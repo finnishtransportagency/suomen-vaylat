@@ -1,4 +1,4 @@
-FROM FROM 675356752005.dkr.ecr.eu-west-1.amazonaws.com/suomen-vaylat-build:nginx-1.19.9-alpine
+FROM 675356752005.dkr.ecr.eu-west-1.amazonaws.com/suomen-vaylat-build:nginx-1.19.9-alpine
 
 ARG BASE_PATH
 
