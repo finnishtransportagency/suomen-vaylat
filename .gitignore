@@ -1,0 +1,23 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/suomen-vaylat-app/node_modules
+/suomen-vaylat-app/.pnp
+.pnp.js
+
+# testing
+/suomen-vaylat-app/coverage
+
+# production
+/suomen-vaylat-app/build
+
+# misc
+suomen-vaylat-app/.DS_Store
+suomen-vaylat-app/.env.local
+suomen-vaylat-app/.env.development.local
+suomen-vaylat-app/.env.test.local
+suomen-vaylat-app/.env.production.local
+
+suomen-vaylat-app/npm-debug.log*
+suomen-vaylat-app/yarn-debug.log*
+suomen-vaylat-app/yarn-error.log*
