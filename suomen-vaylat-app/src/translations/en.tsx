@@ -6,6 +6,9 @@ const en = {
             sv: "På svenska"
         },
         currentLanguage: "en"
+    },
+    map: {
+        iframeTitle: "Suomen Väylät EN"
     }
 }
 

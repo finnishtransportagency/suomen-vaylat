@@ -10,18 +10,12 @@ import PublishedMap from '../published-map/PublishedMap';
  * @class App
  * @extends {React.Component}
  */
- class App extends React.Component {
-  componentDidMount() {
-    // TODO
-  }
-
-  render() {
+ const App = () => {
     return (
         <div>
             <PublishedMap/>
         </div>
     );
-  }
 }
 
 export default App;

@@ -1,3 +1,23 @@
+#language-selector {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    button.language-selection {
+        background: none;
+        border: none;
+        /*optional*/
+        font-family: arial, sans-serif;
+        /*input has OS specific font-family*/
+        color: #069;
+        cursor: pointer;
+        padding: 10px;
+
+        &.active {
+            color: #ff0000;
+        }
+    }
+}
 #published-map-container {
     #sv-iframe {
         border: none;
