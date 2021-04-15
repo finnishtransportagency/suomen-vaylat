@@ -1,5 +1,5 @@
 import { configureStore, applyMiddleware } from '@reduxjs/toolkit';
-import languageReducer from './features/language/languageSlice';
+import languageReducer from './slices/languageSlice';
 import thunkMiddleware from 'redux-thunk';
 import { loadFromLocalStorage, saveToLocalStorage } from './localStorage';
 import { throttle } from 'lodash';

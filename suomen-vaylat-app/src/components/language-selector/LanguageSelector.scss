@@ -1,0 +1,16 @@
+@import '../../colors.scss';
+
+div#language-selector {
+    button.language-selection {
+        background: none;
+        border: none;
+        font-family: arial, sans-serif;
+        color: $white;
+        cursor: pointer;
+        padding: 10px;
+
+        &.active {
+            text-decoration: underline;
+        }
+    }
+}

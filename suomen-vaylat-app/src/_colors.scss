@@ -1,0 +1,27 @@
+
+// Colors
+$maincolor1: #0064af;
+$maincolor2: #009ae1;
+$maincolor3: #49c2f1;
+
+$secondaryColor1: #00b0cc; // 70,50,30
+$secondaryColor2: #207a43; // 70,50,30
+$secondaryColor3: #8dcb6d; // 70,50,30
+$secondaryColor4: #ffc300; // 70,50,30
+$secondaryColor5: #910aa3; // 70,50,30
+$secondaryColor6: #c73f00; // 70,50,30
+$secondaryColor7: #ff5100; // 70,50,30
+$secondaryColor8: #e50083; // 70,50,30
+$black: #000000; // 80,50,20
+$white: #ffffff;
+
+$primaryColor: #009ae1;
+$primaryTextColor: #fff;
+
+
+@mixin border-radius($radius) {
+    -webkit-border-radius: $radius;
+    -moz-border-radius: $radius;
+    -ms-border-radius: $radius;
+    border-radius: $radius;
+}
