@@ -1,7 +1,5 @@
 import React from 'react';
-
-import './App.css';
-import PublishedMap from '../published-map/PublishedMap';
+import Layout from './components/layout/Layout';
 
 /**
  * Top class for the application.
@@ -12,8 +10,8 @@ import PublishedMap from '../published-map/PublishedMap';
  */
  const App = () => {
     return (
-        <div>
-            <PublishedMap/>
+        <div className="sv-app">
+            <Layout/>
         </div>
     );
 }
