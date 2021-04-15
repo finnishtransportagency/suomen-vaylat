@@ -1,15 +1,12 @@
 const fi = {
     language: {
         languageSelection: {
-            fi: "Suomeksi",
-            en: "In English",
-            sv: "På svenska"
-        },
-        currentLanguage: "fi"
+            fi: "FI",
+            en: "EN",
+            sv: "SV"
+        }
     },
-    map: {
-        iframeTitle: "Suomen Väylät"
-    }
+    title: "Suomen Väylät"
 }
 
 export default fi;
