@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import strings from "../../translations";
 
+
 const initialState = {
   current: 'fi'
 };
@@ -12,8 +13,6 @@ export const languageSlice = createSlice({
     setLocale: (state, action) => {
       state.current = action.payload;
       strings.setLanguage(action.payload);
-
-      console.log('Kielisyys: ' + action.payload);
     }
   }
 });
