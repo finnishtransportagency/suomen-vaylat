@@ -16,7 +16,7 @@ Before production build (npm create build) create file .env.production.local und
 
 | Key                         | Value                                                                                                             |
 |-----------------------------|-------------------------------------------------------------------------------------------------------------------|
-| REACT_APP_PUBLISHED_MAP_URL | Published map url, example: https://kartta.paikkatietoikkuna.fi/published/fi/b4c7e6c7-0a81-4477-9b29-812ddce7532d |
+| REACT_APP_PUBLISHED_MAP_URL | Published map url, example: `https://kartta.paikkatietoikkuna.fi/?uuid=b4c7e6c7-0a81-4477-9b29-812ddce7532d`      |
 
 
 # Maybe can remove ?
