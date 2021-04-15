@@ -24,7 +24,8 @@ export const LanguageSelector = () => {
     return (
         <div id="language-selector">
             {strings.getAvailableLanguages().map((value, index) => {
-                return <button key={index} className={buttonClass(value)} id={buttonId(value)} onClick={() => dispatch(setLocale(value))}>{strings.getString('language.languageSelection.' + value)}</button>
+                // eslint-disable-next-line jsx-a11y/anchor-is-valid
+                return <a key={index} className={buttonClass(value)} id={buttonId(value)} onClick={() => dispatch(setLocale(value))}>{strings.getString('language.languageSelection.' + value)}</a>
             })}
         </div>
     );

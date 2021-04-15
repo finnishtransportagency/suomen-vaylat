@@ -1,13 +1,16 @@
 @import '../../colors.scss';
 
 div#language-selector {
-    button.language-selection {
-        background: none;
-        border: none;
-        font-family: arial, sans-serif;
+    display: flex;
+    float: right;
+
+    a.language-selection {
         color: $white;
         cursor: pointer;
-        padding: 10px;
+        padding-top: 12px;
+        padding-bottom: 12px;
+        padding-left: 4px;
+        padding-right: 4px;
 
         &.active {
             text-decoration: underline;
