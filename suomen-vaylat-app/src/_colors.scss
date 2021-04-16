@@ -18,6 +18,9 @@ $white: #ffffff;
 $primaryColor: #009ae1;
 $primaryTextColor: #fff;
 
+// Component colors
+$layout-header-background-color: $maincolor2;
+
 
 @mixin border-radius($radius) {
     -webkit-border-radius: $radius;
