@@ -2,7 +2,7 @@ version: 0.2
 
 env:
   variables:
-    REACT_APP_PUBLISHED_MAP_URL: https://kartta.paikkatietoikkuna.fi/published/fi/b4c7e6c7-0a81-4477-9b29-812ddce7532d
+    REACT_APP_PUBLISHED_MAP_URL: https://kartta.paikkatietoikkuna.fi/?uuid=b4c7e6c7-0a81-4477-9b29-812ddce7532d
 
 phases:
   pre_build:
