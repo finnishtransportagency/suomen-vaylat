@@ -1,5 +1,9 @@
 version: 0.2
 
+env:
+  variables:
+    REACT_APP_PUBLISHED_MAP_URL: https://kartta.paikkatietoikkuna.fi/published/fi/b4c7e6c7-0a81-4477-9b29-812ddce7532d
+
 phases:
   pre_build:
     commands:
@@ -11,6 +15,8 @@ phases:
     commands:
       - |
         docker build -t $IMAGE_REPO_URI:latest \
+        --build-arg REACT_APP_PUBLISHED_MAP_URL=$REACT_APP_PUBLISHED_MAP_URL \
+        --build-arg PUBLIC_URL=$BASE_PATH \
         --build-arg BASE_PATH=$BASE_PATH \
         .
       - docker tag $IMAGE_REPO_URI:latest $IMAGE_REPO_URI:$IMAGE_TAG
