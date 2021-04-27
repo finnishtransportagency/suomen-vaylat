@@ -19,6 +19,10 @@ const initialState = {
   current: (langParam && isSupported) ? langParam : defaultLang
 };
 
+if (langParam !== null && isSupported) {
+  strings.setLanguage(langParam);
+}
+
 export const languageSlice = createSlice({
   name: 'language',
   initialState,
