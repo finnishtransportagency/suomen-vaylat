@@ -1,12 +1,10 @@
-import React from 'react'
-import { setLocale } from '../../state/slices/languageSlice';
-import { useAppDispatch, useAppSelector } from '../../state/hooks';
-import strings from './../../translations'
+import React from 'react';
+import { useAppSelector } from '../../state/hooks';
+import strings from './../../translations';
 
 import './LanguageSelector.scss';
 
 export const LanguageSelector = () => {
-    const dispatch = useAppDispatch();
     const lang = useAppSelector((state) => state.language);
 
     const buttonClass = (locale: string) => {
@@ -25,7 +23,7 @@ export const LanguageSelector = () => {
         <div id="language-selector">
             {strings.getAvailableLanguages().map((value, index) => {
                 // eslint-disable-next-line jsx-a11y/anchor-is-valid
-                return <a key={index} className={buttonClass(value)} id={buttonId(value)} onClick={() => dispatch(setLocale(value))}>{strings.getString('language.languageSelection.' + value)}</a>
+                return <a key={index} className={buttonClass(value)} id={buttonId(value)} href={'?lang=' + value}>{strings.getString('language.languageSelection.' + value)}</a>
             })}
         </div>
     );

@@ -1,6 +1,9 @@
 import React from 'react';
 import Layout from './components/layout/Layout';
 import PageTitle from './components/layout/PageTitle';
+import { Router } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import { history, store } from './state/store'
 
 /**
  * Top class for the application.
@@ -11,10 +14,14 @@ import PageTitle from './components/layout/PageTitle';
  */
  const App = () => {
     return (
-        <div className="sv-app">
-            <PageTitle/>
-            <Layout/>
-        </div>
+        <Provider store={store}>
+            <Router history={history}>
+                <div className="sv-app">
+                    <PageTitle/>
+                    <Layout/>
+                </div>
+            </Router>
+        </Provider>
     );
 }
 
