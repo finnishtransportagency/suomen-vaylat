@@ -27,7 +27,7 @@ phases:
   post_build:
     commands:
       - |
-        if [ "$CUSTOM_TAG" == "" ]; then
+        if [ "$CUSTOM_TAG" = "" ]; then
           docker push $IMAGE_REPO_URI:latest
         fi
       - docker push $IMAGE_REPO_URI:$IMAGE_TAG
