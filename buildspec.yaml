@@ -2,7 +2,8 @@ version: 0.2
 
 env:
   variables:
-    REACT_APP_PUBLISHED_MAP_URL: https://kartta.paikkatietoikkuna.fi/?uuid=b4c7e6c7-0a81-4477-9b29-812ddce7532d
+    BASE_PATH: suomen-vaylat
+    PUBLISHED_MAP_URL: https://kartta.paikkatietoikkuna.fi/?uuid=b4c7e6c7-0a81-4477-9b29-812ddce7532d
 
 phases:
   pre_build:
@@ -10,26 +11,20 @@ phases:
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $IMAGE_REGISTRY_URI
       - IMAGE_REPO_URI=$IMAGE_REGISTRY_URI/$IMAGE_REPO_NAME
       - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
-      - IMAGE_TAG=${COMMIT_HASH:=latest}
-      - |
-        if [ "$CUSTOM_TAG" != "" ]; then
-          IMAGE_TAG=$CUSTOM_TAG
-        fi
+      - LATEST_TAG=${TAG_PREFIX}latest
+      - IMAGE_TAG=${TAG_PREFIX}${COMMIT_HASH:=latest}
   build:
     commands:
       - |
-        docker build -t $IMAGE_REPO_URI:latest \
-        --build-arg REACT_APP_PUBLISHED_MAP_URL=$REACT_APP_PUBLISHED_MAP_URL \
-        --build-arg PUBLIC_URL=$BASE_PATH \
+        docker build -t $IMAGE_REPO_URI:$LATEST_TAG \
+        --build-arg REACT_APP_PUBLISHED_MAP_URL=$PUBLISHED_MAP_URL \
+        --build-arg PUBLIC_URL=/$BASE_PATH \
         --build-arg BASE_PATH=$BASE_PATH \
         .
-      - docker tag $IMAGE_REPO_URI:latest $IMAGE_REPO_URI:$IMAGE_TAG
+      - docker tag $IMAGE_REPO_URI:$LATEST_TAG $IMAGE_REPO_URI:$IMAGE_TAG
   post_build:
     commands:
-      - |
-        if [ "$CUSTOM_TAG" = "" ]; then
-          docker push $IMAGE_REPO_URI:latest
-        fi
+      - docker push $IMAGE_REPO_URI:$LATEST_TAG
       - docker push $IMAGE_REPO_URI:$IMAGE_TAG
       - printf '[{"name":"'$CONTAINER_NAME'","imageUri":"'$IMAGE_REPO_URI':'$IMAGE_TAG'"}]' > imagedef.json
 
