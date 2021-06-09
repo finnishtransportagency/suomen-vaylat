@@ -1,0 +1,12 @@
+div#menus {
+    z-index: 100;
+    position: absolute;
+    margin: 15px !important;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+button#dropdown-basic-button {
+    border-radius: 25px !important;
+}
