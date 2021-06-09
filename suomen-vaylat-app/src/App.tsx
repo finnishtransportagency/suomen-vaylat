@@ -5,6 +5,8 @@ import { Router } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { history, store } from './state/store'
 
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 /**
  * Top class for the application.
  * Everything else is under this.
