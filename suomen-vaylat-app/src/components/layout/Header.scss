@@ -8,4 +8,18 @@ div#sv-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+
+    img.logo {
+        height: 2.5em;
+        margin-left: 1em;
+    }
+
+    div.vayla-logo {
+        margin-left: auto;
+        a {
+            img {
+                height: 4em;
+            }
+        }
+    }
 }
