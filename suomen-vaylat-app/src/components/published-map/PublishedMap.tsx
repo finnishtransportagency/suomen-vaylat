@@ -46,7 +46,7 @@ class PublishedMap extends Component<IPublishedMapProps, IPublishedMapState> {
         this.synchronizer = OskariRPC.synchronizerFactory(
           OskariRPC.connect(iframe, process.env.REACT_APP_PUBLISHED_MAP_DOMAIN),
           [
-            // example handlers, remove these on future
+            // FIXME Example handlers, remove these on future
             new MarkerHandler(this.handleMapClick),
             new GroupsHandler(this.groupsGetted)
           ]
@@ -75,7 +75,7 @@ class PublishedMap extends Component<IPublishedMapProps, IPublishedMapState> {
     // ***********************************************************************
     // RPC handler functions
     // ***********************************************************************
-    // Example mapclick, remove on future
+    // FIXME Example mapclick, remove on future
     handleMapClick = ({lon, lat}: {
         lon:number,
         lat:number
@@ -95,7 +95,7 @@ class PublishedMap extends Component<IPublishedMapProps, IPublishedMapState> {
         });
     };
 
-    // Groups getted, save them to map state
+    // TODO Groups getted, save them to map state
     groupsGetted = (groups:Array<Group>) => {
         this.setState({
             maplayerGroups: groups
@@ -120,7 +120,7 @@ class PublishedMap extends Component<IPublishedMapProps, IPublishedMapState> {
             });
             return names;
         };
-        console.log('Ryhmät', getNames('', groups).join(','));
+        console.log('Groups', getNames('', groups).join(','));
     };
 
     render() {
