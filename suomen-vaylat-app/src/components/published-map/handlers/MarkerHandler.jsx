@@ -5,11 +5,13 @@ export default class MarkerHandler {
         this.currentMarker = 0;
     }
     init(channel) {
+        console.log("test");
         channel.handleEvent('MapClickedEvent', ({lon, lat, x, y, ctrlKeyDown}) => {
             this.onClick({lon, lat});
         });
     }
     synchronize(channel, state) {
+        console.log(channel);
         if (this.visibleMarkers === state.markers) {
             return; // relying on immutability; same identity -> no changes
         }
