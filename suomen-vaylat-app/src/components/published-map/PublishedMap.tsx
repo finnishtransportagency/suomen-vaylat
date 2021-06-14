@@ -7,6 +7,8 @@ import './PublishedMap.scss';
 import idGenerator from '../../utils/idGenerator';
 import MarkerHandler from './handlers/MarkerHandler';
 import GroupsHandler from './handlers/GroupsHandler';
+import LayerList from './handlers/LayerList';
+import { Button } from 'react-bootstrap';
 
 interface IPublishedMapProps {
     lang?: string
@@ -42,6 +44,7 @@ class PublishedMap extends Component<IPublishedMapProps, IPublishedMapState> {
     }
 
     componentDidMount() {
+        console.log("MO");
         const iframe = document.getElementById('sv-iframe');
         this.synchronizer = OskariRPC.synchronizerFactory(
           OskariRPC.connect(iframe, process.env.REACT_APP_PUBLISHED_MAP_DOMAIN),
@@ -67,6 +70,7 @@ class PublishedMap extends Component<IPublishedMapProps, IPublishedMapState> {
     }
 
     hideSpinner = () => {
+        console.log("???");
         this.setState({
           loading: false
         });
@@ -97,9 +101,12 @@ class PublishedMap extends Component<IPublishedMapProps, IPublishedMapState> {
 
     // TODO Groups getted, save them to map state
     groupsGetted = (groups:Array<Group>) => {
+        console.log(groups);
         this.setState({
             maplayerGroups: groups
         });
+        
+        console.log("MO");
 
         // Remove this on future
         // Get recursive group names to string array
@@ -126,6 +133,7 @@ class PublishedMap extends Component<IPublishedMapProps, IPublishedMapState> {
     render() {
         return (
             <div id="published-map-container">
+                <LayerList></LayerList>
                 {this.state.loading ? (
                     <CenterSpinner/>
                 ) : null}
