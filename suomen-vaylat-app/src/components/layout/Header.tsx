@@ -1,20 +1,40 @@
 import React from 'react'
 import LanguageSelector from '../language-selector/LanguageSelector';
+import strings from './../../translations';
 
 import './Header.scss';
 
+import logoFi from './images/suomen_vaylat_fi.png';
+import logoEn from './images/suomen_vaylat_en.png';
+import logoSv from './images/suomen_vaylat_sv.png';
+
+
+import vaylaLogoFi from './images/vayla_sivussa_fi.png';
+import vaylaLogoEn from './images/vayla_sivussa_en.png';
+import vaylaLogoSv from './images/vayla_sivussa_sv.png';
+
 export const Header = () => {
-    // FIXME Use localization
+    // FIXME Use localization (also check images)
+    let logo = logoFi;
+    let vaylaLogo = vaylaLogoFi;
+    const lang = strings.getLanguage();
+    if (lang === 'en') {
+        logo = logoEn;
+        vaylaLogo = vaylaLogoEn;
+    } else if (lang === 'sv') {
+        logo = logoSv;
+        vaylaLogo = vaylaLogoSv;
+    }
     return (
         <div id="sv-header">
 
             <div>
-                <img className="logo" alt="SuomenVäylät" src="/resources/images/suomen_vaylat.png"/>
+                <img className="logo" alt="SuomenVäylät" src={logo}/>
             </div>
 
             <div className="vayla-logo">
                 <a href="https://www.vayla.fi" target="_blank" rel="noreferrer">
-                    <img alt="Väylä" src="/resources/images/vayla_sivussa_fi_sv_white.png"/>
+                    <img alt="Väylä" src={vaylaLogo}/>
                 </a>
             </div>
             <LanguageSelector/>
