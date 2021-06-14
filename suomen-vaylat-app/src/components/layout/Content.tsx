@@ -12,10 +12,6 @@ export const Content = () => {
     return (
         <div id="sv-content">
             <div id="menus">
-                <MainMenu></MainMenu>
-                <RataMenu></RataMenu>
-                <VesiMenu></VesiMenu>
-                <TieMenu></TieMenu>
             </div>
             <PublishedMap></PublishedMap>
         </div>
