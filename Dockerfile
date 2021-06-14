@@ -1,6 +1,7 @@
 FROM 675356752005.dkr.ecr.eu-west-1.amazonaws.com/suomen-vaylat-build:node-12-buster as builder
 
 ARG REACT_APP_PUBLISHED_MAP_URL
+ARG REACT_APP_PUBLISHED_MAP_DOMAIN
 ARG PUBLIC_URL
 
 COPY ./suomen-vaylat-app /suomen-vaylat

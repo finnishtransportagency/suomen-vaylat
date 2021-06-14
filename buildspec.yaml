@@ -4,6 +4,7 @@ env:
   variables:
     BASE_PATH: suomen-vaylat
     MAP_URL: https://paikkatietodev.testivaylapilvi.fi/sv-kartta/?uuid=05f97ec6-4a64-4815-a10e-833d00fd01cf
+    MAP_DOMAIN: https://paikkatietodev.testivaylapilvi.fi
 
 phases:
   pre_build:
@@ -18,6 +19,7 @@ phases:
       - |
         docker build -t $IMAGE_REPO_URI:$LATEST_TAG \
         --build-arg REACT_APP_PUBLISHED_MAP_URL=$MAP_URL \
+        --build-arg REACT_APP_PUBLISHED_MAP_DOMAIN=$MAP_DOMAIN \
         --build-arg PUBLIC_URL=/$BASE_PATH \
         --build-arg BASE_PATH=$BASE_PATH \
         .
