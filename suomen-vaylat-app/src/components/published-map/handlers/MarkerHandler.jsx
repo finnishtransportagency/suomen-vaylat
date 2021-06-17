@@ -12,6 +12,7 @@ export default class MarkerHandler {
     }
     synchronize(channel, state) {
         console.log(channel);
+        console.log("SOOOOS");
         if (this.visibleMarkers === state.markers) {
             return; // relying on immutability; same identity -> no changes
         }

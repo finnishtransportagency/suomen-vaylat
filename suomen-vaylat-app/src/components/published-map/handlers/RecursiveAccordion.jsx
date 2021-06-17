@@ -1,42 +1,51 @@
 
 import { Accordion, Card, Button } from 'react-bootstrap';
+import Layer from './Layer';
 
-export const RecursiveAccordion = ({ items, recurse = false }) => {
-    console.log(items);
+export const LayerList = ({groupLayers, allLayers}) => {
+    var filteredLayers = [];
+    console.log(allLayers);
+    for (var i in groupLayers) {
+        filteredLayers.push(allLayers.filter(layer => layer.id == groupLayers[i]));
+    }
+    console.log(filteredLayers);
+    var layers = filteredLayers.map((layer) => 
+        <Layer id={layer[0].id} name={layer[0].name} opacity={layer[0].opacity}></Layer>
+    );
+    return (
+        <div>{layers}</div>
+    )
+}
+
+export const RecursiveAccordion = ({ groups, layers, recurse = false }) => {
+    console.log(layers);
     return (
         <div>
-        {items.map((item, index) => {
-          var children = items.filter((i) => {
-            return i.parentId === item.id;
-          });
-  
-          var hasChildren = children.length > 0;
-          /*
-
-          var hasChildren = groups.length > 0;
-
-          if (item.parentId === -1)
-          */
-  
-          if (item.parentId === 0) {
+        {groups.map((group, index) => {
+            var hasChildren = false;
+            if(group.groups) {
+                hasChildren = group.groups.length > 0;
+            }
+            console.log(layers);
+          if (group.parentId === -1) {
             return (
                 <Accordion>
                 <Card>
                     <Card.Header>
-                    <Accordion.Toggle as={Button} variant="link" eventKey={item.id}>
-                        {item.title}
+                    <Accordion.Toggle as={Button} variant="link" eventKey={group.id}>
+                        {group.name}
                     </Accordion.Toggle>
                     </Card.Header>
-                    <Accordion.Collapse eventKey={item.id}>
+                    <Accordion.Collapse eventKey={group.id}>
                         <Card.Body>
                             {hasChildren && (
                             <div>
-                                <RecursiveAccordion items={children} recurse={true} />
-                                { item.body }
+                                <LayerList groupLayers={group.layers} allLayers={layers}></LayerList>
+                                <RecursiveAccordion groups={group.groups} layers={layers} recurse={true} />
                             </div>
                             )}
                             {!hasChildren && (
-                            <div dangerouslySetInnerHTML={{ __html: item.body }} />
+                                <LayerList groupLayers={group.layers} allLayers={layers}></LayerList>
                             )}
                         </Card.Body>
                     </Accordion.Collapse>
@@ -51,20 +60,20 @@ export const RecursiveAccordion = ({ items, recurse = false }) => {
                 <Accordion>
               <Card>
               <Card.Header>
-              <Accordion.Toggle as={Button} variant="link" eventKey={item.id}>
-                  {item.title}
+              <Accordion.Toggle as={Button} variant="link" eventKey={group.id}>
+                  {group.name}
               </Accordion.Toggle>
               </Card.Header>
-                <Accordion.Collapse eventKey={item.id}>
+                <Accordion.Collapse eventKey={group.id}>
                 <Card.Body>
                     {hasChildren && (
                     <div>
-                        <RecursiveAccordion items={children} recurse={true} />
-                        { item.body }
+                        <LayerList groupLayers={group.layers} allLayers={layers}></LayerList>
+                        <RecursiveAccordion groups={group.groups} layers={layers} recurse={true} />
                     </div>
                     )}
                     {!hasChildren && (
-                    <div dangerouslySetInnerHTML={{ __html: item.body }} />
+                        <LayerList groupLayers={group.layers} allLayers={layers}></LayerList>
                     )}
                 </Card.Body>
                 </Accordion.Collapse>
