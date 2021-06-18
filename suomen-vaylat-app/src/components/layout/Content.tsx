@@ -1,5 +1,5 @@
 import React from 'react'
-import PublishedMap from '../published-map/PublishedMap'
+import PublishedMap from '../published-map/PublishedMap.jsx'
 import MainMenu from '../menus/MainMenu';
 import VesiMenu from '../menus/VesiMenu';
 import RataMenu from '../menus/RataMenu';
