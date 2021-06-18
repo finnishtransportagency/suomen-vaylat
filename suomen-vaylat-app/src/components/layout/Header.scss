@@ -8,6 +8,8 @@ div#sv-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    position:absolute;
+    width: 100%;
 
     img.logo {
         height: 2.5em;
