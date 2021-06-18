@@ -1,6 +1,9 @@
 import { createBrowserHistory } from 'history';
 import { configureStore, applyMiddleware } from '@reduxjs/toolkit';
+
 import languageReducer from './slices/languageSlice';
+import rpcReducer from './slices/rpcSlice';
+
 import thunkMiddleware from 'redux-thunk';
 //import { loadFromLocalStorage, saveToLocalStorage } from './localStorage';
 //import { throttle } from 'lodash';
@@ -9,9 +12,12 @@ const middlewareEnhancer = applyMiddleware(thunkMiddleware);
 
 export const store = configureStore ({
   reducer: {
-    language: languageReducer
+    language: languageReducer,
+    rpc: rpcReducer
   },
-  enhancers: [middlewareEnhancer]
+  enhancers: [middlewareEnhancer],
+  middleware: (getDefaultMiddleware) =>
+  getDefaultMiddleware({serializableCheck: false}),
   // TODO check at if something still need to get localStorage
   //preloadedState: loadFromLocalStorage()
 });
