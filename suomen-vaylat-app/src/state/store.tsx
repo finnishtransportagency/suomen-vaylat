@@ -3,6 +3,7 @@ import { configureStore, applyMiddleware } from '@reduxjs/toolkit';
 
 import languageReducer from './slices/languageSlice';
 import rpcReducer from './slices/rpcSlice';
+import searchReducer from './slices/searchSlice';
 
 import thunkMiddleware from 'redux-thunk';
 //import { loadFromLocalStorage, saveToLocalStorage } from './localStorage';
@@ -13,7 +14,8 @@ const middlewareEnhancer = applyMiddleware(thunkMiddleware);
 export const store = configureStore ({
   reducer: {
     language: languageReducer,
-    rpc: rpcReducer
+    rpc: rpcReducer,
+    search: searchReducer
   },
   enhancers: [middlewareEnhancer],
   middleware: (getDefaultMiddleware) =>
