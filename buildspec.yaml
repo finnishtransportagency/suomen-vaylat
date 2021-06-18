@@ -1,23 +1,20 @@
 version: 0.2
 
-env:
-  variables:
-    BASE_PATH: suomen-vaylat
-    MAP_URL: https://paikkatietodev.testivaylapilvi.fi/sv-kartta/?uuid=05f97ec6-4a64-4815-a10e-833d00fd01cf
-    MAP_DOMAIN: https://paikkatietodev.testivaylapilvi.fi
-
 phases:
   pre_build:
     commands:
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $IMAGE_REGISTRY_URI
       - IMAGE_REPO_URI=$IMAGE_REGISTRY_URI/$IMAGE_REPO_NAME
       - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
+      - TAG_PREFIX=${TAG_PREFIX:-$ENVIRONMENT-}
       - LATEST_TAG=${TAG_PREFIX}latest
       - IMAGE_TAG=${TAG_PREFIX}${COMMIT_HASH:=latest}
   build:
     commands:
       - |
+        DOCKER_BUILDKIT=1 \
         docker build -t $IMAGE_REPO_URI:$LATEST_TAG \
+        --target $ENVIRONMENT \
         --build-arg REACT_APP_PUBLISHED_MAP_URL=$MAP_URL \
         --build-arg REACT_APP_PUBLISHED_MAP_DOMAIN=$MAP_DOMAIN \
         --build-arg PUBLIC_URL=/$BASE_PATH \
