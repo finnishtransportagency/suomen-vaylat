@@ -20,11 +20,3 @@ $primaryTextColor: #fff;
 
 // Component colors
 $layout-header-background-color: $maincolor2;
-
-
-@mixin border-radius($radius) {
-    -webkit-border-radius: $radius;
-    -moz-border-radius: $radius;
-    -ms-border-radius: $radius;
-    border-radius: $radius;
-}
