@@ -1,0 +1,54 @@
+@import '../../utils.scss';
+@import '../../colors.scss';
+
+div#search {
+    position: absolute;
+    z-index: 100;
+    top: 60px;
+    right: 12px;
+    margin-top: 1em;
+    width: 400px;
+    background-color: $white;
+    height: 50px;
+    background-color: $maincolor2;
+    @include border-radius(25px);
+    @include shadow();
+    padding: 6px;
+
+    div.search-group {
+
+        div.input-group {
+            button {
+                margin-left:4px;
+                @include border-radius(25px);
+                background-color: $white;
+                color: #6c757d;
+                &:hover, &:active {
+                    background-color: $maincolor3;
+                    color: $white;
+                }
+            }
+
+            a {
+                &.dropdown-item {
+                    &:hover {
+                        background-color: $maincolor3;
+                            color: $white;
+                    }
+                }
+            }
+
+            input {
+                @include border-radius(25px);
+                margin-left:4px;
+                background-color: $white;
+
+            }
+
+            button.search-button {
+                background-color: $maincolor1;
+                color: $white;
+            }
+        }
+    }
+}

@@ -5,6 +5,7 @@ import VesiMenu from '../menus/VesiMenu';
 import RataMenu from '../menus/RataMenu';
 import TieMenu from '../menus/TieMenu';
 import './Content.scss';
+import Search from '../search/Search';
 
 
 export const Content = () => {
@@ -18,6 +19,7 @@ export const Content = () => {
                 <TieMenu></TieMenu>
             </div>
             <PublishedMap></PublishedMap>
+            <Search></Search>
         </div>
     );
  }
