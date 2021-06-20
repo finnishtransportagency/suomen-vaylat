@@ -16,10 +16,11 @@ export default class GroupsHandler {
         });
     }
 
-    synchronize(channel, state) {
+    synchronize(channel, state) {/*
         if (this.selectedLayers === state.selectedLayers) {
             return; // relying on immutability; same identity -> no changes
         }
+        const selectedLayers = new Map(this.selectedLayers.map((layer) => [layer]));
         state.selectedLayers
             .filter((layer) => {
                 const selectLayer = selectedLayers.get(layer.id);
@@ -38,7 +39,7 @@ export default class GroupsHandler {
                 channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, true]);
             });
     
-            this.selectedLayers = state.selectedLayers;
+            this.selectedLayers = state.selectedLayers;*/
         //channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layerId, !currentVisibility]);
     }
 }
