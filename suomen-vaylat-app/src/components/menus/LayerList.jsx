@@ -1,24 +1,8 @@
 
 import { Accordion, Card, Button } from 'react-bootstrap';
-import Layer from './Layer';
+import Layers from './Layers';
 
-export const LayerList = ({groupLayers, allLayers}) => {
-    var filteredLayers = [];
-    console.log(allLayers);
-    for (var i in groupLayers) {
-        filteredLayers.push(allLayers.filter(layer => layer.id == groupLayers[i]));
-    }
-    console.log(filteredLayers);
-    var layers = filteredLayers.map((layer) => 
-        <Layer id={layer[0].id} name={layer[0].name} opacity={layer[0].opacity}></Layer>
-    );
-    return (
-        <div>{layers}</div>
-    )
-}
-
-export const RecursiveAccordion = ({ groups, layers, recurse = false }) => {
-    console.log(layers);
+export const LayerList = ({ groups, layers, recurse = false }) => {
     return (
         <div>
         {groups.map((group, index) => {
@@ -26,11 +10,10 @@ export const RecursiveAccordion = ({ groups, layers, recurse = false }) => {
             if(group.groups) {
                 hasChildren = group.groups.length > 0;
             }
-            console.log(layers);
           if (group.parentId === -1) {
             return (
                 <Accordion>
-                <Card>
+                <Card style={{borderRadius: "30px", marginBottom: "5px"}}>
                     <Card.Header>
                     <Accordion.Toggle as={Button} variant="link" eventKey={group.id}>
                         {group.name}
@@ -40,12 +23,12 @@ export const RecursiveAccordion = ({ groups, layers, recurse = false }) => {
                         <Card.Body>
                             {hasChildren && (
                             <div>
-                                <LayerList groupLayers={group.layers} allLayers={layers}></LayerList>
-                                <RecursiveAccordion groups={group.groups} layers={layers} recurse={true} />
+                                <Layers groupLayers={group.layers} allLayers={layers}></Layers>
+                                <LayerList groups={group.groups} layers={layers} recurse={true} />
                             </div>
                             )}
                             {!hasChildren && (
-                                <LayerList groupLayers={group.layers} allLayers={layers}></LayerList>
+                                <Layers groupLayers={group.layers} allLayers={layers}></Layers>
                             )}
                         </Card.Body>
                     </Accordion.Collapse>
@@ -58,7 +41,7 @@ export const RecursiveAccordion = ({ groups, layers, recurse = false }) => {
             return (
                 
                 <Accordion>
-              <Card>
+              <Card style={{borderRadius: "30px", marginBottom: "5px"}}>
               <Card.Header>
               <Accordion.Toggle as={Button} variant="link" eventKey={group.id}>
                   {group.name}
@@ -68,12 +51,12 @@ export const RecursiveAccordion = ({ groups, layers, recurse = false }) => {
                 <Card.Body>
                     {hasChildren && (
                     <div>
-                        <LayerList groupLayers={group.layers} allLayers={layers}></LayerList>
-                        <RecursiveAccordion groups={group.groups} layers={layers} recurse={true} />
+                        <Layers groupLayers={group.layers} allLayers={layers}></Layers>
+                        <LayerList groups={group.groups} layers={layers} recurse={true} />
                     </div>
                     )}
                     {!hasChildren && (
-                        <LayerList groupLayers={group.layers} allLayers={layers}></LayerList>
+                        <Layers groupLayers={group.layers} allLayers={layers}></Layers>
                     )}
                 </Card.Body>
                 </Accordion.Collapse>
@@ -86,4 +69,4 @@ export const RecursiveAccordion = ({ groups, layers, recurse = false }) => {
     );
   };
 
-  export default RecursiveAccordion;
+  export default LayerList;

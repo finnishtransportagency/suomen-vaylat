@@ -8,7 +8,7 @@ import idGenerator from '../../utils/idGenerator';
 import MarkerHandler from './handlers/MarkerHandler';
 import GroupsHandler from './handlers/GroupsHandler';
 import LayersHandler from './handlers/LayersHandler';
-import LayerList from './handlers/LayerList';
+import LayerListTEMP from '../menus/LayerListTEMP';
 import { Button } from 'react-bootstrap';
 
 interface IPublishedMapProps {
@@ -153,7 +153,7 @@ class PublishedMap extends Component<IPublishedMapProps, IPublishedMapState> {
     render() {
         return (
             <div id="published-map-container">
-                <LayerList></LayerList>
+                <LayerListTEMP></LayerListTEMP>
                 {this.state.loading ? (
                     <CenterSpinner/>
                 ) : null}
