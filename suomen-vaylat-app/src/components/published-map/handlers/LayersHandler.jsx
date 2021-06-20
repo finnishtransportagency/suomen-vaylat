@@ -5,11 +5,9 @@ export default class GroupsHandler {
     }
 
     init(channel) {
-        console.log(channel);
         channel.getSupportedFunctions((data) => {
             if (data.getAllLayers === true) {
                 channel.getAllLayers((layers) => {
-                    console.log(JSON.stringify(layers))
                     this.layersGetted(layers);
                 });
             }
