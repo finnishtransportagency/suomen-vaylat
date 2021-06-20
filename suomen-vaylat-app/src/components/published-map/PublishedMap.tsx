@@ -57,7 +57,6 @@ class PublishedMap extends Component<IPublishedMapProps, IPublishedMapState> {
     }
 
     componentDidMount() {
-        console.log("MO");
         const iframe = document.getElementById('sv-iframe');
         this.synchronizer = OskariRPC.synchronizerFactory(
           OskariRPC.connect(iframe, process.env.REACT_APP_PUBLISHED_MAP_DOMAIN),
@@ -84,7 +83,6 @@ class PublishedMap extends Component<IPublishedMapProps, IPublishedMapState> {
     }
 
     hideSpinner = () => {
-        console.log("???");
         this.setState({
           loading: false
         });
@@ -118,7 +116,6 @@ class PublishedMap extends Component<IPublishedMapProps, IPublishedMapState> {
         this.setState({
             maplayerGroups: groups
         });
-        console.log(JSON.stringify(groups))
 
         // Remove this on future
         // Get recursive group names to string array
@@ -139,15 +136,12 @@ class PublishedMap extends Component<IPublishedMapProps, IPublishedMapState> {
             });
             return names;
         };
-        console.log('Groups', getNames('', groups).join(','));
     };
     
     layersGetted = (layers:Array<Layer>) => {
         this.setState({
             maplayers: layers
         });
-        console.log("layers");
-        console.log(layers);
     };
 
     render() {

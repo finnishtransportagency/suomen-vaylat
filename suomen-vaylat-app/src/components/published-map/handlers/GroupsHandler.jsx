@@ -19,7 +19,6 @@ export default class GroupsHandler {
                 group.groups = this.reCreateGroups(group.groups);
             }
         });
-        console.log(newGroups);
         return newGroups;
     }
 
@@ -27,7 +26,6 @@ export default class GroupsHandler {
         channel.getSupportedFunctions((data) => {
             if (data.getAllGroups === true) {
                 channel.getAllGroups((groups) => {
-                    console.log(groups);
                     this.groupsGetted(this.reCreateGroups(groups));
                 });
             }
