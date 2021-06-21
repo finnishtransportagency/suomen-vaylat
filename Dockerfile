@@ -33,8 +33,8 @@ FROM builder AS test-builder
 
 ARG PUBLIC_URL
 
-ENV REACT_APP_PUBLISHED_MAP_URL=https://paikkatietodev.testivaylapilvi.fi/sv-kartta/?uuid=05f97ec6-4a64-4815-a10e-833d00fd01cf
-ENV REACT_APP_PUBLISHED_MAP_DOMAIN=https://paikkatietodev.testivaylapilvi.fi
+ENV REACT_APP_PUBLISHED_MAP_URL=https://paikkatietotest.testivaylapilvi.fi/sv-kartta/?uuid=32ec5134-3dae-403f-903b-57d035a16b6c
+ENV REACT_APP_PUBLISHED_MAP_DOMAIN=https://paikkatietotest.testivaylapilvi.fi
 
 RUN cd /suomen-vaylat && \
     npm ci && \
