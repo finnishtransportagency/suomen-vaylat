@@ -11,6 +11,7 @@ const initialState = {
   zoomLevelsLayers: {},
   tagLayers: [],
   zoomRange: {},
+  currentZoomLevel: 0
 };
 
 export const rpcSlice = createSlice({
@@ -32,10 +33,10 @@ export const rpcSlice = createSlice({
     setAllTags: (state, action) => {
         state.allTags = action.payload;
     },
-    setCurrentState: (state, action) => {
-        state.currentState = action.payload;
-    },
     setFeatures: (state, action) => {
+        state.features = action.payload;
+    },
+    setCurrentState: (state, action) => {
         state.currentState = action.payload;
     },
     setTagLayers: (state, action) => {
@@ -59,7 +60,7 @@ export const rpcSlice = createSlice({
         });
     },
     setZoomOut: (state, action) => {
-        state.channel !== null && state.channel.zoomIn(function (data) {
+        state.channel !== null && state.channel.zoomOut(function (data) {
             console.log('Zoom level after: ', data);
         });
     },
@@ -68,6 +69,9 @@ export const rpcSlice = createSlice({
             console.log('Zoom level after: ', data);
         });
     },
+    setCurrentZoomLevel: (state, action) => {
+        state.currentZoomLevel = action.payload;
+    }
   }
 });
 
@@ -86,7 +90,8 @@ export const {
     setOpacity,
     setZoomIn,
     setZoomOut,
-    setZoomTo
+    setZoomTo,
+    setCurrentZoomLevel
 } = rpcSlice.actions;
 
 export default rpcSlice.reducer;

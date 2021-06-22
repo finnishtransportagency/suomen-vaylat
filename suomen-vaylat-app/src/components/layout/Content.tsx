@@ -4,8 +4,8 @@ import MainMenu from '../menus/MainMenu';
 import VesiMenu from '../menus/VesiMenu';
 import RataMenu from '../menus/RataMenu';
 import TieMenu from '../menus/TieMenu';
+import ZoomMenu from '../zoom-features/ZoomMenu';
 import './Content.scss';
-
 
 export const Content = () => {
 
@@ -17,6 +17,7 @@ export const Content = () => {
                 <VesiMenu></VesiMenu>
                 <TieMenu></TieMenu>
             </div>
+            <ZoomMenu />
             <PublishedMap></PublishedMap>
         </div>
     );
