@@ -13,7 +13,8 @@ import {
     setFeatures,
     setTagLayers,
     setZoomRange,
-    setZoomLevelsLayers
+    setZoomLevelsLayers,
+    setCurrentZoomLevel
 } from '../../state/slices/rpcSlice';
 
 import CenterSpinner from '../center-spinner/CenterSpinner';
@@ -90,6 +91,7 @@ const PublishedMap = ({lang}) => {
                     channel.getZoomRange(function (data) {
                         console.log('getZoomRange: ', data);
                         store.dispatch(setZoomRange(data));
+                        data.hasOwnProperty('current') && store.dispatch(setCurrentZoomLevel(data.current));
                     });
                 }
             });
@@ -109,6 +111,8 @@ const PublishedMap = ({lang}) => {
                 if (data.AfterMapMoveEvent) {
                     channel.handleEvent('AfterMapMoveEvent', event => {
                         console.log('AfterMapMoveEvent: ', event);
+                        event.zoom && console.log(event.zoom);
+                        event.hasOwnProperty('zoom') && store.dispatch(setCurrentZoomLevel(event.zoom));
                     });
                 }
             });
