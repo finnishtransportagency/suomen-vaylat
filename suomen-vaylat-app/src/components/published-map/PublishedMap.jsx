@@ -111,7 +111,6 @@ const PublishedMap = ({lang}) => {
                 if (data.AfterMapMoveEvent) {
                     channel.handleEvent('AfterMapMoveEvent', event => {
                         console.log('AfterMapMoveEvent: ', event);
-                        event.zoom && console.log(event.zoom);
                         event.hasOwnProperty('zoom') && store.dispatch(setCurrentZoomLevel(event.zoom));
                     });
                 }

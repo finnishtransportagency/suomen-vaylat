@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import LanguageSelector from '../language-selector/LanguageSelector';
 import strings from './../../translations';
 
@@ -14,6 +14,8 @@ import vaylaLogoEn from './images/vayla_sivussa_en.png';
 import vaylaLogoSv from './images/vayla_sivussa_sv.png';
 
 export const Header = () => {
+
+    console.log(strings);
     // FIXME Use localization (also check images)
     let logo = logoFi;
     let vaylaLogo = vaylaLogoFi;
@@ -28,9 +30,10 @@ export const Header = () => {
     return (
         <div id="sv-header">
 
-            <div>
-                <img className="logo" alt="SuomenVäylät" src={logo}/>
-            </div>
+            <h3 id="sv-header-title">
+                {strings.title.toUpperCase()}
+                {/* <img className="logo" alt="SuomenVäylät" src={logo}/> */}
+            </h3>
 
             <div className="vayla-logo">
                 <a href="https://www.vayla.fi" target="_blank" rel="noreferrer">

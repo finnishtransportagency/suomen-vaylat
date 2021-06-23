@@ -52,11 +52,7 @@ const StyledZoomLevelCircle = styled.div`
 
 
 const ZoomBarCircle = ({index, zoomLevel, zoomTo, setHoveringIndex, isExpanded, layer}) => {
-    console.log(isExpanded);
-
     const { store } = useContext(ReactReduxContext);
-    
-    //const [hovering, setHovering] = useState(false);
 
     return (
         <StyledZoomLevelContainer
