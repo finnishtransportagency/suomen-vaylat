@@ -1,10 +1,11 @@
 export default class RequestTags {
     constructor() {
-        this.groups = getAllGroups();
+        this.groups = this.getAllGroups();
+        this.layers = this.getAllLayers();
     }
 
     getLayersByGroup (group) {
-        var filteredGroups = homes.filter(function (el) {
+        var filteredGroups = group.filter(function (el) {
             return el.name == group ;
           });
         return filteredGroups;
@@ -26,6 +27,17 @@ export default class RequestTags {
             // Korostetaan löytynyt geometria kartalta
             channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', [data.geom, { "centerTo": true }]);
         }, function(errors) { channel.log('Tiehaku epäonnistui', errors); } );
+    }
+
+    /**
+    * Get all layers
+    * @method @private getAllLayers
+    * @return {JSONArray} return array of layer
+    */
+    getAllLayers () {
+        channel.getAllLayers(function (layers) {
+            return layers;
+        });
     }
 
     /**
