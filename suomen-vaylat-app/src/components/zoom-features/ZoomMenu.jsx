@@ -14,7 +14,7 @@ const StyledZoomMenu = styled.div`
     width: 100%;
     max-width: 250px;
     height: 100vh;
-    padding: 30px;
+    padding: 50px;
     right: 0;
     bottom: 0;
     display: flex;
@@ -30,14 +30,20 @@ const ZoomMenu = () => {
     const { store } = useContext(ReactReduxContext);
     const zoomLevelsLayers = useAppSelector((state) => state.rpc.zoomLevelsLayers);
     const currentZoomLevel = useAppSelector((state) => state.rpc.currentZoomLevel);
+    const allLayers = useAppSelector((state) => state.rpc.allLayers);
+    const currentZoomLevelsLayers = useAppSelector((state) => state.rpc.currentZoomLevelsLayers);
+
+    console.log(currentZoomLevelsLayers);
 
     return (
     <StyledZoomMenu>
         <ZoomBar
+            setHoveringIndex={setHoveringIndex}
             zoomLevelsLayers={zoomLevelsLayers}
             hoveringIndex={hoveringIndex}
-            setHoveringIndex={setHoveringIndex}
             currentZoomLevel={currentZoomLevel}
+            allLayers={allLayers}
+            currentZoomLevelsLayers={currentZoomLevelsLayers}
         />
         {/* <Dropdown
             layers={layers}
