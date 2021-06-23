@@ -3,7 +3,6 @@ import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
 
 import ZoomBar from './ZoomBar';
-//import Dropdown from './Dropdown';
 
 import { useAppSelector } from '../../state/hooks';
 import { ReactReduxContext } from 'react-redux';
@@ -31,9 +30,6 @@ const ZoomMenu = () => {
     const zoomLevelsLayers = useAppSelector((state) => state.rpc.zoomLevelsLayers);
     const currentZoomLevel = useAppSelector((state) => state.rpc.currentZoomLevel);
     const allLayers = useAppSelector((state) => state.rpc.allLayers);
-    const currentZoomLevelsLayers = useAppSelector((state) => state.rpc.currentZoomLevelsLayers);
-
-    console.log(currentZoomLevelsLayers);
 
     return (
     <StyledZoomMenu>
@@ -43,13 +39,7 @@ const ZoomMenu = () => {
             hoveringIndex={hoveringIndex}
             currentZoomLevel={currentZoomLevel}
             allLayers={allLayers}
-            currentZoomLevelsLayers={currentZoomLevelsLayers}
         />
-        {/* <Dropdown
-            layers={layers}
-            hoveringIndex={hoveringIndex}
-            setHoveringIndex={setHoveringIndex}
-        /> */}
     </StyledZoomMenu>
     );
 };
