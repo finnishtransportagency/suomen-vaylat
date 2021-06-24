@@ -11,6 +11,13 @@ div#sv-header {
     position:absolute;
     width: 100%;
 
+    #sv-header-title {
+        color: $white;
+        padding-left: 20px;
+        margin: 0;
+        font-weight: 600;
+    }
+
     img.logo {
         height: 2.5em;
         margin-left: 1em;
