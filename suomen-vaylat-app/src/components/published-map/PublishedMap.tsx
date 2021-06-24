@@ -7,6 +7,9 @@ import './PublishedMap.scss';
 import idGenerator from '../../utils/idGenerator';
 import MarkerHandler from './handlers/MarkerHandler';
 import GroupsHandler from './handlers/GroupsHandler';
+import LayersHandler from './handlers/LayersHandler';
+//import LayerListTEMP from '../menus/LayerListTEMP';
+import { Button } from 'react-bootstrap';
 
 interface IPublishedMapProps {
     lang?: string
@@ -15,7 +18,8 @@ interface IPublishedMapProps {
 interface IPublishedMapState {
     loading?: boolean,
     markers: object[],
-    maplayerGroups: object[]
+    maplayerGroups: object[],
+    maplayers: object[]
 }
 
 interface Group {
@@ -27,6 +31,16 @@ interface Group {
     parentId: number
 }
 
+interface Layer {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    id: number,
+    opacity: number,
+    visible: boolean,
+    name: string,
+    minZoom: number,
+    maxZoom: number
+}
+
 class PublishedMap extends Component<IPublishedMapProps, IPublishedMapState> {
     mapRef: any;
     synchronizer: any;
@@ -36,7 +50,8 @@ class PublishedMap extends Component<IPublishedMapProps, IPublishedMapState> {
         this.state = {
             loading: true,
             markers: [],
-            maplayerGroups: []
+            maplayerGroups: [],
+            maplayers: []
         }
         this.mapRef = React.createRef();
     }
@@ -48,7 +63,8 @@ class PublishedMap extends Component<IPublishedMapProps, IPublishedMapState> {
           [
             // FIXME Example handlers, remove these on future
             new MarkerHandler(this.handleMapClick),
-            new GroupsHandler(this.groupsGetted)
+            new GroupsHandler(this.groupsGetted),
+            new LayersHandler(this.layersGetted)
           ]
         );
         this.synchronizer.synchronize(this.state);
@@ -120,12 +136,18 @@ class PublishedMap extends Component<IPublishedMapProps, IPublishedMapState> {
             });
             return names;
         };
-        console.log('Groups', getNames('', groups).join(','));
+    };
+    
+    layersGetted = (layers:Array<Layer>) => {
+        this.setState({
+            maplayers: layers
+        });
     };
 
     render() {
         return (
             <div id="published-map-container">
+                {/* <LayerListTEMP></LayerListTEMP> */}
                 {this.state.loading ? (
                     <CenterSpinner/>
                 ) : null}
