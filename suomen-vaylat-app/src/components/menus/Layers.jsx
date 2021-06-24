@@ -1,25 +1,47 @@
+import { useState } from 'react';
+import styled, { keyframes } from 'styled-components';
 
-import { Accordion, Card, Button, Nav , ListGroup } from 'react-bootstrap';
-import React, { useState } from 'react';
+const StyledLayerContainer = styled.li`
+    overflow: hidden;
+    transition: all 0.3s ease-out;
+    //max-height: 0%;
+    display: flex;
+    align-items: center;
+    opacity: ${props => props.isOpen ? "1" : "0"};
+    height: ${props => props.isOpen ? "40px" : "0px"};
+    margin: 0;
+`;
 
-export const Layers = ({ groupLayers, allLayers }) => {
+const StyledlayerHeader = styled.div`
 
-    const [checked, setChecked] = useState([]);
+`;
 
+const StyledLayerName = styled.p`
+    font-size: 15px;
+    margin: 5px;
+`;
+
+
+
+export const Layers = ({ groupLayers, allLayers, isOpen }) => {
     //Find matching layers from all layers and groups, then push this group's layers into 'filteredLayers'
     var filteredLayers = [];
     for (var i in groupLayers) {
         filteredLayers.push(allLayers.filter(layer => layer.id == groupLayers[i]));
     }
     return (
-        <div>
+        <>
             {filteredLayers.map((layer, index) => {
                 return (
-                    <div>
-                        {layer[0].name}
-                    </div>
+                    <StyledLayerContainer key={layer.id} isOpen={isOpen}>
+                        <StyledlayerHeader>
+                            <StyledLayerName>
+                                {layer[0].name}
+                            </StyledLayerName>
+                        </StyledlayerHeader>
+                    </StyledLayerContainer>
             )})}
-        </div>
+        </>
     );
   };
 
