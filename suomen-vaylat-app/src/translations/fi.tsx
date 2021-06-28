@@ -6,7 +6,12 @@ const fi = {
             sv: "SV"
         }
     },
-    title: "Suomen Väylät"
+    title: "Suomen Väylät",
+    search: {
+        default: 'Hae',
+        address: 'Hae',
+        vkm: 'Hae piste'
+    }
 }
 
 export default fi;

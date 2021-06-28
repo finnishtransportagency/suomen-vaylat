@@ -9,7 +9,6 @@ div#search {
     margin-top: 1em;
     width: 400px;
     background-color: $white;
-    height: 50px;
     background-color: $maincolor2;
     @include border-radius(25px);
     @include shadow();
@@ -23,6 +22,7 @@ div#search {
                 @include border-radius(25px);
                 background-color: $white;
                 color: #6c757d;
+                height: 38px;
                 &:hover, &:active {
                     background-color: $maincolor3;
                     color: $white;
@@ -42,7 +42,11 @@ div#search {
                 @include border-radius(25px);
                 margin-left:4px;
                 background-color: $white;
+            }
 
+            .dropdown-menu {
+                max-height: calc(100vh * 0.3);
+                overflow-y: auto;
             }
 
             button.search-button {
