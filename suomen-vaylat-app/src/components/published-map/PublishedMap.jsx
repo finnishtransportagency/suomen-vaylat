@@ -13,7 +13,8 @@ import {
     setFeatures,
     setTagLayers,
     setZoomRange,
-    setZoomLevelsLayers
+    setZoomLevelsLayers,
+    setCurrentZoomLevel
 } from '../../state/slices/rpcSlice';
 
 import CenterSpinner from '../center-spinner/CenterSpinner';
@@ -30,6 +31,16 @@ const PublishedMap = ({lang}) => {
     };
 
     useEffect(() => {
+
+        var allGroups;
+        var allLayers;
+        var allTags;
+        var currentState;
+        var features;
+        var zoomLevelsLayers;
+        var tagLayers;
+        var zoomRange;
+
         store.dispatch(setLoading(true));
         const iframe = document.getElementById('sv-iframe');
         var handlers = [
@@ -41,80 +52,92 @@ const PublishedMap = ({lang}) => {
         var synchronizer = OskariRPC.synchronizerFactory(channel,handlers);
 
         channel.onReady(() => {
+
             store.dispatch(setChannel(channel));
             channel.getSupportedFunctions(function (data) {
-                console.log('GetSupportedFunctions: ', data);
+                //console.log('GetSupportedFunctions: ', data);
+                if(data.getZoomRange) {
+                    channel.getZoomRange(function (data) {
+                        //console.log('getZoomRange: ', data);
+                        zoomRange = data;
+                        store.dispatch(setZoomRange(data));
+                        data.hasOwnProperty('current') && store.dispatch(setCurrentZoomLevel(data.current));
+                    });
+                }
                 if (data.getAllGroups) {
                     channel.getAllGroups(function (data) {
-                        console.log('getAllGroups: ', data);
+                        //console.log('getAllGroups: ', data);
+                        allGroups = data;
                         store.dispatch(setAllGroups(data));
                     });
                 }
                 if (data.getAllLayers) {
                     channel.getAllLayers(function (data) {
-                        console.log('getAllLayers: ', data);
+                        //console.log('getAllLayers: ', data);
+                        allLayers = data;
                         store.dispatch(setAllLayers(data));
                     });
                 }
                 if (data.getAllTags) {
                     channel.getAllTags(function (data) {
-                        console.log('getAllTags: ', data);
+                        //console.log('getAllTags: ', data);
+                        allTags = data;
                         store.dispatch(setAllTags(data));
                     });
                 }
                 if (data.getCurrentState) {
                     channel.getCurrentState(function (data) {
-                        console.log('getCurrentState: ', data);
+                        //console.log('getCurrentState: ', data);
+                        currentState = data;
                         store.dispatch(setCurrentState(data));
                     });
                 }
                 if (data.getFeatures) {
                     channel.getFeatures(function (data) {
-                        console.log('getFeatures: ', data);
+                        //console.log('getFeatures: ', data);
+                        features = data;
                         store.dispatch(setFeatures(data));
                     });
                 }
                 if (data.getZoomLevelsLayers) {
                     channel.getZoomLevelsLayers(function (data) {
-                        console.log('getZoomLevelsLayers: ', data);
+                        //console.log('getZoomLevelsLayers: ', data);
+                        zoomLevelsLayers = data;
                         store.dispatch(setZoomLevelsLayers(data));
                     });
                 }
                 if (data.getTagLayers) {
                     channel.getTagLayers(function (data) {
-                        console.log('getTagLayers: ', data);
+                        //console.log('getTagLayers: ', data);
+                        tagLayers = data;
                         store.dispatch(setTagLayers(data));
-                    });
-                }
-                if(data.getZoomRange) {
-                    channel.getZoomRange(function (data) {
-                        console.log('getZoomRange: ', data);
-                        store.dispatch(setZoomRange(data));
                     });
                 }
             });
 
             channel.getSupportedEvents(function (data) {
-                console.log('GetSupportedEvents: ', data);
+                //console.log('GetSupportedEvents: ', data);
                 if (data.MapClickedEvent) {
                     channel.handleEvent('MapClickedEvent', event => {
-                        console.log('MapClickedEvent: ', event);
+                        //console.log('MapClickedEvent: ', event);
                     });
                 }
                 if (data.MarkerClickEvent) {
                     channel.handleEvent('MarkerClickEvent', event => {
-                        console.log('MarkerClickEvent: ', event);
+                        //console.log('MarkerClickEvent: ', event);
                     });
                 }
                 if (data.AfterMapMoveEvent) {
                     channel.handleEvent('AfterMapMoveEvent', event => {
-                        console.log('AfterMapMoveEvent: ', event);
+                        //console.log('AfterMapMoveEvent: ', event);
+                        event.hasOwnProperty('zoom') &&
+                        store.dispatch(setCurrentZoomLevel(event.zoom));
                     });
                 }
             });
 
             channel.getSupportedRequests(function (data) {
-                console.log('getSupportedRequests: ', data);
+                //console.log('getSupportedRequests: ', data);
             });
         });
         
