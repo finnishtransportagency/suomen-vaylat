@@ -10,7 +10,7 @@ const initialState = {
   currentState: {},
   zoomLevelsLayers: {},
   tagLayers: [],
-  zoomRange: {},
+  zoomRange: {}
 };
 
 export const rpcSlice = createSlice({
@@ -19,7 +19,7 @@ export const rpcSlice = createSlice({
   reducers: {
     setLoading: (state, action) => {
         state.loading = action.payload;
-    }, 
+    },
     setChannel: (state, action) => {
         state.channel = action.payload;
     },
@@ -68,6 +68,31 @@ export const rpcSlice = createSlice({
             console.log('Zoom level after: ', data);
         });
     },
+    searchVKMRoad: (state, action) => {
+        if (state.channel !== null) {
+            state.channel.searchVKMRoad(action.payload.search, action.payload.handler, (err) => { 
+                if (typeof action.errorHandler === 'function') {
+                    action.errorHandler(err);
+                } else {
+                    // FIXME Tee virheen käsittely
+                    console.log('Tee virheenkorjaus, esim. tie= 2, osa=9', err);
+                }
+            });
+        }
+    },
+    addFeaturesToMap: (state, action) => {
+        state.channel !== null && state.channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest',
+        [action.payload.geojson, {
+            layerId: action.payload.layerId,
+            centerTo:action.payload.centerTo || true,
+            featureStyle: action.payload.featureStyle,
+            hover: action.payload.hover,
+            maxZoomLevel: action.payload.maxZoomLevel || 4
+        }]);
+    },
+    removeFeaturesFromMap: (state, action) => {
+        state.channel !== null && state.channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [null, null, action.payload.layerId]);
+    }
   }
 });
 
@@ -86,7 +111,10 @@ export const {
     setOpacity,
     setZoomIn,
     setZoomOut,
-    setZoomTo
+    setZoomTo,
+    searchVKMRoad,
+    addFeaturesToMap,
+    removeFeaturesFromMap
 } = rpcSlice.actions;
 
 export default rpcSlice.reducer;
