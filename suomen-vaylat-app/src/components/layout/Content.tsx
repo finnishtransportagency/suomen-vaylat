@@ -4,20 +4,17 @@ import MainMenu from '../menus/MainMenu';
 import VesiMenu from '../menus/VesiMenu';
 import RataMenu from '../menus/RataMenu';
 import TieMenu from '../menus/TieMenu';
+import ZoomMenu from '../zoom-features/ZoomMenu';
 import './Content.scss';
 import Search from '../search/Search';
-
 
 export const Content = () => {
 
     return (
         <div id="sv-content">
             <div id="menus">
-                <MainMenu></MainMenu>
-                <RataMenu></RataMenu>
-                <VesiMenu></VesiMenu>
-                <TieMenu></TieMenu>
             </div>
+            <ZoomMenu />
             <PublishedMap></PublishedMap>
             <Search></Search>
         </div>

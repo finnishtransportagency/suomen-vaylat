@@ -10,7 +10,8 @@ const initialState = {
   currentState: {},
   zoomLevelsLayers: {},
   tagLayers: [],
-  zoomRange: {}
+  zoomRange: {},
+  currentZoomLevel: 0
 };
 
 export const rpcSlice = createSlice({
@@ -32,10 +33,10 @@ export const rpcSlice = createSlice({
     setAllTags: (state, action) => {
         state.allTags = action.payload;
     },
-    setCurrentState: (state, action) => {
-        state.currentState = action.payload;
-    },
     setFeatures: (state, action) => {
+        state.features = action.payload;
+    },
+    setCurrentState: (state, action) => {
         state.currentState = action.payload;
     },
     setTagLayers: (state, action) => {
@@ -59,7 +60,7 @@ export const rpcSlice = createSlice({
         });
     },
     setZoomOut: (state, action) => {
-        state.channel !== null && state.channel.zoomIn(function (data) {
+        state.channel !== null && state.channel.zoomOut(function (data) {
             console.log('Zoom level after: ', data);
         });
     },
@@ -70,7 +71,7 @@ export const rpcSlice = createSlice({
     },
     searchVKMRoad: (state, action) => {
         if (state.channel !== null) {
-            state.channel.searchVKMRoad(action.payload.search, action.payload.handler, (err) => { 
+            state.channel.searchVKMRoad(action.payload.search, action.payload.handler, (err) => {
                 if (typeof action.errorHandler === 'function') {
                     action.errorHandler(err);
                 } else {
@@ -92,6 +93,8 @@ export const rpcSlice = createSlice({
     },
     removeFeaturesFromMap: (state, action) => {
         state.channel !== null && state.channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [null, null, action.payload.layerId]);
+    setCurrentZoomLevel: (state, action) => {
+        state.currentZoomLevel = action.payload;
     }
   }
 });
@@ -114,7 +117,8 @@ export const {
     setZoomTo,
     searchVKMRoad,
     addFeaturesToMap,
-    removeFeaturesFromMap
+    removeFeaturesFromMap,
+    setCurrentZoomLevel
 } = rpcSlice.actions;
 
 export default rpcSlice.reducer;
