@@ -10,16 +10,16 @@ phases:
       - TAG_PREFIX=${TAG_PREFIX:-$ENVIRONMENT-}
       - LATEST_TAG=${TAG_PREFIX}latest
       - IMAGE_TAG=${TAG_PREFIX}${COMMIT_HASH:=latest}
-      - |
-        if [ "$ENVIRONMENT" = "test" ]; then
-          COMMIT_TAG=$(git describe --tags)
-          echo "COMMIT_TAG=$COMMIT_TAG"
-          if !(echo "$COMMIT_TAG" | grep -Pq '^release-\d+\.\d+\.\d+$'); then
-            echo "Not on release-x.y.z tag!"
-            exit 1
-          fi
-          IMAGE_TAG=${TAG_PREFIX}${COMMIT_TAG}
-        fi
+      # - |
+      #   if [ "$ENVIRONMENT" = "test" ]; then
+      #     COMMIT_TAG=$(git describe --tags)
+      #     echo "COMMIT_TAG=$COMMIT_TAG"
+      #     if !(echo "$COMMIT_TAG" | grep -Pq '^release-\d+\.\d+\.\d+$'); then
+      #       echo "Not on release-x.y.z tag!"
+      #       exit 1
+      #     fi
+      #     IMAGE_TAG=${TAG_PREFIX}${COMMIT_TAG}
+      #   fi
   build:
     commands:
       - |
