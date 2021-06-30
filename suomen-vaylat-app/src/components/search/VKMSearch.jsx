@@ -7,6 +7,7 @@ import { addFeaturesToMap, searchVKMRoad, removeFeaturesFromMap } from '../../st
 import { setFormData, setSearchResult, setSearching, emptySearchResult } from '../../state/slices/searchSlice';
 import { StyledContainer, StyledTextField, StyledSelectInput } from './CommonComponents';
 import { VKMGeoJsonStyles, VKMGeoJsonHoverStyles } from './VKMSearchStyles';
+import strings from '../../translations';
 
 let debounceSearchVKM = null;
 
@@ -100,7 +101,8 @@ const VKMSearch = ({visible, search, store, vectorLayerId}) => {
 
     return (
             <StyledContainer visible={visible} className="search-inputs">
-                <StyledTextField placeholder="Tie"
+                <StyledTextField
+                    placeholder={strings.search.vkm.tie}
                     onChange={(event) => {
                         onChange('tie', parseFloat(event.target.value));
                     }}
@@ -112,42 +114,43 @@ const VKMSearch = ({visible, search, store, vectorLayerId}) => {
                 </StyledTextField>
 
                 <StyledSelectInput
-                    options={search.searchResult.tieosat.map((value, index) => {
-                        return { value: value, label: value }
-                    })}
-                    value={search.formData.vkm.tieosa}
-                    disabled={search.searchResult.tieosat.length <= 0 || search.searching}
-                    placeholder="Tieosa"
+                    placeholder={strings.search.vkm.osa}
                     onChange={(event) => {
                         onChange('tieosa', parseFloat(event.target.value));
                     }}
+                    value={search.formData.vkm.tieosa}
+                    disabled={search.searchResult.tieosat.length <= 0 || search.searching}
                     className="margin-top"
+                    options={search.searchResult.tieosat.map((value, index) => {
+                        return { value: value, label: value }
+                    })}
                 >
                 </StyledSelectInput>
 
                 <StyledSelectInput
-                    options={search.searchResult.ajoradat.map((value, index) => {
-                        return { value: value, label: value }
-                    })}
-                    value={search.formData.vkm.ajorata}
-                    disabled={search.searchResult.ajoradat.length <= 0 || search.searching}
-                    placeholder="Ajorata"
+                    placeholder={strings.search.vkm.ajorata}
                     onChange={(event) => {
                         onChange('ajorata', parseFloat(event.target.value));
                     }}
+                    value={search.formData.vkm.ajorata}
+                    disabled={search.searchResult.ajoradat.length <= 0 || search.searching}
                     className="margin-top"
+                    options={search.searchResult.ajoradat.map((value, index) => {
+                        return { value: value, label: value }
+                    })}
                 >
                 </StyledSelectInput>
 
-                <StyledTextField placeholder="Etäisyys"
+                <StyledTextField
+                    placeholder={strings.search.vkm.etaisyys}
                     onChange={(event) => {
                         onChange('etaisyys', parseFloat(event.target.value));
                     }}
                     value={search.formData.vkm.etaisyys !== null ? search.formData.vkm.etaisyys : ''}
                     disabled={search.formData.vkm.tie === null || search.formData.vkm.tieosa === null || search.formData.vkm.ajorata === null || search.searching}
+                    className="margin-top"
                     min="0"
                     type="number"
-                    className="margin-top"
                 >
                 </StyledTextField>
             </StyledContainer>

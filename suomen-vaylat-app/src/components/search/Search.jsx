@@ -2,14 +2,14 @@ import React, { useContext } from 'react';
 import { ReactReduxContext } from 'react-redux';
 import styled from 'styled-components';
 import { useAppSelector } from '../../state/hooks';
-import { addFeaturesToMap, searchVKMRoad, removeFeaturesFromMap } from '../../state/slices/rpcSlice';
+import { searchVKMRoad, removeFeaturesFromMap } from '../../state/slices/rpcSlice';
 import { setSearchSelected, emptySearchResult, emptyFormData, setSearching } from '../../state/slices/searchSlice';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import strings from '../../translations';
 import CenterSpinner from '../center-spinner/CenterSpinner';
 import { StyledSelectInput } from './CommonComponents';
-import { setFormData, setSearchResult } from '../../state/slices/searchSlice';
+import { setSearchResult } from '../../state/slices/searchSlice';
 import './Search.scss';
 import VKMSearch from './VKMSearch';
 
@@ -63,7 +63,6 @@ const StyledSearchControl = styled.button`
 
 export const Search = () => {
     const search = useAppSelector((state) => state.search);
-    console.log(search);
 
     const vectorLayerId = 'SEARCH_VECTORLAYER';
     const { store } = useContext(ReactReduxContext)
@@ -75,9 +74,9 @@ export const Search = () => {
         store.dispatch(emptyFormData());
         store.dispatch(removeFeaturesFromMap(vectorLayerId + '_' + search.selected));
     };
-    const values = [
-        { value: 'address', label: 'Osoitehaku' },
-        { value: 'vkm', label: 'Tiehaku' },
+    const searchTypes = [
+        { value: 'address', label: strings.search.types.address },
+        { value: 'vkm', label: strings.search.types.vkm }
     ];
 
     let searchDisabled = true;
@@ -110,7 +109,7 @@ export const Search = () => {
                 <CenterSpinner/>
             ) : null}
                 <StyledSelectInput
-                    options={values}
+                    options={searchTypes}
                     value={search.selected}
                     onChange={(event) => {
                         searchTypeOnChange(event.target.value);
