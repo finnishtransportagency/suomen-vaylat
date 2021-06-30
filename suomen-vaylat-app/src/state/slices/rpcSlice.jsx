@@ -72,8 +72,8 @@ export const rpcSlice = createSlice({
     searchVKMRoad: (state, action) => {
         if (state.channel !== null) {
             state.channel.searchVKMRoad(action.payload.search, action.payload.handler, (err) => {
-                if (typeof action.errorHandler === 'function') {
-                    action.errorHandler(err);
+                if (typeof action.payload.errorHandler === 'function') {
+                    action.payload.errorHandler(err);
                 } else {
                     // FIXME Tee virheen käsittely
                     console.log('Tee virheenkorjaus, esim. tie= 2, osa=9', err);

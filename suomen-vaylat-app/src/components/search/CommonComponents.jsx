@@ -119,3 +119,15 @@ export const StyledSelectInput = styled(({
       </div>
     )
   })``
+
+  export const ToastMessage = ({title, message, errors}) => (
+    <div>
+      <h5>{title}</h5>
+      {message}
+      <ul>
+      {errors.map((item,index)=>{
+            return <li key={index}>{item}</li>
+        })}
+      </ul>
+    </div>
+  )
