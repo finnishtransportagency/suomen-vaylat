@@ -93,6 +93,7 @@ export const rpcSlice = createSlice({
     },
     removeFeaturesFromMap: (state, action) => {
         state.channel !== null && state.channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [null, null, action.payload.layerId]);
+    },
     setCurrentZoomLevel: (state, action) => {
         state.currentZoomLevel = action.payload;
     }
