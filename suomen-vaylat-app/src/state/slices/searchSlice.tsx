@@ -31,6 +31,14 @@ export const searchSlice = createSlice({
     },
     setSearchSelected: (state, action) => {
       state.selected = action.payload;
+      state.searching = false;
+      state.searchResult = {
+        tie: null,
+        geom: null,
+        tieosat: [],
+        osa: null,
+        ajoradat: []
+      };
     },
     setSearchResult: (state, action) => {
       if (action.payload.tie) {
@@ -65,10 +73,28 @@ export const searchSlice = createSlice({
         osa: null,
         ajoradat: []
       };
+    },
+    emptyFormData: (state) => {
+      state.formData = {
+        address: '',
+        vkm: {
+          ajorata: null,
+          etaisyys: null,
+          tie: null,
+          tieosa: null
+        }
+      };
     }
   }
 });
 
-export const { setFormData, setSearchSelected, setSearchResult, setSearching, emptySearchResult } = searchSlice.actions;
+export const {
+  setFormData,
+  setSearchSelected,
+  setSearchResult,
+  setSearching,
+  emptySearchResult,
+  emptyFormData
+} = searchSlice.actions;
 
 export default searchSlice.reducer;
