@@ -8,8 +8,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import strings from '../../translations';
 import CenterSpinner from '../center-spinner/CenterSpinner';
-import { StyledSelectInput } from './CommonComponents';
+import { StyledSelectInput, ToastMessage } from './CommonComponents';
 import { setSearchResult } from '../../state/slices/searchSlice';
+import { ShowError } from '../messages/Messages';
 import './Search.scss';
 import VKMSearch from './VKMSearch';
 
@@ -84,12 +85,21 @@ export const Search = () => {
     const onClickHandler = () => {
         store.dispatch(setSearching(true));
 
+        const vkmSearchErrorHandler = (errors) => {
+            store.dispatch(setSearching(false));
+
+            ShowError(<ToastMessage title={strings.search.vkm.error.title}
+                message={strings.search.vkm.error.text}
+                errors={errors}/>);
+        };
+
         if (search.selected === 'vkm') {
             store.dispatch(searchVKMRoad({
                 search: [search.formData.vkm.tie, search.formData.vkm.tieosa, search.formData.vkm.ajorata, search.formData.vkm.etaisyys],
                 handler: (data) => {
                     store.dispatch(setSearchResult(data));
-                }
+                },
+                errorHandler: vkmSearchErrorHandler
             }));
         }
     };

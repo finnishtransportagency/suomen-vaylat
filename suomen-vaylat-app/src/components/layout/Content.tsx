@@ -7,6 +7,7 @@ import TieMenu from '../menus/TieMenu';
 import ZoomMenu from '../zoom-features/ZoomMenu';
 import './Content.scss';
 import Search from '../search/Search';
+import { ToastContainer } from 'react-toastify';
 
 export const Content = () => {
 
@@ -17,6 +18,7 @@ export const Content = () => {
             <ZoomMenu />
             <PublishedMap></PublishedMap>
             <Search></Search>
+            <ToastContainer></ToastContainer>
         </div>
     );
  }

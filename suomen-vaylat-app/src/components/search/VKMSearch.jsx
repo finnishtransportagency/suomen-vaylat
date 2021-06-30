@@ -5,17 +5,17 @@ import { debounce } from 'tlence';
 
 import { addFeaturesToMap, searchVKMRoad, removeFeaturesFromMap } from '../../state/slices/rpcSlice';
 import { setFormData, setSearchResult, setSearching, emptySearchResult } from '../../state/slices/searchSlice';
-import { StyledContainer, StyledTextField, StyledSelectInput } from './CommonComponents';
+import { StyledContainer, StyledTextField, StyledSelectInput, ToastMessage } from './CommonComponents';
 import { VKMGeoJsonStyles, VKMGeoJsonHoverStyles } from './VKMSearchStyles';
 import strings from '../../translations';
+import { ShowError } from '../messages/Messages';
 
 let debounceSearchVKM = null;
 
 const VKMSearch = ({visible, search, store, vectorLayerId}) => {
-
     if (search.selected === 'vkm' && search.searchResult.geom !== null && search.searching === false) {
         let style = 'tie';
-        if (search.formData.vkm.tieosa !== null || search.formData.vkm.ajorata !== null) {
+        if ((search.formData.vkm.tieosa !== null || search.formData.vkm.ajorata !== null) && search.searchResult.osa) {
             style = 'osa';
         } else if (search.formData.vkm.etaisyys !== null) {
             style = 'etaisyys';
@@ -87,11 +87,21 @@ const VKMSearch = ({visible, search, store, vectorLayerId}) => {
         const vkmSearchHandler = (data) => {
             store.dispatch(setSearchResult(data));
         };
+
+        const vkmSearchErrorHandler = (errors) => {
+            store.dispatch(setSearching(false));
+
+            ShowError(<ToastMessage title={strings.search.vkm.error.title}
+                message={strings.search.vkm.error.text}
+                errors={errors}/>);
+        };
+
         const searchVKM = (data) => {
             store.dispatch(setSearching(true));
             store.dispatch(searchVKMRoad({
                 search: data,
-                handler: vkmSearchHandler
+                handler: vkmSearchHandler,
+                errorHandler: vkmSearchErrorHandler
             }));
         };
         debounceSearchVKM = debounce(searchVKM, 1000);
