@@ -8,9 +8,20 @@ const fi = {
     },
     title: "Suomen Väylät",
     search: {
-        default: 'Hae',
-        address: 'Hae',
-        vkm: 'Hae piste'
+        types: {
+            address: 'Osoitehaku',
+            vkm: 'Tiehaku'
+        },
+        vkm: {
+            tie: 'Tie',
+            osa: 'Tieosa',
+            ajorata: 'Ajorata',
+            etaisyys: 'Etäisyys (m)',
+            error: {
+                title: 'Tiehaku epäonnistui',
+                text: 'Tarkista seuraavat virheet:'
+            }
+        }
     }
 }
 

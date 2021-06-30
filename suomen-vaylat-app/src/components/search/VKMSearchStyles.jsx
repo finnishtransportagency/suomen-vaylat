@@ -1,3 +1,5 @@
+import strings from '../../translations';
+
 export const VKMGeoJsonStyles = {
     tie: {
         stroke: {
@@ -26,28 +28,28 @@ export const VKMGeoJsonHoverStyles = {
         inherit: true,
         effect: 'darken',
         content: [
-            { key: 'Tie', valueProperty: 'tie' },
-            { key: 'Tieosa', valueProperty: 'osa' },
-            { key: 'Ajorata', valueProperty: 'ajorata' }
+            { key: strings.search.vkm.tie, valueProperty: 'tie' },
+            { key: strings.search.vkm.osa, valueProperty: 'osa' },
+            { key: strings.search.vkm.ajorata, valueProperty: 'ajorata' }
         ]
     },
     osa: {
         inherit: true,
         effect: 'darken',
         content: [
-            { key: 'Tie', valueProperty: 'tie' },
-            { key: 'Tieosa', valueProperty: 'osa' },
-            { key: 'Ajorata', valueProperty: 'ajorata' }
+            { key: strings.search.vkm.tie, valueProperty: 'tie' },
+            { key: strings.search.vkm.osa, valueProperty: 'osa' },
+            { key: strings.search.vkm.ajorata, valueProperty: 'ajorata' }
         ]
     },
     etaisyys: {
         inherit: true,
         effect: 'darken',
         content: [
-            { key: 'Tie', valueProperty: 'tie' },
-            { key: 'Tieosa', valueProperty: 'osa' },
-            { key: 'Ajorata', valueProperty: 'ajorata' },
-            { key: 'Etäisyys', valueProperty: 'etaisyys' }
+            { key: strings.search.vkm.tie, valueProperty: 'tie' },
+            { key: strings.search.vkm.osa, valueProperty: 'osa' },
+            { key: strings.search.vkm.ajorata, valueProperty: 'ajorata' },
+            { key: strings.search.vkm.etaisyys, valueProperty: 'etaisyys' }
         ]
     }
 };
