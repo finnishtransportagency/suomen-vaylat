@@ -1,81 +1,34 @@
 import React from 'react';
+import { useEffect } from 'react';
 
-import Select from 'react-styled-select'
+import { debounce } from 'tlence';
 
 import { addFeaturesToMap, searchVKMRoad, removeFeaturesFromMap } from '../../state/slices/rpcSlice';
 import { setFormData, setSearchResult, setSearching, emptySearchResult } from '../../state/slices/searchSlice';
-import { StyledContainer, StyledTextField } from './CommonComponents';
+import { StyledContainer, StyledTextField, StyledSelectInput } from './CommonComponents';
+import { VKMGeoJsonStyles, VKMGeoJsonHoverStyles } from './VKMSearchStyles';
 
-const geoJSONstyles = {
-    tie: {
-        stroke: {
-            color: '#910aa3',
-            width: 12
-        }
-    },
-    osa: {
-        stroke: {
-            color: '#ffc300',
-            width: 8
-        }
-    },
-    etaisyys: {
-        image: {
-            radius: 14,
-            fill: {
-                color: '#c73f00'
-            }
-        }
-    }
-};
-
-const geoJSONHoverStyles = {
-    tie: {
-        inherit: true,
-        effect: 'darken',
-        content: [
-            { key: 'Tie', valueProperty: 'tie' },
-            { key: 'Tieosa', valueProperty: 'osa' },
-            { key: 'Ajorata', valueProperty: 'ajorata' }
-        ]
-    },
-    osa: {
-        inherit: true,
-        effect: 'darken',
-        content: [
-            { key: 'Tie', valueProperty: 'tie' },
-            { key: 'Tieosa', valueProperty: 'osa' },
-            { key: 'Ajorata', valueProperty: 'ajorata' }
-        ]
-    },
-    etaisyys: {
-        inherit: true,
-        effect: 'darken',
-        content: [
-            { key: 'Tie', valueProperty: 'tie' },
-            { key: 'Tieosa', valueProperty: 'osa' },
-            { key: 'Ajorata', valueProperty: 'ajorata' },
-            { key: 'Etäisyys', valueProperty: 'etaisyys' }
-        ]
-    }
-};
+let debounceSearchVKM = null;
 
 const VKMSearch = ({visible, search, store, vectorLayerId}) => {
-    const vkmSearchHandler = (data) => {
-        store.dispatch(setSearchResult(data));
-    };
 
     if (search.selected === 'vkm' && search.searchResult.geom !== null && search.searching === false) {
         let style = 'tie';
-        if (search.searchResult.osa && search.searchResult.ajoradat) {
+        if (search.formData.vkm.tieosa !== null || search.formData.vkm.ajorata !== null) {
             style = 'osa';
+        } else if (search.formData.vkm.etaisyys !== null) {
+            style = 'etaisyys';
         }
-        let featureStyle = geoJSONstyles[style];
-        let hover = geoJSONHoverStyles[style];
+        let featureStyle = VKMGeoJsonStyles[style];
+        let hover = VKMGeoJsonHoverStyles[style];
+
+        if (style === 'tie') {
+            store.dispatch(removeFeaturesFromMap(vectorLayerId + '_vkm_osa'));
+        }
 
         store.dispatch(addFeaturesToMap({
             geojson: search.searchResult.geom,
-            layerId: vectorLayerId + '_' + search.selected + '_' + style,
+            layerId: vectorLayerId + '_vkm_' + style,
             featureStyle: featureStyle,
             hover: hover,
             maxZoomLevel: 10
@@ -83,7 +36,6 @@ const VKMSearch = ({visible, search, store, vectorLayerId}) => {
     }
 
     const onChange = (name, value) => {
-
         let formData = {
             tie: (name === 'tie') ? value : search.formData.vkm.tie,
             tieosa: (name === 'tieosa') ? value : search.formData.vkm.tieosa,
@@ -96,9 +48,7 @@ const VKMSearch = ({visible, search, store, vectorLayerId}) => {
             if (value === null) {
                 return;
             }
-            data.push(parseFloat(value));
-            store.dispatch(removeFeaturesFromMap(vectorLayerId + '_' + search.selected + '_tie'));
-            store.dispatch(removeFeaturesFromMap(vectorLayerId + '_' + search.selected + '_osa'));
+            data.push(value);
             store.dispatch(emptySearchResult());
             formData.tieosa = null;
             formData.ajorata = null;
@@ -107,34 +57,45 @@ const VKMSearch = ({visible, search, store, vectorLayerId}) => {
             data.push(formData.tie);
         }
         if (name === 'tieosa') {
-            data.push(parseFloat(value));
-            store.dispatch(removeFeaturesFromMap(vectorLayerId + '_' + search.selected + '_osa'));
+            data.push(value);
             formData.ajorata = null;
             formData.etaisyys = null;
         } else {
             data.push(formData.tieosa);
         }
         if (name === 'ajorata') {
-            data.push(parseFloat(value));
-            store.dispatch(removeFeaturesFromMap(vectorLayerId + '_' + search.selected + '_osa'));
+            data.push(value);
             formData.etaisyys = null;
         } else {
             data.push(formData.ajorata);
         }
         if (name === 'etaisyys') {
-            data.push(parseFloat(value));
+            data.push(value);
         } else {
             data.push(formData.etaisyys);
         }
 
         store.dispatch(setFormData(formData));
-        store.dispatch(setSearching(true));
 
-        store.dispatch(searchVKMRoad({
-            search: data,
-            handler: vkmSearchHandler
-        }));
+        if (name !== 'etaisyys') {
+            debounceSearchVKM(data);
+        }
     };
+
+    useEffect(() => {
+        const vkmSearchHandler = (data) => {
+            store.dispatch(setSearchResult(data));
+        };
+        const searchVKM = (data) => {
+            store.dispatch(setSearching(true));
+            store.dispatch(searchVKMRoad({
+                search: data,
+                handler: vkmSearchHandler
+            }));
+        };
+        debounceSearchVKM = debounce(searchVKM, 1000);
+    }, [store]);
+
 
 
     return (
@@ -146,40 +107,47 @@ const VKMSearch = ({visible, search, store, vectorLayerId}) => {
                     value={search.formData.vkm.tie ? search.formData.vkm.tie : ''}
                     disabled={search.searching}
                     min="1"
+                    type="number"
                 >
                 </StyledTextField>
 
-                <Select
-                        options={search.searchResult.tieosat.map((value, index) => {
-                            return { value: value, label: value }
-                        })}
-                        value={search.formData.vkm.tieosa}
-                        disabled={search.searchResult.tieosat.length <= 0 || search.searching}
-                        placeholder="Tieosa"
-                        onChange={(name) => {
-                            onChange('tieosa', name);
-                        }}
-                        className="margin-top"
-                    />
-                <Select
-                        options={search.searchResult.ajoradat.map((value, index) => {
-                            return { value: value, label: value }
-                        })}
-                        value={search.formData.vkm.ajorata}
-                        disabled={search.searchResult.ajoradat.length <= 0 || search.searching}
-                        placeholder="Ajorata"
-                        onChange={(name) => {
-                            onChange('ajorata', name);
-                        }}
-                        className="margin-top"
-                    />
+                <StyledSelectInput
+                    options={search.searchResult.tieosat.map((value, index) => {
+                        return { value: value, label: value }
+                    })}
+                    value={search.formData.vkm.tieosa}
+                    disabled={search.searchResult.tieosat.length <= 0 || search.searching}
+                    placeholder="Tieosa"
+                    onChange={(event) => {
+                        onChange('tieosa', parseFloat(event.target.value));
+                    }}
+                    className="margin-top"
+                >
+                </StyledSelectInput>
+
+                <StyledSelectInput
+                    options={search.searchResult.ajoradat.map((value, index) => {
+                        return { value: value, label: value }
+                    })}
+                    value={search.formData.vkm.ajorata}
+                    disabled={search.searchResult.ajoradat.length <= 0 || search.searching}
+                    placeholder="Ajorata"
+                    onChange={(event) => {
+                        onChange('ajorata', parseFloat(event.target.value));
+                    }}
+                    className="margin-top"
+                >
+                </StyledSelectInput>
+
                 <StyledTextField placeholder="Etäisyys"
                     onChange={(event) => {
-                        //onChange('etaisyys', parseFloat(event.target.value));
+                        onChange('etaisyys', parseFloat(event.target.value));
                     }}
-                    value={search.formData.vkm.etaisyys ? search.formData.vkm.etaisyys : ''}
+                    value={search.formData.vkm.etaisyys !== null ? search.formData.vkm.etaisyys : ''}
                     disabled={search.formData.vkm.tie === null || search.formData.vkm.tieosa === null || search.formData.vkm.ajorata === null || search.searching}
                     min="0"
+                    type="number"
+                    className="margin-top"
                 >
                 </StyledTextField>
             </StyledContainer>

@@ -19,13 +19,44 @@ export const StyledInput = styled.input`
   padding: 6px 8px;
   border-width: 1px;
   border-style: solid;
-  border-color: ${props => props.error ? 'red' : 'black'};
+  border-color: ${props => props.error ? 'red' : '#dcdce3'};
+  border-radius: 2px;
   margin: 0;
+  min-height: 36px;
+  font-size: 14px;
+  color: #777;
+  cursor: ${props => props.disabled ? 'not-allowed' : 'pointer'}
+  `;
+
+export const StyledSelect = styled.select`
+  width: 100%;
+  font-size: 14px;
+  padding: 6px 4px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: ${props => props.error ? 'red' : '#dcdce3'};
+  border-radius: 2px;
+  margin: 0;
+  min-height: 36px;
+  font-size: 14px;
+  color: #777;
+  cursor: ${props => props.disabled ? 'not-allowed' : 'pointer'};
+
+  option {
+    color: black;
+    background: white;
+    display: flex;
+    white-space: pre;
+    min-height: 36px;
+    padding: 0px 2px 1px;
+    font-size: 14px;
+  }
   `;
 
 export const StyledTextField = styled(({
     id,
     name,
+    type,
     min,
     value,
     placeholder,
@@ -42,7 +73,7 @@ export const StyledTextField = styled(({
         <StyledInput
           id={id}
           name={name}
-          type="number"
+          type={type}
           min={min}
           placeholder={placeholder}
           value={value}
@@ -50,6 +81,39 @@ export const StyledTextField = styled(({
           disabled={disabled}
           error={error}
         />
+        {hintText && <Text>{hintText}</Text>}
+        {error && <Error>{error}</Error>}
+      </div>
+    )
+  })``
+
+export const StyledSelectInput = styled(({
+    id,
+    name,
+    value,
+    placeholder,
+    hasError,
+    isTouched,
+    hintText,
+    onChange,
+    disabled,
+    className,
+    options
+  }) => {
+    const error = isTouched && hasError;
+    return (
+      <div className={className}>
+        <StyledSelect
+          id={id}
+          name={name}
+          value={value + ''|| ''}
+          onChange={onChange}
+          disabled={disabled}
+          error={error}
+        >
+          <option value="" readonly="true" hidden="true" selected>{placeholder}</option>
+          {options.map(({ value, label }, index) => <option value={value} >{label}</option>)}
+        </StyledSelect>
         {hintText && <Text>{hintText}</Text>}
         {error && <Error>{error}</Error>}
       </div>

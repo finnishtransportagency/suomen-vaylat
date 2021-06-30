@@ -88,7 +88,8 @@ export const rpcSlice = createSlice({
             centerTo:action.payload.centerTo || true,
             featureStyle: action.payload.featureStyle,
             hover: action.payload.hover,
-            maxZoomLevel: action.payload.maxZoomLevel || 4
+            maxZoomLevel: action.payload.maxZoomLevel || 4,
+            clearPrevious: action.payload.clearPrevious || true
         }]);
     },
     removeFeaturesFromMap: (state, action) => {
