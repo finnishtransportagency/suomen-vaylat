@@ -1,7 +1,6 @@
 
 import { useState } from 'react';
 import styled, { keyframes } from 'styled-components';
-import { Accordion, Card, Button } from 'react-bootstrap';
 import LayerList from './LayerList';
 import Layers from './Layers';
 
@@ -28,7 +27,7 @@ const StyledGroupName = styled.h6`
     //font-weight: bold;
 `;
 
-const StyledExpandButton = styled.div`
+const StyledSelectButton = styled.div`
     width: 20px;
     height: 20px;
     border: 1px solid black;
@@ -47,19 +46,18 @@ const StyledLayerGroup = styled.ul`
 `;
 
 export const LayerGroup = ({ group, layers, hasChildren }) => {
-    group.layers !== undefined && console.log(group.layers.length);
     const [isOpen, setIsOpen] = useState(false);
     return (
         <>
             {group.parentId === -1 ? (
                 <StyledMasterGroupHeader onClick={() => setIsOpen(!isOpen)}>
                     <StyledGroupName>{group.name}</StyledGroupName>
-                    { hasChildren && <StyledExpandButton isOpen={isOpen}/>}
+                    { hasChildren && <StyledSelectButton isOpen={isOpen}/>}
                 </StyledMasterGroupHeader> 
             ) : (
                 <StyledGroupHeader onClick={() => setIsOpen(!isOpen)}>
                     <StyledGroupName>{group.name}</StyledGroupName>
-                    { hasChildren || group.layers !== undefined && <StyledExpandButton isOpen={isOpen} />}
+                    { hasChildren || group.layers !== undefined && <StyledSelectButton isOpen={isOpen} />}
                 </StyledGroupHeader> 
             )}
             <StyledLayerGroup key={group.id} isOpen={isOpen}>

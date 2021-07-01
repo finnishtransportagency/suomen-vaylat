@@ -89,6 +89,7 @@ const PublishedMap = ({lang}) => {
                     channel.getCurrentState(function (data) {
                         //console.log('getCurrentState: ', data);
                         currentState = data;
+                        console.log(currentState);
                         store.dispatch(setCurrentState(data));
                     });
                 }

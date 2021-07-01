@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, current } from '@reduxjs/toolkit';
 
 const initialState = {
   loading: true,
@@ -11,7 +11,8 @@ const initialState = {
   zoomLevelsLayers: {},
   tagLayers: [],
   zoomRange: {},
-  currentZoomLevel: 0
+  currentZoomLevel: 0,
+  selectedLayers: []
 };
 
 export const rpcSlice = createSlice({
@@ -43,13 +44,31 @@ export const rpcSlice = createSlice({
         state.tagLayers = action.payload;
     },
     setZoomRange: (state, action) => {
+        console.log(state.zoomRange);
         state.zoomRange = action.payload;
     },
     setZoomLevelsLayers: (state, action) => {
         state.zoomLevelsLayers = action.payload;
     },
     setMapLayerVisibility: (state, action) => {
-        state.channel !== null && state.channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [action.payload.id, action.payload.value]);
+        var selectedLayers = action.payload.selectedLayers.selectedLayers;
+        if (selectedLayers === action.payload.layer) {
+            return; // relying on immutability; same identity -> no changes
+        }
+        const selectedLayersMap = new Map(selectedLayers.map((layer) => [layer]));
+        const toDelete = selectedLayers.filter((layer) => layer.id == action.payload.layer[0].id);
+        toDelete.length > 0 ?
+            state.channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [toDelete[0].id, false])
+            :
+            state.channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [action.payload.layer[0].id, true]);
+        var array = [...selectedLayers];
+        if (array.includes(action.payload.layer[0])) {
+            const filteredArray = array.filter(e => e.id != action.payload.layer[0].id);
+            state.selectedLayers = filteredArray;
+        }  else {
+            array.push(action.payload.layer[0]);
+            state.selectedLayers = array;
+        }
     },
     setOpacity: (state, action) => {
         state.channel !== null && state.channel.postRequest('ChangeMapLayerOpacityRequest', [action.payload.id, action.payload.value]);
