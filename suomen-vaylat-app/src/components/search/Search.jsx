@@ -19,8 +19,9 @@ const StyledSearchContainer = styled.div`
     position: fixed;
     max-width: 400px;
     padding: 8px;
-    right: 30px;
-    top: 90px;
+    margin-left: 20px;
+    right: 20px;
+    top: 80px;
     display: flex;
     justify-content: flex-end;
     align-items: flex-start;
