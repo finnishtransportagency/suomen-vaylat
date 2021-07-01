@@ -1,11 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
 import { ReactReduxContext } from 'react-redux';
-import styled, { keyframes } from 'styled-components'
+import styled, { keyframes } from 'styled-components';
 
 import { setZoomIn, setZoomOut } from '../../state/slices/rpcSlice';
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faAngleUp, faSearchMinus, faSearchPlus, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faAngleUp, faSearchMinus, faSearchPlus, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 
 import ZoomBarCircle from './ZoomBarCircle';
 
