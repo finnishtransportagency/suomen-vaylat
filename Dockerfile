@@ -21,7 +21,7 @@ FROM builder AS dev-builder
 
 ARG PUBLIC_URL
 
-ENV REACT_APP_PUBLISHED_MAP_URL=https://paikkatietodev.testivaylapilvi.fi/sv-kartta/?uuid=05f97ec6-4a64-4815-a10e-833d00fd01cf
+ENV REACT_APP_PUBLISHED_MAP_URL=https://paikkatietodev.testivaylapilvi.fi/sv-kartta/?uuid=8b65cd2c-9f8c-474d-93db-56788131d3e2
 ENV REACT_APP_PUBLISHED_MAP_DOMAIN=https://paikkatietodev.testivaylapilvi.fi
 
 RUN cd /suomen-vaylat && \
