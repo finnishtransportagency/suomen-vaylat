@@ -25,22 +25,12 @@ const PublishedMap = ({lang}) => {
 
     const { store } = useContext(ReactReduxContext);
     const loading = useAppSelector((state) => state.rpc.loading);
-    
+
     const hideSpinner = () => {
         store.dispatch(setLoading(false));
     };
 
     useEffect(() => {
-
-        var allGroups;
-        var allLayers;
-        var allTags;
-        var currentState;
-        var features;
-        var zoomLevelsLayers;
-        var tagLayers;
-        var zoomRange;
-
         store.dispatch(setLoading(true));
         const iframe = document.getElementById('sv-iframe');
         var handlers = [
@@ -59,7 +49,6 @@ const PublishedMap = ({lang}) => {
                 if(data.getZoomRange) {
                     channel.getZoomRange(function (data) {
                         //console.log('getZoomRange: ', data);
-                        zoomRange = data;
                         store.dispatch(setZoomRange(data));
                         data.hasOwnProperty('current') && store.dispatch(setCurrentZoomLevel(data.current));
                     });
@@ -67,50 +56,42 @@ const PublishedMap = ({lang}) => {
                 if (data.getAllGroups) {
                     channel.getAllGroups(function (data) {
                         //console.log('getAllGroups: ', data);
-                        allGroups = data;
                         store.dispatch(setAllGroups(data));
                     });
                 }
                 if (data.getAllLayers) {
                     channel.getAllLayers(function (data) {
                         //console.log('getAllLayers: ', data);
-                        allLayers = data;
                         store.dispatch(setAllLayers(data));
                     });
                 }
                 if (data.getAllTags) {
                     channel.getAllTags(function (data) {
                         //console.log('getAllTags: ', data);
-                        allTags = data;
                         store.dispatch(setAllTags(data));
                     });
                 }
                 if (data.getCurrentState) {
                     channel.getCurrentState(function (data) {
                         //console.log('getCurrentState: ', data);
-                        currentState = data;
-                        console.log(currentState);
                         store.dispatch(setCurrentState(data));
                     });
                 }
                 if (data.getFeatures) {
                     channel.getFeatures(function (data) {
                         //console.log('getFeatures: ', data);
-                        features = data;
                         store.dispatch(setFeatures(data));
                     });
                 }
                 if (data.getZoomLevelsLayers) {
                     channel.getZoomLevelsLayers(function (data) {
                         //console.log('getZoomLevelsLayers: ', data);
-                        zoomLevelsLayers = data;
                         store.dispatch(setZoomLevelsLayers(data));
                     });
                 }
                 if (data.getTagLayers) {
                     channel.getTagLayers(function (data) {
                         //console.log('getTagLayers: ', data);
-                        tagLayers = data;
                         store.dispatch(setTagLayers(data));
                     });
                 }
@@ -141,7 +122,7 @@ const PublishedMap = ({lang}) => {
                 //console.log('getSupportedRequests: ', data);
             });
         });
-        
+
         synchronizer.synchronize();
 
         return () => {

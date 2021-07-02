@@ -167,7 +167,7 @@ const StyledLayerInfoItem = styled.div`
     height: 25px;
     opacity: 0;
     animation: ${fadeIn} 0.2s ease-in forwards;
-    animation-delay: ${props => props.index * 0.01+'s'}; 
+    animation-delay: ${props => props.index * 0.01+'s'};
     svg {
         color: rgba(255, 255, 255, 0.7);
     }
@@ -187,7 +187,7 @@ const ZoomBar = ({
     currentZoomLevel,
     allLayers
 }) => {
-    
+
     const [isExpanded, setIsExpanded] = useState(false);
     const [hoveringIndex, setHoveringIndex] = useState(null);
 
@@ -207,7 +207,6 @@ const ZoomBar = ({
                         <StyledTitle>TÄLLÄ ZOOM-TASOLLA NÄYTETTÄVÄT TASOT</StyledTitle>
                         <StyledLayerInfoContainer>
                             {currentLayersInfoLayers.map((zoomLevelLayer, index) => {
-                                var layer = allLayers.find(layer => layer.id === zoomLevelLayer.id);
                                 return (
                                 <StyledLayerInfoItem
                                     key={hoveringIndex !== null ?
@@ -251,7 +250,7 @@ const ZoomBar = ({
                     </StyledZoomBarControlBottom>
                     {Object.values(zoomLevelsLayers).map((layer, index) => {
                         return <ZoomBarCircle
-                            key={layer.id}
+                            key={index}
                             index={index}
                             layer={layer}
                             zoomLevel={currentZoomLevel}
@@ -269,7 +268,7 @@ const ZoomBar = ({
                         <FontAwesomeIcon
                             icon={faSearchPlus}
                         />
-                    </StyledZoomBarControlTop> 
+                    </StyledZoomBarControlTop>
             </StyledZoomBarContainer>
     )
 };

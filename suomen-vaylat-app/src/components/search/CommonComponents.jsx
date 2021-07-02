@@ -111,8 +111,8 @@ export const StyledSelectInput = styled(({
           disabled={disabled}
           error={error}
         >
-          <option value="" readonly="true" hidden="true" selected>{placeholder}</option>
-          {options.map(({ value, label }, index) => <option value={value} >{label}</option>)}
+          <option value="" readOnly={true} hidden={true}>{placeholder}</option>
+          {options.map(({ value, label }, index) => <option key={index} value={value} >{label}</option>)}
         </StyledSelect>
         {hintText && <Text>{hintText}</Text>}
         {error && <Error>{error}</Error>}

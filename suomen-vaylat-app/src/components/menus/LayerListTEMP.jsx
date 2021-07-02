@@ -1,4 +1,4 @@
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
 import { useAppSelector } from '../../state/hooks';
 import LayerList from './LayerList';
 

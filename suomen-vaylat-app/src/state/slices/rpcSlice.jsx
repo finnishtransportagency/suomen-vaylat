@@ -1,4 +1,4 @@
-import { createSlice, current } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   loading: true,
@@ -21,7 +21,7 @@ export const rpcSlice = createSlice({
   reducers: {
     setLoading: (state, action) => {
         state.loading = action.payload;
-    }, 
+    },
     setChannel: (state, action) => {
         state.channel = action.payload;
     },
@@ -44,7 +44,6 @@ export const rpcSlice = createSlice({
         state.tagLayers = action.payload;
     },
     setZoomRange: (state, action) => {
-        console.log(state.zoomRange);
         state.zoomRange = action.payload;
     },
     setZoomLevelsLayers: (state, action) => {
@@ -55,15 +54,14 @@ export const rpcSlice = createSlice({
         if (selectedLayers === action.payload.layer) {
             return; // relying on immutability; same identity -> no changes
         }
-        const selectedLayersMap = new Map(selectedLayers.map((layer) => [layer]));
-        const toDelete = selectedLayers.filter((layer) => layer.id == action.payload.layer[0].id);
+        const toDelete = selectedLayers.filter((layer) => layer.id === action.payload.layer[0].id);
         toDelete.length > 0 ?
             state.channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [toDelete[0].id, false])
             :
             state.channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [action.payload.layer[0].id, true]);
         var array = [...selectedLayers];
         if (array.includes(action.payload.layer[0])) {
-            const filteredArray = array.filter(e => e.id != action.payload.layer[0].id);
+            const filteredArray = array.filter(e => e.id !== action.payload.layer[0].id);
             state.selectedLayers = filteredArray;
         }  else {
             array.push(action.payload.layer[0]);
