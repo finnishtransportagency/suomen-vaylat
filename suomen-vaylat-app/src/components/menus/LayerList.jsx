@@ -1,10 +1,7 @@
-
-import { useState } from 'react';
-import styled, { keyframes } from 'styled-components';
+import shortid from 'shortid';
 import LayerGroup from './LayerGroup';
 
 export const LayerList = ({ groups, layers, recurse = false}) => {
-
     return (
         <>
         {groups.map((group, index) => {
@@ -13,9 +10,8 @@ export const LayerList = ({ groups, layers, recurse = false}) => {
                 hasChildren = group.groups.length > 0;
             }
             return (
-                <>
-                   <LayerGroup group={group} layers={layers} hasChildren={hasChildren} />
-                </>
+
+                   <LayerGroup key={shortid.generate()} group={group} layers={layers} hasChildren={hasChildren} />
 
             );
         })

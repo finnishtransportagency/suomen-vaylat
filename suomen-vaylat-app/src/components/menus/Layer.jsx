@@ -1,7 +1,7 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { ReactReduxContext, useSelector } from 'react-redux';
 import { setMapLayerVisibility } from '../../state/slices/rpcSlice';
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
 
 const StyledLayerContainer = styled.li`
     overflow: hidden;
