@@ -16,9 +16,17 @@ const initialState = {
     geom: null,
     tieosat: [],
     osa: null,
-    ajoradat: []
+    ajoradat: [],
+    address: []
   },
-  searching: false
+  searching: false,
+  addressSearchEventHandlerReady: false,
+  selectedIndex: -1,
+  marker: {
+    x: null,
+    y: null,
+    msg: null
+  }
 };
 
 
@@ -37,7 +45,14 @@ export const searchSlice = createSlice({
         geom: null,
         tieosat: [],
         osa: null,
-        ajoradat: []
+        ajoradat: [],
+        address: []
+      };
+      state.selectedIndex = -1;
+      state.marker = {
+        x: null,
+        y: null,
+        msg: null
       };
     },
     setSearchResult: (state, action) => {
@@ -56,11 +71,15 @@ export const searchSlice = createSlice({
       if (action.payload.osa) {
         state.searchResult.osa = action.payload.osa;
       }
+      if (action.payload.address) {
+        state.searchResult.address = action.payload.address;
+      }
       if (action.payload.searching) {
         state.searching = action.payload.searching;
       } else {
         state.searching = false;
       }
+      state.selectedIndex = -1;
     },
     setSearching: (state, action) => {
       state.searching = action.payload;
@@ -71,7 +90,14 @@ export const searchSlice = createSlice({
         geom: null,
         tieosat: [],
         osa: null,
-        ajoradat: []
+        ajoradat: [],
+        address: []
+      };
+      state.selectedIndex = -1;
+      state.marker = {
+        x: null,
+        y: null,
+        msg: null
       };
     },
     emptyFormData: (state) => {
@@ -84,6 +110,17 @@ export const searchSlice = createSlice({
           tieosa: null
         }
       };
+    },
+    setAddressSearchEventHandlerReady: (state, action) => {
+      state.addressSearchEventHandlerReady = action.payload;
+    },
+    setSelectedIndex: (state, action) => {
+      state.selectedIndex = action.payload;
+    },
+    setMarker: (state, action) => {
+      state.marker.x = action.payload.x;
+      state.marker.y = action.payload.y;
+      state.marker.msg = action.payload.msg;
     }
   }
 });
@@ -94,7 +131,10 @@ export const {
   setSearchResult,
   setSearching,
   emptySearchResult,
-  emptyFormData
+  emptyFormData,
+  setAddressSearchEventHandlerReady,
+  setSelectedIndex,
+  setMarker
 } = searchSlice.actions;
 
 export default searchSlice.reducer;

@@ -21,7 +21,7 @@ export const rpcSlice = createSlice({
   reducers: {
     setLoading: (state, action) => {
         state.loading = action.payload;
-    }, 
+    },
     setChannel: (state, action) => {
         state.channel = action.payload;
     },
@@ -116,6 +116,26 @@ export const rpcSlice = createSlice({
     },
     setCurrentZoomLevel: (state, action) => {
         state.currentZoomLevel = action.payload;
+    },
+    searchRequest: (state, action) => {
+        state.channel !== null && state.channel.postRequest('SearchRequest', [action.payload]);
+    },
+    addMarkerRequest: (state, action) => {
+        const data =  {
+            x: action.payload.x,
+            y: action.payload.y,
+            msg: action.payload.msg || '',
+            shape: action.payload.shape || 2,
+            size: action.payload.size || 7,
+            color: action.payload.color || '0064af'
+        };
+        state.channel !== null && state.channel.postRequest('MapModulePlugin.AddMarkerRequest', [data, action.payload.markerId]);
+    },
+    removeMarkerRequest: (state, action) => {
+        state.channel !== null && state.channel.postRequest('MapModulePlugin.RemoveMarkersRequest', [action.payload.markerId]);
+    },
+    mapMoveRequest: (state, action) => {
+        state.channel !== null && state.channel.postRequest('MapMoveRequest', [action.payload.x, action.payload.y, action.payload.zoom || 10]);
     }
   }
 });
@@ -139,7 +159,11 @@ export const {
     searchVKMRoad,
     addFeaturesToMap,
     removeFeaturesFromMap,
-    setCurrentZoomLevel
+    setCurrentZoomLevel,
+    searchRequest,
+    addMarkerRequest,
+    removeMarkerRequest,
+    mapMoveRequest
 } = rpcSlice.actions;
 
 export default rpcSlice.reducer;

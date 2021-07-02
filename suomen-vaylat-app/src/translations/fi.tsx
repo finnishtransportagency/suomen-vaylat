@@ -21,6 +21,13 @@ const fi = {
                 title: 'Tiehaku epäonnistui',
                 text: 'Tarkista seuraavat virheet:'
             }
+        },
+        address: {
+            address: 'Opastinsilta 12 Helsinki',
+            error: {
+                title: 'Osoitehaku',
+                text: 'Tuloksia ei löytynyt osoitehaulla.'
+            }
         }
     }
 }

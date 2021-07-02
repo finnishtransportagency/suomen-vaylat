@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { ReactReduxContext } from 'react-redux';
 import styled from 'styled-components';
 import { useAppSelector } from '../../state/hooks';
-import { searchVKMRoad, removeFeaturesFromMap } from '../../state/slices/rpcSlice';
+import { searchVKMRoad, removeFeaturesFromMap, searchRequest, removeMarkerRequest, addMarkerRequest, mapMoveRequest } from '../../state/slices/rpcSlice';
 import { setSearchSelected, emptySearchResult, emptyFormData, setSearching } from '../../state/slices/searchSlice';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
@@ -13,6 +13,7 @@ import { setSearchResult } from '../../state/slices/searchSlice';
 import { ShowError } from '../messages/Messages';
 import './Search.scss';
 import VKMSearch from './VKMSearch';
+import AddressSearch from './AddressSearch';
 
 const StyledSearchContainer = styled.div`
     z-index: 2;
@@ -67,6 +68,7 @@ export const Search = () => {
     const search = useAppSelector((state) => state.search);
 
     const vectorLayerId = 'SEARCH_VECTORLAYER';
+    const markerId = 'SEARCH_MARKER';
     const { store } = useContext(ReactReduxContext)
 
     // handlers
@@ -102,16 +104,39 @@ export const Search = () => {
                 },
                 errorHandler: vkmSearchErrorHandler
             }));
+        } else if (search.selected === 'address') {
+            store.dispatch(searchRequest(search.formData.address));
         }
     };
 
-    if( search.searching === false && search.selected === 'vkm'
+    if (search.searching === false && search.selected === 'vkm'
         && search.formData.vkm.tie !== null
         && search.formData.vkm.tieosa !== null
         && search.formData.vkm.ajorata !== null
         && search.formData.vkm.etaisyys !== null
     ) {
         searchDisabled = false;
+    } else if (search.searching === false && search.selected === 'address'
+        && search.formData.address !== null && search.formData.address.length > 0) {
+        searchDisabled = false;
+    }
+
+    if (search.searching === false && search.marker.lon !== null && search.marker.lat !== null) {
+
+        store.dispatch(addMarkerRequest({
+            x: search.marker.x,
+            y: search.marker.y,
+            msg: search.marker.msg || '',
+            markerId: markerId
+        }));
+
+        store.dispatch(mapMoveRequest({
+            x: search.marker.x,
+            y: search.marker.y
+        }));
+
+    } else if (search.searching === false ) {
+        //store.dispatch(removeMarkerRequest(markerId));
     }
 
     return (
@@ -132,7 +157,10 @@ export const Search = () => {
                     search={search}
                     store={store}
                     vectorLayerId={vectorLayerId}></VKMSearch>
-
+                <AddressSearch visible={search.selected === 'address'}
+                    search={search}
+                    store={store}
+                    markerId={markerId} onEnterHandler={onClickHandler}></AddressSearch>
                 <StyledSearchControl
                     disabled={searchDisabled}
                     onClick={onClickHandler}
