@@ -1,5 +1,5 @@
 import {  useContext } from 'react';
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
 
 import { ReactReduxContext } from 'react-redux';
 
@@ -13,7 +13,7 @@ const StyledZoomLevelCircle = styled.div`
     box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
     pointer-events: auto;
     transition: all 0.5s ease-in-out;
-   
+
     background-color: ${props => props.index === props.zoomLevel ? "#ffc300" : "#fff"};
     transform: ${props => props.index === props.zoomLevel && "scale(1.2)"};
     width: ${props => props.isExpanded ? "23px" : "0px"};

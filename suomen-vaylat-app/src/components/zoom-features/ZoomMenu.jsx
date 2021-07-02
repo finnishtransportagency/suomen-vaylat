@@ -1,11 +1,10 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 
 import styled from 'styled-components';
 
 import ZoomBar from './ZoomBar';
 
 import { useAppSelector } from '../../state/hooks';
-import { ReactReduxContext } from 'react-redux';
 
 const StyledZoomMenu = styled.div`
     z-index: 2;
@@ -26,7 +25,6 @@ const StyledZoomMenu = styled.div`
 const ZoomMenu = () => {
     const [hoveringIndex, setHoveringIndex] = useState(null);
 
-    const { store } = useContext(ReactReduxContext);
     const zoomLevelsLayers = useAppSelector((state) => state.rpc.zoomLevelsLayers);
     const currentZoomLevel = useAppSelector((state) => state.rpc.currentZoomLevel);
     const allLayers = useAppSelector((state) => state.rpc.allLayers);
