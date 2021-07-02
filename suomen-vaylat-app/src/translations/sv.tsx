@@ -21,6 +21,13 @@ const sv = {
                 title: 'Vägsökning misslyckades',
                 text: 'Sök efter följande fel:'
             }
+        },
+        address: {
+            address: 'Opastinsilta 12 Helsinki',
+            error: {
+                title: 'Adress sökning',
+                text: 'Inga resultat hittades för adressökning.'
+            }
         }
     }
 }
