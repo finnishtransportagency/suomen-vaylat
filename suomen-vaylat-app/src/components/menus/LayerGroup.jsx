@@ -1,6 +1,6 @@
 
 import { useState } from 'react';
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
 import LayerList from './LayerList';
 import Layers from './Layers';
 
@@ -50,17 +50,17 @@ export const LayerGroup = ({ group, layers, hasChildren }) => {
     return (
         <>
             {group.parentId === -1 ? (
-                <StyledMasterGroupHeader onClick={() => setIsOpen(!isOpen)}>
+                <StyledMasterGroupHeader key={"smgh_" + group.parentId + "_" + group.id} onClick={() => setIsOpen(!isOpen)}>
                     <StyledGroupName>{group.name}</StyledGroupName>
                     { hasChildren && <StyledSelectButton isOpen={isOpen}/>}
-                </StyledMasterGroupHeader> 
+                </StyledMasterGroupHeader>
             ) : (
-                <StyledGroupHeader onClick={() => setIsOpen(!isOpen)}>
+                <StyledGroupHeader key={"smgh_" +group.parentId + '_' + group.id} onClick={() => setIsOpen(!isOpen)}>
                     <StyledGroupName>{group.name}</StyledGroupName>
-                    { hasChildren || group.layers !== undefined && <StyledSelectButton isOpen={isOpen} />}
-                </StyledGroupHeader> 
+                    { (hasChildren || group.layers !== undefined) && <StyledSelectButton isOpen={isOpen} />}
+                </StyledGroupHeader>
             )}
-            <StyledLayerGroup key={group.id} isOpen={isOpen}>
+            <StyledLayerGroup key={"slg_" + group.parentId + "_" + group.id}  isOpen={isOpen}>
                 {hasChildren && (
                     <>
                         <Layers groupLayers={group.layers} allLayers={layers} isOpen={isOpen}/>
