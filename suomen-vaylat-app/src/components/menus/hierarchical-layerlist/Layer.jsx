@@ -1,6 +1,7 @@
 import React, { useContext, useState } from "react";
 import { ReactReduxContext, useSelector } from 'react-redux';
-import { setMapLayerVisibility } from '../../state/slices/rpcSlice';
+import { setMapLayerVisibility } from '../../../state/slices/rpcSlice';
+import { useAppSelector } from '../../../state/hooks';
 import styled from 'styled-components';
 
 const StyledLayerContainer = styled.li`
@@ -33,9 +34,9 @@ const StyledLayerName = styled.p`
 
 
 
-export const Layer = ({ layer }) => {
+export const Layer = ({ layer, selected }) => {
     const { store } = useContext(ReactReduxContext);
-    const selectedLayers = useSelector(state => state.rpc)
+    const selectedLayers = useAppSelector((state) => state.rpc.selectedLayers);
     const [isSelected, setIsSelected] = useState(false);
 
     const selectLayer = (isSelected) => {

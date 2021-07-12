@@ -1,6 +1,6 @@
 import React from 'react';
 import PublishedMap from '../published-map/PublishedMap.jsx';
-import LayerListTEMP from '../menus/LayerListTEMP';
+import LayerListTEMP from '../menus/hierarchical-layerlist/LayerListTEMP';
 
 import ZoomMenu from '../zoom-features/ZoomMenu';
 import './Content.scss';

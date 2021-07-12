@@ -49,19 +49,31 @@ export const rpcSlice = createSlice({
     setZoomLevelsLayers: (state, action) => {
         state.zoomLevelsLayers = action.payload;
     },
+    setSelectedLayerIds: (state, action) => {
+        console.log(action.payload.selectedLayers);
+        const oldSelectedLayers = action.payload.selectedLayers;
+        var newSelectedLayers = [...oldSelectedLayers];
+        if (newSelectedLayers.length > 0) {
+            newSelectedLayers.push([...action.payload.layers]);
+        } else {
+            newSelectedLayers.push([...action.payload.layers]);
+        }
+        state.selectedLayerIds = newSelectedLayers;
+    },
     setMapLayerVisibility: (state, action) => {
-        var selectedLayers = action.payload.selectedLayers.selectedLayers;
+
+        var selectedLayers = action.payload.selectedLayers;
         if (selectedLayers === action.payload.layer) {
             return; // relying on immutability; same identity -> no changes
         }
-        const toDelete = selectedLayers.filter((layer) => layer.id === action.payload.layer[0].id);
+        const toDelete = selectedLayers.filter((layer) => layer.id === action.payload.layer[0].getId());
         toDelete.length > 0 ?
             state.channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [toDelete[0].id, false])
             :
-            state.channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [action.payload.layer[0].id, true]);
+            state.channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [action.payload.layer[0].getId(), true]);
         var array = [...selectedLayers];
         if (array.includes(action.payload.layer[0])) {
-            const filteredArray = array.filter(e => e.id !== action.payload.layer[0].id);
+            const filteredArray = array.filter(e => e.id !== action.payload.layer[0].getId());
             state.selectedLayers = filteredArray;
         }  else {
             array.push(action.payload.layer[0]);
@@ -129,6 +141,7 @@ export const {
     setTagLayers,
     setZoomRange,
     setZoomLevelsLayers,
+    setSelectedLayerIds,
     setMapLayerVisibility,
     setOpacity,
     setZoomIn,
