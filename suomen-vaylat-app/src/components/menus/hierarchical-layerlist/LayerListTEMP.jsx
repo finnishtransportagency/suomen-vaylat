@@ -1,6 +1,7 @@
 import styled from 'styled-components';
-import { useAppSelector } from '../../state/hooks';
+import { useAppSelector } from '../../../state/hooks';
 import LayerList from './LayerList';
+import Tabs from "./Tabs"; 
 
 //VÄLIAIKAINEN PALIKKA VÄLITTÄMÄÄN TESTIDATAA HIERARKISELLE TASOVALIKOLLE
 
@@ -24,11 +25,12 @@ export const LayerListTEMP = () => {
   const allLayers = useAppSelector((state) => state.rpc.allLayers);
 
     return (
-      <StyledLayerList>
-        {/* <div style={{position: "absolute",margin: "15px",width: "300px",zIndex: "10"}}> */}
-        <LayerList groups={allGroups} layers={allLayers} recurse={false} />
-        {/* </div> */}
-      </StyledLayerList>
+        <StyledLayerList>
+          <Tabs> 
+            <LayerList label="layerlist" groups={allGroups} layers={allLayers} recurse={false} />
+            <LayerList label="layerlist-favs" groups={allGroups} layers={allLayers} recurse={false} />
+          </Tabs> 
+        </StyledLayerList>
       );
 };
 

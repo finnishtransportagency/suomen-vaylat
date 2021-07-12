@@ -3,6 +3,7 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import LayerList from './LayerList';
 import Layers from './Layers';
+import { useAppSelector } from '../../state/hooks';
 
 const StyledMasterGroupHeader = styled.div`
     display: flex;
@@ -47,28 +48,38 @@ const StyledLayerGroup = styled.ul`
 
 export const LayerGroup = ({ group, layers, hasChildren }) => {
     const [isOpen, setIsOpen] = useState(false);
+    const selectedLayers = useAppSelector((state) => state.rpc.selectedLayers);
+    const layerRows = group.getLayers().map((layer, index) => {
+        const layerProps = {
+            model: layer,
+            even: index % 2 === 0,
+            selected: Array.isArray(selectedLayerIds) && selectedLayerIds.includes(layer.getId()),
+            controller
+        };
+        return layerProps;
+    });
     return (
         <>
             {group.parentId === -1 ? (
                 <StyledMasterGroupHeader key={"smgh_" + group.parentId + "_" + group.id} onClick={() => setIsOpen(!isOpen)}>
                     <StyledGroupName>{group.name}</StyledGroupName>
-                    { hasChildren && <StyledSelectButton isOpen={isOpen}/>}
+                    { hasChildren && <StyledSelectButton isOpen={isOpen} onClick={() => console.log("tt")}/>}
                 </StyledMasterGroupHeader>
             ) : (
                 <StyledGroupHeader key={"smgh_" +group.parentId + '_' + group.id} onClick={() => setIsOpen(!isOpen)}>
                     <StyledGroupName>{group.name}</StyledGroupName>
-                    { (hasChildren || group.layers !== undefined) && <StyledSelectButton isOpen={isOpen} />}
+                    { (hasChildren || group.layers !== undefined) && <StyledSelectButton isOpen={isOpen} onClick={() => console.log("jj")}/>}
                 </StyledGroupHeader>
             )}
             <StyledLayerGroup key={"slg_" + group.parentId + "_" + group.id}  isOpen={isOpen}>
                 {hasChildren && (
                     <>
-                        <Layers groupLayers={group.layers} allLayers={layers} isOpen={isOpen}/>
+                        <Layers groupLayers={group.layers} allLayers={layers} selected={selected} />
                         <LayerList groups={group.groups} layers={layers} recurse={true} />
                     </>
                 )}
                 {!hasChildren && (
-                    <Layers groupLayers={group.layers} allLayers={layers} isOpen={isOpen}/>
+                    <Layers groupLayers={group.layers} allLayers={layers} selected={selected} />
                 )}
             </StyledLayerGroup>
         </>

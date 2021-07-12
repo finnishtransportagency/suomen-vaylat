@@ -1,6 +1,6 @@
 import Layer from './Layer';
 
-export const Layers = ({ groupLayers, allLayers }) => {
+export const Layers = ({ groupLayers, allLayers, selected }) => {
     //Find matching layers from all layers and groups, then push this group's layers into 'filteredLayers'
     var filteredLayers = [];
     if (groupLayers) {
@@ -12,7 +12,7 @@ export const Layers = ({ groupLayers, allLayers }) => {
         <>
             {filteredLayers.map((layer, index) => {
                 return (
-                    <Layer key={index} layer={layer}></Layer>
+                    <Layer key={index} layer={layer} selected={selected} ></Layer>
             )})}
         </>
     );
