@@ -1,6 +1,6 @@
-import { useContext, useState } from "react";
+import { useEffect, useContext, useState } from "react";
 import { ReactReduxContext, useSelector } from 'react-redux';
-import { setMapLayerVisibility } from '../../state/slices/rpcSlice';
+import { setAllLayers, setMapLayerVisibility } from '../../state/slices/rpcSlice';
 import styled from 'styled-components';
 
 const StyledLayerContainer = styled.li`
@@ -32,12 +32,20 @@ const StyledLayerName = styled.p`
 
 export const Layer = ({ layer, isOpen }) => {
     const { store } = useContext(ReactReduxContext);
-    const selectedLayers = useSelector(state => state.rpc)
-    const [isSelected, setIsSelected] = useState(false);
+    const channel = useSelector(state => state.rpc.channel)
+    //const [isSelected, setIsSelected] = useState(false);
 
-    const selectLayer = (isSelected) => {
-        store.dispatch(setMapLayerVisibility({layer, selectedLayers}));
-        setIsSelected(!isSelected);
+    const handleLayerVisibility = (channel, layer) => {
+        console.log(layer);
+        channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, !layer.visible]);
+        channel.getAllLayers(function (data) {
+            console.log(data);
+            //console.log('getAllGroups: ', data);
+            store.dispatch(setAllLayers(data));
+        });
+        //store.dispatch(setMapLayerVisibility({layer, value}));
+        //channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [action.payload.layer[0].id, true]);
+       //setIsSelected(!isSelected);
     }
 
     return (
@@ -47,8 +55,8 @@ export const Layer = ({ layer, isOpen }) => {
             >
                 <StyledSelectButton
                     type="checkbox"
-                    checked={isSelected}
-                    onChange={() => selectLayer(isSelected)}
+                    checked={layer[0].visible}
+                    onChange={() => handleLayerVisibility(channel, layer[0])}
                 />
                 <StyledlayerHeader>
                     <StyledLayerName>

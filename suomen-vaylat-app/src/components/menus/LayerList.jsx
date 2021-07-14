@@ -15,7 +15,7 @@ export const LayerList = ({ groups, layers, recurse = false}) => {
             }
             return (
             <LayerGroup
-                key={shortid.generate()}
+                key={group.id}
                 index={index}
                 group={group}
                 layers={layers}
