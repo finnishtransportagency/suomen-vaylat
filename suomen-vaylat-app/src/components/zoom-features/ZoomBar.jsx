@@ -230,7 +230,8 @@ const ZoomBar = ({
                             icon={faAngleUp}
                             style={{
                                 transform: isExpanded && "rotate(180deg)"
-                            }}/>
+                            }}
+                        />
                     </StyledExpandControl>
                     <StyledCenterLine />
                     <StyledZoomBarControlBottom
