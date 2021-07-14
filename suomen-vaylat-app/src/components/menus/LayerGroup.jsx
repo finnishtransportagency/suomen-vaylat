@@ -144,47 +144,47 @@ const themeStyles = {
     100: {
         icon: faCar,
         color: [
-            "rgb(32, 122, 67)",
-            "rgb(141, 203, 109)"
+            "#207a43",
+            "#8dcb6d"
         ]
     },
     101: {
         icon: faShip,
         color: [
-            "rgb(0, 100, 175)",
-            "rgb(73, 194, 241)"
+            "#0064af",
+            "#49c2f1"
         ]
     },
     34: {
         icon: faHardHat,
         color: [
-            "rgb(247, 147, 30)",
-            "rgb(255, 195, 0)"
+            "#f7931e",
+            "#ffc300"
         ]
     },
     2: {
         icon: faTrain,
         color: [
-            "rgb(199, 63, 0)",
-            "rgb(255, 81, 0)"
+            "#c73f00",
+            "#ff5100"
         ]
     },
     199: {
         icon: faLandmark,
         color: [
-            "#fafa"
+            "#186ef0" // FIX LATER
         ]
     },
     265: {
         icon: faRoad,
         color: [
-            "#fafa"
+            "#186ef0" // FIX LATER
         ]
     },
     1: {
         icon: faMap,
         color: [
-            "#fafa"
+            "#186ef0" // FIX LATER
         ]
     },
 }
@@ -242,9 +242,7 @@ export const LayerGroup = ({ index, group, layers, hasChildren }) => {
                             }}
                         />
                     </StyledGroupSelectButton>
-                    
                     <StyledGroupName>{group.name}</StyledGroupName>
-                    {/* { (hasChildren || group.layers !== undefined) && <StyledSelectButton isOpen={isOpen} />} */}
                 </StyledGroupHeader>
             )}
             <StyledLayerGroupContainer
