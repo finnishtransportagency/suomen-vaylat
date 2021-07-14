@@ -48,7 +48,6 @@ export const Layer = ({ layer, isOpen }) => {
                 <StyledSelectButton
                     type="checkbox"
                     checked={isSelected}
-                    //isSelected={isSelected}
                     onChange={() => selectLayer(isSelected)}
                 />
                 <StyledlayerHeader>
