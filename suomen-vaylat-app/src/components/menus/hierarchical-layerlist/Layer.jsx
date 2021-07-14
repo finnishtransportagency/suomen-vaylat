@@ -34,10 +34,11 @@ const StyledLayerName = styled.p`
 
 
 
-export const Layer = ({ layer, selected }) => {
+export const Layer = ({ layer }) => {
     const { store } = useContext(ReactReduxContext);
     const selectedLayers = useAppSelector((state) => state.rpc.selectedLayers);
     const [isSelected, setIsSelected] = useState(false);
+
 
     const selectLayer = (isSelected) => {
         store.dispatch(setMapLayerVisibility({layer, selectedLayers}));
