@@ -3,9 +3,9 @@ import strings from './../../translations';
 
 import './Header.scss';
 
-import vaylaLogoFi from './images/vayla_sivussa_fi.png';
-import vaylaLogoEn from './images/vayla_sivussa_en.png';
-import vaylaLogoSv from './images/vayla_sivussa_sv.png';
+import vaylaLogoFi from './images/vayla_sivussa_fi_white.svg';
+import vaylaLogoEn from './images/vayla_sivussa_en_white.svg';
+import vaylaLogoSv from './images/vayla_sivussa_sv_white.svg';
 
 export const Header = () => {
 
