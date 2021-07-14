@@ -53,7 +53,7 @@ const StyledMasterGroupHeader = styled.div`
     align-items: center;
     height: 40px;
     padding-left: 5px;
-    background-color: ${props => props.color[1] || "#0091ff"};
+    background-color: ${props => props.color[1]};
     border-radius: 20px;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
     transition: all 0.1s ease-in;
@@ -141,6 +141,12 @@ const StyledLayerGroup = styled.ul`
 `;
 
 const themeStyles = {
+    default: {
+        color: [
+            "#186ef0",
+            "#186ef0"
+        ]
+    },
     100: {
         icon: faCar,
         color: [
@@ -172,18 +178,21 @@ const themeStyles = {
     199: {
         icon: faLandmark,
         color: [
+            "#186ef0", // FIX LATER
             "#186ef0" // FIX LATER
         ]
     },
     265: {
         icon: faRoad,
         color: [
+            "#186ef0", // FIX LATER
             "#186ef0" // FIX LATER
         ]
     },
     1: {
         icon: faMap,
         color: [
+            "#186ef0", // FIX LATER
             "#186ef0" // FIX LATER
         ]
     },
@@ -197,11 +206,11 @@ export const LayerGroup = ({ index, group, layers, hasChildren }) => {
                 <StyledMasterGroupHeader
                     key={"smgh_" + group.parentId + "_" + group.id}
                     onClick={() => setIsOpen(!isOpen)}
-                    color={themeStyles.hasOwnProperty(group.id) && themeStyles[group.id].color}
+                    color={themeStyles.hasOwnProperty(group.id) ? themeStyles[group.id].color : themeStyles["default"].color}
                 >
                     <StyledLeftContent>
                         <StyledMasterGroupHeaderIcon
-                            color={themeStyles.hasOwnProperty(group.id) && themeStyles[group.id].color}
+                            color={themeStyles.hasOwnProperty(group.id) ? themeStyles[group.id].color : themeStyles["default"].color}
                     >
                             {
                                 themeStyles.hasOwnProperty(group.id) &&
