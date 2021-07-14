@@ -2,7 +2,6 @@ import React, { useContext, useEffect } from 'react';
 import OskariRPC from 'oskari-rpc';
 import { useAppSelector } from '../../state/hooks';
 import { ReactReduxContext } from 'react-redux';
-import { Layer } from '../../Layer';
 
 import {
     setLoading,
@@ -62,16 +61,12 @@ const PublishedMap = ({lang}) => {
                 }
                 if (data.getAllLayers) {
                     channel.getAllLayers(function (data) {
-                        const layers = data.map(layer =>
-                            new Layer(layer.id, layer.name, layer.opacity, layer.visible));
-                        console.log('getAllLayers: ', layers);
-                        console.log(layers[1].getId());
-                        store.dispatch(setAllLayers(layers));
+                        store.dispatch(setAllLayers(data));
                     });
                 }
                 if (data.getAllTags) {
                     channel.getAllTags(function (data) {
-                        //console.log('getAllTags: ', data);
+                        console.log('getAllTags: ', data);
                         store.dispatch(setAllTags(data));
                     });
                 }

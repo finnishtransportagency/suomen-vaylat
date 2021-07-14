@@ -1,4 +1,5 @@
 import Layer from './Layer';
+import { useAppSelector } from '../../../state/hooks';
 
 export const Layers = ({ groupLayers, allLayers, selected }) => {
     //Find matching layers from all layers and groups, then push this group's layers into 'filteredLayers'

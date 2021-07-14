@@ -29,6 +29,12 @@ export const rpcSlice = createSlice({
         state.allGroups = action.payload;
     },
     setAllLayers: (state, action) => {
+        
+        const selectedLayers = action.payload.filter(layer => layer.visible == true)
+        if (selectedLayers.length > 0) {
+            state.selectedLayers = selectedLayers;
+        }
+        console.log(state.selectedLayers)
         state.allLayers = action.payload;
     },
     setAllTags: (state, action) => {
@@ -49,6 +55,11 @@ export const rpcSlice = createSlice({
     setZoomLevelsLayers: (state, action) => {
         state.zoomLevelsLayers = action.payload;
     },
+    setSelectedLayers: (state, action) => {
+        console.log(action);
+        const data = action;
+        state.selectedLayers = data;
+    },
     setSelectedLayerIds: (state, action) => {
         console.log(action.payload.selectedLayers);
         const oldSelectedLayers = action.payload.selectedLayers;
@@ -66,19 +77,19 @@ export const rpcSlice = createSlice({
         if (selectedLayers === action.payload.layer) {
             return; // relying on immutability; same identity -> no changes
         }
-        const toDelete = selectedLayers.filter((layer) => layer.id === action.payload.layer[0].getId());
-        toDelete.length > 0 ?
+        const toDelete = selectedLayers.filter((layer) => layer.id === action.payload.layer[0].id);
+        if (toDelete.length > 0 ) {
             state.channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [toDelete[0].id, false])
-            :
-            state.channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [action.payload.layer[0].getId(), true]);
-        var array = [...selectedLayers];
-        if (array.includes(action.payload.layer[0])) {
-            const filteredArray = array.filter(e => e.id !== action.payload.layer[0].getId());
-            state.selectedLayers = filteredArray;
-        }  else {
-            array.push(action.payload.layer[0]);
-            state.selectedLayers = array;
+        } else {
+            state.channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [action.payload.layer[0].id, true]);
         }
+        var selectedLayers = [];
+        state.channel.getAllLayers((data) => {
+            const test = data.filter(layer => layer.visible == true);
+            console.log(test);
+            //state.selectedLayers = test;
+            rpcSlice.caseReducers.setSelectedLayers(state, test);
+          });
     },
     setOpacity: (state, action) => {
         state.channel !== null && state.channel.postRequest('ChangeMapLayerOpacityRequest', [action.payload.id, action.payload.value]);
@@ -150,7 +161,8 @@ export const {
     searchVKMRoad,
     addFeaturesToMap,
     removeFeaturesFromMap,
-    setCurrentZoomLevel
+    setCurrentZoomLevel,
+    setSelectedLayers
 } = rpcSlice.actions;
 
 export default rpcSlice.reducer;

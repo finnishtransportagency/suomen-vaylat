@@ -3,7 +3,7 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import LayerList from './LayerList';
 import Layers from './Layers';
-import { useAppSelector } from '../../state/hooks';
+import { useAppSelector } from '../../../state/hooks';
 
 const StyledMasterGroupHeader = styled.div`
     display: flex;
@@ -48,16 +48,18 @@ const StyledLayerGroup = styled.ul`
 
 export const LayerGroup = ({ group, layers, hasChildren }) => {
     const [isOpen, setIsOpen] = useState(false);
-    const selectedLayers = useAppSelector((state) => state.rpc.selectedLayers);
+    const selected = false ;
+    /*
     const layerRows = group.getLayers().map((layer, index) => {
         const layerProps = {
             model: layer,
             even: index % 2 === 0,
-            selected: Array.isArray(selectedLayerIds) && selectedLayerIds.includes(layer.getId()),
+            selected: Array.isArray(selectedLayerIds) && selectedLayerIds.includes(layer.id),
             controller
         };
         return layerProps;
-    });
+    });*/
+    console.log(isOpen);
     return (
         <>
             {group.parentId === -1 ? (
