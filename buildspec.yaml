@@ -3,6 +3,7 @@ version: 0.2
 phases:
   pre_build:
     commands:
+      - CODEARTIFACT_AUTH_TOKEN=`aws codeartifact get-authorization-token --domain suomen-vaylat --domain-owner 675356752005 --query authorizationToken --output text`
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $IMAGE_REGISTRY_URI
       - IMAGE_REPO_URI=$IMAGE_REGISTRY_URI/$IMAGE_REPO_NAME
       - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
@@ -19,6 +20,7 @@ phases:
         --build-arg REACT_APP_PUBLISHED_MAP_DOMAIN=$MAP_DOMAIN \
         --build-arg PUBLIC_URL=/$BASE_PATH \
         --build-arg BASE_PATH=$BASE_PATH \
+        --build-arg CODEARTIFACT_AUTH_TOKEN=$CODEARTIFACT_AUTH_TOKEN \
         .
       - docker tag $IMAGE_REPO_URI:$LATEST_TAG $IMAGE_REPO_URI:$IMAGE_TAG
   post_build:

@@ -15,6 +15,27 @@ const initialState = {
   selectedLayers: []
 };
 
+function getAllLayers(channel) {
+    // channel.getAllLayers(function (data) {
+    //     console.log(data);
+    // });
+    return new Promise(function(myResolve, myReject) {
+        channel.getAllLayers(function (data) {
+            myResolve(data);
+        });
+    });
+    //store.dispatch(setAllLayers({layer, value}));
+};
+
+// const getAllLayers = (channel) => {
+//     channel.getAllLayers(function (data) {
+//         //console.log('getAllLayers: ', data);
+//         return data;
+//         //state.allLayers = data;
+//         //store.dispatch(setAllGroups(data));
+//     });
+// };
+
 export const rpcSlice = createSlice({
   name: 'rpc',
   initialState,
@@ -72,24 +93,8 @@ export const rpcSlice = createSlice({
         state.selectedLayerIds = newSelectedLayers;
     },
     setMapLayerVisibility: (state, action) => {
-
-        var selectedLayers = action.payload.selectedLayers;
-        if (selectedLayers === action.payload.layer) {
-            return; // relying on immutability; same identity -> no changes
-        }
-        const toDelete = selectedLayers.filter((layer) => layer.id === action.payload.layer[0].id);
-        if (toDelete.length > 0 ) {
-            state.channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [toDelete[0].id, false])
-        } else {
-            state.channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [action.payload.layer[0].id, true]);
-        }
-        var selectedLayers = [];
-        state.channel.getAllLayers((data) => {
-            const test = data.filter(layer => layer.visible == true);
-            console.log(test);
-            //state.selectedLayers = test;
-            rpcSlice.caseReducers.setSelectedLayers(state, test);
-          });
+        var layer = action.payload.layer;
+        state.channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, !layer.visible]);
     },
     setOpacity: (state, action) => {
         state.channel !== null && state.channel.postRequest('ChangeMapLayerOpacityRequest', [action.payload.id, action.payload.value]);

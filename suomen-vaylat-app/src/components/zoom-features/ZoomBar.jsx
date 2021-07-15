@@ -56,8 +56,6 @@ const StyledExpandControl = styled.div`
     };
 `;
 
-
-
 const StyledZoomBarControlTop = styled.button`
     border: none;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
@@ -78,7 +76,6 @@ const StyledZoomBarControlTop = styled.button`
     };
     &:hover {
         background-color: #009ae1;
-        transform: scale(1.05);
     }
 `;
 
@@ -98,11 +95,9 @@ const StyledZoomBarControlBottom = styled.button`
     align-items: center;
     svg {
         color: white;
-
     };
     &:hover {
         background-color: #009ae1;
-        transform: scale(1.05);
     }
 `;
 
@@ -235,7 +230,8 @@ const ZoomBar = ({
                             icon={faAngleUp}
                             style={{
                                 transform: isExpanded && "rotate(180deg)"
-                            }}/>
+                            }}
+                        />
                     </StyledExpandControl>
                     <StyledCenterLine />
                     <StyledZoomBarControlBottom

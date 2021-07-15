@@ -1,61 +1,69 @@
-import React, { useContext, useState } from "react";
+import { useEffect, useContext, useState } from "react";
 import { ReactReduxContext, useSelector } from 'react-redux';
-import { setMapLayerVisibility } from '../../../state/slices/rpcSlice';
-import { useAppSelector } from '../../../state/hooks';
+import { setAllLayers, setMapLayerVisibility } from '../../state/slices/rpcSlice';
 import styled from 'styled-components';
 
 const StyledLayerContainer = styled.li`
     overflow: hidden;
-    transition: all 0.3s ease-out;
-    //max-height: 0%;
     display: flex;
     align-items: center;
-    opacity: "1";
-    height: "40px";
     margin: 0;
 `;
 
-const StyledSelectButton = styled.div`
-    width: 20px;
-    height: 20px;
+const StyledSelectButton = styled.input`
+    cursor: pointer;
+    width: 18px;
+    height: 18px;
     border: 1px solid black;
     margin-right: 10px;
-    background-color: ${props => props.isSelected ? "blue" : "white"};
 `;
 
 const StyledlayerHeader = styled.div`
-
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
 `;
 
 const StyledLayerName = styled.p`
-    font-size: 15px;
+    font-size: 14px;
     margin: 5px;
 `;
 
-
-
-export const Layer = ({ layer }) => {
+export const Layer = ({ layer, isOpen }) => {
     const { store } = useContext(ReactReduxContext);
-    const selectedLayers = useAppSelector((state) => state.rpc.selectedLayers);
-    const [isSelected, setIsSelected] = useState(false);
+    const channel = useSelector(state => state.rpc.channel)
+    //const [isSelected, setIsSelected] = useState(false);
 
-
-    const selectLayer = (isSelected) => {
-        store.dispatch(setMapLayerVisibility({layer, selectedLayers}));
-        setIsSelected(!isSelected);
+    const handleLayerVisibility = (channel, layer) => {
+        console.log(layer);
+        channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, !layer.visible]);
+        channel.getAllLayers(function (data) {
+            console.log(data);
+            //console.log('getAllGroups: ', data);
+            store.dispatch(setAllLayers(data));
+        });
+        //store.dispatch(setMapLayerVisibility({layer, value}));
+        //channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [action.payload.layer[0].id, true]);
+       //setIsSelected(!isSelected);
     }
 
     return (
-        <>
-            <StyledLayerContainer key={layer.id}>
-                <StyledlayerHeader onClick={() => selectLayer(isSelected)}>
+            <StyledLayerContainer
+                key={layer[0].id}
+                isOpen={isOpen}
+            >
+                <StyledSelectButton
+                    type="checkbox"
+                    checked={layer[0].visible}
+                    onChange={() => handleLayerVisibility(channel, layer[0])}
+                />
+                <StyledlayerHeader>
                     <StyledLayerName>
                         {layer[0].name}
                     </StyledLayerName>
-                <StyledSelectButton isSelected={isSelected} />
                 </StyledlayerHeader>
             </StyledLayerContainer>
-        </>
     );
   };
 
