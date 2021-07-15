@@ -6,7 +6,7 @@ import Tabs from "./Tabs";
 //VÄLIAIKAINEN PALIKKA VÄLITTÄMÄÄN TESTIDATAA HIERARKISELLE TASOVALIKOLLE
 
 const StyledLayerList = styled.div`
-  width: 300px;
+  width: 330px;
   position: absolute;
   top: 6%;
   left: 0px;
@@ -15,7 +15,8 @@ const StyledLayerList = styled.div`
   overflow-y: auto;
   &::-webkit-scrollbar {
         display: none;
-  }
+  };
+  padding: 20px;
 `;
 
 
