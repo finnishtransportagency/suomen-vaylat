@@ -35,6 +35,7 @@ const StyledMyLocationButton = styled.div`
     box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
     svg {
         color: white;
+        font-size: 23px;
     };
     &:hover {
         background-color: #009ae1;
@@ -55,7 +56,6 @@ const ZoomMenu = () => {
         }}>
             <FontAwesomeIcon
                 icon={faSearchLocation}
-                size="lg"
             />
         </StyledMyLocationButton>
         <ZoomBar
