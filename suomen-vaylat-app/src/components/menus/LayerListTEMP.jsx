@@ -1,11 +1,12 @@
 import styled from 'styled-components';
 import { useAppSelector } from '../../state/hooks';
+import SelectedLayers from './selected-layers/SelectedLayers';
 import LayerList from './LayerList';
 
 //VÄLIAIKAINEN PALIKKA VÄLITTÄMÄÄN TESTIDATAA HIERARKISELLE TASOVALIKOLLE
 
 const StyledLayerList = styled.div`
-  width: 300px;
+  width: 330px;
   position: absolute;
   top: 6%;
   left: 0px;
@@ -14,7 +15,8 @@ const StyledLayerList = styled.div`
   overflow-y: auto;
   &::-webkit-scrollbar {
         display: none;
-  }
+  };
+  padding: 20px;
 `;
 
 
@@ -25,9 +27,8 @@ export const LayerListTEMP = () => {
 
     return (
       <StyledLayerList>
-        {/* <div style={{position: "absolute",margin: "15px",width: "300px",zIndex: "10"}}> */}
+        <SelectedLayers layers={allLayers}/>
         <LayerList groups={allGroups} layers={allLayers} recurse={false} />
-        {/* </div> */}
       </StyledLayerList>
       );
 };
