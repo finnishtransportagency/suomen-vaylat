@@ -16,27 +16,6 @@ const initialState = {
   filter: null
 };
 
-function getAllLayers(channel) {
-    // channel.getAllLayers(function (data) {
-    //     console.log(data);
-    // });
-    return new Promise(function(myResolve, myReject) {
-        channel.getAllLayers(function (data) {
-            myResolve(data);
-        });
-    });
-    //store.dispatch(setAllLayers({layer, value}));
-};
-
-// const getAllLayers = (channel) => {
-//     channel.getAllLayers(function (data) {
-//         //console.log('getAllLayers: ', data);
-//         return data;
-//         //state.allLayers = data;
-//         //store.dispatch(setAllGroups(data));
-//     });
-// };
-
 export const rpcSlice = createSlice({
   name: 'rpc',
   initialState,

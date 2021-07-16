@@ -1,5 +1,6 @@
 import styled from 'styled-components';
-import { useAppSelector } from '../../../state/hooks';
+import { useAppSelector } from '../../state/hooks';
+import SelectedLayers from './selected-layers/SelectedLayers';
 import LayerList from './LayerList';
 import Tabs from "./Tabs"; 
 
@@ -29,7 +30,8 @@ export const LayerListTEMP = () => {
 
     return (
         <StyledLayerList>
-          <Tabs> 
+          <Tabs>
+            <SelectedLayers layers={allLayers}/>
             <LayerList label="layerlist" groups={allGroups} layers={allLayers} tags={allTags} recurse={false} />
             <div></div>
           </Tabs> 
