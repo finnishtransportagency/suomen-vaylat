@@ -138,29 +138,10 @@ const StyledLayerGroupContainer = styled.div`
     padding: ${props => props.parentId === -1 && props.isOpen && "15px 10px 15px 5px"};
 `;
 
-const StyledLayerSelectButton = styled.input`
-    cursor: pointer;
-    min-width: 18px;
-    min-height: 18px;
-`;
-
 const StyledLayerGroup = styled.ul`
     margin-bottom: 0px;
     padding-inline-start: 15px;
     list-style-type: none;
-`;
-
-const StyledAsd = styled.div`
-    &:not(:last-child) {
-        &:after {
-            content: "";
-            display: block;
-            height: 1px;
-            background-image: linear-gradient(90deg, rgba(0,100,175,0.1) 0%, rgba(0,100,175,0.5) 50%, rgba(0,100,175,0.1) 100%);
-            background-repeat: no-repeat;
-            background-position: center bottom;
-        }
-    };
 `;
 
 const themeStyles = {
@@ -246,7 +227,6 @@ export const LayerGroup = ({ index, group, layers, hasChildren }) => {
                     </StyledLeftContent>
                     <StyledSelectButton
                         hasChildren={hasChildren}
-                        //disabled={!hasChildren}
                         isOpen={isOpen}
                     >
                         <FontAwesomeIcon
@@ -273,14 +253,6 @@ export const LayerGroup = ({ index, group, layers, hasChildren }) => {
                             }}
                         />
                     </StyledGroupSelectButton>
-                    {/* <StyledLayerSelectButton
-                        type="checkbox"
-                        //checked={layer[0].visible}
-                        onChange={event => {
-                            event.preventDefault();
-                            //handleLayerVisibility(channel, layer[0]);
-                        }}
-                    /> */}
                     <StyledGroupName>{group.name}</StyledGroupName>
                 </StyledGroupHeader>
             )}
@@ -290,17 +262,15 @@ export const LayerGroup = ({ index, group, layers, hasChildren }) => {
                 parentId={group.parentId}
             >
                 <StyledLayerGroup>
-                  
                         {hasChildren && (
                             <>
                                 <Layers groupLayers={group.layers} allLayers={layers} isOpen={isOpen}/>
                                 <LayerList groups={group.groups} layers={layers} recurse={true} />
                             </>
                         )}
-                   
-                    {!hasChildren && (
-                        <Layers groupLayers={group.layers} allLayers={layers} isOpen={isOpen}/>
-                    )}
+                        {!hasChildren && (
+                            <Layers groupLayers={group.layers} allLayers={layers} isOpen={isOpen}/>
+                        )}
                 </StyledLayerGroup>
             </StyledLayerGroupContainer>
         </StyledLayerGroups>

@@ -41,17 +41,17 @@ export const Layer = ({ layer, isOpen }) => {
 
     return (
             <StyledLayerContainer
-                key={layer[0].id}
+                key={layer.id}
                 isOpen={isOpen}
             >
                 <StyledLayerSelectButton
                     type="checkbox"
-                    checked={layer[0].visible}
-                    onChange={() => handleLayerVisibility(channel, layer[0])}
+                    checked={layer.visible}
+                    onChange={() => handleLayerVisibility(channel, layer)}
                 />
                 <StyledlayerHeader>
                     <StyledLayerName>
-                        {layer[0].name}
+                        {layer.name}
                     </StyledLayerName>
                 </StyledlayerHeader>
             </StyledLayerContainer>

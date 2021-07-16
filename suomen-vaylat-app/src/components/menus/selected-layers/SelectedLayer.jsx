@@ -4,7 +4,7 @@ import { setAllLayers } from '../../../state/slices/rpcSlice';
 import styled from 'styled-components';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEllipsisH, faTrash, faCog } from '@fortawesome/free-solid-svg-icons';
+import { faTrash, faCog } from '@fortawesome/free-solid-svg-icons';
 
 import LayerOptions from './LayerOptions';
 
@@ -54,12 +54,6 @@ const StyledLayerInfo = styled.div`
     align-items: center;
 `;
 
-const StyledLayerSelectButton = styled.input`
-    cursor: pointer;
-    min-width: 18px;
-    min-height: 18px;
-`;
-
 const StyledLayerDeleteIcon = styled.div`
     cursor: pointer;
     display: flex;
@@ -97,7 +91,7 @@ export const SelectedLayer = ({ isOpen, layer }) => {
     const [isOptionsOpen, setIsOptionsOpen] = useState(false);
     const { store } = useContext(ReactReduxContext);
     const channel = useSelector(state => state.rpc.channel);
-
+    
     const handleLayerVisibility = (channel, layer) => {
         channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, !layer.visible]);
         channel.getAllLayers(function (data) {
@@ -111,19 +105,15 @@ export const SelectedLayer = ({ isOpen, layer }) => {
                     key={layer.id}
             >
                 <StyledLayerInfo>
-                    <StyledLayerDeleteIcon>
+                    <StyledLayerDeleteIcon
+                    onClick={() => {
+                            layer.visible && setIsOptionsOpen(false);
+                            handleLayerVisibility(channel, layer);
+                        }}>
                         <FontAwesomeIcon
                             icon={faTrash}
                         />
                     </StyledLayerDeleteIcon>
-                    {/* <StyledLayerSelectButton
-                        type="checkbox"
-                        checked={layer.visible}
-                        onChange={() => {
-                            layer.visible && setIsOptionsOpen(false);
-                            handleLayerVisibility(channel, layer);
-                        }}
-                    /> */}
                     <StyledlayerHeader>
                         <StyledLayerName>
                             {layer.name}
