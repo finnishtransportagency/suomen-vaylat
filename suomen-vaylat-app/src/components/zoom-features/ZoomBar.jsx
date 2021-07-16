@@ -49,10 +49,9 @@ const StyledExpandControl = styled.div`
         background-color: #009ae1;
     };
     svg {
+        font-size: 23px;
         transition: all 0.5s ease-out;
-        color: white;
-        width: 100%;
-        height: 20px;
+        color: #fff;
     };
 `;
 
@@ -70,9 +69,8 @@ const StyledZoomBarControlTop = styled.button`
     justify-content: center;
     align-items: center;
    svg {
-        color: white;
-        width: 28px;
-        height: 28px;
+        color: #fff;
+        font-size: 20px;
     };
     &:hover {
         background-color: #009ae1;
@@ -94,7 +92,8 @@ const StyledZoomBarControlBottom = styled.button`
     justify-content: center;
     align-items: center;
     svg {
-        color: white;
+        color: #fff;
+        font-size: 20px;
     };
     &:hover {
         background-color: #009ae1;

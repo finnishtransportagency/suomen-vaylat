@@ -44,7 +44,7 @@ const StyledMasterGroupName = styled.p`
     margin: 0;
     font-weight: 600;
     padding-left: 10px;
-    color: #000;
+    color: #fff;
 `;
 
 const StyledMasterGroupHeader = styled.div`
@@ -80,6 +80,7 @@ const StyledMasterGroupHeaderIcon = styled.div`
     height: 28px;
     border-radius: 50%;
     svg {
+        font-size: 16px;
         color: #fff;
     }
 `;
@@ -92,11 +93,14 @@ const StyledGroupHeader = styled.div`
 `;
 
 const StyledGroupName = styled.p`
-    font-size: 14px;
+    font-size: 13px;
     margin: 0;
     font-weight: 600;
     padding-left: 0px;
     color: #000;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 `;
 
 const StyledSelectButton = styled.button`
@@ -108,16 +112,16 @@ const StyledSelectButton = styled.button`
     background-color: transparent;
     margin-right: 15px;
     svg {
+        font-size: 23px;
         transition: all 0.5s ease-out;
-        color: #000;
+        color: #fff;
     };
-    opacity: ${props => props.hasChildren ? "1" : "0.5"};
 `;
 
 const StyledGroupSelectButton = styled.div`
     cursor: pointer;
     align-items: center;
-    margin-right: 15px;
+    margin-right: 5px;
     svg {
         transition: all 0.5s ease-out;
         color: #000;
@@ -145,7 +149,7 @@ const themeStyles = {
     default: {
         color: [
             "#186ef0",
-            "#186ef0"
+            "#0064af"
         ]
     },
     100: {
@@ -224,7 +228,7 @@ export const LayerGroup = ({ index, group, layers, hasChildren }) => {
                     <StyledLeftContent>
                         <StyledMasterGroupHeaderIcon
                             color={themeStyles.hasOwnProperty(group.id) ? themeStyles[group.id].color : themeStyles["default"].color}
-                    >
+                        >
                             {
                                 themeStyles.hasOwnProperty(group.id) &&
                                 <FontAwesomeIcon
@@ -236,11 +240,9 @@ export const LayerGroup = ({ index, group, layers, hasChildren }) => {
                     </StyledLeftContent>
                     <StyledSelectButton
                         hasChildren={hasChildren}
-                        //disabled={!hasChildren}
                         isOpen={isOpen}
                     >
                         <FontAwesomeIcon
-                            size="lg"
                             icon={faAngleUp}
                             style={{
                                 transform: isOpen && "rotate(180deg)"
@@ -273,15 +275,15 @@ export const LayerGroup = ({ index, group, layers, hasChildren }) => {
                 parentId={group.parentId}
             >
                 <StyledLayerGroup>
-                    {hasChildren && (
-                        <>
+                        {hasChildren && (
+                            <>
+                                <Layers groupLayers={group.layers} allLayers={layers} isOpen={isOpen}/>
+                                <LayerList groups={group.groups} layers={layers} recurse={true} />
+                            </>
+                        )}
+                        {!hasChildren && (
                             <Layers groupLayers={group.layers} allLayers={layers} isOpen={isOpen}/>
-                            <LayerList groups={group.groups} layers={layers} recurse={true} />
-                        </>
-                    )}
-                    {!hasChildren && (
-                        <Layers groupLayers={group.layers} allLayers={layers} isOpen={isOpen}/>
-                    )}
+                        )}
                 </StyledLayerGroup>
             </StyledLayerGroupContainer>
         </StyledLayerGroups>
