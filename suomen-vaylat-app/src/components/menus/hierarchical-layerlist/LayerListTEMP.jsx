@@ -24,12 +24,14 @@ export const LayerListTEMP = () => {
 
   const allGroups = useAppSelector((state) => state.rpc.allGroups);
   const allLayers = useAppSelector((state) => state.rpc.allLayers);
+  const allTags = useAppSelector((state) => state.rpc.allTags);
+  console.log(allTags);
 
     return (
         <StyledLayerList>
           <Tabs> 
-            <LayerList label="layerlist" groups={allGroups} layers={allLayers} recurse={false} />
-            <LayerList label="layerlist-favs" groups={allGroups} layers={allLayers} recurse={false} />
+            <LayerList label="layerlist" groups={allGroups} layers={allLayers} tags={allTags} recurse={false} />
+            <div></div>
           </Tabs> 
         </StyledLayerList>
       );

@@ -1,5 +1,8 @@
-import React from 'react';
+import { useContext, useState } from 'react';
 import { useAppSelector } from '../../../state/hooks';
+import styled from 'styled-components';
+import { ReactReduxContext, useSelector } from 'react-redux';
+import { setFilter } from '../../../state/slices/rpcSlice';
 
 const StyledFilterButton = styled.div`
     width: 40px;
@@ -11,8 +14,10 @@ const StyledFilterButton = styled.div`
 
 const Filter = ({ filter }) => {
     const { store } = useContext(ReactReduxContext);
+    const [isSelected, setIsSelected] = useState(false);
     const selectFilter = (filter) => {
-        store.dispatch(setFilter({filter}));
+        //store.dispatch(setFilter({filter}));
+        console.log("selected filter: "+filter);
     };
 
     return (
@@ -20,11 +25,9 @@ const Filter = ({ filter }) => {
             <StyledFilterButton
                 onClick={selectFilter(filter)}
                 isSelected={isSelected}
-                color={filter.color}
-                selectedColor={filter.selectedColor}
             >
                 {
-                    filter.title
+                    filter
                 }
             </StyledFilterButton>
         </>
