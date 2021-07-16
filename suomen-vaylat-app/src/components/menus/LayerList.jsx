@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import shortid from 'shortid';
 import LayerGroup from './LayerGroup';
 
 const StyledLayerList = styled.div`

@@ -43,7 +43,7 @@ const StyledMasterGroupName = styled.p`
     margin: 0;
     font-weight: 600;
     padding-left: 10px;
-    color: #000;
+    color: #fff;
 `;
 
 const StyledMasterGroupHeader = styled.div`
@@ -79,6 +79,7 @@ const StyledMasterGroupHeaderIcon = styled.div`
     height: 28px;
     border-radius: 50%;
     svg {
+        font-size: 16px;
         color: #fff;
     }
 `;
@@ -91,11 +92,14 @@ const StyledGroupHeader = styled.div`
 `;
 
 const StyledGroupName = styled.p`
-    font-size: 14px;
+    font-size: 13px;
     margin: 0;
     font-weight: 600;
     padding-left: 0px;
     color: #000;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 `;
 
 const StyledSelectButton = styled.button`
@@ -107,16 +111,16 @@ const StyledSelectButton = styled.button`
     background-color: transparent;
     margin-right: 15px;
     svg {
+        font-size: 23px;
         transition: all 0.5s ease-out;
-        color: #000;
+        color: #fff;
     };
-    opacity: ${props => props.hasChildren ? "1" : "0.5"};
 `;
 
 const StyledGroupSelectButton = styled.div`
     cursor: pointer;
     align-items: center;
-    margin-right: 15px;
+    margin-right: 5px;
     svg {
         transition: all 0.5s ease-out;
         color: #000;
@@ -134,17 +138,36 @@ const StyledLayerGroupContainer = styled.div`
     padding: ${props => props.parentId === -1 && props.isOpen && "15px 10px 15px 5px"};
 `;
 
+const StyledLayerSelectButton = styled.input`
+    cursor: pointer;
+    min-width: 18px;
+    min-height: 18px;
+`;
+
 const StyledLayerGroup = styled.ul`
     margin-bottom: 0px;
     padding-inline-start: 15px;
     list-style-type: none;
 `;
 
+const StyledAsd = styled.div`
+    &:not(:last-child) {
+        &:after {
+            content: "";
+            display: block;
+            height: 1px;
+            background-image: linear-gradient(90deg, rgba(0,100,175,0.1) 0%, rgba(0,100,175,0.5) 50%, rgba(0,100,175,0.1) 100%);
+            background-repeat: no-repeat;
+            background-position: center bottom;
+        }
+    };
+`;
+
 const themeStyles = {
     default: {
         color: [
             "#186ef0",
-            "#186ef0"
+            "#0064af"
         ]
     },
     100: {
@@ -211,7 +234,7 @@ export const LayerGroup = ({ index, group, layers, hasChildren }) => {
                     <StyledLeftContent>
                         <StyledMasterGroupHeaderIcon
                             color={themeStyles.hasOwnProperty(group.id) ? themeStyles[group.id].color : themeStyles["default"].color}
-                    >
+                        >
                             {
                                 themeStyles.hasOwnProperty(group.id) &&
                                 <FontAwesomeIcon
@@ -227,7 +250,6 @@ export const LayerGroup = ({ index, group, layers, hasChildren }) => {
                         isOpen={isOpen}
                     >
                         <FontAwesomeIcon
-                            size="lg"
                             icon={faAngleUp}
                             style={{
                                 transform: isOpen && "rotate(180deg)"
@@ -251,6 +273,14 @@ export const LayerGroup = ({ index, group, layers, hasChildren }) => {
                             }}
                         />
                     </StyledGroupSelectButton>
+                    {/* <StyledLayerSelectButton
+                        type="checkbox"
+                        //checked={layer[0].visible}
+                        onChange={event => {
+                            event.preventDefault();
+                            //handleLayerVisibility(channel, layer[0]);
+                        }}
+                    /> */}
                     <StyledGroupName>{group.name}</StyledGroupName>
                 </StyledGroupHeader>
             )}
@@ -260,12 +290,14 @@ export const LayerGroup = ({ index, group, layers, hasChildren }) => {
                 parentId={group.parentId}
             >
                 <StyledLayerGroup>
-                    {hasChildren && (
-                        <>
-                            <Layers groupLayers={group.layers} allLayers={layers} isOpen={isOpen}/>
-                            <LayerList groups={group.groups} layers={layers} recurse={true} />
-                        </>
-                    )}
+                  
+                        {hasChildren && (
+                            <>
+                                <Layers groupLayers={group.layers} allLayers={layers} isOpen={isOpen}/>
+                                <LayerList groups={group.groups} layers={layers} recurse={true} />
+                            </>
+                        )}
+                   
                     {!hasChildren && (
                         <Layers groupLayers={group.layers} allLayers={layers} isOpen={isOpen}/>
                     )}
