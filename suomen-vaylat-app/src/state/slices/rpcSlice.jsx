@@ -12,7 +12,8 @@ const initialState = {
   tagLayers: [],
   zoomRange: {},
   currentZoomLevel: 0,
-  selectedLayers: []
+  selectedLayers: [],
+  filter: null
 };
 
 function getAllLayers(channel) {
@@ -49,6 +50,9 @@ export const rpcSlice = createSlice({
     setAllGroups: (state, action) => {
         state.allGroups = action.payload;
     },
+    setFilter: (state, action) => {
+        state.filter = action.payload;
+    },
     setAllLayers: (state, action) => {
         
         const selectedLayers = action.payload.filter(layer => layer.visible == true)
@@ -59,6 +63,7 @@ export const rpcSlice = createSlice({
         state.allLayers = action.payload;
     },
     setAllTags: (state, action) => {
+        console.log("SETALLTAGS");
         state.allTags = action.payload;
     },
     setFeatures: (state, action) => {
@@ -167,7 +172,8 @@ export const {
     addFeaturesToMap,
     removeFeaturesFromMap,
     setCurrentZoomLevel,
-    setSelectedLayers
+    setSelectedLayers,
+    setFilter
 } = rpcSlice.actions;
 
 export default rpcSlice.reducer;

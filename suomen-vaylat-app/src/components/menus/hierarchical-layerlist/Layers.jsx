@@ -5,15 +5,16 @@ export const Layers = ({ groupLayers, allLayers, isOpen }) => {
     //Find matching layers from all layers and groups, then push this group's layers into 'filteredLayers'
     var filteredLayers = [];
     if (groupLayers) {
-        groupLayers.forEach((groupLayerList) => {
-            filteredLayers.push(allLayers.filter(layer => layer.id === groupLayerList));
+        groupLayers.forEach((groupLayerId) => {
+            var layer = allLayers.find(layer => layer.id === groupLayerId);
+            layer !== undefined && filteredLayers.push(layer);
         });
-    }
+    };
     return (
         <>
             {filteredLayers.map((layer, index) => {
                 return (
-                    <Layer key={layer[0].id} layer={layer} isOpen={isOpen} index={index}></Layer>
+                    <Layer key={layer.id} layer={layer} isOpen={isOpen} index={index}></Layer>
             )})}
         </>
     );

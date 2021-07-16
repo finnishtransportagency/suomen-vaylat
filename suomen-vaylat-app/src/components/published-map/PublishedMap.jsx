@@ -46,6 +46,17 @@ const PublishedMap = ({lang}) => {
             store.dispatch(setChannel(channel));
             channel.getSupportedFunctions(function (data) {
                 //console.log('GetSupportedFunctions: ', data);
+                if (data.getAllTags) {
+                    channel.getAllTags(function (data) {
+                        console.log('getAllTags: ', data);
+                        store.dispatch(setAllTags(data));
+                    });
+                }
+                if(data.getAllThemes) {
+                    channel.getAllThemes(function (data) {
+                        console.log('getAllThemes: ', data);
+                    });
+                }
                 if(data.getZoomRange) {
                     channel.getZoomRange(function (data) {
                         //console.log('getZoomRange: ', data);
@@ -55,19 +66,14 @@ const PublishedMap = ({lang}) => {
                 }
                 if (data.getAllGroups) {
                     channel.getAllGroups(function (data) {
-                        //console.log('getAllGroups: ', data);
+                        console.log('getAllGroups: ', data);
                         store.dispatch(setAllGroups(data));
                     });
                 }
                 if (data.getAllLayers) {
                     channel.getAllLayers(function (data) {
+                        console.log('getAllLayers: ', data);
                         store.dispatch(setAllLayers(data));
-                    });
-                }
-                if (data.getAllTags) {
-                    channel.getAllTags(function (data) {
-                        console.log('getAllTags: ', data);
-                        store.dispatch(setAllTags(data));
                     });
                 }
                 if (data.getCurrentState) {

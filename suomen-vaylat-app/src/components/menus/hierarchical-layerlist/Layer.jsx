@@ -1,6 +1,6 @@
 import { useEffect, useContext, useState } from "react";
 import { ReactReduxContext, useSelector } from 'react-redux';
-import { setAllLayers, setMapLayerVisibility } from '../../state/slices/rpcSlice';
+import { setAllLayers, setMapLayerVisibility } from '../../../state/slices/rpcSlice';
 import styled from 'styled-components';
 
 const StyledLayerContainer = styled.li`
@@ -50,17 +50,17 @@ export const Layer = ({ layer, isOpen }) => {
 
     return (
             <StyledLayerContainer
-                key={layer[0].id}
+                key={layer.id}
                 isOpen={isOpen}
             >
                 <StyledSelectButton
                     type="checkbox"
-                    checked={layer[0].visible}
-                    onChange={() => handleLayerVisibility(channel, layer[0])}
+                    checked={layer.visible}
+                    onChange={() => handleLayerVisibility(channel, layer)}
                 />
                 <StyledlayerHeader>
                     <StyledLayerName>
-                        {layer[0].name}
+                        {layer.name}
                     </StyledLayerName>
                 </StyledlayerHeader>
             </StyledLayerContainer>
