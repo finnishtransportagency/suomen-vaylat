@@ -1,6 +1,6 @@
-import { useEffect, useContext, useState } from "react";
+import { useContext } from "react";
 import { ReactReduxContext, useSelector } from 'react-redux';
-import { setAllLayers, setMapLayerVisibility } from '../../state/slices/rpcSlice';
+import { setAllLayers } from '../../state/slices/rpcSlice';
 import styled from 'styled-components';
 
 const StyledLayerContainer = styled.li`
@@ -10,12 +10,10 @@ const StyledLayerContainer = styled.li`
     margin: 0;
 `;
 
-const StyledSelectButton = styled.input`
+const StyledLayerSelectButton = styled.input`
     cursor: pointer;
-    width: 18px;
-    height: 18px;
-    border: 1px solid black;
-    margin-right: 10px;
+    min-width: 18px;
+    min-height: 18px;
 `;
 
 const StyledlayerHeader = styled.div`
@@ -26,26 +24,19 @@ const StyledlayerHeader = styled.div`
 `;
 
 const StyledLayerName = styled.p`
-    font-size: 14px;
+    font-size: 13px;
     margin: 5px;
 `;
 
 export const Layer = ({ layer, isOpen }) => {
     const { store } = useContext(ReactReduxContext);
     const channel = useSelector(state => state.rpc.channel)
-    //const [isSelected, setIsSelected] = useState(false);
 
     const handleLayerVisibility = (channel, layer) => {
-        console.log(layer);
         channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, !layer.visible]);
         channel.getAllLayers(function (data) {
-            console.log(data);
-            //console.log('getAllGroups: ', data);
             store.dispatch(setAllLayers(data));
         });
-        //store.dispatch(setMapLayerVisibility({layer, value}));
-        //channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [action.payload.layer[0].id, true]);
-       //setIsSelected(!isSelected);
     }
 
     return (
@@ -53,7 +44,7 @@ export const Layer = ({ layer, isOpen }) => {
                 key={layer[0].id}
                 isOpen={isOpen}
             >
-                <StyledSelectButton
+                <StyledLayerSelectButton
                     type="checkbox"
                     checked={layer[0].visible}
                     onChange={() => handleLayerVisibility(channel, layer[0])}

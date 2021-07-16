@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { useAppSelector } from '../../state/hooks';
+import SelectedLayers from './selected-layers/SelectedLayers';
 import LayerList from './LayerList';
 
 //VÄLIAIKAINEN PALIKKA VÄLITTÄMÄÄN TESTIDATAA HIERARKISELLE TASOVALIKOLLE
@@ -26,6 +27,7 @@ export const LayerListTEMP = () => {
 
     return (
       <StyledLayerList>
+        <SelectedLayers layers={allLayers}/>
         <LayerList groups={allGroups} layers={allLayers} recurse={false} />
       </StyledLayerList>
       );
