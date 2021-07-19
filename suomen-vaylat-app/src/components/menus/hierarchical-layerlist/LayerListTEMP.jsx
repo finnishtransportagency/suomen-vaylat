@@ -29,8 +29,8 @@ export const LayerListTEMP = () => {
     return (
         <StyledLayerList>
           <Tabs>
-            <LayerList label="Layerlist" groups={allGroups} layers={allLayers} recurse={false} />
-            <SelectedLayers label="Selected Layers" layers={allLayers} />
+            <LayerList label="Kaikki tasot" groups={allGroups} layers={allLayers} recurse={false} />
+            <SelectedLayers label="Valitut tasot" layers={allLayers} />
           </Tabs> 
         </StyledLayerList>
       );

@@ -2,15 +2,19 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
   
-const StyledTabListItem = styled.li`
-  padding: 0.5rem 0.75rem;
-  background-color: ${props => props.active ? "blue" : "green"};
+const StyledTabListItem = styled.div`
+  width: 50%;
+  padding: 0.1rem;
+  background-color: ${props => props.active ? "#49c2f1" : "none"};
   border-radius: 20px;
     font-size: 15px;
     font-family: 'Exo 2';
     margin: 0;
     font-weight: 600;
-    color: #fff;
+    color: ${props => props.active ? "#000" : "#fff"};
+    text-align: center;
+    text-shadow: ${props => props.active ? "none" : "rgba(0, 0, 0, 0.16) 0px 2px 4px, rgba(0, 0, 0, 0.23) 0px 2px 4px"};
+    cursor: pointer;
 `;
 
 class Tab extends Component {
