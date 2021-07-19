@@ -4,15 +4,16 @@ import Tab from './Tab';
 import styled from 'styled-components';
 
   
-const StyledTabList = styled.ol`
-border-bottom: 1px solid #ccc;
-padding-left: 0;
-background-color: white;
-border-radius: 20px;
-box-sizing: border-box;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+const StyledTabList = styled.div`
+  border-bottom: 1px solid #ccc;
+  padding: 0.25rem;
+  background-color: #186ef0;
+  border-radius: 30px;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-around;
+  align-items: center;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
 `;
 
 
