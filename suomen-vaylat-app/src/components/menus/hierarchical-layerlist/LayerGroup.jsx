@@ -205,18 +205,6 @@ const themeStyles = {
 
 export const LayerGroup = ({ index, group, layers, hasChildren }) => {
     const [isOpen, setIsOpen] = useState(false);
-    const selected = false ;
-    /*
-    const layerRows = group.getLayers().map((layer, index) => {
-        const layerProps = {
-            model: layer,
-            even: index % 2 === 0,
-            selected: Array.isArray(selectedLayerIds) && selectedLayerIds.includes(layer.id),
-            controller
-        };
-        return layerProps;
-    });*/
-    console.log(isOpen);
     return (
         <StyledLayerGroups index={index}>
             {group.parentId === -1 ? (
