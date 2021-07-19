@@ -11,7 +11,6 @@ import {
     setAllTags,
     setCurrentState,
     setFeatures,
-    setTagLayers,
     setZoomRange,
     setZoomLevelsLayers,
     setCurrentZoomLevel
@@ -94,10 +93,10 @@ const PublishedMap = ({lang}) => {
                         store.dispatch(setZoomLevelsLayers(data));
                     });
                 }
-                if (data.getTagLayers) {
-                    channel.getTagLayers(function (data) {
-                        //console.log('getTagLayers: ', data);
-                        store.dispatch(setTagLayers(data));
+                if (data.getLayerTags) {
+                    const layerId = 299;
+                    channel.getLayerTags([layerId], function (tags) {
+                        console.log('getLayerTags', tags);
                     });
                 }
             });

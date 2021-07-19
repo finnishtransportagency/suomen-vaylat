@@ -7,6 +7,12 @@ import styled from 'styled-components';
 const StyledTabList = styled.ol`
 border-bottom: 1px solid #ccc;
 padding-left: 0;
+background-color: white;
+border-radius: 20px;
+box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 `;
 
 

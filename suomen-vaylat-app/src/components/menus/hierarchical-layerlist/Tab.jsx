@@ -3,13 +3,14 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
   
 const StyledTabListItem = styled.li`
-display: inline-block;
-list-style: none;
-margin-bottom: -1px;
-padding: 0.5rem 0.75rem;
-background-color: ${props => props.active ? "white" : "blue"};
-border: ${props => props.active ? "solid #ccc" : "none"};
-border-width: ${props => props.active ? "1px 1px 0 1px" : "0"};
+  padding: 0.5rem 0.75rem;
+  background-color: ${props => props.active ? "blue" : "green"};
+  border-radius: 20px;
+    font-size: 15px;
+    font-family: 'Exo 2';
+    margin: 0;
+    font-weight: 600;
+    color: #fff;
 `;
 
 class Tab extends Component {

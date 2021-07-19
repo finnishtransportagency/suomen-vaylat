@@ -2,28 +2,31 @@ import { useContext, useState } from 'react';
 import { useAppSelector } from '../../../state/hooks';
 import styled from 'styled-components';
 import { ReactReduxContext, useSelector } from 'react-redux';
-import { setFilter } from '../../../state/slices/rpcSlice';
+import { setTagLayers } from '../../../state/slices/rpcSlice';
 
-const StyledFilterButton = styled.div`
-    width: 40px;
-    height: 20px;
-    border: 1px solid black;
-    margin: 5px;
-    background-color: ${props => props.isSelected ? props.selectedColor : props.color};
+const StyledFilterButton = styled.button`
+    border-radius: 20px;
+    border: none ;
+    padding: 5px;
+    margin: 2px;
+    font-size: 13px;
 `;
 
-const Filter = ({ filter }) => {
+export const Filter = ({ filter }) => {
     const { store } = useContext(ReactReduxContext);
+    const channel = useSelector(state => state.rpc.channel)
     const [isSelected, setIsSelected] = useState(false);
+
     const selectFilter = (filter) => {
-        //store.dispatch(setFilter({filter}));
-        console.log("selected filter: "+filter);
-    };
+        channel.getTagLayers([filter], function (data) {
+            store.dispatch(setTagLayers(data));
+        });
+    }
 
     return (
         <>
             <StyledFilterButton
-                onClick={selectFilter(filter)}
+                onClick={() => selectFilter(filter)}
                 isSelected={isSelected}
             >
                 {

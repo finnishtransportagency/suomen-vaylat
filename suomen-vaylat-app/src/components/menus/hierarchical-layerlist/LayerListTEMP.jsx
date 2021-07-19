@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import { useAppSelector } from '../../state/hooks';
-import SelectedLayers from './selected-layers/SelectedLayers';
+import { useAppSelector } from '../../../state/hooks';
+import SelectedLayers from '../selected-layers/SelectedLayers';
 import LayerList from './LayerList';
 import Tabs from "./Tabs"; 
 
@@ -25,15 +25,12 @@ export const LayerListTEMP = () => {
 
   const allGroups = useAppSelector((state) => state.rpc.allGroups);
   const allLayers = useAppSelector((state) => state.rpc.allLayers);
-  const allTags = useAppSelector((state) => state.rpc.allTags);
-  console.log(allTags);
 
     return (
         <StyledLayerList>
           <Tabs>
-            <SelectedLayers layers={allLayers}/>
-            <LayerList label="layerlist" groups={allGroups} layers={allLayers} tags={allTags} recurse={false} />
-            <div></div>
+            <LayerList label="Layerlist" groups={allGroups} layers={allLayers} recurse={false} />
+            <SelectedLayers label="Selected Layers" layers={allLayers} />
           </Tabs> 
         </StyledLayerList>
       );

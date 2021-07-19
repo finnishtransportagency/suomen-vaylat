@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { ReactReduxContext, useSelector } from 'react-redux';
-import { setAllLayers } from '../../state/slices/rpcSlice';
+import { setAllLayers } from '../../../state/slices/rpcSlice';
 import styled from 'styled-components';
 
 const StyledLayerContainer = styled.li`
