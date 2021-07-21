@@ -1,4 +1,5 @@
 import React, { useContext, useEffect } from 'react';
+import styled from 'styled-components';
 import OskariRPC from 'oskari-rpc';
 import { useAppSelector } from '../../state/hooks';
 import { ReactReduxContext } from 'react-redux';
@@ -20,6 +21,18 @@ import {
 import CenterSpinner from '../center-spinner/CenterSpinner';
 
 import './PublishedMap.scss';
+
+const StyledPublishedMap = styled.div`
+    width: 100%;
+    height: 100%;
+`;
+
+const StyledIframe = styled.iframe`
+    border: none;
+    width: 100%;
+    height: 100%;
+`;
+
 
 const PublishedMap = ({lang}) => {
 
@@ -45,7 +58,7 @@ const PublishedMap = ({lang}) => {
 
             store.dispatch(setChannel(channel));
             channel.getSupportedFunctions(function (data) {
-                //console.log('GetSupportedFunctions: ', data);
+               //console.log('GetSupportedFunctions: ', data);
                 if(data.getZoomRange) {
                     channel.getZoomRange(function (data) {
                         //console.log('getZoomRange: ', data);
@@ -141,15 +154,22 @@ const PublishedMap = ({lang}) => {
                             {
                               "lon": event.lon,
                               "lat": event.lat,
-                              "duration": 5000,
-                              "zoom": 10,
+                              "duration": 3000,
+                              "zoom": 4,
                               "animation": "zoomPan"
-                            }
+                            },
+                            {
+                                "lon": event.lon,
+                                "lat": event.lat,
+                                "duration": 3000,
+                                "zoom": 10,
+                                "animation": "zoomPan"
+                              }
                           ];
                           var stepDefaults = {
                             "zoom": 5,
                             "animation": "fly",
-                            "duration": 5000,
+                            "duration": 3000,
                             "srsName": "EPSG:3067"
                           };
                           channel.postRequest('MapTourRequest', [routeSteps, stepDefaults]);
@@ -171,14 +191,14 @@ const PublishedMap = ({lang}) => {
     },[store]);
 
     return (
-        <div id="published-map-container">
+        <StyledPublishedMap>
             {loading ? (
                 <CenterSpinner/>
             ) : null}
-            <iframe id="sv-iframe" title="iframe" src={process.env.REACT_APP_PUBLISHED_MAP_URL + "&lang=" + lang}
+            <StyledIframe id="sv-iframe" title="iframe" src={process.env.REACT_APP_PUBLISHED_MAP_URL + "&lang=" + lang}
                 allow="geolocation" onLoad={() => hideSpinner()}>
-            </iframe>
-        </div>
+            </StyledIframe>
+        </StyledPublishedMap>
     )
 };
 

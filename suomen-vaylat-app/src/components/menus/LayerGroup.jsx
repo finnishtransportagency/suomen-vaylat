@@ -34,6 +34,7 @@ const StyledLayerGroups = styled.div`
     animation-fill-mode: forwards;
     animation-duration: 0.5s;
     animation-name: ${fadeIn};
+    margin-top: 10px;
 `;
 
 const StyledMasterGroupName = styled.p`
@@ -54,7 +55,7 @@ const StyledMasterGroupHeader = styled.div`
     height: 40px;
     padding-left: 5px;
     background-color: ${props => props.color[1]};
-    border-radius: 20px;
+    border-radius: 2px;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
     transition: all 0.1s ease-in;
     &:hover {
@@ -129,10 +130,10 @@ const StyledGroupSelectButton = styled.div`
 
 const StyledLayerGroupContainer = styled.div`
     background-color: #fff;
-    border-radius: 20px;
+    border-radius: 2px;
     box-shadow: ${props => props.parentId === -1 && "rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px"}; 
     height: ${props => props.isOpen ? "auto" : "0px"};
-    margin-top: ${props => props.parentId !== -1 ? "0px" : "10px"};
+    //margin-top: ${props => props.parentId !== -1 ? "0px" : "10px"};
     margin-bottom: ${props => props.isOpen ? "10px" : "0px"};
     overflow: hidden;
     padding: ${props => props.parentId === -1 && props.isOpen && "15px 10px 15px 5px"};

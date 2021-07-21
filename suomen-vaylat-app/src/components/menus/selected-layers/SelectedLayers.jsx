@@ -1,13 +1,10 @@
-import { useState, useContext } from "react";
-import { ReactReduxContext, useSelector } from 'react-redux';
-import { setAllLayers } from '../../../state/slices/rpcSlice';
+import { useState } from "react";
 import styled from 'styled-components';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faAngleUp,
     faCheck,
-    faEllipsisH
 } from '@fortawesome/free-solid-svg-icons';
 
 import SelectedLayer from './SelectedLayer';
@@ -30,7 +27,7 @@ const StyledMasterGroupHeader = styled.div`
     height: 40px;
     padding-left: 5px;
     background-color: #0064af;
-    border-radius: 20px;
+    border-radius: 2px;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
     transition: all 0.1s ease-in;
     &:hover {
@@ -59,6 +56,16 @@ const StyledLeftContent = styled.div`
     align-items: center;
 `;
 
+const StyledSelectedLayersCount = styled.div`
+    width: 27px;
+    height: 27px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 5px;
+    color: #fff;
+`;
+
 const StyledExpandButton = styled.button`
     display: flex;
     justify-content: center;
@@ -76,11 +83,9 @@ const StyledExpandButton = styled.button`
 
 const StyledLayerGroupContainer = styled.div`
     background-color: #fff;
-    border-radius: 20px;
+    border-radius: 2px;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px; 
     height: ${props => props.isOpen ? "auto" : "0px"};
-    margin-top: 10px;
-    margin-bottom: ${props => props.isOpen ? "10px" : "0px"};
     overflow: hidden;
     padding: ${props => props.isOpen && "15px 10px 15px 5px"};
 `;
@@ -93,7 +98,7 @@ const StyledLayerGroup = styled.ul`
 
 export const SelectedLayers = ({ layers }) => {
     var selectedLayers = layers.filter(layer => layer.visible === true).sort((a, b) => a.name > b.name ? 1 : -1);
-    const [isOpen, setIsOpen] = useState(false);
+    const [isOpen, setIsOpen] = useState(true);
     return (
         <>
             <StyledMasterGroupHeader
@@ -108,6 +113,9 @@ export const SelectedLayers = ({ layers }) => {
                     <StyledMasterGroupName>Valitut tasot</StyledMasterGroupName>
                 </StyledLeftContent>
                 <StyledExpandButton>
+                    <StyledSelectedLayersCount>
+                        {selectedLayers.length}
+                    </StyledSelectedLayersCount>
                     <FontAwesomeIcon
                         icon={faAngleUp}
                         style={{

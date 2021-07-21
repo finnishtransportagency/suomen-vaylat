@@ -6,19 +6,19 @@ import LayerList from './LayerList';
 //VÄLIAIKAINEN PALIKKA VÄLITTÄMÄÄN TESTIDATAA HIERARKISELLE TASOVALIKOLLE
 
 const StyledLayerList = styled.div`
-  width: 330px;
+  width: 100%;
+  max-width: 420px;
   position: absolute;
-  top: 6%;
+  top: 0px;
   left: 0px;
   z-index: 10;
-  height: calc(100% - 6%);
+  height: 100%;
   overflow-y: auto;
+  padding: 10px;
   &::-webkit-scrollbar {
-        display: none;
+    display: none;
   };
-  padding: 20px;
 `;
-
 
 export const LayerListTEMP = () => {
 
