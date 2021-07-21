@@ -2,8 +2,6 @@ import styled from 'styled-components';
 import Content from './Content';
 import Header from './Header';
 
-import './Layout.scss';
-
 const StyledLayout = styled.div`
     background-color: #0064af;
     height: 100vh;
