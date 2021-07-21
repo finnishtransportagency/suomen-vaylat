@@ -30,7 +30,7 @@ const StyledLayerName = styled.p`
 
 export const Layer = ({ layer, isOpen }) => {
     const { store } = useContext(ReactReduxContext);
-    const channel = useSelector(state => state.rpc.channel)
+    const channel = useSelector(state => state.rpc.channel);
 
     const handleLayerVisibility = (channel, layer) => {
         channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, !layer.visible]);
