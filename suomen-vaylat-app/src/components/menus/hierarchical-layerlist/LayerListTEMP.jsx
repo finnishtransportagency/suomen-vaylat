@@ -25,11 +25,13 @@ export const LayerListTEMP = () => {
 
   const allGroups = useAppSelector((state) => state.rpc.allGroups);
   const allLayers = useAppSelector((state) => state.rpc.allLayers);
+  const allThemes = useAppSelector((state) => state.rpc.allThemes);
 
     return (
         <StyledLayerList>
           <Tabs>
             <LayerList label="Kaikki tasot" groups={allGroups} layers={allLayers} recurse={false} />
+            <LayerList label="Teema tasot" groups={allGroups} layers={allLayers} recurse={false} />
             <SelectedLayers label="Valitut tasot" layers={allLayers} />
           </Tabs> 
         </StyledLayerList>

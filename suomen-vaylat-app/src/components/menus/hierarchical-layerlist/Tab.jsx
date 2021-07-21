@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
   
 const StyledTabListItem = styled.div`
-  width: 50%;
+  width: 32%;
   padding: 0.1rem;
   background-color: ${props => props.active ? "#49c2f1" : "none"};
   border-radius: 20px;
