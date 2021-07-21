@@ -52,8 +52,7 @@ const ZoomMenu = () => {
     return (
     <StyledZoomMenu>
         <StyledMyLocationButton onClick={() => {
-           //rpc.channel.postRequestByName('StartUserLocationTrackingRequest', [{addToMap: 'location', centerMap: 'single'}]);
-            rpc.channel.postRequest('MapModulePlugin.StartUserLocationTrackingRequest', [{addToMap: 'location', centerMap: 'single'}])
+            rpc.channel.postRequest('MyLocationPlugin.GetUserLocationRequest');
         }}>
             <FontAwesomeIcon
                 icon={faSearchLocation}
