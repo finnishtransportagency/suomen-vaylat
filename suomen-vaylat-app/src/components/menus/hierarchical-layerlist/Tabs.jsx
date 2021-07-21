@@ -5,7 +5,6 @@ import styled from 'styled-components';
 
   
 const StyledTabList = styled.div`
-  border-bottom: 1px solid #ccc;
   padding: 0.25rem;
   background-color: #186ef0;
   border-radius: 30px;
