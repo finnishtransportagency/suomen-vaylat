@@ -12,7 +12,8 @@ const initialState = {
   tagLayers: [],
   zoomRange: {},
   currentZoomLevel: 0,
-  selectedLayers: []
+  selectedLayers: [],
+  filter: null
 };
 
 export const rpcSlice = createSlice({
@@ -28,10 +29,20 @@ export const rpcSlice = createSlice({
     setAllGroups: (state, action) => {
         state.allGroups = action.payload;
     },
+    setFilter: (state, action) => {
+        state.filter = action.payload;
+    },
     setAllLayers: (state, action) => {
+        
+        const selectedLayers = action.payload.filter(layer => layer.visible == true)
+        if (selectedLayers.length > 0) {
+            state.selectedLayers = selectedLayers;
+        }
+        console.log(state.selectedLayers)
         state.allLayers = action.payload;
     },
     setAllTags: (state, action) => {
+        console.log("SETALLTAGS");
         state.allTags = action.payload;
     },
     setFeatures: (state, action) => {
@@ -48,6 +59,22 @@ export const rpcSlice = createSlice({
     },
     setZoomLevelsLayers: (state, action) => {
         state.zoomLevelsLayers = action.payload;
+    },
+    setSelectedLayers: (state, action) => {
+        console.log(action);
+        const data = action;
+        state.selectedLayers = data;
+    },
+    setSelectedLayerIds: (state, action) => {
+        console.log(action.payload.selectedLayers);
+        const oldSelectedLayers = action.payload.selectedLayers;
+        var newSelectedLayers = [...oldSelectedLayers];
+        if (newSelectedLayers.length > 0) {
+            newSelectedLayers.push([...action.payload.layers]);
+        } else {
+            newSelectedLayers.push([...action.payload.layers]);
+        }
+        state.selectedLayerIds = newSelectedLayers;
     },
     setMapLayerVisibility: (state, action) => {
         var layer = action.payload.layer;
@@ -114,6 +141,7 @@ export const {
     setTagLayers,
     setZoomRange,
     setZoomLevelsLayers,
+    setSelectedLayerIds,
     setMapLayerVisibility,
     setOpacity,
     setZoomIn,
@@ -122,7 +150,9 @@ export const {
     searchVKMRoad,
     addFeaturesToMap,
     removeFeaturesFromMap,
-    setCurrentZoomLevel
+    setCurrentZoomLevel,
+    setSelectedLayers,
+    setFilter
 } = rpcSlice.actions;
 
 export default rpcSlice.reducer;
