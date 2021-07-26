@@ -15,9 +15,9 @@ export const LayerList = ({ groups, layers, recurse = false}) => {
   }
     return (
         <StyledLayerList>
-            {allTags.map((tag) => {
+            {allTags.map((tag, index) => {
                 return(
-                    <Filter key={tag} filter={tag} />
+                    <Filter key={index} filter={tag} />
                 );
             })}
             {groups.map((group, index) => {
