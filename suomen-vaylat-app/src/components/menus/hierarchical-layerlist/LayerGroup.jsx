@@ -1,6 +1,8 @@
 
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import styled, { keyframes } from 'styled-components';
+import { ReactReduxContext, useSelector } from 'react-redux';
+import { setAllLayers } from '../../../state/slices/rpcSlice';
 import LayerList from './LayerList';
 import Layers from './Layers';
 import { useAppSelector } from '../../../state/hooks';
@@ -145,6 +147,10 @@ const StyledLayerGroup = styled.ul`
     list-style-type: none;
 `;
 
+const StyledCheckbox = styled.input`
+    margin-right: 7px;
+`;
+
 const themeStyles = {
     default: {
         color: [
@@ -205,6 +211,26 @@ const themeStyles = {
 
 export const LayerGroup = ({ index, group, layers, hasChildren }) => {
     const [isOpen, setIsOpen] = useState(false);
+    const { store } = useContext(ReactReduxContext);
+    const channel = useSelector(state => state.rpc.channel)
+    //Find matching layers from all layers and groups, then push this group's layers into 'filteredLayers'
+    var filteredLayers = [];
+    if (group.layers) {
+        group.layers.forEach((groupLayerId) => {
+            var layer = layers.find(layer => layer.id === groupLayerId);
+            layer !== undefined && filteredLayers.push(layer);
+        });
+    };
+
+    const selectLayer = (e) => {
+        e.stopPropagation();
+        filteredLayers.map(layer => {
+            channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, !layer.visible]);
+        });
+        channel.getAllLayers(function (data) {
+            store.dispatch(setAllLayers(data));
+        });
+    }
     return (
         <StyledLayerGroups index={index}>
             {group.parentId === -1 ? (
@@ -230,6 +256,12 @@ export const LayerGroup = ({ index, group, layers, hasChildren }) => {
                         hasChildren={hasChildren}
                         isOpen={isOpen}
                     >
+                        <StyledCheckbox
+                            name="groupSelected"
+                            type="checkbox"
+                            onClick={(event) => selectLayer(event)}
+                        />
+
                         <FontAwesomeIcon
                             icon={faAngleUp}
                             style={{
@@ -247,6 +279,12 @@ export const LayerGroup = ({ index, group, layers, hasChildren }) => {
                         isOpen={isOpen}
                         onClick={() => setIsOpen(!isOpen)}
                     >
+                        <StyledCheckbox
+                            name="groupSelected"
+                            type="checkbox"
+                            onClick={(event) => selectLayer(event)}
+                        />
+
                         <FontAwesomeIcon
                             icon={faAngleUp}
                             style={{
@@ -265,12 +303,12 @@ export const LayerGroup = ({ index, group, layers, hasChildren }) => {
                 <StyledLayerGroup>
                         {hasChildren && (
                             <>
-                                <Layers groupLayers={group.layers} allLayers={layers} isOpen={isOpen}/>
+                                <Layers layers={filteredLayers} isOpen={isOpen}/>
                                 <LayerList groups={group.groups} layers={layers} recurse={true} />
                             </>
                         )}
                         {!hasChildren && (
-                            <Layers groupLayers={group.layers} allLayers={layers} isOpen={isOpen}/>
+                            <Layers layers={filteredLayers} isOpen={isOpen}/>
                         )}
                 </StyledLayerGroup>
             </StyledLayerGroupContainer>
