@@ -5,7 +5,7 @@ import { setIsSideMenuOpen } from '../../state/slices/uiSlice';
 import styled from 'styled-components';
 import { device } from '../../device';
 import PublishedMap from '../published-map/PublishedMap.jsx';
-import LayerListTEMP from '../menus/LayerListTEMP';
+import LayerListTEMP from '../menus/hierarchical-layerlist/LayerListTEMP';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLayerGroup } from '@fortawesome/free-solid-svg-icons';

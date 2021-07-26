@@ -1,8 +1,11 @@
 
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import styled, { keyframes } from 'styled-components';
+import { ReactReduxContext, useSelector } from 'react-redux';
+import { setAllLayers } from '../../../state/slices/rpcSlice';
 import LayerList from './LayerList';
 import Layers from './Layers';
+import { useAppSelector } from '../../../state/hooks';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -34,7 +37,6 @@ const StyledLayerGroups = styled.div`
     animation-fill-mode: forwards;
     animation-duration: 0.5s;
     animation-name: ${fadeIn};
-    margin-top: 10px;
 `;
 
 const StyledMasterGroupName = styled.p`
@@ -55,7 +57,7 @@ const StyledMasterGroupHeader = styled.div`
     height: 40px;
     padding-left: 5px;
     background-color: ${props => props.color[1]};
-    border-radius: 2px;
+    border-radius: 20px;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
     transition: all 0.1s ease-in;
     &:hover {
@@ -130,10 +132,10 @@ const StyledGroupSelectButton = styled.div`
 
 const StyledLayerGroupContainer = styled.div`
     background-color: #fff;
-    border-radius: 2px;
+    border-radius: 20px;
     box-shadow: ${props => props.parentId === -1 && "rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px"}; 
     height: ${props => props.isOpen ? "auto" : "0px"};
-    //margin-top: ${props => props.parentId !== -1 ? "0px" : "10px"};
+    margin-top: ${props => props.parentId !== -1 ? "0px" : "10px"};
     margin-bottom: ${props => props.isOpen ? "10px" : "0px"};
     overflow: hidden;
     padding: ${props => props.parentId === -1 && props.isOpen && "15px 10px 15px 5px"};
@@ -143,6 +145,10 @@ const StyledLayerGroup = styled.ul`
     margin-bottom: 0px;
     padding-inline-start: 15px;
     list-style-type: none;
+`;
+
+const StyledCheckbox = styled.input`
+    margin-right: 7px;
 `;
 
 const themeStyles = {
@@ -205,6 +211,26 @@ const themeStyles = {
 
 export const LayerGroup = ({ index, group, layers, hasChildren }) => {
     const [isOpen, setIsOpen] = useState(false);
+    const { store } = useContext(ReactReduxContext);
+    const channel = useSelector(state => state.rpc.channel)
+    //Find matching layers from all layers and groups, then push this group's layers into 'filteredLayers'
+    var filteredLayers = [];
+    if (group.layers) {
+        group.layers.forEach((groupLayerId) => {
+            var layer = layers.find(layer => layer.id === groupLayerId);
+            layer !== undefined && filteredLayers.push(layer);
+        });
+    };
+
+    const selectLayer = (e) => {
+        e.stopPropagation();
+        filteredLayers.map(layer => {
+            channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, !layer.visible]);
+        });
+        channel.getAllLayers(function (data) {
+            store.dispatch(setAllLayers(data));
+        });
+    }
     return (
         <StyledLayerGroups index={index}>
             {group.parentId === -1 ? (
@@ -230,6 +256,12 @@ export const LayerGroup = ({ index, group, layers, hasChildren }) => {
                         hasChildren={hasChildren}
                         isOpen={isOpen}
                     >
+                        <StyledCheckbox
+                            name="groupSelected"
+                            type="checkbox"
+                            onClick={(event) => selectLayer(event)}
+                        />
+
                         <FontAwesomeIcon
                             icon={faAngleUp}
                             style={{
@@ -247,6 +279,12 @@ export const LayerGroup = ({ index, group, layers, hasChildren }) => {
                         isOpen={isOpen}
                         onClick={() => setIsOpen(!isOpen)}
                     >
+                        <StyledCheckbox
+                            name="groupSelected"
+                            type="checkbox"
+                            onClick={(event) => selectLayer(event)}
+                        />
+
                         <FontAwesomeIcon
                             icon={faAngleUp}
                             style={{
@@ -265,12 +303,12 @@ export const LayerGroup = ({ index, group, layers, hasChildren }) => {
                 <StyledLayerGroup>
                         {hasChildren && (
                             <>
-                                <Layers groupLayers={group.layers} allLayers={layers} isOpen={isOpen}/>
+                                <Layers layers={filteredLayers} isOpen={isOpen}/>
                                 <LayerList groups={group.groups} layers={layers} recurse={true} />
                             </>
                         )}
                         {!hasChildren && (
-                            <Layers groupLayers={group.layers} allLayers={layers} isOpen={isOpen}/>
+                            <Layers layers={filteredLayers} isOpen={isOpen}/>
                         )}
                 </StyledLayerGroup>
             </StyledLayerGroupContainer>

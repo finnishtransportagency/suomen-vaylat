@@ -58,7 +58,6 @@ const PublishedMap = ({lang}) => {
 
             store.dispatch(setChannel(channel));
             channel.getSupportedFunctions(function (data) {
-               //console.log('GetSupportedFunctions: ', data);
                 if(data.getZoomRange) {
                     channel.getZoomRange(function (data) {
                         //console.log('getZoomRange: ', data);
@@ -68,13 +67,13 @@ const PublishedMap = ({lang}) => {
                 }
                 if (data.getAllGroups) {
                     channel.getAllGroups(function (data) {
-                        //console.log('getAllGroups: ', data);
+                        console.log('getAllGroups: ', data);
                         store.dispatch(setAllGroups(data));
                     });
                 }
                 if (data.getAllLayers) {
                     channel.getAllLayers(function (data) {
-                        //console.log('getAllLayers: ', data);
+                        console.log('getAllLayers: ', data);
                         store.dispatch(setAllLayers(data));
                     });
                 }
@@ -102,10 +101,10 @@ const PublishedMap = ({lang}) => {
                         store.dispatch(setZoomLevelsLayers(data));
                     });
                 }
-                if (data.getTagLayers) {
-                    channel.getTagLayers(function (data) {
-                        //console.log('getTagLayers: ', data);
-                        store.dispatch(setTagLayers(data));
+                if (data.getLayerTags) {
+                    const layerId = 299;
+                    channel.getLayerTags([layerId], function (tags) {
+                        console.log('getLayerTags', tags);
                     });
                 }
             });
