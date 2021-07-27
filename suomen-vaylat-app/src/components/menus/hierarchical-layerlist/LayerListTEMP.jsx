@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { useAppSelector } from '../../../state/hooks';
 import SelectedLayers from '../selected-layers/SelectedLayers';
 import LayerList from './LayerList';
+import ThemeLayerList from './ThemeLayerList';
 import Tabs from "./Tabs"; 
 
 //VÄLIAIKAINEN PALIKKA VÄLITTÄMÄÄN TESTIDATAA HIERARKISELLE TASOVALIKOLLE
@@ -25,13 +26,13 @@ export const LayerListTEMP = () => {
 
   const allGroups = useAppSelector((state) => state.rpc.allGroups);
   const allLayers = useAppSelector((state) => state.rpc.allLayers);
-  const allThemes = useAppSelector((state) => state.rpc.allThemes);
+  const allThemes = useAppSelector((state) => state.rpc.allThemesWithLayers);
 
     return (
         <StyledLayerList>
           <Tabs>
             <LayerList label="Kaikki tasot" groups={allGroups} layers={allLayers} recurse={false} />
-            <LayerList label="Teema tasot" groups={allGroups} layers={allLayers} recurse={false} />
+            <ThemeLayerList label="Teema tasot" allLayers={allLayers} allThemes={allThemes}/>
             <SelectedLayers label="Valitut tasot" layers={allLayers} />
           </Tabs> 
         </StyledLayerList>
