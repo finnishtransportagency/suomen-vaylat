@@ -7,6 +7,7 @@ import {
     setLoading,
     setChannel,
     setAllGroups,
+    setAllThemesWithLayers,
     setAllLayers,
     setAllTags,
     setCurrentState,
@@ -54,6 +55,32 @@ const PublishedMap = ({lang}) => {
                 if(data.getAllThemes) {
                     channel.getAllThemes(function (data) {
                         console.log('getAllThemes: ', data);
+                    });
+                }
+                if(data.getSuomenVaylatLayers) {
+                    channel.getSuomenVaylatLayers(function (data) {
+                        console.log('getSuomenVaylatLayers: ', data);
+                    });
+                }
+                if(data.getSVData) {
+                    channel.getSVData(function (data) {
+                        console.log('getSVData: ', data);
+                    });
+                }
+                if(data.getThemesWithLayers) {
+                    channel.getThemesWithLayers(function (data) {
+                        console.log('getThemesWithLayers: ', data);
+                        store.dispatch(setAllThemesWithLayers(data));
+                    });
+                }
+                if(data.getLayerThemes) {
+                    channel.getLayerThemes([826],function (data) {
+                        console.log('getLayerThemes: ', data);
+                    });
+                }
+                if(data.getThemeLayers) {
+                    channel.getThemeLayers(["Päällysteiden kuntokartta"],function (data) {
+                        console.log('getThemeLayers: ', data);
                     });
                 }
                 if(data.getZoomRange) {
