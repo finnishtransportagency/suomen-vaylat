@@ -8,6 +8,7 @@ import {
     setLoading,
     setChannel,
     setAllGroups,
+    setAllThemesWithLayers,
     setAllLayers,
     setAllTags,
     setCurrentState,
@@ -58,6 +59,24 @@ const PublishedMap = ({lang}) => {
 
             store.dispatch(setChannel(channel));
             channel.getSupportedFunctions(function (data) {
+                //console.log('GetSupportedFunctions: ', data);
+                if (data.getAllTags) {
+                    channel.getAllTags(function (data) {
+                        console.log('getAllTags: ', data);
+                        store.dispatch(setAllTags(data));
+                    });
+                }
+                if(data.getAllThemes) {
+                    channel.getAllThemes(function (data) {
+                        console.log('getAllThemes: ', data);
+                    });
+                }
+                if(data.getThemesWithLayers) {
+                    channel.getThemesWithLayers(function (data) {
+                        console.log('getThemesWithLayers: ', data);
+                        store.dispatch(setAllThemesWithLayers(data));
+                    });
+                }
                 if(data.getZoomRange) {
                     channel.getZoomRange(function (data) {
                         //console.log('getZoomRange: ', data);
@@ -99,12 +118,6 @@ const PublishedMap = ({lang}) => {
                     channel.getZoomLevelsLayers(function (data) {
                         //console.log('getZoomLevelsLayers: ', data);
                         store.dispatch(setZoomLevelsLayers(data));
-                    });
-                }
-                if (data.getLayerTags) {
-                    const layerId = 299;
-                    channel.getLayerTags([layerId], function (tags) {
-                        console.log('getLayerTags', tags);
                     });
                 }
             });

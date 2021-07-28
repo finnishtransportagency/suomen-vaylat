@@ -13,6 +13,7 @@ const initialState = {
   zoomRange: {},
   currentZoomLevel: 0,
   selectedLayers: [],
+  allThemesWithLayers: [],
   filter: null
 };
 
@@ -42,8 +43,10 @@ export const rpcSlice = createSlice({
         state.allLayers = action.payload;
     },
     setAllTags: (state, action) => {
-        console.log("SETALLTAGS");
         state.allTags = action.payload;
+    },
+    setAllThemesWithLayers: (state, action) => {
+        state.allThemesWithLayers = action.payload;
     },
     setFeatures: (state, action) => {
         state.features = action.payload;
@@ -152,6 +155,7 @@ export const {
     removeFeaturesFromMap,
     setCurrentZoomLevel,
     setSelectedLayers,
+    setAllThemesWithLayers,
     setFilter
 } = rpcSlice.actions;
 
