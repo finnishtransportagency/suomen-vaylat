@@ -11,7 +11,6 @@ const defaultLang = strings.getAvailableLanguages()[0];
 
 if (langParam == null) {
   LOG.warn('Language not setted as param, using default (' + defaultLang+ ').');
-  console.log('Language not setted as param, using default (' + defaultLang+ ').');
 } else if (!isSupported) {
   LOG.warn('Language (' + langParam + ') not supported, using default (' + defaultLang+ ').');
 }

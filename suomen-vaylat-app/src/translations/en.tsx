@@ -21,6 +21,13 @@ const en = {
                 title: 'Road search failed',
                 text: 'Check for the following errors:'
             }
+        },
+        address: {
+            address: 'Opastinsilta 12 Helsinki',
+            error: {
+                title: 'Address search',
+                text: 'No results were found for the address search.'
+            }
         }
     }
 }

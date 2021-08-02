@@ -1,4 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { Logger } from '../../utils/logger';
+
+const LOG = new Logger('RPCSlice');
 
 const initialState = {
   loading: true,
@@ -34,12 +37,11 @@ export const rpcSlice = createSlice({
         state.filter = action.payload;
     },
     setAllLayers: (state, action) => {
-        
-        const selectedLayers = action.payload.filter(layer => layer.visible == true)
+        const selectedLayers = action.payload.filter(layer => layer.visible === true)
         if (selectedLayers.length > 0) {
             state.selectedLayers = selectedLayers;
         }
-        console.log(state.selectedLayers)
+        LOG.log(state.selectedLayers)
         state.allLayers = action.payload;
     },
     setAllTags: (state, action) => {
@@ -64,12 +66,12 @@ export const rpcSlice = createSlice({
         state.zoomLevelsLayers = action.payload;
     },
     setSelectedLayers: (state, action) => {
-        console.log(action);
+        LOG.log(action);
         const data = action;
         state.selectedLayers = data;
     },
     setSelectedLayerIds: (state, action) => {
-        console.log(action.payload.selectedLayers);
+        LOG.log(action.payload.selectedLayers);
         const oldSelectedLayers = action.payload.selectedLayers;
         var newSelectedLayers = [...oldSelectedLayers];
         if (newSelectedLayers.length > 0) {
@@ -88,17 +90,17 @@ export const rpcSlice = createSlice({
     },
     setZoomIn: (state, action) => {
         state.channel !== null && state.channel.zoomIn(function (data) {
-            console.log('Zoom level after: ', data);
+            LOG.log('Zoom level after: ', data);
         });
     },
     setZoomOut: (state, action) => {
         state.channel !== null && state.channel.zoomOut(function (data) {
-            console.log('Zoom level after: ', data);
+            LOG.log('Zoom level after: ', data);
         });
     },
     setZoomTo: (state, action) => {
         state.channel !== null && state.channel.zoomTo([action.payload], function (data) {
-            console.log('Zoom level after: ', data);
+            LOG.log('Zoom level after: ', data);
         });
     },
     searchVKMRoad: (state, action) => {
@@ -107,8 +109,7 @@ export const rpcSlice = createSlice({
                 if (typeof action.payload.errorHandler === 'function') {
                     action.payload.errorHandler(err);
                 } else {
-                    // FIXME Tee virheen käsittely
-                    console.log('Tee virheenkorjaus, esim. tie= 2, osa=9', err);
+                    LOG.warn('VKM search failed');
                 }
             });
         }
@@ -129,6 +130,26 @@ export const rpcSlice = createSlice({
     },
     setCurrentZoomLevel: (state, action) => {
         state.currentZoomLevel = action.payload;
+    },
+    searchRequest: (state, action) => {
+        state.channel !== null && state.channel.postRequest('SearchRequest', [action.payload]);
+    },
+    addMarkerRequest: (state, action) => {
+        const data =  {
+            x: action.payload.x,
+            y: action.payload.y,
+            msg: action.payload.msg || '',
+            shape: action.payload.shape || 2,
+            size: action.payload.size || 7,
+            color: action.payload.color || '0064af'
+        };
+        state.channel !== null && state.channel.postRequest('MapModulePlugin.AddMarkerRequest', [data, action.payload.markerId]);
+    },
+    removeMarkerRequest: (state, action) => {
+        state.channel !== null && state.channel.postRequest('MapModulePlugin.RemoveMarkersRequest', [action.payload.markerId]);
+    },
+    mapMoveRequest: (state, action) => {
+        state.channel !== null && state.channel.postRequest('MapMoveRequest', [action.payload.x, action.payload.y, action.payload.zoom || 10]);
     }
   }
 });
@@ -154,6 +175,10 @@ export const {
     addFeaturesToMap,
     removeFeaturesFromMap,
     setCurrentZoomLevel,
+    searchRequest,
+    addMarkerRequest,
+    removeMarkerRequest,
+    mapMoveRequest,
     setSelectedLayers,
     setAllThemesWithLayers,
     setFilter
