@@ -1,4 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { Logger } from '../../utils/logger';
+
+const LOG = new Logger('RPCSlice');
 
 const initialState = {
   loading: true,
@@ -12,7 +15,9 @@ const initialState = {
   tagLayers: [],
   zoomRange: {},
   currentZoomLevel: 0,
-  selectedLayers: []
+  selectedLayers: [],
+  allThemesWithLayers: [],
+  filter: null
 };
 
 export const rpcSlice = createSlice({
@@ -28,11 +33,22 @@ export const rpcSlice = createSlice({
     setAllGroups: (state, action) => {
         state.allGroups = action.payload;
     },
+    setFilter: (state, action) => {
+        state.filter = action.payload;
+    },
     setAllLayers: (state, action) => {
+        const selectedLayers = action.payload.filter(layer => layer.visible === true)
+        if (selectedLayers.length > 0) {
+            state.selectedLayers = selectedLayers;
+        }
+        LOG.log(state.selectedLayers)
         state.allLayers = action.payload;
     },
     setAllTags: (state, action) => {
         state.allTags = action.payload;
+    },
+    setAllThemesWithLayers: (state, action) => {
+        state.allThemesWithLayers = action.payload;
     },
     setFeatures: (state, action) => {
         state.features = action.payload;
@@ -49,41 +65,42 @@ export const rpcSlice = createSlice({
     setZoomLevelsLayers: (state, action) => {
         state.zoomLevelsLayers = action.payload;
     },
+    setSelectedLayers: (state, action) => {
+        LOG.log(action);
+        const data = action;
+        state.selectedLayers = data;
+    },
+    setSelectedLayerIds: (state, action) => {
+        LOG.log(action.payload.selectedLayers);
+        const oldSelectedLayers = action.payload.selectedLayers;
+        var newSelectedLayers = [...oldSelectedLayers];
+        if (newSelectedLayers.length > 0) {
+            newSelectedLayers.push([...action.payload.layers]);
+        } else {
+            newSelectedLayers.push([...action.payload.layers]);
+        }
+        state.selectedLayerIds = newSelectedLayers;
+    },
     setMapLayerVisibility: (state, action) => {
-        var selectedLayers = action.payload.selectedLayers.selectedLayers;
-        if (selectedLayers === action.payload.layer) {
-            return; // relying on immutability; same identity -> no changes
-        }
-        const toDelete = selectedLayers.filter((layer) => layer.id === action.payload.layer[0].id);
-        toDelete.length > 0 ?
-            state.channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [toDelete[0].id, false])
-            :
-            state.channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [action.payload.layer[0].id, true]);
-        var array = [...selectedLayers];
-        if (array.includes(action.payload.layer[0])) {
-            const filteredArray = array.filter(e => e.id !== action.payload.layer[0].id);
-            state.selectedLayers = filteredArray;
-        }  else {
-            array.push(action.payload.layer[0]);
-            state.selectedLayers = array;
-        }
+        var layer = action.payload.layer;
+        state.channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, !layer.visible]);
     },
     setOpacity: (state, action) => {
         state.channel !== null && state.channel.postRequest('ChangeMapLayerOpacityRequest', [action.payload.id, action.payload.value]);
     },
     setZoomIn: (state, action) => {
         state.channel !== null && state.channel.zoomIn(function (data) {
-            console.log('Zoom level after: ', data);
+            LOG.log('Zoom level after: ', data);
         });
     },
     setZoomOut: (state, action) => {
         state.channel !== null && state.channel.zoomOut(function (data) {
-            console.log('Zoom level after: ', data);
+            LOG.log('Zoom level after: ', data);
         });
     },
     setZoomTo: (state, action) => {
         state.channel !== null && state.channel.zoomTo([action.payload], function (data) {
-            console.log('Zoom level after: ', data);
+            LOG.log('Zoom level after: ', data);
         });
     },
     searchVKMRoad: (state, action) => {
@@ -92,8 +109,7 @@ export const rpcSlice = createSlice({
                 if (typeof action.payload.errorHandler === 'function') {
                     action.payload.errorHandler(err);
                 } else {
-                    // FIXME Tee virheen käsittely
-                    console.log('Tee virheenkorjaus, esim. tie= 2, osa=9', err);
+                    LOG.warn('VKM search failed');
                 }
             });
         }
@@ -149,6 +165,7 @@ export const {
     setTagLayers,
     setZoomRange,
     setZoomLevelsLayers,
+    setSelectedLayerIds,
     setMapLayerVisibility,
     setOpacity,
     setZoomIn,
@@ -161,7 +178,10 @@ export const {
     searchRequest,
     addMarkerRequest,
     removeMarkerRequest,
-    mapMoveRequest
+    mapMoveRequest,
+    setSelectedLayers,
+    setAllThemesWithLayers,
+    setFilter
 } = rpcSlice.actions;
 
 export default rpcSlice.reducer;

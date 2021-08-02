@@ -3,6 +3,7 @@ import { configureStore, applyMiddleware } from '@reduxjs/toolkit';
 
 import languageReducer from './slices/languageSlice';
 import rpcReducer from './slices/rpcSlice';
+import uiReducer from './slices/uiSlice';
 import searchReducer from './slices/searchSlice';
 
 import thunkMiddleware from 'redux-thunk';
@@ -15,6 +16,7 @@ export const store = configureStore ({
   reducer: {
     language: languageReducer,
     rpc: rpcReducer,
+    ui: uiReducer,
     search: searchReducer
   },
   enhancers: [middlewareEnhancer],

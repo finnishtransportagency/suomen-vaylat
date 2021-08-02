@@ -3,6 +3,10 @@ FROM 675356752005.dkr.ecr.eu-west-1.amazonaws.com/suomen-vaylat-build:node-12-bu
 
 COPY ./suomen-vaylat-app /suomen-vaylat
 
+ARG CODEARTIFACT_AUTH_TOKEN
+ENV CODEARTIFACT_AUTH_TOKEN=$CODEARTIFACT_AUTH_TOKEN
+COPY ./npmrc /suomen-vaylat/.npmrc
+
 ### Local builder
 FROM builder AS local-builder
 
@@ -11,6 +15,9 @@ ARG PUBLIC_URL
 # Get these as args in local build
 ARG REACT_APP_PUBLISHED_MAP_URL
 ARG REACT_APP_PUBLISHED_MAP_DOMAIN
+
+# Don't use codeartifact in local build
+RUN rm /suomen-vaylat/.npmrc
 
 RUN cd /suomen-vaylat && \
     npm ci && \
@@ -66,4 +73,4 @@ FROM base AS test
 
 ARG BASE_PATH
 
-COPY --from=dev-builder /suomen-vaylat/build /www/$BASE_PATH
+COPY --from=test-builder /suomen-vaylat/build /www/$BASE_PATH
