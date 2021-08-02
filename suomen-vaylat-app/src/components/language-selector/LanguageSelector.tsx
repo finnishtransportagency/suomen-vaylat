@@ -1,31 +1,64 @@
-import React from 'react';
+import { useContext } from "react";
+import styled from 'styled-components';
+//import { device } from '../../device';
 import { useAppSelector } from '../../state/hooks';
+import { ReactReduxContext } from 'react-redux';
+import { setLocale } from '../../state/slices/languageSlice';
+
 import strings from './../../translations';
 
-import './LanguageSelector.scss';
+const StyledLanguageSelector = styled.div`
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    color: #fff;
+    padding-right: 10px;
+`;
+
+const StyledSelect = styled.select`
+    cursor: pointer;
+    width: 45px;
+    height: 30px;
+    background-color: transparent;
+    border: none;
+    color: #fff;
+    font-size: 18px;
+    option {
+        border: none;
+        background-color: #0064af;
+        width: 45px;
+        height: 30px;
+        font-size: 18px;
+    };
+    &:focus {
+            outline: 0;
+            outline-color: transparent;
+            outline-style: none;
+    };
+`;
 
 export const LanguageSelector = () => {
+    const { store } = useContext(ReactReduxContext);
     const lang = useAppSelector((state) => state.language);
 
-    const buttonClass = (locale: string) => {
-        if (lang.current === locale) {
-            return 'language-selection language-selection-' + locale + ' active';
-        } else {
-            return 'language-selection language-selection-' + locale;
-        }
-    }
-
-    const buttonId = (locale: string) => {
-        return 'lang-' + locale;
-    }
-
     return (
-        <div id="language-selector">
-            {strings.getAvailableLanguages().map((value, index) => {
-                // eslint-disable-next-line jsx-a11y/anchor-is-valid
-                return <a key={index} className={buttonClass(value)} id={buttonId(value)} href={'?lang=' + value}>{strings.getString('language.languageSelection.' + value)}</a>
-            })}
-        </div>
+        <StyledLanguageSelector>
+            <StyledSelect
+                name="langueage_selector"
+                value={lang.current}
+                onChange={(event: { target: { value: any; }; }) => store.dispatch(setLocale(event.target.value))}
+            >
+                {strings.getAvailableLanguages().map((value, index) => {
+                        return  (
+                        <option
+                            key={'lang-'+value}
+                            value={value}
+                        >
+                            {strings.getString('language.languageSelection.' + value)}
+                        </option>
+                    )})}
+            </StyledSelect>
+        </StyledLanguageSelector>
     );
  }
 
