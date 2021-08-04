@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Modal from 'react-modal';
 import styled from 'styled-components';
-import { ANNOUNCEMENTS_LOCALSTORAGE } from '../published-map/Constants';
 
 const customStyles = {
   content: {
