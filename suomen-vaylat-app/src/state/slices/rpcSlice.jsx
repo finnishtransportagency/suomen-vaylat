@@ -13,6 +13,8 @@ const initialState = {
   zoomRange: {},
   currentZoomLevel: 0,
   selectedLayers: [],
+  announcements: [],
+  activeAnnouncements: [],
   allThemesWithLayers: [],
   filter: null
 };
@@ -34,12 +36,10 @@ export const rpcSlice = createSlice({
         state.filter = action.payload;
     },
     setAllLayers: (state, action) => {
-        
         const selectedLayers = action.payload.filter(layer => layer.visible == true)
         if (selectedLayers.length > 0) {
             state.selectedLayers = selectedLayers;
         }
-        console.log(state.selectedLayers)
         state.allLayers = action.payload;
     },
     setAllTags: (state, action) => {
@@ -47,6 +47,12 @@ export const rpcSlice = createSlice({
     },
     setAllThemesWithLayers: (state, action) => {
         state.allThemesWithLayers = action.payload;
+    },
+    setAnnouncements: (state, action) => {
+        state.announcements = action.payload;
+    },
+    setActiveAnnouncements: (state, action) => {
+        state.activeAnnouncements = action.payload;
     },
     setFeatures: (state, action) => {
         state.features = action.payload;
@@ -64,12 +70,10 @@ export const rpcSlice = createSlice({
         state.zoomLevelsLayers = action.payload;
     },
     setSelectedLayers: (state, action) => {
-        console.log(action);
         const data = action;
         state.selectedLayers = data;
     },
     setSelectedLayerIds: (state, action) => {
-        console.log(action.payload.selectedLayers);
         const oldSelectedLayers = action.payload.selectedLayers;
         var newSelectedLayers = [...oldSelectedLayers];
         if (newSelectedLayers.length > 0) {
@@ -156,6 +160,8 @@ export const {
     setCurrentZoomLevel,
     setSelectedLayers,
     setAllThemesWithLayers,
+    setAnnouncements,
+    setActiveAnnouncements,
     setFilter
 } = rpcSlice.actions;
 
