@@ -5,7 +5,6 @@ import { ReactReduxContext, useSelector } from 'react-redux';
 import { setAllLayers } from '../../../state/slices/rpcSlice';
 import LayerList from './LayerList';
 import Layers from './Layers';
-import { useAppSelector } from '../../../state/hooks';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -222,7 +221,22 @@ export const LayerGroup = ({ index, group, layers, hasChildren }) => {
         });
     };
 
-    const selectLayer = (e) => {
+    let checkbox;
+    let visibleLayers = [];
+    filteredLayers.map(layer => {
+        layer.visible == true && visibleLayers.push(layer);
+    })
+    /*
+    if (filteredLayers.length == visibleLayers.length) {
+        checkbox.style.color = 'red' ;
+    } else if (visibleLayers.length > 0 ) {
+        checkbox.style.color = 'blue';
+    } else {
+        checkbox.style.color = 'white';
+    }
+    */
+
+    const selectGroup = (e) => {
         e.stopPropagation();
         filteredLayers.map(layer => {
             channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, !layer.visible]);
@@ -259,7 +273,7 @@ export const LayerGroup = ({ index, group, layers, hasChildren }) => {
                         <StyledCheckbox
                             name="groupSelected"
                             type="checkbox"
-                            onClick={(event) => selectLayer(event)}
+                            onClick={(event) => selectGroup(event)}
                         />
 
                         <FontAwesomeIcon
@@ -282,7 +296,7 @@ export const LayerGroup = ({ index, group, layers, hasChildren }) => {
                         <StyledCheckbox
                             name="groupSelected"
                             type="checkbox"
-                            onClick={(event) => selectLayer(event)}
+                            onClick={(event) => selectGroup(event)}
                         />
 
                         <FontAwesomeIcon

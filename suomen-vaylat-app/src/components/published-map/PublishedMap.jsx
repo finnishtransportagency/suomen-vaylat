@@ -2,6 +2,8 @@ import React, { useContext, useEffect } from 'react';
 import OskariRPC from 'oskari-rpc';
 import { useAppSelector } from '../../state/hooks';
 import { ReactReduxContext } from 'react-redux';
+import { AnnouncementsModal } from '../announcements-modal/AnnouncementsModal';
+import { ANNOUNCEMENTS_LOCALSTORAGE } from './Constants';
 
 import {
     setLoading,
@@ -14,7 +16,8 @@ import {
     setFeatures,
     setZoomRange,
     setZoomLevelsLayers,
-    setCurrentZoomLevel
+    setCurrentZoomLevel,
+    setActiveAnnouncements
 } from '../../state/slices/rpcSlice';
 
 import CenterSpinner from '../center-spinner/CenterSpinner';
@@ -45,42 +48,30 @@ const PublishedMap = ({lang}) => {
 
             store.dispatch(setChannel(channel));
             channel.getSupportedFunctions(function (data) {
-                //console.log('GetSupportedFunctions: ', data);
+                console.log(data);
                 if (data.getAllTags) {
                     channel.getAllTags(function (data) {
-                        console.log('getAllTags: ', data);
                         store.dispatch(setAllTags(data));
                     });
                 }
-                if(data.getAllThemes) {
-                    channel.getAllThemes(function (data) {
-                        console.log('getAllThemes: ', data);
-                    });
-                }
-                if(data.getSuomenVaylatLayers) {
-                    channel.getSuomenVaylatLayers(function (data) {
-                        console.log('getSuomenVaylatLayers: ', data);
-                    });
-                }
-                if(data.getSVData) {
-                    channel.getSVData(function (data) {
-                        console.log('getSVData: ', data);
+                if (data.getAnnouncements) {
+                    channel.getAnnouncements(function (data) {
+                        console.log('getAnnouncements: ', data);
+                        var localStorageAnnouncements = localStorage.getItem(ANNOUNCEMENTS_LOCALSTORAGE);
+                        const activeAnnouncements = data.map(announcement => {
+                            // is the modal stored in the localstorage aka has it been set to not show again
+                            if ((announcement.active && localStorageAnnouncements && localStorageAnnouncements.includes(announcement.id)) || !announcement.active) {
+                                return false;
+                            } else {
+                                return true;
+                            }
+                        })
+                        store.dispatch(setActiveAnnouncements(activeAnnouncements));
                     });
                 }
                 if(data.getThemesWithLayers) {
                     channel.getThemesWithLayers(function (data) {
-                        console.log('getThemesWithLayers: ', data);
                         store.dispatch(setAllThemesWithLayers(data));
-                    });
-                }
-                if(data.getLayerThemes) {
-                    channel.getLayerThemes([826],function (data) {
-                        console.log('getLayerThemes: ', data);
-                    });
-                }
-                if(data.getThemeLayers) {
-                    channel.getThemeLayers(["Päällysteiden kuntokartta"],function (data) {
-                        console.log('getThemeLayers: ', data);
                     });
                 }
                 if(data.getZoomRange) {
@@ -92,13 +83,11 @@ const PublishedMap = ({lang}) => {
                 }
                 if (data.getAllGroups) {
                     channel.getAllGroups(function (data) {
-                        console.log('getAllGroups: ', data);
                         store.dispatch(setAllGroups(data));
                     });
                 }
                 if (data.getAllLayers) {
                     channel.getAllLayers(function (data) {
-                        console.log('getAllLayers: ', data);
                         store.dispatch(setAllLayers(data));
                     });
                 }
@@ -118,12 +107,6 @@ const PublishedMap = ({lang}) => {
                     channel.getZoomLevelsLayers(function (data) {
                         //console.log('getZoomLevelsLayers: ', data);
                         store.dispatch(setZoomLevelsLayers(data));
-                    });
-                }
-                if (data.getLayerTags) {
-                    const layerId = 299;
-                    channel.getLayerTags([layerId], function (tags) {
-                        console.log('getLayerTags', tags);
                     });
                 }
             });
@@ -201,11 +184,24 @@ const PublishedMap = ({lang}) => {
 
     },[store]);
 
+    
+    const announcements = useAppSelector((state) => state.rpc.announcements);
+
     return (
         <div id="published-map-container">
             {loading ? (
                 <CenterSpinner/>
             ) : null}
+            {announcements.map((announcement) => {
+                return (
+                <AnnouncementsModal
+                    id={announcement.id}
+                    title={announcement.title}
+                    content={announcement.content}
+                    key={announcement.id}
+                />
+                );
+            })}
             <iframe id="sv-iframe" title="iframe" src={process.env.REACT_APP_PUBLISHED_MAP_URL + "&lang=" + lang}
                 allow="geolocation" onLoad={() => hideSpinner()}>
             </iframe>
