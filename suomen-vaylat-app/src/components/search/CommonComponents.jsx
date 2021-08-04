@@ -65,7 +65,8 @@ export const StyledTextField = styled(({
     hintText,
     onChange,
     disabled,
-    className
+    className,
+    onKeyPress
   }) => {
     const error = isTouched && hasError;
     return (
@@ -78,6 +79,7 @@ export const StyledTextField = styled(({
           placeholder={placeholder}
           value={value}
           onChange={onChange}
+          onKeyPress={onKeyPress}
           disabled={disabled}
           error={error}
         />
@@ -124,10 +126,12 @@ export const StyledSelectInput = styled(({
     <div>
       <h5>{title}</h5>
       {message}
+      {errors && errors.length > 0 &&
       <ul>
-      {errors.map((item,index)=>{
-            return <li key={index}>{item}</li>
-        })}
-      </ul>
+        {errors.map((item,index)=>{
+              return <li key={index}>{item}</li>
+          })}
+        </ul>
+      }
     </div>
   )
