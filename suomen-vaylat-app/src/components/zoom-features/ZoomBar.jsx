@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { ReactReduxContext } from 'react-redux';
 import styled, { keyframes } from 'styled-components';
 
