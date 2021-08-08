@@ -186,7 +186,6 @@ export const {
     mapMoveRequest,
     setSelectedLayers,
     setAllThemesWithLayers,
-    setAnnouncements,
     setActiveAnnouncements,
     setFilter
 } = rpcSlice.actions;

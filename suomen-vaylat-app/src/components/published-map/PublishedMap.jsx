@@ -4,7 +4,6 @@ import OskariRPC from 'oskari-rpc';
 import { useAppSelector } from '../../state/hooks';
 import { ReactReduxContext } from 'react-redux';
 import { AnnouncementsModal } from '../announcements-modal/AnnouncementsModal';
-import { ANNOUNCEMENTS_LOCALSTORAGE } from './Constants';
 
 import {
     setLoading,
@@ -15,7 +14,6 @@ import {
     setAllTags,
     setCurrentState,
     setFeatures,
-    setTagLayers,
     setZoomRange,
     setZoomLevelsLayers,
     setCurrentZoomLevel,
@@ -36,6 +34,8 @@ const StyledIframe = styled.iframe`
     width: 100%;
     height: 100%;
 `;
+
+const ANNOUNCEMENTS_LOCALSTORAGE = "oskari-announcements";
 
 
 const PublishedMap = ({lang}) => {
@@ -70,17 +70,12 @@ const PublishedMap = ({lang}) => {
                 }
                 if (data.getAnnouncements) {
                     channel.getAnnouncements(function (data) {
-                        console.log('getAnnouncements: ', data);
-                        var localStorageAnnouncements = localStorage.getItem(ANNOUNCEMENTS_LOCALSTORAGE);
-                        const activeAnnouncements = data.map(announcement => {
-                            // is the modal stored in the localstorage aka has it been set to not show again
-                            if ((announcement.active && localStorageAnnouncements && localStorageAnnouncements.includes(announcement.id)) || !announcement.active) {
-                                return false;
-                            } else {
-                                return true;
-                            }
-                        })
-                        store.dispatch(setActiveAnnouncements(activeAnnouncements));
+                        console.log(data);
+                        if (data.data && data.data.length > 0) {
+                            var localStorageAnnouncements = localStorage.getItem(ANNOUNCEMENTS_LOCALSTORAGE) ? localStorage.getItem(ANNOUNCEMENTS_LOCALSTORAGE) : [];
+                            const activeAnnouncements = data.data.filter(announcement => announcement.active && localStorageAnnouncements && !localStorageAnnouncements.includes(announcement.id));
+                            store.dispatch(setActiveAnnouncements(activeAnnouncements));
+                        }
                     });
                 }
                 if(data.getThemesWithLayers) {
@@ -212,7 +207,8 @@ const PublishedMap = ({lang}) => {
     },[store]);
 
     
-    const announcements = useAppSelector((state) => state.rpc.announcements);
+    let announcements = useAppSelector((state) => state.rpc.activeAnnouncements);
+    console.log(announcements);
 
     return (
         <StyledPublishedMap>
@@ -220,6 +216,7 @@ const PublishedMap = ({lang}) => {
                 <CenterSpinner/>
             ) : null}
             {announcements.map((announcement) => {
+                console.log(announcement);
                 return (
                 <AnnouncementsModal
                     id={announcement.id}
