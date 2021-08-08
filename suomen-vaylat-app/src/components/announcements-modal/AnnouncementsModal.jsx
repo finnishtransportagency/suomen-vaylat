@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import Modal from 'react-modal';
 import styled from 'styled-components';
 
@@ -11,12 +10,18 @@ const customStyles = {
     bottom: 'auto',
     marginRight: '-50%',
     transform: 'translate(-50%, -50%)',
+    padding: ".5rem"
   },
 };
 
+const ANNOUNCEMENTS_LOCALSTORAGE = "oskari-announcements";
+
 const addToLocalStorageArray = (name, value) => {
+    console.log("APUA");
+    console.log(name);
     // Get the existing data
     var existing = localStorage.getItem(name);
+    console.log(existing);
 
     // If no existing data, create an array
     // Otherwise, convert the localStorage string to an array
@@ -24,6 +29,8 @@ const addToLocalStorageArray = (name, value) => {
 
     // Add new data to localStorage Array
     existing.push(value);
+    console.log(existing);
+    console.log(name);
 
     // Save back to localStorage
     localStorage.setItem(name, existing.toString());
@@ -33,11 +40,22 @@ const StyledCheckbox = styled.input`
     margin-right: 7px;
 `;
 
+const StyledContent = styled.div`
+    padding: .5rem;
+`;
+const StyledHeader = styled.div`
+    padding: .5rem;
+`;
+const StyledFooter = styled.div`
+    justify-content: space-between;
+`;
+
 // Make sure to bind modal to your appElement (https://reactcommunity.org/react-modal/accessibility/)
 Modal.setAppElement('#root');
 
 export const AnnouncementsModal = ({ id, title, content }) => {
-  const [modalIsOpen, setIsOpen] = React.useState(false);
+    console.log(id);
+  const [modalIsOpen, setIsOpen] = React.useState(true);
   const [selected, setIsSelected] = React.useState(false);
   function openModal() {
     setIsOpen(true);
@@ -56,24 +74,33 @@ export const AnnouncementsModal = ({ id, title, content }) => {
 
   return (
     <div>
-      <button onClick={openModal}>Open Modal</button>
-      <Modal
-        isOpen={() => setIsOpen(!modalIsOpen)}
-        onAfterOpen={afterOpenModal}
-        onRequestClose={() => closeModal()}
-        style={customStyles}
-        contentLabel="Example Modal"
-      >
-        <h2 ref={(_title) => (title = _title)}>{title}</h2>
-        <button onClick={() => closeModal()}>close</button>
-        <StyledCheckbox
-            name="announcementSelected"
-            type="checkbox"
-            onClick={() => setIsSelected(!selected)}
-        />
-        <p>
-            {content}
-        </p>
+
+        <Modal
+            isOpen={modalIsOpen}
+            onAfterOpen={afterOpenModal}
+            onRequestClose={() => closeModal()}
+            style={customStyles}
+            contentLabel="Example Modal"
+        >
+        <StyledHeader className="modal-header">
+            <h5>{title}</h5>
+        </StyledHeader>
+        <StyledContent>
+            <p>
+                {content}
+            </p>
+        </StyledContent>
+        <StyledFooter className="modal-footer">
+            <label>
+                <StyledCheckbox
+                    name="announcementSelected"
+                    type="checkbox"
+                    onClick={() => setIsSelected(!selected)}
+                />
+                Älä näytä uudelleen
+            </label>
+            <button onClick={() => closeModal()}>OK</button>
+        </StyledFooter>
       </Modal>
     </div>
   );

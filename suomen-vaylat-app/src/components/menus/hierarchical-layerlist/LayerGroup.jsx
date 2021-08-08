@@ -221,26 +221,34 @@ export const LayerGroup = ({ index, group, layers, hasChildren }) => {
         });
     };
 
-    let checkbox;
+    let checked;
+    let indeterminate;
     let visibleLayers = [];
+    
     filteredLayers.map(layer => {
         layer.visible == true && visibleLayers.push(layer);
-    })
-    /*
+    });
+
     if (filteredLayers.length == visibleLayers.length) {
-        checkbox.style.color = 'red' ;
+        checked = true;
     } else if (visibleLayers.length > 0 ) {
-        checkbox.style.color = 'blue';
+        indeterminate = true;
     } else {
-        checkbox.style.color = 'white';
+        checked = false;
+        indeterminate = false;
     }
-    */
 
     const selectGroup = (e) => {
         e.stopPropagation();
-        filteredLayers.map(layer => {
-            channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, !layer.visible]);
+        if (!indeterminate) {
+            filteredLayers.map(layer => {
+                channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, !layer.visible]);
+            });
+        } else {
+            filteredLayers.map(layer => {
+                channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, false]);
         });
+        }
         channel.getAllLayers(function (data) {
             store.dispatch(setAllLayers(data));
         });
@@ -273,6 +281,9 @@ export const LayerGroup = ({ index, group, layers, hasChildren }) => {
                         <StyledCheckbox
                             name="groupSelected"
                             type="checkbox"
+                            readOnly
+                            checked={checked}
+                            ref={el => el && (el.indeterminate = indeterminate)}
                             onClick={(event) => selectGroup(event)}
                         />
 
@@ -296,6 +307,9 @@ export const LayerGroup = ({ index, group, layers, hasChildren }) => {
                         <StyledCheckbox
                             name="groupSelected"
                             type="checkbox"
+                            readOnly
+                            checked={checked}
+                            ref={el => el && (el.indeterminate = indeterminate)}
                             onClick={(event) => selectGroup(event)}
                         />
 
