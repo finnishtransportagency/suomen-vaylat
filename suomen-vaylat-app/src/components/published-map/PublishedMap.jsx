@@ -62,7 +62,6 @@ const PublishedMap = ({lang}) => {
 
             store.dispatch(setChannel(channel));
             channel.getSupportedFunctions(function (data) {
-                console.log(data);
                 if (data.getAllTags) {
                     channel.getAllTags(function (data) {
                         store.dispatch(setAllTags(data));
@@ -70,7 +69,6 @@ const PublishedMap = ({lang}) => {
                 }
                 if (data.getAnnouncements) {
                     channel.getAnnouncements(function (data) {
-                        console.log(data);
                         if (data.data && data.data.length > 0) {
                             var localStorageAnnouncements = localStorage.getItem(ANNOUNCEMENTS_LOCALSTORAGE) ? localStorage.getItem(ANNOUNCEMENTS_LOCALSTORAGE) : [];
                             const activeAnnouncements = data.data.filter(announcement => announcement.active && localStorageAnnouncements && !localStorageAnnouncements.includes(announcement.id));
@@ -208,7 +206,6 @@ const PublishedMap = ({lang}) => {
 
     
     let announcements = useAppSelector((state) => state.rpc.activeAnnouncements);
-    console.log(announcements);
 
     return (
         <StyledPublishedMap>
@@ -216,7 +213,6 @@ const PublishedMap = ({lang}) => {
                 <CenterSpinner/>
             ) : null}
             {announcements.map((announcement) => {
-                console.log(announcement);
                 return (
                 <AnnouncementsModal
                     id={announcement.id}
