@@ -21,6 +21,7 @@ const dontShowAgain = {
     "sv": "Älä näytä uudelleen"
 
 }
+
 const ANNOUNCEMENTS_LOCALSTORAGE = "oskari-announcements";
 
 const addToLocalStorageArray = (name, value) => {
@@ -58,7 +59,6 @@ Modal.setAppElement('#root');
 export const AnnouncementsModal = ({ id, title, content }) => {
     const [modalIsOpen, setIsOpen] = React.useState(true);
     const [selected, setIsSelected] = React.useState(false);
-    
     const language = useAppSelector((state) => state.language);
     const lang = language.current;
 
