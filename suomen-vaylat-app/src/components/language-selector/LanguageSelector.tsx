@@ -38,15 +38,23 @@ const StyledSelect = styled.select`
 `;
 
 export const LanguageSelector = () => {
-    const { store } = useContext(ReactReduxContext);
     const lang = useAppSelector((state) => state.language);
+
+    const redirect = (key:string, value:string) => {
+        let urlParams = new URLSearchParams(window.location.search);
+        urlParams.delete(key);
+        urlParams.set(key, value);
+        window.location.search = urlParams.toString();
+    };
 
     return (
         <StyledLanguageSelector>
             <StyledSelect
-                name="langueage_selector"
+                name="language_selector"
                 value={lang.current}
-                onChange={(event: { target: { value: any; }; }) => store.dispatch(setLocale(event.target.value))}
+                onChange={(event: { target: { value: any; }; }) => {
+                    redirect('lang', event.target.value);
+                }}
             >
                 {strings.getAvailableLanguages().map((value, index) => {
                         return  (
