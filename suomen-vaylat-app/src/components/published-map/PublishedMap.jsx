@@ -35,10 +35,12 @@ const StyledIframe = styled.iframe`
 `;
 
 
-const PublishedMap = ({lang}) => {
+const PublishedMap = () => {
 
     const { store } = useContext(ReactReduxContext);
     const loading = useAppSelector((state) => state.rpc.loading);
+    const language = useAppSelector((state) => state.language);
+    const lang = language.current;
 
     const hideSpinner = () => {
         store.dispatch(setLoading(false));
