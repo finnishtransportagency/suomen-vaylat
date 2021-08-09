@@ -115,16 +115,40 @@ export const ThemeLayerList = ({allLayers, allThemes}) => {
     const [isOpen, setIsOpen] = useState(false);
     const { store } = useContext(ReactReduxContext);
     const channel = useSelector(state => state.rpc.channel)
+    
+    let checked;
+    let indeterminate;
+    let visibleLayers = [];
+    
+    filteredLayers.map(layer => {
+        layer.visible == true && visibleLayers.push(layer);
+    });
+    
+    if (filteredLayers.length == visibleLayers.length) {
+        checked = true;
+    } else if (visibleLayers.length > 0 ) {
+        indeterminate = true;
+    } else {
+        checked = false;
+        indeterminate = false;
+    }
 
     const selectGroup = (e) => {
         e.stopPropagation();
-        filteredLayers.map(layer => {
-            channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, !layer.visible]);
+        if (!indeterminate) {
+            filteredLayers.map(layer => {
+                channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, !layer.visible]);
+            });
+        } else {
+            filteredLayers.map(layer => {
+                channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, false]);
         });
+        }
         channel.getAllLayers(function (data) {
-            store.dispatch(setAllLayers(data));
+                store.dispatch(setAllLayers(data));
         });
     }
+
     return (
                     <StyledLayerGroups key={index} index={index}>
                             <StyledMasterGroupHeader
@@ -141,6 +165,9 @@ export const ThemeLayerList = ({allLayers, allThemes}) => {
                                         name="groupSelected"
                                         type="checkbox"
                                         onClick={(event) => selectGroup(event)}
+                                        readOnly
+                                        checked={checked}
+                                        ref={el => el && (el.indeterminate = indeterminate)}
                                     />
 
                                     <FontAwesomeIcon
