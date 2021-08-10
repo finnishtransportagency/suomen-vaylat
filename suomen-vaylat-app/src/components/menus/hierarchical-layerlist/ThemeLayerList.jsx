@@ -99,6 +99,7 @@ const StyledCheckbox = styled.input`
 `;
 
 export const ThemeLayerList = ({allLayers, allThemes}) => {
+    console.log(allThemes);
     return (
         <>
             {allThemes.map((theme, index) => {

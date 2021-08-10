@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import { device } from '../../device';
 import PublishedMap from '../published-map/PublishedMap.jsx';
 import LayerListTEMP from '../menus/hierarchical-layerlist/LayerListTEMP';
+import DrawingTools from '../measurement-tools/DrawingTools';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLayerGroup } from '@fortawesome/free-solid-svg-icons';
@@ -25,6 +26,7 @@ const StyledContent = styled.div`
 const StyledSideMenu = styled.div`
     z-index: 3;
     position: absolute;
+    display: flex;
     transition: all 0.5s ease-out;
     top: 0px;
     left: 0px;
@@ -73,6 +75,7 @@ export const Content = () => {
                     />
                 </StyledSideMenuButton>
                 <LayerListTEMP />
+                <DrawingTools/>
             </StyledSideMenu>
             <ZoomMenu />
             <PublishedMap />

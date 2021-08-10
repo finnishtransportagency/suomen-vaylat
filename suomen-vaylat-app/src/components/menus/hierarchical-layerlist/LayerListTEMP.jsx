@@ -10,10 +10,9 @@ import Tabs from "./Tabs";
 const StyledLayerList = styled.div`
   width: 330px;
   position: absolute;
-  top: 6%;
   left: 0px;
   z-index: 10;
-  height: calc(100% - 6%);
+  height: calc(90%);
   overflow-y: auto;
   &::-webkit-scrollbar {
         display: none;
