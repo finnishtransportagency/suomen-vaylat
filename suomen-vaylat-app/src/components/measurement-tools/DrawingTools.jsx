@@ -52,26 +52,9 @@ const StyledDrawingToolContainer = styled.div`
     flex-direction: column;
 `;
 
-const StyledDrawingTools = styled.div`
-    display: flex;
-    background-color: ${props => props.color};
-    align-items: center;
-    justify-content: center;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    svg {
-        font-size: 20px;
-        color: #fff;
-    }
-`;
-
 const StyledTools = styled.div`
     display: flex;
     justify-content: space-between;
-    margin-left: auto;
-    margin-right: auto;
-
     position: absolute;
     bottom: 1.5rem;
     margin: 1rem;
@@ -117,7 +100,7 @@ const drawinToolsData = [
     {
         "name" : "sv-measure-box",
         "style" : {
-            "color" : "orange",
+            "color" : "purple",
             "icon" : faBox
         },
         "type" : "Box"
@@ -125,25 +108,10 @@ const drawinToolsData = [
 ];
 
 export const DrawingTools = () => {
-    const [isDrawing, setIsDrawing] = useState(false);
-
-    const [allValues, setAllValues] = useState({
-        activeTool: '',
-        isDrawing: false
-     });
-
     const [activeTool, setActiveTool] = useState("");
     const channel = useSelector(state => state.rpc.channel)
     const startStopTool = (tool) => {
-        console.log(tool);
-        console.log(activeTool);
         if (tool.name != activeTool) {
-            /*
-            if (activeTool == "") {
-                console.log("!!!!!");
-                var clearData = [activeTool, true];
-                channel.postRequest('DrawTools.StopDrawingRequest', clearData);
-            }*/
             var data = [tool.name, tool.type, { showMeasureOnMap: true }];
             channel.postRequest('DrawTools.StartDrawingRequest', data);
             setActiveTool(tool.name);
@@ -152,22 +120,9 @@ export const DrawingTools = () => {
             channel.postRequest('DrawTools.StopDrawingRequest', clearData);
             setActiveTool("");
         }
-        /*
-        if (!isDrawing) {
-            var clearData = [tool.name, true];
-            channel.postRequest('DrawTools.StopDrawingRequest', clearData);
-
-            var data = [tool.name, tool.type, { showMeasureOnMap: true }];
-            channel.postRequest('DrawTools.StartDrawingRequest', data);
-        } else {
-            var data = [tool.name];
-            channel.postRequest('DrawTools.StopDrawingRequest', data);
-        }
-        setIsDrawing(!isDrawing);*/
     }
 
     const eraseDrawing = (tool) => {
-        console.log("TYTY");
         var clearData = [tool.name, true];
         channel.postRequest('DrawTools.StopDrawingRequest', clearData);
     }
