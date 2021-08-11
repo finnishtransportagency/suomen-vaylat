@@ -1,9 +1,7 @@
-import { useState, useContext } from 'react';
-import { useAppSelector } from '../../state/hooks';
+import { useState } from 'react';
 import styled from 'styled-components';
-import { device } from '../../device';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { ReactReduxContext, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import {
     faRuler,
     faSquare,
@@ -12,8 +10,6 @@ import {
     faDrawPolygon,
     faEraser
 } from '@fortawesome/free-solid-svg-icons';
-
-import LanguageSelector from '../language-selector/LanguageSelector';
 
 const StyledDrawingTool = styled.div`
     z-index: 9999;
