@@ -29,6 +29,16 @@ const fi = {
                 text: 'Tuloksia ei löytynyt osoitehaulla.'
             }
         }
+    },
+    announcements: {
+        dontShowAgain: 'Älä näytä uudelleen'
+    },
+    layerlist: {
+        layerlistLabels: {
+            allLayers: 'Kaikki tasot' ,
+            themeLayers: 'Teemat',
+            selectedLayers: 'Valitut tasot'
+        }
     }
 }
 

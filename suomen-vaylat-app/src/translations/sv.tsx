@@ -29,6 +29,16 @@ const sv = {
                 text: 'Inga resultat hittades för adressökning.'
             }
         }
+    },
+    announcements: {
+        dontShowAgain: "Visa inte igen"
+    },
+    layerlist: {
+        layerlistLabels: {
+            allLayers: 'Alla lager' ,
+            themeLayers: 'Teman',
+            selectedLayers: 'Valda lagert'
+        }
     }
 }
 
