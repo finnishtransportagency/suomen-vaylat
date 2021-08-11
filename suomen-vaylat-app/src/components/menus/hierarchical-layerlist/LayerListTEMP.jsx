@@ -3,7 +3,8 @@ import { useAppSelector } from '../../../state/hooks';
 import SelectedLayers from '../selected-layers/SelectedLayers';
 import LayerList from './LayerList';
 import ThemeLayerList from './ThemeLayerList';
-import Tabs from "./Tabs"; 
+import Tabs from "./Tabs";
+import strings from '../../../translations';
 
 //VÄLIAIKAINEN PALIKKA VÄLITTÄMÄÄN TESTIDATAA HIERARKISELLE TASOVALIKOLLE
 
@@ -19,7 +20,7 @@ const StyledLayerList = styled.div`
         display: none;
   };
   padding: 20px;
-`;
+`
 
 const layerlistLabels = {
   "allLayers" : {
@@ -51,9 +52,9 @@ export const LayerListTEMP = () => {
     return (
         <StyledLayerList>
           <Tabs>
-            <LayerList label={layerlistLabels.allLayers[lang]} groups={allGroups} layers={allLayers} recurse={false} />
-            <ThemeLayerList label={layerlistLabels.themeLayers[lang]} allLayers={allLayers} allThemes={allThemes}/>
-            <SelectedLayers label={layerlistLabels.selectedLayers[lang]} layers={allLayers} />
+            <LayerList label={strings.layerlist.layerlistLabels.allLayers} groups={allGroups} layers={allLayers} recurse={false} />
+            <ThemeLayerList label={strings.layerlist.layerlistLabels.themeLayers} allLayers={allLayers} allThemes={allThemes}/>
+            <SelectedLayers label={strings.layerlist.layerlistLabels.selectedLayers} layers={allLayers} />
           </Tabs> 
         </StyledLayerList>
       );

@@ -2,6 +2,7 @@ import React from 'react';
 import Modal from 'react-modal';
 import styled from 'styled-components';
 import { useAppSelector } from '../../state/hooks';
+import strings from '../../translations';
 
 const customStyles = {
   content: {
@@ -14,13 +15,6 @@ const customStyles = {
     padding: ".5rem"
   },
 };
-
-const dontShowAgain = {
-    "fi": "Älä näytä uudelleen",
-    "en": "Don't show again",
-    "sv": "Älä näytä uudelleen"
-
-}
 
 const ANNOUNCEMENTS_LOCALSTORAGE = "oskari-announcements";
 
@@ -59,8 +53,6 @@ Modal.setAppElement('#root');
 export const AnnouncementsModal = ({ id, title, content }) => {
     const [modalIsOpen, setIsOpen] = React.useState(true);
     const [selected, setIsSelected] = React.useState(false);
-    const language = useAppSelector((state) => state.language);
-    const lang = language.current;
 
     function openModal() {
         setIsOpen(true);
@@ -102,7 +94,7 @@ export const AnnouncementsModal = ({ id, title, content }) => {
                         type="checkbox"
                         onClick={() => setIsSelected(!selected)}
                     />
-                    {dontShowAgain[lang]}
+                    {strings.announcements.dontShowAgain}
                 </label>
                 <button onClick={() => closeModal()}>OK</button>
             </StyledFooter>

@@ -29,6 +29,16 @@ const en = {
                 text: 'No results were found for the address search.'
             }
         }
+    },
+    announcements: {
+        dontShowAgain: "Don't show again"
+    },
+    layerlist: {
+        layerlistLabels: {
+            allLayers: 'All layers' ,
+            themeLayers: 'Themes',
+            selectedLayers: 'Selected layers'
+        }
     }
 }
 
