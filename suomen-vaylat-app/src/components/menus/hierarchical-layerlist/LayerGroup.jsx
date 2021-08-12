@@ -5,7 +5,6 @@ import { ReactReduxContext, useSelector } from 'react-redux';
 import { setAllLayers } from '../../../state/slices/rpcSlice';
 import LayerList from './LayerList';
 import Layers from './Layers';
-import { useAppSelector } from '../../../state/hooks';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -222,11 +221,34 @@ export const LayerGroup = ({ index, group, layers, hasChildren }) => {
         });
     };
 
-    const selectLayer = (e) => {
+    let checked;
+    let indeterminate;
+    let visibleLayers = [];
+    
+    filteredLayers.map(layer => {
+        layer.visible == true && visibleLayers.push(layer);
+    });
+
+    if (filteredLayers.length == visibleLayers.length) {
+        checked = true;
+    } else if (visibleLayers.length > 0 ) {
+        indeterminate = true;
+    } else {
+        checked = false;
+        indeterminate = false;
+    }
+
+    const selectGroup = (e) => {
         e.stopPropagation();
-        filteredLayers.map(layer => {
-            channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, !layer.visible]);
+        if (!indeterminate) {
+            filteredLayers.map(layer => {
+                channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, !layer.visible]);
+            });
+        } else {
+            filteredLayers.map(layer => {
+                channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, false]);
         });
+        }
         channel.getAllLayers(function (data) {
             store.dispatch(setAllLayers(data));
         });
@@ -259,7 +281,10 @@ export const LayerGroup = ({ index, group, layers, hasChildren }) => {
                         <StyledCheckbox
                             name="groupSelected"
                             type="checkbox"
-                            onClick={(event) => selectLayer(event)}
+                            readOnly
+                            checked={checked}
+                            ref={el => el && (el.indeterminate = indeterminate)}
+                            onClick={(event) => selectGroup(event)}
                         />
 
                         <FontAwesomeIcon
@@ -282,7 +307,10 @@ export const LayerGroup = ({ index, group, layers, hasChildren }) => {
                         <StyledCheckbox
                             name="groupSelected"
                             type="checkbox"
-                            onClick={(event) => selectLayer(event)}
+                            readOnly
+                            checked={checked}
+                            ref={el => el && (el.indeterminate = indeterminate)}
+                            onClick={(event) => selectGroup(event)}
                         />
 
                         <FontAwesomeIcon

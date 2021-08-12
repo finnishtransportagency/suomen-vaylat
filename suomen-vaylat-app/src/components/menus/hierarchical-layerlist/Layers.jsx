@@ -1,5 +1,4 @@
 import Layer from './Layer';
-import { useAppSelector } from '../../../state/hooks';
 
 export const Layers = ({ layers, isOpen }) => {
     return (

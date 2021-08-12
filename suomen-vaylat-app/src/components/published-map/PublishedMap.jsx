@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import OskariRPC from 'oskari-rpc';
 import { useAppSelector } from '../../state/hooks';
 import { ReactReduxContext } from 'react-redux';
+import { AnnouncementsModal } from '../announcements-modal/AnnouncementsModal';
 
 import {
     setLoading,
@@ -13,10 +14,10 @@ import {
     setAllTags,
     setCurrentState,
     setFeatures,
-    setTagLayers,
     setZoomRange,
     setZoomLevelsLayers,
-    setCurrentZoomLevel
+    setCurrentZoomLevel,
+    setActiveAnnouncements
 } from '../../state/slices/rpcSlice';
 
 import CenterSpinner from '../center-spinner/CenterSpinner';
@@ -33,6 +34,8 @@ const StyledIframe = styled.iframe`
     width: 100%;
     height: 100%;
 `;
+
+const ANNOUNCEMENTS_LOCALSTORAGE = "oskari-announcements";
 
 
 const PublishedMap = () => {
@@ -61,21 +64,22 @@ const PublishedMap = () => {
 
             store.dispatch(setChannel(channel));
             channel.getSupportedFunctions(function (data) {
-                //console.log('GetSupportedFunctions: ', data);
                 if (data.getAllTags) {
                     channel.getAllTags(function (data) {
-                        console.log('getAllTags: ', data);
                         store.dispatch(setAllTags(data));
                     });
                 }
-                if(data.getAllThemes) {
-                    channel.getAllThemes(function (data) {
-                        console.log('getAllThemes: ', data);
+                if (data.getAnnouncements) {
+                    channel.getAnnouncements(function (data) {
+                        if (data.data && data.data.length > 0) {
+                            var localStorageAnnouncements = localStorage.getItem(ANNOUNCEMENTS_LOCALSTORAGE) ? localStorage.getItem(ANNOUNCEMENTS_LOCALSTORAGE) : [];
+                            const activeAnnouncements = data.data.filter(announcement => announcement.active && localStorageAnnouncements && !localStorageAnnouncements.includes(announcement.id));
+                            store.dispatch(setActiveAnnouncements(activeAnnouncements));
+                        }
                     });
                 }
                 if(data.getThemesWithLayers) {
                     channel.getThemesWithLayers(function (data) {
-                        console.log('getThemesWithLayers: ', data);
                         store.dispatch(setAllThemesWithLayers(data));
                     });
                 }
@@ -88,13 +92,11 @@ const PublishedMap = () => {
                 }
                 if (data.getAllGroups) {
                     channel.getAllGroups(function (data) {
-                        console.log('getAllGroups: ', data);
                         store.dispatch(setAllGroups(data));
                     });
                 }
                 if (data.getAllLayers) {
                     channel.getAllLayers(function (data) {
-                        console.log('getAllLayers: ', data);
                         store.dispatch(setAllLayers(data));
                     });
                 }
@@ -204,11 +206,24 @@ const PublishedMap = () => {
 
     },[store]);
 
+    
+    let announcements = useAppSelector((state) => state.rpc.activeAnnouncements);
+
     return (
         <StyledPublishedMap>
             {loading ? (
                 <CenterSpinner/>
             ) : null}
+            {announcements.map((announcement) => {
+                return (
+                <AnnouncementsModal
+                    id={announcement.id}
+                    title={announcement.title}
+                    content={announcement.content}
+                    key={announcement.id}
+                />
+                );
+            })}
             <StyledIframe id="sv-iframe" title="iframe" src={process.env.REACT_APP_PUBLISHED_MAP_URL + "&lang=" + lang}
                 allow="geolocation" onLoad={() => hideSpinner()}>
             </StyledIframe>
