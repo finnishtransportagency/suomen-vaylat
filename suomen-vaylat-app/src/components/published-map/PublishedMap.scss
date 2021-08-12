@@ -7,3 +7,11 @@ div#published-map-container {
         //position: absolute;
     }
 }
+
+div#mappluginsContent {
+        z-index: 9999;
+}
+
+div.ReactModal__Overlay.ReactModal__Overlay--after-open {
+    background: transparent !important;
+}

@@ -1,5 +1,4 @@
 import { useContext, useState } from 'react';
-import { useAppSelector } from '../../../state/hooks';
 import styled from 'styled-components';
 import { ReactReduxContext, useSelector } from 'react-redux';
 import { setTagLayers } from '../../../state/slices/rpcSlice';

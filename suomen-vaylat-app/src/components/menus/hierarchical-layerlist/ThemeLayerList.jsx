@@ -2,25 +2,11 @@ import { useState, useContext } from 'react';
 import styled, { keyframes } from 'styled-components';
 import { ReactReduxContext, useSelector } from 'react-redux';
 import { setAllLayers } from '../../../state/slices/rpcSlice';
-import LayerGroup from './LayerGroup';
-import Filter from './Filter';
-import { useAppSelector } from '../../../state/hooks';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import LayerList from './LayerList';
 import Layers from './Layers';
 import {
-    faAngleUp,
-    faCar,
-    faHardHat,
-    faShip,
-    faLandmark,
-    faTrain,
-    faRoad,
-    faMap
+    faAngleUp
 } from '@fortawesome/free-solid-svg-icons';
-
-const StyledLayerList = styled.div`
-`;
 
 const fadeIn = keyframes`
   from {
@@ -76,38 +62,6 @@ const StyledLeftContent = styled.div`
     align-items: center;
 `;
 
-const StyledMasterGroupHeaderIcon = styled.div`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: blue;
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    svg {
-        font-size: 16px;
-        color: #fff;
-    }
-`;
-
-const StyledGroupHeader = styled.div`
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    height: 30px;
-`;
-
-const StyledGroupName = styled.p`
-    font-size: 13px;
-    margin: 0;
-    font-weight: 600;
-    padding-left: 0px;
-    color: #000;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-`;
-
 const StyledSelectButton = styled.button`
     display: flex;
     justify-content: center;
@@ -121,16 +75,6 @@ const StyledSelectButton = styled.button`
         transition: all 0.5s ease-out;
         color: #fff;
     };
-`;
-
-const StyledGroupSelectButton = styled.div`
-    cursor: pointer;
-    align-items: center;
-    margin-right: 5px;
-    svg {
-        transition: all 0.5s ease-out;
-        color: #000;
-    }
 `;
 
 const StyledLayerGroupContainer = styled.div`
@@ -154,71 +98,11 @@ const StyledCheckbox = styled.input`
     margin-right: 7px;
 `;
 
-const themeStyles = {
-    default: {
-        color: [
-            "#186ef0",
-            "#0064af"
-        ]
-    },
-    100: {
-        icon: faCar,
-        color: [
-            "#207a43",
-            "#8dcb6d"
-        ]
-    },
-    101: {
-        icon: faShip,
-        color: [
-            "#0064af",
-            "#49c2f1"
-        ]
-    },
-    34: {
-        icon: faHardHat,
-        color: [
-            "#f7931e",
-            "#ffc300"
-        ]
-    },
-    2: {
-        icon: faTrain,
-        color: [
-            "#c73f00",
-            "#ff5100"
-        ]
-    },
-    199: {
-        icon: faLandmark,
-        color: [
-            "#186ef0", // FIX LATER
-            "#186ef0" // FIX LATER
-        ]
-    },
-    265: {
-        icon: faRoad,
-        color: [
-            "#186ef0", // FIX LATER
-            "#186ef0" // FIX LATER
-        ]
-    },
-    1: {
-        icon: faMap,
-        color: [
-            "#186ef0", // FIX LATER
-            "#186ef0" // FIX LATER
-        ]
-    },
-}
-
 export const ThemeLayerList = ({allLayers, allThemes}) => {
-    const [isOpen, setIsOpen] = useState(false);
     return (
         <>
             {allThemes.map((theme, index) => {
                 var filteredLayers = allLayers.filter(layer => theme.layers.includes(layer.id));
-                console.log(theme);
                 return (
                     <ThemeGroup key={index} theme={theme} filteredLayers={filteredLayers} index={index}/>
                 );
@@ -231,16 +115,40 @@ export const ThemeLayerList = ({allLayers, allThemes}) => {
     const [isOpen, setIsOpen] = useState(false);
     const { store } = useContext(ReactReduxContext);
     const channel = useSelector(state => state.rpc.channel)
+    
+    let checked;
+    let indeterminate;
+    let visibleLayers = [];
+    
+    filteredLayers.map(layer => {
+        layer.visible == true && visibleLayers.push(layer);
+    });
+    
+    if (filteredLayers.length == visibleLayers.length) {
+        checked = true;
+    } else if (visibleLayers.length > 0 ) {
+        indeterminate = true;
+    } else {
+        checked = false;
+        indeterminate = false;
+    }
 
     const selectGroup = (e) => {
         e.stopPropagation();
-        filteredLayers.map(layer => {
-            channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, !layer.visible]);
+        if (!indeterminate) {
+            filteredLayers.map(layer => {
+                channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, !layer.visible]);
+            });
+        } else {
+            filteredLayers.map(layer => {
+                channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, false]);
         });
+        }
         channel.getAllLayers(function (data) {
-            store.dispatch(setAllLayers(data));
+                store.dispatch(setAllLayers(data));
         });
     }
+
     return (
                     <StyledLayerGroups key={index} index={index}>
                             <StyledMasterGroupHeader
@@ -257,6 +165,9 @@ export const ThemeLayerList = ({allLayers, allThemes}) => {
                                         name="groupSelected"
                                         type="checkbox"
                                         onClick={(event) => selectGroup(event)}
+                                        readOnly
+                                        checked={checked}
+                                        ref={el => el && (el.indeterminate = indeterminate)}
                                     />
 
                                     <FontAwesomeIcon
