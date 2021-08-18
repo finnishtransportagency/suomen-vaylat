@@ -132,7 +132,7 @@ const StyledGroupSelectButton = styled.div`
 const StyledLayerGroupContainer = styled.div`
     background-color: #fff;
     border-radius: 20px;
-    box-shadow: ${props => props.parentId === -1 && "rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px"}; 
+    box-shadow: ${props => props.parentId === -1 && "rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px"};
     height: ${props => props.isOpen ? "auto" : "0px"};
     margin-top: ${props => props.parentId !== -1 ? "0px" : "10px"};
     margin-bottom: ${props => props.isOpen ? "10px" : "0px"};
@@ -224,12 +224,13 @@ export const LayerGroup = ({ index, group, layers, hasChildren }) => {
     let checked;
     let indeterminate;
     let visibleLayers = [];
-    
+
     filteredLayers.map(layer => {
-        layer.visible == true && visibleLayers.push(layer);
+        layer.visible === true && visibleLayers.push(layer);
+        return null;
     });
 
-    if (filteredLayers.length == visibleLayers.length) {
+    if (filteredLayers.length === visibleLayers.length) {
         checked = true;
     } else if (visibleLayers.length > 0 ) {
         indeterminate = true;
@@ -243,10 +244,12 @@ export const LayerGroup = ({ index, group, layers, hasChildren }) => {
         if (!indeterminate) {
             filteredLayers.map(layer => {
                 channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, !layer.visible]);
+                return null;
             });
         } else {
             filteredLayers.map(layer => {
                 channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, false]);
+                return null;
         });
         }
         channel.getAllLayers(function (data) {
@@ -324,7 +327,7 @@ export const LayerGroup = ({ index, group, layers, hasChildren }) => {
                 </StyledGroupHeader>
             )}
             <StyledLayerGroupContainer
-                key={"slg_" + group.parentId + "_" + group.id} 
+                key={"slg_" + group.parentId + "_" + group.id}
                 isOpen={isOpen}
                 parentId={group.parentId}
             >

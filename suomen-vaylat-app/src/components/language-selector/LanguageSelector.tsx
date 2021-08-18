@@ -1,9 +1,5 @@
-import { useContext } from "react";
 import styled from 'styled-components';
-//import { device } from '../../device';
 import { useAppSelector } from '../../state/hooks';
-import { ReactReduxContext } from 'react-redux';
-import { setLocale } from '../../state/slices/languageSlice';
 
 import strings from './../../translations';
 

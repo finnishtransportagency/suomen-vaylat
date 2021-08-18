@@ -14,6 +14,10 @@ const StyledFilterButton = styled.button`
     background-color: ${props => props.isSelected ? "#49c2f1" : "white"};
 `;
 
+const StyledFilter = styled.span`
+    padding-bottom: 10px;
+`;
+
 export const Filter = ({ filter }) => {
     const { store } = useContext(ReactReduxContext);
     const channel = useSelector(state => state.rpc.channel)
@@ -34,7 +38,7 @@ export const Filter = ({ filter }) => {
     }
 
     return (
-        <>
+        <StyledFilter>
             <StyledFilterButton
                 onClick={() => selectFilter(filter)}
                 isSelected={isSelected}
@@ -43,7 +47,7 @@ export const Filter = ({ filter }) => {
                     filter
                 }
             </StyledFilterButton>
-        </>
+        </StyledFilter>
     );
 };
 

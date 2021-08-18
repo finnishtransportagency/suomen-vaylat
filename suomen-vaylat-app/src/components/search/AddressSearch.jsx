@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { useAppSelector } from '../../state/hooks';
 import { StyledContainer, StyledTextField, ToastMessage } from './CommonComponents';
 import { setFormData, setSearching, setSearchResult, setSelectedIndex, setMarker, setAddressSearchEventHandlerReady } from '../../state/slices/searchSlice';
-import { addMarkerRequest, removeMarkerRequest, mapMoveRequest } from '../../state/slices/rpcSlice';
 import strings from '../../translations';
 import { ShowWarning } from '../messages/Messages';
 
