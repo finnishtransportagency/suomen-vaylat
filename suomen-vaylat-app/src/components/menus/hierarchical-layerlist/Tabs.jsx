@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Tab from './Tab';
 import styled from 'styled-components';
 
-  
+
 const StyledTabList = styled.div`
   padding: 0.25rem;
   background-color: #186ef0;
@@ -13,6 +13,13 @@ const StyledTabList = styled.div`
   justify-content: space-around;
   align-items: center;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+`;
+
+const StyledTabs = styled.div`
+`;
+
+const StyledTabContent = styled.div`
+  padding-top: 10px;
 `;
 
 class Tabs extends Component {
@@ -44,7 +51,7 @@ class Tabs extends Component {
     } = this;
 
     return (
-      <div className="tabs">
+      <StyledTabs>
         <StyledTabList>
           {children.map((child) => {
             const { label } = child.props;
@@ -59,7 +66,7 @@ class Tabs extends Component {
             );
           })}
         </StyledTabList>
-        <div className="tab-content">
+        <StyledTabContent>
           {children.map((child) => {
             if (child.props.label !== activeTab) {
                 return undefined;
@@ -67,8 +74,8 @@ class Tabs extends Component {
                 return child;
             }
           })}
-        </div>
-      </div>
+        </StyledTabContent>
+      </StyledTabs>
     );
   }
 }

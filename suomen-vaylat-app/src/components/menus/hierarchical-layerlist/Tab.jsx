@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-  
+
 const StyledTabListItem = styled.div`
   width: 32%;
   padding: 0.1rem;
@@ -37,7 +37,7 @@ class Tab extends Component {
         label,
       },
     } = this;
-    
+
     let active = false
 
     if (activeTab === label) {
