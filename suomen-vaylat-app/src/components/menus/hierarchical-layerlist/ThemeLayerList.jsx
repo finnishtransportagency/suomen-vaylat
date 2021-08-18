@@ -80,7 +80,7 @@ const StyledSelectButton = styled.button`
 const StyledLayerGroupContainer = styled.div`
     background-color: #fff;
     border-radius: 20px;
-    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px; 
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
     height: ${props => props.isOpen ? "auto" : "0px"};
     margin-top: 10px;
     margin-bottom: ${props => props.isOpen ? "10px" : "0px"};
@@ -115,16 +115,17 @@ export const ThemeLayerList = ({allLayers, allThemes}) => {
     const [isOpen, setIsOpen] = useState(false);
     const { store } = useContext(ReactReduxContext);
     const channel = useSelector(state => state.rpc.channel)
-    
+
     let checked;
     let indeterminate;
     let visibleLayers = [];
-    
+
     filteredLayers.map(layer => {
-        layer.visible == true && visibleLayers.push(layer);
+        layer.visible === true && visibleLayers.push(layer);
+        return true;
     });
-    
-    if (filteredLayers.length == visibleLayers.length) {
+
+    if (filteredLayers.length === visibleLayers.length) {
         checked = true;
     } else if (visibleLayers.length > 0 ) {
         indeterminate = true;
@@ -138,11 +139,13 @@ export const ThemeLayerList = ({allLayers, allThemes}) => {
         if (!indeterminate) {
             filteredLayers.map(layer => {
                 channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, !layer.visible]);
+                return true;
             });
         } else {
             filteredLayers.map(layer => {
                 channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, false]);
-        });
+                return true;
+            });
         }
         channel.getAllLayers(function (data) {
                 store.dispatch(setAllLayers(data));
@@ -183,7 +186,7 @@ export const ThemeLayerList = ({allLayers, allThemes}) => {
                             isOpen={isOpen}
                         >
                             <StyledLayerGroup>
-                                <Layers layers={filteredLayers} isOpen={isOpen}/>
+                                <Layers layers={filteredLayers} isOpen={isOpen} theme={theme.name}/>
                             </StyledLayerGroup>
                         </StyledLayerGroupContainer>
                     </StyledLayerGroups>
