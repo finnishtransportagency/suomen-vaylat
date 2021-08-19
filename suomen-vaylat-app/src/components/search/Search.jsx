@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { ReactReduxContext } from 'react-redux';
 import styled from 'styled-components';
 import { useAppSelector } from '../../state/hooks';
-import { searchVKMRoad, removeFeaturesFromMap, searchRequest, removeMarkerRequest, addMarkerRequest, mapMoveRequest } from '../../state/slices/rpcSlice';
+import { searchVKMRoad, removeFeaturesFromMap, searchRequest, addMarkerRequest, mapMoveRequest } from '../../state/slices/rpcSlice';
 import { setSearchSelected, emptySearchResult, emptyFormData, setSearching } from '../../state/slices/searchSlice';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
@@ -121,8 +121,7 @@ export const Search = () => {
         searchDisabled = false;
     }
 
-    if (search.searching === false && search.marker.lon !== null && search.marker.lat !== null) {
-
+    if (search.searching === false && search.marker.x !== null && search.marker.y !== null) {
         store.dispatch(addMarkerRequest({
             x: search.marker.x,
             y: search.marker.y,

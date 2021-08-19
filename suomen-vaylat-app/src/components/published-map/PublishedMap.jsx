@@ -85,7 +85,6 @@ const PublishedMap = () => {
                 }
                 if(data.getZoomRange) {
                     channel.getZoomRange(function (data) {
-                        //console.log('getZoomRange: ', data);
                         store.dispatch(setZoomRange(data));
                         data.hasOwnProperty('current') && store.dispatch(setCurrentZoomLevel(data.current));
                     });
@@ -102,32 +101,27 @@ const PublishedMap = () => {
                 }
                 if (data.getAllTags) {
                     channel.getAllTags(function (data) {
-                        //console.log('getAllTags: ', data);
                         store.dispatch(setAllTags(data));
                     });
                 }
                 if (data.getCurrentState) {
                     channel.getCurrentState(function (data) {
-                        //console.log('getCurrentState: ', data);
                         store.dispatch(setCurrentState(data));
                     });
                 }
                 if (data.getFeatures) {
                     channel.getFeatures(function (data) {
-                        //console.log('getFeatures: ', data);
                         store.dispatch(setFeatures(data));
                     });
                 }
                 if (data.getZoomLevelsLayers) {
                     channel.getZoomLevelsLayers(function (data) {
-                        //console.log('getZoomLevelsLayers: ', data);
                         store.dispatch(setZoomLevelsLayers(data));
                     });
                 }
             });
 
             channel.getSupportedEvents(function (data) {
-                //console.log('GetSupportedEvents: ', data);
                 if (data.MapClickedEvent) {
                     channel.handleEvent('MapClickedEvent', event => {
                         //console.log('MapClickedEvent: ', event);
@@ -140,7 +134,6 @@ const PublishedMap = () => {
                 }
                 if (data.AfterMapMoveEvent) {
                     channel.handleEvent('AfterMapMoveEvent', event => {
-                        //console.log('AfterMapMoveEvent: ', event);
                         event.hasOwnProperty('zoom') &&
                         store.dispatch(setCurrentZoomLevel(event.zoom));
                     });
@@ -151,7 +144,6 @@ const PublishedMap = () => {
                     });
                 }
                 if (data.UserLocationEvent) {
-
                     channel.postRequest('MapModulePlugin.RemoveMarkersRequest', ["my_location"]);
 
                     channel.handleEvent('UserLocationEvent', event => {
@@ -206,7 +198,7 @@ const PublishedMap = () => {
 
     },[store]);
 
-    
+
     let announcements = useAppSelector((state) => state.rpc.activeAnnouncements);
 
     return (

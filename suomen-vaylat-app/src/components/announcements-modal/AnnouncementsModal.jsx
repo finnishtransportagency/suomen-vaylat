@@ -1,7 +1,6 @@
 import React from 'react';
 import Modal from 'react-modal';
 import styled from 'styled-components';
-import { useAppSelector } from '../../state/hooks';
 import strings from '../../translations';
 
 const customStyles = {
@@ -53,10 +52,6 @@ Modal.setAppElement('#root');
 export const AnnouncementsModal = ({ id, title, content }) => {
     const [modalIsOpen, setIsOpen] = React.useState(true);
     const [selected, setIsSelected] = React.useState(false);
-
-    function openModal() {
-        setIsOpen(true);
-    }
 
     function afterOpenModal() {
         // references are now sync'd and can be accessed.
