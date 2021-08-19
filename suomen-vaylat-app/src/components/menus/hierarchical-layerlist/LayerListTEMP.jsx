@@ -22,32 +22,12 @@ const StyledLayerList = styled.div`
   padding: 20px;
 `
 
-const layerlistLabels = {
-  "allLayers" : {
-    "fi": "Kaikki tasot",
-    "en": "All layers",
-    "sv": "All layers"
-  },
-  "themeLayers" : {
-    "fi": "Teema tasot",
-    "en": "Theme layers",
-    "sv": "Theme layers"
-  },
-  "selectedLayers" : {
-    "fi": "Valitut tasot",
-    "en": "Selected layers",
-    "sv": "Selected layers"
-  }
-}
-
-
 export const LayerListTEMP = () => {
 
   const allGroups = useAppSelector((state) => state.rpc.allGroups);
   const allLayers = useAppSelector((state) => state.rpc.allLayers);
   const allThemes = useAppSelector((state) => state.rpc.allThemesWithLayers);
-  const language = useAppSelector((state) => state.language);
-  const lang = language.current;
+  useAppSelector((state) => state.language);
 
     return (
         <StyledLayerList>
@@ -55,7 +35,7 @@ export const LayerListTEMP = () => {
             <LayerList label={strings.layerlist.layerlistLabels.allLayers} groups={allGroups} layers={allLayers} recurse={false} />
             <ThemeLayerList label={strings.layerlist.layerlistLabels.themeLayers} allLayers={allLayers} allThemes={allThemes}/>
             <SelectedLayers label={strings.layerlist.layerlistLabels.selectedLayers} layers={allLayers} />
-          </Tabs> 
+          </Tabs>
         </StyledLayerList>
       );
 };

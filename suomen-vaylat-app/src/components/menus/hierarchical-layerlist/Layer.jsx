@@ -28,7 +28,7 @@ const StyledLayerName = styled.p`
     margin: 5px;
 `;
 
-export const Layer = ({ layer, isOpen }) => {
+export const Layer = ({ layer, isOpen, theme }) => {
     const { store } = useContext(ReactReduxContext);
     const channel = useSelector(state => state.rpc.channel)
 
@@ -39,9 +39,28 @@ export const Layer = ({ layer, isOpen }) => {
         });
     }
 
+    if (layer.visible) {
+        // if theme then check layer theme style
+        if (theme) {
+            channel.getLayerThemeStyle([layer.id, theme], function(styleName) {
+                if (styleName) {
+                    channel.changeLayerStyle([layer.id, styleName], function() {});
+                }
+            });
+        }
+        // else use default
+        else {
+            channel.getLayerThemeStyle([layer.id, null], function(styleName) {
+                if (styleName) {
+                    channel.changeLayerStyle([layer.id, styleName], function() {});
+                }
+            });
+        }
+    }
+
     return (
             <StyledLayerContainer
-                key={layer.id}
+                key={'layer' + layer.id + '_' + theme}
                 isOpen={isOpen}
             >
                 <StyledLayerSelectButton

@@ -39,7 +39,7 @@ export const rpcSlice = createSlice({
         state.filter = action.payload;
     },
     setAllLayers: (state, action) => {
-        const selectedLayers = action.payload.filter(layer => layer.visible == true)
+        const selectedLayers = action.payload.filter(layer => layer.visible === true)
         if (selectedLayers.length > 0) {
             state.selectedLayers = selectedLayers;
         }
