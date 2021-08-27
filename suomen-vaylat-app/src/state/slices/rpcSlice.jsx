@@ -19,7 +19,9 @@ const initialState = {
   announcements: [],
   activeAnnouncements: [],
   allThemesWithLayers: [],
-  filter: null
+  filter: null,
+  suomenVaylatLayers: [],
+  layerMetadata: { data: null, layer: null, uuid: null}
 };
 
 export const rpcSlice = createSlice({
@@ -155,6 +157,33 @@ export const rpcSlice = createSlice({
     },
     mapMoveRequest: (state, action) => {
         state.channel !== null && state.channel.postRequest('MapMoveRequest', [action.payload.x, action.payload.y, action.payload.zoom || 10]);
+    },
+    setSuomenVaylatLayers: (state, action) => {
+        state.suomenVaylatLayers = action.payload;
+    },
+    getLayerMetadata: (state, action) => {
+        state.channel && state.channel.getLayerMetadata([action.payload.uuid], (data) => {
+            action.payload.handler(data, action.payload.layer, action.payload.uuid)
+        }, (err) => {
+            if (typeof action.payload.errorHandler === 'function') {
+                action.payload.errorHandler(err);
+            } else {
+                LOG.warn('Get layer metadata failed');
+            }
+        });
+    },
+    clearLayerMetadata: (state) => {
+        state.layerMetadata = {
+            data: null,
+            layer: null
+        };
+    },
+    setLayerMetadata: (state, action) => {
+        state.layerMetadata = {
+            layer: action.payload.layer,
+            data: action.payload.data,
+            uuid: action.payload.uuid
+        };
     }
   }
 });
@@ -187,7 +216,11 @@ export const {
     setSelectedLayers,
     setAllThemesWithLayers,
     setActiveAnnouncements,
-    setFilter
+    setFilter,
+    setSuomenVaylatLayers,
+    getLayerMetadata,
+    clearLayerMetadata,
+    setLayerMetadata
 } = rpcSlice.actions;
 
 export default rpcSlice.reducer;

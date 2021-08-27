@@ -1,10 +1,10 @@
 import { useState, useContext } from "react";
 import { ReactReduxContext, useSelector } from 'react-redux';
-import { setAllLayers } from '../../../state/slices/rpcSlice';
+import { setAllLayers, getLayerMetadata, setLayerMetadata, clearLayerMetadata } from '../../../state/slices/rpcSlice';
 import styled from 'styled-components';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash, faCog } from '@fortawesome/free-solid-svg-icons';
+import { faTrash, faCog, faInfo } from '@fortawesome/free-solid-svg-icons';
 
 import LayerOptions from './LayerOptions';
 
@@ -41,7 +41,7 @@ const StyledlayerHeader = styled.div`
 const StyledLayerName = styled.p`
     font-size: 13px;
     margin: 5px;
-    max-width: 200px;
+    max-width: 180px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -68,7 +68,7 @@ const StyledLayerDeleteIcon = styled.div`
     };
     &:hover {
         svg {
-            color: #009ae1;  
+            color: #009ae1;
         }
     }
 `;
@@ -82,21 +82,46 @@ const StyledLayerOptionsButton = styled.button`
     };
     &:hover {
         svg {
-            color: #838383;   
+            color: #838383;
         }
     };
 `;
 
-export const SelectedLayer = ({ isOpen, layer }) => {
+const StyledLayerInfoIcon = styled.button`
+    background-color: transparent;
+    border: none;
+    font-size: 20px;
+    svg {
+        transition: all 0.1s ease-out;
+        font-size: 18px;
+        color: #0064af;
+    };
+    &:hover {
+        svg {
+            color: #009ae1;
+        }
+    }
+`;
+
+export const SelectedLayer = ({ isOpen, layer, uuid }) => {
     const [isOptionsOpen, setIsOptionsOpen] = useState(false);
     const { store } = useContext(ReactReduxContext);
     const channel = useSelector(state => state.rpc.channel);
-    
+
     const handleLayerVisibility = (channel, layer) => {
         channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, !layer.visible]);
         channel.getAllLayers(function (data) {
             store.dispatch(setAllLayers(data));
         });
+    };
+
+    const handleMetadataSuccess = (data, layer, uuid) => {
+        if (data) {
+            store.dispatch(setLayerMetadata({data:data, layer:layer, uuid: uuid}));
+        }
+    };
+    const handleMetadataError = () => {
+        store.dispatch(clearLayerMetadata());
     };
 
     return (
@@ -120,6 +145,15 @@ export const SelectedLayer = ({ isOpen, layer }) => {
                         </StyledLayerName>
                     </StyledlayerHeader>
                 </StyledLayerInfo>
+                <div>
+                {uuid &&
+                    <StyledLayerInfoIcon onClick={() => {
+                            store.dispatch(getLayerMetadata({layer:layer, uuid:uuid, handler: handleMetadataSuccess, errorHandler: handleMetadataError}));
+                        }
+                    }>
+                        <FontAwesomeIcon icon={faInfo}/>
+                    </StyledLayerInfoIcon>
+                }
                     <StyledLayerOptionsButton
                         onClick={() => setIsOptionsOpen(!isOptionsOpen)}
                     >
@@ -127,6 +161,7 @@ export const SelectedLayer = ({ isOpen, layer }) => {
                             icon={faCog}
                         />
                     </StyledLayerOptionsButton>
+                    </div>
             </StyledTopContent>
             {isOptionsOpen && <LayerOptions layer={layer} isOpen={isOpen} isOptionsOpen={isOptionsOpen}/>}
         </StyledLayerContainer>
