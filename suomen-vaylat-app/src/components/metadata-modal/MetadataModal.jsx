@@ -120,7 +120,7 @@ export const MetadataModal = () => {
                 style={customStyles}
             >
             <StyledHeader className="modal-header">
-                <h5>{layerName} -karttatason metatiedot</h5>
+                <h5>{strings.formatString(strings.metadata.title, layerName)}</h5>
                 <StyledLayerCloseIcon
                     onClick={() => {
                         closeModal();
@@ -138,28 +138,28 @@ export const MetadataModal = () => {
             active={active === 'ABSTRACT' || active === null}
             onClick={() => setActive('ABSTRACT')}
           >
-            Perustiedot
+            {strings.metadata.tabs.abstract}
           </Tab>
           <Tab
             key={'JHS158'}
             active={active === 'JHS158'}
             onClick={() => setActive('JHS158')}
           >
-            JHS 158 -metatiedot
+            {strings.metadata.tabs.jhs}
           </Tab>
           <Tab
             key={'INSPIRE'}
             active={active === 'INSPIRE'}
             onClick={() => setActive('INSPIRE')}
           >
-            Inspire-metatiedot
+            {strings.metadata.tabs.inspire}
           </Tab>
           <Tab
             key={'QUALITY'}
             active={active === 'QUALITY'}
             onClick={() => setActive('QUALITY')}
           >
-            Laatutiedot
+            {strings.metadata.tabs.quality}
           </Tab>
 
       </ButtonGroup>

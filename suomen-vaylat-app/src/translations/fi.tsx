@@ -41,6 +41,13 @@ const fi = {
         }
     },
     metadata: {
+        title: '{0} -karttatason metatiedot',
+        tabs: {
+            abstract: 'Perustiedot',
+            inspire: 'Inspire-metatiedot',
+            jhs: 'JHS 158 -metatiedot',
+            quality: 'Laatutiedot'
+        },
         heading: {
             abstractTextData: 'Aineiston tiivistelmä',
             abstractTextService: 'Palvelun tiivistelmä',
