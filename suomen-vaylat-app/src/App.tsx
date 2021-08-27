@@ -7,6 +7,10 @@ import { history, store } from './state/store'
 import SimpleReactLightbox from 'simple-react-lightbox'
 
 import 'bootstrap/dist/css/bootstrap.min.css';
+import './App.scss';
+import Modal from 'react-modal';
+
+Modal.setAppElement('#root');
 
 /**
  * Top class for the application.

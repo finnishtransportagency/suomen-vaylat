@@ -74,9 +74,6 @@ const StyledLayerCloseIcon = styled.div`
     }
 `;
 
-// Make sure to bind modal to your appElement (https://reactcommunity.org/react-modal/accessibility/)
-Modal.setAppElement('#root');
-
 export const AnnouncementsModal = ({ id, title, content }) => {
     const [modalIsOpen, setIsOpen] = React.useState(true);
     const [selected, setIsSelected] = React.useState(false);
