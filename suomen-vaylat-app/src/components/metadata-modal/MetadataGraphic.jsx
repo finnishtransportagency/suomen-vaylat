@@ -1,29 +1,22 @@
 import styled from 'styled-components';
-
-const StyledBrowseGraphic = styled.div`
-    cursor: zoom-in;
-    display: table-cell;
-    margin-bottom: 6px;
-    margin-left: 6px;
-`;
+import { SRLWrapper } from 'simple-react-lightbox';
 
 const StyledImage = styled.img`
     max-height: 200px;
+    cursor: zoom-in;
 `;
 
 export const MetadataGraphic = ({ identification }) => {
     return (
-        <>
+        <SRLWrapper>
         {identification && identification.browseGraphics && identification.browseGraphics.map((graphic, index) => {
                     return (
-                        <StyledBrowseGraphic
-                            key={'metadata-graphic-' + index + '-' + graphic.fileName}
-                        >
+                        <a href={graphic.fileName}>
                             <StyledImage src={graphic.fileName}/>
-                        </StyledBrowseGraphic>
+                        </a>
                     )
                     })}
-        </>
+        </SRLWrapper>
     );
 };
 

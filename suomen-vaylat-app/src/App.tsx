@@ -4,6 +4,7 @@ import PageTitle from './components/layout/PageTitle';
 import { Router } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { history, store } from './state/store'
+import SimpleReactLightbox from 'simple-react-lightbox'
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -16,14 +17,16 @@ import 'bootstrap/dist/css/bootstrap.min.css';
  */
  const App = () => {
     return (
-        <Provider store={store}>
-            <Router history={history}>
-                <div className="sv-app">
-                    <PageTitle/>
-                    <Layout/>
-                </div>
-            </Router>
-        </Provider>
+        <SimpleReactLightbox>
+            <Provider store={store}>
+                <Router history={history}>
+                    <div className="sv-app">
+                        <PageTitle/>
+                        <Layout/>
+                    </div>
+                </Router>
+            </Provider>
+        </SimpleReactLightbox>
     );
 }
 
