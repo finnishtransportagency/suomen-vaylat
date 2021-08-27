@@ -1,11 +1,5 @@
-import styled from 'styled-components';
-import strings from '../../translations';
-
-const StyledAbstractTitle = styled.h5`
-`;
-
-const StyledParagraph = styled.p`
-`;
+import strings from '../../../../translations';
+import {StyledTitle, StyledParagraph} from './Common';
 
 export const AbstractText = ({ identification }) => {
     const abstractTextHeader = identification.type === "data" ? strings.metadata.heading.abstractTextData : strings.metadata.heading.abstractTextService;
@@ -13,7 +7,7 @@ export const AbstractText = ({ identification }) => {
         <>
         {identification.abstractText.length > 0 &&
             <>
-                <StyledAbstractTitle>{abstractTextHeader}</StyledAbstractTitle>
+                <StyledTitle>{abstractTextHeader}</StyledTitle>
                 <StyledParagraph>{identification.abstractText}</StyledParagraph>
             </>
         }

@@ -1,13 +1,10 @@
-import styled from 'styled-components';
-
-const StyledCitationTitle = styled.h4`
-`;
+import {StyledTitle} from './Common';
 
 export const Citation = ({ identification }) => {
     return (
         <>
         {identification.citation.title.length > 0 &&
-            <StyledCitationTitle>{identification.citation.title}</StyledCitationTitle>
+            <StyledTitle>{identification.citation.title}</StyledTitle>
         }
         </>
     );

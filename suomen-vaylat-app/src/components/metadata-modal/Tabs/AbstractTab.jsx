@@ -1,8 +1,8 @@
 import styled from 'styled-components';
-import AbstractText from './AbstractText';
-import Citation from './Citation';
-import MetadataDateStamp from './MetadataDateStamp';
-import MetadataGraphic from './MetadataGraphic';
+import AbstractText from './Components/AbstractText';
+import Citation from './Components/Citation';
+import MetadataDateStamp from './Components/MetadataDateStamp';
+import MetadataGraphic from './Components/MetadataGraphic';
 
 const StyledArticle = styled.article`
 `;

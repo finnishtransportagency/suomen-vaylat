@@ -6,7 +6,8 @@ import styled from 'styled-components';
 import strings from '../../translations';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
-import AbstractTab from './AbstractTab';
+import AbstractTab from './Tabs/AbstractTab';
+import JhsTab from './Tabs/JhsTab';
 
 const customStyles = {
   content: {
@@ -84,10 +85,6 @@ const StyledTabContent = styled.div`
     overflow:auto;
 `;
 
-
-// Make sure to bind modal to your appElement (https://reactcommunity.org/react-modal/accessibility/)
-Modal.setAppElement('#root');
-
 export const MetadataModal = () => {
     const [active, setActive] = React.useState(true);
     const [uuid, setUuid] = React.useState(true);
@@ -141,9 +138,9 @@ export const MetadataModal = () => {
             {strings.metadata.tabs.abstract}
           </Tab>
           <Tab
-            key={'JHS158'}
-            active={active === 'JHS158'}
-            onClick={() => setActive('JHS158')}
+            key={'JHS'}
+            active={active === 'JHS'}
+            onClick={() => setActive('JHS')}
           >
             {strings.metadata.tabs.jhs}
           </Tab>
@@ -166,7 +163,18 @@ export const MetadataModal = () => {
       <p />
       <StyledTabContent>
         {metadata.data !== null && active === 'ABSTRACT' &&
-          <AbstractTab identification={identification} datestamp={metadata.data.metadataDateStamp}></AbstractTab>
+          <AbstractTab
+              identification={identification}
+              datestamp={metadata.data.metadataDateStamp}>
+          </AbstractTab>
+        }
+        {metadata.data !== null && active === 'JHS' &&
+          <JhsTab
+              identification={identification}
+              datestamp={metadata.data.metadataDateStamp}
+              onlineResources={metadata.data.onlineResources}
+              lineageStatements={metadata.data.lineageStatements}>
+          </JhsTab>
         }
       </StyledTabContent>
             </StyledContent>
