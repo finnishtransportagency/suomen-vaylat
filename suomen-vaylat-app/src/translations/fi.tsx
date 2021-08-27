@@ -39,6 +39,13 @@ const fi = {
             themeLayers: 'Teemat',
             selectedLayers: 'Valitut tasot'
         }
+    },
+    metadata: {
+        heading: {
+            abstractTextData: 'Aineiston tiivistelmä',
+            abstractTextService: 'Palvelun tiivistelmä',
+            metadataDateStamp: 'Metatiedon päiväys'
+        }
     }
 }
 

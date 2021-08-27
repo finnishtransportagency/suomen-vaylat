@@ -26,6 +26,7 @@ export const LayerListTEMP = () => {
 
   const allGroups = useAppSelector((state) => state.rpc.allGroups);
   const allLayers = useAppSelector((state) => state.rpc.allLayers);
+  const suomenVaylatLayers = useAppSelector((state) => state.rpc.suomenVaylatLayers);
   const allThemes = useAppSelector((state) => state.rpc.allThemesWithLayers);
   useAppSelector((state) => state.language);
 
@@ -34,7 +35,7 @@ export const LayerListTEMP = () => {
           <Tabs>
             <LayerList label={strings.layerlist.layerlistLabels.allLayers} groups={allGroups} layers={allLayers} recurse={false} />
             <ThemeLayerList label={strings.layerlist.layerlistLabels.themeLayers} allLayers={allLayers} allThemes={allThemes}/>
-            <SelectedLayers label={strings.layerlist.layerlistLabels.selectedLayers} layers={allLayers} />
+            <SelectedLayers label={strings.layerlist.layerlistLabels.selectedLayers} layers={allLayers} suomenVaylatLayers={suomenVaylatLayers} />
           </Tabs>
         </StyledLayerList>
       );

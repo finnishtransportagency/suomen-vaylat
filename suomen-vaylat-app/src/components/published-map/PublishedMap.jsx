@@ -4,6 +4,7 @@ import OskariRPC from 'oskari-rpc';
 import { useAppSelector } from '../../state/hooks';
 import { ReactReduxContext } from 'react-redux';
 import { AnnouncementsModal } from '../announcements-modal/AnnouncementsModal';
+import { MetadataModal } from '../metadata-modal/MetadataModal';
 
 import {
     setLoading,
@@ -17,7 +18,8 @@ import {
     setZoomRange,
     setZoomLevelsLayers,
     setCurrentZoomLevel,
-    setActiveAnnouncements
+    setActiveAnnouncements,
+    setSuomenVaylatLayers
 } from '../../state/slices/rpcSlice';
 
 import CenterSpinner from '../center-spinner/CenterSpinner';
@@ -119,6 +121,11 @@ const PublishedMap = () => {
                         store.dispatch(setZoomLevelsLayers(data));
                     });
                 }
+                if (data.getSuomenVaylatLayers) {
+                    channel.getSuomenVaylatLayers(function (data) {
+                        store.dispatch(setSuomenVaylatLayers(data));
+                    });
+                }
             });
 
             channel.getSupportedEvents(function (data) {
@@ -216,6 +223,7 @@ const PublishedMap = () => {
                 />
                 );
             })}
+            <MetadataModal></MetadataModal>
             <StyledIframe id="sv-iframe" title="iframe" src={process.env.REACT_APP_PUBLISHED_MAP_URL + "&lang=" + lang}
                 allow="geolocation" onLoad={() => hideSpinner()}>
             </StyledIframe>

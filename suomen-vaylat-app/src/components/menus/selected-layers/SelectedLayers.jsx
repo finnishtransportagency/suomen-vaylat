@@ -84,7 +84,7 @@ const StyledExpandButton = styled.button`
 const StyledLayerGroupContainer = styled.div`
     background-color: #fff;
     border-radius: 2px;
-    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px; 
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
     height: ${props => props.isOpen ? "auto" : "0px"};
     overflow: hidden;
     padding: ${props => props.isOpen && "15px 10px 15px 5px"};
@@ -96,8 +96,9 @@ const StyledLayerGroup = styled.ul`
     list-style-type: none;
 `;
 
-export const SelectedLayers = ({ layers }) => {
+export const SelectedLayers = ({ layers, suomenVaylatLayers }) => {
     var selectedLayers = layers.filter(layer => layer.visible === true).sort((a, b) => a.name > b.name ? 1 : -1);
+
     const [isOpen, setIsOpen] = useState(true);
     return (
         <>
@@ -129,10 +130,11 @@ export const SelectedLayers = ({ layers }) => {
             >
                 <StyledLayerGroup>
                     {selectedLayers.map(layer => {
-                    return ( 
+                    return (
                         <SelectedLayer
                             key={layer.id+'selected'}
                             layer={layer}
+                            uuid={suomenVaylatLayers.filter(l => l.id === layer.id)[0].uuid}
                         />
                     )
                     })}
