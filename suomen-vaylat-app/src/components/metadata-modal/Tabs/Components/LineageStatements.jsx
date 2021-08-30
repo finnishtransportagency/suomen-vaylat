@@ -20,14 +20,3 @@ export const LineageStatements = ({ lineageStatements }) => {
     );
 };
 export default LineageStatements;
-
-/*
-<% if (lineageStatements.length) { %>' +
-                    '        <h2>' + this.locale.heading.lineageStatement + '</h2>' +
-                    '        <% _.forEach(lineageStatements, function (lineage) { %>' +
-                    '           <% _.forEach(lineage, function (paragraph) { %>' +
-                    '               <p>${paragraph}</p>' +
-                    '           <% }); %>' +
-                    '        <% }); %>' +
-                    '    <% } %>' +
-*/

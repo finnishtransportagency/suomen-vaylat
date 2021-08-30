@@ -164,16 +164,16 @@ export const MetadataModal = () => {
       <StyledTabContent>
         {metadata.data !== null && active === 'ABSTRACT' &&
           <AbstractTab
-              identification={identification}
-              datestamp={metadata.data.metadataDateStamp}>
+            data={metadata.data}
+            identification={identification}
+          >
           </AbstractTab>
         }
         {metadata.data !== null && active === 'JHS' &&
           <JhsTab
+              data={metadata.data}
               identification={identification}
-              datestamp={metadata.data.metadataDateStamp}
-              onlineResources={metadata.data.onlineResources}
-              lineageStatements={metadata.data.lineageStatements}>
+          >
           </JhsTab>
         }
       </StyledTabContent>
