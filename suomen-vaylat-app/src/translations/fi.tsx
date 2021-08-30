@@ -55,7 +55,18 @@ const fi = {
             onlineResource: 'Verkko-osoite',
             resourceLanguage: 'Resurssin kieli',
             topicCategory: 'Aiheluokka',
-            lineageStatement: 'Kuvaus aineiston historiasta'
+            lineageStatement: 'Kuvaus aineiston historiasta',
+            spatialResolution: 'Sijaintitiedon erotuskyky',
+            responsibleParty: 'Vastuutaho',
+            citationDate: 'Päivämäärä',
+            distributionFormat: 'Jakeluformaatti',
+            spatialRepresentationType: 'Sijaintitiedon esitystapa',
+            fileIdentifier: 'Tiedostotunniste',
+            metadataStandardName: 'Metatietostandardin nimi',
+            metadataStandardVersion: 'Metatietostandardin versio',
+            metadataLanguage: 'Metatiedon kieli',
+            metadataCharacterSet: 'Metatiedoissa käytetty merkistö',
+            metadataOrganisation: 'Organisaation nimi'
         },
         codeLists: {
             'gmd:MD_CharacterSetCode': {
