@@ -1,7 +1,6 @@
 import {StyledA, StyledUl, StyledLi} from './Common';
 
 export const ElectronicMailAddresses = ({ electronicMailAddresses }) => {
-    console.log(electronicMailAddresses);
     return (
         <>
         {electronicMailAddresses && electronicMailAddresses.length > 0 &&

@@ -4,6 +4,10 @@ export const StyledTitle = styled.h5`
     cursor: default;
 `;
 
+export const StyledTitleLittle = styled.h6`
+    cursor: default;
+`;
+
 export const StyledUl = styled.ul`
     cursor: default;
 `;
@@ -23,4 +27,8 @@ export const StyledParagraph = styled.p`
 export const StyledImage = styled.img`
     max-height: 200px;
     cursor: zoom-in;
+`;
+
+export const StyledDiv = styled.div`
+    cursor: default;
 `;
