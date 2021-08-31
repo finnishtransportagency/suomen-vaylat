@@ -36,7 +36,7 @@ const fi = {
     layerlist: {
         layerlistLabels: {
             allLayers: 'Kaikki tasot' ,
-            themeLayers: 'Teemat',
+            themeLayers: 'Teemakartat',
             selectedLayers: 'Valitut tasot'
         }
     }

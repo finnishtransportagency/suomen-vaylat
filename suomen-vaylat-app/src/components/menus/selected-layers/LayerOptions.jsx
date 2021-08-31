@@ -32,13 +32,13 @@ const StyledlayerOpacityControl = styled.input`
         appearance: none;
         width: 16px;
         height: 16px;
-        border: 3px solid #0064af;
+        border: 3px solid ${props => props.theme.colors.maincolor1};
         box-sizing: border-box;
         border-radius: 50%;
-        background: #fff;
+        background: ${props => props.theme.colors.mainWhite};
         cursor: pointer;
         &:hover{
-            background: #0064af;
+            background: ${props => props.theme.colors.maincolor1};
         }
     }
 `;

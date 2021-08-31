@@ -3,7 +3,7 @@ import Content from './Content';
 import Header from './Header';
 
 const StyledLayout = styled.div`
-    background-color: #0064af;
+    background-color: ${(props: { theme: { colors: { maincolor1: any; }; }; }) => props.theme.colors.maincolor1};
     height: 100vh;
 `;
 

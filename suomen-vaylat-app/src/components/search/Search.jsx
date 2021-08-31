@@ -4,8 +4,9 @@ import styled from 'styled-components';
 import { useAppSelector } from '../../state/hooks';
 import { searchVKMRoad, removeFeaturesFromMap, searchRequest, addMarkerRequest, mapMoveRequest } from '../../state/slices/rpcSlice';
 import { setSearchSelected, emptySearchResult, emptyFormData, setSearching } from '../../state/slices/searchSlice';
+import { setIsSearchOpen } from '../../state/slices/uiSlice';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import { faTimes, faSearch } from '@fortawesome/free-solid-svg-icons';
 import strings from '../../translations';
 import CenterSpinner from '../center-spinner/CenterSpinner';
 import { StyledSelectInput, ToastMessage } from './CommonComponents';
@@ -27,9 +28,26 @@ const StyledSearchContainer = styled.div`
     justify-content: flex-end;
     align-items: flex-start;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
-    background-color: #0064af;
+    background-color: ${props => props.theme.colors.maincolor1};
     border-radius: 15px;
     flex-flow: row wrap;
+`;
+
+const StyledCloseButton = styled.div`
+    position: absolute;
+    top: -15px;
+    left: -15px;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: ${props => props.theme.colors.maincolor1};
+    border-radius: 50%;
+    border: 1px solid white;
+    svg {
+        color: ${props => props.theme.colors.mainWhite};
+    }
 `;
 
 const StyledSearchControl = styled.button`
@@ -39,7 +57,7 @@ const StyledSearchControl = styled.button`
     transition: all 0.1s ease-in;
     width: 46px;
     height: 46px;
-    background-color: #0064af;
+    background-color: ${props => props.theme.colors.maincolor1};
     margin: 0px 3px 3px 3px;
     border-radius: 50%;
     display: flex;
@@ -53,7 +71,7 @@ const StyledSearchControl = styled.button`
         height: 28px;
     };
     &:hover {
-        background-color: #009ae1;
+        background-color: ${props => props.theme.colors.maincolor2};
         transform: scale(1.05);
     }
     &:disabled {
@@ -140,6 +158,13 @@ export const Search = () => {
 
     return (
         <StyledSearchContainer className="search">
+            <StyledCloseButton 
+                onClick={() => store.dispatch(setIsSearchOpen(false))}
+            >
+                <FontAwesomeIcon
+                            icon={faTimes}
+                />
+            </StyledCloseButton>
             {search.searching ? (
                 <CenterSpinner/>
             ) : null}

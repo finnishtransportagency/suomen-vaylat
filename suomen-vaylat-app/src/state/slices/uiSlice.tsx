@@ -1,7 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  isSideMenuOpen: false
+  isSideMenuOpen: false,
+  isSearchOpen: false
 };
 
 export const uiSlice = createSlice({
@@ -10,10 +11,13 @@ export const uiSlice = createSlice({
   reducers: {
     setIsSideMenuOpen: (state, action) => {
       state.isSideMenuOpen = action.payload;
+    },
+    setIsSearchOpen: (state, action) => {
+      state.isSearchOpen = action.payload;
     }
   }
 });
 
-export const { setIsSideMenuOpen } = uiSlice.actions;
+export const { setIsSideMenuOpen, setIsSearchOpen } = uiSlice.actions;
 
 export default uiSlice.reducer;

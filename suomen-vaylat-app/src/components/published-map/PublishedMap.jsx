@@ -25,8 +25,8 @@ import CenterSpinner from '../center-spinner/CenterSpinner';
 import './PublishedMap.scss';
 
 const StyledPublishedMap = styled.div`
-    width: 100%;
-    height: 100%;
+    //width: calc(100% -50px);
+    height: calc(var(--app-height) - 60px);
 `;
 
 const StyledIframe = styled.iframe`
@@ -91,7 +91,13 @@ const PublishedMap = () => {
                 }
                 if (data.getAllGroups) {
                     channel.getAllGroups(function (data) {
-                        store.dispatch(setAllGroups(data));
+                        const arrangeAlphabetically = (x,y) => {
+                            if (x.name < y.name) {return -1;}
+                            if (x.name > y.name) {return 1;}
+                            return 0;
+                        };
+                        console.log(data.sort(arrangeAlphabetically));
+                        store.dispatch(setAllGroups(data.sort(arrangeAlphabetically)));
                     });
                 }
                 if (data.getAllLayers) {
@@ -206,7 +212,7 @@ const PublishedMap = () => {
             {loading ? (
                 <CenterSpinner/>
             ) : null}
-            {announcements.map((announcement) => {
+            {/* {announcements.map((announcement) => {
                 return (
                 <AnnouncementsModal
                     id={announcement.id}
@@ -215,7 +221,7 @@ const PublishedMap = () => {
                     key={announcement.id}
                 />
                 );
-            })}
+            })} */}
             <StyledIframe id="sv-iframe" title="iframe" src={process.env.REACT_APP_PUBLISHED_MAP_URL + "&lang=" + lang}
                 allow="geolocation" onLoad={() => hideSpinner()}>
             </StyledIframe>
