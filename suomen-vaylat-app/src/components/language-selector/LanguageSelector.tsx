@@ -7,7 +7,7 @@ const StyledLanguageSelector = styled.div`
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    color: #fff;
+    color: ${(props: { theme: { colors: { mainWhite: any; }; }; }) => props.theme.colors.mainWhite};
     padding-right: 10px;
 `;
 
@@ -17,11 +17,11 @@ const StyledSelect = styled.select`
     height: 30px;
     background-color: transparent;
     border: none;
-    color: #fff;
+    color: ${(props: { theme: { colors: { mainWhite: any; }; }; }) => props.theme.colors.mainWhite};
     font-size: 18px;
     option {
         border: none;
-        background-color: #0064af;
+        background-color: ${(props: { theme: { colors: { maincolor1: any; }; }; }) => props.theme.colors.maincolor1};
         width: 45px;
         height: 30px;
         font-size: 18px;

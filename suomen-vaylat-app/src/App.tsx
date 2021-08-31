@@ -3,7 +3,8 @@ import Layout from './components/layout/Layout';
 import PageTitle from './components/layout/PageTitle';
 import { Router } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import { history, store } from './state/store'
+import { history, store } from './state/store';
+import Theme from './theme/theme';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -18,10 +19,12 @@ import 'bootstrap/dist/css/bootstrap.min.css';
     return (
         <Provider store={store}>
             <Router history={history}>
-                <div className="sv-app">
-                    <PageTitle/>
-                    <Layout/>
-                </div>
+                <Theme>
+                    <div className="sv-app">
+                        <PageTitle/>
+                        <Layout/>
+                    </div>
+                </Theme>
             </Router>
         </Provider>
     );

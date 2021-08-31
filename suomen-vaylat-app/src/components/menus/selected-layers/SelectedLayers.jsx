@@ -9,32 +9,36 @@ import {
 
 import SelectedLayer from './SelectedLayer';
 
+const StyledSelectedLayers = styled.div`
+    
+`;
+
 const StyledMasterGroupName = styled.p`
     transition: all 0.1s ease-in;
     font-size: 14px;
-    font-family: 'Exo 2';
-    margin: 0;
     font-weight: 600;
+    margin: 0;
     padding-left: 10px;
-    color: #fff;
+    color: ${props => props.theme.colors.mainWhite};
 `;
 
 const StyledMasterGroupHeader = styled.div`
+    position: sticky;
+    top: 0px;
     cursor: pointer;
     display: flex;
     justify-content: space-between;
     align-items: center;
     height: 40px;
-    padding-left: 5px;
-    background-color: #0064af;
+    padding-left: 10px;
     border-radius: 2px;
-    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
     transition: all 0.1s ease-in;
+    background-color: ${props => props.theme.colors.maincolor1};
     &:hover {
-        background-color: #186ef0;
+        background-color: ${props => props.theme.colors.maincolor2};
     };
     &:hover ${StyledMasterGroupName} {
-        color: #fff;
+        color: ${props => props.theme.colors.mainWhite};
     };
 `;
 
@@ -42,13 +46,11 @@ const StyledMasterGroupHeaderIcon = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #186ef0;
     width: 28px;
     height: 28px;
-    border-radius: 50%;
     svg {
-        color: #fff;
-    }
+        color: ${props => props.theme.colors.mainWhite};
+    };
 `;
 
 const StyledLeftContent = styled.div`
@@ -63,7 +65,7 @@ const StyledSelectedLayersCount = styled.div`
     justify-content: center;
     align-items: center;
     margin-right: 5px;
-    color: #fff;
+    color: ${props => props.theme.colors.mainWhite};
 `;
 
 const StyledExpandButton = styled.button`
@@ -77,17 +79,16 @@ const StyledExpandButton = styled.button`
     svg {
         font-size: 23px;
         transition: all 0.5s ease-out;
-        color: #fff;
+        color: ${props => props.theme.colors.mainWhite};
     };
 `;
 
 const StyledLayerGroupContainer = styled.div`
-    background-color: #fff;
+    background-color: ${props => props.theme.colors.mainWhite};
     border-radius: 2px;
-    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px; 
     height: ${props => props.isOpen ? "auto" : "0px"};
     overflow: hidden;
-    padding: ${props => props.isOpen && "15px 10px 15px 5px"};
+    //padding: ${props => props.isOpen && "15px 10px 15px 5px"};
 `;
 
 const StyledLayerGroup = styled.ul`
@@ -96,11 +97,10 @@ const StyledLayerGroup = styled.ul`
     list-style-type: none;
 `;
 
-export const SelectedLayers = ({ layers }) => {
-    var selectedLayers = layers.filter(layer => layer.visible === true).sort((a, b) => a.name > b.name ? 1 : -1);
-    const [isOpen, setIsOpen] = useState(true);
+export const SelectedLayers = ({ label, layers, selectedLayers }) => {
+    const [isOpen, setIsOpen] = useState(false);
     return (
-        <>
+        <StyledSelectedLayers>
             <StyledMasterGroupHeader
                 onClick={() => setIsOpen(!isOpen)}
             >
@@ -110,7 +110,7 @@ export const SelectedLayers = ({ layers }) => {
                             icon={faCheck}
                         />
                     </StyledMasterGroupHeaderIcon>
-                    <StyledMasterGroupName>Valitut tasot</StyledMasterGroupName>
+                    <StyledMasterGroupName>{label}</StyledMasterGroupName>
                 </StyledLeftContent>
                 <StyledExpandButton>
                     <StyledSelectedLayersCount>
@@ -138,7 +138,7 @@ export const SelectedLayers = ({ layers }) => {
                     })}
                 </StyledLayerGroup>
             </StyledLayerGroupContainer>
-        </>
+        </StyledSelectedLayers>
     );
   };
 

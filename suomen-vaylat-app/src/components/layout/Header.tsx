@@ -1,6 +1,5 @@
 import { useAppSelector } from '../../state/hooks';
 import styled from 'styled-components';
-import { device } from '../../device';
 
 import LanguageSelector from '../language-selector/LanguageSelector';
 import strings from './../../translations';
@@ -13,11 +12,11 @@ const StyledHeaderContainer = styled.div`
     height: 80px;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
-    @media ${device.desktop} {
+    @media ${(props: { theme: { device: { desktop: any; }; }; }) => props.theme.device.desktop} {
         height: 60px;
         //display: none;
     };
-    @media ${device.tablet} {
+    @media ${(props: { theme: { device: { tablet: any; }; }; }) => props.theme.device.tablet} {
         grid-template-columns: 1fr 1fr;
         //display: none;
     };
@@ -25,15 +24,17 @@ const StyledHeaderContainer = styled.div`
 
 const StyledHeaderTitleContainer = styled.p`
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     height: inherit;
     margin: 0;
-    color: #fff;
-    @media ${device.tablet} {
+    padding-left: 10px;
+    font-weight: 600;
+    color: ${(props: { theme: { colors: { mainWhite: any; }; }; }) => props.theme.colors.mainWhite};
+    @media ${(props: { theme: { device: { tablet: any; }; }; }) => props.theme.device.tablet} {
         display: none;
     };
-    @media ${device.desktop} {
+    @media ${(props: { theme: { device: { desktop: any; }; }; }) => props.theme.device.desktop} {
         font-size: 25px;
     };
 `;
@@ -41,7 +42,7 @@ const StyledHeaderTitleContainer = styled.p`
 const StyledHeaderLogoContainer = styled.div`
         height: inherit;
         display: flex;
-        justify-content: flex-start;
+        justify-content: center;
         align-items: center;
         svg {
             height: inherit;
@@ -60,6 +61,9 @@ export const Header = () => {
     // }
     return (
         <StyledHeaderContainer>
+            <StyledHeaderTitleContainer>
+                    {strings.title.toUpperCase()}
+            </StyledHeaderTitleContainer>
             <StyledHeaderLogoContainer>
                 {   lang.current === 'fi' ? <VaylaLogoFi /> :
                     lang.current === 'en' ? <VaylaLogoEn /> :
@@ -68,9 +72,6 @@ export const Header = () => {
                     <img alt="Väylä" src={vaylaLogo}/>
                 </a> */}
             </StyledHeaderLogoContainer>
-            <StyledHeaderTitleContainer>
-                    {strings.title.toUpperCase()}
-            </StyledHeaderTitleContainer>
             <LanguageSelector />
         </StyledHeaderContainer>
     );

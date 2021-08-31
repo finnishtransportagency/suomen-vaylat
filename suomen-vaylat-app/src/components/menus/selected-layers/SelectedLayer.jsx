@@ -41,7 +41,6 @@ const StyledlayerHeader = styled.div`
 const StyledLayerName = styled.p`
     font-size: 13px;
     margin: 5px;
-    max-width: 200px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -64,11 +63,11 @@ const StyledLayerDeleteIcon = styled.div`
     svg {
         transition: all 0.1s ease-out;
         font-size: 18px;
-        color: #0064af;
+        color: ${props => props.theme.colors.maincolor1};
     };
     &:hover {
         svg {
-            color: #009ae1;  
+            color: ${props => props.theme.colors.maincolor2};
         }
     }
 `;
