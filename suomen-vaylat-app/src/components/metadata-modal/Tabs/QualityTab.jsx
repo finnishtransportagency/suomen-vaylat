@@ -4,7 +4,7 @@ import Citation from './Components/Citation';
 import {StyledArticle} from './Components/Common';
 import MetadataGraphic from './Components/MetadataGraphic';
 
-export const AbstractTab = ({ identification, data, visible }) => {
+export const QualityTab = ({ identification, data, visible }) => {
     return (
         <StyledArticle visible={visible}>
             <MetadataGraphic identification={identification}></MetadataGraphic>
@@ -24,4 +24,4 @@ export const AbstractTab = ({ identification, data, visible }) => {
     );
 };
 
-export default AbstractTab;
+export default QualityTab;

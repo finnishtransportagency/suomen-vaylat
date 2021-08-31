@@ -9,6 +9,7 @@ import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import AbstractTab from './Tabs/AbstractTab';
 import JhsTab from './Tabs/JhsTab';
 import InspireTab from './Tabs/InspireTab';
+import QualityTab from './Tabs/QualityTab';
 
 const customStyles = {
   content: {
@@ -28,7 +29,7 @@ const customStyles = {
     maxHeight: '800px',
     overflow: 'hidden'
   },
-  overlay: {zIndex: 5}
+  overlay: { zIndex: 5 }
 };
 
 const StyledContent = styled.div`
@@ -87,107 +88,111 @@ const StyledTabContent = styled.div`
 `;
 
 export const MetadataModal = () => {
-    const [active, setActive] = React.useState(true);
-    const [uuid, setUuid] = React.useState(true);
-    const { store } = useContext(ReactReduxContext);
-    const metadata = useSelector((state) => state.rpc.layerMetadata);
-    const layerName = metadata.layer ? metadata.layer.name : '';
-    const identification = (metadata.data && metadata.data.identifications) ? metadata.data.identifications[0] : {};
+  const [active, setActive] = React.useState(true);
+  const [uuid, setUuid] = React.useState(true);
+  const { store } = useContext(ReactReduxContext);
+  const metadata = useSelector((state) => state.rpc.layerMetadata);
+  const layerName = metadata.layer ? metadata.layer.name : '';
+  const identification = (metadata.data && metadata.data.identifications) ? metadata.data.identifications[0] : {};
 
-    if (metadata.uuid !== uuid) {
-        setActive('ABSTRACT');
-        setUuid(metadata.uuid);
-    }
-    console.log(metadata);
+  if (metadata.uuid !== uuid) {
+    setActive('ABSTRACT');
+    setUuid(metadata.uuid);
+  }
+  console.log(metadata);
 
 
-    function afterOpenModal() {
-        // references are now sync'd and can be accessed.
-    }
+  function afterOpenModal() {
+    // references are now sync'd and can be accessed.
+  }
 
-    function closeModal() {
-        store.dispatch(clearLayerMetadata());
-    }
+  function closeModal() {
+    store.dispatch(clearLayerMetadata());
+  }
 
-    return (
-        <div>
-            <Modal
-                isOpen={metadata.data !== null}
-                onAfterOpen={afterOpenModal}
-                onRequestClose={() => closeModal()}
-                style={customStyles}
+  return (
+    <div>
+      <Modal
+        isOpen={metadata.data !== null}
+        onAfterOpen={afterOpenModal}
+        onRequestClose={() => closeModal()}
+        style={customStyles}
+      >
+        <StyledHeader className="modal-header">
+          <h5>{strings.formatString(strings.metadata.title, layerName)}</h5>
+          <StyledLayerCloseIcon
+            onClick={() => {
+              closeModal();
+            }}>
+            <FontAwesomeIcon
+              icon={faTimes}
+            />
+          </StyledLayerCloseIcon>
+        </StyledHeader>
+        {metadata.data !== null &&
+        <StyledContent>
+          <ButtonGroup>
+            <Tab
+              key={'ABSTRACT'}
+              active={active === 'ABSTRACT' || active === null}
+              onClick={() => setActive('ABSTRACT')}
             >
-            <StyledHeader className="modal-header">
-                <h5>{strings.formatString(strings.metadata.title, layerName)}</h5>
-                <StyledLayerCloseIcon
-                    onClick={() => {
-                        closeModal();
-                        }}>
-                        <FontAwesomeIcon
-                            icon={faTimes}
-                        />
-                    </StyledLayerCloseIcon>
-            </StyledHeader>
-            <StyledContent>
-            <ButtonGroup>
+              {strings.metadata.tabs.abstract}
+            </Tab>
+            <Tab
+              key={'JHS'}
+              active={active === 'JHS'}
+              onClick={() => setActive('JHS')}
+            >
+              {strings.metadata.tabs.jhs}
+            </Tab>
+            <Tab
+              key={'INSPIRE'}
+              active={active === 'INSPIRE'}
+              onClick={() => setActive('INSPIRE')}
+            >
+              {strings.metadata.tabs.inspire}
+            </Tab>
+            <Tab
+              key={'QUALITY'}
+              active={active === 'QUALITY'}
+              onClick={() => setActive('QUALITY')}
+            >
+              {strings.metadata.tabs.quality}
+            </Tab>
 
-          <Tab
-            key={'ABSTRACT'}
-            active={active === 'ABSTRACT' || active === null}
-            onClick={() => setActive('ABSTRACT')}
-          >
-            {strings.metadata.tabs.abstract}
-          </Tab>
-          <Tab
-            key={'JHS'}
-            active={active === 'JHS'}
-            onClick={() => setActive('JHS')}
-          >
-            {strings.metadata.tabs.jhs}
-          </Tab>
-          <Tab
-            key={'INSPIRE'}
-            active={active === 'INSPIRE'}
-            onClick={() => setActive('INSPIRE')}
-          >
-            {strings.metadata.tabs.inspire}
-          </Tab>
-          <Tab
-            key={'QUALITY'}
-            active={active === 'QUALITY'}
-            onClick={() => setActive('QUALITY')}
-          >
-            {strings.metadata.tabs.quality}
-          </Tab>
-
-      </ButtonGroup>
-      <p />
-      <StyledTabContent>
-        {metadata.data !== null && active === 'ABSTRACT' &&
-          <AbstractTab
-            data={metadata.data}
-            identification={identification}
-          >
-          </AbstractTab>
-        }
-        {metadata.data !== null && active === 'JHS' &&
-          <JhsTab
+          </ButtonGroup>
+          <p />
+          <StyledTabContent>
+            <AbstractTab
+              visible={metadata.data !== null && active === 'ABSTRACT'}
               data={metadata.data}
               identification={identification}
-          >
-          </JhsTab>
-        }
-        {metadata.data !== null && active === 'INSPIRE' &&
-          <InspireTab
+            >
+            </AbstractTab>
+            <JhsTab
+              visible={metadata.data !== null && active === 'JHS'}
               data={metadata.data}
               identification={identification}
-          >
-          </InspireTab>
-        }
-      </StyledTabContent>
-            </StyledContent>
-        </Modal>
-        </div>
-    );
+            >
+            </JhsTab>
+            <InspireTab
+              visible={metadata.data !== null && active === 'INSPIRE'}
+              data={metadata.data}
+              identification={identification}
+            >
+            </InspireTab>
+            <QualityTab
+              visible={metadata.data !== null && active === 'QUALITY'}
+              data={metadata.data}
+              identification={identification}
+            >
+            </QualityTab>
+          </StyledTabContent>
+        </StyledContent>
+      }
+      </Modal>
+    </div>
+  );
 }
 export default MetadataModal;

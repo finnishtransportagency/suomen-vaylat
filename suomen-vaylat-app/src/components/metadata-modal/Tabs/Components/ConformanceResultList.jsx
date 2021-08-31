@@ -10,16 +10,24 @@ export const ConformanceResultList = ({ conformanceResultList }) => {
                     return (
                         <>
                         {data.specification &&
-                            <StyledDiv key={'metadata-conformance-result-specification-' + index}>{strings.metadata.qualityContent.specification}: {data.specification}</StyledDiv>
+                            <>
+                                {strings.metadata.qualityContent.specification}: {data.specification}
+                            </>
                         }
                         {data.pass === true &&
-                            <StyledDiv key={'metadata-conformance-result-pass-' + index}>{strings.metadata.qualityContent.qualityPassTrue}</StyledDiv>
+                            <>
+                                {strings.metadata.qualityContent.qualityPassTrue}
+                            </>
                         }
                         {data.pass === false &&
-                            <StyledDiv key={'metadata-conformance-result-pass-' + index}>{strings.metadata.qualityContent.qualityPassFalse}</StyledDiv>
+                            <>
+                                {strings.metadata.qualityContent.qualityPassFalse}
+                            </>
                         }
                         {data.explanation &&
-                            <StyledDiv key={'metadata-conformance-result-explanation-' + index}>{strings.metadata.qualityContent.explanation}: {data.explanation}</StyledDiv>
+                            <>
+                                {strings.metadata.qualityContent.explanation}: {data.explanation}
+                            </>
                         }
                         </>
                     )

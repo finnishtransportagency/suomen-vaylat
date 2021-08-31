@@ -1,7 +1,7 @@
 import strings from '../../../translations';
-import styled from 'styled-components';
 import Citation from './Components/Citation';
 import CitationDate from './Components/CitationDate';
+import {StyledArticle} from './Components/Common';
 import DistributionFormats from './Components/DistributionFormats';
 import Languages from './Components/Languages';
 import LineageStatements from './Components/LineageStatements';
@@ -14,12 +14,9 @@ import TemporalExtents from './Components/TemporalExtents';
 import HeaderAndParagraph from './Components/HeaderAndParagraph';
 import TopicCategories from './Components/TopicCategories';
 
-const StyledArticle = styled.article`
-`;
-
-export const JhsTab = ({ identification, data }) => {
+export const JhsTab = ({ identification, data, visible }) => {
     return (
-        <StyledArticle>
+        <StyledArticle visible={visible}>
             <MetadataGraphic identification={identification}></MetadataGraphic>
             <Citation identification={identification}></Citation>
             <HeaderAndParagraph
