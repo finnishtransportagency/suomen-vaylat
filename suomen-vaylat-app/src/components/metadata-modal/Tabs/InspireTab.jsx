@@ -1,7 +1,7 @@
 import strings from '../../../translations';
-import styled from 'styled-components';
 import Citation from './Components/Citation';
 import CitationDate from './Components/CitationDate';
+import {StyledArticle} from './Components/Common';
 import Languages from './Components/Languages';
 import LineageStatements from './Components/LineageStatements';
 import MetadataGraphic from './Components/MetadataGraphic';
@@ -22,12 +22,9 @@ import OtherConstraints from './Components/OtherConstraints';
 import Classifications from './Components/Classifications';
 import UseLimitations from './Components/UseLimitations';
 
-const StyledArticle = styled.article`
-`;
-
-export const InspireTab = ({ identification, data }) => {
+export const InspireTab = ({ identification, data, visible }) => {
     return (
-        <StyledArticle>
+        <StyledArticle visible={visible}>
             <MetadataGraphic identification={identification}></MetadataGraphic>
             <Citation identification={identification}></Citation>
             <HeaderAndParagraph

@@ -9,7 +9,7 @@ export const UseLimitations = ({ identification }) => {
             <>
                 <StyledTitle>{strings.metadata.heading.useLimitation}</StyledTitle>
                 <StyledUl>
-                {identification.useLimitations.map((data, index) => {
+                {identification.useLimitations.map((data) => {
                     return (
                         <UseLimitation uselimitation={data}></UseLimitation>
                     )
