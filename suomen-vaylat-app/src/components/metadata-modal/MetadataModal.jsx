@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import AbstractTab from './Tabs/AbstractTab';
 import JhsTab from './Tabs/JhsTab';
+import InspireTab from './Tabs/InspireTab';
 
 const customStyles = {
   content: {
@@ -175,6 +176,13 @@ export const MetadataModal = () => {
               identification={identification}
           >
           </JhsTab>
+        }
+        {metadata.data !== null && active === 'INSPIRE' &&
+          <InspireTab
+              data={metadata.data}
+              identification={identification}
+          >
+          </InspireTab>
         }
       </StyledTabContent>
             </StyledContent>

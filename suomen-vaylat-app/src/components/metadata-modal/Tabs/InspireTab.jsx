@@ -2,22 +2,30 @@ import strings from '../../../translations';
 import styled from 'styled-components';
 import Citation from './Components/Citation';
 import CitationDate from './Components/CitationDate';
-import DistributionFormats from './Components/DistributionFormats';
 import Languages from './Components/Languages';
 import LineageStatements from './Components/LineageStatements';
 import MetadataGraphic from './Components/MetadataGraphic';
 import OnlineResources from './Components/OnlineResources';
 import ResponsibleParties from './Components/ResponsibleParties';
-import SpatialRepresentationTypes from './Components/SpatialRepresentationTypes';
 import SpatialResolutions from './Components/SpatialResolutions';
 import TemporalExtents from './Components/TemporalExtents';
 import HeaderAndParagraph from './Components/HeaderAndParagraph';
 import TopicCategories from './Components/TopicCategories';
+import ScopeCodes from './Components/ScopeCodes';
+import ResourceIdentifiers from './Components/ResourceIdentifiers';
+import OperatesOn from './Components/OperatesOn';
+import ServiceType from './Components/ServiceType';
+import DescriptiveKeywords from './Components/DescriptiveKeywords';
+import DataQualities from './Components/DataQualities';
+import AccessConstraints from './Components/AccessConstraints';
+import OtherConstraints from './Components/OtherConstraints';
+import Classifications from './Components/Classifications';
+import UseLimitations from './Components/UseLimitations';
 
 const StyledArticle = styled.article`
 `;
 
-export const JhsTab = ({ identification, data }) => {
+export const InspireTab = ({ identification, data }) => {
     return (
         <StyledArticle>
             <MetadataGraphic identification={identification}></MetadataGraphic>
@@ -44,43 +52,17 @@ export const JhsTab = ({ identification, data }) => {
                 header={strings.metadata.heading.responsibleParty}
                 responsibleParties={identification.responsibleParties}></ResponsibleParties>
             <CitationDate identification={identification}></CitationDate>
-            <DistributionFormats distributionFormats={data.distributionFormats}></DistributionFormats>
-            <SpatialRepresentationTypes identification={identification}></SpatialRepresentationTypes>
-            <HeaderAndParagraph
-                visible={data.fileIdentifier && data.fileIdentifier.length > 0}
-                header={strings.metadata.heading.fileIdentifier}
-                text={data.fileIdentifier}
-            >
-            </HeaderAndParagraph>
-            <HeaderAndParagraph
-                visible={data.metadataStandardName && data.metadataStandardName.length > 0}
-                header={strings.metadata.heading.metadataStandardName}
-                text={data.metadataStandardName}
-            >
-            </HeaderAndParagraph>
-            <HeaderAndParagraph
-                visible={data.metadataStandardVersion && data.metadataStandardVersion.length > 0}
-                header={strings.metadata.heading.metadataStandardVersion}
-                text={data.metadataStandardVersion}
-            >
-            </HeaderAndParagraph>
-            <HeaderAndParagraph
-                visible={data.metadataLanguage && data.metadataLanguage.length > 0}
-                header={strings.metadata.heading.metadataLanguage}
-                text={data.metadataLanguage}
-            >
-            </HeaderAndParagraph>
-            <HeaderAndParagraph
-                visible={data.metadataCharacterSet && data.metadataCharacterSet.length > 0}
-                header={strings.metadata.heading.metadataCharacterSet}
-                title={(strings.metadata.codeLists['gmd:MD_CharacterSetCode'][data.metadataCharacterSet] || {description: data.metadataCharacterSet}).description}
-                text={(strings.metadata.codeLists['gmd:MD_CharacterSetCode'][data.metadataCharacterSet] || {label: data.metadataCharacterSet}).label}></HeaderAndParagraph>
-            <ResponsibleParties
-                visible={data.metadataResponsibleParties && data.metadataResponsibleParties.length > 0}
-                header={strings.metadata.heading.metadataOrganisation}
-                responsibleParties={data.metadataResponsibleParties}></ResponsibleParties>
-
+            <ScopeCodes scopeCodes={data.scopeCodes}></ScopeCodes>
+            <ResourceIdentifiers identification={identification}></ResourceIdentifiers>
+            <OperatesOn identification={identification}></OperatesOn>
+            <ServiceType identification={identification}></ServiceType>
+            <DescriptiveKeywords identification={identification}></DescriptiveKeywords>
+            <DataQualities dataQualities={data.dataQualities}></DataQualities>
+            <AccessConstraints identification={identification}></AccessConstraints>
+            <OtherConstraints identification={identification}></OtherConstraints>
+            <Classifications identification={identification}></Classifications>
+            <UseLimitations identification={identification}></UseLimitations>
         </StyledArticle>
     );
 };
-export default JhsTab;
+export default InspireTab;
