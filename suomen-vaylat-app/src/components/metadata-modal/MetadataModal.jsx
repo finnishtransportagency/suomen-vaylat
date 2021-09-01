@@ -14,27 +14,6 @@ import { useAppSelector } from '../../state/hooks';
 
 import './MetadataModal.scss';
 
-const customStyles = {
-  content: {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    marginRight: '-50%',
-    transform: 'translate(-50%, -50%)',
-    padding: '0',
-    borderRadius: 0,
-    boxShadow: 'rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px',
-    border: 'none',
-    height: '80%',
-    width: '80%',
-    maxWidth: '1000px',
-    maxHeight: '800px',
-    overflow: 'hidden'
-  },
-  overlay: { zIndex: 20 }
-};
-
 const StyledContent = styled.div`
     padding: .5rem;
     height: 100%;
@@ -88,6 +67,9 @@ const ButtonGroup = styled.div`
 const StyledTabContent = styled.div`
     height: calc(100% - 110px);
     overflow:auto;
+    @media (max-width: 460px) {
+      height: calc(100% - 140px);
+    }
 `;
 
 export const MetadataModal = () => {
