@@ -1,7 +1,7 @@
 import strings from '../../../translations';
 import Citation from './Components/Citation';
 import CitationDate from './Components/CitationDate';
-import {StyledArticle} from './Components/Common';
+import { StyledArticle } from './Components/Common';
 import DistributionFormats from './Components/DistributionFormats';
 import Languages from './Components/Languages';
 import LineageStatements from './Components/LineageStatements';
@@ -70,8 +70,8 @@ export const JhsTab = ({ identification, data, visible }) => {
             <HeaderAndParagraph
                 visible={data.metadataCharacterSet && data.metadataCharacterSet.length > 0}
                 header={strings.metadata.heading.metadataCharacterSet}
-                title={(strings.metadata.codeLists['gmd:MD_CharacterSetCode'][data.metadataCharacterSet] || {description: data.metadataCharacterSet}).description}
-                text={(strings.metadata.codeLists['gmd:MD_CharacterSetCode'][data.metadataCharacterSet] || {label: data.metadataCharacterSet}).label}></HeaderAndParagraph>
+                title={(strings.metadata.codeLists['gmd:MD_CharacterSetCode'][data.metadataCharacterSet] || { description: data.metadataCharacterSet }).description}
+                text={(strings.metadata.codeLists['gmd:MD_CharacterSetCode'][data.metadataCharacterSet] || { label: data.metadataCharacterSet }).label}></HeaderAndParagraph>
             <ResponsibleParties
                 visible={data.metadataResponsibleParties && data.metadataResponsibleParties.length > 0}
                 header={strings.metadata.heading.metadataOrganisation}

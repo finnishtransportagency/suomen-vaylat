@@ -31,8 +31,9 @@ export const StyledImage = styled.img`
 
 export const StyledDiv = styled.div`
     cursor: default;
+    margin-bottom: 1rem;
 `;
 
 export const StyledArticle = styled.article`
-    display: ${props => props.visible? 'block': 'none'}
+    display: ${props => props.visible ? 'block' : 'none'}
 `;

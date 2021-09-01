@@ -1,12 +1,13 @@
-import {StyledTitle} from './Common';
+import React from 'react';
+import { StyledTitle } from './Common';
 
 export const Citation = ({ identification }) => {
     return (
-        <>
-        {identification.citation.title.length > 0 &&
-            <StyledTitle>{identification.citation.title}</StyledTitle>
-        }
-        </>
+        <React.Fragment key={'metadata-modal-citation'}>
+            {identification.citation.title.length > 0 &&
+                <StyledTitle>{identification.citation.title}</StyledTitle>
+            }
+        </React.Fragment>
     );
 };
 

@@ -1,7 +1,7 @@
 import strings from '../../../translations';
 import Citation from './Components/Citation';
 import CitationDate from './Components/CitationDate';
-import {StyledArticle} from './Components/Common';
+import { StyledArticle } from './Components/Common';
 import Languages from './Components/Languages';
 import LineageStatements from './Components/LineageStatements';
 import MetadataGraphic from './Components/MetadataGraphic';
