@@ -10,6 +10,9 @@ import AbstractTab from './Tabs/AbstractTab';
 import JhsTab from './Tabs/JhsTab';
 import InspireTab from './Tabs/InspireTab';
 import QualityTab from './Tabs/QualityTab';
+import { useAppSelector } from '../../state/hooks';
+
+import './MetadataModal.scss';
 
 const customStyles = {
   content: {
@@ -65,7 +68,7 @@ const StyledLayerCloseIcon = styled.div`
 
 const Tab = styled.button`
   font-size: 16px;
-  padding: 10px 10px;
+  padding: 4px 4px;
   cursor: pointer;
   opacity: 0.6;
   background: white;
@@ -88,6 +91,7 @@ const StyledTabContent = styled.div`
 `;
 
 export const MetadataModal = () => {
+  useAppSelector((state) => state.language);
   const [active, setActive] = React.useState(true);
   const [uuid, setUuid] = React.useState(true);
   const { store } = useContext(ReactReduxContext);
@@ -115,7 +119,7 @@ export const MetadataModal = () => {
         isOpen={metadata.data !== null}
         onAfterOpen={afterOpenModal}
         onRequestClose={() => closeModal()}
-        style={customStyles}
+        className={'metadata-modal'}
       >
         <StyledHeader className="modal-header">
           <h5>{strings.formatString(strings.metadata.title, layerName)}</h5>
