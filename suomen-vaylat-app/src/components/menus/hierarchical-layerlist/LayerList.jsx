@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import LayerGroup from './LayerGroup';
-import Filter from './Filter';
 import { useAppSelector } from '../../../state/hooks';
 
 const StyledLayerList = styled.div`
