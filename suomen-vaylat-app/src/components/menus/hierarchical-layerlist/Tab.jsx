@@ -3,18 +3,27 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 const StyledTabListItem = styled.div`
-  width: 32%;
-  padding: 0.1rem;
-  background-color: ${props => props.active ? "#49c2f1" : "none"};
+  transition: all 0.4s ease-out;
+  border-radius: 2px;
+  font-size: 15px;
+  background-color: ${props => props.active ? props.theme.colors.mainWhite : "none"};
+  width: 50%;
+  height: 28px;
   border-radius: 20px;
-    font-size: 15px;
-    font-family: 'Exo 2';
-    margin: 0;
-    font-weight: 600;
-    color: ${props => props.active ? "#000" : "#fff"};
-    text-align: center;
-    text-shadow: ${props => props.active ? "none" : "rgba(0, 0, 0, 0.16) 0px 2px 4px, rgba(0, 0, 0, 0.23) 0px 2px 4px"};
-    cursor: pointer;
+  margin: 1px;
+  font-family: 'Exo 2';
+  font-weight: 600;
+  color: ${props => props.active ? props.theme.colors.black : props.theme.colors.mainWhite};
+  text-align: center;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const StyledTabName = styled.p`
+  margin: 0px;
+  user-select: none;
 `;
 
 class Tab extends Component {
@@ -49,7 +58,9 @@ class Tab extends Component {
         active={active}
         onClick={onClick}
       >
-        {label}
+        <StyledTabName>
+          {label}
+        </StyledTabName>
       </StyledTabListItem>
     );
   }

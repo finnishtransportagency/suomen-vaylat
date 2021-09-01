@@ -29,7 +29,7 @@ const customStyles = {
     maxHeight: '800px',
     overflow: 'hidden'
   },
-  overlay: { zIndex: 5 }
+  overlay: { zIndex: 20 }
 };
 
 const StyledContent = styled.div`
@@ -38,8 +38,8 @@ const StyledContent = styled.div`
 `;
 const StyledHeader = styled.div`
     padding: .5rem;
-    background-color: #0064af;
-    color: #ffffff;
+    background-color: ${props => props.theme.colors.maincolor1};
+    color: ${props => props.theme.colors.mainWhite};
     border-radius: 0
 `;
 
@@ -54,11 +54,11 @@ const StyledLayerCloseIcon = styled.div`
     svg {
         transition: all 0.1s ease-out;
         font-size: 18px;
-        color: #ffffff;
+        color: ${props => props.theme.colors.mainWhite};
     };
     &:hover {
         svg {
-            color: #009ae1;
+            color: ${props => props.theme.colors.maincolor2};
         }
     }
 `;

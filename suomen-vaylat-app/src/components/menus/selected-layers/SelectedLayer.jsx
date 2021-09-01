@@ -41,13 +41,10 @@ const StyledlayerHeader = styled.div`
 const StyledLayerName = styled.p`
     font-size: 13px;
     margin: 5px;
-    max-width: 180px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 `;
-
-
 
 const StyledLayerInfo = styled.div`
     display: flex;
@@ -64,11 +61,11 @@ const StyledLayerDeleteIcon = styled.div`
     svg {
         transition: all 0.1s ease-out;
         font-size: 18px;
-        color: #0064af;
+        color: ${props => props.theme.colors.maincolor1};
     };
     &:hover {
         svg {
-            color: #009ae1;
+            color: ${props => props.theme.colors.maincolor2};
         }
     }
 `;
@@ -117,7 +114,7 @@ export const SelectedLayer = ({ isOpen, layer, uuid }) => {
 
     const handleMetadataSuccess = (data, layer, uuid) => {
         if (data) {
-            store.dispatch(setLayerMetadata({data:data, layer:layer, uuid: uuid}));
+            store.dispatch(setLayerMetadata({ data: data, layer: layer, uuid: uuid }));
         }
     };
     const handleMetadataError = () => {
@@ -127,11 +124,11 @@ export const SelectedLayer = ({ isOpen, layer, uuid }) => {
     return (
         <StyledLayerContainer>
             <StyledTopContent
-                    key={layer.id}
+                key={layer.id}
             >
                 <StyledLayerInfo>
                     <StyledLayerDeleteIcon
-                    onClick={() => {
+                        onClick={() => {
                             layer.visible && setIsOptionsOpen(false);
                             handleLayerVisibility(channel, layer);
                         }}>
@@ -146,14 +143,14 @@ export const SelectedLayer = ({ isOpen, layer, uuid }) => {
                     </StyledlayerHeader>
                 </StyledLayerInfo>
                 <div>
-                {uuid &&
-                    <StyledLayerInfoIcon onClick={() => {
-                            store.dispatch(getLayerMetadata({layer:layer, uuid:uuid, handler: handleMetadataSuccess, errorHandler: handleMetadataError}));
+                    {uuid &&
+                        <StyledLayerInfoIcon onClick={() => {
+                            store.dispatch(getLayerMetadata({ layer: layer, uuid: uuid, handler: handleMetadataSuccess, errorHandler: handleMetadataError }));
                         }
-                    }>
-                        <FontAwesomeIcon icon={faInfo}/>
-                    </StyledLayerInfoIcon>
-                }
+                        }>
+                            <FontAwesomeIcon icon={faInfo} />
+                        </StyledLayerInfoIcon>
+                    }
                     <StyledLayerOptionsButton
                         onClick={() => setIsOptionsOpen(!isOptionsOpen)}
                     >
@@ -161,11 +158,11 @@ export const SelectedLayer = ({ isOpen, layer, uuid }) => {
                             icon={faCog}
                         />
                     </StyledLayerOptionsButton>
-                    </div>
+                </div>
             </StyledTopContent>
-            {isOptionsOpen && <LayerOptions layer={layer} isOpen={isOpen} isOptionsOpen={isOptionsOpen}/>}
+            {isOptionsOpen && <LayerOptions layer={layer} isOpen={isOpen} isOptionsOpen={isOptionsOpen} />}
         </StyledLayerContainer>
     );
-  };
+};
 
 export default SelectedLayer;

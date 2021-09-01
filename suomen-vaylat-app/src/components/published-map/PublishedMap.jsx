@@ -27,8 +27,8 @@ import CenterSpinner from '../center-spinner/CenterSpinner';
 import './PublishedMap.scss';
 
 const StyledPublishedMap = styled.div`
-    width: 100%;
-    height: 100%;
+    //width: calc(100% -50px);
+    height: calc(var(--app-height) - 60px);
 `;
 
 const StyledIframe = styled.iframe`
@@ -55,12 +55,12 @@ const PublishedMap = () => {
         store.dispatch(setLoading(true));
         const iframe = document.getElementById('sv-iframe');
         var handlers = [
-                //new AllGroupsHandler(getAllGroups),
-                //new GroupsHandler(this.groupsGetted)
+            //new AllGroupsHandler(getAllGroups),
+            //new GroupsHandler(this.groupsGetted)
         ];
 
         var channel = OskariRPC.connect(iframe, process.env.REACT_APP_PUBLISHED_MAP_DOMAIN);
-        var synchronizer = OskariRPC.synchronizerFactory(channel,handlers);
+        var synchronizer = OskariRPC.synchronizerFactory(channel, handlers);
 
         channel.onReady(() => {
 
@@ -80,12 +80,12 @@ const PublishedMap = () => {
                         }
                     });
                 }
-                if(data.getThemesWithLayers) {
+                if (data.getThemesWithLayers) {
                     channel.getThemesWithLayers(function (data) {
                         store.dispatch(setAllThemesWithLayers(data));
                     });
                 }
-                if(data.getZoomRange) {
+                if (data.getZoomRange) {
                     channel.getZoomRange(function (data) {
                         store.dispatch(setZoomRange(data));
                         data.hasOwnProperty('current') && store.dispatch(setCurrentZoomLevel(data.current));
@@ -93,7 +93,12 @@ const PublishedMap = () => {
                 }
                 if (data.getAllGroups) {
                     channel.getAllGroups(function (data) {
-                        store.dispatch(setAllGroups(data));
+                        const arrangeAlphabetically = (x, y) => {
+                            if (x.name < y.name) { return -1; }
+                            if (x.name > y.name) { return 1; }
+                            return 0;
+                        };
+                        store.dispatch(setAllGroups(data.sort(arrangeAlphabetically)));
                     });
                 }
                 if (data.getAllLayers) {
@@ -142,7 +147,7 @@ const PublishedMap = () => {
                 if (data.AfterMapMoveEvent) {
                     channel.handleEvent('AfterMapMoveEvent', event => {
                         event.hasOwnProperty('zoom') &&
-                        store.dispatch(setCurrentZoomLevel(event.zoom));
+                            store.dispatch(setCurrentZoomLevel(event.zoom));
                     });
                 }
                 if (data.SearchResultEvent) {
@@ -157,21 +162,21 @@ const PublishedMap = () => {
                         var data = {
                             x: event.lon,
                             y: event.lat,
-                            msg : '',
+                            msg: '',
                             shape: '<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#0064af"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zM7 9c0-2.76 2.24-5 5-5s5 2.24 5 5c0 2.88-2.88 7.19-5 9.88C9.92 16.21 7 11.85 7 9z"/><circle cx="12" cy="9" r="2.5"/></svg>',
                             offsetX: 0, // center point x position from left to right
                             offsetY: 10, // center point y position from bottom to up
                             size: 6
-                          };
+                        };
                         channel.postRequest('MapModulePlugin.AddMarkerRequest', [data, "my_location"]);
 
                         var routeSteps = [
                             {
-                              "lon": event.lon,
-                              "lat": event.lat,
-                              "duration": 3000,
-                              "zoom": 4,
-                              "animation": "zoomPan"
+                                "lon": event.lon,
+                                "lat": event.lat,
+                                "duration": 3000,
+                                "zoom": 4,
+                                "animation": "zoomPan"
                             },
                             {
                                 "lon": event.lon,
@@ -179,15 +184,15 @@ const PublishedMap = () => {
                                 "duration": 3000,
                                 "zoom": 10,
                                 "animation": "zoomPan"
-                              }
-                          ];
-                          var stepDefaults = {
+                            }
+                        ];
+                        var stepDefaults = {
                             "zoom": 5,
                             "animation": "fly",
                             "duration": 3000,
                             "srsName": "EPSG:3067"
-                          };
-                          channel.postRequest('MapTourRequest', [routeSteps, stepDefaults]);
+                        };
+                        channel.postRequest('MapTourRequest', [routeSteps, stepDefaults]);
                     });
                 }
             });
@@ -203,7 +208,7 @@ const PublishedMap = () => {
             synchronizer.destroy();
         };
 
-    },[store]);
+    }, [store]);
 
 
     let announcements = useAppSelector((state) => state.rpc.activeAnnouncements);
@@ -211,16 +216,16 @@ const PublishedMap = () => {
     return (
         <StyledPublishedMap>
             {loading ? (
-                <CenterSpinner/>
+                <CenterSpinner />
             ) : null}
             {announcements.map((announcement) => {
                 return (
-                <AnnouncementsModal
-                    id={announcement.id}
-                    title={announcement.title}
-                    content={announcement.content}
-                    key={announcement.id}
-                />
+                    <AnnouncementsModal
+                        id={announcement.id}
+                        title={announcement.title}
+                        content={announcement.content}
+                        key={announcement.id}
+                    />
                 );
             })}
             <MetadataModal></MetadataModal>
