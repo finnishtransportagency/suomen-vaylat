@@ -43,10 +43,10 @@ const sv = {
     metadata: {
         title: '{0} -kartlager metadata',
         tabs: {
-            abstract: 'Perustiedot',
-            inspire: 'Inspire-metatiedot',
-            jhs: 'JHS 158 -metatiedot',
-            quality: 'Laatutiedot'
+            abstract: 'Grundläggande information',
+            inspire: 'Inspire metadata',
+            jhs: 'ISO 19115 metadata',
+            quality: 'Data kvalität'
         },
         heading: {
             abstractTextData: 'Sammanfattning text (data)',
