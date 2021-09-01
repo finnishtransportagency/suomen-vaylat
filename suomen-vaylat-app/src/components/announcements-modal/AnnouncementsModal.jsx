@@ -18,7 +18,7 @@ const customStyles = {
       boxShadow: 'rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px',
       border: 'none'
     },
-    overlay: {zIndex: 5}
+    overlay: {zIndex: 20}
   };
 
 const ANNOUNCEMENTS_LOCALSTORAGE = "oskari-announcements";
@@ -47,8 +47,8 @@ const StyledContent = styled.div`
 `;
 const StyledHeader = styled.div`
     padding: .5rem;
-    background-color: #0064af;
-    color: #ffffff;
+    background-color: ${props => props.theme.colors.maincolor1};
+    color: ${props => props.theme.colors.mainWhite};
     border-radius: 0
 `;
 const StyledFooter = styled.div`
@@ -65,11 +65,11 @@ const StyledLayerCloseIcon = styled.div`
     svg {
         transition: all 0.1s ease-out;
         font-size: 18px;
-        color: #ffffff;
+        color: ${props => props.theme.colors.mainWhite};
     };
     &:hover {
         svg {
-            color: #009ae1;
+            color: ${props => props.theme.colors.maincolor2};
         }
     }
 `;
@@ -97,7 +97,6 @@ export const AnnouncementsModal = ({ id, title, content }) => {
                 onAfterOpen={afterOpenModal}
                 onRequestClose={() => closeModal()}
                 style={customStyles}
-                contentLabel="Example Modal"
             >
             <StyledHeader className="modal-header">
                 <h5>{title}</h5>

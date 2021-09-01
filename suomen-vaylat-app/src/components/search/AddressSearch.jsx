@@ -9,7 +9,7 @@ import { ShowWarning } from '../messages/Messages';
 const List = styled.ul`
   list-style: none;
   padding: 0px 6px;
-  background-color: #fff;
+  background-color: ${props => props.theme.colors.mainWhite};
   border-bottom-left-radius: 4px;
   border-bottom-right-radius: 4px;
   box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.16);
@@ -34,7 +34,7 @@ const ListItem = styled.li`
   text-overflow: ellipsis;
   white-space: nowrap;
   cursor: pointer;
-  color: ${props => props.selected ? '#0064af' : ''};
+  color: ${props => props.selected ? props.theme.colors.maincolor1 : ''};
   font-weight: ${props => props.selected ? 'bold' : ''};
 `;
 

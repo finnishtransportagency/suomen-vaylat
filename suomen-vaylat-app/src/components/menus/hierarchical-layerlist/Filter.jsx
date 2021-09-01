@@ -3,19 +3,24 @@ import styled from 'styled-components';
 import { ReactReduxContext, useSelector } from 'react-redux';
 import { setTagLayers } from '../../../state/slices/rpcSlice';
 
-const StyledFilterButton = styled.button`
+const StyledFilterButton = styled.div`
+    transition: all 0.1s ease-out;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    border: 1px solid ${props => props.theme.colors.maincolor2};
     border-radius: 20px;
-    border: solid;
-    border-width: 2px;
-    border-color: #49c2f1;
-    padding: 0.25rem 0.4rem 0.25rem 0.4rem;
+    padding: 0px 6px 0px 6px;
     margin: 2px;
     font-size: 13px;
-    background-color: ${props => props.isSelected ? "#49c2f1" : "white"};
+    //min-width: 100px;
+    background-color: ${props => props.isSelected ? props.theme.colors.maincolor2 : "white"};
+    &:hover{
+        background-color: ${props => props.theme.colors.maincolor3};
+    };
 `;
 
 const StyledFilter = styled.span`
-    padding-bottom: 10px;
 `;
 
 export const Filter = ({ filter }) => {

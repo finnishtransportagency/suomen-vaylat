@@ -31,14 +31,14 @@ const StyledMyLocationButton = styled.div`
     margin-bottom: 50px;
     width: 45px;
     height: 45px;
-    background-color: #0064af;
+    background-color: ${props => props.theme.colors.maincolor1};
     box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
     svg {
         color: white;
         font-size: 23px;
     };
     &:hover {
-        background-color: #009ae1;
+        background-color: ${props => props.theme.colors.maincolor2};
     };
     pointer-events: auto;
     cursor: pointer;

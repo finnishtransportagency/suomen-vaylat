@@ -40,18 +40,18 @@ const StyledExpandControl = styled.div`
     transition: all 0.1s ease-in;
     width: 40px;
     height: 40px;
-    background-color: #0064af;
+    background-color: ${props => props.theme.colors.maincolor1};
     border-radius: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
     &:hover {
-        background-color: #009ae1;
+        background-color: ${props => props.theme.colors.maincolor2};
     };
     svg {
         font-size: 23px;
         transition: all 0.5s ease-out;
-        color: #fff;
+        color: ${props => props.theme.colors.mainWhite};
     };
 `;
 
@@ -62,18 +62,18 @@ const StyledZoomBarControlTop = styled.button`
     transition: all 0.1s ease-in;
     width: 46px;
     height: 46px;
-    background-color: #0064af;
+    background-color: ${props => props.theme.colors.maincolor1};
     margin: 0px 3px 3px 3px;
     border-radius: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
    svg {
-        color: #fff;
+        color: ${props => props.theme.colors.mainWhite};
         font-size: 20px;
     };
     &:hover {
-        background-color: #009ae1;
+        background-color: ${props => props.theme.colors.maincolor2};
     }
 `;
 
@@ -85,18 +85,18 @@ const StyledZoomBarControlBottom = styled.button`
     cursor: pointer;
     width: 46px;
     height: 46px;
-    background-color: #0064af;
+    background-color: ${props => props.theme.colors.maincolor1};
     margin: 3px 3px 0px 3px;
     border-radius: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
     svg {
-        color: #fff;
+        color: ${props => props.theme.colors.mainWhite};
         font-size: 20px;
     };
     &:hover {
-        background-color: #009ae1;
+        background-color: ${props => props.theme.colors.maincolor2};
     }
 `;
 
@@ -106,7 +106,7 @@ const StyledCenterLine = styled.div`
     position: absolute;
     width: 4px;
     height: 100%;
-    background-color: #0064af;
+    background-color: ${props => props.theme.colors.maincolor1};
 `;
 
 const StyledZoomBarLayersInfo = styled.div`
@@ -116,7 +116,7 @@ const StyledZoomBarLayersInfo = styled.div`
     left: ${props => props.isExpanded ? '-240px' : '-230px' };
     width: 230px;
     height: 100%;
-    background-color: #0064af;
+    background-color: ${props => props.theme.colors.maincolor1};
     border-radius: 15px;
     opacity: ${props => props.isExpanded ? '1' : '0'};
     transition-delay: 0.6s;
@@ -135,7 +135,7 @@ const StyledTitle = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    color: #fff;
+    color: ${props => props.theme.colors.mainWhite};
     text-align: center;
     padding: 10px;
 `;
@@ -156,7 +156,7 @@ const StyledLayerInfoItem = styled.div`
     font-family: 'Exo 2';
     font-weight: 300;
     font-size: 13px;
-    color: #fff;
+    color: ${props => props.theme.colors.mainWhite};
     width: 100%;
     height: 25px;
     opacity: 0;
