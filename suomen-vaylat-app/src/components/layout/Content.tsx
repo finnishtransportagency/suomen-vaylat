@@ -51,7 +51,7 @@ const StyledSideMenu = styled.div`
     transform: ${(props: { isSideMenuOpen: boolean; }) => props.isSideMenuOpen ? "translateX(0%)" : "translateX(-100%)"};
     background-color: ${(props: { theme: { colors: { maincolor1: any; }; }; }) => props.theme.colors.maincolor1};
     box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
-    @media ${(props: { theme: { device: { laptop: any; }; }; }) => props.theme.device.laptop} { 
+    @media ${(props: { theme: { device: { laptop: any; }; }; }) => props.theme.device.laptop} {
         z-index: 10;
     };
     @media ${(props: { theme: { device: { mobileL: any; }; }; }) => props.theme.device.mobileL} {
@@ -121,7 +121,7 @@ export const Content = () => {
     const selectedLayers = useAppSelector((state) => state.rpc.selectedLayers);
     const allThemes = useAppSelector((state) => state.rpc.allThemesWithLayers);
     const allTags = useAppSelector((state) => state.rpc.allTags);
-
+    const suomenVaylatLayers = useAppSelector((state) => state.rpc.suomenVaylatLayers);
     return (
         <StyledContent>
             <StyledSideMenu isSideMenuOpen={isSideMenuOpen}>
@@ -136,6 +136,7 @@ export const Content = () => {
                     themes={allThemes}
                     tags={allTags}
                     selectedLayers={selectedLayers}
+                    suomenVaylatLayers={suomenVaylatLayers}
                 />
             </StyledSideMenu>
             <ZoomMenu />
