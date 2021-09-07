@@ -27,7 +27,6 @@ import CenterSpinner from '../center-spinner/CenterSpinner';
 import './PublishedMap.scss';
 
 const StyledPublishedMap = styled.div`
-    //width: calc(100% -50px);
     height: calc(var(--app-height) - 60px);
 `;
 
@@ -152,7 +151,6 @@ const PublishedMap = () => {
                 }
                 if (data.SearchResultEvent) {
                     channel.handleEvent('SearchResultEvent', event => {
-                        console.log('SearchResultEvent: ', event);
                     });
                 }
                 if (data.UserLocationEvent) {
