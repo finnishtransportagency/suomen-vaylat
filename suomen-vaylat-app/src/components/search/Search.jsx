@@ -190,8 +190,6 @@ export const Search = () => {
             y: search.marker.y
         }));
 
-    } else if (search.searching === false ) {
-        //store.dispatch(removeMarkerRequest(markerId));
     }
 
     return (
@@ -207,7 +205,7 @@ export const Search = () => {
                 />
             </StyledCloseButton>
             <StyledEmptyButton
-                disabled={(search.marker.x === null && search.marker.y === null && search.searchResult.geom === null)}
+                disabled={((search.formData.address.length === 0 && search.formData.vkm.tie === null) || search.searching === true)}
                 onClick={() => {
                     searchTypeOnChange(search.selected);
                 }}
