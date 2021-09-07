@@ -5,12 +5,19 @@ import { Router } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { history, store } from './state/store';
 import Theme from './theme/theme';
-import SimpleReactLightbox from 'simple-react-lightbox'
+import SimpleReactLightbox from 'simple-react-lightbox';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import './App.scss';
 import Modal from 'react-modal';
+import styled from 'styled-components';
 
 Modal.setAppElement('#root');
+
+const StyledAppContainer = styled.div`
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+`;
 
 /**
  * Top class for the application.
@@ -25,10 +32,10 @@ const App = () => {
             <Provider store={store}>
                 <Router history={history}>
                     <Theme>
-                        <div className="sv-app">
+                        <StyledAppContainer>
                             <PageTitle />
                             <Layout />
-                        </div>
+                        </StyledAppContainer>
                     </Theme>
                 </Router>
             </Provider>
