@@ -21,13 +21,13 @@ const StyledLayerList = styled.div`
   };
 `;
 
-export const LayerListTEMP = ({groups, layers, themes, tags, selectedLayers}) => {
+export const LayerListTEMP = ({groups, layers, themes, tags, selectedLayers, suomenVaylatLayers}) => {
   useAppSelector((state) => state.language);
 
     return (
       <>
       <StyledLayerList>
-      <SelectedLayers label={strings.layerlist.layerlistLabels.selectedLayers} layers={layers} selectedLayers={selectedLayers} />
+      <SelectedLayers label={strings.layerlist.layerlistLabels.selectedLayers} layers={layers} selectedLayers={selectedLayers} suomenVaylatLayers={suomenVaylatLayers}/>
           <Tabs allTags={tags}>
             <ThemeLayerList
               label={strings.layerlist.layerlistLabels.themeLayers}

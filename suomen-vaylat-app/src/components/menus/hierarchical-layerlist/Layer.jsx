@@ -12,12 +12,6 @@ const StyledLayerContainer = styled.li`
     margin: 0;
 `;
 
-const StyledLayerSelectButton = styled.input`
-    cursor: pointer;
-    min-width: 16px;
-    min-height: 16px;
-`;
-
 const StyledlayerHeader = styled.div`
     display: flex;
     width: 100%;

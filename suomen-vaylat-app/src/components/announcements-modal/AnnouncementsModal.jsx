@@ -2,18 +2,24 @@ import React from 'react';
 import Modal from 'react-modal';
 import styled from 'styled-components';
 import strings from '../../translations';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
 
 const customStyles = {
-  content: {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    marginRight: '-50%',
-    transform: 'translate(-50%, -50%)',
-    padding: ".5rem"
-  },
-};
+    content: {
+      top: '50%',
+      left: '50%',
+      right: 'auto',
+      bottom: 'auto',
+      marginRight: '-50%',
+      transform: 'translate(-50%, -50%)',
+      padding: '0',
+      borderRadius: 0,
+      boxShadow: 'rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px',
+      border: 'none'
+    },
+    overlay: {zIndex: 20}
+  };
 
 const ANNOUNCEMENTS_LOCALSTORAGE = "oskari-announcements";
 
@@ -41,13 +47,32 @@ const StyledContent = styled.div`
 `;
 const StyledHeader = styled.div`
     padding: .5rem;
+    background-color: ${props => props.theme.colors.maincolor1};
+    color: ${props => props.theme.colors.mainWhite};
+    border-radius: 0
 `;
 const StyledFooter = styled.div`
     justify-content: space-between;
 `;
 
-// Make sure to bind modal to your appElement (https://reactcommunity.org/react-modal/accessibility/)
-Modal.setAppElement('#root');
+const StyledLayerCloseIcon = styled.div`
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 28px;
+    min-height: 28px;
+    svg {
+        transition: all 0.1s ease-out;
+        font-size: 18px;
+        color: ${props => props.theme.colors.mainWhite};
+    };
+    &:hover {
+        svg {
+            color: ${props => props.theme.colors.maincolor2};
+        }
+    }
+`;
 
 export const AnnouncementsModal = ({ id, title, content }) => {
     const [modalIsOpen, setIsOpen] = React.useState(true);
@@ -72,10 +97,17 @@ export const AnnouncementsModal = ({ id, title, content }) => {
                 onAfterOpen={afterOpenModal}
                 onRequestClose={() => closeModal()}
                 style={customStyles}
-                contentLabel="Example Modal"
             >
             <StyledHeader className="modal-header">
                 <h5>{title}</h5>
+                <StyledLayerCloseIcon
+                    onClick={() => {
+                        closeModal();
+                        }} title='Sulje'>
+                        <FontAwesomeIcon
+                            icon={faTimes}
+                        />
+                    </StyledLayerCloseIcon>
             </StyledHeader>
             <StyledContent>
                 <p>

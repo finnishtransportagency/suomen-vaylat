@@ -8,7 +8,7 @@ import { ShowWarning } from '../messages/Messages';
 
 const List = styled.ul`
   list-style: none;
-  padding: 0px 6px;
+  padding: 0px;
   background-color: ${props => props.theme.colors.mainWhite};
   border-bottom-left-radius: 4px;
   border-bottom-right-radius: 4px;
@@ -18,12 +18,15 @@ const List = styled.ul`
   position:absolute;
   z-index: 100;
   color: #777;
+  font-size: 13px;
+  margin-left:1px;
+  width:228px;
 `;
 
 const ListItem = styled.li`
   display: flex;
   flex-direction: column;
-  padding: 2px 0px;
+  padding: 2px 8px;
   :first-of-type {
     border-top: none;
   }
@@ -81,18 +84,17 @@ const AddressSearch = ({visible, search, store, onEnterHandler}) => {
                     }
                 }}
                 value={search.formData.address ? search.formData.address : ''}
-                disabled={search.searching}
                 min="1"
                 type="text"
             >
             </StyledTextField>
             {search.searching === false && search.searchResult.address.length > 0 &&
                 <List>
-                {search.searchResult.address.map(({ name, lon, lat, id }) => (
-                    <ListItem key={name} onClick={() => {
+                {search.searchResult.address.map(({ name, lon, lat, id }, index) => (
+                    <ListItem key={name + '_' + index} onClick={() => {
                         onClick(name, lon, lat, id);
                     }} selected={search.selectedIndex === id}>
-                        <span title={name}>{name.substring(0, 25) + '...'}</span>
+                        <span title={name}>{name.substring(0, 30) + '...'}</span>
                     </ListItem>
                 ))}
                 </List>
