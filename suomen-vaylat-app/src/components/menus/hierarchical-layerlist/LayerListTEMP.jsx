@@ -8,8 +8,8 @@ import SelectedLayers from '../../menus/selected-layers/SelectedLayers';
 //VÄLIAIKAINEN PALIKKA VÄLITTÄMÄÄN TESTIDATAA HIERARKISELLE TASOVALIKOLLE
 
 const StyledLayerList = styled.div`
-  position: absolute;
-  left: 0px;
+  //position: absolute;
+  //left: 0px;
   overflow-y: auto;
   width: 100%;
   height: calc(var(--app-height) - 120px);

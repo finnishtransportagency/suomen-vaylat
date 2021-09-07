@@ -96,7 +96,6 @@ const PublishedMap = () => {
                             if (x.name > y.name) {return 1;}
                             return 0;
                         };
-                        console.log(data.sort(arrangeAlphabetically));
                         store.dispatch(setAllGroups(data.sort(arrangeAlphabetically)));
                     });
                 }
@@ -130,12 +129,12 @@ const PublishedMap = () => {
             channel.getSupportedEvents(function (data) {
                 if (data.MapClickedEvent) {
                     channel.handleEvent('MapClickedEvent', event => {
-                        //console.log('MapClickedEvent: ', event);
+
                     });
                 }
                 if (data.MarkerClickEvent) {
                     channel.handleEvent('MarkerClickEvent', event => {
-                        //console.log('MarkerClickEvent: ', event);
+
                     });
                 }
                 if (data.AfterMapMoveEvent) {
@@ -192,7 +191,7 @@ const PublishedMap = () => {
             });
 
             channel.getSupportedRequests(function (data) {
-                //console.log('getSupportedRequests: ', data);
+
             });
         });
 
