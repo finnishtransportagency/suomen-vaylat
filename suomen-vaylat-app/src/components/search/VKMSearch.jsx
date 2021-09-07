@@ -12,7 +12,7 @@ import { ShowError } from '../messages/Messages';
 
 let debounceSearchVKM = null;
 
-const VKMSearch = ({visible, search, store, vectorLayerId}) => {
+const VKMSearch = ({visible, search, store, vectorLayerId, onEnterHandler}) => {
     if (search.selected === 'vkm' && search.searchResult.geom !== null && search.searching === false) {
         let style = 'tie';
         if ((search.formData.vkm.tieosa !== null || search.formData.vkm.ajorata !== null) && search.searchResult.osa) {
@@ -117,7 +117,6 @@ const VKMSearch = ({visible, search, store, vectorLayerId}) => {
                         onChange('tie', parseFloat(event.target.value));
                     }}
                     value={search.formData.vkm.tie ? search.formData.vkm.tie : ''}
-                    disabled={search.searching}
                     min="1"
                     type="number"
                 >
@@ -129,8 +128,8 @@ const VKMSearch = ({visible, search, store, vectorLayerId}) => {
                         onChange('tieosa', parseFloat(event.target.value));
                     }}
                     value={search.formData.vkm.tieosa}
-                    disabled={search.searchResult.tieosat.length <= 0 || search.searching}
-                    className="margin-top"
+                    disabled={search.searchResult.tieosat.length <= 0}
+                    marginTop={true}
                     options={search.searchResult.tieosat.map((value, index) => {
                         return { value: value, label: value }
                     })}
@@ -143,8 +142,8 @@ const VKMSearch = ({visible, search, store, vectorLayerId}) => {
                         onChange('ajorata', parseFloat(event.target.value));
                     }}
                     value={search.formData.vkm.ajorata}
-                    disabled={search.searchResult.ajoradat.length <= 0 || search.searching}
-                    className="margin-top"
+                    disabled={search.searchResult.ajoradat.length <= 0}
+                    marginTop={true}
                     options={search.searchResult.ajoradat.map((value, index) => {
                         return { value: value, label: value }
                     })}
@@ -157,10 +156,15 @@ const VKMSearch = ({visible, search, store, vectorLayerId}) => {
                         onChange('etaisyys', parseFloat(event.target.value));
                     }}
                     value={search.formData.vkm.etaisyys !== null ? search.formData.vkm.etaisyys : ''}
-                    disabled={search.formData.vkm.tie === null || search.formData.vkm.tieosa === null || search.formData.vkm.ajorata === null || search.searching}
-                    className="margin-top"
+                    disabled={search.formData.vkm.tie === null || search.formData.vkm.tieosa === null || search.formData.vkm.ajorata === null}
+                    marginTop={true}
                     min="0"
                     type="number"
+                    onKeyPress={(event) => {
+                        if (event.key === 'Enter') {
+                            onEnterHandler();
+                        }
+                    }}
                 >
                 </StyledTextField>
             </StyledContainer>

@@ -10,7 +10,7 @@ import {
 import SelectedLayer from './SelectedLayer';
 
 const StyledSelectedLayers = styled.div`
-    
+
 `;
 
 const StyledMasterGroupName = styled.p`
@@ -97,7 +97,7 @@ const StyledLayerGroup = styled.ul`
     list-style-type: none;
 `;
 
-export const SelectedLayers = ({ label, layers, selectedLayers }) => {
+export const SelectedLayers = ({ label, layers, selectedLayers, suomenVaylatLayers }) => {
     const [isOpen, setIsOpen] = useState(false);
     return (
         <StyledSelectedLayers>
@@ -129,17 +129,18 @@ export const SelectedLayers = ({ label, layers, selectedLayers }) => {
             >
                 <StyledLayerGroup>
                     {selectedLayers.map(layer => {
-                    return ( 
-                        <SelectedLayer
-                            key={layer.id+'selected'}
-                            layer={layer}
-                        />
-                    )
+                        return (
+                            <SelectedLayer
+                                key={layer.id + 'selected'}
+                                layer={layer}
+                                uuid={suomenVaylatLayers && suomenVaylatLayers.length > 0 ? suomenVaylatLayers.filter(l => l.id === layer.id)[0].uuid : ''}
+                            />
+                        )
                     })}
                 </StyledLayerGroup>
             </StyledLayerGroupContainer>
         </StyledSelectedLayers>
     );
-  };
+};
 
 export default SelectedLayers;
