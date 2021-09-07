@@ -2,6 +2,7 @@ import styled from 'styled-components';
 
 export const StyledContainer = styled.div`
     display: ${props => props.visible ? 'block' : 'none'};
+    padding-left:6px;
 `;
 
 export const Text = styled.p`
@@ -14,7 +15,7 @@ export const Error = styled(Text)`
 `;
 
 export const StyledInput = styled.input`
-  width: 100%;
+  width: 229px;
   font-size: 14px;
   padding: 6px 8px;
   border-width: 1px;
@@ -24,8 +25,25 @@ export const StyledInput = styled.input`
   margin: 0;
   min-height: 36px;
   font-size: 14px;
-  color: #777;
-  cursor: ${props => props.disabled ? 'not-allowed' : 'pointer'}
+  color: ${props => props.theme.colors.black};
+  cursor: ${props => props.disabled ? 'not-allowed' : 'pointer'};
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+  &:disabled {
+    display: none;
+  }
+  -moz-appearance: textfield;
+  ::-webkit-inner-spin-button{
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  ::-webkit-outer-spin-button{
+      -webkit-appearance: none;
+      margin: 0;
+  }
+  margin-top: ${props => props.marginTop ? '8px' : '0'};
+  @media only screen and (max-width: 400px) {
+    margin-top: 8px;
+  }
   `;
 
 export const StyledSelect = styled.select`
@@ -39,18 +57,18 @@ export const StyledSelect = styled.select`
   margin: 0;
   min-height: 36px;
   font-size: 14px;
-  color: #777;
+  color: #black;
   cursor: ${props => props.disabled ? 'not-allowed' : 'pointer'};
 
-  option {
-    color: black;
-    background: white;
-    display: flex;
-    white-space: pre;
-    min-height: 36px;
-    padding: 0px 2px 1px;
-    font-size: 14px;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+
+  &:disabled {
+    display:none;
   }
+
+
+
+  margin-top: ${props => props.marginTop ? '8px' : '0'};
   `;
 
 export const StyledTextField = styled(({
@@ -66,7 +84,8 @@ export const StyledTextField = styled(({
     onChange,
     disabled,
     className,
-    onKeyPress
+    onKeyPress,
+    marginTop
   }) => {
     const error = isTouched && hasError;
     return (
@@ -82,6 +101,7 @@ export const StyledTextField = styled(({
           onKeyPress={onKeyPress}
           disabled={disabled}
           error={error}
+          marginTop={marginTop}
         />
         {hintText && <Text>{hintText}</Text>}
         {error && <Error>{error}</Error>}
@@ -100,7 +120,8 @@ export const StyledSelectInput = styled(({
     onChange,
     disabled,
     className,
-    options
+    options,
+    marginTop
   }) => {
     const error = isTouched && hasError;
     return (
@@ -112,6 +133,7 @@ export const StyledSelectInput = styled(({
           onChange={onChange}
           disabled={disabled}
           error={error}
+          marginTop={marginTop}
         >
           <option value="" readOnly={true} hidden={true}>{placeholder}</option>
           {options.map(({ value, label }, index) => <option key={index} value={value} >{label}</option>)}
