@@ -64,7 +64,7 @@ export const JhsTab = ({ identification, data, visible }) => {
             <HeaderAndParagraph
                 visible={data.metadataLanguage && data.metadataLanguage.length > 0}
                 header={strings.metadata.heading.metadataLanguage}
-                text={data.metadataLanguage}
+                text={strings.metadata.languages[data.metadataLanguage] || data.metadataLanguage}
             >
             </HeaderAndParagraph>
             <HeaderAndParagraph

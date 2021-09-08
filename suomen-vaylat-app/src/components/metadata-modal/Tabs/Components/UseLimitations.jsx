@@ -1,6 +1,6 @@
 import React from 'react';
 import strings from '../../../../translations';
-import { StyledTitle, StyledUl } from './Common';
+import { StyledParagraph, StyledTitle } from './Common';
 import UseLimitation from './UseLimitation';
 
 export const UseLimitations = ({ identification }) => {
@@ -9,13 +9,13 @@ export const UseLimitations = ({ identification }) => {
             {identification.useLimitations && identification.useLimitations.length > 0 &&
                 <React.Fragment key={'metadata-modal-use-limitations-content'}>
                     <StyledTitle>{strings.metadata.heading.useLimitation}</StyledTitle>
-                    <StyledUl>
+                    <StyledParagraph>
                         {identification.useLimitations.map((data) => {
                             return (
                                 <UseLimitation uselimitation={data}></UseLimitation>
                             )
                         })}
-                    </StyledUl>
+                    </StyledParagraph>
                 </React.Fragment>
             }
         </React.Fragment>

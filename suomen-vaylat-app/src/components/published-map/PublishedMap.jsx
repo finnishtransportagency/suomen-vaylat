@@ -143,12 +143,12 @@ const PublishedMap = () => {
             channel.getSupportedEvents(function (data) {
                 if (data.MapClickedEvent) {
                     channel.handleEvent('MapClickedEvent', event => {
-                        //console.log('MapClickedEvent: ', event);
+
                     });
                 }
                 if (data.MarkerClickEvent) {
                     channel.handleEvent('MarkerClickEvent', event => {
-                        //console.log('MarkerClickEvent: ', event);
+
                     });
                 }
                 if (data.AfterMapMoveEvent) {
@@ -204,7 +204,7 @@ const PublishedMap = () => {
             });
 
             channel.getSupportedRequests(function (data) {
-                //console.log('getSupportedRequests: ', data);
+
             });
         });
 
