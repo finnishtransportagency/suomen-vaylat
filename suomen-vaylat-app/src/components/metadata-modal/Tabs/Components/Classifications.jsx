@@ -7,7 +7,7 @@ export const Classifications = ({ identification }) => {
         <React.Fragment key={'metadata-modal-classifications'}>
             {identification.classifications && identification.classifications.length > 0 &&
                 <React.Fragment key={'metadata-modal-classifications-content'}>
-                    <StyledTitle>{strings.metadata.heading.classifications}</StyledTitle>
+                    <StyledTitle>{strings.metadata.heading.classification}</StyledTitle>
                     <StyledUl>
                         {identification.classifications.map((data, index) => {
                             return (
