@@ -21,7 +21,8 @@ const initialState = {
   allThemesWithLayers: [],
   filter: null,
   suomenVaylatLayers: [],
-  layerMetadata: { data: null, layer: null, uuid: null}
+  layerMetadata: { data: null, layer: null, uuid: null},
+  legends: []
 };
 
 export const rpcSlice = createSlice({
@@ -184,6 +185,14 @@ export const rpcSlice = createSlice({
             data: action.payload.data,
             uuid: action.payload.uuid
         };
+    },
+    getLegends: (state) => {
+        state.channel && state.channel.getLegends((data) => {
+            state.legends = data;
+        });
+    },
+    setLegends: (state, action) => {
+        state.legends = action.payload;
     }
   }
 });
@@ -220,7 +229,9 @@ export const {
     setSuomenVaylatLayers,
     getLayerMetadata,
     clearLayerMetadata,
-    setLayerMetadata
+    setLayerMetadata,
+    getLegends,
+    setLegends
 } = rpcSlice.actions;
 
 export default rpcSlice.reducer;

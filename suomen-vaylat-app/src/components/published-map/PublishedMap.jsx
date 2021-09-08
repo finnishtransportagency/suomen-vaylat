@@ -19,7 +19,8 @@ import {
     setZoomLevelsLayers,
     setCurrentZoomLevel,
     setActiveAnnouncements,
-    setSuomenVaylatLayers
+    setSuomenVaylatLayers,
+    setLegends
 } from '../../state/slices/rpcSlice';
 
 import CenterSpinner from '../center-spinner/CenterSpinner';
@@ -130,6 +131,13 @@ const PublishedMap = () => {
                         store.dispatch(setSuomenVaylatLayers(data));
                     });
                 }
+                if (data.getLegends) {
+                    channel.getLegends((data) => {
+                        console.log(data);
+                        console.log(data[58]);
+                        store.dispatch(setLegends(data));
+                    });
+                }
             });
 
             channel.getSupportedEvents(function (data) {
@@ -230,7 +238,11 @@ const PublishedMap = () => {
             <StyledIframe id="sv-iframe" title="iframe" src={process.env.REACT_APP_PUBLISHED_MAP_URL + "&lang=" + lang}
                 allow="geolocation" onLoad={() => hideSpinner()}>
             </StyledIframe>
+            <div>
+                <img src="action?action_route=GetLayerTile&legend=true&style=digiroad%3Adr_kaistojen_lukumaara&id=901" alt="kuva"></img>
+            </div>
         </StyledPublishedMap>
+
     )
 };
 

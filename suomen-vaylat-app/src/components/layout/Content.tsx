@@ -119,6 +119,7 @@ export const Content = () => {
     const allGroups = useAppSelector((state) => state.rpc.allGroups);
     const allLayers = useAppSelector((state) => state.rpc.allLayers);
     const selectedLayers = useAppSelector((state) => state.rpc.selectedLayers);
+    console.log(selectedLayers);
     const allThemes = useAppSelector((state) => state.rpc.allThemesWithLayers);
     const allTags = useAppSelector((state) => state.rpc.allTags);
     const suomenVaylatLayers = useAppSelector((state) => state.rpc.suomenVaylatLayers);
