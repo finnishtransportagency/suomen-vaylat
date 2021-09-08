@@ -10,11 +10,9 @@ export const CitationDate = ({ identification }) => {
             {identification.citation.date.date &&
                 <React.Fragment key={'metadata-modal-citation-date-content'}>
                     <StyledTitle>{strings.metadata.heading.citationDate}</StyledTitle>
-                    <StyledUl>
-                        <StyledParagraph title={(strings.metadata.codeLists['gmd:CI_DateTypeCode'][identification.citation.date.dateType] || { description: identification.citation.date.dateType }).description}>
-                            <Moment format="DD.MM.YYYY" tz="Europe/Helsinki">{identification.citation.date.date}</Moment> ({(strings.metadata.codeLists['gmd:CI_DateTypeCode'][identification.citation.date.dateType] || { description: identification.citation.date.dateType }).label})
-                        </StyledParagraph>
-                    </StyledUl>
+                    <StyledParagraph title={(strings.metadata.codeLists['gmd:CI_DateTypeCode'][identification.citation.date.dateType] || { description: identification.citation.date.dateType }).description}>
+                        <Moment format="DD.MM.YYYY" tz="Europe/Helsinki">{identification.citation.date.date}</Moment> ({(strings.metadata.codeLists['gmd:CI_DateTypeCode'][identification.citation.date.dateType] || { description: identification.citation.date.dateType }).label})
+                    </StyledParagraph>
                 </React.Fragment>
             }
         </React.Fragment>
