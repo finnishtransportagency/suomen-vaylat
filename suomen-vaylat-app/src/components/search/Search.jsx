@@ -42,7 +42,6 @@ const StyledCloseButton = styled.div`
     align-items: center;
     background-color: ${props => props.theme.colors.maincolor1};
     border-radius: 50%;
-    border: 1px solid white;
     svg {
         color: ${props => props.theme.colors.mainWhite};
     }

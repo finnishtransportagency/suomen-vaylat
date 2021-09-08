@@ -64,6 +64,7 @@ const ZoomMenu = () => {
             hoveringIndex={hoveringIndex}
             currentZoomLevel={rpc.currentZoomLevel}
             allLayers={rpc.allLayers}
+            selectedLayers={rpc.selectedLayers}
         />
     </StyledZoomMenu>
     );

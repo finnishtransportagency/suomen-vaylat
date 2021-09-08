@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleUp, faSearchMinus, faSearchPlus, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 
 import ZoomBarCircle from './ZoomBarCircle';
+import ZoomBarLayer from './ZoomBarLayer';
 
 const fadeIn = keyframes`
   0% {
@@ -129,8 +130,7 @@ const StyledTitle = styled.div`
     height: 60px;
     top: 0px;
     left: 0px;
-    font-family: 'Exo 2';
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 400;
     display: flex;
     justify-content: center;
@@ -150,46 +150,19 @@ const StyledLayerInfoContainer = styled.div`
     }
 `;
 
-const StyledLayerInfoItem = styled.div`
-    display: flex;
-    align-items: center;
-    font-family: 'Exo 2';
-    font-weight: 300;
-    font-size: 13px;
-    color: ${props => props.theme.colors.mainWhite};
-    width: 100%;
-    height: 25px;
-    opacity: 0;
-    animation: ${fadeIn} 0.2s ease-in forwards;
-    animation-delay: ${props => props.index * 0.01+'s'};
-    svg {
-        color: rgba(255, 255, 255, 0.7);
-    }
-`;
-
-const StyledLayerInfo = styled.p`
-    padding-left: 10px;
-    margin: 0px;
-    white-space: nowrap;
-    overflow: hidden;
-    display: inline-block;
-    text-overflow: ellipsis;
-`;
-
 const ZoomBar = ({
     zoomLevelsLayers,
     currentZoomLevel,
-    allLayers
+    allLayers,
+    selectedLayers
 }) => {
-
     const [isExpanded, setIsExpanded] = useState(false);
     const [hoveringIndex, setHoveringIndex] = useState(null);
-
     const { store } = useContext(ReactReduxContext);
-
     const [currentLayersInfoLayers, setCurrentLayersInfoLayers] = useState([]);
 
     useEffect(() => {
+        
         hoveringIndex !== null ?
         setCurrentLayersInfoLayers(Object.values(zoomLevelsLayers)[hoveringIndex].layers) :
         zoomLevelsLayers[currentZoomLevel] !== undefined && setCurrentLayersInfoLayers(Object.values(zoomLevelsLayers)[currentZoomLevel].layers);
@@ -201,23 +174,16 @@ const ZoomBar = ({
                         <StyledTitle>TÄLLÄ ZOOM-TASOLLA NÄYTETTÄVÄT TASOT</StyledTitle>
                         <StyledLayerInfoContainer>
                             {currentLayersInfoLayers.map((zoomLevelLayer, index) => {
-                                return (
-                                <StyledLayerInfoItem
+                                const layer = selectedLayers.find(layer => layer.id === zoomLevelLayer.id);
+                                return layer && <ZoomBarLayer
                                     key={hoveringIndex !== null ?
                                         zoomLevelLayer.id+'_'+hoveringIndex :
                                         zoomLevelLayer.id+'_'+currentZoomLevel
                                     }
+                                    zoomLevelLayer={zoomLevelLayer}
                                     index={index}
-                                >
-                                    <FontAwesomeIcon
-                                        icon={zoomLevelLayer.visible ? faEye : faEyeSlash}
-                                    />
-                                    <StyledLayerInfo
-                                    >
-                                        {zoomLevelLayer.name}
-                                    </StyledLayerInfo>
-                                </StyledLayerInfoItem>
-                                )
+                                    layer={layer}
+                                />
                             })}
                         </StyledLayerInfoContainer>
 
