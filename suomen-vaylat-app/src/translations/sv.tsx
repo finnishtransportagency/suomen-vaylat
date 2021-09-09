@@ -593,6 +593,9 @@ const sv = {
             zh: 'kinesiska',
             zu: 'zulu'
         }
+    },
+    legend: {
+        title: 'Förklaringar'
     }
 }
 

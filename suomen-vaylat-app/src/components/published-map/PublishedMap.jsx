@@ -39,7 +39,6 @@ const StyledIframe = styled.iframe`
 
 const ANNOUNCEMENTS_LOCALSTORAGE = "oskari-announcements";
 
-
 const PublishedMap = () => {
 
     const { store } = useContext(ReactReduxContext);
@@ -238,9 +237,6 @@ const PublishedMap = () => {
             <StyledIframe id="sv-iframe" title="iframe" src={process.env.REACT_APP_PUBLISHED_MAP_URL + "&lang=" + lang}
                 allow="geolocation" onLoad={() => hideSpinner()}>
             </StyledIframe>
-            <div>
-                <img src="action?action_route=GetLayerTile&legend=true&style=digiroad%3Adr_kaistojen_lukumaara&id=901" alt="kuva"></img>
-            </div>
         </StyledPublishedMap>
 
     )

@@ -593,6 +593,9 @@ const en = {
             zh: 'Chinese',
             zu: 'Zulu'
         }
+    },
+    legend: {
+        title: 'Map legends'
     }
 }
 
