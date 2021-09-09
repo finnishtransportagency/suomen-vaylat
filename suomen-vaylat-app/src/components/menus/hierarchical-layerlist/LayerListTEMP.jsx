@@ -9,8 +9,6 @@ import SelectedLayers from '../../menus/selected-layers/SelectedLayers';
 //VÄLIAIKAINEN PALIKKA VÄLITTÄMÄÄN TESTIDATAA HIERARKISELLE TASOVALIKOLLE
 
 const StyledLayerList = styled.div`
-  //position: absolute;
-  //left: 0px;
   overflow-y: auto;
   width: 100%;
   height: calc(var(--app-height) - 70px);
@@ -74,7 +72,6 @@ const LayerListTEMP = ({groups, layers, themes, tags, selectedLayers, suomenVayl
   useAppSelector((state) => state.language);
 
     return (
-
       <StyledLayerList>
       <SelectedLayers label={strings.layerlist.layerlistLabels.selectedLayers} layers={layers} selectedLayers={selectedLayers} suomenVaylatLayers={suomenVaylatLayers}/>
         <Tabs allTags={tags}>

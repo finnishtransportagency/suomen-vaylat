@@ -22,12 +22,15 @@ const StyledContent = styled.div`
     };
 `;
 
-const StyledCloseSideMenuButton = styled.div`
+const StyledCloseSideMenuButtonContainer = styled.div`
     position: absolute;
-    top: 10px;
+    top: 40px;
     left: 100%;
     cursor: pointer;
-    margin: 0px 10px 5px auto;
+`;
+
+const StyledCloseSideMenuButton = styled.div`
+    cursor: pointer;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -36,8 +39,10 @@ const StyledCloseSideMenuButton = styled.div`
     background-color: transparent;
     border-radius: 0px 5px 5px 0px;
     background-color: ${(props: { theme: { colors: { maincolor1: any; }; }; }) => props.theme.colors.maincolor1};
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
     svg {
         position: absolute;
+        transition: all 0.5s ease-out;
         color: ${(props: { theme: { colors: { mainWhite: any; }; }; }) => props.theme.colors.mainWhite};
         font-size: 25px;
     };
@@ -126,11 +131,18 @@ const Content = () => {
     return (
         <StyledContent>
             <StyledSideMenu isSideMenuOpen={isSideMenuOpen}>
-                <StyledCloseSideMenuButton onClick={() => store.dispatch(setIsSideMenuOpen(!isSideMenuOpen))}>
-                    <FontAwesomeIcon
-                        icon={isSideMenuOpen ? faAngleLeft : faLayerGroup}
-                    />
-                </StyledCloseSideMenuButton>
+                <StyledCloseSideMenuButtonContainer onClick={() => store.dispatch(setIsSideMenuOpen(!isSideMenuOpen))}>
+                    <StyledCloseSideMenuButton>
+                        <FontAwesomeIcon
+                            icon={faLayerGroup}
+                            style={{transform: isSideMenuOpen ? 'rotateY(90deg)' : 'rotateY(0deg)'}}
+                        />
+                        <FontAwesomeIcon
+                            icon={faAngleLeft}
+                            style={{transform: isSideMenuOpen ? 'rotateY(0deg)' : 'rotateY(-90deg)'}}
+                        />
+                    </StyledCloseSideMenuButton>
+                </StyledCloseSideMenuButtonContainer>
                 <LayerListTEMP
                     groups={allGroups}
                     layers={allLayers}
