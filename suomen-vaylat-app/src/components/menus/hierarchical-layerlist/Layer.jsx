@@ -21,7 +21,7 @@ const StyledlayerHeader = styled.div`
 
 const StyledLayerName = styled.p`
     user-select: none;
-    color: ${props => props.theme.colors.mainWhite};
+    color: ${props => props.theme.colors.black};
     font-size: 13px;
     margin: 5px;
     @media ${ props => props.theme.device.mobileL} {
@@ -72,7 +72,7 @@ export const Layer = ({ layer, isOpen, theme }) => {
                 <Checkbox
                     isChecked={layer.visible}
                     handleClick={() => handleLayerVisibility(channel, layer)}
-                    size={15}
+                    size={18}
                 />
                 <StyledlayerHeader>
                     <StyledLayerName>

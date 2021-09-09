@@ -1,11 +1,13 @@
 import { useState, useContext } from 'react';
 import styled, { keyframes } from 'styled-components';
+import strings from '../../../translations';
 import { ReactReduxContext, useSelector } from 'react-redux';
 import { setAllLayers } from '../../../state/slices/rpcSlice';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Layers from './Layers';
 import {
-    faAngleUp
+    faAngleDown,
+    faMap
 } from '@fortawesome/free-solid-svg-icons';
 
 import Checkbox from '../../checkbox/Checkbox';
@@ -20,17 +22,6 @@ const fadeIn = keyframes`
   }
 `;
 
-
-// const StyledLayerGroups = styled.div`
-//     opacity: 0;
-//     animation-delay: ${props => props.index * 0.025 + 's'};
-//     animation-timing-function: ease-in-out;
-//     animation-fill-mode: forwards;
-//     animation-duration: 0.5s;
-//     animation-name: ${fadeIn};
-//     padding-top: 10px;
-// `;
-
 const StyledLayerGroups = styled.div`
     display: flex;
     flex-direction: column;
@@ -41,36 +32,64 @@ const StyledLayerGroups = styled.div`
     animation-fill-mode: forwards;
     animation-duration: 0.5s;
     animation-name: ${fadeIn};
-    border-top: ${props => props.parentId === -1 ? '1px solid '+props.theme.colors.maincolor2 : "none"};
+    margin: 10px 0px 10px 0px;
+    border-radius: 2px;
+    background-color: ${props => props.theme.colors.mainWhite};
     &:last-child {
         ${props => props.parentId === -1 ? '1px solid '+props.theme.colors.maincolor2 : "none"};
-    }
+    };
 `;
 
 const StyledMasterGroupName = styled.p`
+    user-select: none;
     transition: all 0.1s ease-in;
     font-size: 14px;
     font-weight: 600;
     margin: 0;
     padding-left: 10px;
-    color: ${props => props.theme.colors.mainWhite};
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 200px;
+    color: ${props => props.theme.colors.black};
+    @media ${ props => props.theme.device.mobileL} {
+        font-size: 13px;
+    };
 `;
 
 const StyledMasterGroupHeader = styled.div`
+    z-index: 1;
+    position: sticky;
+    top: 0px;
     cursor: pointer;
     display: flex;
     justify-content: space-between;
     align-items: center;
     height: 40px;
-    padding-left: 10px;
-    border-radius: 2px;
+    padding-left: 5px;
     transition: all 0.1s ease-in;
+    border-radius: 2px;
+    background-color: ${props => props.theme.colors.secondaryColor3};
     &:hover {
-        background-color: ${props => props.theme.colors.maincolor2};
+        background-color: ${props => props.theme.colors.secondaryColor2};
     };
     &:hover ${StyledMasterGroupName} {
         color: ${props => props.theme.colors.mainWhite};
     };
+`;
+
+const StyledMasterGroupHeaderIcon = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 28px;
+    height: 28px;
+    background-color: ${props => props.theme.colors.secondaryColor2};
+    border-radius: 50%;
+    svg {
+        font-size: 16px;
+        color: ${props => props.theme.colors.mainWhite};
+    }
 `;
 
 const StyledLeftContent = styled.div`
@@ -87,23 +106,31 @@ const StyledSelectButton = styled.button`
     background-color: transparent;
     margin-right: 15px;
     svg {
-        font-size: 23px;
+        font-size: 25px;
         transition: all 0.5s ease-out;
-        color: ${props => props.theme.colors.mainWhite};
+        color: ${props => props.theme.colors.black};
     };
 `;
 
 const StyledLayerGroupContainer = styled.div`
     height: ${props => props.isOpen ? "auto" : "0px"};
-    padding-inline-start: 20px;
     overflow: hidden;
 `;
 
 const StyledLayerGroup = styled.ul`
-    margin-bottom: 0px;
-    padding-inline-start: 15px;
+    padding-inline-start: 10px;
     list-style-type: none;
 `;
+
+const StyledSubHeader = styled.p`
+    display: flex;
+    align-items: center;
+    margin: 0px;
+    height: 30px;
+    color: ${props => props.theme.colors.secondaryColor3};
+    font-size: 12px;
+`;
+
 
 export const ThemeLayerList = ({allLayers, allThemes}) => {
     return (
@@ -111,7 +138,12 @@ export const ThemeLayerList = ({allLayers, allThemes}) => {
             {allThemes.map((theme, index) => {
                 var filteredLayers = allLayers.filter(layer => theme.layers.includes(layer.id));
                 return (
-                    <ThemeGroup key={index} theme={theme} filteredLayers={filteredLayers} index={index}/>
+                    <ThemeGroup
+                        key={index}
+                        theme={theme}
+                        filteredLayers={filteredLayers}
+                        index={index}
+                    />
                 );
             })}
         </>
@@ -166,26 +198,22 @@ export const ThemeLayerList = ({allLayers, allThemes}) => {
                         onClick={() => setIsOpen(!isOpen)}
                     >
                         <StyledLeftContent>
+                            <StyledMasterGroupHeaderIcon>
+                                <FontAwesomeIcon
+                                    icon={faMap}
+                                />
+                            </StyledMasterGroupHeaderIcon>
                             <StyledMasterGroupName>{theme.name}</StyledMasterGroupName>
                         </StyledLeftContent>
                         <StyledSelectButton
                             isOpen={isOpen}
                         >
-                            {/* <StyledCheckbox
-                                name="groupSelected"
-                                type="checkbox"
-                                onClick={(event) => selectGroup(event)}
-                                readOnly
-                                checked={checked}
-                                ref={el => el && (el.indeterminate = indeterminate)}
-                            /> */}
                             <Checkbox
                                     isChecked={checked}
                                     handleClick={selectGroup}
                             />
-
                             <FontAwesomeIcon
-                                icon={faAngleUp}
+                                icon={faAngleDown}
                                 style={{
                                     transform: isOpen && "rotate(180deg)"
                                 }}
@@ -197,6 +225,10 @@ export const ThemeLayerList = ({allLayers, allThemes}) => {
                     isOpen={isOpen}
                 >
                     <StyledLayerGroup>
+                        <StyledSubHeader>VÄLIOTSIKKO</StyledSubHeader>
+                        <StyledSubHeader>
+                            {strings.layerlist.layerlistLabels.layers.toUpperCase()}
+                        </StyledSubHeader>
                         <Layers layers={filteredLayers} isOpen={isOpen} theme={theme.name}/>
                     </StyledLayerGroup>
                 </StyledLayerGroupContainer>

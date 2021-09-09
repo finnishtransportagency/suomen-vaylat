@@ -5,16 +5,16 @@ import { faCheck } from '@fortawesome/free-solid-svg-icons';
 
 const StyledCheckbox = styled.div`
     cursor: pointer;
-    min-width: ${props => props.size ? props.size+"px" : "18px"};
-    min-height: ${props => props.size ? props.size+"px" : "18px"};
+    min-width: 20px;
+    min-height: 20px;
     display: flex;
     justify-content: center;
     align-items: center;
-    //border: 1px solid ${props => props.theme.colors.maincolor2};
+    border: 2px solid ${props => props.theme.colors.maincolor1};
+    box-sizing: border-box;
     background-color: ${props => props.theme.colors.mainWhite};
-    border-radius: 4px;
+    border-radius: 30%;
     margin-right: 5px;
-    //margin-left: ${props => props.marginLeft ? props.marginLeft+"px" : "none"};
 `;
 
 const Checkbox = ({
