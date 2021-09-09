@@ -1,14 +1,19 @@
-import { useState, useContext } from "react";
+import {  useContext } from "react";
 import { ReactReduxContext, useSelector } from 'react-redux';
 import { setAllLayers, getLayerMetadata, setLayerMetadata, clearLayerMetadata } from '../../../state/slices/rpcSlice';
 import styled from 'styled-components';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash, faCog, faInfo } from '@fortawesome/free-solid-svg-icons';
+import { faTrash, faInfo } from '@fortawesome/free-solid-svg-icons';
 
-import LayerOptions from './LayerOptions';
+//import LayerOptions from './LayerOptions';
 
 const StyledLayerContainer = styled.div`
+    transition: all 0.3s ease-out;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    height: 40px;
     &:not(:last-child) {
         &:after {
             content: "";
@@ -19,16 +24,6 @@ const StyledLayerContainer = styled.div`
             background-position: center bottom;
         }
     };
-`;
-
-const StyledTopContent = styled.li`
-    transition: all 0.3s ease-out;
-    overflow: hidden;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin: 0;
-    height: 30px;
 `;
 
 const StyledlayerHeader = styled.div`
@@ -46,9 +41,16 @@ const StyledLayerName = styled.p`
     text-overflow: ellipsis;
 `;
 
-const StyledLayerInfo = styled.div`
+const StyledLeftContent = styled.div`
     display: flex;
     align-items: center;
+`;
+
+const StyledRightContent = styled.div`
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+    margin-right: 10px;
 `;
 
 const StyledLayerDeleteIcon = styled.div`
@@ -70,21 +72,39 @@ const StyledLayerDeleteIcon = styled.div`
     }
 `;
 
-const StyledLayerOptionsButton = styled.button`
-    background-color: transparent;
-    border: none;
-    font-size: 20px;
-    svg {
-        color: #464646;
-    };
-    &:hover {
-        svg {
-            color: #838383;
+const StyledlayerOpacityControl = styled.input`
+    user-select: auto;
+    width: 60px;
+    -webkit-appearance: none;
+    appearance: none;
+    height: 6px;
+    border-radius: 5px;
+    background: linear-gradient(90deg, rgba(0,100,175,0) 0%, rgba(0,100,175,1) 100%);
+    box-shadow: rgba(0, 0, 0, 0.048) 0px 1px 2px, rgba(0, 0, 0, 0.11) 0px 1px 2px;
+    outline: none;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+    margin-right: 5px;
+
+    ::-webkit-slider-thumb {
+        transition: all 0.1s ease-out;
+        -webkit-appearance: none;
+        appearance: none;
+        width: 16px;
+        height: 16px;
+        border: 3px solid ${props => props.theme.colors.maincolor1};
+        box-sizing: border-box;
+        border-radius: 50%;
+        background: ${props => props.theme.colors.mainWhite};
+        cursor: pointer;
+        &:hover{
+            background: ${props => props.theme.colors.maincolor1};
         }
-    };
+    }
 `;
 
 const StyledLayerInfoIcon = styled.button`
+    opacity: ${props => props.uuid ? 1 : 0};
     background-color: transparent;
     border: none;
     font-size: 20px;
@@ -100,13 +120,20 @@ const StyledLayerInfoIcon = styled.button`
     }
 `;
 
-export const SelectedLayer = ({ isOpen, layer, uuid }) => {
-    const [isOptionsOpen, setIsOptionsOpen] = useState(false);
+
+export const SelectedLayer = ({ layer, uuid }) => {
     const { store } = useContext(ReactReduxContext);
     const channel = useSelector(state => state.rpc.channel);
 
     const handleLayerVisibility = (channel, layer) => {
         channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, !layer.visible]);
+        channel.getAllLayers(function (data) {
+            store.dispatch(setAllLayers(data));
+        });
+    };
+
+    const handleLayerOpacity = (channel, layer, value) => {
+        channel.postRequest('ChangeMapLayerOpacityRequest', [layer.id, value]);
         channel.getAllLayers(function (data) {
             store.dispatch(setAllLayers(data));
         });
@@ -123,13 +150,9 @@ export const SelectedLayer = ({ isOpen, layer, uuid }) => {
 
     return (
         <StyledLayerContainer>
-            <StyledTopContent
-                key={layer.id}
-            >
-                <StyledLayerInfo>
+                <StyledLeftContent>
                     <StyledLayerDeleteIcon
                         onClick={() => {
-                            layer.visible && setIsOptionsOpen(false);
                             handleLayerVisibility(channel, layer);
                         }}>
                         <FontAwesomeIcon
@@ -141,26 +164,25 @@ export const SelectedLayer = ({ isOpen, layer, uuid }) => {
                             {layer.name}
                         </StyledLayerName>
                     </StyledlayerHeader>
-                </StyledLayerInfo>
-                <div>
-                    {uuid &&
-                        <StyledLayerInfoIcon onClick={() => {
+                </StyledLeftContent>
+                <StyledRightContent>
+                    <StyledlayerOpacityControl
+                        type="range"
+                        min="0"
+                        max="100"
+                        value={layer.opacity}
+                        onChange={event => handleLayerOpacity(channel, layer, event.target.value)}
+                    />
+                    <StyledLayerInfoIcon
+                        disabled={uuid ? false : true}
+                        uuid={uuid}
+                        onClick={() => {
                             store.dispatch(getLayerMetadata({ layer: layer, uuid: uuid, handler: handleMetadataSuccess, errorHandler: handleMetadataError }));
                         }
-                        }>
-                            <FontAwesomeIcon icon={faInfo} />
-                        </StyledLayerInfoIcon>
-                    }
-                    <StyledLayerOptionsButton
-                        onClick={() => setIsOptionsOpen(!isOptionsOpen)}
-                    >
-                        <FontAwesomeIcon
-                            icon={faCog}
-                        />
-                    </StyledLayerOptionsButton>
-                </div>
-            </StyledTopContent>
-            {isOptionsOpen && <LayerOptions layer={layer} isOpen={isOpen} isOptionsOpen={isOptionsOpen} />}
+                    }>
+                        <FontAwesomeIcon icon={faInfo} />
+                    </StyledLayerInfoIcon>
+                </StyledRightContent>
         </StyledLayerContainer>
     );
 };

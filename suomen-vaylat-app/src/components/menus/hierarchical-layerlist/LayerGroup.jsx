@@ -30,7 +30,6 @@ const fadeIn = keyframes`
   }
 `;
 
-
 const StyledLayerGroups = styled.div`
     display: flex;
     flex-direction: column;
@@ -41,9 +40,12 @@ const StyledLayerGroups = styled.div`
     animation-fill-mode: forwards;
     animation-duration: 0.5s;
     animation-name: ${fadeIn};
+    margin: ${props => props.parentId === -1 && "10px 0px 10px 0px"};
+    border-radius: 2px;
+    background-color: ${props => props.theme.colors.mainWhite};
     &:last-child {
         ${props => props.parentId === -1 ? '1px solid '+props.theme.colors.maincolor2 : "none"};
-    }
+    };
 `;
 
 const StyledMasterGroupName = styled.p`
@@ -53,7 +55,11 @@ const StyledMasterGroupName = styled.p`
     font-weight: 600;
     margin: 0;
     padding-left: 10px;
-    color: ${props => props.theme.colors.mainWhite};
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 200px;
+    color: ${props => props.theme.colors.black};
     @media ${ props => props.theme.device.mobileL} {
         font-size: 13px;
     };
@@ -68,10 +74,10 @@ const StyledMasterGroupHeader = styled.div`
     justify-content: space-between;
     align-items: center;
     height: 40px;
-    padding-left: 10px;
-    border-radius: 2px;
+    padding-left: 5px;
     transition: all 0.1s ease-in;
-    background-color: ${props => props.theme.colors.maincolor1};
+    border-radius: 2px;
+    background-color: ${props => props.theme.colors.maincolor3};
     &:hover {
         background-color: ${props => props.theme.colors.maincolor2};
     };
@@ -85,14 +91,22 @@ const StyledLeftContent = styled.div`
     align-items: center;
 `;
 
+const StyledRightContent = styled.div`
+    display: flex;
+    align-items: center;
+
+`;
+
 const StyledMasterGroupHeaderIcon = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
     width: 28px;
     height: 28px;
+    background-color: ${props => props.theme.colors.maincolor1};
+    border-radius: 50%;
     svg {
-        font-size: 20px;
+        font-size: 16px;
         color: ${props => props.theme.colors.mainWhite};
     }
 `;
@@ -101,16 +115,18 @@ const StyledGroupHeader = styled.div`
     cursor: pointer;
     display: flex;
     align-items: center;
-    height: 40px;
+    height: 30px;
 `;
 
 const StyledGroupName = styled.p`
     user-select: none;
     margin: 0;
     font-size: 13px;
-    font-weight: 600;
     padding-left: 0px;
-    color: ${props => props.theme.colors.mainWhite};
+    color: ${props => props.theme.colors.black};
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
     max-width: 260px;
     @media ${ props => props.theme.device.mobileL} {
         font-size: 12px;
@@ -126,9 +142,9 @@ const StyledSelectButton = styled.button`
     background-color: transparent;
     margin-right: 15px;
     svg {
-        font-size: 23px;
+        font-size: 25px;
         transition: all 0.5s ease-out;
-        color: ${props => props.theme.colors.mainWhite};
+        color: ${props => props.theme.colors.black};
     };
 `;
 
@@ -138,7 +154,7 @@ const StyledGroupSelectButton = styled.div`
     margin-right: 5px;
     svg {
         transition: all 0.5s ease-out;
-        color: ${props => props.theme.colors.mainWhite};
+        color: ${props => props.theme.colors.black};
     }
 `;
 
@@ -148,7 +164,18 @@ const StyledLayerGroupContainer = styled.div`
 `;
 
 const StyledLayerGroup = styled.ul`
+    padding-inline-start: ${props => props.parentId === -1 ? "10px" : "30px"};
     list-style-type: none;
+`;
+
+const StyledSubHeader = styled.p`
+    display: flex;
+    align-items: center;
+    margin: 0px;
+    margin-left: 10px;
+    height: 30px;
+    color: ${props => props.theme.colors.maincolor1};
+    font-size: 12px;
 `;
 
 const themeStyles = {
@@ -224,7 +251,10 @@ export const LayerGroup = ({ index, group, layers, hasChildren }) => {
         });
     }
     return (
-        <StyledLayerGroups index={index} parentId={group.parentId}>
+        <StyledLayerGroups
+                index={index}
+                parentId={group.parentId}
+            >
             {group.parentId === -1 ? (
                 <StyledMasterGroupHeader
                     key={"smgh_" + group.parentId + "_" + group.id}
@@ -242,21 +272,23 @@ export const LayerGroup = ({ index, group, layers, hasChildren }) => {
                         </StyledMasterGroupHeaderIcon>
                         <StyledMasterGroupName>{group.name}</StyledMasterGroupName>
                     </StyledLeftContent>
-                    <StyledSelectButton
-                        hasChildren={hasChildren}
-                        isOpen={isOpen}
-                    >
+                    <StyledRightContent>
                         <Checkbox
-                                isChecked={checked}
-                                handleClick={selectGroup}
+                                    isChecked={checked}
+                                    handleClick={selectGroup}
                         />
-                        <FontAwesomeIcon
-                            icon={faAngleDown}
-                            style={{
-                                transform: isOpen && "rotate(180deg)"
-                            }}
-                        />
-                    </StyledSelectButton>
+                        <StyledSelectButton
+                            hasChildren={hasChildren}
+                            isOpen={isOpen}
+                        >
+                            <FontAwesomeIcon
+                                icon={faAngleDown}
+                                style={{
+                                    transform: isOpen && "rotate(180deg)"
+                                }}
+                            />
+                        </StyledSelectButton>
+                    </StyledRightContent>
                 </StyledMasterGroupHeader>
             ) : (
                 <StyledGroupHeader
@@ -287,10 +319,19 @@ export const LayerGroup = ({ index, group, layers, hasChildren }) => {
                 isOpen={isOpen}
             >
                 <StyledLayerGroup parentId={group.parentId}>
+                {group.parentId === -1 && <StyledSubHeader>KARTTATASOT</StyledSubHeader>}
                         {hasChildren && (
                             <>
-                                <Layers layers={filteredLayers} isOpen={isOpen}/>
-                                <LayerList groups={group.groups} layers={layers} recurse={true} />
+                                <Layers
+                                    layers={filteredLayers}
+                                    isOpen={isOpen}
+                                />
+                                <LayerList
+                                    key={'layer-list'+index}
+                                    groups={group.groups}
+                                    layers={layers}
+                                    recurse={true} 
+                                />
                             </>
                         )}
                         {!hasChildren && (

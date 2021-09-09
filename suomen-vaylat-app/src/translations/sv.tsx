@@ -37,7 +37,11 @@ const sv = {
         layerlistLabels: {
             allLayers: 'Alla lager' ,
             themeLayers: 'Teman',
-            selectedLayers: 'Valda lagert'
+            selectedLayers: 'Valda lagert',
+            layers: 'Layers',
+            selectAll: 'Select all',
+            deselectAll: 'Deselect all',
+            layerFilters: 'Layer filters'
         }
     },
     metadata: {
