@@ -603,7 +603,8 @@ const fi = {
         }
     },
     legend: {
-        title: 'Karttaselitteet'
+        title: 'Karttaselitteet',
+        nolegend: 'Ei karttaselitettä'
     }
 }
 
