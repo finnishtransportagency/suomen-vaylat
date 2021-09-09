@@ -97,7 +97,7 @@ const StyledLayerGroup = styled.ul`
     list-style-type: none;
 `;
 
-export const SelectedLayers = ({ label, layers, selectedLayers, suomenVaylatLayers }) => {
+export const SelectedLayers = ({ label, selectedLayers, suomenVaylatLayers }) => {
     const [isOpen, setIsOpen] = useState(false);
     return (
         <StyledSelectedLayers>

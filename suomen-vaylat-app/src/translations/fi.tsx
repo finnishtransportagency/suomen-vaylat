@@ -37,7 +37,11 @@ const fi = {
         layerlistLabels: {
             allLayers: 'Kaikki tasot' ,
             themeLayers: 'Teemakartat',
-            selectedLayers: 'Valitut tasot'
+            selectedLayers: 'Valitut tasot',
+            layers: 'Karttatasot',
+            selectAll: 'Valitse kaikki',
+            deselectAll: 'Tyhjennä kaikki',
+            layerFilters: 'Tasovalikon suodattimet'
         }
     },
     metadata: {
