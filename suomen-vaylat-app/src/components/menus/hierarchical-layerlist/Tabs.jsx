@@ -5,13 +5,16 @@ import Filter from './Filter';
 import styled from 'styled-components';
 
 const StyledTabs = styled.div`
-
+  margin: 10px;
 `;
 
 const StyledTopContent = styled.div`
-  
+  z-index: 1;
+  position: sticky;
+  top: -10px;
   padding: 15px;
   border-radius: 2px;
+  background-color:  ${props => props.theme.colors.maincolor1};
 `;
 
 const StyledTabList = styled.div`
@@ -19,8 +22,9 @@ const StyledTabList = styled.div`
   justify-content: space-around;
   align-items: center;
   border-radius: 15px;
-  border: 1px solid ${props => props.theme.colors.mainWhite};
+  
   box-sizing: border-box;
+  background-color: #e4e4e4;
 `;
 
 const StyledTabContent = styled.div`
@@ -37,8 +41,8 @@ const StyledFilterList = styled.div`
 const StyledFilterListHeader = styled.div`
     display: flex;
     justify-content: flex-start;
-    color: ${props => props.theme.colors.mainWhite};
-    padding: 10px;
+    color: ${props => props.theme.colors.maincolor1};
+    padding: 10px 0px 10px 5px;
     font-size: 12px;
 `;
 
@@ -92,18 +96,6 @@ class Tabs extends Component {
               );
             })}
           </StyledTabList>
-          <StyledFilterList>
-            <StyledFilterListHeader>
-              TASOJEN SUODATTIMET
-            </StyledFilterListHeader>
-            <StyledFiltersContainer>
-              {this.props.allTags.map((tag, index) => {
-                return(
-                    <Filter key={index} filter={tag} />
-                );
-              })}
-            </StyledFiltersContainer>
-          </StyledFilterList>
         </StyledTopContent>
         <StyledTabContent>
           {children.map((child) => {

@@ -37,7 +37,11 @@ const en = {
         layerlistLabels: {
             allLayers: 'All layers' ,
             themeLayers: 'Themes',
-            selectedLayers: 'Selected layers'
+            selectedLayers: 'Selected layers',
+            layers: 'Layers',
+            selectAll: 'Select all',
+            deselectAll: 'Deselect all',
+            layerFilters: 'Layer filters'
         }
     },
     metadata: {

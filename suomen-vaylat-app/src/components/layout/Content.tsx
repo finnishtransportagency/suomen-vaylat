@@ -7,7 +7,7 @@ import PublishedMap from '../published-map/PublishedMap.jsx';
 import LayerListTEMP from '../menus/hierarchical-layerlist/LayerListTEMP';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faLayerGroup, faTimes, faSearch } from '@fortawesome/free-solid-svg-icons';
+import { faLayerGroup, faSearch, faAngleLeft } from '@fortawesome/free-solid-svg-icons';
 
 import ZoomMenu from '../zoom-features/ZoomMenu';
 import Search from '../search/Search';
@@ -23,6 +23,9 @@ const StyledContent = styled.div`
 `;
 
 const StyledCloseSideMenuButton = styled.div`
+    position: absolute;
+    top: 10px;
+    left: 100%;
     cursor: pointer;
     margin: 0px 10px 5px auto;
     display: flex;
@@ -31,9 +34,10 @@ const StyledCloseSideMenuButton = styled.div`
     width: 45px;
     height: 45px;
     background-color: transparent;
-    border-radius: 50%;
-    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+    border-radius: 0px 5px 5px 0px;
+    background-color: ${(props: { theme: { colors: { maincolor1: any; }; }; }) => props.theme.colors.maincolor1};
     svg {
+        position: absolute;
         color: ${(props: { theme: { colors: { mainWhite: any; }; }; }) => props.theme.colors.mainWhite};
         font-size: 25px;
     };
@@ -50,13 +54,13 @@ const StyledSideMenu = styled.div`
     height: calc(var(--app-height) - 60px);
     transform: ${(props: { isSideMenuOpen: boolean; }) => props.isSideMenuOpen ? "translateX(0%)" : "translateX(-100%)"};
     background-color: ${(props: { theme: { colors: { maincolor1: any; }; }; }) => props.theme.colors.maincolor1};
-    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+    box-shadow: rgba(0, 0, 0, 0.19) 5px 5px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
     @media ${(props: { theme: { device: { laptop: any; }; }; }) => props.theme.device.laptop} {
         z-index: 10;
     };
     @media ${(props: { theme: { device: { mobileL: any; }; }; }) => props.theme.device.mobileL} {
         z-index: 10;
-        max-width: 100%;
+        max-width: calc(100% - 50px);
         width: 100%;
         height: 100%;
     };
@@ -66,10 +70,7 @@ const StyledMenuBar = styled.div`
     transition: all 0.5s ease-in-out;
     position: absolute;
     top: 0px;
-    left: 10px;
-    //display: flex;
-    //justify-content: space-around;
-    //align-items: flex-start;
+    right: 0px;
     width: 60px;
     height: 100%;
 `;
@@ -112,7 +113,7 @@ const StyledLayerCount = styled.div`
     font-weight: 600;
 `;
 
-export const Content = () => {
+const Content = () => {
     const { store } = useContext(ReactReduxContext);
     const isSideMenuOpen = useAppSelector((state) => state.ui.isSideMenuOpen);
     const isSearchOpen = useAppSelector((state) => state.ui.isSearchOpen);
@@ -127,7 +128,7 @@ export const Content = () => {
             <StyledSideMenu isSideMenuOpen={isSideMenuOpen}>
                 <StyledCloseSideMenuButton onClick={() => store.dispatch(setIsSideMenuOpen(!isSideMenuOpen))}>
                     <FontAwesomeIcon
-                        icon={faTimes}
+                        icon={isSideMenuOpen ? faAngleLeft : faLayerGroup}
                     />
                 </StyledCloseSideMenuButton>
                 <LayerListTEMP
