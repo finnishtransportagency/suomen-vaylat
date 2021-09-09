@@ -597,6 +597,9 @@ const fi = {
             zh: 'kiina',
             zu: 'zulu'
         }
+    },
+    legend: {
+        title: 'Karttaselitteet'
     }
 }
 
