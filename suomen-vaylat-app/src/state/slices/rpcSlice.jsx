@@ -42,9 +42,9 @@ export const rpcSlice = createSlice({
     },
     setAllLayers: (state, action) => {
         const selectedLayers = action.payload.filter(layer => layer.visible === true)
-        if (selectedLayers.length > 0) {
+        //if (selectedLayers.length > 0) {
             state.selectedLayers = selectedLayers;
-        }
+        //}
         state.allLayers = action.payload;
     },
     setAllTags: (state, action) => {
