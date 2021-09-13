@@ -13,7 +13,6 @@ const StyledTopContent = styled.div`
   position: sticky;
   top: -10px;
   padding: 15px;
-  border-radius: 2px;
   background-color:  ${props => props.theme.colors.maincolor1};
 `;
 
@@ -22,33 +21,12 @@ const StyledTabList = styled.div`
   justify-content: space-around;
   align-items: center;
   border-radius: 15px;
-  
   box-sizing: border-box;
   background-color: #e4e4e4;
 `;
 
 const StyledTabContent = styled.div`
 
-`;
-
-const StyledFilterList = styled.div`
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 0px 10px 15px 10px;
-`;
-
-const StyledFilterListHeader = styled.div`
-    display: flex;
-    justify-content: flex-start;
-    color: ${props => props.theme.colors.maincolor1};
-    padding: 10px 0px 10px 5px;
-    font-size: 12px;
-`;
-
-const StyledFiltersContainer = styled.div`
-  display: flex;
-  flex-wrap: wrap;
 `;
 
 class Tabs extends Component {

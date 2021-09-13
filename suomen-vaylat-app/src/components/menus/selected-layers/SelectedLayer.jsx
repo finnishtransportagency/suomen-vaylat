@@ -62,7 +62,7 @@ const StyledLayerDeleteIcon = styled.div`
     min-height: 28px;
     svg {
         transition: all 0.1s ease-out;
-        font-size: 18px;
+        font-size: 16px;
         color: ${props => props.theme.colors.maincolor1};
     };
     &:hover {
