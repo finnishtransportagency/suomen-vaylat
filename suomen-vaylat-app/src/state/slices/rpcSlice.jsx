@@ -164,7 +164,6 @@ export const rpcSlice = createSlice({
     },
     getLayerMetadata: (state, action) => {
         state.channel && state.channel.getLayerMetadata([action.payload.uuid], (data) => {
-            console.log(data);
             action.payload.handler(data, action.payload.layer, action.payload.uuid)
         }, (err) => {
             if (typeof action.payload.errorHandler === 'function') {

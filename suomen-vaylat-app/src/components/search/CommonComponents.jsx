@@ -66,10 +66,12 @@ export const StyledSelect = styled.select`
     display:none;
   }
 
-
-
+  background: ${props => props.theme.colors.white};
   margin-top: ${props => props.marginTop ? '8px' : '0'};
   `;
+
+export const StyledOption = styled.option`
+`;
 
 export const StyledTextField = styled(({
     id,
@@ -135,8 +137,8 @@ export const StyledSelectInput = styled(({
           error={error}
           marginTop={marginTop}
         >
-          <option value="" readOnly={true} hidden={true}>{placeholder}</option>
-          {options.map(({ value, label }, index) => <option key={index} value={value} >{label}</option>)}
+          <StyledOption value="" readOnly={true} hidden={true}>{placeholder}</StyledOption>
+          {options.map(({ value, label }, index) => <StyledOption key={index} value={value} >{label}</StyledOption>)}
         </StyledSelect>
         {hintText && <Text>{hintText}</Text>}
         {error && <Error>{error}</Error>}

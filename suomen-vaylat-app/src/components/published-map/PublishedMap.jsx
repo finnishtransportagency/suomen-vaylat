@@ -132,8 +132,6 @@ const PublishedMap = () => {
                 }
                 if (data.getLegends) {
                     channel.getLegends((data) => {
-                        console.log(data);
-                        console.log(data[58]);
                         store.dispatch(setLegends(data));
                     });
                 }

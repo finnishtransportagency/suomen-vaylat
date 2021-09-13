@@ -60,22 +60,25 @@ const StyledLayerCloseIcon = styled.div`
 `;
 
 export const Legend = ({selectedLayers}) => {
-    const allLegends = useAppSelector((state) => state.rpc.legends);
+    useAppSelector((state) => state.rpc.legends);
     const legends = [];
     const noLegends = [];
-    const { store } = useContext(ReactReduxContext)
+    const { store } = useContext(ReactReduxContext);
+    const allLegends = useAppSelector((state) => state.rpc.legends);
 
-    // First layers where has legend
-    selectedLayers.forEach((layer) => {
-        const legend = allLegends.filter((l) => {
-            return l.layerId === layer.id;
+    if (selectedLayers) {
+        selectedLayers.forEach((layer) => {
+            const legend = allLegends.filter((l) => {
+                return l.layerId === layer.id;
+            });
+            if (legend[0] && legend[0].legend) {
+                legends.push(legend[0]);
+            } else if (legend[0]) {
+                noLegends.push(legend[0]);
+            }
         });
-        if (legend[0] && legend[0].legend) {
-            legends.push(legend[0]);
-        } else if (legend[0]) {
-            noLegends.push(legend[0]);
-        }
-    });
+    }
+    legends.push.apply(legends, noLegends);
 
     const [size, setSize] = useState({
         width: window.innerWidth,
@@ -88,7 +91,6 @@ export const Legend = ({selectedLayers}) => {
         });
       useEffect(() => (window.onresize = updateSize), []);
 
-    legends.push.apply(legends, noLegends);
 
     return(
         <Draggable handle='.draggable-handler' bounds="parent" disabled={size.width/2 < 300}>
@@ -108,21 +110,14 @@ export const Legend = ({selectedLayers}) => {
                 <StyledGroupsContainer>
                 {legends && legends.length > 0 && legends.map((legend, index) => {
                     return(
-                        <LegendGroup legend={legend} index={index}></LegendGroup>
+                        <LegendGroup legend={legend} key={'legend-legend-group-' + index} index={index}></LegendGroup>
                     )
                 })}
+                {legends && legends.length === 0 &&
+                    <>{strings.legend.noSelectedLayers}</>
+                }
                 </StyledGroupsContainer>
             </StyledLegendContainer>
         </Draggable>
     );
 };
-
-/*
-
-import Draggable from "react-draggable";
-<Draggable>
-            <StyledImageDiv>
-                <img src={process.env.REACT_APP_PROXY_URL + "action?action_route=GetLayerTile&legend=true&style=digiroad%3Adr_kaistojen_lukumaara&id=901"} alt="kuva"></img>
-            </StyledImageDiv>
-            </Draggable>
-*/
