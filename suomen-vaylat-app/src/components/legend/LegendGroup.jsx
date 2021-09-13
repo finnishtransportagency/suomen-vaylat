@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 import strings from '../../translations';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -123,7 +123,7 @@ export const LegendGroup = ({ legend, index }) => {
                 {legend.legend !== null &&
                     <StyledLegend>
                         <StyledLegendImage
-                            src={legend.legend.indexOf('action') > -1 ? process.env.REACT_APP_PROXY_URL + legend.legend : legend.legend}
+                            src={legend.legend.indexOf('action') > -1 ? process.env.REACT_APP_PROXY_URL + legend.legend + '&t=' + new Date().getTime() : (legend.legend.indexOf('?') > 0 ? legend.legend + '&t=' + new Date().getTime() : legend.legend + '?t=' + new Date().getTime())}
                         ></StyledLegendImage>
                     </StyledLegend>
                 }

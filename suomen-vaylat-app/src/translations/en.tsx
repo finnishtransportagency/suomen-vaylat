@@ -599,7 +599,9 @@ const en = {
         }
     },
     legend: {
-        title: 'Map legends'
+        title: 'Map legends',
+        nolegend: 'No layer legend',
+        noSelectedLayers: 'No map layers selected'
     }
 }
 

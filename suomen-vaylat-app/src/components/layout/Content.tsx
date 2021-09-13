@@ -125,6 +125,7 @@ const Content = () => {
     const allThemes = useAppSelector((state) => state.rpc.allThemesWithLayers);
     const allTags = useAppSelector((state) => state.rpc.allTags);
     const suomenVaylatLayers = useAppSelector((state) => state.rpc.suomenVaylatLayers);
+
     return (
         <StyledContent>
             <StyledSideMenu isSideMenuOpen={isSideMenuOpen}>

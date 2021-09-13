@@ -604,7 +604,8 @@ const fi = {
     },
     legend: {
         title: 'Karttaselitteet',
-        nolegend: 'Ei karttaselitettä'
+        nolegend: 'Ei karttaselitettä',
+        noSelectedLayers: 'Karttatasoja ei valittuna'
     }
 }
 

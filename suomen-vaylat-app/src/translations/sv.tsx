@@ -599,7 +599,9 @@ const sv = {
         }
     },
     legend: {
-        title: 'Förklaringar'
+        title: 'Förklaringar',
+        nolegend: 'Inte en legend',
+        noSelectedLayers: 'Inga kartlager har valts'
     }
 }
 
