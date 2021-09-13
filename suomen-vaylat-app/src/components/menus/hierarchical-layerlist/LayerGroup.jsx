@@ -68,7 +68,7 @@ const StyledMasterGroupName = styled.p`
 const StyledMasterGroupHeader = styled.div`
     z-index: 1;
     position: sticky;
-    top: 0px;
+    top: 50px;
     cursor: pointer;
     display: flex;
     justify-content: space-between;
@@ -263,12 +263,12 @@ export const LayerGroup = ({ index, group, layers, hasChildren }) => {
                     <StyledLeftContent>
                         <StyledMasterGroupHeaderIcon
                         >
-
-                                <FontAwesomeIcon
-                                    icon={themeStyles.hasOwnProperty(group.id) ?
-                                        themeStyles[group.id].icon : faCircle}
-                                />
-
+                            {
+                                themeStyles.hasOwnProperty(group.id) &&
+                                    <FontAwesomeIcon
+                                        icon={themeStyles[group.id].icon}
+                                    />
+                            }
                         </StyledMasterGroupHeaderIcon>
                         <StyledMasterGroupName>{group.name}</StyledMasterGroupName>
                     </StyledLeftContent>

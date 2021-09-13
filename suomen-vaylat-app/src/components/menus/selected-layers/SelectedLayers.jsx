@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import styled from 'styled-components';
-
+import { setAllLayers } from '../../../state/slices/rpcSlice';
+import { ReactReduxContext, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faAngleUp,
-    faCheck
+    faCheck,
+    faTrash
 } from '@fortawesome/free-solid-svg-icons';
 
 import SelectedLayer from './SelectedLayer';
@@ -97,8 +99,38 @@ const StyledLayerGroup = styled.ul`
     list-style-type: none;
 `;
 
+const StyledDeleteAllSelectedLayers = styled.div`
+    cursor: pointer;
+    height: 30px;
+    margin-top: 5px;
+    margin-left: 5px;
+    display: flex;
+    align-items: center;
+    svg {
+        font-size: 23px;
+        color: ${props => props.theme.colors.maincolor1};
+    };
+    p {
+        padding-left: 10px;
+        margin: 0;
+        font-size: 15px;
+    }
+`;
+
 export const SelectedLayers = ({ label, selectedLayers, suomenVaylatLayers }) => {
+    const { store } = useContext(ReactReduxContext);
+    const channel = useSelector(state => state.rpc.channel);
     const [isOpen, setIsOpen] = useState(false);
+
+    const handleRemoveAllSelectedLayers = () => {
+        selectedLayers.forEach(layer => {
+            channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, !layer.visible]);
+        });
+        channel.getAllLayers(function (data) {
+            store.dispatch(setAllLayers(data));
+        });
+    };
+
     return (
         <StyledSelectedLayers>
             <StyledMasterGroupHeader
@@ -128,6 +160,15 @@ export const SelectedLayers = ({ label, selectedLayers, suomenVaylatLayers }) =>
                 isOpen={isOpen}
             >
                 <StyledLayerGroup>
+                    { selectedLayers.length > 0 &&
+                    <StyledDeleteAllSelectedLayers>
+                        <FontAwesomeIcon
+                                onClick={() => handleRemoveAllSelectedLayers()}
+                                icon={faTrash}
+                        />
+                        <p>Poista kaikki valitut tasot</p>
+                    </StyledDeleteAllSelectedLayers>
+                    }
                     {selectedLayers.map(layer => {
                         return (
                             <SelectedLayer

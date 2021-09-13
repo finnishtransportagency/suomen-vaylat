@@ -60,7 +60,7 @@ const StyledMasterGroupName = styled.p`
 const StyledMasterGroupHeader = styled.div`
     z-index: 1;
     position: sticky;
-    top: 0px;
+    top: 50px;
     cursor: pointer;
     display: flex;
     justify-content: space-between;
@@ -126,8 +126,17 @@ const StyledSubHeader = styled.p`
     display: flex;
     align-items: center;
     margin: 0px;
+    margin-top: 10px;
+    padding-left: 5px;
     height: 30px;
     color: ${props => props.theme.colors.secondaryColor3};
+    font-size: 12px;
+`;
+
+const StyledSubText = styled.p`
+    margin: 0px;
+    padding: 10px;
+    color: ${props => props.theme.colors.black};
     font-size: 12px;
 `;
 
@@ -226,6 +235,7 @@ export const ThemeLayerList = ({allLayers, allThemes}) => {
                 >
                     <StyledLayerGroup>
                         <StyledSubHeader>VÄLIOTSIKKO</StyledSubHeader>
+                        <StyledSubText>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Accusamus, necessitatibus adipisci velit, aliquid sunt commodi officiis expedita dolor eligendi natus numquam reiciendis ipsam non facere repellat deserunt blanditiis quam? Dicta!</StyledSubText>
                         <StyledSubHeader>
                             {strings.layerlist.layerlistLabels.layers.toUpperCase()}
                         </StyledSubHeader>
