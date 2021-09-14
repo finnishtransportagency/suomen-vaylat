@@ -9,6 +9,7 @@ import {ReactComponent as VaylaLogoEn} from './images/vayla_sivussa_en_white.svg
 import {ReactComponent as VaylaLogoSv} from './images/vayla_sivussa_sv_white.svg';
 
 const StyledHeaderContainer = styled.div`
+    z-index: 20;
     height: 80px;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
@@ -20,6 +21,7 @@ const StyledHeaderContainer = styled.div`
         grid-template-columns: 1fr 1fr;
         //display: none;
     };
+    box-shadow: rgb(0 0 0 / 16%) 0px 3px 6px, rgb(0 0 0 / 23%) 0px 3px 6px;
 `;
 
 const StyledHeaderTitleContainer = styled.p`

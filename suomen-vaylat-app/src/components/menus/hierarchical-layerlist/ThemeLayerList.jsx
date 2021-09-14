@@ -59,8 +59,6 @@ const StyledMasterGroupName = styled.p`
 
 const StyledMasterGroupHeader = styled.div`
     z-index: 1;
-    position: sticky;
-    top: 50px;
     cursor: pointer;
     display: flex;
     justify-content: space-between;
@@ -78,6 +76,17 @@ const StyledMasterGroupHeader = styled.div`
     };
 `;
 
+const StyledLeftContent = styled.div`
+    display: flex;
+    align-items: center;
+`;
+
+const StyledRightContent = styled.div`
+    display: flex;
+    align-items: center;
+
+`;
+
 const StyledMasterGroupHeaderIcon = styled.div`
     display: flex;
     justify-content: center;
@@ -90,11 +99,6 @@ const StyledMasterGroupHeaderIcon = styled.div`
         font-size: 16px;
         color: ${props => props.theme.colors.mainWhite};
     }
-`;
-
-const StyledLeftContent = styled.div`
-    display: flex;
-    align-items: center;
 `;
 
 const StyledSelectButton = styled.button`
@@ -202,7 +206,40 @@ export const ThemeLayerList = ({allLayers, allThemes}) => {
 
     return (
             <StyledLayerGroups key={index} index={index}>
-                    <StyledMasterGroupHeader
+
+                <StyledMasterGroupHeader
+                    key={"smgh_" + index}
+                    onClick={() => setIsOpen(!isOpen)}
+                >
+                    <StyledLeftContent>
+                        <StyledMasterGroupHeaderIcon
+                        >
+                            <FontAwesomeIcon
+                                icon={faMap}
+                            />
+                        </StyledMasterGroupHeaderIcon>
+                        <StyledMasterGroupName>{theme.name}</StyledMasterGroupName>
+                    </StyledLeftContent>
+                    <StyledRightContent>
+                        <Checkbox
+                            isChecked={checked}
+                            handleClick={selectGroup}
+                        />
+                        <StyledSelectButton
+                            isOpen={isOpen}
+                        >
+                            <FontAwesomeIcon
+                                icon={faAngleDown}
+                                style={{
+                                    transform: isOpen && "rotate(180deg)"
+                                }}
+                            />
+                        </StyledSelectButton>
+                    </StyledRightContent>
+                </StyledMasterGroupHeader>
+
+
+                    {/* <StyledMasterGroupHeader
                         key={"smgh_" + index}
                         onClick={() => setIsOpen(!isOpen)}
                     >
@@ -228,7 +265,7 @@ export const ThemeLayerList = ({allLayers, allThemes}) => {
                                 }}
                             />
                         </StyledSelectButton>
-                    </StyledMasterGroupHeader>
+                    </StyledMasterGroupHeader> */}
                 <StyledLayerGroupContainer
                     key={"slg_" + index}
                     isOpen={isOpen}

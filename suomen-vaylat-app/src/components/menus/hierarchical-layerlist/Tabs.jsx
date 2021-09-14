@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Tab from './Tab';
 import Filter from './Filter';
 import styled from 'styled-components';
+import strings from '../../../translations';
 
 const StyledTabs = styled.div`
   margin: 10px;
@@ -10,24 +11,34 @@ const StyledTabs = styled.div`
 
 const StyledTopContent = styled.div`
   z-index: 1;
-  position: sticky;
-  top: -10px;
-  padding: 15px;
-  background-color:  ${props => props.theme.colors.maincolor1};
+  padding: 10px;
 `;
 
 const StyledTabList = styled.div`
+  transition: all 0.1s ease-out;
   display: flex;
   justify-content: space-around;
   align-items: center;
   border-radius: 15px;
   box-sizing: border-box;
   background-color: #e4e4e4;
+  &:hover {
+    background-color: ${props => props.theme.colors.maincolor3};
+  }
 `;
 
 const StyledTabContent = styled.div`
 
 `;
+
+const StyledListSubtitle = styled.div`
+    display: flex;
+    justify-content: flex-start;
+    color: ${props => props.theme.colors.maincolor1};
+    padding: 10px 0px 10px 5px;
+    font-size: 15px;
+`;
+
 
 class Tabs extends Component {
   static propTypes = {
@@ -60,6 +71,9 @@ class Tabs extends Component {
     return (
       <StyledTabs>
         <StyledTopContent>
+          <StyledListSubtitle>
+                {strings.layerlist.layerlistLabels.show}
+          </StyledListSubtitle>
           <StyledTabList>
             {children.map((child) => {
               const { label } = child.props;

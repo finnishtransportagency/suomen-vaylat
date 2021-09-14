@@ -1,73 +1,43 @@
 import { useState, useContext } from "react";
 import styled from 'styled-components';
 import { setAllLayers } from '../../../state/slices/rpcSlice';
+import strings from '../../../translations';
 import { ReactReduxContext, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-    faAngleUp,
-    faCheck,
-    faTrash
-} from '@fortawesome/free-solid-svg-icons';
+import { faAngleUp, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 import SelectedLayer from './SelectedLayer';
+import SelectedLayersCount from './SelectedLayersCount';
 
 const StyledSelectedLayers = styled.div`
-
+    background-color: ${props => props.theme.colors.mainWhite};
+    margin-bottom: 5px;
 `;
 
 const StyledMasterGroupName = styled.p`
     transition: all 0.1s ease-in;
     font-size: 14px;
-    font-weight: 600;
+    font-weight: 400;
     margin: 0;
     padding-left: 10px;
-    color: ${props => props.theme.colors.mainWhite};
+    color: ${props => props.theme.colors.maincolor1};
 `;
 
 const StyledMasterGroupHeader = styled.div`
-    position: sticky;
-    top: 0px;
     cursor: pointer;
     display: flex;
     justify-content: space-between;
     align-items: center;
     height: 40px;
-    padding-left: 10px;
     border-radius: 2px;
     transition: all 0.1s ease-in;
-    background-color: ${props => props.theme.colors.maincolor1};
-    &:hover {
-        background-color: ${props => props.theme.colors.maincolor2};
-    };
-    &:hover ${StyledMasterGroupName} {
-        color: ${props => props.theme.colors.mainWhite};
-    };
-`;
-
-const StyledMasterGroupHeaderIcon = styled.div`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 28px;
-    height: 28px;
-    svg {
-        color: ${props => props.theme.colors.mainWhite};
-    };
+    color: ${props => props.theme.colors.black};
+    background-color: ${props => props.theme.colors.mainWhite};
 `;
 
 const StyledLeftContent = styled.div`
     display: flex;
     align-items: center;
-`;
-
-const StyledSelectedLayersCount = styled.div`
-    width: 27px;
-    height: 27px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-right: 5px;
-    color: ${props => props.theme.colors.mainWhite};
 `;
 
 const StyledExpandButton = styled.button`
@@ -77,11 +47,11 @@ const StyledExpandButton = styled.button`
     height: 100%;
     border: none;
     background-color: transparent;
-    margin-right: 15px;
+    margin-right: 10px;
     svg {
-        font-size: 23px;
+        font-size: 30px;
         transition: all 0.5s ease-out;
-        color: ${props => props.theme.colors.mainWhite};
+        color: ${props => props.theme.colors.black};
     };
 `;
 
@@ -101,14 +71,17 @@ const StyledLayerGroup = styled.ul`
 
 const StyledDeleteAllSelectedLayers = styled.div`
     cursor: pointer;
+    width: 250px;
     height: 30px;
-    margin-top: 5px;
-    margin-left: 5px;
     display: flex;
+    justify-content: center;
     align-items: center;
+    background-color: ${props => props.theme.colors.maincolor1};
+    color: ${props => props.theme.colors.mainWhite};
+    border-radius: 15px;
+    margin: 20px auto 20px auto;
     svg {
-        font-size: 23px;
-        color: ${props => props.theme.colors.maincolor1};
+        font-size: 16px;
     };
     p {
         padding-left: 10px;
@@ -137,17 +110,10 @@ export const SelectedLayers = ({ label, selectedLayers, suomenVaylatLayers }) =>
                 onClick={() => setIsOpen(!isOpen)}
             >
                 <StyledLeftContent>
-                    <StyledMasterGroupHeaderIcon>
-                        <FontAwesomeIcon
-                            icon={faCheck}
-                        />
-                    </StyledMasterGroupHeaderIcon>
                     <StyledMasterGroupName>{label}</StyledMasterGroupName>
+                    <SelectedLayersCount count={selectedLayers.length}/>
                 </StyledLeftContent>
                 <StyledExpandButton>
-                    <StyledSelectedLayersCount>
-                        {selectedLayers.length}
-                    </StyledSelectedLayersCount>
                     <FontAwesomeIcon
                         icon={faAngleUp}
                         style={{
@@ -160,15 +126,6 @@ export const SelectedLayers = ({ label, selectedLayers, suomenVaylatLayers }) =>
                 isOpen={isOpen}
             >
                 <StyledLayerGroup>
-                    { selectedLayers.length > 0 &&
-                    <StyledDeleteAllSelectedLayers>
-                        <FontAwesomeIcon
-                                onClick={() => handleRemoveAllSelectedLayers()}
-                                icon={faTrash}
-                        />
-                        <p>Poista kaikki valitut tasot</p>
-                    </StyledDeleteAllSelectedLayers>
-                    }
                     {selectedLayers.map(layer => {
                         return (
                             <SelectedLayer
@@ -178,6 +135,13 @@ export const SelectedLayers = ({ label, selectedLayers, suomenVaylatLayers }) =>
                             />
                         )
                     })}
+                    <StyledDeleteAllSelectedLayers>
+                        <FontAwesomeIcon
+                                onClick={() => handleRemoveAllSelectedLayers()}
+                                icon={faTrash}
+                        />
+                        <p>{strings.layerlist.layerlistLabels.removeAllSelectedLayers}</p>
+                    </StyledDeleteAllSelectedLayers>
                 </StyledLayerGroup>
             </StyledLayerGroupContainer>
         </StyledSelectedLayers>

@@ -3,7 +3,6 @@ import { ReactReduxContext, useSelector } from 'react-redux';
 import { setAllLayers } from '../../../state/slices/rpcSlice';
 import styled from 'styled-components';
 
-import Checkbox from '../../checkbox/Checkbox';
 
 const StyledLayerContainer = styled.li`
     overflow: hidden;
@@ -27,6 +26,20 @@ const StyledLayerName = styled.p`
     @media ${ props => props.theme.device.mobileL} {
         font-size: 12px;
     };
+`;
+
+const StyledCheckbox = styled.div`
+    cursor: pointer;
+    min-width: 20px;
+    min-height: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid ${props => props.theme.colors.maincolor1};
+    box-sizing: border-box;
+    background-color: ${props => props.theme.colors.mainWhite};
+    border-radius: 30%;
+    margin-right: 36px;
 `;
 
 export const Layer = ({ layer, isOpen, theme }) => {
@@ -69,16 +82,16 @@ export const Layer = ({ layer, isOpen, theme }) => {
                     checked={layer.visible}
                     onChange={() => handleLayerVisibility(channel, layer)}
                 /> */}
-                <Checkbox
-                    isChecked={layer.visible}
-                    handleClick={() => handleLayerVisibility(channel, layer)}
-                    size={18}
-                />
+
                 <StyledlayerHeader>
                     <StyledLayerName>
                         {layer.name}
                     </StyledLayerName>
                 </StyledlayerHeader>
+                <StyledCheckbox
+                    isChecked={layer.visible}
+                    handleClick={() => handleLayerVisibility(channel, layer)}
+                />
             </StyledLayerContainer>
     );
   };

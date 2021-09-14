@@ -14,15 +14,9 @@ const StyledLayerContainer = styled.div`
     display: flex;
     align-items: center;
     height: 40px;
-    &:not(:last-child) {
-        &:after {
-            content: "";
-            display: block;
-            height: 1px;
-            background-image: linear-gradient(90deg, rgba(0,100,175,0.1) 0%, rgba(0,100,175,0.5) 50%, rgba(0,100,175,0.1) 100%);
-            background-repeat: no-repeat;
-            background-position: center bottom;
-        }
+    background-color: rgba(0, 0, 0, 0.1);
+    &:nth-child(2n) {
+        background-color: ${props => props.theme.colors.mainWhite};
     };
 `;
 
@@ -34,11 +28,13 @@ const StyledlayerHeader = styled.div`
 `;
 
 const StyledLayerName = styled.p`
+    user-select: none;
     font-size: 13px;
     margin: 5px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    max-width: 180px;
 `;
 
 const StyledLeftContent = styled.div`

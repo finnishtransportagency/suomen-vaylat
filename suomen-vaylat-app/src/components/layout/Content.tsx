@@ -3,17 +3,19 @@ import { useAppSelector } from '../../state/hooks';
 import { ReactReduxContext } from 'react-redux';
 import { setIsSideMenuOpen, setIsSearchOpen } from '../../state/slices/uiSlice';
 import styled from 'styled-components';
+import strings from '../../translations';
 import PublishedMap from '../published-map/PublishedMap.jsx';
 import LayerListTEMP from '../menus/hierarchical-layerlist/LayerListTEMP';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faLayerGroup, faSearch, faAngleLeft } from '@fortawesome/free-solid-svg-icons';
+import { faLayerGroup, faSearch, faTimes } from '@fortawesome/free-solid-svg-icons';
 
 import ZoomMenu from '../zoom-features/ZoomMenu';
 import Search from '../search/Search';
 import { ToastContainer } from 'react-toastify';
 
 const StyledContent = styled.div`
+    z-index: 1;
     position: relative;
     height: var(--app-height);
     overflow: hidden;
@@ -22,40 +24,18 @@ const StyledContent = styled.div`
     };
 `;
 
-const StyledCloseSideMenuButtonContainer = styled.div`
-    position: absolute;
-    top: 40px;
-    left: 100%;
-    cursor: pointer;
-`;
-
-const StyledCloseSideMenuButton = styled.div`
-    cursor: pointer;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 45px;
-    height: 45px;
-    background-color: transparent;
-    border-radius: 0px 5px 5px 0px;
-    background-color: ${(props: { theme: { colors: { maincolor1: any; }; }; }) => props.theme.colors.maincolor1};
-    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
-    svg {
-        position: absolute;
-        transition: all 0.5s ease-out;
-        color: ${(props: { theme: { colors: { mainWhite: any; }; }; }) => props.theme.colors.mainWhite};
-        font-size: 25px;
-    };
-`;
 
 const StyledSideMenu = styled.div`
     z-index: 10;
+    display: flex;
+    flex-direction: column;
     position: absolute;
     transition: all 0.5s ease-in-out;
     top: 0px;
     left: 0px;
     max-width: 340px;
-    width: calc(100% - 50px);
+    width: 100%;
+    padding: 10px;
     height: calc(var(--app-height) - 60px);
     transform: ${(props: { isSideMenuOpen: boolean; }) => props.isSideMenuOpen ? "translateX(0%)" : "translateX(-100%)"};
     background-color: ${(props: { theme: { colors: { maincolor1: any; }; }; }) => props.theme.colors.maincolor1};
@@ -65,17 +45,52 @@ const StyledSideMenu = styled.div`
     };
     @media ${(props: { theme: { device: { mobileL: any; }; }; }) => props.theme.device.mobileL} {
         z-index: 10;
-        max-width: calc(100% - 50px);
+        max-width: 100%;
         width: 100%;
-        height: 100%;
+        //height: var(--app-height);
+    };
+`;
+
+const StyledSideMenuHeader = styled.div`
+    height: 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: ${(props: { theme: { colors: { mainWhite: any; }; }; }) => props.theme.colors.mainWhite};
+    margin: 10px;
+    padding-left: 10px;
+    svg  {
+        font-size: 20px;
+    }
+`;
+
+const StyledSideMenuLeftContent = styled.div`
+    display: flex;
+    align-items: center;
+`;
+
+const StyledSideMenuHeaderTitle = styled.p`
+    font-size: 18px;
+    margin: 0;
+    font-weight: 600;
+    padding-left: 10px;
+`;
+
+const StyledSideMenuCloseButton = styled.div`
+    cursor: pointer;
+    display: flex;
+    padding-right: 15px;
+    svg {
+        color: ${(props: { theme: { colors: { mainWhite: any; }; }; }) => props.theme.colors.mainWhite};
+        font-size: 20px;
     };
 `;
 
 const StyledMenuBar = styled.div`
     transition: all 0.5s ease-in-out;
     position: absolute;
-    top: 0px;
-    right: 0px;
+    top: 10px;
+    left: 10px;
     width: 60px;
     height: 100%;
 `;
@@ -91,7 +106,7 @@ const StyledMenuBarButton = styled.div`
     align-items: center;
     background-color: ${(props: { theme: { colors: { maincolor1: any; }; }; }) => props.theme.colors.maincolor1};
     border-radius: 50%;
-    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+    box-shadow: rgb(0 0 0 / 16%) 0px 3px 6px, rgb(0 0 0 / 23%) 0px 3px 6px;
     svg {
         font-size: 18px;
         color: ${(props: { theme: { colors: { mainWhite: any; }; }; }) => props.theme.colors.mainWhite};
@@ -131,18 +146,19 @@ const Content = () => {
     return (
         <StyledContent>
             <StyledSideMenu isSideMenuOpen={isSideMenuOpen}>
-                <StyledCloseSideMenuButtonContainer onClick={() => store.dispatch(setIsSideMenuOpen(!isSideMenuOpen))}>
-                    <StyledCloseSideMenuButton>
+                <StyledSideMenuHeader>
+                    <StyledSideMenuLeftContent>
                         <FontAwesomeIcon
                             icon={faLayerGroup}
-                            style={{transform: isSideMenuOpen ? 'rotateY(90deg)' : 'rotateY(0deg)'}}
                         />
+                        <StyledSideMenuHeaderTitle>{strings.layerlist.layerlistLabels.layers}</StyledSideMenuHeaderTitle>
+                    </StyledSideMenuLeftContent>
+                    <StyledSideMenuCloseButton onClick={() => store.dispatch(setIsSideMenuOpen(!isSideMenuOpen))}>
                         <FontAwesomeIcon
-                            icon={faAngleLeft}
-                            style={{transform: isSideMenuOpen ? 'rotateY(0deg)' : 'rotateY(-90deg)'}}
+                            icon={faTimes}
                         />
-                    </StyledCloseSideMenuButton>
-                </StyledCloseSideMenuButtonContainer>
+                    </StyledSideMenuCloseButton>
+                </StyledSideMenuHeader>   
                 <LayerListTEMP
                     groups={allGroups}
                     layers={allLayers}
