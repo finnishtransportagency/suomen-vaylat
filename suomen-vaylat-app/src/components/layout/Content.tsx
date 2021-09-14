@@ -1,18 +1,19 @@
 import { useContext } from "react";
 import { useAppSelector } from '../../state/hooks';
 import { ReactReduxContext } from 'react-redux';
-import { setIsSideMenuOpen, setIsSearchOpen } from '../../state/slices/uiSlice';
+import { setIsSideMenuOpen, setIsSearchOpen, setIsLegendOpen} from '../../state/slices/uiSlice';
 import styled from 'styled-components';
 import strings from '../../translations';
 import PublishedMap from '../published-map/PublishedMap.jsx';
 import LayerListTEMP from '../menus/hierarchical-layerlist/LayerListTEMP';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faLayerGroup, faSearch, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faLayerGroup, faSearch, faTimes, faImages } from '@fortawesome/free-solid-svg-icons';
 
 import ZoomMenu from '../zoom-features/ZoomMenu';
 import Search from '../search/Search';
 import { ToastContainer } from 'react-toastify';
+import { Legend } from "../legend/Legend";
 
 const StyledContent = styled.div`
     z-index: 1;
@@ -137,12 +138,14 @@ const Content = () => {
     const { store } = useContext(ReactReduxContext);
     const isSideMenuOpen = useAppSelector((state) => state.ui.isSideMenuOpen);
     const isSearchOpen = useAppSelector((state) => state.ui.isSearchOpen);
+    const isLegendOpen = useAppSelector((state) => state.ui.isLegendOpen);
     const allGroups = useAppSelector((state) => state.rpc.allGroups);
     const allLayers = useAppSelector((state) => state.rpc.allLayers);
     const selectedLayers = useAppSelector((state) => state.rpc.selectedLayers);
     const allThemes = useAppSelector((state) => state.rpc.allThemesWithLayers);
     const allTags = useAppSelector((state) => state.rpc.allTags);
     const suomenVaylatLayers = useAppSelector((state) => state.rpc.suomenVaylatLayers);
+
     return (
         <StyledContent>
             <StyledSideMenu isSideMenuOpen={isSideMenuOpen}>
@@ -171,6 +174,7 @@ const Content = () => {
             <ZoomMenu />
             <PublishedMap />
             {isSearchOpen && <Search />}
+            {isLegendOpen && <Legend selectedLayers={selectedLayers}></Legend>}
             <ToastContainer></ToastContainer>
             <StyledMenuBar>
                     <StyledMenuBarButton
@@ -188,6 +192,12 @@ const Content = () => {
                     >
                         <FontAwesomeIcon
                             icon={faSearch}
+                        />
+                    </StyledMenuBarButton>
+                    <StyledMenuBarButton
+                        onClick={() => store.dispatch(setIsLegendOpen(!isLegendOpen))}>
+                        <FontAwesomeIcon
+                            icon={faImages}
                         />
                     </StyledMenuBarButton>
             </StyledMenuBar>

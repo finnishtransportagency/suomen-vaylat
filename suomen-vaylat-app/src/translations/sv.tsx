@@ -601,6 +601,11 @@ const sv = {
             zh: 'kinesiska',
             zu: 'zulu'
         }
+    },
+    legend: {
+        title: 'Förklaringar',
+        nolegend: 'Inte en legend',
+        noSelectedLayers: 'Inga kartlager har valts'
     }
 }
 
