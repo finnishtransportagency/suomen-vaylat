@@ -197,7 +197,7 @@ export const LayerGroup = ({ index, group, layers, hasChildren }) => {
         return null;
     });
 
-    if (filteredLayers.length === visibleLayers.length) {
+    if (filteredLayers.length === visibleLayers.length && visibleLayers.length > 0) {
         checked = true;
     } else if (visibleLayers.length > 0 ) {
         indeterminate = true;
@@ -205,6 +205,8 @@ export const LayerGroup = ({ index, group, layers, hasChildren }) => {
         checked = false;
         indeterminate = false;
     }
+
+    console.log(filteredLayers);
 
     const selectGroup = (e) => {
         e.stopPropagation();

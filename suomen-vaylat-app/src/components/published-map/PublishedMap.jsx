@@ -19,7 +19,8 @@ import {
     setZoomLevelsLayers,
     setCurrentZoomLevel,
     setActiveAnnouncements,
-    setSuomenVaylatLayers
+    setSuomenVaylatLayers,
+    setTagsWithLayers
 } from '../../state/slices/rpcSlice';
 
 import CenterSpinner from '../center-spinner/CenterSpinner';
@@ -65,11 +66,20 @@ const PublishedMap = () => {
 
             store.dispatch(setChannel(channel));
             channel.getSupportedFunctions(function (data) {
-                if (data.getAllTags) {
-                    channel.getAllTags(function (data) {
+                console.log(data);
+                if (data.getTags) {
+                    channel.getTags(function (data) {
                         store.dispatch(setAllTags(data));
                     });
                 }
+
+                if (data.getTagsWithLayers) {
+                    channel.getTagsWithLayers(function (data) {
+                        console.log(data);
+                        store.dispatch(setTagsWithLayers(data));
+                    });
+                }
+
                 if (data.getAnnouncements) {
                     channel.getAnnouncements(function (data) {
                         if (data.data && data.data.length > 0) {
@@ -103,11 +113,6 @@ const PublishedMap = () => {
                 if (data.getAllLayers) {
                     channel.getAllLayers(function (data) {
                         store.dispatch(setAllLayers(data));
-                    });
-                }
-                if (data.getAllTags) {
-                    channel.getAllTags(function (data) {
-                        store.dispatch(setAllTags(data));
                     });
                 }
                 if (data.getCurrentState) {
