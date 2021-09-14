@@ -26,8 +26,6 @@ phases:
         DOCKER_BUILDKIT=1 \
         docker build -t $IMAGE_REPO_URI:$LATEST_TAG \
         --target $ENVIRONMENT \
-        --build-arg REACT_APP_PUBLISHED_MAP_URL=$MAP_URL \
-        --build-arg REACT_APP_PUBLISHED_MAP_DOMAIN=$MAP_DOMAIN \
         --build-arg PUBLIC_URL=/$BASE_PATH \
         --build-arg BASE_PATH=$BASE_PATH \
         --build-arg CODEARTIFACT_AUTH_TOKEN=$CODEARTIFACT_AUTH_TOKEN \
