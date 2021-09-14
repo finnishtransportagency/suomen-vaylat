@@ -597,6 +597,11 @@ const en = {
             zh: 'Chinese',
             zu: 'Zulu'
         }
+    },
+    legend: {
+        title: 'Map legends',
+        nolegend: 'No layer legend',
+        noSelectedLayers: 'No map layers selected'
     }
 }
 
