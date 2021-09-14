@@ -123,7 +123,7 @@ export const Search = () => {
 
     const vectorLayerId = 'SEARCH_VECTORLAYER';
     const markerId = 'SEARCH_MARKER';
-    const { store } = useContext(ReactReduxContext)
+    const { store } = useContext(ReactReduxContext);
 
     // handlers
     const searchTypeOnChange = (name) => {
@@ -188,7 +188,6 @@ export const Search = () => {
             x: search.marker.x,
             y: search.marker.y
         }));
-
     }
 
     return (
@@ -204,7 +203,7 @@ export const Search = () => {
                 />
             </StyledCloseButton>
             <StyledEmptyButton
-                disabled={((search.formData.address.length === 0 && search.formData.vkm.tie === null) || search.searching === true)}
+                disabled={(search.formData.address === null || (search.formData.address.length === 0 && search.formData.vkm.tie === null) || search.searching === true)}
                 onClick={() => {
                     searchTypeOnChange(search.selected);
                 }}

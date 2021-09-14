@@ -601,6 +601,11 @@ const fi = {
             zh: 'kiina',
             zu: 'zulu'
         }
+    },
+    legend: {
+        title: 'Karttaselitteet',
+        nolegend: 'Ei karttaselitettä',
+        noSelectedLayers: 'Karttatasoja ei valittuna'
     }
 }
 

@@ -1,8 +1,8 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { ReactReduxContext, useSelector } from 'react-redux';
-import { setAllLayers } from '../../../state/slices/rpcSlice';
+import { setLegends, setAllLayers } from '../../../state/slices/rpcSlice';
 import styled from 'styled-components';
-
+import { debounce } from 'tlence';
 import Checkbox from '../../checkbox/Checkbox';
 
 const StyledLayerContainer = styled.li`
@@ -29,6 +29,8 @@ const StyledLayerName = styled.p`
     };
 `;
 
+let debounceLegendsUpdate = null;
+
 export const Layer = ({ layer, isOpen, theme }) => {
     const { store } = useContext(ReactReduxContext);
     const channel = useSelector(state => state.rpc.channel)
@@ -40,12 +42,25 @@ export const Layer = ({ layer, isOpen, theme }) => {
         });
     }
 
+    useEffect(() => {
+        const updateLayerLegends = (channel) => {
+            channel.getLegends((data) => {
+                store.dispatch(setLegends(data));
+            });
+        };
+
+        debounceLegendsUpdate = debounce(updateLayerLegends, 500);
+    }, [store]);
+
     if (layer.visible) {
         // if theme then check layer theme style
         if (theme) {
             channel.getLayerThemeStyle([layer.id, theme], function(styleName) {
                 if (styleName) {
-                    channel.changeLayerStyle([layer.id, styleName], function() {});
+                    channel.changeLayerStyle([layer.id, styleName], function() {
+                        // update layers legends
+                        debounceLegendsUpdate(channel);
+                    });
                 }
             });
         }
@@ -53,7 +68,9 @@ export const Layer = ({ layer, isOpen, theme }) => {
         else {
             channel.getLayerThemeStyle([layer.id, null], function(styleName) {
                 if (styleName) {
-                    channel.changeLayerStyle([layer.id, styleName], function() {});
+                    channel.changeLayerStyle([layer.id, styleName], function() {
+                        debounceLegendsUpdate(channel);
+                    });
                 }
             });
         }

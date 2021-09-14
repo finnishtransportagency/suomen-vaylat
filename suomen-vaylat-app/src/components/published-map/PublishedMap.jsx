@@ -19,7 +19,8 @@ import {
     setZoomLevelsLayers,
     setCurrentZoomLevel,
     setActiveAnnouncements,
-    setSuomenVaylatLayers
+    setSuomenVaylatLayers,
+    setLegends
 } from '../../state/slices/rpcSlice';
 
 import CenterSpinner from '../center-spinner/CenterSpinner';
@@ -37,7 +38,6 @@ const StyledIframe = styled.iframe`
 `;
 
 const ANNOUNCEMENTS_LOCALSTORAGE = "oskari-announcements";
-
 
 const PublishedMap = () => {
 
@@ -128,6 +128,11 @@ const PublishedMap = () => {
                 if (data.getSuomenVaylatLayers) {
                     channel.getSuomenVaylatLayers(function (data) {
                         store.dispatch(setSuomenVaylatLayers(data));
+                    });
+                }
+                if (data.getLegends) {
+                    channel.getLegends((data) => {
+                        store.dispatch(setLegends(data));
                     });
                 }
             });
@@ -231,6 +236,7 @@ const PublishedMap = () => {
                 allow="geolocation" onLoad={() => hideSpinner()}>
             </StyledIframe>
         </StyledPublishedMap>
+
     )
 };
 
