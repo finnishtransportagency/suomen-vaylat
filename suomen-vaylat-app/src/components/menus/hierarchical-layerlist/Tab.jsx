@@ -6,14 +6,13 @@ const StyledTabListItem = styled.div`
   transition: all 0.4s ease-out;
   border-radius: 2px;
   font-size: 15px;
-  background-color: ${props => props.active ? props.theme.colors.maincolor3 : "none"};
+  background-color: ${props => props.active ? props.theme.colors.maincolor1 : "none"};
   width: 50%;
   height: 30px;
   border-radius: 15px;
-  margin: 1px;
   font-size: 16px;
   font-weight: 600;
-  color: ${props => props.active ? props.theme.colors.black : props.theme.colors.black};
+  color: ${props => props.active ? props.theme.colors.mainWhite : props.theme.colors.black};
   text-align: center;
   cursor: pointer;
   display: flex;

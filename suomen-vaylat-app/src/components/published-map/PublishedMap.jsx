@@ -105,8 +105,8 @@ const PublishedMap = () => {
                         store.dispatch(setAllLayers(data));
                     });
                 }
-                if (data.getAllTags) {
-                    channel.getAllTags(function (data) {
+                if (data.getTags) {
+                    channel.getTags(function (data) {
                         store.dispatch(setAllTags(data));
                     });
                 }

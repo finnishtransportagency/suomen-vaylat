@@ -67,8 +67,6 @@ const StyledMasterGroupName = styled.p`
 
 const StyledMasterGroupHeader = styled.div`
     z-index: 1;
-    position: sticky;
-    top: 50px;
     cursor: pointer;
     display: flex;
     justify-content: space-between;
@@ -115,7 +113,9 @@ const StyledGroupHeader = styled.div`
     cursor: pointer;
     display: flex;
     align-items: center;
+    justify-content: space-between;
     height: 30px;
+    background-color: rgba(0, 0, 0, 0.1);
 `;
 
 const StyledGroupName = styled.p`
@@ -140,22 +140,12 @@ const StyledSelectButton = styled.button`
     height: 100%;
     border: none;
     background-color: transparent;
-    margin-right: 15px;
+    margin-right: 10px;
     svg {
-        font-size: 25px;
+        font-size: 23px;
         transition: all 0.5s ease-out;
         color: ${props => props.theme.colors.black};
     };
-`;
-
-const StyledGroupSelectButton = styled.div`
-    cursor: pointer;
-    align-items: center;
-    margin-right: 5px;
-    svg {
-        transition: all 0.5s ease-out;
-        color: ${props => props.theme.colors.black};
-    }
 `;
 
 const StyledLayerGroupContainer = styled.div`
@@ -164,18 +154,9 @@ const StyledLayerGroupContainer = styled.div`
 `;
 
 const StyledLayerGroup = styled.ul`
-    padding-inline-start: ${props => props.parentId === -1 ? "10px" : "30px"};
+    padding-inline-start: ${props => props.parentId === -1 ? "10px" : "15px"};
     list-style-type: none;
-`;
-
-const StyledSubHeader = styled.p`
-    display: flex;
-    align-items: center;
-    margin: 0px;
-    margin-left: 10px;
-    height: 30px;
-    color: ${props => props.theme.colors.maincolor1};
-    font-size: 12px;
+    margin: 0;
 `;
 
 const themeStyles = {
@@ -295,23 +276,24 @@ export const LayerGroup = ({ index, group, layers, hasChildren }) => {
                     key={"smgh_" +group.parentId + '_' + group.id}
                     onClick={() => setIsOpen(!isOpen)}
                 >
-                   <StyledGroupSelectButton
-                        isOpen={isOpen}
-                        onClick={() => setIsOpen(!isOpen)}
-                    >
-                        <FontAwesomeIcon
-                            icon={faAngleDown}
-                            style={{
-                                transform: isOpen && "rotate(180deg)"
-                            }}
-                        />
-                    </StyledGroupSelectButton>
-                    <Checkbox
-                            isChecked={checked}
-                            handleClick={selectGroup}
-                            size={16}
-                    />
                     <StyledGroupName>{group.name}</StyledGroupName>
+                    <StyledRightContent>
+                        <Checkbox
+                                isChecked={checked}
+                                handleClick={selectGroup}
+                        />
+                        <StyledSelectButton
+                            isOpen={isOpen}
+                            onClick={() => setIsOpen(!isOpen)}
+                        >
+                            <FontAwesomeIcon
+                                icon={faAngleDown}
+                                style={{
+                                    transform: isOpen && "rotate(180deg)"
+                                }}
+                            />
+                        </StyledSelectButton>
+                    </StyledRightContent>
                 </StyledGroupHeader>
             )}
             <StyledLayerGroupContainer
@@ -319,7 +301,6 @@ export const LayerGroup = ({ index, group, layers, hasChildren }) => {
                 isOpen={isOpen}
             >
                 <StyledLayerGroup parentId={group.parentId}>
-                {group.parentId === -1 && <StyledSubHeader>KARTTATASOT</StyledSubHeader>}
                         {hasChildren && (
                             <>
                                 <Layers

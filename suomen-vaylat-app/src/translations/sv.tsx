@@ -40,8 +40,12 @@ const sv = {
             selectedLayers: 'Valda lagert',
             layers: 'Layers',
             selectAll: 'Select all',
-            deselectAll: 'Deselect all',
-            layerFilters: 'Layer filters'
+            show: 'Show',
+            filterByType: 'Filter by type',
+            searchForLayers: 'Search for layers',
+            clearFilters: 'Clear filters',
+            searchResults: 'Search results',
+            removeAllSelectedLayers: 'Remove all selected layers'
         }
     },
     metadata: {

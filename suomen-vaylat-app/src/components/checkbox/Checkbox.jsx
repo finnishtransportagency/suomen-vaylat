@@ -14,7 +14,10 @@ const StyledCheckbox = styled.div`
     box-sizing: border-box;
     background-color: ${props => props.theme.colors.mainWhite};
     border-radius: 30%;
-    margin-right: 5px;
+    svg {
+        color: #0064af;
+        font-size: 12px;
+    }
 `;
 
 const Checkbox = ({
@@ -30,10 +33,6 @@ const Checkbox = ({
         {
             isChecked && <FontAwesomeIcon 
                 icon={faCheck}
-                style={{
-                    color: "#0064af",
-                    fontSize: "12px",
-                }}
         />
         }
 
