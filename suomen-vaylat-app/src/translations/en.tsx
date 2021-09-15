@@ -7,6 +7,27 @@ const en = {
         }
     },
     title: 'Suomen Väylät EN',
+    appInfo: {
+        title: "Sovelluksen tiedot",
+        headingText: 'Suomen Väylät -karttapalvelu kokoaa yhteen Väyläviraston avoimet, ' +
+            'eri väylämuotoihin liittyvät aineistot. ' +
+            'Palvelun kautta väylätietoja halutaan kuvata mahdollisimman ' +
+            'sujuvasti, näkyvästi, ajantasaisesti ja monipuolisesti ' +
+            'erilaisille käyttäjäryhmille ja -tarpeille.',
+        mainText: 'Väyläviraston lakisääteinen tehtävä on ' +
+            'vastata Suomen tie-, rataverkosta sekä vesiväylistä. ' +
+            'Väylävirasto hallinnoi, hyödyntää sekä jakaa ' +
+            'mittavan määrän väyläverkkoihin liittyviä tietoja. ' +
+            'Väyliin liittyvät sijainti-, ominaisuus- ja kuntotiedot ' +
+            'sekä väylähankkeiden suunnittelu - ja toteumatiedot, ovat ' +
+            'perustana monen toiminnan suunnittelulle, päätöksenteolle ja ' +
+            'seurannalle. Väyläviraston toiminnan myötä syntyvät tietoaineistot ' +
+            'ja niiden perusteella tekemät tilastot ja tutkimukset pidetään ' +
+            'lähtökohtaisesti julkisena tietona, joita luovutetaan muiden ' +
+            'yhteiskunnan toimijoiden ja kansalaisten käyttöön. ' +
+            'Julkinen tieto luovutetaan muiden toimijoiden käyttöön avoimena ' +
+            'datana aina silloin, kun se on mahdollista.'
+    },
     search: {
         types: {
             address: 'Address search',
