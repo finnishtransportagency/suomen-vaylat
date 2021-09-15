@@ -7,6 +7,11 @@ import strings from './../../translations';
 import {ReactComponent as VaylaLogoFi} from './images/vayla_sivussa_fi_white.svg';
 import {ReactComponent as VaylaLogoEn} from './images/vayla_sivussa_en_white.svg';
 import {ReactComponent as VaylaLogoSv} from './images/vayla_sivussa_sv_white.svg';
+import {faInfoCircle} from "@fortawesome/free-solid-svg-icons";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {setIsInfoOpen} from "../../state/slices/uiSlice";
+import {useContext} from "react";
+import {ReactReduxContext} from "react-redux";
 
 const StyledHeaderContainer = styled.div`
     z-index: 20;
@@ -22,6 +27,28 @@ const StyledHeaderContainer = styled.div`
         //display: none;
     };
     box-shadow: rgb(0 0 0 / 16%) 0px 3px 6px, rgb(0 0 0 / 23%) 0px 3px 6px;
+`;
+
+const StyledHeaderMenuBarButton = styled.div`
+    position: relative;
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    margin-right:5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: ${(props: { theme: { colors: { maincolor1: any; }; }; }) => props.theme.colors.maincolor1};
+    border-radius: 50%;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+    svg {
+        font-size: 18px;
+        color: ${(props: { theme: { colors: { mainWhite: any; }; }; }) => props.theme.colors.mainWhite};
+    };
+    @media ${(props: { theme: { device: { mobileL: any; }; }; }) => props.theme.device.mobileL} {
+        width: 40px;
+        height: 40px;
+    };
 `;
 
 const StyledHeaderTitleContainer = styled.p`
@@ -51,8 +78,18 @@ const StyledHeaderLogoContainer = styled.div`
         };
 `;
 
+const StyledLanguageSelector = styled.div`
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    color: ${(props: { theme: { colors: { mainWhite: any; }; }; }) => props.theme.colors.mainWhite};
+    padding-right: 10px;
+`;
+
 export const Header = () => {
     const lang = useAppSelector((state) => state.language);
+    const { store } = useContext(ReactReduxContext);
+    const isInfoOpen = useAppSelector((state) => state.ui.isInfoOpen);
     // // FIXME Use localization (also check images)
     // let vaylaLogo = <VaylaLogoFi />;
     // //const lang = strings.getLanguage();
@@ -74,7 +111,14 @@ export const Header = () => {
                     <img alt="Väylä" src={vaylaLogo}/>
                 </a> */}
             </StyledHeaderLogoContainer>
-            <LanguageSelector />
+            <StyledLanguageSelector>
+                <StyledHeaderMenuBarButton onClick={() => store.dispatch(setIsInfoOpen(!isInfoOpen))}>
+                    <FontAwesomeIcon
+                        icon={faInfoCircle}
+                    />
+                </StyledHeaderMenuBarButton>
+                <LanguageSelector />
+            </StyledLanguageSelector>
         </StyledHeaderContainer>
     );
  }
