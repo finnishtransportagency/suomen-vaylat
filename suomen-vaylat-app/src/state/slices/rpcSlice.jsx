@@ -13,6 +13,7 @@ const initialState = {
   currentState: {},
   zoomLevelsLayers: {},
   tagLayers: [],
+  tags: [],
   zoomRange: {},
   currentZoomLevel: 0,
   selectedLayers: [],
@@ -22,7 +23,8 @@ const initialState = {
   filter: null,
   suomenVaylatLayers: [],
   layerMetadata: { data: null, layer: null, uuid: null},
-  legends: []
+  legends: [],
+  tagsWithLayers: {}
 };
 
 export const rpcSlice = createSlice({
@@ -50,6 +52,12 @@ export const rpcSlice = createSlice({
     },
     setAllTags: (state, action) => {
         state.allTags = action.payload;
+    },
+    setTags: (state, action) => {
+        state.tags = action.payload;
+    },
+    setTagsWithLayers: (state, action) => {
+        state.tagsWithLayers = action.payload;
     },
     setAllThemesWithLayers: (state, action) => {
         state.allThemesWithLayers = action.payload;
@@ -203,6 +211,7 @@ export const {
     setAllGroups,
     setAllLayers,
     setAllTags,
+    setTags,
     setCurrentState,
     setFeatures,
     setTagLayers,
@@ -231,7 +240,8 @@ export const {
     clearLayerMetadata,
     setLayerMetadata,
     getLegends,
-    setLegends
+    setLegends,
+    setTagsWithLayers
 } = rpcSlice.actions;
 
 export default rpcSlice.reducer;

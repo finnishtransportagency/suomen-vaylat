@@ -20,7 +20,8 @@ import {
     setCurrentZoomLevel,
     setActiveAnnouncements,
     setSuomenVaylatLayers,
-    setLegends
+    setLegends,
+    setTagsWithLayers
 } from '../../state/slices/rpcSlice';
 
 import CenterSpinner from '../center-spinner/CenterSpinner';
@@ -38,6 +39,7 @@ const StyledIframe = styled.iframe`
 `;
 
 const ANNOUNCEMENTS_LOCALSTORAGE = "oskari-announcements";
+
 
 const PublishedMap = () => {
 
@@ -65,11 +67,20 @@ const PublishedMap = () => {
 
             store.dispatch(setChannel(channel));
             channel.getSupportedFunctions(function (data) {
-                if (data.getAllTags) {
-                    channel.getAllTags(function (data) {
+                console.log(data);
+                if (data.getTags) {
+                    channel.getTags(function (data) {
                         store.dispatch(setAllTags(data));
                     });
                 }
+
+                if (data.getTagsWithLayers) {
+                    channel.getTagsWithLayers(function (data) {
+                        console.log(data);
+                        store.dispatch(setTagsWithLayers(data));
+                    });
+                }
+
                 if (data.getAnnouncements) {
                     channel.getAnnouncements(function (data) {
                         if (data.data && data.data.length > 0) {
