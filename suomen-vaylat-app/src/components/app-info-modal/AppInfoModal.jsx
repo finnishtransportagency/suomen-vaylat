@@ -96,11 +96,6 @@ export const AppInfoModal = () => {
                 <StyledContent>
                     {content}
                 </StyledContent>
-                <StyledFooter className="modal-footer">
-                    <StyledOkButton>
-                        <button onClick={() => closeModal()}>OK</button>
-                    </StyledOkButton>
-                </StyledFooter>
             </Modal>
         </div>
     );
