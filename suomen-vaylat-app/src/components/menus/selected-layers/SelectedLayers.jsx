@@ -135,9 +135,10 @@ export const SelectedLayers = ({ label, selectedLayers, suomenVaylatLayers }) =>
                             />
                         )
                     })}
-                    <StyledDeleteAllSelectedLayers>
+                    <StyledDeleteAllSelectedLayers
+                        onClick={() => handleRemoveAllSelectedLayers()}
+                    >
                         <FontAwesomeIcon
-                                onClick={() => handleRemoveAllSelectedLayers()}
                                 icon={faTrash}
                         />
                         <p>{strings.layerlist.layerlistLabels.removeAllSelectedLayers}</p>
