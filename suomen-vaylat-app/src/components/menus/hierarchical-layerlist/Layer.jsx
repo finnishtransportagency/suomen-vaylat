@@ -2,6 +2,7 @@ import { useContext, useEffect } from "react";
 import { ReactReduxContext, useSelector } from 'react-redux';
 import { setLegends, setAllLayers } from '../../../state/slices/rpcSlice';
 import styled from 'styled-components';
+import { debounce } from 'tlence';
 
 const StyledLayerContainer = styled.li`
     overflow: hidden;
@@ -27,6 +28,7 @@ const StyledLayerName = styled.p`
     };
 `;
 
+let debounceLegendsUpdate = null;
 const StyledCheckbox = styled.div`
     cursor: pointer;
     min-width: 20px;
