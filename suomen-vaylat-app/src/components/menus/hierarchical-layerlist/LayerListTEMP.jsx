@@ -52,13 +52,14 @@ const StyledFiltersContainer = styled.div`
 `;
 
 const StyledDeleteAllSelectedLayers = styled.div`
-    cursor: pointer;
+    cursor: not-allowed;
     width: 250px;
     height: 30px;
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: ${props => props.theme.colors.maincolor1};
+    background-color: rgba(0, 0, 0, 0.2);
+    //background-color: ${props => props.theme.colors.maincolor1};
     color: ${props => props.theme.colors.mainWhite};
     border-radius: 15px;
     margin: 10px auto 20px auto;
