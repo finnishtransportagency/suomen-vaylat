@@ -26,58 +26,144 @@ const fadeIn = keyframes`
 `;
 
 const StyledLayerGroups = styled.div`
-display: flex;
-flex-direction: column;
-justify-content: center;
-opacity: 0;
-padding-left: 10px;
-animation-delay: ${props => props.index * 0.025 + 's'};
-animation-timing-function: ease-in-out;
-animation-fill-mode: forwards;
-animation-duration: 0.5s;
-animation-name: ${fadeIn};
-&:last-child {
-    ${props => props.parentId === -1 ? '1px solid '+props.theme.colors.maincolor2 : "none"};
-}
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    opacity: 0;
+    animation-delay: ${props => props.index * 0.025 + 's'};
+    animation-timing-function: ease-in-out;
+    animation-fill-mode: forwards;
+    animation-duration: 0.5s;
+    animation-name: ${fadeIn};
+    margin: ${props => props.parentId === -1 && "10px 0px 10px 0px"};
+    border-radius: 2px;
+    background-color: ${props => props.theme.colors.mainWhite};
+    &:last-child {
+        ${props => props.parentId === -1 ? '1px solid '+props.theme.colors.maincolor2 : "none"};
+    };
+    margin-bottom: 10px;
+`;
+
+const StyledMasterGroupName = styled.p`
+    user-select: none;
+    transition: all 0.1s ease-in;
+    font-size: 14px;
+    font-weight: 600;
+    margin: 0;
+    padding-left: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 200px;
+    color: ${props => props.theme.colors.black};
+    @media ${ props => props.theme.device.mobileL} {
+        font-size: 13px;
+    };
+`;
+
+const StyledMasterGroupHeader = styled.div`
+    z-index: 1;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 40px;
+    padding-left: 5px;
+    transition: all 0.1s ease-in;
+    border-radius: 2px;
+    background-color: ${props => props.theme.colors.maincolor3};
+    &:hover {
+        background-color: ${props => props.theme.colors.maincolor2};
+    };
+    &:hover ${StyledMasterGroupName} {
+        color: ${props => props.theme.colors.mainWhite};
+    };
+`;
+
+const StyledLeftContent = styled.div`
+    display: flex;
+    align-items: center;
+`;
+
+const StyledRightContent = styled.div`
+    display: flex;
+    align-items: center;
+
+`;
+
+const StyledMasterGroupHeaderIcon = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 28px;
+    height: 28px;
+    background-color: ${props => props.theme.colors.maincolor1};
+    border-radius: 50%;
+    svg {
+        font-size: 16px;
+        color: ${props => props.theme.colors.mainWhite};
+    }
 `;
 
 const StyledGroupHeader = styled.div`
-cursor: pointer;
-display: flex;
-align-items: center;
-height: 40px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 30px;
+    background-color: rgba(0, 0, 0, 0.1);
 `;
 
 const StyledGroupName = styled.p`
-user-select: none;
-margin: 0;
-font-size: 13px;
-font-weight: 600;
-padding-left: 0px;
-color: ${props => props.theme.colors.mainWhite};
-max-width: 260px;
-@media ${ props => props.theme.device.mobileL} {
-    font-size: 12px;
-};
+    user-select: none;
+    margin: 0;
+    font-size: 13px;
+    padding-left: 0px;
+    color: ${props => props.theme.colors.black};
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 260px;
+    @media ${ props => props.theme.device.mobileL} {
+        font-size: 12px;
+    };
 `;
 
-const StyledGroupSelectButton = styled.div`
-cursor: pointer;
-align-items: center;
-margin-right: 5px;
-svg {
-    transition: all 0.5s ease-out;
-    color: ${props => props.theme.colors.mainWhite};
-}
+const StyledSelectButton = styled.button`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    border: none;
+    background-color: transparent;
+    margin-right: 10px;
+    svg {
+        font-size: 23px;
+        transition: all 0.5s ease-out;
+        color: ${props => props.theme.colors.black};
+    };
 `;
 
 const StyledLayerGroupContainer = styled.div`
-height: ${props => props.isOpen ? "auto" : "0px"};
-overflow: hidden;
+    height: ${props => props.isOpen ? "auto" : "0px"};
+    overflow: hidden;
 `;
 
 const StyledLayerGroup = styled.ul`
-list-style-type: none;
+    padding-inline-start: ${props => props.parentId === -1 ? "10px" : "15px"};
+    list-style-type: none;
+    margin: 0;
+`;
+
+
+const StyledGroupSelectButton = styled.div`
+    cursor: pointer;
+    align-items: center;
+    margin-right: 5px;
+    svg {
+        transition: all 0.5s ease-out;
+        color: ${props => props.theme.colors.mainWhite};
+    }
 `;
 
 export const LayerList = ({ groups, layers, recurse = false}) => {
@@ -178,12 +264,18 @@ export const LayerList = ({ groups, layers, recurse = false}) => {
     }
 
     return (
-                <StyledLayerGroups index={index}>
-                    <StyledGroupHeader
-                        key={"smgh_" + index + '_'}
-                        onClick={() => setIsOpen(!isOpen)}
-                    >
-                        <StyledGroupSelectButton
+            <StyledLayerGroups index={index}>
+                <StyledMasterGroupHeader
+                    key={"smgh_" + index + '_'}
+                    onClick={() => setIsOpen(!isOpen)}
+                >
+                    <StyledMasterGroupName>{tag.charAt(0).toUpperCase() + tag.slice(1)}</StyledMasterGroupName>
+                    <StyledRightContent>
+                        <Checkbox
+                                isChecked={checked}
+                                handleClick={selectTag}
+                        />
+                        <StyledSelectButton
                             isOpen={isOpen}
                             onClick={() => setIsOpen(!isOpen)}
                         >
@@ -193,23 +285,19 @@ export const LayerList = ({ groups, layers, recurse = false}) => {
                                     transform: isOpen && "rotate(180deg)"
                                 }}
                             />
-                        </StyledGroupSelectButton>
-                        <Checkbox
-                            isChecked={checked}
-                            handleClick={selectTag}
-                            size={16}
-                        />
-                        <StyledGroupName>{tag}</StyledGroupName>
-                    </StyledGroupHeader>
-                    <StyledLayerGroupContainer
-                        key={"slg_" + index + "_"}
-                        isOpen={isOpen}
-                    >
-                        <StyledLayerGroup>
-                            <Layers layers={filteredLayers} isOpen={isOpen}/>
-                        </StyledLayerGroup>
-                    </StyledLayerGroupContainer>
-                </StyledLayerGroups>
+                        </StyledSelectButton>
+                    </StyledRightContent>
+                </StyledMasterGroupHeader>
+
+                <StyledLayerGroupContainer
+                    key={"slg_" + index + "_"}
+                    isOpen={isOpen}
+                >
+                    <StyledLayerGroup>
+                        <Layers layers={filteredLayers} isOpen={isOpen}/>
+                    </StyledLayerGroup>
+                </StyledLayerGroupContainer>
+            </StyledLayerGroups>
     );
   };
 

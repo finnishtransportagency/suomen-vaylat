@@ -3,6 +3,8 @@ import { ReactReduxContext, useSelector } from 'react-redux';
 import { setLegends, setAllLayers } from '../../../state/slices/rpcSlice';
 import styled from 'styled-components';
 import { debounce } from 'tlence';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCheck } from '@fortawesome/free-solid-svg-icons';
 
 const StyledLayerContainer = styled.li`
     overflow: hidden;
@@ -41,6 +43,10 @@ const StyledCheckbox = styled.div`
     background-color: ${props => props.theme.colors.mainWhite};
     border-radius: 30%;
     margin-right: 36px;
+    svg {
+        color: #0064af;
+        font-size: 12px;
+    }
 `;
 
 export const Layer = ({ layer, isOpen, theme }) => {
@@ -93,12 +99,6 @@ export const Layer = ({ layer, isOpen, theme }) => {
                 key={'layer' + layer.id + '_' + theme}
                 isOpen={isOpen}
             >
-                {/* <StyledLayerSelectButton
-                    type="checkbox"
-                    checked={layer.visible}
-                    onChange={() => handleLayerVisibility(channel, layer)}
-                /> */}
-
                 <StyledlayerHeader>
                     <StyledLayerName>
                         {layer.name}
@@ -106,8 +106,14 @@ export const Layer = ({ layer, isOpen, theme }) => {
                 </StyledlayerHeader>
                 <StyledCheckbox
                     isChecked={layer.visible}
-                    handleClick={() => handleLayerVisibility(channel, layer)}
-                />
+                    onClick={() => handleLayerVisibility(channel, layer)}
+                >
+                {
+                    layer.visible && <FontAwesomeIcon 
+                        icon={faCheck}
+                    />
+                    }
+                </StyledCheckbox>
             </StyledLayerContainer>
     );
   };
