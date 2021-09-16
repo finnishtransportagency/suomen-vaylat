@@ -13,13 +13,18 @@ const initialState = {
   currentState: {},
   zoomLevelsLayers: {},
   tagLayers: [],
+  tags: [],
   zoomRange: {},
   currentZoomLevel: 0,
   selectedLayers: [],
   announcements: [],
   activeAnnouncements: [],
   allThemesWithLayers: [],
-  filter: null
+  filter: null,
+  suomenVaylatLayers: [],
+  layerMetadata: { data: null, layer: null, uuid: null},
+  legends: [],
+  tagsWithLayers: {}
 };
 
 export const rpcSlice = createSlice({
@@ -39,14 +44,20 @@ export const rpcSlice = createSlice({
         state.filter = action.payload;
     },
     setAllLayers: (state, action) => {
-        const selectedLayers = action.payload.filter(layer => layer.visible == true)
-        if (selectedLayers.length > 0) {
+        const selectedLayers = action.payload.filter(layer => layer.visible === true)
+        //if (selectedLayers.length > 0) {
             state.selectedLayers = selectedLayers;
-        }
+        //}
         state.allLayers = action.payload;
     },
     setAllTags: (state, action) => {
         state.allTags = action.payload;
+    },
+    setTags: (state, action) => {
+        state.tags = action.payload;
+    },
+    setTagsWithLayers: (state, action) => {
+        state.tagsWithLayers = action.payload;
     },
     setAllThemesWithLayers: (state, action) => {
         state.allThemesWithLayers = action.payload;
@@ -155,6 +166,41 @@ export const rpcSlice = createSlice({
     },
     mapMoveRequest: (state, action) => {
         state.channel !== null && state.channel.postRequest('MapMoveRequest', [action.payload.x, action.payload.y, action.payload.zoom || 10]);
+    },
+    setSuomenVaylatLayers: (state, action) => {
+        state.suomenVaylatLayers = action.payload;
+    },
+    getLayerMetadata: (state, action) => {
+        state.channel && state.channel.getLayerMetadata([action.payload.uuid], (data) => {
+            action.payload.handler(data, action.payload.layer, action.payload.uuid)
+        }, (err) => {
+            if (typeof action.payload.errorHandler === 'function') {
+                action.payload.errorHandler(err);
+            } else {
+                LOG.warn('Get layer metadata failed');
+            }
+        });
+    },
+    clearLayerMetadata: (state) => {
+        state.layerMetadata = {
+            data: null,
+            layer: null
+        };
+    },
+    setLayerMetadata: (state, action) => {
+        state.layerMetadata = {
+            layer: action.payload.layer,
+            data: action.payload.data,
+            uuid: action.payload.uuid
+        };
+    },
+    getLegends: (state) => {
+        state.channel && state.channel.getLegends((data) => {
+            state.legends = data;
+        });
+    },
+    setLegends: (state, action) => {
+        state.legends = action.payload;
     }
   }
 });
@@ -165,6 +211,7 @@ export const {
     setAllGroups,
     setAllLayers,
     setAllTags,
+    setTags,
     setCurrentState,
     setFeatures,
     setTagLayers,
@@ -187,7 +234,14 @@ export const {
     setSelectedLayers,
     setAllThemesWithLayers,
     setActiveAnnouncements,
-    setFilter
+    setFilter,
+    setSuomenVaylatLayers,
+    getLayerMetadata,
+    clearLayerMetadata,
+    setLayerMetadata,
+    getLegends,
+    setLegends,
+    setTagsWithLayers
 } = rpcSlice.actions;
 
 export default rpcSlice.reducer;

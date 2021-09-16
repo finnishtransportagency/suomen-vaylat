@@ -1,60 +1,131 @@
 import styled from 'styled-components';
 import { useAppSelector } from '../../../state/hooks';
-import SelectedLayers from '../selected-layers/SelectedLayers';
 import LayerList from './LayerList';
 import ThemeLayerList from './ThemeLayerList';
-import Tabs from "./Tabs"; 
+import Tabs from "./Tabs";
+import strings from '../../../translations';
+import Filter from './Filter';
+import SelectedLayers from '../../menus/selected-layers/SelectedLayers';
+import LayerSearch from './LayerSearch';
+import Dropdown from './Dropdown';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
 //VÄLIAIKAINEN PALIKKA VÄLITTÄMÄÄN TESTIDATAA HIERARKISELLE TASOVALIKOLLE
 
+
+const StyledLayerListContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+`;
+
 const StyledLayerList = styled.div`
-  width: 330px;
-  position: absolute;
-  left: 0px;
-  z-index: 10;
-  height: calc(90%);
-  overflow-y: auto;
+  justify-content: flex-start;
+  background-color:  ${props => props.theme.colors.mainWhite};
   &::-webkit-scrollbar {
         display: none;
   };
-  padding: 20px;
 `;
 
-const layerlistLabels = {
-  "allLayers" : {
-    "fi": "Kaikki tasot",
-    "en": "All layers",
-    "sv": "All layers"
-  },
-  "themeLayers" : {
-    "fi": "Teema tasot",
-    "en": "Theme layers",
-    "sv": "Theme layers"
-  },
-  "selectedLayers" : {
-    "fi": "Valitut tasot",
-    "en": "Selected layers",
-    "sv": "Selected layers"
-  }
-}
+const StyledFilterList = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0px 10px 15px 10px;
+    background-color: ${props => props.theme.colors.mainWhite};
+    color: ${props => props.theme.colors.maincolor1};
+`;
 
+const StyledListSubtitle = styled.div`
+    display: flex;
+    justify-content: flex-start;
+    color: ${props => props.theme.colors.maincolor1};
+    padding: 10px 0px 10px 5px;
+    font-size: 15px;
+`;
 
-export const LayerListTEMP = () => {
+const StyledFiltersContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+`;
 
-  const allGroups = useAppSelector((state) => state.rpc.allGroups);
-  const allLayers = useAppSelector((state) => state.rpc.allLayers);
-  const allThemes = useAppSelector((state) => state.rpc.allThemesWithLayers);
-  const language = useAppSelector((state) => state.language);
-  const lang = language.current;
+const StyledDeleteAllSelectedLayers = styled.div`
+    cursor: not-allowed;
+    width: 250px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.2);
+    //background-color: ${props => props.theme.colors.maincolor1};
+    color: ${props => props.theme.colors.mainWhite};
+    border-radius: 15px;
+    margin: 10px auto 20px auto;
+    svg {
+        font-size: 16px;
+    };
+    p {
+        padding-left: 10px;
+        margin: 0;
+        font-size: 15px;
+    }
+`;
+
+const LayerListTEMP = ({groups, layers, themes, tags, selectedLayers, suomenVaylatLayers}) => {
+  useAppSelector((state) => state.language);
 
     return (
-        <StyledLayerList>
-          <Tabs>
-            <LayerList label={layerlistLabels.allLayers[lang]} groups={allGroups} layers={allLayers} recurse={false} />
-            <ThemeLayerList label={layerlistLabels.themeLayers[lang]} allLayers={allLayers} allThemes={allThemes}/>
-            <SelectedLayers label={layerlistLabels.selectedLayers[lang]} layers={allLayers} />
-          </Tabs> 
-        </StyledLayerList>
+      <StyledLayerListContainer>
+          <SelectedLayers
+            label={strings.layerlist.layerlistLabels.selectedLayers.toUpperCase()}
+            layers={layers}
+            selectedLayers={selectedLayers}
+            suomenVaylatLayers={suomenVaylatLayers}
+          />
+          <Dropdown title={strings.layerlist.layerlistLabels.searchForLayers.toUpperCase()}>
+            <StyledLayerList>
+              <LayerSearch />
+              <Tabs allTags={tags}>
+                <ThemeLayerList
+                  label={strings.layerlist.layerlistLabels.themeLayers}
+                  allLayers={layers}
+                  allThemes={themes}
+                />
+                <div label={strings.layerlist.layerlistLabels.allLayers}>
+                  <StyledFilterList>
+                    <StyledListSubtitle>
+                      {strings.layerlist.layerlistLabels.filterByType}
+                    </StyledListSubtitle>
+                    <StyledFiltersContainer>
+                      {tags.map((tag, index) => {
+                        return(
+                            <Filter key={index} filter={tag} />
+                        );
+                      })}
+                    </StyledFiltersContainer>
+                      <StyledDeleteAllSelectedLayers>
+                        <FontAwesomeIcon
+                                icon={faTrash}
+                        />
+                        <p>{strings.layerlist.layerlistLabels.clearFilters}</p>
+                    </StyledDeleteAllSelectedLayers>
+                  </StyledFilterList>
+                  <StyledListSubtitle>
+                      {strings.layerlist.layerlistLabels.searchResults}
+                    </StyledListSubtitle>
+                  <LayerList
+                    label={strings.layerlist.layerlistLabels.allLayers}
+                    groups={groups}
+                    layers={layers}
+                    recurse={false}
+                  />
+                </div>
+              </Tabs>
+            </StyledLayerList>
+          </Dropdown>
+      </StyledLayerListContainer>
       );
 };
 

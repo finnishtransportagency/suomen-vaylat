@@ -3,8 +3,10 @@ import Content from './Content';
 import Header from './Header';
 
 const StyledLayout = styled.div`
-    background-color: #0064af;
-    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: ${(props: { theme: { colors: { maincolor1: any; }; }; }) => props.theme.colors.maincolor1};
+    height: var(--app-height);
 `;
 
 export const Layout = () => {

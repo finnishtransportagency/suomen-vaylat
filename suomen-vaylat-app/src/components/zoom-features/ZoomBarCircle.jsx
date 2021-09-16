@@ -14,12 +14,12 @@ const StyledZoomLevelCircle = styled.div`
     pointer-events: auto;
     transition: all 0.5s ease-in-out;
 
-    background-color: ${props => props.index === props.zoomLevel ? "#ffc300" : "#fff"};
+    background-color: ${props => props.index === props.zoomLevel ? "#ffc300" : props.theme.colors.mainWhite};
     transform: ${props => props.index === props.zoomLevel && "scale(1.2)"};
     width: ${props => props.isExpanded ? "23px" : "0px"};
     height: ${props => props.isExpanded ? "23px" : "0px"};
     opacity: ${props => props.isExpanded ? "1" : "0"};
-    border-color: #0064af;
+    border-color: ${props => props.theme.colors.maincolor1};
     border-style: solid;
     border-width: ${props => props.isExpanded ? "3px" : "1px"};
     border-radius: 50%;

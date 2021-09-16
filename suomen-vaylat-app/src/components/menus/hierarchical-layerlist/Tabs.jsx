@@ -1,19 +1,44 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import Tab from './Tab';
+import Filter from './Filter';
 import styled from 'styled-components';
+import strings from '../../../translations';
 
-  
+const StyledTabs = styled.div`
+  margin: 10px;
+`;
+
+const StyledTopContent = styled.div`
+  z-index: 1;
+  padding: 10px;
+`;
+
 const StyledTabList = styled.div`
-  padding: 0.25rem;
-  background-color: #186ef0;
-  border-radius: 30px;
+  transition: all 0.1s ease-out;
   display: flex;
-  flex-flow: row wrap;
   justify-content: space-around;
   align-items: center;
-    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+  border-radius: 15px;
+  box-sizing: border-box;
+  background-color: #e4e4e4;
+  &:hover {
+    background-color: ${props => props.theme.colors.maincolor3};
+  }
 `;
+
+const StyledTabContent = styled.div`
+
+`;
+
+const StyledListSubtitle = styled.div`
+    display: flex;
+    justify-content: flex-start;
+    color: ${props => props.theme.colors.maincolor1};
+    padding: 10px 0px 10px 5px;
+    font-size: 15px;
+`;
+
 
 class Tabs extends Component {
   static propTypes = {
@@ -44,22 +69,27 @@ class Tabs extends Component {
     } = this;
 
     return (
-      <div className="tabs">
-        <StyledTabList>
-          {children.map((child) => {
-            const { label } = child.props;
+      <StyledTabs>
+        <StyledTopContent>
+          <StyledListSubtitle>
+                {strings.layerlist.layerlistLabels.show}
+          </StyledListSubtitle>
+          <StyledTabList>
+            {children.map((child) => {
+              const { label } = child.props;
 
-            return (
-              <Tab
-                activeTab={activeTab}
-                key={label}
-                label={label}
-                onClick={onClickTabItem}
-              />
-            );
-          })}
-        </StyledTabList>
-        <div className="tab-content">
+              return (
+                <Tab
+                  activeTab={activeTab}
+                  key={label}
+                  label={label}
+                  onClick={onClickTabItem}
+                />
+              );
+            })}
+          </StyledTabList>
+        </StyledTopContent>
+        <StyledTabContent>
           {children.map((child) => {
             if (child.props.label !== activeTab) {
                 return undefined;
@@ -67,8 +97,8 @@ class Tabs extends Component {
                 return child;
             }
           })}
-        </div>
-      </div>
+        </StyledTabContent>
+      </StyledTabs>
     );
   }
 }

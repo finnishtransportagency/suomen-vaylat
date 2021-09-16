@@ -14,10 +14,11 @@ Before production build (npm create build) create file .env.production.local und
 
 ### Variables
 
-| Key                            | Value                                                                                                             |
-|--------------------------------|-------------------------------------------------------------------------------------------------------------------|
+| Key                            | Value                                                                                                                             |
+|--------------------------------|-----------------------------------------------------------------------------------------------------------------------------------|
 | REACT_APP_PUBLISHED_MAP_URL    | Published map url, example: `https://paikkatietodev.testivaylapilvi.fi/sv-kartta/?uuid=8b65cd2c-9f8c-474d-93db-56788131d3e2`      |
-| REACT_APP_PUBLISHED_MAP_DOMAIN | Published map domain, example: `https://paikkatietodev.testivaylapilvi.fi`                                              |
+| REACT_APP_PUBLISHED_MAP_DOMAIN | Published map domain, example: `https://paikkatietodev.testivaylapilvi.fi`                                                        |
+| REACT_APP_PROXY_URL            | Proxy url, example: `https://paikkatietodev.testivaylapilvi.fi/sv-kartta/`                                                        |
 
 
 ## Available Scripts
