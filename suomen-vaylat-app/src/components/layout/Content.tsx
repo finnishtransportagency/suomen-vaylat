@@ -12,6 +12,7 @@ import { faLayerGroup, faSearch, faTimes, faImages } from '@fortawesome/free-sol
 
 import ZoomMenu from '../zoom-features/ZoomMenu';
 import Search from '../search/Search';
+import AppInfoModal from '../app-info-modal/AppInfoModal';
 import { ToastContainer } from 'react-toastify';
 import { Legend } from "../legend/Legend";
 
@@ -161,7 +162,7 @@ const Content = () => {
                             icon={faTimes}
                         />
                     </StyledSideMenuCloseButton>
-                </StyledSideMenuHeader>   
+                </StyledSideMenuHeader>
                 <LayerListTEMP
                     groups={allGroups}
                     layers={allLayers}
@@ -175,6 +176,7 @@ const Content = () => {
             <PublishedMap />
             {isSearchOpen && <Search />}
             {isLegendOpen && <Legend selectedLayers={selectedLayers}></Legend>}
+            <AppInfoModal />
             <ToastContainer></ToastContainer>
             <StyledMenuBar>
                     <StyledMenuBarButton
