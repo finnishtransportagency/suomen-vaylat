@@ -1,14 +1,14 @@
 import { useContext } from "react";
 import { useAppSelector } from '../../state/hooks';
 import { ReactReduxContext } from 'react-redux';
-import { setIsSideMenuOpen, setIsSearchOpen, setIsLegendOpen} from '../../state/slices/uiSlice';
+import { setIsFullScreen, setIsSideMenuOpen, setIsSearchOpen, setIsLegendOpen} from '../../state/slices/uiSlice';
 import styled from 'styled-components';
 import strings from '../../translations';
 import PublishedMap from '../published-map/PublishedMap.jsx';
 import LayerListTEMP from '../menus/hierarchical-layerlist/LayerListTEMP';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faLayerGroup, faSearch, faTimes, faImages } from '@fortawesome/free-solid-svg-icons';
+import { faLayerGroup, faSearch, faTimes, faImages, faExpand, faCompress } from '@fortawesome/free-solid-svg-icons';
 
 import ZoomMenu from '../zoom-features/ZoomMenu';
 import Search from '../search/Search';
@@ -148,6 +148,7 @@ const StyledLayerCount = styled.div`
 
 const Content = () => {
     const { store } = useContext(ReactReduxContext);
+    const isFullScreen = useAppSelector((state) => state.ui.isFullScreen);
     const isSideMenuOpen = useAppSelector((state) => state.ui.isSideMenuOpen);
     const isSearchOpen = useAppSelector((state) => state.ui.isSearchOpen);
     const isLegendOpen = useAppSelector((state) => state.ui.isLegendOpen);
@@ -157,6 +158,19 @@ const Content = () => {
     const allThemes = useAppSelector((state) => state.rpc.allThemesWithLayers);
     const allTags = useAppSelector((state) => state.rpc.allTags);
     const suomenVaylatLayers = useAppSelector((state) => state.rpc.suomenVaylatLayers);
+
+    const handleFullScreen = () => {
+        if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen();
+            store.dispatch(setIsFullScreen(true));
+        } else {
+          if (document.exitFullscreen) {
+                document.exitFullscreen();
+                store.dispatch(setIsFullScreen(false));
+          }
+        }
+    };
+
 
     return (
         <StyledContent>
@@ -190,29 +204,35 @@ const Content = () => {
             <AppInfoModal />
             <ToastContainer></ToastContainer>
             <StyledMenuBar>
-                    <StyledMenuBarButton
-                        onClick={() => store.dispatch(setIsSideMenuOpen(!isSideMenuOpen))}
-                    >
-                        <StyledLayerCount>
-                            {selectedLayers.length}
-                        </StyledLayerCount>
-                        <FontAwesomeIcon
-                            icon={faLayerGroup}
-                        />
-                    </StyledMenuBarButton>
-                    <StyledMenuBarButton
-                        onClick={() => store.dispatch(setIsSearchOpen(!isSearchOpen))}
-                    >
-                        <FontAwesomeIcon
-                            icon={faSearch}
-                        />
-                    </StyledMenuBarButton>
-                    <StyledMenuBarButton
-                        onClick={() => store.dispatch(setIsLegendOpen(!isLegendOpen))}>
-                        <FontAwesomeIcon
-                            icon={faImages}
-                        />
-                    </StyledMenuBarButton>
+                <StyledMenuBarButton
+                    onClick={() => store.dispatch(setIsSideMenuOpen(!isSideMenuOpen))}
+                >
+                    <StyledLayerCount>
+                        {selectedLayers.length}
+                    </StyledLayerCount>
+                    <FontAwesomeIcon
+                        icon={faLayerGroup}
+                    />
+                </StyledMenuBarButton>
+                <StyledMenuBarButton
+                    onClick={() => store.dispatch(setIsSearchOpen(!isSearchOpen))}
+                >
+                    <FontAwesomeIcon
+                        icon={faSearch}
+                    />
+                </StyledMenuBarButton>
+                <StyledMenuBarButton
+                    onClick={() => store.dispatch(setIsLegendOpen(!isLegendOpen))}>
+                    <FontAwesomeIcon
+                        icon={faImages}
+                    />
+                </StyledMenuBarButton>
+                <StyledMenuBarButton
+                    onClick={() => handleFullScreen()}>
+                    <FontAwesomeIcon
+                        icon={isFullScreen ? faCompress : faExpand}
+                    />
+                </StyledMenuBarButton>
             </StyledMenuBar>
         </StyledContent>
     );
