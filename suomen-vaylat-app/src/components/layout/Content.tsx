@@ -91,10 +91,21 @@ const StyledSideMenuCloseButton = styled.div`
 const StyledMenuBar = styled.div`
     transition: all 0.5s ease-in-out;
     position: absolute;
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
     top: 10px;
     left: 10px;
-    width: 60px;
+    width: 40px;
     height: 100%;
+    @media ${(props: { theme: { device: { mobileL: any; }; }; }) => props.theme.device.mobileL} {
+        top: calc(100% - 60px);
+        width: 100%;
+        height: 40px;
+        flex-direction: row;
+        justify-content: space-around;
+        align-items: center;
+    };
 `;
 
 const StyledMenuBarButton = styled.div`
