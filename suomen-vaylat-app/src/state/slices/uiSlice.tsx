@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
+  isFullScreen: false,
   isSideMenuOpen: false,
   isSearchOpen: false,
   isLegendOpen: false,
@@ -11,6 +12,9 @@ export const uiSlice = createSlice({
   name: 'ui',
   initialState,
   reducers: {
+    setIsFullScreen: (state, action) => {
+      state.isFullScreen = action.payload;
+    },
     setIsSideMenuOpen: (state, action) => {
       state.isSideMenuOpen = action.payload;
     },
@@ -26,6 +30,6 @@ export const uiSlice = createSlice({
   }
 });
 
-export const { setIsSideMenuOpen, setIsSearchOpen, setIsLegendOpen, setIsInfoOpen } = uiSlice.actions;
+export const { setIsFullScreen, setIsSideMenuOpen, setIsSearchOpen, setIsLegendOpen, setIsInfoOpen } = uiSlice.actions;
 
 export default uiSlice.reducer;
