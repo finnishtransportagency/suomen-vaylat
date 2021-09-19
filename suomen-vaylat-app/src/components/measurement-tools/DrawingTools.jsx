@@ -14,7 +14,7 @@ import {
 const StyledDrawingTool = styled.div`
     z-index: 9999;
     display: flex;
-    background-color: ${props => props.color};
+    background-color: ${(props => props.active? props.theme.colors.maincolorselected1 : props.theme.colors.maincolor1)};
     align-items: center;
     justify-content: center;
     width: 40px;
@@ -24,6 +24,7 @@ const StyledDrawingTool = styled.div`
         font-size: 20px;
         color: #fff;
     }
+    box-shadow: rgb(0 0 0 / 16%) 0px 3px 6px, rgb(0 0 0 / 23%) 0px 3px 6px;
 `;
 
 const StyledErase = styled.div`
@@ -42,6 +43,9 @@ const StyledErase = styled.div`
 `;
 
 const StyledDrawingToolContainer = styled.div`
+    transition: all .3s ease-in-out;
+    opacity: ${props => props.isDrawingToolsOpen ? "1" : "0 !important"};
+    margin: .5rem;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -49,15 +53,16 @@ const StyledDrawingToolContainer = styled.div`
 `;
 
 const StyledTools = styled.div`
+    transition: all .2s ease-in-out;
     display: flex;
     justify-content: space-between;
     position: absolute;
-    bottom: 1.5rem;
+    bottom: ${props => props.isDrawingToolsOpen ? "0" : "-5% !important"};
+    left: 40%;
     margin: 1rem;
     align-items: center;
     flex-direction: row;
     background-color: ${props => props.color};
-    width: 80%;
 `;
 
 const drawinToolsData = [
@@ -103,7 +108,7 @@ const drawinToolsData = [
     }
 ];
 
-export const DrawingTools = () => {
+export const DrawingTools = ({isDrawingToolsOpen}) => {
     const [activeTool, setActiveTool] = useState("");
     const channel = useSelector(state => state.rpc.channel)
     const startStopTool = (tool) => {
@@ -117,18 +122,18 @@ export const DrawingTools = () => {
             setActiveTool("");
         }
     }
-
     const eraseDrawing = (tool) => {
         var clearData = [tool.name, true];
         channel.postRequest('DrawTools.StopDrawingRequest', clearData);
+        setActiveTool("");
     }
     return (
-        <StyledTools>
-            {drawinToolsData.map((tool) => {
+        <StyledTools isDrawingToolsOpen={isDrawingToolsOpen}>
+            {drawinToolsData.map((tool, index) => {
                 return (
-                    <StyledDrawingToolContainer>
+                    <StyledDrawingToolContainer key={index} isDrawingToolsOpen={isDrawingToolsOpen} >
                         <StyledDrawingTool
-                            color={tool.style.color}
+                            active={tool.name == activeTool ? true : false}
                             onClick={() => startStopTool(tool)}
                         >
                             <FontAwesomeIcon

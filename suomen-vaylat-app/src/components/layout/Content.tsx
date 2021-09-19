@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { useAppSelector } from '../../state/hooks';
 import { ReactReduxContext } from 'react-redux';
-import { setIsSideMenuOpen, setIsSearchOpen, setIsLegendOpen} from '../../state/slices/uiSlice';
+import { setIsSideMenuOpen, setIsSearchOpen, setIsLegendOpen, setIsDrawingToolsOpen} from '../../state/slices/uiSlice';
 import styled from 'styled-components';
 import strings from '../../translations';
 import PublishedMap from '../published-map/PublishedMap.jsx';
@@ -9,7 +9,7 @@ import LayerListTEMP from '../menus/hierarchical-layerlist/LayerListTEMP';
 import DrawingTools from '../measurement-tools/DrawingTools';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faLayerGroup, faSearch, faTimes, faImages } from '@fortawesome/free-solid-svg-icons';
+import { faLayerGroup, faSearch, faTimes, faImages, faPencilRuler } from '@fortawesome/free-solid-svg-icons';
 
 import ZoomMenu from '../zoom-features/ZoomMenu';
 import Search from '../search/Search';
@@ -141,6 +141,7 @@ const Content = () => {
     const isSideMenuOpen = useAppSelector((state) => state.ui.isSideMenuOpen);
     const isSearchOpen = useAppSelector((state) => state.ui.isSearchOpen);
     const isLegendOpen = useAppSelector((state) => state.ui.isLegendOpen);
+    const isDrawingToolsOpen = useAppSelector((state) => state.ui.isDrawingToolsOpen);
     const allGroups = useAppSelector((state) => state.rpc.allGroups);
     const allLayers = useAppSelector((state) => state.rpc.allLayers);
     const selectedLayers = useAppSelector((state) => state.rpc.selectedLayers);
@@ -177,6 +178,7 @@ const Content = () => {
             <PublishedMap />
             {isSearchOpen && <Search />}
             {isLegendOpen && <Legend selectedLayers={selectedLayers}></Legend>}
+            <DrawingTools isDrawingToolsOpen={isDrawingToolsOpen} />
             <AppInfoModal />
             <ToastContainer></ToastContainer>
             <StyledMenuBar>
@@ -201,6 +203,12 @@ const Content = () => {
                         onClick={() => store.dispatch(setIsLegendOpen(!isLegendOpen))}>
                         <FontAwesomeIcon
                             icon={faImages}
+                        />
+                    </StyledMenuBarButton>
+                    <StyledMenuBarButton
+                        onClick={() => store.dispatch(setIsDrawingToolsOpen(!isDrawingToolsOpen))}>
+                        <FontAwesomeIcon
+                            icon={faPencilRuler}
                         />
                     </StyledMenuBarButton>
             </StyledMenuBar>
