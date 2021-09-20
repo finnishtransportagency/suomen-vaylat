@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { useAppSelector } from '../../state/hooks';
 import { ReactReduxContext } from 'react-redux';
-import { setIsSideMenuOpen, setIsSearchOpen, setIsLegendOpen, setIsDrawingToolsOpen} from '../../state/slices/uiSlice';
+import { setIsSideMenuOpen, setIsSearchOpen, setIsLegendOpen, setIsDrawingToolsOpen, setIsFullScreen} from '../../state/slices/uiSlice';
 import styled from 'styled-components';
 import strings from '../../translations';
 import PublishedMap from '../published-map/PublishedMap.jsx';
@@ -9,7 +9,7 @@ import LayerListTEMP from '../menus/hierarchical-layerlist/LayerListTEMP';
 import DrawingTools from '../measurement-tools/DrawingTools';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faLayerGroup, faSearch, faTimes, faImages, faPencilRuler } from '@fortawesome/free-solid-svg-icons';
+import { faLayerGroup, faSearch, faTimes, faImages, faPencilRuler, faExpand, faCompress } from '@fortawesome/free-solid-svg-icons';
 
 import ZoomMenu from '../zoom-features/ZoomMenu';
 import Search from '../search/Search';
@@ -92,10 +92,21 @@ const StyledSideMenuCloseButton = styled.div`
 const StyledMenuBar = styled.div`
     transition: all 0.5s ease-in-out;
     position: absolute;
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
     top: 10px;
     left: 10px;
-    width: 60px;
+    width: 40px;
     height: 100%;
+    @media ${(props: { theme: { device: { mobileL: any; }; }; }) => props.theme.device.mobileL} {
+        top: calc(100% - 60px);
+        width: 100%;
+        height: 40px;
+        flex-direction: row;
+        justify-content: space-around;
+        align-items: center;
+    };
 `;
 
 const StyledMenuBarButton = styled.div`
@@ -138,6 +149,7 @@ const StyledLayerCount = styled.div`
 
 const Content = () => {
     const { store } = useContext(ReactReduxContext);
+    const isFullScreen = useAppSelector((state) => state.ui.isFullScreen);
     const isSideMenuOpen = useAppSelector((state) => state.ui.isSideMenuOpen);
     const isSearchOpen = useAppSelector((state) => state.ui.isSearchOpen);
     const isLegendOpen = useAppSelector((state) => state.ui.isLegendOpen);
@@ -148,6 +160,19 @@ const Content = () => {
     const allThemes = useAppSelector((state) => state.rpc.allThemesWithLayers);
     const allTags = useAppSelector((state) => state.rpc.allTags);
     const suomenVaylatLayers = useAppSelector((state) => state.rpc.suomenVaylatLayers);
+
+    const handleFullScreen = () => {
+        if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen();
+            store.dispatch(setIsFullScreen(true));
+        } else {
+          if (document.exitFullscreen) {
+                document.exitFullscreen();
+                store.dispatch(setIsFullScreen(false));
+          }
+        }
+    };
+
 
     return (
         <StyledContent>
@@ -209,6 +234,12 @@ const Content = () => {
                         onClick={() => store.dispatch(setIsDrawingToolsOpen(!isDrawingToolsOpen))}>
                         <FontAwesomeIcon
                             icon={faPencilRuler}
+                        />
+                    </StyledMenuBarButton>
+                    <StyledMenuBarButton
+                        onClick={() => handleFullScreen()}>
+                        <FontAwesomeIcon
+                            icon={isFullScreen ? faCompress : faExpand}
                         />
                     </StyledMenuBarButton>
             </StyledMenuBar>
