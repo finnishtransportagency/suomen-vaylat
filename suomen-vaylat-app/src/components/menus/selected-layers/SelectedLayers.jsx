@@ -1,8 +1,10 @@
-import { useState, useContext } from "react";
+import React, { useState, useContext } from "react";
 import styled from 'styled-components';
-import { setAllLayers } from '../../../state/slices/rpcSlice';
+import { setAllLayers, setSelectedLayersOrder} from '../../../state/slices/rpcSlice';
 import strings from '../../../translations';
 import { ReactReduxContext, useSelector } from 'react-redux';
+import {SortableContainer, SortableElement} from 'react-sortable-hoc';
+import {arrayMoveImmutable} from 'array-move';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleUp, faTrash } from '@fortawesome/free-solid-svg-icons';
 
@@ -90,10 +92,40 @@ const StyledDeleteAllSelectedLayers = styled.div`
     }
 `;
 
+const SortableItem = SortableElement(({value}) =>
+    <SelectedLayer
+        key={value.id + 'selected'}
+        layer={value}
+        uuid={value.suomenVaylatLayers && value.suomenVaylatLayers.length > 0 ? value.suomenVaylatLayers.filter(l => l.id === value.id)[0].uuid : ''}
+    />);
+
+
+const SortableList = SortableContainer(({items}) => {
+    return (
+        <div>
+            {items.map((value, index) => (
+                <SortableItem
+                    key={`item-${value.id}`}
+                    index={index}
+                    value={value}
+                    suomenVaylatLayers={value.suomenVaylatLayers}/>
+            ))}
+        </div>
+    );
+});
+
 export const SelectedLayers = ({ label, selectedLayers, suomenVaylatLayers }) => {
     const { store } = useContext(ReactReduxContext);
     const channel = useSelector(state => state.rpc.channel);
     const [isOpen, setIsOpen] = useState(false);
+
+    const onSortEnd = (oldIndex) => {
+        store.dispatch(setSelectedLayersOrder(arrayMoveImmutable(
+            selectedLayers,
+            oldIndex.oldIndex,
+            oldIndex.newIndex)
+        ))
+    };
 
     const handleRemoveAllSelectedLayers = () => {
         selectedLayers.forEach(layer => {
@@ -126,15 +158,11 @@ export const SelectedLayers = ({ label, selectedLayers, suomenVaylatLayers }) =>
                 isOpen={isOpen}
             >
                 <StyledLayerGroup>
-                    {selectedLayers.map(layer => {
-                        return (
-                            <SelectedLayer
-                                key={layer.id + 'selected'}
-                                layer={layer}
-                                uuid={suomenVaylatLayers && suomenVaylatLayers.length > 0 ? suomenVaylatLayers.filter(l => l.id === layer.id)[0].uuid : ''}
-                            />
-                        )
-                    })}
+                    <SortableList
+                        items={selectedLayers}
+                        onSortEnd={onSortEnd}
+                        suomenVaylatLayers={suomenVaylatLayers}
+                    />
                     <StyledDeleteAllSelectedLayers
                         onClick={() => handleRemoveAllSelectedLayers()}
                     >
