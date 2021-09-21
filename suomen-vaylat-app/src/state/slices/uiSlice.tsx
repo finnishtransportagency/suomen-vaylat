@@ -15,6 +15,13 @@ export const uiSlice = createSlice({
     setIsFullScreen: (state, action) => {
       state.isFullScreen = action.payload;
     },
+    setIsMainScreen: (state) => {
+      state.isFullScreen = false
+      state.isSideMenuOpen = false
+      state.isSearchOpen = false
+      state.isLegendOpen = false
+      state.isInfoOpen = false;
+    },
     setIsSideMenuOpen: (state, action) => {
       state.isSideMenuOpen = action.payload;
     },
@@ -30,6 +37,11 @@ export const uiSlice = createSlice({
   }
 });
 
-export const { setIsFullScreen, setIsSideMenuOpen, setIsSearchOpen, setIsLegendOpen, setIsInfoOpen } = uiSlice.actions;
+export const { setIsFullScreen,
+               setIsMainScreen,
+               setIsSideMenuOpen,
+               setIsSearchOpen,
+               setIsLegendOpen,
+               setIsInfoOpen } = uiSlice.actions;
 
 export default uiSlice.reducer;
