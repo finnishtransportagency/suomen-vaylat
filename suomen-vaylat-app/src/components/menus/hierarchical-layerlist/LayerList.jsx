@@ -218,7 +218,6 @@ export const LayerList = ({ groups, layers, recurse = false}) => {
     const channel = useSelector(state => state.rpc.channel)
     const tagsWithLayers = useSelector(state => state.rpc.tagsWithLayers)
     const tagLayers = tagsWithLayers[tag];
-    console.log(layers);
     let checked;
     let indeterminate;
     let visibleLayers = [];
