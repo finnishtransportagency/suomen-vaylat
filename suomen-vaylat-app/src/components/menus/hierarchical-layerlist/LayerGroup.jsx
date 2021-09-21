@@ -214,8 +214,6 @@ export const LayerGroup = ({ index, group, layers, hasChildren }) => {
         indeterminate = false;
     }
 
-    console.log(filteredLayers);
-
     const selectGroup = (e) => {
         e.stopPropagation();
         if (!indeterminate) {

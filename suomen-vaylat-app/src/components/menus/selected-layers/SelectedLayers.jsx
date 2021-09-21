@@ -120,6 +120,7 @@ export const SelectedLayers = ({ label, selectedLayers, suomenVaylatLayers }) =>
     const [isOpen, setIsOpen] = useState(false);
 
     const onSortEnd = (oldIndex) => {
+        channel.reorderLayers([selectedLayers[oldIndex.oldIndex].id, oldIndex.newIndex], function () {});
         store.dispatch(setSelectedLayersOrder(arrayMoveImmutable(
             selectedLayers,
             oldIndex.oldIndex,
