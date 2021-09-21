@@ -83,6 +83,9 @@ export const rpcSlice = createSlice({
     setZoomLevelsLayers: (state, action) => {
         state.zoomLevelsLayers = action.payload;
     },
+    setSelectedLayersOrder: (state, action) => {
+        state.selectedLayers = action.payload;
+    },
     setSelectedLayers: (state, action) => {
         const data = action;
         state.selectedLayers = data;
@@ -232,6 +235,7 @@ export const {
     removeMarkerRequest,
     mapMoveRequest,
     setSelectedLayers,
+    setSelectedLayersOrder,
     setAllThemesWithLayers,
     setActiveAnnouncements,
     setFilter,

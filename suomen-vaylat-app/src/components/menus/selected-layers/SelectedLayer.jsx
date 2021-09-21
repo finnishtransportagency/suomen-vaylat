@@ -9,6 +9,7 @@ import { faTrash, faInfo } from '@fortawesome/free-solid-svg-icons';
 //import LayerOptions from './LayerOptions';
 
 const StyledLayerContainer = styled.div`
+    cursor: pointer;
     transition: all 0.3s ease-out;
     overflow: hidden;
     display: flex;
