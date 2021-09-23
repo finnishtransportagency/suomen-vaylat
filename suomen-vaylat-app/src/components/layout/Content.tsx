@@ -190,11 +190,11 @@ const Content = () => {
         </ReactTooltip>
         
         <ReactTooltip id='fullscreen' place="right" type="dark" effect="float">
-            <span>{strings.tooltips.fullScreenButton}</span>
+            <span>{strings.tooltips.fullscreenButton}</span>
         </ReactTooltip>
         
         <ReactTooltip id='drawingtools' place="right" type="dark" effect="float">
-            <span>{strings.tooltips.fullScreenButton}</span>
+            <span>{strings.tooltips.drawingtools.drawingtoolsButton}</span>
         </ReactTooltip>
 
         <StyledContent>

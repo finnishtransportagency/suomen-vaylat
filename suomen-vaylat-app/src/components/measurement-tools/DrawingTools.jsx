@@ -2,6 +2,8 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useSelector } from 'react-redux';
+import ReactTooltip from "react-tooltip";
+import strings from '../../translations';
 import {
     faRuler,
     faSquare,
@@ -12,7 +14,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 const StyledDrawingTool = styled.div`
-    z-index: 9999;
+    z-index: 100;
     display: flex;
     background-color: ${(props => props.active? props.theme.colors.maincolorselected1 : props.theme.colors.maincolor1)};
     align-items: center;
@@ -128,30 +130,61 @@ export const DrawingTools = ({isDrawingToolsOpen}) => {
         setActiveTool("");
     }
     return (
-        <StyledTools isDrawingToolsOpen={isDrawingToolsOpen}>
-            {drawinToolsData.map((tool, index) => {
-                return (
-                    <StyledDrawingToolContainer key={index} isDrawingToolsOpen={isDrawingToolsOpen} >
-                        <StyledDrawingTool
-                            active={tool.name == activeTool ? true : false}
-                            onClick={() => startStopTool(tool)}
+        <>
+            <ReactTooltip id='circle' place="top" type="dark" effect="float">
+                <span>{strings.tooltips.drawingtools.circle}</span>
+            </ReactTooltip>
+            
+            <ReactTooltip id='box' place="top" type="dark" effect="float">
+                <span>{strings.tooltips.drawingtools.box}</span>
+            </ReactTooltip>
+            
+            <ReactTooltip id='square' place="top" type="dark" effect="float">
+                <span>{strings.tooltips.drawingtools.square}</span>
+            </ReactTooltip>
+            
+            <ReactTooltip id='polygon' place="top" type="dark" effect="float">
+                <span>{strings.tooltips.drawingtools.polygon}</span>
+            </ReactTooltip>
+            
+            <ReactTooltip id='linestring' place="top" type="dark" effect="float">
+                <span>{strings.tooltips.drawingtools.linestring}</span>
+            </ReactTooltip>
+            
+            <ReactTooltip id='erase' place="top" type="dark" effect="float">
+                <span>{strings.tooltips.drawingtools.erase}</span>
+            </ReactTooltip>
+
+            <StyledTools isDrawingToolsOpen={isDrawingToolsOpen}>
+                {drawinToolsData.map((tool, index) => {
+                    return (
+                        <StyledDrawingToolContainer
+                            key={index}
+                            isDrawingToolsOpen={isDrawingToolsOpen} 
                         >
-                            <FontAwesomeIcon
-                                icon={tool.style.icon}
-                            />
-                        </StyledDrawingTool>
-                        <StyledErase
-                            color={tool.style.color}
-                            onClick={() => eraseDrawing(tool)}
-                        >
-                            <FontAwesomeIcon
-                                icon={faEraser}
-                            />
-                        </StyledErase>
-                    </StyledDrawingToolContainer>
-                )
-            })}
-        </StyledTools>
+                            <StyledDrawingTool
+                                data-tip data-for={tool.type.toLowerCase()}
+                                active={tool.name == activeTool ? true : false}
+                                onClick={() => startStopTool(tool)}
+                            >
+                                <FontAwesomeIcon
+                                    icon={tool.style.icon}
+                                />
+                            </StyledDrawingTool>
+                            <StyledErase
+                                data-tip data-for='erase'
+                                color={tool.style.color}
+                                onClick={() => eraseDrawing(tool)}
+                            >
+                                <FontAwesomeIcon
+                                    icon={faEraser}
+                                />
+                            </StyledErase>
+                        </StyledDrawingToolContainer>
+                    )
+                })}
+            </StyledTools>
+        </>
     );
  }
 
