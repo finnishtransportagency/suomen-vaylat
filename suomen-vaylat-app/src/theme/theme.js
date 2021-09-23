@@ -18,6 +18,7 @@ const theme = {
         maincolor1: "#0064af",
         maincolor2: "#009ae1",
         maincolor3: "#49c2f1",
+        maincolorselected1: "#024c85",
         secondaryColor1: "#00b0cc",
         secondaryColor2: "#207a43",
         secondaryColor3: "#8dcb6d",
