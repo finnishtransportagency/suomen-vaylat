@@ -11,13 +11,21 @@ const fi = {
         layerlistButton: "Tasovalikko",
         searchButton: "Haku",
         legendButton: "Legenda",
-        fullScreenButton: "Koko näyttö",
+        fullscreenButton: "Koko näyttö",
         myLocButton: "Oma sijainti",
-        drawingToolsButton: "Piirtotyökalut",
         zoomExpand: "Laajenna",
         zoomIn: "Lähennä",
         zoomOut: "Loitonna",
-        opacity: "Opasiteetti"
+        opacity: "Opasiteetti",
+        drawingtools: {
+            drawingtoolsButton: "Piirtotyökalut",
+            circle: "Ympyrä",
+            square: "Neliö",
+            box: "Laatikko",
+            linestring: "Viiva",
+            polygon: "Monikulmio",
+            erase: "Tyhjennä"
+        }
     },
     appInfo: {
         title: "Sovelluksen tiedot",

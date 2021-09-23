@@ -11,13 +11,21 @@ const en = {
         layerlistButton: "Layerlist",
         searchButton: "Search",
         legendButton: "Legend",
-        fullScreenButton: "Full screen",
+        fullscreenButton: "Full screen",
         myLocButton: "My location",
-        drawingToolsButton: "Drawing tools",
         zoomExpand: "Expand",
         zoomIn: "Zoom in",
         zoomOut: "Zoom out",
-        opacity: "Opacity"
+        opacity: "Opacity",
+        drawingtools: {
+            drawingtoolsButton: "Drawing tools",
+            circle: "Circle",
+            square: "Square",
+            box: "Box",
+            linestring: "Line",
+            polygon: "Polygon",
+            erase: "Erase"
+        }
     },
     appInfo: {
         title: "Sovelluksen tiedot",
