@@ -2,6 +2,7 @@ import { useContext } from "react";
 import { useAppSelector } from '../../state/hooks';
 import { ReactReduxContext } from 'react-redux';
 import { setIsFullScreen, setIsSideMenuOpen, setIsSearchOpen, setIsLegendOpen} from '../../state/slices/uiSlice';
+import ReactTooltip from "react-tooltip";
 import styled from 'styled-components';
 import strings from '../../translations';
 import PublishedMap from '../published-map/PublishedMap.jsx';
@@ -173,6 +174,23 @@ const Content = () => {
 
 
     return (
+        <>
+        <ReactTooltip id='layerlist' place="right" type="dark" effect="float">
+            <span>{strings.tooltips.layerlistButton}</span>
+        </ReactTooltip>
+        
+        <ReactTooltip id='search' place="right" type="dark" effect="float">
+            <span>{strings.tooltips.searchButton}</span>
+        </ReactTooltip>
+        
+        <ReactTooltip id='legend' place="right" type="dark" effect="float">
+            <span>{strings.tooltips.legendButton}</span>
+        </ReactTooltip>
+        
+        <ReactTooltip id='fullScreen' place="right" type="dark" effect="float">
+            <span>{strings.tooltips.fullScreenButton}</span>
+        </ReactTooltip>
+
         <StyledContent>
             <StyledSideMenu isSideMenuOpen={isSideMenuOpen}>
                 <StyledSideMenuHeader>
@@ -205,6 +223,7 @@ const Content = () => {
             <ToastContainer></ToastContainer>
             <StyledMenuBar>
                 <StyledMenuBarButton
+                    data-tip data-for='layerlist'
                     onClick={() => store.dispatch(setIsSideMenuOpen(!isSideMenuOpen))}
                 >
                     <StyledLayerCount>
@@ -215,6 +234,7 @@ const Content = () => {
                     />
                 </StyledMenuBarButton>
                 <StyledMenuBarButton
+                    data-tip data-for='search'
                     onClick={() => store.dispatch(setIsSearchOpen(!isSearchOpen))}
                 >
                     <FontAwesomeIcon
@@ -222,12 +242,14 @@ const Content = () => {
                     />
                 </StyledMenuBarButton>
                 <StyledMenuBarButton
+                    data-tip data-for='legend'
                     onClick={() => store.dispatch(setIsLegendOpen(!isLegendOpen))}>
                     <FontAwesomeIcon
                         icon={faImages}
                     />
                 </StyledMenuBarButton>
                 <StyledMenuBarButton
+                    data-tip data-for='fullScreen'
                     onClick={() => handleFullScreen()}>
                     <FontAwesomeIcon
                         icon={isFullScreen ? faCompress : faExpand}
@@ -235,6 +257,7 @@ const Content = () => {
                 </StyledMenuBarButton>
             </StyledMenuBar>
         </StyledContent>
+        </>
     );
  }
 
