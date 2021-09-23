@@ -1,14 +1,15 @@
 import { useContext } from "react";
 import { useAppSelector } from '../../state/hooks';
 import { ReactReduxContext } from 'react-redux';
-import { setIsFullScreen, setIsSideMenuOpen, setIsSearchOpen, setIsLegendOpen} from '../../state/slices/uiSlice';
+import { setIsSideMenuOpen, setIsSearchOpen, setIsLegendOpen, setIsDrawingToolsOpen, setIsFullScreen} from '../../state/slices/uiSlice';
 import styled from 'styled-components';
 import strings from '../../translations';
 import PublishedMap from '../published-map/PublishedMap.jsx';
 import LayerListTEMP from '../menus/hierarchical-layerlist/LayerListTEMP';
+import DrawingTools from '../measurement-tools/DrawingTools';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faLayerGroup, faSearch, faTimes, faImages, faExpand, faCompress } from '@fortawesome/free-solid-svg-icons';
+import { faLayerGroup, faSearch, faTimes, faImages, faPencilRuler, faExpand, faCompress } from '@fortawesome/free-solid-svg-icons';
 
 import ZoomMenu from '../zoom-features/ZoomMenu';
 import Search from '../search/Search';
@@ -152,6 +153,7 @@ const Content = () => {
     const isSideMenuOpen = useAppSelector((state) => state.ui.isSideMenuOpen);
     const isSearchOpen = useAppSelector((state) => state.ui.isSearchOpen);
     const isLegendOpen = useAppSelector((state) => state.ui.isLegendOpen);
+    const isDrawingToolsOpen = useAppSelector((state) => state.ui.isDrawingToolsOpen);
     const allGroups = useAppSelector((state) => state.rpc.allGroups);
     const allLayers = useAppSelector((state) => state.rpc.allLayers);
     const selectedLayers = useAppSelector((state) => state.rpc.selectedLayers);
@@ -201,38 +203,45 @@ const Content = () => {
             <PublishedMap />
             {isSearchOpen && <Search />}
             {isLegendOpen && <Legend selectedLayers={selectedLayers}></Legend>}
+            <DrawingTools isDrawingToolsOpen={isDrawingToolsOpen} />
             <AppInfoModal />
             <ToastContainer></ToastContainer>
             <StyledMenuBar>
-                <StyledMenuBarButton
-                    onClick={() => store.dispatch(setIsSideMenuOpen(!isSideMenuOpen))}
-                >
-                    <StyledLayerCount>
-                        {selectedLayers.length}
-                    </StyledLayerCount>
-                    <FontAwesomeIcon
-                        icon={faLayerGroup}
-                    />
-                </StyledMenuBarButton>
-                <StyledMenuBarButton
-                    onClick={() => store.dispatch(setIsSearchOpen(!isSearchOpen))}
-                >
-                    <FontAwesomeIcon
-                        icon={faSearch}
-                    />
-                </StyledMenuBarButton>
-                <StyledMenuBarButton
-                    onClick={() => store.dispatch(setIsLegendOpen(!isLegendOpen))}>
-                    <FontAwesomeIcon
-                        icon={faImages}
-                    />
-                </StyledMenuBarButton>
-                <StyledMenuBarButton
-                    onClick={() => handleFullScreen()}>
-                    <FontAwesomeIcon
-                        icon={isFullScreen ? faCompress : faExpand}
-                    />
-                </StyledMenuBarButton>
+                    <StyledMenuBarButton
+                        onClick={() => store.dispatch(setIsSideMenuOpen(!isSideMenuOpen))}
+                    >
+                        <StyledLayerCount>
+                            {selectedLayers.length}
+                        </StyledLayerCount>
+                        <FontAwesomeIcon
+                            icon={faLayerGroup}
+                        />
+                    </StyledMenuBarButton>
+                    <StyledMenuBarButton
+                        onClick={() => store.dispatch(setIsSearchOpen(!isSearchOpen))}
+                    >
+                        <FontAwesomeIcon
+                            icon={faSearch}
+                        />
+                    </StyledMenuBarButton>
+                    <StyledMenuBarButton
+                        onClick={() => store.dispatch(setIsLegendOpen(!isLegendOpen))}>
+                        <FontAwesomeIcon
+                            icon={faImages}
+                        />
+                    </StyledMenuBarButton>
+                    <StyledMenuBarButton
+                        onClick={() => store.dispatch(setIsDrawingToolsOpen(!isDrawingToolsOpen))}>
+                        <FontAwesomeIcon
+                            icon={faPencilRuler}
+                        />
+                    </StyledMenuBarButton>
+                    <StyledMenuBarButton
+                        onClick={() => handleFullScreen()}>
+                        <FontAwesomeIcon
+                            icon={isFullScreen ? faCompress : faExpand}
+                        />
+                    </StyledMenuBarButton>
             </StyledMenuBar>
         </StyledContent>
     );

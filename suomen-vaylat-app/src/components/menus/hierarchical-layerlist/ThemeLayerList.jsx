@@ -146,6 +146,7 @@ const StyledSubText = styled.p`
 
 
 export const ThemeLayerList = ({allLayers, allThemes}) => {
+    console.log(allThemes);
     return (
         <>
             {allThemes.map((theme, index) => {
