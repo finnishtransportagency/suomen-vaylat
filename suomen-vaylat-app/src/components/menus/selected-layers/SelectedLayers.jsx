@@ -92,15 +92,15 @@ const StyledDeleteAllSelectedLayers = styled.div`
     }
 `;
 
-const SortableItem = SortableElement(({value}) =>
+const SortableItem = SortableElement(({value, suomenVaylatLayers}) =>
     <SelectedLayer
         key={value.id + 'selected'}
         layer={value}
-        uuid={value.suomenVaylatLayers && value.suomenVaylatLayers.length > 0 ? value.suomenVaylatLayers.filter(l => l.id === value.id)[0].uuid : ''}
+        uuid={suomenVaylatLayers && suomenVaylatLayers.length > 0 ? suomenVaylatLayers.filter(l => l.id === value.id)[0].uuid : ''}
     />);
 
 
-const SortableList = SortableContainer(({items}) => {
+const SortableList = SortableContainer(({items, suomenVaylatLayers}) => {
     return (
         <div>
             {items.map((value, index) => (
@@ -108,7 +108,7 @@ const SortableList = SortableContainer(({items}) => {
                     key={`item-${value.id}`}
                     index={index}
                     value={value}
-                    suomenVaylatLayers={value.suomenVaylatLayers}/>
+                    suomenVaylatLayers={suomenVaylatLayers}/>
             ))}
         </div>
     );
