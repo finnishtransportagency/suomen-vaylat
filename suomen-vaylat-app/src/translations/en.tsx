@@ -8,27 +8,29 @@ const en = {
     },
     title: 'Suomen Väylät EN',
     tooltips: {
-        layerlistButton: "Layerlist",
-        searchButton: "Search",
-        legendButton: "Legend",
-        fullscreenButton: "Full screen",
-        myLocButton: "My location",
-        zoomExpand: "Expand",
-        zoomIn: "Zoom in",
-        zoomOut: "Zoom out",
-        opacity: "Opacity",
+        layerlistButton: 'Layerlist',
+        searchButton: 'Search',
+        legendButton: 'Legend',
+        fullscreenButton: 'Full screen',
+        myLocButton: 'My location',
+        zoomExpand: 'Expand',
+        zoomIn: 'Zoom in',
+        zoomOut: 'Zoom out',
+        opacity: 'Opacity',
         drawingtools: {
-            drawingtoolsButton: "Drawing tools",
-            circle: "Circle",
-            square: "Square",
-            box: "Box",
-            linestring: "Line",
-            polygon: "Polygon",
-            erase: "Erase"
-        }
+            drawingtoolsButton: 'Drawing tools',
+            circle: 'Circle',
+            square: 'Square',
+            box: 'Box',
+            linestring: 'Line',
+            polygon: 'Polygon',
+            erase: 'Erase'
+        },
+        share: 'Share this page',
+        metadata: 'Show maplayer metadata'
     },
     appInfo: {
-        title: "Sovelluksen tiedot",
+        title: 'Sovelluksen tiedot',
         headingText: 'Suomen Väylät -karttapalvelu kokoaa yhteen Väyläviraston avoimet, ' +
             'eri väylämuotoihin liittyvät aineistot. ' +
             'Palvelun kautta väylätietoja halutaan kuvata mahdollisimman ' +

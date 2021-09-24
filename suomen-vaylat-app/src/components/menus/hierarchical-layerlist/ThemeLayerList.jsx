@@ -14,6 +14,7 @@ import {
 import Checkbox from '../../checkbox/Checkbox';
 import { useAppSelector } from '../../../state/hooks';
 import { setShareUrl } from '../../../state/slices/uiSlice';
+import ReactTooltip from 'react-tooltip';
 
 const fadeIn = keyframes`
   from {
@@ -237,6 +238,9 @@ export const ThemeLayerList = ({allLayers, allThemes}) => {
 
     return (
             <StyledLayerGroups key={index} index={index}>
+                <ReactTooltip id='share' place='right' type='dark' effect='float'>
+                    <span>{strings.tooltips.share}</span>
+                </ReactTooltip>
 
                 <StyledMasterGroupHeader
                     key={"smgh_" + index}
@@ -257,6 +261,7 @@ export const ThemeLayerList = ({allLayers, allThemes}) => {
                             handleClick={selectGroup}
                         />
                         <StyledShareButton
+                            data-tip data-for='share'
                             onClick={(e) => {
                                 e && e.stopPropagation();
                                 shareGroup(theme.name);

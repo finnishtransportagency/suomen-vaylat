@@ -9,6 +9,7 @@ import { setShareUrl } from '../../state/slices/uiSlice';
 import strings from '../../translations';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { EmailIcon, EmailShareButton, FacebookIcon, FacebookShareButton, LinkedinIcon, LinkedinShareButton, TelegramIcon, TelegramShareButton, TwitterIcon, TwitterShareButton, WhatsappIcon, WhatsappShareButton } from 'react-share';
+import ReactTooltip from 'react-tooltip';
 
 const StyledShareWebSiteContainer = styled.div`
     position:absolute;
@@ -126,6 +127,33 @@ export const ShareWebSite = () => {
     const inputRef = useRef(null);
     return (
         <StyledShareWebSiteContainer>
+            <ReactTooltip id='clipboard' place='right' type='dark' effect='float'>
+                <span>{strings.share.tooltips.clipboard}</span>
+            </ReactTooltip>
+            <ReactTooltip id='email' place='right' type='dark' effect='float'>
+                <span>{strings.share.tooltips.email}</span>
+            </ReactTooltip>
+
+            <ReactTooltip id='facebook' place='right' type='dark' effect='float'>
+                <span>{strings.share.tooltips.facebook}</span>
+            </ReactTooltip>
+
+            <ReactTooltip id='twitter' place='right' type='dark' effect='float'>
+                <span>{strings.share.tooltips.twitter}</span>
+            </ReactTooltip>
+
+            <ReactTooltip id='linkedin' place='right' type='dark' effect='float'>
+                <span>{strings.share.tooltips.linkedin}</span>
+            </ReactTooltip>
+
+            <ReactTooltip id='whatsapp' place='right' type='dark' effect='float'>
+                <span>{strings.share.tooltips.whatsapp}</span>
+            </ReactTooltip>
+
+            <ReactTooltip id='telegram' place='right' type='dark' effect='float'>
+                <span>{strings.share.tooltips.telegram}</span>
+            </ReactTooltip>
+
             <StyledHeader>
                 {strings.share.title}
                 <StyledCloseIcon onClick={() => {
@@ -140,44 +168,35 @@ export const ShareWebSite = () => {
                 {isCopied ? <StyledCopiedToClipboardText>{strings.share.shareTexts.copiedToClipboard}</StyledCopiedToClipboardText> : null}
                 <StyledShareButtonsContainer>
                     <CopyToClipboard text={shareUrl} onCopy={() => {setIsCopied(true);}}>
-                        <StyledCopyClipboardButton onClick={() => {
-                            inputRef.current.select();
-                        }}>
-                            <StyledClipboardIcon title={strings.share.tooltips.clipboard}>
+                        <StyledCopyClipboardButton
+                            onClick={() => {
+                                inputRef.current.select();
+                            }}
+                            data-tip data-for='clipboard'
+                        >
+                            <StyledClipboardIcon>
                                 <FontAwesomeIcon icon={faCopy}></FontAwesomeIcon>
                             </StyledClipboardIcon>
                         </StyledCopyClipboardButton>
                     </CopyToClipboard>
-                    <div title={strings.share.tooltips.email}>
-                        <EmailShareButton url={shareUrl} subject={title} body={emailBody}>
-                            <EmailIcon size={shareIconSize} />
-                        </EmailShareButton>
-                    </div>
-                    <div title={strings.share.tooltips.facebook}>
-                        <FacebookShareButton url={shareUrl} quote={title}>
-                            <FacebookIcon size={shareIconSize} />
-                        </FacebookShareButton>
-                    </div>
-                    <div title={strings.share.tooltips.twitter}>
-                        <TwitterShareButton url={shareUrl} title={title}>
-                            <TwitterIcon size={shareIconSize} />
-                        </TwitterShareButton>
-                    </div>
-                    <div title={strings.share.tooltips.linkedin}>
-                        <LinkedinShareButton url={shareUrl}>
-                            <LinkedinIcon size={shareIconSize} />
-                        </LinkedinShareButton>
-                    </div>
-                    <div title={strings.share.tooltips.whatsapp}>
-                        <WhatsappShareButton url={shareUrl} title={title} separator=': '>
-                            <WhatsappIcon size={shareIconSize} />
-                        </WhatsappShareButton>
-                    </div>
-                    <div title={strings.share.tooltips.telegram}>
-                        <TelegramShareButton url={shareUrl} title={title}>
-                            <TelegramIcon size={shareIconSize} />
-                        </TelegramShareButton>
-                    </div>
+                    <EmailShareButton url={shareUrl} subject={title} body={emailBody} data-tip data-for='email'>
+                        <EmailIcon size={shareIconSize} />
+                    </EmailShareButton>
+                    <FacebookShareButton url={shareUrl} quote={title} data-tip data-for='facebook'>
+                        <FacebookIcon size={shareIconSize} />
+                    </FacebookShareButton>
+                    <TwitterShareButton url={shareUrl} title={title} data-tip data-for='twitter'>
+                        <TwitterIcon size={shareIconSize} />
+                    </TwitterShareButton>
+                    <LinkedinShareButton url={shareUrl} data-tip data-for='linkedin'>
+                        <LinkedinIcon size={shareIconSize} />
+                    </LinkedinShareButton>
+                    <WhatsappShareButton url={shareUrl} title={title} separator=': ' data-tip data-for='whatsapp'>
+                        <WhatsappIcon size={shareIconSize} />
+                    </WhatsappShareButton>
+                    <TelegramShareButton url={shareUrl} title={title} data-tip data-for='telegram'>
+                        <TelegramIcon size={shareIconSize} />
+                    </TelegramShareButton>
                 </StyledShareButtonsContainer>
             </StyledContainer>
         </StyledShareWebSiteContainer>

@@ -152,6 +152,10 @@ export const SelectedLayer = ({ layer, uuid }) => {
                 <span>{strings.tooltips.opacity + ": " + layer.opacity}</span>
             </ReactTooltip>
 
+            <ReactTooltip id='metadata' place="top" type="dark" effect="solid">
+                <span>{strings.tooltips.metadata}</span>
+            </ReactTooltip>
+
             <StyledLayerContainer>
                     <StyledLeftContent>
                         <StyledLayerDeleteIcon
@@ -178,6 +182,7 @@ export const SelectedLayer = ({ layer, uuid }) => {
                             onChange={event => handleLayerOpacity(channel, layer, event.target.value)}
                         />
                         <StyledLayerInfoIcon
+                            data-tip data-for='metadata'
                             disabled={uuid ? false : true}
                             uuid={uuid}
                             onClick={() => {
