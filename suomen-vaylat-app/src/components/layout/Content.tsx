@@ -7,6 +7,7 @@ import strings from '../../translations';
 import PublishedMap from '../published-map/PublishedMap.jsx';
 import LayerListTEMP from '../menus/hierarchical-layerlist/LayerListTEMP';
 import DrawingTools from '../measurement-tools/DrawingTools';
+import ReactTooltip from "react-tooltip";
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLayerGroup, faSearch, faTimes, faImages, faPencilRuler, faExpand, faCompress } from '@fortawesome/free-solid-svg-icons';
@@ -175,6 +176,27 @@ const Content = () => {
 
 
     return (
+        <>
+        <ReactTooltip id='layerlist' place="right" type="dark" effect="float">
+            <span>{strings.tooltips.layerlistButton}</span>
+        </ReactTooltip>
+        
+        <ReactTooltip id='search' place="right" type="dark" effect="float">
+            <span>{strings.tooltips.searchButton}</span>
+        </ReactTooltip>
+        
+        <ReactTooltip id='legend' place="right" type="dark" effect="float">
+            <span>{strings.tooltips.legendButton}</span>
+        </ReactTooltip>
+        
+        <ReactTooltip id='fullscreen' place="right" type="dark" effect="float">
+            <span>{strings.tooltips.fullscreenButton}</span>
+        </ReactTooltip>
+        
+        <ReactTooltip id='drawingtools' place="right" type="dark" effect="float">
+            <span>{strings.tooltips.drawingtools.drawingtoolsButton}</span>
+        </ReactTooltip>
+
         <StyledContent>
             <StyledSideMenu isSideMenuOpen={isSideMenuOpen}>
                 <StyledSideMenuHeader>
@@ -207,43 +229,49 @@ const Content = () => {
             <AppInfoModal />
             <ToastContainer></ToastContainer>
             <StyledMenuBar>
-                    <StyledMenuBarButton
-                        onClick={() => store.dispatch(setIsSideMenuOpen(!isSideMenuOpen))}
-                    >
-                        <StyledLayerCount>
-                            {selectedLayers.length}
-                        </StyledLayerCount>
-                        <FontAwesomeIcon
-                            icon={faLayerGroup}
-                        />
-                    </StyledMenuBarButton>
-                    <StyledMenuBarButton
-                        onClick={() => store.dispatch(setIsSearchOpen(!isSearchOpen))}
-                    >
-                        <FontAwesomeIcon
-                            icon={faSearch}
-                        />
-                    </StyledMenuBarButton>
-                    <StyledMenuBarButton
-                        onClick={() => store.dispatch(setIsLegendOpen(!isLegendOpen))}>
-                        <FontAwesomeIcon
-                            icon={faImages}
-                        />
-                    </StyledMenuBarButton>
-                    <StyledMenuBarButton
-                        onClick={() => store.dispatch(setIsDrawingToolsOpen(!isDrawingToolsOpen))}>
-                        <FontAwesomeIcon
-                            icon={faPencilRuler}
-                        />
-                    </StyledMenuBarButton>
-                    <StyledMenuBarButton
-                        onClick={() => handleFullScreen()}>
-                        <FontAwesomeIcon
-                            icon={isFullScreen ? faCompress : faExpand}
-                        />
-                    </StyledMenuBarButton>
+                <StyledMenuBarButton
+                    data-tip data-for='layerlist'
+                    onClick={() => store.dispatch(setIsSideMenuOpen(!isSideMenuOpen))}
+                >
+                    <StyledLayerCount>
+                        {selectedLayers.length}
+                    </StyledLayerCount>
+                    <FontAwesomeIcon
+                        icon={faLayerGroup}
+                    />
+                </StyledMenuBarButton>
+                <StyledMenuBarButton
+                    data-tip data-for='search'
+                    onClick={() => store.dispatch(setIsSearchOpen(!isSearchOpen))}
+                >
+                    <FontAwesomeIcon
+                        icon={faSearch}
+                    />
+                </StyledMenuBarButton>
+                <StyledMenuBarButton
+                    data-tip data-for='legend'
+                    onClick={() => store.dispatch(setIsLegendOpen(!isLegendOpen))}>
+                    <FontAwesomeIcon
+                        icon={faImages}
+                    />
+                </StyledMenuBarButton>
+                <StyledMenuBarButton
+                    data-tip data-for='fullscreen'
+                    onClick={() => handleFullScreen()}>
+                    <FontAwesomeIcon
+                        icon={isFullScreen ? faCompress : faExpand}
+                    />
+                </StyledMenuBarButton>
+                <StyledMenuBarButton
+                    data-tip data-for='drawingtools'
+                    onClick={() => store.dispatch(setIsDrawingToolsOpen(!isDrawingToolsOpen))}>
+                    <FontAwesomeIcon
+                        icon={faPencilRuler}
+                    />
+                </StyledMenuBarButton>
             </StyledMenuBar>
         </StyledContent>
+        </>
     );
  }
 
