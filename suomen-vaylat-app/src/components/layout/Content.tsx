@@ -1,14 +1,16 @@
 import { useContext } from "react";
 import { useAppSelector } from '../../state/hooks';
 import { ReactReduxContext } from 'react-redux';
-import { setIsFullScreen, setIsSideMenuOpen, setIsSearchOpen, setIsLegendOpen} from '../../state/slices/uiSlice';
+import { setIsSideMenuOpen, setIsSearchOpen, setIsLegendOpen, setIsDrawingToolsOpen, setIsFullScreen} from '../../state/slices/uiSlice';
 import styled from 'styled-components';
 import strings from '../../translations';
 import PublishedMap from '../published-map/PublishedMap.jsx';
 import LayerListTEMP from '../menus/hierarchical-layerlist/LayerListTEMP';
+import DrawingTools from '../measurement-tools/DrawingTools';
+import ReactTooltip from "react-tooltip";
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faLayerGroup, faSearch, faTimes, faImages, faExpand, faCompress } from '@fortawesome/free-solid-svg-icons';
+import { faLayerGroup, faSearch, faTimes, faImages, faPencilRuler, faExpand, faCompress } from '@fortawesome/free-solid-svg-icons';
 
 import ZoomMenu from '../zoom-features/ZoomMenu';
 import Search from '../search/Search';
@@ -152,6 +154,7 @@ const Content = () => {
     const isSideMenuOpen = useAppSelector((state) => state.ui.isSideMenuOpen);
     const isSearchOpen = useAppSelector((state) => state.ui.isSearchOpen);
     const isLegendOpen = useAppSelector((state) => state.ui.isLegendOpen);
+    const isDrawingToolsOpen = useAppSelector((state) => state.ui.isDrawingToolsOpen);
     const allGroups = useAppSelector((state) => state.rpc.allGroups);
     const allLayers = useAppSelector((state) => state.rpc.allLayers);
     const selectedLayers = useAppSelector((state) => state.rpc.selectedLayers);
@@ -173,6 +176,27 @@ const Content = () => {
 
 
     return (
+        <>
+        <ReactTooltip id='layerlist' place="right" type="dark" effect="float">
+            <span>{strings.tooltips.layerlistButton}</span>
+        </ReactTooltip>
+        
+        <ReactTooltip id='search' place="right" type="dark" effect="float">
+            <span>{strings.tooltips.searchButton}</span>
+        </ReactTooltip>
+        
+        <ReactTooltip id='legend' place="right" type="dark" effect="float">
+            <span>{strings.tooltips.legendButton}</span>
+        </ReactTooltip>
+        
+        <ReactTooltip id='fullscreen' place="right" type="dark" effect="float">
+            <span>{strings.tooltips.fullscreenButton}</span>
+        </ReactTooltip>
+        
+        <ReactTooltip id='drawingtools' place="right" type="dark" effect="float">
+            <span>{strings.tooltips.drawingtools.drawingtoolsButton}</span>
+        </ReactTooltip>
+
         <StyledContent>
             <StyledSideMenu isSideMenuOpen={isSideMenuOpen}>
                 <StyledSideMenuHeader>
@@ -201,10 +225,12 @@ const Content = () => {
             <PublishedMap />
             {isSearchOpen && <Search />}
             {isLegendOpen && <Legend selectedLayers={selectedLayers}></Legend>}
+            <DrawingTools isDrawingToolsOpen={isDrawingToolsOpen} />
             <AppInfoModal />
             <ToastContainer></ToastContainer>
             <StyledMenuBar>
                 <StyledMenuBarButton
+                    data-tip data-for='layerlist'
                     onClick={() => store.dispatch(setIsSideMenuOpen(!isSideMenuOpen))}
                 >
                     <StyledLayerCount>
@@ -215,6 +241,7 @@ const Content = () => {
                     />
                 </StyledMenuBarButton>
                 <StyledMenuBarButton
+                    data-tip data-for='search'
                     onClick={() => store.dispatch(setIsSearchOpen(!isSearchOpen))}
                 >
                     <FontAwesomeIcon
@@ -222,19 +249,29 @@ const Content = () => {
                     />
                 </StyledMenuBarButton>
                 <StyledMenuBarButton
+                    data-tip data-for='legend'
                     onClick={() => store.dispatch(setIsLegendOpen(!isLegendOpen))}>
                     <FontAwesomeIcon
                         icon={faImages}
                     />
                 </StyledMenuBarButton>
                 <StyledMenuBarButton
+                    data-tip data-for='fullscreen'
                     onClick={() => handleFullScreen()}>
                     <FontAwesomeIcon
                         icon={isFullScreen ? faCompress : faExpand}
                     />
                 </StyledMenuBarButton>
+                <StyledMenuBarButton
+                    data-tip data-for='drawingtools'
+                    onClick={() => store.dispatch(setIsDrawingToolsOpen(!isDrawingToolsOpen))}>
+                    <FontAwesomeIcon
+                        icon={faPencilRuler}
+                    />
+                </StyledMenuBarButton>
             </StyledMenuBar>
         </StyledContent>
+        </>
     );
  }
 
