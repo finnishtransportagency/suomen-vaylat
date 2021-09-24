@@ -7,7 +7,8 @@ const initialState = {
   isLegendOpen: false,
   isInfoOpen: false,
   selectedTheme: '',
-  shareUrl: ''
+  shareUrl: '',
+  isDrawingToolsOpen: false
 };
 
 export const uiSlice = createSlice({
@@ -34,6 +35,9 @@ export const uiSlice = createSlice({
     },
     setShareUrl: (state, action) => {
       state.shareUrl = action.payload;
+    },
+    setIsDrawingToolsOpen: (state, action) => {
+      state.isDrawingToolsOpen = action.payload;
     }
   }
 });
@@ -45,7 +49,8 @@ export const {
   setIsLegendOpen,
   setIsInfoOpen,
   setSelectedTheme,
-  setShareUrl
+  setShareUrl,
+  setIsDrawingToolsOpen
 } = uiSlice.actions;
 
 export default uiSlice.reducer;
