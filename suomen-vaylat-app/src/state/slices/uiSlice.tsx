@@ -5,7 +5,8 @@ const initialState = {
   isSideMenuOpen: false,
   isSearchOpen: false,
   isLegendOpen: false,
-  isInfoOpen: false
+  isInfoOpen: false,
+  isDrawingToolsOpen: false
 };
 
 export const uiSlice = createSlice({
@@ -33,6 +34,9 @@ export const uiSlice = createSlice({
     },
     setIsInfoOpen: (state, action) => {
       state.isInfoOpen = action.payload;
+    },
+    setIsDrawingToolsOpen: (state, action) => {
+      state.isDrawingToolsOpen = action.payload;
     }
   }
 });
@@ -42,6 +46,7 @@ export const { setIsFullScreen,
                setIsSideMenuOpen,
                setIsSearchOpen,
                setIsLegendOpen,
-               setIsInfoOpen } = uiSlice.actions;
+               setIsInfoOpen,
+               setIsDrawingToolsOpen  } = uiSlice.actions;
 
 export default uiSlice.reducer;
