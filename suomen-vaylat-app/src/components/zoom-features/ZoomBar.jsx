@@ -1,28 +1,16 @@
 import { useContext, useEffect, useState } from "react";
 import { ReactReduxContext } from 'react-redux';
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
 import strings from '../../translations';
 import ReactTooltip from "react-tooltip";
 
 import { setZoomIn, setZoomOut } from '../../state/slices/rpcSlice';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAngleUp, faSearchMinus, faSearchPlus, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import { faAngleUp, faSearchMinus, faSearchPlus} from '@fortawesome/free-solid-svg-icons';
 
 import ZoomBarCircle from './ZoomBarCircle';
 import ZoomBarLayer from './ZoomBarLayer';
-
-const fadeIn = keyframes`
-  0% {
-      opacity: 0;
-   // transform: rotate(0deg);
-  }
-
-  100% {
-        opacity: 1;
-    //transform: rotate(360deg);
-  }
-`;
 
 const StyledZoomBarContainer = styled.div`
     pointer-events: none;
@@ -164,7 +152,7 @@ const ZoomBar = ({
     const [currentLayersInfoLayers, setCurrentLayersInfoLayers] = useState([]);
 
     useEffect(() => {
-        
+
         hoveringIndex !== null ?
         setCurrentLayersInfoLayers(Object.values(zoomLevelsLayers)[hoveringIndex].layers) :
         zoomLevelsLayers[currentZoomLevel] !== undefined && setCurrentLayersInfoLayers(Object.values(zoomLevelsLayers)[currentZoomLevel].layers);

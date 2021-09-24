@@ -106,17 +106,17 @@ export const rpcSlice = createSlice({
     },
     setZoomIn: (state, action) => {
         state.channel !== null && state.channel.zoomIn(function (data) {
-            LOG.log('Zoom level after: ', data);
+            //LOG.log('Zoom level after: ', data);
         });
     },
     setZoomOut: (state, action) => {
         state.channel !== null && state.channel.zoomOut(function (data) {
-            LOG.log('Zoom level after: ', data);
+            //LOG.log('Zoom level after: ', data);
         });
     },
     setZoomTo: (state, action) => {
         state.channel !== null && state.channel.zoomTo([action.payload], function (data) {
-            LOG.log('Zoom level after: ', data);
+            //LOG.log('Zoom level after: ', data);
         });
     },
     searchVKMRoad: (state, action) => {
