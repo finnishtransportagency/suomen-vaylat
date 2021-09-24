@@ -5,7 +5,9 @@ const initialState = {
   isSideMenuOpen: false,
   isSearchOpen: false,
   isLegendOpen: false,
-  isInfoOpen: false
+  isInfoOpen: false,
+  selectedTheme: '',
+  shareUrl: ''
 };
 
 export const uiSlice = createSlice({
@@ -26,10 +28,24 @@ export const uiSlice = createSlice({
     },
     setIsInfoOpen: (state, action) => {
       state.isInfoOpen = action.payload;
+    },
+    setSelectedTheme: (state, action) => {
+      state.selectedTheme = action.payload;
+    },
+    setShareUrl: (state, action) => {
+      state.shareUrl = action.payload;
     }
   }
 });
 
-export const { setIsFullScreen, setIsSideMenuOpen, setIsSearchOpen, setIsLegendOpen, setIsInfoOpen } = uiSlice.actions;
+export const {
+  setIsFullScreen,
+  setIsSideMenuOpen,
+  setIsSearchOpen,
+  setIsLegendOpen,
+  setIsInfoOpen,
+  setSelectedTheme,
+  setShareUrl
+} = uiSlice.actions;
 
 export default uiSlice.reducer;

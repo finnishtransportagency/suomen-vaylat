@@ -74,7 +74,8 @@ const StyledDeleteAllSelectedLayers = styled.div`
 `;
 
 const LayerListTEMP = ({groups, layers, themes, tags, selectedLayers, suomenVaylatLayers}) => {
-  useAppSelector((state) => state.language);
+    useAppSelector((state) => state.language);
+    const selectedTheme = useAppSelector((state) => state.ui.selectedTheme);
 
     return (
       <StyledLayerListContainer>
@@ -84,7 +85,7 @@ const LayerListTEMP = ({groups, layers, themes, tags, selectedLayers, suomenVayl
             selectedLayers={selectedLayers}
             suomenVaylatLayers={suomenVaylatLayers}
           />
-          <Dropdown title={strings.layerlist.layerlistLabels.searchForLayers.toUpperCase()}>
+          <Dropdown title={strings.layerlist.layerlistLabels.searchForLayers.toUpperCase()} isOpen={selectedTheme !== null}>
             <StyledLayerList>
               <LayerSearch />
               <Tabs allTags={tags}>

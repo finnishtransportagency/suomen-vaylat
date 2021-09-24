@@ -7,10 +7,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Layers from './Layers';
 import {
     faAngleDown,
-    faMap
+    faMap,
+    faShareAlt
 } from '@fortawesome/free-solid-svg-icons';
 
 import Checkbox from '../../checkbox/Checkbox';
+import { useAppSelector } from '../../../state/hooks';
+import { setShareUrl } from '../../../state/slices/uiSlice';
 
 const fadeIn = keyframes`
   from {
@@ -108,9 +111,24 @@ const StyledSelectButton = styled.button`
     height: 100%;
     border: none;
     background-color: transparent;
-    margin-right: 15px;
+    margin-right: 10px;
     svg {
         font-size: 25px;
+        transition: all 0.5s ease-out;
+        color: ${props => props.theme.colors.black};
+    };
+`;
+
+const StyledShareButton = styled.button`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    border: none;
+    background-color: transparent;
+    margin-right: 0px;
+    svg {
+        font-size: 14px;
         transition: all 0.5s ease-out;
         color: ${props => props.theme.colors.black};
     };
@@ -164,9 +182,11 @@ export const ThemeLayerList = ({allLayers, allThemes}) => {
   };
 
   export const ThemeGroup = ({theme, filteredLayers, index}) => {
-    const [isOpen, setIsOpen] = useState(false);
+    const selectedTheme = useAppSelector((state) => state.ui.selectedTheme);
+    const [isOpen, setIsOpen] = useState(selectedTheme === theme.name);
     const { store } = useContext(ReactReduxContext);
-    const channel = useSelector(state => state.rpc.channel)
+    const channel = useSelector(state => state.rpc.channel);
+    const [isProgrammaticSelection, setIsProgrammaticSelection] = useState(false);
 
     let checked;
     let indeterminate;
@@ -187,7 +207,8 @@ export const ThemeLayerList = ({allLayers, allThemes}) => {
     }
 
     const selectGroup = (e) => {
-        e.stopPropagation();
+        e && e.stopPropagation();
+
         if (!indeterminate) {
             filteredLayers.map(layer => {
                 channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, !layer.visible]);
@@ -200,8 +221,18 @@ export const ThemeLayerList = ({allLayers, allThemes}) => {
             });
         }
         channel.getAllLayers(function (data) {
-                store.dispatch(setAllLayers(data));
+            store.dispatch(setAllLayers(data));
         });
+    }
+
+    const shareGroup = (themeName) => {
+        const url = process.env.REACT_APP_SITE_URL + '/theme/' + encodeURIComponent(themeName);
+        store.dispatch(setShareUrl(url));
+    };
+
+    if (encodeURIComponent(theme.name) === selectedTheme && isProgrammaticSelection === false) {
+        selectGroup();
+        setIsProgrammaticSelection(true);
     }
 
     return (
@@ -225,6 +256,15 @@ export const ThemeLayerList = ({allLayers, allThemes}) => {
                             isChecked={checked}
                             handleClick={selectGroup}
                         />
+                        <StyledShareButton
+                            onClick={(e) => {
+                                e && e.stopPropagation();
+                                shareGroup(theme.name);
+                            }}>
+                            <FontAwesomeIcon
+                                icon={faShareAlt}
+                            />
+                        </StyledShareButton>
                         <StyledSelectButton
                             isOpen={isOpen}
                         >
