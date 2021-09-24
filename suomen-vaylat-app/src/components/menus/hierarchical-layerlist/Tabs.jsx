@@ -1,7 +1,6 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import Tab from './Tab';
-import Filter from './Filter';
 import styled from 'styled-components';
 import strings from '../../../translations';
 

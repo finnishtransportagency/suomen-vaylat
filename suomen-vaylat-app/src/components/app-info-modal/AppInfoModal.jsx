@@ -33,9 +33,6 @@ const StyledHeader = styled.div`
     color: ${props => props.theme.colors.mainWhite};
     border-radius: 0
 `;
-const StyledFooter = styled.div`
-    justify-content: space-between;
-`;
 
 const StyledLayerCloseIcon = styled.div`
     cursor: pointer;
@@ -55,13 +52,6 @@ const StyledLayerCloseIcon = styled.div`
         }
     }
 `;
-
-const StyledOkButton = styled.div`
-    cursor: pointer;
-    display: flex;
-    justify-content: right;
-    align-items: center;
-    `;
 
 export const AppInfoModal = () => {
     const { store } = useContext(ReactReduxContext);
