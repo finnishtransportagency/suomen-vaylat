@@ -7,6 +7,26 @@ const fi = {
         }
     },
     title: 'Suomen Väylät',
+    tooltips: {
+        layerlistButton: "Tasovalikko",
+        searchButton: "Haku",
+        legendButton: "Legenda",
+        fullscreenButton: "Koko näyttö",
+        myLocButton: "Oma sijainti",
+        zoomExpand: "Laajenna",
+        zoomIn: "Lähennä",
+        zoomOut: "Loitonna",
+        opacity: "Opasiteetti",
+        drawingtools: {
+            drawingtoolsButton: "Piirtotyökalut",
+            circle: "Ympyrä",
+            square: "Neliö",
+            box: "Laatikko",
+            linestring: "Viiva",
+            polygon: "Monikulmio",
+            erase: "Tyhjennä"
+        }
+    },
     appInfo: {
         title: "Sovelluksen tiedot",
         headingText: 'Suomen Väylät -karttapalvelu kokoaa yhteen Väyläviraston avoimet, ' +

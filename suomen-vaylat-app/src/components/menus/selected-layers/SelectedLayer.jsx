@@ -2,6 +2,8 @@ import {  useContext } from "react";
 import { ReactReduxContext, useSelector } from 'react-redux';
 import { setAllLayers, getLayerMetadata, setLayerMetadata, clearLayerMetadata } from '../../../state/slices/rpcSlice';
 import styled from 'styled-components';
+import ReactTooltip from "react-tooltip";
+import strings from '../../../translations';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faInfo } from '@fortawesome/free-solid-svg-icons';
@@ -145,41 +147,48 @@ export const SelectedLayer = ({ layer, uuid }) => {
     };
 
     return (
-        <StyledLayerContainer>
-                <StyledLeftContent>
-                    <StyledLayerDeleteIcon
-                        onClick={() => {
-                            handleLayerVisibility(channel, layer);
-                        }}>
-                        <FontAwesomeIcon
-                            icon={faTrash}
+        <>
+            <ReactTooltip id='opacity' place="top" type="dark" effect="solid">
+                <span>{strings.tooltips.opacity + ": " + layer.opacity}</span>
+            </ReactTooltip>
+
+            <StyledLayerContainer>
+                    <StyledLeftContent>
+                        <StyledLayerDeleteIcon
+                            onClick={() => {
+                                handleLayerVisibility(channel, layer);
+                            }}>
+                            <FontAwesomeIcon
+                                icon={faTrash}
+                            />
+                        </StyledLayerDeleteIcon>
+                        <StyledlayerHeader>
+                            <StyledLayerName>
+                                {layer.name}
+                            </StyledLayerName>
+                        </StyledlayerHeader>
+                    </StyledLeftContent>
+                    <StyledRightContent>
+                        <StyledlayerOpacityControl
+                            data-tip data-for='opacity'
+                            type="range"
+                            min="0"
+                            max="100"
+                            value={layer.opacity}
+                            onChange={event => handleLayerOpacity(channel, layer, event.target.value)}
                         />
-                    </StyledLayerDeleteIcon>
-                    <StyledlayerHeader>
-                        <StyledLayerName>
-                            {layer.name}
-                        </StyledLayerName>
-                    </StyledlayerHeader>
-                </StyledLeftContent>
-                <StyledRightContent>
-                    <StyledlayerOpacityControl
-                        type="range"
-                        min="0"
-                        max="100"
-                        value={layer.opacity}
-                        onChange={event => handleLayerOpacity(channel, layer, event.target.value)}
-                    />
-                    <StyledLayerInfoIcon
-                        disabled={uuid ? false : true}
-                        uuid={uuid}
-                        onClick={() => {
-                            store.dispatch(getLayerMetadata({ layer: layer, uuid: uuid, handler: handleMetadataSuccess, errorHandler: handleMetadataError }));
-                        }
-                    }>
-                        <FontAwesomeIcon icon={faInfo} />
-                    </StyledLayerInfoIcon>
-                </StyledRightContent>
-        </StyledLayerContainer>
+                        <StyledLayerInfoIcon
+                            disabled={uuid ? false : true}
+                            uuid={uuid}
+                            onClick={() => {
+                                store.dispatch(getLayerMetadata({ layer: layer, uuid: uuid, handler: handleMetadataSuccess, errorHandler: handleMetadataError }));
+                            }
+                        }>
+                            <FontAwesomeIcon icon={faInfo} />
+                        </StyledLayerInfoIcon>
+                    </StyledRightContent>
+            </StyledLayerContainer>
+        </>
     );
 };
 
