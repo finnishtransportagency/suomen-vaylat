@@ -14,8 +14,7 @@ import {
     faLandmark,
     faTrain,
     faRoad,
-    faMap,
-    faCircle
+    faMap
 } from '@fortawesome/free-solid-svg-icons';
 
 import Checkbox from '../../checkbox/Checkbox';
@@ -214,8 +213,6 @@ export const LayerGroup = ({ index, group, layers, hasChildren }) => {
         indeterminate = false;
     }
 
-    console.log(filteredLayers);
-
     const selectGroup = (e) => {
         e.stopPropagation();
         if (!indeterminate) {
@@ -313,7 +310,7 @@ export const LayerGroup = ({ index, group, layers, hasChildren }) => {
                                     key={'layer-list'+index}
                                     groups={group.groups}
                                     layers={layers}
-                                    recurse={true} 
+                                    recurse={true}
                                 />
                             </>
                         )}

@@ -15,6 +15,7 @@ import Search from '../search/Search';
 import AppInfoModal from '../app-info-modal/AppInfoModal';
 import { ToastContainer } from 'react-toastify';
 import { Legend } from "../legend/Legend";
+import { ShareWebSite } from "../share-web-site/ShareWebSite";
 
 const StyledContent = styled.div`
     z-index: 1;
@@ -159,6 +160,9 @@ const Content = () => {
     const allTags = useAppSelector((state) => state.rpc.allTags);
     const suomenVaylatLayers = useAppSelector((state) => state.rpc.suomenVaylatLayers);
 
+    const shareUrl = useAppSelector((state) => state.ui.shareUrl);
+    const isShareOpen = shareUrl && shareUrl.length > 0 ? true : false;
+
     const handleFullScreen = () => {
         if (!document.fullscreenElement) {
             document.documentElement.requestFullscreen();
@@ -201,6 +205,7 @@ const Content = () => {
             <PublishedMap />
             {isSearchOpen && <Search />}
             {isLegendOpen && <Legend selectedLayers={selectedLayers}></Legend>}
+            {isShareOpen && <ShareWebSite></ShareWebSite>}
             <AppInfoModal />
             <ToastContainer></ToastContainer>
             <StyledMenuBar>

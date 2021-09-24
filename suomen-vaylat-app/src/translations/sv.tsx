@@ -627,6 +627,23 @@ const sv = {
         title: 'Förklaringar',
         nolegend: 'Inte en legend',
         noSelectedLayers: 'Inga kartlager har valts'
+    },
+    share: {
+        title: 'Dela denna sida',
+        shareTexts: {
+            title: 'Suomen Väylät - kartlänk',
+            emailBody: 'Kartlänk: ',
+            copiedToClipboard: 'Kopierat till urklipp'
+        },
+        tooltips: {
+            clipboard: 'Kopiera till Urklipp',
+            email: 'Skicka via e-post',
+            facebook: 'Dela på Facebook',
+            twitter: 'Dela på Twitter',
+            linkedin: 'Dela på LinkedIn',
+            whatsapp: 'Dela på WhatsApp',
+            telegram: 'Dela på Telegram'
+        }
     }
 }
 

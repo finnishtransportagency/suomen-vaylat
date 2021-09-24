@@ -627,6 +627,23 @@ const en = {
         title: 'Map legends',
         nolegend: 'No layer legend',
         noSelectedLayers: 'No map layers selected'
+    },
+    share: {
+        title: 'Share this page',
+        shareTexts: {
+            title: 'Suomen Väylät - map link',
+            emailBody: 'Map link: ',
+            copiedToClipboard: 'Copied to clipboard'
+        },
+        tooltips: {
+            clipboard: 'Copy to clipboard',
+            email: 'Send by email',
+            facebook: 'Share on Facebook',
+            twitter: 'Share on Twitter',
+            linkedin: 'Share on LinkedIn',
+            whatsapp: 'Share on WhatsApp',
+            telegram: 'Share on Telegram'
+        }
     }
 }
 

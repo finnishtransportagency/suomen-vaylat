@@ -109,7 +109,7 @@ export const Layer = ({ layer, isOpen, theme }) => {
                     onClick={() => handleLayerVisibility(channel, layer)}
                 >
                 {
-                    layer.visible && <FontAwesomeIcon 
+                    layer.visible && <FontAwesomeIcon
                         icon={faCheck}
                     />
                     }

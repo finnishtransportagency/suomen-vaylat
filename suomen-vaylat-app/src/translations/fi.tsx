@@ -631,6 +631,23 @@ const fi = {
         title: 'Karttaselitteet',
         nolegend: 'Ei karttaselitettä',
         noSelectedLayers: 'Karttatasoja ei valittuna'
+    },
+    share: {
+        title: 'Jaa sivu',
+        shareTexts: {
+            title: 'Suomen Väylät - karttalinkki',
+            emailBody: 'Karttalinkki: ',
+            copiedToClipboard: 'Kopioitu leikepöydälle'
+        },
+        tooltips: {
+            clipboard: 'Kopioi leikepöydälle',
+            email: 'Lähetä sähköpostilla',
+            facebook: 'Jaa Facebookissa',
+            twitter: 'Jaa Twitterissä',
+            linkedin: 'Jaa LinkedInissä',
+            whatsapp: 'Jaa WhatsAppissa',
+            telegram: 'Jaa Telegrammissa'
+        }
     }
 }
 
