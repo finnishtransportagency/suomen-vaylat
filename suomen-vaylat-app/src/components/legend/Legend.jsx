@@ -29,7 +29,8 @@ const StyledHeader = styled.div`
     padding: .5rem;
     background-color: ${props => props.theme.colors.maincolor1};
     color: ${props => props.theme.colors.mainWhite};
-    border-radius: 0
+    border-radius: 0;
+    cursor: move;
 `;
 
 const StyledGroupsContainer = styled.div`

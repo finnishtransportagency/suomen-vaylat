@@ -21,7 +21,8 @@ import {
     setActiveAnnouncements,
     setSuomenVaylatLayers,
     setLegends,
-    setTagsWithLayers
+    setTagsWithLayers,
+    setCurrentMapCenter
 } from '../../state/slices/rpcSlice';
 
 import CenterSpinner from '../center-spinner/CenterSpinner';
@@ -144,6 +145,11 @@ const PublishedMap = () => {
                         store.dispatch(setLegends(data));
                     });
                 }
+                if (data.getMapPosition) {
+                    channel.getMapPosition((data) => {
+                        store.dispatch(setCurrentMapCenter(data));
+                    });
+                }
             });
 
             channel.getSupportedEvents(function (data) {
@@ -159,8 +165,7 @@ const PublishedMap = () => {
                 }
                 if (data.AfterMapMoveEvent) {
                     channel.handleEvent('AfterMapMoveEvent', event => {
-                        event.hasOwnProperty('zoom') &&
-                            store.dispatch(setCurrentZoomLevel(event.zoom));
+                        store.dispatch(setCurrentMapCenter(event));
                     });
                 }
                 if (data.SearchResultEvent) {

@@ -10,6 +10,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Modal from 'react-modal';
 import styled from 'styled-components';
 import {setIsSideMenuOpen, setSelectedTheme} from "./state/slices/uiSlice";
+import { HandleSharedWebSiteLink } from './components/share-web-site/HandleSharedWebSiteLink';
 
 Modal.setAppElement('#root');
 
@@ -39,16 +40,24 @@ const App = () => {
                                 <Layout />
                             </StyledAppContainer>
                         }/>
-                        <Route exact path="/theme/:themename" render={(routerProps) => {
+                        <Route exact path="/theme/:zoom/:x/:y/:themename?" render={(routerProps) => {
                             const theme = routerProps.match.params.themename;
                             if (theme) {
                                 store.dispatch(setIsSideMenuOpen(true));
                                 store.dispatch(setSelectedTheme(theme));
                             }
                             return (<StyledAppContainer>
-                            <PageTitle />
-                            <Layout />
-                            </StyledAppContainer>);
+                                <HandleSharedWebSiteLink/>
+                                <PageTitle />
+                                <Layout />
+                                </StyledAppContainer>);
+                            }}/>
+                        <Route exact path="/link/:zoom/:x/:y/:maplayers?" render={() => {
+                            return (<StyledAppContainer>
+                                <HandleSharedWebSiteLink/>
+                                <PageTitle />
+                                <Layout />
+                                </StyledAppContainer>);
                         }}/>
                     </Theme>
                 </Router>
