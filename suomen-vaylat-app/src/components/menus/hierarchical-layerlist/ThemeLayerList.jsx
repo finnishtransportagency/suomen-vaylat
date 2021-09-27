@@ -7,14 +7,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Layers from './Layers';
 import {
     faAngleDown,
-    faMap,
-    faShareAlt
+    faMap
 } from '@fortawesome/free-solid-svg-icons';
 
 import Checkbox from '../../checkbox/Checkbox';
 import { useAppSelector } from '../../../state/hooks';
-import { setShareUrl } from '../../../state/slices/uiSlice';
-import ReactTooltip from 'react-tooltip';
+import { ThemeGroupLinkButton } from '../../share-web-site/ShareLinkButtons';
 
 const fadeIn = keyframes`
   from {
@@ -120,21 +118,6 @@ const StyledSelectButton = styled.button`
     };
 `;
 
-const StyledShareButton = styled.button`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-    border: none;
-    background-color: transparent;
-    margin-right: 0px;
-    svg {
-        font-size: 14px;
-        transition: all 0.5s ease-out;
-        color: ${props => props.theme.colors.black};
-    };
-`;
-
 const StyledLayerGroupContainer = styled.div`
     height: ${props => props.isOpen ? "auto" : "0px"};
     overflow: hidden;
@@ -226,11 +209,6 @@ export const ThemeLayerList = ({allLayers, allThemes}) => {
         });
     }
 
-    const shareGroup = (themeName) => {
-        const url = process.env.REACT_APP_SITE_URL + '/theme/' + encodeURIComponent(themeName);
-        store.dispatch(setShareUrl(url));
-    };
-
     if (encodeURIComponent(theme.name) === selectedTheme && isProgrammaticSelection === false) {
         selectGroup();
         setIsProgrammaticSelection(true);
@@ -238,10 +216,6 @@ export const ThemeLayerList = ({allLayers, allThemes}) => {
 
     return (
             <StyledLayerGroups key={index} index={index}>
-                <ReactTooltip id='share' place='right' type='dark' effect='float'>
-                    <span>{strings.tooltips.share}</span>
-                </ReactTooltip>
-
                 <StyledMasterGroupHeader
                     key={"smgh_" + index}
                     onClick={() => setIsOpen(!isOpen)}
@@ -260,16 +234,7 @@ export const ThemeLayerList = ({allLayers, allThemes}) => {
                             isChecked={checked}
                             handleClick={selectGroup}
                         />
-                        <StyledShareButton
-                            data-tip data-for='share'
-                            onClick={(e) => {
-                                e && e.stopPropagation();
-                                shareGroup(theme.name);
-                            }}>
-                            <FontAwesomeIcon
-                                icon={faShareAlt}
-                            />
-                        </StyledShareButton>
+                        <ThemeGroupLinkButton theme={theme.name}/>
                         <StyledSelectButton
                             isOpen={isOpen}
                         >

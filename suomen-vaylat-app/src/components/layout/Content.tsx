@@ -17,7 +17,7 @@ import Search from '../search/Search';
 import AppInfoModal from '../app-info-modal/AppInfoModal';
 import { ToastContainer } from 'react-toastify';
 import { Legend } from "../legend/Legend";
-import { ShareWebSite } from "../share-web-site/ShareWebSite";
+import { ShareWebSitePopup } from "../share-web-site/ShareWebSitePopup";
 
 const StyledContent = styled.div`
     z-index: 1;
@@ -229,7 +229,7 @@ const Content = () => {
             <PublishedMap />
             {isSearchOpen && <Search />}
             {isLegendOpen && <Legend selectedLayers={selectedLayers}></Legend>}
-            {isShareOpen && <ShareWebSite></ShareWebSite>}
+            {isShareOpen && <ShareWebSitePopup></ShareWebSitePopup>}
             <DrawingTools isDrawingToolsOpen={isDrawingToolsOpen} />
             <AppInfoModal />
             <ToastContainer></ToastContainer>

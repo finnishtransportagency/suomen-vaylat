@@ -24,7 +24,11 @@ const initialState = {
   suomenVaylatLayers: [],
   layerMetadata: { data: null, layer: null, uuid: null},
   legends: [],
-  tagsWithLayers: {}
+  tagsWithLayers: {},
+  center: {
+      x: 0,
+      y: 0
+  }
 };
 
 export const rpcSlice = createSlice({
@@ -201,6 +205,11 @@ export const rpcSlice = createSlice({
     },
     setLegends: (state, action) => {
         state.legends = action.payload;
+    },
+    setCurrentMapCenter: (state, action) => {
+        state.center.x = action.payload.centerX;
+        state.center.y = action.payload.centerY;
+        state.currentZoomLevel = action.payload.zoom;
     }
   }
 });
@@ -241,7 +250,8 @@ export const {
     setLayerMetadata,
     getLegends,
     setLegends,
-    setTagsWithLayers
+    setTagsWithLayers,
+    setCurrentMapCenter
 } = rpcSlice.actions;
 
 export default rpcSlice.reducer;
