@@ -64,10 +64,8 @@ const PublishedMap = () => {
         var synchronizer = OskariRPC.synchronizerFactory(channel, handlers);
 
         channel.onReady(() => {
-
             store.dispatch(setChannel(channel));
             channel.getSupportedFunctions(function (data) {
-                console.log(data);
                 if (data.getTags) {
                     channel.getTags(function (data) {
                         store.dispatch(setAllTags(data));
@@ -76,7 +74,6 @@ const PublishedMap = () => {
 
                 if (data.getTagsWithLayers) {
                     channel.getTagsWithLayers(function (data) {
-                        console.log(data);
                         store.dispatch(setTagsWithLayers(data));
                     });
                 }

@@ -51,15 +51,14 @@ const StyledFiltersContainer = styled.div`
   flex-wrap: wrap;
 `;
 
-const StyledDeleteAllSelectedLayers = styled.div`
+const StyledDeleteAllSelectedFilters = styled.div`
     cursor: not-allowed;
     width: 250px;
     height: 30px;
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: rgba(0, 0, 0, 0.2);
-    //background-color: ${props => props.theme.colors.maincolor1};
+    background-color: ${props => props.theme.colors.maincolor1};
     color: ${props => props.theme.colors.mainWhite};
     border-radius: 15px;
     margin: 10px auto 20px auto;
@@ -86,14 +85,19 @@ const LayerListTEMP = ({groups, layers, themes, tags, selectedLayers, suomenVayl
           />
           <Dropdown title={strings.layerlist.layerlistLabels.searchForLayers.toUpperCase()}>
             <StyledLayerList>
-              <LayerSearch />
               <Tabs allTags={tags}>
+                <div label={strings.layerlist.layerlistLabels.themeLayers}>
+                <StyledListSubtitle>
+                      {strings.layerlist.layerlistLabels.searchResults}
+                </StyledListSubtitle>
                 <ThemeLayerList
                   label={strings.layerlist.layerlistLabels.themeLayers}
                   allLayers={layers}
                   allThemes={themes}
                 />
+                </div>
                 <div label={strings.layerlist.layerlistLabels.allLayers}>
+                <LayerSearch layers={layers}/>
                   <StyledFilterList>
                     <StyledListSubtitle>
                       {strings.layerlist.layerlistLabels.filterByType}
@@ -105,16 +109,16 @@ const LayerListTEMP = ({groups, layers, themes, tags, selectedLayers, suomenVayl
                         );
                       })}
                     </StyledFiltersContainer>
-                      <StyledDeleteAllSelectedLayers>
+                      <StyledDeleteAllSelectedFilters>
                         <FontAwesomeIcon
                                 icon={faTrash}
                         />
                         <p>{strings.layerlist.layerlistLabels.clearFilters}</p>
-                    </StyledDeleteAllSelectedLayers>
+                    </StyledDeleteAllSelectedFilters>
                   </StyledFilterList>
                   <StyledListSubtitle>
                       {strings.layerlist.layerlistLabels.searchResults}
-                    </StyledListSubtitle>
+                  </StyledListSubtitle>
                   <LayerList
                     label={strings.layerlist.layerlistLabels.allLayers}
                     groups={groups}
