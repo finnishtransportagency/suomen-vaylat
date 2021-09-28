@@ -4,6 +4,7 @@ const initialState = {
   isFullScreen: false,
   isSideMenuOpen: false,
   isSearchOpen: false,
+  searchParams: "",
   isLegendOpen: false,
   isInfoOpen: false,
   selectedTheme: '',
@@ -24,6 +25,9 @@ export const uiSlice = createSlice({
     setIsSearchOpen: (state, action) => {
       state.isSearchOpen = action.payload;
     },
+    setSearchParams: (state, action) => {
+      state.searchParams = action.payload;
+    },
     setIsLegendOpen: (state, action) =>  {
       state.isLegendOpen = action.payload
     },
@@ -42,15 +46,6 @@ export const uiSlice = createSlice({
   }
 });
 
-export const {
-  setIsFullScreen,
-  setIsSideMenuOpen,
-  setIsSearchOpen,
-  setIsLegendOpen,
-  setIsInfoOpen,
-  setSelectedTheme,
-  setShareUrl,
-  setIsDrawingToolsOpen
-} = uiSlice.actions;
+export const { setSearchParams, setIsSideMenuOpen, setIsSearchOpen, setIsLegendOpen, setIsInfoOpen, setIsFullScreen, setIsDrawingToolsOpen, setSelectedTheme, setShareUrl } = uiSlice.actions;
 
 export default uiSlice.reducer;

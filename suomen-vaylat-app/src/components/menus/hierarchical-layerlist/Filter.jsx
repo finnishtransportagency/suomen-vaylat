@@ -13,7 +13,6 @@ const StyledFilterButton = styled.div`
     padding: 0px 6px 0px 6px;
     margin: 2px;
     font-size: 13px;
-    //min-width: 100px;
     background-color: ${props => props.isSelected ? props.theme.colors.maincolor2 : "white"};
     &:hover{
         background-color: ${props => props.theme.colors.maincolor3};
@@ -25,9 +24,9 @@ const StyledFilter = styled.span`
 
 export const Filter = ({ filter }) => {
     const { store } = useContext(ReactReduxContext);
-    const channel = useSelector(state => state.rpc.channel)
-    const tagLayers = useSelector(state => state.rpc.tagLayers)
-    const tags = useSelector(state => state.rpc.tags)
+    const channel = useSelector(state => state.rpc.channel);
+    const tagLayers = useSelector(state => state.rpc.tagLayers);
+    const tags = useSelector(state => state.rpc.tags);
     const [isSelected, setIsSelected] = useState(false);
 
     const selectFilter = (filter) => {
@@ -44,7 +43,7 @@ export const Filter = ({ filter }) => {
             store.dispatch(setTags(tags2));
         });
         setIsSelected(!isSelected);
-    }
+    };
 
     return (
         <StyledFilter>

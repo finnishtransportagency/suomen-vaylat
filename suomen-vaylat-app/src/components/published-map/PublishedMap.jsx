@@ -5,13 +5,13 @@ import { useAppSelector } from '../../state/hooks';
 import { ReactReduxContext } from 'react-redux';
 import { AnnouncementsModal } from '../announcements-modal/AnnouncementsModal';
 import { MetadataModal } from '../metadata-modal/MetadataModal';
+import { updateLayers } from '../../utils/rpcUtil';
 
 import {
     setLoading,
     setChannel,
     setAllGroups,
     setAllThemesWithLayers,
-    setAllLayers,
     setAllTags,
     setCurrentState,
     setFeatures,
@@ -65,7 +65,6 @@ const PublishedMap = () => {
         var synchronizer = OskariRPC.synchronizerFactory(channel, handlers);
 
         channel.onReady(() => {
-
             store.dispatch(setChannel(channel));
             channel.getSupportedFunctions(function (data) {
                 if (data.getTags) {
@@ -110,11 +109,8 @@ const PublishedMap = () => {
                         store.dispatch(setAllGroups(data.sort(arrangeAlphabetically)));
                     });
                 }
-                if (data.getAllLayers) {
-                    channel.getAllLayers(function (data) {
-                        store.dispatch(setAllLayers(data));
-                    });
-                }
+                updateLayers(store, channel);
+
                 if (data.getTags) {
                     channel.getTags(function (data) {
                         store.dispatch(setAllTags(data));

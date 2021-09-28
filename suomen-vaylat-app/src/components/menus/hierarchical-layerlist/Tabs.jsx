@@ -46,9 +46,8 @@ class Tabs extends Component {
 
   constructor(props) {
     super(props);
-
     this.state = {
-      activeTab: this.props.children[0].props.label,
+      activeTab: (props.comeInMapLink === false) ? this.props.children[0].props.label : this.props.children[1].props.label,
     };
   }
 
