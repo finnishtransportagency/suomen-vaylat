@@ -48,11 +48,10 @@ export const rpcSlice = createSlice({
         state.filter = action.payload;
     },
     setAllLayers: (state, action) => {
-        const selectedLayers = action.payload.filter(layer => layer.visible === true)
-        //if (selectedLayers.length > 0) {
-            state.selectedLayers = selectedLayers;
-        //}
         state.allLayers = action.payload;
+    },
+    setSelectedLayers: (state, action) => {
+        state.selectedLayers = action.payload;
     },
     setAllTags: (state, action) => {
         state.allTags = action.payload;
@@ -86,20 +85,6 @@ export const rpcSlice = createSlice({
     },
     setZoomLevelsLayers: (state, action) => {
         state.zoomLevelsLayers = action.payload;
-    },
-    setSelectedLayers: (state, action) => {
-        const data = action;
-        state.selectedLayers = data;
-    },
-    setSelectedLayerIds: (state, action) => {
-        const oldSelectedLayers = action.payload.selectedLayers;
-        var newSelectedLayers = [...oldSelectedLayers];
-        if (newSelectedLayers.length > 0) {
-            newSelectedLayers.push([...action.payload.layers]);
-        } else {
-            newSelectedLayers.push([...action.payload.layers]);
-        }
-        state.selectedLayerIds = newSelectedLayers;
     },
     setMapLayerVisibility: (state, action) => {
         var layer = action.payload.layer;
@@ -219,6 +204,7 @@ export const {
     setChannel,
     setAllGroups,
     setAllLayers,
+    setSelectedLayers,
     setAllTags,
     setTags,
     setCurrentState,
@@ -226,7 +212,6 @@ export const {
     setTagLayers,
     setZoomRange,
     setZoomLevelsLayers,
-    setSelectedLayerIds,
     setMapLayerVisibility,
     setOpacity,
     setZoomIn,
@@ -240,7 +225,6 @@ export const {
     addMarkerRequest,
     removeMarkerRequest,
     mapMoveRequest,
-    setSelectedLayers,
     setAllThemesWithLayers,
     setActiveAnnouncements,
     setFilter,

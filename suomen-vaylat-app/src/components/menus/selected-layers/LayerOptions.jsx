@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { ReactReduxContext, useSelector } from 'react-redux';
-import { setAllLayers } from '../../../state/slices/rpcSlice';
 import styled from 'styled-components';
+import { updateLayers } from "../../../utils/rpcUtil";
 
 const StyledLayerOptionsContainer = styled.div`
     transition: all 0.3s ease-out;
@@ -49,9 +49,7 @@ export const LayerOptions = ({ layer, isOptionsOpen }) => {
 
     const handleLayerOpacity = (channel, layer, value) => {
         channel.postRequest('ChangeMapLayerOpacityRequest', [layer.id, value]);
-        channel.getAllLayers(function (data) {
-            store.dispatch(setAllLayers(data));
-        });
+        updateLayers(store, channel);
     };
 
     return (

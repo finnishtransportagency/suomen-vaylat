@@ -2,7 +2,6 @@
 import { useState, useContext } from 'react';
 import styled, { keyframes } from 'styled-components';
 import { ReactReduxContext, useSelector } from 'react-redux';
-import { setAllLayers } from '../../../state/slices/rpcSlice';
 import LayerList from './LayerList';
 import Layers from './Layers';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -18,6 +17,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 import Checkbox from '../../checkbox/Checkbox';
+import { updateLayers } from '../../../utils/rpcUtil';
 
 const fadeIn = keyframes`
   from {
@@ -185,7 +185,7 @@ const themeStyles = {
 export const LayerGroup = ({ index, group, layers, hasChildren }) => {
     const [isOpen, setIsOpen] = useState(false);
     const { store } = useContext(ReactReduxContext);
-    const channel = useSelector(state => state.rpc.channel)
+    const channel = useSelector(state => state.rpc.channel);
     //Find matching layers from all layers and groups, then push this group's layers into 'filteredLayers'
     var filteredLayers = [];
     if (group.layers) {
@@ -224,12 +224,10 @@ export const LayerGroup = ({ index, group, layers, hasChildren }) => {
             filteredLayers.map(layer => {
                 channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, false]);
                 return null;
-        });
+            });
         }
-        channel.getAllLayers(function (data) {
-            store.dispatch(setAllLayers(data));
-        });
-    }
+        updateLayers(store, channel);
+    };
     return (
         <StyledLayerGroups
                 index={index}
@@ -254,17 +252,16 @@ export const LayerGroup = ({ index, group, layers, hasChildren }) => {
                     </StyledLeftContent>
                     <StyledRightContent>
                         <Checkbox
-                                    isChecked={checked}
-                                    handleClick={selectGroup}
+                            isChecked={checked}
+                            handleClick={selectGroup}
                         />
                         <StyledSelectButton
                             hasChildren={hasChildren}
-                            isOpen={isOpen}
                         >
                             <FontAwesomeIcon
                                 icon={faAngleDown}
                                 style={{
-                                    transform: isOpen && "rotate(180deg)"
+                                    transform:  isOpen && "rotate(180deg)"
                                 }}
                             />
                         </StyledSelectButton>
@@ -282,7 +279,6 @@ export const LayerGroup = ({ index, group, layers, hasChildren }) => {
                                 handleClick={selectGroup}
                         />
                         <StyledSelectButton
-                            isOpen={isOpen}
                             onClick={() => setIsOpen(!isOpen)}
                         >
                             <FontAwesomeIcon

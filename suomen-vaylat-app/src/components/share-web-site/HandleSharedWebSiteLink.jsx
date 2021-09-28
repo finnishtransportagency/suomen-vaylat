@@ -1,8 +1,8 @@
 import { useContext } from 'react';
 import { ReactReduxContext, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
-import { setAllLayers, setLegends } from '../../state/slices/rpcSlice';
-
+import { setLegends } from '../../state/slices/rpcSlice';
+import { updateLayers } from '../../utils/rpcUtil';
 
 /**
  * HandleSharedWebSiteLink component handles map state when come in via shared url.
@@ -31,15 +31,19 @@ export const HandleSharedWebSiteLink = () => {
     // if mapLayers given, add wanted layers to map
     if (channel && maplayers) {
         const layers = maplayers.split('++');
-        layers.forEach(l => {
+        layers.reverse().forEach((l, index) => {
             const layerProps = l.split('+');
             if (layerProps.length === 3) {
                 const layerId = parseInt(layerProps[0]);
                 const opacity = parseInt(layerProps[1]);
                 const style = layerProps[3];
+
                 channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layerId, true]);
                 channel.postRequest('ChangeMapLayerOpacityRequest', [layerId, opacity]);
                 channel.changeLayerStyle([layerId, style], function() {});
+
+                // Update layer orders to correct
+                channel.reorderLayers([layerId, index], () => {});
             }
         });
     }
@@ -50,8 +54,6 @@ export const HandleSharedWebSiteLink = () => {
     });
 
     // last update layers to redux
-    channel && channel.getAllLayers(function (data) {
-        store.dispatch(setAllLayers(data));
-    });
+    updateLayers(store, channel);
     return (<></>);
 };

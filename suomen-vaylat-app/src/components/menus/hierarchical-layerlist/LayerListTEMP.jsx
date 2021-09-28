@@ -11,6 +11,7 @@ import Dropdown from './Dropdown';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import { useParams } from 'react-router';
 //VÄLIAIKAINEN PALIKKA VÄLITTÄMÄÄN TESTIDATAA HIERARKISELLE TASOVALIKOLLE
 
 
@@ -51,15 +52,14 @@ const StyledFiltersContainer = styled.div`
   flex-wrap: wrap;
 `;
 
-const StyledDeleteAllSelectedLayers = styled.div`
+const StyledDeleteAllSelectedFilters = styled.div`
     cursor: not-allowed;
     width: 250px;
     height: 30px;
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: rgba(0, 0, 0, 0.2);
-    //background-color: ${props => props.theme.colors.maincolor1};
+    background-color: ${props => props.theme.colors.maincolor1};
     color: ${props => props.theme.colors.mainWhite};
     border-radius: 15px;
     margin: 10px auto 20px auto;
@@ -76,6 +76,7 @@ const StyledDeleteAllSelectedLayers = styled.div`
 const LayerListTEMP = ({groups, layers, themes, tags, selectedLayers, suomenVaylatLayers}) => {
     useAppSelector((state) => state.language);
     const selectedTheme = useAppSelector((state) => state.ui.selectedTheme);
+    const {maplayers} = useParams();
 
     return (
       <StyledLayerListContainer>
@@ -87,14 +88,19 @@ const LayerListTEMP = ({groups, layers, themes, tags, selectedLayers, suomenVayl
           />
           <Dropdown title={strings.layerlist.layerlistLabels.searchForLayers.toUpperCase()} isOpen={selectedTheme !== null}>
             <StyledLayerList>
-              <LayerSearch />
-              <Tabs allTags={tags}>
+              <Tabs allTags={tags} comeInMapLink={(maplayers && maplayers.length > 0) ? true : false}>
+                <div label={strings.layerlist.layerlistLabels.themeLayers}>
+                <StyledListSubtitle>
+                      {strings.layerlist.layerlistLabels.searchResults}
+                </StyledListSubtitle>
                 <ThemeLayerList
                   label={strings.layerlist.layerlistLabels.themeLayers}
                   allLayers={layers}
                   allThemes={themes}
                 />
+                </div>
                 <div label={strings.layerlist.layerlistLabels.allLayers}>
+                <LayerSearch layers={layers}/>
                   <StyledFilterList>
                     <StyledListSubtitle>
                       {strings.layerlist.layerlistLabels.filterByType}
@@ -106,16 +112,16 @@ const LayerListTEMP = ({groups, layers, themes, tags, selectedLayers, suomenVayl
                         );
                       })}
                     </StyledFiltersContainer>
-                      <StyledDeleteAllSelectedLayers>
+                      <StyledDeleteAllSelectedFilters>
                         <FontAwesomeIcon
                                 icon={faTrash}
                         />
                         <p>{strings.layerlist.layerlistLabels.clearFilters}</p>
-                    </StyledDeleteAllSelectedLayers>
+                    </StyledDeleteAllSelectedFilters>
                   </StyledFilterList>
                   <StyledListSubtitle>
                       {strings.layerlist.layerlistLabels.searchResults}
-                    </StyledListSubtitle>
+                  </StyledListSubtitle>
                   <LayerList
                     label={strings.layerlist.layerlistLabels.allLayers}
                     groups={groups}
