@@ -1,10 +1,11 @@
 import { useContext, useEffect } from "react";
 import { ReactReduxContext, useSelector } from 'react-redux';
-import { setLegends, setAllLayers } from '../../../state/slices/rpcSlice';
+import { setLegends } from '../../../state/slices/rpcSlice';
 import styled from 'styled-components';
 import { debounce } from 'tlence';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
+import { updateLayers } from "../../../utils/rpcUtil";
 
 const StyledLayerContainer = styled.li`
     overflow: hidden;
@@ -52,12 +53,14 @@ const StyledCheckbox = styled.div`
 export const Layer = ({ layer, theme }) => {
     const { store } = useContext(ReactReduxContext);
     const channel = useSelector(state => state.rpc.channel);
+    const selectedLayers = useSelector(state => state.rpc.selectedLayers);
 
     const handleLayerVisibility = (channel, layer) => {
         channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, !layer.visible]);
-        channel.getAllLayers(function (data) {
-            store.dispatch(setAllLayers(data));
-        });
+        // Update layer orders to correct
+        const position = selectedLayers.length + 1;
+        channel.reorderLayers([layer.id, position], () => {});
+        updateLayers(store, channel);
     };
 
     useEffect(() => {
@@ -108,7 +111,7 @@ export const Layer = ({ layer, theme }) => {
                     onClick={() => handleLayerVisibility(channel, layer)}
                 >
                 {
-                    layer.visible && <FontAwesomeIcon 
+                    layer.visible && <FontAwesomeIcon
                         icon={faCheck}
                     />
                     }
