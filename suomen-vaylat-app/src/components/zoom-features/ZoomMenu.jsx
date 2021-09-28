@@ -5,6 +5,8 @@ import ZoomBar from './ZoomBar';
 import { useAppSelector } from '../../state/hooks';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearchLocation } from '@fortawesome/free-solid-svg-icons';
+import strings from '../../translations';
+import ReactTooltip from "react-tooltip";
 
 const StyledZoomMenu = styled.div`
     z-index: 2;
@@ -50,23 +52,32 @@ const ZoomMenu = () => {
     const rpc = useAppSelector((state) => state.rpc);
 
     return (
-    <StyledZoomMenu>
-        <StyledMyLocationButton onClick={() => {
-            rpc.channel.postRequest('MyLocationPlugin.GetUserLocationRequest');
-        }}>
-            <FontAwesomeIcon
-                icon={faSearchLocation}
-            />
-        </StyledMyLocationButton>
-        <ZoomBar
-            setHoveringIndex={setHoveringIndex}
-            zoomLevelsLayers={rpc.zoomLevelsLayers}
-            hoveringIndex={hoveringIndex}
-            currentZoomLevel={rpc.currentZoomLevel}
-            allLayers={rpc.allLayers}
-            selectedLayers={rpc.selectedLayers}
-        />
-    </StyledZoomMenu>
+        <>
+            <ReactTooltip id='myLoc' place="top" type="dark" effect="float">
+                <span>{strings.tooltips.myLocButton}</span>
+            </ReactTooltip>
+
+            <StyledZoomMenu>
+                <StyledMyLocationButton
+                    data-tip data-for='myLoc'
+                    onClick={() => {
+                        rpc.channel.postRequest('MyLocationPlugin.GetUserLocationRequest');
+                    }}
+                >
+                    <FontAwesomeIcon
+                        icon={faSearchLocation}
+                    />
+                </StyledMyLocationButton>
+                <ZoomBar
+                    setHoveringIndex={setHoveringIndex}
+                    zoomLevelsLayers={rpc.zoomLevelsLayers}
+                    hoveringIndex={hoveringIndex}
+                    currentZoomLevel={rpc.currentZoomLevel}
+                    allLayers={rpc.allLayers}
+                    selectedLayers={rpc.selectedLayers}
+                />
+            </StyledZoomMenu>
+        </>
     );
 };
 
