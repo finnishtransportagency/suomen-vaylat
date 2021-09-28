@@ -77,8 +77,8 @@ const LayerSearch = ({ layers }) => {
             }
             <StyledMessage>
                 {
-                    searchParams !== "" && searchParams.length > 2 && searchResults.length === 0 ? "Ei hakutuloksia" :
-                    searchParams.length > 0 && searchParams.length < 3 && "Syötä vähintään 3 kirjainta"
+                    searchParams !== "" && searchParams.length > 2 && searchResults.length === 0 ? strings.layerlist.layerlistLabels.noSearchResults :
+                    searchParams.length > 0 && searchParams.length < 3 && strings.layerlist.layerlistLabels.typeAtLeastThreeCharacters
                 }
             </StyledMessage>
         </StyledLayerSearchContainer>

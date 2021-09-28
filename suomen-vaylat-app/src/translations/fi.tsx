@@ -86,7 +86,9 @@ const fi = {
             searchForLayers: 'Hae karttatasoja',
             clearFilters: 'Tyhjennä suodatinvalinnat',
             searchResults: 'Hakutulokset',
-            removeAllSelectedLayers: 'Poista kaikki valitut tasot'
+            removeAllSelectedLayers: 'Poista kaikki valitut tasot',
+            noSearchResults: 'Ei hakutuloksia',
+            typeAtLeastThreeCharacters: 'Syötä vähintaan 3 kirjainta'
         }
     },
     metadata: {

@@ -86,7 +86,9 @@ const sv = {
             searchForLayers: 'Search for layers',
             clearFilters: 'Clear filters',
             searchResults: 'Search results',
-            removeAllSelectedLayers: 'Remove all selected layers'
+            removeAllSelectedLayers: 'Remove all selected layers',
+            noSearchResults: 'No search results',
+            typeAtLeastThreeCharacters: 'Type at least 3 characters'
         }
     },
     metadata: {
