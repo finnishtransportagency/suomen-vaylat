@@ -1,8 +1,7 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState, useContext } from 'react';
 import styled, { keyframes } from 'styled-components';
 import strings from '../../../translations';
 import { ReactReduxContext, useSelector } from 'react-redux';
-import { setAllLayers } from '../../../state/slices/rpcSlice';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Layers from './Layers';
 import {
@@ -11,6 +10,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 import Checkbox from '../../checkbox/Checkbox';
+import { updateLayers } from '../../../utils/rpcUtil';
 
 const fadeIn = keyframes`
   from {
@@ -198,9 +198,7 @@ export const ThemeLayerList = ({allLayers, allThemes}) => {
                 return true;
             });
         }
-        channel.getAllLayers(function (data) {
-                store.dispatch(setAllLayers(data));
-        });
+        updateLayers(store, channel);
     };
 
     return (

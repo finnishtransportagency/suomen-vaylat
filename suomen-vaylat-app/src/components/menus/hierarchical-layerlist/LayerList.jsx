@@ -8,8 +8,8 @@ import {
     faAngleDown
 } from '@fortawesome/free-solid-svg-icons';
 import Checkbox from '../../checkbox/Checkbox';
-import { setAllLayers } from '../../../state/slices/rpcSlice';
 import Layers from './Layers';
+import { updateLayers } from '../../../utils/rpcUtil';
 
 const StyledLayerList = styled.div`
 
@@ -207,7 +207,7 @@ export const LayerList = ({ groups, layers, recurse = false}) => {
                     }
                 </StyledLayerList>
             }
-            
+
         </>
     );
   };
@@ -222,7 +222,7 @@ export const LayerList = ({ groups, layers, recurse = false}) => {
     let indeterminate;
     let visibleLayers = [];
     var filteredLayers = [];
-    
+
     if (tagLayers) {
         tagLayers.forEach((tagLayerId) => {
             var layer = layers.find(layer => layer.id === tagLayerId);
@@ -255,11 +255,9 @@ export const LayerList = ({ groups, layers, recurse = false}) => {
             filteredLayers.map(layer => {
                 channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, false]);
                 return null;
-        });
+            });
         }
-        channel.getAllLayers(function (data) {
-            store.dispatch(setAllLayers(data));
-        });
+        updateLayers(store, channel);
     }
 
     return (
