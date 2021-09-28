@@ -186,7 +186,7 @@ const themeStyles = {
 export const LayerGroup = ({ index, group, layers, hasChildren }) => {
     const [isOpen, setIsOpen] = useState(false);
     const { store } = useContext(ReactReduxContext);
-    const channel = useSelector(state => state.rpc.channel)
+    const channel = useSelector(state => state.rpc.channel);
     //Find matching layers from all layers and groups, then push this group's layers into 'filteredLayers'
     var filteredLayers = [];
     if (group.layers) {
@@ -214,8 +214,6 @@ export const LayerGroup = ({ index, group, layers, hasChildren }) => {
         indeterminate = false;
     }
 
-    console.log(filteredLayers);
-
     const selectGroup = (e) => {
         e.stopPropagation();
         if (!indeterminate) {
@@ -232,7 +230,7 @@ export const LayerGroup = ({ index, group, layers, hasChildren }) => {
         channel.getAllLayers(function (data) {
             store.dispatch(setAllLayers(data));
         });
-    }
+    };
     return (
         <StyledLayerGroups
                 index={index}
@@ -257,17 +255,16 @@ export const LayerGroup = ({ index, group, layers, hasChildren }) => {
                     </StyledLeftContent>
                     <StyledRightContent>
                         <Checkbox
-                                    isChecked={checked}
-                                    handleClick={selectGroup}
+                            isChecked={checked}
+                            handleClick={selectGroup}
                         />
                         <StyledSelectButton
                             hasChildren={hasChildren}
-                            isOpen={isOpen}
                         >
                             <FontAwesomeIcon
                                 icon={faAngleDown}
                                 style={{
-                                    transform: isOpen && "rotate(180deg)"
+                                    transform:  isOpen && "rotate(180deg)"
                                 }}
                             />
                         </StyledSelectButton>
@@ -285,7 +282,6 @@ export const LayerGroup = ({ index, group, layers, hasChildren }) => {
                                 handleClick={selectGroup}
                         />
                         <StyledSelectButton
-                            isOpen={isOpen}
                             onClick={() => setIsOpen(!isOpen)}
                         >
                             <FontAwesomeIcon

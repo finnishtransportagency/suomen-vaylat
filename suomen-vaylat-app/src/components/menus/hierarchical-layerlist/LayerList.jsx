@@ -168,20 +168,20 @@ const StyledGroupSelectButton = styled.div`
 
 export const LayerList = ({ groups, layers, recurse = false}) => {
   const tagLayers = useAppSelector((state) => state.rpc.tagLayers);
-  const tags = useSelector(state => state.rpc.tags)
-
-  if (tagLayers.length > 0) {
-    layers = layers.filter(layer => tagLayers.includes(layer.id));
-  }
+  const tags = useSelector(state => state.rpc.tags);
+    if (tagLayers.length > 0) {
+        layers = layers.filter(layer => tagLayers.includes(layer.id));
+    }
     return (
         <>
             {tagLayers.length > 0 ?
                 <StyledLayerList>
-                    {tags.map((tag, index) => {
-                        return (
-                            <TagLayerList tag={tag} layers={layers} index={index} />
-                        );
-                    })
+                    {
+                        tags.map((tag, index) => {
+                            return (
+                                <TagLayerList tag={tag} layers={layers} index={index} />
+                            );
+                        })
                     }
                 </StyledLayerList>
                 :
@@ -215,10 +215,9 @@ export const LayerList = ({ groups, layers, recurse = false}) => {
   const TagLayerList = ({tag, layers, index}) => {
     const [isOpen, setIsOpen] = useState(false);
     const { store } = useContext(ReactReduxContext);
-    const channel = useSelector(state => state.rpc.channel)
-    const tagsWithLayers = useSelector(state => state.rpc.tagsWithLayers)
+    const channel = useSelector(state => state.rpc.channel);
+    const tagsWithLayers = useSelector(state => state.rpc.tagsWithLayers);
     const tagLayers = tagsWithLayers[tag];
-    console.log(layers);
     let checked;
     let indeterminate;
     let visibleLayers = [];

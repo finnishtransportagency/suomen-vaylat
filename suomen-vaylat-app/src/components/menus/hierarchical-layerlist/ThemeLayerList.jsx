@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import styled, { keyframes } from 'styled-components';
 import strings from '../../../translations';
 import { ReactReduxContext, useSelector } from 'react-redux';
@@ -84,7 +84,6 @@ const StyledLeftContent = styled.div`
 const StyledRightContent = styled.div`
     display: flex;
     align-items: center;
-
 `;
 
 const StyledMasterGroupHeaderIcon = styled.div`
@@ -98,7 +97,7 @@ const StyledMasterGroupHeaderIcon = styled.div`
     svg {
         font-size: 16px;
         color: ${props => props.theme.colors.mainWhite};
-    }
+    };
 `;
 
 const StyledSelectButton = styled.button`
@@ -146,27 +145,47 @@ const StyledSubText = styled.p`
 
 
 export const ThemeLayerList = ({allLayers, allThemes}) => {
+    // const searchParams = useSelector(state => state.ui.searchParams);
     return (
         <>
             {allThemes.map((theme, index) => {
                 var filteredLayers = allLayers.filter(layer => theme.layers.includes(layer.id));
-                return (
-                    <ThemeGroup
+                //var searchResults = filteredLayers.filter(layer => layer.name.toLowerCase().includes(searchParams.toLowerCase()));
+                   return <ThemeGroup
                         key={index}
                         theme={theme}
                         filteredLayers={filteredLayers}
                         index={index}
                     />
-                );
+                // return searchParams.length < 2 ? (
+                //     <ThemeGroup
+                //         key={index}
+                //         theme={theme}
+                //         filteredLayers={searchParams !== "" ? searchResults : filteredLayers}
+                //         index={index}
+                //     />
+                // ) : searchResults.length > 0 &&  (
+                //     <ThemeGroup
+                //         key={index}
+                //         theme={theme}
+                //         filteredLayers={searchParams !== "" ? searchResults : filteredLayers}
+                //         index={index}
+                //         searchParams={searchParams}
+                //     /> 
+                // );
             })}
         </>
     );
   };
 
-  export const ThemeGroup = ({theme, filteredLayers, index}) => {
+  export const ThemeGroup = ({theme, filteredLayers, index, searchParams}) => {
     const [isOpen, setIsOpen] = useState(false);
     const { store } = useContext(ReactReduxContext);
-    const channel = useSelector(state => state.rpc.channel)
+    const channel = useSelector(state => state.rpc.channel);
+
+    // useEffect(() => {
+    //     searchParams !== undefined && setIsOpen(true);
+    // },[searchParams]);
 
     let checked;
     let indeterminate;
@@ -184,7 +203,8 @@ export const ThemeLayerList = ({allLayers, allThemes}) => {
     } else {
         checked = false;
         indeterminate = false;
-    }
+    };
+
 
     const selectGroup = (e) => {
         e.stopPropagation();
@@ -202,7 +222,7 @@ export const ThemeLayerList = ({allLayers, allThemes}) => {
         channel.getAllLayers(function (data) {
                 store.dispatch(setAllLayers(data));
         });
-    }
+    };
 
     return (
             <StyledLayerGroups key={index} index={index}>
@@ -212,8 +232,7 @@ export const ThemeLayerList = ({allLayers, allThemes}) => {
                     onClick={() => setIsOpen(!isOpen)}
                 >
                     <StyledLeftContent>
-                        <StyledMasterGroupHeaderIcon
-                        >
+                        <StyledMasterGroupHeaderIcon>
                             <FontAwesomeIcon
                                 icon={faMap}
                             />
@@ -237,35 +256,6 @@ export const ThemeLayerList = ({allLayers, allThemes}) => {
                         </StyledSelectButton>
                     </StyledRightContent>
                 </StyledMasterGroupHeader>
-
-
-                    {/* <StyledMasterGroupHeader
-                        key={"smgh_" + index}
-                        onClick={() => setIsOpen(!isOpen)}
-                    >
-                        <StyledLeftContent>
-                            <StyledMasterGroupHeaderIcon>
-                                <FontAwesomeIcon
-                                    icon={faMap}
-                                />
-                            </StyledMasterGroupHeaderIcon>
-                            <StyledMasterGroupName>{theme.name}</StyledMasterGroupName>
-                        </StyledLeftContent>
-                        <StyledSelectButton
-                            isOpen={isOpen}
-                        >
-                            <Checkbox
-                                    isChecked={checked}
-                                    handleClick={selectGroup}
-                            />
-                            <FontAwesomeIcon
-                                icon={faAngleDown}
-                                style={{
-                                    transform: isOpen && "rotate(180deg)"
-                                }}
-                            />
-                        </StyledSelectButton>
-                    </StyledMasterGroupHeader> */}
                 <StyledLayerGroupContainer
                     key={"slg_" + index}
                     isOpen={isOpen}
