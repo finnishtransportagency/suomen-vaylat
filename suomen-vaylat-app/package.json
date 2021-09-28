@@ -33,6 +33,7 @@
     "react-spinkit": "^3.0.0",
     "react-styled": "0.0.5",
     "react-toastify": "^7.0.4",
+    "react-tooltip": "^4.2.21",
     "redux-persist": "^6.0.0",
     "redux-persist-transform-filter": "0.0.20",
     "redux-promise-middleware": "^6.1.2",
