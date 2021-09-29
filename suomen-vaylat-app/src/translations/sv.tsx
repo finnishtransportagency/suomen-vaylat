@@ -27,7 +27,9 @@ const sv = {
             erase: 'Tyhjennä'
         },
         share: 'Dela denna sida',
-        metadata: 'Visa kartlagers metadata'
+        shareTheme: 'Dela detta tema',
+        metadata: 'Visa kartlagers metadata',
+        showPageInfo: 'Visa sidinformation'
     },
     appInfo: {
         title: 'Sovelluksen tiedot',
