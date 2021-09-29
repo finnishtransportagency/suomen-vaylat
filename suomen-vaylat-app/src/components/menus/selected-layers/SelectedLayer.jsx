@@ -1,12 +1,13 @@
 import {  useContext } from "react";
 import { ReactReduxContext, useSelector } from 'react-redux';
-import { setAllLayers, getLayerMetadata, setLayerMetadata, clearLayerMetadata } from '../../../state/slices/rpcSlice';
+import { getLayerMetadata, setLayerMetadata, clearLayerMetadata } from '../../../state/slices/rpcSlice';
 import styled from 'styled-components';
 import ReactTooltip from "react-tooltip";
 import strings from '../../../translations';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faInfo } from '@fortawesome/free-solid-svg-icons';
+import { updateLayers } from "../../../utils/rpcUtil";
 
 //import LayerOptions from './LayerOptions';
 
@@ -124,16 +125,12 @@ export const SelectedLayer = ({ layer, uuid }) => {
 
     const handleLayerVisibility = (channel, layer) => {
         channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, !layer.visible]);
-        channel.getAllLayers(function (data) {
-            store.dispatch(setAllLayers(data));
-        });
+        updateLayers(store, channel);
     };
 
     const handleLayerOpacity = (channel, layer, value) => {
         channel.postRequest('ChangeMapLayerOpacityRequest', [layer.id, value]);
-        channel.getAllLayers(function (data) {
-            store.dispatch(setAllLayers(data));
-        });
+        updateLayers(store, channel);
     };
 
     const handleMetadataSuccess = (data, layer, uuid) => {
