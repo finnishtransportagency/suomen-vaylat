@@ -11,7 +11,7 @@ import {
 
 import Checkbox from '../../checkbox/Checkbox';
 import { useAppSelector } from '../../../state/hooks';
-import { ThemeGroupLinkButton } from '../../share-web-site/ShareLinkButtons';
+import { ThemeGroupShareButton } from '../../share-web-site/ShareLinkButtons';
 import { updateLayers } from '../../../utils/rpcUtil';
 
 const fadeIn = keyframes`
@@ -233,7 +233,7 @@ export const ThemeGroup = ({theme, filteredLayers, index, searchParams}) => {
                             isChecked={checked}
                             handleClick={selectGroup}
                         />
-                        <ThemeGroupLinkButton theme={theme.name}/>
+                        <ThemeGroupShareButton theme={theme.name}/>
                         <StyledSelectButton
                             isOpen={isOpen}
                         >
