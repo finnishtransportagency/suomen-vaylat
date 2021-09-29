@@ -13,22 +13,26 @@ const StyledDropDownContainerName = styled.p`
 `;
 
 const StyledDropDownContainer = styled.div`
-    overflow-y: auto;
     border-radius: 2px;
     transition: all 0.1s ease-in;
     color: ${props => props.theme.colors.black};
     background-color: ${props => props.theme.colors.mainWhite};
     &::-webkit-scrollbar {
         display: none;
-  };
+    };
 `;
 
 const StyledHeaderContent = styled.div`
     cursor: pointer;
+    position: sticky;
+    top: 0px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     height: 40px;
+    background-color: #fff;
+    z-index: 1;
+    box-shadow: rgb(0 0 0 / 16%) 0px 3px 6px, rgb(0 0 0 / 23%) 0px 3px 6px;
 `;
 
 const StyledExpandButton = styled.button`
