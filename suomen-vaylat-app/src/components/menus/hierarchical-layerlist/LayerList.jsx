@@ -188,12 +188,13 @@ export const LayerList = ({ groups, layers, recurse = false}) => {
                 <StyledLayerList>
                     {groups.map((group, index) => {
                         var hasChildren = false;
-                        if(group.groups) {
+                        if (group.groups) {
                             hasChildren = group.groups.length > 0;
                         }
+                        let isVisible = (group.layers && group.layers.length > 0) || hasChildren;
                         return (
                             <>
-                                { group.layers && (hasChildren || group.layers.length > 0) ? (
+                                { isVisible ? (
                                     <LayerGroup
                                         key={group.id}
                                         index={index}
