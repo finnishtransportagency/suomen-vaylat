@@ -43,9 +43,14 @@ const StyledHeaderButton = styled.div`
     };
 `;
 
-export const ThemeGroupLinkButton = ({theme}) => {
+/**
+ * Theme group share button
+ * @param {String} theme theme name
+ * @returns theme share button component
+ */
+export const ThemeGroupShareButton = ({theme}) => {
     const { store } = useContext(ReactReduxContext);
-    const url = process.env.REACT_APP_SITE_URL + '/theme/{zoom}/{x}/{y}/' + encodeURIComponent(theme);
+    const url = process.env.REACT_APP_SITE_URL + '/theme/{lang}/{zoom}/{x}/{y}/' + encodeURIComponent(theme);
     const shareGroup = () => {
         store.dispatch(setShareUrl(url));
     };
@@ -69,9 +74,13 @@ export const ThemeGroupLinkButton = ({theme}) => {
     );
 };
 
+/**
+ * Website share button
+ * @returns  website share button component
+ */
 export const WebSiteShareButton = () => {
     const { store } = useContext(ReactReduxContext);
-    const url = process.env.REACT_APP_SITE_URL + '/link/{zoom}/{x}/{y}/{maplayers}';
+    const url = process.env.REACT_APP_SITE_URL + '/link/{lang}/{layerlistType}/{zoom}/{x}/{y}/{maplayers}';
     return (
         <StyledHeaderButton onClick={(e) => {
             e && e.stopPropagation();

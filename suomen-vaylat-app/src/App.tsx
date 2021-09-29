@@ -9,7 +9,6 @@ import SimpleReactLightbox from 'simple-react-lightbox';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Modal from 'react-modal';
 import styled from 'styled-components';
-import {setIsSideMenuOpen, setSelectedTheme} from "./state/slices/uiSlice";
 import { HandleSharedWebSiteLink } from './components/share-web-site/HandleSharedWebSiteLink';
 
 Modal.setAppElement('#root');
@@ -29,6 +28,13 @@ const StyledAppContainer = styled.div`
  * @extends {React.Component}
  */
 const App = () => {
+
+    const appContainer = <StyledAppContainer>
+        <HandleSharedWebSiteLink/>
+        <PageTitle />
+        <Layout />
+        </StyledAppContainer>;
+
     return (
         <SimpleReactLightbox>
             <Provider store={store}>
@@ -40,24 +46,12 @@ const App = () => {
                                 <Layout />
                             </StyledAppContainer>
                         }/>
-                        <Route exact path="/theme/:zoom/:x/:y/:themename?" render={(routerProps) => {
-                            const theme = routerProps.match.params.themename;
-                            if (theme) {
-                                store.dispatch(setIsSideMenuOpen(true));
-                                store.dispatch(setSelectedTheme(theme));
-                            }
-                            return (<StyledAppContainer>
-                                <HandleSharedWebSiteLink/>
-                                <PageTitle />
-                                <Layout />
-                                </StyledAppContainer>);
-                            }}/>
-                        <Route exact path="/link/:zoom/:x/:y/:maplayers?" render={() => {
-                            return (<StyledAppContainer>
-                                <HandleSharedWebSiteLink/>
-                                <PageTitle />
-                                <Layout />
-                                </StyledAppContainer>);
+                        <Route exact path="/theme/:lang/:zoom/:x/:y/:themename?" render={() => {
+                            return (appContainer);
+                        }}/>
+
+                        <Route exact path="/link/:lang/:layerlistType/:zoom/:x/:y/:maplayers?" render={() => {
+                            return (appContainer);
                         }}/>
                     </Theme>
                 </Router>

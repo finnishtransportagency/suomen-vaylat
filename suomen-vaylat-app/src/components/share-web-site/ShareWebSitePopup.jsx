@@ -130,6 +130,7 @@ export const ShareWebSitePopup = () => {
 
     const selectedLayers = useAppSelector((state) => state.rpc.selectedLayers);
     const legends = useAppSelector(state => state.rpc.legends);
+    const layerlistType = useAppSelector(state => state.ui.selectedLayerList);
 
     const getMapLayerStyle = (layer) => {
         const legend = legends.filter((l) => { return l.layerId === layer.id;});
@@ -139,17 +140,19 @@ export const ShareWebSitePopup = () => {
         return 'default';
     };
 
-    // FIXME Tarkista tasot sen jälkeen kun selectedLayers on oikeissa järjestyksessä
     let mapLayers = '';
     selectedLayers.forEach((l) => {
         mapLayers += l.id + '+' + l.opacity + '+' + getMapLayerStyle(l) + '++';
     });
     mapLayers = mapLayers.substring(0, mapLayers.length-2);
 
+    // Replace link palceholders to correct values
     let url = shareUrl.replace('{zoom}', currentZoomLevel);
     url = url.replace('{x}', parseInt(currentMapCenter.x));
     url = url.replace('{y}', parseInt(currentMapCenter.y));
     url = url.replace('{maplayers}', mapLayers);
+    url = url.replace('{layerlistType}', layerlistType);
+    url = url.replace('{lang}', strings.getLanguage());
 
     const title = strings.share.shareTexts.title;
     const emailBody = strings.share.shareTexts.emailBody;

@@ -9,7 +9,8 @@ const initialState = {
   isInfoOpen: false,
   selectedTheme: '',
   shareUrl: '',
-  isDrawingToolsOpen: false
+  isDrawingToolsOpen: false,
+  selectedLayerList: 'theme'
 };
 
 export const uiSlice = createSlice({
@@ -42,10 +43,13 @@ export const uiSlice = createSlice({
     },
     setIsDrawingToolsOpen: (state, action) => {
       state.isDrawingToolsOpen = action.payload;
+    },
+    setSelectedLayerListType: (state, action) => {
+      state.selectedLayerList = action.payload;
     }
   }
 });
 
-export const { setSearchParams, setIsSideMenuOpen, setIsSearchOpen, setIsLegendOpen, setIsInfoOpen, setIsFullScreen, setIsDrawingToolsOpen, setSelectedTheme, setShareUrl } = uiSlice.actions;
+export const { setSearchParams, setIsSideMenuOpen, setIsSearchOpen, setIsLegendOpen, setIsInfoOpen, setIsFullScreen, setIsDrawingToolsOpen, setSelectedTheme, setShareUrl, setSelectedLayerListType } = uiSlice.actions;
 
 export default uiSlice.reducer;
