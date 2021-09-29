@@ -9,7 +9,8 @@ import {ReactComponent as VaylaLogoEn} from './images/vayla_sivussa_en_white.svg
 import {ReactComponent as VaylaLogoSv} from './images/vayla_sivussa_sv_white.svg';
 import {faInfoCircle} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {setIsInfoOpen} from "../../state/slices/uiSlice";
+import {setIsFullScreen, setIsInfoOpen, setIsMainScreen} from "../../state/slices/uiSlice";
+import {mapMoveRequest, setZoomTo} from "../../state/slices/rpcSlice";
 import {useContext} from "react";
 import {ReactReduxContext} from "react-redux";
 
@@ -52,6 +53,7 @@ const StyledHeaderMenuBarButton = styled.div`
 `;
 
 const StyledHeaderTitleContainer = styled.p`
+    cursor: pointer;
     display: flex;
     justify-content: flex-start;
     align-items: center;
@@ -98,9 +100,19 @@ export const Header = () => {
     // } else if (lang.current === 'sv') {
     //     vaylaLogo = <VaylaLogoSv />;
     // }
+
+    const setToMainScreen = () => {
+        store.dispatch(mapMoveRequest({
+            x: 505210.92181416467,
+            y: 7109206.188955102
+        }));
+        store.dispatch(setIsMainScreen())
+        store.dispatch(setZoomTo(0))
+    };
+
     return (
         <StyledHeaderContainer>
-            <StyledHeaderTitleContainer>
+            <StyledHeaderTitleContainer onClick={() => setToMainScreen()}>
                     {strings.title.toUpperCase()}
             </StyledHeaderTitleContainer>
             <StyledHeaderLogoContainer>
