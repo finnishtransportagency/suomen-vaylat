@@ -1,5 +1,3 @@
-import { useContext, useEffect, useState } from "react";
-import { ReactReduxContext } from 'react-redux';
 import styled, { keyframes } from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';

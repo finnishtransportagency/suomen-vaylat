@@ -80,53 +80,10 @@ const StyledMasterGroupHeader = styled.div`
     };
 `;
 
-const StyledLeftContent = styled.div`
-    display: flex;
-    align-items: center;
-`;
-
 const StyledRightContent = styled.div`
     display: flex;
     align-items: center;
 
-`;
-
-const StyledMasterGroupHeaderIcon = styled.div`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 28px;
-    height: 28px;
-    background-color: ${props => props.theme.colors.maincolor1};
-    border-radius: 50%;
-    svg {
-        font-size: 16px;
-        color: ${props => props.theme.colors.mainWhite};
-    }
-`;
-
-const StyledGroupHeader = styled.div`
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    height: 30px;
-    background-color: rgba(0, 0, 0, 0.1);
-`;
-
-const StyledGroupName = styled.p`
-    user-select: none;
-    margin: 0;
-    font-size: 13px;
-    padding-left: 0px;
-    color: ${props => props.theme.colors.black};
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 260px;
-    @media ${ props => props.theme.device.mobileL} {
-        font-size: 12px;
-    };
 `;
 
 const StyledSelectButton = styled.button`
@@ -153,17 +110,6 @@ const StyledLayerGroup = styled.ul`
     padding-inline-start: ${props => props.parentId === -1 ? "10px" : "15px"};
     list-style-type: none;
     margin: 0;
-`;
-
-
-const StyledGroupSelectButton = styled.div`
-    cursor: pointer;
-    align-items: center;
-    margin-right: 5px;
-    svg {
-        transition: all 0.5s ease-out;
-        color: ${props => props.theme.colors.mainWhite};
-    }
 `;
 
 export const LayerList = ({ groups, layers, recurse = false}) => {

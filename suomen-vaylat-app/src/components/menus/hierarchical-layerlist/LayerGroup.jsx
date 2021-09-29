@@ -13,8 +13,7 @@ import {
     faLandmark,
     faTrain,
     faRoad,
-    faMap,
-    faCircle
+    faMap
 } from '@fortawesome/free-solid-svg-icons';
 
 import Checkbox from '../../checkbox/Checkbox';

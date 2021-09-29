@@ -10,6 +10,8 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 import Checkbox from '../../checkbox/Checkbox';
+import { useAppSelector } from '../../../state/hooks';
+import { ThemeGroupShareButton } from '../../share-web-site/ShareLinkButtons';
 import { updateLayers } from '../../../utils/rpcUtil';
 
 const fadeIn = keyframes`
@@ -107,7 +109,7 @@ const StyledSelectButton = styled.button`
     height: 100%;
     border: none;
     background-color: transparent;
-    margin-right: 15px;
+    margin-right: 10px;
     svg {
         font-size: 25px;
         transition: all 0.5s ease-out;
@@ -143,7 +145,6 @@ const StyledSubText = styled.p`
     font-size: 12px;
 `;
 
-
 export const ThemeLayerList = ({allLayers, allThemes}) => {
     // const searchParams = useSelector(state => state.ui.searchParams);
     return (
@@ -161,10 +162,13 @@ export const ThemeLayerList = ({allLayers, allThemes}) => {
     );
   };
 
-  export const ThemeGroup = ({theme, filteredLayers, index, searchParams}) => {
+export const ThemeGroup = ({theme, filteredLayers, index, searchParams}) => {
+    const selectedTheme = useAppSelector((state) => state.ui.selectedTheme);
     const [isOpen, setIsOpen] = useState(false);
     const { store } = useContext(ReactReduxContext);
     const channel = useSelector(state => state.rpc.channel);
+    const [isProgrammaticSelection, setIsProgrammaticSelection] = useState(false);
+    const selectedLayers = useSelector(state => state.rpc.selectedLayers);
 
     let checked;
     let indeterminate;
@@ -184,12 +188,15 @@ export const ThemeLayerList = ({allLayers, allThemes}) => {
         indeterminate = false;
     };
 
-
     const selectGroup = (e) => {
-        e.stopPropagation();
+        e && e.stopPropagation();
+
         if (!indeterminate) {
             filteredLayers.map(layer => {
                 channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, !layer.visible]);
+                // Update layer orders to correct
+                const position = selectedLayers.length + 1;
+                channel.reorderLayers([layer.id, position], () => {});
                 return true;
             });
         } else {
@@ -198,12 +205,17 @@ export const ThemeLayerList = ({allLayers, allThemes}) => {
                 return true;
             });
         }
+
         updateLayers(store, channel);
     };
 
+    if (encodeURIComponent(theme.name) === selectedTheme && isProgrammaticSelection === false) {
+        selectGroup();
+        setIsProgrammaticSelection(true);
+    }
+
     return (
             <StyledLayerGroups key={index} index={index}>
-
                 <StyledMasterGroupHeader
                     key={"smgh_" + index}
                     onClick={() => setIsOpen(!isOpen)}
@@ -221,6 +233,7 @@ export const ThemeLayerList = ({allLayers, allThemes}) => {
                             isChecked={checked}
                             handleClick={selectGroup}
                         />
+                        <ThemeGroupShareButton theme={theme.name}/>
                         <StyledSelectButton
                             isOpen={isOpen}
                         >
