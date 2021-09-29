@@ -27,7 +27,9 @@ const fi = {
             erase: 'Tyhjennä'
         },
         share: 'Jaa sivu',
-        metadata: 'Näytä tason metadata'
+        shareTheme: 'Jaa teema',
+        metadata: 'Näytä tason metadata',
+        showPageInfo: 'Näytä sivun info'
     },
     appInfo: {
         title: 'Sovelluksen tiedot',

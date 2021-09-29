@@ -57,8 +57,8 @@ export const ThemeGroupShareButton = ({theme}) => {
 
     return(
         <>
-            <ReactTooltip id={'share_' + theme} place='right' type='dark' effect='float'>
-                <span>{strings.tooltips.share}</span>
+            <ReactTooltip id={'share_' + theme} place='top' type='dark' effect='float'>
+                <span>{strings.tooltips.shareTheme}</span>
             </ReactTooltip>
             <StyledShareButton
                 data-tip data-for={'share_' + theme}
@@ -82,13 +82,20 @@ export const WebSiteShareButton = () => {
     const { store } = useContext(ReactReduxContext);
     const url = process.env.REACT_APP_SITE_URL + '/link/{lang}/{layerlistType}/{zoom}/{x}/{y}/{maplayers}';
     return (
-        <StyledHeaderButton onClick={(e) => {
-            e && e.stopPropagation();
-            store.dispatch(setShareUrl(url));
-        }}>
-            <FontAwesomeIcon
-                icon={faShareAlt}
-            />
-        </StyledHeaderButton>
+        <>
+            <ReactTooltip id={'share_website'} place='bottom' type='dark' effect='float'>
+                <span>{strings.tooltips.share}</span>
+            </ReactTooltip>
+            <StyledHeaderButton
+                data-tip data-for={'share_website'}
+                onClick={(e) => {
+                    e && e.stopPropagation();
+                    store.dispatch(setShareUrl(url));
+                }}>
+                <FontAwesomeIcon
+                    icon={faShareAlt}
+                />
+            </StyledHeaderButton>
+        </>
     );
 };

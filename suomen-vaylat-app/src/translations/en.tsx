@@ -27,7 +27,9 @@ const en = {
             erase: 'Erase'
         },
         share: 'Share this page',
-        metadata: 'Show maplayer metadata'
+        shareTheme: 'Share this theme',
+        metadata: 'Show maplayer metadata',
+        showPageInfo: 'Show page info'
     },
     appInfo: {
         title: 'Sovelluksen tiedot',

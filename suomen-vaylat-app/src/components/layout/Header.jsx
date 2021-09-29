@@ -13,6 +13,7 @@ import {setIsInfoOpen} from "../../state/slices/uiSlice";
 import {useContext} from "react";
 import {ReactReduxContext} from "react-redux";
 import { WebSiteShareButton } from '../share-web-site/ShareLinkButtons';
+import ReactTooltip from 'react-tooltip';
 
 const StyledHeaderContainer = styled.div`
     z-index: 20;
@@ -93,6 +94,9 @@ export const Header = () => {
 
     return (
         <StyledHeaderContainer>
+            <ReactTooltip id={'show_info'} place='bottom' type='dark' effect='float'>
+                <span>{strings.tooltips.showPageInfo}</span>
+            </ReactTooltip>
             <StyledHeaderTitleContainer>
                     {strings.title.toUpperCase()}
             </StyledHeaderTitleContainer>
@@ -105,8 +109,8 @@ export const Header = () => {
                 </a> */}
             </StyledHeaderLogoContainer>
             <StyledRightCornerButtons>
-            <WebSiteShareButton />
-                <StyledHeaderButton onClick={() => store.dispatch(setIsInfoOpen(!isInfoOpen))}>
+                <WebSiteShareButton />
+                <StyledHeaderButton data-tip data-for={'show_info'} onClick={() => store.dispatch(setIsInfoOpen(!isInfoOpen))}>
                     <FontAwesomeIcon
                         icon={faInfoCircle}
                     />
