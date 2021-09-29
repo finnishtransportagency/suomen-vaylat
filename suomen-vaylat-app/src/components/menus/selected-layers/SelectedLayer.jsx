@@ -143,12 +143,14 @@ export const SelectedLayer = ({ layer, uuid }) => {
     };
 
     return (
-        <>
-            <ReactTooltip id='opacity' place="top" type="dark" effect="solid">
-                <span>{strings.tooltips.opacity + ": " + layer.opacity}</span>
-            </ReactTooltip>
-
             <StyledLayerContainer>
+                <ReactTooltip id={'opacity' + layer.id} place="top" type="dark" effect="solid">
+                    <span>{strings.tooltips.opacity + ": " + layer.opacity}</span>
+                </ReactTooltip>
+
+                <ReactTooltip id={'metadata' + layer.id} place="top" type="dark" effect="solid">
+                    <span>{strings.tooltips.metadata}</span>
+                </ReactTooltip>
                     <StyledLeftContent>
                         <StyledLayerDeleteIcon
                             onClick={() => {
@@ -166,7 +168,7 @@ export const SelectedLayer = ({ layer, uuid }) => {
                     </StyledLeftContent>
                     <StyledRightContent>
                         <StyledlayerOpacityControl
-                            data-tip data-for='opacity'
+                            data-tip data-for={'opacity' + layer.id}
                             type="range"
                             min="0"
                             max="100"
@@ -174,6 +176,7 @@ export const SelectedLayer = ({ layer, uuid }) => {
                             onChange={event => handleLayerOpacity(channel, layer, event.target.value)}
                         />
                         <StyledLayerInfoIcon
+                            data-tip data-for={'metadata' + layer.id}
                             disabled={uuid ? false : true}
                             uuid={uuid}
                             onClick={() => {
@@ -184,7 +187,6 @@ export const SelectedLayer = ({ layer, uuid }) => {
                         </StyledLayerInfoIcon>
                     </StyledRightContent>
             </StyledLayerContainer>
-        </>
     );
 };
 

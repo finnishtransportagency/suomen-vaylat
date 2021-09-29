@@ -24,7 +24,11 @@ const initialState = {
   suomenVaylatLayers: [],
   layerMetadata: { data: null, layer: null, uuid: null},
   legends: [],
-  tagsWithLayers: {}
+  tagsWithLayers: {},
+  center: {
+      x: 0,
+      y: 0
+  }
 };
 
 export const rpcSlice = createSlice({
@@ -91,17 +95,17 @@ export const rpcSlice = createSlice({
     },
     setZoomIn: (state, action) => {
         state.channel !== null && state.channel.zoomIn(function (data) {
-            LOG.log('Zoom level after: ', data);
+            //LOG.log('Zoom level after: ', data);
         });
     },
     setZoomOut: (state, action) => {
         state.channel !== null && state.channel.zoomOut(function (data) {
-            LOG.log('Zoom level after: ', data);
+            //LOG.log('Zoom level after: ', data);
         });
     },
     setZoomTo: (state, action) => {
         state.channel !== null && state.channel.zoomTo([action.payload], function (data) {
-            LOG.log('Zoom level after: ', data);
+            //LOG.log('Zoom level after: ', data);
         });
     },
     searchVKMRoad: (state, action) => {
@@ -186,6 +190,11 @@ export const rpcSlice = createSlice({
     },
     setLegends: (state, action) => {
         state.legends = action.payload;
+    },
+    setCurrentMapCenter: (state, action) => {
+        state.center.x = action.payload.centerX;
+        state.center.y = action.payload.centerY;
+        state.currentZoomLevel = action.payload.zoom;
     }
   }
 });
@@ -225,7 +234,8 @@ export const {
     setLayerMetadata,
     getLegends,
     setLegends,
-    setTagsWithLayers
+    setTagsWithLayers,
+    setCurrentMapCenter
 } = rpcSlice.actions;
 
 export default rpcSlice.reducer;
