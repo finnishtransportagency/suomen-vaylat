@@ -10,7 +10,7 @@ const initialState = {
   selectedTheme: '',
   shareUrl: '',
   isDrawingToolsOpen: false,
-  selectedLayerList: 'theme'
+  selectedLayerList: 'themes'
 };
 
 export const uiSlice = createSlice({
