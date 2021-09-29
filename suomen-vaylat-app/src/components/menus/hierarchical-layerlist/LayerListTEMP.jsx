@@ -17,20 +17,19 @@ import { ReactReduxContext } from 'react-redux';
 import { setSelectedLayerListType } from '../../../state/slices/uiSlice';
 //VÄLIAIKAINEN PALIKKA VÄLITTÄMÄÄN TESTIDATAA HIERARKISELLE TASOVALIKOLLE
 
-
 const StyledLayerListContainer = styled.div`
   display: flex;
   flex-direction: column;
   height: 100%;
-  overflow: hidden;
+  overflow-y: auto;
+  &::-webkit-scrollbar {
+        display: none;
+  };
 `;
 
 const StyledLayerList = styled.div`
   justify-content: flex-start;
   background-color:  ${props => props.theme.colors.mainWhite};
-  &::-webkit-scrollbar {
-        display: none;
-  };
 `;
 
 const StyledFilterList = styled.div`
