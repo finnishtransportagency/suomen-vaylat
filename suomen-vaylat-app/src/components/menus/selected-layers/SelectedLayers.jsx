@@ -33,6 +33,9 @@ const StyledMasterGroupHeader = styled.div`
     transition: all 0.1s ease-in;
     color: ${props => props.theme.colors.black};
     background-color: ${props => props.theme.colors.mainWhite};
+    box-shadow: rgb(0 0 0 / 16%) 0px 3px 6px, rgb(0 0 0 / 23%) 0px 3px 6px;
+    position: sticky;
+    top: 0px;
 `;
 
 const StyledLeftContent = styled.div`
