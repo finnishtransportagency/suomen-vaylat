@@ -54,7 +54,7 @@ const StyledExpandContent = styled.div`
 `;
 
 const Dropdown = (props) => {
-    const [isOpen, setIsOpen] = useState(false);
+    const [isOpen, setIsOpen] = useState(props.isOpen === true);
     return (
         <StyledDropDownContainer
             isOpen={isOpen}

@@ -1,7 +1,6 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import Tab from './Tab';
-import Filter from './Filter';
 import styled from 'styled-components';
 import strings from '../../../translations';
 
@@ -47,14 +46,19 @@ class Tabs extends Component {
 
   constructor(props) {
     super(props);
-
     this.state = {
-      activeTab: this.props.children[0].props.label,
+      // if come to link, check layerlist type, else set theme to default
+      activeTab: (!props.layerlistType || props.layerlistType === 'themes') ? strings.layerlist.layerlistLabels.themeLayers : strings.layerlist.layerlistLabels.allLayers
     };
   }
 
   onClickTabItem = (tab) => {
     this.setState({ activeTab: tab });
+    if (tab === strings.layerlist.layerlistLabels.allLayers) {
+      this.props.setLayerListType('layers');
+    } else {
+      this.props.setLayerListType('themes');
+    }
   }
 
   render() {
@@ -75,7 +79,7 @@ class Tabs extends Component {
                 {strings.layerlist.layerlistLabels.show}
           </StyledListSubtitle>
           <StyledTabList>
-            {children.map((child) => {
+            {children.map((child, index) => {
               const { label } = child.props;
 
               return (

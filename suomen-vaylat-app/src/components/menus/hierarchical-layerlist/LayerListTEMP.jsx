@@ -11,6 +11,10 @@ import Dropdown from './Dropdown';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import { useParams } from 'react-router';
+import { useContext } from 'react';
+import { ReactReduxContext } from 'react-redux';
+import { setSelectedLayerListType } from '../../../state/slices/uiSlice';
 //VÄLIAIKAINEN PALIKKA VÄLITTÄMÄÄN TESTIDATAA HIERARKISELLE TASOVALIKOLLE
 
 const StyledLayerListContainer = styled.div`
@@ -72,7 +76,14 @@ const StyledDeleteAllSelectedFilters = styled.div`
 `;
 
 const LayerListTEMP = ({groups, layers, themes, tags, selectedLayers, suomenVaylatLayers}) => {
-  useAppSelector((state) => state.language);
+
+    const { store } = useContext(ReactReduxContext);
+    useAppSelector((state) => state.language);
+    const selectedTheme = useAppSelector((state) => state.ui.selectedTheme);
+    const setLayerListType = (type) => {
+      store.dispatch(setSelectedLayerListType(type));
+    };
+    const {layerlistType} = useParams();
 
     return (
       <StyledLayerListContainer>
@@ -82,9 +93,9 @@ const LayerListTEMP = ({groups, layers, themes, tags, selectedLayers, suomenVayl
             selectedLayers={selectedLayers}
             suomenVaylatLayers={suomenVaylatLayers}
           />
-          <Dropdown title={strings.layerlist.layerlistLabels.searchForLayers.toUpperCase()}>
+          <Dropdown title={strings.layerlist.layerlistLabels.searchForLayers.toUpperCase()} isOpen={selectedTheme !== null}>
             <StyledLayerList>
-              <Tabs allTags={tags}>
+              <Tabs allTags={tags} layerlistType={layerlistType} setLayerListType={setLayerListType}>
                 <div label={strings.layerlist.layerlistLabels.themeLayers}>
                 <StyledListSubtitle>
                       {strings.layerlist.layerlistLabels.searchResults}

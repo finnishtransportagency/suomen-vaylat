@@ -32,7 +32,7 @@ export const Filter = ({ filter }) => {
     const selectFilter = (filter) => {
         var newTags = [...tagLayers];
         var tags2 = [...tags];
-        tags2.includes(filter) ? tags2 = tags2.filter(tag => tag != filter) : tags2.push(filter);
+        tags2.includes(filter) ? tags2 = tags2.filter(tag => tag !== filter) : tags2.push(filter);
         channel.getTagLayers([filter], function (data) {
             if (isSelected) {
                 newTags = newTags.filter(tag => !data.includes(tag));
