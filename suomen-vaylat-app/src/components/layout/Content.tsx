@@ -123,7 +123,7 @@ const StyledMenuBarButton = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: ${(props: { theme: { colors: { maincolor1: any; }; }; }) => props.theme.colors.maincolor1};
+    background-color: ${(props: { isActive: any; theme: { colors: { maincolor2: any; maincolor1: any; }; }; }) => props.isActive ? props.theme.colors.maincolor2 : props.theme.colors.maincolor1};
     border-radius: 50%;
     box-shadow: rgb(0 0 0 / 16%) 0px 3px 6px, rgb(0 0 0 / 23%) 0px 3px 6px;
     svg {
@@ -235,6 +235,7 @@ const Content = () => {
             <StyledMenuBar>
                 <StyledMenuBarButton
                     data-tip data-for='layerlist'
+                    isActive={isSideMenuOpen}
                     onClick={() => store.dispatch(setIsSideMenuOpen(!isSideMenuOpen))}
                 >
                     <StyledLayerCount>
@@ -246,6 +247,7 @@ const Content = () => {
                 </StyledMenuBarButton>
                 <StyledMenuBarButton
                     data-tip data-for='search'
+                    isActive={isSearchOpen}
                     onClick={() => store.dispatch(setIsSearchOpen(!isSearchOpen))}
                 >
                     <FontAwesomeIcon
@@ -254,23 +256,26 @@ const Content = () => {
                 </StyledMenuBarButton>
                 <StyledMenuBarButton
                     data-tip data-for='legend'
+                    isActive={isLegendOpen}
                     onClick={() => store.dispatch(setIsLegendOpen(!isLegendOpen))}>
                     <FontAwesomeIcon
                         icon={faImages}
                     />
                 </StyledMenuBarButton>
                 <StyledMenuBarButton
-                    data-tip data-for='fullscreen'
-                    onClick={() => handleFullScreen()}>
-                    <FontAwesomeIcon
-                        icon={isFullScreen ? faCompress : faExpand}
-                    />
-                </StyledMenuBarButton>
-                <StyledMenuBarButton
                     data-tip data-for='drawingtools'
+                    isActive={isDrawingToolsOpen}
                     onClick={() => store.dispatch(setIsDrawingToolsOpen(!isDrawingToolsOpen))}>
                     <FontAwesomeIcon
                         icon={faPencilRuler}
+                    />
+                </StyledMenuBarButton>
+                <StyledMenuBarButton
+                    data-tip data-for='fullscreen'
+                    isActive={isFullScreen}
+                    onClick={() => handleFullScreen()}>
+                    <FontAwesomeIcon
+                        icon={isFullScreen ? faCompress : faExpand}
                     />
                 </StyledMenuBarButton>
             </StyledMenuBar>
