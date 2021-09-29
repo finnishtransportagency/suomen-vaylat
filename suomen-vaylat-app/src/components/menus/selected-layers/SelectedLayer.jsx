@@ -13,7 +13,6 @@ import { updateLayers } from "../../../utils/rpcUtil";
 
 const StyledLayerContainer = styled.div`
     transition: all 0.3s ease-out;
-    overflow: hidden;
     display: flex;
     align-items: center;
     height: 40px;
