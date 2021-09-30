@@ -55,7 +55,7 @@ const App = () => {
                             return (appContainer);
                         }}/>
 
-                        <Route exact path={routerPrefix + '/link/:lang/:layerlistType/:zoom/:x/:y/:maplayers?'} render={() => {
+                        <Route exact path={routerPrefix + 'link/:lang/:layerlistType/:zoom/:x/:y/:maplayers?'} render={() => {
                             return (appContainer);
                         }}/>
                     </Theme>
