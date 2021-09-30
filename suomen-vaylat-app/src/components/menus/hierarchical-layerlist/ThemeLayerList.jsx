@@ -203,6 +203,9 @@ export const ThemeLayerList = ({allLayers, allThemes}) => {
         });
     };
 
+    // Convert theme's name into simple string
+    const themeLocalization = strings.themelayerlist[theme.name.toLowerCase().replace(/[^a-ö]/g, '').replace(/\u00e4/g, "a").replace(/\u00f6/g, "o")];
+
     return (
             <StyledLayerGroups key={index} index={index}>
 
@@ -240,8 +243,8 @@ export const ThemeLayerList = ({allLayers, allThemes}) => {
                     isOpen={isOpen}
                 >
                     <StyledLayerGroup>
-                        <StyledSubHeader>VÄLIOTSIKKO</StyledSubHeader>
-                        <StyledSubText>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Accusamus, necessitatibus adipisci velit, aliquid sunt commodi officiis expedita dolor eligendi natus numquam reiciendis ipsam non facere repellat deserunt blanditiis quam? Dicta!</StyledSubText>
+                        <StyledSubHeader>{themeLocalization.title}</StyledSubHeader>
+                        <StyledSubText>{themeLocalization.description}</StyledSubText>
                         <StyledSubHeader>
                             {strings.layerlist.layerlistLabels.layers.toUpperCase()}
                         </StyledSubHeader>

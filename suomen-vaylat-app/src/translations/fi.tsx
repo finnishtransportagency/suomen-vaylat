@@ -91,6 +91,32 @@ const fi = {
             typeAtLeastThreeCharacters: 'Syötä vähintaan 3 kirjainta'
         }
     },
+    themelayerlist: {
+        hankekartta: {
+            title: 'Hankekartta',
+            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc ut est id dolor suscipit placerat. Nam in elit non lacus aliquet molestie. Duis non pretium.'
+        },
+        paallysteidenkuntokartta: {
+            title: 'Päällysteiden kuntokartta',
+            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc ut est id dolor suscipit placerat. Nam in elit non lacus aliquet molestie. Duis non pretium.'
+        },
+        siltarajoituskartta: {
+            title: 'Siltarajoituskartta',
+            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc ut est id dolor suscipit placerat. Nam in elit non lacus aliquet molestie. Duis non pretium.'
+        },
+        tienumerokartta: {
+            title: 'Tienumerokartta',
+            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc ut est id dolor suscipit placerat. Nam in elit non lacus aliquet molestie. Duis non pretium.'
+        },
+        rataverkonkuntokartta: {
+            title: 'Rataverkon kuntokartta',
+            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc ut est id dolor suscipit placerat. Nam in elit non lacus aliquet molestie. Duis non pretium.'
+        },
+        tentverkosto: {
+            title: 'TEN-T verkosto',
+            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc ut est id dolor suscipit placerat. Nam in elit non lacus aliquet molestie. Duis non pretium.'
+        }
+    },
     metadata: {
         title: '{0} -karttatason metatiedot',
         tabs: {

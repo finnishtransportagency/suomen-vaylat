@@ -1,9 +1,25 @@
 import { useContext, useState } from 'react';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import { ReactReduxContext, useSelector } from 'react-redux';
 import { setTagLayers, setTags } from '../../../state/slices/rpcSlice';
 
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+`;
+
 const StyledFilterButton = styled.div`
+    opacity: 0;
+    animation-delay: ${props => props.index * 0.025 + 's'};
+    animation-timing-function: ease-in-out;
+    animation-fill-mode: forwards;
+    animation-duration: 0.2s;
+    animation-name: ${fadeIn};
     transition: all 0.1s ease-out;
     cursor: pointer;
     display: flex;
@@ -22,12 +38,12 @@ const StyledFilterButton = styled.div`
 const StyledFilter = styled.span`
 `;
 
-export const Filter = ({ filter }) => {
+export const Filter = ({ filter, isOpen, index }) => {
     const { store } = useContext(ReactReduxContext);
     const channel = useSelector(state => state.rpc.channel);
     const tagLayers = useSelector(state => state.rpc.tagLayers);
     const tags = useSelector(state => state.rpc.tags);
-    const [isSelected, setIsSelected] = useState(false);
+    const [isSelected, setIsSelected] = useState(tags.includes(filter));
 
     const selectFilter = (filter) => {
         var newTags = [...tagLayers];
@@ -48,8 +64,10 @@ export const Filter = ({ filter }) => {
     return (
         <StyledFilter>
             <StyledFilterButton
+                index={index}
                 onClick={() => selectFilter(filter)}
                 isSelected={isSelected}
+                isOpen={isOpen}
             >
                 {
                     filter

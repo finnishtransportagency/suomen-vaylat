@@ -1,4 +1,5 @@
-import styled from 'styled-components';
+import { useState } from 'react';
+import styled, { keyframes } from 'styled-components';
 import { useAppSelector } from '../../../state/hooks';
 import LayerList from './LayerList';
 import ThemeLayerList from './ThemeLayerList';
@@ -10,9 +11,18 @@ import LayerSearch from './LayerSearch';
 import Dropdown from './Dropdown';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faTrash, faFilter } from '@fortawesome/free-solid-svg-icons';
 //VÄLIAIKAINEN PALIKKA VÄLITTÄMÄÄN TESTIDATAA HIERARKISELLE TASOVALIKOLLE
 
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+`;
 
 const StyledLayerListContainer = styled.div`
   display: flex;
@@ -30,6 +40,13 @@ const StyledLayerList = styled.div`
 `;
 
 const StyledFilterList = styled.div`
+    opacity: 0;
+    animation-timing-function: ease-in-out;
+    animation-fill-mode: forwards;
+    animation-duration: 0.5s;
+    animation-name: ${fadeIn};
+    transition: all .3s ease-in-out;
+    height: ${props => props.isOpen ? "100%" : 0};
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -72,8 +89,28 @@ const StyledDeleteAllSelectedFilters = styled.div`
     }
 `;
 
+const StyledSelectButton = styled.button`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    border: none;
+    background-color: transparent;
+    svg {
+        font-size: 1rem;
+        transition: all 0.5s ease-out;
+        color: ${props => props.theme.colors.black};
+    };
+`;
+
+const StyledSearchAndFilter = styled.div`
+    display: flex;
+    align-items: center;
+`;
+
 const LayerListTEMP = ({groups, layers, themes, tags, selectedLayers, suomenVaylatLayers}) => {
   useAppSelector((state) => state.language);
+  const [isOpen, setIsOpen] = useState(false);
 
     return (
       <StyledLayerListContainer>
@@ -97,25 +134,36 @@ const LayerListTEMP = ({groups, layers, themes, tags, selectedLayers, suomenVayl
                 />
                 </div>
                 <div label={strings.layerlist.layerlistLabels.allLayers}>
-                <LayerSearch layers={layers}/>
-                  <StyledFilterList>
-                    <StyledListSubtitle>
-                      {strings.layerlist.layerlistLabels.filterByType}
-                    </StyledListSubtitle>
-                    <StyledFiltersContainer>
-                      {tags.map((tag, index) => {
-                        return(
-                            <Filter key={index} filter={tag} />
-                        );
-                      })}
-                    </StyledFiltersContainer>
-                      <StyledDeleteAllSelectedFilters>
+                  <StyledSearchAndFilter>
+                    <StyledSelectButton
+                      onClick={() => setIsOpen(!isOpen)}
+                    >
                         <FontAwesomeIcon
-                                icon={faTrash}
+                            icon={faFilter}
                         />
-                        <p>{strings.layerlist.layerlistLabels.clearFilters}</p>
-                    </StyledDeleteAllSelectedFilters>
-                  </StyledFilterList>
+                    </StyledSelectButton>
+                    <LayerSearch layers={layers}/>
+                  </StyledSearchAndFilter>
+                  { isOpen &&
+                    <StyledFilterList isOpen={isOpen}>
+                      <StyledListSubtitle>
+                        {strings.layerlist.layerlistLabels.filterByType}
+                      </StyledListSubtitle>
+                      <StyledFiltersContainer>
+                        {tags.map((tag, index) => {
+                          return(
+                              <Filter isOpen={isOpen} key={index} index={index} filter={tag} />
+                          );
+                        })}
+                      </StyledFiltersContainer>
+                        <StyledDeleteAllSelectedFilters>
+                          <FontAwesomeIcon
+                                  icon={faTrash}
+                          />
+                          <p>{strings.layerlist.layerlistLabels.clearFilters}</p>
+                      </StyledDeleteAllSelectedFilters>
+                    </StyledFilterList>
+                  }
                   <StyledListSubtitle>
                       {strings.layerlist.layerlistLabels.searchResults}
                   </StyledListSubtitle>
