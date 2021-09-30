@@ -93,13 +93,12 @@ export const rpcSlice = createSlice({
     },
     setSelectedLayersOrder: (state, action) => {
         const newSelectedLayers = action.payload.map((layer, idx) =>
-            Object.assign({}, layer, {priority:idx})
+            Object.assign({}, layer)
         )
         state.selectedLayers = newSelectedLayers;
     },
     setSelectedLayers: (state, action) => {
-        const data = action;
-        state.selectedLayers = data;
+        state.selectedLayers = action.payload;
     },
     setSelectedLayerIds: (state, action) => {
         const oldSelectedLayers = action.payload.selectedLayers;

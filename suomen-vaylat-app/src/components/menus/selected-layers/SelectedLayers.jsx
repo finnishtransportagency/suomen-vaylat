@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react";
 import styled from 'styled-components';
-import { setAllLayers, setSelectedLayersOrder} from '../../../state/slices/rpcSlice';
+import { setAllLayers, setSelectedLayers } from '../../../state/slices/rpcSlice';
 import strings from '../../../translations';
 import { ReactReduxContext, useSelector } from 'react-redux';
 import {SortableContainer, SortableElement} from 'react-sortable-hoc';
@@ -120,12 +120,9 @@ export const SelectedLayers = ({ label, selectedLayers, suomenVaylatLayers }) =>
     const [isOpen, setIsOpen] = useState(false);
 
     const onSortEnd = (oldIndex) => {
-        channel.reorderLayers([selectedLayers[oldIndex.oldIndex].id, oldIndex.newIndex], function () {});
-        store.dispatch(setSelectedLayersOrder(arrayMoveImmutable(
-            selectedLayers,
-            oldIndex.oldIndex,
-            oldIndex.newIndex)
-        ))
+        channel.reorderLayers([selectedLayers[oldIndex.oldIndex].id, selectedLayers.length - oldIndex.newIndex], function () {});
+        const newSelectedLayers = arrayMoveImmutable(selectedLayers, oldIndex.oldIndex, oldIndex.newIndex)
+        store.dispatch(setSelectedLayers(newSelectedLayers))
     };
 
     const handleRemoveAllSelectedLayers = () => {
