@@ -29,6 +29,11 @@ const StyledAppContainer = styled.div`
  */
 const App = () => {
 
+    let routerPrefix = '/';
+    if (process.env.REACT_APP_ROUTER_PREFIX) {
+        routerPrefix = process.env.REACT_APP_ROUTER_PREFIX;
+    }
+
     const appContainer = <StyledAppContainer>
         <HandleSharedWebSiteLink/>
         <PageTitle />
@@ -40,17 +45,17 @@ const App = () => {
             <Provider store={store}>
                 <Router history={history}>
                     <Theme>
-                        <Route exact path="/" render={() =>
+                        <Route exact path={routerPrefix} render={() =>
                             <StyledAppContainer>
                                 <PageTitle />
                                 <Layout />
                             </StyledAppContainer>
                         }/>
-                        <Route exact path="/theme/:lang/:zoom/:x/:y/:themename?" render={() => {
+                        <Route exact path={routerPrefix + 'theme/:lang/:zoom/:x/:y/:themename?'} render={() => {
                             return (appContainer);
                         }}/>
 
-                        <Route exact path="/link/:lang/:layerlistType/:zoom/:x/:y/:maplayers?" render={() => {
+                        <Route exact path={routerPrefix + '/link/:lang/:layerlistType/:zoom/:x/:y/:maplayers?'} render={() => {
                             return (appContainer);
                         }}/>
                     </Theme>
