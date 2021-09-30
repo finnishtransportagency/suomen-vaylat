@@ -1,26 +1,16 @@
 import { useContext, useEffect, useState } from "react";
 import { ReactReduxContext } from 'react-redux';
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
+import strings from '../../translations';
+import ReactTooltip from "react-tooltip";
 
 import { setZoomIn, setZoomOut } from '../../state/slices/rpcSlice';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAngleUp, faSearchMinus, faSearchPlus, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import { faAngleUp, faSearchMinus, faSearchPlus} from '@fortawesome/free-solid-svg-icons';
 
 import ZoomBarCircle from './ZoomBarCircle';
 import ZoomBarLayer from './ZoomBarLayer';
-
-const fadeIn = keyframes`
-  0% {
-      opacity: 0;
-   // transform: rotate(0deg);
-  }
-
-  100% {
-        opacity: 1;
-    //transform: rotate(360deg);
-  }
-`;
 
 const StyledZoomBarContainer = styled.div`
     pointer-events: none;
@@ -162,76 +152,93 @@ const ZoomBar = ({
     const [currentLayersInfoLayers, setCurrentLayersInfoLayers] = useState([]);
 
     useEffect(() => {
-        
+
         hoveringIndex !== null ?
         setCurrentLayersInfoLayers(Object.values(zoomLevelsLayers)[hoveringIndex].layers) :
         zoomLevelsLayers[currentZoomLevel] !== undefined && setCurrentLayersInfoLayers(Object.values(zoomLevelsLayers)[currentZoomLevel].layers);
     }, [zoomLevelsLayers, currentZoomLevel, hoveringIndex]);
 
     return (
-            <StyledZoomBarContainer>
-                    <StyledZoomBarLayersInfo isExpanded={isExpanded}>
-                        <StyledTitle>TÄLLÄ ZOOM-TASOLLA NÄYTETTÄVÄT TASOT</StyledTitle>
-                        <StyledLayerInfoContainer>
-                            {currentLayersInfoLayers.map((zoomLevelLayer, index) => {
-                                const layer = selectedLayers.find(layer => layer.id === zoomLevelLayer.id);
-                                return layer && <ZoomBarLayer
-                                    key={hoveringIndex !== null ?
-                                        zoomLevelLayer.id+'_'+hoveringIndex :
-                                        zoomLevelLayer.id+'_'+currentZoomLevel
-                                    }
-                                    zoomLevelLayer={zoomLevelLayer}
-                                    index={index}
-                                    layer={layer}
-                                />
-                            })}
-                        </StyledLayerInfoContainer>
+        <>
+            <ReactTooltip id='zoomExpand' place="top" type="dark" effect="float">
+                <span>{strings.tooltips.zoomExpand}</span>
+            </ReactTooltip>
 
-                    </StyledZoomBarLayersInfo>
-                    <StyledExpandControl
-                        onClick={() => setIsExpanded(!isExpanded)}
-                    >
-                        <FontAwesomeIcon
-                            icon={faAngleUp}
-                            style={{
-                                transform: isExpanded && "rotate(180deg)"
-                            }}
-                        />
-                    </StyledExpandControl>
-                    <StyledCenterLine />
-                    <StyledZoomBarControlBottom
-                        disabled={currentZoomLevel === 0}
-                        onClick={() => {
-                            store.dispatch(setZoomOut());
-                        }}
-                    >
-                        <FontAwesomeIcon
-                            icon={faSearchMinus}
-                        />
-                    </StyledZoomBarControlBottom>
-                    {Object.values(zoomLevelsLayers).map((layer, index) => {
-                        return <ZoomBarCircle
-                            key={index}
+            <ReactTooltip id='zoomIn' place="top" type="dark" effect="float">
+                <span>{strings.tooltips.zoomIn}</span>
+            </ReactTooltip>
+
+            <ReactTooltip id='zoomOut' place="top" type="dark" effect="float">
+                <span>{strings.tooltips.zoomOut}</span>
+            </ReactTooltip>
+
+            <StyledZoomBarContainer>
+            <StyledZoomBarLayersInfo isExpanded={isExpanded}>
+                <StyledTitle>TÄLLÄ ZOOM-TASOLLA NÄYTETTÄVÄT TASOT</StyledTitle>
+                <StyledLayerInfoContainer>
+                    {currentLayersInfoLayers.map((zoomLevelLayer, index) => {
+                        const layer = selectedLayers.find(layer => layer.id === zoomLevelLayer.id);
+                        return layer && <ZoomBarLayer
+                            key={hoveringIndex !== null ?
+                                zoomLevelLayer.id+'_'+hoveringIndex :
+                                zoomLevelLayer.id+'_'+currentZoomLevel
+                            }
+                            zoomLevelLayer={zoomLevelLayer}
                             index={index}
                             layer={layer}
-                            zoomLevel={currentZoomLevel}
-                            isExpanded={isExpanded}
-                            //zoomTo={zoomTo}
-                            setHoveringIndex={setHoveringIndex}
                         />
                     })}
-                    <StyledZoomBarControlTop
-                        disabled={currentZoomLevel === Object.values(zoomLevelsLayers).length - 1}
-                        onClick={() => {
-                            store.dispatch(setZoomIn());
-                        }}
-                    >
-                        <FontAwesomeIcon
-                            icon={faSearchPlus}
-                        />
-                    </StyledZoomBarControlTop>
+                </StyledLayerInfoContainer>
+
+            </StyledZoomBarLayersInfo>
+            <StyledExpandControl
+                data-tip data-for='zoomExpand'
+                onClick={() => setIsExpanded(!isExpanded)}
+            >
+                <FontAwesomeIcon
+                    icon={faAngleUp}
+                    style={{
+                        transform: isExpanded && "rotate(180deg)"
+                    }}
+                />
+            </StyledExpandControl>
+            <StyledCenterLine />
+            <StyledZoomBarControlBottom
+                data-tip data-for='zoomOut'
+                disabled={currentZoomLevel === 0}
+                onClick={() => {
+                    store.dispatch(setZoomOut());
+                }}
+            >
+                <FontAwesomeIcon
+                    icon={faSearchMinus}
+                />
+            </StyledZoomBarControlBottom>
+            {Object.values(zoomLevelsLayers).map((layer, index) => {
+                return <ZoomBarCircle
+                    key={index}
+                    index={index}
+                    layer={layer}
+                    zoomLevel={currentZoomLevel}
+                    isExpanded={isExpanded}
+                    //zoomTo={zoomTo}
+                    setHoveringIndex={setHoveringIndex}
+                />
+            })}
+            <StyledZoomBarControlTop
+                data-tip data-for='zoomIn'
+                disabled={currentZoomLevel === Object.values(zoomLevelsLayers).length - 1}
+                onClick={() => {
+                    store.dispatch(setZoomIn());
+                }}
+            >
+                <FontAwesomeIcon
+                    icon={faSearchPlus}
+                />
+            </StyledZoomBarControlTop>
             </StyledZoomBarContainer>
-    )
+        </>
+    );
 };
 
 export default ZoomBar;

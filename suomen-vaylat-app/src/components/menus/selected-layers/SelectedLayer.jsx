@@ -1,17 +1,19 @@
 import {  useContext } from "react";
 import { ReactReduxContext, useSelector } from 'react-redux';
-import { setAllLayers, getLayerMetadata, setLayerMetadata, clearLayerMetadata } from '../../../state/slices/rpcSlice';
+import { getLayerMetadata, setLayerMetadata, clearLayerMetadata } from '../../../state/slices/rpcSlice';
 import styled from 'styled-components';
+import ReactTooltip from "react-tooltip";
+import strings from '../../../translations';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faInfo } from '@fortawesome/free-solid-svg-icons';
+import { updateLayers } from "../../../utils/rpcUtil";
 
 //import LayerOptions from './LayerOptions';
 
 const StyledLayerContainer = styled.div`
     cursor: pointer;
     transition: all 0.3s ease-out;
-    overflow: hidden;
     display: flex;
     align-items: center;
     height: 40px;
@@ -124,16 +126,12 @@ export const SelectedLayer = ({ layer, uuid }) => {
 
     const handleLayerVisibility = (channel, layer) => {
         channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, !layer.visible]);
-        channel.getAllLayers(function (data) {
-            store.dispatch(setAllLayers(data));
-        });
+        updateLayers(store, channel);
     };
 
     const handleLayerOpacity = (channel, layer, value) => {
         channel.postRequest('ChangeMapLayerOpacityRequest', [layer.id, value]);
-        channel.getAllLayers(function (data) {
-            store.dispatch(setAllLayers(data));
-        });
+        updateLayers(store, channel);
     };
 
     const handleMetadataSuccess = (data, layer, uuid) => {
@@ -146,41 +144,50 @@ export const SelectedLayer = ({ layer, uuid }) => {
     };
 
     return (
-        <StyledLayerContainer>
-                <StyledLeftContent>
-                    <StyledLayerDeleteIcon
-                        onClick={() => {
-                            handleLayerVisibility(channel, layer);
-                        }}>
-                        <FontAwesomeIcon
-                            icon={faTrash}
+            <StyledLayerContainer>
+                <ReactTooltip id={'opacity' + layer.id} place="top" type="dark" effect="solid">
+                    <span>{strings.tooltips.opacity + ": " + layer.opacity}</span>
+                </ReactTooltip>
+
+                <ReactTooltip id={'metadata' + layer.id} place="top" type="dark" effect="solid">
+                    <span>{strings.tooltips.metadata}</span>
+                </ReactTooltip>
+                    <StyledLeftContent>
+                        <StyledLayerDeleteIcon
+                            onClick={() => {
+                                handleLayerVisibility(channel, layer);
+                            }}>
+                            <FontAwesomeIcon
+                                icon={faTrash}
+                            />
+                        </StyledLayerDeleteIcon>
+                        <StyledlayerHeader>
+                            <StyledLayerName>
+                                {layer.name}
+                            </StyledLayerName>
+                        </StyledlayerHeader>
+                    </StyledLeftContent>
+                    <StyledRightContent>
+                        <StyledlayerOpacityControl
+                            data-tip data-for={'opacity' + layer.id}
+                            type="range"
+                            min="0"
+                            max="100"
+                            value={layer.opacity}
+                            onChange={event => handleLayerOpacity(channel, layer, event.target.value)}
                         />
-                    </StyledLayerDeleteIcon>
-                    <StyledlayerHeader>
-                        <StyledLayerName>
-                            {layer.name}
-                        </StyledLayerName>
-                    </StyledlayerHeader>
-                </StyledLeftContent>
-                <StyledRightContent>
-                    <StyledlayerOpacityControl
-                        type="range"
-                        min="0"
-                        max="100"
-                        value={layer.opacity}
-                        onChange={event => handleLayerOpacity(channel, layer, event.target.value)}
-                    />
-                    <StyledLayerInfoIcon
-                        disabled={uuid ? false : true}
-                        uuid={uuid}
-                        onClick={() => {
-                            store.dispatch(getLayerMetadata({ layer: layer, uuid: uuid, handler: handleMetadataSuccess, errorHandler: handleMetadataError }));
-                        }
-                    }>
-                        <FontAwesomeIcon icon={faInfo} />
-                    </StyledLayerInfoIcon>
-                </StyledRightContent>
-        </StyledLayerContainer>
+                        <StyledLayerInfoIcon
+                            data-tip data-for={'metadata' + layer.id}
+                            disabled={uuid ? false : true}
+                            uuid={uuid}
+                            onClick={() => {
+                                store.dispatch(getLayerMetadata({ layer: layer, uuid: uuid, handler: handleMetadataSuccess, errorHandler: handleMetadataError }));
+                            }
+                        }>
+                            <FontAwesomeIcon icon={faInfo} />
+                        </StyledLayerInfoIcon>
+                    </StyledRightContent>
+            </StyledLayerContainer>
     );
 };
 

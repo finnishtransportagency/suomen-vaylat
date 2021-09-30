@@ -7,8 +7,32 @@ const sv = {
         }
     },
     title: 'Suomen Väylät SV',
+    tooltips: {
+        layerlistButton: 'Tasovalikko',
+        searchButton: 'Haku',
+        legendButton: 'Legenda',
+        fullscreenButton: 'Koko näyttö',
+        myLocButton: 'Oma sijainti',
+        zoomExpand: 'Laajenna',
+        zoomIn: 'Lähennä',
+        zoomOut: 'Loitonna',
+        opacity: 'Läpinäkyvyys',
+        drawingtools: {
+            drawingtoolsButton: 'Piirtotyökalut',
+            circle: 'Ympyrä',
+            square: 'Neliö',
+            box: 'Laatikko',
+            linestring: 'Viiva',
+            polygon: 'Monikulmio',
+            erase: 'Tyhjennä'
+        },
+        share: 'Dela denna sida',
+        shareTheme: 'Dela detta tema',
+        metadata: 'Visa kartlagers metadata',
+        showPageInfo: 'Visa sidinformation'
+    },
     appInfo: {
-        title: "Sovelluksen tiedot",
+        title: 'Sovelluksen tiedot',
         headingText: 'Suomen Väylät -karttapalvelu kokoaa yhteen Väyläviraston avoimet, ' +
             'eri väylämuotoihin liittyvät aineistot. ' +
             'Palvelun kautta väylätietoja halutaan kuvata mahdollisimman ' +
@@ -66,7 +90,9 @@ const sv = {
             searchForLayers: 'Search for layers',
             clearFilters: 'Clear filters',
             searchResults: 'Search results',
-            removeAllSelectedLayers: 'Remove all selected layers'
+            removeAllSelectedLayers: 'Remove all selected layers',
+            noSearchResults: 'No search results',
+            typeAtLeastThreeCharacters: 'Type at least 3 characters'
         }
     },
     metadata: {
@@ -627,6 +653,23 @@ const sv = {
         title: 'Förklaringar',
         nolegend: 'Inte en legend',
         noSelectedLayers: 'Inga kartlager har valts'
+    },
+    share: {
+        title: 'Dela denna sida',
+        shareTexts: {
+            title: 'Suomen Väylät - kartlänk',
+            emailBody: 'Kartlänk: ',
+            copiedToClipboard: 'Kopierat till urklipp'
+        },
+        tooltips: {
+            clipboard: 'Kopiera till Urklipp',
+            email: 'Skicka via e-post',
+            facebook: 'Dela på Facebook',
+            twitter: 'Dela på Twitter',
+            linkedin: 'Dela på LinkedIn',
+            whatsapp: 'Dela på WhatsApp',
+            telegram: 'Dela på Telegram'
+        }
     }
 }
 

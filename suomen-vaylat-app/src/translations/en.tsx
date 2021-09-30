@@ -7,8 +7,32 @@ const en = {
         }
     },
     title: 'Suomen Väylät EN',
+    tooltips: {
+        layerlistButton: 'Layerlist',
+        searchButton: 'Search',
+        legendButton: 'Legend',
+        fullscreenButton: 'Full screen',
+        myLocButton: 'My location',
+        zoomExpand: 'Expand',
+        zoomIn: 'Zoom in',
+        zoomOut: 'Zoom out',
+        opacity: 'Opacity',
+        drawingtools: {
+            drawingtoolsButton: 'Drawing tools',
+            circle: 'Circle',
+            square: 'Square',
+            box: 'Box',
+            linestring: 'Line',
+            polygon: 'Polygon',
+            erase: 'Erase'
+        },
+        share: 'Share this page',
+        shareTheme: 'Share this theme',
+        metadata: 'Show maplayer metadata',
+        showPageInfo: 'Show page info'
+    },
     appInfo: {
-        title: "Sovelluksen tiedot",
+        title: 'Sovelluksen tiedot',
         headingText: 'Suomen Väylät -karttapalvelu kokoaa yhteen Väyläviraston avoimet, ' +
             'eri väylämuotoihin liittyvät aineistot. ' +
             'Palvelun kautta väylätietoja halutaan kuvata mahdollisimman ' +
@@ -66,7 +90,9 @@ const en = {
             searchForLayers: 'Search for layers',
             clearFilters: 'Clear filters',
             searchResults: 'Search results',
-            removeAllSelectedLayers: 'Remove all selected layers'
+            removeAllSelectedLayers: 'Remove all selected layers',
+            noSearchResults: 'No search results',
+            typeAtLeastThreeCharacters: 'Type at least 3 characters'
         }
     },
     metadata: {
@@ -627,6 +653,23 @@ const en = {
         title: 'Map legends',
         nolegend: 'No layer legend',
         noSelectedLayers: 'No map layers selected'
+    },
+    share: {
+        title: 'Share this page',
+        shareTexts: {
+            title: 'Suomen Väylät - map link',
+            emailBody: 'Map link: ',
+            copiedToClipboard: 'Copied to clipboard'
+        },
+        tooltips: {
+            clipboard: 'Copy to clipboard',
+            email: 'Send by email',
+            facebook: 'Share on Facebook',
+            twitter: 'Share on Twitter',
+            linkedin: 'Share on LinkedIn',
+            whatsapp: 'Share on WhatsApp',
+            telegram: 'Share on Telegram'
+        }
     }
 }
 

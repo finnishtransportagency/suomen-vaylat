@@ -8,8 +8,8 @@ import {
     faAngleDown
 } from '@fortawesome/free-solid-svg-icons';
 import Checkbox from '../../checkbox/Checkbox';
-import { setAllLayers } from '../../../state/slices/rpcSlice';
 import Layers from './Layers';
+import { updateLayers } from '../../../utils/rpcUtil';
 
 const StyledLayerList = styled.div`
 
@@ -80,53 +80,10 @@ const StyledMasterGroupHeader = styled.div`
     };
 `;
 
-const StyledLeftContent = styled.div`
-    display: flex;
-    align-items: center;
-`;
-
 const StyledRightContent = styled.div`
     display: flex;
     align-items: center;
 
-`;
-
-const StyledMasterGroupHeaderIcon = styled.div`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 28px;
-    height: 28px;
-    background-color: ${props => props.theme.colors.maincolor1};
-    border-radius: 50%;
-    svg {
-        font-size: 16px;
-        color: ${props => props.theme.colors.mainWhite};
-    }
-`;
-
-const StyledGroupHeader = styled.div`
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    height: 30px;
-    background-color: rgba(0, 0, 0, 0.1);
-`;
-
-const StyledGroupName = styled.p`
-    user-select: none;
-    margin: 0;
-    font-size: 13px;
-    padding-left: 0px;
-    color: ${props => props.theme.colors.black};
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 260px;
-    @media ${ props => props.theme.device.mobileL} {
-        font-size: 12px;
-    };
 `;
 
 const StyledSelectButton = styled.button`
@@ -155,45 +112,35 @@ const StyledLayerGroup = styled.ul`
     margin: 0;
 `;
 
-
-const StyledGroupSelectButton = styled.div`
-    cursor: pointer;
-    align-items: center;
-    margin-right: 5px;
-    svg {
-        transition: all 0.5s ease-out;
-        color: ${props => props.theme.colors.mainWhite};
-    }
-`;
-
 export const LayerList = ({ groups, layers, recurse = false}) => {
   const tagLayers = useAppSelector((state) => state.rpc.tagLayers);
-  const tags = useSelector(state => state.rpc.tags)
-
-  if (tagLayers.length > 0) {
-    layers = layers.filter(layer => tagLayers.includes(layer.id));
-  }
+  const tags = useSelector(state => state.rpc.tags);
+    if (tagLayers.length > 0) {
+        layers = layers.filter(layer => tagLayers.includes(layer.id));
+    }
     return (
         <>
             {tagLayers.length > 0 ?
                 <StyledLayerList>
-                    {tags.map((tag, index) => {
-                        return (
-                            <TagLayerList tag={tag} layers={layers} index={index} />
-                        );
-                    })
+                    {
+                        tags.map((tag, index) => {
+                            return (
+                                <TagLayerList tag={tag} layers={layers} index={index} />
+                            );
+                        })
                     }
                 </StyledLayerList>
                 :
                 <StyledLayerList>
                     {groups.map((group, index) => {
                         var hasChildren = false;
-                        if(group.groups) {
+                        if (group.groups) {
                             hasChildren = group.groups.length > 0;
                         }
+                        let isVisible = (group.layers && group.layers.length > 0) || hasChildren;
                         return (
                             <>
-                                { group.layers && (hasChildren || group.layers.length > 0) ? (
+                                { isVisible ? (
                                     <LayerGroup
                                         key={group.id}
                                         index={index}
@@ -207,7 +154,7 @@ export const LayerList = ({ groups, layers, recurse = false}) => {
                     }
                 </StyledLayerList>
             }
-            
+
         </>
     );
   };
@@ -215,14 +162,14 @@ export const LayerList = ({ groups, layers, recurse = false}) => {
   const TagLayerList = ({tag, layers, index}) => {
     const [isOpen, setIsOpen] = useState(false);
     const { store } = useContext(ReactReduxContext);
-    const channel = useSelector(state => state.rpc.channel)
-    const tagsWithLayers = useSelector(state => state.rpc.tagsWithLayers)
+    const channel = useSelector(state => state.rpc.channel);
+    const tagsWithLayers = useSelector(state => state.rpc.tagsWithLayers);
     const tagLayers = tagsWithLayers[tag];
     let checked;
     let indeterminate;
     let visibleLayers = [];
     var filteredLayers = [];
-    
+
     if (tagLayers) {
         tagLayers.forEach((tagLayerId) => {
             var layer = layers.find(layer => layer.id === tagLayerId);
@@ -255,11 +202,9 @@ export const LayerList = ({ groups, layers, recurse = false}) => {
             filteredLayers.map(layer => {
                 channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, false]);
                 return null;
-        });
+            });
         }
-        channel.getAllLayers(function (data) {
-            store.dispatch(setAllLayers(data));
-        });
+        updateLayers(store, channel);
     }
 
     return (

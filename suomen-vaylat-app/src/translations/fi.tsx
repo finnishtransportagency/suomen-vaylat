@@ -7,8 +7,32 @@ const fi = {
         }
     },
     title: 'Suomen Väylät',
+    tooltips: {
+        layerlistButton: 'Tasovalikko',
+        searchButton: 'Haku',
+        legendButton: 'Legenda',
+        fullscreenButton: 'Koko näyttö',
+        myLocButton: 'Oma sijainti',
+        zoomExpand: 'Laajenna',
+        zoomIn: 'Lähennä',
+        zoomOut: 'Loitonna',
+        opacity: 'Opasiteetti',
+        drawingtools: {
+            drawingtoolsButton: 'Piirtotyökalut',
+            circle: 'Ympyrä',
+            square: 'Neliö',
+            box: 'Laatikko',
+            linestring: 'Viiva',
+            polygon: 'Monikulmio',
+            erase: 'Tyhjennä'
+        },
+        share: 'Jaa sivu',
+        shareTheme: 'Jaa teema',
+        metadata: 'Näytä tason metadata',
+        showPageInfo: 'Näytä sivun info'
+    },
     appInfo: {
-        title: "Sovelluksen tiedot",
+        title: 'Sovelluksen tiedot',
         headingText: 'Suomen Väylät -karttapalvelu kokoaa yhteen Väyläviraston avoimet, ' +
             'eri väylämuotoihin liittyvät aineistot. ' +
             'Palvelun kautta väylätietoja halutaan kuvata mahdollisimman ' +
@@ -66,7 +90,9 @@ const fi = {
             searchForLayers: 'Hae karttatasoja',
             clearFilters: 'Tyhjennä suodatinvalinnat',
             searchResults: 'Hakutulokset',
-            removeAllSelectedLayers: 'Poista kaikki valitut tasot'
+            removeAllSelectedLayers: 'Poista kaikki valitut tasot',
+            noSearchResults: 'Ei hakutuloksia',
+            typeAtLeastThreeCharacters: 'Syötä vähintaan 3 kirjainta'
         }
     },
     metadata: {
@@ -631,6 +657,23 @@ const fi = {
         title: 'Karttaselitteet',
         nolegend: 'Ei karttaselitettä',
         noSelectedLayers: 'Karttatasoja ei valittuna'
+    },
+    share: {
+        title: 'Jaa sivu',
+        shareTexts: {
+            title: 'Suomen Väylät - karttalinkki',
+            emailBody: 'Karttalinkki: ',
+            copiedToClipboard: 'Kopioitu leikepöydälle'
+        },
+        tooltips: {
+            clipboard: 'Kopioi leikepöydälle',
+            email: 'Lähetä sähköpostilla',
+            facebook: 'Jaa Facebookissa',
+            twitter: 'Jaa Twitterissä',
+            linkedin: 'Jaa LinkedInissä',
+            whatsapp: 'Jaa WhatsAppissa',
+            telegram: 'Jaa Telegrammissa'
+        }
     }
 }
 
