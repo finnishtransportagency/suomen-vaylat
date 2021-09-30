@@ -10,6 +10,7 @@ import { faAngleUp, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 import SelectedLayer from './SelectedLayer';
 import SelectedLayersCount from './SelectedLayersCount';
+import { updateLayers } from "../../../utils/rpcUtil";
 
 const StyledSelectedLayers = styled.div`
     background-color: ${props => props.theme.colors.mainWhite};
@@ -35,6 +36,9 @@ const StyledMasterGroupHeader = styled.div`
     transition: all 0.1s ease-in;
     color: ${props => props.theme.colors.black};
     background-color: ${props => props.theme.colors.mainWhite};
+    box-shadow: rgb(0 0 0 / 16%) 0px 3px 6px, rgb(0 0 0 / 23%) 0px 3px 6px;
+    position: sticky;
+    top: 0px;
 `;
 
 const StyledLeftContent = styled.div`
@@ -129,9 +133,7 @@ export const SelectedLayers = ({ label, selectedLayers, suomenVaylatLayers }) =>
         selectedLayers.forEach(layer => {
             channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, !layer.visible]);
         });
-        channel.getAllLayers(function (data) {
-            store.dispatch(setAllLayers(data));
-        });
+        updateLayers(store, channel);
     };
 
     return (

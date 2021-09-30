@@ -2,7 +2,6 @@ import { useState, useContext } from 'react';
 import styled, { keyframes } from 'styled-components';
 import strings from '../../../translations';
 import { ReactReduxContext, useSelector } from 'react-redux';
-import { setAllLayers } from '../../../state/slices/rpcSlice';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Layers from './Layers';
 import {
@@ -11,6 +10,9 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 import Checkbox from '../../checkbox/Checkbox';
+import { useAppSelector } from '../../../state/hooks';
+import { ThemeGroupShareButton } from '../../share-web-site/ShareLinkButtons';
+import { updateLayers } from '../../../utils/rpcUtil';
 
 const fadeIn = keyframes`
   from {
@@ -84,7 +86,6 @@ const StyledLeftContent = styled.div`
 const StyledRightContent = styled.div`
     display: flex;
     align-items: center;
-
 `;
 
 const StyledMasterGroupHeaderIcon = styled.div`
@@ -98,7 +99,7 @@ const StyledMasterGroupHeaderIcon = styled.div`
     svg {
         font-size: 16px;
         color: ${props => props.theme.colors.mainWhite};
-    }
+    };
 `;
 
 const StyledSelectButton = styled.button`
@@ -108,7 +109,7 @@ const StyledSelectButton = styled.button`
     height: 100%;
     border: none;
     background-color: transparent;
-    margin-right: 15px;
+    margin-right: 10px;
     svg {
         font-size: 25px;
         transition: all 0.5s ease-out;
@@ -144,30 +145,30 @@ const StyledSubText = styled.p`
     font-size: 12px;
 `;
 
-
 export const ThemeLayerList = ({allLayers, allThemes}) => {
-    console.log(allThemes);
+    // const searchParams = useSelector(state => state.ui.searchParams);
     return (
         <>
             {allThemes.map((theme, index) => {
                 var filteredLayers = allLayers.filter(layer => theme.layers.includes(layer.id));
-                return (
-                    <ThemeGroup
+                   return <ThemeGroup
                         key={index}
                         theme={theme}
                         filteredLayers={filteredLayers}
                         index={index}
                     />
-                );
             })}
         </>
     );
   };
 
-  export const ThemeGroup = ({theme, filteredLayers, index}) => {
+export const ThemeGroup = ({theme, filteredLayers, index, searchParams}) => {
+    const selectedTheme = useAppSelector((state) => state.ui.selectedTheme);
     const [isOpen, setIsOpen] = useState(false);
     const { store } = useContext(ReactReduxContext);
-    const channel = useSelector(state => state.rpc.channel)
+    const channel = useSelector(state => state.rpc.channel);
+    const [isProgrammaticSelection, setIsProgrammaticSelection] = useState(false);
+    const selectedLayers = useSelector(state => state.rpc.selectedLayers);
 
     let checked;
     let indeterminate;
@@ -185,13 +186,17 @@ export const ThemeLayerList = ({allLayers, allThemes}) => {
     } else {
         checked = false;
         indeterminate = false;
-    }
+    };
 
     const selectGroup = (e) => {
-        e.stopPropagation();
+        e && e.stopPropagation();
+
         if (!indeterminate) {
             filteredLayers.map(layer => {
                 channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, !layer.visible]);
+                // Update layer orders to correct
+                const position = selectedLayers.length + 1;
+                channel.reorderLayers([layer.id, position], () => {});
                 return true;
             });
         } else {
@@ -200,21 +205,23 @@ export const ThemeLayerList = ({allLayers, allThemes}) => {
                 return true;
             });
         }
-        channel.getAllLayers(function (data) {
-                store.dispatch(setAllLayers(data));
-        });
+
+        updateLayers(store, channel);
+    };
+
+    if (encodeURIComponent(theme.name) === selectedTheme && isProgrammaticSelection === false) {
+        selectGroup();
+        setIsProgrammaticSelection(true);
     }
 
     return (
             <StyledLayerGroups key={index} index={index}>
-
                 <StyledMasterGroupHeader
                     key={"smgh_" + index}
                     onClick={() => setIsOpen(!isOpen)}
                 >
                     <StyledLeftContent>
-                        <StyledMasterGroupHeaderIcon
-                        >
+                        <StyledMasterGroupHeaderIcon>
                             <FontAwesomeIcon
                                 icon={faMap}
                             />
@@ -226,6 +233,7 @@ export const ThemeLayerList = ({allLayers, allThemes}) => {
                             isChecked={checked}
                             handleClick={selectGroup}
                         />
+                        <ThemeGroupShareButton theme={theme.name}/>
                         <StyledSelectButton
                             isOpen={isOpen}
                         >
@@ -238,35 +246,6 @@ export const ThemeLayerList = ({allLayers, allThemes}) => {
                         </StyledSelectButton>
                     </StyledRightContent>
                 </StyledMasterGroupHeader>
-
-
-                    {/* <StyledMasterGroupHeader
-                        key={"smgh_" + index}
-                        onClick={() => setIsOpen(!isOpen)}
-                    >
-                        <StyledLeftContent>
-                            <StyledMasterGroupHeaderIcon>
-                                <FontAwesomeIcon
-                                    icon={faMap}
-                                />
-                            </StyledMasterGroupHeaderIcon>
-                            <StyledMasterGroupName>{theme.name}</StyledMasterGroupName>
-                        </StyledLeftContent>
-                        <StyledSelectButton
-                            isOpen={isOpen}
-                        >
-                            <Checkbox
-                                    isChecked={checked}
-                                    handleClick={selectGroup}
-                            />
-                            <FontAwesomeIcon
-                                icon={faAngleDown}
-                                style={{
-                                    transform: isOpen && "rotate(180deg)"
-                                }}
-                            />
-                        </StyledSelectButton>
-                    </StyledMasterGroupHeader> */}
                 <StyledLayerGroupContainer
                     key={"slg_" + index}
                     isOpen={isOpen}

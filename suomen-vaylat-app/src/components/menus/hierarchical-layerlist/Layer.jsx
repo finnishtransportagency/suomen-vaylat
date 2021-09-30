@@ -1,10 +1,11 @@
 import { useContext, useEffect } from "react";
 import { ReactReduxContext, useSelector } from 'react-redux';
-import { setLegends, setAllLayers } from '../../../state/slices/rpcSlice';
+import { setLegends } from '../../../state/slices/rpcSlice';
 import styled from 'styled-components';
 import { debounce } from 'tlence';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
+import { updateLayers } from "../../../utils/rpcUtil";
 
 const StyledLayerContainer = styled.li`
     overflow: hidden;
@@ -46,19 +47,21 @@ const StyledCheckbox = styled.div`
     svg {
         color: #0064af;
         font-size: 12px;
-    }
+    };
 `;
 
-export const Layer = ({ layer, isOpen, theme }) => {
+export const Layer = ({ layer, theme }) => {
     const { store } = useContext(ReactReduxContext);
-    const channel = useSelector(state => state.rpc.channel)
+    const channel = useSelector(state => state.rpc.channel);
+    const selectedLayers = useSelector(state => state.rpc.selectedLayers);
 
     const handleLayerVisibility = (channel, layer) => {
         channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, !layer.visible]);
-        channel.getAllLayers(function (data) {
-            store.dispatch(setAllLayers(data));
-        });
-    }
+        // Update layer orders to correct
+        const position = selectedLayers.length + 1;
+        channel.reorderLayers([layer.id, position], () => {});
+        updateLayers(store, channel);
+    };
 
     useEffect(() => {
         const updateLayerLegends = (channel) => {
@@ -71,7 +74,7 @@ export const Layer = ({ layer, isOpen, theme }) => {
     }, [store]);
 
     if (layer.visible) {
-        // if theme then check layer theme style
+        // If theme then check layer theme style
         if (theme) {
             channel.getLayerThemeStyle([layer.id, theme], function(styleName) {
                 if (styleName) {
@@ -82,7 +85,7 @@ export const Layer = ({ layer, isOpen, theme }) => {
                 }
             });
         }
-        // else use default
+        // Else use default
         else {
             channel.getLayerThemeStyle([layer.id, null], function(styleName) {
                 if (styleName) {
@@ -97,7 +100,6 @@ export const Layer = ({ layer, isOpen, theme }) => {
     return (
             <StyledLayerContainer
                 key={'layer' + layer.id + '_' + theme}
-                isOpen={isOpen}
             >
                 <StyledlayerHeader>
                     <StyledLayerName>
@@ -109,7 +111,7 @@ export const Layer = ({ layer, isOpen, theme }) => {
                     onClick={() => handleLayerVisibility(channel, layer)}
                 >
                 {
-                    layer.visible && <FontAwesomeIcon 
+                    layer.visible && <FontAwesomeIcon
                         icon={faCheck}
                     />
                     }
