@@ -20,6 +20,7 @@ Before production build (npm create build) create file .env.production.local und
 | REACT_APP_PUBLISHED_MAP_DOMAIN | Published map domain, example: `https://paikkatietodev.testivaylapilvi.fi`                                                        |
 | REACT_APP_PROXY_URL            | Proxy url, example: `https://paikkatietodev.testivaylapilvi.fi/sv-kartta/`                                                        |
 | REACT_APP_SITE_URL             | App site url, example: `http://localhost:3000`                                                                                    |
+| REACT_APP_ROUTER_PREFIX        | React router prefix, example: `/` or `/suomen-vaylat/`                                                                            |
 
 
 ## Available Scripts
