@@ -7,6 +7,7 @@ import Layer from '../hierarchical-layerlist/Layer';
 
 const StyledLayerSearchContainer = styled.div`
     display: flex;
+    flex: 1;
     flex-direction: column;
     margin: 10px;
 `;
