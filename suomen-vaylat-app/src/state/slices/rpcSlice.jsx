@@ -62,6 +62,9 @@ export const rpcSlice = createSlice({
         //}
         state.allLayers = action.payload;
     },
+    setSelectedLayers: (state, action) => {
+        state.selectedLayers = action.payload;
+    },
     setAllTags: (state, action) => {
         state.allTags = action.payload;
     },
