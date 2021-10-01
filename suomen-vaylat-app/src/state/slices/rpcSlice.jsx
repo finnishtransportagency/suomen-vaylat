@@ -98,25 +98,6 @@ export const rpcSlice = createSlice({
     setZoomLevelsLayers: (state, action) => {
         state.zoomLevelsLayers = action.payload;
     },
-    setSelectedLayersOrder: (state, action) => {
-        const newSelectedLayers = action.payload.map((layer, idx) =>
-            Object.assign({}, layer)
-        )
-        state.selectedLayers = newSelectedLayers;
-    },
-    setSelectedLayers: (state, action) => {
-        state.selectedLayers = action.payload;
-    },
-    setSelectedLayerIds: (state, action) => {
-        const oldSelectedLayers = action.payload.selectedLayers;
-        var newSelectedLayers = [...oldSelectedLayers];
-        if (newSelectedLayers.length > 0) {
-            newSelectedLayers.push([...action.payload.layers]);
-        } else {
-            newSelectedLayers.push([...action.payload.layers]);
-        }
-        state.selectedLayerIds = newSelectedLayers;
-    },
     setMapLayerVisibility: (state, action) => {
         var layer = action.payload.layer;
         state.channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, !layer.visible]);
@@ -256,7 +237,6 @@ export const {
     addMarkerRequest,
     removeMarkerRequest,
     mapMoveRequest,
-    setSelectedLayersOrder,
     setAllThemesWithLayers,
     setActiveAnnouncements,
     setFilter,
