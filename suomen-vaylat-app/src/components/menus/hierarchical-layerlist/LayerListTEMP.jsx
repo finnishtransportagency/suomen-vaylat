@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
+import { ReactReduxContext } from 'react-redux';
 import styled, { keyframes } from 'styled-components';
 import { useAppSelector } from '../../../state/hooks';
 import LayerList from './LayerList';
@@ -9,6 +10,7 @@ import Filter from './Filter';
 import SelectedLayers from '../../menus/selected-layers/SelectedLayers';
 import LayerSearch from './LayerSearch';
 import Dropdown from './Dropdown';
+import { setTagLayers, setTags } from '../../../state/slices/rpcSlice';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faFilter } from '@fortawesome/free-solid-svg-icons';
@@ -69,7 +71,7 @@ const StyledFiltersContainer = styled.div`
 `;
 
 const StyledDeleteAllSelectedFilters = styled.div`
-    cursor: not-allowed;
+    cursor: pointer;
     width: 250px;
     height: 30px;
     display: flex;
@@ -109,8 +111,14 @@ const StyledSearchAndFilter = styled.div`
 `;
 
 const LayerListTEMP = ({groups, layers, themes, tags, selectedLayers, suomenVaylatLayers}) => {
+  const { store } = useContext(ReactReduxContext);
   useAppSelector((state) => state.language);
   const [isOpen, setIsOpen] = useState(false);
+
+  const emptyFilters = () => {
+    store.dispatch(setTagLayers([]));
+    store.dispatch(setTags([]));
+  }
 
     return (
       <StyledLayerListContainer>
@@ -156,11 +164,13 @@ const LayerListTEMP = ({groups, layers, themes, tags, selectedLayers, suomenVayl
                           );
                         })}
                       </StyledFiltersContainer>
-                        <StyledDeleteAllSelectedFilters>
-                          <FontAwesomeIcon
-                                  icon={faTrash}
-                          />
-                          <p>{strings.layerlist.layerlistLabels.clearFilters}</p>
+                      <StyledDeleteAllSelectedFilters
+                        onClick={() => emptyFilters()}
+                      >
+                        <FontAwesomeIcon
+                          icon={faTrash}
+                        />
+                        <p>{strings.layerlist.layerlistLabels.clearFilters}</p>
                       </StyledDeleteAllSelectedFilters>
                     </StyledFilterList>
                   }
