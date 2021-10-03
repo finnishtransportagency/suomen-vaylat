@@ -7,7 +7,7 @@ import strings from '../../translations';
 import PublishedMap from '../published-map/PublishedMap.jsx';
 import LayerListTEMP from '../menus/hierarchical-layerlist/LayerListTEMP';
 import DrawingTools from '../measurement-tools/DrawingTools';
-import ReactTooltip from "react-tooltip";
+import ReactTooltip from 'react-tooltip';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLayerGroup, faSearch, faTimes, faImages, faPencilRuler, faExpand, faCompress } from '@fortawesome/free-solid-svg-icons';
@@ -17,6 +17,7 @@ import Search from '../search/Search';
 import AppInfoModal from '../app-info-modal/AppInfoModal';
 import { ToastContainer } from 'react-toastify';
 import { Legend } from "../legend/Legend";
+import { ShareWebSitePopup } from "../share-web-site/ShareWebSitePopup";
 
 const StyledContent = styled.div`
     z-index: 1;
@@ -44,6 +45,10 @@ const StyledSideMenu = styled.div`
     transform: ${(props: { isSideMenuOpen: boolean; }) => props.isSideMenuOpen ? "translateX(0%)" : "translateX(-100%)"};
     background-color: ${(props: { theme: { colors: { maincolor1: any; }; }; }) => props.theme.colors.maincolor1};
     box-shadow: rgba(0, 0, 0, 0.19) 5px 5px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+    overflow-y: auto;
+    &::-webkit-scrollbar {
+        display: none;
+    };
     @media ${(props: { theme: { device: { laptop: any; }; }; }) => props.theme.device.laptop} {
         z-index: 10;
     };
@@ -119,7 +124,7 @@ const StyledMenuBarButton = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: ${(props: { theme: { colors: { maincolor1: any; }; }; }) => props.theme.colors.maincolor1};
+    background-color: ${(props: { isActive: any; theme: { colors: { maincolor2: any; maincolor1: any; }; }; }) => props.isActive ? props.theme.colors.maincolor2 : props.theme.colors.maincolor1};
     border-radius: 50%;
     box-shadow: rgb(0 0 0 / 16%) 0px 3px 6px, rgb(0 0 0 / 23%) 0px 3px 6px;
     svg {
@@ -161,6 +166,9 @@ const Content = () => {
     const allThemes = useAppSelector((state) => state.rpc.allThemesWithLayers);
     const allTags = useAppSelector((state) => state.rpc.allTags);
     const suomenVaylatLayers = useAppSelector((state) => state.rpc.suomenVaylatLayers);
+
+    const shareUrl = useAppSelector((state) => state.ui.shareUrl);
+    const isShareOpen = shareUrl && shareUrl.length > 0 ? true : false;
 
     const handleFullScreen = () => {
         if (!document.fullscreenElement) {
@@ -225,12 +233,14 @@ const Content = () => {
             <PublishedMap />
             {isSearchOpen && <Search />}
             {isLegendOpen && <Legend selectedLayers={selectedLayers}></Legend>}
+            {isShareOpen && <ShareWebSitePopup></ShareWebSitePopup>}
             <DrawingTools isDrawingToolsOpen={isDrawingToolsOpen} />
             <AppInfoModal />
             <ToastContainer></ToastContainer>
             <StyledMenuBar>
                 <StyledMenuBarButton
                     data-tip data-for='layerlist'
+                    isActive={isSideMenuOpen}
                     onClick={() => store.dispatch(setIsSideMenuOpen(!isSideMenuOpen))}
                 >
                     <StyledLayerCount>
@@ -242,6 +252,7 @@ const Content = () => {
                 </StyledMenuBarButton>
                 <StyledMenuBarButton
                     data-tip data-for='search'
+                    isActive={isSearchOpen}
                     onClick={() => store.dispatch(setIsSearchOpen(!isSearchOpen))}
                 >
                     <FontAwesomeIcon
@@ -250,23 +261,26 @@ const Content = () => {
                 </StyledMenuBarButton>
                 <StyledMenuBarButton
                     data-tip data-for='legend'
+                    isActive={isLegendOpen}
                     onClick={() => store.dispatch(setIsLegendOpen(!isLegendOpen))}>
                     <FontAwesomeIcon
                         icon={faImages}
                     />
                 </StyledMenuBarButton>
                 <StyledMenuBarButton
-                    data-tip data-for='fullscreen'
-                    onClick={() => handleFullScreen()}>
-                    <FontAwesomeIcon
-                        icon={isFullScreen ? faCompress : faExpand}
-                    />
-                </StyledMenuBarButton>
-                <StyledMenuBarButton
                     data-tip data-for='drawingtools'
+                    isActive={isDrawingToolsOpen}
                     onClick={() => store.dispatch(setIsDrawingToolsOpen(!isDrawingToolsOpen))}>
                     <FontAwesomeIcon
                         icon={faPencilRuler}
+                    />
+                </StyledMenuBarButton>
+                <StyledMenuBarButton
+                    data-tip data-for='fullscreen'
+                    isActive={isFullScreen}
+                    onClick={() => handleFullScreen()}>
+                    <FontAwesomeIcon
+                        icon={isFullScreen ? faCompress : faExpand}
                     />
                 </StyledMenuBarButton>
             </StyledMenuBar>

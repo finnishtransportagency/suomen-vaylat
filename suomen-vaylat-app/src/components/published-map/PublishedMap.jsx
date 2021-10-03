@@ -5,13 +5,13 @@ import { useAppSelector } from '../../state/hooks';
 import { ReactReduxContext } from 'react-redux';
 import { AnnouncementsModal } from '../announcements-modal/AnnouncementsModal';
 import { MetadataModal } from '../metadata-modal/MetadataModal';
+import { updateLayers } from '../../utils/rpcUtil';
 
 import {
     setLoading,
     setChannel,
     setAllGroups,
     setAllThemesWithLayers,
-    setAllLayers,
     setAllTags,
     setCurrentState,
     setFeatures,
@@ -21,7 +21,8 @@ import {
     setActiveAnnouncements,
     setSuomenVaylatLayers,
     setLegends,
-    setTagsWithLayers
+    setTagsWithLayers,
+    setCurrentMapCenter
 } from '../../state/slices/rpcSlice';
 
 import CenterSpinner from '../center-spinner/CenterSpinner';
@@ -108,11 +109,8 @@ const PublishedMap = () => {
                         store.dispatch(setAllGroups(data.sort(arrangeAlphabetically)));
                     });
                 }
-                if (data.getAllLayers) {
-                    channel.getAllLayers(function (data) {
-                        store.dispatch(setAllLayers(data));
-                    });
-                }
+                updateLayers(store, channel);
+
                 if (data.getTags) {
                     channel.getTags(function (data) {
                         store.dispatch(setAllTags(data));
@@ -143,6 +141,11 @@ const PublishedMap = () => {
                         store.dispatch(setLegends(data));
                     });
                 }
+                if (data.getMapPosition) {
+                    channel.getMapPosition((data) => {
+                        store.dispatch(setCurrentMapCenter(data));
+                    });
+                }
             });
 
             channel.getSupportedEvents(function (data) {
@@ -158,8 +161,7 @@ const PublishedMap = () => {
                 }
                 if (data.AfterMapMoveEvent) {
                     channel.handleEvent('AfterMapMoveEvent', event => {
-                        event.hasOwnProperty('zoom') &&
-                            store.dispatch(setCurrentZoomLevel(event.zoom));
+                        store.dispatch(setCurrentMapCenter(event));
                     });
                 }
                 if (data.SearchResultEvent) {

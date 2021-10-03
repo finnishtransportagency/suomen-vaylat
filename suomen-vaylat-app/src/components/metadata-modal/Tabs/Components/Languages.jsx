@@ -11,7 +11,7 @@ export const Languages = ({ identification }) => {
                     <StyledUl>
                         {identification.languages.map((language, index) => {
                             return (
-                                <StyledLi>
+                                <StyledLi key={'metadata-modal-languages-content-' + language + '-' + index }>
                                     {strings.metadata.languages[language] || language}
                                 </StyledLi>
                             )
