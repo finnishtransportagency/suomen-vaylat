@@ -216,16 +216,33 @@ export const LayerGroup = ({ index, group, layers, hasChildren }) => {
 
     const selectGroup = (e) => {
         e.stopPropagation();
-        if (!indeterminate) {
-            filteredLayers.map(layer => {
-                channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, !layer.visible]);
-                return null;
-            });
+        if (filteredLayers.length > 9 && !checked) {
+            const confirmed = window.confirm("SOS");
+            if (confirmed) {
+                if (!indeterminate) {
+                        filteredLayers.map(layer => {
+                            channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, !layer.visible]);
+                            return null;
+                        });
+                } else {
+                        filteredLayers.map(layer => {
+                            channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, false]);
+                            return null;
+                        });
+                }
+            }
         } else {
-            filteredLayers.map(layer => {
-                channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, false]);
-                return null;
-        });
+            if (!indeterminate) {
+                    filteredLayers.map(layer => {
+                        channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, !layer.visible]);
+                        return null;
+                    });
+            } else {
+                    filteredLayers.map(layer => {
+                        channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, false]);
+                        return null;
+                    });
+            }
         }
         channel.getAllLayers(function (data) {
             store.dispatch(setAllLayers(data));
