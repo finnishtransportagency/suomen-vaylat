@@ -15,6 +15,8 @@ ARG PUBLIC_URL
 ENV REACT_APP_PUBLISHED_MAP_URL=https://172.21.0.201/sv-kartta/?uuid=0a13438a-4432-46bd-bab9-bf50b1d3fa08
 ENV REACT_APP_PUBLISHED_MAP_DOMAIN=https://172.21.0.201
 ENV REACT_APP_PROXY_URL=https://172.21.0.201/sv-kartta/
+ENV REACT_APP_SITE_URL=http://172.21.0.220/suomen-vaylat
+ENV REACT_APP_ROUTER_PREFIX=/suomen-vaylat/
 
 # Don't use codeartifact in local build
 RUN rm /suomen-vaylat/.npmrc
@@ -31,6 +33,8 @@ ARG PUBLIC_URL
 ENV REACT_APP_PUBLISHED_MAP_URL=https://paikkatietodev.testivaylapilvi.fi/sv-kartta/?uuid=8b65cd2c-9f8c-474d-93db-56788131d3e2
 ENV REACT_APP_PUBLISHED_MAP_DOMAIN=https://paikkatietodev.testivaylapilvi.fi
 ENV REACT_APP_PROXY_URL=https://paikkatietodev.testivaylapilvi.fi/sv-kartta/
+ENV REACT_APP_SITE_URL=https://paikkatietodev.testivaylapilvi.fi/suomen-vaylat
+ENV REACT_APP_ROUTER_PREFIX=/suomen-vaylat/
 
 RUN cd /suomen-vaylat && \
     npm ci && \
@@ -44,6 +48,8 @@ ARG PUBLIC_URL
 ENV REACT_APP_PUBLISHED_MAP_URL=https://paikkatietotest.testivaylapilvi.fi/sv-kartta/?uuid=32ec5134-3dae-403f-903b-57d035a16b6c
 ENV REACT_APP_PUBLISHED_MAP_DOMAIN=https://paikkatietotest.testivaylapilvi.fi
 ENV REACT_APP_PROXY_URL=https://paikkatietotest.testivaylapilvi.fi/sv-kartta/
+ENV REACT_APP_SITE_URL=https://paikkatietotest.testivaylapilvi.fi/suomen-vaylat
+ENV REACT_APP_ROUTER_PREFIX=/suomen-vaylat/
 
 RUN cd /suomen-vaylat && \
     npm ci && \

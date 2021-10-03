@@ -24,7 +24,11 @@ const initialState = {
   suomenVaylatLayers: [],
   layerMetadata: { data: null, layer: null, uuid: null},
   legends: [],
-  tagsWithLayers: {}
+  tagsWithLayers: {},
+  center: {
+      x: 0,
+      y: 0
+  }
 };
 
 export const rpcSlice = createSlice({
@@ -44,11 +48,10 @@ export const rpcSlice = createSlice({
         state.filter = action.payload;
     },
     setAllLayers: (state, action) => {
-        const selectedLayers = action.payload.filter(layer => layer.visible === true)
-        //if (selectedLayers.length > 0) {
-            state.selectedLayers = selectedLayers;
-        //}
         state.allLayers = action.payload;
+    },
+    setSelectedLayers: (state, action) => {
+        state.selectedLayers = action.payload;
     },
     setAllTags: (state, action) => {
         state.allTags = action.payload;
@@ -83,20 +86,6 @@ export const rpcSlice = createSlice({
     setZoomLevelsLayers: (state, action) => {
         state.zoomLevelsLayers = action.payload;
     },
-    setSelectedLayers: (state, action) => {
-        const data = action;
-        state.selectedLayers = data;
-    },
-    setSelectedLayerIds: (state, action) => {
-        const oldSelectedLayers = action.payload.selectedLayers;
-        var newSelectedLayers = [...oldSelectedLayers];
-        if (newSelectedLayers.length > 0) {
-            newSelectedLayers.push([...action.payload.layers]);
-        } else {
-            newSelectedLayers.push([...action.payload.layers]);
-        }
-        state.selectedLayerIds = newSelectedLayers;
-    },
     setMapLayerVisibility: (state, action) => {
         var layer = action.payload.layer;
         state.channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, !layer.visible]);
@@ -106,17 +95,17 @@ export const rpcSlice = createSlice({
     },
     setZoomIn: (state, action) => {
         state.channel !== null && state.channel.zoomIn(function (data) {
-            LOG.log('Zoom level after: ', data);
+            //LOG.log('Zoom level after: ', data);
         });
     },
     setZoomOut: (state, action) => {
         state.channel !== null && state.channel.zoomOut(function (data) {
-            LOG.log('Zoom level after: ', data);
+            //LOG.log('Zoom level after: ', data);
         });
     },
     setZoomTo: (state, action) => {
         state.channel !== null && state.channel.zoomTo([action.payload], function (data) {
-            LOG.log('Zoom level after: ', data);
+            //LOG.log('Zoom level after: ', data);
         });
     },
     searchVKMRoad: (state, action) => {
@@ -201,6 +190,11 @@ export const rpcSlice = createSlice({
     },
     setLegends: (state, action) => {
         state.legends = action.payload;
+    },
+    setCurrentMapCenter: (state, action) => {
+        state.center.x = action.payload.centerX;
+        state.center.y = action.payload.centerY;
+        state.currentZoomLevel = action.payload.zoom;
     }
   }
 });
@@ -210,6 +204,7 @@ export const {
     setChannel,
     setAllGroups,
     setAllLayers,
+    setSelectedLayers,
     setAllTags,
     setTags,
     setCurrentState,
@@ -217,7 +212,6 @@ export const {
     setTagLayers,
     setZoomRange,
     setZoomLevelsLayers,
-    setSelectedLayerIds,
     setMapLayerVisibility,
     setOpacity,
     setZoomIn,
@@ -231,7 +225,6 @@ export const {
     addMarkerRequest,
     removeMarkerRequest,
     mapMoveRequest,
-    setSelectedLayers,
     setAllThemesWithLayers,
     setActiveAnnouncements,
     setFilter,
@@ -241,7 +234,8 @@ export const {
     setLayerMetadata,
     getLegends,
     setLegends,
-    setTagsWithLayers
+    setTagsWithLayers,
+    setCurrentMapCenter
 } = rpcSlice.actions;
 
 export default rpcSlice.reducer;

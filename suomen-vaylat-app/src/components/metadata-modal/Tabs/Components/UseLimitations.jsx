@@ -10,9 +10,9 @@ export const UseLimitations = ({ identification }) => {
                 <React.Fragment key={'metadata-modal-use-limitations-content'}>
                     <StyledTitle>{strings.metadata.heading.useLimitation}</StyledTitle>
                     <StyledParagraph>
-                        {identification.useLimitations.map((data) => {
+                        {identification.useLimitations.map((data, index) => {
                             return (
-                                <UseLimitation uselimitation={data}></UseLimitation>
+                                <UseLimitation uselimitation={data} key={'metadata-modal-use-limitations-content-' + data + '-' + index}></UseLimitation>
                             )
                         })}
                     </StyledParagraph>

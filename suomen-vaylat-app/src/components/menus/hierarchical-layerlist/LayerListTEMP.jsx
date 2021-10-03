@@ -1,4 +1,5 @@
 import { useState, useContext } from 'react';
+import { useParams } from 'react-router';
 import { ReactReduxContext } from 'react-redux';
 import styled, { keyframes } from 'styled-components';
 import { useAppSelector } from '../../../state/hooks';
@@ -11,6 +12,7 @@ import SelectedLayers from '../../menus/selected-layers/SelectedLayers';
 import LayerSearch from './LayerSearch';
 import Dropdown from './Dropdown';
 import { setTagLayers, setTags } from '../../../state/slices/rpcSlice';
+import { setSelectedLayerListType } from '../../../state/slices/uiSlice';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faFilter } from '@fortawesome/free-solid-svg-icons';
@@ -30,15 +32,15 @@ const StyledLayerListContainer = styled.div`
   display: flex;
   flex-direction: column;
   height: 100%;
-  overflow: hidden;
+  overflow-y: auto;
+  &::-webkit-scrollbar {
+        display: none;
+  };
 `;
 
 const StyledLayerList = styled.div`
   justify-content: flex-start;
   background-color:  ${props => props.theme.colors.mainWhite};
-  &::-webkit-scrollbar {
-        display: none;
-  };
 `;
 
 const StyledFilterList = styled.div`
@@ -111,14 +113,23 @@ const StyledSearchAndFilter = styled.div`
 `;
 
 const LayerListTEMP = ({groups, layers, themes, tags, selectedLayers, suomenVaylatLayers}) => {
-  const { store } = useContext(ReactReduxContext);
-  useAppSelector((state) => state.language);
-  const [isOpen, setIsOpen] = useState(false);
 
-  const emptyFilters = () => {
-    store.dispatch(setTagLayers([]));
-    store.dispatch(setTags([]));
-  }
+    const { store } = useContext(ReactReduxContext);
+    useAppSelector((state) => state.language);
+    const selectedTheme = useAppSelector((state) => state.ui.selectedTheme);
+
+    const setLayerListType = (type) => {
+      store.dispatch(setSelectedLayerListType(type));
+    };
+
+    const { layerlistType } = useParams();
+
+    const [isOpen, setIsOpen] = useState(false);
+  
+    const emptyFilters = () => {
+      store.dispatch(setTagLayers([]));
+      store.dispatch(setTags([]));
+    }
 
     return (
       <StyledLayerListContainer>
@@ -128,9 +139,9 @@ const LayerListTEMP = ({groups, layers, themes, tags, selectedLayers, suomenVayl
             selectedLayers={selectedLayers}
             suomenVaylatLayers={suomenVaylatLayers}
           />
-          <Dropdown title={strings.layerlist.layerlistLabels.searchForLayers.toUpperCase()}>
+          <Dropdown title={strings.layerlist.layerlistLabels.searchForLayers.toUpperCase()} isOpen={selectedTheme !== null}>
             <StyledLayerList>
-              <Tabs allTags={tags}>
+              <Tabs allTags={tags} layerlistType={layerlistType} setLayerListType={setLayerListType}>
                 <div label={strings.layerlist.layerlistLabels.themeLayers}>
                 <StyledListSubtitle>
                       {strings.layerlist.layerlistLabels.searchResults}

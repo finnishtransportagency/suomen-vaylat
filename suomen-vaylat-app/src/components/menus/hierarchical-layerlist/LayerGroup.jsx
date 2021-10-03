@@ -2,7 +2,6 @@
 import { useState, useContext } from 'react';
 import styled, { keyframes } from 'styled-components';
 import { ReactReduxContext, useSelector } from 'react-redux';
-import { setAllLayers } from '../../../state/slices/rpcSlice';
 import LayerList from './LayerList';
 import Layers from './Layers';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -14,11 +13,11 @@ import {
     faLandmark,
     faTrain,
     faRoad,
-    faMap,
-    faCircle
+    faMap
 } from '@fortawesome/free-solid-svg-icons';
 
 import Checkbox from '../../checkbox/Checkbox';
+import { updateLayers } from '../../../utils/rpcUtil';
 
 const fadeIn = keyframes`
   from {
@@ -244,9 +243,7 @@ export const LayerGroup = ({ index, group, layers, hasChildren }) => {
                     });
             }
         }
-        channel.getAllLayers(function (data) {
-            store.dispatch(setAllLayers(data));
-        });
+        updateLayers(store, channel);
     };
     return (
         <StyledLayerGroups
@@ -326,7 +323,7 @@ export const LayerGroup = ({ index, group, layers, hasChildren }) => {
                                     key={'layer-list'+index}
                                     groups={group.groups}
                                     layers={layers}
-                                    recurse={true} 
+                                    recurse={true}
                                 />
                             </>
                         )}
