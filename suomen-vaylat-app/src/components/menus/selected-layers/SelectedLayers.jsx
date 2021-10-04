@@ -15,27 +15,27 @@ const StyledSelectedLayers = styled.div`
 `;
 
 const StyledMasterGroupName = styled.p`
-    transition: all 0.1s ease-in;
-    font-size: 14px;
-    font-weight: 400;
+    color: ${props => props.theme.colors.maincolor1};
     margin: 0;
     padding-left: 10px;
-    color: ${props => props.theme.colors.maincolor1};
+    font-size: 14px;
+    font-weight: 400;
+    transition: all 0.1s ease-in;
 `;
 
 const StyledMasterGroupHeader = styled.div`
-    cursor: pointer;
+    position: sticky;
+    top: 0px;
+    height: 40px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 40px;
-    border-radius: 2px;
-    transition: all 0.1s ease-in;
+    cursor: pointer;
+    box-shadow: rgb(0 0 0 / 16%) 0px 3px 6px, rgb(0 0 0 / 23%) 0px 3px 6px;
     color: ${props => props.theme.colors.black};
     background-color: ${props => props.theme.colors.mainWhite};
-    box-shadow: rgb(0 0 0 / 16%) 0px 3px 6px, rgb(0 0 0 / 23%) 0px 3px 6px;
-    position: sticky;
-    top: 0px;
+    border-radius: 2px;
+    transition: all 0.1s ease-in;
 `;
 
 const StyledLeftContent = styled.div`
@@ -44,45 +44,44 @@ const StyledLeftContent = styled.div`
 `;
 
 const StyledExpandButton = styled.button`
+    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100%;
-    border: none;
     background-color: transparent;
     margin-right: 10px;
+    border: none;
     svg {
+        color: ${props => props.theme.colors.black};
         font-size: 30px;
         transition: all 0.5s ease-out;
-        color: ${props => props.theme.colors.black};
     };
 `;
 
 const StyledLayerGroupContainer = styled.div`
-    background-color: ${props => props.theme.colors.mainWhite};
-    border-radius: 2px;
     height: ${props => props.isOpen ? "auto" : "0px"};
     overflow: hidden;
-    //padding: ${props => props.isOpen && "15px 10px 15px 5px"};
+    background-color: ${props => props.theme.colors.mainWhite};
+    border-radius: 2px;
 `;
 
 const StyledLayerGroup = styled.ul`
+    list-style-type: none;
     margin-bottom: 0px;
     padding-inline-start: 5px;
-    list-style-type: none;
 `;
 
 const StyledDeleteAllSelectedLayers = styled.div`
-    cursor: pointer;
     width: 250px;
     height: 30px;
+    cursor: pointer;
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: ${props => props.theme.colors.maincolor1};
     color: ${props => props.theme.colors.mainWhite};
-    border-radius: 15px;
+    background-color: ${props => props.theme.colors.maincolor1};
     margin: 20px auto 20px auto;
+    border-radius: 15px;
     svg {
         font-size: 16px;
     };
@@ -93,9 +92,16 @@ const StyledDeleteAllSelectedLayers = styled.div`
     }
 `;
 
-export const SelectedLayers = ({ label, selectedLayers, suomenVaylatLayers }) => {
+export const SelectedLayers = ({
+    label,
+    selectedLayers,
+    suomenVaylatLayers
+}) => {
+
     const { store } = useContext(ReactReduxContext);
+
     const channel = useSelector(state => state.rpc.channel);
+    
     const [isOpen, setIsOpen] = useState(false);
 
     const handleRemoveAllSelectedLayers = () => {
