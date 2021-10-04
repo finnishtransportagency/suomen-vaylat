@@ -1,14 +1,14 @@
 import { useContext } from "react";
-import { useAppSelector } from '../../../state/hooks';
-import { ReactReduxContext } from 'react-redux';
-import { setIsSideMenuOpen } from '../../../state/slices/uiSlice';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLayerGroup, faTimes } from '@fortawesome/free-solid-svg-icons';
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { ReactReduxContext } from 'react-redux';
 import styled from 'styled-components';
+import { useAppSelector } from '../../../state/hooks';
+import { setIsSideMenuOpen } from '../../../state/slices/uiSlice';
 import strings from '../../../translations';
-
 import LayerListTEMP from '../hierarchical-layerlist/LayerListTEMP';
+
+
 
 const StyledSideMenu = styled.div`
     z-index: 10;

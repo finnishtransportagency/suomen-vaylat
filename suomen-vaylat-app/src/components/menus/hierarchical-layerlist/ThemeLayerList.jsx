@@ -1,19 +1,19 @@
 import { useState, useContext } from 'react';
-import { useAppSelector } from '../../../state/hooks';
-import styled, { keyframes } from 'styled-components';
-import strings from '../../../translations';
-import { ReactReduxContext } from 'react-redux';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faAngleDown,
     faMap
 } from '@fortawesome/free-solid-svg-icons';
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { ReactReduxContext } from 'react-redux';
+import styled, { keyframes } from 'styled-components';
+import { useAppSelector } from '../../../state/hooks';
+import strings from '../../../translations';
 import { updateLayers } from '../../../utils/rpcUtil';
-
+import Checkbox from '../../checkbox/Checkbox';
 import { ThemeGroupShareButton } from '../../share-web-site/ShareLinkButtons';
 import Layers from './Layers';
-import Checkbox from '../../checkbox/Checkbox';
+
+
 
 const fadeIn = keyframes`
   from {

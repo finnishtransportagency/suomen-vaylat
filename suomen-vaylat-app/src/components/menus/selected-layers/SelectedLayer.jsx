@@ -1,13 +1,13 @@
 import {  useContext } from "react";
-import { ReactReduxContext, useSelector } from 'react-redux';
-import { getLayerMetadata, setLayerMetadata, clearLayerMetadata } from '../../../state/slices/rpcSlice';
-import styled from 'styled-components';
-import ReactTooltip from "react-tooltip";
-import strings from '../../../translations';
-
+import { faInfo, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash, faInfo } from '@fortawesome/free-solid-svg-icons';
+import { ReactReduxContext, useSelector } from 'react-redux';
+import ReactTooltip from "react-tooltip";
+import styled from 'styled-components';
+import { clearLayerMetadata, getLayerMetadata, setLayerMetadata } from '../../../state/slices/rpcSlice';
+import strings from '../../../translations';
 import { updateLayers } from "../../../utils/rpcUtil";
+
 
 const StyledLayerContainer = styled.div`
     height: 40px;

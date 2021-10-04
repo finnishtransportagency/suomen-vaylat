@@ -1,6 +1,6 @@
 import React from 'react';
 import strings from '../../../../translations';
-import { StyledTitle, StyledUl, StyledLi, StyledA } from './Common';
+import { StyledA, StyledLi, StyledTitle, StyledUl } from './Common';
 
 export const OnlineResources = ({ onlineResources }) => {
     return (

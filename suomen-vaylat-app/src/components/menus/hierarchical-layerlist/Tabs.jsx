@@ -1,9 +1,9 @@
-import { Component } from 'react';
 import PropTypes from 'prop-types';
-import strings from '../../../translations';
+import { Component } from 'react';
 import styled from 'styled-components';
-
+import strings from '../../../translations';
 import Tab from './Tab';
+
 
 const StyledTabs = styled.div`
   margin: 10px;

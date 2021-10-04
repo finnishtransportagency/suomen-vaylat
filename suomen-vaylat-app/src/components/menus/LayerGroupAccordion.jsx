@@ -15,4 +15,4 @@ export const LayerGroupAccordion = (props) => {
     );
  }
 
- export default CenterSpinner;
+ export default LayerGroupAccordion;

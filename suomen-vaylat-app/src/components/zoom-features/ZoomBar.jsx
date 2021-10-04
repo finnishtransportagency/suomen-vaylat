@@ -1,16 +1,16 @@
 import { useContext, useEffect, useState } from "react";
-import { ReactReduxContext } from 'react-redux';
-import styled from 'styled-components';
-import strings from '../../translations';
-import ReactTooltip from "react-tooltip";
-
-import { setZoomIn, setZoomOut } from '../../state/slices/rpcSlice';
-
+import { faAngleUp, faSearchMinus, faSearchPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAngleUp, faSearchMinus, faSearchPlus} from '@fortawesome/free-solid-svg-icons';
-
+import { ReactReduxContext } from 'react-redux';
+import ReactTooltip from "react-tooltip";
+import styled from 'styled-components';
+import { setZoomIn, setZoomOut } from '../../state/slices/rpcSlice';
+import strings from '../../translations';
 import ZoomBarCircle from './ZoomBarCircle';
 import ZoomBarLayer from './ZoomBarLayer';
+
+
+
 
 const StyledZoomBarContainer = styled.div`
     position: relative;

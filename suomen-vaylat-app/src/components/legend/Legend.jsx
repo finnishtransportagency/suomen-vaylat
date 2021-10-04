@@ -1,14 +1,13 @@
-import { useContext, useState, useEffect } from 'react';
-import { ReactReduxContext } from 'react-redux';
-import { useAppSelector } from '../../state/hooks';
-import styled from 'styled-components';
+import { useContext, useEffect, useState } from 'react';
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Draggable from 'react-draggable';
+import { ReactReduxContext } from 'react-redux';
+import styled from 'styled-components';
+import { useAppSelector } from '../../state/hooks';
+import { setIsLegendOpen } from '../../state/slices/uiSlice';
 import strings from '../../translations';
 import { LegendGroup } from './LegendGroup';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimes } from '@fortawesome/free-solid-svg-icons';
-import { setIsLegendOpen } from '../../state/slices/uiSlice';
-
 
 const StyledLegendContainer = styled.div`
     z-index: 30;

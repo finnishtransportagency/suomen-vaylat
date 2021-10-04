@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import { useAppSelector } from '../../state/hooks';
-
 import strings from './../../translations';
 
 const StyledLanguageSelector = styled.div`

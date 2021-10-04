@@ -1,19 +1,14 @@
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
-import styled from 'styled-components';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
-import strings from '../../translations';
-
-import ReactTooltip from 'react-tooltip';
 import {
-    faRuler,
-    faSquare,
-    faCircle,
-    faBox,
-    faDrawPolygon,
-    faEraser
+    faBox, faCircle, faDrawPolygon,
+    faEraser, faRuler,
+    faSquare
 } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useSelector } from 'react-redux';
+import ReactTooltip from 'react-tooltip';
+import styled from 'styled-components';
+import strings from '../../translations';
 
 const StyledTools = styled.div`
     position: absolute;

@@ -1,10 +1,10 @@
 import { useContext } from 'react';
-import styled from 'styled-components';
-import ReactTooltip from 'react-tooltip';
-import { setShareUrl } from '../../state/slices/uiSlice';
-import { ReactReduxContext } from 'react-redux';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShareAlt } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { ReactReduxContext } from 'react-redux';
+import ReactTooltip from 'react-tooltip';
+import styled from 'styled-components';
+import { setShareUrl } from '../../state/slices/uiSlice';
 import strings from '../../translations';
 
 const StyledShareButton = styled.button`

@@ -1,30 +1,17 @@
 import { useContext } from "react";
-import { useAppSelector } from '../../../state/hooks';
-import { ReactReduxContext } from 'react-redux';
-import styled from 'styled-components';
-import ReactTooltip from 'react-tooltip';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
-import strings from '../../../translations';
-
 import {
-    faLayerGroup,
-    faSearch,
-    faImages,
-    faPencilRuler,
-    faExpand,
-    faCompress
+    faCompress, faExpand, faImages, faLayerGroup, faPencilRuler, faSearch
 } from '@fortawesome/free-solid-svg-icons';
-
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { ReactReduxContext } from 'react-redux';
+import ReactTooltip from 'react-tooltip';
+import styled from 'styled-components';
+import { useAppSelector } from '../../../state/hooks';
 import {
-    setIsSideMenuOpen,
-    setIsSearchOpen,
-    setIsLegendOpen,
     setIsDrawingToolsOpen,
-    setIsFullScreen
+    setIsFullScreen, setIsLegendOpen, setIsSearchOpen, setIsSideMenuOpen
 } from '../../../state/slices/uiSlice';
-
+import strings from '../../../translations';
 
 const StyledMenuBar = styled.div`
     position: absolute;

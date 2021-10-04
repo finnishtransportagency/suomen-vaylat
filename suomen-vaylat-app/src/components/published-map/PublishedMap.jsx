@@ -1,34 +1,20 @@
 import { useContext, useEffect } from 'react';
-import styled from 'styled-components';
 import OskariRPC from 'oskari-rpc';
-import { useAppSelector } from '../../state/hooks';
 import { ReactReduxContext } from 'react-redux';
-import { updateLayers } from '../../utils/rpcUtil';
-
-import { AnnouncementsModal } from '../announcements-modal/AnnouncementsModal';
-import { MetadataModal } from '../metadata-modal/MetadataModal';
-
+import styled from 'styled-components';
+import { useAppSelector } from '../../state/hooks';
 import {
-    setLoading,
-    setChannel,
-    setAllGroups,
-    setAllThemesWithLayers,
-    setAllTags,
-    setCurrentState,
-    setFeatures,
-    setZoomRange,
-    setZoomLevelsLayers,
-    setCurrentZoomLevel,
-    setActiveAnnouncements,
-    setSuomenVaylatLayers,
-    setLegends,
-    setTagsWithLayers,
-    setCurrentMapCenter
+    setActiveAnnouncements, setAllGroups, setAllTags, setAllThemesWithLayers, setChannel, setCurrentMapCenter, setCurrentState, setCurrentZoomLevel, setFeatures, setLegends, setLoading, setSuomenVaylatLayers, setTagsWithLayers, setZoomLevelsLayers, setZoomRange
 } from '../../state/slices/rpcSlice';
-
+import { updateLayers } from '../../utils/rpcUtil';
+import { AnnouncementsModal } from '../announcements-modal/AnnouncementsModal';
 import CenterSpinner from '../center-spinner/CenterSpinner';
-
+import { MetadataModal } from '../metadata-modal/MetadataModal';
 import './PublishedMap.scss';
+
+
+
+
 
 const StyledPublishedMap = styled.div`
     height: calc(var(--app-height) - 60px);

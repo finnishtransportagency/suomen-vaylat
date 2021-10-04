@@ -1,20 +1,20 @@
+import { useContext } from 'react';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { ReactReduxContext } from 'react-redux';
+import { useParams } from 'react-router';
 import styled from 'styled-components';
 import { useAppSelector } from '../../../state/hooks';
-import { useParams } from 'react-router';
-import { useContext } from 'react';
-import { ReactReduxContext } from 'react-redux';
-import strings from '../../../translations';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { setSelectedLayerListType } from '../../../state/slices/uiSlice';
-
-import LayerList from './LayerList';
-import ThemeLayerList from './ThemeLayerList';
-import Filter from './Filter';
-import Tabs from "./Tabs";
+import strings from '../../../translations';
 import SelectedLayers from '../../menus/selected-layers/SelectedLayers';
-import LayerSearch from './LayerSearch';
 import Dropdown from './Dropdown';
+import Filter from './Filter';
+import LayerList from './LayerList';
+import LayerSearch from './LayerSearch';
+import Tabs from "./Tabs";
+import ThemeLayerList from './ThemeLayerList';
+
 
 //VÄLIAIKAINEN PALIKKA VÄLITTÄMÄÄN TESTIDATAA HIERARKISELLE TASOVALIKOLLE
 

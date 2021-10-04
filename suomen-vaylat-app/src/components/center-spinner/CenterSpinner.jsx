@@ -1,6 +1,5 @@
-import { useContext } from 'react'
-import styled from 'styled-components';
-import { ThemeContext } from 'styled-components';
+import { useContext } from 'react';
+import styled, { ThemeContext } from 'styled-components';
 
 const Spinner = require('react-spinkit');
 

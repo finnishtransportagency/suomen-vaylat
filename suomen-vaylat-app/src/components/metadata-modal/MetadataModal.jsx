@@ -1,18 +1,18 @@
-import React, { useState, useContext } from 'react';
-import { ReactReduxContext, useSelector } from 'react-redux';
-import Modal from 'react-modal';
-import { clearLayerMetadata } from '../../state/slices/rpcSlice';
-import styled from 'styled-components';
-import strings from '../../translations';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useContext, useState } from 'react';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
-import AbstractTab from './Tabs/AbstractTab';
-import JhsTab from './Tabs/JhsTab';
-import InspireTab from './Tabs/InspireTab';
-import QualityTab from './Tabs/QualityTab';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import Modal from 'react-modal';
+import { ReactReduxContext, useSelector } from 'react-redux';
+import styled from 'styled-components';
 import { useAppSelector } from '../../state/hooks';
-
+import { clearLayerMetadata } from '../../state/slices/rpcSlice';
+import strings from '../../translations';
 import './MetadataModal.scss';
+import AbstractTab from './Tabs/AbstractTab';
+import InspireTab from './Tabs/InspireTab';
+import JhsTab from './Tabs/JhsTab';
+import QualityTab from './Tabs/QualityTab';
+
 
 const StyledContent = styled.div`
     height: 100%;

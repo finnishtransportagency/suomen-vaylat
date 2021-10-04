@@ -1,13 +1,13 @@
 import { useState, useContext } from "react";
+import { faAngleUp, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { ReactReduxContext, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import strings from '../../../translations';
-import { ReactReduxContext, useSelector } from 'react-redux';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAngleUp, faTrash } from '@fortawesome/free-solid-svg-icons';
-
+import { updateLayers } from "../../../utils/rpcUtil";
 import SelectedLayer from './SelectedLayer';
 import SelectedLayersCount from './SelectedLayersCount';
-import { updateLayers } from "../../../utils/rpcUtil";
+
 
 const StyledSelectedLayers = styled.div`
     background-color: ${props => props.theme.colors.mainWhite};

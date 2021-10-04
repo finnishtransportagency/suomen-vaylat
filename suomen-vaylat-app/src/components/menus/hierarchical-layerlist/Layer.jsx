@@ -1,10 +1,10 @@
 import { useContext, useEffect } from "react";
+import { faCheck } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ReactReduxContext, useSelector } from 'react-redux';
-import { setLegends } from '../../../state/slices/rpcSlice';
 import styled from 'styled-components';
 import { debounce } from 'tlence';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheck } from '@fortawesome/free-solid-svg-icons';
+import { setLegends } from '../../../state/slices/rpcSlice';
 import { updateLayers } from "../../../utils/rpcUtil";
 
 const StyledLayerContainer = styled.li`

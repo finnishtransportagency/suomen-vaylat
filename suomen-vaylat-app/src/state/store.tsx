@@ -1,12 +1,12 @@
+import { applyMiddleware, configureStore } from '@reduxjs/toolkit';
 import { createBrowserHistory } from 'history';
-import { configureStore, applyMiddleware } from '@reduxjs/toolkit';
-
+import thunkMiddleware from 'redux-thunk';
 import languageReducer from './slices/languageSlice';
 import rpcReducer from './slices/rpcSlice';
-import uiReducer from './slices/uiSlice';
 import searchReducer from './slices/searchSlice';
+import uiReducer from './slices/uiSlice';
 
-import thunkMiddleware from 'redux-thunk';
+
 //import { loadFromLocalStorage, saveToLocalStorage } from './localStorage';
 //import { throttle } from 'lodash';
 

@@ -1,19 +1,18 @@
-import React, { useContext } from 'react';
+import { useContext } from 'react';
+import { faSearch, faTimes, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ReactReduxContext } from 'react-redux';
 import styled from 'styled-components';
 import { useAppSelector } from '../../state/hooks';
-import { searchVKMRoad, removeFeaturesFromMap, searchRequest, addMarkerRequest, mapMoveRequest, removeMarkerRequest } from '../../state/slices/rpcSlice';
-import { setSearchSelected, emptySearchResult, emptyFormData, setSearching } from '../../state/slices/searchSlice';
+import { addMarkerRequest, mapMoveRequest, removeFeaturesFromMap, removeMarkerRequest, searchRequest, searchVKMRoad } from '../../state/slices/rpcSlice';
+import { emptyFormData, emptySearchResult, setSearching, setSearchResult, setSearchSelected } from '../../state/slices/searchSlice';
 import { setIsSearchOpen } from '../../state/slices/uiSlice';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimes, faSearch, faTrash } from '@fortawesome/free-solid-svg-icons';
 import strings from '../../translations';
 import CenterSpinner from '../center-spinner/CenterSpinner';
-import { StyledSelectInput, ToastMessage } from './CommonComponents';
-import { setSearchResult } from '../../state/slices/searchSlice';
 import { ShowError } from '../messages/Messages';
-import VKMSearch from './VKMSearch';
 import AddressSearch from './AddressSearch';
+import { StyledSelectInput, ToastMessage } from './CommonComponents';
+import VKMSearch from './VKMSearch';
 
 const StyledSearchContainer = styled.div`
     z-index: 2;
