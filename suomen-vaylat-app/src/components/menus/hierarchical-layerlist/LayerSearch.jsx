@@ -12,18 +12,12 @@ const StyledLayerSearchContainer = styled.div`
 `;
 
 const StyledSearchInput = styled.input`
-    text-align: middle;
-    //border: 1px solid black;
-    border-radius: 5px;
-
     height: 40px;
     padding-left: 10px;
-    &::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
-       // color: #000;
-    };
+    border-radius: 5px;
     &::-webkit-search-cancel-button {
-        position:relative;
-        right:10px;  
+        position: relative;
+        right: 10px;  
         height: 40px;
         width: 40px;
         cursor: pointer;
@@ -43,9 +37,9 @@ const StyledLayerList = styled.div`
 `;
 
 const StyledMessage = styled.p`
-    margin: 0;
     text-align: center;
     color: ${props => props.theme.colors.secondaryColor7};
+    margin: 0;
     font-size: 14px;
     font-weight: 600;
 `;

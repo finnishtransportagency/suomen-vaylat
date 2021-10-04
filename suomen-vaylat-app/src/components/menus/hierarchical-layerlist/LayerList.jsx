@@ -35,27 +35,27 @@ const StyledLayerGroups = styled.div`
     animation-fill-mode: forwards;
     animation-duration: 0.5s;
     animation-name: ${fadeIn};
-    margin: ${props => props.parentId === -1 && "10px 0px 10px 0px"};
-    border-radius: 2px;
     background-color: ${props => props.theme.colors.mainWhite};
+    margin: ${props => props.parentId === -1 && "10px 0px 10px 0px"};
+    margin-bottom: 10px;
+    border-radius: 2px;
     &:last-child {
         ${props => props.parentId === -1 ? '1px solid '+props.theme.colors.maincolor2 : "none"};
     };
-    margin-bottom: 10px;
 `;
 
 const StyledMasterGroupName = styled.p`
     user-select: none;
-    transition: all 0.1s ease-in;
-    font-size: 14px;
-    font-weight: 600;
-    margin: 0;
-    padding-left: 10px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     max-width: 200px;
     color: ${props => props.theme.colors.black};
+    margin: 0;
+    padding-left: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.1s ease-in;
     @media ${ props => props.theme.device.mobileL} {
         font-size: 13px;
     };
@@ -63,15 +63,15 @@ const StyledMasterGroupName = styled.p`
 
 const StyledMasterGroupHeader = styled.div`
     z-index: 1;
+    height: 40px;
     cursor: pointer;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 40px;
-    padding-left: 5px;
-    transition: all 0.1s ease-in;
-    border-radius: 2px;
     background-color: ${props => props.theme.colors.maincolor3};
+    padding-left: 5px;
+    border-radius: 2px;
+    transition: all 0.1s ease-in;
     &:hover {
         background-color: ${props => props.theme.colors.maincolor2};
     };
@@ -87,17 +87,17 @@ const StyledRightContent = styled.div`
 `;
 
 const StyledSelectButton = styled.button`
+    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100%;
-    border: none;
     background-color: transparent;
     margin-right: 10px;
+    border: none;
     svg {
+        color: ${props => props.theme.colors.black};
         font-size: 23px;
         transition: all 0.5s ease-out;
-        color: ${props => props.theme.colors.black};
     };
 `;
 
@@ -107,14 +107,19 @@ const StyledLayerGroupContainer = styled.div`
 `;
 
 const StyledLayerGroup = styled.ul`
-    padding-inline-start: ${props => props.parentId === -1 ? "10px" : "15px"};
     list-style-type: none;
     margin: 0;
+    padding-inline-start: ${props => props.parentId === -1 ? "10px" : "15px"};
 `;
 
-export const LayerList = ({ groups, layers, recurse = false}) => {
-  const tagLayers = useAppSelector((state) => state.rpc.tagLayers);
-  const tags = useSelector(state => state.rpc.tags);
+export const LayerList = ({
+    groups,
+    layers,
+    recurse = false
+}) => {
+
+    const { tagLayers, tags } = useSelector((state) => state.rpc);
+
     if (tagLayers.length > 0) {
         layers = layers.filter(layer => tagLayers.includes(layer.id));
     }
@@ -232,13 +237,12 @@ export const LayerList = ({ groups, layers, recurse = false}) => {
                         </StyledSelectButton>
                     </StyledRightContent>
                 </StyledMasterGroupHeader>
-
                 <StyledLayerGroupContainer
                     key={"slg_" + index + "_"}
                     isOpen={isOpen}
                 >
                     <StyledLayerGroup>
-                        <Layers layers={filteredLayers} isOpen={isOpen}/>
+                        <Layers layers={filteredLayers} isOpen={isOpen} />
                     </StyledLayerGroup>
                 </StyledLayerGroupContainer>
             </StyledLayerGroups>

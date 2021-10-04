@@ -18,16 +18,15 @@ import AddressSearch from './AddressSearch';
 const StyledSearchContainer = styled.div`
     z-index: 2;
     position: fixed;
-    max-width: 400px;
-    padding: 8px;
-    margin-left: 20px;
-    right: 30px;
     top: 90px;
+    right: 30px;
+    min-width: 350px;
+    max-width: 400px;
     display: flex;
     justify-content: flex-end;
     align-items: flex-start;
     flex-flow: row wrap;
-    min-width:350px;
+    margin-left: 20px;
     padding: 6px;
 `;
 
@@ -52,28 +51,26 @@ const StyledSearchControl = styled.button`
     position: absolute;
     top: ${props => (props.selectedSearch === 'vkm' ? '142px': '10px')};
     right: 12px;
-    border: none;
-    pointer-events: auto;
-    transition: all 0.1s ease-in;
     width: 30px;
     height: 30px;
-
-    border-radius: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
+    pointer-events: auto;
     cursor: pointer;
+    margin: 0;
     background-color: transparent;
     padding: 0 !important;
-    margin: 0;
-
+    border: none;
+    border-radius: 50%;
+    transition: all 0.1s ease-in;
     svg {
-        color: ${props => props.theme.colors.maincolor1};
         width: 28px;
         height: 28px;
+        color: ${props => props.theme.colors.maincolor1};
         &:hover {
-            color: ${props => props.theme.colors.maincolor2};
             transform: scale(1.05);
+            color: ${props => props.theme.colors.maincolor2};
         }
     };
     &:disabled {
@@ -89,24 +86,23 @@ const StyledEmptyButton = styled.button`
     position: absolute;
     top: 10px;
     right: ${props => (props.selectedSearch === 'vkm' ? '12px': '35px')};
-    border: none;
-    pointer-events: auto;
-    transition: all 0.1s ease-in;
     width: 30px;
     height: 30px;
-    background-color: transparent;
     display: flex;
     justify-content: center;
     align-items: center;
+    pointer-events: auto;
     cursor: pointer;
-
+    background-color: transparent;
+    border: none;
+    transition: all 0.1s ease-in;
     svg {
-        color: ${props => props.theme.colors.maincolor1};
         width: 28px;
         height: 28px;
+        color: ${props => props.theme.colors.maincolor1};
         &:hover {
-            color: ${props => props.theme.colors.maincolor2};
             transform: scale(1.05);
+            color: ${props => props.theme.colors.maincolor2};
         }
     };
     &:disabled {
@@ -119,6 +115,7 @@ const StyledEmptyButton = styled.button`
 `;
 
 export const Search = () => {
+    
     const search = useAppSelector((state) => state.search);
 
     const vectorLayerId = 'SEARCH_VECTORLAYER';

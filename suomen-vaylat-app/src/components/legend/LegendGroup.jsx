@@ -11,16 +11,16 @@ const StyledLegendGroup = styled.div`
 
 const StyledGroupName = styled.p`
     user-select: none;
-    transition: all 0.1s ease-in;
-    font-size: 14px;
-    font-weight: 600;
-    margin: 0;
-    padding-left: 10px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     max-width: 200px;
     color: ${props => props.theme.colors.black};
+    margin: 0;
+    padding-left: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.1s ease-in;
     @media ${props => props.theme.device.mobileL} {
         font-size: 13px;
     };
@@ -30,15 +30,15 @@ const StyledGroupHeader = styled.div`
     z-index: 1;
     position: sticky;
     top: 0px;
-    cursor: pointer;
+    height: 40px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 40px;
-    padding-left: 5px;
-    transition: all 0.1s ease-in;
-    border-radius: 2px;
+    cursor: pointer;
     background-color: ${props => props.hasLegend ? props.theme.colors.maincolor3 : '#bbb'};
+    padding-left: 5px;
+    border-radius: 2px;
+    transition: all 0.1s ease-in;
     &:hover {
         background-color: ${props => props.hasLegend ? props.theme.colors.maincolor2 : '#bbb'};
     };
@@ -58,17 +58,17 @@ const StyledRightContent = styled.div`
 `;
 
 const StyledSelectButton = styled.button`
+    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100%;
     border: none;
-    background-color: transparent;
     margin-right: 15px;
+    background-color: transparent;
     svg {
+        color: ${props => props.theme.colors.black};
         font-size: 25px;
         transition: all 0.5s ease-out;
-        color: ${props => props.theme.colors.black};
     };
 `;
 

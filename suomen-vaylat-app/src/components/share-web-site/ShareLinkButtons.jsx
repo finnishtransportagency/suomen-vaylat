@@ -8,34 +8,34 @@ import { faShareAlt } from '@fortawesome/free-solid-svg-icons';
 import strings from '../../translations';
 
 const StyledShareButton = styled.button`
+    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100%;
-    border: none;
     background-color: transparent;
     margin-right: 0px;
+    border: none;
     svg {
         font-size: 14px;
-        transition: all 0.5s ease-out;
         color: ${props => props.theme.colors.black};
+        transition: all 0.5s ease-out;
     };
 `;
 
 const StyledHeaderButton = styled.div`
     position: relative;
-    cursor: pointer;
     width: 40px;
     height: 40px;
-    margin-right:5px;
     display: flex;
     justify-content: center;
     align-items: center;
+    cursor: pointer;
     background-color: transparent;
+    margin-right: 5px;
     border-radius: 50%;
     svg {
-        font-size: 18px;
         color: ${props => props.theme.colors.mainWhite};
+        font-size: 18px;
     };
     @media ${props => props.theme.device.mobileL} {
         width: 40px;
@@ -48,7 +48,7 @@ const StyledHeaderButton = styled.div`
  * @param {String} theme theme name
  * @returns theme share button component
  */
-export const ThemeGroupShareButton = ({theme}) => {
+export const ThemeGroupShareButton = ({ theme }) => {
     const { store } = useContext(ReactReduxContext);
     const url = process.env.REACT_APP_SITE_URL + '/theme/{lang}/{zoom}/{x}/{y}/' + encodeURIComponent(theme);
     const shareGroup = () => {

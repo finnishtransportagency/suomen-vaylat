@@ -14,10 +14,10 @@ import { HandleSharedWebSiteLink } from './components/share-web-site/HandleShare
 Modal.setAppElement('#root');
 
 const StyledAppContainer = styled.div`
-    margin: 0;
-    padding: 0;
     width: 100%;
     height: var(--app-height);
+    margin: 0;
+    padding: 0;
 `;
 
 /**
