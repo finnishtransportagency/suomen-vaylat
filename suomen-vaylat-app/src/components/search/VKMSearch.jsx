@@ -4,15 +4,23 @@ import { useEffect } from 'react';
 import { debounce } from 'tlence';
 
 import { addFeaturesToMap, searchVKMRoad, removeFeaturesFromMap } from '../../state/slices/rpcSlice';
-import { setFormData, setSearchResult, setSearching, emptySearchResult } from '../../state/slices/searchSlice';
+import {
+    setFormData,
+    setSearchResult,
+    setSearching,
+    emptySearchResult,
+    setSearchError
+} from '../../state/slices/searchSlice';
 import { StyledContainer, StyledTextField, StyledSelectInput, ToastMessage } from './CommonComponents';
 import { VKMGeoJsonStyles, VKMGeoJsonHoverStyles } from './VKMSearchStyles';
 import strings from '../../translations';
+import { Notification } from '../notification/Notification'
 import { ShowError } from '../messages/Messages';
 
 let debounceSearchVKM = null;
 
 const VKMSearch = ({visible, search, store, vectorLayerId, onEnterHandler}) => {
+
     if (search.selected === 'vkm' && search.searchResult.geom !== null && search.searching === false) {
         let style = 'tie';
         if ((search.formData.vkm.tieosa !== null || search.formData.vkm.ajorata !== null) && search.searchResult.osa) {
@@ -37,6 +45,7 @@ const VKMSearch = ({visible, search, store, vectorLayerId, onEnterHandler}) => {
     }
 
     const onChange = (name, value) => {
+        store.dispatch(setSearchError({errorState: false, data: ['']}));
         let formData = {
             tie: (name === 'tie') ? value : search.formData.vkm.tie,
             tieosa: (name === 'tieosa') ? value : search.formData.vkm.tieosa,
@@ -89,11 +98,9 @@ const VKMSearch = ({visible, search, store, vectorLayerId, onEnterHandler}) => {
         };
 
         const vkmSearchErrorHandler = (errors) => {
+            console.log("vkmSearchErrorHandler errors ", errors)
             store.dispatch(setSearching(false));
-
-            ShowError(<ToastMessage title={strings.search.vkm.error.title}
-                message={strings.search.vkm.error.text}
-                errors={errors}/>);
+            store.dispatch(setSearchError({errorState: true, data: errors, errorType: 'primary'}));
         };
 
         const searchVKM = (data) => {

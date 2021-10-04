@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import React, { useContext } from "react";
 import { useAppSelector } from '../../state/hooks';
 import { ReactReduxContext } from 'react-redux';
 import { setIsSideMenuOpen, setIsSearchOpen, setIsLegendOpen, setIsDrawingToolsOpen, setIsFullScreen} from '../../state/slices/uiSlice';
@@ -18,6 +18,7 @@ import AppInfoModal from '../app-info-modal/AppInfoModal';
 import { ToastContainer } from 'react-toastify';
 import { Legend } from "../legend/Legend";
 import { ShareWebSitePopup } from "../share-web-site/ShareWebSitePopup";
+import { Notification } from "../notification/Notification";
 
 const StyledContent = styled.div`
     z-index: 1;
@@ -155,6 +156,7 @@ const StyledLayerCount = styled.div`
 
 const Content = () => {
     const { store } = useContext(ReactReduxContext);
+    const search = useAppSelector((state) => state.search);
     const isFullScreen = useAppSelector((state) => state.ui.isFullScreen);
     const isSideMenuOpen = useAppSelector((state) => state.ui.isSideMenuOpen);
     const isSearchOpen = useAppSelector((state) => state.ui.isSearchOpen);
@@ -188,19 +190,19 @@ const Content = () => {
         <ReactTooltip id='layerlist' place="right" type="dark" effect="float">
             <span>{strings.tooltips.layerlistButton}</span>
         </ReactTooltip>
-        
+
         <ReactTooltip id='search' place="right" type="dark" effect="float">
             <span>{strings.tooltips.searchButton}</span>
         </ReactTooltip>
-        
+
         <ReactTooltip id='legend' place="right" type="dark" effect="float">
             <span>{strings.tooltips.legendButton}</span>
         </ReactTooltip>
-        
+
         <ReactTooltip id='fullscreen' place="right" type="dark" effect="float">
             <span>{strings.tooltips.fullscreenButton}</span>
         </ReactTooltip>
-        
+
         <ReactTooltip id='drawingtools' place="right" type="dark" effect="float">
             <span>{strings.tooltips.drawingtools.drawingtoolsButton}</span>
         </ReactTooltip>
@@ -236,7 +238,8 @@ const Content = () => {
             {isShareOpen && <ShareWebSitePopup></ShareWebSitePopup>}
             <DrawingTools isDrawingToolsOpen={isDrawingToolsOpen} />
             <AppInfoModal />
-            <ToastContainer></ToastContainer>
+            {/*<ToastContainer></ToastContainer>*/}
+
             <StyledMenuBar>
                 <StyledMenuBarButton
                     data-tip data-for='layerlist'

@@ -28,25 +28,29 @@ export const ShowSuccess = (message) => {
 };
 
 export const ShowWarning = (message) => {
-    toast.warn(message, {
-        position: "top-right",
-        autoClose: delayMs,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        });
+    // toast.warn(message, {
+    //     position: "top-right",
+    //     autoClose: delayMs,
+    //     hideProgressBar: false,
+    //     closeOnClick: true,
+    //     pauseOnHover: true,
+    //     draggable: true,
+    //     progress: undefined,
+    //     });
 };
 
 export const ShowError = (message) => {
-    toast.error(message, {
-        position: "top-right",
-        autoClose: delayMs,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        });
+    console.log("message showerror ", message);
+
+    // toast.error(message, {
+    //     position: "top-right",
+    //     autoClose: delayMs,
+    //     hideProgressBar: false,
+    //     closeOnClick: true,
+    //     pauseOnHover: true,
+    //     draggable: true,
+    //     progress: undefined,
+    //     });
+    // <Notification>
+    // </Notification>
 };
