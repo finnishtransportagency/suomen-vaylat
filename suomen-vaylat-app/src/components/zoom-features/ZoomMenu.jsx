@@ -1,12 +1,11 @@
 import { useState } from 'react';
-
-import styled from 'styled-components';
-import ZoomBar from './ZoomBar';
-import { useAppSelector } from '../../state/hooks';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearchLocation } from '@fortawesome/free-solid-svg-icons';
-import strings from '../../translations';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import ReactTooltip from "react-tooltip";
+import styled from 'styled-components';
+import { useAppSelector } from '../../state/hooks';
+import strings from '../../translations';
+import ZoomBar from './ZoomBar';
 
 const StyledZoomMenu = styled.div`
     z-index: 2;

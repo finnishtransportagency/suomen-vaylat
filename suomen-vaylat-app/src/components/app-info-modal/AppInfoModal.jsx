@@ -1,12 +1,12 @@
 import { useContext } from 'react';
-import strings from "../../translations";
-import styled from 'styled-components';
-import Modal from "react-modal";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
-import { useAppSelector } from "../../state/hooks";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Modal from "react-modal";
 import { ReactReduxContext } from "react-redux";
+import styled from 'styled-components';
+import { useAppSelector } from "../../state/hooks";
 import { setIsInfoOpen } from "../../state/slices/uiSlice";
+import strings from "../../translations";
 
 const customStyles = {
     content: {

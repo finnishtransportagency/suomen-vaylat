@@ -1,10 +1,10 @@
 import { useContext } from "react";
-import styled from 'styled-components';
-import strings from '../../../translations';
 import { ReactReduxContext, useSelector } from 'react-redux';
+import styled from 'styled-components';
 import { setSearchParams } from '../../../state/slices/uiSlice';
-
+import strings from '../../../translations';
 import Layer from '../hierarchical-layerlist/Layer';
+
 
 const StyledLayerSearchContainer = styled.div`
     display: flex;

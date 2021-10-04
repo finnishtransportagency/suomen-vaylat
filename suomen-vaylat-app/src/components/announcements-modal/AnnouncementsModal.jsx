@@ -1,9 +1,9 @@
 import React from 'react';
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Modal from 'react-modal';
 import styled from 'styled-components';
 import strings from '../../translations';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimes } from '@fortawesome/free-solid-svg-icons';
 
 const customStyles = {
     content: {
@@ -91,41 +91,40 @@ export const AnnouncementsModal = ({ id, title, content }) => {
 
     return (
         <div>
-
             <Modal
                 isOpen={modalIsOpen}
                 onAfterOpen={afterOpenModal}
                 onRequestClose={() => closeModal()}
                 style={customStyles}
             >
-            <StyledHeader className="modal-header">
-                <h5>{title}</h5>
-                <StyledLayerCloseIcon
-                    onClick={() => {
-                        closeModal();
-                        }} title='Sulje'>
-                        <FontAwesomeIcon
-                            icon={faTimes}
+                <StyledHeader className="modal-header">
+                    <h5>{title}</h5>
+                    <StyledLayerCloseIcon
+                        onClick={() => {
+                            closeModal();
+                            }} title='Sulje'>
+                            <FontAwesomeIcon
+                                icon={faTimes}
+                            />
+                        </StyledLayerCloseIcon>
+                </StyledHeader>
+                <StyledContent>
+                    <p>
+                        {content}
+                    </p>
+                </StyledContent>
+                <StyledFooter className="modal-footer">
+                    <label>
+                        <StyledCheckbox
+                            name="announcementSelected"
+                            type="checkbox"
+                            onClick={() => setIsSelected(!selected)}
                         />
-                    </StyledLayerCloseIcon>
-            </StyledHeader>
-            <StyledContent>
-                <p>
-                    {content}
-                </p>
-            </StyledContent>
-            <StyledFooter className="modal-footer">
-                <label>
-                    <StyledCheckbox
-                        name="announcementSelected"
-                        type="checkbox"
-                        onClick={() => setIsSelected(!selected)}
-                    />
-                    {strings.announcements.dontShowAgain}
-                </label>
-                <button onClick={() => closeModal()}>OK</button>
-            </StyledFooter>
-        </Modal>
+                        {strings.announcements.dontShowAgain}
+                    </label>
+                    <button onClick={() => closeModal()}>OK</button>
+                </StyledFooter>
+            </Modal>
         </div>
     );
 }

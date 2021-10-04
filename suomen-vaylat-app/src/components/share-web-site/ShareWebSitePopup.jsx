@@ -1,16 +1,16 @@
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { faCopy, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useContext, useState } from 'react';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
+import Draggable from 'react-draggable';
 import { ReactReduxContext } from 'react-redux';
+import { EmailIcon, EmailShareButton, FacebookIcon, FacebookShareButton, LinkedinIcon, LinkedinShareButton, TelegramIcon, TelegramShareButton, TwitterIcon, TwitterShareButton, WhatsappIcon, WhatsappShareButton } from 'react-share';
+import ReactTooltip from 'react-tooltip';
 import styled from 'styled-components';
 import { useAppSelector } from '../../state/hooks';
 import { setShareUrl } from '../../state/slices/uiSlice';
 import strings from '../../translations';
-import { CopyToClipboard } from 'react-copy-to-clipboard';
-import { EmailIcon, EmailShareButton, FacebookIcon, FacebookShareButton, LinkedinIcon, LinkedinShareButton, TelegramIcon, TelegramShareButton, TwitterIcon, TwitterShareButton, WhatsappIcon, WhatsappShareButton } from 'react-share';
-import ReactTooltip from 'react-tooltip';
-import Draggable from 'react-draggable';
 
 const StyledShareWebSiteContainer = styled.div`
     z-index: 30;

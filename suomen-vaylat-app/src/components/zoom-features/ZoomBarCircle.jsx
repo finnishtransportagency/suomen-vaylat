@@ -1,9 +1,9 @@
 import {  useContext } from 'react';
-import styled from 'styled-components';
-
 import { ReactReduxContext } from 'react-redux';
-
+import styled from 'styled-components';
 import { setZoomTo } from '../../state/slices/rpcSlice';
+
+
 
 const StyledZoomLevelContainer = styled.div`
     position: relative;

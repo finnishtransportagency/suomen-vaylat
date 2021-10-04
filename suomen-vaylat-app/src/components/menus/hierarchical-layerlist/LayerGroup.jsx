@@ -1,24 +1,18 @@
-
 import { useState, useContext } from 'react';
-import styled, { keyframes } from 'styled-components';
-import { ReactReduxContext, useSelector } from 'react-redux';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faAngleDown,
     faCar,
-    faHardHat,
-    faShip,
-    faLandmark,
-    faTrain,
-    faRoad,
-    faMap
+    faHardHat, faLandmark, faMap, faRoad, faShip, faTrain
 } from '@fortawesome/free-solid-svg-icons';
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { ReactReduxContext, useSelector } from 'react-redux';
+import styled, { keyframes } from 'styled-components';
 import { updateLayers } from '../../../utils/rpcUtil';
-
+import Checkbox from '../../checkbox/Checkbox';
 import LayerList from './LayerList';
 import Layers from './Layers';
-import Checkbox from '../../checkbox/Checkbox';
+
+
 
 const fadeIn = keyframes`
   from {

@@ -1,10 +1,9 @@
-import React from 'react';
 import styled from 'styled-components';
 import { useAppSelector } from '../../state/hooks';
-import { StyledContainer, StyledTextField, ToastMessage } from './CommonComponents';
-import { setFormData, setSearching, setSearchResult, setSelectedIndex, setMarker, setAddressSearchEventHandlerReady } from '../../state/slices/searchSlice';
+import { setAddressSearchEventHandlerReady, setFormData, setMarker, setSearching, setSearchResult, setSelectedIndex } from '../../state/slices/searchSlice';
 import strings from '../../translations';
 import { ShowWarning } from '../messages/Messages';
+import { StyledContainer, StyledTextField, ToastMessage } from './CommonComponents';
 
 const List = styled.ul`
   z-index: 100;

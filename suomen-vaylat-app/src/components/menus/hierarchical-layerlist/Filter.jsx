@@ -1,6 +1,6 @@
 import { useContext, useState } from 'react';
-import styled from 'styled-components';
 import { ReactReduxContext, useSelector } from 'react-redux';
+import styled from 'styled-components';
 import { setTagLayers, setTags } from '../../../state/slices/rpcSlice';
 
 const StyledFilterButton = styled.div`
