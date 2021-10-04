@@ -2,9 +2,7 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import strings from '../../translations';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-    faAngleDown
-} from '@fortawesome/free-solid-svg-icons';
+import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
 
 const StyledLegendGroup = styled.div`
 `;

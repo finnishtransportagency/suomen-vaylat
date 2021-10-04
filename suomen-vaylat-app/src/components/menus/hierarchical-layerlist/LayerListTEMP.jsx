@@ -1,20 +1,21 @@
 import styled from 'styled-components';
 import { useAppSelector } from '../../../state/hooks';
+import { useParams } from 'react-router';
+import { useContext } from 'react';
+import { ReactReduxContext } from 'react-redux';
+import strings from '../../../translations';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import { setSelectedLayerListType } from '../../../state/slices/uiSlice';
+
 import LayerList from './LayerList';
 import ThemeLayerList from './ThemeLayerList';
-import Tabs from "./Tabs";
-import strings from '../../../translations';
 import Filter from './Filter';
+import Tabs from "./Tabs";
 import SelectedLayers from '../../menus/selected-layers/SelectedLayers';
 import LayerSearch from './LayerSearch';
 import Dropdown from './Dropdown';
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash } from '@fortawesome/free-solid-svg-icons';
-import { useParams } from 'react-router';
-import { useContext } from 'react';
-import { ReactReduxContext } from 'react-redux';
-import { setSelectedLayerListType } from '../../../state/slices/uiSlice';
 //VÄLIAIKAINEN PALIKKA VÄLITTÄMÄÄN TESTIDATAA HIERARKISELLE TASOVALIKOLLE
 
 const StyledLayerListContainer = styled.div`
@@ -84,11 +85,15 @@ const LayerListTEMP = ({
 }) => {
 
     const { store } = useContext(ReactReduxContext);
+
     useAppSelector((state) => state.language);
+
     const selectedTheme = useAppSelector((state) => state.ui.selectedTheme);
+
     const setLayerListType = (type) => {
       store.dispatch(setSelectedLayerListType(type));
     };
+    
     const {layerlistType} = useParams();
 
     return (

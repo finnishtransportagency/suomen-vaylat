@@ -1,9 +1,11 @@
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useSelector } from 'react-redux';
-import ReactTooltip from 'react-tooltip';
+
 import strings from '../../translations';
+
+import ReactTooltip from 'react-tooltip';
 import {
     faRuler,
     faSquare,
@@ -46,7 +48,7 @@ const StyledDrawingTool = styled.div`
     box-shadow: rgb(0 0 0 / 16%) 0px 3px 6px, rgb(0 0 0 / 23%) 0px 3px 6px;
     border-radius: 50%;
     svg {
-        color: #fff;
+        color: ${props => props.theme.colors.mainWhite};
         font-size: 20px;
     };
 `;
@@ -61,7 +63,7 @@ const StyledErase = styled.div`
     margin-top: 1rem;
     border-radius: 50%;
     svg {
-        color: #fff;
+        color: ${props => props.theme.colors.mainWhite};
         font-size: 15px;
     }
 `;
@@ -110,8 +112,11 @@ const drawinToolsData = [
 ];
 
 export const DrawingTools = () => {
+
     const [activeTool, setActiveTool] = useState('');
+
     const channel = useSelector(state => state.rpc.channel);
+
     const startStopTool = (tool) => {
         if (tool.name !== activeTool) {
             var data = [tool.name, tool.type, { showMeasureOnMap: true }];
@@ -122,12 +127,14 @@ export const DrawingTools = () => {
             channel.postRequest('DrawTools.StopDrawingRequest', clearData);
             setActiveTool('');
         }
-    }
+    };
+
     const eraseDrawing = (tool) => {
         var clearData = [tool.name, true];
         channel.postRequest('DrawTools.StopDrawingRequest', clearData);
         setActiveTool('');
-    }
+    };
+
     return (
         <>
             <ReactTooltip id='circle' place='top' type='dark' effect='float'>
@@ -158,7 +165,7 @@ export const DrawingTools = () => {
                 {drawinToolsData.map((tool, index) => {
                     return (
                         <StyledDrawingToolContainer
-                            key={index}
+                            key={tool.name}
                         >
                             <StyledDrawingTool
                                 data-tip data-for={tool.type.toLowerCase()}

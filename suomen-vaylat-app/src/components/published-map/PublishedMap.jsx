@@ -1,11 +1,12 @@
-import React, { useContext, useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 import styled from 'styled-components';
 import OskariRPC from 'oskari-rpc';
 import { useAppSelector } from '../../state/hooks';
 import { ReactReduxContext } from 'react-redux';
+import { updateLayers } from '../../utils/rpcUtil';
+
 import { AnnouncementsModal } from '../announcements-modal/AnnouncementsModal';
 import { MetadataModal } from '../metadata-modal/MetadataModal';
-import { updateLayers } from '../../utils/rpcUtil';
 
 import {
     setLoading,
@@ -56,10 +57,7 @@ const PublishedMap = () => {
     useEffect(() => {
         store.dispatch(setLoading(true));
         const iframe = document.getElementById('sv-iframe');
-        var handlers = [
-            //new AllGroupsHandler(getAllGroups),
-            //new GroupsHandler(this.groupsGetted)
-        ];
+        var handlers = [];
 
         var channel = OskariRPC.connect(iframe, process.env.REACT_APP_PUBLISHED_MAP_DOMAIN);
         var synchronizer = OskariRPC.synchronizerFactory(channel, handlers);
@@ -72,13 +70,13 @@ const PublishedMap = () => {
                     channel.getTags(function (data) {
                         store.dispatch(setAllTags(data));
                     });
-                }
+                };
 
                 if (data.getTagsWithLayers) {
                     channel.getTagsWithLayers(function (data) {
                         store.dispatch(setTagsWithLayers(data));
                     });
-                }
+                };
 
                 if (data.getAnnouncements) {
                     channel.getAnnouncements(function (data) {
@@ -88,20 +86,20 @@ const PublishedMap = () => {
                             store.dispatch(setActiveAnnouncements(activeAnnouncements));
                         }
                     });
-                }
+                };
 
                 if (data.getThemesWithLayers) {
                     channel.getThemesWithLayers(function (data) {
                         store.dispatch(setAllThemesWithLayers(data));
                     });
-                }
+                };
 
                 if (data.getZoomRange) {
                     channel.getZoomRange(function (data) {
                         store.dispatch(setZoomRange(data));
                         data.hasOwnProperty('current') && store.dispatch(setCurrentZoomLevel(data.current));
                     });
-                }
+                };
 
                 if (data.getAllGroups) {
                     channel.getAllGroups(function (data) {
@@ -112,7 +110,7 @@ const PublishedMap = () => {
                         };
                         store.dispatch(setAllGroups(data.sort(arrangeAlphabetically)));
                     });
-                }
+                };
 
                 updateLayers(store, channel);
 
@@ -120,65 +118,70 @@ const PublishedMap = () => {
                     channel.getTags(function (data) {
                         store.dispatch(setAllTags(data));
                     });
-                }
+                };
 
                 if (data.getCurrentState) {
                     channel.getCurrentState(function (data) {
                         store.dispatch(setCurrentState(data));
                     });
-                }
+                };
 
                 if (data.getFeatures) {
                     channel.getFeatures(function (data) {
                         store.dispatch(setFeatures(data));
                     });
-                }
+                };
 
                 if (data.getZoomLevelsLayers) {
                     channel.getZoomLevelsLayers(function (data) {
                         store.dispatch(setZoomLevelsLayers(data));
                     });
-                }
+                };
 
                 if (data.getSuomenVaylatLayers) {
                     channel.getSuomenVaylatLayers(function (data) {
                         store.dispatch(setSuomenVaylatLayers(data));
                     });
-                }
+                };
 
                 if (data.getLegends) {
                     channel.getLegends((data) => {
                         store.dispatch(setLegends(data));
                     });
-                }
+                };
 
                 if (data.getMapPosition) {
                     channel.getMapPosition((data) => {
                         store.dispatch(setCurrentMapCenter(data));
                     });
-                }
+                };
             });
 
             channel.getSupportedEvents(function (data) {
+                
                 if (data.MapClickedEvent) {
                     channel.handleEvent('MapClickedEvent', event => {
 
                     });
-                }
+                };
+
                 if (data.MarkerClickEvent) {
                     channel.handleEvent('MarkerClickEvent', event => {
 
                     });
-                }
+                };
+
                 if (data.AfterMapMoveEvent) {
                     channel.handleEvent('AfterMapMoveEvent', event => {
                         store.dispatch(setCurrentMapCenter(event));
                     });
-                }
+                };
+
                 if (data.SearchResultEvent) {
                     channel.handleEvent('SearchResultEvent', event => {
                     });
-                }
+                };
+
                 if (data.UserLocationEvent) {
                     channel.postRequest('MapModulePlugin.RemoveMarkersRequest', ["my_location"]);
 
@@ -218,7 +221,7 @@ const PublishedMap = () => {
                         };
                         channel.postRequest('MapTourRequest', [routeSteps, stepDefaults]);
                     });
-                }
+                };
             });
 
             channel.getSupportedRequests(function (data) {
@@ -233,7 +236,6 @@ const PublishedMap = () => {
         };
 
     }, [store]);
-
 
     let announcements = useAppSelector((state) => state.rpc.activeAnnouncements);
 

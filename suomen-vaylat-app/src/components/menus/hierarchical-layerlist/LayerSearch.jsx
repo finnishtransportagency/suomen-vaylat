@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import strings from '../../../translations';
 import { ReactReduxContext, useSelector } from 'react-redux';
 import { setSearchParams } from '../../../state/slices/uiSlice';
+
 import Layer from '../hierarchical-layerlist/Layer';
 
 const StyledLayerSearchContainer = styled.div`
@@ -60,7 +61,7 @@ const LayerSearch = ({ layers }) => {
                 searchParams !== "" && searchParams.length > 2 && 
                 <>
                     <StyledListSubtitle>
-                    {strings.layerlist.layerlistLabels.searchResults}
+                        {strings.layerlist.layerlistLabels.searchResults}
                     </StyledListSubtitle>
                     <StyledLayerList>
                         {searchResults.map(layer => {

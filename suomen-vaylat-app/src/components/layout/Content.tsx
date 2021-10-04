@@ -1,14 +1,15 @@
 import { useAppSelector } from '../../state/hooks';
 import styled from 'styled-components';
+
+import { ToastContainer } from 'react-toastify';
+
 import PublishedMap from '../published-map/PublishedMap.jsx';
 import DrawingTools from '../measurement-tools/DrawingTools';
-
 import SideMenu from '../menus/side-menu/SideMenu';
 import MenuBar from  '../layout/menu-bar/MenuBar';
 import ZoomMenu from '../zoom-features/ZoomMenu';
 import Search from '../search/Search';
 import AppInfoModal from '../app-info-modal/AppInfoModal';
-import { ToastContainer } from 'react-toastify';
 import { Legend } from "../legend/Legend";
 import { ShareWebSitePopup } from "../share-web-site/ShareWebSitePopup";
 

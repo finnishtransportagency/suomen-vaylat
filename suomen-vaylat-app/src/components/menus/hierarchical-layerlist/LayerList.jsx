@@ -1,12 +1,9 @@
 import { useState, useContext } from 'react';
 import styled, { keyframes } from 'styled-components';
 import LayerGroup from './LayerGroup';
-import { useAppSelector } from '../../../state/hooks';
 import { ReactReduxContext, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-    faAngleDown
-} from '@fortawesome/free-solid-svg-icons';
+import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
 import Checkbox from '../../checkbox/Checkbox';
 import Layers from './Layers';
 import { updateLayers } from '../../../utils/rpcUtil';
@@ -122,7 +119,8 @@ export const LayerList = ({
 
     if (tagLayers.length > 0) {
         layers = layers.filter(layer => tagLayers.includes(layer.id));
-    }
+    };
+
     return (
         <>
             {tagLayers.length > 0 ?
@@ -164,12 +162,17 @@ export const LayerList = ({
     );
   };
 
-  const TagLayerList = ({tag, layers, index}) => {
-    const [isOpen, setIsOpen] = useState(false);
+  const TagLayerList = ({
+      tag,
+      layers, index
+    }) => {
     const { store } = useContext(ReactReduxContext);
     const channel = useSelector(state => state.rpc.channel);
     const tagsWithLayers = useSelector(state => state.rpc.tagsWithLayers);
     const tagLayers = tagsWithLayers[tag];
+
+    const [ isOpen, setIsOpen ] = useState(false);
+
     let checked;
     let indeterminate;
     let visibleLayers = [];

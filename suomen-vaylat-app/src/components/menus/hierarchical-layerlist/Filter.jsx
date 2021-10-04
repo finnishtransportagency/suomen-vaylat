@@ -24,9 +24,14 @@ const StyledFilter = styled.span`
 `;
 
 export const Filter = ({ filter }) => {
+    
     const { store } = useContext(ReactReduxContext);
 
-    const { channel, tagLayers, tags } = useSelector(state => state.rpc);
+    const {
+        channel,
+        tagLayers,
+        tags
+    } = useSelector(state => state.rpc);
 
     const [isSelected, setIsSelected] = useState(false);
 

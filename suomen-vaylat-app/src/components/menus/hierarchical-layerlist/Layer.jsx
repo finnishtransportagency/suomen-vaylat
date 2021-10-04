@@ -51,9 +51,13 @@ const StyledCheckbox = styled.div`
 `;
 
 export const Layer = ({ layer, theme }) => {
+
     const { store } = useContext(ReactReduxContext);
 
-    const { channel, selectedLayers} = useSelector(state => state.rpc);
+    const {
+        channel,
+        selectedLayers
+    } = useSelector(state => state.rpc);
 
     const handleLayerVisibility = (channel, layer) => {
         channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, !layer.visible]);
@@ -64,12 +68,13 @@ export const Layer = ({ layer, theme }) => {
     };
 
     useEffect(() => {
+
         const updateLayerLegends = (channel) => {
             channel.getLegends((data) => {
                 store.dispatch(setLegends(data));
             });
         };
-
+        
         debounceLegendsUpdate = debounce(updateLayerLegends, 500);
     }, [store]);
 
