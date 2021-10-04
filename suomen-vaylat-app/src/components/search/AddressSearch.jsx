@@ -2,9 +2,18 @@ import React from 'react';
 import styled from 'styled-components';
 import { useAppSelector } from '../../state/hooks';
 import { StyledContainer, StyledTextField, ToastMessage } from './CommonComponents';
-import { setFormData, setSearching, setSearchResult, setSelectedIndex, setMarker, setAddressSearchEventHandlerReady } from '../../state/slices/searchSlice';
+import {
+    setFormData,
+    setSearching,
+    setSearchResult,
+    setSelectedIndex,
+    setMarker,
+    setAddressSearchEventHandlerReady,
+    setSearchError
+} from '../../state/slices/searchSlice';
 import strings from '../../translations';
 import { ShowWarning } from '../messages/Messages';
+import {Notification} from "../notification/Notification";
 
 const List = styled.ul`
   list-style: none;
@@ -55,8 +64,9 @@ const AddressSearch = ({visible, search, store, onEnterHandler}) => {
             store.dispatch(setSearching(false));
             store.dispatch(setSearchResult({ address: data.result.locations }));
             if (data.result.locations.length === 0) {
-                ShowWarning(<ToastMessage title={strings.search.address.error.title}
-                    message={strings.search.address.error.text}/>);
+                // ShowWarning(<ToastMessage title={strings.search.address.error.title}
+                //     message={strings.search.address.error.text}/>);
+                store.dispatch(setSearchError({errorState: true, data: [''], errorType: 'warning'}));
             }
         });
         store.dispatch(setAddressSearchEventHandlerReady(true));
@@ -99,6 +109,13 @@ const AddressSearch = ({visible, search, store, onEnterHandler}) => {
                 ))}
                 </List>
             }
+            {/*{search.searchError &&*/}
+            {/*    <Notification*/}
+            {/*        title={strings.search.vkm.error.title}*/}
+            {/*        message={strings.search.vkm.error.text}*/}
+            {/*        errors={search.searchErrorData}*/}
+            {/*    />*/}
+            {/*}*/}
         </StyledContainer>);
 };
 
