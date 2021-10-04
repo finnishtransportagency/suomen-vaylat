@@ -1,19 +1,20 @@
+import { useContext } from "react";
 import { useAppSelector } from '../../state/hooks';
+import { ReactReduxContext } from "react-redux";
 import styled from 'styled-components';
-
 import LanguageSelector from '../language-selector/LanguageSelector';
 import strings from '../../translations';
-
-import {ReactComponent as VaylaLogoFi} from './images/vayla_sivussa_fi_white.svg';
-import {ReactComponent as VaylaLogoEn} from './images/vayla_sivussa_en_white.svg';
-import {ReactComponent as VaylaLogoSv} from './images/vayla_sivussa_sv_white.svg';
-import {faInfoCircle} from "@fortawesome/free-solid-svg-icons";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {setIsInfoOpen} from "../../state/slices/uiSlice";
-import {useContext} from "react";
-import {ReactReduxContext} from "react-redux";
-import { WebSiteShareButton } from '../share-web-site/ShareLinkButtons';
 import ReactTooltip from 'react-tooltip';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
+
+import { setIsInfoOpen } from "../../state/slices/uiSlice";
+
+import { WebSiteShareButton } from '../share-web-site/ShareLinkButtons';
+
+import { ReactComponent as VaylaLogoFi } from './images/vayla_sivussa_fi_white.svg';
+import { ReactComponent as VaylaLogoEn } from './images/vayla_sivussa_en_white.svg';
+import { ReactComponent as VaylaLogoSv } from './images/vayla_sivussa_sv_white.svg';
 
 const StyledHeaderContainer = styled.div`
     z-index: 20;
@@ -68,13 +69,13 @@ const StyledHeaderTitleContainer = styled.p`
 `;
 
 const StyledHeaderLogoContainer = styled.div`
+    height: inherit;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    svg {
         height: inherit;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        svg {
-            height: inherit;
-        };
+    };
 `;
 
 const StyledRightCornerButtons = styled.div`

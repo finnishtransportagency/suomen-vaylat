@@ -2,8 +2,6 @@
 import { useState, useContext } from 'react';
 import styled, { keyframes } from 'styled-components';
 import { ReactReduxContext, useSelector } from 'react-redux';
-import LayerList from './LayerList';
-import Layers from './Layers';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faAngleDown,
@@ -16,8 +14,11 @@ import {
     faMap
 } from '@fortawesome/free-solid-svg-icons';
 
-import Checkbox from '../../checkbox/Checkbox';
 import { updateLayers } from '../../../utils/rpcUtil';
+
+import LayerList from './LayerList';
+import Layers from './Layers';
+import Checkbox from '../../checkbox/Checkbox';
 
 const fadeIn = keyframes`
   from {
