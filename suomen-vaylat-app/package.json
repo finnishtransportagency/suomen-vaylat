@@ -76,7 +76,6 @@
   "devDependencies": {
     "@types/lodash": "^4.14.168",
     "@types/react-router-dom": "^5.1.7",
-    "eslint-plugin-import": "^2.24.2",
     "redux-devtools": "^3.7.0",
     "redux-devtools-extension": "^2.13.9"
   }
