@@ -34,9 +34,9 @@ const StyledPublishedMap = styled.div`
 `;
 
 const StyledIframe = styled.iframe`
-    border: none;
     width: 100%;
     height: 100%;
+    border: none;
 `;
 
 const ANNOUNCEMENTS_LOCALSTORAGE = "oskari-announcements";
@@ -67,6 +67,7 @@ const PublishedMap = () => {
         channel.onReady(() => {
             store.dispatch(setChannel(channel));
             channel.getSupportedFunctions(function (data) {
+
                 if (data.getTags) {
                     channel.getTags(function (data) {
                         store.dispatch(setAllTags(data));
@@ -88,17 +89,20 @@ const PublishedMap = () => {
                         }
                     });
                 }
+
                 if (data.getThemesWithLayers) {
                     channel.getThemesWithLayers(function (data) {
                         store.dispatch(setAllThemesWithLayers(data));
                     });
                 }
+
                 if (data.getZoomRange) {
                     channel.getZoomRange(function (data) {
                         store.dispatch(setZoomRange(data));
                         data.hasOwnProperty('current') && store.dispatch(setCurrentZoomLevel(data.current));
                     });
                 }
+
                 if (data.getAllGroups) {
                     channel.getAllGroups(function (data) {
                         const arrangeAlphabetically = (x, y) => {
@@ -109,6 +113,7 @@ const PublishedMap = () => {
                         store.dispatch(setAllGroups(data.sort(arrangeAlphabetically)));
                     });
                 }
+
                 updateLayers(store, channel);
 
                 if (data.getTags) {
@@ -116,31 +121,37 @@ const PublishedMap = () => {
                         store.dispatch(setAllTags(data));
                     });
                 }
+
                 if (data.getCurrentState) {
                     channel.getCurrentState(function (data) {
                         store.dispatch(setCurrentState(data));
                     });
                 }
+
                 if (data.getFeatures) {
                     channel.getFeatures(function (data) {
                         store.dispatch(setFeatures(data));
                     });
                 }
+
                 if (data.getZoomLevelsLayers) {
                     channel.getZoomLevelsLayers(function (data) {
                         store.dispatch(setZoomLevelsLayers(data));
                     });
                 }
+
                 if (data.getSuomenVaylatLayers) {
                     channel.getSuomenVaylatLayers(function (data) {
                         store.dispatch(setSuomenVaylatLayers(data));
                     });
                 }
+
                 if (data.getLegends) {
                     channel.getLegends((data) => {
                         store.dispatch(setLegends(data));
                     });
                 }
+
                 if (data.getMapPosition) {
                     channel.getMapPosition((data) => {
                         store.dispatch(setCurrentMapCenter(data));
@@ -241,7 +252,7 @@ const PublishedMap = () => {
                     />
                 );
             })}
-            <MetadataModal></MetadataModal>
+            <MetadataModal />
             <StyledIframe id="sv-iframe" title="iframe" src={process.env.REACT_APP_PUBLISHED_MAP_URL + "&lang=" + lang}
                 allow="geolocation" onLoad={() => hideSpinner()}>
             </StyledIframe>

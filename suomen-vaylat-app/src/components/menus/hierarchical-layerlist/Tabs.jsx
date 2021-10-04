@@ -14,13 +14,13 @@ const StyledTopContent = styled.div`
 `;
 
 const StyledTabList = styled.div`
-  transition: all 0.1s ease-out;
   display: flex;
   justify-content: space-around;
   align-items: center;
+  transition: all 0.1s ease-out;
+  background-color: #e4e4e4;
   border-radius: 15px;
   box-sizing: border-box;
-  background-color: #e4e4e4;
   &:hover {
     background-color: ${props => props.theme.colors.maincolor3};
   }
@@ -79,9 +79,8 @@ class Tabs extends Component {
                 {strings.layerlist.layerlistLabels.show}
           </StyledListSubtitle>
           <StyledTabList>
-            {children.map((child, index) => {
+            {children.map((child) => {
               const { label } = child.props;
-
               return (
                 <Tab
                   activeTab={activeTab}

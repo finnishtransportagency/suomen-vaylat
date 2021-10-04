@@ -13,9 +13,9 @@ import ZoomBarCircle from './ZoomBarCircle';
 import ZoomBarLayer from './ZoomBarLayer';
 
 const StyledZoomBarContainer = styled.div`
+    position: relative;
     pointer-events: none;
     cursor: pointer;
-    position: relative;
     display: flex;
     flex-direction: column-reverse;
     align-items: center;
@@ -25,40 +25,40 @@ const StyledExpandControl = styled.div`
     position: absolute;
     top: -15px;
     right: -60%;
-    transform: translateY(-50%);
-    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
-    pointer-events: auto;
-    transition: all 0.1s ease-in;
     width: 40px;
     height: 40px;
-    background-color: ${props => props.theme.colors.maincolor1};
-    border-radius: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
+    transform: translateY(-50%);
+    pointer-events: auto;
+    background-color: ${props => props.theme.colors.maincolor1};
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+    border-radius: 50%;
+    transition: all 0.1s ease-in;
     &:hover {
         background-color: ${props => props.theme.colors.maincolor2};
     };
     svg {
         font-size: 23px;
-        transition: all 0.5s ease-out;
         color: ${props => props.theme.colors.mainWhite};
+        transition: all 0.5s ease-out;
     };
 `;
 
 const StyledZoomBarControlTop = styled.button`
-    border: none;
-    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
-    pointer-events: auto;
-    transition: all 0.1s ease-in;
     width: 46px;
     height: 46px;
-    background-color: ${props => props.theme.colors.maincolor1};
-    margin: 0px 3px 3px 3px;
-    border-radius: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
+    pointer-events: auto;
+    background-color: ${props => props.theme.colors.maincolor1};
+    margin: 0px 3px 3px 3px;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+    border: none;
+    border-radius: 50%;
+    transition: all 0.1s ease-in;
    svg {
         color: ${props => props.theme.colors.mainWhite};
         font-size: 20px;
@@ -69,19 +69,19 @@ const StyledZoomBarControlTop = styled.button`
 `;
 
 const StyledZoomBarControlBottom = styled.button`
-    border: none;
-    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
-    pointer-events: auto;
-    transition: all 0.3s ease-out;
-    cursor: pointer;
     width: 46px;
     height: 46px;
-    background-color: ${props => props.theme.colors.maincolor1};
-    margin: 3px 3px 0px 3px;
-    border-radius: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
+    pointer-events: auto;
+    cursor: pointer;
+    background-color: ${props => props.theme.colors.maincolor1};
+    margin: 3px 3px 0px 3px;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+    border: none;
+    border-radius: 50%;
+    transition: all 0.3s ease-out;
     svg {
         color: ${props => props.theme.colors.mainWhite};
         font-size: 20px;
@@ -92,49 +92,49 @@ const StyledZoomBarControlBottom = styled.button`
 `;
 
 const StyledCenterLine = styled.div`
-    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
     z-index: -1;
     position: absolute;
     width: 4px;
     height: 100%;
     background-color: ${props => props.theme.colors.maincolor1};
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
 `;
 
 const StyledZoomBarLayersInfo = styled.div`
-    overflow: hidden;
-    transition: all 0.3s ease-out;
     position: absolute;
     left: ${props => props.isExpanded ? '-240px' : '-230px' };
     width: 230px;
     height: 100%;
-    background-color: ${props => props.theme.colors.maincolor1};
-    border-radius: 15px;
+    overflow: hidden;
     opacity: ${props => props.isExpanded ? '1' : '0'};
     transition-delay: 0.6s;
+    background-color: ${props => props.theme.colors.maincolor1};
     box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+    border-radius: 15px;
+    transition: all 0.3s ease-out;
 `;
 
 const StyledTitle = styled.div`
-    margin: 0;
-    width: 100%;
-    height: 60px;
     top: 0px;
     left: 0px;
-    font-size: 12px;
-    font-weight: 400;
+    width: 100%;
+    height: 60px;
     display: flex;
     justify-content: center;
     align-items: center;
-    color: ${props => props.theme.colors.mainWhite};
     text-align: center;
+    color: ${props => props.theme.colors.mainWhite};
+    margin: 0;
     padding: 10px;
+    font-size: 12px;
+    font-weight: 400;
 `;
 
 const StyledLayerInfoContainer = styled.div`
-    padding: 0px 15px 15px 15px;
     pointer-events: auto;
     overflow-y: auto;
     height: 100%;
+    padding: 0px 15px 15px 15px;
     &::-webkit-scrollbar {
         display: none;
     }

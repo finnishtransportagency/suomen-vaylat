@@ -20,15 +20,13 @@ const StyledHeaderContainer = styled.div`
     height: 80px;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
+    box-shadow: rgb(0 0 0 / 16%) 0px 3px 6px, rgb(0 0 0 / 23%) 0px 3px 6px;
     @media ${props => props.theme.device.desktop} {
         height: 60px;
-        //display: none;
     };
     @media ${props => props.theme.device.tablet} {
         grid-template-columns: 1fr 1fr;
-        //display: none;
     };
-    box-shadow: rgb(0 0 0 / 16%) 0px 3px 6px, rgb(0 0 0 / 23%) 0px 3px 6px;
 `;
 
 const StyledHeaderButton = styled.div`
@@ -36,15 +34,15 @@ const StyledHeaderButton = styled.div`
     cursor: pointer;
     width: 40px;
     height: 40px;
-    margin-right:5px;
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-right:5px;
     background-color: transparent;
     border-radius: 50%;
     svg {
-        font-size: 18px;
         color: ${props => props.theme.colors.mainWhite};
+        font-size: 18px;
     };
     @media ${props => props.theme.device.mobileL} {
         width: 40px;
@@ -53,14 +51,14 @@ const StyledHeaderButton = styled.div`
 `;
 
 const StyledHeaderTitleContainer = styled.p`
+    height: inherit;
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    height: inherit;
     margin: 0;
+    color: ${props => props.theme.colors.mainWhite};
     padding-left: 10px;
     font-weight: 600;
-    color: ${props => props.theme.colors.mainWhite};
     @media ${props => props.theme.device.tablet} {
         display: none;
     };

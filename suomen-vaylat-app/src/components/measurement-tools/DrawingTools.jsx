@@ -13,58 +13,57 @@ import {
     faEraser
 } from '@fortawesome/free-solid-svg-icons';
 
-const StyledDrawingTool = styled.div`
-    z-index: 100;
+const StyledTools = styled.div`
+    position: absolute;
+    left: 50%;
+    bottom: 0px;
+    transform: translateX(-50%);
     display: flex;
-    background-color: ${(props => props.active? props.theme.colors.maincolorselected1 : props.theme.colors.maincolor1)};
+    justify-content: space-between;
     align-items: center;
-    justify-content: center;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    svg {
-        font-size: 20px;
-        color: #fff;
-    }
-    box-shadow: rgb(0 0 0 / 16%) 0px 3px 6px, rgb(0 0 0 / 23%) 0px 3px 6px;
-`;
-
-const StyledErase = styled.div`
-    display: flex;
-    margin-top: 1rem;
-    background-color: grey;
-    align-items: center;
-    justify-content: center;
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    svg {
-        font-size: 15px;
-        color: #fff;
-    }
+    flex-direction: row;
+    background-color: ${props => props.color};
+    margin: 1rem;
+    transition: all .2s ease-in-out;
 `;
 
 const StyledDrawingToolContainer = styled.div`
-    transition: all .3s ease-in-out;
-    opacity: ${props => props.isDrawingToolsOpen ? '1' : '0 !important'};
-    margin: .5rem;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
+    margin: .5rem;
 `;
 
-const StyledTools = styled.div`
-    transition: all .2s ease-in-out;
+const StyledDrawingTool = styled.div`
+    z-index: 100;
+    width: 40px;
+    height: 40px;
     display: flex;
-    justify-content: space-between;
-    position: absolute;
-    bottom: ${props => props.isDrawingToolsOpen ? '0' : '-5% !important'};
-    left: 40%;
-    margin: 1rem;
     align-items: center;
-    flex-direction: row;
-    background-color: ${props => props.color};
+    justify-content: center;
+    background-color: ${(props => props.active? props.theme.colors.maincolorselected1 : props.theme.colors.maincolor1)};
+    box-shadow: rgb(0 0 0 / 16%) 0px 3px 6px, rgb(0 0 0 / 23%) 0px 3px 6px;
+    border-radius: 50%;
+    svg {
+        color: #fff;
+        font-size: 20px;
+    };
+`;
+
+const StyledErase = styled.div`
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: grey;
+    margin-top: 1rem;
+    border-radius: 50%;
+    svg {
+        color: #fff;
+        font-size: 15px;
+    }
 `;
 
 const drawinToolsData = [
@@ -110,9 +109,9 @@ const drawinToolsData = [
     }
 ];
 
-export const DrawingTools = ({isDrawingToolsOpen}) => {
+export const DrawingTools = () => {
     const [activeTool, setActiveTool] = useState('');
-    const channel = useSelector(state => state.rpc.channel)
+    const channel = useSelector(state => state.rpc.channel);
     const startStopTool = (tool) => {
         if (tool.name !== activeTool) {
             var data = [tool.name, tool.type, { showMeasureOnMap: true }];
@@ -155,12 +154,11 @@ export const DrawingTools = ({isDrawingToolsOpen}) => {
                 <span>{strings.tooltips.drawingtools.erase}</span>
             </ReactTooltip>
 
-            <StyledTools isDrawingToolsOpen={isDrawingToolsOpen}>
+            <StyledTools>
                 {drawinToolsData.map((tool, index) => {
                     return (
                         <StyledDrawingToolContainer
                             key={index}
-                            isDrawingToolsOpen={isDrawingToolsOpen}
                         >
                             <StyledDrawingTool
                                 data-tip data-for={tool.type.toLowerCase()}
@@ -186,6 +184,6 @@ export const DrawingTools = ({isDrawingToolsOpen}) => {
             </StyledTools>
         </>
     );
- }
+ };
 
  export default DrawingTools;

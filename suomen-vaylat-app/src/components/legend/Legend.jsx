@@ -11,10 +11,10 @@ import { setIsLegendOpen } from '../../state/slices/uiSlice';
 
 
 const StyledLegendContainer = styled.div`
-    position:absolute;
-    bottom:10px;
+    z-index: 30;
+    position: absolute;
+    bottom: 10px;
     right: 10px;
-    z-index:30;
     width: 300px;
     max-width:70%;
     height: 60%;
@@ -26,32 +26,32 @@ const StyledLegendContainer = styled.div`
 `;
 
 const StyledHeader = styled.div`
-    padding: .5rem;
-    background-color: ${props => props.theme.colors.maincolor1};
-    color: ${props => props.theme.colors.mainWhite};
     border-radius: 0;
     cursor: move;
+    color: ${props => props.theme.colors.mainWhite};
+    background-color: ${props => props.theme.colors.maincolor1};
+    padding: .5rem;
 `;
 
 const StyledGroupsContainer = styled.div`
-    padding: 6px;
     height: calc(100% - 40px);
     overflow-y: auto;
+    padding: 6px;
 `;
 
 const StyledLayerCloseIcon = styled.div`
-    cursor: pointer;
-    position:absolute;
-    right: 0;
+    position: absolute;
     top: 8px;
-    justify-content: center;
-    align-items: center;
+    right: 0;
     min-width: 28px;
     min-height: 28px;
+    cursor: pointer;
+    justify-content: center;
+    align-items: center;
     svg {
-        transition: all 0.1s ease-out;
-        font-size: 18px;
         color: ${props => props.theme.colors.mainWhite};
+        font-size: 18px;
+        transition: all 0.1s ease-out;
     };
     &:hover {
         svg {

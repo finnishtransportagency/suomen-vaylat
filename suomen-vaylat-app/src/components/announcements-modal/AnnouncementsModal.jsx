@@ -47,25 +47,25 @@ const StyledContent = styled.div`
 `;
 const StyledHeader = styled.div`
     padding: .5rem;
-    background-color: ${props => props.theme.colors.maincolor1};
+    border-radius: 0;
     color: ${props => props.theme.colors.mainWhite};
-    border-radius: 0
+    background-color: ${props => props.theme.colors.maincolor1};
 `;
 const StyledFooter = styled.div`
     justify-content: space-between;
 `;
 
 const StyledLayerCloseIcon = styled.div`
-    cursor: pointer;
+    min-width: 28px;
+    min-height: 28px;
     display: flex;
     justify-content: center;
     align-items: center;
-    min-width: 28px;
-    min-height: 28px;
+    cursor: pointer;
     svg {
-        transition: all 0.1s ease-out;
-        font-size: 18px;
         color: ${props => props.theme.colors.mainWhite};
+        font-size: 18px;
+        transition: all 0.1s ease-out;
     };
     &:hover {
         svg {

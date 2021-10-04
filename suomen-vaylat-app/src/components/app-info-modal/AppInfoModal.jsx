@@ -1,12 +1,12 @@
-import React, {useContext} from 'react';
+import { useContext } from 'react';
 import strings from "../../translations";
 import styled from 'styled-components';
 import Modal from "react-modal";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faTimes} from "@fortawesome/free-solid-svg-icons";
-import {useAppSelector} from "../../state/hooks";
-import {ReactReduxContext} from "react-redux";
-import {setIsInfoOpen} from "../../state/slices/uiSlice";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import { useAppSelector } from "../../state/hooks";
+import { ReactReduxContext } from "react-redux";
+import { setIsInfoOpen } from "../../state/slices/uiSlice";
 
 const customStyles = {
     content: {
@@ -27,30 +27,31 @@ const customStyles = {
 const StyledContent = styled.div`
     padding: .5rem;
 `;
+
 const StyledHeader = styled.div`
     padding: .5rem;
-    background-color: ${props => props.theme.colors.maincolor1};
+    border-radius: 0;
     color: ${props => props.theme.colors.mainWhite};
-    border-radius: 0
+    background-color: ${props => props.theme.colors.maincolor1};
 `;
 
 const StyledLayerCloseIcon = styled.div`
+    min-width: 28px;
+    min-height: 28px;
     cursor: pointer;
     display: flex;
     justify-content: center;
     align-items: center;
-    min-width: 28px;
-    min-height: 28px;
     svg {
-        transition: all 0.1s ease-out;
-        font-size: 18px;
         color: ${props => props.theme.colors.mainWhite};
+        font-size: 18px;
+        transition: all 0.1s ease-out;
     };
     &:hover {
         svg {
             color: ${props => props.theme.colors.maincolor2};
         }
-    }
+    };
 `;
 
 export const AppInfoModal = () => {
@@ -63,7 +64,7 @@ export const AppInfoModal = () => {
 
     function closeModal() {
         store.dispatch(setIsInfoOpen(false));
-    }
+    };
 
     return (
         <div>
@@ -89,5 +90,6 @@ export const AppInfoModal = () => {
             </Modal>
         </div>
     );
-}
+};
+
 export default AppInfoModal;

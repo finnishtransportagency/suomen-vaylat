@@ -10,14 +10,14 @@ const StyledCheckbox = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    border: 2px solid ${props => props.theme.colors.maincolor1};
-    box-sizing: border-box;
     background-color: ${props => props.theme.colors.mainWhite};
+    border: 2px solid ${props => props.theme.colors.maincolor1};
     border-radius: 30%;
+    box-sizing: border-box;
     svg {
         color: #0064af;
         font-size: 12px;
-    }
+    };
 `;
 
 const Checkbox = ({
