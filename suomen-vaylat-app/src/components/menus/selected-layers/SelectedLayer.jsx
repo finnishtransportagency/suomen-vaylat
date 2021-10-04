@@ -9,34 +9,32 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faInfo } from '@fortawesome/free-solid-svg-icons';
 import { updateLayers } from "../../../utils/rpcUtil";
 
-//import LayerOptions from './LayerOptions';
-
 const StyledLayerContainer = styled.div`
-    transition: all 0.3s ease-out;
+    height: 40px;
     display: flex;
     align-items: center;
-    height: 40px;
     background-color: rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease-out;
     &:nth-child(2n) {
         background-color: ${props => props.theme.colors.mainWhite};
     };
 `;
 
 const StyledlayerHeader = styled.div`
-    display: flex;
     width: 100%;
+    display: flex;
     justify-content: space-between;
     align-items: center;
 `;
 
 const StyledLayerName = styled.p`
+    max-width: 180px;
     user-select: none;
-    font-size: 13px;
-    margin: 5px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 180px;
+    margin: 5px;
+    font-size: 13px;
 `;
 
 const StyledLeftContent = styled.div`
@@ -52,49 +50,48 @@ const StyledRightContent = styled.div`
 `;
 
 const StyledLayerDeleteIcon = styled.div`
-    cursor: pointer;
+    min-width: 28px;
+    min-height: 28px;
     display: flex;
     justify-content: center;
     align-items: center;
-    min-width: 28px;
-    min-height: 28px;
+    cursor: pointer;
     svg {
-        transition: all 0.1s ease-out;
-        font-size: 16px;
         color: ${props => props.theme.colors.maincolor1};
+        font-size: 16px;
+        transition: all 0.1s ease-out;
     };
     &:hover {
         svg {
             color: ${props => props.theme.colors.maincolor2};
-        }
+        };
     }
 `;
 
 const StyledlayerOpacityControl = styled.input`
-    user-select: auto;
     width: 60px;
+    height: 6px;
+    user-select: auto;
     -webkit-appearance: none;
     appearance: none;
-    height: 6px;
-    border-radius: 5px;
-    background: linear-gradient(90deg, rgba(0,100,175,0) 0%, rgba(0,100,175,1) 100%);
-    box-shadow: rgba(0, 0, 0, 0.048) 0px 1px 2px, rgba(0, 0, 0, 0.11) 0px 1px 2px;
     outline: none;
+    background: linear-gradient(90deg, rgba(0,100,175,0) 0%, rgba(0,100,175,1) 100%);
+    margin-right: 5px;
+    box-shadow: rgba(0, 0, 0, 0.048) 0px 1px 2px, rgba(0, 0, 0, 0.11) 0px 1px 2px;
+    border-radius: 5px;
     -webkit-transition: .2s;
     transition: opacity .2s;
-    margin-right: 5px;
-
     ::-webkit-slider-thumb {
-        transition: all 0.1s ease-out;
-        -webkit-appearance: none;
-        appearance: none;
         width: 16px;
         height: 16px;
-        border: 3px solid ${props => props.theme.colors.maincolor1};
-        box-sizing: border-box;
-        border-radius: 50%;
-        background: ${props => props.theme.colors.mainWhite};
+        -webkit-appearance: none;
+        appearance: none;
         cursor: pointer;
+        background: ${props => props.theme.colors.mainWhite};
+        border: 3px solid ${props => props.theme.colors.maincolor1};
+        border-radius: 50%;
+        box-sizing: border-box;
+        transition: all 0.1s ease-out;
         &:hover{
             background: ${props => props.theme.colors.maincolor1};
         }
@@ -107,9 +104,9 @@ const StyledLayerInfoIcon = styled.button`
     border: none;
     font-size: 20px;
     svg {
-        transition: all 0.1s ease-out;
-        font-size: 18px;
         color: #0064af;
+        font-size: 18px;
+        transition: all 0.1s ease-out;
     };
     &:hover {
         svg {
@@ -119,8 +116,13 @@ const StyledLayerInfoIcon = styled.button`
 `;
 
 
-export const SelectedLayer = ({ layer, uuid }) => {
+export const SelectedLayer = ({
+    layer,
+    uuid
+}) => {
+
     const { store } = useContext(ReactReduxContext);
+
     const channel = useSelector(state => state.rpc.channel);
 
     const handleLayerVisibility = (channel, layer) => {
