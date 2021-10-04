@@ -33,7 +33,7 @@ const Checkbox = ({
         {
             isChecked && <FontAwesomeIcon 
                 icon={faCheck}
-        />
+            />
         }
 
     </StyledCheckbox>

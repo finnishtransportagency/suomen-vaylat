@@ -5,13 +5,13 @@ import { setIsSideMenuOpen, setIsSearchOpen, setIsLegendOpen, setIsDrawingToolsO
 import styled from 'styled-components';
 import strings from '../../translations';
 import PublishedMap from '../published-map/PublishedMap.jsx';
-import LayerListTEMP from '../menus/hierarchical-layerlist/LayerListTEMP';
 import DrawingTools from '../measurement-tools/DrawingTools';
 import ReactTooltip from 'react-tooltip';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faLayerGroup, faSearch, faTimes, faImages, faPencilRuler, faExpand, faCompress } from '@fortawesome/free-solid-svg-icons';
+import { faLayerGroup, faSearch, faImages, faPencilRuler, faExpand, faCompress } from '@fortawesome/free-solid-svg-icons';
 
+import SideMenu from '../menus/side-menu/SideMenu';
 import ZoomMenu from '../zoom-features/ZoomMenu';
 import Search from '../search/Search';
 import AppInfoModal from '../app-info-modal/AppInfoModal';
@@ -27,72 +27,6 @@ const StyledContent = styled.div`
     @media ${(props: { theme: { device: { desktop: any; }; }; }) => props.theme.device.desktop} {
         height: calc(var(--app-height) - 60px);
     };
-`;
-
-
-const StyledSideMenu = styled.div`
-    z-index: 10;
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    width: 100%;
-    max-width: 340px;
-    height: calc(var(--app-height) - 60px);
-    display: flex;
-    flex-direction: column;
-    transform: ${(props: { isSideMenuOpen: boolean; }) => props.isSideMenuOpen ? "translateX(0%)" : "translateX(-100%)"};
-    overflow-y: auto;
-    background-color: ${(props: { theme: { colors: { maincolor1: any; }; }; }) => props.theme.colors.maincolor1};
-    padding: 10px;
-    box-shadow: rgba(0, 0, 0, 0.19) 5px 5px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
-    transition: all 0.5s ease-in-out;
-    &::-webkit-scrollbar {
-        display: none;
-    };
-    @media ${(props: { theme: { device: { laptop: any; }; }; }) => props.theme.device.laptop} {
-        z-index: 10;
-    };
-    @media ${(props: { theme: { device: { mobileL: any; }; }; }) => props.theme.device.mobileL} {
-        z-index: 10;
-        max-width: 100%;
-        width: 100%;
-        //height: var(--app-height);
-    };
-`;
-
-const StyledSideMenuHeader = styled.div`
-    height: 40px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    color: ${(props: { theme: { colors: { mainWhite: any; }; }; }) => props.theme.colors.mainWhite};
-    margin: 10px;
-    padding-left: 10px;
-    svg  {
-        font-size: 20px;
-    }
-`;
-
-const StyledSideMenuLeftContent = styled.div`
-    display: flex;
-    align-items: center;
-`;
-
-const StyledSideMenuHeaderTitle = styled.p`
-    margin: 0;
-    padding-left: 10px;
-    font-size: 18px;
-    font-weight: 600;
-`;
-
-const StyledSideMenuCloseButton = styled.div`
-    display: flex;
-    cursor: pointer;
-    padding-right: 15px;
-    svg {
-        color: ${(props: { theme: { colors: { mainWhite: any; }; }; }) => props.theme.colors.mainWhite};
-        font-size: 20px;
-   };
 `;
 
 const StyledMenuBar = styled.div`
@@ -157,6 +91,8 @@ const Content = () => {
 
     const { store } = useContext(ReactReduxContext);
 
+    const { selectedLayers } = useAppSelector((state) => state.rpc);
+
     const {
         isFullScreen,
         isSideMenuOpen,
@@ -165,15 +101,6 @@ const Content = () => {
         isDrawingToolsOpen,
         shareUrl
     } =  useAppSelector((state) => state.ui);
-
-    const {
-        allGroups,
-        allLayers,
-        selectedLayers,
-        allThemesWithLayers,
-        allTags,
-        suomenVaylatLayers,
-    } = useAppSelector((state) => state.rpc);
     
     const isShareOpen = shareUrl && shareUrl.length > 0 ? true : false;
 
@@ -213,29 +140,7 @@ const Content = () => {
         </ReactTooltip>
 
         <StyledContent>
-            <StyledSideMenu isSideMenuOpen={isSideMenuOpen}>
-                <StyledSideMenuHeader>
-                    <StyledSideMenuLeftContent>
-                        <FontAwesomeIcon
-                            icon={faLayerGroup}
-                        />
-                        <StyledSideMenuHeaderTitle>{strings.layerlist.layerlistLabels.layers}</StyledSideMenuHeaderTitle>
-                    </StyledSideMenuLeftContent>
-                    <StyledSideMenuCloseButton onClick={() => store.dispatch(setIsSideMenuOpen(!isSideMenuOpen))}>
-                        <FontAwesomeIcon
-                            icon={faTimes}
-                        />
-                    </StyledSideMenuCloseButton>
-                </StyledSideMenuHeader>
-                <LayerListTEMP
-                    groups={allGroups}
-                    layers={allLayers}
-                    themes={allThemesWithLayers}
-                    tags={allTags}
-                    selectedLayers={selectedLayers}
-                    suomenVaylatLayers={suomenVaylatLayers}
-                />
-            </StyledSideMenu>
+            <SideMenu />
             <ZoomMenu />
             <PublishedMap />
             {isSearchOpen && <Search />}
