@@ -109,13 +109,6 @@ const AddressSearch = ({visible, search, store, onEnterHandler}) => {
                 ))}
                 </List>
             }
-            {/*{search.searchError &&*/}
-            {/*    <Notification*/}
-            {/*        title={strings.search.vkm.error.title}*/}
-            {/*        message={strings.search.vkm.error.text}*/}
-            {/*        errors={search.searchErrorData}*/}
-            {/*    />*/}
-            {/*}*/}
         </StyledContainer>);
 };
 

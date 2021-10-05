@@ -5,6 +5,8 @@ import { Route, Router } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { history, store } from './state/store';
 import Theme from './theme/theme';
+import './_colors.scss';
+import './custom.scss';
 import SimpleReactLightbox from 'simple-react-lightbox';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Modal from 'react-modal';
