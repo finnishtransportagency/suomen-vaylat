@@ -11,7 +11,6 @@ import strings from '../../translations';
 import CenterSpinner from '../center-spinner/CenterSpinner';
 import { StyledSelectInput, ToastMessage } from './CommonComponents';
 import { setSearchResult } from '../../state/slices/searchSlice';
-import { ShowError } from '../messages/Messages';
 import VKMSearch from './VKMSearch';
 import Notification from '../notification/Notification'
 import AddressSearch from './AddressSearch';
@@ -244,13 +243,11 @@ export const Search = () => {
                         icon={faSearch}
                     />
                 </StyledSearchControl>
-                {search.searchError &&
-                    <Notification
-                        title={strings.search.vkm.error.title}
-                        message={strings.search.vkm.error.text}
-                        errors={search.searchErrorData}
-                    />
-            }
+                <Notification
+                    title={strings.search.vkm.error.title}
+                    message={strings.search.vkm.error.text}
+                    errors={search.searchErrorData}
+                />
             </StyledSearchContainer>
         );
 
