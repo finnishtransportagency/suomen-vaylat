@@ -14,8 +14,6 @@ import {
 import { StyledContainer, StyledTextField, StyledSelectInput, ToastMessage } from './CommonComponents';
 import { VKMGeoJsonStyles, VKMGeoJsonHoverStyles } from './VKMSearchStyles';
 import strings from '../../translations';
-import { Notification } from '../notification/Notification'
-import { ShowError } from '../messages/Messages';
 
 let debounceSearchVKM = null;
 
