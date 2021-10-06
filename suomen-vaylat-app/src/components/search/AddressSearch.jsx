@@ -12,8 +12,6 @@ import {
     setSearchError
 } from '../../state/slices/searchSlice';
 import strings from '../../translations';
-import { ShowWarning } from '../messages/Messages';
-import {Notification} from "../notification/Notification";
 
 const List = styled.ul`
   list-style: none;
@@ -64,8 +62,6 @@ const AddressSearch = ({visible, search, store, onEnterHandler}) => {
             store.dispatch(setSearching(false));
             store.dispatch(setSearchResult({ address: data.result.locations }));
             if (data.result.locations.length === 0) {
-                // ShowWarning(<ToastMessage title={strings.search.address.error.title}
-                //     message={strings.search.address.error.text}/>);
                 store.dispatch(setSearchError({errorState: true, data: [''], errorType: 'warning'}));
             }
         });
