@@ -1,9 +1,11 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import Modal from 'react-modal';
 import styled from 'styled-components';
-import strings from '../../translations';
+import strings from '../../../translations';
+import { ReactReduxContext, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import { updateLayers } from '../../../utils/rpcUtil';
 
 const customStyles = {
     content: {
@@ -18,10 +20,10 @@ const customStyles = {
       boxShadow: 'rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px',
       border: 'none'
     },
-    overlay: {zIndex: 20}
+    overlay: {zIndex: 9999}
   };
 
-const ANNOUNCEMENTS_LOCALSTORAGE = "oskari-announcements";
+const OSKARI_LOCALSTORAGE = "oskari";
 
 const addToLocalStorageArray = (name, value) => {
     // Get the existing data
@@ -45,12 +47,14 @@ const StyledCheckbox = styled.input`
 const StyledContent = styled.div`
     padding: .5rem;
 `;
+
 const StyledHeader = styled.div`
     padding: .5rem;
     background-color: ${props => props.theme.colors.maincolor1};
     color: ${props => props.theme.colors.mainWhite};
     border-radius: 0;
 `;
+
 const StyledFooter = styled.div`
     justify-content: space-between;
 `;
@@ -74,24 +78,39 @@ const StyledLayerCloseIcon = styled.div`
     }
 `;
 
-export const AnnouncementsModal = ({ id, title, content }) => {
+export const ConfirmPopup = ({ filteredLayers, indeterminate }) => {
+    console.log("DDDD");
     const [modalIsOpen, setIsOpen] = useState(true);
     const [selected, setIsSelected] = useState(false);
+    const { store } = useContext(ReactReduxContext);
+    const channel = useSelector(state => state.rpc.channel);
+    console.log("DDDD");
 
-    function afterOpenModal() {
+    const afterOpenModal = () => {
+        if (!indeterminate) {
+                filteredLayers.map(layer => {
+                    channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, !layer.visible]);
+                    return null;
+                });
+        } else {
+                filteredLayers.map(layer => {
+                    channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, false]);
+                    return null;
+                });
+        }
+        updateLayers(store, channel);
         // references are now sync'd and can be accessed.
     }
 
-    function closeModal() {
+    const closeModal = () => {
         setIsOpen(false);
         if (selected) {
-            addToLocalStorageArray(ANNOUNCEMENTS_LOCALSTORAGE, id);
+            addToLocalStorageArray(OSKARI_LOCALSTORAGE, "multipleLayersWarning");
         }
     }
 
     return (
         <div>
-
             <Modal
                 isOpen={modalIsOpen}
                 onAfterOpen={afterOpenModal}
@@ -99,7 +118,7 @@ export const AnnouncementsModal = ({ id, title, content }) => {
                 style={customStyles}
             >
             <StyledHeader className="modal-header">
-                <h5>{title}</h5>
+                <h5>{strings.warning}</h5>
                 <StyledLayerCloseIcon
                     onClick={() => {
                         closeModal();
@@ -111,7 +130,7 @@ export const AnnouncementsModal = ({ id, title, content }) => {
             </StyledHeader>
             <StyledContent>
                 <p>
-                    {content}
+                    {strings.multipleLayersWarning}
                 </p>
             </StyledContent>
             <StyledFooter className="modal-footer">
@@ -123,10 +142,11 @@ export const AnnouncementsModal = ({ id, title, content }) => {
                     />
                     {strings.dontShowAgain}
                 </label>
-                <button onClick={() => closeModal()}>OK</button>
+                <button onClick={() => closeModal()}>{strings.continue}</button>
+                <button onClick={() => closeModal()}>{strings.cancel}</button>
             </StyledFooter>
         </Modal>
         </div>
     );
 }
-export default AnnouncementsModal;
+export default ConfirmPopup;

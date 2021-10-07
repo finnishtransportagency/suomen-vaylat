@@ -4,6 +4,7 @@ import styled, { keyframes } from 'styled-components';
 import { ReactReduxContext, useSelector } from 'react-redux';
 import LayerList from './LayerList';
 import Layers from './Layers';
+import ConfirmPopup from './ConfirmPopup';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faAngleDown,
@@ -216,35 +217,29 @@ export const LayerGroup = ({ index, group, layers, hasChildren }) => {
     const selectGroup = (e) => {
         e.stopPropagation();
         if (filteredLayers.length > 9 && !checked) {
-            const confirmed = window.confirm("SOS");
-            if (confirmed) {
-                if (!indeterminate) {
-                        filteredLayers.map(layer => {
-                            channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, !layer.visible]);
-                            return null;
-                        });
-                } else {
-                        filteredLayers.map(layer => {
-                            channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, false]);
-                            return null;
-                        });
-                }
-            }
+            console.log("TOKA");
+            return (
+                <ConfirmPopup filteredLayers={filteredLayers} indeterminate={indeterminate} />
+            );
         } else {
-            if (!indeterminate) {
-                    filteredLayers.map(layer => {
-                        channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, !layer.visible]);
-                        return null;
-                    });
-            } else {
-                    filteredLayers.map(layer => {
-                        channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, false]);
-                        return null;
-                    });
-            }
+            groupLayersVisibility();
         }
-        updateLayers(store, channel);
     };
+
+    const groupLayersVisibility = () => {
+        if (!indeterminate) {
+                filteredLayers.map(layer => {
+                    channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, !layer.visible]);
+                    return null;
+                });
+        } else {
+                filteredLayers.map(layer => {
+                    channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, false]);
+                    return null;
+                });
+        }
+    }
+
     return (
         <StyledLayerGroups
                 index={index}

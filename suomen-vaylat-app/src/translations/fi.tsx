@@ -31,6 +31,10 @@ const fi = {
         metadata: 'Näytä tason metadata',
         showPageInfo: 'Näytä sivun info'
     },
+    warning: 'Varoitus!',
+    multipleLayersWarning: 'Olet lisäämässä kartalle 10 tai enemmän karttatasoa ja se saattaa vaikuttaa palvelun suorituskykyyn',
+    continue: 'jatka',
+    cancel: 'peruuta',
     appInfo: {
         title: 'Sovelluksen tiedot',
         headingText: 'Suomen Väylät -karttapalvelu kokoaa yhteen Väyläviraston avoimet, ' +
@@ -75,9 +79,7 @@ const fi = {
             }
         }
     },
-    announcements: {
-        dontShowAgain: 'Älä näytä uudelleen'
-    },
+    dontShowAgain: 'Älä näytä uudelleen',
     layerlist: {
         layerlistLabels: {
             allLayers: 'Kaikki tasot' ,

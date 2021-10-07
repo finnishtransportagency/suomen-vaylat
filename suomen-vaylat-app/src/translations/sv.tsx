@@ -31,6 +31,10 @@ const sv = {
         metadata: 'Visa kartlagers metadata',
         showPageInfo: 'Visa sidinformation'
     },
+    warning: 'Obs!',
+    multipleLayersWarning: 'You are about to activate 10 or more layers and it might affect the performance of the website',
+    continue: 'continue',
+    cancel: 'cancel',
     appInfo: {
         title: 'Sovelluksen tiedot',
         headingText: 'Suomen Väylät -karttapalvelu kokoaa yhteen Väyläviraston avoimet, ' +
@@ -75,9 +79,7 @@ const sv = {
             }
         }
     },
-    announcements: {
-        dontShowAgain: 'Visa inte igen'
-    },
+    dontShowAgain: 'Visa inte igen',
     layerlist: {
         layerlistLabels: {
             allLayers: 'Alla lager' ,
