@@ -31,6 +31,10 @@ const en = {
         metadata: 'Show maplayer metadata',
         showPageInfo: 'Show page info'
     },
+    warning: 'Warning!',
+    multipleLayersWarning: 'You are about to activate 10 or more maplayers and it might affect the performance of the service',
+    continue: 'continue',
+    cancel: 'cancel',
     appInfo: {
         title: 'Sovelluksen tiedot',
         headingText: 'Suomen Väylät -karttapalvelu kokoaa yhteen Väyläviraston avoimet, ' +
@@ -75,9 +79,7 @@ const en = {
             }
         }
     },
-    announcements: {
-        dontShowAgain: 'Don\'t show again'
-    },
+    dontShowAgain: 'Don\'t show again',
     layerlist: {
         layerlistLabels: {
             allLayers: 'All layers' ,
