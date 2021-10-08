@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { Accordion } from 'react-bootstrap';
 
 export const LayerGroupAccordion = (props) => {
@@ -17,4 +15,4 @@ export const LayerGroupAccordion = (props) => {
     );
  }
 
- export default CenterSpinner;
+ export default LayerGroupAccordion;

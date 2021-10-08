@@ -1,6 +1,6 @@
 import React from 'react';
 import strings from '../../../../translations';
-import { StyledTitle, StyledUl, StyledLi } from './Common';
+import { StyledLi, StyledTitle, StyledUl } from './Common';
 
 export const Languages = ({ identification }) => {
     return (

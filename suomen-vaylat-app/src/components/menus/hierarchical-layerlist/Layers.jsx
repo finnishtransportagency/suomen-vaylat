@@ -1,6 +1,11 @@
 import Layer from './Layer';
 
-export const Layers = ({ layers, isOpen, theme, isSelected = false }) => {
+export const Layers = ({
+    layers,
+    isOpen,
+    theme,
+    isSelected = false
+}) => {
     return (
         <>
             {layers.map((layer, index) => {

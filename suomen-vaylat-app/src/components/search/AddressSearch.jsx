@@ -1,4 +1,3 @@
-import React from 'react';
 import styled from 'styled-components';
 import { useAppSelector } from '../../state/hooks';
 import { StyledContainer, StyledTextField, ToastMessage } from './CommonComponents';
@@ -14,41 +13,45 @@ import {
 import strings from '../../translations';
 
 const List = styled.ul`
+  z-index: 100;
+  position: absolute;
+  width: 228px;
+  max-height: 200px;
   list-style: none;
-  padding: 0px;
+  overflow: auto;
+  color: #777;
   background-color: ${props => props.theme.colors.mainWhite};
+  margin-left: 1px;
+  padding: 0px;
+  box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.16);
   border-bottom-left-radius: 4px;
   border-bottom-right-radius: 4px;
-  box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.16);
-  max-height: 200px;
-  overflow: auto;
-  position:absolute;
-  z-index: 100;
-  color: #777;
   font-size: 13px;
-  margin-left:1px;
-  width:228px;
 `;
 
 const ListItem = styled.li`
   display: flex;
   flex-direction: column;
-  padding: 2px 8px;
-  :first-of-type {
-    border-top: none;
-  }
-  :nth-child(even) {
-      background-color: #eee;
-  }
-
   text-overflow: ellipsis;
   white-space: nowrap;
   cursor: pointer;
   color: ${props => props.selected ? props.theme.colors.maincolor1 : ''};
+  padding: 2px 8px;
   font-weight: ${props => props.selected ? 'bold' : ''};
+  :first-of-type {
+    border-top: none;
+  };
+  :nth-child(even) {
+      background-color: #eee;
+  };
 `;
 
-const AddressSearch = ({visible, search, store, onEnterHandler}) => {
+const AddressSearch = ({
+    visible,
+    search,
+    store,
+    onEnterHandler
+}) => {
 
     const rpc = useAppSelector((state) => state.rpc);
 

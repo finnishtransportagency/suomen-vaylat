@@ -1,8 +1,7 @@
-import { StyledParagraph, StyledTitle } from './Common';
-import Moment from 'react-moment';
-import 'moment-timezone';
 import React from 'react';
-
+import 'moment-timezone';
+import Moment from 'react-moment';
+import { StyledParagraph, StyledTitle } from './Common';
 
 export const HeaderAndParagraph = ({ visible, header, title, text, momentFormat }) => {
     return (

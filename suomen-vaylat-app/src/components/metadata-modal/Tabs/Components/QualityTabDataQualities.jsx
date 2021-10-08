@@ -1,8 +1,8 @@
+import React from 'react';
+import Moment from 'react-moment';
 import strings from '../../../../translations';
 import { StyledTitle, StyledTitleLittle } from './Common';
-import Moment from 'react-moment';
 import ConformanceResultList from './ConformanceResultList';
-import React from 'react';
 
 export const QualityTabDataQualities = ({ dataQualities }) => {
     return (

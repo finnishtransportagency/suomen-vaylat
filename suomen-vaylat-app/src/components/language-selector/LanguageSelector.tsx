@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import { useAppSelector } from '../../state/hooks';
-
 import strings from './../../translations';
 
 const StyledLanguageSelector = styled.div`
@@ -12,18 +11,18 @@ const StyledLanguageSelector = styled.div`
 `;
 
 const StyledSelect = styled.select`
-    cursor: pointer;
     width: 45px;
     height: 30px;
+    cursor: pointer;
+    color: ${(props: { theme: { colors: { mainWhite: any; }; }; }) => props.theme.colors.mainWhite};
     background-color: transparent;
     border: none;
-    color: ${(props: { theme: { colors: { mainWhite: any; }; }; }) => props.theme.colors.mainWhite};
     font-size: 18px;
     option {
-        border: none;
-        background-color: ${(props: { theme: { colors: { maincolor1: any; }; }; }) => props.theme.colors.maincolor1};
         width: 45px;
         height: 30px;
+        background-color: ${(props: { theme: { colors: { maincolor1: any; }; }; }) => props.theme.colors.maincolor1};
+        border: none;
         font-size: 18px;
     };
     &:focus {
@@ -34,6 +33,7 @@ const StyledSelect = styled.select`
 `;
 
 export const LanguageSelector = () => {
+    
     const lang = useAppSelector((state) => state.language);
 
     const redirect = (key:string, value:string) => {

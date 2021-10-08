@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import  { Component } from 'react';
 import { Dropdown, DropdownButton } from 'react-bootstrap';
 
 class MainMenu extends Component {
