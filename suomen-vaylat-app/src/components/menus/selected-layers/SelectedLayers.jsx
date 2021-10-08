@@ -1,10 +1,14 @@
 import { useState, useContext } from "react";
-import { faAngleUp, faTrash } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { ReactReduxContext, useSelector } from 'react-redux';
 import styled from 'styled-components';
+import { setAllLayers, setSelectedLayers } from '../../../state/slices/rpcSlice';
 import strings from '../../../translations';
 import { updateLayers } from "../../../utils/rpcUtil";
+import { ReactReduxContext, useSelector } from 'react-redux';
+import { SortableContainer, SortableElement } from 'react-sortable-hoc';
+import {arrayMoveImmutable} from 'array-move';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faAngleUp, faTrash } from '@fortawesome/free-solid-svg-icons';
+
 import SelectedLayer from './SelectedLayer';
 import SelectedLayersCount from './SelectedLayersCount';
 
@@ -92,17 +96,40 @@ const StyledDeleteAllSelectedLayers = styled.div`
     }
 `;
 
-export const SelectedLayers = ({
-    label,
-    selectedLayers,
-    suomenVaylatLayers
-}) => {
+const SortableItem = SortableElement(({value, suomenVaylatLayers}) =>
+    <SelectedLayer
+        key={value.id + 'selected'}
+        layer={value}
+        uuid={suomenVaylatLayers && suomenVaylatLayers.length > 0 ? suomenVaylatLayers.filter(l => l.id === value.id)[0].uuid : ''}
+    />);
 
+
+const SortableList = SortableContainer(({items, suomenVaylatLayers}) => {
+    return (
+        <div>
+            {items.map((value, index) => (
+                <SortableItem
+                    key={`item-${value.id}`}
+                    index={index}
+                    value={value}
+                    suomenVaylatLayers={suomenVaylatLayers}/>
+            ))}
+        </div>
+    );
+});
+
+export const SelectedLayers = ({ label, selectedLayers, suomenVaylatLayers }) => {
     const { store } = useContext(ReactReduxContext);
 
     const channel = useSelector(state => state.rpc.channel);
     
     const [isOpen, setIsOpen] = useState(false);
+
+    const onSortEnd = (oldIndex) => {
+        channel.reorderLayers([selectedLayers[oldIndex.oldIndex].id, selectedLayers.length - oldIndex.newIndex], function () {});
+        const newSelectedLayers = arrayMoveImmutable(selectedLayers, oldIndex.oldIndex, oldIndex.newIndex)
+        store.dispatch(setSelectedLayers(newSelectedLayers))
+    };
 
     const handleRemoveAllSelectedLayers = () => {
         selectedLayers.forEach(layer => {
@@ -133,15 +160,11 @@ export const SelectedLayers = ({
                 isOpen={isOpen}
             >
                 <StyledLayerGroup>
-                    {selectedLayers.map(layer => {
-                        return (
-                            <SelectedLayer
-                                key={layer.id + 'selected'}
-                                layer={layer}
-                                uuid={suomenVaylatLayers && suomenVaylatLayers.length > 0 ? suomenVaylatLayers.filter(l => l.id === layer.id)[0].uuid : ''}
-                            />
-                        )
-                    })}
+                    <SortableList
+                        items={selectedLayers}
+                        onSortEnd={onSortEnd}
+                        suomenVaylatLayers={suomenVaylatLayers}
+                    />
                     <StyledDeleteAllSelectedLayers
                         onClick={() => handleRemoveAllSelectedLayers()}
                     >
