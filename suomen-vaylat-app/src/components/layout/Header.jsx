@@ -5,7 +5,8 @@ import { ReactReduxContext } from "react-redux";
 import ReactTooltip from 'react-tooltip';
 import styled from 'styled-components';
 import { useAppSelector } from '../../state/hooks';
-import { setIsInfoOpen } from "../../state/slices/uiSlice";
+import { setIsInfoOpen, setIsMainScreen } from "../../state/slices/uiSlice";
+import { mapMoveRequest, setZoomTo } from "../../state/slices/rpcSlice";
 import strings from '../../translations';
 import LanguageSelector from '../language-selector/LanguageSelector';
 import { WebSiteShareButton } from '../share-web-site/ShareLinkButtons';
@@ -52,6 +53,7 @@ const StyledHeaderButton = styled.div`
 `;
 
 const StyledHeaderTitleContainer = styled.p`
+    cursor: pointer;
     height: inherit;
     display: flex;
     justify-content: flex-start;
@@ -91,12 +93,21 @@ export const Header = () => {
     const { store } = useContext(ReactReduxContext);
     const isInfoOpen = useAppSelector((state) => state.ui.isInfoOpen);
 
+    const setToMainScreen = () => {
+        store.dispatch(mapMoveRequest({
+            x: 505210.92181416467,
+            y: 7109206.188955102
+        }));
+        store.dispatch(setIsMainScreen())
+        store.dispatch(setZoomTo(0))
+    };
+
     return (
         <StyledHeaderContainer>
             <ReactTooltip id={'show_info'} place='bottom' type='dark' effect='float'>
                 <span>{strings.tooltips.showPageInfo}</span>
             </ReactTooltip>
-            <StyledHeaderTitleContainer>
+            <StyledHeaderTitleContainer onClick={() => setToMainScreen()}>
                     {strings.title.toUpperCase()}
             </StyledHeaderTitleContainer>
             <StyledHeaderLogoContainer>
