@@ -8,7 +8,6 @@ import SideMenu from '../menus/side-menu/SideMenu';
 import PublishedMap from '../published-map/PublishedMap';
 import Search from '../search/Search';
 import { ShareWebSitePopup } from "../share-web-site/ShareWebSitePopup";
-import { Notification } from "../notification/Notification";
 import ZoomMenu from '../zoom-features/ZoomMenu';
 
 const StyledContent = styled.div`
@@ -45,7 +44,6 @@ const Content = () => {
             {isShareOpen && <ShareWebSitePopup />}
             {isDrawingToolsOpen && <DrawingTools />}
             <AppInfoModal />
-            {/*<ToastContainer />*/}
             <MenuBar />
         </StyledContent>
         </>

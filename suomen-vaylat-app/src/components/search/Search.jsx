@@ -141,7 +141,6 @@ export const Search = () => {
         store.dispatch(setSearching(true));
 
         const vkmSearchErrorHandler = (errors) => {
-            console.log("seracherror ", errors);
             store.dispatch(setSearching(false));
             store.dispatch(setSearchError({errorState: true, data: errors, errorType: "primary"}));
         };

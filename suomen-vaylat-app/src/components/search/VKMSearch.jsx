@@ -87,7 +87,6 @@ const VKMSearch = ({visible, search, store, vectorLayerId, onEnterHandler}) => {
         };
 
         const vkmSearchErrorHandler = (errors) => {
-            console.log("vkmSearchErrorHandler errors ", errors)
             store.dispatch(setSearching(false));
             store.dispatch(setSearchError({errorState: true, data: errors, errorType: 'primary'}));
         };
