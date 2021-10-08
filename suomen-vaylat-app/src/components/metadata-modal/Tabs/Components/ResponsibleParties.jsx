@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyledTitle, StyledUl, StyledLi } from './Common';
+import { StyledLi, StyledTitle, StyledUl } from './Common';
 import ElectronicMailAddresses from './ElectronicMailAddresses';
 
 export const ResponsibleParties = ({ visible, header, responsibleParties }) => {

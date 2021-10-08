@@ -1,18 +1,19 @@
 import { useState, useContext } from 'react';
-import styled, { keyframes } from 'styled-components';
-import strings from '../../../translations';
-import { ReactReduxContext, useSelector } from 'react-redux';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import Layers from './Layers';
 import {
     faAngleDown,
     faMap
 } from '@fortawesome/free-solid-svg-icons';
-
-import Checkbox from '../../checkbox/Checkbox';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { ReactReduxContext } from 'react-redux';
+import styled, { keyframes } from 'styled-components';
 import { useAppSelector } from '../../../state/hooks';
-import { ThemeGroupShareButton } from '../../share-web-site/ShareLinkButtons';
+import strings from '../../../translations';
 import { updateLayers } from '../../../utils/rpcUtil';
+import Checkbox from '../../checkbox/Checkbox';
+import { ThemeGroupShareButton } from '../../share-web-site/ShareLinkButtons';
+import Layers from './Layers';
+
+
 
 const fadeIn = keyframes`
   from {
@@ -34,9 +35,9 @@ const StyledLayerGroups = styled.div`
     animation-fill-mode: forwards;
     animation-duration: 0.5s;
     animation-name: ${fadeIn};
+    background-color: ${props => props.theme.colors.mainWhite};
     margin: 10px 0px 10px 0px;
     border-radius: 2px;
-    background-color: ${props => props.theme.colors.mainWhite};
     &:last-child {
         ${props => props.parentId === -1 ? '1px solid '+props.theme.colors.maincolor2 : "none"};
     };
@@ -44,16 +45,16 @@ const StyledLayerGroups = styled.div`
 
 const StyledMasterGroupName = styled.p`
     user-select: none;
-    transition: all 0.1s ease-in;
-    font-size: 14px;
-    font-weight: 600;
-    margin: 0;
-    padding-left: 10px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     max-width: 200px;
     color: ${props => props.theme.colors.black};
+    margin: 0;
+    padding-left: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.1s ease-in;
     @media ${ props => props.theme.device.mobileL} {
         font-size: 13px;
     };
@@ -61,15 +62,15 @@ const StyledMasterGroupName = styled.p`
 
 const StyledMasterGroupHeader = styled.div`
     z-index: 1;
-    cursor: pointer;
+    height: 40px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 40px;
-    padding-left: 5px;
-    transition: all 0.1s ease-in;
-    border-radius: 2px;
+    cursor: pointer;
     background-color: ${props => props.theme.colors.secondaryColor3};
+    padding-left: 5px;
+    border-radius: 2px;
+    transition: all 0.1s ease-in;
     &:hover {
         background-color: ${props => props.theme.colors.secondaryColor2};
     };
@@ -89,31 +90,31 @@ const StyledRightContent = styled.div`
 `;
 
 const StyledMasterGroupHeaderIcon = styled.div`
+    width: 28px;
+    height: 28px;
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 28px;
-    height: 28px;
     background-color: ${props => props.theme.colors.secondaryColor2};
     border-radius: 50%;
     svg {
-        font-size: 16px;
         color: ${props => props.theme.colors.mainWhite};
+        font-size: 16px;
     };
 `;
 
 const StyledSelectButton = styled.button`
+    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100%;
-    border: none;
     background-color: transparent;
     margin-right: 10px;
+    border: none;
     svg {
+        color: ${props => props.theme.colors.black};
         font-size: 25px;
         transition: all 0.5s ease-out;
-        color: ${props => props.theme.colors.black};
     };
 `;
 
@@ -123,30 +124,32 @@ const StyledLayerGroupContainer = styled.div`
 `;
 
 const StyledLayerGroup = styled.ul`
-    padding-inline-start: 10px;
     list-style-type: none;
+    padding-inline-start: 10px;
 `;
 
 const StyledSubHeader = styled.p`
+    height: 30px;
     display: flex;
     align-items: center;
+    color: ${props => props.theme.colors.secondaryColor3};
     margin: 0px;
     margin-top: 10px;
     padding-left: 5px;
-    height: 30px;
-    color: ${props => props.theme.colors.secondaryColor3};
     font-size: 12px;
 `;
 
 const StyledSubText = styled.p`
+    color: ${props => props.theme.colors.black};
     margin: 0px;
     padding: 10px;
-    color: ${props => props.theme.colors.black};
     font-size: 12px;
 `;
 
-export const ThemeLayerList = ({allLayers, allThemes}) => {
-    // const searchParams = useSelector(state => state.ui.searchParams);
+export const ThemeLayerList = ({
+    allLayers,
+    allThemes
+}) => {
     return (
         <>
             {allThemes.map((theme, index) => {
@@ -162,13 +165,19 @@ export const ThemeLayerList = ({allLayers, allThemes}) => {
     );
   };
 
-export const ThemeGroup = ({theme, filteredLayers, index, searchParams}) => {
-    const selectedTheme = useAppSelector((state) => state.ui.selectedTheme);
-    const [isOpen, setIsOpen] = useState(false);
+export const ThemeGroup = ({
+    theme,
+    filteredLayers,
+    index
+}) => {
+
     const { store } = useContext(ReactReduxContext);
-    const channel = useSelector(state => state.rpc.channel);
+
+    const { channel, selectedLayers } = useAppSelector((state) => state.rpc);
+    const selectedTheme = useAppSelector((state) => state.ui.selectedTheme);
+
+    const [isOpen, setIsOpen] = useState(false);
     const [isProgrammaticSelection, setIsProgrammaticSelection] = useState(false);
-    const selectedLayers = useSelector(state => state.rpc.selectedLayers);
 
     let checked;
     let indeterminate;

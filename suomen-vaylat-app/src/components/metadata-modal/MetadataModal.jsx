@@ -1,30 +1,29 @@
-import React, { useContext } from 'react';
-import { ReactReduxContext, useSelector } from 'react-redux';
-import Modal from 'react-modal';
-import { clearLayerMetadata } from '../../state/slices/rpcSlice';
-import styled from 'styled-components';
-import strings from '../../translations';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useContext, useState } from 'react';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
-import AbstractTab from './Tabs/AbstractTab';
-import JhsTab from './Tabs/JhsTab';
-import InspireTab from './Tabs/InspireTab';
-import QualityTab from './Tabs/QualityTab';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import Modal from 'react-modal';
+import { ReactReduxContext, useSelector } from 'react-redux';
+import styled from 'styled-components';
 import { useAppSelector } from '../../state/hooks';
-
+import { clearLayerMetadata } from '../../state/slices/rpcSlice';
+import strings from '../../translations';
 import './MetadataModal.scss';
+import AbstractTab from './Tabs/AbstractTab';
+import InspireTab from './Tabs/InspireTab';
+import JhsTab from './Tabs/JhsTab';
+import QualityTab from './Tabs/QualityTab';
+
 
 const StyledContent = styled.div`
-    padding: .5rem;
     height: 100%;
+    padding: .5rem;
 `;
 const StyledHeader = styled.div`
-    padding: .5rem;
-    background-color: ${props => props.theme.colors.maincolor1};
     color: ${props => props.theme.colors.mainWhite};
-    border-radius: 0
+    background-color: ${props => props.theme.colors.maincolor1};
+    padding: .5rem;
+    border-radius: 0;
 `;
-
 
 const StyledLayerCloseIcon = styled.div`
     cursor: pointer;
@@ -34,9 +33,9 @@ const StyledLayerCloseIcon = styled.div`
     min-width: 28px;
     min-height: 28px;
     svg {
-        transition: all 0.1s ease-out;
-        font-size: 18px;
         color: ${props => props.theme.colors.mainWhite};
+        font-size: 18px;
+        transition: all 0.1s ease-out;
     };
     &:hover {
         svg {
@@ -46,13 +45,13 @@ const StyledLayerCloseIcon = styled.div`
 `;
 
 const Tab = styled.button`
-  font-size: 16px;
-  padding: 4px 4px;
   cursor: pointer;
   opacity: 0.6;
   background: white;
-  border: 0;
   outline: 0;
+  padding: 4px 4px;
+  border: 0;
+  font-size: 16px;
   ${({ active }) =>
     active &&
     `
@@ -66,18 +65,23 @@ const ButtonGroup = styled.div`
 
 const StyledTabContent = styled.div`
     height: calc(100% - 110px);
-    overflow:auto;
+    overflow: auto;
     @media (max-width: 460px) {
       height: calc(100% - 140px);
-    }
+    };
 `;
 
 export const MetadataModal = () => {
+
   useAppSelector((state) => state.language);
-  const [active, setActive] = React.useState(true);
-  const [uuid, setUuid] = React.useState(true);
+
   const { store } = useContext(ReactReduxContext);
+
   const metadata = useSelector((state) => state.rpc.layerMetadata);
+
+  const [active, setActive] = useState(true);
+  const [uuid, setUuid] = useState(true);
+
   const layerName = metadata.layer ? metadata.layer.name : '';
   const identification = (metadata.data && metadata.data.identifications) ? metadata.data.identifications[0] : {};
 

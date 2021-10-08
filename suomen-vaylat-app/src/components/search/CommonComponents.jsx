@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 
 export const StyledContainer = styled.div`
-    display: ${props => props.visible ? 'block' : 'none'};
-    padding-left:6px;
+  display: ${props => props.visible ? 'block' : 'none'};
+  padding-left:6px;
 `;
 
 export const Text = styled.p`
@@ -10,24 +10,21 @@ export const Text = styled.p`
 `;
 
 export const Error = styled(Text)`
-  font-size: 12px;
   color: red;
+  font-size: 12px;
 `;
 
 export const StyledInput = styled.input`
   width: 229px;
-  font-size: 14px;
-  padding: 6px 8px;
-  border-width: 1px;
-  border-style: solid;
-  border-color: ${props => props.error ? 'red' : '#dcdce3'};
-  border-radius: 2px;
-  margin: 0;
   min-height: 36px;
-  font-size: 14px;
-  color: ${props => props.theme.colors.black};
   cursor: ${props => props.disabled ? 'not-allowed' : 'pointer'};
+  color: ${props => props.theme.colors.black};
+  margin: 0;
+  padding: 6px 8px;
   box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+  border: 1px solid ${props => props.error ? 'red' : '#dcdce3'};
+  border-radius: 2px;
+  font-size: 14px;
   &:disabled {
     display: none;
   }
@@ -48,20 +45,15 @@ export const StyledInput = styled.input`
 
 export const StyledSelect = styled.select`
   width: 100%;
-  font-size: 14px;
-  padding: 6px 4px;
-  border-width: 1px;
-  border-style: solid;
-  border-color: ${props => props.error ? 'red' : '#dcdce3'};
-  border-radius: 2px;
-  margin: 0;
   min-height: 36px;
-  font-size: 14px;
-  color: #black;
   cursor: ${props => props.disabled ? 'not-allowed' : 'pointer'};
-
+  margin: 0;
+  color: black;
+  padding: 6px 4px;
   box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
-
+  border: 1px solid ${props => props.error ? 'red' : '#dcdce3'};
+  border-radius: 2px;
+  font-size: 14px;
   &:disabled {
     display:none;
   }
@@ -71,6 +63,7 @@ export const StyledSelect = styled.select`
   `;
 
 export const StyledOption = styled.option`
+
 `;
 
 export const StyledTextField = styled(({

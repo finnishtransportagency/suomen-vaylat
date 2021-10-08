@@ -1,4 +1,3 @@
-import React from 'react'
 import { useAppSelector } from '../../state/hooks';
 import strings from '../../translations';
 

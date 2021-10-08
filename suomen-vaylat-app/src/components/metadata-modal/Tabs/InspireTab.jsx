@@ -1,25 +1,25 @@
 import strings from '../../../translations';
+import AccessConstraints from './Components/AccessConstraints';
 import Citation from './Components/Citation';
 import CitationDate from './Components/CitationDate';
+import Classifications from './Components/Classifications';
 import { StyledArticle } from './Components/Common';
+import DataQualities from './Components/DataQualities';
+import DescriptiveKeywords from './Components/DescriptiveKeywords';
+import HeaderAndParagraph from './Components/HeaderAndParagraph';
 import Languages from './Components/Languages';
 import LineageStatements from './Components/LineageStatements';
 import MetadataGraphic from './Components/MetadataGraphic';
 import OnlineResources from './Components/OnlineResources';
+import OperatesOn from './Components/OperatesOn';
+import OtherConstraints from './Components/OtherConstraints';
+import ResourceIdentifiers from './Components/ResourceIdentifiers';
 import ResponsibleParties from './Components/ResponsibleParties';
+import ScopeCodes from './Components/ScopeCodes';
+import ServiceType from './Components/ServiceType';
 import SpatialResolutions from './Components/SpatialResolutions';
 import TemporalExtents from './Components/TemporalExtents';
-import HeaderAndParagraph from './Components/HeaderAndParagraph';
 import TopicCategories from './Components/TopicCategories';
-import ScopeCodes from './Components/ScopeCodes';
-import ResourceIdentifiers from './Components/ResourceIdentifiers';
-import OperatesOn from './Components/OperatesOn';
-import ServiceType from './Components/ServiceType';
-import DescriptiveKeywords from './Components/DescriptiveKeywords';
-import DataQualities from './Components/DataQualities';
-import AccessConstraints from './Components/AccessConstraints';
-import OtherConstraints from './Components/OtherConstraints';
-import Classifications from './Components/Classifications';
 import UseLimitations from './Components/UseLimitations';
 
 export const InspireTab = ({ identification, data, visible }) => {

@@ -1,42 +1,41 @@
 import { useState } from 'react';
-
-import styled from 'styled-components';
-import ZoomBar from './ZoomBar';
-import { useAppSelector } from '../../state/hooks';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearchLocation } from '@fortawesome/free-solid-svg-icons';
-import strings from '../../translations';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import ReactTooltip from "react-tooltip";
+import styled from 'styled-components';
+import { useAppSelector } from '../../state/hooks';
+import strings from '../../translations';
+import ZoomBar from './ZoomBar';
 
 const StyledZoomMenu = styled.div`
     z-index: 2;
     position: fixed;
+    right: 0;
+    bottom: 0;
     width: 100%;
     max-width: 250px;
     height: 100vh;
-    padding: 50px;
-    right: 0;
-    bottom: 0;
     display: flex;
     justify-content: flex-end;
     align-items: center;
     flex-direction: column;
     pointer-events: none;
+    padding: 50px;
 `;
 
 const StyledMyLocationButton = styled.div`
-    transition: all 0.1s ease-out;
+    width: 45px;
+    height: 45px;
     display: flex;
     justify-content: center;
     align-items: center;
-    border-radius: 50%;
-    margin-bottom: 50px;
-    width: 45px;
-    height: 45px;
+    transition: all 0.1s ease-out;
     background-color: ${props => props.theme.colors.maincolor1};
+    margin-bottom: 50px;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+    border-radius: 50%;
     svg {
-        color: white;
+        color: ${props => props.theme.colors.mainWhite};
         font-size: 23px;
     };
     &:hover {
