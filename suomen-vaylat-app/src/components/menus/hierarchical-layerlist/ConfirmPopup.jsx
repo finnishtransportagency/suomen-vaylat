@@ -78,34 +78,39 @@ const StyledLayerCloseIcon = styled.div`
     }
 `;
 
-export const ConfirmPopup = ({ filteredLayers, indeterminate }) => {
-    console.log("DDDD");
+export const ConfirmPopup = ({ filteredLayers, indeterminate, hideWarn }) => {
     const [modalIsOpen, setIsOpen] = useState(true);
     const [selected, setIsSelected] = useState(false);
     const { store } = useContext(ReactReduxContext);
     const channel = useSelector(state => state.rpc.channel);
-    console.log("DDDD");
 
     const afterOpenModal = () => {
-        if (!indeterminate) {
-                filteredLayers.map(layer => {
-                    channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, !layer.visible]);
-                    return null;
-                });
-        } else {
-                filteredLayers.map(layer => {
-                    channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, false]);
-                    return null;
-                });
-        }
-        updateLayers(store, channel);
         // references are now sync'd and can be accessed.
     }
 
-    const closeModal = () => {
-        setIsOpen(false);
-        if (selected) {
-            addToLocalStorageArray(OSKARI_LOCALSTORAGE, "multipleLayersWarning");
+    const closeModal = (cancel) => {
+        if (cancel) {
+            hideWarn();
+            if (selected) {
+                addToLocalStorageArray(OSKARI_LOCALSTORAGE, "multipleLayersWarning");
+            }
+        } else {
+            if (!indeterminate) {
+                    filteredLayers.map(layer => {
+                        channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, !layer.visible]);
+                        return null;
+                    });
+            } else {
+                    filteredLayers.map(layer => {
+                        channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, false]);
+                        return null;
+                    });
+            }
+            updateLayers(store, channel);
+            hideWarn();
+            if (selected) {
+                addToLocalStorageArray(OSKARI_LOCALSTORAGE, "multipleLayersWarning");
+            }
         }
     }
 
@@ -143,7 +148,7 @@ export const ConfirmPopup = ({ filteredLayers, indeterminate }) => {
                     {strings.dontShowAgain}
                 </label>
                 <button onClick={() => closeModal()}>{strings.continue}</button>
-                <button onClick={() => closeModal()}>{strings.cancel}</button>
+                <button onClick={() => closeModal(true)}>{strings.cancel}</button>
             </StyledFooter>
         </Modal>
         </div>
