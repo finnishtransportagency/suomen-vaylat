@@ -16,7 +16,7 @@ import strings from '../../../translations';
 const StyledMenuBar = styled.div`
     position: absolute;
     top: 10px;
-    left: 10px;
+    left: ${props => props.isSideMenuOpen ? "360px" : "10px"};
     width: 40px;
     height: 100%;
     display: flex;
@@ -25,6 +25,7 @@ const StyledMenuBar = styled.div`
     transition: all 0.5s ease-in-out;
     @media ${props => props.theme.device.mobileL} {
         top: calc(100% - 60px);
+        left: 10px;
         width: 100%;
         height: 40px;
         justify-content: space-around;
@@ -120,7 +121,7 @@ const MenuBar = () => {
                 <span>{strings.tooltips.fullscreenButton}</span>
             </ReactTooltip>
             
-            <StyledMenuBar>
+            <StyledMenuBar isSideMenuOpen={isSideMenuOpen}>
                 <StyledMenuBarButton
                     data-tip data-for='layerlist'
                     isActive={isSideMenuOpen}
