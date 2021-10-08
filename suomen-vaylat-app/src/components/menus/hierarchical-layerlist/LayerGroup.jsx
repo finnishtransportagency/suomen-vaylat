@@ -20,6 +20,8 @@ import {
 import Checkbox from '../../checkbox/Checkbox';
 import { updateLayers } from '../../../utils/rpcUtil';
 
+const OSKARI_LOCALSTORAGE = "oskari";
+
 const fadeIn = keyframes`
   from {
     opacity: 0;
@@ -185,6 +187,7 @@ const themeStyles = {
 
 export const LayerGroup = ({ index, group, layers, hasChildren }) => {
     const [isOpen, setIsOpen] = useState(false);
+    const [warnActive, setWarnActive] = useState(false);
     const { store } = useContext(ReactReduxContext);
     const channel = useSelector(state => state.rpc.channel);
     //Find matching layers from all layers and groups, then push this group's layers into 'filteredLayers'
@@ -216,15 +219,17 @@ export const LayerGroup = ({ index, group, layers, hasChildren }) => {
 
     const selectGroup = (e) => {
         e.stopPropagation();
-        if (filteredLayers.length > 9 && !checked) {
-            console.log("TOKA");
-            return (
-                <ConfirmPopup filteredLayers={filteredLayers} indeterminate={indeterminate} />
-            );
+        var localStorageWarn = localStorage.getItem(OSKARI_LOCALSTORAGE) ? localStorage.getItem(OSKARI_LOCALSTORAGE) : [] ;
+        if (filteredLayers.length > 9 && !checked && !localStorageWarn.includes("multipleLayersWarning")) {
+            setWarnActive(true);
         } else {
             groupLayersVisibility();
         }
     };
+
+    const hideWarn = () => {
+        setWarnActive(false);
+    }
 
     const groupLayersVisibility = () => {
         if (!indeterminate) {
@@ -238,9 +243,14 @@ export const LayerGroup = ({ index, group, layers, hasChildren }) => {
                     return null;
                 });
         }
+        updateLayers(store, channel);
     }
 
     return (
+        <>
+        {warnActive &&
+            <ConfirmPopup filteredLayers={filteredLayers} indeterminate={indeterminate} hideWarn={() => hideWarn()} />
+        }
         <StyledLayerGroups
                 index={index}
                 parentId={group.parentId}
@@ -328,6 +338,7 @@ export const LayerGroup = ({ index, group, layers, hasChildren }) => {
                 </StyledLayerGroup>
             </StyledLayerGroupContainer>
         </StyledLayerGroups>
+        </>
     );
   };
 
