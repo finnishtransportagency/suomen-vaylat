@@ -1,34 +1,33 @@
-import { useAppSelector } from '../../state/hooks';
-import styled from 'styled-components';
-
-import LanguageSelector from '../language-selector/LanguageSelector';
-import strings from '../../translations';
-
-import {ReactComponent as VaylaLogoFi} from './images/vayla_sivussa_fi_white.svg';
-import {ReactComponent as VaylaLogoEn} from './images/vayla_sivussa_en_white.svg';
-import {ReactComponent as VaylaLogoSv} from './images/vayla_sivussa_sv_white.svg';
-import {faInfoCircle} from "@fortawesome/free-solid-svg-icons";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {setIsInfoOpen} from "../../state/slices/uiSlice";
-import {useContext} from "react";
-import {ReactReduxContext} from "react-redux";
-import { WebSiteShareButton } from '../share-web-site/ShareLinkButtons';
+import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useContext } from "react";
+import { ReactReduxContext } from "react-redux";
 import ReactTooltip from 'react-tooltip';
+import styled from 'styled-components';
+import { useAppSelector } from '../../state/hooks';
+import { setIsInfoOpen } from "../../state/slices/uiSlice";
+import strings from '../../translations';
+import LanguageSelector from '../language-selector/LanguageSelector';
+import { WebSiteShareButton } from '../share-web-site/ShareLinkButtons';
+import { ReactComponent as VaylaLogoEn } from './images/vayla_sivussa_en_white.svg';
+import { ReactComponent as VaylaLogoFi } from './images/vayla_sivussa_fi_white.svg';
+import { ReactComponent as VaylaLogoSv } from './images/vayla_sivussa_sv_white.svg';
+
+
+
 
 const StyledHeaderContainer = styled.div`
     z-index: 20;
     height: 80px;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
+    box-shadow: rgb(0 0 0 / 16%) 0px 3px 6px, rgb(0 0 0 / 23%) 0px 3px 6px;
     @media ${props => props.theme.device.desktop} {
         height: 60px;
-        //display: none;
     };
     @media ${props => props.theme.device.tablet} {
         grid-template-columns: 1fr 1fr;
-        //display: none;
     };
-    box-shadow: rgb(0 0 0 / 16%) 0px 3px 6px, rgb(0 0 0 / 23%) 0px 3px 6px;
 `;
 
 const StyledHeaderButton = styled.div`
@@ -36,15 +35,15 @@ const StyledHeaderButton = styled.div`
     cursor: pointer;
     width: 40px;
     height: 40px;
-    margin-right:5px;
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-right:5px;
     background-color: transparent;
     border-radius: 50%;
     svg {
-        font-size: 18px;
         color: ${props => props.theme.colors.mainWhite};
+        font-size: 18px;
     };
     @media ${props => props.theme.device.mobileL} {
         width: 40px;
@@ -53,14 +52,14 @@ const StyledHeaderButton = styled.div`
 `;
 
 const StyledHeaderTitleContainer = styled.p`
+    height: inherit;
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    height: inherit;
     margin: 0;
+    color: ${props => props.theme.colors.mainWhite};
     padding-left: 10px;
     font-weight: 600;
-    color: ${props => props.theme.colors.mainWhite};
     @media ${props => props.theme.device.tablet} {
         display: none;
     };
@@ -70,13 +69,13 @@ const StyledHeaderTitleContainer = styled.p`
 `;
 
 const StyledHeaderLogoContainer = styled.div`
+    height: inherit;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    svg {
         height: inherit;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        svg {
-            height: inherit;
-        };
+    };
 `;
 
 const StyledRightCornerButtons = styled.div`

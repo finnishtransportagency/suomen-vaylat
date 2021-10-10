@@ -1,10 +1,10 @@
 import { useContext, useEffect } from "react";
+import { faCheck } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ReactReduxContext, useSelector } from 'react-redux';
-import { setLegends } from '../../../state/slices/rpcSlice';
 import styled from 'styled-components';
 import { debounce } from 'tlence';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheck } from '@fortawesome/free-solid-svg-icons';
+import { setLegends } from '../../../state/slices/rpcSlice';
 import { updateLayers } from "../../../utils/rpcUtil";
 
 const StyledLayerContainer = styled.li`
@@ -24,8 +24,8 @@ const StyledlayerHeader = styled.div`
 const StyledLayerName = styled.p`
     user-select: none;
     color: ${props => props.theme.colors.black};
-    font-size: 13px;
     margin: 5px;
+    font-size: 13px;
     @media ${ props => props.theme.device.mobileL} {
         font-size: 12px;
     };
@@ -39,21 +39,25 @@ const StyledCheckbox = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    border: 2px solid ${props => props.theme.colors.maincolor1};
-    box-sizing: border-box;
     background-color: ${props => props.theme.colors.mainWhite};
-    border-radius: 30%;
     margin-right: 36px;
+    border: 2px solid ${props => props.theme.colors.maincolor1};
+    border-radius: 30%;
+    box-sizing: border-box;
     svg {
-        color: #0064af;
+        color: ${props => props.theme.colors.maincolor1};
         font-size: 12px;
     };
 `;
 
 export const Layer = ({ layer, theme }) => {
+
     const { store } = useContext(ReactReduxContext);
-    const channel = useSelector(state => state.rpc.channel);
-    const selectedLayers = useSelector(state => state.rpc.selectedLayers);
+
+    const {
+        channel,
+        selectedLayers
+    } = useSelector(state => state.rpc);
 
     const handleLayerVisibility = (channel, layer) => {
         channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, !layer.visible]);
@@ -64,12 +68,13 @@ export const Layer = ({ layer, theme }) => {
     };
 
     useEffect(() => {
+
         const updateLayerLegends = (channel) => {
             channel.getLegends((data) => {
                 store.dispatch(setLegends(data));
             });
         };
-
+        
         debounceLegendsUpdate = debounce(updateLayerLegends, 500);
     }, [store]);
 

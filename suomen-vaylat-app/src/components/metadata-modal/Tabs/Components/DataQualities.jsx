@@ -1,6 +1,6 @@
 import React from 'react';
 import strings from '../../../../translations';
-import { StyledTitle, StyledTitleLittle, StyledDiv } from './Common';
+import { StyledDiv, StyledTitle, StyledTitleLittle } from './Common';
 import ConformanceResultList from './ConformanceResultList';
 
 export const DataQualities = ({ dataQualities }) => {

@@ -1,6 +1,6 @@
 import React from 'react';
 import strings from '../../../../translations';
-import { StyledTitle, StyledParagraph } from './Common';
+import { StyledParagraph, StyledTitle } from './Common';
 
 export const OtherConstraints = ({ identification }) => {
     return (
