@@ -1,18 +1,18 @@
-import React, { useContext } from 'react'
-import styled from 'styled-components';
-import { ThemeContext } from 'styled-components';
+import { useContext } from 'react';
+import styled, { ThemeContext } from 'styled-components';
 
 const Spinner = require('react-spinkit');
 
 const StyledSpinner = styled.div`
-    position:absolute;
+    z-index: 5;
+    position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    z-index:5;
 `;
 
 export const CenterSpinner = () => {
+    
     const themeContext = useContext(ThemeContext);
 
     return (

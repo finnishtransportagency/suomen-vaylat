@@ -1,9 +1,10 @@
 import { useContext } from "react";
-import styled from 'styled-components';
-import strings from '../../../translations';
 import { ReactReduxContext, useSelector } from 'react-redux';
+import styled from 'styled-components';
 import { setSearchParams } from '../../../state/slices/uiSlice';
+import strings from '../../../translations';
 import Layer from '../hierarchical-layerlist/Layer';
+
 
 const StyledLayerSearchContainer = styled.div`
     display: flex;
@@ -13,18 +14,12 @@ const StyledLayerSearchContainer = styled.div`
 `;
 
 const StyledSearchInput = styled.input`
-    text-align: middle;
-    //border: 1px solid black;
-    border-radius: 5px;
-
     height: 40px;
     padding-left: 10px;
-    &::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
-       // color: #000;
-    };
+    border-radius: 5px;
     &::-webkit-search-cancel-button {
-        position:relative;
-        right:10px;  
+        position: relative;
+        right: 10px;  
         height: 40px;
         width: 40px;
         cursor: pointer;
@@ -44,9 +39,9 @@ const StyledLayerList = styled.div`
 `;
 
 const StyledMessage = styled.p`
-    margin: 0;
     text-align: center;
     color: ${props => props.theme.colors.secondaryColor7};
+    margin: 0;
     font-size: 14px;
     font-weight: 600;
 `;
@@ -67,7 +62,7 @@ const LayerSearch = ({ layers }) => {
                 searchParams !== "" && searchParams.length > 2 && 
                 <>
                     <StyledListSubtitle>
-                    {strings.layerlist.layerlistLabels.searchResults}
+                        {strings.layerlist.layerlistLabels.searchResults}
                     </StyledListSubtitle>
                     <StyledLayerList>
                         {searchResults.map(layer => {

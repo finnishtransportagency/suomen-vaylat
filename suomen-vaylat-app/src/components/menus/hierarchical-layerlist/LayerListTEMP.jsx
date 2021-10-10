@@ -1,21 +1,22 @@
-import { useState, useContext } from 'react';
-import { useParams } from 'react-router';
+import { useContext } from 'react';
+import { faTrash, faFilter } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ReactReduxContext } from 'react-redux';
+import { useParams } from 'react-router';
 import styled, { keyframes } from 'styled-components';
 import { useAppSelector } from '../../../state/hooks';
-import LayerList from './LayerList';
-import ThemeLayerList from './ThemeLayerList';
-import Tabs from "./Tabs";
+import { setSelectedLayerListType } from '../../../state/slices/uiSlice';
 import strings from '../../../translations';
-import Filter from './Filter';
 import SelectedLayers from '../../menus/selected-layers/SelectedLayers';
-import LayerSearch from './LayerSearch';
 import Dropdown from './Dropdown';
 import { setTagLayers, setTags } from '../../../state/slices/rpcSlice';
-import { setSelectedLayerListType } from '../../../state/slices/uiSlice';
+import Filter from './Filter';
+import LayerList from './LayerList';
+import LayerSearch from './LayerSearch';
+import Tabs from "./Tabs";
+import ThemeLayerList from './ThemeLayerList';
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash, faFilter } from '@fortawesome/free-solid-svg-icons';
+
 //VÄLIAIKAINEN PALIKKA VÄLITTÄMÄÄN TESTIDATAA HIERARKISELLE TASOVALIKOLLE
 
 const fadeIn = keyframes`
@@ -54,9 +55,9 @@ const StyledFilterList = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: 0px 10px 15px 10px;
-    background-color: ${props => props.theme.colors.mainWhite};
     color: ${props => props.theme.colors.maincolor1};
+    background-color: ${props => props.theme.colors.mainWhite};
+    padding: 0px 10px 15px 10px;
 `;
 
 const StyledListSubtitle = styled.div`
@@ -79,10 +80,10 @@ const StyledDeleteAllSelectedFilters = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: ${props => props.theme.colors.maincolor1};
     color: ${props => props.theme.colors.mainWhite};
-    border-radius: 15px;
+    background-color: ${props => props.theme.colors.maincolor1};
     margin: 10px auto 20px auto;
+    border-radius: 15px;
     svg {
         font-size: 16px;
     };
@@ -112,10 +113,19 @@ const StyledSearchAndFilter = styled.div`
     align-items: center;
 `;
 
-const LayerListTEMP = ({groups, layers, themes, tags, selectedLayers, suomenVaylatLayers}) => {
+const LayerListTEMP = ({
+  groups,
+  layers,
+  themes,
+  tags,
+  selectedLayers,
+  suomenVaylatLayers
+}) => {
 
     const { store } = useContext(ReactReduxContext);
+
     useAppSelector((state) => state.language);
+
     const selectedTheme = useAppSelector((state) => state.ui.selectedTheme);
 
     const setLayerListType = (type) => {
@@ -143,14 +153,14 @@ const LayerListTEMP = ({groups, layers, themes, tags, selectedLayers, suomenVayl
             <StyledLayerList>
               <Tabs allTags={tags} layerlistType={layerlistType} setLayerListType={setLayerListType}>
                 <div label={strings.layerlist.layerlistLabels.themeLayers}>
-                <StyledListSubtitle>
-                      {strings.layerlist.layerlistLabels.searchResults}
-                </StyledListSubtitle>
-                <ThemeLayerList
-                  label={strings.layerlist.layerlistLabels.themeLayers}
-                  allLayers={layers}
-                  allThemes={themes}
-                />
+                  <StyledListSubtitle>
+                        {strings.layerlist.layerlistLabels.searchResults}
+                  </StyledListSubtitle>
+                  <ThemeLayerList
+                    label={strings.layerlist.layerlistLabels.themeLayers}
+                    allLayers={layers}
+                    allThemes={themes}
+                  />
                 </div>
                 <div label={strings.layerlist.layerlistLabels.allLayers}>
                   <StyledSearchAndFilter>

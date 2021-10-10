@@ -1,4 +1,3 @@
-
 import { useState, useContext } from 'react';
 import styled, { keyframes } from 'styled-components';
 import { ReactReduxContext, useSelector } from 'react-redux';
@@ -9,16 +8,17 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faAngleDown,
     faCar,
-    faHardHat,
-    faShip,
-    faLandmark,
-    faTrain,
-    faRoad,
-    faMap
+    faHardHat, faLandmark, faMap, faRoad, faShip, faTrain
 } from '@fortawesome/free-solid-svg-icons';
-
-import Checkbox from '../../checkbox/Checkbox';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { ReactReduxContext, useSelector } from 'react-redux';
+import styled, { keyframes } from 'styled-components';
 import { updateLayers } from '../../../utils/rpcUtil';
+import Checkbox from '../../checkbox/Checkbox';
+import LayerList from './LayerList';
+import Layers from './Layers';
+
+
 
 const OSKARI_LOCALSTORAGE = "oskari";
 
@@ -42,9 +42,9 @@ const StyledLayerGroups = styled.div`
     animation-fill-mode: forwards;
     animation-duration: 0.5s;
     animation-name: ${fadeIn};
+    background-color: ${props => props.theme.colors.mainWhite};
     margin: ${props => props.parentId === -1 && "10px 0px 10px 0px"};
     border-radius: 2px;
-    background-color: ${props => props.theme.colors.mainWhite};
     &:last-child {
         ${props => props.parentId === -1 ? '1px solid '+props.theme.colors.maincolor2 : "none"};
     };
@@ -52,16 +52,16 @@ const StyledLayerGroups = styled.div`
 
 const StyledMasterGroupName = styled.p`
     user-select: none;
-    transition: all 0.1s ease-in;
-    font-size: 14px;
-    font-weight: 600;
-    margin: 0;
-    padding-left: 10px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     max-width: 200px;
     color: ${props => props.theme.colors.black};
+    margin: 0;
+    padding-left: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.1s ease-in;
     @media ${ props => props.theme.device.mobileL} {
         font-size: 13px;
     };
@@ -69,15 +69,15 @@ const StyledMasterGroupName = styled.p`
 
 const StyledMasterGroupHeader = styled.div`
     z-index: 1;
-    cursor: pointer;
+    height: 40px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 40px;
-    padding-left: 5px;
-    transition: all 0.1s ease-in;
-    border-radius: 2px;
+    cursor: pointer;
     background-color: ${props => props.theme.colors.maincolor3};
+    padding-left: 5px;
+    border-radius: 2px;
+    transition: all 0.1s ease-in;
     &:hover {
         background-color: ${props => props.theme.colors.maincolor2};
     };
@@ -94,59 +94,57 @@ const StyledLeftContent = styled.div`
 const StyledRightContent = styled.div`
     display: flex;
     align-items: center;
-
 `;
 
 const StyledMasterGroupHeaderIcon = styled.div`
+    width: 28px;
+    height: 28px;
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 28px;
-    height: 28px;
-    background-color: ${props => props.theme.colors.maincolor1};
     border-radius: 50%;
+    background-color: ${props => props.theme.colors.maincolor1};
     svg {
         font-size: 16px;
         color: ${props => props.theme.colors.mainWhite};
-    }
+    };
 `;
 
 const StyledGroupHeader = styled.div`
-    cursor: pointer;
+    height: 30px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: 30px;
+    cursor: pointer;
     background-color: rgba(0, 0, 0, 0.1);
 `;
 
 const StyledGroupName = styled.p`
+    max-width: 260px;
     user-select: none;
-    margin: 0;
-    font-size: 13px;
-    padding-left: 0px;
-    color: ${props => props.theme.colors.black};
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 260px;
+    margin: 0;
+    padding-left: 0px;
+    font-size: 13px;
     @media ${ props => props.theme.device.mobileL} {
         font-size: 12px;
     };
 `;
 
 const StyledSelectButton = styled.button`
+    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100%;
-    border: none;
     background-color: transparent;
     margin-right: 10px;
+    border: none;
     svg {
+        color: ${props => props.theme.colors.black};
         font-size: 23px;
         transition: all 0.5s ease-out;
-        color: ${props => props.theme.colors.black};
     };
 `;
 
@@ -156,9 +154,9 @@ const StyledLayerGroupContainer = styled.div`
 `;
 
 const StyledLayerGroup = styled.ul`
-    padding-inline-start: ${props => props.parentId === -1 ? "10px" : "15px"};
     list-style-type: none;
     margin: 0;
+    padding-inline-start: ${props => props.parentId === -1 ? "10px" : "15px"};
 `;
 
 const themeStyles = {
@@ -185,7 +183,12 @@ const themeStyles = {
     },
 }
 
-export const LayerGroup = ({ index, group, layers, hasChildren }) => {
+export const LayerGroup = ({
+    index,
+    group,
+    layers,
+    hasChildren
+}) => {
     const [isOpen, setIsOpen] = useState(false);
     const [warnActive, setWarnActive] = useState(false);
     const { store } = useContext(ReactReduxContext);

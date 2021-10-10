@@ -1,7 +1,7 @@
 import strings from '../../../translations';
-import HeaderAndParagraph from './Components/HeaderAndParagraph';
 import Citation from './Components/Citation';
 import { StyledArticle } from './Components/Common';
+import HeaderAndParagraph from './Components/HeaderAndParagraph';
 import MetadataGraphic from './Components/MetadataGraphic';
 
 export const AbstractTab = ({ identification, data, visible }) => {

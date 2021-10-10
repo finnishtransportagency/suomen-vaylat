@@ -1,27 +1,27 @@
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { faCopy, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useContext, useState } from 'react';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
+import Draggable from 'react-draggable';
 import { ReactReduxContext } from 'react-redux';
+import { EmailIcon, EmailShareButton, FacebookIcon, FacebookShareButton, LinkedinIcon, LinkedinShareButton, TelegramIcon, TelegramShareButton, TwitterIcon, TwitterShareButton, WhatsappIcon, WhatsappShareButton } from 'react-share';
+import ReactTooltip from 'react-tooltip';
 import styled from 'styled-components';
 import { useAppSelector } from '../../state/hooks';
 import { setShareUrl } from '../../state/slices/uiSlice';
 import strings from '../../translations';
-import { CopyToClipboard } from 'react-copy-to-clipboard';
-import { EmailIcon, EmailShareButton, FacebookIcon, FacebookShareButton, LinkedinIcon, LinkedinShareButton, TelegramIcon, TelegramShareButton, TwitterIcon, TwitterShareButton, WhatsappIcon, WhatsappShareButton } from 'react-share';
-import ReactTooltip from 'react-tooltip';
-import Draggable from 'react-draggable';
 
 const StyledShareWebSiteContainer = styled.div`
-    position:absolute;
+    z-index: 30;
+    position: absolute;
     top: 50%;
     left: 50%;
-    z-index:30;
-    margin-top: -150px;
-    margin-left: -150px;
     width: 300px;
     height: 200px;
-    background:white;
+    background: white;
+    margin-top: -150px;
+    margin-left: -150px;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
     @media ${props => props.theme.device.mobileL} {
         font-size: 13px;
@@ -29,26 +29,26 @@ const StyledShareWebSiteContainer = styled.div`
 `;
 
 const StyledHeader = styled.div`
-    padding: .5rem;
-    background-color: ${props => props.theme.colors.maincolor1};
-    color: ${props => props.theme.colors.mainWhite};
-    border-radius: 0;
     cursor: move;
+    color: ${props => props.theme.colors.mainWhite};
+    background-color: ${props => props.theme.colors.maincolor1};
+    padding: .5rem;
+    border-radius: 0;
 `;
 
 const StyledCloseIcon = styled.div`
-    cursor: pointer;
-    position:absolute;
-    right: 0;
+    position: absolute;
     top: 8px;
-    justify-content: center;
-    align-items: center;
+    right: 0;
     min-width: 28px;
     min-height: 28px;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
     svg {
-        transition: all 0.1s ease-out;
-        font-size: 18px;
         color: ${props => props.theme.colors.mainWhite};
+        font-size: 18px;
+        transition: all 0.1s ease-out;
     };
     &:hover {
         svg {
@@ -59,17 +59,16 @@ const StyledCloseIcon = styled.div`
 
 const StyledClipboardIcon = styled.div`
     svg {
-        transition: all 0.1s ease-out;
-        font-size: 18px;
         color: ${props => props.theme.colors.maincolor1};
+        font-size: 18px;
+        transition: all 0.1s ease-out;
     };
-
 `;
 
 const StyledContainer = styled.div`
-    padding: 6px;
     height: calc(100% - 40px);
     overflow-y: auto;
+    padding: 6px;
 `;
 
 const StyledInput = styled.textarea`
@@ -81,12 +80,12 @@ const StyledInput = styled.textarea`
 const StyledShareButtonsContainer = styled.div`
     position: absolute;
     bottom: 0;
+    width: calc(100% - 12px);
     display: flex;
+    justify-content: center;
+    align-items: center;
     flex-direction: row;
     flex-wrap: nowrap;
-    justify-content: center;
-    aling-items: center;
-    width: calc(100% - 12px);
     button {
         margin: 4px;
         margin-bottom: 8px;
@@ -94,17 +93,17 @@ const StyledShareButtonsContainer = styled.div`
 `;
 
 const StyledCopyClipboardButton = styled.button`
-    justify-content: center;
-    align-items: center;
-    border: none;
-    background-color: ${props => props.theme.colors.maincolor1};
-    margin-right: 10px;
     width: 32px;
     height: 32px;
+    justify-content: center;
+    align-items: center;
+    background-color: ${props => props.theme.colors.maincolor1};
+    margin-right: 10px;
+    border: none;
     svg {
-        transition: all 0.1s ease-out;
-        font-size: 18px;
         color: ${props => props.theme.colors.mainWhite};
+        font-size: 18px;
+        transition: all 0.1s ease-out;
     };
     &:hover {
         color: ${props => props.theme.colors.maincolor2};
@@ -122,15 +121,22 @@ const StyledCopiedToClipboardText = styled.span`
  * Shows ShareWebSitePopup if shareUrl is defined in Redux state.
  */
 export const ShareWebSitePopup = () => {
-    const { store } = useContext(ReactReduxContext);
-    const shareUrl = useAppSelector((state) => state.ui.shareUrl);
-    const [isCopied, setIsCopied] = useState(false);
-    const currentMapCenter = useAppSelector(state => state.rpc.center);
-    const currentZoomLevel = useAppSelector(state => state.rpc.currentZoomLevel);
 
-    const selectedLayers = useAppSelector((state) => state.rpc.selectedLayers);
-    const legends = useAppSelector(state => state.rpc.legends);
-    const layerlistType = useAppSelector(state => state.ui.selectedLayerList);
+    const { store } = useContext(ReactReduxContext);
+
+    const {
+        center,
+        currentZoomLevel,
+        selectedLayers,
+        legends
+    } = useAppSelector(state => state.rpc);
+
+    const {
+        shareUrl,
+        selectedLayerList
+    } = useAppSelector(state => state.ui);
+
+    const [isCopied, setIsCopied] = useState(false);
 
     const getMapLayerStyle = (layer) => {
         const legend = legends.filter((l) => { return l.layerId === layer.id;});
@@ -148,10 +154,10 @@ export const ShareWebSitePopup = () => {
 
     // Replace link palceholders to correct values
     let url = shareUrl.replace('{zoom}', currentZoomLevel);
-    url = url.replace('{x}', parseInt(currentMapCenter.x));
-    url = url.replace('{y}', parseInt(currentMapCenter.y));
+    url = url.replace('{x}', parseInt(center.x));
+    url = url.replace('{y}', parseInt(center.y));
     url = url.replace('{maplayers}', mapLayers);
-    url = url.replace('{layerlistType}', layerlistType);
+    url = url.replace('{layerlistType}', selectedLayerList);
     url = url.replace('{lang}', strings.getLanguage());
 
     const title = strings.share.shareTexts.title;

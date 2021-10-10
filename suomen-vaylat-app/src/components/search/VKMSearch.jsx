@@ -1,14 +1,11 @@
-import React from 'react';
 import { useEffect } from 'react';
-
 import { debounce } from 'tlence';
-
-import { addFeaturesToMap, searchVKMRoad, removeFeaturesFromMap } from '../../state/slices/rpcSlice';
-import { setFormData, setSearchResult, setSearching, emptySearchResult } from '../../state/slices/searchSlice';
-import { StyledContainer, StyledTextField, StyledSelectInput, ToastMessage } from './CommonComponents';
-import { VKMGeoJsonStyles, VKMGeoJsonHoverStyles } from './VKMSearchStyles';
+import { addFeaturesToMap, removeFeaturesFromMap, searchVKMRoad } from '../../state/slices/rpcSlice';
+import { emptySearchResult, setFormData, setSearching, setSearchResult } from '../../state/slices/searchSlice';
 import strings from '../../translations';
 import { ShowError } from '../messages/Messages';
+import { StyledContainer, StyledSelectInput, StyledTextField, ToastMessage } from './CommonComponents';
+import { VKMGeoJsonHoverStyles, VKMGeoJsonStyles } from './VKMSearchStyles';
 
 let debounceSearchVKM = null;
 

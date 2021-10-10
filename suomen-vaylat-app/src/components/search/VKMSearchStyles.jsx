@@ -3,14 +3,14 @@ import strings from '../../translations';
 export const VKMGeoJsonStyles = {
     tie: {
         stroke: {
-            color: '#910aa3',
-            width: 12
+            width: 12,
+            color: '#910aa3'
         }
     },
     osa: {
         stroke: {
-            color: '#ffc300',
-            width: 8
+            width: 8,
+            color: '#ffc300'
         }
     },
     etaisyys: {

@@ -1,51 +1,51 @@
 import { useState } from 'react';
-import styled from 'styled-components';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleUp } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import styled from 'styled-components';
 
 const StyledDropDownContainerName = styled.p`
-    transition: all 0.1s ease-in;
-    font-size: 14px;
-    font-weight: 400;
+    color: ${props => props.theme.colors.maincolor1};
     margin: 0;
     padding-left: 10px;
-    color: ${props => props.theme.colors.maincolor1};
+    font-size: 14px;
+    font-weight: 400;
+    transition: all 0.1s ease-in;
 `;
 
 const StyledDropDownContainer = styled.div`
-    border-radius: 2px;
-    transition: all 0.1s ease-in;
     color: ${props => props.theme.colors.black};
     background-color: ${props => props.theme.colors.mainWhite};
+    border-radius: 2px;
+    transition: all 0.1s ease-in;
     &::-webkit-scrollbar {
         display: none;
     };
 `;
 
 const StyledHeaderContent = styled.div`
-    cursor: pointer;
+    z-index: 1;
     position: sticky;
     top: 0px;
+    height: 40px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 40px;
-    background-color: #fff;
-    z-index: 1;
+    cursor: pointer;
     box-shadow: rgb(0 0 0 / 16%) 0px 3px 6px, rgb(0 0 0 / 23%) 0px 3px 6px;
+    background-color: #fff;
 `;
 
 const StyledExpandButton = styled.button`
     display: flex;
     justify-content: center;
     align-items: center;
-    border: none;
     background-color: transparent;
     margin-right: 10px;
+    border: none;
     svg {
+        color: ${props => props.theme.colors.black};
         font-size: 30px;
         transition: all 0.5s ease-out;
-        color: ${props => props.theme.colors.black};
     };
 `;
 
