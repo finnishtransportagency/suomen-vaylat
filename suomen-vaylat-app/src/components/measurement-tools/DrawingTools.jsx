@@ -1,9 +1,5 @@
 import { useState } from 'react';
-import {
-    faBox, faCircle, faDrawPolygon,
-    faEraser, faRuler,
-    faSquare
-} from '@fortawesome/free-solid-svg-icons';
+import { faEraser } from '@fortawesome/free-solid-svg-icons';
 
 import svCircle from '../../theme/icons/drawtools_circle.svg';
 import svSquare from '../../theme/icons/drawtools_square.svg';
@@ -129,14 +125,15 @@ export const DrawingTools = () => {
             channel.postRequest('DrawTools.StartDrawingRequest', data);
             setActiveTool(tool.name);
         } else {
-            var clearData = [activeTool];
-            channel.postRequest('DrawTools.StopDrawingRequest', clearData);
+            channel.postRequest('DrawTools.StopDrawingRequest', [activeTool]);
             setActiveTool('');
         }
     };
 
     const eraseDrawing = () => {
+        // remove geometries off the map
         channel.postRequest('DrawTools.StopDrawingRequest', [true]);
+        // stop the drawing tool
         channel.postRequest('DrawTools.StopDrawingRequest', [activeTool]);
         setActiveTool('');
     };
