@@ -4,6 +4,11 @@ import {
     faEraser, faRuler,
     faSquare
 } from '@fortawesome/free-solid-svg-icons';
+
+import svCircle from '../../theme/icons/drawtools_circle.svg';
+import svSquare from '../../theme/icons/drawtools_square.svg';
+import svRectangle from '../../theme/icons/drawtools_rectangle.svg';
+import svPolygon from '../../theme/icons/drawtools_polygon.svg';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useSelector } from 'react-redux';
 import ReactTooltip from 'react-tooltip';
@@ -63,19 +68,22 @@ const StyledErase = styled.div`
     }
 `;
 
+const StyledIcon = styled.img`
+    height: 1.5rem;
+    width: auto;
+`;
+
 const drawinToolsData = [
     {
         'name' : 'sv-measure-polygon',
         'style' : {
-            'color' : 'red',
-            'icon' : faDrawPolygon
+            'icon' : svPolygon
             },
         'type' : 'Polygon'
     },
     {
         'name' : 'sv-measure-linestring',
         'style' : {
-            'color' : 'blue',
             'icon' : faRuler
         },
         'type' : 'LineString'
@@ -83,24 +91,21 @@ const drawinToolsData = [
     {
         'name' : 'sv-measure-square',
         'style' : {
-            'color' : 'green',
-            'icon' : faSquare
+            'icon' : svSquare
         },
         'type' : 'Square'
     },
     {
         'name' : 'sv-measure-circle',
         'style' : {
-            'color' : 'orange',
-            'icon' : faCircle
+            'icon' : svCircle
         },
         'type' : 'Circle'
     },
     {
         'name' : 'sv-measure-box',
         'style' : {
-            'color' : 'purple',
-            'icon' : faBox
+            'icon' : svRectangle
         },
         'type' : 'Box'
     }
@@ -167,9 +172,7 @@ export const DrawingTools = () => {
                                 active={tool.name === activeTool ? true : false}
                                 onClick={() => startStopTool(tool)}
                             >
-                                <FontAwesomeIcon
-                                    icon={tool.style.icon}
-                                />
+                                <StyledIcon src={tool.style.icon}/>
                             </StyledDrawingTool>
                             <StyledErase
                                 data-tip data-for='erase'
