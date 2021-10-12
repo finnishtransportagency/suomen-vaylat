@@ -14,7 +14,6 @@ const StyledLegendContainer = styled.div`
     position: absolute;
     bottom: 10px;
     right: 10px;
-    width: 300px;
     max-width:70%;
     height: 60%;
     background:white;
