@@ -1,9 +1,11 @@
 import { useState } from 'react';
-import {
-    faBox, faCircle, faDrawPolygon,
-    faEraser, faRuler,
-    faSquare
-} from '@fortawesome/free-solid-svg-icons';
+import { faEraser } from '@fortawesome/free-solid-svg-icons';
+
+import svCircle from '../../theme/icons/drawtools_circle.svg';
+import svSquare from '../../theme/icons/drawtools_square.svg';
+import svRectangle from '../../theme/icons/drawtools_rectangle.svg';
+import svPolygon from '../../theme/icons/drawtools_polygon.svg';
+import svLinestring from '../../theme/icons/drawtools_linestring.svg';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useSelector } from 'react-redux';
 import ReactTooltip from 'react-tooltip';
@@ -49,61 +51,66 @@ const StyledDrawingTool = styled.div`
 `;
 
 const StyledErase = styled.div`
-    width: 30px;
-    height: 30px;
+    z-index: 100;
+    width: 40px;
+    height: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: grey;
-    margin-top: 1rem;
+    background-color: ${props => props.theme.colors.secondaryColor7};
+    box-shadow: rgb(0 0 0 / 16%) 0px 3px 6px, rgb(0 0 0 / 23%) 0px 3px 6px;
     border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    margin-left: .5rem;
     svg {
         color: ${props => props.theme.colors.mainWhite};
-        font-size: 15px;
-    }
+        font-size: 20px;
+    };
+`;
+
+const StyledIcon = styled.img`
+    width: 1.5rem;
 `;
 
 const drawinToolsData = [
     {
-        'name' : 'sv-measure-polygon',
-        'style' : {
-            'color' : 'red',
-            'icon' : faDrawPolygon
-            },
-        'type' : 'Polygon'
-    },
-    {
         'name' : 'sv-measure-linestring',
         'style' : {
-            'color' : 'blue',
-            'icon' : faRuler
+            'icon' : svLinestring
         },
         'type' : 'LineString'
     },
     {
+        'name' : 'sv-measure-polygon',
+        'style' : {
+            'icon' : svPolygon
+            },
+        'type' : 'Polygon'
+    },
+    {
         'name' : 'sv-measure-square',
         'style' : {
-            'color' : 'green',
-            'icon' : faSquare
+            'icon' : svSquare
         },
         'type' : 'Square'
     },
     {
+        'name' : 'sv-measure-box',
+        'style' : {
+            'icon' : svRectangle
+        },
+        'type' : 'Box'
+    },
+    {
         'name' : 'sv-measure-circle',
         'style' : {
-            'color' : 'orange',
-            'icon' : faCircle
+            'icon' : svCircle
         },
         'type' : 'Circle'
     },
-    {
-        'name' : 'sv-measure-box',
-        'style' : {
-            'color' : 'purple',
-            'icon' : faBox
-        },
-        'type' : 'Box'
-    }
 ];
 
 export const DrawingTools = () => {
@@ -118,15 +125,16 @@ export const DrawingTools = () => {
             channel.postRequest('DrawTools.StartDrawingRequest', data);
             setActiveTool(tool.name);
         } else {
-            var clearData = [activeTool];
-            channel.postRequest('DrawTools.StopDrawingRequest', clearData);
+            channel.postRequest('DrawTools.StopDrawingRequest', [activeTool]);
             setActiveTool('');
         }
     };
 
-    const eraseDrawing = (tool) => {
-        var clearData = [tool.name, true];
-        channel.postRequest('DrawTools.StopDrawingRequest', clearData);
+    const eraseDrawing = () => {
+        // remove geometries off the map
+        channel.postRequest('DrawTools.StopDrawingRequest', [true]);
+        // stop the drawing tool
+        channel.postRequest('DrawTools.StopDrawingRequest', [activeTool]);
         setActiveTool('');
     };
 
@@ -167,22 +175,19 @@ export const DrawingTools = () => {
                                 active={tool.name === activeTool ? true : false}
                                 onClick={() => startStopTool(tool)}
                             >
-                                <FontAwesomeIcon
-                                    icon={tool.style.icon}
-                                />
+                                <StyledIcon src={tool.style.icon}/>
                             </StyledDrawingTool>
-                            <StyledErase
-                                data-tip data-for='erase'
-                                color={tool.style.color}
-                                onClick={() => eraseDrawing(tool)}
-                            >
-                                <FontAwesomeIcon
-                                    icon={faEraser}
-                                />
-                            </StyledErase>
                         </StyledDrawingToolContainer>
                     )
                 })}
+                <StyledErase
+                    data-tip data-for='erase'
+                    onClick={() => eraseDrawing()}
+                >
+                    <FontAwesomeIcon
+                        icon={faEraser}
+                    />
+                </StyledErase>
             </StyledTools>
         </>
     );
