@@ -1,18 +1,21 @@
 import { useState, useContext } from 'react';
+import styled, { keyframes } from 'styled-components';
+import { ReactReduxContext, useSelector } from 'react-redux';
+import LayerList from './LayerList';
+import Layers from './Layers';
+import ConfirmPopup from './ConfirmPopup';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faAngleDown,
     faCar,
     faHardHat, faLandmark, faMap, faRoad, faShip, faTrain
 } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { ReactReduxContext, useSelector } from 'react-redux';
-import styled, { keyframes } from 'styled-components';
 import { updateLayers } from '../../../utils/rpcUtil';
 import Checkbox from '../../checkbox/Checkbox';
-import LayerList from './LayerList';
-import Layers from './Layers';
 
 
+
+const OSKARI_LOCALSTORAGE = "oskari";
 
 const fadeIn = keyframes`
   from {
@@ -182,6 +185,7 @@ export const LayerGroup = ({
     hasChildren
 }) => {
     const [isOpen, setIsOpen] = useState(false);
+    const [warnActive, setWarnActive] = useState(false);
     const { store } = useContext(ReactReduxContext);
     const channel = useSelector(state => state.rpc.channel);
     //Find matching layers from all layers and groups, then push this group's layers into 'filteredLayers'
@@ -213,20 +217,38 @@ export const LayerGroup = ({
 
     const selectGroup = (e) => {
         e.stopPropagation();
-        if (!indeterminate) {
-            filteredLayers.map(layer => {
-                channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, !layer.visible]);
-                return null;
-            });
+        var localStorageWarn = localStorage.getItem(OSKARI_LOCALSTORAGE) ? localStorage.getItem(OSKARI_LOCALSTORAGE) : [] ;
+        if (filteredLayers.length > 9 && !checked && !localStorageWarn.includes("multipleLayersWarning")) {
+            setWarnActive(true);
         } else {
-            filteredLayers.map(layer => {
-                channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, false]);
-                return null;
-            });
+            groupLayersVisibility();
+        }
+    };
+
+    const hideWarn = () => {
+        setWarnActive(false);
+    }
+
+    const groupLayersVisibility = () => {
+        if (!indeterminate) {
+                filteredLayers.map(layer => {
+                    channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, !layer.visible]);
+                    return null;
+                });
+        } else {
+                filteredLayers.map(layer => {
+                    channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, false]);
+                    return null;
+                });
         }
         updateLayers(store, channel);
-    };
+    }
+
     return (
+        <>
+        {warnActive &&
+            <ConfirmPopup filteredLayers={filteredLayers} indeterminate={indeterminate} hideWarn={() => hideWarn()} />
+        }
         <StyledLayerGroups
                 index={index}
                 parentId={group.parentId}
@@ -314,6 +336,7 @@ export const LayerGroup = ({
                 </StyledLayerGroup>
             </StyledLayerGroupContainer>
         </StyledLayerGroups>
+        </>
     );
   };
 
