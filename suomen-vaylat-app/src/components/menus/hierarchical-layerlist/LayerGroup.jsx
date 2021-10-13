@@ -271,10 +271,6 @@ export const LayerGroup = ({
                         <StyledMasterGroupName>{group.name}</StyledMasterGroupName>
                     </StyledLeftContent>
                     <StyledRightContent>
-                        <Checkbox
-                            isChecked={checked}
-                            handleClick={selectGroup}
-                        />
                         <StyledSelectButton
                             hasChildren={hasChildren}
                         >
