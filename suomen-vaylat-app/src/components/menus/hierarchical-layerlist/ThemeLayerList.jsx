@@ -263,8 +263,12 @@ export const ThemeGroup = ({
                     isOpen={isOpen}
                 >
                     <StyledLayerGroup>
-                        <StyledSubHeader>{strings.themelayerlist[theme.id].title}</StyledSubHeader>
-                        {strings.themelayerlist[theme.id].description !== null && <StyledSubText>{strings.themelayerlist[theme.id].description}</StyledSubText>}
+                        {strings.themelayerlist[theme.id].description !== null &&
+                        <> 
+                            <StyledSubHeader>{strings.themelayerlist[theme.id].title}</StyledSubHeader>
+                            <StyledSubText>{strings.themelayerlist[theme.id].description}</StyledSubText>
+                        </>
+                        }
                         <StyledSubHeader>
                             {strings.layerlist.layerlistLabels.layers.toUpperCase()}
                         </StyledSubHeader>
