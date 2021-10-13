@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { faAngleUp } from '@fortawesome/free-solid-svg-icons';
+import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styled from 'styled-components';
 
@@ -67,7 +67,7 @@ const Dropdown = (props) => {
             <StyledDropDownContainerName>{props.title}</StyledDropDownContainerName>
             <StyledExpandButton>
                 <FontAwesomeIcon
-                    icon={faAngleUp}
+                    icon={faAngleDown}
                     style={{
                         transform: isOpen && "rotate(180deg)"
                     }}

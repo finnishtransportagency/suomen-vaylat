@@ -7,7 +7,7 @@ import { ReactReduxContext, useSelector } from 'react-redux';
 import { SortableContainer, SortableElement } from 'react-sortable-hoc';
 import {arrayMoveImmutable} from 'array-move';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAngleUp, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faAngleDown, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 import SelectedLayer from './SelectedLayer';
 import SelectedLayersCount from './SelectedLayersCount';
@@ -149,7 +149,7 @@ export const SelectedLayers = ({ label, selectedLayers, suomenVaylatLayers }) =>
                 </StyledLeftContent>
                 <StyledExpandButton>
                     <FontAwesomeIcon
-                        icon={faAngleUp}
+                        icon={faAngleDown}
                         style={{
                             transform: isOpen && "rotate(180deg)"
                         }}
