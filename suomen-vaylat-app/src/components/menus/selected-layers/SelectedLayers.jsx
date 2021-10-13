@@ -161,6 +161,7 @@ export const SelectedLayers = ({ label, selectedLayers, suomenVaylatLayers }) =>
             >
                 <StyledLayerGroup>
                     <SortableList
+                        transitionDuration={0}
                         items={selectedLayers}
                         onSortEnd={onSortEnd}
                         suomenVaylatLayers={suomenVaylatLayers}

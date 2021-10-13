@@ -1,3 +1,6 @@
+
+import './_colors.scss';
+import './custom.scss';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Modal from 'react-modal';
 import { Provider } from 'react-redux';
