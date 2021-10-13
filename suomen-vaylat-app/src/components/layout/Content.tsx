@@ -1,4 +1,3 @@
-import { ToastContainer } from 'react-toastify';
 import styled from 'styled-components';
 import { useAppSelector } from '../../state/hooks';
 import AppInfoModal from '../app-info-modal/AppInfoModal';
@@ -31,7 +30,7 @@ const Content = () => {
         isDrawingToolsOpen,
         shareUrl
     } =  useAppSelector((state) => state.ui);
-    
+
     const isShareOpen = shareUrl && shareUrl.length > 0 ? true : false;
 
     return (
@@ -45,7 +44,6 @@ const Content = () => {
             {isShareOpen && <ShareWebSitePopup />}
             {isDrawingToolsOpen && <DrawingTools />}
             <AppInfoModal />
-            <ToastContainer />
             <MenuBar />
         </StyledContent>
         </>

@@ -20,6 +20,9 @@ const initialState = {
     address: []
   },
   searching: false,
+  searchError: false,
+  searchErrorData: null,
+  searchErrorType: '',
   addressSearchEventHandlerReady: false,
   selectedIndex: -1,
   marker: {
@@ -84,6 +87,11 @@ export const searchSlice = createSlice({
     setSearching: (state, action) => {
       state.searching = action.payload;
     },
+    setSearchError: (state, action) => {
+      state.searchError = action.payload.errorState;
+      state.searchErrorData = action.payload.data[0];
+      state.searchErrorType = action.payload.errorType;
+    },
     emptySearchResult: (state) => {
       state.searchResult = {
         tie: null,
@@ -129,6 +137,7 @@ export const {
   setFormData,
   setSearchSelected,
   setSearchResult,
+  setSearchError,
   setSearching,
   emptySearchResult,
   emptyFormData,

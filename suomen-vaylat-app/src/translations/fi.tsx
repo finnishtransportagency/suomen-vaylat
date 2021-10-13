@@ -31,6 +31,10 @@ const fi = {
         metadata: 'Näytä tason metadata',
         showPageInfo: 'Näytä sivun info'
     },
+    warning: 'Varoitus!',
+    multipleLayersWarning: 'Olet lisäämässä kartalle 10 tai enemmän karttatasoa ja se saattaa vaikuttaa palvelun suorituskykyyn',
+    continue: 'jatka',
+    cancel: 'peruuta',
     appInfo: {
         title: 'Sovelluksen tiedot',
         headingText: 'Suomen Väylät -karttapalvelu kokoaa yhteen Väyläviraston avoimet, ' +
@@ -75,9 +79,7 @@ const fi = {
             }
         }
     },
-    announcements: {
-        dontShowAgain: 'Älä näytä uudelleen'
-    },
+    dontShowAgain: 'Älä näytä uudelleen',
     layerlist: {
         layerlistLabels: {
             allLayers: 'Kaikki tasot' ,
@@ -93,6 +95,32 @@ const fi = {
             removeAllSelectedLayers: 'Poista kaikki valitut tasot',
             noSearchResults: 'Ei hakutuloksia',
             typeAtLeastThreeCharacters: 'Syötä vähintaan 3 kirjainta'
+        }
+    },
+    themelayerlist: {
+        hankekartta: {
+            title: 'Hankekartta',
+            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc ut est id dolor suscipit placerat. Nam in elit non lacus aliquet molestie. Duis non pretium.'
+        },
+        paallysteidenkuntokartta: {
+            title: 'Päällysteiden kuntokartta',
+            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc ut est id dolor suscipit placerat. Nam in elit non lacus aliquet molestie. Duis non pretium.'
+        },
+        siltarajoituskartta: {
+            title: 'Siltarajoituskartta',
+            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc ut est id dolor suscipit placerat. Nam in elit non lacus aliquet molestie. Duis non pretium.'
+        },
+        tienumerokartta: {
+            title: 'Tienumerokartta',
+            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc ut est id dolor suscipit placerat. Nam in elit non lacus aliquet molestie. Duis non pretium.'
+        },
+        rataverkonkuntokartta: {
+            title: 'Rataverkon kuntokartta',
+            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc ut est id dolor suscipit placerat. Nam in elit non lacus aliquet molestie. Duis non pretium.'
+        },
+        tentverkosto: {
+            title: 'TEN-T verkosto',
+            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc ut est id dolor suscipit placerat. Nam in elit non lacus aliquet molestie. Duis non pretium.'
         }
     },
     metadata: {

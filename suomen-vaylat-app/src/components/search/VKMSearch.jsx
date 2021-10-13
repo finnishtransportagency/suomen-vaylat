@@ -1,15 +1,15 @@
 import { useEffect } from 'react';
 import { debounce } from 'tlence';
 import { addFeaturesToMap, removeFeaturesFromMap, searchVKMRoad } from '../../state/slices/rpcSlice';
-import { emptySearchResult, setFormData, setSearching, setSearchResult } from '../../state/slices/searchSlice';
+import { emptySearchResult, setFormData, setSearching, setSearchResult, setSearchError } from '../../state/slices/searchSlice';
 import strings from '../../translations';
-import { ShowError } from '../messages/Messages';
-import { StyledContainer, StyledSelectInput, StyledTextField, ToastMessage } from './CommonComponents';
+import { StyledContainer, StyledSelectInput, StyledTextField } from './CommonComponents';
 import { VKMGeoJsonHoverStyles, VKMGeoJsonStyles } from './VKMSearchStyles';
 
 let debounceSearchVKM = null;
 
 const VKMSearch = ({visible, search, store, vectorLayerId, onEnterHandler}) => {
+
     if (search.selected === 'vkm' && search.searchResult.geom !== null && search.searching === false) {
         let style = 'tie';
         if ((search.formData.vkm.tieosa !== null || search.formData.vkm.ajorata !== null) && search.searchResult.osa) {
@@ -34,6 +34,7 @@ const VKMSearch = ({visible, search, store, vectorLayerId, onEnterHandler}) => {
     }
 
     const onChange = (name, value) => {
+        store.dispatch(setSearchError({errorState: false, data: ['']}));
         let formData = {
             tie: (name === 'tie') ? value : search.formData.vkm.tie,
             tieosa: (name === 'tieosa') ? value : search.formData.vkm.tieosa,
@@ -87,10 +88,7 @@ const VKMSearch = ({visible, search, store, vectorLayerId, onEnterHandler}) => {
 
         const vkmSearchErrorHandler = (errors) => {
             store.dispatch(setSearching(false));
-
-            ShowError(<ToastMessage title={strings.search.vkm.error.title}
-                message={strings.search.vkm.error.text}
-                errors={errors}/>);
+            store.dispatch(setSearchError({errorState: true, data: errors, errorType: 'primary'}));
         };
 
         const searchVKM = (data) => {

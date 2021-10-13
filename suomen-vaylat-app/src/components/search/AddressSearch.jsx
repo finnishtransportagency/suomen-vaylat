@@ -1,9 +1,16 @@
 import styled from 'styled-components';
 import { useAppSelector } from '../../state/hooks';
-import { setAddressSearchEventHandlerReady, setFormData, setMarker, setSearching, setSearchResult, setSelectedIndex } from '../../state/slices/searchSlice';
-import strings from '../../translations';
-import { ShowWarning } from '../messages/Messages';
 import { StyledContainer, StyledTextField, ToastMessage } from './CommonComponents';
+import {
+    setFormData,
+    setSearching,
+    setSearchResult,
+    setSelectedIndex,
+    setMarker,
+    setAddressSearchEventHandlerReady,
+    setSearchError
+} from '../../state/slices/searchSlice';
+import strings from '../../translations';
 
 const List = styled.ul`
   z-index: 100;
@@ -58,8 +65,7 @@ const AddressSearch = ({
             store.dispatch(setSearching(false));
             store.dispatch(setSearchResult({ address: data.result.locations }));
             if (data.result.locations.length === 0) {
-                ShowWarning(<ToastMessage title={strings.search.address.error.title}
-                    message={strings.search.address.error.text}/>);
+                store.dispatch(setSearchError({errorState: true, data: [''], errorType: 'warning'}));
             }
         });
         store.dispatch(setAddressSearchEventHandlerReady(true));
