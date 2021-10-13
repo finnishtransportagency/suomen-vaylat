@@ -98,29 +98,29 @@ const fi = {
         }
     },
     themelayerlist: {
-        hankekartta: {
+        0: {
             title: 'Hankekartta',
-            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc ut est id dolor suscipit placerat. Nam in elit non lacus aliquet molestie. Duis non pretium.'
+            description: 'Kartalla esitetään Väyläviraston investointihankkeet ja toteutukseen tähtäävät hankesuunnittelukohteet.'
         },
-        paallysteidenkuntokartta: {
+        1: {
             title: 'Päällysteiden kuntokartta',
-            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc ut est id dolor suscipit placerat. Nam in elit non lacus aliquet molestie. Duis non pretium.'
+            description: null
         },
-        siltarajoituskartta: {
+        2: {
             title: 'Siltarajoituskartta',
-            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc ut est id dolor suscipit placerat. Nam in elit non lacus aliquet molestie. Duis non pretium.'
+            description: 'Kartalla on esitetty painorajoitetut sillat ja alikulkujen rajoitukset. Rajoituksia voi poistua ja tulla lisää, joten karttaa kannattaa tarkastella usein. Muistakaa tarkistaa mahdolliset rajoitukset myös kunnista ja yksityisteiden tiekunnilta.'
         },
-        tienumerokartta: {
+        3: {
             title: 'Tienumerokartta',
-            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc ut est id dolor suscipit placerat. Nam in elit non lacus aliquet molestie. Duis non pretium.'
+            description: null
         },
-        rataverkonkuntokartta: {
+        4: {
             title: 'Rataverkon kuntokartta',
-            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc ut est id dolor suscipit placerat. Nam in elit non lacus aliquet molestie. Duis non pretium.'
+            description: null
         },
-        tentverkosto: {
-            title: 'TEN-T verkosto',
-            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc ut est id dolor suscipit placerat. Nam in elit non lacus aliquet molestie. Duis non pretium.'
+        5: {
+                title: 'TEN-T verkosto',
+                description: 'TEN-T-verkosto koostuu kahdesta tasosta: vuoteen 2030 mennessä rakennettavasta ydinverkosta (core network) ja vuoteen 2050 mennessä rakennettavasta kattavasta verkosta (comprehensive network). TEN-T ydinverkko keskittyy tärkeimpiin yhteyksiin ja solmukohtiin. Ydinverkon toteuttamista edistää käytäviin perustuva lähestymistapa. TEN-T-verkko kattaa kaikki liikennemuodot: maantie-, ilma-, sisävesi-, meri- sekä liikennemuotojen yhdistelyn mahdollistavat alustat.'
         }
     },
     metadata: {
