@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import {
-    faCompress, faExpand, faImages, faLayerGroup, faPencilRuler, faSearch
+    faCompress, faExpand, faListAlt, faLayerGroup, faPencilRuler, faSearch
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ReactReduxContext } from 'react-redux';
@@ -148,7 +148,7 @@ const MenuBar = () => {
                     isActive={isLegendOpen}
                     onClick={() => store.dispatch(setIsLegendOpen(!isLegendOpen))}>
                     <FontAwesomeIcon
-                        icon={faImages}
+                        icon={faListAlt}
                     />
                 </StyledMenuBarButton>
                 <StyledMenuBarButton
