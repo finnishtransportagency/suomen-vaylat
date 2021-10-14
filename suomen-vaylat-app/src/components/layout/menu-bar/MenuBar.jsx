@@ -9,7 +9,7 @@ import styled from 'styled-components';
 import { useAppSelector } from '../../../state/hooks';
 import {
     setIsDrawingToolsOpen,
-    setIsFullScreen, setIsLegendOpen, setIsSearchOpen, setIsSideMenuOpen
+    setIsFullScreen, setIsLegendOpen, setIsSearchOpen, setIsSideMenuOpen, setActiveTool
 } from '../../../state/slices/uiSlice';
 import strings from '../../../translations';
 
@@ -76,7 +76,7 @@ const MenuBar = () => {
 
     const { store } = useContext(ReactReduxContext);
 
-    const { selectedLayers } = useAppSelector((state) => state.rpc);
+    const { selectedLayers, channel } = useAppSelector((state) => state.rpc);
 
     const {
         isFullScreen,
@@ -84,6 +84,7 @@ const MenuBar = () => {
         isSearchOpen,
         isLegendOpen,
         isDrawingToolsOpen,
+        activeTool,
     } =  useAppSelector((state) => state.ui);
 
     const handleFullScreen = () => {
@@ -97,6 +98,15 @@ const MenuBar = () => {
           }
         }
     };
+
+    const closeDrawingTools = () => {
+        // remove geometries off the map
+        channel.postRequest('DrawTools.StopDrawingRequest', [true]);
+        // stop the drawing tool
+        channel.postRequest('DrawTools.StopDrawingRequest', [activeTool]);
+        store.dispatch(setActiveTool(''));
+        store.dispatch(setIsDrawingToolsOpen(!isDrawingToolsOpen))
+    }
 
 
     return (
@@ -154,7 +164,7 @@ const MenuBar = () => {
                 <StyledMenuBarButton
                     data-tip data-for='drawingtools'
                     isActive={isDrawingToolsOpen}
-                    onClick={() => store.dispatch(setIsDrawingToolsOpen(!isDrawingToolsOpen))}>
+                    onClick={() => closeDrawingTools()}>
                     <FontAwesomeIcon
                         icon={faPencilRuler}
                     />
