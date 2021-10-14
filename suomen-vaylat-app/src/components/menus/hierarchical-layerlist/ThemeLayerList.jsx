@@ -217,9 +217,6 @@ export const ThemeGroup = ({
 
         updateLayers(store, channel);
     };
-
-    // Convert theme's name into simple string
-    //const themeLocalization = strings.themelayerlist[theme.name.toLowerCase().replace(/[^a-ö]/g, '').replace(/\u00e4/g, "a").replace(/\u00f6/g, "o")];
     
     if (encodeURIComponent(theme.name) === selectedTheme && isProgrammaticSelection === false) {
         selectGroup();
