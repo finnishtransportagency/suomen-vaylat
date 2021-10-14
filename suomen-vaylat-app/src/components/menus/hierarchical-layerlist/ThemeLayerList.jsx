@@ -217,9 +217,6 @@ export const ThemeGroup = ({
 
         updateLayers(store, channel);
     };
-
-    // Convert theme's name into simple string
-    const themeLocalization = strings.themelayerlist[theme.name.toLowerCase().replace(/[^a-ö]/g, '').replace(/\u00e4/g, "a").replace(/\u00f6/g, "o")];
     
     if (encodeURIComponent(theme.name) === selectedTheme && isProgrammaticSelection === false) {
         selectGroup();
@@ -263,8 +260,12 @@ export const ThemeGroup = ({
                     isOpen={isOpen}
                 >
                     <StyledLayerGroup>
-                        <StyledSubHeader>{themeLocalization.title}</StyledSubHeader>
-                        <StyledSubText>{themeLocalization.description}</StyledSubText>
+                        {strings.themelayerlist[theme.id].description !== null &&
+                        <> 
+                            <StyledSubHeader>{strings.themelayerlist[theme.id].title}</StyledSubHeader>
+                            <StyledSubText>{strings.themelayerlist[theme.id].description}</StyledSubText>
+                        </>
+                        }
                         <StyledSubHeader>
                             {strings.layerlist.layerlistLabels.layers.toUpperCase()}
                         </StyledSubHeader>
