@@ -7,6 +7,10 @@ ARG CODEARTIFACT_AUTH_TOKEN
 ENV CODEARTIFACT_AUTH_TOKEN=$CODEARTIFACT_AUTH_TOKEN
 COPY ./npmrc /suomen-vaylat/.npmrc
 
+# The name of this arg must not be the same that gets substituted by buildspec
+ARG ACCOUNT_ID
+RUN sed -i "s|ACCOUNT_ID|$ACCOUNT_ID|g" /suomen-vaylat/.npmrc
+
 ### Local builder
 FROM builder AS local-builder
 

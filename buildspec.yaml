@@ -30,6 +30,7 @@ phases:
         --build-arg PUBLIC_URL=/$BASE_PATH \
         --build-arg BASE_PATH=$BASE_PATH \
         --build-arg CODEARTIFACT_AUTH_TOKEN=$CODEARTIFACT_AUTH_TOKEN \
+        --build-arg ACCOUNT_ID=$AWS_ACCOUNT_ID \
         .
       - docker tag $IMAGE_REPO_URI:$LATEST_TAG $IMAGE_REPO_URI:$IMAGE_TAG
   post_build:
