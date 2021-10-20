@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useContext } from 'react';
+import { ReactReduxContext } from 'react-redux';
 import { faEraser } from '@fortawesome/free-solid-svg-icons';
 
 import svCircle from '../../theme/icons/drawtools_circle.svg';
@@ -11,6 +12,7 @@ import { useSelector } from 'react-redux';
 import ReactTooltip from 'react-tooltip';
 import styled from 'styled-components';
 import strings from '../../translations';
+import { setActiveTool } from '../../state/slices/uiSlice';
 
 const StyledTools = styled.div`
     position: absolute;
@@ -114,19 +116,19 @@ const drawinToolsData = [
 ];
 
 export const DrawingTools = () => {
-
-    const [activeTool, setActiveTool] = useState('');
-
-    const channel = useSelector(state => state.rpc.channel);
+    const { store } = useContext(ReactReduxContext);
+    const { channel } = useSelector(state => state.rpc);
+    const { activeTool } = useSelector(state => state.ui);
+    console.log(activeTool);
 
     const startStopTool = (tool) => {
         if (tool.name !== activeTool) {
             var data = [tool.name, tool.type, { showMeasureOnMap: true }];
             channel.postRequest('DrawTools.StartDrawingRequest', data);
-            setActiveTool(tool.name);
+            store.dispatch(setActiveTool(tool.name));
         } else {
             channel.postRequest('DrawTools.StopDrawingRequest', [activeTool]);
-            setActiveTool('');
+            store.dispatch(setActiveTool(''));
         }
     };
 
@@ -135,7 +137,7 @@ export const DrawingTools = () => {
         channel.postRequest('DrawTools.StopDrawingRequest', [true]);
         // stop the drawing tool
         channel.postRequest('DrawTools.StopDrawingRequest', [activeTool]);
-        setActiveTool('');
+        store.dispatch(setActiveTool(''));
     };
 
     return (

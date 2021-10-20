@@ -1,3 +1,3 @@
-registry=https://suomen-vaylat-675356752005.d.codeartifact.eu-west-1.amazonaws.com/npm/npmjs/
-//suomen-vaylat-675356752005.d.codeartifact.eu-west-1.amazonaws.com/npm/npmjs/:always-auth=true
-//suomen-vaylat-675356752005.d.codeartifact.eu-west-1.amazonaws.com/npm/npmjs/:_authToken=${CODEARTIFACT_AUTH_TOKEN}
+registry=https://suomen-vaylat-AWS_ACCOUNT_ID.d.codeartifact.eu-west-1.amazonaws.com/npm/npmjs/
+//suomen-vaylat-AWS_ACCOUNT_ID.d.codeartifact.eu-west-1.amazonaws.com/npm/npmjs/:always-auth=true
+//suomen-vaylat-AWS_ACCOUNT_ID.d.codeartifact.eu-west-1.amazonaws.com/npm/npmjs/:_authToken=${CODEARTIFACT_AUTH_TOKEN}
