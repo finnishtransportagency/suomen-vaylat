@@ -1,9 +1,8 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useRef } from "react";
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ReactReduxContext, useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { debounce } from 'tlence';
 import { setLegends } from '../../../state/slices/rpcSlice';
 import { updateLayers } from "../../../utils/rpcUtil";
 
@@ -31,7 +30,6 @@ const StyledLayerName = styled.p`
     };
 `;
 
-let debounceLegendsUpdate = null;
 const StyledCheckbox = styled.div`
     cursor: pointer;
     min-width: 20px;
@@ -67,16 +65,20 @@ export const Layer = ({ layer, theme }) => {
         updateLayers(store, channel);
     };
 
-    useEffect(() => {
+    const timerRef = useRef(null);
 
-        const updateLayerLegends = (channel) => {
+    const updateLayerLegends = () => {
+        timerRef.current = setTimeout(() => {
             channel.getLegends((data) => {
                 store.dispatch(setLegends(data));
             });
-        };
-        
-        debounceLegendsUpdate = debounce(updateLayerLegends, 500);
-    }, [store]);
+        }, 500);
+    };
+
+    useEffect(() => {
+        // Clear the interval when the component unmounts
+        return () => clearTimeout(timerRef.current);
+      }, []);
 
     if (layer.visible) {
         // If theme then check layer theme style
@@ -85,7 +87,7 @@ export const Layer = ({ layer, theme }) => {
                 if (styleName) {
                     channel.changeLayerStyle([layer.id, styleName], function() {
                         // update layers legends
-                        debounceLegendsUpdate(channel);
+                        updateLayerLegends();
                     });
                 }
             });
@@ -95,7 +97,7 @@ export const Layer = ({ layer, theme }) => {
             channel.getLayerThemeStyle([layer.id, null], function(styleName) {
                 if (styleName) {
                     channel.changeLayerStyle([layer.id, styleName], function() {
-                        debounceLegendsUpdate(channel);
+                        updateLayerLegends();
                     });
                 }
             });
