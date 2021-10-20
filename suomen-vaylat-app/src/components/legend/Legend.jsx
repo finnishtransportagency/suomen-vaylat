@@ -1,3 +1,4 @@
+import React from 'react';
 import { useContext, useEffect, useState } from 'react';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -107,16 +108,22 @@ export const Legend = ({selectedLayers}) => {
                         </StyledLayerCloseIcon>
                 </StyledHeader>
                 <StyledGroupsContainer>
-                {legends && legends.length > 0 && legends.map((legend, index) => {
-                    return(
-                        <LegendGroup legend={legend} key={'legend-legend-group-' + index} index={index}></LegendGroup>
-                    )
-                })}
+                {legends && legends.length > 0 && <LegendGroups legends={legends}></LegendGroups>}
                 {legends && legends.length === 0 &&
                     <>{strings.legend.noSelectedLayers}</>
                 }
                 </StyledGroupsContainer>
             </StyledLegendContainer>
         </Draggable>
+    );
+};
+
+const LegendGroups = ({legends}) => {
+    return (
+        legends.map((legend, index) => {
+            return(
+                <LegendGroup legend={legend} key={'legend-legend-group-' + index} index={index}></LegendGroup>
+            )
+        })
     );
 };

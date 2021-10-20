@@ -120,8 +120,8 @@ export const LegendGroup = ({ legend, index }) => {
                 }
                 {legend.legend !== null &&
                     <StyledLegend>
-                        <StyledLegendImage
-                            src={legend.legend.indexOf('action') > -1 ? process.env.REACT_APP_PROXY_URL + legend.legend + '&t=' + new Date().getTime() : (legend.legend.indexOf('?') > 0 ? legend.legend + '&t=' + new Date().getTime() : legend.legend + '?t=' + new Date().getTime())}
+                        <StyledLegendImage key={legend.legend}
+                            src={legend.legend.indexOf('action') > -1 ? process.env.REACT_APP_PROXY_URL + legend.legend : (legend.legend.indexOf('?') > 0 ? legend.legend : legend.legend )}
                         ></StyledLegendImage>
                     </StyledLegend>
                 }

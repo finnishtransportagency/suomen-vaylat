@@ -67,88 +67,74 @@ export const StyledOption = styled.option`
 `;
 
 export const StyledTextField = styled(({
-    id,
-    name,
-    type,
-    min,
-    value,
-    placeholder,
-    hasError,
-    isTouched,
-    hintText,
-    onChange,
-    disabled,
-    className,
-    onKeyPress,
-    marginTop
-  }) => {
-    const error = isTouched && hasError;
-    return (
-      <div className={className}>
-        <StyledInput
-          id={id}
-          name={name}
-          type={type}
-          min={min}
-          placeholder={placeholder}
-          value={value}
-          onChange={onChange}
-          onKeyPress={onKeyPress}
-          disabled={disabled}
-          error={error}
-          marginTop={marginTop}
-        />
-        {hintText && <Text>{hintText}</Text>}
-        {error && <Error>{error}</Error>}
-      </div>
-    )
-  })``
-
-export const StyledSelectInput = styled(({
-    id,
-    name,
-    value,
-    placeholder,
-    hasError,
-    isTouched,
-    hintText,
-    onChange,
-    disabled,
-    className,
-    options,
-    marginTop
-  }) => {
-    const error = isTouched && hasError;
-    return (
-      <div className={className}>
-        <StyledSelect
-          id={id}
-          name={name}
-          value={value + ''|| ''}
-          onChange={onChange}
-          disabled={disabled}
-          error={error}
-          marginTop={marginTop}
-        >
-          <StyledOption value="" readOnly={true} hidden={true}>{placeholder}</StyledOption>
-          {options.map(({ value, label }, index) => <StyledOption key={index} value={value} >{label}</StyledOption>)}
-        </StyledSelect>
-        {hintText && <Text>{hintText}</Text>}
-        {error && <Error>{error}</Error>}
-      </div>
-    )
-  })``
-
-  export const ToastMessage = ({title, message, errors}) => (
-    <div>
-      <h5>{title}</h5>
-      {message}
-      {errors && errors.length > 0 &&
-      <ul>
-        {errors.map((item,index)=>{
-              return <li key={index}>{item}</li>
-          })}
-        </ul>
-      }
+  id,
+  name,
+  type,
+  min,
+  value,
+  placeholder,
+  hasError,
+  isTouched,
+  hintText,
+  onChange,
+  disabled,
+  className,
+  onKeyPress,
+  marginTop
+}) => {
+  const error = isTouched && hasError;
+  return (
+    <div className={className}>
+      <StyledInput
+        id={id}
+        name={name}
+        type={type}
+        min={min}
+        placeholder={placeholder}
+        value={value}
+        onChange={onChange}
+        onKeyPress={onKeyPress}
+        disabled={disabled}
+        error={error}
+        marginTop={marginTop}
+      />
+      {hintText && <Text>{hintText}</Text>}
+      {error && <Error>{error}</Error>}
     </div>
   )
+})``
+
+export const StyledSelectInput = styled(({
+  id,
+  name,
+  value,
+  placeholder,
+  hasError,
+  isTouched,
+  hintText,
+  onChange,
+  disabled,
+  className,
+  options,
+  marginTop
+}) => {
+  const error = isTouched && hasError;
+  return (
+    <div className={className}>
+      <StyledSelect
+        id={id}
+        name={name}
+        value={value + '' || ''}
+        onChange={onChange}
+        disabled={disabled}
+        error={error}
+        marginTop={marginTop}
+      >
+        <StyledOption value="" readOnly={true} hidden={true}>{placeholder}</StyledOption>
+        {options.map(({ value, label }, index) => <StyledOption key={index} value={value} >{label}</StyledOption>)}
+      </StyledSelect>
+      {hintText && <Text>{hintText}</Text>}
+      {error && <Error>{error}</Error>}
+    </div>
+  )
+})``
