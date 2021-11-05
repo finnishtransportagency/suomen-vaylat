@@ -1,9 +1,9 @@
-import { useContext, useEffect, useRef } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ReactReduxContext, useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { setLegends } from '../../../state/slices/rpcSlice';
+import { getLegends, setLegends, setMapLayerVisibility } from '../../../state/slices/rpcSlice';
 import { updateLayers } from "../../../utils/rpcUtil";
 
 const StyledLayerContainer = styled.li`
@@ -52,13 +52,16 @@ export const Layer = ({ layer, theme }) => {
 
     const { store } = useContext(ReactReduxContext);
 
+    const [layerStyle, setLayerStyle] = useState(null);
+
     const {
         channel,
         selectedLayers
     } = useSelector(state => state.rpc);
 
     const handleLayerVisibility = (channel, layer) => {
-        channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, !layer.visible]);
+        store.dispatch(setMapLayerVisibility(layer));
+        //channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, !layer.visible]);
         // Update layer orders to correct
         const position = selectedLayers.length + 1;
         channel.reorderLayers([layer.id, position], () => {});
@@ -69,9 +72,9 @@ export const Layer = ({ layer, theme }) => {
 
     const updateLayerLegends = () => {
         timerRef.current = setTimeout(() => {
-            channel.getLegends((data) => {
+            store.dispatch(getLegends({handler: (data) => {
                 store.dispatch(setLegends(data));
-            });
+            }}));
         }, 500);
     };
 
@@ -81,27 +84,19 @@ export const Layer = ({ layer, theme }) => {
       }, []);
 
     if (layer.visible) {
-        // If theme then check layer theme style
-        if (theme) {
-            channel.getLayerThemeStyle([layer.id, theme], function(styleName) {
-                if (styleName) {
+        const themeStyle = theme || null;
+        channel.getLayerThemeStyle([layer.id, themeStyle], function(styleName) {
+            if (styleName) {
+
+                if (styleName !== layerStyle) {
+                    setLayerStyle(styleName);
                     channel.changeLayerStyle([layer.id, styleName], function() {
                         // update layers legends
                         updateLayerLegends();
                     });
                 }
-            });
-        }
-        // Else use default
-        else {
-            channel.getLayerThemeStyle([layer.id, null], function(styleName) {
-                if (styleName) {
-                    channel.changeLayerStyle([layer.id, styleName], function() {
-                        updateLayerLegends();
-                    });
-                }
-            });
-        }
+            }
+        });
     }
 
     return (
