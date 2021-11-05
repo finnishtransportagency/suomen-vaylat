@@ -99,7 +99,7 @@ export const rpcSlice = createSlice({
         state.zoomLevelsLayers = action.payload;
     },
     setMapLayerVisibility: (state, action) => {
-        var layer = action.payload.layer;
+        var layer = action.payload;
         state.channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, !layer.visible]);
     },
     setOpacity: (state, action) => {
@@ -195,9 +195,11 @@ export const rpcSlice = createSlice({
             uuid: action.payload.uuid
         };
     },
-    getLegends: (state) => {
+    getLegends: (state, action) => {
         state.channel && state.channel.getLegends((data) => {
-            state.legends = data;
+            if (typeof action.payload.handler === 'function') {
+                action.payload.handler(data);
+            }
         });
     },
     setLegends: (state, action) => {
