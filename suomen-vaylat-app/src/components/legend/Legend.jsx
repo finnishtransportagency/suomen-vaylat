@@ -89,7 +89,7 @@ export const Legend = ({selectedLayers}) => {
         });
       useEffect(() => {
           window.onresize = updateSize;
-      }, [allLegends]);
+      }, []);
 
 
     return(
