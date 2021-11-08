@@ -33,12 +33,12 @@ const StyledGroupHeader = styled.div`
     justify-content: space-between;
     align-items: center;
     cursor: pointer;
-    background-color: ${props => props.hasLegend ? props.theme.colors.maincolor3 : '#bbb'};
+    background-color: ${props => props.hasLegend ? props.theme.colors.mainColor3 : '#bbb'};
     padding-left: 5px;
     border-radius: 2px;
     transition: all 0.1s ease-in;
     &:hover {
-        background-color: ${props => props.hasLegend ? props.theme.colors.maincolor2 : '#bbb'};
+        background-color: ${props => props.hasLegend ? props.theme.colors.mainColor2 : '#bbb'};
     };
     &:hover ${StyledGroupName} {
         color: ${props => props.hasLegend ? props.theme.colors.mainWhite : props.theme.colors.black};
@@ -75,9 +75,9 @@ const StyledGroupContainer = styled.div`
     overflow: hidden;
     padding: ${props => props.isOpen ? '6px' : '0'};
     margin: 0px 0px 10px 0px;
-    border-bottom: 1px solid ${props => props.hasLegend ? props.theme.colors.maincolor3 : '#bbb'};
-    border-left: 1px solid ${props => props.hasLegend ? props.theme.colors.maincolor3 : '#bbb'};
-    border-right: 1px solid ${props => props.hasLegend ? props.theme.colors.maincolor3 : '#bbb'};
+    border-bottom: 1px solid ${props => props.hasLegend ? props.theme.colors.mainColor3 : '#bbb'};
+    border-left: 1px solid ${props => props.hasLegend ? props.theme.colors.mainColor3 : '#bbb'};
+    border-right: 1px solid ${props => props.hasLegend ? props.theme.colors.mainColor3 : '#bbb'};
 `;
 
 const StyledLegend = styled.div``;

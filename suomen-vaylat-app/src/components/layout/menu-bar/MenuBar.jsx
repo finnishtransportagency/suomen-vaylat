@@ -14,16 +14,18 @@ import {
 import strings from '../../../translations';
 
 const StyledMenuBar = styled.div`
-    position: absolute;
-    top: 10px;
-    left: ${props => props.isSideMenuOpen ? "360px" : "10px"};
-    width: 40px;
+    pointer-events: none;
+    grid-row-start: 1;
+    //position: absolute;
+    //top: 10px;
+    //left: ${props => props.isSideMenuOpen ? "360px" : "10px"};
+    //left: 10px;
     height: 100%;
     display: flex;
     align-items: flex-start;
     flex-direction: column;
     transition: all 0.5s ease-in-out;
-    @media ${props => props.theme.device.mobileL} {
+    /* @media ${props => props.theme.device.mobileL} {
         top: calc(100% - 60px);
         left: 10px;
         width: 100%;
@@ -31,24 +33,26 @@ const StyledMenuBar = styled.div`
         justify-content: space-around;
         align-items: center;
         flex-direction: row;
-    };
+    }; */
 `;
 
 const StyledMenuBarButton = styled.div`
+    pointer-events: auto;
     position: relative;
     cursor: pointer;
-    width: 40px;
-    height: 40px;
+    width: 48px;
+    height: 48px;
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: ${props => props.isActive ? props.theme.colors.maincolor2 : props.theme.colors.maincolor1};
+    background-color: ${props => props.isActive ? props.theme.colors.buttonActive : props.theme.colors.button};
     margin-top: 10px;
-    box-shadow: rgb(0 0 0 / 16%) 0px 3px 6px, rgb(0 0 0 / 23%) 0px 3px 6px;
+    //box-shadow: rgb(0 0 0 / 16%) 0px 3px 6px, rgb(0 0 0 / 23%) 0px 3px 6px;
+    box-shadow: 2px 2px 4px #0000004D;
     border-radius: 50%;
     svg {
         color: ${props => props.theme.colors.mainWhite};
-        font-size: 18px;
+        font-size: 22px;
     };
     @media ${props => props.theme.device.mobileL} {
         width: 40px;

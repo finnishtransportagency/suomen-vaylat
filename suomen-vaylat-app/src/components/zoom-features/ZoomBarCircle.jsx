@@ -15,7 +15,7 @@ const StyledZoomLevelCircle = styled.div`
     width: ${props => props.isExpanded ? "23px" : "0px"};
     height: ${props => props.isExpanded ? "23px" : "0px"};
     opacity: ${props => props.isExpanded ? "1" : "0"};
-    border: ${props => `${props.isExpanded ? "3px" : "1px"} solid ${props.theme.colors.maincolor1}`};
+    border: ${props => `${props.isExpanded ? "3px" : "1px"} solid ${props.theme.colors.mainColor1}`};
     border-radius: 50%;
     background-color: ${props => props.index === props.zoomLevel ? props.theme.colors.secondaryColor4 : props.theme.colors.mainWhite};
     margin: ${props => props.isExpanded ? "3px" : "0px"};

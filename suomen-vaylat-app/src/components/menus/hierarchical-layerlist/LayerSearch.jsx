@@ -5,31 +5,66 @@ import { setSearchParams } from '../../../state/slices/uiSlice';
 import strings from '../../../translations';
 import Layer from '../hierarchical-layerlist/Layer';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+    faSearch,
+} from '@fortawesome/free-solid-svg-icons';
+
 
 const StyledLayerSearchContainer = styled.div`
     display: flex;
     flex: 1;
     flex-direction: column;
-    margin: 10px;
+`;
+
+const StyledSearchInputContainer = styled.div`
+    display: flex;
+    //justify-content: space-between;
+    align-items: center;
+    height: 40px;
+    border: 1px solid #AAAAAA;
+    overflow: hidden;
+    border-radius: 20px;
+
+`;
+
+const StyledSearchInputContainerIcon = styled.div`
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    //background-color: ${props => props.theme.colors.mainColor1};
+    svg {
+        //color: ${props => props.theme.colors.mainWhite};
+        color: #AAAAAA;
+        font-size: 16px;
+    }
 `;
 
 const StyledSearchInput = styled.input`
-    height: 40px;
+    font-size: 16px;
     padding-left: 10px;
-    border-radius: 5px;
+    height: 100%;
+   // border-radius: 5px;
+    border: none;
     &::-webkit-search-cancel-button {
-        position: relative;
-        right: 10px;  
-        height: 40px;
-        width: 40px;
-        cursor: pointer;
+        //position: relative;
+        //right: 10px;  
+        //height: 40px;
+        //width: 40px;
+        //cursor: pointer;
+    };
+    &:focus {
+        outline-width: 0;
     }
 `;
 
 const StyledListSubtitle = styled.div`
     display: flex;
     justify-content: flex-start;
-    color: ${props => props.theme.colors.maincolor1};
+    color: ${props => props.theme.colors.mainColor1};
     padding: 10px 0px 10px 5px;
     font-size: 15px;
 `;
@@ -52,12 +87,19 @@ const LayerSearch = ({ layers }) => {
     const searchResults = layers.filter(layer => layer.name.toLowerCase().includes(searchParams.toLowerCase()));
     return (
         <StyledLayerSearchContainer>
-            <StyledSearchInput
-                type="search"
-                placeholder={strings.layerlist.layerlistLabels.searchForLayers}
-                value={searchParams}
-                onChange={e => store.dispatch(setSearchParams(e.target.value))}
-            />
+            <StyledSearchInputContainer>
+                <StyledSearchInputContainerIcon>
+                    <FontAwesomeIcon
+                            icon={faSearch}
+                    />
+                </StyledSearchInputContainerIcon>
+                <StyledSearchInput
+                    //type="search"
+                    placeholder={strings.layerlist.layerlistLabels.searchForLayers+"..."}
+                    value={searchParams}
+                    onChange={e => store.dispatch(setSearchParams(e.target.value))}
+                />
+            </StyledSearchInputContainer>
             {
                 searchParams !== "" && searchParams.length > 2 && 
                 <>

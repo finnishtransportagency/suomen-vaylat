@@ -50,7 +50,7 @@ const StyledContent = styled.div`
 
 const StyledHeader = styled.div`
     padding: .5rem;
-    background-color: ${props => props.theme.colors.maincolor1};
+    background-color: ${props => props.theme.colors.mainColor1};
     color: ${props => props.theme.colors.mainWhite};
     border-radius: 0;
 `;
@@ -73,7 +73,7 @@ const StyledLayerCloseIcon = styled.div`
     };
     &:hover {
         svg {
-            color: ${props => props.theme.colors.maincolor2};
+            color: ${props => props.theme.colors.mainColor2};
         }
     }
 `;
@@ -86,7 +86,7 @@ export const ConfirmPopup = ({ filteredLayers, indeterminate, hideWarn }) => {
 
     const afterOpenModal = () => {
         // references are now sync'd and can be accessed.
-    }
+    };
 
     const closeModal = (cancel) => {
         if (cancel) {
@@ -112,7 +112,7 @@ export const ConfirmPopup = ({ filteredLayers, indeterminate, hideWarn }) => {
                 addToLocalStorageArray(OSKARI_LOCALSTORAGE, "multipleLayersWarning");
             }
         }
-    }
+    };
 
     return (
         <div>

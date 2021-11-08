@@ -35,7 +35,7 @@ const ListItem = styled.li`
   text-overflow: ellipsis;
   white-space: nowrap;
   cursor: pointer;
-  color: ${props => props.selected ? props.theme.colors.maincolor1 : ''};
+  color: ${props => props.selected ? props.theme.colors.mainColor1 : ''};
   padding: 2px 8px;
   font-weight: ${props => props.selected ? 'bold' : ''};
   :first-of-type {
