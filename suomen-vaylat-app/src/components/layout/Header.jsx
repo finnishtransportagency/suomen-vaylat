@@ -6,13 +6,14 @@ import ReactTooltip from 'react-tooltip';
 import styled from 'styled-components';
 import { useAppSelector } from '../../state/hooks';
 import { setIsInfoOpen, setIsMainScreen } from "../../state/slices/uiSlice";
-import { mapMoveRequest, setZoomTo } from "../../state/slices/rpcSlice";
+import { mapMoveRequest, setZoomTo, setMapLayerVisibility } from "../../state/slices/rpcSlice";
 import strings from '../../translations';
 import LanguageSelector from '../language-selector/LanguageSelector';
 import { WebSiteShareButton } from '../share-web-site/ShareLinkButtons';
 import { ReactComponent as VaylaLogoEn } from './images/vayla_sivussa_en_white.svg';
 import { ReactComponent as VaylaLogoFi } from './images/vayla_sivussa_fi_white.svg';
 import { ReactComponent as VaylaLogoSv } from './images/vayla_sivussa_sv_white.svg';
+import {updateLayers} from "../../utils/rpcUtil";
 
 
 
@@ -92,6 +93,11 @@ export const Header = () => {
     const lang = useAppSelector((state) => state.language);
     const { store } = useContext(ReactReduxContext);
     const isInfoOpen = useAppSelector((state) => state.ui.isInfoOpen);
+    const {
+        allLayers,
+        channel,
+        selectedLayers
+    } = useAppSelector((state) => state.rpc);
 
     const setToMainScreen = () => {
         store.dispatch(mapMoveRequest({
@@ -99,7 +105,27 @@ export const Header = () => {
             y: 7109206.188955102
         }));
         store.dispatch(setIsMainScreen())
+        const Ids = [303, 996, 100]
+        const filteredLayers = [];
+        if (allLayers) {
+            Ids.forEach((id) => {
+                allLayers.forEach((layer) => {
+                    if(id == layer.id) {
+                        filteredLayers.push(layer)
+                    }
+                })
+            })
+
+        }
+        filteredLayers.map((layer) => {
+            channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, !layer.visible]);
+            // Update layer orders to correct
+            const position = selectedLayers.length + 1;
+            channel.reorderLayers([layer.id, position], () => {});
+        })
         store.dispatch(setZoomTo(0))
+        updateLayers(store, channel)
+
     };
 
     return (
