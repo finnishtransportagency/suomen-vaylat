@@ -15,10 +15,10 @@ const theme = {
       main: 'Exo 2'
     },
     colors: {
-        maincolor1: "#0064af",
-        maincolor2: "#009ae1",
-        maincolor3: "#49c2f1",
-        maincolorselected1: "#024c85",
+        mainColor1: "#0064af",
+        mainColor2: "#009ae1",
+        mainColor3: "#49c2f1",
+        mainColorselected1: "#024c85",
         secondaryColor1: "#00b0cc",
         secondaryColor2: "#207a43",
         secondaryColor3: "#8dcb6d",
@@ -29,6 +29,8 @@ const theme = {
         secondaryColor8: "#e50083",
         black: "#000000",
         mainWhite: "#ffffff",
+        button: "#0064af",
+        buttonActive: "#004477",
     },
     device: {
       mobileS: `(max-width: ${size.mobileS})`,

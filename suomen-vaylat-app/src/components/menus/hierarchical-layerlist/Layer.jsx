@@ -7,6 +7,8 @@ import { debounce } from 'tlence';
 import { setLegends } from '../../../state/slices/rpcSlice';
 import { updateLayers } from "../../../utils/rpcUtil";
 
+//import Switch from '../../../components/switch/Switch';
+
 const StyledLayerContainer = styled.li`
     overflow: hidden;
     display: flex;
@@ -23,15 +25,17 @@ const StyledlayerHeader = styled.div`
 
 const StyledLayerName = styled.p`
     user-select: none;
-    color: ${props => props.theme.colors.black};
+    color: ${props => props.theme.colors.mainColor1};
     margin: 5px;
-    font-size: 13px;
+    font-size: 14px;
     @media ${ props => props.theme.device.mobileL} {
         font-size: 12px;
     };
 `;
 
 let debounceLegendsUpdate = null;
+
+
 const StyledCheckbox = styled.div`
     cursor: pointer;
     min-width: 20px;
@@ -41,14 +45,50 @@ const StyledCheckbox = styled.div`
     align-items: center;
     background-color: ${props => props.theme.colors.mainWhite};
     margin-right: 36px;
-    border: 2px solid ${props => props.theme.colors.maincolor1};
+    border: 2px solid ${props => props.theme.colors.mainColor1};
     border-radius: 30%;
     box-sizing: border-box;
     svg {
-        color: ${props => props.theme.colors.maincolor1};
+        color: ${props => props.theme.colors.mainColor1};
         font-size: 12px;
     };
 `;
+
+const StyledSwitchContainer = styled.div`
+    position: relative;
+    min-width: 32px;
+    height: 16px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    background-color: ${props => props.isSelected ? "#8DCB6D" : "#AAAAAA"};
+    cursor: pointer;
+    margin-right: 16px;
+`;
+
+const StyledSwitchButton = styled.div`
+    position: absolute;
+    left: ${props => props.isSelected ? "15px" : "0px"};
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-left: 2px;
+    margin-right: 2px;
+    transition: all 0.3s ease-out;
+    background-color: ${props => props.theme.colors.mainWhite};
+`;
+
+const Switch = ({ action, layer, isSelected }) => {
+    return (
+        <StyledSwitchContainer
+        isSelected={isSelected}
+        onClick={() => {
+            action(layer);
+        }}>
+            <StyledSwitchButton isSelected={isSelected}/>
+        </StyledSwitchContainer>
+    );
+};
 
 export const Layer = ({ layer, theme }) => {
 
@@ -59,7 +99,7 @@ export const Layer = ({ layer, theme }) => {
         selectedLayers
     } = useSelector(state => state.rpc);
 
-    const handleLayerVisibility = (channel, layer) => {
+    const handleLayerVisibility = (layer) => {
         channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, !layer.visible]);
         // Update layer orders to correct
         const position = selectedLayers.length + 1;
@@ -68,12 +108,11 @@ export const Layer = ({ layer, theme }) => {
     };
 
     useEffect(() => {
-
         const updateLayerLegends = (channel) => {
             channel.getLegends((data) => {
                 store.dispatch(setLegends(data));
             });
-        };
+    };
         
         debounceLegendsUpdate = debounce(updateLayerLegends, 500);
     }, [store]);
@@ -104,6 +143,7 @@ export const Layer = ({ layer, theme }) => {
 
     return (
             <StyledLayerContainer
+                className={`list-layer ${layer.visible && "list-layer-active"}`}
                 key={'layer' + layer.id + '_' + theme}
             >
                 <StyledlayerHeader>
@@ -111,16 +151,11 @@ export const Layer = ({ layer, theme }) => {
                         {layer.name}
                     </StyledLayerName>
                 </StyledlayerHeader>
-                <StyledCheckbox
-                    isChecked={layer.visible}
-                    onClick={() => handleLayerVisibility(channel, layer)}
-                >
-                {
-                    layer.visible && <FontAwesomeIcon
-                        icon={faCheck}
-                    />
-                    }
-                </StyledCheckbox>
+                <Switch
+                    action={handleLayerVisibility}
+                    isSelected={layer.visible}
+                    layer={layer}
+                />
             </StyledLayerContainer>
     );
   };

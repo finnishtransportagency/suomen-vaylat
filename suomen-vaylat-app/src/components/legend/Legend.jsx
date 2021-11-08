@@ -27,7 +27,7 @@ const StyledHeader = styled.div`
     border-radius: 0;
     cursor: move;
     color: ${props => props.theme.colors.mainWhite};
-    background-color: ${props => props.theme.colors.maincolor1};
+    background-color: ${props => props.theme.colors.mainColor1};
     padding: .5rem;
 `;
 
@@ -53,7 +53,7 @@ const StyledLayerCloseIcon = styled.div`
     };
     &:hover {
         svg {
-            color: ${props => props.theme.colors.maincolor2};
+            color: ${props => props.theme.colors.mainColor2};
         }
     }
 `;

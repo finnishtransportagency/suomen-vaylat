@@ -23,7 +23,7 @@ const StyledTabList = styled.div`
   border-radius: 15px;
   box-sizing: border-box;
   &:hover {
-    background-color: ${props => props.theme.colors.maincolor3};
+    background-color: ${props => props.theme.colors.mainColor3};
   }
 `;
 
@@ -34,7 +34,7 @@ const StyledTabContent = styled.div`
 const StyledListSubtitle = styled.div`
     display: flex;
     justify-content: flex-start;
-    color: ${props => props.theme.colors.maincolor1};
+    color: ${props => props.theme.colors.mainColor1};
     padding: 10px 0px 10px 5px;
     font-size: 15px;
 `;

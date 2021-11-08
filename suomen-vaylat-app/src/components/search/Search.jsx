@@ -38,7 +38,7 @@ const StyledCloseButton = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: ${props => props.theme.colors.maincolor1};
+    background-color: ${props => props.theme.colors.mainColor1};
     border-radius: 50%;
     svg {
         color: ${props => props.theme.colors.mainWhite};
@@ -66,10 +66,10 @@ const StyledSearchControl = styled.button`
     svg {
         width: 28px;
         height: 28px;
-        color: ${props => props.theme.colors.maincolor1};
+        color: ${props => props.theme.colors.mainColor1};
         &:hover {
             transform: scale(1.05);
-            color: ${props => props.theme.colors.maincolor2};
+            color: ${props => props.theme.colors.mainColor2};
         }
     };
     &:disabled {
@@ -98,10 +98,10 @@ const StyledEmptyButton = styled.button`
     svg {
         width: 28px;
         height: 28px;
-        color: ${props => props.theme.colors.maincolor1};
+        color: ${props => props.theme.colors.mainColor1};
         &:hover {
             transform: scale(1.05);
-            color: ${props => props.theme.colors.maincolor2};
+            color: ${props => props.theme.colors.mainColor2};
         }
     };
     &:disabled {

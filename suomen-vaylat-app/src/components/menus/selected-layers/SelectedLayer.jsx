@@ -1,10 +1,11 @@
-import {  useContext } from "react";
+import {  useState, useContext } from "react";
 import { faInfo, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ReactReduxContext, useSelector } from 'react-redux';
 import ReactTooltip from "react-tooltip";
 import styled from 'styled-components';
 import { clearLayerMetadata, getLayerMetadata, setLayerMetadata } from '../../../state/slices/rpcSlice';
+import { setIsSwipingDisabled } from '../../../state/slices/uiSlice';
 import strings from '../../../translations';
 import { updateLayers } from "../../../utils/rpcUtil";
 
@@ -60,13 +61,13 @@ const StyledLayerDeleteIcon = styled.div`
     align-items: center;
     cursor: pointer;
     svg {
-        color: ${props => props.theme.colors.maincolor1};
+        color: ${props => props.theme.colors.mainColor1};
         font-size: 16px;
         transition: all 0.1s ease-out;
     };
     &:hover {
         svg {
-            color: ${props => props.theme.colors.maincolor2};
+            color: ${props => props.theme.colors.mainColor2};
         };
     }
 `;
@@ -91,12 +92,12 @@ const StyledlayerOpacityControl = styled.input`
         appearance: none;
         cursor: pointer;
         background: ${props => props.theme.colors.mainWhite};
-        border: 3px solid ${props => props.theme.colors.maincolor1};
+        border: 3px solid ${props => props.theme.colors.mainColor1};
         border-radius: 50%;
         box-sizing: border-box;
         transition: all 0.1s ease-out;
         &:hover{
-            background: ${props => props.theme.colors.maincolor1};
+            background: ${props => props.theme.colors.mainColor1};
         }
     }
 `;
@@ -124,18 +125,21 @@ export const SelectedLayer = ({
     uuid
 }) => {
 
+    const [opacity, setOpacity] = useState(layer.opacity)
+
     const { store } = useContext(ReactReduxContext);
 
     const channel = useSelector(state => state.rpc.channel);
 
     const handleLayerVisibility = (channel, layer) => {
         channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, !layer.visible]);
-        updateLayers(store, channel);
+       // updateLayers(store, channel);
     };
 
     const handleLayerOpacity = (channel, layer, value) => {
         channel.postRequest('ChangeMapLayerOpacityRequest', [layer.id, value]);
-        updateLayers(store, channel);
+        setOpacity(value);
+        //updateLayers(store, channel);
     };
 
     const handleMetadataSuccess = (data, layer, uuid) => {
@@ -146,7 +150,7 @@ export const SelectedLayer = ({
     const handleMetadataError = () => {
         store.dispatch(clearLayerMetadata());
     };
-
+    
     return (
             <StyledLayerContainer>
                 <ReactTooltip id={'opacity' + layer.id} place="top" type="dark" effect="solid">
@@ -173,11 +177,12 @@ export const SelectedLayer = ({
                     </StyledLeftContent>
                     <StyledRightContent>
                         <StyledlayerOpacityControl
-                            data-tip data-for={'opacity' + layer.id}
+                            //data-tip data-for={'opacity' + layer.id}
+                            className="swiper-no-swiping"
                             type="range"
                             min="0"
                             max="100"
-                            value={layer.opacity}
+                            value={opacity}
                             onChange={event => handleLayerOpacity(channel, layer, event.target.value)}
                         />
                         <StyledLayerInfoIcon

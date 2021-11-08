@@ -5,6 +5,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ReactReduxContext } from 'react-redux';
+import { motion } from "framer-motion";
 import styled, { keyframes } from 'styled-components';
 import { useAppSelector } from '../../../state/hooks';
 import strings from '../../../translations';
@@ -13,33 +14,29 @@ import Checkbox from '../../checkbox/Checkbox';
 import { ThemeGroupShareButton } from '../../share-web-site/ShareLinkButtons';
 import Layers from './Layers';
 
+import Intersection from './Intersection.jpg';
 
-
-const fadeIn = keyframes`
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
-`;
+const listVariants = {
+    visible: {
+        height: "auto",
+        opacity: 1
+    },
+    hidden: {
+        height: 0,
+        opacity: 0
+    },
+};
 
 const StyledLayerGroups = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: center;
-    opacity: 0;
-    animation-delay: ${props => props.index * 0.025 + 's'};
-    animation-timing-function: ease-in-out;
-    animation-fill-mode: forwards;
-    animation-duration: 0.5s;
-    animation-name: ${fadeIn};
     background-color: ${props => props.theme.colors.mainWhite};
-    margin: 10px 0px 10px 0px;
+    //margin: ${props => props.parentId === -1 && "8px 0px 8px 0px"};
+    margin: 8px 0px 8px 0px;
     border-radius: 2px;
     &:last-child {
-        ${props => props.parentId === -1 ? '1px solid '+props.theme.colors.maincolor2 : "none"};
+        ${props => props.parentId === -1 ? '1px solid '+props.theme.colors.mainColor2 : "none"};
     };
 `;
 
@@ -48,35 +45,31 @@ const StyledMasterGroupName = styled.p`
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 200px;
-    color: ${props => props.theme.colors.black};
+    max-width: 165px;
+    color: ${props => props.theme.colors.mainWhite};
     margin: 0;
-    padding-left: 10px;
+    padding: 0px;
+    //padding-left: 10px;
     font-size: 14px;
     font-weight: 600;
     transition: all 0.1s ease-in;
+
     @media ${ props => props.theme.device.mobileL} {
-        font-size: 13px;
+        //font-size: 13px;
     };
 `;
 
 const StyledMasterGroupHeader = styled.div`
     z-index: 1;
-    height: 40px;
+    height: 48px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     cursor: pointer;
-    background-color: ${props => props.theme.colors.secondaryColor3};
-    padding-left: 5px;
-    border-radius: 2px;
+    background-color: ${props => props.theme.colors.secondaryColor2};
+    //padding-left: 5px;
+    border-radius: 4px;
     transition: all 0.1s ease-in;
-    &:hover {
-        background-color: ${props => props.theme.colors.secondaryColor2};
-    };
-    &:hover ${StyledMasterGroupName} {
-        color: ${props => props.theme.colors.mainWhite};
-    };
 `;
 
 const StyledLeftContent = styled.div`
@@ -90,16 +83,16 @@ const StyledRightContent = styled.div`
 `;
 
 const StyledMasterGroupHeaderIcon = styled.div`
-    width: 28px;
-    height: 28px;
+    width: 48px;
+    //height: 48px;
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: ${props => props.theme.colors.secondaryColor2};
-    border-radius: 50%;
+    //border-radius: 50%;
+    //background-color: ${props => props.theme.colors.mainColor1};
     svg {
+        font-size: 20px;
         color: ${props => props.theme.colors.mainWhite};
-        font-size: 16px;
     };
 `;
 
@@ -109,42 +102,94 @@ const StyledSelectButton = styled.button`
     justify-content: center;
     align-items: center;
     background-color: transparent;
-    margin-right: 10px;
+    margin-right: 8px;
     border: none;
     svg {
-        color: ${props => props.theme.colors.black};
-        font-size: 25px;
+        color: ${props => props.theme.colors.mainWhite};
+        font-size: 21px;
         transition: all 0.5s ease-out;
     };
 `;
 
-const StyledLayerGroupContainer = styled.div`
-    height: ${props => props.isOpen ? "auto" : "0px"};
+const StyledLayerGroupContainer = styled(motion.div)`
+    //height: ${props => props.isOpen ? "auto" : "0px"};
+    //margin-top: 8px;
     overflow: hidden;
+`;
+
+const StyledLayerGroupImage = styled.img`
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+
 `;
 
 const StyledLayerGroup = styled.ul`
     list-style-type: none;
     padding-inline-start: 10px;
+    margin: 0;
 `;
 
 const StyledSubHeader = styled.p`
     height: 30px;
     display: flex;
     align-items: center;
-    color: ${props => props.theme.colors.secondaryColor3};
+    color: ${props => props.theme.colors.secondaryColor2};
     margin: 0px;
-    margin-top: 10px;
-    padding-left: 5px;
-    font-size: 12px;
+    margin-top: 8px;
+    padding-left: 8px;
+    font-size: 13px;
+    font-weight: bold;
 `;
 
 const StyledSubText = styled.p`
     color: ${props => props.theme.colors.black};
     margin: 0px;
-    padding: 10px;
+    padding: 0px 8px 8px 8px;
     font-size: 12px;
+    font-weight: 400;
 `;
+
+
+const StyledSwitchContainer = styled.div`
+    position: relative;
+    min-width: 32px;
+    height: 16px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    background-color: ${props => props.isSelected ? "#8DCB6D" : "#AAAAAA"};
+    cursor: pointer;
+    margin-right: 4px;
+    svg {
+
+    }
+`;
+
+const StyledSwitchButton = styled.div`
+    position: absolute;
+    left: ${props => props.isSelected ? "15px" : "0px"};
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-left: 2px;
+    margin-right: 2px;
+    transition: all 0.3s ease-out;
+    background-color: ${props => props.theme.colors.mainWhite};
+`;
+
+const Switch = ({ action, isSelected }) => {
+    return (
+        <StyledSwitchContainer
+            isSelected={isSelected}
+            onClick={event => {
+                action(event);
+            }}
+        >
+            <StyledSwitchButton isSelected={isSelected}/>
+        </StyledSwitchContainer>
+    );
+};
 
 export const ThemeLayerList = ({
     allLayers,
@@ -238,11 +283,14 @@ export const ThemeGroup = ({
                         <StyledMasterGroupName>{theme.name}</StyledMasterGroupName>
                     </StyledLeftContent>
                     <StyledRightContent>
-                        <Checkbox
-                            isChecked={checked}
-                            handleClick={selectGroup}
+                        <Switch 
+                            isSelected={checked}
+                            action={selectGroup}
                         />
-                        <ThemeGroupShareButton theme={theme.name}/>
+                        <ThemeGroupShareButton
+                            color={"#ffffff"}
+                            theme={theme.name}
+                        />
                         <StyledSelectButton
                             isOpen={isOpen}
                         >
@@ -257,18 +305,19 @@ export const ThemeGroup = ({
                 </StyledMasterGroupHeader>
                 <StyledLayerGroupContainer
                     key={"slg_" + index}
-                    isOpen={isOpen}
-                >
+                    //isOpen={isOpen}
+                    //initial="hidden"
+                    animate={isOpen ? "visible" : "hidden"}
+                    variants={listVariants}
+                > 
+                {strings.themelayerlist[theme.id].description !== null &&
+                    <div> 
+                        <StyledLayerGroupImage src={Intersection} alt=""/>
+                        <StyledSubHeader>{strings.themelayerlist[theme.id].title}</StyledSubHeader>
+                        <StyledSubText>{strings.themelayerlist[theme.id].description}</StyledSubText>
+                    </div>
+                }
                     <StyledLayerGroup>
-                        {strings.themelayerlist[theme.id].description !== null &&
-                        <> 
-                            <StyledSubHeader>{strings.themelayerlist[theme.id].title}</StyledSubHeader>
-                            <StyledSubText>{strings.themelayerlist[theme.id].description}</StyledSubText>
-                        </>
-                        }
-                        <StyledSubHeader>
-                            {strings.layerlist.layerlistLabels.layers.toUpperCase()}
-                        </StyledSubHeader>
                         <Layers layers={filteredLayers} isOpen={isOpen} theme={theme.name}/>
                     </StyledLayerGroup>
                 </StyledLayerGroupContainer>

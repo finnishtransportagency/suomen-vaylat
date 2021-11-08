@@ -85,7 +85,7 @@ const sv = {
             allLayers: 'Alla lager' ,
             themeLayers: 'Teman',
             selectedLayers: 'Valda lagert',
-            layers: 'Layers',
+            mapLayers: 'Layers',
             selectAll: 'Select all',
             show: 'Show',
             filterByType: 'Filter by type',

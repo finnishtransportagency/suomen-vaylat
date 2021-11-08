@@ -85,7 +85,7 @@ const en = {
             allLayers: 'All layers' ,
             themeLayers: 'Themes',
             selectedLayers: 'Selected layers',
-            layers: 'Layers',
+            mapLayers: 'Layers',
             selectAll: 'Select all',
             show: 'Show',
             filterByType: 'Filter by type',

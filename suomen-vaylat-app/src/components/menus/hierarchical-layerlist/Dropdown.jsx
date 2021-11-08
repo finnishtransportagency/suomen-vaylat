@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styled from 'styled-components';
 
 const StyledDropDownContainerName = styled.p`
-    color: ${props => props.theme.colors.maincolor1};
+    color: ${props => props.theme.colors.mainColor1};
     margin: 0;
     padding-left: 10px;
     font-size: 14px;

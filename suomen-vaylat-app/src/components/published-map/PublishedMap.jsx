@@ -76,6 +76,7 @@ const PublishedMap = () => {
 
                 if (data.getThemesWithLayers) {
                     channel.getThemesWithLayers(function (data) {
+                        console.log(data);
                         store.dispatch(setAllThemesWithLayers(data));
                     });
                 };
@@ -84,6 +85,12 @@ const PublishedMap = () => {
                     channel.getZoomRange(function (data) {
                         store.dispatch(setZoomRange(data));
                         data.hasOwnProperty('current') && store.dispatch(setCurrentZoomLevel(data.current));
+                    });
+                };
+
+                if (data.getAllLayers) {
+                    channel.getAllLayers(function (data) {
+                        console.log(data);
                     });
                 };
 

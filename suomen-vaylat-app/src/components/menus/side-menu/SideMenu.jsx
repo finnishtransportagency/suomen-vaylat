@@ -8,21 +8,19 @@ import { setIsSideMenuOpen } from '../../../state/slices/uiSlice';
 import strings from '../../../translations';
 import LayerListTEMP from '../hierarchical-layerlist/LayerListTEMP';
 
-
-
 const StyledSideMenu = styled.div`
-    z-index: 10;
-    position: absolute;
-    top: 0px;
-    left: 0px;
+    //z-index: 10;
+    //position: absolute;
+   // top: 0px;
+    //left: 0px;
     width: 100%;
     max-width: 340px;
-    height: calc(var(--app-height) - 60px);
+    //height: calc(var(--app-height) - 60px);
     display: flex;
     flex-direction: column;
     transform: ${props => props.isSideMenuOpen ? "translateX(0%)" : "translateX(-100%)"};
     overflow-y: auto;
-    background-color: ${props => props.theme.colors.maincolor1};
+    background-color: ${props => props.theme.colors.mainColor1};
     padding: 10px;
     box-shadow: rgba(0, 0, 0, 0.19) 5px 5px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
     transition: all 0.5s ease-in-out;
@@ -75,6 +73,7 @@ const StyledSideMenuCloseButton = styled.div`
    };
 `;
 
+
 const SideMenu = () => {
 
     const { store } = useContext(ReactReduxContext);
@@ -91,13 +90,13 @@ const SideMenu = () => {
     const { isSideMenuOpen } =  useAppSelector((state) => state.ui);
 
 return (
-<StyledSideMenu isSideMenuOpen={isSideMenuOpen}>
+<StyledSideMenu isSideMenuOpen={true}>
     <StyledSideMenuHeader>
         <StyledSideMenuLeftContent>
             <FontAwesomeIcon
                 icon={faLayerGroup}
             />
-            <StyledSideMenuHeaderTitle>{strings.layerlist.layerlistLabels.layers}</StyledSideMenuHeaderTitle>
+            <StyledSideMenuHeaderTitle>{strings.layerlist.layerlistLabels.mapLayers}</StyledSideMenuHeaderTitle>
         </StyledSideMenuLeftContent>
         <StyledSideMenuCloseButton onClick={() => store.dispatch(setIsSideMenuOpen(!isSideMenuOpen))}>
             <FontAwesomeIcon
@@ -105,14 +104,14 @@ return (
             />
         </StyledSideMenuCloseButton>
     </StyledSideMenuHeader>
-    <LayerListTEMP
+    {/* <LayerListTEMP
         groups={allGroups}
         layers={allLayers}
         themes={allThemesWithLayers}
         tags={allTags}
         selectedLayers={selectedLayers}
         suomenVaylatLayers={suomenVaylatLayers}
-    />
+    /> */}
 </StyledSideMenu>
 )};
 

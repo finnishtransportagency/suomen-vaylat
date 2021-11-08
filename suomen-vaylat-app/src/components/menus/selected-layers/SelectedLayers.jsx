@@ -1,6 +1,7 @@
 import { useState, useContext } from "react";
 import styled from 'styled-components';
 import { setAllLayers, setSelectedLayers } from '../../../state/slices/rpcSlice';
+import { setIsSwipingDisabled } from '../../../state/slices/uiSlice';
 import strings from '../../../translations';
 import { updateLayers } from "../../../utils/rpcUtil";
 import { ReactReduxContext, useSelector } from 'react-redux';
@@ -19,7 +20,7 @@ const StyledSelectedLayers = styled.div`
 `;
 
 const StyledMasterGroupName = styled.p`
-    color: ${props => props.theme.colors.maincolor1};
+    color: ${props => props.theme.colors.mainColor1};
     margin: 0;
     padding-left: 10px;
     font-size: 14px;
@@ -63,7 +64,7 @@ const StyledExpandButton = styled.button`
 `;
 
 const StyledLayerGroupContainer = styled.div`
-    height: ${props => props.isOpen ? "auto" : "0px"};
+    //height: ${props => props.isOpen ? "auto" : "0px"};
     overflow: hidden;
     background-color: ${props => props.theme.colors.mainWhite};
     border-radius: 2px;
@@ -83,7 +84,7 @@ const StyledDeleteAllSelectedLayers = styled.div`
     justify-content: center;
     align-items: center;
     color: ${props => props.theme.colors.mainWhite};
-    background-color: ${props => props.theme.colors.maincolor1};
+    background-color: ${props => props.theme.colors.mainColor1};
     margin: 20px auto 20px auto;
     border-radius: 15px;
     svg {
@@ -126,6 +127,7 @@ export const SelectedLayers = ({ label, selectedLayers, suomenVaylatLayers }) =>
     const [isOpen, setIsOpen] = useState(false);
 
     const onSortEnd = (oldIndex) => {
+        store.dispatch(setIsSwipingDisabled(false))
         channel.reorderLayers([selectedLayers[oldIndex.oldIndex].id, selectedLayers.length - oldIndex.newIndex], function () {});
         const newSelectedLayers = arrayMoveImmutable(selectedLayers, oldIndex.oldIndex, oldIndex.newIndex)
         store.dispatch(setSelectedLayers(newSelectedLayers))
@@ -140,7 +142,7 @@ export const SelectedLayers = ({ label, selectedLayers, suomenVaylatLayers }) =>
 
     return (
         <StyledSelectedLayers>
-            <StyledMasterGroupHeader
+            {/* <StyledMasterGroupHeader
                 onClick={() => setIsOpen(!isOpen)}
             >
                 <StyledLeftContent>
@@ -155,14 +157,16 @@ export const SelectedLayers = ({ label, selectedLayers, suomenVaylatLayers }) =>
                         }}
                     />
                 </StyledExpandButton>
-            </StyledMasterGroupHeader>
+            </StyledMasterGroupHeader> */}
             <StyledLayerGroupContainer
-                isOpen={isOpen}
+                //isOpen={isOpen}
             >
                 <StyledLayerGroup>
                     <SortableList
+                        lockAxis={"y"}
                         transitionDuration={0}
                         items={selectedLayers}
+                        onSortStart={() => store.dispatch(setIsSwipingDisabled(true))}
                         onSortEnd={onSortEnd}
                         suomenVaylatLayers={suomenVaylatLayers}
                     />

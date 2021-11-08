@@ -26,14 +26,14 @@ const StyledFilterButton = styled.div`
     justify-content: center;
     cursor: pointer;
     padding: 0px 6px 0px 6px;
-    background-color: ${props => props.isSelected ? props.theme.colors.maincolor2 : props.theme.colors.white};
+    background-color: ${props => props.isSelected ? props.theme.colors.mainColor2 : props.theme.colors.white};
     margin: 2px;
-    border: 1px solid ${props => props.theme.colors.maincolor2};
+    border: 1px solid ${props => props.theme.colors.mainColor2};
     border-radius: 20px;
     font-size: 13px;
     transition: all 0.1s ease-out;
     &:hover{
-        background-color: ${props => props.theme.colors.maincolor3};
+        background-color: ${props => props.theme.colors.mainColor3};
     };
 `;
 

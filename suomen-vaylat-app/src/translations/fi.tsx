@@ -84,8 +84,8 @@ const fi = {
         layerlistLabels: {
             allLayers: 'Kaikki tasot' ,
             themeLayers: 'Teemakartat',
-            selectedLayers: 'Valitut karttatasot',
-            layers: 'Karttatasot',
+            selectedLayers: 'Valitut tasot',
+            mapLayers: 'Karttatasot',
             selectAll: 'Valitse kaikki',
             show: 'Näytä',
             filterByType: 'Suodata tyypeittäin',
