@@ -1,10 +1,10 @@
+import React from 'react';
 import { useContext, useEffect, useState } from 'react';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Draggable from 'react-draggable';
-import { ReactReduxContext } from 'react-redux';
+import { ReactReduxContext, useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { useAppSelector } from '../../state/hooks';
 import { setIsLegendOpen } from '../../state/slices/uiSlice';
 import strings from '../../translations';
 import { LegendGroup } from './LegendGroup';
@@ -59,11 +59,10 @@ const StyledLayerCloseIcon = styled.div`
 `;
 
 export const Legend = ({selectedLayers}) => {
-    useAppSelector((state) => state.rpc.legends);
     const legends = [];
     const noLegends = [];
     const { store } = useContext(ReactReduxContext);
-    const allLegends = useAppSelector((state) => state.rpc.legends);
+    const allLegends = useSelector((state) => state.rpc.legends);
 
     if (selectedLayers) {
         selectedLayers.forEach((layer) => {
@@ -88,12 +87,14 @@ export const Legend = ({selectedLayers}) => {
           width: window.innerWidth,
           height: window.innerHeight
         });
-      useEffect(() => (window.onresize = updateSize), []);
+      useEffect(() => {
+          window.onresize = updateSize;
+      }, []);
 
 
     return(
         <Draggable handle='.draggable-handler' bounds="parent" disabled={size.width/2 < 300}>
-            <StyledLegendContainer>
+            <StyledLegendContainer key={legends}>
                 <StyledHeader className='draggable-handler'>
                     {strings.legend.title}
                     <StyledLayerCloseIcon
@@ -107,16 +108,22 @@ export const Legend = ({selectedLayers}) => {
                         </StyledLayerCloseIcon>
                 </StyledHeader>
                 <StyledGroupsContainer>
-                {legends && legends.length > 0 && legends.map((legend, index) => {
-                    return(
-                        <LegendGroup legend={legend} key={'legend-legend-group-' + index} index={index}></LegendGroup>
-                    )
-                })}
+                {legends && legends.length > 0 && <LegendGroups legends={legends}></LegendGroups>}
                 {legends && legends.length === 0 &&
                     <>{strings.legend.noSelectedLayers}</>
                 }
                 </StyledGroupsContainer>
             </StyledLegendContainer>
         </Draggable>
+    );
+};
+
+const LegendGroups = ({legends}) => {
+    return (
+        legends.map((legend, index) => {
+            return(
+                <LegendGroup legend={legend} key={'legend-legend-group-' + index} index={index}></LegendGroup>
+            )
+        })
     );
 };

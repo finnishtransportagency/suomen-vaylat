@@ -11,7 +11,7 @@ import strings from '../../translations';
 import CenterSpinner from '../center-spinner/CenterSpinner';
 import Notification from '../notification/Notification'
 import AddressSearch from './AddressSearch';
-import { StyledSelectInput, ToastMessage } from './CommonComponents';
+import { StyledSelectInput } from './CommonComponents';
 import VKMSearch from './VKMSearch';
 
 const StyledSearchContainer = styled.div`

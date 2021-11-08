@@ -1,10 +1,9 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ReactReduxContext, useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { debounce } from 'tlence';
-import { setLegends } from '../../../state/slices/rpcSlice';
+import { getLegends, setLegends, setMapLayerVisibility } from '../../../state/slices/rpcSlice';
 import { updateLayers } from "../../../utils/rpcUtil";
 
 //import Switch from '../../../components/switch/Switch';
@@ -32,9 +31,6 @@ const StyledLayerName = styled.p`
         font-size: 12px;
     };
 `;
-
-let debounceLegendsUpdate = null;
-
 
 const StyledCheckbox = styled.div`
     cursor: pointer;
@@ -94,51 +90,51 @@ export const Layer = ({ layer, theme }) => {
 
     const { store } = useContext(ReactReduxContext);
 
+    const [layerStyle, setLayerStyle] = useState(null);
+
     const {
         channel,
         selectedLayers
     } = useSelector(state => state.rpc);
 
-    const handleLayerVisibility = (layer) => {
-        channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, !layer.visible]);
+    const handleLayerVisibility = (channel, layer) => {
+        store.dispatch(setMapLayerVisibility(layer));
+        //channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, !layer.visible]);
         // Update layer orders to correct
         const position = selectedLayers.length + 1;
         channel.reorderLayers([layer.id, position], () => {});
         updateLayers(store, channel);
     };
 
-    useEffect(() => {
-        const updateLayerLegends = (channel) => {
-            channel.getLegends((data) => {
+    const timerRef = useRef(null);
+
+    const updateLayerLegends = () => {
+        timerRef.current = setTimeout(() => {
+            store.dispatch(getLegends({handler: (data) => {
                 store.dispatch(setLegends(data));
-            });
+            }}));
+        }, 500);
     };
-        
-        debounceLegendsUpdate = debounce(updateLayerLegends, 500);
-    }, [store]);
+
+    useEffect(() => {
+        // Clear the interval when the component unmounts
+        return () => clearTimeout(timerRef.current);
+      }, []);
 
     if (layer.visible) {
-        // If theme then check layer theme style
-        if (theme) {
-            channel.getLayerThemeStyle([layer.id, theme], function(styleName) {
-                if (styleName) {
+        const themeStyle = theme || null;
+        channel.getLayerThemeStyle([layer.id, themeStyle], function(styleName) {
+            if (styleName) {
+
+                if (styleName !== layerStyle) {
+                    setLayerStyle(styleName);
                     channel.changeLayerStyle([layer.id, styleName], function() {
                         // update layers legends
-                        debounceLegendsUpdate(channel);
+                        updateLayerLegends();
                     });
                 }
-            });
-        }
-        // Else use default
-        else {
-            channel.getLayerThemeStyle([layer.id, null], function(styleName) {
-                if (styleName) {
-                    channel.changeLayerStyle([layer.id, styleName], function() {
-                        debounceLegendsUpdate(channel);
-                    });
-                }
-            });
-        }
+            }
+        });
     }
 
     return (
