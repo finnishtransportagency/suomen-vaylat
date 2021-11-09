@@ -88,6 +88,7 @@ const sv = {
             mapLayers: 'Layers',
             selectAll: 'Select all',
             show: 'Show',
+            filterOrSearchLayers: 'Filter or search layers',
             filterByType: 'Filter by type',
             searchForLayers: 'Search for layers',
             clearFilters: 'Clear filters',

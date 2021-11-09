@@ -1,6 +1,4 @@
 import { useContext, useEffect, useRef, useState } from "react";
-import { faCheck } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ReactReduxContext, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { getLegends, setLegends, setMapLayerVisibility } from '../../../state/slices/rpcSlice';
@@ -28,24 +26,6 @@ const StyledLayerName = styled.p`
     margin: 5px;
     font-size: 14px;
     @media ${ props => props.theme.device.mobileL} {
-        font-size: 12px;
-    };
-`;
-
-const StyledCheckbox = styled.div`
-    cursor: pointer;
-    min-width: 20px;
-    min-height: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: ${props => props.theme.colors.mainWhite};
-    margin-right: 36px;
-    border: 2px solid ${props => props.theme.colors.mainColor1};
-    border-radius: 30%;
-    box-sizing: border-box;
-    svg {
-        color: ${props => props.theme.colors.mainColor1};
         font-size: 12px;
     };
 `;
@@ -121,8 +101,9 @@ export const Layer = ({ layer, theme }) => {
         return () => clearTimeout(timerRef.current);
       }, []);
 
+      const themeStyle = theme || null;
+
     if (layer.visible) {
-        const themeStyle = theme || null;
         channel.getLayerThemeStyle([layer.id, themeStyle], function(styleName) {
             if (styleName) {
 
@@ -148,7 +129,7 @@ export const Layer = ({ layer, theme }) => {
                     </StyledLayerName>
                 </StyledlayerHeader>
                 <Switch
-                    action={handleLayerVisibility}
+                    action={() => handleLayerVisibility(channel, layer)}
                     isSelected={layer.visible}
                     layer={layer}
                 />

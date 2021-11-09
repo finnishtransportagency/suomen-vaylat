@@ -1,5 +1,5 @@
 import { useState, useContext, useRef } from 'react';
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
 import { ReactReduxContext, useSelector } from 'react-redux';
 import { motion } from "framer-motion";
 import LayerList from './LayerList';
@@ -20,8 +20,6 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 import { updateLayers } from '../../../utils/rpcUtil';
-//import Switch from '../../switch/Switch';
-import Checkbox from '../../checkbox/Checkbox';
 
 const OSKARI_LOCALSTORAGE = "oskari";
 
@@ -123,7 +121,7 @@ const StyledMasterGroupName = styled.p`
 const StyledMasterGroupLayersCount = styled.p`
     margin: 0;
     padding: 0px;
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 500;
     color: rgba(255, 255, 255, 0.8);
 `;
@@ -182,7 +180,7 @@ const StyledSelectButton = styled.button`
 const StyledLayerGroup = styled(motion.ul)`
     list-style-type: none;
     margin: 0;
-    padding-inline-start: ${props => props.parentId === -1 ? "8px" : "16px"};
+    padding-inline-start: ${props => props.parentId === -1 ? "8px" : "25px"};
     overflow: hidden;
     transition: max-height 0.3s ease-out;
 `;
@@ -266,8 +264,6 @@ export const LayerGroup = ({
 
     const refEl = useRef(null);
 
-    refEl !== null && refEl.current && console.log(refEl.current.getElementsByClassName('list-layer').length);
-    refEl !== null && refEl.current && console.log(refEl.current.getElementsByClassName('list-layer-active').length);
     //Find matching layers from all layers and groups, then push this group's layers into 'filteredLayers'
     var filteredLayers = [];
     if (group.layers) {
@@ -422,15 +418,15 @@ export const LayerGroup = ({
                 >
                     {hasChildren && (
                         <>
-                            <Layers
-                                layers={filteredLayers}
-                                isOpen={isOpen}
-                            />
                             <LayerList
-                                key={'layer-list'+index}
+                                key={'layer-list'+group.id}
                                 groups={group.groups}
                                 layers={layers}
                                 recurse={true}
+                            />
+                            <Layers
+                                layers={filteredLayers}
+                                isOpen={isOpen}
                             />
                         </>
                     )}

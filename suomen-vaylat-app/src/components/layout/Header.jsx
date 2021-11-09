@@ -134,7 +134,7 @@ export const Header = () => {
                 <span>{strings.tooltips.showPageInfo}</span>
             </ReactTooltip>
             <StyledHeaderTitleContainer onClick={() => setToMainScreen()}>
-                    {strings.title.toUpperCase()}
+                    {strings.title}
             </StyledHeaderTitleContainer>
             <StyledHeaderLogoContainer>
                 {   lang.current === 'fi' ? <VaylaLogoFi /> :

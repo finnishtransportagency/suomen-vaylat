@@ -1,8 +1,7 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useRef } from 'react';
 import styled from 'styled-components';
 import { useAppSelector } from '../../state/hooks';
-//import SwipeableViews from 'react-swipeable-views';
-
+import { motion } from "framer-motion";
 import { Swiper, SwiperSlide } from 'swiper/react/swiper-react.js';
 
 // Styles must use direct files imports
@@ -17,12 +16,6 @@ import SwiperCore, {
     EffectCoverflow,
     Pagination
   } from 'swiper';
-
-import { motion } from "framer-motion";
-
-import {
-    faLayerGroup
-} from '@fortawesome/free-solid-svg-icons';
 
 import DialogHeader from './DialogHeader';
 import LayerListTEMP from '../menus/hierarchical-layerlist/LayerListTEMP';
@@ -39,11 +32,13 @@ SwiperCore.use([
 
 const variants = {
     open: {
-        y: 0,
+        pointerEvents: "auto",
+        x: 0,
         opacity: 1,
     },
     closed: {
-        y: "100%",
+        pointerEvents: "none",
+        x: "-100%",
         opacity: 0,
     },
 };
@@ -70,9 +65,10 @@ const StyledTabs = styled.div`
     position: relative;
     display: flex;
     align-items: center;
-    height: 50px;
+    height: 42px;
     background-color: #F2F2F2;
     z-index: 2;
+    margin-top: 12px;
     &::before {
         position: absolute;
         z-index: -1;
@@ -87,7 +83,7 @@ const StyledTabs = styled.div`
             return props.tabIndex * -50+'%';
             }}
         );
-            transition: all 0.2s ease-out;
+        transition: all 0.2s ease-out;
     };
 `;
 
@@ -96,19 +92,18 @@ const StyledTab = styled.div`
     width: calc(100% / 3);
     cursor: pointer;
     font-size: 14px;
-    //font-size: ${props => props.isSelected ? '15px' : '14px'};
     font-weight: bold;
     color: ${props => props.isSelected ? props.theme.colors[props.color] : "#656565"};
     text-align: center;
     transform: scale(${props => {
-            return props.isSelected ? "1.05" : "1";
-            }});
+        return props.isSelected ? "1.05" : "1";
+    }});
     transition: transform 0.2s ease-out;
 `;
 
 const StyledSwiper = styled(Swiper)`
   .swiper-slide {
-    padding: 0px 16px 16px 16px;
+    padding: 16px 16px 16px 16px;
     overflow: auto;
     &::-webkit-scrollbar {
         display: none;
@@ -201,7 +196,7 @@ const MapLayersDialog = () => {
                     variants={variants}
                     transition={{
                         //type: "spring",
-                        duration: 0.7,
+                        //duration: 0.7,
                     }}
             >
                 <DialogHeader
@@ -232,7 +227,7 @@ const MapLayersDialog = () => {
                     className="mySwiper"
                     //longSwipesRatio={1}
                     //shortSwipes={false} 
-                    speed={400}
+                    speed={300}
                     //effect={'coverflow'}
                     // coverflowEffect={{
                     //     "rotate": 20,
