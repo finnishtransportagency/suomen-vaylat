@@ -14,6 +14,7 @@ import {
 import strings from '../../../translations';
 
 const StyledMenuBar = styled.div`
+z-index: 1;
     pointer-events: none;
     grid-row-start: 1;
     //position: absolute;

@@ -5,6 +5,7 @@ import MenuBar from '../layout/menu-bar/MenuBar';
 import { Legend } from "../legend/Legend";
 import DrawingTools from '../measurement-tools/DrawingTools';
 import MapLayersDialog from '../dialog/MapLayersDialog';
+import WarningDialog from '../dialog/WarningDialog';
 import PublishedMap from '../published-map/PublishedMap';
 import Search from '../search/Search';
 import { ShareWebSitePopup } from "../share-web-site/ShareWebSitePopup";
@@ -62,6 +63,7 @@ const Content = () => {
             <StyledContentGrid>
                 <MenuBar />
                 <MapLayersDialog />
+                <WarningDialog />
             </StyledContentGrid>
         </StyledContent>
         </>

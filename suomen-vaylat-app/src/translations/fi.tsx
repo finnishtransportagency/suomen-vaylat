@@ -88,6 +88,7 @@ const fi = {
             mapLayers: 'Karttatasot',
             selectAll: 'Valitse kaikki',
             show: 'Näytä',
+            filterOrSearchLayers: 'Suodata tai hae tasoja',
             filterByType: 'Suodata tyypeittäin',
             searchForLayers: 'Hae karttatasoja',
             clearFilters: 'Tyhjennä suodatinvalinnat',

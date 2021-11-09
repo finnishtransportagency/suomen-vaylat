@@ -6,12 +6,10 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ReactReduxContext } from 'react-redux';
 import { motion } from "framer-motion";
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
 import { useAppSelector } from '../../../state/hooks';
 import strings from '../../../translations';
 import { updateLayers } from '../../../utils/rpcUtil';
-import Checkbox from '../../checkbox/Checkbox';
-import { ThemeGroupShareButton } from '../../share-web-site/ShareLinkButtons';
 import Layers from './Layers';
 
 import Intersection from './Intersection.jpg';
@@ -27,12 +25,20 @@ const listVariants = {
     },
 };
 
+const masterHeaderIconVariants = {
+    open: {
+        rotate: 180
+    },
+    closed: {
+        rotate: 0
+    },
+};
+
 const StyledLayerGroups = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: center;
     background-color: ${props => props.theme.colors.mainWhite};
-    //margin: ${props => props.parentId === -1 && "8px 0px 8px 0px"};
     margin: 8px 0px 8px 0px;
     border-radius: 2px;
     &:last-child {
@@ -45,11 +51,10 @@ const StyledMasterGroupName = styled.p`
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 165px;
+    max-width: 230px;
     color: ${props => props.theme.colors.mainWhite};
     margin: 0;
     padding: 0px;
-    //padding-left: 10px;
     font-size: 14px;
     font-weight: 600;
     transition: all 0.1s ease-in;
@@ -82,14 +87,17 @@ const StyledRightContent = styled.div`
     align-items: center;
 `;
 
-const StyledMasterGroupHeaderIcon = styled.div`
-    width: 48px;
-    //height: 48px;
+const StyledMotionIconWrapper = styled(motion.div)`
     display: flex;
     justify-content: center;
     align-items: center;
-    //border-radius: 50%;
-    //background-color: ${props => props.theme.colors.mainColor1};
+`;
+
+const StyledMasterGroupHeaderIcon = styled.div`
+    width: 48px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     svg {
         font-size: 20px;
         color: ${props => props.theme.colors.mainWhite};
@@ -112,8 +120,6 @@ const StyledSelectButton = styled.button`
 `;
 
 const StyledLayerGroupContainer = styled(motion.div)`
-    //height: ${props => props.isOpen ? "auto" : "0px"};
-    //margin-top: 8px;
     overflow: hidden;
 `;
 
@@ -149,47 +155,6 @@ const StyledSubText = styled.p`
     font-size: 12px;
     font-weight: 400;
 `;
-
-
-const StyledSwitchContainer = styled.div`
-    position: relative;
-    min-width: 32px;
-    height: 16px;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    background-color: ${props => props.isSelected ? "#8DCB6D" : "#AAAAAA"};
-    cursor: pointer;
-    margin-right: 4px;
-    svg {
-
-    }
-`;
-
-const StyledSwitchButton = styled.div`
-    position: absolute;
-    left: ${props => props.isSelected ? "15px" : "0px"};
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    margin-left: 2px;
-    margin-right: 2px;
-    transition: all 0.3s ease-out;
-    background-color: ${props => props.theme.colors.mainWhite};
-`;
-
-const Switch = ({ action, isSelected }) => {
-    return (
-        <StyledSwitchContainer
-            isSelected={isSelected}
-            onClick={event => {
-                action(event);
-            }}
-        >
-            <StyledSwitchButton isSelected={isSelected}/>
-        </StyledSwitchContainer>
-    );
-};
 
 export const ThemeLayerList = ({
     allLayers,
@@ -259,7 +224,6 @@ export const ThemeGroup = ({
                 return true;
             });
         }
-
         updateLayers(store, channel);
     };
     
@@ -269,10 +233,12 @@ export const ThemeGroup = ({
     }
 
     return (
-            <StyledLayerGroups key={index} index={index}>
+            <StyledLayerGroups index={index}>
                 <StyledMasterGroupHeader
                     key={"smgh_" + index}
-                    onClick={() => setIsOpen(!isOpen)}
+                    onClick={() => {
+                        setIsOpen(!isOpen);
+                    }}
                 >
                     <StyledLeftContent>
                         <StyledMasterGroupHeaderIcon>
@@ -283,23 +249,24 @@ export const ThemeGroup = ({
                         <StyledMasterGroupName>{theme.name}</StyledMasterGroupName>
                     </StyledLeftContent>
                     <StyledRightContent>
-                        <Switch 
+                        {/* <Switch 
                             isSelected={checked}
                             action={selectGroup}
                         />
                         <ThemeGroupShareButton
                             color={"#ffffff"}
                             theme={theme.name}
-                        />
-                        <StyledSelectButton
-                            isOpen={isOpen}
-                        >
-                            <FontAwesomeIcon
-                                icon={faAngleDown}
-                                style={{
-                                    transform: isOpen && "rotate(180deg)"
-                                }}
-                            />
+                        /> */}
+                        <StyledSelectButton> 
+                            <StyledMotionIconWrapper
+                                initial="closed"
+                                animate={isOpen ? "open" : "closed"}
+                                variants={masterHeaderIconVariants}
+                            >
+                                <FontAwesomeIcon
+                                    icon={faAngleDown}
+                                />
+                            </StyledMotionIconWrapper>
                         </StyledSelectButton>
                     </StyledRightContent>
                 </StyledMasterGroupHeader>

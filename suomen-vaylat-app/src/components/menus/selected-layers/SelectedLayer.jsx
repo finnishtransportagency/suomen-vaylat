@@ -5,10 +5,7 @@ import { ReactReduxContext, useSelector } from 'react-redux';
 import ReactTooltip from "react-tooltip";
 import styled from 'styled-components';
 import { clearLayerMetadata, getLayerMetadata, setLayerMetadata } from '../../../state/slices/rpcSlice';
-import { setIsSwipingDisabled } from '../../../state/slices/uiSlice';
 import strings from '../../../translations';
-import { updateLayers } from "../../../utils/rpcUtil";
-
 
 const StyledLayerContainer = styled.div`
     z-index: 9999;
@@ -152,7 +149,7 @@ export const SelectedLayer = ({
     };
     
     return (
-            <StyledLayerContainer>
+            <StyledLayerContainer className="swiper-no-swiping">
                 <ReactTooltip id={'opacity' + layer.id} place="top" type="dark" effect="solid">
                     <span>{strings.tooltips.opacity + ": " + layer.opacity}</span>
                 </ReactTooltip>
@@ -178,7 +175,6 @@ export const SelectedLayer = ({
                     <StyledRightContent>
                         <StyledlayerOpacityControl
                             //data-tip data-for={'opacity' + layer.id}
-                            className="swiper-no-swiping"
                             type="range"
                             min="0"
                             max="100"

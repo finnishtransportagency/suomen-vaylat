@@ -1,35 +1,30 @@
 import { useContext, useState } from 'react';
-import { faTrash, faFilter, faAngleDown } from '@fortawesome/free-solid-svg-icons';
+import { faFilter } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ReactReduxContext } from 'react-redux';
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
 import { useAppSelector } from '../../../state/hooks';
+import { motion } from "framer-motion";
 import strings from '../../../translations';
 import { setTagLayers, setTags } from '../../../state/slices/rpcSlice';
 import Filter from './Filter';
 import LayerList from './LayerList';
 import LayerSearch from './LayerSearch';
 
-//VÄLIAIKAINEN PALIKKA VÄLITTÄMÄÄN TESTIDATAA HIERARKISELLE TASOVALIKOLLE
+const listVariants = {
+  visible: {
+      height: "auto",
+      opacity: 1
+  },
+  hidden: {
+      height: 0,
+      opacity: 0
+  },
+};
 
-const fadeIn = keyframes`
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
-`;
-
-const StyledFilterList = styled.div`
-    opacity: 0;
-    animation-timing-function: ease-in-out;
-    animation-fill-mode: forwards;
-    animation-duration: 0.5s;
-    animation-name: ${fadeIn};
-    transition: all .3s ease-in-out;
-    height: ${props => props.isOpen ? "100%" : 0};
+const StyledFilterList = styled(motion.div)`
+    //height: ${props => props.isOpen ? "auto" : 0};
+    overflow: hidden;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -42,13 +37,13 @@ const StyledListSubtitle = styled.div`
     justify-content: flex-start;
     align-items: center;
     color: ${props => props.theme.colors.mainColor1};
-    padding: 10px 0px 10px 5px;
-    font-size: 15px;
+    padding: 0px 0px 16px 0px;
+    font-size: 14px;
     svg {
       margin-left: 8px;
       font-size: 20px;
       transition: all 0.3s ease-out;
-    }
+    };
 `;
 
 const StyledFiltersContainer = styled.div`
@@ -58,42 +53,46 @@ const StyledFiltersContainer = styled.div`
 
 const StyledDeleteAllSelectedFilters = styled.div`
     cursor: pointer;
-    width: 250px;
-    height: 30px;
+    max-width: 184px;
+    height: 32px;
     display: flex;
     justify-content: center;
     align-items: center;
     color: ${props => props.theme.colors.mainWhite};
     background-color: ${props => props.theme.colors.mainColor1};
-    margin: 10px auto 20px auto;
+    margin: 16px 0px 16px 0px;
     border-radius: 15px;
     svg {
         font-size: 16px;
     };
     p {
-        padding-left: 10px;
         margin: 0;
-        font-size: 15px;
-    };
-`;
-
-const StyledSelectButton = styled.button`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-    border: none;
-    background-color: transparent;
-    svg {
-        font-size: 1rem;
-        transition: all 0.5s ease-out;
-        color: ${props => props.theme.colors.black};
+        font-size: 12px;
+        font-weight: bold;
     };
 `;
 
 const StyledSearchAndFilter = styled.div`
     display: flex;
     align-items: center;
+    margin-left: 8px;
+    margin-right: 8px;
+    margin-bottom: 16px;
+`;
+
+const StyledFilterButton = styled.div`
+  width: 32px;
+  height: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  background-color: ${props => props.isOpen ? "#004477" : props.theme.colors.mainColor1};
+  margin-right: 8px;
+  svg {
+    font-size: 12px;
+    color: ${props => props.theme.colors.mainWhite};
+  };
 `;
 
 const LayerListTEMP = ({
@@ -115,49 +114,39 @@ const LayerListTEMP = ({
 
     return (
       <>
+       <StyledListSubtitle>{strings.layerlist.layerlistLabels.filterOrSearchLayers}</StyledListSubtitle>
         <StyledSearchAndFilter>
-          {/* <StyledSelectButton
+          <StyledFilterButton
             onClick={() => setIsOpen(!isOpen)}
+            isOpen={isOpen}
           >
               <FontAwesomeIcon
                   icon={faFilter}
               />
-          </StyledSelectButton> */}
+          </StyledFilterButton>
           <LayerSearch layers={layers}/>
         </StyledSearchAndFilter>
-        <StyledListSubtitle
-              style={{
-                cursor: "pointer"
-              }}
-              onClick={() => setIsOpen(!isOpen)}
-            >
-              {strings.layerlist.layerlistLabels.filterByType}
-                <FontAwesomeIcon
-                  icon={faAngleDown}
-                  style={{
-                    transform: isOpen && "rotate(180deg)"
-                   }}
-                />
-            </StyledListSubtitle>
-        { isOpen &&
-          <StyledFilterList isOpen={isOpen}>
-            <StyledFiltersContainer>
-              {tags.map((tag, index) => {
-                return(
-                    <Filter isOpen={isOpen} key={index} index={index} filter={tag} />
-                );
-              })}
-            </StyledFiltersContainer>
-            <StyledDeleteAllSelectedFilters
-              onClick={() => emptyFilters()}
-            >
-              <FontAwesomeIcon
-                icon={faTrash}
-              />
-              <p>{strings.layerlist.layerlistLabels.clearFilters}</p>
-            </StyledDeleteAllSelectedFilters>
-          </StyledFilterList>
-        }
+        <StyledFilterList
+          initial="hidden"
+          animate={isOpen ? "visible" : "hidden"}
+          variants={listVariants}
+        >
+          <StyledListSubtitle>
+            {strings.layerlist.layerlistLabels.filterByType}
+          </StyledListSubtitle>
+          <StyledFiltersContainer>
+            {tags.map((tag, index) => {
+              return(
+                  <Filter isOpen={isOpen} key={'fiter-tag-'+index} filter={tag} />
+              );
+            })}
+          </StyledFiltersContainer>
+          <StyledDeleteAllSelectedFilters
+            onClick={() => emptyFilters()}
+          >
+            <p>{strings.layerlist.layerlistLabels.clearFilters}</p>
+          </StyledDeleteAllSelectedFilters>
+        </StyledFilterList>
         <LayerList
           label={strings.layerlist.layerlistLabels.allLayers}
           groups={groups}
