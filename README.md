@@ -60,3 +60,12 @@ It correctly bundles React in production mode and optimizes the build for the be
 
 The build is minified and the filenames include the hashes.\
 Your app is ready to be deployed!
+
+## Reporting issues
+
+Issues should be reported here: https://github.com/finnishtransportagency/suomen-vaylat/issues
+
+## License
+
+This work is lisenced under [EUPL v1.1](https://joinup.ec.europa.eu/software/page/eupl/licence-eupl)
+(any language version applies, English version is included in https://github.com/finnishtransportagency/suomen-vaylat/blob/master/LICENSE.EUPL-11.pdf).
