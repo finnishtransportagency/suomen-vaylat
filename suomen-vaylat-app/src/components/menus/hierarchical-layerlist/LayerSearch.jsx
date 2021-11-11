@@ -1,5 +1,6 @@
 import { useContext } from "react";
 import { ReactReduxContext, useSelector } from 'react-redux';
+import { motion } from "framer-motion";
 import styled from 'styled-components';
 import { setSearchParams } from '../../../state/slices/uiSlice';
 import strings from '../../../translations';
@@ -10,6 +11,17 @@ import {
     faSearch,
 } from '@fortawesome/free-solid-svg-icons';
 
+
+const listVariants = {
+  visible: {
+      height: "auto",
+      opacity: 1
+  },
+  hidden: {
+      height: 0,
+      opacity: 0
+  },
+};
 
 const StyledLayerSearchContainer = styled.div`
     display: flex;
@@ -25,8 +37,9 @@ const StyledSearchInputContainer = styled.div`
     border: 1px solid #AAAAAA;
     overflow: hidden;
     border-radius: 20px;
-
 `;
+
+const StyledSearchResults = styled.div``
 
 const StyledSearchInputContainerIcon = styled.div`
     width: 40px;
@@ -84,13 +97,13 @@ const StyledMessage = styled.p`
 const LayerSearch = ({ layers }) => {
     const { store } = useContext(ReactReduxContext);
     const searchParams = useSelector(state => state.ui.searchParams);
-    const searchResults = layers.filter(layer => layer.name.toLowerCase().includes(searchParams.toLowerCase()));
+    const searchResults = searchParams.length > 2 ? layers.filter(layer => layer.name.toLowerCase().includes(searchParams.toLowerCase())) : "";
     return (
         <StyledLayerSearchContainer>
             <StyledSearchInputContainer>
                 <StyledSearchInputContainerIcon>
                     <FontAwesomeIcon
-                            icon={faSearch}
+                        icon={faSearch}
                     />
                 </StyledSearchInputContainerIcon>
                 <StyledSearchInput
@@ -100,25 +113,27 @@ const LayerSearch = ({ layers }) => {
                     onChange={e => store.dispatch(setSearchParams(e.target.value))}
                 />
             </StyledSearchInputContainer>
-            {
-                searchParams !== "" && searchParams.length > 2 && 
-                <>
-                    <StyledListSubtitle>
-                        {strings.layerlist.layerlistLabels.searchResults}
-                    </StyledListSubtitle>
-                    <StyledLayerList>
-                        {searchResults.map(layer => {
-                            return <Layer layer={layer}/>
-                        })}
-                    </StyledLayerList>
-                </>
-            }
-            <StyledMessage>
-                {
-                    searchParams !== "" && searchParams.length > 2 && searchResults.length === 0 ? strings.layerlist.layerlistLabels.noSearchResults :
-                    searchParams.length > 0 && searchParams.length < 3 && strings.layerlist.layerlistLabels.typeAtLeastThreeCharacters
-                }
-            </StyledMessage>
+            <StyledSearchResults>
+                    <motion.div
+                        //initial="hidden"
+                        animate={searchParams !== "" && searchParams.length > 2 ? "visible" : "hidden"}
+                        variants={listVariants}>
+                        <StyledListSubtitle>
+                            {strings.layerlist.layerlistLabels.searchResults}
+                        </StyledListSubtitle>
+                        <StyledLayerList>
+                            {searchResults.length > 0 && searchParams !== "" && searchResults.map(layer => {
+                                return <Layer key={"search_resutlt_"+layer.id} layer={layer}/>
+                            })}
+                        </StyledLayerList>
+                    </motion.div>
+                <StyledMessage>
+                    {
+                        searchParams !== "" && searchParams.length > 2 && searchResults.length === 0 ? strings.layerlist.layerlistLabels.noSearchResults :
+                        searchParams.length > 0 && searchParams.length < 3 && strings.layerlist.layerlistLabels.typeAtLeastThreeCharacters
+                    }
+                </StyledMessage>
+            </StyledSearchResults>
         </StyledLayerSearchContainer>
     )
 };

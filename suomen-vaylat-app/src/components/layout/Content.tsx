@@ -63,7 +63,7 @@ const Content = () => {
             <StyledContentGrid>
                 <MenuBar />
                 <MapLayersDialog />
-                <WarningDialog />
+                {/* <WarningDialog /> */}
             </StyledContentGrid>
         </StyledContent>
         </>

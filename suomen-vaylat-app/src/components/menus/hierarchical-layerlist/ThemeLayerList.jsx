@@ -1,6 +1,5 @@
 import { useState, useContext } from 'react';
 import {
-    faAngleDown,
     faMap
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -25,14 +24,6 @@ const listVariants = {
     },
 };
 
-const masterHeaderIconVariants = {
-    open: {
-        rotate: 180
-    },
-    closed: {
-        rotate: 0
-    },
-};
 
 const StyledLayerGroups = styled.div`
     display: flex;
@@ -87,12 +78,6 @@ const StyledRightContent = styled.div`
     align-items: center;
 `;
 
-const StyledMotionIconWrapper = styled(motion.div)`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-`;
-
 const StyledMasterGroupHeaderIcon = styled.div`
     width: 48px;
     display: flex;
@@ -104,19 +89,26 @@ const StyledMasterGroupHeaderIcon = styled.div`
     };
 `;
 
-const StyledSelectButton = styled.button`
-    height: 100%;
+const StyledSelectButton = styled.div`
+    position: relative;
+    width: 18px;
+    height: 18px;
     display: flex;
     justify-content: center;
     align-items: center;
     background-color: transparent;
-    margin-right: 8px;
-    border: none;
-    svg {
-        color: ${props => props.theme.colors.mainWhite};
-        font-size: 21px;
-        transition: all 0.5s ease-out;
-    };
+    margin-right: 16px;
+    border: 2px solid white;
+    border-radius: 50%;
+    &:before {
+        position: absolute;
+        content: "";
+        width: 10px;
+        height: 10px;
+        background-color: ${props => props.isOpen ? props.theme.colors.mainWhite : "transparent"};
+        border-radius: 50%;
+        transition: background-color 0.3s ease-out;
+    }
 `;
 
 const StyledLayerGroupContainer = styled(motion.div)`
@@ -127,7 +119,6 @@ const StyledLayerGroupImage = styled.img`
     width: 100%;
     height: 200px;
     object-fit: cover;
-
 `;
 
 const StyledLayerGroup = styled.ul`
@@ -160,6 +151,48 @@ export const ThemeLayerList = ({
     allLayers,
     allThemes
 }) => {
+
+    const { store } = useContext(ReactReduxContext);
+    const { channel } = useAppSelector((state) => state.rpc);
+    const [lastSelectedTheme, setLastSelectedTheme] = useState(null);
+    const [selectedThemeGroupIndex, setSelectedThemeGroupIndex] = useState(null);
+
+    const selectGroup = (index, theme) => {
+        setLastSelectedTheme(theme);
+        if(selectedThemeGroupIndex === null){
+            setSelectedThemeGroupIndex(index);
+            setTimeout(() => {
+                theme.layers.forEach(layerId => {
+                    theme.defaultLayers.includes(layerId) && channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layerId, true]);
+                });
+                updateLayers(store, channel);
+            },700);
+        } else if(selectedThemeGroupIndex !== index ){
+            lastSelectedTheme !== null && lastSelectedTheme.layers.forEach(layerId => {
+                channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layerId, false]);
+            });
+            updateLayers(store, channel);
+            setTimeout(() => {
+                setSelectedThemeGroupIndex(index);
+                setTimeout(() => {
+                        theme.layers.forEach(layerId => {
+                            theme.defaultLayers.includes(layerId) && channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layerId, true]);
+                        });
+                    updateLayers(store, channel);
+                },700);
+            },1000);
+
+        } else {
+            theme.layers.forEach(layerId => {
+                channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layerId, false]);
+            });
+            updateLayers(store, channel);
+            setTimeout(() => {
+                setSelectedThemeGroupIndex(null);
+            },700);
+        };
+    };
+
     return (
         <>
             {allThemes.map((theme, index) => {
@@ -169,6 +202,8 @@ export const ThemeLayerList = ({
                         theme={theme}
                         filteredLayers={filteredLayers}
                         index={index}
+                        selectGroup={selectGroup}
+                        selectedThemeGroupIndex={selectedThemeGroupIndex}
                     />
             })}
         </>
@@ -178,117 +213,56 @@ export const ThemeLayerList = ({
 export const ThemeGroup = ({
     theme,
     filteredLayers,
-    index
+    index,
+    selectedThemeGroupIndex,
+    selectGroup
 }) => {
 
-    const { store } = useContext(ReactReduxContext);
-
-    const { channel, selectedLayers } = useAppSelector((state) => state.rpc);
-    const selectedTheme = useAppSelector((state) => state.ui.selectedTheme);
-
-    const [isOpen, setIsOpen] = useState(false);
-    const [isProgrammaticSelection, setIsProgrammaticSelection] = useState(false);
-
-    let checked;
-    let indeterminate;
-    let visibleLayers = [];
-
-    filteredLayers.map(layer => {
-        layer.visible === true && visibleLayers.push(layer);
-        return true;
-    });
-
-    if (filteredLayers.length === visibleLayers.length) {
-        checked = true;
-    } else if (visibleLayers.length > 0 ) {
-        indeterminate = true;
-    } else {
-        checked = false;
-        indeterminate = false;
-    };
-
-    const selectGroup = (e) => {
-        e && e.stopPropagation();
-
-        if (!indeterminate) {
-            filteredLayers.map(layer => {
-                channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, !layer.visible]);
-                // Update layer orders to correct
-                const position = selectedLayers.length + 1;
-                channel.reorderLayers([layer.id, position], () => {});
-                return true;
-            });
-        } else {
-            filteredLayers.map(layer => {
-                channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, false]);
-                return true;
-            });
-        }
-        updateLayers(store, channel);
-    };
-    
-    if (encodeURIComponent(theme.name) === selectedTheme && isProgrammaticSelection === false) {
-        selectGroup();
-        setIsProgrammaticSelection(true);
-    }
+    const isOpen = selectedThemeGroupIndex === index;
 
     return (
-            <StyledLayerGroups index={index}>
-                <StyledMasterGroupHeader
-                    key={"smgh_" + index}
-                    onClick={() => {
-                        setIsOpen(!isOpen);
-                    }}
-                >
-                    <StyledLeftContent>
-                        <StyledMasterGroupHeaderIcon>
-                            <FontAwesomeIcon
-                                icon={faMap}
-                            />
-                        </StyledMasterGroupHeaderIcon>
-                        <StyledMasterGroupName>{theme.name}</StyledMasterGroupName>
-                    </StyledLeftContent>
-                    <StyledRightContent>
-                        {/* <Switch 
-                            isSelected={checked}
-                            action={selectGroup}
+        <StyledLayerGroups index={index}>
+            <StyledMasterGroupHeader
+                key={"smgh_" + index}
+                onClick={() => {
+                    //setIsOpen(!isOpen);
+                    selectGroup(index, theme);
+                }}
+            >
+                <StyledLeftContent>
+                    <StyledMasterGroupHeaderIcon>
+                        <FontAwesomeIcon
+                            icon={faMap}
                         />
-                        <ThemeGroupShareButton
-                            color={"#ffffff"}
-                            theme={theme.name}
-                        /> */}
-                        <StyledSelectButton> 
-                            <StyledMotionIconWrapper
-                                initial="closed"
-                                animate={isOpen ? "open" : "closed"}
-                                variants={masterHeaderIconVariants}
-                            >
-                                <FontAwesomeIcon
-                                    icon={faAngleDown}
-                                />
-                            </StyledMotionIconWrapper>
-                        </StyledSelectButton>
-                    </StyledRightContent>
-                </StyledMasterGroupHeader>
-                <StyledLayerGroupContainer
-                    key={"slg_" + index}
-                    //isOpen={isOpen}
-                    //initial="hidden"
-                    animate={isOpen ? "visible" : "hidden"}
-                    variants={listVariants}
-                > 
-                {strings.themelayerlist[theme.id].description !== null &&
-                    <div> 
-                        <StyledLayerGroupImage src={Intersection} alt=""/>
-                        <StyledSubHeader>{strings.themelayerlist[theme.id].title}</StyledSubHeader>
-                        <StyledSubText>{strings.themelayerlist[theme.id].description}</StyledSubText>
-                    </div>
-                }
-                    <StyledLayerGroup>
-                        <Layers layers={filteredLayers} isOpen={isOpen} theme={theme.name}/>
-                    </StyledLayerGroup>
-                </StyledLayerGroupContainer>
-            </StyledLayerGroups>
+                    </StyledMasterGroupHeaderIcon>
+                    <StyledMasterGroupName>{theme.name}</StyledMasterGroupName>
+                </StyledLeftContent>
+                <StyledRightContent>
+                    <StyledSelectButton
+                        isOpen={isOpen}
+                    >
+                    </StyledSelectButton>
+                </StyledRightContent>
+            </StyledMasterGroupHeader>
+            <StyledLayerGroupContainer
+                key={"slg_" + index}
+                //isOpen={isOpen}
+                initial="hidden"
+                animate={isOpen ? "visible" : "hidden"}
+                variants={listVariants}
+            > 
+            {strings.themelayerlist[theme.id].description !== null &&
+                <div> 
+                    <StyledLayerGroupImage src={Intersection} alt=""/>
+                    <StyledSubHeader>{strings.themelayerlist[theme.id].title}</StyledSubHeader>
+                    <StyledSubText>{strings.themelayerlist[theme.id].description}</StyledSubText>
+                </div>
+            }
+                <StyledLayerGroup>
+                    <Layers layers={filteredLayers} isOpen={isOpen} theme={theme.name}/>
+                </StyledLayerGroup>
+            </StyledLayerGroupContainer>
+        </StyledLayerGroups>
     );
   };
 

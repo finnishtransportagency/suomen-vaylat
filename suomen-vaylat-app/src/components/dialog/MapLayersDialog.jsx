@@ -50,7 +50,8 @@ const StyledMapLayersDialog = styled(motion.div)`
     display: flex;
     flex-direction: column;
     pointer-events: auto;
-    background-color: ${props => props.theme.colors.mainWhite};
+    //background-color: ${props => props.theme.colors.mainWhite};
+    background-color: #F2F2F2;
     border-radius: 4px;
     overflow: hidden;
     overflow-y: auto;
@@ -59,31 +60,46 @@ const StyledMapLayersDialog = styled(motion.div)`
         &::-webkit-scrollbar {
         display: none;
     };
+    /* @media ${props => props.theme.device.laptop} {
+        z-index: 10;
+    }; */
+    @media ${props => props.theme.device.mobileL} {
+        z-index: 10;
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        width: 100%;
+        height: 100%;
+    };
 `;
 
 const StyledTabs = styled.div`
     position: relative;
     display: flex;
     align-items: center;
-    height: 42px;
+    height: 48px;
     background-color: #F2F2F2;
-    z-index: 2;
-    margin-top: 12px;
+    //margin-top: 12px;
+    margin: 16px 8px 0px 8px;
     &::before {
         position: absolute;
-        z-index: -1;
         content: '';
         width: calc(100% / 3);
         height: 100%;
         background-color: white;
         bottom: 0px;
         left: ${props => props.tabIndex * 50+'%'};
+        border-radius: 4px;
         transform: translateX(
             ${props => {
             return props.tabIndex * -50+'%';
             }}
         );
-        transition: all 0.2s ease-out;
+        transition: all 0.3s ease-out;
+        box-shadow: 0px -1px 11px ${props => props.tabIndex === 0 ?
+        "rgba(0, 99, 175, 0.3)" : props.tabIndex === 1 ?
+        "rgba(32, 122, 66, 0.3)" :
+        "rgba(229, 0, 130, 0.3)"};
     };
 `;
 
@@ -101,22 +117,38 @@ const StyledTab = styled.div`
     transition: transform 0.2s ease-out;
 `;
 
+const StyledLayerCount = styled.div`
+    position: absolute;
+    top: -14px;
+    right: -4px;
+    width: 25px;
+    height: 18px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+    color: ${props => props.theme.colors.mainWhite};
+    background-color: ${props => props.theme.colors.secondaryColor7};
+    font-size: 11px;
+    font-weight: 600;
+`;
+
 const StyledSwiper = styled(Swiper)`
   .swiper-slide {
+    background-color: ${props => props.theme.colors.mainWhite};
     padding: 16px 16px 16px 16px;
     overflow: auto;
     &::-webkit-scrollbar {
         display: none;
     };
-  }
-  
-  .swiper-slide img {
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
+  }; 
+  transition: box-shadow 0.3s ease-out;
+  box-shadow: 0px -1px 11px ${props => props.tabIndex === 0 ?
+        "rgba(0, 99, 175, 0.3)" : props.tabIndex === 1 ?
+        "rgba(32, 122, 66, 0.3)" :
+        "rgba(229, 0, 130, 0.3)"};
 `;
+
 
 const MapLayersDialog = () => {
 
@@ -137,23 +169,6 @@ const MapLayersDialog = () => {
     const [tabIndex, setTabIndex] = useState(0);
 
     const inputEl = useRef(null);
-
-    // useEffect(() => {
-    //     var swiper = new Swiper('.swiper-container', {
-    //         pagination: {
-    //           el: '.swiper-pagination',
-    //           clickable: true,
-    //           renderBullet: function (index, className) {
-    //             return '<span class="' + className + '">' + (index + 1) + '</span>';
-    //           },
-    //         },
-    //     });
-    // },[]);
-
-    // useEffect(() => {
-    //     inputEl.current.swiper.slideTo(tabIndex);
-    // },[tabIndex]);
-
 
     const tabsContent = [
         {
@@ -182,6 +197,7 @@ const MapLayersDialog = () => {
             id: "swipeAbleTab_2",
             title: strings.layerlist.layerlistLabels.selectedLayers,
             titleColor: "secondaryColor8",
+            titleContent: "layerCounter",
             content: <SelectedLayers
                         selectedLayers={selectedLayers}
                         suomenVaylatLayers={suomenVaylatLayers}
@@ -203,7 +219,7 @@ const MapLayersDialog = () => {
                     title={strings.layerlist.layerlistLabels.mapLayers}
                 />
                 <StyledTabs
-                 tabIndex={tabIndex}
+                    tabIndex={tabIndex}
                 >
                     {
                         tabsContent.map((tab, index) => {
@@ -218,13 +234,19 @@ const MapLayersDialog = () => {
                                     }}
                                 >
                                     {tab.title}
+                                    {
+                                        tab.titleContent &&
+                                        tab.titleContent === "layerCounter" && 
+                                        <StyledLayerCount>{selectedLayers.length}</StyledLayerCount>
+                                    }
                                 </StyledTab>
                             )
                         })
                     }
                 </StyledTabs>
                 <StyledSwiper
-                    className="mySwiper"
+                    tabIndex={tabIndex}
+                    className="map-layers-swiper"
                     //longSwipesRatio={1}
                     //shortSwipes={false} 
                     speed={300}
@@ -236,18 +258,6 @@ const MapLayersDialog = () => {
                     //     "modifier": 1,
                     //     "slideShadows": false
                     // }}
-                    pagination={{
-                        el: '.swiper-pagination',
-                        clickable: true,
-                        type: "custom",
-                        // "renderBullet": function (index, className) {
-                        //     return '<span class="' + className + '">' + (index + 1) + '</span>';
-                        // },
-                        renderBullet: function (index, className) {
-                            return '<span class="' + className + '">' + (index + 1) + '</span>';
-                        }
-                    }}
-                    
                     onSlideChange={e => {
                         setTabIndex(e.activeIndex);
                         inputEl.current.swiper.slideTo(e.activeIndex);

@@ -73,7 +73,6 @@ const StyledSideMenuCloseButton = styled.div`
    };
 `;
 
-
 const SideMenu = () => {
 
     const { store } = useContext(ReactReduxContext);

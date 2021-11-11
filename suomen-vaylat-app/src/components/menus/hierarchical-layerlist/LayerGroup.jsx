@@ -48,7 +48,7 @@ const StyledLayerGroups = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: center;
-    opacity: 1;
+    //opacity: 1;
     background-color: ${props => props.parentId === -1 ? props.theme.colors.mainWhite : "#F2F2F2"};
     margin: 8px 0px 8px 0px;
     border-radius: 4px;
@@ -59,15 +59,18 @@ const StyledLayerGroups = styled.div`
 `;
 
 const StyledMasterGroupHeader = styled.div`
+    position: sticky;
+    top: -16px;
     z-index: 1;
-    height: 48px;
+    min-height: 48px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     cursor: pointer;
     background-color: ${props => props.theme.colors.mainColor1};
     border-radius: 4px;
-    transition: all 0.1s ease-in;
+    padding-top: 8px;
+    padding-bottom: 8px;
 `;
 
 const StyledLeftContent = styled.div`
@@ -91,6 +94,12 @@ const StyledMasterGroupHeaderIcon = styled.div`
         font-size: 20px;
         color: ${props => props.theme.colors.mainWhite};
     };
+    p {
+        margin: 0;
+        font-weight: bold;
+        font-size: 22px;
+        color: ${props => props.theme.colors.mainWhite};
+    }
 `;
 
 const StyledMasterGroupTitleContent = styled.div`
@@ -102,10 +111,7 @@ const StyledMasterGroupTitleContent = styled.div`
 
 const StyledMasterGroupName = styled.p`
     user-select: none;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 220px;
+    max-width: 240px;
     color: ${props => props.theme.colors.mainWhite};
     margin: 0;
     padding: 0px;
@@ -138,20 +144,18 @@ const StyledRightContent = styled.div`
 
 
 const StyledGroupHeader = styled.div`
-    height: 30px;
+    min-height: 30px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     cursor: pointer;
     border-radius: 4px;
+    padding: 8px 0px 8px 8px;
 `;
 
 const StyledGroupName = styled.p`
-    max-width: 210px;
+    max-width: 220px;
     user-select: none;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
     margin: 0;
     padding-left: 0px;
     font-size: 14px;
@@ -339,10 +343,10 @@ export const LayerGroup = ({
                     <StyledLeftContent>
                         <StyledMasterGroupHeaderIcon>
                             {
-                                themeStyles.hasOwnProperty(group.id) &&
+                                themeStyles.hasOwnProperty(group.id) ?
                                     <FontAwesomeIcon
                                         icon={themeStyles[group.id].icon}
-                                    />
+                                    /> : <p>{group.name.charAt(0)}</p>
                             }
                         </StyledMasterGroupHeaderIcon>
                         <StyledMasterGroupTitleContent>
@@ -380,8 +384,7 @@ export const LayerGroup = ({
                 >
                 <StyledLefContent>
                     <StyledSelectButton
-                            onClick={() => setIsOpen(!isOpen)}
-                            subGroup={true}
+                        subGroup={true}
                     >
                         <StyledMotionIconWrapper
                             initial="closed"
@@ -396,10 +399,6 @@ export const LayerGroup = ({
                     <StyledGroupName>{group.name}</StyledGroupName>
                 </StyledLefContent>
                     <StyledRightContent>
-                        {/* <Checkbox
-                                isChecked={checked}
-                                handleClick={selectGroup}
-                        /> */}
                         <Switch 
                             isSelected={checked}
                             action={selectGroup}

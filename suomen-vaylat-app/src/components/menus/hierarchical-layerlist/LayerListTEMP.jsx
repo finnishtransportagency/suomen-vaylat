@@ -74,7 +74,7 @@ const StyledDeleteAllSelectedFilters = styled.div`
 
 const StyledSearchAndFilter = styled.div`
     display: flex;
-    align-items: center;
+    //align-items: center;
     margin-left: 8px;
     margin-right: 8px;
     margin-bottom: 16px;
@@ -89,6 +89,7 @@ const StyledFilterButton = styled.div`
   border-radius: 50%;
   background-color: ${props => props.isOpen ? "#004477" : props.theme.colors.mainColor1};
   margin-right: 8px;
+  cursor: pointer;
   svg {
     font-size: 12px;
     color: ${props => props.theme.colors.mainWhite};
@@ -116,14 +117,16 @@ const LayerListTEMP = ({
       <>
        <StyledListSubtitle>{strings.layerlist.layerlistLabels.filterOrSearchLayers}</StyledListSubtitle>
         <StyledSearchAndFilter>
-          <StyledFilterButton
-            onClick={() => setIsOpen(!isOpen)}
-            isOpen={isOpen}
-          >
-              <FontAwesomeIcon
-                  icon={faFilter}
-              />
-          </StyledFilterButton>
+          <div>
+            <StyledFilterButton
+              onClick={() => setIsOpen(!isOpen)}
+              isOpen={isOpen}
+            >
+                <FontAwesomeIcon
+                    icon={faFilter}
+                />
+            </StyledFilterButton>
+          </div>
           <LayerSearch layers={layers}/>
         </StyledSearchAndFilter>
         <StyledFilterList
