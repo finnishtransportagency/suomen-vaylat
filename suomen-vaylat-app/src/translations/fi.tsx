@@ -33,8 +33,8 @@ const fi = {
     },
     warning: 'Varoitus!',
     multipleLayersWarning: 'Olet lisäämässä kartalle 10 tai enemmän karttatasoa ja se saattaa vaikuttaa palvelun suorituskykyyn',
-    continue: 'jatka',
-    cancel: 'peruuta',
+    continue: 'Jatka',
+    cancel: 'Peruuta',
     appInfo: {
         title: 'Sovelluksen tiedot',
         headingText: 'Suomen Väylät -karttapalvelu kokoaa yhteen Väyläviraston avoimet, ' +

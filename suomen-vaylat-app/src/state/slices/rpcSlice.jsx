@@ -18,6 +18,13 @@ const initialState = {
   zoomRange: {},
   currentZoomLevel: 0,
   selectedLayers: [],
+  warnings: {
+      show: false,
+      message: '',
+      type: '',
+      filteredLayers: [],
+      indeterminate: false
+  },
   announcements: [],
   activeAnnouncements: [],
   allThemesWithLayers: [],
@@ -64,6 +71,15 @@ export const rpcSlice = createSlice({
     },
     setSelectedLayers: (state, action) => {
         state.selectedLayers = action.payload;
+    },
+    setSelectError: (state,action) => {
+        state.warnings = {
+            show: action.payload.show,
+            message: action.payload.message,
+            type: action.payload.type,
+            filteredLayers: action.payload.filteredLayers,
+            indeterminate: action.payload.indeterminate
+        };
     },
     setAllTags: (state, action) => {
         state.allTags = action.payload;
@@ -231,6 +247,7 @@ export const {
     setZoomIn,
     setZoomOut,
     setZoomTo,
+    setSelectError,
     searchVKMRoad,
     addFeaturesToMap,
     removeFeaturesFromMap,

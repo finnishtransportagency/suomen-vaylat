@@ -1,6 +1,7 @@
-import { useState, useRef } from 'react';
+import {useState, useRef, useContext} from 'react';
 import styled from 'styled-components';
 import { useAppSelector } from '../../state/hooks';
+import { setIsSideMenuOpen } from '../../state/slices/uiSlice';
 import { motion } from "framer-motion";
 import { Swiper, SwiperSlide } from 'swiper/react/swiper-react.js';
 
@@ -23,6 +24,7 @@ import ThemeLayerList from '../menus/hierarchical-layerlist/ThemeLayerList';
 import SelectedLayers from '../menus/selected-layers/SelectedLayers';
 
 import strings from '../../translations';
+import {ReactReduxContext} from "react-redux";
 
 // install Swiper modules
 SwiperCore.use([
@@ -141,7 +143,7 @@ const StyledSwiper = styled(Swiper)`
     &::-webkit-scrollbar {
         display: none;
     };
-  }; 
+  };
   transition: box-shadow 0.3s ease-out;
   box-shadow: 0px -1px 11px ${props => props.tabIndex === 0 ?
         "rgba(0, 99, 175, 0.3)" : props.tabIndex === 1 ?
@@ -161,14 +163,19 @@ const MapLayersDialog = () => {
         suomenVaylatLayers,
     } = useAppSelector((state) => state.rpc);
 
+    const { store } = useContext(ReactReduxContext);
+
     const {
-        isSideMenuOpen,
-        isSwipingDisabled
+        isSideMenuOpen
     } =  useAppSelector((state) => state.ui);
 
     const [tabIndex, setTabIndex] = useState(0);
 
     const inputEl = useRef(null);
+
+    const hideWarn = () => {
+        store.dispatch(setIsSideMenuOpen(!isSideMenuOpen))
+    }
 
     const tabsContent = [
         {
@@ -217,6 +224,7 @@ const MapLayersDialog = () => {
             >
                 <DialogHeader
                     title={strings.layerlist.layerlistLabels.mapLayers}
+                    hideWarn={hideWarn}
                 />
                 <StyledTabs
                     tabIndex={tabIndex}
@@ -236,7 +244,7 @@ const MapLayersDialog = () => {
                                     {tab.title}
                                     {
                                         tab.titleContent &&
-                                        tab.titleContent === "layerCounter" && 
+                                        tab.titleContent === "layerCounter" &&
                                         <StyledLayerCount>{selectedLayers.length}</StyledLayerCount>
                                     }
                                 </StyledTab>
@@ -248,7 +256,7 @@ const MapLayersDialog = () => {
                     tabIndex={tabIndex}
                     className="map-layers-swiper"
                     //longSwipesRatio={1}
-                    //shortSwipes={false} 
+                    //shortSwipes={false}
                     speed={300}
                     //effect={'coverflow'}
                     // coverflowEffect={{

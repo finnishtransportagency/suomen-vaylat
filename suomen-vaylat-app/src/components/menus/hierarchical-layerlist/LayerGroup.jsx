@@ -4,7 +4,6 @@ import { ReactReduxContext, useSelector } from 'react-redux';
 import { motion } from "framer-motion";
 import LayerList from './LayerList';
 import Layers from './Layers';
-import ConfirmPopup from './ConfirmPopup';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faAngleRight,
@@ -20,6 +19,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 import { updateLayers } from '../../../utils/rpcUtil';
+import {setSelectError} from "../../../state/slices/rpcSlice"
 
 const OSKARI_LOCALSTORAGE = "oskari";
 
@@ -262,7 +262,6 @@ export const LayerGroup = ({
 }) => {
 
     const [isOpen, setIsOpen] = useState(false);
-    const [warnActive, setWarnActive] = useState(false);
     const { store } = useContext(ReactReduxContext);
     const channel = useSelector(state => state.rpc.channel);
 
@@ -299,14 +298,10 @@ export const LayerGroup = ({
         e.stopPropagation();
         var localStorageWarn = localStorage.getItem(OSKARI_LOCALSTORAGE) ? localStorage.getItem(OSKARI_LOCALSTORAGE) : [] ;
         if (filteredLayers.length > 9 && !checked && !localStorageWarn.includes("multipleLayersWarning")) {
-            setWarnActive(true);
+            store.dispatch(setSelectError({show: true, type: 'multipleLayersWarning', filteredLayers: filteredLayers, indeterminate: indeterminate}));
         } else {
             groupLayersVisibility();
         }
-    };
-
-    const hideWarn = () => {
-        setWarnActive(false);
     };
 
     const groupLayersVisibility = () => {
@@ -326,9 +321,6 @@ export const LayerGroup = ({
 
     return (
         <>
-        {warnActive &&
-            <ConfirmPopup filteredLayers={filteredLayers} indeterminate={indeterminate} hideWarn={() => hideWarn()} />
-        }
         <StyledLayerGroups
                 index={index}
                 parentId={group.parentId}
