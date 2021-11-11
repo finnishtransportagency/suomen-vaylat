@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { debounce } from 'tlence';
-import { addFeaturesToMap, removeFeaturesFromMap, searchVKMRoad } from '../../state/slices/rpcSlice';
-import { emptySearchResult, setFormData, setSearching, setSearchResult, setSearchError } from '../../state/slices/searchSlice';
+import {addFeaturesToMap, removeFeaturesFromMap, searchVKMRoad, setSelectError} from '../../state/slices/rpcSlice';
+import { emptySearchResult, setFormData, setSearching, setSearchResult } from '../../state/slices/searchSlice';
 import strings from '../../translations';
 import { StyledContainer, StyledSelectInput, StyledTextField } from './CommonComponents';
 import { VKMGeoJsonHoverStyles, VKMGeoJsonStyles } from './VKMSearchStyles';
@@ -34,7 +34,6 @@ const VKMSearch = ({visible, search, store, vectorLayerId, onEnterHandler}) => {
     }
 
     const onChange = (name, value) => {
-        store.dispatch(setSearchError({errorState: false, data: ['']}));
         let formData = {
             tie: (name === 'tie') ? value : search.formData.vkm.tie,
             tieosa: (name === 'tieosa') ? value : search.formData.vkm.tieosa,
@@ -88,7 +87,7 @@ const VKMSearch = ({visible, search, store, vectorLayerId, onEnterHandler}) => {
 
         const vkmSearchErrorHandler = (errors) => {
             store.dispatch(setSearching(false));
-            store.dispatch(setSearchError({errorState: true, data: errors, errorType: 'primary'}));
+            store.dispatch(setSelectError({show: true, message: errors[0], type: 'searchWarning', filteredLayers: [], indeterminate: false}));
         };
 
         const searchVKM = (data) => {

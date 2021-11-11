@@ -4,12 +4,19 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ReactReduxContext } from 'react-redux';
 import styled from 'styled-components';
 import { useAppSelector } from '../../state/hooks';
-import { addMarkerRequest, mapMoveRequest, removeFeaturesFromMap, removeMarkerRequest, searchRequest, searchVKMRoad } from '../../state/slices/rpcSlice';
+import {
+    addMarkerRequest,
+    mapMoveRequest,
+    removeFeaturesFromMap,
+    removeMarkerRequest,
+    searchRequest,
+    searchVKMRoad,
+    setSelectError
+} from '../../state/slices/rpcSlice';
 import { emptyFormData, emptySearchResult, setSearching, setSearchResult, setSearchSelected, setSearchError } from '../../state/slices/searchSlice';
 import { setIsSearchOpen } from '../../state/slices/uiSlice';
 import strings from '../../translations';
 import CenterSpinner from '../center-spinner/CenterSpinner';
-import Notification from '../notification/Notification'
 import AddressSearch from './AddressSearch';
 import { StyledSelectInput } from './CommonComponents';
 import VKMSearch from './VKMSearch';
@@ -125,7 +132,6 @@ export const Search = () => {
     const searchTypeOnChange = (name) => {
         store.dispatch(setSearchSelected(name));
         store.dispatch(emptySearchResult());
-        store.dispatch(setSearchError({errorState: false, data: [''], errorType: ""}));
         store.dispatch(emptyFormData());
         store.dispatch(removeFeaturesFromMap(vectorLayerId + '_' + search.selected));
         store.dispatch(removeMarkerRequest(markerId));
@@ -142,7 +148,7 @@ export const Search = () => {
 
         const vkmSearchErrorHandler = (errors) => {
             store.dispatch(setSearching(false));
-            store.dispatch(setSearchError({errorState: true, data: errors, errorType: "primary"}));
+            store.dispatch(setSelectError({show: true, message: strings.search.address.error.text, type: 'searchWarning', filteredLayers: [], indeterminate: false}));
         };
 
         if (search.selected === 'vkm') {
@@ -238,11 +244,6 @@ export const Search = () => {
                         icon={faSearch}
                     />
                 </StyledSearchControl>
-                <Notification
-                    title={strings.search.vkm.error.title}
-                    message={strings.search.vkm.error.text}
-                    errors={search.searchErrorData}
-                />
             </StyledSearchContainer>
         );
 

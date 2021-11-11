@@ -10,6 +10,10 @@ import PublishedMap from '../published-map/PublishedMap';
 import Search from '../search/Search';
 import { ShareWebSitePopup } from "../share-web-site/ShareWebSitePopup";
 import ZoomMenu from '../zoom-features/ZoomMenu';
+import strings from "../../translations";
+import {setSelectError} from "../../state/slices/rpcSlice";
+import {useContext} from "react";
+import {ReactReduxContext} from "react-redux";
 
 const StyledContent = styled.div`
     z-index: 1;
@@ -38,7 +42,8 @@ const StyledContentGrid = styled.div`
 const Content = () => {
 
     const {
-        selectedLayers
+        selectedLayers,
+        warnings
     } = useAppSelector((state) => state.rpc);
 
     const {
@@ -48,7 +53,13 @@ const Content = () => {
         shareUrl
     } =  useAppSelector((state) => state.ui);
 
+    const search = useAppSelector((state) => state.search)
+    const { store } = useContext(ReactReduxContext);
     const isShareOpen = shareUrl && shareUrl.length > 0 ? true : false;
+
+    const hideWarn = () => {
+        store.dispatch(setSelectError({show: false, type: '', filteredLayers: [], indeterminate: false}));
+    };
 
     return (
         <>
@@ -63,7 +74,27 @@ const Content = () => {
             <StyledContentGrid>
                 <MenuBar />
                 <MapLayersDialog />
-                {/* <WarningDialog /> */}
+                {warnings.show && warnings.type == 'multipleLayersWarning' &&
+                    <WarningDialog
+                        dialogOpen={warnings.show}
+                        hideWarn={hideWarn}
+                        title={strings.warning}
+                        message={strings.multipleLayersWarning}
+                        filteredLayers={warnings.filteredLayers}
+                        indeterminate={warnings.indeterminate}
+                    />
+                }
+                {warnings.show && warnings.type == 'searchWarning' &&
+                    <WarningDialog
+                        dialogOpen={warnings.show}
+                        hideWarn={hideWarn}
+                        title={search.selected == 'vkm' ?
+                            strings.search.vkm.error.title : strings.search.address.error.title}
+                        message={warnings.message}
+                        filteredLayers={[]}
+                        indeterminate={false}
+                    />
+                }
             </StyledContentGrid>
         </StyledContent>
         </>

@@ -1,11 +1,6 @@
-import { useContext } from 'react';
-import { ReactReduxContext } from 'react-redux';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styled from 'styled-components';
-import { useAppSelector } from '../../state/hooks';
-
-import { setIsSideMenuOpen } from '../../state/slices/uiSlice';
 
 const StyledHeaderContent = styled.div`
     position: sticky;
@@ -46,14 +41,9 @@ const StyledCloseIcon = styled(FontAwesomeIcon)`
 const DialogHeader = ({
     type,
     title,
-    icon
+    icon,
+    hideWarn
 }) => {
-
-    const { store } = useContext(ReactReduxContext);
-
-    const {
-        isSideMenuOpen
-    } =  useAppSelector((state) => state.ui);
 
     return (
             <StyledHeaderContent type={type}>
@@ -67,7 +57,7 @@ const DialogHeader = ({
                 </StyledTitleContent>
                     <StyledCloseIcon
                         icon={faTimes}
-                        onClick={() => store.dispatch(setIsSideMenuOpen(!isSideMenuOpen))}
+                        onClick={() => hideWarn()}
                     />
               
             </StyledHeaderContent>

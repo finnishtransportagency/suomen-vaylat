@@ -1,8 +1,29 @@
 import styled from 'styled-components';
-import { useAppSelector } from '../../state/hooks';
 import { motion } from "framer-motion";
 
 import DialogHeader from './DialogHeader';
+import {useContext, useState} from "react";
+import {ReactReduxContext, useSelector} from "react-redux";
+import {updateLayers} from "../../utils/rpcUtil";
+import strings from "../../translations";
+import {Button} from "react-bootstrap";
+
+const OSKARI_LOCALSTORAGE = "oskari";
+
+const addToLocalStorageArray = (name, value) => {
+    // Get the existing data
+    var existing = localStorage.getItem(name);
+
+    // If no existing data, create an array
+    // Otherwise, convert the localStorage string to an array
+    existing = existing ? existing.split(',') : [];
+
+    // Add new data to localStorage Array
+    existing.push(value);
+
+    // Save back to localStorage
+    localStorage.setItem(name, existing.toString());
+}
 
 const variants = {
     open: {
@@ -18,12 +39,20 @@ const variants = {
     },
 };
 
+const StyledFooter = styled.div`
+    justify-content: space-between;
+`;
+
 const StyledWarningDialog = styled(motion.div)`
     position: absolute;
     left: 50%;
-    top: 50%;
+    top: 35%;
     max-width: 300px;
     max-height: 500px;
+    transform: 'translate(-50%, -50%)'
+    right: 'auto'
+    bottom: 'auto'
+    marginRight: '-50%'
     display: flex;
     flex-direction: column;
     pointer-events: auto;
@@ -41,23 +70,53 @@ const StyledWarningDialog = styled(motion.div)`
     }
 `;
 
-const WarningDialog = () => {
+const WarningDialog = ({ title='', message='', filteredLayers=[], indeterminate=false, hideWarn, dialogOpen }) => {
+    const [selected, setIsSelected] = useState(false);
+    const { store } = useContext(ReactReduxContext);
+    const channel = useSelector(state => state.rpc.channel);
 
-    const {
-        isSideMenuOpen,
-    } =  useAppSelector((state) => state.ui);
+    const closeModal = (cancel) => {
+        if (cancel) {
+            hideWarn();
+            if (selected) {
+                addToLocalStorageArray(OSKARI_LOCALSTORAGE, "multipleLayersWarning");
+            }
+        } else {
+            if (!indeterminate) {
+                filteredLayers.map(layer => {
+                    channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, !layer.visible]);
+                    return null;
+                });
+            } else {
+                filteredLayers.map(layer => {
+                    channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, false]);
+                    return null;
+                });
+            }
+            updateLayers(store, channel);
+            hideWarn();
+            if (selected) {
+                addToLocalStorageArray(OSKARI_LOCALSTORAGE, "multipleLayersWarning");
+            }
+        }
+    };
 
     return (
             <StyledWarningDialog
                     initial="closed"
-                    animate={isSideMenuOpen ? "open" : "closed"}
+                    animate={dialogOpen ? "open" : "closed"}
                     variants={variants}
             >
                 <DialogHeader
                     type={"warning"}
-                    title={"Varoitus"}
+                    title={title}
+                    hideWarn={closeModal}
                 />
-                <p>Sed arcu lectus auctor vitae, consectetuer et venenatis eget velit. Sed augue orci, lacinia eu tincidunt et eleifend nec lacus. Donec ultricies nisl ut felis, suspendisse potenti. Lorem ipsum ligula ut hendrerit mollis, ipsum erat vehicula risus, eu suscipit sem libero nec erat. Aliquam erat volutpat. Sed congue augue vitae neque. Nulla consectetuer porttitor pede. Fusce purus morbi tortor magna condimentum vel, placerat id blandit sit amet tortor.</p>
+                <p>{message}</p>
+                <StyledFooter className="modal-footer">
+                    <Button onClick={() => closeModal()}>{strings.continue}</Button>
+                    <Button onClick={() => closeModal(true)}>{strings.cancel}</Button>
+                </StyledFooter>
             </StyledWarningDialog>
     );
  }
