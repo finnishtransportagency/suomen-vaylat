@@ -5,7 +5,7 @@ import { setIsSwipingDisabled } from '../../../state/slices/uiSlice';
 import strings from '../../../translations';
 import { updateLayers } from "../../../utils/rpcUtil";
 import { ReactReduxContext, useSelector } from 'react-redux';
-import { SortableContainer, SortableElement } from 'react-sortable-hoc';
+import { SortableContainer, SortableElement, SortableHandle } from 'react-sortable-hoc';
 import {arrayMoveImmutable} from 'array-move';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
@@ -14,20 +14,7 @@ import SelectedLayer from './SelectedLayer';
 
 
 const StyledSelectedLayers = styled.div`
-    background-color: ${props => props.theme.colors.mainWhite};
-    margin-bottom: 5px;
-`;
 
-const StyledLayerGroupContainer = styled.div`
-    overflow: hidden;
-    background-color: ${props => props.theme.colors.mainWhite};
-    border-radius: 2px;
-`;
-
-const StyledLayerGroup = styled.ul`
-    list-style-type: none;
-    margin-bottom: 0px;
-    padding-inline-start: 5px;
 `;
 
 const StyledDeleteAllSelectedLayers = styled.div`
@@ -79,10 +66,9 @@ export const SelectedLayers = ({ label, selectedLayers, suomenVaylatLayers }) =>
     const channel = useSelector(state => state.rpc.channel);
 
     const onSortEnd = (oldIndex) => {
-        store.dispatch(setIsSwipingDisabled(false))
         channel.reorderLayers([selectedLayers[oldIndex.oldIndex].id, selectedLayers.length - oldIndex.newIndex], function () {});
         const newSelectedLayers = arrayMoveImmutable(selectedLayers, oldIndex.oldIndex, oldIndex.newIndex)
-        store.dispatch(setSelectedLayers(newSelectedLayers))
+        store.dispatch(setSelectedLayers(newSelectedLayers));
     };
 
     const handleRemoveAllSelectedLayers = () => {
@@ -94,27 +80,22 @@ export const SelectedLayers = ({ label, selectedLayers, suomenVaylatLayers }) =>
 
     return (
         <StyledSelectedLayers>
-            <StyledLayerGroupContainer
+            <SortableList
+                //axis={"y"}
+                lockAxis={"y"}
+                transitionDuration={300}
+                items={selectedLayers}
+                onSortEnd={onSortEnd}
+                suomenVaylatLayers={suomenVaylatLayers}
+            />
+            <StyledDeleteAllSelectedLayers
+                onClick={() => handleRemoveAllSelectedLayers()}
             >
-                <StyledLayerGroup>
-                    <SortableList
-                        lockAxis={"y"}
-                        transitionDuration={0}
-                        items={selectedLayers}
-                        onSortStart={() => store.dispatch(setIsSwipingDisabled(true))}
-                        onSortEnd={onSortEnd}
-                        suomenVaylatLayers={suomenVaylatLayers}
-                    />
-                    <StyledDeleteAllSelectedLayers
-                        onClick={() => handleRemoveAllSelectedLayers()}
-                    >
-                        <FontAwesomeIcon
-                                icon={faTrash}
-                        />
-                        <p>{strings.layerlist.layerlistLabels.removeAllSelectedLayers}</p>
-                    </StyledDeleteAllSelectedLayers>
-                </StyledLayerGroup>
-            </StyledLayerGroupContainer>
+                <FontAwesomeIcon
+                    icon={faTrash}
+                />
+                <p>{strings.layerlist.layerlistLabels.removeAllSelectedLayers}</p>
+            </StyledDeleteAllSelectedLayers>
         </StyledSelectedLayers>
     );
 };

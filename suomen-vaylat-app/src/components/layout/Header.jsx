@@ -13,7 +13,7 @@ import { WebSiteShareButton } from '../share-web-site/ShareLinkButtons';
 import { ReactComponent as VaylaLogoEn } from './images/vayla_sivussa_en_white.svg';
 import { ReactComponent as VaylaLogoFi } from './images/vayla_sivussa_fi_white.svg';
 import { ReactComponent as VaylaLogoSv } from './images/vayla_sivussa_sv_white.svg';
-import {updateLayers} from "../../utils/rpcUtil";
+import { updateLayers } from "../../utils/rpcUtil";
 
 
 
