@@ -10,6 +10,7 @@ import { useAppSelector } from '../../../state/hooks';
 import strings from '../../../translations';
 import { updateLayers } from '../../../utils/rpcUtil';
 import Layers from './Layers';
+import { reArrangeSelectedMapLayers } from '../../../state/slices/rpcSlice';
 
 import Intersection from './Intersection.jpg';
 
@@ -23,7 +24,6 @@ const listVariants = {
         opacity: 0
     },
 };
-
 
 const StyledLayerGroups = styled.div`
     display: flex;
@@ -250,9 +250,9 @@ export const ThemeGroup = ({
                 initial="hidden"
                 animate={isOpen ? "visible" : "hidden"}
                 variants={listVariants}
-            > 
+            >
             {strings.themelayerlist[theme.id].description !== null &&
-                <div> 
+                <div>
                     <StyledLayerGroupImage src={Intersection} alt=""/>
                     <StyledSubHeader>{strings.themelayerlist[theme.id].title}</StyledSubHeader>
                     <StyledSubText>{strings.themelayerlist[theme.id].description}</StyledSubText>

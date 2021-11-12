@@ -225,6 +225,12 @@ export const rpcSlice = createSlice({
         state.center.x = action.payload.centerX;
         state.center.y = action.payload.centerY;
         state.currentZoomLevel = action.payload.zoom;
+    },
+    changeLayerStyle: (state, action) => {
+        state.channel !== null && state.channel.postRequest('ChangeMapLayerStyleRequest', [action.payload.layerId, action.payload.style]);
+    },
+    reArrangeSelectedMapLayers: (state, action) => {
+        state.channel !== null && state.channel.postRequest('RearrangeSelectedMapLayerRequest', [action.payload.layerId, action.payload.position]);
     }
   }
 });
@@ -266,7 +272,9 @@ export const {
     getLegends,
     setLegends,
     setTagsWithLayers,
-    setCurrentMapCenter
+    setCurrentMapCenter,
+    changeLayerStyle,
+    reArrangeSelectedMapLayers
 } = rpcSlice.actions;
 
 export default rpcSlice.reducer;

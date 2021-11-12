@@ -1,11 +1,10 @@
 import { useContext } from "react";
 import styled from 'styled-components';
-import { setSelectedLayers } from '../../../state/slices/rpcSlice';
-import { setIsSwipingDisabled } from '../../../state/slices/uiSlice';
+import { reArrangeSelectedMapLayers, setSelectedLayers } from '../../../state/slices/rpcSlice';
 import strings from '../../../translations';
 import { updateLayers } from "../../../utils/rpcUtil";
 import { ReactReduxContext, useSelector } from 'react-redux';
-import { SortableContainer, SortableElement, SortableHandle } from 'react-sortable-hoc';
+import { SortableContainer, SortableElement} from 'react-sortable-hoc';
 import {arrayMoveImmutable} from 'array-move';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
@@ -66,7 +65,7 @@ export const SelectedLayers = ({ label, selectedLayers, suomenVaylatLayers }) =>
     const channel = useSelector(state => state.rpc.channel);
 
     const onSortEnd = (oldIndex) => {
-        channel.reorderLayers([selectedLayers[oldIndex.oldIndex].id, selectedLayers.length - oldIndex.newIndex], function () {});
+        store.dispatch(reArrangeSelectedMapLayers({layerId: selectedLayers[oldIndex.oldIndex].id, position: selectedLayers.length - oldIndex.newIndex}));
         const newSelectedLayers = arrayMoveImmutable(selectedLayers, oldIndex.oldIndex, oldIndex.newIndex)
         store.dispatch(setSelectedLayers(newSelectedLayers));
     };
