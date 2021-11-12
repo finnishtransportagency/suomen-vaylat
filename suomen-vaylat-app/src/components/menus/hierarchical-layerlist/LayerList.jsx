@@ -2,7 +2,8 @@ import { useState, useContext } from 'react';
 import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ReactReduxContext, useSelector } from 'react-redux';
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
+
 import { updateLayers } from '../../../utils/rpcUtil';
 import Checkbox from '../../checkbox/Checkbox';
 import LayerGroup from './LayerGroup';
@@ -12,32 +13,17 @@ const StyledLayerList = styled.div`
 
 `;
 
-const fadeIn = keyframes`
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
-`;
-
 const StyledLayerGroups = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: center;
     opacity: 0;
-    animation-delay: ${props => props.index * 0.025 + 's'};
-    animation-timing-function: ease-in-out;
-    animation-fill-mode: forwards;
-    animation-duration: 0.5s;
-    animation-name: ${fadeIn};
     background-color: ${props => props.theme.colors.mainWhite};
     margin: ${props => props.parentId === -1 && "10px 0px 10px 0px"};
     margin-bottom: 10px;
     border-radius: 2px;
     &:last-child {
-        ${props => props.parentId === -1 ? '1px solid '+props.theme.colors.maincolor2 : "none"};
+        ${props => props.parentId === -1 ? '1px solid '+props.theme.colors.mainColor2 : "none"};
     };
 `;
 
@@ -65,12 +51,12 @@ const StyledMasterGroupHeader = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: ${props => props.theme.colors.maincolor3};
+    background-color: ${props => props.theme.colors.mainColor3};
     padding-left: 5px;
     border-radius: 2px;
     transition: all 0.1s ease-in;
     &:hover {
-        background-color: ${props => props.theme.colors.maincolor2};
+        background-color: ${props => props.theme.colors.mainColor2};
     };
     &:hover ${StyledMasterGroupName} {
         color: ${props => props.theme.colors.mainWhite};
@@ -99,7 +85,7 @@ const StyledSelectButton = styled.button`
 `;
 
 const StyledLayerGroupContainer = styled.div`
-    height: ${props => props.isOpen ? "auto" : "0px"};
+    //height: ${props => props.isOpen ? "auto" : "0px"};
     overflow: hidden;
 `;
 
@@ -107,6 +93,7 @@ const StyledLayerGroup = styled.ul`
     list-style-type: none;
     margin: 0;
     padding-inline-start: ${props => props.parentId === -1 ? "10px" : "15px"};
+    
 `;
 
 export const LayerList = ({
@@ -242,7 +229,7 @@ export const LayerList = ({
                 </StyledMasterGroupHeader>
                 <StyledLayerGroupContainer
                     key={"slg_" + index + "_"}
-                    isOpen={isOpen}
+                    //isOpen={isOpen}
                 >
                     <StyledLayerGroup>
                         <Layers layers={filteredLayers} isOpen={isOpen} />

@@ -11,7 +11,7 @@ const StyledTabListItem = styled.div`
   justify-content: center;
   align-items: center;
   color: ${props => props.active ? props.theme.colors.mainWhite : props.theme.colors.black};
-  background-color: ${props => props.active ? props.theme.colors.maincolor1 : "none"};
+  background-color: ${props => props.active ? props.theme.colors.mainColor1 : "none"};
   border-radius: 15px;
   font-size: 15px;
   font-weight: 600;

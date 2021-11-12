@@ -17,7 +17,7 @@ const StyledShareButton = styled.button`
     border: none;
     svg {
         font-size: 14px;
-        color: ${props => props.theme.colors.black};
+        color: ${props => props.color ? props.color :  props.theme.colors.black};
         transition: all 0.5s ease-out;
     };
 `;
@@ -48,7 +48,7 @@ const StyledHeaderButton = styled.div`
  * @param {String} theme theme name
  * @returns theme share button component
  */
-export const ThemeGroupShareButton = ({ theme }) => {
+export const ThemeGroupShareButton = ({ theme, color }) => {
     const { store } = useContext(ReactReduxContext);
     const url = process.env.REACT_APP_SITE_URL + '/theme/{lang}/{zoom}/{x}/{y}/' + encodeURIComponent(theme);
     const shareGroup = () => {
@@ -65,7 +65,9 @@ export const ThemeGroupShareButton = ({ theme }) => {
                 onClick={(e) => {
                     e && e.stopPropagation();
                     shareGroup();
-                }}>
+                }}
+                color={color}
+                >
                 <FontAwesomeIcon
                     icon={faShareAlt}
                 />
