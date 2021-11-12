@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faInfoCircle
 } from '@fortawesome/free-solid-svg-icons';
-
+import LayerMetadataButton from './LayerMetadataButton';
 
 const StyledLayerContainer = styled.li`
     background-color: ${props => props.themeStyle && "#F5F5F5"};
@@ -59,12 +59,6 @@ const StyledSwitchButton = styled.div`
     margin-right: 2px;
     transition: all 0.3s ease-out;
     background-color: ${props => props.theme.colors.mainWhite};
-`;
-
-const StyledInfoIcon = styled(FontAwesomeIcon)`
-    margin-right: 8px;
-    color: ${props => props.theme.colors.mainColor1};
-    font-size: 20px;
 `;
 
 const Switch = ({ action, layer, isSelected }) => {
@@ -142,7 +136,8 @@ export const Layer = ({ layer, theme }) => {
                         {layer.name}
                     </StyledLayerName>
                 </StyledlayerHeader>
-                <StyledInfoIcon icon={faInfoCircle} />
+                {layer.metadataIdentifier && <LayerMetadataButton layer={layer}/>}
+                {/* <StyledInfoIcon icon={faInfoCircle} /> */}
                 <Switch
                     action={() => handleLayerVisibility(channel, layer)}
                     isSelected={layer.visible}

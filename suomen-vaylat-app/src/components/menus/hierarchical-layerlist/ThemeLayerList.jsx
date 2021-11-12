@@ -25,7 +25,6 @@ const listVariants = {
     },
 };
 
-
 const StyledLayerGroups = styled.div`
     display: flex;
     flex-direction: column;
