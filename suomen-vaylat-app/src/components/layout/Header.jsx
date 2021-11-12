@@ -110,7 +110,7 @@ export const Header = () => {
         if (allLayers) {
             Ids.forEach((id) => {
                 allLayers.forEach((layer) => {
-                    if(id == layer.id) {
+                    if(id === layer.id) {
                         filteredLayers.push(layer)
                     }
                 })

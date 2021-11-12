@@ -37,7 +37,7 @@ export const Notification = ({title, message, errors}) => {
                 unmountOnExit
             >
                 <StyledAlert>
-                    <Alert bsPrefix={searchErrorType == 'error' ? 'alert-style' : ''} show={searchError} variant={searchErrorType} onClose={closeAlert}>
+                    <Alert bsPrefix={searchErrorType === 'error' ? 'alert-style' : ''} show={searchError} variant={searchErrorType} onClose={closeAlert}>
                         <Alert.Heading>{title}</Alert.Heading>
                         <p>{message}</p>
                         <p>{errors}</p>
