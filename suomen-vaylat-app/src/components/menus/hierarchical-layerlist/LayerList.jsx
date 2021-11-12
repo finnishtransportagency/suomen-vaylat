@@ -9,15 +9,42 @@ import Checkbox from '../../checkbox/Checkbox';
 import LayerGroup from './LayerGroup';
 import Layers from './Layers';
 
+import { motion } from "framer-motion";
+
+const layerGroupVariants = {
+
+}
+
+const masterHeaderIconVariants = {
+    open: { rotate: 180 },
+    closed: { rotate: 0 },
+};
+
+const layerGroupIconVariants = {
+    open: { rotate: 90 },
+    closed: { rotate: 0 },
+};
+
+const listVariants = {
+    visible: {
+        height: "auto",
+        opacity: 1
+    },
+    hidden: {
+        height: 0,
+        opacity: 0
+    },
+};
+
 const StyledLayerList = styled.div`
 
 `;
 
-const StyledLayerGroups = styled.div`
+const StyledLayerGroups = styled(motion.div)`
     display: flex;
     flex-direction: column;
     justify-content: center;
-    opacity: 0;
+    //opacity: 0;
     background-color: ${props => props.theme.colors.mainWhite};
     margin: ${props => props.parentId === -1 && "10px 0px 10px 0px"};
     margin-bottom: 10px;
@@ -27,46 +54,89 @@ const StyledLayerGroups = styled.div`
     };
 `;
 
-const StyledMasterGroupName = styled.p`
-    user-select: none;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 200px;
-    color: ${props => props.theme.colors.black};
-    margin: 0;
-    padding-left: 10px;
-    font-size: 14px;
-    font-weight: 600;
-    transition: all 0.1s ease-in;
-    @media ${ props => props.theme.device.mobileL} {
-        font-size: 13px;
-    };
-`;
-
 const StyledMasterGroupHeader = styled.div`
+    position: sticky;
+    top: -16px;
     z-index: 1;
-    height: 40px;
-    cursor: pointer;
+    min-height: 48px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: ${props => props.theme.colors.mainColor3};
-    padding-left: 5px;
-    border-radius: 2px;
+    cursor: pointer;
+    background-color: ${props => props.theme.colors.mainColor1};
+    border-radius: 4px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+`;
+
+const StyledMasterGroupName = styled.p`
+    user-select: none;
+    max-width: 240px;
+    color: ${props => props.theme.colors.mainWhite};
+    margin: 0;
+    padding: 0px;
+    font-size: 14px;
+    font-weight: 600;
     transition: all 0.1s ease-in;
-    &:hover {
-        background-color: ${props => props.theme.colors.mainColor2};
-    };
-    &:hover ${StyledMasterGroupName} {
-        color: ${props => props.theme.colors.mainWhite};
+
+    @media ${ props => props.theme.device.mobileL} {
+        //font-size: 13px;
     };
 `;
+
+const StyledMasterGroupLayersCount = styled.p`
+    margin: 0;
+    padding: 0px;
+    font-size: 12px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.8);
+`;
+
+const StyledLefContent = styled.div`
+    display: flex;
+    align-items: center;
+`;
+const StyledLeftContent = styled.div`
+    display: flex;
+    height: 100%;
+    align-items: center;
+`;
+
 
 const StyledRightContent = styled.div`
     display: flex;
     align-items: center;
+`;
 
+const StyledMotionIconWrapper = styled(motion.div)`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`;
+
+const StyledMasterGroupHeaderIcon = styled.div`
+    width: 48px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    svg {
+        font-size: 20px;
+        color: ${props => props.theme.colors.mainWhite};
+    };
+    p {
+        margin: 0;
+        font-weight: bold;
+        font-size: 22px;
+        color: ${props => props.theme.colors.mainWhite};
+    }
+`;
+
+
+const StyledMasterGroupTitleContent = styled.div`
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 `;
 
 const StyledSelectButton = styled.button`
@@ -75,12 +145,12 @@ const StyledSelectButton = styled.button`
     justify-content: center;
     align-items: center;
     background-color: transparent;
-    margin-right: 10px;
+    margin-right: 8px;
     border: none;
     svg {
-        color: ${props => props.theme.colors.black};
-        font-size: 23px;
-        transition: all 0.5s ease-out;
+        color: ${props => props.theme.colors.mainWhite};
+        font-size: 19px;
+        transition: all 0.3s ease-out;
     };
 `;
 
@@ -89,11 +159,12 @@ const StyledLayerGroupContainer = styled.div`
     overflow: hidden;
 `;
 
-const StyledLayerGroup = styled.ul`
+const StyledLayerGroup = styled(motion.ul)`
     list-style-type: none;
     margin: 0;
-    padding-inline-start: ${props => props.parentId === -1 ? "10px" : "15px"};
-    
+    padding-inline-start: 25px;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
 `;
 
 export const LayerList = ({
@@ -151,7 +222,8 @@ export const LayerList = ({
 
   const TagLayerList = ({
       tag,
-      layers, index
+      layers,
+      index
     }) => {
     const { store } = useContext(ReactReduxContext);
     const channel = useSelector(state => state.rpc.channel);
@@ -203,8 +275,12 @@ export const LayerList = ({
     }
 
     return (
-            <StyledLayerGroups index={index}>
-                <StyledMasterGroupHeader
+            <StyledLayerGroups
+                initial={{ opacity: 0, x: -50 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0 }}
+            >
+                {/* <StyledMasterGroupHeader
                     key={"smgh_" + index + '_'}
                     onClick={() => setIsOpen(!isOpen)}
                 >
@@ -226,15 +302,50 @@ export const LayerList = ({
                             />
                         </StyledSelectButton>
                     </StyledRightContent>
-                </StyledMasterGroupHeader>
-                <StyledLayerGroupContainer
-                    key={"slg_" + index + "_"}
-                    //isOpen={isOpen}
+                </StyledMasterGroupHeader> */}
+                <StyledMasterGroupHeader
+                     key={"smgh_" + index + '_'}
+                    onClick={() => {
+                        setIsOpen(!isOpen);
+                    }}
                 >
-                    <StyledLayerGroup>
+                    <StyledLeftContent>
+                        <StyledMasterGroupHeaderIcon>
+                            <p>{tag.charAt(0).toUpperCase()}</p>
+                        </StyledMasterGroupHeaderIcon>
+                        <StyledMasterGroupTitleContent>
+                            <StyledMasterGroupName>
+                                {tag.charAt(0).toUpperCase() + tag.slice(1)}
+                            </StyledMasterGroupName>
+                            <StyledMasterGroupLayersCount>
+
+                            </StyledMasterGroupLayersCount>
+                        </StyledMasterGroupTitleContent>
+
+                    </StyledLeftContent>
+                    <StyledRightContent>
+                        <StyledSelectButton> 
+                            <StyledMotionIconWrapper
+                                initial="closed"
+                                animate={isOpen ? "open" : "closed"}
+                                variants={masterHeaderIconVariants}
+                            >
+                                <FontAwesomeIcon
+                                    icon={faAngleDown}
+                                />
+                            </StyledMotionIconWrapper>
+                        </StyledSelectButton>
+                    </StyledRightContent>
+                </StyledMasterGroupHeader>
+                    <StyledLayerGroup
+                        key={"slg_" + index + "_"}
+                        isOpen={isOpen}
+                        initial="hidden"
+                        animate={isOpen ? "visible" : "hidden"}
+                        variants={listVariants}
+                    >
                         <Layers layers={filteredLayers} isOpen={isOpen} />
                     </StyledLayerGroup>
-                </StyledLayerGroupContainer>
             </StyledLayerGroups>
     );
   };
