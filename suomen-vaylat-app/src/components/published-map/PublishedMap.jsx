@@ -12,10 +12,6 @@ import CenterSpinner from '../center-spinner/CenterSpinner';
 import { MetadataModal } from '../metadata-modal/MetadataModal';
 import './PublishedMap.scss';
 
-
-
-
-
 const StyledPublishedMap = styled.div`
     height: calc(var(--app-height) - 60px);
 `;

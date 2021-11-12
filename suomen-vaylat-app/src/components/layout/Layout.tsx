@@ -6,7 +6,7 @@ const StyledLayout = styled.div`
     display: flex;
     flex-direction: column;
     height: var(--app-height);
-    background-color: ${(props: { theme: { colors: { maincolor1: any; }; }; }) => props.theme.colors.maincolor1};
+    background-color: ${(props: { theme: { colors: { mainColor1: any; }; }; }) => props.theme.colors.mainColor1};
 `;
 
 export const Layout = () => {

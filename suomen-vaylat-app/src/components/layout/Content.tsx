@@ -4,7 +4,8 @@ import AppInfoModal from '../app-info-modal/AppInfoModal';
 import MenuBar from '../layout/menu-bar/MenuBar';
 import { Legend } from "../legend/Legend";
 import DrawingTools from '../measurement-tools/DrawingTools';
-import SideMenu from '../menus/side-menu/SideMenu';
+import MapLayersDialog from '../dialog/MapLayersDialog';
+import WarningDialog from '../dialog/WarningDialog';
 import PublishedMap from '../published-map/PublishedMap';
 import Search from '../search/Search';
 import { ShareWebSitePopup } from "../share-web-site/ShareWebSitePopup";
@@ -20,9 +21,25 @@ const StyledContent = styled.div`
     };
 `;
 
+const StyledContentGrid = styled.div`
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    display: grid;
+    gap: 16px;
+    grid-template-columns: 48px 344px 1fr 48px;
+    padding: 16px;
+    pointer-events: none;
+`;
+
 const Content = () => {
 
-    const { selectedLayers } = useAppSelector((state) => state.rpc);
+    const {
+        selectedLayers
+    } = useAppSelector((state) => state.rpc);
 
     const {
         isSearchOpen,
@@ -36,7 +53,6 @@ const Content = () => {
     return (
         <>
         <StyledContent>
-            <SideMenu />
             <ZoomMenu />
             <PublishedMap />
             {isSearchOpen && <Search />}
@@ -44,7 +60,11 @@ const Content = () => {
             {isShareOpen && <ShareWebSitePopup />}
             {isDrawingToolsOpen && <DrawingTools />}
             <AppInfoModal />
-            <MenuBar />
+            <StyledContentGrid>
+                <MenuBar />
+                <MapLayersDialog />
+                {/* <WarningDialog /> */}
+            </StyledContentGrid>
         </StyledContent>
         </>
     );
