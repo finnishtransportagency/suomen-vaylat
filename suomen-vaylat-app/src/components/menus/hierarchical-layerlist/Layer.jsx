@@ -1,13 +1,13 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import { ReactReduxContext, useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { getLegends, setLegends, setMapLayerVisibility } from '../../../state/slices/rpcSlice';
+import { changeLayerStyle, getLegends, reArrangeSelectedMapLayers, setLegends, setMapLayerVisibility } from '../../../state/slices/rpcSlice';
 import { updateLayers } from "../../../utils/rpcUtil";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faInfoCircle
 } from '@fortawesome/free-solid-svg-icons';
-
+import LayerMetadataButton from './LayerMetadataButton';
 
 const StyledLayerContainer = styled.li`
     background-color: ${props => props.themeStyle && "#F5F5F5"};
@@ -61,12 +61,6 @@ const StyledSwitchButton = styled.div`
     background-color: ${props => props.theme.colors.mainWhite};
 `;
 
-const StyledInfoIcon = styled(FontAwesomeIcon)`
-    margin-right: 8px;
-    color: ${props => props.theme.colors.mainColor1};
-    font-size: 20px;
-`;
-
 const Switch = ({ action, layer, isSelected }) => {
     return (
         <StyledSwitchContainer
@@ -92,10 +86,9 @@ export const Layer = ({ layer, theme }) => {
 
     const handleLayerVisibility = (channel, layer) => {
         store.dispatch(setMapLayerVisibility(layer));
-        //channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, !layer.visible]);
         // Update layer orders to correct
         const position = selectedLayers.length + 1;
-        channel.reorderLayers([layer.id, position], () => {});
+        store.dispatch(reArrangeSelectedMapLayers({layerId: layer.id, position: position}));
         updateLayers(store, channel);
     };
 
@@ -122,10 +115,9 @@ export const Layer = ({ layer, theme }) => {
 
                 if (styleName !== layerStyle) {
                     setLayerStyle(styleName);
-                    channel.changeLayerStyle([layer.id, styleName], function() {
-                        // update layers legends
-                        updateLayerLegends();
-                    });
+                    store.dispatch(changeLayerStyle({layerId: layer.id, style:styleName}));
+                    // update layers legends
+                    updateLayerLegends();
                 }
             }
         });
@@ -144,7 +136,8 @@ export const Layer = ({ layer, theme }) => {
                         {layer.name}
                     </StyledLayerName>
                 </StyledlayerHeader>
-                <StyledInfoIcon icon={faInfoCircle} />
+                {layer.metadataIdentifier && <LayerMetadataButton layer={layer}/>}
+                {/* <StyledInfoIcon icon={faInfoCircle} /> */}
                 <Switch
                     action={() => handleLayerVisibility(channel, layer)}
                     isSelected={layer.visible}

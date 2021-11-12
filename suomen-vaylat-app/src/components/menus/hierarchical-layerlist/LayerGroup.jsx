@@ -23,6 +23,16 @@ import {setSelectError} from "../../../state/slices/rpcSlice"
 
 const OSKARI_LOCALSTORAGE = "oskari";
 
+const masterHeaderIconVariants = {
+    open: { rotate: 180 },
+    closed: { rotate: 0 },
+};
+
+const layerGroupIconVariants = {
+    open: { rotate: 90 },
+    closed: { rotate: 0 },
+};
+
 const listVariants = {
     visible: {
         height: "auto",
@@ -34,17 +44,7 @@ const listVariants = {
     },
 };
 
-const masterHeaderIconVariants = {
-    open: { rotate: 180 },
-    closed: { rotate: 0 },
-};
-
-const layerGroupIconVariants = {
-    open: { rotate: 90 },
-    closed: { rotate: 0 },
-};
-
-const StyledLayerGroups = styled.div`
+const StyledLayerGroups = styled(motion.div)`
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -322,9 +322,11 @@ export const LayerGroup = ({
     return (
         <>
         <StyledLayerGroups
-                index={index}
-                parentId={group.parentId}
-            >
+            parentId={group.parentId}
+            initial={{ opacity: 0, x: -10 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0 }}
+        >
             {group.parentId === -1 ? (
                 <StyledMasterGroupHeader
                     key={"smgh_" + group.parentId + "_" + group.id}
@@ -338,7 +340,7 @@ export const LayerGroup = ({
                                 themeStyles.hasOwnProperty(group.id) ?
                                     <FontAwesomeIcon
                                         icon={themeStyles[group.id].icon}
-                                    /> : <p>{group.name.charAt(0)}</p>
+                                    /> : <p>{group.name.charAt(0).toUpperCase()}</p>
                             }
                         </StyledMasterGroupHeaderIcon>
                         <StyledMasterGroupTitleContent>
@@ -354,18 +356,16 @@ export const LayerGroup = ({
 
                     </StyledLeftContent>
                     <StyledRightContent>
-                        <StyledSelectButton
-                            hasChildren={hasChildren}
-                        > 
-                        <StyledMotionIconWrapper
-                            initial="closed"
-                            animate={isOpen ? "open" : "closed"}
-                            variants={masterHeaderIconVariants}
-                        >
-                            <FontAwesomeIcon
-                                icon={faAngleDown}
-                            />
-                        </StyledMotionIconWrapper>
+                        <StyledSelectButton> 
+                            <StyledMotionIconWrapper
+                                initial="closed"
+                                animate={isOpen ? "open" : "closed"}
+                                variants={masterHeaderIconVariants}
+                            >
+                                <FontAwesomeIcon
+                                    icon={faAngleDown}
+                                />
+                            </StyledMotionIconWrapper>
                         </StyledSelectButton>
                     </StyledRightContent>
                 </StyledMasterGroupHeader>
