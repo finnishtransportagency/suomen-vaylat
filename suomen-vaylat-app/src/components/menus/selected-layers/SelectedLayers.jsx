@@ -1,6 +1,6 @@
 import { useState, useContext } from "react";
 import styled from 'styled-components';
-import { setAllLayers, setSelectedLayers } from '../../../state/slices/rpcSlice';
+import { reArrangeSelectedMapLayers, setAllLayers, setSelectedLayers } from '../../../state/slices/rpcSlice';
 import strings from '../../../translations';
 import { updateLayers } from "../../../utils/rpcUtil";
 import { ReactReduxContext, useSelector } from 'react-redux';
@@ -122,11 +122,11 @@ export const SelectedLayers = ({ label, selectedLayers, suomenVaylatLayers }) =>
     const { store } = useContext(ReactReduxContext);
 
     const channel = useSelector(state => state.rpc.channel);
-    
+
     const [isOpen, setIsOpen] = useState(false);
 
     const onSortEnd = (oldIndex) => {
-        channel.reorderLayers([selectedLayers[oldIndex.oldIndex].id, selectedLayers.length - oldIndex.newIndex], function () {});
+        store.dispatch(reArrangeSelectedMapLayers({layerId: selectedLayers[oldIndex.oldIndex].id, position: selectedLayers.length - oldIndex.newIndex}));
         const newSelectedLayers = arrayMoveImmutable(selectedLayers, oldIndex.oldIndex, oldIndex.newIndex)
         store.dispatch(setSelectedLayers(newSelectedLayers))
     };
