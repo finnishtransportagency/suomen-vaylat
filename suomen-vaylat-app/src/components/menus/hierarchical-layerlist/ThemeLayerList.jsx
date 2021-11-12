@@ -12,6 +12,7 @@ import { updateLayers } from '../../../utils/rpcUtil';
 import Checkbox from '../../checkbox/Checkbox';
 import { ThemeGroupShareButton } from '../../share-web-site/ShareLinkButtons';
 import Layers from './Layers';
+import { reArrangeSelectedMapLayers } from '../../../state/slices/rpcSlice';
 
 
 
@@ -205,7 +206,7 @@ export const ThemeGroup = ({
                 channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, !layer.visible]);
                 // Update layer orders to correct
                 const position = selectedLayers.length + 1;
-                channel.reorderLayers([layer.id, position], () => {});
+                store.dispatch(reArrangeSelectedMapLayers({layerId: layer.id, position: position}));
                 return true;
             });
         } else {
@@ -217,7 +218,7 @@ export const ThemeGroup = ({
 
         updateLayers(store, channel);
     };
-    
+
     if (encodeURIComponent(theme.name) === selectedTheme && isProgrammaticSelection === false) {
         selectGroup();
         setIsProgrammaticSelection(true);
@@ -261,7 +262,7 @@ export const ThemeGroup = ({
                 >
                     <StyledLayerGroup>
                         {strings.themelayerlist[theme.id].description !== null &&
-                        <> 
+                        <>
                             <StyledSubHeader>{strings.themelayerlist[theme.id].title}</StyledSubHeader>
                             <StyledSubText>{strings.themelayerlist[theme.id].description}</StyledSubText>
                         </>
