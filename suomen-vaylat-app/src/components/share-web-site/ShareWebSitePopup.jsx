@@ -31,7 +31,7 @@ const StyledShareWebSiteContainer = styled.div`
 const StyledHeader = styled.div`
     cursor: move;
     color: ${props => props.theme.colors.mainWhite};
-    background-color: ${props => props.theme.colors.maincolor1};
+    background-color: ${props => props.theme.colors.mainColor1};
     padding: .5rem;
     border-radius: 0;
 `;
@@ -52,14 +52,14 @@ const StyledCloseIcon = styled.div`
     };
     &:hover {
         svg {
-            color: ${props => props.theme.colors.maincolor2};
+            color: ${props => props.theme.colors.mainColor2};
         }
     }
 `;
 
 const StyledClipboardIcon = styled.div`
     svg {
-        color: ${props => props.theme.colors.maincolor1};
+        color: ${props => props.theme.colors.mainColor1};
         font-size: 18px;
         transition: all 0.1s ease-out;
     };
@@ -97,7 +97,7 @@ const StyledCopyClipboardButton = styled.button`
     height: 32px;
     justify-content: center;
     align-items: center;
-    background-color: ${props => props.theme.colors.maincolor1};
+    background-color: ${props => props.theme.colors.mainColor1};
     margin-right: 10px;
     border: none;
     svg {
@@ -106,7 +106,7 @@ const StyledCopyClipboardButton = styled.button`
         transition: all 0.1s ease-out;
     };
     &:hover {
-        color: ${props => props.theme.colors.maincolor2};
+        color: ${props => props.theme.colors.mainColor2};
         svg {
             color: ${props => props.theme.colors.mainWhite};
         }
@@ -114,7 +114,7 @@ const StyledCopyClipboardButton = styled.button`
 `;
 
 const StyledCopiedToClipboardText = styled.span`
-    color: ${props => props.theme.colors.maincolor1};
+    color: ${props => props.theme.colors.mainColor1};
 `;
 
 /**

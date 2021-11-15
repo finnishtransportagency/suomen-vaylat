@@ -7,10 +7,10 @@ import {
     setSearchResult,
     setSelectedIndex,
     setMarker,
-    setAddressSearchEventHandlerReady,
-    setSearchError
+    setAddressSearchEventHandlerReady
 } from '../../state/slices/searchSlice';
 import strings from '../../translations';
+import {setSelectError} from "../../state/slices/rpcSlice";
 
 const List = styled.ul`
   z-index: 100;
@@ -35,7 +35,7 @@ const ListItem = styled.li`
   text-overflow: ellipsis;
   white-space: nowrap;
   cursor: pointer;
-  color: ${props => props.selected ? props.theme.colors.maincolor1 : ''};
+  color: ${props => props.selected ? props.theme.colors.mainColor1 : ''};
   padding: 2px 8px;
   font-weight: ${props => props.selected ? 'bold' : ''};
   :first-of-type {
@@ -65,7 +65,7 @@ const AddressSearch = ({
             store.dispatch(setSearching(false));
             store.dispatch(setSearchResult({ address: data.result.locations }));
             if (data.result.locations.length === 0) {
-                store.dispatch(setSearchError({errorState: true, data: [''], errorType: 'warning'}));
+                store.dispatch(setSelectError({show: true, message: strings.search.address.error.text, type: 'searchWarning', filteredLayers: [], indeterminate: false}));
             }
         });
         store.dispatch(setAddressSearchEventHandlerReady(true));

@@ -10,7 +10,7 @@ const StyledCheckbox = styled.div`
     justify-content: center;
     align-items: center;
     background-color: ${props => props.theme.colors.mainWhite};
-    border: 2px solid ${props => props.theme.colors.maincolor1};
+    border: 2px solid ${props => props.theme.colors.mainColor1};
     border-radius: 30%;
     box-sizing: border-box;
     svg {

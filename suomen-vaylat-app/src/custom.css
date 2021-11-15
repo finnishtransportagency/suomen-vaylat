@@ -1,0 +1,43 @@
+.alert-style {
+  background-color: #49c2f1;
+  color: #084298;
+  border-color: #b6d4fe;
+  position: relative;
+  padding: 1rem 1rem;
+  margin-bottom: 1rem;
+  border: 1px solid transparent;
+  border-radius: .25rem;
+  -webkit-transition: opacity .15s linear;
+  transition: opacity .15s linear;
+}
+
+.alert-enter {
+  opacity: 0;
+  -webkit-transform: scale(0.9);
+          transform: scale(0.9);
+}
+
+.alert-enter-active {
+  opacity: 1;
+  -webkit-transform: translateX(0);
+          transform: translateX(0);
+  -webkit-transition: opacity 300ms, -webkit-transform 500ms;
+  transition: opacity 300ms, -webkit-transform 500ms;
+  transition: opacity 300ms, transform 500ms;
+  transition: opacity 300ms, transform 500ms, -webkit-transform 500ms;
+}
+
+.alert-exit {
+  opacity: 1;
+}
+
+.alert-exit-active {
+  opacity: 0;
+  -webkit-transform: scale(0.9);
+          transform: scale(0.9);
+  -webkit-transition: opacity 300ms, -webkit-transform 500ms;
+  transition: opacity 300ms, -webkit-transform 500ms;
+  transition: opacity 300ms, transform 500ms;
+  transition: opacity 300ms, transform 500ms, -webkit-transform 500ms;
+}
+/*# sourceMappingURL=custom.css.map */

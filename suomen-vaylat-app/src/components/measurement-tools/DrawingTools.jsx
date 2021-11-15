@@ -43,7 +43,7 @@ const StyledDrawingTool = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: ${(props => props.active? props.theme.colors.maincolorselected1 : props.theme.colors.maincolor1)};
+    background-color: ${(props => props.active? props.theme.colors.mainColorselected1 : props.theme.colors.mainColor1)};
     box-shadow: rgb(0 0 0 / 16%) 0px 3px 6px, rgb(0 0 0 / 23%) 0px 3px 6px;
     border-radius: 50%;
     svg {

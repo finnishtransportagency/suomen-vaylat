@@ -6,14 +6,14 @@ import ReactTooltip from 'react-tooltip';
 import styled from 'styled-components';
 import { useAppSelector } from '../../state/hooks';
 import { setIsInfoOpen, setIsMainScreen } from "../../state/slices/uiSlice";
-import { mapMoveRequest, setZoomTo, setMapLayerVisibility } from "../../state/slices/rpcSlice";
+import { mapMoveRequest, setZoomTo, setMapLayerVisibility, reArrangeSelectedMapLayers } from "../../state/slices/rpcSlice";
 import strings from '../../translations';
 import LanguageSelector from '../language-selector/LanguageSelector';
 import { WebSiteShareButton } from '../share-web-site/ShareLinkButtons';
 import { ReactComponent as VaylaLogoEn } from './images/vayla_sivussa_en_white.svg';
 import { ReactComponent as VaylaLogoFi } from './images/vayla_sivussa_fi_white.svg';
 import { ReactComponent as VaylaLogoSv } from './images/vayla_sivussa_sv_white.svg';
-import {updateLayers} from "../../utils/rpcUtil";
+import { updateLayers } from "../../utils/rpcUtil";
 
 
 
@@ -110,7 +110,7 @@ export const Header = () => {
         if (allLayers) {
             Ids.forEach((id) => {
                 allLayers.forEach((layer) => {
-                    if(id == layer.id) {
+                    if(id === layer.id) {
                         filteredLayers.push(layer)
                     }
                 })
@@ -121,7 +121,7 @@ export const Header = () => {
             channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, !layer.visible]);
             // Update layer orders to correct
             const position = selectedLayers.length + 1;
-            channel.reorderLayers([layer.id, position], () => {});
+            store.dispatch(reArrangeSelectedMapLayers({layerId: layer.id, position: position}));
         })
         store.dispatch(setZoomTo(0))
         updateLayers(store, channel)
@@ -134,7 +134,7 @@ export const Header = () => {
                 <span>{strings.tooltips.showPageInfo}</span>
             </ReactTooltip>
             <StyledHeaderTitleContainer onClick={() => setToMainScreen()}>
-                    {strings.title.toUpperCase()}
+                    {strings.title}
             </StyledHeaderTitleContainer>
             <StyledHeaderLogoContainer>
                 {   lang.current === 'fi' ? <VaylaLogoFi /> :

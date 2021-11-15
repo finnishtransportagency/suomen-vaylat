@@ -32,12 +32,12 @@ const StyledExpandControl = styled.div`
     align-items: center;
     transform: translateY(-50%);
     pointer-events: auto;
-    background-color: ${props => props.theme.colors.maincolor1};
+    background-color: ${props => props.theme.colors.mainColor1};
     box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
     border-radius: 50%;
     transition: all 0.1s ease-in;
     &:hover {
-        background-color: ${props => props.theme.colors.maincolor2};
+        background-color: ${props => props.theme.colors.mainColor2};
     };
     svg {
         font-size: 23px;
@@ -53,7 +53,7 @@ const StyledZoomBarControlTop = styled.button`
     justify-content: center;
     align-items: center;
     pointer-events: auto;
-    background-color: ${props => props.theme.colors.maincolor1};
+    background-color: ${props => props.theme.colors.mainColor1};
     margin: 0px 3px 3px 3px;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
     border: none;
@@ -64,7 +64,7 @@ const StyledZoomBarControlTop = styled.button`
         font-size: 20px;
     };
     &:hover {
-        background-color: ${props => props.theme.colors.maincolor2};
+        background-color: ${props => props.theme.colors.mainColor2};
     }
 `;
 
@@ -76,7 +76,7 @@ const StyledZoomBarControlBottom = styled.button`
     align-items: center;
     pointer-events: auto;
     cursor: pointer;
-    background-color: ${props => props.theme.colors.maincolor1};
+    background-color: ${props => props.theme.colors.mainColor1};
     margin: 3px 3px 0px 3px;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
     border: none;
@@ -87,7 +87,7 @@ const StyledZoomBarControlBottom = styled.button`
         font-size: 20px;
     };
     &:hover {
-        background-color: ${props => props.theme.colors.maincolor2};
+        background-color: ${props => props.theme.colors.mainColor2};
     }
 `;
 
@@ -96,7 +96,7 @@ const StyledCenterLine = styled.div`
     position: absolute;
     width: 4px;
     height: 100%;
-    background-color: ${props => props.theme.colors.maincolor1};
+    background-color: ${props => props.theme.colors.mainColor1};
     box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
 `;
 
@@ -108,7 +108,7 @@ const StyledZoomBarLayersInfo = styled.div`
     overflow: hidden;
     opacity: ${props => props.isExpanded ? '1' : '0'};
     transition-delay: 0.6s;
-    background-color: ${props => props.theme.colors.maincolor1};
+    background-color: ${props => props.theme.colors.mainColor1};
     box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
     border-radius: 15px;
     transition: all 0.3s ease-out;
