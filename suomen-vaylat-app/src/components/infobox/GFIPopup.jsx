@@ -29,11 +29,17 @@ const StyledContent = styled.div`
     padding: .5rem;
 `;
 
+const StyledGFIHeader = styled.div`
+    padding-bottom: .5rem;
+    color: ${props => props.theme.colors.mainColor1};
+    font-size: 1.2rem;
+`;
+
 const StyledHeader = styled.div`
     padding: .5rem;
     border-radius: 0;
     color: ${props => props.theme.colors.mainWhite};
-    background-color: ${props => props.theme.colors.maincolor1};
+    background-color: ${props => props.theme.colors.mainColor1};
 `;
 
 const StyledLayerCloseIcon = styled.div`
@@ -50,7 +56,7 @@ const StyledLayerCloseIcon = styled.div`
     };
     &:hover {
         svg {
-            color: ${props => props.theme.colors.maincolor2};
+            color: ${props => props.theme.colors.mainColor2};
         }
     };
 `;
@@ -80,6 +86,7 @@ export const GFIPopup = props => {
                 isOpen={isGFIOpen}
                 onRequestClose={() => closeModal()}
                 style={customStyles}
+                className={'gfi-modal'}
             >
                 <StyledHeader className="modal-header">
                     <h5>{title}</h5>
@@ -93,7 +100,9 @@ export const GFIPopup = props => {
                     </StyledLayerCloseIcon>
                 </StyledHeader>
                 <StyledContent>
-                    {headingText}
+                    <StyledGFIHeader className="gfi-header">
+                        {headingText}
+                    </StyledGFIHeader>
                     {contentDiv}
                 </StyledContent>
             </Modal>
