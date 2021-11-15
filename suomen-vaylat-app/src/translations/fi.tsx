@@ -31,6 +31,9 @@ const fi = {
         metadata: 'Näytä tason metadata',
         showPageInfo: 'Näytä sivun info'
     },
+    gfi: {
+        title: 'Kohdetiedot'
+    },
     warning: 'Varoitus!',
     multipleLayersWarning: 'Olet lisäämässä kartalle 10 tai enemmän karttatasoa ja se saattaa vaikuttaa palvelun suorituskykyyn',
     continue: 'jatka',

@@ -1,0 +1,30 @@
+div.popupContent {
+    clear: both;
+    background-color: #FFFFFF;
+    position: relative;
+    left: 0px;
+    top: 0px;
+    max-height: 250px;
+    border: 1px solid;
+    border-color: #424343;
+    overflow: auto;
+    padding: 20px 20px 20px 25px;
+
+    div.contentWrapper-infobox {
+        margin-bottom: 10px;
+    }
+
+    hr.infoboxLine {
+        border: 1px solid;
+        width: 90%;
+        margin-top: 10px;
+    }
+
+    span.infoboxActionLinks {
+        padding-right: 15px;
+    }
+
+    table td, table th {
+      padding-right: 5px;
+  }
+}
