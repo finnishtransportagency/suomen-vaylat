@@ -30,7 +30,7 @@ const StyledMyLocationButton = styled.div`
     justify-content: center;
     align-items: center;
     transition: all 0.1s ease-out;
-    background-color: ${props => props.theme.colors.maincolor1};
+    background-color: ${props => props.theme.colors.mainColor1};
     margin-bottom: 50px;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
     border-radius: 50%;
@@ -39,7 +39,7 @@ const StyledMyLocationButton = styled.div`
         font-size: 23px;
     };
     &:hover {
-        background-color: ${props => props.theme.colors.maincolor2};
+        background-color: ${props => props.theme.colors.mainColor2};
     };
     pointer-events: auto;
     cursor: pointer;

@@ -18,6 +18,13 @@ const initialState = {
   zoomRange: {},
   currentZoomLevel: 0,
   selectedLayers: [],
+  warnings: {
+      show: false,
+      message: '',
+      type: '',
+      filteredLayers: [],
+      indeterminate: false
+  },
   announcements: [],
   activeAnnouncements: [],
   allThemesWithLayers: [],
@@ -64,6 +71,15 @@ export const rpcSlice = createSlice({
     },
     setSelectedLayers: (state, action) => {
         state.selectedLayers = action.payload;
+    },
+    setSelectError: (state,action) => {
+        state.warnings = {
+            show: action.payload.show,
+            message: action.payload.message,
+            type: action.payload.type,
+            filteredLayers: action.payload.filteredLayers,
+            indeterminate: action.payload.indeterminate
+        };
     },
     setAllTags: (state, action) => {
         state.allTags = action.payload;
@@ -209,6 +225,12 @@ export const rpcSlice = createSlice({
         state.center.x = action.payload.centerX;
         state.center.y = action.payload.centerY;
         state.currentZoomLevel = action.payload.zoom;
+    },
+    changeLayerStyle: (state, action) => {
+        state.channel !== null && state.channel.postRequest('ChangeMapLayerStyleRequest', [action.payload.layerId, action.payload.style]);
+    },
+    reArrangeSelectedMapLayers: (state, action) => {
+        state.channel !== null && state.channel.postRequest('RearrangeSelectedMapLayerRequest', [action.payload.layerId, action.payload.position]);
     }
   }
 });
@@ -231,6 +253,7 @@ export const {
     setZoomIn,
     setZoomOut,
     setZoomTo,
+    setSelectError,
     searchVKMRoad,
     addFeaturesToMap,
     removeFeaturesFromMap,
@@ -249,7 +272,9 @@ export const {
     getLegends,
     setLegends,
     setTagsWithLayers,
-    setCurrentMapCenter
+    setCurrentMapCenter,
+    changeLayerStyle,
+    reArrangeSelectedMapLayers
 } = rpcSlice.actions;
 
 export default rpcSlice.reducer;

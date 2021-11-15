@@ -21,7 +21,7 @@ const StyledSelect = styled.select`
     option {
         width: 45px;
         height: 30px;
-        background-color: ${(props: { theme: { colors: { maincolor1: any; }; }; }) => props.theme.colors.maincolor1};
+        background-color: ${(props: { theme: { colors: { mainColor1: any; }; }; }) => props.theme.colors.mainColor1};
         border: none;
         font-size: 18px;
     };

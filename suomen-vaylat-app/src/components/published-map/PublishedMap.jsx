@@ -17,10 +17,6 @@ import GFIHandler from '../infobox/GFIHandler';
 import { GFIPopup } from '../infobox/GFIPopup';
 import './PublishedMap.scss';
 
-
-
-
-
 const StyledPublishedMap = styled.div`
     height: calc(var(--app-height) - 60px);
 `;

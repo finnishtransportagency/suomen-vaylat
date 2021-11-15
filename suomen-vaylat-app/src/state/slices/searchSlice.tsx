@@ -21,7 +21,7 @@ const initialState = {
   },
   searching: false,
   searchError: false,
-  searchErrorData: null,
+  searchErrorData: "",
   searchErrorType: '',
   addressSearchEventHandlerReady: false,
   selectedIndex: -1,

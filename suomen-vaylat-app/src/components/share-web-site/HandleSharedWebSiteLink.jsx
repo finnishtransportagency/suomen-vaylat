@@ -2,7 +2,7 @@ import { useContext } from 'react';
 import { ReactReduxContext, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import { setLocale } from '../../state/slices/languageSlice';
-import { setLegends } from '../../state/slices/rpcSlice';
+import { changeLayerStyle, reArrangeSelectedMapLayers, setLegends } from '../../state/slices/rpcSlice';
 import { setIsSideMenuOpen, setSelectedTheme } from '../../state/slices/uiSlice';
 import { Logger } from '../../utils/logger';
 import { updateLayers } from '../../utils/rpcUtil';
@@ -59,10 +59,10 @@ export const HandleSharedWebSiteLink = () => {
 
                 channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layerId, true]);
                 channel.postRequest('ChangeMapLayerOpacityRequest', [layerId, opacity]);
-                channel.changeLayerStyle([layerId, style], function() {});
+                store.dispatch(changeLayerStyle({layerId: layerId, style:style}));
 
                 // Update layer orders to correct
-                channel.reorderLayers([layerId, index], () => {});
+                store.dispatch(reArrangeSelectedMapLayers({layerId: layerId, position: index}));
             }
         });
     }
