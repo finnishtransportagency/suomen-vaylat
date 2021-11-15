@@ -31,6 +31,9 @@ const en = {
         metadata: 'Show maplayer metadata',
         showPageInfo: 'Show page info'
     },
+    gfi: {
+        title: 'Feature Data'
+    },
     warning: 'Warning!',
     multipleLayersWarning: 'You are about to activate 10 or more maplayers and it might affect the performance of the service',
     continue: 'continue',
