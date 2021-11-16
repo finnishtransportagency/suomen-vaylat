@@ -159,14 +159,6 @@ const MenuBar = () => {
                     />
                 </StyledMenuBarButton>
                 <StyledMenuBarButton
-                    data-tip data-for='legend'
-                    isActive={isLegendOpen}
-                    onClick={() => store.dispatch(setIsLegendOpen(!isLegendOpen))}>
-                    <FontAwesomeIcon
-                        icon={faListAlt}
-                    />
-                </StyledMenuBarButton>
-                <StyledMenuBarButton
                     data-tip data-for='drawingtools'
                     isActive={isDrawingToolsOpen}
                     onClick={() => closeDrawingTools()}>

@@ -67,7 +67,7 @@ const Content = () => {
             <ZoomMenu />
             <PublishedMap />
             {isSearchOpen && <Search />}
-            {isLegendOpen && <Legend selectedLayers={selectedLayers} />}
+            {/*{isLegendOpen && <Legend selectedLayers={selectedLayers} />}*/}
             {isShareOpen && <ShareWebSitePopup />}
             {isDrawingToolsOpen && <DrawingTools />}
             <AppInfoModal />

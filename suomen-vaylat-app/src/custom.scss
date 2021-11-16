@@ -29,3 +29,25 @@
     transform: scale(0.9);
     transition: opacity 300ms, transform 500ms;
 }
+
+/* width */
+#legend-main-container::-webkit-scrollbar {
+    width: 10px;
+}
+
+/* Track */
+#legend-main-container::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px grey;
+    border-radius: 10px;
+}
+
+/* Handle */
+#legend-main-container::-webkit-scrollbar-thumb {
+    background-color: $mainColor1;
+    border-radius: 10px;
+}
+
+/* Handle on hover */
+#legend-main-container::-webkit-scrollbar-thumb:hover {
+    background: $mainColor2;
+}
