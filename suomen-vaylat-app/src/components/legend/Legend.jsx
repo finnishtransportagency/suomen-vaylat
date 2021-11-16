@@ -1,21 +1,16 @@
 import React from 'react';
-import { useContext, useEffect, useState } from 'react';
-import { faTimes } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import Draggable from 'react-draggable';
-import { ReactReduxContext, useSelector } from 'react-redux';
+import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import '../../custom.scss';
 import styled from 'styled-components';
-import { setIsLegendOpen } from '../../state/slices/uiSlice';
 import strings from '../../translations';
 import { LegendGroup } from './LegendGroup';
 
 const StyledLegendContainer = styled.div`
     z-index: 30;
-    position: absolute;
-    bottom: 10px;
-    right: 10px;
-    max-width:70%;
-    height: 60%;
+    pointer-events: auto;
+    width: 100%;
+    height: 100%;
     background:white;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
     @media ${ props => props.theme.device.mobileL} {
@@ -34,35 +29,15 @@ const StyledHeader = styled.div`
 const StyledGroupsContainer = styled.div`
     height: calc(100% - 40px);
     overflow-y: auto;
+    overflow-x: hidden;
     padding: 6px;
 `;
 
-const StyledLayerCloseIcon = styled.div`
-    position: absolute;
-    top: 8px;
-    right: 0;
-    min-width: 28px;
-    min-height: 28px;
-    cursor: pointer;
-    justify-content: center;
-    align-items: center;
-    svg {
-        color: ${props => props.theme.colors.mainWhite};
-        font-size: 18px;
-        transition: all 0.1s ease-out;
-    };
-    &:hover {
-        svg {
-            color: ${props => props.theme.colors.mainColor2};
-        }
-    }
-`;
-
-export const Legend = ({selectedLayers}) => {
+export const Legend = ({selectedLayers, hoveringIndex, zoomLevelsLayers, currentZoomLevel}) => {
     const legends = [];
     const noLegends = [];
-    const { store } = useContext(ReactReduxContext);
     const allLegends = useSelector((state) => state.rpc.legends);
+    const [currentLayersInfoLayers, setCurrentLayersInfoLayers] = useState([]);
 
     if (selectedLayers) {
         selectedLayers.forEach((layer) => {
@@ -87,43 +62,34 @@ export const Legend = ({selectedLayers}) => {
           width: window.innerWidth,
           height: window.innerHeight
         });
-      useEffect(() => {
-          window.onresize = updateSize;
-      }, []);
+    useEffect(() => {
+        window.onresize = updateSize;
+        hoveringIndex !== null ?
+            setCurrentLayersInfoLayers(Object.values(zoomLevelsLayers)[hoveringIndex].layers) :
+            zoomLevelsLayers[currentZoomLevel] !== undefined && setCurrentLayersInfoLayers(Object.values(zoomLevelsLayers)[currentZoomLevel].layers);
+    }, [zoomLevelsLayers, currentZoomLevel, hoveringIndex]);
 
 
     return(
-        <Draggable handle='.draggable-handler' bounds="parent" disabled={size.width/2 < 300}>
-            <StyledLegendContainer key={legends}>
-                <StyledHeader className='draggable-handler'>
-                    {strings.legend.title}
-                    <StyledLayerCloseIcon
-                        className='draggable-cancel'
-                        onClick={() => {
-                            store.dispatch(setIsLegendOpen(false));
-                            }}>
-                            <FontAwesomeIcon
-                                icon={faTimes}
-                            />
-                        </StyledLayerCloseIcon>
-                </StyledHeader>
-                <StyledGroupsContainer>
-                {legends && legends.length > 0 && <LegendGroups legends={legends}></LegendGroups>}
-                {legends && legends.length === 0 &&
-                    <>{strings.legend.noSelectedLayers}</>
-                }
-                </StyledGroupsContainer>
-            </StyledLegendContainer>
-        </Draggable>
-    );
-};
-
-const LegendGroups = ({legends}) => {
-    return (
-        legends.map((legend, index) => {
-            return(
-                <LegendGroup legend={legend} key={'legend-legend-group-' + index} index={index}></LegendGroup>
-            )
-        })
+        <StyledLegendContainer key={legends}>
+            <StyledHeader>
+                {strings.legend.title}
+            </StyledHeader>
+            <StyledGroupsContainer id='legend-main-container'>
+                {currentLayersInfoLayers.map((zoomLevelLayer, index) => {
+                    const legend = legends.find(layer => layer.layerId === zoomLevelLayer.id);
+                    return legend && <LegendGroup
+                        key={hoveringIndex !== null ?
+                            zoomLevelLayer.id+'_'+hoveringIndex :
+                            zoomLevelLayer.id+'_'+currentZoomLevel
+                        }
+                        legend={legend}
+                        zoomLevelLayer={zoomLevelLayer}
+                        index={index}
+                        layer={legend}
+                    />
+                })}
+            </StyledGroupsContainer>
+        </StyledLegendContainer>
     );
 };
