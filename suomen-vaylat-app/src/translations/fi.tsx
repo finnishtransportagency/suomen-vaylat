@@ -86,6 +86,7 @@ const fi = {
             themeLayers: 'Teemakartat',
             selectedLayers: 'Valitut tasot',
             mapLayers: 'Karttatasot',
+            backgroundMaps: 'Taustakartat',
             selectAll: 'Valitse kaikki',
             show: 'Näytä',
             filterOrSearchLayers: 'Suodata tai hae tasoja',
@@ -93,7 +94,8 @@ const fi = {
             searchForLayers: 'Hae karttatasoja',
             clearFilters: 'Tyhjennä suodatinvalinnat',
             searchResults: 'Hakutulokset',
-            removeAllSelectedLayers: 'Poista kaikki valitut tasot',
+            clearSelectedMapLayers: 'Tyhjennä valitut karttatasot',
+            clearSelectedBackgroundMaps: 'Tyhjennä valitut taustakartat',
             noSearchResults: 'Ei hakutuloksia',
             typeAtLeastThreeCharacters: 'Syötä vähintaan 3 kirjainta'
         }

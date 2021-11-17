@@ -45,7 +45,7 @@ const Content = () => {
         selectedLayers,
         warnings
     } = useAppSelector((state) => state.rpc);
-
+    
     const {
         isSearchOpen,
         isLegendOpen,
@@ -74,24 +74,26 @@ const Content = () => {
             <StyledContentGrid>
                 <MenuBar />
                 <MapLayersDialog />
-                {warnings.show && warnings.type == 'multipleLayersWarning' &&
+                {warnings.show && warnings.type === 'multipleLayersWarning' &&
                     <WarningDialog
                         dialogOpen={warnings.show}
                         hideWarn={hideWarn}
                         title={strings.warning}
                         message={strings.multipleLayersWarning}
                         filteredLayers={warnings.filteredLayers}
-                        indeterminate={warnings.indeterminate}
+                        isChecked={warnings.isChecked}
+                        //indeterminate={warnings.indeterminate}
                     />
                 }
-                {warnings.show && warnings.type == 'searchWarning' &&
+                {warnings.show && warnings.type === 'searchWarning' &&
                     <WarningDialog
                         dialogOpen={warnings.show}
                         hideWarn={hideWarn}
-                        title={search.selected == 'vkm' ?
+                        title={search.selected === 'vkm' ?
                             strings.search.vkm.error.title : strings.search.address.error.title}
                         message={warnings.message}
                         filteredLayers={[]}
+                        isChecked={undefined}
                         indeterminate={false}
                     />
                 }
