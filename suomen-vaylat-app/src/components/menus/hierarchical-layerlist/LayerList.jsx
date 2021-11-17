@@ -154,11 +154,6 @@ const StyledSelectButton = styled.button`
     };
 `;
 
-const StyledLayerGroupContainer = styled.div`
-    //height: ${props => props.isOpen ? "auto" : "0px"};
-    overflow: hidden;
-`;
-
 const StyledLayerGroup = styled(motion.ul)`
     list-style-type: none;
     margin: 0;
@@ -186,7 +181,11 @@ export const LayerList = ({
                     {
                         tags.map((tag, index) => {
                             return (
-                                <TagLayerList tag={tag} layers={layers} index={index} />
+                                <TagLayerList
+                                    tag={tag}
+                                    layers={layers}
+                                    index={index}
+                                />
                             );
                         })
                     }
@@ -225,15 +224,11 @@ export const LayerList = ({
       layers,
       index
     }) => {
-    const { store } = useContext(ReactReduxContext);
-    const channel = useSelector(state => state.rpc.channel);
     const tagsWithLayers = useSelector(state => state.rpc.tagsWithLayers);
     const tagLayers = tagsWithLayers[tag];
 
     const [ isOpen, setIsOpen ] = useState(false);
 
-    let checked;
-    let indeterminate;
     let visibleLayers = [];
     var filteredLayers = [];
 
@@ -249,60 +244,12 @@ export const LayerList = ({
         return null;
     });
 
-    if (filteredLayers.length === visibleLayers.length && visibleLayers.length > 0) {
-        checked = true;
-    } else if (visibleLayers.length > 0 ) {
-        indeterminate = true;
-    } else {
-        checked = false;
-        indeterminate = false;
-    }
-
-    const selectTag = (e) => {
-        e.stopPropagation();
-        if (!indeterminate) {
-            filteredLayers.map(layer => {
-                channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, !layer.visible]);
-                return null;
-            });
-        } else {
-            filteredLayers.map(layer => {
-                channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, false]);
-                return null;
-            });
-        }
-        updateLayers(store, channel);
-    }
-
     return (
             <StyledLayerGroups
                 initial={{ opacity: 0, x: -50 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0 }}
             >
-                {/* <StyledMasterGroupHeader
-                    key={"smgh_" + index + '_'}
-                    onClick={() => setIsOpen(!isOpen)}
-                >
-                    <StyledMasterGroupName>{tag.charAt(0).toUpperCase() + tag.slice(1)}</StyledMasterGroupName>
-                    <StyledRightContent>
-                        <Checkbox
-                                isChecked={checked}
-                                handleClick={selectTag}
-                        />
-                        <StyledSelectButton
-                            isOpen={isOpen}
-                            onClick={() => setIsOpen(!isOpen)}
-                        >
-                            <FontAwesomeIcon
-                                icon={faAngleDown}
-                                style={{
-                                    transform: isOpen && "rotate(180deg)"
-                                }}
-                            />
-                        </StyledSelectButton>
-                    </StyledRightContent>
-                </StyledMasterGroupHeader> */}
                 <StyledMasterGroupHeader
                      key={"smgh_" + index + '_'}
                     onClick={() => {

@@ -2,11 +2,11 @@ import styled from 'styled-components';
 import { motion } from "framer-motion";
 
 import DialogHeader from './DialogHeader';
-import {useContext, useState} from "react";
-import {ReactReduxContext, useSelector} from "react-redux";
-import {updateLayers} from "../../utils/rpcUtil";
+import { useContext, useState } from "react";
+import { ReactReduxContext, useSelector } from "react-redux";
+import { updateLayers } from "../../utils/rpcUtil";
 import strings from "../../translations";
-import {Button} from "react-bootstrap";
+import { Button } from "react-bootstrap";
 
 const OSKARI_LOCALSTORAGE = "oskari";
 
@@ -49,10 +49,10 @@ const StyledWarningDialog = styled(motion.div)`
     top: 35%;
     max-width: 300px;
     max-height: 500px;
-    transform: 'translate(-50%, -50%)'
-    right: 'auto'
-    bottom: 'auto'
-    marginRight: '-50%'
+    transform: translate(-50%, -50%);
+    right: auto;
+    bottom: auto;
+    margin-right: '-50%';
     display: flex;
     flex-direction: column;
     pointer-events: auto;
@@ -70,7 +70,7 @@ const StyledWarningDialog = styled(motion.div)`
     }
 `;
 
-const WarningDialog = ({ title='', message='', filteredLayers=[], indeterminate=false, hideWarn, dialogOpen }) => {
+const WarningDialog = ({ title='', message='', filteredLayers=[], indeterminate=false, hideWarn, dialogOpen, isChecked }) => {
     const [selected, setIsSelected] = useState(false);
     const { store } = useContext(ReactReduxContext);
     const channel = useSelector(state => state.rpc.channel);
@@ -82,17 +82,21 @@ const WarningDialog = ({ title='', message='', filteredLayers=[], indeterminate=
                 addToLocalStorageArray(OSKARI_LOCALSTORAGE, "multipleLayersWarning");
             }
         } else {
-            if (!indeterminate) {
-                filteredLayers.map(layer => {
-                    channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, !layer.visible]);
-                    return null;
-                });
-            } else {
-                filteredLayers.map(layer => {
-                    channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, false]);
-                    return null;
-                });
-            }
+            filteredLayers.map(layer => {
+                channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, !isChecked]);
+                return null;
+            });
+            // if (!indeterminate) {
+            //     filteredLayers.map(layer => {
+            //         channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, !layer.visible]);
+            //         return null;
+            //     });
+            // } else {
+            //     filteredLayers.map(layer => {
+            //         channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, false]);
+            //         return null;
+            //     });
+            // }
             updateLayers(store, channel);
             hideWarn();
             if (selected) {

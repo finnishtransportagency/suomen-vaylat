@@ -23,7 +23,8 @@ const initialState = {
       message: '',
       type: '',
       filteredLayers: [],
-      indeterminate: false
+      indeterminate: false,
+      isChecked: null
   },
   announcements: [],
   activeAnnouncements: [],
@@ -78,7 +79,8 @@ export const rpcSlice = createSlice({
             message: action.payload.message,
             type: action.payload.type,
             filteredLayers: action.payload.filteredLayers,
-            indeterminate: action.payload.indeterminate
+            indeterminate: action.payload.indeterminate,
+            isChecked: action.payload.isChecked
         };
     },
     setAllTags: (state, action) => {

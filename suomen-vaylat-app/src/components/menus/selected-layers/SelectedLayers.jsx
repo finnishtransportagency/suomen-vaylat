@@ -27,14 +27,26 @@ const StyledDeleteAllSelectedLayers = styled.div`
     background-color: ${props => props.theme.colors.mainColor1};
     margin: 20px auto 20px auto;
     border-radius: 15px;
-    svg {
-        font-size: 16px;
-    };
     p {
-        padding-left: 10px;
+        //padding-left: 10px;
         margin: 0;
-        font-size: 15px;
-    }
+        font-size: 12px;
+        font-weight: bold;
+    };
+`;
+
+const StyledListSubtitle = styled.div`
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    color: ${props => props.theme.colors.mainColor1};
+    padding: 0px 0px 16px 0px;
+    font-size: 14px;
+    svg {
+      margin-left: 8px;
+      font-size: 20px;
+      transition: all 0.3s ease-out;
+    };
 `;
 
 const SortableItem = SortableElement(({value, suomenVaylatLayers}) =>
@@ -64,36 +76,67 @@ export const SelectedLayers = ({ label, selectedLayers, suomenVaylatLayers }) =>
 
     const channel = useSelector(state => state.rpc.channel);
 
+    const mapLayers = selectedLayers.filter(layer => {
+        return layer.id !== 3 && layer.id !== 958;
+    });
+
+    const backgroundMaps = selectedLayers.filter(layer => {
+        return layer.id === 3 || layer.id === 958;
+    });
+
     const onSortEnd = (oldIndex) => {
         store.dispatch(reArrangeSelectedMapLayers({layerId: selectedLayers[oldIndex.oldIndex].id, position: selectedLayers.length - oldIndex.newIndex}));
         const newSelectedLayers = arrayMoveImmutable(selectedLayers, oldIndex.oldIndex, oldIndex.newIndex)
         store.dispatch(setSelectedLayers(newSelectedLayers));
     };
 
-    const handleRemoveAllSelectedLayers = () => {
-        selectedLayers.forEach(layer => {
+    const handleClearSelectedLayers = () => {
+        mapLayers.forEach(layer => {
             channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, !layer.visible]);
         });
         updateLayers(store, channel);
     };
 
+    const handleClearSelectedBackgroundMaps = () => {
+        backgroundMaps.forEach(layer => {
+            channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, !layer.visible]);
+        });
+        updateLayers(store, channel);
+    };
+
+
+
+    console.log(mapLayers);
+
     return (
         <StyledSelectedLayers>
+            <StyledListSubtitle>{strings.layerlist.layerlistLabels.mapLayers}</StyledListSubtitle>
             <SortableList
                 //axis={"y"}
                 lockAxis={"y"}
                 transitionDuration={300}
-                items={selectedLayers}
+                items={mapLayers}
                 onSortEnd={onSortEnd}
                 suomenVaylatLayers={suomenVaylatLayers}
             />
             <StyledDeleteAllSelectedLayers
-                onClick={() => handleRemoveAllSelectedLayers()}
+                onClick={() => handleClearSelectedLayers()}
             >
-                <FontAwesomeIcon
-                    icon={faTrash}
-                />
-                <p>{strings.layerlist.layerlistLabels.removeAllSelectedLayers}</p>
+                <p>{strings.layerlist.layerlistLabels.clearSelectedMapLayers}</p>
+            </StyledDeleteAllSelectedLayers>
+            <StyledListSubtitle>{strings.layerlist.layerlistLabels.backgroundMaps}</StyledListSubtitle>
+            <SortableList
+                //axis={"y"}
+                lockAxis={"y"}
+                transitionDuration={300}
+                items={backgroundMaps}
+                onSortEnd={onSortEnd}
+                suomenVaylatLayers={suomenVaylatLayers}
+            />
+            <StyledDeleteAllSelectedLayers
+                onClick={() => handleClearSelectedBackgroundMaps()}
+            >
+                <p>{strings.layerlist.layerlistLabels.clearSelectedBackgroundMaps}</p>
             </StyledDeleteAllSelectedLayers>
         </StyledSelectedLayers>
     );
