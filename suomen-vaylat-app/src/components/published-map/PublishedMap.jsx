@@ -51,8 +51,6 @@ const PublishedMap = () => {
             layerId: layerId,
             type: type
         }
-        //const updatedLocations = gfiLocations.slice();
-        //updatedLocations.push(location);
         console.log(location);
         store.dispatch(setGFILocations(location));
         store.dispatch(setIsGFIOpen(!isGFIOpen));

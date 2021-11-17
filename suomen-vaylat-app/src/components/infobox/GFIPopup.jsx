@@ -8,6 +8,7 @@ import { useAppSelector } from "../../state/hooks";
 import { setIsGFIOpen } from "../../state/slices/uiSlice";
 import strings from "../../translations";
 import './GFI.scss';
+import { GeoJSONFormatter } from './GeoJSONFormatter';
 
 const customStyles = {
     content: {
@@ -63,15 +64,24 @@ const StyledLayerCloseIcon = styled.div`
 
 export const GFIPopup = props => {
     console.log(props);
+    const geojsonFormatter = new GeoJSONFormatter();
 
     const { store } = useContext(ReactReduxContext);
     const isGFIOpen = useAppSelector((state) => state.ui.isGFIOpen);
     const allLayers = useAppSelector((state) => state.rpc.allLayers);
-    console.log(allLayers);
-    const headingText = allLayers.filter(layer => layer.id === props.layerId)[0].name;
-    console.log(props.content);
-    const mainText = props.content;
-    const popupContent = <div dangerouslySetInnerHTML={{__html: mainText}}></div> ;
+
+    const layerName = allLayers.filter(layer => layer.id === props.layerId)[0].name;
+    let content;
+
+    if (props.type === 'text') {
+        content = props.content
+    }
+    else if (props.type === 'geojson') {
+        //content = props.content.features[0].toString;
+        content = geojsonFormatter.format(props.content, layerName);
+    }
+
+    const popupContent = <div dangerouslySetInnerHTML={{__html: content}}></div> ;
     var contentWrapper = <div className="contentWrapper-infobox">{popupContent}</div> ;
     var contentDiv = <div className="popupContent">{contentWrapper}</div> ;
     const title = strings.gfi.title
@@ -101,7 +111,7 @@ export const GFIPopup = props => {
                 </StyledHeader>
                 <StyledContent>
                     <StyledGFIHeader className="gfi-header">
-                        {headingText}
+                        {layerName}
                     </StyledGFIHeader>
                     {contentDiv}
                 </StyledContent>
