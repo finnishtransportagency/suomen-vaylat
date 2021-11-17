@@ -113,8 +113,7 @@ const VKMSearch = ({visible, search, store, vectorLayerId, onEnterHandler}) => {
                     value={search.formData.vkm.tie ? search.formData.vkm.tie : ''}
                     min="1"
                     type="number"
-                >
-                </StyledTextField>
+                />
 
                 <StyledSelectInput
                     placeholder={strings.search.vkm.osa}
@@ -127,8 +126,7 @@ const VKMSearch = ({visible, search, store, vectorLayerId, onEnterHandler}) => {
                     options={search.searchResult.tieosat.map((value, index) => {
                         return { value: value, label: value }
                     })}
-                >
-                </StyledSelectInput>
+                />
 
                 <StyledSelectInput
                     placeholder={strings.search.vkm.ajorata}
@@ -141,9 +139,8 @@ const VKMSearch = ({visible, search, store, vectorLayerId, onEnterHandler}) => {
                     options={search.searchResult.ajoradat.map((value, index) => {
                         return { value: value, label: value }
                     })}
-                >
-                </StyledSelectInput>
-
+                />
+                
                 <StyledTextField
                     placeholder={strings.search.vkm.etaisyys}
                     onChange={(event) => {
@@ -159,8 +156,7 @@ const VKMSearch = ({visible, search, store, vectorLayerId, onEnterHandler}) => {
                             onEnterHandler();
                         }
                     }}
-                >
-                </StyledTextField>
+                />
             </StyledContainer>
     );
 };
