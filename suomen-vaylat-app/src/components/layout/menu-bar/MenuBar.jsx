@@ -14,27 +14,15 @@ import {
 import strings from '../../../translations';
 
 const StyledMenuBar = styled.div`
-z-index: 1;
+    z-index: 1;
     pointer-events: none;
     grid-row-start: 1;
-    //position: absolute;
-    //top: 10px;
-    //left: ${props => props.isSideMenuOpen ? "360px" : "10px"};
-    //left: 10px;
+    grid-row-end: 3;
     height: 100%;
     display: flex;
     align-items: flex-start;
     flex-direction: column;
     transition: all 0.5s ease-in-out;
-    /* @media ${props => props.theme.device.mobileL} {
-        top: calc(100% - 60px);
-        left: 10px;
-        width: 100%;
-        height: 40px;
-        justify-content: space-around;
-        align-items: center;
-        flex-direction: row;
-    }; */
 `;
 
 const StyledMenuBarButton = styled.div`

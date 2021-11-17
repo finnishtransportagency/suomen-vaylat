@@ -34,7 +34,8 @@ const StyledContentGrid = styled.div`
     box-sizing: border-box;
     display: grid;
     gap: 16px;
-    grid-template-columns: 48px 344px 1fr 48px;
+    grid-template-columns: 48px 344px 1fr;
+    grid-template-rows: 48px 1fr;
     padding: 16px;
     pointer-events: none;
 `;
@@ -66,7 +67,6 @@ const Content = () => {
         <StyledContent>
             <ZoomMenu />
             <PublishedMap />
-            {isSearchOpen && <Search />}
             {isLegendOpen && <Legend selectedLayers={selectedLayers} />}
             {isShareOpen && <ShareWebSitePopup />}
             {isDrawingToolsOpen && <DrawingTools />}
@@ -74,6 +74,7 @@ const Content = () => {
             <StyledContentGrid>
                 <MenuBar />
                 <MapLayersDialog />
+                <Search isOpen={isSearchOpen}/>
                 {warnings.show && warnings.type === 'multipleLayersWarning' &&
                     <WarningDialog
                         dialogOpen={warnings.show}

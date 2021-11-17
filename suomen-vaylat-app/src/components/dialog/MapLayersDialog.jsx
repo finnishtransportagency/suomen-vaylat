@@ -46,13 +46,13 @@ const variants = {
 };
 
 const StyledMapLayersDialog = styled(motion.div)`
-    //position: relative;
+    grid-row-start: 1;
+    grid-row-end: 3;
     width: 100%;
     height: auto;
     display: flex;
     flex-direction: column;
     pointer-events: auto;
-    //background-color: ${props => props.theme.colors.mainWhite};
     background-color: #F2F2F2;
     border-radius: 4px;
     overflow: hidden;

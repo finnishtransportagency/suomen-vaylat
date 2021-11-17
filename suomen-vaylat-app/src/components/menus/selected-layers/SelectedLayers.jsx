@@ -104,15 +104,10 @@ export const SelectedLayers = ({ label, selectedLayers, suomenVaylatLayers }) =>
         updateLayers(store, channel);
     };
 
-
-
-    console.log(mapLayers);
-
     return (
         <StyledSelectedLayers>
             <StyledListSubtitle>{strings.layerlist.layerlistLabels.mapLayers}</StyledListSubtitle>
             <SortableList
-                //axis={"y"}
                 lockAxis={"y"}
                 transitionDuration={300}
                 items={mapLayers}
@@ -126,7 +121,6 @@ export const SelectedLayers = ({ label, selectedLayers, suomenVaylatLayers }) =>
             </StyledDeleteAllSelectedLayers>
             <StyledListSubtitle>{strings.layerlist.layerlistLabels.backgroundMaps}</StyledListSubtitle>
             <SortableList
-                //axis={"y"}
                 lockAxis={"y"}
                 transitionDuration={300}
                 items={backgroundMaps}

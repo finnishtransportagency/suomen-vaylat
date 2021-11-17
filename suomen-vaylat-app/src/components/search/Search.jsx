@@ -18,30 +18,58 @@ import { setIsSearchOpen } from '../../state/slices/uiSlice';
 import strings from '../../translations';
 import CenterSpinner from '../center-spinner/CenterSpinner';
 import AddressSearch from './AddressSearch';
-import { StyledSelectInput } from './CommonComponents';
 import VKMSearch from './VKMSearch';
+import { StyledSelectInput } from './CommonComponents';
+import { motion } from "framer-motion";
 
-const StyledSearchContainer = styled.div`
+
+const variants = {
+    open: {
+        pointerEvents: "auto",
+        x: 0,
+        opacity: 1,
+    },
+    closed: {
+        pointerEvents: "none",
+        x: "20px",
+        opacity: 0,
+    },
+};
+
+const StyledSearchContainer = styled(motion.div)`
     z-index: 2;
-    position: fixed;
-    top: 90px;
-    right: 30px;
-    min-width: 350px;
-    max-width: 400px;
+    position: relative;
+    width: 100%;
+    height: 48px;
     display: flex;
     justify-content: flex-end;
-    align-items: flex-start;
-    flex-flow: row wrap;
-    margin-left: 20px;
-    padding: 6px;
+    justify-self: end;
+
+`;
+
+const StyledSearchMethod = styled.div`
+    background-color: ${props => props.theme.colors.mainWhite};
+    border-radius: 24px;
+    width: 100%;
+    max-width: 120px;
+    pointer-events: auto;
+`;
+
+const StyledSearchAddressInput = styled.div`
+    position: relative;
+    width: 100%;
+    max-width: 300px;
+    height: 48px;
+    background-color: ${props => props.theme.colors.mainWhite};
+    border-radius: 24px;
+    pointer-events: auto;
 `;
 
 const StyledCloseButton = styled.div`
     position: absolute;
-    top: -20px;
-    right: -20px;
-    width: 40px;
-    height: 40px;
+    right: 0px;
+    min-width: 48px;
+    height: 48px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -51,76 +79,33 @@ const StyledCloseButton = styled.div`
         color: ${props => props.theme.colors.mainWhite};
     }
     cursor: pointer;
+    pointer-events: auto;
 `;
 
-const StyledSearchControl = styled.button`
+const StyledEmptyButton = styled.div`
     position: absolute;
-    top: ${props => (props.selectedSearch === 'vkm' ? '142px': '10px')};
-    right: 12px;
-    width: 30px;
-    height: 30px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    top: 50%;
+    transform: translateY(-12px);
+    right: 54px;
     pointer-events: auto;
     cursor: pointer;
-    margin: 0;
-    background-color: transparent;
-    padding: 0 !important;
     border: none;
-    border-radius: 50%;
     transition: all 0.1s ease-in;
     svg {
-        width: 28px;
-        height: 28px;
+        width: 24px;
+        height: 24px;
         color: ${props => props.theme.colors.mainColor1};
         &:hover {
             transform: scale(1.05);
             color: ${props => props.theme.colors.mainColor2};
         }
     };
-    &:disabled {
-        display: none;
-    }
-
-    @media only screen and (max-width: 400px) {
-        top: ${props => (props.selectedSearch === 'vkm' ? '186px': '52px')};
-    }
-`;
-
-const StyledEmptyButton = styled.button`
-    position: absolute;
-    top: 10px;
-    right: ${props => (props.selectedSearch === 'vkm' ? '12px': '35px')};
-    width: 30px;
-    height: 30px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    pointer-events: auto;
-    cursor: pointer;
-    background-color: transparent;
-    border: none;
-    transition: all 0.1s ease-in;
-    svg {
-        width: 28px;
-        height: 28px;
-        color: ${props => props.theme.colors.mainColor1};
-        &:hover {
-            transform: scale(1.05);
-            color: ${props => props.theme.colors.mainColor2};
-        }
-    };
-    &:disabled {
-        display: none;
-    }
-
     @media only screen and (max-width: 400px) {
         top: 52px;
     }
 `;
 
-export const Search = () => {
+export const Search = ({isOpen}) => {
 
     const search = useAppSelector((state) => state.search);
 
@@ -191,31 +176,16 @@ export const Search = () => {
     }
 
     return (
-        <StyledSearchContainer className="search">
-            <StyledCloseButton
-                onClick={() => {
-                    searchTypeOnChange('address');
-                    store.dispatch(setIsSearchOpen(false));
-                }}
-            >
-                <FontAwesomeIcon
-                            icon={faTimes}
-                />
-            </StyledCloseButton>
-            <StyledEmptyButton
-                disabled={(search.formData.address === null || (search.formData.address.length === 0 && search.formData.vkm.tie === null) || search.searching === true)}
-                onClick={() => {
-                    searchTypeOnChange(search.selected);
-                }}
-                selectedSearch={search.selected}
-                >
-                <FontAwesomeIcon
-                    icon={faTrash}
-                />
-            </StyledEmptyButton>
-            {search.searching ? (
-                <CenterSpinner/>
-            ) : null}
+        <StyledSearchContainer
+            initial="closed"
+            animate={isOpen ? "open" : "closed"}
+            variants={variants}
+            transition={{
+                //type: "spring",
+                //duration: 0.7,
+            }}
+        >
+            <StyledSearchMethod>
                 <StyledSelectInput
                     options={searchTypes}
                     value={search.selected}
@@ -223,27 +193,66 @@ export const Search = () => {
                         searchTypeOnChange(event.target.value);
                     }}
                     className="search search-type"
-                >
-                </StyledSelectInput>
-                <VKMSearch visible={search.selected === 'vkm'}
-                    search={search}
-                    store={store}
-                    vectorLayerId={vectorLayerId}
-                    onEnterHandler={onClickHandler}></VKMSearch>
-                <AddressSearch visible={search.selected === 'address'}
-                    search={search}
-                    store={store}
-                    markerId={markerId} onEnterHandler={onClickHandler}></AddressSearch>
-                <StyledSearchControl
-                    disabled={searchDisabled}
-                    onClick={onClickHandler}
-                    className="search search-button"
-                    selectedSearch={search.selected}
-                    >
-                    <FontAwesomeIcon
-                        icon={faSearch}
+                />
+            </StyledSearchMethod>
+            <StyledSearchAddressInput>
+                {
+                    search.selected === 'vkm' && 
+                    <VKMSearch
+                        visible={search.selected === 'vkm'}
+                        search={search}
+                        store={store}
+                        vectorLayerId={vectorLayerId}
+                        onEnterHandler={onClickHandler}
                     />
-                </StyledSearchControl>
+                }
+                {
+                    search.selected === 'address' && 
+                    <AddressSearch
+                        visible={search.selected === 'address'}
+                        search={search}
+                        store={store}
+                        markerId={markerId} onEnterHandler={onClickHandler}
+                    />
+                }
+                {
+                    search.searching !== true &&
+                    <StyledEmptyButton
+                        onClick={() => {
+                            searchTypeOnChange(search.selected);
+                        }}
+                        selectedSearch={search.selected}
+                    >
+                            <FontAwesomeIcon
+                                icon={faTrash}
+                            />
+                    </StyledEmptyButton>
+                }
+                {
+                    search.searching && <CenterSpinner/>
+                }
+            </StyledSearchAddressInput>
+                {
+                    search.formData.address === null || search.formData.address.length === 0 ?
+                    <StyledCloseButton
+                        onClick={() => {
+                            searchTypeOnChange('address');
+                            store.dispatch(setIsSearchOpen(false));
+                        }}
+                    >
+                        <FontAwesomeIcon
+                            icon={faTimes}
+                        />
+                    </StyledCloseButton>
+                :
+                    <StyledCloseButton
+                        onClick={onClickHandler}
+                    >
+                            <FontAwesomeIcon
+                                icon={faSearch}
+                            />
+                    </StyledCloseButton>
+                }
             </StyledSearchContainer>
         );
 
