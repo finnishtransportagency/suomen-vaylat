@@ -4,10 +4,6 @@ export default class MarkerHandler {
     }
     init(channel) {
         channel.handleEvent('DataForMapLocationEvent', ({x, y, content, layerId, type}) => {
-            console.log(x);
-            console.log(y);
-            console.log(layerId);
-            console.log(type);
             this.onClick({x, y, content, layerId, type});
         });
     }
