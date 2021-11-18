@@ -63,7 +63,6 @@ const StyledLayerCloseIcon = styled.div`
 `;
 
 export const GFIPopup = props => {
-    console.log(props);
     const geojsonFormatter = new GeoJSONFormatter();
 
     const { store } = useContext(ReactReduxContext);
@@ -77,7 +76,6 @@ export const GFIPopup = props => {
         content = props.content
     }
     else if (props.type === 'geojson') {
-        //content = props.content.features[0].toString;
         content = geojsonFormatter.format(props.content, layerName);
     }
 

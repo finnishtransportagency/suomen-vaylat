@@ -7,23 +7,6 @@ import CodeListValues from './CodeListValues/CodeListValues';
  * - highPriorityFields: Show these GeoJSON feature properties first and different style than other
  * - visibleFields: Show these GeoJSON feature properties second (below highPriorityFields) and "normal" style
  *
- * For example attribute field:
- * {
- *     "data": {
- *         "gfi": {
- *             "highPriorityFields": [
- *                 "laj_tyyppi",
- *                 "vert_taso",
- *                 "laj_taso"
- *             ],
- *             "visibleFields": [
- *                 "ruoppaus",
- *                 "maalaatu"
- *              ]
- *         }
- *     }
- * }
- *
  * If highPriorityFields and visibleFields are not cofigured then show all properties.
  *
  * Layer feature localized field names come from FieldNameLocales/fi.js, FieldNameLocales/en.js and FieldNameLocales/sv.js
@@ -54,33 +37,27 @@ export class GeoJSONFormatter {
                     reOrderedProperties[key] = f.properties[key];
                 }
             });
-            console.log(reOrderedProperties);
-            console.log(f.properties);
-            //f.properties = reOrderedProperties;
         });
     }
 
     format (data = {}, layerName) {
-        console.log(data);
         let geoJSON = {...data};
-        console.log(geoJSON);
         const visibleFields = JSON.parse(geoJSON.features[0].properties._order.replace('\\',''));
-        console.log(visibleFields);
         const highPriority = JSON.parse(geoJSON.features[0].properties._orderHigh.replace('\\',''));
         let pretty = [];
 
         // reorder properties
         this.reOrderFeatureProperties(geoJSON, visibleFields, highPriority);
-        //const content = JSON.stringify(geoJSON);
-        //data.content = content;
 
         geoJSON.features.forEach(f => {
             const keys = Object.keys(f.properties);
+            console.log(keys);
             keys.forEach(key => {
-                pretty.push(this.getContent(layerName, key, f.properties[key], visibleFields, highPriority));
+                if (key !== "_order" && key !== "_orderHigh") {
+                    pretty.push(this.getContent(layerName, key, f.properties[key], visibleFields, highPriority));
+                }
             });
         });
-        console.log(pretty);
         return '<table class="geojson-formatted">' + pretty.join('') + '</table>';
     }
 
