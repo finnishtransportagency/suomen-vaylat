@@ -270,7 +270,7 @@ const MapLayersDialog = () => {
                         setTabIndex(e.activeIndex);
                         inputEl.current.swiper.slideTo(e.activeIndex);
                     }}
-                    allowTouchMove={true} // Disable for desktop if swiping with mouse is usable
+                    allowTouchMove={false} // Disable swiping
                     ref={inputEl}
                 >
                 {
