@@ -10,7 +10,7 @@ div.popupContent {
     border-color: #424343;
     overflow: scroll;
     padding-top: 5px;
-    border-top: 1px solid #3c3c3c;
+    border-top: 1px solid $mainColor1;
 
     div.contentWrapper-infobox {
         margin-bottom: 10px;
@@ -26,8 +26,13 @@ div.popupContent {
         padding-right: 15px;
     }
 
-    table td, table th {
-        padding-right: 20px;
+    td:nth-child(even) {
+        padding-left: 10px;
+    }
+    
+    td:nth-child(odd) {
+        padding-right: 10px;
+        border-right: 1px solid #ddd;
     }
 
     table {
@@ -35,7 +40,16 @@ div.popupContent {
     }
     
     tr:nth-child(2n) {
-        background-color: $mainColor3;
+        background-color: #f2f2f2;
+    }
+
+    tr.high-priority {
+        color: #ffffff;
+        background-color: $mainColor2;
+    }
+
+    table tr {
+        border-bottom: 1px solid #ddd;
     }
 
 }
@@ -46,6 +60,7 @@ div.popupContent::-webkit-scrollbar {
 
 div.ReactModalPortal {
     div.ReactModal__Overlay--after-open {
+        border-radius: 4px;
         z-index: 20;
         position: fixed;
         inset: 0px;
@@ -61,7 +76,7 @@ div.ReactModalPortal {
             background: rgb(255, 255, 255);
             outline: none;
             border: none;
-            border-radius: 0px;
+            border-radius: 4px;
             max-height: 50rem;
             max-width: 50rem;
 
