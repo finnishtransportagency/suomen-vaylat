@@ -12,7 +12,11 @@ import { updateLayers } from '../../../utils/rpcUtil';
 import Layers from './Layers';
 import { reArrangeSelectedMapLayers } from '../../../state/slices/rpcSlice';
 
-import Intersection from './Intersection.jpg';
+import hankekartta from './hankekartta.JPG';
+import intersection from './Intersection.jpg';
+import siltarajoituskartta from './siltarajoituskartta.jpg';
+import tienumerokartta from './tienumerokartta.jpg';
+import kuntokartta from './kuntokartta.jpg';
 
 const listVariants = {
     visible: {
@@ -147,6 +151,15 @@ const StyledSubText = styled.p`
     font-weight: 400;
 `;
 
+const themeImages = {
+    0: hankekartta,
+    1: intersection,
+    2: siltarajoituskartta,
+    3: tienumerokartta,
+    4: kuntokartta
+
+};
+
 export const ThemeLayerList = ({
     allLayers,
     allThemes
@@ -217,15 +230,14 @@ export const ThemeGroup = ({
     selectedThemeGroupIndex,
     selectGroup
 }) => {
-
+    
     const isOpen = selectedThemeGroupIndex === index;
 
     return (
         <StyledLayerGroups index={index}>
             <StyledMasterGroupHeader
-                key={"smgh_" + index}
+                key={"smgh_" + theme.id}
                 onClick={() => {
-                    //setIsOpen(!isOpen);
                     selectGroup(index, theme);
                 }}
             >
@@ -246,18 +258,21 @@ export const ThemeGroup = ({
             </StyledMasterGroupHeader>
             <StyledLayerGroupContainer
                 key={"slg_" + index}
-                //isOpen={isOpen}
                 initial="hidden"
                 animate={isOpen ? "visible" : "hidden"}
                 variants={listVariants}
             >
-            {strings.themelayerlist[theme.id].description !== null &&
+
                 <div>
-                    <StyledLayerGroupImage src={Intersection} alt=""/>
-                    <StyledSubHeader>{strings.themelayerlist[theme.id].title}</StyledSubHeader>
-                    <StyledSubText>{strings.themelayerlist[theme.id].description}</StyledSubText>
+                    {themeImages[theme.id] && <StyledLayerGroupImage src={themeImages[theme.id]} alt=""/>}
+                    {strings.themelayerlist[theme.id].description !== null && 
+                    <>
+                        <StyledSubHeader>{strings.themelayerlist[theme.id].title}</StyledSubHeader>
+                        <StyledSubText>{strings.themelayerlist[theme.id].description}</StyledSubText>
+                    </>
+                    }
                 </div>
-            }
+
                 <StyledLayerGroup>
                     <Layers layers={filteredLayers} isOpen={isOpen} theme={theme.name}/>
                 </StyledLayerGroup>
