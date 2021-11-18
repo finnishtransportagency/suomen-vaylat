@@ -1,7 +1,8 @@
-import {useState, useRef, useContext} from 'react';
+import { useRef, useContext, useEffect } from 'react';
 import styled from 'styled-components';
 import { useAppSelector } from '../../state/hooks';
-import { setIsSideMenuOpen } from '../../state/slices/uiSlice';
+import { ReactReduxContext } from 'react-redux';
+import { setIsSideMenuOpen, setSelectedMapLayersMenuTab } from '../../state/slices/uiSlice';
 import { motion } from "framer-motion";
 import { Swiper, SwiperSlide } from 'swiper/react/swiper-react.js';
 
@@ -24,7 +25,6 @@ import ThemeLayerList from '../menus/hierarchical-layerlist/ThemeLayerList';
 import SelectedLayers from '../menus/selected-layers/SelectedLayers';
 
 import strings from '../../translations';
-import {ReactReduxContext} from "react-redux";
 
 // install Swiper modules
 SwiperCore.use([
@@ -154,6 +154,8 @@ const StyledSwiper = styled(Swiper)`
 
 const MapLayersDialog = () => {
 
+    const { store } = useContext(ReactReduxContext);
+
     const {
         allGroups,
         allLayers,
@@ -163,19 +165,19 @@ const MapLayersDialog = () => {
         suomenVaylatLayers,
     } = useAppSelector((state) => state.rpc);
 
-    const { store } = useContext(ReactReduxContext);
+    const { selectedMapLayersMenuTab } = useAppSelector((state) => state.ui);
 
-    const {
-        isSideMenuOpen
-    } =  useAppSelector((state) => state.ui);
-
-    const [tabIndex, setTabIndex] = useState(0);
+    const { isSideMenuOpen } =  useAppSelector((state) => state.ui);
 
     const inputEl = useRef(null);
 
     const hideWarn = () => {
-        store.dispatch(setIsSideMenuOpen(!isSideMenuOpen))
-    }
+        store.dispatch(setIsSideMenuOpen(!isSideMenuOpen));
+    };
+
+    useEffect(() => {
+        inputEl.current.swiper.slideTo(selectedMapLayersMenuTab);
+    },[selectedMapLayersMenuTab]);
 
     const tabsContent = [
         {
@@ -227,18 +229,19 @@ const MapLayersDialog = () => {
                     hideWarn={hideWarn}
                 />
                 <StyledTabs
-                    tabIndex={tabIndex}
+                    tabIndex={selectedMapLayersMenuTab}
                 >
                     {
                         tabsContent.map((tab, index) => {
                             return (
                                 <StyledTab
                                     key={"tab_"+index}
-                                    isSelected={index === tabIndex}
+                                    isSelected={index === selectedMapLayersMenuTab}
                                     color={tab.titleColor}
                                     onClick={() => {
-                                        setTabIndex(index);
-                                        inputEl.current.swiper.slideTo(index);
+                                        store.dispatch(setSelectedMapLayersMenuTab(index));
+                                        //setTabIndex(index);
+                                       // inputEl.current.swiper.slideTo(index);
                                     }}
                                 >
                                     {tab.title}
@@ -253,7 +256,7 @@ const MapLayersDialog = () => {
                     }
                 </StyledTabs>
                 <StyledSwiper
-                    tabIndex={tabIndex}
+                    tabIndex={selectedMapLayersMenuTab}
                     className="map-layers-swiper"
                     //longSwipesRatio={1}
                     //shortSwipes={false}
@@ -267,10 +270,11 @@ const MapLayersDialog = () => {
                     //     "slideShadows": false
                     // }}
                     onSlideChange={e => {
-                        setTabIndex(e.activeIndex);
-                        inputEl.current.swiper.slideTo(e.activeIndex);
+                        store.dispatch(setSelectedMapLayersMenuTab(e.activeIndex));
+                        //setTabIndex(e.activeIndex);
+                        //inputEl.current.swiper.slideTo(e.activeIndex);
                     }}
-                    allowTouchMove={false} // Disable swiping
+                    allowTouchMove={true} // Disable swiping
                     ref={inputEl}
                 >
                 {

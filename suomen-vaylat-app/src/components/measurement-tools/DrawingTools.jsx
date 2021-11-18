@@ -118,6 +118,7 @@ const drawinToolsData = [
 export const DrawingTools = () => {
     const { store } = useContext(ReactReduxContext);
     const { channel } = useSelector(state => state.rpc);
+    console.log(channel);
     const { activeTool } = useSelector(state => state.ui);
     console.log(activeTool);
 
