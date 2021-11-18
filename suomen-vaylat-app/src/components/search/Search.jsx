@@ -13,7 +13,7 @@ import {
     searchVKMRoad,
     setSelectError
 } from '../../state/slices/rpcSlice';
-import { emptyFormData, emptySearchResult, setSearching, setSearchResult, setSearchSelected, setSearchError } from '../../state/slices/searchSlice';
+import { emptyFormData, emptySearchResult, setSearching, setSearchResult, setSearchSelected } from '../../state/slices/searchSlice';
 import { setIsSearchOpen } from '../../state/slices/uiSlice';
 import strings from '../../translations';
 import CenterSpinner from '../center-spinner/CenterSpinner';
@@ -180,10 +180,6 @@ export const Search = ({isOpen}) => {
             initial="closed"
             animate={isOpen ? "open" : "closed"}
             variants={variants}
-            transition={{
-                //type: "spring",
-                //duration: 0.7,
-            }}
         >
             <StyledSearchMethod>
                 <StyledSelectInput

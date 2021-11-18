@@ -1,27 +1,17 @@
-import { useState, useContext } from 'react';
+import { useState } from 'react';
 import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { ReactReduxContext, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
-import { updateLayers } from '../../../utils/rpcUtil';
-import Checkbox from '../../checkbox/Checkbox';
 import LayerGroup from './LayerGroup';
 import Layers from './Layers';
 
 import { motion } from "framer-motion";
 
-const layerGroupVariants = {
-
-}
 
 const masterHeaderIconVariants = {
     open: { rotate: 180 },
-    closed: { rotate: 0 },
-};
-
-const layerGroupIconVariants = {
-    open: { rotate: 90 },
     closed: { rotate: 0 },
 };
 
@@ -92,10 +82,6 @@ const StyledMasterGroupLayersCount = styled.p`
     color: rgba(255, 255, 255, 0.8);
 `;
 
-const StyledLefContent = styled.div`
-    display: flex;
-    align-items: center;
-`;
 const StyledLeftContent = styled.div`
     display: flex;
     height: 100%;

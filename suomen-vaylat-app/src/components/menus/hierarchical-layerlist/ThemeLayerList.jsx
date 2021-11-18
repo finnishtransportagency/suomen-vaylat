@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import {
     faMap
 } from '@fortawesome/free-solid-svg-icons';
@@ -10,7 +10,10 @@ import { useAppSelector } from '../../../state/hooks';
 import strings from '../../../translations';
 import { updateLayers } from '../../../utils/rpcUtil';
 import Layers from './Layers';
-import { reArrangeSelectedMapLayers } from '../../../state/slices/rpcSlice';
+//import { reArrangeSelectedMapLayers } from '../../../state/slices/rpcSlice';
+import {
+    setSelectedTheme
+} from '../../../state/slices/uiSlice';
 
 import hankekartta from './hankekartta.JPG';
 import intersection from './Intersection.jpg';
@@ -167,12 +170,16 @@ export const ThemeLayerList = ({
 
     const { store } = useContext(ReactReduxContext);
     const { channel } = useAppSelector((state) => state.rpc);
+
+    const { selectedTheme,  selectedMapLayersMenuThemeIndex} = useAppSelector((state) => state.ui);
+
     const [lastSelectedTheme, setLastSelectedTheme] = useState(null);
     const [selectedThemeGroupIndex, setSelectedThemeGroupIndex] = useState(null);
 
     const selectGroup = (index, theme) => {
         setLastSelectedTheme(theme);
         if(selectedThemeGroupIndex === null){
+            store.dispatch(setSelectedTheme(theme));
             setSelectedThemeGroupIndex(index);
             setTimeout(() => {
                 theme.layers.forEach(layerId => {
@@ -181,6 +188,7 @@ export const ThemeLayerList = ({
                 updateLayers(store, channel);
             },700);
         } else if(selectedThemeGroupIndex !== index ){
+            store.dispatch(setSelectedTheme(theme));
             lastSelectedTheme !== null && lastSelectedTheme.layers.forEach(layerId => {
                 channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layerId, false]);
             });
@@ -196,6 +204,7 @@ export const ThemeLayerList = ({
             },1000);
 
         } else {
+            store.dispatch(setSelectedTheme(null));
             theme.layers.forEach(layerId => {
                 channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layerId, false]);
             });
@@ -206,6 +215,30 @@ export const ThemeLayerList = ({
         };
     };
 
+    useEffect(() => {
+        if(selectedTheme === null && selectedThemeGroupIndex !== null){
+            lastSelectedTheme.layers.forEach(layerId => {
+                channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layerId, false]);
+            });
+            updateLayers(store, channel);
+            setTimeout(() => {
+                setSelectedThemeGroupIndex(null);
+            },700);
+        };
+
+    },[
+        selectedThemeGroupIndex,
+        selectedTheme,
+        lastSelectedTheme,
+        store,
+        channel
+    ]);
+
+    useEffect(() => {
+        setSelectedThemeGroupIndex(selectedMapLayersMenuThemeIndex);
+        console.log(selectedMapLayersMenuThemeIndex);
+    },[selectedMapLayersMenuThemeIndex]);
+
     return (
         <>
             {allThemes.map((theme, index) => {
@@ -215,6 +248,7 @@ export const ThemeLayerList = ({
                         theme={theme}
                         filteredLayers={filteredLayers}
                         index={index}
+                        selectedTheme={selectedTheme}
                         selectGroup={selectGroup}
                         selectedThemeGroupIndex={selectedThemeGroupIndex}
                     />
@@ -230,7 +264,7 @@ export const ThemeGroup = ({
     selectedThemeGroupIndex,
     selectGroup
 }) => {
-    
+
     const isOpen = selectedThemeGroupIndex === index;
 
     return (
@@ -262,7 +296,6 @@ export const ThemeGroup = ({
                 animate={isOpen ? "visible" : "hidden"}
                 variants={listVariants}
             >
-
                 <div>
                     {themeImages[theme.id] && <StyledLayerGroupImage src={themeImages[theme.id]} alt=""/>}
                     {strings.themelayerlist[theme.id].description !== null && 
@@ -272,7 +305,6 @@ export const ThemeGroup = ({
                     </>
                     }
                 </div>
-
                 <StyledLayerGroup>
                     <Layers layers={filteredLayers} isOpen={isOpen} theme={theme.name}/>
                 </StyledLayerGroup>

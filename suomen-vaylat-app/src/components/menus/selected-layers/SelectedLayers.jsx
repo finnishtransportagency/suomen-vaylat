@@ -6,11 +6,8 @@ import { updateLayers } from "../../../utils/rpcUtil";
 import { ReactReduxContext, useSelector } from 'react-redux';
 import { SortableContainer, SortableElement} from 'react-sortable-hoc';
 import {arrayMoveImmutable} from 'array-move';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash } from '@fortawesome/free-solid-svg-icons';
 
 import SelectedLayer from './SelectedLayer';
-
 
 const StyledSelectedLayers = styled.div`
 

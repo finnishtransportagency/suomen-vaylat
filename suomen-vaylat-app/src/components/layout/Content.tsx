@@ -8,6 +8,7 @@ import MapLayersDialog from '../dialog/MapLayersDialog';
 import WarningDialog from '../dialog/WarningDialog';
 import PublishedMap from '../published-map/PublishedMap';
 import Search from '../search/Search';
+import ThemeMapsActionButton from '../action-button/ThemeMapsActionButton';
 import { ShareWebSitePopup } from "../share-web-site/ShareWebSitePopup";
 import ZoomMenu from '../zoom-features/ZoomMenu';
 import strings from "../../translations";
@@ -75,6 +76,7 @@ const Content = () => {
                 <MenuBar />
                 <MapLayersDialog />
                 <Search isOpen={isSearchOpen}/>
+                <ThemeMapsActionButton />
                 {warnings.show && warnings.type === 'multipleLayersWarning' &&
                     <WarningDialog
                         dialogOpen={warnings.show}

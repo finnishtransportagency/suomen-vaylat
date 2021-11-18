@@ -9,7 +9,11 @@ import styled from 'styled-components';
 import { useAppSelector } from '../../../state/hooks';
 import {
     setIsDrawingToolsOpen,
-    setIsFullScreen, setIsLegendOpen, setIsSearchOpen, setIsSideMenuOpen, setActiveTool
+    setIsFullScreen,
+    setIsLegendOpen,
+    setIsSearchOpen,
+    setIsSideMenuOpen,
+    setActiveTool
 } from '../../../state/slices/uiSlice';
 import strings from '../../../translations';
 
