@@ -7,9 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useAppSelector } from '../../state/hooks';
 import { ReactReduxContext } from 'react-redux';
 
-import {
-    setSelectedTheme
-} from '../../state/slices/uiSlice';
+import { selectGroup } from '../../utils/rpcUtil';
 
 import { ThemeGroupShareButton } from '../share-web-site/ShareLinkButtons';
 
@@ -19,11 +17,13 @@ const variants = {
     open: {
         pointerEvents: "auto",
         y: 0,
+        x: "-50%",
         opacity: 1,
     },
     closed: {
         pointerEvents: "none",
         y: "20px",
+        x: "-50%",
         opacity: 0,
     },
 };
@@ -31,8 +31,7 @@ const variants = {
 const StyledActionButtonWrapper = styled(motion.div)`
     position: absolute;
     top: 0px;
-    left: 50%;
-    transform: translateX(-50%);
+    left: 50vw;
     width: 100%;
     max-width: 312px;
     height: 48px;
@@ -96,12 +95,19 @@ const StyledActionButtonClose = styled.div`
 
 const ThemeMapsActionButton = () => {
     const { store } = useContext(ReactReduxContext);
-    const { selectedTheme } = useAppSelector((state) => state.ui);
+    //const { channel } = useAppSelector((state) => state.rpc);
+
+    const { channel, selectedTheme,  lastSelectedTheme, selectedThemeIndex} = useAppSelector((state) => state.rpc);
+
+    const handleSelectGroup = (index, theme) => {
+        selectGroup(store, channel, index, theme, lastSelectedTheme, selectedThemeIndex);
+    };
+
 
     return (
     <StyledActionButtonWrapper
         initial="closed"
-        animate={selectedTheme !== null && selectedTheme !== "" ? "open" : "closed"}
+        animate={selectedTheme && selectedTheme !== "" ? "open" : "closed"}
         variants={variants}
         //onClick={() => action}
     >
@@ -111,12 +117,12 @@ const ThemeMapsActionButton = () => {
                     icon={faMap}
                 />
             </StyledActionButtonIcon>
-            <StyledActionButtonText>{selectedTheme !== null && selectedTheme.name}</StyledActionButtonText>
+            <StyledActionButtonText>{selectedTheme && selectedTheme.name}</StyledActionButtonText>
         </StyledLeftContent>
         <StyledRightContent>
-            <ThemeGroupShareButton themeId={selectedTheme !== null && selectedTheme.id}/>
+            <ThemeGroupShareButton themeId={selectedTheme && selectedTheme.id}/>
             <StyledActionButtonClose
-                onClick={() => store.dispatch(setSelectedTheme(null))}
+                onClick={() => handleSelectGroup(selectedThemeIndex, selectedTheme)}
             >
                 <FontAwesomeIcon
                     icon={faTimes}

@@ -2,10 +2,10 @@ import { useContext } from 'react';
 import { ReactReduxContext, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import { setLocale } from '../../state/slices/languageSlice';
-import { changeLayerStyle, reArrangeSelectedMapLayers, setLegends } from '../../state/slices/rpcSlice';
-import { setIsSideMenuOpen, setSelectedMapLayersMenuTab, setSelectedTheme, setSelectedMapLayersMenuThemeIndex } from '../../state/slices/uiSlice';
+import { changeLayerStyle, reArrangeSelectedMapLayers, setLegends, setSelectedTheme, setLastSelectedTheme, setSelectedThemeIndex } from '../../state/slices/rpcSlice';
+import { setIsSideMenuOpen, setSelectedMapLayersMenuTab, setSelectedMapLayersMenuThemeIndex } from '../../state/slices/uiSlice';
 import { Logger } from '../../utils/logger';
-import { updateLayers } from '../../utils/rpcUtil';
+import { updateLayers, selectGroup } from '../../utils/rpcUtil';
 
 const LOG = new Logger('HandleSharedWebSiteLink');
 
@@ -18,6 +18,7 @@ const LOG = new Logger('HandleSharedWebSiteLink');
  */
 export const HandleSharedWebSiteLink = () => {
 
+
     let {zoom, x, y, maplayers, themeId, lang} = useParams();
     zoom = parseInt(zoom);
     x = parseInt(x);
@@ -25,6 +26,8 @@ export const HandleSharedWebSiteLink = () => {
 
     const { store } = useContext(ReactReduxContext);
     const channel = useSelector(state => state.rpc.channel);
+    //const { selectedTheme,  lastSelectedTheme, selectedThemeIndex} = useAppSelector((state) => state.rpc);
+
     const allThemesWithLayers = useSelector(state => state.rpc.allThemesWithLayers);
 
     if ((zoom && x && y) || themeId) {
@@ -48,10 +51,20 @@ export const HandleSharedWebSiteLink = () => {
     if (themeId) {
         store.dispatch(setIsSideMenuOpen(true));
         const theme = allThemesWithLayers.find(theme => theme.id === parseInt(themeId));
-        const themeGroupIndex = allThemesWithLayers.findIndex( theme => theme.id === parseInt(themeId));
-        theme && store.dispatch(setSelectedTheme(theme));
-        theme && store.dispatch(setSelectedMapLayersMenuTab(1));
-        theme && store.dispatch(setSelectedMapLayersMenuThemeIndex(themeGroupIndex));
+        const themeGroupIndex = allThemesWithLayers.findIndex(theme => theme.id === parseInt(themeId));
+
+        if(theme){
+            store.dispatch(setSelectedMapLayersMenuTab(1));
+            store.dispatch(setLastSelectedTheme(theme));
+            store.dispatch(setSelectedTheme(theme));
+            store.dispatch(setSelectedThemeIndex(themeGroupIndex));
+            setTimeout(() => {
+                theme.layers.forEach(layerId => {
+                    theme.defaultLayers.includes(layerId) && channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layerId, true]);
+                });
+                updateLayers(store, channel);
+            },700);
+        }
     }
     // else if mapLayers given, add wanted layers to map
     else if (channel && maplayers) {
