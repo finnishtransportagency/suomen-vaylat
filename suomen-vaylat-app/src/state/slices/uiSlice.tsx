@@ -7,7 +7,6 @@ const initialState = {
   searchParams: "",
   isLegendOpen: false,
   isInfoOpen: false,
-  selectedTheme: '',
   shareUrl: '',
   isDrawingToolsOpen: false,
   selectedLayerList: 'themes',
@@ -46,9 +45,6 @@ export const uiSlice = createSlice({
     setIsInfoOpen: (state, action) => {
       state.isInfoOpen = action.payload;
     },
-    setSelectedTheme: (state, action) => {
-      state.selectedTheme = action.payload;
-    },
     setShareUrl: (state, action) => {
       state.shareUrl = action.payload;
     },
@@ -83,7 +79,6 @@ export const {
   setIsInfoOpen,
   setIsFullScreen,
   setIsDrawingToolsOpen,
-  setSelectedTheme,
   setShareUrl,
   setSelectedLayerListType,
   setActiveTool,

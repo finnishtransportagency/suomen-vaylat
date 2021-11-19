@@ -1,19 +1,14 @@
-import { useState, useContext, useEffect } from 'react';
-import {
-    faMap
-} from '@fortawesome/free-solid-svg-icons';
+import { useContext } from 'react';
+import { faMap } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ReactReduxContext } from 'react-redux';
 import { motion } from "framer-motion";
 import styled from 'styled-components';
 import { useAppSelector } from '../../../state/hooks';
 import strings from '../../../translations';
-import { updateLayers } from '../../../utils/rpcUtil';
+import { selectGroup } from '../../../utils/rpcUtil';
 import Layers from './Layers';
 //import { reArrangeSelectedMapLayers } from '../../../state/slices/rpcSlice';
-import {
-    setSelectedTheme
-} from '../../../state/slices/uiSlice';
 
 import hankekartta from './hankekartta.JPG';
 import intersection from './Intersection.jpg';
@@ -169,75 +164,12 @@ export const ThemeLayerList = ({
 }) => {
 
     const { store } = useContext(ReactReduxContext);
-    const { channel } = useAppSelector((state) => state.rpc);
 
-    const { selectedTheme,  selectedMapLayersMenuThemeIndex} = useAppSelector((state) => state.ui);
+    const { channel, selectedTheme,  lastSelectedTheme, selectedThemeIndex} = useAppSelector((state) => state.rpc);
 
-    const [lastSelectedTheme, setLastSelectedTheme] = useState(null);
-    const [selectedThemeGroupIndex, setSelectedThemeGroupIndex] = useState(null);
-
-    const selectGroup = (index, theme) => {
-        setLastSelectedTheme(theme);
-        if(selectedThemeGroupIndex === null){
-            store.dispatch(setSelectedTheme(theme));
-            setSelectedThemeGroupIndex(index);
-            setTimeout(() => {
-                theme.layers.forEach(layerId => {
-                    theme.defaultLayers.includes(layerId) && channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layerId, true]);
-                });
-                updateLayers(store, channel);
-            },700);
-        } else if(selectedThemeGroupIndex !== index ){
-            store.dispatch(setSelectedTheme(theme));
-            lastSelectedTheme !== null && lastSelectedTheme.layers.forEach(layerId => {
-                channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layerId, false]);
-            });
-            updateLayers(store, channel);
-            setTimeout(() => {
-                setSelectedThemeGroupIndex(index);
-                setTimeout(() => {
-                        theme.layers.forEach(layerId => {
-                            theme.defaultLayers.includes(layerId) && channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layerId, true]);
-                        });
-                    updateLayers(store, channel);
-                },700);
-            },1000);
-
-        } else {
-            store.dispatch(setSelectedTheme(null));
-            theme.layers.forEach(layerId => {
-                channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layerId, false]);
-            });
-            updateLayers(store, channel);
-            setTimeout(() => {
-                setSelectedThemeGroupIndex(null);
-            },700);
-        };
+    const handleSelectGroup = (index, theme) => {
+        selectGroup(store, channel, index, theme, lastSelectedTheme, selectedThemeIndex);
     };
-
-    useEffect(() => {
-        if(selectedTheme === null && selectedThemeGroupIndex !== null){
-            lastSelectedTheme.layers.forEach(layerId => {
-                channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layerId, false]);
-            });
-            updateLayers(store, channel);
-            setTimeout(() => {
-                setSelectedThemeGroupIndex(null);
-            },700);
-        };
-
-    },[
-        selectedThemeGroupIndex,
-        selectedTheme,
-        lastSelectedTheme,
-        store,
-        channel
-    ]);
-
-    useEffect(() => {
-        setSelectedThemeGroupIndex(selectedMapLayersMenuThemeIndex);
-        console.log(selectedMapLayersMenuThemeIndex);
-    },[selectedMapLayersMenuThemeIndex]);
 
     return (
         <>
@@ -249,8 +181,8 @@ export const ThemeLayerList = ({
                         filteredLayers={filteredLayers}
                         index={index}
                         selectedTheme={selectedTheme}
-                        selectGroup={selectGroup}
-                        selectedThemeGroupIndex={selectedThemeGroupIndex}
+                        selectGroup={handleSelectGroup}
+                        selectedThemeIndex={selectedThemeIndex}
                     />
             })}
         </>
@@ -261,11 +193,11 @@ export const ThemeGroup = ({
     theme,
     filteredLayers,
     index,
-    selectedThemeGroupIndex,
+    selectedThemeIndex,
     selectGroup
 }) => {
 
-    const isOpen = selectedThemeGroupIndex === index;
+    const isOpen = selectedThemeIndex === index;
 
     return (
         <StyledLayerGroups index={index}>

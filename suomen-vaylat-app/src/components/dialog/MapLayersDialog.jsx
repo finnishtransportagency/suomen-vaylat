@@ -76,6 +76,7 @@ const StyledMapLayersDialog = styled(motion.div)`
 `;
 
 const StyledTabs = styled.div`
+    z-index:2;
     position: relative;
     display: flex;
     align-items: center;

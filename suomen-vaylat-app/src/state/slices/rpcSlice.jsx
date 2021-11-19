@@ -29,6 +29,9 @@ const initialState = {
   announcements: [],
   activeAnnouncements: [],
   allThemesWithLayers: [],
+  selectedTheme: null,
+  lastSelectedTheme: null,
+  selectedThemeIndex: null,
   filter: null,
   suomenVaylatLayers: [],
   layerMetadata: { data: null, layer: null, uuid: null},
@@ -94,6 +97,18 @@ export const rpcSlice = createSlice({
     },
     setAllThemesWithLayers: (state, action) => {
         state.allThemesWithLayers = action.payload;
+    },
+    setSelectedTheme: (state, action) => {
+        state.selectedTheme = action.payload;
+        // if(action.payload === null){
+        //     state.selectedThemeIndex = null;
+        // };
+    },
+    setLastSelectedTheme: (state, action) => {
+        state.lastSelectedTheme = action.payload;
+    },
+    setSelectedThemeIndex: (state, action) => {
+        state.selectedThemeIndex = action.payload;
     },
     setAnnouncements: (state, action) => {
         state.announcements = action.payload;
@@ -265,6 +280,9 @@ export const {
     removeMarkerRequest,
     mapMoveRequest,
     setAllThemesWithLayers,
+    setSelectedTheme,
+    setLastSelectedTheme,
+    setSelectedThemeIndex,
     setActiveAnnouncements,
     setFilter,
     setSuomenVaylatLayers,
