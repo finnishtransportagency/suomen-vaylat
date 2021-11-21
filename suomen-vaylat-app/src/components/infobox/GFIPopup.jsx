@@ -5,10 +5,12 @@ import Modal from "react-modal";
 import { ReactReduxContext } from "react-redux";
 import styled from 'styled-components';
 import { useAppSelector } from "../../state/hooks";
-import { setIsGFIOpen } from "../../state/slices/uiSlice";
+import { setIsGFIOpen, setGFILocations } from "../../state/slices/uiSlice";
 import strings from "../../translations";
 import './GFI.scss';
 import { GeoJSONFormatter } from './GeoJSONFormatter';
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import 'react-tabs/style/react-tabs.css';
 
 const customStyles = {
     content: {
@@ -62,30 +64,40 @@ const StyledLayerCloseIcon = styled.div`
     };
 `;
 
-export const GFIPopup = props => {
+export const GFIPopup = ({gfiLocations}) => {
     const geojsonFormatter = new GeoJSONFormatter();
 
     const { store } = useContext(ReactReduxContext);
     const isGFIOpen = useAppSelector((state) => state.ui.isGFIOpen);
     const allLayers = useAppSelector((state) => state.rpc.allLayers);
+    let tabsTitles = []
+    let tabsContent = []
+    let layerName = null;
+    let contentDiv = null;
 
-    const layerName = allLayers.filter(layer => layer.id === props.layerId)[0].name;
-    let content;
+    gfiLocations.map(location => {
+        layerName = allLayers.filter(layer => layer.id === location.layerId)[0].name;
+        tabsTitles.push(layerName);
+        let content;
+    
+        if (location.type === 'text') {
+            content = location.content
+        }
+        else if (location.type === 'geojson') {
+            content = geojsonFormatter.format(location.content);
+        }
+    
+        const popupContent = <div dangerouslySetInnerHTML={{__html: content}}></div> ;
+        var contentWrapper = <div className="contentWrapper-infobox">{popupContent}</div> ;
+        contentDiv = <div className="popupContent">{contentWrapper}</div> ;
+        tabsContent.push(contentDiv);
 
-    if (props.type === 'text') {
-        content = props.content
-    }
-    else if (props.type === 'geojson') {
-        content = geojsonFormatter.format(props.content, layerName);
-    }
-
-    const popupContent = <div dangerouslySetInnerHTML={{__html: content}}></div> ;
-    var contentWrapper = <div className="contentWrapper-infobox">{popupContent}</div> ;
-    var contentDiv = <div className="popupContent">{contentWrapper}</div> ;
+    })
     const title = strings.gfi.title
 
     function closeModal() {
         store.dispatch(setIsGFIOpen(false));
+        store.dispatch(setGFILocations([]));
     };
 
     return (
@@ -107,12 +119,32 @@ export const GFIPopup = props => {
                         />
                     </StyledLayerCloseIcon>
                 </StyledHeader>
-                <StyledContent>
-                    <StyledGFIHeader className="gfi-header">
-                        {layerName}
-                    </StyledGFIHeader>
-                    {contentDiv}
-                </StyledContent>
+                <Tabs>
+                    <StyledContent>
+                        <TabList>
+                            {
+                                tabsTitles.map((title, index) => {
+                                    return (
+                                        <Tab>
+                                            <StyledGFIHeader className="gfi-header">
+                                                {title}
+                                            </StyledGFIHeader>
+                                        </Tab>
+                                    )
+                                })
+                            }
+                        </TabList>
+                        {
+                            tabsContent.map((content, index) => {
+                                    return (
+                                        <TabPanel>
+                                            {content}
+                                        </TabPanel>
+                                    )
+                                })
+                        }
+                    </StyledContent>
+                </Tabs>
             </Modal>
         </div>
     );
