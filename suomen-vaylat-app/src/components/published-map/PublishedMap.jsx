@@ -1,4 +1,4 @@
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import OskariRPC from 'oskari-rpc';
 import { ReactReduxContext } from 'react-redux';
 import styled from 'styled-components';
@@ -13,7 +13,6 @@ import { updateLayers } from '../../utils/rpcUtil';
 import { AnnouncementsModal } from '../announcements-modal/AnnouncementsModal';
 import CenterSpinner from '../center-spinner/CenterSpinner';
 import { MetadataModal } from '../metadata-modal/MetadataModal';
-import GFIHandler from '../infobox/GFIHandler';
 import { GFIPopup } from '../infobox/GFIPopup';
 import './PublishedMap.scss';
 
@@ -34,32 +33,20 @@ const PublishedMap = () => {
 
     const { store } = useContext(ReactReduxContext);
     const loading = useAppSelector((state) => state.rpc.loading);
-    const gfiLocations = useAppSelector((state) => state.ui.gfiLocations);
-    const isGFIOpen = useAppSelector((state) => state.ui.isGFIOpen);
+    //const gfiLocations = useAppSelector((state) => state.ui.gfiLocations);
     const language = useAppSelector((state) => state.language);
+    const [gfiLocations, setGFILocations] = useState(null);
+    const isGFIOpen = useAppSelector((state) => state.ui.isGFIOpen);
     const lang = language.current;
 
     const hideSpinner = () => {
         store.dispatch(setLoading(false));
     };
 
-    const handleMapClick = ({x, y, content, layerId, type}) => {
-        const location = {
-            x: x,
-            y: y,
-            content: content,
-            layerId: layerId,
-            type: type
-        }
-        console.log(location);
-        store.dispatch(setGFILocations(location));
-        store.dispatch(setIsGFIOpen(!isGFIOpen));
-    };
-
     useEffect(() => {
         store.dispatch(setLoading(true));
         const iframe = document.getElementById('sv-iframe');
-        var handlers = [new GFIHandler(handleMapClick)];
+        var handlers = [];
 
         var channel = OskariRPC.connect(iframe, process.env.REACT_APP_PUBLISHED_MAP_DOMAIN);
         var synchronizer = OskariRPC.synchronizerFactory(channel, handlers);
@@ -166,6 +153,17 @@ const PublishedMap = () => {
 
                     });
                 };
+                
+                if (data.DataForMapLocationEvent) {
+                    channel.handleEvent('DataForMapLocationEvent', (data) => {
+                        console.log(data);
+                        let locations = gfiLocations !== null ? [gfiLocations] : [] ;
+                        locations.push(data)
+                        setGFILocations(locations);
+                        //store.dispatch(setGFILocations(locations));
+                        store.dispatch(setIsGFIOpen(true));
+                    });
+                }
 
                 if (data.MarkerClickEvent) {
                     channel.handleEvent('MarkerClickEvent', event => {
@@ -257,7 +255,7 @@ const PublishedMap = () => {
                 );
             })}
             {gfiLocations != null ? (
-                <GFIPopup {...gfiLocations}/>
+                <GFIPopup gfiLocations={gfiLocations}/>
             ) : null}
             <MetadataModal />
             <StyledIframe id="sv-iframe" title="iframe" src={process.env.REACT_APP_PUBLISHED_MAP_URL + "&lang=" + lang}
