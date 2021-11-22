@@ -1,6 +1,11 @@
 import { useContext } from "react";
 import {
-    faCompress, faExpand, faListAlt, faLayerGroup, faPencilRuler, faSearch
+    faCompress,
+    faExpand,
+    faListAlt,
+    faLayerGroup,
+    faPencilRuler,
+    faSearch
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ReactReduxContext } from 'react-redux';
@@ -17,6 +22,8 @@ import {
 } from '../../../state/slices/uiSlice';
 import strings from '../../../translations';
 
+import DrawingTools from '../../measurement-tools/DrawingTools';
+
 const StyledMenuBar = styled.div`
     z-index: 1;
     pointer-events: none;
@@ -29,6 +36,13 @@ const StyledMenuBar = styled.div`
     transition: all 0.5s ease-in-out;
 `;
 
+const StyledMapToolsContainer = styled.div`
+    background-color: ${props => props.theme.colors.mainWhite};
+    border-radius: 24px;
+    box-shadow: 2px 2px 4px #0000004D;
+    margin-top: 8px;
+`;
+
 const StyledMenuBarButton = styled.div`
     pointer-events: auto;
     position: relative;
@@ -39,8 +53,29 @@ const StyledMenuBarButton = styled.div`
     justify-content: center;
     align-items: center;
     background-color: ${props => props.isActive ? props.theme.colors.buttonActive : props.theme.colors.button};
-    margin-top: 10px;
-    //box-shadow: rgb(0 0 0 / 16%) 0px 3px 6px, rgb(0 0 0 / 23%) 0px 3px 6px;
+    margin-top: 8px;
+    box-shadow: 2px 2px 4px #0000004D;
+    border-radius: 50%;
+    svg {
+        color: ${props => props.theme.colors.mainWhite};
+        font-size: 22px;
+    };
+    @media ${props => props.theme.device.mobileL} {
+        width: 40px;
+        height: 40px;
+    };
+`;
+
+const StyledMenuBarToolsButton = styled.div`
+    pointer-events: auto;
+    position: relative;
+    cursor: pointer;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: ${props => props.isActive ? props.theme.colors.buttonActive : props.theme.colors.button};
     box-shadow: 2px 2px 4px #0000004D;
     border-radius: 50%;
     svg {
@@ -158,14 +193,18 @@ const MenuBar = () => {
                         icon={faListAlt}
                     />
                 </StyledMenuBarButton>
-                <StyledMenuBarButton
-                    data-tip data-for='drawingtools'
-                    isActive={isDrawingToolsOpen}
-                    onClick={() => closeDrawingTools()}>
-                    <FontAwesomeIcon
-                        icon={faPencilRuler}
-                    />
-                </StyledMenuBarButton>
+                <StyledMapToolsContainer>
+                    <StyledMenuBarToolsButton
+                        data-tip data-for='drawingtools'
+                        isActive={isDrawingToolsOpen}
+                        onClick={() => closeDrawingTools()}>
+                        <FontAwesomeIcon
+                            icon={faPencilRuler}
+                        />
+                    </StyledMenuBarToolsButton>
+                    <DrawingTools isOpen={isDrawingToolsOpen}/>
+                </StyledMapToolsContainer>
+
                 <StyledMenuBarButton
                     data-tip data-for='fullscreen'
                     isActive={isFullScreen}
