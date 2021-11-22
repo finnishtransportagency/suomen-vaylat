@@ -72,6 +72,7 @@ const StyledErase = styled.div`
     justify-content: center;
     flex-direction: column;
     margin-top: 8px;
+    margin-bottom: 2px;
     svg {
         color: ${props => props.theme.colors.mainWhite};
         font-size: 20px;
