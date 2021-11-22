@@ -7,6 +7,10 @@ import {
     reArrangeSelectedMapLayers
 } from "../state/slices/rpcSlice";
 
+import {
+    setSelectedMapLayersMenuThemeIndex
+} from "../state/slices/uiSlice";
+
 export const updateLayers = (store, channel) => {
     channel && channel.getAllLayers(function (data) {
         store.dispatch(setAllLayers(data));
@@ -76,3 +80,26 @@ export const reArrangeSelectedLayersOrder = (selectedLayers) => {
 
     return mapLayers.concat(backgroundMaps)
 }
+
+export const resetThemeGroups = (store, channel, index, theme, lastSelectedTheme, selectedThemeIndex) => {
+    // if(theme){
+    //     theme.layers.forEach(layerId => {
+    //         channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layerId, false]);
+    //     });
+    // };
+    store.dispatch(setSelectedTheme(null));
+    store.dispatch(setLastSelectedTheme(null));
+    store.dispatch(setSelectedThemeIndex(null));
+};
+
+export const resetThemeGroupsForMainScreen = (store, channel, index, theme, lastSelectedTheme, selectedThemeIndex) => {
+    if(theme){
+        theme.layers.forEach(layerId => {
+            channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layerId, false]);
+        });
+    };
+    store.dispatch(setSelectedMapLayersMenuThemeIndex(0));
+    store.dispatch(setSelectedTheme(null));
+    store.dispatch(setLastSelectedTheme(null));
+    store.dispatch(setSelectedThemeIndex(null));
+};
