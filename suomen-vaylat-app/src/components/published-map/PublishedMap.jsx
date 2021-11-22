@@ -4,11 +4,9 @@ import { ReactReduxContext } from 'react-redux';
 import styled from 'styled-components';
 import { useAppSelector } from '../../state/hooks';
 import {
-    setActiveAnnouncements, setAllGroups, setAllTags, setAllThemesWithLayers, setChannel, setCurrentMapCenter, setCurrentState, setCurrentZoomLevel, setFeatures, setLegends, setLoading, setSuomenVaylatLayers, setTagsWithLayers, setZoomLevelsLayers, setZoomRange
+    setActiveAnnouncements, setAllGroups, setAllTags, setAllThemesWithLayers, setChannel, setCurrentMapCenter, setCurrentState, setCurrentZoomLevel, setFeatures, setLegends, setLoading, setSuomenVaylatLayers, setTagsWithLayers, setZoomLevelsLayers, setZoomRange, setGFILocations 
 } from '../../state/slices/rpcSlice';
-import {
-    setGFILocations, setIsGFIOpen
-} from '../../state/slices/uiSlice';
+import { setIsGFIOpen } from '../../state/slices/uiSlice';
 import { updateLayers } from '../../utils/rpcUtil';
 import { AnnouncementsModal } from '../announcements-modal/AnnouncementsModal';
 import CenterSpinner from '../center-spinner/CenterSpinner';
@@ -33,10 +31,8 @@ const PublishedMap = () => {
 
     const { store } = useContext(ReactReduxContext);
     const loading = useAppSelector((state) => state.rpc.loading);
-    //const gfiLocations = useAppSelector((state) => state.ui.gfiLocations);
+    const gfiLocations = useAppSelector((state) => state.rpc.gfiLocations);
     const language = useAppSelector((state) => state.language);
-    const [gfiLocations, setGFILocations] = useState(null);
-    const isGFIOpen = useAppSelector((state) => state.ui.isGFIOpen);
     const lang = language.current;
 
     const hideSpinner = () => {
@@ -156,11 +152,7 @@ const PublishedMap = () => {
                 
                 if (data.DataForMapLocationEvent) {
                     channel.handleEvent('DataForMapLocationEvent', (data) => {
-                        console.log(data);
-                        let locations = gfiLocations !== null ? [gfiLocations] : [] ;
-                        locations.push(data)
-                        setGFILocations(locations);
-                        //store.dispatch(setGFILocations(locations));
+                        store.dispatch(setGFILocations(data));
                         store.dispatch(setIsGFIOpen(true));
                     });
                 }
@@ -254,7 +246,7 @@ const PublishedMap = () => {
                     />
                 );
             })}
-            {gfiLocations != null ? (
+            {gfiLocations.length > 0 ? (
                 <GFIPopup gfiLocations={gfiLocations}/>
             ) : null}
             <MetadataModal />

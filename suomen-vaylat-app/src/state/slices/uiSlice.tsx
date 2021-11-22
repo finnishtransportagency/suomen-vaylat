@@ -24,9 +24,6 @@ export const uiSlice = createSlice({
     setIsFullScreen: (state, action) => {
       state.isFullScreen = action.payload;
     },
-    setGFILocations: (state, action) => {
-      state.gfiLocations = action.payload;
-    },
     setIsGFIOpen: (state, action) => {
       state.isGFIOpen = action.payload;
     },
@@ -87,8 +84,7 @@ export const {
   setSelectedLayerListType,
   setActiveTool,
   setIsSwipingDisabled,
-  setIsGFIOpen,
-  setGFILocations
+  setIsGFIOpen
 } = uiSlice.actions;
 
 export default uiSlice.reducer;
