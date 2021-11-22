@@ -64,7 +64,6 @@ export const uiSlice = createSlice({
       state.selectedMapLayersMenuTab = action.payload;
     },
     setSelectedMapLayersMenuThemeIndex: (state, action) => {
-      console.log(action.payload);
       state.selectedMapLayersMenuThemeIndex = action.payload;
     }
   }
