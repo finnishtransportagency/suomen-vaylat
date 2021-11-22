@@ -2,7 +2,7 @@ import { useContext } from "react";
 import styled from 'styled-components';
 import { setSelectedLayers } from '../../../state/slices/rpcSlice';
 import strings from '../../../translations';
-import { updateLayers, reArrangeRPCLayerOrder } from "../../../utils/rpcUtil";
+import { updateLayers, resetThemeGroups, reArrangeRPCLayerOrder } from "../../../utils/rpcUtil";
 import { ReactReduxContext, useSelector } from 'react-redux';
 import { SortableContainer, SortableElement} from 'react-sortable-hoc';
 import {arrayMoveImmutable} from 'array-move';
@@ -97,6 +97,8 @@ export const SelectedLayers = ({ label, selectedLayers, suomenVaylatLayers }) =>
         mapLayers.forEach(layer => {
             channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, !layer.visible]);
         });
+        resetThemeGroups(store);
+
         updateLayers(store, channel);
     };
 
