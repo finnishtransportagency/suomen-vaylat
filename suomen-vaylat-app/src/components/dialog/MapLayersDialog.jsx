@@ -164,6 +164,8 @@ const MapLayersDialog = () => {
         allThemesWithLayers,
         allTags,
         suomenVaylatLayers,
+        zoomLevelsLayers,
+        currentZoomLevel
     } = useAppSelector((state) => state.rpc);
 
     const { selectedMapLayersMenuTab } = useAppSelector((state) => state.ui);
@@ -211,6 +213,8 @@ const MapLayersDialog = () => {
             content: <SelectedLayers
                         selectedLayers={selectedLayers}
                         suomenVaylatLayers={suomenVaylatLayers}
+                        zoomLevelsLayers={zoomLevelsLayers}
+                        currentZoomLevel={currentZoomLevel}
                     />
         }
     ];
