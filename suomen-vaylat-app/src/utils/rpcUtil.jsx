@@ -59,6 +59,17 @@ export const selectGroup = (store, channel, index, theme, lastSelectedTheme, sel
 };
 
 export const resetThemeGroups = (store, channel, index, theme, lastSelectedTheme, selectedThemeIndex) => {
+    // if(theme){
+    //     theme.layers.forEach(layerId => {
+    //         channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layerId, false]);
+    //     });
+    // };
+    store.dispatch(setSelectedTheme(null));
+    store.dispatch(setLastSelectedTheme(null));
+    store.dispatch(setSelectedThemeIndex(null));
+};
+
+export const resetThemeGroupsForMainScreen = (store, channel, index, theme, lastSelectedTheme, selectedThemeIndex) => {
     if(theme){
         theme.layers.forEach(layerId => {
             channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layerId, false]);
