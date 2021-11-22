@@ -105,7 +105,7 @@ export const Header = () => {
             y: 7109206.188955102
         }));
         store.dispatch(setIsMainScreen())
-        const Ids = [303, 996, 100]
+        const Ids = [1354, 1388, 1387]
         const filteredLayers = [];
         if (allLayers) {
             Ids.forEach((id) => {
