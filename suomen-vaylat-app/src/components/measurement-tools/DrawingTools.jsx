@@ -1,5 +1,8 @@
 import { useContext } from 'react';
+import styled from 'styled-components';
+import { motion } from 'framer-motion';
 import { ReactReduxContext } from 'react-redux';
+
 import { faEraser } from '@fortawesome/free-solid-svg-icons';
 
 import svCircle from '../../theme/icons/drawtools_circle.svg';
@@ -10,52 +13,54 @@ import svLinestring from '../../theme/icons/drawtools_linestring.svg';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useSelector } from 'react-redux';
 import ReactTooltip from 'react-tooltip';
-import styled from 'styled-components';
+
 import strings from '../../translations';
 import { setActiveTool } from '../../state/slices/uiSlice';
 
-const StyledTools = styled.div`
-    position: absolute;
-    left: 50%;
-    bottom: 0px;
-    transform: translateX(-50%);
+const listVariants = {
+    visible: {
+        height: "auto",
+        opacity: 1
+    },
+    hidden: {
+        height: 0,
+        opacity: 0
+    },
+};
+
+const StyledTools = styled(motion.div)`
     display: flex;
-    justify-content: space-between;
     align-items: center;
     flex-direction: row;
     background-color: ${props => props.color};
-    margin: 1rem;
-    transition: all .2s ease-in-out;
-`;
-
-const StyledDrawingToolContainer = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: center;
     flex-direction: column;
-    margin: .5rem;
 `;
 
 const StyledDrawingTool = styled.div`
+    pointer-events: auto;
+    cursor: pointer;
     z-index: 100;
-    width: 40px;
-    height: 40px;
+    width: 44px;
+    min-height: 44px;
     display: flex;
     align-items: center;
     justify-content: center;
     background-color: ${(props => props.active? props.theme.colors.mainColorselected1 : props.theme.colors.mainColor1)};
     box-shadow: rgb(0 0 0 / 16%) 0px 3px 6px, rgb(0 0 0 / 23%) 0px 3px 6px;
     border-radius: 50%;
+    margin-top: 8px;
     svg {
         color: ${props => props.theme.colors.mainWhite};
-        font-size: 20px;
+        //font-size: 18px;
     };
 `;
 
 const StyledErase = styled.div`
+    pointer-events: auto;
+    cursor: pointer;
     z-index: 100;
-    width: 40px;
-    height: 40px;
+    width: 44px;
+    min-height: 44px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -66,7 +71,7 @@ const StyledErase = styled.div`
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    margin-left: .5rem;
+    margin-top: 8px;
     svg {
         color: ${props => props.theme.colors.mainWhite};
         font-size: 20px;
@@ -74,7 +79,7 @@ const StyledErase = styled.div`
 `;
 
 const StyledIcon = styled.img`
-    width: 1.5rem;
+    width: 1.3rem;
 `;
 
 const drawinToolsData = [
@@ -115,12 +120,10 @@ const drawinToolsData = [
     },
 ];
 
-export const DrawingTools = () => {
+export const DrawingTools = ({isOpen}) => {
     const { store } = useContext(ReactReduxContext);
     const { channel } = useSelector(state => state.rpc);
-    console.log(channel);
     const { activeTool } = useSelector(state => state.ui);
-    console.log(activeTool);
 
     const startStopTool = (tool) => {
         if (tool.name !== activeTool) {
@@ -167,20 +170,22 @@ export const DrawingTools = () => {
                 <span>{strings.tooltips.drawingtools.erase}</span>
             </ReactTooltip>
 
-            <StyledTools>
+            <StyledTools
+                isOpen={isOpen}
+                initial="hidden"
+                animate={isOpen ? "visible" : "hidden"}
+                variants={listVariants}
+            >
                 {drawinToolsData.map((tool, index) => {
                     return (
-                        <StyledDrawingToolContainer
-                            key={tool.name}
-                        >
                             <StyledDrawingTool
+                                key={tool.name}
                                 data-tip data-for={tool.type.toLowerCase()}
                                 active={tool.name === activeTool ? true : false}
                                 onClick={() => startStopTool(tool)}
                             >
                                 <StyledIcon src={tool.style.icon}/>
                             </StyledDrawingTool>
-                        </StyledDrawingToolContainer>
                     )
                 })}
                 <StyledErase
