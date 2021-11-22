@@ -144,7 +144,8 @@ const DragHandle = SortableHandle(() => (
 
 export const SelectedLayer = ({
     layer,
-    uuid
+    uuid,
+    layerVisible
 }) => {
 
     const { store } = useContext(ReactReduxContext);
@@ -197,7 +198,7 @@ export const SelectedLayer = ({
                         </StyledLayerInfoIconWrapper>
                     </StyledlayerHeader>
                     <StyledMidContent>
-                        Lähennä nähdäksesi taso
+                        {layerVisible ? "Taso näkyvillä" : "Lähennä nähdäksesi taso"}
                     </StyledMidContent>
                     <StyledBottomContent>
                         <p>Läpinäkyvyys</p>

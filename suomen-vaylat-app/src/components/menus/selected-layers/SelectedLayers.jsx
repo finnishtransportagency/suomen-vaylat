@@ -46,15 +46,16 @@ const StyledListSubtitle = styled.div`
     };
 `;
 
-const SortableItem = SortableElement(({value, suomenVaylatLayers}) =>
+const SortableItem = SortableElement(({value, suomenVaylatLayers, visible}) =>
     <SelectedLayer
         key={value.id + 'selected'}
         layer={value}
         uuid={suomenVaylatLayers && suomenVaylatLayers.length > 0 ? suomenVaylatLayers.filter(l => l.id === value.id)[0].uuid : ''}
+        layerVisible={visible}
     />
 );
 
-const SortableList = SortableContainer(({items, suomenVaylatLayers}) => {
+const SortableList = SortableContainer(({items, suomenVaylatLayers, zoomLevelsLayers, currentZoomLevel}) => {
     return (
         <div>
             {items.map((value, index) => (
@@ -62,13 +63,15 @@ const SortableList = SortableContainer(({items, suomenVaylatLayers}) => {
                     key={`item-${value.id}`}
                     index={index}
                     value={value}
-                    suomenVaylatLayers={suomenVaylatLayers}/>
+                    suomenVaylatLayers={suomenVaylatLayers}
+                    visible={zoomLevelsLayers[currentZoomLevel].layers.find(layer => layer.id === value.id)}
+                />
             ))}
         </div>
     );
 });
 
-export const SelectedLayers = ({ label, selectedLayers, suomenVaylatLayers }) => {
+export const SelectedLayers = ({ label, selectedLayers, suomenVaylatLayers, zoomLevelsLayers, currentZoomLevel }) => {
     const { store } = useContext(ReactReduxContext);
 
     const channel = useSelector(state => state.rpc.channel);
@@ -112,6 +115,8 @@ export const SelectedLayers = ({ label, selectedLayers, suomenVaylatLayers }) =>
                 items={mapLayers}
                 onSortEnd={onSortEnd}
                 suomenVaylatLayers={suomenVaylatLayers}
+                zoomLevelsLayers={zoomLevelsLayers}
+                currentZoomLevel={currentZoomLevel}
             />
             <StyledDeleteAllSelectedLayers
                 onClick={() => handleClearSelectedLayers()}
@@ -125,6 +130,8 @@ export const SelectedLayers = ({ label, selectedLayers, suomenVaylatLayers }) =>
                 items={backgroundMaps}
                 onSortEnd={onSortEnd}
                 suomenVaylatLayers={suomenVaylatLayers}
+                zoomLevelsLayers={zoomLevelsLayers}
+                currentZoomLevel={currentZoomLevel}
             />
             <StyledDeleteAllSelectedLayers
                 onClick={() => handleClearSelectedBackgroundMaps()}
