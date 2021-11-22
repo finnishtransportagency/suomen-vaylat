@@ -5,7 +5,8 @@ import Modal from "react-modal";
 import { ReactReduxContext } from "react-redux";
 import styled from 'styled-components';
 import { useAppSelector } from "../../state/hooks";
-import { setIsGFIOpen, setGFILocations } from "../../state/slices/uiSlice";
+import { resetGFILocations } from "../../state/slices/rpcSlice";
+import { setIsGFIOpen } from "../../state/slices/uiSlice";
 import strings from "../../translations";
 import './GFI.scss';
 import { GeoJSONFormatter } from './GeoJSONFormatter';
@@ -65,6 +66,7 @@ const StyledLayerCloseIcon = styled.div`
 `;
 
 export const GFIPopup = ({gfiLocations}) => {
+    console.log(gfiLocations);
     const geojsonFormatter = new GeoJSONFormatter();
 
     const { store } = useContext(ReactReduxContext);
@@ -75,29 +77,32 @@ export const GFIPopup = ({gfiLocations}) => {
     let layerName = null;
     let contentDiv = null;
 
-    gfiLocations.map(location => {
-        layerName = allLayers.filter(layer => layer.id === location.layerId)[0].name;
-        tabsTitles.push(layerName);
-        let content;
+    if (gfiLocations.length > 0) {
+        gfiLocations.map(location => {
+            layerName = allLayers.filter(layer => layer.id === location.layerId)[0].name;
+            tabsTitles.push(layerName);
+            let content;
+        
+            if (location.type === 'text') {
+                content = location.content
+            }
+            else if (location.type === 'geojson') {
+                content = geojsonFormatter.format(location.content);
+            }
+        
+            const popupContent = <div dangerouslySetInnerHTML={{__html: content}}></div> ;
+            var contentWrapper = <div className="contentWrapper-infobox">{popupContent}</div> ;
+            contentDiv = <div className="popupContent">{contentWrapper}</div> ;
+            tabsContent.push(contentDiv);
     
-        if (location.type === 'text') {
-            content = location.content
-        }
-        else if (location.type === 'geojson') {
-            content = geojsonFormatter.format(location.content);
-        }
-    
-        const popupContent = <div dangerouslySetInnerHTML={{__html: content}}></div> ;
-        var contentWrapper = <div className="contentWrapper-infobox">{popupContent}</div> ;
-        contentDiv = <div className="popupContent">{contentWrapper}</div> ;
-        tabsContent.push(contentDiv);
+        });
+    };
 
-    })
     const title = strings.gfi.title
 
     function closeModal() {
         store.dispatch(setIsGFIOpen(false));
-        store.dispatch(setGFILocations([]));
+        store.dispatch(resetGFILocations([]));
     };
 
     return (
