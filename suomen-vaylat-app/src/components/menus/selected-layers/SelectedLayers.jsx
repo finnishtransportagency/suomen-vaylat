@@ -1,8 +1,8 @@
 import { useContext } from "react";
 import styled from 'styled-components';
-import { reArrangeSelectedMapLayers, setSelectedLayers } from '../../../state/slices/rpcSlice';
+import { setSelectedLayers } from '../../../state/slices/rpcSlice';
 import strings from '../../../translations';
-import { updateLayers } from "../../../utils/rpcUtil";
+import { updateLayers, reArrangeRPCLayerOrder } from "../../../utils/rpcUtil";
 import { ReactReduxContext, useSelector } from 'react-redux';
 import { SortableContainer, SortableElement} from 'react-sortable-hoc';
 import {arrayMoveImmutable} from 'array-move';
@@ -81,9 +81,15 @@ export const SelectedLayers = ({ label, selectedLayers, suomenVaylatLayers }) =>
         return layer.id === 3 || layer.id === 958;
     });
 
-    const onSortEnd = (oldIndex) => {
-        store.dispatch(reArrangeSelectedMapLayers({layerId: selectedLayers[oldIndex.oldIndex].id, position: selectedLayers.length - oldIndex.newIndex}));
-        const newSelectedLayers = arrayMoveImmutable(selectedLayers, oldIndex.oldIndex, oldIndex.newIndex)
+    const sortSelectedLayers = (selectedLayer) => {
+        const newSelectedLayers = arrayMoveImmutable(selectedLayers, selectedLayer.oldIndex, selectedLayer.newIndex)
+        reArrangeRPCLayerOrder(store, newSelectedLayers);
+        store.dispatch(setSelectedLayers(newSelectedLayers));
+    };
+
+    const sortBackgroundLayers = (backgroundLayer) => {
+        const newSelectedLayers = arrayMoveImmutable(selectedLayers, backgroundLayer.oldIndex + selectedLayers.length, backgroundLayer.newIndex + selectedLayers.length)
+        reArrangeRPCLayerOrder(store, newSelectedLayers);
         store.dispatch(setSelectedLayers(newSelectedLayers));
     };
 
@@ -108,7 +114,7 @@ export const SelectedLayers = ({ label, selectedLayers, suomenVaylatLayers }) =>
                 lockAxis={"y"}
                 transitionDuration={300}
                 items={mapLayers}
-                onSortEnd={onSortEnd}
+                onSortEnd={sortSelectedLayers}
                 suomenVaylatLayers={suomenVaylatLayers}
             />
             <StyledDeleteAllSelectedLayers
@@ -121,7 +127,7 @@ export const SelectedLayers = ({ label, selectedLayers, suomenVaylatLayers }) =>
                 lockAxis={"y"}
                 transitionDuration={300}
                 items={backgroundMaps}
-                onSortEnd={onSortEnd}
+                onSortEnd={sortBackgroundLayers}
                 suomenVaylatLayers={suomenVaylatLayers}
             />
             <StyledDeleteAllSelectedLayers

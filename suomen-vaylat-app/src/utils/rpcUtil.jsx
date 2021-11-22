@@ -3,7 +3,8 @@ import {
     setSelectedLayers,
     setSelectedTheme,
     setLastSelectedTheme,
-    setSelectedThemeIndex
+    setSelectedThemeIndex,
+    reArrangeSelectedMapLayers
 } from "../state/slices/rpcSlice";
 
 export const updateLayers = (store, channel) => {
@@ -11,7 +12,9 @@ export const updateLayers = (store, channel) => {
         store.dispatch(setAllLayers(data));
     });
     channel && channel.getSelectedLayers(function (data) {
-        store.dispatch(setSelectedLayers(data));
+        const reArrangedSelectedLayers = reArrangeSelectedLayersOrder(data)
+        store.dispatch(setSelectedLayers(reArrangedSelectedLayers));
+        reArrangeRPCLayerOrder(store, reArrangedSelectedLayers)
     });
 };
 
@@ -53,3 +56,23 @@ export const selectGroup = (store, channel, index, theme, lastSelectedTheme, sel
         },700);
     };
 };
+
+export const reArrangeRPCLayerOrder = (store, selectedLayers) => {
+    selectedLayers.map((layer, idx) => {
+        // Update layer orders to correct
+        const position = selectedLayers.length-idx;
+        store.dispatch(reArrangeSelectedMapLayers({layerId: layer.id, position: position}));
+    })
+}
+
+export const reArrangeSelectedLayersOrder = (selectedLayers) => {
+    const mapLayers = selectedLayers.filter(layer => {
+        return layer.id !== 3 && layer.id !== 958;
+    });
+
+    const backgroundMaps = selectedLayers.filter(layer => {
+        return layer.id === 3 || layer.id === 958;
+    });
+
+    return mapLayers.concat(backgroundMaps)
+}
