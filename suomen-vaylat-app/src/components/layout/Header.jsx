@@ -7,7 +7,7 @@ import styled from 'styled-components';
 import { useAppSelector } from '../../state/hooks';
 import { setIsInfoOpen, setIsMainScreen } from "../../state/slices/uiSlice";
 import { mapMoveRequest, setZoomTo, setMapLayerVisibility, reArrangeSelectedMapLayers } from "../../state/slices/rpcSlice";
-import { resetThemeGroups } from "../../utils/rpcUtil";
+import { resetThemeGroupsForMainScreen } from "../../utils/rpcUtil";
 import strings from '../../translations';
 import LanguageSelector from '../language-selector/LanguageSelector';
 import { WebSiteShareButton } from '../share-web-site/ShareLinkButtons';
@@ -105,7 +105,7 @@ export const Header = () => {
 
     //const { channel, selectedTheme,  lastSelectedTheme, selectedThemeIndex} = useAppSelector((state) => state.rpc);
     const handleSelectGroup = (index, theme) => {
-        resetThemeGroups(store, channel, index, theme, lastSelectedTheme, selectedThemeIndex);
+        resetThemeGroupsForMainScreen(store, channel, index, theme, lastSelectedTheme, selectedThemeIndex);
     };
 
 
