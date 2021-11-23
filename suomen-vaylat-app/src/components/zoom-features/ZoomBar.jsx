@@ -3,6 +3,7 @@ import { faAngleUp, faSearchMinus, faSearchPlus } from '@fortawesome/free-solid-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ReactReduxContext } from 'react-redux';
 import ReactTooltip from "react-tooltip";
+import { isMobile } from '../../theme/theme';
 import styled from 'styled-components';
 import { setZoomIn, setZoomOut } from '../../state/slices/rpcSlice';
 import strings from '../../translations';
@@ -160,15 +161,15 @@ const ZoomBar = ({
 
     return (
         <>
-            <ReactTooltip id='zoomExpand' place="top" type="dark" effect="float">
+            <ReactTooltip disable={isMobile} id='zoomExpand' place="top" type="dark" effect="float">
                 <span>{strings.tooltips.zoomExpand}</span>
             </ReactTooltip>
 
-            <ReactTooltip id='zoomIn' place="top" type="dark" effect="float">
+            <ReactTooltip disable={isMobile} id='zoomIn' place="top" type="dark" effect="float">
                 <span>{strings.tooltips.zoomIn}</span>
             </ReactTooltip>
 
-            <ReactTooltip id='zoomOut' place="top" type="dark" effect="float">
+            <ReactTooltip disable={isMobile} id='zoomOut' place="top" type="dark" effect="float">
                 <span>{strings.tooltips.zoomOut}</span>
             </ReactTooltip>
 

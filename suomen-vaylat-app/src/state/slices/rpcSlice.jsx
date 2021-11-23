@@ -1,6 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { Logger } from '../../utils/logger';
-import sortArrayByOrderArray from '../../utils/sortArrayByOrderArray'
 
 const LOG = new Logger('RPCSlice');
 
@@ -61,16 +60,7 @@ export const rpcSlice = createSlice({
     },
     setAllLayers: (state, action) => {
         const selectedLayers = action.payload.filter(layer => layer.visible === true)
-
-        const layerOrder = []
-        state.selectedLayers.map((stateSelectedLayer, idx) => {
-            layerOrder[idx] = stateSelectedLayer.id
-        });
-
-        const newSortedSelectedLayers = (sortArrayByOrderArray(selectedLayers, layerOrder));
-
-            state.selectedLayers = newSortedSelectedLayers;
-        //}
+        state.selectedLayers = selectedLayers;
         state.allLayers = action.payload;
     },
     setSelectedLayers: (state, action) => {
