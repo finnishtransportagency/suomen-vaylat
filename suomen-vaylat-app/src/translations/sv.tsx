@@ -80,6 +80,7 @@ const sv = {
         }
     },
     dontShowAgain: 'Visa inte igen',
+    ok: 'OK',
     layerlist: {
         layerlistLabels: {
             allLayers: 'Alla lager' ,

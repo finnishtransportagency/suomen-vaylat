@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import strings from '../../translations';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import { Button } from "react-bootstrap";
 
 const customStyles = {
     content: {
@@ -74,6 +75,11 @@ const StyledLayerCloseIcon = styled.div`
     }
 `;
 
+const StyledButton = styled(Button)`
+    border-radius: 30px;
+    background-color: #0064af;
+`;
+
 export const AnnouncementsModal = ({ id, title, content }) => {
     const [modalIsOpen, setIsOpen] = useState(true);
     const [selected, setIsSelected] = useState(false);
@@ -123,7 +129,7 @@ export const AnnouncementsModal = ({ id, title, content }) => {
                     />
                     {strings.dontShowAgain}
                 </label>
-                <button onClick={() => closeModal()}>OK</button>
+                <StyledButton onClick={() => closeModal()}>{strings.ok}</StyledButton>
             </StyledFooter>
         </Modal>
         </div>
