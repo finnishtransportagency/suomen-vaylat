@@ -67,7 +67,7 @@ const StyledMapLayersDialog = styled(motion.div)`
     }; */
     @media ${props => props.theme.device.mobileL} {
         z-index: 10;
-        position: absolute;
+        position: fixed;
         top: 0px;
         left: 0px;
         width: 100%;
