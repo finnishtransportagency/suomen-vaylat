@@ -57,6 +57,16 @@ div.popupContent::-webkit-scrollbar {
     display: none;
 }
 
+div.react-tabs {
+    ul {
+        white-space: nowrap;
+    }
+
+    li {
+        box-sizing: border-box;
+    }
+}
+
 div.ReactModalPortal {
     div.ReactModal__Overlay--after-open {
         border-radius: 4px;

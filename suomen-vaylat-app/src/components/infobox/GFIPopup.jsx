@@ -36,7 +36,6 @@ const StyledContent = styled.div`
 const StyledGFIHeader = styled.div`
     padding-bottom: .5rem;
     color: ${props => props.theme.colors.mainColor1};
-    font-size: 1.2rem;
 `;
 
 const StyledHeader = styled.div`
