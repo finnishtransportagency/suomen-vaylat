@@ -80,6 +80,7 @@ const en = {
         }
     },
     dontShowAgain: 'Don\'t show again',
+    ok: 'OK',
     layerlist: {
         layerlistLabels: {
             allLayers: 'All layers' ,
