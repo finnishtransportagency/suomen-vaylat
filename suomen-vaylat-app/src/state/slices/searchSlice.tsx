@@ -17,7 +17,9 @@ const initialState = {
     tieosat: [],
     osa: null,
     ajoradat: [],
-    address: []
+    address: [],
+    etaisyys: null,
+    ajorata: null
   },
   searching: false,
   searchError: false,
@@ -29,7 +31,8 @@ const initialState = {
     x: null,
     y: null,
     msg: null
-  }
+  },
+  searchResultOnMapId: null
 };
 
 
@@ -49,7 +52,9 @@ export const searchSlice = createSlice({
         tieosat: [],
         osa: null,
         ajoradat: [],
-        address: []
+        address: [],
+        etaisyys: null,
+        ajorata: null
       };
       state.selectedIndex = -1;
       state.marker = {
@@ -82,6 +87,12 @@ export const searchSlice = createSlice({
       } else {
         state.searching = false;
       }
+      if (action.payload.ajorata) {
+        state.searchResult.ajorata = action.payload.ajorata;
+      }
+      if (action.payload.etaisyys) {
+        state.searchResult.etaisyys = action.payload.etaisyys;
+      }
       state.selectedIndex = -1;
     },
     setSearching: (state, action) => {
@@ -99,7 +110,9 @@ export const searchSlice = createSlice({
         tieosat: [],
         osa: null,
         ajoradat: [],
-        address: []
+        address: [],
+        etaisyys: null,
+        ajorata: null
       };
       state.selectedIndex = -1;
       state.marker = {
@@ -107,6 +120,7 @@ export const searchSlice = createSlice({
         y: null,
         msg: null
       };
+      state.searchResultOnMapId = null;
     },
     emptyFormData: (state) => {
       state.formData = {
@@ -129,6 +143,9 @@ export const searchSlice = createSlice({
       state.marker.x = action.payload.x;
       state.marker.y = action.payload.y;
       state.marker.msg = action.payload.msg;
+    },
+    setSearchResultOnMapId: (state, action) => {
+      state.searchResultOnMapId = action.payload;
     }
   }
 });
@@ -143,7 +160,8 @@ export const {
   emptyFormData,
   setAddressSearchEventHandlerReady,
   setSelectedIndex,
-  setMarker
+  setMarker,
+  setSearchResultOnMapId
 } = searchSlice.actions;
 
 export default searchSlice.reducer;
