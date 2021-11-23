@@ -7,6 +7,7 @@ import Draggable from 'react-draggable';
 import { ReactReduxContext } from 'react-redux';
 import { EmailIcon, EmailShareButton, FacebookIcon, FacebookShareButton, LinkedinIcon, LinkedinShareButton, TelegramIcon, TelegramShareButton, TwitterIcon, TwitterShareButton, WhatsappIcon, WhatsappShareButton } from 'react-share';
 import ReactTooltip from 'react-tooltip';
+import { isMobile } from '../../theme/theme';
 import styled from 'styled-components';
 import { useAppSelector } from '../../state/hooks';
 import { setShareUrl } from '../../state/slices/uiSlice';
@@ -179,30 +180,30 @@ export const ShareWebSitePopup = () => {
     return (
         <Draggable handle='.draggable-handler' bounds="parent" disabled={size.width / 2 < 300}>
             <StyledShareWebSiteContainer>
-                <ReactTooltip id='clipboard' place='right' type='dark' effect='float'>
+                <ReactTooltip disable={isMobile} id='clipboard' place='right' type='dark' effect='float'>
                     <span>{strings.share.tooltips.clipboard}</span>
                 </ReactTooltip>
-                <ReactTooltip id='email' place='right' type='dark' effect='float'>
+                <ReactTooltip disable={isMobile} id='email' place='right' type='dark' effect='float'>
                     <span>{strings.share.tooltips.email}</span>
                 </ReactTooltip>
 
-                <ReactTooltip id='facebook' place='right' type='dark' effect='float'>
+                <ReactTooltip disable={isMobile} id='facebook' place='right' type='dark' effect='float'>
                     <span>{strings.share.tooltips.facebook}</span>
                 </ReactTooltip>
 
-                <ReactTooltip id='twitter' place='right' type='dark' effect='float'>
+                <ReactTooltip disable={isMobile} id='twitter' place='right' type='dark' effect='float'>
                     <span>{strings.share.tooltips.twitter}</span>
                 </ReactTooltip>
 
-                <ReactTooltip id='linkedin' place='right' type='dark' effect='float'>
+                <ReactTooltip disable={isMobile} id='linkedin' place='right' type='dark' effect='float'>
                     <span>{strings.share.tooltips.linkedin}</span>
                 </ReactTooltip>
 
-                <ReactTooltip id='whatsapp' place='right' type='dark' effect='float'>
+                <ReactTooltip disable={isMobile} id='whatsapp' place='right' type='dark' effect='float'>
                     <span>{strings.share.tooltips.whatsapp}</span>
                 </ReactTooltip>
 
-                <ReactTooltip id='telegram' place='right' type='dark' effect='float'>
+                <ReactTooltip disable={isMobile} id='telegram' place='right' type='dark' effect='float'>
                     <span>{strings.share.tooltips.telegram}</span>
                 </ReactTooltip>
 
