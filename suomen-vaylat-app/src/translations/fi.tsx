@@ -80,6 +80,7 @@ const fi = {
         }
     },
     dontShowAgain: 'Älä näytä uudelleen',
+    ok: 'OK',
     layerlist: {
         layerlistLabels: {
             allLayers: 'Kaikki tasot' ,
