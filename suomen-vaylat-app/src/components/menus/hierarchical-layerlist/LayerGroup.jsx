@@ -1,4 +1,4 @@
-import { useState, useContext, useRef } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import styled from 'styled-components';
 import { ReactReduxContext, useSelector } from 'react-redux';
 import { motion } from "framer-motion";
@@ -19,7 +19,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 import { updateLayers } from '../../../utils/rpcUtil';
-import {setSelectError} from "../../../state/slices/rpcSlice"
+import { setSelectError } from "../../../state/slices/rpcSlice"
 
 const OSKARI_LOCALSTORAGE = "oskari";
 
@@ -48,7 +48,6 @@ const StyledLayerGroups = styled(motion.div)`
     display: flex;
     flex-direction: column;
     justify-content: center;
-    //opacity: 1;
     background-color: ${props => props.parentId === -1 ? props.theme.colors.mainWhite : "#F2F2F2"};
     margin: 8px 0px 8px 0px;
     border-radius: 4px;
@@ -262,59 +261,84 @@ export const LayerGroup = ({
 }) => {
 
     const [isOpen, setIsOpen] = useState(false);
+    const [isChecked, setIsChecked] = useState(false);
     const { store } = useContext(ReactReduxContext);
     const channel = useSelector(state => state.rpc.channel);
 
-    const refEl = useRef(null);
+    const [filteredLayers, setFilteredLayers] = useState([]);
+    const [totalGroupLayersCount, setTotalGroupLayersCoun] = useState(0);
+    const [totalVisibleGroupLayersCount, setTotalVisibleGroupLayersCount] = useState(0);
+    const [visibleLayers, setVisibleLayers] = useState([]);
 
     //Find matching layers from all layers and groups, then push this group's layers into 'filteredLayers'
-    var filteredLayers = [];
-    if (group.layers) {
-        group.layers.forEach((groupLayerId) => {
-            var layer = layers.find(layer => layer.id === groupLayerId);
-            layer !== undefined && filteredLayers.push(layer);
-        });
-    };
+    useEffect(() => {
+        
+        if(group.layers){
+            var getLayers = group.layers.map(groupLayerId => {
+                var layer = layers.find(layer => layer.id === groupLayerId);
+                if(layer !== undefined){
+                    return layer;
+                }
+            });
+            setFilteredLayers(getLayers);
+            setVisibleLayers(getLayers.filter(layer => layer.visible === true));
 
-    let checked;
-    let indeterminate;
-    let visibleLayers = [];
+        };
 
-    filteredLayers.map(layer => {
-        layer.visible === true && visibleLayers.push(layer);
-        return null;
-    });
+        if(group.parentId === -1){
+            var layersCount = 0;
+            var visibleLayersCount = 0;
+            const layersCounter = (group) => {
+                if(group.hasOwnProperty("layers") && group.layers.length > 0){
+                    group.layers.forEach(layerId => {
+                       if(layers.find(layer => layer.id === layerId).visible === true){
+                            visibleLayersCount = visibleLayersCount + 1;
+                       };
+                    })
+                    layersCount = layersCount + group.layers.length;
+                };
 
-    if (filteredLayers.length === visibleLayers.length && visibleLayers.length > 0) {
-        checked = true;
-    } else if (visibleLayers.length > 0 ) {
-        indeterminate = true;
-    } else {
-        checked = false;
-        indeterminate = false;
-    }
+                var hasGroups = group.hasOwnProperty("groups") && group.groups.length > 0;
+                hasGroups && group.groups.forEach(group => {
+                    layersCounter(group);
+                });
+                setTotalGroupLayersCoun(layersCount);
+                setTotalVisibleGroupLayersCount(visibleLayersCount);
+            };
+            layersCounter(group);
+        };
+    },[group, layers]);
+
+
 
     const selectGroup = (e) => {
         e.stopPropagation();
+        var invisibleLayers = filteredLayers.length - visibleLayers.length;
         var localStorageWarn = localStorage.getItem(OSKARI_LOCALSTORAGE) ? localStorage.getItem(OSKARI_LOCALSTORAGE) : [] ;
-        if (filteredLayers.length > 9 && !checked && !localStorageWarn.includes("multipleLayersWarning")) {
-            store.dispatch(setSelectError({show: true, type: 'multipleLayersWarning', filteredLayers: filteredLayers, indeterminate: indeterminate}));
+        if (filteredLayers.length > 9 && invisibleLayers > 9 && isChecked === false && !localStorageWarn.includes("multipleLayersWarning")) {
+            store.dispatch(setSelectError({show: true, type: 'multipleLayersWarning', filteredLayers: filteredLayers, isChecked: isChecked}));
         } else {
             groupLayersVisibility();
         }
     };
 
     const groupLayersVisibility = () => {
-        if (!indeterminate) {
-                filteredLayers.map(layer => {
-                    channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, !layer.visible]);
-                    return null;
-                });
+
+        if(filteredLayers.length === visibleLayers.length){
+            filteredLayers.forEach(layer => {
+                channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, false]);
+            });
+            setIsChecked(false);
+        } else if (isChecked === false){
+            filteredLayers.forEach(layer => {
+                channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, true]);
+            });
+            setIsChecked(true);
         } else {
-                filteredLayers.map(layer => {
-                    channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, false]);
-                    return null;
-                });
+            filteredLayers.forEach(layer => {
+                channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, true]);
+            });
+            setIsChecked(true);
         }
         updateLayers(store, channel);
     };
@@ -348,8 +372,8 @@ export const LayerGroup = ({
                                 {group.name}
                             </StyledMasterGroupName>
                             <StyledMasterGroupLayersCount>
-                                {
-                                    refEl !== null && refEl.current && refEl.current.getElementsByClassName('list-layer-active').length +"/"+ refEl.current.getElementsByClassName('list-layer').length
+                                { 
+                                  totalVisibleGroupLayersCount +" / "+ totalGroupLayersCount
                                 }
                             </StyledMasterGroupLayersCount>
                         </StyledMasterGroupTitleContent>
@@ -392,7 +416,11 @@ export const LayerGroup = ({
                 </StyledLefContent>
                     <StyledRightContent>
                         <Switch 
-                            isSelected={checked}
+                            isSelected={
+                                filteredLayers.length === visibleLayers.length ||
+                                !visibleLayers.length === 0 ||
+                                !visibleLayers.length > filteredLayers.length
+                            }
                             action={selectGroup}
                         />
                     </StyledRightContent>
@@ -405,7 +433,6 @@ export const LayerGroup = ({
                     initial="hidden"
                     animate={isOpen ? "visible" : "hidden"}
                     variants={listVariants}
-                    ref={refEl}
                 >
                     {hasChildren && (
                         <>

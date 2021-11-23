@@ -1,6 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { Logger } from '../../utils/logger';
-import sortArrayByOrderArray from '../../utils/sortArrayByOrderArray'
 
 const LOG = new Logger('RPCSlice');
 
@@ -23,11 +22,15 @@ const initialState = {
       message: '',
       type: '',
       filteredLayers: [],
-      indeterminate: false
+      indeterminate: false,
+      isChecked: null
   },
   announcements: [],
   activeAnnouncements: [],
   allThemesWithLayers: [],
+  selectedTheme: null,
+  lastSelectedTheme: null,
+  selectedThemeIndex: null,
   filter: null,
   suomenVaylatLayers: [],
   layerMetadata: { data: null, layer: null, uuid: null},
@@ -58,16 +61,7 @@ export const rpcSlice = createSlice({
     },
     setAllLayers: (state, action) => {
         const selectedLayers = action.payload.filter(layer => layer.visible === true)
-
-        const layerOrder = []
-        state.selectedLayers.map((stateSelectedLayer, idx) => {
-            layerOrder[idx] = stateSelectedLayer.id
-        });
-
-        const newSortedSelectedLayers = (sortArrayByOrderArray(selectedLayers, layerOrder));
-
-            state.selectedLayers = newSortedSelectedLayers;
-        //}
+        state.selectedLayers = selectedLayers;
         state.allLayers = action.payload;
     },
     setSelectedLayers: (state, action) => {
@@ -79,7 +73,8 @@ export const rpcSlice = createSlice({
             message: action.payload.message,
             type: action.payload.type,
             filteredLayers: action.payload.filteredLayers,
-            indeterminate: action.payload.indeterminate
+            indeterminate: action.payload.indeterminate,
+            isChecked: action.payload.isChecked
         };
     },
     setAllTags: (state, action) => {
@@ -93,6 +88,18 @@ export const rpcSlice = createSlice({
     },
     setAllThemesWithLayers: (state, action) => {
         state.allThemesWithLayers = action.payload;
+    },
+    setSelectedTheme: (state, action) => {
+        state.selectedTheme = action.payload;
+        // if(action.payload === null){
+        //     state.selectedThemeIndex = null;
+        // };
+    },
+    setLastSelectedTheme: (state, action) => {
+        state.lastSelectedTheme = action.payload;
+    },
+    setSelectedThemeIndex: (state, action) => {
+        state.selectedThemeIndex = action.payload;
     },
     setAnnouncements: (state, action) => {
         state.announcements = action.payload;
@@ -270,6 +277,9 @@ export const {
     removeMarkerRequest,
     mapMoveRequest,
     setAllThemesWithLayers,
+    setSelectedTheme,
+    setLastSelectedTheme,
+    setSelectedThemeIndex,
     setActiveAnnouncements,
     setFilter,
     setSuomenVaylatLayers,

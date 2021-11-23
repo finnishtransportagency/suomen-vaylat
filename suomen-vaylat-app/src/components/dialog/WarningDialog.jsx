@@ -2,11 +2,11 @@ import styled from 'styled-components';
 import { motion } from "framer-motion";
 
 import DialogHeader from './DialogHeader';
-import {useContext, useState} from "react";
-import {ReactReduxContext, useSelector} from "react-redux";
-import {updateLayers} from "../../utils/rpcUtil";
+import { useContext, useState } from "react";
+import { ReactReduxContext, useSelector } from "react-redux";
+import { updateLayers } from "../../utils/rpcUtil";
 import strings from "../../translations";
-import {Button} from "react-bootstrap";
+import { Button } from "react-bootstrap";
 
 const OSKARI_LOCALSTORAGE = "oskari";
 
@@ -28,12 +28,10 @@ const addToLocalStorageArray = (name, value) => {
 const variants = {
     open: {
         pointerEvents: "auto",
-        y: 0,
         opacity: 1,
     },
     closed: {
         pointerEvents: "none",
-        y: "100%",
         opacity: 0,
 
     },
@@ -44,15 +42,14 @@ const StyledFooter = styled.div`
 `;
 
 const StyledWarningDialog = styled(motion.div)`
+    z-index:10;
     position: absolute;
     left: 50%;
-    top: 35%;
-    max-width: 300px;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    max-width: 400px;
     max-height: 500px;
-    transform: 'translate(-50%, -50%)'
-    right: 'auto'
-    bottom: 'auto'
-    marginRight: '-50%'
     display: flex;
     flex-direction: column;
     pointer-events: auto;
@@ -65,12 +62,26 @@ const StyledWarningDialog = styled(motion.div)`
         &::-webkit-scrollbar {
         display: none;
     };
-    p {
-        padding: 20px;
-    }
+
 `;
 
-const WarningDialog = ({ title='', message='', filteredLayers=[], indeterminate=false, hideWarn, dialogOpen }) => {
+const StyledContent = styled.div`
+    max-width: 800px;
+    padding: 24px;
+    border-radius: 4px;
+`;
+
+const StyledButton = styled(Button)`
+    border-radius: 30px;
+    background-color: #0064af;
+`;
+
+const StyledButton = styled(Button)`
+    border-radius: 30px;
+    background-color: #0064af;
+`;
+
+const WarningDialog = ({ title='', message='', filteredLayers=[], indeterminate=false, hideWarn, dialogOpen, isChecked }) => {
     const [selected, setIsSelected] = useState(false);
     const { store } = useContext(ReactReduxContext);
     const channel = useSelector(state => state.rpc.channel);
@@ -82,17 +93,21 @@ const WarningDialog = ({ title='', message='', filteredLayers=[], indeterminate=
                 addToLocalStorageArray(OSKARI_LOCALSTORAGE, "multipleLayersWarning");
             }
         } else {
-            if (!indeterminate) {
-                filteredLayers.map(layer => {
-                    channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, !layer.visible]);
-                    return null;
-                });
-            } else {
-                filteredLayers.map(layer => {
-                    channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, false]);
-                    return null;
-                });
-            }
+            filteredLayers.map(layer => {
+                channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, !isChecked]);
+                return null;
+            });
+            // if (!indeterminate) {
+            //     filteredLayers.map(layer => {
+            //         channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, !layer.visible]);
+            //         return null;
+            //     });
+            // } else {
+            //     filteredLayers.map(layer => {
+            //         channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, false]);
+            //         return null;
+            //     });
+            // }
             updateLayers(store, channel);
             hideWarn();
             if (selected) {
@@ -112,10 +127,12 @@ const WarningDialog = ({ title='', message='', filteredLayers=[], indeterminate=
                     title={title}
                     hideWarn={closeModal}
                 />
-                <p>{message}</p>
+                <StyledContent>
+                    {message}
+                </StyledContent>
                 <StyledFooter className="modal-footer">
-                    <Button onClick={() => closeModal()}>{strings.continue}</Button>
-                    <Button onClick={() => closeModal(true)}>{strings.cancel}</Button>
+                    <StyledButton onClick={() => closeModal()}>{strings.continue}</StyledButton>
+                    <StyledButton onClick={() => closeModal(true)}>{strings.cancel}</StyledButton>
                 </StyledFooter>
             </StyledWarningDialog>
     );

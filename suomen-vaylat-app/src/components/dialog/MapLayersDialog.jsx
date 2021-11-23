@@ -1,7 +1,8 @@
-import {useState, useRef, useContext} from 'react';
+import { useRef, useContext, useEffect } from 'react';
 import styled from 'styled-components';
 import { useAppSelector } from '../../state/hooks';
-import { setIsSideMenuOpen } from '../../state/slices/uiSlice';
+import { ReactReduxContext } from 'react-redux';
+import { setIsSideMenuOpen, setSelectedMapLayersMenuTab } from '../../state/slices/uiSlice';
 import { motion } from "framer-motion";
 import { Swiper, SwiperSlide } from 'swiper/react/swiper-react.js';
 
@@ -24,7 +25,6 @@ import ThemeLayerList from '../menus/hierarchical-layerlist/ThemeLayerList';
 import SelectedLayers from '../menus/selected-layers/SelectedLayers';
 
 import strings from '../../translations';
-import {ReactReduxContext} from "react-redux";
 
 // install Swiper modules
 SwiperCore.use([
@@ -46,13 +46,13 @@ const variants = {
 };
 
 const StyledMapLayersDialog = styled(motion.div)`
-    //position: relative;
+    grid-row-start: 1;
+    grid-row-end: 3;
     width: 100%;
     height: auto;
     display: flex;
     flex-direction: column;
     pointer-events: auto;
-    //background-color: ${props => props.theme.colors.mainWhite};
     background-color: #F2F2F2;
     border-radius: 4px;
     overflow: hidden;
@@ -67,7 +67,7 @@ const StyledMapLayersDialog = styled(motion.div)`
     }; */
     @media ${props => props.theme.device.mobileL} {
         z-index: 10;
-        position: absolute;
+        position: fixed;
         top: 0px;
         left: 0px;
         width: 100%;
@@ -76,6 +76,7 @@ const StyledMapLayersDialog = styled(motion.div)`
 `;
 
 const StyledTabs = styled.div`
+    z-index:2;
     position: relative;
     display: flex;
     align-items: center;
@@ -140,9 +141,6 @@ const StyledSwiper = styled(Swiper)`
     background-color: ${props => props.theme.colors.mainWhite};
     padding: 16px 16px 16px 16px;
     overflow: auto;
-    &::-webkit-scrollbar {
-        display: none;
-    };
   };
   transition: box-shadow 0.3s ease-out;
   box-shadow: 0px -1px 11px ${props => props.tabIndex === 0 ?
@@ -154,6 +152,8 @@ const StyledSwiper = styled(Swiper)`
 
 const MapLayersDialog = () => {
 
+    const { store } = useContext(ReactReduxContext);
+
     const {
         allGroups,
         allLayers,
@@ -163,19 +163,19 @@ const MapLayersDialog = () => {
         suomenVaylatLayers,
     } = useAppSelector((state) => state.rpc);
 
-    const { store } = useContext(ReactReduxContext);
+    const { selectedMapLayersMenuTab } = useAppSelector((state) => state.ui);
 
-    const {
-        isSideMenuOpen
-    } =  useAppSelector((state) => state.ui);
-
-    const [tabIndex, setTabIndex] = useState(0);
+    const { isSideMenuOpen } =  useAppSelector((state) => state.ui);
 
     const inputEl = useRef(null);
 
     const hideWarn = () => {
-        store.dispatch(setIsSideMenuOpen(!isSideMenuOpen))
-    }
+        store.dispatch(setIsSideMenuOpen(!isSideMenuOpen));
+    };
+
+    useEffect(() => {
+        inputEl.current.swiper.slideTo(selectedMapLayersMenuTab);
+    },[selectedMapLayersMenuTab]);
 
     const tabsContent = [
         {
@@ -227,18 +227,19 @@ const MapLayersDialog = () => {
                     hideWarn={hideWarn}
                 />
                 <StyledTabs
-                    tabIndex={tabIndex}
+                    tabIndex={selectedMapLayersMenuTab}
                 >
                     {
                         tabsContent.map((tab, index) => {
                             return (
                                 <StyledTab
                                     key={"tab_"+index}
-                                    isSelected={index === tabIndex}
+                                    isSelected={index === selectedMapLayersMenuTab}
                                     color={tab.titleColor}
                                     onClick={() => {
-                                        setTabIndex(index);
-                                        inputEl.current.swiper.slideTo(index);
+                                        store.dispatch(setSelectedMapLayersMenuTab(index));
+                                        //setTabIndex(index);
+                                       // inputEl.current.swiper.slideTo(index);
                                     }}
                                 >
                                     {tab.title}
@@ -253,7 +254,7 @@ const MapLayersDialog = () => {
                     }
                 </StyledTabs>
                 <StyledSwiper
-                    tabIndex={tabIndex}
+                    tabIndex={selectedMapLayersMenuTab}
                     className="map-layers-swiper"
                     //longSwipesRatio={1}
                     //shortSwipes={false}
@@ -267,10 +268,11 @@ const MapLayersDialog = () => {
                     //     "slideShadows": false
                     // }}
                     onSlideChange={e => {
-                        setTabIndex(e.activeIndex);
-                        inputEl.current.swiper.slideTo(e.activeIndex);
+                        store.dispatch(setSelectedMapLayersMenuTab(e.activeIndex));
+                        //setTabIndex(e.activeIndex);
+                        //inputEl.current.swiper.slideTo(e.activeIndex);
                     }}
-                    allowTouchMove={true} // Disable for desktop if swiping with mouse is usable
+                    allowTouchMove={false} // Disable swiping
                     ref={inputEl}
                 >
                 {

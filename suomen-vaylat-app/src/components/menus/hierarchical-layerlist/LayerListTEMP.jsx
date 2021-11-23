@@ -74,7 +74,7 @@ const StyledDeleteAllSelectedFilters = styled.div`
 
 const StyledSearchAndFilter = styled.div`
     display: flex;
-    //align-items: center;
+    align-items: center;
     margin-left: 8px;
     margin-right: 8px;
     margin-bottom: 16px;
