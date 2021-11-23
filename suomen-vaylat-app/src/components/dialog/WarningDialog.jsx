@@ -70,6 +70,11 @@ const StyledWarningDialog = styled(motion.div)`
     }
 `;
 
+const StyledButton = styled(Button)`
+    border-radius: 30px;
+    background-color: #0064af;
+`;
+
 const WarningDialog = ({ title='', message='', filteredLayers=[], indeterminate=false, hideWarn, dialogOpen, isChecked }) => {
     const [selected, setIsSelected] = useState(false);
     const { store } = useContext(ReactReduxContext);
@@ -118,8 +123,8 @@ const WarningDialog = ({ title='', message='', filteredLayers=[], indeterminate=
                 />
                 <p>{message}</p>
                 <StyledFooter className="modal-footer">
-                    <Button onClick={() => closeModal()}>{strings.continue}</Button>
-                    <Button onClick={() => closeModal(true)}>{strings.cancel}</Button>
+                    <StyledButton onClick={() => closeModal()}>{strings.continue}</StyledButton>
+                    <StyledButton onClick={() => closeModal(true)}>{strings.cancel}</StyledButton>
                 </StyledFooter>
             </StyledWarningDialog>
     );

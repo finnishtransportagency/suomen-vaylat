@@ -23,6 +23,7 @@ const StyledShareWebSiteContainer = styled.div`
     background: white;
     margin-top: -150px;
     margin-left: -150px;
+    border-radius: 4px;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
     @media ${props => props.theme.device.mobileL} {
         font-size: 13px;
@@ -34,7 +35,7 @@ const StyledHeader = styled.div`
     color: ${props => props.theme.colors.mainWhite};
     background-color: ${props => props.theme.colors.mainColor1};
     padding: .5rem;
-    border-radius: 0;
+    border-radius: 4px 4px 0px 0px;
 `;
 
 const StyledCloseIcon = styled.div`
@@ -76,6 +77,7 @@ const StyledInput = styled.textarea`
     width: 100%;
     height: 80px;
     resize: none;
+    border: none;
 `;
 
 const StyledShareButtonsContainer = styled.div`
@@ -94,6 +96,7 @@ const StyledShareButtonsContainer = styled.div`
 `;
 
 const StyledCopyClipboardButton = styled.button`
+    border-radius: 20px;
     width: 32px;
     height: 32px;
     justify-content: center;
@@ -233,22 +236,22 @@ export const ShareWebSitePopup = () => {
                             </StyledCopyClipboardButton>
                         </CopyToClipboard>
                         <EmailShareButton url={url} subject={title} body={emailBody} data-tip data-for='email'>
-                            <EmailIcon size={shareIconSize} />
+                            <EmailIcon round={true} size={shareIconSize} />
                         </EmailShareButton>
                         <FacebookShareButton url={url} quote={title} data-tip data-for='facebook'>
-                            <FacebookIcon size={shareIconSize} />
+                            <FacebookIcon round={true} size={shareIconSize} />
                         </FacebookShareButton>
                         <TwitterShareButton url={url} title={title} data-tip data-for='twitter'>
-                            <TwitterIcon size={shareIconSize} />
+                            <TwitterIcon round={true} size={shareIconSize} />
                         </TwitterShareButton>
                         <LinkedinShareButton url={url} data-tip data-for='linkedin'>
-                            <LinkedinIcon size={shareIconSize} />
+                            <LinkedinIcon round={true} size={shareIconSize} />
                         </LinkedinShareButton>
                         <WhatsappShareButton url={url} title={title} separator=': ' data-tip data-for='whatsapp'>
-                            <WhatsappIcon size={shareIconSize} />
+                            <WhatsappIcon round={true} size={shareIconSize} />
                         </WhatsappShareButton>
                         <TelegramShareButton url={url} title={title} data-tip data-for='telegram'>
-                            <TelegramIcon size={shareIconSize} />
+                            <TelegramIcon round={true} size={shareIconSize} />
                         </TelegramShareButton>
                     </StyledShareButtonsContainer>
                 </StyledContainer>
