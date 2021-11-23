@@ -8,21 +8,26 @@ import { useAppSelector } from "../../state/hooks";
 import { setIsInfoOpen } from "../../state/slices/uiSlice";
 import strings from "../../translations";
 
-const customStyles = {
-    content: {
-      top: '50%',
-      left: '50%',
-      right: 'auto',
-      bottom: 'auto',
-      marginRight: '-50%',
-      transform: 'translate(-50%, -50%)',
-      padding: '0',
-      borderRadius: '4px',
-      boxShadow: 'rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px',
-      border: 'none'
-    },
-    overlay: {zIndex: 20}
-  };
+const StyledModal = styled(Modal)`
+    position: absolute;
+    width: 100%;
+    max-width: 800px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: ${props => props.theme.colors.mainWhite};
+    box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.20);
+    border-radius: 4px;
+    overflow: auto;
+    @media ${props => props.theme.device.mobileL} {
+        position: fixed;
+        top: 0px;
+        left: 0px;
+        width: 100%;
+        height: 100%;
+        transform: none;
+    };
+`;
 
 const StyledContent = styled.div`
     max-width: 800px;
@@ -31,13 +36,15 @@ const StyledContent = styled.div`
 `;
 
 const StyledHeader = styled.div`
+    position: sticky;
+    top: 0px;
     padding: 16px;
     color: ${props => props.theme.colors.mainWhite};
     background-color: ${props => props.theme.colors.mainColor1};
     height: 56px;
     display: flex;
     align-items: center;
-    box-shadow: 2px 2px 4px 0px rgba(0,0,0,0.20);
+    box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.20);
 `;
 
 const StyledModalTitle = styled.p`
@@ -78,28 +85,25 @@ export const AppInfoModal = () => {
     };
 
     return (
-        <div>
-            <Modal
-                isOpen={isInfoOpen}
-                onRequestClose={() => closeModal()}
-                style={customStyles}
-            >
-                <StyledHeader className="modal-header">
-                    <StyledModalTitle>{title}</StyledModalTitle>
-                    <StyledModalCloseIcon
-                        onClick={() => {
-                            closeModal();
-                        }} title='Sulje'>
-                        <FontAwesomeIcon
-                            icon={faTimes}
-                        />
-                    </StyledModalCloseIcon>
-                </StyledHeader>
-                <StyledContent>
-                    {content}
-                </StyledContent>
-            </Modal>
-        </div>
+        <StyledModal
+            isOpen={isInfoOpen}
+            onRequestClose={() => closeModal()}
+        >
+            <StyledHeader className="modal-header">
+                <StyledModalTitle>{title}</StyledModalTitle>
+                <StyledModalCloseIcon
+                    onClick={() => {
+                        closeModal();
+                    }} title='Sulje'>
+                    <FontAwesomeIcon
+                        icon={faTimes}
+                    />
+                </StyledModalCloseIcon>
+            </StyledHeader>
+            <StyledContent>
+                {content}
+            </StyledContent>
+        </StyledModal>
     );
 };
 
