@@ -13,6 +13,7 @@ import svLinestring from '../../theme/icons/drawtools_linestring.svg';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useSelector } from 'react-redux';
 import ReactTooltip from 'react-tooltip';
+import { isMobile } from '../../theme/theme';
 
 import strings from '../../translations';
 import { setActiveTool } from '../../state/slices/uiSlice';
@@ -53,6 +54,10 @@ const StyledDrawingTool = styled.div`
         color: ${props => props.theme.colors.mainWhite};
         //font-size: 18px;
     };
+    @media ${props => props.theme.device.mobileL} {
+        width: 38px;
+        min-height: 38px;
+    };
 `;
 
 const StyledErase = styled.div`
@@ -76,6 +81,13 @@ const StyledErase = styled.div`
     svg {
         color: ${props => props.theme.colors.mainWhite};
         font-size: 20px;
+    };
+    @media ${props => props.theme.device.mobileL} {
+        width: 38px;
+        min-height: 38px;
+        svg {
+            font-size: 18px;
+        };
     };
 `;
 
@@ -147,27 +159,27 @@ export const DrawingTools = ({isOpen}) => {
 
     return (
         <>
-            <ReactTooltip id='circle' place='top' type='dark' effect='float'>
+            <ReactTooltip disable={isMobile} id='circle' place='top' type='dark' effect='float'>
                 <span>{strings.tooltips.drawingtools.circle}</span>
             </ReactTooltip>
 
-            <ReactTooltip id='box' place='top' type='dark' effect='float'>
+            <ReactTooltip disable={isMobile} id='box' place='top' type='dark' effect='float'>
                 <span>{strings.tooltips.drawingtools.box}</span>
             </ReactTooltip>
 
-            <ReactTooltip id='square' place='top' type='dark' effect='float'>
+            <ReactTooltip disable={isMobile} id='square' place='top' type='dark' effect='float'>
                 <span>{strings.tooltips.drawingtools.square}</span>
             </ReactTooltip>
 
-            <ReactTooltip id='polygon' place='top' type='dark' effect='float'>
+            <ReactTooltip disable={isMobile} id='polygon' place='top' type='dark' effect='float'>
                 <span>{strings.tooltips.drawingtools.polygon}</span>
             </ReactTooltip>
 
-            <ReactTooltip id='linestring' place='top' type='dark' effect='float'>
+            <ReactTooltip disable={isMobile} id='linestring' place='top' type='dark' effect='float'>
                 <span>{strings.tooltips.drawingtools.linestring}</span>
             </ReactTooltip>
 
-            <ReactTooltip id='erase' place='top' type='dark' effect='float'>
+            <ReactTooltip disable={isMobile} id='erase' place='top' type='dark' effect='float'>
                 <span>{strings.tooltips.drawingtools.erase}</span>
             </ReactTooltip>
 

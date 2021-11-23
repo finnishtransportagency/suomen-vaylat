@@ -10,6 +10,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ReactReduxContext } from 'react-redux';
 import ReactTooltip from 'react-tooltip';
+import { isMobile } from '../../../theme/theme';
 import styled from 'styled-components';
 import { useAppSelector } from '../../../state/hooks';
 import {
@@ -63,6 +64,9 @@ const StyledMenuBarButton = styled.div`
     @media ${props => props.theme.device.mobileL} {
         width: 40px;
         height: 40px;
+        svg {
+            font-size: 18px;
+        };
     };
 `;
 
@@ -85,6 +89,9 @@ const StyledMenuBarToolsButton = styled.div`
     @media ${props => props.theme.device.mobileL} {
         width: 40px;
         height: 40px;
+        svg {
+            font-size: 18px;
+        };
     };
 `;
 
@@ -140,26 +147,28 @@ const MenuBar = () => {
         store.dispatch(setIsDrawingToolsOpen(!isDrawingToolsOpen))
     };
 
+    //const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
 
     return (
         <>
-            <ReactTooltip id='layerlist' place="right" type="dark" effect="float">
+            <ReactTooltip disable={isMobile} id='layerlist' place="right" type="dark" effect="float">
                 <span>{strings.tooltips.layerlistButton}</span>
             </ReactTooltip>
             
-            <ReactTooltip id='search' place="right" type="dark" effect="float">
+            <ReactTooltip disable={isMobile} id='search' place="right" type="dark" effect="float">
                 <span>{strings.tooltips.searchButton}</span>
             </ReactTooltip>
             
-            <ReactTooltip id='legend' place="right" type="dark" effect="float">
+            <ReactTooltip disable={isMobile} id='legend' place="right" type="dark" effect="float">
                 <span>{strings.tooltips.legendButton}</span>
             </ReactTooltip>
 
-            <ReactTooltip id='drawingtools' place="right" type="dark" effect="float">
+            <ReactTooltip disable={isMobile} id='drawingtools' place="right" type="dark" effect="float">
                 <span>{strings.tooltips.drawingtools.drawingtoolsButton}</span>
             </ReactTooltip>
             
-            <ReactTooltip id='fullscreen' place="right" type="dark" effect="float">
+            <ReactTooltip disable={isMobile} id='fullscreen' place="right" type="dark" effect="float">
                 <span>{strings.tooltips.fullscreenButton}</span>
             </ReactTooltip>
             

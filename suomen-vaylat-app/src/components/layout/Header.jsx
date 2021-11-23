@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useContext } from "react";
 import { ReactReduxContext } from "react-redux";
 import ReactTooltip from 'react-tooltip';
+import { isMobile } from '../../theme/theme';
 import styled from 'styled-components';
 import { useAppSelector } from '../../state/hooks';
 import { setIsInfoOpen, setIsMainScreen } from "../../state/slices/uiSlice";
@@ -16,11 +17,7 @@ import { ReactComponent as VaylaLogoFi } from './images/vayla_sivussa_fi_white.s
 import { ReactComponent as VaylaLogoSv } from './images/vayla_sivussa_sv_white.svg';
 import { updateLayers } from "../../utils/rpcUtil";
 
-
-
-
 const StyledHeaderContainer = styled.div`
-    z-index: 20;
     height: 80px;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
@@ -142,7 +139,7 @@ export const Header = () => {
 
     return (
         <StyledHeaderContainer>
-            <ReactTooltip id={'show_info'} place='bottom' type='dark' effect='float'>
+            <ReactTooltip disable={isMobile} id={'show_info'} place='bottom' type='dark' effect='float'>
                 <span>{strings.tooltips.showPageInfo}</span>
             </ReactTooltip>
             <StyledHeaderTitleContainer onClick={() => setToMainScreen()}>
