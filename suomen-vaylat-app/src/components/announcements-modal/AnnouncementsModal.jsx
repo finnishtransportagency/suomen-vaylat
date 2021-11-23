@@ -44,35 +44,42 @@ const StyledCheckbox = styled.input`
 `;
 
 const StyledContent = styled.div`
-    padding: .5rem;
+    max-width: 800px;
+    padding: 32px;
+    border-radius: 4px;
 `;
+
 const StyledHeader = styled.div`
-    padding: .5rem;
-    background-color: ${props => props.theme.colors.mainColor1};
+    padding: 16px;
     color: ${props => props.theme.colors.mainWhite};
-    border-radius: 0;
+    background-color: ${props => props.theme.colors.mainColor1};
+    height: 56px;
+    display: flex;
+    align-items: center;
+    box-shadow: 2px 2px 4px 0px rgba(0,0,0,0.20);
 `;
+
 const StyledFooter = styled.div`
     justify-content: space-between;
 `;
 
-const StyledLayerCloseIcon = styled.div`
+const StyledModalCloseIcon = styled.div`
+    min-width: 28px;
+    min-height: 28px;
     cursor: pointer;
     display: flex;
     justify-content: center;
     align-items: center;
-    min-width: 28px;
-    min-height: 28px;
     svg {
-        transition: all 0.1s ease-out;
-        font-size: 18px;
         color: ${props => props.theme.colors.mainWhite};
+        font-size: 20px;
+        transition: all 0.1s ease-out;
     };
     &:hover {
         svg {
             color: ${props => props.theme.colors.mainColor2};
         }
-    }
+    };
 `;
 
 const StyledButton = styled(Button)`
@@ -97,41 +104,38 @@ export const AnnouncementsModal = ({ id, title, content }) => {
 
     return (
         <div>
-
             <Modal
                 isOpen={modalIsOpen}
                 onAfterOpen={afterOpenModal}
                 onRequestClose={() => closeModal()}
                 style={customStyles}
             >
-            <StyledHeader className="modal-header">
-                <h5>{title}</h5>
-                <StyledLayerCloseIcon
-                    onClick={() => {
-                        closeModal();
-                        }} title='Sulje'>
-                        <FontAwesomeIcon
-                            icon={faTimes}
-                        />
-                    </StyledLayerCloseIcon>
-            </StyledHeader>
-            <StyledContent>
-                <p>
+                <StyledHeader className="modal-header">
+                    <h5>{title}</h5>
+                    <StyledModalCloseIcon
+                        onClick={() => {
+                            closeModal();
+                            }} title='Sulje'>
+                            <FontAwesomeIcon
+                                icon={faTimes}
+                            />
+                        </StyledModalCloseIcon>
+                </StyledHeader>
+                <StyledContent>
                     {content}
-                </p>
-            </StyledContent>
-            <StyledFooter className="modal-footer">
-                <label>
-                    <StyledCheckbox
-                        name="announcementSelected"
-                        type="checkbox"
-                        onClick={() => setIsSelected(!selected)}
-                    />
-                    {strings.dontShowAgain}
-                </label>
-                <StyledButton onClick={() => closeModal()}>{strings.ok}</StyledButton>
-            </StyledFooter>
-        </Modal>
+                </StyledContent>
+                <StyledFooter className="modal-footer">
+                    <label>
+                        <StyledCheckbox
+                            name="announcementSelected"
+                            type="checkbox"
+                            onClick={() => setIsSelected(!selected)}
+                        />
+                        {strings.dontShowAgain}
+                    </label>
+                    <StyledButton onClick={() => closeModal()}>{strings.ok}</StyledButton>
+                </StyledFooter>
+            </Modal>
         </div>
     );
 }
