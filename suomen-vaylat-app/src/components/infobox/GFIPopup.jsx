@@ -151,10 +151,10 @@ export const GFIPopup = ({gfiLocations}) => {
                     <StyledContent>
                         <TabList>
                             {
-                                tabsIds.map((id, index) => {
+                                tabsIds.map((id) => {
                                     return (
                                         <Tab>
-                                            <StyledGFIHeader className="gfi-header">
+                                            <StyledGFIHeader key={id} className="gfi-header">
                                                 {allLayers.filter(layer => layer.id === id)[0].name}
                                                 <StyledTabCloseIcon
                                                     onClick={() => {
@@ -173,7 +173,7 @@ export const GFIPopup = ({gfiLocations}) => {
                         {
                             tabsContent.map((content, index) => {
                                     return (
-                                        <TabPanel>
+                                        <TabPanel key={index}>
                                             {content}
                                         </TabPanel>
                                     )
