@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { faSearchLocation } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import ReactTooltip from "react-tooltip";
+import { isMobile } from '../../theme/theme';
 import styled from 'styled-components';
 import { useAppSelector } from '../../state/hooks';
 import strings from '../../translations';
@@ -52,7 +53,7 @@ const ZoomMenu = () => {
 
     return (
         <>
-            <ReactTooltip id='myLoc' place="top" type="dark" effect="float">
+            <ReactTooltip disable={isMobile} id='myLoc' place="top" type="dark" effect="float">
                 <span>{strings.tooltips.myLocButton}</span>
             </ReactTooltip>
 

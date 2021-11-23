@@ -3,7 +3,6 @@ import { useAppSelector } from '../../state/hooks';
 import AppInfoModal from '../app-info-modal/AppInfoModal';
 import MenuBar from '../layout/menu-bar/MenuBar';
 import { Legend } from "../legend/Legend";
-import DrawingTools from '../measurement-tools/DrawingTools';
 import MapLayersDialog from '../dialog/MapLayersDialog';
 import WarningDialog from '../dialog/WarningDialog';
 import PublishedMap from '../published-map/PublishedMap';
@@ -51,7 +50,6 @@ const Content = () => {
     const {
         isSearchOpen,
         isLegendOpen,
-        isDrawingToolsOpen,
         shareUrl
     } =  useAppSelector((state) => state.ui);
 
@@ -70,7 +68,6 @@ const Content = () => {
             <PublishedMap />
             {isLegendOpen && <Legend selectedLayers={selectedLayers} />}
             {isShareOpen && <ShareWebSitePopup />}
-            {isDrawingToolsOpen && <DrawingTools />}
             <AppInfoModal />
             <StyledContentGrid>
                 <MenuBar />

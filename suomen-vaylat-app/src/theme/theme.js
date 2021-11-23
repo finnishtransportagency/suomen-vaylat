@@ -1,5 +1,7 @@
 import { ThemeProvider } from "styled-components";
 
+export const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
 const size = {
   mobileS: '320px',
   mobileM: '375px',
