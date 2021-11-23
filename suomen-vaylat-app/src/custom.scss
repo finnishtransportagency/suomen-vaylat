@@ -29,3 +29,25 @@
     transform: scale(0.9);
     transition: opacity 300ms, transform 500ms;
 }
+
+/* width */
+.swiper-slide-active::-webkit-scrollbar {
+    width: 10px;
+}
+
+/* Track */
+.swiper-slide-active::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px grey;
+    border-radius: 10px;
+}
+
+/* Handle */
+.swiper-slide-active::-webkit-scrollbar-thumb {
+    background-color: $mainColor1;
+    border-radius: 10px;
+}
+
+/* Handle on hover */
+.swiper-slide-active::-webkit-scrollbar-thumb:hover {
+    background: $mainColor2;
+}

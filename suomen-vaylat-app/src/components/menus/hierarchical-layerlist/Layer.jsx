@@ -1,12 +1,13 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import { ReactReduxContext, useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { changeLayerStyle, getLegends, reArrangeSelectedMapLayers, setLegends, setMapLayerVisibility } from '../../../state/slices/rpcSlice';
-import { updateLayers } from "../../../utils/rpcUtil";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-    faInfoCircle
-} from '@fortawesome/free-solid-svg-icons';
+    changeLayerStyle,
+    getLegends,
+    setLegends,
+    setMapLayerVisibility,
+} from '../../../state/slices/rpcSlice';
+import { updateLayers } from "../../../utils/rpcUtil";
 import LayerMetadataButton from './LayerMetadataButton';
 
 const StyledLayerContainer = styled.li`
@@ -80,15 +81,11 @@ export const Layer = ({ layer, theme }) => {
     const [layerStyle, setLayerStyle] = useState(null);
 
     const {
-        channel,
-        selectedLayers
+        channel
     } = useSelector(state => state.rpc);
 
     const handleLayerVisibility = (channel, layer) => {
         store.dispatch(setMapLayerVisibility(layer));
-        // Update layer orders to correct
-        const position = selectedLayers.length + 1;
-        store.dispatch(reArrangeSelectedMapLayers({layerId: layer.id, position: position}));
         updateLayers(store, channel);
     };
 

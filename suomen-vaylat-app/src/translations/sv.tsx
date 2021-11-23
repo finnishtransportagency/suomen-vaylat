@@ -83,12 +83,14 @@ const sv = {
         }
     },
     dontShowAgain: 'Visa inte igen',
+    ok: 'OK',
     layerlist: {
         layerlistLabels: {
             allLayers: 'Alla lager' ,
             themeLayers: 'Teman',
             selectedLayers: 'Valda lagert',
             mapLayers: 'Layers',
+            backgroundMaps: 'Background maps',
             selectAll: 'Select all',
             show: 'Show',
             filterOrSearchLayers: 'Filter or search layers',
@@ -96,7 +98,8 @@ const sv = {
             searchForLayers: 'Search for layers',
             clearFilters: 'Clear filters',
             searchResults: 'Search results',
-            removeAllSelectedLayers: 'Remove all selected layers',
+            clearSelectedMapLayers: 'Clear selected map layers',
+            clearSelectedBackgroundMaps: 'Clear selected background maps',
             noSearchResults: 'No search results',
             typeAtLeastThreeCharacters: 'Type at least 3 characters'
         }
