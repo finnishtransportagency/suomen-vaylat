@@ -64,6 +64,9 @@ const StyledMenuBarButton = styled.div`
     @media ${props => props.theme.device.mobileL} {
         width: 40px;
         height: 40px;
+        svg {
+            font-size: 18px;
+        };
     };
 `;
 
@@ -86,6 +89,9 @@ const StyledMenuBarToolsButton = styled.div`
     @media ${props => props.theme.device.mobileL} {
         width: 40px;
         height: 40px;
+        svg {
+            font-size: 18px;
+        };
     };
 `;
 

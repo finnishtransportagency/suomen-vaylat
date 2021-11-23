@@ -85,6 +85,9 @@ const StyledErase = styled.div`
     @media ${props => props.theme.device.mobileL} {
         width: 38px;
         min-height: 38px;
+        svg {
+            font-size: 18px;
+        };
     };
 `;
 
