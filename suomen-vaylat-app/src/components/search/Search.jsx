@@ -13,7 +13,7 @@ import {
     searchVKMRoad,
     setSelectError
 } from '../../state/slices/rpcSlice';
-import { emptyFormData, emptySearchResult, setSearching, setSearchResult, setSearchSelected } from '../../state/slices/searchSlice';
+import { emptyFormData, emptySearchResult, setSearching, setSearchResult, setSearchResultOnMapId, setSearchSelected } from '../../state/slices/searchSlice';
 import { setIsSearchOpen } from '../../state/slices/uiSlice';
 import strings from '../../translations';
 import CenterSpinner from '../center-spinner/CenterSpinner';
@@ -161,7 +161,8 @@ export const Search = ({isOpen}) => {
         searchDisabled = false;
     }
 
-    if (search.searching === false && search.marker.x !== null && search.marker.y !== null) {
+    if (search.searching === false && search.marker.x !== null && search.marker.y !== null
+        && search.searchResultOnMapId !== search.marker.x + '_' + search.marker.y + '_' + (search.marker.msg || '') + '_' + markerId) {
         store.dispatch(addMarkerRequest({
             x: search.marker.x,
             y: search.marker.y,
@@ -173,6 +174,8 @@ export const Search = ({isOpen}) => {
             x: search.marker.x,
             y: search.marker.y
         }));
+
+        store.dispatch(setSearchResultOnMapId(search.marker.x + '_' + search.marker.y + '_' + (search.marker.msg || '') + '_' + markerId));
     }
 
     return (
@@ -193,7 +196,7 @@ export const Search = ({isOpen}) => {
             </StyledSearchMethod>
             <StyledSearchAddressInput>
                 {
-                    search.selected === 'vkm' && 
+                    search.selected === 'vkm' &&
                     <VKMSearch
                         visible={search.selected === 'vkm'}
                         search={search}
@@ -203,7 +206,7 @@ export const Search = ({isOpen}) => {
                     />
                 }
                 {
-                    search.selected === 'address' && 
+                    search.selected === 'address' &&
                     <AddressSearch
                         visible={search.selected === 'address'}
                         search={search}
