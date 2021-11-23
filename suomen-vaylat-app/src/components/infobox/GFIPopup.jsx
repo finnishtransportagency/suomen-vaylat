@@ -22,7 +22,7 @@ const customStyles = {
         marginRight: '-25%',
         transform: 'translate(-50%, -50%)',
         padding: '0',
-        borderRadius: 0,
+        borderRadius: '4px',
         boxShadow: 'rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px',
         border: 'none'
     },
@@ -34,7 +34,7 @@ const StyledContent = styled.div`
 `;
 
 const StyledGFIHeader = styled.div`
-    padding-bottom: .5rem;
+    display: flex;
     color: ${props => props.theme.colors.mainColor1};
 `;
 
@@ -64,6 +64,25 @@ const StyledLayerCloseIcon = styled.div`
     };
 `;
 
+const StyledTabCloseIcon = styled.div`
+    min-width: 28px;
+    min-height: 28px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    svg {
+        color: ${props => props.theme.colors.mainColor1};
+        font-size: 18px;
+        transition: all 0.1s ease-out;
+    };
+    &:hover {
+        svg {
+            color: ${props => props.theme.colors.mainColor2};
+        }
+    };
+`;
+
 export const GFIPopup = ({gfiLocations}) => {
     console.log(gfiLocations);
     const geojsonFormatter = new GeoJSONFormatter();
@@ -71,15 +90,15 @@ export const GFIPopup = ({gfiLocations}) => {
     const { store } = useContext(ReactReduxContext);
     const isGFIOpen = useAppSelector((state) => state.ui.isGFIOpen);
     const allLayers = useAppSelector((state) => state.rpc.allLayers);
-    let tabsTitles = []
+    let tabsIds = []
     let tabsContent = []
-    let layerName = null;
+    let layerIds = null;
     let contentDiv = null;
 
     if (gfiLocations.length > 0) {
         gfiLocations.map(location => {
-            layerName = allLayers.filter(layer => layer.id === location.layerId)[0].name;
-            tabsTitles.push(layerName);
+            layerIds = allLayers.filter(layer => layer.id === location.layerId)[0].id;
+            tabsIds.push(layerIds);
             let content;
         
             if (location.type === 'text') {
@@ -102,6 +121,11 @@ export const GFIPopup = ({gfiLocations}) => {
     function closeModal() {
         store.dispatch(setIsGFIOpen(false));
         store.dispatch(resetGFILocations([]));
+    };
+
+    function closeTab(id) {
+        var filteredLocations = gfiLocations.filter(gfi => gfi.layerId !== id);
+        store.dispatch(resetGFILocations(filteredLocations));
     };
 
     return (
@@ -127,11 +151,19 @@ export const GFIPopup = ({gfiLocations}) => {
                     <StyledContent>
                         <TabList>
                             {
-                                tabsTitles.map((title, index) => {
+                                tabsIds.map((id, index) => {
                                     return (
                                         <Tab>
                                             <StyledGFIHeader className="gfi-header">
-                                                {title}
+                                                {allLayers.filter(layer => layer.id === id)[0].name}
+                                                <StyledTabCloseIcon
+                                                    onClick={() => {
+                                                        closeTab(id);
+                                                    }} title='Sulje'>
+                                                    <FontAwesomeIcon
+                                                        icon={faTimes}
+                                                    />
+                                                </StyledTabCloseIcon>
                                             </StyledGFIHeader>
                                         </Tab>
                                     )
