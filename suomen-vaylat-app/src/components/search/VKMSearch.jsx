@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { debounce } from 'tlence';
 import {addFeaturesToMap, removeFeaturesFromMap, searchVKMRoad, setSelectError} from '../../state/slices/rpcSlice';
-import { emptySearchResult, setFormData, setSearching, setSearchResult } from '../../state/slices/searchSlice';
+import { emptySearchResult, setFormData, setSearching, setSearchResult, setSearchResultOnMapId } from '../../state/slices/searchSlice';
 import strings from '../../translations';
 import { StyledContainer, StyledSelectInput, StyledTextField } from './CommonComponents';
 import { VKMGeoJsonHoverStyles, VKMGeoJsonStyles } from './VKMSearchStyles';
@@ -9,8 +9,8 @@ import { VKMGeoJsonHoverStyles, VKMGeoJsonStyles } from './VKMSearchStyles';
 let debounceSearchVKM = null;
 
 const VKMSearch = ({visible, search, store, vectorLayerId, onEnterHandler}) => {
-
-    if (search.selected === 'vkm' && search.searchResult.geom !== null && search.searching === false) {
+    if (search.selected === 'vkm' && search.searchResult.geom !== null && search.searching === false
+        && search.searchResultOnMapId !== search.searchResult.tie + '_' + search.searchResult.osa + '_' + search.searchResult.ajorata + '_' + search.searchResult.etaisyys) {
         let style = 'tie';
         if ((search.formData.vkm.tieosa !== null || search.formData.vkm.ajorata !== null) && search.searchResult.osa) {
             style = 'osa';
@@ -31,6 +31,8 @@ const VKMSearch = ({visible, search, store, vectorLayerId, onEnterHandler}) => {
             hover: hover,
             maxZoomLevel: 10
         }));
+
+        store.dispatch(setSearchResultOnMapId(search.searchResult.tie + '_' + search.searchResult.osa + '_' + search.searchResult.ajorata + '_' + search.searchResult.etaisyys));
     }
 
     const onChange = (name, value) => {
@@ -140,7 +142,7 @@ const VKMSearch = ({visible, search, store, vectorLayerId, onEnterHandler}) => {
                         return { value: value, label: value }
                     })}
                 />
-                
+
                 <StyledTextField
                     placeholder={strings.search.vkm.etaisyys}
                     onChange={(event) => {

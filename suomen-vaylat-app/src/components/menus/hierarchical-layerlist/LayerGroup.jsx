@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext, useRef } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import styled from 'styled-components';
 import { ReactReduxContext, useSelector } from 'react-redux';
 import { motion } from "framer-motion";
@@ -266,12 +266,13 @@ export const LayerGroup = ({
     const channel = useSelector(state => state.rpc.channel);
 
     const [filteredLayers, setFilteredLayers] = useState([]);
+    const [totalGroupLayersCount, setTotalGroupLayersCoun] = useState(0);
+    const [totalVisibleGroupLayersCount, setTotalVisibleGroupLayersCount] = useState(0);
     const [visibleLayers, setVisibleLayers] = useState([]);
-    const refEl = useRef(null);
-    
 
     //Find matching layers from all layers and groups, then push this group's layers into 'filteredLayers'
     useEffect(() => {
+        
         if(group.layers){
             var getLayers = group.layers.map(groupLayerId => {
                 var layer = layers.find(layer => layer.id === groupLayerId);
@@ -283,7 +284,31 @@ export const LayerGroup = ({
             setVisibleLayers(getLayers.filter(layer => layer.visible === true));
 
         };
+
+        if(group.parentId === -1){
+            var layersCount = 0;
+            var visibleLayersCount = 0;
+            const layersCounter = (group) => {
+                if(group.hasOwnProperty("layers") && group.layers.length > 0){
+                    group.layers.forEach(layerId => {
+                       if(layers.find(layer => layer.id === layerId).visible === true){
+                            visibleLayersCount = visibleLayersCount + 1;
+                       };
+                    })
+                    layersCount = layersCount + group.layers.length;
+                };
+
+                var hasGroups = group.hasOwnProperty("groups") && group.groups.length > 0;
+                hasGroups && group.groups.forEach(group => {
+                    layersCounter(group);
+                });
+                setTotalGroupLayersCoun(layersCount);
+                setTotalVisibleGroupLayersCount(visibleLayersCount);
+            };
+            layersCounter(group);
+        };
     },[group, layers]);
+
 
 
     const selectGroup = (e) => {
@@ -315,18 +340,6 @@ export const LayerGroup = ({
             });
             setIsChecked(true);
         }
-
-        // if (!indeterminate) {
-        //         filteredLayers.map(layer => {
-        //             channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, !layer.visible]);
-        //             return null;
-        //         });
-        // } else {
-        //         filteredLayers.map(layer => {
-        //             channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, false]);
-        //             return null;
-        //         });
-        // }
         updateLayers(store, channel);
     };
 
@@ -360,7 +373,7 @@ export const LayerGroup = ({
                             </StyledMasterGroupName>
                             <StyledMasterGroupLayersCount>
                                 { 
-                                    refEl !== null && refEl.current && refEl.current.getElementsByClassName('list-layer-active').length +"/"+ refEl.current.getElementsByClassName('list-layer').length
+                                  totalVisibleGroupLayersCount +" / "+ totalGroupLayersCount
                                 }
                             </StyledMasterGroupLayersCount>
                         </StyledMasterGroupTitleContent>
@@ -420,7 +433,6 @@ export const LayerGroup = ({
                     initial="hidden"
                     animate={isOpen ? "visible" : "hidden"}
                     variants={listVariants}
-                    ref={refEl}
                 >
                     {hasChildren && (
                         <>

@@ -67,7 +67,7 @@ const StyledMapLayersDialog = styled(motion.div)`
     }; */
     @media ${props => props.theme.device.mobileL} {
         z-index: 10;
-        position: absolute;
+        position: fixed;
         top: 0px;
         left: 0px;
         width: 100%;
@@ -141,9 +141,6 @@ const StyledSwiper = styled(Swiper)`
     background-color: ${props => props.theme.colors.mainWhite};
     padding: 16px 16px 16px 16px;
     overflow: auto;
-    &::-webkit-scrollbar {
-        display: none;
-    };
   };
   transition: box-shadow 0.3s ease-out;
   box-shadow: 0px -1px 11px ${props => props.tabIndex === 0 ?
@@ -275,7 +272,7 @@ const MapLayersDialog = () => {
                         //setTabIndex(e.activeIndex);
                         //inputEl.current.swiper.slideTo(e.activeIndex);
                     }}
-                    allowTouchMove={true} // Disable swiping
+                    allowTouchMove={false} // Disable swiping
                     ref={inputEl}
                 >
                 {

@@ -3,15 +3,22 @@ import {
     setSelectedLayers,
     setSelectedTheme,
     setLastSelectedTheme,
-    setSelectedThemeIndex
+    setSelectedThemeIndex,
+    reArrangeSelectedMapLayers
 } from "../state/slices/rpcSlice";
+
+import {
+    setSelectedMapLayersMenuThemeIndex
+} from "../state/slices/uiSlice";
 
 export const updateLayers = (store, channel) => {
     channel && channel.getAllLayers(function (data) {
         store.dispatch(setAllLayers(data));
     });
     channel && channel.getSelectedLayers(function (data) {
-        store.dispatch(setSelectedLayers(data));
+        const reArrangedSelectedLayers = reArrangeSelectedLayersOrder(data)
+        store.dispatch(setSelectedLayers(reArrangedSelectedLayers));
+        reArrangeRPCLayerOrder(store, reArrangedSelectedLayers)
     });
 };
 
@@ -52,4 +59,47 @@ export const selectGroup = (store, channel, index, theme, lastSelectedTheme, sel
             store.dispatch(setSelectedThemeIndex(null));
         },700);
     };
+};
+
+export const reArrangeRPCLayerOrder = (store, selectedLayers) => {
+    selectedLayers.map((layer, idx) => {
+        // Update layer orders to correct
+        const position = selectedLayers.length-idx;
+        store.dispatch(reArrangeSelectedMapLayers({layerId: layer.id, position: position}));
+    })
+}
+
+export const reArrangeSelectedLayersOrder = (selectedLayers) => {
+    const mapLayers = selectedLayers.filter(layer => {
+        return layer.id !== 3 && layer.id !== 958;
+    });
+
+    const backgroundMaps = selectedLayers.filter(layer => {
+        return layer.id === 3 || layer.id === 958;
+    });
+
+    return mapLayers.concat(backgroundMaps)
+}
+
+export const resetThemeGroups = (store, channel, index, theme, lastSelectedTheme, selectedThemeIndex) => {
+    // if(theme){
+    //     theme.layers.forEach(layerId => {
+    //         channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layerId, false]);
+    //     });
+    // };
+    store.dispatch(setSelectedTheme(null));
+    store.dispatch(setLastSelectedTheme(null));
+    store.dispatch(setSelectedThemeIndex(null));
+};
+
+export const resetThemeGroupsForMainScreen = (store, channel, index, theme, lastSelectedTheme, selectedThemeIndex) => {
+    if(theme){
+        theme.layers.forEach(layerId => {
+            channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layerId, false]);
+        });
+    };
+    store.dispatch(setSelectedMapLayersMenuThemeIndex(0));
+    store.dispatch(setSelectedTheme(null));
+    store.dispatch(setLastSelectedTheme(null));
+    store.dispatch(setSelectedThemeIndex(null));
 };
