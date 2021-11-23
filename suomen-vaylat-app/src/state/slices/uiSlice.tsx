@@ -7,12 +7,13 @@ const initialState = {
   searchParams: "",
   isLegendOpen: false,
   isInfoOpen: false,
-  selectedTheme: '',
   shareUrl: '',
   isDrawingToolsOpen: false,
   selectedLayerList: 'themes',
   activeTool: '',
   isSwipingDisabled: false,
+  selectedMapLayersMenuTab: 0,
+  selectedMapLayersMenuThemeIndex: null
 };
 
 export const uiSlice = createSlice({
@@ -44,9 +45,6 @@ export const uiSlice = createSlice({
     setIsInfoOpen: (state, action) => {
       state.isInfoOpen = action.payload;
     },
-    setSelectedTheme: (state, action) => {
-      state.selectedTheme = action.payload;
-    },
     setShareUrl: (state, action) => {
       state.shareUrl = action.payload;
     },
@@ -61,6 +59,12 @@ export const uiSlice = createSlice({
     },
     setIsSwipingDisabled: (state, action) => {
       state.isSwipingDisabled = action.payload;
+    },
+    setSelectedMapLayersMenuTab: (state, action) => {
+      state.selectedMapLayersMenuTab = action.payload;
+    },
+    setSelectedMapLayersMenuThemeIndex: (state, action) => {
+      state.selectedMapLayersMenuThemeIndex = action.payload;
     }
   }
 });
@@ -74,11 +78,12 @@ export const {
   setIsInfoOpen,
   setIsFullScreen,
   setIsDrawingToolsOpen,
-  setSelectedTheme,
   setShareUrl,
   setSelectedLayerListType,
   setActiveTool,
-  setIsSwipingDisabled
+  setIsSwipingDisabled,
+  setSelectedMapLayersMenuTab,
+  setSelectedMapLayersMenuThemeIndex,
 } = uiSlice.actions;
 
 export default uiSlice.reducer;

@@ -2,7 +2,6 @@ import styled from 'styled-components';
 
 export const StyledContainer = styled.div`
   display: ${props => props.visible ? 'block' : 'none'};
-  padding-left:6px;
 `;
 
 export const Text = styled.p`
@@ -15,15 +14,15 @@ export const Error = styled(Text)`
 `;
 
 export const StyledInput = styled.input`
-  width: 229px;
-  min-height: 36px;
+  width: 100%;
+  min-height: 48px;
   cursor: ${props => props.disabled ? 'not-allowed' : 'pointer'};
   color: ${props => props.theme.colors.black};
   margin: 0;
   padding: 6px 8px;
   box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
   border: 1px solid ${props => props.error ? 'red' : '#dcdce3'};
-  border-radius: 2px;
+  border-radius: 24px;
   font-size: 14px;
   &:disabled {
     display: none;
@@ -45,14 +44,14 @@ export const StyledInput = styled.input`
 
 export const StyledSelect = styled.select`
   width: 100%;
-  min-height: 36px;
+  min-height: 48px;
   cursor: ${props => props.disabled ? 'not-allowed' : 'pointer'};
   margin: 0;
   color: black;
   padding: 6px 4px;
   box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
   border: 1px solid ${props => props.error ? 'red' : '#dcdce3'};
-  border-radius: 2px;
+  border-radius: 24px;
   font-size: 14px;
   &:disabled {
     display:none;

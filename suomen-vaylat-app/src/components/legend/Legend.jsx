@@ -7,6 +7,7 @@ import strings from '../../translations';
 import { LegendGroup } from './LegendGroup';
 
 const StyledLegendContainer = styled.div`
+    border-radius: 4px;
     z-index: 30;
     pointer-events: auto;
     width: 100%;
@@ -20,10 +21,11 @@ const StyledLegendContainer = styled.div`
 
 const StyledHeader = styled.div`
     border-radius: 0;
-    cursor: move;
+    cursor: auto;
     color: ${props => props.theme.colors.mainWhite};
     background-color: ${props => props.theme.colors.mainColor1};
     padding: .5rem;
+    border-radius: 4px 4px 0px 0px;
 `;
 
 const StyledGroupsContainer = styled.div`
@@ -33,7 +35,7 @@ const StyledGroupsContainer = styled.div`
     padding: 6px;
 `;
 
-export const Legend = ({selectedLayers, hoveringIndex, zoomLevelsLayers, currentZoomLevel}) => {
+export const Legend = ({selectedLayers, zoomLevelsLayers, currentZoomLevel}) => {
     const legends = [];
     const noLegends = [];
     const allLegends = useSelector((state) => state.rpc.legends);
@@ -53,21 +55,9 @@ export const Legend = ({selectedLayers, hoveringIndex, zoomLevelsLayers, current
     }
     legends.push.apply(legends, noLegends);
 
-    const [size, setSize] = useState({
-        width: window.innerWidth,
-        height: window.innerHeight
-      });
-      const updateSize = () =>
-        setSize({
-          width: window.innerWidth,
-          height: window.innerHeight
-        });
     useEffect(() => {
-        window.onresize = updateSize;
-        hoveringIndex !== null ?
-            setCurrentLayersInfoLayers(Object.values(zoomLevelsLayers)[hoveringIndex].layers) :
             zoomLevelsLayers[currentZoomLevel] !== undefined && setCurrentLayersInfoLayers(Object.values(zoomLevelsLayers)[currentZoomLevel].layers);
-    }, [zoomLevelsLayers, currentZoomLevel, hoveringIndex]);
+    }, [zoomLevelsLayers, currentZoomLevel]);
 
 
     return(
@@ -79,8 +69,8 @@ export const Legend = ({selectedLayers, hoveringIndex, zoomLevelsLayers, current
                 {currentLayersInfoLayers.map((zoomLevelLayer, index) => {
                     const legend = legends.find(layer => layer.layerId === zoomLevelLayer.id);
                     return legend && <LegendGroup
-                        key={hoveringIndex !== null ?
-                            zoomLevelLayer.id+'_'+hoveringIndex :
+                        key={currentZoomLevel !== null ?
+                            zoomLevelLayer.id+'_'+currentZoomLevel :
                             zoomLevelLayer.id+'_'+currentZoomLevel
                         }
                         legend={legend}

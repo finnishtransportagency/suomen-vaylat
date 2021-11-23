@@ -80,12 +80,14 @@ const en = {
         }
     },
     dontShowAgain: 'Don\'t show again',
+    ok: 'OK',
     layerlist: {
         layerlistLabels: {
             allLayers: 'All layers' ,
             themeLayers: 'Themes',
             selectedLayers: 'Selected layers',
             mapLayers: 'Layers',
+            backgroundMaps: 'Background maps',
             selectAll: 'Select all',
             show: 'Show',
             filterOrSearchLayers: 'Filter or search layers',
@@ -93,7 +95,8 @@ const en = {
             searchForLayers: 'Search for layers',
             clearFilters: 'Clear filters',
             searchResults: 'Search results',
-            removeAllSelectedLayers: 'Remove all selected layers',
+            clearSelectedMapLayers: 'Clear selected map layers',
+            clearSelectedBackgroundMaps: 'Clear selected background maps',
             noSearchResults: 'No search results',
             typeAtLeastThreeCharacters: 'Type at least 3 characters'
         }
