@@ -5,8 +5,7 @@ import { ReactReduxContext, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { clearLayerMetadata, getLayerMetadata, setLayerMetadata } from '../../../state/slices/rpcSlice';
 import { updateLayers } from "../../../utils/rpcUtil";
-import { SortableContainer, SortableElement, SortableHandle } from 'react-sortable-hoc';
-import strings from '../../../translations';
+import { SortableHandle } from 'react-sortable-hoc';
 
 const StyledLayerContainer = styled.div`
     z-index: 9999;

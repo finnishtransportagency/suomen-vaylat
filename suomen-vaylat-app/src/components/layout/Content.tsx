@@ -3,11 +3,11 @@ import { useAppSelector } from '../../state/hooks';
 import AppInfoModal from '../app-info-modal/AppInfoModal';
 import MenuBar from '../layout/menu-bar/MenuBar';
 import { Legend } from "../legend/Legend";
-import DrawingTools from '../measurement-tools/DrawingTools';
 import MapLayersDialog from '../dialog/MapLayersDialog';
 import WarningDialog from '../dialog/WarningDialog';
 import PublishedMap from '../published-map/PublishedMap';
 import Search from '../search/Search';
+import ThemeMapsActionButton from '../action-button/ThemeMapsActionButton';
 import { ShareWebSitePopup } from "../share-web-site/ShareWebSitePopup";
 import ZoomMenu from '../zoom-features/ZoomMenu';
 import strings from "../../translations";
@@ -34,7 +34,8 @@ const StyledContentGrid = styled.div`
     box-sizing: border-box;
     display: grid;
     gap: 16px;
-    grid-template-columns: 48px 344px 1fr 48px;
+    grid-template-columns: 48px 344px 1fr;
+    grid-template-rows: 48px 1fr;
     padding: 16px;
     pointer-events: none;
 `;
@@ -43,13 +44,14 @@ const Content = () => {
 
     const {
         selectedLayers,
-        warnings
+        warnings,
+        zoomLevelsLayers,
+        currentZoomLevel
     } = useAppSelector((state) => state.rpc);
 
     const {
         isSearchOpen,
         isLegendOpen,
-        isDrawingToolsOpen,
         shareUrl
     } =  useAppSelector((state) => state.ui);
 
@@ -66,32 +68,39 @@ const Content = () => {
         <StyledContent>
             <ZoomMenu />
             <PublishedMap />
-            {isSearchOpen && <Search />}
+            {/*{isSearchOpen && <Search />}*/}
             {/*{isLegendOpen && <Legend selectedLayers={selectedLayers} />}*/}
+            {isLegendOpen && <Legend selectedLayers={selectedLayers}
+                                     zoomLevelsLayers={zoomLevelsLayers}
+                                     currentZoomLevel={currentZoomLevel}
+                            />}
             {isShareOpen && <ShareWebSitePopup />}
-            {isDrawingToolsOpen && <DrawingTools />}
             <AppInfoModal />
             <StyledContentGrid>
                 <MenuBar />
                 <MapLayersDialog />
-                {warnings.show && warnings.type == 'multipleLayersWarning' &&
+                <Search isOpen={isSearchOpen}/>
+                <ThemeMapsActionButton />
+                {warnings.show && warnings.type === 'multipleLayersWarning' &&
                     <WarningDialog
                         dialogOpen={warnings.show}
                         hideWarn={hideWarn}
                         title={strings.warning}
                         message={strings.multipleLayersWarning}
                         filteredLayers={warnings.filteredLayers}
-                        indeterminate={warnings.indeterminate}
+                        isChecked={warnings.isChecked}
+                        //indeterminate={warnings.indeterminate}
                     />
                 }
-                {warnings.show && warnings.type == 'searchWarning' &&
+                {warnings.show && warnings.type === 'searchWarning' &&
                     <WarningDialog
                         dialogOpen={warnings.show}
                         hideWarn={hideWarn}
-                        title={search.selected == 'vkm' ?
+                        title={search.selected === 'vkm' ?
                             strings.search.vkm.error.title : strings.search.address.error.title}
                         message={warnings.message}
                         filteredLayers={[]}
+                        isChecked={undefined}
                         indeterminate={false}
                     />
                 }
