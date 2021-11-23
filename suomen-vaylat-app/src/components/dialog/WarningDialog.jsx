@@ -47,7 +47,8 @@ const StyledWarningDialog = styled(motion.div)`
     position: absolute;
     left: 50%;
     top: 35%;
-    max-width: 300px;
+    width: 100%;
+    min-width: 400px;
     max-height: 500px;
     transform: translate(-50%, -50%);
     right: auto;
@@ -65,9 +66,13 @@ const StyledWarningDialog = styled(motion.div)`
         &::-webkit-scrollbar {
         display: none;
     };
-    p {
-        padding: 20px;
-    }
+
+`;
+
+const StyledContent = styled.div`
+    max-width: 800px;
+    padding: 24px;
+    border-radius: 4px;
 `;
 
 const StyledButton = styled(Button)`
@@ -121,7 +126,10 @@ const WarningDialog = ({ title='', message='', filteredLayers=[], indeterminate=
                     title={title}
                     hideWarn={closeModal}
                 />
-                <p>{message}</p>
+                <StyledContent>
+                    {message}
+                    
+                </StyledContent>
                 <StyledFooter className="modal-footer">
                     <StyledButton onClick={() => closeModal()}>{strings.continue}</StyledButton>
                     <StyledButton onClick={() => closeModal(true)}>{strings.cancel}</StyledButton>
