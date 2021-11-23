@@ -28,12 +28,10 @@ const addToLocalStorageArray = (name, value) => {
 const variants = {
     open: {
         pointerEvents: "auto",
-        y: 0,
         opacity: 1,
     },
     closed: {
         pointerEvents: "none",
-        y: "100%",
         opacity: 0,
 
     },
@@ -44,16 +42,14 @@ const StyledFooter = styled.div`
 `;
 
 const StyledWarningDialog = styled(motion.div)`
+    z-index:10;
     position: absolute;
     left: 50%;
-    top: 35%;
-    width: 100%;
-    min-width: 400px;
-    max-height: 500px;
+    top: 50%;
     transform: translate(-50%, -50%);
-    right: auto;
-    bottom: auto;
-    margin-right: '-50%';
+    width: 100%;
+    max-width: 400px;
+    max-height: 500px;
     display: flex;
     flex-direction: column;
     pointer-events: auto;
@@ -128,7 +124,6 @@ const WarningDialog = ({ title='', message='', filteredLayers=[], indeterminate=
                 />
                 <StyledContent>
                     {message}
-                    
                 </StyledContent>
                 <StyledFooter className="modal-footer">
                     <StyledButton onClick={() => closeModal()}>{strings.continue}</StyledButton>
