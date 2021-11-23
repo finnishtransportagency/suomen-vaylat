@@ -10,6 +10,7 @@ import strings from '../../translations';
 import { LegendGroup } from './LegendGroup';
 
 const StyledLegendContainer = styled.div`
+    border-radius: 4px;
     z-index: 30;
     position: absolute;
     bottom: 10px;
@@ -29,6 +30,7 @@ const StyledHeader = styled.div`
     color: ${props => props.theme.colors.mainWhite};
     background-color: ${props => props.theme.colors.mainColor1};
     padding: .5rem;
+    border-radius: 4px 4px 0px 0px;
 `;
 
 const StyledGroupsContainer = styled.div`

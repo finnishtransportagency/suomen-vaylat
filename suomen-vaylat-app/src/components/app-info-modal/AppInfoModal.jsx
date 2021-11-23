@@ -17,7 +17,7 @@ const customStyles = {
         marginRight: '-25%',
         transform: 'translate(-50%, -50%)',
         padding: '0',
-        borderRadius: 0,
+        borderRadius: '4px',
         boxShadow: 'rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px',
         border: 'none'
     },
@@ -26,13 +26,14 @@ const customStyles = {
 
 const StyledContent = styled.div`
     padding: .5rem;
+    border-radius: 4px;
 `;
 
 const StyledHeader = styled.div`
     padding: .5rem;
-    border-radius: 0;
     color: ${props => props.theme.colors.mainWhite};
     background-color: ${props => props.theme.colors.mainColor1};
+    border-radius: 4px 4px 0px 0px;
 `;
 
 const StyledLayerCloseIcon = styled.div`
