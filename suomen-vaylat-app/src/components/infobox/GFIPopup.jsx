@@ -6,11 +6,11 @@ import { ReactReduxContext } from "react-redux";
 import styled from 'styled-components';
 import { useAppSelector } from "../../state/hooks";
 import { resetGFILocations } from "../../state/slices/rpcSlice";
-import { setIsGFIOpen } from "../../state/slices/uiSlice";
 import strings from "../../translations";
 import './GFI.scss';
 import { GeoJSONFormatter } from './GeoJSONFormatter';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import Draggable from "react-draggable";
 import 'react-tabs/style/react-tabs.css';
 
 const customStyles = {
@@ -30,7 +30,7 @@ const customStyles = {
 };
 
 const StyledContent = styled.div`
-    padding: .5rem;
+    padding: .3rem;
 `;
 
 const StyledGFIHeader = styled.div`
@@ -119,7 +119,6 @@ export const GFIPopup = ({gfiLocations}) => {
     const title = strings.gfi.title
 
     function closeModal() {
-        store.dispatch(setIsGFIOpen(false));
         store.dispatch(resetGFILocations([]));
     };
 
@@ -130,6 +129,7 @@ export const GFIPopup = ({gfiLocations}) => {
 
     return (
         <div>
+            <Draggable>
             <Modal
                 isOpen={isGFIOpen}
                 onRequestClose={() => closeModal()}
@@ -153,8 +153,8 @@ export const GFIPopup = ({gfiLocations}) => {
                             {
                                 tabsIds.map((id) => {
                                     return (
-                                        <Tab>
-                                            <StyledGFIHeader key={id} className="gfi-header">
+                                        <Tab key={id}>
+                                            <StyledGFIHeader className="gfi-header">
                                                 {allLayers.filter(layer => layer.id === id)[0].name}
                                                 <StyledTabCloseIcon
                                                     onClick={() => {
@@ -182,6 +182,7 @@ export const GFIPopup = ({gfiLocations}) => {
                     </StyledContent>
                 </Tabs>
             </Modal>
+            </Draggable>
         </div>
     );
 };
