@@ -188,7 +188,7 @@ export const LayerList = ({
                             <>
                                 { isVisible ? (
                                     <LayerGroup
-                                        key={group.id}
+                                        key={'layer-group-'+group.id}
                                         index={index}
                                         group={group}
                                         layers={layers}
