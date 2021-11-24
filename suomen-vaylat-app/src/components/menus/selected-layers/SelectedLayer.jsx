@@ -124,7 +124,6 @@ const StyledLayerInfoIconWrapper = styled.div`
     cursor: pointer;
     width: 30px;
     padding-left: 8px;
-    opacity: ${props => props.uuid ? 1 : 0};
     font-size: 20px;
     svg {
         color: ${props => props.theme.colors.mainColor1};
@@ -164,6 +163,7 @@ export const SelectedLayer = ({
         setOpacity(value);
     };
 
+
     const handleMetadataSuccess = (data, layer, uuid) => {
         if (data) {
             store.dispatch(setLayerMetadata({ data: data, layer: layer, uuid: uuid }));
@@ -171,6 +171,10 @@ export const SelectedLayer = ({
     };
     const handleMetadataError = () => {
         store.dispatch(clearLayerMetadata());
+    };
+
+    const handleLayerMetadata = (layer, uuid) => {
+        store.dispatch(getLayerMetadata({ layer: layer, uuid: uuid, handler: handleMetadataSuccess, errorHandler: handleMetadataError }));
     };
 
     let layerInfoText = strings.layerlist.selectedLayers.layerVisible;
@@ -184,6 +188,7 @@ export const SelectedLayer = ({
             <StyledLayerContainer>
                 <StyledLayerContent>
                     <StyledLayerDeleteIcon
+                        className="swiper-no-swiping"
                         onClick={() => {
                             handleLayerVisibility(channel, layer);
                         }}>
@@ -195,15 +200,17 @@ export const SelectedLayer = ({
                         <StyledLayerName>
                             {layer.name}
                         </StyledLayerName>
-                        <StyledLayerInfoIconWrapper
-                            disabled={uuid ? false : true}
-                            uuid={uuid}
-                            onClick={() => {
-                                store.dispatch(getLayerMetadata({ layer: layer, uuid: uuid, handler: handleMetadataSuccess, errorHandler: handleMetadataError }));
-                            }}
-                        >
-                            <FontAwesomeIcon icon={faInfoCircle} />
-                        </StyledLayerInfoIconWrapper>
+                        { uuid &&
+                            <StyledLayerInfoIconWrapper
+                                className="swiper-no-swiping"
+                                uuid={uuid}
+                                onClick={() => {
+                                    handleLayerMetadata(layer, uuid);
+                                }}
+                            >
+                                <FontAwesomeIcon icon={faInfoCircle} />
+                            </StyledLayerInfoIconWrapper>
+                        }
                     </StyledlayerHeader>
                     <StyledMidContent>
                         {layerInfoText}
