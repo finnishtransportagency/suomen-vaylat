@@ -115,9 +115,12 @@ const LayerSearch = ({ layers }) => {
             </StyledSearchInputContainer>
             <StyledSearchResults>
                     <motion.div
-                        //initial="hidden"
                         animate={searchParams !== "" && searchParams.length > 2 ? "visible" : "hidden"}
-                        variants={listVariants}>
+                        variants={listVariants}
+                        transition={{
+                            duration: 0.3,
+                        }}
+                        >
                         <StyledListSubtitle>
                             {strings.layerlist.layerlistLabels.searchResults}
                         </StyledListSubtitle>

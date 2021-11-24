@@ -92,17 +92,6 @@ const WarningDialog = ({ title='', message='', filteredLayers=[], indeterminate=
                 channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, !isChecked]);
                 return null;
             });
-            // if (!indeterminate) {
-            //     filteredLayers.map(layer => {
-            //         channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, !layer.visible]);
-            //         return null;
-            //     });
-            // } else {
-            //     filteredLayers.map(layer => {
-            //         channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, false]);
-            //         return null;
-            //     });
-            // }
             updateLayers(store, channel);
             hideWarn();
             if (selected) {
@@ -116,6 +105,9 @@ const WarningDialog = ({ title='', message='', filteredLayers=[], indeterminate=
                     initial="closed"
                     animate={dialogOpen ? "open" : "closed"}
                     variants={variants}
+                    transition={{
+                        duration: 0.3,
+                    }}
             >
                 <DialogHeader
                     type={"warning"}
@@ -125,10 +117,10 @@ const WarningDialog = ({ title='', message='', filteredLayers=[], indeterminate=
                 <StyledContent>
                     {message}
                 </StyledContent>
-                <StyledFooter className="modal-footer">
+                {/* <StyledFooter className="modal-footer">
                     <StyledButton onClick={() => closeModal()}>{strings.continue}</StyledButton>
                     <StyledButton onClick={() => closeModal(true)}>{strings.cancel}</StyledButton>
-                </StyledFooter>
+                </StyledFooter> */}
             </StyledWarningDialog>
     );
  }

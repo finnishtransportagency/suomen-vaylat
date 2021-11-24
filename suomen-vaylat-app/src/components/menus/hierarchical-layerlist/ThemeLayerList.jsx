@@ -227,6 +227,9 @@ export const ThemeGroup = ({
                 initial="hidden"
                 animate={isOpen ? "visible" : "hidden"}
                 variants={listVariants}
+                transition={{
+                    duration: 0.3,
+                }}
             >
                 <div>
                     {themeImages[theme.id] && <StyledLayerGroupImage src={themeImages[theme.id]} alt=""/>}
