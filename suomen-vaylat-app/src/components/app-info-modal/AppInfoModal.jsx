@@ -8,6 +8,22 @@ import { useAppSelector } from "../../state/hooks";
 import { setIsInfoOpen } from "../../state/slices/uiSlice";
 import strings from "../../translations";
 
+const customStyles = {
+    content: {
+      top: '50%',
+      left: '50%',
+      right: 'auto',
+      bottom: 'auto',
+      marginRight: '-50%',
+      transform: 'translate(-50%, -50%)',
+      padding: '0',
+      borderRadius: '4px',
+      boxShadow: 'rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px',
+      border: 'none'
+    },
+    overlay: {zIndex: 20}
+  };
+
 const StyledModal = styled(Modal)`
     position: absolute;
     width: 100%;
@@ -85,9 +101,10 @@ export const AppInfoModal = () => {
     };
 
     return (
-        <StyledModal
+        <Modal
             isOpen={isInfoOpen}
             onRequestClose={() => closeModal()}
+            style={customStyles}
         >
             <StyledHeader className="modal-header">
                 <StyledModalTitle>{title}</StyledModalTitle>
@@ -103,7 +120,7 @@ export const AppInfoModal = () => {
             <StyledContent>
                 {content}
             </StyledContent>
-        </StyledModal>
+        </Modal>
     );
 };
 
