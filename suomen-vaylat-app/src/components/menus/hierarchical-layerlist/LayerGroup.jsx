@@ -44,7 +44,7 @@ const listVariants = {
     },
 };
 
-const StyledLayerGroups = styled(motion.div)`
+const StyledLayerGroups = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -345,12 +345,7 @@ export const LayerGroup = ({
 
     return (
         <>
-        <StyledLayerGroups
-            parentId={group.parentId}
-            initial={{ opacity: 0, x: -10 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0 }}
-        >
+        <StyledLayerGroups>
             {group.parentId === -1 ? (
                 <StyledMasterGroupHeader
                     key={"smgh_" + group.parentId + "_" + group.id}
@@ -385,6 +380,9 @@ export const LayerGroup = ({
                                 initial="closed"
                                 animate={isOpen ? "open" : "closed"}
                                 variants={masterHeaderIconVariants}
+                                transition={{
+                                    duration: 0.3,
+                                }}
                             >
                                 <FontAwesomeIcon
                                     icon={faAngleDown}
@@ -406,6 +404,9 @@ export const LayerGroup = ({
                             initial="closed"
                             animate={isOpen ? "open" : "closed"}
                             variants={layerGroupIconVariants}
+                            transition={{
+                                duration: 0.3,
+                            }}
                         >
                             <FontAwesomeIcon
                                 icon={faAngleRight}
@@ -429,10 +430,12 @@ export const LayerGroup = ({
                 <StyledLayerGroup
                     parentId={group.parentId}
                     key={"slg_" + group.parentId + "_" + group.id}
-                    isOpen={isOpen}
                     initial="hidden"
                     animate={isOpen ? "visible" : "hidden"}
                     variants={listVariants}
+                    transition={{
+                        duration: 0.3,
+                    }}
                 >
                     {hasChildren && (
                         <>
