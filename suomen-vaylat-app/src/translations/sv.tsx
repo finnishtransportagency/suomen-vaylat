@@ -103,7 +103,8 @@ const sv = {
         selectedLayers: {
             layerVisible: 'lager synligt',
             zoomInToShowLayer: 'Zooma in för att se kartlagret',
-            zoomOutToShowLayer: 'Zooma ut för att se kartlagret'
+            zoomOutToShowLayer: 'Zooma ut för att se kartlagret',
+            opacity: 'Genomskinlighet'
         }
     },
     themelayerlist: {

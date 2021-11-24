@@ -147,7 +147,6 @@ const DragHandle = SortableHandle(() => (
 export const SelectedLayer = ({
     layer,
     uuid,
-    layerVisible,
     currentZoomLevel
 }) => {
 
@@ -197,7 +196,6 @@ export const SelectedLayer = ({
                             {layer.name}
                         </StyledLayerName>
                         <StyledLayerInfoIconWrapper
-                            //data-tip data-for={'metadata' + layer.id}
                             disabled={uuid ? false : true}
                             uuid={uuid}
                             onClick={() => {
@@ -211,10 +209,9 @@ export const SelectedLayer = ({
                         {layerInfoText}
                     </StyledMidContent>
                     <StyledBottomContent>
-                        <p>Läpinäkyvyys</p>
+                        <p>{strings.layerlist.selectedLayers.opacity}</p>
                         <StyledlayerOpacityControl
                             className="swiper-no-swiping"
-                            //data-tip data-for={'opacity' + layer.id}
                             type="range"
                             min="0"
                             max="100"
