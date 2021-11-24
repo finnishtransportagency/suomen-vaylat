@@ -62,31 +62,40 @@ export const selectGroup = (store, channel, index, theme, lastSelectedTheme, sel
 };
 
 export const reArrangeRPCLayerOrder = (store, selectedLayers) => {
-    selectedLayers.map((layer, idx) => {
+    const mapLayers = selectedLayers.filter(layer => {
+        return !(layer.groups && layer.groups.includes(1));
+    });
+
+    const backgroundMaps = selectedLayers.filter(layer => {
+        return layer.groups && layer.groups.includes(1);
+    });
+
+    mapLayers.forEach((layer, idx) => {
         // Update layer orders to correct
         const position = selectedLayers.length-idx;
+        store.dispatch(reArrangeSelectedMapLayers({layerId: layer.id, position: position}));
+    });
+
+    backgroundMaps.forEach((layer, idx) => {
+        // Update layer orders to correct
+        const position = selectedLayers.length - mapLayers.length -idx;
         store.dispatch(reArrangeSelectedMapLayers({layerId: layer.id, position: position}));
     })
 }
 
 export const reArrangeSelectedLayersOrder = (selectedLayers) => {
     const mapLayers = selectedLayers.filter(layer => {
-        return layer.id !== 3 && layer.id !== 958;
+        return !(layer.groups && layer.groups.includes(1));
     });
 
     const backgroundMaps = selectedLayers.filter(layer => {
-        return layer.id === 3 || layer.id === 958;
+        return layer.groups && layer.groups.includes(1);
     });
 
     return mapLayers.concat(backgroundMaps)
 }
 
 export const resetThemeGroups = (store, channel, index, theme, lastSelectedTheme, selectedThemeIndex) => {
-    // if(theme){
-    //     theme.layers.forEach(layerId => {
-    //         channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layerId, false]);
-    //     });
-    // };
     store.dispatch(setSelectedTheme(null));
     store.dispatch(setLastSelectedTheme(null));
     store.dispatch(setSelectedThemeIndex(null));
