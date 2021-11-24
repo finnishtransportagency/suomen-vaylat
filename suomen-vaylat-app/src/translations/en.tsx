@@ -103,7 +103,8 @@ const en = {
         selectedLayers: {
             layerVisible: 'Layer visible',
             zoomInToShowLayer: 'Zoom in to see the map layer',
-            zoomOutToShowLayer: 'Zoom out to see the map layer'
+            zoomOutToShowLayer: 'Zoom out to see the map layer',
+            opacity: 'Transparency'
         }
     },
     themelayerlist: {

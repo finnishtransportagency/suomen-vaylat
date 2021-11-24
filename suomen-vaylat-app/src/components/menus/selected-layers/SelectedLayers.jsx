@@ -50,7 +50,7 @@ const SortableItem = SortableElement(({value,currentZoomLevel}) =>
     <SelectedLayer
         key={value.id + 'selected'}
         layer={value}
-        uuid={value.metadataIdentifier && value.metadataIdentifier.length > 0 ? value.metadataIdentifier : ''}
+        uuid={value.metadataIdentifier}
         currentZoomLevel={currentZoomLevel}
     />
 );

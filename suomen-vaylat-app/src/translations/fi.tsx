@@ -103,7 +103,8 @@ const fi = {
         selectedLayers: {
             layerVisible: 'Taso näkyvillä',
             zoomInToShowLayer: 'Lähennä nähdäksesi taso',
-            zoomOutToShowLayer: 'Loitonna nähdäksesi taso'
+            zoomOutToShowLayer: 'Loitonna nähdäksesi taso',
+            opacity: 'Läpinäkyvyys'
         }
     },
     themelayerlist: {
