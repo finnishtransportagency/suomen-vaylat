@@ -112,7 +112,7 @@ export const Header = () => {
         }));
         store.dispatch(setIsMainScreen());
         handleSelectGroup(null, lastSelectedTheme);
-        const Ids = [3,1354, 1388, 1387]
+        const Ids = [793,1354, 1388, 1387]
         const filteredLayers = [];
         if (allLayers) {
             Ids.forEach((id) => {
