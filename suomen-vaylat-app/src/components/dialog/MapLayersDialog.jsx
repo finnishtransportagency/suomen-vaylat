@@ -190,10 +190,7 @@ const MapLayersDialog = () => {
             content: <LayerListTEMP
                         groups={allGroups}
                         layers={allLayers}
-                        themes={allThemesWithLayers}
                         tags={allTags}
-                        selectedLayers={selectedLayers}
-                        suomenVaylatLayers={suomenVaylatLayers}
                     />
         },
         {
@@ -212,8 +209,6 @@ const MapLayersDialog = () => {
             titleContent: "layerCounter",
             content: <SelectedLayers
                         selectedLayers={selectedLayers}
-                        suomenVaylatLayers={suomenVaylatLayers}
-                        zoomLevelsLayers={zoomLevelsLayers}
                         currentZoomLevel={currentZoomLevel}
                     />
         }
