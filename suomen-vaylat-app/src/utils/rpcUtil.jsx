@@ -103,3 +103,17 @@ export const resetThemeGroupsForMainScreen = (store, channel, index, theme, last
     store.dispatch(setLastSelectedTheme(null));
     store.dispatch(setSelectedThemeIndex(null));
 };
+
+export const removeDuplicates = (originalArray, prop) => {
+    let newArray = [];
+    let lookupObject  = {};
+
+    for(let i in originalArray) {
+        lookupObject[originalArray[i][prop]] = originalArray[i];
+    }
+
+    for(let i in lookupObject) {
+        newArray.push(lookupObject[i]);
+    }
+    return newArray;
+}
