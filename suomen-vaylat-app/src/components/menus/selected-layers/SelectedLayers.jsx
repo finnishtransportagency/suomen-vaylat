@@ -2,7 +2,7 @@ import { useContext } from "react";
 import styled from 'styled-components';
 import { setSelectedLayers } from '../../../state/slices/rpcSlice';
 import strings from '../../../translations';
-import { updateLayers, resetThemeGroups, reArrangeRPCLayerOrder } from "../../../utils/rpcUtil";
+import { updateLayers, resetThemeGroups, reArrangeRPCLayerOrder } from '../../../utils/rpcUtil';
 import { ReactReduxContext, useSelector } from 'react-redux';
 import { SortableContainer, SortableElement} from 'react-sortable-hoc';
 import {arrayMoveImmutable} from 'array-move';
@@ -51,11 +51,11 @@ const SortableItem = SortableElement(({value,currentZoomLevel}) =>
         key={value.id + 'selected'}
         layer={value}
         uuid={value.metadataIdentifier && value.metadataIdentifier.length > 0 ? value.metadataIdentifier : ''}
+        currentZoomLevel={currentZoomLevel}
     />
 );
 
-const SortableList = SortableContainer(({items, currentZoomLevel, backgroundMaps}) => {
-    console.log(items);
+const SortableList = SortableContainer(({items, currentZoomLevel}) => {
     return (
         <div>
             {items.map((value, index) => (
@@ -70,7 +70,7 @@ const SortableList = SortableContainer(({items, currentZoomLevel, backgroundMaps
     );
 });
 
-export const SelectedLayers = ({ label, selectedLayers, suomenVaylatLayers, zoomLevelsLayers, currentZoomLevel }) => {
+export const SelectedLayers = ({ selectedLayers, currentZoomLevel }) => {
     const { store } = useContext(ReactReduxContext);
 
     const channel = useSelector(state => state.rpc.channel);
@@ -120,7 +120,6 @@ export const SelectedLayers = ({ label, selectedLayers, suomenVaylatLayers, zoom
                 items={mapLayers}
                 onSortEnd={sortSelectedLayers}
                 currentZoomLevel={currentZoomLevel}
-                backgroundMaps={false}
             />
             <StyledDeleteAllSelectedLayers
                 onClick={() => handleClearSelectedLayers()}
@@ -134,7 +133,6 @@ export const SelectedLayers = ({ label, selectedLayers, suomenVaylatLayers, zoom
                 items={backgroundMaps}
                 onSortEnd={sortBackgroundLayers}
                 currentZoomLevel={currentZoomLevel}
-                backgroundMaps={true}
             />
             <StyledDeleteAllSelectedLayers
                 onClick={() => handleClearSelectedBackgroundMaps()}

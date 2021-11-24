@@ -99,6 +99,11 @@ const fi = {
             clearSelectedBackgroundMaps: 'Tyhjennä valitut taustakartat',
             noSearchResults: 'Ei hakutuloksia',
             typeAtLeastThreeCharacters: 'Syötä vähintaan 3 kirjainta'
+        },
+        selectedLayers: {
+            layerVisible: 'Taso näkyvillä',
+            zoomInToShowLayer: 'Lähennä nähdäksesi taso',
+            zoomOutToShowLayer: 'Loitonna nähdäksesi taso'
         }
     },
     themelayerlist: {

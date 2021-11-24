@@ -99,6 +99,11 @@ const sv = {
             clearSelectedBackgroundMaps: 'Clear selected background maps',
             noSearchResults: 'No search results',
             typeAtLeastThreeCharacters: 'Type at least 3 characters'
+        },
+        selectedLayers: {
+            layerVisible: 'lager synligt',
+            zoomInToShowLayer: 'Zooma in för att se kartlagret',
+            zoomOutToShowLayer: 'Zooma ut för att se kartlagret'
         }
     },
     themelayerlist: {

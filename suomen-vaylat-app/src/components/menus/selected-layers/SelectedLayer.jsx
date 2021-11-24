@@ -4,8 +4,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ReactReduxContext, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { clearLayerMetadata, getLayerMetadata, setLayerMetadata } from '../../../state/slices/rpcSlice';
-import { updateLayers } from "../../../utils/rpcUtil";
+import { updateLayers } from '../../../utils/rpcUtil';
 import { SortableHandle } from 'react-sortable-hoc';
+
+import strings from '../../../translations';
 
 const StyledLayerContainer = styled.div`
     z-index: 9999;
@@ -114,7 +116,7 @@ const StyledLayerGripControl = styled.div`
     cursor: pointer;
     svg {
         font-size: 17px;
-        color: ${props => props.theme.colors.mainColor1}; 
+        color: ${props => props.theme.colors.mainColor1};
     }
 `;
 
@@ -145,7 +147,8 @@ const DragHandle = SortableHandle(() => (
 export const SelectedLayer = ({
     layer,
     uuid,
-    layerVisible
+    layerVisible,
+    currentZoomLevel
 }) => {
 
     const { store } = useContext(ReactReduxContext);
@@ -170,7 +173,14 @@ export const SelectedLayer = ({
     const handleMetadataError = () => {
         store.dispatch(clearLayerMetadata());
     };
-    
+
+    let layerInfoText = strings.layerlist.selectedLayers.layerVisible;
+    if (layer.maxZoomLevel && layer.minZoomLevel && currentZoomLevel <  layer.minZoomLevel) {
+        layerInfoText = strings.layerlist.selectedLayers.zoomInToShowLayer;
+    } else if (layer.maxZoomLevel && layer.minZoomLevel && currentZoomLevel >  layer.maxZoomLevel) {
+        layerInfoText = strings.layerlist.selectedLayers.zoomOutToShowLayer;
+    }
+
     return (
             <StyledLayerContainer>
                 <StyledLayerContent>
@@ -198,7 +208,7 @@ export const SelectedLayer = ({
                         </StyledLayerInfoIconWrapper>
                     </StyledlayerHeader>
                     <StyledMidContent>
-                        {layerVisible ? "Taso näkyvillä" : "Lähennä nähdäksesi taso"}
+                        {layerInfoText}
                     </StyledMidContent>
                     <StyledBottomContent>
                         <p>Läpinäkyvyys</p>
