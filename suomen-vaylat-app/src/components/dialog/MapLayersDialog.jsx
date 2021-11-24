@@ -207,7 +207,6 @@ const MapLayersDialog = () => {
             titleContent: "layerCounter",
             content: <SelectedLayers
                         selectedLayers={selectedLayers}
-                        suomenVaylatLayers={suomenVaylatLayers}
                     />
         }
     ];
