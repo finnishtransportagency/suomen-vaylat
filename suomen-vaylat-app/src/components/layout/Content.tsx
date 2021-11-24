@@ -44,9 +44,11 @@ const Content = () => {
 
     const {
         selectedLayers,
-        warnings
+        warnings,
+        zoomLevelsLayers,
+        currentZoomLevel
     } = useAppSelector((state) => state.rpc);
-    
+
     const {
         isSearchOpen,
         isLegendOpen,
@@ -66,7 +68,12 @@ const Content = () => {
         <StyledContent>
             <ZoomMenu />
             <PublishedMap />
-            {isLegendOpen && <Legend selectedLayers={selectedLayers} />}
+            {/*{isSearchOpen && <Search />}*/}
+            {/*{isLegendOpen && <Legend selectedLayers={selectedLayers} />}*/}
+            {isLegendOpen && <Legend selectedLayers={selectedLayers}
+                                     zoomLevelsLayers={zoomLevelsLayers}
+                                     currentZoomLevel={currentZoomLevel}
+                            />}
             {isShareOpen && <ShareWebSitePopup />}
             <AppInfoModal />
             <StyledContentGrid>
