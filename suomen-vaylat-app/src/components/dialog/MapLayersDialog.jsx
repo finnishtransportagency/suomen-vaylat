@@ -161,6 +161,8 @@ const MapLayersDialog = () => {
         allThemesWithLayers,
         allTags,
         suomenVaylatLayers,
+        zoomLevelsLayers,
+        currentZoomLevel
     } = useAppSelector((state) => state.rpc);
 
     const { selectedMapLayersMenuTab } = useAppSelector((state) => state.ui);
@@ -185,10 +187,7 @@ const MapLayersDialog = () => {
             content: <LayerListTEMP
                         groups={allGroups}
                         layers={allLayers}
-                        themes={allThemesWithLayers}
                         tags={allTags}
-                        selectedLayers={selectedLayers}
-                        suomenVaylatLayers={suomenVaylatLayers}
                     />
         },
         {
@@ -207,6 +206,7 @@ const MapLayersDialog = () => {
             titleContent: "layerCounter",
             content: <SelectedLayers
                         selectedLayers={selectedLayers}
+                        currentZoomLevel={currentZoomLevel}
                     />
         }
     ];
