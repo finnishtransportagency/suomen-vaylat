@@ -7,8 +7,8 @@ import { isMobile } from '../../theme/theme';
 import styled from 'styled-components';
 import { useAppSelector } from '../../state/hooks';
 import { setIsInfoOpen, setIsMainScreen } from "../../state/slices/uiSlice";
-import { mapMoveRequest, setZoomTo, setMapLayerVisibility, reArrangeSelectedMapLayers } from "../../state/slices/rpcSlice";
-import { resetThemeGroupsForMainScreen } from "../../utils/rpcUtil";
+import { mapMoveRequest, setZoomTo, setMapLayerVisibility, setSelectedLayers, reArrangeSelectedMapLayers } from "../../state/slices/rpcSlice";
+import { resetThemeGroupsForMainScreen, removeDuplicates } from "../../utils/rpcUtil";
 import strings from '../../translations';
 import LanguageSelector from '../language-selector/LanguageSelector';
 import { WebSiteShareButton } from '../share-web-site/ShareLinkButtons';
@@ -91,7 +91,7 @@ export const Header = () => {
     const lang = useAppSelector((state) => state.language);
     const { store } = useContext(ReactReduxContext);
     const isInfoOpen = useAppSelector((state) => state.ui.isInfoOpen);
-    
+
     const {
         channel,
         allLayers,
@@ -105,7 +105,6 @@ export const Header = () => {
         resetThemeGroupsForMainScreen(store, channel, index, theme, lastSelectedTheme, selectedThemeIndex);
     };
 
-
     const setToMainScreen = () => {
         store.dispatch(mapMoveRequest({
             x: 505210.92181416467,
@@ -113,7 +112,7 @@ export const Header = () => {
         }));
         store.dispatch(setIsMainScreen());
         handleSelectGroup(null, lastSelectedTheme);
-        const Ids = [303, 996, 100]
+        const Ids = [793,1354, 1388, 1387]
         const filteredLayers = [];
         if (allLayers) {
             Ids.forEach((id) => {
@@ -123,13 +122,15 @@ export const Header = () => {
                     }
                 })
             })
-
         };
-        filteredLayers.map((layer) => {
-            channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, !layer.visible]);
-            // Update layer orders to correct
-            const position = selectedLayers.length + 1;
-            store.dispatch(reArrangeSelectedMapLayers({layerId: layer.id, position: position}));
+        const combinedLayers = filteredLayers.concat(selectedLayers)
+        const uniqueArray = removeDuplicates(combinedLayers, "id");
+        uniqueArray.map((layer) => {
+            if(Ids.includes(layer.id)) {
+                channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, true]);
+            } else {
+                channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, false]);
+            }
         })
         store.dispatch(setZoomTo(0))
         updateLayers(store, channel)

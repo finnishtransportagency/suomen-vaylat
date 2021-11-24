@@ -141,9 +141,6 @@ const StyledSwiper = styled(Swiper)`
     background-color: ${props => props.theme.colors.mainWhite};
     padding: 16px 16px 16px 16px;
     overflow: auto;
-    &::-webkit-scrollbar {
-        display: none;
-    };
   };
   transition: box-shadow 0.3s ease-out;
   box-shadow: 0px -1px 11px ${props => props.tabIndex === 0 ?
@@ -258,6 +255,7 @@ const MapLayersDialog = () => {
                 <StyledSwiper
                     tabIndex={selectedMapLayersMenuTab}
                     className="map-layers-swiper"
+                    id={"map-swiper"}
                     //longSwipesRatio={1}
                     //shortSwipes={false}
                     speed={300}
