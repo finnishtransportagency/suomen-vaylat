@@ -130,6 +130,7 @@ export const SelectedLayers = ({ selectedLayers, currentZoomLevel }) => {
             <StyledListSubtitle>{strings.layerlist.layerlistLabels.backgroundMaps}</StyledListSubtitle>
             <SortableList
                 lockAxis={"y"}
+                distance={1}
                 transitionDuration={300}
                 items={backgroundMaps}
                 onSortEnd={sortBackgroundLayers}
