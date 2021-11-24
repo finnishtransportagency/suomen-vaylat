@@ -207,7 +207,6 @@ const MapLayersDialog = () => {
             titleContent: "layerCounter",
             content: <SelectedLayers
                         selectedLayers={selectedLayers}
-                        suomenVaylatLayers={suomenVaylatLayers}
                     />
         }
     ];
@@ -255,6 +254,7 @@ const MapLayersDialog = () => {
                 <StyledSwiper
                     tabIndex={selectedMapLayersMenuTab}
                     className="map-layers-swiper"
+                    id={"map-swiper"}
                     //longSwipesRatio={1}
                     //shortSwipes={false}
                     speed={300}

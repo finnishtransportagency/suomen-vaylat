@@ -46,15 +46,15 @@ const StyledListSubtitle = styled.div`
     };
 `;
 
-const SortableItem = SortableElement(({value, suomenVaylatLayers}) =>
+const SortableItem = SortableElement(({value}) =>
     <SelectedLayer
         key={value.id + 'selected'}
         layer={value}
-        uuid={suomenVaylatLayers && suomenVaylatLayers.length > 0 ? suomenVaylatLayers.filter(l => l.id === value.id)[0].uuid : ''}
+        uuid={value.metadataIdentifier}
     />
 );
 
-const SortableList = SortableContainer(({items, suomenVaylatLayers}) => {
+const SortableList = SortableContainer(({items}) => {
     return (
         <div>
             {items.map((value, index) => (
@@ -62,13 +62,13 @@ const SortableList = SortableContainer(({items, suomenVaylatLayers}) => {
                     key={`item-${value.id}`}
                     index={index}
                     value={value}
-                    suomenVaylatLayers={suomenVaylatLayers}/>
+                />
             ))}
         </div>
     );
 });
 
-export const SelectedLayers = ({ label, selectedLayers, suomenVaylatLayers }) => {
+export const SelectedLayers = ({ label, selectedLayers }) => {
     const { store } = useContext(ReactReduxContext);
 
     const channel = useSelector(state => state.rpc.channel);
@@ -117,7 +117,6 @@ export const SelectedLayers = ({ label, selectedLayers, suomenVaylatLayers }) =>
                 transitionDuration={300}
                 items={mapLayers}
                 onSortEnd={sortSelectedLayers}
-                suomenVaylatLayers={suomenVaylatLayers}
             />
             <StyledDeleteAllSelectedLayers
                 onClick={() => handleClearSelectedLayers()}
@@ -130,7 +129,6 @@ export const SelectedLayers = ({ label, selectedLayers, suomenVaylatLayers }) =>
                 transitionDuration={300}
                 items={backgroundMaps}
                 onSortEnd={sortBackgroundLayers}
-                suomenVaylatLayers={suomenVaylatLayers}
             />
             <StyledDeleteAllSelectedLayers
                 onClick={() => handleClearSelectedBackgroundMaps()}

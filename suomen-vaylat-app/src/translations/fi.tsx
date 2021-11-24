@@ -686,7 +686,7 @@ const fi = {
         }
     },
     legend: {
-        title: 'Karttaselitteet',
+        title: 'Kartalla nyt',
         nolegend: 'Ei karttaselitettä',
         noSelectedLayers: 'Karttatasoja ei valittuna'
     },
