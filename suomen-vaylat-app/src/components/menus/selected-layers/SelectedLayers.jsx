@@ -46,16 +46,16 @@ const StyledListSubtitle = styled.div`
     };
 `;
 
-const SortableItem = SortableElement(({value, suomenVaylatLayers, visible}) =>
+const SortableItem = SortableElement(({value,currentZoomLevel}) =>
     <SelectedLayer
         key={value.id + 'selected'}
         layer={value}
-        uuid={suomenVaylatLayers && suomenVaylatLayers.length > 0 ? suomenVaylatLayers.filter(l => l.id === value.id)[0].uuid : ''}
-        layerVisible={visible}
+        uuid={value.metadataIdentifier && value.metadataIdentifier.length > 0 ? value.metadataIdentifier : ''}
     />
 );
 
-const SortableList = SortableContainer(({items, suomenVaylatLayers, zoomLevelsLayers, currentZoomLevel}) => {
+const SortableList = SortableContainer(({items, currentZoomLevel, backgroundMaps}) => {
+    console.log(items);
     return (
         <div>
             {items.map((value, index) => (
@@ -63,8 +63,7 @@ const SortableList = SortableContainer(({items, suomenVaylatLayers, zoomLevelsLa
                     key={`item-${value.id}`}
                     index={index}
                     value={value}
-                    suomenVaylatLayers={suomenVaylatLayers}
-                    visible={zoomLevelsLayers[currentZoomLevel].layers.find(layer => layer.id === value.id)}
+                    currentZoomLevel={currentZoomLevel}
                 />
             ))}
         </div>
@@ -77,11 +76,11 @@ export const SelectedLayers = ({ label, selectedLayers, suomenVaylatLayers, zoom
     const channel = useSelector(state => state.rpc.channel);
 
     const mapLayers = selectedLayers.filter(layer => {
-        return layer.id !== 3 && layer.id !== 958;
+        return !(layer.groups && layer.groups.includes(1));
     });
 
     const backgroundMaps = selectedLayers.filter(layer => {
-        return layer.id === 3 || layer.id === 958;
+        return layer.groups && layer.groups.includes(1);
     });
 
     const sortSelectedLayers = (selectedLayer) => {
@@ -120,9 +119,8 @@ export const SelectedLayers = ({ label, selectedLayers, suomenVaylatLayers, zoom
                 transitionDuration={300}
                 items={mapLayers}
                 onSortEnd={sortSelectedLayers}
-                suomenVaylatLayers={suomenVaylatLayers}
-                zoomLevelsLayers={zoomLevelsLayers}
                 currentZoomLevel={currentZoomLevel}
+                backgroundMaps={false}
             />
             <StyledDeleteAllSelectedLayers
                 onClick={() => handleClearSelectedLayers()}
@@ -135,9 +133,8 @@ export const SelectedLayers = ({ label, selectedLayers, suomenVaylatLayers, zoom
                 transitionDuration={300}
                 items={backgroundMaps}
                 onSortEnd={sortBackgroundLayers}
-                suomenVaylatLayers={suomenVaylatLayers}
-                zoomLevelsLayers={zoomLevelsLayers}
                 currentZoomLevel={currentZoomLevel}
+                backgroundMaps={true}
             />
             <StyledDeleteAllSelectedLayers
                 onClick={() => handleClearSelectedBackgroundMaps()}
