@@ -76,11 +76,6 @@ const StyledButton = styled(Button)`
     background-color: #0064af;
 `;
 
-const StyledButton = styled(Button)`
-    border-radius: 30px;
-    background-color: #0064af;
-`;
-
 const WarningDialog = ({ title='', message='', filteredLayers=[], indeterminate=false, hideWarn, dialogOpen, isChecked }) => {
     const [selected, setIsSelected] = useState(false);
     const { store } = useContext(ReactReduxContext);

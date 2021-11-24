@@ -12,7 +12,6 @@ const initialState = {
   selectedLayerList: 'themes',
   activeTool: '',
   gfiLocations: null,
-  isGFIOpen: false,
   isSwipingDisabled: false,
   selectedMapLayersMenuTab: 0,
   selectedMapLayersMenuThemeIndex: null
@@ -24,9 +23,6 @@ export const uiSlice = createSlice({
   reducers: {
     setIsFullScreen: (state, action) => {
       state.isFullScreen = action.payload;
-    },
-    setIsGFIOpen: (state, action) => {
-      state.isGFIOpen = action.payload;
     },
     setIsMainScreen: (state) => {
       state.isFullScreen = false
@@ -87,7 +83,6 @@ export const {
   setSelectedLayerListType,
   setActiveTool,
   setIsSwipingDisabled,
-  setIsGFIOpen,
   setSelectedMapLayersMenuTab,
   setSelectedMapLayersMenuThemeIndex
 } = uiSlice.actions;
