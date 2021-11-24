@@ -44,7 +44,6 @@ const StyledSearchContainer = styled(motion.div)`
     display: flex;
     justify-content: flex-end;
     justify-self: end;
-
 `;
 
 const StyledSearchMethod = styled.div`
@@ -183,6 +182,9 @@ export const Search = ({isOpen}) => {
             initial="closed"
             animate={isOpen ? "open" : "closed"}
             variants={variants}
+            transition={{
+                duration: 0.3,
+            }}
         >
             <StyledSearchMethod>
                 <StyledSelectInput

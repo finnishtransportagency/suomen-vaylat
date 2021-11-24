@@ -109,7 +109,9 @@ const ThemeMapsActionButton = () => {
         initial="closed"
         animate={selectedTheme && selectedTheme !== "" ? "open" : "closed"}
         variants={variants}
-        //onClick={() => action}
+        transition={{
+            duration: 0.3,
+        }}
     >
         <StyledLeftContent>
             <StyledActionButtonIcon>

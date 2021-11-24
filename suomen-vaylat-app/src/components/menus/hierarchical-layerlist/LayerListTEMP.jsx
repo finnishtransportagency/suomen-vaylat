@@ -54,7 +54,7 @@ const StyledFiltersContainer = styled.div`
 const StyledDeleteAllSelectedFilters = styled.div`
     cursor: pointer;
     max-width: 184px;
-    height: 32px;
+    min-height: 32px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -133,6 +133,9 @@ const LayerListTEMP = ({
           initial="hidden"
           animate={isOpen ? "visible" : "hidden"}
           variants={listVariants}
+          transition={{
+            duration: 0.3,
+        }}
         >
           <StyledListSubtitle>
             {strings.layerlist.layerlistLabels.filterByType}

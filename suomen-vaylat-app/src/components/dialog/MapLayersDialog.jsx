@@ -217,8 +217,7 @@ const MapLayersDialog = () => {
                     animate={isSideMenuOpen ? "open" : "closed"}
                     variants={variants}
                     transition={{
-                        //type: "spring",
-                        //duration: 0.7,
+                        duration: 0.3,
                     }}
             >
                 <DialogHeader

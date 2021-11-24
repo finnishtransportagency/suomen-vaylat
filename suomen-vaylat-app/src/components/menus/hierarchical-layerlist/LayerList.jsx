@@ -30,7 +30,7 @@ const StyledLayerList = styled.div`
 
 `;
 
-const StyledLayerGroups = styled(motion.div)`
+const StyledLayerGroups = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -231,11 +231,7 @@ export const LayerList = ({
     });
 
     return (
-            <StyledLayerGroups
-                initial={{ opacity: 0, x: -50 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0 }}
-            >
+            <StyledLayerGroups>
                 <StyledMasterGroupHeader
                      key={"smgh_" + index + '_'}
                     onClick={() => {
@@ -262,6 +258,9 @@ export const LayerList = ({
                                 initial="closed"
                                 animate={isOpen ? "open" : "closed"}
                                 variants={masterHeaderIconVariants}
+                                transition={{
+                                    duration: 0.3,
+                                }}
                             >
                                 <FontAwesomeIcon
                                     icon={faAngleDown}
@@ -276,6 +275,9 @@ export const LayerList = ({
                         initial="hidden"
                         animate={isOpen ? "visible" : "hidden"}
                         variants={listVariants}
+                        transition={{
+                            duration: 0.3,
+                        }}
                     >
                         <Layers layers={filteredLayers} isOpen={isOpen} />
                     </StyledLayerGroup>
