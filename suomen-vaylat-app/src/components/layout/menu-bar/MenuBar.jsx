@@ -155,11 +155,11 @@ const MenuBar = () => {
             <ReactTooltip disable={isMobile} id='layerlist' place="right" type="dark" effect="float">
                 <span>{strings.tooltips.layerlistButton}</span>
             </ReactTooltip>
-            
+
             <ReactTooltip disable={isMobile} id='search' place="right" type="dark" effect="float">
                 <span>{strings.tooltips.searchButton}</span>
             </ReactTooltip>
-            
+
             <ReactTooltip disable={isMobile} id='legend' place="right" type="dark" effect="float">
                 <span>{strings.tooltips.legendButton}</span>
             </ReactTooltip>
@@ -167,11 +167,11 @@ const MenuBar = () => {
             <ReactTooltip disable={isMobile} id='drawingtools' place="right" type="dark" effect="float">
                 <span>{strings.tooltips.drawingtools.drawingtoolsButton}</span>
             </ReactTooltip>
-            
+
             <ReactTooltip disable={isMobile} id='fullscreen' place="right" type="dark" effect="float">
                 <span>{strings.tooltips.fullscreenButton}</span>
             </ReactTooltip>
-            
+
             <StyledMenuBar isSideMenuOpen={isSideMenuOpen}>
                 <StyledMenuBarButton
                     data-tip data-for='layerlist'
@@ -192,14 +192,6 @@ const MenuBar = () => {
                 >
                     <FontAwesomeIcon
                         icon={faSearch}
-                    />
-                </StyledMenuBarButton>
-                <StyledMenuBarButton
-                    data-tip data-for='legend'
-                    isActive={isLegendOpen}
-                    onClick={() => store.dispatch(setIsLegendOpen(!isLegendOpen))}>
-                    <FontAwesomeIcon
-                        icon={faListAlt}
                     />
                 </StyledMenuBarButton>
                 <StyledMapToolsContainer>

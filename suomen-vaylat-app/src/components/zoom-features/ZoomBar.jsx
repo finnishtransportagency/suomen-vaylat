@@ -1,5 +1,6 @@
-import { useContext, useEffect, useState } from "react";
-import { faAngleUp, faSearchMinus, faSearchPlus } from '@fortawesome/free-solid-svg-icons';
+import { useContext, useState } from "react";
+import { faSearchLocation, faListAlt, faSearchMinus, faSearchPlus } from '@fortawesome/free-solid-svg-icons';
+import location from '../../theme/icons/my_location_white_24dp.svg';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ReactReduxContext } from 'react-redux';
 import ReactTooltip from "react-tooltip";
@@ -8,10 +9,8 @@ import styled from 'styled-components';
 import { setZoomIn, setZoomOut } from '../../state/slices/rpcSlice';
 import strings from '../../translations';
 import ZoomBarCircle from './ZoomBarCircle';
-import ZoomBarLayer from './ZoomBarLayer';
-
-
-
+import {Legend} from "../legend/Legend";
+import {useAppSelector} from "../../state/hooks";
 
 const StyledZoomBarContainer = styled.div`
     position: relative;
@@ -20,31 +19,6 @@ const StyledZoomBarContainer = styled.div`
     display: flex;
     flex-direction: column-reverse;
     align-items: center;
-`;
-
-const StyledExpandControl = styled.div`
-    position: absolute;
-    top: -15px;
-    right: -60%;
-    width: 40px;
-    height: 40px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transform: translateY(-50%);
-    pointer-events: auto;
-    background-color: ${props => props.theme.colors.mainColor1};
-    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
-    border-radius: 50%;
-    transition: all 0.1s ease-in;
-    &:hover {
-        background-color: ${props => props.theme.colors.mainColor2};
-    };
-    svg {
-        font-size: 23px;
-        color: ${props => props.theme.colors.mainWhite};
-        transition: all 0.5s ease-out;
-    };
 `;
 
 const StyledZoomBarControlTop = styled.button`
@@ -104,60 +78,83 @@ const StyledCenterLine = styled.div`
 const StyledZoomBarLayersInfo = styled.div`
     position: absolute;
     left: ${props => props.isExpanded ? '-240px' : '-230px' };
-    width: 230px;
+    width: 240px;
     height: 100%;
     overflow: hidden;
     opacity: ${props => props.isExpanded ? '1' : '0'};
     transition-delay: 0.6s;
-    background-color: ${props => props.theme.colors.mainColor1};
     box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
     border-radius: 15px;
     transition: all 0.3s ease-out;
 `;
 
-const StyledTitle = styled.div`
-    top: 0px;
-    left: 0px;
-    width: 100%;
-    height: 60px;
+const StyledLayerInfoContainer = styled.div`
+    overflow-y: auto;
+    height: 100%;
+`;
+
+const StyledIcon = styled.img`
+    width: 1.3rem;
+    color: ffffff;
+`;
+
+const StyledMyLocationButton = styled.div`
+    width: 45px;
+    height: 45px;
+    margin-top: 10px;
     display: flex;
     justify-content: center;
     align-items: center;
-    text-align: center;
-    color: ${props => props.theme.colors.mainWhite};
-    margin: 0;
-    padding: 10px;
-    font-size: 12px;
-    font-weight: 400;
+    transition: all 0.1s ease-out;
+    background-color: ${props => props.theme.colors.mainColor1};
+    // margin-bottom: 50px;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+    border-radius: 50%;
+    svg {
+        color: ${props => props.theme.colors.mainWhite};
+        font-size: 23px;
+    };
+    &:hover {
+        background-color: ${props => props.theme.colors.mainColor2};
+    };
+    pointer-events: auto;
+    cursor: pointer;
 `;
 
-const StyledLayerInfoContainer = styled.div`
-    pointer-events: auto;
-    overflow-y: auto;
-    height: 100%;
-    padding: 0px 15px 15px 15px;
-    &::-webkit-scrollbar {
-        display: none;
-    }
+const StyledMenuBarButton = styled.div`
+    position: relative;
+    pointer-events:auto;
+    // cursor: pointer;
+    width: 46px;
+    height: 46px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: ${props => props.isActive ? props.theme.colors.mainColor2 : props.theme.colors.mainColor1};
+    // margin-top: 10px;
+    box-shadow: rgb(0 0 0 / 16%) 0px 3px 6px, rgb(0 0 0 / 23%) 0px 3px 6px;
+    border-radius: 50%;
+    svg {
+        color: ${props => props.theme.colors.mainWhite};
+        font-size: 18px;
+    };
+    @media ${props => props.theme.device.mobileL} {
+        width: 40px;
+        height: 40px;
+    };
+
 `;
 
 const ZoomBar = ({
     zoomLevelsLayers,
     currentZoomLevel,
-    allLayers,
     selectedLayers
 }) => {
     const [isExpanded, setIsExpanded] = useState(false);
     const [hoveringIndex, setHoveringIndex] = useState(null);
     const { store } = useContext(ReactReduxContext);
-    const [currentLayersInfoLayers, setCurrentLayersInfoLayers] = useState([]);
-
-    useEffect(() => {
-
-        hoveringIndex !== null ?
-        setCurrentLayersInfoLayers(Object.values(zoomLevelsLayers)[hoveringIndex].layers) :
-        zoomLevelsLayers[currentZoomLevel] !== undefined && setCurrentLayersInfoLayers(Object.values(zoomLevelsLayers)[currentZoomLevel].layers);
-    }, [zoomLevelsLayers, currentZoomLevel, hoveringIndex]);
+    const rpc = useAppSelector((state) => state.rpc);
 
     return (
         <>
@@ -175,68 +172,69 @@ const ZoomBar = ({
 
             <StyledZoomBarContainer>
             <StyledZoomBarLayersInfo isExpanded={isExpanded}>
-                <StyledTitle>TÄLLÄ ZOOM-TASOLLA NÄYTETTÄVÄT TASOT</StyledTitle>
                 <StyledLayerInfoContainer>
-                    {currentLayersInfoLayers.map((zoomLevelLayer, index) => {
-                        const layer = selectedLayers.find(layer => layer.id === zoomLevelLayer.id);
-                        return layer && <ZoomBarLayer
-                            key={hoveringIndex !== null ?
-                                zoomLevelLayer.id+'_'+hoveringIndex :
-                                zoomLevelLayer.id+'_'+currentZoomLevel
-                            }
-                            zoomLevelLayer={zoomLevelLayer}
-                            index={index}
-                            layer={layer}
-                        />
-                    })}
+                    <Legend
+                        currentZoomLevel={currentZoomLevel}
+                        selectedLayers={selectedLayers}
+                        zoomLevelsLayers={zoomLevelsLayers}
+                        hoveringIndex={hoveringIndex}
+                    />
                 </StyledLayerInfoContainer>
 
             </StyledZoomBarLayersInfo>
-            <StyledExpandControl
-                data-tip data-for='zoomExpand'
-                onClick={() => setIsExpanded(!isExpanded)}
-            >
-                <FontAwesomeIcon
-                    icon={faAngleUp}
-                    style={{
-                        transform: isExpanded && "rotate(180deg)"
+                <StyledMyLocationButton
+                    data-tip data-for='myLoc'
+                    onClick={() => {
+                        rpc.channel.postRequest('MyLocationPlugin.GetUserLocationRequest');
                     }}
-                />
-            </StyledExpandControl>
-            <StyledCenterLine />
-            <StyledZoomBarControlBottom
-                data-tip data-for='zoomOut'
-                disabled={currentZoomLevel === 0}
-                onClick={() => {
-                    store.dispatch(setZoomOut());
-                }}
-            >
-                <FontAwesomeIcon
-                    icon={faSearchMinus}
-                />
-            </StyledZoomBarControlBottom>
-            {Object.values(zoomLevelsLayers).map((layer, index) => {
-                return <ZoomBarCircle
-                    key={index}
-                    index={index}
-                    layer={layer}
-                    zoomLevel={currentZoomLevel}
-                    isExpanded={isExpanded}
-                    //zoomTo={zoomTo}
-                    setHoveringIndex={setHoveringIndex}
-                />
-            })}
-            <StyledZoomBarControlTop
-                data-tip data-for='zoomIn'
-                disabled={currentZoomLevel === Object.values(zoomLevelsLayers).length - 1}
-                onClick={() => {
-                    store.dispatch(setZoomIn());
-                }}
-            >
-                <FontAwesomeIcon
-                    icon={faSearchPlus}
-                />
-            </StyledZoomBarControlTop>
+                >
+                    <StyledIcon src={location} />
+
+                    {/*<FontAwesomeIcon*/}
+                    {/*    icon={location}*/}
+                    {/*/>*/}
+                </StyledMyLocationButton>
+                <StyledCenterLine />
+                <StyledZoomBarControlBottom
+                    data-tip data-for='zoomOut'
+                    disabled={currentZoomLevel === 0}
+                    onClick={() => {
+                        store.dispatch(setZoomOut());
+                    }}
+                >
+                    <FontAwesomeIcon
+                        icon={faSearchMinus}
+                    />
+                </StyledZoomBarControlBottom>
+                {Object.values(zoomLevelsLayers).map((layer, index) => {
+                    return <ZoomBarCircle
+                        key={index}
+                        index={index}
+                        layer={layer}
+                        zoomLevel={currentZoomLevel}
+                        isExpanded={isExpanded}
+                        setHoveringIndex={setHoveringIndex}
+                    />
+                })}
+                <StyledZoomBarControlTop
+                    data-tip data-for='zoomIn'
+                    disabled={currentZoomLevel === Object.values(zoomLevelsLayers).length - 1}
+                    onClick={() => {
+                        store.dispatch(setZoomIn());
+                    }}
+                >
+                    <FontAwesomeIcon
+                        icon={faSearchPlus}
+                    />
+                </StyledZoomBarControlTop>
+                <StyledMenuBarButton
+                    data-tip data-for='legend'
+                    isActive={isExpanded}
+                    onClick={() => setIsExpanded(!isExpanded)}>
+                    <FontAwesomeIcon
+                        icon={faListAlt}
+                    />
+                </StyledMenuBarButton>
             </StyledZoomBarContainer>
         </>
     );
