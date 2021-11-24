@@ -99,6 +99,11 @@ const en = {
             clearSelectedBackgroundMaps: 'Clear selected background maps',
             noSearchResults: 'No search results',
             typeAtLeastThreeCharacters: 'Type at least 3 characters'
+        },
+        selectedLayers: {
+            layerVisible: 'Layer visible',
+            zoomInToShowLayer: 'Zoom in to see the map layer',
+            zoomOutToShowLayer: 'Zoom out to see the map layer'
         }
     },
     themelayerlist: {
