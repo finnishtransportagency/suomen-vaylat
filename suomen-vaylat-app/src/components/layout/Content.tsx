@@ -2,7 +2,6 @@ import styled from 'styled-components';
 import { useAppSelector } from '../../state/hooks';
 import AppInfoModal from '../app-info-modal/AppInfoModal';
 import MenuBar from '../layout/menu-bar/MenuBar';
-import { Legend } from "../legend/Legend";
 import MapLayersDialog from '../dialog/MapLayersDialog';
 import WarningDialog from '../dialog/WarningDialog';
 import PublishedMap from '../published-map/PublishedMap';
@@ -43,15 +42,11 @@ const StyledContentGrid = styled.div`
 const Content = () => {
 
     const {
-        selectedLayers,
         warnings,
-        zoomLevelsLayers,
-        currentZoomLevel
     } = useAppSelector((state) => state.rpc);
 
     const {
         isSearchOpen,
-        isLegendOpen,
         shareUrl
     } =  useAppSelector((state) => state.ui);
 
@@ -68,12 +63,6 @@ const Content = () => {
         <StyledContent>
             <ZoomMenu />
             <PublishedMap />
-            {/*{isSearchOpen && <Search />}*/}
-            {/*{isLegendOpen && <Legend selectedLayers={selectedLayers} />}*/}
-            {isLegendOpen && <Legend selectedLayers={selectedLayers}
-                                     zoomLevelsLayers={zoomLevelsLayers}
-                                     currentZoomLevel={currentZoomLevel}
-                            />}
             {isShareOpen && <ShareWebSitePopup />}
             <AppInfoModal />
             <StyledContentGrid>
