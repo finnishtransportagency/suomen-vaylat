@@ -6,7 +6,6 @@ import styled from 'styled-components';
 import { useAppSelector } from '../../../state/hooks';
 import { setIsSideMenuOpen } from '../../../state/slices/uiSlice';
 import strings from '../../../translations';
-import LayerListTEMP from '../hierarchical-layerlist/LayerListTEMP';
 
 const StyledSideMenu = styled.div`
     //z-index: 10;
@@ -77,15 +76,6 @@ const SideMenu = () => {
 
     const { store } = useContext(ReactReduxContext);
 
-    const {
-        allGroups,
-        allLayers,
-        selectedLayers,
-        allThemesWithLayers,
-        allTags,
-        suomenVaylatLayers,
-    } = useAppSelector((state) => state.rpc);
-
     const { isSideMenuOpen } =  useAppSelector((state) => state.ui);
 
 return (
@@ -103,14 +93,6 @@ return (
             />
         </StyledSideMenuCloseButton>
     </StyledSideMenuHeader>
-    {/* <LayerListTEMP
-        groups={allGroups}
-        layers={allLayers}
-        themes={allThemesWithLayers}
-        tags={allTags}
-        selectedLayers={selectedLayers}
-        suomenVaylatLayers={suomenVaylatLayers}
-    /> */}
 </StyledSideMenu>
 )};
 

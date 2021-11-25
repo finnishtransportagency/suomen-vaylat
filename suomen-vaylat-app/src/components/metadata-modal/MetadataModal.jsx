@@ -8,15 +8,38 @@ import { useAppSelector } from '../../state/hooks';
 import { clearLayerMetadata } from '../../state/slices/rpcSlice';
 import strings from '../../translations';
 import './MetadataModal.scss';
-import AbstractTab from './Tabs/AbstractTab';
-import InspireTab from './Tabs/InspireTab';
-import JhsTab from './Tabs/JhsTab';
-import QualityTab from './Tabs/QualityTab';
+import MetadataGraphic from './Tabs/Components/MetadataGraphic';
+import Citation from './Tabs/Components/Citation';
+import HeaderAndParagraph from './Tabs/Components/HeaderAndParagraph';
+import OnlineResources from './Tabs/Components/OnlineResources';
+import Languages from './Tabs/Components/Languages';
+import TopicCategories from './Tabs/Components/TopicCategories';
+import TemporalExtents from './Tabs/Components/TemporalExtents';
+import LineageStatements from './Tabs/Components/LineageStatements';
+import SpatialResolutions from './Tabs/Components/SpatialResolutions';
+import ResponsibleParties from './Tabs/Components/ResponsibleParties';
+import CitationDate from './Tabs/Components/CitationDate';
+import DistributionFormats from './Tabs/Components/DistributionFormats';
+import SpatialRepresentationTypes from './Tabs/Components/SpatialRepresentationTypes';
+import ScopeCodes from './Tabs/Components/ScopeCodes';
+import ResourceIdentifiers from './Tabs/Components/ResourceIdentifiers';
+import OperatesOn from './Tabs/Components/OperatesOn';
+import ServiceType from './Tabs/Components/ServiceType';
+import DescriptiveKeywords from './Tabs/Components/DescriptiveKeywords';
+import DataQualities from './Tabs/Components/DataQualities';
+import AccessConstraints from './Tabs/Components/AccessConstraints';
+import OtherConstraints from './Tabs/Components/OtherConstraints';
+import Classifications from './Tabs/Components/Classifications';
+import UseLimitations from './Tabs/Components/UseLimitations';
+import QualityTabDataQualities from './Tabs/Components/QualityTabDataQualities';
 
 
 const StyledContent = styled.div`
-    height: 100%;
     padding: .5rem;
+    height: calc(100% - 50px);
+    @media (max-width: 460px) {
+      height: calc(100% - 50px);
+    };
 `;
 const StyledHeader = styled.div`
     color: ${props => props.theme.colors.mainWhite};
@@ -44,33 +67,6 @@ const StyledLayerCloseIcon = styled.div`
     }
 `;
 
-const Tab = styled.button`
-  cursor: pointer;
-  opacity: 0.6;
-  background: white;
-  outline: 0;
-  padding: 4px 4px;
-  border: 0;
-  font-size: 16px;
-  ${({ active }) =>
-    active &&
-    `
-    border-bottom: 2px solid black;
-    opacity: 1;
-  `}
-`;
-const ButtonGroup = styled.div`
-  display: flex;
-`;
-
-const StyledTabContent = styled.div`
-    height: calc(100% - 110px);
-    overflow: auto;
-    @media (max-width: 460px) {
-      height: calc(100% - 140px);
-    };
-`;
-
 export const MetadataModal = () => {
 
   useAppSelector((state) => state.language);
@@ -79,14 +75,12 @@ export const MetadataModal = () => {
 
   const metadata = useSelector((state) => state.rpc.layerMetadata);
 
-  const [active, setActive] = useState(true);
   const [uuid, setUuid] = useState(true);
 
   const layerName = metadata.layer ? metadata.layer.name : '';
   const identification = (metadata.data && metadata.data.identifications) ? metadata.data.identifications[0] : {};
 
   if (metadata.uuid !== uuid) {
-    setActive('ABSTRACT');
     setUuid(metadata.uuid);
   }
 
@@ -107,7 +101,7 @@ export const MetadataModal = () => {
         onRequestClose={() => closeModal()}
         className={'metadata-modal'}
       >
-        <StyledHeader className="modal-header">
+        <StyledHeader className='modal-header'>
           <h5>{strings.formatString(strings.metadata.title, layerName)}</h5>
           <StyledLayerCloseIcon
             onClick={() => {
@@ -119,65 +113,78 @@ export const MetadataModal = () => {
           </StyledLayerCloseIcon>
         </StyledHeader>
         {metadata.data !== null &&
-          <StyledContent>
-            <ButtonGroup>
-              <Tab
-                key={'ABSTRACT'}
-                active={active === 'ABSTRACT' || active === null}
-                onClick={() => setActive('ABSTRACT')}
-              >
-                {strings.metadata.tabs.abstract}
-              </Tab>
-              <Tab
-                key={'JHS'}
-                active={active === 'JHS'}
-                onClick={() => setActive('JHS')}
-              >
-                {strings.metadata.tabs.jhs}
-              </Tab>
-              <Tab
-                key={'INSPIRE'}
-                active={active === 'INSPIRE'}
-                onClick={() => setActive('INSPIRE')}
-              >
-                {strings.metadata.tabs.inspire}
-              </Tab>
-              <Tab
-                key={'QUALITY'}
-                active={active === 'QUALITY'}
-                onClick={() => setActive('QUALITY')}
-              >
-                {strings.metadata.tabs.quality}
-              </Tab>
+          <StyledContent className='metadata-content'>
+            <MetadataGraphic identification={identification}></MetadataGraphic>
+            <Citation identification={identification}></Citation>
+            <HeaderAndParagraph
+              visible={identification.abstractText.length > 0}
+              header={(identification.type === 'data' ? strings.metadata.heading.abstractTextData : strings.metadata.heading.abstractTextService)}
+              text={identification.abstractText}
+            ></HeaderAndParagraph>
+            <HeaderAndParagraph
+              visible={metadata.data.metadataDateStamp.length > 0}
+              header={strings.metadata.heading.metadataDateStamp}
+              text={metadata.data.metadataDateStamp}
+              momentFormat={'DD.MM.YYYY hh:mm:ss'}
+            ></HeaderAndParagraph>
+            <OnlineResources onlineResources={metadata.data.onlineResources}></OnlineResources>
+            <Languages identification={identification}></Languages>
+            <TopicCategories identification={identification}></TopicCategories>
+            <TemporalExtents identification={identification}></TemporalExtents>
+            <LineageStatements lineageStatements={metadata.data.lineageStatements}></LineageStatements>
+            <SpatialResolutions identification={identification}></SpatialResolutions>
+            <ResponsibleParties
+              visible={identification.responsibleParties && identification.responsibleParties.length > 0}
+              header={strings.metadata.heading.responsibleParty}
+              responsibleParties={identification.responsibleParties}></ResponsibleParties>
+            <CitationDate identification={identification}></CitationDate>
+            <ScopeCodes scopeCodes={metadata.data.scopeCodes}></ScopeCodes>
+            <ResourceIdentifiers identification={identification}></ResourceIdentifiers>
+            <OperatesOn identification={identification}></OperatesOn>
+            <ServiceType identification={identification}></ServiceType>
+            <DescriptiveKeywords identification={identification}></DescriptiveKeywords>
+            <DataQualities dataQualities={metadata.data.dataQualities}></DataQualities>
+            <AccessConstraints identification={identification}></AccessConstraints>
+            <OtherConstraints identification={identification}></OtherConstraints>
+            <Classifications identification={identification}></Classifications>
+            <UseLimitations identification={identification}></UseLimitations>
+            <DistributionFormats distributionFormats={metadata.data.distributionFormats}></DistributionFormats>
+            <SpatialRepresentationTypes identification={identification}></SpatialRepresentationTypes>
+            <HeaderAndParagraph
+              visible={metadata.data.fileIdentifier && metadata.data.fileIdentifier.length > 0}
+              header={strings.metadata.heading.fileIdentifier}
+              text={metadata.data.fileIdentifier}
+            >
+            </HeaderAndParagraph>
+            <HeaderAndParagraph
+              visible={metadata.data.metadataStandardName && metadata.data.metadataStandardName.length > 0}
+              header={strings.metadata.heading.metadataStandardName}
+              text={metadata.data.metadataStandardName}
+            >
+            </HeaderAndParagraph>
+            <HeaderAndParagraph
+              visible={metadata.data.metadataStandardVersion && metadata.data.metadataStandardVersion.length > 0}
+              header={strings.metadata.heading.metadataStandardVersion}
+              text={metadata.data.metadataStandardVersion}
+            >
+            </HeaderAndParagraph>
+            <HeaderAndParagraph
+              visible={metadata.data.metadataLanguage && metadata.data.metadataLanguage.length > 0}
+              header={strings.metadata.heading.metadataLanguage}
+              text={strings.metadata.languages[metadata.data.metadataLanguage] || metadata.data.metadataLanguage}
+            >
+            </HeaderAndParagraph>
+            <HeaderAndParagraph
+              visible={metadata.data.metadataCharacterSet && metadata.data.metadataCharacterSet.length > 0}
+              header={strings.metadata.heading.metadataCharacterSet}
+              title={(strings.metadata.codeLists['gmd:MD_CharacterSetCode'][metadata.data.metadataCharacterSet] || { description: metadata.data.metadataCharacterSet }).description}
+              text={(strings.metadata.codeLists['gmd:MD_CharacterSetCode'][metadata.data.metadataCharacterSet] || { label: metadata.data.metadataCharacterSet }).label}></HeaderAndParagraph>
+            <ResponsibleParties
+              visible={metadata.data.metadataResponsibleParties && metadata.data.metadataResponsibleParties.length > 0}
+              header={strings.metadata.heading.metadataOrganisation}
+              responsibleParties={metadata.data.metadataResponsibleParties}></ResponsibleParties>
+            <QualityTabDataQualities dataQualities={metadata.data.dataQualities}></QualityTabDataQualities>
 
-            </ButtonGroup>
-            <p />
-            <StyledTabContent>
-              <AbstractTab
-                visible={metadata.data !== null && active === 'ABSTRACT'}
-                data={metadata.data}
-                identification={identification}
-              >
-              </AbstractTab>
-              <JhsTab
-                visible={metadata.data !== null && active === 'JHS'}
-                data={metadata.data}
-                identification={identification}
-              >
-              </JhsTab>
-              <InspireTab
-                visible={metadata.data !== null && active === 'INSPIRE'}
-                data={metadata.data}
-                identification={identification}
-              >
-              </InspireTab>
-              <QualityTab
-                visible={metadata.data !== null && active === 'QUALITY'}
-                data={metadata.data}
-                identification={identification}
-              >
-              </QualityTab>
-            </StyledTabContent>
           </StyledContent>
         }
       </Modal>

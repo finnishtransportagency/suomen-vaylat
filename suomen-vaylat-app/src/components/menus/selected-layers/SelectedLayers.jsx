@@ -89,8 +89,10 @@ export const SelectedLayers = ({ selectedLayers, currentZoomLevel }) => {
         store.dispatch(setSelectedLayers(newSelectedLayers));
     };
 
-    const sortBackgroundLayers = (backgroundLayer) => {
-        const newSelectedLayers = arrayMoveImmutable(selectedLayers, backgroundLayer.oldIndex + selectedLayers.length, backgroundLayer.newIndex + selectedLayers.length)
+    const sortSelectedBackgroundLayers = (backgroundLayer) => {
+        const newSelectedLayers = arrayMoveImmutable(selectedLayers, 
+            (backgroundLayer.oldIndex + selectedLayers.length) - backgroundMaps.length,
+            (backgroundLayer.newIndex + selectedLayers.length) - backgroundMaps.length)
         reArrangeRPCLayerOrder(store, newSelectedLayers);
         store.dispatch(setSelectedLayers(newSelectedLayers));
     };
@@ -133,7 +135,7 @@ export const SelectedLayers = ({ selectedLayers, currentZoomLevel }) => {
                 distance={1}
                 transitionDuration={300}
                 items={backgroundMaps}
-                onSortEnd={sortBackgroundLayers}
+                onSortEnd={sortSelectedBackgroundLayers}
                 currentZoomLevel={currentZoomLevel}
             />
             <StyledDeleteAllSelectedLayers

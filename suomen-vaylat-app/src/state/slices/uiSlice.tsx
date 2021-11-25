@@ -4,13 +4,13 @@ const initialState = {
   isFullScreen: false,
   isSideMenuOpen: false,
   isSearchOpen: false,
-  searchParams: "",
-  isLegendOpen: false,
+  searchParams: '',
   isInfoOpen: false,
   shareUrl: '',
   isDrawingToolsOpen: false,
   selectedLayerList: 'themes',
   activeTool: '',
+  gfiLocations: null,
   isSwipingDisabled: false,
   selectedMapLayersMenuTab: 0,
   selectedMapLayersMenuThemeIndex: null
@@ -24,10 +24,9 @@ export const uiSlice = createSlice({
       state.isFullScreen = action.payload;
     },
     setIsMainScreen: (state) => {
-      state.isFullScreen = false
-      state.isSideMenuOpen = false
-      state.isSearchOpen = false
-      state.isLegendOpen = false
+      state.isFullScreen = false;
+      state.isSideMenuOpen = false;
+      state.isSearchOpen = false;
       state.isInfoOpen = false;
     },
     setIsSideMenuOpen: (state, action) => {
@@ -38,9 +37,6 @@ export const uiSlice = createSlice({
     },
     setSearchParams: (state, action) => {
       state.searchParams = action.payload;
-    },
-    setIsLegendOpen: (state, action) =>  {
-      state.isLegendOpen = action.payload
     },
     setIsInfoOpen: (state, action) => {
       state.isInfoOpen = action.payload;
@@ -74,7 +70,6 @@ export const {
   setSearchParams,
   setIsSideMenuOpen,
   setIsSearchOpen,
-  setIsLegendOpen,
   setIsInfoOpen,
   setIsFullScreen,
   setIsDrawingToolsOpen,
@@ -83,7 +78,7 @@ export const {
   setActiveTool,
   setIsSwipingDisabled,
   setSelectedMapLayersMenuTab,
-  setSelectedMapLayersMenuThemeIndex,
+  setSelectedMapLayersMenuThemeIndex
 } = uiSlice.actions;
 
 export default uiSlice.reducer;
