@@ -135,12 +135,6 @@ const fi = {
     },
     metadata: {
         title: '{0} -karttatason metatiedot',
-        tabs: {
-            abstract: 'Perustiedot',
-            inspire: 'Inspire-metatiedot',
-            jhs: 'JHS 158 -metatiedot',
-            quality: 'Laatutiedot'
-        },
         // SELECT ROWS + SHIFT + ALT + I
         // Copied from Oskari https://github.com/oskariorg/oskari-frontend/blob/master/bundles/catalogue/metadataflyout/resources/locale/fi.js
         heading: {

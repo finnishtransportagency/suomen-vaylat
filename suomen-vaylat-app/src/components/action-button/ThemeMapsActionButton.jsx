@@ -11,19 +11,19 @@ import { selectGroup } from '../../utils/rpcUtil';
 
 import { ThemeGroupShareButton } from '../share-web-site/ShareLinkButtons';
 
-import { motion } from "framer-motion";
+import { motion } from 'framer-motion';
 
 const variants = {
     open: {
-        pointerEvents: "auto",
+        pointerEvents: 'auto',
         y: 0,
-        x: "-50%",
+        x: '-50%',
         opacity: 1,
     },
     closed: {
-        pointerEvents: "none",
-        y: "20px",
-        x: "-50%",
+        pointerEvents: 'none',
+        y: '20px',
+        x: '-50%',
         opacity: 0,
     },
 };
@@ -106,8 +106,8 @@ const ThemeMapsActionButton = () => {
 
     return (
     <StyledActionButtonWrapper
-        initial="closed"
-        animate={selectedTheme && selectedTheme !== "" ? "open" : "closed"}
+        initial='closed'
+        animate={selectedTheme && selectedTheme !== '' ? 'open' : 'closed'}
         variants={variants}
         transition={{
             duration: 0.3,

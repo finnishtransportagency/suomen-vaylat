@@ -1,16 +1,16 @@
-import { useContext, useState } from "react";
-import { faSearchLocation, faListAlt, faSearchMinus, faSearchPlus } from '@fortawesome/free-solid-svg-icons';
+import { useContext, useState } from 'react';
+import { faListAlt, faSearchMinus, faSearchPlus } from '@fortawesome/free-solid-svg-icons';
 import location from '../../theme/icons/my_location_white_24dp.svg';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ReactReduxContext } from 'react-redux';
-import ReactTooltip from "react-tooltip";
+import ReactTooltip from 'react-tooltip';
 import { isMobile } from '../../theme/theme';
 import styled from 'styled-components';
 import { setZoomIn, setZoomOut } from '../../state/slices/rpcSlice';
 import strings from '../../translations';
 import ZoomBarCircle from './ZoomBarCircle';
-import {Legend} from "../legend/Legend";
-import {useAppSelector} from "../../state/hooks";
+import {Legend} from '../legend/Legend';
+import {useAppSelector} from '../../state/hooks';
 
 const StyledZoomBarContainer = styled.div`
     position: relative;
@@ -158,15 +158,15 @@ const ZoomBar = ({
 
     return (
         <>
-            <ReactTooltip disable={isMobile} id='zoomExpand' place="top" type="dark" effect="float">
+            <ReactTooltip disable={isMobile} id='zoomExpand' place='top' type='dark' effect='float'>
                 <span>{strings.tooltips.zoomExpand}</span>
             </ReactTooltip>
 
-            <ReactTooltip disable={isMobile} id='zoomIn' place="top" type="dark" effect="float">
+            <ReactTooltip disable={isMobile} id='zoomIn' place='top' type='dark' effect='float'>
                 <span>{strings.tooltips.zoomIn}</span>
             </ReactTooltip>
 
-            <ReactTooltip disable={isMobile} id='zoomOut' place="top" type="dark" effect="float">
+            <ReactTooltip disable={isMobile} id='zoomOut' place='top' type='dark' effect='float'>
                 <span>{strings.tooltips.zoomOut}</span>
             </ReactTooltip>
 

@@ -1,14 +1,14 @@
 import styled from 'styled-components';
-import { motion } from "framer-motion";
+import { motion } from 'framer-motion';
 
 import DialogHeader from './DialogHeader';
-import { useContext, useState } from "react";
-import { ReactReduxContext, useSelector } from "react-redux";
-import { updateLayers } from "../../utils/rpcUtil";
-import strings from "../../translations";
-import { Button } from "react-bootstrap";
+import { useContext, useState } from 'react';
+import { ReactReduxContext, useSelector } from 'react-redux';
+import { updateLayers } from '../../utils/rpcUtil';
+import strings from '../../translations';
+import { Button } from 'react-bootstrap';
 
-const OSKARI_LOCALSTORAGE = "oskari";
+const OSKARI_LOCALSTORAGE = 'oskari';
 
 const addToLocalStorageArray = (name, value) => {
     // Get the existing data
@@ -27,12 +27,12 @@ const addToLocalStorageArray = (name, value) => {
 
 const variants = {
     open: {
-        pointerEvents: "auto",
-        opacity: 1,
+        pointerEvents: 'auto',
+        display: 'block'
     },
     closed: {
-        pointerEvents: "none",
-        opacity: 0,
+        pointerEvents: 'none',
+        display: 'none'
 
     },
 };
@@ -77,7 +77,7 @@ const StyledButton = styled(Button)`
 `;
 
 const WarningDialog = ({ title='', message='', filteredLayers=[], indeterminate=false, hideWarn, dialogOpen, isChecked, warningType }) => {
-    const [selected, setIsSelected] = useState(false);
+    const [selected] = useState(false);
     const { store } = useContext(ReactReduxContext);
     const channel = useSelector(state => state.rpc.channel);
 
@@ -85,7 +85,7 @@ const WarningDialog = ({ title='', message='', filteredLayers=[], indeterminate=
         if (cancel) {
             hideWarn();
             if (selected) {
-                addToLocalStorageArray(OSKARI_LOCALSTORAGE, "multipleLayersWarning");
+                addToLocalStorageArray(OSKARI_LOCALSTORAGE, 'multipleLayersWarning');
             }
         } else {
             filteredLayers.map(layer => {
@@ -95,22 +95,22 @@ const WarningDialog = ({ title='', message='', filteredLayers=[], indeterminate=
             updateLayers(store, channel);
             hideWarn();
             if (selected) {
-                addToLocalStorageArray(OSKARI_LOCALSTORAGE, "multipleLayersWarning");
+                addToLocalStorageArray(OSKARI_LOCALSTORAGE, 'multipleLayersWarning');
             }
         }
     };
 
     return (
             <StyledWarningDialog
-                    initial="closed"
-                    animate={dialogOpen ? "open" : "closed"}
+                    initial='closed'
+                    animate={dialogOpen ? 'open' : 'closed'}
                     variants={variants}
                     transition={{
                         duration: 0.3,
                     }}
             >
                 <DialogHeader
-                    type={"warning"}
+                    type={'warning'}
                     title={title}
                     hideWarn={closeModal}
                 />
@@ -118,7 +118,7 @@ const WarningDialog = ({ title='', message='', filteredLayers=[], indeterminate=
                     {message}
                 </StyledContent>
                 {warningType === 'multipleLayersWarning' &&
-                    <StyledFooter className="modal-footer">
+                    <StyledFooter className='modal-footer'>
                         <StyledButton onClick={() => closeModal()}>{strings.continue}</StyledButton>
                         <StyledButton onClick={() => closeModal(true)}>{strings.cancel}</StyledButton>
                     </StyledFooter>
