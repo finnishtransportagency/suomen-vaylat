@@ -81,6 +81,7 @@ const Content = () => {
                         filteredLayers={warnings.filteredLayers}
                         isChecked={warnings.isChecked}
                         //indeterminate={warnings.indeterminate}
+                        warningType={warnings.type}
                     />
                 }
                 {warnings.show && warnings.type === 'searchWarning' &&
@@ -93,6 +94,7 @@ const Content = () => {
                         filteredLayers={[]}
                         isChecked={undefined}
                         indeterminate={false}
+                        warningType={warnings.type}
                     />
                 }
             </StyledContentGrid>
