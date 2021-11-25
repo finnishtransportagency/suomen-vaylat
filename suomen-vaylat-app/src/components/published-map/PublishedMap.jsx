@@ -9,7 +9,6 @@ import {
 import { updateLayers } from '../../utils/rpcUtil';
 import { AnnouncementsModal } from '../announcements-modal/AnnouncementsModal';
 import CenterSpinner from '../center-spinner/CenterSpinner';
-import { MetadataModal } from '../metadata-modal/MetadataModal';
 import './PublishedMap.scss';
 
 const StyledPublishedMap = styled.div`
@@ -140,7 +139,7 @@ const PublishedMap = () => {
             });
 
             channel.getSupportedEvents(function (data) {
-                
+
                 if (data.MapClickedEvent) {
                     channel.handleEvent('MapClickedEvent', event => {
 
@@ -236,7 +235,6 @@ const PublishedMap = () => {
                     />
                 );
             })}
-            <MetadataModal />
             <StyledIframe id="sv-iframe" title="iframe" src={process.env.REACT_APP_PUBLISHED_MAP_URL + "&lang=" + lang}
                 allow="geolocation" onLoad={() => hideSpinner()}>
             </StyledIframe>
