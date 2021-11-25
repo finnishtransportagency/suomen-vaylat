@@ -160,8 +160,6 @@ const MapLayersDialog = () => {
         selectedLayers,
         allThemesWithLayers,
         allTags,
-        suomenVaylatLayers,
-        zoomLevelsLayers,
         currentZoomLevel
     } = useAppSelector((state) => state.rpc);
 

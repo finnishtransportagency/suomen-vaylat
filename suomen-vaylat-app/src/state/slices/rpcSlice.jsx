@@ -32,7 +32,6 @@ const initialState = {
   lastSelectedTheme: null,
   selectedThemeIndex: null,
   filter: null,
-  suomenVaylatLayers: [],
   layerMetadata: { data: null, layer: null, uuid: null},
   legends: [],
   tagsWithLayers: {},
@@ -217,10 +216,6 @@ export const rpcSlice = createSlice({
         state.channel !== null && state.channel.postRequest('MapMoveRequest', [action.payload.x, action.payload.y, action.payload.zoom || 10]);
         LOG.log('mapMoveRequest ', action.payload);
     },
-    setSuomenVaylatLayers: (state, action) => {
-        state.suomenVaylatLayers = action.payload;
-        LOG.log('setSuomenVaylatLayers to ', action.payload);
-    },
     getLayerMetadata: (state, action) => {
         state.channel && state.channel.getLayerMetadata([action.payload.uuid], (data) => {
             LOG.log('Metadata getted ', data, action.payload.layer, action.payload.uuid);
@@ -313,7 +308,6 @@ export const {
     setSelectedThemeIndex,
     setActiveAnnouncements,
     setFilter,
-    setSuomenVaylatLayers,
     getLayerMetadata,
     clearLayerMetadata,
     setLayerMetadata,

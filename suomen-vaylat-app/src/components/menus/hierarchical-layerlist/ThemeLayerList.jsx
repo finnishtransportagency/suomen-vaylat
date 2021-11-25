@@ -2,7 +2,7 @@ import { useContext } from 'react';
 import { faMap } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ReactReduxContext } from 'react-redux';
-import { motion } from "framer-motion";
+import { motion } from 'framer-motion';
 import styled from 'styled-components';
 import { useAppSelector } from '../../../state/hooks';
 import strings from '../../../translations';
@@ -18,7 +18,7 @@ import kuntokartta from './kuntokartta.jpg';
 
 const listVariants = {
     visible: {
-        height: "auto",
+        height: 'auto',
         opacity: 1
     },
     hidden: {
@@ -35,7 +35,7 @@ const StyledLayerGroups = styled.div`
     margin: 8px 0px 8px 0px;
     border-radius: 2px;
     &:last-child {
-        ${props => props.parentId === -1 ? '1px solid '+props.theme.colors.mainColor2 : "none"};
+        ${props => props.parentId === -1 ? '1px solid '+props.theme.colors.mainColor2 : 'none'};
     };
 `;
 
@@ -104,10 +104,10 @@ const StyledSelectButton = styled.div`
     border-radius: 50%;
     &:before {
         position: absolute;
-        content: "";
+        content: '';
         width: 10px;
         height: 10px;
-        background-color: ${props => props.isOpen ? props.theme.colors.mainWhite : "transparent"};
+        background-color: ${props => props.isOpen ? props.theme.colors.mainWhite : 'transparent'};
         border-radius: 50%;
         transition: background-color 0.3s ease-out;
     }
@@ -202,7 +202,7 @@ export const ThemeGroup = ({
     return (
         <StyledLayerGroups index={index}>
             <StyledMasterGroupHeader
-                key={"smgh_" + theme.id}
+                key={'smgh_' + theme.id}
                 onClick={() => {
                     selectGroup(index, theme);
                 }}
@@ -223,17 +223,17 @@ export const ThemeGroup = ({
                 </StyledRightContent>
             </StyledMasterGroupHeader>
             <StyledLayerGroupContainer
-                key={"slg_" + index}
-                initial="hidden"
-                animate={isOpen ? "visible" : "hidden"}
+                key={'slg_' + index}
+                initial='hidden'
+                animate={isOpen ? 'visible' : 'hidden'}
                 variants={listVariants}
                 transition={{
                     duration: 0.3,
                 }}
             >
                 <div>
-                    {themeImages[theme.id] && <StyledLayerGroupImage src={themeImages[theme.id]} alt=""/>}
-                    {strings.themelayerlist[theme.id].description !== null && 
+                    {themeImages[theme.id] && <StyledLayerGroupImage src={themeImages[theme.id]} alt=''/>}
+                    {strings.themelayerlist[theme.id].description !== null &&
                     <>
                         <StyledSubHeader>{strings.themelayerlist[theme.id].title}</StyledSubHeader>
                         <StyledSubText>{strings.themelayerlist[theme.id].description}</StyledSubText>
