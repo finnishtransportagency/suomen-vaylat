@@ -39,7 +39,7 @@ const StyledContent = styled.div`
     height: calc(100% - 50px);
     overflow: auto;
     @media (max-width: 460px) {
-      height: calc(100% - 140px);
+      height: calc(100% - 50px);
     };
 `;
 const StyledHeader = styled.div`

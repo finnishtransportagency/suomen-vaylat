@@ -189,10 +189,6 @@ const ZoomBar = ({
                     }}
                 >
                     <StyledIcon src={location} />
-
-                    {/*<FontAwesomeIcon*/}
-                    {/*    icon={location}*/}
-                    {/*/>*/}
                 </StyledMyLocationButton>
                 <StyledCenterLine />
                 <StyledZoomBarControlBottom
