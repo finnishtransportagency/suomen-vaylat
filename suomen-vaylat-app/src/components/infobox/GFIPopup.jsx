@@ -132,53 +132,53 @@ export const GFIPopup = ({gfiLocations}) => {
                 className={'gfi-modal'}
             >
                 <Draggable handle=".handle" bounds="body">
-                <SyledModalContent className="handle">
-                <StyledHeader className="modal-header">
-                    <h5>{title}</h5>
-                    <StyledLayerCloseIcon
-                        onClick={() => {
-                            closeModal();
-                        }} title='Sulje'>
-                        <FontAwesomeIcon
-                            icon={faTimes}
-                        />
-                    </StyledLayerCloseIcon>
-                </StyledHeader>
-                <Tabs>
-                    <StyledContent>
-                        <TabList>
-                            {
-                                tabsIds.map((id) => {
-                                    return (
-                                        <Tab key={id}>
-                                            <StyledGFIHeader className="gfi-header">
-                                                {allLayers.filter(layer => layer.id === id)[0].name}
-                                                <StyledTabCloseIcon
-                                                    onClick={() => {
-                                                        closeTab(id);
-                                                    }} title='Sulje'>
-                                                    <FontAwesomeIcon
-                                                        icon={faTimes}
-                                                    />
-                                                </StyledTabCloseIcon>
-                                            </StyledGFIHeader>
-                                        </Tab>
-                                    )
-                                })
-                            }
-                        </TabList>
-                        {
-                            tabsContent.map((content, index) => {
-                                    return (
-                                        <TabPanel key={index}>
-                                            {content}
-                                        </TabPanel>
-                                    )
-                                })
-                        }
-                    </StyledContent>
-                </Tabs>
-                </SyledModalContent>
+                    <SyledModalContent className="handle">
+                        <StyledHeader className="modal-header">
+                            <h5>{title}</h5>
+                            <StyledLayerCloseIcon
+                                onClick={() => {
+                                    closeModal();
+                                }} title='Sulje'>
+                                <FontAwesomeIcon
+                                    icon={faTimes}
+                                />
+                            </StyledLayerCloseIcon>
+                        </StyledHeader>
+                        <Tabs>
+                            <StyledContent>
+                                <TabList>
+                                    {
+                                        tabsIds.map((id) => {
+                                            return (
+                                                <Tab key={id}>
+                                                    <StyledGFIHeader className="gfi-header">
+                                                        {allLayers.filter(layer => layer.id === id)[0].name}
+                                                        <StyledTabCloseIcon
+                                                            onClick={() => {
+                                                                closeTab(id);
+                                                            }} title='Sulje'>
+                                                            <FontAwesomeIcon
+                                                                icon={faTimes}
+                                                            />
+                                                        </StyledTabCloseIcon>
+                                                    </StyledGFIHeader>
+                                                </Tab>
+                                            )
+                                        })
+                                    }
+                                </TabList>
+                                {
+                                    tabsContent.map((content, index) => {
+                                            return (
+                                                <TabPanel key={index}>
+                                                    {content}
+                                                </TabPanel>
+                                            )
+                                        })
+                                }
+                            </StyledContent>
+                        </Tabs>
+                    </SyledModalContent>
                 </Draggable>
             </Modal>
         </div>
