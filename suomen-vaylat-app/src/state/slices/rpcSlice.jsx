@@ -195,11 +195,14 @@ export const rpcSlice = createSlice({
         state.suomenVaylatLayers = action.payload;
     },
     getLayerMetadata: (state, action) => {
+        console.log('getLayerMetadata', action.payload);
         state.channel && state.channel.getLayerMetadata([action.payload.uuid], (data) => {
-            action.payload.handler(data, action.payload.layer, action.payload.uuid)
+            console.log('metadata getted', data, action.payload.layer, action.payload.uuid);
+            action.payload.handler(data, action.payload.layer, action.payload.uuid);
         }, (err) => {
             if (typeof action.payload.errorHandler === 'function') {
                 action.payload.errorHandler(err);
+                console.warn('metadata get error', err);
             } else {
                 LOG.warn('Get layer metadata failed');
             }
@@ -212,6 +215,7 @@ export const rpcSlice = createSlice({
         };
     },
     setLayerMetadata: (state, action) => {
+        console.log('setLayerMetadata', action.payload);
         state.layerMetadata = {
             layer: action.payload.layer,
             data: action.payload.data,
