@@ -76,7 +76,7 @@ const StyledButton = styled(Button)`
     background-color: #0064af;
 `;
 
-const WarningDialog = ({ title='', message='', filteredLayers=[], indeterminate=false, hideWarn, dialogOpen, isChecked }) => {
+const WarningDialog = ({ title='', message='', filteredLayers=[], indeterminate=false, hideWarn, dialogOpen, isChecked, warningType }) => {
     const [selected, setIsSelected] = useState(false);
     const { store } = useContext(ReactReduxContext);
     const channel = useSelector(state => state.rpc.channel);
@@ -117,10 +117,12 @@ const WarningDialog = ({ title='', message='', filteredLayers=[], indeterminate=
                 <StyledContent>
                     {message}
                 </StyledContent>
-                {/* <StyledFooter className="modal-footer">
-                    <StyledButton onClick={() => closeModal()}>{strings.continue}</StyledButton>
-                    <StyledButton onClick={() => closeModal(true)}>{strings.cancel}</StyledButton>
-                </StyledFooter> */}
+                {warningType === 'multipleLayersWarning' &&
+                    <StyledFooter className="modal-footer">
+                        <StyledButton onClick={() => closeModal()}>{strings.continue}</StyledButton>
+                        <StyledButton onClick={() => closeModal(true)}>{strings.cancel}</StyledButton>
+                    </StyledFooter>
+                }
             </StyledWarningDialog>
     );
  }
