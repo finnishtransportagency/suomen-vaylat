@@ -7,12 +7,13 @@ import WarningDialog from '../dialog/WarningDialog';
 import PublishedMap from '../published-map/PublishedMap';
 import Search from '../search/Search';
 import ThemeMapsActionButton from '../action-button/ThemeMapsActionButton';
-import { ShareWebSitePopup } from "../share-web-site/ShareWebSitePopup";
+import { ShareWebSitePopup } from '../share-web-site/ShareWebSitePopup';
 import ZoomMenu from '../zoom-features/ZoomMenu';
-import strings from "../../translations";
-import {setSelectError} from "../../state/slices/rpcSlice";
-import {useContext} from "react";
-import {ReactReduxContext} from "react-redux";
+import strings from '../../translations';
+import {setSelectError} from '../../state/slices/rpcSlice';
+import {useContext} from 'react';
+import {ReactReduxContext} from 'react-redux';
+import MetadataModal from '../metadata-modal/MetadataModal';
 
 const StyledContent = styled.div`
     z-index: 1;
@@ -42,7 +43,7 @@ const StyledContentGrid = styled.div`
 const Content = () => {
 
     const {
-        warnings,
+        warnings
     } = useAppSelector((state) => state.rpc);
 
     const {
@@ -65,6 +66,7 @@ const Content = () => {
             <PublishedMap />
             {isShareOpen && <ShareWebSitePopup />}
             <AppInfoModal />
+            <MetadataModal />
             <StyledContentGrid>
                 <MenuBar />
                 <MapLayersDialog />
@@ -79,6 +81,7 @@ const Content = () => {
                         filteredLayers={warnings.filteredLayers}
                         isChecked={warnings.isChecked}
                         //indeterminate={warnings.indeterminate}
+                        warningType={warnings.type}
                     />
                 }
                 {warnings.show && warnings.type === 'searchWarning' &&
@@ -91,6 +94,7 @@ const Content = () => {
                         filteredLayers={[]}
                         isChecked={undefined}
                         indeterminate={false}
+                        warningType={warnings.type}
                     />
                 }
             </StyledContentGrid>

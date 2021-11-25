@@ -31,6 +31,10 @@ const fi = {
         metadata: 'Näytä tason metadata',
         showPageInfo: 'Näytä sivun info'
     },
+    gfi: {
+        title: 'Kohdetiedot',
+        close: 'Sulje'
+    },
     warning: 'Varoitus!',
     multipleLayersWarning: 'Olet lisäämässä kartalle 10 tai enemmän karttatasoa ja se saattaa vaikuttaa palvelun suorituskykyyn',
     continue: 'Jatka',
@@ -135,12 +139,6 @@ const fi = {
     },
     metadata: {
         title: '{0} -karttatason metatiedot',
-        tabs: {
-            abstract: 'Perustiedot',
-            inspire: 'Inspire-metatiedot',
-            jhs: 'JHS 158 -metatiedot',
-            quality: 'Laatutiedot'
-        },
         // SELECT ROWS + SHIFT + ALT + I
         // Copied from Oskari https://github.com/oskariorg/oskari-frontend/blob/master/bundles/catalogue/metadataflyout/resources/locale/fi.js
         heading: {

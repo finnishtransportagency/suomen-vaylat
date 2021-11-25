@@ -2,7 +2,6 @@ import { useContext } from "react";
 import {
     faCompress,
     faExpand,
-    faListAlt,
     faLayerGroup,
     faPencilRuler,
     faSearch
@@ -16,7 +15,6 @@ import { useAppSelector } from '../../../state/hooks';
 import {
     setIsDrawingToolsOpen,
     setIsFullScreen,
-    setIsLegendOpen,
     setIsSearchOpen,
     setIsSideMenuOpen,
     setActiveTool
@@ -121,7 +119,6 @@ const MenuBar = () => {
         isFullScreen,
         isSideMenuOpen,
         isSearchOpen,
-        isLegendOpen,
         isDrawingToolsOpen,
         activeTool,
     } =  useAppSelector((state) => state.ui);
@@ -146,8 +143,6 @@ const MenuBar = () => {
         store.dispatch(setActiveTool(''));
         store.dispatch(setIsDrawingToolsOpen(!isDrawingToolsOpen))
     };
-
-    //const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
 
     return (
