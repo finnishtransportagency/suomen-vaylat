@@ -132,7 +132,7 @@ export const Header = () => {
                 channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, false]);
             }
         })
-        store.dispatch(setZoomTo(0))
+        store.dispatch(setZoomTo(1))
         updateLayers(store, channel)
     };
 
