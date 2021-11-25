@@ -129,7 +129,7 @@ export const StyledSelectInput = styled(({
         error={error}
         marginTop={marginTop}
       >
-        <StyledOption value="" readOnly={true} hidden={true}>{placeholder}</StyledOption>
+        <StyledOption value='' readOnly={true} hidden={true}>{placeholder}</StyledOption>
         {options.map(({ value, label }, index) => <StyledOption key={index} value={value} >{label}</StyledOption>)}
       </StyledSelect>
       {hintText && <Text>{hintText}</Text>}

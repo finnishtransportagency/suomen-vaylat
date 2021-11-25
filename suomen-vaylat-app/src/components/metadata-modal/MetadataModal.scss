@@ -3,7 +3,7 @@ div.ReactModalPortal {
         z-index: 20;
         position: fixed;
         inset: 0px;
-        background-color: rgba(255, 255, 255, 0.75);
+        background-color: transparent !important;
         div.metadata-modal {
             position: absolute;
             transform: translate(-50%, -50%);
