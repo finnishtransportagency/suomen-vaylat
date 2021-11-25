@@ -5,9 +5,6 @@
  * - visibleFields: Show these GeoJSON feature properties second (below highPriorityFields) and "normal" style
  *
  * If highPriorityFields and visibleFields are not cofigured then show all properties.
- *
- * Layer feature localized field names come from FieldNameLocales/fi.js, FieldNameLocales/en.js and FieldNameLocales/sv.js
- * Layer feature code list field values come from CodeListValues/fi.js, CodeListValues/en.js and CodeListValues/sv.js
  * @class GeoJSONFormatter
  */
 export class GeoJSONFormatter {

@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect } from 'react';
 import OskariRPC from 'oskari-rpc';
 import { ReactReduxContext } from 'react-redux';
 import styled from 'styled-components';
