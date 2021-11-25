@@ -2,7 +2,7 @@
 
 div.popupContent {
     clear: both;
-    background-color: #FFFFFF;
+    background-color: #ffffff;
     position: relative;
     left: 0px;
     top: 0px;
@@ -28,7 +28,7 @@ div.popupContent {
     td:nth-child(even) {
         padding-left: 10px;
     }
-    
+
     td:nth-child(odd) {
         padding-right: 10px;
         border-right: 1px solid #ddd;
@@ -36,9 +36,9 @@ div.popupContent {
 
     table {
         padding-right: 0px !important;
-        width: 100%
+        width: 100%;
     }
-    
+
     tr:nth-child(2n) {
         background-color: #f2f2f2;
     }
@@ -51,29 +51,28 @@ div.popupContent {
     table tr {
         border-bottom: 1px solid #ddd;
     }
-
 }
 
 div.react-tabs {
     overflow-x: auto;
     overflow-y: hidden;
-    
+
     ::-webkit-scrollbar {
-        height: .4rem;
-        width: .4rem;
+        height: 0.4rem;
+        width: 0.4rem;
     }
-    
+
     /* Track */
     ::-webkit-scrollbar-track {
         border-radius: 10px;
     }
-    
+
     /* Handle */
     ::-webkit-scrollbar-thumb {
         background-color: $mainColor1;
         border-radius: 10px;
     }
-    
+
     /* Handle on hover */
     ::-webkit-scrollbar-thumb:hover {
         background: $mainColor2;

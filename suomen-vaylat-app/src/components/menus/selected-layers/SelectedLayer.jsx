@@ -4,8 +4,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ReactReduxContext, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { clearLayerMetadata, getLayerMetadata, setLayerMetadata } from '../../../state/slices/rpcSlice';
-import { updateLayers } from "../../../utils/rpcUtil";
+import { updateLayers } from '../../../utils/rpcUtil';
 import { SortableHandle } from 'react-sortable-hoc';
+
+import strings from '../../../translations';
 
 const StyledLayerContainer = styled.div`
     z-index: 9999;
@@ -114,7 +116,7 @@ const StyledLayerGripControl = styled.div`
     cursor: pointer;
     svg {
         font-size: 17px;
-        color: ${props => props.theme.colors.mainColor1}; 
+        color: ${props => props.theme.colors.mainColor1};
     }
 `;
 
@@ -122,7 +124,6 @@ const StyledLayerInfoIconWrapper = styled.div`
     cursor: pointer;
     width: 30px;
     padding-left: 8px;
-    opacity: ${props => props.uuid ? 1 : 0};
     font-size: 20px;
     svg {
         color: ${props => props.theme.colors.mainColor1};
@@ -144,7 +145,8 @@ const DragHandle = SortableHandle(() => (
 
 export const SelectedLayer = ({
     layer,
-    uuid
+    uuid,
+    currentZoomLevel
 }) => {
 
     const { store } = useContext(ReactReduxContext);
@@ -161,6 +163,7 @@ export const SelectedLayer = ({
         setOpacity(value);
     };
 
+
     const handleMetadataSuccess = (data, layer, uuid) => {
         if (data) {
             store.dispatch(setLayerMetadata({ data: data, layer: layer, uuid: uuid }));
@@ -169,11 +172,23 @@ export const SelectedLayer = ({
     const handleMetadataError = () => {
         store.dispatch(clearLayerMetadata());
     };
-    
+
+    const handleLayerMetadata = (layer, uuid) => {
+        store.dispatch(getLayerMetadata({ layer: layer, uuid: uuid, handler: handleMetadataSuccess, errorHandler: handleMetadataError }));
+    };
+
+    let layerInfoText = strings.layerlist.selectedLayers.layerVisible;
+    if (layer.maxZoomLevel && layer.minZoomLevel && currentZoomLevel <  layer.minZoomLevel) {
+        layerInfoText = strings.layerlist.selectedLayers.zoomInToShowLayer;
+    } else if (layer.maxZoomLevel && layer.minZoomLevel && currentZoomLevel >  layer.maxZoomLevel) {
+        layerInfoText = strings.layerlist.selectedLayers.zoomOutToShowLayer;
+    }
+
     return (
             <StyledLayerContainer>
                 <StyledLayerContent>
                     <StyledLayerDeleteIcon
+                        className="swiper-no-swiping"
                         onClick={() => {
                             handleLayerVisibility(channel, layer);
                         }}>
@@ -185,25 +200,25 @@ export const SelectedLayer = ({
                         <StyledLayerName>
                             {layer.name}
                         </StyledLayerName>
-                        <StyledLayerInfoIconWrapper
-                            //data-tip data-for={'metadata' + layer.id}
-                            disabled={uuid ? false : true}
-                            uuid={uuid}
-                            onClick={() => {
-                                store.dispatch(getLayerMetadata({ layer: layer, uuid: uuid, handler: handleMetadataSuccess, errorHandler: handleMetadataError }));
-                            }}
-                        >
-                            <FontAwesomeIcon icon={faInfoCircle} />
-                        </StyledLayerInfoIconWrapper>
+                        { uuid &&
+                            <StyledLayerInfoIconWrapper
+                                className="swiper-no-swiping"
+                                uuid={uuid}
+                                onClick={() => {
+                                    handleLayerMetadata(layer, uuid);
+                                }}
+                            >
+                                <FontAwesomeIcon icon={faInfoCircle} />
+                            </StyledLayerInfoIconWrapper>
+                        }
                     </StyledlayerHeader>
                     <StyledMidContent>
-                        Lähennä nähdäksesi taso
+                        {layerInfoText}
                     </StyledMidContent>
                     <StyledBottomContent>
-                        <p>Läpinäkyvyys</p>
+                        <p>{strings.layerlist.selectedLayers.opacity}</p>
                         <StyledlayerOpacityControl
                             className="swiper-no-swiping"
-                            //data-tip data-for={'opacity' + layer.id}
                             type="range"
                             min="0"
                             max="100"

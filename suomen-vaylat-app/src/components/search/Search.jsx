@@ -44,7 +44,6 @@ const StyledSearchContainer = styled(motion.div)`
     display: flex;
     justify-content: flex-end;
     justify-self: end;
-
 `;
 
 const StyledSearchMethod = styled.div`
@@ -126,8 +125,6 @@ export const Search = ({isOpen}) => {
         { value: 'vkm', label: strings.search.types.vkm }
     ];
 
-    let searchDisabled = true;
-
     const onClickHandler = () => {
         store.dispatch(setSearching(true));
 
@@ -148,18 +145,6 @@ export const Search = ({isOpen}) => {
             store.dispatch(searchRequest(search.formData.address));
         }
     };
-
-    if (search.searching === false && search.selected === 'vkm'
-        && search.formData.vkm.tie !== null
-        && search.formData.vkm.tieosa !== null
-        && search.formData.vkm.ajorata !== null
-        && search.formData.vkm.etaisyys !== null
-    ) {
-        searchDisabled = false;
-    } else if (search.searching === false && search.selected === 'address'
-        && search.formData.address !== null && search.formData.address.length > 0) {
-        searchDisabled = false;
-    }
 
     if (search.searching === false && search.marker.x !== null && search.marker.y !== null
         && search.searchResultOnMapId !== search.marker.x + '_' + search.marker.y + '_' + (search.marker.msg || '') + '_' + markerId) {
@@ -183,6 +168,9 @@ export const Search = ({isOpen}) => {
             initial="closed"
             animate={isOpen ? "open" : "closed"}
             variants={variants}
+            transition={{
+                duration: 0.3,
+            }}
         >
             <StyledSearchMethod>
                 <StyledSelectInput

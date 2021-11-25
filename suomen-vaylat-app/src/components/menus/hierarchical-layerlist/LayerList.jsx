@@ -7,7 +7,7 @@ import styled from 'styled-components';
 import LayerGroup from './LayerGroup';
 import Layers from './Layers';
 
-import { motion } from "framer-motion";
+import { motion } from 'framer-motion';
 
 
 const masterHeaderIconVariants = {
@@ -17,7 +17,7 @@ const masterHeaderIconVariants = {
 
 const listVariants = {
     visible: {
-        height: "auto",
+        height: 'auto',
         opacity: 1
     },
     hidden: {
@@ -30,17 +30,17 @@ const StyledLayerList = styled.div`
 
 `;
 
-const StyledLayerGroups = styled(motion.div)`
+const StyledLayerGroups = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: center;
     //opacity: 0;
     background-color: ${props => props.theme.colors.mainWhite};
-    margin: ${props => props.parentId === -1 && "10px 0px 10px 0px"};
+    margin: ${props => props.parentId === -1 && '10px 0px 10px 0px'};
     margin-bottom: 10px;
     border-radius: 2px;
     &:last-child {
-        ${props => props.parentId === -1 ? '1px solid '+props.theme.colors.mainColor2 : "none"};
+        ${props => props.parentId === -1 ? '1px solid '+props.theme.colors.mainColor2 : 'none'};
     };
 `;
 
@@ -171,6 +171,7 @@ export const LayerList = ({
                                     tag={tag}
                                     layers={layers}
                                     index={index}
+                                    key={'taglayerlist-' + tag + '-' + index}
                                 />
                             );
                         })
@@ -188,7 +189,7 @@ export const LayerList = ({
                             <>
                                 { isVisible ? (
                                     <LayerGroup
-                                        key={group.id}
+                                        key={'layer-group-'+group.id}
                                         index={index}
                                         group={group}
                                         layers={layers}
@@ -231,13 +232,9 @@ export const LayerList = ({
     });
 
     return (
-            <StyledLayerGroups
-                initial={{ opacity: 0, x: -50 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0 }}
-            >
+            <StyledLayerGroups>
                 <StyledMasterGroupHeader
-                     key={"smgh_" + index + '_'}
+                     key={'smgh_' + index + '_'}
                     onClick={() => {
                         setIsOpen(!isOpen);
                     }}
@@ -257,11 +254,14 @@ export const LayerList = ({
 
                     </StyledLeftContent>
                     <StyledRightContent>
-                        <StyledSelectButton> 
+                        <StyledSelectButton>
                             <StyledMotionIconWrapper
-                                initial="closed"
-                                animate={isOpen ? "open" : "closed"}
+                                initial='closed'
+                                animate={isOpen ? 'open' : 'closed'}
                                 variants={masterHeaderIconVariants}
+                                transition={{
+                                    duration: 0.3,
+                                }}
                             >
                                 <FontAwesomeIcon
                                     icon={faAngleDown}
@@ -271,11 +271,14 @@ export const LayerList = ({
                     </StyledRightContent>
                 </StyledMasterGroupHeader>
                     <StyledLayerGroup
-                        key={"slg_" + index + "_"}
+                        key={'slg_' + index + '_'}
                         isOpen={isOpen}
-                        initial="hidden"
-                        animate={isOpen ? "visible" : "hidden"}
+                        initial='hidden'
+                        animate={isOpen ? 'visible' : 'hidden'}
                         variants={listVariants}
+                        transition={{
+                            duration: 0.3,
+                        }}
                     >
                         <Layers layers={filteredLayers} isOpen={isOpen} />
                     </StyledLayerGroup>

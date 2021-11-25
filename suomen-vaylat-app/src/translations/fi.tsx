@@ -32,7 +32,8 @@ const fi = {
         showPageInfo: 'Näytä sivun info'
     },
     gfi: {
-        title: 'Kohdetiedot'
+        title: 'Kohdetiedot',
+        close: 'Sulje'
     },
     warning: 'Varoitus!',
     multipleLayersWarning: 'Olet lisäämässä kartalle 10 tai enemmän karttatasoa ja se saattaa vaikuttaa palvelun suorituskykyyn',
@@ -102,6 +103,12 @@ const fi = {
             clearSelectedBackgroundMaps: 'Tyhjennä valitut taustakartat',
             noSearchResults: 'Ei hakutuloksia',
             typeAtLeastThreeCharacters: 'Syötä vähintaan 3 kirjainta'
+        },
+        selectedLayers: {
+            layerVisible: 'Taso näkyvillä',
+            zoomInToShowLayer: 'Lähennä nähdäksesi taso',
+            zoomOutToShowLayer: 'Loitonna nähdäksesi taso',
+            opacity: 'Läpinäkyvyys'
         }
     },
     themelayerlist: {
@@ -132,12 +139,6 @@ const fi = {
     },
     metadata: {
         title: '{0} -karttatason metatiedot',
-        tabs: {
-            abstract: 'Perustiedot',
-            inspire: 'Inspire-metatiedot',
-            jhs: 'JHS 158 -metatiedot',
-            quality: 'Laatutiedot'
-        },
         // SELECT ROWS + SHIFT + ALT + I
         // Copied from Oskari https://github.com/oskariorg/oskari-frontend/blob/master/bundles/catalogue/metadataflyout/resources/locale/fi.js
         heading: {
@@ -689,7 +690,7 @@ const fi = {
         }
     },
     legend: {
-        title: 'Karttaselitteet',
+        title: 'Kartalla nyt',
         nolegend: 'Ei karttaselitettä',
         noSelectedLayers: 'Karttatasoja ei valittuna'
     },

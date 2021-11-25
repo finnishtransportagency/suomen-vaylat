@@ -1,6 +1,4 @@
 import { useState } from 'react';
-import { faSearchLocation } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import ReactTooltip from "react-tooltip";
 import { isMobile } from '../../theme/theme';
 import styled from 'styled-components';
@@ -24,28 +22,6 @@ const StyledZoomMenu = styled.div`
     padding: 50px;
 `;
 
-const StyledMyLocationButton = styled.div`
-    width: 45px;
-    height: 45px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: all 0.1s ease-out;
-    background-color: ${props => props.theme.colors.mainColor1};
-    margin-bottom: 50px;
-    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
-    border-radius: 50%;
-    svg {
-        color: ${props => props.theme.colors.mainWhite};
-        font-size: 23px;
-    };
-    &:hover {
-        background-color: ${props => props.theme.colors.mainColor2};
-    };
-    pointer-events: auto;
-    cursor: pointer;
-`;
-
 const ZoomMenu = () => {
     const [hoveringIndex, setHoveringIndex] = useState(null);
 
@@ -58,16 +34,6 @@ const ZoomMenu = () => {
             </ReactTooltip>
 
             <StyledZoomMenu>
-                <StyledMyLocationButton
-                    data-tip data-for='myLoc'
-                    onClick={() => {
-                        rpc.channel.postRequest('MyLocationPlugin.GetUserLocationRequest');
-                    }}
-                >
-                    <FontAwesomeIcon
-                        icon={faSearchLocation}
-                    />
-                </StyledMyLocationButton>
                 <ZoomBar
                     setHoveringIndex={setHoveringIndex}
                     zoomLevelsLayers={rpc.zoomLevelsLayers}

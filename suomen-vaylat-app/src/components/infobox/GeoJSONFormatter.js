@@ -8,10 +8,6 @@
  * @class GeoJSONFormatter
  */
 export class GeoJSONFormatter {
-
-    constructor() {
-    }
-
     reOrderFeatureProperties (geoJSON = {}, visibleFields = [], highPriority=[]) {
         if (visibleFields.length === 0 && highPriority.length === 0) {
             return;
@@ -46,7 +42,7 @@ export class GeoJSONFormatter {
         geoJSON.features.forEach(f => {
             const keys = Object.keys(f.properties);
             keys.forEach(key => {
-                if (key !== "_order" && key !== "_orderHigh") {
+                if (key !== '_order' && key !== '_orderHigh') {
                     pretty.push(this.getContent(key, f.properties[key], visibleFields, highPriority));
                 }
             });

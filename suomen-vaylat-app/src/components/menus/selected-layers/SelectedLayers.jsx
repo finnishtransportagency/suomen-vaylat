@@ -2,7 +2,7 @@ import { useContext } from "react";
 import styled from 'styled-components';
 import { setSelectedLayers } from '../../../state/slices/rpcSlice';
 import strings from '../../../translations';
-import { updateLayers, resetThemeGroups, reArrangeRPCLayerOrder } from "../../../utils/rpcUtil";
+import { updateLayers, resetThemeGroups, reArrangeRPCLayerOrder } from '../../../utils/rpcUtil';
 import { ReactReduxContext, useSelector } from 'react-redux';
 import { SortableContainer, SortableElement} from 'react-sortable-hoc';
 import {arrayMoveImmutable} from 'array-move';
@@ -46,15 +46,16 @@ const StyledListSubtitle = styled.div`
     };
 `;
 
-const SortableItem = SortableElement(({value, suomenVaylatLayers}) =>
+const SortableItem = SortableElement(({value,currentZoomLevel}) =>
     <SelectedLayer
         key={value.id + 'selected'}
         layer={value}
-        uuid={suomenVaylatLayers && suomenVaylatLayers.length > 0 ? suomenVaylatLayers.filter(l => l.id === value.id)[0].uuid : ''}
+        uuid={value.metadataIdentifier}
+        currentZoomLevel={currentZoomLevel}
     />
 );
 
-const SortableList = SortableContainer(({items, suomenVaylatLayers}) => {
+const SortableList = SortableContainer(({items, currentZoomLevel}) => {
     return (
         <div>
             {items.map((value, index) => (
@@ -62,23 +63,24 @@ const SortableList = SortableContainer(({items, suomenVaylatLayers}) => {
                     key={`item-${value.id}`}
                     index={index}
                     value={value}
-                    suomenVaylatLayers={suomenVaylatLayers}/>
+                    currentZoomLevel={currentZoomLevel}
+                />
             ))}
         </div>
     );
 });
 
-export const SelectedLayers = ({ label, selectedLayers, suomenVaylatLayers }) => {
+export const SelectedLayers = ({ selectedLayers, currentZoomLevel }) => {
     const { store } = useContext(ReactReduxContext);
 
     const channel = useSelector(state => state.rpc.channel);
 
     const mapLayers = selectedLayers.filter(layer => {
-        return layer.id !== 3 && layer.id !== 958;
+        return !(layer.groups && layer.groups.includes(1));
     });
 
     const backgroundMaps = selectedLayers.filter(layer => {
-        return layer.id === 3 || layer.id === 958;
+        return layer.groups && layer.groups.includes(1);
     });
 
     const sortSelectedLayers = (selectedLayer) => {
@@ -114,10 +116,11 @@ export const SelectedLayers = ({ label, selectedLayers, suomenVaylatLayers }) =>
             <StyledListSubtitle>{strings.layerlist.layerlistLabels.mapLayers}</StyledListSubtitle>
             <SortableList
                 lockAxis={"y"}
+                distance={1}
                 transitionDuration={300}
                 items={mapLayers}
                 onSortEnd={sortSelectedLayers}
-                suomenVaylatLayers={suomenVaylatLayers}
+                currentZoomLevel={currentZoomLevel}
             />
             <StyledDeleteAllSelectedLayers
                 onClick={() => handleClearSelectedLayers()}
@@ -127,10 +130,11 @@ export const SelectedLayers = ({ label, selectedLayers, suomenVaylatLayers }) =>
             <StyledListSubtitle>{strings.layerlist.layerlistLabels.backgroundMaps}</StyledListSubtitle>
             <SortableList
                 lockAxis={"y"}
+                distance={1}
                 transitionDuration={300}
                 items={backgroundMaps}
                 onSortEnd={sortBackgroundLayers}
-                suomenVaylatLayers={suomenVaylatLayers}
+                currentZoomLevel={currentZoomLevel}
             />
             <StyledDeleteAllSelectedLayers
                 onClick={() => handleClearSelectedBackgroundMaps()}

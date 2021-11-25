@@ -1,14 +1,14 @@
 import styled from 'styled-components';
-import { motion } from "framer-motion";
+import { motion } from 'framer-motion';
 
 import DialogHeader from './DialogHeader';
-import { useContext, useState } from "react";
-import { ReactReduxContext, useSelector } from "react-redux";
-import { updateLayers } from "../../utils/rpcUtil";
-import strings from "../../translations";
-import { Button } from "react-bootstrap";
+import { useContext, useState } from 'react';
+import { ReactReduxContext, useSelector } from 'react-redux';
+import { updateLayers } from '../../utils/rpcUtil';
+import strings from '../../translations';
+import { Button } from 'react-bootstrap';
 
-const OSKARI_LOCALSTORAGE = "oskari";
+const OSKARI_LOCALSTORAGE = 'oskari';
 
 const addToLocalStorageArray = (name, value) => {
     // Get the existing data
@@ -27,12 +27,12 @@ const addToLocalStorageArray = (name, value) => {
 
 const variants = {
     open: {
-        pointerEvents: "auto",
-        opacity: 1,
+        pointerEvents: 'auto',
+        display: 'block'
     },
     closed: {
-        pointerEvents: "none",
-        opacity: 0,
+        pointerEvents: 'none',
+        display: 'none'
 
     },
 };
@@ -76,8 +76,8 @@ const StyledButton = styled(Button)`
     background-color: #0064af;
 `;
 
-const WarningDialog = ({ title='', message='', filteredLayers=[], indeterminate=false, hideWarn, dialogOpen, isChecked }) => {
-    const [selected, setIsSelected] = useState(false);
+const WarningDialog = ({ title='', message='', filteredLayers=[], indeterminate=false, hideWarn, dialogOpen, isChecked, warningType }) => {
+    const [selected] = useState(false);
     const { store } = useContext(ReactReduxContext);
     const channel = useSelector(state => state.rpc.channel);
 
@@ -85,50 +85,44 @@ const WarningDialog = ({ title='', message='', filteredLayers=[], indeterminate=
         if (cancel) {
             hideWarn();
             if (selected) {
-                addToLocalStorageArray(OSKARI_LOCALSTORAGE, "multipleLayersWarning");
+                addToLocalStorageArray(OSKARI_LOCALSTORAGE, 'multipleLayersWarning');
             }
         } else {
             filteredLayers.map(layer => {
                 channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, !isChecked]);
                 return null;
             });
-            // if (!indeterminate) {
-            //     filteredLayers.map(layer => {
-            //         channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, !layer.visible]);
-            //         return null;
-            //     });
-            // } else {
-            //     filteredLayers.map(layer => {
-            //         channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, false]);
-            //         return null;
-            //     });
-            // }
             updateLayers(store, channel);
             hideWarn();
             if (selected) {
-                addToLocalStorageArray(OSKARI_LOCALSTORAGE, "multipleLayersWarning");
+                addToLocalStorageArray(OSKARI_LOCALSTORAGE, 'multipleLayersWarning');
             }
         }
     };
 
     return (
             <StyledWarningDialog
-                    initial="closed"
-                    animate={dialogOpen ? "open" : "closed"}
+                    initial='closed'
+                    animate={dialogOpen ? 'open' : 'closed'}
                     variants={variants}
+                    transition={{
+                        duration: 0.3,
+                    }}
             >
                 <DialogHeader
-                    type={"warning"}
+                    type={'warning'}
                     title={title}
                     hideWarn={closeModal}
                 />
                 <StyledContent>
                     {message}
                 </StyledContent>
-                <StyledFooter className="modal-footer">
-                    <StyledButton onClick={() => closeModal()}>{strings.continue}</StyledButton>
-                    <StyledButton onClick={() => closeModal(true)}>{strings.cancel}</StyledButton>
-                </StyledFooter>
+                {warningType === 'multipleLayersWarning' &&
+                    <StyledFooter className='modal-footer'>
+                        <StyledButton onClick={() => closeModal()}>{strings.continue}</StyledButton>
+                        <StyledButton onClick={() => closeModal(true)}>{strings.cancel}</StyledButton>
+                    </StyledFooter>
+                }
             </StyledWarningDialog>
     );
  }

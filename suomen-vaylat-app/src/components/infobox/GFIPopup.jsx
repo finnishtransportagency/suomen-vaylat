@@ -1,23 +1,23 @@
 import { useContext } from 'react';
-import { faTimes } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Modal from "react-modal";
-import { ReactReduxContext } from "react-redux";
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import Modal from 'react-modal';
+import { ReactReduxContext } from 'react-redux';
 import styled from 'styled-components';
-import { useAppSelector } from "../../state/hooks";
-import { resetGFILocations } from "../../state/slices/rpcSlice";
-import strings from "../../translations";
+import { useAppSelector } from '../../state/hooks';
+import { resetGFILocations } from '../../state/slices/rpcSlice';
+import strings from '../../translations';
 import './GFI.scss';
 import { GeoJSONFormatter } from './GeoJSONFormatter';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
-import Draggable from "react-draggable";
+import Draggable from 'react-draggable';
 import 'react-tabs/style/react-tabs.css';
 
 const customStyles = {
     overlay: {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center"
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center'
   }
 };
 
@@ -84,7 +84,6 @@ export const GFIPopup = ({gfiLocations}) => {
     const geojsonFormatter = new GeoJSONFormatter();
 
     const { store } = useContext(ReactReduxContext);
-    const isGFIOpen = useAppSelector((state) => state.ui.isGFIOpen);
     const allLayers = useAppSelector((state) => state.rpc.allLayers);
     let tabsIds = []
     let tabsContent = []
@@ -96,19 +95,19 @@ export const GFIPopup = ({gfiLocations}) => {
             layerIds = allLayers.filter(layer => layer.id === location.layerId)[0].id;
             tabsIds.push(layerIds);
             let content;
-        
+
             if (location.type === 'text') {
                 content = location.content
             }
             else if (location.type === 'geojson') {
                 content = geojsonFormatter.format(location.content);
             }
-        
+
             const popupContent = <div dangerouslySetInnerHTML={{__html: content}}></div> ;
-            var contentWrapper = <div className="contentWrapper-infobox">{popupContent}</div> ;
-            contentDiv = <div className="popupContent">{contentWrapper}</div> ;
+            var contentWrapper = <div className='contentWrapper-infobox'>{popupContent}</div> ;
+            contentDiv = <div className='popupContent'>{contentWrapper}</div> ;
             tabsContent.push(contentDiv);
-    
+
         });
     };
 
@@ -131,14 +130,14 @@ export const GFIPopup = ({gfiLocations}) => {
                 style={customStyles}
                 className={'gfi-modal'}
             >
-                <Draggable handle=".handle" bounds="body">
-                    <SyledModalContent className="handle">
-                        <StyledHeader className="modal-header">
+                <Draggable handle='.handle' bounds='body'>
+                    <SyledModalContent className='handle'>
+                        <StyledHeader className='modal-header'>
                             <h5>{title}</h5>
                             <StyledLayerCloseIcon
                                 onClick={() => {
                                     closeModal();
-                                }} title='Sulje'>
+                                }} title={strings.gfi.close}>
                                 <FontAwesomeIcon
                                     icon={faTimes}
                                 />
@@ -151,12 +150,12 @@ export const GFIPopup = ({gfiLocations}) => {
                                         tabsIds.map((id) => {
                                             return (
                                                 <Tab key={id}>
-                                                    <StyledGFIHeader className="gfi-header">
+                                                    <StyledGFIHeader className='gfi-header'>
                                                         {allLayers.filter(layer => layer.id === id)[0].name}
                                                         <StyledTabCloseIcon
                                                             onClick={() => {
                                                                 closeTab(id);
-                                                            }} title='Sulje'>
+                                                            }} title={strings.gfi.close}>
                                                             <FontAwesomeIcon
                                                                 icon={faTimes}
                                                             />
