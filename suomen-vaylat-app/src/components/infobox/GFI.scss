@@ -12,6 +12,7 @@ div.popupContent {
 
     div.contentWrapper-infobox {
         margin-bottom: 10px;
+        margin-right: 5px;
     }
 
     hr.infoboxLine {
@@ -90,23 +91,17 @@ div.react-tabs {
 }
 
 div.ReactModalPortal {
+    //uncomment pointer-events to enable moving the map while gfi popup is open
+    //pointer-events: none;
     div.ReactModal__Overlay--after-open {
-        border-radius: 4px;
-        z-index: 20;
-        position: fixed;
-        inset: 0px;
-        background-color: rgba(255, 255, 255, 0.75);
         div.gfi-modal {
-            position: absolute;
+            //pointer-events: auto;
             padding: 0px;
-            box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
-            overflow: hidden;
+            overflow: visible;
             margin: auto;
             inset: 50% auto auto 50%;
-            background: rgb(255, 255, 255);
             outline: none;
             border: none;
-            border-radius: 4px;
             max-height: 50rem;
             max-width: 50rem;
 

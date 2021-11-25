@@ -14,23 +14,15 @@ import Draggable from "react-draggable";
 import 'react-tabs/style/react-tabs.css';
 
 const customStyles = {
-    content: {
-        top: '50%',
-        left: '50%',
-        right: 'auto',
-        bottom: 'auto',
-        marginRight: '-25%',
-        transform: 'translate(-50%, -50%)',
-        padding: '0',
-        borderRadius: '4px',
-        boxShadow: 'rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px',
-        border: 'none'
-    },
-    overlay: {zIndex: 20}
+    overlay: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center"
+  }
 };
 
 const StyledContent = styled.div`
-    padding: .3rem;
+    padding: .3rem 0 0.3rem 0.3rem;
 `;
 
 const StyledGFIHeader = styled.div`
@@ -40,7 +32,7 @@ const StyledGFIHeader = styled.div`
 
 const StyledHeader = styled.div`
     padding: .5rem;
-    border-radius: 0;
+    border-radius: 4px 4px 0 0;
     color: ${props => props.theme.colors.mainWhite};
     background-color: ${props => props.theme.colors.mainColor1};
 `;
@@ -83,8 +75,12 @@ const StyledTabCloseIcon = styled.div`
     };
 `;
 
+const SyledModalContent = styled.div`
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+    background: rgb(255, 255, 255);
+`;
+
 export const GFIPopup = ({gfiLocations}) => {
-    console.log(gfiLocations);
     const geojsonFormatter = new GeoJSONFormatter();
 
     const { store } = useContext(ReactReduxContext);
@@ -129,13 +125,14 @@ export const GFIPopup = ({gfiLocations}) => {
 
     return (
         <div>
-            <Draggable>
             <Modal
-                isOpen={isGFIOpen}
+                isOpen={true}
                 onRequestClose={() => closeModal()}
                 style={customStyles}
                 className={'gfi-modal'}
             >
+                <Draggable handle=".handle" bounds="body">
+                <SyledModalContent className="handle">
                 <StyledHeader className="modal-header">
                     <h5>{title}</h5>
                     <StyledLayerCloseIcon
@@ -181,8 +178,9 @@ export const GFIPopup = ({gfiLocations}) => {
                         }
                     </StyledContent>
                 </Tabs>
+                </SyledModalContent>
+                </Draggable>
             </Modal>
-            </Draggable>
         </div>
     );
 };

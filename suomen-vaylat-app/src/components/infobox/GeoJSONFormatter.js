@@ -48,7 +48,6 @@ export class GeoJSONFormatter {
 
         geoJSON.features.forEach(f => {
             const keys = Object.keys(f.properties);
-            console.log(keys);
             keys.forEach(key => {
                 if (key !== "_order" && key !== "_orderHigh") {
                     pretty.push(this.getContent(key, f.properties[key], visibleFields, highPriority));
