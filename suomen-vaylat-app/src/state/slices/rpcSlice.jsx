@@ -35,6 +35,7 @@ const initialState = {
   layerMetadata: { data: null, layer: null, uuid: null},
   legends: [],
   tagsWithLayers: {},
+  gfiLocations: [],
   center: {
       x: 0,
       y: 0
@@ -270,7 +271,12 @@ export const rpcSlice = createSlice({
     },
     reArrangeSelectedMapLayers: (state, action) => {
         state.channel !== null && state.channel.postRequest('RearrangeSelectedMapLayerRequest', [action.payload.layerId, action.payload.position]);
-        LOG.log('reArrangeSeelctedMapLayers', action.payload);
+    },
+    setGFILocations: (state, action) => {
+      state.gfiLocations.push(action.payload);
+    },
+    resetGFILocations: (state, action) => {
+      state.gfiLocations = action.payload;
     }
   }
 });
@@ -316,7 +322,9 @@ export const {
     setTagsWithLayers,
     setCurrentMapCenter,
     changeLayerStyle,
-    reArrangeSelectedMapLayers
+    reArrangeSelectedMapLayers,
+    setGFILocations,
+    resetGFILocations
 } = rpcSlice.actions;
 
 export default rpcSlice.reducer;

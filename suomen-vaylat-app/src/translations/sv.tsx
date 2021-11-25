@@ -31,6 +31,10 @@ const sv = {
         metadata: 'Visa kartlagers metadata',
         showPageInfo: 'Visa sidinformation'
     },
+    gfi: {
+        title: 'Objektuppgifter',
+        close: 'Stänga'
+    },
     warning: 'Obs!',
     multipleLayersWarning: 'You are about to activate 10 or more layers and it might affect the performance of the website',
     continue: 'continue',

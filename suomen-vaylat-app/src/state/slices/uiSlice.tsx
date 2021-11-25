@@ -10,6 +10,7 @@ const initialState = {
   isDrawingToolsOpen: false,
   selectedLayerList: 'themes',
   activeTool: '',
+  gfiLocations: null,
   isSwipingDisabled: false,
   selectedMapLayersMenuTab: 0,
   selectedMapLayersMenuThemeIndex: null
@@ -77,7 +78,7 @@ export const {
   setActiveTool,
   setIsSwipingDisabled,
   setSelectedMapLayersMenuTab,
-  setSelectedMapLayersMenuThemeIndex,
+  setSelectedMapLayersMenuThemeIndex
 } = uiSlice.actions;
 
 export default uiSlice.reducer;
