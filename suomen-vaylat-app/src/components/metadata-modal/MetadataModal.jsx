@@ -37,7 +37,6 @@ import QualityTabDataQualities from './Tabs/Components/QualityTabDataQualities';
 const StyledContent = styled.div`
     padding: .5rem;
     height: calc(100% - 50px);
-    overflow: auto;
     @media (max-width: 460px) {
       height: calc(100% - 50px);
     };
@@ -102,7 +101,7 @@ export const MetadataModal = () => {
         onRequestClose={() => closeModal()}
         className={'metadata-modal'}
       >
-        <StyledHeader className="modal-header">
+        <StyledHeader className='modal-header'>
           <h5>{strings.formatString(strings.metadata.title, layerName)}</h5>
           <StyledLayerCloseIcon
             onClick={() => {
@@ -114,7 +113,7 @@ export const MetadataModal = () => {
           </StyledLayerCloseIcon>
         </StyledHeader>
         {metadata.data !== null &&
-          <StyledContent>
+          <StyledContent className='metadata-content'>
             <MetadataGraphic identification={identification}></MetadataGraphic>
             <Citation identification={identification}></Citation>
             <HeaderAndParagraph

@@ -1,3 +1,5 @@
+@import '../../colors';
+
 div.ReactModalPortal {
     div.ReactModal__Overlay--after-open {
         z-index: 20;
@@ -28,6 +30,11 @@ div.ReactModalPortal {
                 max-height: none;
                 max-width: none;
             }
+
+            div.metadata-content {
+                overflow-y: auto;
+            }
         }
+
     }
 }
