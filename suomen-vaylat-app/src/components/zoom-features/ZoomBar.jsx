@@ -81,7 +81,7 @@ const StyledZoomBarLayersInfo = styled.div`
     width: 240px;
     height: 100%;
     overflow: hidden;
-    opacity: ${props => props.isExpanded ? '1' : '0'};
+    display: ${props => props.isExpanded ? 'block' : 'none'};
     transition-delay: 0.6s;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
     border-radius: 15px;

@@ -51,7 +51,7 @@ const StyledLayerGroups = styled.div`
     background-color: ${props => props.parentId === -1 ? props.theme.colors.mainWhite : "#F2F2F2"};
     margin: 8px 0px 8px 0px;
     border-radius: 4px;
-    
+
     &:last-child {
         ${props => props.parentId === -1 ? '1px solid '+props.theme.colors.mainColor2 : "none"};
     };
@@ -187,7 +187,7 @@ const StyledLayerGroup = styled(motion.ul)`
     overflow: hidden;
     transition: max-height 0.3s ease-out;
 `;
- 
+
 const themeStyles = {
     100: {
         icon: faCar
@@ -272,29 +272,20 @@ export const LayerGroup = ({
 
     //Find matching layers from all layers and groups, then push this group's layers into 'filteredLayers'
     useEffect(() => {
-        
-        if(group.layers){
-            var getLayers = group.layers.map(groupLayerId => {
-                var layer = layers.find(layer => layer.id === groupLayerId);
-                if(layer !== undefined){
-                    return layer;
-                }
-            });
+
+        if (group.layers) {
+            var getLayers = layers.filter(l => group.layers.includes(l.id));
             setFilteredLayers(getLayers);
             setVisibleLayers(getLayers.filter(layer => layer.visible === true));
 
         };
 
-        if(group.parentId === -1){
+        if (group.parentId === -1) {
             var layersCount = 0;
             var visibleLayersCount = 0;
             const layersCounter = (group) => {
-                if(group.hasOwnProperty("layers") && group.layers.length > 0){
-                    group.layers.forEach(layerId => {
-                       if(layers.find(layer => layer.id === layerId).visible === true){
-                            visibleLayersCount = visibleLayersCount + 1;
-                       };
-                    })
+                if (group.hasOwnProperty("layers") && group.layers.length > 0) {
+                    visibleLayersCount += layers.filter(l => group.layers.includes(l.id) && l.visible === true).length;
                     layersCount = layersCount + group.layers.length;
                 };
 
@@ -367,7 +358,7 @@ export const LayerGroup = ({
                                 {group.name}
                             </StyledMasterGroupName>
                             <StyledMasterGroupLayersCount>
-                                { 
+                                {
                                   totalVisibleGroupLayersCount +" / "+ totalGroupLayersCount
                                 }
                             </StyledMasterGroupLayersCount>
@@ -375,7 +366,7 @@ export const LayerGroup = ({
 
                     </StyledLeftContent>
                     <StyledRightContent>
-                        <StyledSelectButton> 
+                        <StyledSelectButton>
                             <StyledMotionIconWrapper
                                 initial="closed"
                                 animate={isOpen ? "open" : "closed"}
@@ -416,7 +407,7 @@ export const LayerGroup = ({
                     <StyledGroupName>{group.name}</StyledGroupName>
                 </StyledLefContent>
                     <StyledRightContent>
-                        <Switch 
+                        <Switch
                             isSelected={
                                 filteredLayers.length === visibleLayers.length ||
                                 !visibleLayers.length === 0 ||
