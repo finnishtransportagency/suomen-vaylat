@@ -35,6 +35,7 @@ const StyledTools = styled(motion.div)`
     flex-direction: row;
     background-color: ${props => props.color};
     flex-direction: column;
+    overflow: hidden;
 `;
 
 const StyledDrawingTool = styled.div`
@@ -188,6 +189,9 @@ export const DrawingTools = ({isOpen}) => {
                 initial="hidden"
                 animate={isOpen ? "visible" : "hidden"}
                 variants={listVariants}
+                transition={{
+                    duration: 0.3,
+                }}
             >
                 {drawinToolsData.map((tool, index) => {
                     return (

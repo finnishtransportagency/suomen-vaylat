@@ -2,7 +2,6 @@ import { useContext } from "react";
 import {
     faCompress,
     faExpand,
-    faListAlt,
     faLayerGroup,
     faPencilRuler,
     faSearch
@@ -16,7 +15,6 @@ import { useAppSelector } from '../../../state/hooks';
 import {
     setIsDrawingToolsOpen,
     setIsFullScreen,
-    setIsLegendOpen,
     setIsSearchOpen,
     setIsSideMenuOpen,
     setActiveTool
@@ -121,7 +119,6 @@ const MenuBar = () => {
         isFullScreen,
         isSideMenuOpen,
         isSearchOpen,
-        isLegendOpen,
         isDrawingToolsOpen,
         activeTool,
     } =  useAppSelector((state) => state.ui);
@@ -147,19 +144,17 @@ const MenuBar = () => {
         store.dispatch(setIsDrawingToolsOpen(!isDrawingToolsOpen))
     };
 
-    //const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-
 
     return (
         <>
             <ReactTooltip disable={isMobile} id='layerlist' place="right" type="dark" effect="float">
                 <span>{strings.tooltips.layerlistButton}</span>
             </ReactTooltip>
-            
+
             <ReactTooltip disable={isMobile} id='search' place="right" type="dark" effect="float">
                 <span>{strings.tooltips.searchButton}</span>
             </ReactTooltip>
-            
+
             <ReactTooltip disable={isMobile} id='legend' place="right" type="dark" effect="float">
                 <span>{strings.tooltips.legendButton}</span>
             </ReactTooltip>
@@ -167,11 +162,11 @@ const MenuBar = () => {
             <ReactTooltip disable={isMobile} id='drawingtools' place="right" type="dark" effect="float">
                 <span>{strings.tooltips.drawingtools.drawingtoolsButton}</span>
             </ReactTooltip>
-            
+
             <ReactTooltip disable={isMobile} id='fullscreen' place="right" type="dark" effect="float">
                 <span>{strings.tooltips.fullscreenButton}</span>
             </ReactTooltip>
-            
+
             <StyledMenuBar isSideMenuOpen={isSideMenuOpen}>
                 <StyledMenuBarButton
                     data-tip data-for='layerlist'
@@ -192,14 +187,6 @@ const MenuBar = () => {
                 >
                     <FontAwesomeIcon
                         icon={faSearch}
-                    />
-                </StyledMenuBarButton>
-                <StyledMenuBarButton
-                    data-tip data-for='legend'
-                    isActive={isLegendOpen}
-                    onClick={() => store.dispatch(setIsLegendOpen(!isLegendOpen))}>
-                    <FontAwesomeIcon
-                        icon={faListAlt}
                     />
                 </StyledMenuBarButton>
                 <StyledMapToolsContainer>

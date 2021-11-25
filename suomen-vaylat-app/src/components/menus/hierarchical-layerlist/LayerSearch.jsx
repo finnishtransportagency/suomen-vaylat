@@ -1,6 +1,6 @@
-import { useContext } from "react";
+import { useContext } from 'react';
 import { ReactReduxContext, useSelector } from 'react-redux';
-import { motion } from "framer-motion";
+import { motion } from 'framer-motion';
 import styled from 'styled-components';
 import { setSearchParams } from '../../../state/slices/uiSlice';
 import strings from '../../../translations';
@@ -14,7 +14,7 @@ import {
 
 const listVariants = {
   visible: {
-      height: "auto",
+      height: 'auto',
       opacity: 1
   },
   hidden: {
@@ -64,7 +64,7 @@ const StyledSearchInput = styled.input`
     border: none;
     &::-webkit-search-cancel-button {
         //position: relative;
-        //right: 10px;  
+        //right: 10px;
         //height: 40px;
         //width: 40px;
         //cursor: pointer;
@@ -97,7 +97,7 @@ const StyledMessage = styled.p`
 const LayerSearch = ({ layers }) => {
     const { store } = useContext(ReactReduxContext);
     const searchParams = useSelector(state => state.ui.searchParams);
-    const searchResults = searchParams.length > 2 ? layers.filter(layer => layer.name.toLowerCase().includes(searchParams.toLowerCase())) : "";
+    const searchResults = searchParams.length > 2 ? layers.filter(layer => layer.name.toLowerCase().includes(searchParams.toLowerCase())) : '';
     return (
         <StyledLayerSearchContainer>
             <StyledSearchInputContainer>
@@ -107,29 +107,32 @@ const LayerSearch = ({ layers }) => {
                     />
                 </StyledSearchInputContainerIcon>
                 <StyledSearchInput
-                    //type="search"
-                    placeholder={strings.layerlist.layerlistLabels.searchForLayers+"..."}
+                    //type='search'
+                    placeholder={strings.layerlist.layerlistLabels.searchForLayers+'...'}
                     value={searchParams}
                     onChange={e => store.dispatch(setSearchParams(e.target.value))}
                 />
             </StyledSearchInputContainer>
             <StyledSearchResults>
                     <motion.div
-                        //initial="hidden"
-                        animate={searchParams !== "" && searchParams.length > 2 ? "visible" : "hidden"}
-                        variants={listVariants}>
+                        animate={searchParams !== '' && searchParams.length > 2 ? 'visible' : 'hidden'}
+                        variants={listVariants}
+                        transition={{
+                            duration: 0.3,
+                        }}
+                        >
                         <StyledListSubtitle>
                             {strings.layerlist.layerlistLabels.searchResults}
                         </StyledListSubtitle>
                         <StyledLayerList>
-                            {searchResults.length > 0 && searchParams !== "" && searchResults.map(layer => {
-                                return <Layer key={"search_resutlt_"+layer.id} layer={layer}/>
+                            {searchResults.length > 0 && searchParams !== '' && searchResults.map(layer => {
+                                return <Layer key={'search_resutlt_'+layer.id} layer={layer}/>
                             })}
                         </StyledLayerList>
                     </motion.div>
                 <StyledMessage>
                     {
-                        searchParams !== "" && searchParams.length > 2 && searchResults.length === 0 ? strings.layerlist.layerlistLabels.noSearchResults :
+                        searchParams !== '' && searchParams.length > 2 && searchResults.length === 0 ? strings.layerlist.layerlistLabels.noSearchResults :
                         searchParams.length > 0 && searchParams.length < 3 && strings.layerlist.layerlistLabels.typeAtLeastThreeCharacters
                     }
                 </StyledMessage>

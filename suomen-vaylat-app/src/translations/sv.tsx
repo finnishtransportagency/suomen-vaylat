@@ -32,7 +32,8 @@ const sv = {
         showPageInfo: 'Visa sidinformation'
     },
     gfi: {
-        title: 'Objektuppgifter'
+        title: 'Objektuppgifter',
+        close: 'Stänga'
     },
     warning: 'Obs!',
     multipleLayersWarning: 'You are about to activate 10 or more layers and it might affect the performance of the website',
@@ -102,6 +103,12 @@ const sv = {
             clearSelectedBackgroundMaps: 'Clear selected background maps',
             noSearchResults: 'No search results',
             typeAtLeastThreeCharacters: 'Type at least 3 characters'
+        },
+        selectedLayers: {
+            layerVisible: 'lager synligt',
+            zoomInToShowLayer: 'Zooma in för att se kartlagret',
+            zoomOutToShowLayer: 'Zooma ut för att se kartlagret',
+            opacity: 'Genomskinlighet'
         }
     },
     themelayerlist: {
@@ -132,12 +139,6 @@ const sv = {
     },
     metadata: {
         title: '{0} -kartlager metadata',
-        tabs: {
-            abstract: 'Grundläggande information',
-            inspire: 'Inspire metadata',
-            jhs: 'ISO 19115 metadata',
-            quality: 'Data kvalität'
-        },
         heading: {
             abstractTextData: 'Sammanfattning text (data)',
             abstractTextService: 'Sammanfattning text (tjänst)',

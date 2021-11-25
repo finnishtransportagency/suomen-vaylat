@@ -160,7 +160,7 @@ const MapLayersDialog = () => {
         selectedLayers,
         allThemesWithLayers,
         allTags,
-        suomenVaylatLayers,
+        currentZoomLevel
     } = useAppSelector((state) => state.rpc);
 
     const { selectedMapLayersMenuTab } = useAppSelector((state) => state.ui);
@@ -185,10 +185,7 @@ const MapLayersDialog = () => {
             content: <LayerListTEMP
                         groups={allGroups}
                         layers={allLayers}
-                        themes={allThemesWithLayers}
                         tags={allTags}
-                        selectedLayers={selectedLayers}
-                        suomenVaylatLayers={suomenVaylatLayers}
                     />
         },
         {
@@ -207,7 +204,7 @@ const MapLayersDialog = () => {
             titleContent: "layerCounter",
             content: <SelectedLayers
                         selectedLayers={selectedLayers}
-                        suomenVaylatLayers={suomenVaylatLayers}
+                        currentZoomLevel={currentZoomLevel}
                     />
         }
     ];
@@ -218,8 +215,7 @@ const MapLayersDialog = () => {
                     animate={isSideMenuOpen ? "open" : "closed"}
                     variants={variants}
                     transition={{
-                        //type: "spring",
-                        //duration: 0.7,
+                        duration: 0.3,
                     }}
             >
                 <DialogHeader
@@ -256,6 +252,7 @@ const MapLayersDialog = () => {
                 <StyledSwiper
                     tabIndex={selectedMapLayersMenuTab}
                     className="map-layers-swiper"
+                    id={"map-swiper"}
                     //longSwipesRatio={1}
                     //shortSwipes={false}
                     speed={300}

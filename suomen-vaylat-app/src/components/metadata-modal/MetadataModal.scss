@@ -1,9 +1,11 @@
+@import '../../colors';
+
 div.ReactModalPortal {
     div.ReactModal__Overlay--after-open {
         z-index: 20;
         position: fixed;
         inset: 0px;
-        background-color: rgba(255, 255, 255, 0.75);
+        background-color: transparent !important;
         div.metadata-modal {
             position: absolute;
             transform: translate(-50%, -50%);
@@ -28,6 +30,11 @@ div.ReactModalPortal {
                 max-height: none;
                 max-width: none;
             }
+
+            div.metadata-content {
+                overflow-y: auto;
+            }
         }
+
     }
 }

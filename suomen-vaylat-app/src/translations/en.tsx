@@ -32,7 +32,8 @@ const en = {
         showPageInfo: 'Show page info'
     },
     gfi: {
-        title: 'Feature Data'
+        title: 'Feature Data',
+        close: 'Close'
     },
     warning: 'Warning!',
     multipleLayersWarning: 'You are about to activate 10 or more maplayers and it might affect the performance of the service',
@@ -102,6 +103,12 @@ const en = {
             clearSelectedBackgroundMaps: 'Clear selected background maps',
             noSearchResults: 'No search results',
             typeAtLeastThreeCharacters: 'Type at least 3 characters'
+        },
+        selectedLayers: {
+            layerVisible: 'Layer visible',
+            zoomInToShowLayer: 'Zoom in to see the map layer',
+            zoomOutToShowLayer: 'Zoom out to see the map layer',
+            opacity: 'Transparency'
         }
     },
     themelayerlist: {
@@ -131,12 +138,6 @@ const en = {
         }
     },data: {
         title: '{0} -map layer metadata',
-        tabs: {
-            abstract: 'Basic information',
-            inspire: 'Inspire metadata',
-            jhs: 'ISO 19115 metadata',
-            quality: 'Data quality'
-        },
         heading: {
             abstractTextData: 'Abstract text (data)',
             abstractTextService: 'Abstract text (service)',
