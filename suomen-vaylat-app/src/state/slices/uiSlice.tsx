@@ -4,7 +4,7 @@ const initialState = {
   isFullScreen: false,
   isSideMenuOpen: false,
   isSearchOpen: false,
-  searchParams: "",
+  searchParams: '',
   isInfoOpen: false,
   shareUrl: '',
   isDrawingToolsOpen: false,

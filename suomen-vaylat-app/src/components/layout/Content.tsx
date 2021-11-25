@@ -2,18 +2,17 @@ import styled from 'styled-components';
 import { useAppSelector } from '../../state/hooks';
 import AppInfoModal from '../app-info-modal/AppInfoModal';
 import MenuBar from '../layout/menu-bar/MenuBar';
-import { Legend } from "../legend/Legend";
 import MapLayersDialog from '../dialog/MapLayersDialog';
 import WarningDialog from '../dialog/WarningDialog';
 import PublishedMap from '../published-map/PublishedMap';
 import Search from '../search/Search';
 import ThemeMapsActionButton from '../action-button/ThemeMapsActionButton';
-import { ShareWebSitePopup } from "../share-web-site/ShareWebSitePopup";
+import { ShareWebSitePopup } from '../share-web-site/ShareWebSitePopup';
 import ZoomMenu from '../zoom-features/ZoomMenu';
-import strings from "../../translations";
-import {setSelectError} from "../../state/slices/rpcSlice";
-import {useContext} from "react";
-import {ReactReduxContext} from "react-redux";
+import strings from '../../translations';
+import {setSelectError} from '../../state/slices/rpcSlice';
+import {useContext} from 'react';
+import {ReactReduxContext} from 'react-redux';
 import MetadataModal from '../metadata-modal/MetadataModal';
 
 const StyledContent = styled.div`

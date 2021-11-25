@@ -134,12 +134,6 @@ const en = {
         }
     },data: {
         title: '{0} -map layer metadata',
-        tabs: {
-            abstract: 'Basic information',
-            inspire: 'Inspire metadata',
-            jhs: 'ISO 19115 metadata',
-            quality: 'Data quality'
-        },
         heading: {
             abstractTextData: 'Abstract text (data)',
             abstractTextService: 'Abstract text (service)',

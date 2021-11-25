@@ -135,12 +135,6 @@ const sv = {
     },
     metadata: {
         title: '{0} -kartlager metadata',
-        tabs: {
-            abstract: 'Grundläggande information',
-            inspire: 'Inspire metadata',
-            jhs: 'ISO 19115 metadata',
-            quality: 'Data kvalität'
-        },
         heading: {
             abstractTextData: 'Sammanfattning text (data)',
             abstractTextService: 'Sammanfattning text (tjänst)',

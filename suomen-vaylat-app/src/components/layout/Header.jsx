@@ -1,21 +1,21 @@
-import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useContext } from "react";
-import { ReactReduxContext } from "react-redux";
+import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useContext } from 'react';
+import { ReactReduxContext } from 'react-redux';
 import ReactTooltip from 'react-tooltip';
 import { isMobile } from '../../theme/theme';
 import styled from 'styled-components';
 import { useAppSelector } from '../../state/hooks';
-import { setIsInfoOpen, setIsMainScreen } from "../../state/slices/uiSlice";
-import { mapMoveRequest, setZoomTo, setMapLayerVisibility, setSelectedLayers, reArrangeSelectedMapLayers } from "../../state/slices/rpcSlice";
-import { resetThemeGroupsForMainScreen, removeDuplicates } from "../../utils/rpcUtil";
+import { setIsInfoOpen, setIsMainScreen } from '../../state/slices/uiSlice';
+import { mapMoveRequest, setZoomTo } from '../../state/slices/rpcSlice';
+import { resetThemeGroupsForMainScreen, removeDuplicates } from '../../utils/rpcUtil';
 import strings from '../../translations';
 import LanguageSelector from '../language-selector/LanguageSelector';
 import { WebSiteShareButton } from '../share-web-site/ShareLinkButtons';
 import { ReactComponent as VaylaLogoEn } from './images/vayla_sivussa_en_white.svg';
 import { ReactComponent as VaylaLogoFi } from './images/vayla_sivussa_fi_white.svg';
 import { ReactComponent as VaylaLogoSv } from './images/vayla_sivussa_sv_white.svg';
-import { updateLayers } from "../../utils/rpcUtil";
+import { updateLayers } from '../../utils/rpcUtil';
 
 const StyledHeaderContainer = styled.div`
     height: 80px;
@@ -112,10 +112,10 @@ export const Header = () => {
         }));
         store.dispatch(setIsMainScreen());
         handleSelectGroup(null, lastSelectedTheme);
-        const Ids = [793,1354, 1388, 1387]
+        const visibleMapLayerIds = [793,1354, 1388, 1387]
         const filteredLayers = [];
         if (allLayers) {
-            Ids.forEach((id) => {
+            visibleMapLayerIds.forEach((id) => {
                 allLayers.forEach((layer) => {
                     if(id === layer.id) {
                         filteredLayers.push(layer)
@@ -124,9 +124,9 @@ export const Header = () => {
             })
         };
         const combinedLayers = filteredLayers.concat(selectedLayers)
-        const uniqueArray = removeDuplicates(combinedLayers, "id");
-        uniqueArray.map((layer) => {
-            if(Ids.includes(layer.id)) {
+        const uniqueArray = removeDuplicates(combinedLayers, 'id');
+        uniqueArray.forEach(layer => {
+            if(visibleMapLayerIds.includes(layer.id)) {
                 channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, true]);
             } else {
                 channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, false]);
@@ -134,7 +134,6 @@ export const Header = () => {
         })
         store.dispatch(setZoomTo(0))
         updateLayers(store, channel)
-
     };
 
     return (
@@ -149,8 +148,8 @@ export const Header = () => {
                 {   lang.current === 'fi' ? <VaylaLogoFi /> :
                     lang.current === 'en' ? <VaylaLogoEn /> :
                     lang.current === 'sv' ? <VaylaLogoSv /> : <VaylaLogoFi />}
-                {/* <a href="https://www.vayla.fi" target="_blank" rel="noreferrer">
-                    <img alt="Väylä" src={vaylaLogo}/>
+                {/* <a href='https://www.vayla.fi' target='_blank' rel='noreferrer'>
+                    <img alt='Väylä' src={vaylaLogo}/>
                 </a> */}
             </StyledHeaderLogoContainer>
             <StyledRightCornerButtons>

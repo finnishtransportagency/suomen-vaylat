@@ -4,7 +4,7 @@ import { ReactReduxContext } from 'react-redux';
 import styled from 'styled-components';
 import { useAppSelector } from '../../state/hooks';
 import {
-    setActiveAnnouncements, setAllGroups, setAllTags, setAllThemesWithLayers, setChannel, setCurrentMapCenter, setCurrentState, setCurrentZoomLevel, setFeatures, setLegends, setLoading, setSuomenVaylatLayers, setTagsWithLayers, setZoomLevelsLayers, setZoomRange
+    setActiveAnnouncements, setAllGroups, setAllTags, setAllThemesWithLayers, setChannel, setCurrentMapCenter, setCurrentState, setCurrentZoomLevel, setFeatures, setLegends, setLoading, setTagsWithLayers, setZoomLevelsLayers, setZoomRange
 } from '../../state/slices/rpcSlice';
 import { updateLayers } from '../../utils/rpcUtil';
 import { AnnouncementsModal } from '../announcements-modal/AnnouncementsModal';
@@ -116,12 +116,6 @@ const PublishedMap = () => {
                 if (data.getZoomLevelsLayers) {
                     channel.getZoomLevelsLayers(function (data) {
                         store.dispatch(setZoomLevelsLayers(data));
-                    });
-                };
-
-                if (data.getSuomenVaylatLayers) {
-                    channel.getSuomenVaylatLayers(function (data) {
-                        store.dispatch(setSuomenVaylatLayers(data));
                     });
                 };
 

@@ -165,13 +165,11 @@ export const SelectedLayer = ({
 
 
     const handleMetadataSuccess = (data, layer, uuid) => {
-        console.log('handleMetadataSuccess', data, layer, uuid);
         if (data) {
             store.dispatch(setLayerMetadata({ data: data, layer: layer, uuid: uuid }));
         }
     };
     const handleMetadataError = () => {
-        console.log('handleMetadataError');
         store.dispatch(clearLayerMetadata());
     };
 
@@ -207,7 +205,6 @@ export const SelectedLayer = ({
                                 className="swiper-no-swiping"
                                 uuid={uuid}
                                 onClick={() => {
-                                    console.log('info icon onclick');
                                     handleLayerMetadata(layer, uuid);
                                 }}
                             >

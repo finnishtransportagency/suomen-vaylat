@@ -3,9 +3,9 @@ import { ReactReduxContext, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import { setLocale } from '../../state/slices/languageSlice';
 import { changeLayerStyle, reArrangeSelectedMapLayers, setLegends, setSelectedTheme, setLastSelectedTheme, setSelectedThemeIndex } from '../../state/slices/rpcSlice';
-import { setIsSideMenuOpen, setSelectedMapLayersMenuTab, setSelectedMapLayersMenuThemeIndex } from '../../state/slices/uiSlice';
+import { setIsSideMenuOpen, setSelectedMapLayersMenuTab } from '../../state/slices/uiSlice';
 import { Logger } from '../../utils/logger';
-import { updateLayers, selectGroup } from '../../utils/rpcUtil';
+import { updateLayers } from '../../utils/rpcUtil';
 
 const LOG = new Logger('HandleSharedWebSiteLink');
 

@@ -2,13 +2,11 @@ import styled from 'styled-components';
 import { motion } from "framer-motion";
 
 import DialogHeader from './DialogHeader';
-import { useContext, useState } from "react";
-import { ReactReduxContext, useSelector } from "react-redux";
-import { updateLayers } from "../../utils/rpcUtil";
-import strings from "../../translations";
-import { Button } from "react-bootstrap";
+import { useContext, useState } from 'react';
+import { ReactReduxContext, useSelector } from 'react-redux';
+import { updateLayers } from '../../utils/rpcUtil';
 
-const OSKARI_LOCALSTORAGE = "oskari";
+const OSKARI_LOCALSTORAGE = 'oskari';
 
 const addToLocalStorageArray = (name, value) => {
     // Get the existing data
@@ -27,19 +25,15 @@ const addToLocalStorageArray = (name, value) => {
 
 const variants = {
     open: {
-        pointerEvents: "auto",
-        opacity: 1,
+        pointerEvents: 'auto',
+        display: 'block'
     },
     closed: {
-        pointerEvents: "none",
-        opacity: 0,
+        pointerEvents: 'none',
+        display: 'none'
 
     },
 };
-
-const StyledFooter = styled.div`
-    justify-content: space-between;
-`;
 
 const StyledWarningDialog = styled(motion.div)`
     z-index:10;
@@ -71,13 +65,8 @@ const StyledContent = styled.div`
     border-radius: 4px;
 `;
 
-const StyledButton = styled(Button)`
-    border-radius: 30px;
-    background-color: #0064af;
-`;
-
 const WarningDialog = ({ title='', message='', filteredLayers=[], indeterminate=false, hideWarn, dialogOpen, isChecked }) => {
-    const [selected, setIsSelected] = useState(false);
+    const [selected] = useState(false);
     const { store } = useContext(ReactReduxContext);
     const channel = useSelector(state => state.rpc.channel);
 
