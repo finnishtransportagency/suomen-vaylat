@@ -14,6 +14,7 @@ import strings from "../../translations";
 import {setSelectError} from "../../state/slices/rpcSlice";
 import {useContext} from "react";
 import {ReactReduxContext} from "react-redux";
+import MetadataModal from '../metadata-modal/MetadataModal';
 
 const StyledContent = styled.div`
     z-index: 1;
@@ -43,15 +44,11 @@ const StyledContentGrid = styled.div`
 const Content = () => {
 
     const {
-        selectedLayers,
-        warnings,
-        zoomLevelsLayers,
-        currentZoomLevel
+        warnings
     } = useAppSelector((state) => state.rpc);
 
     const {
         isSearchOpen,
-        isLegendOpen,
         shareUrl
     } =  useAppSelector((state) => state.ui);
 
@@ -68,14 +65,9 @@ const Content = () => {
         <StyledContent>
             <ZoomMenu />
             <PublishedMap />
-            {/*{isSearchOpen && <Search />}*/}
-            {/*{isLegendOpen && <Legend selectedLayers={selectedLayers} />}*/}
-            {isLegendOpen && <Legend selectedLayers={selectedLayers}
-                                     zoomLevelsLayers={zoomLevelsLayers}
-                                     currentZoomLevel={currentZoomLevel}
-                            />}
             {isShareOpen && <ShareWebSitePopup />}
             <AppInfoModal />
+            <MetadataModal />
             <StyledContentGrid>
                 <MenuBar />
                 <MapLayersDialog />
