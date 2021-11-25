@@ -4,9 +4,8 @@ import { ReactReduxContext } from 'react-redux';
 import styled from 'styled-components';
 import { useAppSelector } from '../../state/hooks';
 import {
-    setActiveAnnouncements, setAllGroups, setAllTags, setAllThemesWithLayers, setChannel, setCurrentMapCenter, setCurrentState, setCurrentZoomLevel, setFeatures, setLegends, setLoading, setSuomenVaylatLayers, setTagsWithLayers, setZoomLevelsLayers, setZoomRange, setGFILocations 
+    setActiveAnnouncements, setAllGroups, setAllTags, setAllThemesWithLayers, setChannel, setCurrentMapCenter, setCurrentState, setCurrentZoomLevel, setFeatures, setLegends, setLoading, setSuomenVaylatLayers, setTagsWithLayers, setZoomLevelsLayers, setZoomRange, setGFILocations
 } from '../../state/slices/rpcSlice';
-import { setIsGFIOpen } from '../../state/slices/uiSlice';
 import { updateLayers } from '../../utils/rpcUtil';
 import { AnnouncementsModal } from '../announcements-modal/AnnouncementsModal';
 import CenterSpinner from '../center-spinner/CenterSpinner';
@@ -153,7 +152,6 @@ const PublishedMap = () => {
                 if (data.DataForMapLocationEvent) {
                     channel.handleEvent('DataForMapLocationEvent', (data) => {
                         store.dispatch(setGFILocations(data));
-                        store.dispatch(setIsGFIOpen(true));
                     });
                 }
 
