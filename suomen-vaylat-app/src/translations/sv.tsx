@@ -12,6 +12,7 @@ const sv = {
         searchButton: 'Haku',
         legendButton: 'Legenda',
         fullscreenButton: 'Koko näyttö',
+        legendHeader: 'Synlig på denna zoomnivå',
         myLocButton: 'Oma sijainti',
         zoomExpand: 'Laajenna',
         zoomIn: 'Lähennä',

@@ -11,9 +11,11 @@ import { ShareWebSitePopup } from '../share-web-site/ShareWebSitePopup';
 import ZoomMenu from '../zoom-features/ZoomMenu';
 import strings from '../../translations';
 import {setSelectError} from '../../state/slices/rpcSlice';
-import {useContext} from 'react';
+import React, {useContext} from 'react';
 import {ReactReduxContext} from 'react-redux';
 import MetadataModal from '../metadata-modal/MetadataModal';
+import {isMobile} from "../../theme/theme";
+import ReactTooltip from "react-tooltip";
 
 const StyledContent = styled.div`
     z-index: 1;
