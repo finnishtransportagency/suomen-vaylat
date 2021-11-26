@@ -25,6 +25,7 @@ const StyledHeader = styled.div`
     color: ${props => props.theme.colors.mainWhite};
     background-color: ${props => props.theme.colors.mainColor1};
     padding: .5rem;
+    pointer-events:auto;
     border-radius: 4px 4px 0px 0px;
 `;
 
@@ -62,7 +63,7 @@ export const Legend = ({selectedLayers, zoomLevelsLayers, currentZoomLevel}) => 
 
     return(
         <StyledLegendContainer key={legends}>
-            <StyledHeader>
+            <StyledHeader data-tip data-for='legend-header'>
                 {strings.legend.title}
             </StyledHeader>
             <StyledGroupsContainer id='legend-main-container'>
