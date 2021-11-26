@@ -97,12 +97,6 @@ const PublishedMap = () => {
 
                 updateLayers(store, channel);
 
-                if (data.getTags) {
-                    channel.getTags(function (data) {
-                        store.dispatch(setAllTags(data));
-                    });
-                };
-
                 if (data.getCurrentState) {
                     channel.getCurrentState(function (data) {
                         store.dispatch(setCurrentState(data));
