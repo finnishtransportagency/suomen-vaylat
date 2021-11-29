@@ -131,6 +131,14 @@ const StyledMasterGroupLayersCount = styled.p`
     color: rgba(255, 255, 255, 0.8);
 `;
 
+const StyledSubGroupLayersCount = styled.p`
+    margin: 0;
+    padding: 0px;
+    font-size: 12px;
+    font-weight: 500;
+    color: ${props => props.theme.colors.mainColor2};
+`;
+
 const StyledLefContent = styled.div`
     display: flex;
     align-items: center;
@@ -280,24 +288,22 @@ export const LayerGroup = ({
 
         };
 
-        if (group.parentId === -1) {
-            var layersCount = 0;
-            var visibleLayersCount = 0;
-            const layersCounter = (group) => {
-                if (group.hasOwnProperty("layers") && group.layers.length > 0) {
-                    visibleLayersCount += layers.filter(l => group.layers.includes(l.id) && l.visible === true).length;
-                    layersCount = layersCount + group.layers.length;
-                };
-
-                var hasGroups = group.hasOwnProperty("groups") && group.groups.length > 0;
-                hasGroups && group.groups.forEach(group => {
-                    layersCounter(group);
-                });
-                setTotalGroupLayersCoun(layersCount);
-                setTotalVisibleGroupLayersCount(visibleLayersCount);
+        var layersCount = 0;
+        var visibleLayersCount = 0;
+        const layersCounter = (group) => {
+            if (group.hasOwnProperty("layers") && group.layers.length > 0) {
+                visibleLayersCount += layers.filter(l => group.layers.includes(l.id) && l.visible === true).length;
+                layersCount = layersCount + group.layers.length;
             };
-            layersCounter(group);
+
+            var hasGroups = group.hasOwnProperty("groups") && group.groups.length > 0;
+            hasGroups && group.groups.forEach(group => {
+                layersCounter(group);
+            });
+            setTotalGroupLayersCoun(layersCount);
+            setTotalVisibleGroupLayersCount(visibleLayersCount);
         };
+        layersCounter(group);
     },[group, layers]);
 
 
@@ -404,7 +410,14 @@ export const LayerGroup = ({
                             />
                         </StyledMotionIconWrapper>
                     </StyledSelectButton>
-                    <StyledGroupName>{group.name}</StyledGroupName>
+                    <div>
+                        <StyledGroupName>{group.name}</StyledGroupName>
+                        <StyledSubGroupLayersCount>
+                            {
+                                totalVisibleGroupLayersCount +" / "+ totalGroupLayersCount
+                            }
+                        </StyledSubGroupLayersCount>
+                    </div>
                 </StyledLefContent>
                     <StyledRightContent>
                         <Switch
