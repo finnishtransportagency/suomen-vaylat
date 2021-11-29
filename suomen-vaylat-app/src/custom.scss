@@ -54,3 +54,9 @@
 .swiper-slide-active::-webkit-scrollbar-thumb:hover {
     background: $mainColor2;
 }
+
+#legend-main-container,
+.swiper-slide-active {
+    scrollbar-color: $mainColor1 #ffffff; /* thumb and track color */
+    scrollbar-width: thin;
+}
