@@ -9,6 +9,7 @@ import Layer from '../hierarchical-layerlist/Layer';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faSearch,
+    faTimesCircle
 } from '@fortawesome/free-solid-svg-icons';
 
 
@@ -58,7 +59,6 @@ const StyledSearchInputContainerIcon = styled.div`
 
 const StyledSearchInput = styled.input`
     font-size: 16px;
-    padding-left: 10px;
     height: 100%;
    // border-radius: 5px;
     border: none;
@@ -101,9 +101,11 @@ const LayerSearch = ({ layers }) => {
     return (
         <StyledLayerSearchContainer>
             <StyledSearchInputContainer>
-                <StyledSearchInputContainerIcon>
+                <StyledSearchInputContainerIcon
+                    {...(searchParams !== '' && { onClick: () => store.dispatch(setSearchParams(''))})}
+                >
                     <FontAwesomeIcon
-                        icon={faSearch}
+                        icon={searchParams !== '' ? faTimesCircle : faSearch}
                     />
                 </StyledSearchInputContainerIcon>
                 <StyledSearchInput
