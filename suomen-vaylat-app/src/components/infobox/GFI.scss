@@ -8,10 +8,9 @@ div.popupContent {
     top: 0px;
     max-height: 250px;
     overflow: scroll;
-    padding-top: 5px;
+    padding-bottom: 0 !important;
 
     div.contentWrapper-infobox {
-        margin-bottom: 10px;
         margin-right: 5px;
     }
 
@@ -35,6 +34,7 @@ div.popupContent {
     }
 
     table {
+        border-top: 1px solid #ddd;
         padding-right: 0px !important;
         width: 100%;
     }
@@ -79,9 +79,9 @@ div.react-tabs {
     }
 
     ul {
-        white-space: nowrap;
         overflow-x: auto;
         overflow-y: hidden;
+        margin: 0px;
     }
 
     li {
