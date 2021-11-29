@@ -8,15 +8,18 @@ const en = {
     },
     title: 'Suomen Väylät EN',
     tooltips: {
+        layerlist: {
+            opacity: 'Opacity',
+            filter: 'Filter'
+        },
+        searchButton: 'Address search',
         layerlistButton: 'Layerlist',
-        searchButton: 'Search',
         legendButton: 'Legend',
         fullscreenButton: 'Full screen',
         myLocButton: 'My location',
         zoomExpand: 'Expand',
         zoomIn: 'Zoom in',
         zoomOut: 'Zoom out',
-        opacity: 'Opacity',
         drawingtools: {
             drawingtoolsButton: 'Drawing tools',
             circle: 'Circle',
