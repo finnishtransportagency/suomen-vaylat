@@ -66,12 +66,12 @@ export const Legend = ({selectedLayers, zoomLevelsLayers, currentZoomLevel}) => 
                 {strings.legend.title}
             </StyledHeader>
             <StyledGroupsContainer id='legend-main-container'>
-                {currentLayersInfoLayers.map((zoomLevelLayer, index) => {
-                    const legend = legends.find(layer => layer.layerId === zoomLevelLayer.id);
-                    return legend && <LegendGroup
+                {legends.map((legend, index) => {
+                    const zoomLevelLayer = currentLayersInfoLayers.find((layer) => layer.id === legend.layerId);
+                    return zoomLevelLayer && <LegendGroup
                         key={currentZoomLevel !== null ?
-                            zoomLevelLayer.id+'_'+currentZoomLevel :
-                            zoomLevelLayer.id+'_'+currentZoomLevel
+                            legend.layerId+'_'+currentZoomLevel :
+                            legend.layerId+'_'+currentZoomLevel
                         }
                         legend={legend}
                         zoomLevelLayer={zoomLevelLayer}
