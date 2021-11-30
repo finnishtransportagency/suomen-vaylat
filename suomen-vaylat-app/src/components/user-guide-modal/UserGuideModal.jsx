@@ -8,7 +8,6 @@ import styled from 'styled-components';
 import { useAppSelector } from '../../state/hooks';
 import { setIsUserGuideOpen } from '../../state/slices/uiSlice';
 import strings from '../../translations';
-import UserGuideAccordion from "./UserGuideAccordion";
 import {Accordion} from "react-bootstrap";
 import UserGuideTabs from "./UserGuideTabs";
 // import {StyledContainer} from "../search/CommonComponents";
