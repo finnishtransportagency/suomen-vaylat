@@ -54,3 +54,22 @@
 .swiper-slide-active::-webkit-scrollbar-thumb:hover {
     background: $mainColor2;
 }
+
+.user-guide-header {
+    cursor: pointer;
+}
+
+//.user-guide-item {
+//    border-bottom: #00b0cc;
+//    border-style: solid;
+//}
+
+.user-guide-tabs {
+    transition: all 0.6s ease-out;
+    min-height: 264px;
+}
+
+.user-guide-body {
+
+    //border: 1px #00b0cc;
+}

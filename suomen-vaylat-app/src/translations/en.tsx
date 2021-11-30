@@ -29,7 +29,8 @@ const en = {
         share: 'Share this page',
         shareTheme: 'Share this theme',
         metadata: 'Show maplayer metadata',
-        showPageInfo: 'Show page info'
+        showPageInfo: 'Show page info',
+        showUserGuide: 'Show user guide',
     },
     gfi: {
         title: 'Feature Data',

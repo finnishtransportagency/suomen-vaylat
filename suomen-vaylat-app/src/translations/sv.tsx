@@ -29,7 +29,8 @@ const sv = {
         share: 'Dela denna sida',
         shareTheme: 'Dela detta tema',
         metadata: 'Visa kartlagers metadata',
-        showPageInfo: 'Visa sidinformation'
+        showPageInfo: 'Visa sidinformation',
+        showUserGuide: 'visa bruksanvisningen',
     },
     gfi: {
         title: 'Objektuppgifter',
