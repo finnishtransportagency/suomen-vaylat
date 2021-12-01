@@ -97,16 +97,11 @@ export const UserGuideModal = () => {
     const { store } = useContext(ReactReduxContext);
     const [modalIndex, setModalIndex] = useState(0);
     const isUserGuideOpen = useAppSelector((state) => state.ui.isUserGuideOpen);
-    // const content = <div dangerouslySetInnerHTML={{ __html: headingText + '<br><br>' + mainText }}></div>
     const title = strings.appGuide.title
 
     function closeModal() {
         store.dispatch(setIsUserGuideOpen(false));
     };
-
-    const upperBarContent = <div dangerouslySetInnerHTML={{ __html: '<StyledIcon src={suomenVaylatTextIcon} />' + strings.appGuide.modalContent.upperBar.content.startingView + '<br><br>' +
-            strings.appGuide.modalContent.upperBar.content.sharePage + '<br><br>' + strings.appGuide.modalContent.upperBar.content.infoButton + '<br><br>'
-    + strings.appGuide.modalContent.upperBar.content.languageSelection }}></div>
 
     const modalContent = [
         {

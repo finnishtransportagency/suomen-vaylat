@@ -1,11 +1,9 @@
-import {useRef, useContext, useEffect, useState} from 'react';
+import {useRef, useContext, useState} from 'react';
 import styled from 'styled-components';
-import { useAppSelector } from '../../state/hooks';
 import { ReactReduxContext } from 'react-redux';
-import { setIsSideMenuOpen, setSelectedMapLayersMenuTab } from '../../state/slices/uiSlice';
 import { motion } from "framer-motion";
 import { Swiper, SwiperSlide } from 'swiper/react/swiper-react.js';
-
+import '../../_colors.scss';
 // Styles must use direct files imports
 import 'swiper/swiper.scss'; // core Swiper
 import 'swiper/modules/navigation/navigation.scss'; // Navigation module
@@ -69,6 +67,10 @@ const StyledMapLayersDialog = styled(motion.div)`
         width: 100%;
         height: 100%;
     };
+`;
+
+const StyledTabSubTitle = styled.div`
+    margin:10px;  
 `;
 
 const StyledTabs = styled.div`
@@ -183,6 +185,9 @@ const UserGuideTabs = () => {
                         duration: 0.3,
                     }}
             >
+                <StyledTabSubTitle>
+                    {strings.appGuide.modalContent.mapLevelMenu.subTitle}
+                </StyledTabSubTitle>
                 <StyledTabs
                     tabIndex={tabIndex}
                 >

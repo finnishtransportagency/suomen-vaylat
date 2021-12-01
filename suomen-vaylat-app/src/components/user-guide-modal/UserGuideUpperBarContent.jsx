@@ -10,21 +10,26 @@ const StyledIcon = styled.img`
     height: 28px;
 `;
 
-// const upperBarContent = <div dangerouslySetInnerHTML={{ __html: '<StyledIcon src={suomenVaylatTextIcon} />' + strings.appGuide.modalContent.upperBar.content.startingView + '<br><br>' +
-//         strings.appGuide.modalContent.upperBar.content.sharePage + '<br><br>' + strings.appGuide.modalContent.upperBar.content.infoButton + '<br><br>'
-//         + strings.appGuide.modalContent.upperBar.content.languageSelection }}></div>
+const StyledSubTitle = styled.em`
+    margin-left: 5px;
+    color: ${props => props.theme.colors.mainColor1}; 
+`;
 
 const UserGuideUpperBarContent = () => {
     return (
         <div>
             <StyledIcon src={suomenVaylatTextIcon} />
-            <p>{strings.appGuide.modalContent.upperBar.content.startingView}</p>
+            <StyledSubTitle>{strings.appGuide.modalContent.upperBar.startingView.title}</StyledSubTitle>
+            <p>{strings.appGuide.modalContent.upperBar.startingView.text}</p>
             <StyledIcon src={shareIcon} />
-            <p>{strings.appGuide.modalContent.upperBar.content.sharePage}</p>
+            <StyledSubTitle>{strings.appGuide.modalContent.upperBar.sharePage.title}</StyledSubTitle>
+            <p>{strings.appGuide.modalContent.upperBar.sharePage.text}</p>
             <StyledIcon src={infoIcon} />
-            <p>{strings.appGuide.modalContent.upperBar.content.infoButton}</p>
+            <StyledSubTitle>{strings.appGuide.modalContent.upperBar.infoButton.title}</StyledSubTitle>
+            <p>{strings.appGuide.modalContent.upperBar.infoButton.text}</p>
             <StyledIcon src={languageSelectionIcon} />
-            <p>{strings.appGuide.modalContent.upperBar.content.languageSelection}</p>
+            <StyledSubTitle>{strings.appGuide.modalContent.upperBar.languageSelection.title}</StyledSubTitle>
+            <p>{strings.appGuide.modalContent.upperBar.languageSelection.text}</p>
         </div>
     )
 }
