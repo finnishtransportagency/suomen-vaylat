@@ -47,21 +47,23 @@ const fi = {
         modalContent: {
             upperBar: {
                 title: "Yläpalkin toiminnot",
-                startingView: {
-                    title: "Palaa aloitusnäkymään",
-                    text: "Aloitusnäkymä on valmiiksi määritelty näkymä, jossa näytetään koko Suomen alueelta vesiväylät, rataverkko ja tieverkko."
-                },
-                sharePage: {
-                    title: "Jaa sivu",
-                    text: "Kartan nykyisen näkymän voi jakaa linkillä suoraan valittuun palveluun tai kopioimalla linkin. Näkymässä säilytetään kohdistus, zoom-taso sekä valitut aineistot ja valittu teema."
-                },
-                infoButton: {
-                    title: "Info",
-                    text: "Info-napin takaa löytyy tietoa sovelluksesta, käyttöohjeet sekä yhteystiedot esimerkiksi palautteen lähettämistä varten."
-                },
-                languageSelection: {
-                    title: "Kieli",
-                    text: "Karttapalvelun kieleksi voi valita suomen, ruotsin tai englannin."
+                content: {
+                    0: {
+                        title: "Palaa aloitusnäkymään",
+                        text: "Aloitusnäkymä on valmiiksi määritelty näkymä, jossa näytetään koko Suomen alueelta vesiväylät, rataverkko ja tieverkko."
+                    },
+                    1: {
+                        title: "Jaa sivu",
+                        text: "Kartan nykyisen näkymän voi jakaa linkillä suoraan valittuun palveluun tai kopioimalla linkin. Näkymässä säilytetään kohdistus, zoom-taso sekä valitut aineistot ja valittu teema."
+                    },
+                    2: {
+                        title: "Info",
+                        text: "Info-napin takaa löytyy tietoa sovelluksesta, käyttöohjeet sekä yhteystiedot esimerkiksi palautteen lähettämistä varten."
+                    },
+                    3: {
+                        title: "Kieli",
+                        text: "Karttapalvelun kieleksi voi valita suomen, ruotsin tai englannin."
+                    }
                 }
             },
             mapLevelMenu: {
