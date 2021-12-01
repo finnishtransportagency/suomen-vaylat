@@ -45,21 +45,23 @@ const en = {
         modalContent: {
             upperBar: {
                 title: "Top Bar Functions",
-                startingView: {
-                    title: "Return to start view",
-                    text: "The start view is a predefined view that shows waterways, the railway network and the road net-work throughout Finland."
-                },
-                sharePage: {
-                    title: "Share page",
-                    text: "You can share the current view of the map with a link directly to the selected service or by copying the link. The view retains the focus, zoom level, and selected materials and theme."
-                },
-                infoButton: {
-                    title: "Info",
-                    text: "Behind the info button you will find information about the application, operating instructions and contact information for sending feedback, for example."
-                },
-                languageSelection: {
-                    title: "Language",
-                    text: "You can select Finnish, Swedish or English as the language of the map service."
+                content: {
+                    0: {
+                        title: "Return to start view",
+                        text: "The start view is a predefined view that shows waterways, the railway network and the road net-work throughout Finland."
+                    },
+                    1: {
+                        title: "Share page",
+                        text: "You can share the current view of the map with a link directly to the selected service or by copying the link. The view retains the focus, zoom level, and selected materials and theme."
+                    },
+                    2: {
+                        title: "Info",
+                        text: "Behind the info button you will find information about the application, operating instructions and contact information for sending feedback, for example."
+                    },
+                    3: {
+                        title: "Language",
+                        text: "You can select Finnish, Swedish or English as the language of the map service."
+                    }
                 }
             },
             mapLevelMenu: {
