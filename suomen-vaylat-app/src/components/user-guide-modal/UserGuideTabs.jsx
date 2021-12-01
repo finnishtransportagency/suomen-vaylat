@@ -1,6 +1,5 @@
-import {useRef, useContext, useState} from 'react';
+import {useState} from 'react';
 import styled from 'styled-components';
-import { ReactReduxContext } from 'react-redux';
 import { motion } from "framer-motion";
 import { Swiper, SwiperSlide } from 'swiper/react/swiper-react.js';
 import '../../_colors.scss';
@@ -117,22 +116,6 @@ const StyledTab = styled.div`
     transition: transform 0.2s ease-out;
 `;
 
-const StyledLayerCount = styled.div`
-    position: absolute;
-    top: -14px;
-    right: -4px;
-    width: 25px;
-    height: 18px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 5px;
-    color: ${props => props.theme.colors.mainWhite};
-    background-color: ${props => props.theme.colors.secondaryColor7};
-    font-size: 11px;
-    font-weight: 600;
-`;
-
 const StyledSwiper = styled(Swiper)`
   .swiper-slide {
     background-color: ${props => props.theme.colors.mainWhite};
@@ -149,10 +132,7 @@ const StyledSwiper = styled(Swiper)`
 
 const UserGuideTabs = () => {
 
-    const { store } = useContext(ReactReduxContext);
     const [tabIndex, setTabIndex] = useState(0);
-
-    const inputEl = useRef(null);
 
     const tabsContent = [
         {
@@ -179,7 +159,6 @@ const UserGuideTabs = () => {
     return (
             <StyledMapLayersDialog
                     initial="open"
-                    // animate={isSideMenuOpen ? "open" : "closed"}
                     variants={variants}
                     transition={{
                         duration: 0.3,
@@ -200,8 +179,6 @@ const UserGuideTabs = () => {
                                     color={tab.titleColor}
                                     onClick={() => {
                                         setTabIndex(index);
-                                        //setTabIndex(index);
-                                       // inputEl.current.swiper.slideTo(index);
                                     }}
                                 >
                                     {tab.title}
@@ -215,24 +192,11 @@ const UserGuideTabs = () => {
                     tabIndex={tabIndex}
                     className="map-layers-swiper"
                     id={"map-swiper"}
-                    //longSwipesRatio={1}
-                    //shortSwipes={false}
                     speed={300}
-                    //effect={'coverflow'}
-                    // coverflowEffect={{
-                    //     "rotate": 20,
-                    //     "stretch": 0,
-                    //     "depth": 10,
-                    //     "modifier": 1,
-                    //     "slideShadows": false
-                    // }}
                     onSlideChange={e => {
                         setTabIndex(e.activeIndex);
-                        //setTabIndex(e.activeIndex);
-                        //inputEl.current.swiper.slideTo(e.activeIndex);
                     }}
                     allowTouchMove={false} // Disable swiping
-                    // ref={inputEl}
                 >
                     <SwiperSlide
                         id={"tab_content_" + tabIndex}
