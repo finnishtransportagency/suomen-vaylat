@@ -47,15 +47,26 @@ const fi = {
         modalContent: {
             upperBar: {
                 title: "Yläpalkin toiminnot",
-                content: {
-                    startingView: "Palaa aloitusnäkymään Aloitusnäkymä on valmiiksi määritelty näkymä, jossa näytetään koko Suomen alueelta vesiväylät, rataverkko ja tieverkko.",
-                    sharePage: "Jaa sivu Kartan nykyisen näkymän voi jakaa linkillä suoraan valittuun palveluun tai kopioimalla linkin. Näkymässä säilytetään kohdistus, zoom-taso sekä valitut aineistot ja valittu teema.",
-                    infoButton: "Info-napin takaa löytyy tietoa sovelluksesta, käyttöohjeet sekä yhteystiedot esimerkiksi palautteen lähettämistä varten.",
-                    languageSelection: "Kieli Karttapalvelun kieleksi voi valita suomen, ruotsin tai englannin."
+                startingView: {
+                    title: "Palaa aloitusnäkymään",
+                    text: "Aloitusnäkymä on valmiiksi määritelty näkymä, jossa näytetään koko Suomen alueelta vesiväylät, rataverkko ja tieverkko."
+                },
+                sharePage: {
+                    title: "Jaa sivu",
+                    text: "Kartan nykyisen näkymän voi jakaa linkillä suoraan valittuun palveluun tai kopioimalla linkin. Näkymässä säilytetään kohdistus, zoom-taso sekä valitut aineistot ja valittu teema."
+                },
+                infoButton: {
+                    title: "Info",
+                    text: "Info-napin takaa löytyy tietoa sovelluksesta, käyttöohjeet sekä yhteystiedot esimerkiksi palautteen lähettämistä varten."
+                },
+                languageSelection: {
+                    title: "Kieli",
+                    text: "Karttapalvelun kieleksi voi valita suomen, ruotsin tai englannin."
                 }
             },
             mapLevelMenu: {
                 title: "Karttatasovalikko",
+                subTitle: "Karttatasovalikko avautuu vasemmasta yläreunasta. Valittavissa on 3 välilehteä",
                 tabsContent: {
                     materList: "Aineistolistausta voi suodattaa aiheittain suodatin-painikkeen takaa. Karttatasoa voi hakea nimellä kirjoittamalla vähintään 3 kirjainta haku-kenttään.",
                     themeLayerSelection: "Teeman valinta asettaa näkyviin teemaan määritellyt karttatasot\n" +
