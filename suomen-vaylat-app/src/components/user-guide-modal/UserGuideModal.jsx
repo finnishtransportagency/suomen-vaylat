@@ -1,6 +1,6 @@
 import {useContext, useState} from 'react';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
-import { suomenVaylatTextIcon } from "./images/suomen_vaylat_text.jpg"
+import suomenVaylatTextIcon from "./images/suomen_vaylat_text.jpg"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Modal from 'react-modal';
 import { ReactReduxContext } from 'react-redux';
@@ -10,6 +10,11 @@ import { setIsUserGuideOpen } from '../../state/slices/uiSlice';
 import strings from '../../translations';
 import {Accordion} from "react-bootstrap";
 import UserGuideTabs from "./UserGuideTabs";
+import UserGuideUpperBarContent from "./UserGuideUpperBarContent";
+import searchIcon from "./images/haku_ikoni.jpg"
+import drawingToolsIcon from "./images/piirtotyökalut.jpg"
+import fullScreenIcon from "./images/laajenna_ikoni.jpg"
+import zoomBarIcon from "./images/zoom-tasot.jpg"
 // import {StyledContainer} from "../search/CommonComponents";
 
 const customStyles = {
@@ -61,9 +66,8 @@ const StyledModalTitle = styled.p`
 `;
 
 const StyledIcon = styled.img`
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
+    // width: 100%;
+    height: 35px;
 `;
 
 // const StyledIcon = styled.img`
@@ -100,14 +104,14 @@ export const UserGuideModal = () => {
         store.dispatch(setIsUserGuideOpen(false));
     };
 
-    const upperBarContent = <div dangerouslySetInnerHTML={{ __html: strings.appGuide.modalContent.upperBar.content.startingView + '<br><br>' +
+    const upperBarContent = <div dangerouslySetInnerHTML={{ __html: '<StyledIcon src={suomenVaylatTextIcon} />' + strings.appGuide.modalContent.upperBar.content.startingView + '<br><br>' +
             strings.appGuide.modalContent.upperBar.content.sharePage + '<br><br>' + strings.appGuide.modalContent.upperBar.content.infoButton + '<br><br>'
     + strings.appGuide.modalContent.upperBar.content.languageSelection }}></div>
 
     const modalContent = [
         {
             title: strings.appGuide.modalContent.upperBar.title,
-            content: upperBarContent
+            content: <UserGuideUpperBarContent />
         },
         {
             title: strings.appGuide.modalContent.mapLevelMenu.title,
@@ -115,19 +119,31 @@ export const UserGuideModal = () => {
         },
         {
             title: strings.appGuide.modalContent.search.title,
-            content: <p>{strings.appGuide.modalContent.search.content}</p>
+            content: <div>
+                <StyledIcon src={searchIcon} />
+                <p>{strings.appGuide.modalContent.search.content}</p>
+            </div>
         },
         {
             title: strings.appGuide.modalContent.measureTool.title,
-            content: <p>{strings.appGuide.modalContent.measureTool.content}</p>
+            content: <div>
+                <StyledIcon src={drawingToolsIcon} />
+                <p>{strings.appGuide.modalContent.measureTool.content}</p>
+            </div>
         },
         {
             title: strings.appGuide.modalContent.setFullScreen.title,
-            content: <p>{strings.appGuide.modalContent.setFullScreen.content}</p>
+            content: <div>
+                <StyledIcon src={fullScreenIcon} />
+                <p>{strings.appGuide.modalContent.setFullScreen.content}</p>
+            </div>
         },
         {
             title: strings.appGuide.modalContent.zoomBar.title,
-            content: <p>{strings.appGuide.modalContent.zoomBar.content}</p>
+            content: <div>
+                <StyledIcon src={zoomBarIcon} />
+                <p>{strings.appGuide.modalContent.zoomBar.content}</p>
+            </div>
         }
     ];
 
@@ -140,7 +156,6 @@ export const UserGuideModal = () => {
             >
                 <StyledHeader className='modal-header'>
                     <StyledModalTitle>{title}</StyledModalTitle>
-                    <StyledIcon src={suomenVaylatTextIcon} />
                     <StyledModalCloseIcon
                         onClick={() => {
                             closeModal();
