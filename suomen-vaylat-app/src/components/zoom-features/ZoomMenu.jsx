@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
 import ReactTooltip from "react-tooltip";
 import { isMobile } from '../../theme/theme';
 import styled from 'styled-components';
@@ -6,24 +7,20 @@ import { useAppSelector } from '../../state/hooks';
 import strings from '../../translations';
 import ZoomBar from './ZoomBar';
 
-const StyledZoomMenu = styled.div`
+import { Legend } from '../legend/Legend';
+
+const StyledZoomMenu = styled(motion.div)`
     z-index: 2;
-    position: fixed;
-    right: 0;
-    bottom: 0;
-    width: 100%;
-    max-width: 250px;
-    height: 100vh;
+    position: absolute;
+    right: 16px;
+    bottom: 16px;
     display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    flex-direction: column;
     pointer-events: none;
-    padding: 50px;
 `;
 
 const ZoomMenu = () => {
     const [hoveringIndex, setHoveringIndex] = useState(null);
+    const [isExpanded, setIsExpanded] = useState(false);
 
     const rpc = useAppSelector((state) => state.rpc);
 
@@ -34,10 +31,21 @@ const ZoomMenu = () => {
             </ReactTooltip>
 
             <StyledZoomMenu>
+                <Legend
+                    currentZoomLevel={rpc.currentZoomLevel}
+                    selectedLayers={rpc.selectedLayers}
+                    zoomLevelsLayers={rpc.zoomLevelsLayers}
+                    hoveringIndex={hoveringIndex}
+                    isExpanded={isExpanded}
+                    setIsExpanded={setIsExpanded}
+                />
+
                 <ZoomBar
                     setHoveringIndex={setHoveringIndex}
                     zoomLevelsLayers={rpc.zoomLevelsLayers}
                     hoveringIndex={hoveringIndex}
+                    isExpanded={isExpanded}
+                    setIsExpanded={setIsExpanded}
                     currentZoomLevel={rpc.currentZoomLevel}
                     allLayers={rpc.allLayers}
                     selectedLayers={rpc.selectedLayers}

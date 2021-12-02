@@ -135,6 +135,7 @@ const LayerListTEMP = ({
           variants={listVariants}
           transition={{
             duration: 0.3,
+            type: "tween"
         }}
         >
           <StyledListSubtitle>
