@@ -107,6 +107,7 @@ const WarningDialog = ({ title='', message='', filteredLayers=[], indeterminate=
                     variants={variants}
                     transition={{
                         duration: 0.3,
+                        type: "tween"
                     }}
             >
                 <DialogHeader
