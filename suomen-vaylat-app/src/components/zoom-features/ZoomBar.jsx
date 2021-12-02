@@ -118,9 +118,13 @@ const StyledMenuBarButton = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+    transition: all 0.1s ease-out;
     background-color: ${props => props.isActive ? props.theme.colors.mainColor2 : props.theme.colors.mainColor1};
     box-shadow: rgb(0 0 0 / 16%) 0px 3px 6px, rgb(0 0 0 / 23%) 0px 3px 6px;
     border-radius: 50%;
+    &:hover {
+        background-color: ${props => props.theme.colors.mainColor2};
+    };
     svg {
         color: ${props => props.theme.colors.mainWhite};
         font-size: 18px;
