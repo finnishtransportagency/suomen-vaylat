@@ -142,7 +142,7 @@ const fi = {
             vkm: 'Tiehaku'
         },
         vkm: {
-            tie: 'Tie',
+            tie: 'Tienumero',
             osa: 'Tieosa',
             ajorata: 'Ajorata',
             etaisyys: 'Etäisyys (m)',
