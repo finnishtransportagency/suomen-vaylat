@@ -12,7 +12,7 @@ const en = {
         searchButton: 'Search',
         legendButton: 'Legend',
         fullscreenButton: 'Full screen',
-        legendHeader: 'Visible at this zoom level',
+        legendHeader: 'The data displayed at this zoom level and their explanations',
         myLocButton: 'My location',
         zoomExpand: 'Expand',
         zoomIn: 'Zoom in',

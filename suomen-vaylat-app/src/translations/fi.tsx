@@ -14,7 +14,7 @@ const fi = {
         searchButton: 'Haku',
         legendButton: 'Legenda',
         fullscreenButton: 'Koko näyttö',
-        legendHeader: 'Tällä zoom-tasolla näkyvissä',
+        legendHeader: 'Tällä zoom-tasolla näkyvissä olevat aineistot ja niiden selitteet',
         myLocButton: 'Oma sijainti',
         zoomExpand: 'Laajenna',
         zoomIn: 'Lähennä',
