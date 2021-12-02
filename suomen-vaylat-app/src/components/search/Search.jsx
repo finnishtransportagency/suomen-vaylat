@@ -170,6 +170,7 @@ export const Search = ({isOpen}) => {
             variants={variants}
             transition={{
                 duration: 0.3,
+                type: "tween"
             }}
         >
             <StyledSearchMethod>
