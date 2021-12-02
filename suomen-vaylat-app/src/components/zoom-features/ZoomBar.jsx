@@ -1,29 +1,42 @@
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
+import styled from 'styled-components';
+import { motion } from 'framer-motion';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faListAlt, faSearchMinus, faSearchPlus } from '@fortawesome/free-solid-svg-icons';
 import location from '../../theme/icons/my_location_white_24dp.svg';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
+import { useAppSelector } from '../../state/hooks';
 import { ReactReduxContext } from 'react-redux';
 import ReactTooltip from 'react-tooltip';
 import { isMobile } from '../../theme/theme';
-import styled from 'styled-components';
 import { setZoomIn, setZoomOut } from '../../state/slices/rpcSlice';
 import strings from '../../translations';
 import ZoomBarCircle from './ZoomBarCircle';
-import {Legend} from '../legend/Legend';
-import {useAppSelector} from '../../state/hooks';
 
 const StyledZoomBarContainer = styled.div`
     position: relative;
     pointer-events: none;
     cursor: pointer;
     display: flex;
-    flex-direction: column-reverse;
+    //flex-direction: column-reverse;
+    flex-direction: column;
     align-items: center;
+    &::before {
+        z-index: -1;
+        content: '';
+        position: absolute;
+        top: 0px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 4px;
+        height: 100%;
+        background-color: ${props => props.theme.colors.mainColor1};
+    }
 `;
 
 const StyledZoomBarControlTop = styled.button`
     width: 46px;
-    height: 46px;
+    min-height: 46px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -45,7 +58,7 @@ const StyledZoomBarControlTop = styled.button`
 
 const StyledZoomBarControlBottom = styled.button`
     width: 46px;
-    height: 46px;
+    min-height: 46px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -66,48 +79,23 @@ const StyledZoomBarControlBottom = styled.button`
     }
 `;
 
-const StyledCenterLine = styled.div`
-    z-index: -1;
-    position: absolute;
-    width: 4px;
-    height: 100%;
-    background-color: ${props => props.theme.colors.mainColor1};
-    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
-`;
-
-const StyledZoomBarLayersInfo = styled.div`
-    position: absolute;
-    left: ${props => props.isExpanded ? '-240px' : '-230px' };
-    width: 240px;
-    height: 100%;
+const StyledZoombarCircles = styled(motion.div)`
     overflow: hidden;
-    display: ${props => props.isExpanded ? 'block' : 'none'};
-    transition-delay: 0.6s;
-    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
-    border-radius: 15px;
-    transition: all 0.3s ease-out;
-`;
-
-const StyledLayerInfoContainer = styled.div`
-    overflow-y: auto;
-    height: 100%;
 `;
 
 const StyledIcon = styled.img`
-    width: 1.3rem;
-    color: ffffff;
+    width: 20px;
 `;
 
 const StyledMyLocationButton = styled.div`
     width: 45px;
-    height: 45px;
+    min-height: 46px;
     margin-top: 10px;
     display: flex;
     justify-content: center;
     align-items: center;
     transition: all 0.1s ease-out;
     background-color: ${props => props.theme.colors.mainColor1};
-    // margin-bottom: 50px;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
     border-radius: 50%;
     svg {
@@ -124,15 +112,13 @@ const StyledMyLocationButton = styled.div`
 const StyledMenuBarButton = styled.div`
     position: relative;
     pointer-events:auto;
-    // cursor: pointer;
     width: 46px;
-    height: 46px;
+    min-height: 46px;
     margin-bottom: 10px;
     display: flex;
     justify-content: center;
     align-items: center;
     background-color: ${props => props.isActive ? props.theme.colors.mainColor2 : props.theme.colors.mainColor1};
-    // margin-top: 10px;
     box-shadow: rgb(0 0 0 / 16%) 0px 3px 6px, rgb(0 0 0 / 23%) 0px 3px 6px;
     border-radius: 50%;
     svg {
@@ -146,13 +132,24 @@ const StyledMenuBarButton = styled.div`
 
 `;
 
+const listVariants = {
+    visible: {
+        height: "auto",
+        //opacity: 1
+    },
+    hidden: {
+        height: 0,
+        //opacity: 0
+    },
+};
+
 const ZoomBar = ({
     zoomLevelsLayers,
     currentZoomLevel,
-    selectedLayers
+    isExpanded,
+    setIsExpanded,
+    setHoveringIndex
 }) => {
-    const [isExpanded, setIsExpanded] = useState(false);
-    const [hoveringIndex, setHoveringIndex] = useState(null);
     const { store } = useContext(ReactReduxContext);
     const rpc = useAppSelector((state) => state.rpc);
 
@@ -171,47 +168,14 @@ const ZoomBar = ({
             </ReactTooltip>
 
             <StyledZoomBarContainer>
-            <StyledZoomBarLayersInfo isExpanded={isExpanded}>
-                <StyledLayerInfoContainer>
-                    <Legend
-                        currentZoomLevel={currentZoomLevel}
-                        selectedLayers={selectedLayers}
-                        zoomLevelsLayers={zoomLevelsLayers}
-                        hoveringIndex={hoveringIndex}
-                    />
-                </StyledLayerInfoContainer>
-
-            </StyledZoomBarLayersInfo>
-                <StyledMyLocationButton
-                    data-tip data-for='myLoc'
-                    onClick={() => {
-                        rpc.channel.postRequest('MyLocationPlugin.GetUserLocationRequest');
-                    }}
-                >
-                    <StyledIcon src={location} />
-                </StyledMyLocationButton>
-                <StyledCenterLine />
-                <StyledZoomBarControlBottom
-                    data-tip data-for='zoomOut'
-                    disabled={currentZoomLevel === 0}
-                    onClick={() => {
-                        store.dispatch(setZoomOut());
-                    }}
-                >
+            <StyledMenuBarButton
+                    data-tip data-for='legend'
+                    isActive={isExpanded}
+                    onClick={() => setIsExpanded(!isExpanded)}>
                     <FontAwesomeIcon
-                        icon={faSearchMinus}
+                        icon={faListAlt}
                     />
-                </StyledZoomBarControlBottom>
-                {Object.values(zoomLevelsLayers).map((layer, index) => {
-                    return <ZoomBarCircle
-                        key={index}
-                        index={index}
-                        layer={layer}
-                        zoomLevel={currentZoomLevel}
-                        isExpanded={isExpanded}
-                        setHoveringIndex={setHoveringIndex}
-                    />
-                })}
+                </StyledMenuBarButton>
                 <StyledZoomBarControlTop
                     data-tip data-for='zoomIn'
                     disabled={currentZoomLevel === Object.values(zoomLevelsLayers).length - 1}
@@ -223,14 +187,44 @@ const ZoomBar = ({
                         icon={faSearchPlus}
                     />
                 </StyledZoomBarControlTop>
-                <StyledMenuBarButton
-                    data-tip data-for='legend'
-                    isActive={isExpanded}
-                    onClick={() => setIsExpanded(!isExpanded)}>
+                <StyledZoombarCircles
+                    initial='hidden'
+                    animate={isExpanded ? 'visible' : 'hidden'}
+                    variants={listVariants}
+                    transition={{
+                        duration: 0.5,
+                        type: "tween"
+                    }}
+                >
+                    {Object.values(zoomLevelsLayers).map((layer, index) => {
+                            return <ZoomBarCircle
+                                key={index}
+                                index={index}
+                                layer={layer}
+                                zoomLevel={currentZoomLevel}
+                                setHoveringIndex={setHoveringIndex}
+                            />
+                    })}
+                </StyledZoombarCircles>
+                <StyledZoomBarControlBottom
+                    data-tip data-for='zoomOut'
+                    disabled={currentZoomLevel === 0}
+                    onClick={() => {
+                        store.dispatch(setZoomOut());
+                    }}
+                >
                     <FontAwesomeIcon
-                        icon={faListAlt}
+                        icon={faSearchMinus}
                     />
-                </StyledMenuBarButton>
+                </StyledZoomBarControlBottom>
+                <StyledMyLocationButton
+                    data-tip data-for='myLoc'
+                    onClick={() => {
+                        rpc.channel.postRequest('MyLocationPlugin.GetUserLocationRequest');
+                    }}
+                >
+                    <StyledIcon src={location} />
+                </StyledMyLocationButton>
             </StyledZoomBarContainer>
         </>
     );

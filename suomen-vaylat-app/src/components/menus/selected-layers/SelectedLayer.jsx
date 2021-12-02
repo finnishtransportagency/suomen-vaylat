@@ -23,6 +23,9 @@ const StyledLayerContent = styled.div`
     background-color: #F5F5F5;
     box-shadow: 0px 1px 3px #0000001F;
     border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 `;
 
 const StyledlayerHeader = styled.div`
@@ -48,7 +51,7 @@ const StyledLayerName = styled.p`
 
 const StyledBottomContent = styled.div`
     display: flex;
-    justify-content: space-between;
+    //justify-content: space-between;
     align-items: center;
     p {
         margin: 0;
@@ -58,7 +61,7 @@ const StyledBottomContent = styled.div`
 `;
 
 const StyledLayerDeleteIcon = styled.div`
-     position: absolute;
+    position: absolute;
     top: 0px;
     right: 0px;
     min-width: 28px;
@@ -69,7 +72,7 @@ const StyledLayerDeleteIcon = styled.div`
     cursor: pointer;
     svg {
         color: ${props => props.theme.colors.mainColor1};
-        font-size: 20px;
+        font-size: 18px;
         transition: all 0.1s ease-out;
     };
     &:hover {
@@ -87,7 +90,7 @@ const StyledlayerOpacityControl = styled.input`
     appearance: none;
     outline: none;
     background: linear-gradient(90deg, rgba(0,100,175,0) 0%, ${props => props.theme.colors.secondaryColor8} 100%);
-    margin-right: 5px;
+    margin-left: 8px;
     border-radius: 5px;
     -webkit-transition: .2s;
     transition: opacity .2s;
@@ -122,9 +125,8 @@ const StyledLayerGripControl = styled.div`
 
 const StyledLayerInfoIconWrapper = styled.div`
     cursor: pointer;
-    width: 30px;
+
     padding-left: 8px;
-    font-size: 20px;
     svg {
         color: ${props => props.theme.colors.mainColor1};
         font-size: 18px;

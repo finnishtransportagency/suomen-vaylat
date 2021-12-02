@@ -95,7 +95,6 @@ const StyledActionButtonClose = styled.div`
 
 const ThemeMapsActionButton = () => {
     const { store } = useContext(ReactReduxContext);
-    //const { channel } = useAppSelector((state) => state.rpc);
 
     const { channel, selectedTheme,  lastSelectedTheme, selectedThemeIndex} = useAppSelector((state) => state.rpc);
 
@@ -111,6 +110,7 @@ const ThemeMapsActionButton = () => {
         variants={variants}
         transition={{
             duration: 0.3,
+            type: "tween"
         }}
     >
         <StyledLeftContent>
