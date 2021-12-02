@@ -20,7 +20,6 @@ const StyledLegendContainer = styled(motion.div)`
     display: flex;
     flex-direction: column;
     background: ${props => props.theme.colors.mainWhite};
-    // overflow: hidden;
     opacity: 0;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
     @media ${ props => props.theme.device.mobileL} {
