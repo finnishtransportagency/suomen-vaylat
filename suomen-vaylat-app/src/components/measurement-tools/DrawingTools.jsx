@@ -191,6 +191,7 @@ export const DrawingTools = ({isOpen}) => {
                 variants={listVariants}
                 transition={{
                     duration: 0.3,
+                    type: "tween"
                 }}
             >
                 {drawinToolsData.map((tool, index) => {
