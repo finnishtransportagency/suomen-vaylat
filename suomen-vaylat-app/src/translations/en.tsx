@@ -30,7 +30,8 @@ const en = {
         share: 'Share this page',
         shareTheme: 'Share this theme',
         metadata: 'Show maplayer metadata',
-        showPageInfo: 'Show page info'
+        showPageInfo: 'Show page info',
+        showUserGuide: 'Show user guide',
     },
     gfi: {
         title: 'Feature Data',
@@ -40,6 +41,57 @@ const en = {
     multipleLayersWarning: 'You are about to activate 10 or more maplayers and it might affect the performance of the service',
     continue: 'continue',
     cancel: 'cancel',
+    appGuide: {
+        title: "User Guide",
+        modalContent: {
+            upperBar: {
+                title: "Top Bar Functions",
+                content: {
+                    0: {
+                        title: "Return to start view",
+                        text: "The start view is a predefined view that shows waterways, the railway network and the road net-work throughout Finland."
+                    },
+                    1: {
+                        title: "Share page",
+                        text: "You can share the current view of the map with a link directly to the selected service or by copying the link. The view retains the focus, zoom level, and selected materials and theme."
+                    },
+                    2: {
+                        title: "Info",
+                        text: "Behind the info button you will find information about the application, operating instructions and contact information for sending feedback, for example."
+                    },
+                    3: {
+                        title: "Language",
+                        text: "You can select Finnish, Swedish or English as the language of the map service."
+                    }
+                }
+            },
+            mapLevelMenu: {
+                title: "Map Level Menu",
+                subTitle: "The map level menu opens at the top left. There are 3 tabs to choose from",
+                tabsContent: {
+                    materList: "You can filter the material list by topic behind the filter button. You can search the map level by name by entering at least 3 letters in the search field.",
+                    themeLayerSelection: "Selecting a theme displays the map levels defined for the theme and opens a menu for selecting map materials related to the theme. Some of the map materials have their own style for the theme. There can be only one theme at a time. When a theme is selected, you can also select map materials other than those defined for the theme in the All Levels menu. The theme closes with the theme marker at the top of the map.",
+                    selectedLayers: "List of selected map levels on the map. You can change the order of the levels by dragging them from the icon on the right. The transparency can be adjusted with the slider and the level selec-tion can be deselected."
+                },
+            },
+            search: {
+                title: "Search",
+                content: "The search opens in the upper right corner of the map using the magnifying glass button on the left. The Search function allows you to search for you and addresses by selecting the search you want to use from the drop-down menu. You can delete a search result from the map by tapping the trash in the search box."
+            },
+            measureTool: {
+                title: "Drawingtools",
+                content: "The measurement tools open from the drawing icon on the left. The tools can be used to measure length or area. the measurement results can be deleted from the map with the orange rubber but-ton."
+            },
+            setFullScreen: {
+                title: "Expand",
+                content: "The Expand button can be used to expand the Suomen Vaylat application to fill the entire screen."
+            },
+            zoomBar: {
+                title: "Captions / Zoom Bar",
+                content: "You can open the zoom level and the map levels with their captions on the map at that zoom level from the caption icon at the bottom right. Map levels are listed at the top first. Selecting another scale from the zoom bar moves to the selected approach level."
+            }
+        }
+    },
     appInfo: {
         title: 'Sovelluksen tiedot',
         headingText: 'Suomen Väylät -karttapalvelu kokoaa yhteen Väyläviraston avoimet, ' +
