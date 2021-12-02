@@ -91,7 +91,7 @@ export const GFIPopup = ({gfiLocations}) => {
     let contentDiv = null;
 
     if (gfiLocations.length > 0) {
-        gfiLocations.map(location => {
+        gfiLocations.forEach(location => {
             layerIds = allLayers.filter(layer => layer.id === location.layerId)[0].id;
             tabsIds.push(layerIds);
             let content;
