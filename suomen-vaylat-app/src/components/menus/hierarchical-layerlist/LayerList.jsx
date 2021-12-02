@@ -261,6 +261,7 @@ export const LayerList = ({
                                 variants={masterHeaderIconVariants}
                                 transition={{
                                     duration: 0.3,
+                                    type: "tween"
                                 }}
                             >
                                 <FontAwesomeIcon
@@ -278,6 +279,7 @@ export const LayerList = ({
                         variants={listVariants}
                         transition={{
                             duration: 0.3,
+                            type: "tween"
                         }}
                     >
                         <Layers layers={filteredLayers} isOpen={isOpen} />

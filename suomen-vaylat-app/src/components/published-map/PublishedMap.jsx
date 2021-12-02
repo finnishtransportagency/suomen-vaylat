@@ -8,7 +8,9 @@ import {
 } from '../../state/slices/rpcSlice';
 import { updateLayers } from '../../utils/rpcUtil';
 import { AnnouncementsModal } from '../announcements-modal/AnnouncementsModal';
-import CenterSpinner from '../center-spinner/CenterSpinner';
+
+import SvLoder from '../../components/loader/SvLoader';
+
 import { GFIPopup } from '../infobox/GFIPopup';
 import './PublishedMap.scss';
 
@@ -219,7 +221,7 @@ const PublishedMap = () => {
     return (
         <StyledPublishedMap>
             {loading ? (
-                <CenterSpinner />
+                <SvLoder />
             ) : null}
             {announcements.map((announcement) => {
                 return (
