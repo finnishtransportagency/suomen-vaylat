@@ -35,9 +35,9 @@ const VKMSearch = ({visible, search, store, vectorLayerId, onEnterHandler}) => {
         store.dispatch(setSearchResultOnMapId(search.searchResult.tie + '_' + search.searchResult.osa + '_' + search.searchResult.ajorata + '_' + search.searchResult.etaisyys));
     }
 
-    const onChange = (name, value) => {
+    const onChange = (name, value, doSearch = true) => {
         let formData = {
-            tie: (name === 'tie') ? value : search.formData.vkm.tie,
+            tie: (name === 'tie') ? isNaN(value) ? null : value : search.formData.vkm.tie,
             tieosa: (name === 'tieosa') ? value : search.formData.vkm.tieosa,
             ajorata: (name === 'ajorata') ? value : search.formData.vkm.ajorata,
             etaisyys: (name === 'etaisyys') ? value : search.formData.vkm.etaisyys
@@ -77,7 +77,7 @@ const VKMSearch = ({visible, search, store, vectorLayerId, onEnterHandler}) => {
 
         store.dispatch(setFormData(formData));
 
-        if (name !== 'etaisyys') {
+        if (name !== 'etaisyys' && doSearch) {
             debounceSearchVKM(data);
         }
     };
@@ -110,11 +110,16 @@ const VKMSearch = ({visible, search, store, vectorLayerId, onEnterHandler}) => {
                 <StyledTextField
                     placeholder={strings.search.vkm.tie}
                     onChange={(event) => {
-                        onChange('tie', parseFloat(event.target.value));
+                        onChange('tie', parseFloat(event.target.value), false);
                     }}
                     value={search.formData.vkm.tie ? search.formData.vkm.tie : ''}
                     min="1"
                     type="number"
+                    onKeyPress={(event) => {
+                        if (event.key === 'Enter') {
+                            onEnterHandler();
+                        }
+                    }}
                 />
 
                 <StyledSelectInput
