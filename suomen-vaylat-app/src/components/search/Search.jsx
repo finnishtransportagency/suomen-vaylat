@@ -163,6 +163,7 @@ export const Search = ({isOpen}) => {
         store.dispatch(setSearchResultOnMapId(search.marker.x + '_' + search.marker.y + '_' + (search.marker.msg || '') + '_' + markerId));
     }
 
+
     return (
         <StyledSearchContainer
             initial="closed"
@@ -220,7 +221,8 @@ export const Search = ({isOpen}) => {
                 }
             </StyledSearchAddressInput>
                 {
-                    search.formData.address === null || search.formData.address.length === 0 ?
+                    (search.selected === 'address' && search.formData.address === null) || (search.selected === 'vkm' && search.formData.vkm.tie === null)
+                    ?
                     <StyledCloseButton
                         onClick={() => {
                             searchTypeOnChange('address');
