@@ -1,4 +1,5 @@
-import { useContext } from 'react';
+import React, { useContext } from 'react';
+import ReactTooltip from 'react-tooltip';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -7,7 +8,6 @@ import location from '../../theme/icons/my_location_white_24dp.svg';
 
 import { useAppSelector } from '../../state/hooks';
 import { ReactReduxContext } from 'react-redux';
-import ReactTooltip from 'react-tooltip';
 import { isMobile } from '../../theme/theme';
 import { setZoomIn, setZoomOut } from '../../state/slices/rpcSlice';
 import strings from '../../translations';
@@ -172,10 +172,11 @@ const ZoomBar = ({
             </ReactTooltip>
 
             <StyledZoomBarContainer>
-            <StyledMenuBarButton
+                <StyledMenuBarButton
                     data-tip data-for='legend'
                     isActive={isExpanded}
-                    onClick={() => setIsExpanded(!isExpanded)}>
+                    onClick={() => setIsExpanded(!isExpanded)}
+                >
                     <FontAwesomeIcon
                         icon={faListAlt}
                     />

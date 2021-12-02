@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { motion } from 'framer-motion';
 import '../../custom.scss';
@@ -7,6 +7,8 @@ import strings from '../../translations';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { LegendGroup } from './LegendGroup';
+import {isMobile} from "../../theme/theme";
+import ReactTooltip from "react-tooltip";
 
 
 const StyledLegendContainer = styled(motion.div)`
@@ -18,7 +20,7 @@ const StyledLegendContainer = styled(motion.div)`
     display: flex;
     flex-direction: column;
     background: ${props => props.theme.colors.mainWhite};
-    overflow: hidden;
+    // overflow: hidden;
     opacity: 0;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
     @media ${ props => props.theme.device.mobileL} {
@@ -30,6 +32,7 @@ const StyledHeaderContent = styled.div`
     height: 56px;
     z-index: 1;
     display: flex;
+    border-radius: 4px 4px 0px 0px;
     align-items: center;
     justify-content: space-between;
     background-color:  ${props => props.theme.colors.mainColor1};
@@ -121,7 +124,12 @@ export const Legend = ({
                 type: "tween"
             }}
         >
-            <StyledHeaderContent>
+            <ReactTooltip disable={isMobile} id='legendHeader' place='top' type='dark' effect='float'>
+                <span>{strings.tooltips.legendHeader}</span>
+            </ReactTooltip>
+            <StyledHeaderContent
+                data-tip data-for="legendHeader"
+            >
                 <StyledTitleContent>
                     <p>{strings.legend.title}</p>
                 </StyledTitleContent>
@@ -130,7 +138,7 @@ export const Legend = ({
                         onClick={() => setIsExpanded(false)}
                     />
             </StyledHeaderContent>
-            <StyledGroupsContainer id='legend-main-container'>
+            <StyledGroupsContainer id="legend-main-container">
                 {legends.map((legend, index) => {
                     const zoomLevelLayer = currentLayersInfoLayers.find((layer) => layer.id === legend.layerId);
                     return zoomLevelLayer && <LegendGroup
