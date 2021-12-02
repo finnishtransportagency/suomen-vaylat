@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { useAppSelector } from '../../state/hooks';
 import AppInfoModal from '../app-info-modal/AppInfoModal';
+import UserGuideModal from '../user-guide-modal/UserGuideModal';
 import MenuBar from '../layout/menu-bar/MenuBar';
 import MapLayersDialog from '../dialog/MapLayersDialog';
 import WarningDialog from '../dialog/WarningDialog';
@@ -67,6 +68,7 @@ const Content = () => {
             <ZoomMenu />
             <PublishedMap />
             {isShareOpen && <ShareWebSitePopup />}
+            <UserGuideModal />
             <AppInfoModal />
             <MetadataModal />
             <StyledContentGrid>

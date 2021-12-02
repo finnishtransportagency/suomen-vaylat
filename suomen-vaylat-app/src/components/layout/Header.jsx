@@ -1,4 +1,4 @@
-import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
+import { faInfoCircle, faQuestion } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useContext } from 'react';
 import { ReactReduxContext } from 'react-redux';
@@ -6,7 +6,7 @@ import ReactTooltip from 'react-tooltip';
 import { isMobile } from '../../theme/theme';
 import styled from 'styled-components';
 import { useAppSelector } from '../../state/hooks';
-import { setIsInfoOpen, setIsMainScreen } from '../../state/slices/uiSlice';
+import { setIsInfoOpen, setIsMainScreen, setIsUserGuideOpen } from '../../state/slices/uiSlice';
 import { mapMoveRequest, setZoomTo } from '../../state/slices/rpcSlice';
 import { resetThemeGroupsForMainScreen, removeDuplicates } from '../../utils/rpcUtil';
 import strings from '../../translations';
@@ -91,6 +91,7 @@ export const Header = () => {
     const lang = useAppSelector((state) => state.language);
     const { store } = useContext(ReactReduxContext);
     const isInfoOpen = useAppSelector((state) => state.ui.isInfoOpen);
+    const isUserGuideOpen = useAppSelector((state) => state.ui.isUserGuideOpen);
 
     const {
         channel,
@@ -141,6 +142,9 @@ export const Header = () => {
             <ReactTooltip disable={isMobile} id={'show_info'} place='bottom' type='dark' effect='float'>
                 <span>{strings.tooltips.showPageInfo}</span>
             </ReactTooltip>
+            <ReactTooltip disable={isMobile} id={'show_user_guide'} place='bottom' type='dark' effect='float'>
+                <span>{strings.tooltips.showUserGuide}</span>
+            </ReactTooltip>
             <StyledHeaderTitleContainer onClick={() => setToMainScreen()}>
                     {strings.title}
             </StyledHeaderTitleContainer>
@@ -154,6 +158,11 @@ export const Header = () => {
             </StyledHeaderLogoContainer>
             <StyledRightCornerButtons>
                 <WebSiteShareButton />
+                <StyledHeaderButton data-tip data-for={'show_user_guide'} onClick={() => store.dispatch(setIsUserGuideOpen(!isUserGuideOpen))}>
+                    <FontAwesomeIcon
+                        icon={faQuestion}
+                    />
+                </StyledHeaderButton>
                 <StyledHeaderButton data-tip data-for={'show_info'} onClick={() => store.dispatch(setIsInfoOpen(!isInfoOpen))}>
                     <FontAwesomeIcon
                         icon={faInfoCircle}
