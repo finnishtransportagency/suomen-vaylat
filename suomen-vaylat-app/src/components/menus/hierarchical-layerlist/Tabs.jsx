@@ -48,18 +48,12 @@ class Tabs extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      // if come to link, check layerlist type, else set theme to default
-      activeTab: (!props.layerlistType || props.layerlistType === 'themes') ? strings.layerlist.layerlistLabels.themeLayers : strings.layerlist.layerlistLabels.allLayers
+      activeTab: strings.layerlist.layerlistLabels.allLayers
     };
   }
 
   onClickTabItem = (tab) => {
     this.setState({ activeTab: tab });
-    if (tab === strings.layerlist.layerlistLabels.allLayers) {
-      this.props.setLayerListType('layers');
-    } else {
-      this.props.setLayerListType('themes');
-    }
   }
 
   render() {
