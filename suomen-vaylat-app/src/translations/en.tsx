@@ -66,7 +66,7 @@ const en = {
             vkm: 'Road search'
         },
         vkm: {
-            tie: 'Road',
+            tie: 'Road number',
             osa: 'Road section',
             ajorata: 'Carriageway',
             etaisyys: 'Distance (m)',

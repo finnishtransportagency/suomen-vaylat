@@ -66,7 +66,7 @@ const sv = {
             vkm: 'Vägsökning'
         },
         vkm: {
-            tie: 'Väg',
+            tie: 'Väg nummer',
             osa: 'Vägsträcka',
             ajorata: 'Körbana',
             etaisyys: 'Avstånd (m)',
