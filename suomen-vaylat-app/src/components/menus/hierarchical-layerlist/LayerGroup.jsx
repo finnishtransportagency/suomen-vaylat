@@ -276,7 +276,14 @@ export const LayerGroup = ({
     useEffect(() => {
 
         if (group.layers) {
-            var getLayers = layers.filter(l => group.layers.includes(l.id));
+            var getLayers = [];
+            // need use group.layers because it is layer name ordered list
+            group.layers.forEach(gl => {
+                var layer = layers.filter(l => l.id === gl);
+                if (layer && layer[0]) {
+                    getLayers.push(layer[0]);
+                }
+            });
             setFilteredLayers(getLayers);
             setVisibleLayers(getLayers.filter(layer => layer.visible === true));
 
