@@ -35,60 +35,64 @@ const sv = {
     },
     gfi: {
         title: 'Objektuppgifter',
-        close: 'Stänga'
     },
-    warning: 'Obs!',
+    general: {
+        close: 'Stänga',
+        warning: 'Obs!',
+        continue: 'Continue',
+        cancel: 'Cancel',
+        dontShowAgain: 'Visa inte igen',
+        ok: 'OK',
+    },
     multipleLayersWarning: 'You are about to activate 10 or more layers and it might affect the performance of the website',
-    continue: 'continue',
-    cancel: 'cancel',
     appGuide: {
-        title: "Användarguide",
+        title: 'Användarguide',
         modalContent: {
             upperBar: {
-                title: "Top Bar-funktioner",
+                title: 'Top Bar-funktioner',
                 content: {
                     0: {
-                        title: "Återgå till startvyn",
-                        text: "Startvyn är en fördefinierad vy som visar vattenvägar, järnvägsnätet och vägnätet i hela Finland."
+                        title: 'Återgå till startvyn',
+                        text: 'Startvyn är en fördefinierad vy som visar vattenvägar, järnvägsnätet och vägnätet i hela Finland.'
                     },
                     1: {
-                        title: "Dela sida",
-                        text: "Du kan dela den aktuella vyn av kartan med en länk direkt till den valda tjänsten eller genom att kopiera länken. Vyn behåller fokus, zoomnivå och valda material och tema."
+                        title: 'Dela sida',
+                        text: 'Du kan dela den aktuella vyn av kartan med en länk direkt till den valda tjänsten eller genom att kopiera länken. Vyn behåller fokus, zoomnivå och valda material och tema.'
                     },
                     2: {
-                        title: "Info",
-                        text: "Bakom infoknappen hittar du information om applikationen, bruksanvisning och kontaktuppgifter för att skicka feedback till exempel."
+                        title: 'Info',
+                        text: 'Bakom infoknappen hittar du information om applikationen, bruksanvisning och kontaktuppgifter för att skicka feedback till exempel.'
                     },
                     3: {
-                        title: "Språk",
-                        text: "Du kan välja finska, svenska eller engelska som språk för karttjänsten."
+                        title: 'Språk',
+                        text: 'Du kan välja finska, svenska eller engelska som språk för karttjänsten.'
                     }
                 }
             },
             mapLevelMenu: {
-                title: "Kartnivåmeny",
-                subTitle: "Kartnivåmenyn öppnas uppe till vänster. Det finns 3 flikar att välja mellan",
+                title: 'Kartnivåmeny',
+                subTitle: 'Kartnivåmenyn öppnas uppe till vänster. Det finns 3 flikar att välja mellan',
                 tabsContent: {
-                    materList: "Du kan filtrera materiallistan efter ämne bakom filterknappen. Du kan söka på kartnivån efter namn genom att ange minst 3 bokstäver i sökfältet.",
-                    themeLayerSelection: "Att välja ett tema visar kartnivåerna som definierats för temat och öppnar en meny för att välja kartmaterial som är relaterat till temat. En del av kartmaterialen har sin egen stil för temat. Det kan bara finnas ett tema åt gången. När ett tema är valt kan du också välja andra kartmaterial än de som definierats för temat i menyn Alla nivåer. Temat avslutas med temamarkören överst på kartan.",
-                    selectedLayers: "Lista över valda kartnivåer på kartan. Du kan ändra ordningen på nivåerna genom att dra dem från ikonen till höger. Transparensen kan justeras med skjutreglaget och nivåvalet kan avmarkeras."
+                    materList: 'Du kan filtrera materiallistan efter ämne bakom filterknappen. Du kan söka på kartnivån efter namn genom att ange minst 3 bokstäver i sökfältet.',
+                    themeLayerSelection: 'Att välja ett tema visar kartnivåerna som definierats för temat och öppnar en meny för att välja kartmaterial som är relaterat till temat. En del av kartmaterialen har sin egen stil för temat. Det kan bara finnas ett tema åt gången. När ett tema är valt kan du också välja andra kartmaterial än de som definierats för temat i menyn Alla nivåer. Temat avslutas med temamarkören överst på kartan.',
+                    selectedLayers: 'Lista över valda kartnivåer på kartan. Du kan ändra ordningen på nivåerna genom att dra dem från ikonen till höger. Transparensen kan justeras med skjutreglaget och nivåvalet kan avmarkeras.'
                 },
             },
             search: {
-                title: "Sök",
-                content: "Sökningen öppnas i kartans övre högra hörn med hjälp av förstoringsglasknappen till vänster. Sökfunktionen låter dig söka efter dig och adresser genom att välja den sökning du vill använda från rullgardinsmenyn. Du kan ta bort ett sökresultat från kartan genom att trycka på papperskorgen i sökrutan."
+                title: 'Sök',
+                content: 'Sökningen öppnas i kartans övre högra hörn med hjälp av förstoringsglasknappen till vänster. Sökfunktionen låter dig söka efter dig och adresser genom att välja den sökning du vill använda från rullgardinsmenyn. Du kan ta bort ett sökresultat från kartan genom att trycka på papperskorgen i sökrutan.'
             },
             measureTool: {
-                title: "Ritverktyg",
-                content: "Mätverktygen öppnas från ritikonen till vänster. Verktygen kan användas för att mäta längd eller area. mätresultaten kan raderas från kartan med den orangea gummiknappen."
+                title: 'Ritverktyg',
+                content: 'Mätverktygen öppnas från ritikonen till vänster. Verktygen kan användas för att mäta längd eller area. mätresultaten kan raderas från kartan med den orangea gummiknappen.'
             },
             setFullScreen: {
-                title: "Bygga ut",
-                content: "Expandera-knappen kan användas för att expandera Suomen Vaylat-applikationen så att den fyller hela skärmen."
+                title: 'Bygga ut',
+                content: 'Expandera-knappen kan användas för att expandera Suomen Vaylat-applikationen så att den fyller hela skärmen.'
             },
             zoomBar: {
-                title: "Bildtexter / zoomfält",
-                content: "Du kan öppna zoomnivån och kartnivåerna med deras bildtexter på kartan på den zoomnivån från bildtextikonen längst ner till höger. Kartnivåer listas först överst. Om du väljer en annan skala från zoomfältet flyttas till den valda inflygningsnivån."
+                title: 'Bildtexter / zoomfält',
+                content: 'Du kan öppna zoomnivån och kartnivåerna med deras bildtexter på kartan på den zoomnivån från bildtextikonen längst ner till höger. Kartnivåer listas först överst. Om du väljer en annan skala från zoomfältet flyttas till den valda inflygningsnivån.'
             }
         }
     },
@@ -136,8 +140,6 @@ const sv = {
             }
         }
     },
-    dontShowAgain: 'Visa inte igen',
-    ok: 'OK',
     layerlist: {
         layerlistLabels: {
             allLayers: 'Alla lager' ,

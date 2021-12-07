@@ -110,12 +110,12 @@ export const AnnouncementsModal = ({ id, title, content }) => {
                 onRequestClose={() => closeModal()}
                 style={customStyles}
             >
-                <StyledHeader className="modal-header">
+                <StyledHeader className='modal-header'>
                     <h5>{title}</h5>
                     <StyledModalCloseIcon
                         onClick={() => {
                             closeModal();
-                            }} title='Sulje'>
+                            }} title={strings.general.close}>
                             <FontAwesomeIcon
                                 icon={faTimes}
                             />
@@ -124,16 +124,16 @@ export const AnnouncementsModal = ({ id, title, content }) => {
                 <StyledContent>
                     {content}
                 </StyledContent>
-                <StyledFooter className="modal-footer">
+                <StyledFooter className='modal-footer'>
                     <label>
                         <StyledCheckbox
-                            name="announcementSelected"
-                            type="checkbox"
+                            name='announcementSelected'
+                            type='checkbox'
                             onClick={() => setIsSelected(!selected)}
                         />
-                        {strings.dontShowAgain}
+                        {strings.general.dontShowAgain}
                     </label>
-                    <StyledButton onClick={() => closeModal()}>{strings.ok}</StyledButton>
+                    <StyledButton onClick={() => closeModal()}>{strings.general.ok}</StyledButton>
                 </StyledFooter>
             </Modal>
         </div>
