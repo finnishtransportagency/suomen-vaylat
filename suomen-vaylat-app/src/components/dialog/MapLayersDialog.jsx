@@ -117,7 +117,7 @@ const StyledTabs = styled.div`
         box-shadow: 0px -1px 11px ${props => props.tabIndex === 0 ?
         "rgba(0, 99, 175, 0.3)" : props.tabIndex === 1 ?
         "rgba(32, 122, 66, 0.3)" :
-        "rgba(229, 0, 130, 0.3)"}; 
+        "rgba(229, 0, 130, 0.3)"};
     }
 `;
 

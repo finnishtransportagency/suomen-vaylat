@@ -55,7 +55,7 @@ export const StyledSelect = styled.select`
   cursor: ${props => props.disabled ? 'not-allowed' : 'pointer'};
   margin: 0;
   color: black;
-  padding: 6px 4px;
+  padding: 14px 4px;
   box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
   border: none;
   //border-radius: 24px;
@@ -65,7 +65,7 @@ export const StyledSelect = styled.select`
    // display: none;
   }
 
-  background: ${props => props.theme.colors.white};
+  background-color: white;
   margin-top: ${props => props.marginTop ? '8px' : '0'};
   `;
 

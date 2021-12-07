@@ -1,4 +1,5 @@
-import { useContext } from 'react';
+import React, { useContext } from 'react';
+import ReactTooltip from 'react-tooltip';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -7,7 +8,6 @@ import location from '../../theme/icons/my_location_white_24dp.svg';
 
 import { useAppSelector } from '../../state/hooks';
 import { ReactReduxContext } from 'react-redux';
-import ReactTooltip from 'react-tooltip';
 import { isMobile } from '../../theme/theme';
 import { setZoomIn, setZoomOut } from '../../state/slices/rpcSlice';
 import strings from '../../translations';
@@ -141,9 +141,13 @@ const StyledMenuBarButton = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+    transition: all 0.1s ease-out;
     background-color: ${props => props.isActive ? props.theme.colors.mainColor2 : props.theme.colors.mainColor1};
     box-shadow: rgb(0 0 0 / 16%) 0px 3px 6px, rgb(0 0 0 / 23%) 0px 3px 6px;
     border-radius: 50%;
+    &:hover {
+        background-color: ${props => props.theme.colors.mainColor2};
+    };
     svg {
         color: ${props => props.theme.colors.mainWhite};
         font-size: 18px;
@@ -196,7 +200,8 @@ const ZoomBar = ({
                 <StyledMenuBarButton
                     data-tip data-for='legend'
                     isActive={isExpanded}
-                    onClick={() => setIsExpanded(!isExpanded)}>
+                    onClick={() => setIsExpanded(!isExpanded)}
+                >
                     <FontAwesomeIcon
                         icon={faListAlt}
                     />
