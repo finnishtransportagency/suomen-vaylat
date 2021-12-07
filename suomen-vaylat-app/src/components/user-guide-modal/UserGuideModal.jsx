@@ -1,6 +1,5 @@
 import {useContext, useState} from 'react';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
-import suomenVaylatTextIcon from "./images/suomen_vaylat_text.jpg"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Modal from 'react-modal';
 import { ReactReduxContext } from 'react-redux';
@@ -15,7 +14,6 @@ import searchIcon from "./images/haku_ikoni.jpg"
 import drawingToolsIcon from "./images/piirtotyökalut.jpg"
 import fullScreenIcon from "./images/laajenna_ikoni.jpg"
 import zoomBarIcon from "./images/zoom-tasot.jpg"
-// import {StyledContainer} from "../search/CommonComponents";
 
 const customStyles = {
     content: {
@@ -35,17 +33,11 @@ const customStyles = {
 };
 
 const StyledContent = styled.div`
-    // max-width: 800px;
     width:400px;
     width: 100%;
-    // margin: 100px;
     padding: 32px;
     border-radius: 4px;
 `;
-
-// const StyledContainer = styled.div`
-//     width: 700px;
-// `;
 
 const StyledHeader = styled.div`
     position: sticky;
@@ -69,10 +61,6 @@ const StyledIcon = styled.img`
     // width: 100%;
     height: 35px;
 `;
-
-// const StyledIcon = styled.img`
-//     width: 1.3rem;
-// `;
 
 const StyledModalCloseIcon = styled.div`
     min-width: 28px;
@@ -143,7 +131,6 @@ export const UserGuideModal = () => {
     ];
 
     return (
-        // <StyledContainer>
             <Modal
                 isOpen={isUserGuideOpen}
                 onRequestClose={() => closeModal()}
@@ -154,7 +141,7 @@ export const UserGuideModal = () => {
                     <StyledModalCloseIcon
                         onClick={() => {
                             closeModal();
-                        }} title='Sulje'>
+                        }} title={strings.general.close}>
                         <FontAwesomeIcon
                             icon={faTimes}
                         />
@@ -167,13 +154,14 @@ export const UserGuideModal = () => {
                             return (
                                 <Accordion.Item
                                     eventKey={index}
-                                    bsPrefix={"user-guide-item"}
+                                    bsPrefix={'user-guide-item'}
+                                    key={'accordion_' + index}
                                 >
                                     <Accordion.Button
                                         // bsPrefix={"accordion-header"}
                                         key={`accordion-header-${index}`}
                                         className={'user-guide-header'}
-                                        as={"h4"}
+                                        as={'h4'}
                                         onClick={() => setModalIndex(index)}
                                     >
                                         {content.title}
@@ -184,12 +172,10 @@ export const UserGuideModal = () => {
                                 </Accordion.Item>
                             )
                         })
-
                         }
                     </Accordion>
                 </StyledContent>
             </Modal>
-          // </StyledContainer>
     );
 };
 
