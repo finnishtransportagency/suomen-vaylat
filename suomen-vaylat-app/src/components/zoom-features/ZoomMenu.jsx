@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import ReactTooltip from "react-tooltip";
 import { isMobile } from '../../theme/theme';

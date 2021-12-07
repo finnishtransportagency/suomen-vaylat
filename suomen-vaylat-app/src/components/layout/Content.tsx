@@ -1,8 +1,9 @@
-import { useContext } from 'react';
-import {ReactReduxContext} from 'react-redux';
+import React, {useContext} from 'react';
+import { ReactReduxContext } from 'react-redux';
 import { useAppSelector } from '../../state/hooks';
 import styled from 'styled-components';
 import AppInfoModal from '../app-info-modal/AppInfoModal';
+import UserGuideModal from '../user-guide-modal/UserGuideModal';
 import MenuBar from '../layout/menu-bar/MenuBar';
 import MapLayersDialog from '../dialog/MapLayersDialog';
 import WarningDialog from '../dialog/WarningDialog';
@@ -15,6 +16,8 @@ import ZoomMenu from '../zoom-features/ZoomMenu';
 import strings from '../../translations';
 import { setSelectError } from '../../state/slices/rpcSlice';
 import MetadataModal from '../metadata-modal/MetadataModal';
+import { isMobile } from "../../theme/theme";
+import ReactTooltip from "react-tooltip";
 
 const StyledContent = styled.div`
     z-index: 1;
@@ -71,6 +74,7 @@ const Content = () => {
             {/* <ZoomMenu /> */}
             <PublishedMap />
             {isShareOpen && <ShareWebSitePopup />}
+            <UserGuideModal />
             <AppInfoModal />
             <MetadataModal />
             <StyledContentGrid>
