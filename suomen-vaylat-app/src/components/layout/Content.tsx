@@ -22,10 +22,11 @@ import ReactTooltip from "react-tooltip";
 const StyledContent = styled.div`
     z-index: 1;
     position: relative;
-    height: var(--app-height);
+    //height: var(--app-height);
+    //height: 100%;
     overflow: hidden;
     @media ${(props: { theme: { device: { desktop: any; }; }; }) => props.theme.device.desktop} {
-        height: calc(var(--app-height) - 56px);
+        //height: calc(var(--app-height) - 56px);
     };
 `;
 
