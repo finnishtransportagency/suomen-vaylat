@@ -16,8 +16,6 @@ import ZoomMenu from '../zoom-features/ZoomMenu';
 import strings from '../../translations';
 import { setSelectError } from '../../state/slices/rpcSlice';
 import MetadataModal from '../metadata-modal/MetadataModal';
-import { isMobile } from "../../theme/theme";
-import ReactTooltip from "react-tooltip";
 
 const StyledContent = styled.div`
     z-index: 1;
@@ -72,7 +70,6 @@ const Content = () => {
     return (
         <>
         <StyledContent>
-            {/* <ZoomMenu /> */}
             <PublishedMap />
             {isShareOpen && <ShareWebSitePopup />}
             <UserGuideModal />
@@ -84,12 +81,12 @@ const Content = () => {
                 <Search2 />
                 {/* <Search isOpen={isSearchOpen} /> */}
                 <ZoomMenu />
-                {/* <ThemeMapsActionButton /> */}
+                <ThemeMapsActionButton />
                 {warnings.show && warnings.type === 'multipleLayersWarning' &&
                     <WarningDialog
                         dialogOpen={warnings.show}
                         hideWarn={hideWarn}
-                        title={strings.warning}
+                        title={strings.general.warning}
                         message={strings.multipleLayersWarning}
                         filteredLayers={warnings.filteredLayers}
                         isChecked={warnings.isChecked}
