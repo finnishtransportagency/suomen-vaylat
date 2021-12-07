@@ -18,15 +18,16 @@ import { ReactComponent as VaylaLogoSv } from './images/vayla_sivussa_sv_white.s
 import { updateLayers } from '../../utils/rpcUtil';
 
 const StyledHeaderContainer = styled.div`
-    height: 80px;
+    height: 64px;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     box-shadow: rgb(0 0 0 / 16%) 0px 3px 6px, rgb(0 0 0 / 23%) 0px 3px 6px;
-    @media ${props => props.theme.device.desktop} {
+    /* @media ${props => props.theme.device.desktop} {
         height: 60px;
-    };
+    }; */
     @media ${props => props.theme.device.tablet} {
         grid-template-columns: 1fr 1fr;
+        height: 56px;
     };
 `;
 
@@ -90,7 +91,9 @@ const StyledRightCornerButtons = styled.div`
 export const Header = () => {
     const lang = useAppSelector((state) => state.language);
     const { store } = useContext(ReactReduxContext);
-    const isInfoOpen = useAppSelector((state) => state.ui.isInfoOpen);
+    const {
+        isInfoOpen
+    } = useAppSelector((state) => state.ui);
 
     const {
         channel,

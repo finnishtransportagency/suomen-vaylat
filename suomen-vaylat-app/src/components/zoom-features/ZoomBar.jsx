@@ -18,6 +18,7 @@ const StyledZoomBarContainer = styled.div`
     pointer-events: none;
     cursor: pointer;
     display: flex;
+    height: 100%;
     //flex-direction: column-reverse;
     flex-direction: column;
     align-items: center;
@@ -35,14 +36,15 @@ const StyledZoomBarContainer = styled.div`
 `;
 
 const StyledZoomBarControlTop = styled.button`
-    width: 46px;
-    min-height: 46px;
+    width: 48px;
+    min-height: 48px;
     display: flex;
     justify-content: center;
     align-items: center;
     pointer-events: auto;
     background-color: ${props => props.theme.colors.mainColor1};
-    margin: 0px 3px 3px 3px;
+    //margin: 0px 3px 3px 3px;
+    margin-bottom: 8px;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
     border: none;
     border-radius: 50%;
@@ -53,7 +55,14 @@ const StyledZoomBarControlTop = styled.button`
     };
     &:hover {
         background-color: ${props => props.theme.colors.mainColor2};
-    }
+    };
+    @media ${props => props.theme.device.mobileL} {
+        width: 32px;
+        min-height: 32px;
+        svg {
+        font-size: 16px;
+        };
+    };
 `;
 
 const StyledZoomBarControlBottom = styled.button`
@@ -65,7 +74,7 @@ const StyledZoomBarControlBottom = styled.button`
     pointer-events: auto;
     cursor: pointer;
     background-color: ${props => props.theme.colors.mainColor1};
-    margin: 3px 3px 0px 3px;
+    //margin: 3px 3px 0px 3px;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
     border: none;
     border-radius: 50%;
@@ -76,7 +85,14 @@ const StyledZoomBarControlBottom = styled.button`
     };
     &:hover {
         background-color: ${props => props.theme.colors.mainColor2};
-    }
+    };
+    @media ${props => props.theme.device.mobileL} {
+        width: 32px;
+        min-height: 32px;
+        svg {
+        font-size: 16px;
+        };
+    };
 `;
 
 const StyledZoombarCircles = styled(motion.div)`
@@ -88,12 +104,14 @@ const StyledIcon = styled.img`
 `;
 
 const StyledMyLocationButton = styled.div`
-    width: 45px;
-    min-height: 46px;
-    margin-top: 10px;
+    width: 48px;
+    min-height: 48px;
+    margin-top: 8px;
     display: flex;
     justify-content: center;
     align-items: center;
+    pointer-events: auto;
+    cursor: pointer;
     transition: all 0.1s ease-out;
     background-color: ${props => props.theme.colors.mainColor1};
     box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
@@ -105,16 +123,21 @@ const StyledMyLocationButton = styled.div`
     &:hover {
         background-color: ${props => props.theme.colors.mainColor2};
     };
-    pointer-events: auto;
-    cursor: pointer;
+    @media ${props => props.theme.device.mobileL} {
+        width: 32px;
+        min-height: 32px;
+        svg {
+            font-size: 16px;
+        };
+    };
 `;
 
 const StyledMenuBarButton = styled.div`
     position: relative;
     pointer-events:auto;
-    width: 46px;
-    min-height: 46px;
-    margin-bottom: 10px;
+    min-width: 48px;
+    min-height: 48px;
+    margin-bottom: 8px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -126,10 +149,12 @@ const StyledMenuBarButton = styled.div`
         font-size: 18px;
     };
     @media ${props => props.theme.device.mobileL} {
-        width: 40px;
-        height: 40px;
+        min-width: 32px;
+        min-height: 32px;
+        svg {
+            font-size: 16px;
+        };
     };
-
 `;
 
 const listVariants = {
@@ -168,7 +193,7 @@ const ZoomBar = ({
             </ReactTooltip>
 
             <StyledZoomBarContainer>
-            <StyledMenuBarButton
+                <StyledMenuBarButton
                     data-tip data-for='legend'
                     isActive={isExpanded}
                     onClick={() => setIsExpanded(!isExpanded)}>
@@ -221,6 +246,7 @@ const ZoomBar = ({
                     data-tip data-for='myLoc'
                     onClick={() => {
                         rpc.channel.postRequest('MyLocationPlugin.GetUserLocationRequest');
+                        setIsExpanded(false);
                     }}
                 >
                     <StyledIcon src={location} />

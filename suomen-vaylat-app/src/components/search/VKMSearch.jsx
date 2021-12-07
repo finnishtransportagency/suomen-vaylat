@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import styled from 'styled-components';
 import { debounce } from 'tlence';
 import {addFeaturesToMap, removeFeaturesFromMap, searchVKMRoad, setSelectError} from '../../state/slices/rpcSlice';
 import { emptySearchResult, setFormData, setSearching, setSearchResult, setSearchResultOnMapId } from '../../state/slices/searchSlice';
@@ -7,6 +8,10 @@ import { StyledContainer, StyledSelectInput, StyledTextField } from './CommonCom
 import { VKMGeoJsonHoverStyles, VKMGeoJsonStyles } from './VKMSearchStyles';
 
 let debounceSearchVKM = null;
+
+const StyledInputContainer = styled.div`
+
+`;
 
 const VKMSearch = ({visible, search, store, vectorLayerId, onEnterHandler}) => {
     if (search.selected === 'vkm' && search.searchResult.geom !== null && search.searching === false
@@ -107,17 +112,20 @@ const VKMSearch = ({visible, search, store, vectorLayerId, onEnterHandler}) => {
 
     return (
             <StyledContainer visible={visible} className="search-inputs">
-                <StyledTextField
-                    placeholder={strings.search.vkm.tie}
-                    onChange={(event) => {
-                        onChange('tie', parseFloat(event.target.value));
-                    }}
-                    value={search.formData.vkm.tie ? search.formData.vkm.tie : ''}
-                    min="1"
-                    type="number"
-                />
-
+                <label htmlFor="vkm-road">{strings.search.vkm.tie}:</label>
+                    <StyledTextField
+                        id="vkm-road"
+                        placeholder={strings.search.vkm.tie}
+                        onChange={(event) => {
+                            onChange('tie', parseFloat(event.target.value));
+                        }}
+                        value={search.formData.vkm.tie ? search.formData.vkm.tie : ''}
+                        min="1"
+                        type="number"
+                    />
+                <label htmlFor="vkm-tieosa">{strings.search.vkm.osa}:</label> 
                 <StyledSelectInput
+                    id="vkm-tieosa"
                     placeholder={strings.search.vkm.osa}
                     onChange={(event) => {
                         onChange('tieosa', parseFloat(event.target.value));
@@ -129,8 +137,9 @@ const VKMSearch = ({visible, search, store, vectorLayerId, onEnterHandler}) => {
                         return { value: value, label: value }
                     })}
                 />
-
+                <label htmlFor="vkm-ajorata">{strings.search.vkm.ajorata}:</label>  
                 <StyledSelectInput
+                    id="vkm-ajorata"
                     placeholder={strings.search.vkm.ajorata}
                     onChange={(event) => {
                         onChange('ajorata', parseFloat(event.target.value));
@@ -142,8 +151,9 @@ const VKMSearch = ({visible, search, store, vectorLayerId, onEnterHandler}) => {
                         return { value: value, label: value }
                     })}
                 />
-
+                <label htmlFor="vkm-etaisyys">{strings.search.vkm.etaisyys}:</label>  
                 <StyledTextField
+                     id="vkm-etaisyys"
                     placeholder={strings.search.vkm.etaisyys}
                     onChange={(event) => {
                         onChange('etaisyys', parseFloat(event.target.value));
