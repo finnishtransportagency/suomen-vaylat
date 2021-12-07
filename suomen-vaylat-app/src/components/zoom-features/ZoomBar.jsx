@@ -97,6 +97,8 @@ const StyledZoomBarControlBottom = styled.button`
 
 const StyledZoombarCircles = styled(motion.div)`
     overflow: hidden;
+    display: flex;
+    flex-direction: column-reverse;
 `;
 
 const StyledIcon = styled.img`

@@ -64,7 +64,6 @@ const SortableList = SortableContainer(({items, currentZoomLevel}) => {
                     index={index}
                     value={value}
                     currentZoomLevel={currentZoomLevel}
-                    disabled={true}
                 />
             ))}
         </div>
