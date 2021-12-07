@@ -15,8 +15,6 @@ import {setSelectError} from '../../state/slices/rpcSlice';
 import React, {useContext} from 'react';
 import {ReactReduxContext} from 'react-redux';
 import MetadataModal from '../metadata-modal/MetadataModal';
-import {isMobile} from "../../theme/theme";
-import ReactTooltip from "react-tooltip";
 
 const StyledContent = styled.div`
     z-index: 1;
@@ -80,7 +78,7 @@ const Content = () => {
                     <WarningDialog
                         dialogOpen={warnings.show}
                         hideWarn={hideWarn}
-                        title={strings.warning}
+                        title={strings.general.warning}
                         message={strings.multipleLayersWarning}
                         filteredLayers={warnings.filteredLayers}
                         isChecked={warnings.isChecked}
