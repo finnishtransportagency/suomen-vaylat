@@ -4,7 +4,7 @@ import { ReactReduxContext } from 'react-redux';
 import styled from 'styled-components';
 import { useAppSelector } from '../../state/hooks';
 import {
-    setActiveAnnouncements, setAllGroups, setAllTags, setAllThemesWithLayers, setChannel, setCurrentMapCenter, setCurrentState, setCurrentZoomLevel, setFeatures, setLegends, setLoading, setTagsWithLayers, setZoomLevelsLayers, setZoomRange, setGFILocations
+    setActiveAnnouncements, setAllGroups, setAllTags, setAllThemesWithLayers, setChannel, setCurrentMapCenter, setCurrentState, setCurrentZoomLevel, setFeatures, setLegends, setLoading, setTagsWithLayers, setZoomLevelsLayers, setZoomRange, setGFILocations, setGFIPoint, resetGFILocations
 } from '../../state/slices/rpcSlice';
 import { updateLayers } from '../../utils/rpcUtil';
 import { AnnouncementsModal } from '../announcements-modal/AnnouncementsModal';
@@ -137,8 +137,12 @@ const PublishedMap = () => {
             channel.getSupportedEvents(function (data) {
 
                 if (data.MapClickedEvent) {
-                    channel.handleEvent('MapClickedEvent', event => {
-
+                    channel.handleEvent('MapClickedEvent', (data) => {
+                        // Reset GFI locations so the popup closes and loads with new content
+                        channel.postRequest('MapModulePlugin.RemoveMarkersRequest', ['gfi_location']);
+                        store.dispatch(resetGFILocations([]));
+                        // Set new GFI point
+                        store.dispatch(setGFIPoint(data));
                     });
                 };
 
@@ -150,7 +154,6 @@ const PublishedMap = () => {
 
                 if (data.MarkerClickEvent) {
                     channel.handleEvent('MarkerClickEvent', event => {
-
                     });
                 };
 
