@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { faTimes, faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Modal from 'react-modal';
@@ -23,7 +23,7 @@ const StyledMyLocationButton = styled.div`
     justify-content: flex-end;
     align-items: center;
     svg {
-        color: ${props => props.theme.colors.mainWhite};
+        color: ${props => props.locationActive ? props.theme.colors.mainColor2 : props.theme.colors.mainWhite};
         font-size: 18px;
         transition: all 0.1s ease-out;
     };
@@ -111,9 +111,8 @@ const SyledModalContent = styled.div`
 
 export const GFIPopup = ({gfiLocations}) => {
     const { store } = useContext(ReactReduxContext);
-    //const allLayers = useAppSelector((state) => state.rpc.allLayers);
-    const { channel, allLayers, gfiPoint } = useAppSelector((state) => state.rpc);
-    const markerIcon = '<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#0064af"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zM7 9c0-2.76 2.24-5 5-5s5 2.24 5 5c0 2.88-2.88 7.19-5 9.88C9.92 16.21 7 11.85 7 9z"/><circle cx="12" cy="9" r="2.5"/></svg>';
+    const { channel, allLayers, gfiPoint, currentZoomLevel } = useAppSelector((state) => state.rpc);
+    const [locationActive, activateLocation] = useState(false);
     let tabsIds = []
     let tabsContent = []
     let layerIds = null;
@@ -142,15 +141,34 @@ export const GFIPopup = ({gfiLocations}) => {
 
     const title = strings.gfi.title
 
-    function closeModal() {
+    const closeModal = () => {
         store.dispatch(resetGFILocations([]));
         channel.postRequest('MapModulePlugin.RemoveMarkersRequest', ['gfi_location']);
     };
 
-    function closeTab(id) {
+    const closeTab = (id) => {
         var filteredLocations = gfiLocations.filter(gfi => gfi.layerId !== id);
         store.dispatch(resetGFILocations(filteredLocations));
     };
+
+    const locationOnClick = (locationActive) => {
+        if (!locationActive) {
+            var markerLocation = {
+                x: gfiPoint.lon,
+                y: gfiPoint.lat,
+                msg: '',
+                shape: '<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#0064af"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zM7 9c0-2.76 2.24-5 5-5s5 2.24 5 5c0 2.88-2.88 7.19-5 9.88C9.92 16.21 7 11.85 7 9z"/><circle cx="12" cy="9" r="2.5"/></svg>',
+                offsetX: 0, // center point x position from left to right
+                offsetY: 0, // center point y position from bottom to up
+                size: 6
+            };
+            channel.postRequest('MapModulePlugin.AddMarkerRequest', [markerLocation, 'gfi_location']);
+            channel.postRequest('MapMoveRequest', [gfiPoint.lon, gfiPoint.lat, currentZoomLevel]);
+        } else {
+            channel.postRequest('MapModulePlugin.RemoveMarkersRequest', ['gfi_location']);
+        }
+        activateLocation(!locationActive);
+    }
 
     return (
         <div>
@@ -170,20 +188,8 @@ export const GFIPopup = ({gfiLocations}) => {
                             <StyledHeaderButtons>
                                 <StyledMyLocationButton
                                     data-tip data-for='gfiLoc'
-                                    onClick={() => {
-                                        var markerLocation = {
-                                            x: gfiPoint.lon,
-                                            y: gfiPoint.lat,
-                                            msg: '',
-                                            shape: '<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#0064af"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zM7 9c0-2.76 2.24-5 5-5s5 2.24 5 5c0 2.88-2.88 7.19-5 9.88C9.92 16.21 7 11.85 7 9z"/><circle cx="12" cy="9" r="2.5"/></svg>',
-                                            offsetX: 0, // center point x position from left to right
-                                            offsetY: 0, // center point y position from bottom to up
-                                            size: 6
-                                        };
-                                        const zoomLevel = 7;
-                                        channel.postRequest('MapModulePlugin.AddMarkerRequest', [markerLocation, 'gfi_location']);
-                                        channel.postRequest('MapMoveRequest', [gfiPoint.lon, gfiPoint.lat, zoomLevel]);
-                                    }}
+                                    onClick={() => locationOnClick(locationActive)}
+                                    locationActive={locationActive}
                                 >
                                     <FontAwesomeIcon
                                         icon={faMapMarkerAlt}
