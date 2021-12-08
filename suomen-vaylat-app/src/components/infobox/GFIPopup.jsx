@@ -119,7 +119,7 @@ export const GFIPopup = ({gfiLocations}) => {
     let contentDiv = null;
 
     if (gfiLocations.length > 0) {
-        gfiLocations.map(location => {
+        gfiLocations.forEach((location, index) => {
             layerIds = allLayers.filter(layer => layer.id === location.layerId)[0].id;
             tabsIds.push(layerIds);
             let content;
@@ -132,7 +132,7 @@ export const GFIPopup = ({gfiLocations}) => {
                 tabsContent.push(contentDiv);
             }
             else if (location.type === 'geojson') {
-                content =  <FormattedGFI data={location.content} />;
+                content =  <FormattedGFI key={index} data={location.content} />;
                 tabsContent.push(content);
             }
 

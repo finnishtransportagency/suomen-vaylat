@@ -88,10 +88,10 @@ div.react-tabs {
 
 div.ReactModalPortal {
     //uncomment pointer-events to enable moving the map while gfi popup is open
-    pointer-events: none;
+    //pointer-events: none;
     div.ReactModal__Overlay--after-open {
         div.gfi-modal {
-            pointer-events: auto;
+            //pointer-events: auto;
             padding: 0px;
             overflow: visible;
             margin: auto;
