@@ -33,7 +33,7 @@ const StyledSelect = styled.select`
 `;
 
 export const LanguageSelector = () => {
-    
+
     const lang = useAppSelector((state) => state.language);
 
     const redirect = (key:string, value:string) => {

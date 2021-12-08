@@ -148,6 +148,8 @@ const StyledLayerGroup = styled(motion.ul)`
     transition: max-height 0.3s ease-out;
 `;
 
+const StyledLayerGroupWrapper = styled.div``;
+
 export const LayerList = ({
     groups,
     layers,
@@ -186,7 +188,7 @@ export const LayerList = ({
                         }
                         let isVisible = (group.layers && group.layers.length > 0) || hasChildren;
                         return (
-                            <>
+                            <StyledLayerGroupWrapper key={'group-sl-' + index + '-' + group.id }>
                                 { isVisible ? (
                                     <LayerGroup
                                         key={'layer-group-'+group.id}
@@ -195,7 +197,7 @@ export const LayerList = ({
                                         layers={layers}
                                         hasChildren={hasChildren}
                                     />) : null}
-                            </>
+                            </StyledLayerGroupWrapper>
                         );
                     })
                     }

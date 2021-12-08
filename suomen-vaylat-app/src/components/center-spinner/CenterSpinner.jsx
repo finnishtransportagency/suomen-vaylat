@@ -12,7 +12,7 @@ const StyledSpinner = styled.div`
 `;
 
 export const CenterSpinner = () => {
-    
+
     const themeContext = useContext(ThemeContext);
 
     return (

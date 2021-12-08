@@ -74,7 +74,6 @@ const StyledZoomBarControlBottom = styled.button`
     pointer-events: auto;
     cursor: pointer;
     background-color: ${props => props.theme.colors.mainColor1};
-    //margin: 3px 3px 0px 3px;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
     border: none;
     border-radius: 50%;
@@ -165,13 +164,11 @@ const StyledMenuBarButton = styled.div`
 
 const listVariants = {
     visible: {
-        height: "auto",
-        //opacity: 1
+        height: 'auto'
     },
     hidden: {
-        height: 0,
-        //opacity: 0
-    },
+        height: 0
+    }
 };
 
 const ZoomBar = ({
@@ -225,7 +222,7 @@ const ZoomBar = ({
                     variants={listVariants}
                     transition={{
                         duration: 0.5,
-                        type: "tween"
+                        type: 'tween'
                     }}
                 >
                     {Object.values(zoomLevelsLayers).map((layer, index) => {
