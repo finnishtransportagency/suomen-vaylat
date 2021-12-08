@@ -7,13 +7,13 @@ import styled from 'styled-components';
 import { useAppSelector } from '../../state/hooks';
 import { setIsUserGuideOpen } from '../../state/slices/uiSlice';
 import strings from '../../translations';
-import {Accordion} from "react-bootstrap";
-import UserGuideTabs from "./UserGuideTabs";
-import UserGuideUpperBarContent from "./UserGuideUpperBarContent";
-import searchIcon from "./images/haku_ikoni.jpg"
-import drawingToolsIcon from "./images/piirtotyökalut.jpg"
-import fullScreenIcon from "./images/laajenna_ikoni.jpg"
-import zoomBarIcon from "./images/zoom-tasot.jpg"
+import {Accordion} from 'react-bootstrap';
+import UserGuideTabs from './UserGuideTabs';
+import UserGuideUpperBarContent from './UserGuideUpperBarContent';
+import searchIcon from './images/haku_ikoni.jpg'
+import drawingToolsIcon from './images/piirtotyökalut.jpg'
+import fullScreenIcon from './images/laajenna_ikoni.jpg'
+import zoomBarIcon from './images/zoom-tasot.jpg'
 
 const customStyles = {
     content: {
@@ -158,7 +158,7 @@ export const UserGuideModal = () => {
                                     key={'accordion_' + index}
                                 >
                                     <Accordion.Button
-                                        // bsPrefix={"accordion-header"}
+                                        // bsPrefix={'accordion-header'}
                                         key={`accordion-header-${index}`}
                                         className={'user-guide-header'}
                                         as={'h4'}

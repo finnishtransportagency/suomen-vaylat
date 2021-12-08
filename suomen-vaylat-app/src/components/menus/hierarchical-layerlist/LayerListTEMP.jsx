@@ -107,7 +107,7 @@ const LayerListTEMP = ({
     useAppSelector((state) => state.language);
 
     const [isOpen, setIsOpen] = useState(false);
-  
+
     const emptyFilters = () => {
       store.dispatch(setTagLayers([]));
       store.dispatch(setTags([]));

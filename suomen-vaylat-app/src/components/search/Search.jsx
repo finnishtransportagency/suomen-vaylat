@@ -134,7 +134,7 @@ export const Search = ({isOpen}) => {
 
     const onClickHandler = () => {
         store.dispatch(setSearching(true));
-        
+
         const vkmSearchErrorHandler = (errors) => {
             store.dispatch(setSearching(false));
             store.dispatch(setSelectError({show: true, message: strings.search.address.error.text, type: 'searchWarning', filteredLayers: [], indeterminate: false}));

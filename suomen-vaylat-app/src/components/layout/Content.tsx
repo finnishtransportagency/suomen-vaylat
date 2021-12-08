@@ -8,7 +8,6 @@ import MenuBar from '../layout/menu-bar/MenuBar';
 import MapLayersDialog from '../dialog/MapLayersDialog';
 import WarningDialog from '../dialog/WarningDialog';
 import PublishedMap from '../published-map/PublishedMap';
-import Search from '../search/Search';
 import Search2 from '../search/Search2';
 import ThemeMapsActionButton from '../action-button/ThemeMapsActionButton';
 import { ShareWebSitePopup } from '../share-web-site/ShareWebSitePopup';
@@ -45,7 +44,7 @@ const StyledContentGrid = styled.div`
         padding: 8px;
         grid-template-columns: 48px 1fr;
     };
-    
+
 `;
 
 const Content = () => {
@@ -55,7 +54,6 @@ const Content = () => {
     } = useAppSelector((state) => state.rpc);
 
     const {
-        isSearchOpen,
         shareUrl
     } =  useAppSelector((state) => state.ui);
 
@@ -79,7 +77,6 @@ const Content = () => {
                 <MenuBar />
                 <MapLayersDialog />
                 <Search2 />
-                {/* <Search isOpen={isSearchOpen} /> */}
                 <ZoomMenu />
                 <ThemeMapsActionButton />
                 {warnings.show && warnings.type === 'multipleLayersWarning' &&
@@ -90,7 +87,6 @@ const Content = () => {
                         message={strings.multipleLayersWarning}
                         filteredLayers={warnings.filteredLayers}
                         isChecked={warnings.isChecked}
-                        //indeterminate={warnings.indeterminate}
                         warningType={warnings.type}
                     />
                 }

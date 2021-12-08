@@ -3,8 +3,6 @@ import { ReactReduxContext } from 'react-redux';
 import styled from 'styled-components';
 import { setZoomTo } from '../../state/slices/rpcSlice';
 
-
-
 const StyledZoomLevelContainer = styled.div`
     position: relative;
 `;
@@ -47,8 +45,6 @@ const ZoomBarCircle = ({
                 zoomLevel={zoomLevel}
                 onClick={() => store.dispatch(setZoomTo(index))}
                 isExpanded={isExpanded}
-                //onMouseEnter={() => setHoveringIndex(index)}
-                //onMouseLeave={() => setHoveringIndex(null)}
             >
             </StyledZoomLevelCircle>
         </StyledZoomLevelContainer>

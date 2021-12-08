@@ -279,7 +279,7 @@ export const rpcSlice = createSlice({
       state.gfiLocations = action.payload;
     },
     removeAllSelectedLayers: (state, action) => {
-        const groupId = action.payload && action.payload.notRemoveLayersByGroupId || null;
+        const groupId = (action.payload && action.payload.notRemoveLayersByGroupId) || null;
         state.selectedLayers.forEach(l => {
             if (groupId !== null) {
                 if (l && l.groups && !l.groups.includes(groupId)) {

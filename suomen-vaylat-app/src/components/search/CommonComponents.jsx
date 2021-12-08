@@ -20,18 +20,15 @@ export const Error = styled(Text)`
 
 export const StyledInput = styled.input`
   width: 100%;
-  //min-height: 48px;
   cursor: ${props => props.disabled ? 'not-allowed' : 'pointer'};
   color: ${props => props.theme.colors.black};
   margin: 0;
   padding: 6px 8px;
-  //box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
   border: none;
   border-radius: 4px;
   font-size: 14px;
   &:disabled {
     opacity: 0.3;
-   // display: none;
   }
   -moz-appearance: textfield;
   ::-webkit-inner-spin-button{
@@ -43,9 +40,6 @@ export const StyledInput = styled.input`
       margin: 0;
   }
   margin-top: ${props => props.marginTop ? '8px' : '0'};
-  @media only screen and (max-width: 400px) {
-    //margin-top: 8px;
-  }
   `;
 
 export const StyledSelect = styled.select`
@@ -58,11 +52,8 @@ export const StyledSelect = styled.select`
   padding: 14px 4px;
   box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
   border: none;
-  //border-radius: 24px;
-  //font-size: 12px;
   &:disabled {
     opacity: 0.3;
-   // display: none;
   }
 
   background-color: white;

@@ -8,7 +8,6 @@ import { useAppSelector } from '../../../state/hooks';
 import strings from '../../../translations';
 import { selectGroup } from '../../../utils/rpcUtil';
 import Layers from './Layers';
-//import { reArrangeSelectedMapLayers } from '../../../state/slices/rpcSlice';
 
 import hankekartta from './hankekartta.JPG';
 import intersection from './Intersection.jpg';

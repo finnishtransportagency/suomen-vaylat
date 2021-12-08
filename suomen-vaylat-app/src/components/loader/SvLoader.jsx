@@ -79,7 +79,7 @@ const pathVariants3 = {
 const SvLoader = () => {
   return (
     <StyledLoaderWrapper>
-      
+
         <svg
           className="svlogo-svg"
           version="1.1"

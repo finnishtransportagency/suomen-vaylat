@@ -1,18 +1,17 @@
-import strings from "../../translations";
-import styled from "styled-components";
-import suomenVaylatTextIcon from "./images/suomen_vaylat_text.jpg"
-import shareIcon from "./images/jaa_sivu.jpg"
-import infoIcon from "./images/info_nappi.jpg"
-import languageSelectionIcon from "./images/kieli_valinta.jpg"
+import strings from '../../translations';
+import styled from 'styled-components';
+import suomenVaylatTextIcon from './images/suomen_vaylat_text.jpg'
+import shareIcon from './images/jaa_sivu.jpg'
+import infoIcon from './images/info_nappi.jpg'
+import languageSelectionIcon from './images/kieli_valinta.jpg'
 
 const StyledIcon = styled.img`
-    // width: 100%;
     height: 28px;
 `;
 
 const StyledSubTitle = styled.em`
     margin-left: 5px;
-    color: ${props => props.theme.colors.mainColor1}; 
+    color: ${props => props.theme.colors.mainColor1};
 `;
 
 const upperBarImages = {

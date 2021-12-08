@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import ReactTooltip from "react-tooltip";
+import ReactTooltip from 'react-tooltip';
 import { isMobile } from '../../theme/theme';
 import styled from 'styled-components';
 import { useAppSelector } from '../../state/hooks';
@@ -27,7 +26,7 @@ const ZoomMenu = () => {
 
     return (
         <>
-            <ReactTooltip disable={isMobile} id='myLoc' place="top" type="dark" effect="float">
+            <ReactTooltip disable={isMobile} id='myLoc' place='top' type='dark' effect='float'>
                 <span>{strings.tooltips.myLocButton}</span>
             </ReactTooltip>
 
