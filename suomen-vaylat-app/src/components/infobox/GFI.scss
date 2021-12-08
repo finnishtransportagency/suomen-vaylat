@@ -25,11 +25,13 @@ div.popupContent {
     }
 
     td:nth-child(even) {
+        padding-right: 10px;
         padding-left: 10px;
     }
 
     td:nth-child(odd) {
         padding-right: 10px;
+        padding-left: 10px;
         border-right: 1px solid #ddd;
     }
 
@@ -41,11 +43,6 @@ div.popupContent {
 
     tr:nth-child(2n) {
         background-color: #f2f2f2;
-    }
-
-    tr.high-priority {
-        color: #ffffff;
-        background-color: $mainColor2;
     }
 
     table tr {
@@ -91,10 +88,10 @@ div.react-tabs {
 
 div.ReactModalPortal {
     //uncomment pointer-events to enable moving the map while gfi popup is open
-    //pointer-events: none;
+    pointer-events: none;
     div.ReactModal__Overlay--after-open {
         div.gfi-modal {
-            //pointer-events: auto;
+            pointer-events: auto;
             padding: 0px;
             overflow: visible;
             margin: auto;

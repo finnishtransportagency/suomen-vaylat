@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faTimes, faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Modal from 'react-modal';
 import { ReactReduxContext } from 'react-redux';
@@ -8,26 +8,55 @@ import { useAppSelector } from '../../state/hooks';
 import { resetGFILocations } from '../../state/slices/rpcSlice';
 import strings from '../../translations';
 import './GFI.scss';
-import { GeoJSONFormatter } from './GeoJSONFormatter';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import Draggable from 'react-draggable';
 import 'react-tabs/style/react-tabs.css';
+import { FormattedGFI } from './FormattedGFI';
+import ReactTooltip from "react-tooltip";
+import { isMobile } from '../../theme/theme';
+
+const StyledMyLocationButton = styled.div`
+    min-width: 28px;
+    min-height: 28px;
+    cursor: pointer;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    svg {
+        color: ${props => props.theme.colors.mainWhite};
+        font-size: 18px;
+        transition: all 0.1s ease-out;
+    };
+    &:hover {
+        svg {
+            color: ${props => props.theme.colors.mainColor2};
+        }
+    };
+`;
+
+const StyledHeaderButtons = styled.div`
+    display: flex;
+`;
 
 const customStyles = {
     overlay: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center'
-  }
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    content: {
+        marginLeft: '55%'
+    }
 };
 
 const StyledContent = styled.div`
-    padding: .3rem 0 0.3rem 0.3rem;
+    padding: .3rem 0 0 0.3rem;
 `;
 
 const StyledGFIHeader = styled.div`
     display: flex;
     color: ${props => props.theme.colors.mainColor1};
+    font-weight: bold;
 `;
 
 const StyledHeader = styled.div`
@@ -81,10 +110,10 @@ const SyledModalContent = styled.div`
 `;
 
 export const GFIPopup = ({gfiLocations}) => {
-    const geojsonFormatter = new GeoJSONFormatter();
-
     const { store } = useContext(ReactReduxContext);
-    const allLayers = useAppSelector((state) => state.rpc.allLayers);
+    //const allLayers = useAppSelector((state) => state.rpc.allLayers);
+    const { channel, allLayers, gfiPoint } = useAppSelector((state) => state.rpc);
+    const markerIcon = '<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#0064af"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zM7 9c0-2.76 2.24-5 5-5s5 2.24 5 5c0 2.88-2.88 7.19-5 9.88C9.92 16.21 7 11.85 7 9z"/><circle cx="12" cy="9" r="2.5"/></svg>';
     let tabsIds = []
     let tabsContent = []
     let layerIds = null;
@@ -98,15 +127,15 @@ export const GFIPopup = ({gfiLocations}) => {
 
             if (location.type === 'text') {
                 content = location.content
+                const popupContent = <div dangerouslySetInnerHTML={{__html: content}}></div> ;
+                var contentWrapper = <div className='contentWrapper-infobox'>{popupContent}</div> ;
+                contentDiv = <div className='popupContent'>{contentWrapper}</div> ;
+                tabsContent.push(contentDiv);
             }
             else if (location.type === 'geojson') {
-                content = geojsonFormatter.format(location.content);
+                content =  <FormattedGFI data={location.content} />;
+                tabsContent.push(content);
             }
-
-            const popupContent = <div dangerouslySetInnerHTML={{__html: content}}></div> ;
-            var contentWrapper = <div className='contentWrapper-infobox'>{popupContent}</div> ;
-            contentDiv = <div className='popupContent'>{contentWrapper}</div> ;
-            tabsContent.push(contentDiv);
 
         });
     };
@@ -115,6 +144,7 @@ export const GFIPopup = ({gfiLocations}) => {
 
     function closeModal() {
         store.dispatch(resetGFILocations([]));
+        channel.postRequest('MapModulePlugin.RemoveMarkersRequest', ['gfi_location']);
     };
 
     function closeTab(id) {
@@ -130,18 +160,44 @@ export const GFIPopup = ({gfiLocations}) => {
                 style={customStyles}
                 className={'gfi-modal'}
             >
-                <Draggable handle='.handle' bounds='body'>
+                <ReactTooltip disable={isMobile} id='gfiLoc' place="top" type="dark" effect="float">
+                    <span>{strings.gfi.gfiLocation}</span>
+                </ReactTooltip>
+                <Draggable handle='.modal-header' bounds='body'>
                     <SyledModalContent className='handle'>
                         <StyledHeader className='modal-header'>
                             <h5>{title}</h5>
-                            <StyledLayerCloseIcon
-                                onClick={() => {
-                                    closeModal();
-                                }} title={strings.gfi.close}>
-                                <FontAwesomeIcon
-                                    icon={faTimes}
-                                />
-                            </StyledLayerCloseIcon>
+                            <StyledHeaderButtons>
+                                <StyledMyLocationButton
+                                    data-tip data-for='gfiLoc'
+                                    onClick={() => {
+                                        var markerLocation = {
+                                            x: gfiPoint.lon,
+                                            y: gfiPoint.lat,
+                                            msg: '',
+                                            shape: '<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#0064af"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zM7 9c0-2.76 2.24-5 5-5s5 2.24 5 5c0 2.88-2.88 7.19-5 9.88C9.92 16.21 7 11.85 7 9z"/><circle cx="12" cy="9" r="2.5"/></svg>',
+                                            offsetX: 0, // center point x position from left to right
+                                            offsetY: 0, // center point y position from bottom to up
+                                            size: 6
+                                        };
+                                        const zoomLevel = 7;
+                                        channel.postRequest('MapModulePlugin.AddMarkerRequest', [markerLocation, 'gfi_location']);
+                                        channel.postRequest('MapMoveRequest', [gfiPoint.lon, gfiPoint.lat, zoomLevel]);
+                                    }}
+                                >
+                                    <FontAwesomeIcon
+                                        icon={faMapMarkerAlt}
+                                    />
+                                </StyledMyLocationButton>
+                                <StyledLayerCloseIcon
+                                    onClick={() => {
+                                        closeModal();
+                                    }} title={strings.gfi.close}>
+                                    <FontAwesomeIcon
+                                        icon={faTimes}
+                                    />
+                                </StyledLayerCloseIcon>
+                            </StyledHeaderButtons>
                         </StyledHeader>
                         <Tabs>
                             <StyledContent>

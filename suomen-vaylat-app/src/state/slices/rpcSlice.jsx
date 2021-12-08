@@ -39,7 +39,8 @@ const initialState = {
   center: {
       x: 0,
       y: 0
-  }
+  },
+  gfiPoint: null
 };
 
 export const rpcSlice = createSlice({
@@ -277,6 +278,9 @@ export const rpcSlice = createSlice({
     },
     resetGFILocations: (state, action) => {
       state.gfiLocations = action.payload;
+    },
+    setGFIPoint: (state, action) => {
+      state.gfiPoint = action.payload;
     }
   }
 });
@@ -324,7 +328,8 @@ export const {
     changeLayerStyle,
     reArrangeSelectedMapLayers,
     setGFILocations,
-    resetGFILocations
+    resetGFILocations,
+    setGFIPoint
 } = rpcSlice.actions;
 
 export default rpcSlice.reducer;
