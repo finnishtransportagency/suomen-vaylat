@@ -13,7 +13,14 @@ import {
     searchVKMRoad,
     setSelectError
 } from '../../state/slices/rpcSlice';
-import { emptyFormData, emptySearchResult, setSearching, setSearchResult, setSearchResultOnMapId, setSearchSelected } from '../../state/slices/searchSlice';
+import {
+    emptyFormData,
+    emptySearchResult,
+    setSearching,
+    setSearchResult,
+    setSearchResultOnMapId,
+    setSearchSelected
+} from '../../state/slices/searchSlice';
 import { setIsSearchOpen } from '../../state/slices/uiSlice';
 import strings from '../../translations';
 import CenterSpinner from '../center-spinner/CenterSpinner';
@@ -163,6 +170,7 @@ export const Search = ({isOpen}) => {
         store.dispatch(setSearchResultOnMapId(search.marker.x + '_' + search.marker.y + '_' + (search.marker.msg || '') + '_' + markerId));
     }
 
+
     return (
         <StyledSearchContainer
             initial="closed"
@@ -170,6 +178,7 @@ export const Search = ({isOpen}) => {
             variants={variants}
             transition={{
                 duration: 0.3,
+                type: "tween"
             }}
         >
             <StyledSearchMethod>
@@ -220,7 +229,8 @@ export const Search = ({isOpen}) => {
                 }
             </StyledSearchAddressInput>
                 {
-                    search.formData.address === null || search.formData.address.length === 0 ?
+                    (search.selected === 'address' && search.formData.address === null) || (search.selected === 'vkm' && search.formData.vkm.tie === null)
+                    ?
                     <StyledCloseButton
                         onClick={() => {
                             searchTypeOnChange('address');

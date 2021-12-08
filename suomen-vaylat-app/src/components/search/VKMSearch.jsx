@@ -35,9 +35,9 @@ const VKMSearch = ({visible, search, store, vectorLayerId, onEnterHandler}) => {
         store.dispatch(setSearchResultOnMapId(search.searchResult.tie + '_' + search.searchResult.osa + '_' + search.searchResult.ajorata + '_' + search.searchResult.etaisyys));
     }
 
-    const onChange = (name, value) => {
+    const onChange = (name, value, doSearch = true) => {
         let formData = {
-            tie: (name === 'tie') ? value : search.formData.vkm.tie,
+            tie: (name === 'tie') ? isNaN(value) ? null : value : search.formData.vkm.tie,
             tieosa: (name === 'tieosa') ? value : search.formData.vkm.tieosa,
             ajorata: (name === 'ajorata') ? value : search.formData.vkm.ajorata,
             etaisyys: (name === 'etaisyys') ? value : search.formData.vkm.etaisyys
@@ -77,7 +77,7 @@ const VKMSearch = ({visible, search, store, vectorLayerId, onEnterHandler}) => {
 
         store.dispatch(setFormData(formData));
 
-        if (name !== 'etaisyys') {
+        if (name !== 'etaisyys' && doSearch) {
             debounceSearchVKM(data);
         }
     };
@@ -107,17 +107,25 @@ const VKMSearch = ({visible, search, store, vectorLayerId, onEnterHandler}) => {
 
     return (
             <StyledContainer visible={visible} className="search-inputs">
+                <label htmlFor="vkm-road">{strings.search.vkm.tie}:</label>
                 <StyledTextField
+                    id="vkm-road"
                     placeholder={strings.search.vkm.tie}
                     onChange={(event) => {
-                        onChange('tie', parseFloat(event.target.value));
+                        onChange('tie', parseFloat(event.target.value), false);
                     }}
                     value={search.formData.vkm.tie ? search.formData.vkm.tie : ''}
                     min="1"
                     type="number"
+                    onKeyPress={(event) => {
+                        if (event.key === 'Enter') {
+                            onEnterHandler();
+                        }
+                    }}
                 />
-
+                <label htmlFor="vkm-tieosa">{strings.search.vkm.osa}:</label>
                 <StyledSelectInput
+                    id="vkm-tieosa"
                     placeholder={strings.search.vkm.osa}
                     onChange={(event) => {
                         onChange('tieosa', parseFloat(event.target.value));
@@ -129,8 +137,9 @@ const VKMSearch = ({visible, search, store, vectorLayerId, onEnterHandler}) => {
                         return { value: value, label: value }
                     })}
                 />
-
+                <label htmlFor="vkm-ajorata">{strings.search.vkm.ajorata}:</label>
                 <StyledSelectInput
+                    id="vkm-ajorata"
                     placeholder={strings.search.vkm.ajorata}
                     onChange={(event) => {
                         onChange('ajorata', parseFloat(event.target.value));
@@ -142,8 +151,9 @@ const VKMSearch = ({visible, search, store, vectorLayerId, onEnterHandler}) => {
                         return { value: value, label: value }
                     })}
                 />
-
+                <label htmlFor="vkm-etaisyys">{strings.search.vkm.etaisyys}:</label>
                 <StyledTextField
+                     id="vkm-etaisyys"
                     placeholder={strings.search.vkm.etaisyys}
                     onChange={(event) => {
                         onChange('etaisyys', parseFloat(event.target.value));

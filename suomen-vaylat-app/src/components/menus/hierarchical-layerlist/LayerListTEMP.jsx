@@ -110,7 +110,7 @@ const LayerListTEMP = ({
     useAppSelector((state) => state.language);
 
     const [isOpen, setIsOpen] = useState(false);
-  
+
     const emptyFilters = () => {
       store.dispatch(setTagLayers([]));
       store.dispatch(setTags([]));
@@ -140,6 +140,7 @@ const LayerListTEMP = ({
           variants={listVariants}
           transition={{
             duration: 0.3,
+            type: "tween"
         }}
         >
           <StyledListSubtitle>

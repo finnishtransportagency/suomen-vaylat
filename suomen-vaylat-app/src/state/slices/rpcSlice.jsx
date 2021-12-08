@@ -280,7 +280,19 @@ export const rpcSlice = createSlice({
       state.gfiLocations = action.payload;
     },
     setGFIPoint: (state, action) => {
-      state.gfiPoint = action.payload;
+        state.gfiPoint = action.payload;
+    },
+    removeAllSelectedLayers: (state, action) => {
+        const groupId = (action.payload && action.payload.notRemoveLayersByGroupId) || null;
+        state.selectedLayers.forEach(l => {
+            if (groupId !== null) {
+                if (l && l.groups && !l.groups.includes(groupId)) {
+                    state.channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [l.id, false]);
+                }
+            } else {
+                state.channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [l.id, false]);
+            }
+        });
     }
   }
 });
@@ -329,7 +341,8 @@ export const {
     reArrangeSelectedMapLayers,
     setGFILocations,
     resetGFILocations,
-    setGFIPoint
+    setGFIPoint,
+    removeAllSelectedLayers
 } = rpcSlice.actions;
 
 export default rpcSlice.reducer;

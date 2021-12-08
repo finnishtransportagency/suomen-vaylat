@@ -8,13 +8,8 @@ import { setIsSideMenuOpen } from '../../../state/slices/uiSlice';
 import strings from '../../../translations';
 
 const StyledSideMenu = styled.div`
-    //z-index: 10;
-    //position: absolute;
-   // top: 0px;
-    //left: 0px;
     width: 100%;
     max-width: 340px;
-    //height: calc(var(--app-height) - 60px);
     display: flex;
     flex-direction: column;
     transform: ${props => props.isSideMenuOpen ? "translateX(0%)" : "translateX(-100%)"};

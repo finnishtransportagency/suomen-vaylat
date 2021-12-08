@@ -6,9 +6,9 @@ const initialState = {
   isSearchOpen: false,
   searchParams: '',
   isInfoOpen: false,
+  isUserGuideOpen: false,
   shareUrl: '',
   isDrawingToolsOpen: false,
-  selectedLayerList: 'themes',
   activeTool: '',
   gfiLocations: null,
   isSwipingDisabled: false,
@@ -28,6 +28,7 @@ export const uiSlice = createSlice({
       state.isSideMenuOpen = false;
       state.isSearchOpen = false;
       state.isInfoOpen = false;
+      state.isUserGuideOpen = false;
     },
     setIsSideMenuOpen: (state, action) => {
       state.isSideMenuOpen = action.payload;
@@ -41,14 +42,14 @@ export const uiSlice = createSlice({
     setIsInfoOpen: (state, action) => {
       state.isInfoOpen = action.payload;
     },
+    setIsUserGuideOpen: (state, action) => {
+      state.isUserGuideOpen = action.payload;
+    },
     setShareUrl: (state, action) => {
       state.shareUrl = action.payload;
     },
     setIsDrawingToolsOpen: (state, action) => {
       state.isDrawingToolsOpen = action.payload;
-    },
-    setSelectedLayerListType: (state, action) => {
-      state.selectedLayerList = action.payload;
     },
     setActiveTool: (state, action) => {
       state.activeTool = action.payload;
@@ -71,10 +72,10 @@ export const {
   setIsSideMenuOpen,
   setIsSearchOpen,
   setIsInfoOpen,
+  setIsUserGuideOpen,
   setIsFullScreen,
   setIsDrawingToolsOpen,
   setShareUrl,
-  setSelectedLayerListType,
   setActiveTool,
   setIsSwipingDisabled,
   setSelectedMapLayersMenuTab,

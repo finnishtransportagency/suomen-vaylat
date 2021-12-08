@@ -8,7 +8,6 @@ import { useAppSelector } from '../../../state/hooks';
 import strings from '../../../translations';
 import { selectGroup } from '../../../utils/rpcUtil';
 import Layers from './Layers';
-//import { reArrangeSelectedMapLayers } from '../../../state/slices/rpcSlice';
 
 import hankekartta from './hankekartta.JPG';
 import intersection from './Intersection.jpg';
@@ -33,7 +32,6 @@ const StyledLayerGroups = styled.div`
     justify-content: center;
     background-color: ${props => props.theme.colors.mainWhite};
     margin: 8px 0px 8px 0px;
-    border-radius: 2px;
     &:last-child {
         ${props => props.parentId === -1 ? '1px solid '+props.theme.colors.mainColor2 : 'none'};
     };
@@ -65,9 +63,7 @@ const StyledMasterGroupHeader = styled.div`
     align-items: center;
     cursor: pointer;
     background-color: ${props => props.theme.colors.secondaryColor2};
-    //padding-left: 5px;
-    border-radius: 4px;
-    transition: all 0.1s ease-in;
+    border-radius: ${props => props.isOpen ? "4px 4px 0px 0px": "4px"};
 `;
 
 const StyledLeftContent = styled.div`
@@ -206,6 +202,7 @@ export const ThemeGroup = ({
                 onClick={() => {
                     selectGroup(index, theme);
                 }}
+                isOpen={isOpen}
             >
                 <StyledLeftContent>
                     <StyledMasterGroupHeaderIcon>
@@ -229,6 +226,7 @@ export const ThemeGroup = ({
                 variants={listVariants}
                 transition={{
                     duration: 0.3,
+                    type: "tween"
                 }}
             >
                 <div>

@@ -32,25 +32,50 @@
 
 /* width */
 #legend-main-container::-webkit-scrollbar,
-.swiper-slide-active::-webkit-scrollbar {
+.swiper-slide-active::-webkit-scrollbar,
+.ReactModal__Content::-webkit-scrollbar{
     width: .5rem;
 }
 
 /* Track */
 #legend-main-container::-webkit-scrollbar-track,
-.swiper-slide-active::-webkit-scrollbar-track {
+.swiper-slide-active::-webkit-scrollbar-track,
+.ReactModal__Content::-webkit-scrollbar-track{
     border-radius: 10px;
 }
 
 /* Handle */
 #legend-main-container::-webkit-scrollbar-thumb,
-.swiper-slide-active::-webkit-scrollbar-thumb {
+.swiper-slide-active::-webkit-scrollbar-thumb,
+.ReactModal__Content::-webkit-scrollbar-thumb{
     background-color: $mainColor1;
     border-radius: 10px;
 }
 
 /* Handle on hover */
 #legend-main-container::-webkit-scrollbar-thumb:hover,
-.swiper-slide-active::-webkit-scrollbar-thumb:hover {
+.swiper-slide-active::-webkit-scrollbar-thumb:hover,
+.ReactModal__Content::-webkit-scrollbar-thumb:hover{
     background: $mainColor2;
+}
+/* For Firefox */
+#legend-main-container,
+.swiper-slide-active,
+.ReactModal__Content{
+    scrollbar-color: $mainColor1 #ffffff; /* thumb and track color */
+    scrollbar-width: thin;
+}
+
+.user-guide-header {
+    cursor: pointer;
+}
+
+.user-guide-tabs {
+    transition: all 0.6s ease-out;
+    min-height: 264px;
+}
+
+.user-guide-upper-bar-sub-title {
+    margin-left: 5px;
+    color: $mainColor1;
 }
