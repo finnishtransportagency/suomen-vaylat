@@ -56,14 +56,14 @@ const StyledMapLayersDialog = styled(motion.div)`
     /* @media ${props => props.theme.device.laptop} {
         z-index: 10;
     }; */
-    @media ${props => props.theme.device.mobileL} {
-        z-index: 10;
-        position: fixed;
-        top: 0px;
-        left: 0px;
-        width: 100%;
-        height: 100%;
-    };
+    // @media ${props => props.theme.device.mobileL} {
+    //     z-index: 10;
+    //     position: fixed;
+    //     top: 0px;
+    //     left: 0px;
+    //     width: 100%;
+    //     height: 100%;
+    // };
 `;
 
 const StyledTabSubTitle = styled.div`
@@ -112,6 +112,9 @@ const StyledTab = styled.div`
         return props.isSelected ? '1.05' : '1';
     }});
     transition: transform 0.2s ease-out;
+    @media ${props => props.theme.device.mobileL} {
+        font-size: 11px;
+    };
 `;
 
 const StyledSwiper = styled(Swiper)`
