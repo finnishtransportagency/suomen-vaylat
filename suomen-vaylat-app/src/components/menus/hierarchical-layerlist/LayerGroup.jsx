@@ -70,17 +70,12 @@ const StyledMasterGroupHeader = styled.div`
     border-radius: 4px;
     padding-top: 8px;
     padding-bottom: 8px;
+    box-shadow: 0px 3px 6px 0px rgba(0,0,0,0.16);
 `;
 
 const StyledLeftContent = styled.div`
     display: flex;
     height: 100%;
-    align-items: center;
-`;
-
-const StyledMotionIconWrapper = styled(motion.div)`
-    display: flex;
-    justify-content: center;
     align-items: center;
 `;
 
@@ -188,6 +183,13 @@ const StyledSelectButton = styled.button`
     };
 `;
 
+
+const StyledMotionIconWrapper = styled(motion.div)`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`;
+
 const StyledLayerGroup = styled(motion.ul)`
     list-style-type: none;
     margin: 0;
@@ -282,7 +284,14 @@ export const LayerGroup = ({
     useEffect(() => {
 
         if (group.layers) {
-            var getLayers = layers.filter(l => group.layers.includes(l.id));
+            var getLayers = [];
+            // need use group.layers because it is layer name ordered list
+            group.layers.forEach(gl => {
+                var layer = layers.filter(l => l.id === gl);
+                if (layer && layer[0]) {
+                    getLayers.push(layer[0]);
+                }
+            });
             setFilteredLayers(getLayers);
             setVisibleLayers(getLayers.filter(layer => layer.visible === true));
 
@@ -379,6 +388,7 @@ export const LayerGroup = ({
                                 variants={masterHeaderIconVariants}
                                 transition={{
                                     duration: 0.3,
+                                    type: "tween"
                                 }}
                             >
                                 <FontAwesomeIcon
@@ -403,6 +413,7 @@ export const LayerGroup = ({
                             variants={layerGroupIconVariants}
                             transition={{
                                 duration: 0.3,
+                                type: "tween"
                             }}
                         >
                             <FontAwesomeIcon
@@ -439,6 +450,7 @@ export const LayerGroup = ({
                     variants={listVariants}
                     transition={{
                         duration: 0.3,
+                        type: "tween"
                     }}
                 >
                     {hasChildren && (

@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
+    <meta name="theme-color" content="rgb(0, 100, 175)" />
     <meta
       name="description"
       content="Suomen Väylät -karttapalvelu. Palvelu kokoaa yhteen Väyläviraston avoimet, eri väylämuotoihin liittyvät aineistot. Palvelun kautta väylätietoja halutaan kuvata mahdollisimman sujuvasti, näkyvästi, ajantasaisesti ja monipuolisesti erilaisille käyttäjäryhmille ja -tarpeille."
@@ -29,6 +29,8 @@
     <style>
       body {
           font-family: "Exo 2",sans-serif !important;
+          /* Disable Pull-to-Refresh Feature on Mobile Browsers */
+          overscroll-behavior: contain;
       }
     </style>
   </head>

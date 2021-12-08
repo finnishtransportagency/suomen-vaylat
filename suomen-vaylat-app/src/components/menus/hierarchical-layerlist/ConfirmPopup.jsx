@@ -123,11 +123,11 @@ export const ConfirmPopup = ({ filteredLayers, indeterminate, hideWarn }) => {
                 style={customStyles}
             >
             <StyledHeader className="modal-header">
-                <h5>{strings.warning}</h5>
+                <h5>{strings.general.warning}</h5>
                 <StyledLayerCloseIcon
                     onClick={() => {
                         closeModal();
-                        }} title='Sulje'>
+                        }} title={strings.general.close}>
                         <FontAwesomeIcon
                             icon={faTimes}
                         />
@@ -145,10 +145,10 @@ export const ConfirmPopup = ({ filteredLayers, indeterminate, hideWarn }) => {
                         type="checkbox"
                         onClick={() => setIsSelected(!selected)}
                     />
-                    {strings.dontShowAgain}
+                    {strings.general.dontShowAgain}
                 </label>
-                <button onClick={() => closeModal()}>{strings.continue}</button>
-                <button onClick={() => closeModal(true)}>{strings.cancel}</button>
+                <button onClick={() => closeModal()}>{strings.general.continue}</button>
+                <button onClick={() => closeModal(true)}>{strings.general.cancel}</button>
             </StyledFooter>
         </Modal>
         </div>

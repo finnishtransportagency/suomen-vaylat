@@ -3,8 +3,7 @@ import {
     faCompress,
     faExpand,
     faLayerGroup,
-    faPencilRuler,
-    faSearch
+    faPencilRuler
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ReactReduxContext } from 'react-redux';
@@ -15,7 +14,6 @@ import { useAppSelector } from '../../../state/hooks';
 import {
     setIsDrawingToolsOpen,
     setIsFullScreen,
-    setIsSearchOpen,
     setIsSideMenuOpen,
     setActiveTool
 } from '../../../state/slices/uiSlice';
@@ -33,13 +31,17 @@ const StyledMenuBar = styled.div`
     align-items: flex-start;
     flex-direction: column;
     transition: all 0.5s ease-in-out;
+    @media ${props => props.theme.device.mobileL} {
+        grid-row-start: 2;
+        grid-row-end: 3;
+    };
 `;
 
 const StyledMapToolsContainer = styled.div`
     background-color: ${props => props.theme.colors.mainWhite};
     border-radius: 24px;
     box-shadow: 2px 2px 4px #0000004D;
-    margin-top: 8px;
+    margin-bottom: 8px;
 `;
 
 const StyledMenuBarButton = styled.div`
@@ -52,7 +54,7 @@ const StyledMenuBarButton = styled.div`
     justify-content: center;
     align-items: center;
     background-color: ${props => props.isActive ? props.theme.colors.buttonActive : props.theme.colors.button};
-    margin-top: 8px;
+    margin-bottom: 8px;
     box-shadow: 2px 2px 4px #0000004D;
     border-radius: 50%;
     svg {
@@ -118,7 +120,6 @@ const MenuBar = () => {
     const {
         isFullScreen,
         isSideMenuOpen,
-        isSearchOpen,
         isDrawingToolsOpen,
         activeTool,
     } =  useAppSelector((state) => state.ui);
@@ -168,6 +169,15 @@ const MenuBar = () => {
             </ReactTooltip>
 
             <StyledMenuBar isSideMenuOpen={isSideMenuOpen}>
+                {/* <StyledMenuBarButton
+                    data-tip data-for='search'
+                    isActive={isSearchOpen}
+                    onClick={() => store.dispatch(setIsSearchOpen(!isSearchOpen))}
+                >
+                    <FontAwesomeIcon
+                        icon={faSearch}
+                    />
+                </StyledMenuBarButton> */}
                 <StyledMenuBarButton
                     data-tip data-for='layerlist'
                     isActive={isSideMenuOpen}
@@ -178,15 +188,6 @@ const MenuBar = () => {
                     </StyledLayerCount>
                     <FontAwesomeIcon
                         icon={faLayerGroup}
-                    />
-                </StyledMenuBarButton>
-                <StyledMenuBarButton
-                    data-tip data-for='search'
-                    isActive={isSearchOpen}
-                    onClick={() => store.dispatch(setIsSearchOpen(!isSearchOpen))}
-                >
-                    <FontAwesomeIcon
-                        icon={faSearch}
                     />
                 </StyledMenuBarButton>
                 <StyledMapToolsContainer>

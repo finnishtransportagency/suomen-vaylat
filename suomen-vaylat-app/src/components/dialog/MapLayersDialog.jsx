@@ -59,7 +59,7 @@ const StyledMapLayersDialog = styled(motion.div)`
     overflow-y: auto;
     user-select: none;
     box-shadow: 0px 3px 6px 0px rgba(0,0,0,0.16);
-        &::-webkit-scrollbar {
+    &::-webkit-scrollbar {
         display: none;
     };
     /* @media ${props => props.theme.device.laptop} {
@@ -76,23 +76,38 @@ const StyledMapLayersDialog = styled(motion.div)`
 `;
 
 const StyledTabs = styled.div`
-    z-index:2;
     position: relative;
     display: flex;
     align-items: center;
-    height: 48px;
+    height: 40px;
     background-color: #F2F2F2;
     //margin-top: 12px;
     margin: 16px 8px 0px 8px;
     &::before {
+        z-index: 2;
         position: absolute;
         content: '';
         width: calc(100% / 3);
         height: 100%;
-        background-color: white;
+        background-color: ${props => props.theme.colors.mainWhite};
         bottom: 0px;
         left: ${props => props.tabIndex * 50+'%'};
-        border-radius: 4px;
+        border-radius: 4px 4px 0px 0px;
+        transform: translateX(
+            ${props => {
+            return props.tabIndex * -50+'%';
+            }}
+        );
+        transition: all 0.3s ease-out;
+    };
+    &::after {
+        position: absolute;
+        content: '';
+        width: calc(100% / 3);
+        height: 100%;
+        bottom: 0px;
+        left: ${props => props.tabIndex * 50+'%'};
+        border-radius: 4px 4px 0px 0px;
         transform: translateX(
             ${props => {
             return props.tabIndex * -50+'%';
@@ -103,10 +118,11 @@ const StyledTabs = styled.div`
         "rgba(0, 99, 175, 0.3)" : props.tabIndex === 1 ?
         "rgba(32, 122, 66, 0.3)" :
         "rgba(229, 0, 130, 0.3)"};
-    };
+    }
 `;
 
 const StyledTab = styled.div`
+    z-index: 2;
     user-select: none;
     width: calc(100% / 3);
     cursor: pointer;
@@ -114,15 +130,15 @@ const StyledTab = styled.div`
     font-weight: bold;
     color: ${props => props.isSelected ? props.theme.colors[props.color] : "#656565"};
     text-align: center;
-    transform: scale(${props => {
+    /* transform: scale(${props => {
         return props.isSelected ? "1.05" : "1";
-    }});
-    transition: transform 0.2s ease-out;
+    }}); */
+    transition: color 0.2s ease-out;
 `;
 
 const StyledLayerCount = styled.div`
     position: absolute;
-    top: -14px;
+    top: -8px;
     right: -4px;
     width: 25px;
     height: 18px;
@@ -139,8 +155,8 @@ const StyledLayerCount = styled.div`
 const StyledSwiper = styled(Swiper)`
   .swiper-slide {
     background-color: ${props => props.theme.colors.mainWhite};
-    padding: 16px 16px 16px 16px;
-    overflow: auto;
+    padding: 16px 8px 16px 16px;
+    overflow: scroll;
   };
   transition: box-shadow 0.3s ease-out;
   box-shadow: 0px -1px 11px ${props => props.tabIndex === 0 ?
@@ -216,6 +232,7 @@ const MapLayersDialog = () => {
                     variants={variants}
                     transition={{
                         duration: 0.3,
+                        type: "tween"
                     }}
             >
                 <DialogHeader

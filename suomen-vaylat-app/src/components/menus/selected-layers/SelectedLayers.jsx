@@ -90,7 +90,7 @@ export const SelectedLayers = ({ selectedLayers, currentZoomLevel }) => {
     };
 
     const sortSelectedBackgroundLayers = (backgroundLayer) => {
-        const newSelectedLayers = arrayMoveImmutable(selectedLayers, 
+        const newSelectedLayers = arrayMoveImmutable(selectedLayers,
             (backgroundLayer.oldIndex + selectedLayers.length) - backgroundMaps.length,
             (backgroundLayer.newIndex + selectedLayers.length) - backgroundMaps.length)
         reArrangeRPCLayerOrder(store, newSelectedLayers);

@@ -90,7 +90,7 @@ export const AppInfoModal = () => {
                 <StyledModalCloseIcon
                     onClick={() => {
                         closeModal();
-                    }} title='Sulje'>
+                    }} title={strings.general.close}>
                     <FontAwesomeIcon
                         icon={faTimes}
                     />

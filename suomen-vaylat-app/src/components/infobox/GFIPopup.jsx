@@ -217,7 +217,7 @@ export const GFIPopup = ({gfiLocations}) => {
                                                         <StyledTabCloseIcon
                                                             onClick={() => {
                                                                 closeTab(id);
-                                                            }} title={strings.gfi.close}>
+                                                            }} title={strings.general.close}>
                                                             <FontAwesomeIcon
                                                                 icon={faTimes}
                                                             />

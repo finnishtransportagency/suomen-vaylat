@@ -107,6 +107,7 @@ const WarningDialog = ({ title='', message='', filteredLayers=[], indeterminate=
                     variants={variants}
                     transition={{
                         duration: 0.3,
+                        type: "tween"
                     }}
             >
                 <DialogHeader
@@ -119,8 +120,8 @@ const WarningDialog = ({ title='', message='', filteredLayers=[], indeterminate=
                 </StyledContent>
                 {warningType === 'multipleLayersWarning' &&
                     <StyledFooter className='modal-footer'>
-                        <StyledButton onClick={() => closeModal()}>{strings.continue}</StyledButton>
-                        <StyledButton onClick={() => closeModal(true)}>{strings.cancel}</StyledButton>
+                        <StyledButton onClick={() => closeModal()}>{strings.general.continue}</StyledButton>
+                        <StyledButton onClick={() => closeModal(true)}>{strings.general.cancel}</StyledButton>
                     </StyledFooter>
                 }
             </StyledWarningDialog>

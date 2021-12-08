@@ -46,7 +46,13 @@ const StyledActionButtonWrapper = styled(motion.div)`
     pointer-events: auto;
     svg {
         color: ${props => props.theme.colors.mainWhite};
-    }
+    };
+    @media ${props => props.theme.device.mobileL} {
+        top: initial;
+        bottom: 8px;
+        max-width: 212px;
+        height: 40px;
+    };
 `;
 
 const StyledLeftContent = styled.div`
@@ -71,6 +77,13 @@ const StyledActionButtonIcon = styled.div`
     svg {
         font-size: 18px;
     };
+    @media ${props => props.theme.device.mobileL} {
+        min-width: 40px;
+        height: 40px;
+        svg {
+            font-size: 16px;
+        };
+    };
 `;
 
 const StyledActionButtonText = styled.p`
@@ -79,6 +92,9 @@ const StyledActionButtonText = styled.p`
     font-size: 14px;
     font-weight: 600;
     user-select: none;
+    @media ${props => props.theme.device.mobileL} {
+        font-size: 12px;
+    };
 `;
 
 const StyledActionButtonClose = styled.div`
@@ -91,11 +107,15 @@ const StyledActionButtonClose = styled.div`
     svg {
         font-size: 20px;
     };
+    @media ${props => props.theme.device.mobileL} {
+        svg {
+            font-size: 18px;
+        };
+    };
 `;
 
 const ThemeMapsActionButton = () => {
     const { store } = useContext(ReactReduxContext);
-    //const { channel } = useAppSelector((state) => state.rpc);
 
     const { channel, selectedTheme,  lastSelectedTheme, selectedThemeIndex} = useAppSelector((state) => state.rpc);
 
@@ -111,6 +131,7 @@ const ThemeMapsActionButton = () => {
         variants={variants}
         transition={{
             duration: 0.3,
+            type: "tween"
         }}
     >
         <StyledLeftContent>
