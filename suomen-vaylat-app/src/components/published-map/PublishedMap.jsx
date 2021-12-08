@@ -28,8 +28,7 @@ const ANNOUNCEMENTS_LOCALSTORAGE = 'oskari-announcements';
 const PublishedMap = () => {
 
     const { store } = useContext(ReactReduxContext);
-    const loading = useAppSelector((state) => state.rpc.loading);
-    const gfiLocations = useAppSelector((state) => state.rpc.gfiLocations);
+    let { loading, gfiLocations } = useAppSelector((state) => state.rpc);
     const language = useAppSelector((state) => state.language);
     const lang = language.current;
 
@@ -138,10 +137,6 @@ const PublishedMap = () => {
 
                 if (data.MapClickedEvent) {
                     channel.handleEvent('MapClickedEvent', (data) => {
-                        // Reset GFI locations so the popup closes and loads with new content
-                        channel.postRequest('MapModulePlugin.RemoveMarkersRequest', ['gfi_location']);
-                        store.dispatch(resetGFILocations([]));
-                        // Set new GFI point
                         store.dispatch(setGFIPoint(data));
                     });
                 };

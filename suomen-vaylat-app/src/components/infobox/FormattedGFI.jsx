@@ -76,11 +76,11 @@ const reOrderFeatureProperties = (geoJSON = {}, visibleFields = [], highPriority
 const getContent = (key, value, visibleFields, highPriorityFields, lowPriorityTable, highPriorityTable) => {
     const hasConfiguration = highPriorityFields.length !== 0 || visibleFields.length !== 0;
     if (hasConfiguration && highPriorityFields.includes(key)) {
-        return highPriorityTable.push(<tr class="high-priority"><td class="title">{key}</td><td>{value}</td></tr>);
+        return highPriorityTable.push(<tr className="high-priority"><td className="title">{key}</td><td>{value}</td></tr>);
     } else if (hasConfiguration && visibleFields.includes(key)) {
-        return lowPriorityTable.push(<tr class="low-priority"><td class="title">{key}</td><td>{value}</td></tr>);
+        return lowPriorityTable.push(<tr className="low-priority"><td className="title">{key}</td><td>{value}</td></tr>);
     }
-    return lowPriorityTable.push(<tr class="low-priority"><td class="title">{key}</td><td>{value}</td></tr>);
+    return lowPriorityTable.push(<tr className="low-priority"><td className="title">{key}</td><td>{value}</td></tr>);
 };
 
 export const FormattedGFI = ({ data }) => {
@@ -101,7 +101,7 @@ export const FormattedGFI = ({ data }) => {
                 getContent(key, f.properties[key], visibleFields, highPriority, lowPriorityTable, highPriorityTable);
             }
         });
-        pretty.push(<Tables index={index} lowPriorityTable={lowPriorityTable} highPriorityTable={highPriorityTable} />);
+        pretty.push(<GFITables key={index} index={index} lowPriorityTable={lowPriorityTable} highPriorityTable={highPriorityTable} />);
     });
 
     return (
@@ -121,7 +121,7 @@ export const FormattedGFI = ({ data }) => {
     );
   };
 
-  const Tables = ({ index, lowPriorityTable, highPriorityTable}) => {
+  const GFITables = ({ index, lowPriorityTable, highPriorityTable}) => {
     const highPriorityTableExists = highPriorityTable.length > 0 ? false : true;
     const [isFeatureOpen, openFeature] = useState(true);
     const [isInfoOpen, openInfo] = useState(highPriorityTableExists);
