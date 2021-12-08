@@ -10,15 +10,9 @@ import {
     faEllipsisV
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
 import AddressSearch from './AddressSearch';
 import VKMSearch from './VKMSearch';
-
-
 import SvLoder from '../../components/loader/SvLoader';
-
-
-
 import strings from '../../translations';
 
 import {
@@ -46,7 +40,7 @@ import { setIsSearchOpen } from '../../state/slices/uiSlice';
 
 
 const StyledSearchContainer = styled.div`
-    width: ${props => props.isSearchOpen ? "100%" : "48px"};
+    width: ${props => props.isSearchOpen ? '100%' : '48px'};
     pointer-events: auto;
     z-index: 2;
     position: relative;
@@ -59,7 +53,7 @@ const StyledSearchContainer = styled.div`
         max-width: 100%;
         grid-column-start: 1;
         grid-column-end: 4;
-        width: ${props => props.isSearchOpen ? "100%" : "40px"};
+        width: ${props => props.isSearchOpen ? '100%' : '40px'};
     };
 `;
 
@@ -107,7 +101,7 @@ const StyledSearchMethodSelector = styled.div`
     justify-content: center;
     align-items: center;
     cursor: pointer;
-    color: ${props => props.isSearchMethodSelectorOpen ? props.theme.colors.mainColor1 : "rgba(0,0,0,0.5)"};
+    color: ${props => props.isSearchMethodSelectorOpen ? props.theme.colors.mainColor1 : 'rgba(0,0,0,0.5)'};
     p {
         margin: 0;
     };
@@ -270,14 +264,14 @@ return (
                     >
                         <FontAwesomeIcon
                             icon={faEllipsisV}
-                            style={{transform: isSearchMethodSelectorOpen && "rotate(180deg)"}}
+                            style={{transform: isSearchMethodSelectorOpen && 'rotate(180deg)'}}
                         />
                     </StyledSearchMethodSelector>
                     {
                         !search.searching ?
                         <StyledSelectedSearchMethod onClick={() => isSearchMethodSelectorOpen && setIsSearchMethodSelectorOpen(false)}>
                             {
-                                search.selected === 'vkm' && <p>Tiehaku</p>
+                                search.selected === 'vkm' && <p>{strings.search.types.vkm}</p>
                             }
                             {
                                 search.selected === 'address' &&
@@ -328,6 +322,7 @@ return (
                                 searchTypeOnChange(searchType.value);
                                 setIsSearchMethodSelectorOpen(false);
                             }}
+                            key={'search-type-' + searchType.value}
                         >
                            <p>{searchType.label}</p>
                         </StyledDropdownContentItem>
