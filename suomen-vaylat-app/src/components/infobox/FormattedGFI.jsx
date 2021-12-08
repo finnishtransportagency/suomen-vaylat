@@ -18,7 +18,6 @@ const listVariants = {
 
 const StyledInfoHeader = styled.div`
     color: ${props => props.theme.colors.mainColor1};
-    //margin-top: 1rem;
 `;
 
 const StyledInfoHeaderDiv = styled.div`
