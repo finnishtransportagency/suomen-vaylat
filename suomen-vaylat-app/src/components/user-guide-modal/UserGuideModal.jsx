@@ -92,6 +92,10 @@ export const UserGuideModal = () => {
         store.dispatch(setIsUserGuideOpen(false));
     };
 
+    const setAccordionIndex = (index) => {
+        modalIndex == index ? setModalIndex(-1) : setModalIndex(index)
+    }
+
     const modalContent = [
         {
             title: strings.appGuide.modalContent.upperBar.title,
@@ -163,7 +167,7 @@ export const UserGuideModal = () => {
                                         key={`accordion-header-${index}`}
                                         className={'user-guide-header'}
                                         as={'h4'}
-                                        onClick={() => setModalIndex(index)}
+                                        onClick={() => setAccordionIndex(index)}
                                     >
                                         {content.title}
                                     </Accordion.Button>
