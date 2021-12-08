@@ -35,7 +35,9 @@ const fi = {
     },
     gfi: {
         title: 'Kohdetiedot',
-        close: 'Sulje'
+        close: 'Sulje',
+        additionalInfo: 'Lisätiedot',
+        gfiLocation: 'Lähennä kohteeseen'
     },
     warning: 'Varoitus!',
     multipleLayersWarning: 'Olet lisäämässä kartalle 10 tai enemmän karttatasoa ja se saattaa vaikuttaa palvelun suorituskykyyn',

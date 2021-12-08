@@ -37,7 +37,9 @@ const sv = {
     },
     gfi: {
         title: 'Objektuppgifter',
-        close: 'Stänga'
+        close: 'Stänga',
+        additionalInfo: 'Lisätiedot',
+        gfiLocation: 'Lähennä kohteeseen'
     },
     warning: 'Obs!',
     multipleLayersWarning: 'You are about to activate 10 or more layers and it might affect the performance of the website',
