@@ -126,7 +126,7 @@ const StyledSelectedSearchMethod = styled.div`
     }
 `;
 
-const StyledMenuBarButton = styled.div`  
+const StyledMenuBarButton = styled.div`
     pointer-events: auto;
     cursor: pointer;
     min-width: 48px;
@@ -184,8 +184,6 @@ const StyledDropdownContentItem = styled.div`
 `;
 
 const Search2 = () => {
-
-
     const [isSearchMethodSelectorOpen, setIsSearchMethodSelectorOpen] = useState(false);
     const search = useAppSelector((state) => state.search);
     const {
@@ -248,7 +246,6 @@ const Search2 = () => {
         store.dispatch(setSearchResultOnMapId(search.marker.x + '_' + search.marker.y + '_' + (search.marker.msg || '') + '_' + markerId));
     };
 
-    
     const onAddressSelect = (name, lon, lat, id) => {
         store.dispatch(setSelectedIndex(id));
         store.dispatch(setMarker({
@@ -296,7 +293,7 @@ return (
                     }
                 </StyledLeftContent>
                 {
-                    search.selected !== 'vkm' && 
+                    search.selected !== 'vkm' &&
                     <StyledSearchActionButton
                         onClick={() => {
                             if(search.searchResult.address.length > 0){
@@ -321,9 +318,7 @@ return (
                 />
             </StyledMenuBarButton>
         </StyledSearchWrapper>
-        <StyledDropdownWrapper
-            //layout
-        >
+        <StyledDropdownWrapper>
             <StyledDropdownContent>
             {
                 isSearchMethodSelectorOpen && searchTypes.map(searchType => {
@@ -368,7 +363,7 @@ return (
                     />
             }
             </StyledDropdownContent>
-        </StyledDropdownWrapper>  
+        </StyledDropdownWrapper>
 </StyledSearchContainer>
 );
 

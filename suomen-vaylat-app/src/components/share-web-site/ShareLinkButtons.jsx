@@ -54,11 +54,7 @@ const StyledHeaderButton = styled.div`
  */
 export const ThemeGroupShareButton = ({ themeId, color }) => {
     const { store } = useContext(ReactReduxContext);
-    //const url = process.env.REACT_APP_SITE_URL + '/theme/{lang}/{zoom}/{x}/{y}/' + encodeURIComponent(themeId);
     const url = process.env.REACT_APP_SITE_URL + '/theme/{lang}/{zoom}/{x}/{y}/' + themeId;
-    const shareGroup = () => {
-        store.dispatch(setShareUrl(url));
-    };
 
     return(
         <>
@@ -69,7 +65,7 @@ export const ThemeGroupShareButton = ({ themeId, color }) => {
                 data-tip data-for={'share_' + themeId}
                 onClick={(e) => {
                     e && e.stopPropagation();
-                    shareGroup();
+                    store.dispatch(setShareUrl(url));
                 }}
                 color={color}
             >
@@ -87,7 +83,7 @@ export const ThemeGroupShareButton = ({ themeId, color }) => {
  */
 export const WebSiteShareButton = () => {
     const { store } = useContext(ReactReduxContext);
-    const url = process.env.REACT_APP_SITE_URL + '/link/{lang}/{layerlistType}/{zoom}/{x}/{y}/{maplayers}';
+    const url = process.env.REACT_APP_SITE_URL + '/link/{lang}/{zoom}/{x}/{y}/{maplayers}';
     return (
         <>
             <ReactTooltip disable={isMobile} id={'share_website'} place='bottom' type='dark' effect='float'>

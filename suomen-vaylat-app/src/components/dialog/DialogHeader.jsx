@@ -59,7 +59,7 @@ const DialogHeader = ({
                         icon={faTimes}
                         onClick={() => hideWarn()}
                     />
-              
+
             </StyledHeaderContent>
     );
  }

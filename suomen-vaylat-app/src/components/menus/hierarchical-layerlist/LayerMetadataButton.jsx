@@ -37,7 +37,7 @@ export const LayerMetadataButton = ({
     const handleMetadataError = () => {
         store.dispatch(clearLayerMetadata());
     };
-    
+
     return (
             <StyledLayerInfoIconWrapper
                 uuid={layer.metadataIdentifier}

@@ -5,11 +5,11 @@ import {
     setLastSelectedTheme,
     setSelectedThemeIndex,
     reArrangeSelectedMapLayers
-} from "../state/slices/rpcSlice";
+} from '../state/slices/rpcSlice';
 
 import {
     setSelectedMapLayersMenuThemeIndex
-} from "../state/slices/uiSlice";
+} from '../state/slices/uiSlice';
 
 export const updateLayers = (store, channel) => {
     channel && channel.getAllLayers(function (data) {
