@@ -1,5 +1,4 @@
 import { useEffect } from 'react';
-import styled from 'styled-components';
 import { debounce } from 'tlence';
 import {addFeaturesToMap, removeFeaturesFromMap, searchVKMRoad, setSelectError} from '../../state/slices/rpcSlice';
 import { emptySearchResult, setFormData, setSearching, setSearchResult, setSearchResultOnMapId } from '../../state/slices/searchSlice';
@@ -8,10 +7,6 @@ import { StyledContainer, StyledSelectInput, StyledTextField } from './CommonCom
 import { VKMGeoJsonHoverStyles, VKMGeoJsonStyles } from './VKMSearchStyles';
 
 let debounceSearchVKM = null;
-
-const StyledInputContainer = styled.div`
-
-`;
 
 const VKMSearch = ({visible, search, store, vectorLayerId, onEnterHandler}) => {
     if (search.selected === 'vkm' && search.searchResult.geom !== null && search.searching === false
@@ -128,7 +123,7 @@ const VKMSearch = ({visible, search, store, vectorLayerId, onEnterHandler}) => {
                         }
                     }}
                 />
-                <label htmlFor="vkm-tieosa">{strings.search.vkm.osa}:</label> 
+                <label htmlFor="vkm-tieosa">{strings.search.vkm.osa}:</label>
                 <StyledSelectInput
                     id="vkm-tieosa"
                     placeholder={strings.search.vkm.osa}
@@ -142,7 +137,7 @@ const VKMSearch = ({visible, search, store, vectorLayerId, onEnterHandler}) => {
                         return { value: value, label: value }
                     })}
                 />
-                <label htmlFor="vkm-ajorata">{strings.search.vkm.ajorata}:</label>  
+                <label htmlFor="vkm-ajorata">{strings.search.vkm.ajorata}:</label>
                 <StyledSelectInput
                     id="vkm-ajorata"
                     placeholder={strings.search.vkm.ajorata}
@@ -156,7 +151,7 @@ const VKMSearch = ({visible, search, store, vectorLayerId, onEnterHandler}) => {
                         return { value: value, label: value }
                     })}
                 />
-                <label htmlFor="vkm-etaisyys">{strings.search.vkm.etaisyys}:</label>  
+                <label htmlFor="vkm-etaisyys">{strings.search.vkm.etaisyys}:</label>
                 <StyledTextField
                      id="vkm-etaisyys"
                     placeholder={strings.search.vkm.etaisyys}

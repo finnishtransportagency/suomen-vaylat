@@ -136,8 +136,7 @@ export const ShareWebSitePopup = () => {
     } = useAppSelector(state => state.rpc);
 
     const {
-        shareUrl,
-        selectedLayerList
+        shareUrl
     } = useAppSelector(state => state.ui);
 
     const [isCopied, setIsCopied] = useState(false);
@@ -161,7 +160,6 @@ export const ShareWebSitePopup = () => {
     url = url.replace('{x}', parseInt(center.x));
     url = url.replace('{y}', parseInt(center.y));
     url = url.replace('{maplayers}', mapLayers);
-    url = url.replace('{layerlistType}', selectedLayerList);
     url = url.replace('{lang}', strings.getLanguage());
 
     const title = strings.share.shareTexts.title;

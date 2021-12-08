@@ -3,8 +3,7 @@ import {
     faCompress,
     faExpand,
     faLayerGroup,
-    faPencilRuler,
-    faSearch
+    faPencilRuler
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ReactReduxContext } from 'react-redux';
@@ -15,7 +14,6 @@ import { useAppSelector } from '../../../state/hooks';
 import {
     setIsDrawingToolsOpen,
     setIsFullScreen,
-    setIsSearchOpen,
     setIsSideMenuOpen,
     setActiveTool
 } from '../../../state/slices/uiSlice';
@@ -122,7 +120,6 @@ const MenuBar = () => {
     const {
         isFullScreen,
         isSideMenuOpen,
-        isSearchOpen,
         isDrawingToolsOpen,
         activeTool,
     } =  useAppSelector((state) => state.ui);

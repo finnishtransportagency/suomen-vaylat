@@ -1,14 +1,12 @@
 import {useState} from 'react';
 import styled from 'styled-components';
-import { motion } from "framer-motion";
+import { motion } from 'framer-motion';
 import { Swiper, SwiperSlide } from 'swiper/react/swiper-react.js';
 import '../../_colors.scss';
 // Styles must use direct files imports
 import 'swiper/swiper.scss'; // core Swiper
 import 'swiper/modules/navigation/navigation.scss'; // Navigation module
 import 'swiper/modules/pagination/pagination.scss'; // Pagination module
-
-// import './swiper.css'; //
 
 // import Swiper core and required modules
 import SwiperCore, {
@@ -27,13 +25,13 @@ SwiperCore.use([
 
 const variants = {
     open: {
-        pointerEvents: "auto",
+        pointerEvents: 'auto',
         x: 0,
         opacity: 1,
     },
     closed: {
-        pointerEvents: "none",
-        x: "-100%",
+        pointerEvents: 'none',
+        x: '-100%',
         opacity: 0,
     },
 };
@@ -69,7 +67,7 @@ const StyledMapLayersDialog = styled(motion.div)`
 `;
 
 const StyledTabSubTitle = styled.div`
-    margin:10px;  
+    margin:10px;
 `;
 
 const StyledTabs = styled.div`
@@ -96,9 +94,9 @@ const StyledTabs = styled.div`
         );
         transition: all 0.3s ease-out;
         box-shadow: 0px -1px 11px ${props => props.tabIndex === 0 ?
-        "rgba(0, 99, 175, 0.3)" : props.tabIndex === 1 ?
-        "rgba(32, 122, 66, 0.3)" :
-        "rgba(229, 0, 130, 0.3)"};
+        'rgba(0, 99, 175, 0.3)' : props.tabIndex === 1 ?
+        'rgba(32, 122, 66, 0.3)' :
+        'rgba(229, 0, 130, 0.3)'};
     };
 `;
 
@@ -108,10 +106,10 @@ const StyledTab = styled.div`
     cursor: pointer;
     font-size: 14px;
     font-weight: bold;
-    color: ${props => props.isSelected ? props.theme.colors[props.color] : "#656565"};
+    color: ${props => props.isSelected ? props.theme.colors[props.color] : '#656565'};
     text-align: center;
     transform: scale(${props => {
-        return props.isSelected ? "1.05" : "1";
+        return props.isSelected ? '1.05' : '1';
     }});
     transition: transform 0.2s ease-out;
 `;
@@ -124,9 +122,9 @@ const StyledSwiper = styled(Swiper)`
   };
   transition: box-shadow 0.3s ease-out;
   box-shadow: 0px -1px 11px ${props => props.tabIndex === 0 ?
-        "rgba(0, 99, 175, 0.3)" : props.tabIndex === 1 ?
-        "rgba(32, 122, 66, 0.3)" :
-        "rgba(229, 0, 130, 0.3)"};
+        'rgba(0, 99, 175, 0.3)' : props.tabIndex === 1 ?
+        'rgba(32, 122, 66, 0.3)' :
+        'rgba(229, 0, 130, 0.3)'};
 `;
 
 
@@ -136,29 +134,29 @@ const UserGuideTabs = () => {
 
     const tabsContent = [
         {
-            id: "swipeAbleTab_0",
+            id: 'swipeAbleTab_0',
             title: strings.layerlist.layerlistLabels.allLayers,
-            titleColor: "mainColor1",
+            titleColor: 'mainColor1',
             content: <p>{strings.appGuide.modalContent.mapLevelMenu.tabsContent.materList}</p>
         },
         {
-            id: "swipeAbleTab_1",
-            titleColor: "secondaryColor2",
+            id: 'swipeAbleTab_1',
+            titleColor: 'secondaryColor2',
             title: strings.layerlist.layerlistLabels.themeLayers,
             content: <p>{strings.appGuide.modalContent.mapLevelMenu.tabsContent.themeLayerSelection}</p>
         },
         {
-            id: "swipeAbleTab_2",
+            id: 'swipeAbleTab_2',
             title: strings.layerlist.layerlistLabels.selectedLayers,
-            titleColor: "secondaryColor8",
-            titleContent: "layerCounter",
+            titleColor: 'secondaryColor8',
+            titleContent: 'layerCounter',
             content: <p>{strings.appGuide.modalContent.mapLevelMenu.tabsContent.selectedLayers}</p>
         }
     ];
 
     return (
             <StyledMapLayersDialog
-                    initial="open"
+                    initial='open'
                     variants={variants}
                     transition={{
                         duration: 0.3,
@@ -174,7 +172,7 @@ const UserGuideTabs = () => {
                         tabsContent.map((tab, index) => {
                             return (
                                 <StyledTab
-                                    key={"tab_"+index}
+                                    key={'tab_'+index}
                                     isSelected={index === tabIndex}
                                     color={tab.titleColor}
                                     onClick={() => {
@@ -190,8 +188,8 @@ const UserGuideTabs = () => {
                 </StyledTabs>
                 <StyledSwiper
                     tabIndex={tabIndex}
-                    className="map-layers-swiper"
-                    id={"map-swiper"}
+                    className='map-layers-swiper'
+                    id={'map-swiper'}
                     speed={300}
                     onSlideChange={e => {
                         setTabIndex(e.activeIndex);
@@ -199,14 +197,14 @@ const UserGuideTabs = () => {
                     allowTouchMove={false} // Disable swiping
                 >
                     <SwiperSlide
-                        id={"tab_content_" + tabIndex}
-                        key={"tab_content_" + tabIndex}
+                        id={'tab_content_' + tabIndex}
+                        key={'tab_content_' + tabIndex}
                         className={'user-guide-tabs'}
                     >
                         {tabsContent[tabIndex].content}
                     </SwiperSlide>
 
-                <div className="swiper-pagination"></div>
+                <div className='swiper-pagination'></div>
                 </StyledSwiper>
             </StyledMapLayersDialog>
     );

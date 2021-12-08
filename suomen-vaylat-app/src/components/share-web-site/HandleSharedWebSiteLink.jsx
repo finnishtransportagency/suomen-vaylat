@@ -2,7 +2,7 @@ import { useContext } from 'react';
 import { ReactReduxContext, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import { setLocale } from '../../state/slices/languageSlice';
-import { changeLayerStyle, reArrangeSelectedMapLayers, setLegends, setSelectedTheme, setLastSelectedTheme, setSelectedThemeIndex } from '../../state/slices/rpcSlice';
+import { changeLayerStyle, reArrangeSelectedMapLayers, setLegends, setSelectedTheme, setLastSelectedTheme, setSelectedThemeIndex, removeAllSelectedLayers } from '../../state/slices/rpcSlice';
 import { setIsSideMenuOpen, setSelectedMapLayersMenuTab } from '../../state/slices/uiSlice';
 import { Logger } from '../../utils/logger';
 import { updateLayers } from '../../utils/rpcUtil';
@@ -18,7 +18,6 @@ const LOG = new Logger('HandleSharedWebSiteLink');
  */
 export const HandleSharedWebSiteLink = () => {
 
-
     let {zoom, x, y, maplayers, themeId, lang} = useParams();
     zoom = parseInt(zoom);
     x = parseInt(x);
@@ -26,7 +25,6 @@ export const HandleSharedWebSiteLink = () => {
 
     const { store } = useContext(ReactReduxContext);
     const channel = useSelector(state => state.rpc.channel);
-    //const { selectedTheme,  lastSelectedTheme, selectedThemeIndex} = useAppSelector((state) => state.rpc);
 
     const allThemesWithLayers = useSelector(state => state.rpc.allThemesWithLayers);
 
@@ -49,11 +47,12 @@ export const HandleSharedWebSiteLink = () => {
 
     // If theme given then select wanted theme
     if (themeId) {
+        store.dispatch(removeAllSelectedLayers({notRemoveLayersByGroupId: 1}));
         store.dispatch(setIsSideMenuOpen(true));
         const theme = allThemesWithLayers.find(theme => theme.id === parseInt(themeId));
         const themeGroupIndex = allThemesWithLayers.findIndex(theme => theme.id === parseInt(themeId));
 
-        if(theme){
+        if (theme){
             store.dispatch(setSelectedMapLayersMenuTab(1));
             store.dispatch(setLastSelectedTheme(theme));
             store.dispatch(setSelectedTheme(theme));
@@ -66,9 +65,12 @@ export const HandleSharedWebSiteLink = () => {
             },700);
         }
     }
-    // else if mapLayers given, add wanted layers to map
+    // else if mapLayers given, remove all layers and then add wanted layers to map
     else if (channel && maplayers) {
+        store.dispatch(setIsSideMenuOpen(true));
+        store.dispatch(setSelectedMapLayersMenuTab(2));
         const layers = maplayers.split('++');
+        store.dispatch(removeAllSelectedLayers());
         layers.reverse().forEach((l, index) => {
             const layerProps = l.split('+');
             if (layerProps.length === 3) {

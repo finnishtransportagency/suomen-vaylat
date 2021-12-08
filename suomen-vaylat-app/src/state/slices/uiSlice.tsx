@@ -9,7 +9,6 @@ const initialState = {
   isUserGuideOpen: false,
   shareUrl: '',
   isDrawingToolsOpen: false,
-  selectedLayerList: 'themes',
   activeTool: '',
   gfiLocations: null,
   isSwipingDisabled: false,
@@ -52,9 +51,6 @@ export const uiSlice = createSlice({
     setIsDrawingToolsOpen: (state, action) => {
       state.isDrawingToolsOpen = action.payload;
     },
-    setSelectedLayerListType: (state, action) => {
-      state.selectedLayerList = action.payload;
-    },
     setActiveTool: (state, action) => {
       state.activeTool = action.payload;
     },
@@ -80,7 +76,6 @@ export const {
   setIsFullScreen,
   setIsDrawingToolsOpen,
   setShareUrl,
-  setSelectedLayerListType,
   setActiveTool,
   setIsSwipingDisabled,
   setSelectedMapLayersMenuTab,

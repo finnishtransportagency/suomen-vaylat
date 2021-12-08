@@ -102,7 +102,6 @@ export const Header = () => {
         selectedThemeIndex
     } = useAppSelector((state) => state.rpc);
 
-    //const { channel, selectedTheme,  lastSelectedTheme, selectedThemeIndex} = useAppSelector((state) => state.rpc);
     const handleSelectGroup = (index, theme) => {
         resetThemeGroupsForMainScreen(store, channel, index, theme, lastSelectedTheme, selectedThemeIndex);
     };
@@ -153,9 +152,6 @@ export const Header = () => {
                 {   lang.current === 'fi' ? <VaylaLogoFi /> :
                     lang.current === 'en' ? <VaylaLogoEn /> :
                     lang.current === 'sv' ? <VaylaLogoSv /> : <VaylaLogoFi />}
-                {/* <a href='https://www.vayla.fi' target='_blank' rel='noreferrer'>
-                    <img alt='Väylä' src={vaylaLogo}/>
-                </a> */}
             </StyledHeaderLogoContainer>
             <StyledRightCornerButtons>
                 <WebSiteShareButton />
