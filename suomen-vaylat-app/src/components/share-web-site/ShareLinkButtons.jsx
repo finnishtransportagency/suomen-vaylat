@@ -21,6 +21,9 @@ const StyledShareButton = styled.button`
         color: ${props => props.color ? props.color : props.theme.colors.black};
         transition: all 0.5s ease-out;
     };
+    @media ${props => props.theme.device.mobileL} {
+        font-size: 16px;
+    };
 `;
 
 const StyledHeaderButton = styled.div`

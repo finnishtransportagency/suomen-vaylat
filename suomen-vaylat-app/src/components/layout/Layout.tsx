@@ -3,6 +3,10 @@ import Content from './Content';
 import Header from './Header';
 
 const StyledLayout = styled.div`
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 100vw;
     display: flex;
     flex-direction: column;
     height: var(--app-height);
