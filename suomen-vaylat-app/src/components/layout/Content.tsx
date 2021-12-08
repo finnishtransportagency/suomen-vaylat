@@ -1,5 +1,7 @@
-import styled from 'styled-components';
+import React, {useContext} from 'react';
+import { ReactReduxContext } from 'react-redux';
 import { useAppSelector } from '../../state/hooks';
+import styled from 'styled-components';
 import AppInfoModal from '../app-info-modal/AppInfoModal';
 import UserGuideModal from '../user-guide-modal/UserGuideModal';
 import MenuBar from '../layout/menu-bar/MenuBar';
@@ -7,22 +9,22 @@ import MapLayersDialog from '../dialog/MapLayersDialog';
 import WarningDialog from '../dialog/WarningDialog';
 import PublishedMap from '../published-map/PublishedMap';
 import Search from '../search/Search';
+import Search2 from '../search/Search2';
 import ThemeMapsActionButton from '../action-button/ThemeMapsActionButton';
 import { ShareWebSitePopup } from '../share-web-site/ShareWebSitePopup';
 import ZoomMenu from '../zoom-features/ZoomMenu';
 import strings from '../../translations';
-import {setSelectError} from '../../state/slices/rpcSlice';
-import React, {useContext} from 'react';
-import {ReactReduxContext} from 'react-redux';
+import { setSelectError } from '../../state/slices/rpcSlice';
 import MetadataModal from '../metadata-modal/MetadataModal';
 
 const StyledContent = styled.div`
     z-index: 1;
     position: relative;
-    height: var(--app-height);
+    //height: var(--app-height);
+    //height: 100%;
     overflow: hidden;
     @media ${(props: { theme: { device: { desktop: any; }; }; }) => props.theme.device.desktop} {
-        height: calc(var(--app-height) - 60px);
+        //height: calc(var(--app-height) - 56px);
     };
 `;
 
@@ -34,11 +36,16 @@ const StyledContentGrid = styled.div`
     height: 100%;
     box-sizing: border-box;
     display: grid;
-    gap: 16px;
+    grid-row-gap: 8px;
     grid-template-columns: 48px 344px 1fr;
     grid-template-rows: 48px 1fr;
     padding: 16px;
     pointer-events: none;
+    @media ${(props: { theme: { device: { mobileL: any; }; }; }) => props.theme.device.mobileL} {
+        padding: 8px;
+        grid-template-columns: 48px 1fr;
+    };
+    
 `;
 
 const Content = () => {
@@ -63,7 +70,6 @@ const Content = () => {
     return (
         <>
         <StyledContent>
-            <ZoomMenu />
             <PublishedMap />
             {isShareOpen && <ShareWebSitePopup />}
             <UserGuideModal />
@@ -72,7 +78,9 @@ const Content = () => {
             <StyledContentGrid>
                 <MenuBar />
                 <MapLayersDialog />
-                <Search isOpen={isSearchOpen}/>
+                <Search2 />
+                {/* <Search isOpen={isSearchOpen} /> */}
+                <ZoomMenu />
                 <ThemeMapsActionButton />
                 {warnings.show && warnings.type === 'multipleLayersWarning' &&
                     <WarningDialog
@@ -90,8 +98,7 @@ const Content = () => {
                     <WarningDialog
                         dialogOpen={warnings.show}
                         hideWarn={hideWarn}
-                        title={search.selected === 'vkm' ?
-                            strings.search.vkm.error.title : strings.search.address.error.title}
+                        title={search.selected === 'vkm' ? strings.search.vkm.error.title : strings.search.address.error.title}
                         message={warnings.message}
                         filteredLayers={[]}
                         isChecked={undefined}

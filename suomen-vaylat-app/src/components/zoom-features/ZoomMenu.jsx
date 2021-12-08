@@ -9,12 +9,13 @@ import ZoomBar from './ZoomBar';
 
 import { Legend } from '../legend/Legend';
 
-const StyledZoomMenu = styled(motion.div)`
+const StyledZoomMenu = styled.div`
+    position: relative;
     z-index: 2;
-    position: absolute;
-    right: 16px;
-    bottom: 16px;
+    justify-self: end;
+    align-self: end;
     display: flex;
+    align-items: end;
     pointer-events: none;
 `;
 

@@ -13,7 +13,7 @@ const StyledZoomLevelCircle = styled.div`
     pointer-events: auto;
     width: 22px;
     height: 22px;
-    border: 4px solid ${props => props.theme.colors.mainColor1} ;
+    border: 4px solid ${props => props.theme.colors.mainColor1};
     border-radius: 50%;
     background-color: ${props => props.index === props.zoomLevel ? props.theme.colors.secondaryColor4 : props.theme.colors.mainWhite};
     transform: ${props => props.index === props.zoomLevel ? "scale(1.1)" : "scale(1)"};
@@ -23,6 +23,11 @@ const StyledZoomLevelCircle = styled.div`
     &:hover {
         background-color: #ffc300;
         transform: scale(1.1);
+    };
+    @media ${props => props.theme.device.mobileL} {
+        width: 16px;
+        height: 16px;
+        border: 2px solid ${props => props.theme.colors.mainColor1};
     };
 `;
 

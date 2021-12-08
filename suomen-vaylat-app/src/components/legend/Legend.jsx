@@ -13,7 +13,8 @@ import ReactTooltip from "react-tooltip";
 
 const StyledLegendContainer = styled(motion.div)`
     position: absolute;
-    right: 58px;
+    top: 0px;
+    right: 66px;
     border-radius: 4px;
     min-width: 200px;
     height: 100%;
@@ -24,6 +25,7 @@ const StyledLegendContainer = styled(motion.div)`
     box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
     @media ${ props => props.theme.device.mobileL} {
         font-size: 13px;
+        right: 42px;
     };
 `;
 

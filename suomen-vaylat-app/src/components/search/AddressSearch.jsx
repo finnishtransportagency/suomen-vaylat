@@ -71,19 +71,19 @@ const AddressSearch = ({
         store.dispatch(setAddressSearchEventHandlerReady(true));
     }
 
-    const onClick = (name, lon, lat, id) => {
-        store.dispatch(setSelectedIndex(id));
-        store.dispatch(setMarker({
-            x: lon,
-            y: lat,
-            msg: name
-        }));
-    };
+    // const onClick = (name, lon, lat, id) => {
+    //     store.dispatch(setSelectedIndex(id));
+    //     store.dispatch(setMarker({
+    //         x: lon,
+    //         y: lat,
+    //         msg: name
+    //     }));
+    // };
 
     return (
         <StyledContainer visible={visible} className="search-inputs">
             <StyledTextField
-                placeholder={strings.search.address.address}
+                placeholder={strings.search.types.address + '...'}
                 onChange={(event) => {
                     onChange(event.target.value);
                 }}
@@ -97,7 +97,7 @@ const AddressSearch = ({
                 type="text"
             >
             </StyledTextField>
-            {search.searching === false && search.searchResult.address.length > 0 &&
+            {/* {search.searching === false && search.searchResult.address.length > 0 &&
                 <List>
                 {search.searchResult.address.map(({ name, lon, lat, id }, index) => (
                     <ListItem key={name + '_' + index} onClick={() => {
@@ -107,7 +107,7 @@ const AddressSearch = ({
                     </ListItem>
                 ))}
                 </List>
-            }
+            } */}
         </StyledContainer>);
 };
 
