@@ -8,8 +8,12 @@ const en = {
     },
     title: 'Suomen Väylät EN',
     tooltips: {
+        layerlist: {
+            opacity: 'Opacity',
+            filter: 'Filter'
+        },
+        searchButton: 'Address search',
         layerlistButton: 'Layerlist',
-        searchButton: 'Search',
         legendButton: 'Legend',
         fullscreenButton: 'Full screen',
         legendHeader: 'The data displayed at this zoom level and their explanations',
@@ -17,7 +21,6 @@ const en = {
         zoomExpand: 'Expand',
         zoomIn: 'Zoom in',
         zoomOut: 'Zoom out',
-        opacity: 'Opacity',
         drawingtools: {
             drawingtoolsButton: 'Drawing tools',
             circle: 'Circle',
@@ -35,6 +38,10 @@ const en = {
     },
     gfi: {
         title: 'Feature Data',
+        close: 'Close',
+        additionalInfo: 'Additional information',
+        gfiLocation: 'Zoom to location',
+        target: 'Target'
     },
     general: {
         close: 'Close',
