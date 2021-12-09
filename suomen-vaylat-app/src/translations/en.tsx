@@ -38,6 +38,9 @@ const en = {
     },
     gfi: {
         title: 'Feature Data',
+        close: 'Close',
+        additionalInfo: 'Additional information',
+        gfiLocation: 'Zoom to location'
     },
     general: {
         close: 'Close',

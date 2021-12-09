@@ -37,6 +37,9 @@ const fi = {
     },
     gfi: {
         title: 'Kohdetiedot',
+        close: 'Sulje',
+        additionalInfo: 'Lisätiedot',
+        gfiLocation: 'Lähennä kohteeseen'
     },
     general: {
         close: 'Sulje',
