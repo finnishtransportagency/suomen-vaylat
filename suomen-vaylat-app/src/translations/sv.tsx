@@ -39,6 +39,9 @@ const sv = {
     },
     gfi: {
         title: 'Objektuppgifter',
+        close: 'Stänga',
+        additionalInfo: 'Lisätiedot',
+        gfiLocation: 'Lähennä kohteeseen'
     },
     general: {
         close: 'Stänga',
