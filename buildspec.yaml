@@ -4,22 +4,11 @@ phases:
   pre_build:
     commands:
       - CODEARTIFACT_AUTH_TOKEN=`aws codeartifact get-authorization-token --domain suomen-vaylat --domain-owner $AWS_ACCOUNT_ID --query authorizationToken --output text`
-      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $IMAGE_REGISTRY_URI
-      - IMAGE_REPO_URI=$IMAGE_REGISTRY_URI/$IMAGE_REPO_NAME
+      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $IMAGE_REPO_URI
       - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
       - TAG_PREFIX=${TAG_PREFIX:-$ENVIRONMENT-}
       - LATEST_TAG=${TAG_PREFIX}latest
       - IMAGE_TAG=${TAG_PREFIX}${COMMIT_HASH:=latest}
-      # - |
-      #   if [ "$ENVIRONMENT" = "test" ]; then
-      #     COMMIT_TAG=$(git describe --tags)
-      #     echo "COMMIT_TAG=$COMMIT_TAG"
-      #     if !(echo "$COMMIT_TAG" | grep -Pq '^release-\d+\.\d+\.\d+$'); then
-      #       echo "Not on release-x.y.z tag!"
-      #       exit 1
-      #     fi
-      #     IMAGE_TAG=${TAG_PREFIX}${COMMIT_TAG}
-      #   fi
   build:
     commands:
       - sed -i "s|AWS_ACCOUNT_ID|$AWS_ACCOUNT_ID|g" Dockerfile
