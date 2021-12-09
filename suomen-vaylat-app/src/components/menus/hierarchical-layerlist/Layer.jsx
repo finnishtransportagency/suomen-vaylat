@@ -81,7 +81,8 @@ export const Layer = ({ layer, theme }) => {
     const [layerStyle, setLayerStyle] = useState(null);
 
     const {
-        channel
+        channel,
+        selectedTheme
     } = useSelector(state => state.rpc);
 
     const handleLayerVisibility = (channel, layer) => {
@@ -107,9 +108,9 @@ export const Layer = ({ layer, theme }) => {
     const themeStyle = theme || null;
 
     if (layer.visible) {
-        channel.getLayerThemeStyle([layer.id, themeStyle], function(styleName) {
-            if (styleName) {
+        channel.getLayerThemeStyle([layer.id, (selectedTheme && selectedTheme.name) ? selectedTheme.name : null], function(styleName) {
 
+            if (styleName) {
                 if (styleName !== layerStyle) {
                     setLayerStyle(styleName);
                     store.dispatch(changeLayerStyle({layerId: layer.id, style:styleName}));
