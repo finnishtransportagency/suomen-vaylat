@@ -8,16 +8,18 @@ const fi = {
     },
     title: 'Suomen Väylät',
     tooltips: {
+        layerlist: {
+            filter: 'Suodata',
+            opacity: 'Opasiteetti',
+        },
+        searchButton: 'Osoitehaku',
         layerlistButton: 'Tasovalikko',
-        searchButton: 'Haku',
-        legendButton: 'Legenda',
         fullscreenButton: 'Koko näyttö',
         legendHeader: 'Tällä zoom-tasolla näkyvissä olevat aineistot ja niiden selitteet',
         myLocButton: 'Oma sijainti',
         zoomExpand: 'Laajenna',
         zoomIn: 'Lähennä',
         zoomOut: 'Loitonna',
-        opacity: 'Opasiteetti',
         drawingtools: {
             drawingtoolsButton: 'Piirtotyökalut',
             circle: 'Ympyrä',
@@ -783,7 +785,7 @@ const fi = {
             twitter: 'Jaa Twitterissä',
             linkedin: 'Jaa LinkedInissä',
             whatsapp: 'Jaa WhatsAppissa',
-            telegram: 'Jaa Telegrammissa'
+            telegram: 'Jaa Telegrammissa',
         }
     }
 }

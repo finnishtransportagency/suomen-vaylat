@@ -10,6 +10,8 @@ import { setTagLayers, setTags } from '../../../state/slices/rpcSlice';
 import Filter from './Filter';
 import LayerList from './LayerList';
 import LayerSearch from './LayerSearch';
+import ReactTooltip from 'react-tooltip';
+import { isMobile } from '../../../theme/theme';
 
 const listVariants = {
   visible: {
@@ -35,7 +37,7 @@ const StyledFilterList = styled(motion.div)`
 const StyledListSubtitle = styled.div`
     display: flex;
     justify-content: flex-start;
-    align-items: center;
+    align-items: flex-start;
     color: ${props => props.theme.colors.mainColor1};
     padding: 0px 0px 16px 0px;
     font-size: 14px;
@@ -74,7 +76,7 @@ const StyledDeleteAllSelectedFilters = styled.div`
 
 const StyledSearchAndFilter = styled.div`
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     margin-left: 8px;
     margin-right: 8px;
     margin-bottom: 16px;
@@ -88,7 +90,8 @@ const StyledFilterButton = styled.div`
   align-items: center;
   border-radius: 50%;
   background-color: ${props => props.isOpen ? "#004477" : props.theme.colors.mainColor1};
-  margin-right: 8px;
+  margin-right: 4px;
+  margin-top: 4px;
   cursor: pointer;
   svg {
     font-size: 12px;
@@ -107,7 +110,7 @@ const LayerListTEMP = ({
     useAppSelector((state) => state.language);
 
     const [isOpen, setIsOpen] = useState(false);
-
+  
     const emptyFilters = () => {
       store.dispatch(setTagLayers([]));
       store.dispatch(setTags([]));
@@ -115,10 +118,13 @@ const LayerListTEMP = ({
 
     return (
       <>
+      <ReactTooltip disable={isMobile} id='layerlist-filter' place="right" type="dark" effect="float">
+          <span>{strings.tooltips.layerlist.filter}</span>
+      </ReactTooltip>
        <StyledListSubtitle>{strings.layerlist.layerlistLabels.filterOrSearchLayers}</StyledListSubtitle>
         <StyledSearchAndFilter>
-          <div>
             <StyledFilterButton
+              data-tip data-for='layerlist-filter'
               onClick={() => setIsOpen(!isOpen)}
               isOpen={isOpen}
             >
@@ -126,7 +132,6 @@ const LayerListTEMP = ({
                     icon={faFilter}
                 />
             </StyledFilterButton>
-          </div>
           <LayerSearch layers={layers}/>
         </StyledSearchAndFilter>
         <StyledFilterList
