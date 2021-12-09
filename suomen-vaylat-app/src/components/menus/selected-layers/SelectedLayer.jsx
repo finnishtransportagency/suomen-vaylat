@@ -5,11 +5,11 @@ import { ReactReduxContext, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { clearLayerMetadata, getLayerMetadata, setLayerMetadata } from '../../../state/slices/rpcSlice';
 import { updateLayers } from '../../../utils/rpcUtil';
-import { SortableHandle } from 'react-sortable-hoc';
+import { sortableHandle } from 'react-sortable-hoc';
 
 import strings from '../../../translations';
 
-const StyledLayerContainer = styled.div`
+const StyledLayerContainer = styled.li`
     z-index: 9999;
     height: 80px;
     display: flex;
@@ -112,9 +112,11 @@ const StyledlayerOpacityControl = styled.input`
 `;
 
 const StyledLayerGripControl = styled.div`
-    width: 24px;
+    height: 100%;
+    width: 100%;
+    max-width: 40px;
     display: flex;
-    justify-content: flex-end;
+    justify-content: center;
     align-items: center;
     cursor: pointer;
     svg {
@@ -139,7 +141,7 @@ const StyledLayerInfoIconWrapper = styled.div`
     }
 `;
 
-const DragHandle = SortableHandle(() => (
+const DragHandle = sortableHandle(() => (
     <StyledLayerGripControl className="swiper-no-swiping">
         <FontAwesomeIcon icon={faGripVertical} />
     </StyledLayerGripControl>
