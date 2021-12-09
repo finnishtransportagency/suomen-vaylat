@@ -4,7 +4,22 @@ import { ReactReduxContext } from 'react-redux';
 import styled from 'styled-components';
 import { useAppSelector } from '../../state/hooks';
 import {
-    setActiveAnnouncements, setAllGroups, setAllTags, setAllThemesWithLayers, setChannel, setCurrentMapCenter, setCurrentState, setCurrentZoomLevel, setFeatures, setLegends, setLoading, setTagsWithLayers, setZoomLevelsLayers, setZoomRange, setGFILocations, setGFIPoint, resetGFILocations
+    setActiveAnnouncements,
+    setAllGroups,
+    setAllTags,
+    setAllThemesWithLayers,
+    setChannel,
+    setCurrentMapCenter,
+    setCurrentState,
+    setCurrentZoomLevel,
+    setFeatures,
+    setLegends,
+    setLoading,
+    setTagsWithLayers,
+    setZoomLevelsLayers,
+    setZoomRange,
+    setGFILocations,
+    setGFIPoint
 } from '../../state/slices/rpcSlice';
 import { updateLayers } from '../../utils/rpcUtil';
 import { AnnouncementsModal } from '../announcements-modal/AnnouncementsModal';
