@@ -1,17 +1,33 @@
-import { useContext } from "react";
+import React, { useState, useContext, useRef } from "react";
 import styled from 'styled-components';
 import { setSelectedLayers } from '../../../state/slices/rpcSlice';
 import strings from '../../../translations';
 import { updateLayers, resetThemeGroups, reArrangeRPCLayerOrder } from '../../../utils/rpcUtil';
 import { ReactReduxContext, useSelector } from 'react-redux';
-import { SortableContainer, SortableElement} from 'react-sortable-hoc';
+import { sortableContainer, sortableElement, arrayMove } from 'react-sortable-hoc';
 import {arrayMoveImmutable} from 'array-move';
+
 
 import SelectedLayer from './SelectedLayer';
 
 const StyledSelectedLayers = styled.div`
 
 `;
+
+// const SortableContainer = sortableContainer(({items, currentZoomLevel}) => {
+//     return (
+//         <div ref={inputEl}>
+//             {items.map((value, index) => (
+//                 <SortableElement
+//                     key={`item-${value.id}`}
+//                     index={index}
+//                     value={value}
+//                     currentZoomLevel={currentZoomLevel}
+//                 />
+//             ))}
+//         </div>
+//     );
+// });
 
 const StyledDeleteAllSelectedLayers = styled.div`
     width: 250px;
@@ -46,31 +62,21 @@ const StyledListSubtitle = styled.div`
     };
 `;
 
-const SortableItem = SortableElement(({value,currentZoomLevel}) =>
+const SortableElement = sortableElement(({value, currentZoomLevel}) =>
     <SelectedLayer
-        key={value.id + 'selected'}
         layer={value}
         uuid={value.metadataIdentifier}
         currentZoomLevel={currentZoomLevel}
     />
 );
 
-const SortableList = SortableContainer(({items, currentZoomLevel}) => {
-    return (
-        <div>
-            {items.map((value, index) => (
-                <SortableItem
-                    key={`item-${value.id}`}
-                    index={index}
-                    value={value}
-                    currentZoomLevel={currentZoomLevel}
-                />
-            ))}
-        </div>
-    );
+const SortableContainer = sortableContainer(({children}) => {
+  return <div>{children}</div>;
 });
 
+
 export const SelectedLayers = ({ selectedLayers, currentZoomLevel }) => {
+
     const { store } = useContext(ReactReduxContext);
 
     const channel = useSelector(state => state.rpc.channel);
@@ -113,31 +119,54 @@ export const SelectedLayers = ({ selectedLayers, currentZoomLevel }) => {
         updateLayers(store, channel);
     };
 
+
     return (
         <StyledSelectedLayers>
             <StyledListSubtitle>{strings.layerlist.layerlistLabels.mapLayers}</StyledListSubtitle>
-            <SortableList
-                lockAxis={"y"}
-                distance={1}
-                transitionDuration={300}
-                items={mapLayers}
+            <SortableContainer
                 onSortEnd={sortSelectedLayers}
-                currentZoomLevel={currentZoomLevel}
-            />
+                useDragHandle
+                lockAxis={"y"}
+            >
+                <ul
+                    style={{paddingInlineStart: "0px"}}
+                >
+                    {mapLayers.map((item, i) => (
+                        <SortableElement
+                            key={item.id+" "+i}
+                            value={item}
+                            index={i}
+                            currentZoomLevel={currentZoomLevel}
+                        //collection={index}
+                        />
+                    ))}
+                </ul>
+            </SortableContainer>
             <StyledDeleteAllSelectedLayers
                 onClick={() => handleClearSelectedLayers()}
             >
                 <p>{strings.layerlist.layerlistLabels.clearSelectedMapLayers}</p>
             </StyledDeleteAllSelectedLayers>
             <StyledListSubtitle>{strings.layerlist.layerlistLabels.backgroundMaps}</StyledListSubtitle>
-            <SortableList
-                lockAxis={"y"}
-                distance={1}
-                transitionDuration={300}
-                items={backgroundMaps}
+            <SortableContainer
                 onSortEnd={sortSelectedBackgroundLayers}
-                currentZoomLevel={currentZoomLevel}
-            />
+                useDragHandle
+                lockAxis={"y"}
+            >
+                <ul
+                    style={{paddingInlineStart: "0px"}}
+                >
+                    {backgroundMaps.map((item, i) => (
+                        <SortableElement
+                            key={item.id+" "+i}
+                            value={item}
+                            index={i}
+                            currentZoomLevel={currentZoomLevel}
+                        //collection={index}
+                        />
+                    ))}
+                </ul>
+            </SortableContainer>
             <StyledDeleteAllSelectedLayers
                 onClick={() => handleClearSelectedBackgroundMaps()}
             >
