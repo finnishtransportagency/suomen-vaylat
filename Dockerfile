@@ -1,5 +1,5 @@
 ### Base builder
-FROM 675356752005.dkr.ecr.eu-west-1.amazonaws.com/suomen-vaylat-build:node-12-buster AS builder
+FROM AWS_ACCOUNT_ID.dkr.ecr.eu-west-1.amazonaws.com/suomen-vaylat-build:node-12-buster AS builder
 
 COPY ./suomen-vaylat-app /suomen-vaylat
 
@@ -56,7 +56,7 @@ RUN cd /suomen-vaylat && \
     npm run build
 
 ### Base image
-FROM 675356752005.dkr.ecr.eu-west-1.amazonaws.com/suomen-vaylat-build:nginx-1.19.9-alpine AS base
+FROM AWS_ACCOUNT_ID.dkr.ecr.eu-west-1.amazonaws.com/suomen-vaylat-build:nginx-1.19.9-alpine AS base
 
 RUN rm /etc/nginx/conf.d/default.conf
 COPY ./nginx-conf/suomen-vaylat.conf /etc/nginx/conf.d/

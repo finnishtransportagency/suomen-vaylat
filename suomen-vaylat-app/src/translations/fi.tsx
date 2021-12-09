@@ -8,15 +8,18 @@ const fi = {
     },
     title: 'Suomen Väylät',
     tooltips: {
+        layerlist: {
+            filter: 'Suodata',
+            opacity: 'Opasiteetti',
+        },
+        searchButton: 'Osoitehaku',
         layerlistButton: 'Tasovalikko',
-        searchButton: 'Haku',
-        legendButton: 'Legenda',
         fullscreenButton: 'Koko näyttö',
+        legendHeader: 'Tällä zoom-tasolla näkyvissä olevat aineistot ja niiden selitteet',
         myLocButton: 'Oma sijainti',
         zoomExpand: 'Laajenna',
         zoomIn: 'Lähennä',
         zoomOut: 'Loitonna',
-        opacity: 'Opasiteetti',
         drawingtools: {
             drawingtoolsButton: 'Piirtotyökalut',
             circle: 'Ympyrä',
@@ -29,12 +32,97 @@ const fi = {
         share: 'Jaa sivu',
         shareTheme: 'Jaa teema',
         metadata: 'Näytä tason metadata',
-        showPageInfo: 'Näytä sivun info'
+        showPageInfo: 'Näytä sivun info',
+        showUserGuide: 'Näytä käyttöohje',
     },
-    warning: 'Varoitus!',
+    gfi: {
+        title: 'Kohdetiedot',
+        close: 'Sulje',
+        additionalInfo: 'Lisätiedot',
+        gfiLocation: 'Lähennä kohteeseen',
+        target: 'Kohde'
+    },
+    general: {
+        close: 'Sulje',
+        warning: 'Varoitus!',
+        continue: 'Jatka',
+        cancel: 'Peruuta',
+        dontShowAgain: 'Älä näytä uudelleen',
+        ok: 'OK'
+    },
     multipleLayersWarning: 'Olet lisäämässä kartalle 10 tai enemmän karttatasoa ja se saattaa vaikuttaa palvelun suorituskykyyn',
-    continue: 'jatka',
-    cancel: 'peruuta',
+    appGuide: {
+        title: 'Käyttöohje',
+        modalContent: {
+            upperBar: {
+                title: 'Yläpalkin toiminnot',
+                content: {
+                    0: {
+                        title: 'Palaa aloitusnäkymään',
+                        text: 'Aloitusnäkymä on valmiiksi määritelty näkymä, jossa näytetään koko Suomen alueelta vesiväylät, rataverkko ja tieverkko.'
+                    },
+                    1: {
+                        title: 'Jaa sivu',
+                        text: 'Kartan nykyisen näkymän voi jakaa linkillä suoraan valittuun palveluun tai kopioimalla linkin. Näkymässä säilytetään kohdistus, zoom-taso sekä valitut aineistot ja valittu teema.'
+                    },
+                    2: {
+                        title: 'Info',
+                        text: 'Info-napin takaa löytyy tietoa sovelluksesta, käyttöohjeet sekä yhteystiedot esimerkiksi palautteen lähettämistä varten.'
+                    },
+                    3: {
+                        title: 'Kieli',
+                        text: 'Karttapalvelun kieleksi voi valita suomen, ruotsin tai englannin.'
+                    }
+                }
+            },
+            mapLevelMenu: {
+                title: 'Karttatasovalikko',
+                subTitle: 'Karttatasovalikko avautuu vasemmasta yläreunasta. Valittavissa on 3 välilehteä',
+                tabsContent: {
+                    materList: 'Aineistolistausta voi suodattaa aiheittain suodatin-painikkeen takaa. Karttatasoa voi hakea nimellä kirjoittamalla vähintään 3 kirjainta haku-kenttään.',
+                    themeLayerSelection: 'Teeman valinta asettaa näkyviin teemaan määritellyt karttatasot\n' +
+                        'ja avaa valikon teemaan liittyvien kartta-aineistojen valintaan.\n' +
+                        'Osalla kartta-aineistoista on oma tyylinsä teemalle.\n' +
+                        'Teemoja voi olla auki vain yksi kerrallaan. Teeman ollessa valittuna\n' +
+                        'voi Kaikki tasot -valikosta valita myös muita kartta-aineistoja näkyviin\n' +
+                        'kuin mitä teemaan on määritelty. Teema suljetaan kartan yläreunasta\n' +
+                        'löytyvästä teema-merkistä.Teeman valinta asettaa näkyviin teemaan määritellyt\n' +
+                        'karttatasot ja avaa valikon teemaan liittyvien kartta-aineistojen valintaan.\n' +
+                        'Osalla kartta-aineistoista on oma tyylinsä teemalle. Teemoja voi olla auki\n' +
+                        'vain yksi kerrallaan. Teeman ollessa valittuna voi Kaikki tasot -valikosta\n' +
+                        'valita myös muita kartta-aineistoja näkyviin kuin mitä teemaan on määritelty.\n' +
+                        'Teema suljetaan kartan yläreunasta löytyvästä teema-merkistä.',
+                    selectedLayers: 'Lista kartalle valituista karttatasoista. Tasojen järjestystä voi vaihtaa raahaamalla niitä oikean reunan ikonista.\n' +
+                        'Läpinäkyvyyttä voi säätää liukusäätimellä ja\n' +
+                        'tason valinnan voi poistaa ruksista.'
+                },
+            },
+            search: {
+                title: 'Haku',
+                content: 'Haku avautuu kartan oikeaan yläkulmaan vasemman reunan suurennuslasi-painikkeesta. ' +
+                    'Haku-toiminnolla voi hakea teitä ja ja osoitteita valitsemalla alasvetovalikosta ' +
+                    'käytettävän haun. Hakutuloksen voi poistaa kartalta painamalla haku-kentän roskakoria.'
+            },
+            measureTool: {
+                title: 'Mittaustyökalut',
+                content: 'Mittaustyökalut avautuvat vasemman reunan piirto-ikonista.\n' +
+                    'Työkaluilla voi mitata pituutta tai pinta-alaa. mittaustulokset saa poistettua kartalta oranssilla kumi-painikkeella.'
+            },
+            setFullScreen: {
+                title: 'Laajenna',
+                content: 'Laajenna-painikkeella voi laajentaa\n' +
+                    'Suomen Väylät -sovelluksen täyttämään\n' +
+                    'koko näyttöruudun.'
+            },
+            zoomBar: {
+                title: 'Selitteet / zoom-palkki',
+                content: 'Zoom-tason ja kartalla sillä zoom-tasolla näkyvät karttatasot selitteineen\n' +
+                    'saa avattua oikean alareunan selite-ikonista. Karttatasot on listattu päällimmäinen\n' +
+                    'ensimmäisenä. Valitsemalla zoom-palkista toisen mittakaavan,\n' +
+                    'siirrytään valitulle lähestymistasolle.'
+            }
+        }
+    },
     appInfo: {
         title: 'Sovelluksen tiedot',
         headingText: 'Suomen Väylät -karttapalvelu kokoaa yhteen Väyläviraston avoimet, ' +
@@ -62,7 +150,7 @@ const fi = {
             vkm: 'Tiehaku'
         },
         vkm: {
-            tie: 'Tie',
+            tie: 'Tienumero',
             osa: 'Tieosa',
             ajorata: 'Ajorata',
             etaisyys: 'Etäisyys (m)',
@@ -79,22 +167,30 @@ const fi = {
             }
         }
     },
-    dontShowAgain: 'Älä näytä uudelleen',
     layerlist: {
         layerlistLabels: {
             allLayers: 'Kaikki tasot' ,
             themeLayers: 'Teemakartat',
-            selectedLayers: 'Valitut karttatasot',
-            layers: 'Karttatasot',
+            selectedLayers: 'Valitut tasot',
+            mapLayers: 'Karttatasot',
+            backgroundMaps: 'Taustakartat',
             selectAll: 'Valitse kaikki',
             show: 'Näytä',
+            filterOrSearchLayers: 'Suodata tai hae tasoja',
             filterByType: 'Suodata tyypeittäin',
             searchForLayers: 'Hae karttatasoja',
             clearFilters: 'Tyhjennä suodatinvalinnat',
             searchResults: 'Hakutulokset',
-            removeAllSelectedLayers: 'Poista kaikki valitut tasot',
+            clearSelectedMapLayers: 'Tyhjennä valitut karttatasot',
+            clearSelectedBackgroundMaps: 'Tyhjennä valitut taustakartat',
             noSearchResults: 'Ei hakutuloksia',
             typeAtLeastThreeCharacters: 'Syötä vähintaan 3 kirjainta'
+        },
+        selectedLayers: {
+            layerVisible: 'Taso näkyvillä',
+            zoomInToShowLayer: 'Lähennä nähdäksesi taso',
+            zoomOutToShowLayer: 'Loitonna nähdäksesi taso',
+            opacity: 'Läpinäkyvyys'
         }
     },
     themelayerlist: {
@@ -125,13 +221,6 @@ const fi = {
     },
     metadata: {
         title: '{0} -karttatason metatiedot',
-        tabs: {
-            abstract: 'Perustiedot',
-            inspire: 'Inspire-metatiedot',
-            jhs: 'JHS 158 -metatiedot',
-            quality: 'Laatutiedot'
-        },
-        // SELECT ROWS + SHIFT + ALT + I
         // Copied from Oskari https://github.com/oskariorg/oskari-frontend/blob/master/bundles/catalogue/metadataflyout/resources/locale/fi.js
         heading: {
             abstractTextService: 'Palvelun tiivistelmä',
@@ -682,7 +771,7 @@ const fi = {
         }
     },
     legend: {
-        title: 'Karttaselitteet',
+        title: 'Kartalla nyt',
         nolegend: 'Ei karttaselitettä',
         noSelectedLayers: 'Karttatasoja ei valittuna'
     },
@@ -700,7 +789,7 @@ const fi = {
             twitter: 'Jaa Twitterissä',
             linkedin: 'Jaa LinkedInissä',
             whatsapp: 'Jaa WhatsAppissa',
-            telegram: 'Jaa Telegrammissa'
+            telegram: 'Jaa Telegrammissa',
         }
     }
 }

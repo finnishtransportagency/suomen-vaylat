@@ -7,6 +7,7 @@ import Draggable from 'react-draggable';
 import { ReactReduxContext } from 'react-redux';
 import { EmailIcon, EmailShareButton, FacebookIcon, FacebookShareButton, LinkedinIcon, LinkedinShareButton, TelegramIcon, TelegramShareButton, TwitterIcon, TwitterShareButton, WhatsappIcon, WhatsappShareButton } from 'react-share';
 import ReactTooltip from 'react-tooltip';
+import { isMobile } from '../../theme/theme';
 import styled from 'styled-components';
 import { useAppSelector } from '../../state/hooks';
 import { setShareUrl } from '../../state/slices/uiSlice';
@@ -22,6 +23,7 @@ const StyledShareWebSiteContainer = styled.div`
     background: white;
     margin-top: -150px;
     margin-left: -150px;
+    border-radius: 4px;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
     @media ${props => props.theme.device.mobileL} {
         font-size: 13px;
@@ -31,9 +33,9 @@ const StyledShareWebSiteContainer = styled.div`
 const StyledHeader = styled.div`
     cursor: move;
     color: ${props => props.theme.colors.mainWhite};
-    background-color: ${props => props.theme.colors.maincolor1};
+    background-color: ${props => props.theme.colors.mainColor1};
     padding: .5rem;
-    border-radius: 0;
+    border-radius: 4px 4px 0px 0px;
 `;
 
 const StyledCloseIcon = styled.div`
@@ -52,14 +54,14 @@ const StyledCloseIcon = styled.div`
     };
     &:hover {
         svg {
-            color: ${props => props.theme.colors.maincolor2};
+            color: ${props => props.theme.colors.mainColor2};
         }
     }
 `;
 
 const StyledClipboardIcon = styled.div`
     svg {
-        color: ${props => props.theme.colors.maincolor1};
+        color: ${props => props.theme.colors.mainColor1};
         font-size: 18px;
         transition: all 0.1s ease-out;
     };
@@ -75,6 +77,7 @@ const StyledInput = styled.textarea`
     width: 100%;
     height: 80px;
     resize: none;
+    border: none;
 `;
 
 const StyledShareButtonsContainer = styled.div`
@@ -93,11 +96,12 @@ const StyledShareButtonsContainer = styled.div`
 `;
 
 const StyledCopyClipboardButton = styled.button`
+    border-radius: 20px;
     width: 32px;
     height: 32px;
     justify-content: center;
     align-items: center;
-    background-color: ${props => props.theme.colors.maincolor1};
+    background-color: ${props => props.theme.colors.mainColor1};
     margin-right: 10px;
     border: none;
     svg {
@@ -106,7 +110,7 @@ const StyledCopyClipboardButton = styled.button`
         transition: all 0.1s ease-out;
     };
     &:hover {
-        color: ${props => props.theme.colors.maincolor2};
+        color: ${props => props.theme.colors.mainColor2};
         svg {
             color: ${props => props.theme.colors.mainWhite};
         }
@@ -114,7 +118,7 @@ const StyledCopyClipboardButton = styled.button`
 `;
 
 const StyledCopiedToClipboardText = styled.span`
-    color: ${props => props.theme.colors.maincolor1};
+    color: ${props => props.theme.colors.mainColor1};
 `;
 
 /**
@@ -132,8 +136,7 @@ export const ShareWebSitePopup = () => {
     } = useAppSelector(state => state.rpc);
 
     const {
-        shareUrl,
-        selectedLayerList
+        shareUrl
     } = useAppSelector(state => state.ui);
 
     const [isCopied, setIsCopied] = useState(false);
@@ -157,7 +160,6 @@ export const ShareWebSitePopup = () => {
     url = url.replace('{x}', parseInt(center.x));
     url = url.replace('{y}', parseInt(center.y));
     url = url.replace('{maplayers}', mapLayers);
-    url = url.replace('{layerlistType}', selectedLayerList);
     url = url.replace('{lang}', strings.getLanguage());
 
     const title = strings.share.shareTexts.title;
@@ -179,30 +181,30 @@ export const ShareWebSitePopup = () => {
     return (
         <Draggable handle='.draggable-handler' bounds="parent" disabled={size.width / 2 < 300}>
             <StyledShareWebSiteContainer>
-                <ReactTooltip id='clipboard' place='right' type='dark' effect='float'>
+                <ReactTooltip disable={isMobile} id='clipboard' place='right' type='dark' effect='float'>
                     <span>{strings.share.tooltips.clipboard}</span>
                 </ReactTooltip>
-                <ReactTooltip id='email' place='right' type='dark' effect='float'>
+                <ReactTooltip disable={isMobile} id='email' place='right' type='dark' effect='float'>
                     <span>{strings.share.tooltips.email}</span>
                 </ReactTooltip>
 
-                <ReactTooltip id='facebook' place='right' type='dark' effect='float'>
+                <ReactTooltip disable={isMobile} id='facebook' place='right' type='dark' effect='float'>
                     <span>{strings.share.tooltips.facebook}</span>
                 </ReactTooltip>
 
-                <ReactTooltip id='twitter' place='right' type='dark' effect='float'>
+                <ReactTooltip disable={isMobile} id='twitter' place='right' type='dark' effect='float'>
                     <span>{strings.share.tooltips.twitter}</span>
                 </ReactTooltip>
 
-                <ReactTooltip id='linkedin' place='right' type='dark' effect='float'>
+                <ReactTooltip disable={isMobile} id='linkedin' place='right' type='dark' effect='float'>
                     <span>{strings.share.tooltips.linkedin}</span>
                 </ReactTooltip>
 
-                <ReactTooltip id='whatsapp' place='right' type='dark' effect='float'>
+                <ReactTooltip disable={isMobile} id='whatsapp' place='right' type='dark' effect='float'>
                     <span>{strings.share.tooltips.whatsapp}</span>
                 </ReactTooltip>
 
-                <ReactTooltip id='telegram' place='right' type='dark' effect='float'>
+                <ReactTooltip disable={isMobile} id='telegram' place='right' type='dark' effect='float'>
                     <span>{strings.share.tooltips.telegram}</span>
                 </ReactTooltip>
 
@@ -232,22 +234,22 @@ export const ShareWebSitePopup = () => {
                             </StyledCopyClipboardButton>
                         </CopyToClipboard>
                         <EmailShareButton url={url} subject={title} body={emailBody} data-tip data-for='email'>
-                            <EmailIcon size={shareIconSize} />
+                            <EmailIcon round={true} size={shareIconSize} />
                         </EmailShareButton>
                         <FacebookShareButton url={url} quote={title} data-tip data-for='facebook'>
-                            <FacebookIcon size={shareIconSize} />
+                            <FacebookIcon round={true} size={shareIconSize} />
                         </FacebookShareButton>
                         <TwitterShareButton url={url} title={title} data-tip data-for='twitter'>
-                            <TwitterIcon size={shareIconSize} />
+                            <TwitterIcon round={true} size={shareIconSize} />
                         </TwitterShareButton>
                         <LinkedinShareButton url={url} data-tip data-for='linkedin'>
-                            <LinkedinIcon size={shareIconSize} />
+                            <LinkedinIcon round={true} size={shareIconSize} />
                         </LinkedinShareButton>
                         <WhatsappShareButton url={url} title={title} separator=': ' data-tip data-for='whatsapp'>
-                            <WhatsappIcon size={shareIconSize} />
+                            <WhatsappIcon round={true} size={shareIconSize} />
                         </WhatsappShareButton>
                         <TelegramShareButton url={url} title={title} data-tip data-for='telegram'>
-                            <TelegramIcon size={shareIconSize} />
+                            <TelegramIcon round={true} size={shareIconSize} />
                         </TelegramShareButton>
                     </StyledShareButtonsContainer>
                 </StyledContainer>

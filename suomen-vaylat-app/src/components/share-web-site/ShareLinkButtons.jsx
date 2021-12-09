@@ -3,6 +3,7 @@ import { faShareAlt } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ReactReduxContext } from 'react-redux';
 import ReactTooltip from 'react-tooltip';
+import { isMobile } from '../../theme/theme';
 import styled from 'styled-components';
 import { setShareUrl } from '../../state/slices/uiSlice';
 import strings from '../../translations';
@@ -16,9 +17,12 @@ const StyledShareButton = styled.button`
     margin-right: 0px;
     border: none;
     svg {
-        font-size: 14px;
-        color: ${props => props.theme.colors.black};
+        font-size: 18px;
+        color: ${props => props.color ? props.color : props.theme.colors.black};
         transition: all 0.5s ease-out;
+    };
+    @media ${props => props.theme.device.mobileL} {
+        font-size: 16px;
     };
 `;
 
@@ -48,24 +52,23 @@ const StyledHeaderButton = styled.div`
  * @param {String} theme theme name
  * @returns theme share button component
  */
-export const ThemeGroupShareButton = ({ theme }) => {
+export const ThemeGroupShareButton = ({ themeId, color }) => {
     const { store } = useContext(ReactReduxContext);
-    const url = process.env.REACT_APP_SITE_URL + '/theme/{lang}/{zoom}/{x}/{y}/' + encodeURIComponent(theme);
-    const shareGroup = () => {
-        store.dispatch(setShareUrl(url));
-    };
+    const url = process.env.REACT_APP_SITE_URL + '/theme/{lang}/{zoom}/{x}/{y}/' + themeId;
 
     return(
         <>
-            <ReactTooltip id={'share_' + theme} place='top' type='dark' effect='float'>
+            <ReactTooltip disable={isMobile} id={'share_' + themeId} place='top' type='dark' effect='float'>
                 <span>{strings.tooltips.shareTheme}</span>
             </ReactTooltip>
             <StyledShareButton
-                data-tip data-for={'share_' + theme}
+                data-tip data-for={'share_' + themeId}
                 onClick={(e) => {
                     e && e.stopPropagation();
-                    shareGroup();
-                }}>
+                    store.dispatch(setShareUrl(url));
+                }}
+                color={color}
+            >
                 <FontAwesomeIcon
                     icon={faShareAlt}
                 />
@@ -80,10 +83,10 @@ export const ThemeGroupShareButton = ({ theme }) => {
  */
 export const WebSiteShareButton = () => {
     const { store } = useContext(ReactReduxContext);
-    const url = process.env.REACT_APP_SITE_URL + '/link/{lang}/{layerlistType}/{zoom}/{x}/{y}/{maplayers}';
+    const url = process.env.REACT_APP_SITE_URL + '/link/{lang}/{zoom}/{x}/{y}/{maplayers}';
     return (
         <>
-            <ReactTooltip id={'share_website'} place='bottom' type='dark' effect='float'>
+            <ReactTooltip disable={isMobile} id={'share_website'} place='bottom' type='dark' effect='float'>
                 <span>{strings.tooltips.share}</span>
             </ReactTooltip>
             <StyledHeaderButton

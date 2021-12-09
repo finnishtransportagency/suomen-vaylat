@@ -6,6 +6,7 @@ import { CSSTransition } from 'react-transition-group';
 import {ReactReduxContext} from "react-redux";
 import {useAppSelector} from "../../state/hooks";
 import {setSearchError} from "../../state/slices/searchSlice";
+import strings from "../../translations";
 
 const StyledAlert = styled.div`
     z-index: 2;
@@ -37,12 +38,12 @@ export const Notification = ({title, message, errors}) => {
                 unmountOnExit
             >
                 <StyledAlert>
-                    <Alert bsPrefix={searchErrorType == 'error' ? 'alert-style' : ''} show={searchError} variant={searchErrorType} onClose={closeAlert}>
+                    <Alert bsPrefix={searchErrorType === 'error' ? 'alert-style' : ''} show={searchError} variant={searchErrorType} onClose={closeAlert}>
                         <Alert.Heading>{title}</Alert.Heading>
                         <p>{message}</p>
                         <p>{errors}</p>
                         <hr></hr>
-                        <Button align={'right'} onClick={closeAlert}>Sulje</Button>
+                        <Button align={'right'} onClick={closeAlert}>{strings.general.close}</Button>
                     </Alert>
                 </StyledAlert>
             </CSSTransition>

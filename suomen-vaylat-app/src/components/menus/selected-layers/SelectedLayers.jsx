@@ -1,79 +1,33 @@
-import { useState, useContext } from "react";
+import React, { useState, useContext, useRef } from "react";
 import styled from 'styled-components';
-import { setAllLayers, setSelectedLayers } from '../../../state/slices/rpcSlice';
+import { setSelectedLayers } from '../../../state/slices/rpcSlice';
 import strings from '../../../translations';
-import { updateLayers } from "../../../utils/rpcUtil";
+import { updateLayers, resetThemeGroups, reArrangeRPCLayerOrder } from '../../../utils/rpcUtil';
 import { ReactReduxContext, useSelector } from 'react-redux';
-import { SortableContainer, SortableElement } from 'react-sortable-hoc';
+import { sortableContainer, sortableElement, arrayMove } from 'react-sortable-hoc';
 import {arrayMoveImmutable} from 'array-move';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAngleDown, faTrash } from '@fortawesome/free-solid-svg-icons';
+
 
 import SelectedLayer from './SelectedLayer';
-import SelectedLayersCount from './SelectedLayersCount';
-
 
 const StyledSelectedLayers = styled.div`
-    background-color: ${props => props.theme.colors.mainWhite};
-    margin-bottom: 5px;
+
 `;
 
-const StyledMasterGroupName = styled.p`
-    color: ${props => props.theme.colors.maincolor1};
-    margin: 0;
-    padding-left: 10px;
-    font-size: 14px;
-    font-weight: 400;
-    transition: all 0.1s ease-in;
-`;
-
-const StyledMasterGroupHeader = styled.div`
-    position: sticky;
-    top: 0px;
-    height: 40px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    cursor: pointer;
-    box-shadow: rgb(0 0 0 / 16%) 0px 3px 6px, rgb(0 0 0 / 23%) 0px 3px 6px;
-    color: ${props => props.theme.colors.black};
-    background-color: ${props => props.theme.colors.mainWhite};
-    border-radius: 2px;
-    transition: all 0.1s ease-in;
-`;
-
-const StyledLeftContent = styled.div`
-    display: flex;
-    align-items: center;
-`;
-
-const StyledExpandButton = styled.button`
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: transparent;
-    margin-right: 10px;
-    border: none;
-    svg {
-        color: ${props => props.theme.colors.black};
-        font-size: 30px;
-        transition: all 0.5s ease-out;
-    };
-`;
-
-const StyledLayerGroupContainer = styled.div`
-    height: ${props => props.isOpen ? "auto" : "0px"};
-    overflow: hidden;
-    background-color: ${props => props.theme.colors.mainWhite};
-    border-radius: 2px;
-`;
-
-const StyledLayerGroup = styled.ul`
-    list-style-type: none;
-    margin-bottom: 0px;
-    padding-inline-start: 5px;
-`;
+// const SortableContainer = sortableContainer(({items, currentZoomLevel}) => {
+//     return (
+//         <div ref={inputEl}>
+//             {items.map((value, index) => (
+//                 <SortableElement
+//                     key={`item-${value.id}`}
+//                     index={index}
+//                     value={value}
+//                     currentZoomLevel={currentZoomLevel}
+//                 />
+//             ))}
+//         </div>
+//     );
+// });
 
 const StyledDeleteAllSelectedLayers = styled.div`
     width: 250px;
@@ -83,99 +37,141 @@ const StyledDeleteAllSelectedLayers = styled.div`
     justify-content: center;
     align-items: center;
     color: ${props => props.theme.colors.mainWhite};
-    background-color: ${props => props.theme.colors.maincolor1};
+    background-color: ${props => props.theme.colors.mainColor1};
     margin: 20px auto 20px auto;
     border-radius: 15px;
-    svg {
-        font-size: 16px;
-    };
     p {
-        padding-left: 10px;
+        //padding-left: 10px;
         margin: 0;
-        font-size: 15px;
-    }
+        font-size: 12px;
+        font-weight: bold;
+    };
 `;
 
-const SortableItem = SortableElement(({value, suomenVaylatLayers}) =>
+const StyledListSubtitle = styled.div`
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    color: ${props => props.theme.colors.mainColor1};
+    padding: 0px 0px 16px 0px;
+    font-size: 14px;
+    svg {
+      margin-left: 8px;
+      font-size: 20px;
+      transition: all 0.3s ease-out;
+    };
+`;
+
+const SortableElement = sortableElement(({value, currentZoomLevel}) =>
     <SelectedLayer
-        key={value.id + 'selected'}
         layer={value}
-        uuid={suomenVaylatLayers && suomenVaylatLayers.length > 0 ? suomenVaylatLayers.filter(l => l.id === value.id)[0].uuid : ''}
-    />);
+        uuid={value.metadataIdentifier}
+        currentZoomLevel={currentZoomLevel}
+    />
+);
 
-
-const SortableList = SortableContainer(({items, suomenVaylatLayers}) => {
-    return (
-        <div>
-            {items.map((value, index) => (
-                <SortableItem
-                    key={`item-${value.id}`}
-                    index={index}
-                    value={value}
-                    suomenVaylatLayers={suomenVaylatLayers}/>
-            ))}
-        </div>
-    );
+const SortableContainer = sortableContainer(({children}) => {
+  return <div>{children}</div>;
 });
 
-export const SelectedLayers = ({ label, selectedLayers, suomenVaylatLayers }) => {
+
+export const SelectedLayers = ({ selectedLayers, currentZoomLevel }) => {
+
     const { store } = useContext(ReactReduxContext);
 
     const channel = useSelector(state => state.rpc.channel);
-    
-    const [isOpen, setIsOpen] = useState(false);
 
-    const onSortEnd = (oldIndex) => {
-        channel.reorderLayers([selectedLayers[oldIndex.oldIndex].id, selectedLayers.length - oldIndex.newIndex], function () {});
-        const newSelectedLayers = arrayMoveImmutable(selectedLayers, oldIndex.oldIndex, oldIndex.newIndex)
-        store.dispatch(setSelectedLayers(newSelectedLayers))
+    const mapLayers = selectedLayers.filter(layer => {
+        return !(layer.groups && layer.groups.includes(1));
+    });
+
+    const backgroundMaps = selectedLayers.filter(layer => {
+        return layer.groups && layer.groups.includes(1);
+    });
+
+    const sortSelectedLayers = (selectedLayer) => {
+        const newSelectedLayers = arrayMoveImmutable(selectedLayers, selectedLayer.oldIndex, selectedLayer.newIndex)
+        reArrangeRPCLayerOrder(store, newSelectedLayers);
+        store.dispatch(setSelectedLayers(newSelectedLayers));
     };
 
-    const handleRemoveAllSelectedLayers = () => {
-        selectedLayers.forEach(layer => {
+    const sortSelectedBackgroundLayers = (backgroundLayer) => {
+        const newSelectedLayers = arrayMoveImmutable(selectedLayers,
+            (backgroundLayer.oldIndex + selectedLayers.length) - backgroundMaps.length,
+            (backgroundLayer.newIndex + selectedLayers.length) - backgroundMaps.length)
+        reArrangeRPCLayerOrder(store, newSelectedLayers);
+        store.dispatch(setSelectedLayers(newSelectedLayers));
+    };
+
+    const handleClearSelectedLayers = () => {
+        mapLayers.forEach(layer => {
+            channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, !layer.visible]);
+        });
+        resetThemeGroups(store);
+
+        updateLayers(store, channel);
+    };
+
+    const handleClearSelectedBackgroundMaps = () => {
+        backgroundMaps.forEach(layer => {
             channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, !layer.visible]);
         });
         updateLayers(store, channel);
     };
 
+
     return (
         <StyledSelectedLayers>
-            <StyledMasterGroupHeader
-                onClick={() => setIsOpen(!isOpen)}
+            <StyledListSubtitle>{strings.layerlist.layerlistLabels.mapLayers}</StyledListSubtitle>
+            <SortableContainer
+                onSortEnd={sortSelectedLayers}
+                useDragHandle
+                lockAxis={"y"}
             >
-                <StyledLeftContent>
-                    <StyledMasterGroupName>{label}</StyledMasterGroupName>
-                    <SelectedLayersCount count={selectedLayers.length}/>
-                </StyledLeftContent>
-                <StyledExpandButton>
-                    <FontAwesomeIcon
-                        icon={faAngleDown}
-                        style={{
-                            transform: isOpen && "rotate(180deg)"
-                        }}
-                    />
-                </StyledExpandButton>
-            </StyledMasterGroupHeader>
-            <StyledLayerGroupContainer
-                isOpen={isOpen}
-            >
-                <StyledLayerGroup>
-                    <SortableList
-                        transitionDuration={0}
-                        items={selectedLayers}
-                        onSortEnd={onSortEnd}
-                        suomenVaylatLayers={suomenVaylatLayers}
-                    />
-                    <StyledDeleteAllSelectedLayers
-                        onClick={() => handleRemoveAllSelectedLayers()}
-                    >
-                        <FontAwesomeIcon
-                                icon={faTrash}
+                <ul
+                    style={{paddingInlineStart: "0px"}}
+                >
+                    {mapLayers.map((item, i) => (
+                        <SortableElement
+                            key={item.id+" "+i}
+                            value={item}
+                            index={i}
+                            currentZoomLevel={currentZoomLevel}
+                        //collection={index}
                         />
-                        <p>{strings.layerlist.layerlistLabels.removeAllSelectedLayers}</p>
-                    </StyledDeleteAllSelectedLayers>
-                </StyledLayerGroup>
-            </StyledLayerGroupContainer>
+                    ))}
+                </ul>
+            </SortableContainer>
+            <StyledDeleteAllSelectedLayers
+                onClick={() => handleClearSelectedLayers()}
+            >
+                <p>{strings.layerlist.layerlistLabels.clearSelectedMapLayers}</p>
+            </StyledDeleteAllSelectedLayers>
+            <StyledListSubtitle>{strings.layerlist.layerlistLabels.backgroundMaps}</StyledListSubtitle>
+            <SortableContainer
+                onSortEnd={sortSelectedBackgroundLayers}
+                useDragHandle
+                lockAxis={"y"}
+            >
+                <ul
+                    style={{paddingInlineStart: "0px"}}
+                >
+                    {backgroundMaps.map((item, i) => (
+                        <SortableElement
+                            key={item.id+" "+i}
+                            value={item}
+                            index={i}
+                            currentZoomLevel={currentZoomLevel}
+                        //collection={index}
+                        />
+                    ))}
+                </ul>
+            </SortableContainer>
+            <StyledDeleteAllSelectedLayers
+                onClick={() => handleClearSelectedBackgroundMaps()}
+            >
+                <p>{strings.layerlist.layerlistLabels.clearSelectedBackgroundMaps}</p>
+            </StyledDeleteAllSelectedLayers>
         </StyledSelectedLayers>
     );
 };

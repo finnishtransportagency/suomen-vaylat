@@ -4,17 +4,30 @@ import { ReactReduxContext } from 'react-redux';
 import styled from 'styled-components';
 import { useAppSelector } from '../../state/hooks';
 import {
-    setActiveAnnouncements, setAllGroups, setAllTags, setAllThemesWithLayers, setChannel, setCurrentMapCenter, setCurrentState, setCurrentZoomLevel, setFeatures, setLegends, setLoading, setSuomenVaylatLayers, setTagsWithLayers, setZoomLevelsLayers, setZoomRange
+    setActiveAnnouncements,
+    setAllGroups,
+    setAllTags,
+    setAllThemesWithLayers,
+    setChannel,
+    setCurrentMapCenter,
+    setCurrentState,
+    setCurrentZoomLevel,
+    setFeatures,
+    setLegends,
+    setLoading,
+    setTagsWithLayers,
+    setZoomLevelsLayers,
+    setZoomRange,
+    setGFILocations,
+    setGFIPoint
 } from '../../state/slices/rpcSlice';
 import { updateLayers } from '../../utils/rpcUtil';
 import { AnnouncementsModal } from '../announcements-modal/AnnouncementsModal';
-import CenterSpinner from '../center-spinner/CenterSpinner';
-import { MetadataModal } from '../metadata-modal/MetadataModal';
+
+import SvLoder from '../../components/loader/SvLoader';
+
+import { GFIPopup } from '../infobox/GFIPopup';
 import './PublishedMap.scss';
-
-
-
-
 
 const StyledPublishedMap = styled.div`
     height: calc(var(--app-height) - 60px);
@@ -26,13 +39,13 @@ const StyledIframe = styled.iframe`
     border: none;
 `;
 
-const ANNOUNCEMENTS_LOCALSTORAGE = "oskari-announcements";
+const ANNOUNCEMENTS_LOCALSTORAGE = 'oskari-announcements';
 
 
 const PublishedMap = () => {
 
     const { store } = useContext(ReactReduxContext);
-    const loading = useAppSelector((state) => state.rpc.loading);
+    let { loading, gfiLocations } = useAppSelector((state) => state.rpc);
     const language = useAppSelector((state) => state.language);
     const lang = language.current;
 
@@ -100,12 +113,6 @@ const PublishedMap = () => {
 
                 updateLayers(store, channel);
 
-                if (data.getTags) {
-                    channel.getTags(function (data) {
-                        store.dispatch(setAllTags(data));
-                    });
-                };
-
                 if (data.getCurrentState) {
                     channel.getCurrentState(function (data) {
                         store.dispatch(setCurrentState(data));
@@ -124,12 +131,6 @@ const PublishedMap = () => {
                     });
                 };
 
-                if (data.getSuomenVaylatLayers) {
-                    channel.getSuomenVaylatLayers(function (data) {
-                        store.dispatch(setSuomenVaylatLayers(data));
-                    });
-                };
-
                 if (data.getLegends) {
                     channel.getLegends((data) => {
                         store.dispatch(setLegends(data));
@@ -144,16 +145,21 @@ const PublishedMap = () => {
             });
 
             channel.getSupportedEvents(function (data) {
-                
-                if (data.MapClickedEvent) {
-                    channel.handleEvent('MapClickedEvent', event => {
 
+                if (data.MapClickedEvent) {
+                    channel.handleEvent('MapClickedEvent', (data) => {
+                        store.dispatch(setGFIPoint(data));
                     });
                 };
 
+                if (data.DataForMapLocationEvent) {
+                    channel.handleEvent('DataForMapLocationEvent', (data) => {
+                        store.dispatch(setGFILocations(data));
+                    });
+                }
+
                 if (data.MarkerClickEvent) {
                     channel.handleEvent('MarkerClickEvent', event => {
-
                     });
                 };
 
@@ -169,7 +175,7 @@ const PublishedMap = () => {
                 };
 
                 if (data.UserLocationEvent) {
-                    channel.postRequest('MapModulePlugin.RemoveMarkersRequest', ["my_location"]);
+                    channel.postRequest('MapModulePlugin.RemoveMarkersRequest', ['my_location']);
 
                     channel.handleEvent('UserLocationEvent', event => {
                         var data = {
@@ -181,29 +187,29 @@ const PublishedMap = () => {
                             offsetY: 10, // center point y position from bottom to up
                             size: 6
                         };
-                        channel.postRequest('MapModulePlugin.AddMarkerRequest', [data, "my_location"]);
+                        channel.postRequest('MapModulePlugin.AddMarkerRequest', [data, 'my_location']);
 
                         var routeSteps = [
                             {
-                                "lon": event.lon,
-                                "lat": event.lat,
-                                "duration": 3000,
-                                "zoom": 4,
-                                "animation": "zoomPan"
+                                'lon': event.lon,
+                                'lat': event.lat,
+                                'duration': 3000,
+                                'zoom': 4,
+                                'animation': 'zoomPan'
                             },
                             {
-                                "lon": event.lon,
-                                "lat": event.lat,
-                                "duration": 3000,
-                                "zoom": 10,
-                                "animation": "zoomPan"
+                                'lon': event.lon,
+                                'lat': event.lat,
+                                'duration': 3000,
+                                'zoom': 10,
+                                'animation': 'zoomPan'
                             }
                         ];
                         var stepDefaults = {
-                            "zoom": 5,
-                            "animation": "fly",
-                            "duration": 3000,
-                            "srsName": "EPSG:3067"
+                            'zoom': 5,
+                            'animation': 'fly',
+                            'duration': 3000,
+                            'srsName': 'EPSG:3067'
                         };
                         channel.postRequest('MapTourRequest', [routeSteps, stepDefaults]);
                     });
@@ -228,7 +234,7 @@ const PublishedMap = () => {
     return (
         <StyledPublishedMap>
             {loading ? (
-                <CenterSpinner />
+                <SvLoder />
             ) : null}
             {announcements.map((announcement) => {
                 return (
@@ -240,9 +246,11 @@ const PublishedMap = () => {
                     />
                 );
             })}
-            <MetadataModal />
-            <StyledIframe id="sv-iframe" title="iframe" src={process.env.REACT_APP_PUBLISHED_MAP_URL + "&lang=" + lang}
-                allow="geolocation" onLoad={() => hideSpinner()}>
+            {gfiLocations.length > 0 ? (
+                <GFIPopup gfiLocations={gfiLocations}/>
+            ) : null}
+            <StyledIframe id='sv-iframe' title='iframe' src={process.env.REACT_APP_PUBLISHED_MAP_URL + '&lang=' + lang}
+                allow='geolocation' onLoad={() => hideSpinner()}>
             </StyledIframe>
         </StyledPublishedMap>
 

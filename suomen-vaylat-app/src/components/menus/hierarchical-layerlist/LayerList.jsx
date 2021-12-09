@@ -1,86 +1,128 @@
-import { useState, useContext } from 'react';
+import { useState } from 'react';
 import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { ReactReduxContext, useSelector } from 'react-redux';
-import styled, { keyframes } from 'styled-components';
-import { updateLayers } from '../../../utils/rpcUtil';
-import Checkbox from '../../checkbox/Checkbox';
+import { useSelector } from 'react-redux';
+import styled from 'styled-components';
+
 import LayerGroup from './LayerGroup';
 import Layers from './Layers';
 
+import { motion } from 'framer-motion';
+
+
+const masterHeaderIconVariants = {
+    open: { rotate: 180 },
+    closed: { rotate: 0 },
+};
+
+const listVariants = {
+    visible: {
+        height: 'auto',
+        opacity: 1
+    },
+    hidden: {
+        height: 0,
+        opacity: 0
+    },
+};
+
 const StyledLayerList = styled.div`
 
-`;
-
-const fadeIn = keyframes`
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
 `;
 
 const StyledLayerGroups = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: center;
-    opacity: 0;
-    animation-delay: ${props => props.index * 0.025 + 's'};
-    animation-timing-function: ease-in-out;
-    animation-fill-mode: forwards;
-    animation-duration: 0.5s;
-    animation-name: ${fadeIn};
+    //opacity: 0;
     background-color: ${props => props.theme.colors.mainWhite};
-    margin: ${props => props.parentId === -1 && "10px 0px 10px 0px"};
+    margin: ${props => props.parentId === -1 && '10px 0px 10px 0px'};
     margin-bottom: 10px;
     border-radius: 2px;
     &:last-child {
-        ${props => props.parentId === -1 ? '1px solid '+props.theme.colors.maincolor2 : "none"};
-    };
-`;
-
-const StyledMasterGroupName = styled.p`
-    user-select: none;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 200px;
-    color: ${props => props.theme.colors.black};
-    margin: 0;
-    padding-left: 10px;
-    font-size: 14px;
-    font-weight: 600;
-    transition: all 0.1s ease-in;
-    @media ${ props => props.theme.device.mobileL} {
-        font-size: 13px;
+        ${props => props.parentId === -1 ? '1px solid '+props.theme.colors.mainColor2 : 'none'};
     };
 `;
 
 const StyledMasterGroupHeader = styled.div`
+    position: sticky;
+    top: -16px;
     z-index: 1;
-    height: 40px;
-    cursor: pointer;
+    min-height: 48px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: ${props => props.theme.colors.maincolor3};
-    padding-left: 5px;
-    border-radius: 2px;
+    cursor: pointer;
+    background-color: ${props => props.theme.colors.mainColor1};
+    border-radius: 4px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+`;
+
+const StyledMasterGroupName = styled.p`
+    user-select: none;
+    max-width: 240px;
+    color: ${props => props.theme.colors.mainWhite};
+    margin: 0;
+    padding: 0px;
+    font-size: 14px;
+    font-weight: 600;
     transition: all 0.1s ease-in;
-    &:hover {
-        background-color: ${props => props.theme.colors.maincolor2};
-    };
-    &:hover ${StyledMasterGroupName} {
-        color: ${props => props.theme.colors.mainWhite};
+
+    @media ${ props => props.theme.device.mobileL} {
+        //font-size: 13px;
     };
 `;
+
+const StyledMasterGroupLayersCount = styled.p`
+    margin: 0;
+    padding: 0px;
+    font-size: 12px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.8);
+`;
+
+const StyledLeftContent = styled.div`
+    display: flex;
+    height: 100%;
+    align-items: center;
+`;
+
 
 const StyledRightContent = styled.div`
     display: flex;
     align-items: center;
+`;
 
+const StyledMotionIconWrapper = styled(motion.div)`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`;
+
+const StyledMasterGroupHeaderIcon = styled.div`
+    width: 48px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    svg {
+        font-size: 20px;
+        color: ${props => props.theme.colors.mainWhite};
+    };
+    p {
+        margin: 0;
+        font-weight: bold;
+        font-size: 22px;
+        color: ${props => props.theme.colors.mainWhite};
+    }
+`;
+
+
+const StyledMasterGroupTitleContent = styled.div`
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 `;
 
 const StyledSelectButton = styled.button`
@@ -89,25 +131,24 @@ const StyledSelectButton = styled.button`
     justify-content: center;
     align-items: center;
     background-color: transparent;
-    margin-right: 10px;
+    margin-right: 8px;
     border: none;
     svg {
-        color: ${props => props.theme.colors.black};
-        font-size: 23px;
-        transition: all 0.5s ease-out;
+        color: ${props => props.theme.colors.mainWhite};
+        font-size: 19px;
+        transition: all 0.3s ease-out;
     };
 `;
 
-const StyledLayerGroupContainer = styled.div`
-    height: ${props => props.isOpen ? "auto" : "0px"};
-    overflow: hidden;
-`;
-
-const StyledLayerGroup = styled.ul`
+const StyledLayerGroup = styled(motion.ul)`
     list-style-type: none;
     margin: 0;
-    padding-inline-start: ${props => props.parentId === -1 ? "10px" : "15px"};
+    padding-inline-start: 25px;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
 `;
+
+const StyledLayerGroupWrapper = styled.div``;
 
 export const LayerList = ({
     groups,
@@ -128,7 +169,12 @@ export const LayerList = ({
                     {
                         tags.map((tag, index) => {
                             return (
-                                <TagLayerList tag={tag} layers={layers} index={index} />
+                                <TagLayerList
+                                    tag={tag}
+                                    layers={layers}
+                                    index={index}
+                                    key={'taglayerlist-' + tag + '-' + index}
+                                />
                             );
                         })
                     }
@@ -142,16 +188,16 @@ export const LayerList = ({
                         }
                         let isVisible = (group.layers && group.layers.length > 0) || hasChildren;
                         return (
-                            <>
+                            <StyledLayerGroupWrapper key={'group-sl-' + index + '-' + group.id }>
                                 { isVisible ? (
                                     <LayerGroup
-                                        key={group.id}
+                                        key={'layer-group-'+group.id}
                                         index={index}
                                         group={group}
                                         layers={layers}
                                         hasChildren={hasChildren}
                                     />) : null}
-                            </>
+                            </StyledLayerGroupWrapper>
                         );
                     })
                     }
@@ -164,17 +210,14 @@ export const LayerList = ({
 
   const TagLayerList = ({
       tag,
-      layers, index
+      layers,
+      index
     }) => {
-    const { store } = useContext(ReactReduxContext);
-    const channel = useSelector(state => state.rpc.channel);
     const tagsWithLayers = useSelector(state => state.rpc.tagsWithLayers);
     const tagLayers = tagsWithLayers[tag];
 
     const [ isOpen, setIsOpen ] = useState(false);
 
-    let checked;
-    let indeterminate;
     let visibleLayers = [];
     var filteredLayers = [];
 
@@ -190,64 +233,59 @@ export const LayerList = ({
         return null;
     });
 
-    if (filteredLayers.length === visibleLayers.length && visibleLayers.length > 0) {
-        checked = true;
-    } else if (visibleLayers.length > 0 ) {
-        indeterminate = true;
-    } else {
-        checked = false;
-        indeterminate = false;
-    }
-
-    const selectTag = (e) => {
-        e.stopPropagation();
-        if (!indeterminate) {
-            filteredLayers.map(layer => {
-                channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, !layer.visible]);
-                return null;
-            });
-        } else {
-            filteredLayers.map(layer => {
-                channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, false]);
-                return null;
-            });
-        }
-        updateLayers(store, channel);
-    }
-
     return (
-            <StyledLayerGroups index={index}>
+            <StyledLayerGroups>
                 <StyledMasterGroupHeader
-                    key={"smgh_" + index + '_'}
-                    onClick={() => setIsOpen(!isOpen)}
+                     key={'smgh_' + index + '_'}
+                    onClick={() => {
+                        setIsOpen(!isOpen);
+                    }}
                 >
-                    <StyledMasterGroupName>{tag.charAt(0).toUpperCase() + tag.slice(1)}</StyledMasterGroupName>
+                    <StyledLeftContent>
+                        <StyledMasterGroupHeaderIcon>
+                            <p>{tag.charAt(0).toUpperCase()}</p>
+                        </StyledMasterGroupHeaderIcon>
+                        <StyledMasterGroupTitleContent>
+                            <StyledMasterGroupName>
+                                {tag.charAt(0).toUpperCase() + tag.slice(1)}
+                            </StyledMasterGroupName>
+                            <StyledMasterGroupLayersCount>
+
+                            </StyledMasterGroupLayersCount>
+                        </StyledMasterGroupTitleContent>
+
+                    </StyledLeftContent>
                     <StyledRightContent>
-                        <Checkbox
-                                isChecked={checked}
-                                handleClick={selectTag}
-                        />
-                        <StyledSelectButton
-                            isOpen={isOpen}
-                            onClick={() => setIsOpen(!isOpen)}
-                        >
-                            <FontAwesomeIcon
-                                icon={faAngleDown}
-                                style={{
-                                    transform: isOpen && "rotate(180deg)"
+                        <StyledSelectButton>
+                            <StyledMotionIconWrapper
+                                initial='closed'
+                                animate={isOpen ? 'open' : 'closed'}
+                                variants={masterHeaderIconVariants}
+                                transition={{
+                                    duration: 0.3,
+                                    type: "tween"
                                 }}
-                            />
+                            >
+                                <FontAwesomeIcon
+                                    icon={faAngleDown}
+                                />
+                            </StyledMotionIconWrapper>
                         </StyledSelectButton>
                     </StyledRightContent>
                 </StyledMasterGroupHeader>
-                <StyledLayerGroupContainer
-                    key={"slg_" + index + "_"}
-                    isOpen={isOpen}
-                >
-                    <StyledLayerGroup>
+                    <StyledLayerGroup
+                        key={'slg_' + index + '_'}
+                        isOpen={isOpen}
+                        initial='hidden'
+                        animate={isOpen ? 'visible' : 'hidden'}
+                        variants={listVariants}
+                        transition={{
+                            duration: 0.3,
+                            type: "tween"
+                        }}
+                    >
                         <Layers layers={filteredLayers} isOpen={isOpen} />
                     </StyledLayerGroup>
-                </StyledLayerGroupContainer>
             </StyledLayerGroups>
     );
   };

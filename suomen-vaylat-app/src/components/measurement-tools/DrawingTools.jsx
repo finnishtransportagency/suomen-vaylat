@@ -1,4 +1,8 @@
-import { useState } from 'react';
+import { useContext } from 'react';
+import styled from 'styled-components';
+import { motion } from 'framer-motion';
+import { ReactReduxContext } from 'react-redux';
+
 import { faEraser } from '@fortawesome/free-solid-svg-icons';
 
 import svCircle from '../../theme/icons/drawtools_circle.svg';
@@ -9,51 +13,60 @@ import svLinestring from '../../theme/icons/drawtools_linestring.svg';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useSelector } from 'react-redux';
 import ReactTooltip from 'react-tooltip';
-import styled from 'styled-components';
-import strings from '../../translations';
+import { isMobile } from '../../theme/theme';
 
-const StyledTools = styled.div`
-    position: absolute;
-    left: 50%;
-    bottom: 0px;
-    transform: translateX(-50%);
+import strings from '../../translations';
+import { setActiveTool } from '../../state/slices/uiSlice';
+
+const listVariants = {
+    visible: {
+        height: "auto",
+        opacity: 1
+    },
+    hidden: {
+        height: 0,
+        opacity: 0
+    },
+};
+
+const StyledTools = styled(motion.div)`
     display: flex;
-    justify-content: space-between;
     align-items: center;
     flex-direction: row;
     background-color: ${props => props.color};
-    margin: 1rem;
-    transition: all .2s ease-in-out;
-`;
-
-const StyledDrawingToolContainer = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: center;
     flex-direction: column;
-    margin: .5rem;
+    overflow: hidden;
 `;
 
 const StyledDrawingTool = styled.div`
+    pointer-events: auto;
+    cursor: pointer;
     z-index: 100;
-    width: 40px;
-    height: 40px;
+    width: 44px;
+    min-height: 44px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: ${(props => props.active? props.theme.colors.maincolorselected1 : props.theme.colors.maincolor1)};
+    background-color: ${(props => props.active? props.theme.colors.mainColorselected1 : props.theme.colors.mainColor1)};
     box-shadow: rgb(0 0 0 / 16%) 0px 3px 6px, rgb(0 0 0 / 23%) 0px 3px 6px;
     border-radius: 50%;
+    margin-top: 8px;
     svg {
         color: ${props => props.theme.colors.mainWhite};
-        font-size: 20px;
+        //font-size: 18px;
+    };
+    @media ${props => props.theme.device.mobileL} {
+        width: 38px;
+        min-height: 38px;
     };
 `;
 
 const StyledErase = styled.div`
+    pointer-events: auto;
+    cursor: pointer;
     z-index: 100;
-    width: 40px;
-    height: 40px;
+    width: 44px;
+    min-height: 44px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -64,15 +77,23 @@ const StyledErase = styled.div`
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    margin-left: .5rem;
+    margin-top: 8px;
+    margin-bottom: 2px;
     svg {
         color: ${props => props.theme.colors.mainWhite};
         font-size: 20px;
     };
+    @media ${props => props.theme.device.mobileL} {
+        width: 38px;
+        min-height: 38px;
+        svg {
+            font-size: 18px;
+        };
+    };
 `;
 
 const StyledIcon = styled.img`
-    width: 1.5rem;
+    width: 1.3rem;
 `;
 
 const drawinToolsData = [
@@ -113,20 +134,19 @@ const drawinToolsData = [
     },
 ];
 
-export const DrawingTools = () => {
-
-    const [activeTool, setActiveTool] = useState('');
-
-    const channel = useSelector(state => state.rpc.channel);
+export const DrawingTools = ({isOpen}) => {
+    const { store } = useContext(ReactReduxContext);
+    const { channel } = useSelector(state => state.rpc);
+    const { activeTool } = useSelector(state => state.ui);
 
     const startStopTool = (tool) => {
         if (tool.name !== activeTool) {
             var data = [tool.name, tool.type, { showMeasureOnMap: true }];
             channel.postRequest('DrawTools.StartDrawingRequest', data);
-            setActiveTool(tool.name);
+            store.dispatch(setActiveTool(tool.name));
         } else {
             channel.postRequest('DrawTools.StopDrawingRequest', [activeTool]);
-            setActiveTool('');
+            store.dispatch(setActiveTool(''));
         }
     };
 
@@ -135,49 +155,55 @@ export const DrawingTools = () => {
         channel.postRequest('DrawTools.StopDrawingRequest', [true]);
         // stop the drawing tool
         channel.postRequest('DrawTools.StopDrawingRequest', [activeTool]);
-        setActiveTool('');
+        store.dispatch(setActiveTool(''));
     };
 
     return (
         <>
-            <ReactTooltip id='circle' place='top' type='dark' effect='float'>
+            <ReactTooltip disable={isMobile} id='circle' place='top' type='dark' effect='float'>
                 <span>{strings.tooltips.drawingtools.circle}</span>
             </ReactTooltip>
 
-            <ReactTooltip id='box' place='top' type='dark' effect='float'>
+            <ReactTooltip disable={isMobile} id='box' place='top' type='dark' effect='float'>
                 <span>{strings.tooltips.drawingtools.box}</span>
             </ReactTooltip>
 
-            <ReactTooltip id='square' place='top' type='dark' effect='float'>
+            <ReactTooltip disable={isMobile} id='square' place='top' type='dark' effect='float'>
                 <span>{strings.tooltips.drawingtools.square}</span>
             </ReactTooltip>
 
-            <ReactTooltip id='polygon' place='top' type='dark' effect='float'>
+            <ReactTooltip disable={isMobile} id='polygon' place='top' type='dark' effect='float'>
                 <span>{strings.tooltips.drawingtools.polygon}</span>
             </ReactTooltip>
 
-            <ReactTooltip id='linestring' place='top' type='dark' effect='float'>
+            <ReactTooltip disable={isMobile} id='linestring' place='top' type='dark' effect='float'>
                 <span>{strings.tooltips.drawingtools.linestring}</span>
             </ReactTooltip>
 
-            <ReactTooltip id='erase' place='top' type='dark' effect='float'>
+            <ReactTooltip disable={isMobile} id='erase' place='top' type='dark' effect='float'>
                 <span>{strings.tooltips.drawingtools.erase}</span>
             </ReactTooltip>
 
-            <StyledTools>
+            <StyledTools
+                isOpen={isOpen}
+                initial="hidden"
+                animate={isOpen ? "visible" : "hidden"}
+                variants={listVariants}
+                transition={{
+                    duration: 0.3,
+                    type: "tween"
+                }}
+            >
                 {drawinToolsData.map((tool, index) => {
                     return (
-                        <StyledDrawingToolContainer
-                            key={tool.name}
-                        >
                             <StyledDrawingTool
+                                key={tool.name}
                                 data-tip data-for={tool.type.toLowerCase()}
                                 active={tool.name === activeTool ? true : false}
                                 onClick={() => startStopTool(tool)}
                             >
                                 <StyledIcon src={tool.style.icon}/>
                             </StyledDrawingTool>
-                        </StyledDrawingToolContainer>
                     )
                 })}
                 <StyledErase
