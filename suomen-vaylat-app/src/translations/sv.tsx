@@ -8,8 +8,12 @@ const sv = {
     },
     title: 'Suomen Väylät SV',
     tooltips: {
+        layerlist: {
+            opacity: 'Läpinäkyvyys',
+            filter: 'Filtrera'
+        },
+        searchButton: 'Osoitehaku',
         layerlistButton: 'Tasovalikko',
-        searchButton: 'Haku',
         legendButton: 'Legenda',
         fullscreenButton: 'Koko näyttö',
         legendHeader: 'Data som visas på denna zoomnivå och deras förklaringar',
@@ -35,6 +39,9 @@ const sv = {
     },
     gfi: {
         title: 'Objektuppgifter',
+        close: 'Stänga',
+        additionalInfo: 'Lisätiedot',
+        gfiLocation: 'Lähennä kohteeseen'
     },
     general: {
         close: 'Stänga',
