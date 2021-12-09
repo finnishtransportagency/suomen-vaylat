@@ -1,7 +1,7 @@
 import { useState } from "react";
 import styled from 'styled-components';
 import strings from '../../translations';
-import { motion } from "framer-motion";
+import { motion } from 'framer-motion';
 import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -51,6 +51,9 @@ const StyledFeature = styled(motion.div)`
     overflow: hidden;
 `;
 
+const StyledGFITablesContainer  = styled.div`
+`;
+
 const reOrderFeatureProperties = (geoJSON = {}, visibleFields = [], highPriority=[]) => {
     if (visibleFields.length === 0 && highPriority.length === 0) {
         return;
@@ -76,11 +79,11 @@ const reOrderFeatureProperties = (geoJSON = {}, visibleFields = [], highPriority
 const getContent = (key, value, visibleFields, highPriorityFields, lowPriorityTable, highPriorityTable) => {
     const hasConfiguration = highPriorityFields.length !== 0 || visibleFields.length !== 0;
     if (hasConfiguration && highPriorityFields.includes(key)) {
-        return highPriorityTable.push(<tr className="high-priority"><td className="title">{key}</td><td>{value}</td></tr>);
+        return highPriorityTable.push(<tr key={'hr-' + key + '-' + value} className="high-priority"><td className="title">{key}</td><td>{value}</td></tr>);
     } else if (hasConfiguration && visibleFields.includes(key)) {
-        return lowPriorityTable.push(<tr className="low-priority"><td className="title">{key}</td><td>{value}</td></tr>);
+        return lowPriorityTable.push(<tr key={'lr-' + key + '-' + value} className="low-priority"><td className="title">{key}</td><td>{value}</td></tr>);
     }
-    return lowPriorityTable.push(<tr className="low-priority"><td className="title">{key}</td><td>{value}</td></tr>);
+    return lowPriorityTable.push(<tr key={'rr-' + key + '-' + value} className="low-priority"><td className="title">{key}</td><td>{value}</td></tr>);
 };
 
 export const FormattedGFI = ({ data }) => {
@@ -88,7 +91,7 @@ export const FormattedGFI = ({ data }) => {
     const visibleFields = JSON.parse(geoJSON.features[0].properties._order.replace('\\',''));
     const highPriority = JSON.parse(geoJSON.features[0].properties._orderHigh.replace('\\',''));
     let pretty = [];
-    
+
     // reorder properties
     reOrderFeatureProperties(geoJSON, visibleFields, highPriority);
 
@@ -108,11 +111,11 @@ export const FormattedGFI = ({ data }) => {
             <>
                 <div className='popupContent'>
                     <div className='contentWrapper-infobox'>
-                        {pretty.map((table) => {
+                        {pretty.map((table, index) => {
                             return (
-                                <>
+                                <div key={'gfi-popup-wrapper-' + index}>
                                     {table}
-                                </>
+                                </div>
                             )
                         })}
                     </div>
@@ -125,15 +128,14 @@ export const FormattedGFI = ({ data }) => {
     const highPriorityTableExists = highPriorityTable.length > 0 ? false : true;
     const [isFeatureOpen, openFeature] = useState(true);
     const [isInfoOpen, openInfo] = useState(highPriorityTableExists);
-    const name = "Kohde " + (index + 1);
 
     return (
-            <>
+            <StyledGFITablesContainer key={'gfi-tables-' + index}>
                 <StyledInfoHeaderDiv
-                    onClick={() => openFeature(!isFeatureOpen)} 
+                    onClick={() => openFeature(!isFeatureOpen)}
                 >
-                    <StyledInfoHeader>{name}</StyledInfoHeader>
-                    
+                    <StyledInfoHeader>{strings.gfi.target + ' ' + (index + 1)}</StyledInfoHeader>
+
                     <FontAwesomeIcon
                         icon={faAngleDown}
                         style={{
@@ -155,7 +157,9 @@ export const FormattedGFI = ({ data }) => {
                     <StyledHighPriorityDiv className="high-priority-table">
                         <StyledInfoHeader></StyledInfoHeader>
                         <table>
-                            {highPriorityTable}
+                            <tbody>
+                                {highPriorityTable}
+                            </tbody>
                         </table>
                     </StyledHighPriorityDiv>
                 :
@@ -170,7 +174,7 @@ export const FormattedGFI = ({ data }) => {
                             <StyledInfoHeader>
                                 {strings.gfi.additionalInfo}
                             </StyledInfoHeader>
-                            
+
                             <FontAwesomeIcon
                                 icon={faAngleDown}
                                 style={{
@@ -188,15 +192,17 @@ export const FormattedGFI = ({ data }) => {
                         variants={listVariants}
                         transition={{
                             duration: 0.1,
-                        }} 
+                        }}
                     >
                     <table>
-                        {lowPriorityTable}
+                        <tbody>
+                            {lowPriorityTable}
+                        </tbody>
                     </table>
                     </StyledLowPriorityTable>
                 </StyledLowPriorityDiv>
                 </StyledFeature>
-            </>
+            </StyledGFITablesContainer>
     );
   };
 

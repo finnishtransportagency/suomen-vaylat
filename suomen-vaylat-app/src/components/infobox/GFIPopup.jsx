@@ -45,7 +45,8 @@ const customStyles = {
         alignItems: 'center'
     },
     content: {
-        marginLeft: '55%'
+        marginLeft: '40%',
+        width: '60%'
     }
 };
 

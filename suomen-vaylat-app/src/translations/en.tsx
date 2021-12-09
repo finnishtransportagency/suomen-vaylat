@@ -40,7 +40,8 @@ const en = {
         title: 'Feature Data',
         close: 'Close',
         additionalInfo: 'Additional information',
-        gfiLocation: 'Zoom to location'
+        gfiLocation: 'Zoom to location',
+        target: 'Target'
     },
     general: {
         close: 'Close',
