@@ -142,7 +142,39 @@ const fi = {
             'lähtökohtaisesti julkisena tietona, joita luovutetaan muiden ' +
             'yhteiskunnan toimijoiden ja kansalaisten käyttöön. ' +
             'Julkinen tieto luovutetaan muiden toimijoiden käyttöön avoimena ' +
-            'datana aina silloin, kun se on mahdollista.'
+            'datana aina silloin, kun se on mahdollista.',
+        versionInfo: {
+            title: 'Versiotiedot',
+            versionInfoList: {
+                0: {
+                    title: 'Sovellus päivitetty viimeksi: '
+                },
+                1: {
+                    title: 'Tiedossa olevat puutteet:',
+                    list: {
+                        0: {
+                             content: 'Karttaa ei voi raahata kun sen päälle on avattu ikkuna (kohdetietoikkuna, infoikkuna, metatietoikkuna)'
+                        },
+                        1: { content: 'Kohdetiedot eivät skaalaudu mobiiliin'},
+                        2: { content: 'Kaikkia aineistoryhmiä ei ole käsitelty datan osalta',
+                             subContent: {
+                                0: 'Tiestötiedoista puuttuvat selkokielisyydet ja kenttien priorisointi kohdetietoikkunaan',
+                                1: 'Inspire-aineistoista sekä digiroad-aineistoista puuttuvat kenttien priorisointi kohdetietoikkunaan'
+                            }
+                        },
+                        3: { content: 'Sillat-aineiston tyylit eivät vaihdu oikein teemakartassa'},
+                    }
+                },
+                2: {
+                    title: 'Sillat aineiston tyylit eivät vaihdu oikein teemakartassa'
+                }
+            },
+            contactInfoFeedback: {
+                0: 'Sovelluksesta vastaa Väylävirasto ja sovelluksen toimittaa Sitowise.',
+                1: 'Palautetta toivotaan lähetettävän osoitteeseen suomenvaylat@vaylat.fi'
+            }
+        }
+
     },
     search: {
         types: {
