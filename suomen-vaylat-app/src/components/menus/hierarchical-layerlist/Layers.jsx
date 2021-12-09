@@ -6,6 +6,9 @@ export const Layers = ({
     theme,
     isSelected = false
 }) => {
+    layers.sort(function(a, b) {
+        return a.name.toLowerCase().localeCompare(b.name.toLowerCase());
+    });
     return (
         <>
             {layers.map((layer, index) => {

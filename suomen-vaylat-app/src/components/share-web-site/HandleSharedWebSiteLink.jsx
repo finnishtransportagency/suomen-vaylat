@@ -76,11 +76,12 @@ export const HandleSharedWebSiteLink = () => {
             if (layerProps.length === 3) {
                 const layerId = parseInt(layerProps[0]);
                 const opacity = parseInt(layerProps[1]);
-                const style = layerProps[3];
+                const style = layerProps[2];
 
-                channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layerId, true]);
+
                 channel.postRequest('ChangeMapLayerOpacityRequest', [layerId, opacity]);
                 store.dispatch(changeLayerStyle({layerId: layerId, style:style}));
+                channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layerId, true]);
 
                 // Update layer orders to correct
                 store.dispatch(reArrangeSelectedMapLayers({layerId: layerId, position: index}));
