@@ -109,14 +109,11 @@ export const Layer = ({ layer, theme }) => {
 
     if (layer.visible) {
         channel.getLayerThemeStyle([layer.id, (selectedTheme && selectedTheme.name) ? selectedTheme.name : null], function(styleName) {
-
-            if (styleName) {
-                if (styleName !== layerStyle) {
-                    setLayerStyle(styleName);
-                    store.dispatch(changeLayerStyle({layerId: layer.id, style:styleName}));
-                    // update layers legends
-                    updateLayerLegends();
-                }
+            if (styleName && styleName !== layerStyle) {
+                setLayerStyle(styleName);
+                store.dispatch(changeLayerStyle({layerId: layer.id, style:styleName}));
+                // update layers legends
+                updateLayerLegends();
             }
         });
     }
