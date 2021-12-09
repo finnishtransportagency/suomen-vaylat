@@ -39,7 +39,8 @@ const initialState = {
   center: {
       x: 0,
       y: 0
-  }
+  },
+  gfiPoint: null
 };
 
 export const rpcSlice = createSlice({
@@ -278,6 +279,9 @@ export const rpcSlice = createSlice({
     resetGFILocations: (state, action) => {
       state.gfiLocations = action.payload;
     },
+    setGFIPoint: (state, action) => {
+        state.gfiPoint = action.payload;
+    },
     removeAllSelectedLayers: (state, action) => {
         const groupId = (action.payload && action.payload.notRemoveLayersByGroupId) || null;
         state.selectedLayers.forEach(l => {
@@ -337,6 +341,7 @@ export const {
     reArrangeSelectedMapLayers,
     setGFILocations,
     resetGFILocations,
+    setGFIPoint,
     removeAllSelectedLayers
 } = rpcSlice.actions;
 

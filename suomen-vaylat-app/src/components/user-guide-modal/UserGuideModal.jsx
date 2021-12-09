@@ -94,7 +94,7 @@ export const UserGuideModal = () => {
     };
 
     const setAccordionIndex = (index) => {
-        modalIndex == index ? setModalIndex(-1) : setModalIndex(index)
+        modalIndex === index ? setModalIndex(-1) : setModalIndex(index)
     }
 
     const modalContent = [
