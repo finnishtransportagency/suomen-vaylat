@@ -78,7 +78,7 @@ const reOrderFeatureProperties = (geoJSON = {}, visibleFields = [], highPriority
 
 const getContent = (key, value, visibleFields, highPriorityFields, lowPriorityTable, highPriorityTable) => {
     const hasConfiguration = highPriorityFields.length !== 0 || visibleFields.length !== 0;
-    value = (value.startsWith('http://') || value.startsWith('https://')) ? '<a href="' + value + '" target="_blank">' + value + '<a>' : value;
+    value = (value && typeof value === 'string' && (value.startsWith('http://') || value.startsWith('https://'))) ? '<a href="' + value + '" target="_blank">' + value + '<a>' : value;
     if (hasConfiguration && highPriorityFields.includes(key)) {
         return highPriorityTable.push(<tr key={'hr-' + key + '-' + value} className="high-priority"><td className="title">{key}</td><td dangerouslySetInnerHTML={{__html: value}}></td></tr>);
     } else if (hasConfiguration && visibleFields.includes(key)) {
