@@ -1,33 +1,16 @@
-import React, { useState, useContext, useRef } from "react";
+import React, { useContext } from "react";
 import styled from 'styled-components';
 import { setSelectedLayers } from '../../../state/slices/rpcSlice';
 import strings from '../../../translations';
 import { updateLayers, resetThemeGroups, reArrangeRPCLayerOrder } from '../../../utils/rpcUtil';
 import { ReactReduxContext, useSelector } from 'react-redux';
-import { sortableContainer, sortableElement, arrayMove } from 'react-sortable-hoc';
+import { sortableContainer, sortableElement } from 'react-sortable-hoc';
 import {arrayMoveImmutable} from 'array-move';
-
-
 import SelectedLayer from './SelectedLayer';
 
 const StyledSelectedLayers = styled.div`
 
 `;
-
-// const SortableContainer = sortableContainer(({items, currentZoomLevel}) => {
-//     return (
-//         <div ref={inputEl}>
-//             {items.map((value, index) => (
-//                 <SortableElement
-//                     key={`item-${value.id}`}
-//                     index={index}
-//                     value={value}
-//                     currentZoomLevel={currentZoomLevel}
-//                 />
-//             ))}
-//         </div>
-//     );
-// });
 
 const StyledDeleteAllSelectedLayers = styled.div`
     width: 250px;
