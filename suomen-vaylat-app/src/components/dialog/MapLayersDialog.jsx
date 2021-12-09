@@ -286,7 +286,7 @@ const MapLayersDialog = () => {
                         //setTabIndex(e.activeIndex);
                         //inputEl.current.swiper.slideTo(e.activeIndex);
                     }}
-                    allowTouchMove={false} // Disable swiping
+                    //allowTouchMove={false} // Disable swiping
                     ref={inputEl}
                 >
                 {
