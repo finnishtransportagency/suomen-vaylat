@@ -1,58 +1,69 @@
-import {  useContext } from "react";
-import { faInfo, faTrash } from '@fortawesome/free-solid-svg-icons';
+import {  useState, useContext } from "react";
+import { faInfoCircle, faTimes, faGripVertical } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ReactReduxContext, useSelector } from 'react-redux';
-import ReactTooltip from "react-tooltip";
 import styled from 'styled-components';
 import { clearLayerMetadata, getLayerMetadata, setLayerMetadata } from '../../../state/slices/rpcSlice';
+import { updateLayers } from '../../../utils/rpcUtil';
+import { sortableHandle } from 'react-sortable-hoc';
+
 import strings from '../../../translations';
-import { updateLayers } from "../../../utils/rpcUtil";
 
-
-const StyledLayerContainer = styled.div`
+const StyledLayerContainer = styled.li`
     z-index: 9999;
-    height: 40px;
-    cursor: pointer;
-    transition: all 0.3s ease-out;
+    height: 80px;
     display: flex;
-    align-items: center;
-    background-color: rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease-out;
-    &:nth-child(2n) {
-        background-color: ${props => props.theme.colors.mainWhite};
-    };
+    margin-bottom: 8px;
+`;
+
+const StyledLayerContent = styled.div`
+    position: relative;
+    width: 100%;
+    padding: 8px;
+    background-color: #F5F5F5;
+    box-shadow: 0px 1px 3px #0000001F;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 `;
 
 const StyledlayerHeader = styled.div`
     width: 100%;
     display: flex;
-    justify-content: space-between;
     align-items: center;
 `;
 
+const StyledMidContent = styled.div`
+    font-size: 10px;
+`;
+
 const StyledLayerName = styled.p`
-    max-width: 180px;
+    max-width: 220px;
+    margin: 0;
     user-select: none;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    margin: 5px;
-    font-size: 13px;
+    font-size: 14px;
+    color: ${props => props.theme.colors.secondaryColor8};
 `;
 
-const StyledLeftContent = styled.div`
+const StyledBottomContent = styled.div`
     display: flex;
+    //justify-content: space-between;
     align-items: center;
-`;
-
-const StyledRightContent = styled.div`
-    display: flex;
-    align-items: center;
-    margin-left: auto;
-    margin-right: 10px;
+    p {
+        margin: 0;
+        color: ${props => props.theme.colors.mainColor1};
+        font-size: 12px;
+    }
 `;
 
 const StyledLayerDeleteIcon = styled.div`
+    position: absolute;
+    top: 0px;
+    right: 0px;
     min-width: 28px;
     min-height: 28px;
     display: flex;
@@ -60,27 +71,26 @@ const StyledLayerDeleteIcon = styled.div`
     align-items: center;
     cursor: pointer;
     svg {
-        color: ${props => props.theme.colors.maincolor1};
-        font-size: 16px;
+        color: ${props => props.theme.colors.mainColor1};
+        font-size: 18px;
         transition: all 0.1s ease-out;
     };
     &:hover {
         svg {
-            color: ${props => props.theme.colors.maincolor2};
+            color: ${props => props.theme.colors.mainColor2};
         };
     }
 `;
 
 const StyledlayerOpacityControl = styled.input`
-    width: 60px;
-    height: 6px;
+    width: 104px;
+    height: 8px;
     user-select: auto;
     -webkit-appearance: none;
     appearance: none;
     outline: none;
-    background: linear-gradient(90deg, rgba(0,100,175,0) 0%, rgba(0,100,175,1) 100%);
-    margin-right: 5px;
-    box-shadow: rgba(0, 0, 0, 0.048) 0px 1px 2px, rgba(0, 0, 0, 0.11) 0px 1px 2px;
+    background: linear-gradient(90deg, rgba(0,100,175,0) 0%, ${props => props.theme.colors.secondaryColor8} 100%);
+    margin-left: 8px;
     border-radius: 5px;
     -webkit-transition: .2s;
     transition: opacity .2s;
@@ -91,41 +101,60 @@ const StyledlayerOpacityControl = styled.input`
         appearance: none;
         cursor: pointer;
         background: ${props => props.theme.colors.mainWhite};
-        border: 3px solid ${props => props.theme.colors.maincolor1};
+        border: 2px solid ${props => props.theme.colors.secondaryColor8};
         border-radius: 50%;
         box-sizing: border-box;
         transition: all 0.1s ease-out;
         &:hover{
-            background: ${props => props.theme.colors.maincolor1};
+            background: ${props => props.theme.colors.secondaryColor8};
         }
     }
 `;
 
-const StyledLayerInfoIcon = styled.button`
-    opacity: ${props => props.uuid ? 1 : 0};
-    background-color: transparent;
-    border: none;
-    font-size: 20px;
+const StyledLayerGripControl = styled.div`
+    height: 100%;
+    width: 100%;
+    max-width: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
     svg {
-        color: #0064af;
+        font-size: 17px;
+        color: ${props => props.theme.colors.mainColor1};
+    }
+`;
+
+const StyledLayerInfoIconWrapper = styled.div`
+    cursor: pointer;
+
+    padding-left: 8px;
+    svg {
+        color: ${props => props.theme.colors.mainColor1};
         font-size: 18px;
         transition: all 0.1s ease-out;
     };
     &:hover {
         svg {
-            color: #009ae1;
+            color: ${props => props.theme.colors.mainColor2};
         }
     }
 `;
 
+const DragHandle = sortableHandle(() => (
+    <StyledLayerGripControl className="swiper-no-swiping">
+        <FontAwesomeIcon icon={faGripVertical} />
+    </StyledLayerGripControl>
+));
 
 export const SelectedLayer = ({
     layer,
-    uuid
+    uuid,
+    currentZoomLevel
 }) => {
 
     const { store } = useContext(ReactReduxContext);
-
+    const [opacity, setOpacity] = useState(layer.opacity)
     const channel = useSelector(state => state.rpc.channel);
 
     const handleLayerVisibility = (channel, layer) => {
@@ -135,8 +164,9 @@ export const SelectedLayer = ({
 
     const handleLayerOpacity = (channel, layer, value) => {
         channel.postRequest('ChangeMapLayerOpacityRequest', [layer.id, value]);
-        updateLayers(store, channel);
+        setOpacity(value);
     };
+
 
     const handleMetadataSuccess = (data, layer, uuid) => {
         if (data) {
@@ -147,50 +177,61 @@ export const SelectedLayer = ({
         store.dispatch(clearLayerMetadata());
     };
 
+    const handleLayerMetadata = (layer, uuid) => {
+        store.dispatch(getLayerMetadata({ layer: layer, uuid: uuid, handler: handleMetadataSuccess, errorHandler: handleMetadataError }));
+    };
+
+    let layerInfoText = strings.layerlist.selectedLayers.layerVisible;
+    if (layer.maxZoomLevel && layer.minZoomLevel && currentZoomLevel <  layer.minZoomLevel) {
+        layerInfoText = strings.layerlist.selectedLayers.zoomInToShowLayer;
+    } else if (layer.maxZoomLevel && layer.minZoomLevel && currentZoomLevel >  layer.maxZoomLevel) {
+        layerInfoText = strings.layerlist.selectedLayers.zoomOutToShowLayer;
+    }
+
     return (
             <StyledLayerContainer>
-                <ReactTooltip id={'opacity' + layer.id} place="top" type="dark" effect="solid">
-                    <span>{strings.tooltips.opacity + ": " + layer.opacity}</span>
-                </ReactTooltip>
-
-                <ReactTooltip id={'metadata' + layer.id} place="top" type="dark" effect="solid">
-                    <span>{strings.tooltips.metadata}</span>
-                </ReactTooltip>
-                    <StyledLeftContent>
-                        <StyledLayerDeleteIcon
-                            onClick={() => {
-                                handleLayerVisibility(channel, layer);
-                            }}>
-                            <FontAwesomeIcon
-                                icon={faTrash}
-                            />
-                        </StyledLayerDeleteIcon>
-                        <StyledlayerHeader>
-                            <StyledLayerName>
-                                {layer.name}
-                            </StyledLayerName>
-                        </StyledlayerHeader>
-                    </StyledLeftContent>
-                    <StyledRightContent>
+                <StyledLayerContent>
+                    <StyledLayerDeleteIcon
+                        className="swiper-no-swiping"
+                        onClick={() => {
+                            handleLayerVisibility(channel, layer);
+                        }}>
+                        <FontAwesomeIcon
+                            icon={faTimes}
+                        />
+                    </StyledLayerDeleteIcon>
+                    <StyledlayerHeader>
+                        <StyledLayerName>
+                            {layer.name}
+                        </StyledLayerName>
+                        { uuid &&
+                            <StyledLayerInfoIconWrapper
+                                className="swiper-no-swiping"
+                                uuid={uuid}
+                                onClick={() => {
+                                    handleLayerMetadata(layer, uuid);
+                                }}
+                            >
+                                <FontAwesomeIcon icon={faInfoCircle} />
+                            </StyledLayerInfoIconWrapper>
+                        }
+                    </StyledlayerHeader>
+                    <StyledMidContent>
+                        {layerInfoText}
+                    </StyledMidContent>
+                    <StyledBottomContent>
+                        <p>{strings.layerlist.selectedLayers.opacity}</p>
                         <StyledlayerOpacityControl
-                            data-tip data-for={'opacity' + layer.id}
+                            className="swiper-no-swiping"
                             type="range"
                             min="0"
                             max="100"
-                            value={layer.opacity}
+                            value={opacity}
                             onChange={event => handleLayerOpacity(channel, layer, event.target.value)}
                         />
-                        <StyledLayerInfoIcon
-                            data-tip data-for={'metadata' + layer.id}
-                            disabled={uuid ? false : true}
-                            uuid={uuid}
-                            onClick={() => {
-                                store.dispatch(getLayerMetadata({ layer: layer, uuid: uuid, handler: handleMetadataSuccess, errorHandler: handleMetadataError }));
-                            }
-                        }>
-                            <FontAwesomeIcon icon={faInfo} />
-                        </StyledLayerInfoIcon>
-                    </StyledRightContent>
+                    </StyledBottomContent>
+                </StyledLayerContent>
+                <DragHandle />
             </StyledLayerContainer>
     );
 };

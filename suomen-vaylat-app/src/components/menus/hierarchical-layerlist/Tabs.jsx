@@ -23,7 +23,7 @@ const StyledTabList = styled.div`
   border-radius: 15px;
   box-sizing: border-box;
   &:hover {
-    background-color: ${props => props.theme.colors.maincolor3};
+    background-color: ${props => props.theme.colors.mainColor3};
   }
 `;
 
@@ -34,7 +34,7 @@ const StyledTabContent = styled.div`
 const StyledListSubtitle = styled.div`
     display: flex;
     justify-content: flex-start;
-    color: ${props => props.theme.colors.maincolor1};
+    color: ${props => props.theme.colors.mainColor1};
     padding: 10px 0px 10px 5px;
     font-size: 15px;
 `;
@@ -48,18 +48,12 @@ class Tabs extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      // if come to link, check layerlist type, else set theme to default
-      activeTab: (!props.layerlistType || props.layerlistType === 'themes') ? strings.layerlist.layerlistLabels.themeLayers : strings.layerlist.layerlistLabels.allLayers
+      activeTab: strings.layerlist.layerlistLabels.allLayers
     };
   }
 
   onClickTabItem = (tab) => {
     this.setState({ activeTab: tab });
-    if (tab === strings.layerlist.layerlistLabels.allLayers) {
-      this.props.setLayerListType('layers');
-    } else {
-      this.props.setLayerListType('themes');
-    }
   }
 
   render() {

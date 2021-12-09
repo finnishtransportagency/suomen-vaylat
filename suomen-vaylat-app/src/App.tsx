@@ -37,7 +37,7 @@ const App = () => {
     }
 
     const appContainer = <StyledAppContainer>
-        <HandleSharedWebSiteLink/>
+        <HandleSharedWebSiteLink />
         <PageTitle />
         <Layout />
         </StyledAppContainer>;
@@ -53,11 +53,11 @@ const App = () => {
                                 <Layout />
                             </StyledAppContainer>
                         }/>
-                        <Route exact path={routerPrefix + 'theme/:lang/:zoom/:x/:y/:themename?'} render={() => {
+                        <Route exact path={routerPrefix + 'theme/:lang/:zoom/:x/:y/:themeId?'} render={() => {
                             return (appContainer);
                         }}/>
 
-                        <Route exact path={routerPrefix + 'link/:lang/:layerlistType/:zoom/:x/:y/:maplayers?'} render={() => {
+                        <Route exact path={routerPrefix + 'link/:lang/:zoom/:x/:y/:maplayers?'} render={() => {
                             return (appContainer);
                         }}/>
                     </Theme>

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { motion } from 'framer-motion';
 import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styled from 'styled-components';
@@ -7,41 +8,32 @@ import strings from '../../translations';
 const StyledLegendGroup = styled.div`
 `;
 
-const StyledGroupName = styled.p`
-    user-select: none;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 200px;
-    color: ${props => props.theme.colors.black};
-    margin: 0;
-    padding-left: 10px;
-    font-size: 14px;
-    font-weight: 600;
-    transition: all 0.1s ease-in;
-    @media ${props => props.theme.device.mobileL} {
-        font-size: 13px;
-    };
-`;
-
 const StyledGroupHeader = styled.div`
     z-index: 1;
     position: sticky;
     top: 0px;
-    height: 40px;
+    min-height: 40px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     cursor: pointer;
-    background-color: ${props => props.hasLegend ? props.theme.colors.maincolor3 : '#bbb'};
-    padding-left: 5px;
-    border-radius: 2px;
+    background-color: ${props => props.hasLegend ? props.theme.colors.mainColor1 : '#bbb'};
+    border-radius: 4px;
     transition: all 0.1s ease-in;
-    &:hover {
-        background-color: ${props => props.hasLegend ? props.theme.colors.maincolor2 : '#bbb'};
-    };
-    &:hover ${StyledGroupName} {
-        color: ${props => props.hasLegend ? props.theme.colors.mainWhite : props.theme.colors.black};
+    padding: 8px;
+    box-shadow: 0px 3px 6px 0px rgba(0,0,0,0.16);
+`;
+
+const StyledGroupName = styled.p`
+    user-select: none;
+    max-width: 200px;
+    color: ${props => props.theme.colors.mainWhite};
+    margin: 0;
+    padding-left: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    @media ${props => props.theme.device.mobileL} {
+        font-size: 13px;
     };
 `;
 
@@ -60,29 +52,48 @@ const StyledSelectButton = styled.button`
     display: flex;
     justify-content: center;
     align-items: center;
-    border: none;
-    margin-right: 15px;
     background-color: transparent;
+    border: none;
     svg {
-        color: ${props => props.theme.colors.black};
-        font-size: 25px;
-        transition: all 0.5s ease-out;
+        color: ${props => props.subGroup ? props.theme.colors.mainColor1 : props.theme.colors.mainWhite};
+        font-size: 19px;
+        transition: all 0.3s ease-out;
     };
 `;
 
-const StyledGroupContainer = styled.div`
-    height: ${props => props.isOpen ? 'auto' : '0px'};
-    overflow: hidden;
-    padding: ${props => props.isOpen ? '6px' : '0'};
-    margin: 0px 0px 10px 0px;
-    border-bottom: 1px solid ${props => props.hasLegend ? props.theme.colors.maincolor3 : '#bbb'};
-    border-left: 1px solid ${props => props.hasLegend ? props.theme.colors.maincolor3 : '#bbb'};
-    border-right: 1px solid ${props => props.hasLegend ? props.theme.colors.maincolor3 : '#bbb'};
+const StyledMotionIconWrapper = styled(motion.div)`
+    display: flex;
+    justify-content: center;
+    align-items: center;
 `;
 
-const StyledLegend = styled.div``;
+const StyledGroupContainer = styled(motion.div)`
+    overflow: hidden;
+    margin-bottom: 6px;
+`;
+
+const StyledLegend = styled.div`
+    padding: 8px 0px 8px 8px;
+`;
 
 const StyledLegendImage = styled.img``;
+
+const masterHeaderIconVariants = {
+    open: { rotate: 180 },
+    closed: { rotate: 0 },
+};
+
+const listVariants = {
+    visible: {
+        height: "auto",
+        opacity: 1
+    },
+    hidden: {
+        height: 0,
+        opacity: 0
+    },
+};
+
 
 export const LegendGroup = ({ legend, index }) => {
 
@@ -98,30 +109,44 @@ export const LegendGroup = ({ legend, index }) => {
                     <StyledGroupName>{legend.layerName}</StyledGroupName>
                 </StyledLeftContent>
                 <StyledRightContent>
-                    <StyledSelectButton
-                        isOpen={isOpen}
-                    >
-                        <FontAwesomeIcon
-                            icon={faAngleDown}
-                            style={{
-                                transform: isOpen && "rotate(180deg)"
-                            }}
-                        />
-                    </StyledSelectButton>
+                    <StyledSelectButton>
+                            <StyledMotionIconWrapper
+                                initial="open"
+                                animate={isOpen ? "open" : "closed"}
+                                variants={masterHeaderIconVariants}
+                                transition={{
+                                    duration: 0.3,
+                                    type: "tween"
+                                }}
+                            >
+                                <FontAwesomeIcon
+                                    icon={faAngleDown}
+                                />
+                            </StyledMotionIconWrapper>
+                        </StyledSelectButton>
+
+
                 </StyledRightContent>
             </StyledGroupHeader>
             <StyledGroupContainer
                 isOpen={isOpen}
                 key={'legend-conteiner-' + index}
                 hasLegend={legend.legend !== null}
+                initial="visible"
+                animate={isOpen ? "visible" : "hidden"}
+                variants={listVariants}
+                transition={{
+                    duration: 0.3,
+                    type: "tween"
+                }}
             >
                 {legend.legend === null &&
                     <StyledLegend>{strings.legend.nolegend}</StyledLegend>
                 }
                 {legend.legend !== null &&
                     <StyledLegend>
-                        <StyledLegendImage
-                            src={legend.legend.indexOf('action') > -1 ? process.env.REACT_APP_PROXY_URL + legend.legend + '&t=' + new Date().getTime() : (legend.legend.indexOf('?') > 0 ? legend.legend + '&t=' + new Date().getTime() : legend.legend + '?t=' + new Date().getTime())}
+                        <StyledLegendImage key={legend.legend}
+                            src={legend.legend.indexOf('action') > -1 ? process.env.REACT_APP_PROXY_URL + legend.legend : (legend.legend.indexOf('?') > 0 ? legend.legend : legend.legend )}
                         ></StyledLegendImage>
                     </StyledLegend>
                 }

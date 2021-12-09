@@ -12,7 +12,7 @@ const StyledSpinner = styled.div`
 `;
 
 export const CenterSpinner = () => {
-    
+
     const themeContext = useContext(ThemeContext);
 
     return (
@@ -20,7 +20,7 @@ export const CenterSpinner = () => {
             <Spinner
                 className="loading"
                 name="line-scale-pulse-out"
-                color={themeContext.colors.maincolor1}
+                color={themeContext.colors.mainColor1}
                 fadeIn="quarter"
             />
         </StyledSpinner>
