@@ -113,7 +113,7 @@ const StyledTab = styled.div`
     }});
     transition: transform 0.2s ease-out;
     @media ${props => props.theme.device.mobileL} {
-        font-size: 11px;
+        font-size: 9px;
     };
 `;
 
