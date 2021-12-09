@@ -118,10 +118,15 @@ const VKMSearch = ({visible, search, store, vectorLayerId, onEnterHandler}) => {
                     min="1"
                     type="number"
                     onKeyPress={(event) => {
+                        event = event || window.event;
+                        let charCode = (typeof event.which == 'undefined') ? event.keyCode : event.which;
+                        let charStr = String.fromCharCode(charCode);
                         if (event.key === 'Enter') {
                             onEnterHandler();
+                        } else if (!charStr.match(/^[0-9]+$/))
+                            event.preventDefault();
                         }
-                    }}
+                    }
                 />
                 <label htmlFor="vkm-tieosa">{strings.search.vkm.osa}:</label>
                 <StyledSelectInput
@@ -153,7 +158,7 @@ const VKMSearch = ({visible, search, store, vectorLayerId, onEnterHandler}) => {
                 />
                 <label htmlFor="vkm-etaisyys">{strings.search.vkm.etaisyys}:</label>
                 <StyledTextField
-                     id="vkm-etaisyys"
+                    id="vkm-etaisyys"
                     placeholder={strings.search.vkm.etaisyys}
                     onChange={(event) => {
                         onChange('etaisyys', parseFloat(event.target.value));
@@ -164,10 +169,15 @@ const VKMSearch = ({visible, search, store, vectorLayerId, onEnterHandler}) => {
                     min="0"
                     type="number"
                     onKeyPress={(event) => {
+                        event = event || window.event;
+                        let charCode = (typeof event.which == 'undefined') ? event.keyCode : event.which;
+                        let charStr = String.fromCharCode(charCode);
                         if (event.key === 'Enter') {
                             onEnterHandler();
+                        } else if (!charStr.match(/^[0-9]+$/))
+                            event.preventDefault();
                         }
-                    }}
+                    }
                 />
             </StyledContainer>
     );
