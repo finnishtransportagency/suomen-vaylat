@@ -16,12 +16,14 @@
     "@types/react-dom": "^17.0.0",
     "array-move": "^4.0.0",
     "bootstrap": "^4.6.0",
+    "cross-env": "^7.0.3",
     "framer-motion": "^4.1.17",
     "history": "^5.0.0",
     "lodash.throttle": "^4.1.1",
     "moment": "^2.29.1",
     "moment-timezone": "^0.5.33",
     "oskari-rpc": "^2.1.0",
+    "preval.macro": "^5.0.0",
     "react": "^17.0.2",
     "react-bootstrap": "^2.0.0-rc.0",
     "react-copy-to-clipboard": "^5.0.4",
@@ -55,8 +57,8 @@
     "web-vitals": "^1.0.1"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "cross-env REACT_APP_VERSION=$npm_package_version react-scripts start",
+    "build": "cross-env REACT_APP_VERSION=$npm_package_version react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -80,6 +82,7 @@
   },
   "devDependencies": {
     "@types/lodash": "^4.14.168",
+    "@types/preval.macro": "^3.0.0",
     "@types/react-router-dom": "^5.1.7",
     "redux-devtools": "^3.7.0",
     "redux-devtools-extension": "^2.13.9"
