@@ -162,21 +162,16 @@ const fi = {
                                 0: 'Tiestötiedoista puuttuvat selkokielisyydet ja kenttien priorisointi kohdetietoikkunaan',
                                 1: 'Inspire-aineistoista sekä digiroad-aineistoista puuttuvat kenttien priorisointi kohdetietoikkunaan'
                             }
-                        },
-                        3: { content: 'Sillat-aineiston tyylit eivät vaihdu oikein teemakartassa'},
+                        }
                     }
-                },
-                1: {
-                    title: 'Sillat aineiston tyylit eivät vaihdu oikein teemakartassa'
                 }
             },
             contactInfoFeedback: {
                 0: 'Sovelluksesta vastaa Väylävirasto ja sovelluksen toimittaa Sitowise.',
                 1: 'Palautetta toivotaan lähetettävän osoitteeseen ',
-                2: 'suomenvaylat@vaylat.fi'
+                2: 'suomenvaylat@vayla.fi'
             }
         }
-
     },
     search: {
         types: {
