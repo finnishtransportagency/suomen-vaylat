@@ -7,8 +7,9 @@ import styled from 'styled-components';
 import { useAppSelector } from '../../state/hooks';
 import { setIsInfoOpen } from '../../state/slices/uiSlice';
 import strings from '../../translations';
-import {Swiper, SwiperSlide} from "swiper/react/swiper-react";
-import {motion} from "framer-motion";
+import {Swiper, SwiperSlide} from 'swiper/react/swiper-react';
+import {motion} from 'framer-motion';
+import { getAppBuildDate, getAppVersion } from '../../utils/appInfoUtil';
 
 const customStyles = {
     content: {
@@ -97,7 +98,7 @@ const StyledMapLayersDialog = styled(motion.div)`
     overflow: hidden;
     overflow-y: auto;
     user-select: none;
-   
+
     /* @media ${props => props.theme.device.laptop} {
         z-index: 10;
     }; */
@@ -109,10 +110,6 @@ const StyledMapLayersDialog = styled(motion.div)`
     //     width: 100%;
     //     height: 100%;
     // };
-`;
-
-const StyledTabSubTitle = styled.div`
-    margin:10px;
 `;
 
 const StyledTabs = styled.div`
@@ -212,13 +209,16 @@ export const ListComponent = ({listData}) => {
 export const AppInfoModal = () => {
     const { store } = useContext(ReactReduxContext);
     const isInfoOpen = useAppSelector((state) => state.ui.isInfoOpen);
-    const headingText = strings.appInfo.headingText.bold()
-    const mainText = strings.appInfo.mainText
-    const content = <div dangerouslySetInnerHTML={{ __html: headingText + '<br><br>' + mainText }}></div>
-    const title = strings.appInfo.title
-    const versionInfoList = strings.appInfo.versionInfo.versionInfoList
-    const contactInfoFeedback = strings.appInfo.versionInfo.contactInfoFeedback
+    const headingText = strings.appInfo.headingText.bold();
+    const mainText = strings.appInfo.mainText;
+    const content = <div dangerouslySetInnerHTML={{ __html: headingText + '<br><br>' + mainText }}></div>;
+    const title = strings.appInfo.title;
+    const versionInfoList = strings.appInfo.versionInfo.versionInfoList;
+    const contactInfoFeedback = strings.appInfo.versionInfo.contactInfoFeedback;
 
+    // App build info
+    const currentAppVersion = getAppVersion();
+    const currentAppBuildDate = getAppBuildDate();
 
     const [tabIndex, setTabIndex] = useState(0);
 
