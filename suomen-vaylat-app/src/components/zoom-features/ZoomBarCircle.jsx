@@ -26,6 +26,7 @@ const StyledZoomLevelCircle = styled.div`
         width: 16px;
         height: 16px;
         border: 2px solid ${props => props.theme.colors.mainColor1};
+        margin: 2px;
     };
 `;
 

@@ -40,6 +40,7 @@ const StyledContentGrid = styled.div`
     grid-template-rows: 48px 1fr;
     padding: 16px;
     pointer-events: none;
+    gap: 8px;
     @media ${(props: { theme: { device: { mobileL: any; }; }; }) => props.theme.device.mobileL} {
         padding: 8px;
         grid-template-columns: 48px 1fr;
