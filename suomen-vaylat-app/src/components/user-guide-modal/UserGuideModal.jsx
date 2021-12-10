@@ -156,28 +156,28 @@ export const UserGuideModal = () => {
                 <StyledContent>
                     <Accordion activeKey={modalIndex}>
                         {
-                        modalContent.map((content, index) => {
-                            return (
-                                <Accordion.Item
-                                    eventKey={index}
-                                    bsPrefix={'user-guide-item'}
-                                    key={'accordion_' + index}
-                                >
-                                    <Accordion.Button
-                                        // bsPrefix={'accordion-header'}
-                                        key={`accordion-header-${index}`}
-                                        className={'user-guide-header'}
-                                        as={'h4'}
-                                        onClick={() => setAccordionIndex(index)}
+                            modalContent.map((content, index) => {
+                                return (
+                                    <Accordion.Item
+                                        eventKey={index}
+                                        bsPrefix={'user-guide-item'}
+                                        key={'accordion_' + index}
                                     >
-                                        {content.title}
-                                    </Accordion.Button>
-                                    <Accordion.Body bsPrefix={'user-guide-body'}>
-                                        {content.content}
-                                    </Accordion.Body>
-                                </Accordion.Item>
-                            )
-                        })
+                                        <Accordion.Button
+                                            // bsPrefix={'accordion-header'}
+                                            key={`accordion-header-${index}`}
+                                            className={'user-guide-header'}
+                                            as={'h4'}
+                                            onClick={() => setAccordionIndex(index)}
+                                        >
+                                            {content.title}
+                                        </Accordion.Button>
+                                        <Accordion.Body bsPrefix={'user-guide-body'}>
+                                            {content.content}
+                                        </Accordion.Body>
+                                    </Accordion.Item>
+                                )
+                            })
                         }
                     </Accordion>
                 </StyledContent>
