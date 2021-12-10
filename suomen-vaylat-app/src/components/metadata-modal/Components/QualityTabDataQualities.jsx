@@ -1,6 +1,6 @@
 import React from 'react';
 import Moment from 'react-moment';
-import strings from '../../../../translations';
+import strings from '../../../translations';
 import { StyledTitle, StyledTitleLittle } from './Common';
 import ConformanceResultList from './ConformanceResultList';
 

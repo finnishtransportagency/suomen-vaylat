@@ -1,5 +1,5 @@
 import React from 'react';
-import strings from '../../../../translations';
+import strings from '../../../translations';
 import { StyledDiv, StyledTitle, StyledTitleLittle } from './Common';
 import ConformanceResultList from './ConformanceResultList';
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import strings from '../../../../translations';
+import strings from '../../../translations';
 import { StyledParagraph, StyledTitle } from './Common';
 
 export const LineageStatements = ({ lineageStatements }) => {

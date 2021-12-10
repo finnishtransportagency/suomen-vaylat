@@ -1,7 +1,7 @@
 import React from 'react';
 import 'moment-timezone';
 import Moment from 'react-moment';
-import strings from '../../../../translations';
+import strings from '../../../translations';
 import { StyledParagraph, StyledTitle } from './Common';
 
 export const CitationDate = ({ identification }) => {

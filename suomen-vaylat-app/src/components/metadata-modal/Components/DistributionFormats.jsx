@@ -1,5 +1,5 @@
 import React from 'react';
-import strings from '../../../../translations';
+import strings from '../../../translations';
 import { StyledLi, StyledTitle, StyledUl } from './Common';
 
 export const DistributionFormats = ({ distributionFormats }) => {
