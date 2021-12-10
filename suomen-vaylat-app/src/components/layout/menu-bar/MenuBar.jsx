@@ -32,7 +32,7 @@ const StyledMenuBar = styled.div`
     flex-direction: column;
     transition: all 0.5s ease-in-out;
     @media ${props => props.theme.device.mobileL} {
-        grid-row-start: 2;
+        grid-row-start: ${props => props.isSearchOpen ? 2 : 1};
         grid-row-end: 3;
     };
 `;
@@ -121,6 +121,7 @@ const MenuBar = () => {
         isFullScreen,
         isSideMenuOpen,
         isDrawingToolsOpen,
+        isSearchOpen,
         activeTool,
     } =  useAppSelector((state) => state.ui);
 
@@ -168,7 +169,10 @@ const MenuBar = () => {
                 <span>{strings.tooltips.fullscreenButton}</span>
             </ReactTooltip>
 
-            <StyledMenuBar isSideMenuOpen={isSideMenuOpen}>
+            <StyledMenuBar
+                isSideMenuOpen={isSideMenuOpen}
+                isSearchOpen={isSearchOpen}
+            >
                 {/* <StyledMenuBarButton
                     data-tip data-for='search'
                     isActive={isSearchOpen}

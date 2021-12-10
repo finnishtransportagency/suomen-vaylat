@@ -50,6 +50,7 @@ const StyledHeader = styled.div`
     display: flex;
     align-items: center;
     box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.20);
+    z-index: 5;
 `;
 
 const StyledModalTitle = styled.p`

@@ -32,6 +32,9 @@ const StyledZoomBarContainer = styled.div`
         width: 4px;
         height: 100%;
         background-color: ${props => props.theme.colors.mainColor1};
+        @media ${props => props.theme.device.mobileL} {
+            width: 3px;
+        };
     }
 `;
 
@@ -59,8 +62,9 @@ const StyledZoomBarControlTop = styled.button`
     @media ${props => props.theme.device.mobileL} {
         width: 32px;
         min-height: 32px;
+        margin-bottom: 4px;
         svg {
-        font-size: 16px;
+            font-size: 16px;
         };
     };
 `;
@@ -127,6 +131,7 @@ const StyledMyLocationButton = styled.div`
     @media ${props => props.theme.device.mobileL} {
         width: 32px;
         min-height: 32px;
+        margin-top: 4px;
         svg {
             font-size: 16px;
         };
@@ -156,6 +161,7 @@ const StyledMenuBarButton = styled.div`
     @media ${props => props.theme.device.mobileL} {
         min-width: 32px;
         min-height: 32px;
+        margin-bottom: 4px;
         svg {
             font-size: 16px;
         };
