@@ -145,11 +145,12 @@ const fi = {
             'datana aina silloin, kun se on mahdollista.',
         versionInfo: {
             title: 'Versiotiedot',
+            appVersion: 'Sovelluksen versio: ',
+            appLastUpdate: 'Sovellus päivitetty viimeksi: ',
+            appInfoTitle: 'Tietoa palvelusta',
+            appContactAndFeedback: 'Yhteystiedot ja palaute',
             versionInfoList: {
                 0: {
-                    title: 'Sovellus päivitetty viimeksi: '
-                },
-                1: {
                     title: 'Tiedossa olevat puutteet:',
                     list: {
                         0: {
@@ -165,13 +166,14 @@ const fi = {
                         3: { content: 'Sillat-aineiston tyylit eivät vaihdu oikein teemakartassa'},
                     }
                 },
-                2: {
+                1: {
                     title: 'Sillat aineiston tyylit eivät vaihdu oikein teemakartassa'
                 }
             },
             contactInfoFeedback: {
                 0: 'Sovelluksesta vastaa Väylävirasto ja sovelluksen toimittaa Sitowise.',
-                1: 'Palautetta toivotaan lähetettävän osoitteeseen suomenvaylat@vaylat.fi'
+                1: 'Palautetta toivotaan lähetettävän osoitteeseen ',
+                2: 'suomenvaylat@vaylat.fi'
             }
         }
 
