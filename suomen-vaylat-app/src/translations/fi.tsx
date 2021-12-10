@@ -173,7 +173,7 @@ const fi = {
             contactInfoFeedback: {
                 0: 'Sovelluksesta vastaa Väylävirasto ja sovelluksen toimittaa Sitowise.',
                 1: 'Palautetta toivotaan lähetettävän osoitteeseen ',
-                2: 'suomenvaylat@vaylat.fi'
+                2: 'suomenvaylat@vayla.fi'
             }
         }
 
