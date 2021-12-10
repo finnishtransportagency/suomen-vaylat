@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useRef, useState} from 'react';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Modal from 'react-modal';
@@ -10,6 +10,9 @@ import strings from '../../translations';
 import {Swiper, SwiperSlide} from 'swiper/react/swiper-react';
 import {motion} from 'framer-motion';
 import { getAppBuildDate, getAppVersion } from '../../utils/appInfoUtil';
+import {Overlay} from "react-bootstrap";
+import {isMobile} from "../../theme/theme";
+import ReactTooltip from "react-tooltip";
 
 const customStyles = {
     content: {
@@ -159,6 +162,16 @@ const StyledTab = styled.div`
     };
 `;
 
+const StyledButton = styled.button`
+    border: none;
+    background-color: #ffffff;
+    color: ${props => props.theme.colors.mainColor1};
+`;
+
+const StyledTitle = styled.em`
+    color: ${props => props.theme.colors.mainColor1};
+`;
+
 const StyledSwiper = styled(Swiper)`
   .swiper-slide {
     background-color: ${props => props.theme.colors.mainWhite};
@@ -206,6 +219,43 @@ export const ListComponent = ({listData}) => {
     )
 }
 
+export const VersionInfo = ({listData, currentAppVersion, currentAppBuildDate}) => {
+    return (
+        <div>
+            <StyledTitle><p>{strings.appInfo.versionInfo.appVersion + currentAppVersion}</p></StyledTitle>
+            <StyledTitle><p>{strings.appInfo.versionInfo.appLastUpdate + currentAppBuildDate}</p></StyledTitle>
+            <ListComponent listData={listData} />
+        </div>
+    )
+}
+
+export const ContactAndFeedback = () => {
+    const [textCopiedTooltip, setTextCopiedTooltip] = useState(false);
+    const target = useRef(null);
+    const contactInfoFeedback = strings.appInfo.versionInfo.contactInfoFeedback
+
+
+    const copyTextToClipboard = (text) => {
+        console.log("copyTextToClipboard text", text)
+        navigator.clipboard.writeText(text)
+        setTextCopiedTooltip(true)
+    }
+
+    return (
+        <div>
+            <Overlay target={target.current} show={textCopiedTooltip} placement={'top'} >
+                <ReactTooltip disable={isMobile} place="top" type="dark" effect="float">
+                    <span>{strings.gfi.gfiLocation}</span>
+                </ReactTooltip>
+            </Overlay>
+            <p>{contactInfoFeedback[0]}</p>
+            <p>{contactInfoFeedback[1]} <StyledButton ref={target} onClick={() => copyTextToClipboard(contactInfoFeedback[2])}>{contactInfoFeedback[2]}</StyledButton></p>
+        </div>
+    )
+}
+
+
+
 export const AppInfoModal = () => {
     const { store } = useContext(ReactReduxContext);
     const isInfoOpen = useAppSelector((state) => state.ui.isInfoOpen);
@@ -214,7 +264,6 @@ export const AppInfoModal = () => {
     const content = <div dangerouslySetInnerHTML={{ __html: headingText + '<br><br>' + mainText }}></div>;
     const title = strings.appInfo.title;
     const versionInfoList = strings.appInfo.versionInfo.versionInfoList;
-    const contactInfoFeedback = strings.appInfo.versionInfo.contactInfoFeedback;
 
     // App build info
     const currentAppVersion = getAppVersion();
@@ -225,7 +274,7 @@ export const AppInfoModal = () => {
     const tabsContent = [
         {
             id: 'swipeAbleTab_0',
-            title: 'Tietoa palvelusta',
+            title: strings.appInfo.versionInfo.appInfoTitle,
             titleColor: 'mainColor1',
             content: content
         },
@@ -233,14 +282,18 @@ export const AppInfoModal = () => {
             id: 'swipeAbleTab_1',
             title: strings.appInfo.versionInfo.title,
             titleColor: 'secondaryColor2',
-            content: <ListComponent listData={versionInfoList} />
+            content: <VersionInfo
+                listData={versionInfoList}
+                currentAppVersion={currentAppVersion}
+                currentAppBuildDate={currentAppBuildDate}
+            />
         },
         {
             id: 'swipeAbleTab_2',
-            title: 'Yhteystiedot ja palaute',
+            title: strings.appInfo.versionInfo.appContactAndFeedback,
             titleColor: 'secondaryColor8',
             titleContent: 'layerCounter',
-            content: <ListComponent listData={contactInfoFeedback} />
+            content: <ContactAndFeedback />
         }
     ];
 
