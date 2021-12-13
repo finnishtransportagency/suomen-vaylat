@@ -2,6 +2,8 @@
 
 ## 0.2.0
 
+New UI.
+
 ## 0.1.0
 
 Initial versio for Suomen Väylät app.
