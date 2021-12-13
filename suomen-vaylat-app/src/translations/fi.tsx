@@ -162,12 +162,8 @@ const fi = {
                                 0: 'Tiestötiedoista puuttuvat selkokielisyydet ja kenttien priorisointi kohdetietoikkunaan',
                                 1: 'Inspire-aineistoista sekä digiroad-aineistoista puuttuvat kenttien priorisointi kohdetietoikkunaan'
                             }
-                        },
-                        3: { content: 'Sillat-aineiston tyylit eivät vaihdu oikein teemakartassa'},
+                        }
                     }
-                },
-                1: {
-                    title: 'Sillat aineiston tyylit eivät vaihdu oikein teemakartassa'
                 }
             },
             contactInfoFeedback: {
@@ -176,7 +172,6 @@ const fi = {
                 2: 'suomenvaylat@vayla.fi'
             }
         }
-
     },
     search: {
         types: {

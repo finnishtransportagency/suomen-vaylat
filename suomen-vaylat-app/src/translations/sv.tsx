@@ -123,7 +123,36 @@ const sv = {
             'lähtökohtaisesti julkisena tietona, joita luovutetaan muiden ' +
             'yhteiskunnan toimijoiden ja kansalaisten käyttöön. ' +
             'Julkinen tieto luovutetaan muiden toimijoiden käyttöön avoimena ' +
-            'datana aina silloin, kun se on mahdollista.'
+            'datana aina silloin, kun se on mahdollista.',
+        versionInfo: {
+            title: 'Versiotiedot',
+            appVersion: 'Sovelluksen versio: ',
+            appLastUpdate: 'Sovellus päivitetty viimeksi: ',
+            appInfoTitle: 'Tietoa palvelusta',
+            appContactAndFeedback: 'Yhteystiedot ja palaute',
+            versionInfoList: {
+                0: {
+                    title: 'Tiedossa olevat puutteet:',
+                    list: {
+                        0: {
+                                content: 'Karttaa ei voi raahata kun sen päälle on avattu ikkuna (kohdetietoikkuna, infoikkuna, metatietoikkuna)'
+                        },
+                        1: { content: 'Kohdetiedot eivät skaalaudu mobiiliin'},
+                        2: { content: 'Kaikkia aineistoryhmiä ei ole käsitelty datan osalta',
+                                subContent: {
+                                0: 'Tiestötiedoista puuttuvat selkokielisyydet ja kenttien priorisointi kohdetietoikkunaan',
+                                1: 'Inspire-aineistoista sekä digiroad-aineistoista puuttuvat kenttien priorisointi kohdetietoikkunaan'
+                            }
+                        }
+                    }
+                }
+            },
+            contactInfoFeedback: {
+                0: 'Sovelluksesta vastaa Väylävirasto ja sovelluksen toimittaa Sitowise.',
+                1: 'Palautetta toivotaan lähetettävän osoitteeseen ',
+                2: 'suomenvaylat@vayla.fi'
+            }
+        }
     },
     search: {
         types: {
