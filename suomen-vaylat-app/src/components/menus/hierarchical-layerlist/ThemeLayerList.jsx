@@ -231,7 +231,7 @@ export const ThemeGroup = ({
             >
                 <div>
                     {themeImages[theme.id] && <StyledLayerGroupImage src={themeImages[theme.id]} alt=''/>}
-                    {strings.themelayerlist[theme.id] && strings.themelayerlist[theme.id].description !== null &&
+                    {strings.themelayerlist[theme.id].description !== null &&
                     <>
                         <StyledSubHeader>{strings.themelayerlist[theme.id].title}</StyledSubHeader>
                         <StyledSubText>{strings.themelayerlist[theme.id].description}</StyledSubText>
