@@ -108,8 +108,8 @@ export const Header = () => {
 
     const setToMainScreen = () => {
         store.dispatch(mapMoveRequest({
-            x: 505210.92181416467,
-            y: 7109206.188955102
+            x: 435211,
+            y: 7109206
         }));
         store.dispatch(setIsMainScreen());
         handleSelectGroup(null, lastSelectedTheme);
@@ -133,7 +133,7 @@ export const Header = () => {
                 channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, false]);
             }
         })
-        store.dispatch(setZoomTo(1))
+        store.dispatch(setZoomTo(0))
         updateLayers(store, channel)
     };
 
