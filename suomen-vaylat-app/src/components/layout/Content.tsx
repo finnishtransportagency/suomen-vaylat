@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, { useContext } from 'react';
 import { ReactReduxContext } from 'react-redux';
 import { useAppSelector } from '../../state/hooks';
 import styled from 'styled-components';
@@ -14,7 +14,12 @@ import { ShareWebSitePopup } from '../share-web-site/ShareWebSitePopup';
 import ZoomMenu from '../zoom-features/ZoomMenu';
 import strings from '../../translations';
 import { setSelectError } from '../../state/slices/rpcSlice';
+import { setShareUrl } from '../../state/slices/uiSlice';
 import MetadataModal from '../metadata-modal/MetadataModal';
+
+import { faShareAlt } from '@fortawesome/free-solid-svg-icons';
+
+import Modal from '../modals/Modal';
 
 const StyledContent = styled.div`
     z-index: 1;
@@ -45,7 +50,6 @@ const StyledContentGrid = styled.div`
         padding: 8px;
         grid-template-columns: 48px 1fr;
     };
-
 `;
 
 const Content = () => {
@@ -66,14 +70,31 @@ const Content = () => {
         store.dispatch(setSelectError({show: false, type: '', filteredLayers: [], indeterminate: false}));
     };
 
+    const handleCloseShareWebSite = () => {
+        store.dispatch(setShareUrl(''));
+    };
+
     return (
         <>
-        <StyledContent>
+        <StyledContent
+            id='content'
+        >
             <PublishedMap />
-            {isShareOpen && <ShareWebSitePopup />}
+            {/* {isShareOpen && <ShareWebSitePopup />} */}
             <UserGuideModal />
             <AppInfoModal />
             <MetadataModal />
+            <Modal
+                drag={false}
+                backdrop={true}
+                icon={faShareAlt}
+                title={strings.share.title}
+                type={"normal"}
+                closeAction={handleCloseShareWebSite}
+                isOpen={isShareOpen}
+            >
+                <ShareWebSitePopup />
+            </Modal>
             <StyledContentGrid>
                 <MenuBar />
                 <MapLayersDialog />
