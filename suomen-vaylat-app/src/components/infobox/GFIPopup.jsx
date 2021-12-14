@@ -45,8 +45,7 @@ const customStyles = {
         alignItems: 'center'
     },
     content: {
-        marginLeft: '40%',
-        width: '60%'
+        marginTop: '10%'
     }
 };
 
@@ -183,7 +182,7 @@ export const GFIPopup = ({gfiLocations}) => {
                     <span>{strings.gfi.gfiLocation}</span>
                 </ReactTooltip>
                 <Draggable handle='.modal-header' bounds='body'>
-                    <SyledModalContent className='handle'>
+                    <SyledModalContent>
                         <StyledHeader className='modal-header'>
                             <h5>{title}</h5>
                             <StyledHeaderButtons>
