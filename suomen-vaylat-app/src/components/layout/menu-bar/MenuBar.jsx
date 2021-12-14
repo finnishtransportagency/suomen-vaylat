@@ -97,8 +97,8 @@ const StyledMenuBarToolsButton = styled.div`
 
 const StyledLayerCount = styled.div`
     position: absolute;
-    top: -6px;
-    right: -3px;
+    top: -7px;
+    right: -8px;
     width: 25px;
     height: 18px;
     display: flex;
