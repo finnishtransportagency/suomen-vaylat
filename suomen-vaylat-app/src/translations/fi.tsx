@@ -16,6 +16,7 @@ const fi = {
         layerlistButton: 'Tasovalikko',
         fullscreenButton: 'Koko näyttö',
         legendHeader: 'Tällä zoom-tasolla näkyvissä olevat aineistot ja niiden selitteet',
+        legendButton: 'Selitteet',
         myLocButton: 'Oma sijainti',
         zoomExpand: 'Laajenna',
         zoomIn: 'Lähennä',

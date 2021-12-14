@@ -14,7 +14,7 @@ const sv = {
         },
         searchButton: 'Osoitehaku',
         layerlistButton: 'Tasovalikko',
-        legendButton: 'Legenda',
+        legendButton: 'Förklaringar',
         fullscreenButton: 'Koko näyttö',
         legendHeader: 'Data som visas på denna zoomnivå och deras förklaringar',
         myLocButton: 'Oma sijainti',
