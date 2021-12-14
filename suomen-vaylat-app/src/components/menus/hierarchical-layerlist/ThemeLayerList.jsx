@@ -161,7 +161,12 @@ export const ThemeLayerList = ({
 
     const { store } = useContext(ReactReduxContext);
 
-    const { channel, selectedTheme,  lastSelectedTheme, selectedThemeIndex} = useAppSelector((state) => state.rpc);
+    const {
+        channel,
+        selectedTheme, 
+        lastSelectedTheme,
+        selectedThemeIndex
+    } = useAppSelector((state) => state.rpc);
 
     const handleSelectGroup = (index, theme) => {
         selectGroup(store, channel, index, theme, lastSelectedTheme, selectedThemeIndex);
@@ -231,7 +236,12 @@ export const ThemeGroup = ({
             >
                 <div>
                     {themeImages[theme.id] && <StyledLayerGroupImage src={themeImages[theme.id]} alt=''/>}
-                    {strings.themelayerlist[theme.id].description !== null &&
+                    {strings.themelayerlist.hasOwnProperty(theme.id) && strings.themelayerlist[theme.id].title !== null &&
+                    <>
+                        <StyledSubHeader>{strings.themelayerlist[theme.id].title}</StyledSubHeader>
+                    </>
+                    }
+                    {strings.themelayerlist.hasOwnProperty(theme.id) && strings.themelayerlist[theme.id].description !== null &&
                     <>
                         <StyledSubHeader>{strings.themelayerlist[theme.id].title}</StyledSubHeader>
                         <StyledSubText>{strings.themelayerlist[theme.id].description}</StyledSubText>
