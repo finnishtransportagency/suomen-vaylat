@@ -1,8 +1,7 @@
-import { useState, useEffect, useContext, useRef } from 'react';
-import { ReactReduxContext } from 'react-redux';
+import { useState, useRef } from 'react';
 import { useAppSelector } from '../../state/hooks';
 import styled from 'styled-components';
-import { motion, AnimatePresence, useDragControls } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import ReactTooltip from 'react-tooltip';
 
 import { faCopy } from '@fortawesome/free-solid-svg-icons';
@@ -73,9 +72,6 @@ const StyledCopiedToClipboardText = styled(motion.span)`
  * Shows ShareWebSitePopup if shareUrl is defined in Redux state.
  */
 export const ShareWebSitePopup = () => {
-
-    const { store } = useContext(ReactReduxContext);
-
     const {
         center,
         currentZoomLevel,
@@ -206,7 +202,7 @@ export const ShareWebSitePopup = () => {
             </StyledContainer>
         </>
 
-             
+
 
         // <Draggable handle='.draggable-handler' bounds="parent" disabled={size.width / 2 < 300}>
         //     <StyledShareWebSiteContainer>
