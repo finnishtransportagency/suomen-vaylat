@@ -1,0 +1,33 @@
+version: 0.2
+
+phases:
+  pre_build:
+    commands:
+      - CODEARTIFACT_AUTH_TOKEN=`aws codeartifact get-authorization-token --domain suomen-vaylat --domain-owner $AWS_ACCOUNT_ID --query authorizationToken --output text`
+      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $IMAGE_REPO_URI
+      - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
+      - TAG_PREFIX=${TAG_PREFIX:-$ENVIRONMENT-}
+      - LATEST_TAG=${TAG_PREFIX}latest
+      - IMAGE_TAG=${TAG_PREFIX}${COMMIT_HASH:=latest}
+  build:
+    commands:
+      - sed -i "s|AWS_ACCOUNT_ID|$AWS_ACCOUNT_ID|g" Dockerfile
+      - sed -i "s|AWS_ACCOUNT_ID|$AWS_ACCOUNT_ID|g" npmrc
+      - |
+        DOCKER_BUILDKIT=1 \
+        docker build -t $IMAGE_REPO_URI:$LATEST_TAG \
+        --target $ENVIRONMENT \
+        --build-arg PUBLIC_URL=/$BASE_PATH \
+        --build-arg BASE_PATH=$BASE_PATH \
+        --build-arg CODEARTIFACT_AUTH_TOKEN=$CODEARTIFACT_AUTH_TOKEN \
+        .
+      - docker tag $IMAGE_REPO_URI:$LATEST_TAG $IMAGE_REPO_URI:$IMAGE_TAG
+  post_build:
+    commands:
+      - docker push $IMAGE_REPO_URI:$LATEST_TAG
+      - docker push $IMAGE_REPO_URI:$IMAGE_TAG
+      - printf '[{"name":"'$CONTAINER_NAME'","imageUri":"'$IMAGE_REPO_URI':'$IMAGE_TAG'"}]' > imagedef.json
+
+artifacts:
+  files:
+    - imagedef.json
