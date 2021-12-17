@@ -12,7 +12,6 @@ const StyledContent = styled.div`
     background-color: #F2F2F2;
 `;
 
-
 const StyledTabs = styled.div`
     position: relative;
     display: flex;
@@ -51,7 +50,7 @@ const StyledTabs = styled.div`
         );
         transition: all 0.3s ease-out;¨
         box-shadow: 0px -1px 11px rgba(0, 99, 175, 0.3);
-    }
+    };
 `;
 
 const StyledTab = styled.div`
@@ -242,8 +241,7 @@ export const AppInfoModalContent = () => {
                             tabsContent.map((tab, index) => {
                                 return (
                                     <SwiperSlide
-                                        id={'ai_tab_content_' + tabIndex}
-                                        key={'ai_tab_content_' + tabIndex}
+                                        key={'ai_tab_content_' + index}
                                         className={'app-info-tabs'}
                                     >
                                         {tab.content}
