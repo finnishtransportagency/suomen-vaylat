@@ -25,7 +25,7 @@ const UserGuideUpperBarContent = () => {
     return (
         Object.values(strings.appGuide.modalContent.upperBar.content).map((value, index) => {
             return (
-                <div>
+                <div key={"ugubc_"+index}>
                     <StyledIcon src={upperBarImages[index]} />
                     <StyledSubTitle>{value.title}</StyledSubTitle>
                     <p>{value.text}</p>
