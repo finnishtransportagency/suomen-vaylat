@@ -157,10 +157,6 @@ const MenuBar = () => {
                 <span>{strings.tooltips.searchButton}</span>
             </ReactTooltip>
 
-            <ReactTooltip disable={isMobile} id='legend' place="right" type="dark" effect="float">
-                <span>{strings.tooltips.legendButton}</span>
-            </ReactTooltip>
-
             <ReactTooltip disable={isMobile} id='drawingtools' place="right" type="dark" effect="float">
                 <span>{strings.tooltips.drawingtools.drawingtoolsButton}</span>
             </ReactTooltip>

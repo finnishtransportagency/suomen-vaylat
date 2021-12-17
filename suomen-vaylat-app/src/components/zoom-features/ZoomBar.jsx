@@ -201,6 +201,11 @@ const ZoomBar = ({
                 <span>{strings.tooltips.zoomOut}</span>
             </ReactTooltip>
 
+            <ReactTooltip disable={isMobile} id='legend' place="right" type="dark" effect="float">
+                <span>{strings.tooltips.legendButton}</span>
+            </ReactTooltip>
+
+
             <StyledZoomBarContainer>
                 <StyledMenuBarButton
                     data-tip data-for='legend'
