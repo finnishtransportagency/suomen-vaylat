@@ -14,7 +14,7 @@ const sv = {
         },
         searchButton: 'Osoitehaku',
         layerlistButton: 'Tasovalikko',
-        legendButton: 'Legenda',
+        legendButton: 'Förklaringar',
         fullscreenButton: 'Koko näyttö',
         legendHeader: 'Data som visas på denna zoomnivå och deras förklaringar',
         myLocButton: 'Oma sijainti',
@@ -148,7 +148,7 @@ const sv = {
                 }
             },
             contactInfoFeedback: {
-                0: 'Sovelluksesta vastaa Väylävirasto ja sovelluksen toimittaa Sitowise.',
+                0: 'Sovelluksesta vastaa Väylävirasto ja sovelluksen toimittaa Sitowise Oy.',
                 1: 'Palautetta toivotaan lähetettävän osoitteeseen ',
                 2: 'suomenvaylat@vayla.fi'
             }
@@ -659,7 +659,6 @@ const sv = {
                 }
             }
         },
-        // copied from https://github.com/oskariorg/oskari-frontend/blob/master/bundles/framework/divmanazer/resources/locale/sv.js
         languages: {
             af: 'afrikaans',
             ak: 'akan',
