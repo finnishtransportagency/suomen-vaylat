@@ -163,7 +163,7 @@ const StyledGroupName = styled.p`
     font-size: 14px;
     font-weight: bold;
     color: ${props => props.theme.colors.mainColor1};
-    @media ${ props => props.theme.device.mobileL} {
+    @media ${props => props.theme.device.mobileL} {
         font-size: 12px;
     };
 `;

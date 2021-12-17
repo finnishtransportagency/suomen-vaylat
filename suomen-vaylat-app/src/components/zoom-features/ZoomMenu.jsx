@@ -10,7 +10,6 @@ import { Legend } from '../legend/Legend';
 
 const StyledZoomMenu = styled.div`
     position: relative;
-    z-index: 2;
     justify-self: end;
     align-self: end;
     display: flex;

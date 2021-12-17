@@ -24,6 +24,8 @@ import LayerListTEMP from '../menus/hierarchical-layerlist/LayerListTEMP';
 import ThemeLayerList from '../menus/hierarchical-layerlist/ThemeLayerList';
 import SelectedLayers from '../menus/selected-layers/SelectedLayers';
 
+import { faLayerGroup } from '@fortawesome/free-solid-svg-icons';
+
 import strings from '../../translations';
 
 // install Swiper modules
@@ -79,7 +81,7 @@ const StyledTabs = styled.div`
     position: relative;
     display: flex;
     align-items: center;
-    height: 40px;
+    min-height: 40px;
     background-color: #F2F2F2;
     //margin-top: 12px;
     margin: 16px 8px 0px 8px;
@@ -126,7 +128,7 @@ const StyledTab = styled.div`
     user-select: none;
     width: calc(100% / 3);
     cursor: pointer;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: bold;
     color: ${props => props.isSelected ? props.theme.colors[props.color] : "#656565"};
     text-align: center;
@@ -155,8 +157,9 @@ const StyledLayerCount = styled.div`
 const StyledSwiper = styled(Swiper)`
   .swiper-slide {
     background-color: ${props => props.theme.colors.mainWhite};
-    padding: 16px 8px 16px 16px;
-    overflow: scroll;
+    //padding: 16px 8px 16px 16px;
+    padding: 8px;
+    overflow: auto;
   };
   transition: box-shadow 0.3s ease-out;
   box-shadow: 0px -1px 11px ${props => props.tabIndex === 0 ?
@@ -238,6 +241,7 @@ const MapLayersDialog = () => {
                 <DialogHeader
                     title={strings.layerlist.layerlistLabels.mapLayers}
                     hideWarn={hideWarn}
+                    icon={faLayerGroup}
                 />
                 <StyledTabs
                     tabIndex={selectedMapLayersMenuTab}
