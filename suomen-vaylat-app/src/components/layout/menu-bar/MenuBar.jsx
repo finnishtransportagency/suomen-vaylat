@@ -173,15 +173,6 @@ const MenuBar = () => {
                 isSideMenuOpen={isSideMenuOpen}
                 isSearchOpen={isSearchOpen}
             >
-                {/* <StyledMenuBarButton
-                    data-tip data-for='search'
-                    isActive={isSearchOpen}
-                    onClick={() => store.dispatch(setIsSearchOpen(!isSearchOpen))}
-                >
-                    <FontAwesomeIcon
-                        icon={faSearch}
-                    />
-                </StyledMenuBarButton> */}
                 <StyledMenuBarButton
                     data-tip data-for='layerlist'
                     isActive={isSideMenuOpen}
@@ -205,7 +196,6 @@ const MenuBar = () => {
                     </StyledMenuBarToolsButton>
                     <DrawingTools isOpen={isDrawingToolsOpen}/>
                 </StyledMapToolsContainer>
-
                 <StyledMenuBarButton
                     data-tip data-for='fullscreen'
                     isActive={isFullScreen}

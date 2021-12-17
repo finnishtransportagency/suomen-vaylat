@@ -1,4 +1,4 @@
-import { useContext, useEffect } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import OskariRPC from 'oskari-rpc';
 import { ReactReduxContext } from 'react-redux';
 import styled from 'styled-components';
@@ -22,7 +22,6 @@ import {
     setGFIPoint
 } from '../../state/slices/rpcSlice';
 import { updateLayers } from '../../utils/rpcUtil';
-import { AnnouncementsModal } from '../announcements-modal/AnnouncementsModal';
 
 import SvLoder from '../../components/loader/SvLoader';
 
@@ -30,6 +29,10 @@ import { GFIPopup } from '../infobox/GFIPopup';
 import './PublishedMap.scss';
 
 const StyledPublishedMap = styled.div`
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
     height: calc(var(--app-height) - 60px);
 `;
 
@@ -229,23 +232,11 @@ const PublishedMap = () => {
 
     }, [store]);
 
-    let announcements = useAppSelector((state) => state.rpc.activeAnnouncements);
-
     return (
         <StyledPublishedMap>
             {loading ? (
                 <SvLoder />
             ) : null}
-            {announcements.map((announcement) => {
-                return (
-                    <AnnouncementsModal
-                        id={announcement.id}
-                        title={announcement.title}
-                        content={announcement.content}
-                        key={announcement.id}
-                    />
-                );
-            })}
             {gfiLocations.length > 0 ? (
                 <GFIPopup gfiLocations={gfiLocations}/>
             ) : null}

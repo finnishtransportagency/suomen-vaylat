@@ -24,6 +24,7 @@ const StyledClipboardIcon = styled.div`
 
 const StyledContainer = styled.div`
     text-align: center;
+    margin: 18px;
 `;
 
 const StyledInput = styled.textarea`
@@ -115,19 +116,7 @@ export const ShareWebSitePopup = () => {
     const shareIconSize = 48;
     const inputRef = useRef(null);
 
-    // const [size, setSize] = useState({
-    //     width: window.innerWidth,
-    //     height: window.innerHeight
-    // });
-    // const updateSize = () =>
-    //     setSize({
-    //         width: window.innerWidth,
-    //         height: window.innerHeight
-    //     });
-    // useEffect(() => (window.onresize = updateSize), []);
-
     return (
-        <>
             <StyledContainer>
                 <StyledInput value={url} ref={inputRef} readOnly />
                 <AnimatePresence>
@@ -204,85 +193,5 @@ export const ShareWebSitePopup = () => {
                     </TelegramShareButton>
                 </StyledShareButtonsContainer>
             </StyledContainer>
-        </>
-
-             
-
-        // <Draggable handle='.draggable-handler' bounds="parent" disabled={size.width / 2 < 300}>
-        //     <StyledShareWebSiteContainer>
-        //         <ReactTooltip disable={isMobile} id='clipboard' place='right' type='dark' effect='float'>
-        //             <span>{strings.share.tooltips.clipboard}</span>
-        //         </ReactTooltip>
-        //         <ReactTooltip disable={isMobile} id='email' place='right' type='dark' effect='float'>
-        //             <span>{strings.share.tooltips.email}</span>
-        //         </ReactTooltip>
-
-        //         <ReactTooltip disable={isMobile} id='facebook' place='right' type='dark' effect='float'>
-        //             <span>{strings.share.tooltips.facebook}</span>
-        //         </ReactTooltip>
-
-        //         <ReactTooltip disable={isMobile} id='twitter' place='right' type='dark' effect='float'>
-        //             <span>{strings.share.tooltips.twitter}</span>
-        //         </ReactTooltip>
-
-        //         <ReactTooltip disable={isMobile} id='linkedin' place='right' type='dark' effect='float'>
-        //             <span>{strings.share.tooltips.linkedin}</span>
-        //         </ReactTooltip>
-
-        //         <ReactTooltip disable={isMobile} id='whatsapp' place='right' type='dark' effect='float'>
-        //             <span>{strings.share.tooltips.whatsapp}</span>
-        //         </ReactTooltip>
-
-        //         <ReactTooltip disable={isMobile} id='telegram' place='right' type='dark' effect='float'>
-        //             <span>{strings.share.tooltips.telegram}</span>
-        //         </ReactTooltip>
-
-        //         <StyledHeader className='draggable-handler'>
-        //             {strings.share.title}
-        //             <StyledCloseIcon onClick={() => {
-        //                 store.dispatch(setShareUrl(''));
-        //             }}>
-        //                 <FontAwesomeIcon icon={faTimes} />
-        //             </StyledCloseIcon>
-        //         </StyledHeader>
-        //         <StyledContainer>
-        //             <StyledInput value={url} ref={inputRef} readOnly>
-        //             </StyledInput>
-        //             {isCopied ? <StyledCopiedToClipboardText>{strings.share.shareTexts.copiedToClipboard}</StyledCopiedToClipboardText> : null}
-        //             <StyledShareButtonsContainer>
-        //                 <CopyToClipboard text={url} onCopy={() => { setIsCopied(true); }}>
-        //                     <StyledCopyClipboardButton
-        //                         onClick={() => {
-        //                             inputRef.current.select();
-        //                         }}
-        //                         data-tip data-for='clipboard'
-        //                     >
-        //                         <StyledClipboardIcon>
-        //                             <FontAwesomeIcon icon={faCopy}></FontAwesomeIcon>
-        //                         </StyledClipboardIcon>
-        //                     </StyledCopyClipboardButton>
-        //                 </CopyToClipboard>
-        //                 <EmailShareButton url={url} subject={title} body={emailBody} data-tip data-for='email'>
-        //                     <EmailIcon round={true} size={shareIconSize} />
-        //                 </EmailShareButton>
-        //                 <FacebookShareButton url={url} quote={title} data-tip data-for='facebook'>
-        //                     <FacebookIcon round={true} size={shareIconSize} />
-        //                 </FacebookShareButton>
-        //                 <TwitterShareButton url={url} title={title} data-tip data-for='twitter'>
-        //                     <TwitterIcon round={true} size={shareIconSize} />
-        //                 </TwitterShareButton>
-        //                 <LinkedinShareButton url={url} data-tip data-for='linkedin'>
-        //                     <LinkedinIcon round={true} size={shareIconSize} />
-        //                 </LinkedinShareButton>
-        //                 <WhatsappShareButton url={url} title={title} separator=': ' data-tip data-for='whatsapp'>
-        //                     <WhatsappIcon round={true} size={shareIconSize} />
-        //                 </WhatsappShareButton>
-        //                 <TelegramShareButton url={url} title={title} data-tip data-for='telegram'>
-        //                     <TelegramIcon round={true} size={shareIconSize} />
-        //                 </TelegramShareButton>
-        //             </StyledShareButtonsContainer>
-        //         </StyledContainer>
-        //     </StyledShareWebSiteContainer>
-        // </Draggable>
     );
 };

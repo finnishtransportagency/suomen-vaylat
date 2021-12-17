@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   isFullScreen: false,
+  modalConstrainsRef: null,
   isSideMenuOpen: false,
   isSearchOpen: false,
   searchParams: '',
@@ -29,6 +30,9 @@ export const uiSlice = createSlice({
       state.isSearchOpen = false;
       state.isInfoOpen = false;
       state.isUserGuideOpen = false;
+    },
+    setModalConstrainsRef: (state, action) => {
+      state.modalConstrainsRef = action.payload;
     },
     setIsSideMenuOpen: (state, action) => {
       state.isSideMenuOpen = action.payload;
@@ -67,15 +71,16 @@ export const uiSlice = createSlice({
 });
 
 export const {
+  setIsFullScreen,
   setIsMainScreen,
-  setSearchParams,
+  setModalConstrainsRef,
   setIsSideMenuOpen,
   setIsSearchOpen,
+  setSearchParams,
   setIsInfoOpen,
   setIsUserGuideOpen,
-  setIsFullScreen,
-  setIsDrawingToolsOpen,
   setShareUrl,
+  setIsDrawingToolsOpen,
   setActiveTool,
   setIsSwipingDisabled,
   setSelectedMapLayersMenuTab,
