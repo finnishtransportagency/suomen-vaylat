@@ -9,8 +9,8 @@ const en = {
     title: 'Suomen Väylät EN',
     tooltips: {
         layerlist: {
-            opacity: 'Opacity',
-            filter: 'Filter'
+            filter: 'Filter',
+            opacity: 'Opacity'
         },
         searchButton: 'Address search',
         layerlistButton: 'Layerlist',
@@ -81,7 +81,7 @@ const en = {
                 subTitle: 'The map level menu opens at the top left. There are 3 tabs to choose from',
                 tabsContent: {
                     materList: 'You can filter the material list by topic behind the filter button. You can search the map level by name by entering at least 3 letters in the search field.',
-                    themeLayerSelection: 'Selecting a theme displays the map levels defined for the theme and opens a menu for selecting map materials related to the theme. Some of the map materials have their own style for the theme. There can be only one theme at a time. When a theme is selected, you can also select map materials other than those defined for the theme in the All Levels menu. The theme closes with the theme marker at the top of the map.',
+                    themeLayerSelection: 'Selecting a theme displays the map layers defined for the theme and opens a menu for selecting map materials related to the theme. Some of the map materials have their own style for the theme. There can be only one theme at a time. When a theme is selected, you can also select map materials other than those defined for the theme in the All Levels menu. The theme closes with the theme marker at the top of the map.',
                     selectedLayers: 'List of selected map levels on the map. You can change the order of the levels by dragging them from the icon on the right. The transparency can be adjusted with the slider and the level selec-tion can be deselected.'
                 },
             },
@@ -134,11 +134,12 @@ const en = {
                     title: 'Tiedossa olevat puutteet:',
                     list: {
                         0: {
-                                content: 'Karttaa ei voi raahata kun sen päälle on avattu ikkuna (kohdetietoikkuna, infoikkuna, metatietoikkuna)'
+                            content: 'Karttaa ei voi raahata kun sen päälle on avattu ikkuna (kohdetietoikkuna, infoikkuna, metatietoikkuna)'
                         },
-                        1: { content: 'Kohdetiedot eivät skaalaudu mobiiliin'},
-                        2: { content: 'Kaikkia aineistoryhmiä ei ole käsitelty datan osalta',
-                                subContent: {
+                        1: { content: 'Kohdetiedot eivät skaalaudu mobiiliin' },
+                        2: {
+                            content: 'Kaikkia aineistoryhmiä ei ole käsitelty datan osalta',
+                            subContent: {
                                 0: 'Tiestötiedoista puuttuvat selkokielisyydet ja kenttien priorisointi kohdetietoikkunaan',
                                 1: 'Inspire-aineistoista sekä digiroad-aineistoista puuttuvat kenttien priorisointi kohdetietoikkunaan'
                             }
@@ -147,7 +148,7 @@ const en = {
                 }
             },
             contactInfoFeedback: {
-                0: 'Sovelluksesta vastaa Väylävirasto ja sovelluksen toimittaa Sitowise.',
+                0: 'Sovelluksesta vastaa Väylävirasto ja sovelluksen toimittaa Sitowise Oy.',
                 1: 'Palautetta toivotaan lähetettävän osoitteeseen ',
                 2: 'suomenvaylat@vayla.fi'
             }
@@ -178,7 +179,7 @@ const en = {
     },
     layerlist: {
         layerlistLabels: {
-            allLayers: 'All layers' ,
+            allLayers: 'All layers',
             themeLayers: 'Themes',
             selectedLayers: 'Selected layers',
             mapLayers: 'Layers',
@@ -231,7 +232,8 @@ const en = {
             title: 'Verkkoselostus',
             description: null
         }
-    },data: {
+    },
+    metadata: {
         title: '{0} -map layer metadata',
         heading: {
             abstractTextData: 'Abstract text (data)',
@@ -657,7 +659,6 @@ const en = {
                 }
             }
         },
-        // Copied from: https://github.com/oskariorg/oskari-frontend/blob/master/bundles/framework/divmanazer/resources/locale/en.js
         languages: {
             af: 'Afrikaans',
             ak: 'Akan',
