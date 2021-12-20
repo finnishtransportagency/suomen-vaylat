@@ -40,6 +40,7 @@ import { setIsSearchOpen } from '../../state/slices/uiSlice';
 
 
 const StyledSearchContainer = styled.div`
+    z-index: 1;
     pointer-events: auto;
     position: relative;
     grid-column-start: 3;
@@ -205,8 +206,9 @@ const Search = () => {
         store.dispatch(setSearching(true));
 
         const vkmSearchErrorHandler = (errors) => {
+
             store.dispatch(setSearching(false));
-            store.dispatch(setSelectError({show: true, message: strings.search.address.error.text, type: 'searchWarning', filteredLayers: [], indeterminate: false}));
+            store.dispatch(setSelectError({show: true, message: strings.search.vkm.error.text, errors: errors, type: 'searchWarning', filteredLayers: [], indeterminate: false}));
         };
 
         if (search.selected === 'vkm') {

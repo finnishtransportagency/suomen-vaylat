@@ -27,7 +27,8 @@ import {
     faShareAlt,
     faInfoCircle,
     faQuestion,
-    faBullhorn
+    faBullhorn,
+    faExclamationCircle
 } from '@fortawesome/free-solid-svg-icons';
 
 import Modal from '../modals/Modal';
@@ -212,24 +213,50 @@ const Content = () => {
             >
                 <ShareWebSitePopup />
             </Modal>
-            <StyledContentGrid>
-                <MenuBar />
-                <MapLayersDialog />
-                <Search />
-                <ZoomMenu />
-                <ThemeMapsActionButton />
-                {warnings.show && warnings.type === 'multipleLayersWarning' &&
-                    <WarningDialog
-                        dialogOpen={warnings.show}
-                        hideWarn={hideWarn}
-                        title={strings.general.warning}
-                        message={strings.multipleLayersWarning}
-                        filteredLayers={warnings.filteredLayers}
-                        isChecked={warnings.isChecked}
-                        warningType={warnings.type}
-                    />
-                }
-                {warnings.show && warnings.type === 'searchWarning' &&
+            <Modal
+                constraintsRef={constraintsRef} /* Reference div for modal drag boundaries */
+                drag={false} /* Enable (true) or disable (false) drag */
+                resize={false}
+                backdrop={true} /* Is backdrop enabled (true) or disabled (false) */
+                fullScreenOnMobile={false} /* Scale modal full width / height when using mobile device */
+                titleIcon={faExclamationCircle} /* Use icon on title or null */
+                title={strings.general.warning} /* Modal header title */
+                type={"warning"} /* Type "normal" or "warning" */
+                warningType={warnings.type}
+                closeAction={hideWarn} /* Action when pressing modal close button or backdrop */
+                isOpen={warnings.show && warnings.type === 'multipleLayersWarning'} /* Modal state */
+                id={null}
+            >
+                <WarningDialog
+                    hideWarn={hideWarn}
+                    message={strings.multipleLayersWarning}
+                    filteredLayers={warnings.filteredLayers}
+                    warningType={warnings.type}
+                />
+            </Modal>
+            <Modal
+                constraintsRef={constraintsRef} /* Reference div for modal drag boundaries */
+                drag={false} /* Enable (true) or disable (false) drag */
+                resize={false}
+                backdrop={true} /* Is backdrop enabled (true) or disabled (false) */
+                fullScreenOnMobile={false} /* Scale modal full width / height when using mobile device */
+                titleIcon={faExclamationCircle} /* Use icon on title or null */
+                title={search.selected === 'vkm' ? strings.search.vkm.error.title : strings.search.address.error.title} /* Modal header title */
+                type={"warning"} /* Type "normal" or "warning" */
+                warningType={warnings.type}
+                closeAction={hideWarn} /* Action when pressing modal close button or backdrop */
+                isOpen={warnings.show && warnings.type === 'searchWarning'} /* Modal state */
+                id={null}
+            >
+                <WarningDialog
+                    hideWarn={hideWarn}
+                    message={warnings.message}
+                    errors={warnings.errors}
+                    filteredLayers={[]}
+                    warningType={warnings.type}
+                />
+            </Modal>
+                {/* {warnings.show && warnings.type === 'searchWarning' &&
                     <WarningDialog
                         dialogOpen={warnings.show}
                         hideWarn={hideWarn}
@@ -240,7 +267,13 @@ const Content = () => {
                         indeterminate={false}
                         warningType={warnings.type}
                     />
-                }
+                } */}
+            <StyledContentGrid>
+                <MenuBar />
+                <MapLayersDialog />
+                <Search />
+                <ZoomMenu />
+                <ThemeMapsActionButton />
             </StyledContentGrid>
         </StyledContent>
         </>

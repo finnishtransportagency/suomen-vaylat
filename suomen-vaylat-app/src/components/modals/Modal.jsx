@@ -25,7 +25,7 @@ z-index: ${props => props.resize ? 2 : 9998};
 const StyledModalWrapper = styled(motion.div)`
     z-index: ${props => props.resize ? 4 : 9999};
     position: fixed;
-    padding: 50px;
+    padding: ${props => props.resize && "50px"};
     @media ${props => props.theme.device.mobileL} {
         position:  ${props => props.fullScreenOnMobile ? "fixed" : "initial"};
         top: 0px;
@@ -144,6 +144,10 @@ const Modal = ({
         setTimeout(() => {
             closeAction(selected, id);
         },[500])
+    };
+
+    const handleWarningModal = () => {
+        
     };
 
     const clonedChildren = cloneElement(children, { handleAnnouncementModal  }); // If announce modal type is passed as prop, add additional "handleAnnouncementModal" function to modal children to handle modal state
