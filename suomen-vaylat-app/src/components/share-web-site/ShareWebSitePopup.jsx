@@ -189,5 +189,6 @@ export const ShareWebSitePopup = () => {
                     </TelegramShareButton>
                 </StyledShareButtonsContainer>
             </StyledContainer>
+        </>
     );
 };
