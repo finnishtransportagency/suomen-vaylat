@@ -19,6 +19,7 @@ const initialState = {
   selectedLayers: [],
   warnings: {
       show: false,
+      errors: [],
       message: '',
       type: '',
       filteredLayers: [],
@@ -77,6 +78,7 @@ export const rpcSlice = createSlice({
     setSelectError: (state,action) => {
         state.warnings = {
             show: action.payload.show,
+            errors: action.payload.errors,
             message: action.payload.message,
             type: action.payload.type,
             filteredLayers: action.payload.filteredLayers,
