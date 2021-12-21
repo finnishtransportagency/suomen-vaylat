@@ -1,4 +1,4 @@
-import { useState} from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 import strings from '../../translations';
 import { Accordion } from 'react-bootstrap';
@@ -101,40 +101,40 @@ export const UserGuideModalContent = () => {
     ];
 
     return (
-                <StyledContent>
-                    <StyledAccordion activeKey={modalIndex}>
-                        {
-                            modalContent.map((content, index) => {
-                                return (
-                                    <StyledAccordionItem
-                                        eventKey={index}
-                                        //bsPrefix={'user-guide-item'}
-                                        key={'accordion_' + index}
-                                    >
-                                        <StyledAccordionButton
-                                            //bsPrefix={'accordion-header'}
-                                            key={`accordion-header-${index}`}
-                                            //className={'user-guide-header'}
-                                            as={'div'}
-                                            onClick={() => setAccordionIndex(index)}
-                                        >
-                                            <FontAwesomeIcon
-                                                style={{
-                                                    transform: modalIndex === index && "rotate(90deg)"
-                                                }}
-                                                icon={faAngleRight}
-                                            />
-                                            <p>{content.title}</p>
-                                        </StyledAccordionButton>
-                                        <StyledAccordionBody bsPrefix={'user-guide-body'}>
-                                            {content.content}
-                                        </StyledAccordionBody>
-                                    </StyledAccordionItem>
-                                )
-                            })
-                        }
-                    </StyledAccordion>
-                </StyledContent>
+        <StyledContent>
+            <StyledAccordion activeKey={modalIndex}>
+                {
+                    modalContent.map((content, index) => {
+                        return (
+                            <StyledAccordionItem
+                                eventKey={index}
+                                //bsPrefix={'user-guide-item'}
+                                key={'accordion_' + index}
+                            >
+                                <StyledAccordionButton
+                                    //bsPrefix={'accordion-header'}
+                                    key={`accordion-header-${index}`}
+                                    //className={'user-guide-header'}
+                                    as={'div'}
+                                    onClick={() => setAccordionIndex(index)}
+                                >
+                                    <FontAwesomeIcon
+                                        style={{
+                                            transform: modalIndex === index && "rotate(90deg)"
+                                        }}
+                                        icon={faAngleRight}
+                                    />
+                                    <p>{content.title}</p>
+                                </StyledAccordionButton>
+                                <StyledAccordionBody bsPrefix={'user-guide-body'}>
+                                    {content.content}
+                                </StyledAccordionBody>
+                            </StyledAccordionItem>
+                        )
+                    })
+                }
+            </StyledAccordion>
+        </StyledContent>
     );
 };
 

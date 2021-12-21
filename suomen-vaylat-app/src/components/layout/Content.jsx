@@ -16,7 +16,6 @@ import ZoomMenu from '../zoom-features/ZoomMenu';
 import strings from '../../translations';
 import { setSelectError } from '../../state/slices/rpcSlice';
 import {
-    setModalConstrainsRef,
     setShareUrl,
     setIsInfoOpen,
     setIsUserGuideOpen,
@@ -94,14 +93,14 @@ const Content = () => {
     const addToLocalStorageArray = (name, value) => {
         // Get the existing data
         let existing = localStorage.getItem(name);
-    
+
         // If no existing data, create an array
         // Otherwise, convert the localStorage string to an array
         existing = existing ? existing.split(',') : [];
-    
+
         // Add new data to localStorage Array
         existing.push(value);
-    
+
         // Save back to localStorage
         localStorage.setItem(name, existing.toString());
     };
@@ -256,18 +255,6 @@ const Content = () => {
                     warningType={warnings.type}
                 />
             </Modal>
-                {/* {warnings.show && warnings.type === 'searchWarning' &&
-                    <WarningDialog
-                        dialogOpen={warnings.show}
-                        hideWarn={hideWarn}
-                        title={search.selected === 'vkm' ? strings.search.vkm.error.title : strings.search.address.error.title}
-                        message={warnings.message}
-                        filteredLayers={[]}
-                        isChecked={undefined}
-                        indeterminate={false}
-                        warningType={warnings.type}
-                    />
-                } */}
             <StyledContentGrid>
                 <MenuBar />
                 <MapLayersDialog />

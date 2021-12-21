@@ -2,9 +2,6 @@ import { useState } from 'react';
 import { cloneElement} from 'react';
 import styled from 'styled-components';
 import { motion, AnimatePresence, useDragControls } from 'framer-motion';
-
-import { useAppSelector } from '../../state/hooks';
-
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -146,15 +143,11 @@ const Modal = ({
         },[500])
     };
 
-    const handleWarningModal = () => {
-        
-    };
-
     const clonedChildren = cloneElement(children, { handleAnnouncementModal  }); // If announce modal type is passed as prop, add additional "handleAnnouncementModal" function to modal children to handle modal state
 
     return (
         <AnimatePresence>
-            { (isOpen || localState) && 
+            { (isOpen || localState) &&
             <>
                 <StyledModalWrapper
                         key="modal"
@@ -212,7 +205,7 @@ const Modal = ({
                         </StyledModalContent>
                     </StyledModal>
                 </StyledModalWrapper>
-                { backdrop && 
+                { backdrop &&
                     <StyledModalBackdrop
                         backdrop={backdrop}
                         initial={{ opacity: 0 }}
