@@ -71,6 +71,9 @@ const StyledMasterGroupHeader = styled.div`
     padding-top: 8px;
     padding-bottom: 8px;
     box-shadow: 0px 3px 6px 0px rgba(0,0,0,0.16);
+    @-moz-document url-prefix() {
+        position: initial;
+    };
 `;
 
 const StyledLeftContent = styled.div`

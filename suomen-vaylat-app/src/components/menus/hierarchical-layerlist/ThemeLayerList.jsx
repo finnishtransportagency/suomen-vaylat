@@ -64,6 +64,9 @@ const StyledMasterGroupHeader = styled.div`
     cursor: pointer;
     background-color: ${props => props.theme.colors.secondaryColor2};
     border-radius: ${props => props.isOpen ? "4px 4px 0px 0px": "4px"};
+    @-moz-document url-prefix() {
+        position: initial;
+    };
 `;
 
 const StyledLeftContent = styled.div`
