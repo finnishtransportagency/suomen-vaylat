@@ -1,63 +1,63 @@
-import { useRef } from 'react';
+import { useState } from 'react';
+import { cloneElement} from 'react';
 import styled from 'styled-components';
 import { motion, AnimatePresence, useDragControls } from 'framer-motion';
-
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-
 const StyledModalBackdrop = styled(motion.div)`
-    z-index: 9999;
+z-index: ${props => props.resize ? 2 : 9998};
     position: fixed;
     top: 0px;
     right: 0px;
     bottom: 0px;
     left: 0px;
-    background-color: ${props => props.backdrop ? 'rgba(0, 0, 0, 0.3)' : 'transparent'};
+    background-color: rgba(0, 0, 0, 0.4);
     display: flex;
     justify-content: center;
     align-items: center;
-    pointer-events: ${props => props.backdrop ? "auto" : "none"};
     opacity: 0;
 `;
 
 const StyledModalWrapper = styled(motion.div)`
-    width: 100%;
-    height: auto;
-    max-width: 400px;
-    max-height: 600px;
-    background-color:  ${props => props.theme.colors.mainWhite};
-    border-radius: 4px;
-    box-shadow: rgb(0 0 0 / 16%) 0px 3px 6px, rgb(0 0 0 / 23%) 0px 3px 6px;
-    overflow: hidden;
-    pointer-events: auto;
-    margin: 8px;
+    z-index: ${props => props.resize ? 4 : 9999};
+    position: fixed;
+    padding: ${props => props.resize && "50px"};
     @media ${props => props.theme.device.mobileL} {
-        max-width: 100%;
-        max-height: 100%;
+        position:  ${props => props.fullScreenOnMobile ? "fixed" : "initial"};
         top: 0px;
         right: 0px;
         bottom: 0px;
         left: 0px;
+        border-radius: ${props => props.fullScreenOnMobile && "0px"};
+        padding: 0px;
+        margin: ${props => props.fullScreenOnMobile === false && "8px"};
     };
 `;
 
+const StyledModal = styled(motion.div)`
+    position: relative;
+    width: 100%;
+    height: 100%;
+    max-width: 100vw;
+    background-color:  ${props => props.theme.colors.mainWhite};
+    border-radius: 4px;
+    box-shadow: rgb(0 0 0 / 16%) 0px 3px 6px, rgb(0 0 0 / 23%) 0px 3px 6px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    resize: ${props => props.resize && "both"};
+    overflow: auto;
+`;
+
 const StyledModalHeader = styled.div`
-    position: sticky;
-    top: 0px;
-    height: 56px;
-    z-index: 1;
+    min-height: 56px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     background-color:  ${props => props.type === "warning" ? "#C73F00" : props.theme.colors.mainColor1};
     box-shadow: 2px 2px 4px 0px rgba(0,0,0,0.20);
-    p {
-        margin: 0px;
-        font-size: 20px;
-        font-weight: bold;
-        color:  ${props => props.theme.colors.mainWhite};
-    };
+    padding-right: 16px;
     cursor:  ${props => props.drag ? "grab" : "initial"};
     &&:active {
         cursor: ${props => props.drag ? "grabbing" : "initial"};
@@ -67,15 +67,36 @@ const StyledModalHeader = styled.div`
     svg {
         color: ${props => props.theme.colors.mainWhite};
     };
+    @media ${props => props.theme.device.mobileL} {
+        pointer-events: none;
+        svg {
+            pointer-events: auto;
+        };
+    };
 `;
 
 const StyledModalTitle = styled.div`
     display: flex;
     align-items: center;
-    padding: 16px;
+    padding: 16px 16px 16px 16px;
+    p {
+        margin: 0px;
+        font-size: 20px;
+        font-weight: bold;
+        color:  ${props => props.theme.colors.mainWhite};
+    };
     svg {
         font-size: 20px;
         margin-right: 16px;
+    };
+    @media ${props => props.theme.device.mobileL} {
+        pointer-events: none;
+        p {
+            font-size: 16px;
+        };
+        svg {
+            pointer-events: auto;
+        };
     };
 `;
 
@@ -83,7 +104,7 @@ const StyledCloseButton = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 16px;
+    //padding: 16px;
     cursor: pointer;
 `;
 
@@ -92,90 +113,116 @@ const StyledCloseIcon = styled(FontAwesomeIcon)`
 `;
 
 const StyledModalContent = styled.div`
-    margin: 18px;
+    height: 100%;
     overflow: auto;
 `;
 
 const Modal = ({
+    constraintsRef,
     drag,
+    resize,
     backdrop,
-    icon,
+    fullScreenOnMobile,
+    titleIcon,
     title,
     type,
     closeAction,
     isOpen,
+    id,
     children
 }) => {
 
-    const constraintsRef = useRef(null);
-
     const dragControls = useDragControls();
+
+    const [localState, setLocalState] = useState(type === "announcement");
+
+    const handleAnnouncementModal = (selected, id) => {
+        setLocalState(false);
+        setTimeout(() => {
+            closeAction(selected, id);
+        },[500])
+    };
+
+    const clonedChildren = cloneElement(children, { handleAnnouncementModal  }); // If announce modal type is passed as prop, add additional "handleAnnouncementModal" function to modal children to handle modal state
 
     return (
         <AnimatePresence>
-            {isOpen && 
-                <StyledModalBackdrop
-                    ref={constraintsRef}
-                    backdrop={backdrop}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{
-                        duration: 0.3,
-                        type: "tween"
-                    }}
-                    onClick={(e) => {
-                        backdrop && closeAction()
-                    }}
-                >
-                    <StyledModalWrapper
+            { (isOpen || localState) &&
+            <>
+                <StyledModalWrapper
+                        key="modal"
                         drag={drag}
                         dragConstraints={constraintsRef}
                         dragControls={dragControls}
                         dragListener={false}
-                        dragTransition={{
-                            bounceStiffness: 1000,
-                            bounceDamping: 40
-                        }}
-                        initial={{ y: 100 }}
-                        animate={{ y: 0 }}
-                        exit={{ y: 100 }}
+                        dragMomentum={false}
+                        initial={{ y: 100, filter: "blur(1px)", opacity: 0 }}
+                        animate={{ y: 0, filter: "blur(0px)", opacity: 1 }}
+                        exit={{ y: 100, filter: "blur(10px)", opacity: 0 }}
                         transition={{
-                            duration: 0.3,
+                            duration: 0.4,
                             type: "tween"
                         }}
+                        fullScreenOnMobile={fullScreenOnMobile}
+                        resize={resize}
                         onClick={e => {
                             e.stopPropagation();
                         }}
+                >
+                    <StyledModal
+                        resize={resize}
                     >
                         <StyledModalHeader
                             type={type}
                             drag={drag}
                             onPointerDown={(e) => {
-                                dragControls.start(e)
+                                drag && dragControls.start(e)
                             }}
                         >
                             <StyledModalTitle>
                                 {
-                                    icon && <FontAwesomeIcon
-                                        icon={icon}
+                                    titleIcon && <FontAwesomeIcon
+                                        icon={titleIcon}
                                     />
                                 }
                                 <p>{title}</p>
                             </StyledModalTitle>
-                            <StyledCloseButton
-                                onClick={() => closeAction()}
+
+                           <StyledCloseButton
+                                onClick={() => {
+                                    type !== "announcement" && closeAction();
+                                    type === "announcement" && handleAnnouncementModal(null, null);
+                                }}
                             >
                                 <StyledCloseIcon
                                     icon={faTimes}
                                 />
                             </StyledCloseButton>
+
                         </StyledModalHeader>
                         <StyledModalContent>
-                            {children}
+                            {!type === "announcement" ? children : clonedChildren}
                         </StyledModalContent>
-                    </StyledModalWrapper>
-                </StyledModalBackdrop>
+                    </StyledModal>
+                </StyledModalWrapper>
+                { backdrop &&
+                    <StyledModalBackdrop
+                        backdrop={backdrop}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{
+                            duration: 0.4,
+                            type: "tween"
+                        }}
+                        onClick={() => {
+                            backdrop && closeAction && type !== "announcement" ? closeAction() : type === "announcement" && handleAnnouncementModal(null, null);
+                        }}
+                        resize={resize}
+                    >
+                    </StyledModalBackdrop>
+                }
+            </>
             }
 
         </AnimatePresence>

@@ -14,6 +14,7 @@ import strings from '../../translations';
 import ZoomBarCircle from './ZoomBarCircle';
 
 const StyledZoomBarContainer = styled.div`
+    z-index: 1;
     position: relative;
     pointer-events: none;
     cursor: pointer;
@@ -22,6 +23,13 @@ const StyledZoomBarContainer = styled.div`
     //flex-direction: column-reverse;
     flex-direction: column;
     align-items: center;
+`;
+
+const StyledZoomBarZoomFeatures = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
     &::before {
         z-index: -1;
         content: '';
@@ -216,47 +224,50 @@ const ZoomBar = ({
                         icon={faListAlt}
                     />
                 </StyledMenuBarButton>
-                <StyledZoomBarControlTop
-                    data-tip data-for='zoomIn'
-                    disabled={currentZoomLevel === Object.values(zoomLevelsLayers).length - 1}
-                    onClick={() => {
-                        store.dispatch(setZoomIn());
-                    }}
-                >
-                    <FontAwesomeIcon
-                        icon={faSearchPlus}
-                    />
-                </StyledZoomBarControlTop>
-                <StyledZoombarCircles
-                    initial='hidden'
-                    animate={isExpanded ? 'visible' : 'hidden'}
-                    variants={listVariants}
-                    transition={{
-                        duration: 0.5,
-                        type: 'tween'
-                    }}
-                >
-                    {Object.values(zoomLevelsLayers).map((layer, index) => {
-                            return <ZoomBarCircle
-                                key={index}
-                                index={index}
-                                layer={layer}
-                                zoomLevel={currentZoomLevel}
-                                setHoveringIndex={setHoveringIndex}
-                            />
-                    })}
-                </StyledZoombarCircles>
-                <StyledZoomBarControlBottom
-                    data-tip data-for='zoomOut'
-                    disabled={currentZoomLevel === 0}
-                    onClick={() => {
-                        store.dispatch(setZoomOut());
-                    }}
-                >
-                    <FontAwesomeIcon
-                        icon={faSearchMinus}
-                    />
-                </StyledZoomBarControlBottom>
+                <StyledZoomBarZoomFeatures>
+                    <StyledZoomBarControlTop
+                        data-tip data-for='zoomIn'
+                        disabled={currentZoomLevel === Object.values(zoomLevelsLayers).length - 1}
+                        onClick={() => {
+                            store.dispatch(setZoomIn());
+                        }}
+                    >
+                        <FontAwesomeIcon
+                            icon={faSearchPlus}
+                        />
+                    </StyledZoomBarControlTop>
+                    <StyledZoombarCircles
+                        initial='hidden'
+                        animate={isExpanded ? 'visible' : 'hidden'}
+                        variants={listVariants}
+                        transition={{
+                            duration: 0.5,
+                            type: 'tween'
+                        }}
+                    >
+                        {Object.values(zoomLevelsLayers).map((layer, index) => {
+                                return <ZoomBarCircle
+                                    key={index}
+                                    index={index}
+                                    layer={layer}
+                                    zoomLevel={currentZoomLevel}
+                                    setHoveringIndex={setHoveringIndex}
+                                />
+                        })}
+                    </StyledZoombarCircles>
+                    <StyledZoomBarControlBottom
+                        data-tip data-for='zoomOut'
+                        disabled={currentZoomLevel === 0}
+                        onClick={() => {
+                            store.dispatch(setZoomOut());
+                        }}
+                    >
+                        <FontAwesomeIcon
+                            icon={faSearchMinus}
+                        />
+                    </StyledZoomBarControlBottom>
+                </StyledZoomBarZoomFeatures>
+
                 <StyledMyLocationButton
                     data-tip data-for='myLoc'
                     onClick={() => {
