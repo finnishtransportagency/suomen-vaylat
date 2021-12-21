@@ -182,7 +182,7 @@ const Search = () => {
     const search = useAppSelector((state) => state.search);
     const {
         isSearchOpen,
-    } =  useAppSelector((state) => state.ui);
+    } = useAppSelector((state) => state.ui);
 
     const vectorLayerId = 'SEARCH_VECTORLAYER';
     const markerId = 'SEARCH_MARKER';
@@ -208,7 +208,7 @@ const Search = () => {
         const vkmSearchErrorHandler = (errors) => {
 
             store.dispatch(setSearching(false));
-            store.dispatch(setSelectError({show: true, message: strings.search.vkm.error.text, errors: errors, type: 'searchWarning', filteredLayers: [], indeterminate: false}));
+            store.dispatch(setSelectError({ show: true, message: strings.search.vkm.error.text, errors: errors, type: 'searchWarning', filteredLayers: [], indeterminate: false }));
         };
 
         if (search.selected === 'vkm') {
@@ -250,140 +250,138 @@ const Search = () => {
         }));
     };
 
-    
-
-return (
-    <StyledSearchContainer
-        isSearchOpen={isSearchOpen}
-    >
-       
-        <StyledSearchWrapper>
-            <StyledSearchContent>
-                <StyledLeftContent>
-                    <StyledLeftContentWrapper>
-                    <StyledSearchMethodSelector
-                        onClick={() => {
-                            setIsSearchMethodSelectorOpen(!isSearchMethodSelectorOpen);
-                        }}
-                        isSearchMethodSelectorOpen={isSearchMethodSelectorOpen}
-                    >
-                        <FontAwesomeIcon
-                            icon={faEllipsisV}
-                            style={{transform: isSearchMethodSelectorOpen && 'rotate(180deg)'}}
-                        />
-                    </StyledSearchMethodSelector>
-                    {
-                        !search.searching ?
-                        <StyledSelectedSearchMethod onClick={() => isSearchMethodSelectorOpen && setIsSearchMethodSelectorOpen(false)}>
-                            {
-                                search.selected === 'vkm' && <p>{strings.search.types.vkm}</p>
-                            }
-                            {
-                                search.selected === 'address' &&
-                                <AddressSearch
-                                    visible={search.selected === 'address'}
-                                    search={search}
-                                    store={store}
-                                    markerId={markerId}
-                                    onEnterHandler={onClickHandler}
-                                />
-                            }
-                        </StyledSelectedSearchMethod> : <SvLoder />
-                    }
-                   </StyledLeftContentWrapper> 
-                    {
-                    search.selected !== 'vkm' &&
-                        <StyledSearchActionButton
-                            onClick={() => {
-                                if(search.searchResult.address.length > 0){
-                                    searchTypeOnChange(search.selected);
-                                } else if(search.formData.address.length > 0 ){
-                                    onClickHandler();
-                                }
-                            }}
-                                icon={search.searchResult.address.length > 0 ? faTrash : faSearch}
-                        />
-                    }
-                </StyledLeftContent>
-
-            </StyledSearchContent>
-            <StyledMenuBarButton
-                onClick={() => {
-                    searchTypeOnChange('address');
-                    store.dispatch(setIsSearchOpen(!isSearchOpen));
-                    setIsSearchMethodSelectorOpen(false);
-                }}
-            >
-                <FontAwesomeIcon
-                    icon={isSearchOpen ? faTimes : faSearch}
-                />
-            </StyledMenuBarButton>
-        </StyledSearchWrapper>
-        <StyledDropdownWrapper
-            
+    return (
+        <StyledSearchContainer
             isSearchOpen={isSearchOpen}
         >
 
-{
-    ((isSearchMethodSelectorOpen) || (
-        !isSearchMethodSelectorOpen &&
-        !search.searching &&
-        search.searching === false && search.searchResult.address.length > 0 &&
-        search.selected === 'address'
-    ) || (
-        !isSearchMethodSelectorOpen &&
-        search.selected === 'vkm'
-    )) &&  <StyledDropdownContent layout>
-    {
-        isSearchMethodSelectorOpen && searchTypes.map(searchType => {
-            return (
-                <StyledDropdownContentItem
+            <StyledSearchWrapper>
+                <StyledSearchContent>
+                    <StyledLeftContent>
+                        <StyledLeftContentWrapper>
+                            <StyledSearchMethodSelector
+                                onClick={() => {
+                                    setIsSearchMethodSelectorOpen(!isSearchMethodSelectorOpen);
+                                }}
+                                isSearchMethodSelectorOpen={isSearchMethodSelectorOpen}
+                            >
+                                <FontAwesomeIcon
+                                    icon={faEllipsisV}
+                                    style={{ transform: isSearchMethodSelectorOpen && 'rotate(180deg)' }}
+                                />
+                            </StyledSearchMethodSelector>
+                            {
+                                !search.searching ?
+                                    <StyledSelectedSearchMethod onClick={() => isSearchMethodSelectorOpen && setIsSearchMethodSelectorOpen(false)}>
+                                        {
+                                            search.selected === 'vkm' && <p>{strings.search.types.vkm}</p>
+                                        }
+                                        {
+                                            search.selected === 'address' &&
+                                            <AddressSearch
+                                                visible={search.selected === 'address'}
+                                                search={search}
+                                                store={store}
+                                                markerId={markerId}
+                                                onEnterHandler={onClickHandler}
+                                            />
+                                        }
+                                    </StyledSelectedSearchMethod> : <SvLoder />
+                            }
+                        </StyledLeftContentWrapper>
+                        {
+                            search.selected !== 'vkm' &&
+                            <StyledSearchActionButton
+                                onClick={() => {
+                                    if (search.searchResult.address.length > 0) {
+                                        searchTypeOnChange(search.selected);
+                                    } else if (search.formData.address.length > 0) {
+                                        onClickHandler();
+                                    }
+                                }}
+                                icon={search.searchResult.address.length > 0 ? faTrash : faSearch}
+                            />
+                        }
+                    </StyledLeftContent>
+
+                </StyledSearchContent>
+                <StyledMenuBarButton
                     onClick={() => {
-                        searchTypeOnChange(searchType.value);
+                        searchTypeOnChange('address');
+                        store.dispatch(setIsSearchOpen(!isSearchOpen));
                         setIsSearchMethodSelectorOpen(false);
                     }}
-                    key={'search-type-' + searchType.value}
                 >
-                   <p>{searchType.label}</p>
-                </StyledDropdownContentItem>
-            );
-        })
-    }
-    {
-        !isSearchMethodSelectorOpen &&
-        !search.searching &&
-        search.searching === false && search.searchResult.address.length > 0 &&
-        search.selected === 'address' &&
-        search.searchResult.address.map(({ name, lon, lat, id }, index) => {
-            return <StyledDropdownContentItem
-                        key={name + '_' + index}
-                        onClick={() => {
-                            searchTypeOnChange('address');
-                            onAddressSelect(name, lon, lat, id);
-                        }}
-                    >
-                        <p>{name}</p>
-             </StyledDropdownContentItem>
-        })
-    }
-    {
-            !isSearchMethodSelectorOpen &&
-            search.selected === 'vkm' &&
-            <VKMSearch
-                visible={search.selected === 'vkm'}
-                search={search}
-                store={store}
-                vectorLayerId={vectorLayerId}
-                onEnterHandler={onClickHandler}
-            />
-    }
-    </StyledDropdownContent>
-}
+                    <FontAwesomeIcon
+                        icon={isSearchOpen ? faTimes : faSearch}
+                    />
+                </StyledMenuBarButton>
+            </StyledSearchWrapper>
+            <StyledDropdownWrapper
 
-           
-        </StyledDropdownWrapper>
-</StyledSearchContainer>
-);
+                isSearchOpen={isSearchOpen}
+            >
+
+                {
+                    ((isSearchMethodSelectorOpen) || (
+                        !isSearchMethodSelectorOpen &&
+                        !search.searching &&
+                        search.searching === false && search.searchResult.address.length > 0 &&
+                        search.selected === 'address'
+                    ) || (
+                            !isSearchMethodSelectorOpen &&
+                            search.selected === 'vkm'
+                        )) && <StyledDropdownContent layout>
+                        {
+                            isSearchMethodSelectorOpen && searchTypes.map(searchType => {
+                                return (
+                                    <StyledDropdownContentItem
+                                        onClick={() => {
+                                            searchTypeOnChange(searchType.value);
+                                            setIsSearchMethodSelectorOpen(false);
+                                        }}
+                                        key={'search-type-' + searchType.value}
+                                    >
+                                        <p>{searchType.label}</p>
+                                    </StyledDropdownContentItem>
+                                );
+                            })
+                        }
+                        {
+                            !isSearchMethodSelectorOpen &&
+                            !search.searching &&
+                            search.searching === false && search.searchResult.address.length > 0 &&
+                            search.selected === 'address' &&
+                            search.searchResult.address.map(({ name, lon, lat, id }, index) => {
+                                return <StyledDropdownContentItem
+                                    key={name + '_' + index}
+                                    onClick={() => {
+                                        searchTypeOnChange('address');
+                                        onAddressSelect(name, lon, lat, id);
+                                    }}
+                                >
+                                    <p>{name}</p>
+                                </StyledDropdownContentItem>
+                            })
+                        }
+                        {
+                            !isSearchMethodSelectorOpen &&
+                            search.selected === 'vkm' &&
+                            <VKMSearch
+                                visible={search.selected === 'vkm'}
+                                search={search}
+                                store={store}
+                                vectorLayerId={vectorLayerId}
+                                onEnterHandler={onClickHandler}
+                            />
+                        }
+                    </StyledDropdownContent>
+                }
+
+
+            </StyledDropdownWrapper>
+        </StyledSearchContainer>
+    );
 
 };
 

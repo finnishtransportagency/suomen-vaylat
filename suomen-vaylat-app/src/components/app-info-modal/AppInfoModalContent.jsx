@@ -93,20 +93,20 @@ const StyledSwiper = styled(Swiper)`
 export const ListComponent = ({listData}) => {
     return (
         <ul>
-            {Object.values(listData).map((item, index) => {
+            {Object.values(listData).map((item) => {
                 return (
-                    <div>
-                        <li>{item.title || item}
+                    <div key={'app-info-list-content-' + item.title || item}>
+                        <li key={'app-info-lc-li-' + item.title || item}>{item.title || item}
                             {item.list &&
-                                <ul>
+                                <ul key={'app-info-lc-ul-' + item.title || item}>
                                     {Object.values(item.list).map((listItem) => {
                                         return (
-                                            <li>{listItem.content}
+                                            <li key={'app-info-lc-ul-li-' + listItem.content}>{listItem.content}
                                                 {listItem.subContent &&
-                                                    <ul>
+                                                    <ul key={'app-info-lc-ul-li-ul-' + listItem.content}>
                                                         {Object.values(listItem.subContent).map((subItem) => {
                                                             return (
-                                                                <li>{subItem}</li>
+                                                                <li key={'app-info-lc-ul-li-ul-li' + subItem}>{subItem}</li>
                                                             )
                                                         })}
                                                     </ul>
@@ -201,7 +201,7 @@ export const AppInfoModalContent = () => {
     useEffect(() => {
         inputEl.current.swiper.slideTo(tabIndex);
     },[tabIndex]);
-    
+
     return (
         <>
             <StyledContent>
@@ -250,7 +250,7 @@ export const AppInfoModalContent = () => {
                             })
                         }
                     </StyledSwiper>
-               
+
             </StyledContent>
         </>
     );

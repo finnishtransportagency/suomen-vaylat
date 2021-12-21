@@ -267,7 +267,7 @@ const ZoomBar = ({
                         />
                     </StyledZoomBarControlBottom>
                 </StyledZoomBarZoomFeatures>
-                
+
                 <StyledMyLocationButton
                     data-tip data-for='myLoc'
                     onClick={() => {

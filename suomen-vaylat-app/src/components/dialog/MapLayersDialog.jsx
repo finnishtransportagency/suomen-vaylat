@@ -274,21 +274,9 @@ const MapLayersDialog = () => {
                     tabIndex={selectedMapLayersMenuTab}
                     className="map-layers-swiper"
                     id={"map-swiper"}
-                    //longSwipesRatio={1}
-                    //shortSwipes={false}
                     speed={300}
-                    //effect={'coverflow'}
-                    // coverflowEffect={{
-                    //     "rotate": 20,
-                    //     "stretch": 0,
-                    //     "depth": 10,
-                    //     "modifier": 1,
-                    //     "slideShadows": false
-                    // }}
                     onSlideChange={e => {
                         store.dispatch(setSelectedMapLayersMenuTab(e.activeIndex));
-                        //setTabIndex(e.activeIndex);
-                        //inputEl.current.swiper.slideTo(e.activeIndex);
                     }}
                     allowTouchMove={false} // Disable swiping
                     ref={inputEl}
