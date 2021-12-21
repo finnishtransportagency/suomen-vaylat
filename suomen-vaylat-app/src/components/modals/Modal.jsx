@@ -38,8 +38,9 @@ const StyledModalWrapper = styled(motion.div)`
 const StyledModal = styled(motion.div)`
     position: relative;
     width: 100%;
+    max-width: ${props => props.maxWidth ? props.maxWidth+"px" : "100vw"};
     height: 100%;
-    max-width: 100vw;
+    max-height: calc(100vh - 100px);
     background-color:  ${props => props.theme.colors.mainWhite};
     border-radius: 4px;
     box-shadow: rgb(0 0 0 / 16%) 0px 3px 6px, rgb(0 0 0 / 23%) 0px 3px 6px;
@@ -48,6 +49,9 @@ const StyledModal = styled(motion.div)`
     flex-direction: column;
     resize: ${props => props.resize && "both"};
     overflow: auto;
+    @media ${props => props.theme.device.mobileL} {
+        max-height: unset;
+    };
 `;
 
 const StyledModalHeader = styled.div`
@@ -129,6 +133,7 @@ const Modal = ({
     closeAction,
     isOpen,
     id,
+    maxWidth,
     children
 }) => {
 
@@ -142,12 +147,12 @@ const Modal = ({
             closeAction(selected, id);
         },[500])
     };
-
+    
     const clonedChildren = cloneElement(children, { handleAnnouncementModal  }); // If announce modal type is passed as prop, add additional "handleAnnouncementModal" function to modal children to handle modal state
 
     return (
         <AnimatePresence>
-            { (isOpen || localState) &&
+            { (isOpen || localState) && 
             <>
                 <StyledModalWrapper
                         key="modal"
@@ -171,6 +176,7 @@ const Modal = ({
                 >
                     <StyledModal
                         resize={resize}
+                        maxWidth={maxWidth}
                     >
                         <StyledModalHeader
                             type={type}
@@ -205,7 +211,7 @@ const Modal = ({
                         </StyledModalContent>
                     </StyledModal>
                 </StyledModalWrapper>
-                { backdrop &&
+                { backdrop && 
                     <StyledModalBackdrop
                         backdrop={backdrop}
                         initial={{ opacity: 0 }}

@@ -14,8 +14,12 @@ import ThemeMapsActionButton from '../action-button/ThemeMapsActionButton';
 import { ShareWebSitePopup } from '../share-web-site/ShareWebSitePopup';
 import ZoomMenu from '../zoom-features/ZoomMenu';
 import strings from '../../translations';
-import { setSelectError } from '../../state/slices/rpcSlice';
+import { 
+    setSelectError,
+    clearLayerMetadata
+} from '../../state/slices/rpcSlice';
 import {
+    setModalConstrainsRef,
     setShareUrl,
     setIsInfoOpen,
     setIsUserGuideOpen,
@@ -44,7 +48,7 @@ const StyledContent = styled.div`
     justify-content: center;
     align-items: center;
     @media ${props => props.theme.device.desktop} {
-        //height: calc(var(--app-height) - 56px);
+
     };
 `;
 
@@ -87,20 +91,21 @@ const Content = () => {
     const isShareOpen = shareUrl && shareUrl.length > 0 ? true : false;
 
     const announcements = useAppSelector((state) => state.rpc.activeAnnouncements);
+    const metadata = useAppSelector((state) => state.rpc.layerMetadata);
 
     const ANNOUNCEMENTS_LOCALSTORAGE = "oskari-announcements";
 
     const addToLocalStorageArray = (name, value) => {
         // Get the existing data
         let existing = localStorage.getItem(name);
-
+    
         // If no existing data, create an array
         // Otherwise, convert the localStorage string to an array
         existing = existing ? existing.split(',') : [];
-
+    
         // Add new data to localStorage Array
         existing.push(value);
-
+    
         // Save back to localStorage
         localStorage.setItem(name, existing.toString());
     };
@@ -133,6 +138,10 @@ const Content = () => {
     const handleCloseUserGuide = () => {
         store.dispatch(setIsUserGuideOpen(false));
     };
+
+    const handleCloseMetadataModal = () => {
+            store.dispatch(clearLayerMetadata());
+    }
 
     return (
         <>
@@ -196,7 +205,22 @@ const Content = () => {
             >
                 <AppInfoModalContent />
             </Modal>
-            <MetadataModal />
+            <Modal
+                constraintsRef={constraintsRef} /* Reference div for modal drag boundaries */
+                drag={false} /* Enable (true) or disable (false) drag */
+                resize={false}
+                backdrop={true} /* Is backdrop enabled (true) or disabled (false) */
+                fullScreenOnMobile={true} /* Scale modal full width / height when using mobile device */
+                titleIcon={faInfoCircle} /* Use icon on title or null */
+                title={strings.formatString(strings.metadata.title, metadata.layer ? metadata.layer.name : '')} /* Modal header title */
+                type={"normal"} /* Type "normal" or "warning" */
+                closeAction={handleCloseMetadataModal} /* Action when pressing modal close button or backdrop */
+                isOpen={metadata.data !== null} /* Modal state */
+                id={null}
+                maxWidth={800}
+            >
+                <MetadataModal metadata={metadata}/>
+            </Modal>
             <Modal
                 constraintsRef={constraintsRef} /* Reference div for modal drag boundaries */
                 drag={false} /* Enable (true) or disable (false) drag */
