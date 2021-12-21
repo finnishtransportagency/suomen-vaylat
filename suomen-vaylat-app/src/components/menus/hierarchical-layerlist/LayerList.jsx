@@ -57,6 +57,9 @@ const StyledMasterGroupHeader = styled.div`
     border-radius: 4px;
     padding-top: 8px;
     padding-bottom: 8px;
+    @-moz-document url-prefix() {
+        position: initial;
+    };
 `;
 
 const StyledMasterGroupName = styled.p`
