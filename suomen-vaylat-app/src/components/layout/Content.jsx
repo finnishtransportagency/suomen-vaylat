@@ -14,12 +14,11 @@ import ThemeMapsActionButton from '../action-button/ThemeMapsActionButton';
 import { ShareWebSitePopup } from '../share-web-site/ShareWebSitePopup';
 import ZoomMenu from '../zoom-features/ZoomMenu';
 import strings from '../../translations';
-import { 
+import {
     setSelectError,
     clearLayerMetadata
 } from '../../state/slices/rpcSlice';
 import {
-    setModalConstrainsRef,
     setShareUrl,
     setIsInfoOpen,
     setIsUserGuideOpen,
@@ -84,7 +83,7 @@ const Content = () => {
         shareUrl,
         isInfoOpen,
         isUserGuideOpen
-    } =  useAppSelector((state) => state.ui);
+    } = useAppSelector((state) => state.ui);
 
     const search = useAppSelector((state) => state.search)
     const { store } = useContext(ReactReduxContext);
@@ -98,14 +97,14 @@ const Content = () => {
     const addToLocalStorageArray = (name, value) => {
         // Get the existing data
         let existing = localStorage.getItem(name);
-    
+
         // If no existing data, create an array
         // Otherwise, convert the localStorage string to an array
         existing = existing ? existing.split(',') : [];
-    
+
         // Add new data to localStorage Array
         existing.push(value);
-    
+
         // Save back to localStorage
         localStorage.setItem(name, existing.toString());
     };
@@ -114,7 +113,7 @@ const Content = () => {
 
     useEffect(() => {
         announcements && setCurrentAnnouncement(0);
-    },[announcements]);
+    }, [announcements]);
 
     function closeAnnouncement(selected, id) {
         if (selected) {
@@ -124,7 +123,7 @@ const Content = () => {
     };
 
     const hideWarn = () => {
-        store.dispatch(setSelectError({show: false, type: '', filteredLayers: [], indeterminate: false}));
+        store.dispatch(setSelectError({ show: false, type: '', filteredLayers: [], indeterminate: false }));
     };
 
     function handleCloseAppInfoModal() {
@@ -140,155 +139,155 @@ const Content = () => {
     };
 
     const handleCloseMetadataModal = () => {
-            store.dispatch(clearLayerMetadata());
+        store.dispatch(clearLayerMetadata());
     }
 
     return (
         <>
-        <StyledContent
-            ref={constraintsRef}
-        >
-            <PublishedMap />
-            {
-                currentAnnouncement !== null && announcements[currentAnnouncement] && (
-                    <Modal
-                        key={'announcement-modal-'+announcements[currentAnnouncement].id}
-                        constraintsRef={constraintsRef} /* Reference div for modal drag boundaries */
-                        drag={false} /* Enable (true) or disable (false) drag */
-                        resize={false}
-                        backdrop={true} /* Is backdrop enabled (true) or disabled (false) */
-                        fullScreenOnMobile={false} /* Scale modal full width / height when using mobile device */
-                        titleIcon={faBullhorn} /* Use icon on title or null */
-                        title={announcements[currentAnnouncement].title} /* Modal header title */
-                        type={"announcement"} /* Type "normal" or "warning" */
-                        closeAction={closeAnnouncement} /* Action when pressing modal close button or backdrop */
-                        isOpen={null} /* Modal state */
-                        id={announcements[currentAnnouncement].id}
-                >
-                        <AnnouncementsModal
+            <StyledContent
+                ref={constraintsRef}
+            >
+                <PublishedMap />
+                {
+                    currentAnnouncement !== null && announcements[currentAnnouncement] && (
+                        <Modal
+                            key={'announcement-modal-' + announcements[currentAnnouncement].id}
+                            constraintsRef={constraintsRef} /* Reference div for modal drag boundaries */
+                            drag={false} /* Enable (true) or disable (false) drag */
+                            resize={false}
+                            backdrop={true} /* Is backdrop enabled (true) or disabled (false) */
+                            fullScreenOnMobile={false} /* Scale modal full width / height when using mobile device */
+                            titleIcon={faBullhorn} /* Use icon on title or null */
+                            title={announcements[currentAnnouncement].title} /* Modal header title */
+                            type={"announcement"} /* Type "normal" or "warning" */
+                            closeAction={closeAnnouncement} /* Action when pressing modal close button or backdrop */
+                            isOpen={null} /* Modal state */
                             id={announcements[currentAnnouncement].id}
-                            title={announcements[currentAnnouncement].title}
-                            content={announcements[currentAnnouncement].content}
-                            key={'announcement_modal_'+announcements[currentAnnouncement].id}
-                        />
-                    </Modal>
-                )
-            }
+                        >
+                            <AnnouncementsModal
+                                id={announcements[currentAnnouncement].id}
+                                title={announcements[currentAnnouncement].title}
+                                content={announcements[currentAnnouncement].content}
+                                key={'announcement_modal_' + announcements[currentAnnouncement].id}
+                            />
+                        </Modal>
+                    )
+                }
 
-            <Modal
-                constraintsRef={constraintsRef} /* Reference div for modal drag boundaries */
-                drag={false} /* Enable (true) or disable (false) drag */
-                resize={false}
-                backdrop={true} /* Is backdrop enabled (true) or disabled (false) */
-                fullScreenOnMobile={true} /* Scale modal full width / height when using mobile device */
-                titleIcon={faQuestion} /* Use icon on title or null */
-                title={strings.appGuide.title} /* Modal header title */
-                type={"normal"} /* Type "normal" or "warning" */
-                closeAction={handleCloseUserGuide} /* Action when pressing modal close button or backdrop */
-                isOpen={isUserGuideOpen} /* Modal state */
-                id={null}
-            >
-                <UserGuideModalContent />
-            </Modal>
-            <Modal
-                constraintsRef={constraintsRef} /* Reference div for modal drag boundaries */
-                drag={false} /* Enable (true) or disable (false) drag */
-                resize={false}
-                backdrop={true} /* Is backdrop enabled (true) or disabled (false) */
-                fullScreenOnMobile={true} /* Scale modal full width / height when using mobile device */
-                titleIcon={faInfoCircle} /* Use icon on title or null */
-                title={strings.appInfo.title} /* Modal header title */
-                type={"normal"} /* Type "normal" or "warning" */
-                closeAction={handleCloseAppInfoModal} /* Action when pressing modal close button or backdrop */
-                isOpen={isInfoOpen} /* Modal state */
-                id={null}
-            >
-                <AppInfoModalContent />
-            </Modal>
-            <Modal
-                constraintsRef={constraintsRef} /* Reference div for modal drag boundaries */
-                drag={false} /* Enable (true) or disable (false) drag */
-                resize={false}
-                backdrop={true} /* Is backdrop enabled (true) or disabled (false) */
-                fullScreenOnMobile={true} /* Scale modal full width / height when using mobile device */
-                titleIcon={faInfoCircle} /* Use icon on title or null */
-                title={strings.formatString(strings.metadata.title, metadata.layer ? metadata.layer.name : '')} /* Modal header title */
-                type={"normal"} /* Type "normal" or "warning" */
-                closeAction={handleCloseMetadataModal} /* Action when pressing modal close button or backdrop */
-                isOpen={metadata.data !== null} /* Modal state */
-                id={null}
-                maxWidth={800}
-            >
-                <MetadataModal metadata={metadata}/>
-            </Modal>
-            <Modal
-                constraintsRef={constraintsRef} /* Reference div for modal drag boundaries */
-                drag={false} /* Enable (true) or disable (false) drag */
-                resize={false}
-                backdrop={true} /* Is backdrop enabled (true) or disabled (false) */
-                fullScreenOnMobile={false} /* Scale modal full width / height when using mobile device */
-                titleIcon={faShareAlt} /* Use icon on title or null */
-                title={strings.share.title} /* Modal header title */
-                type={"normal"} /* Type "normal" or "warning" */
-                closeAction={handleCloseShareWebSite} /* Action when pressing modal close button or backdrop */
-                isOpen={isShareOpen} /* Modal state */
-                id={null}
-            >
-                <ShareWebSitePopup />
-            </Modal>
-            <Modal
-                constraintsRef={constraintsRef} /* Reference div for modal drag boundaries */
-                drag={false} /* Enable (true) or disable (false) drag */
-                resize={false}
-                backdrop={true} /* Is backdrop enabled (true) or disabled (false) */
-                fullScreenOnMobile={false} /* Scale modal full width / height when using mobile device */
-                titleIcon={faExclamationCircle} /* Use icon on title or null */
-                title={strings.general.warning} /* Modal header title */
-                type={"warning"} /* Type "normal" or "warning" */
-                warningType={warnings.type}
-                closeAction={hideWarn} /* Action when pressing modal close button or backdrop */
-                isOpen={warnings.show && warnings.type === 'multipleLayersWarning'} /* Modal state */
-                id={null}
-            >
-                <WarningDialog
-                    hideWarn={hideWarn}
-                    message={strings.multipleLayersWarning}
-                    filteredLayers={warnings.filteredLayers}
+                <Modal
+                    constraintsRef={constraintsRef} /* Reference div for modal drag boundaries */
+                    drag={false} /* Enable (true) or disable (false) drag */
+                    resize={false}
+                    backdrop={true} /* Is backdrop enabled (true) or disabled (false) */
+                    fullScreenOnMobile={true} /* Scale modal full width / height when using mobile device */
+                    titleIcon={faQuestion} /* Use icon on title or null */
+                    title={strings.appGuide.title} /* Modal header title */
+                    type={"normal"} /* Type "normal" or "warning" */
+                    closeAction={handleCloseUserGuide} /* Action when pressing modal close button or backdrop */
+                    isOpen={isUserGuideOpen} /* Modal state */
+                    id={null}
+                >
+                    <UserGuideModalContent />
+                </Modal>
+                <Modal
+                    constraintsRef={constraintsRef} /* Reference div for modal drag boundaries */
+                    drag={false} /* Enable (true) or disable (false) drag */
+                    resize={false}
+                    backdrop={true} /* Is backdrop enabled (true) or disabled (false) */
+                    fullScreenOnMobile={true} /* Scale modal full width / height when using mobile device */
+                    titleIcon={faInfoCircle} /* Use icon on title or null */
+                    title={strings.appInfo.title} /* Modal header title */
+                    type={"normal"} /* Type "normal" or "warning" */
+                    closeAction={handleCloseAppInfoModal} /* Action when pressing modal close button or backdrop */
+                    isOpen={isInfoOpen} /* Modal state */
+                    id={null}
+                >
+                    <AppInfoModalContent />
+                </Modal>
+                <Modal
+                    constraintsRef={constraintsRef} /* Reference div for modal drag boundaries */
+                    drag={false} /* Enable (true) or disable (false) drag */
+                    resize={false}
+                    backdrop={true} /* Is backdrop enabled (true) or disabled (false) */
+                    fullScreenOnMobile={true} /* Scale modal full width / height when using mobile device */
+                    titleIcon={faInfoCircle} /* Use icon on title or null */
+                    title={strings.formatString(strings.metadata.title, metadata.layer ? metadata.layer.name : '')} /* Modal header title */
+                    type={"normal"} /* Type "normal" or "warning" */
+                    closeAction={handleCloseMetadataModal} /* Action when pressing modal close button or backdrop */
+                    isOpen={metadata.data !== null} /* Modal state */
+                    id={null}
+                    maxWidth={800}
+                >
+                    <MetadataModal metadata={metadata} />
+                </Modal>
+                <Modal
+                    constraintsRef={constraintsRef} /* Reference div for modal drag boundaries */
+                    drag={false} /* Enable (true) or disable (false) drag */
+                    resize={false}
+                    backdrop={true} /* Is backdrop enabled (true) or disabled (false) */
+                    fullScreenOnMobile={false} /* Scale modal full width / height when using mobile device */
+                    titleIcon={faShareAlt} /* Use icon on title or null */
+                    title={strings.share.title} /* Modal header title */
+                    type={"normal"} /* Type "normal" or "warning" */
+                    closeAction={handleCloseShareWebSite} /* Action when pressing modal close button or backdrop */
+                    isOpen={isShareOpen} /* Modal state */
+                    id={null}
+                >
+                    <ShareWebSitePopup />
+                </Modal>
+                <Modal
+                    constraintsRef={constraintsRef} /* Reference div for modal drag boundaries */
+                    drag={false} /* Enable (true) or disable (false) drag */
+                    resize={false}
+                    backdrop={true} /* Is backdrop enabled (true) or disabled (false) */
+                    fullScreenOnMobile={false} /* Scale modal full width / height when using mobile device */
+                    titleIcon={faExclamationCircle} /* Use icon on title or null */
+                    title={strings.general.warning} /* Modal header title */
+                    type={"warning"} /* Type "normal" or "warning" */
                     warningType={warnings.type}
-                />
-            </Modal>
-            <Modal
-                constraintsRef={constraintsRef} /* Reference div for modal drag boundaries */
-                drag={false} /* Enable (true) or disable (false) drag */
-                resize={false}
-                backdrop={true} /* Is backdrop enabled (true) or disabled (false) */
-                fullScreenOnMobile={false} /* Scale modal full width / height when using mobile device */
-                titleIcon={faExclamationCircle} /* Use icon on title or null */
-                title={search.selected === 'vkm' ? strings.search.vkm.error.title : strings.search.address.error.title} /* Modal header title */
-                type={"warning"} /* Type "normal" or "warning" */
-                warningType={warnings.type}
-                closeAction={hideWarn} /* Action when pressing modal close button or backdrop */
-                isOpen={warnings.show && warnings.type === 'searchWarning'} /* Modal state */
-                id={null}
-            >
-                <WarningDialog
-                    hideWarn={hideWarn}
-                    message={warnings.message}
-                    errors={warnings.errors}
-                    filteredLayers={[]}
+                    closeAction={hideWarn} /* Action when pressing modal close button or backdrop */
+                    isOpen={warnings.show && warnings.type === 'multipleLayersWarning'} /* Modal state */
+                    id={null}
+                >
+                    <WarningDialog
+                        hideWarn={hideWarn}
+                        message={strings.multipleLayersWarning}
+                        filteredLayers={warnings.filteredLayers}
+                        warningType={warnings.type}
+                    />
+                </Modal>
+                <Modal
+                    constraintsRef={constraintsRef} /* Reference div for modal drag boundaries */
+                    drag={false} /* Enable (true) or disable (false) drag */
+                    resize={false}
+                    backdrop={true} /* Is backdrop enabled (true) or disabled (false) */
+                    fullScreenOnMobile={false} /* Scale modal full width / height when using mobile device */
+                    titleIcon={faExclamationCircle} /* Use icon on title or null */
+                    title={search.selected === 'vkm' ? strings.search.vkm.error.title : strings.search.address.error.title} /* Modal header title */
+                    type={"warning"} /* Type "normal" or "warning" */
                     warningType={warnings.type}
-                />
-            </Modal>
-            <StyledContentGrid>
-                <MenuBar />
-                <MapLayersDialog />
-                <Search />
-                <ZoomMenu />
-                <ThemeMapsActionButton />
-            </StyledContentGrid>
-        </StyledContent>
+                    closeAction={hideWarn} /* Action when pressing modal close button or backdrop */
+                    isOpen={warnings.show && warnings.type === 'searchWarning'} /* Modal state */
+                    id={null}
+                >
+                    <WarningDialog
+                        hideWarn={hideWarn}
+                        message={warnings.message}
+                        errors={warnings.errors}
+                        filteredLayers={[]}
+                        warningType={warnings.type}
+                    />
+                </Modal>
+                <StyledContentGrid>
+                    <MenuBar />
+                    <MapLayersDialog />
+                    <Search />
+                    <ZoomMenu />
+                    <ThemeMapsActionButton />
+                </StyledContentGrid>
+            </StyledContent>
         </>
     );
- }
+}
 
- export default Content;
+export default Content;
