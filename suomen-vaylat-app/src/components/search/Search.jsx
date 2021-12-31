@@ -169,16 +169,22 @@ const StyledDropdownContent = styled(motion.div)`
 const StyledDropdownContentItem = styled.div`
     user-select: none;
     cursor: pointer;
-    padding-top: 8px;
+    padding: 8px;
+    border-radius: 5px;
+    background-color: ${props => props.itemSelected ? props.theme.colors.mainColor3 : ""};
+    &:hover{
+        background-color: ${props => props.theme.colors.mainColor3};
+    };
     p {
         margin: 0;
         padding: 0;
-        font-size: 12px;
+        font-size: 15px;
     }
 `;
 
 const Search = () => {
     const [isSearchMethodSelectorOpen, setIsSearchMethodSelectorOpen] = useState(false);
+    const [searchResultSelectedIndex, setSearchResultSelectedIndex] = useState(-1);
     const search = useAppSelector((state) => state.search);
     const {
         isSearchOpen,
@@ -262,6 +268,10 @@ const Search = () => {
 
         store.dispatch(setSearchResultOnMapId(search.marker.x + '_' + search.marker.y + '_' + (search.marker.msg || '') + '_' + markerId));
     };
+
+    const setItemSelected = (index) => {
+        setSearchResultSelectedIndex(index)
+    }
 
     const onAddressSelect = (name, lon, lat, id) => {
         store.dispatch(setSelectedIndex(id));
@@ -377,9 +387,11 @@ const Search = () => {
                                     __html: visibleText
                                 };
                                 return <StyledDropdownContentItem
+                                    itemSelected={searchResultSelectedIndex == index}
                                     key={name + '_' + index}
                                     onClick={() => {
-                                        searchTypeOnChange('address');
+                                        // searchTypeOnChange('address');
+                                        setItemSelected(index);
                                         onAddressSelect(name, lon, lat, id);
                                     }}
                                 >
