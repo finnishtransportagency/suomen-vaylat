@@ -20,7 +20,7 @@ const StyledModalBackdrop = styled(motion.div)`
 `;
 
 const StyledModalWrapper = styled(motion.div)`
-    z-index: ${props => props.resize ? 4 : 9999};
+    z-index: ${props => props.resize ? 4 : 9993};
     position: fixed;
     top: ${props => props.resize && "0px"};
     left: ${props => props.resize && "0px"};
