@@ -20,13 +20,11 @@ import {
     setZoomRange,
     setGFILocations,
     setGFIPoint,
-    setStartState
+    setStartState,
+    resetGFILocations
 } from '../../state/slices/rpcSlice';
 import { updateLayers } from '../../utils/rpcUtil';
-
 import SvLoder from '../../components/loader/SvLoader';
-
-import { GFIPopup } from '../infobox/GFIPopup';
 import './PublishedMap.scss';
 
 const StyledPublishedMap = styled.div`
@@ -45,11 +43,10 @@ const StyledIframe = styled.iframe`
 
 const ANNOUNCEMENTS_LOCALSTORAGE = 'oskari-announcements';
 
-
 const PublishedMap = () => {
 
     const { store } = useContext(ReactReduxContext);
-    let { loading, gfiLocations } = useAppSelector((state) => state.rpc);
+    const { loading } = useAppSelector((state) => state.rpc);
     const language = useAppSelector((state) => state.language);
     const lang = language.current;
 
@@ -152,15 +149,18 @@ const PublishedMap = () => {
 
                 if (data.MapClickedEvent) {
                     channel.handleEvent('MapClickedEvent', (data) => {
+                        store.dispatch(resetGFILocations([]));
+                        channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', []);
                         store.dispatch(setGFIPoint(data));
                     });
                 };
 
                 if (data.DataForMapLocationEvent) {
                     channel.handleEvent('DataForMapLocationEvent', (data) => {
+                        channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', []);
                         store.dispatch(setGFILocations(data));
                     });
-                }
+                };
 
                 if (data.MarkerClickEvent) {
                     channel.handleEvent('MarkerClickEvent', event => {
@@ -266,9 +266,6 @@ const PublishedMap = () => {
         <StyledPublishedMap>
             {loading ? (
                 <SvLoder />
-            ) : null}
-            {gfiLocations.length > 0 ? (
-                <GFIPopup gfiLocations={gfiLocations}/>
             ) : null}
             <StyledIframe id='sv-iframe' title='iframe' src={process.env.REACT_APP_PUBLISHED_MAP_URL + '&lang=' + lang}
                 allow='geolocation' onLoad={() => hideSpinner()}>
