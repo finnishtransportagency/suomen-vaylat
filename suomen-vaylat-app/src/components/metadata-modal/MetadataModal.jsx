@@ -30,28 +30,11 @@ import UseLimitations from './Components/UseLimitations';
 import QualityTabDataQualities from './Components/QualityTabDataQualities';
 
 
-// const StyledContent = styled.div`
-//     padding: 16px;
-//     height: 100%;
-//     width: 100%;
-//     overflow: auto;
-//     //overflow-y: auto;
-//     //max-height: calc(100% - 50px);
-//     @media (max-width: 460px) {
-//      // max-height: calc(100% - 50px);
-//     };
-// `;
-
 const StyledContent = styled.div`
-    //min-width: 600px;
-    //max-width: 600px;
-    //width: 100%;
-    //max-height: 1000px;
     height: 100%;
     padding: 16px;
     overflow: auto;
     @media ${props => props.theme.device.mobileL} {
-       // min-width: initial;
     };
 `;
 
