@@ -6,7 +6,8 @@ import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const StyledModalBackdrop = styled(motion.div)`
-    z-index: ${props => props.resize ? 2 : 9998};
+    //z-index: ${props => props.resize ? 1 : 9998};
+    z-index: 10;
     position: fixed;
     top: 0px;
     right: 0px;
