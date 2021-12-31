@@ -41,7 +41,13 @@ const initialState = {
       x: 0,
       y: 0
   },
-  gfiPoint: null
+  gfiPoint: null,
+  startState: {
+      x: null,
+      y: null,
+      selectedLayers: [],
+      zoom: null
+  }
 };
 
 export const rpcSlice = createSlice({
@@ -217,7 +223,7 @@ export const rpcSlice = createSlice({
         LOG.log('removeMarkerRequest ', action.payload);
     },
     mapMoveRequest: (state, action) => {
-        state.channel !== null && state.channel.postRequest('MapMoveRequest', [action.payload.x, action.payload.y, action.payload.zoom || 10]);
+        state.channel !== null && state.channel.postRequest('MapMoveRequest', [action.payload.x, action.payload.y, typeof action.payload.zoom === 'number' ? action.payload.zoom : 10]);
         LOG.log('mapMoveRequest ', action.payload);
     },
     getLayerMetadata: (state, action) => {
@@ -295,6 +301,20 @@ export const rpcSlice = createSlice({
                 state.channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [l.id, false]);
             }
         });
+    },
+    setStartState: (state, action) => {
+        if (typeof action.payload.x === 'number') {
+            state.startState.x = action.payload.x;
+        }
+        if (typeof action.payload.y === 'number') {
+            state.startState.y = action.payload.y;
+        }
+        if (action.payload.selectedLayers) {
+            state.startState.selectedLayers = action.payload.selectedLayers;
+        }
+        if (typeof action.payload.zoom === 'number') {
+            state.startState.zoom = action.payload.zoom;
+        }
     }
   }
 });
@@ -344,7 +364,8 @@ export const {
     setGFILocations,
     resetGFILocations,
     setGFIPoint,
-    removeAllSelectedLayers
+    removeAllSelectedLayers,
+    setStartState
 } = rpcSlice.actions;
 
 export default rpcSlice.reducer;

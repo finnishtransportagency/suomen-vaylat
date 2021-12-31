@@ -8,8 +8,8 @@ import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAppSelector } from '../../state/hooks';
 import { setIsInfoOpen, setIsMainScreen, setIsUserGuideOpen } from '../../state/slices/uiSlice';
-import { mapMoveRequest, setZoomTo } from '../../state/slices/rpcSlice';
-import { resetThemeGroupsForMainScreen, removeDuplicates } from '../../utils/rpcUtil';
+import { mapMoveRequest } from '../../state/slices/rpcSlice';
+import { resetThemeGroupsForMainScreen } from '../../utils/rpcUtil';
 import strings from '../../translations';
 import LanguageSelector from '../language-selector/LanguageSelector';
 import { WebSiteShareButton } from '../share-web-site/ShareLinkButtons';
@@ -151,10 +151,10 @@ export const Header = () => {
 
     const {
         channel,
-        allLayers,
         selectedLayers,
         lastSelectedTheme,
-        selectedThemeIndex
+        selectedThemeIndex,
+        startState
     } = useAppSelector((state) => state.rpc);
 
     const handleSelectGroup = (index, theme) => {
@@ -162,33 +162,26 @@ export const Header = () => {
     };
 
     const setToMainScreen = () => {
+        // remove all selected layers
+        selectedLayers.forEach((layer) => {
+            channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, false]);
+        });
+
+        // set map center
         store.dispatch(mapMoveRequest({
-            x: 435211,
-            y: 7109206
+            x: startState.x,
+            y: startState.y,
+            zoom: startState.zoom
         }));
+
+        // add start layers
+        startState.selectedLayers.forEach((layerId) => {
+            channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layerId, true]);
+        });
+
         store.dispatch(setIsMainScreen());
         handleSelectGroup(null, lastSelectedTheme);
-        const visibleMapLayerIds = [793,1354, 1388, 1387]
-        const filteredLayers = [];
-        if (allLayers) {
-            visibleMapLayerIds.forEach((id) => {
-                allLayers.forEach((layer) => {
-                    if(id === layer.id) {
-                        filteredLayers.push(layer)
-                    }
-                })
-            })
-        };
-        const combinedLayers = filteredLayers.concat(selectedLayers)
-        const uniqueArray = removeDuplicates(combinedLayers, 'id');
-        uniqueArray.forEach(layer => {
-            if(visibleMapLayerIds.includes(layer.id)) {
-                channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, true]);
-            } else {
-                channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, false]);
-            }
-        })
-        store.dispatch(setZoomTo(0))
+
         updateLayers(store, channel)
     };
 

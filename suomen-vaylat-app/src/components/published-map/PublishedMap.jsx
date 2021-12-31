@@ -19,18 +19,15 @@ import {
     setZoomLevelsLayers,
     setZoomRange,
     setGFILocations,
-    resetGFILocations,
-    setGFIPoint
+    setGFIPoint,
+    setStartState,
+    resetGFILocations
 } from '../../state/slices/rpcSlice';
 import { updateLayers } from '../../utils/rpcUtil';
-
 import SvLoder from '../../components/loader/SvLoader';
-
-import { GFIPopup } from '../infobox/GFIPopup';
 import './PublishedMap.scss';
 
 const StyledPublishedMap = styled.div`
-    //z-index: 1;
     position: absolute;
     top: 0px;
     left: 0px;
@@ -46,11 +43,10 @@ const StyledIframe = styled.iframe`
 
 const ANNOUNCEMENTS_LOCALSTORAGE = 'oskari-announcements';
 
-
 const PublishedMap = () => {
 
     const { store } = useContext(ReactReduxContext);
-    let { loading, gfiLocations } = useAppSelector((state) => state.rpc);
+    const { loading } = useAppSelector((state) => state.rpc);
     const language = useAppSelector((state) => state.language);
     const lang = language.current;
 
@@ -161,8 +157,6 @@ const PublishedMap = () => {
 
                 if (data.DataForMapLocationEvent) {
                     channel.handleEvent('DataForMapLocationEvent', (data) => {
-                        console.log(data);
-                        console.log(gfiLocations);
                         channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', []);
                         store.dispatch(setGFILocations(data));
                     });
@@ -226,8 +220,37 @@ const PublishedMap = () => {
                 };
             });
 
-            channel.getSupportedRequests(function (data) {
+            // save start state
+            channel.getCurrentState(data => {
+                channel.getSelectedLayers(layers => {
+                    if (data.mapfull && data.mapfull.state) {
+                        const mapfullState = data.mapfull.state;
+                        const selectedLayers = [];
+                        const visibleLayers = [];
 
+                        layers.forEach(layer => {
+                            visibleLayers.push(layer.id);
+                        });
+
+                        // check layer orders
+                        const layerOrders = mapfullState.selectedLayers.filter(layer => {
+                            return visibleLayers.includes(layer.id);
+                        });
+
+                        layerOrders.forEach(layer => {
+                            selectedLayers.push(layer.id);
+                        });
+
+                        const startState = {
+                            x: mapfullState.east,
+                            y: mapfullState.north,
+                            selectedLayers: selectedLayers,
+                            zoom: mapfullState.zoom
+                        }
+
+                        store.dispatch(setStartState(startState));
+                    }
+                });
             });
         });
 

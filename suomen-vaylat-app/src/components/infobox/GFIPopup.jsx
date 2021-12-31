@@ -1,12 +1,11 @@
 import { useContext, useState, useEffect } from 'react';
-import { faTimes, faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ReactReduxContext } from 'react-redux';
 import styled from 'styled-components';
 import { useAppSelector } from '../../state/hooks';
 import { resetGFILocations } from '../../state/slices/rpcSlice';
 import { FormattedGFI } from './FormattedGFI';
-import { isMobile } from '../../theme/theme';
 
 const StyledTabs = styled.div`
     min-height: 48px;
@@ -100,11 +99,8 @@ export const GFIPopup = () => {
     const [tabsContent, setTabsContent] = useState([]);
     const [geoJsonToShow, setGeoJsonToShow] = useState(null);
 
-    console.log(selectedTab);
-    console.log(tabsContent);
-
     useEffect(() => {
-        const mapResults = gfiLocations.map((location, index) => {
+        const mapResults = gfiLocations.map((location) => {
             const layerIds = allLayers.filter(layer => layer.id === location.layerId)[0].id;
             let content;
             if (location.type === 'text') {
@@ -120,7 +116,8 @@ export const GFIPopup = () => {
                     data={location.content}
                     type="geoJson"
                 />;
-            };
+            }
+            return null;
         });
 
         setTabsContent(mapResults);
@@ -166,7 +163,7 @@ export const GFIPopup = () => {
         store.dispatch(resetGFILocations(filteredLocations));
         channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', []);
     };
-    
+
     return (
         <>
             <StyledTabs>

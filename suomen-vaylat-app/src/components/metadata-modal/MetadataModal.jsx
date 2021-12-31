@@ -1,5 +1,4 @@
-import { useContext, useState } from 'react';
-import { ReactReduxContext } from 'react-redux';
+import { useState } from 'react';
 import styled from 'styled-components';
 import { useAppSelector } from '../../state/hooks';
 import strings from '../../translations';
