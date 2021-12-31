@@ -14,7 +14,12 @@ const listVariants = {
         opacity: 0,
         height: 0,
     },
-  };
+};
+
+const StyledGFITablesContainer  = styled.div`
+    border-bottom: ${props => !props.isFeatureOpen && "1px solid #ddd"};
+    padding: 8px;
+`;
 
 const StyledInfoHeader = styled.div`
     color: ${props => props.theme.colors.mainColor1};
@@ -24,34 +29,49 @@ const StyledInfoHeaderDiv = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin: .5rem 0 .5rem 0;
+    margin: 8px;
     font-weight: bold;
+    cursor: pointer;
     svg {
         color: ${props => props.theme.colors.mainColor1};
         font-size: 19px;
         transition: all 0.3s ease-out;
     };
+    &:hover {
+        ${StyledInfoHeader}{
+            color: ${props => props.theme.colors.mainColor2};
+        };
+        svg {
+            color: ${props => props.theme.colors.mainColor2};
+        };
+    }
 `;
 
 const StyledLowPriorityDiv = styled.div`
     display: flex;
     flex-direction: column;
-    margin-left: 1rem;
+    //margin-left: 1rem;
 `;
 
 const StyledHighPriorityDiv = styled.div`
     margin-left: 1rem;
+    tbody {
+        overflow: auto;
+    }
 `;
 
 const StyledLowPriorityTable = styled(motion.div)`
-    overflow: hidden;
+    overflow: scroll;
+    &::-webkit-scrollbar {
+        display: none;
+    };
+    tbody {
+        overflow: auto;
+    }
 `;
 
 const StyledFeature = styled(motion.div)`
     overflow: hidden;
-`;
-
-const StyledGFITablesContainer  = styled.div`
 `;
 
 const reOrderFeatureProperties = (geoJSON = {}, visibleFields = [], highPriority=[]) => {
@@ -105,33 +125,44 @@ export const FormattedGFI = ({ data }) => {
                 getContent(key, f.properties[key], visibleFields, highPriority, lowPriorityTable, highPriorityTable);
             }
         });
-        pretty.push(<GFITables key={index} index={index} lowPriorityTable={lowPriorityTable} highPriorityTable={highPriorityTable} />);
+        pretty.push(
+            <GFITables
+                key={index}
+                index={index}
+                lowPriorityTable={lowPriorityTable}
+                highPriorityTable={highPriorityTable}
+                geoJSON={geoJSON}
+            />
+        );
     });
 
     return (
-            <>
-                <div className='popupContent'>
-                    <div className='contentWrapper-infobox'>
-                        {pretty.map((table, index) => {
-                            return (
-                                <div key={'gfi-popup-wrapper-' + index}>
-                                    {table}
-                                </div>
-                            )
-                        })}
-                    </div>
-                </div>
-            </>
+            <div className="test">
+                {pretty.map((table, index) => {
+                    return (
+                        <div key={'gfi-popup-wrapper-' + index}>
+                            {table}
+                        </div>
+                    )
+                })}
+            </div>
     );
   };
 
-  const GFITables = ({ index, lowPriorityTable, highPriorityTable}) => {
+  const GFITables = ({
+    index,
+    lowPriorityTable,
+    highPriorityTable
+    }) => {
     const highPriorityTableExists = highPriorityTable.length > 0 ? false : true;
     const [isFeatureOpen, openFeature] = useState(true);
     const [isInfoOpen, openInfo] = useState(highPriorityTableExists);
 
     return (
-            <StyledGFITablesContainer key={'gfi-tables-' + index}>
+            <StyledGFITablesContainer
+                key={'gfi-tables-' + index}
+                isFeatureOpen={isFeatureOpen}
+            >
                 <StyledInfoHeaderDiv
                     onClick={() => openFeature(!isFeatureOpen)}
                 >
@@ -155,8 +186,7 @@ export const FormattedGFI = ({ data }) => {
                 >
 
                 {!highPriorityTableExists ?
-                    <StyledHighPriorityDiv className="high-priority-table">
-                        <StyledInfoHeader></StyledInfoHeader>
+                    <StyledHighPriorityDiv>
                         <table>
                             <tbody>
                                 {highPriorityTable}
@@ -167,7 +197,7 @@ export const FormattedGFI = ({ data }) => {
                     null
                 }
 
-                <StyledLowPriorityDiv className="low-priority-table">
+                <StyledLowPriorityDiv>
                     {!highPriorityTableExists ?
                         <StyledInfoHeaderDiv
                             onClick={() => openInfo(!isInfoOpen)}

@@ -172,7 +172,7 @@ const fi = {
         address: {
             address: 'Opastinsilta 12 Helsinki',
             error: {
-                title: 'Osoitehaku',
+                title: 'Osoitehaku epäonnistui',
                 text: 'Tuloksia ei löytynyt osoitehaulla.'
             }
         }

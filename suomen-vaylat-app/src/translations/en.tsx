@@ -172,7 +172,7 @@ const en = {
         address: {
             address: 'Opastinsilta 12 Helsinki',
             error: {
-                title: 'Address search',
+                title: 'Address search failed',
                 text: 'No results were found for the address search.'
             }
         }

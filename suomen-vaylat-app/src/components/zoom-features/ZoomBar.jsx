@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import ReactTooltip from 'react-tooltip';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
@@ -245,15 +245,15 @@ const ZoomBar = ({
                             type: 'tween'
                         }}
                     >
-                        {Object.values(zoomLevelsLayers).map((layer, index) => {
-                                return <ZoomBarCircle
-                                    key={index}
-                                    index={index}
-                                    layer={layer}
-                                    zoomLevel={currentZoomLevel}
-                                    setHoveringIndex={setHoveringIndex}
-                                />
-                        })}
+                    {Object.values(zoomLevelsLayers).map((layer, index) => {
+                        return <ZoomBarCircle
+                            key={index}
+                            index={index}
+                            layer={layer}
+                            zoomLevel={currentZoomLevel}
+                            setHoveringIndex={setHoveringIndex}
+                        />
+                    })}
                     </StyledZoombarCircles>
                     <StyledZoomBarControlBottom
                         data-tip data-for='zoomOut'
@@ -272,7 +272,7 @@ const ZoomBar = ({
                     data-tip data-for='myLoc'
                     onClick={() => {
                         rpc.channel.postRequest('MyLocationPlugin.GetUserLocationRequest');
-                        setIsExpanded(false);
+                        //setIsExpanded(false);
                     }}
                 >
                     <StyledIcon src={location} />

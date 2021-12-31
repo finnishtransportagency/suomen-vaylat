@@ -19,6 +19,7 @@ import {
     setZoomLevelsLayers,
     setZoomRange,
     setGFILocations,
+    resetGFILocations,
     setGFIPoint
 } from '../../state/slices/rpcSlice';
 import { updateLayers } from '../../utils/rpcUtil';
@@ -151,15 +152,20 @@ const PublishedMap = () => {
 
                 if (data.MapClickedEvent) {
                     channel.handleEvent('MapClickedEvent', (data) => {
+                        store.dispatch(resetGFILocations([]));
+                        channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', []);
                         store.dispatch(setGFIPoint(data));
                     });
                 };
 
                 if (data.DataForMapLocationEvent) {
                     channel.handleEvent('DataForMapLocationEvent', (data) => {
+                        console.log(data);
+                        console.log(gfiLocations);
+                        channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', []);
                         store.dispatch(setGFILocations(data));
                     });
-                }
+                };
 
                 if (data.MarkerClickEvent) {
                     channel.handleEvent('MarkerClickEvent', event => {
@@ -236,9 +242,6 @@ const PublishedMap = () => {
         <StyledPublishedMap>
             {loading ? (
                 <SvLoder />
-            ) : null}
-            {gfiLocations.length > 0 ? (
-                <GFIPopup gfiLocations={gfiLocations}/>
             ) : null}
             <StyledIframe id='sv-iframe' title='iframe' src={process.env.REACT_APP_PUBLISHED_MAP_URL + '&lang=' + lang}
                 allow='geolocation' onLoad={() => hideSpinner()}>
