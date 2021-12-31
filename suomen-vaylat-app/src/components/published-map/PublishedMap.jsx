@@ -19,7 +19,8 @@ import {
     setZoomLevelsLayers,
     setZoomRange,
     setGFILocations,
-    setGFIPoint
+    setGFIPoint,
+    setStartState
 } from '../../state/slices/rpcSlice';
 import { updateLayers } from '../../utils/rpcUtil';
 
@@ -219,8 +220,37 @@ const PublishedMap = () => {
                 };
             });
 
-            channel.getSupportedRequests(function (data) {
+            // save start state
+            channel.getCurrentState(data => {
+                channel.getSelectedLayers(layers => {
+                    if (data.mapfull && data.mapfull.state) {
+                        const mapfullState = data.mapfull.state;
+                        const selectedLayers = [];
+                        const visibleLayers = [];
 
+                        layers.forEach(layer => {
+                            visibleLayers.push(layer.id);
+                        });
+
+                        // check layer orders
+                        const layerOrders = mapfullState.selectedLayers.filter(layer => {
+                            return visibleLayers.includes(layer.id);
+                        });
+
+                        layerOrders.forEach(layer => {
+                            selectedLayers.push(layer.id);
+                        });
+
+                        const startState = {
+                            x: mapfullState.east,
+                            y: mapfullState.north,
+                            selectedLayers: selectedLayers,
+                            zoom: mapfullState.zoom
+                        }
+
+                        store.dispatch(setStartState(startState));
+                    }
+                });
             });
         });
 
