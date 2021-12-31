@@ -5,6 +5,7 @@ import { ReactReduxContext } from 'react-redux';
 import ReactTooltip from 'react-tooltip';
 import { isMobile } from '../../theme/theme';
 import styled from 'styled-components';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useAppSelector } from '../../state/hooks';
 import { setIsInfoOpen, setIsMainScreen, setIsUserGuideOpen } from '../../state/slices/uiSlice';
 import { mapMoveRequest, setZoomTo } from '../../state/slices/rpcSlice';
@@ -21,33 +22,12 @@ const StyledHeaderContainer = styled.div`
     height: 64px;
     display: grid;
     position: relative;
-    z-index: 5;
+    //z-index: 10;
     grid-template-columns: 1fr 1fr 1fr;
     box-shadow: rgb(0 0 0 / 16%) 0px 3px 6px, rgb(0 0 0 / 23%) 0px 3px 6px;
     @media ${props => props.theme.device.tablet} {
         // grid-template-columns: 1fr 1fr 1fr;
         height: 56px;
-    };
-`;
-
-const StyledSubNavContainer = styled.div`
-    height: 64px;
-    display: grid;
-    position: absolute;
-    top: ${props => props.isSubNavOpen ? "100%" : "-100%"};
-    width: 100%;
-    z-index: ${props => props.isSubNavOpen ? "99999" : "-5"};
-    transition: all 0.3s ease-out;
-    background-color: ${props => props.theme.colors.mainColor1};
-    box-shadow: rgb(0 0 0 / 16%) 0px 3px 6px, rgb(0 0 0 / 23%) 0px 3px 6px;
-    @media ${props => props.theme.device.desktop} {
-        height: 60px;
-        display: none;
-    }; 
-    @media ${props => props.theme.device.mobileL} {
-        grid-template-columns: 1fr 1fr;
-        height: 56px;
-        display: grid;
     };
 `;
 
@@ -59,16 +39,19 @@ const StyledHeaderButton = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-right:5px;
+    margin-right: 8px;
     background-color: transparent;
     border-radius: 50%;
     svg {
         color: ${props => props.theme.colors.mainWhite};
-        font-size: 18px;
+        font-size: 22px;
     };
     @media ${props => props.theme.device.mobileL} {
         width: 40px;
         height: 40px;
+        svg {
+            font-size: 22px;
+        };
     };
 `;
 
@@ -80,7 +63,7 @@ const StyledHeaderTitleContainer = styled.p`
     align-items: center;
     margin: 0;
     color: ${props => props.theme.colors.mainWhite};
-    padding-left: 10px;
+    padding-left: 8px;
     font-weight: 600;
     @media ${props => props.theme.device.desktop} {
         font-size: 25px;
@@ -88,7 +71,6 @@ const StyledHeaderTitleContainer = styled.p`
     @media ${props => props.theme.device.tablet} {
         font-size: 15px;
     };
-   
 `;
 
 const StyledHeaderLogoContainer = styled.div`
@@ -96,8 +78,15 @@ const StyledHeaderLogoContainer = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+    //height: 100%;
     svg {
         height: inherit;
+        max-height: 60px;
+    };
+    @media ${props => props.theme.device.mobileL} {
+        svg {
+            max-height: 48px;
+        };
     };
 `;
 
@@ -112,16 +101,6 @@ const StyledRightCornerButtons = styled.div`
     };
 `;
 
-const MobileButtons = styled.div`
-    display: flex;
-    @media ${props => props.theme.device.desktop} {
-        display: none;
-    };
-    @media ${props => props.theme.device.mobileL} {
-        display: flex;
-    };
-`;
-
 const DesktopButtons = styled.div`
     display: flex;
     @media ${props => props.theme.device.mobileL} {
@@ -129,12 +108,41 @@ const DesktopButtons = styled.div`
     };
 `;
 
+const StyledMobileNavContainer = styled(motion.div)`
+    z-index: 10;
+    position: absolute;
+    width: 100%;
+    height: 56px;
+    display: grid;
+    left: 0px;
+    top: 100%;
+    background-color: ${props => props.theme.colors.mainColor1};
+    box-shadow: rgb(0 0 0 / 16%) 0px 3px 6px, rgb(0 0 0 / 23%) 0px 3px 6px;
+    display: none;
+    @media ${props => props.theme.device.mobileL} {
+        display: flex;
+        justify-content: flex-end;
+    };
+`;
+
 const StyledRightCornerButtonsMobile = styled.div`
     display: flex;
-    justify-content: flex-end;
     align-items: center;
     color: ${props => props.theme.colors.mainWhite};
-    padding-right: 10px;
+`;
+
+const MobileButtons = styled.div`
+    display: none;
+    @media ${props => props.theme.device.mobileL} {
+        display: flex;
+    };
+    ${StyledHeaderButton}{
+        margin-right: 0px;
+        width: 24px;
+        svg {
+            font-size: 20px;
+        }
+    }
 `;
 
 export const Header = () => {
@@ -227,30 +235,43 @@ export const Header = () => {
                         <LanguageSelector />
                     </DesktopButtons>
                 </StyledRightCornerButtons>
-                <StyledSubNavContainer isSubNavOpen={isSubNavOpen}>
-                    <ReactTooltip disable={isMobile} id={'show_info'} place='bottom' type='dark' effect='float'>
-                        <span>{strings.tooltips.showPageInfo}</span>
-                    </ReactTooltip>
-                    <ReactTooltip disable={isMobile} id={'show_user_guide'} place='bottom' type='dark' effect='float'>
-                        <span>{strings.tooltips.showUserGuide}</span>
-                    </ReactTooltip>
-                    <StyledRightCornerButtonsMobile>
-                        <WebSiteShareButton/>
-                        <StyledHeaderButton data-tip data-for={'show_user_guide'}
-                                            onClick={() => store.dispatch(setIsUserGuideOpen(!isUserGuideOpen))}>
-                            <FontAwesomeIcon
-                                icon={faQuestion}
-                            />
-                        </StyledHeaderButton>
-                        <StyledHeaderButton data-tip data-for={'show_info'}
-                                            onClick={() => store.dispatch(setIsInfoOpen(!isInfoOpen))}>
-                            <FontAwesomeIcon
-                                icon={faInfoCircle}
-                            />
-                        </StyledHeaderButton>
-                        <LanguageSelector/>
-                    </StyledRightCornerButtonsMobile>
-                </StyledSubNavContainer>
+                <AnimatePresence>
+                    {
+                        isSubNavOpen &&
+                        <StyledMobileNavContainer
+                            initial={{ y: -100, filter: "blur(1px)", opacity: 0 }}
+                            animate={{ y: 0, filter: "blur(0px)", opacity: 1 }}
+                            exit={{ y: -100, filter: "blur(10px)", opacity: 0 }}
+                            transition={{
+                                duration: 0.4,
+                                type: "tween"
+                            }}
+                        >
+                            <StyledRightCornerButtonsMobile>
+                                <WebSiteShareButton setSubNavOpen={setSubNavOpen}/>
+                                <StyledHeaderButton data-tip data-for={'show_user_guide'}
+                                                    onClick={() => {
+                                                        setSubNavOpen(false);
+                                                        store.dispatch(setIsUserGuideOpen(!isUserGuideOpen))}
+                                                    }>
+                                    <FontAwesomeIcon
+                                        icon={faQuestion}
+                                    />
+                                </StyledHeaderButton>
+                                <StyledHeaderButton data-tip data-for={'show_info'}
+                                                    onClick={() => {
+                                                        setSubNavOpen(false);
+                                                        store.dispatch(setIsInfoOpen(!isInfoOpen))}
+                                                        }>
+                                    <FontAwesomeIcon
+                                        icon={faInfoCircle}
+                                    />
+                                </StyledHeaderButton>
+                                <LanguageSelector/>
+                            </StyledRightCornerButtonsMobile>
+                        </StyledMobileNavContainer>
+                    }
+                </AnimatePresence>
             </StyledHeaderContainer>
         </>
     );
