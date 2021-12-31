@@ -22,11 +22,9 @@ const StyledHeaderContainer = styled.div`
     height: 64px;
     display: grid;
     position: relative;
-    //z-index: 10;
     grid-template-columns: 1fr 1fr 1fr;
     box-shadow: rgb(0 0 0 / 16%) 0px 3px 6px, rgb(0 0 0 / 23%) 0px 3px 6px;
     @media ${props => props.theme.device.tablet} {
-        // grid-template-columns: 1fr 1fr 1fr;
         height: 56px;
     };
 `;
@@ -78,7 +76,6 @@ const StyledHeaderLogoContainer = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    //height: 100%;
     svg {
         height: inherit;
         max-height: 60px;
