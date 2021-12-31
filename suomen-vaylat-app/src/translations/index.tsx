@@ -1,7 +1,7 @@
 import LocalizedStrings from 'react-localization';
-import fi from './fi';
-import en from './en';
-import sv from './sv';
+import fi from './fi.json';
+import en from './en.json';
+import sv from './sv.json';
 
 // first lang is default
 const strings = new LocalizedStrings({

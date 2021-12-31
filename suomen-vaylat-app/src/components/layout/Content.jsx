@@ -20,7 +20,6 @@ import {
     resetGFILocations
 } from '../../state/slices/rpcSlice';
 import {
-    setModalConstrainsRef,
     setShareUrl,
     setIsInfoOpen,
     setIsUserGuideOpen,
@@ -87,7 +86,7 @@ const Content = () => {
         shareUrl,
         isInfoOpen,
         isUserGuideOpen
-    } =  useAppSelector((state) => state.ui);
+    } = useAppSelector((state) => state.ui);
 
     const search = useAppSelector((state) => state.search)
     const { store } = useContext(ReactReduxContext);
@@ -106,14 +105,14 @@ const Content = () => {
     const addToLocalStorageArray = (name, value) => {
         // Get the existing data
         let existing = localStorage.getItem(name);
-    
+
         // If no existing data, create an array
         // Otherwise, convert the localStorage string to an array
         existing = existing ? existing.split(',') : [];
-    
+
         // Add new data to localStorage Array
         existing.push(value);
-    
+
         // Save back to localStorage
         localStorage.setItem(name, existing.toString());
     };
@@ -122,7 +121,7 @@ const Content = () => {
 
     useEffect(() => {
         announcements && setCurrentAnnouncement(0);
-    },[announcements]);
+    }, [announcements]);
 
     const closeAnnouncement = (selected, id) => {
         if (selected) {
@@ -132,7 +131,7 @@ const Content = () => {
     };
 
     const hideWarn = () => {
-        store.dispatch(setSelectError({show: false, type: '', filteredLayers: [], indeterminate: false}));
+        store.dispatch(setSelectError({ show: false, type: '', filteredLayers: [], indeterminate: false }));
     };
 
     function handleCloseAppInfoModal() {
@@ -159,11 +158,11 @@ const Content = () => {
 
     return (
         <>
-        <StyledContent
-            ref={constraintsRef}
-        >
-            <PublishedMap />
-            {
+            <StyledContent
+                ref={constraintsRef}
+            >
+                <PublishedMap />
+                {
                 currentAnnouncement !== null && announcements[currentAnnouncement] && (
                     <Modal
                         key={'announcement-modal-'+announcements[currentAnnouncement].id}
@@ -287,40 +286,49 @@ const Content = () => {
                     message={strings.multipleLayersWarning}
                     filteredLayers={warnings.filteredLayers}
                     warningType={warnings.type}
-                />
-            </Modal>
-            <Modal
-                constraintsRef={constraintsRef} /* Reference div for modal drag boundaries */
-                drag={false} /* Enable (true) or disable (false) drag */
-                resize={false}
-                backdrop={true} /* Is backdrop enabled (true) or disabled (false) */
-                fullScreenOnMobile={false} /* Scale modal full width / height when using mobile device */
-                titleIcon={faExclamationCircle} /* Use icon on title or null */
-                title={search.selected === 'vkm' ? strings.search.vkm.error.title : strings.search.address.error.title} /* Modal header title */
-                type={"warning"} /* Type "normal" or "warning" */
-                warningType={warnings.type}
-                closeAction={hideWarn} /* Action when pressing modal close button or backdrop */
-                isOpen={warnings.show && warnings.type === 'searchWarning'} /* Modal state */
-                id={null}
-            >
-                <WarningDialog
-                    hideWarn={hideWarn}
-                    message={warnings.message}
-                    errors={warnings.errors}
-                    filteredLayers={[]}
+                    closeAction={hideWarn} /* Action when pressing modal close button or backdrop */
+                    isOpen={warnings.show && warnings.type === 'multipleLayersWarning'} /* Modal state */
+                    id={null}
+                >
+                    <WarningDialog
+                        hideWarn={hideWarn}
+                        message={strings.multipleLayersWarning}
+                        filteredLayers={warnings.filteredLayers}
+                        warningType={warnings.type}
+                    />
+                </Modal>
+                <Modal
+                    constraintsRef={constraintsRef} /* Reference div for modal drag boundaries */
+                    drag={false} /* Enable (true) or disable (false) drag */
+                    resize={false}
+                    backdrop={true} /* Is backdrop enabled (true) or disabled (false) */
+                    fullScreenOnMobile={false} /* Scale modal full width / height when using mobile device */
+                    titleIcon={faExclamationCircle} /* Use icon on title or null */
+                    title={search.selected === 'vkm' ? strings.search.vkm.error.title : strings.search.address.error.title} /* Modal header title */
+                    type={"warning"} /* Type "normal" or "warning" */
                     warningType={warnings.type}
-                />
-            </Modal>
-            <StyledContentGrid>
-                <MenuBar />
-                <MapLayersDialog />
-                <Search />
-                <ZoomMenu />
-                <ThemeMapsActionButton />
-            </StyledContentGrid>
-        </StyledContent>
+                    closeAction={hideWarn} /* Action when pressing modal close button or backdrop */
+                    isOpen={warnings.show && warnings.type === 'searchWarning'} /* Modal state */
+                    id={null}
+                >
+                    <WarningDialog
+                        hideWarn={hideWarn}
+                        message={warnings.message}
+                        errors={warnings.errors}
+                        filteredLayers={[]}
+                        warningType={warnings.type}
+                    />
+                </Modal>
+                <StyledContentGrid>
+                    <MenuBar />
+                    <MapLayersDialog />
+                    <Search />
+                    <ZoomMenu />
+                    <ThemeMapsActionButton />
+                </StyledContentGrid>
+            </StyledContent>
         </>
     );
- }
+}
 
- export default Content;
+export default Content;

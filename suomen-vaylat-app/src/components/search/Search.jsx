@@ -202,6 +202,28 @@ const Search = () => {
         { value: 'vkm', label: strings.search.types.vkm }
     ];
 
+    const showAddressSearchResults = !isSearchMethodSelectorOpen && search.searching === false &&
+        search.searchResult.address.length > 0 && search.selected === 'address';
+
+    const showVkmSearch = !isSearchMethodSelectorOpen &&
+        search.selected === 'vkm';
+
+    const showDropDownContent = (
+            // if search method selection is open
+            (isSearchMethodSelectorOpen) ||
+            // or search method selection is not open and has address search results
+            (
+                !isSearchMethodSelectorOpen && !search.searching &&
+                search.searching === false && search.searchResult.address.length > 0 &&
+                search.selected === 'address'
+            ) ||
+            // or search method selection is not open and vkm search is selected
+            (
+                !isSearchMethodSelectorOpen &&
+                search.selected === 'vkm'
+            )
+    );
+
     const onClickHandler = () => {
         store.dispatch(setSearching(true));
 
@@ -317,21 +339,9 @@ const Search = () => {
                     />
                 </StyledMenuBarButton>
             </StyledSearchWrapper>
-            <StyledDropdownWrapper
-
-                isSearchOpen={isSearchOpen}
-            >
-
+            <StyledDropdownWrapper isSearchOpen={isSearchOpen}>
                 {
-                    ((isSearchMethodSelectorOpen) || (
-                        !isSearchMethodSelectorOpen &&
-                        !search.searching &&
-                        search.searching === false && search.searchResult.address.length > 0 &&
-                        search.selected === 'address'
-                    ) || (
-                            !isSearchMethodSelectorOpen &&
-                            search.selected === 'vkm'
-                        )) && <StyledDropdownContent layout>
+                    showDropDownContent && <StyledDropdownContent layout>
                         {
                             isSearchMethodSelectorOpen && searchTypes.map(searchType => {
                                 return (
@@ -348,11 +358,24 @@ const Search = () => {
                             })
                         }
                         {
-                            !isSearchMethodSelectorOpen &&
-                            !search.searching &&
-                            search.searching === false && search.searchResult.address.length > 0 &&
-                            search.selected === 'address' &&
-                            search.searchResult.address.map(({ name, lon, lat, id }, index) => {
+                            showAddressSearchResults &&
+                            search.searchResult.address.map(({ name, region, type, lon, lat, id }, index) => {
+                                let visibleText;
+                                if (name === region) {
+                                    visibleText = name;
+                                    if (type) {
+                                        visibleText += ' (' + type.toLowerCase() +')';
+                                    }
+                                } else if (region && type) {
+                                    visibleText = name + ', ' + region + ' (' + type.toLowerCase() +')';
+                                } else if (type) {
+                                    visibleText = name + ' (' + type.toLowerCase() +')';
+                                } else {
+                                    visibleText = name;
+                                }
+                                const text = {
+                                    __html: visibleText
+                                };
                                 return <StyledDropdownContentItem
                                     key={name + '_' + index}
                                     onClick={() => {
@@ -360,13 +383,12 @@ const Search = () => {
                                         onAddressSelect(name, lon, lat, id);
                                     }}
                                 >
-                                    <p>{name}</p>
+                                    <p dangerouslySetInnerHTML={text} />
                                 </StyledDropdownContentItem>
                             })
                         }
                         {
-                            !isSearchMethodSelectorOpen &&
-                            search.selected === 'vkm' &&
+                            showVkmSearch &&
                             <VKMSearch
                                 visible={search.selected === 'vkm'}
                                 search={search}
