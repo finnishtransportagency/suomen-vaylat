@@ -1,5 +1,4 @@
-import { useContext, useState } from 'react';
-import { ReactReduxContext } from 'react-redux';
+import { useState } from 'react';
 import styled from 'styled-components';
 import { useAppSelector } from '../../state/hooks';
 import strings from '../../translations';
@@ -31,10 +30,10 @@ import QualityTabDataQualities from './Components/QualityTabDataQualities';
 
 
 const StyledContent = styled.div`
-    padding: .5rem;
-    max-height: calc(100% - 50px);
-    @media (max-width: 460px) {
-      max-height: calc(100% - 50px);
+    height: 100%;
+    padding: 16px;
+    overflow: auto;
+    @media ${props => props.theme.device.mobileL} {
     };
 `;
 

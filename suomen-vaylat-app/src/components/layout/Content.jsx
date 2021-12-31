@@ -16,13 +16,15 @@ import ZoomMenu from '../zoom-features/ZoomMenu';
 import strings from '../../translations';
 import {
     setSelectError,
-    clearLayerMetadata
+    clearLayerMetadata,
+    resetGFILocations
 } from '../../state/slices/rpcSlice';
 import {
     setShareUrl,
     setIsInfoOpen,
     setIsUserGuideOpen,
 } from '../../state/slices/uiSlice';
+import { GFIPopup } from '../infobox/GFIPopup';
 import MetadataModal from '../metadata-modal/MetadataModal';
 
 import {
@@ -30,7 +32,8 @@ import {
     faInfoCircle,
     faQuestion,
     faBullhorn,
-    faExclamationCircle
+    faExclamationCircle,
+    faMapMarkerAlt
 } from '@fortawesome/free-solid-svg-icons';
 
 import Modal from '../modals/Modal';
@@ -91,6 +94,11 @@ const Content = () => {
 
     const announcements = useAppSelector((state) => state.rpc.activeAnnouncements);
     const metadata = useAppSelector((state) => state.rpc.layerMetadata);
+    let {
+        channel,
+        gfiLocations
+    } = useAppSelector((state) => state.rpc);
+    //const channel = useSelector(state => state.rpc.channel);
 
     const ANNOUNCEMENTS_LOCALSTORAGE = "oskari-announcements";
 
@@ -115,7 +123,7 @@ const Content = () => {
         announcements && setCurrentAnnouncement(0);
     }, [announcements]);
 
-    function closeAnnouncement(selected, id) {
+    const closeAnnouncement = (selected, id) => {
         if (selected) {
             addToLocalStorageArray(ANNOUNCEMENTS_LOCALSTORAGE, id);
         };
@@ -139,8 +147,14 @@ const Content = () => {
     };
 
     const handleCloseMetadataModal = () => {
-        store.dispatch(clearLayerMetadata());
-    }
+            store.dispatch(clearLayerMetadata());
+    };
+
+    const handleCloseGFIModal = () => {
+            store.dispatch(resetGFILocations([]));
+            channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', []);
+            //channel.postRequest('MapModulePlugin.RemoveMarkersRequest', ['gfi_location']);
+    };
 
     return (
         <>
@@ -149,31 +163,48 @@ const Content = () => {
             >
                 <PublishedMap />
                 {
-                    currentAnnouncement !== null && announcements[currentAnnouncement] && (
-                        <Modal
-                            key={'announcement-modal-' + announcements[currentAnnouncement].id}
-                            constraintsRef={constraintsRef} /* Reference div for modal drag boundaries */
-                            drag={false} /* Enable (true) or disable (false) drag */
-                            resize={false}
-                            backdrop={true} /* Is backdrop enabled (true) or disabled (false) */
-                            fullScreenOnMobile={false} /* Scale modal full width / height when using mobile device */
-                            titleIcon={faBullhorn} /* Use icon on title or null */
-                            title={announcements[currentAnnouncement].title} /* Modal header title */
-                            type={"announcement"} /* Type "normal" or "warning" */
-                            closeAction={closeAnnouncement} /* Action when pressing modal close button or backdrop */
-                            isOpen={null} /* Modal state */
+                currentAnnouncement !== null && announcements[currentAnnouncement] && (
+                    <Modal
+                        key={'announcement-modal-'+announcements[currentAnnouncement].id}
+                        constraintsRef={constraintsRef} /* Reference div for modal drag boundaries */
+                        drag={false} /* Enable (true) or disable (false) drag */
+                        resize={false}
+                        backdrop={true} /* Is backdrop enabled (true) or disabled (false) */
+                        fullScreenOnMobile={false} /* Scale modal full width / height when using mobile device */
+                        titleIcon={faBullhorn} /* Use icon on title or null */
+                        title={announcements[currentAnnouncement].title} /* Modal header title */
+                        type={"announcement"} /* Type "normal" or "warning" */
+                        closeAction={closeAnnouncement} /* Action when pressing modal close button or backdrop */
+                        isOpen={null} /* Modal state */
+                        id={announcements[currentAnnouncement].id}
+                >
+                        <AnnouncementsModal
                             id={announcements[currentAnnouncement].id}
-                        >
-                            <AnnouncementsModal
-                                id={announcements[currentAnnouncement].id}
-                                title={announcements[currentAnnouncement].title}
-                                content={announcements[currentAnnouncement].content}
-                                key={'announcement_modal_' + announcements[currentAnnouncement].id}
-                            />
-                        </Modal>
+                            title={announcements[currentAnnouncement].title}
+                            content={announcements[currentAnnouncement].content}
+                            key={'announcement_modal_'+announcements[currentAnnouncement].id}
+                        />
+                    </Modal>
                     )
                 }
-
+                <Modal
+                    constraintsRef={constraintsRef} /* Reference div for modal drag boundaries */
+                    drag={true} /* Enable (true) or disable (false) drag */
+                    resize={true}
+                    backdrop={false} /* Is backdrop enabled (true) or disabled (false) */
+                    fullScreenOnMobile={true} /* Scale modal full width / height when using mobile device */
+                    titleIcon={faMapMarkerAlt} /* Use icon on title or null */
+                    title={strings.gfi.title} /* Modal header title */
+                    type={"normal"} /* Type "normal" or "warning" */
+                    closeAction={handleCloseGFIModal} /* Action when pressing modal close button or backdrop */
+                    isOpen={gfiLocations.length > 0} /* Modal state */
+                    id={null}
+                    minWidth={600}
+                    maxWidth={1200}
+                    //overflow={"auto"}
+                >
+                    <GFIPopup gfiLocations={gfiLocations}/>
+                </Modal>
                 <Modal
                     constraintsRef={constraintsRef} /* Reference div for modal drag boundaries */
                     drag={false} /* Enable (true) or disable (false) drag */
@@ -217,8 +248,9 @@ const Content = () => {
                     isOpen={metadata.data !== null} /* Modal state */
                     id={null}
                     maxWidth={800}
+                    overflow={"auto"}
                 >
-                    <MetadataModal metadata={metadata} />
+                    <MetadataModal metadata={metadata}/>
                 </Modal>
                 <Modal
                     constraintsRef={constraintsRef} /* Reference div for modal drag boundaries */
@@ -254,6 +286,9 @@ const Content = () => {
                         message={strings.multipleLayersWarning}
                         filteredLayers={warnings.filteredLayers}
                         warningType={warnings.type}
+                        closeAction={hideWarn} /* Action when pressing modal close button or backdrop */
+                        isOpen={warnings.show && warnings.type === 'multipleLayersWarning'} /* Modal state */
+                        id={null}
                     />
                 </Modal>
                 <Modal

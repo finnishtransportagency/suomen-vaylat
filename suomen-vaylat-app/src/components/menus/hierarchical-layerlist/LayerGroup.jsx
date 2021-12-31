@@ -59,7 +59,7 @@ const StyledLayerGroups = styled.div`
 
 const StyledMasterGroupHeader = styled.div`
     position: sticky;
-    top: -16px;
+    top: -8px;
     z-index: 1;
     min-height: 48px;
     display: flex;

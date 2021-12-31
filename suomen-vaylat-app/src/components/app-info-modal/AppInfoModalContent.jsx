@@ -10,6 +10,10 @@ import ReactTooltip from "react-tooltip";
 const StyledContent = styled.div`
     max-width: 600px;
     background-color: #F2F2F2;
+    overflow: hidden;
+    display: flex;
+    height: 100%;
+    flex-direction: column;
 `;
 
 const StyledTabs = styled.div`
@@ -86,6 +90,7 @@ const StyledSwiper = styled(Swiper)`
   .swiper-slide {
     background-color: ${props => props.theme.colors.mainWhite};
     padding: 16px 16px 16px 16px;
+    overflow-y: auto;
   };
   transition: box-shadow 0.3s ease-out;
 `;
