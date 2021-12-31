@@ -6,7 +6,8 @@ import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const StyledModalBackdrop = styled(motion.div)`
-    z-index: ${props => props.resize ? 3 : 9992};
+    //z-index: ${props => props.resize ? 1 : 9998};
+    z-index: 10;
     position: fixed;
     top: 0px;
     right: 0px;
@@ -22,6 +23,8 @@ const StyledModalBackdrop = styled(motion.div)`
 const StyledModalWrapper = styled(motion.div)`
     z-index: ${props => props.resize ? 4 : 9993};
     position: fixed;
+    top: ${props => props.resize && "0px"};
+    left: ${props => props.resize && "0px"};
     padding: ${props => props.resize && "50px"};
     @media ${props => props.theme.device.mobileL} {
         position:  ${props => props.fullScreenOnMobile ? "fixed" : "initial"};
@@ -29,7 +32,7 @@ const StyledModalWrapper = styled(motion.div)`
         right: 0px;
         bottom: 0px;
         left: 0px;
-        border-radius: ${props => props.fullScreenOnMobile && "0px"};
+        //border-radius: ${props => props.fullScreenOnMobile && "0px"};
         padding: 0px;
         margin: ${props => props.fullScreenOnMobile === false && "8px"};
     };
@@ -38,8 +41,10 @@ const StyledModalWrapper = styled(motion.div)`
 const StyledModal = styled(motion.div)`
     position: relative;
     width: 100%;
+    min-width: ${props => props.minWidth && props.minWidth+"px"};
     max-width: ${props => props.maxWidth ? props.maxWidth+"px" : "100vw"};
     height: 100%;
+    min-height: 200px;
     max-height: calc(100vh - 100px);
     background-color:  ${props => props.theme.colors.mainWhite};
     border-radius: 4px;
@@ -48,14 +53,20 @@ const StyledModal = styled(motion.div)`
     display: flex;
     flex-direction: column;
     resize: ${props => props.resize && "both"};
-    overflow: auto;
+    overflow: hidden;
     @media ${props => props.theme.device.mobileL} {
+        border-radius: ${props => props.fullScreenOnMobile && "0px"};
+        min-width: unset;
         max-height: unset;
     };
 `;
 
 const StyledModalHeader = styled.div`
-    min-height: 56px;
+    z-index: 10;
+    //min-height: 56px;
+    //height: auto;
+    //position: sticky;
+    //top: 0px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -108,7 +119,7 @@ const StyledCloseButton = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    //padding: 16px;
+    padding: 8px;
     cursor: pointer;
 `;
 
@@ -117,8 +128,10 @@ const StyledCloseIcon = styled(FontAwesomeIcon)`
 `;
 
 const StyledModalContent = styled.div`
-    height: 100%;
-    overflow: auto;
+    //height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow-y: ${props => props.overflow ? "auto" : "hidden"};
 `;
 
 const Modal = ({
@@ -133,7 +146,9 @@ const Modal = ({
     closeAction,
     isOpen,
     id,
+    minWidth,
     maxWidth,
+    overflow,
     children
 }) => {
 
@@ -176,7 +191,9 @@ const Modal = ({
                 >
                     <StyledModal
                         resize={resize}
+                        minWidth={minWidth}
                         maxWidth={maxWidth}
+                        fullScreenOnMobile={fullScreenOnMobile}
                     >
                         <StyledModalHeader
                             type={type}
@@ -206,7 +223,7 @@ const Modal = ({
                             </StyledCloseButton>
 
                         </StyledModalHeader>
-                        <StyledModalContent>
+                        <StyledModalContent overflow={overflow}>
                             {!type === "announcement" ? children : clonedChildren}
                         </StyledModalContent>
                     </StyledModal>

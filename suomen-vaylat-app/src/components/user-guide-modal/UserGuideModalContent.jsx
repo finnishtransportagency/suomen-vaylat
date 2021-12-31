@@ -16,7 +16,9 @@ const StyledContent = styled.div`
     min-width: 600px;
     max-width: 600px;
     width: 100%;
+    height: 100%;
     padding: 16px;
+    overflow: auto;
     @media ${props => props.theme.device.mobileL} {
         min-width: initial;
     };
@@ -113,7 +115,7 @@ export const UserGuideModalContent = () => {
                             >
                                 <StyledAccordionButton
                                     //bsPrefix={'accordion-header'}
-                                    key={`accordion-header-${index}`}
+                                    //key={`accordion-header-${index}`}
                                     //className={'user-guide-header'}
                                     as={'div'}
                                     onClick={() => setAccordionIndex(index)}

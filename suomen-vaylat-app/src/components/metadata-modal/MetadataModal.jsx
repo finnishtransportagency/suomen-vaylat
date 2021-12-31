@@ -31,10 +31,10 @@ import QualityTabDataQualities from './Components/QualityTabDataQualities';
 
 
 const StyledContent = styled.div`
-    padding: .5rem;
-    max-height: calc(100% - 50px);
-    @media (max-width: 460px) {
-      max-height: calc(100% - 50px);
+    height: 100%;
+    padding: 16px;
+    overflow: auto;
+    @media ${props => props.theme.device.mobileL} {
     };
 `;
 

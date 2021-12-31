@@ -96,7 +96,7 @@ export const WebSiteShareButton = ({setSubNavOpen}) => {
                 data-tip data-for={'share_website'}
                 onClick={(e) => {
                     e && e.stopPropagation();
-                    setSubNavOpen(false);
+                    setSubNavOpen && setSubNavOpen(false);
                     store.dispatch(setShareUrl(url));
                 }}>
                 <FontAwesomeIcon
