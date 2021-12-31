@@ -31,6 +31,7 @@ const StyledMenuBar = styled.div`
     align-items: flex-start;
     flex-direction: column;
     transition: all 0.5s ease-in-out;
+    margin-top: 8px;
     @media ${props => props.theme.device.mobileL} {
         grid-row-start: ${props => props.isSearchOpen ? 2 : 1};
         grid-row-end: 3;

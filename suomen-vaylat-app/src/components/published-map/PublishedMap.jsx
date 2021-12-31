@@ -29,6 +29,7 @@ import { GFIPopup } from '../infobox/GFIPopup';
 import './PublishedMap.scss';
 
 const StyledPublishedMap = styled.div`
+    //z-index: 1;
     position: absolute;
     top: 0px;
     left: 0px;
