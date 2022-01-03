@@ -387,10 +387,9 @@ const Search = () => {
                                     __html: visibleText
                                 };
                                 return <StyledDropdownContentItem
-                                    itemSelected={searchResultSelectedIndex == index}
+                                    itemSelected={searchResultSelectedIndex === index}
                                     key={name + '_' + index}
                                     onClick={() => {
-                                        // searchTypeOnChange('address');
                                         setItemSelected(index);
                                         onAddressSelect(name, lon, lat, id);
                                     }}
