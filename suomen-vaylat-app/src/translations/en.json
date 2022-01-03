@@ -119,12 +119,6 @@
                     "title": "Tiedossa olevat puutteet:",
                     "list": {
                         "0": {
-                            "content": "Karttaa ei voi raahata kun sen päälle on avattu ikkuna (kohdetietoikkuna, infoikkuna, metatietoikkuna)"
-                        },
-                        "1": {
-                            "content": "Kohdetiedot eivät skaalaudu mobiiliin"
-                        },
-                        "2": {
                             "content": "Kaikkia aineistoryhmiä ei ole käsitelty datan osalta",
                             "subContent": {
                                 "0": "Tiestötiedoista puuttuvat selkokielisyydet ja kenttien priorisointi kohdetietoikkunaan",
