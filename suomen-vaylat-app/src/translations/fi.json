@@ -131,11 +131,11 @@
                         "1": {
                             "content": "Sovellukseen tehdyt päivitykset",
                             "subContent": {
-                                "0": "Excel tuonnin ja viennin tuki",
+                                "0": "Kielisyyksien Excel tuonnin ja viennin tuki",
                                 "1": "Modaalien parannuspäivitys",
                                 "2": "Otsake palkin mobiiliresponsiivisuuden\nparantaminen",
                                 "3": "Sovelluksen tiedot -tekstien päivitys",
-                                "4": "pienempiä käytettävyysparannuksia"
+                                "4": "Pienempiä käytettävyysparannuksia"
                             }
                         }
                     }
