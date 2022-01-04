@@ -116,6 +116,31 @@
             "appContactAndFeedback": "Yhteystiedot ja palaute",
             "versionInfoList": {
                 "0": {
+                    "title": "Versiomuutokset:",
+                    "list": {
+                        "0": {
+                            "content": "Sovellukseen tehdyt korjaukset",
+                            "subContent": {
+                                "0": "Teeman jako",
+                                "1": "Bugit mobiilinäkymässä",
+                                "2": "Sovelluksen kaatumiseen johtavat bugit",
+                                "3": "Tie- ja osoitehaun korjaukset",
+                                "4": "Zoom-valikon korjaukset"
+                            }
+                        },
+                        "1": {
+                            "content": "Sovellukseen tehdyt päivitykset",
+                            "subContent": {
+                                "0": "Excel tuonnin ja viennin tuki",
+                                "1": "Modaalien parannuspäivitys",
+                                "2": "Otsake palkin mobiiliresponsiivisuuden\nparantaminen",
+                                "3": "Sovelluksen tiedot -tekstien päivitys",
+                                "4": "pienempiä käytettävyysparannuksia"
+                            }
+                        }
+                    }
+                },
+                "1": {
                     "title": "Tiedossa olevat puutteet:",
                     "list": {
                         "0": {
