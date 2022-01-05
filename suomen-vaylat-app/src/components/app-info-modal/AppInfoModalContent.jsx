@@ -83,6 +83,11 @@ const StyledButton = styled.button`
     color: ${props => props.theme.colors.mainColor1};
 `;
 
+const StyledLink = styled.a`
+    cursor: pointer;
+    color: ${props => props.theme.colors.mainColor1};
+`;
+
 const StyledTitle = styled.em`
     color: ${props => props.theme.colors.mainColor1};
 `;
@@ -141,41 +146,25 @@ export const VersionInfo = ({listData, currentAppVersion, currentAppBuildDate}) 
 };
 
 export const ContactAndFeedback = () => {
-    const [textCopiedTooltip, setTextCopiedTooltip] = useState(false);
-    const target = useRef(null);
-    const contactInfoFeedback = strings.appInfo.versionInfo.contactInfoFeedback
-
-    const copyTextToClipboard = (text) => {
-        console.log("copyTextToClipboard text", text)
-        navigator.clipboard.writeText(text)
-        setTextCopiedTooltip(true)
-    };
+    const contactInfoFeedback = strings.appInfo.contactInfoFeedback;
 
     return (
         <div>
-            <Overlay target={target.current} show={textCopiedTooltip} placement={'top'} >
-                <ReactTooltip disable={isMobile} place="top" type="dark" effect="float">
-                    <span>{strings.gfi.gfiLocation}</span>
-                </ReactTooltip>
-            </Overlay>
             <p>{contactInfoFeedback[0]}</p>
-            <p>{contactInfoFeedback[1]} <StyledButton ref={target} onClick={() => copyTextToClipboard(contactInfoFeedback[2])}>{contactInfoFeedback[2]}</StyledButton></p>
+            <p>{contactInfoFeedback[1]} <StyledLink href={'mailto:' + contactInfoFeedback[2] + '?subject='+contactInfoFeedback.emailSubject}>{contactInfoFeedback[2]}</StyledLink></p>
         </div>
     );
 };
 
 export const AppInfoLinks = () => {
-    const appInfoLinks = strings.appInfo.versionInfo.appInfoLinks;
-    const copyTextToClipboard = (text) => {
-        navigator.clipboard.writeText(text)
-    };
+    const appInfoLinks = strings.appInfo.appInfoLinks;
 
     return (
         <div>
             <ul>
                 {Object.values(appInfoLinks).map((link, key) => {
                     return(
-                        <li key={key}>{link.text}<StyledButton onClick={() => copyTextToClipboard(link.link)}>{link.link}</StyledButton></li>
+                        <li key={key}>{link.text} <StyledLink href={link.link} target={'_blank'}>{link.link}</StyledLink></li>
                     )
                 })}
             </ul>
