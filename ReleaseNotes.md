@@ -7,7 +7,12 @@ For a full lis of changes see: https://github.com/finnishtransportagency/suomen-
 * React-modal changed to own modal component
 * Fixed an issue for theme sharing
 * Fixed an issue for layers component
+* Fixed an issue for mobile Firefox
 * Added more translations
+* Set layer subgroups alphabetically on the front end side
+* Improve address search
+* UI tuning
+* GFI modal minimaze
 
 
 ## 0.2.0
