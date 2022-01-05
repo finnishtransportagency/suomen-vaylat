@@ -10,7 +10,7 @@ import MapLayersDialog from '../dialog/MapLayersDialog';
 import WarningDialog from '../dialog/WarningDialog';
 import PublishedMap from '../published-map/PublishedMap';
 import Search from '../search/Search';
-import ThemeMapsActionButton from '../action-button/ThemeMapsActionButton';
+import ActionButtons from '../action-button/ActionButtons';
 import { ShareWebSitePopup } from '../share-web-site/ShareWebSitePopup';
 import ZoomMenu from '../zoom-features/ZoomMenu';
 import strings from '../../translations';
@@ -23,6 +23,7 @@ import {
     setShareUrl,
     setIsInfoOpen,
     setIsUserGuideOpen,
+    setMinimizeGfi,
 } from '../../state/slices/uiSlice';
 import { GFIPopup } from '../infobox/GFIPopup';
 import MetadataModal from '../metadata-modal/MetadataModal';
@@ -33,7 +34,7 @@ import {
     faQuestion,
     faBullhorn,
     faExclamationCircle,
-    faMapMarkerAlt
+    faMapMarkedAlt
 } from '@fortawesome/free-solid-svg-icons';
 
 import Modal from '../modals/Modal';
@@ -42,7 +43,6 @@ const StyledContent = styled.div`
     z-index: 1;
     position: relative;
     width: 100%;
-    //height: 100%;
     height: var(--app-height);
     overflow: hidden;
     display: flex;
@@ -85,7 +85,8 @@ const Content = () => {
     const {
         shareUrl,
         isInfoOpen,
-        isUserGuideOpen
+        isUserGuideOpen,
+        minimizeGfi
     } = useAppSelector((state) => state.ui);
 
     const search = useAppSelector((state) => state.search)
@@ -152,6 +153,7 @@ const Content = () => {
 
     const handleCloseGFIModal = () => {
             store.dispatch(resetGFILocations([]));
+            store.dispatch(setMinimizeGfi(false));
             channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', []);
             //channel.postRequest('MapModulePlugin.RemoveMarkersRequest', ['gfi_location']);
     };
@@ -173,7 +175,7 @@ const Content = () => {
                         fullScreenOnMobile={false} /* Scale modal full width / height when using mobile device */
                         titleIcon={faBullhorn} /* Use icon on title or null */
                         title={announcements[currentAnnouncement].title} /* Modal header title */
-                        type={"announcement"} /* Type "normal" or "warning" */
+                        type={"announcement"} /* Modal type */
                         closeAction={closeAnnouncement} /* Action when pressing modal close button or backdrop */
                         isOpen={null} /* Modal state */
                         id={announcements[currentAnnouncement].id}
@@ -193,11 +195,11 @@ const Content = () => {
                     resize={true}
                     backdrop={false} /* Is backdrop enabled (true) or disabled (false) */
                     fullScreenOnMobile={true} /* Scale modal full width / height when using mobile device */
-                    titleIcon={faMapMarkerAlt} /* Use icon on title or null */
+                    titleIcon={faMapMarkedAlt} /* Use icon on title or null */
                     title={strings.gfi.title} /* Modal header title */
-                    type={"normal"} /* Type "normal" or "warning" */
+                    type={"gfi"} /* Modal type */
                     closeAction={handleCloseGFIModal} /* Action when pressing modal close button or backdrop */
-                    isOpen={gfiLocations.length > 0} /* Modal state */
+                    isOpen={gfiLocations.length > 0 && minimizeGfi === false} /* Modal state */
                     id={null}
                     minWidth={600}
                     maxWidth={1200}
@@ -213,7 +215,7 @@ const Content = () => {
                     fullScreenOnMobile={true} /* Scale modal full width / height when using mobile device */
                     titleIcon={faQuestion} /* Use icon on title or null */
                     title={strings.appGuide.title} /* Modal header title */
-                    type={"normal"} /* Type "normal" or "warning" */
+                    type={"normal"} /* Modal type */
                     closeAction={handleCloseUserGuide} /* Action when pressing modal close button or backdrop */
                     isOpen={isUserGuideOpen} /* Modal state */
                     id={null}
@@ -228,7 +230,7 @@ const Content = () => {
                     fullScreenOnMobile={true} /* Scale modal full width / height when using mobile device */
                     titleIcon={faInfoCircle} /* Use icon on title or null */
                     title={strings.appInfo.title} /* Modal header title */
-                    type={"normal"} /* Type "normal" or "warning" */
+                    type={"normal"} /* Modal type */
                     closeAction={handleCloseAppInfoModal} /* Action when pressing modal close button or backdrop */
                     isOpen={isInfoOpen} /* Modal state */
                     id={null}
@@ -243,7 +245,7 @@ const Content = () => {
                     fullScreenOnMobile={true} /* Scale modal full width / height when using mobile device */
                     titleIcon={faInfoCircle} /* Use icon on title or null */
                     title={strings.formatString(strings.metadata.title, metadata.layer ? metadata.layer.name : '')} /* Modal header title */
-                    type={"normal"} /* Type "normal" or "warning" */
+                    type={"normal"} /* Modal type */
                     closeAction={handleCloseMetadataModal} /* Action when pressing modal close button or backdrop */
                     isOpen={metadata.data !== null} /* Modal state */
                     id={null}
@@ -260,7 +262,7 @@ const Content = () => {
                     fullScreenOnMobile={false} /* Scale modal full width / height when using mobile device */
                     titleIcon={faShareAlt} /* Use icon on title or null */
                     title={strings.share.title} /* Modal header title */
-                    type={"normal"} /* Type "normal" or "warning" */
+                    type={"normal"} /* Modal type */
                     closeAction={handleCloseShareWebSite} /* Action when pressing modal close button or backdrop */
                     isOpen={isShareOpen} /* Modal state */
                     id={null}
@@ -275,7 +277,7 @@ const Content = () => {
                     fullScreenOnMobile={false} /* Scale modal full width / height when using mobile device */
                     titleIcon={faExclamationCircle} /* Use icon on title or null */
                     title={strings.general.warning} /* Modal header title */
-                    type={"warning"} /* Type "normal" or "warning" */
+                    type={"warning"} /* Modal type */
                     warningType={warnings.type}
                     closeAction={hideWarn} /* Action when pressing modal close button or backdrop */
                     isOpen={warnings.show && warnings.type === 'multipleLayersWarning'} /* Modal state */
@@ -299,7 +301,7 @@ const Content = () => {
                     fullScreenOnMobile={false} /* Scale modal full width / height when using mobile device */
                     titleIcon={faExclamationCircle} /* Use icon on title or null */
                     title={search.selected === 'vkm' ? strings.search.vkm.error.title : strings.search.address.error.title} /* Modal header title */
-                    type={"warning"} /* Type "normal" or "warning" */
+                    type={"warning"} /* Modal type */
                     warningType={warnings.type}
                     closeAction={hideWarn} /* Action when pressing modal close button or backdrop */
                     isOpen={warnings.show && warnings.type === 'searchWarning'} /* Modal state */
@@ -318,7 +320,9 @@ const Content = () => {
                     <MapLayersDialog />
                     <Search />
                     <ZoomMenu />
-                    <ThemeMapsActionButton />
+                    <ActionButtons
+                        closeAction={handleCloseGFIModal}
+                    />
                 </StyledContentGrid>
             </StyledContent>
         </>

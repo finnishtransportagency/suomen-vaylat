@@ -1,5 +1,5 @@
 import { useContext, useState, useEffect } from 'react';
-import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faTimes, faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ReactReduxContext } from 'react-redux';
 import styled from 'styled-components';
@@ -36,8 +36,18 @@ const StyledTab = styled.div`
     border-left: 1px solid ${props => props.theme.colors.mainWhite};
     border-top: 1px solid ${props => props.theme.colors.mainWhite};
     border-right: 1px solid ${props => props.theme.colors.mainWhite};
-    padding: 8px 16px 8px 16px;
+    padding: 8px 16px 8px 4px;
     border-radius: 4px 4px 0px 0px;
+`;
+
+const StyledTabLocationButton = styled.div`
+    display: flex;
+    justify-content: center;
+
+    width: 32px;
+    svg {
+        font-size: 22px;
+    }
 `;
 
 const StyledTabCloseButton = styled.div`
@@ -93,7 +103,12 @@ const StyledTabContent = styled.div`
 export const GFIPopup = () => {
 
     const { store } = useContext(ReactReduxContext);
-    const { channel, allLayers, gfiLocations } = useAppSelector((state) => state.rpc);
+    const {
+        channel,
+        allLayers,
+        gfiLocations,
+        currentZoomLevel
+    } = useAppSelector((state) => state.rpc);
 
     const [selectedTab, setSelectedTab] = useState(0);
     const [tabsContent, setTabsContent] = useState([]);
@@ -129,12 +144,39 @@ export const GFIPopup = () => {
         && setGeoJsonToShow(tabsContent[selectedTab].props.data);
     },[selectedTab, tabsContent]);
 
+    const handleOverlayGeometry = (geoJson) => {
+        geoJson !== null ? channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest',
+        [geoJson, {
+            "clearPrevious": true,
+            "centerTo" : true,
+            maxZoomLevel: currentZoomLevel,
+            featureStyle: {
+                "fill": { // fill styles
+                    "color": "rgba(10, 140, 247, 0.3)" // fill color
+                    // "area": {
+                    //     "pattern": -1 // fill style
+                    // }
+                },
+                "stroke": { // stroke styles
+                    "color": "rgba(10, 140, 247, 0.3)", // stroke color
+                    "width": 5, // stroke width
+                    "lineDash": "solid", // line dash, supported: dash, dashdot, dot, longdash, longdashdot and solid
+                    "lineCap": "round", // line cap, supported: butt, round and square
+                    "lineJoin": "round", // line corner, supported: bevel, round and miter
+                    "area": {
+                        "color": "rgba(100, 255, 95, 0.7)", // area stroke color
+                        "width": 8, // area stroke width
+                        "lineJoin": "round" // area line corner, supported: bevel, round and miter
+                    }
+                },
+            }
+        }]) : channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', []);
+    };
+
     useEffect(() => {
         geoJsonToShow !== null ? channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest',
         [geoJsonToShow, {
             "clearPrevious": true,
-            "centerTo" : true,
-            maxZoomLevel: 5,
             featureStyle: {
                 "fill": { // fill styles
                     "color": "rgba(10, 140, 247, 0.3)" // fill color
@@ -174,6 +216,16 @@ export const GFIPopup = () => {
                                     onClick={() => setSelectedTab(index)}
                                     selected={selectedTab === index}
                                 >
+                                    <StyledTabLocationButton
+                                        onClick={() => {
+                                            handleOverlayGeometry(tabContent.props.data);
+                                            //console.log(tabContent.props.data);
+                                        }}
+                                    >
+                                        <FontAwesomeIcon
+                                            icon={faMapMarkerAlt}
+                                        />
+                                    </StyledTabLocationButton>
                                     <p>{allLayers.filter(layer => layer.id === tabContent.props.id)[0].name}</p>
                                     <StyledTabCloseButton
                                         onClick={() => {

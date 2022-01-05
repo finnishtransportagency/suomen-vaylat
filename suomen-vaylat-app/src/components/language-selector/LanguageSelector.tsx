@@ -2,12 +2,25 @@ import styled from 'styled-components';
 import { useAppSelector } from '../../state/hooks';
 import strings from './../../translations';
 
+import {
+    faGlobe,
+} from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 const StyledLanguageSelector = styled.div`
     display: flex;
     justify-content: flex-end;
     align-items: center;
     color: ${(props: { theme: { colors: { mainWhite: any; }; }; }) => props.theme.colors.mainWhite};
     padding-right: 10px;
+    svg {
+        font-size: 22px;
+    };
+    @media ${(props: { theme: { device: { mobileL: any; }; }; }) => props.theme.device.mobileL} {
+        svg {
+            font-size: 20px;
+        };
+    };
 `;
 
 const StyledSelect = styled.select`
@@ -45,6 +58,9 @@ export const LanguageSelector = () => {
 
     return (
         <StyledLanguageSelector>
+                <FontAwesomeIcon
+                    icon={faGlobe}
+                />
             <StyledSelect
                 name="language_selector"
                 value={lang.current}
