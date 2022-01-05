@@ -3,9 +3,6 @@ import styled from 'styled-components';
 import strings from '../../translations';
 import { Swiper, SwiperSlide } from 'swiper/react/swiper-react';
 import { getAppBuildDate, getAppVersion } from '../../utils/appInfoUtil';
-import { Overlay } from "react-bootstrap";
-import { isMobile } from "../../theme/theme";
-import ReactTooltip from "react-tooltip";
 
 const StyledContent = styled.div`
     max-width: 600px;
@@ -74,13 +71,6 @@ const StyledTab = styled.div`
         margin: 0;
         padding: 8px;
     }
-`;
-
-const StyledButton = styled.button`
-    border: none;
-    background-color: #ffffff;
-    cursor: pointer;
-    color: ${props => props.theme.colors.mainColor1};
 `;
 
 const StyledLink = styled.a`
