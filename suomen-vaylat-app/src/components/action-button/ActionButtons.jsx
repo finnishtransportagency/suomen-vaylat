@@ -31,7 +31,6 @@ const StyledContent = styled.div`
         max-width: 212px;
         margin-top: unset;
         margin-bottom: 8px;
-        //height: 40px;
     };
 `;
 
@@ -121,6 +120,7 @@ const StyledActionButtonClose = styled.div`
 const ActionButtons = ({
     closeAction
 }) => {
+
     const { store } = useContext(ReactReduxContext);
 
     const {
@@ -144,83 +144,85 @@ const ActionButtons = ({
     },[minimizeGfi, gfiLocations, store]);
 
     return (
-        <AnimatePresence>
-            {
-                   ((selectedTheme && selectedTheme !== '') || minimizeGfi) &&
-                   <StyledContent>
-                   {minimizeGfi && gfiLocations.length > 0 &&
-                       <StyledActionButton
-                           key="gfi_action_button"
-                           type="gfi"
-                           initial={{ y: 50, filter: "blur(10px)", opacity: 0 }}
-                           animate={{ y: 0, filter: "blur(0px)", opacity: 1 }}
-                           exit={{ y: 50, filter: "blur(10px)", opacity: 0 }}
-                           transition={{
-                               duration: 0.4,
-                               type: "tween"
-                           }}
-                       >
-                           <StyledLeftContent>
-                               <StyledActionButtonIcon>
-                                   <FontAwesomeIcon
-                                       icon={faMapMarkedAlt}
-                                   />
-                               </StyledActionButtonIcon>
-                               <StyledActionButtonText>Kohdetiedot</StyledActionButtonText>
-                           </StyledLeftContent>
-                           <StyledRightContent>
-                               <StyledExpandButton
-                                   onClick={() => store.dispatch(setMinimizeGfi(false))}
-                               >
-                                   <FontAwesomeIcon
-                                       icon={faExpand}
-                                   />
-                               </StyledExpandButton>
-                               <StyledActionButtonClose
-                                   onClick={() => closeAction()}
-                               >
-                                   <FontAwesomeIcon
-                                       icon={faTimes}
-                                   />
-                               </StyledActionButtonClose>
-                           </StyledRightContent>
-                       </StyledActionButton>
-                   }
-                   {selectedTheme && selectedTheme !== '' &&
-                       <StyledActionButton
-                           key="theme_action_button"
-                           initial={{ y: 50, filter: "blur(10px)", opacity: 0 }}
-                           animate={{ y: 0, filter: "blur(0px)", opacity: 1 }}
-                           exit={{ y: 50, filter: "blur(10px)", opacity: 0 }}
-                           transition={{
-                               duration: 0.4,
-                               type: "tween"
-                           }}
-                       >
-                           <StyledLeftContent>
-                               <StyledActionButtonIcon>
-                                   <FontAwesomeIcon
-                                       icon={faMap}
-                                   />
-                               </StyledActionButtonIcon>
-                               <StyledActionButtonText>{selectedTheme && selectedTheme.name}</StyledActionButtonText>
-                           </StyledLeftContent>
-                           <StyledRightContent>
-                               <ThemeGroupShareButton themeId={selectedTheme && selectedTheme.id}/>
-                                   <StyledActionButtonClose
-                                       onClick={() => handleSelectGroup(selectedThemeIndex, selectedTheme)}
-                                   >
-                                       <FontAwesomeIcon
-                                           icon={faTimes}
-                                       />
-                               </StyledActionButtonClose>
-                           </StyledRightContent>
-
-                       </StyledActionButton>
-                   }
-            </StyledContent>
-        }
-        </AnimatePresence>
+            <StyledContent>
+                    <AnimatePresence initial={false}>
+                        {
+                            minimizeGfi && gfiLocations.length > 0 &&
+                            <StyledActionButton
+                                key="gfi_action_button"
+                                type="gfi"
+                                positionTransition
+                                initial={{ y: 50, filter: "blur(10px)", opacity: 0 }}
+                                animate={{ y: 0, filter: "blur(0px)", opacity: 1 }}
+                                exit={{ y: 50, filter: "blur(10px)", opacity: 0 }}
+                                transition={{
+                                    duration: 0.4,
+                                    type: "tween"
+                                }}
+                            >
+                                <StyledLeftContent>
+                                    <StyledActionButtonIcon>
+                                        <FontAwesomeIcon
+                                            icon={faMapMarkedAlt}
+                                        />
+                                    </StyledActionButtonIcon>
+                                    <StyledActionButtonText>Kohdetiedot</StyledActionButtonText>
+                                </StyledLeftContent>
+                                <StyledRightContent>
+                                    <StyledExpandButton
+                                        onClick={() => store.dispatch(setMinimizeGfi(false))}
+                                    >
+                                        <FontAwesomeIcon
+                                            icon={faExpand}
+                                        />
+                                    </StyledExpandButton>
+                                    <StyledActionButtonClose
+                                        onClick={() => closeAction()}
+                                    >
+                                        <FontAwesomeIcon
+                                            icon={faTimes}
+                                        />
+                                    </StyledActionButtonClose>
+                                </StyledRightContent>
+                            </StyledActionButton>
+                        }
+                        {
+                            selectedTheme && selectedTheme !== '' &&
+                            <StyledActionButton
+                                key="theme_action_button"
+                                positionTransition
+                                initial={{ y: 50, filter: "blur(10px)", opacity: 0 }}
+                                animate={{ y: 0, filter: "blur(0px)", opacity: 1 }}
+                                exit={{ y: 50, filter: "blur(10px)", opacity: 0 }}
+                                transition={{
+                                    duration: 0.4,
+                                    type: "tween"
+                                }}
+                            >
+                                <StyledLeftContent>
+                                    <StyledActionButtonIcon>
+                                        <FontAwesomeIcon
+                                            icon={faMap}
+                                        />
+                                    </StyledActionButtonIcon>
+                                    <StyledActionButtonText>{selectedTheme && selectedTheme.name}</StyledActionButtonText>
+                                </StyledLeftContent>
+                                <StyledRightContent>
+                                    <ThemeGroupShareButton themeId={selectedTheme && selectedTheme.id}/>
+                                        <StyledActionButtonClose
+                                            onClick={() => handleSelectGroup(selectedThemeIndex, selectedTheme)}
+                                        >
+                                            <FontAwesomeIcon
+                                                icon={faTimes}
+                                            />
+                                    </StyledActionButtonClose>
+                                </StyledRightContent>
+            
+                            </StyledActionButton>
+                        }
+                    </AnimatePresence>
+    </StyledContent>
+       
     )
 };
 
