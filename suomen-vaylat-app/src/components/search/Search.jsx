@@ -333,6 +333,7 @@ const Search = () => {
                         store.dispatch(setIsSearchOpen(!isSearchOpen));
                         setIsSearchMethodSelectorOpen(false);
                     }}
+                    isActive={isSearchOpen}
                 >
                     <FontAwesomeIcon
                         icon={isSearchOpen ? faTimes : faSearch}

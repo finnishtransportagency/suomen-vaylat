@@ -1,9 +1,13 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { cloneElement} from 'react';
 import styled from 'styled-components';
 import { motion, AnimatePresence, useDragControls } from 'framer-motion';
-import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import { ReactReduxContext } from 'react-redux';
+import { faTimes, faWindowMinimize } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
+
+import { setMinimizeGfi } from '../../state/slices/uiSlice';
 
 const StyledModalBackdrop = styled(motion.div)`
     //z-index: ${props => props.resize ? 1 : 9998};
@@ -63,7 +67,7 @@ const StyledModal = styled(motion.div)`
 
 const StyledModalHeader = styled.div`
     z-index: 10;
-    //min-height: 56px;
+    min-height: 56px;
     //height: auto;
     //position: sticky;
     //top: 0px;
@@ -72,6 +76,7 @@ const StyledModalHeader = styled.div`
     justify-content: space-between;
     background-color:  ${props => props.type === "warning" ? "#C73F00" : props.theme.colors.mainColor1};
     box-shadow: 2px 2px 4px 0px rgba(0,0,0,0.20);
+    padding-left: 16px;
     padding-right: 16px;
     cursor:  ${props => props.drag ? "grab" : "initial"};
     &&:active {
@@ -93,7 +98,6 @@ const StyledModalHeader = styled.div`
 const StyledModalTitle = styled.div`
     display: flex;
     align-items: center;
-    padding: 16px 16px 16px 16px;
     p {
         margin: 0px;
         font-size: 20px;
@@ -113,6 +117,25 @@ const StyledModalTitle = styled.div`
             pointer-events: auto;
         };
     };
+`;
+
+const StyledRightContent = styled.div`
+    display: flex;
+    align-items: center;
+`;
+
+const StyledMinimizeButton = styled.div`
+    //width: 32px;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 8px;
+    padding: 8px;
+    cursor: pointer;
+    svg {
+         font-size: 18px;
+    }
 `;
 
 const StyledCloseButton = styled.div`
@@ -151,6 +174,8 @@ const Modal = ({
     overflow,
     children
 }) => {
+
+    const { store } = useContext(ReactReduxContext);
 
     const dragControls = useDragControls();
 
@@ -210,18 +235,27 @@ const Modal = ({
                                 }
                                 <p>{title}</p>
                             </StyledModalTitle>
-
-                           <StyledCloseButton
-                                onClick={() => {
-                                    type !== "announcement" && closeAction();
-                                    type === "announcement" && handleAnnouncementModal(null, null);
-                                }}
-                            >
-                                <StyledCloseIcon
-                                    icon={faTimes}
-                                />
-                            </StyledCloseButton>
-
+                            <StyledRightContent>
+                                { type === "gfi" && 
+                                    <StyledMinimizeButton
+                                        onClick={() => store.dispatch(setMinimizeGfi(true))}
+                                    >
+                                        <FontAwesomeIcon
+                                            icon={faWindowMinimize}
+                                        />
+                                    </StyledMinimizeButton>
+                                }
+                                <StyledCloseButton
+                                    onClick={() => {
+                                        type !== "announcement" && closeAction();
+                                        type === "announcement" && handleAnnouncementModal(null, null);
+                                    }}
+                                >
+                                    <StyledCloseIcon
+                                        icon={faTimes}
+                                    />
+                                </StyledCloseButton>
+                            </StyledRightContent>
                         </StyledModalHeader>
                         <StyledModalContent overflow={overflow}>
                             {!type === "announcement" ? children : clonedChildren}

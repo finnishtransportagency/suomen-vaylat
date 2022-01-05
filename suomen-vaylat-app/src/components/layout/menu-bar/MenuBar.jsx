@@ -143,7 +143,7 @@ const MenuBar = () => {
         channel.postRequest('DrawTools.StopDrawingRequest', [true]);
         // stop the drawing tool
         channel.postRequest('DrawTools.StopDrawingRequest', [activeTool]);
-        store.dispatch(setActiveTool(''));
+        store.dispatch(setActiveTool(null));
         store.dispatch(setIsDrawingToolsOpen(!isDrawingToolsOpen))
     };
 

@@ -10,11 +10,12 @@ const initialState = {
   isUserGuideOpen: false,
   shareUrl: '',
   isDrawingToolsOpen: false,
-  activeTool: '',
+  activeTool: null,
   gfiLocations: null,
   isSwipingDisabled: false,
   selectedMapLayersMenuTab: 0,
-  selectedMapLayersMenuThemeIndex: null
+  selectedMapLayersMenuThemeIndex: null,
+  minimizeGfi: false
 };
 
 export const uiSlice = createSlice({
@@ -66,6 +67,9 @@ export const uiSlice = createSlice({
     },
     setSelectedMapLayersMenuThemeIndex: (state, action) => {
       state.selectedMapLayersMenuThemeIndex = action.payload;
+    },
+    setMinimizeGfi: (state, action) => {
+      state.minimizeGfi = action.payload;
     }
   }
 });
@@ -84,7 +88,8 @@ export const {
   setActiveTool,
   setIsSwipingDisabled,
   setSelectedMapLayersMenuTab,
-  setSelectedMapLayersMenuThemeIndex
+  setSelectedMapLayersMenuThemeIndex,
+  setMinimizeGfi,
 } = uiSlice.actions;
 
 export default uiSlice.reducer;
