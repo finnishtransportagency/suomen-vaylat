@@ -43,7 +43,6 @@ const StyledContent = styled.div`
     z-index: 1;
     position: relative;
     width: 100%;
-    //height: 100%;
     height: var(--app-height);
     overflow: hidden;
     display: flex;
@@ -98,7 +97,6 @@ const Content = () => {
     const metadata = useAppSelector((state) => state.rpc.layerMetadata);
     let {
         channel,
-        selectedTheme,
         gfiLocations
     } = useAppSelector((state) => state.rpc);
     //const channel = useSelector(state => state.rpc.channel);
