@@ -106,8 +106,8 @@
     },
     "appInfo": {
         "title": "Sovelluksen tiedot",
-        "headingText": "Suomen Väylät -karttapalvelu kokoaa yhteen Väyläviraston avoimet, eri väylämuotoihin liittyvät aineistot. Palvelun kautta väylätietoja halutaan kuvata mahdollisimman sujuvasti, näkyvästi, ajantasaisesti ja monipuolisesti erilaisille käyttäjäryhmille ja -tarpeille.",
-        "mainText": "Väyläviraston lakisääteinen tehtävä on vastata Suomen tie-, rataverkosta sekä vesiväylistä. Väylävirasto hallinnoi, hyödyntää sekä jakaa mittavan määrän väyläverkkoihin liittyviä tietoja. Väyliin liittyvät sijainti-, ominaisuus- ja kuntotiedot sekä väylähankkeiden suunnittelu - ja toteumatiedot, ovat perustana monen toiminnan suunnittelulle, päätöksenteolle ja seurannalle. Väyläviraston toiminnan myötä syntyvät tietoaineistot ja niiden perusteella tekemät tilastot ja tutkimukset pidetään lähtökohtaisesti julkisena tietona, joita luovutetaan muiden yhteiskunnan toimijoiden ja kansalaisten käyttöön. Julkinen tieto luovutetaan muiden toimijoiden käyttöön avoimena datana aina silloin, kun se on mahdollista.",
+        "headingText": "Suomen Väylät on Väyläviraston avoimen datan paikkatietoaineistoihin perustuva karttapalvelu, joka on julkaistu vuonna 2022 ja se sisältää tällä hetkellä yli 270 tietolajia ominaisuustietoineen. Palvelua ja sen sisältöä kehitetään edelleen.",
+        "mainText": "Suomen Väylät karttapalvelun kautta on katseltavissa tiestötietoja valtion tieverkolta, rautatietietoja sekä tietoja vesiväylistä. Lisäksi omiksi kokonaisuuksiksi on koottu Väyläviraston infrahanketietoja sekä kansallisen tie- ja katuverkon tietojärjestelmän, Digiroadin, tietolajit. Palveluun on rakennettu valmiiksi useita teemakarttoja, kuten esimerkiksi Hankekartta ja Rautateiden verkkoseloste. Suomen Väylissä aineistoja voi hakea aineistojen nimen tai aihealueen mukaan sekä suodattaa aineistoja teemojen mukaisesti. Lisäksi karttapalvelusta löytyy erilliset osoite- , tiehaku ja metatietohaut. Suomen Väylät on käytettävissä sekä desktop- että mobiiliversioilla. Palvelua tuotetaan suomen-, ruotsin- ja englannin kielillä.  Palvelun käyttöohjeet löytyvät ?-painikkeen(linkki) takaa. Suomen Väylien operoinnista ja ylläpidosta vastaa tällä hetkellä Sitowise Oy.",
         "versionInfo": {
             "title": "Versiotiedot",
             "appVersion": "Sovelluksen versio: ",
@@ -116,15 +116,34 @@
             "appContactAndFeedback": "Yhteystiedot ja palaute",
             "versionInfoList": {
                 "0": {
+                    "title": "Versiomuutokset:",
+                    "list": {
+                        "0": {
+                            "content": "Sovellukseen tehdyt korjaukset",
+                            "subContent": {
+                                "0": "Teeman jako",
+                                "1": "Bugit mobiilinäkymässä",
+                                "2": "Sovelluksen kaatumiseen johtavat bugit",
+                                "3": "Tie- ja osoitehaun korjaukset",
+                                "4": "Zoom-valikon korjaukset"
+                            }
+                        },
+                        "1": {
+                            "content": "Sovellukseen tehdyt päivitykset",
+                            "subContent": {
+                                "0": "Kielisyyksien Excel tuonnin ja viennin tuki",
+                                "1": "Modaalien parannuspäivitys",
+                                "2": "Otsake palkin mobiiliresponsiivisuuden\nparantaminen",
+                                "3": "Sovelluksen tiedot -tekstien päivitys",
+                                "4": "Pienempiä käytettävyysparannuksia"
+                            }
+                        }
+                    }
+                },
+                "1": {
                     "title": "Tiedossa olevat puutteet:",
                     "list": {
                         "0": {
-                            "content": "Karttaa ei voi raahata kun sen päälle on avattu ikkuna (kohdetietoikkuna, infoikkuna, metatietoikkuna)"
-                        },
-                        "1": {
-                            "content": "Kohdetiedot eivät skaalaudu mobiiliin"
-                        },
-                        "2": {
                             "content": "Kaikkia aineistoryhmiä ei ole käsitelty datan osalta",
                             "subContent": {
                                 "0": "Tiestötiedoista puuttuvat selkokielisyydet ja kenttien priorisointi kohdetietoikkunaan",
