@@ -23,10 +23,16 @@ const StyledZoomLevelCircle = styled.div`
         transform: scale(1.1);
     };
     @media ${props => props.theme.device.mobileL} {
+        width: 20px;
+        height: 20px;
+        border: 4px solid ${props => props.theme.colors.mainColor1};
+        margin: 2px;
+    };
+    @media ${props => props.theme.device.mobileS} {
         width: 16px;
         height: 16px;
-        border: 2px solid ${props => props.theme.colors.mainColor1};
-        margin: 2px;
+        border: 3px solid ${props => props.theme.colors.mainColor1};
+        margin: 1px;
     };
 `;
 
