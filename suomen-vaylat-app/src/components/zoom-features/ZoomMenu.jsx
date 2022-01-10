@@ -6,15 +6,12 @@ import { useAppSelector } from '../../state/hooks';
 import strings from '../../translations';
 import ZoomBar from './ZoomBar';
 
-import { Legend } from '../legend/Legend';
+//import { Legend } from '../legend/Legend';
 
-const StyledZoomMenu = styled.div`
-    position: relative;
-    justify-self: end;
-    align-self: end;
+const StyledContainer = styled.div`
     display: flex;
+    justify-content: flex-end;
     align-items: end;
-    pointer-events: none;
 `;
 
 const ZoomMenu = () => {
@@ -28,17 +25,15 @@ const ZoomMenu = () => {
             <ReactTooltip disable={isMobile} id='myLoc' place='top' type='dark' effect='float'>
                 <span>{strings.tooltips.myLocButton}</span>
             </ReactTooltip>
-
-            <StyledZoomMenu>
-                <Legend
+            <StyledContainer>
+                {/* <Legend
                     currentZoomLevel={rpc.currentZoomLevel}
                     selectedLayers={rpc.selectedLayers}
                     zoomLevelsLayers={rpc.zoomLevelsLayers}
                     hoveringIndex={hoveringIndex}
                     isExpanded={isExpanded}
                     setIsExpanded={setIsExpanded}
-                />
-
+                /> */}
                 <ZoomBar
                     setHoveringIndex={setHoveringIndex}
                     zoomLevelsLayers={rpc.zoomLevelsLayers}
@@ -49,7 +44,7 @@ const ZoomMenu = () => {
                     allLayers={rpc.allLayers}
                     selectedLayers={rpc.selectedLayers}
                 />
-            </StyledZoomMenu>
+            </StyledContainer>
         </>
     );
 };
