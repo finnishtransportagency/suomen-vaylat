@@ -1,11 +1,8 @@
-import { useRef, useState, useEffect} from 'react';
+import React, { useRef, useState, useEffect} from 'react';
 import styled from 'styled-components';
 import strings from '../../translations';
 import { Swiper, SwiperSlide } from 'swiper/react/swiper-react';
 import { getAppBuildDate, getAppVersion } from '../../utils/appInfoUtil';
-import { Overlay } from "react-bootstrap";
-import { isMobile } from "../../theme/theme";
-import ReactTooltip from "react-tooltip";
 
 const StyledContent = styled.div`
     max-width: 600px;
@@ -26,15 +23,15 @@ const StyledTabs = styled.div`
         z-index: 2;
         position: absolute;
         content: '';
-        width: calc(100% / 3);
+        width: calc(100% / 4);
         height: 100%;
         background-color: ${props => props.theme.colors.mainWhite};
         bottom: 0px;
-        left: ${props => props.tabIndex * 50 +'%'};
+        left: ${props => props.tabIndex * 33 +'%'};
         border-radius: 4px 4px 0px 0px;
         transform: translateX(
             ${props => {
-            return props.tabIndex * -50+'%';
+            return props.tabIndex * -33+'%';
             }}
         );
         transition: all 0.3s ease-out;
@@ -42,14 +39,14 @@ const StyledTabs = styled.div`
     &::after {
         position: absolute;
         content: '';
-        width: calc(100% / 3);
+        width: calc(100% / 4);
         height: 100%;
         bottom: 0px;
-        left: ${props => props.tabIndex * 50 + '%'};
+        left: ${props => props.tabIndex * 33 + '%'};
         border-radius: 4px 4px 0px 0px;
         transform: translateX(
             ${props => {
-            return props.tabIndex * -50+ '%';
+            return props.tabIndex * -33+ '%';
             }}
         );
         transition: all 0.3s ease-out;¨
@@ -60,7 +57,7 @@ const StyledTabs = styled.div`
 const StyledTab = styled.div`
     z-index: 2;
     user-select: none;
-    width: calc(100% / 3);
+    width: calc(100% / 4);
     cursor: pointer;
     color: ${props => props.isSelected ? props.theme.colors[props.color] : "#656565"};
     text-align: center;
@@ -76,9 +73,8 @@ const StyledTab = styled.div`
     }
 `;
 
-const StyledButton = styled.button`
-    border: none;
-    background-color: #ffffff;
+const StyledLink = styled.a`
+    cursor: pointer;
     color: ${props => props.theme.colors.mainColor1};
 `;
 
@@ -140,28 +136,31 @@ export const VersionInfo = ({listData, currentAppVersion, currentAppBuildDate}) 
 };
 
 export const ContactAndFeedback = () => {
-    const [textCopiedTooltip, setTextCopiedTooltip] = useState(false);
-    const target = useRef(null);
-    const contactInfoFeedback = strings.appInfo.versionInfo.contactInfoFeedback
-
-    const copyTextToClipboard = (text) => {
-        console.log("copyTextToClipboard text", text)
-        navigator.clipboard.writeText(text)
-        setTextCopiedTooltip(true)
-    };
+    const contactInfoFeedback = strings.appInfo.contactInfoFeedback;
 
     return (
         <div>
-            <Overlay target={target.current} show={textCopiedTooltip} placement={'top'} >
-                <ReactTooltip disable={isMobile} place="top" type="dark" effect="float">
-                    <span>{strings.gfi.gfiLocation}</span>
-                </ReactTooltip>
-            </Overlay>
             <p>{contactInfoFeedback[0]}</p>
-            <p>{contactInfoFeedback[1]} <StyledButton ref={target} onClick={() => copyTextToClipboard(contactInfoFeedback[2])}>{contactInfoFeedback[2]}</StyledButton></p>
+            <p>{contactInfoFeedback[1]} <StyledLink href={'mailto:' + contactInfoFeedback[2] + '?subject='+contactInfoFeedback.emailSubject}>{contactInfoFeedback[2]}</StyledLink></p>
         </div>
     );
 };
+
+export const AppInfoLinks = () => {
+    const appInfoLinks = strings.appInfo.appInfoLinks;
+
+    return (
+        <div>
+            <ul>
+                {Object.values(appInfoLinks).map((link, key) => {
+                    return(
+                        <li key={key}>{link.text} <StyledLink href={link.link} target={'_blank'}>{link.link}</StyledLink></li>
+                    )
+                })}
+            </ul>
+        </div>
+    )
+}
 
 export const AppInfoModalContent = () => {
 
@@ -187,6 +186,12 @@ export const AppInfoModalContent = () => {
         },
         {
             id: 'swipeAbleTab_1',
+            title: strings.appInfo.versionInfo.appInfoLinksTitle,
+            titleColor: 'mainColor1',
+            content: <AppInfoLinks />
+        },
+        {
+            id: 'swipeAbleTab_2',
             title: strings.appInfo.versionInfo.title,
             titleColor: 'mainColor1',
             content: <VersionInfo
@@ -196,7 +201,7 @@ export const AppInfoModalContent = () => {
             />
         },
         {
-            id: 'swipeAbleTab_2',
+            id: 'swipeAbleTab_3',
             title: strings.appInfo.versionInfo.appContactAndFeedback,
             titleColor: 'mainColor1',
             content: <ContactAndFeedback />

@@ -106,13 +106,14 @@
     },
     "appInfo": {
         "title": "Sovelluksen tiedot",
-        "headingText": "Suomen Väylät -karttapalvelu kokoaa yhteen Väyläviraston avoimet, eri väylämuotoihin liittyvät aineistot. Palvelun kautta väylätietoja halutaan kuvata mahdollisimman sujuvasti, näkyvästi, ajantasaisesti ja monipuolisesti erilaisille käyttäjäryhmille ja -tarpeille.",
-        "mainText": "Väyläviraston lakisääteinen tehtävä on vastata Suomen tie-, rataverkosta sekä vesiväylistä. Väylävirasto hallinnoi, hyödyntää sekä jakaa mittavan määrän väyläverkkoihin liittyviä tietoja. Väyliin liittyvät sijainti-, ominaisuus- ja kuntotiedot sekä väylähankkeiden suunnittelu - ja toteumatiedot, ovat perustana monen toiminnan suunnittelulle, päätöksenteolle ja seurannalle. Väyläviraston toiminnan myötä syntyvät tietoaineistot ja niiden perusteella tekemät tilastot ja tutkimukset pidetään lähtökohtaisesti julkisena tietona, joita luovutetaan muiden yhteiskunnan toimijoiden ja kansalaisten käyttöön. Julkinen tieto luovutetaan muiden toimijoiden käyttöön avoimena datana aina silloin, kun se on mahdollista.",
+        "headingText": "Suomen Väylät on Väyläviraston avoimen datan paikkatietoaineistoihin perustuva karttapalvelu, joka on julkaistu vuonna 2022 ja se sisältää tällä hetkellä yli 270 tietolajia ominaisuustietoineen. Palvelua ja sen sisältöä kehitetään edelleen.",
+        "mainText": "Suomen Väylät karttapalvelun kautta on katseltavissa tiestötietoja valtion tieverkolta, rautatietietoja sekä tietoja vesiväylistä. Lisäksi omiksi kokonaisuuksiksi on koottu Väyläviraston infrahanketietoja sekä kansallisen tie- ja katuverkon tietojärjestelmän, Digiroadin, tietolajit. Palveluun on rakennettu valmiiksi useita teemakarttoja, kuten esimerkiksi Hankekartta ja Rautateiden verkkoseloste. Suomen Väylissä aineistoja voi hakea aineistojen nimen tai aihealueen mukaan sekä suodattaa aineistoja teemojen mukaisesti. Lisäksi karttapalvelusta löytyy erilliset osoite- , tiehaku ja metatietohaut. Suomen Väylät on käytettävissä sekä desktop- että mobiiliversioilla. Palvelua tuotetaan suomen-, ruotsin- ja englannin kielillä.  Palvelun käyttöohjeet löytyvät ?-painikkeen(linkki) takaa. Suomen Väylien operoinnista ja ylläpidosta vastaa tällä hetkellä Sitowise Oy.",
         "versionInfo": {
             "title": "Versiotiedot",
             "appVersion": "Sovelluksen versio: ",
             "appLastUpdate": "Sovellus päivitetty viimeksi: ",
             "appInfoTitle": "Tietoa palvelusta",
+            "appInfoLinksTitle": "Linkkejä",
             "appContactAndFeedback": "Yhteystiedot ja palaute",
             "versionInfoList": {
                 "0": {
@@ -152,11 +153,26 @@
                         }
                     }
                 }
+            }
+        },
+        "contactInfoFeedback": {
+            "0": "Sovelluksesta vastaa Väylävirasto ja sovelluksen toimittaa Sitowise Oy.",
+            "1": "Palautetta toivotaan lähetettävän osoitteeseen ",
+            "2": "suomenvaylat@vayla.fi",
+            "emailSubject": "Suomen Väylät palaute"
+        },
+        "appInfoLinks": {
+            "0": {
+                "text" : "Lisätietoja Väyläviraston avoimesta datasta ja käyttöehdoista:",
+                "link" : "https://vayla.fi/vaylista/aineistot/avoindata"
             },
-            "contactInfoFeedback": {
-                "0": "Sovelluksesta vastaa Väylävirasto ja sovelluksen toimittaa Sitowise Oy.",
-                "1": "Palautetta toivotaan lähetettävän osoitteeseen ",
-                "2": "suomenvaylat@vayla.fi"
+            "1": {
+                "text" : "Linkkejä avoimiin rajapintoihin ja latauspalveluun:",
+                "link" : "https://vayla.fi/vaylista/aineistot/avoindata/rajapinnat"
+            },
+            "2": {
+                "text" : "Väyläviraston karttoja:",
+                "link" : "https://vayla.fi/vaylista/aineistot/kartat"
             }
         }
     },

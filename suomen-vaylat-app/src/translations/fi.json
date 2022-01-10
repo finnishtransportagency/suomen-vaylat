@@ -113,6 +113,7 @@
             "appVersion": "Sovelluksen versio: ",
             "appLastUpdate": "Sovellus päivitetty viimeksi: ",
             "appInfoTitle": "Tietoa palvelusta",
+            "appInfoLinksTitle": "Linkkejä",
             "appContactAndFeedback": "Yhteystiedot ja palaute",
             "versionInfoList": {
                 "0": {
@@ -152,11 +153,26 @@
                         }
                     }
                 }
+            }
+        },
+        "contactInfoFeedback": {
+            "0": "Sovelluksesta vastaa Väylävirasto ja sovelluksen toimittaa Sitowise Oy.",
+            "1": "Palautetta toivotaan lähetettävän osoitteeseen ",
+            "2": "suomenvaylat@vayla.fi",
+            "emailSubject": "Suomen Väylät palaute"
+        },
+        "appInfoLinks": {
+            "0": {
+                "text" : "Lisätietoja Väyläviraston avoimesta datasta ja käyttöehdoista:",
+                "link" : "https://vayla.fi/vaylista/aineistot/avoindata"
             },
-            "contactInfoFeedback": {
-                "0": "Sovelluksesta vastaa Väylävirasto ja sovelluksen toimittaa Sitowise Oy.",
-                "1": "Palautetta toivotaan lähetettävän osoitteeseen ",
-                "2": "suomenvaylat@vayla.fi"
+            "1": {
+                "text" : "Linkkejä avoimiin rajapintoihin ja latauspalveluun:",
+                "link" : "https://vayla.fi/vaylista/aineistot/avoindata/rajapinnat"
+            },
+            "2": {
+                "text" : "Väyläviraston karttoja:",
+                "link" : "https://vayla.fi/vaylista/aineistot/kartat"
             }
         }
     },
