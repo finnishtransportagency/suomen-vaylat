@@ -173,7 +173,10 @@ const MenuBar = () => {
                 <StyledMenuBarButton
                     data-tip data-for='layerlist'
                     isActive={isSideMenuOpen}
-                    onClick={() => store.dispatch(setIsSideMenuOpen(!isSideMenuOpen))}
+                    onClick={() =>
+                        store.dispatch(setIsSideMenuOpen(!isSideMenuOpen))
+
+                    }
                 >
                     <StyledLayerCount>
                         {selectedLayers.length}

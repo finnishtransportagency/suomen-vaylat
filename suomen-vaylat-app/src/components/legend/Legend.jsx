@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import React, {useContext, useEffect, useState} from 'react';
+import {ReactReduxContext, useSelector} from 'react-redux';
 import { motion } from 'framer-motion';
 import '../../custom.scss';
 import styled from 'styled-components';
@@ -9,6 +9,7 @@ import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { LegendGroup } from './LegendGroup';
 import {isMobile} from "../../theme/theme";
 import ReactTooltip from "react-tooltip";
+import {setLegendOpen} from "../../state/slices/uiSlice";
 
 
 const StyledLegendContainer = styled(motion.div)`
@@ -91,6 +92,7 @@ export const Legend = ({
     isExpanded,
     setIsExpanded
 }) => {
+    const { store } = useContext(ReactReduxContext);
     const legends = [];
     const noLegends = [];
     const allLegends = useSelector((state) => state.rpc.legends);
@@ -136,7 +138,7 @@ export const Legend = ({
                 </StyledTitleContent>
                     <StyledCloseIcon
                         icon={faTimes}
-                        onClick={() => setIsExpanded(false)}
+                        onClick={() => store.dispatch(setLegendOpen(false))}
                     />
             </StyledHeaderContent>
             <StyledGroupsContainer id="legend-main-container">

@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
+import React, {useContext, useState} from 'react';
 import ReactTooltip from 'react-tooltip';
 import { isMobile } from '../../theme/theme';
 import styled from 'styled-components';
 import { useAppSelector } from '../../state/hooks';
+import {setLegendOpen} from '../../state/slices/uiSlice'
 import strings from '../../translations';
 import ZoomBar from './ZoomBar';
 
 import { Legend } from '../legend/Legend';
+import {ReactReduxContext} from "react-redux";
 
 const StyledZoomMenu = styled.div`
     position: relative;
@@ -19,9 +21,14 @@ const StyledZoomMenu = styled.div`
 
 const ZoomMenu = () => {
     const [hoveringIndex, setHoveringIndex] = useState(null);
-    const [isExpanded, setIsExpanded] = useState(false);
 
+    const { store } = useContext(ReactReduxContext);
     const rpc = useAppSelector((state) => state.rpc);
+    const isLegendOpen = useAppSelector((state) => state.ui.isLegendOpen)
+
+    const setLegendPanelOpen = (isExpanded) => {
+        store.dispatch(setLegendOpen(isExpanded))
+    }
 
     return (
         <>
@@ -35,16 +42,16 @@ const ZoomMenu = () => {
                     selectedLayers={rpc.selectedLayers}
                     zoomLevelsLayers={rpc.zoomLevelsLayers}
                     hoveringIndex={hoveringIndex}
-                    isExpanded={isExpanded}
-                    setIsExpanded={setIsExpanded}
+                    isExpanded={isLegendOpen}
+                    setIsExpanded={setLegendPanelOpen}
                 />
 
                 <ZoomBar
                     setHoveringIndex={setHoveringIndex}
                     zoomLevelsLayers={rpc.zoomLevelsLayers}
                     hoveringIndex={hoveringIndex}
-                    isExpanded={isExpanded}
-                    setIsExpanded={setIsExpanded}
+                    isExpanded={isLegendOpen}
+                    setIsExpanded={setLegendPanelOpen}
                     currentZoomLevel={rpc.currentZoomLevel}
                     allLayers={rpc.allLayers}
                     selectedLayers={rpc.selectedLayers}

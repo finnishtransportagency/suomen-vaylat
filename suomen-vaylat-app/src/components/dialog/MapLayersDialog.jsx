@@ -2,8 +2,9 @@ import { useRef, useContext, useEffect } from 'react';
 import styled from 'styled-components';
 import { useAppSelector } from '../../state/hooks';
 import { ReactReduxContext } from 'react-redux';
-import { setIsSideMenuOpen, setSelectedMapLayersMenuTab } from '../../state/slices/uiSlice';
+import { setIsSideMenuOpen, setSelectedMapLayersMenuTab, setLegendOpen } from '../../state/slices/uiSlice';
 import { motion } from "framer-motion";
+import {isMobile} from "../../theme/theme";
 import { Swiper, SwiperSlide } from 'swiper/react/swiper-react.js';
 
 // Styles must use direct files imports
@@ -190,11 +191,17 @@ const MapLayersDialog = () => {
 
     const hideWarn = () => {
         store.dispatch(setIsSideMenuOpen(!isSideMenuOpen));
+        store.dispatch(setLegendOpen(false));
     };
 
     useEffect(() => {
         inputEl.current.swiper.slideTo(selectedMapLayersMenuTab);
-    },[selectedMapLayersMenuTab]);
+        if(selectedMapLayersMenuTab == 1 && isSideMenuOpen) {
+            store.dispatch(setLegendOpen(true));
+        } else {
+            store.dispatch(setLegendOpen(false));
+        }
+    },[selectedMapLayersMenuTab, isSideMenuOpen]);
 
     const tabsContent = [
         {
@@ -255,7 +262,9 @@ const MapLayersDialog = () => {
                                     color={tab.titleColor}
                                     onClick={() => {
                                         store.dispatch(setSelectedMapLayersMenuTab(index));
-                                        //setTabIndex(index);
+                                        if(!isMobile) {
+                                            store.dispatch(setLegendOpen());
+                                        }
                                        // inputEl.current.swiper.slideTo(index);
                                     }}
                                 >

@@ -5,6 +5,7 @@ const initialState = {
   modalConstrainsRef: null,
   isSideMenuOpen: false,
   isSearchOpen: false,
+  isLegendOpen: false,
   searchParams: '',
   isInfoOpen: false,
   isUserGuideOpen: false,
@@ -50,6 +51,9 @@ export const uiSlice = createSlice({
     setIsUserGuideOpen: (state, action) => {
       state.isUserGuideOpen = action.payload;
     },
+    setLegendOpen: (state, action) => {
+      state.isLegendOpen = action.payload;
+    },
     setShareUrl: (state, action) => {
       state.shareUrl = action.payload;
     },
@@ -88,6 +92,7 @@ export const {
   setActiveTool,
   setIsSwipingDisabled,
   setSelectedMapLayersMenuTab,
+  setLegendOpen,
   setSelectedMapLayersMenuThemeIndex,
   setMinimizeGfi,
 } = uiSlice.actions;
