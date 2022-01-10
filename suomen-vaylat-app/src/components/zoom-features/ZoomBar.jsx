@@ -3,7 +3,7 @@ import ReactTooltip from 'react-tooltip';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faListAlt, faSearchMinus, faSearchPlus } from '@fortawesome/free-solid-svg-icons';
+import { faList, faSearchMinus, faSearchPlus } from '@fortawesome/free-solid-svg-icons';
 import location from '../../theme/icons/my_location_white_24dp.svg';
 
 import { useAppSelector } from '../../state/hooks';
@@ -13,16 +13,14 @@ import { setZoomIn, setZoomOut } from '../../state/slices/rpcSlice';
 import strings from '../../translations';
 import ZoomBarCircle from './ZoomBarCircle';
 
+import { Legend } from '../legend/Legend';
+
 const StyledZoomBarContainer = styled.div`
     z-index: 1;
     position: relative;
     pointer-events: none;
     cursor: pointer;
     display: flex;
-    height: 100%;
-    //flex-direction: column-reverse;
-    flex-direction: column;
-    align-items: center;
 `;
 
 const StyledZoomBarZoomFeatures = styled.div`
@@ -40,9 +38,6 @@ const StyledZoomBarZoomFeatures = styled.div`
         width: 4px;
         height: 100%;
         background-color: ${props => props.theme.colors.mainColor1};
-        @media ${props => props.theme.device.mobileL} {
-            width: 3px;
-        };
     }
 `;
 
@@ -54,8 +49,7 @@ const StyledZoomBarControlTop = styled.button`
     align-items: center;
     pointer-events: auto;
     background-color: ${props => props.theme.colors.mainColor1};
-    //margin: 0px 3px 3px 3px;
-    margin-bottom: 8px;
+    margin-bottom: 4px;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
     border: none;
     border-radius: 50%;
@@ -68,9 +62,9 @@ const StyledZoomBarControlTop = styled.button`
         background-color: ${props => props.theme.colors.mainColor2};
     };
     @media ${props => props.theme.device.mobileL} {
-        width: 32px;
-        min-height: 32px;
-        margin-bottom: 4px;
+        width: 40px;
+        min-height: 40px;
+        //margin-bottom: 4px;
         svg {
             font-size: 16px;
         };
@@ -78,14 +72,15 @@ const StyledZoomBarControlTop = styled.button`
 `;
 
 const StyledZoomBarControlBottom = styled.button`
-    width: 46px;
-    min-height: 46px;
+    width: 48px;
+    min-height: 48px;
     display: flex;
     justify-content: center;
     align-items: center;
     pointer-events: auto;
     cursor: pointer;
     background-color: ${props => props.theme.colors.mainColor1};
+    margin-top: 4px;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
     border: none;
     border-radius: 50%;
@@ -98,8 +93,8 @@ const StyledZoomBarControlBottom = styled.button`
         background-color: ${props => props.theme.colors.mainColor2};
     };
     @media ${props => props.theme.device.mobileL} {
-        width: 32px;
-        min-height: 32px;
+        width: 40px;
+        min-height: 40px;
         svg {
         font-size: 16px;
         };
@@ -137,9 +132,9 @@ const StyledMyLocationButton = styled.div`
         background-color: ${props => props.theme.colors.mainColor2};
     };
     @media ${props => props.theme.device.mobileL} {
-        width: 32px;
-        min-height: 32px;
-        margin-top: 4px;
+        width: 40px;
+        min-height: 40px;
+        //margin-top: 4px;
         svg {
             font-size: 16px;
         };
@@ -167,9 +162,9 @@ const StyledMenuBarButton = styled.div`
         font-size: 18px;
     };
     @media ${props => props.theme.device.mobileL} {
-        min-width: 32px;
-        min-height: 32px;
-        margin-bottom: 4px;
+        min-width: 40px;
+        min-height: 40px;
+        //margin-bottom: 4px;
         svg {
             font-size: 16px;
         };
@@ -215,13 +210,23 @@ const ZoomBar = ({
 
 
             <StyledZoomBarContainer>
+                <Legend
+                    currentZoomLevel={rpc.currentZoomLevel}
+                    selectedLayers={rpc.selectedLayers}
+                    zoomLevelsLayers={rpc.zoomLevelsLayers}
+                    //hoveringIndex={hoveringIndex}
+                    isExpanded={isExpanded}
+                    setIsExpanded={setIsExpanded}
+                />
+
+                <div>
                 <StyledMenuBarButton
                     data-tip data-for='legend'
                     isActive={isExpanded}
                     onClick={() => setIsExpanded(!isExpanded)}
                 >
                     <FontAwesomeIcon
-                        icon={faListAlt}
+                        icon={faList}
                     />
                 </StyledMenuBarButton>
                 <StyledZoomBarZoomFeatures>
@@ -277,6 +282,8 @@ const ZoomBar = ({
                 >
                     <StyledIcon src={location} />
                 </StyledMyLocationButton>
+                </div>
+               
             </StyledZoomBarContainer>
         </>
     );

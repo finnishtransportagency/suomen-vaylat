@@ -40,7 +40,7 @@ import { setIsSearchOpen } from '../../state/slices/uiSlice';
 
 
 const StyledSearchContainer = styled.div`
-    z-index: 1;
+    z-index: 2;
     pointer-events: auto;
     position: relative;
     grid-column-start: 3;

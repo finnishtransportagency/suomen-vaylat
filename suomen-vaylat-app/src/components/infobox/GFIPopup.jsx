@@ -33,9 +33,9 @@ const StyledTab = styled.div`
             font-size: 14px;
         };
     };
-    border-left: 1px solid ${props => props.theme.colors.mainWhite};
-    border-top: 1px solid ${props => props.theme.colors.mainWhite};
-    border-right: 1px solid ${props => props.theme.colors.mainWhite};
+    border-left: 2px solid ${props => props.theme.colors.mainWhite};
+    border-top: 2px solid ${props => props.theme.colors.mainWhite};
+    border-right: 2px solid ${props => props.theme.colors.mainWhite};
     padding: 8px 16px 8px 4px;
     border-radius: 4px 4px 0px 0px;
 `;

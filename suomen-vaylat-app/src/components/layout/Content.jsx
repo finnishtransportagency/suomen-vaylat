@@ -62,12 +62,12 @@ const StyledContentGrid = styled.div`
     height: 100%;
     box-sizing: border-box;
     display: grid;
-    grid-row-gap: 8px;
+    //grid-row-gap: 8px;
     grid-template-columns: 48px 344px 1fr;
     grid-template-rows: 48px 1fr;
     padding: 16px;
     pointer-events: none;
-    gap: 8px;
+    //gap: 8px;
     @media ${props => props.theme.device.mobileL} {
         padding: 8px;
         grid-template-columns: 48px 1fr;
