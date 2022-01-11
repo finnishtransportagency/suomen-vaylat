@@ -57,6 +57,9 @@ const StyledMasterGroupHeader = styled.div`
     border-radius: 4px;
     padding-top: 8px;
     padding-bottom: 8px;
+    @-moz-document url-prefix() {
+        position: initial;
+    };
 `;
 
 const StyledMasterGroupName = styled.p`
@@ -158,6 +161,12 @@ export const LayerList = ({
 
     const { tagLayers, tags } = useSelector((state) => state.rpc);
 
+    const slicedGroups = groups.slice()
+
+    const sortedGroups = slicedGroups.length > 0 ? slicedGroups.sort(function(a, b) {
+        return a.name.toLowerCase().localeCompare(b.name.toLowerCase());
+    }) : []
+
     if (tagLayers.length > 0) {
         layers = layers.filter(layer => tagLayers.includes(layer.id));
     };
@@ -181,7 +190,7 @@ export const LayerList = ({
                 </StyledLayerList>
                 :
                 <StyledLayerList>
-                    {groups.map((group, index) => {
+                    {sortedGroups.map((group, index) => {
                         var hasChildren = false;
                         if (group.groups) {
                             hasChildren = group.groups.length > 0;

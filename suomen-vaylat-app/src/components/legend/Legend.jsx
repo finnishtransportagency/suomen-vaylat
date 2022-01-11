@@ -14,18 +14,25 @@ import ReactTooltip from "react-tooltip";
 const StyledLegendContainer = styled(motion.div)`
     position: absolute;
     top: 0px;
-    right: 66px;
+    right: 100%;
+    //right: 66px;
+    width: 100vw;
     border-radius: 4px;
-    min-width: 200px;
+    //min-width: 200px;
+    margin-right: 8px;
     height: 100%;
+    max-width: 300px;
+    max-height: ${props => props.height && props.height+"px"};
     display: flex;
     flex-direction: column;
     background: ${props => props.theme.colors.mainWhite};
     opacity: 0;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
     @media ${ props => props.theme.device.mobileL} {
+        //position: unset;
         font-size: 13px;
         right: 42px;
+        max-width: calc(100vw - 70px);
     };
 `;
 
@@ -89,8 +96,10 @@ export const Legend = ({
     zoomLevelsLayers,
     currentZoomLevel,
     isExpanded,
-    setIsExpanded
+    setIsExpanded,
+    height
 }) => {
+    //console.log(height);
     const legends = [];
     const noLegends = [];
     const allLegends = useSelector((state) => state.rpc.legends);
@@ -117,6 +126,7 @@ export const Legend = ({
     return(
         <StyledLegendContainer
             key={legends}
+            height={height}
             //initial='visible'
             animate={isExpanded ? 'visible' : 'hidden'}
             variants={listVariants}

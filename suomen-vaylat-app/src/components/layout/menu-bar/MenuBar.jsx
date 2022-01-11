@@ -31,6 +31,7 @@ const StyledMenuBar = styled.div`
     align-items: flex-start;
     flex-direction: column;
     transition: all 0.5s ease-in-out;
+    margin-top: 8px;
     @media ${props => props.theme.device.mobileL} {
         grid-row-start: ${props => props.isSearchOpen ? 2 : 1};
         grid-row-end: 3;
@@ -97,8 +98,8 @@ const StyledMenuBarToolsButton = styled.div`
 
 const StyledLayerCount = styled.div`
     position: absolute;
-    top: -6px;
-    right: -3px;
+    top: -7px;
+    right: -8px;
     width: 25px;
     height: 18px;
     display: flex;
@@ -142,7 +143,7 @@ const MenuBar = () => {
         channel.postRequest('DrawTools.StopDrawingRequest', [true]);
         // stop the drawing tool
         channel.postRequest('DrawTools.StopDrawingRequest', [activeTool]);
-        store.dispatch(setActiveTool(''));
+        store.dispatch(setActiveTool(null));
         store.dispatch(setIsDrawingToolsOpen(!isDrawingToolsOpen))
     };
 
@@ -157,10 +158,6 @@ const MenuBar = () => {
                 <span>{strings.tooltips.searchButton}</span>
             </ReactTooltip>
 
-            <ReactTooltip disable={isMobile} id='legend' place="right" type="dark" effect="float">
-                <span>{strings.tooltips.legendButton}</span>
-            </ReactTooltip>
-
             <ReactTooltip disable={isMobile} id='drawingtools' place="right" type="dark" effect="float">
                 <span>{strings.tooltips.drawingtools.drawingtoolsButton}</span>
             </ReactTooltip>
@@ -173,15 +170,6 @@ const MenuBar = () => {
                 isSideMenuOpen={isSideMenuOpen}
                 isSearchOpen={isSearchOpen}
             >
-                {/* <StyledMenuBarButton
-                    data-tip data-for='search'
-                    isActive={isSearchOpen}
-                    onClick={() => store.dispatch(setIsSearchOpen(!isSearchOpen))}
-                >
-                    <FontAwesomeIcon
-                        icon={faSearch}
-                    />
-                </StyledMenuBarButton> */}
                 <StyledMenuBarButton
                     data-tip data-for='layerlist'
                     isActive={isSideMenuOpen}
@@ -205,7 +193,6 @@ const MenuBar = () => {
                     </StyledMenuBarToolsButton>
                     <DrawingTools isOpen={isDrawingToolsOpen}/>
                 </StyledMapToolsContainer>
-
                 <StyledMenuBarButton
                     data-tip data-for='fullscreen'
                     isActive={isFullScreen}

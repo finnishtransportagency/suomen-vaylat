@@ -1,6 +1,6 @@
 {
   "name": "suomen-vaylat-app",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": true,
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.35",
@@ -19,6 +19,7 @@
     "cross-env": "^7.0.3",
     "framer-motion": "^4.1.17",
     "history": "^5.0.0",
+    "i18n-json-to-xlsx-converter": "^2.0.0",
     "lodash.throttle": "^4.1.1",
     "moment": "^2.29.1",
     "moment-timezone": "^0.5.33",
@@ -84,7 +85,6 @@
     "@types/lodash": "^4.14.168",
     "@types/preval.macro": "^3.0.0",
     "@types/react-router-dom": "^5.1.7",
-    "redux-devtools": "^3.7.0",
     "redux-devtools-extension": "^2.13.9"
   }
 }

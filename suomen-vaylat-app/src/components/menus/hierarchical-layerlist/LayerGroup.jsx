@@ -59,7 +59,7 @@ const StyledLayerGroups = styled.div`
 
 const StyledMasterGroupHeader = styled.div`
     position: sticky;
-    top: -16px;
+    top: -8px;
     z-index: 1;
     min-height: 48px;
     display: flex;
@@ -71,6 +71,9 @@ const StyledMasterGroupHeader = styled.div`
     padding-top: 8px;
     padding-bottom: 8px;
     box-shadow: 0px 3px 6px 0px rgba(0,0,0,0.16);
+    @-moz-document url-prefix() {
+        position: initial;
+    };
 `;
 
 const StyledLeftContent = styled.div`
@@ -163,7 +166,7 @@ const StyledGroupName = styled.p`
     font-size: 14px;
     font-weight: bold;
     color: ${props => props.theme.colors.mainColor1};
-    @media ${ props => props.theme.device.mobileL} {
+    @media ${props => props.theme.device.mobileL} {
         font-size: 12px;
     };
 `;

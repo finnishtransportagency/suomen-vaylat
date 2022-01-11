@@ -47,7 +47,6 @@ export const HandleSharedWebSiteLink = () => {
 
     // If theme given then select wanted theme
     if (themeId) {
-        store.dispatch(removeAllSelectedLayers({notRemoveLayersByGroupId: 1}));
         store.dispatch(setIsSideMenuOpen(true));
         const theme = allThemesWithLayers.find(theme => theme.id === parseInt(themeId));
         const themeGroupIndex = allThemesWithLayers.findIndex(theme => theme.id === parseInt(themeId));
@@ -58,6 +57,8 @@ export const HandleSharedWebSiteLink = () => {
             store.dispatch(setSelectedTheme(theme));
             store.dispatch(setSelectedThemeIndex(themeGroupIndex));
             setTimeout(() => {
+                // remove all layers needs do some timeout
+                store.dispatch(removeAllSelectedLayers({notRemoveLayersByGroupId: 1}));
                 theme.layers.forEach(layerId => {
                     theme.defaultLayers.includes(layerId) && channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layerId, true]);
                 });
@@ -77,7 +78,6 @@ export const HandleSharedWebSiteLink = () => {
                 const layerId = parseInt(layerProps[0]);
                 const opacity = parseInt(layerProps[1]);
                 const style = layerProps[2];
-
 
                 channel.postRequest('ChangeMapLayerOpacityRequest', [layerId, opacity]);
                 store.dispatch(changeLayerStyle({layerId: layerId, style:style}));

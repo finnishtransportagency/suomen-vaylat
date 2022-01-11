@@ -146,7 +146,7 @@ export const DrawingTools = ({isOpen}) => {
             store.dispatch(setActiveTool(tool.name));
         } else {
             channel.postRequest('DrawTools.StopDrawingRequest', [activeTool]);
-            store.dispatch(setActiveTool(''));
+            store.dispatch(setActiveTool(null));
         }
     };
 
@@ -155,7 +155,7 @@ export const DrawingTools = ({isOpen}) => {
         channel.postRequest('DrawTools.StopDrawingRequest', [true]);
         // stop the drawing tool
         channel.postRequest('DrawTools.StopDrawingRequest', [activeTool]);
-        store.dispatch(setActiveTool(''));
+        store.dispatch(setActiveTool(null));
     };
 
     return (

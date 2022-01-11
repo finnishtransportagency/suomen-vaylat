@@ -39,11 +39,14 @@ const StyledHeaderButton = styled.div`
     border-radius: 50%;
     svg {
         color: ${props => props.theme.colors.mainWhite};
-        font-size: 18px;
+        font-size: 22px;
     };
     @media ${props => props.theme.device.mobileL} {
         width: 40px;
         height: 40px;
+        svg {
+            font-size: 18px;
+        };
     };
 `;
 
@@ -81,7 +84,7 @@ export const ThemeGroupShareButton = ({ themeId, color }) => {
  * Website share button
  * @returns  website share button component
  */
-export const WebSiteShareButton = () => {
+export const WebSiteShareButton = ({setSubNavOpen}) => {
     const { store } = useContext(ReactReduxContext);
     const url = process.env.REACT_APP_SITE_URL + '/link/{lang}/{zoom}/{x}/{y}/{maplayers}';
     return (
@@ -93,6 +96,7 @@ export const WebSiteShareButton = () => {
                 data-tip data-for={'share_website'}
                 onClick={(e) => {
                     e && e.stopPropagation();
+                    setSubNavOpen && setSubNavOpen(false);
                     store.dispatch(setShareUrl(url));
                 }}>
                 <FontAwesomeIcon

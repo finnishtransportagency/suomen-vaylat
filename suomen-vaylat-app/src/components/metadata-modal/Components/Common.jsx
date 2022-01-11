@@ -2,14 +2,24 @@ import styled from 'styled-components';
 
 export const StyledTitle = styled.h5`
     cursor: default;
+    @media (max-width: 460px) {
+        font-size: 18px;
+    };
 `;
 
 export const StyledTitleLittle = styled.h6`
     cursor: default;
+    @media (max-width: 460px) {
+        font-size: 14px;
+    };
 `;
 
 export const StyledUl = styled.ul`
     cursor: default;
+    @media (max-width: 460px) {
+        font-size: 14px;
+        padding-inline-start: 20px;
+    };
 `;
 
 export const StyledLi = styled.li`
@@ -18,6 +28,7 @@ export const StyledLi = styled.li`
 
 export const StyledA = styled.a`
     cursor: pointer;
+    word-wrap: break-word;
 `;
 
 export const StyledParagraph = styled.p`
