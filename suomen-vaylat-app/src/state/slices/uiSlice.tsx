@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   isFullScreen: false,
+  modalConstrainsRef: null,
   isSideMenuOpen: false,
   isSearchOpen: false,
   searchParams: '',
@@ -9,11 +10,12 @@ const initialState = {
   isUserGuideOpen: false,
   shareUrl: '',
   isDrawingToolsOpen: false,
-  activeTool: '',
+  activeTool: null,
   gfiLocations: null,
   isSwipingDisabled: false,
   selectedMapLayersMenuTab: 0,
-  selectedMapLayersMenuThemeIndex: null
+  selectedMapLayersMenuThemeIndex: null,
+  minimizeGfi: false
 };
 
 export const uiSlice = createSlice({
@@ -29,6 +31,9 @@ export const uiSlice = createSlice({
       state.isSearchOpen = false;
       state.isInfoOpen = false;
       state.isUserGuideOpen = false;
+    },
+    setModalConstrainsRef: (state, action) => {
+      state.modalConstrainsRef = action.payload;
     },
     setIsSideMenuOpen: (state, action) => {
       state.isSideMenuOpen = action.payload;
@@ -62,24 +67,29 @@ export const uiSlice = createSlice({
     },
     setSelectedMapLayersMenuThemeIndex: (state, action) => {
       state.selectedMapLayersMenuThemeIndex = action.payload;
+    },
+    setMinimizeGfi: (state, action) => {
+      state.minimizeGfi = action.payload;
     }
   }
 });
 
 export const {
+  setIsFullScreen,
   setIsMainScreen,
-  setSearchParams,
+  setModalConstrainsRef,
   setIsSideMenuOpen,
   setIsSearchOpen,
+  setSearchParams,
   setIsInfoOpen,
   setIsUserGuideOpen,
-  setIsFullScreen,
-  setIsDrawingToolsOpen,
   setShareUrl,
+  setIsDrawingToolsOpen,
   setActiveTool,
   setIsSwipingDisabled,
   setSelectedMapLayersMenuTab,
-  setSelectedMapLayersMenuThemeIndex
+  setSelectedMapLayersMenuThemeIndex,
+  setMinimizeGfi,
 } = uiSlice.actions;
 
 export default uiSlice.reducer;

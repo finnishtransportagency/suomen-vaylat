@@ -61,6 +61,20 @@ It correctly bundles React in production mode and optimizes the build for the be
 The build is minified and the filenames include the hashes.\
 Your app is ready to be deployed!
 
+### Generate translations excel
+
+Run `npx i18n-json-to-xlsx-converter --convert 'src/translations/fi.json,src/translations/en.json,src/translations/sv.json'` command (in `suomen-vaylat-app` folder) to generate separated Excel files for three languages.
+If you want you can copy all translations to same one excel now, do following:
+- rename fi.xlsx to translations.xlsx
+- open en.xlsx and copy second column to translations.xlsx third column
+- open sv.xlsx and copyt second column to translations.xlsx fourth column
+- save excel and send transtalitions.xls now some who translate texts
+
+### Generate translation json's from excel
+
+- Copy translations.xlsx to `suomen-vaylat-app/src/translations` folder
+- Run `npx i18n-json-to-xlsx-converter --convert 'src/translations.xlsx'` command (in `suomen-vaylat-app` folder) to generate separated translations json files
+
 ## Reporting issues
 
 Issues should be reported here: https://github.com/finnishtransportagency/suomen-vaylat/issues
