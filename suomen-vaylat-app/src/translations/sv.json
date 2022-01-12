@@ -818,6 +818,13 @@
             "emailBody": "Kartlänk: ",
             "copiedToClipboard": "Kopierat till urklipp"
         },
+        "shareDescriptions": {
+            "chosenContent" : "valitut aineistot",
+            "contentTransparency" : "aineistojen läpinäkyvyys",
+            "currentZoomLevel" : "zoom-tasot",
+            "center" : "kohdennus",
+            "lang" : "kieli"
+        },
         "tooltips": {
             "clipboard": "Kopiera till Urklipp",
             "email": "Skicka via e-post",

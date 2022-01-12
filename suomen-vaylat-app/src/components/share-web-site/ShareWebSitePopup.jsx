@@ -85,10 +85,10 @@ const StyledCopiedToClipboardText = styled(motion.span)`
 export const StyledShareDescription = ({currentZoomLevel, selectedLayers, center, lang}) => {
     const stringArray = []
     let string = "";
-    if(selectedLayers) stringArray.push("valitut aineistot"); stringArray.push("aineistojen läpinäkyvyys");
-    if(currentZoomLevel !== null || currentZoomLevel !== undefined) stringArray.push("zoom-tasot")
-    if(center) stringArray.push("kohdennus");
-    if(lang) stringArray.push("kieli");
+    if(selectedLayers) stringArray.push(strings.share.shareDescriptions.chosenContent); stringArray.push(strings.share.shareDescriptions.contentTransparency);
+    if(currentZoomLevel !== null || currentZoomLevel !== undefined) stringArray.push(strings.share.shareDescriptions.currentZoomLevel)
+    if(center) stringArray.push(strings.share.shareDescriptions.center);
+    if(lang) stringArray.push(strings.share.shareDescriptions.lang);
 
     const makeString = (string, stringArray) => {
         for(let i=0; i < stringArray.length; i++) {

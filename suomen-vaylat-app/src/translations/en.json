@@ -818,6 +818,13 @@
             "emailBody": "Map link: ",
             "copiedToClipboard": "Copied to clipboard"
         },
+        "shareDescriptions": {
+            "chosenContent" : "valitut aineistot",
+            "contentTransparency" : "aineistojen läpinäkyvyys",
+            "currentZoomLevel" : "zoom-tasot",
+            "center" : "kohdennus",
+            "lang" : "kieli"
+        },
         "tooltips": {
             "clipboard": "Copy to clipboard",
             "email": "Send by email",
