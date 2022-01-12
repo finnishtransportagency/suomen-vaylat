@@ -37,7 +37,7 @@ const AddressSearch = ({
     return (
         <StyledContainer visible={visible} className="search-inputs">
             <StyledTextField
-                placeholder={strings.search.types.address + '...'}
+                placeholder={strings.search.address.title + '...'}
                 onChange={(event) => {
                     onChange(event.target.value);
                 }}

@@ -182,6 +182,8 @@
             "vkm": "Road search"
         },
         "vkm": {
+            "title": "Road number search",
+            "subtitle": "Search by road number",
             "tie": "Road number",
             "osa": "Road section",
             "ajorata": "Carriageway",
@@ -192,6 +194,8 @@
             }
         },
         "address": {
+            "title": "Search place",
+            "subtitle": "Search by address, municipality or property identifier",
             "address": "Opastinsilta 12 Helsinki",
             "error": {
                 "title": "Address search",
