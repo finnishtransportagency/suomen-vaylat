@@ -53,7 +53,6 @@ const StyledDrawingTool = styled.div`
     margin-top: 8px;
     svg {
         color: ${props => props.theme.colors.mainWhite};
-        //font-size: 18px;
     };
     @media ${props => props.theme.device.mobileL} {
         width: 38px;

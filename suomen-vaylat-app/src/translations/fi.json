@@ -182,6 +182,8 @@
             "vkm": "Tiehaku"
         },
         "vkm": {
+            "title": "Tiehaku",
+            "subtitle": "Hae tien numerolla",
             "tie": "Tienumero",
             "osa": "Tieosa",
             "ajorata": "Ajorata",
@@ -192,6 +194,8 @@
             }
         },
         "address": {
+            "title": "Paikkahaku",
+            "subtitle": "Hae osoitteella, kunnan nimellä tai kiinteistötunnuksella",
             "address": "Opastinsilta 12 Helsinki",
             "error": {
                 "title": "Osoitehaku",
