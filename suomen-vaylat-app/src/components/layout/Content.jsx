@@ -43,7 +43,8 @@ const StyledContent = styled.div`
     z-index: 1;
     position: relative;
     width: 100%;
-    height: var(--app-height);
+    //height: var(--app-height);
+    height: 100%;
     overflow: hidden;
     display: flex;
     flex-direction: column;
@@ -62,12 +63,10 @@ const StyledContentGrid = styled.div`
     height: 100%;
     box-sizing: border-box;
     display: grid;
-    //grid-row-gap: 8px;
     grid-template-columns: 48px 344px 1fr;
     grid-template-rows: 48px 1fr;
     padding: 16px;
     pointer-events: none;
-    //gap: 8px;
     @media ${props => props.theme.device.mobileL} {
         padding: 8px;
         grid-template-columns: 48px 1fr;

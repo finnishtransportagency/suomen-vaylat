@@ -32,7 +32,7 @@ const StyledPublishedMap = styled.div`
     top: 0px;
     left: 0px;
     width: 100%;
-    height: calc(var(--app-height) - 60px);
+    height: 100%;
 `;
 
 const StyledIframe = styled.iframe`

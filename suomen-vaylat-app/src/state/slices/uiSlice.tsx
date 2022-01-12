@@ -10,6 +10,7 @@ const initialState = {
   isUserGuideOpen: false,
   shareUrl: '',
   isDrawingToolsOpen: false,
+  isLegendOpen: false,
   activeTool: null,
   gfiLocations: null,
   isSwipingDisabled: false,
@@ -50,6 +51,9 @@ export const uiSlice = createSlice({
     setIsUserGuideOpen: (state, action) => {
       state.isUserGuideOpen = action.payload;
     },
+    setIsLegendOpen: (state, action) => {
+      state.isLegendOpen = action.payload;
+    },
     setShareUrl: (state, action) => {
       state.shareUrl = action.payload;
     },
@@ -83,6 +87,7 @@ export const {
   setSearchParams,
   setIsInfoOpen,
   setIsUserGuideOpen,
+  setIsLegendOpen,
   setShareUrl,
   setIsDrawingToolsOpen,
   setActiveTool,
