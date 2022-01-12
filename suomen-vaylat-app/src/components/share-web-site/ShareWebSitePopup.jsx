@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { useAppSelector } from '../../state/hooks';
 import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -28,7 +28,16 @@ const StyledContainer = styled.div`
 
 const StyledInput = styled.textarea`
     width: 100%;
-    height: 140px;
+    height: 80px;
+    resize: none;
+    border: none;
+    font-size: 14px;
+`;
+
+const StyledShareDescriptionWrapper = styled.div`
+    width: 100%;
+    // height: 80px;
+    margin-bottom: 25px;
     resize: none;
     border: none;
     font-size: 14px;
@@ -65,9 +74,41 @@ const StyledCopyClipboardButton = styled.button`
     };
 `;
 
+const SharePageWord = styled.p`
+    margin: 0;
+`;
+
 const StyledCopiedToClipboardText = styled(motion.span)`
     color: ${props => props.theme.colors.mainColor1};
 `;
+
+export const StyledShareDescription = ({currentZoomLevel, selectedLayers, center, lang}) => {
+    const stringArray = []
+    let string = "";
+    if(selectedLayers) stringArray.push("valitut aineistot"); stringArray.push("aineistojen läpinäkyvyys");
+    if(currentZoomLevel !== null || currentZoomLevel !== undefined) stringArray.push("zoom-tasot")
+    if(center) stringArray.push("kohdennus");
+    if(lang) stringArray.push("kieli");
+
+    const makeString = (string, stringArray) => {
+        for(let i=0; i < stringArray.length; i++) {
+            if(i === stringArray.length -1) {
+                string += stringArray[i] + "."
+            } else if(i + 1 == stringArray.length-1){
+                string += stringArray[i] + " ja "
+            } else {
+                string += stringArray[i] + ", "
+            }
+        }
+        return string !== '' ? 'Jaa ' + string : ''
+    }
+
+    return (
+        <StyledShareDescriptionWrapper>
+            <SharePageWord>{makeString(string, stringArray)}</SharePageWord>
+        </StyledShareDescriptionWrapper>
+    )
+}
 
 /**
  * Shows ShareWebSitePopup if shareUrl is defined in Redux state.
@@ -114,6 +155,12 @@ export const ShareWebSitePopup = () => {
 
     return (
             <StyledContainer>
+                <StyledShareDescription 
+                    currentZoomLevel={currentZoomLevel}
+                    selectedLayers={selectedLayers}
+                    center={center}
+                    lang={strings.getLanguage()}
+                />
                 <StyledInput value={url} ref={inputRef} readOnly />
                 <AnimatePresence>
                     {isCopied &&
