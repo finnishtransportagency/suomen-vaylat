@@ -33,9 +33,6 @@ const StyledPublishedMap = styled.div`
     left: 0px;
     width: 100%;
     height: 100%;
-    //height: calc(var(--app-height) - 60px);
-    //height: calc(100vh - 60px);
-    //height: 100vh;
 `;
 
 const StyledIframe = styled.iframe`
