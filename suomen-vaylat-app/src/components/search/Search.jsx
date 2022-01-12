@@ -309,7 +309,6 @@ const Search = () => {
                         opacity: 0
                     }}
                     animate={{
-                        //height: "auto",
                         maxWidth: "400px",
                         opacity: 1
                     }}
