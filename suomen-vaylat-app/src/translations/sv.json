@@ -823,6 +823,8 @@
             "contentTransparency" : "aineistojen läpinäkyvyys",
             "currentZoomLevel" : "zoom-tasot",
             "center" : "kohdennus",
+            "and" : "ja",
+            "share": "Jaa",
             "lang" : "kieli"
         },
         "tooltips": {

@@ -95,12 +95,12 @@ export const StyledShareDescription = ({currentZoomLevel, selectedLayers, center
             if(i === stringArray.length -1) {
                 string += stringArray[i] + "."
             } else if(i + 1 == stringArray.length-1){
-                string += stringArray[i] + " ja "
+                string += stringArray[i] + " " + strings.share.shareDescriptions.and + " "
             } else {
                 string += stringArray[i] + ", "
             }
         }
-        return string !== '' ? 'Jaa ' + string : ''
+        return string !== '' ? strings.share.shareDescriptions.share + ' ' + string : ''
     }
 
     return (
