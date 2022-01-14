@@ -819,13 +819,13 @@
             "copiedToClipboard": "Kopierat till urklipp"
         },
         "shareDescriptions": {
-            "chosenContent" : "valitut aineistot",
-            "contentTransparency" : "aineistojen läpinäkyvyys",
-            "currentZoomLevel" : "zoom-tasot",
-            "center" : "kohdennus",
-            "and" : "ja",
-            "share": "Jaa",
-            "lang" : "kieli"
+            "chosenContent" : "valda lager",
+            "contentTransparency" : "lager transparens",
+            "currentZoomLevel" : "zoom-nivåer",
+            "center" : "centrering",
+            "and" : "och",
+            "share": "Dela med sig",
+            "lang" : "språk"
         },
         "tooltips": {
             "clipboard": "Kopiera till Urklipp",

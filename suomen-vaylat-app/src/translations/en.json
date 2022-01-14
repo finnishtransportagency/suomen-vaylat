@@ -819,13 +819,13 @@
             "copiedToClipboard": "Copied to clipboard"
         },
         "shareDescriptions": {
-            "chosenContent" : "valitut aineistot",
-            "contentTransparency" : "aineistojen läpinäkyvyys",
-            "currentZoomLevel" : "zoom-tasot",
-            "center" : "kohdennus",
-            "and" : "ja",
-            "share": "Jaa",
-            "lang" : "kieli"
+            "chosenContent" : "selected layers",
+            "contentTransparency" : "layer transparencies",
+            "currentZoomLevel" : "zoom-levels",
+            "center" : "centering",
+            "and" : "and",
+            "share": "Share",
+            "lang" : "Language"
         },
         "tooltips": {
             "clipboard": "Copy to clipboard",
