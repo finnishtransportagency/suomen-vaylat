@@ -2,7 +2,7 @@
 
 ## 0.4.0
 
-For a full lis of changes see: https://github.com/finnishtransportagency/suomen-vaylat/milestone/3?closed=1
+For a full list of changes see: https://github.com/finnishtransportagency/suomen-vaylat/milestone/3?closed=1
 
 * Improve search component
 * Open legend when theme maps is selected
@@ -10,7 +10,7 @@ For a full lis of changes see: https://github.com/finnishtransportagency/suomen-
 
 ## 0.3.0
 
-For a full lis of changes see: https://github.com/finnishtransportagency/suomen-vaylat/milestone/2?closed=1
+For a full list of changes see: https://github.com/finnishtransportagency/suomen-vaylat/milestone/2?closed=1
 
 * React-modal changed to own modal component
 * Fixed an issue for theme sharing
