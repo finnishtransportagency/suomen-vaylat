@@ -821,7 +821,7 @@
         "shareDescriptions": {
             "chosenContent" : "selected layers",
             "contentTransparency" : "layer transparencies",
-            "currentZoomLevel" : "zoom-levels",
+            "currentZoomLevel" : "zoom-level",
             "center" : "centering",
             "and" : "and",
             "share": "Share",

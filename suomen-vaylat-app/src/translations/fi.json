@@ -821,7 +821,7 @@
         "shareDescriptions": {
             "chosenContent" : "valitut aineistot",
             "contentTransparency" : "aineistojen läpinäkyvyys",
-            "currentZoomLevel" : "zoom-tasot",
+            "currentZoomLevel" : "zoom-taso",
             "center" : "kohdennus",
             "and" : "ja",
             "share": "Jaa",

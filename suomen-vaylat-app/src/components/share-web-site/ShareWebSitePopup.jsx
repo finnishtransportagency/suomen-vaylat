@@ -84,20 +84,32 @@ const StyledCopiedToClipboardText = styled(motion.span)`
 
 export const StyledShareDescription = ({currentZoomLevel, selectedLayers, center, lang}) => {
     const stringArray = []
-    let string = "";
-    if(selectedLayers) stringArray.push(strings.share.shareDescriptions.chosenContent); stringArray.push(strings.share.shareDescriptions.contentTransparency);
-    if(currentZoomLevel !== null || currentZoomLevel !== undefined) stringArray.push(strings.share.shareDescriptions.currentZoomLevel)
-    if(center) stringArray.push(strings.share.shareDescriptions.center);
-    if(lang) stringArray.push(strings.share.shareDescriptions.lang);
+    let string = '';
+    if (lang) {
+        stringArray.push(strings.share.shareDescriptions.lang);
+    }
+
+    if (currentZoomLevel !== null || currentZoomLevel !== undefined) {
+        stringArray.push(strings.share.shareDescriptions.currentZoomLevel);
+    }
+
+    if (center) {
+        stringArray.push(strings.share.shareDescriptions.center);
+    }
+
+    if (selectedLayers) {
+        stringArray.push(strings.share.shareDescriptions.chosenContent);
+        stringArray.push(strings.share.shareDescriptions.contentTransparency);
+    }
 
     const makeString = (string, stringArray) => {
         for(let i=0; i < stringArray.length; i++) {
             if(i === stringArray.length -1) {
-                string += stringArray[i] + "."
-            } else if(i + 1 == stringArray.length-1){
-                string += stringArray[i] + " " + strings.share.shareDescriptions.and + " "
+                string += stringArray[i] + '.'
+            } else if(i + 1 === stringArray.length-1){
+                string += stringArray[i] + ' ' + strings.share.shareDescriptions.and + ' '
             } else {
-                string += stringArray[i] + ", "
+                string += stringArray[i] + ', '
             }
         }
         return string !== '' ? strings.share.shareDescriptions.share + ' ' + string : ''
@@ -155,7 +167,7 @@ export const ShareWebSitePopup = () => {
 
     return (
             <StyledContainer>
-                <StyledShareDescription 
+                <StyledShareDescription
                     currentZoomLevel={currentZoomLevel}
                     selectedLayers={selectedLayers}
                     center={center}
