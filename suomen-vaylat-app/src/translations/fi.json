@@ -825,7 +825,8 @@
             "center" : "kohdennus",
             "and" : "ja",
             "share": "Jaa",
-            "lang" : "kieli"
+            "lang" : "kieli",
+            "theme": "teema"
         },
         "tooltips": {
             "clipboard": "Kopioi leikepöydälle",

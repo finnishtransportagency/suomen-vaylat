@@ -825,7 +825,8 @@
             "center" : "centering",
             "and" : "and",
             "share": "Share",
-            "lang" : "Language"
+            "lang" : "language",
+            "theme": "theme"
         },
         "tooltips": {
             "clipboard": "Copy to clipboard",

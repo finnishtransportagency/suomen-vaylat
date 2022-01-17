@@ -825,7 +825,8 @@
             "center" : "centrering",
             "and" : "och",
             "share": "Dela med sig",
-            "lang" : "språk"
+            "lang" : "språk",
+            "theme": "tema"
         },
         "tooltips": {
             "clipboard": "Kopiera till Urklipp",

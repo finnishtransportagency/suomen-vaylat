@@ -31,7 +31,6 @@ const StyledInput = styled.textarea`
     height: 80px;
     resize: none;
     border: none;
-    font-size: 14px;
 `;
 
 const StyledShareDescriptionWrapper = styled.div`
@@ -40,7 +39,7 @@ const StyledShareDescriptionWrapper = styled.div`
     margin-bottom: 25px;
     resize: none;
     border: none;
-    font-size: 14px;
+    text-align: left;
 `;
 
 const StyledShareButtonsContainer = styled.div`
@@ -82,42 +81,51 @@ const StyledCopiedToClipboardText = styled(motion.span)`
     color: ${props => props.theme.colors.mainColor1};
 `;
 
-export const StyledShareDescription = ({currentZoomLevel, selectedLayers, center, lang}) => {
-    const stringArray = []
-    let string = '';
-    if (lang) {
-        stringArray.push(strings.share.shareDescriptions.lang);
-    }
+export const StyledShareDescription = ({currentZoomLevel, selectedLayers, center, lang, hasThemeShare}) => {
+    const stringArray = [];
 
-    if (currentZoomLevel !== null || currentZoomLevel !== undefined) {
-        stringArray.push(strings.share.shareDescriptions.currentZoomLevel);
-    }
-
-    if (center) {
-        stringArray.push(strings.share.shareDescriptions.center);
-    }
-
-    if (selectedLayers) {
-        stringArray.push(strings.share.shareDescriptions.chosenContent);
-        stringArray.push(strings.share.shareDescriptions.contentTransparency);
-    }
-
-    const makeString = (string, stringArray) => {
-        for(let i=0; i < stringArray.length; i++) {
-            if(i === stringArray.length -1) {
-                string += stringArray[i] + '.'
-            } else if(i + 1 === stringArray.length-1){
-                string += stringArray[i] + ' ' + strings.share.shareDescriptions.and + ' '
-            } else {
-                string += stringArray[i] + ', '
-            }
+    if (!hasThemeShare) {
+        if (lang) {
+            stringArray.push(strings.share.shareDescriptions.lang);
         }
-        return string !== '' ? strings.share.shareDescriptions.share + ' ' + string : ''
+
+        if (currentZoomLevel !== null || currentZoomLevel !== undefined) {
+            stringArray.push(strings.share.shareDescriptions.currentZoomLevel);
+        }
+
+        if (center) {
+            stringArray.push(strings.share.shareDescriptions.center);
+        }
+
+        if (selectedLayers) {
+            stringArray.push(strings.share.shareDescriptions.chosenContent);
+            stringArray.push(strings.share.shareDescriptions.contentTransparency);
+        }
+    } else {
+        if (lang) {
+            stringArray.push(strings.share.shareDescriptions.lang);
+        }
+
+        if (currentZoomLevel !== null || currentZoomLevel !== undefined) {
+            stringArray.push(strings.share.shareDescriptions.currentZoomLevel);
+        }
+
+        if (center) {
+            stringArray.push(strings.share.shareDescriptions.center);
+        }
+
+        stringArray.push('teema');
+    }
+
+    const makeString = (stringArray) => {
+        return strings.share.shareDescriptions.share + ' ' + stringArray.reduce(function (p, d, i) {
+            return p + (i === stringArray.length - 1 ? ' ' + strings.share.shareDescriptions.and + ' ' : ', ') + d;
+        }) + '.';
     }
 
     return (
         <StyledShareDescriptionWrapper>
-            <SharePageWord>{makeString(string, stringArray)}</SharePageWord>
+            <SharePageWord>{makeString(stringArray)}</SharePageWord>
         </StyledShareDescriptionWrapper>
     )
 }
@@ -153,17 +161,21 @@ export const ShareWebSitePopup = () => {
     });
     mapLayers = mapLayers.substring(0, mapLayers.length-2);
 
-    // Replace link palceholders to correct values
+    // Replace link placeholders to correct values
     let url = shareUrl.replace('{zoom}', currentZoomLevel);
     url = url.replace('{x}', parseInt(center.x));
     url = url.replace('{y}', parseInt(center.y));
     url = url.replace('{maplayers}', mapLayers);
     url = url.replace('{lang}', strings.getLanguage());
 
+    const hasThemeShare = typeof shareUrl === 'string' ? shareUrl.includes('/theme/') : false;
+
     const title = strings.share.shareTexts.title;
     const emailBody = strings.share.shareTexts.emailBody;
     const shareIconSize = 48;
     const inputRef = useRef(null);
+
+    const shareIconStyle= {margin: "8px", filter: "drop-shadow( 2px 2px 4px #0000004d)"};
 
     return (
             <StyledContainer>
@@ -172,6 +184,7 @@ export const ShareWebSitePopup = () => {
                     selectedLayers={selectedLayers}
                     center={center}
                     lang={strings.getLanguage()}
+                    hasThemeShare={hasThemeShare}
                 />
                 <StyledInput value={url} ref={inputRef} readOnly />
                 <AnimatePresence>
@@ -216,7 +229,7 @@ export const ShareWebSitePopup = () => {
                 <ReactTooltip disable={isMobile} id='telegram' place='top' type='dark' effect='float'>
                     <span>{strings.share.tooltips.telegram}</span>
                 </ReactTooltip>
-                    <CopyToClipboard text={url} onCopy={() => { setIsCopied(true); }}>
+                    <CopyToClipboard text={url} onCopy={() => { setIsCopied(true); }} id="share-website-clipboard">
                         <StyledCopyClipboardButton
                             onClick={() => {
                                 inputRef.current.select();
@@ -229,22 +242,22 @@ export const ShareWebSitePopup = () => {
                         </StyledCopyClipboardButton>
                     </CopyToClipboard>
                     <EmailShareButton url={url} subject={title} body={emailBody} data-tip data-for='email'>
-                        <EmailIcon round={true} size={shareIconSize} style={{margin: "8px", filter: "drop-shadow( 2px 2px 4px #0000004d)"}} />
+                        <EmailIcon round={true} size={shareIconSize} style={shareIconStyle} />
                     </EmailShareButton>
                     <FacebookShareButton url={url} quote={title} data-tip data-for='facebook'>
-                        <FacebookIcon round={true} size={shareIconSize} style={{margin: "8px", filter: "drop-shadow( 2px 2px 4px #0000004d)"}}/>
+                        <FacebookIcon round={true} size={shareIconSize} style={shareIconStyle}/>
                     </FacebookShareButton>
                     <TwitterShareButton url={url} title={title} data-tip data-for='twitter'>
-                        <TwitterIcon round={true} size={shareIconSize} style={{margin: "8px", filter: "drop-shadow( 2px 2px 4px #0000004d)"}}/>
+                        <TwitterIcon round={true} size={shareIconSize} style={shareIconStyle}/>
                     </TwitterShareButton>
                     <LinkedinShareButton url={url} data-tip data-for='linkedin'>
-                        <LinkedinIcon round={true} size={shareIconSize} style={{margin: "8px", filter: "drop-shadow( 2px 2px 4px #0000004d)"}}/>
+                        <LinkedinIcon round={true} size={shareIconSize} style={shareIconStyle}/>
                     </LinkedinShareButton>
                     <WhatsappShareButton url={url} title={title} separator=': ' data-tip data-for='whatsapp'>
-                        <WhatsappIcon round={true} size={shareIconSize} style={{margin: "8px", filter: "drop-shadow( 2px 2px 4px #0000004d)"}}/>
+                        <WhatsappIcon round={true} size={shareIconSize} style={shareIconStyle}/>
                     </WhatsappShareButton>
                     <TelegramShareButton url={url} title={title} data-tip data-for='telegram'>
-                        <TelegramIcon round={true} size={shareIconSize} style={{margin: "8px", filter: "drop-shadow( 2px 2px 4px #0000004d)"}}/>
+                        <TelegramIcon round={true} size={shareIconSize} style={shareIconStyle}/>
                     </TelegramShareButton>
                 </StyledShareButtonsContainer>
             </StyledContainer>

@@ -187,12 +187,12 @@ const Modal = ({
             closeAction(selected, id);
         },[500])
     };
-    
+
     const clonedChildren = cloneElement(children, { handleAnnouncementModal  }); // If announce modal type is passed as prop, add additional "handleAnnouncementModal" function to modal children to handle modal state
 
     return (
         <AnimatePresence>
-            { (isOpen || localState) && 
+            { (isOpen || localState) &&
             <>
                 <StyledModalWrapper
                         key="modal"
@@ -236,7 +236,7 @@ const Modal = ({
                                 <p>{title}</p>
                             </StyledModalTitle>
                             <StyledRightContent>
-                                { type === "gfi" && 
+                                { type === "gfi" &&
                                     <StyledMinimizeButton
                                         onClick={() => store.dispatch(setMinimizeGfi(true))}
                                     >
@@ -262,7 +262,7 @@ const Modal = ({
                         </StyledModalContent>
                     </StyledModal>
                 </StyledModalWrapper>
-                { backdrop && 
+                { backdrop &&
                     <StyledModalBackdrop
                         backdrop={backdrop}
                         initial={{ opacity: 0 }}
