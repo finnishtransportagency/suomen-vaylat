@@ -1,5 +1,13 @@
 # Release Notes
 
+## 0.4.0
+
+For a full lis of changes see: https://github.com/finnishtransportagency/suomen-vaylat/milestone/3?closed=1
+
+* Improve search component
+* Open legend when theme maps is selected
+* Improve share descriptions
+
 ## 0.3.0
 
 For a full lis of changes see: https://github.com/finnishtransportagency/suomen-vaylat/milestone/2?closed=1
