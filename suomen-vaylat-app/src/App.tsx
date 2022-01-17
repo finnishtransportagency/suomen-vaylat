@@ -2,7 +2,6 @@
 import './_colors.scss';
 import './custom.scss';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Modal from 'react-modal';
 import { Provider } from 'react-redux';
 import { Route, Router } from 'react-router-dom';
 import SimpleReactLightbox from 'simple-react-lightbox';
@@ -12,8 +11,6 @@ import PageTitle from './components/layout/PageTitle';
 import { HandleSharedWebSiteLink } from './components/share-web-site/HandleSharedWebSiteLink';
 import { history, store } from './state/store';
 import Theme from './theme/theme';
-
-Modal.setAppElement('#root');
 
 const StyledAppContainer = styled.div`
     width: 100%;
