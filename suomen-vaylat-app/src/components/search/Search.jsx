@@ -43,7 +43,6 @@ import { setIsSearchOpen } from '../../state/slices/uiSlice';
 
 const StyledSearchContainer = styled.div`
     z-index: 2;
-    pointer-events: auto;
     position: relative;
     grid-column-start: 3;
     grid-column-end: 4;
@@ -339,7 +338,7 @@ const Search = () => {
                                 <StyledSelectedSearchMethod onClick={() => {
                                 setShowSearchResults(true);
                                 isSearchMethodSelectorOpen && setIsSearchMethodSelectorOpen(false);
-                                } 
+                                }
                                 }>
                                     {
                                         search.selected === 'vkm' && <p>{strings.search.types.vkm + '...'}</p>
@@ -369,7 +368,7 @@ const Search = () => {
                             }}
                             icon={search.searchResult.address.length > 0 ? faTrash : faSearch}
                         />
-                    }          
+                    }
                  </StyledSearchWrapper>
                 }
             </AnimatePresence>
@@ -454,7 +453,7 @@ const Search = () => {
                         }
                     </StyledDropDown>
                 }
-            </AnimatePresence>         
+            </AnimatePresence>
         </StyledSearchContainer>
     );
 };

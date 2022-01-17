@@ -818,6 +818,16 @@
             "emailBody": "Map link: ",
             "copiedToClipboard": "Copied to clipboard"
         },
+        "shareDescriptions": {
+            "chosenContent" : "selected layers",
+            "contentTransparency" : "layer transparencies",
+            "currentZoomLevel" : "zoom-level",
+            "center" : "centering",
+            "and" : "and",
+            "share": "Share",
+            "lang" : "language",
+            "theme": "theme"
+        },
         "tooltips": {
             "clipboard": "Copy to clipboard",
             "email": "Send by email",

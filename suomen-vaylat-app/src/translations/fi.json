@@ -818,6 +818,16 @@
             "emailBody": "Karttalinkki: ",
             "copiedToClipboard": "Kopioitu leikepöydälle"
         },
+        "shareDescriptions": {
+            "chosenContent" : "valitut aineistot",
+            "contentTransparency" : "aineistojen läpinäkyvyys",
+            "currentZoomLevel" : "zoom-taso",
+            "center" : "kohdennus",
+            "and" : "ja",
+            "share": "Jaa",
+            "lang" : "kieli",
+            "theme": "teema"
+        },
         "tooltips": {
             "clipboard": "Kopioi leikepöydälle",
             "email": "Lähetä sähköpostilla",
