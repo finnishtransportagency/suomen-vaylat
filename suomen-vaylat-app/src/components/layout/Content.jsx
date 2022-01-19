@@ -43,7 +43,6 @@ const StyledContent = styled.div`
     z-index: 1;
     position: relative;
     width: 100%;
-    //height: var(--app-height);
     height: 100%;
     overflow: hidden;
     display: flex;

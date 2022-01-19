@@ -179,7 +179,8 @@
     "search": {
         "types": {
             "address": "Osoitehaku",
-            "vkm": "Tiehaku"
+            "vkm": "Tiehaku",
+            "metadata": "Metatietohaku"
         },
         "vkm": {
             "title": "Tiehaku",
@@ -200,6 +201,14 @@
             "error": {
                 "title": "Osoitehaku",
                 "text": "Tuloksia ei löytynyt osoitehaulla."
+            }
+        },
+        "metadata": {
+            "title": "Metatietohaku",
+            "subtitle": "Hea metatiedolla",
+            "error": {
+                "title": "Metatietohaku epäonnistui",
+                "text": "Metatietoja ei löytynyt"
             }
         }
     },

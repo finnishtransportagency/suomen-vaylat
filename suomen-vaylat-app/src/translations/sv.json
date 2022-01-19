@@ -179,7 +179,8 @@
     "search": {
         "types": {
             "address": "Adress sökning",
-            "vkm": "Vägsökning"
+            "vkm": "Vägsökning",
+            "metadata": "Metadata search"
         },
         "vkm": {
             "title": "Road number search",
@@ -200,6 +201,14 @@
             "error": {
                 "title": "Adress sökning",
                 "text": "Inga resultat hittades för adressökning."
+            }
+        },
+        "metadata": {
+            "title": "Search metadata",
+            "subtitle": "Search by metadata",
+            "error": {
+                "title": "Searching metadata failed",
+                "text": "No metadata found"
             }
         }
     },
