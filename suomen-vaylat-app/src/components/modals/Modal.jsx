@@ -202,7 +202,7 @@ const Modal = ({
                         dragListener={false}
                         dragMomentum={false}
                         initial={{ y: 100, filter: "blur(1px)", opacity: 0 }}
-                        animate={{ y: 0, filter: "blur(0px)", opacity: 1 }}
+                        animate={{ y: 0, filter: "none", opacity: 1 }}
                         exit={{ y: 100, filter: "blur(10px)", opacity: 0 }}
                         transition={{
                             duration: 0.4,
