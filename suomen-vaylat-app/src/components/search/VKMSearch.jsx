@@ -19,9 +19,6 @@ const StyledDropdownContentItem = styled.div`
     border-radius: 5px;
 
     background-color: ${props => props.itemSelected ? props.theme.colors.mainColor3 : ""};
-    /* &:hover{
-        background-color: ${props => props.theme.colors.mainColor3};
-    }; */
     p {
         margin: 0;
         padding: 0;
