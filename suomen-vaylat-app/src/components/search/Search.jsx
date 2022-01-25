@@ -23,23 +23,7 @@ import { isMobile } from '../../theme/theme';
 import {
     addMarkerRequest,
     mapMoveRequest,
-    //removeFeaturesFromMap,
-    //removeMarkerRequest,
-    //searchRequest,
-    //searchVKMRoad,
-    //setSelectError,
 } from '../../state/slices/rpcSlice';
-
-// import {
-//     emptyFormData,
-//     emptySearchResult,
-//     setSearching,
-//     setSearchResult,
-//     setSelectedIndex,
-//     setMarker,
-//     setSearchResultOnMapId,
-//     setSearchSelected
-// } from '../../state/slices/searchSlice';
 
 import { setIsSearchOpen } from '../../state/slices/uiSlice';
 
@@ -170,9 +154,6 @@ const StyledDropdownContentItem = styled.div`
     border-radius: 5px;
 
     background-color: ${props => props.itemSelected ? props.theme.colors.mainColor3 : ""};
-    /* &:hover{
-        background-color: ${props => props.theme.colors.mainColor3};
-    }; */
     p {
         margin: 0;
         padding: 0;

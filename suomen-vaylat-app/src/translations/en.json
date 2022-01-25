@@ -1,850 +1,850 @@
 {
-    "language": {
-        "languageSelection": {
-            "fi": "FI",
-            "en": "EN",
-            "sv": "SV"
+  "language": {
+    "languageSelection": {
+      "fi": "FI",
+      "en": "EN",
+      "sv": "SV"
+    }
+  },
+  "title": "Suomen Väylät",
+  "tooltips": {
+    "layerlist": {
+      "filter": "Filter",
+      "opacity": "Opacity"
+    },
+    "searchButton": "Address search",
+    "layerlistButton": "Layerlist",
+    "fullscreenButton": "Full screen",
+    "legendHeader": "The data displayed at this zoom level and their explanations",
+    "legendButton": "Legend",
+    "myLocButton": "My location",
+    "zoomExpand": "Expand",
+    "zoomIn": "Zoom in",
+    "zoomOut": "Zoom out",
+    "opacity": "Opacity",
+    "drawingtools": {
+      "drawingtoolsButton": "Drawing tools",
+      "circle": "Circle",
+      "square": "Square",
+      "box": "Box",
+      "linestring": "Line",
+      "polygon": "Polygon",
+      "erase": "Erase"
+    },
+    "share": "Share this page",
+    "shareTheme": "Share this theme",
+    "metadata": "Show maplayer metadata",
+    "showPageInfo": "Show page info",
+    "showUserGuide": "Show user guide"
+  },
+  "gfi": {
+    "title": "Feature Data",
+    "close": "Close",
+    "additionalInfo": "Additional information",
+    "gfiLocation": "Zoom to location",
+    "target": "Target"
+  },
+  "general": {
+    "close": "Close",
+    "warning": "Warning!",
+    "continue": "Continue",
+    "cancel": "Cancel",
+    "dontShowAgain": "Don't show again",
+    "ok": "OK"
+  },
+  "multipleLayersWarning": "You are about to activate 10 or more maplayers and it might affect the performance of the service",
+  "appGuide": {
+    "title": "User Guide",
+    "modalContent": {
+      "upperBar": {
+        "title": "Top Bar Functions",
+        "content": {
+          "0": {
+            "title": "Return to start view",
+            "text": "The start view is a predefined view that shows waterways, the railway network and the road net-work throughout Finland."
+          },
+          "1": {
+            "title": "Share page",
+            "text": "You can share the current view of the map with a link directly to the selected service or by copying the link. The view retains the focus, zoom level, and selected materials and theme."
+          },
+          "2": {
+            "title": "Info",
+            "text": "Behind the info button you will find information about the application, operating instructions and contact information for sending feedback, for example."
+          },
+          "3": {
+            "title": "Language",
+            "text": "You can select Finnish, Swedish or English as the language of the map service."
+          }
         }
-    },
-    "title": "Suomen Väylät EN",
-    "tooltips": {
-        "layerlist": {
-            "filter": "Filter",
-            "opacity": "Opacity"
-        },
-        "searchButton": "Address search",
-        "layerlistButton": "Layerlist",
-        "fullscreenButton": "Full screen",
-        "legendHeader": "The data displayed at this zoom level and their explanations",
-        "legendButton": "Legend",
-        "myLocButton": "My location",
-        "zoomExpand": "Expand",
-        "zoomIn": "Zoom in",
-        "zoomOut": "Zoom out",
-        "opacity": "Opacity",
-        "drawingtools": {
-            "drawingtoolsButton": "Drawing tools",
-            "circle": "Circle",
-            "square": "Square",
-            "box": "Box",
-            "linestring": "Line",
-            "polygon": "Polygon",
-            "erase": "Erase"
-        },
-        "share": "Share this page",
-        "shareTheme": "Share this theme",
-        "metadata": "Show maplayer metadata",
-        "showPageInfo": "Show page info",
-        "showUserGuide": "Show user guide"
-    },
-    "gfi": {
-        "title": "Feature Data",
-        "close": "Close",
-        "additionalInfo": "Additional information",
-        "gfiLocation": "Zoom to location",
-        "target": "Target"
-    },
-    "general": {
-        "close": "Close",
-        "warning": "Warning!",
-        "continue": "Continue",
-        "cancel": "Cancel",
-        "dontShowAgain": "Don\"t show again",
-        "ok": "OK"
-    },
-    "multipleLayersWarning": "You are about to activate 10 or more maplayers and it might affect the performance of the service",
-    "appGuide": {
-        "title": "User Guide",
-        "modalContent": {
-            "upperBar": {
-                "title": "Top Bar Functions",
-                "content": {
-                    "0": {
-                        "title": "Return to start view",
-                        "text": "The start view is a predefined view that shows waterways, the railway network and the road net-work throughout Finland."
-                    },
-                    "1": {
-                        "title": "Share page",
-                        "text": "You can share the current view of the map with a link directly to the selected service or by copying the link. The view retains the focus, zoom level, and selected materials and theme."
-                    },
-                    "2": {
-                        "title": "Info",
-                        "text": "Behind the info button you will find information about the application, operating instructions and contact information for sending feedback, for example."
-                    },
-                    "3": {
-                        "title": "Language",
-                        "text": "You can select Finnish, Swedish or English as the language of the map service."
-                    }
-                }
-            },
-            "mapLevelMenu": {
-                "title": "Map Level Menu",
-                "subTitle": "The map level menu opens at the top left. There are 3 tabs to choose from",
-                "tabsContent": {
-                    "materList": "You can filter the material list by topic behind the filter button. You can search the map level by name by entering at least 3 letters in the search field.",
-                    "themeLayerSelection": "Selecting a theme displays the map layers defined for the theme and opens a menu for selecting map materials related to the theme. Some of the map materials have their own style for the theme. There can be only one theme at a time. When a theme is selected, you can also select map materials other than those defined for the theme in the All Levels menu. The theme closes with the theme marker at the top of the map.",
-                    "selectedLayers": "List of selected map levels on the map. You can change the order of the levels by dragging them from the icon on the right. The transparency can be adjusted with the slider and the level selec-tion can be deselected."
-                }
-            },
-            "search": {
-                "title": "Search",
-                "content": "The search opens in the upper right corner of the map using the magnifying glass button on the left. The Search function allows you to search for you and addresses by selecting the search you want to use from the drop-down menu. You can delete a search result from the map by tapping the trash in the search box."
-            },
-            "measureTool": {
-                "title": "Drawingtools",
-                "content": "The measurement tools open from the drawing icon on the left. The tools can be used to measure length or area. the measurement results can be deleted from the map with the orange rubber but-ton."
-            },
-            "setFullScreen": {
-                "title": "Expand",
-                "content": "The Expand button can be used to expand the Suomen Vaylat application to fill the entire screen."
-            },
-            "zoomBar": {
-                "title": "Captions / Zoom Bar",
-                "content": "You can open the zoom level and the map levels with their captions on the map at that zoom level from the caption icon at the bottom right. Map levels are listed at the top first. Selecting another scale from the zoom bar moves to the selected approach level."
-            }
+      },
+      "mapLevelMenu": {
+        "title": "Map Level Menu",
+        "subTitle": "The map level menu opens at the top left. There are 3 tabs to choose from",
+        "tabsContent": {
+          "materList": "You can filter the material list by topic behind the filter button. You can search the map level by name by entering at least 3 letters in the search field.",
+          "themeLayerSelection": "Selecting a theme displays the map layers defined for the theme and opens a menu for selecting map materials related to the theme. Some of the map materials have their own style for the theme. There can be only one theme at a time. When a theme is selected, you can also select map materials other than those defined for the theme in the All Levels menu. The theme closes with the theme marker at the top of the map.",
+          "selectedLayers": "List of selected map levels on the map. You can change the order of the levels by dragging them from the icon on the right. The transparency can be adjusted with the slider and the level selec-tion can be deselected."
         }
-    },
-    "appInfo": {
-        "title": "Sovelluksen tiedot",
-        "headingText": "Suomen Väylät on Väyläviraston avoimen datan paikkatietoaineistoihin perustuva karttapalvelu, joka on julkaistu vuonna 2022 ja se sisältää tällä hetkellä yli 270 tietolajia ominaisuustietoineen. Palvelua ja sen sisältöä kehitetään edelleen.",
-        "mainText": "Suomen Väylät karttapalvelun kautta on katseltavissa tiestötietoja valtion tieverkolta, rautatietietoja sekä tietoja vesiväylistä. Lisäksi omiksi kokonaisuuksiksi on koottu Väyläviraston infrahanketietoja sekä kansallisen tie- ja katuverkon tietojärjestelmän, Digiroadin, tietolajit. Palveluun on rakennettu valmiiksi useita teemakarttoja, kuten esimerkiksi Hankekartta ja Rautateiden verkkoseloste. Suomen Väylissä aineistoja voi hakea aineistojen nimen tai aihealueen mukaan sekä suodattaa aineistoja teemojen mukaisesti. Lisäksi karttapalvelusta löytyy erilliset osoite- , tiehaku ja metatietohaut. Suomen Väylät on käytettävissä sekä desktop- että mobiiliversioilla. Palvelua tuotetaan suomen-, ruotsin- ja englannin kielillä.  Palvelun käyttöohjeet löytyvät ?-painikkeen(linkki) takaa. Suomen Väylien operoinnista ja ylläpidosta vastaa tällä hetkellä Sitowise Oy.",
-        "versionInfo": {
-            "title": "Versiotiedot",
-            "appVersion": "Sovelluksen versio: ",
-            "appLastUpdate": "Sovellus päivitetty viimeksi: ",
-            "appInfoTitle": "Tietoa palvelusta",
-            "appInfoLinksTitle": "Linkkejä",
-            "appContactAndFeedback": "Yhteystiedot ja palaute",
-            "versionInfoList": {
-                "0": {
-                    "title": "Versiomuutokset:",
-                    "list": {
-                        "0": {
-                            "content": "Sovellukseen tehdyt korjaukset",
-                            "subContent": {
-                                "0": "Teeman jako",
-                                "1": "Bugit mobiilinäkymässä",
-                                "2": "Sovelluksen kaatumiseen johtavat bugit",
-                                "3": "Tie- ja osoitehaun korjaukset",
-                                "4": "Zoom-valikon korjaukset"
-                            }
-                        },
-                        "1": {
-                            "content": "Sovellukseen tehdyt päivitykset",
-                            "subContent": {
-                                "0": "Kielisyyksien Excel tuonnin ja viennin tuki",
-                                "1": "Modaalien parannuspäivitys",
-                                "2": "Otsake palkin mobiiliresponsiivisuuden\nparantaminen",
-                                "3": "Sovelluksen tiedot -tekstien päivitys",
-                                "4": "Pienempiä käytettävyysparannuksia"
-                            }
-                        }
-                    }
-                },
-                "1": {
-                    "title": "Tiedossa olevat puutteet:",
-                    "list": {
-                        "0": {
-                            "content": "Kaikkia aineistoryhmiä ei ole käsitelty datan osalta",
-                            "subContent": {
-                                "0": "Tiestötiedoista puuttuvat selkokielisyydet ja kenttien priorisointi kohdetietoikkunaan",
-                                "1": "Inspire-aineistoista sekä digiroad-aineistoista puuttuvat kenttien priorisointi kohdetietoikkunaan"
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "contactInfoFeedback": {
-            "0": "Sovelluksesta vastaa Väylävirasto ja sovelluksen toimittaa Sitowise Oy.",
-            "1": "Palautetta toivotaan lähetettävän osoitteeseen ",
-            "2": "suomenvaylat@vayla.fi",
-            "emailSubject": "Suomen Väylät palaute"
-        },
-        "appInfoLinks": {
+      },
+      "search": {
+        "title": "Search",
+        "content": "The search opens in the upper right corner of the map using the magnifying glass button on the left. The Search function allows you to search for you and addresses by selecting the search you want to use from the drop-down menu. You can delete a search result from the map by tapping the trash in the search box."
+      },
+      "measureTool": {
+        "title": "Drawingtools",
+        "content": "The measurement tools open from the drawing icon on the left. The tools can be used to measure length or area. the measurement results can be deleted from the map with the orange rubber but-ton."
+      },
+      "setFullScreen": {
+        "title": "Expand",
+        "content": "The Expand button can be used to expand the Suomen Vaylat application to fill the entire screen."
+      },
+      "zoomBar": {
+        "title": "Captions / Zoom Bar",
+        "content": "You can open the zoom level and the map levels with their captions on the map at that zoom level from the caption icon at the bottom right. Map levels are listed at the top first. Selecting another scale from the zoom bar moves to the selected approach level."
+      }
+    }
+  },
+  "appInfo": {
+    "title": "Application details",
+    "headingText": "Suomen Väylät is a map service provided by the Finnish Transport Infrastructure Agency. The service, based on open data geographical information, was launched in 2022 and it currently contains more than 270 data types and their attributes. The service and its contents are continuously developed.",
+    "mainText": "Using the Suomen Väylät map service, you can view road data on the state-owned road network, rail data and waterway data. Data on infrastructure projects of the Finnish Transport Infrastructure Agency, and the data types of Digiroad (National Road and Street Database) are also included as separate datasets. The service contains several thematic maps, such as a project map and the Finnish Railway Network Statement. In Suomen Väylät, you can search for data by name or subject and filter data by theme. The map service also has separate address, road and metadata search functions. Suomen Väylät is supplied as desktop and mobile versions and the service is available in Finnish, Swedish and English.  For instructions, click the ? button (link). Suomen Väylät is currently operated and maintained by Sitowise Oy.",
+    "versionInfo": {
+      "title": "Version details",
+      "appVersion": "Application version:",
+      "appLastUpdate": "Application last updated:",
+      "appInfoTitle": "Information on the service",
+      "appInfoLinksTitle": "Links",
+      "appContactAndFeedback": "Contact information and feedback",
+      "versionInfoList": {
+        "0": {
+          "title": "Version changes:",
+          "list": {
             "0": {
-                "text" : "Lisätietoja Väyläviraston avoimesta datasta ja käyttöehdoista:",
-                "link" : "https://vayla.fi/vaylista/aineistot/avoindata"
+              "content": "Sovellukseen tehdyt korjaukset",
+              "subContent": {
+                "0": "Teeman jako",
+                "1": "Bugit mobiilinäkymässä",
+                "2": "Sovelluksen kaatumiseen johtavat bugit",
+                "3": "Tie- ja osoitehaun korjaukset",
+                "4": "Zoom-valikon korjaukset"
+              }
             },
             "1": {
-                "text" : "Linkkejä avoimiin rajapintoihin ja latauspalveluun:",
-                "link" : "https://vayla.fi/vaylista/aineistot/avoindata/rajapinnat"
-            },
-            "2": {
-                "text" : "Väyläviraston karttoja:",
-                "link" : "https://vayla.fi/vaylista/aineistot/kartat"
+              "content": "Sovellukseen tehdyt päivitykset",
+              "subContent": {
+                "0": "Kielisyyksien Excel tuonnin ja viennin tuki",
+                "1": "Modaalien parannuspäivitys",
+                "2": "Otsake palkin mobiiliresponsiivisuuden\r\nparantaminen",
+                "3": "Sovelluksen tiedot -tekstien päivitys",
+                "4": "Pienempiä käytettävyysparannuksia"
+              }
             }
-        }
-    },
-    "search": {
-        "types": {
-            "address": "Address search",
-            "vkm": "Road search",
-            "metadata": "Metadata search"
-        },
-        "vkm": {
-            "title": "Road number search",
-            "subtitle": "Search by road number",
-            "tie": "Road number",
-            "osa": "Road section",
-            "ajorata": "Carriageway",
-            "etaisyys": "Distance (m)",
-            "error": {
-                "title": "Road search failed",
-                "text": "Check for the following errors:"
-            }
-        },
-        "address": {
-            "title": "Search place",
-            "subtitle": "Search by address, municipality or property identifier",
-            "address": "Opastinsilta 12 Helsinki",
-            "error": {
-                "title": "Address search failed",
-                "text": "No results found for the address search."
-            }
-        },
-        "metadata": {
-            "title": "Search metadata",
-            "subtitle": "Search by metadata",
-            "error": {
-                "title": "Metadata search failed",
-                "text": "No results found for the metadata search"
-            }
-        }
-    },
-    "layerlist": {
-        "layerlistLabels": {
-            "allLayers": "All layers",
-            "themeLayers": "Themes",
-            "selectedLayers": "Selected layers",
-            "mapLayers": "Layers",
-            "backgroundMaps": "Background maps",
-            "selectAll": "Select all",
-            "show": "Show",
-            "filterOrSearchLayers": "Filter or search layers",
-            "filterByType": "Filter by type",
-            "searchForLayers": "Search for layers",
-            "clearFilters": "Clear filters",
-            "searchResults": "Search results",
-            "clearSelectedMapLayers": "Clear selected map layers",
-            "clearSelectedBackgroundMaps": "Clear selected background maps",
-            "noSearchResults": "No search results",
-            "typeAtLeastThreeCharacters": "Type at least 3 characters"
-        },
-        "selectedLayers": {
-            "layerVisible": "Layer visible",
-            "zoomInToShowLayer": "Zoom in to see the map layer",
-            "zoomOutToShowLayer": "Zoom out to see the map layer",
-            "opacity": "Transparency"
-        }
-    },
-    "themelayerlist": {
-        "0": {
-            "title": "Hankekartta",
-            "description": "Kartalla esitetään Väyläviraston investointihankkeet ja toteutukseen tähtäävät hankesuunnittelukohteet."
+          }
         },
         "1": {
-            "title": "Päällysteiden kuntokartta",
-            "description": null
-        },
-        "2": {
-            "title": "Siltarajoituskartta",
-            "description": "Kartalla on esitetty painorajoitetut sillat ja alikulkujen rajoitukset. Rajoituksia voi poistua ja tulla lisää, joten karttaa kannattaa tarkastella usein. Muistakaa tarkistaa mahdolliset rajoitukset myös kunnista ja yksityisteiden tiekunnilta."
-        },
-        "3": {
-            "title": "Tienumerokartta",
-            "description": null
-        },
-        "4": {
-            "title": "Rataverkon kuntokartta",
-            "description": null
-        },
-        "5": {
-            "title": "TEN-T verkosto",
-            "description": "TEN-T-verkosto koostuu kahdesta tasosta: vuoteen 2030 mennessä rakennettavasta ydinverkosta (core network) ja vuoteen 2050 mennessä rakennettavasta kattavasta verkosta (comprehensive network). TEN-T ydinverkko keskittyy tärkeimpiin yhteyksiin ja solmukohtiin. Ydinverkon toteuttamista edistää käytäviin perustuva lähestymistapa. TEN-T-verkko kattaa kaikki liikennemuodot: maantie-, ilma-, sisävesi-, meri- sekä liikennemuotojen yhdistelyn mahdollistavat alustat."
-        },
-        "6": {
-            "title": "Verkkoselostus",
-            "description": null
+          "title": "Tiedossa olevat puutteet:",
+          "list": {
+            "0": {
+              "content": "Kaikkia aineistoryhmiä ei ole käsitelty datan osalta",
+              "subContent": {
+                "0": "Tiestötiedoista puuttuvat selkokielisyydet ja kenttien priorisointi kohdetietoikkunaan",
+                "1": "Inspire-aineistoista sekä digiroad-aineistoista puuttuvat kenttien priorisointi kohdetietoikkunaan"
+              }
+            }
+          }
         }
+      }
+    },
+    "contactInfoFeedback": {
+      "0": "The application is the responsibility of the Finnish Transport Infrastructure Agency and it is supplied by Sitowise Oy.",
+      "1": "Send your feedback to",
+      "2": "suomenvaylat@vayla.fi",
+      "emailSubject": "Feedback on Suomen Väylät"
+    },
+    "appInfoLinks": {
+      "0": {
+        "text": "Read more about the open data of the Finnish Transport Infrastructure Agency and its terms of use:",
+        "link": "https://vayla.fi/en/transport-network/data/open-data"
+      },
+      "1": {
+        "text": "Links to open APIs and download service:",
+        "link": "https://vayla.fi/en/transport-network/data/open-data/api"
+      },
+      "2": {
+        "text": "Maps of the Finnish Transport Infrastructure Agency:",
+        "link": "https://vayla.fi/vaylista/aineistot/kartat"
+      }
+    }
+  },
+  "search": {
+    "types": {
+      "address": "Address search",
+      "vkm": "Road search",
+      "metadata": "Metadata search"
+    },
+    "vkm": {
+      "tie": "Road number",
+      "title": "Road number search",
+      "subtitle": "Search by road number",
+      "osa": "Road section",
+      "ajorata": "Carriageway",
+      "etaisyys": "Distance (m)",
+      "error": {
+        "title": "Road search failed",
+        "text": "Check for the following errors:"
+      }
+    },
+    "address": {
+      "title": "Search place",
+      "subtitle": "Search by address, municipality or property identifier",
+      "address": "Opastinsilta 12 Helsinki",
+      "error": {
+        "title": "Address search",
+        "text": "No results were found for the address search."
+      }
     },
     "metadata": {
-        "title": "{0} -map layer metadata",
-        "heading": {
-            "abstractTextData": "Abstract text (data)",
-            "abstractTextService": "Abstract text (service)",
-            "accessConstraint": "Access constraints",
-            "citationDate": "Date",
-            "classification": "Classifications",
-            "descriptiveKeyword": "Keywords",
-            "distributionFormat": "Distribution format",
-            "fileIdentifier": "File identifier",
-            "legalConstraint": "Legal constraints",
-            "lineageStatement": "Lineage statement",
-            "metadataCharacterSet": "Metadata characterset",
-            "metadataDateStamp": "Metadata date",
-            "metadataLanguage": "Metadata language",
-            "metadataOrganisation": "Organisation name",
-            "metadataStandardName": "Metadata standard name",
-            "metadataStandardVersion": "Metadata standard version",
-            "onlineResource": "Online resources",
-            "operatesOn": "Operates on",
-            "otherConstraint": "Other constraints",
-            "reportConformance": "Conformance",
-            "responsibleParty": "Responsible party",
-            "resourceIdentifier": "Resource identifier",
-            "resourceLanguage": "Resource language",
-            "scopeCode": "Resource type",
-            "serviceType": "Service type",
-            "spatialRepresentationType": "Spatial representation type",
-            "spatialResolution": "Spatial resolution",
-            "temporalExtent": "Temporal extents",
-            "topicCategory": "Topic categories",
-            "useLimitation": "Use limitations",
-            "absoluteExternalPositionalAccuracy": "Absolute external positional accuracy",
-            "accuracyOfTimeMeasurement": "Accuracy of time measurement",
-            "completenessCommission": "Completeness commission",
-            "completenessOmission": "Completeness omission",
-            "conceptualConsistency": "Conceptual consistency",
-            "domainConsistency": "Domain consistency",
-            "formatConsistency": "Format consistency",
-            "griddedDataPositionalAccuracy": "Gridded data positional accuracy",
-            "nonQuantitativeAttributeAccuracy": "Non quantitative attribute accuracy",
-            "quantitativeAttributeAccuracy": "Quantitative attribute accuracy",
-            "relativeInternalPositionalAccuracy": "Relative internal positional accuracy",
-            "temporalConsistency": "Temporal consistency",
-            "temporalValidity": "Temporal validity",
-            "thematicClassificationCorrectness": "Thematic classification correctness",
-            "topologicalConsistency": "Topological consistency"
-        },
-        "qualityContent": {
-            "qualityPassTrue": "Dataset is conformant to the specification.",
-            "qualityPassFalse": "Dataset is not conformant to the specification.",
-            "nameOfMeasure": "Name of Measure",
-            "citationTitle": "Title",
-            "measureIdentificationCode": "Measure identification code",
-            "measureIdentificationAuthorization": "Measure identification authorization",
-            "measureDescription": "Measure description",
-            "evaluationMethodType": "Evaluation Method",
-            "evaluationMethodDescription": "Evaluation method description",
-            "evaluationProcedure": "Evaluation procedure",
-            "dateTime": "Date / Time",
-            "specification": "Specification title",
-            "explanation": "Explanation",
-            "valueType": "Value type",
-            "valueUnit": "Value unit",
-            "errorStatistic": "Error statistic",
-            "value": "Value",
-            "conformanceResult": "Conformance Result",
-            "quantitativeResult": "Quantitative Result"
-        },
-        "codeLists": {
-            "gmd:MD_CharacterSetCode": {
-                "ucs2": {
-                    "label": "UCS2",
-                    "description": "16-bit fixed size Universal Character Set, based on ISO/IEC 10646"
-                },
-                "ucs4": {
-                    "label": "UCS4",
-                    "description": "32-bit fixed size Universal Character Set, based on ISO/IEC 10646"
-                },
-                "utf7": {
-                    "label": "UTF7",
-                    "description": "7-bit variable size UCS Transfer Format, based on ISO/IEC 10646"
-                },
-                "utf8": {
-                    "label": "UTF8",
-                    "description": "8-bit variable size UCS Transfer Format, based on ISO/IEC 10646"
-                },
-                "utf16": {
-                    "label": "UTF16",
-                    "description": "16-bit variable size UCS Transfer Format, based on ISO/IEC 10646"
-                },
-                "8859part1": {
-                    "label": "8859 Part 1",
-                    "description": "ISO/IEC 8859-1, Information technology - 8-bit single byte coded graphic character sets - Part 1 : Latin alphabet No.1"
-                },
-                "8859part2": {
-                    "label": "8859 Part 2",
-                    "description": "ISO/IEC 8859-2, Information technology - 8-bit single byte coded graphic character sets - Part 2 : Latin alphabet No.2"
-                },
-                "8859part3": {
-                    "label": "8859 Part 3",
-                    "description": "ISO/IEC 8859-3, Information technology - 8-bit single byte coded graphic character sets - Part 3 : Latin alphabet No.3"
-                },
-                "8859part4": {
-                    "label": "8859 Part 4",
-                    "description": "ISO/IEC 8859-4, Information technology - 8-bit single byte coded graphic character sets - Part 4 : Latin alphabet No.4"
-                },
-                "8859part5": {
-                    "label": "8859 Part 5",
-                    "description": "ISO/IEC 8859-5, Information technology - 8-bit single byte coded graphic character sets - Part 5 : Latin/Cyrillic alphabet"
-                },
-                "8859part6": {
-                    "label": "8859 Part 6",
-                    "description": "ISO/IEC 8859-6, Information technology - 8-bit single byte coded graphic character sets - Part 6 : Latin/Arabic alphabet"
-                },
-                "8859part7": {
-                    "label": "8859 Part 7",
-                    "description": "ISO/IEC 8859-7, Information technology - 8-bit single byte coded graphic character sets - Part 7 : Latin/Greek alphabet"
-                },
-                "8859part8": {
-                    "label": "8859 Part 8",
-                    "description": "ISO/IEC 8859-8, Information technology - 8-bit single byte coded graphic character sets - Part 8 : Latin/Hebrew alphabet"
-                },
-                "8859part9": {
-                    "label": "8859 Part 9",
-                    "description": "ISO/IEC 8859-9, Information technology - 8-bit single byte coded graphic character sets - Part 9 : Latin alphabet No.5"
-                },
-                "8859part10": {
-                    "label": "8859 Part 10",
-                    "description": "ISO/IEC 8859-10, Information technology - 8-bit single byte coded graphic character sets - Part 10 : Latin alphabet No.6"
-                },
-                "8859part11": {
-                    "label": "8859 Part 11",
-                    "description": "ISO/IEC 8859-11, Information technology - 8-bit single byte coded graphic character sets - Part 11 : Latin/Thai alphabet"
-                },
-                "8859part13": {
-                    "label": "8859 Part 13",
-                    "description": "ISO/IEC 8859-13, Information technology - 8-bit single byte coded graphic character sets - Part 13 : Latin alphabet No.7"
-                },
-                "8859part14": {
-                    "label": "8859 Part 14",
-                    "description": "ISO/IEC 8859-14, Information technology - 8-bit single byte coded graphic character sets - Part 14 : Latin alphabet No.8 (Celtic)"
-                },
-                "8859part15": {
-                    "label": "8859 Part 15",
-                    "description": "ISO/IEC 8859-15, Information technology - 8-bit single byte coded graphic character sets - Part 15 : Latin alphabet No.9"
-                },
-                "8859part16": {
-                    "label": "8859 Part 16",
-                    "description": "ISO/IEC 8859-16, Information technology - 8-bit single byte coded graphic character sets - Part 16 : Latin alphabet No.10"
-                },
-                "jis": {
-                    "label": "JIS",
-                    "description": "Japanese code set used for electronic transmission"
-                },
-                "shiftJIS": {
-                    "label": "Shift JIS",
-                    "description": "Japanese code set used on MS-DOS machines"
-                },
-                "eucJP": {
-                    "label": "EUC JP",
-                    "description": "Japanese code set used on UNIX based machines"
-                },
-                "usAscii": {
-                    "label": "US ASCII",
-                    "description": "United States ASCII code set (ISO 646 US)"
-                },
-                "ebcdic": {
-                    "label": "EBCDIC",
-                    "description": "IBM mainframe code set"
-                },
-                "eucKR": {
-                    "label": "EUC KR",
-                    "description": "Korean code set"
-                },
-                "big5": {
-                    "label": "Big 5",
-                    "description": "Traditional Chinese code set used in Taiwan, Hong Kong of China and other areas"
-                },
-                "GB2312": {
-                    "label": "GB2312",
-                    "description": "Simplified Chinese code set"
-                }
-            },
-            "gmd:MD_ClassificationCode": {
-                "unclassified": {
-                    "label": "Unclassified",
-                    "description": "Available for general disclosure"
-                },
-                "restricted": {
-                    "label": "Restricted",
-                    "description": "Not for general disclosure"
-                },
-                "confidential": {
-                    "label": "Confidential",
-                    "description": "Available for someone who can be entrusted with information"
-                },
-                "secret": {
-                    "label": "Secret",
-                    "description": "Kept or meant to be kept private, unknown, or hidden from all but a select group of people"
-                },
-                "topSecret": {
-                    "label": "Top secret",
-                    "description": "Of the highest secrecy"
-                }
-            },
-            "gmd:CI_DateTypeCode": {
-                "creation": {
-                    "label": "Creation",
-                    "description": "Date identifies when the resource was brought into existence."
-                },
-                "publication": {
-                    "label": "Publication",
-                    "description": "Date identifies when the resource was issued."
-                },
-                "revision": {
-                    "label": "Revision",
-                    "description": "Date identifies when the resource was examined or re-examined and improved or amended."
-                }
-            },
-            "gmd:MD_RestrictionCode": {
-                "copyright": {
-                    "label": "Copyright",
-                    "description": "Exclusive right to the publication, production, or sale of the rights to a literary, dramatic, musical, or artistic work, or to the use of a commercial print or label, granted by law for a specified period of time to an author, composer, artist, distributor"
-                },
-                "patent": {
-                    "label": "Patent",
-                    "description": "Government has granted exclusive right to make, sell, use or license an invention or discovery"
-                },
-                "patentPending": {
-                    "label": "Pending patent",
-                    "description": "Produced or sold information awaiting a patent"
-                },
-                "trademark": {
-                    "label": "Trademark",
-                    "description": "A name, symbol, or other device identifying a product, officially registered and legally restricted to the use of the owner or manufacturer"
-                },
-                "license": {
-                    "label": "License",
-                    "description": "Formal permission to do something"
-                },
-                "intellectualPropertyRights": {
-                    "label": "Intellectual property rights",
-                    "description": "Rights to financial benefit from and control of distribution of non-tangible property that is a result of creativity"
-                },
-                "restricted": {
-                    "label": "Restricted",
-                    "description": "Withheld from general circulation or disclosure"
-                },
-                "otherRestrictions": {
-                    "label": "Other restrictions",
-                    "description": "Limitation not listed"
-                }
-            },
-            "gmd:MD_ScopeCode": {
-                "attribute": {
-                    "label": "Attribute",
-                    "description": "Information applies to the attribute class"
-                },
-                "attributeType": {
-                    "label": "Attribute type",
-                    "description": "Information applies to the characteristic of a feature"
-                },
-                "collectionHardware": {
-                    "label": "Collection hardware",
-                    "description": "Information applies to the collection hardware class"
-                },
-                "collectionSession": {
-                    "label": "Collection session",
-                    "description": "Information applies to the collection session"
-                },
-                "dataset": {
-                    "label": "Dataset",
-                    "description": "Information applies to the dataset"
-                },
-                "series": {
-                    "label": "Series",
-                    "description": "Information applies to the series"
-                },
-                "nonGeographicDataset": {
-                    "label": "Non geographic dataset",
-                    "description": "Information applies to non-geographic data"
-                },
-                "dimensionGroup": {
-                    "label": "Dimension group",
-                    "description": "Information applies to a dimension group"
-                },
-                "feature": {
-                    "label": "Feature",
-                    "description": "Information applies to a feature"
-                },
-                "featureType": {
-                    "label": "Feature type",
-                    "description": "Information applies to a feature type"
-                },
-                "propertyType": {
-                    "label": "Property type",
-                    "description": "Information applies to a property type"
-                },
-                "fieldSession": {
-                    "label": "Field session",
-                    "description": "Information applies to a field session"
-                },
-                "software": {
-                    "label": "Software",
-                    "description": "Information applies to a computer program or routine"
-                },
-                "service": {
-                    "label": "Service",
-                    "description": "Information applies to a capability which a service provider entity makes available to a service user entity through a set of interfaces that define a behaviour, such as a use case"
-                },
-                "model": {
-                    "label": "Model",
-                    "description": "Information applies to a copy or imitation of an existing or hypothetical object"
-                },
-                "tile": {
-                    "label": "Tile",
-                    "description": "Information applies to a tile, a spatial subset of geographic data"
-                }
-            },
-            "gmd:MD_SpatialRepresentationTypeCode": {
-                "vector": {
-                    "label": "Vector",
-                    "description": "Vector data is used to represent geographic data"
-                },
-                "grid": {
-                    "label": "Grid",
-                    "description": "Grid data is used to represent geographic data"
-                },
-                "textTable": {
-                    "label": "Text, table",
-                    "description": "Textual or tabular data is used to represent geographic data"
-                },
-                "tin": {
-                    "label": "TIN",
-                    "description": "Triangulated irregular network"
-                },
-                "stereoModel": {
-                    "label": "Stereo model",
-                    "description": "Three-dimensional view formed by the intersecting homologous rays of an overlapping pair of images"
-                },
-                "video": {
-                    "label": "Video",
-                    "description": "Scene from a video recording"
-                }
-            },
-            "gmd:MD_TopicCategoryCode": {
-                "farming": {
-                    "label": "Farming",
-                    "description": "Rearing of animals and/or cultivation of plants. Examples: agriculture, irrigation, aquaculture, plantations, herding, pests and diseases affecting crops and livestock"
-                },
-                "biota": {
-                    "label": "Biota",
-                    "description": "Flora and/or fauna in natural environment. Examples: wildlife, vegetation, biological sciences, ecology, wilderness, sealife, wetlands, habitat"
-                },
-                "boundaries": {
-                    "label": "Boundaries",
-                    "description": "Legal land descriptions. Examples: political and administrative boundaries"
-                },
-                "climatologyMeteorologyAtmosphere": {
-                    "label": "Climatology, meteorology, atmosphere",
-                    "description": "Processes and phenomena of the atmosphere. Examples: cloud cover, weather, climate, atmospheric conditions, climate change, precipitation"
-                },
-                "economy": {
-                    "label": "Economy",
-                    "description": "Economic activities, conditions and employment. Examples: production, labour, revenue, commerce, industry, tourism and ecotourism, forestry, fisheries, commercial or subsistence hunting, exploration and exploitation of resources such as minerals, oil and gas"
-                },
-                "elevation": {
-                    "label": "Elevation",
-                    "description": "Height above or below sea level. Examples: altitude, bathymetry, digital elevation models, slope, derived products"
-                },
-                "environment": {
-                    "label": "Environment",
-                    "description": "Environmental resources, protection and conservation. Examples: environmental pollution, waste storage and treatment, environmental impact assessment, monitoring environmental risk, nature reserves, landscape"
-                },
-                "geoscientificInformation": {
-                    "label": "Geoscientific information",
-                    "description": "Information pertaining to earth sciences. Examples: geophysical features and processes, geology, minerals, sciences dealing with the composition, structure and origin of the earth s rocks, risks of earthquakes, volcanic activity, landslides, gravity information, soils, permafrost, hydrogeology, erosion"
-                },
-                "health": {
-                    "label": "Health",
-                    "description": "Health, health services, human ecology, and safety. Examples: disease and illness, factors affecting health, hygiene, substance abuse, mental and physical health, health services"
-                },
-                "imageryBaseMapsEarthCover": {
-                    "label": "Imagery base maps earth cover",
-                    "description": "Base maps. Examples: land cover, topographic maps, imagery, unclassified images, annotations"
-                },
-                "intelligenceMilitary": {
-                    "label": "Intelligence military",
-                    "description": "Military bases, structures, activities. Examples: barracks, training grounds, military transportation, information collection"
-                },
-                "inlandWaters": {
-                    "label": "Inland waters",
-                    "description": "Inland water features, drainage systems and their characteristics. Examples: rivers and glaciers, salt lakes, water utilization plans, dams, currents, floods, water quality, hydrographic charts"
-                },
-                "location": {
-                    "label": "Location",
-                    "description": "Positional information and services. Examples: addresses, geodetic networks, control points, postal zones and services, place names"
-                },
-                "oceans": {
-                    "label": "Oceans",
-                    "description": "Features and characteristics of salt water bodies (excluding inland waters). Examples: tides, tidal waves, coastal information, reefs"
-                },
-                "planningCadastre": {
-                    "label": "Planning cadastre",
-                    "description": "Information used for appropriate actions for future use of the land. Examples: land use maps, zoning maps, cadastral surveys, land ownership"
-                },
-                "society": {
-                    "label": "Society",
-                    "description": "Characteristics of society and cultures. Examples: settlements, anthropology, archaeology, education, traditional beliefs, manners and customs, demographic data, recreational areas and activities, social impact assessments, crime and justice, census information"
-                },
-                "structure": {
-                    "label": "Structure",
-                    "description": "Man-made construction. Examples: buildings, museums, churches, factories, housing, monuments, shops, towers"
-                },
-                "transportation": {
-                    "label": "Transportation",
-                    "description": "Means and aids for conveying persons and/or goods. Examples: roads, airports/airstrips, shipping routes, tunnels, nautical charts, vehicle or vessel location, aeronautical charts, railways"
-                },
-                "utilitiesCommunication": {
-                    "label": "Utilities communication",
-                    "description": "Energy, water and waste systems and communications infrastructure and services. Examples: hydroelectricity, geothermal, solar and nuclear sources of energy, water purification and distribution, sewage collection and disposal, electricity and gas distribution, data communication, telecommunication, radio, communication networks"
-                }
-            }
-        },
-        "languages": {
-            "af": "Afrikaans",
-            "ak": "Akan",
-            "am": "Amharic",
-            "ar": "Arabic",
-            "az": "Azerbaijani",
-            "be": "Belarusian",
-            "bg": "Bulgarian",
-            "bm": "Bambara",
-            "bn": "Bengali",
-            "bo": "Tibetan",
-            "br": "Breton",
-            "bs": "Bosnian",
-            "ca": "Catalan",
-            "cs": "Czech",
-            "cy": "Welsh",
-            "da": "Danish",
-            "de": "German",
-            "dz": "Dzongkha",
-            "ee": "Ewe",
-            "el": "Greek",
-            "en": "English",
-            "eo": "Esperanto",
-            "es": "Spanish",
-            "et": "Estonian",
-            "eu": "Basque",
-            "fa": "Persian",
-            "ff": "Fulah",
-            "fi": "Finnish",
-            "fo": "Faroese",
-            "fr": "French",
-            "fy": "Western Frisian",
-            "ga": "Irish",
-            "gd": "Scottish Gaelic",
-            "gl": "Galician",
-            "gu": "Gujarati",
-            "ha": "Hausa",
-            "he": "Hebrew",
-            "hi": "Hindi",
-            "hr": "Croatian",
-            "hu": "Hungarian",
-            "hy": "Armenian",
-            "ia": "Interlingua",
-            "id": "Indonesian",
-            "ig": "Igbo",
-            "is": "Icelandic",
-            "it": "Italian",
-            "ja": "Japanese",
-            "ka": "Georgian",
-            "ki": "Kikuyu",
-            "kk": "Kazakh",
-            "kl": "Kalaallisut",
-            "km": "Khmer",
-            "kn": "Kannada",
-            "ko": "Korean",
-            "ks": "Kashmiri",
-            "kw": "Cornish",
-            "ky": "Kyrgyz",
-            "lb": "Luxembourgish",
-            "lg": "Ganda",
-            "ln": "Lingala",
-            "lo": "Lao",
-            "lt": "Lithuanian",
-            "lu": "Luba-Katanga",
-            "lv": "Latvian",
-            "mg": "Malagasy",
-            "mk": "Macedonian",
-            "ml": "Malayalam",
-            "mn": "Mongolian",
-            "mr": "Marathi",
-            "ms": "Malay",
-            "mt": "Maltese",
-            "my": "Burmese",
-            "nb": "Norwegian Bokmål",
-            "nd": "North Ndebele",
-            "ne": "Nepali",
-            "nl": "Dutch",
-            "nn": "Norwegian Nynorsk",
-            "om": "Oromo",
-            "or": "Oriya",
-            "os": "Ossetic",
-            "pa": "Punjabi",
-            "pl": "Polish",
-            "ps": "Pashto",
-            "pt": "Portuguese",
-            "qu": "Quechua",
-            "rm": "Romansh",
-            "rn": "Rundi",
-            "ro": "Romanian",
-            "ru": "Russian",
-            "rw": "Kinyarwanda",
-            "se": "Northern Sami",
-            "sg": "Sango",
-            "si": "Sinhala",
-            "sk": "Slovak",
-            "sl": "Slovenian",
-            "sn": "Shona",
-            "so": "Somali",
-            "sq": "Albanian",
-            "sr": "Serbian",
-            "sv": "Swedish",
-            "sw": "Swahili",
-            "ta": "Tamil",
-            "te": "Telugu",
-            "th": "Thai",
-            "ti": "Tigrinya",
-            "tn": "Tswana",
-            "to": "Tongan",
-            "tr": "Turkish",
-            "ts": "Tsonga",
-            "ug": "Uyghur",
-            "uk": "Ukrainian",
-            "ur": "Urdu",
-            "uz": "Uzbek",
-            "vi": "Vietnamese",
-            "yi": "Yiddish",
-            "yo": "Yoruba",
-            "zh": "Chinese",
-            "zu": "Zulu"
-        }
-    },
-    "legend": {
-        "title": "Map legends",
-        "nolegend": "No layer legend",
-        "noSelectedLayers": "No map layers selected"
-    },
-    "share": {
-        "title": "Share this page",
-        "shareTexts": {
-            "title": "Suomen Väylät - map link",
-            "emailBody": "Map link: ",
-            "copiedToClipboard": "Copied to clipboard"
-        },
-        "shareDescriptions": {
-            "chosenContent" : "selected layers",
-            "contentTransparency" : "layer transparencies",
-            "currentZoomLevel" : "zoom-level",
-            "center" : "centering",
-            "and" : "and",
-            "share": "Share",
-            "lang" : "language",
-            "theme": "theme"
-        },
-        "tooltips": {
-            "clipboard": "Copy to clipboard",
-            "email": "Send by email",
-            "facebook": "Share on Facebook",
-            "twitter": "Share on Twitter",
-            "linkedin": "Share on LinkedIn",
-            "whatsapp": "Share on WhatsApp",
-            "telegram": "Share on Telegram"
-        }
+      "title": "Search metadata",
+      "subtitle": "Search by metadata",
+      "error": {
+          "title": "Metadata search failed",
+          "text": "No results found for the metadata search"
+      }
     }
+  },
+  "layerlist": {
+    "layerlistLabels": {
+      "allLayers": "All layers",
+      "themeLayers": "Themes",
+      "selectedLayers": "Selected layers",
+      "mapLayers": "Layers",
+      "backgroundMaps": "Background maps",
+      "selectAll": "Select all",
+      "show": "Show",
+      "filterOrSearchLayers": "Filter or search layers",
+      "filterByType": "Filter by type",
+      "searchForLayers": "Search for layers",
+      "clearFilters": "Clear filters",
+      "searchResults": "Search results",
+      "clearSelectedMapLayers": "Clear selected map layers",
+      "clearSelectedBackgroundMaps": "Clear selected background maps",
+      "noSearchResults": "No search results",
+      "typeAtLeastThreeCharacters": "Type at least 3 characters"
+    },
+    "selectedLayers": {
+      "layerVisible": "Layer visible",
+      "zoomInToShowLayer": "Zoom in to see the map layer",
+      "zoomOutToShowLayer": "Zoom out to see the map layer",
+      "opacity": "Transparency"
+    }
+  },
+  "themelayerlist": {
+    "0": {
+      "title": "Project map",
+      "description": "The map shows the agency’s investment projects and the projects at planning stage aimed for implementation."
+    },
+    "1": {
+      "title": "Map showing the condition of the road pavement",
+      "description": "-"
+    },
+    "2": {
+      "title": "Map showing bridge restrictions",
+      "description": "The map shows bridges with weight restrictions and underpasses with restrictions. Restrictions now in effect may be lifted and new restrictions introduced, and for this reason you should check the map frequently. Remember also to check any restrictions with municipalities and private road maintenance associations."
+    },
+    "3": {
+      "title": "Road number map",
+      "description": "-"
+    },
+    "4": {
+      "title": "Map showing the condition of the railway network",
+      "description": "-"
+    },
+    "5": {
+      "title": "TEN-T network",
+      "description": "The TEN-T network comprises two levels: the core network, to be completed by 2030 and the comprehensive network to be completed by 2050. The TEN-T core network focuses on the most important connections and hubs. The implementation of the core network is advanced by a corridor-based approach. The TEN-T network covers all forms of transport: road, air, internal waterways and sea, as well as platforms enabling a combination of different forms of transport."
+    },
+    "6": {
+      "title": "Finnish Railway Network Statement",
+      "description": "-"
+    }
+  },
+  "metadata": {
+    "title": "{0} -map layer metadata",
+    "heading": {
+      "abstractTextService": "Abstract text (data)",
+      "abstractTextData": "Abstract text (service)",
+      "accessConstraint": "Access constraints",
+      "citationDate": "Date",
+      "classification": "Classifications",
+      "descriptiveKeyword": "Keywords",
+      "distributionFormat": "Distribution format",
+      "fileIdentifier": "File identifier",
+      "legalConstraint": "Legal constraints",
+      "lineageStatement": "Lineage statement",
+      "metadataCharacterSet": "Metadata characterset",
+      "metadataDateStamp": "Metadata date",
+      "metadataLanguage": "Metadata language",
+      "metadataOrganisation": "Organisation name",
+      "metadataStandardName": "Metadata standard name",
+      "metadataStandardVersion": "Metadata standard version",
+      "onlineResource": "Online resources",
+      "operatesOn": "Operates on",
+      "otherConstraint": "Other constraints",
+      "reportConformance": "Conformance",
+      "responsibleParty": "Responsible party",
+      "resourceIdentifier": "Resource identifier",
+      "resourceLanguage": "Resource language",
+      "scopeCode": "Resource type",
+      "serviceType": "Service type",
+      "spatialRepresentationType": "Spatial representation type",
+      "spatialResolution": "Spatial resolution",
+      "temporalExtent": "Temporal extents",
+      "topicCategory": "Topic categories",
+      "useLimitation": "Use limitations",
+      "absoluteExternalPositionalAccuracy": "Absolute external positional accuracy",
+      "accuracyOfTimeMeasurement": "Accuracy of time measurement",
+      "completenessCommission": "Completeness commission",
+      "completenessOmission": "Completeness omission",
+      "conceptualConsistency": "Conceptual consistency",
+      "domainConsistency": "Domain consistency",
+      "formatConsistency": "Format consistency",
+      "griddedDataPositionalAccuracy": "Gridded data positional accuracy",
+      "nonQuantitativeAttributeAccuracy": "Non quantitative attribute accuracy",
+      "quantitativeAttributeAccuracy": "Quantitative attribute accuracy",
+      "relativeInternalPositionalAccuracy": "Relative internal positional accuracy",
+      "temporalConsistency": "Temporal consistency",
+      "temporalValidity": "Temporal validity",
+      "thematicClassificationCorrectness": "Thematic classification correctness",
+      "topologicalConsistency": "Topological consistency"
+    },
+    "qualityContent": {
+      "qualityPassTrue": "Dataset is conformant to the specification.",
+      "qualityPassFalse": "Dataset is not conformant to the specification.",
+      "nameOfMeasure": "Name of Measure",
+      "citationTitle": "Title",
+      "measureIdentificationCode": "Measure identification code",
+      "measureIdentificationAuthorization": "Measure identification authorization",
+      "measureDescription": "Measure description",
+      "evaluationMethodType": "Evaluation Method",
+      "evaluationMethodDescription": "Evaluation method description",
+      "evaluationProcedure": "Evaluation procedure",
+      "dateTime": "Date / Time",
+      "specification": "Specification title",
+      "explanation": "Explanation",
+      "valueType": "Value type",
+      "valueUnit": "Value unit",
+      "errorStatistic": "Error statistic",
+      "value": "Value",
+      "conformanceResult": "Conformance Result",
+      "quantitativeResult": "Quantitative Result"
+    },
+    "codeLists": {
+      "gmd:MD_CharacterSetCode": {
+        "ucs2": {
+          "label": "UCS2",
+          "description": "16-bit fixed size Universal Character Set, based on ISO/IEC 10646"
+        },
+        "ucs4": {
+          "label": "UCS4",
+          "description": "32-bit fixed size Universal Character Set, based on ISO/IEC 10646"
+        },
+        "utf7": {
+          "label": "UTF7",
+          "description": "7-bit variable size UCS Transfer Format, based on ISO/IEC 10646"
+        },
+        "utf8": {
+          "label": "UTF8",
+          "description": "8-bit variable size UCS Transfer Format, based on ISO/IEC 10646"
+        },
+        "utf16": {
+          "label": "UTF16",
+          "description": "16-bit variable size UCS Transfer Format, based on ISO/IEC 10646"
+        },
+        "8859part1": {
+          "label": "8859 Part 1",
+          "description": "ISO/IEC 8859-1, Information technology - 8-bit single byte coded graphic character sets - Part 1 : Latin alphabet No.1"
+        },
+        "8859part2": {
+          "label": "8859 Part 2",
+          "description": "ISO/IEC 8859-2, Information technology - 8-bit single byte coded graphic character sets - Part 2 : Latin alphabet No.2"
+        },
+        "8859part3": {
+          "label": "8859 Part 3",
+          "description": "ISO/IEC 8859-3, Information technology - 8-bit single byte coded graphic character sets - Part 3 : Latin alphabet No.3"
+        },
+        "8859part4": {
+          "label": "8859 Part 4",
+          "description": "ISO/IEC 8859-4, Information technology - 8-bit single byte coded graphic character sets - Part 4 : Latin alphabet No.4"
+        },
+        "8859part5": {
+          "label": "8859 Part 5",
+          "description": "ISO/IEC 8859-5, Information technology - 8-bit single byte coded graphic character sets - Part 5 : Latin/Cyrillic alphabet"
+        },
+        "8859part6": {
+          "label": "8859 Part 6",
+          "description": "ISO/IEC 8859-6, Information technology - 8-bit single byte coded graphic character sets - Part 6 : Latin/Arabic alphabet"
+        },
+        "8859part7": {
+          "label": "8859 Part 7",
+          "description": "ISO/IEC 8859-7, Information technology - 8-bit single byte coded graphic character sets - Part 7 : Latin/Greek alphabet"
+        },
+        "8859part8": {
+          "label": "8859 Part 8",
+          "description": "ISO/IEC 8859-8, Information technology - 8-bit single byte coded graphic character sets - Part 8 : Latin/Hebrew alphabet"
+        },
+        "8859part9": {
+          "label": "8859 Part 9",
+          "description": "ISO/IEC 8859-9, Information technology - 8-bit single byte coded graphic character sets - Part 9 : Latin alphabet No.5"
+        },
+        "8859part10": {
+          "label": "8859 Part 10",
+          "description": "ISO/IEC 8859-10, Information technology - 8-bit single byte coded graphic character sets - Part 10 : Latin alphabet No.6"
+        },
+        "8859part11": {
+          "label": "8859 Part 11",
+          "description": "ISO/IEC 8859-11, Information technology - 8-bit single byte coded graphic character sets - Part 11 : Latin/Thai alphabet"
+        },
+        "8859part13": {
+          "label": "8859 Part 13",
+          "description": "ISO/IEC 8859-13, Information technology - 8-bit single byte coded graphic character sets - Part 13 : Latin alphabet No.7"
+        },
+        "8859part14": {
+          "label": "8859 Part 14",
+          "description": "ISO/IEC 8859-14, Information technology - 8-bit single byte coded graphic character sets - Part 14 : Latin alphabet No.8 (Celtic)"
+        },
+        "8859part15": {
+          "label": "8859 Part 15",
+          "description": "ISO/IEC 8859-15, Information technology - 8-bit single byte coded graphic character sets - Part 15 : Latin alphabet No.9"
+        },
+        "8859part16": {
+          "label": "8859 Part 16",
+          "description": "ISO/IEC 8859-16, Information technology - 8-bit single byte coded graphic character sets - Part 16 : Latin alphabet No.10"
+        },
+        "jis": {
+          "label": "JIS",
+          "description": "Japanese code set used for electronic transmission"
+        },
+        "shiftJIS": {
+          "label": "Shift JIS",
+          "description": "Japanese code set used on MS-DOS machines"
+        },
+        "eucJP": {
+          "label": "EUC JP",
+          "description": "Japanese code set used on UNIX based machines"
+        },
+        "usAscii": {
+          "label": "US ASCII",
+          "description": "United States ASCII code set (ISO 646 US)"
+        },
+        "ebcdic": {
+          "label": "EBCDIC",
+          "description": "IBM mainframe code set"
+        },
+        "eucKR": {
+          "label": "EUC KR",
+          "description": "Korean code set"
+        },
+        "big5": {
+          "label": "Big 5",
+          "description": "Traditional Chinese code set used in Taiwan, Hong Kong of China and other areas"
+        },
+        "GB2312": {
+          "label": "GB2312",
+          "description": "Simplified Chinese code set"
+        }
+      },
+      "gmd:MD_ClassificationCode": {
+        "unclassified": {
+          "label": "Unclassified",
+          "description": "Available for general disclosure"
+        },
+        "restricted": {
+          "label": "Restricted",
+          "description": "Not for general disclosure"
+        },
+        "confidential": {
+          "label": "Confidential",
+          "description": "Available for someone who can be entrusted with information"
+        },
+        "secret": {
+          "label": "Secret",
+          "description": "Kept or meant to be kept private, unknown, or hidden from all but a select group of people"
+        },
+        "topSecret": {
+          "label": "Top secret",
+          "description": "Of the highest secrecy"
+        }
+      },
+      "gmd:CI_DateTypeCode": {
+        "creation": {
+          "label": "Creation",
+          "description": "Date identifies when the resource was brought into existence."
+        },
+        "publication": {
+          "label": "Publication",
+          "description": "Date identifies when the resource was issued."
+        },
+        "revision": {
+          "label": "Revision",
+          "description": "Date identifies when the resource was examined or re-examined and improved or amended."
+        }
+      },
+      "gmd:MD_RestrictionCode": {
+        "copyright": {
+          "label": "Copyright",
+          "description": "Exclusive right to the publication, production, or sale of the rights to a literary, dramatic, musical, or artistic work, or to the use of a commercial print or label, granted by law for a specified period of time to an author, composer, artist, distributor"
+        },
+        "patent": {
+          "label": "Patent",
+          "description": "Government has granted exclusive right to make, sell, use or license an invention or discovery"
+        },
+        "patentPending": {
+          "label": "Pending patent",
+          "description": "Produced or sold information awaiting a patent"
+        },
+        "trademark": {
+          "label": "Trademark",
+          "description": "A name, symbol, or other device identifying a product, officially registered and legally restricted to the use of the owner or manufacturer"
+        },
+        "license": {
+          "label": "License",
+          "description": "Formal permission to do something"
+        },
+        "intellectualPropertyRights": {
+          "label": "Intellectual property rights",
+          "description": "Rights to financial benefit from and control of distribution of non-tangible property that is a result of creativity"
+        },
+        "restricted": {
+          "label": "Restricted",
+          "description": "Withheld from general circulation or disclosure"
+        },
+        "otherRestrictions": {
+          "label": "Other restrictions",
+          "description": "Limitation not listed"
+        }
+      },
+      "gmd:MD_ScopeCode": {
+        "attribute": {
+          "label": "Attribute",
+          "description": "Information applies to the attribute class"
+        },
+        "attributeType": {
+          "label": "Attribute type",
+          "description": "Information applies to the characteristic of a feature"
+        },
+        "collectionHardware": {
+          "label": "Collection hardware",
+          "description": "Information applies to the collection hardware class"
+        },
+        "collectionSession": {
+          "label": "Collection session",
+          "description": "Information applies to the collection session"
+        },
+        "dataset": {
+          "label": "Dataset",
+          "description": "Information applies to the dataset"
+        },
+        "series": {
+          "label": "Series",
+          "description": "Information applies to the series"
+        },
+        "nonGeographicDataset": {
+          "label": "Non geographic dataset",
+          "description": "Information applies to non-geographic data"
+        },
+        "dimensionGroup": {
+          "label": "Dimension group",
+          "description": "Information applies to a dimension group"
+        },
+        "feature": {
+          "label": "Feature",
+          "description": "Information applies to a feature"
+        },
+        "featureType": {
+          "label": "Feature type",
+          "description": "Information applies to a feature type"
+        },
+        "propertyType": {
+          "label": "Property type",
+          "description": "Information applies to a property type"
+        },
+        "fieldSession": {
+          "label": "Field session",
+          "description": "Information applies to a field session"
+        },
+        "software": {
+          "label": "Software",
+          "description": "Information applies to a computer program or routine"
+        },
+        "service": {
+          "label": "Service",
+          "description": "Information applies to a capability which a service provider entity makes available to a service user entity through a set of interfaces that define a behaviour, such as a use case"
+        },
+        "model": {
+          "label": "Model",
+          "description": "Information applies to a copy or imitation of an existing or hypothetical object"
+        },
+        "tile": {
+          "label": "Tile",
+          "description": "Information applies to a tile, a spatial subset of geographic data"
+        }
+      },
+      "gmd:MD_SpatialRepresentationTypeCode": {
+        "vector": {
+          "label": "Vector",
+          "description": "Vector data is used to represent geographic data"
+        },
+        "grid": {
+          "label": "Grid",
+          "description": "Grid data is used to represent geographic data"
+        },
+        "textTable": {
+          "label": "Text, table",
+          "description": "Textual or tabular data is used to represent geographic data"
+        },
+        "tin": {
+          "label": "TIN",
+          "description": "Triangulated irregular network"
+        },
+        "stereoModel": {
+          "label": "Stereo model",
+          "description": "Three-dimensional view formed by the intersecting homologous rays of an overlapping pair of images"
+        },
+        "video": {
+          "label": "Video",
+          "description": "Scene from a video recording"
+        }
+      },
+      "gmd:MD_TopicCategoryCode": {
+        "farming": {
+          "label": "Farming",
+          "description": "Rearing of animals and/or cultivation of plants. Examples: agriculture, irrigation, aquaculture, plantations, herding, pests and diseases affecting crops and livestock"
+        },
+        "biota": {
+          "label": "Biota",
+          "description": "Flora and/or fauna in natural environment. Examples: wildlife, vegetation, biological sciences, ecology, wilderness, sealife, wetlands, habitat"
+        },
+        "boundaries": {
+          "label": "Boundaries",
+          "description": "Legal land descriptions. Examples: political and administrative boundaries"
+        },
+        "climatologyMeteorologyAtmosphere": {
+          "label": "Climatology, meteorology, atmosphere",
+          "description": "Processes and phenomena of the atmosphere. Examples: cloud cover, weather, climate, atmospheric conditions, climate change, precipitation"
+        },
+        "economy": {
+          "label": "Economy",
+          "description": "Economic activities, conditions and employment. Examples: production, labour, revenue, commerce, industry, tourism and ecotourism, forestry, fisheries, commercial or subsistence hunting, exploration and exploitation of resources such as minerals, oil and gas"
+        },
+        "elevation": {
+          "label": "Elevation",
+          "description": "Height above or below sea level. Examples: altitude, bathymetry, digital elevation models, slope, derived products"
+        },
+        "environment": {
+          "label": "Environment",
+          "description": "Environmental resources, protection and conservation. Examples: environmental pollution, waste storage and treatment, environmental impact assessment, monitoring environmental risk, nature reserves, landscape"
+        },
+        "geoscientificInformation": {
+          "label": "Geoscientific information",
+          "description": "Information pertaining to earth sciences. Examples: geophysical features and processes, geology, minerals, sciences dealing with the composition, structure and origin of the earth s rocks, risks of earthquakes, volcanic activity, landslides, gravity information, soils, permafrost, hydrogeology, erosion"
+        },
+        "health": {
+          "label": "Health",
+          "description": "Health, health services, human ecology, and safety. Examples: disease and illness, factors affecting health, hygiene, substance abuse, mental and physical health, health services"
+        },
+        "imageryBaseMapsEarthCover": {
+          "label": "Imagery base maps earth cover",
+          "description": "Base maps. Examples: land cover, topographic maps, imagery, unclassified images, annotations"
+        },
+        "intelligenceMilitary": {
+          "label": "Intelligence military",
+          "description": "Military bases, structures, activities. Examples: barracks, training grounds, military transportation, information collection"
+        },
+        "inlandWaters": {
+          "label": "Inland waters",
+          "description": "Inland water features, drainage systems and their characteristics. Examples: rivers and glaciers, salt lakes, water utilization plans, dams, currents, floods, water quality, hydrographic charts"
+        },
+        "location": {
+          "label": "Location",
+          "description": "Positional information and services. Examples: addresses, geodetic networks, control points, postal zones and services, place names"
+        },
+        "oceans": {
+          "label": "Oceans",
+          "description": "Features and characteristics of salt water bodies (excluding inland waters). Examples: tides, tidal waves, coastal information, reefs"
+        },
+        "planningCadastre": {
+          "label": "Planning cadastre",
+          "description": "Information used for appropriate actions for future use of the land. Examples: land use maps, zoning maps, cadastral surveys, land ownership"
+        },
+        "society": {
+          "label": "Society",
+          "description": "Characteristics of society and cultures. Examples: settlements, anthropology, archaeology, education, traditional beliefs, manners and customs, demographic data, recreational areas and activities, social impact assessments, crime and justice, census information"
+        },
+        "structure": {
+          "label": "Structure",
+          "description": "Man-made construction. Examples: buildings, museums, churches, factories, housing, monuments, shops, towers"
+        },
+        "transportation": {
+          "label": "Transportation",
+          "description": "Means and aids for conveying persons and/or goods. Examples: roads, airports/airstrips, shipping routes, tunnels, nautical charts, vehicle or vessel location, aeronautical charts, railways"
+        },
+        "utilitiesCommunication": {
+          "label": "Utilities communication",
+          "description": "Energy, water and waste systems and communications infrastructure and services. Examples: hydroelectricity, geothermal, solar and nuclear sources of energy, water purification and distribution, sewage collection and disposal, electricity and gas distribution, data communication, telecommunication, radio, communication networks"
+        }
+      }
+    },
+    "languages": {
+      "af": "Afrikaans",
+      "ak": "Akan",
+      "am": "Amharic",
+      "ar": "Arabic",
+      "az": "Azerbaijani",
+      "be": "Belarusian",
+      "bg": "Bulgarian",
+      "bm": "Bambara",
+      "bn": "Bengali",
+      "bo": "Tibetan",
+      "br": "Breton",
+      "bs": "Bosnian",
+      "ca": "Catalan",
+      "cs": "Czech",
+      "cy": "Welsh",
+      "da": "Danish",
+      "de": "German",
+      "dz": "Dzongkha",
+      "ee": "Ewe",
+      "el": "Greek",
+      "en": "English",
+      "eo": "Esperanto",
+      "es": "Spanish",
+      "et": "Estonian",
+      "eu": "Basque",
+      "fa": "Persian",
+      "ff": "Fulah",
+      "fi": "Finnish",
+      "fo": "Faroese",
+      "fr": "French",
+      "fy": "Western Frisian",
+      "ga": "Irish",
+      "gd": "Scottish Gaelic",
+      "gl": "Galician",
+      "gu": "Gujarati",
+      "ha": "Hausa",
+      "he": "Hebrew",
+      "hi": "Hindi",
+      "hr": "Croatian",
+      "hu": "Hungarian",
+      "hy": "Armenian",
+      "ia": "Interlingua",
+      "id": "Indonesian",
+      "ig": "Igbo",
+      "is": "Icelandic",
+      "it": "Italian",
+      "ja": "Japanese",
+      "ka": "Georgian",
+      "ki": "Kikuyu",
+      "kk": "Kazakh",
+      "kl": "Kalaallisut",
+      "km": "Khmer",
+      "kn": "Kannada",
+      "ko": "Korean",
+      "ks": "Kashmiri",
+      "kw": "Cornish",
+      "ky": "Kyrgyz",
+      "lb": "Luxembourgish",
+      "lg": "Ganda",
+      "ln": "Lingala",
+      "lo": "Lao",
+      "lt": "Lithuanian",
+      "lu": "Luba-Katanga",
+      "lv": "Latvian",
+      "mg": "Malagasy",
+      "mk": "Macedonian",
+      "ml": "Malayalam",
+      "mn": "Mongolian",
+      "mr": "Marathi",
+      "ms": "Malay",
+      "mt": "Maltese",
+      "my": "Burmese",
+      "nb": "Norwegian Bokmål",
+      "nd": "North Ndebele",
+      "ne": "Nepali",
+      "nl": "Dutch",
+      "nn": "Norwegian Nynorsk",
+      "om": "Oromo",
+      "or": "Oriya",
+      "os": "Ossetic",
+      "pa": "Punjabi",
+      "pl": "Polish",
+      "ps": "Pashto",
+      "pt": "Portuguese",
+      "qu": "Quechua",
+      "rm": "Romansh",
+      "rn": "Rundi",
+      "ro": "Romanian",
+      "ru": "Russian",
+      "rw": "Kinyarwanda",
+      "se": "Northern Sami",
+      "sg": "Sango",
+      "si": "Sinhala",
+      "sk": "Slovak",
+      "sl": "Slovenian",
+      "sn": "Shona",
+      "so": "Somali",
+      "sq": "Albanian",
+      "sr": "Serbian",
+      "sv": "Swedish",
+      "sw": "Swahili",
+      "ta": "Tamil",
+      "te": "Telugu",
+      "th": "Thai",
+      "ti": "Tigrinya",
+      "tn": "Tswana",
+      "to": "Tongan",
+      "tr": "Turkish",
+      "ts": "Tsonga",
+      "ug": "Uyghur",
+      "uk": "Ukrainian",
+      "ur": "Urdu",
+      "uz": "Uzbek",
+      "vi": "Vietnamese",
+      "yi": "Yiddish",
+      "yo": "Yoruba",
+      "zh": "Chinese",
+      "zu": "Zulu"
+    }
+  },
+  "legend": {
+    "title": "Map legends",
+    "nolegend": "No layer legend",
+    "noSelectedLayers": "No map layers selected"
+  },
+  "share": {
+    "title": "Share this page",
+    "shareTexts": {
+      "title": "Suomen Väylät - map link",
+      "emailBody": "Map link:",
+      "copiedToClipboard": "Copied to clipboard"
+    },
+    "shareDescriptions": {
+      "chosenContent": "selected layers",
+      "contentTransparency": "layer transparencies",
+      "currentZoomLevel": "zoom-level",
+      "center": "centering",
+      "and": "and",
+      "share": "Share",
+      "lang": "language",
+      "theme": "theme"
+    },
+    "tooltips": {
+      "clipboard": "Copy to clipboard",
+      "email": "Send by email",
+      "facebook": "Share on Facebook",
+      "twitter": "Share on Twitter",
+      "linkedin": "Share on LinkedIn",
+      "whatsapp": "Share on WhatsApp",
+      "telegram": "Share on Telegram"
+    }
+  }
 }

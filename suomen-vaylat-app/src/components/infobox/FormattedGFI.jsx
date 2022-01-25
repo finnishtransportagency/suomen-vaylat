@@ -50,7 +50,7 @@ const StyledInfoHeaderDiv = styled.div`
 const StyledLowPriorityDiv = styled.div`
     display: flex;
     flex-direction: column;
-    //margin-left: 1rem;
+    margin-left:8px;
 `;
 
 const StyledHighPriorityDiv = styled.div`
@@ -68,43 +68,40 @@ const StyledLowPriorityTable = styled(motion.div)`
     tbody {
         overflow: auto;
     }
+    margin-left: 8px;
 `;
 
 const StyledFeature = styled(motion.div)`
     overflow: hidden;
 `;
 
-const reOrderFeatureProperties = (geoJSON = {}, visibleFields = [], highPriority=[]) => {
-    if (visibleFields.length === 0 && highPriority.length === 0) {
-        return;
-    }
-
-    // If visible fields or high priority fields are configured then use them
-    geoJSON.features.forEach(f => {
-        const reOrderedProperties = {};
-        highPriority.forEach(key => {
-            if (f.properties[key] !== undefined) {
-                reOrderedProperties[key] = f.properties[key];
-             }
-        });
-
-        visibleFields.forEach(key => {
-            if (f.properties[key] !== undefined) {
-                reOrderedProperties[key] = f.properties[key];
-            }
-        });
-    });
-};
-
 const getContent = (key, value, visibleFields, highPriorityFields, lowPriorityTable, highPriorityTable) => {
     const hasConfiguration = highPriorityFields.length !== 0 || visibleFields.length !== 0;
     value = (value && typeof value === 'string' && (value.startsWith('http://') || value.startsWith('https://'))) ? '<a href="' + value + '" target="_blank">' + value + '<a>' : value;
-    if (hasConfiguration && highPriorityFields.includes(key)) {
-        return highPriorityTable.push(<tr key={'hr-' + key + '-' + value} className="high-priority"><td className="title">{key}</td><td dangerouslySetInnerHTML={{__html: value}}></td></tr>);
-    } else if (hasConfiguration && visibleFields.includes(key)) {
-        return lowPriorityTable.push(<tr key={'lr-' + key + '-' + value} className="low-priority"><td className="title">{key}</td><td dangerouslySetInnerHTML={{__html: value}}></td></tr>);
+    if (value !== null && value.trim() === '') {
+        return;
     }
-    return lowPriorityTable.push(<tr key={'rr-' + key + '-' + value} className="low-priority"><td className="title">{key}</td><td dangerouslySetInnerHTML={{__html: value}}></td></tr>);
+    // try if value is JSON
+    try {
+        const json = JSON.parse(value.replace(/'/g, '"'));
+        // if array
+        if (Array.isArray(json)) {
+            value = '';
+            json.forEach(val => {
+                value += '<div>' + val + '</div>';
+            });
+        }
+    } catch (err) {
+        // not json
+    }
+    if (hasConfiguration && highPriorityFields.includes(key)) {
+        highPriorityTable.push(<tr key={'hr-' + key + '-' + value} className="high-priority"><td className="title">{key}</td><td dangerouslySetInnerHTML={{__html: value}}></td></tr>);
+        return;
+    } else if (hasConfiguration && visibleFields.includes(key)) {
+        lowPriorityTable.push(<tr key={'lr-' + key + '-' + value} className="low-priority"><td className="title">{key}</td><td dangerouslySetInnerHTML={{__html: value}}></td></tr>);
+        return;
+    }
+    lowPriorityTable.push(<tr key={'rr-' + key + '-' + value} className="low-priority"><td className="title">{key}</td><td dangerouslySetInnerHTML={{__html: value}}></td></tr>);
 };
 
 export const FormattedGFI = ({ data }) => {
@@ -112,9 +109,6 @@ export const FormattedGFI = ({ data }) => {
     const visibleFields = JSON.parse(geoJSON.features[0].properties._order.replace('\\',''));
     const highPriority = JSON.parse(geoJSON.features[0].properties._orderHigh.replace('\\',''));
     let pretty = [];
-
-    // reorder properties
-    reOrderFeatureProperties(geoJSON, visibleFields, highPriority);
 
     geoJSON.features.forEach((f, index) => {
         const keys = Object.keys(f.properties);
@@ -137,7 +131,7 @@ export const FormattedGFI = ({ data }) => {
     });
 
     return (
-            <div className="test">
+            <div className="gri-response-tab">
                 {pretty.map((table, index) => {
                     return (
                         <div key={'gfi-popup-wrapper-' + index}>

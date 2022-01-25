@@ -126,13 +126,7 @@ const VKMSearch = ({
         }]);
     };
 
-    // const handleError = (data) => {
-    //     setIsSearching(true);
-    //     console.log(data);
-    // };
-
     const handleVKMSearch = (params) => {
-        console.log(params);
         setIsSearching(true);
         rpc.channel.searchVKMRoad([
             params.hasOwnProperty("vkmTienumero") && parseInt(params.vkmTienumero),
@@ -143,7 +137,6 @@ const VKMSearch = ({
             setIsSearching(false);
             if(err){
                 setError(err);
-                console.log("error "+err);
             }
         });
     };
