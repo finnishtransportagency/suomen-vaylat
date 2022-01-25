@@ -199,8 +199,8 @@
             "subtitle": "Hae osoitteella, kunnan nimellä tai kiinteistötunnuksella",
             "address": "Opastinsilta 12 Helsinki",
             "error": {
-                "title": "Osoitehaku",
-                "text": "Tuloksia ei löytynyt osoitehaulla."
+                "title": "Paikkahaku epäonnistui",
+                "text": "Tuloksia ei löytynyt paikkahaulla."
             }
         },
         "metadata": {
@@ -208,7 +208,7 @@
             "subtitle": "Hea metatiedolla",
             "error": {
                 "title": "Metatietohaku epäonnistui",
-                "text": "Metatietoja ei löytynyt"
+                "text": "Tuloksia ei löytynyt metatietohaulla"
             }
         }
     },

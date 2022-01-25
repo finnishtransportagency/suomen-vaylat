@@ -80,7 +80,7 @@ const PublishedMap = () => {
 
                 if (data.getAnnouncements) {
                     channel.getAnnouncements(function (data) {
-                        if (data.data && data.data.length > 0) {
+                        if (data.hasOwnProperty("data") && data.data.length > 0) {
                             var localStorageAnnouncements = localStorage.getItem(ANNOUNCEMENTS_LOCALSTORAGE) ? localStorage.getItem(ANNOUNCEMENTS_LOCALSTORAGE) : [];
                             const activeAnnouncements = data.data.filter(announcement => announcement.active && localStorageAnnouncements && !localStorageAnnouncements.includes(announcement.id));
                             store.dispatch(setActiveAnnouncements(activeAnnouncements));

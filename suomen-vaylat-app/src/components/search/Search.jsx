@@ -154,7 +154,7 @@ const StyledDropDown = styled(motion.div)`
     border-radius: 24px;
     box-shadow: rgb(0 0 0 / 16%) 0px 3px 6px, rgb(0 0 0 / 23%) 0px 3px 6px;
     background-color: ${props => props.theme.colors.mainWhite};
-    padding: 56px 16px 0px 16px;
+    padding: 64px 16px 0px 16px;
     pointer-events: auto;
     overflow: auto;
     @media ${props => props.theme.device.mobileL} {
@@ -165,12 +165,14 @@ const StyledDropDown = styled(motion.div)`
 const StyledDropdownContentItem = styled.div`
     user-select: none;
     cursor: pointer;
-    padding: 8px;
+    padding-left: 8px;
+    padding-bottom: 16px;
     border-radius: 5px;
+
     background-color: ${props => props.itemSelected ? props.theme.colors.mainColor3 : ""};
-    &:hover{
+    /* &:hover{
         background-color: ${props => props.theme.colors.mainColor3};
-    };
+    }; */
     p {
         margin: 0;
         padding: 0;
@@ -178,8 +180,9 @@ const StyledDropdownContentItem = styled.div`
 `;
 
 const StyledDropdownContentItemTitle = styled.p`
+    text-align: ${props => props.type === "noResults" && "center"};
     font-size: 14px;
-    color: #807A7A;
+    color: #504d4d;
 `;
 
 const StyledDropdownContentItemSubtitle = styled.p`
@@ -272,7 +275,7 @@ const Search = () => {
                     setSearchResults(data);
                 } else {
                     console.log(data);
-                }
+                };
             };
         });
 
@@ -283,7 +286,7 @@ const Search = () => {
                     setSearchResults(data.results);
                 } else {
                     console.log(data);
-                }
+                };
             };
          });
 
@@ -309,13 +312,12 @@ const Search = () => {
         >
             <StyledMenuBarButton
                 onClick={() => {
-                        isSearchOpen && channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', []);
-                        isSearchOpen && channel.postRequest('MapModulePlugin.RemoveMarkersRequest', []);
+                        isSearchOpen && channel && channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', []);
+                        isSearchOpen && channel && channel.postRequest('MapModulePlugin.RemoveMarkersRequest', []);
                         isSearchOpen && setSearchResults(null);
                         isSearchOpen && setSearchValue('');
                         store.dispatch(setIsSearchOpen(!isSearchOpen));
                         isSearchMethodSelectorOpen && setIsSearchMethodSelectorOpen(false);
-
                     }}
                     isActive={isSearchOpen}
                 >
@@ -487,7 +489,7 @@ const Search = () => {
                             <StyledDropdownContentItem
                                 key={'no-results'}
                             >
-                                <StyledDropdownContentItemTitle>No results</StyledDropdownContentItemTitle>
+                                <StyledDropdownContentItemTitle type="noResults">{strings.search.address.error.text}</StyledDropdownContentItemTitle>
                             </StyledDropdownContentItem>
                         } 
                     <StyledHideSearchResultsButton>
@@ -558,7 +560,7 @@ const Search = () => {
                             <StyledDropdownContentItem
                                 key={'no-results'}
                             >
-                                <StyledDropdownContentItemTitle>No results</StyledDropdownContentItemTitle>
+                                <StyledDropdownContentItemTitle type="noResults">{strings.search.metadata.error.text}</StyledDropdownContentItemTitle>
                             </StyledDropdownContentItem>
 
                         }

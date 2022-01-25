@@ -199,16 +199,16 @@
             "subtitle": "Search by address, municipality or property identifier",
             "address": "Opastinsilta 12 Helsinki",
             "error": {
-                "title": "Address search",
-                "text": "No results were found for the address search."
+                "title": "Address search failed",
+                "text": "No results found for the address search."
             }
         },
         "metadata": {
             "title": "Search metadata",
             "subtitle": "Search by metadata",
             "error": {
-                "title": "Searching metadata failed",
-                "text": "No metadata found"
+                "title": "Metadata search failed",
+                "text": "No results found for the metadata search"
             }
         }
     },
