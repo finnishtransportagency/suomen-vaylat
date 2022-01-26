@@ -179,7 +179,8 @@
   "search": {
     "types": {
       "address": "Address search",
-      "vkm": "Road search"
+      "vkm": "Road search",
+      "metadata": "Metadata search"
     },
     "vkm": {
       "tie": "Road number",
@@ -200,6 +201,14 @@
       "error": {
         "title": "Address search",
         "text": "No results were found for the address search."
+      }
+    },
+    "metadata": {
+      "title": "Search metadata",
+      "subtitle": "Search by metadata",
+      "error": {
+          "title": "Metadata search failed",
+          "text": "No results found for the metadata search"
       }
     }
   },
