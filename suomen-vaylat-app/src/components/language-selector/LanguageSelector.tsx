@@ -12,14 +12,9 @@ const StyledLanguageSelector = styled.div`
     justify-content: flex-end;
     align-items: center;
     color: ${(props: { theme: { colors: { mainWhite: any; }; }; }) => props.theme.colors.mainWhite};
-    padding-right: 10px;
+    padding-left: 8px;
     svg {
         font-size: 22px;
-    };
-    @media ${(props: { theme: { device: { mobileL: any; }; }; }) => props.theme.device.mobileL} {
-        svg {
-            font-size: 20px;
-        };
     };
 `;
 

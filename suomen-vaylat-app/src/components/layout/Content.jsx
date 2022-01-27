@@ -97,7 +97,6 @@ const Content = () => {
         channel,
         gfiLocations
     } = useAppSelector((state) => state.rpc);
-    //const channel = useSelector(state => state.rpc.channel);
 
     const ANNOUNCEMENTS_LOCALSTORAGE = "oskari-announcements";
 
@@ -153,7 +152,6 @@ const Content = () => {
             store.dispatch(resetGFILocations([]));
             store.dispatch(setMinimizeGfi(false));
             channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', []);
-            //channel.postRequest('MapModulePlugin.RemoveMarkersRequest', ['gfi_location']);
     };
 
     return (

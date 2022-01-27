@@ -35,7 +35,6 @@ const StyledHeaderButton = styled.div`
     align-items: center;
     cursor: pointer;
     background-color: transparent;
-    margin-right: 5px;
     border-radius: 50%;
     svg {
         color: ${props => props.theme.colors.mainWhite};

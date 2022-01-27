@@ -27,6 +27,8 @@ import {
 
 import { setIsSearchOpen } from '../../state/slices/uiSlice';
 
+import CircleButton from '../circle-button/CircleButton';
+
 const StyledSearchContainer = styled.div`
     z-index: 2;
     position: relative;
@@ -44,7 +46,8 @@ const StyledSearchContainer = styled.div`
 `;
 
 const StyledSearchWrapper = styled(motion.div)`
-    position: relative;
+    position: absolute;
+    z-index: -1;
     transition: all 0.3s ease-out;
     display: flex;
     justify-content: flex-end;
@@ -99,32 +102,6 @@ const StyledSelectedSearchMethod = styled.div`
         margin: 0;
         color: #6c757d;
     }
-`;
-
-const StyledMenuBarButton = styled.div`
-    position: absolute;
-    right: 0px;
-    z-index: 1;
-    pointer-events: auto;
-    cursor: pointer;
-    width: 48px;
-    height: 48px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: ${props => props.isActive ? props.theme.colors.buttonActive : props.theme.colors.button};
-    border-radius: 50%;
-    svg {
-        color: ${props => props.theme.colors.mainWhite};
-        font-size: 22px;
-    };
-    @media ${props => props.theme.device.mobileL} {
-        width: 40px;
-        height: 40px;
-        svg {
-            font-size: 18px;
-        };
-    };
 `;
 
 const StyledDropDown = styled(motion.div)`
@@ -291,35 +268,37 @@ const Search = () => {
         <StyledSearchContainer
             isSearchOpen={isSearchOpen}
         >
-            <StyledMenuBarButton
-                onClick={() => {
-                        isSearchOpen && channel && channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', []);
-                        isSearchOpen && channel && channel.postRequest('MapModulePlugin.RemoveMarkersRequest', []);
-                        isSearchOpen && setSearchResults(null);
-                        isSearchOpen && setSearchValue('');
-                        store.dispatch(setIsSearchOpen(!isSearchOpen));
-                        isSearchMethodSelectorOpen && setIsSearchMethodSelectorOpen(false);
-                    }}
-                    isActive={isSearchOpen}
-                >
-                    <FontAwesomeIcon
-                        icon={isSearchOpen ? faTimes : faSearch}
-                    />
-            </StyledMenuBarButton>
+            <CircleButton
+                icon={isSearchOpen ? faTimes : faSearch}
+                text={strings.tooltips.search}
+                toggleState={isSearchOpen}
+                tooltipDirection={"left"}
+                clickAction={() => {
+                    isSearchOpen && channel && channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', []);
+                    isSearchOpen && channel && channel.postRequest('MapModulePlugin.RemoveMarkersRequest', []);
+                    isSearchOpen && setSearchResults(null);
+                    isSearchOpen && setSearchValue('');
+                    store.dispatch(setIsSearchOpen(!isSearchOpen));
+                    isSearchMethodSelectorOpen && setIsSearchMethodSelectorOpen(false);
+                }}
+            />
             <AnimatePresence>
                 {
                 isSearchOpen && <StyledSearchWrapper
                     initial={{
                         maxWidth: 0,
-                        opacity: 0
+                        opacity: 0,
+                        filter: "blur(10px)"
                     }}
                     animate={{
                         maxWidth: "400px",
-                        opacity: 1
+                        opacity: 1,
+                        filter: "blur(0px)"
                     }}
                     exit={{
                         maxWidth: 0,
-                        opacity: 0
+                        opacity: 0,
+                        filter: "blur(10px)"
                     }}
                     transition={{
                         duration: 0.3,

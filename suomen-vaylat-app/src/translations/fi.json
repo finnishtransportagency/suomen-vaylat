@@ -12,6 +12,7 @@
       "filter": "Suodata",
       "opacity": "Opasiteetti"
     },
+    "search": "Haku",
     "searchButton": "Osoitehaku",
     "layerlistButton": "Tasovalikko",
     "fullscreenButton": "Koko näyttö",
