@@ -39,11 +39,13 @@ const variants = {
         pointerEvents: "auto",
         x: 0,
         opacity: 1,
+        filter: "blur(0px)"
     },
     closed: {
         pointerEvents: "none",
         x: "-100%",
         opacity: 0,
+        filter: "blur(10px)"
     },
 };
 
@@ -236,7 +238,7 @@ const MapLayersDialog = () => {
                     animate={isSideMenuOpen ? "open" : "closed"}
                     variants={variants}
                     transition={{
-                        duration: 0.3,
+                        duration: 0.4,
                         type: "tween"
                     }}
             >

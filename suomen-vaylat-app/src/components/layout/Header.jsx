@@ -37,19 +37,11 @@ const StyledHeaderButton = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-right: 8px;
     background-color: transparent;
     border-radius: 50%;
     svg {
         color: ${props => props.theme.colors.mainWhite};
         font-size: 22px;
-    };
-    @media ${props => props.theme.device.mobileL} {
-        width: 40px;
-        height: 40px;
-        svg {
-            font-size: 22px;
-        };
     };
 `;
 
@@ -76,14 +68,11 @@ const StyledHeaderLogoContainer = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+    a {
+        height: inherit;
+    };
     svg {
         height: inherit;
-        max-height: 60px;
-    };
-    @media ${props => props.theme.device.mobileL} {
-        svg {
-            max-height: 48px;
-        };
     };
 `;
 
@@ -100,6 +89,7 @@ const StyledRightCornerButtons = styled.div`
 
 const DesktopButtons = styled.div`
     display: flex;
+    gap: 4px;
     @media ${props => props.theme.device.mobileL} {
         display: none;
     };
@@ -198,9 +188,20 @@ export const Header = () => {
                         {strings.title}
                 </StyledHeaderTitleContainer>
                 <StyledHeaderLogoContainer>
-                    {   lang.current === 'fi' ? <VaylaLogoFi /> :
-                        lang.current === 'en' ? <VaylaLogoEn /> :
-                        lang.current === 'sv' ? <VaylaLogoSv /> : <VaylaLogoFi />}
+                    <a
+                        href={
+                            lang.current === 'fi' ? "https://vayla.fi/etusivu" :
+                            lang.current === 'en' ? "https://vayla.fi/en/frontpage" :
+                            lang.current === 'sv' ? "https://vayla.fi/sv/framsida" : "https://vayla.fi/etusivu"
+                        }
+                        target="_blank"
+                        rel="noreferrer">
+                        {  
+                            lang.current === 'fi' ? <VaylaLogoFi /> :
+                            lang.current === 'en' ? <VaylaLogoEn /> :
+                            lang.current === 'sv' ? <VaylaLogoSv /> : <VaylaLogoFi />
+                        }
+                    </a>
                 </StyledHeaderLogoContainer>
                 <StyledRightCornerButtons>
                     <MobileButtons>
@@ -229,7 +230,7 @@ export const Header = () => {
                     {
                         isSubNavOpen &&
                         <StyledMobileNavContainer
-                            initial={{ y: -100, filter: "blur(1px)", opacity: 0 }}
+                            initial={{ y: -100, filter: "blur(10px)", opacity: 0 }}
                             animate={{ y: 0, filter: "blur(0px)", opacity: 1 }}
                             exit={{ y: -100, filter: "blur(10px)", opacity: 0 }}
                             transition={{

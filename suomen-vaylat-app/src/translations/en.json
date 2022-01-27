@@ -12,6 +12,7 @@
       "filter": "Filter",
       "opacity": "Opacity"
     },
+    "search": "Search",
     "searchButton": "Address search",
     "layerlistButton": "Layerlist",
     "fullscreenButton": "Full screen",

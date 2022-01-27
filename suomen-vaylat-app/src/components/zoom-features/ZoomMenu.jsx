@@ -1,10 +1,7 @@
 import { useState, useContext } from 'react';
 import { ReactReduxContext } from 'react-redux';
-import ReactTooltip from 'react-tooltip';
-import { isMobile } from '../../theme/theme';
 import styled from 'styled-components';
 import { useAppSelector } from '../../state/hooks';
-import strings from '../../translations';
 import ZoomBar from './ZoomBar';
 
 import { setIsLegendOpen } from '../../state/slices/uiSlice';
@@ -31,9 +28,6 @@ const ZoomMenu = () => {
 
     return (
         <>
-            <ReactTooltip disable={isMobile} id='myLoc' place='top' type='dark' effect='float'>
-                <span>{strings.tooltips.myLocButton}</span>
-            </ReactTooltip>
             <StyledContainer>
                 <ZoomBar
                     setHoveringIndex={setHoveringIndex}

@@ -1,16 +1,13 @@
 import { useContext } from 'react';
-import ReactTooltip from 'react-tooltip';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faList, faSearchMinus, faSearchPlus } from '@fortawesome/free-solid-svg-icons';
-import location from '../../theme/icons/my_location_white_24dp.svg';
+import { faList, faSearchMinus, faSearchPlus, faSearchLocation } from '@fortawesome/free-solid-svg-icons';
 
 import { useAppSelector } from '../../state/hooks';
 import { ReactReduxContext } from 'react-redux';
-import { isMobile } from '../../theme/theme';
 import { setZoomIn, setZoomOut } from '../../state/slices/rpcSlice';
 import strings from '../../translations';
+import CircleButton from '../circle-button/CircleButton';
 import ZoomBarCircle from './ZoomBarCircle';
 
 import { Legend } from '../legend/Legend';
@@ -21,6 +18,12 @@ const StyledZoomBarContainer = styled.div`
     pointer-events: none;
     cursor: pointer;
     display: flex;
+`;
+
+const StyledZoomBarContent = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
 `;
 
 const StyledZoomBarZoomFeatures = styled.div`
@@ -41,134 +44,10 @@ const StyledZoomBarZoomFeatures = styled.div`
     }
 `;
 
-const StyledZoomBarControlTop = styled.button`
-    width: 48px;
-    min-height: 48px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    pointer-events: auto;
-    background-color: ${props => props.theme.colors.mainColor1};
-    margin-bottom: 4px;
-    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
-    border: none;
-    border-radius: 50%;
-    transition: all 0.1s ease-in;
-   svg {
-        color: ${props => props.theme.colors.mainWhite};
-        font-size: 20px;
-    };
-    &:hover {
-        background-color: ${props => props.theme.colors.mainColor2};
-    };
-    @media ${props => props.theme.device.mobileL} {
-        width: 40px;
-        min-height: 40px;
-        //margin-bottom: 4px;
-        svg {
-            font-size: 16px;
-        };
-    };
-`;
-
-const StyledZoomBarControlBottom = styled.button`
-    width: 48px;
-    min-height: 48px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    pointer-events: auto;
-    cursor: pointer;
-    background-color: ${props => props.theme.colors.mainColor1};
-    margin-top: 4px;
-    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
-    border: none;
-    border-radius: 50%;
-    transition: all 0.3s ease-out;
-    svg {
-        color: ${props => props.theme.colors.mainWhite};
-        font-size: 20px;
-    };
-    &:hover {
-        background-color: ${props => props.theme.colors.mainColor2};
-    };
-    @media ${props => props.theme.device.mobileL} {
-        width: 40px;
-        min-height: 40px;
-        svg {
-        font-size: 16px;
-        };
-    };
-`;
-
 const StyledZoombarCircles = styled(motion.div)`
     overflow: hidden;
     display: flex;
     flex-direction: column-reverse;
-`;
-
-const StyledIcon = styled.img`
-    width: 20px;
-`;
-
-const StyledMyLocationButton = styled.div`
-    width: 48px;
-    min-height: 48px;
-    margin-top: 8px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    pointer-events: auto;
-    cursor: pointer;
-    transition: all 0.1s ease-out;
-    background-color: ${props => props.theme.colors.mainColor1};
-    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
-    border-radius: 50%;
-    svg {
-        color: ${props => props.theme.colors.mainWhite};
-        font-size: 23px;
-    };
-    &:hover {
-        background-color: ${props => props.theme.colors.mainColor2};
-    };
-    @media ${props => props.theme.device.mobileL} {
-        width: 40px;
-        min-height: 40px;
-        //margin-top: 4px;
-        svg {
-            font-size: 16px;
-        };
-    };
-`;
-
-const StyledMenuBarButton = styled.div`
-    position: relative;
-    pointer-events:auto;
-    min-width: 48px;
-    min-height: 48px;
-    margin-bottom: 8px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: all 0.1s ease-out;
-    background-color: ${props => props.isActive ? props.theme.colors.mainColor2 : props.theme.colors.mainColor1};
-    box-shadow: rgb(0 0 0 / 16%) 0px 3px 6px, rgb(0 0 0 / 23%) 0px 3px 6px;
-    border-radius: 50%;
-    &:hover {
-        background-color: ${props => props.theme.colors.mainColor2};
-    };
-    svg {
-        color: ${props => props.theme.colors.mainWhite};
-        font-size: 18px;
-    };
-    @media ${props => props.theme.device.mobileL} {
-        min-width: 40px;
-        min-height: 40px;
-        //margin-bottom: 4px;
-        svg {
-            font-size: 16px;
-        };
-    };
 `;
 
 const listVariants = {
@@ -176,7 +55,7 @@ const listVariants = {
         height: 'auto'
     },
     hidden: {
-        height: 0
+        height: 2
     }
 };
 
@@ -191,101 +70,67 @@ const ZoomBar = ({
     const rpc = useAppSelector((state) => state.rpc);
 
     return (
-        <>
-            <ReactTooltip disable={isMobile} id='zoomExpand' place='top' type='dark' effect='float'>
-                <span>{strings.tooltips.zoomExpand}</span>
-            </ReactTooltip>
-
-            <ReactTooltip disable={isMobile} id='zoomIn' place='top' type='dark' effect='float'>
-                <span>{strings.tooltips.zoomIn}</span>
-            </ReactTooltip>
-
-            <ReactTooltip disable={isMobile} id='zoomOut' place='top' type='dark' effect='float'>
-                <span>{strings.tooltips.zoomOut}</span>
-            </ReactTooltip>
-
-            <ReactTooltip disable={isMobile} id='legend' place="right" type="dark" effect="float">
-                <span>{strings.tooltips.legendButton}</span>
-            </ReactTooltip>
-
-
             <StyledZoomBarContainer>
                 <Legend
                     currentZoomLevel={rpc.currentZoomLevel}
                     selectedLayers={rpc.selectedLayers}
                     zoomLevelsLayers={rpc.zoomLevelsLayers}
-                    //hoveringIndex={hoveringIndex}
                     isExpanded={isExpanded}
                     setIsExpanded={setIsExpanded}
                 />
-
-                <div>
-                <StyledMenuBarButton
-                    data-tip data-for='legend'
-                    isActive={isExpanded}
-                    onClick={() => setIsExpanded(!isExpanded)}
-                >
-                    <FontAwesomeIcon
+                <StyledZoomBarContent>
+                    <CircleButton
                         icon={faList}
+                        text={strings.tooltips.legendButton}
+                        toggleState={isExpanded}
+                        clickAction={() => setIsExpanded(!isExpanded)}
+                        tooltipDirection={"left"}
                     />
-                </StyledMenuBarButton>
-                <StyledZoomBarZoomFeatures>
-                    <StyledZoomBarControlTop
-                        data-tip data-for='zoomIn'
-                        disabled={currentZoomLevel === Object.values(zoomLevelsLayers).length - 1}
-                        onClick={() => {
-                            store.dispatch(setZoomIn());
-                        }}
-                    >
-                        <FontAwesomeIcon
+                    <StyledZoomBarZoomFeatures>
+                        <CircleButton
                             icon={faSearchPlus}
+                            text={strings.tooltips.zoomIn}
+                            disabled={currentZoomLevel === Object.values(zoomLevelsLayers).length - 1}
+                            clickAction={() => store.dispatch(setZoomIn())}
+                            tooltipDirection={"left"}
                         />
-                    </StyledZoomBarControlTop>
-                    <StyledZoombarCircles
-                        initial='hidden'
-                        animate={isExpanded ? 'visible' : 'hidden'}
-                        variants={listVariants}
-                        transition={{
-                            duration: 0.5,
-                            type: 'tween'
-                        }}
-                    >
-                    {Object.values(zoomLevelsLayers).map((layer, index) => {
-                        return <ZoomBarCircle
-                            key={index}
-                            index={index}
-                            layer={layer}
-                            zoomLevel={currentZoomLevel}
-                            setHoveringIndex={setHoveringIndex}
-                        />
-                    })}
-                    </StyledZoombarCircles>
-                    <StyledZoomBarControlBottom
-                        data-tip data-for='zoomOut'
-                        disabled={currentZoomLevel === 0}
-                        onClick={() => {
-                            store.dispatch(setZoomOut());
-                        }}
-                    >
-                        <FontAwesomeIcon
+                        <StyledZoombarCircles
+                            initial='hidden'
+                            animate={isExpanded ? 'visible' : 'hidden'}
+                            variants={listVariants}
+                            transition={{
+                                duration: 0.5,
+                                type: 'tween'
+                            }}
+                        >
+                        {Object.values(zoomLevelsLayers).map((layer, index) => {
+                            return <ZoomBarCircle
+                                key={index}
+                                index={index}
+                                layer={layer}
+                                zoomLevel={currentZoomLevel}
+                                setHoveringIndex={setHoveringIndex}
+                            />
+                        })}
+                        </StyledZoombarCircles>
+                        <CircleButton
                             icon={faSearchMinus}
+                            text={strings.tooltips.zoomOut}
+                            disabled={currentZoomLevel === 0}
+                            clickAction={() => store.dispatch(setZoomOut())}
+                            tooltipDirection={"left"}
                         />
-                    </StyledZoomBarControlBottom>
-                </StyledZoomBarZoomFeatures>
-
-                <StyledMyLocationButton
-                    data-tip data-for='myLoc'
-                    onClick={() => {
-                        rpc.channel.postRequest('MyLocationPlugin.GetUserLocationRequest');
-                        //setIsExpanded(false);
-                    }}
-                >
-                    <StyledIcon src={location} />
-                </StyledMyLocationButton>
-                </div>
+                    </StyledZoomBarZoomFeatures>
+                    <CircleButton
+                        icon={faSearchLocation}
+                        text={strings.tooltips.myLocButton}
+                        disabled={currentZoomLevel === Object.values(zoomLevelsLayers).length - 1}
+                        clickAction={() => rpc.channel.postRequest('MyLocationPlugin.GetUserLocationRequest')}
+                        tooltipDirection={"left"}
+                    />
+                </StyledZoomBarContent>
                
             </StyledZoomBarContainer>
-        </>
     );
 };
 
