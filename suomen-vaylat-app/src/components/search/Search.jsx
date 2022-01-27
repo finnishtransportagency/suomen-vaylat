@@ -105,7 +105,7 @@ const StyledSelectedSearchMethod = styled.div`
 `;
 
 const StyledDropDown = styled(motion.div)`
-    z-index: -1;
+    z-index: -2;
     position: absolute;
     top: 0px;
     right: 0px;
@@ -383,8 +383,8 @@ const Search = () => {
                                             setSearchTypeIndex(index);
                                             setIsSearchMethodSelectorOpen(false);
                                             setSearchValue('');
-                                            isSearchOpen && channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', []);
-                                            isSearchOpen && channel.postRequest('MapModulePlugin.RemoveMarkersRequest', []);
+                                            isSearchOpen && channel && channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', []);
+                                            isSearchOpen && channel && channel.postRequest('MapModulePlugin.RemoveMarkersRequest', []);
                                         }}
                                         key={'search-type-' + searchType.value}
                                     >
