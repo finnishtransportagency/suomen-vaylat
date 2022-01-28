@@ -4,7 +4,8 @@ import {
     faCompress,
     faExpand,
     faLayerGroup,
-    faPencilRuler
+    faPencilRuler,
+    faSave
 } from '@fortawesome/free-solid-svg-icons';
 import { ReactReduxContext } from 'react-redux';
 import styled from 'styled-components';
@@ -13,6 +14,7 @@ import {
     setIsDrawingToolsOpen,
     setIsFullScreen,
     setIsSideMenuOpen,
+    setIsSaveViewOpen,
     setActiveTool
 } from '../../../state/slices/uiSlice';
 
@@ -71,6 +73,7 @@ const MenuBar = () => {
         isSideMenuOpen,
         isDrawingToolsOpen,
         isSearchOpen,
+        isSaveViewOpen,
         activeTool,
     } =  useAppSelector((state) => state.ui);
 
@@ -125,6 +128,12 @@ const MenuBar = () => {
                     text={strings.tooltips.fullscreenButton}
                     toggleState={isFullScreen}
                     clickAction={handleFullScreen}
+                />
+                <CircleButton
+                    icon={faSave}
+                    text={"Näkymät"}
+                    toggleState={isSaveViewOpen}
+                    clickAction={() => store.dispatch(setIsSaveViewOpen(!isSaveViewOpen))}
                 />
             </StyledMenuBar>
         </>
