@@ -1,4 +1,5 @@
 import { useContext } from "react";
+import strings from '../../../translations';
 import {
     faCompress,
     faExpand,
@@ -102,7 +103,7 @@ const MenuBar = () => {
             >
                 <CircleButton
                     icon={faLayerGroup}
-                    text="Karttatasot"
+                    text={strings.tooltips.layerlistButton}
                     toggleState={isSideMenuOpen}
                     clickAction={() => store.dispatch(setIsSideMenuOpen(!isSideMenuOpen))}
                 >
@@ -113,7 +114,7 @@ const MenuBar = () => {
                 <StyledMapToolsContainer>
                     <CircleButton
                         icon={faPencilRuler}
-                        text="Piirtotyökalut"
+                        text={strings.tooltips.drawingtools.drawingtoolsButton}
                         toggleState={isDrawingToolsOpen}
                         clickAction={closeDrawingTools}
                     />
@@ -121,7 +122,7 @@ const MenuBar = () => {
                 </StyledMapToolsContainer>
                 <CircleButton
                     icon={isFullScreen ? faCompress : faExpand}
-                    text="Koko näyttö"
+                    text={strings.tooltips.fullscreenButton}
                     toggleState={isFullScreen}
                     clickAction={handleFullScreen}
                 />
