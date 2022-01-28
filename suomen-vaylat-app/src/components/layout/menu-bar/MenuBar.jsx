@@ -131,7 +131,7 @@ const MenuBar = () => {
                 />
                 <CircleButton
                     icon={faSave}
-                    text={"Näkymät"}
+                    text={"Esiasetukset"}
                     toggleState={isSaveViewOpen}
                     clickAction={() => store.dispatch(setIsSaveViewOpen(!isSaveViewOpen))}
                 />

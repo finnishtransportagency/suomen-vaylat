@@ -8,7 +8,7 @@ import UserGuideModalContent from '../user-guide-modal/UserGuideModalContent';
 import MenuBar from './menu-bar/MenuBar';
 import MapLayersDialog from '../dialog/MapLayersDialog';
 import WarningDialog from '../dialog/WarningDialog';
-import Views from '../views/Views';
+import Presets from '../presets/Presets';
 import PublishedMap from '../published-map/PublishedMap';
 import Search from '../search/Search';
 import ActionButtons from '../action-button/ActionButtons';
@@ -326,13 +326,13 @@ const Content = () => {
                     backdrop={true} /* Is backdrop enabled (true) or disabled (false) */
                     fullScreenOnMobile={true} /* Scale modal full width / height when using mobile device */
                     titleIcon={faSave} /* Use icon on title or null */
-                    title={"Näkymät"} /* Modal header title */
+                    title={"Esiasetukset"} /* Modal header title */
                     type={"normal"} /* Modal type */
                     closeAction={handleCloseSaveViewModal} /* Action when pressing modal close button or backdrop */
                     isOpen={isSaveViewOpen} /* Modal state */
                     id={null}
                 >
-                    <Views />
+                    <Presets />
                 </Modal>
                 <StyledContentGrid>
                     <MenuBar />
