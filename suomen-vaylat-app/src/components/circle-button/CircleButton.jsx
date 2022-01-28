@@ -15,8 +15,6 @@ const StyledCircleButton = styled(motion.div)`
     background-color: ${props => props.color === "secondaryColor7" ? props.theme.colors.secondaryColor7 : props.toggleState ? props.theme.colors.buttonActive : props.theme.colors.button};
     box-shadow: 0px 2px 4px #0000004D;
     border-radius: 50%;
-    //margin-left: ${props => props.type === "drawingTool" && "auto"};
-    //margin-right: ${props => props.type === "drawingTool" && "auto"};
     svg {
         color: ${props => props.theme.colors.mainWhite};
         font-size: 22px;

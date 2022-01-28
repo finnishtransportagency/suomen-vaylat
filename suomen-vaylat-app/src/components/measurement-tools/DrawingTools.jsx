@@ -20,7 +20,6 @@ import CircleButton from '../circle-button/CircleButton';
 const StyledTools = styled(motion.div)`
     display: flex;
     align-items: center;
-    //justify-content: center;
     flex-direction: row;
     background-color: ${props => props.color};
     flex-direction: column;
@@ -43,10 +42,8 @@ const variants = {
         filter: "blur(0px)",
         transition: {
             when: "beforeChildren",
-            //staggerChildren: 0.05,
             duration: 0.3,
             type: "tween"
-            //delayChildren: 0.05,
         },
     },
     hidden: {
@@ -59,8 +56,6 @@ const variants = {
             when: "afterChildren",
             duration: 0.2,
             type: "tween",
-            //staggerChildren: 0.01,
-            //delayChildren: 0.05,
         },
     },
 };
