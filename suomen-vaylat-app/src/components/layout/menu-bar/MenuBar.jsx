@@ -39,7 +39,8 @@ const StyledMenuBar = styled.div`
 const StyledMapToolsContainer = styled.div`
     background-color: ${props => props.theme.colors.mainWhite};
     border-radius: 24px;
-    box-shadow: 2px 2px 4px #0000004D;
+    box-shadow: 1px 2px 6px #0000004D;
+    z-index: -1;
 `;
 
 const StyledLayerCount = styled.div`
@@ -86,9 +87,9 @@ const MenuBar = () => {
 
     const closeDrawingTools = () => {
         // remove geometries off the map
-        channel.postRequest('DrawTools.StopDrawingRequest', [true]);
+        channel && channel.postRequest('DrawTools.StopDrawingRequest', [true]);
         // stop the drawing tool
-        channel.postRequest('DrawTools.StopDrawingRequest', [activeTool]);
+        channel && channel.postRequest('DrawTools.StopDrawingRequest', [activeTool]);
         store.dispatch(setActiveTool(null));
         store.dispatch(setIsDrawingToolsOpen(!isDrawingToolsOpen))
     };
