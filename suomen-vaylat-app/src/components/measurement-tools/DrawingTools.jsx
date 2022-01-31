@@ -60,56 +60,6 @@ const variants = {
     },
 };
 
-const drawinToolsData = [
-    {
-        id : 'sv-measure-linestring',
-        name : strings.tooltips.drawingtools.linestring,
-        style : {
-            'icon' : svLinestring
-        },
-        type : 'LineString'
-    },
-    {
-        id : 'sv-measure-polygon',
-        name : strings.tooltips.drawingtools.polygon,
-        style : {
-            icon : svPolygon
-            },
-        type : 'Polygon'
-    },
-    {
-        id : 'sv-measure-square',
-        name : strings.tooltips.drawingtools.square,
-        style : {
-            icon : svSquare
-        },
-        type : 'Square'
-    },
-    {
-        id : 'sv-measure-box',
-        name : strings.tooltips.drawingtools.box,
-        style : {
-            icon : svRectangle
-        },
-        type : 'Box'
-    },
-    {
-        id : 'sv-measure-circle',
-        name : strings.tooltips.drawingtools.circle,
-        style : {
-            icon : svCircle
-        },
-        type : 'Circle'
-    },
-    {
-        id : 'sv-erase',
-        name : strings.tooltips.drawingtools.erase,
-        style : {
-            icon : faEraser
-        },
-    },
-];
-
 export const DrawingTools = ({isOpen, theme}) => {
     const { store } = useContext(ReactReduxContext);
     const { channel } = useSelector(state => state.rpc);
@@ -133,6 +83,56 @@ export const DrawingTools = ({isOpen, theme}) => {
         channel && channel.postRequest('DrawTools.StopDrawingRequest', [activeTool]);
         store.dispatch(setActiveTool(null));
     };
+
+    const drawinToolsData = [
+        {
+            id : 'sv-measure-linestring',
+            name : strings.tooltips.measuringTools.linestring,
+            style : {
+                'icon' : svLinestring
+            },
+            type : 'LineString'
+        },
+        {
+            id : 'sv-measure-polygon',
+            name : strings.tooltips.measuringTools.polygon,
+            style : {
+                icon : svPolygon
+                },
+            type : 'Polygon'
+        },
+        {
+            id : 'sv-measure-square',
+            name : strings.tooltips.measuringTools.square,
+            style : {
+                icon : svSquare
+            },
+            type : 'Square'
+        },
+        {
+            id : 'sv-measure-box',
+            name : strings.tooltips.measuringTools.box,
+            style : {
+                icon : svRectangle
+            },
+            type : 'Box'
+        },
+        {
+            id : 'sv-measure-circle',
+            name : strings.tooltips.measuringTools.circle,
+            style : {
+                icon : svCircle
+            },
+            type : 'Circle'
+        },
+        {
+            id : 'sv-erase',
+            name : strings.tooltips.measuringTools.erase,
+            style : {
+                icon : faEraser
+            },
+        },
+    ];
 
     return (
         <>

@@ -32,6 +32,15 @@
       "polygon": "Monikulmio",
       "erase": "Tyhjennä"
     },
+    "measuringTools": {
+      "measuringToolsButton": "Mittaustyökalut",
+      "circle": "Ympyrä",
+      "square": "Neliö",
+      "box": "Laatikko",
+      "linestring": "Viiva",
+      "polygon": "Monikulmio",
+      "erase": "Tyhjennä"
+    },
     "share": "Jaa sivu",
     "shareTheme": "Jaa teema",
     "metadata": "Näytä tason metadata",

@@ -117,7 +117,7 @@ const MenuBar = () => {
                 <StyledMapToolsContainer>
                     <CircleButton
                         icon={faPencilRuler}
-                        text={strings.tooltips.drawingtools.drawingtoolsButton}
+                        text={strings.tooltips.measuringTools.measuringToolsButton}
                         toggleState={isDrawingToolsOpen}
                         clickAction={closeDrawingTools}
                     />

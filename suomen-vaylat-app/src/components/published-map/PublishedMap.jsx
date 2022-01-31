@@ -15,6 +15,7 @@ import {
     setFeatures,
     setLegends,
     setLoading,
+    setScaleBarState,
     setTagsWithLayers,
     setZoomLevelsLayers,
     setZoomRange,
@@ -175,6 +176,12 @@ const PublishedMap = () => {
 
                 if (data.SearchResultEvent) {
                     channel.handleEvent('SearchResultEvent', event => {
+                    });
+                };
+
+                if(data.ScaleBarEvent) {
+                    channel.handleEvent('ScaleBarEvent', function(data) {
+                        store.dispatch(setScaleBarState(data));
                     });
                 };
 
