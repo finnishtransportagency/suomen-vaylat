@@ -12,6 +12,7 @@ const initialState = {
   features: {},
   currentState: {},
   zoomLevelsLayers: {},
+  scaleBarState: null,
   tagLayers: [],
   tags: [],
   zoomRange: {},
@@ -148,6 +149,9 @@ export const rpcSlice = createSlice({
     setZoomLevelsLayers: (state, action) => {
         state.zoomLevelsLayers = action.payload;
         LOG.log('setZoomLevelsLayers to ', action.payload);
+    },
+    setScaleBarState: (state, action) => {
+        state.scaleBarState = action.payload;
     },
     setMapLayerVisibility: (state, action) => {
         var layer = action.payload;
@@ -332,6 +336,7 @@ export const {
     setTagLayers,
     setZoomRange,
     setZoomLevelsLayers,
+    setScaleBarState,
     setMapLayerVisibility,
     setOpacity,
     setZoomIn,
