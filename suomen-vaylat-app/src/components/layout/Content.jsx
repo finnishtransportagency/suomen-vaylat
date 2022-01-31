@@ -11,6 +11,7 @@ import WarningDialog from '../dialog/WarningDialog';
 import PublishedMap from '../published-map/PublishedMap';
 import Search from '../search/Search';
 import ActionButtons from '../action-button/ActionButtons';
+import ScaleBar from '../scalebar/ScaleBar';
 import { ShareWebSitePopup } from '../share-web-site/ShareWebSitePopup';
 import ZoomMenu from '../zoom-features/ZoomMenu';
 import strings from '../../translations';
@@ -311,6 +312,7 @@ const Content = () => {
                         warningType={warnings.type}
                     />
                 </Modal>
+                <ScaleBar />
                 <StyledContentGrid>
                     <MenuBar />
                     <MapLayersDialog />
