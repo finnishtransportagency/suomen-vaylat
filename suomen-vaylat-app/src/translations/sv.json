@@ -32,6 +32,15 @@
       "polygon": "Polygon",
       "erase": "Töm"
     },
+    "measuringTools": {
+      "measuringToolsButton": "Measuring tools",
+      "circle": "Circle",
+      "square": "Square",
+      "box": "Box",
+      "linestring": "Line",
+      "polygon": "Polygon",
+      "erase": "Erase"
+    },
     "share": "Dela denna sida",
     "shareTheme": "Dela detta tema",
     "metadata": "Visa kartlagers metadata",

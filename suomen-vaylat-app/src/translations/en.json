@@ -32,6 +32,15 @@
       "polygon": "Polygon",
       "erase": "Erase"
     },
+    "measuringTools": {
+      "measuringToolsButton": "Measuring tools",
+      "circle": "Circle",
+      "square": "Square",
+      "box": "Box",
+      "linestring": "Line",
+      "polygon": "Polygon",
+      "erase": "Erase"
+    },
     "share": "Share this page",
     "shareTheme": "Share this theme",
     "metadata": "Show maplayer metadata",
