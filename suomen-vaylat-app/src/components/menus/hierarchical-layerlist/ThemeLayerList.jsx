@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { faMap } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ReactReduxContext } from 'react-redux';
@@ -55,6 +55,24 @@ const StyledMasterGroupName = styled.p`
     };
 `;
 
+const StyledSubthemeName = styled.p`
+    user-select: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 230px;
+    color: ${props => props.theme.colors.mainWhite};
+    margin: 0;
+    padding: 0px;
+    font-size: 13px;
+    font-weight: 600;
+    transition: all 0.1s ease-in;
+
+    @media ${ props => props.theme.device.mobileL} {
+        //font-size: 13px;
+    };
+`;
+
 const StyledMasterGroupHeader = styled.div`
     z-index: 1;
     height: 48px;
@@ -69,14 +87,48 @@ const StyledMasterGroupHeader = styled.div`
     };
 `;
 
+const StyledSubGroupLayersCount = styled.p`
+    margin: 0;
+    padding: 0px;
+    font-size: 12px;
+    font-weight: 500;
+    color: ${props => props.theme.colors.mainWhite};
+`;
+
+const StyledSubthemeHeader = styled.div`
+    z-index: 1;
+    height: 33px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    background-color: ${props => props.theme.colors.secondaryColor3};
+    border-radius: ${props => props.isOpen ? "4px 4px 0px 0px": "4px"};
+    @-moz-document url-prefix() {
+        position: initial;
+    };
+`;
+
 const StyledLeftContent = styled.div`
     display: flex;
     align-items: center;
 `;
 
+const StyledSubthemeLeftContent = styled.div`
+    display: flex;
+    align-items: center;
+    margin-left: 10px;
+`;
+
 const StyledRightContent = styled.div`
     display: flex;
     align-items: center;
+`;
+
+const StyledSubthemeRightContent = styled.div`
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
 `;
 
 const StyledMasterGroupHeaderIcon = styled.div`
@@ -178,15 +230,15 @@ export const ThemeLayerList = ({
     return (
         <>
             {allThemes.map((theme, index) => {
-                var filteredLayers = allLayers.filter(layer => theme.layers.includes(layer.id));
                    return <ThemeGroup
                         key={index}
                         theme={theme}
-                        filteredLayers={filteredLayers}
+                        layers={allLayers}
                         index={index}
                         selectedTheme={selectedTheme}
                         selectGroup={handleSelectGroup}
                         selectedThemeIndex={selectedThemeIndex}
+                        isSubtheme={false}
                     />
             })}
         </>
@@ -195,38 +247,80 @@ export const ThemeLayerList = ({
 
 export const ThemeGroup = ({
     theme,
-    filteredLayers,
+    layers,
     index,
     selectedThemeIndex,
-    selectGroup
+    selectGroup,
+    isSubtheme
 }) => {
+    const [subthemeIsOpen, setSubthemeIsOpen] = useState(false);
+    const [totalGroupLayersCount, setTotalGroupLayersCoun] = useState(0);
+    const [totalVisibleGroupLayersCount, setTotalVisibleGroupLayersCount] = useState(0);
 
-    const isOpen = selectedThemeIndex === index;
+    useEffect(() => {
+        var layersCount = 0;
+        var visibleLayersCount = 0;
+        const layersCounter = (theme) => {
+            if (theme.hasOwnProperty("layers") && theme.layers.length > 0) {
+                visibleLayersCount += layers.filter(l => theme.layers.includes(l.id) && l.visible === true).length;
+                layersCount = layersCount + theme.layers.length;
+            };
+            setTotalGroupLayersCoun(layersCount);
+            setTotalVisibleGroupLayersCount(visibleLayersCount);
+        };
+        layersCounter(theme);
+    },[theme, layers]);
+
+    var filteredLayers = layers.filter(layer => theme.layers.includes(layer.id));
+    const isOpen = isSubtheme ? subthemeIsOpen : selectedThemeIndex === index;
 
     return (
         <StyledLayerGroups index={index}>
-            <StyledMasterGroupHeader
-                key={'smgh_' + theme.id}
-                onClick={() => {
-                    selectGroup(index, theme);
-                }}
-                isOpen={isOpen}
-            >
-                <StyledLeftContent>
-                    <StyledMasterGroupHeaderIcon>
-                        <FontAwesomeIcon
-                            icon={faMap}
-                        />
-                    </StyledMasterGroupHeaderIcon>
-                    <StyledMasterGroupName>{theme.name}</StyledMasterGroupName>
-                </StyledLeftContent>
-                <StyledRightContent>
-                    <StyledSelectButton
-                        isOpen={isOpen}
-                    >
-                    </StyledSelectButton>
-                </StyledRightContent>
-            </StyledMasterGroupHeader>
+            {!isSubtheme ?
+                <StyledMasterGroupHeader
+                    key={'smgh_' + theme.id}
+                    onClick={() => {
+                        selectGroup(index, theme);
+                    }}
+                    isOpen={isOpen}
+                >
+                    <StyledLeftContent>
+                        <StyledMasterGroupHeaderIcon>
+                            <FontAwesomeIcon
+                                icon={faMap}
+                            />
+                        </StyledMasterGroupHeaderIcon>
+                        <StyledMasterGroupName>{theme.name}</StyledMasterGroupName>
+                    </StyledLeftContent>
+                    <StyledRightContent>
+                        <StyledSelectButton
+                            isOpen={isOpen}
+                        >
+                        </StyledSelectButton>
+                    </StyledRightContent>
+                </StyledMasterGroupHeader>
+            :
+                <StyledSubthemeHeader
+                    key={'smgh_' + theme.id}
+                    onClick={() => {
+                        setSubthemeIsOpen(!subthemeIsOpen);
+                    }}
+                    isOpen={isOpen}
+                >
+                    <StyledSubthemeLeftContent>
+                        <StyledSubthemeName>{theme.name}</StyledSubthemeName>
+                    </StyledSubthemeLeftContent>
+                    <StyledSubthemeRightContent>
+                        <StyledSubGroupLayersCount>
+                            {
+                                totalVisibleGroupLayersCount +" / "+ totalGroupLayersCount
+                            }
+                        </StyledSubGroupLayersCount>
+                    </StyledSubthemeRightContent>
+                </StyledSubthemeHeader>
+            }
+
+
             <StyledLayerGroupContainer
                 key={'slg_' + index}
                 initial='hidden'
@@ -246,7 +340,6 @@ export const ThemeGroup = ({
                     }
                     {strings.themelayerlist.hasOwnProperty(theme.id) && strings.themelayerlist[theme.id].description !== null &&
                     <>
-                        <StyledSubHeader>{strings.themelayerlist[theme.id].title}</StyledSubHeader>
                         <StyledSubText>{strings.themelayerlist[theme.id].description}</StyledSubText>
                     </>
                     }
@@ -254,6 +347,21 @@ export const ThemeGroup = ({
                 <StyledLayerGroup>
                     <Layers layers={filteredLayers} isOpen={isOpen} theme={theme.name}/>
                 </StyledLayerGroup>
+                
+                {theme.subthemes && theme.subthemes.map((subtheme, index) => {
+                        return (
+                            <ThemeGroup
+                                key={index}
+                                theme={subtheme}
+                                layers={layers}
+                                index={index}
+                                selectGroup={selectGroup}
+                                selectedThemeIndex={selectedThemeIndex}
+                                isSubtheme={true}
+                            />
+                        );
+                    })
+                }
             </StyledLayerGroupContainer>
         </StyledLayerGroups>
     );
