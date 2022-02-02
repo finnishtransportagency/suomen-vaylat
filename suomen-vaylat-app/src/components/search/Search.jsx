@@ -271,6 +271,48 @@ const Search = () => {
         }));
     };
 
+    const variants = {
+        initial: {
+            maxWidth: 0,
+            opacity: 0,
+            filter: 'blur(10px)'
+        },
+        animate: {
+            maxWidth: '400px',
+            opacity: 1,
+            filter: 'blur(0px)'
+        },
+        exit: {
+            maxWidth: 0,
+            opacity: 0,
+            filter: 'blur(10px)'
+        },
+        transition: {
+            duration: 0.3,
+            type: 'tween'
+        }
+    };
+
+    const dropdownVariants = {
+        initial: {
+            height: 0,
+            opacity: 0
+        },
+        animate: {
+            height: 'auto',
+            maxHeight: 'calc(var(--app-height) - 100px)',
+            opacity: 1
+        },
+        exit: {
+            height: 0,
+            opacity: 0
+        },
+        transition: {
+            duration: 0.5,
+            type: 'tween'
+        }
+    };
+
     return (
         <StyledSearchContainer
             isSearchOpen={isSearchOpen}
@@ -292,25 +334,11 @@ const Search = () => {
             <AnimatePresence>
                 {
                 isSearchOpen && <StyledSearchWrapper
-                    initial={{
-                        maxWidth: 0,
-                        opacity: 0,
-                        filter: "blur(10px)"
-                    }}
-                    animate={{
-                        maxWidth: "400px",
-                        opacity: 1,
-                        filter: "blur(0px)"
-                    }}
-                    exit={{
-                        maxWidth: 0,
-                        opacity: 0,
-                        filter: "blur(10px)"
-                    }}
-                    transition={{
-                        duration: 0.3,
-                        type: "tween"
-                    }}
+                variants={variants}
+                    initial={'initial'}
+                    animate={'animate'}
+                    exit={'exit'}
+                    transition={'transition'}
                 >
                     <StyledLeftContentWrapper>
                         <StyledSearchMethodSelector
@@ -362,24 +390,12 @@ const Search = () => {
                 {
                     isSearchMethodSelectorOpen ?
                     <StyledDropDown
-                        key={"dropdown-content-searchmethods"}
-                        initial={{
-                            height: 0,
-                            opacity: 0
-                        }}
-                        animate={{
-                            height: "auto",
-                            maxHeight: "calc(var(--app-height) - 100px)",
-                            opacity: 1
-                        }}
-                        exit={{
-                            height: 0,
-                            opacity: 0
-                        }}
-                        transition={{
-                            duration: 0.5,
-                            type: "tween"
-                        }}
+                        key={'dropdown-content-searchmethods'}
+                        variants={dropdownVariants}
+                        initial={'initial'}
+                        animate={'animate'}
+                        exit={'exit'}
+                        transition={'transition'}
                     >
                         {
                             searchTypes.map((searchType, index) => {
@@ -407,24 +423,12 @@ const Search = () => {
                     showSearchResults &&
                     searchTypes[searchTypeIndex].value === 'address' ?
                     <StyledDropDown
-                        key={"dropdown-content-address"}
-                        initial={{
-                            height: 0,
-                            opacity: 0
-                        }}
-                        animate={{
-                            height: "auto",
-                            maxHeight: "calc(var(--app-height) - 100px)",
-                            opacity: 1
-                        }}
-                        exit={{
-                            height: 0,
-                            opacity: 0
-                        }}
-                        transition={{
-                            duration: 0.5,
-                            type: "tween"
-                        }}
+                        key={'dropdown-content-address'}
+                        variants={dropdownVariants}
+                        initial={'initial'}
+                        animate={'animate'}
+                        exit={'exit'}
+                        transition={'transition'}
                     >
                         {
                             searchResults.result.locations.length > 0 ? searchResults.result.locations.map(({ name, region, type, lon, lat, id }, index) => {
@@ -470,24 +474,12 @@ const Search = () => {
                     showSearchResults &&
                     searchTypes[searchTypeIndex].value === 'vkm' ?
                     <StyledDropDown
-                        key={"dropdown-content-vkm"}
-                        initial={{
-                            height: 0,
-                            opacity: 0
-                        }}
-                        animate={{
-                            height: "auto",
-                            maxHeight: "calc(var(--app-height) - 100px)",
-                            opacity: 1
-                        }}
-                        exit={{
-                            height: 0,
-                            opacity: 0
-                        }}
-                        transition={{
-                            duration: 0.5,
-                            type: "tween"
-                        }}
+                        key={'dropdown-content-vkm'}
+                        variants={dropdownVariants}
+                        initial={'initial'}
+                        animate={'animate'}
+                        exit={'exit'}
+                        transition={'transition'}
                     >
                         <VKMRoadSearch
                             setIsSearching={setIsSearching}
@@ -497,24 +489,12 @@ const Search = () => {
                     showSearchResults &&
                     searchTypes[searchTypeIndex].value === 'vkmtrack' ?
                     <StyledDropDown
-                        key={"dropdown-content-vkmtrack"}
-                        initial={{
-                            height: 0,
-                            opacity: 0
-                        }}
-                        animate={{
-                            height: "auto",
-                            maxHeight: "calc(var(--app-height) - 100px)",
-                            opacity: 1
-                        }}
-                        exit={{
-                            height: 0,
-                            opacity: 0
-                        }}
-                        transition={{
-                            duration: 0.5,
-                            type: "tween"
-                        }}
+                        key={'dropdown-content-vkmtrack'}
+                        variants={dropdownVariants}
+                        initial={'initial'}
+                        animate={'animate'}
+                        exit={'exit'}
+                        transition={'transition'}
                     >
                         <VKMTrackSearch
                             setIsSearching={setIsSearching}
@@ -525,24 +505,12 @@ const Search = () => {
                     showSearchResults &&
                     searchTypes[searchTypeIndex].value === 'metadata' &&
                     <StyledDropDown
-                        key={"dropdown-content-metadata"}
-                        initial={{
-                            height: 0,
-                            opacity: 0
-                        }}
-                        animate={{
-                            height: "auto",
-                            maxHeight: "calc(var(--app-height) - 100px)",
-                            opacity: 1
-                        }}
-                        exit={{
-                            height: 0,
-                            opacity: 0
-                        }}
-                        transition={{
-                            duration: 0.5,
-                            type: "tween"
-                        }}
+                        key={'dropdown-content-metadata'}
+                        variants={dropdownVariants}
+                        initial={'initial'}
+                        animate={'animate'}
+                        exit={'exit'}
+                        transition={'transition'}
                     >
                         {
                             searchResults.length > 0 ? searchResults.map(result => {
@@ -554,7 +522,7 @@ const Search = () => {
                             <StyledDropdownContentItem
                                 key={'no-results'}
                             >
-                                <StyledDropdownContentItemTitle type="noResults">{strings.search.metadata.error.text}</StyledDropdownContentItemTitle>
+                                <StyledDropdownContentItemTitle type='noResults'>{strings.search.metadata.error.text}</StyledDropdownContentItemTitle>
                             </StyledDropdownContentItem>
 
                         }
