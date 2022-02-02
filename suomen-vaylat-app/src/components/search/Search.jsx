@@ -12,7 +12,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import AddressSearch from './AddressSearch';
-import VKMSearch from './VKMSearch';
+import VKMRoadSearch from './VKMRoadSearch';
 import MetadataSearch from './MetadataSearch';
 import Layer from '../menus/hierarchical-layerlist/Layer';
 import SvLoder from '../loader/SvLoader';
@@ -28,6 +28,7 @@ import {
 import { setIsSearchOpen } from '../../state/slices/uiSlice';
 
 import CircleButton from '../circle-button/CircleButton';
+import VKMTrackSearch from './VKMTrackSearch';
 
 const StyledSearchContainer = styled.div`
     z-index: 2;
@@ -157,7 +158,7 @@ const StyledHideSearchResultsButton = styled.div`
     cursor: pointer;
     svg {
     font-size: 23px;
-      color:  ${props => props.theme.colors.mainColor1}  
+      color:  ${props => props.theme.colors.mainColor1}
     };
 `;
 
@@ -211,6 +212,12 @@ const Search = () => {
             label: strings.search.vkm.title,
             subtitle: strings.search.vkm.subtitle,
             content: <p>{strings.search.vkm.title}...</p>
+        },
+        {
+            value: 'vkmtrack',
+            label: strings.search.vkm.trackTitle,
+            subtitle: strings.search.vkm.trackSubtitle,
+            content: <p>{strings.search.vkm.trackTitle}...</p>
         },
         {
             value: 'metadata',
@@ -345,7 +352,7 @@ const Search = () => {
                                 searchTypes[searchTypeIndex].value === 'metadata' && handleMetadataSearch(searchValue);
                             }}
                             icon={faSearch}
-                        /> 
+                        />
                     }
 
                  </StyledSearchWrapper>
@@ -451,7 +458,7 @@ const Search = () => {
                             >
                                 <StyledDropdownContentItemTitle type="noResults">{strings.search.address.error.text}</StyledDropdownContentItemTitle>
                             </StyledDropdownContentItem>
-                        } 
+                        }
                     <StyledHideSearchResultsButton>
                         <FontAwesomeIcon
                             icon={faAngleUp}
@@ -482,10 +489,37 @@ const Search = () => {
                             type: "tween"
                         }}
                     >
-                        <VKMSearch
+                        <VKMRoadSearch
                             setIsSearching={setIsSearching}
                         />
-                    </StyledDropDown> : 
+                    </StyledDropDown> :
+                    isSearchOpen &&
+                    showSearchResults &&
+                    searchTypes[searchTypeIndex].value === 'vkmtrack' ?
+                    <StyledDropDown
+                        key={"dropdown-content-vkmtrack"}
+                        initial={{
+                            height: 0,
+                            opacity: 0
+                        }}
+                        animate={{
+                            height: "auto",
+                            maxHeight: "calc(var(--app-height) - 100px)",
+                            opacity: 1
+                        }}
+                        exit={{
+                            height: 0,
+                            opacity: 0
+                        }}
+                        transition={{
+                            duration: 0.5,
+                            type: "tween"
+                        }}
+                    >
+                        <VKMTrackSearch
+                            setIsSearching={setIsSearching}
+                        />
+                    </StyledDropDown> :
                     isSearchOpen &&
                     searchResults !== null &&
                     showSearchResults &&
@@ -516,7 +550,7 @@ const Search = () => {
                                 return layers.map(layer => {
                                     return <Layer key={`metadata_${layer.id}`}layer={layer}/>
                                 })
-                            }) : 
+                            }) :
                             <StyledDropdownContentItem
                                 key={'no-results'}
                             >

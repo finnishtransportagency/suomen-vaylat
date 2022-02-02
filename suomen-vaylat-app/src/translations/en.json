@@ -200,8 +200,18 @@
       "ajorata": "Carriageway",
       "etaisyys": "Distance (m)",
       "error": {
-        "title": "Road search failed",
-        "text": "Check for the following errors:"
+        "title": "Road search failed"
+      },
+      "sijaintiraide": "Sijaintiraide",
+      "kuvaus": "Kuvaus",
+      "tyyppi": "Tyyppi",
+      "ratanumero": "Ratanumero",
+      "ratakilometri": "Ratakilometri",
+      "ratametri": "Ratametri",
+      "trackTitle": "Ratahaku",
+      "trackSubtitle": "Hae ratatietoja",
+      "trackError": {
+        "title": "Ratahaku epäonnistui"
       }
     },
     "address": {
