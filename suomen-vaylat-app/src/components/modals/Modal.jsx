@@ -28,7 +28,7 @@ const StyledModalWrapper = styled(motion.div)`
     position: fixed;
     top: ${props => props.resize && "0px"};
     left: ${props => props.resize && "0px"};
-    padding: ${props => props.resize && "50px"};
+    padding: ${props => (props.resize || props.drag) && "50px"};
     @media ${props => props.theme.device.mobileL} {
         position:  ${props => props.fullScreenOnMobile ? "fixed" : "initial"};
         top: 0px;

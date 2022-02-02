@@ -322,16 +322,17 @@ const Content = () => {
                 </Modal>
                 <Modal
                     constraintsRef={constraintsRef} /* Reference div for modal drag boundaries */
-                    drag={false} /* Enable (true) or disable (false) drag */
+                    drag={true} /* Enable (true) or disable (false) drag */
                     resize={false}
-                    backdrop={true} /* Is backdrop enabled (true) or disabled (false) */
+                    backdrop={false} /* Is backdrop enabled (true) or disabled (false) */
                     fullScreenOnMobile={true} /* Scale modal full width / height when using mobile device */
                     titleIcon={faSave} /* Use icon on title or null */
-                    title={"Esiasetukset"} /* Modal header title */
+                    title={"Tallenna näkymä"} /* Modal header title */
                     type={"normal"} /* Modal type */
                     closeAction={handleCloseSaveViewModal} /* Action when pressing modal close button or backdrop */
                     isOpen={isSaveViewOpen} /* Modal state */
                     id={null}
+                    minWidth={600}
                 >
                     <Presets />
                 </Modal>

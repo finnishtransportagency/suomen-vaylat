@@ -89,7 +89,7 @@ export const DrawingTools = ({isOpen, theme}) => {
             id : 'sv-measure-linestring',
             name : strings.tooltips.measuringTools.linestring,
             style : {
-                'icon' : svLinestring
+                icon : svLinestring
             },
             type : 'LineString'
         },
@@ -135,7 +135,6 @@ export const DrawingTools = ({isOpen, theme}) => {
     ];
 
     return (
-        <>
             <StyledTools
                 isOpen={isOpen}
                 initial="hidden"
@@ -146,38 +145,30 @@ export const DrawingTools = ({isOpen, theme}) => {
                     type: "tween",
                 }}
             >
-                {drawinToolsData.map((tool) => {
+                {drawinToolsData.map(tool => {
                     return (
-                        <>
-                            {
-                                tool.id !== "sv-erase" &&
-                                    <CircleButton
-                                        key={tool.id}
-                                        text={tool.name}
-                                        toggleState={tool.name === activeTool ? true : false}
-                                        clickAction={() => startStopTool(tool)}
-                                        type="drawingTool"
-                                    >
-                                        <StyledIcon src={tool.style.icon}/>
-                                    </CircleButton>
-                            }
-                            {
-                                tool.id === "sv-erase" &&
-                                <CircleButton
-                                    icon={faEraser}
-                                    key={tool.id}
-                                    text={tool.name}
-                                    clickAction={() => eraseDrawing()}
-                                    type="drawingTool"
-                                    color="secondaryColor7"
-                                >
-                                </CircleButton>
-                            }
-                        </>
+                            tool.id !== "sv-erase" ?
+                            <CircleButton
+                                key={tool.id}
+                                text={tool.name && tool.name}
+                                toggleState={tool.name && tool.name === activeTool ? true : false}
+                                clickAction={() => startStopTool(tool)}
+                                type="drawingTool"
+                            >
+                                <StyledIcon src={tool.style && tool.style.icon}/>
+                            </CircleButton> : tool.id === "sv-erase" &&
+                            <CircleButton
+                                key={tool.id}
+                                icon={faEraser}
+                                text={tool.name}
+                                clickAction={() => eraseDrawing()}
+                                type="drawingTool"
+                                color="secondaryColor7"
+                            >
+                            </CircleButton>
                     )
                 })}
             </StyledTools>
-        </>
     );
  };
 

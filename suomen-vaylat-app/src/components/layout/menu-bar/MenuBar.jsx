@@ -32,7 +32,7 @@ const StyledMenuBar = styled.div`
     align-items: flex-start;
     flex-direction: column;
     transition: all 0.5s ease-in-out;
-    gap: 4px;
+    gap: 8px;
     @media ${props => props.theme.device.mobileL} {
         grid-row-start: ${props => props.isSearchOpen ? 2 : 1};
         grid-row-end: 3;
@@ -131,7 +131,7 @@ const MenuBar = () => {
                 />
                 <CircleButton
                     icon={faSave}
-                    text={"Esiasetukset"}
+                    text={"Tallenna näkymä"}
                     toggleState={isSaveViewOpen}
                     clickAction={() => store.dispatch(setIsSaveViewOpen(!isSaveViewOpen))}
                 />
