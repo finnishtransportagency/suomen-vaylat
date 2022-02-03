@@ -8,6 +8,7 @@ import UserGuideModalContent from '../user-guide-modal/UserGuideModalContent';
 import MenuBar from './menu-bar/MenuBar';
 import MapLayersDialog from '../dialog/MapLayersDialog';
 import WarningDialog from '../dialog/WarningDialog';
+import Views from '../views/Views';
 import PublishedMap from '../published-map/PublishedMap';
 import Search from '../search/Search';
 import ActionButtons from '../action-button/ActionButtons';
@@ -24,6 +25,7 @@ import {
     setShareUrl,
     setIsInfoOpen,
     setIsUserGuideOpen,
+    setIsSaveViewOpen,
     setMinimizeGfi,
 } from '../../state/slices/uiSlice';
 import { GFIPopup } from '../infobox/GFIPopup';
@@ -35,7 +37,8 @@ import {
     faQuestion,
     faBullhorn,
     faExclamationCircle,
-    faMapMarkedAlt
+    faMapMarkedAlt,
+    faSave
 } from '@fortawesome/free-solid-svg-icons';
 
 import Modal from '../modals/Modal';
@@ -85,6 +88,7 @@ const Content = () => {
         shareUrl,
         isInfoOpen,
         isUserGuideOpen,
+        isSaveViewOpen,
         minimizeGfi
     } = useAppSelector((state) => state.ui);
 
@@ -153,6 +157,10 @@ const Content = () => {
             store.dispatch(resetGFILocations([]));
             store.dispatch(setMinimizeGfi(false));
             channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', []);
+    };
+
+    const handleCloseSaveViewModal = () => {
+        store.dispatch(setIsSaveViewOpen(false));
     };
 
     return (
@@ -311,6 +319,22 @@ const Content = () => {
                         filteredLayers={[]}
                         warningType={warnings.type}
                     />
+                </Modal>
+                <Modal
+                    constraintsRef={constraintsRef} /* Reference div for modal drag boundaries */
+                    drag={true} /* Enable (true) or disable (false) drag */
+                    resize={false}
+                    backdrop={false} /* Is backdrop enabled (true) or disabled (false) */
+                    fullScreenOnMobile={true} /* Scale modal full width / height when using mobile device */
+                    titleIcon={faSave} /* Use icon on title or null */
+                    title={strings.saveView.saveView} /* Modal header title */
+                    type={"normal"} /* Modal type */
+                    closeAction={handleCloseSaveViewModal} /* Action when pressing modal close button or backdrop */
+                    isOpen={isSaveViewOpen} /* Modal state */
+                    id={null}
+                    minWidth={600}
+                >
+                    <Views />
                 </Modal>
                 <ScaleBar />
                 <StyledContentGrid>

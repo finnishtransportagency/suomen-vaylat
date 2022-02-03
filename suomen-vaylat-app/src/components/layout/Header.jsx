@@ -23,7 +23,7 @@ const StyledHeaderContainer = styled.div`
     display: grid;
     position: relative;
     grid-template-columns: 1fr 1fr 1fr;
-    box-shadow: rgb(0 0 0 / 16%) 0px 3px 6px, rgb(0 0 0 / 23%) 0px 3px 6px;
+    box-shadow: 0px 2px 4px #0000004D;
     @media ${props => props.theme.device.tablet} {
         height: 56px;
     };

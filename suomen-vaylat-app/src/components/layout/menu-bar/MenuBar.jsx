@@ -4,7 +4,8 @@ import {
     faCompress,
     faExpand,
     faLayerGroup,
-    faPencilRuler
+    faPencilRuler,
+    faSave
 } from '@fortawesome/free-solid-svg-icons';
 import { ReactReduxContext } from 'react-redux';
 import styled from 'styled-components';
@@ -12,6 +13,7 @@ import { useAppSelector } from '../../../state/hooks';
 import {
     setIsDrawingToolsOpen,
     setIsSideMenuOpen,
+    setIsSaveViewOpen,
     setActiveTool
 } from '../../../state/slices/uiSlice';
 
@@ -29,7 +31,7 @@ const StyledMenuBar = styled.div`
     align-items: flex-start;
     flex-direction: column;
     transition: all 0.5s ease-in-out;
-    gap: 4px;
+    gap: 8px;
     @media ${props => props.theme.device.mobileL} {
         grid-row-start: ${props => props.isSearchOpen ? 2 : 1};
         grid-row-end: 3;
@@ -70,6 +72,7 @@ const MenuBar = () => {
         isSideMenuOpen,
         isDrawingToolsOpen,
         isSearchOpen,
+        isSaveViewOpen,
         activeTool,
     } =  useAppSelector((state) => state.ui);
 
@@ -132,6 +135,12 @@ const MenuBar = () => {
                     text={strings.tooltips.fullscreenButton}
                     toggleState={isFullScreen}
                     clickAction={handleFullScreen}
+                />
+                <CircleButton
+                    icon={faSave}
+                    text={strings.saveView.saveView}
+                    toggleState={isSaveViewOpen}
+                    clickAction={() => store.dispatch(setIsSaveViewOpen(!isSaveViewOpen))}
                 />
             </StyledMenuBar>
         </>
