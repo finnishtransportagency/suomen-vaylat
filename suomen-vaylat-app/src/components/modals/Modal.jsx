@@ -10,7 +10,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { setMinimizeGfi } from '../../state/slices/uiSlice';
 
 const StyledModalBackdrop = styled(motion.div)`
-    //z-index: ${props => props.resize ? 1 : 9998};
     z-index: 10;
     position: fixed;
     top: 0px;
@@ -29,14 +28,13 @@ const StyledModalWrapper = styled(motion.div)`
     position: fixed;
     top: ${props => props.resize && "0px"};
     left: ${props => props.resize && "0px"};
-    padding: ${props => props.resize && "50px"};
+    padding: ${props => (props.resize || props.drag) && "50px"};
     @media ${props => props.theme.device.mobileL} {
         position:  ${props => props.fullScreenOnMobile ? "fixed" : "initial"};
         top: 0px;
         right: 0px;
         bottom: 0px;
         left: 0px;
-        //border-radius: ${props => props.fullScreenOnMobile && "0px"};
         padding: 0px;
         margin: ${props => props.fullScreenOnMobile === false && "8px"};
     };
@@ -68,9 +66,6 @@ const StyledModal = styled(motion.div)`
 const StyledModalHeader = styled.div`
     z-index: 10;
     min-height: 56px;
-    //height: auto;
-    //position: sticky;
-    //top: 0px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -125,7 +120,6 @@ const StyledRightContent = styled.div`
 `;
 
 const StyledMinimizeButton = styled.div`
-    //width: 32px;
     height: 100%;
     display: flex;
     justify-content: center;
@@ -151,7 +145,6 @@ const StyledCloseIcon = styled(FontAwesomeIcon)`
 `;
 
 const StyledModalContent = styled.div`
-    //height: 100%;
     display: flex;
     flex-direction: column;
     overflow-y: ${props => props.overflow ? "auto" : "hidden"};
@@ -201,8 +194,8 @@ const Modal = ({
                         dragControls={dragControls}
                         dragListener={false}
                         dragMomentum={false}
-                        initial={{ y: 100, filter: "blur(1px)", opacity: 0 }}
-                        animate={{ y: 0, filter: "none", opacity: 1 }}
+                        initial={{ y: 100, filter: "blur(10px)", opacity: 0 }}
+                        animate={{ y: 0, filter: "none", opacity: 1 }} // This needs to be fixed
                         exit={{ y: 100, filter: "blur(10px)", opacity: 0 }}
                         transition={{
                             duration: 0.4,

@@ -11,6 +11,7 @@ const initialState = {
   shareUrl: '',
   isDrawingToolsOpen: false,
   isLegendOpen: false,
+  isSaveViewOpen: false,
   activeTool: null,
   gfiLocations: null,
   isSwipingDisabled: false,
@@ -54,6 +55,9 @@ export const uiSlice = createSlice({
     setIsLegendOpen: (state, action) => {
       state.isLegendOpen = action.payload;
     },
+    setIsSaveViewOpen: (state, action) => {
+      state.isSaveViewOpen = action.payload;
+    },
     setShareUrl: (state, action) => {
       state.shareUrl = action.payload;
     },
@@ -88,6 +92,7 @@ export const {
   setIsInfoOpen,
   setIsUserGuideOpen,
   setIsLegendOpen,
+  setIsSaveViewOpen,
   setShareUrl,
   setIsDrawingToolsOpen,
   setActiveTool,

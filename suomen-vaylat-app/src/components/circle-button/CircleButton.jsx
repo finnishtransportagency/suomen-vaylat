@@ -3,7 +3,8 @@ import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-const StyledCircleButton = styled(motion.div)`
+const StyledCircleButton = styled(motion.button)`
+    border: none;
     pointer-events: auto;
     position: relative;
     cursor: pointer;
@@ -12,7 +13,11 @@ const StyledCircleButton = styled(motion.div)`
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: ${props => props.color === "secondaryColor7" ? props.theme.colors.secondaryColor7 : props.toggleState ? props.theme.colors.buttonActive : props.theme.colors.button};
+    background-color: ${ props =>
+        props.color === "secondaryColor7" ? 
+        props.theme.colors.secondaryColor7 : props.toggleState ? 
+        props.theme.colors.buttonActive : props.theme.colors.button
+    };
     box-shadow: 0px 2px 4px #0000004D;
     border-radius: 50%;
     svg {
@@ -72,6 +77,7 @@ const CircleButton = ({
     tooltipDirection,
     type,
     color,
+    disabled,
     children
 }) => {
     const [isHovered, setHovered] = useState(false);
@@ -84,6 +90,7 @@ const CircleButton = ({
             variants={variants}
             type={type}
             color={color}
+            disabled={disabled}
         >
             {
                 icon && <StyledIconContainer>
