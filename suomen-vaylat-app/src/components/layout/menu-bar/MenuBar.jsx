@@ -131,7 +131,7 @@ const MenuBar = () => {
                 />
                 <CircleButton
                     icon={faSave}
-                    text={"Tallenna näkymä"}
+                    text={strings.saveView.saveView}
                     toggleState={isSaveViewOpen}
                     clickAction={() => store.dispatch(setIsSaveViewOpen(!isSaveViewOpen))}
                 />

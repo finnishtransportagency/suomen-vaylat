@@ -8,7 +8,7 @@ import UserGuideModalContent from '../user-guide-modal/UserGuideModalContent';
 import MenuBar from './menu-bar/MenuBar';
 import MapLayersDialog from '../dialog/MapLayersDialog';
 import WarningDialog from '../dialog/WarningDialog';
-import Presets from '../presets/Presets';
+import Views from '../views/Views';
 import PublishedMap from '../published-map/PublishedMap';
 import Search from '../search/Search';
 import ActionButtons from '../action-button/ActionButtons';
@@ -327,14 +327,14 @@ const Content = () => {
                     backdrop={false} /* Is backdrop enabled (true) or disabled (false) */
                     fullScreenOnMobile={true} /* Scale modal full width / height when using mobile device */
                     titleIcon={faSave} /* Use icon on title or null */
-                    title={"Tallenna näkymä"} /* Modal header title */
+                    title={strings.saveView.saveView} /* Modal header title */
                     type={"normal"} /* Modal type */
                     closeAction={handleCloseSaveViewModal} /* Action when pressing modal close button or backdrop */
                     isOpen={isSaveViewOpen} /* Modal state */
                     id={null}
                     minWidth={600}
                 >
-                    <Presets />
+                    <Views />
                 </Modal>
                 <ScaleBar />
                 <StyledContentGrid>
