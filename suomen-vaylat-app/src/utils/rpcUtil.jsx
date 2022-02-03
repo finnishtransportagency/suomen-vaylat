@@ -59,10 +59,12 @@ export const selectGroup = (store, channel, index, theme, lastSelectedTheme, sel
         theme.layers && theme.layers.forEach(layerId => {
             channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layerId, false]);
         });
-        for (var i = 0; i<theme.subthemes.length; i++) {
-            theme.subthemes[i].layers.forEach(layerId => {
-                channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layerId, false]);
-            });
+        if(theme.subthemes){
+            for (var i = 0; i < theme.subthemes.length; i++) {
+                theme.subthemes[i].layers.forEach(layerId => {
+                    channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layerId, false]);
+                });
+            }
         }
         updateLayers(store, channel);
         setTimeout(() => {
