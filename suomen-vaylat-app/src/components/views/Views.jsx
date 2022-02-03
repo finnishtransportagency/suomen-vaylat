@@ -292,8 +292,8 @@ const Views = () => {
     };
 
     const handleRemoveView = (view) => {
-        let updatedPresets = views.filter(presetData => presetData.id !== view.id);
-        window.localStorage.setItem('views', JSON.stringify(updatedPresets));
+        let updatedViews = views.filter(viewData => viewData.id !== view.id);
+        window.localStorage.setItem('views', JSON.stringify(updatedViews));
         setViews(JSON.parse(window.localStorage.getItem("views")));
 
     };
