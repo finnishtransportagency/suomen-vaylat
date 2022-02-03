@@ -280,6 +280,7 @@ const Search = () => {
                     isSearchOpen && setSearchValue('');
                     store.dispatch(setIsSearchOpen(!isSearchOpen));
                     isSearchMethodSelectorOpen && setIsSearchMethodSelectorOpen(false);
+                    setSearchTypeIndex(0);
                 }}
             />
             <AnimatePresence>
