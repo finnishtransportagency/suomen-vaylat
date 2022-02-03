@@ -33,8 +33,8 @@ export const selectGroup = (store, channel, index, theme, lastSelectedTheme, sel
         store.dispatch(setSelectedThemeIndex(index));
         setTimeout(() => {
             !isMobile && store.dispatch(setIsLegendOpen(true));
-            theme.layers.forEach(layerId => {
-                theme.defaultLayers.includes(layerId) && channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layerId, true]);
+            theme.defaultLayers.forEach(layerId => {
+                channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layerId, true]);
             });
             updateLayers(store, channel);
         },700);
@@ -47,8 +47,8 @@ export const selectGroup = (store, channel, index, theme, lastSelectedTheme, sel
         setTimeout(() => {
             store.dispatch(setSelectedThemeIndex(index));
             setTimeout(() => {
-                    theme.layers.forEach(layerId => {
-                        theme.defaultLayers.includes(layerId) && channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layerId, true]);
+                theme.defaultLayers.forEach(layerId => {
+                        channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layerId, true]);
                     });
                 updateLayers(store, channel);
             },700);
@@ -59,6 +59,11 @@ export const selectGroup = (store, channel, index, theme, lastSelectedTheme, sel
         theme.layers.forEach(layerId => {
             channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layerId, false]);
         });
+        for (var i = 0; i<theme.subthemes.length; i++) {
+            theme.subthemes[i].layers.forEach(layerId => {
+                channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layerId, false]);
+            });
+        }
         updateLayers(store, channel);
         setTimeout(() => {
             !isMobile && store.dispatch(setIsLegendOpen(false));
