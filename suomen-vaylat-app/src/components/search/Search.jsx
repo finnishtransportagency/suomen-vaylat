@@ -485,6 +485,12 @@ const Search = () => {
                         <VKMSearch
                             setIsSearching={setIsSearching}
                         />
+                        <StyledHideSearchResultsButton>
+                            <FontAwesomeIcon
+                                icon={faAngleUp}
+                                onClick={() => setShowSearchResults(false)}
+                            />
+                        </StyledHideSearchResultsButton>
                     </StyledDropDown> : 
                     isSearchOpen &&
                     searchResults !== null &&
