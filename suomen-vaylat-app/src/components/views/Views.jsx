@@ -399,7 +399,7 @@ const Views = () => {
                                 height: 0,
                             }}
                         >
-                            {strings.saveView.no}
+                            {strings.saveView.noSavedViews}
                         </StyledNoSavedViews>
                 }
                 </AnimatePresence>
