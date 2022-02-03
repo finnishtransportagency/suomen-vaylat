@@ -5,7 +5,7 @@ import { faList, faSearchMinus, faSearchPlus, faSearchLocation } from '@fortawes
 
 import { useAppSelector } from '../../state/hooks';
 import { ReactReduxContext } from 'react-redux';
-import { setZoomIn, setZoomOut } from '../../state/slices/rpcSlice';
+import { setZoomTo, setZoomIn, setZoomOut } from '../../state/slices/rpcSlice';
 import strings from '../../translations';
 import CircleButton from '../circle-button/CircleButton';
 import ZoomBarCircle from './ZoomBarCircle';
@@ -44,7 +44,35 @@ const StyledZoomBarZoomFeatures = styled.div`
     }
 `;
 
+const StyledZoomBarSliderContainer = styled.div`
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    background-color: red;
+`;
+
+const StyledZoomBarSlider = styled.input`
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    -webkit-appearance: slider-vertical;
+    width: 100%;
+    height: 100%;
+    background: #d3d3d3;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    //outline: none;
+    //transform: rotate(90deg);
+    pointer-events: auto;
+    
+`;
+
 const StyledZoombarCircles = styled(motion.div)`
+    position: relative;
     overflow: hidden;
     display: flex;
     flex-direction: column-reverse;
@@ -112,6 +140,15 @@ const ZoomBar = ({
                                 setHoveringIndex={setHoveringIndex}
                             />
                         })}
+                            <StyledZoomBarSlider
+                                type="range"
+                                orient="vertical"
+                                max="13"
+                                onChange={e => {
+                                    store.dispatch(setZoomTo(e.target.value))}
+                                    //console.log(e.target.value)
+                                }
+                            />
                         </StyledZoombarCircles>
                         <CircleButton
                             icon={faSearchMinus}

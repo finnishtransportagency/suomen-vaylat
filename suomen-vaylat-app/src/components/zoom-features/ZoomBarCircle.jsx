@@ -50,7 +50,7 @@ const ZoomBarCircle = ({
             <StyledZoomLevelCircle
                 index={index}
                 zoomLevel={zoomLevel}
-                onClick={() => store.dispatch(setZoomTo(index))}
+                //onClick={() => store.dispatch(setZoomTo(index))}
                 isExpanded={isExpanded}
             >
             </StyledZoomLevelCircle>
