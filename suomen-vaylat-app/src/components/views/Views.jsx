@@ -381,7 +381,7 @@ const Views = () => {
                             </StyledSavedViewContainer>
                     )
                     }) : <StyledNoSavedViews
-                            key="no-saved-presets"
+                            key="no-saved-views"
                             transition={{
                                 duration: 0.3,
                                 type: "tween"
@@ -414,11 +414,11 @@ const Views = () => {
                     <StyledSubtitle>{strings.saveView.saveNewView}</StyledSubtitle>
                     <StyledSaveNewViewWrapper>
                         <StyledViewName
-                            id="preset-name"
+                            id="view-name"
                             type="text"
                             value={viewName}
                             onChange={e => setViewName(e.target.value)}
-                            placeholder="Näkymän nimi"
+                            placeholder={strings.saveView.viewName}
                         />
                     <CircleButton
                         icon={faPlus}
