@@ -11,7 +11,6 @@ import styled from 'styled-components';
 import { useAppSelector } from '../../../state/hooks';
 import {
     setIsDrawingToolsOpen,
-    setIsFullScreen,
     setIsSideMenuOpen,
     setActiveTool
 } from '../../../state/slices/uiSlice';
@@ -75,14 +74,22 @@ const MenuBar = () => {
     } =  useAppSelector((state) => state.ui);
 
     const handleFullScreen = () => {
-        if (!document.fullscreenElement) {
-            document.documentElement.requestFullscreen();
-            store.dispatch(setIsFullScreen(true));
-        } else {
-          if (document.exitFullscreen) {
+        if(isFullScreen){
+            if (document.exitFullscreen) {
                 document.exitFullscreen();
-                store.dispatch(setIsFullScreen(false));
-          }
+            } else if (document.webkitExitFullscreen) { /* Safari */
+                document.webkitExitFullscreen();
+            } else if (document.msExitFullscreen) { /* IE11 */
+                document.msExitFullscreen();
+            }
+        } else {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen();
+            } else if (document.webkitRequestFullscreen) { /* Safari */
+                document.webkitRequestFullscreen();
+            } else if (document.msRequestFullscreen) { /* IE11 */
+                document.msRequestFullscreen();
+            }
         }
     };
 
