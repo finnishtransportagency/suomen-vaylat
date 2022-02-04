@@ -82,14 +82,14 @@ const StyledOption = styled.option`
 
 `;
 
-const VKMSearch = ({
+const VKMRoadSearch = ({
   setIsSearching,
 }) => {
     const [error, setError] = useState(null);
     const [tienumero, setTienumero] = useState('');
-    const [tieosa, setTieosa] = useState("default");
+    const [tieosa, setTieosa] = useState('default');
     const [tieosat, setTieosat] = useState([]);
-    const [ajorata, setAjorata] = useState("default");
+    const [ajorata, setAjorata] = useState('default');
     const [ajoradat, setAjoradat] = useState([])
     const [etaisyys, setEtaisyys] = useState('');
 
@@ -100,25 +100,25 @@ const VKMSearch = ({
         const vectorLayerId = 'SEARCH_VECTORLAYER';
 
         setIsSearching(false);
-        data.hasOwnProperty("tieosat") && setTieosat(data.tieosat);
-        data.hasOwnProperty("ajoradat") && setAjoradat(data.ajoradat);
+        data.hasOwnProperty('tieosat') && setTieosat(data.tieosat);
+        data.hasOwnProperty('ajoradat') && setAjoradat(data.ajoradat);
 
         let style = 'tie';
-        if (( data.hasOwnProperty("osa") || data.hasOwnProperty("ajorata")) && !data.hasOwnProperty("etaisyys")) {
+        if (( data.hasOwnProperty('osa') || data.hasOwnProperty('ajorata')) && !data.hasOwnProperty('etaisyys')) {
             style = 'osa';
-        } else if (data.hasOwnProperty("etaisyys")) {
+        } else if (data.hasOwnProperty('etaisyys')) {
             style = 'etaisyys';
         }
-        let featureStyle = VKMGeoJsonStyles[style];
-        let hover = VKMGeoJsonHoverStyles[style];
+        let featureStyle = VKMGeoJsonStyles.road[style];
+        let hover = VKMGeoJsonHoverStyles.road[style];
 
         if (style === 'tie') {
             rpc.channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [vectorLayerId + '_vkm_osa']);
         };
 
-        data.hasOwnProperty("geom") && rpc.channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest',
+        data.hasOwnProperty('geom') && rpc.channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest',
         [data.geom, {
-            "centerTo": true,
+            centerTo: true,
             hover: hover,
             featureStyle: featureStyle,
             layerId: vectorLayerId + '_vkm_' + style,
@@ -129,10 +129,10 @@ const VKMSearch = ({
     const handleVKMSearch = (params) => {
         setIsSearching(true);
         rpc.channel.searchVKMRoad([
-            params.hasOwnProperty("vkmTienumero") && parseInt(params.vkmTienumero),
-            params.hasOwnProperty("vkmTieosa") && parseInt(params.vkmTieosa),
-            params.hasOwnProperty("vkmAjorata") && parseInt(params.vkmAjorata),
-            params.hasOwnProperty("vkmEtaisyys") && parseInt(params.vkmEtaisyys),
+            params.hasOwnProperty('vkmTienumero') && parseInt(params.vkmTienumero),
+            params.hasOwnProperty('vkmTieosa') && parseInt(params.vkmTieosa),
+            params.hasOwnProperty('vkmAjorata') && parseInt(params.vkmAjorata),
+            params.hasOwnProperty('vkmEtaisyys') && parseInt(params.vkmEtaisyys),
         ], handleResponse, (err) => {
             setIsSearching(false);
             if(err){
@@ -143,18 +143,18 @@ const VKMSearch = ({
 
     return (
         <StyledContainer>
-            <> 
+            <>
             {
-                error && 
+                error &&
                         <StyledDropdownContentItem>
-                            <StyledDropdownContentItemTitle type="noReults">{strings.search.vkm.error.title}</StyledDropdownContentItemTitle>
+                            <StyledDropdownContentItemTitle type='noResults'>{strings.search.vkm.error.title}</StyledDropdownContentItemTitle>
                             <StyledDropdownContentItemTitle>{error}</StyledDropdownContentItemTitle>
-                        </StyledDropdownContentItem> 
+                        </StyledDropdownContentItem>
                 }
                 <StyledDropdownContentItem>
-                    <StyledLabel htmlFor="vkm-road">{strings.search.vkm.tie}:</StyledLabel>
+                    <StyledLabel htmlFor='vkm-road'>{strings.search.vkm.tie}:</StyledLabel>
                     <StyledInput
-                        id="vkm-road"
+                        id='vkm-road'
                         placeholder={strings.search.vkm.tie}
                         onClick={() => {
                             setError(null);
@@ -163,7 +163,7 @@ const VKMSearch = ({
                             setTienumero(e.target.value);
                         }}
                         min='1'
-                        type="number"
+                        type='number'
                         value={tienumero || ''}
                         onBlur={e => {
                             if(e.target.value !== ""){
@@ -178,9 +178,9 @@ const VKMSearch = ({
                         }} 
                         onKeyPress={e => {
                                 if (e.key === 'Enter') {
-                                    setTieosa("default");
+                                    setTieosa('default');
                                     setTieosat([]);
-                                    setAjorata("default");
+                                    setAjorata('default');
                                     setAjoradat([]);
                                     setEtaisyys('');
                                     setTienumero(e.target.value);
@@ -191,11 +191,11 @@ const VKMSearch = ({
                     />
                 </StyledDropdownContentItem>
                 <StyledDropdownContentItem>
-                    <StyledLabel htmlFor="vkm-tieosa">{strings.search.vkm.osa}:</StyledLabel>
+                    <StyledLabel htmlFor='vkm-tieosa'>{strings.search.vkm.osa}:</StyledLabel>
                     <StyledSelect
-                        id="vkm-tieosa"
+                        id='vkm-tieosa'
                         onChange={e => {
-                            setAjorata("default");
+                            setAjorata('default');
                             setAjoradat([]);
                             setEtaisyys('');
                             setTieosa(e.target.value);
@@ -204,7 +204,7 @@ const VKMSearch = ({
                         disabled={!tieosat.length > 0}
                         value={tieosa}
                     >
-                        <StyledOption value="default" disabled readOnly={true}>{strings.search.vkm.osa}</StyledOption>
+                        <StyledOption value='default' disabled readOnly={true}>{strings.search.vkm.osa}</StyledOption>
                         {
                             tieosat !== null && tieosat.map(tieosa => {
                                 return <StyledOption key={'vkm_tieosa_'+tieosa} value={tieosa}>{tieosa}</StyledOption>
@@ -213,9 +213,9 @@ const VKMSearch = ({
                     </StyledSelect>
                 </StyledDropdownContentItem>
                 <StyledDropdownContentItem>
-                    <StyledLabel htmlFor="vkm-ajorata">{strings.search.vkm.ajorata}:</StyledLabel>
+                    <StyledLabel htmlFor='vkm-ajorata'>{strings.search.vkm.ajorata}:</StyledLabel>
                     <StyledSelect
-                        id="vkm-ajorata"
+                        id='vkm-ajorata'
                         onChange={e => {
                             setAjorata(e.target.value);
                             setEtaisyys('');
@@ -224,7 +224,7 @@ const VKMSearch = ({
                         disabled={!ajoradat.length > 0}
                         value={ajorata}
                     >
-                        <StyledOption value="default" disabled readOnly={true}>{strings.search.vkm.ajorata}</StyledOption>
+                        <StyledOption value='default' disabled readOnly={true}>{strings.search.vkm.ajorata}</StyledOption>
                         {
                             ajoradat !== null && ajoradat.map(item => {
                                 return <StyledOption key={'vkm_ajorata_'+item} value={item}>{item}</StyledOption>
@@ -233,15 +233,15 @@ const VKMSearch = ({
                     </StyledSelect>
                 </StyledDropdownContentItem>
                 <StyledDropdownContentItem>
-                    <StyledLabel htmlFor="vkm-etaisyys">{strings.search.vkm.etaisyys}:</StyledLabel>
+                    <StyledLabel htmlFor='vkm-etaisyys'>{strings.search.vkm.etaisyys}:</StyledLabel>
                     <StyledInput
-                        id="vkm-etaisyys"
+                        id='vkm-etaisyys'
                         placeholder={strings.search.vkm.etaisyys}
                         onChange={e => {
                             setEtaisyys(e.target.value)
                         }}
                         min='1'
-                        type="number"
+                        type='number'
                         value={etaisyys || ''}
                         disabled={!ajoradat.length > 0}
                         onKeyPress={e => {
@@ -257,4 +257,4 @@ const VKMSearch = ({
     );
 };
 
-export default VKMSearch;
+export default VKMRoadSearch;

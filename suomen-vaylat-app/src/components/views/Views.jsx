@@ -1,7 +1,6 @@
 import { useState, useEffect, useContext } from 'react';
 import { ReactReduxContext } from 'react-redux';
 import { useAppSelector } from '../../state/hooks';
-import { mapMoveRequest } from '../../state/slices/rpcSlice';
 import { updateLayers } from '../../utils/rpcUtil';
 import styled from 'styled-components';
 import { motion, AnimatePresence} from 'framer-motion';
@@ -161,28 +160,6 @@ const StyledSavedViewTitleContent = styled.div`
     justify-content: center;
 `;
 
-const StyledSelectButton = styled.div`
-    position: relative;
-    width: 18px;
-    height: 18px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: transparent;
-    margin-right: 16px;
-    border: 2px solid white;
-    border-radius: 50%;
-    &:before {
-        position: absolute;
-        content: '';
-        width: 10px;
-        height: 10px;
-        background-color: ${props => props.isOpen ? props.theme.colors.mainWhite : 'transparent'};
-        border-radius: 50%;
-        transition: background-color 0.3s ease-out;
-    }
-`;
-
 const StyledSaveNewViewWrapper = styled.div`
     display: flex;
     justify-content: flex-end;
@@ -238,7 +215,7 @@ const Views = () => {
                     language: strings.getLanguage()
                 }
             };
-    
+
             views.push(newView);
             window.localStorage.setItem('views', JSON.stringify(views));
             setViews(JSON.parse(window.localStorage.getItem("views")));
@@ -247,7 +224,7 @@ const Views = () => {
     };
 
     const handleActivateView = (view) => {
-    
+
             // // set map center
             // store.dispatch(mapMoveRequest({
             //     x: preset.data.x,
@@ -316,7 +293,7 @@ const Views = () => {
                 {
                     views.length > 0 ? views.map(view => {
                         return (
-                        
+
                             <StyledSavedViewContainer
                                 key={view.id}
                                 transition={{
@@ -359,11 +336,11 @@ const Views = () => {
                                             <StyledSavedViewDescription>
                                                 {
                                                     <Moment format="DD.MM.YYYY" tz="Europe/Helsinki">{view.saveDate}</Moment>
-                                                    
+
                                                 }
                                             </StyledSavedViewDescription>
                                         </StyledSavedViewTitleContent>
-                
+
                                     </StyledLeftContent>
                                     <StyledRightContent>
                                         {/* <StyledSelectButton

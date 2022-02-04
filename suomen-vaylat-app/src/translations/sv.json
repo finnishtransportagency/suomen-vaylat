@@ -211,8 +211,18 @@
       "ajorata": "Körbana",
       "etaisyys": "Avstånd (m)",
       "error": {
-        "title": "Vägsökning misslyckades",
-        "text": "Sök efter följande fel:"
+        "title": "Vägsökning misslyckades"
+      },
+      "sijaintiraide": "Sijaintiraide",
+      "kuvaus": "Kuvaus",
+      "tyyppi": "Tyyppi",
+      "ratanumero": "Ratanumero",
+      "ratakilometri": "Ratakilometri",
+      "ratametri": "Ratametri",
+      "trackTitle": "Ratahaku",
+      "trackSubtitle": "Hae ratatietoja",
+      "trackError": {
+        "title": "Ratahaku epäonnistui"
       }
     },
     "address": {

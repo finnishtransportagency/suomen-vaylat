@@ -211,8 +211,18 @@
       "ajorata": "Ajorata",
       "etaisyys": "Etäisyys (m)",
       "error": {
-        "title": "Tiehaku epäonnistui",
-        "text": "Tarkista seuraavat virheet:"
+        "title": "Tiehaku epäonnistui"
+      },
+      "sijaintiraide": "Sijaintiraide",
+      "kuvaus": "Kuvaus",
+      "tyyppi": "Tyyppi",
+      "ratanumero": "Ratanumero",
+      "ratakilometri": "Ratakilometri",
+      "ratametri": "Ratametri",
+      "trackTitle": "Ratahaku",
+      "trackSubtitle": "Hae ratatietoja",
+      "trackError": {
+        "title": "Ratahaku epäonnistui"
       }
     },
     "address": {
