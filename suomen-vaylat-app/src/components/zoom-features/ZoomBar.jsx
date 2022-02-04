@@ -23,7 +23,7 @@ const StyledZoomBarContainer = styled.div`
 const StyledZoomBarContent = styled.div`
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 8px;
 `;
 
 const StyledZoomBarZoomFeatures = styled.div`

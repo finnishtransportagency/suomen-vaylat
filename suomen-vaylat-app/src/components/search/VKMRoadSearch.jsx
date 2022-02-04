@@ -156,12 +156,26 @@ const VKMRoadSearch = ({
                     <StyledInput
                         id='vkm-road'
                         placeholder={strings.search.vkm.tie}
+                        onClick={() => {
+                            setError(null);
+                        }}
                         onChange={e => {
                             setTienumero(e.target.value);
                         }}
                         min='1'
                         type='number'
                         value={tienumero || ''}
+                        onBlur={e => {
+                            if(e.target.value !== ""){
+                                setTieosa("default");
+                                setTieosat([]);
+                                setAjorata("default");
+                                setAjoradat([]);
+                                setEtaisyys('');
+                                setTienumero(e.target.value);
+                                handleVKMSearch({vkmTienumero: e.target.value});
+                            }
+                        }} 
                         onKeyPress={e => {
                                 if (e.key === 'Enter') {
                                     setTieosa('default');

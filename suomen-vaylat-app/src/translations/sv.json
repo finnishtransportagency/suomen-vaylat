@@ -47,6 +47,17 @@
     "showPageInfo": "Visa sidinformation",
     "showUserGuide": "Visa bruksanvisningen"
   },
+  "saveView" : {
+    "saveView" : "Save view",
+    "savingView" : "Saving view",
+    "saveViewDescription1" : "View will be saved to browser local storage.",
+    "saveViewDescription2" : "Saved view can be accessed only by browser it has been saved.",
+    "noSavedViews" : "No saved views",
+    "deleteAllSavedViews" : "Delete all saved views",
+    "savedViews" : "Saved views",
+    "viewName" : "View name",
+    "saveNewView" : "Save new view"
+  },
   "gfi": {
     "title": "Objektuppgifter",
     "close": "Stänga",

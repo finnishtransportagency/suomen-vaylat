@@ -329,6 +329,7 @@ const Search = () => {
                     isSearchOpen && setSearchValue('');
                     store.dispatch(setIsSearchOpen(!isSearchOpen));
                     isSearchMethodSelectorOpen && setIsSearchMethodSelectorOpen(false);
+                    setSearchTypeIndex(0);
                 }}
             />
             <AnimatePresence>
@@ -484,6 +485,12 @@ const Search = () => {
                         <VKMRoadSearch
                             setIsSearching={setIsSearching}
                         />
+                        <StyledHideSearchResultsButton>
+                            <FontAwesomeIcon
+                                icon={faAngleUp}
+                                onClick={() => setShowSearchResults(false)}
+                            />
+                        </StyledHideSearchResultsButton>
                     </StyledDropDown> :
                     isSearchOpen &&
                     showSearchResults &&
@@ -499,7 +506,14 @@ const Search = () => {
                         <VKMTrackSearch
                             setIsSearching={setIsSearching}
                         />
+                        <StyledHideSearchResultsButton>
+                            <FontAwesomeIcon
+                                icon={faAngleUp}
+                                onClick={() => setShowSearchResults(false)}
+                            />
+                        </StyledHideSearchResultsButton>
                     </StyledDropDown> :
+
                     isSearchOpen &&
                     searchResults !== null &&
                     showSearchResults &&
