@@ -1,12 +1,10 @@
-import React, { useState } from 'react';
-import ReactTooltip from 'react-tooltip';
-import { isMobile } from '../../theme/theme';
+import { useState, useContext } from 'react';
+import { ReactReduxContext } from 'react-redux';
 import styled from 'styled-components';
 import { useAppSelector } from '../../state/hooks';
-import strings from '../../translations';
 import ZoomBar from './ZoomBar';
 
-//import { Legend } from '../legend/Legend';
+import { setIsLegendOpen } from '../../state/slices/uiSlice';
 
 const StyledContainer = styled.div`
     display: flex;
@@ -15,31 +13,28 @@ const StyledContainer = styled.div`
 `;
 
 const ZoomMenu = () => {
+
+    const { store } = useContext(ReactReduxContext);
+
     const [hoveringIndex, setHoveringIndex] = useState(null);
-    const [isExpanded, setIsExpanded] = useState(false);
 
     const rpc = useAppSelector((state) => state.rpc);
 
+    const isLegendOpen = useAppSelector((state) => state.ui.isLegendOpen);
+
+    const handleLegendState = () => {
+        store.dispatch(setIsLegendOpen(!isLegendOpen));
+    };
+
     return (
         <>
-            <ReactTooltip disable={isMobile} id='myLoc' place='top' type='dark' effect='float'>
-                <span>{strings.tooltips.myLocButton}</span>
-            </ReactTooltip>
             <StyledContainer>
-                {/* <Legend
-                    currentZoomLevel={rpc.currentZoomLevel}
-                    selectedLayers={rpc.selectedLayers}
-                    zoomLevelsLayers={rpc.zoomLevelsLayers}
-                    hoveringIndex={hoveringIndex}
-                    isExpanded={isExpanded}
-                    setIsExpanded={setIsExpanded}
-                /> */}
                 <ZoomBar
                     setHoveringIndex={setHoveringIndex}
                     zoomLevelsLayers={rpc.zoomLevelsLayers}
                     hoveringIndex={hoveringIndex}
-                    isExpanded={isExpanded}
-                    setIsExpanded={setIsExpanded}
+                    isExpanded={isLegendOpen}
+                    setIsExpanded={handleLegendState}
                     currentZoomLevel={rpc.currentZoomLevel}
                     allLayers={rpc.allLayers}
                     selectedLayers={rpc.selectedLayers}

@@ -73,7 +73,7 @@ If you want you can copy all translations to same one excel now, do following:
 ### Generate translation json's from excel
 
 - Copy translations.xlsx to `suomen-vaylat-app/src/translations` folder
-- Run `npx i18n-json-to-xlsx-converter --convert 'src/translations.xlsx'` command (in `suomen-vaylat-app` folder) to generate separated translations json files
+- Run `npx i18n-json-to-xlsx-converter --convert 'src/translations/translations.xlsx'` command (in `suomen-vaylat-app` folder) to generate separated translations json files
 
 ## Reporting issues
 

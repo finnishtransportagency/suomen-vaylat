@@ -1,8 +1,6 @@
-
 import './_colors.scss';
 import './custom.scss';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Modal from 'react-modal';
 import { Provider } from 'react-redux';
 import { Route, Router } from 'react-router-dom';
 import SimpleReactLightbox from 'simple-react-lightbox';
@@ -13,7 +11,7 @@ import { HandleSharedWebSiteLink } from './components/share-web-site/HandleShare
 import { history, store } from './state/store';
 import Theme from './theme/theme';
 
-Modal.setAppElement('#root');
+import { setIsFullScreen } from './state/slices/uiSlice';
 
 const StyledAppContainer = styled.div`
     width: 100%;
@@ -21,6 +19,14 @@ const StyledAppContainer = styled.div`
     margin: 0;
     padding: 0;
 `;
+
+document.addEventListener('fullscreenchange', (event) => {
+    if (document.fullscreenElement) {
+        store.dispatch(setIsFullScreen(true));
+    } else {
+        store.dispatch(setIsFullScreen(false));
+    }
+});
 
 /**
  * Top class for the application.
@@ -30,6 +36,8 @@ const StyledAppContainer = styled.div`
  * @extends {React.Component}
  */
 const App = () => {
+
+
 
     let routerPrefix = '/';
     if (process.env.REACT_APP_ROUTER_PREFIX) {

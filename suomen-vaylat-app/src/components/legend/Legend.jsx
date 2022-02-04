@@ -79,15 +79,15 @@ const StyledGroupsContainer = styled.div`
 const listVariants = {
     visible: {
         y: 0,
-        //height: 585,
         opacity: 1,
-        pointerEvents: "auto"
+        pointerEvents: "auto",
+        filter: "blur(0px)"
     },
     hidden: {
         y: "100%",
-        //height: 0,
         opacity: 0,
-        pointerEvents: "none"
+        pointerEvents: "none",
+        filter: "blur(10px)"
     },
 };
 
@@ -99,7 +99,6 @@ export const Legend = ({
     setIsExpanded,
     height
 }) => {
-    //console.log(height);
     const legends = [];
     const noLegends = [];
     const allLegends = useSelector((state) => state.rpc.legends);
@@ -127,11 +126,10 @@ export const Legend = ({
         <StyledLegendContainer
             key={legends}
             height={height}
-            //initial='visible'
             animate={isExpanded ? 'visible' : 'hidden'}
             variants={listVariants}
             transition={{
-                duration: 0.5,
+                duration: 0.7,
                 type: "tween"
             }}
         >

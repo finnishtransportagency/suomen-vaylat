@@ -1,23 +1,23 @@
 import { useContext } from "react";
+import strings from '../../../translations';
 import {
     faCompress,
     faExpand,
     faLayerGroup,
-    faPencilRuler
+    faPencilRuler,
+    faSave
 } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ReactReduxContext } from 'react-redux';
-import ReactTooltip from 'react-tooltip';
-import { isMobile } from '../../../theme/theme';
 import styled from 'styled-components';
 import { useAppSelector } from '../../../state/hooks';
 import {
     setIsDrawingToolsOpen,
-    setIsFullScreen,
     setIsSideMenuOpen,
+    setIsSaveViewOpen,
     setActiveTool
 } from '../../../state/slices/uiSlice';
-import strings from '../../../translations';
+
+import CircleButton from '../../circle-button/CircleButton';
 
 import DrawingTools from '../../measurement-tools/DrawingTools';
 
@@ -31,7 +31,7 @@ const StyledMenuBar = styled.div`
     align-items: flex-start;
     flex-direction: column;
     transition: all 0.5s ease-in-out;
-    margin-top: 8px;
+    gap: 8px;
     @media ${props => props.theme.device.mobileL} {
         grid-row-start: ${props => props.isSearchOpen ? 2 : 1};
         grid-row-end: 3;
@@ -41,59 +41,8 @@ const StyledMenuBar = styled.div`
 const StyledMapToolsContainer = styled.div`
     background-color: ${props => props.theme.colors.mainWhite};
     border-radius: 24px;
-    box-shadow: 2px 2px 4px #0000004D;
-    margin-bottom: 8px;
-`;
-
-const StyledMenuBarButton = styled.div`
-    pointer-events: auto;
-    position: relative;
-    cursor: pointer;
-    width: 48px;
-    height: 48px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: ${props => props.isActive ? props.theme.colors.buttonActive : props.theme.colors.button};
-    margin-bottom: 8px;
-    box-shadow: 2px 2px 4px #0000004D;
-    border-radius: 50%;
-    svg {
-        color: ${props => props.theme.colors.mainWhite};
-        font-size: 22px;
-    };
-    @media ${props => props.theme.device.mobileL} {
-        width: 40px;
-        height: 40px;
-        svg {
-            font-size: 18px;
-        };
-    };
-`;
-
-const StyledMenuBarToolsButton = styled.div`
-    pointer-events: auto;
-    position: relative;
-    cursor: pointer;
-    width: 48px;
-    height: 48px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: ${props => props.isActive ? props.theme.colors.buttonActive : props.theme.colors.button};
-    box-shadow: 2px 2px 4px #0000004D;
-    border-radius: 50%;
-    svg {
-        color: ${props => props.theme.colors.mainWhite};
-        font-size: 22px;
-    };
-    @media ${props => props.theme.device.mobileL} {
-        width: 40px;
-        height: 40px;
-        svg {
-            font-size: 18px;
-        };
-    };
+    box-shadow: 1px 2px 6px #0000004D;
+    z-index: -1;
 `;
 
 const StyledLayerCount = styled.div`
@@ -123,26 +72,35 @@ const MenuBar = () => {
         isSideMenuOpen,
         isDrawingToolsOpen,
         isSearchOpen,
+        isSaveViewOpen,
         activeTool,
     } =  useAppSelector((state) => state.ui);
 
     const handleFullScreen = () => {
-        if (!document.fullscreenElement) {
-            document.documentElement.requestFullscreen();
-            store.dispatch(setIsFullScreen(true));
-        } else {
-          if (document.exitFullscreen) {
+        if(isFullScreen){
+            if (document.exitFullscreen) {
                 document.exitFullscreen();
-                store.dispatch(setIsFullScreen(false));
-          }
+            } else if (document.webkitExitFullscreen) { /* Safari */
+                document.webkitExitFullscreen();
+            } else if (document.msExitFullscreen) { /* IE11 */
+                document.msExitFullscreen();
+            }
+        } else {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen();
+            } else if (document.webkitRequestFullscreen) { /* Safari */
+                document.webkitRequestFullscreen();
+            } else if (document.msRequestFullscreen) { /* IE11 */
+                document.msRequestFullscreen();
+            }
         }
     };
 
     const closeDrawingTools = () => {
         // remove geometries off the map
-        channel.postRequest('DrawTools.StopDrawingRequest', [true]);
+        channel && channel.postRequest('DrawTools.StopDrawingRequest', [true]);
         // stop the drawing tool
-        channel.postRequest('DrawTools.StopDrawingRequest', [activeTool]);
+        channel && channel.postRequest('DrawTools.StopDrawingRequest', [activeTool]);
         store.dispatch(setActiveTool(null));
         store.dispatch(setIsDrawingToolsOpen(!isDrawingToolsOpen))
     };
@@ -150,57 +108,40 @@ const MenuBar = () => {
 
     return (
         <>
-            <ReactTooltip disable={isMobile} id='layerlist' place="right" type="dark" effect="float">
-                <span>{strings.tooltips.layerlistButton}</span>
-            </ReactTooltip>
-
-            <ReactTooltip disable={isMobile} id='search' place="right" type="dark" effect="float">
-                <span>{strings.tooltips.searchButton}</span>
-            </ReactTooltip>
-
-            <ReactTooltip disable={isMobile} id='drawingtools' place="right" type="dark" effect="float">
-                <span>{strings.tooltips.drawingtools.drawingtoolsButton}</span>
-            </ReactTooltip>
-
-            <ReactTooltip disable={isMobile} id='fullscreen' place="right" type="dark" effect="float">
-                <span>{strings.tooltips.fullscreenButton}</span>
-            </ReactTooltip>
-
             <StyledMenuBar
-                isSideMenuOpen={isSideMenuOpen}
                 isSearchOpen={isSearchOpen}
             >
-                <StyledMenuBarButton
-                    data-tip data-for='layerlist'
-                    isActive={isSideMenuOpen}
-                    onClick={() => store.dispatch(setIsSideMenuOpen(!isSideMenuOpen))}
+                <CircleButton
+                    icon={faLayerGroup}
+                    text={strings.tooltips.layerlistButton}
+                    toggleState={isSideMenuOpen}
+                    clickAction={() => store.dispatch(setIsSideMenuOpen(!isSideMenuOpen))}
                 >
                     <StyledLayerCount>
                         {selectedLayers.length}
                     </StyledLayerCount>
-                    <FontAwesomeIcon
-                        icon={faLayerGroup}
-                    />
-                </StyledMenuBarButton>
+                </CircleButton>
                 <StyledMapToolsContainer>
-                    <StyledMenuBarToolsButton
-                        data-tip data-for='drawingtools'
-                        isActive={isDrawingToolsOpen}
-                        onClick={() => closeDrawingTools()}>
-                        <FontAwesomeIcon
-                            icon={faPencilRuler}
-                        />
-                    </StyledMenuBarToolsButton>
+                    <CircleButton
+                        icon={faPencilRuler}
+                        text={strings.tooltips.measuringTools.measuringToolsButton}
+                        toggleState={isDrawingToolsOpen}
+                        clickAction={closeDrawingTools}
+                    />
                     <DrawingTools isOpen={isDrawingToolsOpen}/>
                 </StyledMapToolsContainer>
-                <StyledMenuBarButton
-                    data-tip data-for='fullscreen'
-                    isActive={isFullScreen}
-                    onClick={() => handleFullScreen()}>
-                    <FontAwesomeIcon
-                        icon={isFullScreen ? faCompress : faExpand}
-                    />
-                </StyledMenuBarButton>
+                <CircleButton
+                    icon={isFullScreen ? faCompress : faExpand}
+                    text={strings.tooltips.fullscreenButton}
+                    toggleState={isFullScreen}
+                    clickAction={handleFullScreen}
+                />
+                <CircleButton
+                    icon={faSave}
+                    text={strings.saveView.saveView}
+                    toggleState={isSaveViewOpen}
+                    clickAction={() => store.dispatch(setIsSaveViewOpen(!isSaveViewOpen))}
+                />
             </StyledMenuBar>
         </>
     )};

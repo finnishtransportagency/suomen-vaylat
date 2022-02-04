@@ -1,88 +1,70 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import styled from 'styled-components';
 import { ReactReduxContext } from 'react-redux';
 import { useAppSelector } from '../../state/hooks';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
     faSearch,
     faTimes,
     faTrash,
-    faEllipsisV
+    faEllipsisV,
+    faAngleUp
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import AddressSearch from './AddressSearch';
-import VKMSearch from './VKMSearch';
+import VKMRoadSearch from './VKMRoadSearch';
+import MetadataSearch from './MetadataSearch';
+import Layer from '../menus/hierarchical-layerlist/Layer';
 import SvLoder from '../loader/SvLoader';
 import strings from '../../translations';
+
+import { isMobile } from '../../theme/theme';
 
 import {
     addMarkerRequest,
     mapMoveRequest,
-    removeFeaturesFromMap,
-    removeMarkerRequest,
-    searchRequest,
-    searchVKMRoad,
-    setSelectError
 } from '../../state/slices/rpcSlice';
-
-import {
-    emptyFormData,
-    emptySearchResult,
-    setSearching,
-    setSearchResult,
-    setSelectedIndex,
-    setMarker,
-    setSearchResultOnMapId,
-    setSearchSelected
-} from '../../state/slices/searchSlice';
 
 import { setIsSearchOpen } from '../../state/slices/uiSlice';
 
+import CircleButton from '../circle-button/CircleButton';
+import VKMTrackSearch from './VKMTrackSearch';
 
 const StyledSearchContainer = styled.div`
     z-index: 2;
-    pointer-events: auto;
     position: relative;
     grid-column-start: 3;
     grid-column-end: 4;
-    max-width: 400px;
-    width: ${props => props.isSearchOpen ? "100%" : "48px"};
-    justify-self: end;
-
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    height: 48px;
     @media ${props => props.theme.device.mobileL} {
         grid-column-start: ${props => props.isSearchOpen ? 1 : 2};
         grid-column-end: 4;
-        width: ${props => props.isSearchOpen ? "100%" : "40px"};
+        height: 40px;
     };
 `;
 
-const StyledSearchWrapper = styled.div`
+const StyledSearchWrapper = styled(motion.div)`
+    position: absolute;
+    z-index: -1;
+    transition: all 0.3s ease-out;
     display: flex;
     justify-content: flex-end;
     align-items: center;
+    width: 100%;
+    overflow: hidden;
+    padding-right: 48px;
+    height: 100%;
     background-color: ${props => props.theme.colors.mainWhite};
     border-radius: 24px;
     box-shadow: rgb(0 0 0 / 16%) 0px 3px 6px, rgb(0 0 0 / 23%) 0px 3px 6px;
+    pointer-events: auto;
     @media ${props => props.theme.device.mobileL} {
-        height: 40px;
+        border-radius: 20px;
+        padding-right: 40px;
     };
-    overflow: hidden;
-`;
-
-const StyledSearchContent = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin: 0px 8px 0px 8px;
-    width: 100%;
-`;
-
-const StyledLeftContent = styled.div`
-    position: relative;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
 `;
 
 const StyledLeftContentWrapper = styled.div`
@@ -91,6 +73,7 @@ const StyledLeftContentWrapper = styled.div`
 `;
 
 const StyledSearchActionButton = styled(FontAwesomeIcon)`
+    margin-right: 8px;
     color: rgba(0, 0, 0, 0.5);
     font-size: 16px;
     cursor: pointer;
@@ -101,6 +84,7 @@ const StyledSearchMethodSelector = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-left: 8px;
     cursor: pointer;
     color: ${props => props.isSearchMethodSelectorOpen ? props.theme.colors.mainColor1 : 'rgba(0,0,0,0.5)'};
     p {
@@ -112,7 +96,7 @@ const StyledSearchMethodSelector = styled.div`
 `;
 
 const StyledSelectedSearchMethod = styled.div`
-
+    width: 100%;
     p {
         padding: 6px 8px;
         font-size: 14px;
@@ -121,256 +105,334 @@ const StyledSelectedSearchMethod = styled.div`
     }
 `;
 
-const StyledMenuBarButton = styled.div`
-    z-index: 1;
-    pointer-events: auto;
-    cursor: pointer;
-    min-width: 48px;
-    height: 48px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: ${props => props.isActive ? props.theme.colors.buttonActive : props.theme.colors.button};
-    border-radius: 50%;
-    svg {
-        color: ${props => props.theme.colors.mainWhite};
-        font-size: 22px;
-    };
-    @media ${props => props.theme.device.mobileL} {
-        min-width: 40px;
-        height: 40px;
-        svg {
-            font-size: 18px;
-        };
-    };
-`;
-
-const StyledDropdownWrapper = styled(motion.div)`
-    border-radius: 24px;
-    z-index: -1;
-    //position: absolute;
+const StyledDropDown = styled(motion.div)`
+    z-index: -2;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    max-width: 400px;
     width: 100%;
     height: auto;
-    margin-top: 8px;
-    max-height: calc(var(--app-height) - 120px);
-    overflow: auto;
+    border-radius: 24px;
     box-shadow: rgb(0 0 0 / 16%) 0px 3px 6px, rgb(0 0 0 / 23%) 0px 3px 6px;
     background-color: ${props => props.theme.colors.mainWhite};
-`;
-
-const StyledDropdownContent = styled(motion.div)`
-    margin: 16px;
-    /* margin-top: 48px;
+    padding: 64px 16px 0px 16px;
+    pointer-events: auto;
+    overflow: auto;
     @media ${props => props.theme.device.mobileL} {
-        margin-top: 40px;
-    }; */
+        max-width: 100%;
+    };
 `;
 
 const StyledDropdownContentItem = styled.div`
     user-select: none;
     cursor: pointer;
-    padding: 8px;
+    padding-left: 8px;
+    padding-bottom: 16px;
     border-radius: 5px;
+
     background-color: ${props => props.itemSelected ? props.theme.colors.mainColor3 : ""};
-    &:hover{
-        background-color: ${props => props.theme.colors.mainColor3};
-    };
     p {
         margin: 0;
         padding: 0;
-        font-size: 15px;
     }
 `;
 
-const Search = () => {
-    const [isSearchMethodSelectorOpen, setIsSearchMethodSelectorOpen] = useState(false);
-    const [searchResultSelectedIndex, setSearchResultSelectedIndex] = useState(-1);
-    const search = useAppSelector((state) => state.search);
-    const {
-        isSearchOpen,
-    } = useAppSelector((state) => state.ui);
+const StyledDropdownContentItemTitle = styled.p`
+    text-align: ${props => props.type === "noResults" && "center"};
+    font-size: 14px;
+    color: #504d4d;
+`;
 
-    const vectorLayerId = 'SEARCH_VECTORLAYER';
-    const markerId = 'SEARCH_MARKER';
+const StyledDropdownContentItemSubtitle = styled.p`
+    font-size: 12px;
+    color: #807A7A;
+`;
+
+const StyledHideSearchResultsButton = styled.div`
+    position: sticky;
+    bottom: 0px;
+    background-color: white;
+    text-align: center;
+    padding-bottom: 4px;
+    cursor: pointer;
+    svg {
+    font-size: 23px;
+      color:  ${props => props.theme.colors.mainColor1}
+    };
+`;
+
+const Search = () => {
+    const [searchValue, setSearchValue ] = useState("");
+    const [lastSearchValue, setLastSearchValue] = useState("");
+    const [isSearching, setIsSearching] = useState(false);
+    const [searchResults, setSearchResults] = useState(null);
+    const [showSearchResults, setShowSearchResults] = useState(true);
+    const [isSearchMethodSelectorOpen, setIsSearchMethodSelectorOpen] = useState(false);
+    const [searchTypeIndex, setSearchTypeIndex] = useState(0);
+
+    const { isSearchOpen } = useAppSelector((state) => state.ui);
+    const { channel, allLayers } = useAppSelector((state) => state.rpc);
+
     const { store } = useContext(ReactReduxContext);
 
-    // handlers
-    const searchTypeOnChange = (name) => {
-        store.dispatch(setSearchSelected(name));
-        store.dispatch(emptySearchResult());
-        store.dispatch(emptyFormData());
-        store.dispatch(removeFeaturesFromMap(vectorLayerId + '_' + search.selected));
-        store.dispatch(removeMarkerRequest(markerId));
+    const markerId = 'SEARCH_MARKER';
+
+    const handleAddressSearch = (value) => {
+        setIsSearching(true);
+        channel.postRequest('SearchRequest', [value]);
+        setLastSearchValue(value);
     };
+
+    const handleMetadataSearch = (value) => {
+        setIsSearching(true);
+        channel.postRequest('MetadataSearchRequest', [{
+            search: value,
+            srs: 'EPSG:3067',
+            OrganisationName: 'Väylävirasto'
+        }]);
+        setLastSearchValue(value);
+    };
+
 
     const searchTypes = [
-        { value: 'address', label: strings.search.types.address },
-        { value: 'vkm', label: strings.search.types.vkm }
+        {
+            value: 'address',
+            label: strings.search.address.title,
+            subtitle: strings.search.address.subtitle,
+            content: <AddressSearch
+                searchValue={searchValue}
+                setSearchValue={setSearchValue}
+                setIsSearching={setIsSearching}
+                handleAddressSearch={handleAddressSearch}
+            />
+        },
+        {
+            value: 'vkm',
+            label: strings.search.vkm.title,
+            subtitle: strings.search.vkm.subtitle,
+            content: <p>{strings.search.vkm.title}...</p>
+        },
+        {
+            value: 'vkmtrack',
+            label: strings.search.vkm.trackTitle,
+            subtitle: strings.search.vkm.trackSubtitle,
+            content: <p>{strings.search.vkm.trackTitle}...</p>
+        },
+        {
+            value: 'metadata',
+            label: strings.search.metadata.title,
+            subtitle: strings.search.metadata.subtitle,
+            content: <MetadataSearch
+                searchValue={searchValue}
+                setSearchValue={setSearchValue}
+                setIsSearching={setIsSearching}
+                handleMetadataSearch={handleMetadataSearch}
+            />
+        }
     ];
 
-    const showAddressSearchResults = !isSearchMethodSelectorOpen && search.searching === false &&
-        search.searchResult.address.length > 0 && search.selected === 'address';
+    useEffect(() => {
+        channel && channel.handleEvent('SearchResultEvent', function(data) {
+            setIsSearching(false);
+            if(data.success){
+                if(data.result){
+                    setSearchResults(data);
+                } else {
+                    console.log(data);
+                };
+            };
+        });
 
-    const showVkmSearch = !isSearchMethodSelectorOpen &&
-        search.selected === 'vkm';
+        channel && channel.handleEvent('MetadataSearchResultEvent', function(data) {
+            setIsSearching(false);
+            if(data.success){
+                if(data.results){
+                    setSearchResults(data.results);
+                } else {
+                    console.log(data);
+                };
+            };
+         });
 
-    const showDropDownContent = (
-            // if search method selection is open
-            (isSearchMethodSelectorOpen) ||
-            // or search method selection is not open and has address search results
-            (
-                !isSearchMethodSelectorOpen && !search.searching &&
-                search.searching === false && search.searchResult.address.length > 0 &&
-                search.selected === 'address'
-            ) ||
-            // or search method selection is not open and vkm search is selected
-            (
-                !isSearchMethodSelectorOpen &&
-                search.selected === 'vkm'
-            )
-    );
+    },[channel]);
 
-    const onClickHandler = () => {
-        store.dispatch(setSearching(true));
-
-        const vkmSearchErrorHandler = (errors) => {
-
-            store.dispatch(setSearching(false));
-            store.dispatch(setSelectError({ show: true, message: strings.search.vkm.error.text, errors: errors, type: 'searchWarning', filteredLayers: [], indeterminate: false }));
-        };
-
-        if (search.selected === 'vkm') {
-            store.dispatch(searchVKMRoad({
-                search: [search.formData.vkm.tie, search.formData.vkm.tieosa, search.formData.vkm.ajorata, search.formData.vkm.etaisyys],
-                handler: (data) => {
-                    store.dispatch(setSearchResult(data));
-                },
-                errorHandler: vkmSearchErrorHandler
-            }));
-        } else if (search.selected === 'address') {
-            store.dispatch(searchRequest(search.formData.address));
-        }
-    };
-
-    if (search.searching === false && search.marker.x !== null && search.marker.y !== null
-        && search.searchResultOnMapId !== search.marker.x + '_' + search.marker.y + '_' + (search.marker.msg || '') + '_' + markerId) {
+    const handleAddressSelect = (name, lon, lat, id) => {
         store.dispatch(addMarkerRequest({
-            x: search.marker.x,
-            y: search.marker.y,
-            msg: search.marker.msg || '',
-            markerId: markerId
+            x: lon,
+            y: lat,
+            msg: name || '',
+            markerId: markerId,
         }));
 
         store.dispatch(mapMoveRequest({
-            x: search.marker.x,
-            y: search.marker.y
+            x: lon,
+            y: lat
         }));
-
-        store.dispatch(setSearchResultOnMapId(search.marker.x + '_' + search.marker.y + '_' + (search.marker.msg || '') + '_' + markerId));
     };
 
-    const setItemSelected = (index) => {
-        setSearchResultSelectedIndex(index)
-    }
+    const variants = {
+        initial: {
+            maxWidth: 0,
+            opacity: 0,
+            filter: 'blur(10px)'
+        },
+        animate: {
+            maxWidth: '400px',
+            opacity: 1,
+            filter: 'blur(0px)'
+        },
+        exit: {
+            maxWidth: 0,
+            opacity: 0,
+            filter: 'blur(10px)'
+        },
+        transition: {
+            duration: 0.3,
+            type: 'tween'
+        }
+    };
 
-    const onAddressSelect = (name, lon, lat, id) => {
-        store.dispatch(setSelectedIndex(id));
-        store.dispatch(setMarker({
-            x: lon,
-            y: lat,
-            msg: name
-        }));
+    const dropdownVariants = {
+        initial: {
+            height: 0,
+            opacity: 0
+        },
+        animate: {
+            height: 'auto',
+            maxHeight: 'calc(var(--app-height) - 100px)',
+            opacity: 1
+        },
+        exit: {
+            height: 0,
+            opacity: 0
+        },
+        transition: {
+            duration: 0.5,
+            type: 'tween'
+        }
     };
 
     return (
         <StyledSearchContainer
             isSearchOpen={isSearchOpen}
         >
-
-            <StyledSearchWrapper>
-                <StyledSearchContent>
-                    <StyledLeftContent>
-                        <StyledLeftContentWrapper>
-                            <StyledSearchMethodSelector
-                                onClick={() => {
-                                    setIsSearchMethodSelectorOpen(!isSearchMethodSelectorOpen);
-                                }}
-                                isSearchMethodSelectorOpen={isSearchMethodSelectorOpen}
-                            >
-                                <FontAwesomeIcon
-                                    icon={faEllipsisV}
-                                    style={{ transform: isSearchMethodSelectorOpen && 'rotate(180deg)' }}
-                                />
-                            </StyledSearchMethodSelector>
-                            {
-                                !search.searching ?
-                                    <StyledSelectedSearchMethod onClick={() => isSearchMethodSelectorOpen && setIsSearchMethodSelectorOpen(false)}>
-                                        {
-                                            search.selected === 'vkm' && <p>{strings.search.types.vkm}</p>
-                                        }
-                                        {
-                                            search.selected === 'address' &&
-                                            <AddressSearch
-                                                visible={search.selected === 'address'}
-                                                search={search}
-                                                store={store}
-                                                markerId={markerId}
-                                                onEnterHandler={onClickHandler}
-                                            />
-                                        }
-                                    </StyledSelectedSearchMethod> : <SvLoder />
-                            }
-                        </StyledLeftContentWrapper>
-                        {
-                            search.selected !== 'vkm' &&
-                            <StyledSearchActionButton
-                                onClick={() => {
-                                    if (search.searchResult.address.length > 0) {
-                                        searchTypeOnChange(search.selected);
-                                    } else if (search.formData.address.length > 0) {
-                                        onClickHandler();
-                                    }
-                                }}
-                                icon={search.searchResult.address.length > 0 ? faTrash : faSearch}
-                            />
-                        }
-                    </StyledLeftContent>
-
-                </StyledSearchContent>
-                <StyledMenuBarButton
-                    onClick={() => {
-                        searchTypeOnChange('address');
-                        store.dispatch(setIsSearchOpen(!isSearchOpen));
-                        setIsSearchMethodSelectorOpen(false);
-                    }}
-                    isActive={isSearchOpen}
-                >
-                    <FontAwesomeIcon
-                        icon={isSearchOpen ? faTimes : faSearch}
-                    />
-                </StyledMenuBarButton>
-            </StyledSearchWrapper>
-            <StyledDropdownWrapper isSearchOpen={isSearchOpen}>
+            <CircleButton
+                icon={isSearchOpen ? faTimes : faSearch}
+                text={strings.tooltips.search}
+                toggleState={isSearchOpen}
+                tooltipDirection={"left"}
+                clickAction={() => {
+                    isSearchOpen && channel && channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', []);
+                    isSearchOpen && channel && channel.postRequest('MapModulePlugin.RemoveMarkersRequest', []);
+                    isSearchOpen && setSearchResults(null);
+                    isSearchOpen && setSearchValue('');
+                    store.dispatch(setIsSearchOpen(!isSearchOpen));
+                    isSearchMethodSelectorOpen && setIsSearchMethodSelectorOpen(false);
+                    setSearchTypeIndex(0);
+                }}
+            />
+            <AnimatePresence>
                 {
-                    showDropDownContent && <StyledDropdownContent layout>
+                isSearchOpen && <StyledSearchWrapper
+                variants={variants}
+                    initial={'initial'}
+                    animate={'animate'}
+                    exit={'exit'}
+                    transition={'transition'}
+                >
+                    <StyledLeftContentWrapper>
+                        <StyledSearchMethodSelector
+                            onClick={() => {
+                                setIsSearchMethodSelectorOpen(!isSearchMethodSelectorOpen);
+                            }}
+                            isSearchMethodSelectorOpen={isSearchMethodSelectorOpen}
+                        >
+                            <FontAwesomeIcon
+                                icon={faEllipsisV}
+                            />
+                        </StyledSearchMethodSelector>
                         {
-                            isSearchMethodSelectorOpen && searchTypes.map(searchType => {
+                            !isSearching ?
+                                <StyledSelectedSearchMethod
+                                    onClick={() => {
+                                        setShowSearchResults(true);
+                                        isSearchMethodSelectorOpen && setIsSearchMethodSelectorOpen(false);
+                                    }}
+                                >
+                                    {
+                                        searchTypes[searchTypeIndex].content
+                                    }
+                                </StyledSelectedSearchMethod> : <SvLoder />
+                        }
+                    </StyledLeftContentWrapper>
+                    {
+                      searchResults !== null && (searchValue === lastSearchValue)?
+                      <StyledSearchActionButton
+                            onClick={() => {
+                                setSearchResults(null);
+                                setSearchValue('');
+                            }}
+                            icon={faTrash}
+                        /> :
+                        <StyledSearchActionButton
+                            onClick={() => {
+                                searchTypes[searchTypeIndex].value === 'address' && handleAddressSearch(searchValue);
+                                searchTypes[searchTypeIndex].value === 'metadata' && handleMetadataSearch(searchValue);
+                            }}
+                            icon={faSearch}
+                        />
+                    }
+
+                 </StyledSearchWrapper>
+                }
+            </AnimatePresence>
+            <AnimatePresence>
+                {
+                    isSearchMethodSelectorOpen ?
+                    <StyledDropDown
+                        key={'dropdown-content-searchmethods'}
+                        variants={dropdownVariants}
+                        initial={'initial'}
+                        animate={'animate'}
+                        exit={'exit'}
+                        transition={'transition'}
+                    >
+                        {
+                            searchTypes.map((searchType, index) => {
                                 return (
                                     <StyledDropdownContentItem
                                         onClick={() => {
-                                            searchTypeOnChange(searchType.value);
+                                            setSearchResults(null);
+                                            setSearchTypeIndex(index);
                                             setIsSearchMethodSelectorOpen(false);
+                                            setSearchValue('');
+                                            isSearchOpen && channel && channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', []);
+                                            isSearchOpen && channel && channel.postRequest('MapModulePlugin.RemoveMarkersRequest', []);
                                         }}
                                         key={'search-type-' + searchType.value}
                                     >
-                                        <p>{searchType.label}</p>
+                                        <StyledDropdownContentItemTitle>{searchType.label}</StyledDropdownContentItemTitle>
+                                        <StyledDropdownContentItemSubtitle>{searchType.subtitle}</StyledDropdownContentItemSubtitle>
                                     </StyledDropdownContentItem>
                                 );
                             })
                         }
+                   </StyledDropDown> :
+                    isSearchOpen &&
+                    searchResults !== null &&
+                    showSearchResults &&
+                    searchTypes[searchTypeIndex].value === 'address' ?
+                    <StyledDropDown
+                        key={'dropdown-content-address'}
+                        variants={dropdownVariants}
+                        initial={'initial'}
+                        animate={'animate'}
+                        exit={'exit'}
+                        transition={'transition'}
+                    >
                         {
-                            showAddressSearchResults &&
-                            search.searchResult.address.map(({ name, region, type, lon, lat, id }, index) => {
+                            searchResults.result.locations.length > 0 ? searchResults.result.locations.map(({ name, region, type, lon, lat, id }, index) => {
                                 let visibleText;
                                 if (name === region) {
                                     visibleText = name;
@@ -384,39 +446,111 @@ const Search = () => {
                                 } else {
                                     visibleText = name;
                                 }
-                                const text = {
-                                    __html: visibleText
-                                };
                                 return <StyledDropdownContentItem
-                                    itemSelected={searchResultSelectedIndex === index}
                                     key={name + '_' + index}
                                     onClick={() => {
-                                        setItemSelected(index);
-                                        onAddressSelect(name, lon, lat, id);
+                                        setSearchValue(visibleText);
+                                        setLastSearchValue(visibleText);
+                                        handleAddressSelect(name, lon, lat, id);
+                                        isMobile && setShowSearchResults(false);
                                     }}
                                 >
-                                    <p dangerouslySetInnerHTML={text} />
+                                   <StyledDropdownContentItemTitle>{ visibleText }</StyledDropdownContentItemTitle>
                                 </StyledDropdownContentItem>
-                            })
+                            }) :
+                            <StyledDropdownContentItem
+                                key={'no-results'}
+                            >
+                                <StyledDropdownContentItemTitle type="noResults">{strings.search.address.error.text}</StyledDropdownContentItemTitle>
+                            </StyledDropdownContentItem>
                         }
-                        {
-                            showVkmSearch &&
-                            <VKMSearch
-                                visible={search.selected === 'vkm'}
-                                search={search}
-                                store={store}
-                                vectorLayerId={vectorLayerId}
-                                onEnterHandler={onClickHandler}
+                    <StyledHideSearchResultsButton>
+                        <FontAwesomeIcon
+                            icon={faAngleUp}
+                            onClick={() => setShowSearchResults(false)}
+                        />
+                    </StyledHideSearchResultsButton>
+                    </StyledDropDown> :
+                    isSearchOpen &&
+                    showSearchResults &&
+                    searchTypes[searchTypeIndex].value === 'vkm' ?
+                    <StyledDropDown
+                        key={'dropdown-content-vkm'}
+                        variants={dropdownVariants}
+                        initial={'initial'}
+                        animate={'animate'}
+                        exit={'exit'}
+                        transition={'transition'}
+                    >
+                        <VKMRoadSearch
+                            setIsSearching={setIsSearching}
+                        />
+                        <StyledHideSearchResultsButton>
+                            <FontAwesomeIcon
+                                icon={faAngleUp}
+                                onClick={() => setShowSearchResults(false)}
                             />
+                        </StyledHideSearchResultsButton>
+                    </StyledDropDown> :
+                    isSearchOpen &&
+                    showSearchResults &&
+                    searchTypes[searchTypeIndex].value === 'vkmtrack' ?
+                    <StyledDropDown
+                        key={'dropdown-content-vkmtrack'}
+                        variants={dropdownVariants}
+                        initial={'initial'}
+                        animate={'animate'}
+                        exit={'exit'}
+                        transition={'transition'}
+                    >
+                        <VKMTrackSearch
+                            setIsSearching={setIsSearching}
+                        />
+                        <StyledHideSearchResultsButton>
+                            <FontAwesomeIcon
+                                icon={faAngleUp}
+                                onClick={() => setShowSearchResults(false)}
+                            />
+                        </StyledHideSearchResultsButton>
+                    </StyledDropDown> :
+
+                    isSearchOpen &&
+                    searchResults !== null &&
+                    showSearchResults &&
+                    searchTypes[searchTypeIndex].value === 'metadata' &&
+                    <StyledDropDown
+                        key={'dropdown-content-metadata'}
+                        variants={dropdownVariants}
+                        initial={'initial'}
+                        animate={'animate'}
+                        exit={'exit'}
+                        transition={'transition'}
+                    >
+                        {
+                            searchResults.length > 0 ? searchResults.map(result => {
+                                const layers = allLayers.filter(layer => layer.metadataIdentifier === result.id);
+                                return layers.map(layer => {
+                                    return <Layer key={`metadata_${layer.id}`}layer={layer}/>
+                                })
+                            }) :
+                            <StyledDropdownContentItem
+                                key={'no-results'}
+                            >
+                                <StyledDropdownContentItemTitle type='noResults'>{strings.search.metadata.error.text}</StyledDropdownContentItemTitle>
+                            </StyledDropdownContentItem>
+
                         }
-                    </StyledDropdownContent>
+                    <StyledHideSearchResultsButton>
+                        <FontAwesomeIcon
+                            icon={faAngleUp}
+                            onClick={() => setShowSearchResults(false)}
+                        />
+                    </StyledHideSearchResultsButton>
+                    </StyledDropDown>
                 }
-
-
-            </StyledDropdownWrapper>
+            </AnimatePresence>
         </StyledSearchContainer>
     );
-
 };
 
 export default Search;

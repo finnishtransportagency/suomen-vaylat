@@ -15,6 +15,7 @@ import {
     setFeatures,
     setLegends,
     setLoading,
+    setScaleBarState,
     setTagsWithLayers,
     setZoomLevelsLayers,
     setZoomRange,
@@ -32,7 +33,7 @@ const StyledPublishedMap = styled.div`
     top: 0px;
     left: 0px;
     width: 100%;
-    height: calc(var(--app-height) - 60px);
+    height: 100%;
 `;
 
 const StyledIframe = styled.iframe`
@@ -80,7 +81,7 @@ const PublishedMap = () => {
 
                 if (data.getAnnouncements) {
                     channel.getAnnouncements(function (data) {
-                        if (data.data && data.data.length > 0) {
+                        if (data.hasOwnProperty("data") && data.data.length > 0) {
                             var localStorageAnnouncements = localStorage.getItem(ANNOUNCEMENTS_LOCALSTORAGE) ? localStorage.getItem(ANNOUNCEMENTS_LOCALSTORAGE) : [];
                             const activeAnnouncements = data.data.filter(announcement => announcement.active && localStorageAnnouncements && !localStorageAnnouncements.includes(announcement.id));
                             store.dispatch(setActiveAnnouncements(activeAnnouncements));
@@ -175,6 +176,12 @@ const PublishedMap = () => {
 
                 if (data.SearchResultEvent) {
                     channel.handleEvent('SearchResultEvent', event => {
+                    });
+                };
+
+                if(data.ScaleBarEvent) {
+                    channel.handleEvent('ScaleBarEvent', function(data) {
+                        store.dispatch(setScaleBarState(data));
                     });
                 };
 

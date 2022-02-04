@@ -39,11 +39,13 @@ const variants = {
         pointerEvents: "auto",
         x: 0,
         opacity: 1,
+        filter: "blur(0px)"
     },
     closed: {
         pointerEvents: "none",
         x: "-100%",
         opacity: 0,
+        filter: "blur(10px)"
     },
 };
 
@@ -61,6 +63,7 @@ const StyledMapLayersDialog = styled(motion.div)`
     overflow-y: auto;
     user-select: none;
     box-shadow: 0px 3px 6px 0px rgba(0,0,0,0.16);
+    margin-left: 16px;
     &::-webkit-scrollbar {
         display: none;
     };
@@ -74,6 +77,7 @@ const StyledMapLayersDialog = styled(motion.div)`
         left: 0px;
         width: 100%;
         height: 100%;
+        margin-left: unset;
     };
 `;
 
@@ -234,7 +238,7 @@ const MapLayersDialog = () => {
                     animate={isSideMenuOpen ? "open" : "closed"}
                     variants={variants}
                     transition={{
-                        duration: 0.3,
+                        duration: 0.4,
                         type: "tween"
                     }}
             >
