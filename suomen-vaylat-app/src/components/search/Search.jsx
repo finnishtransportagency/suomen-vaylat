@@ -169,7 +169,7 @@ const Search = () => {
     const [searchResults, setSearchResults] = useState(null);
     const [showSearchResults, setShowSearchResults] = useState(true);
     const [isSearchMethodSelectorOpen, setIsSearchMethodSelectorOpen] = useState(false);
-    const [searchTypeIndex, setSearchTypeIndex] = useState(0);
+    const [searchType, setSearchType] = useState('address');
 
     const { isSearchOpen } = useAppSelector((state) => state.ui);
     const { channel, allLayers } = useAppSelector((state) => state.rpc);
@@ -195,10 +195,24 @@ const Search = () => {
         setLastSearchValue(value);
     };
 
+    const markerIds = [markerId];
+    const vectorLayerIds = [vectorLayerId + '_vkm_tie', vectorLayerId + '_vkm_osa', vectorLayerId + '_vkm_etaisyys', vectorLayerId + '_vkm_track'];
 
-    const searchTypes = [
-        {
-            value: 'address',
+    const removeMarkersAndFeatures = () => {
+        if (!channel) {
+            return;
+        }
+        markerIds.forEach(markerId => {
+            channel.postRequest('MapModulePlugin.RemoveMarkersRequest', [markerId]);
+        });
+        vectorLayerIds.forEach(vectorLayerId => {
+            channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [vectorLayerId])
+        });
+    };
+
+
+    const searchTypes = {
+        address: {
             label: strings.search.address.title,
             subtitle: strings.search.address.subtitle,
             content: <AddressSearch
@@ -209,22 +223,19 @@ const Search = () => {
             />,
             visible: true
         },
-        {
-            value: 'vkm',
+        vkm: {
             label: strings.search.vkm.title,
             subtitle: strings.search.vkm.subtitle,
             content: <p>{strings.search.vkm.title}...</p>,
             visible: channel && channel.searchVKMRoad
         },
-        {
-            value: 'vkmtrack',
+        vkmtrack: {
             label: strings.search.vkm.trackTitle,
             subtitle: strings.search.vkm.trackSubtitle,
             content: <p>{strings.search.vkm.trackTitle}...</p>,
             visible: channel && channel.searchVKMTrack
         },
-        {
-            value: 'metadata',
+        metadata: {
             label: strings.search.metadata.title,
             subtitle: strings.search.metadata.subtitle,
             content: <MetadataSearch
@@ -235,7 +246,7 @@ const Search = () => {
             />,
             visible: true
         }
-    ];
+    };
 
     useEffect(() => {
         channel && channel.handleEvent('SearchResultEvent', function(data) {
@@ -267,7 +278,7 @@ const Search = () => {
             x: lon,
             y: lat,
             msg: name || '',
-            markerId: markerId,
+            markerId: markerId
         }));
 
         store.dispatch(mapMoveRequest({
@@ -328,13 +339,12 @@ const Search = () => {
                 toggleState={isSearchOpen}
                 tooltipDirection={'left'}
                 clickAction={() => {
-                    isSearchOpen && channel && channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', []);
-                    isSearchOpen && channel && channel.postRequest('MapModulePlugin.RemoveMarkersRequest', []);
+                    isSearchOpen && removeMarkersAndFeatures();
                     isSearchOpen && setSearchResults(null);
                     isSearchOpen && setSearchValue('');
                     store.dispatch(setIsSearchOpen(!isSearchOpen));
                     isSearchMethodSelectorOpen && setIsSearchMethodSelectorOpen(false);
-                    setSearchTypeIndex(0);
+                    setSearchType('address');
                 }}
             />
             <AnimatePresence>
@@ -366,30 +376,27 @@ const Search = () => {
                                     }}
                                 >
                                     {
-                                        searchTypes[searchTypeIndex].content
+                                        searchTypes[searchType].content
                                     }
                                 </StyledSelectedSearchMethod> : <SvLoder />
                         }
                     </StyledLeftContentWrapper>
                     {
                       (searchResults !== null && (searchValue === lastSearchValue)) ||
-                      (searchValue.tienumero && searchTypes[searchTypeIndex].value === 'vkm') ||
-                      (searchValue.ratanumero && searchTypes[searchTypeIndex].value === 'vkmtrack')?
+                      (searchValue.tienumero && searchType === 'vkm') ||
+                      (searchValue.ratanumero && searchType === 'vkmtrack')?
                       <StyledSearchActionButton
                             onClick={() => {
                                 setSearchResults(null);
                                 setSearchValue('');
-                                channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [vectorLayerId + '_vkm_tie']);
-                                channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [vectorLayerId + '_vkm_osa']);
-                                channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [vectorLayerId + '_vkm_etaisyys']);
-                                channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [vectorLayerId + '_vkm_track']);
+                                removeMarkersAndFeatures();
                             }}
                             icon={faTrash}
                         /> :
                         <StyledSearchActionButton
                             onClick={() => {
-                                searchTypes[searchTypeIndex].value === 'address' && handleAddressSearch(searchValue);
-                                searchTypes[searchTypeIndex].value === 'metadata' && handleMetadataSearch(searchValue);
+                                searchType === 'address' && handleAddressSearch(searchValue);
+                                searchType === 'metadata' && handleMetadataSearch(searchValue);
                             }}
                             icon={faSearch}
                         />
@@ -410,22 +417,22 @@ const Search = () => {
                         transition={'transition'}
                     >
                         {
-                            searchTypes.map((searchType, index) => {
-                                if (searchType.visible) {
+                            Object.keys(searchTypes).map((searchType) => {
+                                const type = searchTypes[searchType];
+                                if (type.visible) {
                                     return (
                                         <StyledDropdownContentItem
                                             onClick={() => {
                                                 setSearchResults(null);
-                                                setSearchTypeIndex(index);
+                                                setSearchType(searchType);
                                                 setIsSearchMethodSelectorOpen(false);
                                                 setSearchValue('');
-                                                isSearchOpen && channel && channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', []);
-                                                isSearchOpen && channel && channel.postRequest('MapModulePlugin.RemoveMarkersRequest', []);
+                                                isSearchOpen && removeMarkersAndFeatures();
                                             }}
-                                            key={'search-type-' + searchType.value}
+                                            key={'search-type-' + searchType}
                                         >
-                                            <StyledDropdownContentItemTitle>{searchType.label}</StyledDropdownContentItemTitle>
-                                            <StyledDropdownContentItemSubtitle>{searchType.subtitle}</StyledDropdownContentItemSubtitle>
+                                            <StyledDropdownContentItemTitle>{type.label}</StyledDropdownContentItemTitle>
+                                            <StyledDropdownContentItemSubtitle>{type.subtitle}</StyledDropdownContentItemSubtitle>
                                         </StyledDropdownContentItem>
                                     );
                                 } else {
@@ -437,7 +444,7 @@ const Search = () => {
                     isSearchOpen &&
                     searchResults !== null &&
                     showSearchResults &&
-                    searchTypes[searchTypeIndex].value === 'address' ?
+                    searchType === 'address' ?
                     <StyledDropDown
                         key={'dropdown-content-address'}
                         variants={dropdownVariants}
@@ -488,7 +495,7 @@ const Search = () => {
                     </StyledDropDown> :
                     isSearchOpen &&
                     showSearchResults &&
-                    searchTypes[searchTypeIndex].value === 'vkm' ?
+                    searchType === 'vkm' ?
                     <StyledDropDown
                         key={'dropdown-content-vkm'}
                         variants={dropdownVariants}
@@ -501,6 +508,7 @@ const Search = () => {
                             setIsSearching={setIsSearching}
                             searchValue={searchValue}
                             setSearchValue={setSearchValue}
+                            vectorLayerId={vectorLayerId}
                         />
                         <StyledHideSearchResultsButton>
                             <FontAwesomeIcon
@@ -511,7 +519,7 @@ const Search = () => {
                     </StyledDropDown> :
                     isSearchOpen &&
                     showSearchResults &&
-                    searchTypes[searchTypeIndex].value === 'vkmtrack' ?
+                    searchType === 'vkmtrack' ?
                     <StyledDropDown
                         key={'dropdown-content-vkmtrack'}
                         variants={dropdownVariants}
@@ -524,6 +532,7 @@ const Search = () => {
                             setIsSearching={setIsSearching}
                             searchValue={searchValue}
                             setSearchValue={setSearchValue}
+                            vectorLayerId={vectorLayerId}
                         />
                         <StyledHideSearchResultsButton>
                             <FontAwesomeIcon
@@ -536,7 +545,7 @@ const Search = () => {
                     isSearchOpen &&
                     searchResults !== null &&
                     showSearchResults &&
-                    searchTypes[searchTypeIndex].value === 'metadata' &&
+                    searchType === 'metadata' &&
                     <StyledDropDown
                         key={'dropdown-content-metadata'}
                         variants={dropdownVariants}

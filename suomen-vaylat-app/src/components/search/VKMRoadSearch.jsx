@@ -85,11 +85,10 @@ const StyledOption = styled.option`
 const VKMRoadSearch = ({
   setIsSearching,
   searchValue,
-  setSearchValue
+  setSearchValue,
+  vectorLayerId
 }) => {
     const [error, setError] = useState(null);
-    const vectorLayerId = 'SEARCH_VECTORLAYER';
-
     const rpc = useAppSelector((state) => state.rpc);
 
     const handleResponse = (data) => {

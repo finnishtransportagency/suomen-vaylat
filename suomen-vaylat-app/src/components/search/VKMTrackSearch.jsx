@@ -64,11 +64,10 @@ const StyledLabel = styled.label`
 const VKMTrackSearch = ({
   setIsSearching,
   searchValue,
-  setSearchValue
+  setSearchValue,
+  vectorLayerId
 }) => {
-    const vectorLayerId = 'SEARCH_VECTORLAYER';
     const [error, setError] = useState(null);
-
     const rpc = useAppSelector((state) => state.rpc);
 
     const handleResponse = (data) => {
