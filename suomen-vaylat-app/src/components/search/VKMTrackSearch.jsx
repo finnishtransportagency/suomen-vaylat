@@ -18,7 +18,7 @@ const StyledDropdownContentItem = styled.div`
     padding-bottom: 16px;
     border-radius: 5px;
 
-    background-color: ${props => props.itemSelected ? props.theme.colors.mainColor3 : ""};
+    background-color: ${props => props.itemSelected ? props.theme.colors.mainColor3 : ''};
     p {
         margin: 0;
         padding: 0;
@@ -26,7 +26,7 @@ const StyledDropdownContentItem = styled.div`
 `;
 
 const StyledDropdownContentItemTitle = styled.p`
-    text-align: ${props => props.type === "noResults" && "center"};
+    text-align: ${props => props.type === 'noResults' && 'center'};
     font-size: 14px;
     color: #504d4d;
 `;
@@ -63,23 +63,28 @@ const StyledLabel = styled.label`
 
 const VKMTrackSearch = ({
   setIsSearching,
+  searchValue,
+  setSearchValue
 }) => {
+    const vectorLayerId = 'SEARCH_VECTORLAYER';
     const [error, setError] = useState(null);
-    const [ratanumero, setRatanumero] = useState('');
-    const [ratakilometri, setRatakilometri] = useState(1);
-    const [ratametri, setRatametri] = useState(0);
 
     const rpc = useAppSelector((state) => state.rpc);
 
     const handleResponse = (data) => {
-        const vectorLayerId = 'SEARCH_VECTORLAYER';
-
         setIsSearching(false);
 
         let featureStyle = VKMGeoJsonStyles['track'];
         let hover = VKMGeoJsonHoverStyles['track'];
 
         rpc.channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [vectorLayerId + '_vkm_track']);
+
+        setSearchValue({
+            ratanumero: data.hasOwnProperty('ratanumero') ? data.ratanumero : searchValue.ratanumero || '',
+            ratakilometri: data.hasOwnProperty('ratakilometri') ? parseInt(data.ratakilometri) : searchValue.ratakilometri || 1,
+            ratametri: data.hasOwnProperty('ratametri') ? parseInt(data.ratametri) : searchValue.ratakilometri || 0
+        });
+
 
         data.hasOwnProperty('geom') && rpc.channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest',
         [data.geom, {
@@ -93,10 +98,11 @@ const VKMTrackSearch = ({
 
     const handleVKMSearch = (params) => {
         setIsSearching(true);
-        rpc.channel.searchVKMTrack([
-            params.hasOwnProperty('vkmRatanumero') && params.vkmRatanumero,
-            params.hasOwnProperty('vkmRatakilometri') && parseInt(params.vkmRatakilometri),
-            params.hasOwnProperty('vkmRatametri') && parseInt(params.vkmRatametri)
+        setError(null);
+        rpc.channel.searchVKMTrack && rpc.channel.searchVKMTrack([
+            params.hasOwnProperty('vkmRatanumero') ? params.vkmRatanumero : searchValue.ratanumero || '',
+            params.hasOwnProperty('vkmRatakilometri') ? parseInt(params.vkmRatakilometri) : searchValue.ratakilometri || 1,
+            params.hasOwnProperty('vkmRatametri') ? parseInt(params.vkmRatametri) : searchValue.ratametri || 0
         ], handleResponse, (err) => {
             setIsSearching(false);
             if(err){
@@ -110,10 +116,9 @@ const VKMTrackSearch = ({
             <>
             {
                 error &&
-                        <StyledDropdownContentItem>
-                            <StyledDropdownContentItemTitle type='noResults'>{strings.search.vkm.trackError.title}</StyledDropdownContentItemTitle>
-                            <StyledDropdownContentItemTitle>{error}</StyledDropdownContentItemTitle>
-                        </StyledDropdownContentItem>
+                <StyledDropdownContentItem>
+                <StyledDropdownContentItemTitle type='noResults'>{strings.search.vkm.trackError.title}</StyledDropdownContentItemTitle>
+            </StyledDropdownContentItem>
                 }
                 <StyledDropdownContentItem>
                     <StyledLabel htmlFor='vkm-track-number'>{strings.search.vkm.ratanumero}:</StyledLabel>
@@ -121,12 +126,16 @@ const VKMTrackSearch = ({
                         id='vkm-track-number'
                         placeholder={strings.search.vkm.ratanumero}
                         onChange={e => {
-                            setRatanumero(e.target.value);
+                            setSearchValue({
+                                ratanumero: e.target.value,
+                                ratakilometri: searchValue.ratakilometri || 1,
+                                ratametri: searchValue.ratametri || 0
+                            });
                         }}
-                        value={ratanumero || ''}
+                        value={searchValue.ratanumero || ''}
                         onKeyPress={e => {
                                 if (e.key === 'Enter') {
-                                    handleVKMSearch({vkmRatanumero: e.target.value, vkmRatakilometri: ratakilometri, vkmRatametri: ratametri});
+                                    handleVKMSearch({vkmRatanumero: e.target.value, vkmRatakilometri: searchValue.ratakilometri, vkmRatametri: searchValue.ratametri});
                                 }
                             }
                         }
@@ -138,15 +147,19 @@ const VKMTrackSearch = ({
                         id='vkm-track-kilometer'
                         placeholder={strings.search.vkm.ratakilometri}
                         onChange={e => {
-                            setRatakilometri(e.target.value);
+                            setSearchValue({
+                                ratanumero: searchValue.ratanumero,
+                                ratakilometri: e.target.value,
+                                ratametri: searchValue.ratametri
+                            });
                         }}
-                        value={ratakilometri || 1}
+                        value={searchValue.ratakilometri || 1}
                         min='1'
                         step='1'
                         type='number'
                         onKeyPress={e => {
                                 if (e.key === 'Enter') {
-                                    handleVKMSearch({vkmRatanumero: ratanumero, vkmRatakilometri: e.target.value, vkmRatametri: ratametri});
+                                    handleVKMSearch({vkmRatanumero: searchValue.ratanumero, vkmRatakilometri: e.target.value, vkmRatametri: searchValue.ratametri});
                                 }
                             }
                         }
@@ -158,15 +171,19 @@ const VKMTrackSearch = ({
                         id='vkm-track-meter'
                         placeholder={strings.search.vkm.ratametri}
                         onChange={e => {
-                            setRatametri(e.target.value);
+                            setSearchValue({
+                                ratanumero: searchValue.ratanumero,
+                                ratakilometri: searchValue.ratakilometri,
+                                ratametri: e.target.value
+                            });
                         }}
-                        value={ratametri || 0}
+                        value={searchValue.ratametri || 0}
                         min='0'
                         step='1'
                         type='number'
                         onKeyPress={e => {
                                 if (e.key === 'Enter') {
-                                    handleVKMSearch({vkmRatanumero: ratanumero, vkmRatakilometri: ratakilometri, vkmRatametri: e.target.value});
+                                    handleVKMSearch({vkmRatanumero: searchValue.ratanumero, vkmRatakilometri: searchValue.ratakilometri, vkmRatametri: e.target.value});
                                 }
                             }
                         }

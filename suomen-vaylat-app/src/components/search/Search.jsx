@@ -131,7 +131,7 @@ const StyledDropdownContentItem = styled.div`
     padding-bottom: 16px;
     border-radius: 5px;
 
-    background-color: ${props => props.itemSelected ? props.theme.colors.mainColor3 : ""};
+    background-color: ${props => props.itemSelected ? props.theme.colors.mainColor3 : ''};
     p {
         margin: 0;
         padding: 0;
@@ -139,7 +139,7 @@ const StyledDropdownContentItem = styled.div`
 `;
 
 const StyledDropdownContentItemTitle = styled.p`
-    text-align: ${props => props.type === "noResults" && "center"};
+    text-align: ${props => props.type === 'noResults' && 'center'};
     font-size: 14px;
     color: #504d4d;
 `;
@@ -163,8 +163,8 @@ const StyledHideSearchResultsButton = styled.div`
 `;
 
 const Search = () => {
-    const [searchValue, setSearchValue ] = useState("");
-    const [lastSearchValue, setLastSearchValue] = useState("");
+    const [searchValue, setSearchValue ] = useState('');
+    const [lastSearchValue, setLastSearchValue] = useState('');
     const [isSearching, setIsSearching] = useState(false);
     const [searchResults, setSearchResults] = useState(null);
     const [showSearchResults, setShowSearchResults] = useState(true);
@@ -177,6 +177,7 @@ const Search = () => {
     const { store } = useContext(ReactReduxContext);
 
     const markerId = 'SEARCH_MARKER';
+    const vectorLayerId = 'SEARCH_VECTORLAYER';
 
     const handleAddressSearch = (value) => {
         setIsSearching(true);
@@ -205,19 +206,22 @@ const Search = () => {
                 setSearchValue={setSearchValue}
                 setIsSearching={setIsSearching}
                 handleAddressSearch={handleAddressSearch}
-            />
+            />,
+            visible: true
         },
         {
             value: 'vkm',
             label: strings.search.vkm.title,
             subtitle: strings.search.vkm.subtitle,
-            content: <p>{strings.search.vkm.title}...</p>
+            content: <p>{strings.search.vkm.title}...</p>,
+            visible: channel && channel.searchVKMRoad
         },
         {
             value: 'vkmtrack',
             label: strings.search.vkm.trackTitle,
             subtitle: strings.search.vkm.trackSubtitle,
-            content: <p>{strings.search.vkm.trackTitle}...</p>
+            content: <p>{strings.search.vkm.trackTitle}...</p>,
+            visible: channel && channel.searchVKMTrack
         },
         {
             value: 'metadata',
@@ -228,7 +232,8 @@ const Search = () => {
                 setSearchValue={setSearchValue}
                 setIsSearching={setIsSearching}
                 handleMetadataSearch={handleMetadataSearch}
-            />
+            />,
+            visible: true
         }
     ];
 
@@ -321,7 +326,7 @@ const Search = () => {
                 icon={isSearchOpen ? faTimes : faSearch}
                 text={strings.tooltips.search}
                 toggleState={isSearchOpen}
-                tooltipDirection={"left"}
+                tooltipDirection={'left'}
                 clickAction={() => {
                     isSearchOpen && channel && channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', []);
                     isSearchOpen && channel && channel.postRequest('MapModulePlugin.RemoveMarkersRequest', []);
@@ -367,11 +372,17 @@ const Search = () => {
                         }
                     </StyledLeftContentWrapper>
                     {
-                      searchResults !== null && (searchValue === lastSearchValue)?
+                      (searchResults !== null && (searchValue === lastSearchValue)) ||
+                      (searchValue.tienumero && searchTypes[searchTypeIndex].value === 'vkm') ||
+                      (searchValue.ratanumero && searchTypes[searchTypeIndex].value === 'vkmtrack')?
                       <StyledSearchActionButton
                             onClick={() => {
                                 setSearchResults(null);
                                 setSearchValue('');
+                                channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [vectorLayerId + '_vkm_tie']);
+                                channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [vectorLayerId + '_vkm_osa']);
+                                channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [vectorLayerId + '_vkm_etaisyys']);
+                                channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [vectorLayerId + '_vkm_track']);
                             }}
                             icon={faTrash}
                         /> :
@@ -400,22 +411,26 @@ const Search = () => {
                     >
                         {
                             searchTypes.map((searchType, index) => {
-                                return (
-                                    <StyledDropdownContentItem
-                                        onClick={() => {
-                                            setSearchResults(null);
-                                            setSearchTypeIndex(index);
-                                            setIsSearchMethodSelectorOpen(false);
-                                            setSearchValue('');
-                                            isSearchOpen && channel && channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', []);
-                                            isSearchOpen && channel && channel.postRequest('MapModulePlugin.RemoveMarkersRequest', []);
-                                        }}
-                                        key={'search-type-' + searchType.value}
-                                    >
-                                        <StyledDropdownContentItemTitle>{searchType.label}</StyledDropdownContentItemTitle>
-                                        <StyledDropdownContentItemSubtitle>{searchType.subtitle}</StyledDropdownContentItemSubtitle>
-                                    </StyledDropdownContentItem>
-                                );
+                                if (searchType.visible) {
+                                    return (
+                                        <StyledDropdownContentItem
+                                            onClick={() => {
+                                                setSearchResults(null);
+                                                setSearchTypeIndex(index);
+                                                setIsSearchMethodSelectorOpen(false);
+                                                setSearchValue('');
+                                                isSearchOpen && channel && channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', []);
+                                                isSearchOpen && channel && channel.postRequest('MapModulePlugin.RemoveMarkersRequest', []);
+                                            }}
+                                            key={'search-type-' + searchType.value}
+                                        >
+                                            <StyledDropdownContentItemTitle>{searchType.label}</StyledDropdownContentItemTitle>
+                                            <StyledDropdownContentItemSubtitle>{searchType.subtitle}</StyledDropdownContentItemSubtitle>
+                                        </StyledDropdownContentItem>
+                                    );
+                                } else {
+                                    return null;
+                                }
                             })
                         }
                    </StyledDropDown> :
@@ -461,7 +476,7 @@ const Search = () => {
                             <StyledDropdownContentItem
                                 key={'no-results'}
                             >
-                                <StyledDropdownContentItemTitle type="noResults">{strings.search.address.error.text}</StyledDropdownContentItemTitle>
+                                <StyledDropdownContentItemTitle type='noResults'>{strings.search.address.error.text}</StyledDropdownContentItemTitle>
                             </StyledDropdownContentItem>
                         }
                     <StyledHideSearchResultsButton>
@@ -484,6 +499,8 @@ const Search = () => {
                     >
                         <VKMRoadSearch
                             setIsSearching={setIsSearching}
+                            searchValue={searchValue}
+                            setSearchValue={setSearchValue}
                         />
                         <StyledHideSearchResultsButton>
                             <FontAwesomeIcon
@@ -505,6 +522,8 @@ const Search = () => {
                     >
                         <VKMTrackSearch
                             setIsSearching={setIsSearching}
+                            searchValue={searchValue}
+                            setSearchValue={setSearchValue}
                         />
                         <StyledHideSearchResultsButton>
                             <FontAwesomeIcon
