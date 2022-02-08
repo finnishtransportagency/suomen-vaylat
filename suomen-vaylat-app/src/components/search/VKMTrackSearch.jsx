@@ -96,6 +96,10 @@ const VKMTrackSearch = ({
         }]);
     };
 
+    if (searchValue === '' && error !== null) {
+        setError(null);
+    }
+
     const handleVKMSearch = (params) => {
         removeMarkersAndFeatures();
         setIsSearching(true);

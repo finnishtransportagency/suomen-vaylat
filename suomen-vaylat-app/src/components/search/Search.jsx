@@ -160,6 +160,7 @@ const StyledHideSearchResultsButton = styled.div`
     font-size: 23px;
       color:  ${props => props.theme.colors.mainColor1}
     };
+
 `;
 
 const Search = () => {
@@ -382,7 +383,7 @@ const Search = () => {
                     {
                       (searchResults !== null && (searchValue === lastSearchValue)) ||
                       (searchValue.tienumero && searchType === 'vkm') ||
-                      (searchValue.ratanumero && searchType === 'vkmtrack')?
+                      (searchValue.ratanumero && searchType === 'vkmtrack') ?
                       <StyledSearchActionButton
                             onClick={() => {
                                 setSearchResults(null);
@@ -484,10 +485,11 @@ const Search = () => {
                                 <StyledDropdownContentItemTitle type='noResults'>{strings.search.address.error.text}</StyledDropdownContentItemTitle>
                             </StyledDropdownContentItem>
                         }
-                    <StyledHideSearchResultsButton>
+                    <StyledHideSearchResultsButton
+                        onClick={() => setShowSearchResults(false)}
+                    >
                         <FontAwesomeIcon
                             icon={faAngleUp}
-                            onClick={() => setShowSearchResults(false)}
                         />
                     </StyledHideSearchResultsButton>
                     </StyledDropDown> :
@@ -509,10 +511,11 @@ const Search = () => {
                             vectorLayerId={vectorLayerId}
                             removeMarkersAndFeatures={removeMarkersAndFeatures}
                         />
-                        <StyledHideSearchResultsButton>
+                        <StyledHideSearchResultsButton
+                            onClick={() => setShowSearchResults(false)}
+                        >
                             <FontAwesomeIcon
                                 icon={faAngleUp}
-                                onClick={() => setShowSearchResults(false)}
                             />
                         </StyledHideSearchResultsButton>
                     </StyledDropDown> :
@@ -534,10 +537,11 @@ const Search = () => {
                             vectorLayerId={vectorLayerId}
                             removeMarkersAndFeatures={removeMarkersAndFeatures}
                         />
-                        <StyledHideSearchResultsButton>
+                        <StyledHideSearchResultsButton
+                            onClick={() => setShowSearchResults(false)}
+                        >
                             <FontAwesomeIcon
                                 icon={faAngleUp}
-                                onClick={() => setShowSearchResults(false)}
                             />
                         </StyledHideSearchResultsButton>
                     </StyledDropDown> :
@@ -568,10 +572,11 @@ const Search = () => {
                             </StyledDropdownContentItem>
 
                         }
-                    <StyledHideSearchResultsButton>
+                    <StyledHideSearchResultsButton
+                        onClick={() => setShowSearchResults(false)}
+                    >
                         <FontAwesomeIcon
                             icon={faAngleUp}
-                            onClick={() => setShowSearchResults(false)}
                         />
                     </StyledHideSearchResultsButton>
                     </StyledDropDown>
