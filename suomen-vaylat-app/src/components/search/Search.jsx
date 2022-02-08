@@ -180,12 +180,14 @@ const Search = () => {
     const vectorLayerId = 'SEARCH_VECTORLAYER';
 
     const handleAddressSearch = (value) => {
+        removeMarkersAndFeatures();
         setIsSearching(true);
         channel.postRequest('SearchRequest', [value]);
         setLastSearchValue(value);
     };
 
     const handleMetadataSearch = (value) => {
+        removeMarkersAndFeatures();
         setIsSearching(true);
         channel.postRequest('MetadataSearchRequest', [{
             search: value,
@@ -509,6 +511,7 @@ const Search = () => {
                             searchValue={searchValue}
                             setSearchValue={setSearchValue}
                             vectorLayerId={vectorLayerId}
+                            removeMarkersAndFeatures={removeMarkersAndFeatures}
                         />
                         <StyledHideSearchResultsButton>
                             <FontAwesomeIcon
@@ -533,6 +536,7 @@ const Search = () => {
                             searchValue={searchValue}
                             setSearchValue={setSearchValue}
                             vectorLayerId={vectorLayerId}
+                            removeMarkersAndFeatures={removeMarkersAndFeatures}
                         />
                         <StyledHideSearchResultsButton>
                             <FontAwesomeIcon

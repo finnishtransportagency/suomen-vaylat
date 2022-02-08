@@ -86,7 +86,8 @@ const VKMRoadSearch = ({
   setIsSearching,
   searchValue,
   setSearchValue,
-  vectorLayerId
+  vectorLayerId,
+  removeMarkersAndFeatures
 }) => {
     const [error, setError] = useState(null);
     const rpc = useAppSelector((state) => state.rpc);
@@ -127,6 +128,7 @@ const VKMRoadSearch = ({
     };
 
     const handleVKMSearch = (params) => {
+        removeMarkersAndFeatures();
         setIsSearching(true);
         setError(null);
 

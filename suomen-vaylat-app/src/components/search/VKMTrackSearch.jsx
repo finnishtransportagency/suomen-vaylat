@@ -65,7 +65,8 @@ const VKMTrackSearch = ({
   setIsSearching,
   searchValue,
   setSearchValue,
-  vectorLayerId
+  vectorLayerId,
+  removeMarkersAndFeatures
 }) => {
     const [error, setError] = useState(null);
     const rpc = useAppSelector((state) => state.rpc);
@@ -96,6 +97,7 @@ const VKMTrackSearch = ({
     };
 
     const handleVKMSearch = (params) => {
+        removeMarkersAndFeatures();
         setIsSearching(true);
         setError(null);
         rpc.channel.searchVKMTrack && rpc.channel.searchVKMTrack([
