@@ -77,7 +77,7 @@ const VKMTrackSearch = ({
         let featureStyle = VKMGeoJsonStyles['track'];
         let hover = VKMGeoJsonHoverStyles['track'];
 
-        rpc.channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [vectorLayerId + '_vkm_track']);
+        rpc.channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [null, null, vectorLayerId + '_vkm_track']);
 
         setSearchValue({
             ratanumero: data.hasOwnProperty('ratanumero') ? data.ratanumero : searchValue.ratanumero || '',

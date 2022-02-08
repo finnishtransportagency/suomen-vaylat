@@ -208,7 +208,7 @@ const Search = () => {
             channel.postRequest('MapModulePlugin.RemoveMarkersRequest', [markerId]);
         });
         vectorLayerIds.forEach(vectorLayerId => {
-            channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [vectorLayerId])
+            channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [null, null, vectorLayerId])
         });
     };
 
@@ -253,23 +253,19 @@ const Search = () => {
     useEffect(() => {
         channel && channel.handleEvent('SearchResultEvent', function(data) {
             setIsSearching(false);
-            if(data.success){
+            if (data.success){
                 if(data.result){
                     setSearchResults(data);
-                } else {
-                    console.log(data);
-                };
+                }
             };
         });
 
         channel && channel.handleEvent('MetadataSearchResultEvent', function(data) {
             setIsSearching(false);
-            if(data.success){
+            if (data.success){
                 if(data.results){
                     setSearchResults(data.results);
-                } else {
-                    console.log(data);
-                };
+                }
             };
          });
 

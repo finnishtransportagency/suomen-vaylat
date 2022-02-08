@@ -105,7 +105,7 @@ const VKMRoadSearch = ({
         let hover = VKMGeoJsonHoverStyles.road[style];
 
         if (style === 'tie') {
-            rpc.channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [vectorLayerId + '_vkm_osa']);
+            rpc.channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [null, null, vectorLayerId + '_vkm_osa']);
         };
 
         setSearchValue({
