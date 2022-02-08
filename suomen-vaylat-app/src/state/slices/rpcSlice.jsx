@@ -257,6 +257,9 @@ export const rpcSlice = createSlice({
         LOG.log('setLegends to ', action.payload);
     },
     setCurrentMapCenter: (state, action) => {
+        if (state.center.x === action.payload.centerX && state.center.y === action.payload.centerY && state.currentZoomLevel === action.payload.zoom) {
+            return;
+        }
         state.center.x = action.payload.centerX;
         state.center.y = action.payload.centerY;
         state.currentZoomLevel = action.payload.zoom;
