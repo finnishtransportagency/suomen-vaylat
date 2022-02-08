@@ -134,9 +134,12 @@ const PublishedMap = () => {
                 };
 
                 if (data.getLegends) {
-                    channel.getLegends((data) => {
-                        store.dispatch(setLegends(data));
-                    });
+                    // need use global window variable to limit legend updates
+                    window.legendUpdateTimer = setTimeout(function() {
+                        store.dispatch(channel.getLegends({handler: (data) => {
+                            store.dispatch(setLegends(data));
+                        }}));
+                    }, 500);
                 };
 
                 if (data.getMapPosition) {
@@ -151,14 +154,12 @@ const PublishedMap = () => {
                 if (data.MapClickedEvent) {
                     channel.handleEvent('MapClickedEvent', (data) => {
                         store.dispatch(resetGFILocations([]));
-                        channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', []);
                         store.dispatch(setGFIPoint(data));
                     });
                 };
 
                 if (data.DataForMapLocationEvent) {
                     channel.handleEvent('DataForMapLocationEvent', (data) => {
-                        channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', []);
                         store.dispatch(setGFILocations(data));
                     });
                 };

@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { ReactReduxContext, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import {
@@ -77,7 +77,6 @@ const Switch = ({ action, layer, isSelected }) => {
 export const Layer = ({ layer, theme }) => {
 
     const { store } = useContext(ReactReduxContext);
-
     const [layerStyle, setLayerStyle] = useState(null);
 
     const {
@@ -90,10 +89,11 @@ export const Layer = ({ layer, theme }) => {
         updateLayers(store, channel);
     };
 
-    const timerRef = useRef(null);
 
     const updateLayerLegends = () => {
-        timerRef.current = setTimeout(() => {
+        // need use global window variable to limit legend updates
+        clearTimeout(window.legendUpdateTimer);
+        window.legendUpdateTimer = setTimeout(function() {
             store.dispatch(getLegends({handler: (data) => {
                 store.dispatch(setLegends(data));
             }}));
@@ -101,8 +101,8 @@ export const Layer = ({ layer, theme }) => {
     };
 
     useEffect(() => {
-        // Clear the interval when the component unmounts
-        return () => clearTimeout(timerRef.current);
+        // Clear the timeout when the component unmounts
+        return () => clearTimeout(window.legendUpdateTimer);
       }, []);
 
     const themeStyle = theme || null;
