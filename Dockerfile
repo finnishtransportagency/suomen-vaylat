@@ -60,9 +60,9 @@ FROM builder AS production-builder
 
 ARG PUBLIC_URL
 
-ENV REACT_APP_PUBLISHED_MAP_URL=https://paikkatietotest.testivaylapilvi.fi/sv-kartta/?uuid=32ec5134-3dae-403f-903b-57d035a16b6c
+ENV REACT_APP_PUBLISHED_MAP_URL=https://paikkatieto.vaylapilvi.fi/sv-kartta/?uuid=e7dbca99-68bd-4392-8d1d-c2e5098edbe7
 ENV REACT_APP_PUBLISHED_MAP_DOMAIN=https://paikkatieto.vaylapilvi.fi
-ENV REACT_APP_PROXY_URL=https://paikkatietotest.testivaylapilvi.fi/sv-kartta/
+ENV REACT_APP_PROXY_URL=https://paikkatieto.vaylapilvi.fi/sv-kartta/
 ENV REACT_APP_SITE_URL=https://paikkatieto.vaylapilvi.fi/suomen-vaylat
 ENV REACT_APP_ROUTER_PREFIX=/suomen-vaylat/
 
