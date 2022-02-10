@@ -65,8 +65,10 @@ const VKMTrackSearch = ({
   setIsSearching,
   searchValue,
   setSearchValue,
+  setLastSearchValue,
   vectorLayerId,
-  removeMarkersAndFeatures
+  removeMarkersAndFeatures,
+  setSearchResults
 }) => {
     const [error, setError] = useState(null);
     const rpc = useAppSelector((state) => state.rpc);
@@ -79,12 +81,15 @@ const VKMTrackSearch = ({
 
         rpc.channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [null, null, vectorLayerId + '_vkm_track']);
 
-        setSearchValue({
+        const value = {
             ratanumero: data.hasOwnProperty('ratanumero') ? data.ratanumero : searchValue.ratanumero || '',
             ratakilometri: data.hasOwnProperty('ratakilometri') ? parseInt(data.ratakilometri) : searchValue.ratakilometri || 1,
             ratametri: data.hasOwnProperty('ratametri') ? parseInt(data.ratametri) : searchValue.ratakilometri || 0
-        });
+        };
 
+        setSearchValue(value);
+        setLastSearchValue(value);
+        setSearchResults(data);
 
         data.hasOwnProperty('geom') && rpc.channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest',
         [data.geom, {

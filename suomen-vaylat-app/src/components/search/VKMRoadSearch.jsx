@@ -86,8 +86,10 @@ const VKMRoadSearch = ({
   setIsSearching,
   searchValue,
   setSearchValue,
+  setLastSearchValue,
   vectorLayerId,
-  removeMarkersAndFeatures
+  removeMarkersAndFeatures,
+  setSearchResults
 }) => {
     const [error, setError] = useState(null);
     const rpc = useAppSelector((state) => state.rpc);
@@ -105,20 +107,26 @@ const VKMRoadSearch = ({
         let hover = VKMGeoJsonHoverStyles.road[style];
 
         if (style === 'tie') {
-            rpc.channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [null, null, vectorLayerId + '_vkm_osa']);
+            removeMarkersAndFeatures();
         };
 
-        setSearchValue({
+        const value = {
             tienumero: data.hasOwnProperty('tie') ? parseInt(data.tie) : searchValue.tienumero || null,
             tieosa: data.hasOwnProperty('osa') ? parseInt(data.osa) : searchValue.tieosa || 'default',
             ajorata: data.hasOwnProperty('ajorata') ? parseInt(data.ajorata) : searchValue.ajorata || 'default',
             etaisyys: data.hasOwnProperty('etaisyys') ? parseInt(data.etaisyys) : searchValue.etaisyys || '',
             tieosat: data.hasOwnProperty('tieosat') ? data.tieosat: searchValue.tieosat || [],
             ajoradat: data.hasOwnProperty('ajoradat') ? data.ajoradat: searchValue.ajoradat || []
-        });
+        };
+
+        setSearchValue(value);
+        setLastSearchValue(value);
+
+        setSearchResults(data);
 
         data.hasOwnProperty('geom') && rpc.channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest',
         [data.geom, {
+            clearPrevious: true,
             centerTo: true,
             hover: hover,
             featureStyle: featureStyle,
@@ -132,7 +140,6 @@ const VKMRoadSearch = ({
     }
 
     const handleVKMSearch = (params) => {
-        removeMarkersAndFeatures();
         setIsSearching(true);
         setError(null);
 
@@ -148,6 +155,8 @@ const VKMRoadSearch = ({
             }
         });
     };
+
+    console.log(searchValue);
 
     return (
         <StyledContainer>
@@ -171,7 +180,12 @@ const VKMRoadSearch = ({
                         value={searchValue.tienumero || ''}
                         onChange={e => {
                             setSearchValue({
-                                tienumero: e.target.value
+                                tienumero: e.target.value,
+                                tieosa: 'default',
+                                ajorata: 'default',
+                                etaisyys: '',
+                                tieosat: [],
+                                ajoradat: []
                             });
                         }}
                         onKeyPress={e => {
@@ -225,7 +239,17 @@ const VKMRoadSearch = ({
                         placeholder={strings.search.vkm.etaisyys}
                         min='1'
                         type='number'
-                        defaultValue={searchValue.etaisyys || ''}
+                        onChange={e => {
+                            setSearchValue({
+                                tienumero: searchValue.tienumero,
+                                tieosa: searchValue.tieosa,
+                                ajorata: searchValue.ajorata,
+                                etaisyys: e.target.value,
+                                tieosat: searchValue.tieosat,
+                                ajoradat: searchValue.ajoradat
+                            });
+                        }}
+                        value={searchValue.etaisyys || ''}
                         disabled={!searchValue.ajoradat || (searchValue.ajoradat && !searchValue.ajoradat.length > 0)}
                         onKeyPress={e => {
                                 if (e.key === 'Enter') {
@@ -239,5 +263,4 @@ const VKMRoadSearch = ({
         </StyledContainer>
     );
 };
-
 export default VKMRoadSearch;

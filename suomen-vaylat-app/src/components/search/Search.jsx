@@ -381,9 +381,9 @@ const Search = () => {
                         }
                     </StyledLeftContentWrapper>
                     {
-                      (searchResults !== null && (searchValue === lastSearchValue)) ||
+                      (searchResults !== null && (searchValue === lastSearchValue))/* ||
                       (searchValue.tienumero && searchType === 'vkm') ||
-                      (searchValue.ratanumero && searchType === 'vkmtrack') ?
+                      (searchValue.ratanumero && searchType === 'vkmtrack')*/ ?
                       <StyledSearchActionButton
                             onClick={() => {
                                 setSearchResults(null);
@@ -508,6 +508,8 @@ const Search = () => {
                             setIsSearching={setIsSearching}
                             searchValue={searchValue}
                             setSearchValue={setSearchValue}
+                            setLastSearchValue={setLastSearchValue}
+                            setSearchResults={setSearchResults}
                             vectorLayerId={vectorLayerId}
                             removeMarkersAndFeatures={removeMarkersAndFeatures}
                         />
@@ -534,6 +536,8 @@ const Search = () => {
                             setIsSearching={setIsSearching}
                             searchValue={searchValue}
                             setSearchValue={setSearchValue}
+                            setLastSearchValue={setLastSearchValue}
+                            setSearchResults={setSearchResults}
                             vectorLayerId={vectorLayerId}
                             removeMarkersAndFeatures={removeMarkersAndFeatures}
                         />
