@@ -381,9 +381,7 @@ const Search = () => {
                         }
                     </StyledLeftContentWrapper>
                     {
-                      (searchResults !== null && (searchValue === lastSearchValue))/* ||
-                      (searchValue.tienumero && searchType === 'vkm') ||
-                      (searchValue.ratanumero && searchType === 'vkmtrack')*/ ?
+                      (searchResults !== null && (searchValue === lastSearchValue)) ?
                       <StyledSearchActionButton
                             onClick={() => {
                                 setSearchResults(null);

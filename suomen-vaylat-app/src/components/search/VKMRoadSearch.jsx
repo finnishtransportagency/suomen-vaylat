@@ -156,8 +156,6 @@ const VKMRoadSearch = ({
         });
     };
 
-    console.log(searchValue);
-
     return (
         <StyledContainer>
             <>
