@@ -451,7 +451,7 @@ const Search = () => {
                         transition={'transition'}
                     >
                         {
-                            searchResults.result.locations.length > 0 ? searchResults.result.locations.map(({ name, region, type, lon, lat, id }, index) => {
+                            searchResults.result && searchResults.result.locations && searchResults.result.locations.length > 0 ? searchResults.result.locations.map(({ name, region, type, lon, lat, id }, index) => {
                                 let visibleText;
                                 if (name === region) {
                                     visibleText = name;

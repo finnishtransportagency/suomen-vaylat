@@ -198,6 +198,7 @@
     }
   },
   "search": {
+    "required_field_missing": "Tarkista tarvittavat kentät.",
     "vkm": {
       "tie": "Tienumero",
       "title": "Tiehaku",

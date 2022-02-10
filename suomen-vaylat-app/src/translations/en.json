@@ -198,6 +198,7 @@
     }
   },
   "search": {
+    "required_field_missing": "Check the required fields.",
     "vkm": {
       "tie": "Road number",
       "title": "Road number search",
