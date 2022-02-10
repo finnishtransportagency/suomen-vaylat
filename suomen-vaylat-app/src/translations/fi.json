@@ -198,11 +198,6 @@
     }
   },
   "search": {
-    "types": {
-      "address": "Osoitehaku",
-      "vkm": "Tiehaku",
-      "metadata": "Metatietohaku"
-    },
     "vkm": {
       "tie": "Tienumero",
       "title": "Tiehaku",
@@ -211,7 +206,7 @@
       "ajorata": "Ajorata",
       "etaisyys": "Etäisyys (m)",
       "error": {
-        "title": "Tiehaku epäonnistui"
+        "text": "Tuloksia ei löytynyt tiehaulla."
       },
       "sijaintiraide": "Sijaintiraide",
       "kuvaus": "Kuvaus",
@@ -222,7 +217,7 @@
       "trackTitle": "Ratahaku",
       "trackSubtitle": "Hae ratatietoja",
       "trackError": {
-        "title": "Ratahaku epäonnistui"
+        "text": "Tuloksia ei löytynyt ratahaulla."
       }
     },
     "address": {
@@ -230,16 +225,14 @@
       "subtitle": "Hae osoitteella, kunnan nimellä tai kiinteistötunnuksella",
       "address": "Opastinsilta 12 Helsinki",
       "error": {
-        "title": "Osoitehaku",
-        "text": "Tuloksia ei löytynyt osoitehaulla."
+        "text": "Tuloksia ei löytynyt paikkahaulla."
       }
     },
     "metadata": {
       "title": "Metatietohaku",
       "subtitle": "Hea metatiedolla",
       "error": {
-          "title": "Metatietohaku epäonnistui",
-          "text": "Tuloksia ei löytynyt metatietohaulla"
+          "text": "Tuloksia ei löytynyt metatietohaulla."
       }
     }
   },

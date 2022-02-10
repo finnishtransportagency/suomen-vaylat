@@ -127,7 +127,7 @@ const VKMTrackSearch = ({
             {
                 error &&
                 <StyledDropdownContentItem>
-                <StyledDropdownContentItemTitle type='noResults'>{strings.search.vkm.trackError.title}</StyledDropdownContentItemTitle>
+                <StyledDropdownContentItemTitle type='noResults'>{strings.search.vkm.trackError.text}</StyledDropdownContentItemTitle>
             </StyledDropdownContentItem>
                 }
                 <StyledDropdownContentItem>

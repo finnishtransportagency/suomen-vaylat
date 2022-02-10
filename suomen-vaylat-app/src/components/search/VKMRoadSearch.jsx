@@ -162,7 +162,7 @@ const VKMRoadSearch = ({
             {
                 error &&
                         <StyledDropdownContentItem>
-                            <StyledDropdownContentItemTitle type='noResults'>{strings.search.vkm.error.title}</StyledDropdownContentItemTitle>
+                            <StyledDropdownContentItemTitle type='noResults'>{strings.search.vkm.error.text}</StyledDropdownContentItemTitle>
                         </StyledDropdownContentItem>
                 }
                 <StyledDropdownContentItem>
