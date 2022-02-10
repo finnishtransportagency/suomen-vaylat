@@ -154,7 +154,7 @@ export const Header = () => {
     const setToMainScreen = () => {
         // remove all selected layers
         selectedLayers.forEach((layer) => {
-            channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, false]);
+            channel && channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, false]);
         });
 
         // set map center
@@ -166,13 +166,16 @@ export const Header = () => {
 
         // add start layers
         startState.selectedLayers.forEach((layerId) => {
-            channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layerId, true]);
+            channel && channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layerId, true]);
         });
 
         store.dispatch(setIsMainScreen());
         handleSelectGroup(null, lastSelectedTheme);
 
-        updateLayers(store, channel)
+        updateLayers(store, channel);
+
+        // Remove all features from map
+        channel && channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', []);
     };
 
     return (
@@ -196,7 +199,7 @@ export const Header = () => {
                         }
                         target="_blank"
                         rel="noreferrer">
-                        {  
+                        {
                             lang.current === 'fi' ? <VaylaLogoFi /> :
                             lang.current === 'en' ? <VaylaLogoEn /> :
                             lang.current === 'sv' ? <VaylaLogoSv /> : <VaylaLogoFi />

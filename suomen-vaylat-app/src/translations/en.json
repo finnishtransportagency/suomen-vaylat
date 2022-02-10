@@ -198,11 +198,7 @@
     }
   },
   "search": {
-    "types": {
-      "address": "Address search",
-      "vkm": "Road search",
-      "metadata": "Metadata search"
-    },
+    "required_field_missing": "Check the required fields.",
     "vkm": {
       "tie": "Road number",
       "title": "Road number search",
@@ -211,7 +207,7 @@
       "ajorata": "Carriageway",
       "etaisyys": "Distance (m)",
       "error": {
-        "title": "Road search failed"
+        "text": "No results were found for the road search."
       },
       "sijaintiraide": "Sijaintiraide",
       "kuvaus": "Kuvaus",
@@ -222,7 +218,7 @@
       "trackTitle": "Ratahaku",
       "trackSubtitle": "Hae ratatietoja",
       "trackError": {
-        "title": "Ratahaku epäonnistui"
+        "text": "No results were found for the track search."
       }
     },
     "address": {
@@ -230,16 +226,14 @@
       "subtitle": "Search by address, municipality or property identifier",
       "address": "Opastinsilta 12 Helsinki",
       "error": {
-        "title": "Address search",
-        "text": "No results were found for the address search."
+        "text": "No results were found for the place search."
       }
     },
     "metadata": {
       "title": "Search metadata",
       "subtitle": "Search by metadata",
       "error": {
-          "title": "Metadata search failed",
-          "text": "No results found for the metadata search"
+          "text": "No results found for the metadata search."
       }
     }
   },
