@@ -78,6 +78,7 @@ export const Layer = ({ layer, theme }) => {
 
     const { store } = useContext(ReactReduxContext);
     const [layerStyle, setLayerStyle] = useState(null);
+    const [themeSelected, setThemeSelected] = useState(false);
 
     const {
         channel,
@@ -97,7 +98,7 @@ export const Layer = ({ layer, theme }) => {
             store.dispatch(getLegends({handler: (data) => {
                 store.dispatch(setLegends(data));
             }}));
-        }, 500);
+        }, 1000);
     };
 
     useEffect(() => {
@@ -107,7 +108,12 @@ export const Layer = ({ layer, theme }) => {
 
     const themeStyle = theme || null;
 
-    if (layer.visible) {
+    if (selectedTheme && selectedTheme.name && themeSelected === false) {
+        setThemeSelected(true);
+    }
+
+    // needs only get new style or legends when toggling theme selection
+    if (layer.visible && themeSelected) {
         channel.getLayerThemeStyle([layer.id, (selectedTheme && selectedTheme.name) ? selectedTheme.name : null], function(styleName) {
             if (styleName && styleName !== layerStyle) {
                 setLayerStyle(styleName);

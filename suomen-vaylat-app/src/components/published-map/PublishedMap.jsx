@@ -136,9 +136,9 @@ const PublishedMap = () => {
                 if (data.getLegends) {
                     // need use global window variable to limit legend updates
                     window.legendUpdateTimer = setTimeout(function() {
-                        store.dispatch(channel.getLegends({handler: (data) => {
+                        channel.getLegends(function(data) {
                             store.dispatch(setLegends(data));
-                        }}));
+                        });
                     }, 500);
                 };
 
