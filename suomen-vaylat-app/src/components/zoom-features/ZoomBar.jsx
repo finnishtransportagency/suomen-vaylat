@@ -68,7 +68,8 @@ const StyledZoomBarSlider = styled.input`
     //outline: none;
     //transform: rotate(90deg);
     pointer-events: auto;
-    
+    cursor: pointer;
+    opacity: 0;
 `;
 
 const StyledZoombarCircles = styled(motion.div)`
@@ -76,11 +77,12 @@ const StyledZoombarCircles = styled(motion.div)`
     overflow: hidden;
     display: flex;
     flex-direction: column-reverse;
+    width: 100%;
 `;
 
 const listVariants = {
     visible: {
-        height: 'auto'
+        height: 'auto',
     },
     hidden: {
         height: 2
@@ -88,11 +90,12 @@ const listVariants = {
 };
 
 const ZoomBar = ({
+    setHoveringIndex,
+    hoveringIndex,
     zoomLevelsLayers,
     currentZoomLevel,
     isExpanded,
     setIsExpanded,
-    setHoveringIndex
 }) => {
     const { store } = useContext(ReactReduxContext);
     const rpc = useAppSelector((state) => state.rpc);
@@ -137,17 +140,26 @@ const ZoomBar = ({
                                 index={index}
                                 layer={layer}
                                 zoomLevel={currentZoomLevel}
+                                hoveringIndex={hoveringIndex}
                                 setHoveringIndex={setHoveringIndex}
+                                isActive={parseInt(index) === parseInt(hoveringIndex)}
                             />
                         })}
                             <StyledZoomBarSlider
                                 type="range"
                                 orient="vertical"
                                 max="13"
+                                value={hoveringIndex}
                                 onChange={e => {
-                                    store.dispatch(setZoomTo(e.target.value))}
-                                    //console.log(e.target.value)
-                                }
+                                    setHoveringIndex(e.target.value);
+                                    //store.dispatch(setZoomTo(e.target.value))
+                                }}
+                                onMouseUp={e => {
+                                    store.dispatch(setZoomTo(e.target.value))
+                                }}
+                                onTouchEnd={e => {
+                                    store.dispatch(setZoomTo(e.target.value))
+                                }}
                             />
                         </StyledZoombarCircles>
                         <CircleButton
