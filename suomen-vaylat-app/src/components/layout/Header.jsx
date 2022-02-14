@@ -17,6 +17,7 @@ import { ReactComponent as VaylaLogoEn } from './images/vayla_sivussa_en_white.s
 import { ReactComponent as VaylaLogoFi } from './images/vayla_sivussa_fi_white.svg';
 import { ReactComponent as VaylaLogoSv } from './images/vayla_sivussa_sv_white.svg';
 import { updateLayers } from '../../utils/rpcUtil';
+import {Route} from "react-router-dom";
 
 const StyledHeaderContainer = styled.div`
     height: 64px;
@@ -170,6 +171,20 @@ export const Header = () => {
         });
 
         store.dispatch(setIsMainScreen());
+        console.log("meni tästä")
+        console.log("window.historyjee ", window.history)
+        console.log("window ", window)
+        // window.history.pushState({},
+        //     "", "/");
+
+        // window.history.pushState(null,"index",'/')
+        // window.history.replaceState(null, document.title, "/")
+        // window.location.href = '/'
+        // window.location.hash = "/";
+        console.log("this ", this)
+        // this.props.history.replace({ pathname: '/'})
+        // var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname;
+        // window.history.pushState({path:newurl},'',newurl);
         handleSelectGroup(null, lastSelectedTheme);
 
         updateLayers(store, channel)
@@ -185,7 +200,9 @@ export const Header = () => {
                     <span>{strings.tooltips.showUserGuide}</span>
                 </ReactTooltip>
                 <StyledHeaderTitleContainer onClick={() => setToMainScreen()}>
+                    <Route exact path="/">
                         {strings.title}
+                    </Route>
                 </StyledHeaderTitleContainer>
                 <StyledHeaderLogoContainer>
                     <a
