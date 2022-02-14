@@ -1,6 +1,6 @@
 # Release Notes
 
-## 0.4.0
+## 1.0.0
 
 For a full list of changes see: https://github.com/finnishtransportagency/suomen-vaylat/milestone/3?closed=1
 

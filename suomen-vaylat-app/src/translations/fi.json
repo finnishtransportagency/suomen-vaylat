@@ -198,11 +198,7 @@
     }
   },
   "search": {
-    "types": {
-      "address": "Osoitehaku",
-      "vkm": "Tiehaku",
-      "metadata": "Metatietohaku"
-    },
+    "required_field_missing": "Tarkista tarvittavat kentät.",
     "vkm": {
       "tie": "Tienumero",
       "title": "Tiehaku",
@@ -211,8 +207,18 @@
       "ajorata": "Ajorata",
       "etaisyys": "Etäisyys (m)",
       "error": {
-        "title": "Tiehaku epäonnistui",
-        "text": "Tarkista seuraavat virheet:"
+        "text": "Tuloksia ei löytynyt tiehaulla."
+      },
+      "sijaintiraide": "Sijaintiraide",
+      "kuvaus": "Kuvaus",
+      "tyyppi": "Tyyppi",
+      "ratanumero": "Ratanumero",
+      "ratakilometri": "Ratakilometri",
+      "ratametri": "Ratametri",
+      "trackTitle": "Ratahaku",
+      "trackSubtitle": "Hae ratatietoja",
+      "trackError": {
+        "text": "Tuloksia ei löytynyt ratahaulla."
       }
     },
     "address": {
@@ -220,16 +226,14 @@
       "subtitle": "Hae osoitteella, kunnan nimellä tai kiinteistötunnuksella",
       "address": "Opastinsilta 12 Helsinki",
       "error": {
-        "title": "Osoitehaku",
-        "text": "Tuloksia ei löytynyt osoitehaulla."
+        "text": "Tuloksia ei löytynyt paikkahaulla."
       }
     },
     "metadata": {
       "title": "Metatietohaku",
       "subtitle": "Hea metatiedolla",
       "error": {
-          "title": "Metatietohaku epäonnistui",
-          "text": "Tuloksia ei löytynyt metatietohaulla"
+          "text": "Tuloksia ei löytynyt metatietohaulla."
       }
     }
   },
@@ -286,7 +290,7 @@
     },
     "6": {
       "title": "Verkkoselostus",
-      "description": "-"
+      "description": "Verkkoselostuksen karttapalvelussa voi tarkastella rataverkon ominaisuustietoja, kuten sähköistystä ja liikennepaikkojen tietoja. Tiedot perustuvat ratarekisteritietoihin ja ERAan toimitettaviin RINF-tietoihin."
     }
   },
   "metadata": {

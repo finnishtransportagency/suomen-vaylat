@@ -12,7 +12,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import AddressSearch from './AddressSearch';
-import VKMSearch from './VKMSearch';
+import VKMRoadSearch from './VKMRoadSearch';
 import MetadataSearch from './MetadataSearch';
 import Layer from '../menus/hierarchical-layerlist/Layer';
 import SvLoder from '../loader/SvLoader';
@@ -28,6 +28,7 @@ import {
 import { setIsSearchOpen } from '../../state/slices/uiSlice';
 
 import CircleButton from '../circle-button/CircleButton';
+import VKMTrackSearch from './VKMTrackSearch';
 
 const StyledSearchContainer = styled.div`
     z-index: 2;
@@ -130,7 +131,7 @@ const StyledDropdownContentItem = styled.div`
     padding-bottom: 16px;
     border-radius: 5px;
 
-    background-color: ${props => props.itemSelected ? props.theme.colors.mainColor3 : ""};
+    background-color: ${props => props.itemSelected ? props.theme.colors.mainColor3 : ''};
     p {
         margin: 0;
         padding: 0;
@@ -138,7 +139,7 @@ const StyledDropdownContentItem = styled.div`
 `;
 
 const StyledDropdownContentItemTitle = styled.p`
-    text-align: ${props => props.type === "noResults" && "center"};
+    text-align: ${props => props.type === 'noResults' && 'center'};
     font-size: 14px;
     color: #504d4d;
 `;
@@ -157,18 +158,19 @@ const StyledHideSearchResultsButton = styled.div`
     cursor: pointer;
     svg {
     font-size: 23px;
-      color:  ${props => props.theme.colors.mainColor1}  
+      color:  ${props => props.theme.colors.mainColor1}
     };
+
 `;
 
 const Search = () => {
-    const [searchValue, setSearchValue ] = useState("");
-    const [lastSearchValue, setLastSearchValue] = useState("");
+    const [searchValue, setSearchValue ] = useState('');
+    const [lastSearchValue, setLastSearchValue] = useState('');
     const [isSearching, setIsSearching] = useState(false);
     const [searchResults, setSearchResults] = useState(null);
     const [showSearchResults, setShowSearchResults] = useState(true);
     const [isSearchMethodSelectorOpen, setIsSearchMethodSelectorOpen] = useState(false);
-    const [searchTypeIndex, setSearchTypeIndex] = useState(0);
+    const [searchType, setSearchType] = useState('address');
 
     const { isSearchOpen } = useAppSelector((state) => state.ui);
     const { channel, allLayers } = useAppSelector((state) => state.rpc);
@@ -176,14 +178,17 @@ const Search = () => {
     const { store } = useContext(ReactReduxContext);
 
     const markerId = 'SEARCH_MARKER';
+    const vectorLayerId = 'SEARCH_VECTORLAYER';
 
     const handleAddressSearch = (value) => {
+        removeMarkersAndFeatures();
         setIsSearching(true);
         channel.postRequest('SearchRequest', [value]);
         setLastSearchValue(value);
     };
 
     const handleMetadataSearch = (value) => {
+        removeMarkersAndFeatures();
         setIsSearching(true);
         channel.postRequest('MetadataSearchRequest', [{
             search: value,
@@ -193,10 +198,24 @@ const Search = () => {
         setLastSearchValue(value);
     };
 
+    const markerIds = [markerId];
+    const vectorLayerIds = [vectorLayerId + '_vkm_tie', vectorLayerId + '_vkm_osa', vectorLayerId + '_vkm_etaisyys', vectorLayerId + '_vkm_track'];
 
-    const searchTypes = [
-        {
-            value: 'address',
+    const removeMarkersAndFeatures = () => {
+        if (!channel) {
+            return;
+        }
+        markerIds.forEach(markerId => {
+            channel.postRequest('MapModulePlugin.RemoveMarkersRequest', [markerId]);
+        });
+        vectorLayerIds.forEach(vectorLayerId => {
+            channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [null, null, vectorLayerId])
+        });
+    };
+
+
+    const searchTypes = {
+        address: {
             label: strings.search.address.title,
             subtitle: strings.search.address.subtitle,
             content: <AddressSearch
@@ -204,16 +223,22 @@ const Search = () => {
                 setSearchValue={setSearchValue}
                 setIsSearching={setIsSearching}
                 handleAddressSearch={handleAddressSearch}
-            />
+            />,
+            visible: true
         },
-        {
-            value: 'vkm',
+        vkm: {
             label: strings.search.vkm.title,
             subtitle: strings.search.vkm.subtitle,
-            content: <p>{strings.search.vkm.title}...</p>
+            content: <p>{strings.search.vkm.title}...</p>,
+            visible: channel && channel.searchVKMRoad
         },
-        {
-            value: 'metadata',
+        vkmtrack: {
+            label: strings.search.vkm.trackTitle,
+            subtitle: strings.search.vkm.trackSubtitle,
+            content: <p>{strings.search.vkm.trackTitle}...</p>,
+            visible: channel && channel.searchVKMTrack
+        },
+        metadata: {
             label: strings.search.metadata.title,
             subtitle: strings.search.metadata.subtitle,
             content: <MetadataSearch
@@ -221,30 +246,27 @@ const Search = () => {
                 setSearchValue={setSearchValue}
                 setIsSearching={setIsSearching}
                 handleMetadataSearch={handleMetadataSearch}
-            />
+            />,
+            visible: true
         }
-    ];
+    };
 
     useEffect(() => {
         channel && channel.handleEvent('SearchResultEvent', function(data) {
             setIsSearching(false);
-            if(data.success){
+            if (data.success){
                 if(data.result){
                     setSearchResults(data);
-                } else {
-                    console.log(data);
-                };
+                }
             };
         });
 
         channel && channel.handleEvent('MetadataSearchResultEvent', function(data) {
             setIsSearching(false);
-            if(data.success){
+            if (data.success){
                 if(data.results){
                     setSearchResults(data.results);
-                } else {
-                    console.log(data);
-                };
+                }
             };
          });
 
@@ -255,13 +277,55 @@ const Search = () => {
             x: lon,
             y: lat,
             msg: name || '',
-            markerId: markerId,
+            markerId: markerId
         }));
 
         store.dispatch(mapMoveRequest({
             x: lon,
             y: lat
         }));
+    };
+
+    const variants = {
+        initial: {
+            maxWidth: 0,
+            opacity: 0,
+            filter: 'blur(10px)'
+        },
+        animate: {
+            maxWidth: '400px',
+            opacity: 1,
+            filter: 'blur(0px)'
+        },
+        exit: {
+            maxWidth: 0,
+            opacity: 0,
+            filter: 'blur(10px)'
+        },
+        transition: {
+            duration: 0.3,
+            type: 'tween'
+        }
+    };
+
+    const dropdownVariants = {
+        initial: {
+            height: 0,
+            opacity: 0
+        },
+        animate: {
+            height: 'auto',
+            maxHeight: 'calc(var(--app-height) - 100px)',
+            opacity: 1
+        },
+        exit: {
+            height: 0,
+            opacity: 0
+        },
+        transition: {
+            duration: 0.5,
+            type: 'tween'
+        }
     };
 
     return (
@@ -272,39 +336,24 @@ const Search = () => {
                 icon={isSearchOpen ? faTimes : faSearch}
                 text={strings.tooltips.search}
                 toggleState={isSearchOpen}
-                tooltipDirection={"left"}
+                tooltipDirection={'left'}
                 clickAction={() => {
-                    isSearchOpen && channel && channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', []);
-                    isSearchOpen && channel && channel.postRequest('MapModulePlugin.RemoveMarkersRequest', []);
+                    isSearchOpen && removeMarkersAndFeatures();
                     isSearchOpen && setSearchResults(null);
                     isSearchOpen && setSearchValue('');
                     store.dispatch(setIsSearchOpen(!isSearchOpen));
                     isSearchMethodSelectorOpen && setIsSearchMethodSelectorOpen(false);
-                    setSearchTypeIndex(0);
+                    setSearchType('address');
                 }}
             />
             <AnimatePresence>
                 {
                 isSearchOpen && <StyledSearchWrapper
-                    initial={{
-                        maxWidth: 0,
-                        opacity: 0,
-                        filter: "blur(10px)"
-                    }}
-                    animate={{
-                        maxWidth: "400px",
-                        opacity: 1,
-                        filter: "blur(0px)"
-                    }}
-                    exit={{
-                        maxWidth: 0,
-                        opacity: 0,
-                        filter: "blur(10px)"
-                    }}
-                    transition={{
-                        duration: 0.3,
-                        type: "tween"
-                    }}
+                variants={variants}
+                    initial={'initial'}
+                    animate={'animate'}
+                    exit={'exit'}
+                    transition={'transition'}
                 >
                     <StyledLeftContentWrapper>
                         <StyledSearchMethodSelector
@@ -326,27 +375,28 @@ const Search = () => {
                                     }}
                                 >
                                     {
-                                        searchTypes[searchTypeIndex].content
+                                        searchTypes[searchType].content
                                     }
                                 </StyledSelectedSearchMethod> : <SvLoder />
                         }
                     </StyledLeftContentWrapper>
                     {
-                      searchResults !== null && (searchValue === lastSearchValue)?
+                      (searchResults !== null && (searchValue === lastSearchValue)) ?
                       <StyledSearchActionButton
                             onClick={() => {
                                 setSearchResults(null);
                                 setSearchValue('');
+                                removeMarkersAndFeatures();
                             }}
                             icon={faTrash}
                         /> :
                         <StyledSearchActionButton
                             onClick={() => {
-                                searchTypes[searchTypeIndex].value === 'address' && handleAddressSearch(searchValue);
-                                searchTypes[searchTypeIndex].value === 'metadata' && handleMetadataSearch(searchValue);
+                                searchType === 'address' && handleAddressSearch(searchValue);
+                                searchType === 'metadata' && handleMetadataSearch(searchValue);
                             }}
                             icon={faSearch}
-                        /> 
+                        />
                     }
 
                  </StyledSearchWrapper>
@@ -356,72 +406,52 @@ const Search = () => {
                 {
                     isSearchMethodSelectorOpen ?
                     <StyledDropDown
-                        key={"dropdown-content-searchmethods"}
-                        initial={{
-                            height: 0,
-                            opacity: 0
-                        }}
-                        animate={{
-                            height: "auto",
-                            maxHeight: "calc(var(--app-height) - 100px)",
-                            opacity: 1
-                        }}
-                        exit={{
-                            height: 0,
-                            opacity: 0
-                        }}
-                        transition={{
-                            duration: 0.5,
-                            type: "tween"
-                        }}
+                        key={'dropdown-content-searchmethods'}
+                        variants={dropdownVariants}
+                        initial={'initial'}
+                        animate={'animate'}
+                        exit={'exit'}
+                        transition={'transition'}
                     >
                         {
-                            searchTypes.map((searchType, index) => {
-                                return (
-                                    <StyledDropdownContentItem
-                                        onClick={() => {
-                                            setSearchResults(null);
-                                            setSearchTypeIndex(index);
-                                            setIsSearchMethodSelectorOpen(false);
-                                            setSearchValue('');
-                                            isSearchOpen && channel && channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', []);
-                                            isSearchOpen && channel && channel.postRequest('MapModulePlugin.RemoveMarkersRequest', []);
-                                        }}
-                                        key={'search-type-' + searchType.value}
-                                    >
-                                        <StyledDropdownContentItemTitle>{searchType.label}</StyledDropdownContentItemTitle>
-                                        <StyledDropdownContentItemSubtitle>{searchType.subtitle}</StyledDropdownContentItemSubtitle>
-                                    </StyledDropdownContentItem>
-                                );
+                            Object.keys(searchTypes).map((searchType) => {
+                                const type = searchTypes[searchType];
+                                if (type.visible) {
+                                    return (
+                                        <StyledDropdownContentItem
+                                            onClick={() => {
+                                                setSearchResults(null);
+                                                setSearchType(searchType);
+                                                setIsSearchMethodSelectorOpen(false);
+                                                setSearchValue('');
+                                                isSearchOpen && removeMarkersAndFeatures();
+                                            }}
+                                            key={'search-type-' + searchType}
+                                        >
+                                            <StyledDropdownContentItemTitle>{type.label}</StyledDropdownContentItemTitle>
+                                            <StyledDropdownContentItemSubtitle>{type.subtitle}</StyledDropdownContentItemSubtitle>
+                                        </StyledDropdownContentItem>
+                                    );
+                                } else {
+                                    return null;
+                                }
                             })
                         }
                    </StyledDropDown> :
                     isSearchOpen &&
                     searchResults !== null &&
                     showSearchResults &&
-                    searchTypes[searchTypeIndex].value === 'address' ?
+                    searchType === 'address' ?
                     <StyledDropDown
-                        key={"dropdown-content-address"}
-                        initial={{
-                            height: 0,
-                            opacity: 0
-                        }}
-                        animate={{
-                            height: "auto",
-                            maxHeight: "calc(var(--app-height) - 100px)",
-                            opacity: 1
-                        }}
-                        exit={{
-                            height: 0,
-                            opacity: 0
-                        }}
-                        transition={{
-                            duration: 0.5,
-                            type: "tween"
-                        }}
+                        key={'dropdown-content-address'}
+                        variants={dropdownVariants}
+                        initial={'initial'}
+                        animate={'animate'}
+                        exit={'exit'}
+                        transition={'transition'}
                     >
                         {
-                            searchResults.result.locations.length > 0 ? searchResults.result.locations.map(({ name, region, type, lon, lat, id }, index) => {
+                            searchResults.result && searchResults.result.locations && searchResults.result.locations.length > 0 ? searchResults.result.locations.map(({ name, region, type, lon, lat, id }, index) => {
                                 let visibleText;
                                 if (name === region) {
                                     visibleText = name;
@@ -450,72 +480,85 @@ const Search = () => {
                             <StyledDropdownContentItem
                                 key={'no-results'}
                             >
-                                <StyledDropdownContentItemTitle type="noResults">{strings.search.address.error.text}</StyledDropdownContentItemTitle>
+                                <StyledDropdownContentItemTitle type='noResults'>{strings.search.address.error.text}</StyledDropdownContentItemTitle>
                             </StyledDropdownContentItem>
-                        } 
-                    <StyledHideSearchResultsButton>
+                        }
+                    <StyledHideSearchResultsButton
+                        onClick={() => setShowSearchResults(false)}
+                    >
                         <FontAwesomeIcon
                             icon={faAngleUp}
-                            onClick={() => setShowSearchResults(false)}
                         />
                     </StyledHideSearchResultsButton>
                     </StyledDropDown> :
                     isSearchOpen &&
                     showSearchResults &&
-                    searchTypes[searchTypeIndex].value === 'vkm' ?
+                    searchType === 'vkm' ?
                     <StyledDropDown
-                        key={"dropdown-content-vkm"}
-                        initial={{
-                            height: 0,
-                            opacity: 0
-                        }}
-                        animate={{
-                            height: "auto",
-                            maxHeight: "calc(var(--app-height) - 100px)",
-                            opacity: 1
-                        }}
-                        exit={{
-                            height: 0,
-                            opacity: 0
-                        }}
-                        transition={{
-                            duration: 0.5,
-                            type: "tween"
-                        }}
+                        key={'dropdown-content-vkm'}
+                        variants={dropdownVariants}
+                        initial={'initial'}
+                        animate={'animate'}
+                        exit={'exit'}
+                        transition={'transition'}
                     >
-                        <VKMSearch
+                        <VKMRoadSearch
                             setIsSearching={setIsSearching}
+                            searchValue={searchValue}
+                            setSearchValue={setSearchValue}
+                            setLastSearchValue={setLastSearchValue}
+                            setSearchResults={setSearchResults}
+                            vectorLayerId={vectorLayerId}
+                            removeMarkersAndFeatures={removeMarkersAndFeatures}
                         />
-                        <StyledHideSearchResultsButton>
+                        <StyledHideSearchResultsButton
+                            onClick={() => setShowSearchResults(false)}
+                        >
                             <FontAwesomeIcon
                                 icon={faAngleUp}
-                                onClick={() => setShowSearchResults(false)}
                             />
                         </StyledHideSearchResultsButton>
-                    </StyledDropDown> : 
+                    </StyledDropDown> :
+                    isSearchOpen &&
+                    showSearchResults &&
+                    searchType === 'vkmtrack' ?
+                    <StyledDropDown
+                        key={'dropdown-content-vkmtrack'}
+                        variants={dropdownVariants}
+                        initial={'initial'}
+                        animate={'animate'}
+                        exit={'exit'}
+                        transition={'transition'}
+                    >
+                        <VKMTrackSearch
+                            setIsSearching={setIsSearching}
+                            searchValue={searchValue}
+                            setSearchValue={setSearchValue}
+                            setLastSearchValue={setLastSearchValue}
+                            setSearchResults={setSearchResults}
+                            vectorLayerId={vectorLayerId}
+                            removeMarkersAndFeatures={removeMarkersAndFeatures}
+                        />
+                        <StyledHideSearchResultsButton
+                            onClick={() => setShowSearchResults(false)}
+                        >
+                            <FontAwesomeIcon
+                                icon={faAngleUp}
+                            />
+                        </StyledHideSearchResultsButton>
+                    </StyledDropDown> :
+
                     isSearchOpen &&
                     searchResults !== null &&
                     showSearchResults &&
-                    searchTypes[searchTypeIndex].value === 'metadata' &&
+                    searchType === 'metadata' &&
                     <StyledDropDown
-                        key={"dropdown-content-metadata"}
-                        initial={{
-                            height: 0,
-                            opacity: 0
-                        }}
-                        animate={{
-                            height: "auto",
-                            maxHeight: "calc(var(--app-height) - 100px)",
-                            opacity: 1
-                        }}
-                        exit={{
-                            height: 0,
-                            opacity: 0
-                        }}
-                        transition={{
-                            duration: 0.5,
-                            type: "tween"
-                        }}
+                        key={'dropdown-content-metadata'}
+                        variants={dropdownVariants}
+                        initial={'initial'}
+                        animate={'animate'}
+                        exit={'exit'}
+                        transition={'transition'}
                     >
                         {
                             searchResults.length > 0 ? searchResults.map(result => {
@@ -523,18 +566,19 @@ const Search = () => {
                                 return layers.map(layer => {
                                     return <Layer key={`metadata_${layer.id}`}layer={layer}/>
                                 })
-                            }) : 
+                            }) :
                             <StyledDropdownContentItem
                                 key={'no-results'}
                             >
-                                <StyledDropdownContentItemTitle type="noResults">{strings.search.metadata.error.text}</StyledDropdownContentItemTitle>
+                                <StyledDropdownContentItemTitle type='noResults'>{strings.search.metadata.error.text}</StyledDropdownContentItemTitle>
                             </StyledDropdownContentItem>
 
                         }
-                    <StyledHideSearchResultsButton>
+                    <StyledHideSearchResultsButton
+                        onClick={() => setShowSearchResults(false)}
+                    >
                         <FontAwesomeIcon
                             icon={faAngleUp}
-                            onClick={() => setShowSearchResults(false)}
                         />
                     </StyledHideSearchResultsButton>
                     </StyledDropDown>

@@ -151,10 +151,7 @@ export const Legend = ({
                 {legends.map((legend, index) => {
                     const zoomLevelLayer = currentLayersInfoLayers.find((layer) => layer.id === legend.layerId);
                     return zoomLevelLayer && <LegendGroup
-                        key={currentZoomLevel !== null ?
-                            legend.layerId+'_'+currentZoomLevel :
-                            legend.layerId+'_'+currentZoomLevel
-                        }
+                        key={'legend-group-' + legend.layerId}
                         legend={legend}
                         zoomLevelLayer={zoomLevelLayer}
                         index={index}
