@@ -17,7 +17,7 @@ import { ReactComponent as VaylaLogoEn } from './images/vayla_sivussa_en_white.s
 import { ReactComponent as VaylaLogoFi } from './images/vayla_sivussa_fi_white.svg';
 import { ReactComponent as VaylaLogoSv } from './images/vayla_sivussa_sv_white.svg';
 import { updateLayers } from '../../utils/rpcUtil';
-import { createBrowserHistory } from "history";
+import { createBrowserHistory } from 'history';
 const history = createBrowserHistory();
 
 const StyledHeaderContainer = styled.div`
