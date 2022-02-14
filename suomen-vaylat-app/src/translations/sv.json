@@ -290,7 +290,7 @@
     },
     "6": {
       "title": "Beskrivning av bannätet",
-      "description": "-"
+      "description": "Verkkoselostuksen karttapalvelussa voi tarkastella rataverkon ominaisuustietoja, kuten sähköistystä ja liikennepaikkojen tietoja. Tiedot perustuvat ratarekisteritietoihin ja ERAan toimitettaviin RINF-tietoihin."
     }
   },
   "metadata": {
