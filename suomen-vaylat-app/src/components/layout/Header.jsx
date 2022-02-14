@@ -154,6 +154,10 @@ export const Header = () => {
     };
 
     const setToMainScreen = () => {
+        let routerPrefix = '/';
+        if (process.env.REACT_APP_ROUTER_PREFIX) {
+            routerPrefix = process.env.REACT_APP_ROUTER_PREFIX;
+        }
         // remove all selected layers
         selectedLayers.forEach((layer) => {
             channel && channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, false]);
@@ -172,7 +176,7 @@ export const Header = () => {
         });
 
         store.dispatch(setIsMainScreen());
-        history.push('/');
+        history.push(routerPrefix);
         handleSelectGroup(null, lastSelectedTheme);
 
         updateLayers(store, channel);
