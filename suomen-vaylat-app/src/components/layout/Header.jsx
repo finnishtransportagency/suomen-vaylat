@@ -17,6 +17,8 @@ import { ReactComponent as VaylaLogoEn } from './images/vayla_sivussa_en_white.s
 import { ReactComponent as VaylaLogoFi } from './images/vayla_sivussa_fi_white.svg';
 import { ReactComponent as VaylaLogoSv } from './images/vayla_sivussa_sv_white.svg';
 import { updateLayers } from '../../utils/rpcUtil';
+import { createBrowserHistory } from "history";
+const history = createBrowserHistory();
 
 const StyledHeaderContainer = styled.div`
     height: 64px;
@@ -170,6 +172,7 @@ export const Header = () => {
         });
 
         store.dispatch(setIsMainScreen());
+        history.push('/');
         handleSelectGroup(null, lastSelectedTheme);
 
         updateLayers(store, channel);
@@ -188,7 +191,7 @@ export const Header = () => {
                     <span>{strings.tooltips.showUserGuide}</span>
                 </ReactTooltip>
                 <StyledHeaderTitleContainer onClick={() => setToMainScreen()}>
-                        {strings.title}
+                    {strings.title}
                 </StyledHeaderTitleContainer>
                 <StyledHeaderLogoContainer>
                     <a
