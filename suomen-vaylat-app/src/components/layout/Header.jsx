@@ -199,7 +199,7 @@ export const Header = () => {
                         }
                         target="_blank"
                         rel="noreferrer">
-                        {  
+                        {
                             lang.current === 'fi' ? <VaylaLogoFi /> :
                             lang.current === 'en' ? <VaylaLogoEn /> :
                             lang.current === 'sv' ? <VaylaLogoSv /> : <VaylaLogoFi />
