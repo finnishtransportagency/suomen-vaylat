@@ -44,15 +44,6 @@ const StyledZoomBarZoomFeatures = styled.div`
     }
 `;
 
-const StyledZoomBarSliderContainer = styled.div`
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    right: 0px;
-    bottom: 0px;
-    background-color: red;
-`;
-
 const StyledZoomBarSlider = styled.input`
     position: absolute;
     top: 0px;
@@ -178,7 +169,7 @@ const ZoomBar = ({
                         tooltipDirection={"left"}
                     />
                 </StyledZoomBarContent>
-               
+
             </StyledZoomBarContainer>
     );
 };
