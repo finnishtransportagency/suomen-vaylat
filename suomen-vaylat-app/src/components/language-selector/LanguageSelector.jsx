@@ -53,9 +53,9 @@ export const LanguageSelector = () => {
 
     return (
         <StyledLanguageSelector>
-     {/*            <FontAwesomeIcon
+                <FontAwesomeIcon
                     icon={faGlobe}
-                /> */}
+                />
             <StyledSelect
                 name="language_selector"
                 value={lang.current}
