@@ -52,6 +52,7 @@ const StyledActionButton = styled(motion.div)`
         max-width: 212px;
         height: 40px;
     };
+    z-index:100;
 `;
 
 const StyledLeftContent = styled.div`
@@ -217,12 +218,12 @@ const ActionButtons = ({
                                             />
                                     </StyledActionButtonClose>
                                 </StyledRightContent>
-            
+
                             </StyledActionButton>
                         }
                     </AnimatePresence>
     </StyledContent>
-       
+
     )
 };
 

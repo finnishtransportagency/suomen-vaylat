@@ -8,9 +8,11 @@ import UserGuideModalContent from '../user-guide-modal/UserGuideModalContent';
 import MenuBar from './menu-bar/MenuBar';
 import MapLayersDialog from '../dialog/MapLayersDialog';
 import WarningDialog from '../dialog/WarningDialog';
+import Views from '../views/Views';
 import PublishedMap from '../published-map/PublishedMap';
 import Search from '../search/Search';
 import ActionButtons from '../action-button/ActionButtons';
+import ScaleBar from '../scalebar/ScaleBar';
 import { ShareWebSitePopup } from '../share-web-site/ShareWebSitePopup';
 import ZoomMenu from '../zoom-features/ZoomMenu';
 import strings from '../../translations';
@@ -23,6 +25,7 @@ import {
     setShareUrl,
     setIsInfoOpen,
     setIsUserGuideOpen,
+    setIsSaveViewOpen,
     setMinimizeGfi,
 } from '../../state/slices/uiSlice';
 import { GFIPopup } from '../infobox/GFIPopup';
@@ -34,7 +37,8 @@ import {
     faQuestion,
     faBullhorn,
     faExclamationCircle,
-    faMapMarkedAlt
+    faMapMarkedAlt,
+    faSave
 } from '@fortawesome/free-solid-svg-icons';
 
 import Modal from '../modals/Modal';
@@ -43,7 +47,7 @@ const StyledContent = styled.div`
     z-index: 1;
     position: relative;
     width: 100%;
-    height: var(--app-height);
+    height: 100%;
     overflow: hidden;
     display: flex;
     flex-direction: column;
@@ -62,12 +66,10 @@ const StyledContentGrid = styled.div`
     height: 100%;
     box-sizing: border-box;
     display: grid;
-    //grid-row-gap: 8px;
     grid-template-columns: 48px 344px 1fr;
     grid-template-rows: 48px 1fr;
     padding: 16px;
     pointer-events: none;
-    //gap: 8px;
     @media ${props => props.theme.device.mobileL} {
         padding: 8px;
         grid-template-columns: 48px 1fr;
@@ -86,6 +88,7 @@ const Content = () => {
         shareUrl,
         isInfoOpen,
         isUserGuideOpen,
+        isSaveViewOpen,
         minimizeGfi
     } = useAppSelector((state) => state.ui);
 
@@ -99,7 +102,6 @@ const Content = () => {
         channel,
         gfiLocations
     } = useAppSelector((state) => state.rpc);
-    //const channel = useSelector(state => state.rpc.channel);
 
     const ANNOUNCEMENTS_LOCALSTORAGE = "oskari-announcements";
 
@@ -152,10 +154,13 @@ const Content = () => {
     };
 
     const handleCloseGFIModal = () => {
-            store.dispatch(resetGFILocations([]));
-            store.dispatch(setMinimizeGfi(false));
-            channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', []);
-            //channel.postRequest('MapModulePlugin.RemoveMarkersRequest', ['gfi_location']);
+        store.dispatch(resetGFILocations([]));
+        store.dispatch(setMinimizeGfi(false));
+        channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [null, null, 'gfi-result-layer']);
+    };
+
+    const handleCloseSaveViewModal = () => {
+        store.dispatch(setIsSaveViewOpen(false));
     };
 
     return (
@@ -315,6 +320,23 @@ const Content = () => {
                         warningType={warnings.type}
                     />
                 </Modal>
+                <Modal
+                    constraintsRef={constraintsRef} /* Reference div for modal drag boundaries */
+                    drag={true} /* Enable (true) or disable (false) drag */
+                    resize={false}
+                    backdrop={false} /* Is backdrop enabled (true) or disabled (false) */
+                    fullScreenOnMobile={true} /* Scale modal full width / height when using mobile device */
+                    titleIcon={faSave} /* Use icon on title or null */
+                    title={strings.saveView.saveView} /* Modal header title */
+                    type={"normal"} /* Modal type */
+                    closeAction={handleCloseSaveViewModal} /* Action when pressing modal close button or backdrop */
+                    isOpen={isSaveViewOpen} /* Modal state */
+                    id={null}
+                    minWidth={600}
+                >
+                    <Views />
+                </Modal>
+                <ScaleBar />
                 <StyledContentGrid>
                     <MenuBar />
                     <MapLayersDialog />

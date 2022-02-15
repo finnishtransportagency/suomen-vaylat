@@ -11,25 +11,25 @@ const StyledInput = styled.input`
     font-size: 14px;
 `;
 
-const AddressSearch = ({
+const MetadataSearch = ({
     searchValue,
     setSearchValue,
-    handleAddressSearch
+    handleMetadataSearch
 }) => {
 
     return (
         <StyledInput
             type="text"
             value={searchValue}
-            placeholder={strings.search.address.title + '...'}
+            placeholder={strings.search.metadata.title + '...'}
             onChange={e => setSearchValue(e.target.value)}
             onKeyPress={e => {
                 if (e.key === 'Enter') {
-                    handleAddressSearch(e.target.value);
+                    handleMetadataSearch(e.target.value);
                 }
             }}
         />
     );
 };
 
-export default AddressSearch;
+export default MetadataSearch;
