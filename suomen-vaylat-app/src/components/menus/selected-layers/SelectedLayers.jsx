@@ -24,10 +24,9 @@ const StyledDeleteAllSelectedLayers = styled.div`
     margin: 20px auto 20px auto;
     border-radius: 15px;
     p {
-        //padding-left: 10px;
         margin: 0;
         font-size: 12px;
-        font-weight: bold;
+        font-weight: 600;
     };
 `;
 

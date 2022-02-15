@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { useAppSelector } from '../../state/hooks';
-import strings from './../../translations';
+import strings from '../../translations';
 
 import {
     faGlobe,
@@ -11,15 +11,10 @@ const StyledLanguageSelector = styled.div`
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    color: ${(props: { theme: { colors: { mainWhite: any; }; }; }) => props.theme.colors.mainWhite};
-    padding-right: 10px;
+    color: ${(props) => props.theme.colors.mainWhite};
+    padding-left: 8px;
     svg {
         font-size: 22px;
-    };
-    @media ${(props: { theme: { device: { mobileL: any; }; }; }) => props.theme.device.mobileL} {
-        svg {
-            font-size: 20px;
-        };
     };
 `;
 
@@ -27,14 +22,14 @@ const StyledSelect = styled.select`
     width: 45px;
     height: 30px;
     cursor: pointer;
-    color: ${(props: { theme: { colors: { mainWhite: any; }; }; }) => props.theme.colors.mainWhite};
+    color: ${(props) => props.theme.colors.mainWhite};
     background-color: transparent;
     border: none;
     font-size: 18px;
     option {
         width: 45px;
         height: 30px;
-        background-color: ${(props: { theme: { colors: { mainColor1: any; }; }; }) => props.theme.colors.mainColor1};
+        background-color: ${(props) => props.theme.colors.mainColor1};
         border: none;
         font-size: 18px;
     };
@@ -49,7 +44,7 @@ export const LanguageSelector = () => {
 
     const lang = useAppSelector((state) => state.language);
 
-    const redirect = (key:string, value:string) => {
+    const redirect = (key, value) => {
         let urlParams = new URLSearchParams(window.location.search);
         urlParams.delete(key);
         urlParams.set(key, value);
@@ -64,7 +59,7 @@ export const LanguageSelector = () => {
             <StyledSelect
                 name="language_selector"
                 value={lang.current}
-                onChange={(event: { target: { value: any; }; }) => {
+                onChange={(event) => {
                     redirect('lang', event.target.value);
                 }}
             >

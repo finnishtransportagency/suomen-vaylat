@@ -12,6 +12,7 @@ const initialState = {
   features: {},
   currentState: {},
   zoomLevelsLayers: {},
+  scaleBarState: null,
   tagLayers: [],
   tags: [],
   zoomRange: {},
@@ -149,6 +150,9 @@ export const rpcSlice = createSlice({
         state.zoomLevelsLayers = action.payload;
         LOG.log('setZoomLevelsLayers to ', action.payload);
     },
+    setScaleBarState: (state, action) => {
+        state.scaleBarState = action.payload;
+    },
     setMapLayerVisibility: (state, action) => {
         var layer = action.payload;
         state.channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, !layer.visible]);
@@ -181,22 +185,6 @@ export const rpcSlice = createSlice({
             });
         }
         LOG.log('searchVKMRoad ', action.payload);
-    },
-    addFeaturesToMap: (state, action) => {
-        state.channel !== null && state.channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest',
-        [action.payload.geojson, {
-            layerId: action.payload.layerId,
-            centerTo:action.payload.centerTo || true,
-            featureStyle: action.payload.featureStyle,
-            hover: action.payload.hover,
-            maxZoomLevel: action.payload.maxZoomLevel || 4,
-            clearPrevious: action.payload.clearPrevious || true
-        }]);
-        LOG.log('addFeaturesToMap ', action.payload);
-    },
-    removeFeaturesFromMap: (state, action) => {
-        state.channel !== null && state.channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [null, null, action.payload.layerId]);
-        LOG.log('removeFeaturesFromMap ', action.payload);
     },
     setCurrentZoomLevel: (state, action) => {
         state.currentZoomLevel = action.payload;
@@ -269,6 +257,9 @@ export const rpcSlice = createSlice({
         LOG.log('setLegends to ', action.payload);
     },
     setCurrentMapCenter: (state, action) => {
+        if (state.center.x === action.payload.centerX && state.center.y === action.payload.centerY && state.currentZoomLevel === action.payload.zoom) {
+            return;
+        }
         state.center.x = action.payload.centerX;
         state.center.y = action.payload.centerY;
         state.currentZoomLevel = action.payload.zoom;
@@ -332,6 +323,7 @@ export const {
     setTagLayers,
     setZoomRange,
     setZoomLevelsLayers,
+    setScaleBarState,
     setMapLayerVisibility,
     setOpacity,
     setZoomIn,
@@ -339,8 +331,6 @@ export const {
     setZoomTo,
     setSelectError,
     searchVKMRoad,
-    addFeaturesToMap,
-    removeFeaturesFromMap,
     setCurrentZoomLevel,
     searchRequest,
     addMarkerRequest,
