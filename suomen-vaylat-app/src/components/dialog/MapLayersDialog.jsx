@@ -236,7 +236,7 @@ const MapLayersDialog = () => {
                         tabsContent.map((tab, index) => {
                             return (
                                 <StyledTab
-                                    key={"tab_"+index}
+                                    key={"ml_tab_"+index}
                                     isSelected={index === selectedMapLayersMenuTab}
                                     color={tab.titleColor}
                                     onClick={() => {
@@ -256,7 +256,7 @@ const MapLayersDialog = () => {
                 </StyledTabs>
                 <StyledSwiper
                     ref={inputEl}
-                    id={'map-layers-swiper'}
+                    id={"map-layers-swiper"}
                      onSlideChange={e => {
                         store.dispatch(setSelectedMapLayersMenuTab(e.activeIndex));
                     }}
@@ -268,8 +268,8 @@ const MapLayersDialog = () => {
                     tabsContent.map((tab, index) => {
                         return (
                             <SwiperSlide
-                                id={"tab_content_"+index}
-                                key={"tab_content_"+index}
+                                id={"ml_tab_content_"+index}
+                                key={"ml_tab_content_"+index}
                             >
                                 {tab.content}
                             </SwiperSlide>

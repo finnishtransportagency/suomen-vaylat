@@ -1,8 +1,11 @@
 import React, { useRef, useState, useEffect} from 'react';
 import styled from 'styled-components';
 import strings from '../../translations';
-/* import { Swiper, SwiperSlide } from 'swiper/react/swiper-react'; */
 import { getAppBuildDate, getAppVersion } from '../../utils/appInfoUtil';
+
+import { Swiper, SwiperSlide } from 'swiper/react';
+
+import 'swiper/css';
 
 const StyledContent = styled.div`
     max-width: 600px;
@@ -82,14 +85,16 @@ const StyledTitle = styled.em`
     color: ${props => props.theme.colors.mainColor1};
 `;
 
-/* const StyledSwiper = styled(Swiper)`
-  .swiper-slide {
-    background-color: ${props => props.theme.colors.mainWhite};
-    padding: 16px 16px 16px 16px;
-    overflow-y: auto;
-  };
+const StyledSwiper = styled(Swiper)`
+    margin-left: 0;
+    margin-right: 0;
+    .swiper-slide {
+        background-color: ${props => props.theme.colors.mainWhite};
+        padding: 16px 16px 16px 16px;
+        overflow-y: auto;
+    };
   transition: box-shadow 0.3s ease-out;
-`; */
+`;
 
 export const ListComponent = ({listData}) => {
     return (
@@ -208,9 +213,9 @@ export const AppInfoModalContent = () => {
         }
     ];
 
-/*     useEffect(() => {
+    useEffect(() => {
         inputEl.current.swiper.slideTo(tabIndex);
-    },[tabIndex]); */
+    },[tabIndex]);
 
     return (
         <>
@@ -222,7 +227,7 @@ export const AppInfoModalContent = () => {
                             tabsContent.map((tab, index) => {
                                 return (
                                     <StyledTab
-                                        key={'ai_tab_'+index}
+                                        key={"ai_tab_"+index}
                                         isSelected={index === tabIndex}
                                         color={tab.titleColor}
                                         onClick={() => {
@@ -236,31 +241,29 @@ export const AppInfoModalContent = () => {
                             })
                         }
                     </StyledTabs>
-{/*                     <StyledSwiper
+                    <StyledSwiper
+                        ref={inputEl}
+                        id={"app-info-swiper"}
                         tabIndex={tabIndex}
-                        className='app-info-swiper'
-                        id={'ai-swiper'}
-                        speed={300}
                         onSlideChange={e => {
                             setTabIndex(e.activeIndex);
                         }}
                         allowTouchMove={false} // Disable swiping
-                        ref={inputEl}
+                        speed={300}
                     >
                         {
                             tabsContent.map((tab, index) => {
                                 return (
                                     <SwiperSlide
-                                        key={'ai_tab_content_' + index}
-                                        className={'app-info-tabs'}
+                                        id={"ai_tab_content_"+index}
+                                        key={"ai_tab_content_"+index}
                                     >
                                         {tab.content}
                                     </SwiperSlide>
                                 )
                             })
                         }
-                    </StyledSwiper> */}
-
+                    </StyledSwiper>
             </StyledContent>
         </>
     );

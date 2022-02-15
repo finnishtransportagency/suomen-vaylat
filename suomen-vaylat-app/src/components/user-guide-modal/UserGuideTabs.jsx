@@ -1,28 +1,12 @@
-import {useState} from 'react';
+import React, { useRef, useState, useEffect} from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
-/* import { Swiper, SwiperSlide } from 'swiper/react/swiper-react.js';
-import '../../_colors.scss';
-// Styles must use direct files imports
-import 'swiper/swiper.scss'; // core Swiper
-import 'swiper/modules/navigation/navigation.scss'; // Navigation module
-import 'swiper/modules/pagination/pagination.scss'; // Pagination module */
+import { Swiper, SwiperSlide } from 'swiper/react';
 
-/* // import Swiper core and required modules
-import SwiperCore, {
-    EffectCoverflow,
-    Pagination
-  } from 'swiper'; */
-
+import 'swiper/css';
 
 import strings from '../../translations';
-/* 
-// install Swiper modules
-SwiperCore.use([
-    EffectCoverflow,
-    Pagination
-]);
- */
+
 const variants = {
     open: {
         pointerEvents: 'auto',
@@ -71,22 +55,37 @@ const StyledTabSubTitle = styled.div`
 `;
 
 const StyledTabs = styled.div`
-    z-index:2;
     position: relative;
     display: flex;
     align-items: center;
-    height: 48px;
+    min-height: 40px;
     background-color: #F2F2F2;
-    //margin-top: 12px;
+    margin: 16px 8px 0px 8px;
     &::before {
+        z-index: 2;
         position: absolute;
         content: '';
         width: calc(100% / 3);
         height: 100%;
-        background-color: white;
+        background-color: ${props => props.theme.colors.mainWhite};
         bottom: 0px;
         left: ${props => props.tabIndex * 50+'%'};
-        border-radius: 4px;
+        border-radius: 4px 4px 0px 0px;
+        transform: translateX(
+            ${props => {
+            return props.tabIndex * -50+'%';
+            }}
+        );
+        transition: all 0.3s ease-out;
+    };
+    &::after {
+        position: absolute;
+        content: '';
+        width: calc(100% / 3);
+        height: 100%;
+        bottom: 0px;
+        left: ${props => props.tabIndex * 50+'%'};
+        border-radius: 4px 4px 0px 0px;
         transform: translateX(
             ${props => {
             return props.tabIndex * -50+'%';
@@ -94,30 +93,35 @@ const StyledTabs = styled.div`
         );
         transition: all 0.3s ease-out;
         box-shadow: 0px -1px 11px ${props => props.tabIndex === 0 ?
-        'rgba(0, 99, 175, 0.3)' : props.tabIndex === 1 ?
-        'rgba(32, 122, 66, 0.3)' :
-        'rgba(229, 0, 130, 0.3)'};
-    };
+        "rgba(0, 99, 175, 0.3)" : props.tabIndex === 1 ?
+        "rgba(32, 122, 66, 0.3)" :
+        "rgba(229, 0, 130, 0.3)"};
+    }
 `;
 
 const StyledTab = styled.div`
+    z-index: 2;
     user-select: none;
     width: calc(100% / 3);
     cursor: pointer;
-    font-size: 14px;
-    font-weight: bold;
-    color: ${props => props.isSelected ? props.theme.colors[props.color] : '#656565'};
+    color: ${props => props.isSelected ? props.theme.colors[props.color] : "#656565"};
     text-align: center;
-    transform: scale(${props => {
-        return props.isSelected ? '1.05' : '1';
-    }});
-    transition: transform 0.2s ease-out;
-    @media ${props => props.theme.device.mobileL} {
-        font-size: 9px;
-    };
+    transition: color 0.2s ease-out;
+    display: flex;
+    justify-content: center;
+
+    p {
+        font-size: 13px;
+        font-weight: bold;
+        margin: 0;
+        padding: 8px;
+    }
 `;
 
-/* const StyledSwiper = styled(Swiper)`
+const StyledSwiper = styled(Swiper)`
+    margin-left: 0;
+    margin-right: 0;
+    background-color: ${props => props.theme.colors.mainWhite};
   .swiper-slide {
     background-color: ${props => props.theme.colors.mainWhite};
     padding: 16px 16px 16px 16px;
@@ -129,9 +133,11 @@ const StyledTab = styled.div`
         'rgba(32, 122, 66, 0.3)' :
         'rgba(229, 0, 130, 0.3)'};
 `;
- */
+
 
 const UserGuideTabs = () => {
+
+    const inputEl = useRef(null);
 
     const [tabIndex, setTabIndex] = useState(0);
 
@@ -156,6 +162,10 @@ const UserGuideTabs = () => {
             content: <p>{strings.appGuide.modalContent.mapLevelMenu.tabsContent.selectedLayers}</p>
         }
     ];
+    
+    useEffect(() => {
+        inputEl.current.swiper.slideTo(tabIndex);
+    },[tabIndex]);
 
     return (
             <StyledMapLayersDialog
@@ -175,40 +185,44 @@ const UserGuideTabs = () => {
                         tabsContent.map((tab, index) => {
                             return (
                                 <StyledTab
-                                    key={'tab_'+index}
+                                    key={"ug_tab_"+index}
                                     isSelected={index === tabIndex}
                                     color={tab.titleColor}
                                     onClick={() => {
                                         setTabIndex(index);
                                     }}
                                 >
-                                    {tab.title}
+                                    <p>{tab.title}</p>
 
                                 </StyledTab>
                             )
                         })
                     }
                 </StyledTabs>
-{/*                 <StyledSwiper
+                <StyledSwiper
+                    ref={inputEl}
+                    id={'user-guide-swiper'}
                     tabIndex={tabIndex}
-                    className='map-layers-swiper'
-                    id={'map-swiper'}
-                    speed={300}
                     onSlideChange={e => {
                         setTabIndex(e.activeIndex);
                     }}
                     allowTouchMove={false} // Disable swiping
+                    speed={300}
                 >
-                    <SwiperSlide
-                        id={'tab_content_' + tabIndex}
-                        key={'tab_content_' + tabIndex}
-                        className={'user-guide-tabs'}
-                    >
-                        {tabsContent[tabIndex].content}
-                    </SwiperSlide>
-
-                <div className='swiper-pagination'></div>
-                </StyledSwiper> */}
+                    {
+                        tabsContent.map((tab, index) => {
+                            return (
+                                <SwiperSlide
+                                    className={'user-guide-tabs'}
+                                    id={"ug_tab_content_"+index}
+                                    key={"ug_tab_content_"+index}
+                                >
+                                    {tab.content}
+                                </SwiperSlide>
+                            )
+                        })
+                    }
+                </StyledSwiper>
             </StyledMapLayersDialog>
     );
  }
