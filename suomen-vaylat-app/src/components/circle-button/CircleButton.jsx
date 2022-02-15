@@ -14,8 +14,8 @@ const StyledCircleButton = styled(motion.button)`
     justify-content: center;
     align-items: center;
     background-color: ${ props =>
-        props.color === "secondaryColor7" ? 
-        props.theme.colors.secondaryColor7 : props.toggleState ? 
+        props.color === "secondaryColor7" ?
+        props.theme.colors.secondaryColor7 : props.toggleState ?
         props.theme.colors.buttonActive : props.theme.colors.button
     };
     box-shadow: 0px 2px 4px #0000004D;
@@ -45,7 +45,7 @@ const StyledCircleButtonTextContainer = styled(motion.div)`
     position: absolute;
     left: ${props => !props.direction && 0};
     right: ${props => props.direction === "left" && 0};
-    background-color: ${props => props.color === "secondaryColor7" ? props.theme.colors.secondaryColor7 : props.toggleState ? props.theme.colors.buttonActive : props.theme.colors.button};
+    background-color: ${props => props.theme.colors.mainWhite};
     height: 100%;
     z-index: -1;
     display: flex;
@@ -58,7 +58,7 @@ const StyledCircleButtonTextContainer = styled(motion.div)`
     padding-right: ${props => props.direction && "calc(100% + 16px)"};
     overflow: hidden;
     border-radius: 24px;
-    color: ${props => props.theme.colors.mainWhite};
+    color: ${props => props.theme.colors.mainColor1};
     font-size: 14px;
     font-weight: 600;
     pointer-events: none;
@@ -110,7 +110,7 @@ const CircleButton = ({
                             filter: "blur(10px)",
                             opacity: 0,
                             boxShadow: "2px 2px 4px #0000004D"
-                            
+
                         }}
                         animate={{
                             width: "auto",

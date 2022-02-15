@@ -17,6 +17,8 @@ import { ReactComponent as VaylaLogoEn } from './images/vayla_sivussa_en_white.s
 import { ReactComponent as VaylaLogoFi } from './images/vayla_sivussa_fi_white.svg';
 import { ReactComponent as VaylaLogoSv } from './images/vayla_sivussa_sv_white.svg';
 import { updateLayers } from '../../utils/rpcUtil';
+import { createBrowserHistory } from 'history';
+const history = createBrowserHistory();
 
 const StyledHeaderContainer = styled.div`
     height: 64px;
@@ -152,9 +154,13 @@ export const Header = () => {
     };
 
     const setToMainScreen = () => {
+        let routerPrefix = '/';
+        if (process.env.REACT_APP_ROUTER_PREFIX) {
+            routerPrefix = process.env.REACT_APP_ROUTER_PREFIX;
+        }
         // remove all selected layers
         selectedLayers.forEach((layer) => {
-            channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, false]);
+            channel && channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, false]);
         });
 
         // set map center
@@ -166,13 +172,17 @@ export const Header = () => {
 
         // add start layers
         startState.selectedLayers.forEach((layerId) => {
-            channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layerId, true]);
+            channel && channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layerId, true]);
         });
 
         store.dispatch(setIsMainScreen());
+        history.push(routerPrefix);
         handleSelectGroup(null, lastSelectedTheme);
 
-        updateLayers(store, channel)
+        updateLayers(store, channel);
+
+        // Remove all features from map
+        channel && channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', []);
     };
 
     return (
@@ -185,7 +195,7 @@ export const Header = () => {
                     <span>{strings.tooltips.showUserGuide}</span>
                 </ReactTooltip>
                 <StyledHeaderTitleContainer onClick={() => setToMainScreen()}>
-                        {strings.title}
+                    {strings.title}
                 </StyledHeaderTitleContainer>
                 <StyledHeaderLogoContainer>
                     <a
@@ -196,7 +206,7 @@ export const Header = () => {
                         }
                         target="_blank"
                         rel="noreferrer">
-                        {  
+                        {
                             lang.current === 'fi' ? <VaylaLogoFi /> :
                             lang.current === 'en' ? <VaylaLogoEn /> :
                             lang.current === 'sv' ? <VaylaLogoSv /> : <VaylaLogoFi />

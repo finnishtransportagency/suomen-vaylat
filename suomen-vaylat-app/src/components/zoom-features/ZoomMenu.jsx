@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { ReactReduxContext } from 'react-redux';
 import styled from 'styled-components';
 import { useAppSelector } from '../../state/hooks';
@@ -26,18 +26,22 @@ const ZoomMenu = () => {
         store.dispatch(setIsLegendOpen(!isLegendOpen));
     };
 
+    useEffect(() => {
+        setHoveringIndex(rpc.currentZoomLevel);
+    },[rpc.currentZoomLevel])
+
     return (
         <>
             <StyledContainer>
                 <ZoomBar
                     setHoveringIndex={setHoveringIndex}
-                    zoomLevelsLayers={rpc.zoomLevelsLayers}
                     hoveringIndex={hoveringIndex}
+                    zoomLevelsLayers={rpc.zoomLevelsLayers}
+                    currentZoomLevel={rpc.currentZoomLevel}
                     isExpanded={isLegendOpen}
                     setIsExpanded={handleLegendState}
-                    currentZoomLevel={rpc.currentZoomLevel}
-                    allLayers={rpc.allLayers}
-                    selectedLayers={rpc.selectedLayers}
+                    //allLayers={rpc.allLayers}
+                    //selectedLayers={rpc.selectedLayers}
                 />
             </StyledContainer>
         </>

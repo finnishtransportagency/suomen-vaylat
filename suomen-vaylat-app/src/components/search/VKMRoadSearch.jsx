@@ -18,7 +18,7 @@ const StyledDropdownContentItem = styled.div`
     padding-bottom: 16px;
     border-radius: 5px;
 
-    background-color: ${props => props.itemSelected ? props.theme.colors.mainColor3 : ""};
+    background-color: ${props => props.itemSelected ? props.theme.colors.mainColor3 : ''};
     p {
         margin: 0;
         padding: 0;
@@ -26,7 +26,7 @@ const StyledDropdownContentItem = styled.div`
 `;
 
 const StyledDropdownContentItemTitle = styled.p`
-    text-align: ${props => props.type === "noResults" && "center"};
+    text-align: ${props => props.type === 'noResults' && 'center'};
     font-size: 14px;
     color: #504d4d;
 `;
@@ -84,27 +84,21 @@ const StyledOption = styled.option`
 
 const VKMRoadSearch = ({
   setIsSearching,
+  searchValue,
+  setSearchValue,
+  setLastSearchValue,
+  vectorLayerId,
+  removeMarkersAndFeatures,
+  setSearchResults
 }) => {
     const [error, setError] = useState(null);
-    const [tienumero, setTienumero] = useState('');
-    const [tieosa, setTieosa] = useState('default');
-    const [tieosat, setTieosat] = useState([]);
-    const [ajorata, setAjorata] = useState('default');
-    const [ajoradat, setAjoradat] = useState([])
-    const [etaisyys, setEtaisyys] = useState('');
-
     const rpc = useAppSelector((state) => state.rpc);
 
     const handleResponse = (data) => {
-
-        const vectorLayerId = 'SEARCH_VECTORLAYER';
-
         setIsSearching(false);
-        data.hasOwnProperty('tieosat') && setTieosat(data.tieosat);
-        data.hasOwnProperty('ajoradat') && setAjoradat(data.ajoradat);
 
         let style = 'tie';
-        if (( data.hasOwnProperty('osa') || data.hasOwnProperty('ajorata')) && !data.hasOwnProperty('etaisyys')) {
+        if ((data.hasOwnProperty('osa') || data.hasOwnProperty('ajorata')) && !data.hasOwnProperty('etaisyys')) {
             style = 'osa';
         } else if (data.hasOwnProperty('etaisyys')) {
             style = 'etaisyys';
@@ -113,11 +107,26 @@ const VKMRoadSearch = ({
         let hover = VKMGeoJsonHoverStyles.road[style];
 
         if (style === 'tie') {
-            rpc.channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [vectorLayerId + '_vkm_osa']);
+            removeMarkersAndFeatures();
         };
+
+        const value = {
+            tienumero: data.hasOwnProperty('tie') ? parseInt(data.tie) : searchValue.tienumero || null,
+            tieosa: data.hasOwnProperty('osa') ? parseInt(data.osa) : searchValue.tieosa || 'default',
+            ajorata: data.hasOwnProperty('ajorata') ? parseInt(data.ajorata) : searchValue.ajorata || 'default',
+            etaisyys: data.hasOwnProperty('etaisyys') ? parseInt(data.etaisyys) : searchValue.etaisyys || '',
+            tieosat: data.hasOwnProperty('tieosat') ? data.tieosat: searchValue.tieosat || [],
+            ajoradat: data.hasOwnProperty('ajoradat') ? data.ajoradat: searchValue.ajoradat || []
+        };
+
+        setSearchValue(value);
+        setLastSearchValue(value);
+
+        setSearchResults(data);
 
         data.hasOwnProperty('geom') && rpc.channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest',
         [data.geom, {
+            clearPrevious: true,
             centerTo: true,
             hover: hover,
             featureStyle: featureStyle,
@@ -126,13 +135,19 @@ const VKMRoadSearch = ({
         }]);
     };
 
+    if (searchValue === '' && error !== null) {
+        setError(null);
+    }
+
     const handleVKMSearch = (params) => {
         setIsSearching(true);
-        rpc.channel.searchVKMRoad([
+        setError(null);
+
+        rpc.channel.searchVKMRoad && rpc.channel.searchVKMRoad([
             params.hasOwnProperty('vkmTienumero') && parseInt(params.vkmTienumero),
             params.hasOwnProperty('vkmTieosa') && parseInt(params.vkmTieosa),
             params.hasOwnProperty('vkmAjorata') && parseInt(params.vkmAjorata),
-            params.hasOwnProperty('vkmEtaisyys') && parseInt(params.vkmEtaisyys),
+            params.hasOwnProperty('vkmEtaisyys') && parseInt(params.vkmEtaisyys)
         ], handleResponse, (err) => {
             setIsSearching(false);
             if(err){
@@ -147,8 +162,7 @@ const VKMRoadSearch = ({
             {
                 error &&
                         <StyledDropdownContentItem>
-                            <StyledDropdownContentItemTitle type='noResults'>{strings.search.vkm.error.title}</StyledDropdownContentItemTitle>
-                            <StyledDropdownContentItemTitle>{error}</StyledDropdownContentItemTitle>
+                            <StyledDropdownContentItemTitle type='noResults'>{strings.search.vkm.error.text}</StyledDropdownContentItemTitle>
                         </StyledDropdownContentItem>
                 }
                 <StyledDropdownContentItem>
@@ -159,31 +173,21 @@ const VKMRoadSearch = ({
                         onClick={() => {
                             setError(null);
                         }}
-                        onChange={e => {
-                            setTienumero(e.target.value);
-                        }}
                         min='1'
                         type='number'
-                        value={tienumero || ''}
-                        onBlur={e => {
-                            if(e.target.value !== ""){
-                                setTieosa("default");
-                                setTieosat([]);
-                                setAjorata("default");
-                                setAjoradat([]);
-                                setEtaisyys('');
-                                setTienumero(e.target.value);
-                                handleVKMSearch({vkmTienumero: e.target.value});
-                            }
-                        }} 
+                        value={searchValue.tienumero || ''}
+                        onChange={e => {
+                            setSearchValue({
+                                tienumero: e.target.value,
+                                tieosa: 'default',
+                                ajorata: 'default',
+                                etaisyys: '',
+                                tieosat: [],
+                                ajoradat: []
+                            });
+                        }}
                         onKeyPress={e => {
                                 if (e.key === 'Enter') {
-                                    setTieosa('default');
-                                    setTieosat([]);
-                                    setAjorata('default');
-                                    setAjoradat([]);
-                                    setEtaisyys('');
-                                    setTienumero(e.target.value);
                                     handleVKMSearch({vkmTienumero: e.target.value});
                                 }
                             }
@@ -195,18 +199,14 @@ const VKMRoadSearch = ({
                     <StyledSelect
                         id='vkm-tieosa'
                         onChange={e => {
-                            setAjorata('default');
-                            setAjoradat([]);
-                            setEtaisyys('');
-                            setTieosa(e.target.value);
-                            handleVKMSearch({vkmTienumero: tienumero, vkmTieosa: e.target.value});
+                            handleVKMSearch({vkmTienumero: searchValue.tienumero, vkmTieosa: e.target.value});
                         }}
-                        disabled={!tieosat.length > 0}
-                        value={tieosa}
+                        disabled={!searchValue.tieosat || (searchValue.tieosat && !searchValue.tieosat.length > 0)}
+                        value={searchValue.tieosa || 'default'}
                     >
                         <StyledOption value='default' disabled readOnly={true}>{strings.search.vkm.osa}</StyledOption>
                         {
-                            tieosat !== null && tieosat.map(tieosa => {
+                            searchValue.tieosat && searchValue.tieosat.map(tieosa => {
                                 return <StyledOption key={'vkm_tieosa_'+tieosa} value={tieosa}>{tieosa}</StyledOption>
                             })
                         }
@@ -217,16 +217,14 @@ const VKMRoadSearch = ({
                     <StyledSelect
                         id='vkm-ajorata'
                         onChange={e => {
-                            setAjorata(e.target.value);
-                            setEtaisyys('');
-                            handleVKMSearch({vkmTienumero: tienumero, vkmTieosa: tieosa, vkmAjorata: e.target.value});
+                            handleVKMSearch({vkmTienumero: searchValue.tienumero, vkmTieosa: searchValue.tieosa, vkmAjorata: e.target.value});
                         }}
-                        disabled={!ajoradat.length > 0}
-                        value={ajorata}
+                        disabled={!searchValue.ajoradat || (searchValue.ajoradat && !searchValue.ajoradat.length > 0)}
+                        value={searchValue.ajorata || 'default'}
                     >
                         <StyledOption value='default' disabled readOnly={true}>{strings.search.vkm.ajorata}</StyledOption>
                         {
-                            ajoradat !== null && ajoradat.map(item => {
+                            searchValue.ajoradat && searchValue.ajoradat.map(item => {
                                 return <StyledOption key={'vkm_ajorata_'+item} value={item}>{item}</StyledOption>
                             })
                         }
@@ -237,16 +235,23 @@ const VKMRoadSearch = ({
                     <StyledInput
                         id='vkm-etaisyys'
                         placeholder={strings.search.vkm.etaisyys}
-                        onChange={e => {
-                            setEtaisyys(e.target.value)
-                        }}
                         min='1'
                         type='number'
-                        value={etaisyys || ''}
-                        disabled={!ajoradat.length > 0}
+                        onChange={e => {
+                            setSearchValue({
+                                tienumero: searchValue.tienumero,
+                                tieosa: searchValue.tieosa,
+                                ajorata: searchValue.ajorata,
+                                etaisyys: e.target.value,
+                                tieosat: searchValue.tieosat,
+                                ajoradat: searchValue.ajoradat
+                            });
+                        }}
+                        value={searchValue.etaisyys || ''}
+                        disabled={!searchValue.ajoradat || (searchValue.ajoradat && !searchValue.ajoradat.length > 0)}
                         onKeyPress={e => {
                                 if (e.key === 'Enter') {
-                                    handleVKMSearch({vkmTienumero: tienumero, vkmTieosa: tieosa, vkmAjorata: ajorata, vkmEtaisyys: e.target.value});
+                                    handleVKMSearch({vkmTienumero: searchValue.tienumero, vkmTieosa: searchValue.tieosa, vkmAjorata: searchValue.ajorata, vkmEtaisyys: e.target.value});
                                 }
                             }
                         }
@@ -256,5 +261,4 @@ const VKMRoadSearch = ({
         </StyledContainer>
     );
 };
-
 export default VKMRoadSearch;

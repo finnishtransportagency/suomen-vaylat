@@ -30,6 +30,8 @@ export const HandleSharedWebSiteLink = () => {
 
     if ((zoom && x && y) || themeId) {
         LOG.log('The page was accessed via a link, initializing the map according to the link.');
+    } else {
+        return (<></>);
     }
 
     // if channel ready and zoom given without xx and y, zoom map to wanted zoom

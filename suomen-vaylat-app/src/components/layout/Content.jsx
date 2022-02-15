@@ -154,9 +154,9 @@ const Content = () => {
     };
 
     const handleCloseGFIModal = () => {
-            store.dispatch(resetGFILocations([]));
-            store.dispatch(setMinimizeGfi(false));
-            channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', []);
+        store.dispatch(resetGFILocations([]));
+        store.dispatch(setMinimizeGfi(false));
+        channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [null, null, 'gfi-result-layer']);
     };
 
     const handleCloseSaveViewModal = () => {
