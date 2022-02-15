@@ -1,28 +1,28 @@
 import {useState} from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
-import { Swiper, SwiperSlide } from 'swiper/react/swiper-react.js';
+/* import { Swiper, SwiperSlide } from 'swiper/react/swiper-react.js';
 import '../../_colors.scss';
 // Styles must use direct files imports
 import 'swiper/swiper.scss'; // core Swiper
 import 'swiper/modules/navigation/navigation.scss'; // Navigation module
-import 'swiper/modules/pagination/pagination.scss'; // Pagination module
+import 'swiper/modules/pagination/pagination.scss'; // Pagination module */
 
-// import Swiper core and required modules
+/* // import Swiper core and required modules
 import SwiperCore, {
     EffectCoverflow,
     Pagination
-  } from 'swiper';
+  } from 'swiper'; */
 
 
 import strings from '../../translations';
-
+/* 
 // install Swiper modules
 SwiperCore.use([
     EffectCoverflow,
     Pagination
 ]);
-
+ */
 const variants = {
     open: {
         pointerEvents: 'auto',
@@ -117,7 +117,7 @@ const StyledTab = styled.div`
     };
 `;
 
-const StyledSwiper = styled(Swiper)`
+/* const StyledSwiper = styled(Swiper)`
   .swiper-slide {
     background-color: ${props => props.theme.colors.mainWhite};
     padding: 16px 16px 16px 16px;
@@ -129,7 +129,7 @@ const StyledSwiper = styled(Swiper)`
         'rgba(32, 122, 66, 0.3)' :
         'rgba(229, 0, 130, 0.3)'};
 `;
-
+ */
 
 const UserGuideTabs = () => {
 
@@ -189,7 +189,7 @@ const UserGuideTabs = () => {
                         })
                     }
                 </StyledTabs>
-                <StyledSwiper
+{/*                 <StyledSwiper
                     tabIndex={tabIndex}
                     className='map-layers-swiper'
                     id={'map-swiper'}
@@ -208,7 +208,7 @@ const UserGuideTabs = () => {
                     </SwiperSlide>
 
                 <div className='swiper-pagination'></div>
-                </StyledSwiper>
+                </StyledSwiper> */}
             </StyledMapLayersDialog>
     );
  }

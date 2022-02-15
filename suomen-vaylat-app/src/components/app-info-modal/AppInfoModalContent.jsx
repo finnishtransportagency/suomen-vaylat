@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect} from 'react';
 import styled from 'styled-components';
 import strings from '../../translations';
-import { Swiper, SwiperSlide } from 'swiper/react/swiper-react';
+/* import { Swiper, SwiperSlide } from 'swiper/react/swiper-react'; */
 import { getAppBuildDate, getAppVersion } from '../../utils/appInfoUtil';
 
 const StyledContent = styled.div`
@@ -49,7 +49,7 @@ const StyledTabs = styled.div`
             return props.tabIndex * -33+ '%';
             }}
         );
-        transition: all 0.3s ease-out;¨
+        transition: all 0.3s ease-out;
         box-shadow: 0px -1px 11px rgba(0, 99, 175, 0.3);
     };
 `;
@@ -82,14 +82,14 @@ const StyledTitle = styled.em`
     color: ${props => props.theme.colors.mainColor1};
 `;
 
-const StyledSwiper = styled(Swiper)`
+/* const StyledSwiper = styled(Swiper)`
   .swiper-slide {
     background-color: ${props => props.theme.colors.mainWhite};
     padding: 16px 16px 16px 16px;
     overflow-y: auto;
   };
   transition: box-shadow 0.3s ease-out;
-`;
+`; */
 
 export const ListComponent = ({listData}) => {
     return (
@@ -208,9 +208,9 @@ export const AppInfoModalContent = () => {
         }
     ];
 
-    useEffect(() => {
+/*     useEffect(() => {
         inputEl.current.swiper.slideTo(tabIndex);
-    },[tabIndex]);
+    },[tabIndex]); */
 
     return (
         <>
@@ -236,7 +236,7 @@ export const AppInfoModalContent = () => {
                             })
                         }
                     </StyledTabs>
-                    <StyledSwiper
+{/*                     <StyledSwiper
                         tabIndex={tabIndex}
                         className='app-info-swiper'
                         id={'ai-swiper'}
@@ -259,7 +259,7 @@ export const AppInfoModalContent = () => {
                                 )
                             })
                         }
-                    </StyledSwiper>
+                    </StyledSwiper> */}
 
             </StyledContent>
         </>
