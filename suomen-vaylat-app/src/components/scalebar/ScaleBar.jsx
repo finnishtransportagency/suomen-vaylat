@@ -27,6 +27,7 @@ const StyledScaleBarText = styled.p`
 const ScaleBar = () => {
     const { scaleBarState } = useAppSelector((state) => state.rpc);
     return (
+        scaleBarState && scaleBarState.width ?
         <StyledScaleBarContainer
             animate={{
                 width: scaleBarState && scaleBarState.width + 2,
@@ -36,8 +37,9 @@ const ScaleBar = () => {
            <StyledScaleBarText>
                {scaleBarState && scaleBarState.scale && scaleBarState.scale}
                {scaleBarState && scaleBarState.unit && scaleBarState.unit}
-            </StyledScaleBarText> 
+            </StyledScaleBarText>
         </StyledScaleBarContainer>
+        : null
     )
 
 };
