@@ -4,20 +4,10 @@ import { useAppSelector } from '../../state/hooks';
 import { ReactReduxContext } from 'react-redux';
 import { setIsSideMenuOpen, setSelectedMapLayersMenuTab } from '../../state/slices/uiSlice';
 import { motion } from "framer-motion";
-import { Swiper, SwiperSlide } from 'swiper/react/swiper-react.js';
+import { Swiper, SwiperSlide } from 'swiper/react';
 
-// Styles must use direct files imports
-import 'swiper/swiper.scss'; // core Swiper
-import 'swiper/modules/navigation/navigation.scss'; // Navigation module
-import 'swiper/modules/pagination/pagination.scss'; // Pagination module
-
-import './swiper.css'; //
-
-// import Swiper core and required modules
-import SwiperCore, {
-    EffectCoverflow,
-    Pagination
-  } from 'swiper';
+// Import Swiper styles
+import 'swiper/css';
 
 import DialogHeader from './DialogHeader';
 import LayerListTEMP from '../menus/hierarchical-layerlist/LayerListTEMP';
@@ -27,12 +17,6 @@ import SelectedLayers from '../menus/selected-layers/SelectedLayers';
 import { faLayerGroup } from '@fortawesome/free-solid-svg-icons';
 
 import strings from '../../translations';
-
-// install Swiper modules
-SwiperCore.use([
-    EffectCoverflow,
-    Pagination
-]);
 
 const variants = {
     open: {
@@ -87,7 +71,6 @@ const StyledTabs = styled.div`
     align-items: center;
     min-height: 40px;
     background-color: #F2F2F2;
-    //margin-top: 12px;
     margin: 16px 8px 0px 8px;
     &::before {
         z-index: 2;
@@ -136,9 +119,6 @@ const StyledTab = styled.div`
     font-weight: bold;
     color: ${props => props.isSelected ? props.theme.colors[props.color] : "#656565"};
     text-align: center;
-    /* transform: scale(${props => {
-        return props.isSelected ? "1.05" : "1";
-    }}); */
     transition: color 0.2s ease-out;
 `;
 
@@ -159,6 +139,8 @@ const StyledLayerCount = styled.div`
 `;
 
 const StyledSwiper = styled(Swiper)`
+margin-left: 0;
+margin-right: 0;
   .swiper-slide {
     background-color: ${props => props.theme.colors.mainWhite};
     //padding: 16px 8px 16px 16px;
@@ -190,7 +172,7 @@ const MapLayersDialog = () => {
 
     const { isSideMenuOpen } =  useAppSelector((state) => state.ui);
 
-    const inputEl = useRef(null);
+   const inputEl = useRef(null);
 
     const hideWarn = () => {
         store.dispatch(setIsSideMenuOpen(!isSideMenuOpen));
@@ -254,13 +236,11 @@ const MapLayersDialog = () => {
                         tabsContent.map((tab, index) => {
                             return (
                                 <StyledTab
-                                    key={"tab_"+index}
+                                    key={"ml_tab_"+index}
                                     isSelected={index === selectedMapLayersMenuTab}
                                     color={tab.titleColor}
                                     onClick={() => {
                                         store.dispatch(setSelectedMapLayersMenuTab(index));
-                                        //setTabIndex(index);
-                                       // inputEl.current.swiper.slideTo(index);
                                     }}
                                 >
                                     {tab.title}
@@ -275,29 +255,28 @@ const MapLayersDialog = () => {
                     }
                 </StyledTabs>
                 <StyledSwiper
-                    tabIndex={selectedMapLayersMenuTab}
-                    className="map-layers-swiper"
-                    id={"map-swiper"}
-                    speed={300}
-                    onSlideChange={e => {
+                    ref={inputEl}
+                    id={"map-layers-swiper"}
+                     onSlideChange={e => {
                         store.dispatch(setSelectedMapLayersMenuTab(e.activeIndex));
                     }}
+                    tabIndex={selectedMapLayersMenuTab}
                     allowTouchMove={false} // Disable swiping
-                    ref={inputEl}
+                    speed={300}
                 >
                 {
                     tabsContent.map((tab, index) => {
                         return (
                             <SwiperSlide
-                                id={"tab_content_"+index}
-                                key={"tab_content_"+index}
+                                id={"ml_tab_content_"+index}
+                                key={"ml_tab_content_"+index}
                             >
                                 {tab.content}
                             </SwiperSlide>
                         )
                     })
                 }
-                <div className="swiper-pagination"></div>
+                {/* <div className="swiper-pagination"></div> */}
                 </StyledSwiper>
             </StyledMapLayersDialog>
     );
