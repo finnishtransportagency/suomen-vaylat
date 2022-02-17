@@ -15,7 +15,7 @@ import {
     faRoad,
     faShip,
     faTrain,
-    faGlobeEurope, faInfoCircle
+    faGlobeEurope
 } from '@fortawesome/free-solid-svg-icons';
 
 import { updateLayers } from '../../../utils/rpcUtil';
