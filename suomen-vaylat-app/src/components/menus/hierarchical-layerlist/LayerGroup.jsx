@@ -122,20 +122,6 @@ const StyledMasterGroupName = styled.div`
     };
 `;
 
-const StyledMasterGroupInfo = styled.span`
-    pointer-events: auto;
-    color: ${props => props.theme.colors.mainWhite};
-    margin-left: 5px;
-    padding: 0px;
-    font-size: 14px;
-    font-weight: 600;
-    transition: all 0.1s ease-in;
-
-    @media ${ props => props.theme.device.mobileL} {
-        //font-size: 13px;
-    };
-`;
-
 const StyledSubHeader = styled.p`
     height: 30px;
     display: flex;
