@@ -232,7 +232,6 @@ const PublishedMap = () => {
             channel.getCurrentState(data => {
                 channel.getSelectedLayers(layers => {
                     if (data.mapfull && data.mapfull.state) {
-                        console.log(data.mapfull.state);
                         const mapfullState = data.mapfull.state;
                         const selectedLayers = [];
                         const visibleLayers = [];
