@@ -107,7 +107,7 @@ const StyledMasterGroupTitleContent = styled.div`
     justify-content: center;
 `;
 
-const StyledMasterGroupName = styled.div`
+const StyledMasterGroupName = styled.p`
     user-select: none;
     max-width: 240px;
     color: ${props => props.theme.colors.mainWhite};
