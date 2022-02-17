@@ -131,16 +131,16 @@ const MenuBar = () => {
                     <DrawingTools isOpen={isDrawingToolsOpen}/>
                 </StyledMapToolsContainer>
                 <CircleButton
-                    icon={isFullScreen ? faCompress : faExpand}
-                    text={strings.tooltips.fullscreenButton}
-                    toggleState={isFullScreen}
-                    clickAction={handleFullScreen}
-                />
-                <CircleButton
                     icon={faSave}
                     text={strings.saveView.saveView}
                     toggleState={isSaveViewOpen}
                     clickAction={() => store.dispatch(setIsSaveViewOpen(!isSaveViewOpen))}
+                />
+                <CircleButton
+                    icon={isFullScreen ? faCompress : faExpand}
+                    text={strings.tooltips.fullscreenButton}
+                    toggleState={isFullScreen}
+                    clickAction={handleFullScreen}
                 />
             </StyledMenuBar>
         </>
