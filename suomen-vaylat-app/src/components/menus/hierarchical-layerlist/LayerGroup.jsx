@@ -160,6 +160,7 @@ const StyledSubText = styled.p`
 `;
 
 const StyledReadMoreButton = styled.span`
+    cursor: pointer;
     color: ${props => props.theme.colors.mainColor1};
     font-size: 12px;
     font-weight: 400;
