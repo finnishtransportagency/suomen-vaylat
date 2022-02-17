@@ -1,11 +1,11 @@
 import { useContext } from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
-import { faList, faSearchMinus, faSearchPlus, faSearchLocation } from '@fortawesome/free-solid-svg-icons';
+import { faList, faSearchMinus, faSearchPlus, faCrosshairs} from '@fortawesome/free-solid-svg-icons';
 
 import { useAppSelector } from '../../state/hooks';
 import { ReactReduxContext } from 'react-redux';
-import { setZoomIn, setZoomOut } from '../../state/slices/rpcSlice';
+import { setZoomTo, setZoomIn, setZoomOut } from '../../state/slices/rpcSlice';
 import strings from '../../translations';
 import CircleButton from '../circle-button/CircleButton';
 import ZoomBarCircle from './ZoomBarCircle';
@@ -44,15 +44,36 @@ const StyledZoomBarZoomFeatures = styled.div`
     }
 `;
 
+const StyledZoomBarSlider = styled.input`
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    -webkit-appearance: slider-vertical;
+    width: 100%;
+    height: 100%;
+    background: #d3d3d3;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    //outline: none;
+    //transform: rotate(90deg);
+    pointer-events: auto;
+    cursor: pointer;
+    opacity: 0;
+`;
+
 const StyledZoombarCircles = styled(motion.div)`
+    position: relative;
     overflow: hidden;
     display: flex;
     flex-direction: column-reverse;
+    width: 100%;
 `;
 
 const listVariants = {
     visible: {
-        height: 'auto'
+        height: 'auto',
     },
     hidden: {
         height: 2
@@ -60,11 +81,12 @@ const listVariants = {
 };
 
 const ZoomBar = ({
+    setHoveringIndex,
+    hoveringIndex,
     zoomLevelsLayers,
     currentZoomLevel,
     isExpanded,
     setIsExpanded,
-    setHoveringIndex
 }) => {
     const { store } = useContext(ReactReduxContext);
     const rpc = useAppSelector((state) => state.rpc);
@@ -109,9 +131,27 @@ const ZoomBar = ({
                                 index={index}
                                 layer={layer}
                                 zoomLevel={currentZoomLevel}
+                                hoveringIndex={hoveringIndex}
                                 setHoveringIndex={setHoveringIndex}
+                                isActive={parseInt(index) === parseInt(hoveringIndex)}
                             />
                         })}
+                            <StyledZoomBarSlider
+                                type="range"
+                                orient="vertical"
+                                max="13"
+                                value={hoveringIndex}
+                                onChange={e => {
+                                    setHoveringIndex(e.target.value);
+                                    //store.dispatch(setZoomTo(e.target.value))
+                                }}
+                                onMouseUp={e => {
+                                    store.dispatch(setZoomTo(e.target.value))
+                                }}
+                                onTouchEnd={e => {
+                                    store.dispatch(setZoomTo(e.target.value))
+                                }}
+                            />
                         </StyledZoombarCircles>
                         <CircleButton
                             icon={faSearchMinus}
@@ -122,14 +162,14 @@ const ZoomBar = ({
                         />
                     </StyledZoomBarZoomFeatures>
                     <CircleButton
-                        icon={faSearchLocation}
+                        icon={faCrosshairs}
                         text={strings.tooltips.myLocButton}
                         disabled={currentZoomLevel === Object.values(zoomLevelsLayers).length - 1}
                         clickAction={() => rpc.channel.postRequest('MyLocationPlugin.GetUserLocationRequest')}
                         tooltipDirection={"left"}
                     />
                 </StyledZoomBarContent>
-               
+
             </StyledZoomBarContainer>
     );
 };

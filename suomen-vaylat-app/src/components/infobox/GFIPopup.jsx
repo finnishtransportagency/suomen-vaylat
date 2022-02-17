@@ -101,7 +101,7 @@ const StyledTabContent = styled.div`
 `;
 
 export const GFIPopup = () => {
-
+    const LAYER_ID = 'gfi-result-layer';
     const { store } = useContext(ReactReduxContext);
     const {
         channel,
@@ -129,7 +129,7 @@ export const GFIPopup = () => {
                 return <FormattedGFI
                     id={layerIds}
                     data={location.content}
-                    type="geoJson"
+                    type='geoJson'
                 />;
             }
             return null;
@@ -140,70 +140,71 @@ export const GFIPopup = () => {
 
     useEffect(() => {
         tabsContent[selectedTab] !== undefined
-        && tabsContent[selectedTab].props.type === "geoJson"
+        && tabsContent[selectedTab].props.type === 'geoJson'
         && setGeoJsonToShow(tabsContent[selectedTab].props.data);
     },[selectedTab, tabsContent]);
 
     const handleOverlayGeometry = (geoJson) => {
-        geoJson !== null ? channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest',
-        [geoJson, {
-            "clearPrevious": true,
-            "centerTo" : true,
-            maxZoomLevel: currentZoomLevel,
-            featureStyle: {
-                "fill": { // fill styles
-                    "color": "rgba(10, 140, 247, 0.3)" // fill color
-                    // "area": {
-                    //     "pattern": -1 // fill style
-                    // }
-                },
-                "stroke": { // stroke styles
-                    "color": "rgba(10, 140, 247, 0.3)", // stroke color
-                    "width": 5, // stroke width
-                    "lineDash": "solid", // line dash, supported: dash, dashdot, dot, longdash, longdashdot and solid
-                    "lineCap": "round", // line cap, supported: butt, round and square
-                    "lineJoin": "round", // line corner, supported: bevel, round and miter
-                    "area": {
-                        "color": "rgba(100, 255, 95, 0.7)", // area stroke color
-                        "width": 8, // area stroke width
-                        "lineJoin": "round" // area line corner, supported: bevel, round and miter
+        channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [null, null, LAYER_ID]);
+        if (geoJson !== null) {
+            channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest',
+            [geoJson, {
+                centerTo : true,
+                maxZoomLevel: currentZoomLevel,
+                featureStyle: {
+                    fill: {
+                        color: 'rgba(10, 140, 247, 0.3)'
+                    },
+                    stroke: {
+                        color: 'rgba(10, 140, 247, 0.3)',
+                        width: 5,
+                        lineDash: 'solid',
+                        lineCap: 'round',
+                        lineJoin: 'round',
+                        area: {
+                            color: 'rgba(100, 255, 95, 0.7)',
+                            width: 8,
+                            lineJoin: 'round'
+                        }
                     }
                 },
-            }
-        }]) : channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', []);
+                layerId: LAYER_ID
+            }]);
+        }
     };
 
     useEffect(() => {
-        geoJsonToShow !== null ? channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest',
-        [geoJsonToShow, {
-            "clearPrevious": true,
-            featureStyle: {
-                "fill": { // fill styles
-                    "color": "rgba(10, 140, 247, 0.3)" // fill color
-                    // "area": {
-                    //     "pattern": -1 // fill style
-                    // }
-                },
-                "stroke": { // stroke styles
-                    "color": "rgba(10, 140, 247, 0.3)", // stroke color
-                    "width": 5, // stroke width
-                    "lineDash": "solid", // line dash, supported: dash, dashdot, dot, longdash, longdashdot and solid
-                    "lineCap": "round", // line cap, supported: butt, round and square
-                    "lineJoin": "round", // line corner, supported: bevel, round and miter
-                    "area": {
-                        "color": "rgba(100, 255, 95, 0.7)", // area stroke color
-                        "width": 8, // area stroke width
-                        "lineJoin": "round" // area line corner, supported: bevel, round and miter
-                    }
-                },
-            }
-        }]) : channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', []);
+        channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [null, null, LAYER_ID]);
+
+        if (geoJsonToShow !== null) {
+            channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest',
+                [geoJsonToShow, {
+                    featureStyle: {
+                        fill: {
+                            color: 'rgba(10, 140, 247, 0.3)'
+                        },
+                        stroke: {
+                            color: 'rgba(10, 140, 247, 0.3)',
+                            width: 5,
+                            lineDash: 'solid',
+                            lineCap: 'round',
+                            lineJoin: 'round',
+                            area: {
+                                color: 'rgba(100, 255, 95, 0.7)',
+                                width: 8,
+                                lineJoin: 'round'
+                            }
+                        }
+                    },
+                    layerId: LAYER_ID
+                }]);
+        }
     },[channel, geoJsonToShow]);
 
     const closeTab = (id) => {
         var filteredLocations = gfiLocations.filter(gfi => gfi.layerId !== id);
         store.dispatch(resetGFILocations(filteredLocations));
-        channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', []);
+        channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [null, null, LAYER_ID]);
     };
 
     return (
@@ -212,14 +213,13 @@ export const GFIPopup = () => {
                 {
                     tabsContent.map((tabContent, index) => {
                         return <StyledTab
-                                    key={"tab_"+index}
+                                    key={'tab_' + index}
                                     onClick={() => setSelectedTab(index)}
                                     selected={selectedTab === index}
                                 >
                                     <StyledTabLocationButton
                                         onClick={() => {
                                             handleOverlayGeometry(tabContent.props.data);
-                                            //console.log(tabContent.props.data);
                                         }}
                                     >
                                         <FontAwesomeIcon

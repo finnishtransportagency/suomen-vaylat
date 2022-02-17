@@ -1,8 +1,11 @@
 import React, { useRef, useState, useEffect} from 'react';
 import styled from 'styled-components';
 import strings from '../../translations';
-import { Swiper, SwiperSlide } from 'swiper/react/swiper-react';
 import { getAppBuildDate, getAppVersion } from '../../utils/appInfoUtil';
+
+import { Swiper, SwiperSlide } from 'swiper/react';
+
+import 'swiper/css';
 
 const StyledContent = styled.div`
     max-width: 600px;
@@ -49,7 +52,7 @@ const StyledTabs = styled.div`
             return props.tabIndex * -33+ '%';
             }}
         );
-        transition: all 0.3s ease-out;¨
+        transition: all 0.3s ease-out;
         box-shadow: 0px -1px 11px rgba(0, 99, 175, 0.3);
     };
 `;
@@ -83,11 +86,13 @@ const StyledTitle = styled.em`
 `;
 
 const StyledSwiper = styled(Swiper)`
-  .swiper-slide {
-    background-color: ${props => props.theme.colors.mainWhite};
-    padding: 16px 16px 16px 16px;
-    overflow-y: auto;
-  };
+    margin-left: 0;
+    margin-right: 0;
+    .swiper-slide {
+        background-color: ${props => props.theme.colors.mainWhite};
+        padding: 16px 16px 16px 16px;
+        overflow-y: auto;
+    };
   transition: box-shadow 0.3s ease-out;
 `;
 
@@ -125,12 +130,11 @@ export const ListComponent = ({listData}) => {
     );
 };
 
-export const VersionInfo = ({listData, currentAppVersion, currentAppBuildDate}) => {
+export const VersionInfo = ({currentAppVersion, currentAppBuildDate}) => {
     return (
         <div>
             <StyledTitle><p>{strings.appInfo.versionInfo.appVersion + currentAppVersion}</p></StyledTitle>
             <StyledTitle><p>{strings.appInfo.versionInfo.appLastUpdate + currentAppBuildDate}</p></StyledTitle>
-            <ListComponent listData={listData} />
         </div>
     );
 };
@@ -169,7 +173,6 @@ export const AppInfoModalContent = () => {
     const headingText = strings.appInfo.headingText.bold();
     const mainText = strings.appInfo.mainText;
     const content = <div dangerouslySetInnerHTML={{ __html: headingText + '<br><br>' + mainText }}></div>;
-    const versionInfoList = strings.appInfo.versionInfo.versionInfoList;
 
     // App build info
     const currentAppVersion = getAppVersion();
@@ -195,7 +198,6 @@ export const AppInfoModalContent = () => {
             title: strings.appInfo.versionInfo.title,
             titleColor: 'mainColor1',
             content: <VersionInfo
-                listData={versionInfoList}
                 currentAppVersion={currentAppVersion}
                 currentAppBuildDate={currentAppBuildDate}
             />
@@ -222,7 +224,7 @@ export const AppInfoModalContent = () => {
                             tabsContent.map((tab, index) => {
                                 return (
                                     <StyledTab
-                                        key={'ai_tab_'+index}
+                                        key={"ai_tab_"+index}
                                         isSelected={index === tabIndex}
                                         color={tab.titleColor}
                                         onClick={() => {
@@ -237,22 +239,21 @@ export const AppInfoModalContent = () => {
                         }
                     </StyledTabs>
                     <StyledSwiper
+                        ref={inputEl}
+                        id={"app-info-swiper"}
                         tabIndex={tabIndex}
-                        className='app-info-swiper'
-                        id={'ai-swiper'}
-                        speed={300}
                         onSlideChange={e => {
                             setTabIndex(e.activeIndex);
                         }}
                         allowTouchMove={false} // Disable swiping
-                        ref={inputEl}
+                        speed={300}
                     >
                         {
                             tabsContent.map((tab, index) => {
                                 return (
                                     <SwiperSlide
-                                        key={'ai_tab_content_' + index}
-                                        className={'app-info-tabs'}
+                                        id={"ai_tab_content_"+index}
+                                        key={"ai_tab_content_"+index}
                                     >
                                         {tab.content}
                                     </SwiperSlide>
@@ -260,7 +261,6 @@ export const AppInfoModalContent = () => {
                             })
                         }
                     </StyledSwiper>
-
             </StyledContent>
         </>
     );

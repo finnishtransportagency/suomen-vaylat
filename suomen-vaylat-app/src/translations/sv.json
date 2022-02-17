@@ -135,46 +135,7 @@
       "appLastUpdate": "Applikationen uppdaterades senast:",
       "appInfoTitle": "Information om tjänsten",
       "appInfoLinksTitle": "Länkar",
-      "appContactAndFeedback": "Kontaktuppgifter och respons",
-      "versionInfoList": {
-        "0": {
-          "title": "Versionsändringar:",
-          "list": {
-            "0": {
-              "content": "Sovellukseen tehdyt korjaukset",
-              "subContent": {
-                "0": "Teeman jako",
-                "1": "Bugit mobiilinäkymässä",
-                "2": "Sovelluksen kaatumiseen johtavat bugit",
-                "3": "Tie- ja osoitehaun korjaukset",
-                "4": "Zoom-valikon korjaukset"
-              }
-            },
-            "1": {
-              "content": "Sovellukseen tehdyt päivitykset",
-              "subContent": {
-                "0": "Kielisyyksien Excel tuonnin ja viennin tuki",
-                "1": "Modaalien parannuspäivitys",
-                "2": "Otsake palkin mobiiliresponsiivisuuden\r\nparantaminen",
-                "3": "Sovelluksen tiedot -tekstien päivitys",
-                "4": "Pienempiä käytettävyysparannuksia"
-              }
-            }
-          }
-        },
-        "1": {
-          "title": "Tiedossa olevat puutteet:",
-          "list": {
-            "0": {
-              "content": "Kaikkia aineistoryhmiä ei ole käsitelty datan osalta",
-              "subContent": {
-                "0": "Tiestötiedoista puuttuvat selkokielisyydet ja kenttien priorisointi kohdetietoikkunaan",
-                "1": "Inspire-aineistoista sekä digiroad-aineistoista puuttuvat kenttien priorisointi kohdetietoikkunaan"
-              }
-            }
-          }
-        }
-      }
+      "appContactAndFeedback": "Kontaktuppgifter och respons"
     },
     "contactInfoFeedback": {
       "0": "Trafikledsverket ansvarar för applikationen som levereras av Sitowise Oy.",
@@ -198,11 +159,7 @@
     }
   },
   "search": {
-    "types": {
-      "address": "Adress sökning",
-      "vkm": "Vägsökning",
-      "metadata": "Metadata search"
-    },
+    "required_field_missing": "Kontrollera de obligatoriska fälten.",
     "vkm": {
       "tie": "Vägnummer",
       "title": "Sök efter vägnummer",
@@ -211,7 +168,7 @@
       "ajorata": "Körbana",
       "etaisyys": "Avstånd (m)",
       "error": {
-        "title": "Vägsökning misslyckades"
+        "text": "Inga resultat hittades för vägsökning."
       },
       "sijaintiraide": "Sijaintiraide",
       "kuvaus": "Kuvaus",
@@ -222,7 +179,7 @@
       "trackTitle": "Ratahaku",
       "trackSubtitle": "Hae ratatietoja",
       "trackError": {
-        "title": "Ratahaku epäonnistui"
+        "text": "Tuloksia ei löytynyt ratahaulla."
       }
     },
     "address": {
@@ -230,16 +187,14 @@
       "subtitle": "Sök på adress, kommunnamn eller fastighetskod",
       "address": "Opastinsilta 12 Helsinki",
       "error": {
-        "title": "Adress sökning",
-        "text": "Inga resultat hittades för adressökning."
+        "text": "Inga resultat hittades för platsökning."
       }
     },
     "metadata": {
       "title": "Search metadata",
       "subtitle": "Search by metadata",
       "error": {
-          "title": "Metadata search failed",
-          "text": "No results found for the metadata search"
+          "text": "No results found for the metadata search."
       }
     }
   },
@@ -296,7 +251,7 @@
     },
     "6": {
       "title": "Beskrivning av bannätet",
-      "description": "-"
+      "description": "Verkkoselostuksen karttapalvelussa voi tarkastella rataverkon ominaisuustietoja, kuten sähköistystä ja liikennepaikkojen tietoja. Tiedot perustuvat ratarekisteritietoihin ja ERAan toimitettaviin RINF-tietoihin."
     }
   },
   "metadata": {

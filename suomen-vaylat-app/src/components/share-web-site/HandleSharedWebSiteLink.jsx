@@ -28,16 +28,18 @@ export const HandleSharedWebSiteLink = () => {
 
     const allThemesWithLayers = useSelector(state => state.rpc.allThemesWithLayers);
 
-    if ((zoom && x && y) || themeId) {
+    if ((!isNaN(zoom) && x && y) || themeId) {
         LOG.log('The page was accessed via a link, initializing the map according to the link.');
+    } else {
+        return (<></>);
     }
 
     // if channel ready and zoom given without xx and y, zoom map to wanted zoom
-    if (channel && zoom && !x && !y) {
+    if (channel && !isNaN(zoom) && !x && !y) {
         channel.zoomTo([zoom], function () {});
     }
     // if channel ready and zoom, x and y given, zoom map to wanted location and zoom
-    if (channel && zoom && x && y) {
+    if (channel && !isNaN(zoom) && x && y) {
         channel.postRequest('MapMoveRequest', [x, y, zoom]);
     }
 
@@ -78,7 +80,6 @@ export const HandleSharedWebSiteLink = () => {
                 const layerId = parseInt(layerProps[0]);
                 const opacity = parseInt(layerProps[1]);
                 const style = layerProps[2];
-
                 channel.postRequest('ChangeMapLayerOpacityRequest', [layerId, opacity]);
                 store.dispatch(changeLayerStyle({layerId: layerId, style:style}));
                 channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layerId, true]);
