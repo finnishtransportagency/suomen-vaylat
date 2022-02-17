@@ -15,11 +15,14 @@ import {
     faRoad,
     faShip,
     faTrain,
-    faGlobeEurope
+    faGlobeEurope, faInfoCircle
 } from '@fortawesome/free-solid-svg-icons';
 
 import { updateLayers } from '../../../utils/rpcUtil';
 import { setSelectError } from "../../../state/slices/rpcSlice"
+import { setIsGroupInfoOpen, setIsGroupInfoOpenKey } from "../../../state/slices/uiSlice"
+import {useAppSelector} from "../../../state/hooks";
+import strings from "../../../translations";
 
 const OSKARI_LOCALSTORAGE = "oskari";
 
@@ -106,7 +109,7 @@ const StyledMasterGroupTitleContent = styled.div`
     justify-content: center;
 `;
 
-const StyledMasterGroupName = styled.p`
+const StyledMasterGroupName = styled.div`
     user-select: none;
     max-width: 240px;
     color: ${props => props.theme.colors.mainWhite};
@@ -119,6 +122,47 @@ const StyledMasterGroupName = styled.p`
     @media ${ props => props.theme.device.mobileL} {
         //font-size: 13px;
     };
+`;
+
+const StyledMasterGroupInfo = styled.span`
+    pointer-events: auto;
+    color: ${props => props.theme.colors.mainWhite};
+    margin-left: 5px;
+    padding: 0px;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.1s ease-in;
+
+    @media ${ props => props.theme.device.mobileL} {
+        //font-size: 13px;
+    };
+`;
+
+const StyledSubHeader = styled.p`
+    height: 30px;
+    display: flex;
+    align-items: center;
+    color: ${props => props.theme.colors.mainColor1};
+    margin: 0px;
+    margin-top: 8px;
+    padding-left: 8px;
+    font-size: 13px;
+    font-weight: bold;
+`;
+
+const StyledSubText = styled.p`
+    color: ${props => props.theme.colors.black};
+    transition: all 0.1s ease-in;
+    margin: 0px;
+    padding: 0px 8px 8px 8px;
+    font-size: 12px;
+    font-weight: 400;
+`;
+
+const StyledReadMoreButton = styled.span`
+    color: ${props => props.theme.colors.mainColor1};
+    font-size: 12px;
+    font-weight: 400;
 `;
 
 const StyledMasterGroupLayersCount = styled.p`
@@ -275,6 +319,7 @@ export const LayerGroup = ({
 
     const [isOpen, setIsOpen] = useState(false);
     const [isChecked, setIsChecked] = useState(false);
+    const [isExcerptOpen, setIsExcerptOpen] = useState(false);
     const { store } = useContext(ReactReduxContext);
     const channel = useSelector(state => state.rpc.channel);
 
@@ -319,7 +364,6 @@ export const LayerGroup = ({
     },[group, layers]);
 
 
-
     const selectGroup = (e) => {
         e.stopPropagation();
         var invisibleLayers = filteredLayers.length - visibleLayers.length;
@@ -351,6 +395,12 @@ export const LayerGroup = ({
         }
         updateLayers(store, channel);
     };
+
+    const truncatedString = (string, characterAmount, text) => {
+        return (
+            string.length > 10 ? <>{string.substring(0, characterAmount)} <StyledReadMoreButton onClick={() => setIsExcerptOpen(!isExcerptOpen)}>{text}</StyledReadMoreButton></> : string
+        )
+    }
 
     return (
         <>
@@ -456,6 +506,28 @@ export const LayerGroup = ({
                         type: "tween"
                     }}
                 >
+                    {group.parentId == -1 &&
+                        <div>
+                            {strings.groupLayerList.hasOwnProperty(index) && strings.groupLayerList[index].title !== null &&
+                                <>
+                                    <StyledSubHeader>{strings.groupLayerList[index].title}</StyledSubHeader>
+                                </>
+                            }
+                            {strings.groupLayerList.hasOwnProperty(index) && strings.groupLayerList[index].description !== null &&
+                                <>
+                                    {/*<StyledSubText>*/}
+                                    {/*    {isExcerptOpen ? strings.groupLayerList[index].description :*/}
+                                    {/*    <StyledExcerpt onClick={setIsExcerptOpen}>{stringTruncate(strings.groupLayerList[index].description, 145, " Lue lisää")}</StyledExcerpt>}*/}
+                                    {/*</StyledSubText>*/}
+                                    <StyledSubText>
+                                        {isExcerptOpen ? <> {strings.groupLayerList[index].description} <StyledReadMoreButton onClick={() => setIsExcerptOpen(!isExcerptOpen)}>Vähemmän</StyledReadMoreButton></> :
+                                                truncatedString(strings.groupLayerList[index].description,
+                                                    100, 'Lue lisää')}
+                                    </StyledSubText>
+                                </>
+                            }
+                        </div>
+                    }
                     {hasChildren && (
                         <>
                             <LayerList

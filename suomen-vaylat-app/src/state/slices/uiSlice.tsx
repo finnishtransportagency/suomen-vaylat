@@ -7,6 +7,8 @@ const initialState = {
   isSearchOpen: false,
   searchParams: '',
   isInfoOpen: false,
+  isGroupInfoOpen: false,
+  groupInfoOpenKey: 0,
   isUserGuideOpen: false,
   shareUrl: '',
   isDrawingToolsOpen: false,
@@ -45,6 +47,12 @@ export const uiSlice = createSlice({
     },
     setSearchParams: (state, action) => {
       state.searchParams = action.payload;
+    },
+    setIsGroupInfoOpen: (state, action) => {
+      state.isGroupInfoOpen = action.payload;
+    },
+    setIsGroupInfoOpenKey: (state, action) => {
+      state.groupInfoOpenKey = action.payload;
     },
     setIsInfoOpen: (state, action) => {
       state.isInfoOpen = action.payload;
@@ -89,6 +97,8 @@ export const {
   setIsSideMenuOpen,
   setIsSearchOpen,
   setSearchParams,
+  setIsGroupInfoOpen,
+  setIsGroupInfoOpenKey,
   setIsInfoOpen,
   setIsUserGuideOpen,
   setIsLegendOpen,
