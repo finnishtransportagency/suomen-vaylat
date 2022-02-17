@@ -20,8 +20,6 @@ import {
 
 import { updateLayers } from '../../../utils/rpcUtil';
 import { setSelectError } from "../../../state/slices/rpcSlice"
-import { setIsGroupInfoOpen, setIsGroupInfoOpenKey } from "../../../state/slices/uiSlice"
-import {useAppSelector} from "../../../state/hooks";
 import strings from "../../../translations";
 
 const OSKARI_LOCALSTORAGE = "oskari";
@@ -364,6 +362,12 @@ export const LayerGroup = ({
         layersCounter(group);
     },[group, layers]);
 
+    const truncatedString = (string, characterAmount, text) => {
+        return (
+            string.length > 10 ? <>{string.substring(0, characterAmount)} <StyledReadMoreButton
+                onClick={() => setIsExcerptOpen(!isExcerptOpen)}>{text}</StyledReadMoreButton></> : string
+        )
+    }
 
     const selectGroup = (e) => {
         e.stopPropagation();
@@ -397,11 +401,6 @@ export const LayerGroup = ({
         updateLayers(store, channel);
     };
 
-    const truncatedString = (string, characterAmount, text) => {
-        return (
-            string.length > 10 ? <>{string.substring(0, characterAmount)} <StyledReadMoreButton onClick={() => setIsExcerptOpen(!isExcerptOpen)}>{text}</StyledReadMoreButton></> : string
-        )
-    }
 
     return (
         <>
@@ -516,14 +515,11 @@ export const LayerGroup = ({
                             }
                             {strings.groupLayerList.hasOwnProperty(index) && strings.groupLayerList[index].description !== null &&
                                 <>
-                                    {/*<StyledSubText>*/}
-                                    {/*    {isExcerptOpen ? strings.groupLayerList[index].description :*/}
-                                    {/*    <StyledExcerpt onClick={setIsExcerptOpen}>{stringTruncate(strings.groupLayerList[index].description, 145, " Lue lisää")}</StyledExcerpt>}*/}
-                                    {/*</StyledSubText>*/}
                                     <StyledSubText>
-                                        {isExcerptOpen ? <> {strings.groupLayerList[index].description} <StyledReadMoreButton onClick={() => setIsExcerptOpen(!isExcerptOpen)}>Vähemmän</StyledReadMoreButton></> :
+                                        {isExcerptOpen ? <> {strings.groupLayerList[index].description} <StyledReadMoreButton
+                                                onClick={() => setIsExcerptOpen(!isExcerptOpen)}>{strings.groupLayerList.readLess}</StyledReadMoreButton></> :
                                                 truncatedString(strings.groupLayerList[index].description,
-                                                    100, 'Lue lisää')}
+                                                    135, '...' + strings.groupLayerList.readMore)}
                                     </StyledSubText>
                                 </>
                             }

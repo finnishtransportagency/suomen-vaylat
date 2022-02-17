@@ -225,6 +225,8 @@
     }
   },
   "groupLayerList": {
+    "readMore" : "Lue lisää",
+    "readLess" : "Vähemmän",
     "0": {
       "title": "Digiroad",
       "description": "Digiroad on Väyläviraston vastuulla oleva valtakunnallinen aineistokokonaisuus, joka sisältää tieverkon keskilinjageometriat sekä liikenteeseen liittyviä ominaisuustietoja. Digiroad on kokoava tietojärjestelmä, johon kerätään aineistoa Väyläviraston Tierekisteristä, Maanmittauslaitoksen Maastotietokannasta, kuntien katutietojärjestelmistä sekä muutamien muiden viranomaisten tietojärjestelmistä (mm. Helsingin seudun liikenne HSL)."

@@ -224,6 +224,26 @@
       "opacity": "Genomskinlighet"
     }
   },
+  "groupLayerList": {
+    "readMore" : "Lue lisää",
+    "readLess" : "Vähemmän",
+    "0": {
+      "title": "Digiroad",
+      "description": "Digiroad on Väyläviraston vastuulla oleva valtakunnallinen aineistokokonaisuus, joka sisältää tieverkon keskilinjageometriat sekä liikenteeseen liittyviä ominaisuustietoja. Digiroad on kokoava tietojärjestelmä, johon kerätään aineistoa Väyläviraston Tierekisteristä, Maanmittauslaitoksen Maastotietokannasta, kuntien katutietojärjestelmistä sekä muutamien muiden viranomaisten tietojärjestelmistä (mm. Helsingin seudun liikenne HSL)."
+    },
+    "1": {
+      "title": "Euroopan laajuinen liikenneverkko TEN-T",
+      "description": "TEN-T-verkosto koostuu kahdesta tasosta: vuoteen 2030 mennessä rakennettavasta ydinverkosta (core network) ja vuoteen 2050 mennessä rakennettavasta kattavasta verkosta (comprehensive network). TEN-T ydinverkko keskittyy tärkeimpiin yhteyksiin ja solmukohtiin. Ydinverkon toteuttamista edistää käytäviin perustuva lähestymistapa. TEN-T-verkko kattaa kaikki liikennemuodot: maantie-, ilma-, sisävesi-, meri- sekä liikennemuotojen yhdistelyn mahdollistavat alustat."
+    },
+    "4": {
+      "title": "Ratatiedot",
+      "description": "Aineisto kattaa Väyläviraston omistamat rautatiet. Aineiston lähdejärjestelmä on Ratainfratietojen hallintajärjestelmän ratakohteiden hallintasovellus (RATKO)."
+    },
+    "8": {
+      "title": "Vesiväylätiedot",
+      "description": "Aineisto kattaa Väyläviraston vastuulla olevat vesiväylät ja kanavat. Niiden ylläpidossa ja kehittämisessä otetaan huomioon niin kauppamerenkulun kuin muunkin vesiliikenteen tarpeet."
+    }
+  },
   "themelayerlist": {
     "0": {
       "title": "Projektkarta",
