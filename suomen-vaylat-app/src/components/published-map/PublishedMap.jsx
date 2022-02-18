@@ -246,7 +246,7 @@ const PublishedMap = () => {
                         });
 
                         layerOrders.forEach(layer => {
-                            selectedLayers.push(layer.id);
+                            selectedLayers.push(layer);
                         });
 
                         const startState = {

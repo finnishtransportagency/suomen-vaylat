@@ -137,7 +137,7 @@ const Content = () => {
         store.dispatch(setSelectError({ show: false, type: '', filteredLayers: [], indeterminate: false }));
     };
 
-    function handleCloseAppInfoModal() {
+    const handleCloseAppInfoModal = () => {
         store.dispatch(setIsInfoOpen(false));
     };
 

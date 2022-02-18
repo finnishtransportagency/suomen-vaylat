@@ -171,8 +171,9 @@ export const Header = () => {
         }));
 
         // add start layers
-        startState.selectedLayers.forEach((layerId) => {
-            channel && channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layerId, true]);
+        startState.selectedLayers.forEach((layer) => {
+            channel && channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, true]);
+            channel && channel.postRequest('ChangeMapLayerOpacityRequest', [layer.id, layer.opacity]);
         });
 
         store.dispatch(setIsMainScreen());
