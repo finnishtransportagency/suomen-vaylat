@@ -154,11 +154,11 @@ export const SelectedLayer = ({
 }) => {
 
     const { store } = useContext(ReactReduxContext);
-    const [opacity, setOpacity] = useState(layer.opacity)
+    const [opacity, setOpacity] = useState(layer.opacity);
     const channel = useSelector(state => state.rpc.channel);
 
-    const handleLayerVisibility = (channel, layer) => {
-        channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, !layer.visible]);
+    const handleLayerRemoveSelectedLayer = (channel, layer) => {
+        channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, false]);
         updateLayers(store, channel);
     };
 
@@ -194,7 +194,7 @@ export const SelectedLayer = ({
                     <StyledLayerDeleteIcon
                         className="swiper-no-swiping"
                         onClick={() => {
-                            handleLayerVisibility(channel, layer);
+                            handleLayerRemoveSelectedLayer(channel, layer);
                         }}>
                         <FontAwesomeIcon
                             icon={faTimes}
@@ -228,6 +228,8 @@ export const SelectedLayer = ({
                             max="100"
                             value={opacity}
                             onChange={event => handleLayerOpacity(channel, layer, event.target.value)}
+                            onMouseUp={() => updateLayers(store, channel)}
+                            onTouchEnd={() => updateLayers(store, channel)}
                         />
                     </StyledBottomContent>
                 </StyledLayerContent>

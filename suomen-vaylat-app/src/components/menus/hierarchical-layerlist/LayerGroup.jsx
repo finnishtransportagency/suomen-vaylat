@@ -20,6 +20,7 @@ import {
 
 import { updateLayers } from '../../../utils/rpcUtil';
 import { setSelectError } from "../../../state/slices/rpcSlice"
+import strings from "../../../translations";
 
 const OSKARI_LOCALSTORAGE = "oskari";
 
@@ -119,6 +120,34 @@ const StyledMasterGroupName = styled.p`
     @media ${ props => props.theme.device.mobileL} {
         //font-size: 13px;
     };
+`;
+
+const StyledSubHeader = styled.p`
+    height: 30px;
+    display: flex;
+    align-items: center;
+    color: ${props => props.theme.colors.mainColor1};
+    margin: 0px;
+    margin-top: 8px;
+    padding-left: 8px;
+    font-size: 13px;
+    font-weight: bold;
+`;
+
+const StyledSubText = styled.p`
+    color: ${props => props.theme.colors.black};
+    transition: all 0.1s ease-in;
+    margin: 0px;
+    padding: 0px 8px 8px 8px;
+    font-size: 12px;
+    font-weight: 400;
+`;
+
+const StyledReadMoreButton = styled.span`
+    cursor: pointer;
+    color: ${props => props.theme.colors.mainColor1};
+    font-size: 12px;
+    font-weight: 400;
 `;
 
 const StyledMasterGroupLayersCount = styled.p`
@@ -275,6 +304,7 @@ export const LayerGroup = ({
 
     const [isOpen, setIsOpen] = useState(false);
     const [isChecked, setIsChecked] = useState(false);
+    const [isExcerptOpen, setIsExcerptOpen] = useState(false);
     const { store } = useContext(ReactReduxContext);
     const channel = useSelector(state => state.rpc.channel);
 
@@ -318,7 +348,12 @@ export const LayerGroup = ({
         layersCounter(group);
     },[group, layers]);
 
-
+    const truncatedString = (string, characterAmount, text) => {
+        return (
+            string.length > 10 ? <>{string.substring(0, characterAmount)} <StyledReadMoreButton
+                onClick={() => setIsExcerptOpen(!isExcerptOpen)}>{text}</StyledReadMoreButton></> : string
+        )
+    }
 
     const selectGroup = (e) => {
         e.stopPropagation();
@@ -351,6 +386,7 @@ export const LayerGroup = ({
         }
         updateLayers(store, channel);
     };
+
 
     return (
         <>
@@ -456,6 +492,25 @@ export const LayerGroup = ({
                         type: "tween"
                     }}
                 >
+                    {group.parentId == -1 &&
+                        <div>
+                            {strings.groupLayerList.hasOwnProperty(index) && strings.groupLayerList[index].title !== null &&
+                                <>
+                                    <StyledSubHeader>{strings.groupLayerList[index].title}</StyledSubHeader>
+                                </>
+                            }
+                            {strings.groupLayerList.hasOwnProperty(index) && strings.groupLayerList[index].description !== null &&
+                                <>
+                                    <StyledSubText>
+                                        {isExcerptOpen ? <> {strings.groupLayerList[index].description} <StyledReadMoreButton
+                                                onClick={() => setIsExcerptOpen(!isExcerptOpen)}>{strings.groupLayerList.readLess}</StyledReadMoreButton></> :
+                                                truncatedString(strings.groupLayerList[index].description,
+                                                    135, '...' + strings.groupLayerList.readMore)}
+                                    </StyledSubText>
+                                </>
+                            }
+                        </div>
+                    }
                     {hasChildren && (
                         <>
                             <LayerList

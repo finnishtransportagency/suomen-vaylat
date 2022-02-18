@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
-import { faList, faSearchMinus, faSearchPlus, faSearchLocation } from '@fortawesome/free-solid-svg-icons';
+import { faList, faSearchMinus, faSearchPlus, faCrosshairs} from '@fortawesome/free-solid-svg-icons';
 
 import { useAppSelector } from '../../state/hooks';
 import { ReactReduxContext } from 'react-redux';
@@ -162,7 +162,7 @@ const ZoomBar = ({
                         />
                     </StyledZoomBarZoomFeatures>
                     <CircleButton
-                        icon={faSearchLocation}
+                        icon={faCrosshairs}
                         text={strings.tooltips.myLocButton}
                         disabled={currentZoomLevel === Object.values(zoomLevelsLayers).length - 1}
                         clickAction={() => rpc.channel.postRequest('MyLocationPlugin.GetUserLocationRequest')}
