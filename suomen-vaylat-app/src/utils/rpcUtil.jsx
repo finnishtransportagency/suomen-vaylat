@@ -14,7 +14,12 @@ import {
 
 import { isMobile } from '../theme/theme';
 
-
+/**
+ * Update layers. Use only this to update all layers and selected layers.
+ * @method updateLayers
+ * @param {Object} store
+ * @param {Object} channel
+ */
 export const updateLayers = (store, channel) => {
     channel && channel.getAllLayers(function (data) {
         store.dispatch(setAllLayers(data));
@@ -26,9 +31,19 @@ export const updateLayers = (store, channel) => {
     });
 };
 
+/**
+ * Select group.
+ * @method selectGroup
+ * @param {Object} store
+ * @param {Object} channel
+ * @param {Number} index
+ * @param {String} theme
+ * @param {String} lastSelectedTheme
+ * @param {Number} selectedThemeIndex
+ */
 export const selectGroup = (store, channel, index, theme, lastSelectedTheme, selectedThemeIndex) => {
     store.dispatch(setLastSelectedTheme(theme));
-    if(selectedThemeIndex === null){
+    if (selectedThemeIndex === null){
         store.dispatch(setSelectedTheme(theme));
         store.dispatch(setSelectedThemeIndex(index));
         setTimeout(() => {
@@ -38,7 +53,7 @@ export const selectGroup = (store, channel, index, theme, lastSelectedTheme, sel
             });
             updateLayers(store, channel);
         },700);
-    } else if(selectedThemeIndex !== index ){
+    } else if (selectedThemeIndex !== index ){
         store.dispatch(setSelectedTheme(theme));
         lastSelectedTheme !== null && lastSelectedTheme.layers.forEach(layerId => {
             channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layerId, false]);
@@ -59,7 +74,7 @@ export const selectGroup = (store, channel, index, theme, lastSelectedTheme, sel
         theme.layers && theme.layers.forEach(layerId => {
             channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layerId, false]);
         });
-        if(theme.subthemes){
+        if (theme.subthemes){
             for (var i = 0; i < theme.subthemes.length; i++) {
                 theme.subthemes[i].layers.forEach(layerId => {
                     channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layerId, false]);
@@ -74,6 +89,12 @@ export const selectGroup = (store, channel, index, theme, lastSelectedTheme, sel
     };
 };
 
+/**
+ * Rearrange RPC layer order.
+ * @method reArrangeRPCLayerOrder
+ * @param {Object} store
+ * @param {Array} selectedLayers
+ */
 export const reArrangeRPCLayerOrder = (store, selectedLayers) => {
     const mapLayers = selectedLayers.filter(layer => {
         return !(layer.groups && layer.groups.includes(1));
@@ -96,6 +117,12 @@ export const reArrangeRPCLayerOrder = (store, selectedLayers) => {
     })
 }
 
+/**
+ * Rearrange selected layers order.
+ * @method reArrangeSelectedLayersOrder
+ * @param {Array} selectedLayers
+ * @returns ordered layers
+ */
 export const reArrangeSelectedLayersOrder = (selectedLayers) => {
     const mapLayers = selectedLayers.filter(layer => {
         return !(layer.groups && layer.groups.includes(1));
@@ -108,12 +135,32 @@ export const reArrangeSelectedLayersOrder = (selectedLayers) => {
     return mapLayers.concat(backgroundMaps)
 }
 
+/**
+ * Reset theme groups.
+ * @method resetThemeGroup
+ * @param {Object} store
+ * @param {Object} channel
+ * @param {Number} index
+ * @param {String} theme
+ * @param {String} lastSelectedTheme
+ * @param {Number} selectedThemeIndex
+ */
 export const resetThemeGroups = (store, channel, index, theme, lastSelectedTheme, selectedThemeIndex) => {
     store.dispatch(setSelectedTheme(null));
     store.dispatch(setLastSelectedTheme(null));
     store.dispatch(setSelectedThemeIndex(null));
 };
 
+/**
+ * Reset theme groups for main screen.
+ * @method resetThemeGroupsForMainScreen
+ * @param {Object} store
+ * @param {Object} channel
+ * @param {Number} index
+ * @param {String} theme
+ * @param {String} lastSelectedTheme
+ * @param {Number} selectedThemeIndex
+ */
 export const resetThemeGroupsForMainScreen = (store, channel, index, theme, lastSelectedTheme, selectedThemeIndex) => {
     if(theme){
         theme.layers.forEach(layerId => {
@@ -126,6 +173,13 @@ export const resetThemeGroupsForMainScreen = (store, channel, index, theme, last
     store.dispatch(setSelectedThemeIndex(null));
 };
 
+/**
+ * Remove dublicates.
+ * @method removeDublicates
+ * @param {Array} originalArray
+ * @param {String} prop
+ * @returns
+ */
 export const removeDuplicates = (originalArray, prop) => {
     let newArray = [];
     let lookupObject  = {};
