@@ -71,8 +71,6 @@ export const SelectedLayers = ({ selectedLayers, currentZoomLevel }) => {
         return layer.groups && layer.groups.includes(1);
     });
 
-    console.log(mapLayers);
-
     const sortSelectedLayers = (selectedLayer) => {
         const newSelectedLayers = arrayMoveImmutable(selectedLayers, selectedLayer.oldIndex, selectedLayer.newIndex)
         reArrangeRPCLayerOrder(store, newSelectedLayers);
