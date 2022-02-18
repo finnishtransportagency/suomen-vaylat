@@ -78,7 +78,8 @@ const StyledFeature = styled(motion.div)`
 const getContent = (key, value, visibleFields, highPriorityFields, lowPriorityTable, highPriorityTable) => {
     const hasConfiguration = highPriorityFields.length !== 0 || visibleFields.length !== 0;
     value = (value && typeof value === 'string' && (value.startsWith('http://') || value.startsWith('https://'))) ? '<a href="' + value + '" target="_blank">' + value + '<a>' : value;
-    if (value !== null && value.trim() === '') {
+
+    if (value !== null && typeof value === 'string' && value.trim() === '') {
         return;
     }
     // try if value is JSON

@@ -115,7 +115,7 @@ export const SelectedLayers = ({ selectedLayers, currentZoomLevel }) => {
                 >
                     {mapLayers.map((item, i) => (
                         <SortableElement
-                            key={item.id+" "+i}
+                            key={'maplayer-' + item.id}
                             value={item}
                             index={i}
                             currentZoomLevel={currentZoomLevel}
@@ -140,7 +140,7 @@ export const SelectedLayers = ({ selectedLayers, currentZoomLevel }) => {
                 >
                     {backgroundMaps.map((item, i) => (
                         <SortableElement
-                            key={item.id+" "+i}
+                            key={'background-maplayer-' + item.id}
                             value={item}
                             index={i}
                             currentZoomLevel={currentZoomLevel}

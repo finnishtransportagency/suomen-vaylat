@@ -130,12 +130,11 @@ export const ListComponent = ({listData}) => {
     );
 };
 
-export const VersionInfo = ({listData, currentAppVersion, currentAppBuildDate}) => {
+export const VersionInfo = ({currentAppVersion, currentAppBuildDate}) => {
     return (
         <div>
             <StyledTitle><p>{strings.appInfo.versionInfo.appVersion + currentAppVersion}</p></StyledTitle>
             <StyledTitle><p>{strings.appInfo.versionInfo.appLastUpdate + currentAppBuildDate}</p></StyledTitle>
-            <ListComponent listData={listData} />
         </div>
     );
 };
@@ -174,7 +173,6 @@ export const AppInfoModalContent = () => {
     const headingText = strings.appInfo.headingText.bold();
     const mainText = strings.appInfo.mainText;
     const content = <div dangerouslySetInnerHTML={{ __html: headingText + '<br><br>' + mainText }}></div>;
-    const versionInfoList = strings.appInfo.versionInfo.versionInfoList;
 
     // App build info
     const currentAppVersion = getAppVersion();
@@ -200,7 +198,6 @@ export const AppInfoModalContent = () => {
             title: strings.appInfo.versionInfo.title,
             titleColor: 'mainColor1',
             content: <VersionInfo
-                listData={versionInfoList}
                 currentAppVersion={currentAppVersion}
                 currentAppBuildDate={currentAppBuildDate}
             />
