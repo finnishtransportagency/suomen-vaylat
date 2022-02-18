@@ -71,6 +71,8 @@ export const SelectedLayers = ({ selectedLayers, currentZoomLevel }) => {
         return layer.groups && layer.groups.includes(1);
     });
 
+    console.log(mapLayers);
+
     const sortSelectedLayers = (selectedLayer) => {
         const newSelectedLayers = arrayMoveImmutable(selectedLayers, selectedLayer.oldIndex, selectedLayer.newIndex)
         reArrangeRPCLayerOrder(store, newSelectedLayers);
@@ -115,7 +117,7 @@ export const SelectedLayers = ({ selectedLayers, currentZoomLevel }) => {
                 >
                     {mapLayers.map((item, i) => (
                         <SortableElement
-                            key={item.id+" "+i}
+                            key={'maplayer-' + item.id}
                             value={item}
                             index={i}
                             currentZoomLevel={currentZoomLevel}
@@ -140,7 +142,7 @@ export const SelectedLayers = ({ selectedLayers, currentZoomLevel }) => {
                 >
                     {backgroundMaps.map((item, i) => (
                         <SortableElement
-                            key={item.id+" "+i}
+                            key={'background-maplayer-' + item.id}
                             value={item}
                             index={i}
                             currentZoomLevel={currentZoomLevel}
