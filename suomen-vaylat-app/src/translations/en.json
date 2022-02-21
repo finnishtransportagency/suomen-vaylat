@@ -115,6 +115,10 @@
         "title": "Drawingtools",
         "content": "The measurement tools open from the drawing icon on the left. The tools can be used to measure length or area. the measurement results can be deleted from the map with the orange rubber but-ton."
       },
+      "savingView": {
+        "title": "Näkymän tallennus",
+        "content": "Näkymän tallennuksella voidaan tallentaa karttanäkymä selaimen välimuistiin. Näkymään tallennetaan kartan kohdistus, lähestymistaso sekä valitut kartta-aineistot. Tallennetut näkymät ovat käytettävissä sillä laitteella ja selaimessa, jossa näkymä on tallennettu. Tallennettujen näkymien välillä voi siirtyä klikkaamalla/täppäämällä haluttua näkymää. Näkymän voi poistaa roskakori-kuvakkeesta."
+      },
       "setFullScreen": {
         "title": "Expand",
         "content": "The Expand button can be used to expand the Suomen Vaylat application to fill the entire screen."

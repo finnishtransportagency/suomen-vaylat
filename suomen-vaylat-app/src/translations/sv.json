@@ -115,6 +115,10 @@
         "title": "Ritverktyg",
         "content": "Mätverktygen öppnas från ritikonen till vänster. Verktygen kan användas för att mäta längd eller area. mätresultaten kan raderas från kartan med den orangea gummiknappen."
       },
+      "savingView": {
+        "title": "Näkymän tallennus",
+        "content": "Näkymän tallennuksella voidaan tallentaa karttanäkymä selaimen välimuistiin. Näkymään tallennetaan kartan kohdistus, lähestymistaso sekä valitut kartta-aineistot. Tallennetut näkymät ovat käytettävissä sillä laitteella ja selaimessa, jossa näkymä on tallennettu. Tallennettujen näkymien välillä voi siirtyä klikkaamalla/täppäämällä haluttua näkymää. Näkymän voi poistaa roskakori-kuvakkeesta."
+      },
       "setFullScreen": {
         "title": "Bygga ut",
         "content": "Expandera-knappen kan användas för att expandera Suomen Vaylat-applikationen så att den fyller hela skärmen."
