@@ -89,10 +89,14 @@
             "text": "Du kan dela den aktuella vyn av kartan med en länk direkt till den valda tjänsten eller genom att kopiera länken. Vyn behåller fokus, zoomnivå och valda material och tema."
           },
           "2": {
+            "title": "Visa bruksanvisning",
+            "text": ""
+          },
+          "3": {
             "title": "Info",
             "text": "Bakom infoknappen hittar du information om applikationen, bruksanvisning och kontaktuppgifter för att skicka feedback till exempel."
           },
-          "3": {
+          "4": {
             "title": "Språk",
             "text": "Du kan välja finska, svenska eller engelska som språk för karttjänsten."
           }
@@ -116,8 +120,8 @@
         "content": "Mätverktygen öppnas från ritikonen till vänster. Verktygen kan användas för att mäta längd eller area. mätresultaten kan raderas från kartan med den orangea gummiknappen."
       },
       "savingView": {
-        "title": "Näkymän tallennus",
-        "content": "Näkymän tallennuksella voidaan tallentaa karttanäkymä selaimen välimuistiin. Näkymään tallennetaan kartan kohdistus, lähestymistaso sekä valitut kartta-aineistot. Tallennetut näkymät ovat käytettävissä sillä laitteella ja selaimessa, jossa näkymä on tallennettu. Tallennettujen näkymien välillä voi siirtyä klikkaamalla/täppäämällä haluttua näkymää. Näkymän voi poistaa roskakori-kuvakkeesta."
+        "title": "Spara vyn",
+        "content": "Saving a view allows you to save the Map View to your browser's cache. The view saves the map focus, the approach level, and the selected map data. Saved views are available on the device and browser where the view is saved. You can switch between saved views by clicking / tapping the desired view. You can delete the view from the trash can icon."
       },
       "setFullScreen": {
         "title": "Bygga ut",
