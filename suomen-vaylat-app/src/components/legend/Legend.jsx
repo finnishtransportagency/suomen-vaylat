@@ -93,7 +93,6 @@ const listVariants = {
 
 export const Legend = ({
     selectedLayers,
-    zoomLevelsLayers,
     currentZoomLevel,
     isExpanded,
     setIsExpanded,
@@ -102,29 +101,25 @@ export const Legend = ({
     const legends = [];
     const noLegends = [];
     const allLegends = useSelector((state) => state.rpc.legends);
-    const [currentLayersInfoLayers, setCurrentLayersInfoLayers] = useState([]);
 
     if (selectedLayers) {
         selectedLayers.forEach((layer) => {
             const legend = allLegends.filter((l) => {
                 return l.layerId === layer.id;
             });
-            if (legend[0] && legend[0].legend) {
+            const hasVisible = (!isNaN(layer.maxZoomLevel) && !isNaN(layer.minZoomLevel)) ? layer.maxZoomLevel >= currentZoomLevel && layer.minZoomLevel <= currentZoomLevel : true;
+            if (legend[0] && legend[0].legend && hasVisible) {
                 legends.push(legend[0]);
-            } else if (legend[0]) {
+            } else if (legend[0] && hasVisible) {
                 noLegends.push(legend[0]);
             }
         });
     }
     legends.push.apply(legends, noLegends);
 
-    useEffect(() => {
-        zoomLevelsLayers && zoomLevelsLayers[currentZoomLevel] !== undefined && setCurrentLayersInfoLayers(Object.values(zoomLevelsLayers)[currentZoomLevel].layers);
-    }, [zoomLevelsLayers, currentZoomLevel]);
-
     return(
         <StyledLegendContainer
-            key={legends}
+            key={'legend-container'}
             height={height}
             animate={isExpanded ? 'visible' : 'hidden'}
             variants={listVariants}
@@ -149,13 +144,9 @@ export const Legend = ({
             </StyledHeaderContent>
             <StyledGroupsContainer id="legend-main-container">
                 {legends.map((legend, index) => {
-                    const zoomLevelLayer = currentLayersInfoLayers.find((layer) => layer.id === legend.layerId);
-                    return zoomLevelLayer && <LegendGroup
+                    return <LegendGroup
                         key={'legend-group-' + legend.layerId}
                         legend={legend}
-                        zoomLevelLayer={zoomLevelLayer}
-                        index={index}
-                        layer={legend}
                     />
                 })}
             </StyledGroupsContainer>

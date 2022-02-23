@@ -89,10 +89,14 @@
             "text": "Kartan nykyisen näkymän voi jakaa linkillä suoraan valittuun palveluun tai kopioimalla linkin. Näkymässä säilytetään kohdistus, zoom-taso sekä valitut aineistot ja valittu teema."
           },
           "2": {
+            "title": "Näytä käyttöohje",
+            "text": ""
+          },
+          "3": {
             "title": "Info",
             "text": "Info-napin takaa löytyy tietoa sovelluksesta, käyttöohjeet sekä yhteystiedot esimerkiksi palautteen lähettämistä varten."
           },
-          "3": {
+          "4": {
             "title": "Kieli",
             "text": "Karttapalvelun kieleksi voi valita suomen, ruotsin tai englannin."
           }
@@ -114,6 +118,10 @@
       "measureTool": {
         "title": "Mittaustyökalut",
         "content": "Mittaustyökalut avautuvat vasemman reunan piirto-ikonista. Työkaluilla voi mitata pituutta tai pinta-alaa. mittaustulokset saa poistettua kartalta oranssilla kumi-painikkeella."
+      },
+      "savingView": {
+        "title": "Näkymän tallennus",
+        "content": "Näkymän tallennuksella voidaan tallentaa karttanäkymä selaimen välimuistiin. Näkymään tallennetaan kartan kohdistus, lähestymistaso sekä valitut kartta-aineistot. Tallennetut näkymät ovat käytettävissä sillä laitteella ja selaimessa, jossa näkymä on tallennettu. Tallennettujen näkymien välillä voi siirtyä klikkaamalla/täppäämällä haluttua näkymää. Näkymän voi poistaa roskakori-kuvakkeesta."
       },
       "setFullScreen": {
         "title": "Laajenna",
@@ -238,6 +246,10 @@
     "4": {
       "title": "Ratatiedot",
       "description": "Aineisto kattaa Väyläviraston omistamat rautatiet. Aineiston lähdejärjestelmä on Ratainfratietojen hallintajärjestelmän ratakohteiden hallintasovellus (RATKO)."
+    },
+    "5": {
+      "title": "Taitorakennerekisteri",
+      "description": "Taitorakennerekisteri on Väyläviraston taitorakenteiden perustietovarasto ja omaisuudenhallintajärjestelmä, joka sisältää hallinnollista ja rakenteellista tietoa. Taitorakennerekisterin tietosisältöä ovat mm sillat, tunnelit, rautatierummut,  tie- ja yhteysaluslaiturit sekä kanavarakenteet."
     },
     "8": {
       "title": "Vesiväylätiedot",
