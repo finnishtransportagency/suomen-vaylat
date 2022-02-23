@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import UserGuideUpperBarContent from './UserGuideUpperBarContent';
 import searchIcon from './images/haku_ikoni.jpg';
 import drawingToolsIcon from './images/piirtotyökalut.jpg';
+import saveViewIcon from './images/tallenna_nakyma.jpg';
 import fullScreenIcon from './images/laajenna_ikoni.jpg';
 import zoomBarIcon from './images/zoom-tasot.jpg';
 
@@ -72,13 +73,7 @@ export const UserGuideModalContent = () => {
             title: strings.appGuide.modalContent.mapLevelMenu.title,
             content: <UserGuideTabs />
         },
-        {
-            title: strings.appGuide.modalContent.search.title,
-            content: <div>
-                <StyledIcon src={searchIcon} />
-                <p>{strings.appGuide.modalContent.search.content}</p>
-            </div>
-        },
+
         {
             title: strings.appGuide.modalContent.measureTool.title,
             content: <div>
@@ -87,10 +82,24 @@ export const UserGuideModalContent = () => {
             </div>
         },
         {
+            title: strings.appGuide.modalContent.savingView.title,
+            content: <div>
+                <StyledIcon src={saveViewIcon} />
+                <p>{strings.appGuide.modalContent.savingView.content}</p>
+            </div>
+        },
+        {
             title: strings.appGuide.modalContent.setFullScreen.title,
             content: <div>
                 <StyledIcon src={fullScreenIcon} />
                 <p>{strings.appGuide.modalContent.setFullScreen.content}</p>
+            </div>
+        },
+        {
+            title: strings.appGuide.modalContent.search.title,
+            content: <div>
+                <StyledIcon src={searchIcon} />
+                <p>{strings.appGuide.modalContent.search.content}</p>
             </div>
         },
         {

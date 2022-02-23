@@ -89,10 +89,14 @@
             "text": "You can share the current view of the map with a link directly to the selected service or by copying the link. The view retains the focus, zoom level, and selected materials and theme."
           },
           "2": {
+            "title": "Show userguide",
+            "text": ""
+          },
+          "3": {
             "title": "Info",
             "text": "Behind the info button you will find information about the application, operating instructions and contact information for sending feedback, for example."
           },
-          "3": {
+          "4": {
             "title": "Language",
             "text": "You can select Finnish, Swedish or English as the language of the map service."
           }
@@ -114,6 +118,10 @@
       "measureTool": {
         "title": "Drawingtools",
         "content": "The measurement tools open from the drawing icon on the left. The tools can be used to measure length or area. the measurement results can be deleted from the map with the orange rubber but-ton."
+      },
+      "savingView": {
+        "title": "Save The View",
+        "content": "Saving a view allows you to save the Map View to your browser's cache. The view saves the map focus, the approach level, and the selected map data. Saved views are available on the device and browser where the view is saved. You can switch between saved views by clicking / tapping the desired view. You can delete the view from the trash can icon."
       },
       "setFullScreen": {
         "title": "Expand",
