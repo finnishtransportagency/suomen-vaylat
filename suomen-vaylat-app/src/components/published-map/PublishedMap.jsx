@@ -17,7 +17,6 @@ import {
     setLoading,
     setScaleBarState,
     setTagsWithLayers,
-    setZoomLevelsLayers,
     setZoomRange,
     setGFILocations,
     setGFIPoint,
@@ -124,12 +123,6 @@ const PublishedMap = () => {
                 if (data.getFeatures) {
                     channel.getFeatures(function (data) {
                         store.dispatch(setFeatures(data));
-                    });
-                };
-
-                if (data.getZoomLevelsLayers) {
-                    channel.getZoomLevelsLayers(function (data) {
-                        store.dispatch(setZoomLevelsLayers(data));
                     });
                 };
 

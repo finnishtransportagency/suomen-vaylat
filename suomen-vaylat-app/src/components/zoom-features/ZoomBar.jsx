@@ -83,20 +83,21 @@ const listVariants = {
 const ZoomBar = ({
     setHoveringIndex,
     hoveringIndex,
-    zoomLevelsLayers,
     currentZoomLevel,
     isExpanded,
     setIsExpanded,
 }) => {
     const { store } = useContext(ReactReduxContext);
     const rpc = useAppSelector((state) => state.rpc);
+    const zooms = Array.apply(null, {length: rpc.zoomRange.max + 1 - rpc.zoomRange.min}).map(function(_, idx) {
+        return idx + rpc.zoomRange.min;
+    });
 
     return (
             <StyledZoomBarContainer>
                 <Legend
                     currentZoomLevel={rpc.currentZoomLevel}
                     selectedLayers={rpc.selectedLayers}
-                    zoomLevelsLayers={rpc.zoomLevelsLayers}
                     isExpanded={isExpanded}
                     setIsExpanded={setIsExpanded}
                 />
@@ -112,7 +113,7 @@ const ZoomBar = ({
                         <CircleButton
                             icon={faSearchPlus}
                             text={strings.tooltips.zoomIn}
-                            disabled={currentZoomLevel === Object.values(zoomLevelsLayers).length - 1}
+                            disabled={currentZoomLevel === rpc.zoomRange.max}
                             clickAction={() => store.dispatch(setZoomIn())}
                             tooltipDirection={"left"}
                         />
@@ -125,17 +126,18 @@ const ZoomBar = ({
                                 type: 'tween'
                             }}
                         >
-                        {Object.values(zoomLevelsLayers).map((layer, index) => {
+                        {
+                        Object.values(zooms).map((zoom, index) => {
                             return <ZoomBarCircle
                                 key={index}
                                 index={index}
-                                layer={layer}
                                 zoomLevel={currentZoomLevel}
                                 hoveringIndex={hoveringIndex}
                                 setHoveringIndex={setHoveringIndex}
                                 isActive={parseInt(index) === parseInt(hoveringIndex)}
                             />
-                        })}
+                        })
+                        }
                             <StyledZoomBarSlider
                                 type="range"
                                 orient="vertical"
@@ -164,7 +166,7 @@ const ZoomBar = ({
                     <CircleButton
                         icon={faCrosshairs}
                         text={strings.tooltips.myLocButton}
-                        disabled={currentZoomLevel === Object.values(zoomLevelsLayers).length - 1}
+                        disabled={currentZoomLevel === rpc.zoomRange.min}
                         clickAction={() => rpc.channel.postRequest('MyLocationPlugin.GetUserLocationRequest')}
                         tooltipDirection={"left"}
                     />
