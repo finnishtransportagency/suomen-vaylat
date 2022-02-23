@@ -95,14 +95,14 @@ const listVariants = {
 };
 
 
-export const LegendGroup = ({ legend, index }) => {
+export const LegendGroup = ({ legend }) => {
 
     const [isOpen, setIsOpen] = useState(true);
     return (
-        <StyledLegendGroup key={'legend-' + index}>
+        <StyledLegendGroup key={'legend-' + legend.layerId}>
             <StyledGroupHeader
                 onClick={() => setIsOpen(!isOpen)}
-                key={'legend-header-' + index}
+                key={'legend-header-' + legend.layerId}
                 hasLegend={legend.legend !== null}
             >
                 <StyledLeftContent>
@@ -130,7 +130,7 @@ export const LegendGroup = ({ legend, index }) => {
             </StyledGroupHeader>
             <StyledGroupContainer
                 isOpen={isOpen}
-                key={'legend-conteiner-' + index}
+                key={'legend-container-' + legend.layerId}
                 hasLegend={legend.legend !== null}
                 initial="visible"
                 animate={isOpen ? "visible" : "hidden"}

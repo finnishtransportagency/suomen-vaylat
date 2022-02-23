@@ -2,6 +2,7 @@ import strings from '../../translations';
 import styled from 'styled-components';
 import suomenVaylatTextIcon from './images/suomen_vaylat_text.jpg'
 import shareIcon from './images/jaa_sivu.jpg'
+import userGuideIcon from './images/kayttoohje-ikoni.jpg'
 import infoIcon from './images/info_nappi.jpg'
 import languageSelectionIcon from './images/kieli_valinta.jpg'
 
@@ -17,8 +18,9 @@ const StyledSubTitle = styled.em`
 const upperBarImages = {
     0: suomenVaylatTextIcon,
     1: shareIcon,
-    2: infoIcon,
-    3: languageSelectionIcon,
+    2: userGuideIcon,
+    3: infoIcon,
+    4: languageSelectionIcon,
 };
 
 const UserGuideUpperBarContent = () => {

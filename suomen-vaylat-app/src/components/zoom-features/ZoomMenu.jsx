@@ -36,12 +36,9 @@ const ZoomMenu = () => {
                 <ZoomBar
                     setHoveringIndex={setHoveringIndex}
                     hoveringIndex={hoveringIndex}
-                    zoomLevelsLayers={rpc.zoomLevelsLayers}
                     currentZoomLevel={rpc.currentZoomLevel}
                     isExpanded={isLegendOpen}
                     setIsExpanded={handleLegendState}
-                    //allLayers={rpc.allLayers}
-                    //selectedLayers={rpc.selectedLayers}
                 />
             </StyledContainer>
         </>
