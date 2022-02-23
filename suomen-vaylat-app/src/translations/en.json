@@ -247,6 +247,10 @@
       "title": "Ratatiedot",
       "description": "Aineisto kattaa Väyläviraston omistamat rautatiet. Aineiston lähdejärjestelmä on Ratainfratietojen hallintajärjestelmän ratakohteiden hallintasovellus (RATKO)."
     },
+    "5": {
+      "title": "Taitorakennerekisteri",
+      "description": "Taitorakennerekisteri on Väyläviraston taitorakenteiden perustietovarasto ja omaisuudenhallintajärjestelmä, joka sisältää hallinnollista ja rakenteellista tietoa. Taitorakennerekisterin tietosisältöä ovat mm sillat, tunnelit, rautatierummut,  tie- ja yhteysaluslaiturit sekä kanavarakenteet."
+    },
     "8": {
       "title": "Vesiväylätiedot",
       "description": "Aineisto kattaa Väyläviraston vastuulla olevat vesiväylät ja kanavat. Niiden ylläpidossa ja kehittämisessä otetaan huomioon niin kauppamerenkulun kuin muunkin vesiliikenteen tarpeet."
