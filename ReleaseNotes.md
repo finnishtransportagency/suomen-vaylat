@@ -7,6 +7,10 @@ For a full list of changes see: https://github.com/finnishtransportagency/suomen
 * Improve search component
 * Open legend when theme maps is selected
 * Improve share descriptions
+* Track search
+* Improve tool button tooltips
+* GFI fixes
+* Share page improvements
 
 ## 0.3.0
 
