@@ -296,7 +296,6 @@ const Switch = ({ action, isSelected }) => {
 
 
 export const LayerGroup = ({
-    index,
     group,
     layers,
     hasChildren
@@ -386,7 +385,6 @@ export const LayerGroup = ({
         }
         updateLayers(store, channel);
     };
-
 
     return (
         <>
@@ -492,19 +490,19 @@ export const LayerGroup = ({
                         type: "tween"
                     }}
                 >
-                    {group.parentId == -1 &&
+                    {group.parentId === -1 &&
                         <div>
-                            {strings.groupLayerList.hasOwnProperty(index) && strings.groupLayerList[index].title !== null &&
+                            {strings.groupLayerList.hasOwnProperty(group.id) && strings.groupLayerList[group.id].title !== null &&
                                 <>
-                                    <StyledSubHeader>{strings.groupLayerList[index].title}</StyledSubHeader>
+                                    <StyledSubHeader>{strings.groupLayerList[group.id].title}</StyledSubHeader>
                                 </>
                             }
-                            {strings.groupLayerList.hasOwnProperty(index) && strings.groupLayerList[index].description !== null &&
+                            {strings.groupLayerList.hasOwnProperty(group.id) && strings.groupLayerList[group.id].description !== null &&
                                 <>
                                     <StyledSubText>
-                                        {isExcerptOpen ? <> {strings.groupLayerList[index].description} <StyledReadMoreButton
+                                        {isExcerptOpen ? <> {strings.groupLayerList[group.id].description} <StyledReadMoreButton
                                                 onClick={() => setIsExcerptOpen(!isExcerptOpen)}>{strings.groupLayerList.readLess}</StyledReadMoreButton></> :
-                                                truncatedString(strings.groupLayerList[index].description,
+                                                truncatedString(strings.groupLayerList[group.id].description,
                                                     135, '...' + strings.groupLayerList.readMore)}
                                     </StyledSubText>
                                 </>
