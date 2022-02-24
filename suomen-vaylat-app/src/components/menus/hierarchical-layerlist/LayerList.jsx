@@ -197,11 +197,10 @@ export const LayerList = ({
                         }
                         let isVisible = (group.layers && group.layers.length > 0) || hasChildren;
                         return (
-                            <StyledLayerGroupWrapper key={'group-sl-' + index + '-' + group.id }>
+                            <StyledLayerGroupWrapper key={'group-sl-' + group.id }>
                                 { isVisible ? (
                                     <LayerGroup
-                                        key={'layer-group-'+group.id}
-                                        index={index}
+                                        key={'layer-group-' + group.id}
                                         group={group}
                                         layers={layers}
                                         hasChildren={hasChildren}
