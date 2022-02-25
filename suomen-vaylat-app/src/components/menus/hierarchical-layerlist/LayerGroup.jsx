@@ -490,9 +490,8 @@ export const LayerGroup = ({
                         type: "tween"
                     }}
                 >
-                    {group.parentId === -1 &&
                         <div>
-                            {strings.groupLayerList.hasOwnProperty(group.id) && strings.groupLayerList[group.id].title !== null &&
+                            {group.parentId === -1 && strings.groupLayerList.hasOwnProperty(group.id) && strings.groupLayerList[group.id].title !== null &&
                                 <>
                                     <StyledSubHeader>{strings.groupLayerList[group.id].title}</StyledSubHeader>
                                 </>
@@ -508,7 +507,6 @@ export const LayerGroup = ({
                                 </>
                             }
                         </div>
-                    }
                     {hasChildren && (
                         <>
                             <LayerList
