@@ -236,7 +236,7 @@ export const FormattedGFI = ({ data }) => {
                             <FontAwesomeIcon
                                 icon={faAngleDown}
                                 style={{
-                                    transform: isFeatureOpen && 'rotate(180deg)',
+                                    transform: isInfoOpen && 'rotate(180deg)',
                                     marginLeft: '0.5rem'
                                 }}
                             />
