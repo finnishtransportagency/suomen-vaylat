@@ -349,7 +349,7 @@ export const LayerGroup = ({
 
     const truncatedString = (string, characterAmount, text) => {
         return (
-            string.length > 10 ? <>{string.substring(0, characterAmount)} <StyledReadMoreButton
+            string.length > characterAmount + 20 ? <>{string.substring(0, characterAmount)} <StyledReadMoreButton
                 onClick={() => setIsExcerptOpen(!isExcerptOpen)}>{text}</StyledReadMoreButton></> : string
         )
     }
