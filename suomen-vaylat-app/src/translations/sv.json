@@ -281,7 +281,7 @@
       "title": "TENT-T-nätet",
       "description": "TEN-T-nätet består av två plan: kärnnätet (core network) som ska färdigställas före 2030 och det heltäckande nätet (comprehensive network) som ska färdigställas före 2050. TEN-T-kärnnätet koncentreras till de viktigaste förbindelserna och knutpunkterna. Genomförandet av kärnnätet främjas av ett tillvägagångssätt som grundar sig på korridorer. TEN-T-nätet omfattar alla trafikformer: landsvägs-, luft-, insjö-, havs- samt plattformar som gör det möjligt att kombinera de olika trafikformerna."
     },
-    "6": {
+    "100084": {
       "title": "Beskrivning av bannätet",
       "description": "Verkkoselostuksen karttapalvelussa voi tarkastella rataverkon ominaisuustietoja, kuten sähköistystä ja liikennepaikkojen tietoja. Tiedot perustuvat ratarekisteritietoihin ja ERAan toimitettaviin RINF-tietoihin."
     }
