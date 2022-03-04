@@ -261,8 +261,8 @@
     }
   },
   "themelayerlist": {
-    "readMore" : "Lue lisää",
-    "readLess" : "Vähemmän",
+    "readMore" : "Read more",
+    "readLess" : "Read less",
     "0": {
       "title": "Project map",
       "description": "The map shows the agency’s investment projects and the projects at planning stage aimed for implementation."
