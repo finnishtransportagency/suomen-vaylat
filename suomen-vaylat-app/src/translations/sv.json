@@ -261,8 +261,8 @@
     }
   },
   "themelayerlist": {
-    "readMore" : "Lue lisää",
-    "readLess" : "Vähemmän",
+    "readMore" : "Läs mer",
+    "readLess" : "Mindre",
     "0": {
       "title": "Projektkarta",
       "description": "På kartan syns Trafikledsverkets investeringsprojekt och projektplaneringsobjekt som är tänkta att genomföras."
