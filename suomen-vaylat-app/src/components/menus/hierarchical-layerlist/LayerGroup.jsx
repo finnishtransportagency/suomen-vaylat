@@ -508,7 +508,7 @@ export const LayerGroup = ({
                                     <StyledSubText>
                                         {isExcerptOpen ? <> {strings.groupLayerList[group.id].description}
                                                 {strings.groupLayerList[group.id].link_description &&
-                                                    <><StyledLinkButton href={strings.groupLayerList[group.id].link}>{strings.groupLayerList[group.id].link_description}</StyledLinkButton><br /></>
+                                                    <><StyledLinkButton target={"_blank"} href={strings.groupLayerList[group.id].link}>{strings.groupLayerList[group.id].link_description}</StyledLinkButton><br /></>
                                                 }
                                                 <StyledReadMoreButton onClick={() => setIsExcerptOpen(!isExcerptOpen)}>{strings.groupLayerList.readLess}</StyledReadMoreButton></> :
                                                 truncatedString(strings.groupLayerList[group.id].description,
