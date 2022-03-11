@@ -150,6 +150,13 @@ const StyledReadMoreButton = styled.span`
     font-weight: 400;
 `;
 
+const StyledLinkButton = styled.a`
+    cursor: pointer;
+    color: ${props => props.theme.colors.mainColor1};
+    font-size: 12px;
+    font-weight: 400;
+`;
+
 const StyledMasterGroupLayersCount = styled.p`
     margin: 0;
     padding: 0px;
@@ -499,8 +506,11 @@ export const LayerGroup = ({
                             {strings.groupLayerList.hasOwnProperty(group.id) && strings.groupLayerList[group.id].description !== null &&
                                 <>
                                     <StyledSubText>
-                                        {isExcerptOpen ? <> {strings.groupLayerList[group.id].description} <StyledReadMoreButton
-                                                onClick={() => setIsExcerptOpen(!isExcerptOpen)}>{strings.groupLayerList.readLess}</StyledReadMoreButton></> :
+                                        {isExcerptOpen ? <> {strings.groupLayerList[group.id].description}
+                                                {strings.groupLayerList[group.id].link_description &&
+                                                    <><StyledLinkButton href={strings.groupLayerList[group.id].link}>{strings.groupLayerList[group.id].link_description}</StyledLinkButton><br /></>
+                                                }
+                                                <StyledReadMoreButton onClick={() => setIsExcerptOpen(!isExcerptOpen)}>{strings.groupLayerList.readLess}</StyledReadMoreButton></> :
                                                 truncatedString(strings.groupLayerList[group.id].description,
                                                     135, '...' + strings.groupLayerList.readMore)}
                                     </StyledSubText>

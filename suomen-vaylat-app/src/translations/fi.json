@@ -253,7 +253,9 @@
     },
     "727": {
       "title": "Tierekisteri",
-      "description": "Tierekisteri sisältää tietoja Väyläviraston vastuulla olevista maanteistä ja niiden liikenteestä. Tierekisteri on poistuva tietojärjestelmä. Suomen Väylissä esitetyt tierekisterin aineistot ovat irroitettu tierekisteristä 17.2.2022 "
+      "description": "Tierekisteri sisältää tietoja Väyläviraston vastuulla olevista maanteistä ja niiden liikenteestä. Tierekisteri on poistuva tietojärjestelmä. Suomen Väylissä esitetyt tierekisterin aineistot ovat irroitettu tierekisteristä 17.2.2022 ",
+      "link_description": "Tierekisterin tietosisällön kuvaus",
+      "link": "https://vayla.fi/documents/25230764/35411006/tierekisteri_tietosisallon_kuvaus.pdf/f8b86e12-f362-d89e-e518-5b54e884ebb8/tierekisteri_tietosisallon_kuvaus.pdf?t=1631166164551"
     },
     "101": {
       "title": "Vesiväylätiedot",
