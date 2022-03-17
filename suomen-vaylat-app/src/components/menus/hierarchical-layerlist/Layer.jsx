@@ -8,6 +8,7 @@ import {
     setMapLayerVisibility,
 } from '../../../state/slices/rpcSlice';
 import { updateLayers } from "../../../utils/rpcUtil";
+import LayerDownloadLinkButton from "./LayerDownloadLinkButton";
 import LayerMetadataButton from './LayerMetadataButton';
 
 const StyledLayerContainer = styled.li`
@@ -124,6 +125,11 @@ export const Layer = ({ layer, theme }) => {
         });
     }
 
+    let downloadLink = null;
+    if (layer.config && layer.config.downloadLink) {
+        downloadLink = layer.config.downloadLink;
+    }
+
     return (
             <StyledLayerContainer
                 themeStyle={themeStyle}
@@ -138,7 +144,7 @@ export const Layer = ({ layer, theme }) => {
                     </StyledLayerName>
                 </StyledlayerHeader>
                 {layer.metadataIdentifier && <LayerMetadataButton layer={layer}/>}
-                {/* <StyledInfoIcon icon={faInfoCircle} /> */}
+                {downloadLink && <LayerDownloadLinkButton downloadLink={downloadLink} />}
                 <Switch
                     action={() => handleLayerVisibility(channel, layer)}
                     isSelected={layer.visible}
