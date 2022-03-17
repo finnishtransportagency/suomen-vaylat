@@ -120,9 +120,8 @@ const getContent = (key, value, visibleFields, highPriorityFields, lowPriorityRo
         lowPriorityRows.push(<StyledGfiTr key={'lr-' + generatedKey + key + '-' + value}><StyledGfiTd>{key}</StyledGfiTd><StyledGfiTd dangerouslySetInnerHTML={{__html: value}}></StyledGfiTd></StyledGfiTr>);
         return;
     }
-    if (!hasConfiguration) {
-        lowPriorityRows.push(<StyledGfiTr key={'rr-' + generatedKey + key + '-' + value}><StyledGfiTd>{key}</StyledGfiTd><StyledGfiTd dangerouslySetInnerHTML={{__html: value}}></StyledGfiTd></StyledGfiTr>);
-    }
+    lowPriorityRows.push(<StyledGfiTr key={'rr-' + generatedKey + key + '-' + value}><StyledGfiTd>{key}</StyledGfiTd><StyledGfiTd dangerouslySetInnerHTML={{__html: value}}></StyledGfiTd></StyledGfiTr>);
+
 };
 
 export const FormattedGFI = ({ data }) => {
