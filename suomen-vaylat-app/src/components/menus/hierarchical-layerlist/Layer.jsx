@@ -5,7 +5,7 @@ import {
     changeLayerStyle,
     getLegends,
     setLegends,
-    setMapLayerVisibility, setSelectError,
+    setMapLayerVisibility
 } from '../../../state/slices/rpcSlice';
 import { updateLayers } from "../../../utils/rpcUtil";
 import LayerDownloadLinkButton from "./LayerDownloadLinkButton";
