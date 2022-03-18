@@ -5,11 +5,13 @@ import {
     changeLayerStyle,
     getLegends,
     setLegends,
-    setMapLayerVisibility,
+    setMapLayerVisibility, setSelectError,
 } from '../../../state/slices/rpcSlice';
 import { updateLayers } from "../../../utils/rpcUtil";
 import LayerDownloadLinkButton from "./LayerDownloadLinkButton";
+import {setIsDownloadLinkModalOpen} from '../../../state/slices/uiSlice';
 import LayerMetadataButton from './LayerMetadataButton';
+import {useAppSelector} from "../../../state/hooks";
 
 const StyledLayerContainer = styled.li`
     background-color: ${props => props.themeStyle && "#F5F5F5"};
@@ -80,6 +82,7 @@ export const Layer = ({ layer, theme }) => {
     const { store } = useContext(ReactReduxContext);
     const [layerStyle, setLayerStyle] = useState(null);
     const [themeSelected, setThemeSelected] = useState(false);
+    const isDownloadLinkModalOpen = useAppSelector((state) => state.ui.isDownloadLinkModalOpen);
 
     const {
         channel,
@@ -91,6 +94,9 @@ export const Layer = ({ layer, theme }) => {
         updateLayers(store, channel);
     };
 
+    const handleIsDownloadLinkModalOpen = () => {
+        store.dispatch(setIsDownloadLinkModalOpen({ layerDownloadLinkModalOpen: true, layerDownloadLink: downloadLink, layerDownloadLinkName: layer.name }))
+    }
 
     const updateLayerLegends = () => {
         // need use global window variable to limit legend updates
@@ -144,7 +150,9 @@ export const Layer = ({ layer, theme }) => {
                     </StyledLayerName>
                 </StyledlayerHeader>
                 {layer.metadataIdentifier && <LayerMetadataButton layer={layer}/>}
-                {downloadLink && <LayerDownloadLinkButton downloadLink={downloadLink} />}
+                {downloadLink && <LayerDownloadLinkButton
+                    handleIsDownloadLinkModalOpen={handleIsDownloadLinkModalOpen} />
+                }
                 <Switch
                     action={() => handleLayerVisibility(channel, layer)}
                     isSelected={layer.visible}

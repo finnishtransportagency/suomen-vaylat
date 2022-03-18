@@ -5,6 +5,11 @@ const initialState = {
   modalConstrainsRef: null,
   isSideMenuOpen: false,
   isSearchOpen: false,
+  downloadLink: {
+    layerDownloadLinkModalOpen: false,
+    layerDownloadLink: null,
+    layerDownloadLinkName: null,
+  },
   searchParams: '',
   isInfoOpen: false,
   isUserGuideOpen: false,
@@ -48,6 +53,13 @@ export const uiSlice = createSlice({
     },
     setIsInfoOpen: (state, action) => {
       state.isInfoOpen = action.payload;
+    },
+    setIsDownloadLinkModalOpen: (state, action) => {
+      state.downloadLink = {
+        layerDownloadLinkModalOpen: action.payload.layerDownloadLinkModalOpen,
+        layerDownloadLink: action.payload.layerDownloadLink,
+        layerDownloadLinkName: action.payload.layerDownloadLinkName,
+      }
     },
     setIsUserGuideOpen: (state, action) => {
       state.isUserGuideOpen = action.payload;
@@ -96,6 +108,7 @@ export const {
   setShareUrl,
   setIsDrawingToolsOpen,
   setActiveTool,
+  setIsDownloadLinkModalOpen,
   setIsSwipingDisabled,
   setSelectedMapLayersMenuTab,
   setSelectedMapLayersMenuThemeIndex,

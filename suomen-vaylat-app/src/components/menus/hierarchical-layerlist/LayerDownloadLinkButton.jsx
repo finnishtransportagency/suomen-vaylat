@@ -1,6 +1,7 @@
-import { faDownload } from '@fortawesome/free-solid-svg-icons';
+import {faDownload} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styled from 'styled-components';
+import React from "react";
 
 const StyledLayerDownloadIconWrapper = styled.div`
     cursor: pointer;
@@ -20,18 +21,17 @@ const StyledLayerDownloadIconWrapper = styled.div`
 `;
 
 export const LayerDownloadLinkButton = ({
-    downloadLink
+    handleIsDownloadLinkModalOpen
 }) => {
 
     return (
             <StyledLayerDownloadIconWrapper
-                onClick={() => {
-                    window.location.href=downloadLink;
-                }}
+                onClick={() => handleIsDownloadLinkModalOpen()}
             >
                 <FontAwesomeIcon icon={faDownload} />
             </StyledLayerDownloadIconWrapper>
     );
 };
+
 
 export default LayerDownloadLinkButton;
