@@ -232,6 +232,11 @@
       "opacity": "Läpinäkyvyys"
     }
   },
+  "downloadLink": {
+    "downloadLinkModalHeader": "Aineiston lataus",
+    "downloadLinkModalNameText": "Aineiston nimi",
+    "downloadLinkModalButtonText": "Lataa aineisto"
+  },
   "groupLayerList": {
     "readMore" : "Lue lisää",
     "readLess" : "Vähemmän",
