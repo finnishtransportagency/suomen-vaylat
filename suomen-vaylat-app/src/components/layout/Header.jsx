@@ -1,14 +1,21 @@
 import { faInfoCircle, faQuestion, faEllipsisV } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {useContext, useState} from 'react';
+import { useContext, useState} from 'react';
 import { ReactReduxContext } from 'react-redux';
 import ReactTooltip from 'react-tooltip';
 import { isMobile } from '../../theme/theme';
 import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAppSelector } from '../../state/hooks';
-import { setIsInfoOpen, setIsMainScreen, setIsUserGuideOpen } from '../../state/slices/uiSlice';
-import { mapMoveRequest } from '../../state/slices/rpcSlice';
+import {
+    setIsInfoOpen,
+    setIsMainScreen,
+    setIsUserGuideOpen
+} from '../../state/slices/uiSlice';
+import { 
+    mapMoveRequest,
+    resetGFILocations
+} from '../../state/slices/rpcSlice';
 import { resetThemeGroupsForMainScreen } from '../../utils/rpcUtil';
 import strings from '../../translations';
 import LanguageSelector from '../language-selector/LanguageSelector';
@@ -177,6 +184,7 @@ export const Header = () => {
         });
 
         store.dispatch(setIsMainScreen());
+        store.dispatch(resetGFILocations([]));
         history.push(routerPrefix);
         handleSelectGroup(null, lastSelectedTheme);
 

@@ -17,7 +17,8 @@ const initialState = {
   isSwipingDisabled: false,
   selectedMapLayersMenuTab: 0,
   selectedMapLayersMenuThemeIndex: null,
-  minimizeGfi: false
+  minimizeGfi: false,
+  warning: null
 };
 
 export const uiSlice = createSlice({
@@ -33,6 +34,13 @@ export const uiSlice = createSlice({
       state.isSearchOpen = false;
       state.isInfoOpen = false;
       state.isUserGuideOpen = false;
+      state.isDrawingToolsOpen = false;
+      state.isLegendOpen = false;
+      state.isSaveViewOpen = false;
+      state.selectedMapLayersMenuTab = 0;
+      state.selectedMapLayersMenuThemeIndex = null;
+      state.minimizeGfi = false;
+      state.warning = null;
     },
     setModalConstrainsRef: (state, action) => {
       state.modalConstrainsRef = action.payload;
@@ -78,6 +86,9 @@ export const uiSlice = createSlice({
     },
     setMinimizeGfi: (state, action) => {
       state.minimizeGfi = action.payload;
+    },
+    setWarning: (state, action) => {
+      state.warning = action.payload;
     }
   }
 });
@@ -100,6 +111,7 @@ export const {
   setSelectedMapLayersMenuTab,
   setSelectedMapLayersMenuThemeIndex,
   setMinimizeGfi,
+  setWarning
 } = uiSlice.actions;
 
 export default uiSlice.reducer;

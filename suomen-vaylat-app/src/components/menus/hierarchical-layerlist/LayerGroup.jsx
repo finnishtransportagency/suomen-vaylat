@@ -19,7 +19,12 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 import { updateLayers } from '../../../utils/rpcUtil';
-import { setSelectError } from "../../../state/slices/rpcSlice"
+import {
+    setSelectError,
+} from "../../../state/slices/rpcSlice";
+import {
+    setWarning,
+} from "../../../state/slices/uiSlice";
 import strings from "../../../translations";
 
 const OSKARI_LOCALSTORAGE = "oskari";
@@ -301,7 +306,6 @@ const Switch = ({ action, isSelected }) => {
     );
 };
 
-
 export const LayerGroup = ({
     group,
     layers,
@@ -363,13 +367,33 @@ export const LayerGroup = ({
 
     const selectGroup = (e) => {
         e.stopPropagation();
-        var invisibleLayers = filteredLayers.length - visibleLayers.length;
+        let invisibleLayers = filteredLayers.length - visibleLayers.length;
+        if(filteredLayers.length > 9 && invisibleLayers > 9 && isChecked === false){
+            store.dispatch(setWarning({
+                title: strings.multipleLayersWarning,
+                subtitle: null,
+                cancel: {
+                    text: strings.general.cancel,
+                    action: () => store.dispatch(setWarning(null))
+                },
+                confirm: {
+                    text: strings.general.continue,
+                    action: () => {
+                        groupLayersVisibility();
+                        store.dispatch(setWarning(null));
+                    }
+                },
+            }))
+        } else {
+            groupLayersVisibility();
+        }
+/*         var invisibleLayers = filteredLayers.length - visibleLayers.length;
         var localStorageWarn = localStorage.getItem(OSKARI_LOCALSTORAGE) ? localStorage.getItem(OSKARI_LOCALSTORAGE) : [] ;
         if (filteredLayers.length > 9 && invisibleLayers > 9 && isChecked === false && !localStorageWarn.includes("multipleLayersWarning")) {
             store.dispatch(setSelectError({show: true, type: 'multipleLayersWarning', filteredLayers: filteredLayers, isChecked: isChecked}));
         } else {
             groupLayersVisibility();
-        }
+        } */
     };
 
     const groupLayersVisibility = () => {
