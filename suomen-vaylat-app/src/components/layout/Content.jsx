@@ -16,6 +16,8 @@ import ActionButtons from '../action-button/ActionButtons';
 import ScaleBar from '../scalebar/ScaleBar';
 import { ShareWebSitePopup } from '../share-web-site/ShareWebSitePopup';
 import ZoomMenu from '../zoom-features/ZoomMenu';
+import WarningModalContent from '../warning/WarningModalContent';
+
 import strings from '../../translations';
 import {
     setSelectError,
@@ -28,6 +30,7 @@ import {
     setIsUserGuideOpen,
     setIsSaveViewOpen,
     setMinimizeGfi,
+    setWarning,
     setIsDownloadLinkModalOpen
 } from '../../state/slices/uiSlice';
 import { GFIPopup } from '../infobox/GFIPopup';
@@ -92,6 +95,7 @@ const Content = () => {
         isUserGuideOpen,
         isSaveViewOpen,
         minimizeGfi,
+        warning
     } = useAppSelector((state) => state.ui);
 
     const search = useAppSelector((state) => state.search)
@@ -101,6 +105,7 @@ const Content = () => {
 
     const announcements = useAppSelector((state) => state.rpc.activeAnnouncements);
     const metadata = useAppSelector((state) => state.rpc.layerMetadata);
+    
     let {
         channel,
         gfiLocations
@@ -168,6 +173,10 @@ const Content = () => {
 
     const handleCloseSaveViewModal = () => {
         store.dispatch(setIsSaveViewOpen(false));
+    };
+
+    const handleCloseWarning = () => {
+        store.dispatch(setWarning(null));
     };
 
     return (
@@ -288,30 +297,6 @@ const Content = () => {
                     backdrop={true} /* Is backdrop enabled (true) or disabled (false) */
                     fullScreenOnMobile={false} /* Scale modal full width / height when using mobile device */
                     titleIcon={faExclamationCircle} /* Use icon on title or null */
-                    title={strings.general.warning} /* Modal header title */
-                    type={"warning"} /* Modal type */
-                    warningType={warnings.type}
-                    closeAction={hideWarn} /* Action when pressing modal close button or backdrop */
-                    isOpen={warnings.show && warnings.type === 'multipleLayersWarning'} /* Modal state */
-                    id={null}
-                >
-                    <WarningDialog
-                        hideWarn={hideWarn}
-                        message={strings.multipleLayersWarning}
-                        filteredLayers={warnings.filteredLayers}
-                        warningType={warnings.type}
-                        closeAction={hideWarn} /* Action when pressing modal close button or backdrop */
-                        isOpen={warnings.show && warnings.type === 'multipleLayersWarning'} /* Modal state */
-                        id={null}
-                    />
-                </Modal>
-                <Modal
-                    constraintsRef={constraintsRef} /* Reference div for modal drag boundaries */
-                    drag={false} /* Enable (true) or disable (false) drag */
-                    resize={false}
-                    backdrop={true} /* Is backdrop enabled (true) or disabled (false) */
-                    fullScreenOnMobile={false} /* Scale modal full width / height when using mobile device */
-                    titleIcon={faExclamationCircle} /* Use icon on title or null */
                     title={search.selected === 'vkm' ? strings.search.vkm.error.title : strings.search.address.error.title} /* Modal header title */
                     type={"warning"} /* Modal type */
                     warningType={warnings.type}
@@ -357,6 +342,23 @@ const Content = () => {
                     id={null}
                 >
                     <LayerDownloadLinkButtonModal downloadLink={downloadLink} />
+                </Modal>
+                <Modal
+                    constraintsRef={constraintsRef} /* Reference div for modal drag boundaries */
+                    drag={false} /* Enable (true) or disable (false) drag */
+                    resize={false}
+                    backdrop={true} /* Is backdrop enabled (true) or disabled (false) */
+                    fullScreenOnMobile={false} /* Scale modal full width / height when using mobile device */
+                    titleIcon={faExclamationCircle} /* Use icon on title or null */
+                    title={strings.general.warning} /* Modal header title */
+                    type={"warning"} /* Modal type */
+                    closeAction={handleCloseWarning} /* Action when pressing modal close button or backdrop */
+                    isOpen={warning !== null} /* Modal state */
+                    id={null}
+                >
+                    <WarningModalContent
+                        warning={warning}
+                    />
                 </Modal>
                 <ScaleBar />
                 <StyledContentGrid>

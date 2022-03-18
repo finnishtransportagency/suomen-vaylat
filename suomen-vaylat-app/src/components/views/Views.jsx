@@ -10,9 +10,12 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { isMobile } from '../../theme/theme';
 
-import { setIsSaveViewOpen } from '../../state/slices/uiSlice';
+import {
+    setIsSaveViewOpen,
+    setWarning
+} from '../../state/slices/uiSlice';
 
-import { faPlus ,faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import CircleButton from '../circle-button/CircleButton';
@@ -50,7 +53,7 @@ const StyledDeleteAllSavedViews = styled.div`
     justify-content: center;
     align-items: center;
     color: ${props => props.theme.colors.mainWhite};
-    background-color: ${props => props.disabled ? "rgba(177, 177, 177, 0.5)" : props.theme.colors.mainColor1};
+    background-color: ${props => props.disabled ? "rgba(177, 177, 177, 0.5)" : props.theme.colors.secondaryColor6};
     margin: 20px auto 20px auto;
     border-radius: 15px;
     p {
@@ -225,13 +228,6 @@ const Views = () => {
 
     const handleActivateView = (view) => {
 
-            // // set map center
-            // store.dispatch(mapMoveRequest({
-            //     x: preset.data.x,
-            //     y: preset.data.y,
-            //     zoom: preset.data.zoom
-            // }));
-
             channel.getMapPosition(function () {
                 var routeSteps = [
                     {
@@ -278,6 +274,7 @@ const Views = () => {
     const handleDeleteAllViews = () => {
         window.localStorage.setItem('views', JSON.stringify([]));
         setViews(JSON.parse(window.localStorage.getItem("views")));
+        store.dispatch(setWarning(null));
     };
 
     return (
@@ -381,7 +378,23 @@ const Views = () => {
                 }
                 </AnimatePresence>
                 <StyledDeleteAllSavedViews
-                    onClick={() => views.length > 0 && handleDeleteAllViews()}
+                    onClick={() => views.length > 0 &&
+                        store.dispatch(setWarning({
+                            title: "Haluatko varmasti poistaa kaikki tallennetut näkymät?",
+                            subtitle: null,
+                            cancel: {
+                                text: strings.general.cancel,
+                                action: () => store.dispatch(setWarning(null))
+                            },
+                            confirm: {
+                                text: strings.general.continue,
+                                action: () => {
+                                    handleDeleteAllViews();
+                                    store.dispatch(setWarning(null));
+                                }
+                            },
+                        }))
+                    }
                     disabled={views.length === 0}
                 >
                     <p>{strings.saveView.deleteAllSavedViews}</p>
