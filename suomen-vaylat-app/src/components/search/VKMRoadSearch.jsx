@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 import strings from '../../translations';
+import { motion, AnimatePresence } from 'framer-motion';
 
 import { useAppSelector } from '../../state/hooks';
 
@@ -11,7 +12,7 @@ const StyledContainer = styled.div`
     flex-direction: column;
 `;
 
-const StyledDropdownContentItem = styled.div`
+const StyledDropdownContentItem = styled(motion.div)`
     user-select: none;
     cursor: pointer;
     padding-left: 8px;
@@ -82,6 +83,29 @@ const StyledOption = styled.option`
 
 `;
 
+const DropdownContentItem = (props) => {
+    return <StyledDropdownContentItem
+        transition={{
+            duration: 0.2,
+            type: "tween"
+        }}
+        initial={{
+            opacity: 0,
+            height: 0,
+        }}
+        animate={{
+            opacity: 1,
+            height: "auto",
+        }}
+        exit={{
+            opacity: 0,
+            height: 0,
+        }}
+        >
+            {props.children}
+    </StyledDropdownContentItem>
+};
+
 const VKMRoadSearch = ({
   setIsSearching,
   searchValue,
@@ -89,174 +113,106 @@ const VKMRoadSearch = ({
   setLastSearchValue,
   vectorLayerId,
   removeMarkersAndFeatures,
-  setSearchResults
+  setSearchResults,
+  handleVKMSearch,
+  handleVKMResponse,
+  vkmError,
+  setVkmError
 }) => {
-    const [error, setError] = useState(null);
-    const rpc = useAppSelector((state) => state.rpc);
 
-    const handleResponse = (data) => {
-        setIsSearching(false);
-
-        let style = 'tie';
-        if ((data.hasOwnProperty('osa') || data.hasOwnProperty('ajorata')) && !data.hasOwnProperty('etaisyys')) {
-            style = 'osa';
-        } else if (data.hasOwnProperty('etaisyys')) {
-            style = 'etaisyys';
-        }
-        let featureStyle = VKMGeoJsonStyles.road[style];
-        let hover = VKMGeoJsonHoverStyles.road[style];
-
-        if (style === 'tie') {
-            removeMarkersAndFeatures();
-        };
-
-        const value = {
-            tienumero: data.hasOwnProperty('tie') ? parseInt(data.tie) : searchValue.tienumero || null,
-            tieosa: data.hasOwnProperty('osa') ? parseInt(data.osa) : searchValue.tieosa || 'default',
-            ajorata: data.hasOwnProperty('ajorata') ? parseInt(data.ajorata) : searchValue.ajorata || 'default',
-            etaisyys: data.hasOwnProperty('etaisyys') ? parseInt(data.etaisyys) : searchValue.etaisyys || '',
-            tieosat: data.hasOwnProperty('tieosat') ? data.tieosat: searchValue.tieosat || [],
-            ajoradat: data.hasOwnProperty('ajoradat') ? data.ajoradat: searchValue.ajoradat || []
-        };
-
-        setSearchValue(value);
-        setLastSearchValue(value);
-
-        setSearchResults(data);
-
-        data.hasOwnProperty('geom') && rpc.channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest',
-        [data.geom, {
-            clearPrevious: true,
-            centerTo: true,
-            hover: hover,
-            featureStyle: featureStyle,
-            layerId: vectorLayerId + '_vkm_' + style,
-            maxZoomLevel: 10
-        }]);
-    };
-
-    if (searchValue === '' && error !== null) {
-        setError(null);
+    if (searchValue === '' && vkmError !== null) {
+        setVkmError(null);
     }
-
-    const handleVKMSearch = (params) => {
-        setIsSearching(true);
-        setError(null);
-
-        rpc.channel.searchVKMRoad && rpc.channel.searchVKMRoad([
-            params.hasOwnProperty('vkmTienumero') && parseInt(params.vkmTienumero),
-            params.hasOwnProperty('vkmTieosa') && parseInt(params.vkmTieosa),
-            params.hasOwnProperty('vkmAjorata') && parseInt(params.vkmAjorata),
-            params.hasOwnProperty('vkmEtaisyys') && parseInt(params.vkmEtaisyys)
-        ], handleResponse, (err) => {
-            setIsSearching(false);
-            if(err){
-                setError(err);
-            }
-        });
-    };
-
     return (
         <StyledContainer>
             <>
-            {
-                error &&
-                        <StyledDropdownContentItem>
-                            <StyledDropdownContentItemTitle type='noResults'>{strings.search.vkm.error.text}</StyledDropdownContentItemTitle>
-                        </StyledDropdownContentItem>
+                {
+                    vkmError &&
+                    <StyledDropdownContentItem>
+                        <StyledDropdownContentItemTitle type='noResults'>{strings.search.vkm.error.text}</StyledDropdownContentItemTitle>
+                    </StyledDropdownContentItem>
                 }
-                <StyledDropdownContentItem>
-                    <StyledLabel htmlFor='vkm-road'>{strings.search.vkm.tie}:</StyledLabel>
-                    <StyledInput
-                        id='vkm-road'
-                        placeholder={strings.search.vkm.tie}
-                        onClick={() => {
-                            setError(null);
-                        }}
-                        min='1'
-                        type='number'
-                        value={searchValue.tienumero || ''}
-                        onChange={e => {
-                            setSearchValue({
-                                tienumero: e.target.value,
-                                tieosa: 'default',
-                                ajorata: 'default',
-                                etaisyys: '',
-                                tieosat: [],
-                                ajoradat: []
-                            });
-                        }}
-                        onKeyPress={e => {
-                                if (e.key === 'Enter') {
-                                    handleVKMSearch({vkmTienumero: e.target.value});
+                <AnimatePresence>
+                    {
+                        searchValue.hasOwnProperty('tieosat') && searchValue.tieosat.length > 0 && 
+                        <DropdownContentItem>
+                            <StyledLabel htmlFor='vkm-tieosa'>{strings.search.vkm.osa}:</StyledLabel>
+                            <StyledSelect
+                                id='vkm-tieosa'
+                                onChange={e => {
+                                    handleVKMSearch({vkmTienumero: searchValue.tienumero, vkmTieosa: e.target.value});
+                                }}
+                                disabled={!searchValue.tieosat || (searchValue.tieosat && !searchValue.tieosat.length > 0)}
+                                value={searchValue.tieosa || 'default'}
+                            >
+                                <StyledOption value='default' disabled readOnly={true}>{strings.search.vkm.osa}</StyledOption>
+                                {
+                                    searchValue.tieosat && searchValue.tieosat.map(tieosa => {
+                                        return <StyledOption key={'vkm_tieosa_'+tieosa} value={tieosa}>{tieosa}</StyledOption>
+                                    })
                                 }
-                            }
-                        }
-                    />
-                </StyledDropdownContentItem>
-                <StyledDropdownContentItem>
-                    <StyledLabel htmlFor='vkm-tieosa'>{strings.search.vkm.osa}:</StyledLabel>
-                    <StyledSelect
-                        id='vkm-tieosa'
-                        onChange={e => {
-                            handleVKMSearch({vkmTienumero: searchValue.tienumero, vkmTieosa: e.target.value});
-                        }}
-                        disabled={!searchValue.tieosat || (searchValue.tieosat && !searchValue.tieosat.length > 0)}
-                        value={searchValue.tieosa || 'default'}
-                    >
-                        <StyledOption value='default' disabled readOnly={true}>{strings.search.vkm.osa}</StyledOption>
-                        {
-                            searchValue.tieosat && searchValue.tieosat.map(tieosa => {
-                                return <StyledOption key={'vkm_tieosa_'+tieosa} value={tieosa}>{tieosa}</StyledOption>
-                            })
-                        }
-                    </StyledSelect>
-                </StyledDropdownContentItem>
-                <StyledDropdownContentItem>
-                    <StyledLabel htmlFor='vkm-ajorata'>{strings.search.vkm.ajorata}:</StyledLabel>
-                    <StyledSelect
-                        id='vkm-ajorata'
-                        onChange={e => {
-                            handleVKMSearch({vkmTienumero: searchValue.tienumero, vkmTieosa: searchValue.tieosa, vkmAjorata: e.target.value});
-                        }}
-                        disabled={!searchValue.ajoradat || (searchValue.ajoradat && !searchValue.ajoradat.length > 0)}
-                        value={searchValue.ajorata || 'default'}
-                    >
-                        <StyledOption value='default' disabled readOnly={true}>{strings.search.vkm.ajorata}</StyledOption>
-                        {
-                            searchValue.ajoradat && searchValue.ajoradat.map(item => {
-                                return <StyledOption key={'vkm_ajorata_'+item} value={item}>{item}</StyledOption>
-                            })
-                        }
-                    </StyledSelect>
-                </StyledDropdownContentItem>
-                <StyledDropdownContentItem>
-                    <StyledLabel htmlFor='vkm-etaisyys'>{strings.search.vkm.etaisyys}:</StyledLabel>
-                    <StyledInput
-                        id='vkm-etaisyys'
-                        placeholder={strings.search.vkm.etaisyys}
-                        min='1'
-                        type='number'
-                        onChange={e => {
-                            setSearchValue({
-                                tienumero: searchValue.tienumero,
-                                tieosa: searchValue.tieosa,
-                                ajorata: searchValue.ajorata,
-                                etaisyys: e.target.value,
-                                tieosat: searchValue.tieosat,
-                                ajoradat: searchValue.ajoradat
-                            });
-                        }}
-                        value={searchValue.etaisyys || ''}
-                        disabled={!searchValue.ajoradat || (searchValue.ajoradat && !searchValue.ajoradat.length > 0)}
-                        onKeyPress={e => {
-                                if (e.key === 'Enter') {
-                                    handleVKMSearch({vkmTienumero: searchValue.tienumero, vkmTieosa: searchValue.tieosa, vkmAjorata: searchValue.ajorata, vkmEtaisyys: e.target.value});
+                            </StyledSelect>
+                        </DropdownContentItem>
+                    }
+                </AnimatePresence>
+
+                <AnimatePresence>
+                    {
+                        searchValue.hasOwnProperty('ajoradat') && searchValue.ajoradat.length > 0 && 
+                        <DropdownContentItem>
+                            <StyledLabel htmlFor='vkm-ajorata'>{strings.search.vkm.ajorata}:</StyledLabel>
+                            <StyledSelect
+                                id='vkm-ajorata'
+                                onChange={e => {
+                                    handleVKMSearch({vkmTienumero: searchValue.tienumero, vkmTieosa: searchValue.tieosa, vkmAjorata: e.target.value});
+                                }}
+                                disabled={!searchValue.ajoradat || (searchValue.ajoradat && !searchValue.ajoradat.length > 0)}
+                                value={(searchValue.hasOwnProperty('ajorata') && searchValue.ajorata) || 'default'}
+                            >
+                                <StyledOption value='default' disabled readOnly={true}>{strings.search.vkm.ajorata}</StyledOption>
+                                {
+                                    searchValue.ajoradat && searchValue.ajoradat.map(item => {
+                                        return <StyledOption key={'vkm_ajorata_'+item} value={item}>{item}</StyledOption>
+                                    })
                                 }
-                            }
-                        }
-                    />
-                </StyledDropdownContentItem>
+                            </StyledSelect>
+                        </DropdownContentItem>
+                    }
+                </AnimatePresence>
+
+                <AnimatePresence>
+                    {
+                        searchValue.hasOwnProperty('ajorata') && searchValue.ajorata !== 'default' &&
+                        <DropdownContentItem>
+                            <StyledLabel htmlFor='vkm-etaisyys'>{strings.search.vkm.etaisyys}:</StyledLabel>
+                            <StyledInput
+                                id='vkm-etaisyys'
+                                placeholder={strings.search.vkm.etaisyys}
+                                min='1'
+                                type='number'
+                                onChange={e => {
+                                    setSearchValue({
+                                        tienumero: searchValue.tienumero,
+                                        tieosa: searchValue.tieosa,
+                                        ajorata: searchValue.ajorata,
+                                        etaisyys: e.target.value,
+                                        tieosat: searchValue.tieosat,
+                                        ajoradat: searchValue.ajoradat
+                                    });
+                                }}
+                                value={searchValue.etaisyys || ''}
+                                disabled={!searchValue.ajoradat || (searchValue.ajoradat && !searchValue.ajoradat.length > 0)}
+                                onKeyPress={e => {
+                                        if (e.key === 'Enter') {
+                                            handleVKMSearch({vkmTienumero: searchValue.tienumero, vkmTieosa: searchValue.tieosa, vkmAjorata: searchValue.ajorata, vkmEtaisyys: e.target.value});
+                                        }
+                                    }
+                                }
+                            />
+                        </DropdownContentItem>
+                    }
+                </AnimatePresence>
+
             </>
         </StyledContainer>
     );

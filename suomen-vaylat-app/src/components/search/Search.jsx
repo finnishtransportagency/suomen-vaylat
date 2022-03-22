@@ -12,6 +12,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import AddressSearch from './AddressSearch';
+import RoadSearch from './RoadSearch';
 import VKMRoadSearch from './VKMRoadSearch';
 import MetadataSearch from './MetadataSearch';
 import Layer from '../menus/hierarchical-layerlist/Layer';
@@ -29,6 +30,8 @@ import { setIsSearchOpen } from '../../state/slices/uiSlice';
 
 import CircleButton from '../circle-button/CircleButton';
 import VKMTrackSearch from './VKMTrackSearch';
+
+import { VKMGeoJsonHoverStyles, VKMGeoJsonStyles } from './VKMSearchStyles';
 
 const StyledSearchContainer = styled.div`
     z-index: 2;
@@ -164,6 +167,8 @@ const StyledHideSearchResultsButton = styled.div`
 `;
 
 const Search = () => {
+    const [vkmError, setVkmError] = useState(null);
+
     const [searchValue, setSearchValue ] = useState('');
     const [lastSearchValue, setLastSearchValue] = useState('');
     const [isSearching, setIsSearching] = useState(false);
@@ -185,6 +190,75 @@ const Search = () => {
         setIsSearching(true);
         channel.postRequest('SearchRequest', [value]);
         setLastSearchValue(value);
+    };
+
+    const handleVKMResponse = (data) => {
+        console.log(data);
+        setIsSearching(false);
+
+        let style = 'tie';
+        if ((data.hasOwnProperty('osa') || data.hasOwnProperty('ajorata')) && !data.hasOwnProperty('etaisyys')) {
+            style = 'osa';
+        } else if (data.hasOwnProperty('etaisyys')) {
+            style = 'etaisyys';
+        }
+        let featureStyle = VKMGeoJsonStyles.road[style];
+        let hover = VKMGeoJsonHoverStyles.road[style];
+
+        if (style === 'tie') {
+            removeMarkersAndFeatures();
+        };
+
+        const value = {
+            tienumero: data.hasOwnProperty('tie') ? parseInt(data.tie) : searchValue.tienumero || null,
+            tieosa: data.hasOwnProperty('osa') ? parseInt(data.osa) : searchValue.tieosa || 'default',
+            
+            //ajorata: data.hasOwnProperty('ajorata') ? parseInt(data.ajorata) : searchValue.ajorata || 'default',
+            etaisyys: data.hasOwnProperty('etaisyys') ? parseInt(data.etaisyys) : searchValue.etaisyys || '',
+            tieosat: data.hasOwnProperty('tieosat') ? data.tieosat: searchValue.tieosat || [],
+            ajoradat: data.hasOwnProperty('ajoradat') ? data.ajoradat: searchValue.ajoradat || []
+        };
+
+        console.log(value);
+
+        setSearchValue(value);
+        setLastSearchValue(value);
+
+        setSearchResults(data);
+
+        data.hasOwnProperty('geom') && channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest',
+        [data.geom, {
+            clearPrevious: true,
+            centerTo: true,
+            hover: hover,
+            featureStyle: featureStyle,
+            layerId: vectorLayerId + '_vkm_' + style,
+            maxZoomLevel: 10
+        }]);
+    };
+
+    const handleVKMSearch = (params) => {
+
+        console.log(parseInt(params.vkmAjorata));
+
+        setIsSearching(true);
+        setVkmError(null);
+
+        let requestData = [
+            params.hasOwnProperty('vkmTienumero') && parseInt(params.vkmTienumero),
+            params.hasOwnProperty('vkmTieosa') && parseInt(params.vkmTieosa),
+            params.hasOwnProperty('vkmAjorata') && parseInt(params.vkmAjorata),
+            params.hasOwnProperty('vkmEtaisyys') && parseInt(params.vkmEtaisyys)
+        ];
+
+        console.log(requestData);
+
+        channel.searchVKMRoad && channel.searchVKMRoad(requestData, handleVKMResponse, (err) => {
+            setIsSearching(false);
+            if(err){
+                setVkmError(err);
+            }
+        });
     };
 
     const handleMetadataSearch = (value) => {
@@ -229,7 +303,12 @@ const Search = () => {
         vkm: {
             label: strings.search.vkm.title,
             subtitle: strings.search.vkm.subtitle,
-            content: <p>{strings.search.vkm.title}...</p>,
+            content: <RoadSearch
+                searchValue={searchValue}
+                setSearchValue={setSearchValue}
+                setIsSearching={setIsSearching}
+                handleVKMSearch={handleVKMSearch}
+            />,
             visible: channel && channel.searchVKMRoad
         },
         vkmtrack: {
@@ -269,7 +348,6 @@ const Search = () => {
                 }
             };
          });
-
     },[channel]);
 
     const handleAddressSelect = (name, lon, lat, id) => {
@@ -392,7 +470,9 @@ const Search = () => {
                         /> :
                         <StyledSearchActionButton
                             onClick={() => {
+                                console.log(searchType);
                                 searchType === 'address' && handleAddressSearch(searchValue);
+                                searchType === 'vkm' && handleVKMSearch({vkmTienumero: searchValue});
                                 searchType === 'metadata' && handleMetadataSearch(searchValue);
                             }}
                             icon={faSearch}
@@ -493,7 +573,9 @@ const Search = () => {
                     </StyledDropDown> :
                     isSearchOpen &&
                     showSearchResults &&
-                    searchType === 'vkm' ?
+                    searchType === 'vkm' &&
+                    searchValue.tieosat && 
+                    searchValue.tieosat.length > 0 ?
                     <StyledDropDown
                         key={'dropdown-content-vkm'}
                         variants={dropdownVariants}
@@ -510,6 +592,11 @@ const Search = () => {
                             setSearchResults={setSearchResults}
                             vectorLayerId={vectorLayerId}
                             removeMarkersAndFeatures={removeMarkersAndFeatures}
+                            handleVKMSearch={handleVKMSearch}
+                            handleVKMResponse={handleVKMResponse}
+                            vkmError={vkmError}
+                            setVkmError={setVkmError}
+
                         />
                         <StyledHideSearchResultsButton
                             onClick={() => setShowSearchResults(false)}
