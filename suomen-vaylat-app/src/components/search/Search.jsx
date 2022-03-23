@@ -217,8 +217,6 @@ const Search = () => {
             ajoradat: data.hasOwnProperty('ajoradat') ? data.ajoradat: searchValue.ajoradat || []
         };
 
-        console.log(value);
-
         setSearchValue(value);
         setLastSearchValue(value);
 
@@ -246,8 +244,6 @@ const Search = () => {
             params.hasOwnProperty('vkmAjorata') && parseInt(params.vkmAjorata),
             params.hasOwnProperty('vkmEtaisyys') && parseInt(params.vkmEtaisyys)
         ];
-
-        console.log(requestData);
 
         channel.searchVKMRoad && channel.searchVKMRoad(requestData, handleVKMResponse, (err) => {
             setIsSearching(false);
