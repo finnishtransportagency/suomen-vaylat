@@ -16,13 +16,12 @@ const RoadSearch = ({
     setSearchValue,
     handleVKMSearch
 }) => {
-
     return (
         <StyledInput
-            type="text"
-            value={searchValue.tienumero && searchValue.tienumero !== '' ? searchValue.tienumero : searchValue}
+            type="number"
+            value={searchValue.hasOwnProperty('tienumero') ? searchValue.tienumero : ''}
             placeholder={strings.search.vkm.title + '...'}
-            onChange={e => setSearchValue(e.target.value)}
+            onChange={e => setSearchValue({tienumero: e.target.value})}
             onKeyPress={e => {
                 if (e.key === 'Enter') {
                     handleVKMSearch({

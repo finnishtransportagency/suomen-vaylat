@@ -234,7 +234,6 @@ const Search = () => {
     };
 
     const handleVKMSearch = (params) => {
-
         setIsSearching(true);
         setVkmError(null);
 
@@ -462,9 +461,35 @@ const Search = () => {
                         /> :
                         <StyledSearchActionButton
                             onClick={() => {
-                                searchType === 'address' && handleAddressSearch(searchValue);
-                                searchType === 'vkm' && handleVKMSearch({vkmTienumero: searchValue});
-                                searchType === 'metadata' && handleMetadataSearch(searchValue);
+                                switch(searchType){
+                                    case 'address':
+                                        handleAddressSearch(searchValue);
+                                    break;
+                                    case 'vkm':
+                                        
+                                        let data = {};
+                                            if(searchValue.hasOwnProperty('tienumero')){
+                                                data.vkmTienumero = searchValue.tienumero;
+                                            }
+                                            if(searchValue.hasOwnProperty('tieosa')){
+                                                data.vkmTieosa = searchValue.tieosa;
+                                            }
+                                            if(searchValue.hasOwnProperty('ajorata')){
+                                                data.vkmAjorata = searchValue.ajorata;
+                                            }
+                                            if(searchValue.hasOwnProperty('etaisyys')){
+                                                data.vkmEtaisyys = parseInt(searchValue.etaisyys);
+                                            };
+
+                                        handleVKMSearch(data);
+                                    break;
+                                    case 'metadata':
+                                        handleMetadataSearch(searchValue);
+                                    break;
+                                    default:
+                                    
+                                    break;
+                                }
                             }}
                             icon={faSearch}
                         />
