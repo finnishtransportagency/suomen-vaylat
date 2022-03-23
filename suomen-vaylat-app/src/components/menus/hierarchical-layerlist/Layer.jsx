@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from 'react';
 import { ReactReduxContext, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import {
@@ -7,11 +7,10 @@ import {
     setLegends,
     setMapLayerVisibility
 } from '../../../state/slices/rpcSlice';
-import { updateLayers } from "../../../utils/rpcUtil";
-import LayerDownloadLinkButton from "./LayerDownloadLinkButton";
+import { updateLayers } from '../../../utils/rpcUtil';
+import LayerDownloadLinkButton from './LayerDownloadLinkButton';
 import {setIsDownloadLinkModalOpen} from '../../../state/slices/uiSlice';
 import LayerMetadataButton from './LayerMetadataButton';
-import {useAppSelector} from "../../../state/hooks";
 
 const StyledLayerContainer = styled.li`
     background-color: ${props => props.themeStyle && "#F5F5F5"};
@@ -82,7 +81,6 @@ export const Layer = ({ layer, theme }) => {
     const { store } = useContext(ReactReduxContext);
     const [layerStyle, setLayerStyle] = useState(null);
     const [themeSelected, setThemeSelected] = useState(false);
-    const isDownloadLinkModalOpen = useAppSelector((state) => state.ui.isDownloadLinkModalOpen);
 
     const {
         channel,

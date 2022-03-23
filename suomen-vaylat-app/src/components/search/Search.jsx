@@ -462,7 +462,6 @@ const Search = () => {
                         /> :
                         <StyledSearchActionButton
                             onClick={() => {
-                                console.log(searchType);
                                 searchType === 'address' && handleAddressSearch(searchValue);
                                 searchType === 'vkm' && handleVKMSearch({vkmTienumero: searchValue});
                                 searchType === 'metadata' && handleMetadataSearch(searchValue);
@@ -565,7 +564,7 @@ const Search = () => {
                     (isSearchOpen &&
                     showSearchResults &&
                     searchType === 'vkm' &&
-                    searchValue.tieosat && 
+                    searchValue.tieosat &&
                     searchValue.tieosat.length > 0) ||
                     vkmError ?
                     <StyledDropDown

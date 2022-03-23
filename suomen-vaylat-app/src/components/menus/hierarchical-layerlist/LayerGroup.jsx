@@ -19,15 +19,11 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 import { updateLayers } from '../../../utils/rpcUtil';
-import {
-    setSelectError,
-} from "../../../state/slices/rpcSlice";
+
 import {
     setWarning,
 } from "../../../state/slices/uiSlice";
 import strings from "../../../translations";
-
-const OSKARI_LOCALSTORAGE = "oskari";
 
 const masterHeaderIconVariants = {
     open: { rotate: 180 },
