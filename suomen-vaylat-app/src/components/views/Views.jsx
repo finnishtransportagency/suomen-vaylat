@@ -53,7 +53,7 @@ const StyledDeleteAllSavedViews = styled.div`
     justify-content: center;
     align-items: center;
     color: ${props => props.theme.colors.mainWhite};
-    background-color: ${props => props.disabled ? "rgba(177, 177, 177, 0.5)" : props.theme.colors.secondaryColor6};
+    background-color: ${props => props.disabled ? "rgba(177, 177, 177, 0.5)" : props.theme.colors.secondaryColor7};
     margin: 20px auto 20px auto;
     border-radius: 15px;
     p {
