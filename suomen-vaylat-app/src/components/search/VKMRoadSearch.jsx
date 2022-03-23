@@ -207,7 +207,12 @@ const VKMRoadSearch = ({
                                 disabled={!searchValue.ajoradat || (searchValue.ajoradat && !searchValue.ajoradat.length > 0)}
                                 onKeyPress={e => {
                                         if (e.key === 'Enter') {
-                                            handleVKMSearch({vkmTienumero: searchValue.tienumero, vkmTieosa: searchValue.tieosa, vkmAjorata: searchValue.ajorata, vkmEtaisyys: e.target.value});
+                                            handleVKMSearch({
+                                                vkmTienumero: searchValue.tienumero,
+                                                vkmTieosa: searchValue.tieosa,
+                                                vkmAjorata: searchValue.ajorata,
+                                                vkmEtaisyys: e.target.value
+                                            });
                                         }
                                     }
                                 }
