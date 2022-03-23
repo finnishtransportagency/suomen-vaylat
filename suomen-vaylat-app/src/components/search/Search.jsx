@@ -461,7 +461,6 @@ const Search = () => {
                         /> :
                         <StyledSearchActionButton
                             onClick={() => {
-
                                 switch(searchType){
                                     case 'address':
                                         handleAddressSearch(searchValue);
@@ -590,7 +589,7 @@ const Search = () => {
                     (isSearchOpen &&
                     showSearchResults &&
                     searchType === 'vkm' &&
-                    searchValue.tieosat && 
+                    searchValue.tieosat &&
                     searchValue.tieosat.length > 0) ||
                     vkmError ?
                     <StyledDropDown
