@@ -167,8 +167,6 @@ const StyledHideSearchResultsButton = styled.div`
 `;
 
 const Search = () => {
-    const [vkmError, setVkmError] = useState(null);
-
     const [searchValue, setSearchValue ] = useState('');
     const [lastSearchValue, setLastSearchValue] = useState('');
     const [isSearching, setIsSearching] = useState(false);
@@ -185,6 +183,8 @@ const Search = () => {
     const markerId = 'SEARCH_MARKER';
     const vectorLayerId = 'SEARCH_VECTORLAYER';
 
+    const [vkmError, setVkmError] = useState(null);
+
     const handleAddressSearch = (value) => {
         removeMarkersAndFeatures();
         setIsSearching(true);
@@ -193,7 +193,6 @@ const Search = () => {
     };
 
     const handleVKMResponse = (data) => {
-        console.log(data);
         setIsSearching(false);
 
         let style = 'tie';
@@ -212,9 +211,8 @@ const Search = () => {
         const value = {
             tienumero: data.hasOwnProperty('tie') ? parseInt(data.tie) : searchValue.tienumero || null,
             tieosa: data.hasOwnProperty('osa') ? parseInt(data.osa) : searchValue.tieosa || 'default',
-            
-            //ajorata: data.hasOwnProperty('ajorata') ? parseInt(data.ajorata) : searchValue.ajorata || 'default',
-            etaisyys: data.hasOwnProperty('etaisyys') ? parseInt(data.etaisyys) : searchValue.etaisyys || '',
+            ajorata: data.hasOwnProperty('ajorata') ? parseInt(data.ajorata) : 'default',
+            etaisyys: data.hasOwnProperty('etaisyys') ? parseInt(data.etaisyys) : '',
             tieosat: data.hasOwnProperty('tieosat') ? data.tieosat: searchValue.tieosat || [],
             ajoradat: data.hasOwnProperty('ajoradat') ? data.ajoradat: searchValue.ajoradat || []
         };
@@ -238,8 +236,6 @@ const Search = () => {
     };
 
     const handleVKMSearch = (params) => {
-
-        console.log(parseInt(params.vkmAjorata));
 
         setIsSearching(true);
         setVkmError(null);
@@ -427,7 +423,7 @@ const Search = () => {
             <AnimatePresence>
                 {
                 isSearchOpen && <StyledSearchWrapper
-                variants={variants}
+                    variants={variants}
                     initial={'initial'}
                     animate={'animate'}
                     exit={'exit'}
@@ -478,7 +474,6 @@ const Search = () => {
                             icon={faSearch}
                         />
                     }
-
                  </StyledSearchWrapper>
                 }
             </AnimatePresence>
@@ -571,11 +566,12 @@ const Search = () => {
                         />
                     </StyledHideSearchResultsButton>
                     </StyledDropDown> :
-                    isSearchOpen &&
+                    (isSearchOpen &&
                     showSearchResults &&
                     searchType === 'vkm' &&
                     searchValue.tieosat && 
-                    searchValue.tieosat.length > 0 ?
+                    searchValue.tieosat.length > 0) ||
+                    vkmError ?
                     <StyledDropDown
                         key={'dropdown-content-vkm'}
                         variants={dropdownVariants}

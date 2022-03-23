@@ -25,7 +25,9 @@ const RoadSearch = ({
             onChange={e => setSearchValue(e.target.value)}
             onKeyPress={e => {
                 if (e.key === 'Enter') {
-                    handleVKMSearch({vkmTienumero: e.target.value});
+                    handleVKMSearch({
+                        vkmTienumero: e.target.value
+                    });
                 }
             }}
         />

@@ -1,11 +1,6 @@
-import { useState } from 'react';
 import styled from 'styled-components';
 import strings from '../../translations';
 import { motion, AnimatePresence } from 'framer-motion';
-
-import { useAppSelector } from '../../state/hooks';
-
-import { VKMGeoJsonHoverStyles, VKMGeoJsonStyles } from './VKMSearchStyles';
 
 const StyledContainer = styled.div`
     display: flex;
@@ -60,6 +55,7 @@ const StyledLabel = styled.label`
     font-size: 14px;
     font-weight: bold;
     margin: 0px;
+    color: ${props => props.error && props.theme.colors.secondaryColor6};
 `;
 
 const StyledSelect = styled.select`
@@ -107,15 +103,9 @@ const DropdownContentItem = (props) => {
 };
 
 const VKMRoadSearch = ({
-  setIsSearching,
   searchValue,
   setSearchValue,
-  setLastSearchValue,
-  vectorLayerId,
-  removeMarkersAndFeatures,
-  setSearchResults,
   handleVKMSearch,
-  handleVKMResponse,
   vkmError,
   setVkmError
 }) => {
@@ -130,6 +120,7 @@ const VKMRoadSearch = ({
                     vkmError &&
                     <StyledDropdownContentItem>
                         <StyledDropdownContentItemTitle type='noResults'>{strings.search.vkm.error.text}</StyledDropdownContentItemTitle>
+                        <StyledDropdownContentItemTitle type='noResults'>{vkmError}</StyledDropdownContentItemTitle>
                     </StyledDropdownContentItem>
                 }
                 <AnimatePresence>
@@ -140,7 +131,10 @@ const VKMRoadSearch = ({
                             <StyledSelect
                                 id='vkm-tieosa'
                                 onChange={e => {
-                                    handleVKMSearch({vkmTienumero: searchValue.tienumero, vkmTieosa: e.target.value});
+                                    handleVKMSearch({
+                                        vkmTienumero: searchValue.tienumero,
+                                        vkmTieosa: e.target.value
+                                    });
                                 }}
                                 disabled={!searchValue.tieosat || (searchValue.tieosat && !searchValue.tieosat.length > 0)}
                                 value={searchValue.tieosa || 'default'}
@@ -164,10 +158,14 @@ const VKMRoadSearch = ({
                             <StyledSelect
                                 id='vkm-ajorata'
                                 onChange={e => {
-                                    handleVKMSearch({vkmTienumero: searchValue.tienumero, vkmTieosa: searchValue.tieosa, vkmAjorata: e.target.value});
+                                    handleVKMSearch({
+                                        vkmTienumero: searchValue.tienumero,
+                                        vkmTieosa: searchValue.tieosa,
+                                        vkmAjorata: e.target.value
+                                    });
                                 }}
                                 disabled={!searchValue.ajoradat || (searchValue.ajoradat && !searchValue.ajoradat.length > 0)}
-                                value={(searchValue.hasOwnProperty('ajorata') && searchValue.ajorata) || 'default'}
+                                value={searchValue.hasOwnProperty('ajorata') ? searchValue.ajorata : 'default'}
                             >
                                 <StyledOption value='default' disabled readOnly={true}>{strings.search.vkm.ajorata}</StyledOption>
                                 {
@@ -184,7 +182,12 @@ const VKMRoadSearch = ({
                     {
                         searchValue.hasOwnProperty('ajorata') && searchValue.ajorata !== 'default' &&
                         <DropdownContentItem>
-                            <StyledLabel htmlFor='vkm-etaisyys'>{strings.search.vkm.etaisyys}:</StyledLabel>
+                            <StyledLabel
+                                htmlFor='vkm-etaisyys'
+                                error={vkmError}
+                            >
+                                    {strings.search.vkm.etaisyys}:
+                            </StyledLabel>
                             <StyledInput
                                 id='vkm-etaisyys'
                                 placeholder={strings.search.vkm.etaisyys}
