@@ -54,7 +54,6 @@ const StyledSearchWrapper = styled(motion.div)`
     z-index: -1;
     transition: all 0.3s ease-out;
     display: flex;
-    justify-content: flex-end;
     align-items: center;
     width: 100%;
     overflow: hidden;
@@ -62,7 +61,7 @@ const StyledSearchWrapper = styled(motion.div)`
     height: 100%;
     background-color: ${props => props.theme.colors.mainWhite};
     border-radius: 24px;
-    box-shadow: rgb(0 0 0 / 16%) 0px 3px 6px, rgb(0 0 0 / 23%) 0px 3px 6px;
+    box-shadow: ${props => props.searchType === 'vkmtrack' && props.showSearchResults  ? 'none' : 'rgb(0 0 0 / 16%) 0px 3px 6px, rgb(0 0 0 / 23%) 0px 3px 6px'};
     pointer-events: auto;
     @media ${props => props.theme.device.mobileL} {
         border-radius: 20px;
@@ -184,6 +183,7 @@ const Search = () => {
     const vectorLayerId = 'SEARCH_VECTORLAYER';
 
     const [vkmError, setVkmError] = useState(null);
+    const [vkmTrackError, setVkmTrackError] = useState(null);
 
     const handleAddressSearch = (value) => {
         removeMarkersAndFeatures();
@@ -252,6 +252,58 @@ const Search = () => {
         });
     };
 
+    const handleVKMTrackResponse = (data) => {
+        setIsSearching(false);
+
+        let featureStyle = VKMGeoJsonStyles['track'];
+        let hover = VKMGeoJsonHoverStyles['track'];
+
+        channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [null, null, vectorLayerId + '_vkm_track']);
+
+        const value = {
+            ratanumero: data.hasOwnProperty('ratanumero') ? data.ratanumero : searchValue.ratanumero || '',
+            ratakilometri: data.hasOwnProperty('ratakilometri') ? parseInt(data.ratakilometri) : searchValue.ratakilometri || 1,
+            ratametri: data.hasOwnProperty('ratametri') ? parseInt(data.ratametri) : searchValue.ratakilometri || 0
+        };
+
+        setSearchValue(value);
+        setLastSearchValue(value);
+        setSearchResults(data);
+
+        data.hasOwnProperty('geom') && channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest',
+        [data.geom, {
+            centerTo: true,
+            hover: hover,
+            featureStyle: featureStyle,
+            layerId: vectorLayerId + '_vkm_track',
+            maxZoomLevel: 10
+        }]);
+    };
+
+    const handleVKMTrackSearch = (params) => {
+        removeMarkersAndFeatures();
+        setVkmTrackError(null);
+        if(
+            params.hasOwnProperty('ratanumero') && params.ratanumero !== '' &&
+            params.hasOwnProperty('ratakilometri') && params.ratakilometri !== '' &&
+            params.hasOwnProperty('ratametri') && params.ratametri !== ''
+        ) {
+            let requestData = [
+                params.hasOwnProperty('ratanumero') && parseInt(params.ratanumero),
+                params.hasOwnProperty('ratakilometri') && parseInt(params.ratakilometri),
+                params.hasOwnProperty('ratametri') && parseInt(params.ratametri),
+            ];
+            channel.searchVKMTrack && channel.searchVKMTrack(requestData, handleVKMTrackResponse, (err) => {
+                setIsSearching(false);
+                if(err){
+                    setVkmTrackError(err);
+                };
+            });
+        } else {
+            setVkmTrackError("Täytä kaikki hakukentät");
+        };
+    };
+
     const handleMetadataSearch = (value) => {
         removeMarkersAndFeatures();
         setIsSearching(true);
@@ -264,7 +316,13 @@ const Search = () => {
     };
 
     const markerIds = [markerId];
-    const vectorLayerIds = [vectorLayerId + '_vkm_tie', vectorLayerId + '_vkm_osa', vectorLayerId + '_vkm_etaisyys', vectorLayerId + '_vkm_track'];
+    
+    const vectorLayerIds = [
+        vectorLayerId + '_vkm_tie',
+        vectorLayerId + '_vkm_osa',
+        vectorLayerId + '_vkm_etaisyys',
+        vectorLayerId + '_vkm_track'
+    ];
 
     const removeMarkersAndFeatures = () => {
         if (!channel) {
@@ -305,7 +363,7 @@ const Search = () => {
         vkmtrack: {
             label: strings.search.vkm.trackTitle,
             subtitle: strings.search.vkm.trackSubtitle,
-            content: <p>{strings.search.vkm.trackTitle}...</p>,
+            content: <p>{strings.search.vkm.trackTitle}</p>,
             visible: channel && channel.searchVKMTrack
         },
         metadata: {
@@ -407,12 +465,15 @@ const Search = () => {
                 toggleState={isSearchOpen}
                 tooltipDirection={'left'}
                 clickAction={() => {
+                    setIsSearching(false);
                     isSearchOpen && removeMarkersAndFeatures();
                     isSearchOpen && setSearchResults(null);
                     isSearchOpen && setSearchValue('');
                     store.dispatch(setIsSearchOpen(!isSearchOpen));
                     isSearchMethodSelectorOpen && setIsSearchMethodSelectorOpen(false);
                     setSearchType('address');
+                    setVkmError(null);
+                    setVkmTrackError(null);
                 }}
             />
             <AnimatePresence>
@@ -423,6 +484,8 @@ const Search = () => {
                     animate={'animate'}
                     exit={'exit'}
                     transition={'transition'}
+                    searchType={searchType}
+                    showSearchResults={showSearchResults}
                 >
                     <StyledLeftContentWrapper>
                         <StyledSearchMethodSelector
@@ -466,7 +529,6 @@ const Search = () => {
                                         handleAddressSearch(searchValue);
                                     break;
                                     case 'vkm':
-                                        
                                         let data = {};
                                             if(searchValue.hasOwnProperty('tienumero')){
                                                 data.vkmTienumero = searchValue.tienumero;
@@ -480,8 +542,10 @@ const Search = () => {
                                             if(searchValue.hasOwnProperty('etaisyys')){
                                                 data.vkmEtaisyys = parseInt(searchValue.etaisyys);
                                             };
-
                                         handleVKMSearch(data);
+                                    break;
+                                    case 'vkmtrack':
+                                            handleVKMTrackSearch(searchValue)
                                     break;
                                     case 'metadata':
                                         handleMetadataSearch(searchValue);
@@ -641,6 +705,10 @@ const Search = () => {
                             setSearchResults={setSearchResults}
                             vectorLayerId={vectorLayerId}
                             removeMarkersAndFeatures={removeMarkersAndFeatures}
+                            handleVKMTrackSearch={handleVKMTrackSearch}
+                            handleVKMTrackResponse={handleVKMTrackResponse}
+                            vkmTrackError={vkmTrackError}
+                            setVkmTrackError={setVkmTrackError}
                         />
                         <StyledHideSearchResultsButton
                             onClick={() => setShowSearchResults(false)}
