@@ -23,6 +23,13 @@ const StyledDropdownContentItem = styled(motion.div)`
 
 const StyledDropdownContentItemTitle = styled.p`
     text-align: ${props => props.type === 'noResults' && 'center'};
+    font-weight: bold;
+    font-size: 14px;
+    color: #504d4d;
+`;
+
+const StyledDropdownContentItemSubtitle = styled.p`
+    text-align: ${props => props.type === 'noResults' && 'center'};
     font-size: 14px;
     color: #504d4d;
 `;
@@ -120,7 +127,7 @@ const VKMRoadSearch = ({
                     vkmError &&
                     <StyledDropdownContentItem>
                         <StyledDropdownContentItemTitle type='noResults'>{strings.search.vkm.error.text}</StyledDropdownContentItemTitle>
-                        <StyledDropdownContentItemTitle type='noResults'>{vkmError}</StyledDropdownContentItemTitle>
+                        <StyledDropdownContentItemSubtitle type='noResults'>{vkmError}</StyledDropdownContentItemSubtitle>
                     </StyledDropdownContentItem>
                 }
                 <AnimatePresence>
