@@ -5,15 +5,6 @@ import styled from "styled-components";
 import {Button} from "react-bootstrap";
 import strings from "../../../translations";
 
-const StyledCheckbox = styled.input`
-    margin-right: 7px;
-`;
-
-const StyledContent = styled.div`
-    padding: 32px;
-    max-width: 600px;
-`;
-
 const StyledFooter = styled.div`
     justify-content: center;
 `;

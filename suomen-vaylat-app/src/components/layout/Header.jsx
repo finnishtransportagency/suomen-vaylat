@@ -12,7 +12,7 @@ import {
     setIsMainScreen,
     setIsUserGuideOpen
 } from '../../state/slices/uiSlice';
-import { 
+import {
     mapMoveRequest,
     resetGFILocations
 } from '../../state/slices/rpcSlice';
@@ -177,16 +177,16 @@ export const Header = () => {
             zoom: startState.zoom
         }));
 
-        // add start layers
-        startState.selectedLayers.forEach((layer) => {
-            channel && channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, true]);
-            channel && channel.postRequest('ChangeMapLayerOpacityRequest', [layer.id, layer.opacity]);
-        });
-
         store.dispatch(setIsMainScreen());
         store.dispatch(resetGFILocations([]));
         history.push(routerPrefix);
         handleSelectGroup(null, lastSelectedTheme);
+
+        // add start layers back (do it after than select group)
+        startState.selectedLayers.forEach((layer) => {
+            channel && channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, true]);
+            channel && channel.postRequest('ChangeMapLayerOpacityRequest', [layer.id, layer.opacity]);
+        });
 
         updateLayers(store, channel);
 
