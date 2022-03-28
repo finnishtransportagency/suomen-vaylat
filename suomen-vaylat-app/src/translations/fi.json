@@ -58,6 +58,11 @@
     "viewName" : "Näkymän nimi",
     "saveNewView" : "Tallenna uusi näkymä"
   },
+  "download" : {
+    "downloadModalTitle": "Aineistojen lataaminen",
+    "downloadModalString": "Lataa aineistot",
+    "downloadModalSelectedLayers": "Lataa aineistot valituista karttatasoista"
+  },
   "gfi": {
     "title": "Kohdetiedot",
     "close": "Sulje",

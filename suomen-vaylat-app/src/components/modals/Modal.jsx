@@ -3,11 +3,12 @@ import { cloneElement} from 'react';
 import styled from 'styled-components';
 import { motion, AnimatePresence, useDragControls } from 'framer-motion';
 import { ReactReduxContext } from 'react-redux';
-import { faTimes, faWindowMinimize } from '@fortawesome/free-solid-svg-icons';
+import { faTimes, faWindowMinimize, faDownload } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 
-import { setMinimizeGfi } from '../../state/slices/uiSlice';
+import { setMinimizeGfi, setIsDownloadModalOpen } from '../../state/slices/uiSlice';
+import {useAppSelector} from "../../state/hooks";
 
 const StyledModalBackdrop = styled(motion.div)`
 
@@ -120,6 +121,19 @@ const StyledRightContent = styled.div`
     align-items: center;
 `;
 
+const StyledShowDownloadModal = styled.div`
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 8px;
+    padding: 8px;
+    color: black;
+    svg {
+         font-size: 18px;
+    }
+`;
+
 const StyledMinimizeButton = styled.div`
     height: 100%;
     display: flex;
@@ -157,6 +171,7 @@ const Modal = ({
     resize,
     backdrop,
     fullScreenOnMobile,
+    downloadButton,
     titleIcon,
     title,
     type,
@@ -172,6 +187,8 @@ const Modal = ({
     const { store } = useContext(ReactReduxContext);
 
     const dragControls = useDragControls();
+
+    const {isDownloadModalOpen} = useAppSelector((state) => state.ui);
 
     const [localState, setLocalState] = useState(type === "announcement");
 
@@ -231,6 +248,16 @@ const Modal = ({
                                 <p>{title}</p>
                             </StyledModalTitle>
                             <StyledRightContent>
+                                <StyledShowDownloadModal>
+                                    <FontAwesomeIcon
+                                        icon={faDownload}
+                                        onClick={() => downloadButton ? store.dispatch(setIsDownloadModalOpen(!isDownloadModalOpen)) : null}
+                                        style={{
+                                            opacity: downloadButton ? '1' : '0.3',
+                                            cursor: downloadButton ? 'pointer' : 'not-allowed'
+                                        }}
+                                    />
+                                </StyledShowDownloadModal>
                                 { type === "gfi" &&
                                     <StyledMinimizeButton
                                         onClick={() => store.dispatch(setMinimizeGfi(true))}

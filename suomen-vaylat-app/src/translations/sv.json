@@ -58,6 +58,11 @@
     "viewName" : "View name",
     "saveNewView" : "Save new view"
   },
+  "download" : {
+    "downloadModalTitle": "Ladda ner modalt innehåll",
+    "downloadModalString": "Ladda ner maplayers",
+    "downloadModalSelectedLayers": "Ladda ner innehåll från valda lager"
+  },
   "gfi": {
     "title": "Objektuppgifter",
     "close": "Stänga",

@@ -12,6 +12,7 @@ const initialState = {
   },
   searchParams: '',
   isInfoOpen: false,
+  isDownloadModalOpen: false,
   isUserGuideOpen: false,
   shareUrl: '',
   isDrawingToolsOpen: false,
@@ -55,6 +56,9 @@ export const uiSlice = createSlice({
     },
     setIsSearchOpen: (state, action) => {
       state.isSearchOpen = action.payload;
+    },
+    setIsDownloadModalOpen: (state, action) => {
+      state.isDownloadModalOpen = action.payload;
     },
     setSearchParams: (state, action) => {
       state.searchParams = action.payload;
@@ -120,6 +124,7 @@ export const {
   setIsDrawingToolsOpen,
   setActiveTool,
   setIsDownloadLinkModalOpen,
+  setIsDownloadModalOpen,
   setIsSwipingDisabled,
   setSelectedMapLayersMenuTab,
   setSelectedMapLayersMenuThemeIndex,

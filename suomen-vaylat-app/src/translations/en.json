@@ -58,6 +58,11 @@
     "viewName" : "View name",
     "saveNewView" : "Save new view"
   },
+  "download" : {
+    "downloadModalTitle": "Download modal contents",
+    "downloadModalString": "Download maplayers",
+    "downloadModalSelectedLayers": "Download contents from selected layers"
+  },
   "gfi": {
     "title": "Feature Data",
     "close": "Close",

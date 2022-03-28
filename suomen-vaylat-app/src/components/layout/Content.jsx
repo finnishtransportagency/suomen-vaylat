@@ -31,9 +31,10 @@ import {
     setIsSaveViewOpen,
     setMinimizeGfi,
     setWarning,
-    setIsDownloadLinkModalOpen
+    setIsDownloadLinkModalOpen, setIsDownloadModalOpen
 } from '../../state/slices/uiSlice';
 import { GFIPopup } from '../infobox/GFIPopup';
+import GFIPopupDownloadModal from '../infobox/GFIPopupDownloadModal';
 import MetadataModal from '../metadata-modal/MetadataModal';
 
 import {
@@ -95,7 +96,8 @@ const Content = () => {
         isUserGuideOpen,
         isSaveViewOpen,
         minimizeGfi,
-        warning
+        warning,
+        isDownloadModalOpen
     } = useAppSelector((state) => state.ui);
 
     const search = useAppSelector((state) => state.search)
@@ -171,6 +173,10 @@ const Content = () => {
         channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [null, null, 'gfi-result-layer']);
     };
 
+    const handleCloseGFIDownloadModal = () => {
+        store.dispatch(setIsDownloadModalOpen(!isDownloadModalOpen));
+    }
+
     const handleCloseSaveViewModal = () => {
         store.dispatch(setIsSaveViewOpen(false));
     };
@@ -214,6 +220,7 @@ const Content = () => {
                     constraintsRef={constraintsRef} /* Reference div for modal drag boundaries */
                     drag={true} /* Enable (true) or disable (false) drag */
                     resize={true}
+                    downloadButton={true}
                     backdrop={false} /* Is backdrop enabled (true) or disabled (false) */
                     fullScreenOnMobile={true} /* Scale modal full width / height when using mobile device */
                     titleIcon={faMapMarkedAlt} /* Use icon on title or null */
@@ -227,6 +234,24 @@ const Content = () => {
                     //overflow={"auto"}
                 >
                     <GFIPopup gfiLocations={gfiLocations}/>
+                </Modal>
+                <Modal
+                    constraintsRef={constraintsRef} /* Reference div for modal drag boundaries */
+                    drag={true} /* Enable (true) or disable (false) drag */
+                    resize={false}
+                    backdrop={true} /* Is backdrop enabled (true) or disabled (false) */
+                    fullScreenOnMobile={true} /* Scale modal full width / height when using mobile device */
+                    titleIcon={null} /* Use icon on title or null */
+                    title={strings.download.downloadModalTitle} /* Modal header title */
+                    type={"normal"} /* Modal type */
+                    closeAction={handleCloseGFIDownloadModal} /* Action when pressing modal close button or backdrop */
+                    isOpen={gfiLocations.length > 0 && isDownloadModalOpen} /* Modal state */
+                    id={null}
+                    minWidth={600}
+                    maxWidth={1200}
+                    //overflow={"auto"}
+                >
+                    <GFIPopupDownloadModal gfiLocations={gfiLocations} />
                 </Modal>
                 <Modal
                     constraintsRef={constraintsRef} /* Reference div for modal drag boundaries */
