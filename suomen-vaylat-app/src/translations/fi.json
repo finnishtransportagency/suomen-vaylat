@@ -61,7 +61,9 @@
   "download" : {
     "downloadModalTitle": "Aineistojen lataaminen",
     "downloadModalString": "Lataa aineistot",
-    "downloadModalSelectedLayers": "Lataa aineistot valituista karttatasoista"
+    "downloadModalSelectedLayers": "Lataa aineistot valituista karttatasoista",
+    "downloadLayerTitleNotDefined": "Ei määritetty",
+    "downloadButton": "Lataa"
   },
   "gfi": {
     "title": "Kohdetiedot",

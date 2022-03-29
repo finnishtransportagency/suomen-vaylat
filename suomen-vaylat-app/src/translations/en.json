@@ -61,7 +61,9 @@
   "download" : {
     "downloadModalTitle": "Download modal contents",
     "downloadModalString": "Download maplayers",
-    "downloadModalSelectedLayers": "Download contents from selected layers"
+    "downloadModalSelectedLayers": "Download contents from selected layers",
+    "downloadLayerTitleNotDefined": "Not defined",
+    "downloadButton": "Download"
   },
   "gfi": {
     "title": "Feature Data",

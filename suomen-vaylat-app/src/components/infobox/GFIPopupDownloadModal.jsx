@@ -1,25 +1,13 @@
 import { useState, useEffect, useContext } from 'react';
-import { ReactReduxContext } from 'react-redux';
 import { useAppSelector } from '../../state/hooks';
-import { updateLayers } from '../../utils/rpcUtil';
 import styled from 'styled-components';
 import ModalListItem from "../modals/ModalListItem";
-import { motion, AnimatePresence} from 'framer-motion';
+import { motion} from 'framer-motion';
 import strings from '../../translations';
-import Moment from 'react-moment';
-import { v4 as uuidv4 } from 'uuid';
 
-import { isMobile } from '../../theme/theme';
-
-import {
-    setIsSaveViewOpen,
-    setWarning
-} from '../../state/slices/uiSlice';
-
-import {faFileArchive, faPlus, faTrash} from '@fortawesome/free-solid-svg-icons';
+import {faFileArchive} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import CircleButton from '../circle-button/CircleButton';
 
 const StyledViewsContainer = styled.div`
     padding: 24px;
@@ -43,6 +31,23 @@ const StyledDownloadFormats = styled.div`
     justify-content: center;
 `;
 
+const StyledDownloadButton = styled.div`
+    width: 250px;
+    height: 30px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: ${props => props.theme.colors.mainWhite};
+    background-color: ${props => props.disabled ? "rgba(177, 177, 177, 0.5)" : props.theme.colors.mainColor1};
+    margin: 20px auto 20px auto;
+    border-radius: 15px;
+    p {
+        margin: 0;
+        font-size: 12px;
+        font-weight: 600;
+    };
+`;
 
 const StyledDownloadFormat = styled(motion.button)`
     width: 56px;
@@ -57,7 +62,7 @@ const StyledDownloadFormat = styled(motion.button)`
     border-radius: 50%;
     border: none;
     cursor: pointer;
-    pointer-events: ${props => !props.disabled && "auto"};
+    pointer-events: auto;
     svg {
         color: ${props => props.theme.colors.mainWhite};
         font-size: 22px;
@@ -75,27 +80,33 @@ const GFIPopupDownloadModal = (gfiLocations) => {
     const Ids = gfiLocations.gfiLocations.map((location) => {
         return {layerId: location.layerId, value: true}
     })
-    const [checkedCheckboxes, setCheckedCheckboxes] = useState([Ids]);
-
-    const {allLayers} = useAppSelector(state => state.rpc);
-    const downloadFormats = [
+    const defaultDownloadFormats = [
         {
             id: "download-format-shape",
-            title: "shape"
+            title: "shape",
+            selected: false
         },
         {
             id: "download-format-csv",
-            title: "csv"
+            title: "csv",
+            selected: false
         },
         {
             id: "download-format-xls",
-            title: "excel"
+            title: "excel",
+            selected: false
         },
         {
             id: "download-format-json",
-            title: "json"
+            title: "json",
+            selected: false
         }
     ];
+    const [checkedCheckboxes, setCheckedCheckboxes] = useState([Ids]);
+    const [downloadFormats, setDownloadFormats] = useState(defaultDownloadFormats);
+
+    const {allLayers} = useAppSelector(state => state.rpc);
+
 
     const setCheckedCheckboxesHandler = (eventId) => {
         let newIds = [];
@@ -104,6 +115,15 @@ const GFIPopupDownloadModal = (gfiLocations) => {
             newIds.push(checkbox)
         })
         setCheckedCheckboxes([newIds])
+    }
+
+    const setDownloadFormat = (formatId) => {
+        let newSelectedFormats = [];
+        downloadFormats.map((format) => {
+            if(format.id == formatId) format.selected = !format.selected
+            newSelectedFormats.push(format)
+        })
+        setDownloadFormats(newSelectedFormats)
     }
 
     return (
@@ -116,7 +136,7 @@ const GFIPopupDownloadModal = (gfiLocations) => {
                             layerId={location.layerId}
                             checkedValue={checkedCheckboxes[0].filter(checkbox => checkbox.layerId === location.layerId && checkbox.value == true).length > 0}
                             setCheckedCheckboxes={setCheckedCheckboxesHandler}
-                            title={allLayers.filter(layer => layer.id === location.layerId).length > 0 ? allLayers.filter(layer => layer.id === location.layerId)[0].name : "Ei määritetty"}
+                            title={allLayers.filter(layer => layer.id === location.layerId).length > 0 ? allLayers.filter(layer => layer.id === location.layerId)[0].name : strings.download.downloadLayerTitleNotDefined}
                         />
                     )
                 }) : []
@@ -127,23 +147,31 @@ const GFIPopupDownloadModal = (gfiLocations) => {
                 <StyledDownloadFormats>
                     {
                         downloadFormats.map(format => {
-                            return <StyledDownloadFormat
-                                key={format.id}
-                                whileHover={{
-                                    scale: 1.1,
-                                    transition: { duration: 0.2 },
-                                }}
-                                // disabled={!selectedDownloads.length > 0}
-                                onClick={() => console.log("SADDSA")}
-                            >
-                                <FontAwesomeIcon
-                                    icon={faFileArchive}
-                                />
-                                <p>{format.title.toUpperCase()}</p>
-                            </StyledDownloadFormat>
+                            return (
+                                <div onClick={() => setDownloadFormat(format.id)}>
+                                    <StyledDownloadFormat
+                                        key={format.id}
+                                        whileHover={{
+                                            scale: 1.1,
+                                            transition: { duration: 0.2 },
+                                        }}
+                                        disabled={format.selected === false}
+                                    >
+                                        <FontAwesomeIcon
+                                            icon={faFileArchive}
+                                        />
+                                        <p>{format.title.toUpperCase()}</p>
+                                    </StyledDownloadFormat>
+                                </div>
+                            )
                         })
                     }
                 </StyledDownloadFormats>
+                <StyledDownloadButton
+                    disabled={!downloadFormats.filter(format => format.selected === true).length > 0}
+                >
+                    <p>{strings.download.downloadButton}</p>
+                </StyledDownloadButton>
         </StyledViewsContainer>
     )
 

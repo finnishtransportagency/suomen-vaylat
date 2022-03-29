@@ -61,7 +61,9 @@
   "download" : {
     "downloadModalTitle": "Ladda ner modalt innehåll",
     "downloadModalString": "Ladda ner maplayers",
-    "downloadModalSelectedLayers": "Ladda ner innehåll från valda lager"
+    "downloadModalSelectedLayers": "Ladda ner innehåll från valda lager",
+    "downloadLayerTitleNotDefined": "Inte definierad",
+    "downloadButton": "Ladda ner"
   },
   "gfi": {
     "title": "Objektuppgifter",
