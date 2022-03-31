@@ -289,7 +289,7 @@ const Search = () => {
             params.hasOwnProperty('ratametri') && params.ratametri !== ''
         ) {
             let requestData = [
-                params.hasOwnProperty('ratanumero') && parseInt(params.ratanumero),
+                params.hasOwnProperty('ratanumero') && params.ratanumero,
                 params.hasOwnProperty('ratakilometri') && parseInt(params.ratakilometri),
                 params.hasOwnProperty('ratametri') && parseInt(params.ratametri),
             ];
@@ -316,7 +316,7 @@ const Search = () => {
     };
 
     const markerIds = [markerId];
-    
+
     const vectorLayerIds = [
         vectorLayerId + '_vkm_tie',
         vectorLayerId + '_vkm_osa',
@@ -551,7 +551,7 @@ const Search = () => {
                                         handleMetadataSearch(searchValue);
                                     break;
                                     default:
-                                    
+
                                     break;
                                 }
                             }}
