@@ -5,7 +5,8 @@ import {
     faExpand,
     faLayerGroup,
     faPencilRuler,
-    faSave
+    faSave,
+    faMapMarkedAlt
 } from '@fortawesome/free-solid-svg-icons';
 import { ReactReduxContext } from 'react-redux';
 import styled from 'styled-components';
@@ -14,6 +15,7 @@ import {
     setIsDrawingToolsOpen,
     setIsSideMenuOpen,
     setIsSaveViewOpen,
+    setIsGfiOpen,
     setActiveTool
 } from '../../../state/slices/uiSlice';
 
@@ -73,6 +75,7 @@ const MenuBar = () => {
         isDrawingToolsOpen,
         isSearchOpen,
         isSaveViewOpen,
+        isGfiOpen,
         activeTool,
     } =  useAppSelector((state) => state.ui);
 
@@ -135,6 +138,12 @@ const MenuBar = () => {
                     text={strings.saveView.saveView}
                     toggleState={isSaveViewOpen}
                     clickAction={() => store.dispatch(setIsSaveViewOpen(!isSaveViewOpen))}
+                />
+                <CircleButton
+                    icon={faMapMarkedAlt}
+                    text={"Kohdetiedot"}
+                    toggleState={isGfiOpen}
+                    clickAction={() => store.dispatch(setIsGfiOpen(!isGfiOpen))}
                 />
                 <CircleButton
                     icon={isFullScreen ? faCompress : faExpand}

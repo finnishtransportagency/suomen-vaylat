@@ -29,11 +29,12 @@ import {
     setIsInfoOpen,
     setIsUserGuideOpen,
     setIsSaveViewOpen,
+    setIsGfiOpen,
     setMinimizeGfi,
     setWarning,
     setIsDownloadLinkModalOpen
 } from '../../state/slices/uiSlice';
-import { GFIPopup } from '../infobox/GFIPopup';
+import { GFIPopup } from '../gfi/GFIPopup';
 import MetadataModal from '../metadata-modal/MetadataModal';
 
 import {
@@ -94,6 +95,7 @@ const Content = () => {
         isInfoOpen,
         isUserGuideOpen,
         isSaveViewOpen,
+        isGfiOpen,
         minimizeGfi,
         warning
     } = useAppSelector((state) => state.ui);
@@ -167,8 +169,10 @@ const Content = () => {
 
     const handleCloseGFIModal = () => {
         store.dispatch(resetGFILocations([]));
+        store.dispatch(setIsGfiOpen(false));
         store.dispatch(setMinimizeGfi(false));
         channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [null, null, 'gfi-result-layer']);
+        channel.postRequest('DrawTools.StopDrawingRequest', ['gfi-selection-tool', true]);
     };
 
     const handleCloseSaveViewModal = () => {
@@ -220,10 +224,11 @@ const Content = () => {
                     title={strings.gfi.title} /* Modal header title */
                     type={"gfi"} /* Modal type */
                     closeAction={handleCloseGFIModal} /* Action when pressing modal close button or backdrop */
-                    isOpen={gfiLocations.length > 0 && minimizeGfi === false} /* Modal state */
+                    isOpen={isGfiOpen} /* Modal state */
                     id={null}
                     minWidth={600}
                     maxWidth={1200}
+                    minimize={minimizeGfi}
                     //overflow={"auto"}
                 >
                     <GFIPopup gfiLocations={gfiLocations}/>

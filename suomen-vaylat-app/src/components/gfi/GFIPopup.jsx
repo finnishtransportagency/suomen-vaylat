@@ -1,11 +1,24 @@
 import { useContext, useState, useEffect } from 'react';
-import { faTimes, faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
+import { motion, AnimatePresence } from 'framer-motion';
+import { faTimes, faMapMarkerAlt, faPencilRuler } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ReactReduxContext } from 'react-redux';
 import styled from 'styled-components';
 import { useAppSelector } from '../../state/hooks';
 import { resetGFILocations } from '../../state/slices/rpcSlice';
 import { FormattedGFI } from './FormattedGFI';
+
+import GfiTools from './GfiTools';
+import CircleButton from '../circle-button/CircleButton';
+
+const StyledGfiContainer = styled.div`
+    position: relative;
+    min-height: 200px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    min-height: 480px;
+`;
 
 const StyledTabs = styled.div`
     min-height: 48px;
@@ -17,6 +30,8 @@ const StyledTabs = styled.div`
     &::-webkit-scrollbar {
         display: none;
     };
+    position: sticky;
+    top: 0px;
 `;
 
 const StyledTab = styled.div`
@@ -40,6 +55,15 @@ const StyledTab = styled.div`
     border-radius: 4px 4px 0px 0px;
 `;
 
+const StyledNoGfisContainer = styled.div`
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`;
+
 const StyledTabLocationButton = styled.div`
     display: flex;
     justify-content: center;
@@ -58,6 +82,8 @@ const StyledTabCloseButton = styled.div`
 
 const StyledTabContent = styled.div`
     overflow: auto;
+    height: 100%;
+    padding-bottom: 48px;
     div.contentWrapper-infobox {
         @media ${props => props.theme.device.mobileL} {
             font-size: 14px;
@@ -100,6 +126,32 @@ const StyledTabContent = styled.div`
     }
 `;
 
+const StyledGfiToolsButton = styled.div`
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+    padding: 8px;
+    z-index: 3;
+`;
+
+const StyledGfiToolsContainer = styled(motion.div)`
+    display: flex;
+    position: absolute;
+    //width: 100%;
+    height: 100%;
+    //background-color: white;
+    z-index: 2;
+`;
+
+const StyledGfiBackdrop = styled(motion.div)`
+    //width: 100%;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    cursor: pointer;
+`;
+
 export const GFIPopup = () => {
     const LAYER_ID = 'gfi-result-layer';
     const { store } = useContext(ReactReduxContext);
@@ -113,6 +165,7 @@ export const GFIPopup = () => {
     const [selectedTab, setSelectedTab] = useState(0);
     const [tabsContent, setTabsContent] = useState([]);
     const [geoJsonToShow, setGeoJsonToShow] = useState(null);
+    const [isGfiToolsOpen, setIsGfiToolsOpen] = useState(false);
 
     useEffect(() => {
         const mapResults = gfiLocations.map((location) => {
@@ -181,6 +234,15 @@ export const GFIPopup = () => {
         }
     };
 
+    const handleGfiToolsMenu = () => {
+        //isGfiToolsOpen && channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [null, null, 'gfi-result-layer']);
+        isGfiToolsOpen && channel.postRequest('VectorLayerRequest', [{
+            layerId: 'download-tool-layer',
+            remove: true
+        }]);
+        setIsGfiToolsOpen(!isGfiToolsOpen);
+    };
+
     useEffect(() => {
         channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [null, null, LAYER_ID]);
 
@@ -223,11 +285,14 @@ export const GFIPopup = () => {
     };
 
     return (
-        <>
-            <StyledTabs>
-                {
-                    tabsContent.map((tabContent, index) => {
-                        return <StyledTab
+        <StyledGfiContainer>
+            {
+                tabsContent.length > 0 &&
+                <StyledTabs>
+                    {
+                        tabsContent.map((tabContent, index) => {
+                            return (
+                                <StyledTab
                                     key={'tab_' + index}
                                     onClick={() => setSelectedTab(index)}
                                     selected={selectedTab === index}
@@ -241,9 +306,7 @@ export const GFIPopup = () => {
                                             icon={faMapMarkerAlt}
                                         />
                                     </StyledTabLocationButton>
-                                    <p>{
-                                        allLayers.filter(layer => layer.id === tabContent.props.id).length > 0 ? allLayers.filter(layer => layer.id === tabContent.props.id)[0].name : tabContent.props.id
-                                    }</p>
+                                    <p>{allLayers.filter(layer => layer.id === tabContent.props.id)[0].name}</p>
                                     <StyledTabCloseButton
                                         onClick={() => {
                                             closeTab(tabContent.props.id);
@@ -253,16 +316,77 @@ export const GFIPopup = () => {
                                             icon={faTimes}
                                         />
                                     </StyledTabCloseButton>
-                        </StyledTab>
-                    })
-                }
-            </StyledTabs>
-            {
-                <StyledTabContent>
-                         {tabsContent[selectedTab]}
-                 </StyledTabContent>
+                                </StyledTab>
+                            )})
+                    }
+                </StyledTabs>
             }
-        </>
+            <StyledTabContent>
+                {
+                    tabsContent[selectedTab] !== undefined ?
+                        tabsContent[selectedTab] :
+                        <StyledNoGfisContainer>Ei valittuja kohteita</StyledNoGfisContainer> 
+                }
+            </StyledTabContent>
+            <StyledGfiToolsButton>
+                <CircleButton
+                    icon={faPencilRuler}
+                    text={"Valitse kohteita"}
+                    toggleState={isGfiToolsOpen}
+                    tooltipDirection={'left'}
+                    clickAction={handleGfiToolsMenu}
+                />
+            </StyledGfiToolsButton>
+            <AnimatePresence>
+                {
+                    isGfiToolsOpen &&
+                    <StyledGfiToolsContainer
+                        transition={{
+                            duration: 0.4,
+                            type: "tween"
+                        }}
+                        initial={{
+                            opacity: 0,
+                            x: "-100%"
+                        }}
+                        animate={{
+                            opacity: 1,
+                            x: 0
+                        }}
+                        exit={{
+                            opacity: 0,
+                            x: "-100%"
+                        }}
+                    >
+                        <GfiTools
+                            handleGfiToolsMenu={handleGfiToolsMenu}
+                        />
+                        
+                    </StyledGfiToolsContainer>
+                }
+            </AnimatePresence>
+            <AnimatePresence>
+                {
+                    isGfiToolsOpen &&
+                    <StyledGfiBackdrop
+                        transition={{
+                            duration: 0.4,
+                            type: "tween"
+                        }}
+                        initial={{
+                            opacity: 0,
+                        }}
+                        animate={{
+                            opacity: 1,
+                        }}
+                        exit={{
+                            opacity: 0,
+                        }}
+                        onClick={() => handleGfiToolsMenu()}
+                    />
+                }
+            </AnimatePresence>
+        </StyledGfiContainer>
     );
 };
 

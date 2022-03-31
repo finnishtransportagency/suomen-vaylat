@@ -182,7 +182,7 @@ export const FormattedGFI = ({ data }) => {
     generatedKey
     }) => {
     const highPriorityTableExists = highPriorityRows.length > 0 ? false : true;
-    const [isFeatureOpen, openFeature] = useState(true);
+    const [isFeatureOpen, openFeature] = useState(false);
     const [isInfoOpen, openInfo] = useState(highPriorityTableExists);
 
     return (

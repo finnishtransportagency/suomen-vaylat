@@ -25,6 +25,7 @@
     "opacity": "Opacity",
     "drawingtools": {
       "drawingtoolsButton": "Drawing tools",
+      "point": "Point",
       "circle": "Circle",
       "square": "Square",
       "box": "Box",

@@ -34,6 +34,7 @@
     },
     "measuringTools": {
       "measuringToolsButton": "Measuring tools",
+      "point": "Point",
       "circle": "Circle",
       "square": "Square",
       "box": "Box",

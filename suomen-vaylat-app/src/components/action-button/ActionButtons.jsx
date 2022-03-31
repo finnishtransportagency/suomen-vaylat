@@ -140,15 +140,15 @@ const ActionButtons = ({
         selectGroup(store, channel, index, theme, lastSelectedTheme, selectedThemeIndex);
     };
 
-    useEffect(() => {
-        gfiLocations.length === 0 && minimizeGfi && store.dispatch(setMinimizeGfi(false))
-    },[minimizeGfi, gfiLocations, store]);
+/*     useEffect(() => {
+        minimizeGfi && store.dispatch(setMinimizeGfi(false))
+    },[minimizeGfi, gfiLocations, store]); */
 
     return (
             <StyledContent>
                     <AnimatePresence initial={false}>
                         {
-                            minimizeGfi && gfiLocations.length > 0 &&
+                            minimizeGfi &&
                             <StyledActionButton
                                 key="gfi_action_button"
                                 type="gfi"

@@ -23,6 +23,7 @@ import {
     setStartState,
     resetGFILocations
 } from '../../state/slices/rpcSlice';
+import { setGfiCroppingTypes } from '../../state/slices/uiSlice';
 import { updateLayers } from '../../utils/rpcUtil';
 import SvLoder from '../../components/loader/SvLoader';
 import './PublishedMap.scss';
@@ -85,6 +86,12 @@ const PublishedMap = () => {
                             const activeAnnouncements = data.data.filter(announcement => announcement.active && localStorageAnnouncements && !localStorageAnnouncements.includes(announcement.id));
                             store.dispatch(setActiveAnnouncements(activeAnnouncements));
                         }
+                    });
+                };
+
+                if (data.getGfiCroppingTypes) {
+                    channel.getGfiCroppingTypes(function (data) {
+                        store.dispatch(setGfiCroppingTypes(data));
                     });
                 };
 

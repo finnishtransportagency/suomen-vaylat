@@ -146,6 +146,7 @@ const StyledCloseIcon = styled(FontAwesomeIcon)`
 `;
 
 const StyledModalContent = styled.div`
+    height: 100%;
     display: flex;
     flex-direction: column;
     overflow-y: ${props => props.overflow ? "auto" : "hidden"};
@@ -166,6 +167,7 @@ const Modal = ({
     minWidth,
     maxWidth,
     overflow,
+    minimize,
     children
 }) => {
 
@@ -196,7 +198,7 @@ const Modal = ({
                         dragListener={false}
                         dragMomentum={false}
                         initial={{ y: 100, opacity: 0 }}
-                        animate={{ y: 0, opacity: 1 }} // This needs to be fixed
+                        animate={{ x: minimize && -1000, y: 0, opacity: 1 }}
                         exit={{ y: 100, opacity: 0 }}
                         transition={{
                             duration: 0.4,
