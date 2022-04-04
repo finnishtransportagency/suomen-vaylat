@@ -549,7 +549,11 @@ export const rpcSlice = createSlice({
      * @param {Object} action
      */
     setGFILocations: (state, action) => {
-      state.gfiLocations.push(action.payload);
+        if (action.payload.layerId === 'VKM') {
+            state.gfiLocations.unshift(action.payload);
+        } else {
+            state.gfiLocations.push(action.payload);
+        }
     },
 
     /**

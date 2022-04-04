@@ -10,7 +10,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { setMinimizeGfi } from '../../state/slices/uiSlice';
 
 const StyledModalBackdrop = styled(motion.div)`
-    z-index: 10;
+
+    z-index: ${props => props.type === "warning" ? 9998 : 10};
     position: fixed;
     top: 0px;
     right: 0px;
@@ -24,7 +25,7 @@ const StyledModalBackdrop = styled(motion.div)`
 `;
 
 const StyledModalWrapper = styled(motion.div)`
-    z-index: ${props => props.resize ? 4 : 9993};
+    z-index: ${props => props.type === "warning" ? 9999 : props.resize ? 4 : 9993};
     position: fixed;
     top: ${props => props.resize && "0px"};
     left: ${props => props.resize && "0px"};
@@ -69,7 +70,7 @@ const StyledModalHeader = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color:  ${props => props.type === "warning" ? "#C73F00" : props.theme.colors.mainColor1};
+    background-color:  ${props => props.type === "warning" ? props.theme.colors.secondaryColor6 : props.theme.colors.mainColor1};
     box-shadow: 2px 2px 4px 0px rgba(0,0,0,0.20);
     padding-left: 16px;
     padding-right: 16px;
@@ -190,19 +191,20 @@ const Modal = ({
                 <StyledModalWrapper
                         key="modal"
                         drag={drag}
-                        dragConstraints={constraintsRef}
+                        dragConstraints={constraintsRef && constraintsRef}
                         dragControls={dragControls}
                         dragListener={false}
                         dragMomentum={false}
-                        initial={{ y: 100, filter: "blur(10px)", opacity: 0 }}
-                        animate={{ y: 0, filter: "none", opacity: 1 }} // This needs to be fixed
-                        exit={{ y: 100, filter: "blur(10px)", opacity: 0 }}
+                        initial={{ y: 100, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }} // This needs to be fixed
+                        exit={{ y: 100, opacity: 0 }}
                         transition={{
                             duration: 0.4,
                             type: "tween"
                         }}
                         fullScreenOnMobile={fullScreenOnMobile}
                         resize={resize}
+                        type={type}
                         onClick={e => {
                             e.stopPropagation();
                         }}
@@ -269,6 +271,7 @@ const Modal = ({
                             backdrop && closeAction && type !== "announcement" ? closeAction() : type === "announcement" && handleAnnouncementModal(null, null);
                         }}
                         resize={resize}
+                        type={type}
                     >
                     </StyledModalBackdrop>
                 }
