@@ -3,6 +3,7 @@ import { ReactReduxContext } from 'react-redux';
 import { useAppSelector } from '../../state/hooks';
 import styled from 'styled-components';
 import AnnouncementsModal from '../announcements-modal/AnnouncementsModal';
+import LayerDownloadLinkButtonModal from "../menus/hierarchical-layerlist/LayerDownloadLinkButtonModal";
 import AppInfoModalContent from '../app-info-modal/AppInfoModalContent';
 import UserGuideModalContent from '../user-guide-modal/UserGuideModalContent';
 import MenuBar from './menu-bar/MenuBar';
@@ -15,6 +16,8 @@ import ActionButtons from '../action-button/ActionButtons';
 import ScaleBar from '../scalebar/ScaleBar';
 import { ShareWebSitePopup } from '../share-web-site/ShareWebSitePopup';
 import ZoomMenu from '../zoom-features/ZoomMenu';
+import WarningModalContent from '../warning/WarningModalContent';
+
 import strings from '../../translations';
 import {
     setSelectError,
@@ -27,6 +30,8 @@ import {
     setIsUserGuideOpen,
     setIsSaveViewOpen,
     setMinimizeGfi,
+    setWarning,
+    setIsDownloadLinkModalOpen
 } from '../../state/slices/uiSlice';
 import { GFIPopup } from '../infobox/GFIPopup';
 import MetadataModal from '../metadata-modal/MetadataModal';
@@ -89,15 +94,18 @@ const Content = () => {
         isInfoOpen,
         isUserGuideOpen,
         isSaveViewOpen,
-        minimizeGfi
+        minimizeGfi,
+        warning
     } = useAppSelector((state) => state.ui);
 
     const search = useAppSelector((state) => state.search)
     const { store } = useContext(ReactReduxContext);
     const isShareOpen = shareUrl && shareUrl.length > 0 ? true : false;
+    const downloadLink = useAppSelector((state) => state.ui.downloadLink)
 
     const announcements = useAppSelector((state) => state.rpc.activeAnnouncements);
     const metadata = useAppSelector((state) => state.rpc.layerMetadata);
+    
     let {
         channel,
         gfiLocations
@@ -149,6 +157,10 @@ const Content = () => {
         store.dispatch(setIsUserGuideOpen(false));
     };
 
+    const handleCloseDownloadLinkModal = () => {
+        store.dispatch(setIsDownloadLinkModalOpen({ layerDownloadLinkModalOpen: false, layerDownloadLink: null, layerDownloadLinkName: null }))
+    };
+
     const handleCloseMetadataModal = () => {
             store.dispatch(clearLayerMetadata());
     };
@@ -161,6 +173,10 @@ const Content = () => {
 
     const handleCloseSaveViewModal = () => {
         store.dispatch(setIsSaveViewOpen(false));
+    };
+
+    const handleCloseWarning = () => {
+        store.dispatch(setWarning(null));
     };
 
     return (
@@ -281,30 +297,6 @@ const Content = () => {
                     backdrop={true} /* Is backdrop enabled (true) or disabled (false) */
                     fullScreenOnMobile={false} /* Scale modal full width / height when using mobile device */
                     titleIcon={faExclamationCircle} /* Use icon on title or null */
-                    title={strings.general.warning} /* Modal header title */
-                    type={"warning"} /* Modal type */
-                    warningType={warnings.type}
-                    closeAction={hideWarn} /* Action when pressing modal close button or backdrop */
-                    isOpen={warnings.show && warnings.type === 'multipleLayersWarning'} /* Modal state */
-                    id={null}
-                >
-                    <WarningDialog
-                        hideWarn={hideWarn}
-                        message={strings.multipleLayersWarning}
-                        filteredLayers={warnings.filteredLayers}
-                        warningType={warnings.type}
-                        closeAction={hideWarn} /* Action when pressing modal close button or backdrop */
-                        isOpen={warnings.show && warnings.type === 'multipleLayersWarning'} /* Modal state */
-                        id={null}
-                    />
-                </Modal>
-                <Modal
-                    constraintsRef={constraintsRef} /* Reference div for modal drag boundaries */
-                    drag={false} /* Enable (true) or disable (false) drag */
-                    resize={false}
-                    backdrop={true} /* Is backdrop enabled (true) or disabled (false) */
-                    fullScreenOnMobile={false} /* Scale modal full width / height when using mobile device */
-                    titleIcon={faExclamationCircle} /* Use icon on title or null */
                     title={search.selected === 'vkm' ? strings.search.vkm.error.title : strings.search.address.error.title} /* Modal header title */
                     type={"warning"} /* Modal type */
                     warningType={warnings.type}
@@ -335,6 +327,38 @@ const Content = () => {
                     minWidth={600}
                 >
                     <Views />
+                </Modal>
+                <Modal
+                    constraintsRef={constraintsRef} /* Reference div for modal drag boundaries */
+                    drag={false} /* Enable (true) or disable (false) drag */
+                    resize={false}
+                    backdrop={true} /* Is backdrop enabled (true) or disabled (false) */
+                    fullScreenOnMobile={true} /* Scale modal full width / height when using mobile device */
+                    titleIcon={null} /* Use icon on title or null */
+                    title={strings.downloadLink.downloadLinkModalHeader} /* Modal header title */
+                    type={"normal"} /* Modal type */
+                    closeAction={handleCloseDownloadLinkModal} /* Action when pressing modal close button or backdrop */
+                    isOpen={downloadLink.layerDownloadLinkModalOpen} /* Modal state */
+                    id={null}
+                >
+                    <LayerDownloadLinkButtonModal downloadLink={downloadLink} />
+                </Modal>
+                <Modal
+                    constraintsRef={constraintsRef} /* Reference div for modal drag boundaries */
+                    drag={false} /* Enable (true) or disable (false) drag */
+                    resize={false}
+                    backdrop={true} /* Is backdrop enabled (true) or disabled (false) */
+                    fullScreenOnMobile={false} /* Scale modal full width / height when using mobile device */
+                    titleIcon={faExclamationCircle} /* Use icon on title or null */
+                    title={strings.general.warning} /* Modal header title */
+                    type={"warning"} /* Modal type */
+                    closeAction={handleCloseWarning} /* Action when pressing modal close button or backdrop */
+                    isOpen={warning !== null} /* Modal state */
+                    id={null}
+                >
+                    <WarningModalContent
+                        warning={warning}
+                    />
                 </Modal>
                 <ScaleBar />
                 <StyledContentGrid>

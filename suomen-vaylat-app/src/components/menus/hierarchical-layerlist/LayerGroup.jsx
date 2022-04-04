@@ -19,10 +19,11 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 import { updateLayers } from '../../../utils/rpcUtil';
-import { setSelectError } from "../../../state/slices/rpcSlice"
-import strings from "../../../translations";
 
-const OSKARI_LOCALSTORAGE = "oskari";
+import {
+    setWarning,
+} from "../../../state/slices/uiSlice";
+import strings from "../../../translations";
 
 const masterHeaderIconVariants = {
     open: { rotate: 180 },
@@ -144,6 +145,13 @@ const StyledSubText = styled.p`
 `;
 
 const StyledReadMoreButton = styled.span`
+    cursor: pointer;
+    color: ${props => props.theme.colors.mainColor1};
+    font-size: 12px;
+    font-weight: 400;
+`;
+
+const StyledLinkButton = styled.a`
     cursor: pointer;
     color: ${props => props.theme.colors.mainColor1};
     font-size: 12px;
@@ -294,7 +302,6 @@ const Switch = ({ action, isSelected }) => {
     );
 };
 
-
 export const LayerGroup = ({
     group,
     layers,
@@ -349,20 +356,40 @@ export const LayerGroup = ({
 
     const truncatedString = (string, characterAmount, text) => {
         return (
-            string.length > 10 ? <>{string.substring(0, characterAmount)} <StyledReadMoreButton
+            string.length > characterAmount + 20 ? <>{string.substring(0, characterAmount)} <StyledReadMoreButton
                 onClick={() => setIsExcerptOpen(!isExcerptOpen)}>{text}</StyledReadMoreButton></> : string
         )
     }
 
     const selectGroup = (e) => {
         e.stopPropagation();
-        var invisibleLayers = filteredLayers.length - visibleLayers.length;
+        let invisibleLayers = filteredLayers.length - visibleLayers.length;
+        if(filteredLayers.length > 9 && invisibleLayers > 9 && isChecked === false){
+            store.dispatch(setWarning({
+                title: strings.multipleLayersWarning,
+                subtitle: null,
+                cancel: {
+                    text: strings.general.cancel,
+                    action: () => store.dispatch(setWarning(null))
+                },
+                confirm: {
+                    text: strings.general.continue,
+                    action: () => {
+                        groupLayersVisibility();
+                        store.dispatch(setWarning(null));
+                    }
+                },
+            }))
+        } else {
+            groupLayersVisibility();
+        }
+/*         var invisibleLayers = filteredLayers.length - visibleLayers.length;
         var localStorageWarn = localStorage.getItem(OSKARI_LOCALSTORAGE) ? localStorage.getItem(OSKARI_LOCALSTORAGE) : [] ;
         if (filteredLayers.length > 9 && invisibleLayers > 9 && isChecked === false && !localStorageWarn.includes("multipleLayersWarning")) {
             store.dispatch(setSelectError({show: true, type: 'multipleLayersWarning', filteredLayers: filteredLayers, isChecked: isChecked}));
         } else {
             groupLayersVisibility();
-        }
+        } */
     };
 
     const groupLayersVisibility = () => {
@@ -490,9 +517,8 @@ export const LayerGroup = ({
                         type: "tween"
                     }}
                 >
-                    {group.parentId === -1 &&
                         <div>
-                            {strings.groupLayerList.hasOwnProperty(group.id) && strings.groupLayerList[group.id].title !== null &&
+                            {group.parentId === -1 && strings.groupLayerList.hasOwnProperty(group.id) && strings.groupLayerList[group.id].title !== null &&
                                 <>
                                     <StyledSubHeader>{strings.groupLayerList[group.id].title}</StyledSubHeader>
                                 </>
@@ -500,15 +526,17 @@ export const LayerGroup = ({
                             {strings.groupLayerList.hasOwnProperty(group.id) && strings.groupLayerList[group.id].description !== null &&
                                 <>
                                     <StyledSubText>
-                                        {isExcerptOpen ? <> {strings.groupLayerList[group.id].description} <StyledReadMoreButton
-                                                onClick={() => setIsExcerptOpen(!isExcerptOpen)}>{strings.groupLayerList.readLess}</StyledReadMoreButton></> :
+                                        {isExcerptOpen ? <> {strings.groupLayerList[group.id].description}
+                                                {strings.groupLayerList[group.id].link_description &&
+                                                    <><StyledLinkButton target={"_blank"} href={strings.groupLayerList[group.id].link}>{strings.groupLayerList[group.id].link_description}</StyledLinkButton><br /></>
+                                                }
+                                                <StyledReadMoreButton onClick={() => setIsExcerptOpen(!isExcerptOpen)}>{strings.groupLayerList.readLess}</StyledReadMoreButton></> :
                                                 truncatedString(strings.groupLayerList[group.id].description,
                                                     135, '...' + strings.groupLayerList.readMore)}
                                     </StyledSubText>
                                 </>
                             }
                         </div>
-                    }
                     {hasChildren && (
                         <>
                             <LayerList

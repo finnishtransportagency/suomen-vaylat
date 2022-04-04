@@ -1,5 +1,14 @@
 # Release Notes
 
+## 1.1.0
+
+For a full list of changes see: https://github.com/finnishtransportagency/suomen-vaylat/milestone/4?closed=1
+
+* Improve search component
+* Improve resetting start state
+* VKM coordinate search, now gets VKM result on map click (comes from zoom level 8 and closer)
+* Updated texts
+
 ## 1.0.0
 
 For a full list of changes see: https://github.com/finnishtransportagency/suomen-vaylat/milestone/3?closed=1

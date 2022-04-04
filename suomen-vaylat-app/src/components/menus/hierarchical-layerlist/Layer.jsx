@@ -1,13 +1,15 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from 'react';
 import { ReactReduxContext, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import {
     changeLayerStyle,
     getLegends,
     setLegends,
-    setMapLayerVisibility,
+    setMapLayerVisibility
 } from '../../../state/slices/rpcSlice';
-import { updateLayers } from "../../../utils/rpcUtil";
+import { updateLayers } from '../../../utils/rpcUtil';
+import LayerDownloadLinkButton from './LayerDownloadLinkButton';
+import {setIsDownloadLinkModalOpen} from '../../../state/slices/uiSlice';
 import LayerMetadataButton from './LayerMetadataButton';
 
 const StyledLayerContainer = styled.li`
@@ -90,6 +92,9 @@ export const Layer = ({ layer, theme }) => {
         updateLayers(store, channel);
     };
 
+    const handleIsDownloadLinkModalOpen = () => {
+        store.dispatch(setIsDownloadLinkModalOpen({ layerDownloadLinkModalOpen: true, layerDownloadLink: downloadLink, layerDownloadLinkName: layer.name }))
+    }
 
     const updateLayerLegends = () => {
         // need use global window variable to limit legend updates
@@ -124,6 +129,11 @@ export const Layer = ({ layer, theme }) => {
         });
     }
 
+    let downloadLink = null;
+    if (layer.config && layer.config.downloadLink) {
+        downloadLink = layer.config.downloadLink;
+    }
+
     return (
             <StyledLayerContainer
                 themeStyle={themeStyle}
@@ -138,7 +148,9 @@ export const Layer = ({ layer, theme }) => {
                     </StyledLayerName>
                 </StyledlayerHeader>
                 {layer.metadataIdentifier && <LayerMetadataButton layer={layer}/>}
-                {/* <StyledInfoIcon icon={faInfoCircle} /> */}
+                {downloadLink && <LayerDownloadLinkButton
+                    handleIsDownloadLinkModalOpen={handleIsDownloadLinkModalOpen} />
+                }
                 <Switch
                     action={() => handleLayerVisibility(channel, layer)}
                     isSelected={layer.visible}

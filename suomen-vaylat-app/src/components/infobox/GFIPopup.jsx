@@ -116,7 +116,8 @@ export const GFIPopup = () => {
 
     useEffect(() => {
         const mapResults = gfiLocations.map((location) => {
-            const layerIds = allLayers.filter(layer => layer.id === location.layerId)[0].id;
+            const layers = allLayers.filter(layer => layer.id === location.layerId);
+            const layerIds = (layers && layers.length > 0) ? layers[0].id : location.layerId;
             let content;
             if (location.type === 'text') {
                 content = location.content
@@ -166,6 +167,13 @@ export const GFIPopup = () => {
                             width: 8,
                             lineJoin: 'round'
                         }
+                    },
+                    image: {
+                        shape: 5,
+                        size: 3,
+                        fill: {
+                            color: 'rgba(100, 255, 95, 0.7)'
+                        }
                     }
                 },
                 layerId: LAYER_ID
@@ -193,6 +201,13 @@ export const GFIPopup = () => {
                                 color: 'rgba(100, 255, 95, 0.7)',
                                 width: 8,
                                 lineJoin: 'round'
+                            }
+                        },
+                        image: {
+                            shape: 5,
+                            size: 3,
+                            fill: {
+                                color: 'rgba(100, 255, 95, 0.7)'
                             }
                         }
                     },
@@ -226,7 +241,9 @@ export const GFIPopup = () => {
                                             icon={faMapMarkerAlt}
                                         />
                                     </StyledTabLocationButton>
-                                    <p>{allLayers.filter(layer => layer.id === tabContent.props.id)[0].name}</p>
+                                    <p>{
+                                        allLayers.filter(layer => layer.id === tabContent.props.id).length > 0 ? allLayers.filter(layer => layer.id === tabContent.props.id)[0].name : tabContent.props.id
+                                    }</p>
                                     <StyledTabCloseButton
                                         onClick={() => {
                                             closeTab(tabContent.props.id);

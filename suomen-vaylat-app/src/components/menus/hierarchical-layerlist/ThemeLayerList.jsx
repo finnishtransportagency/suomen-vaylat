@@ -164,6 +164,13 @@ const StyledSelectButton = styled.div`
     }
 `;
 
+const StyledReadMoreButton = styled.span`
+    cursor: pointer;
+    color: ${props => props.theme.colors.mainColor1};
+    font-size: 12px;
+    font-weight: 400;
+`;
+
 const StyledLayerGroupContainer = styled(motion.div)`
     overflow: hidden;
 `;
@@ -255,6 +262,7 @@ export const ThemeGroup = ({
 }) => {
     const [subthemeIsOpen, setSubthemeIsOpen] = useState(false);
     const [totalGroupLayersCount, setTotalGroupLayersCoun] = useState(0);
+    const [isExcerptOpen, setIsExcerptOpen] = useState(false);
     const [totalVisibleGroupLayersCount, setTotalVisibleGroupLayersCount] = useState(0);
 
     useEffect(() => {
@@ -270,6 +278,13 @@ export const ThemeGroup = ({
         };
         layersCounter(theme);
     },[theme, layers]);
+
+    const truncatedString = (string, characterAmount, text) => {
+        return (
+            string.length > characterAmount + 20 ? <>{string.substring(0, characterAmount)} <StyledReadMoreButton
+                onClick={() => setIsExcerptOpen(!isExcerptOpen)}>{text}</StyledReadMoreButton></> : string
+        )
+    }
 
     var filteredLayers = layers.filter(layer => theme.layers.includes(layer.id));
     const isOpen = isSubtheme ? subthemeIsOpen : selectedThemeIndex === index;
@@ -334,14 +349,19 @@ export const ThemeGroup = ({
                 <div>
                     {themeImages[theme.id] && <StyledLayerGroupImage src={themeImages[theme.id]} alt=''/>}
                     {strings.themelayerlist.hasOwnProperty(theme.id) && strings.themelayerlist[theme.id].title !== null &&
-                    <>
-                        <StyledSubHeader>{strings.themelayerlist[theme.id].title}</StyledSubHeader>
-                    </>
+                        <>
+                            <StyledSubHeader>{strings.themelayerlist[theme.id].title}</StyledSubHeader>
+                        </>
                     }
                     {strings.themelayerlist.hasOwnProperty(theme.id) && strings.themelayerlist[theme.id].description !== null &&
-                    <>
-                        <StyledSubText>{strings.themelayerlist[theme.id].description}</StyledSubText>
-                    </>
+                        <>
+                            <StyledSubText>
+                                {isExcerptOpen ? <> {strings.themelayerlist[theme.id].description} <StyledReadMoreButton
+                                        onClick={() => setIsExcerptOpen(!isExcerptOpen)}>{strings.themelayerlist.readLess}</StyledReadMoreButton></> :
+                                    truncatedString(strings.themelayerlist[theme.id].description,
+                                        135, '...' + strings.themelayerlist.readMore)}
+                            </StyledSubText>
+                        </>
                     }
                 </div>
                 <StyledLayerGroup>
