@@ -121,12 +121,11 @@ const getContent = (key, value, visibleFields, highPriorityFields, lowPriorityRo
         return;
     }
     lowPriorityRows.push(<StyledGfiTr key={'rr-' + generatedKey + key + '-' + value}><StyledGfiTd>{key}</StyledGfiTd><StyledGfiTd dangerouslySetInnerHTML={{__html: value}}></StyledGfiTd></StyledGfiTr>);
+
 };
 
 export const FormattedGFI = ({ data }) => {
     let geoJSON = {...data};
-    const visibleFields = JSON.parse(geoJSON.features[0].properties._order.replace('\\',''));
-    const highPriority = JSON.parse(geoJSON.features[0].properties._orderHigh.replace('\\',''));
     let pretty = [];
 
     const getKey = (properties) => {
@@ -139,11 +138,12 @@ export const FormattedGFI = ({ data }) => {
         });
         return values.join('-');
     };
-
     geoJSON.features.forEach((f, index) => {
         const keys = Object.keys(f.properties);
         let highPriorityRows = [];
         let lowPriorityRows = [];
+        const visibleFields = f.properties._order && !Array.isArray(f.properties._order) ? JSON.parse(f.properties._order.replace('\\','')) : f.properties._order && Array.isArray(f.properties._order) ? f.properties._order: [];
+        const highPriority = f.properties._orderHigh && !Array.isArray(f.properties._orderHigh) ? JSON.parse(f.properties._orderHigh.replace('\\','')) : f.properties._orderHigh && Array.isArray(f.properties._orderHigh) ? f.properties._orderHigh : [];
         const generatedKey = getKey(f.properties);
         keys.forEach(key => {
             if (key !== '_order' && key !== '_orderHigh') {
@@ -236,7 +236,7 @@ export const FormattedGFI = ({ data }) => {
                             <FontAwesomeIcon
                                 icon={faAngleDown}
                                 style={{
-                                    transform: isFeatureOpen && 'rotate(180deg)',
+                                    transform: isInfoOpen && 'rotate(180deg)',
                                     marginLeft: '0.5rem'
                                 }}
                             />

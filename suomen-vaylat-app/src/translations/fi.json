@@ -232,6 +232,11 @@
       "opacity": "Läpinäkyvyys"
     }
   },
+  "downloadLink": {
+    "downloadLinkModalHeader": "Aineiston lataus",
+    "downloadLinkModalNameText": "Aineiston nimi",
+    "downloadLinkModalButtonText": "Lataa aineisto"
+  },
   "groupLayerList": {
     "readMore" : "Lue lisää",
     "readLess" : "Vähemmän",
@@ -251,12 +256,20 @@
       "title": "Taitorakennerekisteri",
       "description": "Taitorakennerekisteri on Väyläviraston taitorakenteiden perustietovarasto ja omaisuudenhallintajärjestelmä, joka sisältää hallinnollista ja rakenteellista tietoa. Taitorakennerekisterin tietosisältöä ovat mm sillat, tunnelit, rautatierummut,  tie- ja yhteysaluslaiturit sekä kanavarakenteet."
     },
+    "727": {
+      "title": "Tierekisteri",
+      "description": "Tierekisteri sisältää tietoja Väyläviraston vastuulla olevista maanteistä ja niiden liikenteestä. Tierekisteri on poistuva tietojärjestelmä. Suomen Väylissä esitetyt tierekisterin aineistot ovat irroitettu tierekisteristä 17.2.2022 ",
+      "link_description": "Tierekisterin tietosisällön kuvaus",
+      "link": "https://vayla.fi/documents/25230764/35411006/tierekisteri_tietosisallon_kuvaus.pdf/f8b86e12-f362-d89e-e518-5b54e884ebb8/tierekisteri_tietosisallon_kuvaus.pdf?t=1631166164551"
+    },
     "101": {
       "title": "Vesiväylätiedot",
       "description": "Aineisto kattaa Väyläviraston vastuulla olevat vesiväylät ja kanavat. Niiden ylläpidossa ja kehittämisessä otetaan huomioon niin kauppamerenkulun kuin muunkin vesiliikenteen tarpeet."
     }
   },
   "themelayerlist": {
+    "readMore" : "Lue lisää",
+    "readLess" : "Vähemmän",
     "0": {
       "title": "Hankekartta",
       "description": "Kartalla esitetään Väyläviraston investointihankkeet ja toteutukseen tähtäävät hankesuunnittelukohteet."
@@ -282,7 +295,7 @@
       "description": "TEN-T-verkosto koostuu kahdesta tasosta: vuoteen 2030 mennessä rakennettavasta ydinverkosta (core network) ja vuoteen 2050 mennessä rakennettavasta kattavasta verkosta (comprehensive network). TEN-T ydinverkko keskittyy tärkeimpiin yhteyksiin ja solmukohtiin. Ydinverkon toteuttamista edistää käytäviin perustuva lähestymistapa. TEN-T-verkko kattaa kaikki liikennemuodot: maantie-, ilma-, sisävesi-, meri- sekä liikennemuotojen yhdistelyn mahdollistavat alustat."
     },
     "6": {
-      "title": "Verkkoselostus",
+      "title": "Rautateiden verkkoselostus",
       "description": "Verkkoselostuksen karttapalvelussa voi tarkastella rataverkon ominaisuustietoja, kuten sähköistystä ja liikennepaikkojen tietoja. Tiedot perustuvat ratarekisteritietoihin ja ERAan toimitettaviin RINF-tietoihin."
     }
   },

@@ -20,7 +20,7 @@ const addToLocalStorageArray = (name, value) => {
 
     // Save back to localStorage
     localStorage.setItem(name, existing.toString());
-}
+};
 
 
 const StyledFooter = styled.div`
