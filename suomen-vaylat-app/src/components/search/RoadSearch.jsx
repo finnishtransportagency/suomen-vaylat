@@ -20,7 +20,7 @@ const RoadSearch = ({
         <StyledInput
             type="number"
             value={searchValue.hasOwnProperty('tienumero') ? searchValue.tienumero : ''}
-            placeholder={strings.search.vkm.title + '...'}
+            placeholder={strings.search.vkm.tie + '...'}
             onChange={e => setSearchValue({tienumero: e.target.value})}
             onKeyPress={e => {
                 if (e.key === 'Enter') {
