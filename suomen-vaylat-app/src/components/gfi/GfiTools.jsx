@@ -11,6 +11,7 @@ import {
     faPencilRuler,
     faBorderAll,
     faCircle,
+    faTimes,
     faFile,
     faFileArchive
 } from '@fortawesome/free-solid-svg-icons';
@@ -41,7 +42,7 @@ const StyledGfiToolContainer = styled.div`
     position: relative;
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    //gap: 16px;
     padding: 24px;
     //max-height: 500px;
     overflow: auto;
@@ -49,6 +50,19 @@ const StyledGfiToolContainer = styled.div`
         padding: 16px;
     };
     background-color: white;
+`;
+
+const StyledToolsContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+`;
+
+const StyledDrawingToolsContainer = styled(motion.div)`
+    padding-left: 2px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
 `;
 
 const StyledLoadingOverlay = styled(motion.div)`
@@ -66,22 +80,23 @@ const StyledSubtitle = styled.div`
     display: flex;
     justify-content: flex-start;
     color: ${props => props.theme.colors.mainColor1};
-    padding: 10px 0px 10px 5px;
+    padding: 0px 0px 10px 5px;
     font-size: 16px;
     font-weight: bold;
 `;
 
-const StyledToolsContainer = styled.div`
+const StyledCloseButton = styled.div`
+    z-index: 1;
+    position: sticky;
+    top: 0px;
+    right: 0px;
     display: flex;
-    flex-direction: column;
-    gap: 16px;
-`;
-
-const StyledDrawingToolsContainer = styled(motion.div)`
-    padding-left: 2px;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
+    justify-content: flex-end;
+    svg {
+        font-size: 24px;
+        color: ${props => props.theme.colors.mainColor1};
+        cursor: pointer;
+    }
 `;
 
 const StyledDrawingToolContainer = styled.div`
@@ -172,7 +187,7 @@ const icons = {
 };
 
 const drawinToolsData = [
-    {
+/*     {
         id : 'sv-measure-point',
         title : strings.tooltips.measuringTools.point,
         style : {
@@ -180,8 +195,8 @@ const drawinToolsData = [
                         icon={faCircle}
                     />
         },
-        type : 'Point'
-    },
+        type : 'Point'ß
+    }, */
     {
         id : 'sv-measure-linestring',
         title : strings.tooltips.measuringTools.linestring,
@@ -574,6 +589,7 @@ const GfiTools = ({
         };
 
         const featureEventHandler = (data) => {
+            console.log(data);
             if(data.operation === 'click') {
                 if(data.features){
                     Object.values(data.features).forEach(feature => {
@@ -615,6 +631,13 @@ const GfiTools = ({
     },[channel, handleGfiToolsMenu, store]);
 
     return <StyledGfiToolContainer>
+        <StyledCloseButton
+            onClick={() => handleGfiToolsMenu()}
+        >
+            <FontAwesomeIcon
+                icon={faTimes}
+            />
+        </StyledCloseButton>
          <AnimatePresence>
             {
             loading && <StyledLoadingOverlay
@@ -639,13 +662,13 @@ const GfiTools = ({
         <StyledToolsContainer>
         <StyledSubtitle>Valitse kohteita:</StyledSubtitle>
             <CircleButtonListItem
-                            key={'cropping-type-draw'}
-                            id={0}
-                            icon={faPencilRuler}
-                            title={"Piirrä"}
-                            subtitle={"Valitse kohteita käyttämällä piirtotyökaluja"}
-                            selectedItem={selectedTool}
-                            handleSelectTool={handleSelectTool}
+                key={'cropping-type-draw'}
+                id={0}
+                icon={faPencilRuler}
+                title={"Piirrä"}
+                subtitle={"Valitse kohteita käyttämällä piirtotyökaluja"}
+                selectedItem={selectedTool}
+                handleSelectTool={handleSelectTool}
             />
             <AnimatePresence>
             {

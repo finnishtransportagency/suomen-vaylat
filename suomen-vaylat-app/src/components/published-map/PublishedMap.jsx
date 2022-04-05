@@ -23,7 +23,12 @@ import {
     setStartState,
     resetGFILocations
 } from '../../state/slices/rpcSlice';
-import { setGfiCroppingTypes } from '../../state/slices/uiSlice';
+
+import {
+    setGfiCroppingTypes,
+    setIsGfiOpen,
+    setMinimizeGfi
+} from '../../state/slices/uiSlice';
 import { updateLayers } from '../../utils/rpcUtil';
 import SvLoder from '../../components/loader/SvLoader';
 import './PublishedMap.scss';
@@ -153,13 +158,17 @@ const PublishedMap = () => {
 
                 if (data.MapClickedEvent) {
                     channel.handleEvent('MapClickedEvent', (data) => {
-                        store.dispatch(resetGFILocations([]));
-                        store.dispatch(setGFIPoint(data));
+                        //store.dispatch(resetGFILocations([]));
+                        //store.dispatch(setGFIPoint(data));
                     });
                 };
 
                 if (data.DataForMapLocationEvent) {
                     channel.handleEvent('DataForMapLocationEvent', (data) => {
+                        console.log(data);
+                        store.dispatch(resetGFILocations([]));
+                        store.dispatch(setMinimizeGfi(false));
+                        store.dispatch(setIsGfiOpen(true));
                         store.dispatch(setGFILocations(data));
                     });
                 };

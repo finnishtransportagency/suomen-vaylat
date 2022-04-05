@@ -172,6 +172,7 @@ const Content = () => {
         store.dispatch(setIsGfiOpen(false));
         store.dispatch(setMinimizeGfi(false));
         channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [null, null, 'gfi-result-layer']);
+        channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [null, null, 'download-tool-layer']);
         channel.postRequest('DrawTools.StopDrawingRequest', ['gfi-selection-tool', true]);
     };
 
@@ -319,9 +320,9 @@ const Content = () => {
                 </Modal>
                 <Modal
                     constraintsRef={constraintsRef} /* Reference div for modal drag boundaries */
-                    drag={true} /* Enable (true) or disable (false) drag */
+                    drag={false} /* Enable (true) or disable (false) drag */
                     resize={false}
-                    backdrop={false} /* Is backdrop enabled (true) or disabled (false) */
+                    backdrop={true} /* Is backdrop enabled (true) or disabled (false) */
                     fullScreenOnMobile={true} /* Scale modal full width / height when using mobile device */
                     titleIcon={faSave} /* Use icon on title or null */
                     title={strings.saveView.saveView} /* Modal header title */

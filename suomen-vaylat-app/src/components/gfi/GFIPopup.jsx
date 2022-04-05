@@ -198,13 +198,16 @@ export const GFIPopup = () => {
         && setGeoJsonToShow(tabsContent[selectedTab].props.data);
     },[selectedTab, tabsContent]);
 
-    const handleOverlayGeometry = (geoJson) => {
+    const handleOverlayGeometry = (index, geoJson) => {
+        setSelectedTab(index);
         channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [null, null, LAYER_ID]);
         if (geoJson !== null) {
             channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest',
             [geoJson, {
+                layerId: LAYER_ID,
                 centerTo : true,
-                maxZoomLevel: currentZoomLevel,
+                cursor: 'pointer',
+                //maxZoomLevel: currentZoomLevel,
                 featureStyle: {
                     fill: {
                         color: 'rgba(10, 140, 247, 0.3)'
@@ -228,14 +231,15 @@ export const GFIPopup = () => {
                             color: 'rgba(100, 255, 95, 0.7)'
                         }
                     }
-                },
-                layerId: LAYER_ID
+                }
             }]);
         }
     };
 
     const handleGfiToolsMenu = () => {
         //isGfiToolsOpen && channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [null, null, 'gfi-result-layer']);
+        channel.postRequest('DrawTools.StopDrawingRequest', ['gfi-selection-tool', true]);
+        
         isGfiToolsOpen && channel.postRequest('VectorLayerRequest', [{
             layerId: 'download-tool-layer',
             remove: true
@@ -249,6 +253,8 @@ export const GFIPopup = () => {
         if (geoJsonToShow !== null) {
             channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest',
                 [geoJsonToShow, {
+                    layerId: LAYER_ID,
+                    cursor: 'pointer',
                     featureStyle: {
                         fill: {
                             color: 'rgba(10, 140, 247, 0.3)'
@@ -261,27 +267,56 @@ export const GFIPopup = () => {
                             lineJoin: 'round',
                             area: {
                                 color: 'rgba(100, 255, 95, 0.7)',
-                                width: 8,
+                                width: 4,
                                 lineJoin: 'round'
                             }
                         },
                         image: {
-                            shape: 5,
+                            //shape: 5,
                             size: 3,
                             fill: {
                                 color: 'rgba(100, 255, 95, 0.7)'
                             }
-                        }
+                        },
                     },
-                    layerId: LAYER_ID
+                    hover: {
+                        featureStyle: {
+                            fill: {
+                                color: 'rgba(0, 99, 175, 0.7)'
+                            },
+                            stroke: {
+                                color: '#0064af',
+                                width: 2
+                            },
+                            text: { // text style
+                                fill: { // text fill style
+                                    color: "#ffffff" // fill color
+                                },
+                                stroke: {
+                                    color: '#0064af',
+                                    width: 5
+                                },
+                                font: "bold 16px Arial", // font
+                                textAlign: "center", // text align
+                                textBaseline: "middle",
+                                offsetX: 0, // text offset x
+                                offsetY: 0, // text offset y
+                            },
+                        },
+                    }
                 }]);
         }
     },[channel, geoJsonToShow]);
 
-    const closeTab = (id) => {
+    const closeTab = (index, id) => {
         var filteredLocations = gfiLocations.filter(gfi => gfi.layerId !== id);
         store.dispatch(resetGFILocations(filteredLocations));
         channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [null, null, LAYER_ID]);
+        if(index > 0){
+            setSelectedTab(index - 1);
+        } else {
+            setSelectedTab(0);
+        }
     };
 
     return (
@@ -298,8 +333,9 @@ export const GFIPopup = () => {
                                     selected={selectedTab === index}
                                 >
                                     <StyledTabLocationButton
-                                        onClick={() => {
-                                            handleOverlayGeometry(tabContent.props.data);
+                                        onClick={e => {
+                                            e.stopPropagation();
+                                            handleOverlayGeometry(index, tabContent.props.data);
                                         }}
                                     >
                                         <FontAwesomeIcon
@@ -308,8 +344,9 @@ export const GFIPopup = () => {
                                     </StyledTabLocationButton>
                                     <p>{allLayers.filter(layer => layer.id === tabContent.props.id)[0].name}</p>
                                     <StyledTabCloseButton
-                                        onClick={() => {
-                                            closeTab(tabContent.props.id);
+                                        onClick={e => {
+                                            e.stopPropagation();
+                                            closeTab(index, tabContent.props.id);
                                         }}
                                     >
                                         <FontAwesomeIcon

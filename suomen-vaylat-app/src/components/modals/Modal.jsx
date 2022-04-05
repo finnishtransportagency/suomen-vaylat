@@ -6,11 +6,9 @@ import { ReactReduxContext } from 'react-redux';
 import { faTimes, faWindowMinimize } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-
 import { setMinimizeGfi } from '../../state/slices/uiSlice';
 
 const StyledModalBackdrop = styled(motion.div)`
-
     z-index: ${props => props.type === "warning" ? 9998 : 10};
     position: fixed;
     top: 0px;
@@ -22,6 +20,7 @@ const StyledModalBackdrop = styled(motion.div)`
     justify-content: center;
     align-items: center;
     opacity: 0;
+    cursor: pointer;
 `;
 
 const StyledModalWrapper = styled(motion.div)`

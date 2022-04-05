@@ -5,6 +5,8 @@ import { motion } from 'framer-motion';
 import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+import { useAppSelector } from '../../state/hooks';
+
 const listVariants = {
     visible: {
         height: 'auto',
@@ -16,9 +18,10 @@ const listVariants = {
     },
 };
 
-const StyledGFITablesContainer  = styled.div`
+const StyledGFITablesContainer  = styled(motion.div)`
     border-bottom: ${props => !props.isFeatureOpen && '1px solid #ddd'};
-    padding: 8px;
+    cursor: pointer;
+    //padding: 8px;
 `;
 
 const StyledInfoHeader = styled.div`
@@ -29,15 +32,16 @@ const StyledInfoHeaderDiv = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin: 8px;
+    //margin: 8px;
+    padding: 18px;
     font-weight: bold;
-    cursor: pointer;
     svg {
         color: ${props => props.theme.colors.mainColor1};
         font-size: 19px;
         transition: all 0.3s ease-out;
     };
     &:hover {
+        background-color: #f0f0f0;
         ${StyledInfoHeader}{
             color: ${props => props.theme.colors.mainColor2};
         };
@@ -179,16 +183,84 @@ export const FormattedGFI = ({ data }) => {
     index,
     lowPriorityRows,
     highPriorityRows,
+    geoJSON,
     generatedKey
     }) => {
+
     const highPriorityTableExists = highPriorityRows.length > 0 ? false : true;
     const [isFeatureOpen, openFeature] = useState(false);
     const [isInfoOpen, openInfo] = useState(highPriorityTableExists);
+
+    const { channel } = useAppSelector((state) => state.rpc);
+
+    const selectFeature = (feature) => {
+        let featureStyle = {
+            fill: {
+                color: '#e50083',
+                //color: 'rgba(10, 140, 247, 0.3)'
+            },
+            stroke: {
+                color: '#e50083',
+                //color: 'rgba(10, 140, 247, 0.3)',
+                width: 5,
+                lineDash: 'solid',
+                lineCap: 'round',
+                lineJoin: 'round',
+                area: {
+                    color: '#e50083',
+                    //color: 'rgba(10, 140, 247, 0.7)',
+                    width: 4,
+                    lineJoin: 'round'
+                }
+            },
+            image: {
+                shape: 5,
+                size: 3,
+                fill: {
+                    color: '#e50083',
+                    //color: 'rgba(10, 140, 247, 0.7)',
+                }
+            }
+        };
+        
+        let options = {
+            featureStyle: featureStyle,
+            layerId: 'gfi-result-layer-overlay',
+            animationDuration: 200,
+            clearPrevious: true,
+        };
+
+        let rn = 'MapModulePlugin.AddFeaturesToMapRequest';
+
+        var geojsonObject = {
+            'type': 'FeatureCollection',
+            'crs': {
+                'type': 'name',
+                'properties': {
+                'name': 'EPSG:3067'
+                }
+            },
+            'features': [
+                feature
+            ]
+        };
+
+        channel.postRequest(rn, [geojsonObject, options])};
+
+    const deSelectFeature = () => {
+        channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [null, null, 'gfi-result-layer-overlay']);
+    };
 
     return (
             <StyledGFITablesContainer
                 key={'gfi-tables-' + generatedKey}
                 isFeatureOpen={isFeatureOpen}
+                onHoverStart={() => {
+                    selectFeature(geoJSON.features[index]);
+                }}
+                onHoverEnd={() => {
+                    deSelectFeature(geoJSON.features[index]);
+                }}
             >
                 <StyledInfoHeaderDiv
                     onClick={() => openFeature(!isFeatureOpen)}
