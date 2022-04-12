@@ -269,34 +269,25 @@ const GfiTools = ({
     const { gfiCroppingTypes, selectedGfiTool } = useSelector(state => state.ui);
 
     const [ loading, setLoading ] = useState(false);
-    const [ geoJson, setGeoJson ] = useState(null);
 
     const [selectedTool, setSelectedTool] = useState(null);
     const [selectedDrawingTool, setSelectedDrawingTool] = useState(null);
-    //const [selectedDownloads, setSelectedDownloads] = useState([]);
-
-   // const [drawHandler, setDrawHandler] = useState(null);
-
-   const [gfi, setGfi] = useState(null);
 
     const handleSelectTool = (id) => {
-        //store.dispatch(setSelectedFeatures(null));
-        //setSelectedDownloads([]);
-        //store.dispatch(setSelectedDrawingTool(null));
+        
         setSelectedDrawingTool(null);
 
         if(selectedTool !== id) {
             setSelectedTool(id);
 
             if(id === 0) {
-                    //console.log("Drawing type selected");
                     setSelectedTool(id);
                     channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [null, null, 'download-tool-layer']);
                 } else {
 
                     setLoading(true);
                     channel.getGfiCroppingArea([id], function (data) {
-                        isMobile && store.dispatch(setMinimizeGfi(true));
+                        store.dispatch(setMinimizeGfi(true));
                         setLoading(false);
 
                         let label = data.hasOwnProperty('labelProperty') ? data.labelProperty : null;
@@ -327,12 +318,11 @@ const GfiTools = ({
                                     textBaseline: "middle",
                                     offsetX: 0, // text offset x
                                     offsetY: 0, // text offset y
-                                    //labelText: "example", // label text
                                     labelProperty: label, // read label from feature property
                                     overflow: id === 2 ? true : false
                                 },
                             },
-                            hover: {
+                            hover: !isMobile ? {
                                 featureStyle: {
                                     fill: {
                                         color: 'rgba(0, 99, 175, 0.7)'
@@ -354,16 +344,11 @@ const GfiTools = ({
                                         textBaseline: "middle",
                                         offsetX: 0, // text offset x
                                         offsetY: 0, // text offset y
-                                        //labelText: "example", // label text
                                         labelProperty: label, // read label from feature property
                                         overflow: id === 2 ? true : false
                                     },
                                 },
-            /*                     content: [
-                                    { key: 'Feature Data' },
-                                    { key: 'Kunta', 'valueProperty': 'KUNTANIMI' },
-                                ] */
-                            }
+                            } : {}
                         };
 
                         data.geojson && channel.postRequest(rn, [data.geojson, options]);
@@ -377,7 +362,6 @@ const GfiTools = ({
 
     const handleSelectDrawingTool = (id, item) => {
         if(id === selectedGfiTool){
-            //store.dispatch(setSelectedGfiTool(null));
             setSelectedDrawingTool(null);
         } else {
             store.dispatch(setSelectedGfiTool(id));
@@ -440,10 +424,8 @@ const GfiTools = ({
 
             }];
             channel.postRequest('DrawTools.StartDrawingRequest', data);
+            store.dispatch(setMinimizeGfi(true));
         }
-        //var data = ['my functionality id', true];
-        //channel.postRequest('DrawTools.StopDrawingRequest', ['my functionality id', true]);
-
     };
 
 
@@ -558,24 +540,22 @@ const GfiTools = ({
     useEffect(() => {
         const drawHandler = (data) => {
             if(data.isFinished && data.isFinished === true ){
-                //console.log('isFinished === true', data);
-                channel.unregisterEventHandler('DrawingEvent', drawHandler);
-                channel.postRequest('DrawTools.StopDrawingRequest', ['gfi-selection-tool', true]);
-                channel.handleEvent('DrawingEvent', drawHandler);
+                channel && channel.unregisterEventHandler('DrawingEvent', drawHandler);
+                channel && channel.postRequest('DrawTools.StopDrawingRequest', ['gfi-selection-tool', true]);
+                channel && channel.handleEvent('DrawingEvent', drawHandler);
                 store.dispatch(setSelectedGfiTool(null));
                 if(data.id === 'gfi-selection-tool'){
                     store.dispatch(setMinimizeGfi(false));
                     setLoading(true);
                     data.geojson && data.geojson.features && data.geojson.features.forEach(feature => {
-                        console.log(feature);
                         feature.geometry &&  channel && channel.getFeaturesByGeoJSON([feature], (gfiData) => {
-                           console.log('getFeaturesByGeoJSON OK', gfiData);
                            store.dispatch(resetGFILocations([]));
                            gfiData.gfi && gfiData.gfi.forEach(gfi => {
                                 store.dispatch(setGFILocations(
                                     {
                                         content: gfi.geojson,
                                         layerId: gfi.layerId,
+                                        gfiCroppingArea: data.geojson,
                                         type: 'geojson'
                                     }
                                 ));
@@ -589,7 +569,6 @@ const GfiTools = ({
         };
 
         const featureEventHandler = (data) => {
-            console.log(data);
             if(data.operation === 'click') {
                 if(data.features){
                     Object.values(data.features).forEach(feature => {
@@ -599,13 +578,14 @@ const GfiTools = ({
                                 setLoading(true);
                                 Object.values(feature.geojson.features).forEach(subfeature => {
                                     subfeature.geometry && channel && channel.getFeaturesByGeoJSON([subfeature], (gfiData) => {
-                                        console.log('getFeaturesByGeoJSON OK', gfiData);
                                         store.dispatch(resetGFILocations([]));
                                         gfiData.gfi && gfiData.gfi.forEach(gfi => {
+                                            
                                              store.dispatch(setGFILocations(
                                                  {
                                                      content: gfi.geojson,
                                                      layerId: gfi.layerId,
+                                                     gfiCroppingArea: data.features[0].geojson,
                                                      type: 'geojson'
                                                  }
                                              ));
@@ -621,12 +601,12 @@ const GfiTools = ({
             };
         };
 
-        channel.handleEvent('FeatureEvent', featureEventHandler);
-        channel.handleEvent('DrawingEvent', drawHandler);
+        channel && channel.handleEvent('FeatureEvent', featureEventHandler);
+        channel && channel.handleEvent('DrawingEvent', drawHandler);
 
         return () => {
-            channel.unregisterEventHandler('FeatureEvent', featureEventHandler);
-            channel.unregisterEventHandler('DrawingEvent', drawHandler);
+            channel && channel.unregisterEventHandler('FeatureEvent', featureEventHandler);
+            channel && channel.unregisterEventHandler('DrawingEvent', drawHandler);
         };
     },[channel, handleGfiToolsMenu, store]);
 

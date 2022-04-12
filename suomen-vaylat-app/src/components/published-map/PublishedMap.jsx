@@ -25,6 +25,7 @@ import {
 } from '../../state/slices/rpcSlice';
 
 import {
+    setIsFullScreen,
     setGfiCroppingTypes,
     setIsGfiOpen,
     setMinimizeGfi
@@ -60,8 +61,26 @@ const PublishedMap = () => {
         store.dispatch(setLoading(false));
     };
 
+    const handleFullScreenChange = () => {
+        if(document.webkitIsFullScreen){
+ 
+            store.dispatch(setIsFullScreen(true));
+        } else if (document.fullscreenElement) {
+            store.dispatch(setIsFullScreen(true));
+        } else {
+            store.dispatch(setIsFullScreen(false));
+        }
+    };
+
     useEffect(() => {
+
         store.dispatch(setLoading(true));
+
+        document.addEventListener("fullscreenchange", handleFullScreenChange);
+        document.addEventListener("mozfullscreenchange", handleFullScreenChange);
+        document.addEventListener("webkitfullscreenchange", handleFullScreenChange);
+        document.addEventListener("msfullscreenchange", handleFullScreenChange);
+
         const iframe = document.getElementById('sv-iframe');
         var handlers = [];
 

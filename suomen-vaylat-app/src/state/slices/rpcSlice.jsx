@@ -575,7 +575,6 @@ export const rpcSlice = createSlice({
     setGFIPoint: (state, action) => {
         state.gfiPoint = action.payload;
     },
-
     /**
      * Remove all selected layers.
      * @method removeAllSeelctedLayers
@@ -661,6 +660,7 @@ export const {
     setGFILocations,
     resetGFILocations,
     setGFIPoint,
+    setGfiCroppingArea,
     removeAllSelectedLayers,
     setStartState
 } = rpcSlice.actions;

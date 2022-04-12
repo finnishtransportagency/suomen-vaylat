@@ -260,7 +260,7 @@ const Views = () => {
 
             updateLayers(store, channel);
 
-            isMobile && store.dispatch(setIsSaveViewOpen(false));
+            store.dispatch(setIsSaveViewOpen(false));
 
     };
 

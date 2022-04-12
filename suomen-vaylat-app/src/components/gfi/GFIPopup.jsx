@@ -1,28 +1,43 @@
-import { useContext, useState, useEffect } from 'react';
+import { useContext, useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { faTimes, faMapMarkerAlt, faPencilRuler } from '@fortawesome/free-solid-svg-icons';
+import {
+    faTimes,
+    faMapMarkerAlt,
+    faPencilRuler,
+    faDownload,
+    faAngleLeft,
+    faAngleRight
+} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ReactReduxContext } from 'react-redux';
 import styled from 'styled-components';
 import { useAppSelector } from '../../state/hooks';
-import { resetGFILocations } from '../../state/slices/rpcSlice';
-import { FormattedGFI } from './FormattedGFI';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { FreeMode, Controller } from "swiper";
 
+import { resetGFILocations } from '../../state/slices/rpcSlice';
+
+import { FormattedGFI } from './FormattedGFI';
 import GfiTools from './GfiTools';
 import CircleButton from '../circle-button/CircleButton';
 
 const StyledGfiContainer = styled.div`
     position: relative;
-    min-height: 200px;
     height: 100%;
     display: flex;
     flex-direction: column;
     min-height: 480px;
 `;
 
+const StyledTabSwiperContainer = styled.div`
+    display: flex;
+    background-color: ${props => props.theme.colors.mainColor1};;
+`;
+
 const StyledTabs = styled.div`
     min-height: 48px;
     display: flex;
+    gap: 8px;
     background-color: ${props => props.theme.colors.mainColor1};
     overflow-y: scroll;
     z-index: 2;
@@ -32,27 +47,36 @@ const StyledTabs = styled.div`
     };
     position: sticky;
     top: 0px;
+    border-bottom: 1px solid #ddd;
+    padding-left: 4px;
 `;
 
 const StyledTab = styled.div`
     z-index: 10;
     cursor: pointer;
-    margin-left: 8px;
     display: flex;
     align-items: center;
+    justify-content: space-between;
     color:  ${props => props.selected ? props.theme.colors.mainColor1 : props.theme.colors.mainWhite};
     background-color: ${props => props.selected ?  props.theme.colors.mainWhite : props.theme.colors.mainColor1};
-    p {
-        margin: 0;
-        @media ${props => props.theme.device.mobileL} {
-            font-size: 14px;
-        };
-    };
     border-left: 2px solid ${props => props.theme.colors.mainWhite};
     border-top: 2px solid ${props => props.theme.colors.mainWhite};
     border-right: 2px solid ${props => props.theme.colors.mainWhite};
-    padding: 8px 16px 8px 4px;
+    padding: 8px 16px 8px 8px;
     border-radius: 4px 4px 0px 0px;
+    min-width: 200px;
+`;
+
+const StyledTabName = styled.p`
+    margin: 0;
+    font-size: 14px;
+    font-weight: 600;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    @media ${props => props.theme.device.mobileL} {
+        font-size: 14px;
+    };
 `;
 
 const StyledNoGfisContainer = styled.div`
@@ -62,16 +86,61 @@ const StyledNoGfisContainer = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+    font-size: 18px;
+    color: ${props => props.theme.colors.mainColor1};
 `;
 
-const StyledTabLocationButton = styled.div`
+const StyledSwiper = styled(Swiper)`
+    .swiper-slide {
+        height: 1px;
+        
+        //overflow: auto;
+    };
+    .swiper-slide-active {
+        height: auto
+    };
+`;
+
+const StyledTabsSwiper = styled(Swiper)`
+    margin-left: unset;
+    width: 100%;
+    padding-top: 8px;
+    .swiper-slide {
+        max-width: 200px;
+    };
+    .swiper-slide-active {
+
+    };
+`;
+
+const StyledSwiperNavigatorButton = styled.div`
+    cursor: pointer;
     display: flex;
     justify-content: center;
-
-    width: 32px;
+    align-items: center;
+    width: 60px;
+    background-color: ${props => props.theme.colors.mainColor1};
+    border-left: 2px solid white;
+    border-right: 2px solid white;
     svg {
-        font-size: 22px;
+        font-size: 20px;
+        color: white;
     }
+`;
+
+const StyledGfiTab = styled.div`
+    z-index: 10;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color:  ${props => props.selected ? props.theme.colors.mainColor1 : props.theme.colors.mainWhite};
+    background-color: ${props => props.selected ?  props.theme.colors.mainWhite : props.theme.colors.mainColor1};
+    border-left: 2px solid ${props => props.theme.colors.mainWhite};
+    border-top: 2px solid ${props => props.theme.colors.mainWhite};
+    border-right: 2px solid ${props => props.theme.colors.mainWhite};
+    padding: 8px 16px 8px 8px;
+    border-radius: 4px 4px 0px 0px;
 `;
 
 const StyledTabCloseButton = styled.div`
@@ -82,8 +151,6 @@ const StyledTabCloseButton = styled.div`
 
 const StyledTabContent = styled.div`
     overflow: auto;
-    height: 100%;
-    padding-bottom: 48px;
     div.contentWrapper-infobox {
         @media ${props => props.theme.device.mobileL} {
             font-size: 14px;
@@ -126,25 +193,39 @@ const StyledTabContent = styled.div`
     }
 `;
 
-const StyledGfiToolsButton = styled.div`
+const StyledSelectedTabTitle = styled.div`
+    position: sticky;
+    top: 0;
+    text-align: center;
+    padding: 8px;
+    p {
+        color: ${props => props.theme.colors.mainColor1};
+        margin: 0;
+        font-size: 16px;
+        font-weight: 600;
+    }
+`;
+
+const StyledButtonsContainer = styled.div`
     position: absolute;
     bottom: 0px;
     right: 0px;
-    padding: 8px;
+    padding: 16px;
     z-index: 3;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 `;
 
 const StyledGfiToolsContainer = styled(motion.div)`
     display: flex;
     position: absolute;
-    //width: 100%;
     height: 100%;
-    //background-color: white;
-    z-index: 2;
+    z-index: 3;
 `;
 
 const StyledGfiBackdrop = styled(motion.div)`
-    //width: 100%;
+    z-index: 2;
     position: absolute;
     width: 100%;
     height: 100%;
@@ -166,6 +247,13 @@ export const GFIPopup = () => {
     const [tabsContent, setTabsContent] = useState([]);
     const [geoJsonToShow, setGeoJsonToShow] = useState(null);
     const [isGfiToolsOpen, setIsGfiToolsOpen] = useState(false);
+
+    const [gfiTabsSwiper, setGfiTabsSwiper] = useState(null);
+    const [gfiTabsSnapGridLength, setGfiTabsSnapGridLength] = useState(0);
+
+   // console.log(gfiTabsSnapGridLength);
+
+    const gfiInputEl = useRef(null);
 
     useEffect(() => {
         const mapResults = gfiLocations.map((location) => {
@@ -198,11 +286,10 @@ export const GFIPopup = () => {
         && setGeoJsonToShow(tabsContent[selectedTab].props.data);
     },[selectedTab, tabsContent]);
 
-    const handleOverlayGeometry = (index, geoJson) => {
-        setSelectedTab(index);
-        channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [null, null, LAYER_ID]);
+    const handleOverlayGeometry = (geoJson) => {
+        channel && channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [null, null, LAYER_ID]);
         if (geoJson !== null) {
-            channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest',
+            channel && channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest',
             [geoJson, {
                 layerId: LAYER_ID,
                 centerTo : true,
@@ -237,8 +324,7 @@ export const GFIPopup = () => {
     };
 
     const handleGfiToolsMenu = () => {
-        //isGfiToolsOpen && channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [null, null, 'gfi-result-layer']);
-        channel.postRequest('DrawTools.StopDrawingRequest', ['gfi-selection-tool', true]);
+        channel && channel.postRequest('DrawTools.StopDrawingRequest', ['gfi-selection-tool', true]);
         
         isGfiToolsOpen && channel.postRequest('VectorLayerRequest', [{
             layerId: 'download-tool-layer',
@@ -248,10 +334,10 @@ export const GFIPopup = () => {
     };
 
     useEffect(() => {
-        channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [null, null, LAYER_ID]);
+        channel && channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [null, null, LAYER_ID]);
 
         if (geoJsonToShow !== null) {
-            channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest',
+            channel && channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest',
                 [geoJsonToShow, {
                     layerId: LAYER_ID,
                     cursor: 'pointer',
@@ -272,7 +358,6 @@ export const GFIPopup = () => {
                             }
                         },
                         image: {
-                            //shape: 5,
                             size: 3,
                             fill: {
                                 color: 'rgba(100, 255, 95, 0.7)'
@@ -311,7 +396,7 @@ export const GFIPopup = () => {
     const closeTab = (index, id) => {
         var filteredLocations = gfiLocations.filter(gfi => gfi.layerId !== id);
         store.dispatch(resetGFILocations(filteredLocations));
-        channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [null, null, LAYER_ID]);
+        channel && channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [null, null, LAYER_ID]);
         if(index > 0){
             setSelectedTab(index - 1);
         } else {
@@ -319,61 +404,165 @@ export const GFIPopup = () => {
         }
     };
 
+    useEffect(() => {
+        gfiInputEl.current.swiper.slideTo(selectedTab);
+    },[selectedTab]);
+
     return (
         <StyledGfiContainer>
-            {
+            { 
                 tabsContent.length > 0 &&
-                <StyledTabs>
+                <StyledTabSwiperContainer>
                     {
-                        tabsContent.map((tabContent, index) => {
-                            return (
-                                <StyledTab
-                                    key={'tab_' + index}
-                                    onClick={() => setSelectedTab(index)}
-                                    selected={selectedTab === index}
-                                >
-                                    <StyledTabLocationButton
-                                        onClick={e => {
-                                            e.stopPropagation();
-                                            handleOverlayGeometry(index, tabContent.props.data);
-                                        }}
-                                    >
-                                        <FontAwesomeIcon
-                                            icon={faMapMarkerAlt}
-                                        />
-                                    </StyledTabLocationButton>
-                                    <p>{allLayers.filter(layer => layer.id === tabContent.props.id)[0].name}</p>
-                                    <StyledTabCloseButton
-                                        onClick={e => {
-                                            e.stopPropagation();
-                                            closeTab(index, tabContent.props.id);
-                                        }}
-                                    >
-                                        <FontAwesomeIcon
-                                            icon={faTimes}
-                                        />
-                                    </StyledTabCloseButton>
-                                </StyledTab>
-                            )})
+                        gfiTabsSnapGridLength > 1 && <StyledSwiperNavigatorButton
+                            onClick={() => {
+                                gfiTabsSwiper.slidePrev();
+                            }}
+                        >
+                            <FontAwesomeIcon
+                                icon={faAngleLeft}
+                            />
+                        </StyledSwiperNavigatorButton>
                     }
-                </StyledTabs>
+
+                    <StyledTabsSwiper
+                        id={"gfi-tabs-swiper"}
+                        spaceBetween={4}
+                        slidesPerView={"auto"}
+                        freeMode={true}
+                        modules={[Controller, FreeMode]}
+                        onSwiper={setGfiTabsSwiper}
+                        controller={{ control: gfiTabsSwiper }}
+                        onSnapGridLengthChange={e => setGfiTabsSnapGridLength(e.snapGrid.length)}
+                    >
+                    {
+                            tabsContent.map((tabContent, index) => {
+                                return (
+                                    <SwiperSlide
+                                        id={'tab_' + index}
+                                        key={'tab_' + index}
+                                    >
+                                        <StyledGfiTab
+                                            
+                                            onClick={() => setSelectedTab(index)}
+                                            selected={selectedTab === index}
+                                        >
+                                            <StyledTabName>
+                                                {
+                                                    allLayers.filter(layer => layer.id === tabContent.props.id).length > 0 ? allLayers.filter(layer => layer.id === tabContent.props.id)[0].name : tabContent.props.id
+                                                }
+                                            </StyledTabName>
+                                            <StyledTabCloseButton
+                                                onClick={e => {
+                                                    e.stopPropagation();
+                                                    closeTab(index, tabContent.props.id);
+                                                }}
+                                            >
+                                                <FontAwesomeIcon
+                                                    icon={faTimes}
+                                                />
+                                            </StyledTabCloseButton>
+                                        </StyledGfiTab>
+                                    </SwiperSlide>
+                                )})
+                        }
+                    </StyledTabsSwiper>
+                    {
+                        gfiTabsSnapGridLength > 1 && <StyledSwiperNavigatorButton
+                            onClick={() => {
+                                gfiTabsSwiper.slideNext();
+                            }}
+                        >
+                            <FontAwesomeIcon
+                                icon={faAngleRight}
+                            />
+                        </StyledSwiperNavigatorButton>
+                    }
+                </StyledTabSwiperContainer>
             }
             <StyledTabContent>
                 {
-                    tabsContent[selectedTab] !== undefined ?
-                        tabsContent[selectedTab] :
-                        <StyledNoGfisContainer>Ei valittuja kohteita</StyledNoGfisContainer> 
+                    tabsContent[selectedTab] === undefined &&
+                        <StyledNoGfisContainer>Ei valittuja kohteita</StyledNoGfisContainer>
                 }
+                <StyledSwiper
+                    ref={gfiInputEl}
+                    id={"gfi-swiper"}
+                     onSlideChange={e => {
+                         setSelectedTab(e.activeIndex);
+                    }}
+                    tabIndex={selectedTab}
+                    allowTouchMove={false} // Disable swiping
+                    speed={300}
+                >
+                {
+                    gfiLocations.map((location, index) => {
+                        const layers = allLayers.filter(layer => layer.id === location.layerId);
+                        const layerIds = (layers && layers.length > 0) ? layers[0].id : location.layerId;
+                        const name = layers.length > 0 && layers[0].name;
+                        let content;
+                        if (location.type === 'text') {
+                            content = location.content
+                            const popupContent = <div dangerouslySetInnerHTML={{__html: content}}></div> ;
+                            var contentWrapper = <div>{popupContent}</div> ;
+                            const contentDiv = <div id={layerIds}>{contentWrapper}</div>;
+                            return contentDiv;
+                        }
+                        else if (location.type === 'geojson') {
+                            return (
+                                <SwiperSlide
+                                id={"gfi_tab_content_"+index}
+                                key={"gfi_tab_content_"+index}
+                            >
+                                {
+                                    <StyledSelectedTabTitle>
+                                        <p>
+                                            {
+                                                name.toUpperCase()
+                                            }
+                                        </p>
+                                    </StyledSelectedTabTitle>
+                                }
+                                <FormattedGFI
+                                    id={layerIds}
+                                    data={location.content}
+                                    type='geoJson'
+                                />
+                            </SwiperSlide>
+                            );
+                        }
+                    })
+                }
+                </StyledSwiper>
             </StyledTabContent>
-            <StyledGfiToolsButton>
-                <CircleButton
-                    icon={faPencilRuler}
-                    text={"Valitse kohteita"}
-                    toggleState={isGfiToolsOpen}
-                    tooltipDirection={'left'}
-                    clickAction={handleGfiToolsMenu}
-                />
-            </StyledGfiToolsButton>
+            <StyledButtonsContainer>
+                    <CircleButton
+                        icon={faPencilRuler}
+                        text={"Valitse kohteita"}
+                        toggleState={isGfiToolsOpen}
+                        tooltipDirection={'left'}
+                        clickAction={handleGfiToolsMenu}
+                    />
+                    <CircleButton
+                        icon={faMapMarkerAlt}
+                        text={"Kohdista"}
+                        tooltipDirection={'left'}
+                        clickAction={() => {
+                            handleOverlayGeometry(tabsContent[selectedTab].props.data);
+                        }}
+                        disabled={gfiLocations.length === 0}
+                    />
+                    <CircleButton
+                        icon={faDownload}
+                        text={"Lataa kohdetiedot (tulossa)"}
+                        //toggleState={isGfiToolsOpen}
+                        tooltipDirection={'left'}
+                        clickAction={() => {
+                        }}
+                        disabled={true}
+                    />
+            </StyledButtonsContainer>
+
             <AnimatePresence>
                 {
                     isGfiToolsOpen &&

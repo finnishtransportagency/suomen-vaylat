@@ -104,7 +104,7 @@ const CircleButtonListItem = ({
                 {
                     children ? children : icon ? 
                     <FontAwesomeIcon
-                            icon={icon}
+                        icon={icon}
                     /> :
                     <p>{title.charAt(0).toUpperCase()}</p>
                 }

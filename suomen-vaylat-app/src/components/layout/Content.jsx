@@ -227,8 +227,8 @@ const Content = () => {
                     closeAction={handleCloseGFIModal} /* Action when pressing modal close button or backdrop */
                     isOpen={isGfiOpen} /* Modal state */
                     id={null}
-                    minWidth={600}
-                    maxWidth={1200}
+                    minWidth={'600px'}
+                    maxWidth={'calc(100vw - 100px)'}
                     minimize={minimizeGfi}
                     //overflow={"auto"}
                 >
@@ -276,7 +276,7 @@ const Content = () => {
                     closeAction={handleCloseMetadataModal} /* Action when pressing modal close button or backdrop */
                     isOpen={metadata.data !== null} /* Modal state */
                     id={null}
-                    maxWidth={800}
+                    maxWidth={'800px'}
                     overflow={"auto"}
                 >
                     <MetadataModal metadata={metadata}/>
@@ -330,7 +330,7 @@ const Content = () => {
                     closeAction={handleCloseSaveViewModal} /* Action when pressing modal close button or backdrop */
                     isOpen={isSaveViewOpen} /* Modal state */
                     id={null}
-                    minWidth={600}
+                    minWidth={'600px'}
                 >
                     <Views />
                 </Modal>

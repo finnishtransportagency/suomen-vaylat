@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 import strings from '../../translations';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -19,20 +19,18 @@ const listVariants = {
 };
 
 const StyledGFITablesContainer  = styled(motion.div)`
-    border-bottom: ${props => !props.isFeatureOpen && '1px solid #ddd'};
+    border-top: 1px solid #ddd;
     cursor: pointer;
-    //padding: 8px;
 `;
 
-const StyledInfoHeader = styled.div`
+const StyledInfoHeader = styled(motion.div)` 
     color: ${props => props.theme.colors.mainColor1};
 `;
 
-const StyledInfoHeaderDiv = styled.div`
+const StyledInfoHeaderDiv = styled(motion.div)`
     display: flex;
     align-items: center;
     justify-content: space-between;
-    //margin: 8px;
     padding: 18px;
     font-weight: bold;
     svg {
@@ -41,10 +39,6 @@ const StyledInfoHeaderDiv = styled.div`
         transition: all 0.3s ease-out;
     };
     &:hover {
-        background-color: #f0f0f0;
-        ${StyledInfoHeader}{
-            color: ${props => props.theme.colors.mainColor2};
-        };
         svg {
             color: ${props => props.theme.colors.mainColor2};
         };
@@ -54,7 +48,7 @@ const StyledInfoHeaderDiv = styled.div`
 const StyledLowPriorityDiv = styled.div`
     display: flex;
     flex-direction: column;
-    margin-left:8px;
+    padding: 8px;
 `;
 
 const StyledHighPriorityDiv = styled.div`
@@ -72,7 +66,6 @@ const StyledLowPriorityTableContainer = styled(motion.div)`
     tbody {
         overflow: auto;
     }
-    margin-left: 8px;
 `;
 
 const StyledFeature = styled(motion.div)`
@@ -91,10 +84,8 @@ const StyledGfiTable = styled.table`
 const StyledGfiTableBody = styled.tbody`
 `
 
-const StyledGfiResponseTab = styled.div`
-`;
-
 const StyledGfiResponseWrapper = styled.div`
+    overflow: auto;
 `;
 
 const getContent = (key, value, visibleFields, highPriorityFields, lowPriorityRows, highPriorityRows, generatedKey) => {
@@ -142,6 +133,7 @@ export const FormattedGFI = ({ data }) => {
         });
         return values.join('-');
     };
+    
     geoJSON.features.forEach((f, index) => {
         const keys = Object.keys(f.properties);
         let highPriorityRows = [];
@@ -154,6 +146,7 @@ export const FormattedGFI = ({ data }) => {
                 getContent(key, f.properties[key], visibleFields, highPriority, lowPriorityRows, highPriorityRows, generatedKey);
             }
         });
+
         pretty.push(
             <GFITables
                 key={'gfi-table-' + generatedKey}
@@ -166,8 +159,67 @@ export const FormattedGFI = ({ data }) => {
         );
     });
 
+/*     if(geoJSON.features.length > 0 && geoJSON.features[0].hasOwnProperty('properties')){
+                pretty.push(
+                    <table>
+                        <tr>
+                            <th style={{
+                                fontSize: "12px",
+                                padding: "10px",
+                                border: "1px solid black"
+                                }}>Kohde</th>
+                            { Object.keys(geoJSON.features[0].properties).map(header => {
+                                if(
+                                    header !== '_orderHigh'
+                                    && header !== '_order'
+                                    && header !== 'UID'
+                                    && header !== 'objectid'
+                                ){
+                                    return <th 
+                                    style={{
+                                        fontSize: "12px",
+                                        padding: "10px",
+                                        border: "1px solid black"
+                                    }}
+                                >
+                                    {header}
+                                </th>
+                                }
+                            })}
+                        </tr>
+
+                        {
+                            geoJSON.features.map(feature => {
+
+                                return <tr>
+                                    {
+                                        feature.hasOwnProperty('properties') && 
+                                        Object.keys(feature.properties).length > 0 &&
+                                        Object.keys(feature.properties).map((value) => {
+                                            if(
+                                                value !== '_orderHigh'
+                                                && value !== '_order'
+                                                && value !== 'UID'
+                                                && value !== 'objectid'
+                                            ){
+                                                return <td
+                                                style={{
+                                                        fontSize: "12px",
+                                                        textAlign: "center"
+                                                    }}
+                                                >{feature.properties[value]}</td>
+                                            }
+                                        })
+                                    }
+                                </tr>
+                            })
+                        }
+                    </table>
+                );
+    } */
+
     return (
-            <StyledGfiResponseTab>
+            <>
                 {pretty.map((table) => {
                     return (
                         <StyledGfiResponseWrapper key={'gfi-popup-wrapper-' + table.key}>
@@ -175,7 +227,7 @@ export const FormattedGFI = ({ data }) => {
                         </StyledGfiResponseWrapper>
                     )
                 })}
-            </StyledGfiResponseTab>
+            </>
     );
   };
 
@@ -190,25 +242,22 @@ export const FormattedGFI = ({ data }) => {
     const highPriorityTableExists = highPriorityRows.length > 0 ? false : true;
     const [isFeatureOpen, openFeature] = useState(false);
     const [isInfoOpen, openInfo] = useState(highPriorityTableExists);
-
+    const  [isHovered, setHovered] = useState(false);
     const { channel } = useAppSelector((state) => state.rpc);
 
     const selectFeature = (feature) => {
         let featureStyle = {
             fill: {
                 color: '#e50083',
-                //color: 'rgba(10, 140, 247, 0.3)'
             },
             stroke: {
                 color: '#e50083',
-                //color: 'rgba(10, 140, 247, 0.3)',
                 width: 5,
                 lineDash: 'solid',
                 lineCap: 'round',
                 lineJoin: 'round',
                 area: {
                     color: '#e50083',
-                    //color: 'rgba(10, 140, 247, 0.7)',
                     width: 4,
                     lineJoin: 'round'
                 }
@@ -218,7 +267,6 @@ export const FormattedGFI = ({ data }) => {
                 size: 3,
                 fill: {
                     color: '#e50083',
-                    //color: 'rgba(10, 140, 247, 0.7)',
                 }
             }
         };
@@ -254,84 +302,105 @@ export const FormattedGFI = ({ data }) => {
     return (
             <StyledGFITablesContainer
                 key={'gfi-tables-' + generatedKey}
-                isFeatureOpen={isFeatureOpen}
                 onHoverStart={() => {
                     selectFeature(geoJSON.features[index]);
+                    setHovered(true);
                 }}
                 onHoverEnd={() => {
                     deSelectFeature(geoJSON.features[index]);
+                    setHovered(false);
                 }}
             >
                 <StyledInfoHeaderDiv
                     onClick={() => openFeature(!isFeatureOpen)}
+                    isFeatureOpen={isFeatureOpen}
+                    animate={{
+                        backgroundColor: isHovered ? '#f0f0f0' : '#ffffff',
+                    }}
                 >
-                    <StyledInfoHeader>{strings.gfi.target + ' ' + (index + 1)}</StyledInfoHeader>
+                    <StyledInfoHeader
+                        animate={{
+                            color: isHovered ? '#17a2b8' : '#0064af',
+                        }}
+                    >{strings.gfi.target + ' ' + (index + 1)}</StyledInfoHeader>
 
                     <FontAwesomeIcon
                         icon={faAngleDown}
                         style={{
                             transform: isFeatureOpen && 'rotate(180deg)',
-                            marginLeft: '0.5rem'
                         }}
                     />
                 </StyledInfoHeaderDiv>
-                <StyledFeature
-                    initial={isFeatureOpen}
-                    animate={isFeatureOpen ? 'visible' : 'hidden'}
-                    variants={listVariants}
-                    transition={{
-                        duration: 0.1,
-                    }}
-                >
-
-                {!highPriorityTableExists ?
-                    <StyledHighPriorityDiv>
-                        <StyledGfiTable>
-                            <StyledGfiTableBody>
-                                {highPriorityRows}
-                            </StyledGfiTableBody>
-                        </StyledGfiTable>
-                    </StyledHighPriorityDiv>
-                :
-                    null
-                }
-
-                <StyledLowPriorityDiv>
-                    {!highPriorityTableExists ?
-                        <StyledInfoHeaderDiv
-                            onClick={() => openInfo(!isInfoOpen)}
+                <AnimatePresence>
+                    {
+                       isFeatureOpen && <StyledFeature
+                            initial={{
+                                height: 0,
+                                opacity: 0
+                            }}
+                            animate={{
+                                height: 'auto',
+                                opacity: 1,
+                            }}
+                            exit={{
+                                height: 0,
+                                opacity: 0
+                            }}
+                            transition={{
+                                duration: 0.4,
+                                type: "tween"
+                            }}
                         >
-                            <StyledInfoHeader>
-                                {strings.gfi.additionalInfo}
-                            </StyledInfoHeader>
+                            {!highPriorityTableExists ?
+                                <StyledHighPriorityDiv>
+                                    <StyledGfiTable>
+                                        <StyledGfiTableBody>
+                                            {highPriorityRows}
+                                        </StyledGfiTableBody>
+                                    </StyledGfiTable>
+                                </StyledHighPriorityDiv>
+                            :
+                                null
+                            }
 
-                            <FontAwesomeIcon
-                                icon={faAngleDown}
-                                style={{
-                                    transform: isInfoOpen && 'rotate(180deg)',
-                                    marginLeft: '0.5rem'
-                                }}
-                            />
-                        </StyledInfoHeaderDiv>
-                    :
-                        null
+                            <StyledLowPriorityDiv>
+                                {!highPriorityTableExists ?
+                                    <StyledInfoHeaderDiv
+                                        onClick={() => openInfo(!isInfoOpen)}
+                                    >
+                                        <StyledInfoHeader>
+                                            {strings.gfi.additionalInfo}
+                                        </StyledInfoHeader>
+
+                                        <FontAwesomeIcon
+                                            icon={faAngleDown}
+                                            style={{
+                                                transform: isInfoOpen && 'rotate(180deg)',
+                                                marginLeft: '0.5rem'
+                                            }}
+                                        />
+                                    </StyledInfoHeaderDiv>
+                                :
+                                    null
+                                }
+                                <StyledLowPriorityTableContainer
+                                    initial={isInfoOpen}
+                                    animate={isInfoOpen ? 'visible' : 'hidden'}
+                                    variants={listVariants}
+                                    transition={{
+                                        duration: 0.1,
+                                    }}
+                                >
+                                    <StyledGfiTable>
+                                        <StyledGfiTableBody>
+                                            {lowPriorityRows}
+                                        </StyledGfiTableBody>
+                                    </StyledGfiTable>
+                                </StyledLowPriorityTableContainer>
+                            </StyledLowPriorityDiv>
+                        </StyledFeature>
                     }
-                    <StyledLowPriorityTableContainer
-                        initial={isInfoOpen}
-                        animate={isInfoOpen ? 'visible' : 'hidden'}
-                        variants={listVariants}
-                        transition={{
-                            duration: 0.1,
-                        }}
-                    >
-                        <StyledGfiTable>
-                            <StyledGfiTableBody>
-                                {lowPriorityRows}
-                            </StyledGfiTableBody>
-                        </StyledGfiTable>
-                    </StyledLowPriorityTableContainer>
-                </StyledLowPriorityDiv>
-                </StyledFeature>
+                </AnimatePresence>
             </StyledGFITablesContainer>
     );
   };

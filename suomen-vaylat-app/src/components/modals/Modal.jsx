@@ -43,8 +43,8 @@ const StyledModalWrapper = styled(motion.div)`
 const StyledModal = styled(motion.div)`
     position: relative;
     width: 100%;
-    min-width: ${props => props.minWidth && props.minWidth+"px"};
-    max-width: ${props => props.maxWidth ? props.maxWidth+"px" : "100vw"};
+    min-width: ${props => props.minWidth && props.minWidth};
+    max-width: ${props => props.maxWidth ? props.maxWidth : "100vw"};
     height: 100%;
     min-height: 200px;
     max-height: calc(100vh - 100px);
@@ -183,7 +183,7 @@ const Modal = ({
         },[500])
     };
 
-    const clonedChildren = cloneElement(children, { handleAnnouncementModal  }); // If announce modal type is passed as prop, add additional "handleAnnouncementModal" function to modal children to handle modal state
+    const clonedChildren = cloneElement(children, { handleAnnouncementModal }); // If announce modal type is passed as prop, add additional "handleAnnouncementModal" function to modal children to handle modal state
 
     return (
         <AnimatePresence>
@@ -196,9 +196,19 @@ const Modal = ({
                         dragControls={dragControls}
                         dragListener={false}
                         dragMomentum={false}
-                        initial={{ y: 100, opacity: 0 }}
-                        animate={{ x: minimize && -1000, y: 0, opacity: 1 }}
-                        exit={{ y: 100, opacity: 0 }}
+                        initial={{
+                            y: 100,
+                            opacity: 0
+                        }}
+                        animate={{
+                            y: minimize ? 100 : 0,
+                            opacity: minimize ? 0 : 1,
+                            pointerEvents: minimize ? 'none' : 'auto',
+                        }}
+                        exit={{
+                            y: 100,
+                            opacity: 0
+                        }}
                         transition={{
                             duration: 0.4,
                             type: "tween"

@@ -21,6 +21,7 @@ const StyledZoomBarContainer = styled.div`
 `;
 
 const StyledZoomBarContent = styled.div`
+    z-index: 2;
     display: flex;
     flex-direction: column;
     gap: 8px;
@@ -56,8 +57,6 @@ const StyledZoomBarSlider = styled.input`
     background: #d3d3d3;
     padding-top: 8px;
     padding-bottom: 8px;
-    //outline: none;
-    //transform: rotate(90deg);
     pointer-events: auto;
     cursor: pointer;
     opacity: 0;
@@ -145,7 +144,6 @@ const ZoomBar = ({
                                 value={hoveringIndex}
                                 onChange={e => {
                                     setHoveringIndex(e.target.value);
-                                    //store.dispatch(setZoomTo(e.target.value))
                                 }}
                                 onMouseUp={e => {
                                     store.dispatch(setZoomTo(e.target.value))
@@ -158,8 +156,10 @@ const ZoomBar = ({
                         <CircleButton
                             icon={faSearchMinus}
                             text={strings.tooltips.zoomOut}
-                            disabled={currentZoomLevel === 0}
-                            clickAction={() => store.dispatch(setZoomOut())}
+                            clickAction={() => {
+                                currentZoomLevel > 0 && console.log("CHECK");
+                                currentZoomLevel > 0 && store.dispatch(setZoomOut())
+                            }}
                             tooltipDirection={"left"}
                         />
                     </StyledZoomBarZoomFeatures>
