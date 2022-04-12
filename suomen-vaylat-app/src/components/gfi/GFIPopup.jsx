@@ -11,6 +11,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ReactReduxContext } from 'react-redux';
 import styled from 'styled-components';
+import strings from '../../translations';
 import { useAppSelector } from '../../state/hooks';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { FreeMode, Controller } from "swiper";
@@ -483,7 +484,7 @@ export const GFIPopup = () => {
             <StyledTabContent>
                 {
                     tabsContent[selectedTab] === undefined &&
-                        <StyledNoGfisContainer>Ei valittuja kohteita</StyledNoGfisContainer>
+                        <StyledNoGfisContainer>{strings.gfi.noSelectedGfis}</StyledNoGfisContainer>
                 }
                 <StyledSwiper
                     ref={gfiInputEl}
@@ -538,14 +539,14 @@ export const GFIPopup = () => {
             <StyledButtonsContainer>
                     <CircleButton
                         icon={faPencilRuler}
-                        text={"Valitse kohteita"}
+                        text={strings.gfi.selectLocations}
                         toggleState={isGfiToolsOpen}
                         tooltipDirection={'left'}
                         clickAction={handleGfiToolsMenu}
                     />
                     <CircleButton
                         icon={faMapMarkerAlt}
-                        text={"Kohdista"}
+                        text={strings.gfi.focusToLocations}
                         tooltipDirection={'left'}
                         clickAction={() => {
                             handleOverlayGeometry(tabsContent[selectedTab].props.data);

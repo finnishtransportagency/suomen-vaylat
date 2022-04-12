@@ -25,6 +25,7 @@
     "opacity": "Transparens",
     "drawingtools": {
       "drawingtoolsButton": "Ritverktyg",
+      "point": "Point",
       "circle": "Cirkel",
       "square": "Kvadrat",
       "box": "Ruta",
@@ -64,7 +65,12 @@
     "close": "Stänga",
     "additionalInfo": "Tilläggsinformation",
     "gfiLocation": "Zooma in på objektet",
-    "target": "Mål"
+    "target": "Mål",
+    "selectLocations": "Select locations",
+    "focusToLocations": "Focus to locations",
+    "noSelectedGfis": "No selected locations",
+    "draw": "Draw",
+    "drawSubtitle": "Select locations by using drawing tools"
   },
   "general": {
     "close": "Stänga",

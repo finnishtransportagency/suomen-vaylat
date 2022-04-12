@@ -640,13 +640,13 @@ const GfiTools = ({
             }
          </AnimatePresence>
         <StyledToolsContainer>
-        <StyledSubtitle>Valitse kohteita:</StyledSubtitle>
+        <StyledSubtitle>{strings.gfi.selectLocations}:</StyledSubtitle>
             <CircleButtonListItem
                 key={'cropping-type-draw'}
                 id={0}
                 icon={faPencilRuler}
-                title={"Piirrä"}
-                subtitle={"Valitse kohteita käyttämällä piirtotyökaluja"}
+                title={strings.gfi.draw}
+                subtitle={strings.gfi.drawSubtitle}
                 selectedItem={selectedTool}
                 handleSelectTool={handleSelectTool}
             />

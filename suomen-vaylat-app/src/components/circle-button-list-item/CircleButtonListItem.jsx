@@ -93,14 +93,6 @@ const CircleButtonListItem = ({
                 activeColor={activeColor}
                 color={color}
             >
-{/*                 {
-                    icon ? 
-                        <FontAwesomeIcon
-                                icon={icon}
-                        /> :
-                        <p>{title.charAt(0).toUpperCase()}</p>
-                        
-                } */}
                 {
                     children ? children : icon ? 
                     <FontAwesomeIcon
