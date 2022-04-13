@@ -15,7 +15,7 @@ import strings from '../../translations';
 import { useAppSelector } from '../../state/hooks';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { FreeMode, Controller } from "swiper";
-
+import { isMobile } from '../../theme/theme';
 import { resetGFILocations } from '../../state/slices/rpcSlice';
 
 import { FormattedGFI } from './FormattedGFI';
@@ -31,8 +31,11 @@ const StyledGfiContainer = styled.div`
 `;
 
 const StyledTabSwiperContainer = styled.div`
+    z-index: 2;
     display: flex;
-    background-color: ${props => props.theme.colors.mainColor1};;
+    background-color: ${props => props.theme.colors.mainColor1};
+    box-shadow: 2px 2px 4px 0px rgba(0,0,0,0.20);
+    border-bottom: 2px solid white;
 `;
 
 const StyledTabs = styled.div`
@@ -121,8 +124,11 @@ const StyledSwiperNavigatorButton = styled.div`
     align-items: center;
     width: 60px;
     background-color: ${props => props.theme.colors.mainColor1};
-    border-left: 2px solid white;
-    border-right: 2px solid white;
+    //box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.20);
+    //z-index: 1;
+    //border-left: 2px solid white;
+    //border-right: 2px solid white;
+    //border-top: 2px solid white;
     svg {
         font-size: 20px;
         color: white;
@@ -415,7 +421,7 @@ export const GFIPopup = () => {
                 tabsContent.length > 0 &&
                 <StyledTabSwiperContainer>
                     {
-                        gfiTabsSnapGridLength > 1 && <StyledSwiperNavigatorButton
+                        !isMobile && gfiTabsSnapGridLength > 1 && <StyledSwiperNavigatorButton
                             onClick={() => {
                                 gfiTabsSwiper.slidePrev();
                             }}
@@ -469,7 +475,7 @@ export const GFIPopup = () => {
                         }
                     </StyledTabsSwiper>
                     {
-                        gfiTabsSnapGridLength > 1 && <StyledSwiperNavigatorButton
+                        !isMobile && gfiTabsSnapGridLength > 1 && <StyledSwiperNavigatorButton
                             onClick={() => {
                                 gfiTabsSwiper.slideNext();
                             }}

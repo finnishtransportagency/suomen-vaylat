@@ -186,58 +186,6 @@ const icons = {
     }
 };
 
-const drawinToolsData = [
-/*     {
-        id : 'sv-measure-point',
-        title : strings.tooltips.measuringTools.point,
-        style : {
-            icon : <FontAwesomeIcon
-                        icon={faCircle}
-                    />
-        },
-        type : 'Point'ß
-    }, */
-    {
-        id : 'sv-measure-linestring',
-        title : strings.tooltips.measuringTools.linestring,
-        style : {
-            icon : <SvLinestring />
-        },
-        type : 'LineString'
-    },
-    {
-        id : 'sv-measure-polygon',
-        title : strings.tooltips.measuringTools.polygon,
-        style : {
-            icon : <SvPolygon />
-            },
-        type : 'Polygon'
-    },
-/*     {
-        id : 'sv-measure-square',
-        title : strings.tooltips.measuringTools.square,
-        style : {
-            icon : <SvSquare />
-        },
-        type : 'Square'
-    }, */
-    {
-        id : 'sv-measure-box',
-        title : strings.tooltips.measuringTools.box,
-        style : {
-            icon : <SvRectangle />
-        },
-        type : 'Box'
-    },
-    {
-        id : 'sv-measure-circle',
-        title : strings.tooltips.measuringTools.circle,
-        style : {
-            icon : <SvCircle />
-        },
-        type : 'Circle'
-    }
-];
 
 const downloadFormats = [
     {
@@ -262,6 +210,59 @@ const downloadFormats = [
 const GfiTools = ({
     handleGfiToolsMenu
 }) => {
+
+    const drawinToolsData = [
+        /*     {
+                id : 'sv-measure-point',
+                title : strings.tooltips.measuringTools.point,
+                style : {
+                    icon : <FontAwesomeIcon
+                                icon={faCircle}
+                            />
+                },
+                type : 'Point'ß
+            }, */
+            {
+                id : 'sv-measure-linestring',
+                title : strings.tooltips.measuringTools.linestring,
+                style : {
+                    icon : <SvLinestring />
+                },
+                type : 'LineString'
+            },
+            {
+                id : 'sv-measure-polygon',
+                title : strings.tooltips.measuringTools.polygon,
+                style : {
+                    icon : <SvPolygon />
+                    },
+                type : 'Polygon'
+            },
+        /*     {
+                id : 'sv-measure-square',
+                title : strings.tooltips.measuringTools.square,
+                style : {
+                    icon : <SvSquare />
+                },
+                type : 'Square'
+            }, */
+            {
+                id : 'sv-measure-box',
+                title : strings.tooltips.measuringTools.box,
+                style : {
+                    icon : <SvRectangle />
+                },
+                type : 'Box'
+            },
+            {
+                id : 'sv-measure-circle',
+                title : strings.tooltips.measuringTools.circle,
+                style : {
+                    icon : <SvCircle />
+                },
+                type : 'Circle'
+            }
+    ];
 
     const { store } = useContext(ReactReduxContext);
 

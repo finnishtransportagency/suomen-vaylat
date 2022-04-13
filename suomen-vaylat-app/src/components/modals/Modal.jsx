@@ -58,6 +58,7 @@ const StyledModal = styled(motion.div)`
     overflow: hidden;
     @media ${props => props.theme.device.mobileL} {
         border-radius: ${props => props.fullScreenOnMobile && "0px"};
+        max-width: unset;
         min-width: unset;
         max-height: unset;
     };

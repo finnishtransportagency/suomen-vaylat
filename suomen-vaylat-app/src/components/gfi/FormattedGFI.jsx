@@ -38,11 +38,10 @@ const StyledInfoHeaderDiv = styled(motion.div)`
         font-size: 19px;
         transition: all 0.3s ease-out;
     };
-    &:hover {
-        svg {
-            color: ${props => props.theme.colors.mainColor2};
-        };
-    }
+`;
+
+const StyledInfoHeaderIconContainer = styled(motion.div)`
+
 `;
 
 const StyledLowPriorityDiv = styled.div`
@@ -323,13 +322,16 @@ export const FormattedGFI = ({ data }) => {
                             color: isHovered ? '#17a2b8' : '#0064af',
                         }}
                     >{strings.gfi.target + ' ' + (index + 1)}</StyledInfoHeader>
-
-                    <FontAwesomeIcon
-                        icon={faAngleDown}
-                        style={{
-                            transform: isFeatureOpen && 'rotate(180deg)',
+                    <StyledInfoHeaderIconContainer
+                        animate={{
+                            transform: isFeatureOpen ? 'rotate(180deg)' : 'rotate(0deg)',
                         }}
-                    />
+                    >
+                        <FontAwesomeIcon
+                            icon={faAngleDown}
+                        />
+                    </StyledInfoHeaderIconContainer>
+
                 </StyledInfoHeaderDiv>
                 <AnimatePresence>
                     {
