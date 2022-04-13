@@ -177,7 +177,7 @@ const PublishedMap = () => {
 
                 if (data.MapClickedEvent) {
                     channel.handleEvent('MapClickedEvent', (data) => {
-                        //store.dispatch(resetGFILocations([]));
+                        store.dispatch(resetGFILocations([]));
                         //store.dispatch(setGFIPoint(data));
                     });
                 };
@@ -185,7 +185,7 @@ const PublishedMap = () => {
                 if (data.DataForMapLocationEvent) {
                     channel.handleEvent('DataForMapLocationEvent', (data) => {
                         console.log(data);
-                        store.dispatch(resetGFILocations([]));
+                        //store.dispatch(resetGFILocations([]));
                         store.dispatch(setMinimizeGfi(false));
                         store.dispatch(setIsGfiOpen(true));
                         store.dispatch(setGFILocations(data));

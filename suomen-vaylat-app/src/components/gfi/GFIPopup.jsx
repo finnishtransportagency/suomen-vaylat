@@ -2,7 +2,7 @@ import { useContext, useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     faTimes,
-    faMapMarkerAlt,
+    faSearchLocation,
     faPencilRuler,
     faDownload,
     faAngleLeft,
@@ -545,7 +545,7 @@ export const GFIPopup = () => {
                         clickAction={handleGfiToolsMenu}
                     />
                     <CircleButton
-                        icon={faMapMarkerAlt}
+                        icon={faSearchLocation}
                         text={strings.gfi.focusToLocations}
                         tooltipDirection={'left'}
                         clickAction={() => {
