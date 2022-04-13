@@ -227,7 +227,6 @@ const Views = () => {
     };
 
     const handleActivateView = (view) => {
-
             channel.getMapPosition(function () {
                 var routeSteps = [
                     {
@@ -256,6 +255,7 @@ const Views = () => {
 
             view.data.layers.forEach((layer) => {
                 channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, true]);
+                channel.postRequest('ChangeMapLayerOpacityRequest', [layer.id, layer.opacity]);
             });
 
             updateLayers(store, channel);
