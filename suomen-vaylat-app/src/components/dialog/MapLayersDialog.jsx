@@ -51,9 +51,6 @@ const StyledMapLayersDialog = styled(motion.div)`
     &::-webkit-scrollbar {
         display: none;
     };
-    /* @media ${props => props.theme.device.laptop} {
-        z-index: 10;
-    }; */
     @media ${props => props.theme.device.mobileL} {
         z-index: 10;
         position: fixed;

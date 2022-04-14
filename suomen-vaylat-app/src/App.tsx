@@ -27,8 +27,6 @@ const StyledAppContainer = styled.div`
  */
 const App = () => {
 
-
-
     let routerPrefix = '/';
     if (process.env.REACT_APP_ROUTER_PREFIX) {
         routerPrefix = process.env.REACT_APP_ROUTER_PREFIX;

@@ -8,8 +8,6 @@ import strings from '../../translations';
 import Moment from 'react-moment';
 import { v4 as uuidv4 } from 'uuid';
 
-import { isMobile } from '../../theme/theme';
-
 import {
     setIsSaveViewOpen,
     setWarning

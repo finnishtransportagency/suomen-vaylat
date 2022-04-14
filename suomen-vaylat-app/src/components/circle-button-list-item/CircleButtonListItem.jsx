@@ -1,4 +1,4 @@
-import { useState } from 'react'; 
+import { useState } from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 
@@ -94,7 +94,7 @@ const CircleButtonListItem = ({
                 color={color}
             >
                 {
-                    children ? children : icon ? 
+                    children ? children : icon ?
                     <FontAwesomeIcon
                         icon={icon}
                     /> :
@@ -120,7 +120,6 @@ const CircleButtonListItem = ({
             </StyledDescriptionContainer>
         </StyledContent>
     )
-
 };
 
 export default CircleButtonListItem;

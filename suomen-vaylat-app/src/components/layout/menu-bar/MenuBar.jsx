@@ -96,7 +96,7 @@ const MenuBar = () => {
             elem.mozRequestFullScreen();
           }
         }
-        
+
         /* Close fullscreen */
         function closeFullscreen() {
           if (document.exitFullscreen) {

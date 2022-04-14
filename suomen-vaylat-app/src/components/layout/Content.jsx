@@ -107,7 +107,7 @@ const Content = () => {
 
     const announcements = useAppSelector((state) => state.rpc.activeAnnouncements);
     const metadata = useAppSelector((state) => state.rpc.layerMetadata);
-    
+
     let {
         channel,
         gfiLocations

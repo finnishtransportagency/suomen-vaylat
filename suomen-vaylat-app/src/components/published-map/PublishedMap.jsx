@@ -19,7 +19,6 @@ import {
     setTagsWithLayers,
     setZoomRange,
     setGFILocations,
-    setGFIPoint,
     setStartState,
     resetGFILocations
 } from '../../state/slices/rpcSlice';
@@ -61,25 +60,24 @@ const PublishedMap = () => {
         store.dispatch(setLoading(false));
     };
 
-    const handleFullScreenChange = () => {
-        if(document.webkitIsFullScreen){
- 
-            store.dispatch(setIsFullScreen(true));
-        } else if (document.fullscreenElement) {
-            store.dispatch(setIsFullScreen(true));
-        } else {
-            store.dispatch(setIsFullScreen(false));
-        }
-    };
-
     useEffect(() => {
+
+        const handleFullScreenChange = () => {
+            if(document.webkitIsFullScreen) {
+                store.dispatch(setIsFullScreen(true));
+            } else if (document.fullscreenElement) {
+                store.dispatch(setIsFullScreen(true));
+            } else {
+                store.dispatch(setIsFullScreen(false));
+            }
+        };
 
         store.dispatch(setLoading(true));
 
-        document.addEventListener("fullscreenchange", handleFullScreenChange);
-        document.addEventListener("mozfullscreenchange", handleFullScreenChange);
-        document.addEventListener("webkitfullscreenchange", handleFullScreenChange);
-        document.addEventListener("msfullscreenchange", handleFullScreenChange);
+        document.addEventListener('fullscreenchange', handleFullScreenChange);
+        document.addEventListener('mozfullscreenchange', handleFullScreenChange);
+        document.addEventListener('webkitfullscreenchange', handleFullScreenChange);
+        document.addEventListener('msfullscreenchange', handleFullScreenChange);
 
         const iframe = document.getElementById('sv-iframe');
         var handlers = [];
@@ -178,14 +176,11 @@ const PublishedMap = () => {
                 if (data.MapClickedEvent) {
                     channel.handleEvent('MapClickedEvent', (data) => {
                         store.dispatch(resetGFILocations([]));
-                        //store.dispatch(setGFIPoint(data));
                     });
                 };
 
                 if (data.DataForMapLocationEvent) {
                     channel.handleEvent('DataForMapLocationEvent', (data) => {
-                        console.log(data);
-                        //store.dispatch(resetGFILocations([]));
                         store.dispatch(setMinimizeGfi(false));
                         store.dispatch(setIsGfiOpen(true));
                         store.dispatch(setGFILocations(data));

@@ -23,7 +23,7 @@ const StyledGFITablesContainer  = styled(motion.div)`
     cursor: pointer;
 `;
 
-const StyledInfoHeader = styled(motion.div)` 
+const StyledInfoHeader = styled(motion.div)`
     color: ${props => props.theme.colors.mainColor1};
 `;
 
@@ -132,7 +132,7 @@ export const FormattedGFI = ({ data }) => {
         });
         return values.join('-');
     };
-    
+
     geoJSON.features.forEach((f, index) => {
         const keys = Object.keys(f.properties);
         let highPriorityRows = [];
@@ -157,65 +157,6 @@ export const FormattedGFI = ({ data }) => {
             />
         );
     });
-
-/*     if(geoJSON.features.length > 0 && geoJSON.features[0].hasOwnProperty('properties')){
-                pretty.push(
-                    <table>
-                        <tr>
-                            <th style={{
-                                fontSize: "12px",
-                                padding: "10px",
-                                border: "1px solid black"
-                                }}>Kohde</th>
-                            { Object.keys(geoJSON.features[0].properties).map(header => {
-                                if(
-                                    header !== '_orderHigh'
-                                    && header !== '_order'
-                                    && header !== 'UID'
-                                    && header !== 'objectid'
-                                ){
-                                    return <th 
-                                    style={{
-                                        fontSize: "12px",
-                                        padding: "10px",
-                                        border: "1px solid black"
-                                    }}
-                                >
-                                    {header}
-                                </th>
-                                }
-                            })}
-                        </tr>
-
-                        {
-                            geoJSON.features.map(feature => {
-
-                                return <tr>
-                                    {
-                                        feature.hasOwnProperty('properties') && 
-                                        Object.keys(feature.properties).length > 0 &&
-                                        Object.keys(feature.properties).map((value) => {
-                                            if(
-                                                value !== '_orderHigh'
-                                                && value !== '_order'
-                                                && value !== 'UID'
-                                                && value !== 'objectid'
-                                            ){
-                                                return <td
-                                                style={{
-                                                        fontSize: "12px",
-                                                        textAlign: "center"
-                                                    }}
-                                                >{feature.properties[value]}</td>
-                                            }
-                                        })
-                                    }
-                                </tr>
-                            })
-                        }
-                    </table>
-                );
-    } */
 
     return (
             <>
@@ -269,7 +210,7 @@ export const FormattedGFI = ({ data }) => {
                 }
             }
         };
-        
+
         let options = {
             featureStyle: featureStyle,
             layerId: 'gfi-result-layer-overlay',
@@ -280,14 +221,14 @@ export const FormattedGFI = ({ data }) => {
         let rn = 'MapModulePlugin.AddFeaturesToMapRequest';
 
         var geojsonObject = {
-            'type': 'FeatureCollection',
-            'crs': {
-                'type': 'name',
-                'properties': {
-                'name': 'EPSG:3067'
+            type: 'FeatureCollection',
+            crs: {
+                type: 'name',
+                properties: {
+                    name: 'EPSG:3067'
                 }
             },
-            'features': [
+            features: [
                 feature
             ]
         };

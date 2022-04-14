@@ -38,39 +38,6 @@ const StyledTabSwiperContainer = styled.div`
     border-bottom: 2px solid white;
 `;
 
-const StyledTabs = styled.div`
-    min-height: 48px;
-    display: flex;
-    gap: 8px;
-    background-color: ${props => props.theme.colors.mainColor1};
-    overflow-y: scroll;
-    z-index: 2;
-    padding-top: 8px;
-    &::-webkit-scrollbar {
-        display: none;
-    };
-    position: sticky;
-    top: 0px;
-    border-bottom: 1px solid #ddd;
-    padding-left: 4px;
-`;
-
-const StyledTab = styled.div`
-    z-index: 10;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    color:  ${props => props.selected ? props.theme.colors.mainColor1 : props.theme.colors.mainWhite};
-    background-color: ${props => props.selected ?  props.theme.colors.mainWhite : props.theme.colors.mainColor1};
-    border-left: 2px solid ${props => props.theme.colors.mainWhite};
-    border-top: 2px solid ${props => props.theme.colors.mainWhite};
-    border-right: 2px solid ${props => props.theme.colors.mainWhite};
-    padding: 8px 16px 8px 8px;
-    border-radius: 4px 4px 0px 0px;
-    min-width: 200px;
-`;
-
 const StyledTabName = styled.p`
     margin: 0;
     font-size: 14px;
@@ -97,8 +64,6 @@ const StyledNoGfisContainer = styled.div`
 const StyledSwiper = styled(Swiper)`
     .swiper-slide {
         height: 1px;
-        
-        //overflow: auto;
     };
     .swiper-slide-active {
         height: auto
@@ -124,11 +89,6 @@ const StyledSwiperNavigatorButton = styled.div`
     align-items: center;
     width: 60px;
     background-color: ${props => props.theme.colors.mainColor1};
-    //box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.20);
-    //z-index: 1;
-    //border-left: 2px solid white;
-    //border-right: 2px solid white;
-    //border-top: 2px solid white;
     svg {
         font-size: 20px;
         color: white;
@@ -246,8 +206,7 @@ export const GFIPopup = () => {
     const {
         channel,
         allLayers,
-        gfiLocations,
-        currentZoomLevel
+        gfiLocations
     } = useAppSelector((state) => state.rpc);
 
     const [selectedTab, setSelectedTab] = useState(0);
@@ -257,8 +216,6 @@ export const GFIPopup = () => {
 
     const [gfiTabsSwiper, setGfiTabsSwiper] = useState(null);
     const [gfiTabsSnapGridLength, setGfiTabsSnapGridLength] = useState(0);
-
-   // console.log(gfiTabsSnapGridLength);
 
     const gfiInputEl = useRef(null);
 
@@ -301,7 +258,6 @@ export const GFIPopup = () => {
                 layerId: LAYER_ID,
                 centerTo : true,
                 cursor: 'pointer',
-                //maxZoomLevel: currentZoomLevel,
                 featureStyle: {
                     fill: {
                         color: 'rgba(10, 140, 247, 0.3)'
@@ -332,7 +288,7 @@ export const GFIPopup = () => {
 
     const handleGfiToolsMenu = () => {
         channel && channel.postRequest('DrawTools.StopDrawingRequest', ['gfi-selection-tool', true]);
-        
+
         isGfiToolsOpen && channel.postRequest('VectorLayerRequest', [{
             layerId: 'download-tool-layer',
             remove: true
@@ -380,19 +336,19 @@ export const GFIPopup = () => {
                                 color: '#0064af',
                                 width: 2
                             },
-                            text: { // text style
-                                fill: { // text fill style
-                                    color: "#ffffff" // fill color
+                            text: {
+                                fill: {
+                                    color: '#ffffff'
                                 },
                                 stroke: {
                                     color: '#0064af',
                                     width: 5
                                 },
-                                font: "bold 16px Arial", // font
-                                textAlign: "center", // text align
-                                textBaseline: "middle",
-                                offsetX: 0, // text offset x
-                                offsetY: 0, // text offset y
+                                font: 'bold 16px Arial',
+                                textAlign: 'center',
+                                textBaseline: 'middle',
+                                offsetX: 0,
+                                offsetY: 0
                             },
                         },
                     }
@@ -417,7 +373,7 @@ export const GFIPopup = () => {
 
     return (
         <StyledGfiContainer>
-            { 
+            {
                 tabsContent.length > 0 &&
                 <StyledTabSwiperContainer>
                     {
@@ -450,7 +406,7 @@ export const GFIPopup = () => {
                                         key={'tab_' + index}
                                     >
                                         <StyledGfiTab
-                                            
+
                                             onClick={() => setSelectedTab(index)}
                                             selected={selectedTab === index}
                                         >
@@ -503,7 +459,7 @@ export const GFIPopup = () => {
                     speed={300}
                 >
                 {
-                    gfiLocations.map((location, index) => {
+                    gfiLocations.map((location) => {
                         const layers = allLayers.filter(layer => layer.id === location.layerId);
                         const layerIds = (layers && layers.length > 0) ? layers[0].id : location.layerId;
                         const name = layers.length > 0 && layers[0].name;
@@ -518,8 +474,8 @@ export const GFIPopup = () => {
                         else if (location.type === 'geojson') {
                             return (
                                 <SwiperSlide
-                                id={"gfi_tab_content_"+index}
-                                key={"gfi_tab_content_"+index}
+                                id={'gfi_tab_content_' + + location.x + '_' + location.y + '_' + location.layerId}
+                                key={'gfi_tab_content_' + location.x + '_' + location.y + '_' + location.layerId}
                             >
                                 {
                                     <StyledSelectedTabTitle>
@@ -538,6 +494,7 @@ export const GFIPopup = () => {
                             </SwiperSlide>
                             );
                         }
+                        return null;
                     })
                 }
                 </StyledSwiper>
@@ -562,7 +519,6 @@ export const GFIPopup = () => {
                     <CircleButton
                         icon={faDownload}
                         text={"Lataa kohdetiedot (tulossa)"}
-                        //toggleState={isGfiToolsOpen}
                         tooltipDirection={'left'}
                         clickAction={() => {
                         }}
@@ -594,7 +550,7 @@ export const GFIPopup = () => {
                         <GfiTools
                             handleGfiToolsMenu={handleGfiToolsMenu}
                         />
-                        
+
                     </StyledGfiToolsContainer>
                 }
             </AnimatePresence>

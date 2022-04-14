@@ -10,23 +10,17 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faPencilRuler,
     faBorderAll,
-    faCircle,
-    faTimes,
-    faFile,
-    faFileArchive
+    faTimes
 } from '@fortawesome/free-solid-svg-icons';
 
 import CircleButtonListItem from '../circle-button-list-item/CircleButtonListItem';
-//import ModalListItem from '../modals/ModalListItem';
 
 import { ReactComponent as SvCircle } from '../../theme/icons/drawtools_circle.svg';
-import { ReactComponent as SvSquare } from '../../theme/icons/drawtools_square.svg';
 import { ReactComponent as SvRectangle } from '../../theme/icons/drawtools_rectangle.svg';
 import { ReactComponent as SvPolygon } from '../../theme/icons/drawtools_polygon.svg';
 import { ReactComponent as SvLinestring } from '../../theme/icons/drawtools_linestring.svg';
 
 import {
-    //setSelectedFeatures, 
     setGFILocations,
     resetGFILocations
 } from '../../state/slices/rpcSlice';
@@ -42,9 +36,7 @@ const StyledGfiToolContainer = styled.div`
     position: relative;
     display: flex;
     flex-direction: column;
-    //gap: 16px;
     padding: 24px;
-    //max-height: 500px;
     overflow: auto;
     @media ${props => props.theme.device.mobileL} {
         padding: 16px;
@@ -99,72 +91,6 @@ const StyledCloseButton = styled.div`
     }
 `;
 
-const StyledDrawingToolContainer = styled.div`
-`;
-
-const StyledSelectedDownloadsContainer = styled(motion.div)`
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-`;
-
-const StyledDeleteAllDownloads = styled.div`
-    width: 250px;
-    height: 30px;
-    cursor: pointer;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: ${props => props.theme.colors.mainWhite};
-    background-color: ${props => props.disabled ? "rgba(177, 177, 177, 0.5)" : props.theme.colors.mainColor1};
-    margin: 20px auto 20px auto;
-    border-radius: 15px;
-    p {
-        margin: 0;
-        font-size: 12px;
-        font-weight: 600;
-    };
-`;
-
-const StyledDownloadFormatSelectorContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-`;
-
-const StyledDownloadFormats = styled.div`
-    display: flex;
-    margin-left: auto;
-    margin-right: auto;
-    gap: 16px;
-`;
-
-const StyledDownloadFormat = styled(motion.button)`
-    width: 56px;
-    height: 56px;
-    display: flex;
-    gap: 6px;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    background-color: ${props => props.disabled ? "rgba(177, 177, 177, 0.5)" : props.theme.colors.mainColor1};
-    box-shadow: 0px 2px 4px #0000004D;
-    border-radius: 50%;
-    border: none;
-    cursor: pointer;
-    pointer-events: ${props => !props.disabled && "auto"};
-    svg {
-        color: ${props => props.theme.colors.mainWhite};
-        font-size: 22px;
-    };
-    p {
-        margin: 0;
-        font-weight: bold;
-        font-size: 10px;
-        color: ${props => props.theme.colors.mainWhite};
-        margin-top: -4px;
-    };
-`;
-
 const icons = {
    0: {
         icon: faPencilRuler,
@@ -186,42 +112,11 @@ const icons = {
     }
 };
 
-
-const downloadFormats = [
-    {
-        id: "download-format-shape",
-        title: "shape"
-    },
-    {
-        id: "download-format-csv",
-        title: "csv"
-    },
-    {
-        id: "download-format-xls",
-        title: "excel"
-    },
-    {
-        id: "download-format-json",
-        title: "json"
-    }
-];
-
-
 const GfiTools = ({
     handleGfiToolsMenu
 }) => {
 
     const drawinToolsData = [
-        /*     {
-                id : 'sv-measure-point',
-                title : strings.tooltips.measuringTools.point,
-                style : {
-                    icon : <FontAwesomeIcon
-                                icon={faCircle}
-                            />
-                },
-                type : 'Point'ß
-            }, */
             {
                 id : 'sv-measure-linestring',
                 title : strings.tooltips.measuringTools.linestring,
@@ -238,14 +133,6 @@ const GfiTools = ({
                     },
                 type : 'Polygon'
             },
-        /*     {
-                id : 'sv-measure-square',
-                title : strings.tooltips.measuringTools.square,
-                style : {
-                    icon : <SvSquare />
-                },
-                type : 'Square'
-            }, */
             {
                 id : 'sv-measure-box',
                 title : strings.tooltips.measuringTools.box,
@@ -266,7 +153,7 @@ const GfiTools = ({
 
     const { store } = useContext(ReactReduxContext);
 
-    const { channel, selectedFeatures, selectedLayers } = useSelector(state => state.rpc);
+    const { channel } = useSelector(state => state.rpc);
     const { gfiCroppingTypes, selectedGfiTool } = useSelector(state => state.ui);
 
     const [ loading, setLoading ] = useState(false);
@@ -275,7 +162,7 @@ const GfiTools = ({
     const [selectedDrawingTool, setSelectedDrawingTool] = useState(null);
 
     const handleSelectTool = (id) => {
-        
+
         setSelectedDrawingTool(null);
 
         if(selectedTool !== id) {
@@ -297,7 +184,6 @@ const GfiTools = ({
                         let options = {
                             layerId: 'download-tool-layer',
                             clearPrevious: true,
-                            //centerTo: true,
                             featureStyle: {
                                 fill: {
                                     color: 'rgba(255, 255, 255, 0.5)'
@@ -306,20 +192,20 @@ const GfiTools = ({
                                     color: '#0064af',
                                     width: 2
                                 },
-                                text: { // text style
-                                    fill: { // text fill style
-                                        color: "#ffffff" // fill color
+                                text: {
+                                    fill: {
+                                        color: '#ffffff'
                                     },
                                     stroke: {
                                         color: '#0064af',
                                         width: 5
                                     },
-                                    font: "bold 12px Arial", // font
-                                    textAlign: "center", // text align
-                                    textBaseline: "middle",
-                                    offsetX: 0, // text offset x
-                                    offsetY: 0, // text offset y
-                                    labelProperty: label, // read label from feature property
+                                    font: 'bold 12px Arial',
+                                    textAlign: 'center',
+                                    textBaseline: 'middle',
+                                    offsetX: 0,
+                                    offsetY: 0,
+                                    labelProperty: label,
                                     overflow: id === 2 ? true : false
                                 },
                             },
@@ -332,20 +218,20 @@ const GfiTools = ({
                                         color: '#0064af',
                                         width: 2
                                     },
-                                    text: { // text style
-                                        fill: { // text fill style
-                                            color: "#ffffff" // fill color
+                                    text: {
+                                        fill: {
+                                            color: '#ffffff'
                                         },
                                         stroke: {
                                             color: '#0064af',
                                             width: 5
                                         },
-                                        font: "bold 16px Arial", // font
-                                        textAlign: "center", // text align
-                                        textBaseline: "middle",
-                                        offsetX: 0, // text offset x
-                                        offsetY: 0, // text offset y
-                                        labelProperty: label, // read label from feature property
+                                        font: 'bold 16px Arial',
+                                        textAlign: 'center',
+                                        textBaseline: 'middle',
+                                        offsetX: 0,
+                                        offsetY: 0,
+                                        labelProperty: label,
                                         overflow: id === 2 ? true : false
                                     },
                                 },
@@ -417,10 +303,6 @@ const GfiTools = ({
 
 
             var data = ['gfi-selection-tool', item.type, {
-                //allowMultipleDrawing: false,
-                //drawControl: false,
-                //modifyControl: false,
-                //showMeasureOnMap: true,
                 style: style
 
             }];
@@ -428,48 +310,6 @@ const GfiTools = ({
             store.dispatch(setMinimizeGfi(true));
         }
     };
-
-
-    const handleHoverIn = (feature) => {
-        let featureStyle = {
-            fill: {
-                color: 'rgba(0, 99, 175, 0.9)'
-            }
-        };
-
-        let options = {
-            featureStyle: featureStyle,
-            layerId: 'download-tool-layer',
-            animationDuration: 100
-        };
-
-        let rn = 'MapModulePlugin.AddFeaturesToMapRequest';
-
-        if(feature.hasOwnProperty('uid')){
-            channel.postRequest(rn, [{UID: feature.uid}, options]);
-        };
-    };
-
-    const handleHoverOut = (feature) => {
-        let featureStyle = {
-            fill: {
-                color: 'rgba(0, 99, 175, 0.5)'
-            }
-        };
-
-        let options = {
-            featureStyle: featureStyle,
-            layerId: 'download-tool-layer',
-            animationDuration: 100
-        };
-
-        let rn = 'MapModulePlugin.AddFeaturesToMapRequest';
-
-        if(feature.hasOwnProperty('uid')){
-            channel.postRequest(rn, [{UID: feature.uid}, options]);
-        };
-    };
-
 
 /*     useEffect(() => {
         switch(selectedTool){
@@ -581,7 +421,7 @@ const GfiTools = ({
                                     subfeature.geometry && channel && channel.getFeaturesByGeoJSON([subfeature], (gfiData) => {
                                         store.dispatch(resetGFILocations([]));
                                         gfiData.gfi && gfiData.gfi.forEach(gfi => {
-                                            
+
                                              store.dispatch(setGFILocations(
                                                  {
                                                      content: gfi.geojson,
@@ -676,7 +516,6 @@ const GfiTools = ({
                             return <CircleButtonListItem
                                 key={'cropping-type-'+tool.id}
                                 id={tool.id}
-                                //icon={tool.style.icon}
                                 item={tool}
                                 title={tool.title}
                                 subtitle={null}
@@ -692,7 +531,7 @@ const GfiTools = ({
                         })
                     }
                 </StyledDrawingToolsContainer>
-            }  
+            }
             </AnimatePresence>
             {
                 gfiCroppingTypes && gfiCroppingTypes.map((croppingType) => {
@@ -738,7 +577,7 @@ const GfiTools = ({
                 }
         </StyledSelectedDownloadsContainer> */}
 {/*         <StyledDownloadFormatSelectorContainer>
-            
+
             {selectedDownloads.length > 0 &&
             <>
             <StyledSubtitle>Karttatasot:</StyledSubtitle>

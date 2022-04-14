@@ -129,8 +129,7 @@ const ActionButtons = ({
         channel,
         selectedTheme,
         lastSelectedTheme,
-        selectedThemeIndex,
-        gfiLocations
+        selectedThemeIndex
     } = useAppSelector((state) => state.rpc);
 
     const {
