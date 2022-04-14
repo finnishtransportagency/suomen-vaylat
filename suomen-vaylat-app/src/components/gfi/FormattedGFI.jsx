@@ -141,7 +141,7 @@ export const FormattedGFI = ({ data }) => {
         const highPriority = f.properties._orderHigh && !Array.isArray(f.properties._orderHigh) ? JSON.parse(f.properties._orderHigh.replace('\\','')) : f.properties._orderHigh && Array.isArray(f.properties._orderHigh) ? f.properties._orderHigh : [];
         const generatedKey = getKey(f.properties);
         keys.forEach(key => {
-            if (key !== '_order' && key !== '_orderHigh') {
+            if (key !== '_order' && key !== '_orderHigh' && key !== 'UID') {
                 getContent(key, f.properties[key], visibleFields, highPriority, lowPriorityRows, highPriorityRows, generatedKey);
             }
         });
