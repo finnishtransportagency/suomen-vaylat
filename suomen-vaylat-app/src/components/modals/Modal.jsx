@@ -6,11 +6,9 @@ import { ReactReduxContext } from 'react-redux';
 import { faTimes, faWindowMinimize } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-
 import { setMinimizeGfi } from '../../state/slices/uiSlice';
 
 const StyledModalBackdrop = styled(motion.div)`
-
     z-index: ${props => props.type === "warning" ? 9998 : 10};
     position: fixed;
     top: 0px;
@@ -22,6 +20,7 @@ const StyledModalBackdrop = styled(motion.div)`
     justify-content: center;
     align-items: center;
     opacity: 0;
+    cursor: pointer;
 `;
 
 const StyledModalWrapper = styled(motion.div)`
@@ -44,8 +43,8 @@ const StyledModalWrapper = styled(motion.div)`
 const StyledModal = styled(motion.div)`
     position: relative;
     width: 100%;
-    min-width: ${props => props.minWidth && props.minWidth+"px"};
-    max-width: ${props => props.maxWidth ? props.maxWidth+"px" : "100vw"};
+    min-width: ${props => props.minWidth && props.minWidth};
+    max-width: ${props => props.maxWidth ? props.maxWidth : "100vw"};
     height: 100%;
     min-height: 200px;
     max-height: calc(100vh - 100px);
@@ -59,6 +58,7 @@ const StyledModal = styled(motion.div)`
     overflow: hidden;
     @media ${props => props.theme.device.mobileL} {
         border-radius: ${props => props.fullScreenOnMobile && "0px"};
+        max-width: unset;
         min-width: unset;
         max-height: unset;
     };
@@ -146,6 +146,7 @@ const StyledCloseIcon = styled(FontAwesomeIcon)`
 `;
 
 const StyledModalContent = styled.div`
+    height: 100%;
     display: flex;
     flex-direction: column;
     overflow-y: ${props => props.overflow ? "auto" : "hidden"};
@@ -166,6 +167,7 @@ const Modal = ({
     minWidth,
     maxWidth,
     overflow,
+    minimize,
     children
 }) => {
 
@@ -182,7 +184,7 @@ const Modal = ({
         },[500])
     };
 
-    const clonedChildren = cloneElement(children, { handleAnnouncementModal  }); // If announce modal type is passed as prop, add additional "handleAnnouncementModal" function to modal children to handle modal state
+    const clonedChildren = cloneElement(children, { handleAnnouncementModal }); // If announce modal type is passed as prop, add additional "handleAnnouncementModal" function to modal children to handle modal state
 
     return (
         <AnimatePresence>
@@ -195,9 +197,19 @@ const Modal = ({
                         dragControls={dragControls}
                         dragListener={false}
                         dragMomentum={false}
-                        initial={{ y: 100, opacity: 0 }}
-                        animate={{ y: 0, opacity: 1 }} // This needs to be fixed
-                        exit={{ y: 100, opacity: 0 }}
+                        initial={{
+                            y: 100,
+                            opacity: 0
+                        }}
+                        animate={{
+                            y: minimize ? 100 : 0,
+                            opacity: minimize ? 0 : 1,
+                            pointerEvents: minimize ? 'none' : 'auto',
+                        }}
+                        exit={{
+                            y: 100,
+                            opacity: 0
+                        }}
                         transition={{
                             duration: 0.4,
                             type: "tween"

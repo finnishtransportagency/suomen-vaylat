@@ -10,6 +10,7 @@ const StyledContainer = styled.div`
     display: flex;
     justify-content: flex-end;
     align-items: end;
+    -webkit-align-items: flex-end;
 `;
 
 const ZoomMenu = () => {

@@ -25,6 +25,7 @@
     "opacity": "Opacity",
     "drawingtools": {
       "drawingtoolsButton": "Drawing tools",
+      "point": "Point",
       "circle": "Circle",
       "square": "Square",
       "box": "Box",
@@ -34,6 +35,7 @@
     },
     "measuringTools": {
       "measuringToolsButton": "Measuring tools",
+      "point": "Point",
       "circle": "Circle",
       "square": "Square",
       "box": "Box",
@@ -63,7 +65,12 @@
     "close": "Close",
     "additionalInfo": "Additional information",
     "gfiLocation": "Zoom to location",
-    "target": "Target"
+    "target": "Target",
+    "selectLocations": "Select locations",
+    "focusToLocations": "Focus to locations",
+    "noSelectedGfis": "No selected locations",
+    "draw": "Draw",
+    "drawSubtitle": "Select locations by using drawing tools"
   },
   "general": {
     "close": "Close",

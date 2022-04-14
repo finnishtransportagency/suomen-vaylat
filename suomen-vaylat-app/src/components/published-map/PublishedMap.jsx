@@ -19,10 +19,16 @@ import {
     setTagsWithLayers,
     setZoomRange,
     setGFILocations,
-    setGFIPoint,
     setStartState,
     resetGFILocations
 } from '../../state/slices/rpcSlice';
+
+import {
+    setIsFullScreen,
+    setGfiCroppingTypes,
+    setIsGfiOpen,
+    setMinimizeGfi
+} from '../../state/slices/uiSlice';
 import { updateLayers } from '../../utils/rpcUtil';
 import SvLoder from '../../components/loader/SvLoader';
 import './PublishedMap.scss';
@@ -55,7 +61,24 @@ const PublishedMap = () => {
     };
 
     useEffect(() => {
+
+        const handleFullScreenChange = () => {
+            if(document.webkitIsFullScreen) {
+                store.dispatch(setIsFullScreen(true));
+            } else if (document.fullscreenElement) {
+                store.dispatch(setIsFullScreen(true));
+            } else {
+                store.dispatch(setIsFullScreen(false));
+            }
+        };
+
         store.dispatch(setLoading(true));
+
+        document.addEventListener('fullscreenchange', handleFullScreenChange);
+        document.addEventListener('mozfullscreenchange', handleFullScreenChange);
+        document.addEventListener('webkitfullscreenchange', handleFullScreenChange);
+        document.addEventListener('msfullscreenchange', handleFullScreenChange);
+
         const iframe = document.getElementById('sv-iframe');
         var handlers = [];
 
@@ -85,6 +108,12 @@ const PublishedMap = () => {
                             const activeAnnouncements = data.data.filter(announcement => announcement.active && localStorageAnnouncements && !localStorageAnnouncements.includes(announcement.id));
                             store.dispatch(setActiveAnnouncements(activeAnnouncements));
                         }
+                    });
+                };
+
+                if (data.getGfiCroppingTypes) {
+                    channel.getGfiCroppingTypes(function (data) {
+                        store.dispatch(setGfiCroppingTypes(data));
                     });
                 };
 
@@ -147,12 +176,13 @@ const PublishedMap = () => {
                 if (data.MapClickedEvent) {
                     channel.handleEvent('MapClickedEvent', (data) => {
                         store.dispatch(resetGFILocations([]));
-                        store.dispatch(setGFIPoint(data));
                     });
                 };
 
                 if (data.DataForMapLocationEvent) {
                     channel.handleEvent('DataForMapLocationEvent', (data) => {
+                        store.dispatch(setMinimizeGfi(false));
+                        store.dispatch(setIsGfiOpen(true));
                         store.dispatch(setGFILocations(data));
                     });
                 };

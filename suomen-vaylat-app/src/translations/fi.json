@@ -25,6 +25,7 @@
     "opacity": "Läpinäkyvyys",
     "drawingtools": {
       "drawingtoolsButton": "Piirtotyökalut",
+      "point": "Piste",
       "circle": "Ympyrä",
       "square": "Neliö",
       "box": "Laatikko",
@@ -34,6 +35,7 @@
     },
     "measuringTools": {
       "measuringToolsButton": "Mittaustyökalut",
+      "point": "Piste",
       "circle": "Ympyrä",
       "square": "Neliö",
       "box": "Laatikko",
@@ -63,7 +65,12 @@
     "close": "Sulje",
     "additionalInfo": "Lisätiedot",
     "gfiLocation": "Lähennä kohteeseen",
-    "target": "Kohde"
+    "target": "Kohde",
+    "selectLocations": "Valitse kohteita",
+    "focusToLocations": "Tarkenna kohteisiin",
+    "noSelectedGfis": "Ei valittuja kohdetietoja",
+    "draw": "Piirrä",
+    "drawSubtitle": "Valitse kohteita käyttämällä piirtotyökaluja"
   },
   "general": {
     "close": "Sulje",

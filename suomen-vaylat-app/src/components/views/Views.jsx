@@ -8,8 +8,6 @@ import strings from '../../translations';
 import Moment from 'react-moment';
 import { v4 as uuidv4 } from 'uuid';
 
-import { isMobile } from '../../theme/theme';
-
 import {
     setIsSaveViewOpen,
     setWarning
@@ -227,7 +225,6 @@ const Views = () => {
     };
 
     const handleActivateView = (view) => {
-
             channel.getMapPosition(function () {
                 var routeSteps = [
                     {
@@ -256,11 +253,12 @@ const Views = () => {
 
             view.data.layers.forEach((layer) => {
                 channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, true]);
+                channel.postRequest('ChangeMapLayerOpacityRequest', [layer.id, layer.opacity]);
             });
 
             updateLayers(store, channel);
 
-            isMobile && store.dispatch(setIsSaveViewOpen(false));
+            store.dispatch(setIsSaveViewOpen(false));
 
     };
 
