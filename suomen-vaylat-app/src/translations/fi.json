@@ -70,7 +70,8 @@
     "focusToLocations": "Tarkenna kohteisiin",
     "noSelectedGfis": "Ei valittuja kohdetietoja",
     "draw": "Piirrä",
-    "drawSubtitle": "Valitse kohteita käyttämällä piirtotyökaluja"
+    "drawSubtitle": "Valitse kohteita käyttämällä piirtotyökaluja",
+    "download": "Lataa"
   },
   "general": {
     "close": "Sulje",

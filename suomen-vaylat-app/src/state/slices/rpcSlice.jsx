@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, current } from '@reduxjs/toolkit';
 import { Logger } from '../../utils/logger';
 
 const LOG = new Logger('RPCSlice');
@@ -42,6 +42,7 @@ const initialState = {
       y: 0
   },
   gfiPoint: null,
+  downloads: [],
   startState: {
       x: null,
       y: null,
@@ -575,6 +576,31 @@ export const rpcSlice = createSlice({
     setGFIPoint: (state, action) => {
         state.gfiPoint = action.payload;
     },
+
+    /**
+     * Set downloads.
+     * @method setDownloads
+     * @param {Object} state
+     * @param {Object} action
+     */
+    setDownloads: (state, action) => {
+        state.downloads.push(action.payload);
+    },
+
+    setDownloadActive: (state, action) => {
+        state.downloads.push(action.payload);
+    },
+
+    setDownloadFinished: (state, action) => {
+        let downloadIndex = state.downloads.findIndex(download => download.id === action.payload.id);
+        state.downloads[downloadIndex].url = 'https://www.google.com/';
+        state.downloads[downloadIndex].loading = false;
+    },
+
+    setDownloadRemove: (state, action) => {
+
+    },
+
     /**
      * Remove all selected layers.
      * @method removeAllSeelctedLayers
@@ -660,7 +686,10 @@ export const {
     setGFILocations,
     resetGFILocations,
     setGFIPoint,
-    setGfiCroppingArea,
+    setDownloads,
+    setDownloadActive,
+    setDownloadFinished,
+    setDownloadRemove,
     removeAllSelectedLayers,
     setStartState
 } = rpcSlice.actions;

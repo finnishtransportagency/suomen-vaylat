@@ -6,7 +6,8 @@ import {
     faLayerGroup,
     faPencilRuler,
     faSave,
-    faMapMarkedAlt
+    faMapMarkedAlt,
+    faDownload
 } from '@fortawesome/free-solid-svg-icons';
 import { ReactReduxContext } from 'react-redux';
 import styled from 'styled-components';
@@ -17,7 +18,8 @@ import {
     setIsSaveViewOpen,
     setIsGfiOpen,
     setActiveTool,
-    setMinimizeGfi
+    setMinimizeGfi,
+    setIsGfiDownloadOpen
 } from '../../../state/slices/uiSlice';
 
 import CircleButton from '../../circle-button/CircleButton';
@@ -68,7 +70,11 @@ const MenuBar = () => {
 
     const { store } = useContext(ReactReduxContext);
 
-    const { selectedLayers, channel } = useAppSelector((state) => state.rpc);
+    const {
+            selectedLayers,
+            downloads,
+            channel
+        } = useAppSelector((state) => state.rpc);
 
     const {
         isFullScreen,
@@ -77,6 +83,7 @@ const MenuBar = () => {
         isSearchOpen,
         isSaveViewOpen,
         isGfiOpen,
+        isGfiDownloadOpen,
         activeTool,
     } =  useAppSelector((state) => state.ui);
 
@@ -164,6 +171,16 @@ const MenuBar = () => {
                     toggleState={isSaveViewOpen}
                     clickAction={() => store.dispatch(setIsSaveViewOpen(!isSaveViewOpen))}
                 />
+                <CircleButton
+                    icon={faDownload}
+                    text={"Lataukset"}
+                    toggleState={isGfiDownloadOpen}
+                    clickAction={() => store.dispatch(setIsGfiDownloadOpen(!isGfiDownloadOpen))}
+                >
+                    <StyledLayerCount>
+                        {downloads.length}
+                    </StyledLayerCount>
+                </CircleButton>
                 <CircleButton
                     icon={isFullScreen ? faCompress : faExpand}
                     text={strings.tooltips.fullscreenButton}

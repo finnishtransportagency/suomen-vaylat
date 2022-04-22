@@ -314,14 +314,15 @@ export const FormattedGFI = ({ data }) => {
                                         <StyledInfoHeader>
                                             {strings.gfi.additionalInfo}
                                         </StyledInfoHeader>
-
-                                        <FontAwesomeIcon
-                                            icon={faAngleDown}
-                                            style={{
-                                                transform: isInfoOpen && 'rotate(180deg)',
-                                                marginLeft: '0.5rem'
+                                        <StyledInfoHeaderIconContainer
+                                            animate={{
+                                                transform: isInfoOpen ? 'rotate(180deg)' : 'rotate(0deg)',
                                             }}
-                                        />
+                                        >
+                                            <FontAwesomeIcon
+                                                icon={faAngleDown}
+                                            />
+                                        </StyledInfoHeaderIconContainer>
                                     </StyledInfoHeaderDiv>
                                 :
                                     null

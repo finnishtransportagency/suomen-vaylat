@@ -5,6 +5,8 @@ import {
     faSearchLocation,
     faPencilRuler,
     faDownload,
+    faFileArchive,
+    faFileDownload,
     faAngleLeft,
     faAngleRight
 } from '@fortawesome/free-solid-svg-icons';
@@ -17,9 +19,11 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { FreeMode, Controller } from "swiper";
 import { isMobile } from '../../theme/theme';
 import { resetGFILocations } from '../../state/slices/rpcSlice';
+import { setIsGfiDownloadOpen } from '../../state/slices/uiSlice';
 
 import { FormattedGFI } from './FormattedGFI';
-import GfiTools from './GfiTools';
+import GfiToolsMenu from './GfiToolsMenu';
+import GfiDownloadMenu from './GfiDownloadMenu';
 import CircleButton from '../circle-button/CircleButton';
 
 const StyledGfiContainer = styled.div`
@@ -200,7 +204,9 @@ const StyledGfiBackdrop = styled(motion.div)`
     cursor: pointer;
 `;
 
-export const GFIPopup = () => {
+export const GFIPopup = ({
+    handleGfiDownload
+}) => {
     const LAYER_ID = 'gfi-result-layer';
     const { store } = useContext(ReactReduxContext);
     const {
@@ -213,6 +219,7 @@ export const GFIPopup = () => {
     const [tabsContent, setTabsContent] = useState([]);
     const [geoJsonToShow, setGeoJsonToShow] = useState(null);
     const [isGfiToolsOpen, setIsGfiToolsOpen] = useState(false);
+    const [isGfiDownloadsOpen, setIsGfiDownloadsOpen] = useState(false);
 
     const [gfiTabsSwiper, setGfiTabsSwiper] = useState(null);
     const [gfiTabsSnapGridLength, setGfiTabsSnapGridLength] = useState(0);
@@ -293,7 +300,13 @@ export const GFIPopup = () => {
             layerId: 'download-tool-layer',
             remove: true
         }]);
+        setIsGfiDownloadsOpen(false);
         setIsGfiToolsOpen(!isGfiToolsOpen);
+    };
+
+    const handleGfiDownloadsMenu = () => {
+        setIsGfiToolsOpen(false);
+        setIsGfiDownloadsOpen(!isGfiDownloadsOpen);
     };
 
     useEffect(() => {
@@ -508,6 +521,14 @@ export const GFIPopup = () => {
                         clickAction={handleGfiToolsMenu}
                     />
                     <CircleButton
+                        icon={faFileDownload}
+                        text={strings.gfi.download}
+                        tooltipDirection={'left'}
+                        clickAction={handleGfiDownloadsMenu}
+                        //clickAction={() => store.dispatch(setIsGfiDownloadOpen(true))}
+                        disabled={!gfiLocations.length > 0}
+                    />
+                    <CircleButton
                         icon={faSearchLocation}
                         text={strings.gfi.focusToLocations}
                         tooltipDirection={'left'}
@@ -515,14 +536,6 @@ export const GFIPopup = () => {
                             handleOverlayGeometry(tabsContent[selectedTab].props.data);
                         }}
                         disabled={gfiLocations.length === 0}
-                    />
-                    <CircleButton
-                        icon={faDownload}
-                        text={"Lataa kohdetiedot (tulossa)"}
-                        tooltipDirection={'left'}
-                        clickAction={() => {
-                        }}
-                        disabled={true}
                     />
             </StyledButtonsContainer>
 
@@ -547,16 +560,44 @@ export const GFIPopup = () => {
                             x: "-100%"
                         }}
                     >
-                        <GfiTools
+                        <GfiToolsMenu
                             handleGfiToolsMenu={handleGfiToolsMenu}
                         />
-
                     </StyledGfiToolsContainer>
                 }
             </AnimatePresence>
             <AnimatePresence>
                 {
-                    isGfiToolsOpen &&
+                    isGfiDownloadsOpen &&
+                    <StyledGfiToolsContainer
+                        transition={{
+                            duration: 0.4,
+                            type: "tween"
+                        }}
+                        initial={{
+                            opacity: 0,
+                            x: "-100%"
+                        }}
+                        animate={{
+                            opacity: 1,
+                            x: 0
+                        }}
+                        exit={{
+                            opacity: 0,
+                            x: "-100%"
+                        }}
+                    >
+                        <GfiDownloadMenu
+                            handleGfiDownloadsMenu={handleGfiDownloadsMenu}
+                            handleGfiDownload={handleGfiDownload}
+                        />
+                    </StyledGfiToolsContainer>
+                }
+            </AnimatePresence>
+            <AnimatePresence>
+                {
+                    (isGfiDownloadsOpen ||
+                    isGfiToolsOpen) &&
                     <StyledGfiBackdrop
                         transition={{
                             duration: 0.4,
@@ -571,7 +612,10 @@ export const GFIPopup = () => {
                         exit={{
                             opacity: 0,
                         }}
-                        onClick={() => handleGfiToolsMenu()}
+                        onClick={() => {
+                            isGfiToolsOpen && handleGfiToolsMenu();
+                            isGfiDownloadsOpen && handleGfiDownloadsMenu();
+                        }}
                     />
                 }
             </AnimatePresence>

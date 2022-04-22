@@ -138,6 +138,7 @@ const StyledLayerCount = styled.div`
 const StyledSwiper = styled(Swiper)`
     margin-left: 0;
     margin-right: 0;
+    height: 100%;
     .swiper-slide {
         background-color: ${props => props.theme.colors.mainWhite};
         padding: 8px;

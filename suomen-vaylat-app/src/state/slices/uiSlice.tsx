@@ -18,6 +18,7 @@ const initialState = {
   isLegendOpen: false,
   isSaveViewOpen: false,
   isGfiOpen: false,
+  isGfiDownloadOpen: false,
   selectedGfiTool: null,
   activeTool: null,
   gfiLocations: null,
@@ -84,6 +85,9 @@ export const uiSlice = createSlice({
     setIsGfiOpen: (state, action) => {
       state.isGfiOpen = action.payload;
     },
+    setIsGfiDownloadOpen: (state, action) => {
+      state.isGfiDownloadOpen = action.payload;
+    },
     setSelectedGfiTool: (state, action) => {
       state.selectedGfiTool = action.payload;
     },
@@ -129,6 +133,7 @@ export const {
   setIsLegendOpen,
   setIsSaveViewOpen,
   setIsGfiOpen,
+  setIsGfiDownloadOpen,
   setSelectedGfiTool,
   setShareUrl,
   setIsDrawingToolsOpen,

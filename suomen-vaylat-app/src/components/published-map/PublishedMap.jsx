@@ -175,12 +175,30 @@ const PublishedMap = () => {
 
                 if (data.MapClickedEvent) {
                     channel.handleEvent('MapClickedEvent', (data) => {
+                        console.log(data);
                         store.dispatch(resetGFILocations([]));
                     });
                 };
 
                 if (data.DataForMapLocationEvent) {
                     channel.handleEvent('DataForMapLocationEvent', (data) => {
+
+                        const croppingArea = {
+                            type: "FeatureCollection",
+                            features: [
+                                {
+                                    type: "Feature",
+                                    geometry: {
+                                      type: "Point",
+                                      coordinates: [data.y, data.x]
+                                    },
+                                  }
+                            ],
+                            crs: "EPSG:3067"
+                        };
+
+                        data.gfiCroppingArea = croppingArea;
+
                         store.dispatch(setMinimizeGfi(false));
                         store.dispatch(setIsGfiOpen(true));
                         store.dispatch(setGFILocations(data));

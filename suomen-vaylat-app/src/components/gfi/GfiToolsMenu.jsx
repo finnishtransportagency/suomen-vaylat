@@ -112,7 +112,7 @@ const icons = {
     }
 };
 
-const GfiTools = ({
+const GfiToolsMenu = ({
     handleGfiToolsMenu
 }) => {
 
@@ -390,6 +390,7 @@ const GfiTools = ({
                     setLoading(true);
                     data.geojson && data.geojson.features && data.geojson.features.forEach(feature => {
                         feature.geometry &&  channel && channel.getFeaturesByGeoJSON([feature], (gfiData) => {
+                            console.log(gfiData);
                            store.dispatch(resetGFILocations([]));
                            gfiData.gfi && gfiData.gfi.forEach(gfi => {
                                 store.dispatch(setGFILocations(
@@ -481,7 +482,7 @@ const GfiTools = ({
             }
          </AnimatePresence>
         <StyledToolsContainer>
-        <StyledSubtitle>{strings.gfi.selectLocations}:</StyledSubtitle>
+            <StyledSubtitle>{strings.gfi.selectLocations}:</StyledSubtitle>
             <CircleButtonListItem
                 key={'cropping-type-draw'}
                 id={0}
@@ -628,4 +629,4 @@ const GfiTools = ({
     </StyledGfiToolContainer>
 };
 
-export default GfiTools;
+export default GfiToolsMenu;

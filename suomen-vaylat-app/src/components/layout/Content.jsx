@@ -2,6 +2,42 @@ import React, { useState, useContext, useEffect, useRef } from 'react';
 import { ReactReduxContext } from 'react-redux';
 import { useAppSelector } from '../../state/hooks';
 import styled from 'styled-components';
+import strings from '../../translations';
+import { v4 as uuidv4 } from 'uuid';
+
+import {
+    setSelectError,
+    clearLayerMetadata,
+    resetGFILocations,
+    setDownloadActive,
+    setDownloadFinished,
+    setDownloadRemove,
+} from '../../state/slices/rpcSlice';
+
+import {
+    setShareUrl,
+    setIsInfoOpen,
+    setIsUserGuideOpen,
+    setIsSaveViewOpen,
+    setIsGfiOpen,
+    setIsGfiDownloadOpen,
+    setMinimizeGfi,
+    setWarning,
+    setIsDownloadLinkModalOpen,
+} from '../../state/slices/uiSlice';
+
+import {
+    faShareAlt,
+    faInfoCircle,
+    faQuestion,
+    faBullhorn,
+    faExclamationCircle,
+    faMapMarkedAlt,
+    faSave,
+    faDownload
+} from '@fortawesome/free-solid-svg-icons';
+
+import Modal from '../modals/Modal';
 import AnnouncementsModal from '../announcements-modal/AnnouncementsModal';
 import LayerDownloadLinkButtonModal from "../menus/hierarchical-layerlist/LayerDownloadLinkButtonModal";
 import AppInfoModalContent from '../app-info-modal/AppInfoModalContent';
@@ -17,37 +53,9 @@ import ScaleBar from '../scalebar/ScaleBar';
 import { ShareWebSitePopup } from '../share-web-site/ShareWebSitePopup';
 import ZoomMenu from '../zoom-features/ZoomMenu';
 import WarningModalContent from '../warning/WarningModalContent';
-
-import strings from '../../translations';
-import {
-    setSelectError,
-    clearLayerMetadata,
-    resetGFILocations
-} from '../../state/slices/rpcSlice';
-import {
-    setShareUrl,
-    setIsInfoOpen,
-    setIsUserGuideOpen,
-    setIsSaveViewOpen,
-    setIsGfiOpen,
-    setMinimizeGfi,
-    setWarning,
-    setIsDownloadLinkModalOpen
-} from '../../state/slices/uiSlice';
-import { GFIPopup } from '../gfi/GFIPopup';
+import GFIPopup from '../gfi/GFIPopup';
+import GFIDownload from '../gfi/GFIDownload';
 import MetadataModal from '../metadata-modal/MetadataModal';
-
-import {
-    faShareAlt,
-    faInfoCircle,
-    faQuestion,
-    faBullhorn,
-    faExclamationCircle,
-    faMapMarkedAlt,
-    faSave
-} from '@fortawesome/free-solid-svg-icons';
-
-import Modal from '../modals/Modal';
 
 const StyledContent = styled.div`
     z-index: 1;
@@ -82,12 +90,21 @@ const StyledContentGrid = styled.div`
     };
 `;
 
+const StyledLayerNamesList = styled.ul`
+    padding-inline-start: 20px;
+`;
+
+const StyledLayerNamesListItem = styled.li`
+
+`;
+
 const Content = () => {
 
     const constraintsRef = useRef(null);
 
     const {
-        warnings
+        warnings,
+        setDownloads
     } = useAppSelector((state) => state.rpc);
 
     const {
@@ -96,6 +113,7 @@ const Content = () => {
         isUserGuideOpen,
         isSaveViewOpen,
         isGfiOpen,
+        isGfiDownloadOpen,
         minimizeGfi,
         warning
     } = useAppSelector((state) => state.ui);
@@ -103,10 +121,11 @@ const Content = () => {
     const search = useAppSelector((state) => state.search)
     const { store } = useContext(ReactReduxContext);
     const isShareOpen = shareUrl && shareUrl.length > 0 ? true : false;
-    const downloadLink = useAppSelector((state) => state.ui.downloadLink)
+    const downloadLink = useAppSelector((state) => state.ui.downloadLink);
 
     const announcements = useAppSelector((state) => state.rpc.activeAnnouncements);
     const metadata = useAppSelector((state) => state.rpc.layerMetadata);
+    const downloads = useAppSelector((state) => state.rpc.downloads);
 
     let {
         channel,
@@ -176,6 +195,10 @@ const Content = () => {
         channel.postRequest('DrawTools.StopDrawingRequest', ['gfi-selection-tool', true]);
     };
 
+    const handleCloseGfiDownloadModal = () => {
+        store.dispatch(setIsGfiDownloadOpen(false));
+    };
+
     const handleCloseSaveViewModal = () => {
         store.dispatch(setIsSaveViewOpen(false));
     };
@@ -184,6 +207,52 @@ const Content = () => {
         store.dispatch(setWarning(null));
     };
 
+    const handleGfiDownload = (format, layers) => {
+
+        //console.log(format);
+        //console.log(selectedLayers);
+
+        
+/*         let newArr = [...downloadFormats];
+        newArr[newArr.findIndex(item => item.id === format.id)].loading = true;
+        setDownloadFormats(newArr); */
+/* 
+        let layerIds = selectedLayers.map(layer => {
+            return layer.id;
+        }); */
+
+        //console.log(layerIds);
+/*         channel.downloadFeaturesByGeoJSON && channel.downloadFeaturesByGeoJSON([layerIds, geoJSON, 'shape-zip'], function (data) {
+            channel.log('downloadFeaturesByGeoJSON OK', data);
+        }, function(errors) { channel.log('downloadFeaturesByGeoJSON NOK', errors); } ); */
+
+        const newDownload = {
+            id: uuidv4(),
+            layers: layers,
+            title: <StyledLayerNamesList>
+                    {
+                        layers.map(layer => {
+                            return <StyledLayerNamesListItem>{layer.name}</StyledLayerNamesListItem>
+                        })
+                    }
+                </StyledLayerNamesList>,
+            loading: true,
+            date: Date.now(),
+            url: null
+        };
+
+        console.log(newDownload);
+
+       // store.dispatch(setDownloads(newDownload));
+        store.dispatch(setDownloadActive(newDownload));
+
+        store.dispatch(setIsGfiDownloadOpen(true));
+        //console.log(newDownload);
+        setTimeout(() => {
+            store.dispatch(setDownloadFinished(newDownload));
+        },[5000])
+    };
+    
     return (
         <>
             <StyledContent
@@ -230,9 +299,27 @@ const Content = () => {
                     minWidth={'600px'}
                     maxWidth={'calc(100vw - 100px)'}
                     minimize={minimizeGfi}
-                    //overflow={"auto"}
                 >
-                    <GFIPopup gfiLocations={gfiLocations}/>
+                    <GFIPopup 
+                        gfiLocations={gfiLocations}
+                        handleGfiDownload={handleGfiDownload}
+                    />
+                </Modal>
+                <Modal
+                    constraintsRef={constraintsRef} /* Reference div for modal drag boundaries */
+                    drag={false} /* Enable (true) or disable (false) drag */
+                    resize={false}
+                    backdrop={true} /* Is backdrop enabled (true) or disabled (false) */
+                    fullScreenOnMobile={true} /* Scale modal full width / height when using mobile device */
+                    titleIcon={faDownload} /* Use icon on title or null */
+                    title={"Lataukset"} /* Modal header title */
+                    type={"normal"} /* Modal type */
+                    closeAction={handleCloseGfiDownloadModal} /* Action when pressing modal close button or backdrop */
+                    isOpen={isGfiDownloadOpen} /* Modal state */
+                    id={null}
+                    minWidth={'600px'}
+                >
+                       <GFIDownload />
                 </Modal>
                 <Modal
                     constraintsRef={constraintsRef} /* Reference div for modal drag boundaries */
