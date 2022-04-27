@@ -166,21 +166,21 @@ const MenuBar = () => {
                     }}
                 />
                 <CircleButton
-                    icon={faSave}
-                    text={strings.saveView.saveView}
-                    toggleState={isSaveViewOpen}
-                    clickAction={() => store.dispatch(setIsSaveViewOpen(!isSaveViewOpen))}
-                />
-                <CircleButton
                     icon={faDownload}
                     text={"Lataukset"}
                     toggleState={isGfiDownloadOpen}
                     clickAction={() => store.dispatch(setIsGfiDownloadOpen(!isGfiDownloadOpen))}
                 >
                     <StyledLayerCount>
-                        {downloads.length}
+                        {downloads.filter(download => download.url !== null).length}
                     </StyledLayerCount>
                 </CircleButton>
+                <CircleButton
+                    icon={faSave}
+                    text={strings.saveView.saveView}
+                    toggleState={isSaveViewOpen}
+                    clickAction={() => store.dispatch(setIsSaveViewOpen(!isSaveViewOpen))}
+                />
                 <CircleButton
                     icon={isFullScreen ? faCompress : faExpand}
                     text={strings.tooltips.fullscreenButton}

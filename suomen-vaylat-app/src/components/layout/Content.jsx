@@ -207,27 +207,17 @@ const Content = () => {
         store.dispatch(setWarning(null));
     };
 
-    const handleGfiDownload = (format, layers) => {
+    const handleGfiDownload = (format, layers, croppingArea) => {
 
-        //console.log(format);
-        //console.log(selectedLayers);
-
-        
-/*         let newArr = [...downloadFormats];
-        newArr[newArr.findIndex(item => item.id === format.id)].loading = true;
-        setDownloadFormats(newArr); */
-/* 
-        let layerIds = selectedLayers.map(layer => {
+        let layerIds = layers.map(layer => {
             return layer.id;
-        }); */
+        });
 
-        //console.log(layerIds);
-/*         channel.downloadFeaturesByGeoJSON && channel.downloadFeaturesByGeoJSON([layerIds, geoJSON, 'shape-zip'], function (data) {
-            channel.log('downloadFeaturesByGeoJSON OK', data);
-        }, function(errors) { channel.log('downloadFeaturesByGeoJSON NOK', errors); } ); */
+        console.log(format);
 
-        const newDownload = {
+        var newDownload = {
             id: uuidv4(),
+            format: format.title,
             layers: layers,
             title: <StyledLayerNamesList>
                     {
@@ -241,16 +231,22 @@ const Content = () => {
             url: null
         };
 
-        console.log(newDownload);
-
-       // store.dispatch(setDownloads(newDownload));
+        store.dispatch(setIsGfiDownloadOpen(true));
         store.dispatch(setDownloadActive(newDownload));
 
-        store.dispatch(setIsGfiDownloadOpen(true));
-        //console.log(newDownload);
-        setTimeout(() => {
-            store.dispatch(setDownloadFinished(newDownload));
-        },[5000])
+        channel.downloadFeaturesByGeoJSON && channel.downloadFeaturesByGeoJSON([layerIds, croppingArea, format.format], function (data) {
+            //console.log('downloadFeaturesByGeoJSON OK', data);
+            var finishedDownload = {
+                ...newDownload,
+                url: data.url !== null && data.url,
+                fileSize: data.fileSize !== null && data.fileSize,
+                loading: false,
+            };
+            store.dispatch(setDownloadFinished(finishedDownload));
+            //console.log(finishedDownload);
+        }, function(errors) {
+            console.log('downloadFeaturesByGeoJSON NOK', errors);
+        });
     };
     
     return (

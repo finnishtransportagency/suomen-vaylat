@@ -32,6 +32,7 @@ const StyledListContainer = styled.div`
     display: flex;
     flex-direction: column;
     gap: 8px;
+    margin-bottom: 24px;
 `;
 
 
@@ -113,6 +114,7 @@ const GfiDownloadMenu = ({
     let {
         gfiLocations,
         allLayers,
+        gfiCroppingArea,
     } = useAppSelector((state) => state.rpc);
 
     const [selectedLayers, setSelectedLayers] = useState([]);
@@ -120,14 +122,14 @@ const GfiDownloadMenu = ({
     const [downloadFormats] = useState([
             {
                 id: "download-format-shape",
-                title: "shape",
+                title: ".SHP",
                 format: "shape-zip",
                 selected: false,
                 loading: false,
             },
             {
                 id: "download-format-csv",
-                title: "csv",
+                title: ".CSV",
                 format: "csv",
                 selected: false,
                 loading: false,
@@ -141,7 +143,7 @@ const GfiDownloadMenu = ({
             }, */
             {
                 id: "download-format-json",
-                title: "json",
+                title: ".JSON",
                 format: "application/json",
                 selected: false,
                 loading: false
@@ -242,7 +244,7 @@ const GfiDownloadMenu = ({
                                 animate={{
                                     backgroundColor: selectedLayers.length === 0 || format.loading ? '#DDD' : '#0064af'
                                 }}
-                                onClick={() => handleGfiDownload(format, selectedLayers)}
+                                onClick={() => handleGfiDownload(format, selectedLayers, gfiCroppingArea)}
                             >
                                 <FontAwesomeIcon
                                     icon={faDownload}

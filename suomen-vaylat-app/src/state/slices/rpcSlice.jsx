@@ -42,6 +42,7 @@ const initialState = {
       y: 0
   },
   gfiPoint: null,
+  gfiCroppingArea: null,
   downloads: [],
   startState: {
       x: null,
@@ -577,6 +578,12 @@ export const rpcSlice = createSlice({
         state.gfiPoint = action.payload;
     },
 
+
+    setGFICroppingArea: (state, action) => {
+        state.gfiCroppingArea = action.payload;
+    },
+
+
     /**
      * Set downloads.
      * @method setDownloads
@@ -593,12 +600,11 @@ export const rpcSlice = createSlice({
 
     setDownloadFinished: (state, action) => {
         let downloadIndex = state.downloads.findIndex(download => download.id === action.payload.id);
-        state.downloads[downloadIndex].url = 'https://www.google.com/';
-        state.downloads[downloadIndex].loading = false;
+        state.downloads[downloadIndex] = action.payload;
     },
 
     setDownloadRemove: (state, action) => {
-
+        state.downloads = state.downloads.filter(download => download.id !== action.payload);
     },
 
     /**
@@ -686,6 +692,7 @@ export const {
     setGFILocations,
     resetGFILocations,
     setGFIPoint,
+    setGFICroppingArea,
     setDownloads,
     setDownloadActive,
     setDownloadFinished,

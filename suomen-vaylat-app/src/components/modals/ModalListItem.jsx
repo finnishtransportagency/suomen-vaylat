@@ -1,8 +1,7 @@
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
-import CheckBox from "../checkbox/CheckBox";
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
 
 const StyledModalListItemContainer = styled(motion.div)`
     display: flex;
@@ -10,6 +9,7 @@ const StyledModalListItemContainer = styled(motion.div)`
 `;
 
 const StyledModalListItem = styled(motion.div)`
+    position: relative;
     width: 100%;
     z-index: 1;
     min-height: 56px;
@@ -28,7 +28,7 @@ const StyledModalListItem = styled(motion.div)`
     padding: 8px;
 `;
 
-const StyledModalListItemTitle = styled.p`
+const StyledModalListItemTitle = styled.div`
     user-select: none;
     max-width: 240px;
     color: ${props => props.theme.colors.mainWhite};
@@ -39,7 +39,7 @@ const StyledModalListItemTitle = styled.p`
     transition: all 0.1s ease-in;
 `;
 
-const StyledModalListItemSubTitle = styled.p`
+const StyledModalListItemSubTitle = styled.div`
     margin: 0;
     padding: 0px;
     font-size: 12px;
@@ -53,8 +53,20 @@ const StyledLeftContent = styled.div`
 `;
 
 const StyledRightContent = styled.div`
+    height: 100%;
     display: flex;
-    align-items: center;
+`;
+
+const StyledCloseButton = styled.div`
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    padding: 8px;
+    cursor: pointer;
+    svg {
+        font-size: 18px;
+        color: white;
+    }
 `;
 
 const StyleModalListItemIcon = styled.div`
@@ -90,6 +102,7 @@ const ModalListItem = ({
         checkedValue,
         icon,
         selectAction,
+        closeAction,
         removeAction,
         hoverInAction,
         hoverOutAction,
@@ -159,6 +172,16 @@ const ModalListItem = ({
 
             </StyledLeftContent>
             <StyledRightContent>
+                {
+                    closeAction && 
+                    <StyledCloseButton
+                        onClick={() => closeAction(id)}
+                        >
+                        <FontAwesomeIcon
+                            icon={faTimes}
+                        />
+                    </StyledCloseButton>
+                }
                 {/* <StyledSelectButton
                     //isOpen={isOpen}
                 >

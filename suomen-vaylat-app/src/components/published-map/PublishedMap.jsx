@@ -19,6 +19,7 @@ import {
     setTagsWithLayers,
     setZoomRange,
     setGFILocations,
+    setGFICroppingArea,
     setStartState,
     resetGFILocations
 } from '../../state/slices/rpcSlice';
@@ -183,7 +184,7 @@ const PublishedMap = () => {
                 if (data.DataForMapLocationEvent) {
                     channel.handleEvent('DataForMapLocationEvent', (data) => {
 
-                        const croppingArea = {
+/*                         const croppingArea = {
                             type: "FeatureCollection",
                             features: [
                                 {
@@ -195,10 +196,17 @@ const PublishedMap = () => {
                                   }
                             ],
                             crs: "EPSG:3067"
+                        }; */
+
+                        const croppingArea = {
+                            type: "Feature",
+                            geometry: {
+                                type: "Point",
+                                coordinates: [data.y, data.x]
+                            }
                         };
 
-                        data.gfiCroppingArea = croppingArea;
-
+                        store.dispatch(setGFICroppingArea(croppingArea));
                         store.dispatch(setMinimizeGfi(false));
                         store.dispatch(setIsGfiOpen(true));
                         store.dispatch(setGFILocations(data));

@@ -12,6 +12,8 @@ import { faDownload, faFile, faFileArchive } from '@fortawesome/free-solid-svg-i
 import ModalListItem from "../modals/ModalListItem";
 import CircleLoader from '../loader/CircleLoader';
 import CheckBox from "../checkbox/CheckBox";
+import store from '../../state/store';
+import { setDownloadRemove } from '../../state/slices/rpcSlice';
 
 
 const StyledDownloadsContainer = styled.div`
@@ -19,6 +21,7 @@ const StyledDownloadsContainer = styled.div`
     display: flex;
     flex-direction: column;
     gap: 8px;
+    overflow: auto;
 `;
 
 const StyledSubtitle = styled.div`
@@ -26,7 +29,31 @@ const StyledSubtitle = styled.div`
     justify-content: flex-start;
     color: ${props => props.theme.colors.mainColor1};
     padding: 10px 0px 10px 5px;
-    font-size: 15px;
+    font-size: 16px;
+    font-weight: bold;
+`;
+
+const StyledListItemTitleWrapper = styled.ul`
+    margin: 0;
+    li {
+        font-size: 14px;
+        font-weight: 300;
+        span {
+            font-size: 12px;
+            font-weight: bold;
+        }
+    };
+
+    p {
+        margin: 0
+    };
+
+    ul {
+        li {
+            font-size: 12px;
+            font-weight: bold;
+        };
+    };
 `;
 
 const StyledDownloadButton = styled.div`
@@ -56,37 +83,6 @@ const GFIDownload = () => {
 
     const [selectedLayers, setSelectedLayers] = useState([]);
 
-    const [downloadFormats, setDownloadFormats] = useState([
-            {
-                id: "download-format-shape",
-                title: "shape",
-                format: "shape-zip",
-                selected: false,
-                loading: false,
-            },
-            {
-                id: "download-format-csv",
-                title: "csv",
-                format: "csv",
-                selected: false,
-                loading: false,
-            },
-/*             {
-                id: "download-format-xls",
-                title: "excel",
-                format: "excel-zip",
-                selected: false,
-                loading: false,
-            }, */
-            {
-                id: "download-format-json",
-                title: "json",
-                format: "application/json",
-                selected: false,
-                loading: false
-            }
-    ]);
-
     const handleSelectLayer = (layer) => {
         if(selectedLayers.find(selectedLayer => selectedLayer.id === layer.id)){
             setSelectedLayers(selectedLayers.filter(selectedLayer => selectedLayer.id !== layer.id));
@@ -105,67 +101,64 @@ const GFIDownload = () => {
         setSelectedLayers(layers);
     },[allLayers, gfiLocations]);
 
-    const handleGfiDownload = (format) => {
-        console.log(format);
-        console.log(selectedLayers);
-        let newArr = [...downloadFormats];
-        newArr[newArr.findIndex(item => item.id === format.id)].loading = true;
-        setDownloadFormats(newArr);
-
-        let layerIds = selectedLayers.map(layer => {
-            return layer.id;
-        });
-
-        //console.log(layerIds);
-/*         channel.downloadFeaturesByGeoJSON && channel.downloadFeaturesByGeoJSON([layerIds, geoJSON, 'shape-zip'], function (data) {
-            channel.log('downloadFeaturesByGeoJSON OK', data);
-        }, function(errors) { channel.log('downloadFeaturesByGeoJSON NOK', errors); } ); */
-
-
-        setTimeout(() => {
-            let newArr2 = [...downloadFormats];
-            newArr2[newArr2.findIndex(item => item.id === format.id)].loading = false;
-            setDownloadFormats(newArr2);
-            console.log("DONE")
-        },[5000]);
-    };
-
     return (
-
         <StyledDownloadsContainer>
-        <StyledSubtitle>Valmistellaan ladattavaksi:</StyledSubtitle>
+            <StyledSubtitle>Prosessoidaan:</StyledSubtitle>
+                {
+                    downloads.filter(download => download.url === null).length > 0 ? 
+                    downloads.filter(download => download.url === null).map(download => {
+                            return <ModalListItem
+                                key={download.id}
+                                id={download.id}
+                                icon={faFileArchive}
+                                title={
+                                    <StyledListItemTitleWrapper>
+                                        <li>Formaatti: <span>{download.format && download.format}</span></li>
+                                        <li>Päivämäärä: <span><Moment format="DD.MM.YYYY HH:mm" tz="Europe/Helsinki">{download.date}</Moment></span></li> 
+                                        <li>Tiedoston koko: <span>{download.fileSize ? download.fileSize : "-"}</span></li>
+                                        <li>Sisältyvät tasot: </li>
+                                            <ul>
+                                                {
+                                                    download.layers.map(layer => {
+                                                        return <li key={'li_'+layer.id}>{layer.name}</li>
+                                                    })
+                                                }
+                                            </ul>
+                                    </StyledListItemTitleWrapper>
+                                }
+                                //subtitle={<Moment format="DD.MM.YYYY, HH:mm" tz="Europe/Helsinki">{download.date}</Moment>}
+                            >
+                            <CircleLoader />
+                        </ModalListItem>
+                        })
+                     : <div>-</div>
+                }
+            <StyledSubtitle>Valmis ladattavaksi:</StyledSubtitle>
             {
-                downloads.map(download => {
-                    return download.url === null && (
-                    <ModalListItem
+                downloads.filter(download => download.url !== null).map(download => {
+                    return <ModalListItem
                         key={download.id}
                         id={download.id} 
                         icon={faFileArchive}
-                        title={download.title}
-                        subtitle={<Moment format="DD.MM.YYYY, HH:mm" tz="Europe/Helsinki">{download.date}</Moment>}
-                        
-                    >
-                        <CircleLoader />
-                    </ModalListItem>
-                    )
-
-/*                     return format.loading && <div key={'active-download-format'+format.id}>
-                        <p>{format.title} -aineistoa valmistellaan, odota hetki</p>
-                        
-                    </div> */
-                })
-            }
-        <StyledSubtitle>Valmis ladattavaksi:</StyledSubtitle>
-        {
-                downloads.map(download => {
-                    return download.url !== null && (
-                    <ModalListItem
-                        key={download.id}
-                        id={download.id} 
-                        icon={faFileArchive}
-                        title={<Moment format="DD.MM.YYYY HH:mm" tz="Europe/Helsinki">{download.date}</Moment>}
-                        subtitle={download.title}
-                        
+                        title={
+                            <StyledListItemTitleWrapper>
+                                <li>Formaatti: <span>{download.format && download.format}</span></li>
+                                <li>Päivämäärä: <span><Moment format="DD.MM.YYYY HH:mm" tz="Europe/Helsinki">{download.date}</Moment></span></li> 
+                                <li>Tiedoston koko: <span>{download.fileSize ? download.fileSize : "-"}</span></li>
+                                <li>Sisältyvät tasot: </li>
+                                    <ul>
+                                        {
+                                            download.layers.map(layer => {
+                                                return <li key={'li_'+layer.id}>{layer.name}</li>
+                                            })
+                                        }
+                                    </ul>
+                                </StyledListItemTitleWrapper>
+                            }
+                        //subtitle={download.title}
+                        closeAction={() => {
+                            store.dispatch(setDownloadRemove(download.id));
+                        }}
                     >
                         <StyledDownloadButton
                             onClick={() => window.open(`${download.url}`,`_blank`)}
@@ -175,12 +168,6 @@ const GFIDownload = () => {
                             />
                         </StyledDownloadButton>
                     </ModalListItem>
-                    )
-
-/*                     return format.loading && <div key={'active-download-format'+format.id}>
-                        <p>{format.title} -aineistoa valmistellaan, odota hetki</p>
-                        
-                    </div> */
                 })
             }
         </StyledDownloadsContainer>

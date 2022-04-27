@@ -523,6 +523,7 @@ export const GFIPopup = ({
                     <CircleButton
                         icon={faFileDownload}
                         text={strings.gfi.download}
+                        toggleState={isGfiDownloadsOpen}
                         tooltipDirection={'left'}
                         clickAction={handleGfiDownloadsMenu}
                         //clickAction={() => store.dispatch(setIsGfiDownloadOpen(true))}

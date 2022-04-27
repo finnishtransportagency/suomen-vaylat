@@ -22,7 +22,8 @@ import { ReactComponent as SvLinestring } from '../../theme/icons/drawtools_line
 
 import {
     setGFILocations,
-    resetGFILocations
+    resetGFILocations,
+    setGFICroppingArea,
 } from '../../state/slices/rpcSlice';
 
 import {
@@ -311,73 +312,6 @@ const GfiToolsMenu = ({
         }
     };
 
-/*     useEffect(() => {
-        switch(selectedTool){
-        case 1:
-            setSelectedDownloads(
-                selectedFeatures.map(selectedFeature => {
-                    return {
-                         id: selectedFeature.id,
-                         uid: selectedFeature.properties.UID,
-                         title: "Kunta",
-                         subtitle: selectedFeature.properties.KUNTANIMI
-                     };
-                 })
-            );
-        break;
-        case 2:
-            setSelectedDownloads(
-                selectedFeatures.map(selectedFeature => {
-                    return {
-                         id: selectedFeature.id,
-                         uid: selectedFeature.properties.UID,
-                         title: "Maakunta",
-                         subtitle: selectedFeature.properties.NIMI
-                     };
-                 })
-            );
-        break;
-        case 3:
-            setSelectedDownloads(
-                selectedFeatures.map(selectedFeature => {
-                    return {
-                         id: selectedFeature.id,
-                         uid: selectedFeature.properties.UID,
-                         title: "Ruudukko 50km",
-                         subtitle: selectedFeature.properties.LEHTITUNNU
-                     };
-                 })
-            );
-        break;
-        case 4:
-            setSelectedDownloads(
-                selectedFeatures.map(selectedFeature => {
-                    return {
-                         id: selectedFeature.id,
-                         uid: selectedFeature.properties.UID,
-                         title: "Ruudukko 100km",
-                         subtitle: selectedFeature.properties.LEHTITUNNU
-                     };
-                 })
-            );
-        break;
-        case 5:
-            setSelectedDownloads(
-                selectedFeatures.map(selectedFeature => {
-                    return {
-                         id: selectedFeature.id,
-                         uid: selectedFeature.properties.UID,
-                         title: "Ruudukko 200km",
-                         subtitle: selectedFeature.properties.LEHTITUNNU
-                     };
-                 })
-            );
-        break;
-        default:
-        break;
-        }
-    },[selectedFeatures, selectedTool, store]); */
-
     useEffect(() => {
         const drawHandler = (data) => {
             if(data.isFinished && data.isFinished === true ){
@@ -388,9 +322,10 @@ const GfiToolsMenu = ({
                 if(data.id === 'gfi-selection-tool'){
                     store.dispatch(setMinimizeGfi(false));
                     setLoading(true);
+
                     data.geojson && data.geojson.features && data.geojson.features.forEach(feature => {
+                        data.geojson && store.dispatch(setGFICroppingArea(feature));
                         feature.geometry &&  channel && channel.getFeaturesByGeoJSON([feature], (gfiData) => {
-                            console.log(gfiData);
                            store.dispatch(resetGFILocations([]));
                            gfiData.gfi && gfiData.gfi.forEach(gfi => {
                                 store.dispatch(setGFILocations(
@@ -419,6 +354,7 @@ const GfiToolsMenu = ({
                             if(feature.geojson.features){
                                 setLoading(true);
                                 Object.values(feature.geojson.features).forEach(subfeature => {
+                                    data.geojson && store.dispatch(setGFICroppingArea(subfeature));
                                     subfeature.geometry && channel && channel.getFeaturesByGeoJSON([subfeature], (gfiData) => {
                                         store.dispatch(resetGFILocations([]));
                                         gfiData.gfi && gfiData.gfi.forEach(gfi => {
@@ -549,83 +485,6 @@ const GfiToolsMenu = ({
                 })
             }
         </StyledToolsContainer>
-{/*         <StyledSelectedDownloadsContainer>
-            <StyledSubtitle>Valitut rajaukset:</StyledSubtitle>
-            <AnimatePresence>
-                {
-                    selectedDownloads.map(item => {
-                        return <ModalListItem
-                            key={item.id}
-                            id={item.id}
-                            title={item.title}
-                            subtitle={item.subtitle}
-                            icon={faFile}
-                            removeAction={handleRemoveSelectedFeature}
-                            hoverInAction={handleHoverIn}
-                            hoverOutAction={handleHoverOut}
-                            data={item}
-                        />
-                    })
-                }
-            </AnimatePresence>
-                {
-                   selectedDownloads.length > 0 && <StyledDeleteAllDownloads
-                        onClick={() => selectedDownloads.length > 0 && handleDeleteAllSelectedFeatures()}
-                        disabled={selectedDownloads.length === 0}
-                    >
-                        <p>{"Poista kaikki valitut rajausalueet"}</p>
-                    </StyledDeleteAllDownloads>
-                }
-        </StyledSelectedDownloadsContainer> */}
-{/*         <StyledDownloadFormatSelectorContainer>
-
-            {selectedDownloads.length > 0 &&
-            <>
-            <StyledSubtitle>Karttatasot:</StyledSubtitle>
-                <ul>
-                    {
-                        selectedLayers.map(selectedLayer => {
-                            console.log(selectedLayer);
-                            return <li
-                                key={'download-tool-layer-'+selectedLayer.id}
-                                style={{display: 'flex', alignItems: 'center'}}
-                                >
-                                <label htmlFor={'download-tool-layer-input'+selectedLayer.id} style={{margin: 0}}>
-                                    {selectedLayer.name}
-                                </label>
-                                <input type="checkbox" id={'download-tool-layer-input'+selectedLayer.id} checked/>
-                            </li>
-                        })
-                    }
-                </ul>
-            </>
-            }
-        </StyledDownloadFormatSelectorContainer> */}
-{/*         <StyledDownloadFormatSelectorContainer>
-            <StyledSubtitle style={{display: 'flex', justifyContent: 'center'}}>
-                Lataa aineistot valituista karttatasoista
-            </StyledSubtitle>
-            <StyledDownloadFormats>
-                {
-                    downloadFormats.map(format => {
-                        return <StyledDownloadFormat
-                                    key={format.id}
-                                    whileHover={{
-                                        scale: 1.1,
-                                        transition: { duration: 0.2 },
-                                    }}
-                                    disabled={!selectedDownloads.length > 0}
-                                    onClick={() => console.log("SADDSA")}
-                                >
-                                    <FontAwesomeIcon
-                                        icon={faFileArchive}
-                                    />
-                            <p>{format.title.toUpperCase()}</p>
-                        </StyledDownloadFormat>
-                    })
-                }
-            </StyledDownloadFormats>
-        </StyledDownloadFormatSelectorContainer> */}
     </StyledGfiToolContainer>
 };
 

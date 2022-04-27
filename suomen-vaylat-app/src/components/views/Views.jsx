@@ -22,6 +22,9 @@ const StyledViewsContainer = styled.div`
     padding: 24px;
     max-height: 500px;
     overflow: auto;
+    @media ${props => props.theme.device.mobileL} {
+        max-height: unset;
+    };
 `;
 
 const StyledInfoTextContainer = styled.ul`
@@ -70,7 +73,8 @@ const StyledSubtitle = styled.div`
     justify-content: flex-start;
     color: ${props => props.theme.colors.mainColor1};
     padding: 10px 0px 10px 5px;
-    font-size: 15px;
+    font-size: 16px;
+    font-weight: bold;
 `;
 
 const StyledSavedViewContainer = styled(motion.div)`
@@ -282,7 +286,7 @@ const Views = () => {
                     <li>{strings.saveView.saveViewDescription1}</li>
                     <li>{strings.saveView.saveViewDescription2}</li>
                 </StyledInfoTextContainer>
-                <StyledSubtitle>{strings.saveView.savedViews}</StyledSubtitle>
+                <StyledSubtitle>{strings.saveView.savedViews}:</StyledSubtitle>
                 <StyledSavedViews>
                 <AnimatePresence>
                 {
