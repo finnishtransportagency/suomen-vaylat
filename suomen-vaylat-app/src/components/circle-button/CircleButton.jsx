@@ -14,6 +14,7 @@ const StyledCircleButton = styled(motion.button)`
     justify-content: center;
     align-items: center;
     background-color: ${ props =>
+        props.disabled ? "#ddd" :
         props.color === "secondaryColor7" ?
         props.theme.colors.secondaryColor7 : props.toggleState ?
         props.theme.colors.buttonActive : props.theme.colors.button
@@ -84,8 +85,12 @@ const CircleButton = ({
     return (
         <StyledCircleButton
             onClick={() => clickAction()}
-            onHoverStart={() => setHovered(true)}
-            onHoverEnd={() => setHovered(false)}
+            onHoverStart={() => {
+                setHovered(true);
+            }}
+            onHoverEnd={() => {
+                setHovered(false)
+            }}
             toggleState={toggleState}
             variants={variants}
             type={type}

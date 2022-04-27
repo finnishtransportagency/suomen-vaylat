@@ -17,7 +17,6 @@ phases:
         DOCKER_BUILDKIT=1 \
         docker build -t $IMAGE_REPO_URI:$LATEST_TAG \
         --target $ENVIRONMENT \
-        --build-arg PUBLIC_URL=/$BASE_PATH \
         --build-arg BASE_PATH=$BASE_PATH \
         --build-arg CODEARTIFACT_AUTH_TOKEN=$CODEARTIFACT_AUTH_TOKEN \
         .
@@ -26,7 +25,7 @@ phases:
     commands:
       - docker push $IMAGE_REPO_URI:$LATEST_TAG
       - docker push $IMAGE_REPO_URI:$IMAGE_TAG
-      - printf '[{"name":"'$CONTAINER_NAME'","imageUri":"'$IMAGE_REPO_URI':'$IMAGE_TAG'"}]' > imagedef.json
+      - printf '[{"name":"%s","imageUri":"%s"}]' "$CONTAINER_NAME" "$IMAGE_REPO_URI:$IMAGE_TAG"  > imagedef.json
 
 artifacts:
   files:

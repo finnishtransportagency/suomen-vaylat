@@ -18,12 +18,15 @@ const initialState = {
   isDrawingToolsOpen: false,
   isLegendOpen: false,
   isSaveViewOpen: false,
+  isGfiOpen: false,
+  selectedGfiTool: null,
   activeTool: null,
   gfiLocations: null,
   isSwipingDisabled: false,
   selectedMapLayersMenuTab: 0,
   selectedMapLayersMenuThemeIndex: null,
   minimizeGfi: false,
+  gfiCroppingTypes: [],
   warning: null
 };
 
@@ -82,6 +85,12 @@ export const uiSlice = createSlice({
     setIsSaveViewOpen: (state, action) => {
       state.isSaveViewOpen = action.payload;
     },
+    setIsGfiOpen: (state, action) => {
+      state.isGfiOpen = action.payload;
+    },
+    setSelectedGfiTool: (state, action) => {
+      state.selectedGfiTool = action.payload;
+    },
     setShareUrl: (state, action) => {
       state.shareUrl = action.payload;
     },
@@ -103,6 +112,9 @@ export const uiSlice = createSlice({
     setMinimizeGfi: (state, action) => {
       state.minimizeGfi = action.payload;
     },
+    setGfiCroppingTypes: (state, action) => {
+      state.gfiCroppingTypes = action.payload;
+    },
     setWarning: (state, action) => {
       state.warning = action.payload;
     }
@@ -120,6 +132,8 @@ export const {
   setIsUserGuideOpen,
   setIsLegendOpen,
   setIsSaveViewOpen,
+  setIsGfiOpen,
+  setSelectedGfiTool,
   setShareUrl,
   setIsDrawingToolsOpen,
   setActiveTool,
@@ -129,6 +143,7 @@ export const {
   setSelectedMapLayersMenuTab,
   setSelectedMapLayersMenuThemeIndex,
   setMinimizeGfi,
+  setGfiCroppingTypes,
   setWarning
 } = uiSlice.actions;
 

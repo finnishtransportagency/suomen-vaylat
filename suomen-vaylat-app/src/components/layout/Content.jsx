@@ -29,10 +29,12 @@ import {
     setIsInfoOpen,
     setIsUserGuideOpen,
     setIsSaveViewOpen,
+    setIsGfiOpen,
     setMinimizeGfi,
     setWarning,
     setIsDownloadLinkModalOpen, setIsDownloadModalOpen
 } from '../../state/slices/uiSlice';
+
 import { GFIPopup } from '../infobox/GFIPopup';
 import GFIPopupDownloadModal from '../infobox/GFIPopupDownloadModal';
 import MetadataModal from '../metadata-modal/MetadataModal';
@@ -95,6 +97,7 @@ const Content = () => {
         isInfoOpen,
         isUserGuideOpen,
         isSaveViewOpen,
+        isGfiOpen,
         minimizeGfi,
         warning,
         isDownloadModalOpen
@@ -107,7 +110,7 @@ const Content = () => {
 
     const announcements = useAppSelector((state) => state.rpc.activeAnnouncements);
     const metadata = useAppSelector((state) => state.rpc.layerMetadata);
-    
+
     let {
         channel,
         gfiLocations
@@ -169,8 +172,11 @@ const Content = () => {
 
     const handleCloseGFIModal = () => {
         store.dispatch(resetGFILocations([]));
+        store.dispatch(setIsGfiOpen(false));
         store.dispatch(setMinimizeGfi(false));
         channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [null, null, 'gfi-result-layer']);
+        channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [null, null, 'download-tool-layer']);
+        channel.postRequest('DrawTools.StopDrawingRequest', ['gfi-selection-tool', true]);
     };
 
     const handleCloseGFIDownloadModal = () => {
@@ -227,10 +233,11 @@ const Content = () => {
                     title={strings.gfi.title} /* Modal header title */
                     type={"gfi"} /* Modal type */
                     closeAction={handleCloseGFIModal} /* Action when pressing modal close button or backdrop */
-                    isOpen={gfiLocations.length > 0 && minimizeGfi === false} /* Modal state */
+                    isOpen={isGfiOpen} /* Modal state */
                     id={null}
-                    minWidth={600}
-                    maxWidth={1200}
+                    minWidth={'600px'}
+                    maxWidth={'calc(100vw - 100px)'}
+                    minimize={minimizeGfi}
                     //overflow={"auto"}
                 >
                     <GFIPopup gfiLocations={gfiLocations}/>
@@ -295,7 +302,7 @@ const Content = () => {
                     closeAction={handleCloseMetadataModal} /* Action when pressing modal close button or backdrop */
                     isOpen={metadata.data !== null} /* Modal state */
                     id={null}
-                    maxWidth={800}
+                    maxWidth={'800px'}
                     overflow={"auto"}
                 >
                     <MetadataModal metadata={metadata}/>
@@ -339,9 +346,9 @@ const Content = () => {
                 </Modal>
                 <Modal
                     constraintsRef={constraintsRef} /* Reference div for modal drag boundaries */
-                    drag={true} /* Enable (true) or disable (false) drag */
+                    drag={false} /* Enable (true) or disable (false) drag */
                     resize={false}
-                    backdrop={false} /* Is backdrop enabled (true) or disabled (false) */
+                    backdrop={true} /* Is backdrop enabled (true) or disabled (false) */
                     fullScreenOnMobile={true} /* Scale modal full width / height when using mobile device */
                     titleIcon={faSave} /* Use icon on title or null */
                     title={strings.saveView.saveView} /* Modal header title */
@@ -349,7 +356,7 @@ const Content = () => {
                     closeAction={handleCloseSaveViewModal} /* Action when pressing modal close button or backdrop */
                     isOpen={isSaveViewOpen} /* Modal state */
                     id={null}
-                    minWidth={600}
+                    minWidth={'600px'}
                 >
                     <Views />
                 </Modal>

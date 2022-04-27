@@ -234,10 +234,12 @@ const Search = () => {
     };
 
     const handleVKMSearch = (params) => {
+        removeMarkersAndFeatures();
         setIsSearching(true);
         setVkmError(null);
 
-        let requestData = [
+
+        const requestData = [
             params.hasOwnProperty('vkmTienumero') && parseInt(params.vkmTienumero),
             params.hasOwnProperty('vkmTieosa') && parseInt(params.vkmTieosa),
             params.hasOwnProperty('vkmAjorata') && parseInt(params.vkmAjorata),
@@ -258,7 +260,7 @@ const Search = () => {
         let featureStyle = VKMGeoJsonStyles['track'];
         let hover = VKMGeoJsonHoverStyles['track'];
 
-        channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [null, null, vectorLayerId + '_vkm_track']);
+        removeMarkersAndFeatures();
 
         const value = {
             ratanumero: data.hasOwnProperty('ratanumero') ? data.ratanumero : searchValue.ratanumero || '',
@@ -289,7 +291,7 @@ const Search = () => {
             params.hasOwnProperty('ratametri') && params.ratametri !== ''
         ) {
             let requestData = [
-                params.hasOwnProperty('ratanumero') && parseInt(params.ratanumero),
+                params.hasOwnProperty('ratanumero') && params.ratanumero,
                 params.hasOwnProperty('ratakilometri') && parseInt(params.ratakilometri),
                 params.hasOwnProperty('ratametri') && parseInt(params.ratametri),
             ];
@@ -316,7 +318,7 @@ const Search = () => {
     };
 
     const markerIds = [markerId];
-    
+
     const vectorLayerIds = [
         vectorLayerId + '_vkm_tie',
         vectorLayerId + '_vkm_osa',
@@ -551,7 +553,7 @@ const Search = () => {
                                         handleMetadataSearch(searchValue);
                                     break;
                                     default:
-                                    
+
                                     break;
                                 }
                             }}

@@ -11,22 +11,12 @@ import { HandleSharedWebSiteLink } from './components/share-web-site/HandleShare
 import { history, store } from './state/store';
 import Theme from './theme/theme';
 
-import { setIsFullScreen } from './state/slices/uiSlice';
-
 const StyledAppContainer = styled.div`
     width: 100%;
     height: var(--app-height);
     margin: 0;
     padding: 0;
 `;
-
-document.addEventListener('fullscreenchange', (event) => {
-    if (document.fullscreenElement) {
-        store.dispatch(setIsFullScreen(true));
-    } else {
-        store.dispatch(setIsFullScreen(false));
-    }
-});
 
 /**
  * Top class for the application.
@@ -36,8 +26,6 @@ document.addEventListener('fullscreenchange', (event) => {
  * @extends {React.Component}
  */
 const App = () => {
-
-
 
     let routerPrefix = '/';
     if (process.env.REACT_APP_ROUTER_PREFIX) {

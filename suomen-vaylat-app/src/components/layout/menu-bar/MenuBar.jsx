@@ -5,7 +5,8 @@ import {
     faExpand,
     faLayerGroup,
     faPencilRuler,
-    faSave
+    faSave,
+    faMapMarkedAlt
 } from '@fortawesome/free-solid-svg-icons';
 import { ReactReduxContext } from 'react-redux';
 import styled from 'styled-components';
@@ -14,7 +15,9 @@ import {
     setIsDrawingToolsOpen,
     setIsSideMenuOpen,
     setIsSaveViewOpen,
-    setActiveTool
+    setIsGfiOpen,
+    setActiveTool,
+    setMinimizeGfi
 } from '../../../state/slices/uiSlice';
 
 import CircleButton from '../../circle-button/CircleButton';
@@ -73,26 +76,42 @@ const MenuBar = () => {
         isDrawingToolsOpen,
         isSearchOpen,
         isSaveViewOpen,
+        isGfiOpen,
         activeTool,
     } =  useAppSelector((state) => state.ui);
 
     const handleFullScreen = () => {
+        var elem = document.documentElement;
+        /* View in fullscreen */
+
+        function openFullscreen() {
+
+          if (elem.requestFullscreen) {
+            elem.requestFullscreen();
+          } else if (elem.webkitRequestFullscreen) { /* Safari */
+            elem.webkitRequestFullscreen();
+          } else if (elem.msRequestFullscreen) { /* IE11 */
+            elem.msRequestFullscreen();
+          } else if (elem.mozRequestFullScreen) {
+            elem.mozRequestFullScreen();
+          }
+        }
+
+        /* Close fullscreen */
+        function closeFullscreen() {
+          if (document.exitFullscreen) {
+            document.exitFullscreen();
+          } else if (document.webkitExitFullscreen) { /* Safari */
+            document.webkitExitFullscreen();
+          } else if (document.msExitFullscreen) { /* IE11 */
+            document.msExitFullscreen();
+          }
+        }
+
         if(isFullScreen){
-            if (document.exitFullscreen) {
-                document.exitFullscreen();
-            } else if (document.webkitExitFullscreen) { /* Safari */
-                document.webkitExitFullscreen();
-            } else if (document.msExitFullscreen) { /* IE11 */
-                document.msExitFullscreen();
-            }
+            closeFullscreen();
         } else {
-            if (!document.fullscreenElement) {
-                document.documentElement.requestFullscreen();
-            } else if (document.webkitRequestFullscreen) { /* Safari */
-                document.webkitRequestFullscreen();
-            } else if (document.msRequestFullscreen) { /* IE11 */
-                document.msRequestFullscreen();
-            }
+            openFullscreen();
         }
     };
 
@@ -130,6 +149,15 @@ const MenuBar = () => {
                     />
                     <DrawingTools isOpen={isDrawingToolsOpen}/>
                 </StyledMapToolsContainer>
+                <CircleButton
+                    icon={faMapMarkedAlt}
+                    text={"Kohdetiedot"}
+                    toggleState={isGfiOpen}
+                    clickAction={() => {
+                        store.dispatch(setIsGfiOpen(!isGfiOpen));
+                        isGfiOpen && store.dispatch(setMinimizeGfi(false));
+                    }}
+                />
                 <CircleButton
                     icon={faSave}
                     text={strings.saveView.saveView}
