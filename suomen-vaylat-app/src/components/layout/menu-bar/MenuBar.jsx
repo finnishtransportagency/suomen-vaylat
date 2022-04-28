@@ -158,7 +158,7 @@ const MenuBar = () => {
                 </StyledMapToolsContainer>
                 <CircleButton
                     icon={faMapMarkedAlt}
-                    text={"Kohdetiedot"}
+                    text={strings.gfi.title}
                     toggleState={isGfiOpen}
                     clickAction={() => {
                         store.dispatch(setIsGfiOpen(!isGfiOpen));
@@ -167,7 +167,7 @@ const MenuBar = () => {
                 />
                 <CircleButton
                     icon={faDownload}
-                    text={"Lataukset"}
+                    text={strings.downloads.downloads}
                     toggleState={isGfiDownloadOpen}
                     clickAction={() => store.dispatch(setIsGfiDownloadOpen(!isGfiDownloadOpen))}
                 >

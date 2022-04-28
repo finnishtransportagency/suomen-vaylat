@@ -73,6 +73,17 @@
     "drawSubtitle": "Select locations by using drawing tools",
     "download": "Download"
   },
+  "downloads": {
+    "downloads": "Downloads",
+    "processing": "Processing",
+    "noProcessingDownloads": "No processing downloads",
+    "readyForDownload": "Ready for download",
+    "noDownloads": "No downloads",
+    "format": "Format",
+    "date": "Date",
+    "fileSize": "File size",
+    "layers": "Layers"
+  },
   "general": {
     "close": "Stänga",
     "warning": "Obs!",

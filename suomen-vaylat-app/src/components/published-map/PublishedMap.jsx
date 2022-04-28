@@ -48,6 +48,22 @@ const StyledIframe = styled.iframe`
     border: none;
 `;
 
+const StyledLoaderWrapper = styled.div`
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 999;
+    height: 100%;
+    max-width: 200px;
+    max-height: 200px;
+    transform: translate(-50%, -50%);
+  svg {
+    width: 100%;
+    height: 100%;
+    fill: none;
+  }
+`;
+
 const ANNOUNCEMENTS_LOCALSTORAGE = 'oskari-announcements';
 
 const PublishedMap = () => {
@@ -293,9 +309,11 @@ const PublishedMap = () => {
 
     return (
         <StyledPublishedMap>
-            {loading ? (
-                <SvLoder />
-            ) : null}
+            {loading && 
+                <StyledLoaderWrapper>
+                    <SvLoder />
+                </StyledLoaderWrapper>
+            }
             <StyledIframe id='sv-iframe' title='iframe' src={process.env.REACT_APP_PUBLISHED_MAP_URL + '&lang=' + lang}
                 allow='geolocation' onLoad={() => hideSpinner()}>
             </StyledIframe>

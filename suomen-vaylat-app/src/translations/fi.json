@@ -73,6 +73,17 @@
     "drawSubtitle": "Valitse kohteita käyttämällä piirtotyökaluja",
     "download": "Lataa"
   },
+  "downloads": {
+    "downloads": "Lataukset",
+    "processing": "Prosessoidaan",
+    "noProcessingDownloads": "Ei prosessoitavia latauksia",
+    "readyForDownload": "Valmiit lataukset",
+    "noDownloads": "Ei latauksia",
+    "format": "Tiedostomuoto",
+    "date": "Päivämäärä",
+    "fileSize": "Tiedostokoko",
+    "layers": "Tasot"
+  },
   "general": {
     "close": "Sulje",
     "warning": "Varoitus!",

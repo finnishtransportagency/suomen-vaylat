@@ -92,6 +92,22 @@ const StyledCloseButton = styled.div`
     }
 `;
 
+const StyledLoaderWrapper = styled.div`
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 999;
+    height: 100%;
+    max-width: 200px;
+    max-height: 200px;
+    transform: translate(-50%, -50%);
+  svg {
+    width: 100%;
+    height: 100%;
+    fill: none;
+  }
+`;
+
 const icons = {
    0: {
         icon: faPencilRuler,
@@ -413,7 +429,9 @@ const GfiToolsMenu = ({
                         opacity: 0,
                     }}
                 >
-                <SVLoader />
+                    <StyledLoaderWrapper>
+                        <SVLoader />
+                    </StyledLoaderWrapper>
             </StyledLoadingOverlay>
             }
          </AnimatePresence>

@@ -162,7 +162,22 @@ const StyledHideSearchResultsButton = styled.div`
     font-size: 23px;
       color:  ${props => props.theme.colors.mainColor1}
     };
+`;
 
+const StyledLoaderWrapper = styled.div`
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 999;
+    height: 100%;
+    max-width: 200px;
+    max-height: 200px;
+    transform: translate(-50%, -50%);
+  svg {
+    width: 100%;
+    height: 100%;
+    fill: none;
+  }
 `;
 
 const Search = () => {
@@ -511,7 +526,9 @@ const Search = () => {
                                     {
                                         searchTypes[searchType].content
                                     }
-                                </StyledSelectedSearchMethod> : <SvLoder />
+                                </StyledSelectedSearchMethod> : <StyledLoaderWrapper>
+                                    <SvLoder />
+                                </StyledLoaderWrapper>
                         }
                     </StyledLeftContentWrapper>
                     {

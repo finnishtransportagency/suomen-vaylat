@@ -11,6 +11,7 @@ import { faDownload, faFile, faFileArchive } from '@fortawesome/free-solid-svg-i
 
 import ModalListItem from "../modals/ModalListItem";
 import CircleLoader from '../loader/CircleLoader';
+import SvLoader from '../loader/SvLoader';
 import CheckBox from "../checkbox/CheckBox";
 import store from '../../state/store';
 import { setDownloadRemove } from '../../state/slices/rpcSlice';
@@ -71,6 +72,17 @@ const StyledDownloadButton = styled.div`
     };
 `;
 
+const StyledLoaderWrapper = styled.div`
+    z-index: 999;
+    height: 100%;
+    max-width: 40px;
+  svg {
+    width: 100%;
+    height: 100%;
+    fill: none;
+  }
+`;
+
 const GFIDownload = () => {
 
 
@@ -103,7 +115,7 @@ const GFIDownload = () => {
 
     return (
         <StyledDownloadsContainer>
-            <StyledSubtitle>Prosessoidaan:</StyledSubtitle>
+            <StyledSubtitle>{strings.downloads.processing}:</StyledSubtitle>
                 {
                     downloads.filter(download => download.url === null).length > 0 ? 
                     downloads.filter(download => download.url === null).map(download => {
@@ -113,10 +125,10 @@ const GFIDownload = () => {
                                 icon={faFileArchive}
                                 title={
                                     <StyledListItemTitleWrapper>
-                                        <li>Formaatti: <span>{download.format && download.format}</span></li>
-                                        <li>Päivämäärä: <span><Moment format="DD.MM.YYYY HH:mm" tz="Europe/Helsinki">{download.date}</Moment></span></li> 
-                                        <li>Tiedoston koko: <span>{download.fileSize ? download.fileSize : "-"}</span></li>
-                                        <li>Sisältyvät tasot: </li>
+                                        <li>{strings.downloads.format}: <span>{download.format && download.format}</span></li>
+                                        <li>{strings.downloads.date}: <span><Moment format="DD.MM.YYYY HH:mm" tz="Europe/Helsinki">{download.date}</Moment></span></li> 
+                                        <li>{strings.downloads.fileSize}: <span>{download.fileSize ? download.fileSize : "-"}</span></li>
+                                        <li>{strings.downloads.layers}: </li>
                                             <ul>
                                                 {
                                                     download.layers.map(layer => {
@@ -128,13 +140,17 @@ const GFIDownload = () => {
                                 }
                                 //subtitle={<Moment format="DD.MM.YYYY, HH:mm" tz="Europe/Helsinki">{download.date}</Moment>}
                             >
-                            <CircleLoader />
+                                <StyledLoaderWrapper>
+                                    <SvLoader />
+                                </StyledLoaderWrapper>
+
                         </ModalListItem>
                         })
-                     : <div>-</div>
+                     : <p>{strings.downloads.noProcessingDownloads}</p>
                 }
-            <StyledSubtitle>Valmis ladattavaksi:</StyledSubtitle>
+            <StyledSubtitle><p>{strings.downloads.readyForDownload}</p>:</StyledSubtitle>
             {
+                downloads.filter(download => download.url !== null).length > 0 ?
                 downloads.filter(download => download.url !== null).map(download => {
                     return <ModalListItem
                         key={download.id}
@@ -142,10 +158,10 @@ const GFIDownload = () => {
                         icon={faFileArchive}
                         title={
                             <StyledListItemTitleWrapper>
-                                <li>Formaatti: <span>{download.format && download.format}</span></li>
-                                <li>Päivämäärä: <span><Moment format="DD.MM.YYYY HH:mm" tz="Europe/Helsinki">{download.date}</Moment></span></li> 
-                                <li>Tiedoston koko: <span>{download.fileSize ? download.fileSize : "-"}</span></li>
-                                <li>Sisältyvät tasot: </li>
+                                <li>{strings.downloads.format}: <span>{download.format && download.format}</span></li>
+                                <li>{strings.downloads.date}: <span><Moment format="DD.MM.YYYY HH:mm" tz="Europe/Helsinki">{download.date}</Moment></span></li> 
+                                <li>{strings.downloads.fileSize}: <span>{download.fileSize ? download.fileSize : "-"}</span></li>
+                                <li>{strings.downloads.layers}: </li>
                                     <ul>
                                         {
                                             download.layers.map(layer => {
@@ -169,6 +185,7 @@ const GFIDownload = () => {
                         </StyledDownloadButton>
                     </ModalListItem>
                 })
+            : <p>{strings.downloads.noDownloads}</p>
             }
         </StyledDownloadsContainer>
     )

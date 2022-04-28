@@ -94,6 +94,7 @@ const StyledModalHeader = styled.div`
 const StyledModalTitle = styled.div`
     display: flex;
     align-items: center;
+    user-select: none;
     p {
         margin: 0px;
         font-size: 20px;

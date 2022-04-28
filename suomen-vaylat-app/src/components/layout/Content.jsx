@@ -308,7 +308,7 @@ const Content = () => {
                     backdrop={true} /* Is backdrop enabled (true) or disabled (false) */
                     fullScreenOnMobile={true} /* Scale modal full width / height when using mobile device */
                     titleIcon={faDownload} /* Use icon on title or null */
-                    title={"Lataukset"} /* Modal header title */
+                    title={strings.downloads.downloads} /* Modal header title */
                     type={"normal"} /* Modal type */
                     closeAction={handleCloseGfiDownloadModal} /* Action when pressing modal close button or backdrop */
                     isOpen={isGfiDownloadOpen} /* Modal state */

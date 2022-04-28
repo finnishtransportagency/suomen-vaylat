@@ -9,6 +9,7 @@ import {
     faTimes,
     faDownload,
     faFile,
+    faFileArchive
 } from '@fortawesome/free-solid-svg-icons';
 
 import ModalListItem from "../modals/ModalListItem";
@@ -104,6 +105,22 @@ const StyledDownloadFormat = styled(motion.button)`
     };
 `;
 
+const StyledLoaderWrapper = styled.div`
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 999;
+    height: 100%;
+    max-width: 200px;
+    max-height: 200px;
+    transform: translate(-50%, -50%);
+  svg {
+    width: 100%;
+    height: 100%;
+    fill: none;
+  }
+`;
+
 const GfiDownloadMenu = ({
     handleGfiDownloadsMenu,
     handleGfiDownload,
@@ -134,13 +151,13 @@ const GfiDownloadMenu = ({
                 selected: false,
                 loading: false,
             },
-/*             {
+            {
                 id: "download-format-xls",
-                title: "excel",
-                format: "excel-zip",
+                title: ".XLS",
+                format: "excel2007",
                 selected: false,
                 loading: false,
-            }, */
+            },
             {
                 id: "download-format-json",
                 title: ".JSON",
@@ -194,7 +211,9 @@ const GfiDownloadMenu = ({
                         opacity: 0,
                     }}
                 >
-                <SVLoader />
+                    <StyledLoaderWrapper>
+                        <SVLoader />
+                    </StyledLoaderWrapper>
             </StyledLoadingOverlay>
             }
         </AnimatePresence>
@@ -224,7 +243,7 @@ const GfiDownloadMenu = ({
             }
         </StyledListContainer>
         <StyledSubtitle style={{display: 'flex', justifyContent: 'center'}}>
-                Valitse tiedostomuoto:
+                Tiedostomuoto:
         </StyledSubtitle>
         <StyledDownloadFormats>
             {
@@ -247,7 +266,7 @@ const GfiDownloadMenu = ({
                                 onClick={() => handleGfiDownload(format, selectedLayers, gfiCroppingArea)}
                             >
                                 <FontAwesomeIcon
-                                    icon={faDownload}
+                                    icon={faFileArchive}
                                 />
                                 <p>
                                     {format.title.toUpperCase()}
