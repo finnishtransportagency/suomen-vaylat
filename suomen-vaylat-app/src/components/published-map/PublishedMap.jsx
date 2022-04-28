@@ -192,7 +192,6 @@ const PublishedMap = () => {
 
                 if (data.MapClickedEvent) {
                     channel.handleEvent('MapClickedEvent', (data) => {
-                        console.log(data);
                         store.dispatch(resetGFILocations([]));
                     });
                 };

@@ -213,8 +213,6 @@ const Content = () => {
             return layer.id;
         });
 
-        console.log(format);
-
         var newDownload = {
             id: uuidv4(),
             format: format.title,
@@ -235,7 +233,6 @@ const Content = () => {
         store.dispatch(setDownloadActive(newDownload));
 
         channel.downloadFeaturesByGeoJSON && channel.downloadFeaturesByGeoJSON([layerIds, croppingArea, format.format], function (data) {
-            //console.log('downloadFeaturesByGeoJSON OK', data);
             var finishedDownload = {
                 ...newDownload,
                 url: data.url !== null && data.url,
@@ -243,7 +240,6 @@ const Content = () => {
                 loading: false,
             };
             store.dispatch(setDownloadFinished(finishedDownload));
-            //console.log(finishedDownload);
         }, function(errors) {
             console.log('downloadFeaturesByGeoJSON NOK', errors);
         });

@@ -157,7 +157,6 @@ const ZoomBar = ({
                             icon={faSearchMinus}
                             text={strings.tooltips.zoomOut}
                             clickAction={() => {
-                                currentZoomLevel > 0 && console.log("CHECK");
                                 currentZoomLevel > 0 && store.dispatch(setZoomOut())
                             }}
                             tooltipDirection={"left"}
