@@ -1,21 +1,17 @@
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { motion} from 'framer-motion';
 import strings from '../../translations';
 import Moment from 'react-moment';
 
 import { useAppSelector } from '../../state/hooks';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faDownload, faFile, faFileArchive } from '@fortawesome/free-solid-svg-icons';
+import { faDownload, faFileArchive } from '@fortawesome/free-solid-svg-icons';
 
 import ModalListItem from "../modals/ModalListItem";
-import CircleLoader from '../loader/CircleLoader';
 import SvLoader from '../loader/SvLoader';
-import CheckBox from "../checkbox/CheckBox";
 import store from '../../state/store';
 import { setDownloadRemove } from '../../state/slices/rpcSlice';
-
 
 const StyledDownloadsContainer = styled.div`
     padding: 16px;
@@ -84,7 +80,6 @@ const StyledLoaderWrapper = styled.div`
 `;
 
 const GFIDownload = () => {
-
 
     let {
         channel,
