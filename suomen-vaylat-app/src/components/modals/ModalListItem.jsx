@@ -182,24 +182,11 @@ const ModalListItem = ({
                         />
                     </StyledCloseButton>
                 }
-                {/* <StyledSelectButton
-                    //isOpen={isOpen}
-                >
-                </StyledSelectButton> */}
             </StyledRightContent>
         </StyledModalListItem>
         {
             children && children
         }
-{/*         {
-            type === 'selectable' && <CheckBox
-                type='checkbox'
-                id={id}
-                //setCheckedCheckboxes={setCheckedCheckboxes}
-                checked={checkedValue}
-            />
-        } */}
-
     </StyledModalListItemContainer>
 };
 

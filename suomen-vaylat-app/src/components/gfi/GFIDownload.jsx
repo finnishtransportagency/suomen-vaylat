@@ -82,31 +82,8 @@ const StyledLoaderWrapper = styled.div`
 const GFIDownload = () => {
 
     let {
-        channel,
-        gfiLocations,
-        allLayers,
         downloads
     } = useAppSelector((state) => state.rpc);
-
-    const [selectedLayers, setSelectedLayers] = useState([]);
-
-    const handleSelectLayer = (layer) => {
-        if(selectedLayers.find(selectedLayer => selectedLayer.id === layer.id)){
-            setSelectedLayers(selectedLayers.filter(selectedLayer => selectedLayer.id !== layer.id));
-        } else {
-            setSelectedLayers([
-                ...selectedLayers, layer
-            ]);
-        }
-    };
-
-    useEffect(() => {
-        const layers = gfiLocations && gfiLocations.length > 0 && gfiLocations.map((location, index) => {
-            const layer = allLayers.find(layer => layer.id === location.layerId);
-            return layer;
-        });
-        setSelectedLayers(layers);
-    },[allLayers, gfiLocations]);
 
     return (
         <StyledDownloadsContainer>
@@ -133,7 +110,6 @@ const GFIDownload = () => {
                                             </ul>
                                     </StyledListItemTitleWrapper>
                                 }
-                                //subtitle={<Moment format="DD.MM.YYYY, HH:mm" tz="Europe/Helsinki">{download.date}</Moment>}
                             >
                                 <StyledLoaderWrapper>
                                     <SvLoader />
@@ -166,7 +142,6 @@ const GFIDownload = () => {
                                     </ul>
                                 </StyledListItemTitleWrapper>
                             }
-                        //subtitle={download.title}
                         closeAction={() => {
                             store.dispatch(setDownloadRemove(download.id));
                         }}

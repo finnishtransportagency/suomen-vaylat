@@ -199,20 +199,6 @@ const PublishedMap = () => {
                 if (data.DataForMapLocationEvent) {
                     channel.handleEvent('DataForMapLocationEvent', (data) => {
 
-/*                         const croppingArea = {
-                            type: "FeatureCollection",
-                            features: [
-                                {
-                                    type: "Feature",
-                                    geometry: {
-                                      type: "Point",
-                                      coordinates: [data.y, data.x]
-                                    },
-                                  }
-                            ],
-                            crs: "EPSG:3067"
-                        }; */
-
                         const croppingArea = {
                             type: "Feature",
                             geometry: {
