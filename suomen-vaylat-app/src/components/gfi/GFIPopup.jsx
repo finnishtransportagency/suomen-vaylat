@@ -4,11 +4,9 @@ import {
     faTimes,
     faSearchLocation,
     faPencilRuler,
-    faDownload,
-    faFileArchive,
     faFileDownload,
     faAngleLeft,
-    faAngleRight
+    faAngleRight,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ReactReduxContext } from 'react-redux';
@@ -16,11 +14,9 @@ import styled from 'styled-components';
 import strings from '../../translations';
 import { useAppSelector } from '../../state/hooks';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { FreeMode, Controller } from "swiper";
+import { FreeMode, Controller } from 'swiper';
 import { isMobile } from '../../theme/theme';
 import { resetGFILocations } from '../../state/slices/rpcSlice';
-import { setIsGfiDownloadOpen } from '../../state/slices/uiSlice';
-
 import { FormattedGFI } from './FormattedGFI';
 import GfiToolsMenu from './GfiToolsMenu';
 import GfiDownloadMenu from './GfiDownloadMenu';
@@ -37,8 +33,8 @@ const StyledGfiContainer = styled.div`
 const StyledTabSwiperContainer = styled.div`
     z-index: 2;
     display: flex;
-    background-color: ${props => props.theme.colors.mainColor1};
-    box-shadow: 2px 2px 4px 0px rgba(0,0,0,0.20);
+    background-color: ${(props) => props.theme.colors.mainColor1};
+    box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.2);
     border-bottom: 2px solid white;
 `;
 
@@ -49,9 +45,9 @@ const StyledTabName = styled.p`
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-    @media ${props => props.theme.device.mobileL} {
+    @media ${(props) => props.theme.device.mobileL} {
         font-size: 14px;
-    };
+    } ;
 `;
 
 const StyledNoGfisContainer = styled.div`
@@ -62,16 +58,16 @@ const StyledNoGfisContainer = styled.div`
     justify-content: center;
     align-items: center;
     font-size: 18px;
-    color: ${props => props.theme.colors.mainColor1};
+    color: ${(props) => props.theme.colors.mainColor1};
 `;
 
 const StyledSwiper = styled(Swiper)`
     .swiper-slide {
         height: 1px;
-    };
+    }
     .swiper-slide-active {
-        height: auto
-    };
+        height: auto;
+    }
 `;
 
 const StyledTabsSwiper = styled(Swiper)`
@@ -80,10 +76,9 @@ const StyledTabsSwiper = styled(Swiper)`
     padding-top: 8px;
     .swiper-slide {
         max-width: 200px;
-    };
+    }
     .swiper-slide-active {
-
-    };
+    }
 `;
 
 const StyledSwiperNavigatorButton = styled.div`
@@ -92,7 +87,7 @@ const StyledSwiperNavigatorButton = styled.div`
     justify-content: center;
     align-items: center;
     width: 60px;
-    background-color: ${props => props.theme.colors.mainColor1};
+    background-color: ${(props) => props.theme.colors.mainColor1};
     svg {
         font-size: 20px;
         color: white;
@@ -105,11 +100,17 @@ const StyledGfiTab = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;
-    color:  ${props => props.selected ? props.theme.colors.mainColor1 : props.theme.colors.mainWhite};
-    background-color: ${props => props.selected ?  props.theme.colors.mainWhite : props.theme.colors.mainColor1};
-    border-left: 2px solid ${props => props.theme.colors.mainWhite};
-    border-top: 2px solid ${props => props.theme.colors.mainWhite};
-    border-right: 2px solid ${props => props.theme.colors.mainWhite};
+    color: ${(props) =>
+        props.selected
+            ? props.theme.colors.mainColor1
+            : props.theme.colors.mainWhite};
+    background-color: ${(props) =>
+        props.selected
+            ? props.theme.colors.mainWhite
+            : props.theme.colors.mainColor1};
+    border-left: 2px solid ${(props) => props.theme.colors.mainWhite};
+    border-top: 2px solid ${(props) => props.theme.colors.mainWhite};
+    border-right: 2px solid ${(props) => props.theme.colors.mainWhite};
     padding: 8px 16px 8px 8px;
     border-radius: 4px 4px 0px 0px;
 `;
@@ -123,9 +124,9 @@ const StyledTabCloseButton = styled.div`
 const StyledTabContent = styled.div`
     overflow: auto;
     div.contentWrapper-infobox {
-        @media ${props => props.theme.device.mobileL} {
+        @media ${(props) => props.theme.device.mobileL} {
             font-size: 14px;
-        };
+        }
     }
 
     hr.infoboxLine {
@@ -138,7 +139,6 @@ const StyledTabContent = styled.div`
     }
 
     td:nth-child(even) {
-
     }
 
     td:nth-child(odd) {
@@ -170,7 +170,7 @@ const StyledSelectedTabTitle = styled.div`
     text-align: center;
     padding: 8px;
     p {
-        color: ${props => props.theme.colors.mainColor1};
+        color: ${(props) => props.theme.colors.mainColor1};
         margin: 0;
         font-size: 16px;
         font-weight: 600;
@@ -204,16 +204,12 @@ const StyledGfiBackdrop = styled(motion.div)`
     cursor: pointer;
 `;
 
-export const GFIPopup = ({
-    handleGfiDownload
-}) => {
+export const GFIPopup = ({ handleGfiDownload }) => {
     const LAYER_ID = 'gfi-result-layer';
     const { store } = useContext(ReactReduxContext);
-    const {
-        channel,
-        allLayers,
-        gfiLocations
-    } = useAppSelector((state) => state.rpc);
+    const { channel, allLayers, gfiLocations } = useAppSelector(
+        (state) => state.rpc
+    );
 
     const [selectedTab, setSelectedTab] = useState(0);
     const [tabsContent, setTabsContent] = useState([]);
@@ -228,78 +224,98 @@ export const GFIPopup = ({
 
     useEffect(() => {
         const mapResults = gfiLocations.map((location) => {
-            const layers = allLayers.filter(layer => layer.id === location.layerId);
-            const layerIds = (layers && layers.length > 0) ? layers[0].id : location.layerId;
+            const layers = allLayers.filter(
+                (layer) => layer.id === location.layerId
+            );
+            const layerIds =
+                layers && layers.length > 0 ? layers[0].id : location.layerId;
             let content;
             if (location.type === 'text') {
-                content = location.content
-                const popupContent = <div dangerouslySetInnerHTML={{__html: content}}></div> ;
-                var contentWrapper = <div>{popupContent}</div> ;
+                content = location.content;
+                const popupContent = (
+                    <div dangerouslySetInnerHTML={{ __html: content }}></div>
+                );
+                var contentWrapper = <div>{popupContent}</div>;
                 const contentDiv = <div id={layerIds}>{contentWrapper}</div>;
                 return contentDiv;
-            }
-            else if (location.type === 'geojson') {
-                return <FormattedGFI
-                    id={layerIds}
-                    data={location.content}
-                    type='geoJson'
-                />;
+            } else if (location.type === 'geojson') {
+                return (
+                    <FormattedGFI
+                        id={layerIds}
+                        data={location.content}
+                        type="geoJson"
+                    />
+                );
             }
             return null;
         });
 
         setTabsContent(mapResults);
-    },[allLayers, gfiLocations, selectedTab]);
+    }, [allLayers, gfiLocations, selectedTab]);
 
     useEffect(() => {
-        tabsContent[selectedTab] !== undefined
-        && tabsContent[selectedTab].props.type === 'geoJson'
-        && setGeoJsonToShow(tabsContent[selectedTab].props.data);
-    },[selectedTab, tabsContent]);
+        tabsContent[selectedTab] !== undefined &&
+            tabsContent[selectedTab].props.type === 'geoJson' &&
+            setGeoJsonToShow(tabsContent[selectedTab].props.data);
+    }, [selectedTab, tabsContent]);
 
     const handleOverlayGeometry = (geoJson) => {
-        channel && channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [null, null, LAYER_ID]);
+        channel &&
+            channel.postRequest(
+                'MapModulePlugin.RemoveFeaturesFromMapRequest',
+                [null, null, LAYER_ID]
+            );
         if (geoJson !== null) {
-            channel && channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest',
-            [geoJson, {
-                layerId: LAYER_ID,
-                centerTo : true,
-                cursor: 'pointer',
-                featureStyle: {
-                    fill: {
-                        color: 'rgba(10, 140, 247, 0.3)'
+            channel &&
+                channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', [
+                    geoJson,
+                    {
+                        layerId: LAYER_ID,
+                        centerTo: true,
+                        cursor: 'pointer',
+                        featureStyle: {
+                            fill: {
+                                color: 'rgba(10, 140, 247, 0.3)',
+                            },
+                            stroke: {
+                                color: 'rgba(10, 140, 247, 0.3)',
+                                width: 5,
+                                lineDash: 'solid',
+                                lineCap: 'round',
+                                lineJoin: 'round',
+                                area: {
+                                    color: 'rgba(100, 255, 95, 0.7)',
+                                    width: 8,
+                                    lineJoin: 'round',
+                                },
+                            },
+                            image: {
+                                shape: 5,
+                                size: 3,
+                                fill: {
+                                    color: 'rgba(100, 255, 95, 0.7)',
+                                },
+                            },
+                        },
                     },
-                    stroke: {
-                        color: 'rgba(10, 140, 247, 0.3)',
-                        width: 5,
-                        lineDash: 'solid',
-                        lineCap: 'round',
-                        lineJoin: 'round',
-                        area: {
-                            color: 'rgba(100, 255, 95, 0.7)',
-                            width: 8,
-                            lineJoin: 'round'
-                        }
-                    },
-                    image: {
-                        shape: 5,
-                        size: 3,
-                        fill: {
-                            color: 'rgba(100, 255, 95, 0.7)'
-                        }
-                    }
-                }
-            }]);
+                ]);
         }
     };
 
     const handleGfiToolsMenu = () => {
-        channel && channel.postRequest('DrawTools.StopDrawingRequest', ['gfi-selection-tool', true]);
+        channel &&
+            channel.postRequest('DrawTools.StopDrawingRequest', [
+                'gfi-selection-tool',
+                true,
+            ]);
 
-        isGfiToolsOpen && channel.postRequest('VectorLayerRequest', [{
-            layerId: 'download-tool-layer',
-            remove: true
-        }]);
+        isGfiToolsOpen &&
+            channel.postRequest('VectorLayerRequest', [
+                {
+                    layerId: 'download-tool-layer',
+                    remove: true,
+                },
+            ]);
         setIsGfiDownloadsOpen(false);
         setIsGfiToolsOpen(!isGfiToolsOpen);
     };
@@ -310,70 +326,83 @@ export const GFIPopup = ({
     };
 
     useEffect(() => {
-        channel && channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [null, null, LAYER_ID]);
+        channel &&
+            channel.postRequest(
+                'MapModulePlugin.RemoveFeaturesFromMapRequest',
+                [null, null, LAYER_ID]
+            );
 
         if (geoJsonToShow !== null) {
-            channel && channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest',
-                [geoJsonToShow, {
-                    layerId: LAYER_ID,
-                    cursor: 'pointer',
-                    featureStyle: {
-                        fill: {
-                            color: 'rgba(10, 140, 247, 0.3)'
-                        },
-                        stroke: {
-                            color: 'rgba(10, 140, 247, 0.3)',
-                            width: 5,
-                            lineDash: 'solid',
-                            lineCap: 'round',
-                            lineJoin: 'round',
-                            area: {
-                                color: 'rgba(100, 255, 95, 0.7)',
-                                width: 4,
-                                lineJoin: 'round'
-                            }
-                        },
-                        image: {
-                            size: 3,
-                            fill: {
-                                color: 'rgba(100, 255, 95, 0.7)'
-                            }
-                        },
-                    },
-                    hover: {
+            channel &&
+                channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', [
+                    geoJsonToShow,
+                    {
+                        layerId: LAYER_ID,
+                        cursor: 'pointer',
                         featureStyle: {
                             fill: {
-                                color: 'rgba(0, 99, 175, 0.7)'
+                                color: 'rgba(10, 140, 247, 0.3)',
                             },
                             stroke: {
-                                color: '#0064af',
-                                width: 2
+                                color: 'rgba(10, 140, 247, 0.3)',
+                                width: 5,
+                                lineDash: 'solid',
+                                lineCap: 'round',
+                                lineJoin: 'round',
+                                area: {
+                                    color: 'rgba(100, 255, 95, 0.7)',
+                                    width: 4,
+                                    lineJoin: 'round',
+                                },
                             },
-                            text: {
+                            image: {
+                                size: 3,
                                 fill: {
-                                    color: '#ffffff'
+                                    color: 'rgba(100, 255, 95, 0.7)',
+                                },
+                            },
+                        },
+                        hover: {
+                            featureStyle: {
+                                fill: {
+                                    color: 'rgba(0, 99, 175, 0.7)',
                                 },
                                 stroke: {
                                     color: '#0064af',
-                                    width: 5
+                                    width: 2,
                                 },
-                                font: 'bold 16px Arial',
-                                textAlign: 'center',
-                                textBaseline: 'middle',
-                                offsetX: 0,
-                                offsetY: 0
+                                text: {
+                                    fill: {
+                                        color: '#ffffff',
+                                    },
+                                    stroke: {
+                                        color: '#0064af',
+                                        width: 5,
+                                    },
+                                    font: 'bold 16px Arial',
+                                    textAlign: 'center',
+                                    textBaseline: 'middle',
+                                    offsetX: 0,
+                                    offsetY: 0,
+                                },
                             },
                         },
-                    }
-                }]);
+                    },
+                ]);
         }
-    },[channel, geoJsonToShow]);
+    }, [channel, geoJsonToShow]);
 
     const closeTab = (index, id) => {
-        var filteredLocations = gfiLocations.filter(gfi => gfi.layerId !== id);
+        var filteredLocations = gfiLocations.filter(
+            (gfi) => gfi.layerId !== id
+        );
         store.dispatch(resetGFILocations(filteredLocations));
-        channel && channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [null, null, LAYER_ID]);
-        if(index > 0){
+        channel &&
+            channel.postRequest(
+                'MapModulePlugin.RemoveFeaturesFromMapRequest',
+                [null, null, LAYER_ID]
+            );
+        if (index > 0) {
             setSelectedTab(index - 1);
         } else {
             setSelectedTab(0);
@@ -382,210 +411,233 @@ export const GFIPopup = ({
 
     useEffect(() => {
         gfiInputEl.current.swiper.slideTo(selectedTab);
-    },[selectedTab]);
+    }, [selectedTab]);
 
     return (
         <StyledGfiContainer>
-            {
-                tabsContent.length > 0 &&
+            {tabsContent.length > 0 && (
                 <StyledTabSwiperContainer>
-                    {
-                        !isMobile && gfiTabsSnapGridLength > 1 && <StyledSwiperNavigatorButton
+                    {!isMobile && gfiTabsSnapGridLength > 1 && (
+                        <StyledSwiperNavigatorButton
                             onClick={() => {
                                 gfiTabsSwiper.slidePrev();
                             }}
                         >
-                            <FontAwesomeIcon
-                                icon={faAngleLeft}
-                            />
+                            <FontAwesomeIcon icon={faAngleLeft} />
                         </StyledSwiperNavigatorButton>
-                    }
+                    )}
 
                     <StyledTabsSwiper
-                        id={"gfi-tabs-swiper"}
+                        id={'gfi-tabs-swiper'}
                         spaceBetween={4}
-                        slidesPerView={"auto"}
+                        slidesPerView={'auto'}
                         freeMode={true}
                         modules={[Controller, FreeMode]}
                         onSwiper={setGfiTabsSwiper}
                         controller={{ control: gfiTabsSwiper }}
-                        onSnapGridLengthChange={e => setGfiTabsSnapGridLength(e.snapGrid.length)}
-                    >
-                    {
-                            tabsContent.map((tabContent, index) => {
-                                return (
-                                    <SwiperSlide
-                                        id={'tab_' + index}
-                                        key={'tab_' + index}
-                                    >
-                                        <StyledGfiTab
-
-                                            onClick={() => setSelectedTab(index)}
-                                            selected={selectedTab === index}
-                                        >
-                                            <StyledTabName>
-                                                {
-                                                    allLayers.filter(layer => layer.id === tabContent.props.id).length > 0 ? allLayers.filter(layer => layer.id === tabContent.props.id)[0].name : tabContent.props.id
-                                                }
-                                            </StyledTabName>
-                                            <StyledTabCloseButton
-                                                onClick={e => {
-                                                    e.stopPropagation();
-                                                    closeTab(index, tabContent.props.id);
-                                                }}
-                                            >
-                                                <FontAwesomeIcon
-                                                    icon={faTimes}
-                                                />
-                                            </StyledTabCloseButton>
-                                        </StyledGfiTab>
-                                    </SwiperSlide>
-                                )})
+                        onSnapGridLengthChange={(e) =>
+                            setGfiTabsSnapGridLength(e.snapGrid.length)
                         }
+                    >
+                        {tabsContent.map((tabContent, index) => {
+                            return (
+                                <SwiperSlide
+                                    id={'tab_' + index}
+                                    key={'tab_' + index}
+                                >
+                                    <StyledGfiTab
+                                        onClick={() => setSelectedTab(index)}
+                                        selected={selectedTab === index}
+                                    >
+                                        <StyledTabName>
+                                            {allLayers.filter(
+                                                (layer) =>
+                                                    layer.id ===
+                                                    tabContent.props.id
+                                            ).length > 0
+                                                ? allLayers.filter(
+                                                      (layer) =>
+                                                          layer.id ===
+                                                          tabContent.props.id
+                                                  )[0].name
+                                                : tabContent.props.id}
+                                        </StyledTabName>
+                                        <StyledTabCloseButton
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                closeTab(
+                                                    index,
+                                                    tabContent.props.id
+                                                );
+                                            }}
+                                        >
+                                            <FontAwesomeIcon icon={faTimes} />
+                                        </StyledTabCloseButton>
+                                    </StyledGfiTab>
+                                </SwiperSlide>
+                            );
+                        })}
                     </StyledTabsSwiper>
-                    {
-                        !isMobile && gfiTabsSnapGridLength > 1 && <StyledSwiperNavigatorButton
+                    {!isMobile && gfiTabsSnapGridLength > 1 && (
+                        <StyledSwiperNavigatorButton
                             onClick={() => {
                                 gfiTabsSwiper.slideNext();
                             }}
                         >
-                            <FontAwesomeIcon
-                                icon={faAngleRight}
-                            />
+                            <FontAwesomeIcon icon={faAngleRight} />
                         </StyledSwiperNavigatorButton>
-                    }
+                    )}
                 </StyledTabSwiperContainer>
-            }
+            )}
             <StyledTabContent>
-                {
-                    tabsContent[selectedTab] === undefined &&
-                        <StyledNoGfisContainer>{strings.gfi.noSelectedGfis}</StyledNoGfisContainer>
-                }
+                {tabsContent[selectedTab] === undefined && (
+                    <StyledNoGfisContainer>
+                        {strings.gfi.noSelectedGfis}
+                    </StyledNoGfisContainer>
+                )}
                 <StyledSwiper
                     ref={gfiInputEl}
-                    id={"gfi-swiper"}
-                     onSlideChange={e => {
-                         setSelectedTab(e.activeIndex);
+                    id={'gfi-swiper'}
+                    onSlideChange={(e) => {
+                        setSelectedTab(e.activeIndex);
                     }}
                     tabIndex={selectedTab}
                     allowTouchMove={false} // Disable swiping
                     speed={300}
                 >
-                {
-                    gfiLocations.map((location) => {
-                        const layers = allLayers.filter(layer => layer.id === location.layerId);
-                        const layerIds = (layers && layers.length > 0) ? layers[0].id : location.layerId;
+                    {gfiLocations.map((location) => {
+                        const layers = allLayers.filter(
+                            (layer) => layer.id === location.layerId
+                        );
+                        const layerIds =
+                            layers && layers.length > 0
+                                ? layers[0].id
+                                : location.layerId;
                         const name = layers.length > 0 && layers[0].name;
                         let content;
                         if (location.type === 'text') {
-                            content = location.content
-                            const popupContent = <div dangerouslySetInnerHTML={{__html: content}}></div> ;
-                            var contentWrapper = <div>{popupContent}</div> ;
-                            const contentDiv = <div id={layerIds}>{contentWrapper}</div>;
+                            content = location.content;
+                            const popupContent = (
+                                <div
+                                    dangerouslySetInnerHTML={{
+                                        __html: content,
+                                    }}
+                                ></div>
+                            );
+                            var contentWrapper = <div>{popupContent}</div>;
+                            const contentDiv = (
+                                <div id={layerIds}>{contentWrapper}</div>
+                            );
                             return contentDiv;
-                        }
-                        else if (location.type === 'geojson') {
+                        } else if (location.type === 'geojson') {
                             return (
                                 <SwiperSlide
-                                id={'gfi_tab_content_' + + location.x + '_' + location.y + '_' + location.layerId}
-                                key={'gfi_tab_content_' + location.x + '_' + location.y + '_' + location.layerId}
-                            >
-                                {
-                                    <StyledSelectedTabTitle>
-                                        <p>
-                                            {
-                                                name.toUpperCase()
-                                            }
-                                        </p>
-                                    </StyledSelectedTabTitle>
-                                }
-                                <FormattedGFI
-                                    id={layerIds}
-                                    data={location.content}
-                                    type='geoJson'
-                                />
-                            </SwiperSlide>
+                                    id={
+                                        'gfi_tab_content_' +
+                                        +location.x +
+                                        '_' +
+                                        location.y +
+                                        '_' +
+                                        location.layerId
+                                    }
+                                    key={
+                                        'gfi_tab_content_' +
+                                        location.x +
+                                        '_' +
+                                        location.y +
+                                        '_' +
+                                        location.layerId
+                                    }
+                                >
+                                    {
+                                        <StyledSelectedTabTitle>
+                                            <p>{name.toUpperCase()}</p>
+                                        </StyledSelectedTabTitle>
+                                    }
+                                    <FormattedGFI
+                                        id={layerIds}
+                                        data={location.content}
+                                        type="geoJson"
+                                    />
+                                </SwiperSlide>
                             );
                         }
                         return null;
-                    })
-                }
+                    })}
                 </StyledSwiper>
             </StyledTabContent>
             <StyledButtonsContainer>
-                    <CircleButton
-                        icon={faPencilRuler}
-                        text={strings.gfi.selectLocations}
-                        toggleState={isGfiToolsOpen}
-                        tooltipDirection={'left'}
-                        clickAction={handleGfiToolsMenu}
-                    />
-                    <CircleButton
-                        icon={faFileDownload}
-                        text={strings.gfi.download}
-                        toggleState={isGfiDownloadsOpen}
-                        tooltipDirection={'left'}
-                        clickAction={handleGfiDownloadsMenu}
-                        //clickAction={() => store.dispatch(setIsGfiDownloadOpen(true))}
-                        disabled={!gfiLocations.length > 0}
-                    />
-                    <CircleButton
-                        icon={faSearchLocation}
-                        text={strings.gfi.focusToLocations}
-                        tooltipDirection={'left'}
-                        clickAction={() => {
-                            handleOverlayGeometry(tabsContent[selectedTab].props.data);
-                        }}
-                        disabled={gfiLocations.length === 0}
-                    />
+                <CircleButton
+                    icon={faPencilRuler}
+                    text={strings.gfi.selectLocations}
+                    toggleState={isGfiToolsOpen}
+                    tooltipDirection={'left'}
+                    clickAction={handleGfiToolsMenu}
+                />
+                <CircleButton
+                    icon={faFileDownload}
+                    text={strings.gfi.download}
+                    toggleState={isGfiDownloadsOpen}
+                    tooltipDirection={'left'}
+                    clickAction={handleGfiDownloadsMenu}
+                    //clickAction={() => store.dispatch(setIsGfiDownloadOpen(true))}
+                    disabled={!gfiLocations.length > 0}
+                />
+                <CircleButton
+                    icon={faSearchLocation}
+                    text={strings.gfi.focusToLocations}
+                    tooltipDirection={'left'}
+                    clickAction={() => {
+                        handleOverlayGeometry(
+                            tabsContent[selectedTab].props.data
+                        );
+                    }}
+                    disabled={gfiLocations.length === 0}
+                />
             </StyledButtonsContainer>
 
             <AnimatePresence>
-                {
-                    isGfiToolsOpen &&
+                {isGfiToolsOpen && (
                     <StyledGfiToolsContainer
                         transition={{
                             duration: 0.4,
-                            type: "tween"
+                            type: 'tween',
                         }}
                         initial={{
                             opacity: 0,
-                            x: "-100%"
+                            x: '-100%',
                         }}
                         animate={{
                             opacity: 1,
-                            x: 0
+                            x: 0,
                         }}
                         exit={{
                             opacity: 0,
-                            x: "-100%"
+                            x: '-100%',
                         }}
                     >
-                        <GfiToolsMenu
-                            handleGfiToolsMenu={handleGfiToolsMenu}
-                        />
+                        <GfiToolsMenu handleGfiToolsMenu={handleGfiToolsMenu} />
                     </StyledGfiToolsContainer>
-                }
+                )}
             </AnimatePresence>
             <AnimatePresence>
-                {
-                    isGfiDownloadsOpen &&
+                {isGfiDownloadsOpen && (
                     <StyledGfiToolsContainer
                         transition={{
                             duration: 0.4,
-                            type: "tween"
+                            type: 'tween',
                         }}
                         initial={{
                             opacity: 0,
-                            x: "-100%"
+                            x: '-100%',
                         }}
                         animate={{
                             opacity: 1,
-                            x: 0
+                            x: 0,
                         }}
                         exit={{
                             opacity: 0,
-                            x: "-100%"
+                            x: '-100%',
                         }}
                     >
                         <GfiDownloadMenu
@@ -593,16 +645,14 @@ export const GFIPopup = ({
                             handleGfiDownload={handleGfiDownload}
                         />
                     </StyledGfiToolsContainer>
-                }
+                )}
             </AnimatePresence>
             <AnimatePresence>
-                {
-                    (isGfiDownloadsOpen ||
-                    isGfiToolsOpen) &&
+                {(isGfiDownloadsOpen || isGfiToolsOpen) && (
                     <StyledGfiBackdrop
                         transition={{
                             duration: 0.4,
-                            type: "tween"
+                            type: 'tween',
                         }}
                         initial={{
                             opacity: 0,
@@ -618,7 +668,7 @@ export const GFIPopup = ({
                             isGfiDownloadsOpen && handleGfiDownloadsMenu();
                         }}
                     />
-                }
+                )}
             </AnimatePresence>
         </StyledGfiContainer>
     );

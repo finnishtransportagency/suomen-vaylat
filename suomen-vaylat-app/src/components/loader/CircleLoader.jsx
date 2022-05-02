@@ -13,8 +13,8 @@ const StyledCircle = styled(motion.span)`
     display: block;
     width: 28px;
     height: 28px;
-    border: 5px solid #DDD;
-    border-top: 5px solid ${props => props.theme.colors.mainColor1};
+    border: 5px solid #ddd;
+    border-top: 5px solid ${(props) => props.theme.colors.mainColor1};
     border-radius: 50%;
     position: absolute;
     box-sizing: border-box;
@@ -23,18 +23,20 @@ const StyledCircle = styled(motion.span)`
 `;
 
 const CircleLoader = () => {
-    return <StyledContainer>
-        <StyledCircle
-            animate={{
-                rotate: 360
-            }}
-            transition={{
-                repeat: Infinity,
-                duration: 1.2,
-                ease: "anticipate"
-            }}
-        />
-    </StyledContainer>
+    return (
+        <StyledContainer>
+            <StyledCircle
+                animate={{
+                    rotate: 360,
+                }}
+                transition={{
+                    repeat: Infinity,
+                    duration: 1.2,
+                    ease: 'anticipate',
+                }}
+            />
+        </StyledContainer>
+    );
 };
 
 export default CircleLoader;

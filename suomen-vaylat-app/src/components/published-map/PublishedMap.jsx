@@ -21,14 +21,14 @@ import {
     setGFILocations,
     setGFICroppingArea,
     setStartState,
-    resetGFILocations
+    resetGFILocations,
 } from '../../state/slices/rpcSlice';
 
 import {
     setIsFullScreen,
     setGfiCroppingTypes,
     setIsGfiOpen,
-    setMinimizeGfi
+    setMinimizeGfi,
 } from '../../state/slices/uiSlice';
 import { updateLayers } from '../../utils/rpcUtil';
 import SvLoder from '../../components/loader/SvLoader';
@@ -57,17 +57,16 @@ const StyledLoaderWrapper = styled.div`
     max-width: 200px;
     max-height: 200px;
     transform: translate(-50%, -50%);
-  svg {
-    width: 100%;
-    height: 100%;
-    fill: none;
-  }
+    svg {
+        width: 100%;
+        height: 100%;
+        fill: none;
+    }
 `;
 
 const ANNOUNCEMENTS_LOCALSTORAGE = 'oskari-announcements';
 
 const PublishedMap = () => {
-
     const { store } = useContext(ReactReduxContext);
     const { loading } = useAppSelector((state) => state.rpc);
     const language = useAppSelector((state) => state.language);
@@ -78,9 +77,8 @@ const PublishedMap = () => {
     };
 
     useEffect(() => {
-
         const handleFullScreenChange = () => {
-            if(document.webkitIsFullScreen) {
+            if (document.webkitIsFullScreen) {
                 store.dispatch(setIsFullScreen(true));
             } else if (document.fullscreenElement) {
                 store.dispatch(setIsFullScreen(true));
@@ -92,71 +90,103 @@ const PublishedMap = () => {
         store.dispatch(setLoading(true));
 
         document.addEventListener('fullscreenchange', handleFullScreenChange);
-        document.addEventListener('mozfullscreenchange', handleFullScreenChange);
-        document.addEventListener('webkitfullscreenchange', handleFullScreenChange);
+        document.addEventListener(
+            'mozfullscreenchange',
+            handleFullScreenChange
+        );
+        document.addEventListener(
+            'webkitfullscreenchange',
+            handleFullScreenChange
+        );
         document.addEventListener('msfullscreenchange', handleFullScreenChange);
 
         const iframe = document.getElementById('sv-iframe');
         var handlers = [];
 
-        var channel = OskariRPC.connect(iframe, process.env.REACT_APP_PUBLISHED_MAP_DOMAIN);
+        var channel = OskariRPC.connect(
+            iframe,
+            process.env.REACT_APP_PUBLISHED_MAP_DOMAIN
+        );
         var synchronizer = OskariRPC.synchronizerFactory(channel, handlers);
 
         channel.onReady(() => {
             store.dispatch(setChannel(channel));
             channel.getSupportedFunctions(function (data) {
-
                 if (data.getTags) {
                     channel.getTags(function (data) {
                         store.dispatch(setAllTags(data));
                     });
-                };
+                }
 
                 if (data.getTagsWithLayers) {
                     channel.getTagsWithLayers(function (data) {
                         store.dispatch(setTagsWithLayers(data));
                     });
-                };
+                }
 
                 if (data.getAnnouncements) {
                     channel.getAnnouncements(function (data) {
-                        if (data.hasOwnProperty("data") && data.data.length > 0) {
-                            var localStorageAnnouncements = localStorage.getItem(ANNOUNCEMENTS_LOCALSTORAGE) ? localStorage.getItem(ANNOUNCEMENTS_LOCALSTORAGE) : [];
-                            const activeAnnouncements = data.data.filter(announcement => announcement.active && localStorageAnnouncements && !localStorageAnnouncements.includes(announcement.id));
-                            store.dispatch(setActiveAnnouncements(activeAnnouncements));
+                        if (
+                            data.hasOwnProperty('data') &&
+                            data.data.length > 0
+                        ) {
+                            var localStorageAnnouncements =
+                                localStorage.getItem(ANNOUNCEMENTS_LOCALSTORAGE)
+                                    ? localStorage.getItem(
+                                          ANNOUNCEMENTS_LOCALSTORAGE
+                                      )
+                                    : [];
+                            const activeAnnouncements = data.data.filter(
+                                (announcement) =>
+                                    announcement.active &&
+                                    localStorageAnnouncements &&
+                                    !localStorageAnnouncements.includes(
+                                        announcement.id
+                                    )
+                            );
+                            store.dispatch(
+                                setActiveAnnouncements(activeAnnouncements)
+                            );
                         }
                     });
-                };
+                }
 
                 if (data.getGfiCroppingTypes) {
                     channel.getGfiCroppingTypes(function (data) {
                         store.dispatch(setGfiCroppingTypes(data));
                     });
-                };
+                }
 
                 if (data.getThemesWithLayers) {
                     channel.getThemesWithLayers(function (data) {
                         store.dispatch(setAllThemesWithLayers(data));
                     });
-                };
+                }
 
                 if (data.getZoomRange) {
                     channel.getZoomRange(function (data) {
                         store.dispatch(setZoomRange(data));
-                        data.hasOwnProperty('current') && store.dispatch(setCurrentZoomLevel(data.current));
+                        data.hasOwnProperty('current') &&
+                            store.dispatch(setCurrentZoomLevel(data.current));
                     });
-                };
+                }
 
                 if (data.getAllGroups) {
                     channel.getAllGroups(function (data) {
                         const arrangeAlphabetically = (x, y) => {
-                            if (x.name < y.name) { return -1; }
-                            if (x.name > y.name) { return 1; }
+                            if (x.name < y.name) {
+                                return -1;
+                            }
+                            if (x.name > y.name) {
+                                return 1;
+                            }
                             return 0;
                         };
-                        store.dispatch(setAllGroups(data.sort(arrangeAlphabetically)));
+                        store.dispatch(
+                            setAllGroups(data.sort(arrangeAlphabetically))
+                        );
                     });
-                };
+                }
 
                 updateLayers(store, channel);
 
@@ -164,47 +194,45 @@ const PublishedMap = () => {
                     channel.getCurrentState(function (data) {
                         store.dispatch(setCurrentState(data));
                     });
-                };
+                }
 
                 if (data.getFeatures) {
                     channel.getFeatures(function (data) {
                         store.dispatch(setFeatures(data));
                     });
-                };
+                }
 
                 if (data.getLegends) {
                     // need use global window variable to limit legend updates
-                    window.legendUpdateTimer = setTimeout(function() {
-                        channel.getLegends(function(data) {
+                    window.legendUpdateTimer = setTimeout(function () {
+                        channel.getLegends(function (data) {
                             store.dispatch(setLegends(data));
                         });
                     }, 500);
-                };
+                }
 
                 if (data.getMapPosition) {
                     channel.getMapPosition((data) => {
                         store.dispatch(setCurrentMapCenter(data));
                     });
-                };
+                }
             });
 
             channel.getSupportedEvents(function (data) {
-
                 if (data.MapClickedEvent) {
                     channel.handleEvent('MapClickedEvent', (data) => {
                         store.dispatch(resetGFILocations([]));
                     });
-                };
+                }
 
                 if (data.DataForMapLocationEvent) {
                     channel.handleEvent('DataForMapLocationEvent', (data) => {
-
                         const croppingArea = {
-                            type: "Feature",
+                            type: 'Feature',
                             geometry: {
-                                type: "Point",
-                                coordinates: [data.y, data.x]
-                            }
+                                type: 'Point',
+                                coordinates: [data.y, data.x],
+                            },
                         };
 
                         store.dispatch(setGFICroppingArea(croppingArea));
@@ -212,34 +240,36 @@ const PublishedMap = () => {
                         store.dispatch(setIsGfiOpen(true));
                         store.dispatch(setGFILocations(data));
                     });
-                };
+                }
 
                 if (data.MarkerClickEvent) {
-                    channel.handleEvent('MarkerClickEvent', event => {
-                    });
-                };
+                    channel.handleEvent('MarkerClickEvent', (event) => {});
+                }
 
                 if (data.AfterMapMoveEvent) {
-                    channel.handleEvent('AfterMapMoveEvent', event => {
+                    channel.handleEvent('AfterMapMoveEvent', (event) => {
                         store.dispatch(setCurrentMapCenter(event));
                     });
-                };
+                }
 
                 if (data.SearchResultEvent) {
-                    channel.handleEvent('SearchResultEvent', event => {
-                    });
-                };
+                    channel.handleEvent('SearchResultEvent', (event) => {});
+                }
 
-                if(data.ScaleBarEvent) {
-                    channel.handleEvent('ScaleBarEvent', function(data) {
+                if (data.ScaleBarEvent) {
+                    channel.handleEvent('ScaleBarEvent', function (data) {
                         store.dispatch(setScaleBarState(data));
                     });
-                };
+                }
 
                 if (data.UserLocationEvent) {
-                    channel.postRequest('MapModulePlugin.RemoveMarkersRequest', ['my_location']);
+                    channel.postRequest(
+                        'MapModulePlugin.RemoveMarkersRequest',
+                        ['my_location']
+                    );
 
-                    channel.handleEvent('UserLocationEvent', event => {
+                    channel.handleEvent('UserLocationEvent', (event) => {
+                        console.log(event);
                         var data = {
                             x: event.lon,
                             y: event.lat,
@@ -247,35 +277,41 @@ const PublishedMap = () => {
                             shape: '<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#0064af"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zM7 9c0-2.76 2.24-5 5-5s5 2.24 5 5c0 2.88-2.88 7.19-5 9.88C9.92 16.21 7 11.85 7 9z"/><circle cx="12" cy="9" r="2.5"/></svg>',
                             offsetX: 0, // center point x position from left to right
                             offsetY: 10, // center point y position from bottom to up
-                            size: 6
+                            size: 6,
                         };
-                        channel.postRequest('MapModulePlugin.AddMarkerRequest', [data, 'my_location']);
+                        channel.postRequest(
+                            'MapModulePlugin.AddMarkerRequest',
+                            [data, 'my_location']
+                        );
 
                         var routeSteps = [
                             {
-                                'lon': event.lon,
-                                'lat': event.lat,
-                                'duration': 3000,
-                                'zoom': 4,
-                                'animation': 'zoomPan'
+                                lon: event.lon,
+                                lat: event.lat,
+                                duration: 3000,
+                                zoom: 4,
+                                animation: 'zoomPan',
                             },
                             {
-                                'lon': event.lon,
-                                'lat': event.lat,
-                                'duration': 3000,
-                                'zoom': 10,
-                                'animation': 'zoomPan'
-                            }
+                                lon: event.lon,
+                                lat: event.lat,
+                                duration: 3000,
+                                zoom: 10,
+                                animation: 'zoomPan',
+                            },
                         ];
                         var stepDefaults = {
-                            'zoom': 5,
-                            'animation': 'fly',
-                            'duration': 3000,
-                            'srsName': 'EPSG:3067'
+                            zoom: 5,
+                            animation: 'fly',
+                            duration: 3000,
+                            srsName: 'EPSG:3067',
                         };
-                        channel.postRequest('MapTourRequest', [routeSteps, stepDefaults]);
+                        channel.postRequest('MapTourRequest', [
+                            routeSteps,
+                            stepDefaults,
+                        ]);
                     });
-                };
+                }
             });
 
             // save start state
@@ -289,22 +325,24 @@ const PublishedMap = () => {
         return () => {
             synchronizer.destroy();
         };
-
     }, [store]);
 
     return (
         <StyledPublishedMap>
-            {loading && 
+            {loading && (
                 <StyledLoaderWrapper>
                     <SvLoder />
                 </StyledLoaderWrapper>
-            }
-            <StyledIframe id='sv-iframe' title='iframe' src={process.env.REACT_APP_PUBLISHED_MAP_URL + '&lang=' + lang}
-                allow='geolocation' onLoad={() => hideSpinner()}>
-            </StyledIframe>
+            )}
+            <StyledIframe
+                id="sv-iframe"
+                title="iframe"
+                src={process.env.REACT_APP_PUBLISHED_MAP_URL + '&lang=' + lang}
+                allow="geolocation"
+                onLoad={() => hideSpinner()}
+            ></StyledIframe>
         </StyledPublishedMap>
-
-    )
+    );
 };
 
 export default PublishedMap;

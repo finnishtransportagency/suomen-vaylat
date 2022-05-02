@@ -16,22 +16,21 @@ const StyledModalListItem = styled(motion.div)`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    cursor: ${props => props.selectAction && "pointer"};
-    background-color: ${props => props.theme.colors.mainColor1};
+    cursor: ${(props) => props.selectAction && 'pointer'};
+    background-color: ${(props) => props.theme.colors.mainColor1};
     border-radius: 4px;
-    //padding: 8px 0px 8px 0px;
     margin-right: 8px;
-    box-shadow: 0px 3px 6px 0px rgba(0,0,0,0.16);
+    box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, 0.16);
     @-moz-document url-prefix() {
         position: initial;
-    };
+    }
     padding: 8px;
 `;
 
 const StyledModalListItemTitle = styled.div`
     user-select: none;
     max-width: 240px;
-    color: ${props => props.theme.colors.mainWhite};
+    color: ${(props) => props.theme.colors.mainWhite};
     margin: 0;
     padding: 0px;
     font-size: 14px;
@@ -76,13 +75,13 @@ const StyleModalListItemIcon = styled.div`
     align-items: center;
     svg {
         font-size: 20px;
-        color: ${props => props.theme.colors.mainWhite};
-    };
+        color: ${(props) => props.theme.colors.mainWhite};
+    }
     p {
         margin: 0;
         font-weight: bold;
         font-size: 22px;
-        color: ${props => props.theme.colors.mainWhite};
+        color: ${(props) => props.theme.colors.mainWhite};
     }
 `;
 
@@ -94,100 +93,89 @@ const StyledSavedViewTitleContent = styled.div`
 `;
 
 const ModalListItem = ({
-        index,
-        id,
-        type,
-        title,
-        subtitle,
-        checkedValue,
-        icon,
-        selectAction,
-        closeAction,
-        removeAction,
-        hoverInAction,
-        hoverOutAction,
-        data,
-        children
-    }) => {
-
-    return <StyledModalListItemContainer
-        transition={{
-            duration: 0.2,
-            type: "tween"
-        }}
-        initial={{
-            opacity: 0,
-            //height: 0,
-        }}
-        animate={{
-            opacity: 1,
-            height: "auto",
-        }}
-        exit={{
-            opacity: 0,
-            //height: 0,
-        }}
-    >
-        <StyledModalListItem
-            onClick={e => {
-                e.preventDefault();
-                selectAction && selectAction(data);
+    index,
+    id,
+    type,
+    title,
+    subtitle,
+    checkedValue,
+    icon,
+    selectAction,
+    closeAction,
+    removeAction,
+    hoverInAction,
+    hoverOutAction,
+    data,
+    children,
+}) => {
+    return (
+        <StyledModalListItemContainer
+            transition={{
+                duration: 0.2,
+                type: 'tween',
             }}
-            selectAction={selectAction}
-            onMouseEnter={() => {
-                hoverInAction && hoverInAction(data);
+            initial={{
+                opacity: 0,
             }}
-            onMouseLeave={() => {
-                hoverOutAction && hoverOutAction(data)
+            animate={{
+                opacity: 1,
+                height: 'auto',
             }}
-            whileHover={
-                selectAction && {
-                scale: 1.02,
-                transition: { duration: 0.2 },
-            }
-        }
+            exit={{
+                opacity: 0,
+            }}
         >
-            <StyledLeftContent>
-                <StyleModalListItemIcon>
-                    {
-                        icon ?
-                            <FontAwesomeIcon
-                                icon={icon}
-                            /> :
-                            <p>{title.charAt(0).toUpperCase()}</p>
+            <StyledModalListItem
+                onClick={(e) => {
+                    e.preventDefault();
+                    selectAction && selectAction(data);
+                }}
+                selectAction={selectAction}
+                onMouseEnter={() => {
+                    hoverInAction && hoverInAction(data);
+                }}
+                onMouseLeave={() => {
+                    hoverOutAction && hoverOutAction(data);
+                }}
+                whileHover={
+                    selectAction && {
+                        scale: 1.02,
+                        transition: { duration: 0.2 },
                     }
-                </StyleModalListItemIcon>
-                <StyledSavedViewTitleContent>
-                    {
-                        title && <StyledModalListItemTitle>
-                            {title}
-                        </StyledModalListItemTitle>
-                    }
-                    {
-                        subtitle && <StyledModalListItemSubTitle>
-                            {subtitle}
-                        </StyledModalListItemSubTitle>
-                    }
-                </StyledSavedViewTitleContent>
-
-            </StyledLeftContent>
-            <StyledRightContent>
-                {
-                    closeAction && 
-                    <StyledCloseButton
-                        onClick={() => closeAction(id)}
-                        >
-                        <FontAwesomeIcon
-                            icon={faTimes}
-                        />
-                    </StyledCloseButton>
                 }
-            </StyledRightContent>
-        </StyledModalListItem>
-        {
-            children && children
-        }
-    </StyledModalListItemContainer>
+            >
+                <StyledLeftContent>
+                    <StyleModalListItemIcon>
+                        {icon ? (
+                            <FontAwesomeIcon icon={icon} />
+                        ) : (
+                            <p>{title.charAt(0).toUpperCase()}</p>
+                        )}
+                    </StyleModalListItemIcon>
+                    <StyledSavedViewTitleContent>
+                        {title && (
+                            <StyledModalListItemTitle>
+                                {title}
+                            </StyledModalListItemTitle>
+                        )}
+                        {subtitle && (
+                            <StyledModalListItemSubTitle>
+                                {subtitle}
+                            </StyledModalListItemSubTitle>
+                        )}
+                    </StyledSavedViewTitleContent>
+                </StyledLeftContent>
+                <StyledRightContent>
+                    {closeAction && (
+                        <StyledCloseButton onClick={() => closeAction(id)}>
+                            <FontAwesomeIcon icon={faTimes} />
+                        </StyledCloseButton>
+                    )}
+                </StyledRightContent>
+            </StyledModalListItem>
+            {children && children}
+        </StyledModalListItemContainer>
+    );
 };
 
-export default ModalListItem; 
+export default ModalListItem;

@@ -186,6 +186,7 @@
     }
   },
   "search": {
+    "fill_all_fields": "Täytä kaikki hakukentät",
     "required_field_missing": "Tarkista tarvittavat kentät.",
     "vkm": {
       "tie": "Tienumero",

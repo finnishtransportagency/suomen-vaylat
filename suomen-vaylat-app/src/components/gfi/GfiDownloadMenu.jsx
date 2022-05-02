@@ -1,21 +1,20 @@
-import { useState, useContext, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
-import strings from '../../translations';
 import { useAppSelector } from '../../state/hooks';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faTimes,
-    faDownload,
     faFile,
-    faFileArchive
+    faFileArchive,
 } from '@fortawesome/free-solid-svg-icons';
 
-import ModalListItem from "../modals/ModalListItem";
-import CheckBox from "../checkbox/CheckBox";
+import ModalListItem from '../modals/ModalListItem';
+import CheckBox from '../checkbox/CheckBox';
 
 import SVLoader from '../loader/SvLoader';
+import strings from '../../translations';
 
 const StyledGfiDownloadsContainer = styled.div`
     position: relative;
@@ -23,9 +22,9 @@ const StyledGfiDownloadsContainer = styled.div`
     flex-direction: column;
     padding: 24px;
     overflow: auto;
-    @media ${props => props.theme.device.mobileL} {
+    @media ${(props) => props.theme.device.mobileL} {
         padding: 16px;
-    };
+    }
     background-color: white;
 `;
 
@@ -35,7 +34,6 @@ const StyledListContainer = styled.div`
     gap: 8px;
     margin-bottom: 24px;
 `;
-
 
 const StyledLoadingOverlay = styled(motion.div)`
     z-index: 2;
@@ -51,7 +49,7 @@ const StyledLoadingOverlay = styled(motion.div)`
 const StyledSubtitle = styled.div`
     display: flex;
     justify-content: flex-start;
-    color: ${props => props.theme.colors.mainColor1};
+    color: ${(props) => props.theme.colors.mainColor1};
     padding: 0px 0px 10px 5px;
     font-size: 16px;
     font-weight: bold;
@@ -66,7 +64,7 @@ const StyledCloseButton = styled.div`
     justify-content: flex-end;
     svg {
         font-size: 24px;
-        color: ${props => props.theme.colors.mainColor1};
+        color: ${(props) => props.theme.colors.mainColor1};
         cursor: pointer;
     }
 `;
@@ -78,7 +76,7 @@ const StyledDownloadFormats = styled.div`
     padding: 16px;
 `;
 
-const StyledDownloadFormat = styled(motion.button)` 
+const StyledDownloadFormat = styled(motion.button)`
     position: relative;
     width: 56px;
     height: 56px;
@@ -87,22 +85,22 @@ const StyledDownloadFormat = styled(motion.button)`
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    box-shadow: 0px 2px 4px #0000004D;
+    box-shadow: 0px 2px 4px #0000004d;
     border-radius: 50%;
     border: none;
     cursor: pointer;
     pointer-events: auto;
     svg {
-        color: ${props => props.theme.colors.mainWhite};
+        color: ${(props) => props.theme.colors.mainWhite};
         font-size: 22px;
-    };
+    }
     p {
         margin: 0;
         font-weight: bold;
         font-size: 10px;
-        color: ${props => props.theme.colors.mainWhite};
+        color: ${(props) => props.theme.colors.mainWhite};
         margin-top: -4px;
-    };
+    }
 `;
 
 const StyledLoaderWrapper = styled.div`
@@ -114,169 +112,187 @@ const StyledLoaderWrapper = styled.div`
     max-width: 200px;
     max-height: 200px;
     transform: translate(-50%, -50%);
-  svg {
-    width: 100%;
-    height: 100%;
-    fill: none;
-  }
+    svg {
+        width: 100%;
+        height: 100%;
+        fill: none;
+    }
 `;
 
-const GfiDownloadMenu = ({
-    handleGfiDownloadsMenu,
-    handleGfiDownload,
-}) => {
+const GfiDownloadMenu = ({ handleGfiDownloadsMenu, handleGfiDownload }) => {
+    const [loading] = useState(false);
 
-    const [ loading, setLoading ] = useState(false);
-
-    let {
-        gfiLocations,
-        allLayers,
-        gfiCroppingArea,
-    } = useAppSelector((state) => state.rpc);
+    let { gfiLocations, allLayers, gfiCroppingArea } = useAppSelector(
+        (state) => state.rpc
+    );
 
     const [selectedLayers, setSelectedLayers] = useState([]);
 
     const [downloadFormats] = useState([
-            {
-                id: "download-format-shape",
-                title: ".SHP",
-                format: "shape-zip",
-                selected: false,
-                loading: false,
-            },
-            {
-                id: "download-format-csv",
-                title: ".CSV",
-                format: "csv",
-                selected: false,
-                loading: false,
-            },
-            {
-                id: "download-format-xls",
-                title: ".XLS",
-                format: "excel2007",
-                selected: false,
-                loading: false,
-            },
-            {
-                id: "download-format-json",
-                title: ".JSON",
-                format: "application/json",
-                selected: false,
-                loading: false
-            }
+        {
+            id: 'download-format-shape',
+            title: '.SHP',
+            format: 'shape-zip',
+            selected: false,
+            loading: false,
+        },
+        {
+            id: 'download-format-csv',
+            title: '.CSV',
+            format: 'csv',
+            selected: false,
+            loading: false,
+        },
+        {
+            id: 'download-format-xls',
+            title: '.XLS',
+            format: 'excel2007',
+            selected: false,
+            loading: false,
+        },
+        {
+            id: 'download-format-json',
+            title: '.JSON',
+            format: 'application/json',
+            selected: false,
+            loading: false,
+        },
     ]);
 
     const handleSelectLayer = (layer) => {
-        if(selectedLayers.find(selectedLayer => selectedLayer.id === layer.id)){
-            setSelectedLayers(selectedLayers.filter(selectedLayer => selectedLayer.id !== layer.id));
+        if (
+            selectedLayers.find(
+                (selectedLayer) => selectedLayer.id === layer.id
+            )
+        ) {
+            setSelectedLayers(
+                selectedLayers.filter(
+                    (selectedLayer) => selectedLayer.id !== layer.id
+                )
+            );
         } else {
-            setSelectedLayers([
-                ...selectedLayers, layer
-            ]);
+            setSelectedLayers([...selectedLayers, layer]);
         }
     };
 
-
     useEffect(() => {
-        const layers = gfiLocations && gfiLocations.length > 0 && gfiLocations.map((location, index) => {
-            const layer = allLayers.find(layer => layer.id === location.layerId);
-            return layer;
-        });
+        const layers =
+            gfiLocations &&
+            gfiLocations.length > 0 &&
+            gfiLocations.map((location, index) => {
+                const layer = allLayers.find(
+                    (layer) => layer.id === location.layerId
+                );
+                return layer;
+            });
         setSelectedLayers(layers);
-    },[allLayers, gfiLocations]);
+    }, [allLayers, gfiLocations]);
 
-    return <StyledGfiDownloadsContainer>
-        <StyledCloseButton
-            onClick={() => handleGfiDownloadsMenu()}
-        >
-            <FontAwesomeIcon
-                icon={faTimes}
-            />
-        </StyledCloseButton>
-        <AnimatePresence>
-            {
-            loading && <StyledLoadingOverlay
-                    transition={{
-                        duration: 0.2,
-                        type: "tween"
-                    }}
-                    initial={{
-                        opacity: 0,
-                    }}
-                    animate={{
-                        opacity: 1,
-                    }}
-                    exit={{
-                        opacity: 0,
-                    }}
-                >
-                    <StyledLoaderWrapper>
-                        <SVLoader />
-                    </StyledLoaderWrapper>
-            </StyledLoadingOverlay>
-            }
-        </AnimatePresence>
-        <StyledSubtitle>Tasot:</StyledSubtitle>
-        <StyledListContainer>
-            {
-                gfiLocations && gfiLocations.length > 0 && gfiLocations.map((location, index) => {
-                const layer = allLayers.find(layer => layer.id === location.layerId);
+    return (
+        <StyledGfiDownloadsContainer>
+            <StyledCloseButton onClick={() => handleGfiDownloadsMenu()}>
+                <FontAwesomeIcon icon={faTimes} />
+            </StyledCloseButton>
+            <AnimatePresence>
+                {loading && (
+                    <StyledLoadingOverlay
+                        transition={{
+                            duration: 0.2,
+                            type: 'tween',
+                        }}
+                        initial={{
+                            opacity: 0,
+                        }}
+                        animate={{
+                            opacity: 1,
+                        }}
+                        exit={{
+                            opacity: 0,
+                        }}
+                    >
+                        <StyledLoaderWrapper>
+                            <SVLoader />
+                        </StyledLoaderWrapper>
+                    </StyledLoadingOverlay>
+                )}
+            </AnimatePresence>
+            <StyledSubtitle>Tasot:</StyledSubtitle>
+            <StyledListContainer>
+                {gfiLocations &&
+                    gfiLocations.length > 0 &&
+                    gfiLocations.map((location, index) => {
+                        const layer = allLayers.find(
+                            (layer) => layer.id === location.layerId
+                        );
 
-                    return (
-                        <ModalListItem
-                            key={'gfi_download_'+location.layerId}
-                            index={index}
-                            id={location.layerId} 
-                            icon={faFile}
-                            title={layer.name && layer.name}
-                        >
-                            <CheckBox
-                                checked={selectedLayers.find(selectedLayer => selectedLayer.id === location.layerId)}
-                                selectAction={() => {
-                                    handleSelectLayer(layer)
-                                }}
-                            />
-                        </ModalListItem>
-                    )
-                })
-            }
-        </StyledListContainer>
-        <StyledSubtitle style={{display: 'flex', justifyContent: 'center'}}>
-                Tiedostomuoto:
-        </StyledSubtitle>
-        <StyledDownloadFormats>
-            {
-                downloadFormats.map(format => {
-                    return (
-                            <StyledDownloadFormat
-                                key={format.id}
-                                transition={{
-                                    duration: 0.2,
-                                    type: "tween"
-                                }}
-                                whileHover={{
-                                    backgroundColor: !format.loading ? '#3c85bd' : '#DDD',
-                                    transition: { duration: 0.2 },
-                                }}
-                                disabled={selectedLayers.length === 0 || format.loading}
-                                animate={{
-                                    backgroundColor: selectedLayers.length === 0 || format.loading ? '#DDD' : '#0064af'
-                                }}
-                                onClick={() => handleGfiDownload(format, selectedLayers, gfiCroppingArea)}
+                        return (
+                            <ModalListItem
+                                key={'gfi_download_' + location.layerId}
+                                index={index}
+                                id={location.layerId}
+                                icon={faFile}
+                                title={layer.name && layer.name}
                             >
-                                <FontAwesomeIcon
-                                    icon={faFileArchive}
+                                <CheckBox
+                                    checked={selectedLayers.find(
+                                        (selectedLayer) =>
+                                            selectedLayer.id ===
+                                            location.layerId
+                                    )}
+                                    selectAction={() => {
+                                        handleSelectLayer(layer);
+                                    }}
                                 />
-                                <p>
-                                    {format.title.toUpperCase()}
-                                </p>
-                            </StyledDownloadFormat>
-                    )
-                })
-            }
-        </StyledDownloadFormats>
-    </StyledGfiDownloadsContainer>
+                            </ModalListItem>
+                        );
+                    })}
+            </StyledListContainer>
+            <StyledSubtitle
+                style={{ display: 'flex', justifyContent: 'center' }}
+            >
+                {strings.downloads.format}:
+            </StyledSubtitle>
+            <StyledDownloadFormats>
+                {downloadFormats.map((format) => {
+                    return (
+                        <StyledDownloadFormat
+                            key={format.id}
+                            transition={{
+                                duration: 0.2,
+                                type: 'tween',
+                            }}
+                            whileHover={{
+                                backgroundColor: !format.loading
+                                    ? '#3c85bd'
+                                    : '#DDD',
+                                transition: { duration: 0.2 },
+                            }}
+                            disabled={
+                                selectedLayers.length === 0 || format.loading
+                            }
+                            animate={{
+                                backgroundColor:
+                                    selectedLayers.length === 0 ||
+                                    format.loading
+                                        ? '#DDD'
+                                        : '#0064af',
+                            }}
+                            onClick={() =>
+                                handleGfiDownload(
+                                    format,
+                                    selectedLayers,
+                                    gfiCroppingArea
+                                )
+                            }
+                        >
+                            <FontAwesomeIcon icon={faFileArchive} />
+                            <p>{format.title.toUpperCase()}</p>
+                        </StyledDownloadFormat>
+                    );
+                })}
+            </StyledDownloadFormats>
+        </StyledGfiDownloadsContainer>
+    );
 };
 
 export default GfiDownloadMenu;

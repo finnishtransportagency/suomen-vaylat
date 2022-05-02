@@ -186,6 +186,7 @@
     }
   },
   "search": {
+    "fill_all_fields": "Täytä kaikki hakukentät",
     "required_field_missing": "Kontrollera de obligatoriska fälten.",
     "vkm": {
       "tie": "Vägnummer",
