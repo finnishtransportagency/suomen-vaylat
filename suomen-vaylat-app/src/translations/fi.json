@@ -84,7 +84,7 @@
     "fileSize": "Tiedostokoko",
     "layers": "Tasot",
     "failedDownloads": "Virheelliset lataukset",
-    "errorOccuredDuringDownloadProcessing" : "Error occured during download processing"
+    "errorOccuredDuringDownloadProcessing" : "Virhe tapahtui paketin prosessoinnin aikana"
   },
   "general": {
     "close": "Sulje",
