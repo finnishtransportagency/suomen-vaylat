@@ -349,8 +349,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu }) => {
                     data.geojson &&
                         data.geojson.features &&
                         data.geojson.features.forEach((feature) => {
-                            data.geojson &&
-                                store.dispatch(setGFICroppingArea(feature));
+                            store.dispatch(setGFICroppingArea(feature));
                             feature.geometry &&
                                 channel &&
                                 channel.getFeaturesByGeoJSON(
@@ -391,10 +390,9 @@ const GfiToolsMenu = ({ handleGfiToolsMenu }) => {
                                 setLoading(true);
                                 Object.values(feature.geojson.features).forEach(
                                     (subfeature) => {
-                                        data.geojson &&
-                                            store.dispatch(
-                                                setGFICroppingArea(subfeature)
-                                            );
+                                        store.dispatch(
+                                            setGFICroppingArea(subfeature)
+                                        );
                                         subfeature.geometry &&
                                             channel &&
                                             channel.getFeaturesByGeoJSON(

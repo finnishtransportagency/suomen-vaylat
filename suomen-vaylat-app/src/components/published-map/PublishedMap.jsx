@@ -269,7 +269,6 @@ const PublishedMap = () => {
                     );
 
                     channel.handleEvent('UserLocationEvent', (event) => {
-                        console.log(event);
                         var data = {
                             x: event.lon,
                             y: event.lat,
