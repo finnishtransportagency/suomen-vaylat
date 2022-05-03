@@ -10,7 +10,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faPencilRuler,
     faBorderAll,
-    faTimes
+    faTimes,
 } from '@fortawesome/free-solid-svg-icons';
 
 import CircleButtonListItem from '../circle-button-list-item/CircleButtonListItem';
@@ -26,10 +26,7 @@ import {
     setGFICroppingArea,
 } from '../../state/slices/rpcSlice';
 
-import {
-    setMinimizeGfi,
-    setSelectedGfiTool
-} from '../../state/slices/uiSlice';
+import { setMinimizeGfi, setSelectedGfiTool } from '../../state/slices/uiSlice';
 
 import SVLoader from '../loader/SvLoader';
 
@@ -39,9 +36,9 @@ const StyledGfiToolContainer = styled.div`
     flex-direction: column;
     padding: 24px;
     overflow: auto;
-    @media ${props => props.theme.device.mobileL} {
+    @media ${(props) => props.theme.device.mobileL} {
         padding: 16px;
-    };
+    }
     background-color: white;
 `;
 
@@ -72,7 +69,7 @@ const StyledLoadingOverlay = styled(motion.div)`
 const StyledSubtitle = styled.div`
     display: flex;
     justify-content: flex-start;
-    color: ${props => props.theme.colors.mainColor1};
+    color: ${(props) => props.theme.colors.mainColor1};
     padding: 0px 0px 10px 5px;
     font-size: 16px;
     font-weight: bold;
@@ -87,7 +84,7 @@ const StyledCloseButton = styled.div`
     justify-content: flex-end;
     svg {
         font-size: 24px;
-        color: ${props => props.theme.colors.mainColor1};
+        color: ${(props) => props.theme.colors.mainColor1};
         cursor: pointer;
     }
 `;
@@ -101,15 +98,15 @@ const StyledLoaderWrapper = styled.div`
     max-width: 200px;
     max-height: 200px;
     transform: translate(-50%, -50%);
-  svg {
-    width: 100%;
-    height: 100%;
-    fill: none;
-  }
+    svg {
+        width: 100%;
+        height: 100%;
+        fill: none;
+    }
 `;
 
 const icons = {
-   0: {
+    0: {
         icon: faPencilRuler,
     },
     1: {
@@ -126,203 +123,208 @@ const icons = {
     },
     5: {
         icon: faBorderAll,
-    }
+    },
 };
 
-const GfiToolsMenu = ({
-    handleGfiToolsMenu
-}) => {
-
+const GfiToolsMenu = ({ handleGfiToolsMenu }) => {
     const drawinToolsData = [
-            {
-                id : 'sv-measure-linestring',
-                title : strings.tooltips.measuringTools.linestring,
-                style : {
-                    icon : <SvLinestring />
-                },
-                type : 'LineString'
+        {
+            id: 'sv-measure-linestring',
+            title: strings.tooltips.measuringTools.linestring,
+            style: {
+                icon: <SvLinestring />,
             },
-            {
-                id : 'sv-measure-polygon',
-                title : strings.tooltips.measuringTools.polygon,
-                style : {
-                    icon : <SvPolygon />
-                    },
-                type : 'Polygon'
+            type: 'LineString',
+        },
+        {
+            id: 'sv-measure-polygon',
+            title: strings.tooltips.measuringTools.polygon,
+            style: {
+                icon: <SvPolygon />,
             },
-            {
-                id : 'sv-measure-box',
-                title : strings.tooltips.measuringTools.box,
-                style : {
-                    icon : <SvRectangle />
-                },
-                type : 'Box'
+            type: 'Polygon',
+        },
+        {
+            id: 'sv-measure-box',
+            title: strings.tooltips.measuringTools.box,
+            style: {
+                icon: <SvRectangle />,
             },
-            {
-                id : 'sv-measure-circle',
-                title : strings.tooltips.measuringTools.circle,
-                style : {
-                    icon : <SvCircle />
-                },
-                type : 'Circle'
-            }
+            type: 'Box',
+        },
+        {
+            id: 'sv-measure-circle',
+            title: strings.tooltips.measuringTools.circle,
+            style: {
+                icon: <SvCircle />,
+            },
+            type: 'Circle',
+        },
     ];
 
     const { store } = useContext(ReactReduxContext);
 
-    const { channel } = useSelector(state => state.rpc);
-    const { gfiCroppingTypes, selectedGfiTool } = useSelector(state => state.ui);
+    const { channel } = useSelector((state) => state.rpc);
+    const { gfiCroppingTypes, selectedGfiTool } = useSelector(
+        (state) => state.ui
+    );
 
-    const [ loading, setLoading ] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const [selectedTool, setSelectedTool] = useState(null);
-    const [selectedDrawingTool, setSelectedDrawingTool] = useState(null);
 
     const handleSelectTool = (id) => {
-
-        setSelectedDrawingTool(null);
-
-        if(selectedTool !== id) {
+        if (selectedTool !== id) {
             setSelectedTool(id);
 
-            if(id === 0) {
-                    setSelectedTool(id);
-                    channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [null, null, 'download-tool-layer']);
-                } else {
+            if (id === 0) {
+                setSelectedTool(id);
+                channel.postRequest(
+                    'MapModulePlugin.RemoveFeaturesFromMapRequest',
+                    [null, null, 'download-tool-layer']
+                );
+            } else {
+                setLoading(true);
+                channel.getGfiCroppingArea([id], function (data) {
+                    store.dispatch(setMinimizeGfi(true));
+                    setLoading(false);
 
-                    setLoading(true);
-                    channel.getGfiCroppingArea([id], function (data) {
-                        store.dispatch(setMinimizeGfi(true));
-                        setLoading(false);
+                    let label = data.hasOwnProperty('labelProperty')
+                        ? data.labelProperty
+                        : null;
 
-                        let label = data.hasOwnProperty('labelProperty') ? data.labelProperty : null;
-
-                        let rn = 'MapModulePlugin.AddFeaturesToMapRequest';
-                        let options = {
-                            layerId: 'download-tool-layer',
-                            clearPrevious: true,
-                            featureStyle: {
+                    let rn = 'MapModulePlugin.AddFeaturesToMapRequest';
+                    let options = {
+                        layerId: 'download-tool-layer',
+                        clearPrevious: true,
+                        featureStyle: {
+                            fill: {
+                                color: 'rgba(255, 255, 255, 0.5)',
+                            },
+                            stroke: {
+                                color: '#0064af',
+                                width: 2,
+                            },
+                            text: {
                                 fill: {
-                                    color: 'rgba(255, 255, 255, 0.5)'
+                                    color: '#ffffff',
                                 },
                                 stroke: {
                                     color: '#0064af',
-                                    width: 2
+                                    width: 5,
                                 },
-                                text: {
-                                    fill: {
-                                        color: '#ffffff'
-                                    },
-                                    stroke: {
-                                        color: '#0064af',
-                                        width: 5
-                                    },
-                                    font: 'bold 12px Arial',
-                                    textAlign: 'center',
-                                    textBaseline: 'middle',
-                                    offsetX: 0,
-                                    offsetY: 0,
-                                    labelProperty: label,
-                                    overflow: id === 2 ? true : false
-                                },
+                                font: 'bold 12px Arial',
+                                textAlign: 'center',
+                                textBaseline: 'middle',
+                                offsetX: 0,
+                                offsetY: 0,
+                                labelProperty: label,
+                                overflow: id === 2 ? true : false,
                             },
-                            hover: !isMobile ? {
-                                featureStyle: {
-                                    fill: {
-                                        color: 'rgba(0, 99, 175, 0.7)'
-                                    },
-                                    stroke: {
-                                        color: '#0064af',
-                                        width: 2
-                                    },
-                                    text: {
-                                        fill: {
-                                            color: '#ffffff'
-                                        },
-                                        stroke: {
-                                            color: '#0064af',
-                                            width: 5
-                                        },
-                                        font: 'bold 16px Arial',
-                                        textAlign: 'center',
-                                        textBaseline: 'middle',
-                                        offsetX: 0,
-                                        offsetY: 0,
-                                        labelProperty: label,
-                                        overflow: id === 2 ? true : false
-                                    },
-                                },
-                            } : {}
-                        };
+                        },
+                        hover: !isMobile
+                            ? {
+                                  featureStyle: {
+                                      fill: {
+                                          color: 'rgba(0, 99, 175, 0.7)',
+                                      },
+                                      stroke: {
+                                          color: '#0064af',
+                                          width: 2,
+                                      },
+                                      text: {
+                                          fill: {
+                                              color: '#ffffff',
+                                          },
+                                          stroke: {
+                                              color: '#0064af',
+                                              width: 5,
+                                          },
+                                          font: 'bold 16px Arial',
+                                          textAlign: 'center',
+                                          textBaseline: 'middle',
+                                          offsetX: 0,
+                                          offsetY: 0,
+                                          labelProperty: label,
+                                          overflow: id === 2 ? true : false,
+                                      },
+                                  },
+                              }
+                            : {},
+                    };
 
-                        data.geojson && channel.postRequest(rn, [data.geojson, options]);
-                    });
-               }
+                    data.geojson &&
+                        channel.postRequest(rn, [data.geojson, options]);
+                });
+            }
         } else {
             setSelectedTool(null);
-            channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [null, null, 'download-tool-layer']);
+            channel.postRequest(
+                'MapModulePlugin.RemoveFeaturesFromMapRequest',
+                [null, null, 'download-tool-layer']
+            );
         }
     };
 
     const handleSelectDrawingTool = (id, item) => {
-        if(id === selectedGfiTool){
-            setSelectedDrawingTool(null);
-        } else {
+        if (id !== selectedGfiTool) {
             store.dispatch(setSelectedGfiTool(id));
             var style = {
-                draw : {
-                    fill : {
-                         color: 'rgba(255,255,255,0.5)'
+                draw: {
+                    fill: {
+                        color: 'rgba(255,255,255,0.5)',
                     },
-                    stroke : {
-                          color: '#fd7e14',
-                          width: 3
+                    stroke: {
+                        color: '#fd7e14',
+                        width: 3,
                     },
-                    image : {
-                          radius: 4,
-                          fill: {
-                            color: 'rgba(0,0,0,1)'
-                          }
-                    }
+                    image: {
+                        radius: 4,
+                        fill: {
+                            color: 'rgba(0,0,0,1)',
+                        },
+                    },
                 },
-                modify : {
-                    fill : {
-                         color: 'rgba(153,102,255,0.3)'
+                modify: {
+                    fill: {
+                        color: 'rgba(153,102,255,0.3)',
                     },
-                    stroke : {
-                          color: 'rgba(0,0,0,1)',
-                          width: 2
+                    stroke: {
+                        color: 'rgba(0,0,0,1)',
+                        width: 2,
                     },
-                    image : {
-                          radius: 4,
-                          fill: {
-                            color: 'rgba(0,0,0,1)'
-                          }
-                    }
+                    image: {
+                        radius: 4,
+                        fill: {
+                            color: 'rgba(0,0,0,1)',
+                        },
+                    },
                 },
-                intersect : {
-                    fill : {
-                         color: 'rgba(255,255,255,0.3)'
+                intersect: {
+                    fill: {
+                        color: 'rgba(255,255,255,0.3)',
                     },
-                    stroke : {
-                          color: 'rgba(0,0,0,1)',
-                          width: 2,
-                          lineDash: 5
+                    stroke: {
+                        color: 'rgba(0,0,0,1)',
+                        width: 2,
+                        lineDash: 5,
                     },
-                    image : {
-                          radius: 4,
-                          fill: {
-                            color: 'rgba(0,0,0,1)'
-                          }
-                    }
-                }
+                    image: {
+                        radius: 4,
+                        fill: {
+                            color: 'rgba(0,0,0,1)',
+                        },
+                    },
+                },
             };
 
-
-            var data = ['gfi-selection-tool', item.type, {
-                style: style
-
-            }];
+            var data = [
+                'gfi-selection-tool',
+                item.type,
+                {
+                    style: style,
+                },
+            ];
             channel.postRequest('DrawTools.StartDrawingRequest', data);
             store.dispatch(setMinimizeGfi(true));
         }
@@ -330,180 +332,223 @@ const GfiToolsMenu = ({
 
     useEffect(() => {
         const drawHandler = (data) => {
-            if(data.isFinished && data.isFinished === true ){
-                channel && channel.unregisterEventHandler('DrawingEvent', drawHandler);
-                channel && channel.postRequest('DrawTools.StopDrawingRequest', ['gfi-selection-tool', true]);
+            if (data.isFinished && data.isFinished === true) {
+                channel &&
+                    channel.unregisterEventHandler('DrawingEvent', drawHandler);
+                channel &&
+                    channel.postRequest('DrawTools.StopDrawingRequest', [
+                        'gfi-selection-tool',
+                        true,
+                    ]);
                 channel && channel.handleEvent('DrawingEvent', drawHandler);
                 store.dispatch(setSelectedGfiTool(null));
-                if(data.id === 'gfi-selection-tool'){
+                if (data.id === 'gfi-selection-tool') {
                     store.dispatch(setMinimizeGfi(false));
                     setLoading(true);
 
-                    data.geojson && data.geojson.features && data.geojson.features.forEach(feature => {
-                        data.geojson && store.dispatch(setGFICroppingArea(feature));
-                        feature.geometry &&  channel && channel.getFeaturesByGeoJSON([feature], (gfiData) => {
-                           store.dispatch(resetGFILocations([]));
-                           gfiData.gfi && gfiData.gfi.forEach(gfi => {
-                                store.dispatch(setGFILocations(
-                                    {
-                                        content: gfi.geojson,
-                                        layerId: gfi.layerId,
-                                        gfiCroppingArea: data.geojson,
-                                        type: 'geojson'
+                    data.geojson &&
+                        data.geojson.features &&
+                        data.geojson.features.forEach((feature) => {
+                            store.dispatch(setGFICroppingArea(feature));
+                            feature.geometry &&
+                                channel &&
+                                channel.getFeaturesByGeoJSON(
+                                    [feature],
+                                    (gfiData) => {
+                                        store.dispatch(resetGFILocations([]));
+                                        gfiData.gfi &&
+                                            gfiData.gfi.forEach((gfi) => {
+                                                store.dispatch(
+                                                    setGFILocations({
+                                                        content: gfi.geojson,
+                                                        layerId: gfi.layerId,
+                                                        gfiCroppingArea:
+                                                            data.geojson,
+                                                        type: 'geojson',
+                                                    })
+                                                );
+                                            });
+                                        setLoading(false);
+                                        handleGfiToolsMenu();
                                     }
-                                ));
-                            });
-                            setLoading(false);
-                            handleGfiToolsMenu();
+                                );
                         });
-                    });
-                };
-            };
+                }
+            }
         };
 
         const featureEventHandler = (data) => {
-            if(data.operation === 'click') {
-                if(data.features){
-                    Object.values(data.features).forEach(feature => {
-                        if(feature.layerId && feature.layerId === 'download-tool-layer'){
+            if (data.operation === 'click') {
+                if (data.features) {
+                    Object.values(data.features).forEach((feature) => {
+                        if (
+                            feature.layerId &&
+                            feature.layerId === 'download-tool-layer'
+                        ) {
                             store.dispatch(setMinimizeGfi(false));
-                            if(feature.geojson.features){
+                            if (feature.geojson.features) {
                                 setLoading(true);
-                                Object.values(feature.geojson.features).forEach(subfeature => {
-                                    data.geojson && store.dispatch(setGFICroppingArea(subfeature));
-                                    subfeature.geometry && channel && channel.getFeaturesByGeoJSON([subfeature], (gfiData) => {
-                                        store.dispatch(resetGFILocations([]));
-                                        gfiData.gfi && gfiData.gfi.forEach(gfi => {
-
-                                             store.dispatch(setGFILocations(
-                                                 {
-                                                     content: gfi.geojson,
-                                                     layerId: gfi.layerId,
-                                                     gfiCroppingArea: data.features[0].geojson,
-                                                     type: 'geojson'
-                                                 }
-                                             ));
-                                         });
-                                         setLoading(false);
-                                         handleGfiToolsMenu();
-                                     });
-                                });
-                            };
-                        };
+                                Object.values(feature.geojson.features).forEach(
+                                    (subfeature) => {
+                                        store.dispatch(
+                                            setGFICroppingArea(subfeature)
+                                        );
+                                        subfeature.geometry &&
+                                            channel &&
+                                            channel.getFeaturesByGeoJSON(
+                                                [subfeature],
+                                                (gfiData) => {
+                                                    store.dispatch(
+                                                        resetGFILocations([])
+                                                    );
+                                                    gfiData.gfi &&
+                                                        gfiData.gfi.forEach(
+                                                            (gfi) => {
+                                                                store.dispatch(
+                                                                    setGFILocations(
+                                                                        {
+                                                                            content:
+                                                                                gfi.geojson,
+                                                                            layerId:
+                                                                                gfi.layerId,
+                                                                            gfiCroppingArea:
+                                                                                data
+                                                                                    .features[0]
+                                                                                    .geojson,
+                                                                            type: 'geojson',
+                                                                        }
+                                                                    )
+                                                                );
+                                                            }
+                                                        );
+                                                    setLoading(false);
+                                                    handleGfiToolsMenu();
+                                                }
+                                            );
+                                    }
+                                );
+                            }
+                        }
                     });
-                };
-            };
+                }
+            }
         };
 
         channel && channel.handleEvent('FeatureEvent', featureEventHandler);
         channel && channel.handleEvent('DrawingEvent', drawHandler);
 
         return () => {
-            channel && channel.unregisterEventHandler('FeatureEvent', featureEventHandler);
-            channel && channel.unregisterEventHandler('DrawingEvent', drawHandler);
+            channel &&
+                channel.unregisterEventHandler(
+                    'FeatureEvent',
+                    featureEventHandler
+                );
+            channel &&
+                channel.unregisterEventHandler('DrawingEvent', drawHandler);
         };
-    },[channel, handleGfiToolsMenu, store]);
+    }, [channel, handleGfiToolsMenu, store]);
 
-    return <StyledGfiToolContainer>
-        <StyledCloseButton
-            onClick={() => handleGfiToolsMenu()}
-        >
-            <FontAwesomeIcon
-                icon={faTimes}
-            />
-        </StyledCloseButton>
-         <AnimatePresence>
-            {
-            loading && <StyledLoadingOverlay
-                    transition={{
-                        duration: 0.2,
-                        type: "tween"
-                    }}
-                    initial={{
-                        opacity: 0,
-                    }}
-                    animate={{
-                        opacity: 1,
-                    }}
-                    exit={{
-                        opacity: 0,
-                    }}
-                >
-                    <StyledLoaderWrapper>
-                        <SVLoader />
-                    </StyledLoaderWrapper>
-            </StyledLoadingOverlay>
-            }
-         </AnimatePresence>
-        <StyledToolsContainer>
-            <StyledSubtitle>{strings.gfi.selectLocations}:</StyledSubtitle>
-            <CircleButtonListItem
-                key={'cropping-type-draw'}
-                id={0}
-                icon={faPencilRuler}
-                title={strings.gfi.draw}
-                subtitle={strings.gfi.drawSubtitle}
-                selectedItem={selectedTool}
-                handleSelectTool={handleSelectTool}
-            />
+    return (
+        <StyledGfiToolContainer>
+            <StyledCloseButton onClick={() => handleGfiToolsMenu()}>
+                <FontAwesomeIcon icon={faTimes} />
+            </StyledCloseButton>
             <AnimatePresence>
-            {
-                selectedTool === 0 && <StyledDrawingToolsContainer
-                    transition={{
-                        duration: 0.2,
-                        type: "tween"
-                    }}
-                    initial={{
-                        opacity: 0,
-                        height: 0
-                    }}
-                    animate={{
-                        opacity: 1,
-                        height: 'auto'
-                    }}
-                    exit={{
-                        opacity: 0,
-                        height: 0
-                    }}
-                >
-                    {
-                        drawinToolsData.map((tool) => {
-                            return <CircleButtonListItem
-                                key={'cropping-type-'+tool.id}
-                                id={tool.id}
-                                item={tool}
-                                title={tool.title}
-                                subtitle={null}
-                                selectedItem={selectedGfiTool}
-                                handleSelectTool={handleSelectDrawingTool}
-                                size={'md'}
-                                bgColor={'#ffffff'}
-                                color={'#0064AF'}
-                                activeColor={'#ffc107'}
-                            >
-                                {tool.style.icon}
-                            </CircleButtonListItem>
-                        })
-                    }
-                </StyledDrawingToolsContainer>
-            }
+                {loading && (
+                    <StyledLoadingOverlay
+                        transition={{
+                            duration: 0.2,
+                            type: 'tween',
+                        }}
+                        initial={{
+                            opacity: 0,
+                        }}
+                        animate={{
+                            opacity: 1,
+                        }}
+                        exit={{
+                            opacity: 0,
+                        }}
+                    >
+                        <StyledLoaderWrapper>
+                            <SVLoader />
+                        </StyledLoaderWrapper>
+                    </StyledLoadingOverlay>
+                )}
             </AnimatePresence>
-            {
-                gfiCroppingTypes && gfiCroppingTypes.map((croppingType) => {
-                    return <CircleButtonListItem
-                        key={'cropping-type-'+croppingType.id}
-                        id={croppingType.id}
-                        item={croppingType}
-                        icon={icons[croppingType.id].icon}
-                        title={croppingType.title}
-                        subtitle={croppingType.description}
-                        selectedItem={selectedTool}
-                        handleSelectTool={handleSelectTool}
-                    />
-                })
-            }
-        </StyledToolsContainer>
-    </StyledGfiToolContainer>
+            <StyledToolsContainer>
+                <StyledSubtitle>{strings.gfi.selectLocations}:</StyledSubtitle>
+                <CircleButtonListItem
+                    key={'cropping-type-draw'}
+                    id={0}
+                    icon={faPencilRuler}
+                    title={strings.gfi.draw}
+                    subtitle={strings.gfi.drawSubtitle}
+                    selectedItem={selectedTool}
+                    handleSelectTool={handleSelectTool}
+                />
+                <AnimatePresence>
+                    {selectedTool === 0 && (
+                        <StyledDrawingToolsContainer
+                            transition={{
+                                duration: 0.2,
+                                type: 'tween',
+                            }}
+                            initial={{
+                                opacity: 0,
+                                height: 0,
+                            }}
+                            animate={{
+                                opacity: 1,
+                                height: 'auto',
+                            }}
+                            exit={{
+                                opacity: 0,
+                                height: 0,
+                            }}
+                        >
+                            {drawinToolsData.map((tool) => {
+                                return (
+                                    <CircleButtonListItem
+                                        key={'cropping-type-' + tool.id}
+                                        id={tool.id}
+                                        item={tool}
+                                        title={tool.title}
+                                        subtitle={null}
+                                        selectedItem={selectedGfiTool}
+                                        handleSelectTool={
+                                            handleSelectDrawingTool
+                                        }
+                                        size={'md'}
+                                        bgColor={'#ffffff'}
+                                        color={'#0064AF'}
+                                        activeColor={'#ffc107'}
+                                    >
+                                        {tool.style.icon}
+                                    </CircleButtonListItem>
+                                );
+                            })}
+                        </StyledDrawingToolsContainer>
+                    )}
+                </AnimatePresence>
+                {gfiCroppingTypes &&
+                    gfiCroppingTypes.map((croppingType) => {
+                        return (
+                            <CircleButtonListItem
+                                key={'cropping-type-' + croppingType.id}
+                                id={croppingType.id}
+                                item={croppingType}
+                                icon={icons[croppingType.id].icon}
+                                title={croppingType.title}
+                                subtitle={croppingType.description}
+                                selectedItem={selectedTool}
+                                handleSelectTool={handleSelectTool}
+                            />
+                        );
+                    })}
+            </StyledToolsContainer>
+        </StyledGfiToolContainer>
+    );
 };
 
 export default GfiToolsMenu;

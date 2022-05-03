@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext } from 'react';
 import strings from '../../../translations';
 import {
     faCompress,
@@ -7,7 +7,7 @@ import {
     faPencilRuler,
     faSave,
     faMapMarkedAlt,
-    faDownload
+    faDownload,
 } from '@fortawesome/free-solid-svg-icons';
 import { ReactReduxContext } from 'react-redux';
 import styled from 'styled-components';
@@ -19,7 +19,7 @@ import {
     setIsGfiOpen,
     setActiveTool,
     setMinimizeGfi,
-    setIsGfiDownloadOpen
+    setIsGfiDownloadOpen,
 } from '../../../state/slices/uiSlice';
 
 import CircleButton from '../../circle-button/CircleButton';
@@ -37,16 +37,16 @@ const StyledMenuBar = styled.div`
     flex-direction: column;
     transition: all 0.5s ease-in-out;
     gap: 8px;
-    @media ${props => props.theme.device.mobileL} {
-        grid-row-start: ${props => props.isSearchOpen ? 2 : 1};
+    @media ${(props) => props.theme.device.mobileL} {
+        grid-row-start: ${(props) => (props.isSearchOpen ? 2 : 1)};
         grid-row-end: 3;
-    };
+    } ;
 `;
 
 const StyledMapToolsContainer = styled.div`
-    background-color: ${props => props.theme.colors.mainWhite};
+    background-color: ${(props) => props.theme.colors.mainWhite};
     border-radius: 24px;
-    box-shadow: 1px 2px 6px #0000004D;
+    box-shadow: 1px 2px 6px #0000004d;
     z-index: -1;
 `;
 
@@ -60,21 +60,18 @@ const StyledLayerCount = styled.div`
     justify-content: center;
     align-items: center;
     border-radius: 5px;
-    color: ${props => props.theme.colors.mainWhite};
-    background-color: ${props => props.theme.colors.secondaryColor7};
+    color: ${(props) => props.theme.colors.mainWhite};
+    background-color: ${(props) => props.theme.colors.secondaryColor7};
     font-size: 14px;
     font-weight: 600;
 `;
 
 const MenuBar = () => {
-
     const { store } = useContext(ReactReduxContext);
 
-    const {
-            selectedLayers,
-            downloads,
-            channel
-        } = useAppSelector((state) => state.rpc);
+    const { selectedLayers, downloads, channel } = useAppSelector(
+        (state) => state.rpc
+    );
 
     const {
         isFullScreen,
@@ -85,37 +82,40 @@ const MenuBar = () => {
         isGfiOpen,
         isGfiDownloadOpen,
         activeTool,
-    } =  useAppSelector((state) => state.ui);
+    } = useAppSelector((state) => state.ui);
 
     const handleFullScreen = () => {
         var elem = document.documentElement;
         /* View in fullscreen */
 
         function openFullscreen() {
-
-          if (elem.requestFullscreen) {
-            elem.requestFullscreen();
-          } else if (elem.webkitRequestFullscreen) { /* Safari */
-            elem.webkitRequestFullscreen();
-          } else if (elem.msRequestFullscreen) { /* IE11 */
-            elem.msRequestFullscreen();
-          } else if (elem.mozRequestFullScreen) {
-            elem.mozRequestFullScreen();
-          }
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen();
+            } else if (elem.webkitRequestFullscreen) {
+                /* Safari */
+                elem.webkitRequestFullscreen();
+            } else if (elem.msRequestFullscreen) {
+                /* IE11 */
+                elem.msRequestFullscreen();
+            } else if (elem.mozRequestFullScreen) {
+                elem.mozRequestFullScreen();
+            }
         }
 
         /* Close fullscreen */
         function closeFullscreen() {
-          if (document.exitFullscreen) {
-            document.exitFullscreen();
-          } else if (document.webkitExitFullscreen) { /* Safari */
-            document.webkitExitFullscreen();
-          } else if (document.msExitFullscreen) { /* IE11 */
-            document.msExitFullscreen();
-          }
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            } else if (document.webkitExitFullscreen) {
+                /* Safari */
+                document.webkitExitFullscreen();
+            } else if (document.msExitFullscreen) {
+                /* IE11 */
+                document.msExitFullscreen();
+            }
         }
 
-        if(isFullScreen){
+        if (isFullScreen) {
             closeFullscreen();
         } else {
             openFullscreen();
@@ -126,35 +126,35 @@ const MenuBar = () => {
         // remove geometries off the map
         channel && channel.postRequest('DrawTools.StopDrawingRequest', [true]);
         // stop the drawing tool
-        channel && channel.postRequest('DrawTools.StopDrawingRequest', [activeTool]);
+        channel &&
+            channel.postRequest('DrawTools.StopDrawingRequest', [activeTool]);
         store.dispatch(setActiveTool(null));
-        store.dispatch(setIsDrawingToolsOpen(!isDrawingToolsOpen))
+        store.dispatch(setIsDrawingToolsOpen(!isDrawingToolsOpen));
     };
-
 
     return (
         <>
-            <StyledMenuBar
-                isSearchOpen={isSearchOpen}
-            >
+            <StyledMenuBar isSearchOpen={isSearchOpen}>
                 <CircleButton
                     icon={faLayerGroup}
                     text={strings.tooltips.layerlistButton}
                     toggleState={isSideMenuOpen}
-                    clickAction={() => store.dispatch(setIsSideMenuOpen(!isSideMenuOpen))}
+                    clickAction={() =>
+                        store.dispatch(setIsSideMenuOpen(!isSideMenuOpen))
+                    }
                 >
-                    <StyledLayerCount>
-                        {selectedLayers.length}
-                    </StyledLayerCount>
+                    <StyledLayerCount>{selectedLayers.length}</StyledLayerCount>
                 </CircleButton>
                 <StyledMapToolsContainer>
                     <CircleButton
                         icon={faPencilRuler}
-                        text={strings.tooltips.measuringTools.measuringToolsButton}
+                        text={
+                            strings.tooltips.measuringTools.measuringToolsButton
+                        }
                         toggleState={isDrawingToolsOpen}
                         clickAction={closeDrawingTools}
                     />
-                    <DrawingTools isOpen={isDrawingToolsOpen}/>
+                    <DrawingTools isOpen={isDrawingToolsOpen} />
                 </StyledMapToolsContainer>
                 <CircleButton
                     icon={faMapMarkedAlt}
@@ -169,17 +169,25 @@ const MenuBar = () => {
                     icon={faDownload}
                     text={strings.downloads.downloads}
                     toggleState={isGfiDownloadOpen}
-                    clickAction={() => store.dispatch(setIsGfiDownloadOpen(!isGfiDownloadOpen))}
+                    clickAction={() =>
+                        store.dispatch(setIsGfiDownloadOpen(!isGfiDownloadOpen))
+                    }
                 >
                     <StyledLayerCount>
-                        {downloads.filter(download => download.url !== null).length}
+                        {
+                            downloads.filter(
+                                (download) => download.url !== null
+                            ).length
+                        }
                     </StyledLayerCount>
                 </CircleButton>
                 <CircleButton
                     icon={faSave}
                     text={strings.saveView.saveView}
                     toggleState={isSaveViewOpen}
-                    clickAction={() => store.dispatch(setIsSaveViewOpen(!isSaveViewOpen))}
+                    clickAction={() =>
+                        store.dispatch(setIsSaveViewOpen(!isSaveViewOpen))
+                    }
                 />
                 <CircleButton
                     icon={isFullScreen ? faCompress : faExpand}
@@ -189,6 +197,7 @@ const MenuBar = () => {
                 />
             </StyledMenuBar>
         </>
-    )};
+    );
+};
 
- export default MenuBar;
+export default MenuBar;

@@ -19,19 +19,18 @@ const StyledModalListItem = styled(motion.div)`
     cursor: ${props => props.selectAction && "pointer"};
     background-color: ${props => props.color ? props.color : props.theme.colors.mainColor1};
     border-radius: 4px;
-    //padding: 8px 0px 8px 0px;
     margin-right: 8px;
-    box-shadow: 0px 3px 6px 0px rgba(0,0,0,0.16);
+    box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, 0.16);
     @-moz-document url-prefix() {
         position: initial;
-    };
+    }
     padding: 8px;
 `;
 
 const StyledModalListItemTitle = styled.div`
     user-select: none;
     max-width: 240px;
-    color: ${props => props.theme.colors.mainWhite};
+    color: ${(props) => props.theme.colors.mainWhite};
     margin: 0;
     padding: 0px;
     font-size: 14px;
@@ -76,13 +75,13 @@ const StyleModalListItemIcon = styled.div`
     align-items: center;
     svg {
         font-size: 20px;
-        color: ${props => props.theme.colors.mainWhite};
-    };
+        color: ${(props) => props.theme.colors.mainWhite};
+    }
     p {
         margin: 0;
         font-weight: bold;
         font-size: 22px;
-        color: ${props => props.theme.colors.mainWhite};
+        color: ${(props) => props.theme.colors.mainWhite};
     }
 `;
 
@@ -134,12 +133,15 @@ const ModalListItem = ({
                 e.preventDefault();
                 selectAction && selectAction(data);
             }}
-            selectAction={selectAction}
-            onMouseEnter={() => {
-                hoverInAction && hoverInAction(data);
+            initial={{
+                opacity: 0,
             }}
-            onMouseLeave={() => {
-                hoverOutAction && hoverOutAction(data)
+            animate={{
+                opacity: 1,
+                height: 'auto',
+            }}
+            exit={{
+                opacity: 0,
             }}
             whileHover={
                 selectAction && {
@@ -150,45 +152,36 @@ const ModalListItem = ({
         >
             <StyledLeftContent>
                 <StyleModalListItemIcon>
-                    {
-                        icon ?
-                            <FontAwesomeIcon
-                                icon={icon}
-                            /> :
-                            <p>{title.charAt(0).toUpperCase()}</p>
-                    }
+                    {icon ? (
+                        <FontAwesomeIcon icon={icon} />
+                    ) : (
+                        <p>{title.charAt(0).toUpperCase()}</p>
+                    )}
                 </StyleModalListItemIcon>
                 <StyledSavedViewTitleContent>
-                    {
-                        title && <StyledModalListItemTitle>
+                    {title && (
+                        <StyledModalListItemTitle>
                             {title}
                         </StyledModalListItemTitle>
-                    }
-                    {
-                        subtitle && <StyledModalListItemSubTitle>
+                    )}
+                    {subtitle && (
+                        <StyledModalListItemSubTitle>
                             {subtitle}
                         </StyledModalListItemSubTitle>
-                    }
+                    )}
                 </StyledSavedViewTitleContent>
-
             </StyledLeftContent>
             <StyledRightContent>
-                {
-                    closeAction && 
-                    <StyledCloseButton
-                        onClick={() => closeAction(id)}
-                        >
-                        <FontAwesomeIcon
-                            icon={faTimes}
-                        />
+                {closeAction && (
+                    <StyledCloseButton onClick={() => closeAction(id)}>
+                        <FontAwesomeIcon icon={faTimes} />
                     </StyledCloseButton>
-                }
+                )}
             </StyledRightContent>
         </StyledModalListItem>
-        {
-            children && children
-        }
+        {children && children}
     </StyledModalListItemContainer>
+   
 };
 
-export default ModalListItem; 
+export default ModalListItem;

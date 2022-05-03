@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import strings from '../../translations';
 import Moment from 'react-moment';
@@ -8,7 +7,7 @@ import { useAppSelector } from '../../state/hooks';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDownload, faFileArchive, faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
 
-import ModalListItem from "../modals/ModalListItem";
+import ModalListItem from '../modals/ModalListItem';
 import SvLoader from '../loader/SvLoader';
 import store from '../../state/store';
 import { setDownloadRemove } from '../../state/slices/rpcSlice';
@@ -49,18 +48,18 @@ const StyledListItemTitleWrapper = styled.ul`
             font-size: 12px;
             font-weight: bold;
         }
-    };
+    }
 
     p {
-        margin: 0
-    };
+        margin: 0;
+    }
 
     ul {
         li {
             font-size: 12px;
             font-weight: bold;
-        };
-    };
+        }
+    }
 `;
 
 const StyledDownloadButton = styled.div`
@@ -73,20 +72,20 @@ const StyledDownloadButton = styled.div`
         color: rgba(0, 0, 0, 0.5);
         cursor: pointer;
         &:hover {
-            color: ${props => props.theme.colors.mainColor1};
+            color: ${(props) => props.theme.colors.mainColor1};
         }
-    };
+    }
 `;
 
 const StyledLoaderWrapper = styled.div`
     z-index: 999;
     height: 100%;
     max-width: 40px;
-  svg {
-    width: 100%;
-    height: 100%;
-    fill: none;
-  }
+    svg {
+        width: 100%;
+        height: 100%;
+        fill: none;
+    }
 `;
 
 const DownloadItem = ({
@@ -124,10 +123,7 @@ const DownloadItem = ({
 };
 
 const GFIDownload = () => {
-
-    let {
-        downloads
-    } = useAppSelector((state) => state.rpc);
+    let { downloads } = useAppSelector((state) => state.rpc);
 
     return (
         <StyledDownloadsContainer>
@@ -212,8 +208,7 @@ const GFIDownload = () => {
                 )
             }
         </StyledDownloadsContainer>
-    )
-
+    );
 };
 
 export default GFIDownload;
