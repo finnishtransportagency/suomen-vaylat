@@ -216,7 +216,7 @@ const GfiDownloadMenu = ({ handleGfiDownloadsMenu, handleGfiDownload }) => {
                     </StyledLoadingOverlay>
                 )}
             </AnimatePresence>
-            <StyledSubtitle>Tasot:</StyledSubtitle>
+            <StyledSubtitle>{strings.downloads.layers}:</StyledSubtitle>
             <StyledListContainer>
                 {gfiLocations &&
                     gfiLocations.length > 0 &&
