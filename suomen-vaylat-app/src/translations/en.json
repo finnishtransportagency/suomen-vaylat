@@ -70,7 +70,9 @@
     "focusToLocations": "Focus to locations",
     "noSelectedGfis": "No selected locations",
     "draw": "Draw",
-    "drawSubtitle": "Select locations by using drawing tools"
+    "drawSubtitle": "Select locations by using drawing tools",
+    "search": "Search",
+    "dataTableView": "List view"
   },
   "general": {
     "close": "Close",
