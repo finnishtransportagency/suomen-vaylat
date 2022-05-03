@@ -17,10 +17,14 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { FreeMode, Controller } from "swiper";
 import { isMobile } from '../../theme/theme';
 import { resetGFILocations } from '../../state/slices/rpcSlice';
+import Switch from '../switch/Switch';
 
 import { FormattedGFI } from './FormattedGFI';
 import GfiTools from './GfiTools';
 import CircleButton from '../circle-button/CircleButton';
+
+// Max amount of features that wont trigger react-data-table-component
+const GFI_MAX_LENGTH = 5;
 
 const StyledGfiContainer = styled.div`
     position: relative;
@@ -173,6 +177,19 @@ const StyledSelectedTabTitle = styled.div`
     }
 `;
 
+const StyledDataTableSwitch = styled.div`
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-right: 1em;
+    p {
+        color: ${props => props.theme.colors.mainColor1};
+        margin: 0 1em 0 0;
+        font-size: 16px;
+        font-weight: 600;
+    }
+`;
+
 const StyledButtonsContainer = styled.div`
     position: absolute;
     bottom: 0px;
@@ -213,6 +230,7 @@ export const GFIPopup = () => {
     const [tabsContent, setTabsContent] = useState([]);
     const [geoJsonToShow, setGeoJsonToShow] = useState(null);
     const [isGfiToolsOpen, setIsGfiToolsOpen] = useState(false);
+    const [isDataTable, setIsDataTable] = useState(false);
 
     const [gfiTabsSwiper, setGfiTabsSwiper] = useState(null);
     const [gfiTabsSnapGridLength, setGfiTabsSnapGridLength] = useState(0);
@@ -221,6 +239,7 @@ export const GFIPopup = () => {
 
     useEffect(() => {
         const mapResults = gfiLocations.map((location) => {
+            location.content.features.length > GFI_MAX_LENGTH && setIsDataTable(true);
             const layers = allLayers.filter(layer => layer.id === location.layerId);
             const layerIds = (layers && layers.length > 0) ? layers[0].id : location.layerId;
             let content;
@@ -236,6 +255,7 @@ export const GFIPopup = () => {
                     id={layerIds}
                     data={location.content}
                     type='geoJson'
+                    isDataTable={isDataTable}
                 />;
             }
             return null;
@@ -474,24 +494,30 @@ export const GFIPopup = () => {
                         else if (location.type === 'geojson') {
                             return (
                                 <SwiperSlide
-                                id={'gfi_tab_content_' + + location.x + '_' + location.y + '_' + location.layerId}
-                                key={'gfi_tab_content_' + location.x + '_' + location.y + '_' + location.layerId}
-                            >
-                                {
-                                    <StyledSelectedTabTitle>
-                                        <p>
-                                            {
-                                                name.toUpperCase()
-                                            }
-                                        </p>
-                                    </StyledSelectedTabTitle>
-                                }
-                                <FormattedGFI
-                                    id={layerIds}
-                                    data={location.content}
-                                    type='geoJson'
-                                />
-                            </SwiperSlide>
+                                    id={'gfi_tab_content_' + + location.x + '_' + location.y + '_' + location.layerId}
+                                    key={'gfi_tab_content_' + location.x + '_' + location.y + '_' + location.layerId}
+                                >
+                                    {
+                                        <StyledSelectedTabTitle>
+                                            <p>
+                                                {
+                                                    name.toUpperCase()
+                                                }
+                                            </p>
+                                        </StyledSelectedTabTitle>
+
+                                    }
+                                    <StyledDataTableSwitch>
+                                        <p>{strings.gfi.dataTableView}</p>
+                                        <Switch isSelected={isDataTable} action={() => setIsDataTable(!isDataTable)}/>
+                                    </StyledDataTableSwitch>
+                                    <FormattedGFI
+                                        id={layerIds}
+                                        data={location.content}
+                                        type='geoJson'
+                                        isDataTable={isDataTable}
+                                    />
+                                </SwiperSlide>
                             );
                         }
                         return null;
