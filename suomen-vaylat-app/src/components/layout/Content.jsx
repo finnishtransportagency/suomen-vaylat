@@ -250,7 +250,7 @@ const Content = () => {
         store.dispatch(setIsGfiDownloadOpen(true));
         store.dispatch(setDownloadActive(newDownload));
 
-        channel.downloadFeaturesByGeoJSON && channel.downloadFeaturesByGeoJSON([layerIds, null, format.format], function (data) {
+        channel.downloadFeaturesByGeoJSON && channel.downloadFeaturesByGeoJSON([layerIds, croppingArea, format.format], function (data) {
             var finishedDownload = {
                 ...newDownload,
                 url: data.url !== null && data.url,
