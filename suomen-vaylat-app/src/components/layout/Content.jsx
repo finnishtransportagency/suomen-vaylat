@@ -11,7 +11,6 @@ import {
     resetGFILocations,
     setDownloadActive,
     setDownloadFinished,
-    setDownloadRemove,
 } from '../../state/slices/rpcSlice';
 
 import {
@@ -118,14 +117,13 @@ const Content = () => {
         warning
     } = useAppSelector((state) => state.ui);
 
-    const search = useAppSelector((state) => state.search)
+    const search = useAppSelector((state) => state.search);
     const { store } = useContext(ReactReduxContext);
     const isShareOpen = shareUrl && shareUrl.length > 0 ? true : false;
     const downloadLink = useAppSelector((state) => state.ui.downloadLink);
 
     const announcements = useAppSelector((state) => state.rpc.activeAnnouncements);
     const metadata = useAppSelector((state) => state.rpc.layerMetadata);
-    const downloads = useAppSelector((state) => state.rpc.downloads);
 
     let {
         channel,
@@ -232,7 +230,7 @@ const Content = () => {
         store.dispatch(setIsGfiDownloadOpen(true));
         store.dispatch(setDownloadActive(newDownload));
 
-        channel.downloadFeaturesByGeoJSON && channel.downloadFeaturesByGeoJSON([layerIds, croppingArea, format.format], function (data) {
+        channel.downloadFeaturesByGeoJSON && channel.downloadFeaturesByGeoJSON([layerIds, null, format.format], function (data) {
             var finishedDownload = {
                 ...newDownload,
                 url: data.url !== null && data.url,
@@ -241,7 +239,15 @@ const Content = () => {
             };
             store.dispatch(setDownloadFinished(finishedDownload));
         }, function(errors) {
-            console.log('downloadFeaturesByGeoJSON NOK', errors);
+            console.log('downloadFeaturesByGeoJSON error', errors);
+            var errorDownload = {
+                ...newDownload,
+                url: null,
+                fileSize: null,
+                loading: false,
+                error: true
+            };
+            store.dispatch(setDownloadFinished(errorDownload));
         });
     };
     

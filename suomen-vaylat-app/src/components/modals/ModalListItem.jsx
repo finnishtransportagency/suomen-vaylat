@@ -17,7 +17,7 @@ const StyledModalListItem = styled(motion.div)`
     justify-content: space-between;
     align-items: center;
     cursor: ${props => props.selectAction && "pointer"};
-    background-color: ${props => props.theme.colors.mainColor1};
+    background-color: ${props => props.color ? props.color : props.theme.colors.mainColor1};
     border-radius: 4px;
     //padding: 8px 0px 8px 0px;
     margin-right: 8px;
@@ -107,6 +107,7 @@ const ModalListItem = ({
         hoverInAction,
         hoverOutAction,
         data,
+        color,
         children
     }) => {
 
@@ -144,8 +145,8 @@ const ModalListItem = ({
                 selectAction && {
                 scale: 1.02,
                 transition: { duration: 0.2 },
-            }
-        }
+            }}
+            color={color}
         >
             <StyledLeftContent>
                 <StyleModalListItemIcon>

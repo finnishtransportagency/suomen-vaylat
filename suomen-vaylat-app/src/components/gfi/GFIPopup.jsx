@@ -4,8 +4,6 @@ import {
     faTimes,
     faSearchLocation,
     faPencilRuler,
-    faDownload,
-    faFileArchive,
     faFileDownload,
     faAngleLeft,
     faAngleRight
@@ -19,7 +17,6 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { FreeMode, Controller } from "swiper";
 import { isMobile } from '../../theme/theme';
 import { resetGFILocations } from '../../state/slices/rpcSlice';
-import { setIsGfiDownloadOpen } from '../../state/slices/uiSlice';
 
 import { FormattedGFI } from './FormattedGFI';
 import GfiToolsMenu from './GfiToolsMenu';
