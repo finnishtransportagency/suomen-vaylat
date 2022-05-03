@@ -8,7 +8,7 @@ import {
     faTimes,
     faTrash,
     faEllipsisV,
-    faAngleUp
+    faAngleUp,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import AddressSearch from './AddressSearch';
@@ -21,10 +21,7 @@ import strings from '../../translations';
 
 import { isMobile } from '../../theme/theme';
 
-import {
-    addMarkerRequest,
-    mapMoveRequest,
-} from '../../state/slices/rpcSlice';
+import { addMarkerRequest, mapMoveRequest } from '../../state/slices/rpcSlice';
 
 import { setIsSearchOpen } from '../../state/slices/uiSlice';
 
@@ -42,11 +39,11 @@ const StyledSearchContainer = styled.div`
     display: flex;
     justify-content: flex-end;
     height: 48px;
-    @media ${props => props.theme.device.mobileL} {
-        grid-column-start: ${props => props.isSearchOpen ? 1 : 2};
+    @media ${(props) => props.theme.device.mobileL} {
+        grid-column-start: ${(props) => (props.isSearchOpen ? 1 : 2)};
         grid-column-end: 4;
         height: 40px;
-    };
+    } ;
 `;
 
 const StyledSearchWrapper = styled(motion.div)`
@@ -59,14 +56,17 @@ const StyledSearchWrapper = styled(motion.div)`
     overflow: hidden;
     padding-right: 48px;
     height: 100%;
-    background-color: ${props => props.theme.colors.mainWhite};
+    background-color: ${(props) => props.theme.colors.mainWhite};
     border-radius: 24px;
-    box-shadow: ${props => props.searchType === 'vkmtrack' && props.showSearchResults  ? 'none' : 'rgb(0 0 0 / 16%) 0px 3px 6px, rgb(0 0 0 / 23%) 0px 3px 6px'};
+    box-shadow: ${(props) =>
+        props.searchType === 'vkmtrack' && props.showSearchResults
+            ? 'none'
+            : 'rgb(0 0 0 / 16%) 0px 3px 6px, rgb(0 0 0 / 23%) 0px 3px 6px'};
     pointer-events: auto;
-    @media ${props => props.theme.device.mobileL} {
+    @media ${(props) => props.theme.device.mobileL} {
         border-radius: 20px;
         padding-right: 40px;
-    };
+    } ;
 `;
 
 const StyledLeftContentWrapper = styled.div`
@@ -88,10 +88,13 @@ const StyledSearchMethodSelector = styled.div`
     align-items: center;
     margin-left: 8px;
     cursor: pointer;
-    color: ${props => props.isSearchMethodSelectorOpen ? props.theme.colors.mainColor1 : 'rgba(0,0,0,0.5)'};
+    color: ${(props) =>
+        props.isSearchMethodSelectorOpen
+            ? props.theme.colors.mainColor1
+            : 'rgba(0,0,0,0.5)'};
     p {
         margin: 0;
-    };
+    }
     svg {
         font-size: 16px;
     }
@@ -117,13 +120,13 @@ const StyledDropDown = styled(motion.div)`
     height: auto;
     border-radius: 24px;
     box-shadow: rgb(0 0 0 / 16%) 0px 3px 6px, rgb(0 0 0 / 23%) 0px 3px 6px;
-    background-color: ${props => props.theme.colors.mainWhite};
+    background-color: ${(props) => props.theme.colors.mainWhite};
     padding: 64px 16px 0px 16px;
     pointer-events: auto;
     overflow: auto;
-    @media ${props => props.theme.device.mobileL} {
+    @media ${(props) => props.theme.device.mobileL} {
         max-width: 100%;
-    };
+    } ;
 `;
 
 const StyledDropdownContentItem = styled.div`
@@ -133,7 +136,8 @@ const StyledDropdownContentItem = styled.div`
     padding-bottom: 16px;
     border-radius: 5px;
 
-    background-color: ${props => props.itemSelected ? props.theme.colors.mainColor3 : ''};
+    background-color: ${(props) =>
+        props.itemSelected ? props.theme.colors.mainColor3 : ''};
     p {
         margin: 0;
         padding: 0;
@@ -141,14 +145,14 @@ const StyledDropdownContentItem = styled.div`
 `;
 
 const StyledDropdownContentItemTitle = styled.p`
-    text-align: ${props => props.type === 'noResults' && 'center'};
+    text-align: ${(props) => props.type === 'noResults' && 'center'};
     font-size: 14px;
     color: #504d4d;
 `;
 
 const StyledDropdownContentItemSubtitle = styled.p`
     font-size: 12px;
-    color: #807A7A;
+    color: #807a7a;
 `;
 
 const StyledHideSearchResultsButton = styled.div`
@@ -159,19 +163,35 @@ const StyledHideSearchResultsButton = styled.div`
     padding-bottom: 4px;
     cursor: pointer;
     svg {
-    font-size: 23px;
-      color:  ${props => props.theme.colors.mainColor1}
-    };
+        font-size: 23px;
+        color: ${(props) => props.theme.colors.mainColor1};
+    }
+`;
 
+const StyledLoaderWrapper = styled.div`
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 999;
+    height: 100%;
+    max-width: 200px;
+    max-height: 200px;
+    transform: translate(-50%, -50%);
+    svg {
+        width: 100%;
+        height: 100%;
+        fill: none;
+    }
 `;
 
 const Search = () => {
-    const [searchValue, setSearchValue ] = useState('');
+    const [searchValue, setSearchValue] = useState('');
     const [lastSearchValue, setLastSearchValue] = useState('');
     const [isSearching, setIsSearching] = useState(false);
     const [searchResults, setSearchResults] = useState(null);
     const [showSearchResults, setShowSearchResults] = useState(true);
-    const [isSearchMethodSelectorOpen, setIsSearchMethodSelectorOpen] = useState(false);
+    const [isSearchMethodSelectorOpen, setIsSearchMethodSelectorOpen] =
+        useState(false);
     const [searchType, setSearchType] = useState('address');
 
     const { isSearchOpen } = useAppSelector((state) => state.ui);
@@ -196,7 +216,10 @@ const Search = () => {
         setIsSearching(false);
 
         let style = 'tie';
-        if ((data.hasOwnProperty('osa') || data.hasOwnProperty('ajorata')) && !data.hasOwnProperty('etaisyys')) {
+        if (
+            (data.hasOwnProperty('osa') || data.hasOwnProperty('ajorata')) &&
+            !data.hasOwnProperty('etaisyys')
+        ) {
             style = 'osa';
         } else if (data.hasOwnProperty('etaisyys')) {
             style = 'etaisyys';
@@ -206,15 +229,27 @@ const Search = () => {
 
         if (style === 'tie') {
             removeMarkersAndFeatures();
-        };
+        }
 
         const value = {
-            tienumero: data.hasOwnProperty('tie') ? parseInt(data.tie) : searchValue.tienumero || null,
-            tieosa: data.hasOwnProperty('osa') ? parseInt(data.osa) : searchValue.tieosa || 'default',
-            ajorata: data.hasOwnProperty('ajorata') ? parseInt(data.ajorata) : 'default',
-            etaisyys: data.hasOwnProperty('etaisyys') ? parseInt(data.etaisyys) : '',
-            tieosat: data.hasOwnProperty('tieosat') ? data.tieosat: searchValue.tieosat || [],
-            ajoradat: data.hasOwnProperty('ajoradat') ? data.ajoradat: searchValue.ajoradat || []
+            tienumero: data.hasOwnProperty('tie')
+                ? parseInt(data.tie)
+                : searchValue.tienumero || null,
+            tieosa: data.hasOwnProperty('osa')
+                ? parseInt(data.osa)
+                : searchValue.tieosa || 'default',
+            ajorata: data.hasOwnProperty('ajorata')
+                ? parseInt(data.ajorata)
+                : 'default',
+            etaisyys: data.hasOwnProperty('etaisyys')
+                ? parseInt(data.etaisyys)
+                : '',
+            tieosat: data.hasOwnProperty('tieosat')
+                ? data.tieosat
+                : searchValue.tieosat || [],
+            ajoradat: data.hasOwnProperty('ajoradat')
+                ? data.ajoradat
+                : searchValue.ajoradat || [],
         };
 
         setSearchValue(value);
@@ -222,15 +257,18 @@ const Search = () => {
 
         setSearchResults(data);
 
-        data.hasOwnProperty('geom') && channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest',
-        [data.geom, {
-            clearPrevious: true,
-            centerTo: true,
-            hover: hover,
-            featureStyle: featureStyle,
-            layerId: vectorLayerId + '_vkm_' + style,
-            maxZoomLevel: 10
-        }]);
+        data.hasOwnProperty('geom') &&
+            channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', [
+                data.geom,
+                {
+                    clearPrevious: true,
+                    centerTo: true,
+                    hover: hover,
+                    featureStyle: featureStyle,
+                    layerId: vectorLayerId + '_vkm_' + style,
+                    maxZoomLevel: 10,
+                },
+            ]);
     };
 
     const handleVKMSearch = (params) => {
@@ -238,20 +276,22 @@ const Search = () => {
         setIsSearching(true);
         setVkmError(null);
 
-
         const requestData = [
-            params.hasOwnProperty('vkmTienumero') && parseInt(params.vkmTienumero),
+            params.hasOwnProperty('vkmTienumero') &&
+                parseInt(params.vkmTienumero),
             params.hasOwnProperty('vkmTieosa') && parseInt(params.vkmTieosa),
             params.hasOwnProperty('vkmAjorata') && parseInt(params.vkmAjorata),
-            params.hasOwnProperty('vkmEtaisyys') && parseInt(params.vkmEtaisyys)
+            params.hasOwnProperty('vkmEtaisyys') &&
+                parseInt(params.vkmEtaisyys),
         ];
 
-        channel.searchVKMRoad && channel.searchVKMRoad(requestData, handleVKMResponse, (err) => {
-            setIsSearching(false);
-            if(err){
-                setVkmError(err);
-            }
-        });
+        channel.searchVKMRoad &&
+            channel.searchVKMRoad(requestData, handleVKMResponse, (err) => {
+                setIsSearching(false);
+                if (err) {
+                    setVkmError(err);
+                }
+            });
     };
 
     const handleVKMTrackResponse = (data) => {
@@ -263,57 +303,78 @@ const Search = () => {
         removeMarkersAndFeatures();
 
         const value = {
-            ratanumero: data.hasOwnProperty('ratanumero') ? data.ratanumero : searchValue.ratanumero || '',
-            ratakilometri: data.hasOwnProperty('ratakilometri') ? parseInt(data.ratakilometri) : searchValue.ratakilometri || 1,
-            ratametri: data.hasOwnProperty('ratametri') ? parseInt(data.ratametri) : searchValue.ratakilometri || 0
+            ratanumero: data.hasOwnProperty('ratanumero')
+                ? data.ratanumero
+                : searchValue.ratanumero || '',
+            ratakilometri: data.hasOwnProperty('ratakilometri')
+                ? parseInt(data.ratakilometri)
+                : searchValue.ratakilometri || 1,
+            ratametri: data.hasOwnProperty('ratametri')
+                ? parseInt(data.ratametri)
+                : searchValue.ratakilometri || 0,
         };
 
         setSearchValue(value);
         setLastSearchValue(value);
         setSearchResults(data);
 
-        data.hasOwnProperty('geom') && channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest',
-        [data.geom, {
-            centerTo: true,
-            hover: hover,
-            featureStyle: featureStyle,
-            layerId: vectorLayerId + '_vkm_track',
-            maxZoomLevel: 10
-        }]);
+        data.hasOwnProperty('geom') &&
+            channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', [
+                data.geom,
+                {
+                    centerTo: true,
+                    hover: hover,
+                    featureStyle: featureStyle,
+                    layerId: vectorLayerId + '_vkm_track',
+                    maxZoomLevel: 10,
+                },
+            ]);
     };
 
     const handleVKMTrackSearch = (params) => {
         removeMarkersAndFeatures();
         setVkmTrackError(null);
-        if(
-            params.hasOwnProperty('ratanumero') && params.ratanumero !== '' &&
-            params.hasOwnProperty('ratakilometri') && params.ratakilometri !== '' &&
-            params.hasOwnProperty('ratametri') && params.ratametri !== ''
+        if (
+            params.hasOwnProperty('ratanumero') &&
+            params.ratanumero !== '' &&
+            params.hasOwnProperty('ratakilometri') &&
+            params.ratakilometri !== '' &&
+            params.hasOwnProperty('ratametri') &&
+            params.ratametri !== ''
         ) {
             let requestData = [
                 params.hasOwnProperty('ratanumero') && params.ratanumero,
-                params.hasOwnProperty('ratakilometri') && parseInt(params.ratakilometri),
-                params.hasOwnProperty('ratametri') && parseInt(params.ratametri),
+                params.hasOwnProperty('ratakilometri') &&
+                    parseInt(params.ratakilometri),
+                params.hasOwnProperty('ratametri') &&
+                    parseInt(params.ratametri),
             ];
-            channel.searchVKMTrack && channel.searchVKMTrack(requestData, handleVKMTrackResponse, (err) => {
-                setIsSearching(false);
-                if(err){
-                    setVkmTrackError(err);
-                };
-            });
+            channel.searchVKMTrack &&
+                channel.searchVKMTrack(
+                    requestData,
+                    handleVKMTrackResponse,
+                    (err) => {
+                        setIsSearching(false);
+                        if (err) {
+                            setVkmTrackError(err);
+                        }
+                    }
+                );
         } else {
-            setVkmTrackError("Täytä kaikki hakukentät");
-        };
+            setVkmTrackError(strings.search.fill_all_fields);
+        }
     };
 
     const handleMetadataSearch = (value) => {
         removeMarkersAndFeatures();
         setIsSearching(true);
-        channel.postRequest('MetadataSearchRequest', [{
-            search: value,
-            srs: 'EPSG:3067',
-            OrganisationName: 'Väylävirasto'
-        }]);
+        channel.postRequest('MetadataSearchRequest', [
+            {
+                search: value,
+                srs: 'EPSG:3067',
+                OrganisationName: 'Väylävirasto',
+            },
+        ]);
         setLastSearchValue(value);
     };
 
@@ -323,144 +384,158 @@ const Search = () => {
         vectorLayerId + '_vkm_tie',
         vectorLayerId + '_vkm_osa',
         vectorLayerId + '_vkm_etaisyys',
-        vectorLayerId + '_vkm_track'
+        vectorLayerId + '_vkm_track',
     ];
 
     const removeMarkersAndFeatures = () => {
         if (!channel) {
             return;
         }
-        markerIds.forEach(markerId => {
-            channel.postRequest('MapModulePlugin.RemoveMarkersRequest', [markerId]);
+        markerIds.forEach((markerId) => {
+            channel.postRequest('MapModulePlugin.RemoveMarkersRequest', [
+                markerId,
+            ]);
         });
-        vectorLayerIds.forEach(vectorLayerId => {
-            channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [null, null, vectorLayerId])
+        vectorLayerIds.forEach((vectorLayerId) => {
+            channel.postRequest(
+                'MapModulePlugin.RemoveFeaturesFromMapRequest',
+                [null, null, vectorLayerId]
+            );
         });
     };
-
 
     const searchTypes = {
         address: {
             label: strings.search.address.title,
             subtitle: strings.search.address.subtitle,
-            content: <AddressSearch
-                searchValue={searchValue}
-                setSearchValue={setSearchValue}
-                setIsSearching={setIsSearching}
-                handleAddressSearch={handleAddressSearch}
-            />,
-            visible: true
+            content: (
+                <AddressSearch
+                    searchValue={searchValue}
+                    setSearchValue={setSearchValue}
+                    setIsSearching={setIsSearching}
+                    handleAddressSearch={handleAddressSearch}
+                />
+            ),
+            visible: true,
         },
         vkm: {
             label: strings.search.vkm.title,
             subtitle: strings.search.vkm.subtitle,
-            content: <RoadSearch
-                searchValue={searchValue}
-                setSearchValue={setSearchValue}
-                setIsSearching={setIsSearching}
-                handleVKMSearch={handleVKMSearch}
-            />,
-            visible: channel && channel.searchVKMRoad
+            content: (
+                <RoadSearch
+                    searchValue={searchValue}
+                    setSearchValue={setSearchValue}
+                    setIsSearching={setIsSearching}
+                    handleVKMSearch={handleVKMSearch}
+                />
+            ),
+            visible: channel && channel.searchVKMRoad,
         },
         vkmtrack: {
             label: strings.search.vkm.trackTitle,
             subtitle: strings.search.vkm.trackSubtitle,
             content: <p>{strings.search.vkm.trackTitle}</p>,
-            visible: channel && channel.searchVKMTrack
+            visible: channel && channel.searchVKMTrack,
         },
         metadata: {
             label: strings.search.metadata.title,
             subtitle: strings.search.metadata.subtitle,
-            content: <MetadataSearch
-                searchValue={searchValue}
-                setSearchValue={setSearchValue}
-                setIsSearching={setIsSearching}
-                handleMetadataSearch={handleMetadataSearch}
-            />,
-            visible: true
-        }
+            content: (
+                <MetadataSearch
+                    searchValue={searchValue}
+                    setSearchValue={setSearchValue}
+                    setIsSearching={setIsSearching}
+                    handleMetadataSearch={handleMetadataSearch}
+                />
+            ),
+            visible: true,
+        },
     };
 
     useEffect(() => {
-        channel && channel.handleEvent('SearchResultEvent', function(data) {
-            setIsSearching(false);
-            if (data.success){
-                if(data.result){
-                    setSearchResults(data);
+        channel &&
+            channel.handleEvent('SearchResultEvent', function (data) {
+                setIsSearching(false);
+                if (data.success) {
+                    if (data.result) {
+                        setSearchResults(data);
+                    }
                 }
-            };
-        });
+            });
 
-        channel && channel.handleEvent('MetadataSearchResultEvent', function(data) {
-            setIsSearching(false);
-            if (data.success){
-                if(data.results){
-                    setSearchResults(data.results);
+        channel &&
+            channel.handleEvent('MetadataSearchResultEvent', function (data) {
+                setIsSearching(false);
+                if (data.success) {
+                    if (data.results) {
+                        setSearchResults(data.results);
+                    }
                 }
-            };
-         });
-    },[channel]);
+            });
+    }, [channel]);
 
     const handleAddressSelect = (name, lon, lat, id) => {
-        store.dispatch(addMarkerRequest({
-            x: lon,
-            y: lat,
-            msg: name || '',
-            markerId: markerId
-        }));
+        store.dispatch(
+            addMarkerRequest({
+                x: lon,
+                y: lat,
+                msg: name || '',
+                markerId: markerId,
+            })
+        );
 
-        store.dispatch(mapMoveRequest({
-            x: lon,
-            y: lat
-        }));
+        store.dispatch(
+            mapMoveRequest({
+                x: lon,
+                y: lat,
+            })
+        );
     };
 
     const variants = {
         initial: {
             maxWidth: 0,
             opacity: 0,
-            filter: 'blur(10px)'
+            filter: 'blur(10px)',
         },
         animate: {
             maxWidth: '400px',
             opacity: 1,
-            filter: 'blur(0px)'
+            filter: 'blur(0px)',
         },
         exit: {
             maxWidth: 0,
             opacity: 0,
-            filter: 'blur(10px)'
+            filter: 'blur(10px)',
         },
         transition: {
             duration: 0.3,
-            type: 'tween'
-        }
+            type: 'tween',
+        },
     };
 
     const dropdownVariants = {
         initial: {
             height: 0,
-            opacity: 0
+            opacity: 0,
         },
         animate: {
             height: 'auto',
             maxHeight: 'calc(var(--app-height) - 100px)',
-            opacity: 1
+            opacity: 1,
         },
         exit: {
             height: 0,
-            opacity: 0
+            opacity: 0,
         },
         transition: {
             duration: 0.5,
-            type: 'tween'
-        }
+            type: 'tween',
+        },
     };
 
     return (
-        <StyledSearchContainer
-            isSearchOpen={isSearchOpen}
-        >
+        <StyledSearchContainer isSearchOpen={isSearchOpen}>
             <CircleButton
                 icon={isSearchOpen ? faTimes : faSearch}
                 text={strings.tooltips.search}
@@ -472,100 +547,127 @@ const Search = () => {
                     isSearchOpen && setSearchResults(null);
                     isSearchOpen && setSearchValue('');
                     store.dispatch(setIsSearchOpen(!isSearchOpen));
-                    isSearchMethodSelectorOpen && setIsSearchMethodSelectorOpen(false);
+                    isSearchMethodSelectorOpen &&
+                        setIsSearchMethodSelectorOpen(false);
                     setSearchType('address');
                     setVkmError(null);
                     setVkmTrackError(null);
                 }}
             />
             <AnimatePresence>
-                {
-                isSearchOpen && <StyledSearchWrapper
-                    variants={variants}
-                    initial={'initial'}
-                    animate={'animate'}
-                    exit={'exit'}
-                    transition={'transition'}
-                    searchType={searchType}
-                    showSearchResults={showSearchResults}
-                >
-                    <StyledLeftContentWrapper>
-                        <StyledSearchMethodSelector
-                            onClick={() => {
-                                setIsSearchMethodSelectorOpen(!isSearchMethodSelectorOpen);
-                            }}
-                            isSearchMethodSelectorOpen={isSearchMethodSelectorOpen}
-                        >
-                            <FontAwesomeIcon
-                                icon={faEllipsisV}
-                            />
-                        </StyledSearchMethodSelector>
-                        {
-                            !isSearching ?
+                {isSearchOpen && (
+                    <StyledSearchWrapper
+                        variants={variants}
+                        initial={'initial'}
+                        animate={'animate'}
+                        exit={'exit'}
+                        transition={'transition'}
+                        searchType={searchType}
+                        showSearchResults={showSearchResults}
+                    >
+                        <StyledLeftContentWrapper>
+                            <StyledSearchMethodSelector
+                                onClick={() => {
+                                    setIsSearchMethodSelectorOpen(
+                                        !isSearchMethodSelectorOpen
+                                    );
+                                }}
+                                isSearchMethodSelectorOpen={
+                                    isSearchMethodSelectorOpen
+                                }
+                            >
+                                <FontAwesomeIcon icon={faEllipsisV} />
+                            </StyledSearchMethodSelector>
+                            {!isSearching ? (
                                 <StyledSelectedSearchMethod
                                     onClick={() => {
                                         setShowSearchResults(true);
-                                        isSearchMethodSelectorOpen && setIsSearchMethodSelectorOpen(false);
+                                        isSearchMethodSelectorOpen &&
+                                            setIsSearchMethodSelectorOpen(
+                                                false
+                                            );
                                     }}
                                 >
-                                    {
-                                        searchTypes[searchType].content
+                                    {searchTypes[searchType].content}
+                                </StyledSelectedSearchMethod>
+                            ) : (
+                                <StyledLoaderWrapper>
+                                    <SvLoder />
+                                </StyledLoaderWrapper>
+                            )}
+                        </StyledLeftContentWrapper>
+                        {searchResults !== null &&
+                        searchValue === lastSearchValue ? (
+                            <StyledSearchActionButton
+                                onClick={() => {
+                                    setSearchResults(null);
+                                    setSearchValue('');
+                                    removeMarkersAndFeatures();
+                                }}
+                                icon={faTrash}
+                            />
+                        ) : (
+                            <StyledSearchActionButton
+                                onClick={() => {
+                                    switch (searchType) {
+                                        case 'address':
+                                            handleAddressSearch(searchValue);
+                                            break;
+                                        case 'vkm':
+                                            let data = {};
+                                            if (
+                                                searchValue.hasOwnProperty(
+                                                    'tienumero'
+                                                )
+                                            ) {
+                                                data.vkmTienumero =
+                                                    searchValue.tienumero;
+                                            }
+                                            if (
+                                                searchValue.hasOwnProperty(
+                                                    'tieosa'
+                                                )
+                                            ) {
+                                                data.vkmTieosa =
+                                                    searchValue.tieosa;
+                                            }
+                                            if (
+                                                searchValue.hasOwnProperty(
+                                                    'ajorata'
+                                                )
+                                            ) {
+                                                data.vkmAjorata =
+                                                    searchValue.ajorata;
+                                            }
+                                            if (
+                                                searchValue.hasOwnProperty(
+                                                    'etaisyys'
+                                                )
+                                            ) {
+                                                data.vkmEtaisyys = parseInt(
+                                                    searchValue.etaisyys
+                                                );
+                                            }
+                                            handleVKMSearch(data);
+                                            break;
+                                        case 'vkmtrack':
+                                            handleVKMTrackSearch(searchValue);
+                                            break;
+                                        case 'metadata':
+                                            handleMetadataSearch(searchValue);
+                                            break;
+                                        default:
+                                            break;
                                     }
-                                </StyledSelectedSearchMethod> : <SvLoder />
-                        }
-                    </StyledLeftContentWrapper>
-                    {
-                      (searchResults !== null && (searchValue === lastSearchValue)) ?
-                      <StyledSearchActionButton
-                            onClick={() => {
-                                setSearchResults(null);
-                                setSearchValue('');
-                                removeMarkersAndFeatures();
-                            }}
-                            icon={faTrash}
-                        /> :
-                        <StyledSearchActionButton
-                            onClick={() => {
-                                switch(searchType){
-                                    case 'address':
-                                        handleAddressSearch(searchValue);
-                                    break;
-                                    case 'vkm':
-                                        let data = {};
-                                            if(searchValue.hasOwnProperty('tienumero')){
-                                                data.vkmTienumero = searchValue.tienumero;
-                                            }
-                                            if(searchValue.hasOwnProperty('tieosa')){
-                                                data.vkmTieosa = searchValue.tieosa;
-                                            }
-                                            if(searchValue.hasOwnProperty('ajorata')){
-                                                data.vkmAjorata = searchValue.ajorata;
-                                            }
-                                            if(searchValue.hasOwnProperty('etaisyys')){
-                                                data.vkmEtaisyys = parseInt(searchValue.etaisyys);
-                                            };
-                                        handleVKMSearch(data);
-                                    break;
-                                    case 'vkmtrack':
-                                            handleVKMTrackSearch(searchValue)
-                                    break;
-                                    case 'metadata':
-                                        handleMetadataSearch(searchValue);
-                                    break;
-                                    default:
-
-                                    break;
-                                }
-                            }}
-                            icon={faSearch}
-                        />
-                    }
-                 </StyledSearchWrapper>
-                }
+                                }}
+                                icon={faSearch}
+                            />
+                        )}
+                    </StyledSearchWrapper>
+                )}
             </AnimatePresence>
             <AnimatePresence>
-                {
-                    isSearchMethodSelectorOpen ?
+                {isSearchMethodSelectorOpen ? (
                     <StyledDropDown
                         key={'dropdown-content-searchmethods'}
                         variants={dropdownVariants}
@@ -574,35 +676,40 @@ const Search = () => {
                         exit={'exit'}
                         transition={'transition'}
                     >
-                        {
-                            Object.keys(searchTypes).map((searchType) => {
-                                const type = searchTypes[searchType];
-                                if (type.visible) {
-                                    return (
-                                        <StyledDropdownContentItem
-                                            onClick={() => {
-                                                setSearchResults(null);
-                                                setSearchType(searchType);
-                                                setIsSearchMethodSelectorOpen(false);
-                                                setSearchValue('');
-                                                isSearchOpen && removeMarkersAndFeatures();
-                                            }}
-                                            key={'search-type-' + searchType}
-                                        >
-                                            <StyledDropdownContentItemTitle>{type.label}</StyledDropdownContentItemTitle>
-                                            <StyledDropdownContentItemSubtitle>{type.subtitle}</StyledDropdownContentItemSubtitle>
-                                        </StyledDropdownContentItem>
-                                    );
-                                } else {
-                                    return null;
-                                }
-                            })
-                        }
-                   </StyledDropDown> :
-                    isSearchOpen &&
-                    searchResults !== null &&
-                    showSearchResults &&
-                    searchType === 'address' ?
+                        {Object.keys(searchTypes).map((searchType) => {
+                            const type = searchTypes[searchType];
+                            if (type.visible) {
+                                return (
+                                    <StyledDropdownContentItem
+                                        onClick={() => {
+                                            setSearchResults(null);
+                                            setSearchType(searchType);
+                                            setIsSearchMethodSelectorOpen(
+                                                false
+                                            );
+                                            setSearchValue('');
+                                            isSearchOpen &&
+                                                removeMarkersAndFeatures();
+                                        }}
+                                        key={'search-type-' + searchType}
+                                    >
+                                        <StyledDropdownContentItemTitle>
+                                            {type.label}
+                                        </StyledDropdownContentItemTitle>
+                                        <StyledDropdownContentItemSubtitle>
+                                            {type.subtitle}
+                                        </StyledDropdownContentItemSubtitle>
+                                    </StyledDropdownContentItem>
+                                );
+                            } else {
+                                return null;
+                            }
+                        })}
+                    </StyledDropDown>
+                ) : isSearchOpen &&
+                  searchResults !== null &&
+                  showSearchResults &&
+                  searchType === 'address' ? (
                     <StyledDropDown
                         key={'dropdown-content-address'}
                         variants={dropdownVariants}
@@ -611,53 +718,80 @@ const Search = () => {
                         exit={'exit'}
                         transition={'transition'}
                     >
-                        {
-                            searchResults.result && searchResults.result.locations && searchResults.result.locations.length > 0 ? searchResults.result.locations.map(({ name, region, type, lon, lat, id }, index) => {
-                                let visibleText;
-                                if (name === region) {
-                                    visibleText = name;
-                                    if (type) {
-                                        visibleText += ' (' + type.toLowerCase() +')';
+                        {searchResults.result &&
+                        searchResults.result.locations &&
+                        searchResults.result.locations.length > 0 ? (
+                            searchResults.result.locations.map(
+                                (
+                                    { name, region, type, lon, lat, id },
+                                    index
+                                ) => {
+                                    let visibleText;
+                                    if (name === region) {
+                                        visibleText = name;
+                                        if (type) {
+                                            visibleText +=
+                                                ' (' + type.toLowerCase() + ')';
+                                        }
+                                    } else if (region && type) {
+                                        visibleText =
+                                            name +
+                                            ', ' +
+                                            region +
+                                            ' (' +
+                                            type.toLowerCase() +
+                                            ')';
+                                    } else if (type) {
+                                        visibleText =
+                                            name +
+                                            ' (' +
+                                            type.toLowerCase() +
+                                            ')';
+                                    } else {
+                                        visibleText = name;
                                     }
-                                } else if (region && type) {
-                                    visibleText = name + ', ' + region + ' (' + type.toLowerCase() +')';
-                                } else if (type) {
-                                    visibleText = name + ' (' + type.toLowerCase() +')';
-                                } else {
-                                    visibleText = name;
+                                    return (
+                                        <StyledDropdownContentItem
+                                            key={name + '_' + index}
+                                            onClick={() => {
+                                                setSearchValue(visibleText);
+                                                setLastSearchValue(visibleText);
+                                                handleAddressSelect(
+                                                    name,
+                                                    lon,
+                                                    lat,
+                                                    id
+                                                );
+                                                isMobile &&
+                                                    setShowSearchResults(false);
+                                            }}
+                                        >
+                                            <StyledDropdownContentItemTitle>
+                                                {visibleText}
+                                            </StyledDropdownContentItemTitle>
+                                        </StyledDropdownContentItem>
+                                    );
                                 }
-                                return <StyledDropdownContentItem
-                                    key={name + '_' + index}
-                                    onClick={() => {
-                                        setSearchValue(visibleText);
-                                        setLastSearchValue(visibleText);
-                                        handleAddressSelect(name, lon, lat, id);
-                                        isMobile && setShowSearchResults(false);
-                                    }}
-                                >
-                                   <StyledDropdownContentItemTitle>{ visibleText }</StyledDropdownContentItemTitle>
-                                </StyledDropdownContentItem>
-                            }) :
-                            <StyledDropdownContentItem
-                                key={'no-results'}
-                            >
-                                <StyledDropdownContentItemTitle type='noResults'>{strings.search.address.error.text}</StyledDropdownContentItemTitle>
+                            )
+                        ) : (
+                            <StyledDropdownContentItem key={'no-results'}>
+                                <StyledDropdownContentItemTitle type="noResults">
+                                    {strings.search.address.error.text}
+                                </StyledDropdownContentItemTitle>
                             </StyledDropdownContentItem>
-                        }
-                    <StyledHideSearchResultsButton
-                        onClick={() => setShowSearchResults(false)}
-                    >
-                        <FontAwesomeIcon
-                            icon={faAngleUp}
-                        />
-                    </StyledHideSearchResultsButton>
-                    </StyledDropDown> :
-                    (isSearchOpen &&
-                    showSearchResults &&
-                    searchType === 'vkm' &&
-                    searchValue.tieosat &&
-                    searchValue.tieosat.length > 0) ||
-                    vkmError ?
+                        )}
+                        <StyledHideSearchResultsButton
+                            onClick={() => setShowSearchResults(false)}
+                        >
+                            <FontAwesomeIcon icon={faAngleUp} />
+                        </StyledHideSearchResultsButton>
+                    </StyledDropDown>
+                ) : (isSearchOpen &&
+                      showSearchResults &&
+                      searchType === 'vkm' &&
+                      searchValue.tieosat &&
+                      searchValue.tieosat.length > 0) ||
+                  vkmError ? (
                     <StyledDropDown
                         key={'dropdown-content-vkm'}
                         variants={dropdownVariants}
@@ -678,19 +812,16 @@ const Search = () => {
                             handleVKMResponse={handleVKMResponse}
                             vkmError={vkmError}
                             setVkmError={setVkmError}
-
                         />
                         <StyledHideSearchResultsButton
                             onClick={() => setShowSearchResults(false)}
                         >
-                            <FontAwesomeIcon
-                                icon={faAngleUp}
-                            />
+                            <FontAwesomeIcon icon={faAngleUp} />
                         </StyledHideSearchResultsButton>
-                    </StyledDropDown> :
-                    isSearchOpen &&
-                    showSearchResults &&
-                    searchType === 'vkmtrack' ?
+                    </StyledDropDown>
+                ) : isSearchOpen &&
+                  showSearchResults &&
+                  searchType === 'vkmtrack' ? (
                     <StyledDropDown
                         key={'dropdown-content-vkmtrack'}
                         variants={dropdownVariants}
@@ -715,47 +846,53 @@ const Search = () => {
                         <StyledHideSearchResultsButton
                             onClick={() => setShowSearchResults(false)}
                         >
-                            <FontAwesomeIcon
-                                icon={faAngleUp}
-                            />
+                            <FontAwesomeIcon icon={faAngleUp} />
                         </StyledHideSearchResultsButton>
-                    </StyledDropDown> :
-
+                    </StyledDropDown>
+                ) : (
                     isSearchOpen &&
                     searchResults !== null &&
                     showSearchResults &&
-                    searchType === 'metadata' &&
-                    <StyledDropDown
-                        key={'dropdown-content-metadata'}
-                        variants={dropdownVariants}
-                        initial={'initial'}
-                        animate={'animate'}
-                        exit={'exit'}
-                        transition={'transition'}
-                    >
-                        {
-                            searchResults.length > 0 ? searchResults.map(result => {
-                                const layers = allLayers.filter(layer => layer.metadataIdentifier === result.id);
-                                return layers.map(layer => {
-                                    return <Layer key={`metadata_${layer.id}`}layer={layer}/>
+                    searchType === 'metadata' && (
+                        <StyledDropDown
+                            key={'dropdown-content-metadata'}
+                            variants={dropdownVariants}
+                            initial={'initial'}
+                            animate={'animate'}
+                            exit={'exit'}
+                            transition={'transition'}
+                        >
+                            {searchResults.length > 0 ? (
+                                searchResults.map((result) => {
+                                    const layers = allLayers.filter(
+                                        (layer) =>
+                                            layer.metadataIdentifier ===
+                                            result.id
+                                    );
+                                    return layers.map((layer) => {
+                                        return (
+                                            <Layer
+                                                key={`metadata_${layer.id}`}
+                                                layer={layer}
+                                            />
+                                        );
+                                    });
                                 })
-                            }) :
-                            <StyledDropdownContentItem
-                                key={'no-results'}
+                            ) : (
+                                <StyledDropdownContentItem key={'no-results'}>
+                                    <StyledDropdownContentItemTitle type="noResults">
+                                        {strings.search.metadata.error.text}
+                                    </StyledDropdownContentItemTitle>
+                                </StyledDropdownContentItem>
+                            )}
+                            <StyledHideSearchResultsButton
+                                onClick={() => setShowSearchResults(false)}
                             >
-                                <StyledDropdownContentItemTitle type='noResults'>{strings.search.metadata.error.text}</StyledDropdownContentItemTitle>
-                            </StyledDropdownContentItem>
-
-                        }
-                    <StyledHideSearchResultsButton
-                        onClick={() => setShowSearchResults(false)}
-                    >
-                        <FontAwesomeIcon
-                            icon={faAngleUp}
-                        />
-                    </StyledHideSearchResultsButton>
-                    </StyledDropDown>
-                }
+                                <FontAwesomeIcon icon={faAngleUp} />
+                            </StyledHideSearchResultsButton>
+                        </StyledDropDown>
+                    )
+                )}
             </AnimatePresence>
         </StyledSearchContainer>
     );

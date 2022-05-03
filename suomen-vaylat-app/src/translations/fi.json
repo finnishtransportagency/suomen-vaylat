@@ -72,7 +72,19 @@
     "draw": "Piirrä",
     "drawSubtitle": "Valitse kohteita käyttämällä piirtotyökaluja",
     "search": "Haku",
-    "dataTableView": "Listanäkymä"
+    "dataTableView": "Listanäkymä",
+    "download": "Lataa"
+  },
+  "downloads": {
+    "downloads": "Lataukset",
+    "processing": "Prosessoidaan",
+    "noProcessingDownloads": "Ei prosessoitavia latauksia",
+    "readyForDownload": "Valmiit lataukset",
+    "noDownloads": "Ei latauksia",
+    "format": "Tiedostomuoto",
+    "date": "Päivämäärä",
+    "fileSize": "Tiedostokoko",
+    "layers": "Tasot"
   },
   "general": {
     "close": "Sulje",
@@ -176,6 +188,7 @@
     }
   },
   "search": {
+    "fill_all_fields": "Täytä kaikki hakukentät",
     "required_field_missing": "Tarkista tarvittavat kentät.",
     "vkm": {
       "tie": "Tienumero",

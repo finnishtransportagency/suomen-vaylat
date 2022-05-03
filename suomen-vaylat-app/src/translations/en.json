@@ -72,7 +72,19 @@
     "draw": "Draw",
     "drawSubtitle": "Select locations by using drawing tools",
     "search": "Search",
-    "dataTableView": "List view"
+    "dataTableView": "List view",
+    "download": "Download"
+  },
+  "downloads": {
+    "downloads": "Downloads",
+    "processing": "Processing",
+    "noProcessingDownloads": "No processing downloads",
+    "readyForDownload": "Ready for download",
+    "noDownloads": "No downloads",
+    "format": "Format",
+    "date": "Date",
+    "fileSize": "File size",
+    "layers": "Layers"
   },
   "general": {
     "close": "Close",
@@ -176,6 +188,7 @@
     }
   },
   "search": {
+    "fill_all_fields": "Täytä kaikki hakukentät",
     "required_field_missing": "Check the required fields.",
     "vkm": {
       "tie": "Road number",
