@@ -249,7 +249,6 @@ const Content = () => {
 
         store.dispatch(setIsGfiDownloadOpen(true));
         store.dispatch(setDownloadActive(newDownload));
-
         channel.downloadFeaturesByGeoJSON && channel.downloadFeaturesByGeoJSON([layerIds, croppingArea, format.format], function (data) {
             var finishedDownload = {
                 ...newDownload,
@@ -259,7 +258,6 @@ const Content = () => {
             };
             store.dispatch(setDownloadFinished(finishedDownload));
         }, function(errors) {
-            console.log('downloadFeaturesByGeoJSON error', errors);
             var errorDownload = {
                 ...newDownload,
                 url: null,

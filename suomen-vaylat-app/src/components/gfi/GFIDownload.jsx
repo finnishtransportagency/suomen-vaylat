@@ -100,15 +100,15 @@ const DownloadItem = ({
             id={download.id}
             icon={faFileArchive}
             title={
-                <StyledListItemTitleWrapper>
-                    <li>{strings.downloads.format}: <span>{download.format && download.format}</span></li>
-                    <li>{strings.downloads.date}: <span><Moment format="DD.MM.YYYY HH:mm" tz="Europe/Helsinki">{download.date}</Moment></span></li> 
-                    <li>{strings.downloads.fileSize}: <span>{download.fileSize ? download.fileSize : "-"}</span></li>
-                    <li>{strings.downloads.layers}: </li>
-                        <ul>
+                <StyledListItemTitleWrapper key={'download-wrapper-list-item-' + download.id}>
+                    <li key={'download-wrapper-format-' + download.id}>{strings.downloads.format}: <span>{download.format && download.format}</span></li>
+                    <li key={'download-wrapper-date-' + download.id}>{strings.downloads.date}: <span><Moment format='DD.MM.YYYY HH:mm' tz='Europe/Helsinki'>{download.date}</Moment></span></li>
+                    <li key={'download-wrapper-file-size-' + download.id}>{strings.downloads.fileSize}: <span>{download.fileSize ? download.fileSize : "-"}</span></li>
+                    <li key={'download-wrapper-layers-' + download.id}>{strings.downloads.layers}: </li>
+                        <ul key={'download-ul-' + download.id}>
                             {
                                 download.layers.map(layer => {
-                                    return <li key={'li_'+layer.id}>{layer.name}</li>
+                                    return <li key={'li-'+layer.id}>{layer.name}</li>
                                 })
                             }
                         </ul>
@@ -129,10 +129,11 @@ const GFIDownload = () => {
         <StyledDownloadsContainer>
             <StyledSubtitle>{strings.downloads.processing}:</StyledSubtitle>
             {
-                downloads.filter(download => download.loading === true).length > 0 ? 
+                downloads.filter(download => download.loading === true).length > 0 ?
                 downloads.filter(download => download.loading === true).map(download => {
                     return <DownloadItem
                         download={download}
+                        key={'download-item-processing-' + download.id}
                     >
                         <StyledLoaderWrapper>
                             <SvLoader />
@@ -151,6 +152,7 @@ const GFIDownload = () => {
                             store.dispatch(setDownloadRemove(download.id));
                         }}
                         color={'#28a745'}
+                        key={'download-item-ready-for-download-' + download.id}
                     >
                         <StyledDownloadButton
                             onClick={() => window.open(`${download.url}`,`_blank`)}
@@ -170,29 +172,13 @@ const GFIDownload = () => {
                         <StyledDescription>- {strings.downloads.errorOccuredDuringDownloadProcessing}:</StyledDescription>
                         {
                             downloads.filter(download => download.loading === false && download.error).map(download => {
-                                return <ModalListItem
-                                    key={download.id}
-                                    id={download.id}
-                                    icon={faFileArchive}
-                                    title={
-                                        <StyledListItemTitleWrapper>
-                                            <li>{strings.downloads.format}: <span>{download.format && download.format}</span></li>
-                                            <li>{strings.downloads.date}: <span><Moment format="DD.MM.YYYY HH:mm" tz="Europe/Helsinki">{download.date}</Moment></span></li> 
-                                            <li>{strings.downloads.fileSize}: <span>{download.fileSize ? download.fileSize : "-"}</span></li>
-                                            <li>{strings.downloads.layers}: </li>
-                                                <ul>
-                                                    {
-                                                        download.layers.map(layer => {
-                                                            return <li key={'li_'+layer.id}>{layer.name}</li>
-                                                        })
-                                                    }
-                                                </ul>
-                                        </StyledListItemTitleWrapper>
-                                    }
+                                return <DownloadItem
+                                    download={download}
                                     closeAction={() => {
                                         store.dispatch(setDownloadRemove(download.id));
                                     }}
                                     color={'#dc3545'}
+                                    key={'download-item-error-' + download.id}
                                 >
                                         <FontAwesomeIcon
                                             style={{
@@ -201,7 +187,7 @@ const GFIDownload = () => {
                                             }}
                                             icon={faExclamationTriangle}
                                         />
-                                </ModalListItem>
+                                </DownloadItem>
                             })
                         }
                     </>
