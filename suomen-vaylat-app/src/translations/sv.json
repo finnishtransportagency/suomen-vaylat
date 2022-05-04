@@ -82,7 +82,9 @@
     "format": "Format",
     "date": "Date",
     "fileSize": "File size",
-    "layers": "Layers"
+    "layers": "Layers",
+    "failedDownloads": "Failed downloads",
+    "errorOccuredDuringDownloadProcessing" : "Error occured during download processing"
   },
   "general": {
     "close": "Stänga",

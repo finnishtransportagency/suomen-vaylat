@@ -513,7 +513,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
                             layers && layers.length > 0
                                 ? layers[0].id
                                 : location.layerId;
-                        const name = layers.length > 0 && layers[0].name;
+                        const name = layers.length > 0 ? layers[0].name : location.layerId;
                         let content;
                         if (location.type === 'text') {
                             content = location.content;

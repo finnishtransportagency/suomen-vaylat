@@ -249,23 +249,24 @@ const Content = () => {
 
         store.dispatch(setIsGfiDownloadOpen(true));
         store.dispatch(setDownloadActive(newDownload));
-
-        channel.downloadFeaturesByGeoJSON &&
-            channel.downloadFeaturesByGeoJSON(
-                [layerIds, croppingArea, format.format],
-                function (data) {
-                    var finishedDownload = {
-                        ...newDownload,
-                        url: data.url !== null && data.url,
-                        fileSize: data.fileSize !== null && data.fileSize,
-                        loading: false,
-                    };
-                    store.dispatch(setDownloadFinished(finishedDownload));
-                },
-                function (errors) {
-                    console.log('downloadFeaturesByGeoJSON NOK', errors);
-                }
-            );
+        channel.downloadFeaturesByGeoJSON && channel.downloadFeaturesByGeoJSON([layerIds, croppingArea, format.format], function (data) {
+            var finishedDownload = {
+                ...newDownload,
+                url: data.url !== null && data.url,
+                fileSize: data.fileSize !== null && data.fileSize,
+                loading: false,
+            };
+            store.dispatch(setDownloadFinished(finishedDownload));
+        }, function(errors) {
+            var errorDownload = {
+                ...newDownload,
+                url: null,
+                fileSize: null,
+                loading: false,
+                error: true
+            };
+            store.dispatch(setDownloadFinished(errorDownload));
+        });
     };
 
     return (
