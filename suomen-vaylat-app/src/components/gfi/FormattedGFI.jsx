@@ -133,7 +133,7 @@ export const FormattedGFI = ({ data, isDataTable }) => {
                     );
                 }
             });
-    
+
             pretty.push(
                 <GFITables
                     key={'gfi-table-' + generatedKey}
@@ -146,7 +146,7 @@ export const FormattedGFI = ({ data, isDataTable }) => {
                 />
             );
         });
-    
+
         return (
             <>
                 {pretty.map((table) => {
@@ -164,7 +164,7 @@ export const FormattedGFI = ({ data, isDataTable }) => {
         var additionalColumns = [];
 
         const properties = geoJSON.features[0].properties;
-        const highPriorityFields = 
+        const highPriorityFields =
             properties._orderHigh && !Array.isArray(properties._orderHigh)
             ? JSON.parse(properties._orderHigh.replace('\\',''))
             : properties._orderHigh && Array.isArray(properties._orderHigh)
@@ -216,10 +216,10 @@ const dataTable = (columns, data, channel) => {
       columns,
       data
     };
-  
+
     return (
       <div className="main" style={{userSelect: "text", overflow: "scroll"}}>
-        <DataTableExtensions 
+        <DataTableExtensions
             {...tableData}
             filterDigit={0}
             filterPlaceholder={strings.gfi.search}
@@ -257,7 +257,7 @@ const selectRow = ({ selectedRows}, channel ) => {
 
 //get data values without _order and _orderHigh rows, make url values into links
 const getDataTableContent = (key, value, rows, geoJSON, index) => {
-    value = (value && typeof value === 'string' && (value.startsWith('http://') || value.startsWith('https://'))) ? <a href={value} target="_blank">{value}</a> : value;
+    value = (value && typeof value === 'string' && (value.startsWith('http://') || value.startsWith('https://'))) ? <a href={value} target="_blank" rel="noreferrer">{value}</a> : value;
 
     if (value !== null && typeof value === 'string' && value.trim() === '') {
         return;
