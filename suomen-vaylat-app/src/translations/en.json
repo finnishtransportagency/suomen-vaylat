@@ -73,7 +73,9 @@
     "drawSubtitle": "Select locations by using drawing tools",
     "search": "Search",
     "dataTableView": "List view",
-    "download": "Download"
+    "download": "Download",
+    "list": "List",
+    "table" : "Table"
   },
   "downloads": {
     "downloads": "Downloads",

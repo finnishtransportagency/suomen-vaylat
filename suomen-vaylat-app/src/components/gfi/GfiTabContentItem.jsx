@@ -26,7 +26,6 @@ const StyledGfiSubTabContentItemHeader = styled(motion.div)`
 height: 40px;
 display: flex;
 align-items: center;
-//justify-content: space-between;
 padding: 16px;
 `;
 
@@ -80,7 +79,6 @@ const StyledGfiTabContentItemTableHeader = styled.th`
     padding-left: 16px;
     font-size: 14px;
     font-weight: 600;
-    //color: ${props => props.theme.colors.mainColor1};
 `;
 
 const StyledGfiTabContentItemTableData = styled.td`
@@ -186,7 +184,6 @@ const GfiTabContentItem = ({
                                                 <StyledGfiTabContentItemTableData>{data.properties[value]}</StyledGfiTabContentItemTableData>
                                             </StyledGfiTabContentItemTableRow>
                                     })
-                                    
                                 }
                             </StyledGfiTabContentItemTable>
 

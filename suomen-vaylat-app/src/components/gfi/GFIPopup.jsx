@@ -42,8 +42,6 @@ const StyledTabSwiperContainer = styled.div`
     z-index: 2;
     display: flex;
     background-color: ${(props) => props.theme.colors.mainColor1};
-    //box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.2);
-    //border-bottom: 2px solid white;
 `;
 
 const StyledTabName = styled.p`
@@ -580,12 +578,6 @@ export const GFIPopup = ({ handleGfiDownload }) => {
                                             data={location}
                                             showDataTable={showDataTable}
                                         />
-                                    {/* <FormattedGFI
-                                            id={layerIds}
-                                            data={location.content}
-                                            type='geoJson'
-                                            isDataTable={isDataTable}
-                                        /> */}
                                     </SwiperSlide>
                                 );
                             }
@@ -596,7 +588,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
             <StyledButtonsContainer>
                 <CircleButton
                     icon={showDataTable ? faList : faTable}
-                    text={showDataTable ? "Näytä listana" : "Näytä taulukkona"}
+                    text={showDataTable ? strings.gfi.list : strings.gfi.table}
                     //toggleState={isGfiToolsOpen}
                     tooltipDirection={'left'}
                     clickAction={handleDataTableView}

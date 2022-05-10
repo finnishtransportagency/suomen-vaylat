@@ -406,7 +406,6 @@ const GFITables = ({
     const [isFeatureOpen, openFeature] = useState(false);
     const [isInfoOpen, openInfo] = useState(highPriorityTableExists);
     const  [isHovered, setHovered] = useState(false);
-    //const { channel } = useAppSelector((state) => state.rpc);
 
     return (
             <StyledGFITablesContainer
