@@ -86,7 +86,9 @@
     "format": "Tiedostomuoto",
     "date": "Päivämäärä",
     "fileSize": "Tiedostokoko",
-    "layers": "Tasot"
+    "layers": "Tasot",
+    "failedDownloads": "Virheelliset lataukset",
+    "errorOccuredDuringDownloadProcessing" : "Virhe tapahtui paketin prosessoinnin aikana"
   },
   "general": {
     "close": "Sulje",
