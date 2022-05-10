@@ -26,10 +26,11 @@ const StyledModalBackdrop = styled(motion.div)`
 const StyledModalWrapper = styled(motion.div)`
     z-index: ${(props) =>
         props.type === 'warning' ? 9999 : props.resize ? 4 : 9993};
-    position: fixed;
+    position: absolute;
     top: ${(props) => props.resize && '0px'};
     left: ${(props) => props.resize && '0px'};
-    padding: ${(props) => (props.resize || props.drag) && '50px'};
+    padding: ${props => (props.resize || props.drag) && "8px 50px 50px 8px"};
+    max-width: 100%;
     @media ${(props) => props.theme.device.mobileL} {
         position: ${(props) =>
             props.fullScreenOnMobile ? 'fixed' : 'initial'};

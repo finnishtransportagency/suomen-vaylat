@@ -18,6 +18,7 @@ import { useAppSelector } from '../../state/hooks';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { FreeMode, Controller } from 'swiper';
 import { isMobile } from '../../theme/theme';
+import { setMinimizeGfi } from '../../state/slices/uiSlice';
 import { resetGFILocations } from '../../state/slices/rpcSlice';
 
 import { FormattedGFI } from './FormattedGFI';
@@ -621,9 +622,8 @@ export const GFIPopup = ({ handleGfiDownload }) => {
                     text={strings.gfi.focusToLocations}
                     tooltipDirection={'left'}
                     clickAction={() => {
-                        handleOverlayGeometry(
-                            tabsContent[selectedTab].props.data
-                        );
+                        handleOverlayGeometry(tabsContent[selectedTab].props.data);
+                        isMobile && store.dispatch(setMinimizeGfi(true));
                     }}
                     disabled={gfiLocations.length === 0}
                 />
