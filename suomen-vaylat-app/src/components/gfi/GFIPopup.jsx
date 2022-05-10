@@ -4,6 +4,8 @@ import {
     faTimes,
     faSearchLocation,
     faPencilRuler,
+    faTable,
+    faList,
     faFileDownload,
     faAngleLeft,
     faAngleRight,
@@ -17,9 +19,9 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { FreeMode, Controller } from 'swiper';
 import { isMobile } from '../../theme/theme';
 import { resetGFILocations } from '../../state/slices/rpcSlice';
-import Switch from '../switch/Switch';
 
 import { FormattedGFI } from './FormattedGFI';
+import GfiTabContent from './GfiTabContent';
 import GfiToolsMenu from './GfiToolsMenu';
 import GfiDownloadMenu from './GfiDownloadMenu';
 import CircleButton from '../circle-button/CircleButton';
@@ -39,8 +41,8 @@ const StyledTabSwiperContainer = styled.div`
     z-index: 2;
     display: flex;
     background-color: ${(props) => props.theme.colors.mainColor1};
-    box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.2);
-    border-bottom: 2px solid white;
+    //box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.2);
+    //border-bottom: 2px solid white;
 `;
 
 const StyledTabName = styled.p`
@@ -52,7 +54,7 @@ const StyledTabName = styled.p`
     text-overflow: ellipsis;
     @media ${(props) => props.theme.device.mobileL} {
         font-size: 14px;
-    } ;
+    }
 `;
 
 const StyledNoGfisContainer = styled.div`
@@ -67,8 +69,12 @@ const StyledNoGfisContainer = styled.div`
 `;
 
 const StyledSwiper = styled(Swiper)`
+    width: 100%;
     .swiper-slide {
         height: 1px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
     }
     .swiper-slide-active {
         height: auto;
@@ -127,7 +133,8 @@ const StyledTabCloseButton = styled.div`
 `;
 
 const StyledTabContent = styled.div`
-    overflow: auto;
+    overflow: hidden;
+    display: flex;
     div.contentWrapper-infobox {
         @media ${(props) => props.theme.device.mobileL} {
             font-size: 14px;
@@ -169,27 +176,18 @@ const StyledTabContent = styled.div`
     }
 `;
 
+const StyledSelectedTabHeader = styled.div`
+    display: flex;
+    justify-content: center;
+    box-shadow: 2px 2px 4px 0px rgb(0 0 0 / 20%);
+    z-index: 2;
+`;
+
 const StyledSelectedTabTitle = styled.div`
-    position: sticky;
-    top: 0;
-    text-align: center;
     padding: 8px;
     p {
         color: ${(props) => props.theme.colors.mainColor1};
         margin: 0;
-        font-size: 16px;
-        font-weight: 600;
-    }
-`;
-
-const StyledDataTableSwitch = styled.div`
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    margin-right: 1em;
-    p {
-        color: ${props => props.theme.colors.mainColor1};
-        margin: 0 1em 0 0;
         font-size: 16px;
         font-weight: 600;
     }
@@ -225,14 +223,13 @@ const StyledGfiBackdrop = styled(motion.div)`
 export const GFIPopup = ({ handleGfiDownload }) => {
     const LAYER_ID = 'gfi-result-layer';
     const { store } = useContext(ReactReduxContext);
-    const { channel, allLayers, gfiLocations } = useAppSelector(
-        (state) => state.rpc
-    );
+    const { channel, allLayers, gfiLocations } = useAppSelector(state => state.rpc);
 
     const [selectedTab, setSelectedTab] = useState(0);
     const [tabsContent, setTabsContent] = useState([]);
     const [geoJsonToShow, setGeoJsonToShow] = useState(null);
     const [isGfiToolsOpen, setIsGfiToolsOpen] = useState(false);
+    const [showDataTable, setShowDataTable] = useState(false);
     const [isDataTable, setIsDataTable] = useState(false);
     const [isGfiDownloadsOpen, setIsGfiDownloadsOpen] = useState(false);
 
@@ -271,7 +268,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
         });
 
         setTabsContent(mapResults);
-    }, [allLayers, gfiLocations, selectedTab]);
+    }, [allLayers, gfiLocations, isDataTable, selectedTab]);
 
     useEffect(() => {
         tabsContent[selectedTab] !== undefined &&
@@ -320,6 +317,10 @@ export const GFIPopup = ({ handleGfiDownload }) => {
                     },
                 ]);
         }
+    };
+
+    const handleDataTableView = () => {
+        setShowDataTable(!showDataTable);
     };
 
     const handleGfiToolsMenu = () => {
@@ -526,77 +527,79 @@ export const GFIPopup = ({ handleGfiDownload }) => {
                     speed={300}
                 >
                     {gfiLocations.map((location) => {
-                        const layers = allLayers.filter(
-                            (layer) => layer.id === location.layerId
-                        );
-                        const layerIds =
-                            layers && layers.length > 0
-                                ? layers[0].id
-                                : location.layerId;
-                        const name = layers.length > 0 && layers[0].name;
-                        let content;
-                        if (location.type === 'text') {
-                            content = location.content;
-                            const popupContent = (
-                                <div
-                                    dangerouslySetInnerHTML={{
-                                        __html: content,
-                                    }}
-                                ></div>
-                            );
-                            var contentWrapper = <div>{popupContent}</div>;
-                            const contentDiv = (
-                                <div id={layerIds}>{contentWrapper}</div>
-                            );
-                            return contentDiv;
-                        } else if (location.type === 'geojson') {
-                            return (
-                                <SwiperSlide
-                                    id={
-                                        'gfi_tab_content_' +
-                                        +location.x +
-                                        '_' +
-                                        location.y +
-                                        '_' +
-                                        location.layerId
-                                    }
-                                    key={
-                                        'gfi_tab_content_' +
-                                        location.x +
-                                        '_' +
-                                        location.y +
-                                        '_' +
-                                        location.layerId
-                                    }
-                                >
-                                    {
-                                        <StyledSelectedTabTitle>
-                                            <p>
-                                                {
-                                                    name.toUpperCase()
-                                                }
-                                            </p>
-                                        </StyledSelectedTabTitle>
-
-                                    }
-                                    <StyledDataTableSwitch>
-                                        <p>{strings.gfi.dataTableView}</p>
-                                        <Switch isSelected={isDataTable} action={() => setIsDataTable(!isDataTable)}/>
-                                    </StyledDataTableSwitch>
-                                    <FormattedGFI
-                                        id={layerIds}
-                                        data={location.content}
-                                        type='geoJson'
-                                        isDataTable={isDataTable}
-                                    />
-                                </SwiperSlide>
-                            );
-                        }
+                            const layers = allLayers.filter(layer => layer.id === location.layerId);
+                            const layerIds = layers && layers.length > 0 ? layers[0].id : location.layerId;
+                            const name = layers.length > 0 && layers[0].name;
+                            let content;
+/*                             if (location.type === 'text') {
+                                content = location.content;
+                                const popupContent = (
+                                    <div
+                                        dangerouslySetInnerHTML={{
+                                            __html: content,
+                                        }}
+                                    ></div>
+                                );
+                                var contentWrapper = <div>{popupContent}</div>;
+                                const contentDiv = (
+                                    <div id={layerIds}>{contentWrapper}</div>
+                                );
+                                return contentDiv;
+                            } else  */
+                            if (location.type === 'geojson') {
+                                return (
+                                    <SwiperSlide
+                                        id={
+                                            'gfi_tab_content_' +
+                                            +location.x +
+                                            '_' +
+                                            location.y +
+                                            '_' +
+                                            location.layerId
+                                        }
+                                        key={
+                                            'gfi_tab_content_' +
+                                            location.x +
+                                            '_' +
+                                            location.y +
+                                            '_' +
+                                            location.layerId
+                                        }
+                                    >
+                                        <StyledSelectedTabHeader>
+                                            <StyledSelectedTabTitle>
+                                                <p>
+                                                    {
+                                                        name.toUpperCase()
+                                                    }
+                                                </p>
+                                            </StyledSelectedTabTitle>
+                                        </StyledSelectedTabHeader>
+                                        <GfiTabContent
+                                            data={location}
+                                            showDataTable={showDataTable}
+                                        />
+                                    {/* <FormattedGFI
+                                            id={layerIds}
+                                            data={location.content}
+                                            type='geoJson'
+                                            isDataTable={isDataTable}
+                                        /> */}
+                                    </SwiperSlide>
+                                );
+                            }
                         return null;
                     })}
                 </StyledSwiper>
             </StyledTabContent>
             <StyledButtonsContainer>
+                <CircleButton
+                    icon={showDataTable ? faList : faTable}
+                    text={showDataTable ? "Näytä listana" : "Näytä taulukkona"}
+                    //toggleState={isGfiToolsOpen}
+                    tooltipDirection={'left'}
+                    clickAction={handleDataTableView}
+                />
                 <CircleButton
                     icon={faPencilRuler}
                     text={strings.gfi.selectLocations}

@@ -50,6 +50,7 @@ export const uiSlice = createSlice({
             state.selectedMapLayersMenuThemeIndex = null;
             state.minimizeGfi = false;
             state.warning = null;
+            state.isGfiOpen = false;
         },
         setModalConstrainsRef: (state, action) => {
             state.modalConstrainsRef = action.payload;
