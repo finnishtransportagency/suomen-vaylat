@@ -4,8 +4,11 @@ import strings from '../../translations';
 import { motion, AnimatePresence } from 'framer-motion';
 import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
 import { useAppSelector } from '../../state/hooks';
+
+import DataTable from "react-data-table-component";
+import DataTableExtensions from "react-data-table-component-extensions";
+import "react-data-table-component-extensions/dist/index.css";
 
 const listVariants = {
     visible: {
@@ -81,23 +84,210 @@ const StyledGfiResponseWrapper = styled.div`
     overflow: auto;
 `;
 
-const getContent = (
-    key,
-    value,
-    visibleFields,
-    highPriorityFields,
-    lowPriorityRows,
-    highPriorityRows,
-    generatedKey
-) => {
-    const hasConfiguration =
-        highPriorityFields.length !== 0 || visibleFields.length !== 0;
-    value =
-        value &&
-        typeof value === 'string' &&
-        (value.startsWith('http://') || value.startsWith('https://'))
-            ? '<a href="' + value + '" target="_blank">' + value + '<a>'
-            : value;
+export const FormattedGFI = ({ data, isDataTable }) => {
+    const { channel } = useAppSelector((state) => state.rpc);
+    let geoJSON = {...data};
+    let pretty = [];
+
+    // if we want to show the normal dropdown list view
+    if (!isDataTable) {
+        const getKey = (properties) => {
+            const keys = Object.keys(properties);
+            const values = [];
+            keys.forEach(key => {
+                if (key !== '_order' && key !== '_orderHigh') {
+                    values.push(key + '_' + properties[key]);
+                }
+            });
+            return values.join('-');
+        };
+
+        geoJSON.features.forEach((f, index) => {
+            const keys = Object.keys(f.properties);
+            let highPriorityRows = [];
+            let lowPriorityRows = [];
+            const visibleFields =
+                f.properties._order && !Array.isArray(f.properties._order)
+                    ? JSON.parse(f.properties._order.replace('\\', ''))
+                    : f.properties._order && Array.isArray(f.properties._order)
+                    ? f.properties._order
+                    : [];
+            const highPriority =
+                f.properties._orderHigh && !Array.isArray(f.properties._orderHigh)
+                    ? JSON.parse(f.properties._orderHigh.replace('\\', ''))
+                    : f.properties._orderHigh &&
+                      Array.isArray(f.properties._orderHigh)
+                    ? f.properties._orderHigh
+                    : [];
+            const generatedKey = getKey(f.properties);
+            keys.forEach((key) => {
+                if (key !== '_order' && key !== '_orderHigh' && key !== 'UID') {
+                    getContent(
+                        key,
+                        f.properties[key],
+                        visibleFields,
+                        highPriority,
+                        lowPriorityRows,
+                        highPriorityRows,
+                        generatedKey
+                    );
+                }
+            });
+
+            pretty.push(
+                <GFITables
+                    key={'gfi-table-' + generatedKey}
+                    index={index}
+                    lowPriorityRows={lowPriorityRows}
+                    highPriorityRows={highPriorityRows}
+                    geoJSON={geoJSON}
+                    generatedKey={generatedKey}
+                    channel={channel}
+                />
+            );
+        });
+
+        return (
+            <>
+                {pretty.map((table) => {
+                    return (
+                        <StyledGfiResponseWrapper key={'gfi-popup-wrapper-' + table.key}>
+                            {table}
+                        </StyledGfiResponseWrapper>
+                    )
+                })}
+            </>
+        );
+    } else {
+        const propertiesData = [];
+        var columns = [];
+        var additionalColumns = [];
+
+        const properties = geoJSON.features[0].properties;
+        const highPriorityFields =
+            properties._orderHigh && !Array.isArray(properties._orderHigh)
+            ? JSON.parse(properties._orderHigh.replace('\\',''))
+            : properties._orderHigh && Array.isArray(properties._orderHigh)
+            ? properties._orderHigh
+            : [];
+        const visibleFields =
+            properties._order && !Array.isArray(properties._order)
+            ? JSON.parse(properties._order.replace('\\',''))
+            : properties._order && Array.isArray(properties._order)
+            ? properties._order
+            : [];
+
+        geoJSON.features.forEach((f, index) => {
+            let rows = {};
+            const keys = Object.keys(f.properties);
+            keys.forEach(key => {
+                if (key !== '_order' && key !== '_orderHigh' && key !== 'UID') {
+                    getDataTableContent(key, f.properties[key], rows, geoJSON, index);
+                }
+            });
+            propertiesData.push(rows);
+        });
+
+        //set column options
+        visibleFields.forEach(field => {
+            const additionalColumn = {name: field, selector: row => row.fields[field], sortable: true};
+            additionalColumns.push(additionalColumn);
+        });
+
+        highPriorityFields.forEach(field => {
+            const column = {name: field, selector: row => row.fields[field], sortable: true};
+            columns.push(column);
+        });
+
+        //combine columns, this way we can control the high and low priority rows separately
+        const combinedColumns = columns.concat(additionalColumns);
+        pretty.push(dataTable(combinedColumns, propertiesData, channel));
+
+        return (
+            <>
+                {pretty}
+            </>
+        );
+    };
+}
+
+const dataTable = (columns, data, channel) => {
+    const tableData = {
+      columns,
+      data
+    };
+
+    return (
+      <div className="main" style={{userSelect: "text", overflow: "scroll"}}>
+        <DataTableExtensions
+            {...tableData}
+            filterDigit={0}
+            filterPlaceholder={strings.gfi.search}
+            export={false}
+            print={false}
+        >
+            <DataTable
+                columns={columns}
+                data={data}
+                noHeader
+                defaultSortAsc={false}
+                selectableRows={true}
+                selectableRowsHighlight={true}
+                onSelectedRowsChange={selectedRows => selectRow(selectedRows, channel)}
+                pagination
+                striped
+                highlightOnHover
+            />
+        </DataTableExtensions>
+      </div>
+    );
+  }
+
+//highlight selected features on map
+const selectRow = ({ selectedRows}, channel ) => {
+    deSelectFeature(channel);
+    let features = [];
+    selectedRows.forEach((row) => {
+        const index = row.index;
+        const feature = row.geoJSON.features[index];
+        features.push(feature);
+    });
+    selectFeature(channel, features);
+  }
+
+//get data values without _order and _orderHigh rows, make url values into links
+const getDataTableContent = (key, value, rows, geoJSON, index) => {
+    value = (value && typeof value === 'string' && (value.startsWith('http://') || value.startsWith('https://'))) ? <a href={value} target="_blank" rel="noreferrer">{value}</a> : value;
+
+    if (value !== null && typeof value === 'string' && value.trim() === '') {
+        return;
+    }
+    // try if value is JSON
+    try {
+        const json = JSON.parse(value.replace(/'/g, '"'));
+        // if array
+        if (Array.isArray(json)) {
+            value = '';
+            json.forEach(val => {
+                value += " " + val;
+            });
+        }
+    } catch (err) {
+        // not json
+    }
+    //add geojson and index so we can later access features to highlight them on map
+    rows.geoJSON = geoJSON;
+    rows.index = index;
+    if (!rows.fields) {
+        rows.fields = {};
+    }
+    rows.fields[key] = value;
+
+};
+
+const getContent = (key, value, visibleFields, highPriorityFields, lowPriorityRows, highPriorityRows, generatedKey) => {
+    const hasConfiguration = highPriorityFields.length !== 0 || visibleFields.length !== 0;
+    value = (value && typeof value === 'string' && (value.startsWith('http://') || value.startsWith('https://'))) ? '<a href="' + value + '" target="_blank">' + value + '<a>' : value;
 
     if (value !== null && typeof value === 'string' && value.trim() === '') {
         return;
@@ -146,78 +336,61 @@ const getContent = (
     );
 };
 
-export const FormattedGFI = ({ data }) => {
-    let geoJSON = { ...data };
-    let pretty = [];
-
-    const getKey = (properties) => {
-        const keys = Object.keys(properties);
-        const values = [];
-        keys.forEach((key) => {
-            if (key !== '_order' && key !== '_orderHigh') {
-                values.push(key + '_' + properties[key]);
+const selectFeature = (channel, features) => {
+    let featureStyle = {
+        fill: {
+            color: '#e50083',
+        },
+        stroke: {
+            color: '#e50083',
+            width: 5,
+            lineDash: 'solid',
+            lineCap: 'round',
+            lineJoin: 'round',
+            area: {
+                color: '#e50083',
+                width: 4,
+                lineJoin: 'round'
             }
-        });
-        return values.join('-');
+        },
+        image: {
+            shape: 5,
+            size: 3,
+            fill: {
+                color: '#e50083',
+            }
+        }
     };
 
-    geoJSON.features.forEach((f, index) => {
-        const keys = Object.keys(f.properties);
-        let highPriorityRows = [];
-        let lowPriorityRows = [];
-        const visibleFields =
-            f.properties._order && !Array.isArray(f.properties._order)
-                ? JSON.parse(f.properties._order.replace('\\', ''))
-                : f.properties._order && Array.isArray(f.properties._order)
-                ? f.properties._order
-                : [];
-        const highPriority =
-            f.properties._orderHigh && !Array.isArray(f.properties._orderHigh)
-                ? JSON.parse(f.properties._orderHigh.replace('\\', ''))
-                : f.properties._orderHigh &&
-                  Array.isArray(f.properties._orderHigh)
-                ? f.properties._orderHigh
-                : [];
-        const generatedKey = getKey(f.properties);
-        keys.forEach((key) => {
-            if (key !== '_order' && key !== '_orderHigh' && key !== 'UID') {
-                getContent(
-                    key,
-                    f.properties[key],
-                    visibleFields,
-                    highPriority,
-                    lowPriorityRows,
-                    highPriorityRows,
-                    generatedKey
-                );
+    let options = {
+        featureStyle: featureStyle,
+        layerId: 'gfi-result-layer-overlay',
+        animationDuration: 200,
+        clearPrevious: true,
+    };
+
+    let rn = 'MapModulePlugin.AddFeaturesToMapRequest';
+
+    var geojsonObject = {
+        type: 'FeatureCollection',
+        crs: {
+            type: 'name',
+            properties: {
+                name: 'EPSG:3067'
             }
-        });
+        },
+        features: features
+    };
 
-        pretty.push(
-            <GFITables
-                key={'gfi-table-' + generatedKey}
-                index={index}
-                lowPriorityRows={lowPriorityRows}
-                highPriorityRows={highPriorityRows}
-                geoJSON={geoJSON}
-                generatedKey={generatedKey}
-            />
-        );
-    });
+    channel.postRequest(rn, [geojsonObject, options])
+};
 
-    return (
-        <>
-            {pretty.map((table) => {
-                return (
-                    <StyledGfiResponseWrapper
-                        key={'gfi-popup-wrapper-' + table.key}
-                    >
-                        {table}
-                    </StyledGfiResponseWrapper>
-                );
-            })}
-        </>
-    );
+const deSelectFeature = (channel) => {
+    channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [
+        null,
+        null,
+        'gfi-result-layer-overlay',
+    ]);
 };
 
 const GFITables = ({
@@ -226,82 +399,26 @@ const GFITables = ({
     highPriorityRows,
     geoJSON,
     generatedKey,
-}) => {
+    channel
+    }) => {
+
     const highPriorityTableExists = highPriorityRows.length > 0 ? false : true;
     const [isFeatureOpen, openFeature] = useState(false);
     const [isInfoOpen, openInfo] = useState(highPriorityTableExists);
-    const [isHovered, setHovered] = useState(false);
-    const { channel } = useAppSelector((state) => state.rpc);
-
-    const selectFeature = (feature) => {
-        let featureStyle = {
-            fill: {
-                color: '#e50083',
-            },
-            stroke: {
-                color: '#e50083',
-                width: 5,
-                lineDash: 'solid',
-                lineCap: 'round',
-                lineJoin: 'round',
-                area: {
-                    color: '#e50083',
-                    width: 4,
-                    lineJoin: 'round',
-                },
-            },
-            image: {
-                shape: 5,
-                size: 3,
-                fill: {
-                    color: '#e50083',
-                },
-            },
-        };
-
-        let options = {
-            featureStyle: featureStyle,
-            layerId: 'gfi-result-layer-overlay',
-            animationDuration: 200,
-            clearPrevious: true,
-        };
-
-        let rn = 'MapModulePlugin.AddFeaturesToMapRequest';
-
-        var geojsonObject = {
-            type: 'FeatureCollection',
-            crs: {
-                type: 'name',
-                properties: {
-                    name: 'EPSG:3067',
-                },
-            },
-            features: [feature],
-        };
-
-        channel.postRequest(rn, [geojsonObject, options]);
-    };
-
-    const deSelectFeature = () => {
-        channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [
-            null,
-            null,
-            'gfi-result-layer-overlay',
-        ]);
-    };
+    const  [isHovered, setHovered] = useState(false);
 
     return (
-        <StyledGFITablesContainer
-            key={'gfi-tables-' + generatedKey}
-            onHoverStart={() => {
-                selectFeature(geoJSON.features[index]);
-                setHovered(true);
-            }}
-            onHoverEnd={() => {
-                deSelectFeature(geoJSON.features[index]);
-                setHovered(false);
-            }}
-        >
+            <StyledGFITablesContainer
+                key={'gfi-tables-' + generatedKey}
+                onHoverStart={() => {
+                    selectFeature(channel, [geoJSON.features[index]]);
+                    setHovered(true);
+                }}
+                onHoverEnd={() => {
+                    deSelectFeature(channel, [geoJSON.features[index]]);
+                    setHovered(false);
+                }}
+            >
             <StyledInfoHeaderDiv
                 onClick={() => openFeature(!isFeatureOpen)}
                 isFeatureOpen={isFeatureOpen}
@@ -311,7 +428,7 @@ const GFITables = ({
             >
                 <StyledInfoHeader
                     animate={{
-                        color: isHovered ? '#17a2b8' : '#0064af',
+                        backgroundColor: isHovered ? '#f0f0f0' : '#ffffff',
                     }}
                 >
                     {strings.gfi.target + ' ' + (index + 1)}

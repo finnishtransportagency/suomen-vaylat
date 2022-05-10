@@ -71,7 +71,11 @@
     "noSelectedGfis": "Ei valittuja kohdetietoja",
     "draw": "Piirrä",
     "drawSubtitle": "Valitse kohteita käyttämällä piirtotyökaluja",
-    "download": "Lataa"
+    "search": "Haku",
+    "dataTableView": "Listanäkymä",
+    "download": "Lataa",
+    "list": "Lista",
+    "table" : "Taulukko"
   },
   "downloads": {
     "downloads": "Lataukset",
@@ -230,7 +234,7 @@
   },
   "layerlist": {
     "layerlistLabels": {
-      "allLayers": "Kaikki tasot",
+      "allLayers": "Kaikki tasot", 
       "themeLayers": "Teemakartat",
       "selectedLayers": "Valitut tasot",
       "mapLayers": "Karttatasot",

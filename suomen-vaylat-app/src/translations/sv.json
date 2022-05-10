@@ -71,7 +71,11 @@
     "noSelectedGfis": "No selected locations",
     "draw": "Draw",
     "drawSubtitle": "Select locations by using drawing tools",
-    "download": "Download"
+    "search": "Sökning",
+    "dataTableView": "Listvy",
+    "download": "Download",
+    "list": "List",
+    "table" : "Table"
   },
   "downloads": {
     "downloads": "Downloads",

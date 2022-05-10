@@ -340,7 +340,7 @@ const Content = () => {
                     isOpen={isGfiOpen} /* Modal state */
                     id={null}
                     minWidth={'600px'}
-                    maxWidth={'calc(100vw - 100px)'}
+                    //maxWidth={'calc(100vw - 100px)'}
                     minimize={minimizeGfi}
                 >
                     <GFIPopup
