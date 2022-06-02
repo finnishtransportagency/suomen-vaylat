@@ -346,10 +346,6 @@ const Views = () => {
                                             </StyledSavedViewTitleContent>
                                         </StyledLeftContent>
                                         <StyledRightContent>
-                                            {/* <StyledSelectButton
-                                            //isOpen={isOpen}
-                                        >
-                                        </StyledSelectButton> */}
                                         </StyledRightContent>
                                     </StyledSavedView>
                                     <StyledRemoveSavedView>

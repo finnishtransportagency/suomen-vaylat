@@ -43,6 +43,7 @@ const initialState = {
     },
     gfiPoint: null,
     gfiCroppingArea: null,
+    vkmData: null,
     downloads: [],
     startState: {
         x: null,
@@ -416,6 +417,8 @@ export const rpcSlice = createSlice({
                 shape: action.payload.shape || 2,
                 size: action.payload.size || 7,
                 color: action.payload.color || '0064af',
+                offsetX: action.payload.offsetX || '',
+                offsetY: action.payload.offsetY || '',
             };
             state.channel !== null &&
                 state.channel.postRequest('MapModulePlugin.AddMarkerRequest', [
@@ -621,6 +624,10 @@ export const rpcSlice = createSlice({
          */
         resetGFILocations: (state, action) => {
             state.gfiLocations = action.payload;
+            state.channel && state.channel.postRequest(
+                'MapModulePlugin.RemoveFeaturesFromMapRequest',
+                [null, null, 'gfi-result-layer']
+            );
         },
 
         /**
@@ -633,8 +640,24 @@ export const rpcSlice = createSlice({
             state.gfiPoint = action.payload;
         },
 
+        /**
+         * Set GFI cropping area.
+         * @method setGFICroppingArea
+         * @param {Object} state
+         * @param {Object} action
+         */
         setGFICroppingArea: (state, action) => {
             state.gfiCroppingArea = action.payload;
+        },
+
+        /**
+         * Set VKM data.
+         * @method setVKMData
+         * @param {Object} state
+         * @param {Object} action
+         */
+        setVKMData: (state, action) => {
+            state.vkmData = action.payload;
         },
 
         /**
@@ -647,10 +670,22 @@ export const rpcSlice = createSlice({
             state.downloads.push(action.payload);
         },
 
+        /**
+         * Set active downloads.
+         * @method setDownloadActive
+         * @param {Object} state
+         * @param {Object} action
+         */
         setDownloadActive: (state, action) => {
             state.downloads.push(action.payload);
         },
 
+        /**
+         * Set finished download.
+         * @method setDownloadFinished
+         * @param {Object} state
+         * @param {Object} action
+         */
         setDownloadFinished: (state, action) => {
             let downloadIndex = state.downloads.findIndex(
                 (download) => download.id === action.payload.id
@@ -658,6 +693,12 @@ export const rpcSlice = createSlice({
             state.downloads[downloadIndex] = action.payload;
         },
 
+         /**
+         * Remove download.
+         * @method setDownloadRemove
+         * @param {Object} state
+         * @param {Object} action
+         */
         setDownloadRemove: (state, action) => {
             state.downloads = state.downloads.filter(
                 (download) => download.id !== action.payload
@@ -758,6 +799,7 @@ export const {
     resetGFILocations,
     setGFIPoint,
     setGFICroppingArea,
+    setVKMData,
     setDownloads,
     setDownloadActive,
     setDownloadFinished,

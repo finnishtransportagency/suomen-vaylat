@@ -3,10 +3,12 @@ import { cloneElement } from 'react';
 import styled from 'styled-components';
 import { motion, AnimatePresence, useDragControls } from 'framer-motion';
 import { ReactReduxContext } from 'react-redux';
-import { faTimes, faWindowMinimize } from '@fortawesome/free-solid-svg-icons';
+import { faTimes, faWindowMaximize, faWindowMinimize, faWindowRestore } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { setMinimizeGfi } from '../../state/slices/uiSlice';
+import { setMinimizeGfi, setMaximizeGfi } from '../../state/slices/uiSlice';
+
+import { isMobile } from '../../theme/theme';
 
 const StyledModalBackdrop = styled(motion.div)`
     z-index: ${(props) => (props.type === 'warning' ? 9998 : 10)};
@@ -29,8 +31,9 @@ const StyledModalWrapper = styled(motion.div)`
     position: absolute;
     top: ${(props) => props.resize && '0px'};
     left: ${(props) => props.resize && '0px'};
-    padding: ${props => (props.resize || props.drag) && "8px 50px 50px 8px"};
+    padding: ${props => props.maximize ? '4px 4px 4px 4px' : (props.resize || props.drag) && '8px 50px 50px 8px'};
     max-width: 100%;
+    transform: ${props => props.maximize && 'initial !important'};
     @media ${(props) => props.theme.device.mobileL} {
         position: ${(props) =>
             props.fullScreenOnMobile ? 'fixed' : 'initial'};
@@ -40,24 +43,24 @@ const StyledModalWrapper = styled(motion.div)`
         left: 0px;
         padding: 0px;
         margin: ${(props) => props.fullScreenOnMobile === false && '8px'};
-    } ;
+    };
 `;
 
 const StyledModal = styled(motion.div)`
     position: relative;
-    width: 100%;
+    width: ${(props) => props.maximize ? '100% !important' : '100%'};
+    height: ${(props) => props.maximize ? '100% !important' : '100%'};
     min-width: ${(props) => props.minWidth && props.minWidth};
     max-width: ${(props) => (props.maxWidth ? props.maxWidth : '100vw')};
-    height: 100%;
     min-height: 200px;
-    max-height: calc(100vh - 100px);
+    max-height: ${(props) => !props.maximize && 'calc(100vh - 100px)'};
     background-color: ${(props) => props.theme.colors.mainWhite};
     border-radius: 4px;
     box-shadow: rgb(0 0 0 / 16%) 0px 3px 6px, rgb(0 0 0 / 23%) 0px 3px 6px;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    resize: ${(props) => props.resize && 'both'};
+    resize: ${(props) => !props.maximize && props.resize && 'both'};
     overflow: hidden;
     @media ${(props) => props.theme.device.mobileL} {
         border-radius: ${(props) => props.fullScreenOnMobile && '0px'};
@@ -127,7 +130,7 @@ const StyledRightContent = styled.div`
     align-items: center;
 `;
 
-const StyledMinimizeButton = styled.div`
+const StyledHeaderButton = styled.div`
     height: 100%;
     display: flex;
     justify-content: center;
@@ -175,10 +178,10 @@ const Modal = ({
     maxWidth,
     overflow,
     minimize,
+    maximize,
     children,
 }) => {
     const { store } = useContext(ReactReduxContext);
-
     const dragControls = useDragControls();
 
     const [localState, setLocalState] = useState(type === 'announcement');
@@ -211,6 +214,8 @@ const Modal = ({
                             y: minimize ? 100 : 0,
                             opacity: minimize ? 0 : 1,
                             pointerEvents: minimize ? 'none' : 'auto',
+                            width: maximize ? '100%' : 'auto',
+                            height: maximize ? '100%' : 'auto'
                         }}
                         exit={{
                             y: 100,
@@ -222,16 +227,19 @@ const Modal = ({
                         }}
                         fullScreenOnMobile={fullScreenOnMobile}
                         resize={resize}
+                        maximize={maximize}
                         type={type}
                         onClick={(e) => {
                             e.stopPropagation();
                         }}
+
                     >
                         <StyledModal
                             resize={resize}
                             minWidth={minWidth}
                             maxWidth={maxWidth}
                             fullScreenOnMobile={fullScreenOnMobile}
+                            maximize={maximize}
                         >
                             <StyledModalHeader
                                 type={type}
@@ -248,17 +256,28 @@ const Modal = ({
                                 </StyledModalTitle>
                                 <StyledRightContent>
                                     {type === 'gfi' && (
-                                        <StyledMinimizeButton
-                                            onClick={() =>
-                                                store.dispatch(
-                                                    setMinimizeGfi(true)
-                                                )
+                                        <>
+                                            <StyledHeaderButton
+                                                onClick={() => store.dispatch(setMinimizeGfi(true))}
+                                            >
+                                                <FontAwesomeIcon
+                                                    icon={faWindowMinimize}
+                                                />
+                                            </StyledHeaderButton>
+                                            {
+                                                !isMobile &&
+                                                    <StyledHeaderButton
+                                                        onClick={(e) => {
+                                                            e.preventDefault();
+                                                            store.dispatch(setMaximizeGfi(!maximize));
+                                                        }}
+                                                    >
+                                                        <FontAwesomeIcon
+                                                            icon={maximize ? faWindowRestore : faWindowMaximize}
+                                                        />
+                                                    </StyledHeaderButton>
                                             }
-                                        >
-                                            <FontAwesomeIcon
-                                                icon={faWindowMinimize}
-                                            />
-                                        </StyledMinimizeButton>
+                                        </>
                                     )}
                                     <StyledCloseButton
                                         onClick={() => {
@@ -302,7 +321,7 @@ const Modal = ({
                             }}
                             resize={resize}
                             type={type}
-                        ></StyledModalBackdrop>
+                        />
                     )}
                 </>
             )}

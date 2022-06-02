@@ -26,6 +26,7 @@ const initialState = {
     selectedMapLayersMenuTab: 0,
     selectedMapLayersMenuThemeIndex: null,
     minimizeGfi: false,
+    maximizeGfi: false,
     gfiCroppingTypes: [],
     warning: null,
 };
@@ -114,6 +115,9 @@ export const uiSlice = createSlice({
         setMinimizeGfi: (state, action) => {
             state.minimizeGfi = action.payload;
         },
+        setMaximizeGfi: (state, action) => {
+            state.maximizeGfi = action.payload;
+        },
         setGfiCroppingTypes: (state, action) => {
             state.gfiCroppingTypes = action.payload;
         },
@@ -145,6 +149,7 @@ export const {
     setSelectedMapLayersMenuTab,
     setSelectedMapLayersMenuThemeIndex,
     setMinimizeGfi,
+    setMaximizeGfi,
     setGfiCroppingTypes,
     setWarning,
 } = uiSlice.actions;

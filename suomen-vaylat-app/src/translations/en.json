@@ -68,14 +68,20 @@
     "target": "Target",
     "selectLocations": "Select locations",
     "focusToLocations": "Focus to locations",
-    "noSelectedGfis": "No selected locations",
+    "choosingGfi": "Choosing feature data",
+    "choosingGfiDescription1": "Show feature data selection tools by choosing Select Locations",
+    "choosingGfiDescription2": "You can choose locations by using drawing tools or cropping presets",
     "draw": "Draw",
     "drawSubtitle": "Select locations by using drawing tools",
     "search": "Search",
     "dataTableView": "List view",
+    "downloadMaterials": "Download materials",
     "download": "Download",
     "list": "List",
     "table" : "Table"
+  },
+  "vkm": {
+    "locationInfo": "Location info"
   },
   "downloads": {
     "downloads": "Downloads",

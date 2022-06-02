@@ -8,6 +8,7 @@ import { ReactReduxContext } from 'react-redux';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
+    faPencilAlt,
     faPencilRuler,
     faBorderAll,
     faTimes,
@@ -24,6 +25,7 @@ import {
     setGFILocations,
     resetGFILocations,
     setGFICroppingArea,
+    setVKMData
 } from '../../state/slices/rpcSlice';
 
 import { setMinimizeGfi, setSelectedGfiTool } from '../../state/slices/uiSlice';
@@ -356,6 +358,8 @@ const GfiToolsMenu = ({ handleGfiToolsMenu }) => {
                                     [feature],
                                     (gfiData) => {
                                         store.dispatch(resetGFILocations([]));
+                                        store.dispatch(setVKMData(null));
+                                        channel.postRequest('MapModulePlugin.RemoveMarkersRequest', ["VKM_MARKER"]);
                                         gfiData.gfi &&
                                             gfiData.gfi.forEach((gfi) => {
                                                 store.dispatch(
@@ -481,7 +485,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu }) => {
                 <CircleButtonListItem
                     key={'cropping-type-draw'}
                     id={0}
-                    icon={faPencilRuler}
+                    icon={faPencilAlt}
                     title={strings.gfi.draw}
                     subtitle={strings.gfi.drawSubtitle}
                     selectedItem={selectedTool}

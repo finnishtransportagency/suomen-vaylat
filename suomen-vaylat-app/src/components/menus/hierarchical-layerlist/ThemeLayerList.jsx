@@ -82,6 +82,7 @@ const StyledMasterGroupHeader = styled.div`
     cursor: pointer;
     background-color: ${props => props.theme.colors.secondaryColor2};
     border-radius: ${props => props.isOpen ? "4px 4px 0px 0px": "4px"};
+    box-shadow: 0px 3px 6px 0px rgb(0 0 0 / 16%);
     @-moz-document url-prefix() {
         position: initial;
     };

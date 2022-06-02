@@ -23,6 +23,7 @@ import {
     setMinimizeGfi,
     setWarning,
     setIsDownloadLinkModalOpen,
+    setMaximizeGfi,
 } from '../../state/slices/uiSlice';
 
 import {
@@ -107,6 +108,7 @@ const Content = () => {
         isGfiOpen,
         isGfiDownloadOpen,
         minimizeGfi,
+        maximizeGfi,
         warning,
     } = useAppSelector((state) => state.ui);
 
@@ -194,6 +196,7 @@ const Content = () => {
         store.dispatch(resetGFILocations([]));
         store.dispatch(setIsGfiOpen(false));
         store.dispatch(setMinimizeGfi(false));
+        store.dispatch(setMaximizeGfi(false));
         channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [
             null,
             null,
@@ -340,8 +343,10 @@ const Content = () => {
                     isOpen={isGfiOpen} /* Modal state */
                     id={null}
                     minWidth={'600px'}
+                    //maxWidth={'1000px'}
                     //maxWidth={'calc(100vw - 100px)'}
                     minimize={minimizeGfi}
+                    maximize={maximizeGfi}
                 >
                     <GFIPopup
                         gfiLocations={gfiLocations}

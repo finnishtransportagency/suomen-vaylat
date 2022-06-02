@@ -5,15 +5,53 @@ import DataTable from "react-data-table-component";
 
 import GfiTabContentItem from './GfiTabContentItem';
 
-const StyledGfiTabContentContainer = styled.div`
-    overflow: auto;
+import { faTable, faList } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
+
+const StyledSelectedTabHeader = styled.div`
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 2px 2px 4px 0px rgb(0 0 0 / 20%);
+    z-index: 2;
+`;
+
+const StyledSelectedTabTitle = styled.div`
+    padding: 8px;
+    p {
+        color: ${(props) => props.theme.colors.mainColor1};
+        margin: 0;
+        font-size: 16px;
+        font-weight: 600;
+    }
+`;
+
+const StyledSelectedTabDisplayOptionsButton = styled.div`
+    position: absolute;
+    right: 0px;
+    padding: 8px;
+    cursor: pointer;
+    color: ${(props) => props.theme.colors.mainColor1};
+    svg {
+        font-size: 24px;
+    };
 `;
 
 const customStyles = {
     rows: {
         style: {
+            whiteSpace: 'unset',
+            overflow: 'unset',
+            textOverflow: 'unset',
             '&:hover': {
                 backgroundColor: '#f0f0f0',
+                'div *': {
+                    fontSize: '14px',
+                    fontWeight: '600',
+                    whiteSpace: 'unset',
+                  }
               },
         },
     },
@@ -21,21 +59,30 @@ const customStyles = {
         style: {
             fontSize: '14px',
             fontWeight: '600',
+            'div *': {
+                whiteSpace: 'unset',
+                overflow: 'unset',
+                textOverflow: 'unset'
+            }
         },
     },
     cells: {
         style: {
             color: '#646464',
+            userSelect: 'text'
         },
     },
 };
 
 const GfiTabContent = ({
     data,
-    showDataTable
+    title
 }) => {
+
     const [tableColumns, setTableColumns] = useState([]);
     const [tableCells, setTableCells] = useState([]);
+
+    const [showDataTable, setShowDataTable] = useState(data.content && data.content.features && data.content.features.length > 5);
 
     const selectFeature = (channel, features) => {
         let featureStyle = {
@@ -115,14 +162,29 @@ const GfiTabContent = ({
                   selector: row => row[property],
                   sortable: true,
               }
-          }));
+        }));
 
          setTableCells(cells);
     },[data]);
 
-    return <StyledGfiTabContentContainer>
+    return <>
+            <StyledSelectedTabHeader>
+                <StyledSelectedTabTitle>
+                    <p>
+                        {
+                            title.toUpperCase()
+                        }
+                    </p>
+                </StyledSelectedTabTitle>
+                <StyledSelectedTabDisplayOptionsButton
+                    onClick={() => setShowDataTable(!showDataTable)}
+                >
+                    <FontAwesomeIcon icon={showDataTable ? faList : faTable} />
+                </StyledSelectedTabDisplayOptionsButton>
+            </StyledSelectedTabHeader>
+
         {
-            showDataTable ? 
+             showDataTable ?
                 <DataTable
                     columns={tableColumns}
                     data={tableCells}
@@ -131,17 +193,25 @@ const GfiTabContent = ({
                     customStyles={customStyles}
                 />
             :
-            data.content && data.content.features && data.content.features.map((feature, index) => {
-                return <GfiTabContentItem
-                    key={feature.id}
-                    data={feature}
-                    index={index}
-                    selectFeature={selectFeature}
-                    deSelectFeature={deSelectFeature}
-                />
-            })
+            <div style={{
+                overflow: 'auto'
+            }}>
+                {
+                                data.content && data.content.features && data.content.features.map((feature, index) => {
+                                    return <GfiTabContentItem
+                                        key={feature.id}
+                                        title={feature.id.split(".")[1] ? title+" "+feature.id.split(".")[1] : title+" "+feature.id}
+                                        data={feature}
+                                        index={index}
+                                        selectFeature={selectFeature}
+                                        deSelectFeature={deSelectFeature}
+                                    />
+                                })
+                }
+            </div>
+
         }
-    </StyledGfiTabContentContainer>
+    </>
 };
 
 export default GfiTabContent;
