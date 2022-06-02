@@ -78,16 +78,22 @@ const StyledTabs = styled.div`
         content: '';
         width: calc(100% / 3);
         height: 100%;
-        background-color: ${(props) => props.theme.colors.mainWhite};
+        background-color: ${(props) => (props.tabIndex === 0 ? 'rgba(0, 99, 175, 1)' : props.tabIndex === 1 ? 'rgba(32, 122, 66, 1)' : 'rgba(229, 0, 130, 1)')};
         bottom: 0px;
         left: ${(props) => props.tabIndex * 50 + '%'};
-        border-radius: 4px 4px 0px 0px;
+        border-radius: 8px 8px 0px 0px;
         transform: translateX(
             ${(props) => {
                 return props.tabIndex * -50 + '%';
             }}
         );
         transition: all 0.3s ease-out;
+        border-top: 3px solid ${(props) => (props.tabIndex === 0 ? 'rgba(0, 99, 175, 1)' : props.tabIndex === 1 ? 'rgba(32, 122, 66, 1)' : 'rgba(229, 0, 130, 1)')};
+        border-left: 3px solid ${(props) => (props.tabIndex === 0 ? 'rgba(0, 99, 175, 1)' : props.tabIndex === 1 ? 'rgba(32, 122, 66, 1)' : 'rgba(229, 0, 130, 1)')};
+        border-right: 3px solid ${(props) => (props.tabIndex === 0 ? 'rgba(0, 99, 175, 1)' : props.tabIndex === 1 ? 'rgba(32, 122, 66, 1)' : 'rgba(229, 0, 130, 1)')};
+            
+box-shadow: 0px -1px 11px ${(props) => (props.tabIndex === 0 ? 'rgba(0, 99, 175, 0.3)' : props.tabIndex === 1 ? 'rgba(32, 122, 66, 0.3)' : 'rgba(229, 0, 130, 0.3)')};
+
     }
     &::after {
         position: absolute;
@@ -96,14 +102,13 @@ const StyledTabs = styled.div`
         height: 100%;
         bottom: 0px;
         left: ${(props) => props.tabIndex * 50 + '%'};
-        border-radius: 4px 4px 0px 0px;
+        border-radius: 6px 6px 0px 0px;
         transform: translateX(
             ${(props) => {
                 return props.tabIndex * -50 + '%';
             }}
         );
         transition: all 0.3s ease-out;
-        box-shadow: 0px -1px 11px ${(props) => (props.tabIndex === 0 ? 'rgba(0, 99, 175, 0.3)' : props.tabIndex === 1 ? 'rgba(32, 122, 66, 0.3)' : 'rgba(229, 0, 130, 0.3)')};
     }
 `;
 
@@ -114,10 +119,10 @@ const StyledTab = styled.div`
     cursor: pointer;
     font-size: 13px;
     font-weight: bold;
-    color: ${(props) =>
-        props.isSelected ? props.theme.colors[props.color] : '#656565'};
+    color: ${(props) => props.isSelected ? props.theme.colors.mainWhite : '#656565'};
     text-align: center;
     transition: color 0.2s ease-out;
+    margin-top: 4px;
 `;
 
 const StyledLayerCount = styled.div`
@@ -129,7 +134,7 @@ const StyledLayerCount = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    border-radius: 5px;
+    border-radius: 4px;
     color: ${(props) => props.theme.colors.mainWhite};
     background-color: ${(props) => props.theme.colors.secondaryColor7};
     font-size: 11px;
@@ -146,7 +151,7 @@ const StyledSwiper = styled(Swiper)`
         overflow: auto;
     }
     transition: box-shadow 0.3s ease-out;
-    box-shadow: 0px -1px 11px ${(props) => (props.tabIndex === 0 ? 'rgba(0, 99, 175, 0.3)' : props.tabIndex === 1 ? 'rgba(32, 122, 66, 0.3)' : 'rgba(229, 0, 130, 0.3)')};
+    border-top: 3px solid ${(props) => (props.tabIndex === 0 ? 'rgba(0, 99, 175, 1)' : props.tabIndex === 1 ? 'rgba(32, 122, 66, 1)' : 'rgba(229, 0, 130, 1)')};
 `;
 
 const MapLayersDialog = () => {

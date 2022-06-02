@@ -23,10 +23,10 @@ const StyledGfiTabContentItemHeader = styled(motion.div)`
 `;
 
 const StyledGfiSubTabContentItemHeader = styled(motion.div)`
-height: 40px;
-display: flex;
-align-items: center;
-padding: 16px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    padding: 16px;
 `;
 
 const StyledGfiTabContentItemName = styled.p`
@@ -91,11 +91,12 @@ const StyledGfiTabContentItemSubCollapseContent = styled(motion.div)`
 
 const GfiTabContentItem = ({
     index,
+    title,
     data,
     selectFeature,
     deSelectFeature
 }) => {
-    const [isExpanded, setIsExpanded] = useState(false);
+    const [isExpanded, setIsExpanded] = useState(index === 0);
     const [isHovered, setHovered] = useState(false);
     const [isSubExpanded, setIsSubExpanded] = useState(false);
     const [orderHigh, setOrderHigh] = useState(null);
@@ -110,7 +111,7 @@ const GfiTabContentItem = ({
 
         if(hightPriorityFields.length > 0){
             hightPriorityFields && setOrderHigh(hightPriorityFields);
-            lowPriorityFields && setOrderLow(lowPriorityFields);
+            lowPriorityFields && lowPriorityFields.length > 0 && setOrderLow(lowPriorityFields);
         } else if(lowPriorityFields.length > 0){
             setOrderHigh(lowPriorityFields);
         }
@@ -136,7 +137,7 @@ const GfiTabContentItem = ({
                         }}
                     >
                         <StyledGfiTabContentItemName>
-                            {strings.gfi.target + ' ' + (index + 1)}
+                            {title}
                         </StyledGfiTabContentItemName>
                         <StyledGfiTabContentItemExpandIcon
                             animate={{
@@ -209,36 +210,38 @@ const GfiTabContentItem = ({
                                         </StyledGfiSubTabContentItemExpandIcon>
                                     </StyledGfiSubTabContentItemHeader>
                                     <AnimatePresence>
-                                    {isSubExpanded && <StyledGfiTabContentItemSubCollapseContent
-                                        initial={{
-                                            height: 0,
-                                            opacity: 0,
-                                        }}
-                                        animate={{
-                                            height: 'auto',
-                                            opacity: 1,
-                                        }}
-                                        exit={{
-                                            height: 0,
-                                            opacity: 0,
-                                        }}
-                                        transition={{
-                                            duration: 0.3,
-                                            type: 'tween',
-                                        }}
-                                    >
-                                        <StyledGfiTabContentItemTable>
-                                            {
-                                                orderLow && orderLow.map(value => {
-                                                    return <StyledGfiTabContentItemTableRow key={value+'_'+data.properties[value]}>
-                                                        <StyledGfiTabContentItemTableHeader>{value}</StyledGfiTabContentItemTableHeader>
-                                                        <StyledGfiTabContentItemTableData>{data.properties[value]}</StyledGfiTabContentItemTableData>
-                                                    </StyledGfiTabContentItemTableRow>
-                                                })
-                                            }
-                                        </StyledGfiTabContentItemTable>
-                                        </StyledGfiTabContentItemSubCollapseContent>
-                                    }
+                                        {
+                                            isSubExpanded &&
+                                            <StyledGfiTabContentItemSubCollapseContent
+                                                initial={{
+                                                    height: 0,
+                                                    opacity: 0,
+                                                }}
+                                                animate={{
+                                                    height: 'auto',
+                                                    opacity: 1,
+                                                }}
+                                                exit={{
+                                                    height: 0,
+                                                    opacity: 0,
+                                                }}
+                                                transition={{
+                                                    duration: 0.3,
+                                                    type: 'tween',
+                                                }}
+                                            >
+                                            <StyledGfiTabContentItemTable>
+                                                {
+                                                    orderLow && orderLow.map(value => {
+                                                        return <StyledGfiTabContentItemTableRow key={value+'_'+data.properties[value]}>
+                                                            <StyledGfiTabContentItemTableHeader>{value}</StyledGfiTabContentItemTableHeader>
+                                                            <StyledGfiTabContentItemTableData>{data.properties[value]}</StyledGfiTabContentItemTableData>
+                                                        </StyledGfiTabContentItemTableRow>
+                                                    })
+                                                }
+                                            </StyledGfiTabContentItemTable>
+                                            </StyledGfiTabContentItemSubCollapseContent>
+                                        }
                                     </AnimatePresence>
                                 </>
                             }

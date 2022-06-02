@@ -1,5 +1,5 @@
 import {  useState, useContext } from "react";
-import { faInfoCircle, faTimes, faGripVertical } from '@fortawesome/free-solid-svg-icons';
+import { faInfoCircle, faTimes, faGripVertical, faBars, faCaretDown, faCaretUp, faGripLines } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ReactReduxContext, useSelector } from 'react-redux';
 import styled from 'styled-components';
@@ -14,14 +14,14 @@ const StyledLayerContainer = styled.li`
     height: 80px;
     display: flex;
     margin-bottom: 8px;
+    background-color: #F5F5F5;
+    box-shadow: 0px 1px 3px #0000001F;
 `;
 
 const StyledLayerContent = styled.div`
     position: relative;
     width: 100%;
     padding: 8px;
-    background-color: #F5F5F5;
-    box-shadow: 0px 1px 3px #0000001F;
     border-radius: 4px;
     display: flex;
     flex-direction: column;
@@ -35,7 +35,7 @@ const StyledlayerHeader = styled.div`
 `;
 
 const StyledMidContent = styled.div`
-    font-size: 10px;
+    font-size: 12px;
 `;
 
 const StyledLayerName = styled.p`
@@ -51,7 +51,6 @@ const StyledLayerName = styled.p`
 
 const StyledBottomContent = styled.div`
     display: flex;
-    //justify-content: space-between;
     align-items: center;
     p {
         margin: 0;
@@ -116,13 +115,21 @@ const StyledLayerGripControl = styled.div`
     width: 100%;
     max-width: 40px;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     cursor: pointer;
+    transition: all 0.1s ease-out;
     svg {
         font-size: 17px;
         color: ${props => props.theme.colors.mainColor1};
-    }
+    };
+    &:hover {
+        transform: scale(1.1);
+        svg {
+            filter: drop-shadow(0px 1px 2px #00000026);
+        }
+    };
 `;
 
 const StyledLayerInfoIconWrapper = styled.div`
@@ -143,16 +150,35 @@ const StyledLayerInfoIconWrapper = styled.div`
 
 const DragHandle = sortableHandle(() => (
     <StyledLayerGripControl className="swiper-no-swiping">
-        <FontAwesomeIcon icon={faGripVertical} />
+        <FontAwesomeIcon
+            icon={faCaretUp}
+            style={{
+                fontSize: '14px',
+                marginBottom: '-4px'
+            }}
+        />
+        <FontAwesomeIcon
+            icon={faGripLines}
+            style={{
+                fontSize: '16px'
+            }}
+        />
+        <FontAwesomeIcon
+            icon={faCaretDown}
+            style={{
+                fontSize: '14px',
+                marginTop: '-4px'
+            }}
+        />
     </StyledLayerGripControl>
 ));
 
 export const SelectedLayer = ({
     layer,
     uuid,
-    currentZoomLevel
+    currentZoomLevel,
+    sortIndex
 }) => {
-
     const { store } = useContext(ReactReduxContext);
     const [opacity, setOpacity] = useState(layer.opacity);
     const channel = useSelector(state => state.rpc.channel);
@@ -166,7 +192,6 @@ export const SelectedLayer = ({
         channel.postRequest('ChangeMapLayerOpacityRequest', [layer.id, value]);
         setOpacity(value);
     };
-
 
     const handleMetadataSuccess = (data, layer, uuid) => {
         if (data) {
@@ -190,6 +215,7 @@ export const SelectedLayer = ({
 
     return (
             <StyledLayerContainer>
+                <DragHandle />
                 <StyledLayerContent>
                     <StyledLayerDeleteIcon
                         className="swiper-no-swiping"
@@ -233,7 +259,6 @@ export const SelectedLayer = ({
                         />
                     </StyledBottomContent>
                 </StyledLayerContent>
-                <DragHandle />
             </StyledLayerContainer>
     );
 };

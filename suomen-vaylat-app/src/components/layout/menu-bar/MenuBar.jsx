@@ -4,7 +4,7 @@ import {
     faCompress,
     faExpand,
     faLayerGroup,
-    faPencilRuler,
+    faRuler,
     faSave,
     faMapMarkedAlt,
     faDownload,
@@ -137,7 +137,7 @@ const MenuBar = () => {
             <StyledMenuBar isSearchOpen={isSearchOpen}>
                 <CircleButton
                     icon={faLayerGroup}
-                    text={strings.tooltips.layerlistButton}
+                    text={strings.layerlist.layerlistLabels.mapLayers}
                     toggleState={isSideMenuOpen}
                     clickAction={() =>
                         store.dispatch(setIsSideMenuOpen(!isSideMenuOpen))
@@ -145,17 +145,6 @@ const MenuBar = () => {
                 >
                     <StyledLayerCount>{selectedLayers.length}</StyledLayerCount>
                 </CircleButton>
-                <StyledMapToolsContainer>
-                    <CircleButton
-                        icon={faPencilRuler}
-                        text={
-                            strings.tooltips.measuringTools.measuringToolsButton
-                        }
-                        toggleState={isDrawingToolsOpen}
-                        clickAction={closeDrawingTools}
-                    />
-                    <DrawingTools isOpen={isDrawingToolsOpen} />
-                </StyledMapToolsContainer>
                 <CircleButton
                     icon={faMapMarkedAlt}
                     text={strings.gfi.title}
@@ -181,6 +170,17 @@ const MenuBar = () => {
                         }
                     </StyledLayerCount>
                 </CircleButton>
+                <StyledMapToolsContainer>
+                    <CircleButton
+                        icon={faRuler}
+                        text={
+                            strings.tooltips.measuringTools.measuringToolsButton
+                        }
+                        toggleState={isDrawingToolsOpen}
+                        clickAction={closeDrawingTools}
+                    />
+                    <DrawingTools isOpen={isDrawingToolsOpen} />
+                </StyledMapToolsContainer>
                 <CircleButton
                     icon={faSave}
                     text={strings.saveView.saveView}

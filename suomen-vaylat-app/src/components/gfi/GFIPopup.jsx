@@ -4,11 +4,11 @@ import {
     faTimes,
     faSearchLocation,
     faPencilRuler,
-    faTable,
-    faList,
     faFileDownload,
     faAngleLeft,
     faAngleRight,
+    faLayerGroup,
+    faMapMarkerAlt
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ReactReduxContext } from 'react-redux';
@@ -38,6 +38,51 @@ const StyledGfiContainer = styled.div`
     min-height: 480px;
 `;
 
+const StyledVKMDataContainer = styled(motion.div)`
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    color: ${(props) => props.theme.colors.mainColor1};
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+    img {
+        max-width: 100px;
+    };
+    p {
+        margin: 0;
+        font-size: 22px;
+        font-weight: 600;
+    }
+`;
+
+const StyledVKMDataMunacipalityImageWrapper = styled.div`
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding-right: 8px;
+        img {
+            max-height: 100px
+        }
+`;
+
+const StyledCoordinatesWrapper = styled.div`
+    display: flex;
+    align-items: center;
+    svg {
+        font-size: 24px;
+        padding: 8px;
+    }
+    p {
+        margin: 0px;
+        font-size: 12px;
+    }
+`;
+
+const StyledVKMDataInfoWrapper = styled.div`
+    padding-left: 8px;
+`;
+
 const StyledTabSwiperContainer = styled.div`
     z-index: 2;
     display: flex;
@@ -59,12 +104,31 @@ const StyledTabName = styled.p`
 const StyledNoGfisContainer = styled.div`
     position: absolute;
     width: 100%;
+    max-width: 520px;
     height: 100%;
     display: flex;
-    justify-content: center;
-    align-items: center;
+    padding: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    flex-direction: column;
     font-size: 18px;
     color: ${(props) => props.theme.colors.mainColor1};
+`;
+
+const StyledSubtitle = styled.div`
+    display: flex;
+    justify-content: flex-start;
+    color: ${(props) => props.theme.colors.mainColor1};
+    padding: 10px 0px 10px 5px;
+    font-size: 16px;
+    font-weight: bold;
+`;
+
+const StyledInfoTextContainer = styled.ul`
+    li {
+        font-size: 14px;
+        color: ${(props) => props.theme.colors.mainColor1};
+    }
 `;
 
 const StyledSwiper = styled(Swiper)`
@@ -175,32 +239,17 @@ const StyledTabContent = styled.div`
     }
 `;
 
-const StyledSelectedTabHeader = styled.div`
-    display: flex;
-    justify-content: center;
-    box-shadow: 2px 2px 4px 0px rgb(0 0 0 / 20%);
-    z-index: 2;
-`;
-
-const StyledSelectedTabTitle = styled.div`
-    padding: 8px;
-    p {
-        color: ${(props) => props.theme.colors.mainColor1};
-        margin: 0;
-        font-size: 16px;
-        font-weight: 600;
-    }
-`;
-
 const StyledButtonsContainer = styled.div`
     position: absolute;
     bottom: 0px;
     right: 0px;
     padding: 16px;
-    z-index: 3;
+    z-index: 1;
     display: flex;
     flex-direction: column;
+    align-items: flex-end;
     gap: 8px;
+    pointer-events: none;
 `;
 
 const StyledGfiToolsContainer = styled(motion.div)`
@@ -222,16 +271,15 @@ const StyledGfiBackdrop = styled(motion.div)`
 export const GFIPopup = ({ handleGfiDownload }) => {
     const LAYER_ID = 'gfi-result-layer';
     const { store } = useContext(ReactReduxContext);
-    const { channel, allLayers, gfiLocations } = useAppSelector(state => state.rpc);
+    const { channel, allLayers, gfiLocations, vkmData } = useAppSelector(state => state.rpc);
 
     const [selectedTab, setSelectedTab] = useState(0);
     const [tabsContent, setTabsContent] = useState([]);
     const [geoJsonToShow, setGeoJsonToShow] = useState(null);
     const [isGfiToolsOpen, setIsGfiToolsOpen] = useState(false);
-    const [showDataTable, setShowDataTable] = useState(false);
     const [isDataTable, setIsDataTable] = useState(false);
     const [isGfiDownloadsOpen, setIsGfiDownloadsOpen] = useState(false);
-
+    const [isVKMInfoOpen, setIsVKMInfoOpen] = useState(false);
     const [gfiTabsSwiper, setGfiTabsSwiper] = useState(null);
     const [gfiTabsSnapGridLength, setGfiTabsSnapGridLength] = useState(0);
 
@@ -274,6 +322,10 @@ export const GFIPopup = ({ handleGfiDownload }) => {
             tabsContent[selectedTab].props.type === 'geoJson' &&
             setGeoJsonToShow(tabsContent[selectedTab].props.data);
     }, [selectedTab, tabsContent]);
+
+    useEffect(() => {
+        gfiLocations && gfiLocations.length > 0 ? setIsVKMInfoOpen(false) : vkmData && setIsVKMInfoOpen(true);
+    },[vkmData, gfiLocations])
 
     const handleOverlayGeometry = (geoJson) => {
         channel &&
@@ -318,26 +370,27 @@ export const GFIPopup = ({ handleGfiDownload }) => {
         }
     };
 
-    const handleDataTableView = () => {
-        setShowDataTable(!showDataTable);
+    const handleVKMInfo = () => {
+        setIsVKMInfoOpen(!isVKMInfoOpen);
     };
 
+
     const handleGfiToolsMenu = () => {
+        setIsGfiDownloadsOpen(false);
+        setIsGfiToolsOpen(!isGfiToolsOpen);
         channel &&
             channel.postRequest('DrawTools.StopDrawingRequest', [
                 'gfi-selection-tool',
                 true,
             ]);
 
-        isGfiToolsOpen &&
+        isGfiToolsOpen && channel &&
             channel.postRequest('VectorLayerRequest', [
                 {
                     layerId: 'download-tool-layer',
                     remove: true,
                 },
             ]);
-        setIsGfiDownloadsOpen(false);
-        setIsGfiToolsOpen(!isGfiToolsOpen);
     };
 
     const handleGfiDownloadsMenu = () => {
@@ -435,6 +488,71 @@ export const GFIPopup = ({ handleGfiDownload }) => {
 
     return (
         <StyledGfiContainer>
+                <StyledVKMDataContainer
+                    animate={{ 
+                        height: isVKMInfoOpen ? 'auto' : 0,
+                        opacity: isVKMInfoOpen ? 1 : 0,
+                        marginTop: isVKMInfoOpen ? '16px' : '0px',
+                        marginBottom: isVKMInfoOpen ? '16px' : '0px'
+                    }}
+                    transition={{ duration: 0.4 }}
+                >
+                    <StyledVKMDataMunacipalityImageWrapper>
+                        {
+                            vkmData && vkmData.vkm.Kuntakoodi && <img src={'https://www.kuntaliitto.fi/sites/default/files/styles/narrow_320_x_600_/public/media/profile_pictures/'+vkmData.vkm.Kuntakoodi.toString().padStart(3, '0')+'.gif'} alt="" />
+                        }
+                        {
+                            vkmData && vkmData.vkm.Kuntanimi && <p>{vkmData.vkm.Kuntanimi}</p> 
+                        }
+                        {
+                            vkmData && vkmData.coordinates && <StyledCoordinatesWrapper>
+                                <FontAwesomeIcon icon={faMapMarkerAlt} />
+                                <div>
+                                    <p>Lat: {vkmData.coordinates.y}</p>
+                                    <p>Lon: {vkmData.coordinates.x}</p>
+                                </div>
+                            </StyledCoordinatesWrapper>
+                        }
+                    </StyledVKMDataMunacipalityImageWrapper>
+
+                    {
+                        vkmData && vkmData.vkm._orderHigh && vkmData.vkm._orderHigh.filter(value => value !== 'Kuntanimi').length > 0 && 
+                        <StyledVKMDataInfoWrapper>
+                            {
+                                vkmData.vkm._orderHigh.filter(value => value !== 'Kuntanimi').map(property => {
+                                    return (
+                                            <li
+                                                key={'vkm-info-box-li'+property}
+                                                style={{
+                                                    color: '#0064af'
+                                                }}
+                                            >
+                                                <span
+                                                    style={{
+                                                        fontSize: '14px',
+                                                        fontWeight: 'light',
+                                                        margin: '0'
+                                                    }}
+                                                >
+                                                    {property + ":"}
+                                                </span>
+                                                &nbsp;
+                                                <span
+                                                    style={{
+                                                        fontSize: '16px',
+                                                        fontWeight: '600',
+                                                        margin: '0'
+                                                    }}
+                                                >
+                                                    {vkmData.vkm[property]}
+                                                </span>
+                                            </li>
+                                    )
+                                })
+                            }
+                        </StyledVKMDataInfoWrapper>
+                    }
+                </StyledVKMDataContainer>
             {tabsContent.length > 0 && (
                 <StyledTabSwiperContainer>
                     {!isMobile && gfiTabsSnapGridLength > 1 && (
@@ -512,7 +630,12 @@ export const GFIPopup = ({ handleGfiDownload }) => {
             <StyledTabContent>
                 {tabsContent[selectedTab] === undefined && (
                     <StyledNoGfisContainer>
-                        {strings.gfi.noSelectedGfis}
+                        <StyledSubtitle>{strings.gfi.choosingGfi}:</StyledSubtitle>
+                        <StyledInfoTextContainer>
+                            <li>Varmista että olet aktivoinut tasoja Karttatasot valikosta.&nbsp; <FontAwesomeIcon icon={faLayerGroup} style={{fontSize: '16px'}}/></li>
+                            <li>{strings.gfi.choosingGfiDescription1}.&nbsp; <FontAwesomeIcon icon={faPencilRuler} style={{fontSize: '16px'}}/></li>
+                            <li>{strings.gfi.choosingGfiDescription2}.</li>
+                        </StyledInfoTextContainer>
                     </StyledNoGfisContainer>
                 )}
                 <StyledSwiper
@@ -528,7 +651,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
                     {gfiLocations.map((location) => {
                             const layers = allLayers.filter(layer => layer.id === location.layerId);
                             const layerIds = layers && layers.length > 0 ? layers[0].id : location.layerId;
-                            const name = layers.length > 0 && layers[0].name;
+                            const title = layers.length > 0 && layers[0].name;
                             let content;
 /*                             if (location.type === 'text') {
                                 content = location.content;
@@ -565,18 +688,9 @@ export const GFIPopup = ({ handleGfiDownload }) => {
                                             location.layerId
                                         }
                                     >
-                                        <StyledSelectedTabHeader>
-                                            <StyledSelectedTabTitle>
-                                                <p>
-                                                    {
-                                                        name.toUpperCase()
-                                                    }
-                                                </p>
-                                            </StyledSelectedTabTitle>
-                                        </StyledSelectedTabHeader>
                                         <GfiTabContent
                                             data={location}
-                                            showDataTable={showDataTable}
+                                            title={title}
                                         />
                                     </SwiperSlide>
                                 );
@@ -586,13 +700,16 @@ export const GFIPopup = ({ handleGfiDownload }) => {
                 </StyledSwiper>
             </StyledTabContent>
             <StyledButtonsContainer>
-                <CircleButton
-                    icon={showDataTable ? faList : faTable}
-                    text={showDataTable ? strings.gfi.list : strings.gfi.table}
-                    //toggleState={isGfiToolsOpen}
-                    tooltipDirection={'left'}
-                    clickAction={handleDataTableView}
-                />
+                {
+                    vkmData &&
+                    <CircleButton
+                        icon={faMapMarkerAlt}
+                        text={strings.vkm.locationInfo}
+                        toggleState={isVKMInfoOpen}
+                        tooltipDirection={'left'}
+                        clickAction={handleVKMInfo}
+                    />
+                }
                 <CircleButton
                     icon={faPencilRuler}
                     text={strings.gfi.selectLocations}
@@ -602,7 +719,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
                 />
                 <CircleButton
                     icon={faFileDownload}
-                    text={strings.gfi.download}
+                    text={strings.gfi.downloadMaterials}
                     toggleState={isGfiDownloadsOpen}
                     tooltipDirection={'left'}
                     clickAction={handleGfiDownloadsMenu}

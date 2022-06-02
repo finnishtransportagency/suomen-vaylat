@@ -52,8 +52,8 @@
   "saveView" : {
     "saveView" : "Tallenna näkymä",
     "savingView" : "Näkymän tallennus",
-    "saveViewDescription1" : "Näkymä tallentuu selaimen välimuistiin.",
-    "saveViewDescription2" : "Tallennettu näkymä voidaan aktivoida vain selaimessa johon se on tallennettu.",
+    "saveViewDescription1" : "Näkymä tallentuu selaimen välimuistiin",
+    "saveViewDescription2" : "Tallennettu näkymä voidaan aktivoida vain selaimessa johon se on tallennettu",
     "noSavedViews" : "Ei tallennettuja näkymiä",
     "deleteAllSavedViews" : "Poista kaikki tallennetut näkymät",
     "savedViews" : "Tallennetut näkymät",
@@ -68,14 +68,19 @@
     "target": "Kohde",
     "selectLocations": "Valitse kohteita",
     "focusToLocations": "Tarkenna kohteisiin",
-    "noSelectedGfis": "Ei valittuja kohdetietoja",
+    "choosingGfi": "Kohdetietojen valitseminen",
+    "choosingGfiDescription1": "Näytä kohteiden valintatyökalut valitsemalla Valitse kohteita",
+    "choosingGfiDescription2": "Voit valita kohteita käyttämällä piirtotyökaluja tai valmiita rajausvaihtoehtoja",
     "draw": "Piirrä",
     "drawSubtitle": "Valitse kohteita käyttämällä piirtotyökaluja",
     "search": "Haku",
     "dataTableView": "Listanäkymä",
-    "download": "Lataa",
+    "downloadMaterials": "Lataa aineistoja",
     "list": "Lista",
     "table" : "Taulukko"
+  },
+  "vkm": {
+    "locationInfo": "Sijaintitiedot"
   },
   "downloads": {
     "downloads": "Lataukset",
