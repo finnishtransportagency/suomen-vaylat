@@ -272,7 +272,7 @@ const StyledGfiBackdrop = styled(motion.div)`
 export const GFIPopup = ({ handleGfiDownload }) => {
     const LAYER_ID = 'gfi-result-layer';
     const { store } = useContext(ReactReduxContext);
-    const { channel, allLayers, gfiLocations, vkmData } = useAppSelector(state => state.rpc);
+    const { channel, allLayers, gfiLocations, vkmData, pointInfoImageError, setPointInfoImageError } = useAppSelector(state => state.rpc);
 
     const [selectedTab, setSelectedTab] = useState(0);
     const [tabsContent, setTabsContent] = useState([]);
@@ -283,7 +283,6 @@ export const GFIPopup = ({ handleGfiDownload }) => {
     const [isVKMInfoOpen, setIsVKMInfoOpen] = useState(false);
     const [gfiTabsSwiper, setGfiTabsSwiper] = useState(null);
     const [gfiTabsSnapGridLength, setGfiTabsSnapGridLength] = useState(0);
-    const [isKuntaImageError, setIsKuntaImageError] = useState(false);
 
     const gfiInputEl = useRef(null);
 
@@ -501,13 +500,13 @@ export const GFIPopup = ({ handleGfiDownload }) => {
                 >
                     <StyledVKMDataMunacipalityImageWrapper>
                         {
-                            vkmData && vkmData.vkm.kuntakoodi && !isKuntaImageError &&
+                            vkmData && vkmData.vkm.kuntakoodi && !pointInfoImageError &&
                             <img
                                 src={KUNTA_IMAGE_URL + vkmData.vkm.kuntakoodi.toString().padStart(3, '0')+'.gif'}
                                 alt=''
                                 onError={({ currentTarget }) => {
                                     currentTarget.onerror = null; // prevents looping
-                                    setIsKuntaImageError(true);
+                                    setPointInfoImageError(true);
                                   }}
                                 />
                         }

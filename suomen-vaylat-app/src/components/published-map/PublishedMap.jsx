@@ -225,7 +225,7 @@ const PublishedMap = () => {
             channel.getSupportedEvents(function (data) {
                 if (data.MapClickedEvent) {
                     channel.handleEvent('MapClickedEvent', (data) => {
-                        //store.dispatch(resetGFILocations([]));
+                        store.dispatch(resetGFILocations([]));
                     });
                 }
 
@@ -256,7 +256,6 @@ const PublishedMap = () => {
 
                 if (data.DataForMapLocationEvent) {
                     channel.handleEvent('DataForMapLocationEvent', (data) => {
-                        console.log(data);
                         store.dispatch(resetGFILocations([]));
                         const croppingArea = {
                             type: 'Feature',

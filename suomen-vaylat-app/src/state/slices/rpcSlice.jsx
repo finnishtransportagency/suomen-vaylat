@@ -44,6 +44,7 @@ const initialState = {
     gfiPoint: null,
     gfiCroppingArea: null,
     vkmData: null,
+    pointInfoImageError: false,
     downloads: [],
     startState: {
         x: null,
@@ -609,11 +610,7 @@ export const rpcSlice = createSlice({
          * @param {Object} action
          */
         setGFILocations: (state, action) => {
-            if (action.payload.layerId === 'VKM') {
-                state.gfiLocations.unshift(action.payload);
-            } else {
-                state.gfiLocations.push(action.payload);
-            }
+            state.gfiLocations.push(action.payload);
         },
 
         /**
@@ -658,6 +655,17 @@ export const rpcSlice = createSlice({
          */
         setVKMData: (state, action) => {
             state.vkmData = action.payload;
+            state.vkmDataImageError = false;
+        },
+
+        /**
+         * Set point info image error.
+         * @method setPointInfoImageError
+         * @param {Object} state
+         * @param {Object} action
+         */
+        setPointInfoImageError: (state, action) => {
+            state.pointInfoImageError = action.payload;
         },
 
         /**
@@ -800,6 +808,7 @@ export const {
     setGFIPoint,
     setGFICroppingArea,
     setVKMData,
+    setPointInfoImageError,
     setDownloads,
     setDownloadActive,
     setDownloadFinished,
