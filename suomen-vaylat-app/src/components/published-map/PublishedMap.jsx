@@ -1,5 +1,4 @@
 import { useContext, useEffect } from 'react';
-import ReactDOMServer from 'react-dom/server';
 import OskariRPC from 'oskari-rpc';
 import { ReactReduxContext } from 'react-redux';
 import styled from 'styled-components';

@@ -1,5 +1,5 @@
-import {  useState, useContext } from "react";
-import { faInfoCircle, faTimes, faGripVertical, faBars, faCaretDown, faCaretUp, faGripLines } from '@fortawesome/free-solid-svg-icons';
+import {  useState, useContext } from 'react';
+import { faInfoCircle, faTimes, faCaretDown, faCaretUp, faGripLines } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ReactReduxContext, useSelector } from 'react-redux';
 import styled from 'styled-components';

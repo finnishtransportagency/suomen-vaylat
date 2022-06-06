@@ -69,6 +69,7 @@
     "selectLocations": "Valitse kohteita",
     "focusToLocations": "Tarkenna kohteisiin",
     "choosingGfi": "Kohdetietojen valitseminen",
+    "choosingGfiDescription0": "Varmista että olet aktivoinut tasoja Karttatasot valikosta",
     "choosingGfiDescription1": "Näytä kohteiden valintatyökalut valitsemalla Valitse kohteita",
     "choosingGfiDescription2": "Voit valita kohteita käyttämällä piirtotyökaluja tai valmiita rajausvaihtoehtoja",
     "draw": "Piirrä",
@@ -194,6 +195,9 @@
         "text": "Väyläviraston karttoja:",
         "link": "https://vayla.fi/vaylista/aineistot/kartat"
       }
+    },
+    "dataSources": {
+      "municipalityImage": "Sijaintitietojen kuntien vaakunoiden kuvat haetaan kuntaliiton sivuilta (<a href='https://www.kuntaliitto.fi' target='_blank'>https://www.kuntaliitto.fi</a>)."
     }
   },
   "search": {
@@ -239,7 +243,7 @@
   },
   "layerlist": {
     "layerlistLabels": {
-      "allLayers": "Kaikki tasot", 
+      "allLayers": "Kaikki tasot",
       "themeLayers": "Teemakartat",
       "selectedLayers": "Valitut tasot",
       "mapLayers": "Karttatasot",

@@ -69,6 +69,7 @@
     "selectLocations": "Select locations",
     "focusToLocations": "Focus to locations",
     "choosingGfi": "Choosing feature data",
+    "choosingGfiDescription0": "Varmista että olet aktivoinut tasoja Karttatasot valikosta",
     "choosingGfiDescription1": "Show feature data selection tools by choosing Select Locations",
     "choosingGfiDescription2": "You can choose locations by using drawing tools or cropping presets",
     "draw": "Draw",
@@ -76,7 +77,6 @@
     "search": "Search",
     "dataTableView": "List view",
     "downloadMaterials": "Download materials",
-    "download": "Download",
     "list": "List",
     "table" : "Table"
   },
@@ -195,6 +195,9 @@
         "text": "Maps of the Finnish Transport Infrastructure Agency:",
         "link": "https://vayla.fi/vaylista/aineistot/kartat"
       }
+    },
+    "dataSources": {
+      "municipalityImage": "Sijaintitietojen kuntien vaakunoiden kuvat haetaan kuntaliiton sivuilta (https://www.kuntaliitto.fi)."
     }
   },
   "search": {
