@@ -29,6 +29,7 @@ import CircleButton from '../circle-button/CircleButton';
 
 // Max amount of features that wont trigger react-data-table-component
 const GFI_MAX_LENGTH = 5;
+const KUNTA_IMAGE_URL = 'https://www.kuntaliitto.fi/sites/default/files/styles/narrow_320_x_600_/public/media/profile_pictures/';
 
 const StyledGfiContainer = styled.div`
     position: relative;
@@ -271,7 +272,7 @@ const StyledGfiBackdrop = styled(motion.div)`
 export const GFIPopup = ({ handleGfiDownload }) => {
     const LAYER_ID = 'gfi-result-layer';
     const { store } = useContext(ReactReduxContext);
-    const { channel, allLayers, gfiLocations, vkmData } = useAppSelector(state => state.rpc);
+    const { channel, allLayers, gfiLocations, vkmData, pointInfoImageError, setPointInfoImageError } = useAppSelector(state => state.rpc);
 
     const [selectedTab, setSelectedTab] = useState(0);
     const [tabsContent, setTabsContent] = useState([]);
@@ -489,7 +490,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
     return (
         <StyledGfiContainer>
                 <StyledVKMDataContainer
-                    animate={{ 
+                    animate={{
                         height: isVKMInfoOpen ? 'auto' : 0,
                         opacity: isVKMInfoOpen ? 1 : 0,
                         marginTop: isVKMInfoOpen ? '16px' : '0px',
@@ -499,10 +500,18 @@ export const GFIPopup = ({ handleGfiDownload }) => {
                 >
                     <StyledVKMDataMunacipalityImageWrapper>
                         {
-                            vkmData && vkmData.vkm.Kuntakoodi && <img src={'https://www.kuntaliitto.fi/sites/default/files/styles/narrow_320_x_600_/public/media/profile_pictures/'+vkmData.vkm.Kuntakoodi.toString().padStart(3, '0')+'.gif'} alt="" />
+                            vkmData && vkmData.vkm.kuntakoodi && !pointInfoImageError &&
+                            <img
+                                src={KUNTA_IMAGE_URL + vkmData.vkm.kuntakoodi.toString().padStart(3, '0')+'.gif'}
+                                alt=''
+                                onError={({ currentTarget }) => {
+                                    currentTarget.onerror = null; // prevents looping
+                                    setPointInfoImageError(true);
+                                  }}
+                                />
                         }
                         {
-                            vkmData && vkmData.vkm.Kuntanimi && <p>{vkmData.vkm.Kuntanimi}</p> 
+                            vkmData && vkmData.vkm.kuntanimi && <p>{vkmData.vkm.kuntanimi}</p>
                         }
                         {
                             vkmData && vkmData.coordinates && <StyledCoordinatesWrapper>
@@ -516,10 +525,10 @@ export const GFIPopup = ({ handleGfiDownload }) => {
                     </StyledVKMDataMunacipalityImageWrapper>
 
                     {
-                        vkmData && vkmData.vkm._orderHigh && vkmData.vkm._orderHigh.filter(value => value !== 'Kuntanimi').length > 0 && 
+                        vkmData && vkmData.vkm._orderHigh && vkmData.vkm._orderHigh.filter(value => value !== 'kuntanimi').length > 0 &&
                         <StyledVKMDataInfoWrapper>
                             {
-                                vkmData.vkm._orderHigh.filter(value => value !== 'Kuntanimi').map(property => {
+                                vkmData.vkm._orderHigh.filter(value => value !== 'kuntanimi').map(property => {
                                     return (
                                             <li
                                                 key={'vkm-info-box-li'+property}
@@ -534,7 +543,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
                                                         margin: '0'
                                                     }}
                                                 >
-                                                    {property + ":"}
+                                                    {property + ':'}
                                                 </span>
                                                 &nbsp;
                                                 <span
@@ -632,7 +641,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
                     <StyledNoGfisContainer>
                         <StyledSubtitle>{strings.gfi.choosingGfi}:</StyledSubtitle>
                         <StyledInfoTextContainer>
-                            <li>Varmista että olet aktivoinut tasoja Karttatasot valikosta.&nbsp; <FontAwesomeIcon icon={faLayerGroup} style={{fontSize: '16px'}}/></li>
+                            <li>{strings.gfi.choosingGfiDescription0}.&nbsp; <FontAwesomeIcon icon={faLayerGroup} style={{fontSize: '16px'}}/></li>
                             <li>{strings.gfi.choosingGfiDescription1}.&nbsp; <FontAwesomeIcon icon={faPencilRuler} style={{fontSize: '16px'}}/></li>
                             <li>{strings.gfi.choosingGfiDescription2}.</li>
                         </StyledInfoTextContainer>
@@ -650,24 +659,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
                 >
                     {gfiLocations.map((location) => {
                             const layers = allLayers.filter(layer => layer.id === location.layerId);
-                            const layerIds = layers && layers.length > 0 ? layers[0].id : location.layerId;
                             const title = layers.length > 0 && layers[0].name;
-                            let content;
-/*                             if (location.type === 'text') {
-                                content = location.content;
-                                const popupContent = (
-                                    <div
-                                        dangerouslySetInnerHTML={{
-                                            __html: content,
-                                        }}
-                                    ></div>
-                                );
-                                var contentWrapper = <div>{popupContent}</div>;
-                                const contentDiv = (
-                                    <div id={layerIds}>{contentWrapper}</div>
-                                );
-                                return contentDiv;
-                            } else  */
                             if (location.type === 'geojson') {
                                 return (
                                     <SwiperSlide

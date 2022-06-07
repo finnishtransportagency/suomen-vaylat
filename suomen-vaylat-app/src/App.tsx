@@ -16,6 +16,10 @@ const StyledAppContainer = styled.div`
     height: var(--app-height);
     margin: 0;
     padding: 0;
+
+    a {
+        color: #0064af;
+    }
 `;
 
 /**
