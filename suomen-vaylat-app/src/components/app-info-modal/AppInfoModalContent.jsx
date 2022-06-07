@@ -8,7 +8,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 
 const StyledContent = styled.div`
-    max-width: 600px;
+    max-width: 660px;
     overflow: hidden;
     display: flex;
     height: 100%;
@@ -19,7 +19,7 @@ const StyledTabs = styled.div`
     position: relative;
     display: flex;
     align-items: center;
-    height: 48px;
+    max-height: 100px;
     background-color: #F2F2F2;
     &::before {
         z-index: 2;
@@ -184,25 +184,16 @@ export const AppInfoModalContent = () => {
 
     const tabsContent = [
         {
-            id: 'swipeAbleTab_0',
             title: strings.appInfo.versionInfo.appInfoTitle,
             titleColor: 'mainColor1',
             content: content
         },
         {
-            id: 'swipeAbleTab_1',
-            title: 'Tietolähteet',
-            titleColor: 'mainColor1',
-            content: dataSources
-        },
-        {
-            id: 'swipeAbleTab_2',
             title: strings.appInfo.versionInfo.appInfoLinksTitle,
             titleColor: 'mainColor1',
             content: <AppInfoLinks />
         },
         {
-            id: 'swipeAbleTab_3',
             title: strings.appInfo.versionInfo.title,
             titleColor: 'mainColor1',
             content: <VersionInfo
@@ -211,10 +202,14 @@ export const AppInfoModalContent = () => {
             />
         },
         {
-            id: 'swipeAbleTab_4',
             title: strings.appInfo.versionInfo.appContactAndFeedback,
             titleColor: 'mainColor1',
             content: <ContactAndFeedback />
+        },
+        {
+            title: strings.appInfo.dataSources.tabTitle,
+            titleColor: 'mainColor1',
+            content: dataSources
         }
     ];
 
@@ -233,7 +228,7 @@ export const AppInfoModalContent = () => {
                             tabsContent.map((tab, index) => {
                                 return (
                                     <StyledTab
-                                        key={"ai_tab_"+index}
+                                        key={'ai_tab_' + tab.title}
                                         isSelected={index === tabIndex}
                                         color={tab.titleColor}
                                         onClick={() => {
@@ -250,7 +245,7 @@ export const AppInfoModalContent = () => {
                     </StyledTabs>
                     <StyledSwiper
                         ref={inputEl}
-                        id={"app-info-swiper"}
+                        id={'app-info-swiper'}
                         tabIndex={tabIndex}
                         onSlideChange={e => {
                             setTabIndex(e.activeIndex);
@@ -262,8 +257,8 @@ export const AppInfoModalContent = () => {
                             tabsContent.map((tab, index) => {
                                 return (
                                     <SwiperSlide
-                                        id={"ai_tab_content_"+index}
-                                        key={"ai_tab_content_"+index}
+                                        id={'ai_tab_content_' + index}
+                                        key={'ai_tab_content_' + index}
                                     >
                                         {tab.content}
                                     </SwiperSlide>

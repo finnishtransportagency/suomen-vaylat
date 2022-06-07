@@ -197,6 +197,7 @@
       }
     },
     "dataSources": {
+      "tabTitle": "Tietolähteet",
       "municipalityImage": "Sijaintitietojen kuntien vaakunoiden kuvat haetaan kuntaliiton sivuilta (<a href='https://www.kuntaliitto.fi' target='_blank'>https://www.kuntaliitto.fi</a>)."
     }
   },
