@@ -420,8 +420,9 @@ const Content = () => {
                     } /* Action when pressing modal close button or backdrop */
                     isOpen={isInfoOpen} /* Modal state */
                     id={null}
+                    maxWidth={'800px'}
                 >
-                    <AppInfoModalContent />
+                    <AppInfoModalContent/>
                 </Modal>
                 <Modal
                     constraintsRef={
