@@ -1,9 +1,12 @@
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faDownload} from "@fortawesome/free-solid-svg-icons";
+import { useEffect, useState } from 'react';
 import React from "react";
 import styled from "styled-components";
 import {Button} from "react-bootstrap";
 import strings from "../../../translations";
+import { bytesToHumanReadable } from "../../../utils/fileSizeUtil";
+import { fetchAvaFileSize } from "../../../utils/avaUtil";
 
 const StyledFooter = styled.div`
     justify-content: center;
@@ -36,15 +39,36 @@ const StyledContainer = styled.div`
 `;
 
 export const LayerDownloadLinkButtonModal = ({
-                                            downloadLink,
-                                            handleIsDownloadLinkModalOpen
-                                        }) => {
+        downloadLink
+    }) => {
+
+    const [fileSize, setFileSize] = useState('-');
+
+    useEffect(() => {
+        fetchAvaFileSize(downloadLink.layerDownloadLink).then(size => {
+                if (size !== null) {
+                    setFileSize(bytesToHumanReadable(size, false, 1));
+                } else {
+                    setFileSize('-');
+                }
+        }).catch(() => {
+            setFileSize('-');
+        });
+        }
+    , [downloadLink]);
+
     return (
         <StyledContainer>
             <StyledSubtitle>{strings.downloadLink.downloadLinkModalNameText}</StyledSubtitle>
             <StyledInfoTextContainer>
                 {downloadLink.layerDownloadLinkName}
             </StyledInfoTextContainer>
+
+            <StyledSubtitle>{strings.downloadLink.downloadSize}</StyledSubtitle>
+            <StyledInfoTextContainer>
+                {fileSize}
+            </StyledInfoTextContainer>
+
             <StyledFooter className='modal-footer'>
                 <StyledButton onClick={() => window.location.href=downloadLink.layerDownloadLink}>{strings.downloadLink.downloadLinkModalButtonText} <FontAwesomeIcon icon={faDownload} /></StyledButton>
             </StyledFooter>
