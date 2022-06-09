@@ -58,13 +58,14 @@ const StyledVKMDataContainer = styled(motion.div)`
 `;
 
 const StyledVKMDataMunacipalityImageWrapper = styled.div`
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding-right: 8px;
-        img {
-            max-height: 100px
-        }
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-right: 8px;
+    img {
+        max-height: 100px
+    }
+    user-select: text;
 `;
 
 const StyledCoordinatesWrapper = styled.div`
@@ -82,6 +83,7 @@ const StyledCoordinatesWrapper = styled.div`
 
 const StyledVKMDataInfoWrapper = styled.div`
     padding-left: 8px;
+    user-select: text;
 `;
 
 const StyledTabSwiperContainer = styled.div`
