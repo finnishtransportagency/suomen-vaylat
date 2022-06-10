@@ -109,16 +109,16 @@ const GfiTabContent = ({
                 }
             }
         };
-    
+
         let options = {
             featureStyle: featureStyle,
             layerId: 'gfi-result-layer-overlay',
             animationDuration: 200,
             clearPrevious: true,
         };
-    
+
         let rn = 'MapModulePlugin.AddFeaturesToMapRequest';
-    
+
         var geojsonObject = {
             type: 'FeatureCollection',
             crs: {
@@ -129,10 +129,10 @@ const GfiTabContent = ({
             },
             features: features
         };
-    
+
         channel.postRequest(rn, [geojsonObject, options])
     };
-    
+
     const deSelectFeature = (channel) => {
         channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [
             null,

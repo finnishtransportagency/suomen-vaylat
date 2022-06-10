@@ -271,7 +271,8 @@
   "downloadLink": {
     "downloadLinkModalHeader": "Aineiston lataus",
     "downloadLinkModalNameText": "Aineiston nimi",
-    "downloadLinkModalButtonText": "Lataa aineisto"
+    "downloadLinkModalButtonText": "Lataa aineisto",
+    "downloadSize": "Aineiston koko"
   },
   "groupLayerList": {
     "readMore" : "Lue lisää",
