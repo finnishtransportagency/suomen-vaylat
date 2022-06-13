@@ -166,6 +166,7 @@ const ZoomBar = ({
                     <CircleButton
                         icon={faSearchMinus}
                         text={strings.tooltips.zoomOut}
+                        disabled={currentZoomLevel === rpc.zoomRange.min}
                         clickAction={() => {
                             currentZoomLevel > 0 &&
                                 store.dispatch(setZoomOut());
@@ -176,7 +177,6 @@ const ZoomBar = ({
                 <CircleButton
                     icon={faCrosshairs}
                     text={strings.tooltips.myLocButton}
-                    disabled={currentZoomLevel === rpc.zoomRange.min}
                     clickAction={() =>
                         rpc.channel.postRequest(
                             'MyLocationPlugin.GetUserLocationRequest'
