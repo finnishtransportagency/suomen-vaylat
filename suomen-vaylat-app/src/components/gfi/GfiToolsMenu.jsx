@@ -59,7 +59,7 @@ const StyledDrawingToolsContainer = styled(motion.div)`
 
 const StyledLoadingOverlay = styled(motion.div)`
     z-index: 2;
-    position: absolute;
+    position: fixed;
     left: 0px;
     top: 0px;
     right: 0px;
@@ -107,15 +107,13 @@ const StyledLoaderWrapper = styled.div`
     }
 `;
 
+// Define default icon, if null then use cropping area name first char
+const defaultIcon = null;
+
+// Define here other than default icon (null = use cropping area name first char)
 const icons = {
     0: {
         icon: faPencilRuler,
-    },
-    1: {
-        icon: null,
-    },
-    2: {
-        icon: null,
     },
     3: {
         icon: faBorderAll,
@@ -125,7 +123,7 @@ const icons = {
     },
     5: {
         icon: faBorderAll,
-    },
+    }
 };
 
 const GfiToolsMenu = ({ handleGfiToolsMenu }) => {
@@ -257,6 +255,8 @@ const GfiToolsMenu = ({ handleGfiToolsMenu }) => {
 
                     data.geojson &&
                         channel.postRequest(rn, [data.geojson, options]);
+                }, function(err) {
+                    setLoading(false);
                 });
             }
         } else {
@@ -542,7 +542,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu }) => {
                                 key={'cropping-type-' + croppingType.id}
                                 id={croppingType.id}
                                 item={croppingType}
-                                icon={icons[croppingType.id].icon}
+                                icon={icons[croppingType.id] ? icons[croppingType.id].icon : defaultIcon}
                                 title={croppingType.title}
                                 subtitle={croppingType.description}
                                 selectedItem={selectedTool}
