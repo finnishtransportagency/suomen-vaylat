@@ -25,6 +25,7 @@
     "opacity": "Läpinäkyvyys",
     "drawingtools": {
       "drawingtoolsButton": "Piirtotyökalut",
+      "point": "Piste",
       "circle": "Ympyrä",
       "square": "Neliö",
       "box": "Laatikko",
@@ -34,6 +35,7 @@
     },
     "measuringTools": {
       "measuringToolsButton": "Mittaustyökalut",
+      "point": "Piste",
       "circle": "Ympyrä",
       "square": "Neliö",
       "box": "Laatikko",
@@ -50,8 +52,8 @@
   "saveView" : {
     "saveView" : "Tallenna näkymä",
     "savingView" : "Näkymän tallennus",
-    "saveViewDescription1" : "Näkymä tallentuu selaimen välimuistiin.",
-    "saveViewDescription2" : "Tallennettu näkymä voidaan aktivoida vain selaimessa johon se on tallennettu.",
+    "saveViewDescription1" : "Näkymä tallentuu selaimen välimuistiin",
+    "saveViewDescription2" : "Tallennettu näkymä voidaan aktivoida vain selaimessa johon se on tallennettu",
     "noSavedViews" : "Ei tallennettuja näkymiä",
     "deleteAllSavedViews" : "Poista kaikki tallennetut näkymät",
     "savedViews" : "Tallennetut näkymät",
@@ -63,7 +65,36 @@
     "close": "Sulje",
     "additionalInfo": "Lisätiedot",
     "gfiLocation": "Lähennä kohteeseen",
-    "target": "Kohde"
+    "target": "Kohde",
+    "selectLocations": "Valitse kohteita",
+    "focusToLocations": "Tarkenna kohteisiin",
+    "choosingGfi": "Kohdetietojen valitseminen",
+    "choosingGfiDescription0": "Varmista että olet aktivoinut tasoja Karttatasot valikosta",
+    "choosingGfiDescription1": "Näytä kohteiden valintatyökalut valitsemalla Valitse kohteita",
+    "choosingGfiDescription2": "Voit valita kohteita käyttämällä piirtotyökaluja tai valmiita rajausvaihtoehtoja",
+    "draw": "Piirrä",
+    "drawSubtitle": "Valitse kohteita käyttämällä piirtotyökaluja",
+    "search": "Haku",
+    "dataTableView": "Listanäkymä",
+    "downloadMaterials": "Lataa aineistoja",
+    "list": "Lista",
+    "table" : "Taulukko"
+  },
+  "vkm": {
+    "locationInfo": "Sijaintitiedot"
+  },
+  "downloads": {
+    "downloads": "Lataukset",
+    "processing": "Prosessoidaan",
+    "noProcessingDownloads": "Ei prosessoitavia latauksia",
+    "readyForDownload": "Valmiit lataukset",
+    "noDownloads": "Ei latauksia",
+    "format": "Tiedostomuoto",
+    "date": "Päivämäärä",
+    "fileSize": "Tiedostokoko",
+    "layers": "Tasot",
+    "failedDownloads": "Virheelliset lataukset",
+    "errorOccuredDuringDownloadProcessing" : "Virhe tapahtui paketin prosessoinnin aikana"
   },
   "general": {
     "close": "Sulje",
@@ -164,9 +195,14 @@
         "text": "Väyläviraston karttoja:",
         "link": "https://vayla.fi/vaylista/aineistot/kartat"
       }
+    },
+    "dataSources": {
+      "tabTitle": "Tietolähteet",
+      "municipalityImage": "Sijaintitietojen kuntien vaakunoiden kuvat haetaan kuntaliiton sivuilta (<a href='https://www.kuntaliitto.fi' target='_blank'>https://www.kuntaliitto.fi</a>)."
     }
   },
   "search": {
+    "fill_all_fields": "Täytä kaikki hakukentät",
     "required_field_missing": "Tarkista tarvittavat kentät.",
     "vkm": {
       "tie": "Tienumero",
@@ -235,7 +271,8 @@
   "downloadLink": {
     "downloadLinkModalHeader": "Aineiston lataus",
     "downloadLinkModalNameText": "Aineiston nimi",
-    "downloadLinkModalButtonText": "Lataa aineisto"
+    "downloadLinkModalButtonText": "Lataa aineisto",
+    "downloadSize": "Aineiston koko"
   },
   "groupLayerList": {
     "readMore" : "Lue lisää",

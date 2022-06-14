@@ -30,24 +30,24 @@
     transition: opacity 300ms, transform 500ms;
 }
 
-
 @media only screen and (min-width: 425px) {
     /* width */
     ::-webkit-scrollbar {
         width: 8px;
+        height: 8px;
     };
-    
+
     /* Track */
     ::-webkit-scrollbar-track {
         background: transparent;
     };
-    
+
     /* Handle */
     ::-webkit-scrollbar-thumb {
         background-color: $mainColor1;
         border-radius: 5px;
     };
-    
+
     /* Handle on hover */
     ::-webkit-scrollbar-thumb:hover {
         background: $mainColor2;

@@ -25,6 +25,7 @@
     "opacity": "Transparens",
     "drawingtools": {
       "drawingtoolsButton": "Ritverktyg",
+      "point": "Point",
       "circle": "Cirkel",
       "square": "Kvadrat",
       "box": "Ruta",
@@ -34,6 +35,7 @@
     },
     "measuringTools": {
       "measuringToolsButton": "Measuring tools",
+      "point": "Point",
       "circle": "Circle",
       "square": "Square",
       "box": "Box",
@@ -63,7 +65,36 @@
     "close": "Stänga",
     "additionalInfo": "Tilläggsinformation",
     "gfiLocation": "Zooma in på objektet",
-    "target": "Mål"
+    "target": "Mål",
+    "selectLocations": "Select locations",
+    "focusToLocations": "Focus to locations",
+    "choosingGfi": "Choosing feature data",
+    "choosingGfiDescription0": "Varmista että olet aktivoinut tasoja Karttatasot valikosta",
+    "choosingGfiDescription1": "Show feature data selection tools by choosing Select Locations",
+    "choosingGfiDescription2": "You can choose locations by using drawing tools or cropping presets",
+    "draw": "Draw",
+    "drawSubtitle": "Select locations by using drawing tools",
+    "search": "Sökning",
+    "dataTableView": "Listvy",
+    "downloadMaterials": "Lataa aineistoja",
+    "list": "List",
+    "table" : "Table"
+  },
+  "vkm": {
+    "locationInfo": "Location info"
+  },
+  "downloads": {
+    "downloads": "Downloads",
+    "processing": "Processing",
+    "noProcessingDownloads": "No processing downloads",
+    "readyForDownload": "Ready for download",
+    "noDownloads": "No downloads",
+    "format": "Format",
+    "date": "Date",
+    "fileSize": "File size",
+    "layers": "Layers",
+    "failedDownloads": "Failed downloads",
+    "errorOccuredDuringDownloadProcessing" : "Error occured during download processing"
   },
   "general": {
     "close": "Stänga",
@@ -138,7 +169,7 @@
     "headingText": "Finlands Trafikleder är en karttjänst som tillhandahålls av Trafikledsverket och som bygger på öppna data. Tjänsten publicerades 2022 och omfattar för tillfället mer än 270 dataslag med tillhörande egenskapsuppgifter. Tjänsten och dess innehåll utvecklas fortfarande.",
     "mainText": "Via karttjänsten Finlands Trafikleder kan man se vägnätsuppgifter om det statliga vägnätet samt uppgifter om järnvägar och farleder. Det har dessutom skapats egna helheter för Trafikledsverkets infrastrukturprojekt och dataslag för det nationella datasystemet för väg- och gatunätet, Digiroad. Flera temakartor finns redan inbyggda i tjänsten, till exempel Projektkartan och Beskrivning av Finlands bannät. I tjänsten Finlands Trafikleder kan man söka på namn eller ämnesområde och filtrera materialet enligt olika teman. Karttjänsten omfattar dessutom separata sökningar av adresser, vägar och metadata. Finlands Trafikleder kan användas både som desktop- och mobilversion. Tjänsten produceras på finska, svenska och engelska.  Anvisningar om tjänsten hittar man genom att klicka på ? (länk). För tillfället ansvarar Sitowise Oy för driften och underhållet av Finlands Trafikleder.",
     "versionInfo": {
-      "title": "Versionsinformation",
+      "title": "Versions information",
       "appVersion": "Applikationsversion:",
       "appLastUpdate": "Applikationen uppdaterades senast:",
       "appInfoTitle": "Information om tjänsten",
@@ -164,9 +195,14 @@
         "text": "Trafikledsverkets kartor:",
         "link": "https://vayla.fi/vaylista/aineistot/kartat"
       }
+    },
+    "dataSources": {
+      "tabTitle": "Datakällor",
+      "municipalityImage": "Sijaintitietojen kuntien vaakunoiden kuvat haetaan kuntaliiton sivuilta (https://www.kuntaliitto.fi)."
     }
   },
   "search": {
+    "fill_all_fields": "Täytä kaikki hakukentät",
     "required_field_missing": "Kontrollera de obligatoriska fälten.",
     "vkm": {
       "tie": "Vägnummer",
@@ -235,7 +271,8 @@
   "downloadLink": {
     "downloadLinkModalHeader": "Aineiston lataus",
     "downloadLinkModalNameText": "Aineiston nimi",
-    "downloadLinkModalButtonText": "Lataa aineisto"
+    "downloadLinkModalButtonText": "Lataa aineisto",
+    "downloadSize": "Aineiston koko"
   },
   "groupLayerList": {
     "readMore" : "Lue lisää",

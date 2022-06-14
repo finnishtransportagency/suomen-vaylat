@@ -8,8 +8,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 
 const StyledContent = styled.div`
-    max-width: 600px;
-    background-color: #F2F2F2;
+    max-width: 660px;
     overflow: hidden;
     display: flex;
     height: 100%;
@@ -20,21 +19,21 @@ const StyledTabs = styled.div`
     position: relative;
     display: flex;
     align-items: center;
-    height: 48px;
+    max-height: 100px;
     background-color: #F2F2F2;
     &::before {
         z-index: 2;
         position: absolute;
         content: '';
-        width: calc(100% / 4);
+        width: ${props => 'calc(100% /' + props.tabsCount + ')'};
         height: 100%;
         background-color: ${props => props.theme.colors.mainWhite};
         bottom: 0px;
-        left: ${props => props.tabIndex * 33 +'%'};
+        left: ${props => props.tabIndex * (100 / (props.tabsCount - 1)) +'%'};
         border-radius: 4px 4px 0px 0px;
         transform: translateX(
             ${props => {
-            return props.tabIndex * -33+'%';
+                return props.tabIndex * -(100 / (props.tabsCount - 1)) + '%';
             }}
         );
         transition: all 0.3s ease-out;
@@ -42,14 +41,14 @@ const StyledTabs = styled.div`
     &::after {
         position: absolute;
         content: '';
-        width: calc(100% / 4);
+        width: ${props => 'calc(100% /' + props.tabsCount + ')'};
         height: 100%;
         bottom: 0px;
-        left: ${props => props.tabIndex * 33 + '%'};
+        left: ${props => props.tabIndex * (100 / (props.tabsCount - 1)) + '%'};
         border-radius: 4px 4px 0px 0px;
         transform: translateX(
             ${props => {
-            return props.tabIndex * -33+ '%';
+                return props.tabIndex * -(100 / (props.tabsCount - 1)) + '%';
             }}
         );
         transition: all 0.3s ease-out;
@@ -60,7 +59,7 @@ const StyledTabs = styled.div`
 const StyledTab = styled.div`
     z-index: 2;
     user-select: none;
-    width: calc(100% / 4);
+    width: ${props => 'calc(100% /' + props.tabsCount + ')'};
     cursor: pointer;
     color: ${props => props.isSelected ? props.theme.colors[props.color] : "#656565"};
     text-align: center;
@@ -88,10 +87,12 @@ const StyledTitle = styled.em`
 const StyledSwiper = styled(Swiper)`
     margin-left: 0;
     margin-right: 0;
+
     .swiper-slide {
         background-color: ${props => props.theme.colors.mainWhite};
         padding: 16px 16px 16px 16px;
         overflow-y: auto;
+        height:100%;
     };
   transition: box-shadow 0.3s ease-out;
 `;
@@ -173,6 +174,7 @@ export const AppInfoModalContent = () => {
     const headingText = strings.appInfo.headingText.bold();
     const mainText = strings.appInfo.mainText;
     const content = <div dangerouslySetInnerHTML={{ __html: headingText + '<br><br>' + mainText }}></div>;
+    const dataSources = <div dangerouslySetInnerHTML={{ __html: strings.appInfo.dataSources.municipalityImage }}></div>;
 
     // App build info
     const currentAppVersion = getAppVersion();
@@ -182,19 +184,16 @@ export const AppInfoModalContent = () => {
 
     const tabsContent = [
         {
-            id: 'swipeAbleTab_0',
             title: strings.appInfo.versionInfo.appInfoTitle,
             titleColor: 'mainColor1',
             content: content
         },
         {
-            id: 'swipeAbleTab_1',
             title: strings.appInfo.versionInfo.appInfoLinksTitle,
             titleColor: 'mainColor1',
             content: <AppInfoLinks />
         },
         {
-            id: 'swipeAbleTab_2',
             title: strings.appInfo.versionInfo.title,
             titleColor: 'mainColor1',
             content: <VersionInfo
@@ -203,10 +202,14 @@ export const AppInfoModalContent = () => {
             />
         },
         {
-            id: 'swipeAbleTab_3',
             title: strings.appInfo.versionInfo.appContactAndFeedback,
             titleColor: 'mainColor1',
             content: <ContactAndFeedback />
+        },
+        {
+            title: strings.appInfo.dataSources.tabTitle,
+            titleColor: 'mainColor1',
+            content: dataSources
         }
     ];
 
@@ -219,17 +222,19 @@ export const AppInfoModalContent = () => {
             <StyledContent>
                     <StyledTabs
                         tabIndex={tabIndex}
+                        tabsCount={tabsContent.length}
                     >
                         {
                             tabsContent.map((tab, index) => {
                                 return (
                                     <StyledTab
-                                        key={"ai_tab_"+index}
+                                        key={'ai_tab_' + tab.title}
                                         isSelected={index === tabIndex}
                                         color={tab.titleColor}
                                         onClick={() => {
                                             setTabIndex(index);
                                         }}
+                                        tabsCount={tabsContent.length}
                                     >
                                         <p>{tab.title}</p>
 
@@ -240,7 +245,7 @@ export const AppInfoModalContent = () => {
                     </StyledTabs>
                     <StyledSwiper
                         ref={inputEl}
-                        id={"app-info-swiper"}
+                        id={'app-info-swiper'}
                         tabIndex={tabIndex}
                         onSlideChange={e => {
                             setTabIndex(e.activeIndex);
@@ -252,8 +257,8 @@ export const AppInfoModalContent = () => {
                             tabsContent.map((tab, index) => {
                                 return (
                                     <SwiperSlide
-                                        id={"ai_tab_content_"+index}
-                                        key={"ai_tab_content_"+index}
+                                        id={'ai_tab_content_' + index}
+                                        key={'ai_tab_content_' + index}
                                     >
                                         {tab.content}
                                     </SwiperSlide>
