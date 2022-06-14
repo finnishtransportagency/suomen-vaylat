@@ -4,6 +4,11 @@
 
 For a full list of changes see: https://github.com/finnishtransportagency/suomen-vaylat/milestone/5?closed=1
 
+* Improve GFI to show also location info on map click
+* GFI results can also showed as table
+* GFI download
+* Improve GFI selection tools
+
 ## 1.1.0
 
 For a full list of changes see: https://github.com/finnishtransportagency/suomen-vaylat/milestone/4?closed=1
