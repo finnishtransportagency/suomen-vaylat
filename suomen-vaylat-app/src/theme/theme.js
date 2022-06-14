@@ -1,6 +1,29 @@
 import { ThemeProvider } from 'styled-components';
 
-export const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+var isMobileTest = {
+  Android: function() {
+      return navigator.userAgent.match(/Android/i);
+  },
+  BlackBerry: function() {
+      return navigator.userAgent.match(/BlackBerry/i);
+  },
+  iOS: function() {
+      return navigator.userAgent.match(/iPhone|iPad|iPod/i);
+  },
+  iPad: function() {
+    return /Macintosh/i.test(navigator.userAgent) && navigator.maxTouchPoints && navigator.maxTouchPoints > 1;
+  },
+  Opera: function() {
+      return navigator.userAgent.match(/Opera Mini/i);
+  },
+  Windows: function() {
+      return navigator.userAgent.match(/IEMobile/i);
+  },
+  any: function() {
+      return (isMobileTest.Android() || isMobileTest.BlackBerry() || isMobileTest.iOS() || isMobileTest.iPad() || isMobileTest.Opera() || isMobileTest.Windows());
+  }};
+
+  export const isMobile = isMobileTest.any();
 
 const size = {
   mobileS: '320px',

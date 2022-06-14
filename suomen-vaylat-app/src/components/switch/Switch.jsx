@@ -23,12 +23,12 @@ const StyledSwitchButton = styled.div`
     background-color: ${props => props.theme.colors.mainWhite};
 `;
 
-const Switch = ({ action, layer, isSelected }) => {
+const Switch = ({ action, isSelected }) => {
     return (
         <StyledSwitchContainer
             isSelected={isSelected}
-            onClick={() => {
-                action(layer && layer);
+            onClick={event => {
+                action(event);
             }}
         >
             <StyledSwitchButton isSelected={isSelected}/>

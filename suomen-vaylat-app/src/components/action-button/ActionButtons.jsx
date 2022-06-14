@@ -1,4 +1,4 @@
-import { useContext, useEffect } from 'react';
+import { useContext } from 'react';
 import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAppSelector } from '../../state/hooks';
@@ -10,6 +10,7 @@ import {
     faExpand
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import strings from '../../translations';
 import { selectGroup } from '../../utils/rpcUtil';
 import { ThemeGroupShareButton } from '../share-web-site/ShareLinkButtons';
 
@@ -128,8 +129,7 @@ const ActionButtons = ({
         channel,
         selectedTheme,
         lastSelectedTheme,
-        selectedThemeIndex,
-        gfiLocations
+        selectedThemeIndex
     } = useAppSelector((state) => state.rpc);
 
     const {
@@ -140,15 +140,11 @@ const ActionButtons = ({
         selectGroup(store, channel, index, theme, lastSelectedTheme, selectedThemeIndex);
     };
 
-    useEffect(() => {
-        gfiLocations.length === 0 && minimizeGfi && store.dispatch(setMinimizeGfi(false))
-    },[minimizeGfi, gfiLocations, store]);
-
     return (
             <StyledContent>
                     <AnimatePresence initial={false}>
                         {
-                            minimizeGfi && gfiLocations.length > 0 &&
+                            minimizeGfi &&
                             <StyledActionButton
                                 key="gfi_action_button"
                                 type="gfi"
@@ -167,7 +163,7 @@ const ActionButtons = ({
                                             icon={faMapMarkedAlt}
                                         />
                                     </StyledActionButtonIcon>
-                                    <StyledActionButtonText>Kohdetiedot</StyledActionButtonText>
+                                    <StyledActionButtonText>{strings.gfi.title}</StyledActionButtonText>
                                 </StyledLeftContent>
                                 <StyledRightContent>
                                     <StyledExpandButton

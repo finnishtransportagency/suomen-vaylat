@@ -1,7 +1,12 @@
 import { useContext } from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
-import { faList, faSearchMinus, faSearchPlus, faCrosshairs} from '@fortawesome/free-solid-svg-icons';
+import {
+    faList,
+    faSearchMinus,
+    faSearchPlus,
+    faCrosshairs,
+} from '@fortawesome/free-solid-svg-icons';
 
 import { useAppSelector } from '../../state/hooks';
 import { ReactReduxContext } from 'react-redux';
@@ -21,6 +26,7 @@ const StyledZoomBarContainer = styled.div`
 `;
 
 const StyledZoomBarContent = styled.div`
+    z-index: 2;
     display: flex;
     flex-direction: column;
     gap: 8px;
@@ -40,7 +46,7 @@ const StyledZoomBarZoomFeatures = styled.div`
         transform: translateX(-50%);
         width: 4px;
         height: 100%;
-        background-color: ${props => props.theme.colors.mainColor1};
+        background-color: ${(props) => props.theme.colors.mainColor1};
     }
 `;
 
@@ -56,8 +62,6 @@ const StyledZoomBarSlider = styled.input`
     background: #d3d3d3;
     padding-top: 8px;
     padding-bottom: 8px;
-    //outline: none;
-    //transform: rotate(90deg);
     pointer-events: auto;
     cursor: pointer;
     opacity: 0;
@@ -76,8 +80,8 @@ const listVariants = {
         height: 'auto',
     },
     hidden: {
-        height: 2
-    }
+        height: 2,
+    },
 };
 
 const ZoomBar = ({
@@ -89,92 +93,100 @@ const ZoomBar = ({
 }) => {
     const { store } = useContext(ReactReduxContext);
     const rpc = useAppSelector((state) => state.rpc);
-    const zooms = Array.apply(null, {length: rpc.zoomRange.max + 1 - rpc.zoomRange.min}).map(function(_, idx) {
+    const zooms = Array.apply(null, {
+        length: rpc.zoomRange.max + 1 - rpc.zoomRange.min,
+    }).map(function (_, idx) {
         return idx + rpc.zoomRange.min;
     });
 
     return (
-            <StyledZoomBarContainer>
-                <Legend
-                    currentZoomLevel={rpc.currentZoomLevel}
-                    selectedLayers={rpc.selectedLayers}
-                    isExpanded={isExpanded}
-                    setIsExpanded={setIsExpanded}
+        <StyledZoomBarContainer>
+            <Legend
+                currentZoomLevel={rpc.currentZoomLevel}
+                selectedLayers={rpc.selectedLayers}
+                isExpanded={isExpanded}
+                setIsExpanded={setIsExpanded}
+            />
+            <StyledZoomBarContent>
+                <CircleButton
+                    icon={faList}
+                    text={strings.tooltips.legendButton}
+                    toggleState={isExpanded}
+                    clickAction={() => setIsExpanded(!isExpanded)}
+                    tooltipDirection={'left'}
                 />
-                <StyledZoomBarContent>
+                <StyledZoomBarZoomFeatures>
                     <CircleButton
-                        icon={faList}
-                        text={strings.tooltips.legendButton}
-                        toggleState={isExpanded}
-                        clickAction={() => setIsExpanded(!isExpanded)}
-                        tooltipDirection={"left"}
+                        icon={faSearchPlus}
+                        text={strings.tooltips.zoomIn}
+                        disabled={currentZoomLevel === rpc.zoomRange.max}
+                        clickAction={() => store.dispatch(setZoomIn())}
+                        tooltipDirection={'left'}
                     />
-                    <StyledZoomBarZoomFeatures>
-                        <CircleButton
-                            icon={faSearchPlus}
-                            text={strings.tooltips.zoomIn}
-                            disabled={currentZoomLevel === rpc.zoomRange.max}
-                            clickAction={() => store.dispatch(setZoomIn())}
-                            tooltipDirection={"left"}
-                        />
-                        <StyledZoombarCircles
-                            initial='hidden'
-                            animate={isExpanded ? 'visible' : 'hidden'}
-                            variants={listVariants}
-                            transition={{
-                                duration: 0.5,
-                                type: 'tween'
+                    <StyledZoombarCircles
+                        initial="hidden"
+                        animate={isExpanded ? 'visible' : 'hidden'}
+                        variants={listVariants}
+                        transition={{
+                            duration: 0.5,
+                            type: 'tween',
+                        }}
+                    >
+                        {Object.values(zooms).map((zoom, index) => {
+                            return (
+                                <ZoomBarCircle
+                                    key={index}
+                                    index={index}
+                                    zoomLevel={currentZoomLevel}
+                                    hoveringIndex={hoveringIndex}
+                                    setHoveringIndex={setHoveringIndex}
+                                    isActive={
+                                        parseInt(index) ===
+                                        parseInt(hoveringIndex)
+                                    }
+                                />
+                            );
+                        })}
+                        <StyledZoomBarSlider
+                            type="range"
+                            orient="vertical"
+                            max="13"
+                            value={hoveringIndex}
+                            onChange={(e) => {
+                                setHoveringIndex(e.target.value);
                             }}
-                        >
-                        {
-                        Object.values(zooms).map((zoom, index) => {
-                            return <ZoomBarCircle
-                                key={index}
-                                index={index}
-                                zoomLevel={currentZoomLevel}
-                                hoveringIndex={hoveringIndex}
-                                setHoveringIndex={setHoveringIndex}
-                                isActive={parseInt(index) === parseInt(hoveringIndex)}
-                            />
-                        })
-                        }
-                            <StyledZoomBarSlider
-                                type="range"
-                                orient="vertical"
-                                max="13"
-                                value={hoveringIndex}
-                                onChange={e => {
-                                    setHoveringIndex(e.target.value);
-                                    //store.dispatch(setZoomTo(e.target.value))
-                                }}
-                                onMouseUp={e => {
-                                    store.dispatch(setZoomTo(e.target.value))
-                                }}
-                                onTouchEnd={e => {
-                                    store.dispatch(setZoomTo(e.target.value))
-                                }}
-                            />
-                        </StyledZoombarCircles>
-                        <CircleButton
-                            icon={faSearchMinus}
-                            text={strings.tooltips.zoomOut}
-                            disabled={currentZoomLevel === 0}
-                            clickAction={() => store.dispatch(setZoomOut())}
-                            tooltipDirection={"left"}
+                            onMouseUp={(e) => {
+                                store.dispatch(setZoomTo(e.target.value));
+                            }}
+                            onTouchEnd={(e) => {
+                                store.dispatch(setZoomTo(e.target.value));
+                            }}
                         />
-                    </StyledZoomBarZoomFeatures>
+                    </StyledZoombarCircles>
                     <CircleButton
-                        icon={faCrosshairs}
-                        text={strings.tooltips.myLocButton}
+                        icon={faSearchMinus}
+                        text={strings.tooltips.zoomOut}
                         disabled={currentZoomLevel === rpc.zoomRange.min}
-                        clickAction={() => rpc.channel.postRequest('MyLocationPlugin.GetUserLocationRequest')}
-                        tooltipDirection={"left"}
+                        clickAction={() => {
+                            currentZoomLevel > 0 &&
+                                store.dispatch(setZoomOut());
+                        }}
+                        tooltipDirection={'left'}
                     />
-                </StyledZoomBarContent>
-
-            </StyledZoomBarContainer>
+                </StyledZoomBarZoomFeatures>
+                <CircleButton
+                    icon={faCrosshairs}
+                    text={strings.tooltips.myLocButton}
+                    clickAction={() =>
+                        rpc.channel.postRequest(
+                            'MyLocationPlugin.GetUserLocationRequest'
+                        )
+                    }
+                    tooltipDirection={'left'}
+                />
+            </StyledZoomBarContent>
+        </StyledZoomBarContainer>
     );
 };
 
 export default ZoomBar;
-

@@ -28,7 +28,6 @@ const StyledSideMenu = styled.div`
         z-index: 10;
         max-width: 100%;
         width: 100%;
-        //height: var(--app-height);
     };
 `;
 
