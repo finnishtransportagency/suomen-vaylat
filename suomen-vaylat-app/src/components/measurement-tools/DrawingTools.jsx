@@ -45,6 +45,7 @@ const variants = {
             duration: 0.3,
             type: "tween"
         },
+        pointerEvents: "auto"
     },
     hidden: {
         height: 0,
@@ -57,6 +58,7 @@ const variants = {
             duration: 0.2,
             type: "tween",
         },
+        pointerEvents: "none" 
     },
 };
 

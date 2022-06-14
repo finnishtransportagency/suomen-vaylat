@@ -1,17 +1,17 @@
 import { useState, useContext } from 'react';
-import { cloneElement} from 'react';
+import { cloneElement } from 'react';
 import styled from 'styled-components';
 import { motion, AnimatePresence, useDragControls } from 'framer-motion';
 import { ReactReduxContext } from 'react-redux';
-import { faTimes, faWindowMinimize } from '@fortawesome/free-solid-svg-icons';
+import { faTimes, faWindowMaximize, faWindowMinimize, faWindowRestore } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+import { setMinimizeGfi, setMaximizeGfi } from '../../state/slices/uiSlice';
 
-import { setMinimizeGfi } from '../../state/slices/uiSlice';
+import { isMobile } from '../../theme/theme';
 
 const StyledModalBackdrop = styled(motion.div)`
-
-    z-index: ${props => props.type === "warning" ? 9998 : 10};
+    z-index: ${(props) => (props.type === 'warning' ? 9998 : 10)};
     position: fixed;
     top: 0px;
     right: 0px;
@@ -22,46 +22,52 @@ const StyledModalBackdrop = styled(motion.div)`
     justify-content: center;
     align-items: center;
     opacity: 0;
+    cursor: pointer;
 `;
 
 const StyledModalWrapper = styled(motion.div)`
-    z-index: ${props => props.type === "warning" ? 9999 : props.resize ? 4 : 9993};
-    position: fixed;
-    top: ${props => props.resize && "0px"};
-    left: ${props => props.resize && "0px"};
-    padding: ${props => (props.resize || props.drag) && "50px"};
-    @media ${props => props.theme.device.mobileL} {
-        position:  ${props => props.fullScreenOnMobile ? "fixed" : "initial"};
+    z-index: ${(props) =>
+        props.type === 'warning' ? 9999 : props.resize ? 4 : 9993};
+    position: absolute;
+    top: ${(props) => props.resize && '0px'};
+    left: ${(props) => props.resize && '0px'};
+    padding: ${props => props.maximize ? '4px 4px 4px 4px' : (props.resize || props.drag) && '8px 50px 50px 8px'};
+    max-width: 100%;
+    transform: ${props => props.maximize && 'initial !important'};
+    @media ${(props) => props.theme.device.mobileL} {
+        position: ${(props) =>
+            props.fullScreenOnMobile ? 'fixed' : 'initial'};
         top: 0px;
         right: 0px;
         bottom: 0px;
         left: 0px;
         padding: 0px;
-        margin: ${props => props.fullScreenOnMobile === false && "8px"};
+        margin: ${(props) => props.fullScreenOnMobile === false && '8px'};
     };
 `;
 
 const StyledModal = styled(motion.div)`
     position: relative;
-    width: 100%;
-    min-width: ${props => props.minWidth && props.minWidth+"px"};
-    max-width: ${props => props.maxWidth ? props.maxWidth+"px" : "100vw"};
-    height: 100%;
+    width: ${(props) => props.maximize ? '100% !important' : '100%'};
+    height: ${(props) => props.maximize ? '100% !important' : '100%'};
+    min-width: ${(props) => props.minWidth && props.minWidth};
+    max-width: ${(props) => (props.maxWidth ? props.maxWidth : '100vw')};
     min-height: 200px;
-    max-height: calc(100vh - 100px);
-    background-color:  ${props => props.theme.colors.mainWhite};
+    max-height: ${(props) => !props.maximize && 'calc(100vh - 100px)'};
+    background-color: ${(props) => props.theme.colors.mainWhite};
     border-radius: 4px;
     box-shadow: rgb(0 0 0 / 16%) 0px 3px 6px, rgb(0 0 0 / 23%) 0px 3px 6px;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    resize: ${props => props.resize && "both"};
+    resize: ${(props) => !props.maximize && props.resize && 'both'};
     overflow: hidden;
-    @media ${props => props.theme.device.mobileL} {
-        border-radius: ${props => props.fullScreenOnMobile && "0px"};
+    @media ${(props) => props.theme.device.mobileL} {
+        border-radius: ${(props) => props.fullScreenOnMobile && '0px'};
+        max-width: unset;
         min-width: unset;
         max-height: unset;
-    };
+    } ;
 `;
 
 const StyledModalHeader = styled.div`
@@ -70,49 +76,53 @@ const StyledModalHeader = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color:  ${props => props.type === "warning" ? props.theme.colors.secondaryColor6 : props.theme.colors.mainColor1};
-    box-shadow: 2px 2px 4px 0px rgba(0,0,0,0.20);
+    background-color: ${(props) =>
+        props.type === 'warning'
+            ? props.theme.colors.secondaryColor6
+            : props.theme.colors.mainColor1};
+    box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.2);
     padding-left: 16px;
     padding-right: 16px;
-    cursor:  ${props => props.drag ? "grab" : "initial"};
+    cursor: ${(props) => (props.drag ? 'grab' : 'initial')};
     &&:active {
-        cursor: ${props => props.drag ? "grabbing" : "initial"};
-        cursor: ${props => props.drag ? "-moz-grabbing" : "initial"};
-        cursor:  ${props => props.drag ? "-webkit-grabbing" : "initial"};
-    };
+        cursor: ${(props) => (props.drag ? 'grabbing' : 'initial')};
+        cursor: ${(props) => (props.drag ? '-moz-grabbing' : 'initial')};
+        cursor: ${(props) => (props.drag ? '-webkit-grabbing' : 'initial')};
+    }
     svg {
-        color: ${props => props.theme.colors.mainWhite};
-    };
-    @media ${props => props.theme.device.mobileL} {
+        color: ${(props) => props.theme.colors.mainWhite};
+    }
+    @media ${(props) => props.theme.device.mobileL} {
         pointer-events: none;
         svg {
             pointer-events: auto;
-        };
-    };
+        }
+    } ;
 `;
 
 const StyledModalTitle = styled.div`
     display: flex;
     align-items: center;
+    user-select: none;
     p {
         margin: 0px;
         font-size: 20px;
         font-weight: bold;
-        color:  ${props => props.theme.colors.mainWhite};
-    };
+        color: ${(props) => props.theme.colors.mainWhite};
+    }
     svg {
         font-size: 20px;
         margin-right: 16px;
-    };
-    @media ${props => props.theme.device.mobileL} {
+    }
+    @media ${(props) => props.theme.device.mobileL} {
         pointer-events: none;
         p {
             font-size: 16px;
-        };
+        }
         svg {
             pointer-events: auto;
-        };
-    };
+        }
+    } ;
 `;
 
 const StyledRightContent = styled.div`
@@ -120,7 +130,7 @@ const StyledRightContent = styled.div`
     align-items: center;
 `;
 
-const StyledMinimizeButton = styled.div`
+const StyledHeaderButton = styled.div`
     height: 100%;
     display: flex;
     justify-content: center;
@@ -129,7 +139,7 @@ const StyledMinimizeButton = styled.div`
     padding: 8px;
     cursor: pointer;
     svg {
-         font-size: 18px;
+        font-size: 18px;
     }
 `;
 
@@ -146,9 +156,10 @@ const StyledCloseIcon = styled(FontAwesomeIcon)`
 `;
 
 const StyledModalContent = styled.div`
+    height: 100%;
     display: flex;
     flex-direction: column;
-    overflow-y: ${props => props.overflow ? "auto" : "hidden"};
+    overflow-y: ${(props) => (props.overflow ? 'auto' : 'hidden')};
 `;
 
 const Modal = ({
@@ -166,120 +177,156 @@ const Modal = ({
     minWidth,
     maxWidth,
     overflow,
-    children
+    minimize,
+    maximize,
+    children,
 }) => {
-
     const { store } = useContext(ReactReduxContext);
-
     const dragControls = useDragControls();
 
-    const [localState, setLocalState] = useState(type === "announcement");
+    const [localState, setLocalState] = useState(type === 'announcement');
 
     const handleAnnouncementModal = (selected, id) => {
         setLocalState(false);
         setTimeout(() => {
             closeAction(selected, id);
-        },[500])
+        }, [500]);
     };
 
-    const clonedChildren = cloneElement(children, { handleAnnouncementModal  }); // If announce modal type is passed as prop, add additional "handleAnnouncementModal" function to modal children to handle modal state
+    const clonedChildren = cloneElement(children, { handleAnnouncementModal }); // If announce modal type is passed as prop, add additional 'handleAnnouncementModal' function to modal children to handle modal state
 
     return (
         <AnimatePresence>
-            { (isOpen || localState) &&
-            <>
-                <StyledModalWrapper
+            {(isOpen || localState) && (
+                <>
+                    <StyledModalWrapper
                         key="modal"
                         drag={drag}
                         dragConstraints={constraintsRef && constraintsRef}
                         dragControls={dragControls}
                         dragListener={false}
                         dragMomentum={false}
-                        initial={{ y: 100, opacity: 0 }}
-                        animate={{ y: 0, opacity: 1 }} // This needs to be fixed
-                        exit={{ y: 100, opacity: 0 }}
+                        initial={{
+                            y: 100,
+                            opacity: 0,
+                        }}
+                        animate={{
+                            y: minimize ? 100 : 0,
+                            opacity: minimize ? 0 : 1,
+                            pointerEvents: minimize ? 'none' : 'auto',
+                            width: maximize ? '100%' : 'auto',
+                            height: maximize ? '100%' : 'auto'
+                        }}
+                        exit={{
+                            y: 100,
+                            opacity: 0,
+                        }}
                         transition={{
                             duration: 0.4,
-                            type: "tween"
+                            type: 'tween',
                         }}
                         fullScreenOnMobile={fullScreenOnMobile}
                         resize={resize}
+                        maximize={maximize}
                         type={type}
-                        onClick={e => {
+                        onClick={(e) => {
                             e.stopPropagation();
                         }}
-                >
-                    <StyledModal
-                        resize={resize}
-                        minWidth={minWidth}
-                        maxWidth={maxWidth}
-                        fullScreenOnMobile={fullScreenOnMobile}
-                    >
-                        <StyledModalHeader
-                            type={type}
-                            drag={drag}
-                            onPointerDown={(e) => {
-                                drag && dragControls.start(e)
-                            }}
-                        >
-                            <StyledModalTitle>
-                                {
-                                    titleIcon && <FontAwesomeIcon
-                                        icon={titleIcon}
-                                    />
-                                }
-                                <p>{title}</p>
-                            </StyledModalTitle>
-                            <StyledRightContent>
-                                { type === "gfi" &&
-                                    <StyledMinimizeButton
-                                        onClick={() => store.dispatch(setMinimizeGfi(true))}
-                                    >
-                                        <FontAwesomeIcon
-                                            icon={faWindowMinimize}
-                                        />
-                                    </StyledMinimizeButton>
-                                }
-                                <StyledCloseButton
-                                    onClick={() => {
-                                        type !== "announcement" && closeAction();
-                                        type === "announcement" && handleAnnouncementModal(null, null);
-                                    }}
-                                >
-                                    <StyledCloseIcon
-                                        icon={faTimes}
-                                    />
-                                </StyledCloseButton>
-                            </StyledRightContent>
-                        </StyledModalHeader>
-                        <StyledModalContent overflow={overflow}>
-                            {!type === "announcement" ? children : clonedChildren}
-                        </StyledModalContent>
-                    </StyledModal>
-                </StyledModalWrapper>
-                { backdrop &&
-                    <StyledModalBackdrop
-                        backdrop={backdrop}
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        transition={{
-                            duration: 0.4,
-                            type: "tween"
-                        }}
-                        onClick={() => {
-                            backdrop && closeAction && type !== "announcement" ? closeAction() : type === "announcement" && handleAnnouncementModal(null, null);
-                        }}
-                        resize={resize}
-                        type={type}
-                    >
-                    </StyledModalBackdrop>
-                }
-            </>
-            }
 
+                    >
+                        <StyledModal
+                            resize={resize}
+                            minWidth={minWidth}
+                            maxWidth={maxWidth}
+                            fullScreenOnMobile={fullScreenOnMobile}
+                            maximize={maximize}
+                        >
+                            <StyledModalHeader
+                                type={type}
+                                drag={drag}
+                                onPointerDown={(e) => {
+                                    drag && dragControls.start(e);
+                                }}
+                            >
+                                <StyledModalTitle>
+                                    {titleIcon && (
+                                        <FontAwesomeIcon icon={titleIcon} />
+                                    )}
+                                    <p>{title}</p>
+                                </StyledModalTitle>
+                                <StyledRightContent>
+                                    {type === 'gfi' && (
+                                        <>
+                                            <StyledHeaderButton
+                                                onClick={() => store.dispatch(setMinimizeGfi(true))}
+                                            >
+                                                <FontAwesomeIcon
+                                                    icon={faWindowMinimize}
+                                                />
+                                            </StyledHeaderButton>
+                                            {
+                                                !isMobile &&
+                                                    <StyledHeaderButton
+                                                        onClick={(e) => {
+                                                            e.preventDefault();
+                                                            store.dispatch(setMaximizeGfi(!maximize));
+                                                        }}
+                                                    >
+                                                        <FontAwesomeIcon
+                                                            icon={maximize ? faWindowRestore : faWindowMaximize}
+                                                        />
+                                                    </StyledHeaderButton>
+                                            }
+                                        </>
+                                    )}
+                                    <StyledCloseButton
+                                        onClick={() => {
+                                            type !== 'announcement' &&
+                                                closeAction();
+                                            type === 'announcement' &&
+                                                handleAnnouncementModal(
+                                                    null,
+                                                    null
+                                                );
+                                        }}
+                                    >
+                                        <StyledCloseIcon icon={faTimes} />
+                                    </StyledCloseButton>
+                                </StyledRightContent>
+                            </StyledModalHeader>
+                            <StyledModalContent overflow={overflow}>
+                                {!type === 'announcement'
+                                    ? children
+                                    : clonedChildren}
+                            </StyledModalContent>
+                        </StyledModal>
+                    </StyledModalWrapper>
+                    {backdrop && (
+                        <StyledModalBackdrop
+                            backdrop={backdrop}
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            transition={{
+                                duration: 0.4,
+                                type: 'tween',
+                            }}
+                            onClick={() => {
+                                backdrop &&
+                                closeAction &&
+                                type !== 'announcement'
+                                    ? closeAction()
+                                    : type === 'announcement' &&
+                                      handleAnnouncementModal(null, null);
+                            }}
+                            resize={resize}
+                            type={type}
+                        />
+                    )}
+                </>
+            )}
         </AnimatePresence>
-    )
+    );
 };
 
 export default Modal;

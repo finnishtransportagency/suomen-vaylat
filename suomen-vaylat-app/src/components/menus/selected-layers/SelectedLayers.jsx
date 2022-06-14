@@ -14,7 +14,7 @@ const StyledSelectedLayers = styled.div`
 
 const StyledDeleteAllSelectedLayers = styled.div`
     width: 250px;
-    height: 30px;
+    height: 40px;
     cursor: pointer;
     display: flex;
     justify-content: center;
@@ -22,12 +22,13 @@ const StyledDeleteAllSelectedLayers = styled.div`
     color: ${props => props.theme.colors.mainWhite};
     background-color: ${props => props.theme.colors.mainColor1};
     margin: 20px auto 20px auto;
-    border-radius: 15px;
+    border-radius: 20px;
+    box-shadow: 0px 1px 3px #0000001F;
     p {
         margin: 0;
-        font-size: 12px;
+        font-size: 14px;
         font-weight: 600;
-    };
+    }
 `;
 
 const StyledListSubtitle = styled.div`
@@ -36,7 +37,8 @@ const StyledListSubtitle = styled.div`
     align-items: center;
     color: ${props => props.theme.colors.mainColor1};
     padding: 0px 0px 16px 0px;
-    font-size: 14px;
+    font-size: 16px;
+    font-weight: 600;
     svg {
       margin-left: 8px;
       font-size: 20px;
@@ -113,13 +115,12 @@ export const SelectedLayers = ({ selectedLayers, currentZoomLevel }) => {
                 <ul
                     style={{paddingInlineStart: "0px"}}
                 >
-                    {mapLayers.map((item, i) => (
+                    {mapLayers.map((item, index) => (
                         <SortableElement
                             key={'maplayer-' + item.id}
                             value={item}
-                            index={i}
+                            index={index}
                             currentZoomLevel={currentZoomLevel}
-                        //collection={index}
                         />
                     ))}
                 </ul>
@@ -138,13 +139,12 @@ export const SelectedLayers = ({ selectedLayers, currentZoomLevel }) => {
                 <ul
                     style={{paddingInlineStart: "0px"}}
                 >
-                    {backgroundMaps.map((item, i) => (
+                    {backgroundMaps.map((item, index) => (
                         <SortableElement
                             key={'background-maplayer-' + item.id}
                             value={item}
-                            index={i}
+                            index={index}
                             currentZoomLevel={currentZoomLevel}
-                        //collection={index}
                         />
                     ))}
                 </ul>
