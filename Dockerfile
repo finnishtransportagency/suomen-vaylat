@@ -76,21 +76,6 @@ RUN cd /suomen-vaylat && \
     npm ci && \
     npm run build
 
-### Production builder
-FROM builder AS production-builder
-
-ARG PUBLIC_URL
-
-ENV REACT_APP_PUBLISHED_MAP_URL=https://paikkatieto.vaylapilvi.fi/sv-kartta/?uuid=e7dbca99-68bd-4392-8d1d-c2e5098edbe7
-ENV REACT_APP_PUBLISHED_MAP_DOMAIN=https://paikkatieto.vaylapilvi.fi
-ENV REACT_APP_PROXY_URL=https://paikkatieto.vaylapilvi.fi/sv-kartta/
-ENV REACT_APP_SITE_URL=https://paikkatieto.vaylapilvi.fi/suomen-vaylat
-ENV REACT_APP_ROUTER_PREFIX=/suomen-vaylat/
-
-RUN cd /suomen-vaylat && \
-    npm ci && \
-    npm run build
-
 ### Base image
 FROM AWS_ACCOUNT_ID.dkr.ecr.eu-west-1.amazonaws.com/suomen-vaylat-build:nginx-1.19.9-alpine AS base
 
