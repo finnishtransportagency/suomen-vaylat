@@ -1,5 +1,5 @@
 import {  useState, useContext } from 'react';
-import { faInfoCircle, faTimes, faCaretDown, faCaretUp, faGripLines } from '@fortawesome/free-solid-svg-icons';
+import { faInfoCircle, faTimes, faCaretDown, faCaretUp, faGripLines, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ReactReduxContext, useSelector } from 'react-redux';
 import styled from 'styled-components';
@@ -148,6 +148,18 @@ const StyledLayerInfoIconWrapper = styled.div`
     }
 `;
 
+const StyledToggleOpacityIconWrapper = styled.div`
+    cursor: pointer;
+    margin-left: 10px;
+    svg {
+        color: ${props => props.theme.colors.mainColor1};
+        transition: all 0.1s ease-out;
+    };
+    svg:hover {
+        color: ${props => props.theme.colors.mainColor2};
+    }
+    `;
+
 const DragHandle = sortableHandle(() => (
     <StyledLayerGripControl className="swiper-no-swiping">
         <FontAwesomeIcon
@@ -177,10 +189,12 @@ export const SelectedLayer = ({
     layer,
     uuid,
     currentZoomLevel,
-    sortIndex
+    sortIndex,
+    opacityZero
 }) => {
     const { store } = useContext(ReactReduxContext);
     const [opacity, setOpacity] = useState(layer.opacity);
+    const [prevOpacity, setPrevOpacity] = useState(layer.opacity);
     const channel = useSelector(state => state.rpc.channel);
 
     const handleLayerRemoveSelectedLayer = (channel, layer) => {
@@ -191,6 +205,14 @@ export const SelectedLayer = ({
     const handleLayerOpacity = (channel, layer, value) => {
         channel.postRequest('ChangeMapLayerOpacityRequest', [layer.id, value]);
         setOpacity(value);
+    };
+
+    const handleLayerOpacityToggle = (channel, layer) => {
+        !opacityZero ? setPrevOpacity(layer.opacity) : setPrevOpacity(100);
+        const newOpacity = opacityZero? prevOpacity: 0;
+        channel.postRequest('ChangeMapLayerOpacityRequest', [layer.id, newOpacity]);
+        setOpacity(newOpacity);
+        updateLayers(store, channel);
     };
 
     const handleMetadataSuccess = (data, layer, uuid) => {
@@ -257,6 +279,9 @@ export const SelectedLayer = ({
                             onMouseUp={() => updateLayers(store, channel)}
                             onTouchEnd={() => updateLayers(store, channel)}
                         />
+                        <StyledToggleOpacityIconWrapper onClick={() => handleLayerOpacityToggle(channel, layer)}>
+                            <FontAwesomeIcon icon={opacityZero? faEyeSlash : faEye} />
+                        </StyledToggleOpacityIconWrapper>
                     </StyledBottomContent>
                 </StyledLayerContent>
             </StyledLayerContainer>
