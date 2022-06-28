@@ -101,10 +101,10 @@ const CircleButton = ({
         <StyledCircleButton
             onClick={() => clickAction()}
             onHoverStart={() => { 
-                !useReactTooltip && setHovered(true);
+                text && !useReactTooltip && setHovered(true);
             }}
             onHoverEnd={() => { 
-                !useReactTooltip && setHovered(false)
+               text && !useReactTooltip && setHovered(false)
             }}
             toggleState={toggleState}
             variants={variants}
