@@ -52,7 +52,7 @@ const StyledModal = styled(motion.div)`
     height: ${(props) => props.maximize ? '100% !important' : '100%'};
     min-width: ${(props) => props.minWidth && props.minWidth};
     max-width: ${(props) => (props.maxWidth ? props.maxWidth : '100vw')};
-    min-height: 530px;
+    min-height: ${(props) => props.minHeight && props.minHeight};
     max-height: ${(props) => !props.maximize && 'calc(100vh - 100px)'};
     background-color: ${(props) => props.theme.colors.mainWhite};
     border-radius: 4px;
@@ -180,6 +180,7 @@ const Modal = ({
     minimize,
     maximize,
     children,
+    minHeight,
 }) => {
     const { store } = useContext(ReactReduxContext);
     const dragControls = useDragControls();
@@ -240,6 +241,7 @@ const Modal = ({
                             maxWidth={maxWidth}
                             fullScreenOnMobile={fullScreenOnMobile}
                             maximize={maximize}
+                            minHeight={minHeight}
                         >
                             <StyledModalHeader
                                 type={type}

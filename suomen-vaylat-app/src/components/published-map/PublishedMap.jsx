@@ -32,7 +32,7 @@ import {
     setIsGfiOpen,
     setMinimizeGfi,
 } from '../../state/slices/uiSlice';
-import { updateLayers } from '../../utils/rpcUtil';
+import { getActiveAnnouncements, updateLayers } from '../../utils/rpcUtil';
 import SvLoder from '../../components/loader/SvLoader';
 import './PublishedMap.scss';
 
@@ -65,10 +65,6 @@ const StyledLoaderWrapper = styled.div`
         fill: none;
     }
 `;
-
-const ANNOUNCEMENTS_LOCALSTORAGE = 'oskari-announcements';
-
-
 
 const PublishedMap = () => {
     const { store } = useContext(ReactReduxContext);
@@ -130,28 +126,9 @@ const PublishedMap = () => {
 
                 if (data.getAnnouncements) {
                     channel.getAnnouncements(function (data) {
-                        if (
-                            data.hasOwnProperty('data') &&
-                            data.data.length > 0
-                        ) {
-                            var localStorageAnnouncements =
-                                localStorage.getItem(ANNOUNCEMENTS_LOCALSTORAGE)
-                                    ? localStorage.getItem(
-                                          ANNOUNCEMENTS_LOCALSTORAGE
-                                      )
-                                    : [];
-                            const activeAnnouncements = data.data.filter(
-                                (announcement) =>
-                                    announcement.active &&
-                                    localStorageAnnouncements &&
-                                    !localStorageAnnouncements.includes(
-                                        announcement.id
-                                    )
-                            );
-                            store.dispatch(
-                                setActiveAnnouncements(activeAnnouncements)
-                            );
-                        }
+                        store.dispatch(
+                            setActiveAnnouncements(getActiveAnnouncements(data))
+                        );
                     });
                 }
 
