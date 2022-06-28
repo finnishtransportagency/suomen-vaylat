@@ -35,7 +35,7 @@ const size = {
   desktop: '2560px'
 };
 
-const theme = {
+export const theme = {
     fonts: {
       main: 'Exo 2'
     },

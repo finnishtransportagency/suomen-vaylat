@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useContext, useState} from 'react';
 import { ReactReduxContext } from 'react-redux';
 import ReactTooltip from 'react-tooltip';
-import { isMobile } from '../../theme/theme';
+import { theme, isMobile } from '../../theme/theme';
 import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAppSelector } from '../../state/hooks';
@@ -197,10 +197,10 @@ export const Header = () => {
     return (
         <>
             <StyledHeaderContainer>
-                <ReactTooltip disable={isMobile} id={'show_info'} place='bottom' type='dark' effect='float'>
+                <ReactTooltip backgroundColor={theme.colors.mainColor1} disable={isMobile} id={'show_info'} place='bottom' type='dark' effect='float'>
                     <span>{strings.tooltips.showPageInfo}</span>
                 </ReactTooltip>
-                <ReactTooltip disable={isMobile} id={'show_user_guide'} place='bottom' type='dark' effect='float'>
+                <ReactTooltip backgroundColor={theme.colors.mainColor1} disable={isMobile} id={'show_user_guide'} place='bottom' type='dark' effect='float'>
                     <span>{strings.tooltips.showUserGuide}</span>
                 </ReactTooltip>
                 <StyledHeaderTitleContainer onClick={() => setToMainScreen()}>
