@@ -52,7 +52,7 @@ const StyledModal = styled(motion.div)`
     height: ${(props) => props.maximize ? '100% !important' : '100%'};
     min-width: ${(props) => props.minWidth && props.minWidth};
     max-width: ${(props) => (props.maxWidth ? props.maxWidth : '100vw')};
-    min-height: 200px;
+    min-height: 530px;
     max-height: ${(props) => !props.maximize && 'calc(100vh - 100px)'};
     background-color: ${(props) => props.theme.colors.mainWhite};
     border-radius: 4px;

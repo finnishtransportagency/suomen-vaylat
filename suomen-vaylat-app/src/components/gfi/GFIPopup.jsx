@@ -8,7 +8,7 @@ import {
     faAngleLeft,
     faAngleRight,
     faLayerGroup,
-    faMapMarkerAlt
+    faMapMarkerAlt,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ReactReduxContext } from 'react-redux';
@@ -201,6 +201,7 @@ const StyledTabCloseButton = styled.div`
 const StyledTabContent = styled.div`
     overflow: hidden;
     display: flex;
+    height: 100%;
     div.contentWrapper-infobox {
         @media ${(props) => props.theme.device.mobileL} {
             font-size: 14px;
@@ -243,14 +244,12 @@ const StyledTabContent = styled.div`
 `;
 
 const StyledButtonsContainer = styled.div`
-    position: absolute;
-    bottom: 0px;
-    right: 0px;
     padding: 16px;
     z-index: 1;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: flex-end;
+    justify-content: flex-end;
     gap: 8px;
     pointer-events: none;
 `;
@@ -700,7 +699,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
                         icon={faMapMarkerAlt}
                         text={strings.vkm.locationInfo}
                         toggleState={isVKMInfoOpen}
-                        tooltipDirection={'left'}
+                        tooltipDirection={'bottom'}
                         clickAction={handleVKMInfo}
                     />
                 }
@@ -708,22 +707,21 @@ export const GFIPopup = ({ handleGfiDownload }) => {
                     icon={faPencilRuler}
                     text={strings.gfi.selectLocations}
                     toggleState={isGfiToolsOpen}
-                    tooltipDirection={'left'}
+                    tooltipDirection={'bottom'}
                     clickAction={handleGfiToolsMenu}
                 />
                 <CircleButton
                     icon={faFileDownload}
                     text={strings.gfi.downloadMaterials}
                     toggleState={isGfiDownloadsOpen}
-                    tooltipDirection={'left'}
+                    tooltipDirection={'bottom'}
                     clickAction={handleGfiDownloadsMenu}
-                    //clickAction={() => store.dispatch(setIsGfiDownloadOpen(true))}
                     disabled={!gfiLocations.length > 0}
                 />
                 <CircleButton
                     icon={faSearchLocation}
                     text={strings.gfi.focusToLocations}
-                    tooltipDirection={'left'}
+                    tooltipDirection={'bottom'}
                     clickAction={() => {
                         handleOverlayGeometry(tabsContent[selectedTab].props.data);
                         isMobile && store.dispatch(setMinimizeGfi(true));
