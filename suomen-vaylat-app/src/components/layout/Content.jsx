@@ -342,6 +342,7 @@ const Content = () => {
                     isOpen={isGfiOpen} /* Modal state */
                     id={null}
                     minWidth={'600px'}
+                    minHeight={'530px'}
                     //maxWidth={'1000px'}
                     //maxWidth={'calc(100vw - 100px)'}
                     minimize={minimizeGfi}
