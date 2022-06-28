@@ -56,6 +56,7 @@ import WarningModalContent from '../warning/WarningModalContent';
 import GFIPopup from '../gfi/GFIPopup';
 import GFIDownload from '../gfi/GFIDownload';
 import MetadataModal from '../metadata-modal/MetadataModal';
+import { ANNOUNCEMENTS_LOCALSTORAGE } from '../../utils/rpcUtil';
 
 const StyledContent = styled.div`
     z-index: 1;
@@ -123,8 +124,6 @@ const Content = () => {
     const metadata = useAppSelector((state) => state.rpc.layerMetadata);
 
     let { channel, gfiLocations } = useAppSelector((state) => state.rpc);
-
-    const ANNOUNCEMENTS_LOCALSTORAGE = 'oskari-announcements';
 
     const addToLocalStorageArray = (name, value) => {
         // Get the existing data

@@ -429,7 +429,7 @@ export const LayerGroup = ({
                                 themeStyles.hasOwnProperty(group.id) ?
                                     <FontAwesomeIcon
                                         icon={themeStyles[group.id].icon}
-                                    /> : <p>{group.name.charAt(0).toUpperCase()}</p>
+                                    /> : <p>{group && group.name ? group.name.charAt(0).toUpperCase() : group.id}</p>
                             }
                         </StyledMasterGroupHeaderIcon>
                         <StyledMasterGroupTitleContent>

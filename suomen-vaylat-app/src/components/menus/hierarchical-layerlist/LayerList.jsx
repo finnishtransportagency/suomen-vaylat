@@ -164,7 +164,11 @@ export const LayerList = ({
     const slicedGroups = groups.slice()
 
     const sortedGroups = slicedGroups.length > 0 ? slicedGroups.sort(function(a, b) {
-        return a.name.toLowerCase().localeCompare(b.name.toLowerCase());
+        if (a && a.name && b && b.name) {
+            return a.name.toLowerCase().localeCompare(b.name.toLowerCase());
+        } else {
+            return 0;
+        }
     }) : []
 
     if (tagLayers.length > 0) {
