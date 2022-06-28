@@ -75,7 +75,6 @@ const StyledGfiTabContentItemTableRow = styled.tr`
 `;
 
 const StyledGfiTabContentItemTableHeader = styled.th`
-    max-width: 100px;
     padding-left: 16px;
     font-size: 14px;
     font-weight: 600;
