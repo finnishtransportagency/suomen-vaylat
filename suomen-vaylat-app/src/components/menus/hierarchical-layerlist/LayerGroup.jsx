@@ -413,6 +413,9 @@ export const LayerGroup = ({
         updateLayers(store, channel);
     };
 
+    const currentLang = strings.getLanguage();
+    const defaultLang = strings.getAvailableLanguages()[0];
+
     return (
         <>
         <StyledLayerGroups>
@@ -429,12 +432,12 @@ export const LayerGroup = ({
                                 themeStyles.hasOwnProperty(group.id) ?
                                     <FontAwesomeIcon
                                         icon={themeStyles[group.id].icon}
-                                    /> : <p>{group && group.name ? group.name.charAt(0).toUpperCase() : group.id}</p>
+                                    /> : <p>{group.locale[currentLang] && group.locale[currentLang].name ? group.locale[currentLang].name.charAt(0).toUpperCase() : group.locale[defaultLang] && group.locale[defaultLang].name ? group.locale[defaultLang].name.charAt(0).toUpperCase() : group.id}</p>
                             }
                         </StyledMasterGroupHeaderIcon>
                         <StyledMasterGroupTitleContent>
                             <StyledMasterGroupName>
-                                {group.name}
+                                {group.locale[currentLang] && group.locale[currentLang].name ? group.locale[currentLang].name : group.locale[defaultLang] && group.locale[defaultLang].name ? group.locale[defaultLang].name : group.id}
                             </StyledMasterGroupName>
                             <StyledMasterGroupLayersCount>
                                 {
