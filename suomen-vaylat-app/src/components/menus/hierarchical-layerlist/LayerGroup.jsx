@@ -356,7 +356,7 @@ export const LayerGroup = ({
 
     const truncatedString = (string, characterAmount, text) => {
         return (
-            string.length > characterAmount + 20 ? <>{string.substring(0, characterAmount)} <StyledReadMoreButton
+            string.length > characterAmount + 20 ? <>{string.substring(0, characterAmount) + '...'} <StyledReadMoreButton
                 onClick={() => setIsExcerptOpen(!isExcerptOpen)}>{text}</StyledReadMoreButton></> : string
         )
     }
@@ -383,13 +383,6 @@ export const LayerGroup = ({
         } else {
             groupLayersVisibility();
         }
-/*         var invisibleLayers = filteredLayers.length - visibleLayers.length;
-        var localStorageWarn = localStorage.getItem(OSKARI_LOCALSTORAGE) ? localStorage.getItem(OSKARI_LOCALSTORAGE) : [] ;
-        if (filteredLayers.length > 9 && invisibleLayers > 9 && isChecked === false && !localStorageWarn.includes("multipleLayersWarning")) {
-            store.dispatch(setSelectError({show: true, type: 'multipleLayersWarning', filteredLayers: filteredLayers, isChecked: isChecked}));
-        } else {
-            groupLayersVisibility();
-        } */
     };
 
     const groupLayersVisibility = () => {
@@ -415,6 +408,10 @@ export const LayerGroup = ({
 
     const currentLang = strings.getLanguage();
     const defaultLang = strings.getAvailableLanguages()[0];
+    const hasGroupDescription = (group.locale[currentLang] && group.locale[currentLang].desc) || (strings.groupLayerList.hasOwnProperty(group.id) && strings.groupLayerList[group.id].description !== null);
+    const hasGroupName = (group.locale[currentLang].name || (strings.groupLayerList.hasOwnProperty(group.id) && strings.groupLayerList[group.id].title !== null));
+    const groupDescription = (group.locale[currentLang] && group.locale[currentLang].desc) ? group.locale[currentLang].desc :
+                                (strings.groupLayerList.hasOwnProperty(group.id) && strings.groupLayerList[group.id].description !== null ? strings.groupLayerList[group.id].description : null);
 
     return (
         <>
@@ -489,7 +486,7 @@ export const LayerGroup = ({
                         </StyledMotionIconWrapper>
                     </StyledSelectButton>
                     <div>
-                        <StyledGroupName>{group.name}</StyledGroupName>
+                        <StyledGroupName>{group.locale[currentLang] && group.locale[currentLang].name ? group.locale[currentLang].name : group.locale[defaultLang] && group.locale[defaultLang].name ? group.locale[defaultLang].name : group.id}</StyledGroupName>
                         <StyledSubGroupLayersCount>
                             {
                                 totalVisibleGroupLayersCount +" / "+ totalGroupLayersCount
@@ -520,31 +517,33 @@ export const LayerGroup = ({
                         type: "tween"
                     }}
                 >
+                    {group.parentId === -1 &&  ((group.locale[currentLang]) || strings.groupLayerList.hasOwnProperty(group.id)) &&
                         <div>
-                            {group.parentId === -1 && strings.groupLayerList.hasOwnProperty(group.id) && strings.groupLayerList[group.id].title !== null &&
+                            {hasGroupName && hasGroupDescription &&
                                 <>
-                                    <StyledSubHeader>{strings.groupLayerList[group.id].title}</StyledSubHeader>
+                                    <StyledSubHeader>{group.locale[currentLang].name || strings.groupLayerList[group.id].title}</StyledSubHeader>
                                 </>
                             }
-                            {strings.groupLayerList.hasOwnProperty(group.id) && strings.groupLayerList[group.id].description !== null &&
+                            {hasGroupDescription &&
                                 <>
                                     <StyledSubText>
-                                        {isExcerptOpen ? <> {strings.groupLayerList[group.id].description}
-                                                {strings.groupLayerList[group.id].link_description &&
+                                        {isExcerptOpen ? <> {groupDescription}
+                                                {strings.groupLayerList[group.id] && strings.groupLayerList[group.id].link_description &&
                                                     <><StyledLinkButton target={"_blank"} href={strings.groupLayerList[group.id].link}>{strings.groupLayerList[group.id].link_description}</StyledLinkButton><br /></>
                                                 }
-                                                <StyledReadMoreButton onClick={() => setIsExcerptOpen(!isExcerptOpen)}>{strings.groupLayerList.readLess}</StyledReadMoreButton></> :
-                                                truncatedString(strings.groupLayerList[group.id].description,
-                                                    135, '...' + strings.groupLayerList.readMore)}
+                                                <StyledReadMoreButton onClick={() => setIsExcerptOpen(!isExcerptOpen)}> {strings.groupLayerList.readLess}</StyledReadMoreButton></> :
+                                                truncatedString(groupDescription,
+                                                    135, strings.groupLayerList.readMore)}
                                     </StyledSubText>
                                 </>
                             }
                         </div>
+                    }
                     {hasChildren && (
                         <>
                             <LayerList
                                 key={'layer-list'+group.id}
-                                groups={group.groups}
+                                groups={group.groups || []}
                                 layers={layers}
                                 recurse={true}
                             />
