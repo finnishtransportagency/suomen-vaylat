@@ -4,6 +4,7 @@ import { useAppSelector } from '../../state/hooks';
 import styled from 'styled-components';
 import strings from '../../translations';
 import { v4 as uuidv4 } from 'uuid';
+import { isMobile } from '../../theme/theme';
 
 import {
     setSelectError,
@@ -343,6 +344,8 @@ const Content = () => {
                     id={null}
                     minWidth={'600px'}
                     minHeight={'530px'}
+                    height={!isMobile && '100%'}
+                    width={!isMobile && '50%'}
                     //maxWidth={'1000px'}
                     //maxWidth={'calc(100vw - 100px)'}
                     minimize={minimizeGfi}
