@@ -217,8 +217,8 @@ const Modal = ({
                             y: minimize ? 100 : 0,
                             opacity: minimize ? 0 : 1,
                             pointerEvents: minimize ? 'none' : 'auto',
-                            width: maximize ? '100%' : width,
-                            height: maximize ? '100%' : height
+                            width: maximize ? '100%' : isMobile? 'auto' : width,
+                            height: maximize ? '100%' : isMobile? 'auto' : height
                         }}
                         exit={{
                             y: 100,
