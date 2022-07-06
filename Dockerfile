@@ -77,7 +77,7 @@ RUN cd /suomen-vaylat && \
     npm run build
 
 ### Base image
-FROM AWS_ACCOUNT_ID.dkr.ecr.eu-west-1.amazonaws.com/suomen-vaylat-build:nginx-1.19.9-alpine AS base
+FROM AWS_ACCOUNT_ID.dkr.ecr.eu-west-1.amazonaws.com/suomen-vaylat-build:sv-base-image AS base
 
 # Envs are used in Nginx template substitution at container startup
 ARG BASE_PATH
