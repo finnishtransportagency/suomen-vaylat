@@ -181,6 +181,8 @@ const Modal = ({
     maximize,
     children,
     minHeight,
+    height = 'auto',
+    width = 'auto'
 }) => {
     const { store } = useContext(ReactReduxContext);
     const dragControls = useDragControls();
@@ -215,8 +217,8 @@ const Modal = ({
                             y: minimize ? 100 : 0,
                             opacity: minimize ? 0 : 1,
                             pointerEvents: minimize ? 'none' : 'auto',
-                            width: maximize ? '100%' : 'auto',
-                            height: maximize ? '100%' : 'auto'
+                            width: maximize ? '100%' : isMobile? 'auto' : width,
+                            height: maximize ? '100%' : isMobile? 'auto' : height
                         }}
                         exit={{
                             y: 100,

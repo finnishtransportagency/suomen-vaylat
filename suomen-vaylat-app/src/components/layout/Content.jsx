@@ -343,6 +343,8 @@ const Content = () => {
                     id={null}
                     minWidth={'600px'}
                     minHeight={'530px'}
+                    height='100%'
+                    width='50%'
                     //maxWidth={'1000px'}
                     //maxWidth={'calc(100vw - 100px)'}
                     minimize={minimizeGfi}
