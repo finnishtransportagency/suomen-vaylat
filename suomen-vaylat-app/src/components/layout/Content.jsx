@@ -11,6 +11,8 @@ import {
     resetGFILocations,
     setDownloadActive,
     setDownloadFinished,
+    removeMarkerRequest,
+    setVKMData
 } from '../../state/slices/rpcSlice';
 
 import {
@@ -196,6 +198,8 @@ const Content = () => {
         store.dispatch(setIsGfiOpen(false));
         store.dispatch(setMinimizeGfi(false));
         store.dispatch(setMaximizeGfi(false));
+        store.dispatch(setVKMData(null));
+        store.dispatch(removeMarkerRequest("SEARCH_MARKER"));
         channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [
             null,
             null,

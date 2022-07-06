@@ -14,7 +14,9 @@ import {
 } from '../../state/slices/uiSlice';
 import {
     mapMoveRequest,
-    resetGFILocations
+    removeMarkerRequest,
+    resetGFILocations,
+    setVKMData
 } from '../../state/slices/rpcSlice';
 import { resetThemeGroupsForMainScreen } from '../../utils/rpcUtil';
 import strings from '../../translations';
@@ -192,6 +194,12 @@ export const Header = () => {
 
         // Remove all features from map
         channel && channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', []);
+
+        // Remove markers
+        store.dispatch(removeMarkerRequest("SEARCH_MARKER"));
+
+        // Remove VKM data
+        store.dispatch(setVKMData(null));
     };
 
     return (
