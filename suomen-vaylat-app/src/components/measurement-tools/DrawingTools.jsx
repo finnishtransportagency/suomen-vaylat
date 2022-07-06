@@ -156,6 +156,7 @@ export const DrawingTools = ({isOpen, theme}) => {
                                 toggleState={tool.name && tool.name === activeTool ? true : false}
                                 clickAction={() => startStopTool(tool)}
                                 type="drawingTool"
+                                tooltipDirection={"right"}
                             >
                                 <StyledIcon src={tool.style && tool.style.icon}/>
                             </CircleButton> : tool.id === "sv-erase" &&
@@ -166,6 +167,7 @@ export const DrawingTools = ({isOpen, theme}) => {
                                 clickAction={() => eraseDrawing()}
                                 type="drawingTool"
                                 color="secondaryColor7"
+                                tooltipDirection={"right"}
                             >
                             </CircleButton>
                     )
