@@ -265,6 +265,7 @@
       "layerVisible": "Lager synligt",
       "zoomInToShowLayer": "Zooma in för att se kartlagret",
       "zoomOutToShowLayer": "Zooma ut för att se kartlagret",
+      "toShowLayer" : "för att se kartlagret",
       "opacity": "Genomskinlighet"
     }
   },

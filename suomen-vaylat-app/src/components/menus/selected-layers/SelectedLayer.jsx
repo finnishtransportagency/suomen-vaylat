@@ -3,11 +3,12 @@ import { faInfoCircle, faTimes, faCaretDown, faCaretUp, faGripLines, faEye, faEy
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ReactReduxContext, useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { clearLayerMetadata, getLayerMetadata, setLayerMetadata } from '../../../state/slices/rpcSlice';
+import { clearLayerMetadata, getLayerMetadata, setLayerMetadata, setZoomTo } from '../../../state/slices/rpcSlice';
 import { updateLayers } from '../../../utils/rpcUtil';
 import { sortableHandle } from 'react-sortable-hoc';
 
 import strings from '../../../translations';
+import { current } from '@reduxjs/toolkit';
 
 const StyledLayerContainer = styled.li`
     z-index: 9999;
@@ -160,6 +161,25 @@ const StyledToggleOpacityIconWrapper = styled.div`
     }
     `;
 
+const StyledLayerInfoContainer = styled.div`
+    display: flex;
+    flex-direction: row;
+    height: 18px;
+`;
+
+const StyledShowLayerButton = styled.button`
+    background: none;
+    border: none;
+    padding: 0;
+    margin-right: 3px;
+    color: #069;
+    text-decoration: underline;
+    cursor: pointer;
+    display: flex;
+    height: 10px;
+    font:inherit;
+`;
+
 const DragHandle = sortableHandle(() => (
     <StyledLayerGripControl className="swiper-no-swiping">
         <FontAwesomeIcon
@@ -228,10 +248,13 @@ export const SelectedLayer = ({
         store.dispatch(getLayerMetadata({ layer: layer, uuid: uuid, handler: handleMetadataSuccess, errorHandler: handleMetadataError }));
     };
 
+    const isCurrentZoomTooFar = layer.maxZoomLevel && layer.minZoomLevel && currentZoomLevel <  layer.minZoomLevel;
+    const isCurrentZoomTooClose = layer.maxZoomLevel && layer.minZoomLevel && currentZoomLevel >  layer.maxZoomLevel
+
     let layerInfoText = strings.layerlist.selectedLayers.layerVisible;
-    if (layer.maxZoomLevel && layer.minZoomLevel && currentZoomLevel <  layer.minZoomLevel) {
+    if (isCurrentZoomTooFar) {
         layerInfoText = strings.layerlist.selectedLayers.zoomInToShowLayer;
-    } else if (layer.maxZoomLevel && layer.minZoomLevel && currentZoomLevel >  layer.maxZoomLevel) {
+    } else if (isCurrentZoomTooClose) {
         layerInfoText = strings.layerlist.selectedLayers.zoomOutToShowLayer;
     }
 
@@ -265,7 +288,12 @@ export const SelectedLayer = ({
                         }
                     </StyledlayerHeader>
                     <StyledMidContent>
-                        {layerInfoText}
+                        {isCurrentZoomTooFar || isCurrentZoomTooClose ? <StyledLayerInfoContainer> 
+                            <StyledShowLayerButton onClick={() => store.dispatch(setZoomTo(layer.minZoomLevel))}>
+                                {isCurrentZoomTooFar? strings.tooltips.zoomIn : isCurrentZoomTooClose && strings.tooltips.zoomOut}
+                            </StyledShowLayerButton> <p>{strings.layerlist.selectedLayers.toShowLayer}</p>
+                        </StyledLayerInfoContainer> 
+                        : layerInfoText }
                     </StyledMidContent>
                     <StyledBottomContent>
                         <p>{strings.layerlist.selectedLayers.opacity}</p>
