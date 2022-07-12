@@ -265,6 +265,7 @@
       "layerVisible": "Taso näkyvillä",
       "zoomInToShowLayer": "Lähennä nähdäksesi taso",
       "zoomOutToShowLayer": "Loitonna nähdäksesi taso",
+      "toShowLayer" : "nähdäksesi taso",
       "opacity": "Läpinäkyvyys"
     }
   },
