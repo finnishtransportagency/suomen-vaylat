@@ -229,7 +229,8 @@ export const ThemeLayerList = ({
         channel,
         selectedTheme,
         lastSelectedTheme,
-        selectedThemeIndex
+        selectedThemeIndex,
+        currentZoomLevel
     } = useAppSelector((state) => state.rpc);
 
     const handleSelectGroup = (index, theme) => {
@@ -237,8 +238,8 @@ export const ThemeLayerList = ({
     };
 
     useEffect(() => {
-        selectedTheme?.minZoomLevel && store.dispatch(setZoomTo(selectedTheme.minZoomLevel));
-    }, [selectedTheme])
+        if(currentZoomLevel < selectedTheme?.minZoomLevel ) store.dispatch(setZoomTo(selectedTheme.minZoomLevel));
+    }, [selectedTheme]);
 
     return (
         <>
