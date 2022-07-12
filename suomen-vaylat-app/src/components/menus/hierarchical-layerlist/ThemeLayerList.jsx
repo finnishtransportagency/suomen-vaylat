@@ -6,6 +6,7 @@ import { motion } from 'framer-motion';
 import styled from 'styled-components';
 import { useAppSelector } from '../../../state/hooks';
 import strings from '../../../translations';
+import { setZoomTo } from '../../../state/slices/rpcSlice';
 import { selectGroup } from '../../../utils/rpcUtil';
 import Layers from './Layers';
 
@@ -228,12 +229,17 @@ export const ThemeLayerList = ({
         channel,
         selectedTheme,
         lastSelectedTheme,
-        selectedThemeIndex
+        selectedThemeIndex,
+        currentZoomLevel
     } = useAppSelector((state) => state.rpc);
 
     const handleSelectGroup = (index, theme) => {
         selectGroup(store, channel, index, theme, lastSelectedTheme, selectedThemeIndex);
     };
+
+    useEffect(() => {
+        if(currentZoomLevel < selectedTheme?.minZoomLevel ) store.dispatch(setZoomTo(selectedTheme.minZoomLevel));
+    }, [selectedTheme]);
 
     return (
         <>
