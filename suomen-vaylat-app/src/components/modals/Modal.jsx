@@ -29,6 +29,8 @@ const StyledModalWrapper = styled(motion.div)`
     z-index: ${(props) =>
         props.type === 'warning' ? 9999 : props.resize ? 4 : 9993};
     position: absolute;
+    width: ${(props) => props.maximize? '100%' : 'auto'};
+    height: ${(props) => props.maximize? '100%' : 'auto'};
     top: ${(props) => props.resize && '0px'};
     left: ${(props) => props.resize && '0px'};
     padding: ${props => props.maximize ? '4px 4px 4px 4px' : (props.resize || props.drag) && '8px 50px 50px 8px'};
@@ -48,8 +50,8 @@ const StyledModalWrapper = styled(motion.div)`
 
 const StyledModal = styled(motion.div)`
     position: relative;
-    width: ${(props) => props.maximize ? '100% !important' : '100%'};
-    height: ${(props) => props.maximize ? '100% !important' : '100%'};
+    width: ${(props) => props.maximize ? '100% !important' : props.width && props};
+    height: ${(props) => props.maximize ? '100% !important' : props.height && props.height};
     min-width: ${(props) => props.minWidth && props.minWidth};
     max-width: ${(props) => (props.maxWidth ? props.maxWidth : '100vw')};
     min-height: ${(props) => props.minHeight && props.minHeight};
@@ -217,8 +219,6 @@ const Modal = ({
                             y: minimize ? 100 : 0,
                             opacity: minimize ? 0 : 1,
                             pointerEvents: minimize ? 'none' : 'auto',
-                            width: maximize ? '100%' : isMobile? 'auto' : width,
-                            height: maximize ? '100%' : isMobile? 'auto' : height
                         }}
                         exit={{
                             y: 100,
@@ -244,6 +244,8 @@ const Modal = ({
                             fullScreenOnMobile={fullScreenOnMobile}
                             maximize={maximize}
                             minHeight={minHeight}
+                            height={height}
+                            width={width} 
                         >
                             <StyledModalHeader
                                 type={type}
