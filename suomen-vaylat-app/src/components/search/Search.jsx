@@ -228,6 +228,7 @@ const Search = () => {
         removeMarkersAndFeatures();
         setIsSearching(true);
         channel.postRequest('SearchRequest', [value]);
+        setSearchValue(value);
         setLastSearchValue(value);
     };
 
@@ -817,8 +818,6 @@ const Search = () => {
                                             key={name + '_' + index}
                                             type={'searchResult'}
                                             onClick={() => {
-                                                setSearchValue(visibleText);
-                                                setLastSearchValue(visibleText);
                                                 handleSearchSelect(
                                                     name,
                                                     lon,
