@@ -9,6 +9,9 @@ import {
     faTrash,
     faEllipsisV,
     faAngleUp,
+    faCity,
+    faRoad,
+    faTrain,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import AddressSearch from './AddressSearch';
@@ -29,6 +32,18 @@ import CircleButton from '../circle-button/CircleButton';
 import VKMTrackSearch from './VKMTrackSearch';
 
 import { VKMGeoJsonHoverStyles, VKMGeoJsonStyles } from './VKMSearchStyles';
+
+const StyledSearchIcon  = styled.div`
+    min-width: 48px;
+    padding-right: 16px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    color: ${(props) => props.active ? props.theme.colors.secondaryColor8 : 'rgba(0, 0, 0, 0.5)'};
+    svg {
+        font-size: 18px;
+    };
+    `;
 
 const StyledSearchContainer = styled.div`
     z-index: 2;
@@ -130,6 +145,7 @@ const StyledDropDown = styled(motion.div)`
 `;
 
 const StyledDropdownContentItem = styled.div`
+    display: ${(props) => props.type === 'searchResult' && 'flex'};
     user-select: none;
     cursor: pointer;
     padding-left: 8px;
@@ -145,9 +161,10 @@ const StyledDropdownContentItem = styled.div`
 `;
 
 const StyledDropdownContentItemTitle = styled.p`
+    display: ${(props) => props.type === 'searchResult' && 'flex'};
     text-align: ${(props) => props.type === 'noResults' && 'center'};
     font-size: 14px;
-    color: #504d4d;
+    color: ${(props) => props.active ? props.theme.colors.secondaryColor8 : '#504d4d'};
 `;
 
 const StyledDropdownContentItemSubtitle = styled.p`
@@ -204,8 +221,10 @@ const Search = () => {
 
     const [vkmError, setVkmError] = useState(null);
     const [vkmTrackError, setVkmTrackError] = useState(null);
+    const [searchClickedRow, setSearchClickedRow] = useState(null);
 
     const handleAddressSearch = (value) => {
+        setSearchClickedRow(null);
         removeMarkersAndFeatures();
         setIsSearching(true);
         channel.postRequest('SearchRequest', [value]);
@@ -385,6 +404,7 @@ const Search = () => {
         vectorLayerId + '_vkm_osa',
         vectorLayerId + '_vkm_etaisyys',
         vectorLayerId + '_vkm_track',
+        vectorLayerId + '_vkm',
     ];
 
     const removeMarkersAndFeatures = () => {
@@ -417,7 +437,7 @@ const Search = () => {
                 />
             ),
             visible: true,
-        },
+        },/*
         vkm: {
             label: strings.search.vkm.title,
             subtitle: strings.search.vkm.subtitle,
@@ -436,7 +456,7 @@ const Search = () => {
             subtitle: strings.search.vkm.trackSubtitle,
             content: <p>{strings.search.vkm.trackTitle}</p>,
             visible: channel && channel.searchVKMTrack,
-        },
+        },*/
         metadata: {
             label: strings.search.metadata.title,
             subtitle: strings.search.metadata.subtitle,
@@ -474,22 +494,64 @@ const Search = () => {
             });
     }, [channel]);
 
-    const handleAddressSelect = (name, lon, lat, id) => {
-        store.dispatch(
-            addMarkerRequest({
-                x: lon,
-                y: lat,
-                msg: name || '',
-                markerId: markerId,
-            })
-        );
+    const handleSearchSelect = (name, lon, lat, geom, tie, osa, ajorata, etaisyys, type) => {
+        removeMarkersAndFeatures();
+        if (!geom) {
+            store.dispatch(
+                addMarkerRequest({
+                    x: lon,
+                    y: lat,
+                    msg: name || '',
+                    markerId: markerId,
+                })
+            );
 
-        store.dispatch(
-            mapMoveRequest({
-                x: lon,
-                y: lat,
-            })
-        );
+            store.dispatch(
+                mapMoveRequest({
+                    x: lon,
+                    y: lat,
+                })
+            );
+        } else if (type === 'road') {
+            let style = 'tie';
+            if ((osa || ajorata) && !etaisyys) {
+                style = 'osa';
+            } else if (etaisyys) {
+                style = 'etaisyys';
+            }
+            let featureStyle = VKMGeoJsonStyles.road[style];
+            let hover = VKMGeoJsonHoverStyles.road[style];
+
+            if (style === 'tie') {
+                removeMarkersAndFeatures();
+            }
+
+            channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', [
+                geom,
+                {
+                    clearPrevious: true,
+                    centerTo: true,
+                    hover: hover,
+                    featureStyle: featureStyle,
+                    layerId: vectorLayerId + '_vkm_' + style,
+                    maxZoomLevel: 10,
+                },
+            ]);
+        } else if (type === 'track') {
+            let featureStyle = VKMGeoJsonStyles['track'];
+            let hover = VKMGeoJsonHoverStyles['track'];
+
+            channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', [
+                geom,
+                {
+                    centerTo: true,
+                    hover: hover,
+                    featureStyle: featureStyle,
+                    layerId: vectorLayerId + '_vkm_track',
+                    maxZoomLevel: 10
+                }
+            ]);
+        };
     };
 
     const variants = {
@@ -723,7 +785,7 @@ const Search = () => {
                         searchResults.result.locations.length > 0 ? (
                             searchResults.result.locations.map(
                                 (
-                                    { name, region, type, lon, lat, id },
+                                    { name, region, type, lon, lat, id, vkmType, geom, tie, osa, ajorata, etaisyys },
                                     index
                                 ) => {
                                     let visibleText;
@@ -753,20 +815,32 @@ const Search = () => {
                                     return (
                                         <StyledDropdownContentItem
                                             key={name + '_' + index}
+                                            type={'searchResult'}
                                             onClick={() => {
                                                 setSearchValue(visibleText);
                                                 setLastSearchValue(visibleText);
-                                                handleAddressSelect(
+                                                handleSearchSelect(
                                                     name,
                                                     lon,
                                                     lat,
-                                                    id
+                                                    geom,
+                                                    tie,
+                                                    osa,
+                                                    ajorata,
+                                                    etaisyys,
+                                                    vkmType
                                                 );
                                                 isMobile &&
                                                     setShowSearchResults(false);
+                                                setSearchClickedRow(index);
                                             }}
                                         >
-                                            <StyledDropdownContentItemTitle>
+                                            <StyledSearchIcon active={searchClickedRow === index}>
+                                                <FontAwesomeIcon
+                                                    icon={vkmType && vkmType === 'road' ? faRoad : (vkmType && vkmType === 'track') ? faTrain: faCity}
+                                                />
+                                            </StyledSearchIcon>
+                                            <StyledDropdownContentItemTitle type={'searchResult'} active={searchClickedRow === index}>
                                                 {visibleText}
                                             </StyledDropdownContentItemTitle>
                                         </StyledDropdownContentItem>
