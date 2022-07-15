@@ -29,7 +29,7 @@ const StyledModalWrapper = styled(motion.div)`
     z-index: ${(props) =>
         props.type === 'warning' ? 9999 : props.resize ? 4 : 9993};
     position: absolute;
-    width: ${(props) => props.maximize? '100%' : 'auto'};
+    width: ${(props) => props.maximize? '100% !important' : 'auto'};
     height: ${(props) => props.maximize? '100%' : 'auto'};
     top: ${(props) => props.resize && '0px'};
     left: ${(props) => props.resize && '0px'};
@@ -50,8 +50,8 @@ const StyledModalWrapper = styled(motion.div)`
 
 const StyledModal = styled(motion.div)`
     position: relative;
-    width: ${(props) => props.maximize ? '100% !important' : props.width && props};
-    height: ${(props) => props.maximize ? '100% !important' : props.height && props.height};
+    width: ${(props) => props.maximize  || isMobile ? '100% !important' : props.width && props};
+    height: ${(props) => props.maximize || isMobile ? '100% !important' : props.height && props.height};
     min-width: ${(props) => props.minWidth && props.minWidth};
     max-width: ${(props) => (props.maxWidth ? props.maxWidth : '100vw')};
     min-height: ${(props) => props.minHeight && props.minHeight};
