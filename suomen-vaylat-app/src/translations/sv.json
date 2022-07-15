@@ -196,9 +196,20 @@
         "link": "https://vayla.fi/vaylista/aineistot/kartat"
       }
     },
+    "dataSourcesAndTermsOfUse" :{
+      "tabTitle": "Tietolähteet ja käyttöehdot"
+    },
     "dataSources": {
       "tabTitle": "Datakällor",
-      "municipalityImage": "Sijaintitietojen kuntien vaakunoiden kuvat haetaan kuntaliiton sivuilta (https://www.kuntaliitto.fi)."
+      "municipalityImage": "Sijaintitietojen kuntien vaakunoiden kuvat haetaan kuntaliiton sivuilta:",
+      "municipalityLink": "https://www.kuntaliitto.fi",
+      "landSurvey": "Taustakarttojen lähteenä on maanmittauslaitos."
+    },
+    "termsOfUse": {
+      "title": "Käyttöehdot",
+      "description": "Suomen Väylät -palvelun Väyläviraston tietoaineistoja koskee Creative Commons 4.0 Nimeä -käyttölupa.",
+      "moreInfo": "Lisätietoja käyttöehdoista:",
+      "link": "https://vayla.fi/vaylista/aineistot/avoindata/kayttoehdot"
     }
   },
   "search": {
