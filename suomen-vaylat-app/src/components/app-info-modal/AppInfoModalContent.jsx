@@ -9,10 +9,9 @@ import 'swiper/css';
 
 const StyledContent = styled.div`
     max-width: 660px;
-    overflow: hidden;
+    flex-direction: column;
     display: flex;
     height: 100%;
-    flex-direction: column;
 `;
 
 const StyledTabs = styled.div`
@@ -78,10 +77,16 @@ const StyledTab = styled.div`
 const StyledLink = styled.a`
     cursor: pointer;
     color: ${props => props.theme.colors.mainColor1};
+    word-wrap:break-word;
 `;
 
 const StyledTitle = styled.em`
     color: ${props => props.theme.colors.mainColor1};
+`;
+
+const StyledHeading = styled.h5`
+    color: ${props => props.theme.colors.mainColor1};
+
 `;
 
 const StyledSwiper = styled(Swiper)`
@@ -165,7 +170,26 @@ export const AppInfoLinks = () => {
             </ul>
         </div>
     )
-}
+};
+
+export const SourcesAndTermsOfUse = () => {
+    return(
+        <div>
+            <div>
+                <StyledHeading> {strings.appInfo.dataSources.title}</StyledHeading>
+                <p>{strings.appInfo.dataSources.municipalityImage} <StyledLink href={strings.appInfo.dataSources.municipalityLink}>{strings.appInfo.dataSources.municipalityLink}</StyledLink> </p>
+                <p>{strings.appInfo.dataSources.landSurvey}</p>
+            </div>
+            <div>
+                <StyledHeading>{strings.appInfo.termsOfUse.title}</StyledHeading>
+                <p>{strings.appInfo.termsOfUse.description}</p>
+                <div>
+                    <p>{strings.appInfo.termsOfUse.moreInfo} <StyledLink href={strings.appInfo.termsOfUse.link}>{strings.appInfo.termsOfUse.link}</StyledLink></p>
+                </div>
+            </div>
+        </div>
+    )
+};
 
 export const AppInfoModalContent = () => {
 
@@ -174,7 +198,6 @@ export const AppInfoModalContent = () => {
     const headingText = strings.appInfo.headingText.bold();
     const mainText = strings.appInfo.mainText;
     const content = <div dangerouslySetInnerHTML={{ __html: headingText + '<br><br>' + mainText }}></div>;
-    const dataSources = <div dangerouslySetInnerHTML={{ __html: strings.appInfo.dataSources.municipalityImage }}></div>;
 
     // App build info
     const currentAppVersion = getAppVersion();
@@ -207,9 +230,9 @@ export const AppInfoModalContent = () => {
             content: <ContactAndFeedback />
         },
         {
-            title: strings.appInfo.dataSources.tabTitle,
+            title: strings.appInfo.dataSourcesAndTermsOfUse.tabTitle,
             titleColor: 'mainColor1',
-            content: dataSources
+            content: <SourcesAndTermsOfUse />
         }
     ];
 
