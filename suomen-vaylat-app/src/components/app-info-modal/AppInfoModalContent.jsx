@@ -13,7 +13,6 @@ const StyledContent = styled.div`
     flex-direction: column;
     display: flex;
     height: 100%;
-    flex-direction: column;
 `;
 
 const StyledTabs = styled.div`
