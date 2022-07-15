@@ -238,7 +238,7 @@ export const ThemeLayerList = ({
     };
 
     useEffect(() => {
-        if(currentZoomLevel < selectedTheme?.minZoomLevel ) store.dispatch(setZoomTo(selectedTheme.minZoomLevel));
+        if (currentZoomLevel < selectedTheme?.minZoomLevel) store.dispatch(setZoomTo(selectedTheme.minZoomLevel));
     }, [selectedTheme]);
 
     return (
