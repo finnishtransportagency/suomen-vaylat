@@ -67,7 +67,7 @@ const StyledGfiTabContentItemCollapseContent = styled(motion.div)`
 `;
 
 const StyledGfiTabContentItemTable = styled.table`
-   
+
 `;
 
 const StyledGfiTabContentItemTableRow = styled.tr`
@@ -108,7 +108,7 @@ const GfiTabContentItem = ({
         var hightPriorityFields = data.properties._orderHigh && JSON.parse(data.properties._orderHigh);
         var lowPriorityFields = data.properties._order && JSON.parse(data.properties._order);
 
-        if(hightPriorityFields.length > 0){
+        if (hightPriorityFields.length > 0) {
             hightPriorityFields && setOrderHigh(hightPriorityFields);
             lowPriorityFields && lowPriorityFields.length > 0 && setOrderLow(lowPriorityFields);
         } else if(lowPriorityFields.length > 0){
@@ -173,13 +173,13 @@ const GfiTabContentItem = ({
                         >
                             <StyledGfiTabContentItemTable>
                                 {
-                                    orderHigh ? orderHigh.map(value => {
-                                        return <StyledGfiTabContentItemTableRow key={value+'_'+data.properties[value]}>
+                                    orderHigh ? orderHigh.filter(value => value !== 'UID').map(value => {
+                                        return <StyledGfiTabContentItemTableRow key={value + '_' + data.properties[value]}>
                                             <StyledGfiTabContentItemTableHeader>{value}</StyledGfiTabContentItemTableHeader>
                                             <StyledGfiTabContentItemTableData>{data.properties[value]}</StyledGfiTabContentItemTableData>
                                         </StyledGfiTabContentItemTableRow>
-                                    }) : orderLow && orderLow.map(value => {
-                                            return <StyledGfiTabContentItemTableRow key={value+'_'+data.properties[value]}>
+                                    }) : orderLow && orderLow.filter(value => value !== 'UID').map(value => {
+                                            return <StyledGfiTabContentItemTableRow key={value + '_' + data.properties[value]}>
                                                 <StyledGfiTabContentItemTableHeader>{value}</StyledGfiTabContentItemTableHeader>
                                                 <StyledGfiTabContentItemTableData>{data.properties[value]}</StyledGfiTabContentItemTableData>
                                             </StyledGfiTabContentItemTableRow>

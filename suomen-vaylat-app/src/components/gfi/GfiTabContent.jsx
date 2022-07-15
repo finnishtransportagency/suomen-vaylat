@@ -1,13 +1,13 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
-
-import DataTable from "react-data-table-component";
 
 import GfiTabContentItem from './GfiTabContentItem';
 
 import { faTable, faList } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+import { kaReducer, Table } from 'ka-table';
+import "ka-table/style.scss";
 
 const StyledSelectedTabHeader = styled.div`
     position: relative;
@@ -39,48 +39,31 @@ const StyledSelectedTabDisplayOptionsButton = styled.div`
     };
 `;
 
-const customStyles = {
-    rows: {
-        style: {
-            whiteSpace: 'unset',
-            overflow: 'unset',
-            textOverflow: 'unset',
-            '&:hover': {
-                backgroundColor: '#f0f0f0',
-                'div *': {
-                    fontSize: '14px',
-                    fontWeight: '600',
-                    whiteSpace: 'unset',
-                  }
-              },
-        },
-    },
-    headCells: {
-        style: {
-            fontSize: '14px',
-            fontWeight: '600',
-            'div *': {
-                whiteSpace: 'unset',
-                overflow: 'unset',
-                textOverflow: 'unset'
-            }
-        },
-    },
-    cells: {
-        style: {
-            color: '#646464',
-            userSelect: 'text'
-        },
-    },
-};
+const StyledTabContent = styled.div`
+    td:nth-child(odd) {
+        border-right: 1px solid #ddd;
+    }
+
+    tr:nth-child(2n) {
+        background-color: #f2f2f2;
+    }
+
+    table tr {
+        border-bottom: 1px solid #ddd;
+    }
+`;
+
 
 const GfiTabContent = ({
     data,
-    title
+    title,
+    tablePropsInit
 }) => {
 
-    const [tableColumns, setTableColumns] = useState([]);
-    const [tableCells, setTableCells] = useState([]);
+    const [tableProps, changeTableProps] = useState(tablePropsInit);
+    const dispatch = action => {
+      changeTableProps(prevState => kaReducer(prevState, action));
+    };
 
     const [showDataTable, setShowDataTable] = useState(data.content && data.content.features && data.content.features.length > 5);
 
@@ -141,32 +124,6 @@ const GfiTabContent = ({
         ]);
     };
 
-    useEffect(() => {
-        const properties = data && data.content && data.content.features && data.content.features[0].properties;
-
-        var hightPriorityColumns = properties._orderHigh && JSON.parse(properties._orderHigh);
-        var lowPriorityColumns = properties._order && JSON.parse(properties._order);
-
-        var columns = hightPriorityColumns.concat(lowPriorityColumns);
-        var cells = data && data.content && data.content.features && data.content.features.map(feature => {
-                var cell = {...feature.properties};
-                cell['id'] = feature.id;
-                cell.hasOwnProperty('_orderHigh') && delete cell['_orderHigh'];
-                cell.hasOwnProperty('_order') && delete cell['_order'];
-                return cell;
-        });
-
-        setTableColumns(columns.map(property => {
-                  return property !== 'UID' && {
-                  name: property,
-                  selector: row => row[property],
-                  sortable: true,
-              }
-        }));
-
-         setTableCells(cells);
-    },[data]);
-
     return <>
             <StyledSelectedTabHeader>
                 <StyledSelectedTabTitle>
@@ -184,30 +141,29 @@ const GfiTabContent = ({
             </StyledSelectedTabHeader>
 
         {
-             showDataTable ?
-                <DataTable
-                    columns={tableColumns}
-                    data={tableCells}
-                    fixedHeader
-                    fixedHeaderScrollHeight="100%"
-                    customStyles={customStyles}
+            showDataTable ?
+                <Table
+                    {...tableProps}
+                    dispatch={dispatch}
                 />
             :
             <div style={{
                 overflow: 'auto'
             }}>
-                {
-                                data.content && data.content.features && data.content.features.map((feature, index) => {
-                                    return <GfiTabContentItem
-                                        key={feature.id}
-                                        title={feature.id.split(".")[1] ? title+" "+feature.id.split(".")[1] : title+" "+feature.id}
-                                        data={feature}
-                                        index={index}
-                                        selectFeature={selectFeature}
-                                        deSelectFeature={deSelectFeature}
-                                    />
-                                })
-                }
+                <StyledTabContent>
+                    {
+                        data.content && data.content.features && data.content.features.map((feature, index) => {
+                            return <GfiTabContentItem
+                                    key={feature.id}
+                                    title={feature.id.split('.')[1] ? title + ' ' + feature.id.split('.')[1] : title + ' ' + feature.id}
+                                    data={feature}
+                                    index={index}
+                                    selectFeature={selectFeature}
+                                    deSelectFeature={deSelectFeature}
+                                />
+                            })
+                    }
+                </StyledTabContent>
             </div>
 
         }

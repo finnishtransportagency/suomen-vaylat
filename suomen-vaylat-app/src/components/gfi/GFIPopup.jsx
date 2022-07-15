@@ -27,6 +27,8 @@ import GfiToolsMenu from './GfiToolsMenu';
 import GfiDownloadMenu from './GfiDownloadMenu';
 import CircleButton from '../circle-button/CircleButton';
 
+import { SortingMode, PagingPosition } from 'ka-table/enums';
+
 // Max amount of features that wont trigger react-data-table-component
 const GFI_MAX_LENGTH = 5;
 const KUNTA_IMAGE_URL = 'https://www.kuntaliitto.fi/sites/default/files/styles/narrow_320_x_600_/public/media/profile_pictures/';
@@ -217,33 +219,43 @@ const StyledTabContent = styled.div`
         padding-right: 15px;
     }
 
-    td:nth-child(even) {
-    }
-
-    td:nth-child(odd) {
-        border-right: 1px solid #ddd;
-    }
-
     table {
         border-top: 1px solid #ddd;
         padding-right: 0px !important;
         width: 100%;
     }
 
-    tr:nth-child(2n) {
-        background-color: #f2f2f2;
+    .ka-thead-cell {
+        background-color: white;
     }
 
-    table tr {
-        border-bottom: 1px solid #ddd;
+    .ka-cell-text {
+        -webkit-user-select: text;  /* Chrome / Safari */
+        -moz-user-select: text;     /* Firefox */
+        -ms-user-select: text;      /* IE 10+ */
+        user-select: text;
+        max-height: 150px;
+        overflow: hidden;
+    }
+
+    .ka-thead-cell-content, .ka-cell-text {
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     .low-priority-table {
         margin-left: 0px;
     }
+
+    .ka-thead-cell-content {
+        font-size: 14px;
+        font-weight: 600;
+        color: #212529;
+    }
 `;
 
 const StyledButtonsContainer = styled.div`
+    margin-top: auto;
     padding: 16px;
     z-index: 1;
     display: flex;
@@ -376,6 +388,45 @@ export const GFIPopup = ({ handleGfiDownload }) => {
         setIsVKMInfoOpen(!isVKMInfoOpen);
     };
 
+    const tablePropsInit = (data) => {
+        const properties = data && data.content && data.content.features && data.content.features[0].properties;
+
+        var hightPriorityColumns = properties._orderHigh && JSON.parse(properties._orderHigh);
+        var lowPriorityColumns = properties._order && JSON.parse(properties._order);
+        var columnsArray = [];
+
+        var columns = hightPriorityColumns.concat(lowPriorityColumns);
+        columns.forEach(column => {
+            if (column !== 'UID') {
+                columnsArray.push({ key: column, title: column, colGroup: { style: { minWidth: 120 } }});
+            }
+        });
+
+        var cells = data && data.content && data.content.features && data.content.features.map(feature => {
+                var cell = {...feature.properties};
+                cell['id'] = feature.id;
+                cell.hasOwnProperty('UID') && delete cell['UID'];
+                cell.hasOwnProperty('_orderHigh') && delete cell['_orderHigh'];
+                cell.hasOwnProperty('_order') && delete cell['_order'];
+                return cell;
+        });
+
+        const tablePropsInit = {
+            columns: columnsArray,
+            data: cells,
+            rowKeyField: 'id',
+            sortingMode: SortingMode.SingleTripleState,
+            columnResizing: true,
+            paging: {
+              enabled: true,
+              pageIndex: 0,
+              pageSize: 10,
+              pageSizes: [10, 50, 100],
+              position: PagingPosition.Bottom
+            },
+        };
+        return tablePropsInit;
+    }
 
     const handleGfiToolsMenu = () => {
         setIsGfiDownloadsOpen(false);
@@ -661,6 +712,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
                     {gfiLocations.map((location) => {
                             const layers = allLayers.filter(layer => layer.id === location.layerId);
                             const title = layers.length > 0 && layers[0].name;
+                            const tableProps = tablePropsInit(location);
                             if (location.type === 'geojson') {
                                 return (
                                     <SwiperSlide
@@ -684,6 +736,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
                                         <GfiTabContent
                                             data={location}
                                             title={title}
+                                            tablePropsInit={tableProps}
                                         />
                                     </SwiperSlide>
                                 );

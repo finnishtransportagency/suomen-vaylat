@@ -8,7 +8,6 @@ import { updateLayers } from '../../../utils/rpcUtil';
 import { sortableHandle } from 'react-sortable-hoc';
 
 import strings from '../../../translations';
-import { current } from '@reduxjs/toolkit';
 
 const StyledLayerContainer = styled.li`
     z-index: 9999;
@@ -288,11 +287,11 @@ export const SelectedLayer = ({
                         }
                     </StyledlayerHeader>
                     <StyledMidContent>
-                        {isCurrentZoomTooFar || isCurrentZoomTooClose ? <StyledLayerInfoContainer> 
+                        {isCurrentZoomTooFar || isCurrentZoomTooClose ? <StyledLayerInfoContainer>
                             <StyledShowLayerButton onClick={() => store.dispatch(setZoomTo(layer.minZoomLevel))}>
                                 {isCurrentZoomTooFar? strings.tooltips.zoomIn : isCurrentZoomTooClose && strings.tooltips.zoomOut}
                             </StyledShowLayerButton> <p>{strings.layerlist.selectedLayers.toShowLayer}</p>
-                        </StyledLayerInfoContainer> 
+                        </StyledLayerInfoContainer>
                         : layerInfoText }
                     </StyledMidContent>
                     <StyledBottomContent>
