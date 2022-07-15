@@ -9,6 +9,7 @@ import 'swiper/css';
 
 const StyledContent = styled.div`
     max-width: 660px;
+    overflow: hidden;
     flex-direction: column;
     display: flex;
     height: 100%;
