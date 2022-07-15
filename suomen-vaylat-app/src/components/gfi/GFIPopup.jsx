@@ -233,11 +233,11 @@ const StyledTabContent = styled.div`
         -webkit-user-select: text;  /* Chrome / Safari */
         -moz-user-select: text;     /* Firefox */
         -ms-user-select: text;      /* IE 10+ */
-        user-select: text;  
+        user-select: text;
         max-height: 150px;
         overflow: hidden;
     }
-    
+
     .ka-thead-cell-content, .ka-cell-text {
         overflow: hidden;
         text-overflow: ellipsis;
@@ -245,6 +245,12 @@ const StyledTabContent = styled.div`
 
     .low-priority-table {
         margin-left: 0px;
+    }
+
+    .ka-thead-cell-content {
+        font-size: 14px;
+        font-weight: 600;
+        color: #212529;
     }
 `;
 
@@ -312,7 +318,6 @@ export const GFIPopup = ({ handleGfiDownload }) => {
                 return contentDiv;
             }
             else if (location.type === 'geojson') {
-                // THIS IS ACTUALLY NOT USED?
                 return <FormattedGFI
                     id={layerIds}
                     data={location.content}
@@ -391,13 +396,16 @@ export const GFIPopup = ({ handleGfiDownload }) => {
         var columnsArray = [];
 
         var columns = hightPriorityColumns.concat(lowPriorityColumns);
-        columns.forEach(coulmn => {
-            columnsArray.push({ key: coulmn, title: coulmn, colGroup: { style: { minWidth: 120 } }});
+        columns.forEach(column => {
+            if (column !== 'UID') {
+                columnsArray.push({ key: column, title: column, colGroup: { style: { minWidth: 120 } }});
+            }
         });
 
         var cells = data && data.content && data.content.features && data.content.features.map(feature => {
                 var cell = {...feature.properties};
                 cell['id'] = feature.id;
+                cell.hasOwnProperty('UID') && delete cell['UID'];
                 cell.hasOwnProperty('_orderHigh') && delete cell['_orderHigh'];
                 cell.hasOwnProperty('_order') && delete cell['_order'];
                 return cell;
@@ -406,7 +414,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
         const tablePropsInit = {
             columns: columnsArray,
             data: cells,
-            rowKeyField: '',
+            rowKeyField: 'id',
             sortingMode: SortingMode.SingleTripleState,
             columnResizing: true,
             paging: {

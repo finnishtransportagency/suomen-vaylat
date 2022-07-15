@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 
 import GfiTabContentItem from './GfiTabContentItem';
@@ -59,7 +59,7 @@ const GfiTabContent = ({
     title,
     tablePropsInit
 }) => {
-    
+
     const [tableProps, changeTableProps] = useState(tablePropsInit);
     const dispatch = action => {
       changeTableProps(prevState => kaReducer(prevState, action));
@@ -155,7 +155,7 @@ const GfiTabContent = ({
                         data.content && data.content.features && data.content.features.map((feature, index) => {
                             return <GfiTabContentItem
                                     key={feature.id}
-                                    title={feature.id.split(".")[1] ? title+" "+feature.id.split(".")[1] : title+" "+feature.id}
+                                    title={feature.id.split('.')[1] ? title + ' ' + feature.id.split('.')[1] : title + ' ' + feature.id}
                                     data={feature}
                                     index={index}
                                     selectFeature={selectFeature}
