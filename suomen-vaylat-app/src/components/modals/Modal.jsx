@@ -206,7 +206,7 @@ const Modal = ({
                 <>
                     <StyledModalWrapper
                         key="modal"
-                        drag={drag}
+                        drag={isMobile? false : drag}
                         dragConstraints={constraintsRef && constraintsRef}
                         dragControls={dragControls}
                         dragListener={false}
