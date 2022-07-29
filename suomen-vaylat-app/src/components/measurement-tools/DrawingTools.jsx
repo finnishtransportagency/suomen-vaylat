@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { ReactReduxContext } from 'react-redux';
@@ -13,9 +13,11 @@ import svLinestring from '../../theme/icons/drawtools_linestring.svg';
 import { useSelector } from 'react-redux';
 
 import strings from '../../translations';
-import { setActiveTool } from '../../state/slices/uiSlice';
+import { setActiveTool, setHasToastBeenShown } from '../../state/slices/uiSlice';
 
 import CircleButton from '../circle-button/CircleButton';
+import DrawingToast from '../Toasts/DrawingToast';
+import { toast } from 'react-toastify';
 
 const StyledTools = styled(motion.div)`
     display: flex;
@@ -65,13 +67,34 @@ const variants = {
 export const DrawingTools = ({isOpen, theme}) => {
     const { store } = useContext(ReactReduxContext);
     const { channel } = useSelector(state => state.rpc);
-    const { activeTool } = useSelector(state => state.ui);
+    const { activeTool, isDrawingToolsOpen, hasToastBeenShown} = useSelector(state => state.ui);
+    const [ showToast, setShowToast] = useState(JSON.parse(localStorage.getItem("showToast")));
+
+    const handleClick = () => {
+        setShowToast(false);
+        toast.dismiss("drawToast");
+    };
+
+    useEffect(() => {
+        setShowToast(JSON.parse(localStorage.getItem("showToast")));
+        if(showToast === false) store.dispatch(setHasToastBeenShown(true));
+    }, [isDrawingToolsOpen, hasToastBeenShown]);
+
+    if(activeTool === null) toast.dismiss("drawToast");
 
     const startStopTool = (tool) => {
         if (tool.name !== activeTool) {
             var data = [tool.name, tool.type, { showMeasureOnMap: true }];
             channel && channel.postRequest('DrawTools.StartDrawingRequest', data);
             store.dispatch(setActiveTool(tool.name));
+            if(showToast !== false && !hasToastBeenShown) {
+                if((tool.type === "LineString") || (tool.type === "Polygon")) {
+                    toast.info(<DrawingToast handleButtonClick={handleClick} text={strings.tooltips.drawingtools.drawingToastHelp} />, 
+                    {toastId: "drawToast", onClose : () => {
+                         store.dispatch(setHasToastBeenShown(true))
+                    }});
+                }
+            }
         } else {
             channel && channel.postRequest('DrawTools.StopDrawingRequest', [activeTool]);
             store.dispatch(setActiveTool(null));

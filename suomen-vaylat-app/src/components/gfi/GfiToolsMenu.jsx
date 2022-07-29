@@ -1,6 +1,7 @@
 import { useState, useContext, useEffect } from 'react';
 import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
+import { toast } from 'react-toastify';
 import strings from '../../translations';
 import { isMobile } from '../../theme/theme';
 import { useSelector } from 'react-redux';
@@ -15,6 +16,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 import CircleButtonListItem from '../circle-button-list-item/CircleButtonListItem';
+import DrawingToast from '../Toasts/DrawingToast';
 
 import { ReactComponent as SvCircle } from '../../theme/icons/drawtools_circle.svg';
 import { ReactComponent as SvRectangle } from '../../theme/icons/drawtools_rectangle.svg';
@@ -28,7 +30,7 @@ import {
     setVKMData
 } from '../../state/slices/rpcSlice';
 
-import { setMinimizeGfi, setSelectedGfiTool } from '../../state/slices/uiSlice';
+import { setHasToastBeenShown, setMinimizeGfi, setSelectedGfiTool } from '../../state/slices/uiSlice';
 
 import SVLoader from '../loader/SvLoader';
 
@@ -165,13 +167,20 @@ const GfiToolsMenu = ({ handleGfiToolsMenu }) => {
     const { store } = useContext(ReactReduxContext);
 
     const { channel } = useSelector((state) => state.rpc);
-    const { gfiCroppingTypes, selectedGfiTool } = useSelector(
+    const { gfiCroppingTypes, selectedGfiTool, hasToastBeenShown } = useSelector(
         (state) => state.ui
     );
 
     const [loading, setLoading] = useState(false);
 
     const [selectedTool, setSelectedTool] = useState(null);
+
+    const [showToast, setShowToast] = useState(JSON.parse(localStorage.getItem("showToast")));
+
+    const handleClick = () => {
+        setShowToast(false);
+        toast.dismiss("measurementToast");
+    };
 
     const handleSelectTool = (id) => {
         if (selectedTool !== id) {
@@ -329,6 +338,11 @@ const GfiToolsMenu = ({ handleGfiToolsMenu }) => {
             ];
             channel.postRequest('DrawTools.StartDrawingRequest', data);
             store.dispatch(setMinimizeGfi(true));
+            if(showToast !== false && !hasToastBeenShown) {
+                if(item.type === "LineString" || item.type === "Polygon")
+                toast.info(<DrawingToast text={strings.tooltips.measuringTools.measureToast} handleButtonClick={handleClick} />,
+                {toastId: "measurementToast", onClose : () => store.dispatch(setHasToastBeenShown(true))})
+            }
         }
     };
 
@@ -344,6 +358,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu }) => {
                     ]);
                 channel && channel.handleEvent('DrawingEvent', drawHandler);
                 store.dispatch(setSelectedGfiTool(null));
+                toast.dismiss("measurementToast")
                 if (data.id === 'gfi-selection-tool') {
                     store.dispatch(setMinimizeGfi(false));
                     setLoading(true);

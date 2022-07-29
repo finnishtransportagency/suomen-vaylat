@@ -31,7 +31,8 @@
       "box": "Laatikko",
       "linestring": "Viiva",
       "polygon": "Monikulmio",
-      "erase": "Tyhjennä"
+      "erase": "Tyhjennä",
+      "drawingToastHelp": "Voit lopettaa piirtämisen klikkaamalla kahdesti kartalla haluamastasi kohdasta."
     },
     "measuringTools": {
       "measuringToolsButton": "Mittaustyökalut",
@@ -41,7 +42,8 @@
       "box": "Laatikko",
       "linestring": "Viiva",
       "polygon": "Monikulmio",
-      "erase": "Tyhjennä"
+      "erase": "Tyhjennä",
+      "measureToast": "Voit viimeistellä valinnan klikkaamalla viimeiseksi valitusta pisteestä uudelleen"
     },
     "share": "Jaa sivu",
     "shareTheme": "Jaa teema",
@@ -102,7 +104,8 @@
     "continue": "Jatka",
     "cancel": "Peruuta",
     "dontShowAgain": "Älä näytä uudelleen",
-    "ok": "OK"
+    "ok": "OK",
+    "OkLowerCaseK": "Ok"
   },
   "multipleLayersWarning": "Olet lisäämässä kartalle 10 tai enemmän karttatasoa ja se saattaa vaikuttaa palvelun suorituskykyyn",
   "appGuide": {
