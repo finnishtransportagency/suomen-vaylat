@@ -13,10 +13,11 @@ import {
     faPencilRuler,
     faBorderAll,
     faTimes,
+    faInfoCircle
 } from '@fortawesome/free-solid-svg-icons';
 
 import CircleButtonListItem from '../circle-button-list-item/CircleButtonListItem';
-import DrawingToast from '../Toasts/DrawingToast';
+import DrawingToast from '../toasts/DrawingToast';
 
 import { ReactComponent as SvCircle } from '../../theme/icons/drawtools_circle.svg';
 import { ReactComponent as SvRectangle } from '../../theme/icons/drawtools_rectangle.svg';
@@ -341,7 +342,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu }) => {
             if(showToast !== false && !hasToastBeenShown) {
                 if(item.type === "LineString" || item.type === "Polygon")
                 toast.info(<DrawingToast text={strings.tooltips.measuringTools.measureToast} handleButtonClick={handleClick} />,
-                {toastId: "measurementToast", onClose : () => store.dispatch(setHasToastBeenShown(true))})
+                {icon: faInfoCircle, toastId: "measurementToast", onClose : () => store.dispatch(setHasToastBeenShown(true))})
             }
         }
     };
