@@ -32,7 +32,7 @@
       "linestring": "Viiva",
       "polygon": "Monikulmio",
       "erase": "Tyhjennä",
-      "drawingToastHelp": "Voit lopettaa piirtämisen klikkaamalla kahdesti kartalla haluamastasi kohdasta."
+      "drawingToast": "Voit viimeistellä piirron tuplaklikkaamalla tai klikkaamalla viimeksi piirretystä taitepisteestä uudelleen"
     },
     "measuringTools": {
       "measuringToolsButton": "Mittaustyökalut",
@@ -43,7 +43,7 @@
       "linestring": "Viiva",
       "polygon": "Monikulmio",
       "erase": "Tyhjennä",
-      "measureToast": "Voit viimeistellä valinnan klikkaamalla viimeiseksi valitusta pisteestä uudelleen"
+      "measureToast": "Voit viimeistellä piirron tuplaklikkaamalla tai klikkaamalla viimeksi piirretystä taitepisteestä uudelleen"
     },
     "share": "Jaa sivu",
     "shareTheme": "Jaa teema",

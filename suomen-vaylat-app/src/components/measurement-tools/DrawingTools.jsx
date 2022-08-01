@@ -96,7 +96,7 @@ export const DrawingTools = ({isOpen, theme}) => {
             store.dispatch(setActiveTool(tool.name));
             if(showToast !== false && !hasToastBeenShown) {
                 if((tool.type === "LineString") || (tool.type === "Polygon")) {
-                    toast.info(<DrawingToast handleButtonClick={handleClick} text={strings.tooltips.drawingtools.drawingToastHelp} />, 
+                    toast.info(<DrawingToast handleButtonClick={handleClick} text={strings.tooltips.drawingtools.drawingToast} />, 
                     {icon: <StyledToastIcon icon={faInfoCircle} /> ,toastId: "drawToast", onClose : () => {
                          store.dispatch(setHasToastBeenShown(true))
                     }});

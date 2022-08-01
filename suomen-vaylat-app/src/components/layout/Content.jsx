@@ -99,14 +99,6 @@ const StyledLayerNamesList = styled.ul`
 `;
 
 const StyledToastContainer = styled(ToastContainer)`
-  &&&.Toastify__toast-container {}
-  .Toastify__toast {
-
-  }
-  .Toastify__toast-body {}
-  .Toastify__progress-bar {
-
-    }
 `;
 
 const StyledLayerNamesListItem = styled.li``;
