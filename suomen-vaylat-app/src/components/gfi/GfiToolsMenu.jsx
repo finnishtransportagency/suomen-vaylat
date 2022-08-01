@@ -23,6 +23,8 @@ import { ReactComponent as SvCircle } from '../../theme/icons/drawtools_circle.s
 import { ReactComponent as SvRectangle } from '../../theme/icons/drawtools_rectangle.svg';
 import { ReactComponent as SvPolygon } from '../../theme/icons/drawtools_polygon.svg';
 import { ReactComponent as SvLinestring } from '../../theme/icons/drawtools_linestring.svg';
+import { theme } from '../../theme/theme';
+
 
 import {
     setGFILocations,
@@ -108,6 +110,10 @@ const StyledLoaderWrapper = styled.div`
         height: 100%;
         fill: none;
     }
+`;
+
+const StyledToastIcon = styled(FontAwesomeIcon)`
+    color: ${theme.colors.mainColor1};
 `;
 
 // Define default icon, if null then use cropping area name first char
@@ -342,7 +348,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu }) => {
             if(showToast !== false && !hasToastBeenShown) {
                 if(item.type === "LineString" || item.type === "Polygon")
                 toast.info(<DrawingToast text={strings.tooltips.measuringTools.measureToast} handleButtonClick={handleClick} />,
-                {icon: faInfoCircle, toastId: "measurementToast", onClose : () => store.dispatch(setHasToastBeenShown(true))})
+                {icon: <StyledToastIcon icon={faInfoCircle} />, toastId: "measurementToast", onClose : () => store.dispatch(setHasToastBeenShown(true))})
             }
         }
     };
