@@ -31,7 +31,8 @@
       "box": "Ruta",
       "linestring": "Linje",
       "polygon": "Polygon",
-      "erase": "Töm"
+      "erase": "Töm",
+      "drawingToast": "Voit viimeistellä piirron tuplaklikkaamalla tai klikkaamalla viimeksi piirretystä taitepisteestä uudelleen"
     },
     "measuringTools": {
       "measuringToolsButton": "Measuring tools",
@@ -41,7 +42,8 @@
       "box": "Box",
       "linestring": "Line",
       "polygon": "Polygon",
-      "erase": "Erase"
+      "erase": "Erase",
+      "measureToast": "Voit viimeistellä piirron tuplaklikkaamalla tai klikkaamalla viimeksi piirretystä taitepisteestä uudelleen"
     },
     "share": "Dela denna sida",
     "shareTheme": "Dela detta tema",
