@@ -12,6 +12,7 @@ import {
     faPencilRuler,
     faBorderAll,
     faTimes,
+    faDownload,
 } from '@fortawesome/free-solid-svg-icons';
 
 import CircleButtonListItem from '../circle-button-list-item/CircleButtonListItem';
@@ -28,9 +29,14 @@ import {
     setVKMData
 } from '../../state/slices/rpcSlice';
 
-import { setMinimizeGfi, setSelectedGfiTool } from '../../state/slices/uiSlice';
+import { setMinimizeGfi, setSelectedGfiTool, setGeoJsonArray } from '../../state/slices/uiSlice';
 
 import SVLoader from '../loader/SvLoader';
+import CircleButton from '../circle-button/CircleButton';
+
+
+
+const vectorLayerId = 'SEARCH_VECTORLAYER';
 
 const StyledGfiToolContainer = styled.div`
     position: relative;
@@ -165,7 +171,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu }) => {
     const { store } = useContext(ReactReduxContext);
 
     const { channel } = useSelector((state) => state.rpc);
-    const { gfiCroppingTypes, selectedGfiTool } = useSelector(
+    const { gfiCroppingTypes, selectedGfiTool, geoJsonArray } = useSelector(
         (state) => state.ui
     );
 
@@ -177,7 +183,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu }) => {
         if (selectedTool !== id) {
             setSelectedTool(id);
 
-            if (id === 0) {
+            if (id === 0 || id === 505) {
                 setSelectedTool(id);
                 channel.postRequest(
                     'MapModulePlugin.RemoveFeaturesFromMapRequest',
@@ -252,7 +258,6 @@ const GfiToolsMenu = ({ handleGfiToolsMenu }) => {
                               }
                             : {},
                     };
-
                     data.geojson &&
                         channel.postRequest(rn, [data.geojson, options]);
                 }, function(err) {
@@ -332,6 +337,117 @@ const GfiToolsMenu = ({ handleGfiToolsMenu }) => {
         }
     };
 
+    const drawHandler2 = (features) => {
+        channel.postRequest(
+            'MapModulePlugin.RemoveFeaturesFromMapRequest',
+            [null, null, vectorLayerId]
+        );
+        features.data && features.data.geom &&
+        channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', [
+            features.data.geom,
+            {
+                clearPrevious: true,
+                centerTo: true,
+                hover: features.hover,
+                featureStyle: features.featureStyle,
+                layerId: vectorLayerId + '_vkm_' + features.style,
+                maxZoomLevel: 10,
+            },
+        ]);
+
+
+
+        if (features.operation === 'click') {
+            if (features.features) {
+                Object.values(features.features).forEach((feature) => {
+                    if (
+                        feature.layerId &&
+                        feature.layerId === 'download-tool-layer'
+                    ) {
+                        store.dispatch(setMinimizeGfi(false));
+                        if (feature.geojson.features) {
+                            setLoading(true);
+                            Object.values(feature.geojson.features).forEach(
+                                (subfeature) => {
+                                    store.dispatch(
+                                        setGFICroppingArea(subfeature)
+                                    );
+                                    subfeature.geometry &&
+                                        channel &&
+                                        channel.getFeaturesByGeoJSON(
+                                            [subfeature],
+                                            (gfiData) => {
+                                                store.dispatch(
+                                                    resetGFILocations([])
+                                                );
+                                                gfiData.gfi &&
+                                                    gfiData.gfi.forEach(
+                                                        (gfi) => {
+                                                            store.dispatch(
+                                                                setGFILocations(
+                                                                    {
+                                                                        content:
+                                                                            gfi.geojson,
+                                                                        layerId:
+                                                                            gfi.layerId,
+                                                                        gfiCroppingArea:
+                                                                        features
+                                                                                .features[0]
+                                                                                .geojson,
+                                                                        type: 'geojson',
+                                                                    }
+                                                                )
+                                                            );
+                                                        }
+                                                    );
+
+                                                setLoading(false);
+                                                handleGfiToolsMenu(gfiData.gfi);
+                                            }
+                                        );
+                                }
+                            );
+                        }
+                    }
+                });
+            }
+        } else if (features.geojson) {
+
+
+
+
+            console.log(features);
+            features.geojson.features.forEach(feature => {
+                store.dispatch(setGFICroppingArea(feature));
+                feature.geometry &&
+                    channel &&
+                    channel.getFeaturesByGeoJSON(
+                        [feature],
+                        (gfiData) => {
+                            store.dispatch(resetGFILocations([]));
+                            store.dispatch(setVKMData(null));
+                            channel.postRequest('MapModulePlugin.RemoveMarkersRequest', ["VKM_MARKER"]);
+                            gfiData.gfi &&
+                                gfiData.gfi.forEach((gfi) => {
+                                    store.dispatch(
+                                        // TÄLLEEN LAITETAAN VALITTU GEOJSON
+                                        setGFILocations({
+                                            content: gfi.geojson,
+                                            layerId: gfi.layerId,
+                                            gfiCroppingArea:
+                                                features.geojson,
+                                            type: 'geojson',
+                                        })
+                                    );
+                                });
+                            setLoading(false);
+                            handleGfiToolsMenu(gfiData.gfi);
+                        }
+                    );
+            }) 
+        }                 
+    };
+
     useEffect(() => {
         const drawHandler = (data) => {
             if (data.isFinished && data.isFinished === true) {
@@ -363,6 +479,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu }) => {
                                         gfiData.gfi &&
                                             gfiData.gfi.forEach((gfi) => {
                                                 store.dispatch(
+                                                    // TÄLLEEN LAITETAAN VALITTU GEOJSON
                                                     setGFILocations({
                                                         content: gfi.geojson,
                                                         layerId: gfi.layerId,
@@ -372,8 +489,9 @@ const GfiToolsMenu = ({ handleGfiToolsMenu }) => {
                                                     })
                                                 );
                                             });
+                                        geoJsonArray.geoJsonArray ? store.dispatch(setGeoJsonArray({ geoJsonArray: [...geoJsonArray.geoJsonArray, data] })) : store.dispatch(setGeoJsonArray({ geoJsonArray: [...geoJsonArray, data] }))
                                         setLoading(false);
-                                        handleGfiToolsMenu();
+                                        handleGfiToolsMenu(gfiData.gfi);
                                     }
                                 );
                         });
@@ -405,6 +523,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu }) => {
                                                     store.dispatch(
                                                         resetGFILocations([])
                                                     );
+                                                    console.log("HUPS");
                                                     gfiData.gfi &&
                                                         gfiData.gfi.forEach(
                                                             (gfi) => {
@@ -425,8 +544,10 @@ const GfiToolsMenu = ({ handleGfiToolsMenu }) => {
                                                                 );
                                                             }
                                                         );
+                                                    geoJsonArray.geoJsonArray ? store.dispatch(setGeoJsonArray({ geoJsonArray: [...geoJsonArray.geoJsonArray, data] })) : store.dispatch(setGeoJsonArray({ geoJsonArray: [...geoJsonArray, data] }))
+
                                                     setLoading(false);
-                                                    handleGfiToolsMenu();
+                                                    handleGfiToolsMenu(gfiData.gfi);
                                                 }
                                             );
                                     }
@@ -530,6 +651,52 @@ const GfiToolsMenu = ({ handleGfiToolsMenu }) => {
                                     >
                                         {tool.style.icon}
                                     </CircleButtonListItem>
+                                );
+                            })}
+                        </StyledDrawingToolsContainer>
+                    )}
+                </AnimatePresence>
+                
+                <CircleButtonListItem
+                    key={'saved'}
+                    id={505}
+                    icon={faDownload}
+                    title={"Omat geometriat"}
+                    subtitle={"Omat tallennetut geometriat"}
+                    selectedItem={selectedTool}
+                    handleSelectTool={handleSelectTool}
+                />
+                <AnimatePresence>
+                    {selectedTool === 505 && (
+                        <StyledDrawingToolsContainer
+                            transition={{
+                                duration: 0.2,
+                                type: 'tween',
+                            }}
+                            initial={{
+                                opacity: 0,
+                                height: 0,
+                            }}
+                            animate={{
+                                opacity: 1,
+                                height: 'auto',
+                            }}
+                            exit={{
+                                opacity: 0,
+                                height: 0,
+                            }}
+                        >
+                            {geoJsonArray.geoJsonArray && geoJsonArray.geoJsonArray.map((geojson, index) => {
+                                return (
+                                    <>
+                                    <h6>Geometria {index}</h6>
+                                    <CircleButton
+                                        icon={faDownload}
+                                        text={"TEST"}
+                                        tooltipDirection={'bottom'}
+                                        clickAction={() => drawHandler2(geojson)}
+                                    />
+                                    </>
                                 );
                             })}
                         </StyledDrawingToolsContainer>

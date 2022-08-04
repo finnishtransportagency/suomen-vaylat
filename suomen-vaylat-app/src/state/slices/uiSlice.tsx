@@ -12,6 +12,11 @@ const initialState = {
     },
     searchParams: '',
     isInfoOpen: false,
+
+    geoJsonArray: [],
+    isSavedOpen: false,
+
+
     isUserGuideOpen: false,
     shareUrl: '',
     isDrawingToolsOpen: false,
@@ -44,6 +49,10 @@ export const uiSlice = createSlice({
             state.isSideMenuOpen = false;
             state.isSearchOpen = false;
             state.isInfoOpen = false;
+
+            
+            state.isSavedOpen = false;
+
             state.isUserGuideOpen = false;
             state.isDrawingToolsOpen = false;
             state.isLegendOpen = false;
@@ -68,6 +77,12 @@ export const uiSlice = createSlice({
         },
         setIsInfoOpen: (state, action) => {
             state.isInfoOpen = action.payload;
+        },
+        setGeoJsonArray: (state, action) => {
+            state.geoJsonArray = action.payload;
+        },
+        setIsSavedOpen: (state, action) => {
+            state.isSavedOpen = action.payload;
         },
         setIsDownloadLinkModalOpen: (state, action) => {
             state.downloadLink = {
@@ -157,6 +172,9 @@ export const {
     setMaximizeGfi,
     setGfiCroppingTypes,
     setWarning,
+
+    setGeoJsonArray,
+    setIsSavedOpen,
 } = uiSlice.actions;
 
 export default uiSlice.reducer;

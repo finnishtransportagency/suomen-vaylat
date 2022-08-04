@@ -23,7 +23,8 @@ import { isMobile } from '../../theme/theme';
 
 import { addMarkerRequest, mapMoveRequest } from '../../state/slices/rpcSlice';
 
-import { setIsSearchOpen } from '../../state/slices/uiSlice';
+import { setIsSearchOpen, setGeoJsonArray } from '../../state/slices/uiSlice';
+import { useSelector } from 'react-redux';
 
 import CircleButton from '../circle-button/CircleButton';
 import VKMTrackSearch from './VKMTrackSearch';
@@ -205,6 +206,11 @@ const Search = () => {
     const [vkmError, setVkmError] = useState(null);
     const [vkmTrackError, setVkmTrackError] = useState(null);
 
+    const [geom, setGeom] = useState(null);
+    const { geoJsonArray } = useSelector(
+        (state) => state.ui
+    );
+
     const handleAddressSearch = (value) => {
         removeMarkersAndFeatures();
         setIsSearching(true);
@@ -213,6 +219,7 @@ const Search = () => {
     };
 
     const handleVKMResponse = (data) => {
+        console.log(data);
         setIsSearching(false);
 
         let style = 'tie';
@@ -257,6 +264,7 @@ const Search = () => {
 
         setSearchResults(data);
 
+        // TÄSSÄ GEOM LAITETAAN KARTALLE ELI TALLENNETAAN JOHONKIN GEOM JA SIT VALITESSA LISÄTÄÄN KARTALLE
         data.hasOwnProperty('geom') &&
             channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', [
                 data.geom,
@@ -269,6 +277,9 @@ const Search = () => {
                     maxZoomLevel: 10,
                 },
             ]);
+        var saveGeom = {data: data, style: style, hover: hover, featureStyle: featureStyle };
+        geoJsonArray.geoJsonArray ? store.dispatch(setGeoJsonArray({ geoJsonArray: [...geoJsonArray.geoJsonArray, saveGeom] })) : store.dispatch(setGeoJsonArray({ geoJsonArray: [...geoJsonArray, saveGeom] }))
+        setGeom(saveGeom);
     };
 
     const handleVKMSearch = (params) => {
