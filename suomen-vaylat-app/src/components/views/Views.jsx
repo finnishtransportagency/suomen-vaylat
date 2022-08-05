@@ -64,7 +64,9 @@ const StyledDeleteAllSavedViews = styled.div`
     }
 `;
 
-const StyledSaveNewViewContainer = styled.div``;
+const StyledSaveNewViewContainer = styled.div`
+    margin-bottom: 20px;
+`;
 
 const StyledSubtitle = styled.div`
     display: flex;
@@ -283,11 +285,25 @@ const Views = () => {
 
     return (
         <StyledViewsContainer>
-            <StyledSubtitle>{strings.saveView.savingView}:</StyledSubtitle>
-            <StyledInfoTextContainer>
-                <li>{strings.saveView.saveViewDescription1}</li>
-                <li>{strings.saveView.saveViewDescription2}</li>
-            </StyledInfoTextContainer>
+            <StyledSaveNewViewContainer>
+                <StyledSubtitle>{strings.saveView.saveNewView}</StyledSubtitle>
+                <StyledSaveNewViewWrapper>
+                    <StyledViewName
+                        id="view-name"
+                        type="text"
+                        value={viewName}
+                        onChange={(e) => setViewName(e.target.value)}
+                        placeholder={strings.saveView.viewName}
+                    />
+                    <CircleButton
+                        icon={faPlus}
+                        clickAction={() => {
+                            viewName !== '' && handleSaveView();
+                        }}
+                        disabled={viewName === ''}
+                    />
+                </StyledSaveNewViewWrapper>
+            </StyledSaveNewViewContainer>
             <StyledSubtitle>{strings.saveView.savedViews}:</StyledSubtitle>
             <StyledSavedViews>
                 <AnimatePresence>
@@ -410,25 +426,6 @@ const Views = () => {
                     <p>{strings.saveView.deleteAllSavedViews}</p>
                 </StyledDeleteAllSavedViews>
             </StyledSavedViews>
-            <StyledSaveNewViewContainer>
-                <StyledSubtitle>{strings.saveView.saveNewView}</StyledSubtitle>
-                <StyledSaveNewViewWrapper>
-                    <StyledViewName
-                        id="view-name"
-                        type="text"
-                        value={viewName}
-                        onChange={(e) => setViewName(e.target.value)}
-                        placeholder={strings.saveView.viewName}
-                    />
-                    <CircleButton
-                        icon={faPlus}
-                        clickAction={() => {
-                            viewName !== '' && handleSaveView();
-                        }}
-                        disabled={viewName === ''}
-                    />
-                </StyledSaveNewViewWrapper>
-            </StyledSaveNewViewContainer>
         </StyledViewsContainer>
     );
 };

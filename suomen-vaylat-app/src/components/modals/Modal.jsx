@@ -1,14 +1,15 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { cloneElement } from 'react';
 import styled from 'styled-components';
 import { motion, AnimatePresence, useDragControls } from 'framer-motion';
 import { ReactReduxContext } from 'react-redux';
-import { faTimes, faWindowMaximize, faWindowMinimize, faWindowRestore } from '@fortawesome/free-solid-svg-icons';
+import { faTimes, faWindowMaximize, faWindowMinimize, faWindowRestore, faQuestion } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { setMinimizeGfi, setMaximizeGfi } from '../../state/slices/uiSlice';
 
-import { isMobile } from '../../theme/theme';
+import { isMobile, theme } from '../../theme/theme';
+import ReactTooltip from 'react-tooltip';
 
 const StyledModalBackdrop = styled(motion.div)`
     z-index: ${(props) => (props.type === 'warning' ? 9998 : 10)};
@@ -165,6 +166,9 @@ const StyledModalContent = styled.div`
 `;
 
 const Modal = ({
+    hasHelp,
+    helpId,
+    helpContent,
     constraintsRef,
     drag,
     resize,
@@ -254,6 +258,11 @@ const Modal = ({
                                     drag && dragControls.start(e);
                                 }}
                             >
+
+                                <ReactTooltip backgroundColor={theme.colors.mainColor1} disable={isMobile} id={helpId} place='bottom' type='dark' effect='float'>
+                                        {helpContent}
+                                </ReactTooltip>
+
                                 <StyledModalTitle>
                                     {titleIcon && (
                                         <FontAwesomeIcon icon={titleIcon} />
@@ -285,6 +294,18 @@ const Modal = ({
                                             }
                                         </>
                                     )}
+
+                                    {hasHelp && (
+                                        <StyledHeaderButton
+                                            data-tip
+                                            data-for={helpId}
+                                        >
+                                            <FontAwesomeIcon
+                                                icon={faQuestion}
+                                            />
+                                        </StyledHeaderButton>
+                                    )}
+                                    
                                     <StyledCloseButton
                                         onClick={() => {
                                             type !== 'announcement' &&

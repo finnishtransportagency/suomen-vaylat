@@ -228,6 +228,15 @@ const Content = () => {
         store.dispatch(setWarning(null));
     };
 
+    const viewHelp = () => {
+        return (
+            <ul>
+                <li>{strings.saveView.saveViewDescription1}</li>
+                <li>{strings.saveView.saveViewDescription2}</li>
+            </ul>
+        )
+    }
+
     const handleGfiDownload = (format, layers, croppingArea) => {
         let layerIds = layers.map((layer) => {
             return layer.id;
@@ -540,6 +549,9 @@ const Content = () => {
                     isOpen={isSaveViewOpen} /* Modal state */
                     id={null}
                     minWidth={'600px'}
+                    hasHelp={true}
+                    helpId={'show_view_help'}
+                    helpContent={viewHelp()}
                 >
                     <Views />
                 </Modal>
