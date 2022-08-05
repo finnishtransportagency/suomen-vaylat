@@ -2,14 +2,14 @@ import React, { useRef, useState, useEffect} from 'react';
 import styled from 'styled-components';
 import strings from '../../translations';
 import { getAppBuildDate, getAppVersion } from '../../utils/appInfoUtil';
-import { isMobile, theme } from '../../theme/theme';
+import { isMobile} from '../../theme/theme';
 import { motion, AnimatePresence } from 'framer-motion';
 
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 import 'swiper/css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 
 const StyledContent = styled.div`
     max-width: 660px;
@@ -83,20 +83,24 @@ const StyledMobileContainer = styled(motion.div)`
     padding: 0px 16px;
 `;
 
-const StyledCloseMenuButton = styled.div`
+const StyledCloseMenuContainer = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 6px;
+    margin: 5px 5px;
     cursor: pointer;
+    height: 26px;
 `;
 
 const StyledCloseMenuIcon = styled(FontAwesomeIcon)`
     font-size: 18px;
+    position: absolute;
+    left: 16px;
+    top: 75px;
 `;
 
 const StyledMenuContainer = styled(motion.div)`
-    padding: 16px 12px;
+    padding: 0px 12px;
     display: flex;
     justify-content: flex-start;
     color: ${props => props.theme.colors.mainColor1};
@@ -118,6 +122,10 @@ const StyledMobileTab = styled.button`
     font-weight: bold;
     box-shadow: rgba(17, 17, 26, 0.1) 0px 1px 0px;
     margin: 5px 0px;
+`;
+
+const StyledMobileTabContent = styled(motion.div)`
+    padding: 0px 5px;
 `;
 
 const StyledLink = styled.a`
@@ -183,21 +191,19 @@ export const ListComponent = ({listData}) => {
 };
 
 export const AppInfo = () => {
-
     return(
         <>
-            <StyledHeading>{strings.appInfo.versionInfo.appInfoTitle}</StyledHeading>
+            {isMobile && <StyledHeading>{strings.appInfo.versionInfo.appInfoTitle}</StyledHeading>}
             <b>{strings.appInfo.headingText}</b>
             <p>{strings.appInfo.mainText}</p>
         </>
-        
     )
 }
 
 export const VersionInfo = ({currentAppVersion, currentAppBuildDate}) => {
     return (
         <div>
-            <StyledHeading>{strings.appInfo.versionInfo.title}</StyledHeading>
+            {isMobile && <StyledHeading>{strings.appInfo.versionInfo.title}</StyledHeading>}
             <StyledTitle><p>{strings.appInfo.versionInfo.appVersion + currentAppVersion}</p></StyledTitle>
             <StyledTitle><p>{strings.appInfo.versionInfo.appLastUpdate + currentAppBuildDate}</p></StyledTitle>
         </div>
@@ -209,7 +215,7 @@ export const ContactAndFeedback = () => {
 
     return (
         <div>
-            <StyledHeading>{strings.appInfo.versionInfo.appContactAndFeedback}</StyledHeading>
+            {isMobile && <StyledHeading>{strings.appInfo.versionInfo.appContactAndFeedback}</StyledHeading>}
             <p>{contactInfoFeedback[0]}</p>
             <p>{contactInfoFeedback[1]} <StyledLink href={'mailto:' + contactInfoFeedback[2] + '?subject='+contactInfoFeedback.emailSubject}>{contactInfoFeedback[2]}</StyledLink></p>
         </div>
@@ -221,7 +227,7 @@ export const AppInfoLinks = () => {
 
     return (
         <div>
-            <StyledHeading>{strings.appInfo.versionInfo.appInfoLinksTitle}</StyledHeading>
+            {isMobile && <StyledHeading>{strings.appInfo.versionInfo.appInfoLinksTitle}</StyledHeading>}
             <ul>
                 {Object.values(appInfoLinks).map((link, key) => {
                     return(
@@ -263,6 +269,10 @@ export const AppInfoModalContent = () => {
 
     const [tabIndex, setTabIndex] = useState(0);
 
+    useEffect(() => {
+        isMobile && setTabIndex(-1);
+    }, [])
+
     const tabsContent = [
         {
             title: strings.appInfo.versionInfo.appInfoTitle,
@@ -299,32 +309,38 @@ export const AppInfoModalContent = () => {
     },[tabIndex]);
 
     const variants = {
-        initial : {opacity: 0}, hidden:{opacity: isNavOpen && 0, transition: {delay: 0.1}}, visible: {opacity : 1, transition: { delay: 0.4}} , exit: { transition:{transition: 0.4}}
-    }
+        initial : {opacity: 0},
+        hidden:{opacity: isNavOpen && 0, transition: {duration: 0.2}},
+        visible: {opacity : 1, transition: { delay: 0.4}},
+        exit: {opacity: 0, transition: {duration: 0.4}}
+    };
+
+    const containerAnimation = {
+        initial: false,
+        open: {height: "auto", transition: {duration: 0.4, type: "tween"}},
+        closed: {height: "0px", transition: {duration: 0.4, type: "tween"}}
+    };
 
 
     return (
         <>
             <StyledContent>
                 {isMobile && 
-                <AnimatePresence>
-                    <StyledMenuContainer animate={{}} key="menuContainer">
-                        <StyledCloseMenuButton>
-                            <StyledCloseMenuIcon onClick={() => setIsNavOpen(!isNavOpen)} icon={isNavOpen? faArrowLeft : faBars} />
-                        </StyledCloseMenuButton>
+                <>
+                    <StyledMenuContainer key="menuContainer">
+                        <StyledCloseMenuContainer>
+                            <StyledCloseMenuIcon onClick={() => setIsNavOpen(!isNavOpen)} icon={!isNavOpen && faArrowLeft} />
+                        </StyledCloseMenuContainer>
                     </StyledMenuContainer>
                     <StyledMobileContainer
                     key="mobileContainer"
-                    animate={{ height: isNavOpen ? "auto" : "0px"}}
-                    transition={{duration: 0.4, type: "tween"}}
+                    variants={containerAnimation}
+                    animate={isNavOpen? "open" : "closed"}
                     >
                         <AnimatePresence>
                             {isNavOpen &&
                             <StyledMobileTabs
-                                initial={{opacity: 0}}
-                                animate={{opacity: isNavOpen && 1, x: 0}}
                                 exit={{opacity: 0}}
-                                transition={{duration: 0.4}}
                                 tabIndex={tabIndex}
                                 tabsCount={tabsContent.length}
                             >
@@ -352,7 +368,7 @@ export const AppInfoModalContent = () => {
                         }
                         </AnimatePresence>
                     </StyledMobileContainer>
-                </AnimatePresence>
+                </>
                 }
 
                 {!isMobile &&
@@ -385,7 +401,6 @@ export const AppInfoModalContent = () => {
                     tabIndex={tabIndex}
                     onSlideChange={e => {
                         setTabIndex(e.activeIndex);
-                        inputEl.current.scrollTo(0, 0)
                     }}
                     allowTouchMove={false} // Disable swiping
                     speed={isMobile? 0 : 300}
@@ -393,14 +408,18 @@ export const AppInfoModalContent = () => {
                     {
                         tabsContent.map((tab, index) => {
                             return (
-                                <SwiperSlide
+                                    <SwiperSlide
                                     id={'ai_tab_content_' + index}
                                     key={'ai_tab_content_' + index}
                                 >
-                                    <motion.div variants={variants} initial="initial" animate={isNavOpen ? "hidden" : "visible"} exit="exit">
+                                    <AnimatePresence>
+                                        {isMobile && !isNavOpen ? 
+                                        <StyledMobileTabContent key={'tabContent_' + index} variants={isMobile && variants} initial="initial" animate={isNavOpen ? "hidden" : "visible"} exit="exit">
                                         {tab.content}
-                                    </motion.div>
-                                </SwiperSlide>
+                                        </StyledMobileTabContent> : !isMobile && tab.content
+                                    }
+                                    </AnimatePresence>
+                                    </SwiperSlide>
                             )
                         })
                     }
