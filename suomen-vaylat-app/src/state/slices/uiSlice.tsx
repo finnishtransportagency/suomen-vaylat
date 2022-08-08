@@ -47,6 +47,7 @@ export const uiSlice = createSlice({
             state.isUserGuideOpen = false;
             state.isDrawingToolsOpen = false;
             state.isLegendOpen = false;
+            state.isZoomBarOpen = false;
             state.isSaveViewOpen = false;
             state.selectedMapLayersMenuTab = 0;
             state.selectedMapLayersMenuThemeIndex = null;
