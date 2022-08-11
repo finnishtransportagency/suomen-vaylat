@@ -198,7 +198,7 @@ const Content = () => {
         store.dispatch(setIsGfiOpen(false));
         store.dispatch(setMinimizeGfi(false));
         store.dispatch(setMaximizeGfi(false));
-        store.dispatch(setVKMData(null));
+        setTimeout(() => {store.dispatch(setVKMData(null))}, 500) ; // VKM info does not disappear during modal close animation.
         store.dispatch(removeMarkerRequest("SEARCH_MARKER"));
         channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [
             null,

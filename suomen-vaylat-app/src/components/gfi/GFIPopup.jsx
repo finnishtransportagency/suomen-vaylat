@@ -43,20 +43,34 @@ const StyledGfiContainer = styled.div`
 
 const StyledVKMDataContainer = styled(motion.div)`
     display: flex;
-    align-items: center;
-    justify-content: space-around;
+    align-items: flex-start;
     color: ${(props) => props.theme.colors.mainColor1};
     max-width: 500px;
     margin-left: auto;
     margin-right: auto;
-    img {
+    img {s
         max-width: 100px;
     };
-    p {
+    h5 {
         margin: 0;
         font-size: 22px;
         font-weight: 600;
-    }
+    };
+    @media ${props => props.theme.device.mobileM} {
+        margin: 0px 5px;
+        img {
+            max-width: 70px;
+        };
+        h5 {
+            font-size: 18px;
+        };
+        h6 {
+            font-size: 15px;
+        };
+        p {
+            font-size: 13px;
+        };
+    };
 `;
 
 const StyledVKMDataMunacipalityImageWrapper = styled.div`
@@ -68,24 +82,52 @@ const StyledVKMDataMunacipalityImageWrapper = styled.div`
         max-height: 100px
     }
     user-select: text;
+
+`;
+
+const StyledVkmInstruction = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    && p {
+        font-size: 14px;
+    }
+    margin-left: 16px;
+    @media ${props => props.theme.device.mobileM} {
+        margin-left: 5px;
+    };
 `;
 
 const StyledCoordinatesWrapper = styled.div`
     display: flex;
     align-items: center;
-    svg {
-        font-size: 24px;
-        padding: 8px;
-    }
+    margin-left: 16px;
     p {
         margin: 0px;
-        font-size: 12px;
-    }
+        font-size: 14px;
+    };
+    @media ${props => props.theme.device.mobileM} {
+        margin: 0px;
+    };
 `;
 
 const StyledVKMDataInfoWrapper = styled.div`
-    padding-left: 8px;
+    display: flex;
+    flex-direction: column;
+    margin-left: 16px;
     user-select: text;
+    @media ${props => props.theme.device.mobileM} {
+        margin-left: 5px;
+    };
+`;
+
+const StyledVkmDataItems = styled.div`
+    display: flex;
+    flex-direction: column;
+    && p {
+        font-size: 14px;
+        margin: 0px;
+    };
 `;
 
 const StyledTabSwiperContainer = styled.div`
@@ -293,7 +335,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
     const [isGfiToolsOpen, setIsGfiToolsOpen] = useState(false);
     const [isDataTable, setIsDataTable] = useState(false);
     const [isGfiDownloadsOpen, setIsGfiDownloadsOpen] = useState(false);
-    const [isVKMInfoOpen, setIsVKMInfoOpen] = useState(false);
+    const [isVKMInfoOpen, setIsVKMInfoOpen] = useState(vkmData? true : false);
     const [gfiTabsSwiper, setGfiTabsSwiper] = useState(null);
     const [gfiTabsSnapGridLength, setGfiTabsSnapGridLength] = useState(0);
 
@@ -337,9 +379,6 @@ export const GFIPopup = ({ handleGfiDownload }) => {
             setGeoJsonToShow(tabsContent[selectedTab].props.data);
     }, [selectedTab, tabsContent]);
 
-    useEffect(() => {
-        gfiLocations && gfiLocations.length > 0 ? setIsVKMInfoOpen(false) : vkmData && setIsVKMInfoOpen(true);
-    },[vkmData, gfiLocations])
 
     const handleOverlayGeometry = (geoJson) => {
         channel &&
@@ -539,6 +578,10 @@ export const GFIPopup = ({ handleGfiDownload }) => {
         gfiInputEl.current.swiper.slideTo(selectedTab);
     }, [selectedTab]);
 
+    useEffect(() => {
+        vkmData? setIsVKMInfoOpen(true) : setIsVKMInfoOpen(false);
+    }, [vkmData]);
+
     return (
         <StyledGfiContainer>
                 <StyledVKMDataContainer
@@ -546,7 +589,8 @@ export const GFIPopup = ({ handleGfiDownload }) => {
                         height: isVKMInfoOpen ? 'auto' : 0,
                         opacity: isVKMInfoOpen ? 1 : 0,
                         marginTop: isVKMInfoOpen ? '16px' : '0px',
-                        marginBottom: isVKMInfoOpen ? '16px' : '0px'
+                        marginBottom: isVKMInfoOpen ? '16px' : '0px',
+                        y: isVKMInfoOpen? 0 : -100
                     }}
                     transition={{ duration: 0.4 }}
                 >
@@ -563,26 +607,29 @@ export const GFIPopup = ({ handleGfiDownload }) => {
                                 />
                         }
                         {
-                            vkmData && vkmData.vkm.kuntanimi && <p>{vkmData.vkm.kuntanimi}</p>
+                            vkmData && vkmData.vkm.kuntanimi && <h5>{vkmData.vkm.kuntanimi}</h5>
                         }
+                    </StyledVKMDataMunacipalityImageWrapper>
                         {
                             vkmData && vkmData.coordinates && <StyledCoordinatesWrapper>
-                                <FontAwesomeIcon icon={faMapMarkerAlt} />
                                 <div>
-                                    <p>Lat: {vkmData.coordinates.y}</p>
-                                    <p>Lon: {vkmData.coordinates.x}</p>
+                                    <h6>{strings.vkm.locationInfo}</h6>
+                                    <p style={{fontWeight: '600'}}>{vkmData.vkm.Katunimi}</p>
+                                    <p>Lat: <span style={{fontWeight: '600'}}>{vkmData.coordinates.y}</span></p>
+                                    <p>Lon: <span style={{fontWeight: '600'}}>{vkmData.coordinates.x}</span></p>
                                 </div>
                             </StyledCoordinatesWrapper>
                         }
-                    </StyledVKMDataMunacipalityImageWrapper>
-
                     {
-                        vkmData && vkmData.vkm._orderHigh && vkmData.vkm._orderHigh.filter(value => value !== 'kuntanimi').length > 0 &&
+                        vkmData && vkmData.vkm._orderHigh && vkmData.vkm._orderHigh.filter(value => value !== 'kuntanimi').length > 0 ?
                         <StyledVKMDataInfoWrapper>
+                            <h6>{strings.vkm.roadAddressInfo}</h6>
+                            <StyledVkmDataItems>
                             {
                                 vkmData.vkm._orderHigh.filter(value => value !== 'kuntanimi').map(property => {
+                                    if(property !== "Katunimi")
                                     return (
-                                            <li
+                                            <p
                                                 key={'vkm-info-box-li'+property}
                                                 style={{
                                                     color: '#0064af'
@@ -600,18 +647,24 @@ export const GFIPopup = ({ handleGfiDownload }) => {
                                                 &nbsp;
                                                 <span
                                                     style={{
-                                                        fontSize: '16px',
+                                                        fontSize: '14px',
                                                         fontWeight: '600',
                                                         margin: '0'
                                                     }}
                                                 >
                                                     {vkmData.vkm[property]}
                                                 </span>
-                                            </li>
+                                            </p>
                                     )
                                 })
                             }
+                            </StyledVkmDataItems>
                         </StyledVKMDataInfoWrapper>
+                        :
+                        <StyledVkmInstruction>
+                            <h6>{strings.vkm.roadAddressInfo}</h6>
+                            <p>{strings.vkm.roadAddressInstructions}</p>
+                        </StyledVkmInstruction>
                     }
                 </StyledVKMDataContainer>
             {tabsContent.length > 0 && (
