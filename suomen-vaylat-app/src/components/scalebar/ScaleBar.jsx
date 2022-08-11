@@ -22,6 +22,7 @@ const StyledScaleBarText = styled.p`
     margin: 0;
     font-size: 14px;
     font-weight: 600;
+    cursor: default;
 `;
 
 const ScaleBar = () => {

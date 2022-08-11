@@ -81,7 +81,9 @@
     "table" : "Taulukko"
   },
   "vkm": {
-    "locationInfo": "Sijaintitiedot"
+    "locationInfo": "Sijaintitiedot",
+    "roadAddressInfo": "Tieosoitetiedot",
+    "roadAddressInstructions": "Tieosoitetietoja ei pystytty hakemaan. Lähennä karttaa ja klikkaa pistettä, jolle haluat hakea tieosoitetiedot."
   },
   "downloads": {
     "downloads": "Lataukset",
