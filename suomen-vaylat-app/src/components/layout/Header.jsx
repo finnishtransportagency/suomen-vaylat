@@ -10,7 +10,8 @@ import { useAppSelector } from '../../state/hooks';
 import {
     setIsInfoOpen,
     setIsMainScreen,
-    setIsUserGuideOpen
+    setIsUserGuideOpen,
+    setActiveTool
 } from '../../state/slices/uiSlice';
 import {
     mapMoveRequest,
@@ -149,6 +150,7 @@ export const Header = () => {
     const { store } = useContext(ReactReduxContext);
     const isInfoOpen = useAppSelector((state) => state.ui.isInfoOpen);
     const isUserGuideOpen = useAppSelector((state) => state.ui.isUserGuideOpen);
+    const activeTool = useAppSelector(state => state.ui.activeTool);
 
     const {
         channel,
@@ -189,6 +191,14 @@ export const Header = () => {
             channel && channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, true]);
             channel && channel.postRequest('ChangeMapLayerOpacityRequest', [layer.id, layer.opacity]);
         });
+
+        channel && channel.postRequest('DrawTools.StopDrawingRequest', [
+            'gfi-selection-tool',
+            true,
+        ]);
+
+        channel && channel.postRequest('DrawTools.StopDrawingRequest', [activeTool]);
+        store.dispatch(setActiveTool(null));
 
         updateLayers(store, channel);
 
