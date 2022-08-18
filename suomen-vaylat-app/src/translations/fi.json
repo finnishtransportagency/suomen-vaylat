@@ -49,16 +49,35 @@
     "showPageInfo": "Näytä sivun info",
     "showUserGuide": "Näytä käyttöohje"
   },
-  "saveView" : {
-    "saveView" : "Tallenna näkymä",
-    "savingView" : "Näkymän tallennus",
-    "saveViewDescription1" : "Näkymä tallentuu selaimen välimuistiin",
-    "saveViewDescription2" : "Tallennettu näkymä voidaan aktivoida vain selaimessa johon se on tallennettu",
-    "noSavedViews" : "Ei tallennettuja näkymiä",
-    "deleteAllSavedViews" : "Poista kaikki tallennetut näkymät",
-    "savedViews" : "Tallennetut näkymät",
-    "viewName" : "Näkymän nimi",
-    "saveNewView" : "Tallenna uusi näkymä"
+  "savedContent" : {
+    "savedContent" : "Tallennettu sisältö",
+    "viewTitle" : "Näkymät",
+    "geometryTitle" : "Geometriat",
+    "saveView" : {
+      "confirmDeleteAll" : "Haluatko varmasti poistaa kaikki tallennetut näkymät?",
+      "saveView" : "Tallenna näkymä",
+      "savingView" : "Näkymän tallennus",
+      "saveViewDescription1" : "Näkymä tallentuu selaimen välimuistiin",
+      "saveViewDescription2" : "Tallennettu näkymä voidaan aktivoida vain selaimessa johon se on tallennettu",
+      "noSavedViews" : "Ei tallennettuja näkymiä",
+      "deleteAllSavedViews" : "Poista kaikki tallennetut näkymät",
+      "savedViews" : "Tallennetut näkymät",
+      "viewName" : "Näkymän nimi",
+      "saveNewView" : "Tallenna uusi näkymä"
+    },
+    "saveGeometry" : {
+      "confirmDeleteAll" : "Haluatko varmasti poistaa kaikki tallennetut geometriat?",
+      "saveGeometry" : "Tallenna geometria",
+      "savingGeometry" : "Geometrian tallennus",
+      "saveGeometryDescription1" : "Geometria tallentuu selaimen välimuistiin",
+      "saveGeometryDescription2" : "Tallennettu geometria voidaan aktivoida vain selaimessa johon se on tallennettu",
+      "noSavedGeometries" : "Ei tallennettuja geometrioita",
+      "deleteAllSavedGeometries" : "Poista kaikki tallennetut geometriat",
+      "savedGeometries" : "Tallennetut geometriat",
+      "geometryName" : "Geometrian nimi",
+      "noGeometry" : "Ei geometrioita kartalla",
+      "saveNewGeometry" : "Tallenna uusi geometria"
+    }
   },
   "gfi": {
     "title": "Kohdetiedot",

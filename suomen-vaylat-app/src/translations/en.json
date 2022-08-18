@@ -49,16 +49,35 @@
     "showPageInfo": "Show page info",
     "showUserGuide": "Show user guide"
   },
-  "saveView" : {
-    "saveView" : "Save view",
-    "savingView" : "Saving view",
-    "saveViewDescription1" : "View will be saved to browser local storage.",
-    "saveViewDescription2" : "Saved view can be accessed only by browser it has been saved.",
-    "noSavedViews" : "No saved views",
-    "deleteAllSavedViews" : "Delete all saved views",
-    "savedViews" : "Saved views",
-    "viewName" : "View name",
-    "saveNewView" : "Save new view"
+  "savedContent" : {
+    "savedContent" : "Saved content",
+    "viewTitle" : "Views",
+    "geometryTitle" : "Geometries",
+    "saveView" : {
+      "confirmDeleteAll" : "Are you sure you want to delete all views?",
+      "saveView" : "Save view",
+      "savingView" : "Saving view",
+      "saveViewDescription1" : "View will be saved to browser local storage",
+      "saveViewDescription2" : "Saved view can be accessed only by browser it has been saved",
+      "noSavedViews" : "No saved views",
+      "deleteAllSavedViews" : "Delete all saved views",
+      "savedViews" : "Saved views",
+      "viewName" : "View name",
+      "saveNewView" : "Save new view"
+    },
+    "saveGeometry" : {
+      "confirmDeleteAll" : "Are you sure you want to delete all geometries",
+      "saveGeometry" : "Save geometry",
+      "savingGeometry" : "Saving geometries",
+      "saveGeometryDescription1" : "Geometry will be saved to browser local storage",
+      "saveGeometryDescription2" : "Saved geometry can be accessed only by browser it has been saved",
+      "noSavedGeometries" : "No saved geometries",
+      "deleteAllSavedGeometries" : "Delete all saved geometries",
+      "savedGeometries" : "Saved geometries",
+      "geometryName" : "Geometry name",
+      "noGeometry" : "No geometries on the map",
+      "saveNewGeometry" : "Save new geometry"
+    }
   },
   "gfi": {
     "title": "Feature Data",

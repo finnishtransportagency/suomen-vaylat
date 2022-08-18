@@ -49,16 +49,35 @@
     "showPageInfo": "Visa sidinformation",
     "showUserGuide": "Visa bruksanvisningen"
   },
-  "saveView" : {
-    "saveView" : "Save view",
-    "savingView" : "Saving view",
-    "saveViewDescription1" : "View will be saved to browser local storage.",
-    "saveViewDescription2" : "Saved view can be accessed only by browser it has been saved.",
-    "noSavedViews" : "No saved views",
-    "deleteAllSavedViews" : "Delete all saved views",
-    "savedViews" : "Saved views",
-    "viewName" : "View name",
-    "saveNewView" : "Save new view"
+  "savedContent" : {
+    "savedContent" : "Sparat innehåll",
+    "viewTitle" : "Syn",
+    "geometryTitle" : "Geometrier",
+    "saveView" : {
+      "confirmDeleteAll" : "Är du säker på att du vill ta bort alla sparade vyer?",
+      "saveView" : "Spara vy",
+      "savingView" : "Sparar vy",
+      "saveViewDescription1" : "Visa kommer att sparas i webbläsarens lokala lagring",
+      "saveViewDescription2" : "Sparad vy kan endast nås av webbläsaren som den har sparats",
+      "noSavedViews" : "Inga sparade vyer",
+      "deleteAllSavedViews" : "Ta bort alla sparade vyer",
+      "savedViews" : "Sparade vyer",
+      "viewName" : "Visa namn",
+      "saveNewView" : "Spara ny vy"
+    },
+    "saveGeometry" : {
+      "confirmDeleteAll" : "Är du säker på att du vill ta bort alla sparade geometrier?",
+      "saveGeometry" : "Spara geometri",
+      "savingGeometry" : "Geometrilagrings",
+      "saveGeometryDescription1" : "Geometrin sparas i webbläsarens cache",
+      "saveGeometryDescription2" : "Den sparade geometrin kan endast aktiveras i webbläsaren där den är sparad",
+      "noSavedGeometries" : "Inga sparade geometrier",
+      "deleteAllSavedGeometries" : "Ta bort alla sparade geometrier",
+      "savedGeometries" : "Sparade geometrier",
+      "geometryName" : "Namnet på geometrin",
+      "noGeometry" : "Inga geometrier på kartan",
+      "saveNewGeometry" : "Spara den nya geometrin"
+    }
   },
   "gfi": {
     "title": "Objektuppgifter",
