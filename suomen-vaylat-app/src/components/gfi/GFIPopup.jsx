@@ -42,6 +42,7 @@ const StyledGfiContainer = styled.div`
 `;
 
 const StyledVKMDataContainer = styled(motion.div)`
+    user-select: text;
     display: flex;
     align-items: flex-start;
     color: ${(props) => props.theme.colors.mainColor1};
@@ -243,6 +244,7 @@ const StyledTabCloseButton = styled.div`
 `;
 
 const StyledTabContent = styled.div`
+    user-select: text;
     overflow: hidden;
     display: flex;
     height: 100%;
