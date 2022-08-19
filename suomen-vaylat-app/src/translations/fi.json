@@ -75,7 +75,7 @@
       "deleteAllSavedGeometries" : "Poista kaikki tallennetut geometriat",
       "savedGeometries" : "Tallennetut geometriat",
       "geometryName" : "Geometrian nimi",
-      "noGeometry" : "Ei geometrioita kartalla",
+      "noGeometry" : "Ei uusia geometrioita kartalla",
       "saveNewGeometry" : "Tallenna uusi geometria"
     }
   },

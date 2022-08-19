@@ -75,7 +75,7 @@
       "deleteAllSavedGeometries" : "Ta bort alla sparade geometrier",
       "savedGeometries" : "Sparade geometrier",
       "geometryName" : "Namnet på geometrin",
-      "noGeometry" : "Inga geometrier på kartan",
+      "noGeometry" : "Inga nya geometrier på kartan",
       "saveNewGeometry" : "Spara den nya geometrin"
     }
   },

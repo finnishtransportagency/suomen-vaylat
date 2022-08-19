@@ -75,7 +75,7 @@
       "deleteAllSavedGeometries" : "Delete all saved geometries",
       "savedGeometries" : "Saved geometries",
       "geometryName" : "Geometry name",
-      "noGeometry" : "No geometries on the map",
+      "noGeometry" : "No new geometries on the map",
       "saveNewGeometry" : "Save new geometry"
     }
   },
