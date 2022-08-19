@@ -12,11 +12,9 @@ const initialState = {
     },
     searchParams: '',
     isInfoOpen: false,
-
-    geoJsonArray: [],
+    geoJsonArray: {},
     isSavedOpen: false,
-
-
+    savedTabIndex: 0,
     isUserGuideOpen: false,
     shareUrl: '',
     isDrawingToolsOpen: false,
@@ -80,6 +78,9 @@ export const uiSlice = createSlice({
         },
         setGeoJsonArray: (state, action) => {
             state.geoJsonArray = action.payload;
+        },
+        setSavedTabIndex: (state, action) => {
+            state.savedTabIndex = action.payload;
         },
         setIsSavedOpen: (state, action) => {
             state.isSavedOpen = action.payload;
@@ -175,6 +176,7 @@ export const {
 
     setGeoJsonArray,
     setIsSavedOpen,
+    setSavedTabIndex
 } = uiSlice.actions;
 
 export default uiSlice.reducer;
