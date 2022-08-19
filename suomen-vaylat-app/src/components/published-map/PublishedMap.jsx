@@ -1,6 +1,6 @@
 import { useContext, useEffect } from 'react';
 import OskariRPC from 'oskari-rpc';
-import { ReactReduxContext } from 'react-redux';
+import { ReactReduxContext, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { useAppSelector } from '../../state/hooks';
 import {
@@ -69,6 +69,7 @@ const StyledLoaderWrapper = styled.div`
 const PublishedMap = () => {
     const { store } = useContext(ReactReduxContext);
     const { loading } = useAppSelector((state) => state.rpc);
+    const { activeSelectionTool } = useSelector((state) => state.ui);
     const language = useAppSelector((state) => state.language);
     const lang = language.current;
 
@@ -206,9 +207,9 @@ const PublishedMap = () => {
                     });
                 }
 
-                if (data.PointInfoEvent){
+                if (data.PointInfoEvent && activeSelectionTool === null){
                     channel.handleEvent('PointInfoEvent', (data) => {
-                        if(data.vkm !== null){
+                        if(data.vkm !== null && activeSelectionTool === null){
                             store.dispatch(setMinimizeGfi(false));
                             store.dispatch(setVKMData(data));
                             store.dispatch(setIsGfiOpen(true));
@@ -231,7 +232,7 @@ const PublishedMap = () => {
                 }
 
 
-                if (data.DataForMapLocationEvent) {
+                if (data.DataForMapLocationEvent && activeSelectionTool === null) {
                     channel.handleEvent('DataForMapLocationEvent', (data) => {
                         store.dispatch(resetGFILocations([]));
                         const croppingArea = {
