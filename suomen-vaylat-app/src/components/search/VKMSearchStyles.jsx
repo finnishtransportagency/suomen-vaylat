@@ -5,20 +5,20 @@ export const VKMGeoJsonStyles = {
         tie: {
             stroke: {
                 width: 12,
-                color: '#910aa3'
+                color: '#e50083'
             }
         },
         osa: {
             stroke: {
                 width: 8,
-                color: '#ffc300'
+                color: '#e50083'
             }
         },
         etaisyys: {
             image: {
                 radius: 14,
                 fill: {
-                    color: '#c73f00'
+                    color: '#e50083'
                 }
             }
         }
@@ -28,7 +28,7 @@ export const VKMGeoJsonStyles = {
             shape: 5,
             size: 3,
             fill: {
-                color: '#c73f00'
+                color: '#e50083'
             }
         }
     }
