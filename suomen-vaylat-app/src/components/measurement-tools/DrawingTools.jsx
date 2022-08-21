@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { ReactReduxContext } from 'react-redux';
@@ -13,9 +13,12 @@ import svLinestring from '../../theme/icons/drawtools_linestring.svg';
 import { useSelector } from 'react-redux';
 
 import strings from '../../translations';
-import { setActiveTool } from '../../state/slices/uiSlice';
+import { setActiveTool, setIsSaveViewOpen, setSavedTabIndex , setGeoJsonArray} from '../../state/slices/uiSlice';
 
 import CircleButton from '../circle-button/CircleButton';
+import AddGeometryButton from '../add-geometry-button/AddGeometryButton';
+
+const SAVED_GEOMETRY_LAYER_ID = 'saved-geometry-layer';
 
 const StyledTools = styled(motion.div)`
     display: flex;
@@ -65,7 +68,24 @@ const variants = {
 export const DrawingTools = ({isOpen, theme}) => {
     const { store } = useContext(ReactReduxContext);
     const { channel } = useSelector(state => state.rpc);
-    const { activeTool } = useSelector(state => state.ui);
+    const { activeTool, geoJsonArray } = useSelector(state => state.ui);
+
+
+    useEffect(() => {
+        const drawHandler = (data) => {
+            if (data.isFinished && data.isFinished === true) {
+                store.dispatch(setGeoJsonArray(data));
+            }
+        };
+
+        channel && channel.handleEvent('DrawingEvent', drawHandler);
+        
+        return () => {
+            channel &&
+                channel.unregisterEventHandler('DrawingEvent', drawHandler);
+        };
+    }, [channel, store]);
+
 
     const startStopTool = (tool) => {
         if (tool.name !== activeTool) {
@@ -83,6 +103,7 @@ export const DrawingTools = ({isOpen, theme}) => {
         channel && channel.postRequest('DrawTools.StopDrawingRequest', [true]);
         // stop the drawing tool
         channel && channel.postRequest('DrawTools.StopDrawingRequest', [activeTool]);
+        store.dispatch(setGeoJsonArray({}));
         store.dispatch(setActiveTool(null));
     };
 
@@ -136,6 +157,79 @@ export const DrawingTools = ({isOpen, theme}) => {
         },
     ];
 
+    const handleAddGeometry = () => {
+        geoJsonArray.features && geoJsonArray.features.forEach(feature => {
+            channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', [
+                feature.geojson,
+                {
+                    clearPrevious: true,
+                    layerId: SAVED_GEOMETRY_LAYER_ID,
+                    centerTo: true,
+                    featureStyle: {
+                        fill: {
+                            color: 'rgba(10, 140, 247, 0.3)',
+                        },
+                        stroke: {
+                            color: 'rgba(10, 140, 247, 0.3)',
+                            width: 5,
+                            lineDash: 'solid',
+                            lineCap: 'round',
+                            lineJoin: 'round',
+                            area: {
+                                color: 'rgba(100, 255, 95, 0.7)',
+                                width: 8,
+                                lineJoin: 'round',
+                            },
+                        },
+                        image: {
+                            shape: 5,
+                            size: 3,
+                            fill: {
+                                color: 'rgba(100, 255, 95, 0.7)',
+                            },
+                        },
+                    },
+                },
+            ]);
+        })
+
+        geoJsonArray.geojson &&
+        channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', [
+            geoJsonArray.geojson ,
+            {
+                clearPrevious: true,
+                layerId: SAVED_GEOMETRY_LAYER_ID,
+                centerTo: true,
+                featureStyle: {
+                    fill: {
+                        color: 'rgba(10, 140, 247, 0.3)',
+                    },
+                    stroke: {
+                        color: 'rgba(10, 140, 247, 0.3)',
+                        width: 5,
+                        lineDash: 'solid',
+                        lineCap: 'round',
+                        lineJoin: 'round',
+                        area: {
+                            color: 'rgba(100, 255, 95, 0.7)',
+                            width: 8,
+                            lineJoin: 'round',
+                        },
+                    },
+                    image: {
+                        shape: 5,
+                        size: 3,
+                        fill: {
+                            color: 'rgba(100, 255, 95, 0.7)',
+                        },
+                    },
+                },
+            },
+        ]);
+        store.dispatch(setIsSaveViewOpen(true));
+        store.dispatch(setSavedTabIndex(1));
+    };
+
     return (
             <StyledTools
                 isOpen={isOpen}
@@ -172,6 +266,12 @@ export const DrawingTools = ({isOpen, theme}) => {
                             </CircleButton>
                     )
                 })}
+                <AddGeometryButton
+                    disabled={!Object.keys(geoJsonArray).length}
+                    text={strings.savedContent.saveGeometry.saveGeometry}
+                    tooltipDirection={'right'}
+                    clickAction={handleAddGeometry}
+                />
             </StyledTools>
     );
  };

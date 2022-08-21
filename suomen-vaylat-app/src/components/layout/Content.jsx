@@ -26,6 +26,7 @@ import {
     setWarning,
     setIsDownloadLinkModalOpen,
     setMaximizeGfi,
+    setGeoJsonArray
 } from '../../state/slices/uiSlice';
 
 import {
@@ -47,7 +48,7 @@ import UserGuideModalContent from '../user-guide-modal/UserGuideModalContent';
 import MenuBar from './menu-bar/MenuBar';
 import MapLayersDialog from '../dialog/MapLayersDialog';
 import WarningDialog from '../dialog/WarningDialog';
-import Views from '../views/Views';
+import SavedModalContent from '../views/Views';
 import PublishedMap from '../published-map/PublishedMap';
 import Search from '../search/Search';
 import ActionButtons from '../action-button/ActionButtons';
@@ -59,6 +60,9 @@ import GFIPopup from '../gfi/GFIPopup';
 import GFIDownload from '../gfi/GFIDownload';
 import MetadataModal from '../metadata-modal/MetadataModal';
 import { ANNOUNCEMENTS_LOCALSTORAGE } from '../../utils/rpcUtil';
+
+
+const SAVED_GEOMETRY_LAYER_ID = 'saved-geometry-layer';
 
 const StyledContent = styled.div`
     z-index: 1;
@@ -194,6 +198,7 @@ const Content = () => {
     };
 
     const handleCloseGFIModal = () => {
+        store.dispatch(setGeoJsonArray({}));
         store.dispatch(resetGFILocations([]));
         store.dispatch(setIsGfiOpen(false));
         store.dispatch(setMinimizeGfi(false));
@@ -221,6 +226,10 @@ const Content = () => {
     };
 
     const handleCloseSaveViewModal = () => {
+        channel && channel.postRequest(
+            'MapModulePlugin.RemoveFeaturesFromMapRequest',
+            [null, null, SAVED_GEOMETRY_LAYER_ID]
+        );
         store.dispatch(setIsSaveViewOpen(false));
     };
 
@@ -231,8 +240,8 @@ const Content = () => {
     const viewHelp = () => {
         return (
             <ul>
-                <li>{strings.saveView.saveViewDescription1}</li>
-                <li>{strings.saveView.saveViewDescription2}</li>
+                <li>{strings.savedContent.saveView.saveViewDescription1}</li>
+                <li>{strings.savedContent.saveView.saveViewDescription2}</li>
             </ul>
         )
     }
@@ -532,16 +541,16 @@ const Content = () => {
                     constraintsRef={
                         constraintsRef
                     } /* Reference div for modal drag boundaries */
-                    drag={false} /* Enable (true) or disable (false) drag */
+                    drag={true} /* Enable (true) or disable (false) drag */
                     resize={false}
                     backdrop={
-                        true
+                        false
                     } /* Is backdrop enabled (true) or disabled (false) */
                     fullScreenOnMobile={
                         true
                     } /* Scale modal full width / height when using mobile device */
                     titleIcon={faSave} /* Use icon on title or null */
-                    title={strings.saveView.saveView} /* Modal header title */
+                    title={strings.savedContent.savedContent} /* Modal header title */
                     type={'normal'} /* Modal type */
                     closeAction={
                         handleCloseSaveViewModal
@@ -553,7 +562,7 @@ const Content = () => {
                     helpId={'show_view_help'}
                     helpContent={viewHelp()}
                 >
-                    <Views />
+                    <SavedModalContent />
                 </Modal>
                 <Modal
                     constraintsRef={

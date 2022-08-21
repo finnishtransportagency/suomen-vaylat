@@ -23,14 +23,15 @@ import { isMobile } from '../../theme/theme';
 
 import { addMarkerRequest, mapMoveRequest } from '../../state/slices/rpcSlice';
 
-import { setIsSearchOpen, setGeoJsonArray } from '../../state/slices/uiSlice';
-import { useSelector } from 'react-redux';
+import { setIsSearchOpen, setGeoJsonArray, setIsSaveViewOpen, setSavedTabIndex } from '../../state/slices/uiSlice';
 
 import CircleButton from '../circle-button/CircleButton';
 import VKMTrackSearch from './VKMTrackSearch';
 
 import { VKMGeoJsonHoverStyles, VKMGeoJsonStyles } from './VKMSearchStyles';
+import AddGeometryButton from '../add-geometry-button/AddGeometryButton';
 
+const SAVED_GEOMETRY_LAYER_ID = 'saved-geometry-layer';
 const StyledSearchContainer = styled.div`
     z-index: 2;
     position: relative;
@@ -55,7 +56,7 @@ const StyledSearchWrapper = styled(motion.div)`
     align-items: center;
     width: 100%;
     overflow: hidden;
-    padding-right: 48px;
+    padding-right: ${(props) => props.hasGeometry ? "96px" : "48px"};
     height: 100%;
     background-color: ${(props) => props.theme.colors.mainWhite};
     border-radius: 24px;
@@ -185,6 +186,37 @@ const StyledLoaderWrapper = styled.div`
     }
 `;
 
+const addFeaturesToMapParams = 
+    {
+        clearPrevious: true,
+        layerId: SAVED_GEOMETRY_LAYER_ID,
+        centerTo: true,
+        featureStyle: {
+            fill: {
+                color: 'rgba(10, 140, 247, 0.3)',
+            },
+            stroke: {
+                color: 'rgba(10, 140, 247, 0.3)',
+                width: 5,
+                lineDash: 'solid',
+                lineCap: 'round',
+                lineJoin: 'round',
+                area: {
+                    color: 'rgba(100, 255, 95, 0.7)',
+                    width: 8,
+                    lineJoin: 'round',
+                },
+            },
+            image: {
+                shape: 5,
+                size: 3,
+                fill: {
+                    color: 'rgba(100, 255, 95, 0.7)',
+                },
+            },
+        },
+    };
+
 const Search = () => {
     const [searchValue, setSearchValue] = useState('');
     const [lastSearchValue, setLastSearchValue] = useState('');
@@ -195,7 +227,7 @@ const Search = () => {
         useState(false);
     const [searchType, setSearchType] = useState('address');
 
-    const { isSearchOpen } = useAppSelector((state) => state.ui);
+    const { isSearchOpen, geoJsonArray } = useAppSelector((state) => state.ui);
     const { channel, allLayers } = useAppSelector((state) => state.rpc);
 
     const { store } = useContext(ReactReduxContext);
@@ -207,9 +239,17 @@ const Search = () => {
     const [vkmTrackError, setVkmTrackError] = useState(null);
 
     const [geom, setGeom] = useState(null);
-    const { geoJsonArray } = useSelector(
-        (state) => state.ui
-    );
+
+    const handleAddGeometry = () => {
+        geoJsonArray.data && geoJsonArray.data.geom &&
+        channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', [
+            geoJsonArray.data.geom,
+            addFeaturesToMapParams
+        ]);
+        setShowSearchResults(false);
+        store.dispatch(setIsSaveViewOpen(true));
+        store.dispatch(setSavedTabIndex(1));
+    };
 
     const handleAddressSearch = (value) => {
         removeMarkersAndFeatures();
@@ -219,7 +259,6 @@ const Search = () => {
     };
 
     const handleVKMResponse = (data) => {
-        console.log(data);
         setIsSearching(false);
 
         let style = 'tie';
@@ -261,10 +300,8 @@ const Search = () => {
 
         setSearchValue(value);
         setLastSearchValue(value);
-
         setSearchResults(data);
 
-        // TÄSSÄ GEOM LAITETAAN KARTALLE ELI TALLENNETAAN JOHONKIN GEOM JA SIT VALITESSA LISÄTÄÄN KARTALLE
         data.hasOwnProperty('geom') &&
             channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', [
                 data.geom,
@@ -278,7 +315,7 @@ const Search = () => {
                 },
             ]);
         var saveGeom = {data: data, style: style, hover: hover, featureStyle: featureStyle };
-        geoJsonArray.geoJsonArray ? store.dispatch(setGeoJsonArray({ geoJsonArray: [...geoJsonArray.geoJsonArray, saveGeom] })) : store.dispatch(setGeoJsonArray({ geoJsonArray: [...geoJsonArray, saveGeom] }))
+        store.dispatch(setGeoJsonArray(saveGeom));
         setGeom(saveGeom);
     };
 
@@ -547,12 +584,23 @@ const Search = () => {
 
     return (
         <StyledSearchContainer isSearchOpen={isSearchOpen}>
+            {
+                    Object.keys(geoJsonArray).length > 0 &&
+                    <>
+                        <AddGeometryButton
+                            text={strings.savedContent.saveGeometry.saveGeometry}
+                            tooltipDirection={'bottom'}
+                            clickAction={handleAddGeometry}
+                        />
+                    </>
+                }
             <CircleButton
                 icon={isSearchOpen ? faTimes : faSearch}
                 text={strings.tooltips.search}
                 toggleState={isSearchOpen}
                 tooltipDirection={'left'}
                 clickAction={() => {
+                    store.dispatch(setGeoJsonArray({}));
                     setIsSearching(false);
                     isSearchOpen && removeMarkersAndFeatures();
                     isSearchOpen && setSearchResults(null);
@@ -568,6 +616,7 @@ const Search = () => {
             <AnimatePresence>
                 {isSearchOpen && (
                     <StyledSearchWrapper
+                        hasGeometry={Object.keys(geoJsonArray).length > 0}
                         variants={variants}
                         initial={'initial'}
                         animate={'animate'}
@@ -611,6 +660,7 @@ const Search = () => {
                         searchValue === lastSearchValue ? (
                             <StyledSearchActionButton
                                 onClick={() => {
+                                    store.dispatch(setGeoJsonArray({}));
                                     setSearchResults(null);
                                     setSearchValue('');
                                     removeMarkersAndFeatures();

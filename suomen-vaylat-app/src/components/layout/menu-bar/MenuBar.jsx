@@ -20,6 +20,7 @@ import {
     setActiveTool,
     setMinimizeGfi,
     setIsGfiDownloadOpen,
+    setGeoJsonArray
 } from '../../../state/slices/uiSlice';
 
 import CircleButton from '../../circle-button/CircleButton';
@@ -125,6 +126,7 @@ const MenuBar = () => {
     const closeDrawingTools = () => {
         // remove geometries off the map
         channel && channel.postRequest('DrawTools.StopDrawingRequest', [true]);
+        store.dispatch(setGeoJsonArray({}));
         // stop the drawing tool
         channel &&
             channel.postRequest('DrawTools.StopDrawingRequest', [activeTool]);
@@ -187,7 +189,7 @@ const MenuBar = () => {
                 </StyledMapToolsContainer>
                 <CircleButton
                     icon={faSave}
-                    text={strings.saveView.saveView}
+                    text={strings.savedContent.saveView.saveView}
                     toggleState={isSaveViewOpen}
                     tooltipDirection={"right"}
                     clickAction={() =>
