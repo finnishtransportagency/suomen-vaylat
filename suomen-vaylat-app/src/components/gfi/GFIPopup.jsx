@@ -4,6 +4,7 @@ import {
     faTimes,
     faSearchLocation,
     faPencilRuler,
+    faMapMarkedAlt,
     faFileDownload,
     faAngleLeft,
     faAngleRight,
@@ -749,7 +750,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
                         <StyledSubtitle>{strings.gfi.choosingGfi}:</StyledSubtitle>
                         <StyledInfoTextContainer>
                             <li>{strings.gfi.choosingGfiDescription0}.&nbsp; <FontAwesomeIcon icon={faLayerGroup} style={{fontSize: '16px'}}/></li>
-                            <li>{strings.gfi.choosingGfiDescription1}.&nbsp; <FontAwesomeIcon icon={faPencilRuler} style={{fontSize: '16px'}}/></li>
+                            <li>{strings.gfi.choosingGfiDescription1}.&nbsp; <FontAwesomeIcon icon={faMapMarkedAlt} style={{fontSize: '16px'}}/></li>
                             <li>{strings.gfi.choosingGfiDescription2}.</li>
                         </StyledInfoTextContainer>
                     </StyledNoGfisContainer>
@@ -812,7 +813,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
                     />
                 }
                 <CircleButton
-                    icon={faPencilRuler}
+                    icon={faMapMarkedAlt}
                     text={strings.gfi.selectLocations}
                     toggleState={isGfiToolsOpen}
                     tooltipDirection={'bottom'}

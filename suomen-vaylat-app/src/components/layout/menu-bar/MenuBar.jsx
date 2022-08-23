@@ -5,6 +5,7 @@ import {
     faExpand,
     faLayerGroup,
     faRuler,
+    faPencilRuler,
     faSave,
     faMapMarkedAlt,
     faDownload,
@@ -175,9 +176,9 @@ const MenuBar = () => {
                 </CircleButton>
                 <StyledMapToolsContainer>
                     <CircleButton
-                        icon={faRuler}
+                        icon={faPencilRuler}
                         text={
-                            strings.tooltips.measuringTools.measuringToolsButton
+                            strings.tooltips.drawingtools.drawingtoolsButton
                         }
                         toggleState={isDrawingToolsOpen}
                         tooltipDirection={"right"}
