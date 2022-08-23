@@ -263,7 +263,7 @@ const StyledFeaturesInfo = styled.div`
 const StyledFeatureAmount = styled.p`
     text-align: center;
     color: ${props => props.theme.colors.mainColor1};
-    margin: 0px 0px 10px 0px;
+    margin: 5px 0px 10px 0px;
 `;
 
 const StyledShowMoreButtonWrapper = styled.div`
@@ -354,14 +354,14 @@ export const GFIPopup = ({ handleGfiDownload }) => {
     const [isLoading, setIsLoading] = useState(false);
 
     const gfiInputEl = useRef(null);
-    
+
     useEffect(() => {
         if(!isGfiToolsOpen && activeSelectionTool !== null) store.dispatch(setActiveSelectionTool(null));
     }, [isGfiToolsOpen, activeSelectionTool]);
 
     useEffect(() => {
         const mapResults = gfiLocations.map((location) => {
-            location.content.features.length > GFI_MAX_LENGTH && setIsDataTable(true);
+            location?.content?.features?.length > GFI_MAX_LENGTH && setIsDataTable(true);
             const layers = allLayers.filter(
                 (layer) => layer.id === location.layerId
             );
@@ -451,12 +451,12 @@ export const GFIPopup = ({ handleGfiDownload }) => {
     const tablePropsInit = (data) => {
         const properties = data && data.content && data.content.features && data.content.features[0].properties;
 
-        var hightPriorityColumns = properties._orderHigh && JSON.parse(properties._orderHigh);
-        var lowPriorityColumns = properties._order && JSON.parse(properties._order);
+        var hightPriorityColumns = properties?._orderHigh && JSON.parse(properties?._orderHigh);
+        var lowPriorityColumns = properties?._order && JSON.parse(properties?._order);
         var columnsArray = [];
 
-        var columns = hightPriorityColumns.concat(lowPriorityColumns);
-        columns.forEach(column => {
+        var columns = hightPriorityColumns && hightPriorityColumns.concat(lowPriorityColumns);
+        columns && columns.forEach(column => {
             if (column !== 'UID') {
                 columnsArray.push({ key: column, title: column, colGroup: { style: { minWidth: 120 } }});
             }
@@ -842,16 +842,18 @@ export const GFIPopup = ({ handleGfiDownload }) => {
                                             title={title}
                                             tablePropsInit={tableProps}
                                         />
-                                        {location.moreFeatures && <StyledFeaturesInfo>
-                                            <StyledFeatureAmount>
-                                            Kohteita haettu: <span>{location.content.features.length} / {location.content.totalFeatures}</span>
-                                            </StyledFeatureAmount>
+                                        {location.content.features && <StyledFeaturesInfo>
+                                        <StyledFeatureAmount>
+                                            {`${strings.gfi.featureAmount} : `}
+                                            <span>{location.content.features.length} {location.moreFeatures && ` / ${location.content.totalFeatures}`}</span>
+                                        </StyledFeatureAmount>
+                                        {location.moreFeatures &&
                                             <StyledShowMoreButtonWrapper>
                                                 <StyledShowMoreButton onClick={() => getMoreFeatures(location.nextStartIndex, location.layerId)}>
-                                                Hae lisää kohteita</StyledShowMoreButton>
+                                                {strings.gfi.getMoreFeatures}</StyledShowMoreButton>
                                             </StyledShowMoreButtonWrapper>
-                                        </StyledFeaturesInfo> }
-
+                                        }
+                                    </StyledFeaturesInfo>}
                                     </SwiperSlide>
                                 );
                             }

@@ -78,7 +78,9 @@
     "dataTableView": "Listanäkymä",
     "downloadMaterials": "Lataa aineistoja",
     "list": "Lista",
-    "table" : "Taulukko"
+    "table" : "Taulukko",
+    "featureAmount" : "Kohteita",
+    "getMoreFeatures": "Hae lisää kohteita"
   },
   "vkm": {
     "locationInfo": "Sijaintitiedot"

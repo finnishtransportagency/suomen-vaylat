@@ -78,7 +78,9 @@
     "dataTableView": "List view",
     "downloadMaterials": "Download materials",
     "list": "List",
-    "table" : "Table"
+    "table" : "Table",
+    "featureAmount" : "Kohteita",
+    "getMoreFeatures": "Hae lisää kohteita"
   },
   "vkm": {
     "locationInfo": "Location info"

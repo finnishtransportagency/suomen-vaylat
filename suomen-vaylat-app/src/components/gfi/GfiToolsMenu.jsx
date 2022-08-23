@@ -393,7 +393,6 @@ const GfiToolsMenu = ({ handleGfiToolsMenu }) => {
                                 setLoading(true);
                                 Object.values(feature.geojson.features).forEach(
                                     (subfeature) => {
-                                        console.log("subfeature : ", subfeature)
                                         store.dispatch(
                                             setGFICroppingArea(subfeature)
                                         );
