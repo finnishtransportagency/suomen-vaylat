@@ -31,7 +31,8 @@
       "box": "Laatikko",
       "linestring": "Viiva",
       "polygon": "Monikulmio",
-      "erase": "Tyhjennä"
+      "erase": "Tyhjennä",
+      "drawingToast": "Voit viimeistellä piirron tuplaklikkaamalla tai klikkaamalla viimeksi piirretystä taitepisteestä uudelleen"
     },
     "measuringTools": {
       "measuringToolsButton": "Mittaustyökalut",
@@ -41,7 +42,8 @@
       "box": "Laatikko",
       "linestring": "Viiva",
       "polygon": "Monikulmio",
-      "erase": "Tyhjennä"
+      "erase": "Tyhjennä",
+      "measureToast": "Voit viimeistellä piirron tuplaklikkaamalla tai klikkaamalla viimeksi piirretystä taitepisteestä uudelleen"
     },
     "share": "Jaa sivu",
     "shareTheme": "Jaa teema",
@@ -83,7 +85,9 @@
     "getMoreFeatures": "Hae lisää kohteita"
   },
   "vkm": {
-    "locationInfo": "Sijaintitiedot"
+    "locationInfo": "Sijaintitiedot",
+    "roadAddressInfo": "Tieosoitetiedot",
+    "roadAddressInstructions": "Tieosoitetietoja ei pystytty hakemaan. Lähennä karttaa ja klikkaa pistettä, jolle haluat hakea tieosoitetiedot."
   },
   "downloads": {
     "downloads": "Lataukset",
@@ -104,7 +108,8 @@
     "continue": "Jatka",
     "cancel": "Peruuta",
     "dontShowAgain": "Älä näytä uudelleen",
-    "ok": "OK"
+    "ok": "OK",
+    "OkLowerCaseK": "Ok"
   },
   "multipleLayersWarning": "Olet lisäämässä kartalle 10 tai enemmän karttatasoa ja se saattaa vaikuttaa palvelun suorituskykyyn",
   "appGuide": {

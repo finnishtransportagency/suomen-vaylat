@@ -1,9 +1,10 @@
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { ReactReduxContext } from 'react-redux';
 
-import { faEraser } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEraser, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import svCircle from '../../theme/icons/drawtools_circle.svg';
 import svSquare from '../../theme/icons/drawtools_square.svg';
 import svRectangle from '../../theme/icons/drawtools_rectangle.svg';
@@ -13,9 +14,13 @@ import svLinestring from '../../theme/icons/drawtools_linestring.svg';
 import { useSelector } from 'react-redux';
 
 import strings from '../../translations';
-import { setActiveTool } from '../../state/slices/uiSlice';
+import { setActiveTool, setHasToastBeenShown } from '../../state/slices/uiSlice';
+
+import { theme } from '../../theme/theme';
 
 import CircleButton from '../circle-button/CircleButton';
+import DrawingToast from '../toasts/DrawingToast';
+import { toast } from 'react-toastify';
 
 const StyledTools = styled(motion.div)`
     display: flex;
@@ -31,6 +36,10 @@ const StyledIcon = styled.img`
     @media ${props => props.theme.device.mobileL} {
         width: 1rem;
     };
+`;
+
+const StyledToastIcon = styled(FontAwesomeIcon)`
+    color: ${theme.colors.mainColor1};
 `;
 
 const variants = {
@@ -65,13 +74,35 @@ const variants = {
 export const DrawingTools = ({isOpen, theme}) => {
     const { store } = useContext(ReactReduxContext);
     const { channel } = useSelector(state => state.rpc);
-    const { activeTool } = useSelector(state => state.ui);
+    const { activeTool, isDrawingToolsOpen, hasToastBeenShown} = useSelector(state => state.ui);
+    const [ showToast, setShowToast] = useState(JSON.parse(localStorage.getItem("showToast")));
+
+    const handleClick = () => {
+        setShowToast(false);
+        toast.dismiss("drawToast");
+    };
+
+    useEffect(() => {
+        setShowToast(JSON.parse(localStorage.getItem("showToast")));
+        if(showToast === false) store.dispatch(setHasToastBeenShown(true));
+    }, [isDrawingToolsOpen, hasToastBeenShown]);
+
+    if(activeTool === null) toast.dismiss("drawToast");
 
     const startStopTool = (tool) => {
         if (tool.name !== activeTool) {
             var data = [tool.name, tool.type, { showMeasureOnMap: true }];
             channel && channel.postRequest('DrawTools.StartDrawingRequest', data);
             store.dispatch(setActiveTool(tool.name));
+            if(showToast !== false && !hasToastBeenShown) {
+                if((tool.type === "LineString") || (tool.type === "Polygon")) {
+                    toast.info(<DrawingToast handleButtonClick={handleClick} text={strings.tooltips.drawingtools.drawingToast} />, 
+                    {icon: <StyledToastIcon icon={faInfoCircle} /> ,toastId: "drawToast", onClose : () => {
+                         store.dispatch(setHasToastBeenShown(true))
+                    }});
+                }
+                else toast.dismiss("drawToast");
+            }
         } else {
             channel && channel.postRequest('DrawTools.StopDrawingRequest', [activeTool]);
             store.dispatch(setActiveTool(null));

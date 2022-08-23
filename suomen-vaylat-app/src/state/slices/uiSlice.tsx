@@ -31,6 +31,7 @@ const initialState = {
     maximizeGfi: false,
     gfiCroppingTypes: [],
     warning: null,
+    hasToastBeenShown: false
 };
 
 export const uiSlice = createSlice({
@@ -48,6 +49,7 @@ export const uiSlice = createSlice({
             state.isUserGuideOpen = false;
             state.isDrawingToolsOpen = false;
             state.isLegendOpen = false;
+            state.isZoomBarOpen = false;
             state.isSaveViewOpen = false;
             state.selectedMapLayersMenuTab = 0;
             state.selectedMapLayersMenuThemeIndex = null;
@@ -132,6 +134,9 @@ export const uiSlice = createSlice({
         setWarning: (state, action) => {
             state.warning = action.payload;
         },
+        setHasToastBeenShown: (state, action) => {
+            state.hasToastBeenShown = action.payload;
+        }
     },
 });
 
@@ -162,6 +167,7 @@ export const {
     setMaximizeGfi,
     setGfiCroppingTypes,
     setWarning,
+    setHasToastBeenShown
 } = uiSlice.actions;
 
 export default uiSlice.reducer;
