@@ -585,7 +585,7 @@ const Search = () => {
     return (
         <StyledSearchContainer isSearchOpen={isSearchOpen}>
             {
-                    Object.keys(geoJsonArray).length > 0 &&
+                    isSearchOpen && Object.keys(geoJsonArray).length > 0 &&
                     <>
                         <AddGeometryButton
                             text={strings.savedContent.saveGeometry.saveGeometry}
