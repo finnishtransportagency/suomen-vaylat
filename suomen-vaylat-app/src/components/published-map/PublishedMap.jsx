@@ -1,6 +1,6 @@
 import { useContext, useEffect } from 'react';
 import OskariRPC from 'oskari-rpc';
-import { ReactReduxContext } from 'react-redux';
+import { ReactReduxContext, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { useAppSelector } from '../../state/hooks';
 import {
@@ -206,33 +206,30 @@ const PublishedMap = () => {
                     });
                 }
 
-                if (data.PointInfoEvent){
-                    channel.handleEvent('PointInfoEvent', (data) => {
-                        if(data.vkm !== null){
-                            store.dispatch(setMinimizeGfi(false));
-                            store.dispatch(setVKMData(data));
-                            store.dispatch(setIsGfiOpen(true));
+                channel.handleEvent('PointInfoEvent', (data) => {
+                    if(data.vkm !== null && store.getState().ui.activeSelectionTool === null) {
+                        store.dispatch(setMinimizeGfi(false));
+                        store.dispatch(setVKMData(data));
+                        store.dispatch(setIsGfiOpen(true));
 
-                            var MARKER_ID = 'VKM_MARKER';
+                        var MARKER_ID = 'VKM_MARKER';
 
-                            store.dispatch(
-                                addMarkerRequest({
-                                    x: data.coordinates.x,
-                                    y: data.coordinates.y,
-                                    markerId: MARKER_ID,
-                                    shape: '<svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="#0064af" viewBox="0 0 384 512"><path d="M172.268 501.67C26.97 291.031 0 269.413 0 192 0 85.961 85.961 0 192 0s192 85.961 192 192c0 77.413-26.97 99.031-172.268 309.67-9.535 13.774-29.93 13.773-39.464 0zM192 272c44.183 0 80-35.817 80-80s-35.817-80-80-80-80 35.817-80 80 35.817 80 80 80z"/></svg>',
-                                    size: 80,
-                                    offsetX: 13,
-                                    offsetY: 7,
-                                })
-                            );
-                        }
-                    })
-                }
+                        store.dispatch(
+                            addMarkerRequest({
+                                x: data.coordinates.x,
+                                y: data.coordinates.y,
+                                markerId: MARKER_ID,
+                                shape: '<svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="#0064af" viewBox="0 0 384 512"><path d="M172.268 501.67C26.97 291.031 0 269.413 0 192 0 85.961 85.961 0 192 0s192 85.961 192 192c0 77.413-26.97 99.031-172.268 309.67-9.535 13.774-29.93 13.773-39.464 0zM192 272c44.183 0 80-35.817 80-80s-35.817-80-80-80-80 35.817-80 80 35.817 80 80 80z"/></svg>',
+                                size: 80,
+                                offsetX: 13,
+                                offsetY: 7,
+                            })
+                        );
+                    }
+                })
 
-
-                if (data.DataForMapLocationEvent) {
-                    channel.handleEvent('DataForMapLocationEvent', (data) => {
+                channel.handleEvent('DataForMapLocationEvent', (data) => {
+                    if (store.getState().ui.activeSelectionTool === null) {
                         store.dispatch(resetGFILocations([]));
                         const croppingArea = {
                             type: 'Feature',
@@ -246,8 +243,9 @@ const PublishedMap = () => {
                         store.dispatch(setMinimizeGfi(false));
                         store.dispatch(setIsGfiOpen(true));
                         store.dispatch(setGFILocations(data));
-                    });
-                }
+                    }
+                });
+
 
 /*                 if (data.MarkerClickEvent) {
                     channel.handleEvent('MarkerClickEvent', (event) => {});

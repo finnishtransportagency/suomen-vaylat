@@ -33,7 +33,7 @@ import {
     setVKMData
 } from '../../state/slices/rpcSlice';
 
-import { setHasToastBeenShown, setMinimizeGfi, setSelectedGfiTool } from '../../state/slices/uiSlice';
+import { setHasToastBeenShown, setMinimizeGfi, setSelectedGfiTool, setActiveSelectionTool } from '../../state/slices/uiSlice';
 
 import SVLoader from '../loader/SvLoader';
 
@@ -45,7 +45,7 @@ const StyledGfiToolContainer = styled.div`
     overflow: auto;
     @media ${(props) => props.theme.device.mobileL} {
         padding: 16px;
-    }
+    };
     background-color: white;
 `;
 
@@ -174,13 +174,14 @@ const GfiToolsMenu = ({ handleGfiToolsMenu }) => {
     const { store } = useContext(ReactReduxContext);
 
     const { channel } = useSelector((state) => state.rpc);
-    const { gfiCroppingTypes, selectedGfiTool, hasToastBeenShown } = useSelector(
+
+    const { gfiCroppingTypes, selectedGfiTool, hasToastBeenShown, activeSelectionTool } = useSelector(
+
         (state) => state.ui
     );
 
     const [loading, setLoading] = useState(false);
 
-    const [selectedTool, setSelectedTool] = useState(null);
 
     const [showToast, setShowToast] = useState(JSON.parse(localStorage.getItem("showToast")));
 
@@ -190,11 +191,10 @@ const GfiToolsMenu = ({ handleGfiToolsMenu }) => {
     };
 
     const handleSelectTool = (id) => {
-        if (selectedTool !== id) {
-            setSelectedTool(id);
-
+        if (activeSelectionTool !== id) {
+            store.dispatch(setActiveSelectionTool(id));
             if (id === 0) {
-                setSelectedTool(id);
+                store.dispatch(setActiveSelectionTool(id));
                 channel.postRequest(
                     'MapModulePlugin.RemoveFeaturesFromMapRequest',
                     [null, null, 'download-tool-layer']
@@ -276,7 +276,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu }) => {
                 });
             }
         } else {
-            setSelectedTool(null);
+            store.dispatch(setActiveSelectionTool(null));
             channel.postRequest(
                 'MapModulePlugin.RemoveFeaturesFromMapRequest',
                 [null, null, 'download-tool-layer']
@@ -391,6 +391,8 @@ const GfiToolsMenu = ({ handleGfiToolsMenu }) => {
                                                         gfiCroppingArea:
                                                             data.geojson,
                                                         type: 'geojson',
+                                                        moreFeatures: gfi.moreFeatures,
+                                                        nextStartIndex: gfi.nextStartIndex
                                                     })
                                                 );
                                             });
@@ -442,6 +444,8 @@ const GfiToolsMenu = ({ handleGfiToolsMenu }) => {
                                                                                     .features[0]
                                                                                     .geojson,
                                                                             type: 'geojson',
+                                                                            moreFeatures: gfi.moreFeatures,
+                                                                            nextStartIndex: gfi.nextStartIndex
                                                                         }
                                                                     )
                                                                 );
@@ -510,11 +514,11 @@ const GfiToolsMenu = ({ handleGfiToolsMenu }) => {
                     icon={faPencilAlt}
                     title={strings.gfi.draw}
                     subtitle={strings.gfi.drawSubtitle}
-                    selectedItem={selectedTool}
+                    selectedItem={activeSelectionTool}
                     handleSelectTool={handleSelectTool}
                 />
                 <AnimatePresence>
-                    {selectedTool === 0 && (
+                    {activeSelectionTool === 0 && (
                         <StyledDrawingToolsContainer
                             transition={{
                                 duration: 0.2,
@@ -567,7 +571,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu }) => {
                                 icon={icons[croppingType.id] ? icons[croppingType.id].icon : defaultIcon}
                                 title={croppingType.title}
                                 subtitle={croppingType.description}
-                                selectedItem={selectedTool}
+                                selectedItem={activeSelectionTool}
                                 handleSelectTool={handleSelectTool}
                             />
                         );
