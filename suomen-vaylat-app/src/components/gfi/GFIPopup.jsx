@@ -3,7 +3,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
     faTimes,
     faSearchLocation,
-    faPencilRuler,
     faMapMarkedAlt,
     faFileDownload,
     faAngleLeft,
@@ -640,11 +639,10 @@ export const GFIPopup = ({ handleGfiDownload }) => {
     useEffect(() => {
         gfiInputEl.current.swiper.slideTo(selectedTab);
     }, [selectedTab]);
-    
+
     const getMoreFeatures = (nextStartIndex, layerId) => {
         setIsLoading(true);
         channel.getFeaturesByGeoJSON && channel.getFeaturesByGeoJSON([gfiCroppingArea, nextStartIndex, [layerId]], function (data) {
-        channel.log('getFeaturesByGeoJSON OK', data);
         data.gfi.forEach(
             (gfi) => {
                 store.dispatch(addFeaturesToGFILocations({
@@ -658,8 +656,8 @@ export const GFIPopup = ({ handleGfiDownload }) => {
         );
         setIsLoading(false);
     }, function(errors) {
-        setIsLoading(false);
-        channel.log('getFeaturesByGeoJSON NOK', errors)});
+            setIsLoading(false);
+        });
     };
 
     useEffect(() => {
