@@ -23,7 +23,7 @@ var isMobileTest = {
       return (isMobileTest.Android() || isMobileTest.BlackBerry() || isMobileTest.iOS() || isMobileTest.iPad() || isMobileTest.Opera() || isMobileTest.Windows());
   }};
 
-  export const isMobile = isMobileTest.any();
+export const isMobile = isMobileTest.any();
 
 const size = {
   mobileS: '320px',

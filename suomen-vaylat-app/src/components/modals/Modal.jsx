@@ -10,6 +10,8 @@ import { setMinimizeGfi, setMaximizeGfi } from '../../state/slices/uiSlice';
 
 import { isMobile } from '../../theme/theme';
 
+const MIN_SCREEN_WIDTH_MAXIMIZE = 500;
+
 const StyledModalBackdrop = styled(motion.div)`
     z-index: ${(props) => (props.type === 'warning' ? 9998 : 10)};
     position: fixed;
@@ -271,7 +273,7 @@ const Modal = ({
                                                 />
                                             </StyledHeaderButton>
                                             {
-                                                !isMobile &&
+                                                window.screen.width > MIN_SCREEN_WIDTH_MAXIMIZE &&
                                                     <StyledHeaderButton
                                                         onClick={(e) => {
                                                             e.preventDefault();
