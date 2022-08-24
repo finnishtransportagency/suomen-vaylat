@@ -31,7 +31,8 @@
       "box": "Box",
       "linestring": "Line",
       "polygon": "Polygon",
-      "erase": "Erase"
+      "erase": "Erase",
+      "drawingToast": "Voit viimeistellä piirron tuplaklikkaamalla tai klikkaamalla viimeksi piirretystä taitepisteestä uudelleen"
     },
     "measuringTools": {
       "measuringToolsButton": "Measuring tools",
@@ -41,7 +42,8 @@
       "box": "Box",
       "linestring": "Line",
       "polygon": "Polygon",
-      "erase": "Erase"
+      "erase": "Erase",
+      "measureToast": "Voit viimeistellä piirron tuplaklikkaamalla tai klikkaamalla viimeksi piirretystä taitepisteestä uudelleen"
     },
     "share": "Share this page",
     "shareTheme": "Share this theme",
@@ -100,7 +102,9 @@
     "table" : "Table"
   },
   "vkm": {
-    "locationInfo": "Location info"
+    "locationInfo": "Location info",
+    "roadAddressInfo": "Tieosoitetiedot",
+    "roadAddressInstructions": "Tieosoitetietoja ei pystytty hakemaan. Lähennä karttaa ja klikkaa pistettä, jolle haluat hakea tieosoitetiedot."
   },
   "downloads": {
     "downloads": "Downloads",

@@ -2,10 +2,14 @@ import React, { useRef, useState, useEffect} from 'react';
 import styled from 'styled-components';
 import strings from '../../translations';
 import { getAppBuildDate, getAppVersion } from '../../utils/appInfoUtil';
+import { isMobile} from '../../theme/theme';
+import { motion, AnimatePresence } from 'framer-motion';
 
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 import 'swiper/css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 
 const StyledContent = styled.div`
     max-width: 660px;
@@ -56,7 +60,7 @@ const StyledTabs = styled.div`
     };
 `;
 
-const StyledTab = styled.div`
+const StyledTab = styled(motion.div)`
     z-index: 2;
     user-select: none;
     width: ${props => 'calc(100% /' + props.tabsCount + ')'};
@@ -75,6 +79,55 @@ const StyledTab = styled.div`
     }
 `;
 
+const StyledMobileContainer = styled(motion.div)`
+    padding: 0px 16px;
+`;
+
+const StyledCloseMenuContainer = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 5px 5px;
+    cursor: pointer;
+    height: 26px;
+`;
+
+const StyledCloseMenuIcon = styled(FontAwesomeIcon)`
+    font-size: 18px;
+    position: absolute;
+    left: 16px;
+    top: 75px;
+`;
+
+const StyledMenuContainer = styled(motion.div)`
+    padding: 0px 12px;
+    display: flex;
+    justify-content: flex-start;
+    color: ${props => props.theme.colors.mainColor1};
+`;
+
+const StyledMobileTabs = styled(motion.div)`
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+`;
+
+const StyledMobileTab = styled.button`
+    display. flex;
+    text-align: left;
+    border: none;
+    background: none;
+    color: ${props => props.theme.colors.mainColor1};
+    text-decoration: ${props => props.isSelected && 'underline'};
+    font-weight: bold;
+    box-shadow: rgba(17, 17, 26, 0.1) 0px 1px 0px;
+    margin: 5px 0px;
+`;
+
+const StyledMobileTabContent = styled(motion.div)`
+    padding: 0px 5px;
+`;
+
 const StyledLink = styled.a`
     cursor: pointer;
     color: ${props => props.theme.colors.mainColor1};
@@ -87,7 +140,7 @@ const StyledTitle = styled.em`
 
 const StyledHeading = styled.h5`
     color: ${props => props.theme.colors.mainColor1};
-
+    margin 10px 0px 25px 0px;
 `;
 
 const StyledSwiper = styled(Swiper)`
@@ -137,9 +190,20 @@ export const ListComponent = ({listData}) => {
     );
 };
 
+export const AppInfo = () => {
+    return(
+        <>
+            {isMobile && <StyledHeading>{strings.appInfo.versionInfo.appInfoTitle}</StyledHeading>}
+            <b>{strings.appInfo.headingText}</b>
+            <p>{strings.appInfo.mainText}</p>
+        </>
+    )
+}
+
 export const VersionInfo = ({currentAppVersion, currentAppBuildDate}) => {
     return (
         <div>
+            {isMobile && <StyledHeading>{strings.appInfo.versionInfo.title}</StyledHeading>}
             <StyledTitle><p>{strings.appInfo.versionInfo.appVersion + currentAppVersion}</p></StyledTitle>
             <StyledTitle><p>{strings.appInfo.versionInfo.appLastUpdate + currentAppBuildDate}</p></StyledTitle>
         </div>
@@ -151,6 +215,7 @@ export const ContactAndFeedback = () => {
 
     return (
         <div>
+            {isMobile && <StyledHeading>{strings.appInfo.versionInfo.appContactAndFeedback}</StyledHeading>}
             <p>{contactInfoFeedback[0]}</p>
             <p>{contactInfoFeedback[1]} <StyledLink href={'mailto:' + contactInfoFeedback[2] + '?subject='+contactInfoFeedback.emailSubject}>{contactInfoFeedback[2]}</StyledLink></p>
         </div>
@@ -162,6 +227,7 @@ export const AppInfoLinks = () => {
 
     return (
         <div>
+            {isMobile && <StyledHeading>{strings.appInfo.versionInfo.appInfoLinksTitle}</StyledHeading>}
             <ul>
                 {Object.values(appInfoLinks).map((link, key) => {
                     return(
@@ -195,10 +261,7 @@ export const SourcesAndTermsOfUse = () => {
 export const AppInfoModalContent = () => {
 
     const inputEl = useRef(null);
-
-    const headingText = strings.appInfo.headingText.bold();
-    const mainText = strings.appInfo.mainText;
-    const content = <div dangerouslySetInnerHTML={{ __html: headingText + '<br><br>' + mainText }}></div>;
+    const [isNavOpen, setIsNavOpen] = useState(true);
 
     // App build info
     const currentAppVersion = getAppVersion();
@@ -206,11 +269,15 @@ export const AppInfoModalContent = () => {
 
     const [tabIndex, setTabIndex] = useState(0);
 
+    useEffect(() => {
+        isMobile && setTabIndex(-1);
+    }, [])
+
     const tabsContent = [
         {
             title: strings.appInfo.versionInfo.appInfoTitle,
             titleColor: 'mainColor1',
-            content: content
+            content: <AppInfo />
         },
         {
             title: strings.appInfo.versionInfo.appInfoLinksTitle,
@@ -241,55 +308,122 @@ export const AppInfoModalContent = () => {
         inputEl.current.swiper.slideTo(tabIndex);
     },[tabIndex]);
 
+    const variants = {
+        initial : {opacity: 0},
+        hidden:{opacity: isNavOpen && 0, transition: {duration: 0.2}},
+        visible: {opacity : 1, transition: { delay: 0.4}},
+        exit: {opacity: 0, transition: {duration: 0.4}}
+    };
+
+    const containerAnimation = {
+        initial: false,
+        open: {height: "auto", transition: {duration: 0.4, type: "tween"}},
+        closed: {height: "0px", transition: {duration: 0.4, type: "tween"}}
+    };
+
+
     return (
         <>
             <StyledContent>
-                    <StyledTabs
-                        tabIndex={tabIndex}
-                        tabsCount={tabsContent.length}
+                {isMobile && 
+                <>
+                    <StyledMenuContainer key="menuContainer">
+                        <StyledCloseMenuContainer>
+                            <StyledCloseMenuIcon onClick={() => setIsNavOpen(!isNavOpen)} icon={!isNavOpen && faArrowLeft} />
+                        </StyledCloseMenuContainer>
+                    </StyledMenuContainer>
+                    <StyledMobileContainer
+                    key="mobileContainer"
+                    variants={containerAnimation}
+                    animate={isNavOpen? "open" : "closed"}
                     >
-                        {
-                            tabsContent.map((tab, index) => {
-                                return (
-                                    <StyledTab
-                                        key={'ai_tab_' + tab.title}
-                                        isSelected={index === tabIndex}
-                                        color={tab.titleColor}
-                                        onClick={() => {
-                                            setTabIndex(index);
-                                        }}
-                                        tabsCount={tabsContent.length}
-                                    >
-                                        <p>{tab.title}</p>
+                        <AnimatePresence>
+                            {isNavOpen &&
+                            <StyledMobileTabs
+                                exit={{opacity: 0}}
+                                tabIndex={tabIndex}
+                                tabsCount={tabsContent.length}
+                            >
+                                <AnimatePresence>
+                                {
+                                    tabsContent.map((tab, index) => {
+                                        return (
+                                            <StyledMobileTab
+                                                key={'ai_tab_' + tab.title}
+                                                isSelected={index === tabIndex}
+                                                color={tab.titleColor}
+                                                onClick={() => {
+                                                    setTabIndex(index);
+                                                    setIsNavOpen(false);
+                                                }}
+                                                tabsCount={tabsContent.length}
+                                                >
+                                                <p>{tab.title}</p>
+                                                </StyledMobileTab>
+                                            )
+                                        })
+                                    }
+                                </AnimatePresence>
+                            </StyledMobileTabs>
+                        }
+                        </AnimatePresence>
+                    </StyledMobileContainer>
+                </>
+                }
 
-                                    </StyledTab>
-                                )
-                            })
-                        }
-                    </StyledTabs>
-                    <StyledSwiper
-                        ref={inputEl}
-                        id={'app-info-swiper'}
-                        tabIndex={tabIndex}
-                        onSlideChange={e => {
-                            setTabIndex(e.activeIndex);
-                        }}
-                        allowTouchMove={false} // Disable swiping
-                        speed={300}
+                {!isMobile &&
+                    <StyledTabs
+                    tabIndex={tabIndex}
+                    tabsCount={tabsContent.length}
                     >
-                        {
-                            tabsContent.map((tab, index) => {
-                                return (
+                {
+                    tabsContent.map((tab, index) => {
+                        return (
+                            <StyledTab
+                                key={'ai_tab_' + tab.title}
+                                isSelected={index === tabIndex}
+                                color={tab.titleColor}
+                                onClick={() => {
+                                    setTabIndex(index);
+                                }}
+                                tabsCount={tabsContent.length}
+                                >
+                                <p>{tab.title}</p>
+                                </StyledTab>
+                            )
+                        })
+                    }
+                </StyledTabs>
+                }
+                <StyledSwiper
+                    ref={inputEl}
+                    id={'app-info-swiper'}
+                    tabIndex={tabIndex}
+                    onSlideChange={e => {
+                        setTabIndex(e.activeIndex);
+                    }}
+                    allowTouchMove={false} // Disable swiping
+                    speed={isMobile? 0 : 300}
+                >
+                    {
+                        tabsContent.map((tab, index) => {
+                            return (
                                     <SwiperSlide
-                                        id={'ai_tab_content_' + index}
-                                        key={'ai_tab_content_' + index}
-                                    >
+                                    id={'ai_tab_content_' + index}
+                                    key={'ai_tab_content_' + index}
+                                >
+                                    <AnimatePresence>
+                                        {isMobile && !isNavOpen ? 
+                                        <StyledMobileTabContent key={'tabContent_' + index} variants={isMobile && variants} initial="initial" animate={isNavOpen ? "hidden" : "visible"} exit="exit">
                                         {tab.content}
+                                        </StyledMobileTabContent> : !isMobile && tab.content
+                                    }
+                                    </AnimatePresence>
                                     </SwiperSlide>
-                                )
-                            })
-                        }
-                    </StyledSwiper>
+                            )
+                        })
+                    }
+                </StyledSwiper>
             </StyledContent>
         </>
     );

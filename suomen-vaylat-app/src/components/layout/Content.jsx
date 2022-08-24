@@ -1,5 +1,7 @@
 import React, { useState, useContext, useEffect, useRef } from 'react';
 import { ReactReduxContext } from 'react-redux';
+import { ToastContainer, Slide} from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 import { useAppSelector } from '../../state/hooks';
 import styled from 'styled-components';
 import strings from '../../translations';
@@ -93,11 +95,14 @@ const StyledContentGrid = styled.div`
     @media ${(props) => props.theme.device.mobileL} {
         padding: 8px;
         grid-template-columns: 48px 1fr;
-    } ;
+    };
 `;
 
 const StyledLayerNamesList = styled.ul`
     padding-inline-start: 20px;
+`;
+
+const StyledToastContainer = styled(ToastContainer)`
 `;
 
 const StyledLayerNamesListItem = styled.li``;
@@ -203,7 +208,7 @@ const Content = () => {
         store.dispatch(setIsGfiOpen(false));
         store.dispatch(setMinimizeGfi(false));
         store.dispatch(setMaximizeGfi(false));
-        store.dispatch(setVKMData(null));
+        setTimeout(() => {store.dispatch(setVKMData(null))}, 500) ; // VKM info does not disappear during modal close animation.
         store.dispatch(removeMarkerRequest("SEARCH_MARKER"));
         channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [
             null,
@@ -617,6 +622,7 @@ const Content = () => {
                     <WarningModalContent warning={warning} />
                 </Modal>
                 <ScaleBar />
+                <StyledToastContainer position="bottom-left" pauseOnFocusLoss={false} transition={Slide} autoClose={false} closeOnClick={false} />
                 <StyledContentGrid>
                     <MenuBar />
                     <MapLayersDialog />
