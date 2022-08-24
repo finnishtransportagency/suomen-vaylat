@@ -75,10 +75,10 @@ export const UserGuideModalContent = () => {
         },
 
         {
-            title: strings.appGuide.modalContent.measureTool.title,
+            title: strings.appGuide.modalContent.drawingTools.title,
             content: <div>
                 <StyledIcon src={drawingToolsIcon} />
-                <p>{strings.appGuide.modalContent.measureTool.content}</p>
+                <p>{strings.appGuide.modalContent.drawingTools.content}</p>
             </div>
         },
         {

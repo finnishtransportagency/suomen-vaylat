@@ -153,9 +153,9 @@
         "title": "Haku",
         "content": "Haku avautuu kartan oikeaan yläkulmaan vasemman reunan suurennuslasi-painikkeesta. Haku-toiminnolla voi hakea teitä ja ja osoitteita valitsemalla alasvetovalikosta käytettävän haun. Hakutuloksen voi poistaa kartalta painamalla haku-kentän roskakoria."
       },
-      "measureTool": {
-        "title": "Mittaustyökalut",
-        "content": "Mittaustyökalut avautuvat vasemman reunan piirto-ikonista. Työkaluilla voi mitata pituutta tai pinta-alaa. mittaustulokset saa poistettua kartalta oranssilla kumi-painikkeella."
+      "drawingTools": {
+        "title": "Piirtotyökalut",
+        "content": "Piirtotyökalut avautuvat vasemman reunan piirto-ikonista. Työkaluilla voi mitata pituutta tai pinta-alaa. mittaustulokset saa poistettua kartalta oranssilla kumi-painikkeella."
       },
       "savingView": {
         "title": "Näkymän tallennus",
