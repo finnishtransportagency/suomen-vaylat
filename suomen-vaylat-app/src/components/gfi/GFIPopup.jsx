@@ -272,6 +272,7 @@ const StyledTabContent = styled.div`
 
     .ka-thead-cell {
         background-color: white;
+        width: ${(props) => props.isMobile ? "10em" : "auto"};
     }
 
     .ka-cell-text {
@@ -846,7 +847,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
                     )}
                 </StyledTabSwiperContainer>
             )}
-            <StyledTabContent>
+            <StyledTabContent isMobile={isMobile}>
                 {tabsContent[selectedTab] === undefined && (
                     <StyledNoGfisContainer>
                         <StyledSubtitle>{strings.gfi.choosingGfi}:</StyledSubtitle>
