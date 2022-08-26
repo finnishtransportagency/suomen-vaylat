@@ -238,8 +238,6 @@ const Search = () => {
     const [vkmError, setVkmError] = useState(null);
     const [vkmTrackError, setVkmTrackError] = useState(null);
 
-    const [geom, setGeom] = useState(null);
-
     const handleAddGeometry = () => {
         geoJsonArray.data && geoJsonArray.data.geom &&
         channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', [
@@ -316,7 +314,6 @@ const Search = () => {
             ]);
         var saveGeom = {data: data, style: style, hover: hover, featureStyle: featureStyle };
         store.dispatch(setGeoJsonArray(saveGeom));
-        setGeom(saveGeom);
     };
 
     const handleVKMSearch = (params) => {
@@ -377,6 +374,8 @@ const Search = () => {
                     maxZoomLevel: 10,
                 },
             ]);
+        var saveGeom = {data: data, hover: hover, featureStyle: featureStyle };
+        store.dispatch(setGeoJsonArray(saveGeom));
     };
 
     const handleVKMTrackSearch = (params) => {
@@ -600,7 +599,7 @@ const Search = () => {
                 toggleState={isSearchOpen}
                 tooltipDirection={'left'}
                 clickAction={() => {
-                    store.dispatch(setGeoJsonArray({}));
+                    isSearchOpen && store.dispatch(setGeoJsonArray({}));
                     setIsSearching(false);
                     isSearchOpen && removeMarkersAndFeatures();
                     isSearchOpen && setSearchResults(null);

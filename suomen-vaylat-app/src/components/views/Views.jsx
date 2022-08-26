@@ -406,7 +406,7 @@ const Views = () => {
                     x: center.centerX && center.centerX,
                     y: center.centerY && center.centerY,
                     layers: selectedLayers,
-                    language: strings.getLanguage(),
+                    language: strings.getLanguage()
                 },
             };
 
@@ -456,7 +456,6 @@ const Views = () => {
                 layer.opacity,
             ]);
         });
-
         updateLayers(store, channel);
 
         store.dispatch(setIsSaveViewOpen(false));

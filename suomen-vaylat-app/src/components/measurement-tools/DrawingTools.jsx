@@ -86,7 +86,7 @@ export const DrawingTools = ({isOpen, theme}) => {
 
     useEffect(() => {
         const drawHandler = (data) => {
-            if (data.isFinished && data.isFinished === true) {
+            if (data.isFinished && data.isFinished === true && data.geojson.features.length > 0) {
                 store.dispatch(setGeoJsonArray(data));
             }
         };
