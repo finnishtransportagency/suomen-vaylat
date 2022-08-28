@@ -31,7 +31,7 @@ import VKMTrackSearch from './VKMTrackSearch';
 import { VKMGeoJsonHoverStyles, VKMGeoJsonStyles } from './VKMSearchStyles';
 import AddGeometryButton from '../add-geometry-button/AddGeometryButton';
 
-const SAVED_GEOMETRY_LAYER_ID = 'saved-geometry-layer';
+const SEARCH_GEOMETRY_LAYER_ID = 'search-geometry-layer';
 const StyledSearchContainer = styled.div`
     z-index: 2;
     position: relative;
@@ -189,7 +189,7 @@ const StyledLoaderWrapper = styled.div`
 const addFeaturesToMapParams = 
     {
         clearPrevious: true,
-        layerId: SAVED_GEOMETRY_LAYER_ID,
+        layerId: SEARCH_GEOMETRY_LAYER_ID,
         centerTo: true,
         featureStyle: {
             fill: {

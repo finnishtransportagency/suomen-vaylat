@@ -22,7 +22,7 @@ import { toast } from 'react-toastify';
 import CircleButton from '../circle-button/CircleButton';
 import AddGeometryButton from '../add-geometry-button/AddGeometryButton';
 
-const SAVED_GEOMETRY_LAYER_ID = 'saved-geometry-layer';
+const DRAWTOOLS_GEOMETRY_LAYER_ID = 'drawtools-geometry-layer';
 
 const StyledTools = styled(motion.div)`
     display: flex;
@@ -192,7 +192,7 @@ export const DrawingTools = ({isOpen, theme}) => {
                 feature.geojson,
                 {
                     clearPrevious: true,
-                    layerId: SAVED_GEOMETRY_LAYER_ID,
+                    layerId: DRAWTOOLS_GEOMETRY_LAYER_ID,
                     centerTo: true,
                     featureStyle: {
                         fill: {
@@ -227,7 +227,7 @@ export const DrawingTools = ({isOpen, theme}) => {
             geoJsonArray.geojson ,
             {
                 clearPrevious: true,
-                layerId: SAVED_GEOMETRY_LAYER_ID,
+                layerId: DRAWTOOLS_GEOMETRY_LAYER_ID,
                 centerTo: true,
                 featureStyle: {
                     fill: {
