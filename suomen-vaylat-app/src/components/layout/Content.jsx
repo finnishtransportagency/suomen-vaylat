@@ -213,11 +213,6 @@ const Content = () => {
         channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [
             null,
             null,
-            'gfi-result-layer',
-        ]);
-        channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [
-            null,
-            null,
             'download-tool-layer',
         ]);
         channel.postRequest('DrawTools.StopDrawingRequest', [
