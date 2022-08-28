@@ -388,7 +388,10 @@ const Views = () => {
     const [views, setViews] = useState([]);
     const [viewName, setViewName] = useState('');
 
-    const { selectedLayers, channel } = useAppSelector((state) => state.rpc);
+    const { selectedLayers, channel } = useAppSelector((state) => state.rpc);  
+    const { geoJsonArray } = useSelector(
+        (state) => state.ui
+    );
 
     useEffect(() => {
         window.localStorage.getItem('views') !== null &&
@@ -406,6 +409,7 @@ const Views = () => {
                     x: center.centerX && center.centerX,
                     y: center.centerY && center.centerY,
                     layers: selectedLayers,
+                    geometries: {...geoJsonArray},
                     language: strings.getLanguage()
                 },
             };
@@ -456,6 +460,31 @@ const Views = () => {
                 layer.opacity,
             ]);
         });
+
+        // set geometries on map if they exist on the view
+        if (Object.keys(view.data.geometries).length) {
+            const features = {...view.data.geometries};
+            //tiehaku
+            features.data && features.data.geom &&
+            channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', [
+                features.data.geom,
+                addFeaturesToMapParams
+            ]);
+
+            features.features && features.features.forEach(feature => {
+                channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', [
+                    feature.geojson,
+                    addFeaturesToMapParams
+                ]);
+            })
+
+            features.geojson &&
+            channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', [
+                features.geojson ,
+                addFeaturesToMapParams
+            ]);
+        }
+
         updateLayers(store, channel);
 
         store.dispatch(setIsSaveViewOpen(false));
