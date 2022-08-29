@@ -39,8 +39,6 @@ import { setMinimizeGfi, setSelectedGfiTool, setGeoJsonArray, setHasToastBeenSho
 
 import SVLoader from '../loader/SvLoader';
 
-
-
 const vectorLayerId = 'SEARCH_VECTORLAYER';
 
 const StyledGfiToolContainer = styled.div`
@@ -252,7 +250,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu }) => {
 
     const { store } = useContext(ReactReduxContext);
 
-    const { channel, gfiLocations } = useSelector((state) => state.rpc);
+    const { channel } = useSelector((state) => state.rpc);
     const { gfiCroppingTypes, selectedGfiTool, hasToastBeenShown } = useSelector(
         (state) => state.ui
     );
