@@ -24,7 +24,7 @@
     "zoomOut": "Zooma ut",
     "opacity": "Transparens",
     "drawingtools": {
-      "drawingtoolsButton": "Ritverktyg",
+      "drawingtoolsButton": "Drawing tools",
       "point": "Point",
       "circle": "Cirkel",
       "square": "Kvadrat",
@@ -35,7 +35,7 @@
       "drawingToast": "Voit viimeistellä piirron tuplaklikkaamalla tai klikkaamalla viimeksi piirretystä taitepisteestä uudelleen"
     },
     "measuringTools": {
-      "measuringToolsButton": "Measuring tools",
+      "drawingToolsButton": "Drawing tools",
       "point": "Point",
       "circle": "Circle",
       "square": "Square",
@@ -80,7 +80,9 @@
     "dataTableView": "Listvy",
     "downloadMaterials": "Lataa aineistoja",
     "list": "List",
-    "table" : "Table"
+    "table" : "Table",
+    "featureAmount" : "Kohteita",
+    "getMoreFeatures": "Hae lisää kohteita"
   },
   "vkm": {
     "locationInfo": "Location info",
@@ -150,9 +152,9 @@
         "title": "Sök",
         "content": "Sökningen öppnas i kartans övre högra hörn med hjälp av förstoringsglasknappen till vänster. Sökfunktionen låter dig söka efter dig och adresser genom att välja den sökning du vill använda från rullgardinsmenyn. Du kan ta bort ett sökresultat från kartan genom att trycka på papperskorgen i sökrutan."
       },
-      "measureTool": {
-        "title": "Ritverktyg",
-        "content": "Mätverktygen öppnas från ritikonen till vänster. Verktygen kan användas för att mäta längd eller area. mätresultaten kan raderas från kartan med den orangea gummiknappen."
+      "drawingTools": {
+        "title": "Drawing tools",
+        "content": "Drawing tools öppnas från ritikonen till vänster. Verktygen kan användas för att mäta längd eller area. mätresultaten kan raderas från kartan med den orangea gummiknappen."
       },
       "savingView": {
         "title": "Spara vyn",

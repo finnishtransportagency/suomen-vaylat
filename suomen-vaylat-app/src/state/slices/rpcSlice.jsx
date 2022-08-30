@@ -628,6 +628,26 @@ export const rpcSlice = createSlice({
         },
 
         /**
+         * Add features to gfiLocations.
+         * @param {Object} state
+         * @param {Object} action
+         */
+         addFeaturesToGFILocations: (state, action) => {
+            const layerId = action.payload.layerId;
+            const geojson = action.payload.geojson;
+            const nextStartIndex = action.payload.nextStartIndex;
+            const moreFeatures = action.payload.moreFeatures;
+            const selectedGFI = action.payload.selectedGFI;
+            state.gfiLocations.forEach((l) => {
+                if (l.layerId === layerId && l.content && l.content.features) {
+                    l.content.features.push(...geojson.features);
+                }
+            });
+            state.gfiLocations[selectedGFI].moreFeatures = moreFeatures;
+            state.gfiLocations[selectedGFI].nextStartIndex = nextStartIndex;
+        },
+
+        /**
          * Set GFI point.
          * @method setGFIPoint
          * @param {Object} state
@@ -815,6 +835,7 @@ export const {
     setDownloadRemove,
     removeAllSelectedLayers,
     setStartState,
+    addFeaturesToGFILocations
 } = rpcSlice.actions;
 
 export default rpcSlice.reducer;

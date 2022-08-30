@@ -80,7 +80,9 @@
     "dataTableView": "List view",
     "downloadMaterials": "Download materials",
     "list": "List",
-    "table" : "Table"
+    "table" : "Table",
+    "featureAmount" : "Kohteita",
+    "getMoreFeatures": "Hae lisää kohteita"
   },
   "vkm": {
     "locationInfo": "Location info",
@@ -150,9 +152,9 @@
         "title": "Search",
         "content": "The search opens in the upper right corner of the map using the magnifying glass button on the left. The Search function allows you to search for you and addresses by selecting the search you want to use from the drop-down menu. You can delete a search result from the map by tapping the trash in the search box."
       },
-      "measureTool": {
-        "title": "Drawingtools",
-        "content": "The measurement tools open from the drawing icon on the left. The tools can be used to measure length or area. the measurement results can be deleted from the map with the orange rubber but-ton."
+      "drawingTools": {
+        "title": "Drawing tools",
+        "content": "The drawing tools open from the drawing icon on the left. The tools can be used to measure length or area. the measurement results can be deleted from the map with the orange rubber button."
       },
       "savingView": {
         "title": "Save The View",

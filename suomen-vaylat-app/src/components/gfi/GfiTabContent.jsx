@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
 import GfiTabContentItem from './GfiTabContentItem';
@@ -64,6 +64,10 @@ const GfiTabContent = ({
     const dispatch = action => {
       changeTableProps(prevState => kaReducer(prevState, action));
     };
+
+    useEffect(() => {
+        changeTableProps(tablePropsInit);
+    }, [tablePropsInit]);
 
     const [showDataTable, setShowDataTable] = useState(data.content && data.content.features && data.content.features.length > 5);
 
