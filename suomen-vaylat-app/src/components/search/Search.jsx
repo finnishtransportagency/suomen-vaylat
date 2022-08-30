@@ -15,8 +15,6 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import AddressSearch from './AddressSearch';
-import RoadSearch from './RoadSearch';
-import VKMRoadSearch from './VKMRoadSearch';
 import MetadataSearch from './MetadataSearch';
 import Layer from '../menus/hierarchical-layerlist/Layer';
 import SvLoder from '../loader/SvLoader';
@@ -29,7 +27,6 @@ import { addMarkerRequest, mapMoveRequest } from '../../state/slices/rpcSlice';
 import { setIsSearchOpen } from '../../state/slices/uiSlice';
 
 import CircleButton from '../circle-button/CircleButton';
-import VKMTrackSearch from './VKMTrackSearch';
 
 import { VKMGeoJsonHoverStyles, VKMGeoJsonStyles } from './VKMSearchStyles';
 
@@ -236,7 +233,11 @@ const Search = () => {
         setIsSearching(false);
 
         let style = 'tie';
-        if (
+        if (data.hasOwnProperty('osa_loppu')  &&
+            data.hasOwnProperty('etaisyys_loppu')
+        ) {
+            style = 'vali';
+        } else if (
             (data.hasOwnProperty('osa') || data.hasOwnProperty('ajorata')) &&
             !data.hasOwnProperty('etaisyys')
         ) {
@@ -402,6 +403,7 @@ const Search = () => {
 
     const vectorLayerIds = [
         vectorLayerId + '_vkm_tie',
+        vectorLayerId + '_vkm_vali',
         vectorLayerId + '_vkm_osa',
         vectorLayerId + '_vkm_etaisyys',
         vectorLayerId + '_vkm_track',
@@ -438,26 +440,7 @@ const Search = () => {
                 />
             ),
             visible: true,
-        },/*
-        vkm: {
-            label: strings.search.vkm.title,
-            subtitle: strings.search.vkm.subtitle,
-            content: (
-                <RoadSearch
-                    searchValue={searchValue}
-                    setSearchValue={setSearchValue}
-                    setIsSearching={setIsSearching}
-                    handleVKMSearch={handleVKMSearch}
-                />
-            ),
-            visible: channel && channel.searchVKMRoad,
         },
-        vkmtrack: {
-            label: strings.search.vkm.trackTitle,
-            subtitle: strings.search.vkm.trackSubtitle,
-            content: <p>{strings.search.vkm.trackTitle}</p>,
-            visible: channel && channel.searchVKMTrack,
-        },*/
         metadata: {
             label: strings.search.metadata.title,
             subtitle: strings.search.metadata.subtitle,
@@ -495,7 +478,7 @@ const Search = () => {
             });
     }, [channel]);
 
-    const handleSearchSelect = (name, lon, lat, geom, tie, osa, ajorata, etaisyys, type) => {
+    const handleSearchSelect = (name, lon, lat, geom, osa, ajorata, etaisyys, osaLoppu, etaisyysLoppu, type) => {
         removeMarkersAndFeatures();
         if (!geom) {
             store.dispatch(
@@ -516,7 +499,9 @@ const Search = () => {
             );
         } else if (type === 'road') {
             let style = 'tie';
-            if ((osa || ajorata) && !etaisyys) {
+            if (osaLoppu && etaisyysLoppu) {
+                style = 'vali';
+            } else if ((osa || ajorata) && !etaisyys) {
                 style = 'osa';
             } else if (etaisyys) {
                 style = 'etaisyys';
@@ -787,7 +772,7 @@ const Search = () => {
                         searchResults.result.locations.length > 0 ? (
                             searchResults.result.locations.map(
                                 (
-                                    { name, region, type, lon, lat, id, vkmType, geom, tie, osa, ajorata, etaisyys },
+                                    { name, region, type, lon, lat, vkmType, geom, osa, ajorata, etaisyys, osa_loppu, etaisyys_loppu },
                                     index
                                 ) => {
                                     let visibleText;
@@ -824,10 +809,11 @@ const Search = () => {
                                                     lon,
                                                     lat,
                                                     geom,
-                                                    tie,
                                                     osa,
                                                     ajorata,
                                                     etaisyys,
+                                                    osa_loppu,
+                                                    etaisyys_loppu,
                                                     vkmType
                                                 );
                                                 isMobile &&
@@ -854,69 +840,6 @@ const Search = () => {
                                 </StyledDropdownContentItemTitle>
                             </StyledDropdownContentItem>
                         )}
-                        <StyledHideSearchResultsButton
-                            onClick={() => setShowSearchResults(false)}
-                        >
-                            <FontAwesomeIcon icon={faAngleUp} />
-                        </StyledHideSearchResultsButton>
-                    </StyledDropDown>
-                ) : (isSearchOpen &&
-                      showSearchResults &&
-                      searchType === 'vkm' &&
-                      searchValue.tieosat &&
-                      searchValue.tieosat.length > 0) ||
-                  vkmError ? (
-                    <StyledDropDown
-                        key={'dropdown-content-vkm'}
-                        variants={dropdownVariants}
-                        initial={'initial'}
-                        animate={'animate'}
-                        exit={'exit'}
-                        transition={'transition'}
-                    >
-                        <VKMRoadSearch
-                            setIsSearching={setIsSearching}
-                            searchValue={searchValue}
-                            setSearchValue={setSearchValue}
-                            setLastSearchValue={setLastSearchValue}
-                            setSearchResults={setSearchResults}
-                            vectorLayerId={vectorLayerId}
-                            removeMarkersAndFeatures={removeMarkersAndFeatures}
-                            handleVKMSearch={handleVKMSearch}
-                            handleVKMResponse={handleVKMResponse}
-                            vkmError={vkmError}
-                            setVkmError={setVkmError}
-                        />
-                        <StyledHideSearchResultsButton
-                            onClick={() => setShowSearchResults(false)}
-                        >
-                            <FontAwesomeIcon icon={faAngleUp} />
-                        </StyledHideSearchResultsButton>
-                    </StyledDropDown>
-                ) : isSearchOpen &&
-                  showSearchResults &&
-                  searchType === 'vkmtrack' ? (
-                    <StyledDropDown
-                        key={'dropdown-content-vkmtrack'}
-                        variants={dropdownVariants}
-                        initial={'initial'}
-                        animate={'animate'}
-                        exit={'exit'}
-                        transition={'transition'}
-                    >
-                        <VKMTrackSearch
-                            setIsSearching={setIsSearching}
-                            searchValue={searchValue}
-                            setSearchValue={setSearchValue}
-                            setLastSearchValue={setLastSearchValue}
-                            setSearchResults={setSearchResults}
-                            vectorLayerId={vectorLayerId}
-                            removeMarkersAndFeatures={removeMarkersAndFeatures}
-                            handleVKMTrackSearch={handleVKMTrackSearch}
-                            handleVKMTrackResponse={handleVKMTrackResponse}
-                            vkmTrackError={vkmTrackError}
-                            setVkmTrackError={setVkmTrackError}
-                        />
                         <StyledHideSearchResultsButton
                             onClick={() => setShowSearchResults(false)}
                         >

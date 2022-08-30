@@ -2,6 +2,12 @@ import strings from '../../translations';
 
 export const VKMGeoJsonStyles = {
     road: {
+        vali: {
+            stroke: {
+                width: 12,
+                color: '#e50083'
+            }
+        },
         tie: {
             stroke: {
                 width: 12,
@@ -62,6 +68,18 @@ export const VKMGeoJsonHoverStyles = {
                 { key: strings.search.vkm.osa, valueProperty: 'osa' },
                 { key: strings.search.vkm.ajorata, valueProperty: 'ajorata' },
                 { key: strings.search.vkm.etaisyys, valueProperty: 'etaisyys' }
+            ]
+        },
+        vali: {
+            inherit: true,
+            effect: 'darken',
+            content: [
+                { key: strings.search.vkm.tie, valueProperty: 'tie' },
+                { key: strings.search.vkm.osa, valueProperty: 'osa' },
+                { key: strings.search.vkm.ajorata, valueProperty: 'ajorata' },
+                { key: strings.search.vkm.etaisyys, valueProperty: 'etaisyys' },
+                { key: strings.search.vkm.osaLoppu, valueProperty: 'osa_loppu' },
+                { key: strings.search.vkm.etaisyysLoppu, valueProperty: 'etaisyys_loppu' },
             ]
         }
     },

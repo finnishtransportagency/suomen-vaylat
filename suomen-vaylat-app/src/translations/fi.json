@@ -225,8 +225,10 @@
       "title": "Tiehaku",
       "subtitle": "Hae tien numerolla",
       "osa": "Tieosa",
+      "osaLoppu": "Tieosa loppu",
       "ajorata": "Ajorata",
       "etaisyys": "Etäisyys (m)",
+      "etaisyysLoppu": "Etäisyys loppu (m)",
       "error": {
         "text": "Tuloksia ei löytynyt tiehaulla."
       },

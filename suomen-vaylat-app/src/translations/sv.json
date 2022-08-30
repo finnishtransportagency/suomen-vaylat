@@ -224,8 +224,10 @@
       "title": "Sök efter vägnummer",
       "subtitle": "Sök på vägnummer",
       "osa": "Vägsträcka",
+      "osaLoppu": "Tieosa loppu",
       "ajorata": "Körbana",
       "etaisyys": "Avstånd (m)",
+      "etaisyysLoppu": "Etäisyys loppu (m)",
       "error": {
         "text": "Inga resultat hittades för vägsökning."
       },

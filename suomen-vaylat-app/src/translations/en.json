@@ -224,8 +224,10 @@
       "title": "Road number search",
       "subtitle": "Search by road number",
       "osa": "Road section",
+      "osaLoppu": "Tieosa loppu",
       "ajorata": "Carriageway",
       "etaisyys": "Distance (m)",
+      "etaisyysLoppu": "Etäisyys loppu (m)",
       "error": {
         "text": "No results were found for the road search."
       },
