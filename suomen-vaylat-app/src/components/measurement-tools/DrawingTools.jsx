@@ -113,7 +113,7 @@ export const DrawingTools = ({isOpen, theme}) => {
         // stop the drawing tool
         channel && channel.postRequest('DrawTools.StopDrawingRequest', [activeTool]);
         // remove geometries off the map
-        channel && channel.postRequest('DrawTools.StopDrawingRequest', [true, true]);
+        channel && channel.postRequest('DrawTools.StopDrawingRequest', [true]);
         store.dispatch(setActiveTool(null));
     };
 
