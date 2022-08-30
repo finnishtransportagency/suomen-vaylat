@@ -42,6 +42,7 @@
       "box": "Laatikko",
       "linestring": "Viiva",
       "polygon": "Monikulmio",
+      "marker": "Markkeri",
       "erase": "Tyhjennä",
       "measureToast": "Voit viimeistellä piirron tuplaklikkaamalla tai klikkaamalla viimeksi piirretystä taitepisteestä uudelleen"
     },

@@ -415,7 +415,7 @@ export const rpcSlice = createSlice({
                 x: action.payload.x,
                 y: action.payload.y,
                 msg: action.payload.msg || '',
-                shape: action.payload.shape || 2,
+                shape: typeof action.payload.shape === 'number' ? action.payload.shape : 2,
                 size: action.payload.size || 7,
                 color: action.payload.color || '0064af',
                 offsetX: action.payload.offsetX || '',

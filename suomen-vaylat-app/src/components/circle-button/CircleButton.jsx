@@ -84,15 +84,14 @@ const CircleButton = ({
     color,
     disabled,
     effect = "float",
-    children
+    children,
 }) => {
 
     const [isHovered, setHovered] = useState(false);
     const useReactTooltip = tooltipDirection !== "left" && tooltipDirection !== "right" && text;
-
     return (
         <>
-        {useReactTooltip && 
+        {useReactTooltip &&
             <ReactTooltip backgroundColor={tooltipBackgroundColor} textColor={tooltipColor} disable={isMobile} id={text + "_id"} place={tooltipDirection} type='dark' effect={effect}>
                 <span>{text}</span>
             </ReactTooltip>
@@ -123,7 +122,7 @@ const CircleButton = ({
             }
              <AnimatePresence initial={false}>
                  {
-                     !toggleState && isHovered && <StyledCircleButtonTextContainer
+                      !toggleState && isHovered && <StyledCircleButtonTextContainer
                         key={text +"_button"}
                         direction={tooltipDirection}
                         positionTransition

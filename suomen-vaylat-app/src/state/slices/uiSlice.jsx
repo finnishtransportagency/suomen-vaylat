@@ -31,7 +31,9 @@ const initialState = {
     maximizeGfi: false,
     gfiCroppingTypes: [],
     warning: null,
-    hasToastBeenShown: false
+    hasToastBeenShown: false,
+    selectedMarker: 2,
+    drawToolMarkers: []
 };
 
 export const uiSlice = createSlice({
@@ -136,7 +138,14 @@ export const uiSlice = createSlice({
         },
         setHasToastBeenShown: (state, action) => {
             state.hasToastBeenShown = action.payload;
-        }
+        },
+        setSelectedMarker: (state, action) => {
+            state.selectedMarker = action.payload;
+        },
+        addToDrawToolMarkers: (state, action) => {
+            state.drawToolMarkers.push(action.payload);
+        },
+
     },
 });
 
@@ -167,7 +176,9 @@ export const {
     setMaximizeGfi,
     setGfiCroppingTypes,
     setWarning,
-    setHasToastBeenShown
+    setHasToastBeenShown,
+    setSelectedMarker,
+    addToDrawToolMarkers
 } = uiSlice.actions;
 
 export default uiSlice.reducer;
