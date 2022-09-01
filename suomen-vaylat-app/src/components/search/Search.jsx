@@ -12,6 +12,7 @@ import {
     faCity,
     faRoad,
     faTrain,
+    faInfoCircle,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import AddressSearch from './AddressSearch';
@@ -20,15 +21,18 @@ import Layer from '../menus/hierarchical-layerlist/Layer';
 import SvLoder from '../loader/SvLoader';
 import strings from '../../translations';
 
-import { isMobile } from '../../theme/theme';
+import { isMobile, theme } from '../../theme/theme';
 
 import { addMarkerRequest, mapMoveRequest } from '../../state/slices/rpcSlice';
 
-import { setIsSearchOpen } from '../../state/slices/uiSlice';
+import { setHasToastBeenShown, setIsSearchOpen } from '../../state/slices/uiSlice';
 
 import CircleButton from '../circle-button/CircleButton';
 
 import { VKMGeoJsonHoverStyles, VKMGeoJsonStyles } from './VKMSearchStyles';
+import { SEARCH_TIP_LOCALSTORAGE } from '../../utils/constants';
+import { toast } from 'react-toastify';
+import SearchToast from '../toasts/SearchToast';
 
 const StyledSearchIcon  = styled.div`
     min-width: 48px;
@@ -198,6 +202,10 @@ const StyledLoaderWrapper = styled.div`
     }
 `;
 
+const StyledToastIcon = styled(FontAwesomeIcon)`
+    color: ${theme.colors.mainColor1};
+`;
+
 const Search = () => {
     const [searchValue, setSearchValue] = useState('');
     const [lastSearchValue, setLastSearchValue] = useState('');
@@ -208,16 +216,13 @@ const Search = () => {
         useState(false);
     const [searchType, setSearchType] = useState('address');
 
-    const { isSearchOpen } = useAppSelector((state) => state.ui);
+    const { isSearchOpen, hasToastBeenShown } = useAppSelector((state) => state.ui);
     const { channel, allLayers } = useAppSelector((state) => state.rpc);
 
     const { store } = useContext(ReactReduxContext);
 
     const markerId = 'SEARCH_MARKER';
     const vectorLayerId = 'SEARCH_VECTORLAYER';
-
-    const [vkmError, setVkmError] = useState(null);
-    const [vkmTrackError, setVkmTrackError] = useState(null);
     const [searchClickedRow, setSearchClickedRow] = useState(null);
 
     const handleAddressSearch = (value) => {
@@ -227,163 +232,6 @@ const Search = () => {
         channel.postRequest('SearchRequest', [value]);
         setSearchValue(value);
         setLastSearchValue(value);
-    };
-
-    const handleVKMResponse = (data) => {
-        setIsSearching(false);
-
-        let style = 'tie';
-        if (data.hasOwnProperty('osa_loppu')  &&
-            data.hasOwnProperty('etaisyys_loppu')
-        ) {
-            style = 'vali';
-        } else if (
-            (data.hasOwnProperty('osa') || data.hasOwnProperty('ajorata')) &&
-            !data.hasOwnProperty('etaisyys')
-        ) {
-            style = 'osa';
-        } else if (data.hasOwnProperty('etaisyys')) {
-            style = 'etaisyys';
-        }
-        let featureStyle = VKMGeoJsonStyles.road[style];
-        let hover = VKMGeoJsonHoverStyles.road[style];
-
-        if (style === 'tie') {
-            removeMarkersAndFeatures();
-        }
-
-        const value = {
-            tienumero: data.hasOwnProperty('tie')
-                ? parseInt(data.tie)
-                : searchValue.tienumero || null,
-            tieosa: data.hasOwnProperty('osa')
-                ? parseInt(data.osa)
-                : searchValue.tieosa || 'default',
-            ajorata: data.hasOwnProperty('ajorata')
-                ? parseInt(data.ajorata)
-                : 'default',
-            etaisyys: data.hasOwnProperty('etaisyys')
-                ? parseInt(data.etaisyys)
-                : '',
-            tieosat: data.hasOwnProperty('tieosat')
-                ? data.tieosat
-                : searchValue.tieosat || [],
-            ajoradat: data.hasOwnProperty('ajoradat')
-                ? data.ajoradat
-                : searchValue.ajoradat || [],
-        };
-
-        setSearchValue(value);
-        setLastSearchValue(value);
-
-        setSearchResults(data);
-
-        data.hasOwnProperty('geom') &&
-            channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', [
-                data.geom,
-                {
-                    clearPrevious: true,
-                    centerTo: true,
-                    hover: hover,
-                    featureStyle: featureStyle,
-                    layerId: vectorLayerId + '_vkm_' + style,
-                    maxZoomLevel: 10,
-                },
-            ]);
-    };
-
-    const handleVKMSearch = (params) => {
-        removeMarkersAndFeatures();
-        setIsSearching(true);
-        setVkmError(null);
-
-        const requestData = [
-            params.hasOwnProperty('vkmTienumero') &&
-                parseInt(params.vkmTienumero),
-            params.hasOwnProperty('vkmTieosa') && parseInt(params.vkmTieosa),
-            params.hasOwnProperty('vkmAjorata') && parseInt(params.vkmAjorata),
-            params.hasOwnProperty('vkmEtaisyys') &&
-                parseInt(params.vkmEtaisyys),
-        ];
-
-        channel.searchVKMRoad &&
-            channel.searchVKMRoad(requestData, handleVKMResponse, (err) => {
-                setIsSearching(false);
-                if (err) {
-                    setVkmError(err);
-                }
-            });
-    };
-
-    const handleVKMTrackResponse = (data) => {
-        setIsSearching(false);
-
-        let featureStyle = VKMGeoJsonStyles['track'];
-        let hover = VKMGeoJsonHoverStyles['track'];
-
-        removeMarkersAndFeatures();
-
-        const value = {
-            ratanumero: data.hasOwnProperty('ratanumero')
-                ? data.ratanumero
-                : searchValue.ratanumero || '',
-            ratakilometri: data.hasOwnProperty('ratakilometri')
-                ? parseInt(data.ratakilometri)
-                : searchValue.ratakilometri || 1,
-            ratametri: data.hasOwnProperty('ratametri')
-                ? parseInt(data.ratametri)
-                : searchValue.ratakilometri || 0,
-        };
-
-        setSearchValue(value);
-        setLastSearchValue(value);
-        setSearchResults(data);
-
-        data.hasOwnProperty('geom') &&
-            channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', [
-                data.geom,
-                {
-                    centerTo: true,
-                    hover: hover,
-                    featureStyle: featureStyle,
-                    layerId: vectorLayerId + '_vkm_track',
-                    maxZoomLevel: 10,
-                },
-            ]);
-    };
-
-    const handleVKMTrackSearch = (params) => {
-        removeMarkersAndFeatures();
-        setVkmTrackError(null);
-        if (
-            params.hasOwnProperty('ratanumero') &&
-            params.ratanumero !== '' &&
-            params.hasOwnProperty('ratakilometri') &&
-            params.ratakilometri !== '' &&
-            params.hasOwnProperty('ratametri') &&
-            params.ratametri !== ''
-        ) {
-            let requestData = [
-                params.hasOwnProperty('ratanumero') && params.ratanumero,
-                params.hasOwnProperty('ratakilometri') &&
-                    parseInt(params.ratakilometri),
-                params.hasOwnProperty('ratametri') &&
-                    parseInt(params.ratametri),
-            ];
-            channel.searchVKMTrack &&
-                channel.searchVKMTrack(
-                    requestData,
-                    handleVKMTrackResponse,
-                    (err) => {
-                        setIsSearching(false);
-                        if (err) {
-                            setVkmTrackError(err);
-                        }
-                    }
-                );
-        } else {
-            setVkmTrackError(strings.search.fill_all_fields);
-        }
     };
 
     const handleMetadataSearch = (value) => {
@@ -583,6 +431,45 @@ const Search = () => {
         },
     };
 
+    const [showToast, setShowToast] = useState(JSON.parse(localStorage.getItem(SEARCH_TIP_LOCALSTORAGE)));
+
+    const handleClick = () => {
+        setShowToast(false);
+        toast.dismiss('searchToast');
+    };
+
+    const texts = [
+        {
+            text: strings.search.tips.address,
+            examples: strings.search.tips.addressExamples
+        },
+        {
+            text: strings.search.tips.realEstateUnitIdentifier,
+            examples: strings.search.tips.realEstateUnitIdentifierExamples
+        },
+        {
+            text: strings.search.tips.vkmRoad,
+            examples: strings.search.tips.vkmRoadExamples
+        },
+        {
+            text: strings.search.tips.vkmTrack,
+            examples: strings.search.tips.vkmTrackExamples
+        }
+    ];
+
+    if(searchType === 'address' && isSearchOpen && showToast !== false && !hasToastBeenShown.includes('searchToast')) {
+        toast.info(<SearchToast header={strings.search.tips.title} texts={texts} handleButtonClick={handleClick} />,
+        {
+            icon: <StyledToastIcon icon={faInfoCircle} />,
+            toastId: 'searchToast',
+            onClose: () => store.dispatch(setHasToastBeenShown({toastId: 'searchToast', shown: true})),
+            position: 'top-right',
+            draggable: false
+        })
+    } else if (!isSearchOpen || searchType !== 'address') {
+        toast.dismiss('searchToast');
+    }
+
     return (
         <StyledSearchContainer isSearchOpen={isSearchOpen}>
             <CircleButton
@@ -599,8 +486,6 @@ const Search = () => {
                     isSearchMethodSelectorOpen &&
                         setIsSearchMethodSelectorOpen(false);
                     setSearchType('address');
-                    setVkmError(null);
-                    setVkmTrackError(null);
                 }}
             />
             <AnimatePresence>
@@ -661,46 +546,6 @@ const Search = () => {
                                     switch (searchType) {
                                         case 'address':
                                             handleAddressSearch(searchValue);
-                                            break;
-                                        case 'vkm':
-                                            let data = {};
-                                            if (
-                                                searchValue.hasOwnProperty(
-                                                    'tienumero'
-                                                )
-                                            ) {
-                                                data.vkmTienumero =
-                                                    searchValue.tienumero;
-                                            }
-                                            if (
-                                                searchValue.hasOwnProperty(
-                                                    'tieosa'
-                                                )
-                                            ) {
-                                                data.vkmTieosa =
-                                                    searchValue.tieosa;
-                                            }
-                                            if (
-                                                searchValue.hasOwnProperty(
-                                                    'ajorata'
-                                                )
-                                            ) {
-                                                data.vkmAjorata =
-                                                    searchValue.ajorata;
-                                            }
-                                            if (
-                                                searchValue.hasOwnProperty(
-                                                    'etaisyys'
-                                                )
-                                            ) {
-                                                data.vkmEtaisyys = parseInt(
-                                                    searchValue.etaisyys
-                                                );
-                                            }
-                                            handleVKMSearch(data);
-                                            break;
-                                        case 'vkmtrack':
-                                            handleVKMTrackSearch(searchValue);
                                             break;
                                         case 'metadata':
                                             handleMetadataSearch(searchValue);

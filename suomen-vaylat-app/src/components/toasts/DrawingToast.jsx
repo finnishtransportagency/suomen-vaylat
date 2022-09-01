@@ -1,5 +1,6 @@
 import strings from "../../translations";
 import styled from "styled-components";
+import { DRAWING_TIP_LOCALSTORAGE } from "../../utils/constants";
 
 const StyledToastButton = styled.button`
     border: none;
@@ -15,7 +16,7 @@ const StyledToastButton = styled.button`
 export const DrawingToast = ({text, handleButtonClick}) => {
 
     const handleClick = () => {
-        localStorage.setItem("showToast", JSON.stringify(false));
+        localStorage.setItem(DRAWING_TIP_LOCALSTORAGE, JSON.stringify(false));
         handleButtonClick();
     };
 

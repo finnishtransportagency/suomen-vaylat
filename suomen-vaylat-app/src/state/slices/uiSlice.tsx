@@ -31,7 +31,7 @@ const initialState = {
     maximizeGfi: false,
     gfiCroppingTypes: [],
     warning: null,
-    hasToastBeenShown: false
+    hasToastBeenShown : new Array<string>()
 };
 
 export const uiSlice = createSlice({
@@ -135,7 +135,14 @@ export const uiSlice = createSlice({
             state.warning = action.payload;
         },
         setHasToastBeenShown: (state, action) => {
-            state.hasToastBeenShown = action.payload;
+            const toastId = action.payload.toastId;
+            const hasToastBeenShow = action.payload.shown;
+
+            state.hasToastBeenShown = state.hasToastBeenShown.filter(item => item !== toastId);
+
+            if (hasToastBeenShow) {
+                state.hasToastBeenShown.push(toastId as string);
+            }
         }
     },
 });
