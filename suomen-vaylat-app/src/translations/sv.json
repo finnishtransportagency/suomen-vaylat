@@ -108,7 +108,8 @@
     "continue": "Continue",
     "cancel": "Cancel",
     "dontShowAgain": "Visa inte igen",
-    "ok": "OK"
+    "ok": "OK",
+    "OkLowerCaseK": "Ok"
   },
   "multipleLayersWarning": "Du håller på att lägga till minst 10 kartnivåer på kartan och det kan påverka tjänstens prestanda",
   "appGuide": {

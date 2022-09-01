@@ -108,7 +108,8 @@
     "continue": "Continue",
     "cancel": "Cancel",
     "dontShowAgain": "Don't show again",
-    "ok": "OK"
+    "ok": "OK",
+    "OkLowerCaseK": "Ok"
   },
   "multipleLayersWarning": "You are about to activate 10 or more maplayers and it might affect the performance of the service",
   "appGuide": {
