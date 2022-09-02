@@ -276,7 +276,9 @@
         "5/116/0",
         "5/116/0/50",
         "5/116//50",
-        "5/116/0/50 5/348/0/100"
+        "5/116/0/50 5/348/0/100",
+        "5/116//50 5/348//100",
+        "alku:5/116/0/50 loppu:5/348/0/100"
       ],
       "vkmTrack": "Ratahaku, kirjoita muodossa 'ratanumero/ratakilometri/ratametri'.",
       "vkmTrackExamples": [
