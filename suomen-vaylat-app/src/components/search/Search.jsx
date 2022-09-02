@@ -31,7 +31,6 @@ import { setHasToastBeenShown, setIsSearchOpen } from '../../state/slices/uiSlic
 import CircleButton from '../circle-button/CircleButton';
 
 import { VKMGeoJsonHoverStyles, VKMGeoJsonStyles } from './VKMSearchStyles';
-import { SEARCH_TIP_LOCALSTORAGE } from '../../utils/constants';
 import { toast } from 'react-toastify';
 import SearchToast from '../toasts/SearchToast';
 
@@ -434,8 +433,6 @@ const Search = () => {
         },
     };
 
-    const [showToast, setShowToast] = useState(JSON.parse(localStorage.getItem(SEARCH_TIP_LOCALSTORAGE)));
-
     const texts = [
         {
             text: strings.search.tips.address,
@@ -455,7 +452,7 @@ const Search = () => {
         }
     ];
 
-    if(searchType === 'address' && isSearchOpen && showToast !== false && !hasToastBeenShown.includes('searchToast')) {
+    if(searchType === 'address' && isSearchOpen && !hasToastBeenShown.includes('searchToast')) {
         toast.info(<SearchToast header={strings.search.tips.title} texts={texts}/>,
         {
             icon: <StyledToastIcon icon={faInfoCircle} />,
@@ -657,6 +654,7 @@ const Search = () => {
                                         visibleText = name;
                                     }
 
+                                    // Show result on the map if search returns only one result
                                     if (searchResults.result.locations.length === 1 && !firstSearchResultShown) {
                                         handleSearchSelect(
                                             name,
@@ -671,6 +669,7 @@ const Search = () => {
                                             vkmType
                                         );
                                         setFirstSearchResultShown(true);
+                                        toast.dismiss('searchToast');
                                     }
 
                                     return (
