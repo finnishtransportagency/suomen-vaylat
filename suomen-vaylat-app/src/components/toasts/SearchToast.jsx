@@ -1,18 +1,5 @@
 import strings from "../../translations";
 import styled from "styled-components";
-import { SEARCH_TIP_LOCALSTORAGE } from "../../utils/constants";
-
-const StyledToastButton = styled.button`
-    border: none;
-    background: none;
-    color: ${props => props.theme.colors.button};
-    padding: 0px;
-    font-weight: bold;
-    &:hover {
-        color: ${props => props.theme.colors.buttonActive }
-    }
-    margin-top: 12px;
-`;
 
 const StyledHeader = styled.div`
     padding: 0px;
@@ -66,12 +53,7 @@ const StyledCol = styled.div`
     display: table-cell;
 `;
 
-export const SearchToast = ({header, texts, handleButtonClick}) => {
-
-    const handleClick = () => {
-        localStorage.setItem(SEARCH_TIP_LOCALSTORAGE, JSON.stringify(false));
-        handleButtonClick();
-    };
+export const SearchToast = ({header, texts}) => {
 
     return(
         <div>
@@ -99,41 +81,8 @@ export const SearchToast = ({header, texts, handleButtonClick}) => {
                     );
                 })}
             </StyledContainer>
-            <StyledToastButton onClick={() => handleClick()}>{ `${strings.general.OkLowerCaseK}, ${strings.general.dontShowAgain.toLowerCase()}.`}</StyledToastButton>
         </div>
     )
-
-/*
-    return(
-        <div>
-            <StyledContainer>
-                <StyledHeader>{header}</StyledHeader>
-                {texts.map((text) => {
-                    return (
-                        <StyledContent>
-                            {text.text}
-                            <table style={{marginLeft: "16px"}}>
-                                <tr>
-                                    <td style={{verticalAlign: "top"}}>
-                                        <StyledExamplesHeader>{strings.search.tips.example}</StyledExamplesHeader>
-                                    </td>
-                                    <td>
-                                    {text.examples.map((example) => {
-                                            return (
-                                                <StyledExample>{example}</StyledExample>
-                                            )
-                                        })}
-                                    </td>
-                                </tr>
-                            </table>
-                        </StyledContent>
-                    );
-                })}
-            </StyledContainer>
-            <StyledToastButton onClick={() => handleClick()}>{ `${strings.general.OkLowerCaseK}, ${strings.general.dontShowAgain.toLowerCase()}.`}</StyledToastButton>
-        </div>
-    )
-    */
 };
 
 export default SearchToast;

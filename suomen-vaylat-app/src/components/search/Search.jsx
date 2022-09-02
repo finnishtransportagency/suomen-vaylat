@@ -13,6 +13,7 @@ import {
     faRoad,
     faTrain,
     faInfoCircle,
+    faQuestion,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import AddressSearch from './AddressSearch';
@@ -433,11 +434,6 @@ const Search = () => {
 
     const [showToast, setShowToast] = useState(JSON.parse(localStorage.getItem(SEARCH_TIP_LOCALSTORAGE)));
 
-    const handleClick = () => {
-        setShowToast(false);
-        toast.dismiss('searchToast');
-    };
-
     const texts = [
         {
             text: strings.search.tips.address,
@@ -458,7 +454,7 @@ const Search = () => {
     ];
 
     if(searchType === 'address' && isSearchOpen && showToast !== false && !hasToastBeenShown.includes('searchToast')) {
-        toast.info(<SearchToast header={strings.search.tips.title} texts={texts} handleButtonClick={handleClick} />,
+        toast.info(<SearchToast header={strings.search.tips.title} texts={texts}/>,
         {
             icon: <StyledToastIcon icon={faInfoCircle} />,
             toastId: 'searchToast',
@@ -530,6 +526,18 @@ const Search = () => {
                                 </StyledLoaderWrapper>
                             )}
                         </StyledLeftContentWrapper>
+                        {searchType === 'address' && <StyledSearchActionButton
+                                onClick={() => {
+                                    if (!hasToastBeenShown.includes('searchToast')) {
+                                        store.dispatch(setHasToastBeenShown({toastId: 'searchToast', shown: true}));
+                                        toast.dismiss('searchToast');
+                                    } else {
+                                        store.dispatch(setHasToastBeenShown({toastId: 'searchToast', shown: false}));
+                                    }
+                                }}
+                                icon={faQuestion}
+                            />
+                        }
                         {searchResults !== null &&
                         searchValue === lastSearchValue ? (
                             <StyledSearchActionButton
@@ -612,7 +620,9 @@ const Search = () => {
                         exit={'exit'}
                         transition={'transition'}
                     >
-                        {searchResults.result &&
+                        {
+
+                        searchResults.result &&
                         searchResults.result.locations &&
                         searchResults.result.locations.length > 0 ? (
                             searchResults.result.locations.map(
@@ -644,6 +654,22 @@ const Search = () => {
                                     } else {
                                         visibleText = name;
                                     }
+
+                                    if (searchResults.result.locations.length === 1) {
+                                        handleSearchSelect(
+                                            name,
+                                            lon,
+                                            lat,
+                                            geom,
+                                            osa,
+                                            ajorata,
+                                            etaisyys,
+                                            osa_loppu,
+                                            etaisyys_loppu,
+                                            vkmType
+                                        );
+                                    }
+
                                     return (
                                         <StyledDropdownContentItem
                                             key={name + '_' + index}
@@ -666,12 +692,12 @@ const Search = () => {
                                                 setSearchClickedRow(index);
                                             }}
                                         >
-                                            <StyledSearchIcon active={searchClickedRow === index}>
+                                            <StyledSearchIcon active={searchClickedRow === index || searchResults.result.locations.length === 1}>
                                                 <FontAwesomeIcon
                                                     icon={vkmType && vkmType === 'road' ? faRoad : (vkmType && vkmType === 'track') ? faTrain: faCity}
                                                 />
                                             </StyledSearchIcon>
-                                            <StyledDropdownContentItemTitle type={'searchResult'} active={searchClickedRow === index}>
+                                            <StyledDropdownContentItemTitle type={'searchResult'} active={searchClickedRow === index || searchResults.result.locations.length === 1}>
                                                 {visibleText}
                                             </StyledDropdownContentItemTitle>
                                         </StyledDropdownContentItem>
