@@ -225,8 +225,10 @@ const Search = () => {
     const markerId = 'SEARCH_MARKER';
     const vectorLayerId = 'SEARCH_VECTORLAYER';
     const [searchClickedRow, setSearchClickedRow] = useState(null);
+    const [firstSearchResultShown, setFirstSearchResultShown] = useState(false);
 
     const handleAddressSearch = (value) => {
+        setFirstSearchResultShown(false);
         setSearchClickedRow(null);
         removeMarkersAndFeatures();
         setIsSearching(true);
@@ -655,7 +657,7 @@ const Search = () => {
                                         visibleText = name;
                                     }
 
-                                    if (searchResults.result.locations.length === 1) {
+                                    if (searchResults.result.locations.length === 1 && !firstSearchResultShown) {
                                         handleSearchSelect(
                                             name,
                                             lon,
@@ -668,6 +670,7 @@ const Search = () => {
                                             etaisyys_loppu,
                                             vkmType
                                         );
+                                        setFirstSearchResultShown(true);
                                     }
 
                                     return (
