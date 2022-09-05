@@ -47,6 +47,48 @@ const StyledToastIcon = styled(FontAwesomeIcon)`
 const StyledOptionsWrapper = styled(motion.div)`
     position: absolute;
     left: 0;
+    bottom: 5px;
+    background-color: ${props => props.theme.colors.mainWhite};
+    z-index: -1;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-gap: 5px;
+    margin-left: 55px;
+    justify-content: center;
+    align-items: center;
+    white-space: nowrap;
+    padding: 10px;
+    padding-right: 10px;
+    overflow: visible;
+    color: ${props => props.theme.colors.mainColor1};
+    font-weight: 600;
+    box-shadow: 0px 2px 4px #0000004D;
+    gap: 5px;
+    svg {
+        color: ${props => props.theme.colors.mainWhite};
+    };
+    @media ${props => props.theme.device.mobileL} {
+        margin-left: 50px;
+        svg {
+            
+        };
+        button {
+            height: 33px;
+            width: 32px;
+        }
+    };
+`;
+
+const StyledOptionButtonsWrapper = styled(motion.div)`
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 5px;
+`;
+
+/*
+const StyledOptionsWrapper = styled(motion.div)`
+    position: absolute;
+    left: 0;
     background-color: ${props => props.theme.colors.mainWhite};
     z-index: -1;
     display: flex;
@@ -54,8 +96,9 @@ const StyledOptionsWrapper = styled(motion.div)`
     align-items: center;
     white-space: nowrap;
     padding: 20px;
-    padding-left: calc(100% + 16px);
-    overflow: hidden;
+    padding-left: calc(100% + 5px);
+    padding-right: 10px;
+    overflow: visible;
     border-radius: 24px;
     color: ${props => props.theme.colors.mainColor1};
     font-weight: 600;
@@ -64,15 +107,21 @@ const StyledOptionsWrapper = styled(motion.div)`
     gap: 2px;
     svg {
         color: ${props => props.theme.colors.mainWhite};
-        font-size: 18px;
     };
     @media ${props => props.theme.device.mobileL} {
-        height: 38px;
+        height: 35px;
+        gap: 1px;
+        padding-left: calc(100% + 3px);
+        padding-right: 5px;
         svg {
-            font-size: 18px;
+            
         };
+        button {
+            height: 33px;
+            width: 32px;
+        }
     };
-`;
+`; */
 
 const StyledOptionsButton = styled(motion.button)`
     display: flex;
@@ -85,7 +134,7 @@ const StyledOptionsButton = styled(motion.button)`
     border: none;
     border-radius: 50%;
     margin: 0 auto;
-    background-color: ${props => props.theme.colors.button}
+    background-color: ${props => props.theme.colors.button};
 `;
 
 const StyledOptionsIcon = styled(FontAwesomeIcon)`
@@ -117,7 +166,7 @@ const variants = {
             duration: 0.2,
             type: "tween",
         },
-        pointerEvents: "none" 
+        pointerEvents: "none"
     },
 };
 
@@ -126,6 +175,7 @@ export const DrawingTools = ({isOpen}) => {
     const { channel } = useSelector(state => state.rpc);
     const { activeTool, isDrawingToolsOpen, hasToastBeenShown, selectedMarker, drawToolMarkers} = useSelector(state => state.ui);
     const [ showToast, setShowToast] = useState(JSON.parse(localStorage.getItem("showToast")));
+    const [markerLabel, setMarkerLabel] = useState('');
 
 
     const handleClick = () => {
@@ -273,6 +323,8 @@ export const DrawingTools = ({isOpen}) => {
         },
     ];
 
+    console.log("markerLabel = ", markerLabel);
+
     return (
             <StyledTools
                 isOpen={isOpen}
@@ -309,8 +361,8 @@ export const DrawingTools = ({isOpen}) => {
                             </CircleButton> : tool.id === "sv-add-marker" &&
                             <div>
                                 {tool.name && tool.name === activeTool &&
-                                <div>
                                 <StyledOptionsWrapper>
+                                    <StyledOptionButtonsWrapper>
                                     {optionValues.map(option => {
                                         const isSelected = option.id === selectedMarker;
                                         return (option.id !== 7 ?
@@ -321,8 +373,9 @@ export const DrawingTools = ({isOpen}) => {
                                         <StyledOptionsIcon icon={option.icon} />
                                     </StyledOptionsButton>
                                 )})}
+                                    </StyledOptionButtonsWrapper>
+                                    <input value={markerLabel} onChange={(event) => setMarkerLabel(event.target.value)} style={{borderRadius: "5%", padding: "5px", border: "1px solid " + theme.colors.mainColor1}} placeholder="Markkerin nimi" type="text"></input>
                                 </StyledOptionsWrapper>
-                                </div>
                                 }
                                 <CircleButton type="drawingTool" showOptions={true} key={tool.id} icon={faMapMarkerAlt} text={tool.name} clickAction={() => addMarker(tool)}
                                 toggleState={tool.name && tool.name === activeTool ? true : false} tooltipDirection="right" />

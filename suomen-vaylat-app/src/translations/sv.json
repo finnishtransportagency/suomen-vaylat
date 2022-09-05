@@ -42,6 +42,7 @@
       "box": "Box",
       "linestring": "Line",
       "polygon": "Polygon",
+      "marker": "Markkeri",
       "erase": "Erase",
       "measureToast": "Voit viimeistellä piirron tuplaklikkaamalla tai klikkaamalla viimeksi piirretystä taitepisteestä uudelleen"
     },
