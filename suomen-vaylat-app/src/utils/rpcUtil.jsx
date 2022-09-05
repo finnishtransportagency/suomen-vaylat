@@ -15,8 +15,7 @@ import {
 
 import { isMobile } from '../theme/theme';
 import strings from '../translations';
-
-export const ANNOUNCEMENTS_LOCALSTORAGE = 'oskari-announcements';
+import { ANNOUNCEMENTS_LOCALSTORAGE } from '../utils/constants';
 
 /**
  * Update layers. Use only this to update all layers and selected layers.

@@ -4,7 +4,6 @@ import {
     faCompress,
     faExpand,
     faLayerGroup,
-    faRuler,
     faPencilRuler,
     faSave,
     faMapMarkedAlt,
