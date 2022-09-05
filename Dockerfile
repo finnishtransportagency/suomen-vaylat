@@ -49,10 +49,12 @@ FROM builder AS test-builder
 
 ARG BASE_PATH
 
+ENV MAP_DOMAIN=https://d2d9dqqs66cm6.cloudfront.net
+
 ENV PUBLIC_URL=/$BASE_PATH
-ENV REACT_APP_PUBLISHED_MAP_URL=https://paikkatietotest.testivaylapilvi.fi/sv-kartta/?uuid=32ec5134-3dae-403f-903b-57d035a16b6c
-ENV REACT_APP_PUBLISHED_MAP_DOMAIN=https://paikkatietotest.testivaylapilvi.fi
-ENV REACT_APP_PROXY_URL=https://paikkatietotest.testivaylapilvi.fi/sv-kartta/
+ENV REACT_APP_PUBLISHED_MAP_URL=${MAP_DOMAIN}/sv-kartta/?uuid=32ec5134-3dae-403f-903b-57d035a16b6c
+ENV REACT_APP_PUBLISHED_MAP_DOMAIN=${MAP_DOMAIN}
+ENV REACT_APP_PROXY_URL=${MAP_DOMAIN}/sv-kartta/
 ENV REACT_APP_SITE_URL=https://paikkatietotest.testivaylapilvi.fi/$BASE_PATH
 ENV REACT_APP_ROUTER_PREFIX=/$BASE_PATH/
 
@@ -65,10 +67,12 @@ FROM builder AS production-builder
 
 ARG BASE_PATH
 
+ENV MAP_DOMAIN=https://d1tpvkd70x5pxu.cloudfront.net
+
 ENV PUBLIC_URL=/$BASE_PATH
-ENV REACT_APP_PUBLISHED_MAP_URL=https://paikkatieto.vaylapilvi.fi/sv-kartta/?uuid=e7dbca99-68bd-4392-8d1d-c2e5098edbe7
-ENV REACT_APP_PUBLISHED_MAP_DOMAIN=https://paikkatieto.vaylapilvi.fi
-ENV REACT_APP_PROXY_URL=https://paikkatieto.vaylapilvi.fi/sv-kartta/
+ENV REACT_APP_PUBLISHED_MAP_URL=${MAP_DOMAIN}/sv-kartta/?uuid=e7dbca99-68bd-4392-8d1d-c2e5098edbe7
+ENV REACT_APP_PUBLISHED_MAP_DOMAIN=${MAP_DOMAIN}
+ENV REACT_APP_PROXY_URL=${MAP_DOMAIN}/sv-kartta/
 ENV REACT_APP_SITE_URL=https://paikkatieto.vaylapilvi.fi/$BASE_PATH
 ENV REACT_APP_ROUTER_PREFIX=/$BASE_PATH/
 
