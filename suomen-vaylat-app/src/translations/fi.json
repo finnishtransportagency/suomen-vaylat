@@ -284,7 +284,7 @@
       "vkmTrackExamples": [
         "001/2/10"
       ],
-      "realEstateUnitIdentifier": "Kiinteistötunnus haku, kirjoita muodossa 'aa-bb-cc-d' tai 'aaa-bbb-cc-ddd'.",
+      "realEstateUnitIdentifier": "Kiinteistötunnushaku, kirjoita muodossa 'aa-bb-cc-d' tai 'aaa-bbb-cc-ddd'.",
       "realEstateUnitIdentifierExamples": [
         "91-17-16-1",
         "091-017-16-001"
