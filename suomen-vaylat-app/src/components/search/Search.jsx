@@ -234,6 +234,7 @@ const Search = () => {
         channel.postRequest('SearchRequest', [value]);
         setSearchValue(value);
         setLastSearchValue(value);
+        setSearchResults(null);
     };
 
     const handleMetadataSearch = (value) => {
