@@ -205,11 +205,11 @@ export const Header = () => {
         // Remove all features from map
         channel && channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', []);
 
-        // Remove all markers
-        store.dispatch(removeMarkerRequest());
-
         // Remove VKM data
         store.dispatch(setVKMData(null));
+
+        // Remove all markers
+        store.dispatch(removeMarkerRequest());
     };
 
     return (

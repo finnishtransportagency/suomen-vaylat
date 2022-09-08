@@ -1,8 +1,9 @@
 import { useContext, useEffect } from 'react';
 import OskariRPC from 'oskari-rpc';
-import { ReactReduxContext, useSelector } from 'react-redux';
+import { ReactReduxContext } from 'react-redux';
 import styled from 'styled-components';
 import { useAppSelector } from '../../state/hooks';
+import strings from '../../translations';
 import {
     setActiveAnnouncements,
     setAllGroups,
@@ -205,7 +206,7 @@ const PublishedMap = () => {
             channel.getSupportedEvents(function (data) {
                 if (data.MapClickedEvent && store.getState().ui.activeTool === null ) {
                     channel.handleEvent('MapClickedEvent', (data) => {
-                        store.getState().ui.activeTool !== "Markkeri" && store.dispatch(resetGFILocations([]));
+                        store.getState().ui.activeTool !== strings.tooltips.drawingTools.marker && store.dispatch(resetGFILocations([]));
                     });
                 }
 
@@ -229,7 +230,7 @@ const PublishedMap = () => {
                             })
                         );
                     }
-                    if(store.getState().ui.activeTool === "Markkeri") {
+                    if(store.getState().ui.activeTool === strings.tooltips.drawingTools.marker) {
                         let marker_id = data.coordinates.x + data.coordinates.y + "_id";
                         store.getState().ui.selectedMarker !== 7 && store.dispatch(
                             addMarkerRequest({
@@ -237,6 +238,7 @@ const PublishedMap = () => {
                                 y: data.coordinates.y,
                                 markerId: marker_id,
                                 shape: store.getState().ui.selectedMarker,
+                                msg: store.getState().ui.markerLabel,
                                 color: theme.colors.mainColor2,
                                 size: 5,
                                 offsetX: 0,

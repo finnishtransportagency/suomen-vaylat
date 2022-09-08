@@ -437,9 +437,13 @@ export const rpcSlice = createSlice({
          */
         removeMarkerRequest: (state, action) => {
             state.channel !== null &&
+            action.payload?
                 state.channel.postRequest(
                     'MapModulePlugin.RemoveMarkersRequest',
                     [action.payload.markerId]
+                ) :
+                state.channel.postRequest(
+                    'MapModulePlugin.RemoveMarkersRequest',
                 );
             LOG.log('removeMarkerRequest ', action.payload);
         },

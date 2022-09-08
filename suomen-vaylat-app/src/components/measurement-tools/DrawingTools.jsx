@@ -1,10 +1,11 @@
-import { useContext, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { ReactReduxContext } from 'react-redux';
 
+import { debounce } from 'lodash';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEraser, faInfoCircle, faMapMarkerAlt, faMapPin, faFlag, faCircle, faArrowDown, faCommentAlt, faThumbtack, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { faEraser, faInfoCircle, faMapMarkerAlt, faMapPin, faFlag, faCircle, faArrowDown, faCommentAlt, faThumbtack, faTimes, faTrash } from '@fortawesome/free-solid-svg-icons';
 import svCircle from '../../theme/icons/drawtools_circle.svg';
 import svSquare from '../../theme/icons/drawtools_square.svg';
 import svRectangle from '../../theme/icons/drawtools_rectangle.svg';
@@ -14,7 +15,7 @@ import svLinestring from '../../theme/icons/drawtools_linestring.svg';
 import { useSelector } from 'react-redux';
 
 import strings from '../../translations';
-import { setActiveTool, setHasToastBeenShown, setSelectedMarker } from '../../state/slices/uiSlice';
+import { setActiveTool, setHasToastBeenShown, setSelectedMarker, setMarkerLabel } from '../../state/slices/uiSlice';
 import { removeMarkerRequest } from '../../state/slices/rpcSlice';
 
 import { theme } from '../../theme/theme';
@@ -22,7 +23,6 @@ import { theme } from '../../theme/theme';
 import CircleButton from '../circle-button/CircleButton';
 import DrawingToast from '../toasts/DrawingToast';
 import { toast } from 'react-toastify';
-import { ThemeProvider } from 'react-bootstrap';
 
 const StyledTools = styled(motion.div)`
     display: flex;
@@ -46,7 +46,7 @@ const StyledToastIcon = styled(FontAwesomeIcon)`
 
 const StyledOptionsWrapper = styled(motion.div)`
     position: absolute;
-    left: 0;
+    left: 0};
     bottom: 5px;
     background-color: ${props => props.theme.colors.mainWhite};
     z-index: -1;
@@ -68,9 +68,10 @@ const StyledOptionsWrapper = styled(motion.div)`
         color: ${props => props.theme.colors.mainWhite};
     };
     @media ${props => props.theme.device.mobileL} {
-        margin-left: 50px;
+        margin-left: 45px;
+        bottom: -45px;
         svg {
-            
+
         };
         button {
             height: 33px;
@@ -83,45 +84,10 @@ const StyledOptionButtonsWrapper = styled(motion.div)`
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 5px;
-`;
-
-/*
-const StyledOptionsWrapper = styled(motion.div)`
-    position: absolute;
-    left: 0;
-    background-color: ${props => props.theme.colors.mainWhite};
-    z-index: -1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    white-space: nowrap;
-    padding: 20px;
-    padding-left: calc(100% + 5px);
-    padding-right: 10px;
-    overflow: visible;
-    border-radius: 24px;
-    color: ${props => props.theme.colors.mainColor1};
-    font-weight: 600;
-    box-shadow: 0px 2px 4px #0000004D;
-    height: 44px;
-    gap: 2px;
-    svg {
-        color: ${props => props.theme.colors.mainWhite};
-    };
     @media ${props => props.theme.device.mobileL} {
-        height: 35px;
-        gap: 1px;
-        padding-left: calc(100% + 3px);
-        padding-right: 5px;
-        svg {
-            
-        };
-        button {
-            height: 33px;
-            width: 32px;
-        }
+        grid-template-columns: repeat(2, 1fr);
     };
-`; */
+`;
 
 const StyledOptionsButton = styled(motion.button)`
     display: flex;
@@ -139,6 +105,39 @@ const StyledOptionsButton = styled(motion.button)`
 
 const StyledOptionsIcon = styled(FontAwesomeIcon)`
     
+`;
+
+const StyledLabelWrapper = styled.div`
+    border: none;
+`;
+
+const StyledLabelInput = styled.input`
+    width: 200px;
+    padding: 5px;
+    padding-right: 25px;
+    border: 1px solid ${theme.colors.mainColor1};
+    border-radius: 5%;
+    &&:disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
+    };
+    @media ${props => props.theme.device.mobileL} {
+        width: 75px;
+        padding-right: 25px;
+    };
+`;
+
+const StyledClearLabelButton = styled.button`
+    position: absolute;
+    background: none;
+    border: none;
+    bottom: 15px;
+    right: 20px;
+    padding: 0px;
+    @media ${props => props.theme.device.mobileL} {
+        right: 10px;
+        bottom: 12px;
+    };
 `;
 
 const variants = {
@@ -175,18 +174,48 @@ export const DrawingTools = ({isOpen}) => {
     const { channel } = useSelector(state => state.rpc);
     const { activeTool, isDrawingToolsOpen, hasToastBeenShown, selectedMarker, drawToolMarkers} = useSelector(state => state.ui);
     const [ showToast, setShowToast] = useState(JSON.parse(localStorage.getItem("showToast")));
-    const [markerLabel, setMarkerLabel] = useState('');
+    const [label, setLabel] = useState('');
 
+    const updateMarkerLabel = (label) => store.dispatch(setMarkerLabel(label))
+
+    const debouncedChangeHandler = useCallback(
+        debounce(updateMarkerLabel, 300)
+    , []);
+
+    const handleChange = (event) => {
+        setLabel(event.target.value);
+    };
 
     const handleClick = () => {
         setShowToast(false);
         toast.dismiss("drawToast");
     };
 
+    const handleKeyUp = (event) => {
+        if(event.keyCode === 13) {
+            event.preventDefault();
+            event.target.blur();
+        }
+    }
+
+    const resetTools = () => {
+        store.dispatch(setActiveTool(null));
+        setLabel('');
+    }
+
     useEffect(() => {
         setShowToast(JSON.parse(localStorage.getItem("showToast")));
         if(showToast === false) store.dispatch(setHasToastBeenShown(true));
     }, [isDrawingToolsOpen, hasToastBeenShown]);
+
+    useEffect(() => {
+        if(activeTool === strings.tooltips.drawingTools.marker) return;
+        setLabel('');
+    }, [activeTool]);
+
+    useEffect(() => {
+        debouncedChangeHandler(label);
+    }, [label]);
 
     if(activeTool === null) toast.dismiss("drawToast");
 
@@ -206,18 +235,20 @@ export const DrawingTools = ({isOpen}) => {
             }
         } else {
             channel && channel.postRequest('DrawTools.StopDrawingRequest', [activeTool]);
-            store.dispatch(setActiveTool(null));
+            resetTools();
         }
     };
 
     const addMarker = (tool) => {
+        //Stop drawing only if drawing is currently on-going
+        channel && activeTool !== strings.tooltips.drawingTools.marker && activeTool !== null && channel.postRequest('DrawTools.StopDrawingRequest', [activeTool, false]);
         if(tool.name !== activeTool) {
             store.dispatch(setActiveTool(tool.name));
         }
         else {
-            store.dispatch(setActiveTool(null));
+            resetTools();
         }
-    }
+    };
 
     const eraseDrawing = () => {
         // remove geometries off the map
@@ -231,7 +262,7 @@ export const DrawingTools = ({isOpen}) => {
         });
     };
 
-    const optionValues = [
+    const markerShapes = [
         {
             id: 0,
             icon: faThumbtack
@@ -262,14 +293,14 @@ export const DrawingTools = ({isOpen}) => {
         },
         {
             id: 7,
-            icon: faTrashAlt
+            icon: faTimes
         }
     ]
 
-    const drawinToolsData = [
+    const drawingToolsData = [
         {
             id : 'sv-measure-linestring',
-            name : strings.tooltips.measuringTools.linestring,
+            name : strings.tooltips.drawingTools.linestring,
             style : {
                 icon : svLinestring
             },
@@ -277,7 +308,7 @@ export const DrawingTools = ({isOpen}) => {
         },
         {
             id : 'sv-measure-polygon',
-            name : strings.tooltips.measuringTools.polygon,
+            name : strings.tooltips.drawingTools.polygon,
             style : {
                 icon : svPolygon
                 },
@@ -285,7 +316,7 @@ export const DrawingTools = ({isOpen}) => {
         },
         {
             id : 'sv-measure-square',
-            name : strings.tooltips.measuringTools.square,
+            name : strings.tooltips.drawingTools.square,
             style : {
                 icon : svSquare
             },
@@ -293,7 +324,7 @@ export const DrawingTools = ({isOpen}) => {
         },
         {
             id : 'sv-measure-box',
-            name : strings.tooltips.measuringTools.box,
+            name : strings.tooltips.drawingTools.box,
             style : {
                 icon : svRectangle
             },
@@ -301,7 +332,7 @@ export const DrawingTools = ({isOpen}) => {
         },
         {
             id : 'sv-measure-circle',
-            name : strings.tooltips.measuringTools.circle,
+            name : strings.tooltips.drawingTools.circle,
             style : {
                 icon : svCircle
             },
@@ -309,21 +340,19 @@ export const DrawingTools = ({isOpen}) => {
         },
         {
             id: 'sv-add-marker',
-            name: strings.tooltips.measuringTools.marker,
+            name: strings.tooltips.drawingTools.marker,
             style: {
                 icon: faMapMarkerAlt
             },
         },
         {
             id : 'sv-erase',
-            name : strings.tooltips.measuringTools.erase,
+            name : strings.tooltips.drawingTools.erase,
             style : {
                 icon : faEraser
             },
         },
     ];
-
-    console.log("markerLabel = ", markerLabel);
 
     return (
             <StyledTools
@@ -336,7 +365,7 @@ export const DrawingTools = ({isOpen}) => {
                     type: "tween",
                 }}
             >
-                {drawinToolsData.map(tool => {
+                {drawingToolsData.map(tool => {
                     return (
                             tool.id !== "sv-erase" && tool.id !== "sv-add-marker" ?
                             <CircleButton
@@ -363,18 +392,23 @@ export const DrawingTools = ({isOpen}) => {
                                 {tool.name && tool.name === activeTool &&
                                 <StyledOptionsWrapper>
                                     <StyledOptionButtonsWrapper>
-                                    {optionValues.map(option => {
-                                        const isSelected = option.id === selectedMarker;
-                                        return (option.id !== 7 ?
-                                        <StyledOptionsButton style={{background: isSelected && theme.colors.buttonActive}} onClick={() => store.dispatch(setSelectedMarker(option.id))}>
-                                            <StyledOptionsIcon style={{transform: option.icon === faFlag && "scale(-1,1)", color: isSelected && theme.colors.mainWhite + '!important'}} icon={option.icon} />
+                                    {markerShapes.map(shape => {
+                                        const isSelected = shape.id === selectedMarker;
+                                        return (shape.id !== 7 ?
+                                        <StyledOptionsButton style={{background: isSelected && theme.colors.buttonActive}} onClick={() => store.dispatch(setSelectedMarker(shape.id))}>
+                                            <StyledOptionsIcon style={{transform: shape.icon === faFlag && "scale(-1,1)", color: isSelected && theme.colors.mainWhite + '!important'}} icon={shape.icon} />
                                         </StyledOptionsButton> :
-                                        <StyledOptionsButton style={{background: isSelected ? theme.colors.secondaryColor6 : theme.colors.secondaryColor7}} onClick={() => store.dispatch(setSelectedMarker(option.id))}>
-                                        <StyledOptionsIcon icon={option.icon} />
+                                        <StyledOptionsButton style={{background: isSelected ? 'rgb(161 51 0)' : theme.colors.secondaryColor7}} onClick={() => store.dispatch(setSelectedMarker(shape.id))}>
+                                        <StyledOptionsIcon icon={shape.icon} />
                                     </StyledOptionsButton>
                                 )})}
                                     </StyledOptionButtonsWrapper>
-                                    <input value={markerLabel} onChange={(event) => setMarkerLabel(event.target.value)} style={{borderRadius: "5%", padding: "5px", border: "1px solid " + theme.colors.mainColor1}} placeholder="Markkerin nimi" type="text"></input>
+                                    <StyledLabelWrapper>
+                                    <StyledLabelInput onKeyUp={(event) => handleKeyUp(event)} value={label} onChange={(event) => {handleChange(event)}} placeholder={strings.tooltips.drawingTools.labelPlaceholder} type="text"></StyledLabelInput>
+                                    <StyledClearLabelButton onClick={() => setLabel('')}>
+                                        <FontAwesomeIcon style={{color: 'rgba(0, 0, 0, 0.5)'}} icon={faTimes} />
+                                    </StyledClearLabelButton>
+                                    </StyledLabelWrapper>
                                 </StyledOptionsWrapper>
                                 }
                                 <CircleButton type="drawingTool" showOptions={true} key={tool.id} icon={faMapMarkerAlt} text={tool.name} clickAction={() => addMarker(tool)}

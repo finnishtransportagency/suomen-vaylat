@@ -33,7 +33,8 @@ const initialState = {
     warning: null,
     hasToastBeenShown: false,
     selectedMarker: 2,
-    drawToolMarkers: []
+    drawToolMarkers: [],
+    markerLabel: ''
 };
 
 export const uiSlice = createSlice({
@@ -145,7 +146,9 @@ export const uiSlice = createSlice({
         addToDrawToolMarkers: (state, action) => {
             state.drawToolMarkers.push(action.payload);
         },
-
+        setMarkerLabel: (state, action) => {
+            state.markerLabel = action.payload;
+        }
     },
 });
 
@@ -178,7 +181,8 @@ export const {
     setWarning,
     setHasToastBeenShown,
     setSelectedMarker,
-    addToDrawToolMarkers
+    addToDrawToolMarkers,
+    setMarkerLabel
 } = uiSlice.actions;
 
 export default uiSlice.reducer;

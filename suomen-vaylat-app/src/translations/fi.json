@@ -23,28 +23,18 @@
     "zoomIn": "Lähennä",
     "zoomOut": "Loitonna",
     "opacity": "Läpinäkyvyys",
-    "drawingtools": {
-      "drawingtoolsButton": "Piirtotyökalut",
+    "drawingTools": {
+      "drawingToolsButton": "Piirtotyökalut",
       "point": "Piste",
       "circle": "Ympyrä",
       "square": "Neliö",
       "box": "Laatikko",
       "linestring": "Viiva",
       "polygon": "Monikulmio",
+      "marker": "Karttamerkintä",
       "erase": "Tyhjennä",
-      "drawingToast": "Voit viimeistellä piirron tuplaklikkaamalla tai klikkaamalla viimeksi piirretystä taitepisteestä uudelleen"
-    },
-    "measuringTools": {
-      "measuringToolsButton": "Mittaustyökalut",
-      "point": "Piste",
-      "circle": "Ympyrä",
-      "square": "Neliö",
-      "box": "Laatikko",
-      "linestring": "Viiva",
-      "polygon": "Monikulmio",
-      "marker": "Markkeri",
-      "erase": "Tyhjennä",
-      "measureToast": "Voit viimeistellä piirron tuplaklikkaamalla tai klikkaamalla viimeksi piirretystä taitepisteestä uudelleen"
+      "drawingToast": "Voit viimeistellä piirron tuplaklikkaamalla tai klikkaamalla viimeksi piirretystä taitepisteestä uudelleen",
+      "labelPlaceholder": "Merkinnän teksti..."
     },
     "share": "Jaa sivu",
     "shareTheme": "Jaa teema",

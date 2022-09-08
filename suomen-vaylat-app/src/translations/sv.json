@@ -23,28 +23,18 @@
     "zoomIn": "Zooma in",
     "zoomOut": "Zooma ut",
     "opacity": "Transparens",
-    "drawingtools": {
-      "drawingtoolsButton": "Drawing tools",
+    "drawingTools": {
+      "drawingToolsButton": "Drawing tools",
       "point": "Point",
       "circle": "Cirkel",
       "square": "Kvadrat",
       "box": "Ruta",
       "linestring": "Linje",
       "polygon": "Polygon",
+      "marker": "Karttamerkintä",
       "erase": "Töm",
-      "drawingToast": "Voit viimeistellä piirron tuplaklikkaamalla tai klikkaamalla viimeksi piirretystä taitepisteestä uudelleen"
-    },
-    "measuringTools": {
-      "drawingToolsButton": "Drawing tools",
-      "point": "Point",
-      "circle": "Circle",
-      "square": "Square",
-      "box": "Box",
-      "linestring": "Line",
-      "polygon": "Polygon",
-      "marker": "Markkeri",
-      "erase": "Erase",
-      "measureToast": "Voit viimeistellä piirron tuplaklikkaamalla tai klikkaamalla viimeksi piirretystä taitepisteestä uudelleen"
+      "drawingToast": "Voit viimeistellä piirron tuplaklikkaamalla tai klikkaamalla viimeksi piirretystä taitepisteestä uudelleen",
+      "labelPlaceholder": "Merkinnän teksti..."
     },
     "share": "Dela denna sida",
     "shareTheme": "Dela detta tema",
