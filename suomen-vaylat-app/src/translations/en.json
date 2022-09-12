@@ -157,6 +157,13 @@
         "title": "Drawing tools",
         "content": "The drawing tools open from the drawing icon on the left. The tools can be used to measure length or area. the measurement results can be deleted from the map with the orange rubber button."
       },
+      "gfi": {
+        "content": "Kohdetiedot avautuvat klikkaamalla mistä tahansa kartalla, tai vasemman reunan panikkeesta, jonka ikonissa on karttamerkintä. Kohdetiedot-ikkunasta voit hakea kohdetietoja sekä näet tietoja valitsemistasi kohteista ja sijainneista, jotka voit myös halutessasi ladata suoraan laitteellesi valitsemassasi tiedostomuodossa."
+      },
+      "downloads": {
+        "title": "Lataukset",
+        "content": "Lataukset avautuvat vasemman reunan lataukset-painikkeesta. Latauksista löydät valitsemistasi kohdetiedoista tekemäsi lataukset, jotka voit ladata eri muodoissa laitteellesi."
+      },
       "savingView": {
         "title": "Save The View",
         "content": "Saving a view allows you to save the Map View to your browser's cache. The view saves the map focus, the approach level, and the selected map data. Saved views are available on the device and browser where the view is saved. You can switch between saved views by clicking / tapping the desired view. You can delete the view from the trash can icon."
