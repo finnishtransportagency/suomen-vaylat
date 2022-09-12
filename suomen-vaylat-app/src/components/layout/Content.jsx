@@ -441,6 +441,7 @@ const Content = () => {
                     } /* Action when pressing modal close button or backdrop */
                     isOpen={isUserGuideOpen} /* Modal state */
                     id={null}
+                    height="860px"
                 >
                     <UserGuideModalContent />
                 </Modal>

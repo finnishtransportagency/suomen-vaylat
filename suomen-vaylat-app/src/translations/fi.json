@@ -151,11 +151,18 @@
       },
       "search": {
         "title": "Haku",
-        "content": "Haku avautuu kartan oikeaan yläkulmaan vasemman reunan suurennuslasi-painikkeesta. Haku-toiminnolla voi hakea teitä ja ja osoitteita valitsemalla alasvetovalikosta käytettävän haun. Hakutuloksen voi poistaa kartalta painamalla haku-kentän roskakoria."
+        "content": "Haku avautuu kartan oikean yläkulman suurennuslasi-painikkeesta. Haku-toiminnolla voi hakea kuntia, osoitteita, kiinteistötunnuksia, tieosoitteita tai rataosoitteita. Tarkempi ohje aukeaa, kun avaa haun. Hakuohjeen voi piilottaa painamalla hakukentän kysymysmerkkiä.  Hakutuloksen voi poistaa kartalta painamalla hakukentän roskakoria."
       },
       "drawingTools": {
         "title": "Piirtotyökalut",
-        "content": "Piirtotyökalut avautuvat vasemman reunan piirto-ikonista. Työkaluilla voi mitata pituutta tai pinta-alaa. mittaustulokset saa poistettua kartalta oranssilla kumi-painikkeella."
+        "content": "Piirtotyökalut avautuvat vasemman reunan piirto-painikkeesta. Työkaluilla voi lisätä kartalle geometrioita ja mitata pituutta tai pinta-alaa. Mittaustulokset voi poistaa kartalta oranssilla kumi-painikkeella."
+      },
+      "gfi": {
+        "content": "Kohdetiedot avautuvat klikkaamalla mistä tahansa kartalla, tai vasemman reunan panikkeesta, jonka ikonissa on karttamerkintä. Kohdetiedot-ikkunasta voit hakea kohdetietoja sekä näet tietoja valitsemistasi kohteista ja sijainneista, jotka voit myös halutessasi ladata suoraan laitteellesi valitsemassasi tiedostomuodossa."
+      },
+      "downloads": {
+        "title": "Lataukset",
+        "content": "Lataukset avautuvat vasemman reunan lataukset-painikkeesta. Latauksista löydät valitsemistasi kohdetiedoista tekemäsi lataukset, jotka voit ladata eri muodoissa laitteellesi."
       },
       "savingView": {
         "title": "Näkymän tallennus",
@@ -167,7 +174,7 @@
       },
       "zoomBar": {
         "title": "Selitteet / zoom-palkki",
-        "content": "Zoom-tason ja kartalla sillä zoom-tasolla näkyvät karttatasot selitteineen saa avattua oikean alareunan selite-ikonista. Karttatasot on listattu päällimmäinen ensimmäisenä. Valitsemalla zoom-palkista toisen mittakaavan, siirrytään valitulle lähestymistasolle."
+        "content": "Zoom-tason ja kartalla sillä zoom-tasolla näkyvät karttatasot selitteineen saa avattua oikean alareunan selitepainikkeesta. Karttatasot on listattu päällimmäinen ensimmäisenä. Valitsemalla zoom-palkista toisen mittakaavan, siirrytään valitulle lähestymistasolle."
       }
     }
   },
