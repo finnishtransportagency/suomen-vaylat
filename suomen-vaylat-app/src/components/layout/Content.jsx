@@ -74,7 +74,7 @@ const StyledContent = styled.div`
     align-items: center;
     @media ${(props) => props.theme.device.desktop} {
         .Toastify__toast-container {
-            width: 500px;
+
         }
         .Toastify__toast-container--top-right {
             top: 9em;
@@ -82,7 +82,7 @@ const StyledContent = styled.div`
     };
     @media ${props => props.theme.device.tablet} {
         .Toastify__toast-container {
-            width: 100%;
+            width: 80%;
         }
         .Toastify__toast-container--top-right {
             top: 9em;
