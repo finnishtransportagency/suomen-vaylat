@@ -31,7 +31,7 @@ const initialState = {
     maximizeGfi: false,
     gfiCroppingTypes: [],
     warning: null,
-    hasToastBeenShown: false,
+    hasToastBeenShown : [],
     selectedMarker: 2,
     drawToolMarkers: [],
     markerLabel: ''
@@ -138,7 +138,14 @@ export const uiSlice = createSlice({
             state.warning = action.payload;
         },
         setHasToastBeenShown: (state, action) => {
-            state.hasToastBeenShown = action.payload;
+            const toastId = action.payload.toastId;
+            const hasToastBeenShow = action.payload.shown;
+
+            state.hasToastBeenShown = state.hasToastBeenShown.filter(item => item !== toastId);
+
+            if (hasToastBeenShow) {
+                state.hasToastBeenShown.push(toastId);
+            }
         },
         setSelectedMarker: (state, action) => {
             state.selectedMarker = action.payload;

@@ -23,6 +23,7 @@ import { theme } from '../../theme/theme';
 import CircleButton from '../circle-button/CircleButton';
 import DrawingToast from '../toasts/DrawingToast';
 import { toast } from 'react-toastify';
+import { DRAWING_TIP_LOCALSTORAGE } from '../../utils/constants';
 
 const StyledTools = styled(motion.div)`
     display: flex;
@@ -173,7 +174,7 @@ export const DrawingTools = ({isOpen}) => {
     const { store } = useContext(ReactReduxContext);
     const { channel } = useSelector(state => state.rpc);
     const { activeTool, isDrawingToolsOpen, hasToastBeenShown, selectedMarker, drawToolMarkers} = useSelector(state => state.ui);
-    const [ showToast, setShowToast] = useState(JSON.parse(localStorage.getItem("showToast")));
+    const [ showToast, setShowToast] = useState(JSON.parse(localStorage.getItem(DRAWING_TIP_LOCALSTORAGE)));
     const [label, setLabel] = useState('');
 
     const updateMarkerLabel = (label) => store.dispatch(setMarkerLabel(label))
@@ -204,9 +205,8 @@ export const DrawingTools = ({isOpen}) => {
     }
 
     useEffect(() => {
-        setShowToast(JSON.parse(localStorage.getItem("showToast")));
-        if(showToast === false) store.dispatch(setHasToastBeenShown(true));
-    }, [isDrawingToolsOpen, hasToastBeenShown]);
+        if(showToast === false) store.dispatch(setHasToastBeenShown({toastId: 'drawToast', shown: true}));
+    }, [showToast, store]);
 
     useEffect(() => {
         if(activeTool === strings.tooltips.drawingTools.marker) return;
@@ -224,11 +224,11 @@ export const DrawingTools = ({isOpen}) => {
             var data = [tool.name, tool.type, { showMeasureOnMap: true }];
             channel && channel.postRequest('DrawTools.StartDrawingRequest', data);
             store.dispatch(setActiveTool(tool.name));
-            if(showToast !== false && !hasToastBeenShown) {
+            if(showToast !== false && !hasToastBeenShown.includes('drawToast')) {
                 if((tool.type === "LineString") || (tool.type === "Polygon")) {
-                    toast.info(<DrawingToast handleButtonClick={handleClick} text={strings.tooltips.drawingtools.drawingToast} />, 
+                    toast.info(<DrawingToast handleButtonClick={handleClick} text={strings.tooltips.drawingtools.drawingToast} />,
                     {icon: <StyledToastIcon icon={faInfoCircle} /> ,toastId: "drawToast", onClose : () => {
-                         store.dispatch(setHasToastBeenShown(true))
+                         store.dispatch(setHasToastBeenShown({toastId: 'drawToast', shown: true}))
                     }});
                 }
                 else toast.dismiss("drawToast");
@@ -251,10 +251,10 @@ export const DrawingTools = ({isOpen}) => {
     };
 
     const eraseDrawing = () => {
-        // remove geometries off the map
-        channel && channel.postRequest('DrawTools.StopDrawingRequest', [true]);
         // stop the drawing tool
         channel && channel.postRequest('DrawTools.StopDrawingRequest', [activeTool]);
+        // remove geometries off the map
+        channel && channel.postRequest('DrawTools.StopDrawingRequest', [true]);
         store.dispatch(setActiveTool(null));
         // remove all markers made with drawing tools
         drawToolMarkers.forEach(marker => {

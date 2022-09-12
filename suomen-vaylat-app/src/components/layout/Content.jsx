@@ -60,7 +60,7 @@ import WarningModalContent from '../warning/WarningModalContent';
 import GFIPopup from '../gfi/GFIPopup';
 import GFIDownload from '../gfi/GFIDownload';
 import MetadataModal from '../metadata-modal/MetadataModal';
-import { ANNOUNCEMENTS_LOCALSTORAGE } from '../../utils/rpcUtil';
+import { ANNOUNCEMENTS_LOCALSTORAGE } from '../../utils/constants';
 
 const StyledContent = styled.div`
     z-index: 1;
@@ -73,7 +73,40 @@ const StyledContent = styled.div`
     justify-content: center;
     align-items: center;
     @media ${(props) => props.theme.device.desktop} {
-    } ;
+        .Toastify__toast-container {
+
+        }
+        .Toastify__toast-container--top-right {
+            top: 9em;
+        }
+    };
+    @media ${props => props.theme.device.tablet} {
+        .Toastify__toast-container {
+            width: 80%;
+        }
+        .Toastify__toast-container--top-right {
+            top: 9em;
+        }
+    };
+
+    @media ${(props) => props.theme.device.mobileL} {
+        .Toastify__toast-container {
+            width: 100%;
+        }
+        .Toastify__toast-container--top-right {
+            top: 7em;
+        }
+    };
+
+
+
+    .Toastify {
+        z-index: 2;
+    }
+
+    .Toastify__toast-icon {
+        display: none;
+    }
 `;
 
 const StyledContentGrid = styled.div`
@@ -408,6 +441,7 @@ const Content = () => {
                     } /* Action when pressing modal close button or backdrop */
                     isOpen={isUserGuideOpen} /* Modal state */
                     id={null}
+                    height="860px"
                 >
                     <UserGuideModalContent />
                 </Modal>

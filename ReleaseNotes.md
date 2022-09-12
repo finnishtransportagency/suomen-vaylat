@@ -4,6 +4,12 @@
 
 For a full list of changes see: https://github.com/finnishtransportagency/suomen-vaylat/milestone/6?closed=1
 
+* Update userguide
+* Improve search
+* Handle over 100 features
+* Improve GFI
+* Oskari 2.8.0 changes
+
 ## 1.2.0
 
 For a full list of changes see: https://github.com/finnishtransportagency/suomen-vaylat/milestone/5?closed=1

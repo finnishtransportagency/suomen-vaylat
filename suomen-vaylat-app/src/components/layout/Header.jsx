@@ -198,6 +198,7 @@ export const Header = () => {
         ]);
 
         channel && channel.postRequest('DrawTools.StopDrawingRequest', [activeTool]);
+        channel && channel.postRequest('DrawTools.StopDrawingRequest', [true]);
         store.dispatch(setActiveTool(null));
 
         updateLayers(store, channel);

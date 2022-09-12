@@ -272,6 +272,7 @@ const StyledTabContent = styled.div`
 
     .ka-thead-cell {
         background-color: white;
+        width: ${(props) => props.isMobile ? "10em" : "auto"};
     }
 
     .ka-cell-text {
@@ -732,35 +733,36 @@ export const GFIPopup = ({ handleGfiDownload }) => {
                             <StyledVkmDataItems>
                             {
                                 vkmData.vkm._orderHigh.filter(value => value !== 'kuntanimi').map(property => {
-                                    if(property !== "Katunimi")
-                                    return (
-                                            <p
-                                                key={'vkm-info-box-li'+property}
-                                                style={{
-                                                    color: '#0064af'
-                                                }}
-                                            >
-                                                <span
+                                    if (property !== "Katunimi")
+                                        return (
+                                                <p
+                                                    key={'vkm-info-box-li'+property}
                                                     style={{
-                                                        fontSize: '14px',
-                                                        fontWeight: 'light',
-                                                        margin: '0'
+                                                        color: '#0064af'
                                                     }}
                                                 >
-                                                    {property + ':'}
-                                                </span>
-                                                &nbsp;
-                                                <span
-                                                    style={{
-                                                        fontSize: '14px',
-                                                        fontWeight: '600',
-                                                        margin: '0'
-                                                    }}
-                                                >
-                                                    {vkmData.vkm[property]}
-                                                </span>
-                                            </p>
-                                    )
+                                                    <span
+                                                        style={{
+                                                            fontSize: '14px',
+                                                            fontWeight: 'light',
+                                                            margin: '0'
+                                                        }}
+                                                    >
+                                                        {property + ':'}
+                                                    </span>
+                                                    &nbsp;
+                                                    <span
+                                                        style={{
+                                                            fontSize: '14px',
+                                                            fontWeight: '600',
+                                                            margin: '0'
+                                                        }}
+                                                    >
+                                                        {vkmData.vkm[property]}
+                                                    </span>
+                                                </p>
+                                        )
+                                    else return null;
                                 })
                             }
                             </StyledVkmDataItems>
@@ -846,7 +848,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
                     )}
                 </StyledTabSwiperContainer>
             )}
-            <StyledTabContent>
+            <StyledTabContent isMobile={isMobile}>
                 {tabsContent[selectedTab] === undefined && (
                     <StyledNoGfisContainer>
                         <StyledSubtitle>{strings.gfi.choosingGfi}:</StyledSubtitle>

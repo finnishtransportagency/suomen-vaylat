@@ -3,14 +3,21 @@ import styled from 'styled-components';
 import strings from '../../translations';
 import { Accordion } from 'react-bootstrap';
 import UserGuideTabs from './UserGuideTabs';
-import { faAngleRight } from '@fortawesome/free-solid-svg-icons';
+import {
+    faExpand,
+    faLayerGroup,
+    faSearch,
+    faPencilRuler,
+    faSave,
+    faMapMarkedAlt,
+    faDownload,
+    faAngleRight,
+    faList,
+} from '@fortawesome/free-solid-svg-icons';
+import { ReactComponent as VaylaLogo } from '../layout/images/vayla_v_white.svg';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import UserGuideUpperBarContent from './UserGuideUpperBarContent';
-import searchIcon from './images/haku_ikoni.jpg';
-import drawingToolsIcon from './images/piirtotyökalut.jpg';
-import saveViewIcon from './images/tallenna_nakyma.jpg';
-import fullScreenIcon from './images/laajenna_ikoni.jpg';
-import zoomBarIcon from './images/zoom-tasot.jpg';
+import { theme } from '../../theme/theme';
 
 
 const StyledContent = styled.div`
@@ -26,7 +33,8 @@ const StyledContent = styled.div`
 `;
 
 const StyledAccordion = styled(Accordion)`
-
+    display: flex;
+    flex-direction: column;
 `;
 
 const StyledAccordionItem = styled(Accordion.Item)`
@@ -52,9 +60,27 @@ const StyledAccordionBody = styled(Accordion.Body)`
     padding-top: 16px;
 `;
 
-const StyledIcon = styled.img`
-    // width: 100%;
-    height: 35px;
+const StyledGuideContent = styled.div`
+    margin-left 20px;
+`;
+
+const StyledIconButton = styled.button`
+    border: none;
+    border-radius: 50%;
+    background: ${theme.colors.mainColor1};
+    height: 40px;
+    width: 40px;
+    pointer-events: none;
+`;
+
+const StyledFAIcon = styled(FontAwesomeIcon)`
+    color: ${theme.colors.mainWhite};
+`;
+
+const StyledTitleWrapper = styled.div`
+    display: flex;
+    align-items: center;
+    user-select: none;
 `;
 
 export const UserGuideModalContent = () => {
@@ -66,48 +92,101 @@ export const UserGuideModalContent = () => {
 
     const modalContent = [
         {
-            title: strings.appGuide.modalContent.upperBar.title,
-            content: <UserGuideUpperBarContent />
+            title:  <StyledTitleWrapper>
+                    <StyledIconButton>
+                        <VaylaLogo />
+                    </StyledIconButton>
+                        <p>{strings.appGuide.modalContent.upperBar.title}</p>
+                    </StyledTitleWrapper>,
+            content: <StyledGuideContent>
+                        <UserGuideUpperBarContent />
+                    </StyledGuideContent> 
         },
         {
-            title: strings.appGuide.modalContent.mapLevelMenu.title,
+            title: <StyledTitleWrapper>
+                        <StyledIconButton>
+                            <StyledFAIcon icon={faLayerGroup} />
+                        </StyledIconButton>
+                        <p>{strings.appGuide.modalContent.mapLevelMenu.title}</p>
+                    </StyledTitleWrapper>,
             content: <UserGuideTabs />
         },
-
         {
-            title: strings.appGuide.modalContent.drawingTools.title,
-            content: <div>
-                <StyledIcon src={drawingToolsIcon} />
-                <p>{strings.appGuide.modalContent.drawingTools.content}</p>
-            </div>
+            title: <StyledTitleWrapper>
+                        <StyledIconButton>
+                            <StyledFAIcon icon={faMapMarkedAlt} />
+                        </StyledIconButton>
+                        <p>{strings.gfi.title}</p>
+                    </StyledTitleWrapper>,
+            content: <StyledGuideContent style={{display: 'grid', gridTemplateColumns: '1fr'}}>
+                        <p>{strings.appGuide.modalContent.gfi.content}</p>
+                    </StyledGuideContent>
         },
         {
-            title: strings.appGuide.modalContent.savingView.title,
-            content: <div>
-                <StyledIcon src={saveViewIcon} />
-                <p>{strings.appGuide.modalContent.savingView.content}</p>
-            </div>
+            title: <StyledTitleWrapper>
+                        <StyledIconButton>
+                            <StyledFAIcon icon={faDownload} />
+                        </StyledIconButton>
+                        <p>{strings.downloads.downloads}</p>
+                    </StyledTitleWrapper>,
+            content: <StyledGuideContent>
+                        <p>{strings.appGuide.modalContent.downloads.content}</p>
+                    </StyledGuideContent>
         },
         {
-            title: strings.appGuide.modalContent.setFullScreen.title,
-            content: <div>
-                <StyledIcon src={fullScreenIcon} />
-                <p>{strings.appGuide.modalContent.setFullScreen.content}</p>
-            </div>
+            title: <StyledTitleWrapper>
+                        <StyledIconButton>
+                            <StyledFAIcon icon={faPencilRuler} />
+                        </StyledIconButton>
+                        <p>{strings.appGuide.modalContent.drawingTools.title}</p>
+                    </StyledTitleWrapper>,
+            content: <StyledGuideContent>
+                        <p>{strings.appGuide.modalContent.drawingTools.content}</p>
+                    </StyledGuideContent>
         },
         {
-            title: strings.appGuide.modalContent.search.title,
-            content: <div>
-                <StyledIcon src={searchIcon} />
-                <p>{strings.appGuide.modalContent.search.content}</p>
-            </div>
+            title:  <StyledTitleWrapper>
+                        <StyledIconButton>
+                            <StyledFAIcon icon={faSave} />
+                        </StyledIconButton>
+                        <p>{strings.appGuide.modalContent.savingView.title}</p>
+                    </StyledTitleWrapper>,
+            content: <StyledGuideContent>
+                        <p>{strings.appGuide.modalContent.savingView.content}</p>
+                    </StyledGuideContent>
         },
         {
-            title: strings.appGuide.modalContent.zoomBar.title,
-            content: <div>
-                <StyledIcon src={zoomBarIcon} />
-                <p>{strings.appGuide.modalContent.zoomBar.content}</p>
-            </div>
+            title:  <StyledTitleWrapper>
+                        <StyledIconButton>
+                            <StyledFAIcon icon={faExpand} />
+                        </StyledIconButton>
+                        <p>{strings.appGuide.modalContent.setFullScreen.title}</p>
+                    </StyledTitleWrapper>,
+            content: <StyledGuideContent>
+                        <p>{strings.appGuide.modalContent.setFullScreen.content}</p>
+                    </StyledGuideContent>
+        },
+        {
+            title:  <StyledTitleWrapper>
+                        <StyledIconButton>
+                            <StyledFAIcon icon={faSearch} />
+                        </StyledIconButton>
+                        <p>{strings.appGuide.modalContent.search.title}</p>
+                    </StyledTitleWrapper> ,
+            content: <StyledGuideContent>
+                        <p>{strings.appGuide.modalContent.search.content}</p>
+                    </StyledGuideContent>
+        },
+        {
+            title:  <StyledTitleWrapper >
+                        <StyledIconButton>
+                            <StyledFAIcon icon={faList} />
+                        </StyledIconButton>
+                        <p>{strings.appGuide.modalContent.zoomBar.title}</p>
+                    </StyledTitleWrapper>,
+            content:<StyledGuideContent>
+                        <p>{strings.appGuide.modalContent.zoomBar.content}</p>
+                    </StyledGuideContent>
         }
     ];
 

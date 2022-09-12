@@ -36,6 +36,7 @@ import {
 import { setHasToastBeenShown, setMinimizeGfi, setSelectedGfiTool, setActiveSelectionTool } from '../../state/slices/uiSlice';
 
 import SVLoader from '../loader/SvLoader';
+import { DRAWING_TIP_LOCALSTORAGE } from '../../utils/constants';
 
 const StyledGfiToolContainer = styled.div`
     position: relative;
@@ -183,7 +184,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu }) => {
     const [loading, setLoading] = useState(false);
 
 
-    const [showToast, setShowToast] = useState(JSON.parse(localStorage.getItem("showToast")));
+    const [showToast, setShowToast] = useState(JSON.parse(localStorage.getItem(DRAWING_TIP_LOCALSTORAGE)));
 
     const handleClick = () => {
         setShowToast(false);
@@ -345,10 +346,10 @@ const GfiToolsMenu = ({ handleGfiToolsMenu }) => {
             ];
             channel.postRequest('DrawTools.StartDrawingRequest', data);
             store.dispatch(setMinimizeGfi(true));
-            if(showToast !== false && !hasToastBeenShown) {
+            if(showToast !== false && !hasToastBeenShown.includes('measurementToast')) {
                 if(item.type === "LineString" || item.type === "Polygon")
                 toast.info(<DrawingToast text={strings.tooltips.drawingTools.measureToast} handleButtonClick={handleClick} />,
-                {icon: <StyledToastIcon icon={faInfoCircle} />, toastId: "measurementToast", onClose : () => store.dispatch(setHasToastBeenShown(true))})
+                {icon: <StyledToastIcon icon={faInfoCircle} />, toastId: "measurementToast", onClose : () => store.dispatch(setHasToastBeenShown({toastId: 'measurementsToast', shown: true}))})
             }
         }
     };
