@@ -691,6 +691,9 @@ export const GFIPopup = ({ handleGfiDownload }) => {
                 )}
             </AnimatePresence>
                 <StyledVKMDataContainer
+                    initial={{
+                        height: !isVKMInfoOpen && !vkmData && 0
+                    }}
                     animate={{
                         height: isVKMInfoOpen ? 'auto' : 0,
                         opacity: isVKMInfoOpen ? 1 : 0,
