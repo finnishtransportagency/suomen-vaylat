@@ -8,18 +8,13 @@ const StyledHeader = styled.div`
 `;
 
 const StyledContainer = styled.div`
-    @media ${(props) => props.theme.device.desktop} {
-
-    };
     @media ${props => props.theme.device.tablet} {
         height: 60vh;
-        width: 60vw;
         overflow: auto;
     };
 
     @media ${(props) => props.theme.device.mobileL} {
         height: 60vh;
-        width: 60vw;
         overflow: auto;
     };
 `;

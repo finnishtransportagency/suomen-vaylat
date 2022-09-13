@@ -72,6 +72,13 @@ const StyledContent = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    .Toastify__toast-container {
+
+    }
+    .Toastify__toast-container--top-right {
+        top: 9em;
+        width: 400px;
+    }
     @media ${(props) => props.theme.device.desktop} {
         .Toastify__toast-container {
 
