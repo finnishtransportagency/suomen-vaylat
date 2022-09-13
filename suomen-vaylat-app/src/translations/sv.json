@@ -24,24 +24,26 @@
     "zoomOut": "Zooma ut",
     "opacity": "Transparens",
     "drawingtools": {
-      "drawingtoolsButton": "Ritverktyg",
+      "drawingtoolsButton": "Drawing tools",
       "point": "Point",
       "circle": "Cirkel",
       "square": "Kvadrat",
       "box": "Ruta",
       "linestring": "Linje",
       "polygon": "Polygon",
-      "erase": "Töm"
+      "erase": "Töm",
+      "drawingToast": "Voit viimeistellä piirron tuplaklikkaamalla tai klikkaamalla viimeksi piirretystä taitepisteestä uudelleen"
     },
     "measuringTools": {
-      "measuringToolsButton": "Measuring tools",
+      "drawingToolsButton": "Drawing tools",
       "point": "Point",
       "circle": "Circle",
       "square": "Square",
       "box": "Box",
       "linestring": "Line",
       "polygon": "Polygon",
-      "erase": "Erase"
+      "erase": "Erase",
+      "measureToast": "Voit viimeistellä piirron tuplaklikkaamalla tai klikkaamalla viimeksi piirretystä taitepisteestä uudelleen"
     },
     "share": "Dela denna sida",
     "shareTheme": "Dela detta tema",
@@ -78,10 +80,14 @@
     "dataTableView": "Listvy",
     "downloadMaterials": "Lataa aineistoja",
     "list": "List",
-    "table" : "Table"
+    "table" : "Table",
+    "featureAmount" : "Kohteita",
+    "getMoreFeatures": "Hae lisää kohteita"
   },
   "vkm": {
-    "locationInfo": "Location info"
+    "locationInfo": "Location info",
+    "roadAddressInfo": "Tieosoitetiedot",
+    "roadAddressInstructions": "Tieosoitetietoja ei pystytty hakemaan. Lähennä karttaa ja klikkaa pistettä, jolle haluat hakea tieosoitetiedot."
   },
   "downloads": {
     "downloads": "Downloads",
@@ -102,7 +108,8 @@
     "continue": "Continue",
     "cancel": "Cancel",
     "dontShowAgain": "Visa inte igen",
-    "ok": "OK"
+    "ok": "OK",
+    "OkLowerCaseK": "Ok"
   },
   "multipleLayersWarning": "Du håller på att lägga till minst 10 kartnivåer på kartan och det kan påverka tjänstens prestanda",
   "appGuide": {
@@ -146,9 +153,16 @@
         "title": "Sök",
         "content": "Sökningen öppnas i kartans övre högra hörn med hjälp av förstoringsglasknappen till vänster. Sökfunktionen låter dig söka efter dig och adresser genom att välja den sökning du vill använda från rullgardinsmenyn. Du kan ta bort ett sökresultat från kartan genom att trycka på papperskorgen i sökrutan."
       },
-      "measureTool": {
-        "title": "Ritverktyg",
-        "content": "Mätverktygen öppnas från ritikonen till vänster. Verktygen kan användas för att mäta längd eller area. mätresultaten kan raderas från kartan med den orangea gummiknappen."
+      "drawingTools": {
+        "title": "Drawing tools",
+        "content": "Drawing tools öppnas från ritikonen till vänster. Verktygen kan användas för att mäta längd eller area. mätresultaten kan raderas från kartan med den orangea gummiknappen."
+      },
+      "gfi": {
+        "content": "Kohdetiedot avautuvat klikkaamalla mistä tahansa kartalla, tai vasemman reunan panikkeesta, jonka ikonissa on karttamerkintä. Kohdetiedot-ikkunasta voit hakea kohdetietoja sekä näet tietoja valitsemistasi kohteista ja sijainneista, jotka voit myös halutessasi ladata suoraan laitteellesi valitsemassasi tiedostomuodossa."
+      },
+      "downloads": {
+        "title": "Lataukset",
+        "content": "Lataukset avautuvat vasemman reunan lataukset-painikkeesta. Latauksista löydät valitsemistasi kohdetiedoista tekemäsi lataukset, jotka voit ladata eri muodoissa laitteellesi."
       },
       "savingView": {
         "title": "Spara vyn",
@@ -196,9 +210,20 @@
         "link": "https://vayla.fi/vaylista/aineistot/kartat"
       }
     },
+    "dataSourcesAndTermsOfUse" :{
+      "tabTitle": "Tietolähteet ja käyttöehdot"
+    },
     "dataSources": {
       "tabTitle": "Datakällor",
-      "municipalityImage": "Sijaintitietojen kuntien vaakunoiden kuvat haetaan kuntaliiton sivuilta (https://www.kuntaliitto.fi)."
+      "municipalityImage": "Sijaintitietojen kuntien vaakunoiden kuvat haetaan kuntaliiton sivuilta:",
+      "municipalityLink": "https://www.kuntaliitto.fi",
+      "landSurvey": "Taustakarttojen lähteenä on maanmittauslaitos."
+    },
+    "termsOfUse": {
+      "title": "Käyttöehdot",
+      "description": "Suomen Väylät -palvelun Väyläviraston tietoaineistoja koskee Creative Commons 4.0 Nimeä -käyttölupa.",
+      "moreInfo": "Lisätietoja käyttöehdoista:",
+      "link": "https://vayla.fi/vaylista/aineistot/avoindata/kayttoehdot"
     }
   },
   "search": {
@@ -209,8 +234,10 @@
       "title": "Sök efter vägnummer",
       "subtitle": "Sök på vägnummer",
       "osa": "Vägsträcka",
+      "osaLoppu": "Tieosa loppu",
       "ajorata": "Körbana",
       "etaisyys": "Avstånd (m)",
+      "etaisyysLoppu": "Etäisyys loppu (m)",
       "error": {
         "text": "Inga resultat hittades för vägsökning."
       },
@@ -240,6 +267,36 @@
       "error": {
           "text": "No results found for the metadata search."
       }
+    },
+    "tips": {
+      "title": "Paikkahaulla voit hakea kuntaa, osoitetta, kiinteistötunnusta, tieosoitetta tai rataosoitetta.",
+      "address": "Osoitehaku, kirjoita muodossa 'kunta', 'osoite' tai 'osoite, kunta'.",
+      "addressExamples": [
+        "Helsinki",
+        "Opastinsilta 12",
+        "Opastinsilta 12, Helsinki"
+      ],
+      "vkmRoad": "Tiehaku, kirjoita muodossa 'tie/osa/ajorata/etäisyys' tai 'tie/osa/ajorata/etäisyys tie/osa_loppu/ajorata/etäisyys_loppu'.",
+      "vkmRoadExamples": [
+        "5",
+        "5/116",
+        "5/116/0",
+        "5/116/0/50",
+        "5/116//50",
+        "5/116/0/50 5/348/0/100",
+        "5/116//50 5/348//100",
+        "start:5/116/0/50 slut:5/348/0/100"
+      ],
+      "vkmTrack": "Ratahaku, kirjoita muodossa 'ratanumero/ratakilometri/ratametri'.",
+      "vkmTrackExamples": [
+        "001/2/10"
+      ],
+      "realEstateUnitIdentifier": "Kiinteistötunnushaku, kirjoita muodossa 'aa-bb-cc-d' tai 'aaa-bbb-cc-ddd'.",
+      "realEstateUnitIdentifierExamples": [
+        "91-17-16-1",
+        "091-017-16-001"
+      ],
+      "example": "Esim."
     }
   },
   "layerlist": {
@@ -265,6 +322,7 @@
       "layerVisible": "Lager synligt",
       "zoomInToShowLayer": "Zooma in för att se kartlagret",
       "zoomOutToShowLayer": "Zooma ut för att se kartlagret",
+      "toShowLayer" : "för att se kartlagret",
       "opacity": "Genomskinlighet"
     }
   },

@@ -1,3 +1,4 @@
+import moment from 'moment';
 import {
     setAllLayers,
     setSelectedLayers,
@@ -13,6 +14,8 @@ import {
 } from '../state/slices/uiSlice';
 
 import { isMobile } from '../theme/theme';
+import strings from '../translations';
+import { ANNOUNCEMENTS_LOCALSTORAGE } from '../utils/constants';
 
 /**
  * Update layers. Use only this to update all layers and selected layers.
@@ -192,4 +195,49 @@ export const removeDuplicates = (originalArray, prop) => {
         newArray.push(lookupObject[i]);
     }
     return newArray;
+}
+
+/**
+ * Gets active announcements
+ * @param {Array} annoucements announcements
+ * @returns {Array} active annoucements
+ */
+export const getActiveAnnouncements = (annoucements) => {
+    let activeAnnoucements = [];
+    if (annoucements && annoucements.length > 0) {
+        const localStorageAnnouncements =
+            localStorage.getItem(ANNOUNCEMENTS_LOCALSTORAGE)
+                ? localStorage.getItem(
+                        ANNOUNCEMENTS_LOCALSTORAGE
+                    )
+                : [];
+        const activeAnnouncements = annoucements.filter(
+            (announcement) =>
+                localStorageAnnouncements &&
+                !localStorageAnnouncements.includes(
+                    announcement.id
+                )
+        );
+
+
+        const currentTime = Date.now();
+        const currentLang = strings.getLanguage();
+        const defaultLang = strings.getAvailableLanguages()[0];
+
+        activeAnnouncements.forEach(annoucement => {
+            const start = new Date(annoucement.beginDate);
+            const end = new Date(annoucement.endDate);
+            if (moment(currentTime).isBetween(start, end)) {
+                const localeObj = annoucement.locale[currentLang] ? annoucement.locale[currentLang] : (
+                        annoucement.locale[defaultLang] ? annoucement.locale[defaultLang] : annoucement.locale[Object.keys(annoucement.locale)[0]]
+                    )
+                activeAnnoucements.push({
+                    id: annoucement.id,
+                    title: localeObj.title,
+                    content: localeObj.content
+                });
+            }
+        });
+    }
+    return activeAnnoucements;
 }

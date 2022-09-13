@@ -7,7 +7,7 @@ import strings from '../../translations';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { LegendGroup } from './LegendGroup';
-import {isMobile} from "../../theme/theme";
+import {theme, isMobile} from "../../theme/theme";
 import ReactTooltip from "react-tooltip";
 
 
@@ -128,7 +128,7 @@ export const Legend = ({
                 type: "tween"
             }}
         >
-            <ReactTooltip disable={isMobile} id='legendHeader' place='top' type='dark' effect='float'>
+            <ReactTooltip backgroundColor={theme.mainColor1} disable={isMobile} id='legendHeader' place='top' type='dark' effect='float'>
                 <span>{strings.tooltips.legendHeader}</span>
             </ReactTooltip>
             <StyledHeaderContent

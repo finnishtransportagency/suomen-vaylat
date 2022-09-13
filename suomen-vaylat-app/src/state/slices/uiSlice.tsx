@@ -16,11 +16,13 @@ const initialState = {
     shareUrl: '',
     isDrawingToolsOpen: false,
     isLegendOpen: false,
+    isZoomBarOpen: false,
     isSaveViewOpen: false,
     isGfiOpen: false,
     isGfiDownloadOpen: false,
     selectedGfiTool: null,
     activeTool: null,
+    activeSelectionTool: null,
     gfiLocations: null,
     isSwipingDisabled: false,
     selectedMapLayersMenuTab: 0,
@@ -29,6 +31,7 @@ const initialState = {
     maximizeGfi: false,
     gfiCroppingTypes: [],
     warning: null,
+    hasToastBeenShown : new Array<string>()
 };
 
 export const uiSlice = createSlice({
@@ -46,6 +49,7 @@ export const uiSlice = createSlice({
             state.isUserGuideOpen = false;
             state.isDrawingToolsOpen = false;
             state.isLegendOpen = false;
+            state.isZoomBarOpen = false;
             state.isSaveViewOpen = false;
             state.selectedMapLayersMenuTab = 0;
             state.selectedMapLayersMenuThemeIndex = null;
@@ -82,6 +86,9 @@ export const uiSlice = createSlice({
         setIsLegendOpen: (state, action) => {
             state.isLegendOpen = action.payload;
         },
+        setIsZoomBarOpen: (state, action) => {
+            state.isZoomBarOpen = action.payload;
+        },
         setIsSaveViewOpen: (state, action) => {
             state.isSaveViewOpen = action.payload;
         },
@@ -93,6 +100,9 @@ export const uiSlice = createSlice({
         },
         setSelectedGfiTool: (state, action) => {
             state.selectedGfiTool = action.payload;
+        },
+        setActiveSelectionTool: (state, action) => {
+            state.activeSelectionTool = action.payload;
         },
         setShareUrl: (state, action) => {
             state.shareUrl = action.payload;
@@ -124,6 +134,16 @@ export const uiSlice = createSlice({
         setWarning: (state, action) => {
             state.warning = action.payload;
         },
+        setHasToastBeenShown: (state, action) => {
+            const toastId = action.payload.toastId;
+            const hasToastBeenShow = action.payload.shown;
+
+            state.hasToastBeenShown = state.hasToastBeenShown.filter(item => item !== toastId);
+
+            if (hasToastBeenShow) {
+                state.hasToastBeenShown.push(toastId as string);
+            }
+        }
     },
 });
 
@@ -137,10 +157,12 @@ export const {
     setIsInfoOpen,
     setIsUserGuideOpen,
     setIsLegendOpen,
+    setIsZoomBarOpen,
     setIsSaveViewOpen,
     setIsGfiOpen,
     setIsGfiDownloadOpen,
     setSelectedGfiTool,
+    setActiveSelectionTool,
     setShareUrl,
     setIsDrawingToolsOpen,
     setActiveTool,
@@ -152,6 +174,7 @@ export const {
     setMaximizeGfi,
     setGfiCroppingTypes,
     setWarning,
+    setHasToastBeenShown
 } = uiSlice.actions;
 
 export default uiSlice.reducer;
