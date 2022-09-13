@@ -1,9 +1,9 @@
 import {  useState, useContext } from 'react';
-import { faInfoCircle, faTimes, faCaretDown, faCaretUp, faGripLines } from '@fortawesome/free-solid-svg-icons';
+import { faInfoCircle, faTimes, faCaretDown, faCaretUp, faGripLines, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ReactReduxContext, useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { clearLayerMetadata, getLayerMetadata, setLayerMetadata } from '../../../state/slices/rpcSlice';
+import { clearLayerMetadata, getLayerMetadata, setLayerMetadata, setZoomTo } from '../../../state/slices/rpcSlice';
 import { updateLayers } from '../../../utils/rpcUtil';
 import { sortableHandle } from 'react-sortable-hoc';
 
@@ -148,6 +148,37 @@ const StyledLayerInfoIconWrapper = styled.div`
     }
 `;
 
+const StyledToggleOpacityIconWrapper = styled.div`
+    cursor: pointer;
+    margin-left: 10px;
+    svg {
+        color: ${props => props.theme.colors.mainColor1};
+        transition: all 0.1s ease-out;
+    };
+    svg:hover {
+        color: ${props => props.theme.colors.mainColor2};
+    }
+    `;
+
+const StyledLayerInfoContainer = styled.div`
+    display: flex;
+    flex-direction: row;
+    height: 18px;
+`;
+
+const StyledShowLayerButton = styled.button`
+    background: none;
+    border: none;
+    padding: 0;
+    margin-right: 3px;
+    color: #069;
+    text-decoration: underline;
+    cursor: pointer;
+    display: flex;
+    height: 10px;
+    font:inherit;
+`;
+
 const DragHandle = sortableHandle(() => (
     <StyledLayerGripControl className="swiper-no-swiping">
         <FontAwesomeIcon
@@ -177,10 +208,12 @@ export const SelectedLayer = ({
     layer,
     uuid,
     currentZoomLevel,
-    sortIndex
+    sortIndex,
+    opacityZero
 }) => {
     const { store } = useContext(ReactReduxContext);
     const [opacity, setOpacity] = useState(layer.opacity);
+    const [prevOpacity, setPrevOpacity] = useState(layer.opacity);
     const channel = useSelector(state => state.rpc.channel);
 
     const handleLayerRemoveSelectedLayer = (channel, layer) => {
@@ -191,6 +224,14 @@ export const SelectedLayer = ({
     const handleLayerOpacity = (channel, layer, value) => {
         channel.postRequest('ChangeMapLayerOpacityRequest', [layer.id, value]);
         setOpacity(value);
+    };
+
+    const handleLayerOpacityToggle = (channel, layer) => {
+        !opacityZero ? setPrevOpacity(layer.opacity) : setPrevOpacity(100);
+        const newOpacity = opacityZero? prevOpacity: 0;
+        channel.postRequest('ChangeMapLayerOpacityRequest', [layer.id, newOpacity]);
+        setOpacity(newOpacity);
+        updateLayers(store, channel);
     };
 
     const handleMetadataSuccess = (data, layer, uuid) => {
@@ -206,10 +247,13 @@ export const SelectedLayer = ({
         store.dispatch(getLayerMetadata({ layer: layer, uuid: uuid, handler: handleMetadataSuccess, errorHandler: handleMetadataError }));
     };
 
+    const isCurrentZoomTooFar = layer.maxZoomLevel && layer.minZoomLevel && currentZoomLevel <  layer.minZoomLevel;
+    const isCurrentZoomTooClose = layer.maxZoomLevel && layer.minZoomLevel && currentZoomLevel >  layer.maxZoomLevel
+
     let layerInfoText = strings.layerlist.selectedLayers.layerVisible;
-    if (layer.maxZoomLevel && layer.minZoomLevel && currentZoomLevel <  layer.minZoomLevel) {
+    if (isCurrentZoomTooFar) {
         layerInfoText = strings.layerlist.selectedLayers.zoomInToShowLayer;
-    } else if (layer.maxZoomLevel && layer.minZoomLevel && currentZoomLevel >  layer.maxZoomLevel) {
+    } else if (isCurrentZoomTooClose) {
         layerInfoText = strings.layerlist.selectedLayers.zoomOutToShowLayer;
     }
 
@@ -243,7 +287,12 @@ export const SelectedLayer = ({
                         }
                     </StyledlayerHeader>
                     <StyledMidContent>
-                        {layerInfoText}
+                        {isCurrentZoomTooFar || isCurrentZoomTooClose ? <StyledLayerInfoContainer>
+                            <StyledShowLayerButton onClick={() => store.dispatch(setZoomTo(layer.minZoomLevel))}>
+                                {isCurrentZoomTooFar? strings.tooltips.zoomIn : isCurrentZoomTooClose && strings.tooltips.zoomOut}
+                            </StyledShowLayerButton> <p>{strings.layerlist.selectedLayers.toShowLayer}</p>
+                        </StyledLayerInfoContainer>
+                        : layerInfoText }
                     </StyledMidContent>
                     <StyledBottomContent>
                         <p>{strings.layerlist.selectedLayers.opacity}</p>
@@ -257,6 +306,9 @@ export const SelectedLayer = ({
                             onMouseUp={() => updateLayers(store, channel)}
                             onTouchEnd={() => updateLayers(store, channel)}
                         />
+                        <StyledToggleOpacityIconWrapper onClick={() => handleLayerOpacityToggle(channel, layer)}>
+                            <FontAwesomeIcon icon={opacityZero? faEyeSlash : faEye} />
+                        </StyledToggleOpacityIconWrapper>
                     </StyledBottomContent>
                 </StyledLayerContent>
             </StyledLayerContainer>

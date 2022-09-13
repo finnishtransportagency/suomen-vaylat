@@ -9,7 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { EmailIcon, EmailShareButton, FacebookIcon, FacebookShareButton, LinkedinIcon, LinkedinShareButton, TelegramIcon, TelegramShareButton, TwitterIcon, TwitterShareButton, WhatsappIcon, WhatsappShareButton } from 'react-share';
-import { isMobile } from '../../theme/theme';
+import { isMobile, theme } from '../../theme/theme';
 
 import strings from '../../translations';
 
@@ -203,30 +203,30 @@ export const ShareWebSitePopup = () => {
                     }
                 </AnimatePresence>
                 <StyledShareButtonsContainer>
-                <ReactTooltip disable={isMobile} id='clipboard' place='top' type='dark' effect='float'>
+                <ReactTooltip backgroundColor={theme.colors.mainColor1} disable={isMobile} id='clipboard' place='bottom' type='dark' effect='float'>
                     <span>{strings.share.tooltips.clipboard}</span>
                 </ReactTooltip>
-                <ReactTooltip disable={isMobile} id='email' place='top' type='dark' effect='float'>
+                <ReactTooltip backgroundColor={theme.colors.mainColor1} disable={isMobile} id='email' place='bottom' type='dark' effect='float'>
                     <span>{strings.share.tooltips.email}</span>
                 </ReactTooltip>
 
-                <ReactTooltip disable={isMobile} id='facebook' place='top' type='dark' effect='float'>
+                <ReactTooltip backgroundColor={theme.colors.mainColor1} disable={isMobile} id='facebook' place='bottom' type='dark' effect='float'>
                     <span>{strings.share.tooltips.facebook}</span>
                 </ReactTooltip>
 
-                <ReactTooltip disable={isMobile} id='twitter' place='top' type='dark' effect='float'>
+                <ReactTooltip backgroundColor={theme.colors.mainColor1} disable={isMobile} id='twitter' place='bottom' type='dark' effect='float'>
                 <span>{strings.share.tooltips.twitter}</span>
                 </ReactTooltip>
 
-                <ReactTooltip disable={isMobile} id='linkedin' place='top' type='dark' effect='float'>
+                <ReactTooltip backgroundColor={theme.colors.mainColor1} disable={isMobile} id='linkedin' place='bottom' type='dark' effect='float'>
                 <span>{strings.share.tooltips.linkedin}</span>
                 </ReactTooltip>
 
-                <ReactTooltip disable={isMobile} id='whatsapp' place='top' type='dark' effect='float'>
+                <ReactTooltip backgroundColor={theme.colors.mainColor1} disable={isMobile} id='whatsapp' place='bottom' type='dark' effect='float'>
                     <span>{strings.share.tooltips.whatsapp}</span>
                 </ReactTooltip>
 
-                <ReactTooltip disable={isMobile} id='telegram' place='top' type='dark' effect='float'>
+                <ReactTooltip backgroundColor={theme.colors.mainColor1} disable={isMobile} id='telegram' place='bottom' type='dark' effect='float'>
                     <span>{strings.share.tooltips.telegram}</span>
                 </ReactTooltip>
                     <CopyToClipboard text={url} onCopy={() => { setIsCopied(true); }} id="share-website-clipboard">

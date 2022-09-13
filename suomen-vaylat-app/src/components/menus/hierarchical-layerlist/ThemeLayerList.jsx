@@ -6,6 +6,7 @@ import { motion } from 'framer-motion';
 import styled from 'styled-components';
 import { useAppSelector } from '../../../state/hooks';
 import strings from '../../../translations';
+import { setZoomTo } from '../../../state/slices/rpcSlice';
 import { selectGroup } from '../../../utils/rpcUtil';
 import Layers from './Layers';
 
@@ -226,14 +227,19 @@ export const ThemeLayerList = ({
 
     const {
         channel,
-        selectedTheme, 
+        selectedTheme,
         lastSelectedTheme,
-        selectedThemeIndex
+        selectedThemeIndex,
+        currentZoomLevel
     } = useAppSelector((state) => state.rpc);
 
     const handleSelectGroup = (index, theme) => {
         selectGroup(store, channel, index, theme, lastSelectedTheme, selectedThemeIndex);
     };
+
+    useEffect(() => {
+        if (currentZoomLevel < selectedTheme?.minZoomLevel) store.dispatch(setZoomTo(selectedTheme.minZoomLevel));
+    }, [selectedTheme]);
 
     return (
         <>
@@ -282,7 +288,7 @@ export const ThemeGroup = ({
 
     const truncatedString = (string, characterAmount, text) => {
         return (
-            string.length > characterAmount + 20 ? <>{string.substring(0, characterAmount)} <StyledReadMoreButton
+            string.length > characterAmount + 20 ? <>{string.substring(0, characterAmount) + '...'} <StyledReadMoreButton
                 onClick={() => setIsExcerptOpen(!isExcerptOpen)}>{text}</StyledReadMoreButton></> : string
         )
     }
@@ -360,7 +366,7 @@ export const ThemeGroup = ({
                                 {isExcerptOpen ? <> {strings.themelayerlist[theme.id].description} <StyledReadMoreButton
                                         onClick={() => setIsExcerptOpen(!isExcerptOpen)}>{strings.themelayerlist.readLess}</StyledReadMoreButton></> :
                                     truncatedString(strings.themelayerlist[theme.id].description,
-                                        135, '...' + strings.themelayerlist.readMore)}
+                                        135, strings.themelayerlist.readMore)}
                             </StyledSubText>
                         </>
                     }
@@ -368,7 +374,7 @@ export const ThemeGroup = ({
                 <StyledLayerGroup>
                     <Layers layers={filteredLayers} isOpen={isOpen} theme={theme.name}/>
                 </StyledLayerGroup>
-                
+
                 {theme.subthemes && theme.subthemes.map((subtheme, index) => {
                         return (
                             <ThemeGroup

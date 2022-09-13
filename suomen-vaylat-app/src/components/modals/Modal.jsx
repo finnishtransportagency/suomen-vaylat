@@ -10,6 +10,8 @@ import { setMinimizeGfi, setMaximizeGfi } from '../../state/slices/uiSlice';
 
 import { isMobile } from '../../theme/theme';
 
+const MIN_SCREEN_WIDTH_MAXIMIZE = 500;
+
 const StyledModalBackdrop = styled(motion.div)`
     z-index: ${(props) => (props.type === 'warning' ? 9998 : 10)};
     position: fixed;
@@ -29,6 +31,8 @@ const StyledModalWrapper = styled(motion.div)`
     z-index: ${(props) =>
         props.type === 'warning' ? 9999 : props.resize ? 4 : 9993};
     position: absolute;
+    width: ${(props) => props.maximize? '100% !important' : 'auto'};
+    height: ${(props) => props.maximize? '100%' : 'auto'};
     top: ${(props) => props.resize && '0px'};
     left: ${(props) => props.resize && '0px'};
     padding: ${props => props.maximize ? '4px 4px 4px 4px' : (props.resize || props.drag) && '8px 50px 50px 8px'};
@@ -48,11 +52,11 @@ const StyledModalWrapper = styled(motion.div)`
 
 const StyledModal = styled(motion.div)`
     position: relative;
-    width: ${(props) => props.maximize ? '100% !important' : '100%'};
-    height: ${(props) => props.maximize ? '100% !important' : '100%'};
+    width: ${(props) => props.maximize  || isMobile ? '100% !important' : props.width && props};
+    height: ${(props) => props.maximize || isMobile ? '100% !important' : props.height && props.height};
     min-width: ${(props) => props.minWidth && props.minWidth};
     max-width: ${(props) => (props.maxWidth ? props.maxWidth : '100vw')};
-    min-height: 200px;
+    min-height: ${(props) => props.minHeight && props.minHeight};
     max-height: ${(props) => !props.maximize && 'calc(100vh - 100px)'};
     background-color: ${(props) => props.theme.colors.mainWhite};
     border-radius: 4px;
@@ -180,6 +184,9 @@ const Modal = ({
     minimize,
     maximize,
     children,
+    minHeight,
+    height = 'auto',
+    width = 'auto'
 }) => {
     const { store } = useContext(ReactReduxContext);
     const dragControls = useDragControls();
@@ -201,7 +208,7 @@ const Modal = ({
                 <>
                     <StyledModalWrapper
                         key="modal"
-                        drag={drag}
+                        drag={isMobile? false : drag}
                         dragConstraints={constraintsRef && constraintsRef}
                         dragControls={dragControls}
                         dragListener={false}
@@ -214,8 +221,6 @@ const Modal = ({
                             y: minimize ? 100 : 0,
                             opacity: minimize ? 0 : 1,
                             pointerEvents: minimize ? 'none' : 'auto',
-                            width: maximize ? '100%' : 'auto',
-                            height: maximize ? '100%' : 'auto'
                         }}
                         exit={{
                             y: 100,
@@ -240,6 +245,9 @@ const Modal = ({
                             maxWidth={maxWidth}
                             fullScreenOnMobile={fullScreenOnMobile}
                             maximize={maximize}
+                            minHeight={minHeight}
+                            height={height}
+                            width={width} 
                         >
                             <StyledModalHeader
                                 type={type}
@@ -265,7 +273,7 @@ const Modal = ({
                                                 />
                                             </StyledHeaderButton>
                                             {
-                                                !isMobile &&
+                                                window.screen.width > MIN_SCREEN_WIDTH_MAXIMIZE &&
                                                     <StyledHeaderButton
                                                         onClick={(e) => {
                                                             e.preventDefault();

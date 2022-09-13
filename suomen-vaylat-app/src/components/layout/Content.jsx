@@ -1,5 +1,7 @@
 import React, { useState, useContext, useEffect, useRef } from 'react';
 import { ReactReduxContext } from 'react-redux';
+import { ToastContainer, Slide} from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 import { useAppSelector } from '../../state/hooks';
 import styled from 'styled-components';
 import strings from '../../translations';
@@ -11,6 +13,8 @@ import {
     resetGFILocations,
     setDownloadActive,
     setDownloadFinished,
+    removeMarkerRequest,
+    setVKMData
 } from '../../state/slices/rpcSlice';
 
 import {
@@ -56,6 +60,7 @@ import WarningModalContent from '../warning/WarningModalContent';
 import GFIPopup from '../gfi/GFIPopup';
 import GFIDownload from '../gfi/GFIDownload';
 import MetadataModal from '../metadata-modal/MetadataModal';
+import { ANNOUNCEMENTS_LOCALSTORAGE } from '../../utils/constants';
 
 const StyledContent = styled.div`
     z-index: 1;
@@ -67,8 +72,48 @@ const StyledContent = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    .Toastify__toast-container {
+
+    }
+    .Toastify__toast-container--top-right {
+        top: 9em;
+        width: 400px;
+    }
     @media ${(props) => props.theme.device.desktop} {
-    } ;
+        .Toastify__toast-container {
+
+        }
+        .Toastify__toast-container--top-right {
+            top: 9em;
+        }
+    };
+    @media ${props => props.theme.device.tablet} {
+        .Toastify__toast-container {
+            width: 80%;
+        }
+        .Toastify__toast-container--top-right {
+            top: 9em;
+        }
+    };
+
+    @media ${(props) => props.theme.device.mobileL} {
+        .Toastify__toast-container {
+            width: 100%;
+        }
+        .Toastify__toast-container--top-right {
+            top: 7em;
+        }
+    };
+
+
+
+    .Toastify {
+        z-index: 2;
+    }
+
+    .Toastify__toast-icon {
+        display: none;
+    }
 `;
 
 const StyledContentGrid = styled.div`
@@ -86,11 +131,14 @@ const StyledContentGrid = styled.div`
     @media ${(props) => props.theme.device.mobileL} {
         padding: 8px;
         grid-template-columns: 48px 1fr;
-    } ;
+    };
 `;
 
 const StyledLayerNamesList = styled.ul`
     padding-inline-start: 20px;
+`;
+
+const StyledToastContainer = styled(ToastContainer)`
 `;
 
 const StyledLayerNamesListItem = styled.li``;
@@ -123,8 +171,6 @@ const Content = () => {
     const metadata = useAppSelector((state) => state.rpc.layerMetadata);
 
     let { channel, gfiLocations } = useAppSelector((state) => state.rpc);
-
-    const ANNOUNCEMENTS_LOCALSTORAGE = 'oskari-announcements';
 
     const addToLocalStorageArray = (name, value) => {
         // Get the existing data
@@ -197,6 +243,8 @@ const Content = () => {
         store.dispatch(setIsGfiOpen(false));
         store.dispatch(setMinimizeGfi(false));
         store.dispatch(setMaximizeGfi(false));
+        setTimeout(() => {store.dispatch(setVKMData(null))}, 500) ; // VKM info does not disappear during modal close animation.
+        store.dispatch(removeMarkerRequest("SEARCH_MARKER"));
         channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [
             null,
             null,
@@ -343,6 +391,9 @@ const Content = () => {
                     isOpen={isGfiOpen} /* Modal state */
                     id={null}
                     minWidth={'600px'}
+                    minHeight={'530px'}
+                    height='100vw'
+                    width='50vw'
                     //maxWidth={'1000px'}
                     //maxWidth={'calc(100vw - 100px)'}
                     minimize={minimizeGfi}
@@ -397,6 +448,7 @@ const Content = () => {
                     } /* Action when pressing modal close button or backdrop */
                     isOpen={isUserGuideOpen} /* Modal state */
                     id={null}
+                    height="860px"
                 >
                     <UserGuideModalContent />
                 </Modal>
@@ -590,6 +642,7 @@ const Content = () => {
                     <WarningModalContent warning={warning} />
                 </Modal>
                 <ScaleBar />
+                <StyledToastContainer position="bottom-left" pauseOnFocusLoss={false} transition={Slide} autoClose={false} closeOnClick={false} />
                 <StyledContentGrid>
                     <MenuBar />
                     <MapLayersDialog />
