@@ -4,7 +4,7 @@ import {
     faCompress,
     faExpand,
     faLayerGroup,
-    faRuler,
+    faPencilRuler,
     faSave,
     faMapMarkedAlt,
     faDownload,
@@ -139,6 +139,7 @@ const MenuBar = () => {
                     icon={faLayerGroup}
                     text={strings.layerlist.layerlistLabels.mapLayers}
                     toggleState={isSideMenuOpen}
+                    tooltipDirection={"right"}
                     clickAction={() =>
                         store.dispatch(setIsSideMenuOpen(!isSideMenuOpen))
                     }
@@ -149,6 +150,7 @@ const MenuBar = () => {
                     icon={faMapMarkedAlt}
                     text={strings.gfi.title}
                     toggleState={isGfiOpen}
+                    tooltipDirection={"right"}
                     clickAction={() => {
                         store.dispatch(setIsGfiOpen(!isGfiOpen));
                         isGfiOpen && store.dispatch(setMinimizeGfi(false));
@@ -158,6 +160,7 @@ const MenuBar = () => {
                     icon={faDownload}
                     text={strings.downloads.downloads}
                     toggleState={isGfiDownloadOpen}
+                    tooltipDirection={"right"}
                     clickAction={() =>
                         store.dispatch(setIsGfiDownloadOpen(!isGfiDownloadOpen))
                     }
@@ -172,11 +175,12 @@ const MenuBar = () => {
                 </CircleButton>
                 <StyledMapToolsContainer>
                     <CircleButton
-                        icon={faRuler}
+                        icon={faPencilRuler}
                         text={
-                            strings.tooltips.measuringTools.measuringToolsButton
+                            strings.tooltips.drawingtools.drawingtoolsButton
                         }
                         toggleState={isDrawingToolsOpen}
+                        tooltipDirection={"right"}
                         clickAction={closeDrawingTools}
                     />
                     <DrawingTools isOpen={isDrawingToolsOpen} />
@@ -185,6 +189,7 @@ const MenuBar = () => {
                     icon={faSave}
                     text={strings.saveView.saveView}
                     toggleState={isSaveViewOpen}
+                    tooltipDirection={"right"}
                     clickAction={() =>
                         store.dispatch(setIsSaveViewOpen(!isSaveViewOpen))
                     }
@@ -193,6 +198,7 @@ const MenuBar = () => {
                     icon={isFullScreen ? faCompress : faExpand}
                     text={strings.tooltips.fullscreenButton}
                     toggleState={isFullScreen}
+                    tooltipDirection={"right"}
                     clickAction={handleFullScreen}
                 />
             </StyledMenuBar>

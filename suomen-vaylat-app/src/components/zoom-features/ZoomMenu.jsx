@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { useAppSelector } from '../../state/hooks';
 import ZoomBar from './ZoomBar';
 
-import { setIsLegendOpen } from '../../state/slices/uiSlice';
+import { setIsLegendOpen, setIsZoomBarOpen } from '../../state/slices/uiSlice';
 
 const StyledContainer = styled.div`
     display: flex;
@@ -22,10 +22,15 @@ const ZoomMenu = () => {
     const rpc = useAppSelector((state) => state.rpc);
 
     const isLegendOpen = useAppSelector((state) => state.ui.isLegendOpen);
+    const isZoomBarOpen = useAppSelector((state ) => state.ui.isZoomBarOpen);
 
     const handleLegendState = () => {
         store.dispatch(setIsLegendOpen(!isLegendOpen));
     };
+
+    const handleZoomBarState = () => {
+        store.dispatch(setIsZoomBarOpen(!isZoomBarOpen));
+    }
 
     useEffect(() => {
         setHoveringIndex(rpc.currentZoomLevel);
@@ -38,8 +43,10 @@ const ZoomMenu = () => {
                     setHoveringIndex={setHoveringIndex}
                     hoveringIndex={hoveringIndex}
                     currentZoomLevel={rpc.currentZoomLevel}
-                    isExpanded={isLegendOpen}
-                    setIsExpanded={handleLegendState}
+                    isLegendOpen={isLegendOpen}
+                    isZoomBarOpen={isZoomBarOpen}
+                    setIsZoomBarOpen={handleZoomBarState}
+                    setIsLegendOpen={handleLegendState}
                 />
             </StyledContainer>
         </>

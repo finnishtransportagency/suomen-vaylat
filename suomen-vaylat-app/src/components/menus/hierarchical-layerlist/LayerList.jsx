@@ -8,6 +8,7 @@ import LayerGroup from './LayerGroup';
 import Layers from './Layers';
 
 import { motion } from 'framer-motion';
+import strings from '../../../translations';
 
 
 const masterHeaderIconVariants = {
@@ -163,8 +164,16 @@ export const LayerList = ({
 
     const slicedGroups = groups.slice()
 
+    const currentLang = strings.getLanguage();
+
     const sortedGroups = slicedGroups.length > 0 ? slicedGroups.sort(function(a, b) {
-        return a.name.toLowerCase().localeCompare(b.name.toLowerCase());
+        const aName = a.locale[currentLang] && a.locale[currentLang].name ? a.locale[currentLang].name : null;
+        const bName = b.locale[currentLang] && b.locale[currentLang].name ? b.locale[currentLang].name : null;
+        if (aName && bName) {
+            return aName.toLowerCase().localeCompare(bName.toLowerCase());
+        } else {
+            return 0;
+        }
     }) : []
 
     if (tagLayers.length > 0) {
@@ -191,12 +200,24 @@ export const LayerList = ({
                 :
                 <StyledLayerList>
                     {sortedGroups.map((group, index) => {
-                        var hasChildren = false;
-                        if (group.groups) {
-                            hasChildren = group.groups.length > 0;
+                        const recursiveCheckSubGroupLayers = (group) => {
+                            var hasChildrenLayers = false;
+                            if (group.layers && group.layers.length) {
+                                hasChildrenLayers = true;
+                            } else if (group.groups && group.groups.length > 0) {
+                                group.groups.forEach(subgroup => {
+                                    const hasLayers = recursiveCheckSubGroupLayers(subgroup);
+                                    if (hasLayers === true) {
+                                        hasChildrenLayers = true;
+                                    }
+                                });
+                            }
+                            return hasChildrenLayers;
                         }
+
+                        var hasChildren = recursiveCheckSubGroupLayers(group);
                         let isVisible = (group.layers && group.layers.length > 0) || hasChildren;
-                        return (
+                        return group.id !== 826 && (
                             <StyledLayerGroupWrapper key={'group-sl-' + group.id }>
                                 { isVisible ? (
                                     <LayerGroup

@@ -3,18 +3,21 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useContext, useState} from 'react';
 import { ReactReduxContext } from 'react-redux';
 import ReactTooltip from 'react-tooltip';
-import { isMobile } from '../../theme/theme';
+import { theme, isMobile } from '../../theme/theme';
 import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAppSelector } from '../../state/hooks';
 import {
     setIsInfoOpen,
     setIsMainScreen,
-    setIsUserGuideOpen
+    setIsUserGuideOpen,
+    setActiveTool
 } from '../../state/slices/uiSlice';
 import {
     mapMoveRequest,
-    resetGFILocations
+    removeMarkerRequest,
+    resetGFILocations,
+    setVKMData
 } from '../../state/slices/rpcSlice';
 import { resetThemeGroupsForMainScreen } from '../../utils/rpcUtil';
 import strings from '../../translations';
@@ -147,6 +150,7 @@ export const Header = () => {
     const { store } = useContext(ReactReduxContext);
     const isInfoOpen = useAppSelector((state) => state.ui.isInfoOpen);
     const isUserGuideOpen = useAppSelector((state) => state.ui.isUserGuideOpen);
+    const activeTool = useAppSelector(state => state.ui.activeTool);
 
     const {
         channel,
@@ -188,19 +192,34 @@ export const Header = () => {
             channel && channel.postRequest('ChangeMapLayerOpacityRequest', [layer.id, layer.opacity]);
         });
 
+        channel && channel.postRequest('DrawTools.StopDrawingRequest', [
+            'gfi-selection-tool',
+            true,
+        ]);
+
+        channel && channel.postRequest('DrawTools.StopDrawingRequest', [activeTool]);
+        channel && channel.postRequest('DrawTools.StopDrawingRequest', [true]);
+        store.dispatch(setActiveTool(null));
+
         updateLayers(store, channel);
 
         // Remove all features from map
         channel && channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', []);
+
+        // Remove markers
+        store.dispatch(removeMarkerRequest("SEARCH_MARKER"));
+
+        // Remove VKM data
+        store.dispatch(setVKMData(null));
     };
 
     return (
         <>
             <StyledHeaderContainer>
-                <ReactTooltip disable={isMobile} id={'show_info'} place='bottom' type='dark' effect='float'>
+                <ReactTooltip backgroundColor={theme.colors.mainColor1} disable={isMobile} id={'show_info'} place='bottom' type='dark' effect='float'>
                     <span>{strings.tooltips.showPageInfo}</span>
                 </ReactTooltip>
-                <ReactTooltip disable={isMobile} id={'show_user_guide'} place='bottom' type='dark' effect='float'>
+                <ReactTooltip backgroundColor={theme.colors.mainColor1} disable={isMobile} id={'show_user_guide'} place='bottom' type='dark' effect='float'>
                     <span>{strings.tooltips.showUserGuide}</span>
                 </ReactTooltip>
                 <StyledHeaderTitleContainer onClick={() => setToMainScreen()}>

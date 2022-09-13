@@ -31,7 +31,8 @@
       "box": "Laatikko",
       "linestring": "Viiva",
       "polygon": "Monikulmio",
-      "erase": "Tyhjennä"
+      "erase": "Tyhjennä",
+      "drawingToast": "Voit viimeistellä piirron tuplaklikkaamalla tai klikkaamalla viimeksi piirretystä taitepisteestä uudelleen"
     },
     "measuringTools": {
       "measuringToolsButton": "Mittaustyökalut",
@@ -41,7 +42,8 @@
       "box": "Laatikko",
       "linestring": "Viiva",
       "polygon": "Monikulmio",
-      "erase": "Tyhjennä"
+      "erase": "Tyhjennä",
+      "measureToast": "Voit viimeistellä piirron tuplaklikkaamalla tai klikkaamalla viimeksi piirretystä taitepisteestä uudelleen"
     },
     "share": "Jaa sivu",
     "shareTheme": "Jaa teema",
@@ -78,10 +80,14 @@
     "dataTableView": "Listanäkymä",
     "downloadMaterials": "Lataa aineistoja",
     "list": "Lista",
-    "table" : "Taulukko"
+    "table" : "Taulukko",
+    "featureAmount" : "Kohteita",
+    "getMoreFeatures": "Hae lisää kohteita"
   },
   "vkm": {
-    "locationInfo": "Sijaintitiedot"
+    "locationInfo": "Sijaintitiedot",
+    "roadAddressInfo": "Tieosoitetiedot",
+    "roadAddressInstructions": "Tieosoitetietoja ei pystytty hakemaan. Lähennä karttaa ja klikkaa pistettä, jolle haluat hakea tieosoitetiedot."
   },
   "downloads": {
     "downloads": "Lataukset",
@@ -102,7 +108,8 @@
     "continue": "Jatka",
     "cancel": "Peruuta",
     "dontShowAgain": "Älä näytä uudelleen",
-    "ok": "OK"
+    "ok": "OK",
+    "OkLowerCaseK": "Ok"
   },
   "multipleLayersWarning": "Olet lisäämässä kartalle 10 tai enemmän karttatasoa ja se saattaa vaikuttaa palvelun suorituskykyyn",
   "appGuide": {
@@ -144,11 +151,18 @@
       },
       "search": {
         "title": "Haku",
-        "content": "Haku avautuu kartan oikeaan yläkulmaan vasemman reunan suurennuslasi-painikkeesta. Haku-toiminnolla voi hakea teitä ja ja osoitteita valitsemalla alasvetovalikosta käytettävän haun. Hakutuloksen voi poistaa kartalta painamalla haku-kentän roskakoria."
+        "content": "Haku avautuu kartan oikean yläkulman suurennuslasi-painikkeesta. Haku-toiminnolla voi hakea kuntia, osoitteita, kiinteistötunnuksia, tieosoitteita tai rataosoitteita. Tarkempi ohje aukeaa, kun avaa haun. Hakuohjeen voi piilottaa painamalla hakukentän kysymysmerkkiä.  Hakutuloksen voi poistaa kartalta painamalla hakukentän roskakoria."
       },
-      "measureTool": {
-        "title": "Mittaustyökalut",
-        "content": "Mittaustyökalut avautuvat vasemman reunan piirto-ikonista. Työkaluilla voi mitata pituutta tai pinta-alaa. mittaustulokset saa poistettua kartalta oranssilla kumi-painikkeella."
+      "drawingTools": {
+        "title": "Piirtotyökalut",
+        "content": "Piirtotyökalut avautuvat vasemman reunan piirto-painikkeesta. Työkaluilla voi lisätä kartalle geometrioita ja mitata pituutta tai pinta-alaa. Mittaustulokset voi poistaa kartalta oranssilla kumi-painikkeella."
+      },
+      "gfi": {
+        "content": "Kohdetiedot avautuvat klikkaamalla mistä tahansa kartalla, tai vasemman reunan panikkeesta, jonka ikonissa on karttamerkintä. Kohdetiedot-ikkunasta voit hakea kohdetietoja sekä näet tietoja valitsemistasi kohteista ja sijainneista, jotka voit myös halutessasi ladata suoraan laitteellesi valitsemassasi tiedostomuodossa."
+      },
+      "downloads": {
+        "title": "Lataukset",
+        "content": "Lataukset avautuvat vasemman reunan lataukset-painikkeesta. Latauksista löydät valitsemistasi kohdetiedoista tekemäsi lataukset, jotka voit ladata eri muodoissa laitteellesi."
       },
       "savingView": {
         "title": "Näkymän tallennus",
@@ -160,7 +174,7 @@
       },
       "zoomBar": {
         "title": "Selitteet / zoom-palkki",
-        "content": "Zoom-tason ja kartalla sillä zoom-tasolla näkyvät karttatasot selitteineen saa avattua oikean alareunan selite-ikonista. Karttatasot on listattu päällimmäinen ensimmäisenä. Valitsemalla zoom-palkista toisen mittakaavan, siirrytään valitulle lähestymistasolle."
+        "content": "Zoom-tason ja kartalla sillä zoom-tasolla näkyvät karttatasot selitteineen saa avattua oikean alareunan selitepainikkeesta. Karttatasot on listattu päällimmäinen ensimmäisenä. Valitsemalla zoom-palkista toisen mittakaavan, siirrytään valitulle lähestymistasolle."
       }
     }
   },
@@ -196,9 +210,20 @@
         "link": "https://vayla.fi/vaylista/aineistot/kartat"
       }
     },
+    "dataSourcesAndTermsOfUse" :{
+      "tabTitle": "Tietolähteet ja käyttöehdot"
+    },
     "dataSources": {
-      "tabTitle": "Tietolähteet",
-      "municipalityImage": "Sijaintitietojen kuntien vaakunoiden kuvat haetaan kuntaliiton sivuilta (<a href='https://www.kuntaliitto.fi' target='_blank'>https://www.kuntaliitto.fi</a>)."
+      "title": "Tietolähteet",
+      "municipalityImage": "Sijaintitietojen kuntien vaakunoiden kuvat haetaan kuntaliiton sivuilta:",
+      "municipalityLink": "https://www.kuntaliitto.fi",
+      "landSurvey": "Taustakarttojen lähteenä on maanmittauslaitos."
+    },
+    "termsOfUse": {
+      "title": "Käyttöehdot",
+      "description": "Suomen Väylät -palvelun Väyläviraston tietoaineistoja koskee Creative Commons 4.0 Nimeä -käyttölupa.",
+      "moreInfo": "Lisätietoja käyttöehdoista:",
+      "link": "https://vayla.fi/vaylista/aineistot/avoindata/kayttoehdot"
     }
   },
   "search": {
@@ -209,8 +234,10 @@
       "title": "Tiehaku",
       "subtitle": "Hae tien numerolla",
       "osa": "Tieosa",
+      "osaLoppu": "Tieosa loppu",
       "ajorata": "Ajorata",
       "etaisyys": "Etäisyys (m)",
+      "etaisyysLoppu": "Etäisyys loppu (m)",
       "error": {
         "text": "Tuloksia ei löytynyt tiehaulla."
       },
@@ -228,7 +255,7 @@
     },
     "address": {
       "title": "Paikkahaku",
-      "subtitle": "Hae osoitteella, kunnan nimellä tai kiinteistötunnuksella",
+      "subtitle": "Hae osoitteella, kunnan nimellä, kiinteistötunnuksella, tieosoitteella tai rataosoitteella",
       "address": "Opastinsilta 12 Helsinki",
       "error": {
         "text": "Tuloksia ei löytynyt paikkahaulla."
@@ -240,6 +267,36 @@
       "error": {
           "text": "Tuloksia ei löytynyt metatietohaulla."
       }
+    },
+    "tips": {
+      "title": "Paikkahaulla voit hakea kuntaa, osoitetta, kiinteistötunnusta, tieosoitetta tai rataosoitetta.",
+      "address": "Osoitehaku, kirjoita muodossa 'kunta', 'osoite' tai 'osoite, kunta'.",
+      "addressExamples": [
+        "Helsinki",
+        "Opastinsilta 12",
+        "Opastinsilta 12, Helsinki"
+      ],
+      "vkmRoad": "Tiehaku, kirjoita muodossa 'tie/osa/ajorata/etäisyys' tai 'tie/osa/ajorata/etäisyys tie/osa_loppu/ajorata/etäisyys_loppu'.",
+      "vkmRoadExamples": [
+        "5",
+        "5/116",
+        "5/116/0",
+        "5/116/0/50",
+        "5/116//50",
+        "5/116/0/50 5/348/0/100",
+        "5/116//50 5/348//100",
+        "alku:5/116/0/50 loppu:5/348/0/100"
+      ],
+      "vkmTrack": "Ratahaku, kirjoita muodossa 'ratanumero/ratakilometri/ratametri'.",
+      "vkmTrackExamples": [
+        "001/2/10"
+      ],
+      "realEstateUnitIdentifier": "Kiinteistötunnushaku, kirjoita muodossa 'aa-bb-cc-d' tai 'aaa-bbb-cc-ddd'.",
+      "realEstateUnitIdentifierExamples": [
+        "91-17-16-1",
+        "091-017-16-001"
+      ],
+      "example": "Esim."
     }
   },
   "layerlist": {
@@ -265,6 +322,7 @@
       "layerVisible": "Taso näkyvillä",
       "zoomInToShowLayer": "Lähennä nähdäksesi taso",
       "zoomOutToShowLayer": "Loitonna nähdäksesi taso",
+      "toShowLayer" : "nähdäksesi taso",
       "opacity": "Läpinäkyvyys"
     }
   },
