@@ -321,7 +321,6 @@ export const LayerGroup = ({
 
     //Find matching layers from all layers and groups, then push this group's layers into 'filteredLayers'
     useEffect(() => {
-
         if (group.layers) {
             var getLayers = [];
             // need use group.layers because it is layer name ordered list
@@ -354,6 +353,10 @@ export const LayerGroup = ({
         layersCounter(group);
     },[group, layers]);
 
+    useEffect(() => {
+        totalVisibleGroupLayersCount === totalGroupLayersCount && totalVisibleGroupLayersCount !== 0 && setIsChecked(true);
+    }, [totalVisibleGroupLayersCount, totalGroupLayersCount])
+
     const truncatedString = (string, characterAmount, text) => {
         return (
             string.length > characterAmount + 20 ? <>{string.substring(0, characterAmount) + '...'} <StyledReadMoreButton
@@ -361,25 +364,29 @@ export const LayerGroup = ({
         )
     }
 
+    const showWarning = () => {
+        store.dispatch(setWarning({
+            title: strings.multipleLayersWarning,
+            subtitle: null,
+            cancel: {
+                text: strings.general.cancel,
+                action: () => store.dispatch(setWarning(null))
+            },
+            confirm: {
+                text: strings.general.continue,
+                action: () => {
+                    groupLayersVisibility();
+                    store.dispatch(setWarning(null));
+                }
+            },
+        }))
+    }
+
     const selectGroup = (e) => {
         e.stopPropagation();
         let invisibleLayers = filteredLayers.length - visibleLayers.length;
-        if(filteredLayers.length > 9 && invisibleLayers > 9 && isChecked === false){
-            store.dispatch(setWarning({
-                title: strings.multipleLayersWarning,
-                subtitle: null,
-                cancel: {
-                    text: strings.general.cancel,
-                    action: () => store.dispatch(setWarning(null))
-                },
-                confirm: {
-                    text: strings.general.continue,
-                    action: () => {
-                        groupLayersVisibility();
-                        store.dispatch(setWarning(null));
-                    }
-                },
-            }))
+        if((filteredLayers.length > 9 && invisibleLayers > 9 && isChecked === false) || (totalGroupLayersCount > 9 && totalVisibleGroupLayersCount < 9)){
+            showWarning();
         } else {
             groupLayersVisibility();
         }
@@ -387,22 +394,42 @@ export const LayerGroup = ({
 
     const groupLayersVisibility = () => {
 
-        if(filteredLayers.length === visibleLayers.length){
+        const setFilteredLayersVisible = (boolean) => {
             filteredLayers.forEach(layer => {
-                channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, false]);
+                channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, boolean]);
             });
-            setIsChecked(false);
-        } else if (isChecked === false){
-            filteredLayers.forEach(layer => {
-                channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, true]);
+        };
+
+        const setGroupLayersVisible = (boolean) => {
+            group.groups.forEach(group => {
+                group.layers.forEach(layer => {
+                    channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer, boolean]);
+                });
             });
-            setIsChecked(true);
-        } else {
-            filteredLayers.forEach(layer => {
-                channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, true]);
-            });
-            setIsChecked(true);
         }
+
+        if(group.hasOwnProperty("groups")) {
+            if(totalGroupLayersCount === totalVisibleGroupLayersCount && totalGroupLayersCount !== 0) {
+                setFilteredLayersVisible(false);
+                setGroupLayersVisible(false);
+                setIsChecked(false);
+            }
+            else if(totalGroupLayersCount !== totalVisibleGroupLayersCount) {
+                setFilteredLayersVisible(true);
+                setGroupLayersVisible(true);
+                setIsChecked(true);
+            };
+        };
+        if(!group.hasOwnProperty("groups")) {
+            if(filteredLayers.length === visibleLayers.length && isChecked) {
+                setFilteredLayersVisible(false);
+                setIsChecked(false);
+            };
+            if(filteredLayers.length !== visibleLayers.length) {
+                setFilteredLayersVisible(true);
+                setIsChecked(true);
+            }
+        };
         updateLayers(store, channel);
     };
 
@@ -497,9 +524,7 @@ export const LayerGroup = ({
                     <StyledRightContent>
                         <Switch
                             isSelected={
-                                filteredLayers.length === visibleLayers.length ||
-                                !visibleLayers.length === 0 ||
-                                !visibleLayers.length > filteredLayers.length
+                                (totalVisibleGroupLayersCount === totalGroupLayersCount && totalVisibleGroupLayersCount !== 0)
                             }
                             action={selectGroup}
                         />
