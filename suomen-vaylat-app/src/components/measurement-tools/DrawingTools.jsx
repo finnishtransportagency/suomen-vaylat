@@ -245,8 +245,8 @@ export const DrawingTools = ({isOpen}) => {
             store.dispatch(setActiveTool(tool.name));
             if(showToast !== false && !hasToastBeenShown.includes('drawToast')) {
                 if((tool.type === "LineString") || (tool.type === "Polygon")) {
-                    toast.info(<DrawingToast handleButtonClick={handleClick} text={strings.tooltips.drawingtools.drawingToast} />,
-                    {icon: <StyledToastIcon icon={faInfoCircle} /> ,toastId: "drawToast", onClose : () => {
+                    toast.info(<DrawingToast handleButtonClick={handleClick} text={strings.tooltips.drawingTools.drawingToast} />,
+                    {icon: <StyledToastIcon icon={faInfoCircle} />, toastId: "drawToast", onClose : () => {
                          store.dispatch(setHasToastBeenShown({toastId: 'drawToast', shown: true}))
                     }});
                 }
