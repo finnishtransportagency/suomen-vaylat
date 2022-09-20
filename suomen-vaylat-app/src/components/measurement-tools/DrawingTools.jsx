@@ -5,7 +5,7 @@ import { ReactReduxContext } from 'react-redux';
 
 import { debounce } from 'lodash';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEraser, faInfoCircle, faMapMarkerAlt, faMapPin, faFlag, faCircle, faArrowDown, faCommentAlt, faThumbtack, faTimes, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faEraser, faInfoCircle, faMapMarkerAlt, faMapPin, faFlag, faCircle, faArrowDown, faCommentAlt, faThumbtack, faTimes } from '@fortawesome/free-solid-svg-icons';
 import svCircle from '../../theme/icons/drawtools_circle.svg';
 import svSquare from '../../theme/icons/drawtools_square.svg';
 import svRectangle from '../../theme/icons/drawtools_rectangle.svg';
@@ -105,7 +105,7 @@ const StyledOptionsButton = styled(motion.button)`
 `;
 
 const StyledOptionsIcon = styled(FontAwesomeIcon)`
-    
+
 `;
 
 const StyledLabelWrapper = styled.div`
@@ -173,7 +173,7 @@ const variants = {
 export const DrawingTools = ({isOpen}) => {
     const { store } = useContext(ReactReduxContext);
     const { channel } = useSelector(state => state.rpc);
-    const { activeTool, isDrawingToolsOpen, hasToastBeenShown, selectedMarker, drawToolMarkers} = useSelector(state => state.ui);
+    const { activeTool, hasToastBeenShown, selectedMarker, drawToolMarkers} = useSelector(state => state.ui);
     const [ showToast, setShowToast] = useState(JSON.parse(localStorage.getItem(DRAWING_TIP_LOCALSTORAGE)));
     const [label, setLabel] = useState('');
 
