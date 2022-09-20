@@ -270,7 +270,6 @@ const GfiToolsMenu = ({ handleGfiToolsMenu }) => {
     };
 
     const handleSelectTool = (id) => {
-        console.log(activeSelectionTool , id);
         if (activeSelectionTool  !== id) {
             store.dispatch(setActiveSelectionTool(id));
 
