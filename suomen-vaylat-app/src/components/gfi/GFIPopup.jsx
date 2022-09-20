@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
     faTimes,
     faSearchLocation,
-    faPencilRuler,
+    faMapMarkedAlt,
     faFileDownload,
     faAngleLeft,
     faAngleRight,
@@ -18,8 +18,8 @@ import { useAppSelector } from '../../state/hooks';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { FreeMode, Controller } from 'swiper';
 import { isMobile } from '../../theme/theme';
-import { setIsSaveViewOpen, setMinimizeGfi, setSavedTabIndex } from '../../state/slices/uiSlice';
-import { resetGFILocations } from '../../state/slices/rpcSlice';
+import { setIsSaveViewOpen, setMinimizeGfi, setSavedTabIndex, setActiveSelectionTool } from '../../state/slices/uiSlice';
+import { resetGFILocations, addFeaturesToGFILocations } from '../../state/slices/rpcSlice';
 
 import { FormattedGFI } from './FormattedGFI';
 import GfiTabContent from './GfiTabContent';
@@ -27,6 +27,7 @@ import GfiToolsMenu from './GfiToolsMenu';
 import GfiDownloadMenu from './GfiDownloadMenu';
 import CircleButton from '../circle-button/CircleButton';
 import AddGeometryButton from '../add-geometry-button/AddGeometryButton';
+import SVLoader from '../loader/SvLoader';
 
 import { SortingMode, PagingPosition } from 'ka-table/enums';
 
@@ -273,6 +274,7 @@ const StyledTabContent = styled.div`
 
     .ka-thead-cell {
         background-color: white;
+        width: ${(props) => props.isMobile ? "10em" : "auto"};
     }
 
     .ka-cell-text {
@@ -298,6 +300,31 @@ const StyledTabContent = styled.div`
         font-weight: 600;
         color: #212529;
     }
+`;
+
+
+const StyledFeaturesInfo = styled.div`
+    align-items: center;
+`;
+
+const StyledFeatureAmount = styled.p`
+    text-align: center;
+    color: ${props => props.theme.colors.mainColor1};
+    margin: 5px 0px 10px 0px;
+`;
+
+const StyledShowMoreButtonWrapper = styled.div`
+   text-align: center;
+`;
+
+const StyledShowMoreButton = styled.button`
+    width: 250px;
+    height: 35px;
+    color: ${props => props.theme.colors.mainWhite};
+    background-color: ${props => props.theme.colors.mainColor1};
+    border-radius: 20px;
+    box-shadow: 0px 1px 3px #0000001F;
+    border: none;
 `;
 
 const StyledButtonsContainer = styled.div`
@@ -328,7 +355,7 @@ const StyledGfiBackdrop = styled(motion.div)`
     cursor: pointer;
 `;
 
-const addFeaturesToMapParams = 
+const addFeaturesToMapParams =
     {
         clearPrevious: true,
         layerId: SAVED_GEOMETRY_LAYER_ID,
@@ -358,14 +385,42 @@ const addFeaturesToMapParams =
             },
         },
     };
+const StyledLoadingOverlay = styled(motion.div)`
+    z-index: 2;
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    background-color: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(4px);
+`;
+
+const StyledLoaderWrapper = styled.div`
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 999;
+    height: 100%;
+    max-width: 200px;
+    max-height: 200px;
+    transform: translate(-50%, -50%);
+    svg {
+        width: 100%;
+        height: 100%;
+        fill: none;
+    }
+`;
+
 
 export const GFIPopup = ({ handleGfiDownload }) => {
     const LAYER_ID = 'gfi-result-layer';
     const { store } = useContext(ReactReduxContext);
-    const { channel, allLayers, gfiLocations, vkmData, pointInfoImageError, setPointInfoImageError } = useAppSelector(state => state.rpc);
+    const { channel, allLayers, gfiLocations, vkmData, pointInfoImageError, setPointInfoImageError, gfiCroppingArea } = useAppSelector(state => state.rpc);
     const { geoJsonArray } = useAppSelector(
         (state) => state.ui
     );
+    const { activeSelectionTool } = useAppSelector((state) => state.ui);
 
     const [selectedTab, setSelectedTab] = useState(0);
     const [tabsContent, setTabsContent] = useState([]);
@@ -376,12 +431,17 @@ export const GFIPopup = ({ handleGfiDownload }) => {
     const [isVKMInfoOpen, setIsVKMInfoOpen] = useState(vkmData? true : false);
     const [gfiTabsSwiper, setGfiTabsSwiper] = useState(null);
     const [gfiTabsSnapGridLength, setGfiTabsSnapGridLength] = useState(0);
+    const [isLoading, setIsLoading] = useState(false);
 
     const gfiInputEl = useRef(null);
 
     useEffect(() => {
+        if(!isGfiToolsOpen && activeSelectionTool !== null) store.dispatch(setActiveSelectionTool(null));
+    }, [isGfiToolsOpen, activeSelectionTool]);
+
+    useEffect(() => {
         const mapResults = gfiLocations.map((location) => {
-            location.content.features.length > GFI_MAX_LENGTH && setIsDataTable(true);
+            location?.content?.features?.length > GFI_MAX_LENGTH && setIsDataTable(true);
             const layers = allLayers.filter(
                 (layer) => layer.id === location.layerId
             );
@@ -486,12 +546,12 @@ export const GFIPopup = ({ handleGfiDownload }) => {
     const tablePropsInit = (data) => {
         const properties = data && data.content && data.content.features && data.content.features[0].properties;
 
-        var hightPriorityColumns = properties._orderHigh && JSON.parse(properties._orderHigh);
-        var lowPriorityColumns = properties._order && JSON.parse(properties._order);
+        var hightPriorityColumns = properties?._orderHigh && JSON.parse(properties?._orderHigh);
+        var lowPriorityColumns = properties?._order && JSON.parse(properties?._order);
         var columnsArray = [];
 
-        var columns = hightPriorityColumns.concat(lowPriorityColumns);
-        columns.forEach(column => {
+        var columns = hightPriorityColumns && hightPriorityColumns.concat(lowPriorityColumns);
+        columns && columns.forEach(column => {
             if (column !== 'UID') {
                 columnsArray.push({ key: column, title: column, colGroup: { style: { minWidth: 120 } }});
             }
@@ -515,7 +575,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
             paging: {
               enabled: true,
               pageIndex: 0,
-              pageSize: 10,
+              pageSize: 100,
               pageSizes: [10, 50, 100],
               position: PagingPosition.Bottom
             },
@@ -634,13 +694,59 @@ export const GFIPopup = ({ handleGfiDownload }) => {
         gfiInputEl.current.swiper.slideTo(selectedTab);
     }, [selectedTab]);
 
+    const getMoreFeatures = (nextStartIndex, layerId) => {
+        setIsLoading(true);
+        channel.getFeaturesByGeoJSON && channel.getFeaturesByGeoJSON([gfiCroppingArea, nextStartIndex, [layerId]], function (data) {
+        data.gfi.forEach(
+            (gfi) => {
+                store.dispatch(addFeaturesToGFILocations({
+                    layerId: gfi.layerId,
+                    geojson: gfi.geojson,
+                    moreFeatures: gfi.moreFeatures,
+                    nextStartIndex: gfi.nextStartIndex,
+                    selectedGFI: selectedTab
+                }));
+            }
+        );
+        setIsLoading(false);
+    }, function(errors) {
+            setIsLoading(false);
+        });
+    };
+
     useEffect(() => {
         vkmData? setIsVKMInfoOpen(true) : setIsVKMInfoOpen(false);
     }, [vkmData]);
 
     return (
         <StyledGfiContainer>
+            <AnimatePresence>
+                {isLoading && (
+                    <StyledLoadingOverlay
+                        transition={{
+                            duration: 0.4,
+                            type: 'tween',
+                        }}
+                        initial={{
+                            opacity: 0,
+                        }}
+                        animate={{
+                            opacity: 1,
+                        }}
+                        exit={{
+                            opacity: 0,
+                        }}
+                    >
+                        <StyledLoaderWrapper>
+                            <SVLoader />
+                        </StyledLoaderWrapper>
+                    </StyledLoadingOverlay>
+                )}
+            </AnimatePresence>
                 <StyledVKMDataContainer
+                    initial={{
+                        height: !isVKMInfoOpen && !vkmData && 0
+                    }}
                     animate={{
                         height: isVKMInfoOpen ? 'auto' : 0,
                         opacity: isVKMInfoOpen ? 1 : 0,
@@ -683,35 +789,36 @@ export const GFIPopup = ({ handleGfiDownload }) => {
                             <StyledVkmDataItems>
                             {
                                 vkmData.vkm._orderHigh.filter(value => value !== 'kuntanimi').map(property => {
-                                    if(property !== "Katunimi")
-                                    return (
-                                            <p
-                                                key={'vkm-info-box-li'+property}
-                                                style={{
-                                                    color: '#0064af'
-                                                }}
-                                            >
-                                                <span
+                                    if (property !== "Katunimi")
+                                        return (
+                                                <p
+                                                    key={'vkm-info-box-li'+property}
                                                     style={{
-                                                        fontSize: '14px',
-                                                        fontWeight: 'light',
-                                                        margin: '0'
+                                                        color: '#0064af'
                                                     }}
                                                 >
-                                                    {property + ':'}
-                                                </span>
-                                                &nbsp;
-                                                <span
-                                                    style={{
-                                                        fontSize: '14px',
-                                                        fontWeight: '600',
-                                                        margin: '0'
-                                                    }}
-                                                >
-                                                    {vkmData.vkm[property]}
-                                                </span>
-                                            </p>
-                                    )
+                                                    <span
+                                                        style={{
+                                                            fontSize: '14px',
+                                                            fontWeight: 'light',
+                                                            margin: '0'
+                                                        }}
+                                                    >
+                                                        {property + ':'}
+                                                    </span>
+                                                    &nbsp;
+                                                    <span
+                                                        style={{
+                                                            fontSize: '14px',
+                                                            fontWeight: '600',
+                                                            margin: '0'
+                                                        }}
+                                                    >
+                                                        {vkmData.vkm[property]}
+                                                    </span>
+                                                </p>
+                                        )
+                                    else return null;
                                 })
                             }
                             </StyledVkmDataItems>
@@ -797,13 +904,13 @@ export const GFIPopup = ({ handleGfiDownload }) => {
                     )}
                 </StyledTabSwiperContainer>
             )}
-            <StyledTabContent>
+            <StyledTabContent isMobile={isMobile}>
                 {tabsContent[selectedTab] === undefined && (
                     <StyledNoGfisContainer>
                         <StyledSubtitle>{strings.gfi.choosingGfi}:</StyledSubtitle>
                         <StyledInfoTextContainer>
                             <li>{strings.gfi.choosingGfiDescription0}.&nbsp; <FontAwesomeIcon icon={faLayerGroup} style={{fontSize: '16px'}}/></li>
-                            <li>{strings.gfi.choosingGfiDescription1}.&nbsp; <FontAwesomeIcon icon={faPencilRuler} style={{fontSize: '16px'}}/></li>
+                            <li>{strings.gfi.choosingGfiDescription1}.&nbsp; <FontAwesomeIcon icon={faMapMarkedAlt} style={{fontSize: '16px'}}/></li>
                             <li>{strings.gfi.choosingGfiDescription2}.</li>
                         </StyledInfoTextContainer>
                     </StyledNoGfisContainer>
@@ -847,6 +954,18 @@ export const GFIPopup = ({ handleGfiDownload }) => {
                                             title={title}
                                             tablePropsInit={tableProps}
                                         />
+                                        {location.content.features && <StyledFeaturesInfo>
+                                        <StyledFeatureAmount>
+                                            {`${strings.gfi.featureAmount} : `}
+                                            <span>{location.content.features.length} {location.moreFeatures && ` / ${location.content.totalFeatures}`}</span>
+                                        </StyledFeatureAmount>
+                                        {location.moreFeatures &&
+                                            <StyledShowMoreButtonWrapper>
+                                                <StyledShowMoreButton onClick={() => getMoreFeatures(location.nextStartIndex, location.layerId)}>
+                                                {strings.gfi.getMoreFeatures}</StyledShowMoreButton>
+                                            </StyledShowMoreButtonWrapper>
+                                        }
+                                    </StyledFeaturesInfo>}
                                     </SwiperSlide>
                                 );
                             }
@@ -876,7 +995,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
                     />
                 }
                 <CircleButton
-                    icon={faPencilRuler}
+                    icon={faMapMarkedAlt}
                     text={strings.gfi.selectLocations}
                     toggleState={isGfiToolsOpen}
                     tooltipDirection={'bottom'}

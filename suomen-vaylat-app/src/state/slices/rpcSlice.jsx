@@ -415,7 +415,7 @@ export const rpcSlice = createSlice({
                 x: action.payload.x,
                 y: action.payload.y,
                 msg: action.payload.msg || '',
-                shape: action.payload.shape || 2,
+                shape: typeof action.payload.shape === 'number' ? action.payload.shape : 2,
                 size: action.payload.size || 7,
                 color: action.payload.color || '0064af',
                 offsetX: action.payload.offsetX || '',
@@ -437,9 +437,13 @@ export const rpcSlice = createSlice({
          */
         removeMarkerRequest: (state, action) => {
             state.channel !== null &&
+            action.payload?
                 state.channel.postRequest(
                     'MapModulePlugin.RemoveMarkersRequest',
                     [action.payload.markerId]
+                ) :
+                state.channel.postRequest(
+                    'MapModulePlugin.RemoveMarkersRequest',
                 );
             LOG.log('removeMarkerRequest ', action.payload);
         },
@@ -625,6 +629,26 @@ export const rpcSlice = createSlice({
                 'MapModulePlugin.RemoveFeaturesFromMapRequest',
                 [null, null, 'gfi-result-layer']
             );
+        },
+
+        /**
+         * Add features to gfiLocations.
+         * @param {Object} state
+         * @param {Object} action
+         */
+         addFeaturesToGFILocations: (state, action) => {
+            const layerId = action.payload.layerId;
+            const geojson = action.payload.geojson;
+            const nextStartIndex = action.payload.nextStartIndex;
+            const moreFeatures = action.payload.moreFeatures;
+            const selectedGFI = action.payload.selectedGFI;
+            state.gfiLocations.forEach((l) => {
+                if (l.layerId === layerId && l.content && l.content.features) {
+                    l.content.features.push(...geojson.features);
+                }
+            });
+            state.gfiLocations[selectedGFI].moreFeatures = moreFeatures;
+            state.gfiLocations[selectedGFI].nextStartIndex = nextStartIndex;
         },
 
         /**
@@ -815,6 +839,7 @@ export const {
     setDownloadRemove,
     removeAllSelectedLayers,
     setStartState,
+    addFeaturesToGFILocations
 } = rpcSlice.actions;
 
 export default rpcSlice.reducer;

@@ -61,7 +61,7 @@ import WarningModalContent from '../warning/WarningModalContent';
 import GFIPopup from '../gfi/GFIPopup';
 import GFIDownload from '../gfi/GFIDownload';
 import MetadataModal from '../metadata-modal/MetadataModal';
-import { ANNOUNCEMENTS_LOCALSTORAGE } from '../../utils/rpcUtil';
+import { ANNOUNCEMENTS_LOCALSTORAGE } from '../../utils/constants';
 
 
 const SAVED_GEOMETRY_LAYER_ID = 'saved-geometry-layer';
@@ -76,8 +76,48 @@ const StyledContent = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    .Toastify__toast-container {
+
+    }
+    .Toastify__toast-container--top-right {
+        top: 9em;
+        width: 400px;
+    }
     @media ${(props) => props.theme.device.desktop} {
-    } ;
+        .Toastify__toast-container {
+
+        }
+        .Toastify__toast-container--top-right {
+            top: 9em;
+        }
+    };
+    @media ${props => props.theme.device.tablet} {
+        .Toastify__toast-container {
+            width: 80%;
+        }
+        .Toastify__toast-container--top-right {
+            top: 9em;
+        }
+    };
+
+    @media ${(props) => props.theme.device.mobileL} {
+        .Toastify__toast-container {
+            width: 100%;
+        }
+        .Toastify__toast-container--top-right {
+            top: 7em;
+        }
+    };
+
+
+
+    .Toastify {
+        z-index: 2;
+    }
+
+    .Toastify__toast-icon {
+        display: none;
+    }
 `;
 
 const StyledContentGrid = styled.div`
@@ -209,7 +249,7 @@ const Content = () => {
         store.dispatch(setMinimizeGfi(false));
         store.dispatch(setMaximizeGfi(false));
         setTimeout(() => {store.dispatch(setVKMData(null))}, 500) ; // VKM info does not disappear during modal close animation.
-        store.dispatch(removeMarkerRequest("SEARCH_MARKER"));
+        store.dispatch(removeMarkerRequest({markerId: "VKM_MARKER"}));
         channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [
             null,
             null,
@@ -421,6 +461,7 @@ const Content = () => {
                     } /* Action when pressing modal close button or backdrop */
                     isOpen={isUserGuideOpen} /* Modal state */
                     id={null}
+                    height="860px"
                 >
                     <UserGuideModalContent />
                 </Modal>

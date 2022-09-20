@@ -35,9 +35,10 @@ import {
     setVKMData
 } from '../../state/slices/rpcSlice';
 
-import { setMinimizeGfi, setSelectedGfiTool, setGeoJsonArray, setHasToastBeenShown } from '../../state/slices/uiSlice';
+import { setMinimizeGfi, setSelectedGfiTool, setGeoJsonArray, setHasToastBeenShown, setActiveSelectionTool } from '../../state/slices/uiSlice';
 
 import SVLoader from '../loader/SvLoader';
+import { DRAWING_TIP_LOCALSTORAGE } from '../../utils/constants';
 
 const vectorLayerId = 'SEARCH_VECTORLAYER';
 
@@ -49,7 +50,7 @@ const StyledGfiToolContainer = styled.div`
     overflow: auto;
     @media ${(props) => props.theme.device.mobileL} {
         padding: 16px;
-    }
+    };
     background-color: white;
 `;
 
@@ -216,7 +217,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu }) => {
     const drawinToolsData = [
         {
             id: 'sv-measure-linestring',
-            title: strings.tooltips.measuringTools.linestring,
+            title: strings.tooltips.drawingTools.linestring,
             style: {
                 icon: <SvLinestring />,
             },
@@ -224,7 +225,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu }) => {
         },
         {
             id: 'sv-measure-polygon',
-            title: strings.tooltips.measuringTools.polygon,
+            title: strings.tooltips.drawingTools.polygon,
             style: {
                 icon: <SvPolygon />,
             },
@@ -232,7 +233,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu }) => {
         },
         {
             id: 'sv-measure-box',
-            title: strings.tooltips.measuringTools.box,
+            title: strings.tooltips.drawingTools.box,
             style: {
                 icon: <SvRectangle />,
             },
@@ -240,7 +241,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu }) => {
         },
         {
             id: 'sv-measure-circle',
-            title: strings.tooltips.measuringTools.circle,
+            title: strings.tooltips.drawingTools.circle,
             style: {
                 icon: <SvCircle />,
             },
@@ -251,7 +252,9 @@ const GfiToolsMenu = ({ handleGfiToolsMenu }) => {
     const { store } = useContext(ReactReduxContext);
 
     const { channel } = useSelector((state) => state.rpc);
-    const { gfiCroppingTypes, selectedGfiTool, hasToastBeenShown } = useSelector(
+
+    const { gfiCroppingTypes, selectedGfiTool, hasToastBeenShown, activeSelectionTool } = useSelector(
+
         (state) => state.ui
     );
 
@@ -259,7 +262,8 @@ const GfiToolsMenu = ({ handleGfiToolsMenu }) => {
     const [selectedTool, setSelectedTool] = useState(null);
     const [geometries, setGeometries] = useState([]);
 
-    const [showToast, setShowToast] = useState(JSON.parse(localStorage.getItem("showToast")));
+
+    const [showToast, setShowToast] = useState(JSON.parse(localStorage.getItem(DRAWING_TIP_LOCALSTORAGE)));
 
     const handleClick = () => {
         setShowToast(false);
@@ -352,7 +356,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu }) => {
                 });
             }
         } else {
-            setSelectedTool(null);
+            store.dispatch(setActiveSelectionTool(null));
             channel.postRequest(
                 'MapModulePlugin.RemoveFeaturesFromMapRequest',
                 [null, null, 'download-tool-layer']
@@ -421,10 +425,10 @@ const GfiToolsMenu = ({ handleGfiToolsMenu }) => {
             ];
             channel.postRequest('DrawTools.StartDrawingRequest', data);
             store.dispatch(setMinimizeGfi(true));
-            if(showToast !== false && !hasToastBeenShown) {
+            if(showToast !== false && !hasToastBeenShown.includes('measurementToast')) {
                 if(item.type === "LineString" || item.type === "Polygon")
-                toast.info(<DrawingToast text={strings.tooltips.measuringTools.measureToast} handleButtonClick={handleClick} />,
-                {icon: <StyledToastIcon icon={faInfoCircle} />, toastId: "measurementToast", onClose : () => store.dispatch(setHasToastBeenShown(true))})
+                toast.info(<DrawingToast text={strings.tooltips.drawingTools.measureToast} handleButtonClick={handleClick} />,
+                {icon: <StyledToastIcon icon={faInfoCircle} />, toastId: "measurementToast", onClose : () => store.dispatch(setHasToastBeenShown({toastId: 'measurementsToast', shown: true}))})
             }
         }
     };
@@ -518,7 +522,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu }) => {
                             handleGfiToolsMenu(gfiData.gfi);
                         }
                     );
-            }) 
+            })
         }  else if (features.data.data.geom) {
             features.data.data.geom.features.forEach(feature => {
                 store.dispatch(setGFICroppingArea(feature));
@@ -546,12 +550,12 @@ const GfiToolsMenu = ({ handleGfiToolsMenu }) => {
                             handleGfiToolsMenu(gfiData.gfi);
                         }
                     );
-            }) 
-        }           
+            })
+        }
     };
 
     useEffect(() => {
-        
+
         window.localStorage.getItem('geometries') !== null &&
         setGeometries(JSON.parse(window.localStorage.getItem('geometries')));
 
@@ -592,6 +596,8 @@ const GfiToolsMenu = ({ handleGfiToolsMenu }) => {
                                                         gfiCroppingArea:
                                                             data.geojson,
                                                         type: 'geojson',
+                                                        moreFeatures: gfi.moreFeatures,
+                                                        nextStartIndex: gfi.nextStartIndex
                                                     })
                                                 );
                                             });
@@ -644,6 +650,8 @@ const GfiToolsMenu = ({ handleGfiToolsMenu }) => {
                                                                                     .features[0]
                                                                                     .geojson,
                                                                             type: 'geojson',
+                                                                            moreFeatures: gfi.moreFeatures,
+                                                                            nextStartIndex: gfi.nextStartIndex
                                                                         }
                                                                     )
                                                                 );
@@ -713,11 +721,11 @@ const GfiToolsMenu = ({ handleGfiToolsMenu }) => {
                     icon={faPencilAlt}
                     title={strings.gfi.draw}
                     subtitle={strings.gfi.drawSubtitle}
-                    selectedItem={selectedTool}
+                    selectedItem={activeSelectionTool}
                     handleSelectTool={handleSelectTool}
                 />
                 <AnimatePresence>
-                    {selectedTool === 0 && (
+                    {activeSelectionTool === 0 && (
                         <StyledDrawingToolsContainer
                             transition={{
                                 duration: 0.2,
@@ -760,7 +768,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu }) => {
                         </StyledDrawingToolsContainer>
                     )}
                 </AnimatePresence>
-                
+
                 <CircleButtonListItem
                     key={'saved'}
                     id={505}
@@ -863,7 +871,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu }) => {
                                 icon={icons[croppingType.id] ? icons[croppingType.id].icon : defaultIcon}
                                 title={croppingType.title}
                                 subtitle={croppingType.description}
-                                selectedItem={selectedTool}
+                                selectedItem={activeSelectionTool}
                                 handleSelectTool={handleSelectTool}
                             />
                         );

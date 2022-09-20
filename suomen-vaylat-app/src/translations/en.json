@@ -23,27 +23,18 @@
     "zoomIn": "Zoom in",
     "zoomOut": "Zoom out",
     "opacity": "Opacity",
-    "drawingtools": {
-      "drawingtoolsButton": "Drawing tools",
+    "drawingTools": {
+      "drawingToolsButton": "Drawing tools",
       "point": "Point",
       "circle": "Circle",
       "square": "Square",
       "box": "Box",
       "linestring": "Line",
       "polygon": "Polygon",
+      "marker": "Marker",
       "erase": "Erase",
-      "drawingToast": "Voit viimeistellä piirron tuplaklikkaamalla tai klikkaamalla viimeksi piirretystä taitepisteestä uudelleen"
-    },
-    "measuringTools": {
-      "measuringToolsButton": "Measuring tools",
-      "point": "Point",
-      "circle": "Circle",
-      "square": "Square",
-      "box": "Box",
-      "linestring": "Line",
-      "polygon": "Polygon",
-      "erase": "Erase",
-      "measureToast": "Voit viimeistellä piirron tuplaklikkaamalla tai klikkaamalla viimeksi piirretystä taitepisteestä uudelleen"
+      "drawingToast": "Voit viimeistellä piirron tuplaklikkaamalla tai klikkaamalla viimeksi piirretystä taitepisteestä uudelleen",
+      "labelPlaceholder": "Label..."
     },
     "share": "Share this page",
     "shareTheme": "Share this theme",
@@ -99,7 +90,9 @@
     "dataTableView": "List view",
     "downloadMaterials": "Download materials",
     "list": "List",
-    "table" : "Table"
+    "table" : "Table",
+    "featureAmount" : "Kohteita",
+    "getMoreFeatures": "Hae lisää kohteita"
   },
   "vkm": {
     "locationInfo": "Location info",
@@ -125,7 +118,8 @@
     "continue": "Continue",
     "cancel": "Cancel",
     "dontShowAgain": "Don't show again",
-    "ok": "OK"
+    "ok": "OK",
+    "OkLowerCaseK": "Ok"
   },
   "multipleLayersWarning": "You are about to activate 10 or more maplayers and it might affect the performance of the service",
   "appGuide": {
@@ -169,9 +163,16 @@
         "title": "Search",
         "content": "The search opens in the upper right corner of the map using the magnifying glass button on the left. The Search function allows you to search for you and addresses by selecting the search you want to use from the drop-down menu. You can delete a search result from the map by tapping the trash in the search box."
       },
-      "measureTool": {
-        "title": "Drawingtools",
-        "content": "The measurement tools open from the drawing icon on the left. The tools can be used to measure length or area. the measurement results can be deleted from the map with the orange rubber but-ton."
+      "drawingTools": {
+        "title": "Drawing tools",
+        "content": "The drawing tools open from the drawing icon on the left. The tools can be used to measure length or area. the measurement results can be deleted from the map with the orange rubber button."
+      },
+      "gfi": {
+        "content": "Kohdetiedot avautuvat klikkaamalla mistä tahansa kartalla, tai vasemman reunan panikkeesta, jonka ikonissa on karttamerkintä. Kohdetiedot-ikkunasta voit hakea kohdetietoja sekä näet tietoja valitsemistasi kohteista ja sijainneista, jotka voit myös halutessasi ladata suoraan laitteellesi valitsemassasi tiedostomuodossa."
+      },
+      "downloads": {
+        "title": "Lataukset",
+        "content": "Lataukset avautuvat vasemman reunan lataukset-painikkeesta. Latauksista löydät valitsemistasi kohdetiedoista tekemäsi lataukset, jotka voit ladata eri muodoissa laitteellesi."
       },
       "savingView": {
         "title": "Save The View",
@@ -243,8 +244,10 @@
       "title": "Road number search",
       "subtitle": "Search by road number",
       "osa": "Road section",
+      "osaLoppu": "Tieosa loppu",
       "ajorata": "Carriageway",
       "etaisyys": "Distance (m)",
+      "etaisyysLoppu": "Etäisyys loppu (m)",
       "error": {
         "text": "No results were found for the road search."
       },
@@ -274,6 +277,36 @@
       "error": {
           "text": "No results found for the metadata search."
       }
+    },
+    "tips": {
+      "title": "Paikkahaulla voit hakea kuntaa, osoitetta, kiinteistötunnusta, tieosoitetta tai rataosoitetta.",
+      "address": "Osoitehaku, kirjoita muodossa 'kunta', 'osoite' tai 'osoite, kunta'.",
+      "addressExamples": [
+        "Helsinki",
+        "Opastinsilta 12",
+        "Opastinsilta 12, Helsinki"
+      ],
+      "vkmRoad": "Tiehaku, kirjoita muodossa 'tie/osa/ajorata/etäisyys' tai 'tie/osa/ajorata/etäisyys tie/osa_loppu/ajorata/etäisyys_loppu'.",
+      "vkmRoadExamples": [
+        "5",
+        "5/116",
+        "5/116/0",
+        "5/116/0/50",
+        "5/116//50",
+        "5/116/0/50 5/348/0/100",
+        "5/116//50 5/348//100",
+        "start:5/116/0/50 end:5/348/0/100"
+      ],
+      "vkmTrack": "Ratahaku, kirjoita muodossa 'ratanumero/ratakilometri/ratametri'.",
+      "vkmTrackExamples": [
+        "001/2/10"
+      ],
+      "realEstateUnitIdentifier": "Kiinteistötunnushaku, kirjoita muodossa 'aa-bb-cc-d' tai 'aaa-bbb-cc-ddd'.",
+      "realEstateUnitIdentifierExamples": [
+        "91-17-16-1",
+        "091-017-16-001"
+      ],
+      "example": "Esim."
     }
   },
   "layerlist": {

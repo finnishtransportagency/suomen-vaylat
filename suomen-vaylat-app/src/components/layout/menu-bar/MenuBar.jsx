@@ -4,7 +4,7 @@ import {
     faCompress,
     faExpand,
     faLayerGroup,
-    faRuler,
+    faPencilRuler,
     faSave,
     faMapMarkedAlt,
     faDownload,
@@ -20,8 +20,11 @@ import {
     setActiveTool,
     setMinimizeGfi,
     setIsGfiDownloadOpen,
-    setGeoJsonArray
+    setGeoJsonArray,
+    setSelectedMarker
 } from '../../../state/slices/uiSlice';
+
+import { removeMarkerRequest } from '../../../state/slices/rpcSlice';
 
 import CircleButton from '../../circle-button/CircleButton';
 
@@ -73,6 +76,8 @@ const MenuBar = () => {
     const { selectedLayers, downloads, channel } = useAppSelector(
         (state) => state.rpc
     );
+
+    const { drawToolMarkers } = useAppSelector(state => state.ui);
 
     const {
         isFullScreen,
@@ -131,7 +136,11 @@ const MenuBar = () => {
         channel &&
             channel.postRequest('DrawTools.StopDrawingRequest', [activeTool]);
         store.dispatch(setActiveTool(null));
+        drawToolMarkers.forEach(marker => {
+            store.dispatch(removeMarkerRequest({markerId: marker}));
+        });
         store.dispatch(setIsDrawingToolsOpen(!isDrawingToolsOpen));
+        store.dispatch(setSelectedMarker(2));
     };
 
     return (
@@ -177,10 +186,8 @@ const MenuBar = () => {
                 </CircleButton>
                 <StyledMapToolsContainer>
                     <CircleButton
-                        icon={faRuler}
-                        text={
-                            strings.tooltips.measuringTools.measuringToolsButton
-                        }
+                        icon={faPencilRuler}
+                        text={strings.tooltips.drawingTools.drawingToolsButton}
                         toggleState={isDrawingToolsOpen}
                         tooltipDirection={"right"}
                         clickAction={closeDrawingTools}

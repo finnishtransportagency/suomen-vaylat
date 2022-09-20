@@ -198,6 +198,7 @@ export const Header = () => {
         ]);
 
         channel && channel.postRequest('DrawTools.StopDrawingRequest', [activeTool]);
+        channel && channel.postRequest('DrawTools.StopDrawingRequest', [true]);
         store.dispatch(setActiveTool(null));
 
         updateLayers(store, channel);
@@ -205,11 +206,11 @@ export const Header = () => {
         // Remove all features from map
         channel && channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', []);
 
-        // Remove markers
-        store.dispatch(removeMarkerRequest("SEARCH_MARKER"));
-
         // Remove VKM data
         store.dispatch(setVKMData(null));
+
+        // Remove all markers
+        store.dispatch(removeMarkerRequest());
     };
 
     return (
