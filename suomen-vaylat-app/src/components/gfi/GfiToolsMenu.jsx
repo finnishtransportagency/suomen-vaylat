@@ -259,7 +259,6 @@ const GfiToolsMenu = ({ handleGfiToolsMenu }) => {
     );
 
     const [loading, setLoading] = useState(false);
-    const [selectedTool, setSelectedTool] = useState(null);
     const [geometries, setGeometries] = useState([]);
 
 
@@ -271,11 +270,12 @@ const GfiToolsMenu = ({ handleGfiToolsMenu }) => {
     };
 
     const handleSelectTool = (id) => {
-        if (selectedTool !== id) {
-            setSelectedTool(id);
+        console.log(activeSelectionTool , id);
+        if (activeSelectionTool  !== id) {
+            store.dispatch(setActiveSelectionTool(id));
 
             if (id === 0 || id === 505) {
-                setSelectedTool(id);
+                store.dispatch(setActiveSelectionTool(id));
                 channel.postRequest(
                     'MapModulePlugin.RemoveFeaturesFromMapRequest',
                     [null, null, 'download-tool-layer']
@@ -426,9 +426,14 @@ const GfiToolsMenu = ({ handleGfiToolsMenu }) => {
             channel.postRequest('DrawTools.StartDrawingRequest', data);
             store.dispatch(setMinimizeGfi(true));
             if(showToast !== false && !hasToastBeenShown.includes('measurementToast')) {
-                if(item.type === "LineString" || item.type === "Polygon")
-                toast.info(<DrawingToast text={strings.tooltips.drawingTools.measureToast} handleButtonClick={handleClick} />,
-                {icon: <StyledToastIcon icon={faInfoCircle} />, toastId: "measurementToast", onClose : () => store.dispatch(setHasToastBeenShown({toastId: 'measurementsToast', shown: true}))})
+                if(item.type === "LineString" || item.type === "Polygon") {
+                    toast.info(<DrawingToast text={strings.tooltips.drawingTools.drawingToast} handleButtonClick={handleClick} />,
+                    {
+                        icon: <StyledToastIcon icon={faInfoCircle} />,
+                        toastId: "measurementToast",
+                        onClose : () => store.dispatch(setHasToastBeenShown({toastId: 'measurementsToast', shown: true}))
+                    })
+                }
             }
         }
     };
@@ -775,11 +780,11 @@ const GfiToolsMenu = ({ handleGfiToolsMenu }) => {
                     icon={faDownload}
                     title={"Omat geometriat"}
                     subtitle={"Omat tallennetut geometriat"}
-                    selectedItem={selectedTool}
+                    selectedItem={activeSelectionTool}
                     handleSelectTool={handleSelectTool}
                 />
                 <AnimatePresence>
-                    {selectedTool === 505 && (
+                    {activeSelectionTool === 505 && (
                         <StyledDrawingToolsContainer
                             transition={{
                                 duration: 0.2,
