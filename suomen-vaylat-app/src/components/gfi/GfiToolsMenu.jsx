@@ -140,7 +140,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu }) => {
     const drawinToolsData = [
         {
             id: 'sv-measure-linestring',
-            title: strings.tooltips.measuringTools.linestring,
+            title: strings.tooltips.drawingTools.linestring,
             style: {
                 icon: <SvLinestring />,
             },
@@ -148,7 +148,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu }) => {
         },
         {
             id: 'sv-measure-polygon',
-            title: strings.tooltips.measuringTools.polygon,
+            title: strings.tooltips.drawingTools.polygon,
             style: {
                 icon: <SvPolygon />,
             },
@@ -156,7 +156,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu }) => {
         },
         {
             id: 'sv-measure-box',
-            title: strings.tooltips.measuringTools.box,
+            title: strings.tooltips.drawingTools.box,
             style: {
                 icon: <SvRectangle />,
             },
@@ -164,7 +164,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu }) => {
         },
         {
             id: 'sv-measure-circle',
-            title: strings.tooltips.measuringTools.circle,
+            title: strings.tooltips.drawingTools.circle,
             style: {
                 icon: <SvCircle />,
             },
@@ -348,7 +348,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu }) => {
             store.dispatch(setMinimizeGfi(true));
             if(showToast !== false && !hasToastBeenShown.includes('measurementToast')) {
                 if(item.type === "LineString" || item.type === "Polygon")
-                toast.info(<DrawingToast text={strings.tooltips.measuringTools.measureToast} handleButtonClick={handleClick} />,
+                toast.info(<DrawingToast text={strings.tooltips.drawingTools.measureToast} handleButtonClick={handleClick} />,
                 {icon: <StyledToastIcon icon={faInfoCircle} />, toastId: "measurementToast", onClose : () => store.dispatch(setHasToastBeenShown({toastId: 'measurementsToast', shown: true}))})
             }
         }
