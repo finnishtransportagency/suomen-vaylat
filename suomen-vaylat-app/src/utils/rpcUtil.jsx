@@ -10,7 +10,8 @@ import {
 
 import {
     setSelectedMapLayersMenuThemeIndex,
-    setIsLegendOpen
+    setIsLegendOpen,
+    setIsZoomBarOpen
 } from '../state/slices/uiSlice';
 
 import { isMobile } from '../theme/theme';
@@ -50,7 +51,10 @@ export const selectGroup = (store, channel, index, theme, lastSelectedTheme, sel
         store.dispatch(setSelectedTheme(theme));
         store.dispatch(setSelectedThemeIndex(index));
         setTimeout(() => {
-            !isMobile && store.dispatch(setIsLegendOpen(true));
+            if(!isMobile) {
+                store.dispatch(setIsLegendOpen(true));
+                store.dispatch(setIsZoomBarOpen(true));
+            }
             theme.defaultLayers && theme.defaultLayers.forEach(layerId => {
                 channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layerId, true]);
             });
@@ -86,7 +90,10 @@ export const selectGroup = (store, channel, index, theme, lastSelectedTheme, sel
         }
         updateLayers(store, channel);
         setTimeout(() => {
-            !isMobile && store.dispatch(setIsLegendOpen(false));
+            if(!isMobile) {
+                store.dispatch(setIsLegendOpen(false));
+                store.dispatch(setIsZoomBarOpen(false));
+            }
             store.dispatch(setSelectedThemeIndex(null));
         },700);
     };
