@@ -3,6 +3,9 @@
 ## 1.4.0
 
 For a full list of changes see: https://github.com/finnishtransportagency/suomen-vaylat/milestone/7?closed=1
+* Bug fixes
+* Markers
+
 
 ## 1.3.0
 
