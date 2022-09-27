@@ -61,8 +61,8 @@ export const HandleSharedWebSiteLink = () => {
             setTimeout(() => {
                 // remove all layers needs do some timeout
                 store.dispatch(removeAllSelectedLayers({notRemoveLayersByGroupId: 1}));
-                theme.layers.forEach(layerId => {
-                    theme.defaultLayers.includes(layerId) && channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layerId, true]);
+                theme?.defaultLayers?.forEach(layerId => {
+                    channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layerId, true]);
                 });
                 updateLayers(store, channel);
             },700);
