@@ -23,27 +23,18 @@
     "zoomIn": "Zoom in",
     "zoomOut": "Zoom out",
     "opacity": "Opacity",
-    "drawingtools": {
-      "drawingtoolsButton": "Drawing tools",
+    "drawingTools": {
+      "drawingToolsButton": "Drawing tools",
       "point": "Point",
       "circle": "Circle",
       "square": "Square",
       "box": "Box",
       "linestring": "Line",
       "polygon": "Polygon",
+      "marker": "Marker",
       "erase": "Erase",
-      "drawingToast": "Voit viimeistellä piirron tuplaklikkaamalla tai klikkaamalla viimeksi piirretystä taitepisteestä uudelleen"
-    },
-    "measuringTools": {
-      "measuringToolsButton": "Measuring tools",
-      "point": "Point",
-      "circle": "Circle",
-      "square": "Square",
-      "box": "Box",
-      "linestring": "Line",
-      "polygon": "Polygon",
-      "erase": "Erase",
-      "measureToast": "Voit viimeistellä piirron tuplaklikkaamalla tai klikkaamalla viimeksi piirretystä taitepisteestä uudelleen"
+      "drawingToast": "Voit viimeistellä piirron tuplaklikkaamalla tai klikkaamalla viimeksi piirretystä taitepisteestä uudelleen",
+      "labelPlaceholder": "Label..."
     },
     "share": "Share this page",
     "shareTheme": "Share this theme",

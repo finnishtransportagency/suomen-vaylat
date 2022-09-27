@@ -107,6 +107,7 @@ const ZoomBar = ({
             setIsZoomBarOpen(!isZoomBarOpen)
         }
         else if(isZoomBarOpen && !isLegendOpen) setIsZoomBarOpen(false);
+        else if(isLegendOpen && !isZoomBarOpen) setIsZoomBarOpen(true);
     };
 
     return (
@@ -121,7 +122,7 @@ const ZoomBar = ({
                 <CircleButton
                     icon={faList}
                     text={strings.tooltips.legendButton}
-                    toggleState={isZoomBarOpen}
+                    toggleState={isZoomBarOpen || isLegendOpen}
                     clickAction={() => handleLegendClick()}
                     tooltipDirection={'left'}
                 />

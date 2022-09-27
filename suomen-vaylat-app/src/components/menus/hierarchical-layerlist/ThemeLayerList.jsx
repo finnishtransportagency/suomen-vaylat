@@ -268,7 +268,7 @@ export const ThemeGroup = ({
     isSubtheme
 }) => {
     const [subthemeIsOpen, setSubthemeIsOpen] = useState(false);
-    const [totalGroupLayersCount, setTotalGroupLayersCoun] = useState(0);
+    const [totalGroupLayersCount, setTotalGroupLayersCount] = useState(0);
     const [isExcerptOpen, setIsExcerptOpen] = useState(false);
     const [totalVisibleGroupLayersCount, setTotalVisibleGroupLayersCount] = useState(0);
 
@@ -280,7 +280,7 @@ export const ThemeGroup = ({
                 visibleLayersCount += layers.filter(l => theme.layers.includes(l.id) && l.visible === true).length;
                 layersCount = layersCount + theme.layers.length;
             };
-            setTotalGroupLayersCoun(layersCount);
+            setTotalGroupLayersCount(layersCount);
             setTotalVisibleGroupLayersCount(visibleLayersCount);
         };
         layersCounter(theme);
