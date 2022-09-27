@@ -1,6 +1,7 @@
 import strings from "../../translations";
 import styled from "styled-components";
-import { DRAWING_TIP_LOCALSTORAGE } from "../../utils/constants";
+import { DRAWING_TIP_LOCALSTORAGE, SEARCH_TIP_LOCALSTORAGE } from "../../utils/constants";
+import { useEffect } from "react";
 
 const StyledToastContent = styled.div`
     h6 {
@@ -20,12 +21,17 @@ const StyledToastButton = styled.button`
     }
 `;
 
-export const TipToast = ({text, handleButtonClick}) => {
+export const TipToast = ({text, handleButtonClick, localStorageName}) => {
 
-    return(
+    const handleDontShowAgain = () => {
+        localStorage.setItem(localStorageName, JSON.stringify(false));
+        handleButtonClick();
+    };
+
+    return (
         <StyledToastContent>
             {text}
-            <StyledToastButton onClick={() => handleButtonClick()}>{ `${strings.general.OkLowerCaseK}, ${strings.general.dontShowAgain.toLowerCase()}.`}</StyledToastButton>
+            <StyledToastButton onClick={() => handleDontShowAgain()}>{ `${strings.general.OkLowerCaseK}, ${strings.general.dontShowAgain.toLowerCase()}.`}</StyledToastButton>
         </StyledToastContent>
     )
 };

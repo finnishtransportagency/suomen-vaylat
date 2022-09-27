@@ -21,6 +21,7 @@ import MetadataSearch from './MetadataSearch';
 import Layer from '../menus/hierarchical-layerlist/Layer';
 import SvLoder from '../loader/SvLoader';
 import strings from '../../translations';
+import { SEARCH_TIP_LOCALSTORAGE } from '../../utils/constants';
 
 import { isMobile, theme } from '../../theme/theme';
 
@@ -257,6 +258,7 @@ const Search = () => {
     const vectorLayerId = 'SEARCH_VECTORLAYER';
     const [searchClickedRow, setSearchClickedRow] = useState(null);
     const [firstSearchResultShown, setFirstSearchResultShown] = useState(false);
+    const [ showToast, setShowToast] = useState(JSON.parse(localStorage.getItem(SEARCH_TIP_LOCALSTORAGE)));
 
     const handleAddGeometry = () => {
         geoJsonArray.data && geoJsonArray.data.geom &&
@@ -505,6 +507,12 @@ const Search = () => {
         guide: strings.search.tips.toastTipContent
     }
 
+    const handleDontShowAgain = () => {
+        setShowToast(false);
+        toast.dismiss('searchTipToast');
+        store.dispatch(setHasToastBeenShown({toastId: 'searchTipToast', shown: true}));
+    };
+
     if(searchType === 'address' && isSearchOpen && !hasToastBeenShown.includes('searchToast')) {
         toast.info(<SearchToast header={strings.search.tips.title} texts={texts}/>,
         {
@@ -519,10 +527,10 @@ const Search = () => {
     }
 
     useEffect(() => {
-        Object.keys(geoJsonArray).length > 0 && isSearchOpen && !hasToastBeenShown.includes('searchTipToast') ? toast.info(<TipToast text={<div> <h6>{searchDownloadTips.tip}</h6> <p>{searchDownloadTips.guide}</p></div>} />, 
+        Object.keys(geoJsonArray).length > 0 && isSearchOpen && !hasToastBeenShown.includes('searchTipToast') && showToast !== false ? toast.info(<TipToast handleButtonClick={() => handleDontShowAgain()} localStorageName={SEARCH_TIP_LOCALSTORAGE} text={<div> <h6>{searchDownloadTips.tip}</h6> <p>{searchDownloadTips.guide}</p></div>} />, 
         {icon: <StyledToastIcon icon={faInfoCircle} />,
         toastId: 'searchTipToast',
-        onClose: () => store.dispatch(setHasToastBeenShown({toastId: 'searchTipToast', shown: true})),
+        onClose: () => handleDontShowAgain(),
         position: 'bottom-left',
         draggable: false
         })
