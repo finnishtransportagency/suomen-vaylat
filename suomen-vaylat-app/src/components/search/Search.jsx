@@ -369,10 +369,6 @@ const Search = () => {
             });
     }, [channel]);
 
-    useEffect(() => {
-
-    })
-
     const handleSearchSelect = (name, lon, lat, geom, osa, ajorata, etaisyys, osaLoppu, etaisyysLoppu, type) => {
         removeMarkersAndFeatures();
         if (!geom) {
