@@ -31,9 +31,9 @@ import { setIsSearchOpen, setGeoJsonArray, setIsSaveViewOpen, setSavedTabIndex, 
 import CircleButton from '../circle-button/CircleButton';
 
 import { VKMGeoJsonHoverStyles, VKMGeoJsonStyles } from './VKMSearchStyles';
-import AddGeometryButton from '../add-geometry-button/AddGeometryButton';
 import { toast } from 'react-toastify';
 import SearchToast from '../toasts/SearchToast';
+import TipToast from '../toasts/TipToast';
 
 const StyledSearchIcon  = styled.div`
     min-width: 48px;
@@ -72,7 +72,7 @@ const StyledSearchWrapper = styled(motion.div)`
     align-items: center;
     width: 100%;
     overflow: hidden;
-    padding-right: ${(props) => props.hasGeometry ? "96px" : "48px"};
+    padding-right: 48px;
     height: 100%;
     background-color: ${(props) => props.theme.colors.mainWhite};
     border-radius: 24px;
@@ -260,10 +260,6 @@ const Search = () => {
 
     const handleAddGeometry = () => {
         geoJsonArray.data && geoJsonArray.data.geom &&
-        channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', [
-            geoJsonArray.data.geom,
-            addFeaturesToMapParams
-        ]);
         setShowSearchResults(false);
         store.dispatch(setIsSaveViewOpen(true));
         store.dispatch(setSavedTabIndex(1));
@@ -372,6 +368,10 @@ const Search = () => {
                 }
             });
     }, [channel]);
+
+    useEffect(() => {
+
+    })
 
     const handleSearchSelect = (name, lon, lat, geom, osa, ajorata, etaisyys, osaLoppu, etaisyysLoppu, type) => {
         removeMarkersAndFeatures();
@@ -504,6 +504,11 @@ const Search = () => {
         }
     ];
 
+    const searchDownloadTips = {
+        tip: strings.search.tips.toastTip,
+        guide: strings.search.tips.toastTipContent
+    }
+
     if(searchType === 'address' && isSearchOpen && !hasToastBeenShown.includes('searchToast')) {
         toast.info(<SearchToast header={strings.search.tips.title} texts={texts}/>,
         {
@@ -517,18 +522,19 @@ const Search = () => {
         toast.dismiss('searchToast');
     }
 
+    useEffect(() => {
+        Object.keys(geoJsonArray).length > 0 && isSearchOpen && !hasToastBeenShown.includes('searchTipToast') ? toast.info(<TipToast text={<div> <h6>{searchDownloadTips.tip}</h6> <p>{searchDownloadTips.guide}</p></div>} />, 
+        {icon: <StyledToastIcon icon={faInfoCircle} />,
+        toastId: 'searchTipToast',
+        onClose: () => store.dispatch(setHasToastBeenShown({toastId: 'searchTipToast', shown: true})),
+        position: 'bottom-left',
+        draggable: false
+        })
+        : toast.dismiss('searchTipToast');
+    }, [geoJsonArray]);
+
     return (
         <StyledSearchContainer isSearchOpen={isSearchOpen}>
-            {
-                    isSearchOpen && Object.keys(geoJsonArray).length > 0 &&
-                    <>
-                        <AddGeometryButton
-                            text={strings.savedContent.saveGeometry.saveGeometry}
-                            tooltipDirection={'bottom'}
-                            clickAction={handleAddGeometry}
-                        />
-                    </>
-                }
             <CircleButton
                 icon={isSearchOpen ? faTimes : faSearch}
                 text={strings.tooltips.search}

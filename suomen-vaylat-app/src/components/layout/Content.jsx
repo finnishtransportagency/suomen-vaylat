@@ -266,10 +266,6 @@ const Content = () => {
     };
 
     const handleCloseSaveViewModal = () => {
-        channel && channel.postRequest(
-            'MapModulePlugin.RemoveFeaturesFromMapRequest',
-            [null, null, SAVED_GEOMETRY_LAYER_ID]
-        );
         store.dispatch(setIsSaveViewOpen(false));
     };
 

@@ -37,7 +37,8 @@ const initialState = {
     hasToastBeenShown : [],
     selectedMarker: 2,
     drawToolMarkers: [],
-    markerLabel: ''
+    markerLabel: '',
+    activeGeometries: [],
 };
 
 export const uiSlice = createSlice({
@@ -171,6 +172,12 @@ export const uiSlice = createSlice({
         },
         setMarkerLabel: (state, action) => {
             state.markerLabel = action.payload;
+        },
+        addToActiveGeometries: (state, action) => {
+            state.activeGeometries.push(action.payload);
+        },
+        removeActiveGeometry: (state, action) => {
+            state.activeGeometries = state.activeGeometries.filter((activeGeometry) => activeGeometry.id !== action.payload);
         }
     },
 });
@@ -208,7 +215,9 @@ export const {
     setHasToastBeenShown,
     setSelectedMarker,
     addToDrawToolMarkers,
-    setMarkerLabel
+    setMarkerLabel,
+    addToActiveGeometries,
+    removeActiveGeometry
 } = uiSlice.actions;
 
 export default uiSlice.reducer;

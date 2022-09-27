@@ -26,8 +26,6 @@ import { DRAWING_TIP_LOCALSTORAGE } from '../../utils/constants';
 import CircleButton from '../circle-button/CircleButton';
 import AddGeometryButton from '../add-geometry-button/AddGeometryButton';
 
-const DRAWTOOLS_GEOMETRY_LAYER_ID = 'drawtools-geometry-layer';
-
 const StyledTools = styled(motion.div)`
     display: flex;
     align-items: center;
@@ -375,74 +373,7 @@ export const DrawingTools = ({isOpen}) => {
     ];
 
     const handleAddGeometry = () => {
-        geoJsonArray.features && geoJsonArray.features.forEach(feature => {
-            channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', [
-                feature.geojson,
-                {
-                    clearPrevious: true,
-                    layerId: DRAWTOOLS_GEOMETRY_LAYER_ID,
-                    centerTo: true,
-                    featureStyle: {
-                        fill: {
-                            color: 'rgba(10, 140, 247, 0.3)',
-                        },
-                        stroke: {
-                            color: 'rgba(10, 140, 247, 0.3)',
-                            width: 5,
-                            lineDash: 'solid',
-                            lineCap: 'round',
-                            lineJoin: 'round',
-                            area: {
-                                color: 'rgba(100, 255, 95, 0.7)',
-                                width: 8,
-                                lineJoin: 'round',
-                            },
-                        },
-                        image: {
-                            shape: 5,
-                            size: 3,
-                            fill: {
-                                color: 'rgba(100, 255, 95, 0.7)',
-                            },
-                        },
-                    },
-                },
-            ]);
-        })
 
-        geoJsonArray.geojson &&
-        channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', [
-            geoJsonArray.geojson ,
-            {
-                clearPrevious: true,
-                layerId: DRAWTOOLS_GEOMETRY_LAYER_ID,
-                centerTo: true,
-                featureStyle: {
-                    fill: {
-                        color: 'rgba(10, 140, 247, 0.3)',
-                    },
-                    stroke: {
-                        color: 'rgba(10, 140, 247, 0.3)',
-                        width: 5,
-                        lineDash: 'solid',
-                        lineCap: 'round',
-                        lineJoin: 'round',
-                        area: {
-                            color: 'rgba(100, 255, 95, 0.7)',
-                            width: 8,
-                            lineJoin: 'round',
-                        },
-                    },
-                    image: {
-                        shape: 5,
-                        size: 3,
-                        fill: {
-                            color: 'rgba(100, 255, 95, 0.7)',
-                        },
-                    },
-                },
-            },
-        ]);
         store.dispatch(setIsSaveViewOpen(true));
         store.dispatch(setSavedTabIndex(1));
     };

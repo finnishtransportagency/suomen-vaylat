@@ -306,7 +306,9 @@
         "91-17-16-1",
         "091-017-16-001"
       ],
-      "example": "Esim."
+      "example": "Esim.",
+      "toastTip": "Tiesitkö, että voit tallentaa rata- ja tiehausta kartalle tulleen geometrian?",
+      "toastTipContent": "Geometrian voit tallentaa sivun vasemman reunan tallennus-ikonin kautta, toiselta välilehdeltä."
     }
   },
   "layerlist": {

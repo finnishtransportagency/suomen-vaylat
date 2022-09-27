@@ -10,15 +10,15 @@ import { useSelector } from 'react-redux';
 
 import { v4 as uuidv4 } from 'uuid';
 
-import { setIsSaveViewOpen, setWarning, setSavedTabIndex, setGeoJsonArray } from '../../state/slices/uiSlice';
+import { setIsSaveViewOpen, setWarning, setSavedTabIndex, setGeoJsonArray, addToActiveGeometries, removeActiveGeometry, } from '../../state/slices/uiSlice';
 
 import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import CircleButton from '../circle-button/CircleButton';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import { theme } from '../../theme/theme';
 
-const SAVED_GEOMETRY_LAYER_ID = 'saved-geometry-layer';
 
 const StyledContent = styled.div`
     max-width: 660px;
@@ -168,7 +168,7 @@ const StyledSavedView = styled.div`
     justify-content: space-between;
     align-items: center;
     cursor: pointer;
-    background-color: ${(props) => props.theme.colors.mainColor1};
+    background-color: ${(props) => props.theme.colors.button};
     border-radius: 4px;
     padding: 8px 0px 8px 0px;
     box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, 0.16);
@@ -270,37 +270,6 @@ const StyledViewName = styled.input`
         outline-style: none;
     }
 `;
-
-const addFeaturesToMapParams = 
-    {
-        clearPrevious: true,
-        layerId: SAVED_GEOMETRY_LAYER_ID,
-        centerTo: true,
-        featureStyle: {
-            fill: {
-                color: 'rgba(10, 140, 247, 0.3)',
-            },
-            stroke: {
-                color: 'rgba(10, 140, 247, 0.3)',
-                width: 5,
-                lineDash: 'solid',
-                lineCap: 'round',
-                lineJoin: 'round',
-                area: {
-                    color: 'rgba(100, 255, 95, 0.7)',
-                    width: 8,
-                    lineJoin: 'round',
-                },
-            },
-            image: {
-                shape: 5,
-                size: 3,
-                fill: {
-                    color: 'rgba(100, 255, 95, 0.7)',
-                },
-            },
-        },
-    };
 
 export const SavedModalContent = () => {
 
@@ -523,6 +492,7 @@ const Views = () => {
                                         onClick={(e) => {
                                             e.preventDefault();
                                             handleActivateView(view);
+
                                         }}
                                     >
                                         <StyledLeftContent>
@@ -622,34 +592,58 @@ const Views = () => {
 
 const Geometries = () => {
     const { store } = useContext(ReactReduxContext);
-    const { channel } = useSelector((state) => state.rpc);
+    const { channel, currentZoomLevel } = useSelector((state) => state.rpc);
+    const { activeGeometries } = useSelector(state => state.ui);
     const [geometries, setGeometries] = useState([]);
     const [geometryName, setGeometryName] = useState('');
     const { geoJsonArray } = useSelector(
         (state) => state.ui
     );
 
+    console.log("geometries : ", geometries);
+
     useEffect(() => {
         window.localStorage.getItem('geometries') !== null &&
         setGeometries(JSON.parse(window.localStorage.getItem('geometries')));
     }, []);
 
-    const handleSaveGeometry = () => {
-        let newGeometry = {
-            id: uuidv4(),
-            name: geometryName,
-            saveDate: Date.now(),
-            data: {...geoJsonArray}
-        };
-
-        geometries.push(newGeometry);
-        window.localStorage.setItem('geometries', JSON.stringify(geometries));
-        setGeometries(JSON.parse(window.localStorage.getItem('geometries')));
-        store.dispatch(setGeoJsonArray({}));
-        setGeometryName('');
-    };
-
     const handleActivateGeometry = (geometry) => {
+        const addFeaturesToMapParams =
+        {
+            clearPrevious: false,
+            layerId: geometry.id,
+            centerTo: true,
+            maxZoomLevel: currentZoomLevel,
+            featureStyle: {
+                fill: {
+                    color: 'rgba(10, 140, 247, 0.3)',
+                },
+                stroke: {
+                    color: 'rgba(10, 140, 247, 0.3)',
+                    width: 5,
+                    lineDash: 'solid',
+                    lineCap: 'round',
+                    lineJoin: 'round',
+                    area: {
+                        color: 'rgba(100, 255, 95, 0.7)',
+                        width: 8,
+                        lineJoin: 'round',
+                    },
+                },
+                image: {
+                    shape: 5,
+                    size: 3,
+                    fill: {
+                        color: 'rgba(100, 255, 95, 0.7)',
+                    },
+                },
+            },
+        };
+        if(activeGeometries.find(g => g.id === geometry.id)) {
+            store.dispatch(removeActiveGeometry(geometry.id));
+            channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [null, null, geometry.id]);
+            return;
+        }
         const features = {...geometry.data};
         //tiehaku
         features.data && features.data.geom &&
@@ -670,7 +664,98 @@ const Geometries = () => {
             features.geojson ,
             addFeaturesToMapParams
         ]);
+        store.dispatch(addToActiveGeometries(geometry));
     };
+
+    const handleSaveGeometry = () => {
+        let layerId = uuidv4();
+        geoJsonArray.features && geoJsonArray.features.forEach(feature => {
+            channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', [
+                feature.geojson,
+                {
+                    clearPrevious: true,
+                    layerId: layerId,
+                    centerTo: true,
+                    maxZoomLevel: currentZoomLevel,
+                    featureStyle: {
+                        fill: {
+                            color: 'rgba(10, 140, 247, 0.3)',
+                        },
+                        stroke: {
+                            color: 'rgba(10, 140, 247, 0.3)',
+                            width: 5,
+                            lineDash: 'solid',
+                            lineCap: 'round',
+                            lineJoin: 'round',
+                            area: {
+                                color: 'rgba(100, 255, 95, 0.7)',
+                                width: 8,
+                                lineJoin: 'round',
+                            },
+                        },
+                        image: {
+                            shape: 5,
+                            size: 3,
+                            fill: {
+                                color: 'rgba(100, 255, 95, 0.7)',
+                            },
+                        },
+                    },
+                },
+            ]);
+        })
+
+        geoJsonArray.geojson &&
+        channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', [
+            geoJsonArray.geojson ,
+            {
+                clearPrevious: true,
+                layerId: layerId,
+                centerTo: true,
+                maxZoomLevel: currentZoomLevel,
+                featureStyle: {
+                    fill: {
+                        color: 'rgba(10, 140, 247, 0.3)',
+                    },
+                    stroke: {
+                        color: 'rgba(10, 140, 247, 0.3)',
+                        width: 5,
+                        lineDash: 'solid',
+                        lineCap: 'round',
+                        lineJoin: 'round',
+                        area: {
+                            color: 'rgba(100, 255, 95, 0.7)',
+                            width: 8,
+                            lineJoin: 'round',
+                        },
+                    },
+                    image: {
+                        shape: 5,
+                        size: 3,
+                        fill: {
+                            color: 'rgba(100, 255, 95, 0.7)',
+                        },
+                    },
+                },
+            },
+        ]);
+        let newGeometry = {
+            id: layerId,
+            name: geometryName,
+            saveDate: Date.now(),
+            data: {...geoJsonArray}
+        };
+
+        handleActivateGeometry(newGeometry)
+
+        geometries.push(newGeometry);
+        window.localStorage.setItem('geometries', JSON.stringify(geometries));
+        setGeometries(JSON.parse(window.localStorage.getItem('geometries')));
+        store.dispatch(setGeoJsonArray({}));
+        setGeometryName('');
+    };
+
+
 
     const handleRemoveGeometry = (geometry) => {
         let updatedGeometries = geometries.filter((geometryData) => geometryData.id !== geometry.id);
@@ -733,6 +818,7 @@ const Geometries = () => {
                                     }}
                                 >
                                     <StyledSavedView
+                                        style={{backgroundColor: activeGeometries.find(g => g.id === geometry.id) ? theme.colors.buttonActive : theme.colors.button}}
                                         onClick={(e) => {
                                             e.preventDefault();
                                             handleActivateGeometry(geometry);
