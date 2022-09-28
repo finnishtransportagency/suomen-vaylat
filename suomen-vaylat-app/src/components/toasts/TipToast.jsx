@@ -1,7 +1,5 @@
 import strings from "../../translations";
 import styled from "styled-components";
-import { DRAWING_TIP_LOCALSTORAGE, SEARCH_TIP_LOCALSTORAGE } from "../../utils/constants";
-import { useEffect } from "react";
 
 const StyledToastContent = styled.div`
     h6 {

@@ -507,7 +507,7 @@ const Search = () => {
         guide: strings.search.tips.toastTipContent
     }
 
-    const handleDontShowAgain = () => {
+    const handleCloseToast = () => {
         setShowToast(false);
         toast.dismiss('searchTipToast');
         store.dispatch(setHasToastBeenShown({toastId: 'searchTipToast', shown: true}));
@@ -527,10 +527,10 @@ const Search = () => {
     }
 
     useEffect(() => {
-        Object.keys(geoJsonArray).length > 0 && isSearchOpen && !hasToastBeenShown.includes('searchTipToast') && showToast !== false ? toast.info(<TipToast handleButtonClick={() => handleDontShowAgain()} localStorageName={SEARCH_TIP_LOCALSTORAGE} text={<div> <h6>{searchDownloadTips.tip}</h6> <p>{searchDownloadTips.guide}</p></div>} />, 
+        Object.keys(geoJsonArray).length > 0 && isSearchOpen && !hasToastBeenShown.includes('searchTipToast') && showToast !== false ? toast.info(<TipToast handleButtonClick={() => handleCloseToast()} localStorageName={SEARCH_TIP_LOCALSTORAGE} text={<div> <h6>{searchDownloadTips.tip}</h6> <p>{searchDownloadTips.guide}</p></div>} />, 
         {icon: <StyledToastIcon icon={faInfoCircle} />,
         toastId: 'searchTipToast',
-        onClose: () => handleDontShowAgain(),
+        onClose: () => handleCloseToast(),
         position: 'bottom-left',
         draggable: false
         })
