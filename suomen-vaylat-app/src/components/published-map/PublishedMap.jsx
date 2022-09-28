@@ -250,6 +250,17 @@ const PublishedMap = () => {
                 })
 
                 channel.handleEvent('DataForMapLocationEvent', (data) => {
+                    if (data.content && data.content.features) {
+                        data.content.features.forEach(f => {
+                            if (f.properties) {
+                                Object.keys(f.properties).forEach(k => {
+                                    if (typeof f.properties[k] === 'object') {
+                                        f.properties[k] = JSON.stringify(f.properties[k]);
+                                    }
+                                });
+                            }
+                        });
+                    }
                     if (store.getState().ui.activeSelectionTool === null && store.getState().ui.activeTool === null) {
                         store.dispatch(resetGFILocations([]));
                         const croppingArea = {
