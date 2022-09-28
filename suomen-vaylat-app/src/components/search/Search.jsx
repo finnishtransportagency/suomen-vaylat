@@ -27,7 +27,7 @@ import { isMobile, theme } from '../../theme/theme';
 
 import { addMarkerRequest, mapMoveRequest } from '../../state/slices/rpcSlice';
 
-import { setIsSearchOpen, setGeoJsonArray, setIsSaveViewOpen, setSavedTabIndex, setHasToastBeenShown } from '../../state/slices/uiSlice';
+import { setIsSearchOpen, setGeoJsonArray, setHasToastBeenShown } from '../../state/slices/uiSlice';
 
 import CircleButton from '../circle-button/CircleButton';
 
@@ -48,7 +48,6 @@ const StyledSearchIcon  = styled.div`
     };
     `;
 
-const SEARCH_GEOMETRY_LAYER_ID = 'search-geometry-layer';
 const StyledSearchContainer = styled.div`
     z-index: 2;
     position: relative;
@@ -205,36 +204,6 @@ const StyledLoaderWrapper = styled.div`
     }
 `;
 
-const addFeaturesToMapParams =
-    {
-        clearPrevious: true,
-        layerId: SEARCH_GEOMETRY_LAYER_ID,
-        centerTo: true,
-        featureStyle: {
-            fill: {
-                color: 'rgba(10, 140, 247, 0.3)',
-            },
-            stroke: {
-                color: 'rgba(10, 140, 247, 0.3)',
-                width: 5,
-                lineDash: 'solid',
-                lineCap: 'round',
-                lineJoin: 'round',
-                area: {
-                    color: 'rgba(100, 255, 95, 0.7)',
-                    width: 8,
-                    lineJoin: 'round',
-                },
-            },
-            image: {
-                shape: 5,
-                size: 3,
-                fill: {
-                    color: 'rgba(100, 255, 95, 0.7)',
-                },
-            },
-        },
-    };
 const StyledToastIcon = styled(FontAwesomeIcon)`
     color: ${theme.colors.mainColor1};
 `;
@@ -258,14 +227,7 @@ const Search = () => {
     const vectorLayerId = 'SEARCH_VECTORLAYER';
     const [searchClickedRow, setSearchClickedRow] = useState(null);
     const [firstSearchResultShown, setFirstSearchResultShown] = useState(false);
-    const [ showToast, setShowToast] = useState(JSON.parse(localStorage.getItem(SEARCH_TIP_LOCALSTORAGE)));
-
-    const handleAddGeometry = () => {
-        geoJsonArray.data && geoJsonArray.data.geom &&
-        setShowSearchResults(false);
-        store.dispatch(setIsSaveViewOpen(true));
-        store.dispatch(setSavedTabIndex(1));
-    };
+    const [showToast, setShowToast] = useState(JSON.parse(localStorage.getItem(SEARCH_TIP_LOCALSTORAGE)));
 
     const handleAddressSearch = (value) => {
         store.dispatch(setGeoJsonArray({}));
@@ -526,8 +488,10 @@ const Search = () => {
         toast.dismiss('searchToast');
     }
 
+    const vkmKeys = ['vali', 'tie', 'osa', 'etaisyys', 'track'];
+
     useEffect(() => {
-        Object.keys(geoJsonArray).length > 0 && isSearchOpen && !hasToastBeenShown.includes('searchTipToast') && showToast !== false && (geoJsonArray.style === "tie" || geoJsonArray.style === "track") ? toast.info(<TipToast handleButtonClick={() => handleCloseToast()} localStorageName={SEARCH_TIP_LOCALSTORAGE} text={<div> <h6>{searchDownloadTips.tip}</h6> <p>{searchDownloadTips.guide}</p></div>} />, 
+        Object.keys(geoJsonArray).length > 0 && isSearchOpen && !hasToastBeenShown.includes('searchTipToast') && showToast !== false && vkmKeys.includes(geoJsonArray.style)  ? toast.info(<TipToast handleButtonClick={() => handleCloseToast()} localStorageName={SEARCH_TIP_LOCALSTORAGE} text={<div> <h6>{searchDownloadTips.tip}</h6> <p>{searchDownloadTips.guide}</p></div>} />, 
         {icon: <StyledToastIcon icon={faInfoCircle} />,
         toastId: 'searchTipToast',
         onClose: () => handleCloseToast(),
@@ -536,6 +500,8 @@ const Search = () => {
         })
         : toast.dismiss('searchTipToast');
     }, [geoJsonArray]);
+
+
 
     return (
         <StyledSearchContainer isSearchOpen={isSearchOpen}>
