@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAppSelector } from '../../state/hooks';
@@ -7,7 +7,8 @@ import {
     faMap,
     faMapMarkedAlt,
     faTimes,
-    faExpand
+    faExpand,
+    faPencilRuler
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import strings from '../../translations';
@@ -15,6 +16,8 @@ import { selectGroup } from '../../utils/rpcUtil';
 import { ThemeGroupShareButton } from '../share-web-site/ShareLinkButtons';
 
 import { setMinimizeGfi } from '../../state/slices/uiSlice';
+
+const GFI_GEOMETRY_LAYER_ID = 'drawtools-geometry-layer';
 
 const StyledContent = styled.div`
     position: absolute;
@@ -99,7 +102,37 @@ const StyledActionButtonText = styled.p`
 `;
 
 const StyledExpandButton = styled.div`
+    width: 48px;
+    height: 48px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     cursor: pointer;
+    svg {
+        font-size: 20px;
+    };
+    @media ${props => props.theme.device.mobileL} {
+        svg {
+            font-size: 18px;
+        };
+    };
+`;
+
+const StyledGeometryButton = styled.div`
+    width: 48px;
+    height: 48px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    svg {
+        font-size: 20px;
+    };
+    @media ${props => props.theme.device.mobileL} {
+        svg {
+            font-size: 18px;
+        };
+    };
 `;
 
 const StyledActionButtonClose = styled.div`
@@ -119,25 +152,76 @@ const StyledActionButtonClose = styled.div`
     };
 `;
 
+const addFeaturesToMapParams = 
+    {
+        layerId: GFI_GEOMETRY_LAYER_ID,
+        featureStyle: {
+            fill: {
+                color: 'rgba(10, 140, 247, 0.3)',
+            },
+            stroke: {
+                color: 'rgba(10, 140, 247, 0.3)',
+                width: 5,
+                lineDash: 'solid',
+                lineCap: 'round',
+                lineJoin: 'round',
+                area: {
+                    color: 'rgba(100, 255, 95, 0.7)',
+                    width: 8,
+                    lineJoin: 'round',
+                },
+            },
+            image: {
+                shape: 5,
+                size: 3,
+                fill: {
+                    color: 'rgba(100, 255, 95, 0.7)',
+                },
+            },
+        },
+    };
+
 const ActionButtons = ({
     closeAction
 }) => {
 
     const { store } = useContext(ReactReduxContext);
+    
+    const [activeGeometries, setActiveGeometries] = useState(false);
 
     const {
         channel,
         selectedTheme,
         lastSelectedTheme,
-        selectedThemeIndex
+        selectedThemeIndex,
+        gfiLocations
     } = useAppSelector((state) => state.rpc);
-
     const {
         minimizeGfi,
+        geoJsonArray
     } = useAppSelector((state) => state.ui);
 
     const handleSelectGroup = (index, theme) => {
         selectGroup(store, channel, index, theme, lastSelectedTheme, selectedThemeIndex);
+    };
+    
+    const handleShowGeometry = () => {
+        if (!activeGeometries) {
+            gfiLocations.forEach(gfiLocation => {
+                //tiehaku
+                gfiLocation.gfiCroppingArea &&
+                channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', [
+                    gfiLocation.gfiCroppingArea,
+                    addFeaturesToMapParams
+                ]);
+            })
+        } else {
+            channel && channel.postRequest(
+                'MapModulePlugin.RemoveFeaturesFromMapRequest',
+                [null, null, GFI_GEOMETRY_LAYER_ID]
+            );
+        }
+        setActiveGeometries(!activeGeometries);
     };
 
     return (
@@ -166,6 +250,13 @@ const ActionButtons = ({
                                     <StyledActionButtonText>{strings.gfi.title}</StyledActionButtonText>
                                 </StyledLeftContent>
                                 <StyledRightContent>
+                                    <StyledGeometryButton
+                                        onClick={handleShowGeometry}
+                                    >
+                                        <FontAwesomeIcon
+                                            icon={faPencilRuler}
+                                        />
+                                    </StyledGeometryButton>
                                     <StyledExpandButton
                                         onClick={() => store.dispatch(setMinimizeGfi(false))}
                                     >

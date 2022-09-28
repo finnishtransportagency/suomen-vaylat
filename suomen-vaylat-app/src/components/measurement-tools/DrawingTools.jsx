@@ -15,15 +15,16 @@ import svLinestring from '../../theme/icons/drawtools_linestring.svg';
 import { useSelector } from 'react-redux';
 
 import strings from '../../translations';
-import { setActiveTool, setHasToastBeenShown, setSelectedMarker, setMarkerLabel } from '../../state/slices/uiSlice';
+import { setActiveTool, setHasToastBeenShown, setIsSaveViewOpen, setSavedTabIndex , setGeoJsonArray, setSelectedMarker, setMarkerLabel} from '../../state/slices/uiSlice';
 import { removeMarkerRequest } from '../../state/slices/rpcSlice';
 
 import { theme } from '../../theme/theme';
-
-import CircleButton from '../circle-button/CircleButton';
 import DrawingToast from '../toasts/DrawingToast';
 import { toast } from 'react-toastify';
 import { DRAWING_TIP_LOCALSTORAGE } from '../../utils/constants';
+
+import CircleButton from '../circle-button/CircleButton';
+import AddGeometryButton from '../add-geometry-button/AddGeometryButton';
 
 const StyledTools = styled(motion.div)`
     display: flex;
@@ -173,7 +174,7 @@ const variants = {
 export const DrawingTools = ({isOpen}) => {
     const { store } = useContext(ReactReduxContext);
     const { channel } = useSelector(state => state.rpc);
-    const { activeTool, hasToastBeenShown, selectedMarker, drawToolMarkers} = useSelector(state => state.ui);
+    const { activeTool, geoJsonArray, hasToastBeenShown, selectedMarker, drawToolMarkers} = useSelector(state => state.ui);
     const [ showToast, setShowToast] = useState(JSON.parse(localStorage.getItem(DRAWING_TIP_LOCALSTORAGE)));
     const [label, setLabel] = useState('');
 
@@ -205,6 +206,21 @@ export const DrawingTools = ({isOpen}) => {
     }
 
     useEffect(() => {
+        const drawHandler = (data) => {
+            if (data.isFinished && data.isFinished === true && data.geojson.features.length > 0) {
+                store.dispatch(setGeoJsonArray(data));
+            }
+        };
+
+        channel && channel.handleEvent('DrawingEvent', drawHandler);
+
+        return () => {
+            channel &&
+                channel.unregisterEventHandler('DrawingEvent', drawHandler);
+        };
+    }, [channel, store]);
+
+    useEffect(() => {
         if(showToast === false) store.dispatch(setHasToastBeenShown({toastId: 'drawToast', shown: true}));
     }, [showToast, store]);
 
@@ -219,6 +235,7 @@ export const DrawingTools = ({isOpen}) => {
 
     if(activeTool === null) toast.dismiss("drawToast");
 
+
     const startStopTool = (tool) => {
         if (tool.name !== activeTool) {
             var data = [tool.name, tool.type, { showMeasureOnMap: true }];
@@ -226,8 +243,8 @@ export const DrawingTools = ({isOpen}) => {
             store.dispatch(setActiveTool(tool.name));
             if(showToast !== false && !hasToastBeenShown.includes('drawToast')) {
                 if((tool.type === "LineString") || (tool.type === "Polygon")) {
-                    toast.info(<DrawingToast handleButtonClick={handleClick} text={strings.tooltips.drawingtools.drawingToast} />,
-                    {icon: <StyledToastIcon icon={faInfoCircle} /> ,toastId: "drawToast", onClose : () => {
+                    toast.info(<DrawingToast handleButtonClick={handleClick} text={strings.tooltips.drawingTools.drawingToast} />,
+                    {icon: <StyledToastIcon icon={faInfoCircle} />, toastId: "drawToast", onClose : () => {
                          store.dispatch(setHasToastBeenShown({toastId: 'drawToast', shown: true}))
                     }});
                 }
@@ -253,6 +270,7 @@ export const DrawingTools = ({isOpen}) => {
     const eraseDrawing = () => {
         // stop the drawing tool
         channel && channel.postRequest('DrawTools.StopDrawingRequest', [activeTool]);
+        store.dispatch(setGeoJsonArray({}));
         // remove geometries off the map
         channel && channel.postRequest('DrawTools.StopDrawingRequest', [true]);
         store.dispatch(setActiveTool(null));
@@ -354,6 +372,12 @@ export const DrawingTools = ({isOpen}) => {
         },
     ];
 
+    const handleAddGeometry = () => {
+
+        store.dispatch(setIsSaveViewOpen(true));
+        store.dispatch(setSavedTabIndex(1));
+    };
+
     return (
             <StyledTools
                 isOpen={isOpen}
@@ -416,6 +440,12 @@ export const DrawingTools = ({isOpen}) => {
                             </div>
                     )
                 })}
+                <AddGeometryButton
+                    disabled={!Object.keys(geoJsonArray).length}
+                    text={strings.savedContent.saveGeometry.saveGeometry}
+                    tooltipDirection={'right'}
+                    clickAction={handleAddGeometry}
+                />
             </StyledTools>
     );
  };
