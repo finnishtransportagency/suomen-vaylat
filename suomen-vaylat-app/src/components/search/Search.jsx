@@ -527,7 +527,7 @@ const Search = () => {
     }
 
     useEffect(() => {
-        Object.keys(geoJsonArray).length > 0 && isSearchOpen && !hasToastBeenShown.includes('searchTipToast') && showToast !== false ? toast.info(<TipToast handleButtonClick={() => handleCloseToast()} localStorageName={SEARCH_TIP_LOCALSTORAGE} text={<div> <h6>{searchDownloadTips.tip}</h6> <p>{searchDownloadTips.guide}</p></div>} />, 
+        Object.keys(geoJsonArray).length > 0 && isSearchOpen && !hasToastBeenShown.includes('searchTipToast') && showToast !== false && (geoJsonArray.style === "tie" || geoJsonArray.style === "track") ? toast.info(<TipToast handleButtonClick={() => handleCloseToast()} localStorageName={SEARCH_TIP_LOCALSTORAGE} text={<div> <h6>{searchDownloadTips.tip}</h6> <p>{searchDownloadTips.guide}</p></div>} />, 
         {icon: <StyledToastIcon icon={faInfoCircle} />,
         toastId: 'searchTipToast',
         onClose: () => handleCloseToast(),
