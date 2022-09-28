@@ -600,8 +600,6 @@ const Geometries = () => {
         (state) => state.ui
     );
 
-    console.log("geometries : ", geometries);
-
     useEffect(() => {
         window.localStorage.getItem('geometries') !== null &&
         setGeometries(JSON.parse(window.localStorage.getItem('geometries')));
