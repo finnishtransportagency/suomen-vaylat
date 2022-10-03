@@ -179,7 +179,6 @@ export const SelectedLayers = ({ selectedLayers, currentZoomLevel }) => {
                 <ul
                     style={{paddingInlineStart: "0px"}}
                 >
-                    {console.log("backgroundMaps kun mapataan : ", backgroundMaps)}
                     {backgroundMaps && backgroundMaps.map((item, index) => (
                         <SortableElement
                             key={'background-maplayer-' + item.id}
