@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import styled from 'styled-components';
 import { setSelectedLayers } from '../../../state/slices/rpcSlice';
 import strings from '../../../translations';
@@ -64,15 +64,53 @@ export const SelectedLayers = ({ selectedLayers, currentZoomLevel }) => {
 
     const { store } = useContext(ReactReduxContext);
 
-    const channel = useSelector(state => state.rpc.channel);
+    const {channel, allGroups} = useSelector(state => state.rpc);
+
+    const [backgroundMaps, setBackgroundMaps] = useState([]);
+
+    const getBackgroundMaps = (group) => {
+        if(group?.groups) {
+            group.groups.forEach(group => {
+                getBackgroundMaps(group);
+            });
+        }
+        if(group?.layers) {
+            group.layers.forEach(layer => {
+                selectedLayers.forEach(selectedLayer => {
+                    if(selectedLayer.id === layer) {
+                        if(backgroundMaps.length > 0) {
+                            let layerIsDuplicate = backgroundMaps.find(map => map.id === layer);
+                            !layerIsDuplicate && setBackgroundMaps(backgroundMaps => [...backgroundMaps, selectedLayer]);
+                        }
+                        else {
+                            setBackgroundMaps(backgroundMaps => [...backgroundMaps, selectedLayer]);
+                        }
+                    }
+                })
+            });
+        }
+        else return;
+    };
+
+    useEffect(() => {
+        backgroundMaps && backgroundMaps.forEach(map => {
+            const isSelected = selectedLayers.find(sl => map.id === sl.id);
+            !isSelected && setBackgroundMaps(backgroundMaps => backgroundMaps.filter(b => b.id !== map.id));
+        });
+        getBackgroundMaps(allGroups.find(group => group.id === 1));
+    }, [selectedLayers]);
+
 
     const mapLayers = selectedLayers.filter(layer => {
-        return !(layer.groups && layer.groups.includes(1));
+        return !backgroundMaps.find(bm => bm.id === layer.id);
     });
 
+
+/*
     const backgroundMaps = selectedLayers.filter(layer => {
         return layer.groups && layer.groups.includes(1);
-    });
+        
+    }); */
 
     const sortSelectedLayers = (selectedLayer) => {
         const newSelectedLayers = arrayMoveImmutable(selectedLayers, selectedLayer.oldIndex, selectedLayer.newIndex)
@@ -101,6 +139,7 @@ export const SelectedLayers = ({ selectedLayers, currentZoomLevel }) => {
         backgroundMaps.forEach(layer => {
             channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, !layer.visible]);
         });
+        setBackgroundMaps([]);
         updateLayers(store, channel);
     };
 
@@ -140,7 +179,8 @@ export const SelectedLayers = ({ selectedLayers, currentZoomLevel }) => {
                 <ul
                     style={{paddingInlineStart: "0px"}}
                 >
-                    {backgroundMaps.map((item, index) => (
+                    {console.log("backgroundMaps kun mapataan : ", backgroundMaps)}
+                    {backgroundMaps && backgroundMaps.map((item, index) => (
                         <SortableElement
                             key={'background-maplayer-' + item.id}
                             value={item}
