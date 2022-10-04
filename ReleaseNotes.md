@@ -1,5 +1,12 @@
 # Release Notes
 
+## 1.5.0
+
+For a full list of changes see: https://github.com/finnishtransportagency/suomen-vaylat/milestone/8?closed=1
+* Backgroundmap grouping recursive
+* Open legend when opening a themelink
+* Fix GFI error when layer some property contains JSONObject values
+
 ## 1.4.0
 
 For a full list of changes see: https://github.com/finnishtransportagency/suomen-vaylat/milestone/7?closed=1
