@@ -767,6 +767,10 @@ const Geometries = () => {
     };
 
     const handleDeleteAllGeometries = () => {
+        activeGeometries.forEach(geometry => {
+            store.dispatch(removeActiveGeometry(geometry.id));
+            channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [null, null, geometry.id]);
+        });
         window.localStorage.setItem('geometries', JSON.stringify([]));
         setGeometries(JSON.parse(window.localStorage.getItem('geometries')));
         store.dispatch(setWarning(null));
