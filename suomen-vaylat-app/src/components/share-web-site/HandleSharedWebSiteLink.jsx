@@ -3,9 +3,10 @@ import { ReactReduxContext, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import { setLocale } from '../../state/slices/languageSlice';
 import { changeLayerStyle, reArrangeSelectedMapLayers, setLegends, setSelectedTheme, setLastSelectedTheme, setSelectedThemeIndex, removeAllSelectedLayers } from '../../state/slices/rpcSlice';
-import { setIsSideMenuOpen, setSelectedMapLayersMenuTab } from '../../state/slices/uiSlice';
+import { setIsLegendOpen, setIsSideMenuOpen, setIsZoomBarOpen, setSelectedMapLayersMenuTab } from '../../state/slices/uiSlice';
 import { Logger } from '../../utils/logger';
 import { updateLayers } from '../../utils/rpcUtil';
+import { isMobile } from '../../theme/theme';
 
 const LOG = new Logger('HandleSharedWebSiteLink');
 
@@ -64,6 +65,10 @@ export const HandleSharedWebSiteLink = () => {
                 theme?.defaultLayers?.forEach(layerId => {
                     channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layerId, true]);
                 });
+                if(!isMobile) {
+                    store.dispatch(setIsLegendOpen(true));
+                    store.dispatch(setIsZoomBarOpen(true));
+                }
                 updateLayers(store, channel);
             },700);
         }
