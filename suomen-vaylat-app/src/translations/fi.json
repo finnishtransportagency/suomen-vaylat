@@ -110,7 +110,8 @@
     "fileSize": "Tiedostokoko",
     "layers": "Tasot",
     "failedDownloads": "Virheelliset lataukset",
-    "errorOccuredDuringDownloadProcessing" : "Virhe tapahtui paketin prosessoinnin aikana"
+    "errorOccuredDuringDownloadProcessing" : "Virhe tapahtui paketin prosessoinnin aikana",
+    "noWebSocketSupport": "Selaimesi ei tue latauksia. Voit kokeilla uudelleen eri selaimella tai päivittämällä nykyisen selaimesi version."
   },
   "general": {
     "close": "Sulje",

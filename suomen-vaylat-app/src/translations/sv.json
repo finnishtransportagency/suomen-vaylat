@@ -110,7 +110,8 @@
     "fileSize": "File size",
     "layers": "Layers",
     "failedDownloads": "Failed downloads",
-    "errorOccuredDuringDownloadProcessing" : "Error occured during download processing"
+    "errorOccuredDuringDownloadProcessing" : "Error occured during download processing",
+    "noWebSocketSupport": "Selaimesi ei tue latauksia. Voit kokeilla uudelleen eri selaimella tai päivittämällä nykyisen selaimesi version."
   },
   "general": {
     "close": "Stänga",

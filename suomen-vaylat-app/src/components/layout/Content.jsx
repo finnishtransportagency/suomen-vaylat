@@ -63,9 +63,6 @@ import GFIDownload from '../gfi/GFIDownload';
 import MetadataModal from '../metadata-modal/MetadataModal';
 import { ANNOUNCEMENTS_LOCALSTORAGE } from '../../utils/constants';
 
-
-const SAVED_GEOMETRY_LAYER_ID = 'saved-geometry-layer';
-
 const StyledContent = styled.div`
     z-index: 1;
     position: relative;
@@ -283,6 +280,10 @@ const Content = () => {
     }
 
     const handleGfiDownload = (format, layers, croppingArea) => {
+        let sessionId = '';
+        let finishedDownload = null;
+        const supportsWebSockets = 'WebSocket' in window || 'MozWebSocket' in window;
+        
         let layerIds = layers.map((layer) => {
             return layer.id;
         });
@@ -309,24 +310,59 @@ const Content = () => {
 
         store.dispatch(setIsGfiDownloadOpen(true));
         store.dispatch(setDownloadActive(newDownload));
-        channel.downloadFeaturesByGeoJSON && channel.downloadFeaturesByGeoJSON([layerIds, croppingArea, format.format], function (data) {
-            var finishedDownload = {
-                ...newDownload,
-                url: data.url !== null && data.url,
-                fileSize: data.fileSize !== null && data.fileSize,
-                loading: false,
-            };
-            store.dispatch(setDownloadFinished(finishedDownload));
-        }, function(errors) {
-            var errorDownload = {
-                ...newDownload,
-                url: null,
-                fileSize: null,
-                loading: false,
-                error: true
-            };
-            store.dispatch(setDownloadFinished(errorDownload));
+
+        channel.downloadFeaturesByGeoJSON && channel.downloadFeaturesByGeoJSON([layerIds, croppingArea, format.format, sessionId], () => {
+            return;
         });
+
+        const connectWebsocket = (count) =>
+        {
+            const MAX_RECONNECTIONS_TRY = 50;
+            let isDownloadReady = false;
+            if (supportsWebSockets) {
+                // Open WebSocket
+                const ws = new WebSocket("wss://paikkatietodev.testivaylapilvi.fi/sv-kartta/ws-suomen-vaylat");
+                ws.onopen = function ()
+                {
+                    const sendPing = () => {
+                        var json = {type:'ping', data: {}};
+                        ws.send(JSON.stringify(json));
+                    }
+                    setInterval(() => {
+                        sendPing();
+                    }, 1000 * 60 * 30);
+                };
+                ws.onmessage = function (evt)
+                {
+                    let data = JSON.parse(evt.data);
+
+                    if(data.type === "DOWNLOAD_READY") {
+                        let data = JSON.parse(evt.data);
+                        finishedDownload = {
+                            ...newDownload,
+                            url: data.data.url !== null && data.data.url,
+                            fileSize: data.data.fileSize !== null && data.data.fileSize,
+                            loading: false,
+                        };
+                        store.dispatch(setDownloadFinished(finishedDownload));
+                        isDownloadReady = true;
+                        ws.close();
+                    }
+                }
+                ws.onclose = () => {
+                    // If the download is ready don't try to reconnect
+                    if(isDownloadReady) return;
+
+                    if (count < MAX_RECONNECTIONS_TRY) {
+                        setTimeout(() => {
+                            connectWebsocket(count + 1);
+                        }, 1000);
+                    }
+                };
+            }
+                else alert(strings.downloads.noWebSocketSupport);
+            }
+            connectWebsocket(0);
     };
 
     return (
