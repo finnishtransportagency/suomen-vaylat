@@ -161,12 +161,12 @@ const GfiDownloadMenu = ({ handleGfiDownloadsMenu, handleGfiDownload }) => {
 
     const handleSelectLayer = (layer) => {
         if (
-            selectedLayers.find(
+            selectedLayers?.find(
                 (selectedLayer) => selectedLayer.id === layer.id
             )
         ) {
             setSelectedLayers(
-                selectedLayers.filter(
+                selectedLayers?.filter(
                     (selectedLayer) => selectedLayer.id !== layer.id
                 )
             );
@@ -234,7 +234,7 @@ const GfiDownloadMenu = ({ handleGfiDownloadsMenu, handleGfiDownload }) => {
                                 title={layer.name && layer.name}
                             >
                                 <CheckBox
-                                    checked={selectedLayers.find(
+                                    checked={selectedLayers.length > 0 && selectedLayers?.find(
                                         (selectedLayer) =>
                                             selectedLayer.id ===
                                             location.layerId

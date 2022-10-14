@@ -29,7 +29,7 @@ export const TipToast = ({text, handleButtonClick, localStorageName}) => {
     return (
         <StyledToastContent>
             {text}
-            <StyledToastButton onClick={() => handleDontShowAgain()}>{ `${strings.general.OkLowerCaseK}, ${strings.general.dontShowAgain.toLowerCase()}.`}</StyledToastButton>
+            {localStorageName && <StyledToastButton onClick={() => handleDontShowAgain()}>{ `${strings.general.OkLowerCaseK}, ${strings.general.dontShowAgain.toLowerCase()}.`}</StyledToastButton>} 
         </StyledToastContent>
     )
 };

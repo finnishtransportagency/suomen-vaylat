@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect, useRef } from 'react';
 import { ReactReduxContext } from 'react-redux';
-import { ToastContainer, Slide} from "react-toastify";
+import { ToastContainer, Slide, toast} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import { useAppSelector } from '../../state/hooks';
 import styled from 'styled-components';
@@ -63,9 +63,6 @@ import GFIDownload from '../gfi/GFIDownload';
 import MetadataModal from '../metadata-modal/MetadataModal';
 import { ANNOUNCEMENTS_LOCALSTORAGE } from '../../utils/constants';
 
-
-const SAVED_GEOMETRY_LAYER_ID = 'saved-geometry-layer';
-
 const StyledContent = styled.div`
     z-index: 1;
     position: relative;
@@ -76,6 +73,9 @@ const StyledContent = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    .Toastify {
+        z-index: 99 !important;
+    };
     .Toastify__toast-container {
 
     }
@@ -84,9 +84,6 @@ const StyledContent = styled.div`
         width: 400px;
     }
     @media ${(props) => props.theme.device.desktop} {
-        .Toastify__toast-container {
-
-        }
         .Toastify__toast-container--top-right {
             top: 9em;
         }
@@ -113,10 +110,6 @@ const StyledContent = styled.div`
 
     .Toastify {
         z-index: 2;
-    }
-
-    .Toastify__toast-icon {
-        display: none;
     }
 `;
 
@@ -283,6 +276,10 @@ const Content = () => {
     }
 
     const handleGfiDownload = (format, layers, croppingArea) => {
+        let sessionId = '';
+        let finishedDownload = null;
+        const supportsWebSockets = 'WebSocket' in window || 'MozWebSocket' in window;
+        
         let layerIds = layers.map((layer) => {
             return layer.id;
         });
@@ -309,24 +306,73 @@ const Content = () => {
 
         store.dispatch(setIsGfiDownloadOpen(true));
         store.dispatch(setDownloadActive(newDownload));
-        channel.downloadFeaturesByGeoJSON && channel.downloadFeaturesByGeoJSON([layerIds, croppingArea, format.format], function (data) {
-            var finishedDownload = {
-                ...newDownload,
-                url: data.url !== null && data.url,
-                fileSize: data.fileSize !== null && data.fileSize,
-                loading: false,
-            };
-            store.dispatch(setDownloadFinished(finishedDownload));
-        }, function(errors) {
-            var errorDownload = {
-                ...newDownload,
-                url: null,
-                fileSize: null,
-                loading: false,
-                error: true
-            };
-            store.dispatch(setDownloadFinished(errorDownload));
+
+        channel.downloadFeaturesByGeoJSON && channel.downloadFeaturesByGeoJSON([layerIds, croppingArea, format.format, sessionId], (data) => {
+            return;
         });
+
+        const connectWebsocket = (count) =>
+        {
+            const MAX_RECONNECTIONS_TRY = 4;
+            let isDownloadReady = false;
+            if (supportsWebSockets) {
+                // Open WebSocket
+                const ws = new WebSocket(process.env.REACT_APP_WEBSOCKET_URL);
+
+                const handleDownloadFailure = () => {
+                    handleCloseGfiDownloadModal();
+                    handleCloseSaveViewModal();
+                    ws.close();
+                    toast.error(strings.downloads.downloadFailure, {position: "top-center"});
+                };
+
+                ws.onopen = function ()
+                {
+                    const sendPing = () => {
+                        var json = {type:'ping', data: {}};
+                        ws.send(JSON.stringify(json));
+                    }
+                    setInterval(() => {
+                        sendPing();
+                    }, 1000 * 60 * 10);
+                };
+                ws.onmessage = function (evt)
+                {
+                    let data = JSON.parse(evt.data);
+
+                    if(data.type === "DOWNLOAD_READY") {
+                        let data = JSON.parse(evt.data);
+                        finishedDownload = {
+                            ...newDownload,
+                            url: data.data.url !== null && data.data.url,
+                            fileSize: data.data.fileSize !== null && data.data.fileSize,
+                            loading: false,
+                        };
+                        store.dispatch(setDownloadFinished(finishedDownload));
+                        isDownloadReady = true;
+                        ws.close();
+                    }
+                }
+                ws.onerror = () => {
+                    handleDownloadFailure();
+                };
+                ws.onclose = (event) => {
+                    // If the download is ready don't try to reconnect
+                    if(isDownloadReady) return;
+
+                    if (count < MAX_RECONNECTIONS_TRY) {
+                        setTimeout(() => {
+                            connectWebsocket(count + 1);
+                        }, 1000);
+                    }
+                    else {
+                        handleDownloadFailure();
+                    };
+                };
+            }
+                else toast.error(strings.downloads.noWebSocketSupport, {position: "top-center"});
+            }
+            connectWebsocket(0);
     };
 
     return (
