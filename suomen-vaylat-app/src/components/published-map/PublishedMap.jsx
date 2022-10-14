@@ -267,7 +267,7 @@ const PublishedMap = () => {
                             type: 'Feature',
                             geometry: {
                                 type: 'Point',
-                                coordinates: [data.y, data.x],
+                                coordinates: [data.x, data.y],
                             },
                         };
 

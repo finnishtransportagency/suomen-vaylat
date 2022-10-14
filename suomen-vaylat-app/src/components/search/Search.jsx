@@ -476,9 +476,8 @@ const Search = () => {
     };
 
     if(searchType === 'address' && isSearchOpen && !hasToastBeenShown.includes('searchToast')) {
-        toast.info(<SearchToast header={strings.search.tips.title} texts={texts}/>,
+        toast(<SearchToast header={strings.search.tips.title} texts={texts}/>,
         {
-            icon: <StyledToastIcon icon={faInfoCircle} />,
             toastId: 'searchToast',
             onClose: () => store.dispatch(setHasToastBeenShown({toastId: 'searchToast', shown: true})),
             position: 'top-right',

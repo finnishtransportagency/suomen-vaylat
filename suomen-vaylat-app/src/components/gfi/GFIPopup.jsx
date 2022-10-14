@@ -477,6 +477,9 @@ export const GFIPopup = ({ handleGfiDownload }) => {
             setGeoJsonToShow(tabsContent[selectedTab].props.data);
     }, [selectedTab, tabsContent]);
 
+    useEffect(() => {
+        isGfiDownloadsOpen && setIsGfiDownloadsOpen(false);
+    }, [gfiLocations]);
 
     const handleOverlayGeometry = (geoJson) => {
         channel &&
