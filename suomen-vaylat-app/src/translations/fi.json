@@ -111,7 +111,8 @@
     "layers": "Tasot",
     "failedDownloads": "Virheelliset lataukset",
     "errorOccuredDuringDownloadProcessing" : "Virhe tapahtui paketin prosessoinnin aikana",
-    "noWebSocketSupport": "Selaimesi ei tue latauksia. Voit kokeilla uudelleen eri selaimella tai päivittämällä nykyisen selaimesi version."
+    "noWebSocketSupport": "Selaimesi ei tue latauksia. Voit kokeilla uudelleen eri selaimella tai päivittämällä nykyisen selaimesi version.",
+    "downloadFailure": "Latauksessa meni jokin pieleen, yritä uudelleen."
   },
   "general": {
     "close": "Sulje",

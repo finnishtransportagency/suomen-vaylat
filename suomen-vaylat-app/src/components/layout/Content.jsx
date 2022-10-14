@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect, useRef } from 'react';
 import { ReactReduxContext } from 'react-redux';
-import { ToastContainer, Slide} from "react-toastify";
+import { ToastContainer, Slide, toast} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import { useAppSelector } from '../../state/hooks';
 import styled from 'styled-components';
@@ -73,6 +73,9 @@ const StyledContent = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    .Toastify {
+        z-index: 99 !important;
+    };
     .Toastify__toast-container {
 
     }
@@ -81,9 +84,6 @@ const StyledContent = styled.div`
         width: 400px;
     }
     @media ${(props) => props.theme.device.desktop} {
-        .Toastify__toast-container {
-
-        }
         .Toastify__toast-container--top-right {
             top: 9em;
         }
@@ -110,10 +110,6 @@ const StyledContent = styled.div`
 
     .Toastify {
         z-index: 2;
-    }
-
-    .Toastify__toast-icon {
-        display: none;
     }
 `;
 
@@ -311,17 +307,25 @@ const Content = () => {
         store.dispatch(setIsGfiDownloadOpen(true));
         store.dispatch(setDownloadActive(newDownload));
 
-        channel.downloadFeaturesByGeoJSON && channel.downloadFeaturesByGeoJSON([layerIds, croppingArea, format.format, sessionId], () => {
+        channel.downloadFeaturesByGeoJSON && channel.downloadFeaturesByGeoJSON([layerIds, croppingArea, format.format, sessionId], (data) => {
             return;
         });
 
         const connectWebsocket = (count) =>
         {
-            const MAX_RECONNECTIONS_TRY = 50;
+            const MAX_RECONNECTIONS_TRY = 4;
             let isDownloadReady = false;
             if (supportsWebSockets) {
                 // Open WebSocket
-                const ws = new WebSocket("wss://paikkatietodev.testivaylapilvi.fi/sv-kartta/ws-suomen-vaylat");
+                const ws = new WebSocket(process.env.REACT_APP_WEBSOCKET_URL);
+
+                const handleDownloadFailure = () => {
+                    handleCloseGfiDownloadModal();
+                    handleCloseSaveViewModal();
+                    ws.close();
+                    toast.error(strings.downloads.downloadFailure, {position: "top-center"});
+                };
+
                 ws.onopen = function ()
                 {
                     const sendPing = () => {
@@ -330,7 +334,7 @@ const Content = () => {
                     }
                     setInterval(() => {
                         sendPing();
-                    }, 1000 * 60 * 30);
+                    }, 1000 * 60 * 10);
                 };
                 ws.onmessage = function (evt)
                 {
@@ -349,7 +353,10 @@ const Content = () => {
                         ws.close();
                     }
                 }
-                ws.onclose = () => {
+                ws.onerror = () => {
+                    handleDownloadFailure();
+                };
+                ws.onclose = (event) => {
                     // If the download is ready don't try to reconnect
                     if(isDownloadReady) return;
 
@@ -358,9 +365,12 @@ const Content = () => {
                             connectWebsocket(count + 1);
                         }, 1000);
                     }
+                    else {
+                        handleDownloadFailure();
+                    };
                 };
             }
-                else alert(strings.downloads.noWebSocketSupport);
+                else toast.error(strings.downloads.noWebSocketSupport, {position: "top-center"});
             }
             connectWebsocket(0);
     };
