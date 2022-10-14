@@ -39,6 +39,7 @@ ENV REACT_APP_PUBLISHED_MAP_DOMAIN=${MAP_DOMAIN}
 ENV REACT_APP_PROXY_URL=${MAP_DOMAIN}/sv-kartta/
 ENV REACT_APP_SITE_URL=https://paikkatietodev.testivaylapilvi.fi/$BASE_PATH
 ENV REACT_APP_ROUTER_PREFIX=/$BASE_PATH/
+ENV REACT_APP_WEBSOCKET_URL=wss://d442co92ufwmq.cloudfront.net/sv-kartta/ws-suomen-vaylat
 
 RUN cd /suomen-vaylat && \
     npm ci && \
