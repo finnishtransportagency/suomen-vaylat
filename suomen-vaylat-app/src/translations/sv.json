@@ -196,11 +196,12 @@
     "mainText": "Via karttjänsten Finlands Trafikleder kan man se vägnätsuppgifter om det statliga vägnätet samt uppgifter om järnvägar och farleder. Det har dessutom skapats egna helheter för Trafikledsverkets infrastrukturprojekt och dataslag för det nationella datasystemet för väg- och gatunätet, Digiroad. Flera temakartor finns redan inbyggda i tjänsten, till exempel Projektkartan och Beskrivning av Finlands bannät. I tjänsten Finlands Trafikleder kan man söka på namn eller ämnesområde och filtrera materialet enligt olika teman. Karttjänsten omfattar dessutom separata sökningar av adresser, vägar och metadata. Finlands Trafikleder kan användas både som desktop- och mobilversion. Tjänsten produceras på finska, svenska och engelska.  Anvisningar om tjänsten hittar man genom att klicka på ? (länk). För tillfället ansvarar Sitowise Oy för driften och underhållet av Finlands Trafikleder.",
     "versionInfo": {
       "title": "Versions information",
-      "appVersion": "Applikationsversion:",
-      "appLastUpdate": "Applikationen uppdaterades senast:",
+      "appVersion": "Applikationsversion: ",
+      "appLastUpdate": "Applikationen uppdaterades senast: ",
       "appInfoTitle": "Information om tjänsten",
       "appInfoLinksTitle": "Länkar",
-      "appContactAndFeedback": "Kontaktuppgifter och respons"
+      "appContactAndFeedback": "Kontaktuppgifter och respons",
+      "oskari": "Oskari.org -version: "
     },
     "contactInfoFeedback": {
       "0": "Trafikledsverket ansvarar för applikationen som levereras av Sitowise Oy.",
@@ -220,6 +221,10 @@
       "2": {
         "text": "Trafikledsverkets kartor:",
         "link": "https://vayla.fi/vaylista/aineistot/kartat"
+      },
+      "3": {
+        "text": "Aineiston välitysalusta, josta voi ladata avointen aineistojen tiedostoja.",
+        "link": "https://ava.vaylapilvi.fi"
       }
     },
     "dataSourcesAndTermsOfUse" :{
@@ -229,7 +234,10 @@
       "tabTitle": "Datakällor",
       "municipalityImage": "Sijaintitietojen kuntien vaakunoiden kuvat haetaan kuntaliiton sivuilta:",
       "municipalityLink": "https://www.kuntaliitto.fi",
-      "landSurvey": "Taustakarttojen lähteenä on maanmittauslaitos."
+      "landSurvey": "Maanmittauslaitoksen taustakartat sekä kiinteistötunnukset ja -rajat ovat avointa dataa ja käytössä lisenssiehdoilla: ",
+      "landSurveyLink": "https://www.maanmittauslaitos.fi/avoindata-lisenssi-cc40",
+      "roadmaps": "Tiekartat (AT ja GT) ovat CGI Suomi Oy aineistoja käytössä käyttöoikeusluvalla n:o S10325081",
+      "syke": "Asemakaavoitetut aluejaot ovat Suomen Ympäristökeskus (SYKE) avointa dataa. SYKEn avointen aineistojen käyttölupa on Creative Commons Nimeä 4.0"
     },
     "termsOfUse": {
       "title": "Käyttöehdot",

@@ -4,6 +4,7 @@ import strings from '../../translations';
 import { getAppBuildDate, getAppVersion } from '../../utils/appInfoUtil';
 import { isMobile} from '../../theme/theme';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useSelector } from 'react-redux';
 
 import { Swiper, SwiperSlide } from 'swiper/react';
 
@@ -201,11 +202,19 @@ export const AppInfo = () => {
 }
 
 export const VersionInfo = ({currentAppVersion, currentAppBuildDate}) => {
+    const { channel } = useSelector(state => state.rpc);
+    const [oskariVersion, setOskariVersion] = useState(); 
+    
+    channel?.getInfo(function(oskariInfo) {
+        setOskariVersion(oskariInfo.version); 
+    });
+
     return (
         <div>
             {isMobile && <StyledHeading>{strings.appInfo.versionInfo.title}</StyledHeading>}
             <StyledTitle><p>{strings.appInfo.versionInfo.appVersion + currentAppVersion}</p></StyledTitle>
             <StyledTitle><p>{strings.appInfo.versionInfo.appLastUpdate + currentAppBuildDate}</p></StyledTitle>
+            <StyledTitle><p>{strings.appInfo.versionInfo.oskari} {oskariVersion}</p></StyledTitle>
         </div>
     );
 };
@@ -245,7 +254,9 @@ export const SourcesAndTermsOfUse = () => {
             <div>
                 <StyledHeading> {strings.appInfo.dataSources.title}</StyledHeading>
                 <p>{strings.appInfo.dataSources.municipalityImage} <StyledLink href={strings.appInfo.dataSources.municipalityLink}>{strings.appInfo.dataSources.municipalityLink}</StyledLink> </p>
-                <p>{strings.appInfo.dataSources.landSurvey}</p>
+                <p>{strings.appInfo.dataSources.landSurvey} <StyledLink href={strings.appInfo.dataSources.landSurveyLink}>{strings.appInfo.dataSources.landSurveyLink}</StyledLink> </p>
+                <p>{strings.appInfo.dataSources.roadmaps}</p>
+                <p>{strings.appInfo.dataSources.syke}</p>
             </div>
             <div>
                 <StyledHeading>{strings.appInfo.termsOfUse.title}</StyledHeading>
