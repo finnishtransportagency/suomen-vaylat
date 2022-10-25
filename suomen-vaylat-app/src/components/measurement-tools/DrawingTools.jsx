@@ -46,12 +46,8 @@ const StyledToastIcon = styled(FontAwesomeIcon)`
     color: ${theme.colors.mainColor1};
 `;
 
-const StyledMarkerWrapper = styled.div`
-    
-`;
-
 const StyledOptionsWrapper = styled(motion.div)`
-    position: fixed;
+    position: absolute;
     background-color: ${props => props.theme.colors.mainWhite};
     z-index: -1;
     display: grid;
@@ -415,7 +411,7 @@ export const DrawingTools = ({isOpen}) => {
                                 tooltipDirection={"right"}
                             >
                             </CircleButton> : tool.id === "sv-add-marker" &&
-                            <StyledMarkerWrapper>
+                            <div>
                                 {tool.name && tool.name === activeTool &&
                                 <StyledOptionsWrapper>
                                     <StyledOptionButtonsWrapper>
@@ -440,7 +436,7 @@ export const DrawingTools = ({isOpen}) => {
                                 }
                                 <CircleButton type="drawingTool" showOptions={true} key={tool.id} icon={faMapMarkerAlt} text={tool.name} clickAction={() => addMarker(tool)}
                                 toggleState={tool.name && tool.name === activeTool ? true : false} tooltipDirection="right" />
-                            </StyledMarkerWrapper>
+                            </div>
                     )
                 })}
                 <AddGeometryButton
