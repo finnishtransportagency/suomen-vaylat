@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect} from 'react';
 import styled from 'styled-components';
 import strings from '../../translations';
 import { getAppBuildDate, getAppVersion } from '../../utils/appInfoUtil';
-import { isMobile} from '../../theme/theme';
+import { isMobile, size} from '../../theme/theme';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSelector } from 'react-redux';
 
@@ -274,6 +274,8 @@ export const AppInfoModalContent = () => {
     const inputEl = useRef(null);
     const [isNavOpen, setIsNavOpen] = useState(true);
 
+    const showMobileView = isMobile && window.innerWidth < parseInt(size.mobileL);
+
     // App build info
     const currentAppVersion = getAppVersion();
     const currentAppBuildDate = getAppBuildDate();
@@ -281,7 +283,7 @@ export const AppInfoModalContent = () => {
     const [tabIndex, setTabIndex] = useState(0);
 
     useEffect(() => {
-        isMobile && setTabIndex(-1);
+        showMobileView && setTabIndex(-1);
     }, [])
 
     const tabsContent = [
@@ -336,11 +338,11 @@ export const AppInfoModalContent = () => {
     return (
         <>
             <StyledContent>
-                {isMobile && 
+                {showMobileView && 
                 <>
                     <StyledMenuContainer key="menuContainer">
                         <StyledCloseMenuContainer>
-                            <StyledCloseMenuIcon onClick={() => setIsNavOpen(!isNavOpen)} icon={!isNavOpen && faArrowLeft} />
+                            {!isNavOpen && <StyledCloseMenuIcon onClick={() => setIsNavOpen(!isNavOpen)} icon={faArrowLeft} />}
                         </StyledCloseMenuContainer>
                     </StyledMenuContainer>
                     <StyledMobileContainer
@@ -382,7 +384,7 @@ export const AppInfoModalContent = () => {
                 </>
                 }
 
-                {!isMobile &&
+                {!showMobileView &&
                     <StyledTabs
                     tabIndex={tabIndex}
                     tabsCount={tabsContent.length}
@@ -414,7 +416,7 @@ export const AppInfoModalContent = () => {
                         setTabIndex(e.activeIndex);
                     }}
                     allowTouchMove={false} // Disable swiping
-                    speed={isMobile? 0 : 300}
+                    speed={showMobileView? 0 : 300}
                 >
                     {
                         tabsContent.map((tab, index) => {
@@ -424,10 +426,10 @@ export const AppInfoModalContent = () => {
                                     key={'ai_tab_content_' + index}
                                 >
                                     <AnimatePresence>
-                                        {isMobile && !isNavOpen ? 
-                                        <StyledMobileTabContent key={'tabContent_' + index} variants={isMobile && variants} initial="initial" animate={isNavOpen ? "hidden" : "visible"} exit="exit">
+                                        {showMobileView && !isNavOpen ? 
+                                        <StyledMobileTabContent key={'tabContent_' + index} variants={showMobileView && variants} initial="initial" animate={isNavOpen ? "hidden" : "visible"} exit="exit">
                                         {tab.content}
-                                        </StyledMobileTabContent> : !isMobile && tab.content
+                                        </StyledMobileTabContent> : !showMobileView && tab.content
                                     }
                                     </AnimatePresence>
                                     </SwiperSlide>

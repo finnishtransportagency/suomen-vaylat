@@ -48,11 +48,10 @@ const StyledToastIcon = styled(FontAwesomeIcon)`
 
 const StyledOptionsWrapper = styled(motion.div)`
     position: absolute;
-    left: 0};
-    bottom: 5px;
     background-color: ${props => props.theme.colors.mainWhite};
     z-index: -1;
     display: grid;
+    bottom: 40px;
     grid-template-columns: 1fr;
     grid-gap: 5px;
     margin-left: 55px;
@@ -71,7 +70,7 @@ const StyledOptionsWrapper = styled(motion.div)`
     };
     @media ${props => props.theme.device.mobileL} {
         margin-left: 45px;
-        bottom: -45px;
+        bottom: -15px;
         svg {
 
         };

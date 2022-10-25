@@ -89,9 +89,6 @@ const StyledContent = styled.div`
         }
     };
     @media ${props => props.theme.device.tablet} {
-        .Toastify__toast-container {
-            width: 80%;
-        }
         .Toastify__toast-container--top-right {
             top: 9em;
         }
