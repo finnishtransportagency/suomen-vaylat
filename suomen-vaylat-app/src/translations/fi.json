@@ -196,11 +196,12 @@
     "mainText": "Suomen Väylät karttapalvelun kautta on katseltavissa tiestötietoja valtion tieverkolta, rautatietietoja sekä tietoja vesiväylistä. Lisäksi omiksi kokonaisuuksiksi on koottu Väyläviraston infrahanketietoja sekä kansallisen tie- ja katuverkon tietojärjestelmän, Digiroadin, tietolajit. Palveluun on rakennettu valmiiksi useita teemakarttoja, kuten esimerkiksi Hankekartta ja Rautateiden verkkoseloste. Suomen Väylissä aineistoja voi hakea aineistojen nimen tai aihealueen mukaan sekä suodattaa aineistoja teemojen mukaisesti. Lisäksi karttapalvelusta löytyy erilliset osoite- , tiehaku ja metatietohaut. Suomen Väylät on käytettävissä sekä desktop- että mobiiliversioilla. Palvelua tuotetaan suomen-, ruotsin- ja englannin kielillä.  Palvelun käyttöohjeet löytyvät ?-painikkeen(linkki) takaa. Suomen Väylien operoinnista ja ylläpidosta vastaa tällä hetkellä Sitowise Oy.",
     "versionInfo": {
       "title": "Versiotiedot",
-      "appVersion": "Sovelluksen versio:",
-      "appLastUpdate": "Sovellus päivitetty viimeksi:",
+      "appVersion": "Sovelluksen versio: ",
+      "appLastUpdate": "Sovellus päivitetty viimeksi: ",
       "appInfoTitle": "Tietoa palvelusta",
       "appInfoLinksTitle": "Linkkejä",
-      "appContactAndFeedback": "Yhteystiedot ja palaute"
+      "appContactAndFeedback": "Yhteystiedot ja palaute",
+      "oskari": "Oskari.org -versio: "
     },
     "contactInfoFeedback": {
       "0": "Sovelluksesta vastaa Väylävirasto ja sovelluksen toimittaa Sitowise Oy.",
@@ -220,6 +221,10 @@
       "2": {
         "text": "Väyläviraston karttoja:",
         "link": "https://vayla.fi/vaylista/aineistot/kartat"
+      },
+      "3": {
+        "text": "Aineiston välitysalusta, josta voi ladata avointen aineistojen tiedostoja.",
+        "link": "https://ava.vaylapilvi.fi"
       }
     },
     "dataSourcesAndTermsOfUse" :{
@@ -229,7 +234,10 @@
       "title": "Tietolähteet",
       "municipalityImage": "Sijaintitietojen kuntien vaakunoiden kuvat haetaan kuntaliiton sivuilta:",
       "municipalityLink": "https://www.kuntaliitto.fi",
-      "landSurvey": "Taustakarttojen lähteenä on maanmittauslaitos."
+      "landSurvey": "Maanmittauslaitoksen taustakartat sekä kiinteistötunnukset ja -rajat ovat avointa dataa ja käytössä lisenssiehdoilla: ",
+      "landSurveyLink": "https://www.maanmittauslaitos.fi/avoindata-lisenssi-cc40",
+      "roadmaps": "Tiekartat (AT ja GT) ovat CGI Suomi Oy aineistoja käytössä käyttöoikeusluvalla n:o S10325081",
+      "syke": "Asemakaavoitetut aluejaot ovat Suomen Ympäristökeskus (SYKE) avointa dataa. SYKEn avointen aineistojen käyttölupa on Creative Commons Nimeä 4.0"
     },
     "termsOfUse": {
       "title": "Käyttöehdot",

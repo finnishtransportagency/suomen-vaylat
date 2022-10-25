@@ -12,9 +12,12 @@ const StyledContainer = styled.div`
         height: 60vh;
         overflow: auto;
     };
-
     @media ${(props) => props.theme.device.mobileL} {
         height: 60vh;
+        overflow: auto;
+    };
+    @media screen and (max-width: ${(props) => props.theme.device.laptopL}), screen and (max-height: 820px) {
+        max-height: 500px;
         overflow: auto;
     };
 `;

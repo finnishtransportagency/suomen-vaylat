@@ -243,7 +243,7 @@ export const ThemeLayerList = ({
 
     return (
         <>
-            {allThemes.map((theme, index) => {
+            {allThemes?.map((theme, index) => {
                    return <ThemeGroup
                         key={index}
                         theme={theme}
