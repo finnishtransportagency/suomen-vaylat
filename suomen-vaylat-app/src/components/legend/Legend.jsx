@@ -15,13 +15,11 @@ const StyledLegendContainer = styled(motion.div)`
     position: absolute;
     top: 0px;
     right: 100%;
-    //right: 66px;
-    width: 100vw;
     border-radius: 4px;
-    //min-width: 200px;
     margin-right: 8px;
     height: 100%;
-    max-width: 300px;
+    min-width: 350px;
+    max-width: 450px;
     max-height: ${props => props.height && props.height+"px"};
     display: flex;
     flex-direction: column;
@@ -131,11 +129,9 @@ export const Legend = ({
             <ReactTooltip backgroundColor={theme.mainColor1} disable={isMobile} id='legendHeader' place='top' type='dark' effect='float'>
                 <span>{strings.tooltips.legendHeader}</span>
             </ReactTooltip>
-            <StyledHeaderContent
-                data-tip data-for="legendHeader"
-            >
-                <StyledTitleContent>
-                    <p>{strings.legend.title}</p>
+            <StyledHeaderContent>
+                <StyledTitleContent >
+                    <p data-tip data-for="legendHeader">{strings.legend.title}</p>
                 </StyledTitleContent>
                     <StyledCloseIcon
                         icon={faTimes}
