@@ -92,7 +92,12 @@
     "list": "Lista",
     "table" : "Taulukko",
     "featureAmount" : "Kohteita",
-    "getMoreFeatures": "Hae lisää kohteita"
+    "getMoreFeatures": "Hae lisää kohteita",
+    "savedGeometries" : {
+      "title": "Tallennetut geometriat (Poissa käytöstä)",
+      "description": "Omat tallennetut geometriat",
+      "disabled": "Väliaikaisesti poissa käytöstä"
+    }
   },
   "vkm": {
     "locationInfo": "Sijaintitiedot",

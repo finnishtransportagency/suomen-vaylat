@@ -59,17 +59,17 @@
       "saveNewView" : "Save new view"
     },
     "saveGeometry" : {
-      "confirmDeleteAll" : "Are you sure you want to delete all geometries",
-      "saveGeometry" : "Save geometry",
-      "savingGeometry" : "Saving geometries",
-      "saveGeometryDescription1" : "Geometry will be saved to browser local storage",
-      "saveGeometryDescription2" : "Saved geometry can be accessed only by browser it has been saved",
-      "noSavedGeometries" : "No saved geometries",
-      "deleteAllSavedGeometries" : "Delete all saved geometries",
-      "savedGeometries" : "Saved geometries",
-      "geometryName" : "Geometry name",
-      "noGeometry" : "No new geometries on the map",
-      "saveNewGeometry" : "Save new geometry"
+      "confirmDeleteAll" : "Haluatko varmasti poistaa kaikki tallennetut geometriat?",
+      "saveGeometry" : "Tallenna geometria",
+      "savingGeometry" : "Geometrian tallennus",
+      "saveGeometryDescription1" : "Geometria tallentuu selaimen välimuistiin",
+      "saveGeometryDescription2" : "Tallennettu geometria voidaan aktivoida vain selaimessa johon se on tallennettu",
+      "noSavedGeometries" : "Ei tallennettuja geometrioita",
+      "deleteAllSavedGeometries" : "Poista kaikki tallennetut geometriat",
+      "savedGeometries" : "Tallennetut geometriat",
+      "geometryName" : "Geometrian nimi",
+      "noGeometry" : "Ei uusia geometrioita kartalla",
+      "saveNewGeometry" : "Tallenna uusi geometria"
     }
   },
   "gfi": {
@@ -92,7 +92,12 @@
     "list": "List",
     "table" : "Table",
     "featureAmount" : "Kohteita",
-    "getMoreFeatures": "Hae lisää kohteita"
+    "getMoreFeatures": "Hae lisää kohteita",
+    "savedGeometries" : {
+      "title": "Tallennetut geometriat (Poissa käytöstä)",
+      "description": "Omat tallennetut geometriat",
+      "disabled": "Väliaikaisesti poissa käytöstä"
+    }
   },
   "vkm": {
     "locationInfo": "Location info",

@@ -28,7 +28,6 @@ import {
     setWarning,
     setIsDownloadLinkModalOpen,
     setMaximizeGfi,
-    setGeoJsonArray
 } from '../../state/slices/uiSlice';
 
 import {
@@ -236,7 +235,6 @@ const Content = () => {
     };
 
     const handleCloseGFIModal = () => {
-        store.dispatch(setGeoJsonArray({}));
         store.dispatch(resetGFILocations([]));
         store.dispatch(setIsGfiOpen(false));
         store.dispatch(setMinimizeGfi(false));

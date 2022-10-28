@@ -605,7 +605,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu }) => {
                                                     })
                                                 );
                                             });
-                                        store.dispatch(setGeoJsonArray(data));
+                                        store.dispatch(setGeoJsonArray([data]));
                                         setLoading(false);
                                         handleGfiToolsMenu(gfiData.gfi);
                                     }
@@ -774,16 +774,21 @@ const GfiToolsMenu = ({ handleGfiToolsMenu }) => {
                 </AnimatePresence>
 
                 <CircleButtonListItem
+                    bgColor={"gray"}
                     key={'saved'}
                     id={505}
                     icon={faDownload}
-                    title={"Omat geometriat"}
-                    subtitle={"Omat tallennetut geometriat"}
+                    title={strings.gfi.savedGeometries.title}
+                    subtitle={strings.gfi.savedGeometries.disabled}
                     selectedItem={activeSelectionTool}
-                    handleSelectTool={handleSelectTool}
+                    //handleSelectTool={ handleSelectTool} FIX ME WHEN LOGIC HAS BEEN REWORKED
+                    /**
+                     * 
+                     * FIX ME WHEN LOGIC HAS BEEN REWORKED
+                     */
                 />
-                <AnimatePresence>
-                    {activeSelectionTool === 505 && (
+{/*                 <AnimatePresence>
+                    {activeSelectionTool === 505 && null === 0 && (
                         <StyledDrawingToolsContainer
                             transition={{
                                 duration: 0.2,
@@ -864,7 +869,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu }) => {
                             }
                         </StyledDrawingToolsContainer>
                     )}
-                </AnimatePresence>
+                </AnimatePresence> */}
                 {gfiCroppingTypes &&
                     gfiCroppingTypes.map((croppingType) => {
                         return (
