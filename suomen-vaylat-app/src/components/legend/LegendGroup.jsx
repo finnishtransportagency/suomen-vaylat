@@ -74,6 +74,7 @@ const StyledGroupContainer = styled(motion.div)`
 
 const StyledLegend = styled.div`
     padding: 8px 0px 8px 8px;
+    overflow-x: scroll;
 `;
 
 const StyledLegendImage = styled.img``;
