@@ -270,11 +270,18 @@ const StyledTabContent = styled.div`
         border-top: 1px solid #ddd;
         padding-right: 0px !important;
         width: 100%;
+        tr:nth-child(odd) {
+            background-color: #f2f2f2;
+        }
     }
 
     .ka-thead-cell {
         background-color: white;
         width: ${(props) => props.isMobile ? "10em" : "auto"};
+        min-width: 120px;
+        span {
+            color: ${props => props.theme.colors.mainColor1};
+        };
     }
 
     .ka-cell-text {
@@ -289,6 +296,10 @@ const StyledTabContent = styled.div`
     .ka-thead-cell-content, .ka-cell-text {
         overflow: hidden;
         text-overflow: ellipsis;
+    }
+
+    .ka-thead-cell-resize {
+        width: 5px;
     }
 
     .low-priority-table {
@@ -556,7 +567,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
         var columns = hightPriorityColumns && hightPriorityColumns.concat(lowPriorityColumns);
         columns && columns.forEach(column => {
             if (column !== 'UID') {
-                columnsArray.push({ key: column, title: column, colGroup: { style: { minWidth: 120 } }});
+                columnsArray.push({ key: column, title: column, width: 180, colGroup: { style: { minWidth: 120 } }});
             }
         });
 
