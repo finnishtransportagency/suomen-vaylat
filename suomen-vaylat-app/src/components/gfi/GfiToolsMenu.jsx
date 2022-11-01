@@ -661,7 +661,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu }) => {
                                                                 );
                                                             }
                                                         );
-                                                    store.dispatch(setGeoJsonArray(data));
+                                                    store.dispatch(setGeoJsonArray([data]));
                                                     setLoading(false);
                                                     handleGfiToolsMenu(gfiData.gfi);
                                                 }
@@ -781,7 +781,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu }) => {
                     title={strings.gfi.savedGeometries.title}
                     subtitle={strings.gfi.savedGeometries.disabled}
                     selectedItem={activeSelectionTool}
-                    //handleSelectTool={ handleSelectTool} FIX ME WHEN LOGIC HAS BEEN REWORKED
+                    handleSelectTool={ () => {}} 
                     /**
                      * 
                      * FIX ME WHEN LOGIC HAS BEEN REWORKED

@@ -617,8 +617,6 @@ const Geometries = () => {
         {
             clearPrevious: false,
             layerId: geometry.id,
-            centerTo: true,
-            maxZoomLevel: currentZoomLevel,
             featureStyle: {
                 fill: {
                     color: 'rgba(10, 140, 247, 0.3)',

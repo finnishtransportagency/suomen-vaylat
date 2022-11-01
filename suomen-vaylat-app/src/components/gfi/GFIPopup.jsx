@@ -26,7 +26,6 @@ import GfiTabContent from './GfiTabContent';
 import GfiToolsMenu from './GfiToolsMenu';
 import GfiDownloadMenu from './GfiDownloadMenu';
 import CircleButton from '../circle-button/CircleButton';
-import AddGeometryButton from '../add-geometry-button/AddGeometryButton';
 import SVLoader from '../loader/SvLoader';
 
 import { SortingMode, PagingPosition } from 'ka-table/enums';
@@ -417,6 +416,9 @@ export const GFIPopup = ({ handleGfiDownload }) => {
     const LAYER_ID = 'gfi-result-layer';
     const { store } = useContext(ReactReduxContext);
     const { channel, allLayers, gfiLocations, vkmData, pointInfoImageError, setPointInfoImageError, gfiCroppingArea } = useAppSelector(state => state.rpc);
+    const { geoJsonArray } = useAppSelector(
+        (state) => state.ui
+    );
     const { activeSelectionTool } = useAppSelector((state) => state.ui);
 
     const [selectedTab, setSelectedTab] = useState(0);
@@ -523,6 +525,24 @@ export const GFIPopup = ({ handleGfiDownload }) => {
 
     const handleVKMInfo = () => {
         setIsVKMInfoOpen(!isVKMInfoOpen);
+    };
+
+    const handleAddGeometry = () => {/* FIX ME when multiple geometry selecting is available
+        geoJsonArray.features && geoJsonArray.features.forEach(feature => {
+            channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', [
+                feature.geojson,
+                addFeaturesToMapParams
+            ]);
+        })
+
+        geoJsonArray.geojson &&
+        channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', [
+            geoJsonArray.geojson ,
+            addFeaturesToMapParams
+        ]); */
+        store.dispatch(setMinimizeGfi(true));
+        store.dispatch(setIsSaveViewOpen(true));
+        store.dispatch(setSavedTabIndex(1));
     };
 
     const tablePropsInit = (data) => {
@@ -955,7 +975,17 @@ export const GFIPopup = ({ handleGfiDownload }) => {
                     })}
                 </StyledSwiper>
             </StyledTabContent>
-            <StyledButtonsContainer>
+            <StyledButtonsContainer> 
+                {/* FIX ME when multiple geometry selecting is available
+                    Object.keys(geoJsonArray).length > 0 &&
+                    <>
+                        <CircleButton
+                            text={strings.savedContent.saveGeometry.saveGeometry}
+                            tooltipDirection={'bottom'}
+                            clickAction={handleAddGeometry}
+                        />
+                    </> */
+                }
                 {
                     vkmData &&
                     <CircleButton

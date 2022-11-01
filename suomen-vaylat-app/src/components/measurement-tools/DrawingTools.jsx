@@ -24,7 +24,6 @@ import { toast } from 'react-toastify';
 import { DRAWING_TIP_LOCALSTORAGE } from '../../utils/constants';
 
 import CircleButton from '../circle-button/CircleButton';
-import AddGeometryButton from '../add-geometry-button/AddGeometryButton';
 
 const StyledTools = styled(motion.div)`
     display: flex;
@@ -206,13 +205,12 @@ export const DrawingTools = ({isOpen}) => {
     }
 
     useEffect(() => {
-        /** Kun piirrustukset tyhjennetään ekan kerran ne ei poistu geojsonarraysta, jonka takia "tallenna geometriat" -nappi jää aktiiviseksi
+        /**
+         * FIX ME 
+         * This use effect runs when we clear the geoJsonArray and puts the data back in -> save geometries button becomes active when it should not
          */
         const drawHandler = (data) => {
-            console.log("activeTool : ", activeTool)
             if (data.isFinished && data.isFinished === true && data.geojson.features.length > 0) {
-                console.log("data : ", data);
-
                 activeTool !== strings.tooltips.drawingTools.marker && store.dispatch(addToGeoJsonArray(data));
             }
         };
