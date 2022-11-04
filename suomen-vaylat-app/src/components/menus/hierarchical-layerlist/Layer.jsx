@@ -35,9 +35,6 @@ const StyledLayerName = styled.p`
     margin: 0px;
     font-size: 14px;
     padding-left: 8px;
-    @media ${ props => props.theme.device.mobileL} {
-        font-size: 12px;
-    };
 `;
 
 const StyledSwitchContainer = styled.div`

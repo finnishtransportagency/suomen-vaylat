@@ -384,14 +384,14 @@
   },
   "themelayerlist": {
     "readMore" : "Read more",
-    "readLess" : "Read less",
+    "readLess" : "Show less",
     "0": {
       "title": "Project map",
       "description": "The map shows the agency’s investment projects and the projects at planning stage aimed for implementation."
     },
     "1": {
       "title": "Map showing the condition of the road pavement",
-      "description": "-"
+      "description": "Kartalla esitetään tiet ja sillat, joiden kuntoluokka on erittäin huono, huono, tyydyttävä, hyvä tai erittäin hyvä. Päällysteiden kuntotiedot ovat arvioita 31.12.2021 tilanteessa huomioiden vuoden 2021 päällystyskohteet, tiedot päivitetty 8.9.2021"
     },
     "2": {
       "title": "Map showing bridge restrictions",
@@ -399,7 +399,7 @@
     },
     "3": {
       "title": "Road number map",
-      "description": "-"
+      "description": "Tienumerokartalla esitetään tieosoitejärjestelmän tiet ja tieosat numeroineen, sekä jakopisteiden paikat. Tienumeroita käytetään paikantamisen osoitetietona ja ne näkyvät tienkäyttäjille viitoituksessa. Tienumerointi perustuu tieluokkiin ja tieverkon muodostamiin yhteysväleihin, kun taas tieosanumeroinnilla jaetaan tie lyhyempiin hallittaviin tieosuuksiin. "
     },
     "4": {
       "title": "Map showing the condition of the railway network",
@@ -412,6 +412,21 @@
     "6": {
       "title": "Finnish Railway Network Statement",
       "description": "Verkkoselostuksen karttapalvelussa voi tarkastella rataverkon ominaisuustietoja, kuten sähköistystä ja liikennepaikkojen tietoja. Tiedot perustuvat ratarekisteritietoihin ja ERAan toimitettaviin RINF-tietoihin."
+    },
+    "7": {
+      "title": "Tasoristeyspalvelu",
+      "description": "Väyläviraston tasoristeys.fi-karttapalvelu tukee alueellista liikenneturvallisuuden ja maankäytön suunnittelua. Palvelusta löytyvät valtion rataverkon tasoristeysten rekisteri- ja inventointiedot sekä myös tasoristeysten kuvat. Tiedot saa esiin klikkaamalla tasoristeystä karttapohjalla. Palveluun on lisätty myös ratapihojen, laituripolkujen ja huoltoteiden tasoristeykset sekä omana karttatasonaan sivuraiteiden tasoristeykset. "
+    },
+    "8": {
+      "title": "Tiestötiedot lupapalveluun",
+      "description": "Karttapalvelun avulla johtojen ja kaapeleiden ilmoitusmenettelyn edellyttämiä tieosoitteita ja tiestötietoja voidaan tarkastella sijaintipaikan osalata ennen ilmoituksen jättämistä. Lisäksi palvelussa esitetään muita tiestön perustietoja, jotka auttavat työn suunnittelussa."
+    },
+    "9": {
+      "title": "Maanteiden talvihoitoluokat",
+      "description": "Kartalle esitetään maanteiden talvihoitoluokat. Väylän merkitys, liikennemäärä ja -koostumus määrittelevät teiden hoidon palvelutason. Koska kaikkia teitä ei voida hoitaa kohtuullisin kustannuksin välittömästi, tiet on luokiteltu eri hoitoluokkiin. Lisätietoja",
+      "links": {
+        "0": "https://vayla.fi/kunnossapito/tieverkon-kunnossapito/talvihoito"
+      }
     }
   },
   "metadata": {
