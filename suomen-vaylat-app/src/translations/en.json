@@ -385,6 +385,7 @@
   "themelayerlist": {
     "readMore" : "Read more",
     "readLess" : "Show less",
+    "moreInfo": "Lisätietoja: ",
     "0": {
       "title": "Project map",
       "description": "The map shows the agency’s investment projects and the projects at planning stage aimed for implementation."
