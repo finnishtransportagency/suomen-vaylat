@@ -80,10 +80,10 @@ export const SelectedLayers = ({ selectedLayers, currentZoomLevel }) => {
                     if(selectedLayer.id === layer) {
                         if(backgroundMaps.length > 0) {
                             let layerIsDuplicate = backgroundMaps.find(map => map.id === layer);
-                            !layerIsDuplicate && setBackgroundMaps(backgroundMaps => [...backgroundMaps, selectedLayer]);
+                            !layerIsDuplicate && setBackgroundMaps(prevState => [...prevState, selectedLayer]);
                         }
                         else {
-                            setBackgroundMaps(backgroundMaps => [...backgroundMaps, selectedLayer]);
+                            setBackgroundMaps(prevState => [...prevState, selectedLayer]);
                         }
                     }
                 })
@@ -92,25 +92,33 @@ export const SelectedLayers = ({ selectedLayers, currentZoomLevel }) => {
         else return;
     };
 
+    const updateMapOpacities = () => {
+        selectedLayers.forEach(selectedLayer => {
+            backgroundMaps.forEach(backgroundmap => {
+                if(selectedLayer.id === backgroundmap.id) {
+                    if(selectedLayer.opacity !== backgroundmap.opacity) {
+                        let indexToUpdate = backgroundMaps.findIndex(backgroundmap => selectedLayer.id === backgroundmap.id)
+                        let newBackgroundMaps = [...backgroundMaps];
+                        newBackgroundMaps[indexToUpdate] = selectedLayer;
+                        setBackgroundMaps(newBackgroundMaps);
+                    }
+                }
+            })
+        });
+    };
+
     useEffect(() => {
         backgroundMaps && backgroundMaps.forEach(map => {
             const isSelected = selectedLayers.find(sl => map.id === sl.id);
-            !isSelected && setBackgroundMaps(backgroundMaps => backgroundMaps.filter(b => b.id !== map.id));
+            !isSelected && setBackgroundMaps(prevState => prevState.filter(b => b.id !== map.id));
         });
         getBackgroundMaps(allGroups.find(group => group.id === 1));
+        updateMapOpacities();
     }, [selectedLayers]);
-
 
     const mapLayers = selectedLayers.filter(layer => {
         return !backgroundMaps.find(bm => bm.id === layer.id);
     });
-
-
-/*
-    const backgroundMaps = selectedLayers.filter(layer => {
-        return layer.groups && layer.groups.includes(1);
-        
-    }); */
 
     const sortSelectedLayers = (selectedLayer) => {
         const newSelectedLayers = arrayMoveImmutable(selectedLayers, selectedLayer.oldIndex, selectedLayer.newIndex)
