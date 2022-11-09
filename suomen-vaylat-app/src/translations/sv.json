@@ -59,6 +59,19 @@
       "saveNewView" : "Spara ny vy"
     },
     "saveGeometry" : {
+      "confirmDeleteAll" : "Haluatko varmasti poistaa kaikki tallennetut geometriat?",
+      "saveGeometry" : "Tallenna geometria",
+      "savingGeometry" : "Geometrian tallennus",
+      "saveGeometryDescription1" : "Geometria tallentuu selaimen välimuistiin",
+      "saveGeometryDescription2" : "Tallennettu geometria voidaan aktivoida vain selaimessa johon se on tallennettu",
+      "noSavedGeometries" : "Ei tallennettuja geometrioita",
+      "deleteAllSavedGeometries" : "Poista kaikki tallennetut geometriat",
+      "savedGeometries" : "Tallennetut geometriat",
+      "geometryName" : "Geometrian nimi",
+      "noGeometry" : "Ei uusia geometrioita kartalla",
+      "saveNewGeometry" : "Tallenna uusi geometria"
+    },
+    "saveGeometryDraft" : {
       "confirmDeleteAll" : "Är du säker på att du vill ta bort alla sparade geometrier?",
       "saveGeometry" : "Spara geometri",
       "savingGeometry" : "Geometrilagrings",
@@ -70,7 +83,7 @@
       "geometryName" : "Namnet på geometrin",
       "noGeometry" : "Inga nya geometrier på kartan",
       "saveNewGeometry" : "Spara den nya geometrin"
-    }
+    } 
   },
   "gfi": {
     "title": "Objektuppgifter",
@@ -92,7 +105,12 @@
     "list": "List",
     "table" : "Table",
     "featureAmount" : "Kohteita",
-    "getMoreFeatures": "Hae lisää kohteita"
+    "getMoreFeatures": "Hae lisää kohteita",
+    "savedGeometries" : {
+      "title": "Tallennetut geometriat (Poissa käytöstä)",
+      "description": "Omat tallennetut geometriat",
+      "disabled": "Väliaikaisesti poissa käytöstä"
+    }
   },
   "vkm": {
     "locationInfo": "Location info",

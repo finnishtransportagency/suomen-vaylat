@@ -131,7 +131,7 @@ const MenuBar = () => {
     const closeDrawingTools = () => {
         // remove geometries off the map
         channel && channel.postRequest('DrawTools.StopDrawingRequest', [true]);
-        store.dispatch(setGeoJsonArray({}));
+        store.dispatch(setGeoJsonArray([]));
         // stop the drawing tool
         channel &&
             channel.postRequest('DrawTools.StopDrawingRequest', [activeTool]);

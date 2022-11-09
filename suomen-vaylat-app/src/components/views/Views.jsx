@@ -18,6 +18,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import CircleButton from '../circle-button/CircleButton';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { theme } from '../../theme/theme';
+import { addMarkerRequest, removeMarkerRequest } from '../../state/slices/rpcSlice';
 
 
 const StyledContent = styled.div`
@@ -593,7 +594,7 @@ const Views = () => {
 const Geometries = () => {
     const { store } = useContext(ReactReduxContext);
     const { channel, currentZoomLevel } = useSelector((state) => state.rpc);
-    const { activeGeometries } = useSelector(state => state.ui);
+    const { activeGeometries, drawToolMarkers } = useSelector(state => state.ui);
     const [geometries, setGeometries] = useState([]);
     const [geometryName, setGeometryName] = useState('');
     const { geoJsonArray } = useSelector(
@@ -606,12 +607,16 @@ const Geometries = () => {
     }, []);
 
     const handleActivateGeometry = (geometry) => {
+        // Add markers to the map
+        geometry.markers.forEach(marker => {
+            store.dispatch(addMarkerRequest(marker));
+        });
+
+
         const addFeaturesToMapParams =
         {
             clearPrevious: false,
             layerId: geometry.id,
-            centerTo: true,
-            maxZoomLevel: currentZoomLevel,
             featureStyle: {
                 fill: {
                     color: 'rgba(10, 140, 247, 0.3)',
@@ -639,121 +644,57 @@ const Geometries = () => {
         };
         if(activeGeometries.find(g => g.id === geometry.id)) {
             store.dispatch(removeActiveGeometry(geometry.id));
+            geometry.markers.forEach(marker => {
+                store.dispatch(removeMarkerRequest({markerId: marker.markerId}));
+            })
             channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [null, null, geometry.id]);
             return;
         }
-        const features = {...geometry.data};
-        //tiehaku
-        features.data && features.data.geom &&
-        channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', [
-            features.data.geom,
-            addFeaturesToMapParams
-        ]);
+        const savedGeometries = [...geometry.data];
 
-        features.features && features.features.forEach(feature => {
+        savedGeometries.forEach(geometry => {
+            //tiehaku
+            geometry.data && geometry.data.geom &&
             channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', [
-                feature.geojson,
+                geometry.data.geom,
+                addFeaturesToMapParams
+            ]);
+
+            geometry.features && geometry.features.forEach(feature => {
+                channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', [
+                    feature.geojson,
+                    addFeaturesToMapParams
+                ]);
+            })
+
+            geometry.geojson &&
+            channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', [
+                geometry.geojson ,
                 addFeaturesToMapParams
             ]);
         })
 
-        features.geojson &&
-        channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', [
-            features.geojson ,
-            addFeaturesToMapParams
-        ]);
+
         store.dispatch(addToActiveGeometries(geometry));
     };
 
     const handleSaveGeometry = () => {
         let layerId = uuidv4();
-        geoJsonArray.features && geoJsonArray.features.forEach(feature => {
-            channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', [
-                feature.geojson,
-                {
-                    clearPrevious: true,
-                    layerId: layerId,
-                    centerTo: true,
-                    maxZoomLevel: currentZoomLevel,
-                    featureStyle: {
-                        fill: {
-                            color: 'rgba(10, 140, 247, 0.3)',
-                        },
-                        stroke: {
-                            color: 'rgba(10, 140, 247, 0.3)',
-                            width: 5,
-                            lineDash: 'solid',
-                            lineCap: 'round',
-                            lineJoin: 'round',
-                            area: {
-                                color: 'rgba(100, 255, 95, 0.7)',
-                                width: 8,
-                                lineJoin: 'round',
-                            },
-                        },
-                        image: {
-                            shape: 5,
-                            size: 3,
-                            fill: {
-                                color: 'rgba(100, 255, 95, 0.7)',
-                            },
-                        },
-                    },
-                },
-            ]);
-        })
 
-        geoJsonArray.geojson &&
-        channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', [
-            geoJsonArray.geojson ,
-            {
-                clearPrevious: true,
-                layerId: layerId,
-                centerTo: true,
-                maxZoomLevel: currentZoomLevel,
-                featureStyle: {
-                    fill: {
-                        color: 'rgba(10, 140, 247, 0.3)',
-                    },
-                    stroke: {
-                        color: 'rgba(10, 140, 247, 0.3)',
-                        width: 5,
-                        lineDash: 'solid',
-                        lineCap: 'round',
-                        lineJoin: 'round',
-                        area: {
-                            color: 'rgba(100, 255, 95, 0.7)',
-                            width: 8,
-                            lineJoin: 'round',
-                        },
-                    },
-                    image: {
-                        shape: 5,
-                        size: 3,
-                        fill: {
-                            color: 'rgba(100, 255, 95, 0.7)',
-                        },
-                    },
-                },
-            },
-        ]);
         let newGeometry = {
             id: layerId,
             name: geometryName,
             saveDate: Date.now(),
-            data: {...geoJsonArray}
+            data: [...geoJsonArray],
+            markers: [...drawToolMarkers]
         };
-
-        handleActivateGeometry(newGeometry)
 
         geometries.push(newGeometry);
         window.localStorage.setItem('geometries', JSON.stringify(geometries));
         setGeometries(JSON.parse(window.localStorage.getItem('geometries')));
-        store.dispatch(setGeoJsonArray({}));
+        store.dispatch(setGeoJsonArray([]));
         setGeometryName('');
     };
-
-
 
     const handleRemoveGeometry = (geometry) => {
         let updatedGeometries = geometries.filter((geometryData) => geometryData.id !== geometry.id);
@@ -776,24 +717,25 @@ const Geometries = () => {
         store.dispatch(setWarning(null));
     };
 
+    const itemsToSave = geoJsonArray.length > 0 || drawToolMarkers.length > 0;
+
     return (
         <StyledViewsContainer>
             <StyledSaveNewViewContainer>
                 <StyledSubtitle>{strings.savedContent.saveGeometry.saveNewGeometry}</StyledSubtitle>
-
                 <StyledSaveNewViewWrapper>
                     <StyledViewName
                         id="geometry-name"
                         type="text"
                         value={geometryName}
                         onChange={(e) => setGeometryName(e.target.value)}
-                        placeholder={Object.keys(geoJsonArray).length > 0 ? strings.savedContent.saveGeometry.geometryName : strings.savedContent.saveGeometry.noGeometry}
-                        disabled={!Object.keys(geoJsonArray).length > 0}
+                        placeholder={itemsToSave ? strings.savedContent.saveGeometry.geometryName : strings.savedContent.saveGeometry.noGeometry}
+                        disabled={!itemsToSave}
                     />
                     <CircleButton
                         icon={faPlus}
                         clickAction={() => {
-                            geometryName !== '' && Object.keys(geoJsonArray).length > 0 && handleSaveGeometry();
+                            geometryName !== '' && itemsToSave && handleSaveGeometry();
                         }}
                         disabled={geometryName === ''}
                     />
