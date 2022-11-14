@@ -195,7 +195,7 @@ export const AppInfo = () => {
     return(
         <>
             {isMobile && <StyledHeading>{strings.appInfo.versionInfo.appInfoTitle}</StyledHeading>}
-            <b>{strings.appInfo.headingText}</b>
+            <p> <b>{strings.appInfo.headingText}</b> </p>
             <p>{strings.appInfo.mainText}</p>
         </>
     )
@@ -253,8 +253,8 @@ export const SourcesAndTermsOfUse = () => {
         <div>
             <div>
                 <StyledHeading> {strings.appInfo.dataSources.title}</StyledHeading>
-                <p>{strings.appInfo.dataSources.municipalityImage} <StyledLink href={strings.appInfo.dataSources.municipalityLink}>{strings.appInfo.dataSources.municipalityLink}</StyledLink> </p>
-                <p>{strings.appInfo.dataSources.landSurvey} <StyledLink href={strings.appInfo.dataSources.landSurveyLink}>{strings.appInfo.dataSources.landSurveyLink}</StyledLink> </p>
+                <p>{strings.appInfo.dataSources.municipalityImage} <StyledLink target='_blank' href={strings.appInfo.dataSources.municipalityLink}>{strings.appInfo.dataSources.municipalityLink}</StyledLink> </p>
+                <p>{strings.appInfo.dataSources.landSurvey} <StyledLink target='_blank' href={strings.appInfo.dataSources.landSurveyLink}>{strings.appInfo.dataSources.landSurveyLink}</StyledLink> </p>
                 <p>{strings.appInfo.dataSources.roadmaps}</p>
                 <p>{strings.appInfo.dataSources.syke}</p>
             </div>
@@ -262,7 +262,7 @@ export const SourcesAndTermsOfUse = () => {
                 <StyledHeading>{strings.appInfo.termsOfUse.title}</StyledHeading>
                 <p>{strings.appInfo.termsOfUse.description}</p>
                 <div>
-                    <p>{strings.appInfo.termsOfUse.moreInfo} <StyledLink href={strings.appInfo.termsOfUse.link}>{strings.appInfo.termsOfUse.link}</StyledLink></p>
+                    <p>{strings.appInfo.termsOfUse.moreInfo} <StyledLink target='_blank' href={strings.appInfo.termsOfUse.link}>{strings.appInfo.termsOfUse.link}</StyledLink></p>
                 </div>
             </div>
         </div>

@@ -28,6 +28,7 @@ import GfiDownloadMenu from './GfiDownloadMenu';
 import CircleButton from '../circle-button/CircleButton';
 import AddGeometryButton from '../add-geometry-button/AddGeometryButton';
 import SVLoader from '../loader/SvLoader';
+import { isValidUrl } from '../../utils/validUrlUtil';
 
 import { SortingMode, PagingPosition } from 'ka-table/enums';
 
@@ -593,6 +594,11 @@ export const GFIPopup = ({ handleGfiDownload }) => {
               pageSizes: [10, 50, 100],
               position: PagingPosition.Bottom
             },
+            format: ({value}) => {
+                if(isValidUrl(value)) {
+                    return <a target="_blank" rel="noreferrer" href={value}>{value}</a>
+                }
+            }
         };
         return tablePropsInit;
     }
