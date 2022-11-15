@@ -163,12 +163,17 @@ export const LayerList = ({
     const { tagLayers, tags } = useSelector((state) => state.rpc);
 
     const slicedGroups = groups.slice()
-
+    
     const currentLang = strings.getLanguage();
 
     const sortedGroups = slicedGroups.length > 0 ? slicedGroups.sort(function(a, b) {
         const aName = a.locale[currentLang] && a.locale[currentLang].name ? a.locale[currentLang].name : null;
         const bName = b.locale[currentLang] && b.locale[currentLang].name ? b.locale[currentLang].name : null;
+
+        // b.id 727 is Tierekisteri (Poistuva) and should be the lowest element on the list 
+        if(b.id === 727) {
+            return -1
+        }
         if (aName && bName) {
             return aName.toLowerCase().localeCompare(bName.toLowerCase());
         } else {
