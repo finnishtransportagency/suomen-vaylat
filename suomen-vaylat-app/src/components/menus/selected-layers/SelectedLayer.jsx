@@ -214,6 +214,7 @@ export const SelectedLayer = ({
     const { store } = useContext(ReactReduxContext);
     const [opacity, setOpacity] = useState(layer.opacity);
     const [prevOpacity, setPrevOpacity] = useState(layer.opacity);
+    const [isLayerVisible, setIsLayerVisible] = useState(true);
     const channel = useSelector(state => state.rpc.channel);
 
     const handleLayerRemoveSelectedLayer = (channel, layer) => {
@@ -227,6 +228,7 @@ export const SelectedLayer = ({
     };
 
     const handleLayerOpacityToggle = (channel, layer) => {
+        setIsLayerVisible(!isLayerVisible);
         !opacityZero ? setPrevOpacity(layer.opacity) : setPrevOpacity(100);
         const newOpacity = opacityZero? prevOpacity: 0;
         channel.postRequest('ChangeMapLayerOpacityRequest', [layer.id, newOpacity]);
@@ -307,7 +309,7 @@ export const SelectedLayer = ({
                             onTouchEnd={() => updateLayers(store, channel)}
                         />
                         <StyledToggleOpacityIconWrapper onClick={() => handleLayerOpacityToggle(channel, layer)}>
-                            <FontAwesomeIcon icon={opacityZero? faEyeSlash : faEye} />
+                            <FontAwesomeIcon icon={isLayerVisible? faEye : faEyeSlash} />
                         </StyledToggleOpacityIconWrapper>
                     </StyledBottomContent>
                 </StyledLayerContent>

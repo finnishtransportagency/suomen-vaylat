@@ -1,3 +1,4 @@
+import { layer } from '@fortawesome/fontawesome-svg-core';
 import moment from 'moment';
 import {
     setAllLayers,
@@ -5,7 +6,9 @@ import {
     setSelectedTheme,
     setLastSelectedTheme,
     setSelectedThemeIndex,
-    reArrangeSelectedMapLayers
+    reArrangeSelectedMapLayers,
+    setBackgroundMaps,
+    setMapLayers
 } from '../state/slices/rpcSlice';
 
 import {
@@ -29,7 +32,7 @@ export const updateLayers = (store, channel) => {
         store.dispatch(setAllLayers(data));
     });
     channel && channel.getSelectedLayers(function (data) {
-        const reArrangedSelectedLayers = reArrangeSelectedLayersOrder(data)
+        const reArrangedSelectedLayers = reArrangeSelectedLayersOrder(data, store)
         store.dispatch(setSelectedLayers(reArrangedSelectedLayers));
         reArrangeRPCLayerOrder(store, reArrangedSelectedLayers)
     });
@@ -111,25 +114,21 @@ export const selectGroup = (store, channel, index, theme, lastSelectedTheme, sel
  * @param {Array} selectedLayers
  */
 export const reArrangeRPCLayerOrder = (store, selectedLayers) => {
-    const mapLayers = selectedLayers.filter(layer => {
-        return !(layer.groups && layer.groups.includes(1));
-    });
 
-    const backgroundMaps = selectedLayers.filter(layer => {
-        return layer.groups && layer.groups.includes(1);
-    });
+    const mapLayers = store.getState().rpc.selectedLayersByType.mapLayers;
+    const backgroundMaps = store.getState().rpc.selectedLayersByType.backgroundMaps;
+    let concatted = mapLayers.concat(backgroundMaps);
+    store.dispatch(setSelectedLayers(concatted));
 
-    mapLayers.forEach((layer, idx) => {
-        // Update layer orders to correct
-        const position = selectedLayers.length-idx;
+    mapLayers.forEach((layer, i) => {
+        const position = concatted.length - i;
         store.dispatch(reArrangeSelectedMapLayers({layerId: layer.id, position: position}));
     });
 
-    backgroundMaps.forEach((layer, idx) => {
-        // Update layer orders to correct
-        const position = selectedLayers.length - mapLayers.length -idx;
-        store.dispatch(reArrangeSelectedMapLayers({layerId: layer.id, position: position}));
-    })
+    backgroundMaps.forEach((map, i) => {
+        const position = concatted.length - mapLayers.length -i;
+        store.dispatch(reArrangeSelectedMapLayers({layerId: map.id, position: position}))
+    });
 }
 
 /**
@@ -138,16 +137,45 @@ export const reArrangeRPCLayerOrder = (store, selectedLayers) => {
  * @param {Array} selectedLayers
  * @returns ordered layers
  */
-export const reArrangeSelectedLayersOrder = (selectedLayers) => {
-    const mapLayers = selectedLayers.filter(layer => {
-        return !(layer.groups && layer.groups.includes(1));
-    });
+export const reArrangeSelectedLayersOrder = (selectedLayers, store) => {
 
-    const backgroundMaps = selectedLayers.filter(layer => {
-        return layer.groups && layer.groups.includes(1);
-    });
+    let bgMaps = store.getState().rpc.selectedLayersByType.backgroundMaps;
 
-    return mapLayers.concat(backgroundMaps)
+    const clearUnselectedMaps = () => {
+        bgMaps = bgMaps.filter(map => selectedLayers.find(layer => layer.id === map.id))
+    }
+
+    const getBackgroundMaps = (group) => {
+        if(group?.groups) {
+            group.groups.forEach(group => {
+                getBackgroundMaps(group);
+            });
+        }
+        if(group?.layers) {
+            group.layers.forEach(layer => {
+                selectedLayers.forEach(selectedLayer => {
+                    if(selectedLayer.id === layer) {
+                        if(bgMaps.length > 0) {
+                            let duplicateIndex = bgMaps.findIndex(map => map.id === layer);
+                            if(duplicateIndex === -1) bgMaps = [selectedLayer, ...bgMaps];
+                            else bgMaps[duplicateIndex] = selectedLayer
+                        }
+                        else {
+                            bgMaps = [selectedLayer, ...bgMaps];
+                        }
+                    }
+                })
+            });
+        }
+        else return;
+    };
+    clearUnselectedMaps();
+    getBackgroundMaps(store.getState().rpc.allGroups[12]);
+    let layers = selectedLayers.filter(layer => !bgMaps.find(map => map.id === layer.id));
+    store.dispatch(setBackgroundMaps(bgMaps));
+    store.dispatch(setMapLayers(layers));
+
+    return layers.concat(bgMaps)
 }
 
 /**
