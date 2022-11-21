@@ -64,13 +64,27 @@ const StyledGuideContent = styled.div`
     margin-left 20px;
 `;
 
-const StyledIconButton = styled.button`
+const StyledVaylaButton = styled.div`
     border: none;
     border-radius: 50%;
     background: ${theme.colors.mainColor1};
     height: 40px;
     width: 40px;
     pointer-events: none;
+    margin-left: 10px;
+`;
+
+const StyledIconButton = styled.div`
+    border: none;
+    border-radius: 50%;
+    background: ${theme.colors.mainColor1};
+    height: 40px;
+    width: 40px;
+    pointer-events: none;
+    margin-left: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 `;
 
 const StyledFAIcon = styled(FontAwesomeIcon)`
@@ -93,9 +107,9 @@ export const UserGuideModalContent = () => {
     const modalContent = [
         {
             title:  <StyledTitleWrapper>
-                    <StyledIconButton>
+                    <StyledVaylaButton>
                         <VaylaLogo />
-                    </StyledIconButton>
+                    </StyledVaylaButton>
                         <p>{strings.appGuide.modalContent.upperBar.title}</p>
                     </StyledTitleWrapper>,
             content: <StyledGuideContent>
@@ -214,7 +228,7 @@ export const UserGuideModalContent = () => {
                                         }}
                                         icon={faAngleRight}
                                     />
-                                    <p>{content.title}</p>
+                                    {content.title}
                                 </StyledAccordionButton>
                                 <StyledAccordionBody bsPrefix={'user-guide-body'}>
                                     {content.content}

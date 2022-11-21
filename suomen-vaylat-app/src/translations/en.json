@@ -42,16 +42,35 @@
     "showPageInfo": "Show page info",
     "showUserGuide": "Show user guide"
   },
-  "saveView" : {
-    "saveView" : "Save view",
-    "savingView" : "Saving view",
-    "saveViewDescription1" : "View will be saved to browser local storage.",
-    "saveViewDescription2" : "Saved view can be accessed only by browser it has been saved.",
-    "noSavedViews" : "No saved views",
-    "deleteAllSavedViews" : "Delete all saved views",
-    "savedViews" : "Saved views",
-    "viewName" : "View name",
-    "saveNewView" : "Save new view"
+  "savedContent" : {
+    "savedContent" : "Saved content",
+    "viewTitle" : "Views",
+    "geometryTitle" : "Geometries",
+    "saveView" : {
+      "confirmDeleteAll" : "Are you sure you want to delete all views?",
+      "saveView" : "Save view",
+      "savingView" : "Saving view",
+      "saveViewDescription1" : "View will be saved to browser local storage",
+      "saveViewDescription2" : "Saved view can be accessed only by browser it has been saved",
+      "noSavedViews" : "No saved views",
+      "deleteAllSavedViews" : "Delete all saved views",
+      "savedViews" : "Saved views",
+      "viewName" : "View name",
+      "saveNewView" : "Save new view"
+    },
+    "saveGeometry" : {
+      "confirmDeleteAll" : "Are you sure you want to delete all geometries",
+      "saveGeometry" : "Save geometry",
+      "savingGeometry" : "Saving geometries",
+      "saveGeometryDescription1" : "Geometry will be saved to browser local storage",
+      "saveGeometryDescription2" : "Saved geometry can be accessed only by browser it has been saved",
+      "noSavedGeometries" : "No saved geometries",
+      "deleteAllSavedGeometries" : "Delete all saved geometries",
+      "savedGeometries" : "Saved geometries",
+      "geometryName" : "Geometry name",
+      "noGeometry" : "No new geometries on the map",
+      "saveNewGeometry" : "Save new geometry"
+    }
   },
   "gfi": {
     "title": "Feature Data",
@@ -91,7 +110,9 @@
     "fileSize": "File size",
     "layers": "Layers",
     "failedDownloads": "Failed downloads",
-    "errorOccuredDuringDownloadProcessing" : "Error occured during download processing"
+    "errorOccuredDuringDownloadProcessing" : "Error occured during download processing",
+    "noWebSocketSupport": "Selaimesi ei tue latauksia. Voit kokeilla uudelleen eri selaimella tai päivittämällä nykyisen selaimesi version.",
+    "downloadFailure": "Something went wrong. Please try again."
   },
   "general": {
     "close": "Close",
@@ -175,11 +196,12 @@
     "mainText": "Using the Suomen Väylät map service, you can view road data on the state-owned road network, rail data and waterway data. Data on infrastructure projects of the Finnish Transport Infrastructure Agency, and the data types of Digiroad (National Road and Street Database) are also included as separate datasets. The service contains several thematic maps, such as a project map and the Finnish Railway Network Statement. In Suomen Väylät, you can search for data by name or subject and filter data by theme. The map service also has separate address, road and metadata search functions. Suomen Väylät is supplied as desktop and mobile versions and the service is available in Finnish, Swedish and English.  For instructions, click the ? button (link). Suomen Väylät is currently operated and maintained by Sitowise Oy.",
     "versionInfo": {
       "title": "Version details",
-      "appVersion": "Application version:",
-      "appLastUpdate": "Application last updated:",
+      "appVersion": "Application version: ",
+      "appLastUpdate": "Application last updated: ",
       "appInfoTitle": "Information on the service",
       "appInfoLinksTitle": "Links",
-      "appContactAndFeedback": "Contact information and feedback"
+      "appContactAndFeedback": "Contact information and feedback",
+      "oskari": "Oskari.org version: "
     },
     "contactInfoFeedback": {
       "0": "The application is the responsibility of the Finnish Transport Infrastructure Agency and it is supplied by Sitowise Oy.",
@@ -199,6 +221,10 @@
       "2": {
         "text": "Maps of the Finnish Transport Infrastructure Agency:",
         "link": "https://vayla.fi/vaylista/aineistot/kartat"
+      },
+      "3": {
+        "text": "Aineiston välitysalusta, josta voi ladata avointen aineistojen tiedostoja.",
+        "link": "https://ava.vaylapilvi.fi"
       }
     },
     "dataSourcesAndTermsOfUse" :{
@@ -208,7 +234,10 @@
       "tabTitle": "Data Sources",
       "municipalityImage": "Sijaintitietojen kuntien vaakunoiden kuvat haetaan kuntaliiton sivuilta:",
       "municipalityLink": "https://www.kuntaliitto.fi",
-      "landSurvey": "Taustakarttojen lähteenä on maanmittauslaitos."
+      "landSurvey": "Maanmittauslaitoksen taustakartat sekä kiinteistötunnukset ja -rajat ovat avointa dataa ja käytössä lisenssiehdoilla: ",
+      "landSurveyLink": "https://www.maanmittauslaitos.fi/avoindata-lisenssi-cc40",
+      "roadmaps": "Tiekartat (AT ja GT) ovat CGI Suomi Oy aineistoja käytössä käyttöoikeusluvalla n:o S10325081",
+      "syke": "Asemakaavoitetut aluejaot ovat Suomen Ympäristökeskus (SYKE) avointa dataa. SYKEn avointen aineistojen käyttölupa on Creative Commons Nimeä 4.0"
     },
     "termsOfUse": {
       "title": "Käyttöehdot",
@@ -355,14 +384,15 @@
   },
   "themelayerlist": {
     "readMore" : "Read more",
-    "readLess" : "Read less",
+    "readLess" : "Show less",
+    "moreInfo": "Lisätietoja: ",
     "0": {
       "title": "Project map",
       "description": "The map shows the agency’s investment projects and the projects at planning stage aimed for implementation."
     },
     "1": {
       "title": "Map showing the condition of the road pavement",
-      "description": "-"
+      "description": "Kartalla esitetään tiet ja sillat, joiden kuntoluokka on erittäin huono, huono, tyydyttävä, hyvä tai erittäin hyvä. Päällysteiden kuntotiedot ovat arvioita 31.12.2021 tilanteessa huomioiden vuoden 2021 päällystyskohteet, tiedot päivitetty 8.9.2021"
     },
     "2": {
       "title": "Map showing bridge restrictions",
@@ -370,7 +400,7 @@
     },
     "3": {
       "title": "Road number map",
-      "description": "-"
+      "description": "Tienumerokartalla esitetään tieosoitejärjestelmän tiet ja tieosat numeroineen, sekä jakopisteiden paikat. Tienumeroita käytetään paikantamisen osoitetietona ja ne näkyvät tienkäyttäjille viitoituksessa. Tienumerointi perustuu tieluokkiin ja tieverkon muodostamiin yhteysväleihin, kun taas tieosanumeroinnilla jaetaan tie lyhyempiin hallittaviin tieosuuksiin. "
     },
     "4": {
       "title": "Map showing the condition of the railway network",
@@ -383,6 +413,21 @@
     "6": {
       "title": "Finnish Railway Network Statement",
       "description": "Verkkoselostuksen karttapalvelussa voi tarkastella rataverkon ominaisuustietoja, kuten sähköistystä ja liikennepaikkojen tietoja. Tiedot perustuvat ratarekisteritietoihin ja ERAan toimitettaviin RINF-tietoihin."
+    },
+    "7": {
+      "title": "Tasoristeyspalvelu",
+      "description": "Väyläviraston tasoristeys.fi-karttapalvelu tukee alueellista liikenneturvallisuuden ja maankäytön suunnittelua. Palvelusta löytyvät valtion rataverkon tasoristeysten rekisteri- ja inventointiedot sekä myös tasoristeysten kuvat. Tiedot saa esiin klikkaamalla tasoristeystä karttapohjalla. Palveluun on lisätty myös ratapihojen, laituripolkujen ja huoltoteiden tasoristeykset sekä omana karttatasonaan sivuraiteiden tasoristeykset. "
+    },
+    "8": {
+      "title": "Tiestötiedot lupapalveluun",
+      "description": "Karttapalvelun avulla johtojen ja kaapeleiden ilmoitusmenettelyn edellyttämiä tieosoitteita ja tiestötietoja voidaan tarkastella sijaintipaikan osalata ennen ilmoituksen jättämistä. Lisäksi palvelussa esitetään muita tiestön perustietoja, jotka auttavat työn suunnittelussa."
+    },
+    "9": {
+      "title": "Maanteiden talvihoitoluokat",
+      "description": "Kartalle esitetään maanteiden talvihoitoluokat. Väylän merkitys, liikennemäärä ja -koostumus määrittelevät teiden hoidon palvelutason. Koska kaikkia teitä ei voida hoitaa kohtuullisin kustannuksin välittömästi, tiet on luokiteltu eri hoitoluokkiin. Lisätietoja",
+      "links": {
+        "0": "https://vayla.fi/kunnossapito/tieverkon-kunnossapito/talvihoito"
+      }
     }
   },
   "metadata": {

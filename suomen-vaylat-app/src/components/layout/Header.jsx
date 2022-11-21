@@ -11,7 +11,8 @@ import {
     setIsInfoOpen,
     setIsMainScreen,
     setIsUserGuideOpen,
-    setActiveTool
+    setActiveTool,
+    removeActiveGeometry
 } from '../../state/slices/uiSlice';
 import {
     mapMoveRequest,
@@ -148,9 +149,6 @@ export const Header = () => {
     const lang = useAppSelector((state) => state.language);
     const [ isSubNavOpen, setSubNavOpen ] = useState(false);
     const { store } = useContext(ReactReduxContext);
-    const isInfoOpen = useAppSelector((state) => state.ui.isInfoOpen);
-    const isUserGuideOpen = useAppSelector((state) => state.ui.isUserGuideOpen);
-    const activeTool = useAppSelector(state => state.ui.activeTool);
 
     const {
         channel,
@@ -159,6 +157,8 @@ export const Header = () => {
         selectedThemeIndex,
         startState
     } = useAppSelector((state) => state.rpc);
+
+    const { isInfoOpen, isUserGuideOpen, activeTool, activeGeometries } = useAppSelector(state => state.ui);
 
     const handleSelectGroup = (index, theme) => {
         resetThemeGroupsForMainScreen(store, channel, index, theme, lastSelectedTheme, selectedThemeIndex);
@@ -211,6 +211,12 @@ export const Header = () => {
 
         // Remove all markers
         store.dispatch(removeMarkerRequest());
+
+        store.dispatch(removeActiveGeometry());
+
+        activeGeometries.forEach(geometry => {
+            store.dispatch(removeActiveGeometry(geometry.id));
+        });
     };
 
     return (

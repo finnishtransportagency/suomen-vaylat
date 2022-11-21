@@ -46,7 +46,20 @@ export const updateLayers = (store, channel) => {
  * @param {Number} selectedThemeIndex
  */
 export const selectGroup = (store, channel, index, theme, lastSelectedTheme, selectedThemeIndex) => {
+    const closeAllThemeLayers = (theme) => {
+        // close all theme layers
+        theme?.layers?.forEach(layerId => {
+            channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layerId, false]);
+        });
+        // close all subtheme layers and check if subthemes have subthemes and close their layers recursively
+        if(theme.subthemes) {
+            theme.subthemes.forEach(subtheme => {
+                closeAllThemeLayers(subtheme);
+            });
+        }
+    };
     store.dispatch(setLastSelectedTheme(theme));
+
     if (selectedThemeIndex === null){
         store.dispatch(setSelectedTheme(theme));
         store.dispatch(setSelectedThemeIndex(index));
@@ -60,11 +73,11 @@ export const selectGroup = (store, channel, index, theme, lastSelectedTheme, sel
             });
             updateLayers(store, channel);
         },700);
-    } else if (selectedThemeIndex !== index ){
+    } 
+    
+    else if (selectedThemeIndex !== index ){
         store.dispatch(setSelectedTheme(theme));
-        lastSelectedTheme !== null && lastSelectedTheme.layers.forEach(layerId => {
-            channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layerId, false]);
-        });
+        closeAllThemeLayers(lastSelectedTheme);
         updateLayers(store, channel);
         setTimeout(() => {
             store.dispatch(setSelectedThemeIndex(index));
@@ -75,19 +88,11 @@ export const selectGroup = (store, channel, index, theme, lastSelectedTheme, sel
                 updateLayers(store, channel);
             },700);
         },1000);
-
-    } else {
+    } 
+    
+    else {
         store.dispatch(setSelectedTheme(null));
-        theme.layers && theme.layers.forEach(layerId => {
-            channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layerId, false]);
-        });
-        if (theme.subthemes){
-            for (var i = 0; i < theme.subthemes.length; i++) {
-                theme.subthemes[i].layers.forEach(layerId => {
-                    channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layerId, false]);
-                });
-            }
-        }
+        closeAllThemeLayers(lastSelectedTheme);
         updateLayers(store, channel);
         setTimeout(() => {
             if(!isMobile) {

@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext, useRef } from 'react';
 import { ReactReduxContext } from 'react-redux';
 import { useAppSelector } from '../../state/hooks';
 import { updateLayers } from '../../utils/rpcUtil';
@@ -6,14 +6,100 @@ import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
 import strings from '../../translations';
 import Moment from 'react-moment';
+import { useSelector } from 'react-redux';
+
 import { v4 as uuidv4 } from 'uuid';
 
-import { setIsSaveViewOpen, setWarning } from '../../state/slices/uiSlice';
+import { setIsSaveViewOpen, setWarning, setSavedTabIndex, setGeoJsonArray, addToActiveGeometries, removeActiveGeometry, } from '../../state/slices/uiSlice';
 
 import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import CircleButton from '../circle-button/CircleButton';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { theme } from '../../theme/theme';
+
+
+const StyledContent = styled.div`
+    max-width: 660px;
+    overflow: hidden;
+    flex-direction: column;
+    display: flex;
+    height: 100%;
+`;
+
+const StyledTabs = styled.div`
+    position: relative;
+    display: flex;
+    align-items: center;
+    max-height: 100px;
+    background-color: #F2F2F2;
+    &::before {
+        z-index: 2;
+        position: absolute;
+        content: '';
+        width: ${props => 'calc(100% /' + props.tabsCount + ')'};
+        height: 100%;
+        background-color: ${props => props.theme.colors.mainWhite};
+        bottom: 0px;
+        left: ${props => props.tabIndex * (100 / (props.tabsCount - 1)) +'%'};
+        border-radius: 4px 4px 0px 0px;
+        transform: translateX(
+            ${props => {
+                return props.tabIndex * -(100 / (props.tabsCount - 1)) + '%';
+            }}
+        );
+        transition: all 0.3s ease-out;
+    };
+    &::after {
+        position: absolute;
+        content: '';
+        width: ${props => 'calc(100% /' + props.tabsCount + ')'};
+        height: 100%;
+        bottom: 0px;
+        left: ${props => props.tabIndex * (100 / (props.tabsCount - 1)) + '%'};
+        border-radius: 4px 4px 0px 0px;
+        transform: translateX(
+            ${props => {
+                return props.tabIndex * -(100 / (props.tabsCount - 1)) + '%';
+            }}
+        );
+        transition: all 0.3s ease-out;
+        box-shadow: 0px -1px 11px rgba(0, 99, 175, 0.3);
+    };
+`;
+
+const StyledTab = styled.div`
+    z-index: 2;
+    user-select: none;
+    width: ${props => 'calc(100% /' + props.tabsCount + ')'};
+    cursor: pointer;
+    color: ${props => props.isSelected ? props.theme.colors[props.color] : "#656565"};
+    text-align: center;
+    transition: color 0.2s ease-out;
+    display: flex;
+    justify-content: center;
+
+    p {
+        font-size: 15px;
+        font-weight: bold;
+        margin: 0;
+        padding: 10px;
+    }
+`;
+
+const StyledSwiper = styled(Swiper)`
+    margin-left: 0;
+    margin-right: 0;
+
+    .swiper-slide {
+        background-color: ${props => props.theme.colors.mainWhite};
+        padding: 16px 16px 16px 16px;
+        overflow-y: auto;
+        height:100%;
+    };
+  transition: box-shadow 0.3s ease-out;
+`;
 
 const StyledViewsContainer = styled.div`
     padding: 24px;
@@ -22,13 +108,6 @@ const StyledViewsContainer = styled.div`
     @media ${(props) => props.theme.device.mobileL} {
         max-height: unset;
     } ;
-`;
-
-const StyledInfoTextContainer = styled.ul`
-    li {
-        font-size: 14px;
-        color: ${(props) => props.theme.colors.mainColor1};
-    }
 `;
 
 const StyledSavedViews = styled.div`
@@ -64,7 +143,9 @@ const StyledDeleteAllSavedViews = styled.div`
     }
 `;
 
-const StyledSaveNewViewContainer = styled.div``;
+const StyledSaveNewViewContainer = styled.div`
+    margin-bottom: 20px;
+`;
 
 const StyledSubtitle = styled.div`
     display: flex;
@@ -87,7 +168,7 @@ const StyledSavedView = styled.div`
     justify-content: space-between;
     align-items: center;
     cursor: pointer;
-    background-color: ${(props) => props.theme.colors.mainColor1};
+    background-color: ${(props) => props.theme.colors.button};
     border-radius: 4px;
     padding: 8px 0px 8px 0px;
     box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, 0.16);
@@ -190,6 +271,87 @@ const StyledViewName = styled.input`
     }
 `;
 
+export const SavedModalContent = () => {
+
+    const inputEl = useRef(null);
+
+    const { store } = useContext(ReactReduxContext);
+    const { savedTabIndex } = useAppSelector(
+        (state) => state.ui
+    );
+    const tabsContent = [
+        {
+            title: strings.savedContent.viewTitle,
+            titleColor: 'mainColor1',
+            content: <Views/>
+        },
+        {
+            title: strings.savedContent.geometryTitle,
+            titleColor: 'mainColor1',
+            content: <Geometries/>
+        }
+    ];
+
+    useEffect(() => {
+        inputEl.current.swiper.slideTo(savedTabIndex);
+    },[savedTabIndex]);
+
+    return (
+        <>
+            <StyledContent>
+                    <StyledTabs
+                        tabIndex={savedTabIndex}
+                        tabsCount={tabsContent.length}
+                    >
+                        {
+                            tabsContent.map((tab, index) => {
+                                return (
+                                    <StyledTab
+                                        key={'sc_tab_' + tab.title}
+                                        isSelected={index === savedTabIndex}
+                                        color={tab.titleColor}
+                                        onClick={() => {
+                                            store.dispatch(setSavedTabIndex(index));
+                                        }}
+                                        tabsCount={tabsContent.length}
+                                    >
+                                        <p>{tab.title}</p>
+
+                                    </StyledTab>
+                                )
+                            })
+                        }
+                    </StyledTabs>
+                    <StyledSwiper
+                        ref={inputEl}
+                        id={'app-info-swiper'}
+                        tabIndex={savedTabIndex}
+                        onSlideChange={e => {
+                            store.dispatch(setSavedTabIndex(e.activeIndex));
+                        }}
+                        allowTouchMove={false} // Disable swiping
+                        speed={300}
+                    >
+                        {
+                            tabsContent.map((tab, index) => {
+                                return (
+                                    <SwiperSlide
+                                        id={'sc_tab_content_' + index}
+                                        key={'sc_tab_content_' + index}
+                                    >
+                                        {tab.content}
+                                    </SwiperSlide>
+                                )
+                            })
+                        }
+                    </StyledSwiper>
+            </StyledContent>
+        </>
+    );
+};
+
+
+
 const Views = () => {
     const { store } = useContext(ReactReduxContext);
     const [views, setViews] = useState([]);
@@ -213,7 +375,7 @@ const Views = () => {
                     x: center.centerX && center.centerX,
                     y: center.centerY && center.centerY,
                     layers: selectedLayers,
-                    language: strings.getLanguage(),
+                    language: strings.getLanguage()
                 },
             };
 
@@ -263,7 +425,6 @@ const Views = () => {
                 layer.opacity,
             ]);
         });
-
         updateLayers(store, channel);
 
         store.dispatch(setIsSaveViewOpen(false));
@@ -283,12 +444,26 @@ const Views = () => {
 
     return (
         <StyledViewsContainer>
-            <StyledSubtitle>{strings.saveView.savingView}:</StyledSubtitle>
-            <StyledInfoTextContainer>
-                <li>{strings.saveView.saveViewDescription1}</li>
-                <li>{strings.saveView.saveViewDescription2}</li>
-            </StyledInfoTextContainer>
-            <StyledSubtitle>{strings.saveView.savedViews}:</StyledSubtitle>
+            <StyledSaveNewViewContainer>
+                <StyledSubtitle>{strings.savedContent.saveView.saveNewView}</StyledSubtitle>
+                <StyledSaveNewViewWrapper>
+                    <StyledViewName
+                        id="view-name"
+                        type="text"
+                        value={viewName}
+                        onChange={(e) => setViewName(e.target.value)}
+                        placeholder={strings.savedContent.saveView.viewName}
+                    />
+                    <CircleButton
+                        icon={faPlus}
+                        clickAction={() => {
+                            viewName !== '' && handleSaveView();
+                        }}
+                        disabled={viewName === ''}
+                    />
+                </StyledSaveNewViewWrapper>
+            </StyledSaveNewViewContainer>
+            <StyledSubtitle>{strings.savedContent.saveView.savedViews}:</StyledSubtitle>
             <StyledSavedViews>
                 <AnimatePresence>
                     {views.length > 0 ? (
@@ -317,6 +492,7 @@ const Views = () => {
                                         onClick={(e) => {
                                             e.preventDefault();
                                             handleActivateView(view);
+
                                         }}
                                     >
                                         <StyledLeftContent>
@@ -379,7 +555,7 @@ const Views = () => {
                                 height: 0,
                             }}
                         >
-                            {strings.saveView.noSavedViews}
+                            {strings.savedContent.saveView.noSavedViews}
                         </StyledNoSavedViews>
                     )}
                 </AnimatePresence>
@@ -388,7 +564,7 @@ const Views = () => {
                         views.length > 0 &&
                         store.dispatch(
                             setWarning({
-                                title: 'Haluatko varmasti poistaa kaikki tallennetut näkymät?',
+                                title: strings.savedContent.saveView.confirmDeleteAll,
                                 subtitle: null,
                                 cancel: {
                                     text: strings.general.cancel,
@@ -407,30 +583,347 @@ const Views = () => {
                     }
                     disabled={views.length === 0}
                 >
-                    <p>{strings.saveView.deleteAllSavedViews}</p>
+                    <p>{strings.savedContent.saveView.deleteAllSavedViews}</p>
                 </StyledDeleteAllSavedViews>
             </StyledSavedViews>
-            <StyledSaveNewViewContainer>
-                <StyledSubtitle>{strings.saveView.saveNewView}</StyledSubtitle>
-                <StyledSaveNewViewWrapper>
-                    <StyledViewName
-                        id="view-name"
-                        type="text"
-                        value={viewName}
-                        onChange={(e) => setViewName(e.target.value)}
-                        placeholder={strings.saveView.viewName}
-                    />
-                    <CircleButton
-                        icon={faPlus}
-                        clickAction={() => {
-                            viewName !== '' && handleSaveView();
-                        }}
-                        disabled={viewName === ''}
-                    />
-                </StyledSaveNewViewWrapper>
-            </StyledSaveNewViewContainer>
         </StyledViewsContainer>
     );
 };
 
-export default Views;
+const Geometries = () => {
+    const { store } = useContext(ReactReduxContext);
+    const { channel, currentZoomLevel } = useSelector((state) => state.rpc);
+    const { activeGeometries } = useSelector(state => state.ui);
+    const [geometries, setGeometries] = useState([]);
+    const [geometryName, setGeometryName] = useState('');
+    const { geoJsonArray } = useSelector(
+        (state) => state.ui
+    );
+
+    useEffect(() => {
+        window.localStorage.getItem('geometries') !== null &&
+        setGeometries(JSON.parse(window.localStorage.getItem('geometries')));
+    }, []);
+
+    const handleActivateGeometry = (geometry) => {
+        const addFeaturesToMapParams =
+        {
+            clearPrevious: false,
+            layerId: geometry.id,
+            centerTo: true,
+            maxZoomLevel: currentZoomLevel,
+            featureStyle: {
+                fill: {
+                    color: 'rgba(10, 140, 247, 0.3)',
+                },
+                stroke: {
+                    color: 'rgba(10, 140, 247, 0.3)',
+                    width: 5,
+                    lineDash: 'solid',
+                    lineCap: 'round',
+                    lineJoin: 'round',
+                    area: {
+                        color: 'rgba(100, 255, 95, 0.7)',
+                        width: 8,
+                        lineJoin: 'round',
+                    },
+                },
+                image: {
+                    shape: 5,
+                    size: 3,
+                    fill: {
+                        color: 'rgba(100, 255, 95, 0.7)',
+                    },
+                },
+            },
+        };
+        if(activeGeometries.find(g => g.id === geometry.id)) {
+            store.dispatch(removeActiveGeometry(geometry.id));
+            channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [null, null, geometry.id]);
+            return;
+        }
+        const features = {...geometry.data};
+        //tiehaku
+        features.data && features.data.geom &&
+        channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', [
+            features.data.geom,
+            addFeaturesToMapParams
+        ]);
+
+        features.features && features.features.forEach(feature => {
+            channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', [
+                feature.geojson,
+                addFeaturesToMapParams
+            ]);
+        })
+
+        features.geojson &&
+        channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', [
+            features.geojson ,
+            addFeaturesToMapParams
+        ]);
+        store.dispatch(addToActiveGeometries(geometry));
+    };
+
+    const handleSaveGeometry = () => {
+        let layerId = uuidv4();
+        geoJsonArray.features && geoJsonArray.features.forEach(feature => {
+            channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', [
+                feature.geojson,
+                {
+                    clearPrevious: true,
+                    layerId: layerId,
+                    centerTo: true,
+                    maxZoomLevel: currentZoomLevel,
+                    featureStyle: {
+                        fill: {
+                            color: 'rgba(10, 140, 247, 0.3)',
+                        },
+                        stroke: {
+                            color: 'rgba(10, 140, 247, 0.3)',
+                            width: 5,
+                            lineDash: 'solid',
+                            lineCap: 'round',
+                            lineJoin: 'round',
+                            area: {
+                                color: 'rgba(100, 255, 95, 0.7)',
+                                width: 8,
+                                lineJoin: 'round',
+                            },
+                        },
+                        image: {
+                            shape: 5,
+                            size: 3,
+                            fill: {
+                                color: 'rgba(100, 255, 95, 0.7)',
+                            },
+                        },
+                    },
+                },
+            ]);
+        })
+
+        geoJsonArray.geojson &&
+        channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', [
+            geoJsonArray.geojson ,
+            {
+                clearPrevious: true,
+                layerId: layerId,
+                centerTo: true,
+                maxZoomLevel: currentZoomLevel,
+                featureStyle: {
+                    fill: {
+                        color: 'rgba(10, 140, 247, 0.3)',
+                    },
+                    stroke: {
+                        color: 'rgba(10, 140, 247, 0.3)',
+                        width: 5,
+                        lineDash: 'solid',
+                        lineCap: 'round',
+                        lineJoin: 'round',
+                        area: {
+                            color: 'rgba(100, 255, 95, 0.7)',
+                            width: 8,
+                            lineJoin: 'round',
+                        },
+                    },
+                    image: {
+                        shape: 5,
+                        size: 3,
+                        fill: {
+                            color: 'rgba(100, 255, 95, 0.7)',
+                        },
+                    },
+                },
+            },
+        ]);
+        let newGeometry = {
+            id: layerId,
+            name: geometryName,
+            saveDate: Date.now(),
+            data: {...geoJsonArray}
+        };
+
+        handleActivateGeometry(newGeometry)
+
+        geometries.push(newGeometry);
+        window.localStorage.setItem('geometries', JSON.stringify(geometries));
+        setGeometries(JSON.parse(window.localStorage.getItem('geometries')));
+        store.dispatch(setGeoJsonArray({}));
+        setGeometryName('');
+    };
+
+
+
+    const handleRemoveGeometry = (geometry) => {
+        let updatedGeometries = geometries.filter((geometryData) => geometryData.id !== geometry.id);
+        window.localStorage.setItem('geometries', JSON.stringify(updatedGeometries));
+        setGeometries(JSON.parse(window.localStorage.getItem('geometries')));
+        if(activeGeometries.find(g => g.id === geometry.id)) {
+            store.dispatch(removeActiveGeometry(geometry.id));
+            channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [null, null, geometry.id]);
+            return;
+        };
+    };
+
+    const handleDeleteAllGeometries = () => {
+        activeGeometries.forEach(geometry => {
+            store.dispatch(removeActiveGeometry(geometry.id));
+            channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [null, null, geometry.id]);
+        });
+        window.localStorage.setItem('geometries', JSON.stringify([]));
+        setGeometries(JSON.parse(window.localStorage.getItem('geometries')));
+        store.dispatch(setWarning(null));
+    };
+
+    return (
+        <StyledViewsContainer>
+            <StyledSaveNewViewContainer>
+                <StyledSubtitle>{strings.savedContent.saveGeometry.saveNewGeometry}</StyledSubtitle>
+
+                <StyledSaveNewViewWrapper>
+                    <StyledViewName
+                        id="geometry-name"
+                        type="text"
+                        value={geometryName}
+                        onChange={(e) => setGeometryName(e.target.value)}
+                        placeholder={Object.keys(geoJsonArray).length > 0 ? strings.savedContent.saveGeometry.geometryName : strings.savedContent.saveGeometry.noGeometry}
+                        disabled={!Object.keys(geoJsonArray).length > 0}
+                    />
+                    <CircleButton
+                        icon={faPlus}
+                        clickAction={() => {
+                            geometryName !== '' && Object.keys(geoJsonArray).length > 0 && handleSaveGeometry();
+                        }}
+                        disabled={geometryName === ''}
+                    />
+                </StyledSaveNewViewWrapper>
+            </StyledSaveNewViewContainer>
+            <StyledSubtitle>{strings.savedContent.saveGeometry.savedGeometries}:</StyledSubtitle>
+            <StyledSavedViews>
+                <AnimatePresence>
+                    {geometries.length > 0 ? (
+                        geometries.map((geometry) => {
+                            return (
+                                <StyledSavedViewContainer
+                                    key={geometry.id}
+                                    transition={{
+                                        duration: 0.2,
+                                        type: 'tween',
+                                    }}
+                                    initial={{
+                                        opacity: 0,
+                                        height: 0,
+                                    }}
+                                    animate={{
+                                        opacity: 1,
+                                        height: 'auto',
+                                    }}
+                                    exit={{
+                                        opacity: 0,
+                                        height: 0,
+                                    }}
+                                >
+                                    <StyledSavedView
+                                        style={{backgroundColor: activeGeometries.find(g => g.id === geometry.id) ? theme.colors.buttonActive : theme.colors.button}}
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            handleActivateGeometry(geometry);
+                                        }}
+                                    >
+                                        <StyledLeftContent>
+                                            <StyleSavedViewHeaderIcon>
+                                                {
+                                                    <p>
+                                                        {geometry.name
+                                                            .charAt(0)
+                                                            .toUpperCase()}
+                                                    </p>
+                                                }
+                                            </StyleSavedViewHeaderIcon>
+                                            <StyledSavedViewTitleContent>
+                                                <StyledSavedViewName>
+                                                    {geometry.name}
+                                                </StyledSavedViewName>
+                                                <StyledSavedViewDescription>
+                                                    {
+                                                        <Moment
+                                                            format="DD.MM.YYYY"
+                                                            tz="Europe/Helsinki"
+                                                        >
+                                                            {geometry.saveDate}
+                                                        </Moment>
+                                                    }
+                                                </StyledSavedViewDescription>
+                                            </StyledSavedViewTitleContent>
+                                        </StyledLeftContent>
+                                        <StyledRightContent>
+                                        </StyledRightContent>
+                                    </StyledSavedView>
+                                    <StyledRemoveSavedView>
+                                        <FontAwesomeIcon
+                                            icon={faTrash}
+                                            onClick={() =>
+                                                handleRemoveGeometry(geometry)
+                                            }
+                                        />
+                                    </StyledRemoveSavedView>
+                                </StyledSavedViewContainer>
+                            );
+                        })
+                    ) : (
+                        <StyledNoSavedViews
+                            key="no-saved-views"
+                            transition={{
+                                duration: 0.3,
+                                type: 'tween',
+                            }}
+                            initial={{
+                                opacity: 0,
+                                height: 0,
+                            }}
+                            animate={{
+                                opacity: 1,
+                                height: 'auto',
+                            }}
+                            exit={{
+                                opacity: 0,
+                                height: 0,
+                            }}
+                        >
+                            {strings.savedContent.saveGeometry.noSavedGeometries}
+                        </StyledNoSavedViews>
+                    )}
+                </AnimatePresence>
+                <StyledDeleteAllSavedViews
+                    onClick={() =>
+                        geometries.length > 0 &&
+                        store.dispatch(
+                            setWarning({
+                                title: strings.savedContent.saveGeometry.confirmDeleteAll,
+                                subtitle: null,
+                                cancel: {
+                                    text: strings.general.cancel,
+                                    action: () =>
+                                        store.dispatch(setWarning(null)),
+                                },
+                                confirm: {
+                                    text: strings.general.continue,
+                                    action: () => {
+                                        handleDeleteAllGeometries();
+                                        store.dispatch(setWarning(null));
+                                    },
+                                },
+                            })
+                        )
+                    }
+                    disabled={geometries.length === 0}
+                >
+                    <p>{strings.savedContent.saveGeometry.deleteAllSavedGeometries}</p>
+                </StyledDeleteAllSavedViews>
+            </StyledSavedViews>
+        </StyledViewsContainer>
+    );
+};
+
+export default SavedModalContent;
