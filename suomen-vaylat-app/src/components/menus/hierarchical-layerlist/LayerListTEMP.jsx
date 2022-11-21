@@ -147,7 +147,7 @@ const LayerListTEMP = ({
             {strings.layerlist.layerlistLabels.filterByType}
           </StyledListSubtitle>
           <StyledFiltersContainer>
-            {tags.map((tag, index) => {
+            {tags?.map((tag, index) => {
               return(
                   <Filter isOpen={isOpen} key={'fiter-tag-'+index} filter={tag} />
               );

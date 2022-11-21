@@ -42,16 +42,35 @@
     "showPageInfo": "Visa sidinformation",
     "showUserGuide": "Visa bruksanvisningen"
   },
-  "saveView" : {
-    "saveView" : "Save view",
-    "savingView" : "Saving view",
-    "saveViewDescription1" : "View will be saved to browser local storage.",
-    "saveViewDescription2" : "Saved view can be accessed only by browser it has been saved.",
-    "noSavedViews" : "No saved views",
-    "deleteAllSavedViews" : "Delete all saved views",
-    "savedViews" : "Saved views",
-    "viewName" : "View name",
-    "saveNewView" : "Save new view"
+  "savedContent" : {
+    "savedContent" : "Sparat innehåll",
+    "viewTitle" : "Syn",
+    "geometryTitle" : "Geometrier",
+    "saveView" : {
+      "confirmDeleteAll" : "Är du säker på att du vill ta bort alla sparade vyer?",
+      "saveView" : "Spara vy",
+      "savingView" : "Sparar vy",
+      "saveViewDescription1" : "Visa kommer att sparas i webbläsarens lokala lagring",
+      "saveViewDescription2" : "Sparad vy kan endast nås av webbläsaren som den har sparats",
+      "noSavedViews" : "Inga sparade vyer",
+      "deleteAllSavedViews" : "Ta bort alla sparade vyer",
+      "savedViews" : "Sparade vyer",
+      "viewName" : "Visa namn",
+      "saveNewView" : "Spara ny vy"
+    },
+    "saveGeometry" : {
+      "confirmDeleteAll" : "Är du säker på att du vill ta bort alla sparade geometrier?",
+      "saveGeometry" : "Spara geometri",
+      "savingGeometry" : "Geometrilagrings",
+      "saveGeometryDescription1" : "Geometrin sparas i webbläsarens cache",
+      "saveGeometryDescription2" : "Den sparade geometrin kan endast aktiveras i webbläsaren där den är sparad",
+      "noSavedGeometries" : "Inga sparade geometrier",
+      "deleteAllSavedGeometries" : "Ta bort alla sparade geometrier",
+      "savedGeometries" : "Sparade geometrier",
+      "geometryName" : "Namnet på geometrin",
+      "noGeometry" : "Inga nya geometrier på kartan",
+      "saveNewGeometry" : "Spara den nya geometrin"
+    }
   },
   "gfi": {
     "title": "Objektuppgifter",
@@ -91,7 +110,9 @@
     "fileSize": "File size",
     "layers": "Layers",
     "failedDownloads": "Failed downloads",
-    "errorOccuredDuringDownloadProcessing" : "Error occured during download processing"
+    "errorOccuredDuringDownloadProcessing" : "Error occured during download processing",
+    "noWebSocketSupport": "Selaimesi ei tue latauksia. Voit kokeilla uudelleen eri selaimella tai päivittämällä nykyisen selaimesi version.",
+    "downloadFailure": "Something went wrong. Please try again."
   },
   "general": {
     "close": "Stänga",
@@ -175,11 +196,12 @@
     "mainText": "Via karttjänsten Finlands Trafikleder kan man se vägnätsuppgifter om det statliga vägnätet samt uppgifter om järnvägar och farleder. Det har dessutom skapats egna helheter för Trafikledsverkets infrastrukturprojekt och dataslag för det nationella datasystemet för väg- och gatunätet, Digiroad. Flera temakartor finns redan inbyggda i tjänsten, till exempel Projektkartan och Beskrivning av Finlands bannät. I tjänsten Finlands Trafikleder kan man söka på namn eller ämnesområde och filtrera materialet enligt olika teman. Karttjänsten omfattar dessutom separata sökningar av adresser, vägar och metadata. Finlands Trafikleder kan användas både som desktop- och mobilversion. Tjänsten produceras på finska, svenska och engelska.  Anvisningar om tjänsten hittar man genom att klicka på ? (länk). För tillfället ansvarar Sitowise Oy för driften och underhållet av Finlands Trafikleder.",
     "versionInfo": {
       "title": "Versions information",
-      "appVersion": "Applikationsversion:",
-      "appLastUpdate": "Applikationen uppdaterades senast:",
+      "appVersion": "Applikationsversion: ",
+      "appLastUpdate": "Applikationen uppdaterades senast: ",
       "appInfoTitle": "Information om tjänsten",
       "appInfoLinksTitle": "Länkar",
-      "appContactAndFeedback": "Kontaktuppgifter och respons"
+      "appContactAndFeedback": "Kontaktuppgifter och respons",
+      "oskari": "Oskari.org -version: "
     },
     "contactInfoFeedback": {
       "0": "Trafikledsverket ansvarar för applikationen som levereras av Sitowise Oy.",
@@ -199,6 +221,10 @@
       "2": {
         "text": "Trafikledsverkets kartor:",
         "link": "https://vayla.fi/vaylista/aineistot/kartat"
+      },
+      "3": {
+        "text": "Aineiston välitysalusta, josta voi ladata avointen aineistojen tiedostoja.",
+        "link": "https://ava.vaylapilvi.fi"
       }
     },
     "dataSourcesAndTermsOfUse" :{
@@ -208,7 +234,10 @@
       "tabTitle": "Datakällor",
       "municipalityImage": "Sijaintitietojen kuntien vaakunoiden kuvat haetaan kuntaliiton sivuilta:",
       "municipalityLink": "https://www.kuntaliitto.fi",
-      "landSurvey": "Taustakarttojen lähteenä on maanmittauslaitos."
+      "landSurvey": "Maanmittauslaitoksen taustakartat sekä kiinteistötunnukset ja -rajat ovat avointa dataa ja käytössä lisenssiehdoilla: ",
+      "landSurveyLink": "https://www.maanmittauslaitos.fi/avoindata-lisenssi-cc40",
+      "roadmaps": "Tiekartat (AT ja GT) ovat CGI Suomi Oy aineistoja käytössä käyttöoikeusluvalla n:o S10325081",
+      "syke": "Asemakaavoitetut aluejaot ovat Suomen Ympäristökeskus (SYKE) avointa dataa. SYKEn avointen aineistojen käyttölupa on Creative Commons Nimeä 4.0"
     },
     "termsOfUse": {
       "title": "Käyttöehdot",
@@ -356,13 +385,14 @@
   "themelayerlist": {
     "readMore" : "Läs mer",
     "readLess" : "Mindre",
+    "moreInfo": "Lisätietoja: ",
     "0": {
       "title": "Projektkarta",
       "description": "På kartan syns Trafikledsverkets investeringsprojekt och projektplaneringsobjekt som är tänkta att genomföras."
     },
     "1": {
       "title": "Karta över beläggningarnas skick",
-      "description": "-"
+      "description": "Kartalla esitetään tiet ja sillat, joiden kuntoluokka on erittäin huono, huono, tyydyttävä, hyvä tai erittäin hyvä. Päällysteiden kuntotiedot ovat arvioita 31.12.2021 tilanteessa huomioiden vuoden 2021 päällystyskohteet, tiedot päivitetty 8.9.2021"
     },
     "2": {
       "title": "Karta över brobegränsningar",
@@ -370,7 +400,7 @@
     },
     "3": {
       "title": "Karta med vägnummer",
-      "description": "-"
+      "description": "Tienumerokartalla esitetään tieosoitejärjestelmän tiet ja tieosat numeroineen, sekä jakopisteiden paikat. Tienumeroita käytetään paikantamisen osoitetietona ja ne näkyvät tienkäyttäjille viitoituksessa. Tienumerointi perustuu tieluokkiin ja tieverkon muodostamiin yhteysväleihin, kun taas tieosanumeroinnilla jaetaan tie lyhyempiin hallittaviin tieosuuksiin. "
     },
     "4": {
       "title": "Karta över bannätets skick",
@@ -383,6 +413,21 @@
     "6": {
       "title": "Beskrivning av bannätet",
       "description": "Verkkoselostuksen karttapalvelussa voi tarkastella rataverkon ominaisuustietoja, kuten sähköistystä ja liikennepaikkojen tietoja. Tiedot perustuvat ratarekisteritietoihin ja ERAan toimitettaviin RINF-tietoihin."
+    },
+    "7": {
+      "title": "Tasoristeyspalvelu",
+      "description": "Väyläviraston tasoristeys.fi-karttapalvelu tukee alueellista liikenneturvallisuuden ja maankäytön suunnittelua. Palvelusta löytyvät valtion rataverkon tasoristeysten rekisteri- ja inventointiedot sekä myös tasoristeysten kuvat. Tiedot saa esiin klikkaamalla tasoristeystä karttapohjalla. Palveluun on lisätty myös ratapihojen, laituripolkujen ja huoltoteiden tasoristeykset sekä omana karttatasonaan sivuraiteiden tasoristeykset. "
+    },
+    "8": {
+      "title": "Tiestötiedot lupapalveluun",
+      "description": "Karttapalvelun avulla johtojen ja kaapeleiden ilmoitusmenettelyn edellyttämiä tieosoitteita ja tiestötietoja voidaan tarkastella sijaintipaikan osalata ennen ilmoituksen jättämistä. Lisäksi palvelussa esitetään muita tiestön perustietoja, jotka auttavat työn suunnittelussa."
+    },
+    "9": {
+      "title": "Maanteiden talvihoitoluokat",
+      "description": "Kartalle esitetään maanteiden talvihoitoluokat. Väylän merkitys, liikennemäärä ja -koostumus määrittelevät teiden hoidon palvelutason. Koska kaikkia teitä ei voida hoitaa kohtuullisin kustannuksin välittömästi, tiet on luokiteltu eri hoitoluokkiin. Lisätietoja",
+      "links": {
+        "0": "https://vayla.fi/kunnossapito/tieverkon-kunnossapito/talvihoito"
+      }
     }
   },
   "metadata": {

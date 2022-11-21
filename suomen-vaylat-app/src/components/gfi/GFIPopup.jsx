@@ -18,7 +18,7 @@ import { useAppSelector } from '../../state/hooks';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { FreeMode, Controller } from 'swiper';
 import { isMobile } from '../../theme/theme';
-import { setActiveSelectionTool, setMinimizeGfi } from '../../state/slices/uiSlice';
+import { setIsSaveViewOpen, setMinimizeGfi, setSavedTabIndex, setActiveSelectionTool } from '../../state/slices/uiSlice';
 import { resetGFILocations, addFeaturesToGFILocations } from '../../state/slices/rpcSlice';
 
 import { FormattedGFI } from './FormattedGFI';
@@ -26,6 +26,7 @@ import GfiTabContent from './GfiTabContent';
 import GfiToolsMenu from './GfiToolsMenu';
 import GfiDownloadMenu from './GfiDownloadMenu';
 import CircleButton from '../circle-button/CircleButton';
+import AddGeometryButton from '../add-geometry-button/AddGeometryButton';
 import SVLoader from '../loader/SvLoader';
 
 import { SortingMode, PagingPosition } from 'ka-table/enums';
@@ -33,6 +34,7 @@ import { SortingMode, PagingPosition } from 'ka-table/enums';
 // Max amount of features that wont trigger react-data-table-component
 const GFI_MAX_LENGTH = 5;
 const KUNTA_IMAGE_URL = 'https://www.kuntaliitto.fi/sites/default/files/styles/narrow_320_x_600_/public/media/profile_pictures/';
+const SAVED_GEOMETRY_LAYER_ID = 'saved-geometry-layer';
 
 const StyledGfiContainer = styled.div`
     position: relative;
@@ -268,11 +270,18 @@ const StyledTabContent = styled.div`
         border-top: 1px solid #ddd;
         padding-right: 0px !important;
         width: 100%;
+        tr:nth-child(odd) {
+            background-color: #f2f2f2;
+        }
     }
 
     .ka-thead-cell {
         background-color: white;
         width: ${(props) => props.isMobile ? "10em" : "auto"};
+        min-width: 120px;
+        span {
+            color: ${props => props.theme.colors.mainColor1};
+        };
     }
 
     .ka-cell-text {
@@ -287,6 +296,10 @@ const StyledTabContent = styled.div`
     .ka-thead-cell-content, .ka-cell-text {
         overflow: hidden;
         text-overflow: ellipsis;
+    }
+
+    .ka-thead-cell-resize {
+        width: 5px;
     }
 
     .low-priority-table {
@@ -353,6 +366,36 @@ const StyledGfiBackdrop = styled(motion.div)`
     cursor: pointer;
 `;
 
+const addFeaturesToMapParams =
+    {
+        clearPrevious: true,
+        layerId: SAVED_GEOMETRY_LAYER_ID,
+        centerTo: true,
+        featureStyle: {
+            fill: {
+                color: 'rgba(10, 140, 247, 0.3)',
+            },
+            stroke: {
+                color: 'rgba(10, 140, 247, 0.3)',
+                width: 5,
+                lineDash: 'solid',
+                lineCap: 'round',
+                lineJoin: 'round',
+                area: {
+                    color: 'rgba(100, 255, 95, 0.7)',
+                    width: 8,
+                    lineJoin: 'round',
+                },
+            },
+            image: {
+                shape: 5,
+                size: 3,
+                fill: {
+                    color: 'rgba(100, 255, 95, 0.7)',
+                },
+            },
+        },
+    };
 const StyledLoadingOverlay = styled(motion.div)`
     z-index: 2;
     position: fixed;
@@ -385,6 +428,9 @@ export const GFIPopup = ({ handleGfiDownload }) => {
     const LAYER_ID = 'gfi-result-layer';
     const { store } = useContext(ReactReduxContext);
     const { channel, allLayers, gfiLocations, vkmData, pointInfoImageError, setPointInfoImageError, gfiCroppingArea } = useAppSelector(state => state.rpc);
+    const { geoJsonArray } = useAppSelector(
+        (state) => state.ui
+    );
     const { activeSelectionTool } = useAppSelector((state) => state.ui);
 
     const [selectedTab, setSelectedTab] = useState(0);
@@ -442,6 +488,9 @@ export const GFIPopup = ({ handleGfiDownload }) => {
             setGeoJsonToShow(tabsContent[selectedTab].props.data);
     }, [selectedTab, tabsContent]);
 
+    useEffect(() => {
+        isGfiDownloadsOpen && setIsGfiDownloadsOpen(false);
+    }, [gfiLocations]);
 
     const handleOverlayGeometry = (geoJson) => {
         channel &&
@@ -490,6 +539,24 @@ export const GFIPopup = ({ handleGfiDownload }) => {
         setIsVKMInfoOpen(!isVKMInfoOpen);
     };
 
+    const handleAddGeometry = () => {
+        geoJsonArray.features && geoJsonArray.features.forEach(feature => {
+            channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', [
+                feature.geojson,
+                addFeaturesToMapParams
+            ]);
+        })
+
+        geoJsonArray.geojson &&
+        channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', [
+            geoJsonArray.geojson ,
+            addFeaturesToMapParams
+        ]);
+        store.dispatch(setMinimizeGfi(true));
+        store.dispatch(setIsSaveViewOpen(true));
+        store.dispatch(setSavedTabIndex(1));
+    };
+
     const tablePropsInit = (data) => {
         const properties = data && data.content && data.content.features && data.content.features[0].properties;
 
@@ -500,7 +567,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
         var columns = hightPriorityColumns && hightPriorityColumns.concat(lowPriorityColumns);
         columns && columns.forEach(column => {
             if (column !== 'UID') {
-                columnsArray.push({ key: column, title: column, colGroup: { style: { minWidth: 120 } }});
+                columnsArray.push({ key: column, title: column, width: 180, colGroup: { style: { minWidth: 120 } }});
             }
         });
 
@@ -921,6 +988,16 @@ export const GFIPopup = ({ handleGfiDownload }) => {
                 </StyledSwiper>
             </StyledTabContent>
             <StyledButtonsContainer>
+                {
+                    Object.keys(geoJsonArray).length > 0 &&
+                    <>
+                        <AddGeometryButton
+                            text={strings.savedContent.saveGeometry.saveGeometry}
+                            tooltipDirection={'bottom'}
+                            clickAction={handleAddGeometry}
+                        />
+                    </>
+                }
                 {
                     vkmData &&
                     <CircleButton

@@ -6,6 +6,7 @@ import strings from '../../translations';
 import { isMobile } from '../../theme/theme';
 import { useSelector } from 'react-redux';
 import { ReactReduxContext } from 'react-redux';
+import Moment from 'react-moment';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -13,6 +14,7 @@ import {
     faPencilRuler,
     faBorderAll,
     faTimes,
+    faDownload,
     faInfoCircle
 } from '@fortawesome/free-solid-svg-icons';
 
@@ -33,10 +35,12 @@ import {
     setVKMData
 } from '../../state/slices/rpcSlice';
 
-import { setHasToastBeenShown, setMinimizeGfi, setSelectedGfiTool, setActiveSelectionTool } from '../../state/slices/uiSlice';
+import { setMinimizeGfi, setSelectedGfiTool, setGeoJsonArray, setHasToastBeenShown, setActiveSelectionTool } from '../../state/slices/uiSlice';
 
 import SVLoader from '../loader/SvLoader';
 import { DRAWING_TIP_LOCALSTORAGE } from '../../utils/constants';
+
+const vectorLayerId = 'SEARCH_VECTORLAYER';
 
 const StyledGfiToolContainer = styled.div`
     position: relative;
@@ -74,15 +78,6 @@ const StyledLoadingOverlay = styled(motion.div)`
     backdrop-filter: blur(4px);
 `;
 
-const StyledSubtitle = styled.div`
-    display: flex;
-    justify-content: flex-start;
-    color: ${(props) => props.theme.colors.mainColor1};
-    padding: 0px 0px 10px 5px;
-    font-size: 16px;
-    font-weight: bold;
-`;
-
 const StyledCloseButton = styled.div`
     z-index: 1;
     position: sticky;
@@ -113,6 +108,88 @@ const StyledLoaderWrapper = styled.div`
     }
 `;
 
+const StyledSubtitle = styled.div`
+    display: flex;
+    justify-content: flex-start;
+    color: ${(props) => props.theme.colors.mainColor1};
+    padding: 10px 0px 10px 5px;
+    font-size: 16px;
+    font-weight: bold;
+`;
+
+const StyledSavedViewContainer = styled(motion.div)`
+    display: flex;
+`;
+
+const StyledSavedView = styled.div`
+    width: 100%;
+    z-index: 1;
+    min-height: 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    background-color: ${(props) => props.theme.colors.mainColor1};
+    border-radius: 4px;
+    padding: 8px 0px 8px 0px;
+    box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, 0.16);
+    @-moz-document url-prefix() {
+        position: initial;
+    } ;
+`;
+
+const StyledSavedViewName = styled.p`
+    user-select: none;
+    max-width: 240px;
+    color: ${(props) => props.theme.colors.mainWhite};
+    margin: 0;
+    padding: 0px;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.1s ease-in;
+`;
+
+const StyledSavedViewDescription = styled.p`
+    margin: 0;
+    padding: 0px;
+    font-size: 12px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.8);
+`;
+
+const StyledLeftContent = styled.div`
+    display: flex;
+    align-items: center;
+`;
+
+const StyledRightContent = styled.div`
+    display: flex;
+    align-items: center;
+`;
+
+const StyleSavedViewHeaderIcon = styled.div`
+    width: 48px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    svg {
+        font-size: 20px;
+        color: ${(props) => props.theme.colors.mainWhite};
+    }
+    p {
+        margin: 0;
+        font-weight: bold;
+        font-size: 22px;
+        color: ${(props) => props.theme.colors.mainWhite};
+    }
+`;
+
+const StyledSavedViewTitleContent = styled.div`
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+`;
 const StyledToastIcon = styled(FontAwesomeIcon)`
     color: ${theme.colors.mainColor1};
 `;
@@ -182,6 +259,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu }) => {
     );
 
     const [loading, setLoading] = useState(false);
+    const [geometries, setGeometries] = useState([]);
 
 
     const [showToast, setShowToast] = useState(JSON.parse(localStorage.getItem(DRAWING_TIP_LOCALSTORAGE)));
@@ -192,9 +270,10 @@ const GfiToolsMenu = ({ handleGfiToolsMenu }) => {
     };
 
     const handleSelectTool = (id) => {
-        if (activeSelectionTool !== id) {
+        if (activeSelectionTool  !== id) {
             store.dispatch(setActiveSelectionTool(id));
-            if (id === 0) {
+
+            if (id === 0 || id === 505) {
                 store.dispatch(setActiveSelectionTool(id));
                 channel.postRequest(
                     'MapModulePlugin.RemoveFeaturesFromMapRequest',
@@ -269,7 +348,6 @@ const GfiToolsMenu = ({ handleGfiToolsMenu }) => {
                               }
                             : {},
                     };
-
                     data.geojson &&
                         channel.postRequest(rn, [data.geojson, options]);
                 }, function(err) {
@@ -347,14 +425,144 @@ const GfiToolsMenu = ({ handleGfiToolsMenu }) => {
             channel.postRequest('DrawTools.StartDrawingRequest', data);
             store.dispatch(setMinimizeGfi(true));
             if(showToast !== false && !hasToastBeenShown.includes('measurementToast')) {
-                if(item.type === "LineString" || item.type === "Polygon")
-                toast.info(<DrawingToast text={strings.tooltips.drawingTools.measureToast} handleButtonClick={handleClick} />,
-                {icon: <StyledToastIcon icon={faInfoCircle} />, toastId: "measurementToast", onClose : () => store.dispatch(setHasToastBeenShown({toastId: 'measurementsToast', shown: true}))})
+                if(item.type === "LineString" || item.type === "Polygon") {
+                    toast.info(<DrawingToast text={strings.tooltips.drawingTools.drawingToast} handleButtonClick={handleClick} />,
+                    {
+                        icon: <StyledToastIcon icon={faInfoCircle} />,
+                        toastId: "measurementToast",
+                        onClose : () => store.dispatch(setHasToastBeenShown({toastId: 'measurementsToast', shown: true}))
+                    })
+                }
             }
         }
     };
 
+    const handleActivateGeometry = (features) => {
+        channel.postRequest(
+            'MapModulePlugin.RemoveFeaturesFromMapRequest',
+            [null, null, vectorLayerId]
+        );
+
+        //Others than drawtools
+        if (features.data.operation === 'click') {
+            if (features.data.features) {
+                Object.values(features.data.features).forEach((feature) => {
+                    if (
+                        feature.layerId &&
+                        feature.layerId === 'download-tool-layer'
+                    ) {
+                        store.dispatch(setMinimizeGfi(false));
+                        if (feature.geojson.features) {
+                            setLoading(true);
+                            Object.values(feature.geojson.features).forEach(
+                                (subfeature) => {
+                                    store.dispatch(
+                                        setGFICroppingArea(subfeature)
+                                    );
+                                    subfeature.geometry &&
+                                        channel &&
+                                        channel.getFeaturesByGeoJSON(
+                                            [subfeature],
+                                            (gfiData) => {
+                                                store.dispatch(
+                                                    resetGFILocations([])
+                                                );
+                                                gfiData.gfi &&
+                                                    gfiData.gfi.forEach(
+                                                        (gfi) => {
+                                                            store.dispatch(
+                                                                setGFILocations(
+                                                                    {
+                                                                        content:
+                                                                            gfi.geojson,
+                                                                        layerId:
+                                                                            gfi.layerId,
+                                                                        gfiCroppingArea:
+                                                                        features
+                                                                                .data
+                                                                                .features[0]
+                                                                                .geojson,
+                                                                        type: 'geojson',
+                                                                    }
+                                                                )
+                                                            );
+                                                        }
+                                                    );
+
+                                                setLoading(false);
+                                                handleGfiToolsMenu(gfiData.gfi);
+                                            }
+                                        );
+                                }
+                            );
+                        }
+                    }
+                });
+            }
+        } else if (features.data.geojson) {
+            features.data.geojson.features.forEach(feature => {
+                store.dispatch(setGFICroppingArea(feature));
+                feature.geometry &&
+                    channel &&
+                    channel.getFeaturesByGeoJSON(
+                        [feature],
+                        (gfiData) => {
+                            store.dispatch(resetGFILocations([]));
+                            store.dispatch(setVKMData(null));
+                            channel.postRequest('MapModulePlugin.RemoveMarkersRequest', ["VKM_MARKER"]);
+                            gfiData.gfi &&
+                                gfiData.gfi.forEach((gfi) => {
+                                    store.dispatch(
+                                        setGFILocations({
+                                            content: gfi.geojson,
+                                            layerId: gfi.layerId,
+                                            gfiCroppingArea:
+                                                features.data.geojson,
+                                            type: 'geojson',
+                                        })
+                                    );
+                                });
+                            setLoading(false);
+                            handleGfiToolsMenu(gfiData.gfi);
+                        }
+                    );
+            })
+        }  else if (features.data.data.geom) {
+            features.data.data.geom.features.forEach(feature => {
+                store.dispatch(setGFICroppingArea(feature));
+                feature.geometry &&
+                    channel &&
+                    channel.getFeaturesByGeoJSON(
+                        [feature],
+                        (gfiData) => {
+                            store.dispatch(resetGFILocations([]));
+                            store.dispatch(setVKMData(null));
+                            channel.postRequest('MapModulePlugin.RemoveMarkersRequest', ["VKM_MARKER"]);
+                            gfiData.gfi &&
+                                gfiData.gfi.forEach((gfi) => {
+                                    store.dispatch(
+                                        setGFILocations({
+                                            content: gfi.geojson,
+                                            layerId: gfi.layerId,
+                                            gfiCroppingArea:
+                                                features.data.geojson,
+                                            type: 'geojson',
+                                        })
+                                    );
+                                });
+                            setLoading(false);
+                            handleGfiToolsMenu(gfiData.gfi);
+                        }
+                    );
+            })
+        }
+    };
+
     useEffect(() => {
+
+        window.localStorage.getItem('geometries') !== null &&
+        setGeometries(JSON.parse(window.localStorage.getItem('geometries')));
+
         const drawHandler = (data) => {
             if (data.isFinished && data.isFinished === true) {
                 channel &&
@@ -397,8 +605,9 @@ const GfiToolsMenu = ({ handleGfiToolsMenu }) => {
                                                     })
                                                 );
                                             });
+                                        store.dispatch(setGeoJsonArray(data));
                                         setLoading(false);
-                                        handleGfiToolsMenu();
+                                        handleGfiToolsMenu(gfiData.gfi);
                                     }
                                 );
                         });
@@ -452,8 +661,9 @@ const GfiToolsMenu = ({ handleGfiToolsMenu }) => {
                                                                 );
                                                             }
                                                         );
+                                                    store.dispatch(setGeoJsonArray(data));
                                                     setLoading(false);
-                                                    handleGfiToolsMenu();
+                                                    handleGfiToolsMenu(gfiData.gfi);
                                                 }
                                             );
                                     }
@@ -559,6 +769,99 @@ const GfiToolsMenu = ({ handleGfiToolsMenu }) => {
                                     </CircleButtonListItem>
                                 );
                             })}
+                        </StyledDrawingToolsContainer>
+                    )}
+                </AnimatePresence>
+
+                <CircleButtonListItem
+                    key={'saved'}
+                    id={505}
+                    icon={faDownload}
+                    title={"Omat geometriat"}
+                    subtitle={"Omat tallennetut geometriat"}
+                    selectedItem={activeSelectionTool}
+                    handleSelectTool={handleSelectTool}
+                />
+                <AnimatePresence>
+                    {activeSelectionTool === 505 && (
+                        <StyledDrawingToolsContainer
+                            transition={{
+                                duration: 0.2,
+                                type: 'tween',
+                            }}
+                            initial={{
+                                opacity: 0,
+                                height: 0,
+                            }}
+                            animate={{
+                                opacity: 1,
+                                height: 'auto',
+                            }}
+                            exit={{
+                                opacity: 0,
+                                height: 0,
+                            }}
+                        >
+                            {geometries.map((geometry) => {
+                                return (
+                                    <StyledSavedViewContainer
+                                        key={geometry.id}
+                                        transition={{
+                                            duration: 0.2,
+                                            type: 'tween',
+                                        }}
+                                        initial={{
+                                            opacity: 0,
+                                            height: 0,
+                                        }}
+                                        animate={{
+                                            opacity: 1,
+                                            height: 'auto',
+                                        }}
+                                        exit={{
+                                            opacity: 0,
+                                            height: 0,
+                                        }}
+                                    >
+                                        <StyledSavedView
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                handleActivateGeometry(geometry);
+                                            }}
+                                        >
+                                            <StyledLeftContent>
+                                                <StyleSavedViewHeaderIcon>
+                                                    {
+                                                        <p>
+                                                            {geometry.name
+                                                                .charAt(0)
+                                                                .toUpperCase()}
+                                                        </p>
+                                                    }
+                                                </StyleSavedViewHeaderIcon>
+                                                <StyledSavedViewTitleContent>
+                                                    <StyledSavedViewName>
+                                                        {geometry.name}
+                                                    </StyledSavedViewName>
+                                                    <StyledSavedViewDescription>
+                                                        {
+                                                            <Moment
+                                                                format="DD.MM.YYYY"
+                                                                tz="Europe/Helsinki"
+                                                            >
+                                                                {geometry.saveDate}
+                                                            </Moment>
+                                                        }
+                                                    </StyledSavedViewDescription>
+                                                </StyledSavedViewTitleContent>
+                                            </StyledLeftContent>
+                                            <StyledRightContent>
+                                            </StyledRightContent>
+                                        </StyledSavedView>
+                                    </StyledSavedViewContainer>
+                                )
+                                })
+                            }
                         </StyledDrawingToolsContainer>
                     )}
                 </AnimatePresence>

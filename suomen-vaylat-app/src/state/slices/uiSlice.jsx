@@ -12,6 +12,9 @@ const initialState = {
     },
     searchParams: '',
     isInfoOpen: false,
+    geoJsonArray: {},
+    isSavedOpen: false,
+    savedTabIndex: 0,
     isUserGuideOpen: false,
     shareUrl: '',
     isDrawingToolsOpen: false,
@@ -34,7 +37,8 @@ const initialState = {
     hasToastBeenShown : [],
     selectedMarker: 2,
     drawToolMarkers: [],
-    markerLabel: ''
+    markerLabel: '',
+    activeGeometries: [],
 };
 
 export const uiSlice = createSlice({
@@ -49,6 +53,10 @@ export const uiSlice = createSlice({
             state.isSideMenuOpen = false;
             state.isSearchOpen = false;
             state.isInfoOpen = false;
+
+
+            state.isSavedOpen = false;
+
             state.isUserGuideOpen = false;
             state.isDrawingToolsOpen = false;
             state.isLegendOpen = false;
@@ -74,6 +82,15 @@ export const uiSlice = createSlice({
         },
         setIsInfoOpen: (state, action) => {
             state.isInfoOpen = action.payload;
+        },
+        setGeoJsonArray: (state, action) => {
+            state.geoJsonArray = action.payload;
+        },
+        setSavedTabIndex: (state, action) => {
+            state.savedTabIndex = action.payload;
+        },
+        setIsSavedOpen: (state, action) => {
+            state.isSavedOpen = action.payload;
         },
         setIsDownloadLinkModalOpen: (state, action) => {
             state.downloadLink = {
@@ -155,6 +172,12 @@ export const uiSlice = createSlice({
         },
         setMarkerLabel: (state, action) => {
             state.markerLabel = action.payload;
+        },
+        addToActiveGeometries: (state, action) => {
+            state.activeGeometries.push(action.payload);
+        },
+        removeActiveGeometry: (state, action) => {
+            state.activeGeometries = state.activeGeometries.filter((activeGeometry) => activeGeometry.id !== action.payload);
         }
     },
 });
@@ -186,10 +209,15 @@ export const {
     setMaximizeGfi,
     setGfiCroppingTypes,
     setWarning,
+    setGeoJsonArray,
+    setIsSavedOpen,
+    setSavedTabIndex,
     setHasToastBeenShown,
     setSelectedMarker,
     addToDrawToolMarkers,
-    setMarkerLabel
+    setMarkerLabel,
+    addToActiveGeometries,
+    removeActiveGeometry
 } = uiSlice.actions;
 
 export default uiSlice.reducer;
