@@ -223,6 +223,7 @@ export const SelectedLayer = ({
     };
 
     const handleLayerOpacity = (channel, layer, value) => {
+        parseInt(value) === 0 ? setIsLayerVisible(false) : setIsLayerVisible(true);
         channel.postRequest('ChangeMapLayerOpacityRequest', [layer.id, value]);
         setOpacity(value);
     };
