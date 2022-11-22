@@ -17,6 +17,10 @@ const initialState = {
     zoomRange: {},
     currentZoomLevel: 0,
     selectedLayers: [],
+    selectedLayersByType: {
+        backgroundMaps: [],
+        mapLayers: []
+    },
     warnings: {
         show: false,
         errors: [],
@@ -122,6 +126,27 @@ export const rpcSlice = createSlice({
         setSelectedLayers: (state, action) => {
             state.selectedLayers = action.payload;
             LOG.log('setSelectedLayers to ', action.payload);
+        },
+
+        /**
+         * Sets backgroundMaps for selectedLayersByType
+         * @param {Object} state 
+         * @param {Object} action 
+         */
+        setBackgroundMaps: (state, action) => {
+            state.selectedLayersByType.backgroundMaps = action.payload;
+            LOG.log('setBackgroundMaps ', action.payload);
+        },
+
+        /**
+         * Sets mapLayers for selectedLayersByType
+         * @param {Object} state 
+         * @param {Object} action 
+         */
+
+        setMapLayers: (state, action) => {
+            state.selectedLayersByType.mapLayers = action.payload;
+            LOG.log('setMapLayers ', action.payload);
         },
 
         /**
@@ -839,7 +864,9 @@ export const {
     setDownloadRemove,
     removeAllSelectedLayers,
     setStartState,
-    addFeaturesToGFILocations
+    addFeaturesToGFILocations,
+    setBackgroundMaps,
+    setMapLayers
 } = rpcSlice.actions;
 
 export default rpcSlice.reducer;
