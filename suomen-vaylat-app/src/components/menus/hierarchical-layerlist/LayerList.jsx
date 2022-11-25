@@ -172,9 +172,13 @@ export const LayerList = ({
 
         // b.id 727 is Tierekisteri (Poistuva) and should be the lowest element on the list 
         if(b.id === 727) {
+            console.log("asd");
             return -1
         }
-        if (aName && bName) {
+        else if(a.id === 727) {
+            return 1;
+        }
+        else if (aName && bName) {
             return aName.toLowerCase().localeCompare(bName.toLowerCase());
         } else {
             return 0;
