@@ -172,7 +172,6 @@ export const LayerList = ({
 
         // b.id 727 is Tierekisteri (Poistuva) and should be the lowest element on the list 
         if(b.id === 727) {
-            console.log("asd");
             return -1
         }
         else if(a.id === 727) {
