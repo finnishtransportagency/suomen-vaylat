@@ -19,7 +19,8 @@ const initialState = {
     selectedLayers: [],
     selectedLayersByType: {
         backgroundMaps: [],
-        mapLayers: []
+        mapLayers: [],
+        themeLayers: []
     },
     warnings: {
         show: false,
@@ -147,6 +148,11 @@ export const rpcSlice = createSlice({
         setMapLayers: (state, action) => {
             state.selectedLayersByType.mapLayers = action.payload;
             LOG.log('setMapLayers ', action.payload);
+        },
+
+        setThemeLayers: (state, action) => {
+            state.selectedLayersByType.themeLayers = action.payload;
+            LOG.log('setThemeLayers', action.payload);
         },
 
         /**
@@ -866,7 +872,8 @@ export const {
     setStartState,
     addFeaturesToGFILocations,
     setBackgroundMaps,
-    setMapLayers
+    setMapLayers,
+    setThemeLayers
 } = rpcSlice.actions;
 
 export default rpcSlice.reducer;

@@ -1,4 +1,4 @@
-import {  useState, useContext } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { faInfoCircle, faTimes, faCaretDown, faCaretUp, faGripLines, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ReactReduxContext, useSelector } from 'react-redux';
@@ -8,6 +8,8 @@ import { updateLayers } from '../../../utils/rpcUtil';
 import { sortableHandle } from 'react-sortable-hoc';
 
 import strings from '../../../translations';
+import { useAppSelector } from '../../../state/hooks';
+import { theme } from '../../../theme/theme';
 
 const StyledLayerContainer = styled.li`
     z-index: 9999;
@@ -46,7 +48,7 @@ const StyledLayerName = styled.p`
     overflow: hidden;
     text-overflow: ellipsis;
     font-size: 14px;
-    color: ${props => props.theme.colors.secondaryColor8};
+    color: ${props => props.theme.colors.mainColor1};
 `;
 
 const StyledBottomContent = styled.div`
@@ -214,9 +216,16 @@ export const SelectedLayer = ({
     const { store } = useContext(ReactReduxContext);
     const [opacity, setOpacity] = useState(layer.opacity);
     const [prevOpacity, setPrevOpacity] = useState(layer.opacity);
-    const [isLayerVisible, setIsLayerVisible] = useState(true);
+    const [isLayerVisible, setIsLayerVisible] = useState(layer.opacity !== 0);
     const channel = useSelector(state => state.rpc.channel);
 
+    const themeLayers = useAppSelector(state => state.rpc.selectedLayersByType.themeLayers);
+    
+    useEffect(() => {
+        setOpacity(layer.opacity);
+        layer.opacity === 0 ? setIsLayerVisible(false) : setIsLayerVisible(true)
+    }, [layer.opacity])
+    
     const handleLayerRemoveSelectedLayer = (channel, layer) => {
         channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, false]);
         updateLayers(store, channel);
@@ -274,7 +283,7 @@ export const SelectedLayer = ({
                         />
                     </StyledLayerDeleteIcon>
                     <StyledlayerHeader>
-                        <StyledLayerName>
+                        <StyledLayerName style={{color: themeLayers.find(themeLayer => themeLayer === layer.id) && theme.colors.secondaryColor2}}>
                             {layer.name}
                         </StyledLayerName>
                         { uuid &&

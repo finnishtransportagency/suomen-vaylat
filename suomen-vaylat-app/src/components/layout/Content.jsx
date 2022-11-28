@@ -61,6 +61,7 @@ import GFIPopup from '../gfi/GFIPopup';
 import GFIDownload from '../gfi/GFIDownload';
 import MetadataModal from '../metadata-modal/MetadataModal';
 import { ANNOUNCEMENTS_LOCALSTORAGE } from '../../utils/constants';
+import ThemeMenu from '../menus/theme-menu/ThemeMenu';
 
 const StyledContent = styled.div`
     z-index: 1;
@@ -151,6 +152,8 @@ const Content = () => {
         minimizeGfi,
         maximizeGfi,
         warning,
+        isThemeMenuOpen,
+        isSideMenuOpen
     } = useAppSelector((state) => state.ui);
 
     const search = useAppSelector((state) => state.search);
@@ -695,10 +698,11 @@ const Content = () => {
                     <WarningModalContent warning={warning} />
                 </Modal>
                 <ScaleBar />
+                
                 <StyledToastContainer position="bottom-left" pauseOnFocusLoss={false} transition={Slide} autoClose={false} closeOnClick={false} />
                 <StyledContentGrid>
                     <MenuBar />
-                    <MapLayersDialog />
+                    {isThemeMenuOpen && !isSideMenuOpen? <ThemeMenu /> : <MapLayersDialog />}
                     <Search />
                     <ZoomMenu />
                     <ActionButtons closeAction={handleCloseGFIModal} />

@@ -280,7 +280,7 @@ export const ThemeGroup = ({
     const [isExcerptOpen, setIsExcerptOpen] = useState(false);
     const [totalVisibleGroupLayersCount, setTotalVisibleGroupLayersCount] = useState(0);
 
-    useEffect(() => {
+    useEffect(() => {      
         var layersCount = 0;
         var visibleLayersCount = 0;
         const layersCounter = (theme) => {
@@ -290,6 +290,7 @@ export const ThemeGroup = ({
             };
             setTotalGroupLayersCount(layersCount);
             setTotalVisibleGroupLayersCount(visibleLayersCount);
+            
         };
         layersCounter(theme);
     },[theme, layers]);

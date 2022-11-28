@@ -69,6 +69,7 @@ const StyledTabs = styled.div`
     position: relative;
     display: flex;
     align-items: center;
+    justify-content: space-between;
     min-height: 40px;
     background-color: #f2f2f2;
     margin: 16px 8px 0px 8px;
@@ -76,11 +77,11 @@ const StyledTabs = styled.div`
         z-index: 2;
         position: absolute;
         content: '';
-        width: calc(100% / 3);
+        width: calc(100% / 2);
         height: 100%;
-        background-color: ${(props) => (props.tabIndex === 0 ? 'rgba(0, 99, 175, 1)' : props.tabIndex === 1 ? 'rgba(32, 122, 66, 1)' : 'rgba(229, 0, 130, 1)')};
+        background-color: ${(props) => (props.tabIndex === 0 ? 'rgba(0, 99, 175, 1)' : 'rgba(229, 0, 130, 1)')};
         bottom: 0px;
-        left: ${(props) => props.tabIndex * 50 + '%'};
+        left: ${(props) => props.tabIndex * 75 + '%'};
         border-radius: 8px 8px 0px 0px;
         transform: translateX(
             ${(props) => {
@@ -88,11 +89,11 @@ const StyledTabs = styled.div`
             }}
         );
         transition: all 0.3s ease-out;
-        border-top: 3px solid ${(props) => (props.tabIndex === 0 ? 'rgba(0, 99, 175, 1)' : props.tabIndex === 1 ? 'rgba(32, 122, 66, 1)' : 'rgba(229, 0, 130, 1)')};
-        border-left: 3px solid ${(props) => (props.tabIndex === 0 ? 'rgba(0, 99, 175, 1)' : props.tabIndex === 1 ? 'rgba(32, 122, 66, 1)' : 'rgba(229, 0, 130, 1)')};
-        border-right: 3px solid ${(props) => (props.tabIndex === 0 ? 'rgba(0, 99, 175, 1)' : props.tabIndex === 1 ? 'rgba(32, 122, 66, 1)' : 'rgba(229, 0, 130, 1)')};
+        border-top: 3px solid ${(props) => (props.tabIndex === 0 ? 'rgba(0, 99, 175, 1)' :'rgba(229, 0, 130, 1)')};
+        border-left: 3px solid ${(props) => (props.tabIndex === 0 ? 'rgba(0, 99, 175, 1)' : 'rgba(229, 0, 130, 1)')};
+        border-right: 3px solid ${(props) => (props.tabIndex === 0 ? 'rgba(0, 99, 175, 1)' : 'rgba(229, 0, 130, 1)')};
             
-box-shadow: 0px -1px 11px ${(props) => (props.tabIndex === 0 ? 'rgba(0, 99, 175, 0.3)' : props.tabIndex === 1 ? 'rgba(32, 122, 66, 0.3)' : 'rgba(229, 0, 130, 0.3)')};
+box-shadow: 0px -1px 11px ${(props) => (props.tabIndex === 0 ? 'rgba(0, 99, 175, 0.3)' : 'rgba(229, 0, 130, 0.3)')};
 
     }
     &::after {
@@ -115,7 +116,7 @@ box-shadow: 0px -1px 11px ${(props) => (props.tabIndex === 0 ? 'rgba(0, 99, 175,
 const StyledTab = styled.div`
     z-index: 2;
     user-select: none;
-    width: calc(100% / 3);
+    width: calc(100% / 2);
     cursor: pointer;
     font-size: 13px;
     font-weight: bold;
@@ -127,8 +128,8 @@ const StyledTab = styled.div`
 
 const StyledLayerCount = styled.div`
     position: absolute;
-    top: -8px;
-    right: -4px;
+    top: -6px;
+    right: 15px;
     width: 25px;
     height: 18px;
     display: flex;
@@ -151,7 +152,7 @@ const StyledSwiper = styled(Swiper)`
         overflow: auto;
     }
     transition: box-shadow 0.3s ease-out;
-    border-top: 3px solid ${(props) => (props.tabIndex === 0 ? 'rgba(0, 99, 175, 1)' : props.tabIndex === 1 ? 'rgba(32, 122, 66, 1)' : 'rgba(229, 0, 130, 1)')};
+    border-top: 3px solid ${(props) => (props.tabIndex === 0 ? 'rgba(0, 99, 175, 1)' : 'rgba(229, 0, 130, 1)')};
 `;
 
 const MapLayersDialog = () => {
@@ -172,7 +173,7 @@ const MapLayersDialog = () => {
 
     const inputEl = useRef(null);
 
-    const hideWarn = () => {
+    const closeSideMenu = () => {
         store.dispatch(setIsSideMenuOpen(!isSideMenuOpen));
     };
 
@@ -193,6 +194,7 @@ const MapLayersDialog = () => {
                 />
             ),
         },
+        /*
         {
             id: 'swipeAbleTab_1',
             titleColor: 'secondaryColor2',
@@ -203,7 +205,7 @@ const MapLayersDialog = () => {
                     allThemes={allThemesWithLayers}
                 />
             ),
-        },
+        }, */
         {
             id: 'swipeAbleTab_2',
             title: strings.layerlist.layerlistLabels.selectedLayers,
@@ -230,7 +232,7 @@ const MapLayersDialog = () => {
         >
             <DialogHeader
                 title={strings.layerlist.layerlistLabels.mapLayers}
-                hideWarn={hideWarn}
+                handleClose={closeSideMenu}
                 icon={faLayerGroup}
             />
             <StyledTabs tabIndex={selectedMapLayersMenuTab}>

@@ -8,6 +8,7 @@ import {
     faSave,
     faMapMarkedAlt,
     faDownload,
+    faGlobe
 } from '@fortawesome/free-solid-svg-icons';
 import { ReactReduxContext } from 'react-redux';
 import styled from 'styled-components';
@@ -21,7 +22,8 @@ import {
     setMinimizeGfi,
     setIsGfiDownloadOpen,
     setGeoJsonArray,
-    setSelectedMarker
+    setSelectedMarker,
+    setIsThemeMenuOpen
 } from '../../../state/slices/uiSlice';
 
 import { removeMarkerRequest } from '../../../state/slices/rpcSlice';
@@ -82,6 +84,7 @@ const MenuBar = () => {
     const {
         isFullScreen,
         isSideMenuOpen,
+        isThemeMenuOpen,
         isDrawingToolsOpen,
         isSearchOpen,
         isSaveViewOpen,
@@ -146,6 +149,13 @@ const MenuBar = () => {
     return (
         <>
             <StyledMenuBar isSearchOpen={isSearchOpen}>
+                <CircleButton 
+                    icon={faGlobe}
+                    text={strings.layerlist.layerlistLabels.themeLayers}
+                    toggleState={isThemeMenuOpen}
+                    tooltipDirection="right"
+                    clickAction={() => store.dispatch(setIsThemeMenuOpen(!isThemeMenuOpen))}
+                />
                 <CircleButton
                     icon={faLayerGroup}
                     text={strings.layerlist.layerlistLabels.mapLayers}
