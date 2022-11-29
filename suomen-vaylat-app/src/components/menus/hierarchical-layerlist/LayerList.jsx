@@ -174,7 +174,11 @@ export const LayerList = ({
         if(b.id === 727) {
             return -1
         }
-        if (aName && bName) {
+        // a.id 727 is Tierekisteri (Poistuva) only on Firefox 
+        else if(a.id === 727) {
+            return 1;
+        }
+        else if (aName && bName) {
             return aName.toLowerCase().localeCompare(bName.toLowerCase());
         } else {
             return 0;
