@@ -101,14 +101,16 @@ export const Legend = ({
 
     if (selectedLayers) {
         selectedLayers.forEach((layer) => {
-            const legend = allLegends.filter((l) => {
-                return l.layerId === layer.id;
-            });
-            const hasVisible = (!isNaN(layer.maxZoomLevel) && !isNaN(layer.minZoomLevel)) ? layer.maxZoomLevel >= currentZoomLevel && layer.minZoomLevel <= currentZoomLevel : true;
-            if (legend[0] && legend[0].legend && hasVisible) {
-                legends.push(legend[0]);
-            } else if (legend[0] && hasVisible) {
-                noLegends.push(legend[0]);
+            if(layer.opacity !== 0) {
+                const legend = allLegends.filter((l) => {
+                    return l.layerId === layer.id;
+                });
+                const hasVisible = (!isNaN(layer.maxZoomLevel) && !isNaN(layer.minZoomLevel)) ? layer.maxZoomLevel >= currentZoomLevel && layer.minZoomLevel <= currentZoomLevel : true;
+                if (legend[0] && legend[0].legend && hasVisible) {
+                    legends.push(legend[0]);
+                } else if (legend[0] && hasVisible) {
+                    noLegends.push(legend[0]);
+                }
             }
         });
     }

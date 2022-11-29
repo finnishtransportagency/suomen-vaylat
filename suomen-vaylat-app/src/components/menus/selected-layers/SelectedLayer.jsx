@@ -124,7 +124,7 @@ const StyledLayerGripControl = styled.div`
     transition: all 0.1s ease-out;
     svg {
         font-size: 17px;
-        color: ${props => props.theme.colors.mainColor1};
+        color: ${props => props.theme.colors.secondaryColor8};
     };
     &:hover {
         transform: scale(1.1);
