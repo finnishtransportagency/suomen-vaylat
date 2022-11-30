@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { faGlobe } from '@fortawesome/free-solid-svg-icons';
 
 import { useAppSelector } from '../../../state/hooks';
