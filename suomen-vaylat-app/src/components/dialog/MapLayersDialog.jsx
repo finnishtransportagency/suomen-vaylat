@@ -194,18 +194,6 @@ const MapLayersDialog = () => {
                 />
             ),
         },
-        /*
-        {
-            id: 'swipeAbleTab_1',
-            titleColor: 'secondaryColor2',
-            title: strings.layerlist.layerlistLabels.themeLayers,
-            content: (
-                <ThemeLayerList
-                    allLayers={allLayers}
-                    allThemes={allThemesWithLayers}
-                />
-            ),
-        }, */
         {
             id: 'swipeAbleTab_2',
             title: strings.layerlist.layerlistLabels.selectedLayers,
@@ -220,7 +208,7 @@ const MapLayersDialog = () => {
         },
     ];
 
-    return (
+     return (
         <StyledMapLayersDialog
             initial='closed'
             animate={isSideMenuOpen ? 'open' : 'closed'}
@@ -279,7 +267,6 @@ const MapLayersDialog = () => {
                         </SwiperSlide>
                     );
                 })}
-                {/* <div className='swiper-pagination'></div> */}
             </StyledSwiper>
         </StyledMapLayersDialog>
     );

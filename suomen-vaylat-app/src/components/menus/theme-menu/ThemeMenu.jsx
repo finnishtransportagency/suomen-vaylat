@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { faGlobe } from '@fortawesome/free-solid-svg-icons';
 
 import { useAppSelector } from '../../../state/hooks';
@@ -10,7 +10,7 @@ import strings from '../../../translations';
 import store from '../../../state/store';
 import { setIsThemeMenuOpen } from '../../../state/slices/uiSlice';
 
-const StyledMapLayersDialog = styled(motion.div)`
+const StyledThemeMenuContainer = styled(motion.div)`
     grid-row-start: 1;
     grid-row-end: 3;
     width: 100%;
@@ -62,23 +62,21 @@ function ThemeMenu() {
     };
 
     return (
-        <>
-            <StyledMapLayersDialog 
-                initial='closed'
-                animate={isThemeMenuOpen && !isSideMenuOpen ? 'open' : 'closed'}
-                variants={variants}
-                transition={{
-                    duration: 0.4,
-                    type: 'tween',
-                }}
-                >
-                    <DialogHeader icon={faGlobe} title={strings.layerlist.layerlistLabels.themeLayers} handleClose={() => store.dispatch(setIsThemeMenuOpen(false))}/>
-                    <ThemeLayerList
-                        allLayers={allLayers}
-                        allThemes={allThemesWithLayers}
-                    />
-            </StyledMapLayersDialog>
-        </>
+            <StyledThemeMenuContainer 
+                    initial='closed'
+                    animate={isThemeMenuOpen ? 'open' : 'closed'}
+                    variants={variants}
+                    transition={{
+                        duration: 0.4,
+                        type: 'tween',
+                    }}
+                    >
+                        <DialogHeader icon={faGlobe} title={strings.layerlist.layerlistLabels.themeLayers} handleClose={() => store.dispatch(setIsThemeMenuOpen(false))}/>
+                        <ThemeLayerList
+                            allLayers={allLayers}
+                            allThemes={allThemesWithLayers}
+                        />
+            </StyledThemeMenuContainer>
     )
 }
 

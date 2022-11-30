@@ -211,7 +211,6 @@ export const SelectedLayer = ({
     uuid,
     currentZoomLevel,
     sortIndex,
-    opacityZero
 }) => {
     const { store } = useContext(ReactReduxContext);
     const [opacity, setOpacity] = useState(layer.opacity);
@@ -239,10 +238,16 @@ export const SelectedLayer = ({
 
     const handleLayerOpacityToggle = (channel, layer) => {
         setIsLayerVisible(!isLayerVisible);
-        !opacityZero ? setPrevOpacity(layer.opacity) : setPrevOpacity(100);
-        const newOpacity = opacityZero? prevOpacity: 0;
-        channel.postRequest('ChangeMapLayerOpacityRequest', [layer.id, newOpacity]);
+        let newOpacity = opacity === 0 ? prevOpacity: 0;
+        if(opacity === 0 && prevOpacity) {
+            newOpacity = prevOpacity;
+        };
+        if(opacity === 0 && !prevOpacity) {
+            newOpacity = 100
+        }
         setOpacity(newOpacity);
+        channel.postRequest('ChangeMapLayerOpacityRequest', [layer.id, newOpacity]);
+        opacity !== 0 ? setPrevOpacity(layer.opacity) : setPrevOpacity(100);
         updateLayers(store, channel);
     };
 

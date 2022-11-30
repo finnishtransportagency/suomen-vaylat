@@ -51,7 +51,6 @@ const SortableElement = sortableElement(({value, currentZoomLevel}) =>
         layer={value}
         uuid={value.metadataIdentifier}
         currentZoomLevel={currentZoomLevel}
-        opacityZero={value.opacity === 0}
     />
 );
 
