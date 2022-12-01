@@ -130,8 +130,8 @@ export const rpcSlice = createSlice({
 
         /**
          * Sets backgroundMaps for selectedLayersByType
-         * @param {Object} state 
-         * @param {Object} action 
+         * @param {Object} state
+         * @param {Object} action
          */
         setBackgroundMaps: (state, action) => {
             state.selectedLayersByType.backgroundMaps = action.payload;
@@ -140,8 +140,8 @@ export const rpcSlice = createSlice({
 
         /**
          * Sets mapLayers for selectedLayersByType
-         * @param {Object} state 
-         * @param {Object} action 
+         * @param {Object} state
+         * @param {Object} action
          */
 
         setMapLayers: (state, action) => {
@@ -747,7 +747,11 @@ export const rpcSlice = createSlice({
             let downloadIndex = state.downloads.findIndex(
                 (download) => download.id === action.payload.id
             );
-            state.downloads[downloadIndex] = action.payload;
+            let download = state.downloads[downloadIndex];
+            download.url = action.payload.url !== null && action.payload.url;
+            download.fileSize = action.payload.fileSize !== null && action.payload.fileSize;
+            download.loading = false;
+            state.downloads[downloadIndex] = download;
         },
 
          /**
