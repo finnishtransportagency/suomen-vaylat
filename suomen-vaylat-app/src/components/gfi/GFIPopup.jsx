@@ -3,12 +3,12 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
     faTimes,
     faSearchLocation,
-    faPencilRuler,
+    faMapMarkedAlt,
     faFileDownload,
     faAngleLeft,
     faAngleRight,
     faLayerGroup,
-    faMapMarkerAlt
+    faMapMarkerAlt,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ReactReduxContext } from 'react-redux';
@@ -18,18 +18,23 @@ import { useAppSelector } from '../../state/hooks';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { FreeMode, Controller } from 'swiper';
 import { isMobile } from '../../theme/theme';
-import { setMinimizeGfi } from '../../state/slices/uiSlice';
-import { resetGFILocations } from '../../state/slices/rpcSlice';
+import { setIsSaveViewOpen, setMinimizeGfi, setSavedTabIndex, setActiveSelectionTool } from '../../state/slices/uiSlice';
+import { resetGFILocations, addFeaturesToGFILocations } from '../../state/slices/rpcSlice';
 
 import { FormattedGFI } from './FormattedGFI';
 import GfiTabContent from './GfiTabContent';
 import GfiToolsMenu from './GfiToolsMenu';
 import GfiDownloadMenu from './GfiDownloadMenu';
 import CircleButton from '../circle-button/CircleButton';
+import SVLoader from '../loader/SvLoader';
+import { isValidUrl } from '../../utils/validUrlUtil';
+
+import { SortingMode, PagingPosition } from 'ka-table/enums';
 
 // Max amount of features that wont trigger react-data-table-component
 const GFI_MAX_LENGTH = 5;
 const KUNTA_IMAGE_URL = 'https://www.kuntaliitto.fi/sites/default/files/styles/narrow_320_x_600_/public/media/profile_pictures/';
+const SAVED_GEOMETRY_LAYER_ID = 'saved-geometry-layer';
 
 const StyledGfiContainer = styled.div`
     position: relative;
@@ -40,21 +45,36 @@ const StyledGfiContainer = styled.div`
 `;
 
 const StyledVKMDataContainer = styled(motion.div)`
+    user-select: text;
     display: flex;
-    align-items: center;
-    justify-content: space-around;
+    align-items: flex-start;
     color: ${(props) => props.theme.colors.mainColor1};
     max-width: 500px;
     margin-left: auto;
     margin-right: auto;
-    img {
+    img {s
         max-width: 100px;
     };
-    p {
+    h5 {
         margin: 0;
         font-size: 22px;
         font-weight: 600;
-    }
+    };
+    @media ${props => props.theme.device.mobileM} {
+        margin: 0px 5px;
+        img {
+            max-width: 70px;
+        };
+        h5 {
+            font-size: 18px;
+        };
+        h6 {
+            font-size: 15px;
+        };
+        p {
+            font-size: 13px;
+        };
+    };
 `;
 
 const StyledVKMDataMunacipalityImageWrapper = styled.div`
@@ -66,24 +86,52 @@ const StyledVKMDataMunacipalityImageWrapper = styled.div`
         max-height: 100px
     }
     user-select: text;
+
+`;
+
+const StyledVkmInstruction = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    && p {
+        font-size: 14px;
+    }
+    margin-left: 16px;
+    @media ${props => props.theme.device.mobileM} {
+        margin-left: 5px;
+    };
 `;
 
 const StyledCoordinatesWrapper = styled.div`
     display: flex;
     align-items: center;
-    svg {
-        font-size: 24px;
-        padding: 8px;
-    }
+    margin-left: 16px;
     p {
         margin: 0px;
-        font-size: 12px;
-    }
+        font-size: 14px;
+    };
+    @media ${props => props.theme.device.mobileM} {
+        margin: 0px;
+    };
 `;
 
 const StyledVKMDataInfoWrapper = styled.div`
-    padding-left: 8px;
+    display: flex;
+    flex-direction: column;
+    margin-left: 16px;
     user-select: text;
+    @media ${props => props.theme.device.mobileM} {
+        margin-left: 5px;
+    };
+`;
+
+const StyledVkmDataItems = styled.div`
+    display: flex;
+    flex-direction: column;
+    && p {
+        font-size: 14px;
+        margin: 0px;
+    };
 `;
 
 const StyledTabSwiperContainer = styled.div`
@@ -199,8 +247,10 @@ const StyledTabCloseButton = styled.div`
 `;
 
 const StyledTabContent = styled.div`
+    user-select: text;
     overflow: hidden;
     display: flex;
+    height: 100%;
     div.contentWrapper-infobox {
         @media ${(props) => props.theme.device.mobileL} {
             font-size: 14px;
@@ -216,41 +266,86 @@ const StyledTabContent = styled.div`
         padding-right: 15px;
     }
 
-    td:nth-child(even) {
-    }
-
-    td:nth-child(odd) {
-        border-right: 1px solid #ddd;
-    }
-
     table {
         border-top: 1px solid #ddd;
         padding-right: 0px !important;
         width: 100%;
+        tr:nth-child(odd) {
+            background-color: #f2f2f2;
+        }
     }
 
-    tr:nth-child(2n) {
-        background-color: #f2f2f2;
+    .ka-thead-cell {
+        background-color: white;
+        width: ${(props) => props.isMobile ? "10em" : "auto"};
+        min-width: 120px;
+        span {
+            color: ${props => props.theme.colors.mainColor1};
+        };
     }
 
-    table tr {
-        border-bottom: 1px solid #ddd;
+    .ka-cell-text {
+        -webkit-user-select: text;  /* Chrome / Safari */
+        -moz-user-select: text;     /* Firefox */
+        -ms-user-select: text;      /* IE 10+ */
+        user-select: text;
+        max-height: 150px;
+        overflow: hidden;
+    }
+
+    .ka-thead-cell-content, .ka-cell-text {
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .ka-thead-cell-resize {
+        width: 5px;
     }
 
     .low-priority-table {
         margin-left: 0px;
     }
+
+    .ka-thead-cell-content {
+        font-size: 14px;
+        font-weight: 600;
+        color: #212529;
+    }
+`;
+
+
+const StyledFeaturesInfo = styled.div`
+    align-items: center;
+`;
+
+const StyledFeatureAmount = styled.p`
+    text-align: center;
+    color: ${props => props.theme.colors.mainColor1};
+    margin: 5px 0px 10px 0px;
+`;
+
+const StyledShowMoreButtonWrapper = styled.div`
+   text-align: center;
+`;
+
+const StyledShowMoreButton = styled.button`
+    width: 250px;
+    height: 35px;
+    color: ${props => props.theme.colors.mainWhite};
+    background-color: ${props => props.theme.colors.mainColor1};
+    border-radius: 20px;
+    box-shadow: 0px 1px 3px #0000001F;
+    border: none;
 `;
 
 const StyledButtonsContainer = styled.div`
-    position: absolute;
-    bottom: 0px;
-    right: 0px;
+    margin-top: auto;
     padding: 16px;
     z-index: 1;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: flex-end;
+    justify-content: flex-end;
     gap: 8px;
     pointer-events: none;
 `;
@@ -271,10 +366,72 @@ const StyledGfiBackdrop = styled(motion.div)`
     cursor: pointer;
 `;
 
+const addFeaturesToMapParams =
+    {
+        clearPrevious: true,
+        layerId: SAVED_GEOMETRY_LAYER_ID,
+        centerTo: true,
+        featureStyle: {
+            fill: {
+                color: 'rgba(10, 140, 247, 0.3)',
+            },
+            stroke: {
+                color: 'rgba(10, 140, 247, 0.3)',
+                width: 5,
+                lineDash: 'solid',
+                lineCap: 'round',
+                lineJoin: 'round',
+                area: {
+                    color: 'rgba(100, 255, 95, 0.7)',
+                    width: 8,
+                    lineJoin: 'round',
+                },
+            },
+            image: {
+                shape: 5,
+                size: 3,
+                fill: {
+                    color: 'rgba(100, 255, 95, 0.7)',
+                },
+            },
+        },
+    };
+const StyledLoadingOverlay = styled(motion.div)`
+    z-index: 2;
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    background-color: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(4px);
+`;
+
+const StyledLoaderWrapper = styled.div`
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 999;
+    height: 100%;
+    max-width: 200px;
+    max-height: 200px;
+    transform: translate(-50%, -50%);
+    svg {
+        width: 100%;
+        height: 100%;
+        fill: none;
+    }
+`;
+
+
 export const GFIPopup = ({ handleGfiDownload }) => {
     const LAYER_ID = 'gfi-result-layer';
     const { store } = useContext(ReactReduxContext);
-    const { channel, allLayers, gfiLocations, vkmData, pointInfoImageError, setPointInfoImageError } = useAppSelector(state => state.rpc);
+    const { channel, allLayers, gfiLocations, vkmData, pointInfoImageError, setPointInfoImageError, gfiCroppingArea } = useAppSelector(state => state.rpc);
+    const { geoJsonArray } = useAppSelector(
+        (state) => state.ui
+    );
+    const { activeSelectionTool } = useAppSelector((state) => state.ui);
 
     const [selectedTab, setSelectedTab] = useState(0);
     const [tabsContent, setTabsContent] = useState([]);
@@ -282,15 +439,20 @@ export const GFIPopup = ({ handleGfiDownload }) => {
     const [isGfiToolsOpen, setIsGfiToolsOpen] = useState(false);
     const [isDataTable, setIsDataTable] = useState(false);
     const [isGfiDownloadsOpen, setIsGfiDownloadsOpen] = useState(false);
-    const [isVKMInfoOpen, setIsVKMInfoOpen] = useState(false);
+    const [isVKMInfoOpen, setIsVKMInfoOpen] = useState(vkmData? true : false);
     const [gfiTabsSwiper, setGfiTabsSwiper] = useState(null);
     const [gfiTabsSnapGridLength, setGfiTabsSnapGridLength] = useState(0);
+    const [isLoading, setIsLoading] = useState(false);
 
     const gfiInputEl = useRef(null);
 
     useEffect(() => {
+        if(!isGfiToolsOpen && activeSelectionTool !== null) store.dispatch(setActiveSelectionTool(null));
+    }, [isGfiToolsOpen, activeSelectionTool]);
+
+    useEffect(() => {
         const mapResults = gfiLocations.map((location) => {
-            location.content.features.length > GFI_MAX_LENGTH && setIsDataTable(true);
+            location?.content?.features?.length > GFI_MAX_LENGTH && setIsDataTable(true);
             const layers = allLayers.filter(
                 (layer) => layer.id === location.layerId
             );
@@ -327,8 +489,8 @@ export const GFIPopup = ({ handleGfiDownload }) => {
     }, [selectedTab, tabsContent]);
 
     useEffect(() => {
-        gfiLocations && gfiLocations.length > 0 ? setIsVKMInfoOpen(false) : vkmData && setIsVKMInfoOpen(true);
-    },[vkmData, gfiLocations])
+        isGfiDownloadsOpen && setIsGfiDownloadsOpen(false);
+    }, [gfiLocations]);
 
     const handleOverlayGeometry = (geoJson) => {
         channel &&
@@ -377,6 +539,68 @@ export const GFIPopup = ({ handleGfiDownload }) => {
         setIsVKMInfoOpen(!isVKMInfoOpen);
     };
 
+    const handleAddGeometry = () => {/* FIX ME when multiple geometry selecting is available
+        geoJsonArray.features && geoJsonArray.features.forEach(feature => {
+            channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', [
+                feature.geojson,
+                addFeaturesToMapParams
+            ]);
+        })
+
+        geoJsonArray.geojson &&
+        channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', [
+            geoJsonArray.geojson ,
+            addFeaturesToMapParams
+        ]); */
+        store.dispatch(setMinimizeGfi(true));
+        store.dispatch(setIsSaveViewOpen(true));
+        store.dispatch(setSavedTabIndex(1));
+    };
+
+    const tablePropsInit = (data) => {
+        const properties = data && data.content && data.content.features && data.content.features[0].properties;
+
+        var hightPriorityColumns = properties?._orderHigh && JSON.parse(properties?._orderHigh);
+        var lowPriorityColumns = properties?._order && JSON.parse(properties?._order);
+        var columnsArray = [];
+
+        var columns = hightPriorityColumns && hightPriorityColumns.concat(lowPriorityColumns);
+        columns && columns.forEach(column => {
+            if (column !== 'UID') {
+                columnsArray.push({ key: column, title: column, width: 180, colGroup: { style: { minWidth: 120 } }});
+            }
+        });
+
+        var cells = data && data.content && data.content.features && data.content.features.map(feature => {
+                var cell = {...feature.properties};
+                cell['id'] = feature.id;
+                cell.hasOwnProperty('UID') && delete cell['UID'];
+                cell.hasOwnProperty('_orderHigh') && delete cell['_orderHigh'];
+                cell.hasOwnProperty('_order') && delete cell['_order'];
+                return cell;
+        });
+
+        const tablePropsInit = {
+            columns: columnsArray,
+            data: cells,
+            rowKeyField: 'id',
+            sortingMode: SortingMode.SingleTripleState,
+            columnResizing: true,
+            paging: {
+              enabled: true,
+              pageIndex: 0,
+              pageSize: 100,
+              pageSizes: [10, 50, 100],
+              position: PagingPosition.Bottom
+            },
+            format: ({value}) => {
+                if(isValidUrl(value)) {
+                    return <a target="_blank" rel="noreferrer" href={value}>{value}</a>
+                }
+            }
+        };
+        return tablePropsInit;
+    }
 
     const handleGfiToolsMenu = () => {
         setIsGfiDownloadsOpen(false);
@@ -489,14 +713,65 @@ export const GFIPopup = ({ handleGfiDownload }) => {
         gfiInputEl.current.swiper.slideTo(selectedTab);
     }, [selectedTab]);
 
+    const getMoreFeatures = (nextStartIndex, layerId) => {
+        setIsLoading(true);
+        channel.getFeaturesByGeoJSON && channel.getFeaturesByGeoJSON([gfiCroppingArea, nextStartIndex, [layerId]], function (data) {
+        data.gfi.forEach(
+            (gfi) => {
+                store.dispatch(addFeaturesToGFILocations({
+                    layerId: gfi.layerId,
+                    geojson: gfi.geojson,
+                    moreFeatures: gfi.moreFeatures,
+                    nextStartIndex: gfi.nextStartIndex,
+                    selectedGFI: selectedTab
+                }));
+            }
+        );
+        setIsLoading(false);
+    }, function(errors) {
+            setIsLoading(false);
+        });
+    };
+
+    useEffect(() => {
+        vkmData? setIsVKMInfoOpen(true) : setIsVKMInfoOpen(false);
+    }, [vkmData]);
+
     return (
         <StyledGfiContainer>
+            <AnimatePresence>
+                {isLoading && (
+                    <StyledLoadingOverlay
+                        transition={{
+                            duration: 0.4,
+                            type: 'tween',
+                        }}
+                        initial={{
+                            opacity: 0,
+                        }}
+                        animate={{
+                            opacity: 1,
+                        }}
+                        exit={{
+                            opacity: 0,
+                        }}
+                    >
+                        <StyledLoaderWrapper>
+                            <SVLoader />
+                        </StyledLoaderWrapper>
+                    </StyledLoadingOverlay>
+                )}
+            </AnimatePresence>
                 <StyledVKMDataContainer
+                    initial={{
+                        height: !isVKMInfoOpen && !vkmData && 0
+                    }}
                     animate={{
                         height: isVKMInfoOpen ? 'auto' : 0,
                         opacity: isVKMInfoOpen ? 1 : 0,
                         marginTop: isVKMInfoOpen ? '16px' : '0px',
-                        marginBottom: isVKMInfoOpen ? '16px' : '0px'
+                        marginBottom: isVKMInfoOpen ? '16px' : '0px',
+                        y: isVKMInfoOpen? 0 : -100
                     }}
                     transition={{ duration: 0.4 }}
                 >
@@ -513,55 +788,65 @@ export const GFIPopup = ({ handleGfiDownload }) => {
                                 />
                         }
                         {
-                            vkmData && vkmData.vkm.kuntanimi && <p>{vkmData.vkm.kuntanimi}</p>
+                            vkmData && vkmData.vkm.kuntanimi && <h5>{vkmData.vkm.kuntanimi}</h5>
                         }
+                    </StyledVKMDataMunacipalityImageWrapper>
                         {
                             vkmData && vkmData.coordinates && <StyledCoordinatesWrapper>
-                                <FontAwesomeIcon icon={faMapMarkerAlt} />
                                 <div>
-                                    <p>Lat: {vkmData.coordinates.y}</p>
-                                    <p>Lon: {vkmData.coordinates.x}</p>
+                                    <h6>{strings.vkm.locationInfo}</h6>
+                                    <p style={{fontWeight: '600'}}>{vkmData.vkm.Katunimi}</p>
+                                    <p>Lat: <span style={{fontWeight: '600'}}>{vkmData.coordinates.y}</span></p>
+                                    <p>Lon: <span style={{fontWeight: '600'}}>{vkmData.coordinates.x}</span></p>
                                 </div>
                             </StyledCoordinatesWrapper>
                         }
-                    </StyledVKMDataMunacipalityImageWrapper>
-
                     {
-                        vkmData && vkmData.vkm._orderHigh && vkmData.vkm._orderHigh.filter(value => value !== 'kuntanimi').length > 0 &&
+                        vkmData && vkmData.vkm._orderHigh && vkmData.vkm._orderHigh.filter(value => value !== 'kuntanimi').length > 0 ?
                         <StyledVKMDataInfoWrapper>
+                            <h6>{strings.vkm.roadAddressInfo}</h6>
+                            <StyledVkmDataItems>
                             {
                                 vkmData.vkm._orderHigh.filter(value => value !== 'kuntanimi').map(property => {
-                                    return (
-                                            <li
-                                                key={'vkm-info-box-li'+property}
-                                                style={{
-                                                    color: '#0064af'
-                                                }}
-                                            >
-                                                <span
+                                    if (property !== "Katunimi")
+                                        return (
+                                                <p
+                                                    key={'vkm-info-box-li'+property}
                                                     style={{
-                                                        fontSize: '14px',
-                                                        fontWeight: 'light',
-                                                        margin: '0'
+                                                        color: '#0064af'
                                                     }}
                                                 >
-                                                    {property + ':'}
-                                                </span>
-                                                &nbsp;
-                                                <span
-                                                    style={{
-                                                        fontSize: '16px',
-                                                        fontWeight: '600',
-                                                        margin: '0'
-                                                    }}
-                                                >
-                                                    {vkmData.vkm[property]}
-                                                </span>
-                                            </li>
-                                    )
+                                                    <span
+                                                        style={{
+                                                            fontSize: '14px',
+                                                            fontWeight: 'light',
+                                                            margin: '0'
+                                                        }}
+                                                    >
+                                                        {property + ':'}
+                                                    </span>
+                                                    &nbsp;
+                                                    <span
+                                                        style={{
+                                                            fontSize: '14px',
+                                                            fontWeight: '600',
+                                                            margin: '0'
+                                                        }}
+                                                    >
+                                                        {vkmData.vkm[property]}
+                                                    </span>
+                                                </p>
+                                        )
+                                    else return null;
                                 })
                             }
+                            </StyledVkmDataItems>
                         </StyledVKMDataInfoWrapper>
+                        :
+                        <StyledVkmInstruction>
+                            <h6>{strings.vkm.roadAddressInfo}</h6>
+                            <p>{strings.vkm.roadAddressInstructions}</p>
+                        </StyledVkmInstruction>
                     }
                 </StyledVKMDataContainer>
             {tabsContent.length > 0 && (
@@ -638,13 +923,13 @@ export const GFIPopup = ({ handleGfiDownload }) => {
                     )}
                 </StyledTabSwiperContainer>
             )}
-            <StyledTabContent>
+            <StyledTabContent isMobile={isMobile}>
                 {tabsContent[selectedTab] === undefined && (
                     <StyledNoGfisContainer>
                         <StyledSubtitle>{strings.gfi.choosingGfi}:</StyledSubtitle>
                         <StyledInfoTextContainer>
                             <li>{strings.gfi.choosingGfiDescription0}.&nbsp; <FontAwesomeIcon icon={faLayerGroup} style={{fontSize: '16px'}}/></li>
-                            <li>{strings.gfi.choosingGfiDescription1}.&nbsp; <FontAwesomeIcon icon={faPencilRuler} style={{fontSize: '16px'}}/></li>
+                            <li>{strings.gfi.choosingGfiDescription1}.&nbsp; <FontAwesomeIcon icon={faMapMarkedAlt} style={{fontSize: '16px'}}/></li>
                             <li>{strings.gfi.choosingGfiDescription2}.</li>
                         </StyledInfoTextContainer>
                     </StyledNoGfisContainer>
@@ -662,6 +947,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
                     {gfiLocations.map((location) => {
                             const layers = allLayers.filter(layer => layer.id === location.layerId);
                             const title = layers.length > 0 && layers[0].name;
+                            const tableProps = tablePropsInit(location);
                             if (location.type === 'geojson') {
                                 return (
                                     <SwiperSlide
@@ -685,7 +971,20 @@ export const GFIPopup = ({ handleGfiDownload }) => {
                                         <GfiTabContent
                                             data={location}
                                             title={title}
+                                            tablePropsInit={tableProps}
                                         />
+                                        {location.content.features && <StyledFeaturesInfo>
+                                        <StyledFeatureAmount>
+                                            {`${strings.gfi.featureAmount} : `}
+                                            <span>{location.content.features.length} {location.moreFeatures && ` / ${location.content.totalFeatures}`}</span>
+                                        </StyledFeatureAmount>
+                                        {location.moreFeatures &&
+                                            <StyledShowMoreButtonWrapper>
+                                                <StyledShowMoreButton onClick={() => getMoreFeatures(location.nextStartIndex, location.layerId)}>
+                                                {strings.gfi.getMoreFeatures}</StyledShowMoreButton>
+                                            </StyledShowMoreButtonWrapper>
+                                        }
+                                    </StyledFeaturesInfo>}
                                     </SwiperSlide>
                                 );
                             }
@@ -693,37 +992,46 @@ export const GFIPopup = ({ handleGfiDownload }) => {
                     })}
                 </StyledSwiper>
             </StyledTabContent>
-            <StyledButtonsContainer>
+            <StyledButtonsContainer> 
+                {/* FIX ME when multiple geometry selecting is available
+                    Object.keys(geoJsonArray).length > 0 &&
+                    <>
+                        <CircleButton
+                            text={strings.savedContent.saveGeometry.saveGeometry}
+                            tooltipDirection={'bottom'}
+                            clickAction={handleAddGeometry}
+                        />
+                    </> */
+                }
                 {
                     vkmData &&
                     <CircleButton
                         icon={faMapMarkerAlt}
                         text={strings.vkm.locationInfo}
                         toggleState={isVKMInfoOpen}
-                        tooltipDirection={'left'}
+                        tooltipDirection={'bottom'}
                         clickAction={handleVKMInfo}
                     />
                 }
                 <CircleButton
-                    icon={faPencilRuler}
+                    icon={faMapMarkedAlt}
                     text={strings.gfi.selectLocations}
                     toggleState={isGfiToolsOpen}
-                    tooltipDirection={'left'}
+                    tooltipDirection={'bottom'}
                     clickAction={handleGfiToolsMenu}
                 />
                 <CircleButton
                     icon={faFileDownload}
                     text={strings.gfi.downloadMaterials}
                     toggleState={isGfiDownloadsOpen}
-                    tooltipDirection={'left'}
+                    tooltipDirection={'bottom'}
                     clickAction={handleGfiDownloadsMenu}
-                    //clickAction={() => store.dispatch(setIsGfiDownloadOpen(true))}
                     disabled={!gfiLocations.length > 0}
                 />
                 <CircleButton
                     icon={faSearchLocation}
                     text={strings.gfi.focusToLocations}
-                    tooltipDirection={'left'}
+                    tooltipDirection={'bottom'}
                     clickAction={() => {
                         handleOverlayGeometry(tabsContent[selectedTab].props.data);
                         isMobile && store.dispatch(setMinimizeGfi(true));

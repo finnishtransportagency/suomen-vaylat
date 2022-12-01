@@ -11,7 +11,7 @@ import Filter from './Filter';
 import LayerList from './LayerList';
 import LayerSearch from './LayerSearch';
 import ReactTooltip from 'react-tooltip';
-import { isMobile } from '../../../theme/theme';
+import { isMobile, theme } from '../../../theme/theme';
 
 const listVariants = {
   visible: {
@@ -118,7 +118,7 @@ const LayerListTEMP = ({
 
     return (
       <>
-      <ReactTooltip disable={isMobile} id='layerlist-filter' place="right" type="dark" effect="float">
+      <ReactTooltip backgroundColor={theme.colors.mainColor1} disable={isMobile} id='layerlist-filter' place="right" type="dark" effect="float">
           <span>{strings.tooltips.layerlist.filter}</span>
       </ReactTooltip>
        <StyledListSubtitle>{strings.layerlist.layerlistLabels.filterOrSearchLayers}</StyledListSubtitle>
@@ -147,7 +147,7 @@ const LayerListTEMP = ({
             {strings.layerlist.layerlistLabels.filterByType}
           </StyledListSubtitle>
           <StyledFiltersContainer>
-            {tags.map((tag, index) => {
+            {tags?.map((tag, index) => {
               return(
                   <Filter isOpen={isOpen} key={'fiter-tag-'+index} filter={tag} />
               );

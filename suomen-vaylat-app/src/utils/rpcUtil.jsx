@@ -1,18 +1,25 @@
+import { layer } from '@fortawesome/fontawesome-svg-core';
+import moment from 'moment';
 import {
     setAllLayers,
     setSelectedLayers,
     setSelectedTheme,
     setLastSelectedTheme,
     setSelectedThemeIndex,
-    reArrangeSelectedMapLayers
+    reArrangeSelectedMapLayers,
+    setBackgroundMaps,
+    setMapLayers
 } from '../state/slices/rpcSlice';
 
 import {
     setSelectedMapLayersMenuThemeIndex,
-    setIsLegendOpen
+    setIsLegendOpen,
+    setIsZoomBarOpen
 } from '../state/slices/uiSlice';
 
 import { isMobile } from '../theme/theme';
+import strings from '../translations';
+import { ANNOUNCEMENTS_LOCALSTORAGE } from '../utils/constants';
 
 /**
  * Update layers. Use only this to update all layers and selected layers.
@@ -25,7 +32,7 @@ export const updateLayers = (store, channel) => {
         store.dispatch(setAllLayers(data));
     });
     channel && channel.getSelectedLayers(function (data) {
-        const reArrangedSelectedLayers = reArrangeSelectedLayersOrder(data)
+        const reArrangedSelectedLayers = reArrangeSelectedLayersOrder(data, store)
         store.dispatch(setSelectedLayers(reArrangedSelectedLayers));
         reArrangeRPCLayerOrder(store, reArrangedSelectedLayers)
     });
@@ -42,22 +49,38 @@ export const updateLayers = (store, channel) => {
  * @param {Number} selectedThemeIndex
  */
 export const selectGroup = (store, channel, index, theme, lastSelectedTheme, selectedThemeIndex) => {
+    const closeAllThemeLayers = (theme) => {
+        // close all theme layers
+        theme?.layers?.forEach(layerId => {
+            channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layerId, false]);
+        });
+        // close all subtheme layers and check if subthemes have subthemes and close their layers recursively
+        if(theme.subthemes) {
+            theme.subthemes.forEach(subtheme => {
+                closeAllThemeLayers(subtheme);
+            });
+        }
+    };
     store.dispatch(setLastSelectedTheme(theme));
+
     if (selectedThemeIndex === null){
         store.dispatch(setSelectedTheme(theme));
         store.dispatch(setSelectedThemeIndex(index));
         setTimeout(() => {
-            !isMobile && store.dispatch(setIsLegendOpen(true));
+            if(!isMobile) {
+                store.dispatch(setIsLegendOpen(true));
+                store.dispatch(setIsZoomBarOpen(true));
+            }
             theme.defaultLayers && theme.defaultLayers.forEach(layerId => {
                 channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layerId, true]);
             });
             updateLayers(store, channel);
         },700);
-    } else if (selectedThemeIndex !== index ){
+    } 
+    
+    else if (selectedThemeIndex !== index ){
         store.dispatch(setSelectedTheme(theme));
-        lastSelectedTheme !== null && lastSelectedTheme.layers.forEach(layerId => {
-            channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layerId, false]);
-        });
+        closeAllThemeLayers(lastSelectedTheme);
         updateLayers(store, channel);
         setTimeout(() => {
             store.dispatch(setSelectedThemeIndex(index));
@@ -68,22 +91,17 @@ export const selectGroup = (store, channel, index, theme, lastSelectedTheme, sel
                 updateLayers(store, channel);
             },700);
         },1000);
-
-    } else {
+    } 
+    
+    else {
         store.dispatch(setSelectedTheme(null));
-        theme.layers && theme.layers.forEach(layerId => {
-            channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layerId, false]);
-        });
-        if (theme.subthemes){
-            for (var i = 0; i < theme.subthemes.length; i++) {
-                theme.subthemes[i].layers.forEach(layerId => {
-                    channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layerId, false]);
-                });
-            }
-        }
+        closeAllThemeLayers(lastSelectedTheme);
         updateLayers(store, channel);
         setTimeout(() => {
-            !isMobile && store.dispatch(setIsLegendOpen(false));
+            if(!isMobile) {
+                store.dispatch(setIsLegendOpen(false));
+                store.dispatch(setIsZoomBarOpen(false));
+            }
             store.dispatch(setSelectedThemeIndex(null));
         },700);
     };
@@ -96,25 +114,21 @@ export const selectGroup = (store, channel, index, theme, lastSelectedTheme, sel
  * @param {Array} selectedLayers
  */
 export const reArrangeRPCLayerOrder = (store, selectedLayers) => {
-    const mapLayers = selectedLayers.filter(layer => {
-        return !(layer.groups && layer.groups.includes(1));
-    });
 
-    const backgroundMaps = selectedLayers.filter(layer => {
-        return layer.groups && layer.groups.includes(1);
-    });
+    const mapLayers = store.getState().rpc.selectedLayersByType.mapLayers;
+    const backgroundMaps = store.getState().rpc.selectedLayersByType.backgroundMaps;
+    let concatted = mapLayers.concat(backgroundMaps);
+    store.dispatch(setSelectedLayers(concatted));
 
-    mapLayers.forEach((layer, idx) => {
-        // Update layer orders to correct
-        const position = selectedLayers.length-idx;
+    mapLayers.forEach((layer, i) => {
+        const position = concatted.length - i;
         store.dispatch(reArrangeSelectedMapLayers({layerId: layer.id, position: position}));
     });
 
-    backgroundMaps.forEach((layer, idx) => {
-        // Update layer orders to correct
-        const position = selectedLayers.length - mapLayers.length -idx;
-        store.dispatch(reArrangeSelectedMapLayers({layerId: layer.id, position: position}));
-    })
+    backgroundMaps.forEach((map, i) => {
+        const position = concatted.length - mapLayers.length -i;
+        store.dispatch(reArrangeSelectedMapLayers({layerId: map.id, position: position}))
+    });
 }
 
 /**
@@ -123,16 +137,45 @@ export const reArrangeRPCLayerOrder = (store, selectedLayers) => {
  * @param {Array} selectedLayers
  * @returns ordered layers
  */
-export const reArrangeSelectedLayersOrder = (selectedLayers) => {
-    const mapLayers = selectedLayers.filter(layer => {
-        return !(layer.groups && layer.groups.includes(1));
-    });
+export const reArrangeSelectedLayersOrder = (selectedLayers, store) => {
 
-    const backgroundMaps = selectedLayers.filter(layer => {
-        return layer.groups && layer.groups.includes(1);
-    });
+    let bgMaps = store.getState().rpc.selectedLayersByType.backgroundMaps;
 
-    return mapLayers.concat(backgroundMaps)
+    const clearUnselectedMaps = () => {
+        bgMaps = bgMaps.filter(map => selectedLayers.find(layer => layer.id === map.id))
+    }
+
+    const getBackgroundMaps = (group) => {
+        if(group?.groups) {
+            group.groups.forEach(group => {
+                getBackgroundMaps(group);
+            });
+        }
+        if(group?.layers) {
+            group.layers.forEach(layer => {
+                selectedLayers.forEach(selectedLayer => {
+                    if(selectedLayer.id === layer) {
+                        if(bgMaps.length > 0) {
+                            let duplicateIndex = bgMaps.findIndex(map => map.id === layer);
+                            if(duplicateIndex === -1) bgMaps = [selectedLayer, ...bgMaps];
+                            else bgMaps[duplicateIndex] = selectedLayer
+                        }
+                        else {
+                            bgMaps = [selectedLayer, ...bgMaps];
+                        }
+                    }
+                })
+            });
+        }
+        else return;
+    };
+    clearUnselectedMaps();
+    getBackgroundMaps(store.getState().rpc.allGroups[12]);
+    let layers = selectedLayers.filter(layer => !bgMaps.find(map => map.id === layer.id));
+    store.dispatch(setBackgroundMaps(bgMaps));
+    store.dispatch(setMapLayers(layers));
+
+    return layers.concat(bgMaps)
 }
 
 /**
@@ -192,4 +235,49 @@ export const removeDuplicates = (originalArray, prop) => {
         newArray.push(lookupObject[i]);
     }
     return newArray;
+}
+
+/**
+ * Gets active announcements
+ * @param {Array} annoucements announcements
+ * @returns {Array} active annoucements
+ */
+export const getActiveAnnouncements = (annoucements) => {
+    let activeAnnoucements = [];
+    if (annoucements && annoucements.length > 0) {
+        const localStorageAnnouncements =
+            localStorage.getItem(ANNOUNCEMENTS_LOCALSTORAGE)
+                ? localStorage.getItem(
+                        ANNOUNCEMENTS_LOCALSTORAGE
+                    )
+                : [];
+        const activeAnnouncements = annoucements.filter(
+            (announcement) =>
+                localStorageAnnouncements &&
+                !localStorageAnnouncements.includes(
+                    announcement.id
+                )
+        );
+
+
+        const currentTime = Date.now();
+        const currentLang = strings.getLanguage();
+        const defaultLang = strings.getAvailableLanguages()[0];
+
+        activeAnnouncements.forEach(annoucement => {
+            const start = new Date(annoucement.beginDate);
+            const end = new Date(annoucement.endDate);
+            if (moment(currentTime).isBetween(start, end)) {
+                const localeObj = annoucement.locale[currentLang] ? annoucement.locale[currentLang] : (
+                        annoucement.locale[defaultLang] ? annoucement.locale[defaultLang] : annoucement.locale[Object.keys(annoucement.locale)[0]]
+                    )
+                activeAnnoucements.push({
+                    id: annoucement.id,
+                    title: localeObj.title,
+                    content: localeObj.content
+                });
+            }
+        });
+    }
+    return activeAnnoucements;
 }

@@ -1,5 +1,7 @@
 import React, { useState, useContext, useEffect, useRef } from 'react';
 import { ReactReduxContext } from 'react-redux';
+import { ToastContainer, Slide, toast} from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 import { useAppSelector } from '../../state/hooks';
 import styled from 'styled-components';
 import strings from '../../translations';
@@ -11,6 +13,8 @@ import {
     resetGFILocations,
     setDownloadActive,
     setDownloadFinished,
+    removeMarkerRequest,
+    setVKMData
 } from '../../state/slices/rpcSlice';
 
 import {
@@ -45,7 +49,7 @@ import UserGuideModalContent from '../user-guide-modal/UserGuideModalContent';
 import MenuBar from './menu-bar/MenuBar';
 import MapLayersDialog from '../dialog/MapLayersDialog';
 import WarningDialog from '../dialog/WarningDialog';
-import Views from '../views/Views';
+import SavedModalContent from '../views/Views';
 import PublishedMap from '../published-map/PublishedMap';
 import Search from '../search/Search';
 import ActionButtons from '../action-button/ActionButtons';
@@ -56,6 +60,7 @@ import WarningModalContent from '../warning/WarningModalContent';
 import GFIPopup from '../gfi/GFIPopup';
 import GFIDownload from '../gfi/GFIDownload';
 import MetadataModal from '../metadata-modal/MetadataModal';
+import { ANNOUNCEMENTS_LOCALSTORAGE } from '../../utils/constants';
 
 const StyledContent = styled.div`
     z-index: 1;
@@ -67,8 +72,41 @@ const StyledContent = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    .Toastify {
+        z-index: 99 !important;
+    };
+    .Toastify__toast-container {
+
+    }
+    .Toastify__toast-container--top-right {
+        top: 9em;
+        width: 400px;
+    }
     @media ${(props) => props.theme.device.desktop} {
-    } ;
+        .Toastify__toast-container--top-right {
+            top: 9em;
+        }
+    };
+    @media ${props => props.theme.device.tablet} {
+        .Toastify__toast-container--top-right {
+            top: 9em;
+        }
+    };
+
+    @media ${(props) => props.theme.device.mobileL} {
+        .Toastify__toast-container {
+            width: 100%;
+        }
+        .Toastify__toast-container--top-right {
+            top: 7em;
+        }
+    };
+
+
+
+    .Toastify {
+        z-index: 2;
+    }
 `;
 
 const StyledContentGrid = styled.div`
@@ -86,11 +124,14 @@ const StyledContentGrid = styled.div`
     @media ${(props) => props.theme.device.mobileL} {
         padding: 8px;
         grid-template-columns: 48px 1fr;
-    } ;
+    };
 `;
 
 const StyledLayerNamesList = styled.ul`
     padding-inline-start: 20px;
+`;
+
+const StyledToastContainer = styled(ToastContainer)`
 `;
 
 const StyledLayerNamesListItem = styled.li``;
@@ -123,8 +164,6 @@ const Content = () => {
     const metadata = useAppSelector((state) => state.rpc.layerMetadata);
 
     let { channel, gfiLocations } = useAppSelector((state) => state.rpc);
-
-    const ANNOUNCEMENTS_LOCALSTORAGE = 'oskari-announcements';
 
     const addToLocalStorageArray = (name, value) => {
         // Get the existing data
@@ -197,11 +236,8 @@ const Content = () => {
         store.dispatch(setIsGfiOpen(false));
         store.dispatch(setMinimizeGfi(false));
         store.dispatch(setMaximizeGfi(false));
-        channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [
-            null,
-            null,
-            'gfi-result-layer',
-        ]);
+        setTimeout(() => {store.dispatch(setVKMData(null))}, 500) ; // VKM info does not disappear during modal close animation.
+        store.dispatch(removeMarkerRequest({markerId: "VKM_MARKER"}));
         channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [
             null,
             null,
@@ -225,7 +261,20 @@ const Content = () => {
         store.dispatch(setWarning(null));
     };
 
+    const viewHelp = () => {
+        return (
+            <ul>
+                <li>{strings.savedContent.saveView.saveViewDescription1}</li>
+                <li>{strings.savedContent.saveView.saveViewDescription2}</li>
+            </ul>
+        )
+    }
+
     const handleGfiDownload = (format, layers, croppingArea) => {
+        let sessionId = '';
+        let finishedDownload = null;
+        const supportsWebSockets = 'WebSocket' in window || 'MozWebSocket' in window;
+        
         let layerIds = layers.map((layer) => {
             return layer.id;
         });
@@ -252,24 +301,73 @@ const Content = () => {
 
         store.dispatch(setIsGfiDownloadOpen(true));
         store.dispatch(setDownloadActive(newDownload));
-        channel.downloadFeaturesByGeoJSON && channel.downloadFeaturesByGeoJSON([layerIds, croppingArea, format.format], function (data) {
-            var finishedDownload = {
-                ...newDownload,
-                url: data.url !== null && data.url,
-                fileSize: data.fileSize !== null && data.fileSize,
-                loading: false,
-            };
-            store.dispatch(setDownloadFinished(finishedDownload));
-        }, function(errors) {
-            var errorDownload = {
-                ...newDownload,
-                url: null,
-                fileSize: null,
-                loading: false,
-                error: true
-            };
-            store.dispatch(setDownloadFinished(errorDownload));
+
+        channel.downloadFeaturesByGeoJSON && channel.downloadFeaturesByGeoJSON([layerIds, croppingArea, format.format, sessionId], (data) => {
+            return;
         });
+
+        const connectWebsocket = (count) =>
+        {
+            const MAX_RECONNECTIONS_TRY = 4;
+            let isDownloadReady = false;
+            if (supportsWebSockets) {
+                // Open WebSocket
+                const ws = new WebSocket(process.env.REACT_APP_WEBSOCKET_URL);
+
+                const handleDownloadFailure = () => {
+                    handleCloseGfiDownloadModal();
+                    handleCloseSaveViewModal();
+                    ws.close();
+                    toast.error(strings.downloads.downloadFailure, {position: "top-center"});
+                };
+
+                ws.onopen = function ()
+                {
+                    const sendPing = () => {
+                        var json = {type:'ping', data: {}};
+                        ws.send(JSON.stringify(json));
+                    }
+                    setInterval(() => {
+                        sendPing();
+                    }, 1000 * 60 * 10);
+                };
+                ws.onmessage = function (evt)
+                {
+                    let data = JSON.parse(evt.data);
+
+                    if(data.type === "DOWNLOAD_READY") {
+                        let data = JSON.parse(evt.data);
+                        finishedDownload = {
+                            ...newDownload,
+                            url: data.data.url !== null && data.data.url,
+                            fileSize: data.data.fileSize !== null && data.data.fileSize,
+                            loading: false,
+                        };
+                        store.dispatch(setDownloadFinished(finishedDownload));
+                        isDownloadReady = true;
+                        ws.close();
+                    }
+                }
+                ws.onerror = () => {
+                    handleDownloadFailure();
+                };
+                ws.onclose = (event) => {
+                    // If the download is ready don't try to reconnect
+                    if(isDownloadReady) return;
+
+                    if (count < MAX_RECONNECTIONS_TRY) {
+                        setTimeout(() => {
+                            connectWebsocket(count + 1);
+                        }, 1000);
+                    }
+                    else {
+                        handleDownloadFailure();
+                    };
+                };
+            }
+                else toast.error(strings.downloads.noWebSocketSupport, {position: "top-center"});
+            }
+            connectWebsocket(0);
     };
 
     return (
@@ -343,6 +441,9 @@ const Content = () => {
                     isOpen={isGfiOpen} /* Modal state */
                     id={null}
                     minWidth={'600px'}
+                    minHeight={'530px'}
+                    height='100vw'
+                    width='50vw'
                     //maxWidth={'1000px'}
                     //maxWidth={'calc(100vw - 100px)'}
                     minimize={minimizeGfi}
@@ -397,6 +498,7 @@ const Content = () => {
                     } /* Action when pressing modal close button or backdrop */
                     isOpen={isUserGuideOpen} /* Modal state */
                     id={null}
+                    height="860px"
                 >
                     <UserGuideModalContent />
                 </Modal>
@@ -517,16 +619,16 @@ const Content = () => {
                     constraintsRef={
                         constraintsRef
                     } /* Reference div for modal drag boundaries */
-                    drag={false} /* Enable (true) or disable (false) drag */
+                    drag={true} /* Enable (true) or disable (false) drag */
                     resize={false}
                     backdrop={
-                        true
+                        false
                     } /* Is backdrop enabled (true) or disabled (false) */
                     fullScreenOnMobile={
                         true
                     } /* Scale modal full width / height when using mobile device */
                     titleIcon={faSave} /* Use icon on title or null */
-                    title={strings.saveView.saveView} /* Modal header title */
+                    title={strings.savedContent.savedContent} /* Modal header title */
                     type={'normal'} /* Modal type */
                     closeAction={
                         handleCloseSaveViewModal
@@ -534,8 +636,11 @@ const Content = () => {
                     isOpen={isSaveViewOpen} /* Modal state */
                     id={null}
                     minWidth={'600px'}
+                    hasHelp={true}
+                    helpId={'show_view_help'}
+                    helpContent={viewHelp()}
                 >
-                    <Views />
+                    <SavedModalContent />
                 </Modal>
                 <Modal
                     constraintsRef={
@@ -590,6 +695,7 @@ const Content = () => {
                     <WarningModalContent warning={warning} />
                 </Modal>
                 <ScaleBar />
+                <StyledToastContainer position="bottom-left" pauseOnFocusLoss={false} transition={Slide} autoClose={false} closeOnClick={false} />
                 <StyledContentGrid>
                     <MenuBar />
                     <MapLayersDialog />

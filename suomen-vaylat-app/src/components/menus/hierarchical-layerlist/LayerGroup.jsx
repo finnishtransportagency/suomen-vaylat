@@ -321,7 +321,6 @@ export const LayerGroup = ({
 
     //Find matching layers from all layers and groups, then push this group's layers into 'filteredLayers'
     useEffect(() => {
-
         if (group.layers) {
             var getLayers = [];
             // need use group.layers because it is layer name ordered list
@@ -354,64 +353,92 @@ export const LayerGroup = ({
         layersCounter(group);
     },[group, layers]);
 
+    useEffect(() => {
+        totalVisibleGroupLayersCount === totalGroupLayersCount && totalVisibleGroupLayersCount !== 0 && setIsChecked(true);
+    }, [totalVisibleGroupLayersCount, totalGroupLayersCount])
+
     const truncatedString = (string, characterAmount, text) => {
         return (
-            string.length > characterAmount + 20 ? <>{string.substring(0, characterAmount)} <StyledReadMoreButton
+            string.length > characterAmount + 20 ? <>{string.substring(0, characterAmount) + '...'} <StyledReadMoreButton
                 onClick={() => setIsExcerptOpen(!isExcerptOpen)}>{text}</StyledReadMoreButton></> : string
         )
+    }
+
+    const showWarning = () => {
+        store.dispatch(setWarning({
+            title: strings.multipleLayersWarning,
+            subtitle: null,
+            cancel: {
+                text: strings.general.cancel,
+                action: () => store.dispatch(setWarning(null))
+            },
+            confirm: {
+                text: strings.general.continue,
+                action: () => {
+                    groupLayersVisibility();
+                    store.dispatch(setWarning(null));
+                }
+            },
+        }))
     }
 
     const selectGroup = (e) => {
         e.stopPropagation();
         let invisibleLayers = filteredLayers.length - visibleLayers.length;
-        if(filteredLayers.length > 9 && invisibleLayers > 9 && isChecked === false){
-            store.dispatch(setWarning({
-                title: strings.multipleLayersWarning,
-                subtitle: null,
-                cancel: {
-                    text: strings.general.cancel,
-                    action: () => store.dispatch(setWarning(null))
-                },
-                confirm: {
-                    text: strings.general.continue,
-                    action: () => {
-                        groupLayersVisibility();
-                        store.dispatch(setWarning(null));
-                    }
-                },
-            }))
+        if((filteredLayers.length > 9 && invisibleLayers > 9 && isChecked === false) || (totalGroupLayersCount > 9 && totalVisibleGroupLayersCount < 9)){
+            showWarning();
         } else {
             groupLayersVisibility();
         }
-/*         var invisibleLayers = filteredLayers.length - visibleLayers.length;
-        var localStorageWarn = localStorage.getItem(OSKARI_LOCALSTORAGE) ? localStorage.getItem(OSKARI_LOCALSTORAGE) : [] ;
-        if (filteredLayers.length > 9 && invisibleLayers > 9 && isChecked === false && !localStorageWarn.includes("multipleLayersWarning")) {
-            store.dispatch(setSelectError({show: true, type: 'multipleLayersWarning', filteredLayers: filteredLayers, isChecked: isChecked}));
-        } else {
-            groupLayersVisibility();
-        } */
     };
 
     const groupLayersVisibility = () => {
 
-        if(filteredLayers.length === visibleLayers.length){
+        const setFilteredLayersVisible = (boolean) => {
             filteredLayers.forEach(layer => {
-                channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, false]);
+                channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, boolean]);
             });
-            setIsChecked(false);
-        } else if (isChecked === false){
-            filteredLayers.forEach(layer => {
-                channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, true]);
+        };
+
+        const setGroupLayersVisible = (boolean) => {
+            group.groups.forEach(group => {
+                group.layers.forEach(layer => {
+                    channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer, boolean]);
+                });
             });
-            setIsChecked(true);
-        } else {
-            filteredLayers.forEach(layer => {
-                channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, true]);
-            });
-            setIsChecked(true);
         }
+
+        if(group.hasOwnProperty("groups")) {
+            if(totalGroupLayersCount === totalVisibleGroupLayersCount && totalGroupLayersCount !== 0) {
+                setFilteredLayersVisible(false);
+                setGroupLayersVisible(false);
+                setIsChecked(false);
+            }
+            else if(totalGroupLayersCount !== totalVisibleGroupLayersCount) {
+                setFilteredLayersVisible(true);
+                setGroupLayersVisible(true);
+                setIsChecked(true);
+            };
+        };
+        if(!group.hasOwnProperty("groups")) {
+            if(filteredLayers.length === visibleLayers.length && isChecked) {
+                setFilteredLayersVisible(false);
+                setIsChecked(false);
+            };
+            if(filteredLayers.length !== visibleLayers.length) {
+                setFilteredLayersVisible(true);
+                setIsChecked(true);
+            }
+        };
         updateLayers(store, channel);
     };
+
+    const currentLang = strings.getLanguage();
+    const defaultLang = strings.getAvailableLanguages()[0];
+    const hasGroupDescription = (group.locale[currentLang] && group.locale[currentLang].desc) || (strings.groupLayerList.hasOwnProperty(group.id) && strings.groupLayerList[group.id].description !== null);
+    const hasGroupName = (group.locale[currentLang].name || (strings.groupLayerList.hasOwnProperty(group.id) && strings.groupLayerList[group.id].title !== null));
+    const groupDescription = (group.locale[currentLang] && group.locale[currentLang].desc) ? group.locale[currentLang].desc :
+                                (strings.groupLayerList.hasOwnProperty(group.id) && strings.groupLayerList[group.id].description !== null ? strings.groupLayerList[group.id].description : null);
 
     return (
         <>
@@ -429,12 +456,12 @@ export const LayerGroup = ({
                                 themeStyles.hasOwnProperty(group.id) ?
                                     <FontAwesomeIcon
                                         icon={themeStyles[group.id].icon}
-                                    /> : <p>{group.name.charAt(0).toUpperCase()}</p>
+                                    /> : <p>{group.locale[currentLang] && group.locale[currentLang].name ? group.locale[currentLang].name.charAt(0).toUpperCase() : group.locale[defaultLang] && group.locale[defaultLang].name ? group.locale[defaultLang].name.charAt(0).toUpperCase() : group.id}</p>
                             }
                         </StyledMasterGroupHeaderIcon>
                         <StyledMasterGroupTitleContent>
                             <StyledMasterGroupName>
-                                {group.name}
+                                {group.locale[currentLang] && group.locale[currentLang].name ? group.locale[currentLang].name : group.locale[defaultLang] && group.locale[defaultLang].name ? group.locale[defaultLang].name : group.id}
                             </StyledMasterGroupName>
                             <StyledMasterGroupLayersCount>
                                 {
@@ -486,7 +513,7 @@ export const LayerGroup = ({
                         </StyledMotionIconWrapper>
                     </StyledSelectButton>
                     <div>
-                        <StyledGroupName>{group.name}</StyledGroupName>
+                        <StyledGroupName>{group.locale[currentLang] && group.locale[currentLang].name ? group.locale[currentLang].name : group.locale[defaultLang] && group.locale[defaultLang].name ? group.locale[defaultLang].name : group.id}</StyledGroupName>
                         <StyledSubGroupLayersCount>
                             {
                                 totalVisibleGroupLayersCount +" / "+ totalGroupLayersCount
@@ -497,9 +524,7 @@ export const LayerGroup = ({
                     <StyledRightContent>
                         <Switch
                             isSelected={
-                                filteredLayers.length === visibleLayers.length ||
-                                !visibleLayers.length === 0 ||
-                                !visibleLayers.length > filteredLayers.length
+                                (totalVisibleGroupLayersCount === totalGroupLayersCount && totalVisibleGroupLayersCount !== 0)
                             }
                             action={selectGroup}
                         />
@@ -517,31 +542,33 @@ export const LayerGroup = ({
                         type: "tween"
                     }}
                 >
+                    {group.parentId === -1 &&  ((group.locale[currentLang]) || strings.groupLayerList.hasOwnProperty(group.id)) &&
                         <div>
-                            {group.parentId === -1 && strings.groupLayerList.hasOwnProperty(group.id) && strings.groupLayerList[group.id].title !== null &&
+                            {hasGroupName && hasGroupDescription &&
                                 <>
-                                    <StyledSubHeader>{strings.groupLayerList[group.id].title}</StyledSubHeader>
+                                    <StyledSubHeader>{group.locale[currentLang].name || strings.groupLayerList[group.id].title}</StyledSubHeader>
                                 </>
                             }
-                            {strings.groupLayerList.hasOwnProperty(group.id) && strings.groupLayerList[group.id].description !== null &&
+                            {hasGroupDescription &&
                                 <>
                                     <StyledSubText>
-                                        {isExcerptOpen ? <> {strings.groupLayerList[group.id].description}
-                                                {strings.groupLayerList[group.id].link_description &&
+                                        {isExcerptOpen ? <> {groupDescription}
+                                                {strings.groupLayerList[group.id] && strings.groupLayerList[group.id].link_description &&
                                                     <><StyledLinkButton target={"_blank"} href={strings.groupLayerList[group.id].link}>{strings.groupLayerList[group.id].link_description}</StyledLinkButton><br /></>
                                                 }
-                                                <StyledReadMoreButton onClick={() => setIsExcerptOpen(!isExcerptOpen)}>{strings.groupLayerList.readLess}</StyledReadMoreButton></> :
-                                                truncatedString(strings.groupLayerList[group.id].description,
-                                                    135, '...' + strings.groupLayerList.readMore)}
+                                                <StyledReadMoreButton onClick={() => setIsExcerptOpen(!isExcerptOpen)}> {strings.groupLayerList.readLess}</StyledReadMoreButton></> :
+                                                truncatedString(groupDescription,
+                                                    135, strings.groupLayerList.readMore)}
                                     </StyledSubText>
                                 </>
                             }
                         </div>
+                    }
                     {hasChildren && (
                         <>
                             <LayerList
                                 key={'layer-list'+group.id}
-                                groups={group.groups}
+                                groups={group.groups || []}
                                 layers={layers}
                                 recurse={true}
                             />

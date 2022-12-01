@@ -4,7 +4,7 @@ import {
     faCompress,
     faExpand,
     faLayerGroup,
-    faRuler,
+    faPencilRuler,
     faSave,
     faMapMarkedAlt,
     faDownload,
@@ -20,7 +20,11 @@ import {
     setActiveTool,
     setMinimizeGfi,
     setIsGfiDownloadOpen,
+    setGeoJsonArray,
+    setSelectedMarker
 } from '../../../state/slices/uiSlice';
+
+import { removeMarkerRequest } from '../../../state/slices/rpcSlice';
 
 import CircleButton from '../../circle-button/CircleButton';
 
@@ -72,6 +76,8 @@ const MenuBar = () => {
     const { selectedLayers, downloads, channel } = useAppSelector(
         (state) => state.rpc
     );
+
+    const { drawToolMarkers } = useAppSelector(state => state.ui);
 
     const {
         isFullScreen,
@@ -125,11 +131,16 @@ const MenuBar = () => {
     const closeDrawingTools = () => {
         // remove geometries off the map
         channel && channel.postRequest('DrawTools.StopDrawingRequest', [true]);
+        store.dispatch(setGeoJsonArray([]));
         // stop the drawing tool
         channel &&
             channel.postRequest('DrawTools.StopDrawingRequest', [activeTool]);
         store.dispatch(setActiveTool(null));
+        drawToolMarkers.forEach(marker => {
+            store.dispatch(removeMarkerRequest({markerId: marker}));
+        });
         store.dispatch(setIsDrawingToolsOpen(!isDrawingToolsOpen));
+        store.dispatch(setSelectedMarker(2));
     };
 
     return (
@@ -139,6 +150,7 @@ const MenuBar = () => {
                     icon={faLayerGroup}
                     text={strings.layerlist.layerlistLabels.mapLayers}
                     toggleState={isSideMenuOpen}
+                    tooltipDirection={"right"}
                     clickAction={() =>
                         store.dispatch(setIsSideMenuOpen(!isSideMenuOpen))
                     }
@@ -149,6 +161,7 @@ const MenuBar = () => {
                     icon={faMapMarkedAlt}
                     text={strings.gfi.title}
                     toggleState={isGfiOpen}
+                    tooltipDirection={"right"}
                     clickAction={() => {
                         store.dispatch(setIsGfiOpen(!isGfiOpen));
                         isGfiOpen && store.dispatch(setMinimizeGfi(false));
@@ -158,6 +171,7 @@ const MenuBar = () => {
                     icon={faDownload}
                     text={strings.downloads.downloads}
                     toggleState={isGfiDownloadOpen}
+                    tooltipDirection={"right"}
                     clickAction={() =>
                         store.dispatch(setIsGfiDownloadOpen(!isGfiDownloadOpen))
                     }
@@ -172,19 +186,19 @@ const MenuBar = () => {
                 </CircleButton>
                 <StyledMapToolsContainer>
                     <CircleButton
-                        icon={faRuler}
-                        text={
-                            strings.tooltips.measuringTools.measuringToolsButton
-                        }
+                        icon={faPencilRuler}
+                        text={strings.tooltips.drawingTools.drawingToolsButton}
                         toggleState={isDrawingToolsOpen}
+                        tooltipDirection={"right"}
                         clickAction={closeDrawingTools}
                     />
                     <DrawingTools isOpen={isDrawingToolsOpen} />
                 </StyledMapToolsContainer>
                 <CircleButton
                     icon={faSave}
-                    text={strings.saveView.saveView}
+                    text={strings.savedContent.saveView.saveView}
                     toggleState={isSaveViewOpen}
+                    tooltipDirection={"right"}
                     clickAction={() =>
                         store.dispatch(setIsSaveViewOpen(!isSaveViewOpen))
                     }
@@ -193,6 +207,7 @@ const MenuBar = () => {
                     icon={isFullScreen ? faCompress : faExpand}
                     text={strings.tooltips.fullscreenButton}
                     toggleState={isFullScreen}
+                    tooltipDirection={"right"}
                     clickAction={handleFullScreen}
                 />
             </StyledMenuBar>

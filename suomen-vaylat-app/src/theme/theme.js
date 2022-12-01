@@ -23,19 +23,19 @@ var isMobileTest = {
       return (isMobileTest.Android() || isMobileTest.BlackBerry() || isMobileTest.iOS() || isMobileTest.iPad() || isMobileTest.Opera() || isMobileTest.Windows());
   }};
 
-  export const isMobile = isMobileTest.any();
+export const isMobile = isMobileTest.any();
 
-const size = {
+export const size = {
   mobileS: '320px',
   mobileM: '375px',
   mobileL: '425px',
   tablet: '768px',
   laptop: '1024px',
-  laptopL: '1440px',
+  laptopL: '1640px',
   desktop: '2560px'
 };
 
-const theme = {
+export const theme = {
     fonts: {
       main: 'Exo 2'
     },

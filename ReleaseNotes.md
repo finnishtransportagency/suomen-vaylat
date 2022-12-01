@@ -1,5 +1,50 @@
 # Release Notes
 
+## 1.7.0
+
+For a full list of changes see: https://github.com/finnishtransportagency/suomen-vaylat/milestone/10?closed=1
+
+* Tierekisteri to lowest component in list
+* GFI url's to links & open links in a new window
+* Multiple shape geometry saving
+
+## 1.6.0
+
+For a full list of changes see: https://github.com/finnishtransportagency/suomen-vaylat/milestone/9?closed=1
+
+* Fix backgroundmap opacities not updating
+* Tablet style fixes and improvements & crash handling
+* Reset geometries on logo click
+* Fix removed geometries staying on the map
+* Localization updates
+* Download improvements
+
+## 1.5.0
+
+For a full list of changes see: https://github.com/finnishtransportagency/suomen-vaylat/milestone/8?closed=1
+
+* Backgroundmap grouping recursive
+* Open legend when opening a themelink
+* Fix GFI error when layer some property contains JSONObject values
+
+## 1.4.0
+
+For a full list of changes see: https://github.com/finnishtransportagency/suomen-vaylat/milestone/7?closed=1
+
+* Bug fixes
+* Markers
+
+
+## 1.3.0
+
+For a full list of changes see: https://github.com/finnishtransportagency/suomen-vaylat/milestone/6?closed=1
+
+* Update userguide
+* Improve search
+* Handle over 100 features
+* Improve GFI
+* Oskari 2.8.0 changes
+
 ## 1.2.0
 
 For a full list of changes see: https://github.com/finnishtransportagency/suomen-vaylat/milestone/5?closed=1

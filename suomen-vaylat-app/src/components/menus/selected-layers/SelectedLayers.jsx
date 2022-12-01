@@ -1,6 +1,6 @@
-import React, { useContext } from "react";
+import { useContext} from "react";
 import styled from 'styled-components';
-import { setSelectedLayers } from '../../../state/slices/rpcSlice';
+import { setBackgroundMaps, setMapLayers } from '../../../state/slices/rpcSlice';
 import strings from '../../../translations';
 import { updateLayers, resetThemeGroups, reArrangeRPCLayerOrder } from '../../../utils/rpcUtil';
 import { ReactReduxContext, useSelector } from 'react-redux';
@@ -51,6 +51,7 @@ const SortableElement = sortableElement(({value, currentZoomLevel}) =>
         layer={value}
         uuid={value.metadataIdentifier}
         currentZoomLevel={currentZoomLevel}
+        opacityZero={value.opacity === 0}
     />
 );
 
@@ -63,28 +64,21 @@ export const SelectedLayers = ({ selectedLayers, currentZoomLevel }) => {
 
     const { store } = useContext(ReactReduxContext);
 
-    const channel = useSelector(state => state.rpc.channel);
+    const {channel, selectedLayersByType} = useSelector(state => state.rpc);
 
-    const mapLayers = selectedLayers.filter(layer => {
-        return !(layer.groups && layer.groups.includes(1));
-    });
-
-    const backgroundMaps = selectedLayers.filter(layer => {
-        return layer.groups && layer.groups.includes(1);
-    });
+    let backgroundMaps = selectedLayersByType.backgroundMaps;
+    let mapLayers = selectedLayersByType.mapLayers;
 
     const sortSelectedLayers = (selectedLayer) => {
-        const newSelectedLayers = arrayMoveImmutable(selectedLayers, selectedLayer.oldIndex, selectedLayer.newIndex)
+        const newSelectedLayers = arrayMoveImmutable(mapLayers, selectedLayer.oldIndex, selectedLayer.newIndex)
+        store.dispatch(setMapLayers(newSelectedLayers));
         reArrangeRPCLayerOrder(store, newSelectedLayers);
-        store.dispatch(setSelectedLayers(newSelectedLayers));
     };
 
     const sortSelectedBackgroundLayers = (backgroundLayer) => {
-        const newSelectedLayers = arrayMoveImmutable(selectedLayers,
-            (backgroundLayer.oldIndex + selectedLayers.length) - backgroundMaps.length,
-            (backgroundLayer.newIndex + selectedLayers.length) - backgroundMaps.length)
+        const newSelectedLayers = arrayMoveImmutable(backgroundMaps, backgroundLayer.oldIndex, backgroundLayer.newIndex);
+        store.dispatch(setBackgroundMaps(newSelectedLayers));
         reArrangeRPCLayerOrder(store, newSelectedLayers);
-        store.dispatch(setSelectedLayers(newSelectedLayers));
     };
 
     const handleClearSelectedLayers = () => {
@@ -92,7 +86,7 @@ export const SelectedLayers = ({ selectedLayers, currentZoomLevel }) => {
             channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, !layer.visible]);
         });
         resetThemeGroups(store);
-
+        store.dispatch(setMapLayers([]));
         updateLayers(store, channel);
     };
 
@@ -100,6 +94,7 @@ export const SelectedLayers = ({ selectedLayers, currentZoomLevel }) => {
         backgroundMaps.forEach(layer => {
             channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, !layer.visible]);
         });
+        store.dispatch(setBackgroundMaps([]));
         updateLayers(store, channel);
     };
 
@@ -139,7 +134,7 @@ export const SelectedLayers = ({ selectedLayers, currentZoomLevel }) => {
                 <ul
                     style={{paddingInlineStart: "0px"}}
                 >
-                    {backgroundMaps.map((item, index) => (
+                    {backgroundMaps && backgroundMaps.map((item, index) => (
                         <SortableElement
                             key={'background-maplayer-' + item.id}
                             value={item}

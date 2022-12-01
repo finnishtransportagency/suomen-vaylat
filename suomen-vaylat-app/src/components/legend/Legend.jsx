@@ -7,7 +7,7 @@ import strings from '../../translations';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { LegendGroup } from './LegendGroup';
-import {isMobile} from "../../theme/theme";
+import {theme, isMobile} from "../../theme/theme";
 import ReactTooltip from "react-tooltip";
 
 
@@ -15,13 +15,11 @@ const StyledLegendContainer = styled(motion.div)`
     position: absolute;
     top: 0px;
     right: 100%;
-    //right: 66px;
-    width: 100vw;
     border-radius: 4px;
-    //min-width: 200px;
     margin-right: 8px;
     height: 100%;
-    max-width: 300px;
+    min-width: 350px;
+    max-width: 450px;
     max-height: ${props => props.height && props.height+"px"};
     display: flex;
     flex-direction: column;
@@ -29,9 +27,8 @@ const StyledLegendContainer = styled(motion.div)`
     opacity: 0;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
     @media ${ props => props.theme.device.mobileL} {
-        //position: unset;
         font-size: 13px;
-        right: 42px;
+        min-width: 80vw;
         max-width: calc(100vw - 70px);
     };
 `;
@@ -128,14 +125,12 @@ export const Legend = ({
                 type: "tween"
             }}
         >
-            <ReactTooltip disable={isMobile} id='legendHeader' place='top' type='dark' effect='float'>
+            <ReactTooltip backgroundColor={theme.mainColor1} disable={isMobile} id='legendHeader' place='top' type='dark' effect='float'>
                 <span>{strings.tooltips.legendHeader}</span>
             </ReactTooltip>
-            <StyledHeaderContent
-                data-tip data-for="legendHeader"
-            >
-                <StyledTitleContent>
-                    <p>{strings.legend.title}</p>
+            <StyledHeaderContent>
+                <StyledTitleContent >
+                    <p data-tip data-for="legendHeader">{strings.legend.title}</p>
                 </StyledTitleContent>
                     <StyledCloseIcon
                         icon={faTimes}

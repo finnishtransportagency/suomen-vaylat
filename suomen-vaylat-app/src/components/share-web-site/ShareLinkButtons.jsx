@@ -3,7 +3,7 @@ import { faShareAlt } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ReactReduxContext } from 'react-redux';
 import ReactTooltip from 'react-tooltip';
-import { isMobile } from '../../theme/theme';
+import { theme, isMobile } from '../../theme/theme';
 import styled from 'styled-components';
 import { setShareUrl } from '../../state/slices/uiSlice';
 import strings from '../../translations';
@@ -60,7 +60,7 @@ export const ThemeGroupShareButton = ({ themeId, color }) => {
 
     return(
         <>
-            <ReactTooltip disable={isMobile} id={'share_' + themeId} place='top' type='dark' effect='float'>
+            <ReactTooltip backgroundColor={theme.colors.mainColor1} disable={isMobile} id={'share_' + themeId} place='top' type='dark' effect='float'>
                 <span>{strings.tooltips.shareTheme}</span>
             </ReactTooltip>
             <StyledShareButton
@@ -88,7 +88,7 @@ export const WebSiteShareButton = ({setSubNavOpen}) => {
     const url = process.env.REACT_APP_SITE_URL + '/link/{lang}/{zoom}/{x}/{y}/{maplayers}';
     return (
         <>
-            <ReactTooltip disable={isMobile} id={'share_website'} place='bottom' type='dark' effect='float'>
+            <ReactTooltip backgroundColor={theme.colors.mainColor1} disable={isMobile} id={'share_website'} place='bottom' type='dark' effect='float'>
                 <span>{strings.tooltips.share}</span>
             </ReactTooltip>
             <StyledHeaderButton

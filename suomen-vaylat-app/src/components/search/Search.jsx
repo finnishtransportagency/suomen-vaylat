@@ -9,26 +9,44 @@ import {
     faTrash,
     faEllipsisV,
     faAngleUp,
+    faCity,
+    faRoad,
+    faTrain,
+    faInfoCircle,
+    faQuestion,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import AddressSearch from './AddressSearch';
-import RoadSearch from './RoadSearch';
-import VKMRoadSearch from './VKMRoadSearch';
 import MetadataSearch from './MetadataSearch';
 import Layer from '../menus/hierarchical-layerlist/Layer';
 import SvLoder from '../loader/SvLoader';
 import strings from '../../translations';
+import { SEARCH_TIP_LOCALSTORAGE } from '../../utils/constants';
 
-import { isMobile } from '../../theme/theme';
+import { isMobile, theme } from '../../theme/theme';
 
 import { addMarkerRequest, mapMoveRequest } from '../../state/slices/rpcSlice';
 
-import { setIsSearchOpen } from '../../state/slices/uiSlice';
+import { setIsSearchOpen, setGeoJsonArray, setHasToastBeenShown } from '../../state/slices/uiSlice';
 
 import CircleButton from '../circle-button/CircleButton';
-import VKMTrackSearch from './VKMTrackSearch';
 
 import { VKMGeoJsonHoverStyles, VKMGeoJsonStyles } from './VKMSearchStyles';
+import { toast } from 'react-toastify';
+import SearchToast from '../toasts/SearchToast';
+import TipToast from '../toasts/TipToast';
+
+const StyledSearchIcon  = styled.div`
+    min-width: 48px;
+    padding-right: 16px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    color: ${(props) => props.active ? props.theme.colors.secondaryColor8 : 'rgba(0, 0, 0, 0.5)'};
+    svg {
+        font-size: 18px;
+    };
+    `;
 
 const StyledSearchContainer = styled.div`
     z-index: 2;
@@ -130,6 +148,7 @@ const StyledDropDown = styled(motion.div)`
 `;
 
 const StyledDropdownContentItem = styled.div`
+    display: ${(props) => props.type === 'searchResult' && 'flex'};
     user-select: none;
     cursor: pointer;
     padding-left: 8px;
@@ -145,9 +164,10 @@ const StyledDropdownContentItem = styled.div`
 `;
 
 const StyledDropdownContentItemTitle = styled.p`
+    display: ${(props) => props.type === 'searchResult' && 'flex'};
     text-align: ${(props) => props.type === 'noResults' && 'center'};
     font-size: 14px;
-    color: #504d4d;
+    color: ${(props) => props.active ? props.theme.colors.secondaryColor8 : '#504d4d'};
 `;
 
 const StyledDropdownContentItemSubtitle = styled.p`
@@ -184,6 +204,10 @@ const StyledLoaderWrapper = styled.div`
     }
 `;
 
+const StyledToastIcon = styled(FontAwesomeIcon)`
+    color: ${theme.colors.mainColor1};
+`;
+
 const Search = () => {
     const [searchValue, setSearchValue] = useState('');
     const [lastSearchValue, setLastSearchValue] = useState('');
@@ -194,175 +218,27 @@ const Search = () => {
         useState(false);
     const [searchType, setSearchType] = useState('address');
 
-    const { isSearchOpen } = useAppSelector((state) => state.ui);
+    const { isSearchOpen, geoJsonArray, hasToastBeenShown } = useAppSelector((state) => state.ui);
     const { channel, allLayers } = useAppSelector((state) => state.rpc);
 
     const { store } = useContext(ReactReduxContext);
 
     const markerId = 'SEARCH_MARKER';
     const vectorLayerId = 'SEARCH_VECTORLAYER';
-
-    const [vkmError, setVkmError] = useState(null);
-    const [vkmTrackError, setVkmTrackError] = useState(null);
+    const [searchClickedRow, setSearchClickedRow] = useState(null);
+    const [firstSearchResultShown, setFirstSearchResultShown] = useState(false);
+    const [showToast, setShowToast] = useState(JSON.parse(localStorage.getItem(SEARCH_TIP_LOCALSTORAGE)));
 
     const handleAddressSearch = (value) => {
+        store.dispatch(setGeoJsonArray([]));
+        setFirstSearchResultShown(false);
+        setSearchClickedRow(null);
         removeMarkersAndFeatures();
         setIsSearching(true);
         channel.postRequest('SearchRequest', [value]);
-        setLastSearchValue(value);
-    };
-
-    const handleVKMResponse = (data) => {
-        setIsSearching(false);
-
-        let style = 'tie';
-        if (
-            (data.hasOwnProperty('osa') || data.hasOwnProperty('ajorata')) &&
-            !data.hasOwnProperty('etaisyys')
-        ) {
-            style = 'osa';
-        } else if (data.hasOwnProperty('etaisyys')) {
-            style = 'etaisyys';
-        }
-        let featureStyle = VKMGeoJsonStyles.road[style];
-        let hover = VKMGeoJsonHoverStyles.road[style];
-
-        if (style === 'tie') {
-            removeMarkersAndFeatures();
-        }
-
-        const value = {
-            tienumero: data.hasOwnProperty('tie')
-                ? parseInt(data.tie)
-                : searchValue.tienumero || null,
-            tieosa: data.hasOwnProperty('osa')
-                ? parseInt(data.osa)
-                : searchValue.tieosa || 'default',
-            ajorata: data.hasOwnProperty('ajorata')
-                ? parseInt(data.ajorata)
-                : 'default',
-            etaisyys: data.hasOwnProperty('etaisyys')
-                ? parseInt(data.etaisyys)
-                : '',
-            tieosat: data.hasOwnProperty('tieosat')
-                ? data.tieosat
-                : searchValue.tieosat || [],
-            ajoradat: data.hasOwnProperty('ajoradat')
-                ? data.ajoradat
-                : searchValue.ajoradat || [],
-        };
-
         setSearchValue(value);
         setLastSearchValue(value);
-
-        setSearchResults(data);
-
-        data.hasOwnProperty('geom') &&
-            channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', [
-                data.geom,
-                {
-                    clearPrevious: true,
-                    centerTo: true,
-                    hover: hover,
-                    featureStyle: featureStyle,
-                    layerId: vectorLayerId + '_vkm_' + style,
-                    maxZoomLevel: 10,
-                },
-            ]);
-    };
-
-    const handleVKMSearch = (params) => {
-        removeMarkersAndFeatures();
-        setIsSearching(true);
-        setVkmError(null);
-
-        const requestData = [
-            params.hasOwnProperty('vkmTienumero') &&
-                parseInt(params.vkmTienumero),
-            params.hasOwnProperty('vkmTieosa') && parseInt(params.vkmTieosa),
-            params.hasOwnProperty('vkmAjorata') && parseInt(params.vkmAjorata),
-            params.hasOwnProperty('vkmEtaisyys') &&
-                parseInt(params.vkmEtaisyys),
-        ];
-
-        channel.searchVKMRoad &&
-            channel.searchVKMRoad(requestData, handleVKMResponse, (err) => {
-                setIsSearching(false);
-                if (err) {
-                    setVkmError(err);
-                }
-            });
-    };
-
-    const handleVKMTrackResponse = (data) => {
-        setIsSearching(false);
-
-        let featureStyle = VKMGeoJsonStyles['track'];
-        let hover = VKMGeoJsonHoverStyles['track'];
-
-        removeMarkersAndFeatures();
-
-        const value = {
-            ratanumero: data.hasOwnProperty('ratanumero')
-                ? data.ratanumero
-                : searchValue.ratanumero || '',
-            ratakilometri: data.hasOwnProperty('ratakilometri')
-                ? parseInt(data.ratakilometri)
-                : searchValue.ratakilometri || 1,
-            ratametri: data.hasOwnProperty('ratametri')
-                ? parseInt(data.ratametri)
-                : searchValue.ratakilometri || 0,
-        };
-
-        setSearchValue(value);
-        setLastSearchValue(value);
-        setSearchResults(data);
-
-        data.hasOwnProperty('geom') &&
-            channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', [
-                data.geom,
-                {
-                    centerTo: true,
-                    hover: hover,
-                    featureStyle: featureStyle,
-                    layerId: vectorLayerId + '_vkm_track',
-                    maxZoomLevel: 10,
-                },
-            ]);
-    };
-
-    const handleVKMTrackSearch = (params) => {
-        removeMarkersAndFeatures();
-        setVkmTrackError(null);
-        if (
-            params.hasOwnProperty('ratanumero') &&
-            params.ratanumero !== '' &&
-            params.hasOwnProperty('ratakilometri') &&
-            params.ratakilometri !== '' &&
-            params.hasOwnProperty('ratametri') &&
-            params.ratametri !== ''
-        ) {
-            let requestData = [
-                params.hasOwnProperty('ratanumero') && params.ratanumero,
-                params.hasOwnProperty('ratakilometri') &&
-                    parseInt(params.ratakilometri),
-                params.hasOwnProperty('ratametri') &&
-                    parseInt(params.ratametri),
-            ];
-            channel.searchVKMTrack &&
-                channel.searchVKMTrack(
-                    requestData,
-                    handleVKMTrackResponse,
-                    (err) => {
-                        setIsSearching(false);
-                        if (err) {
-                            setVkmTrackError(err);
-                        }
-                    }
-                );
-        } else {
-            setVkmTrackError(strings.search.fill_all_fields);
-        }
+        setSearchResults(null);
     };
 
     const handleMetadataSearch = (value) => {
@@ -382,9 +258,11 @@ const Search = () => {
 
     const vectorLayerIds = [
         vectorLayerId + '_vkm_tie',
+        vectorLayerId + '_vkm_vali',
         vectorLayerId + '_vkm_osa',
         vectorLayerId + '_vkm_etaisyys',
         vectorLayerId + '_vkm_track',
+        vectorLayerId + '_vkm',
     ];
 
     const removeMarkersAndFeatures = () => {
@@ -417,25 +295,6 @@ const Search = () => {
                 />
             ),
             visible: true,
-        },
-        vkm: {
-            label: strings.search.vkm.title,
-            subtitle: strings.search.vkm.subtitle,
-            content: (
-                <RoadSearch
-                    searchValue={searchValue}
-                    setSearchValue={setSearchValue}
-                    setIsSearching={setIsSearching}
-                    handleVKMSearch={handleVKMSearch}
-                />
-            ),
-            visible: channel && channel.searchVKMRoad,
-        },
-        vkmtrack: {
-            label: strings.search.vkm.trackTitle,
-            subtitle: strings.search.vkm.trackSubtitle,
-            content: <p>{strings.search.vkm.trackTitle}</p>,
-            visible: channel && channel.searchVKMTrack,
         },
         metadata: {
             label: strings.search.metadata.title,
@@ -474,22 +333,74 @@ const Search = () => {
             });
     }, [channel]);
 
-    const handleAddressSelect = (name, lon, lat, id) => {
-        store.dispatch(
-            addMarkerRequest({
-                x: lon,
-                y: lat,
-                msg: name || '',
-                markerId: markerId,
-            })
-        );
+    const handleSearchSelect = (name, lon, lat, geom, osa, ajorata, etaisyys, osaLoppu, etaisyysLoppu, type) => {
+        removeMarkersAndFeatures();
+        if (!geom) {
+            store.dispatch(
+                addMarkerRequest({
+                    x: lon,
+                    y: lat,
+                    msg: name || '',
+                    markerId: markerId,
+                    color: 'e50083'
+                })
+            );
 
-        store.dispatch(
-            mapMoveRequest({
-                x: lon,
-                y: lat,
-            })
-        );
+            store.dispatch(
+                mapMoveRequest({
+                    x: lon,
+                    y: lat,
+                })
+            );
+        } else if (type === 'road') {
+            let style = 'tie';
+            if (osaLoppu && etaisyysLoppu) {
+                style = 'vali';
+            } else if ((osa || ajorata) && !etaisyys) {
+                style = 'osa';
+            } else if (etaisyys) {
+                style = 'etaisyys';
+            }
+            let featureStyle = VKMGeoJsonStyles.road[style];
+            let hover = VKMGeoJsonHoverStyles.road[style];
+
+            if (style === 'tie') {
+                removeMarkersAndFeatures();
+            }
+
+            channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', [
+                geom,
+                {
+                    clearPrevious: true,
+                    centerTo: true,
+                    hover: hover,
+                    featureStyle: featureStyle,
+                    layerId: vectorLayerId + '_vkm_' + style,
+                    maxZoomLevel: 10,
+                },
+            ]);
+
+            store.dispatch(setGeoJsonArray([{data: {
+                geom: geom
+            }, style: style, hover: hover, featureStyle: featureStyle }]));
+        } else if (type === 'track') {
+            let featureStyle = VKMGeoJsonStyles['track'];
+            let hover = VKMGeoJsonHoverStyles['track'];
+
+            channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', [
+                geom,
+                {
+                    centerTo: true,
+                    hover: hover,
+                    featureStyle: featureStyle,
+                    layerId: vectorLayerId + '_vkm_track',
+                    maxZoomLevel: 10
+                }
+            ]);
+            store.dispatch(setGeoJsonArray([{data: {
+                geom: geom
+            }, style: 'track', hover: hover, featureStyle: featureStyle }]));
+        };
     };
 
     const variants = {
@@ -534,6 +445,69 @@ const Search = () => {
         },
     };
 
+    const texts = [
+        {
+            text: strings.search.tips.address,
+            examples: strings.search.tips.addressExamples
+        },
+        {
+            text: strings.search.tips.realEstateUnitIdentifier,
+            examples: strings.search.tips.realEstateUnitIdentifierExamples
+        },
+        {
+            text: strings.search.tips.vkmRoad,
+            examples: strings.search.tips.vkmRoadExamples
+        },
+        {
+            text: strings.search.tips.vkmTrack,
+            examples: strings.search.tips.vkmTrackExamples
+        }
+    ];
+
+    const searchDownloadTips = {
+        tip: strings.search.tips.toastTip,
+        guide: strings.search.tips.toastTipContent
+    }
+
+    const handleCloseToast = () => {
+        setShowToast(false);
+        toast.dismiss('searchTipToast');
+        store.dispatch(setHasToastBeenShown({toastId: 'searchTipToast', shown: true}));
+    };
+
+    if(searchType === 'address' && isSearchOpen && !hasToastBeenShown.includes('searchToast')) {
+        toast(<SearchToast header={strings.search.tips.title} texts={texts}/>,
+        {
+            toastId: 'searchToast',
+            onClose: () => store.dispatch(setHasToastBeenShown({toastId: 'searchToast', shown: true})),
+            position: 'top-right',
+            draggable: false
+        })
+    } else if (!isSearchOpen || searchType !== 'address') {
+        toast.dismiss('searchToast');
+    }
+
+    const vkmKeys = ['vali', 'tie', 'osa', 'etaisyys', 'track'];
+
+    useEffect(() => {
+        if(geoJsonArray.length > 0 && isSearchOpen && !hasToastBeenShown.includes('searchTipToast') && showToast !== false) {
+            geoJsonArray.forEach(geoj => {
+                if(vkmKeys.some(vkmStyle => vkmStyle === geoj.style)) {
+                    toast.info(<TipToast handleButtonClick={() => handleCloseToast()} localStorageName={SEARCH_TIP_LOCALSTORAGE} text={<div> <h6>{searchDownloadTips.tip}</h6> <p>{searchDownloadTips.guide}</p></div>} />, 
+                    {icon: <StyledToastIcon icon={faInfoCircle} />,
+                    toastId: 'searchTipToast',
+                    onClose: () => handleCloseToast(),
+                    position: 'bottom-left',
+                    draggable: false
+                    })
+                    store.dispatch(setHasToastBeenShown({toastId: 'searchTipToast', shown: true}));
+                    return;
+                }
+            })
+        }
+        else toast.dismiss('searchTipToast');
+    }, [geoJsonArray]);
+
     return (
         <StyledSearchContainer isSearchOpen={isSearchOpen}>
             <CircleButton
@@ -542,6 +516,7 @@ const Search = () => {
                 toggleState={isSearchOpen}
                 tooltipDirection={'left'}
                 clickAction={() => {
+                    isSearchOpen && store.dispatch(setGeoJsonArray([]));
                     setIsSearching(false);
                     isSearchOpen && removeMarkersAndFeatures();
                     isSearchOpen && setSearchResults(null);
@@ -550,13 +525,12 @@ const Search = () => {
                     isSearchMethodSelectorOpen &&
                         setIsSearchMethodSelectorOpen(false);
                     setSearchType('address');
-                    setVkmError(null);
-                    setVkmTrackError(null);
                 }}
             />
             <AnimatePresence>
                 {isSearchOpen && (
                     <StyledSearchWrapper
+                        hasGeometry={geoJsonArray.length > 0}
                         variants={variants}
                         initial={'initial'}
                         animate={'animate'}
@@ -596,10 +570,23 @@ const Search = () => {
                                 </StyledLoaderWrapper>
                             )}
                         </StyledLeftContentWrapper>
+                        {searchType === 'address' && <StyledSearchActionButton
+                                onClick={() => {
+                                    if (!hasToastBeenShown.includes('searchToast')) {
+                                        store.dispatch(setHasToastBeenShown({toastId: 'searchToast', shown: true}));
+                                        toast.dismiss('searchToast');
+                                    } else {
+                                        store.dispatch(setHasToastBeenShown({toastId: 'searchToast', shown: false}));
+                                    }
+                                }}
+                                icon={faQuestion}
+                            />
+                        }
                         {searchResults !== null &&
                         searchValue === lastSearchValue ? (
                             <StyledSearchActionButton
                                 onClick={() => {
+                                    store.dispatch(setGeoJsonArray([]));
                                     setSearchResults(null);
                                     setSearchValue('');
                                     removeMarkersAndFeatures();
@@ -612,46 +599,6 @@ const Search = () => {
                                     switch (searchType) {
                                         case 'address':
                                             handleAddressSearch(searchValue);
-                                            break;
-                                        case 'vkm':
-                                            let data = {};
-                                            if (
-                                                searchValue.hasOwnProperty(
-                                                    'tienumero'
-                                                )
-                                            ) {
-                                                data.vkmTienumero =
-                                                    searchValue.tienumero;
-                                            }
-                                            if (
-                                                searchValue.hasOwnProperty(
-                                                    'tieosa'
-                                                )
-                                            ) {
-                                                data.vkmTieosa =
-                                                    searchValue.tieosa;
-                                            }
-                                            if (
-                                                searchValue.hasOwnProperty(
-                                                    'ajorata'
-                                                )
-                                            ) {
-                                                data.vkmAjorata =
-                                                    searchValue.ajorata;
-                                            }
-                                            if (
-                                                searchValue.hasOwnProperty(
-                                                    'etaisyys'
-                                                )
-                                            ) {
-                                                data.vkmEtaisyys = parseInt(
-                                                    searchValue.etaisyys
-                                                );
-                                            }
-                                            handleVKMSearch(data);
-                                            break;
-                                        case 'vkmtrack':
-                                            handleVKMTrackSearch(searchValue);
                                             break;
                                         case 'metadata':
                                             handleMetadataSearch(searchValue);
@@ -718,12 +665,14 @@ const Search = () => {
                         exit={'exit'}
                         transition={'transition'}
                     >
-                        {searchResults.result &&
+                        {
+
+                        searchResults.result &&
                         searchResults.result.locations &&
                         searchResults.result.locations.length > 0 ? (
                             searchResults.result.locations.map(
                                 (
-                                    { name, region, type, lon, lat, id },
+                                    { name, region, type, lon, lat, vkmType, geom, osa, ajorata, etaisyys, osa_loppu, etaisyys_loppu },
                                     index
                                 ) => {
                                     let visibleText;
@@ -750,23 +699,53 @@ const Search = () => {
                                     } else {
                                         visibleText = name;
                                     }
+
+                                    // Show result on the map if search returns only one result
+                                    if (searchResults.result.locations.length === 1 && !firstSearchResultShown) {
+                                        handleSearchSelect(
+                                            name,
+                                            lon,
+                                            lat,
+                                            geom,
+                                            osa,
+                                            ajorata,
+                                            etaisyys,
+                                            osa_loppu,
+                                            etaisyys_loppu,
+                                            vkmType
+                                        );
+                                        setFirstSearchResultShown(true);
+                                        toast.dismiss('searchToast');
+                                    }
+
                                     return (
                                         <StyledDropdownContentItem
                                             key={name + '_' + index}
+                                            type={'searchResult'}
                                             onClick={() => {
-                                                setSearchValue(visibleText);
-                                                setLastSearchValue(visibleText);
-                                                handleAddressSelect(
+                                                handleSearchSelect(
                                                     name,
                                                     lon,
                                                     lat,
-                                                    id
+                                                    geom,
+                                                    osa,
+                                                    ajorata,
+                                                    etaisyys,
+                                                    osa_loppu,
+                                                    etaisyys_loppu,
+                                                    vkmType
                                                 );
                                                 isMobile &&
                                                     setShowSearchResults(false);
+                                                setSearchClickedRow(index);
                                             }}
                                         >
-                                            <StyledDropdownContentItemTitle>
+                                            <StyledSearchIcon active={searchClickedRow === index || searchResults.result.locations.length === 1}>
+                                                <FontAwesomeIcon
+                                                    icon={vkmType && vkmType === 'road' ? faRoad : (vkmType && vkmType === 'track') ? faTrain: faCity}
+                                                />
+                                            </StyledSearchIcon>
+                                            <StyledDropdownContentItemTitle type={'searchResult'} active={searchClickedRow === index || searchResults.result.locations.length === 1}>
                                                 {visibleText}
                                             </StyledDropdownContentItemTitle>
                                         </StyledDropdownContentItem>
@@ -780,69 +759,6 @@ const Search = () => {
                                 </StyledDropdownContentItemTitle>
                             </StyledDropdownContentItem>
                         )}
-                        <StyledHideSearchResultsButton
-                            onClick={() => setShowSearchResults(false)}
-                        >
-                            <FontAwesomeIcon icon={faAngleUp} />
-                        </StyledHideSearchResultsButton>
-                    </StyledDropDown>
-                ) : (isSearchOpen &&
-                      showSearchResults &&
-                      searchType === 'vkm' &&
-                      searchValue.tieosat &&
-                      searchValue.tieosat.length > 0) ||
-                  vkmError ? (
-                    <StyledDropDown
-                        key={'dropdown-content-vkm'}
-                        variants={dropdownVariants}
-                        initial={'initial'}
-                        animate={'animate'}
-                        exit={'exit'}
-                        transition={'transition'}
-                    >
-                        <VKMRoadSearch
-                            setIsSearching={setIsSearching}
-                            searchValue={searchValue}
-                            setSearchValue={setSearchValue}
-                            setLastSearchValue={setLastSearchValue}
-                            setSearchResults={setSearchResults}
-                            vectorLayerId={vectorLayerId}
-                            removeMarkersAndFeatures={removeMarkersAndFeatures}
-                            handleVKMSearch={handleVKMSearch}
-                            handleVKMResponse={handleVKMResponse}
-                            vkmError={vkmError}
-                            setVkmError={setVkmError}
-                        />
-                        <StyledHideSearchResultsButton
-                            onClick={() => setShowSearchResults(false)}
-                        >
-                            <FontAwesomeIcon icon={faAngleUp} />
-                        </StyledHideSearchResultsButton>
-                    </StyledDropDown>
-                ) : isSearchOpen &&
-                  showSearchResults &&
-                  searchType === 'vkmtrack' ? (
-                    <StyledDropDown
-                        key={'dropdown-content-vkmtrack'}
-                        variants={dropdownVariants}
-                        initial={'initial'}
-                        animate={'animate'}
-                        exit={'exit'}
-                        transition={'transition'}
-                    >
-                        <VKMTrackSearch
-                            setIsSearching={setIsSearching}
-                            searchValue={searchValue}
-                            setSearchValue={setSearchValue}
-                            setLastSearchValue={setLastSearchValue}
-                            setSearchResults={setSearchResults}
-                            vectorLayerId={vectorLayerId}
-                            removeMarkersAndFeatures={removeMarkersAndFeatures}
-                            handleVKMTrackSearch={handleVKMTrackSearch}
-                            handleVKMTrackResponse={handleVKMTrackResponse}
-                            vkmTrackError={vkmTrackError}
-                            setVkmTrackError={setVkmTrackError}
-                        />
                         <StyledHideSearchResultsButton
                             onClick={() => setShowSearchResults(false)}
                         >

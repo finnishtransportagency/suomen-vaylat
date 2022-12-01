@@ -5,16 +5,17 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
 
 import strings from '../../translations';
+import { isValidUrl } from '../../utils/validUrlUtil';
 
 import { useAppSelector } from '../../state/hooks';
 
 const StyledGfiTabContentItem = styled(motion.div)`
-    cursor: pointer;
     overflow: hidden;
     border-bottom: 1px solid #cdcdcd;
 `;
 
 const StyledGfiTabContentItemHeader = styled(motion.div)`
+    cursor: pointer;
     height: 40px;
     display: flex;
     align-items: center;
@@ -23,6 +24,7 @@ const StyledGfiTabContentItemHeader = styled(motion.div)`
 `;
 
 const StyledGfiSubTabContentItemHeader = styled(motion.div)`
+    cursor: pointer;
     height: 40px;
     display: flex;
     align-items: center;
@@ -67,22 +69,27 @@ const StyledGfiTabContentItemCollapseContent = styled(motion.div)`
 `;
 
 const StyledGfiTabContentItemTable = styled.table`
-   
+
 `;
 
 const StyledGfiTabContentItemTableRow = styled.tr`
 
 `;
 
+// inline-block styling makes the area between two text lines clickable
+const StyledLinkText = styled.a`
+    display: inline-block;
+    word-break: break-all;
+`;
+
 const StyledGfiTabContentItemTableHeader = styled.th`
-    max-width: 100px;
     padding-left: 16px;
     font-size: 14px;
     font-weight: 600;
 `;
 
 const StyledGfiTabContentItemTableData = styled.td`
-    font-size: 12px;
+    font-size: 14px;
 `;
 
 const StyledGfiTabContentItemSubCollapseContent = styled(motion.div)`
@@ -109,7 +116,7 @@ const GfiTabContentItem = ({
         var hightPriorityFields = data.properties._orderHigh && JSON.parse(data.properties._orderHigh);
         var lowPriorityFields = data.properties._order && JSON.parse(data.properties._order);
 
-        if(hightPriorityFields.length > 0){
+        if (hightPriorityFields.length > 0) {
             hightPriorityFields && setOrderHigh(hightPriorityFields);
             lowPriorityFields && lowPriorityFields.length > 0 && setOrderLow(lowPriorityFields);
         } else if(lowPriorityFields.length > 0){
@@ -174,15 +181,19 @@ const GfiTabContentItem = ({
                         >
                             <StyledGfiTabContentItemTable>
                                 {
-                                    orderHigh ? orderHigh.map(value => {
-                                        return <StyledGfiTabContentItemTableRow key={value+'_'+data.properties[value]}>
+                                    orderHigh ? orderHigh.filter(value => value !== 'UID').map(value => {
+                                        return <StyledGfiTabContentItemTableRow key={value + '_' + data.properties[value]}>
                                             <StyledGfiTabContentItemTableHeader>{value}</StyledGfiTabContentItemTableHeader>
-                                            <StyledGfiTabContentItemTableData>{data.properties[value]}</StyledGfiTabContentItemTableData>
+                                            <StyledGfiTabContentItemTableData>
+                                                {isValidUrl(data.properties[value]) ? <StyledLinkText target="_blank" rel="noreferrer" href={data.properties[value]}>{data.properties[value]}</StyledLinkText> : data.properties[value]}
+                                            </StyledGfiTabContentItemTableData>
                                         </StyledGfiTabContentItemTableRow>
-                                    }) : orderLow && orderLow.map(value => {
-                                            return <StyledGfiTabContentItemTableRow key={value+'_'+data.properties[value]}>
+                                    }) : orderLow && orderLow.filter(value => value !== 'UID').map(value => {
+                                            return <StyledGfiTabContentItemTableRow key={value + '_' + data.properties[value]}>
                                                 <StyledGfiTabContentItemTableHeader>{value}</StyledGfiTabContentItemTableHeader>
-                                                <StyledGfiTabContentItemTableData>{data.properties[value]}</StyledGfiTabContentItemTableData>
+                                                <StyledGfiTabContentItemTableData>
+                                                    {isValidUrl(data.properties[value]) ? <StyledLinkText target="_blank" rel="noreferrer" href={data.properties[value]}>{data.properties[value]}</StyledLinkText> : data.properties[value]}
+                                                </StyledGfiTabContentItemTableData>
                                             </StyledGfiTabContentItemTableRow>
                                     })
                                 }
@@ -235,7 +246,9 @@ const GfiTabContentItem = ({
                                                     orderLow && orderLow.map(value => {
                                                         return <StyledGfiTabContentItemTableRow key={value+'_'+data.properties[value]}>
                                                             <StyledGfiTabContentItemTableHeader>{value}</StyledGfiTabContentItemTableHeader>
-                                                            <StyledGfiTabContentItemTableData>{data.properties[value]}</StyledGfiTabContentItemTableData>
+                                                            <StyledGfiTabContentItemTableData>
+                                                                {isValidUrl(data.properties[value]) ? <StyledLinkText target="_blank" rel="noreferrer" href={data.properties[value]}>{data.properties[value]}</StyledLinkText> : data.properties[value]}
+                                                            </StyledGfiTabContentItemTableData>
                                                         </StyledGfiTabContentItemTableRow>
                                                     })
                                                 }

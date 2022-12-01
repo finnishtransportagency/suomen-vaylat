@@ -88,8 +88,10 @@ const ZoomBar = ({
     setHoveringIndex,
     hoveringIndex,
     currentZoomLevel,
-    isExpanded,
-    setIsExpanded,
+    isLegendOpen,
+    isZoomBarOpen,
+    setIsLegendOpen,
+    setIsZoomBarOpen
 }) => {
     const { store } = useContext(ReactReduxContext);
     const rpc = useAppSelector((state) => state.rpc);
@@ -99,20 +101,29 @@ const ZoomBar = ({
         return idx + rpc.zoomRange.min;
     });
 
+    const handleLegendClick = () => {
+        if((isZoomBarOpen && isLegendOpen) || (!isZoomBarOpen && !isLegendOpen)) {
+            setIsLegendOpen(!isLegendOpen);
+            setIsZoomBarOpen(!isZoomBarOpen)
+        }
+        else if(isZoomBarOpen && !isLegendOpen) setIsZoomBarOpen(false);
+        else if(isLegendOpen && !isZoomBarOpen) setIsZoomBarOpen(true);
+    };
+
     return (
         <StyledZoomBarContainer>
             <Legend
                 currentZoomLevel={rpc.currentZoomLevel}
                 selectedLayers={rpc.selectedLayers}
-                isExpanded={isExpanded}
-                setIsExpanded={setIsExpanded}
+                isExpanded={isLegendOpen}
+                setIsExpanded={setIsLegendOpen}
             />
             <StyledZoomBarContent>
                 <CircleButton
                     icon={faList}
                     text={strings.tooltips.legendButton}
-                    toggleState={isExpanded}
-                    clickAction={() => setIsExpanded(!isExpanded)}
+                    toggleState={isZoomBarOpen || isLegendOpen}
+                    clickAction={() => handleLegendClick()}
                     tooltipDirection={'left'}
                 />
                 <StyledZoomBarZoomFeatures>
@@ -125,7 +136,7 @@ const ZoomBar = ({
                     />
                     <StyledZoombarCircles
                         initial="hidden"
-                        animate={isExpanded ? 'visible' : 'hidden'}
+                        animate={isZoomBarOpen ? 'visible' : 'hidden'}
                         variants={listVariants}
                         transition={{
                             duration: 0.5,

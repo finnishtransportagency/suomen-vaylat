@@ -23,25 +23,18 @@
     "zoomIn": "Lähennä",
     "zoomOut": "Loitonna",
     "opacity": "Läpinäkyvyys",
-    "drawingtools": {
-      "drawingtoolsButton": "Piirtotyökalut",
+    "drawingTools": {
+      "drawingToolsButton": "Piirtotyökalut",
       "point": "Piste",
       "circle": "Ympyrä",
       "square": "Neliö",
       "box": "Laatikko",
       "linestring": "Viiva",
       "polygon": "Monikulmio",
-      "erase": "Tyhjennä"
-    },
-    "measuringTools": {
-      "measuringToolsButton": "Mittaustyökalut",
-      "point": "Piste",
-      "circle": "Ympyrä",
-      "square": "Neliö",
-      "box": "Laatikko",
-      "linestring": "Viiva",
-      "polygon": "Monikulmio",
-      "erase": "Tyhjennä"
+      "marker": "Karttamerkintä",
+      "erase": "Tyhjennä",
+      "drawingToast": "Voit viimeistellä piirron tuplaklikkaamalla tai klikkaamalla viimeksi piirretystä taitepisteestä uudelleen",
+      "labelPlaceholder": "Merkinnän teksti..."
     },
     "share": "Jaa sivu",
     "shareTheme": "Jaa teema",
@@ -49,16 +42,35 @@
     "showPageInfo": "Näytä sivun info",
     "showUserGuide": "Näytä käyttöohje"
   },
-  "saveView" : {
-    "saveView" : "Tallenna näkymä",
-    "savingView" : "Näkymän tallennus",
-    "saveViewDescription1" : "Näkymä tallentuu selaimen välimuistiin",
-    "saveViewDescription2" : "Tallennettu näkymä voidaan aktivoida vain selaimessa johon se on tallennettu",
-    "noSavedViews" : "Ei tallennettuja näkymiä",
-    "deleteAllSavedViews" : "Poista kaikki tallennetut näkymät",
-    "savedViews" : "Tallennetut näkymät",
-    "viewName" : "Näkymän nimi",
-    "saveNewView" : "Tallenna uusi näkymä"
+  "savedContent" : {
+    "savedContent" : "Näkymän ja geometrian tallennus",
+    "viewTitle" : "Näkymät",
+    "geometryTitle" : "Geometriat",
+    "saveView" : {
+      "confirmDeleteAll" : "Haluatko varmasti poistaa kaikki tallennetut näkymät?",
+      "saveView" : "Näkymän ja geometrian tallennus",
+      "savingView" : "Näkymän tallennus",
+      "saveViewDescription1" : "Näkymä tallentuu selaimen välimuistiin",
+      "saveViewDescription2" : "Tallennettu näkymä voidaan aktivoida vain selaimessa johon se on tallennettu",
+      "noSavedViews" : "Ei tallennettuja näkymiä",
+      "deleteAllSavedViews" : "Poista kaikki tallennetut näkymät",
+      "savedViews" : "Tallennetut näkymät",
+      "viewName" : "Näkymän nimi",
+      "saveNewView" : "Tallenna uusi näkymä"
+    },
+    "saveGeometry" : {
+      "confirmDeleteAll" : "Haluatko varmasti poistaa kaikki tallennetut geometriat?",
+      "saveGeometry" : "Tallenna geometria",
+      "savingGeometry" : "Geometrian tallennus",
+      "saveGeometryDescription1" : "Geometria tallentuu selaimen välimuistiin",
+      "saveGeometryDescription2" : "Tallennettu geometria voidaan aktivoida vain selaimessa johon se on tallennettu",
+      "noSavedGeometries" : "Ei tallennettuja geometrioita",
+      "deleteAllSavedGeometries" : "Poista kaikki tallennetut geometriat",
+      "savedGeometries" : "Tallennetut geometriat",
+      "geometryName" : "Geometrian nimi",
+      "noGeometry" : "Ei uusia geometrioita kartalla",
+      "saveNewGeometry" : "Tallenna uusi geometria"
+    }
   },
   "gfi": {
     "title": "Kohdetiedot",
@@ -78,10 +90,19 @@
     "dataTableView": "Listanäkymä",
     "downloadMaterials": "Lataa aineistoja",
     "list": "Lista",
-    "table" : "Taulukko"
+    "table" : "Taulukko",
+    "featureAmount" : "Kohteita",
+    "getMoreFeatures": "Hae lisää kohteita",
+    "savedGeometries" : {
+      "title": "Tallennetut geometriat (Poissa käytöstä)",
+      "description": "Omat tallennetut geometriat",
+      "disabled": "Väliaikaisesti poissa käytöstä"
+    }
   },
   "vkm": {
-    "locationInfo": "Sijaintitiedot"
+    "locationInfo": "Sijaintitiedot",
+    "roadAddressInfo": "Tieosoitetiedot",
+    "roadAddressInstructions": "Tieosoitetietoja ei pystytty hakemaan. Lähennä karttaa ja klikkaa pistettä, jolle haluat hakea tieosoitetiedot."
   },
   "downloads": {
     "downloads": "Lataukset",
@@ -94,7 +115,9 @@
     "fileSize": "Tiedostokoko",
     "layers": "Tasot",
     "failedDownloads": "Virheelliset lataukset",
-    "errorOccuredDuringDownloadProcessing" : "Virhe tapahtui paketin prosessoinnin aikana"
+    "errorOccuredDuringDownloadProcessing" : "Virhe tapahtui paketin prosessoinnin aikana",
+    "noWebSocketSupport": "Selaimesi ei tue latauksia. Voit kokeilla uudelleen eri selaimella tai päivittämällä nykyisen selaimesi version.",
+    "downloadFailure": "Latauksessa meni jokin pieleen, yritä uudelleen."
   },
   "general": {
     "close": "Sulje",
@@ -102,7 +125,8 @@
     "continue": "Jatka",
     "cancel": "Peruuta",
     "dontShowAgain": "Älä näytä uudelleen",
-    "ok": "OK"
+    "ok": "OK",
+    "OkLowerCaseK": "Ok"
   },
   "multipleLayersWarning": "Olet lisäämässä kartalle 10 tai enemmän karttatasoa ja se saattaa vaikuttaa palvelun suorituskykyyn",
   "appGuide": {
@@ -144,15 +168,22 @@
       },
       "search": {
         "title": "Haku",
-        "content": "Haku avautuu kartan oikeaan yläkulmaan vasemman reunan suurennuslasi-painikkeesta. Haku-toiminnolla voi hakea teitä ja ja osoitteita valitsemalla alasvetovalikosta käytettävän haun. Hakutuloksen voi poistaa kartalta painamalla haku-kentän roskakoria."
+        "content": "Haku avautuu kartan oikean yläkulman suurennuslasi-painikkeesta. Haku-toiminnolla voi hakea kuntia, osoitteita, kiinteistötunnuksia, tieosoitteita tai rataosoitteita. Tarkempi ohje aukeaa, kun avaa haun. Hakuohjeen voi piilottaa painamalla hakukentän kysymysmerkkiä.  Hakutuloksen voi poistaa kartalta painamalla hakukentän roskakoria."
       },
-      "measureTool": {
-        "title": "Mittaustyökalut",
-        "content": "Mittaustyökalut avautuvat vasemman reunan piirto-ikonista. Työkaluilla voi mitata pituutta tai pinta-alaa. mittaustulokset saa poistettua kartalta oranssilla kumi-painikkeella."
+      "drawingTools": {
+        "title": "Piirtotyökalut",
+        "content": "Piirtotyökalut avautuvat vasemman reunan piirto-painikkeesta. Työkaluilla voidaan lisätä kartalle geometrioita ja mitata pituutta tai pinta-alaa. Piirretyt geometriat ja karttamerkinnät voidaan tallentaa muistiin klikkaamalla Tallenna-painiketta, joka on piirtotyökalujen alin painike.  Piirretyt geometriat voidaan poistaa kartalta oranssilla kumi-painikkeella."
       },
-      "savingView": {
-        "title": "Näkymän tallennus",
-        "content": "Näkymän tallennuksella voidaan tallentaa karttanäkymä selaimen välimuistiin. Näkymään tallennetaan kartan kohdistus, lähestymistaso sekä valitut kartta-aineistot. Tallennetut näkymät ovat käytettävissä sillä laitteella ja selaimessa, jossa näkymä on tallennettu. Tallennettujen näkymien välillä voi siirtyä klikkaamalla/täppäämällä haluttua näkymää. Näkymän voi poistaa roskakori-kuvakkeesta."
+      "gfi": {
+        "content": "Kohdetiedot avautuvat klikkaamalla mistä tahansa kartalla, tai vasemman reunan panikkeesta, jonka ikonissa on karttamerkintä. Kohdetiedot-ikkunasta voit hakea kohdetietoja sekä näet tietoja valitsemistasi kohteista ja sijainneista, jotka voit myös halutessasi ladata suoraan laitteellesi valitsemassasi tiedostomuodossa."
+      },
+      "downloads": {
+        "title": "Lataukset",
+        "content": "Lataukset avautuvat vasemman reunan lataukset-painikkeesta. Latauksista löydät valitsemistasi kohdetiedoista tekemäsi lataukset, jotka voit ladata eri muodoissa laitteellesi."
+      },
+      "viewsAndGeometries": {
+        "title": "Näkymän ja geometrian tallennus",
+        "content": "Näkymän tallennuksella voidaan tallentaa karttanäkymä selaimen välimuistiin. Näkymään tallennetaan kartan kohdistus, lähestymistaso sekä valitut kartta-aineistot. Geometrian tallennus voidaan tehdä, kun kartalla on piirrettyjä geometrioita. Tallennetut näkymät ja geometriat ovat käytettävissä sillä laitteella ja selaimessa, jossa näkymä tai geometria on tallennettu. Tallennettujen näkymien ja geometrioiden välillä voi siirtyä klikkaamalla/täppäämällä haluttua tallennusta. Tallennuksen voi poistaa roskakori-painikkeesta."
       },
       "setFullScreen": {
         "title": "Laajenna",
@@ -160,7 +191,7 @@
       },
       "zoomBar": {
         "title": "Selitteet / zoom-palkki",
-        "content": "Zoom-tason ja kartalla sillä zoom-tasolla näkyvät karttatasot selitteineen saa avattua oikean alareunan selite-ikonista. Karttatasot on listattu päällimmäinen ensimmäisenä. Valitsemalla zoom-palkista toisen mittakaavan, siirrytään valitulle lähestymistasolle."
+        "content": "Zoom-tason ja kartalla sillä zoom-tasolla näkyvät karttatasot selitteineen saa avattua oikean alareunan selitepainikkeesta. Karttatasot on listattu päällimmäinen ensimmäisenä. Valitsemalla zoom-palkista toisen mittakaavan, siirrytään valitulle lähestymistasolle."
       }
     }
   },
@@ -170,11 +201,12 @@
     "mainText": "Suomen Väylät karttapalvelun kautta on katseltavissa tiestötietoja valtion tieverkolta, rautatietietoja sekä tietoja vesiväylistä. Lisäksi omiksi kokonaisuuksiksi on koottu Väyläviraston infrahanketietoja sekä kansallisen tie- ja katuverkon tietojärjestelmän, Digiroadin, tietolajit. Palveluun on rakennettu valmiiksi useita teemakarttoja, kuten esimerkiksi Hankekartta ja Rautateiden verkkoseloste. Suomen Väylissä aineistoja voi hakea aineistojen nimen tai aihealueen mukaan sekä suodattaa aineistoja teemojen mukaisesti. Lisäksi karttapalvelusta löytyy erilliset osoite- , tiehaku ja metatietohaut. Suomen Väylät on käytettävissä sekä desktop- että mobiiliversioilla. Palvelua tuotetaan suomen-, ruotsin- ja englannin kielillä.  Palvelun käyttöohjeet löytyvät ?-painikkeen(linkki) takaa. Suomen Väylien operoinnista ja ylläpidosta vastaa tällä hetkellä Sitowise Oy.",
     "versionInfo": {
       "title": "Versiotiedot",
-      "appVersion": "Sovelluksen versio:",
-      "appLastUpdate": "Sovellus päivitetty viimeksi:",
+      "appVersion": "Sovelluksen versio: ",
+      "appLastUpdate": "Sovellus päivitetty viimeksi: ",
       "appInfoTitle": "Tietoa palvelusta",
       "appInfoLinksTitle": "Linkkejä",
-      "appContactAndFeedback": "Yhteystiedot ja palaute"
+      "appContactAndFeedback": "Yhteystiedot ja palaute",
+      "oskari": "Oskari.org -versio: "
     },
     "contactInfoFeedback": {
       "0": "Sovelluksesta vastaa Väylävirasto ja sovelluksen toimittaa Sitowise Oy.",
@@ -194,11 +226,29 @@
       "2": {
         "text": "Väyläviraston karttoja:",
         "link": "https://vayla.fi/vaylista/aineistot/kartat"
+      },
+      "3": {
+        "text": "Aineiston välitysalusta, josta voi ladata avointen aineistojen tiedostoja.",
+        "link": "https://ava.vaylapilvi.fi"
       }
     },
+    "dataSourcesAndTermsOfUse" :{
+      "tabTitle": "Tietolähteet ja käyttöehdot"
+    },
     "dataSources": {
-      "tabTitle": "Tietolähteet",
-      "municipalityImage": "Sijaintitietojen kuntien vaakunoiden kuvat haetaan kuntaliiton sivuilta (<a href='https://www.kuntaliitto.fi' target='_blank'>https://www.kuntaliitto.fi</a>)."
+      "title": "Tietolähteet",
+      "municipalityImage": "Sijaintitietojen kuntien vaakunoiden kuvat haetaan kuntaliiton sivuilta:",
+      "municipalityLink": "https://www.kuntaliitto.fi",
+      "landSurvey": "Maanmittauslaitoksen taustakartat sekä kiinteistötunnukset ja -rajat ovat avointa dataa ja käytössä lisenssiehdoilla: ",
+      "landSurveyLink": "https://www.maanmittauslaitos.fi/avoindata-lisenssi-cc40",
+      "roadmaps": "Tiekartat (AT ja GT) ovat CGI Suomi Oy aineistoja käytössä käyttöoikeusluvalla n:o S10325081",
+      "syke": "Asemakaavoitetut aluejaot ovat Suomen Ympäristökeskus (SYKE) avointa dataa. SYKEn avointen aineistojen käyttölupa on Creative Commons Nimeä 4.0"
+    },
+    "termsOfUse": {
+      "title": "Käyttöehdot",
+      "description": "Suomen Väylät -palvelun Väyläviraston tietoaineistoja koskee Creative Commons 4.0 Nimeä -käyttölupa.",
+      "moreInfo": "Lisätietoja käyttöehdoista:",
+      "link": "https://vayla.fi/vaylista/aineistot/avoindata/kayttoehdot"
     }
   },
   "search": {
@@ -209,8 +259,10 @@
       "title": "Tiehaku",
       "subtitle": "Hae tien numerolla",
       "osa": "Tieosa",
+      "osaLoppu": "Tieosa loppu",
       "ajorata": "Ajorata",
       "etaisyys": "Etäisyys (m)",
+      "etaisyysLoppu": "Etäisyys loppu (m)",
       "error": {
         "text": "Tuloksia ei löytynyt tiehaulla."
       },
@@ -228,7 +280,7 @@
     },
     "address": {
       "title": "Paikkahaku",
-      "subtitle": "Hae osoitteella, kunnan nimellä tai kiinteistötunnuksella",
+      "subtitle": "Hae osoitteella, kunnan nimellä, kiinteistötunnuksella, tieosoitteella tai rataosoitteella",
       "address": "Opastinsilta 12 Helsinki",
       "error": {
         "text": "Tuloksia ei löytynyt paikkahaulla."
@@ -240,6 +292,38 @@
       "error": {
           "text": "Tuloksia ei löytynyt metatietohaulla."
       }
+    },
+    "tips": {
+      "title": "Paikkahaulla voit hakea kuntaa, osoitetta, kiinteistötunnusta, tieosoitetta tai rataosoitetta.",
+      "address": "Osoitehaku, kirjoita muodossa 'kunta', 'osoite' tai 'osoite, kunta'.",
+      "addressExamples": [
+        "Helsinki",
+        "Opastinsilta 12",
+        "Opastinsilta 12, Helsinki"
+      ],
+      "vkmRoad": "Tiehaku, kirjoita muodossa 'tie/osa/ajorata/etäisyys' tai 'tie/osa/ajorata/etäisyys tie/osa_loppu/ajorata/etäisyys_loppu'.",
+      "vkmRoadExamples": [
+        "5",
+        "5/116",
+        "5/116/0",
+        "5/116/0/50",
+        "5/116//50",
+        "5/116/0/50 5/348/0/100",
+        "5/116//50 5/348//100",
+        "alku:5/116/0/50 loppu:5/348/0/100"
+      ],
+      "vkmTrack": "Ratahaku, kirjoita muodossa 'ratanumero/ratakilometri/ratametri'.",
+      "vkmTrackExamples": [
+        "001/2/10"
+      ],
+      "realEstateUnitIdentifier": "Kiinteistötunnushaku, kirjoita muodossa 'aa-bb-cc-d' tai 'aaa-bbb-cc-ddd'.",
+      "realEstateUnitIdentifierExamples": [
+        "91-17-16-1",
+        "091-017-16-001"
+      ],
+      "example": "Esim.",
+      "toastTip": "Tiesitkö, että voit tallentaa rata- ja tiehausta kartalle tulleen geometrian?",
+      "toastTipContent": "Geometrian voit tallentaa sivun vasemman reunan tallennus-ikonin kautta, toiselta välilehdeltä."
     }
   },
   "layerlist": {
@@ -265,6 +349,7 @@
       "layerVisible": "Taso näkyvillä",
       "zoomInToShowLayer": "Lähennä nähdäksesi taso",
       "zoomOutToShowLayer": "Loitonna nähdäksesi taso",
+      "toShowLayer" : "nähdäksesi taso",
       "opacity": "Läpinäkyvyys"
     }
   },
@@ -306,14 +391,15 @@
   },
   "themelayerlist": {
     "readMore" : "Lue lisää",
-    "readLess" : "Vähemmän",
+    "readLess" : "Näytä vähemmän",
+    "moreInfo": "Lisätietoja: ",
     "0": {
       "title": "Hankekartta",
       "description": "Kartalla esitetään Väyläviraston investointihankkeet ja toteutukseen tähtäävät hankesuunnittelukohteet."
     },
     "1": {
       "title": "Päällysteiden kuntokartta",
-      "description": "-"
+      "description": "Kartalla esitetään tiet ja sillat, joiden kuntoluokka on erittäin huono, huono, tyydyttävä, hyvä tai erittäin hyvä. Päällysteiden kuntotiedot ovat arvioita 31.12.2021 tilanteessa huomioiden vuoden 2021 päällystyskohteet, tiedot päivitetty 8.9.2021"
     },
     "2": {
       "title": "Siltarajoituskartta",
@@ -321,7 +407,7 @@
     },
     "3": {
       "title": "Tienumerokartta",
-      "description": "-"
+      "description": "Tienumerokartalla esitetään tieosoitejärjestelmän tiet ja tieosat numeroineen, sekä jakopisteiden paikat. Tienumeroita käytetään paikantamisen osoitetietona ja ne näkyvät tienkäyttäjille viitoituksessa. Tienumerointi perustuu tieluokkiin ja tieverkon muodostamiin yhteysväleihin, kun taas tieosanumeroinnilla jaetaan tie lyhyempiin hallittaviin tieosuuksiin. "
     },
     "4": {
       "title": "Rataverkon kuntokartta",
@@ -334,6 +420,21 @@
     "6": {
       "title": "Rautateiden verkkoselostus",
       "description": "Verkkoselostuksen karttapalvelussa voi tarkastella rataverkon ominaisuustietoja, kuten sähköistystä ja liikennepaikkojen tietoja. Tiedot perustuvat ratarekisteritietoihin ja ERAan toimitettaviin RINF-tietoihin."
+    },
+    "7": {
+      "title": "Tasoristeyspalvelu",
+      "description": "Väyläviraston tasoristeys.fi-karttapalvelu tukee alueellista liikenneturvallisuuden ja maankäytön suunnittelua. Palvelusta löytyvät valtion rataverkon tasoristeysten rekisteri- ja inventointiedot sekä myös tasoristeysten kuvat. Tiedot saa esiin klikkaamalla tasoristeystä karttapohjalla. Palveluun on lisätty myös ratapihojen, laituripolkujen ja huoltoteiden tasoristeykset sekä omana karttatasonaan sivuraiteiden tasoristeykset. "
+    },
+    "8": {
+      "title": "Tiestötiedot lupapalveluun",
+      "description": "Karttapalvelun avulla johtojen ja kaapeleiden ilmoitusmenettelyn edellyttämiä tieosoitteita ja tiestötietoja voidaan tarkastella sijaintipaikan osalata ennen ilmoituksen jättämistä. Lisäksi palvelussa esitetään muita tiestön perustietoja, jotka auttavat työn suunnittelussa."
+    },
+    "9": {
+      "title": "Maanteiden talvihoitoluokat",
+      "description": "Kartalle esitetään maanteiden talvihoitoluokat. Väylän merkitys, liikennemäärä ja -koostumus määrittelevät teiden hoidon palvelutason. Koska kaikkia teitä ei voida hoitaa kohtuullisin kustannuksin välittömästi, tiet on luokiteltu eri hoitoluokkiin.",
+      "links": {
+        "0": "https://vayla.fi/kunnossapito/tieverkon-kunnossapito/talvihoito"
+      }
     }
   },
   "metadata": {
