@@ -114,6 +114,7 @@
     "date": "Date",
     "fileSize": "File size",
     "layers": "Layers",
+    "errorLayers": "Virheelliset tasot",
     "failedDownloads": "Failed downloads",
     "errorOccuredDuringDownloadProcessing" : "Error occured during download processing",
     "noWebSocketSupport": "Selaimesi ei tue latauksia. Voit kokeilla uudelleen eri selaimella tai päivittämällä nykyisen selaimesi version.",

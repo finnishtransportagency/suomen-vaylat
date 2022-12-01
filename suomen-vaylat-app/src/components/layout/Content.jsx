@@ -313,6 +313,7 @@ const Content = () => {
                     loading: true,
                     date: Date.now(),
                     url: null,
+                    errorLayers: []
                 };
 
                 store.dispatch(setIsGfiDownloadOpen(true));
@@ -376,7 +377,8 @@ const Content = () => {
                     store.dispatch(setDownloadFinished({
                         id: data.data.uuid,
                         url: data.data.url,
-                        fileSize: data.data.fileSize !== null && data.data.fileSize
+                        fileSize: data.data.fileSize !== null && data.data.fileSize,
+                        errorLayers: data.data.errorLayers
                     }));
                 }
             }

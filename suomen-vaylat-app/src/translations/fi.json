@@ -114,6 +114,7 @@
     "date": "Päivämäärä",
     "fileSize": "Tiedostokoko",
     "layers": "Tasot",
+    "errorLayers": "Virheelliset tasot",
     "failedDownloads": "Virheelliset lataukset",
     "errorOccuredDuringDownloadProcessing" : "Virhe tapahtui paketin prosessoinnin aikana",
     "noWebSocketSupport": "Selaimesi ei tue latauksia. Voit kokeilla uudelleen eri selaimella tai päivittämällä nykyisen selaimesi version.",

@@ -751,6 +751,7 @@ export const rpcSlice = createSlice({
             download.url = action.payload.url !== null && action.payload.url;
             download.fileSize = action.payload.fileSize !== null && action.payload.fileSize;
             download.loading = false;
+            download.errorLayers = action.payload.errorLayers;
             state.downloads[downloadIndex] = download;
         },
 
