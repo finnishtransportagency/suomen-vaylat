@@ -163,10 +163,10 @@ export const UserGuideModalContent = () => {
                         <StyledIconButton>
                             <StyledFAIcon icon={faSave} />
                         </StyledIconButton>
-                        <p>{strings.appGuide.modalContent.savingView.title}</p>
+                        <p>{strings.appGuide.modalContent.viewsAndGeometries.title}</p>
                     </StyledTitleWrapper>,
             content: <StyledGuideContent>
-                        <p>{strings.appGuide.modalContent.savingView.content}</p>
+                        <p>{strings.appGuide.modalContent.viewsAndGeometries.content}</p>
                     </StyledGuideContent>
         },
         {

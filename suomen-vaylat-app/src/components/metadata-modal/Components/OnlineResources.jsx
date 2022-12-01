@@ -13,7 +13,7 @@ export const OnlineResources = ({ onlineResources }) => {
                             if (onlineResource.url.length > 0) {
                                 return (
                                     <StyledLi key={'metadata-online-resource-li-' + index}>
-                                        <StyledA href={onlineResource.url} key={'metadata-online-resource-li-a-' + index}>
+                                        <StyledA target="_blank" href={onlineResource.url} key={'metadata-online-resource-li-a-' + index}>
                                             {onlineResource.name && onlineResource.name.length ? onlineResource.name : onlineResource.url}
                                         </StyledA>
                                     </StyledLi>

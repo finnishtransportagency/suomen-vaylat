@@ -5,7 +5,7 @@ import { ReactReduxContext } from 'react-redux';
 
 import { debounce } from 'lodash';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEraser, faInfoCircle, faMapMarkerAlt, faMapPin, faFlag, faCircle, faArrowDown, faCommentAlt, faThumbtack, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faEraser, faInfoCircle, faMapMarkerAlt, faMapPin, faFlag, faCircle, faArrowDown, faCommentAlt, faThumbtack, faTimes, faCloudUploadAlt } from '@fortawesome/free-solid-svg-icons';
 import svCircle from '../../theme/icons/drawtools_circle.svg';
 import svSquare from '../../theme/icons/drawtools_square.svg';
 import svRectangle from '../../theme/icons/drawtools_rectangle.svg';
@@ -15,7 +15,7 @@ import svLinestring from '../../theme/icons/drawtools_linestring.svg';
 import { useSelector } from 'react-redux';
 
 import strings from '../../translations';
-import { setActiveTool, setHasToastBeenShown, setIsSaveViewOpen, setSavedTabIndex , setGeoJsonArray, setSelectedMarker, setMarkerLabel} from '../../state/slices/uiSlice';
+import { setActiveTool, setHasToastBeenShown, setIsSaveViewOpen, setSavedTabIndex , setGeoJsonArray, addToGeoJsonArray, setSelectedMarker, setMarkerLabel, removeFromDrawToolMarkers} from '../../state/slices/uiSlice';
 import { removeMarkerRequest } from '../../state/slices/rpcSlice';
 
 import { theme } from '../../theme/theme';
@@ -24,7 +24,6 @@ import { toast } from 'react-toastify';
 import { DRAWING_TIP_LOCALSTORAGE } from '../../utils/constants';
 
 import CircleButton from '../circle-button/CircleButton';
-import AddGeometryButton from '../add-geometry-button/AddGeometryButton';
 
 const StyledTools = styled(motion.div)`
     display: flex;
@@ -205,12 +204,16 @@ export const DrawingTools = ({isOpen}) => {
     }
 
     useEffect(() => {
+        /**
+         * FIX ME 
+         * This use effect runs when we clear the geoJsonArray and puts the data back in -> save geometries button becomes active when it should not
+         */
         const drawHandler = (data) => {
             if (data.isFinished && data.isFinished === true && data.geojson.features.length > 0) {
-                store.dispatch(setGeoJsonArray(data));
+                activeTool !== strings.tooltips.drawingTools.marker && store.dispatch(addToGeoJsonArray(data));
             }
         };
-
+        
         channel && channel.handleEvent('DrawingEvent', drawHandler);
 
         return () => {
@@ -269,13 +272,15 @@ export const DrawingTools = ({isOpen}) => {
     const eraseDrawing = () => {
         // stop the drawing tool
         channel && channel.postRequest('DrawTools.StopDrawingRequest', [activeTool]);
-        store.dispatch(setGeoJsonArray({}));
+        store.dispatch(setGeoJsonArray([]));
+        store.dispatch(removeFromDrawToolMarkers());
         // remove geometries off the map
         channel && channel.postRequest('DrawTools.StopDrawingRequest', [true]);
         store.dispatch(setActiveTool(null));
         // remove all markers made with drawing tools
         drawToolMarkers.forEach(marker => {
-            store.dispatch(removeMarkerRequest({markerId: marker}));
+            store.dispatch(removeMarkerRequest({markerId: marker.markerId}));
+            store.dispatch(removeFromDrawToolMarkers(marker.markerId));
         });
     };
 
@@ -312,7 +317,7 @@ export const DrawingTools = ({isOpen}) => {
             id: 7,
             icon: faTimes
         }
-    ]
+    ];
 
     const drawingToolsData = [
         {
@@ -405,9 +410,9 @@ export const DrawingTools = ({isOpen}) => {
                                 key={tool.id}
                                 icon={faEraser}
                                 text={tool.name}
-                                clickAction={() => eraseDrawing()}
+                                clickAction={eraseDrawing}
                                 type="drawingTool"
-                                color="secondaryColor7"
+                                color={theme.colors.secondaryColor7}
                                 tooltipDirection={"right"}
                             >
                             </CircleButton> : tool.id === "sv-add-marker" &&
@@ -439,11 +444,13 @@ export const DrawingTools = ({isOpen}) => {
                             </div>
                     )
                 })}
-                <AddGeometryButton
-                    disabled={!Object.keys(geoJsonArray).length}
+                <CircleButton
+                    disabled={!geoJsonArray.length && drawToolMarkers.length <= 0}
                     text={strings.savedContent.saveGeometry.saveGeometry}
                     tooltipDirection={'right'}
                     clickAction={handleAddGeometry}
+                    icon={faCloudUploadAlt}
+                    color={theme.colors.secondaryColor2}
                 />
             </StyledTools>
     );

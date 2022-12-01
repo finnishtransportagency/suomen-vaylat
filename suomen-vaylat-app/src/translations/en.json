@@ -43,12 +43,12 @@
     "showUserGuide": "Show user guide"
   },
   "savedContent" : {
-    "savedContent" : "Saved content",
+    "savedContent" : "Save views and geometries",
     "viewTitle" : "Views",
     "geometryTitle" : "Geometries",
     "saveView" : {
       "confirmDeleteAll" : "Are you sure you want to delete all views?",
-      "saveView" : "Save view",
+      "saveView" : "Save views and geometries",
       "savingView" : "Saving view",
       "saveViewDescription1" : "View will be saved to browser local storage",
       "saveViewDescription2" : "Saved view can be accessed only by browser it has been saved",
@@ -59,17 +59,17 @@
       "saveNewView" : "Save new view"
     },
     "saveGeometry" : {
-      "confirmDeleteAll" : "Are you sure you want to delete all geometries",
-      "saveGeometry" : "Save geometry",
-      "savingGeometry" : "Saving geometries",
-      "saveGeometryDescription1" : "Geometry will be saved to browser local storage",
-      "saveGeometryDescription2" : "Saved geometry can be accessed only by browser it has been saved",
-      "noSavedGeometries" : "No saved geometries",
-      "deleteAllSavedGeometries" : "Delete all saved geometries",
-      "savedGeometries" : "Saved geometries",
-      "geometryName" : "Geometry name",
-      "noGeometry" : "No new geometries on the map",
-      "saveNewGeometry" : "Save new geometry"
+      "confirmDeleteAll" : "Haluatko varmasti poistaa kaikki tallennetut geometriat?",
+      "saveGeometry" : "Tallenna geometria",
+      "savingGeometry" : "Geometrian tallennus",
+      "saveGeometryDescription1" : "Geometria tallentuu selaimen välimuistiin",
+      "saveGeometryDescription2" : "Tallennettu geometria voidaan aktivoida vain selaimessa johon se on tallennettu",
+      "noSavedGeometries" : "Ei tallennettuja geometrioita",
+      "deleteAllSavedGeometries" : "Poista kaikki tallennetut geometriat",
+      "savedGeometries" : "Tallennetut geometriat",
+      "geometryName" : "Geometrian nimi",
+      "noGeometry" : "Ei uusia geometrioita kartalla",
+      "saveNewGeometry" : "Tallenna uusi geometria"
     }
   },
   "gfi": {
@@ -92,7 +92,12 @@
     "list": "List",
     "table" : "Table",
     "featureAmount" : "Kohteita",
-    "getMoreFeatures": "Hae lisää kohteita"
+    "getMoreFeatures": "Hae lisää kohteita",
+    "savedGeometries" : {
+      "title": "Tallennetut geometriat (Poissa käytöstä)",
+      "description": "Omat tallennetut geometriat",
+      "disabled": "Väliaikaisesti poissa käytöstä"
+    }
   },
   "vkm": {
     "locationInfo": "Location info",
@@ -167,7 +172,7 @@
       },
       "drawingTools": {
         "title": "Drawing tools",
-        "content": "The drawing tools open from the drawing icon on the left. The tools can be used to measure length or area. the measurement results can be deleted from the map with the orange rubber button."
+        "content": "Piirtotyökalut avautuvat vasemman reunan piirto-painikkeesta. Työkaluilla voidaan lisätä kartalle geometrioita ja mitata pituutta tai pinta-alaa. Piirretyt geometriat ja karttamerkinnät voidaan tallentaa muistiin klikkaamalla Tallenna-painiketta, joka on piirtotyökalujen alin painike.  Piirretyt geometriat voidaan poistaa kartalta oranssilla kumi-painikkeella."
       },
       "gfi": {
         "content": "Kohdetiedot avautuvat klikkaamalla mistä tahansa kartalla, tai vasemman reunan panikkeesta, jonka ikonissa on karttamerkintä. Kohdetiedot-ikkunasta voit hakea kohdetietoja sekä näet tietoja valitsemistasi kohteista ja sijainneista, jotka voit myös halutessasi ladata suoraan laitteellesi valitsemassasi tiedostomuodossa."
@@ -176,9 +181,9 @@
         "title": "Lataukset",
         "content": "Lataukset avautuvat vasemman reunan lataukset-painikkeesta. Latauksista löydät valitsemistasi kohdetiedoista tekemäsi lataukset, jotka voit ladata eri muodoissa laitteellesi."
       },
-      "savingView": {
-        "title": "Save The View",
-        "content": "Saving a view allows you to save the Map View to your browser's cache. The view saves the map focus, the approach level, and the selected map data. Saved views are available on the device and browser where the view is saved. You can switch between saved views by clicking / tapping the desired view. You can delete the view from the trash can icon."
+      "viewsAndGeometries": {
+        "title": "Näkymän ja geometrian tallennus",
+        "content": "Näkymän tallennuksella voidaan tallentaa karttanäkymä selaimen välimuistiin. Näkymään tallennetaan kartan kohdistus, lähestymistaso sekä valitut kartta-aineistot. Geometrian tallennus voidaan tehdä, kun kartalla on piirrettyjä geometrioita. Tallennetut näkymät ja geometriat ovat käytettävissä sillä laitteella ja selaimessa, jossa näkymä tai geometria on tallennettu. Tallennettujen näkymien ja geometrioiden välillä voi siirtyä klikkaamalla/täppäämällä haluttua tallennusta. Tallennuksen voi poistaa roskakori-painikkeesta."
       },
       "setFullScreen": {
         "title": "Expand",

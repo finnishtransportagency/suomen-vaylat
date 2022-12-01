@@ -1,5 +1,13 @@
 # Release Notes
 
+## 1.7.0
+
+For a full list of changes see: https://github.com/finnishtransportagency/suomen-vaylat/milestone/10?closed=1
+
+* Tierekisteri to lowest component in list
+* GFI url's to links & open links in a new window
+* Multiple shape geometry saving
+
 ## 1.6.0
 
 For a full list of changes see: https://github.com/finnishtransportagency/suomen-vaylat/milestone/9?closed=1

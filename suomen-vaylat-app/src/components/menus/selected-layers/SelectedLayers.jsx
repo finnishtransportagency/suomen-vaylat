@@ -1,6 +1,6 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext} from "react";
 import styled from 'styled-components';
-import { setSelectedLayers } from '../../../state/slices/rpcSlice';
+import { setBackgroundMaps, setMapLayers } from '../../../state/slices/rpcSlice';
 import strings from '../../../translations';
 import { updateLayers, resetThemeGroups, reArrangeRPCLayerOrder } from '../../../utils/rpcUtil';
 import { ReactReduxContext, useSelector } from 'react-redux';
@@ -64,74 +64,21 @@ export const SelectedLayers = ({ selectedLayers, currentZoomLevel }) => {
 
     const { store } = useContext(ReactReduxContext);
 
-    const {channel, allGroups} = useSelector(state => state.rpc);
+    const {channel, selectedLayersByType} = useSelector(state => state.rpc);
 
-    const [backgroundMaps, setBackgroundMaps] = useState([]);
-
-    const getBackgroundMaps = (group) => {
-        if(group?.groups) {
-            group.groups.forEach(group => {
-                getBackgroundMaps(group);
-            });
-        }
-        if(group?.layers) {
-            group.layers.forEach(layer => {
-                selectedLayers.forEach(selectedLayer => {
-                    if(selectedLayer.id === layer) {
-                        if(backgroundMaps.length > 0) {
-                            let layerIsDuplicate = backgroundMaps.find(map => map.id === layer);
-                            !layerIsDuplicate && setBackgroundMaps(prevState => [...prevState, selectedLayer]);
-                        }
-                        else {
-                            setBackgroundMaps(prevState => [...prevState, selectedLayer]);
-                        }
-                    }
-                })
-            });
-        }
-        else return;
-    };
-
-    const updateMapOpacities = () => {
-        selectedLayers.forEach(selectedLayer => {
-            backgroundMaps.forEach(backgroundmap => {
-                if(selectedLayer.id === backgroundmap.id) {
-                    if(selectedLayer.opacity !== backgroundmap.opacity) {
-                        let indexToUpdate = backgroundMaps.findIndex(backgroundmap => selectedLayer.id === backgroundmap.id)
-                        let newBackgroundMaps = [...backgroundMaps];
-                        newBackgroundMaps[indexToUpdate] = selectedLayer;
-                        setBackgroundMaps(newBackgroundMaps);
-                    }
-                }
-            })
-        });
-    };
-
-    useEffect(() => {
-        backgroundMaps && backgroundMaps.forEach(map => {
-            const isSelected = selectedLayers.find(sl => map.id === sl.id);
-            !isSelected && setBackgroundMaps(prevState => prevState.filter(b => b.id !== map.id));
-        });
-        getBackgroundMaps(allGroups.find(group => group.id === 1));
-        updateMapOpacities();
-    }, [selectedLayers]);
-
-    const mapLayers = selectedLayers.filter(layer => {
-        return !backgroundMaps.find(bm => bm.id === layer.id);
-    });
+    let backgroundMaps = selectedLayersByType.backgroundMaps;
+    let mapLayers = selectedLayersByType.mapLayers;
 
     const sortSelectedLayers = (selectedLayer) => {
-        const newSelectedLayers = arrayMoveImmutable(selectedLayers, selectedLayer.oldIndex, selectedLayer.newIndex)
+        const newSelectedLayers = arrayMoveImmutable(mapLayers, selectedLayer.oldIndex, selectedLayer.newIndex)
+        store.dispatch(setMapLayers(newSelectedLayers));
         reArrangeRPCLayerOrder(store, newSelectedLayers);
-        store.dispatch(setSelectedLayers(newSelectedLayers));
     };
 
     const sortSelectedBackgroundLayers = (backgroundLayer) => {
-        const newSelectedLayers = arrayMoveImmutable(selectedLayers,
-            (backgroundLayer.oldIndex + selectedLayers.length) - backgroundMaps.length,
-            (backgroundLayer.newIndex + selectedLayers.length) - backgroundMaps.length)
+        const newSelectedLayers = arrayMoveImmutable(backgroundMaps, backgroundLayer.oldIndex, backgroundLayer.newIndex);
+        store.dispatch(setBackgroundMaps(newSelectedLayers));
         reArrangeRPCLayerOrder(store, newSelectedLayers);
-        store.dispatch(setSelectedLayers(newSelectedLayers));
     };
 
     const handleClearSelectedLayers = () => {
@@ -139,7 +86,7 @@ export const SelectedLayers = ({ selectedLayers, currentZoomLevel }) => {
             channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, !layer.visible]);
         });
         resetThemeGroups(store);
-
+        store.dispatch(setMapLayers([]));
         updateLayers(store, channel);
     };
 
@@ -147,7 +94,7 @@ export const SelectedLayers = ({ selectedLayers, currentZoomLevel }) => {
         backgroundMaps.forEach(layer => {
             channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, !layer.visible]);
         });
-        setBackgroundMaps([]);
+        store.dispatch(setBackgroundMaps([]));
         updateLayers(store, channel);
     };
 
