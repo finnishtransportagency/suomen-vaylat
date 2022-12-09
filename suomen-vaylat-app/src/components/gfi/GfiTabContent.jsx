@@ -158,7 +158,6 @@ const GfiTabContent = ({
                 <StyledTabContent>
                     {
                         data?.content?.features?.map((feature, index) => {
-                            console.log(feature)
                             return <GfiTabContentItem
                                     key={feature.id}
                                     title={feature.id.split('.')[1] ? title + ` | ${strings.gfi.uniqueId } ` + feature.id.split('.')[1] : title + ' ' + feature.id}
