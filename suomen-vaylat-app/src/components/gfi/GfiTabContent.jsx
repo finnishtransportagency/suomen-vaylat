@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
 import GfiTabContentItem from './GfiTabContentItem';
+import strings from '../../translations';
 
 import { faTable, faList } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -156,10 +157,11 @@ const GfiTabContent = ({
             }}>
                 <StyledTabContent>
                     {
-                        data.content && data.content.features && data.content.features.map((feature, index) => {
+                        data?.content?.features?.map((feature, index) => {
+                            console.log(feature)
                             return <GfiTabContentItem
                                     key={feature.id}
-                                    title={feature.id.split('.')[1] ? title + ' ' + feature.id.split('.')[1] : title + ' ' + feature.id}
+                                    title={feature.id.split('.')[1] ? title + ` | ${strings.gfi.uniqueId } ` + feature.id.split('.')[1] : title + ' ' + feature.id}
                                     data={feature}
                                     index={index}
                                     selectFeature={selectFeature}

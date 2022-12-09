@@ -104,6 +104,7 @@
     "downloadMaterials": "Lataa aineistoja",
     "list": "List",
     "table" : "Table",
+    "uniqueId" : "Yksilöivä tunniste",
     "featureAmount" : "Kohteita",
     "getMoreFeatures": "Hae lisää kohteita",
     "savedGeometries" : {
@@ -120,6 +121,7 @@
   "downloads": {
     "downloads": "Downloads",
     "processing": "Processing",
+    "newDownload": "Valitse ladattava alue",
     "noProcessingDownloads": "No processing downloads",
     "readyForDownload": "Ready for download",
     "noDownloads": "No downloads",
