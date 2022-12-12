@@ -91,6 +91,7 @@
     "downloadMaterials": "Lataa aineistoja",
     "list": "Lista",
     "table" : "Taulukko",
+    "uniqueId" : "Yksilöivä tunniste",
     "featureAmount" : "Kohteita",
     "getMoreFeatures": "Hae lisää kohteita",
     "savedGeometries" : {
