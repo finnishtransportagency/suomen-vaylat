@@ -20,7 +20,6 @@ const initialState = {
     selectedLayersByType: {
         backgroundMaps: [],
         mapLayers: [],
-        themeLayers: []
     },
     warnings: {
         show: false,
@@ -34,6 +33,7 @@ const initialState = {
     announcements: [],
     activeAnnouncements: [],
     allThemesWithLayers: [],
+    allSelectedThemeLayers: [],
     selectedTheme: null,
     lastSelectedTheme: null,
     selectedThemeIndex: null,
@@ -150,8 +150,8 @@ export const rpcSlice = createSlice({
             LOG.log('setMapLayers ', action.payload);
         },
 
-        setThemeLayers: (state, action) => {
-            state.selectedLayersByType.themeLayers = action.payload;
+        setAllSelectedThemeLayers: (state, action) => {
+            state.allSelectedThemeLayers = action.payload;
             LOG.log('setThemeLayers', action.payload);
         },
 
@@ -873,7 +873,7 @@ export const {
     addFeaturesToGFILocations,
     setBackgroundMaps,
     setMapLayers,
-    setThemeLayers
+    setAllSelectedThemeLayers
 } = rpcSlice.actions;
 
 export default rpcSlice.reducer;

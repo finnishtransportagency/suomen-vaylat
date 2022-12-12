@@ -218,7 +218,9 @@ export const SelectedLayer = ({
     const [isLayerVisible, setIsLayerVisible] = useState(layer.opacity !== 0);
     const channel = useSelector(state => state.rpc.channel);
 
-    const themeLayers = useAppSelector(state => state.rpc.selectedLayersByType.themeLayers);
+    const { allSelectedThemeLayers } = useAppSelector(state => state.rpc);
+
+
     
     useEffect(() => {
         setOpacity(layer.opacity);
@@ -288,7 +290,7 @@ export const SelectedLayer = ({
                         />
                     </StyledLayerDeleteIcon>
                     <StyledlayerHeader>
-                        <StyledLayerName style={{color: themeLayers.find(themeLayer => themeLayer === layer.id) && theme.colors.secondaryColor2}}>
+                        <StyledLayerName style={{color: allSelectedThemeLayers.find(themeLayer => themeLayer === layer.id) ? theme.colors.secondaryColor2 : theme.colors.mainColor1}}>
                             {layer.name}
                         </StyledLayerName>
                         { uuid &&

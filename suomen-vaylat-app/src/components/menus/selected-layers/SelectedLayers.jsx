@@ -1,9 +1,10 @@
-import { useContext} from "react";
+import { useContext, useEffect} from "react";
 import styled from 'styled-components';
 import { setBackgroundMaps, setMapLayers } from '../../../state/slices/rpcSlice';
 import strings from '../../../translations';
-import { updateLayers, resetThemeGroups, reArrangeRPCLayerOrder } from '../../../utils/rpcUtil';
-import { ReactReduxContext, useSelector } from 'react-redux';
+import { updateLayers, resetThemeGroups, reArrangeRPCLayerOrder, showNonThemeLayers } from '../../../utils/rpcUtil';
+import { ReactReduxContext } from 'react-redux';
+import { useAppSelector } from "../../../state/hooks";
 import { sortableContainer, sortableElement } from 'react-sortable-hoc';
 import {arrayMoveImmutable} from 'array-move';
 import SelectedLayer from './SelectedLayer';
@@ -63,7 +64,7 @@ export const SelectedLayers = ({ selectedLayers, currentZoomLevel }) => {
 
     const { store } = useContext(ReactReduxContext);
 
-    const {channel, selectedLayersByType} = useSelector(state => state.rpc);
+    const {channel, selectedLayersByType, allSelectedThemeLayers, selectedTheme} = useAppSelector(state => state.rpc);
 
     let backgroundMaps = selectedLayersByType.backgroundMaps;
     let mapLayers = selectedLayersByType.mapLayers;
@@ -97,6 +98,12 @@ export const SelectedLayers = ({ selectedLayers, currentZoomLevel }) => {
         updateLayers(store, channel);
     };
 
+    useEffect(() => {
+        if(selectedTheme && !selectedLayers.some(layer => allSelectedThemeLayers.includes(layer.id))) {
+            resetThemeGroups(store);
+            showNonThemeLayers(store, channel);
+        }
+    }, [selectedTheme, selectedLayers])
 
     return (
         <StyledSelectedLayers>
