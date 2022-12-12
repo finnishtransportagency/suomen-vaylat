@@ -35,6 +35,7 @@ import {
     setMinimizeGfi,
     addToDrawToolMarkers,
     removeFromDrawToolMarkers,
+    addToGeoJsonArray,
 } from '../../state/slices/uiSlice';
 import { getActiveAnnouncements, updateLayers } from '../../utils/rpcUtil';
 import SvLoder from '../../components/loader/SvLoader';
@@ -74,7 +75,6 @@ const StyledLoaderWrapper = styled.div`
 const PublishedMap = () => {
     const { store } = useContext(ReactReduxContext);
     const { loading } = useAppSelector((state) => state.rpc);
-    const { drawToolMarkers } = useAppSelector(state => state.ui);
     const language = useAppSelector((state) => state.language);
     const lang = language.current;
 
@@ -206,14 +206,22 @@ const PublishedMap = () => {
             });
 
             channel.getSupportedEvents(function (data) {
-                if (data.MapClickedEvent && store.getState().ui.activeTool === null ) {
+                if (data.MapClickedEvent && store.getState().ui.activeTool === null) {
                     channel.handleEvent('MapClickedEvent', (data) => {
                         store.getState().ui.activeTool !== strings.tooltips.drawingTools.marker && store.dispatch(resetGFILocations([]));
                     });
                 }
 
+                channel.handleEvent('DrawingEvent', (data) => {
+                    if (store.getState().ui.activeTool) {
+                        if (data.isFinished && data.isFinished === true && data.geojson.features.length > 0) {
+                            store.getState().ui.activeTool !== strings.tooltips.drawingTools.marker && store.dispatch(addToGeoJsonArray(data));
+                        }
+                    }
+                });
+
                 channel.handleEvent('PointInfoEvent', (data) => {
-                    if(data.vkm !== null && store.getState().ui.activeSelectionTool === null && store.getState().ui.activeTool === null && store.getState().ui.selectedMarker !== 7) {
+                    if (data.vkm !== null && store.getState().ui.activeSelectionTool === null && store.getState().ui.activeTool === null && store.getState().ui.selectedMarker !== 7) {
                         store.dispatch(setMinimizeGfi(false));
                         store.dispatch(setVKMData(data));
                         store.dispatch(setIsGfiOpen(true));
@@ -232,7 +240,7 @@ const PublishedMap = () => {
                             })
                         );
                     }
-                    if(store.getState().ui.activeTool === strings.tooltips.drawingTools.marker) {
+                    if (store.getState().ui.activeTool === strings.tooltips.drawingTools.marker) {
                         let marker_id = data.coordinates.x + data.coordinates.y + "_id";
                         const customMarker = {
                             x: data.coordinates.x,
@@ -245,7 +253,7 @@ const PublishedMap = () => {
                             offsetX: 0,
                             offsetY: 7,
                         }
-                        if(store.getState().ui.selectedMarker !== 7 ) {
+                        if (store.getState().ui.selectedMarker !== 7) {
                             store.dispatch(addToDrawToolMarkers(customMarker));
                             store.getState().ui.selectedMarker !== 7 && store.dispatch(
                                 addMarkerRequest(customMarker)
