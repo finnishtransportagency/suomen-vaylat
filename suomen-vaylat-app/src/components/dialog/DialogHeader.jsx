@@ -42,7 +42,7 @@ const DialogHeader = ({
     type,
     title,
     icon,
-    hideWarn
+    handleClose
 }) => {
 
     return (
@@ -57,7 +57,7 @@ const DialogHeader = ({
                 </StyledTitleContent>
                     <StyledCloseIcon
                         icon={faTimes}
-                        onClick={() => hideWarn()}
+                        onClick={() => handleClose()}
                     />
 
             </StyledHeaderContent>
