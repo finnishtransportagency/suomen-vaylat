@@ -1,5 +1,5 @@
 import { useEffect, useState, useContext } from 'react';
-import { faInfoCircle, faTimes, faCaretDown, faCaretUp, faGripLines, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import { faInfoCircle, faTimes, faCaretDown, faCaretUp, faGripLines, faEye, faEyeSlash, faLayerGroup, faMap } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ReactReduxContext, useSelector } from 'react-redux';
 import styled from 'styled-components';
@@ -34,6 +34,8 @@ const StyledlayerHeader = styled.div`
     width: 100%;
     display: flex;
     align-items: center;
+    justify-content: space-between;
+    align-items: center;
 `;
 
 const StyledMidContent = styled.div`
@@ -41,7 +43,8 @@ const StyledMidContent = styled.div`
 `;
 
 const StyledLayerName = styled.p`
-    max-width: 220px;
+    display: inline-block;
+    max-width: 210px;
     margin: 0;
     user-select: none;
     white-space: nowrap;
@@ -58,28 +61,6 @@ const StyledBottomContent = styled.div`
         margin: 0;
         color: ${props => props.theme.colors.mainColor1};
         font-size: 12px;
-    }
-`;
-
-const StyledLayerDeleteIcon = styled.div`
-    position: absolute;
-    top: 0px;
-    right: 0px;
-    min-width: 28px;
-    min-height: 28px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    svg {
-        color: ${props => props.theme.colors.mainColor1};
-        font-size: 18px;
-        transition: all 0.1s ease-out;
-    };
-    &:hover {
-        svg {
-            color: ${props => props.theme.colors.mainColor2};
-        };
     }
 `;
 
@@ -134,10 +115,18 @@ const StyledLayerGripControl = styled.div`
     };
 `;
 
-const StyledLayerInfoIconWrapper = styled.div`
-    cursor: pointer;
+const StyledIconsWrapper = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 8px 0px;
+`;
 
-    padding-left: 8px;
+const StyledIconWrapper = styled.button`
+    border: none;
+    background: none;
+    cursor: pointer;
     svg {
         color: ${props => props.theme.colors.mainColor1};
         font-size: 18px;
@@ -276,34 +265,17 @@ export const SelectedLayer = ({
         layerInfoText = strings.layerlist.selectedLayers.zoomOutToShowLayer;
     }
 
+    const isLayerSelectedThemeLayer = allSelectedThemeLayers.find(themeLayer => themeLayer === layer.id);
+
     return (
             <StyledLayerContainer>
                 <DragHandle />
                 <StyledLayerContent>
-                    <StyledLayerDeleteIcon
-                        className="swiper-no-swiping"
-                        onClick={() => {
-                            handleLayerRemoveSelectedLayer(channel, layer);
-                        }}>
-                        <FontAwesomeIcon
-                            icon={faTimes}
-                        />
-                    </StyledLayerDeleteIcon>
                     <StyledlayerHeader>
-                        <StyledLayerName style={{color: allSelectedThemeLayers.find(themeLayer => themeLayer === layer.id) ? theme.colors.secondaryColor2 : theme.colors.mainColor1}}>
+                        <StyledLayerName style={{color: isLayerSelectedThemeLayer ? theme.colors.secondaryColor2 : theme.colors.mainColor1}}>
+                        <FontAwesomeIcon style={{marginRight: '4px', color: isLayerSelectedThemeLayer ? theme.colors.secondaryColor2 : theme.colors.mainColor1 }} icon={isLayerSelectedThemeLayer ? faMap : faLayerGroup} />
                             {layer.name}
                         </StyledLayerName>
-                        { uuid &&
-                            <StyledLayerInfoIconWrapper
-                                className="swiper-no-swiping"
-                                uuid={uuid}
-                                onClick={() => {
-                                    handleLayerMetadata(layer, uuid);
-                                }}
-                            >
-                                <FontAwesomeIcon icon={faInfoCircle} />
-                            </StyledLayerInfoIconWrapper>
-                        }
                     </StyledlayerHeader>
                     <StyledMidContent>
                         {isCurrentZoomTooFar || isCurrentZoomTooClose ? <StyledLayerInfoContainer>
@@ -330,6 +302,28 @@ export const SelectedLayer = ({
                         </StyledToggleOpacityIconWrapper>
                     </StyledBottomContent>
                 </StyledLayerContent>
+                <StyledIconsWrapper>
+                { uuid &&
+                    <StyledIconWrapper
+                        className="swiper-no-swiping"
+                        uuid={uuid}
+                        onClick={() => {
+                            handleLayerMetadata(layer, uuid);
+                        }}
+                    >
+                        <FontAwesomeIcon icon={faInfoCircle} />
+                    </StyledIconWrapper>
+                }
+                    <StyledIconWrapper
+                        className="swiper-no-swiping"
+                        onClick={() => {
+                            handleLayerRemoveSelectedLayer(channel, layer);
+                        }}>
+                        <FontAwesomeIcon
+                            icon={faTimes}
+                        />
+                    </StyledIconWrapper>
+                </StyledIconsWrapper>
             </StyledLayerContainer>
     );
 };

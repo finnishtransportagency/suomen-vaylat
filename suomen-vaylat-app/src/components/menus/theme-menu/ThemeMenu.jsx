@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import { motion } from 'framer-motion';
-import { faGlobe } from '@fortawesome/free-solid-svg-icons';
+import { AnimatePresence, motion } from 'framer-motion';
+import { faMap } from '@fortawesome/free-solid-svg-icons';
 
 import { useAppSelector } from '../../../state/hooks';
 
@@ -11,9 +11,7 @@ import store from '../../../state/store';
 import { setIsThemeMenuOpen } from '../../../state/slices/uiSlice';
 
 const StyledThemeMenuContainer = styled(motion.div)`
-    grid-row-start: 1;
-    grid-row-end: 3;
-    width: 100%;
+    width: 350px;
     height: auto;
     display: flex;
     flex-direction: column;
@@ -62,21 +60,28 @@ function ThemeMenu() {
     };
 
     return (
+        <AnimatePresence>
+            {!isSideMenuOpen && isThemeMenuOpen &&
             <StyledThemeMenuContainer 
-                    initial='closed'
-                    animate={isThemeMenuOpen ? 'open' : 'closed'}
-                    variants={variants}
-                    transition={{
-                        duration: 0.4,
-                        type: 'tween',
-                    }}
-                    >
-                        <DialogHeader icon={faGlobe} title={strings.layerlist.layerlistLabels.themeLayers} handleClose={() => store.dispatch(setIsThemeMenuOpen(false))}/>
-                        <ThemeLayerList
-                            allLayers={allLayers}
-                            allThemes={allThemesWithLayers}
-                        />
+                initial='closed'
+                animate={isThemeMenuOpen ? 'open' : 'closed'}
+                transition={{
+                    duration: 0.4
+                }}
+                exit={{pointerEvents: 'none',
+                x: '-100%',
+                opacity: 0,
+                filter: 'blur(10px)'}}
+                variants={variants}
+            >
+                <DialogHeader icon={faMap} title={strings.layerlist.layerlistLabels.themeLayers} handleClose={() => store.dispatch(setIsThemeMenuOpen(false))}/>
+                <ThemeLayerList
+                    allLayers={allLayers}
+                    allThemes={allThemesWithLayers}
+                />
             </StyledThemeMenuContainer>
+            }
+        </AnimatePresence>
     )
 }
 

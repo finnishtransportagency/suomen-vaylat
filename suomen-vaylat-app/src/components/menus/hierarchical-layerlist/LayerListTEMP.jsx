@@ -1,7 +1,6 @@
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { faFilter } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { ReactReduxContext } from 'react-redux';
 import styled from 'styled-components';
 import { useAppSelector } from '../../../state/hooks';
 import { motion } from "framer-motion";
@@ -12,6 +11,7 @@ import LayerList from './LayerList';
 import LayerSearch from './LayerSearch';
 import ReactTooltip from 'react-tooltip';
 import { isMobile, theme } from '../../../theme/theme';
+import store from '../../../state/store';
 
 const listVariants = {
   visible: {
@@ -104,8 +104,6 @@ const LayerListTEMP = ({
   layers,
   tags
 }) => {
-
-    const { store } = useContext(ReactReduxContext);
 
     useAppSelector((state) => state.language);
 

@@ -1,46 +1,28 @@
-import { useRef, useContext, useEffect } from 'react';
+import { useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import { useAppSelector } from '../../state/hooks';
-import { ReactReduxContext } from 'react-redux';
 import {
     setIsSideMenuOpen,
     setSelectedMapLayersMenuTab,
 } from '../../state/slices/uiSlice';
 import { motion } from 'framer-motion';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import store from '../../state/store';
 
 // Import Swiper styles
 import 'swiper/css';
 
 import DialogHeader from './DialogHeader';
 import LayerListTEMP from '../menus/hierarchical-layerlist/LayerListTEMP';
-import ThemeLayerList from '../menus/hierarchical-layerlist/ThemeLayerList';
 import SelectedLayers from '../menus/selected-layers/SelectedLayers';
 
 import { faLayerGroup } from '@fortawesome/free-solid-svg-icons';
 
 import strings from '../../translations';
 
-const variants = {
-    open: {
-        pointerEvents: 'auto',
-        x: 0,
-        opacity: 1,
-        filter: 'blur(0px)',
-    },
-    closed: {
-        pointerEvents: 'none',
-        x: '-100%',
-        opacity: 0,
-        filter: 'blur(10px)',
-    },
-};
-
 const StyledMapLayersDialog = styled(motion.div)`
-    grid-row-start: 1;
-    grid-row-end: 3;
-    width: 100%;
-    height: auto;
+    width: 350px;
+    max-height: 100%;
     display: flex;
     flex-direction: column;
     pointer-events: auto;
@@ -62,7 +44,7 @@ const StyledMapLayersDialog = styled(motion.div)`
         width: 100%;
         height: 100%;
         margin-left: unset;
-    } ;
+    };
 `;
 
 const StyledTabs = styled.div`
@@ -156,30 +138,39 @@ const StyledSwiper = styled(Swiper)`
 `;
 
 const MapLayersDialog = () => {
-    const { store } = useContext(ReactReduxContext);
-
+    const { isSideMenuOpen, selectedMapLayersMenuTab, isThemeMenuOpen } = useAppSelector((state) => state.ui);
     const {
         allGroups,
         allLayers,
         selectedLayers,
-        allThemesWithLayers,
         allTags,
         currentZoomLevel,
     } = useAppSelector((state) => state.rpc);
 
-    const { selectedMapLayersMenuTab } = useAppSelector((state) => state.ui);
-
-    const { isSideMenuOpen } = useAppSelector((state) => state.ui);
-
     const inputEl = useRef(null);
+    
+    useEffect(() => {
+        inputEl?.current?.swiper?.slideTo(selectedMapLayersMenuTab);
+    }, [selectedMapLayersMenuTab, isSideMenuOpen]);
 
     const closeSideMenu = () => {
         store.dispatch(setIsSideMenuOpen(!isSideMenuOpen));
     };
 
-    useEffect(() => {
-        inputEl.current.swiper.slideTo(selectedMapLayersMenuTab);
-    }, [selectedMapLayersMenuTab]);
+    const variants = {
+        open: {
+            pointerEvents: 'auto',
+            x: 0,
+            opacity: 1,
+            filter: 'blur(0px)',
+        },
+        closed: {
+            pointerEvents: 'none',
+            x: '-100%',
+            opacity: 0,
+            filter: 'blur(10px)',
+        },
+    };
 
     const tabsContent = [
         {
@@ -208,15 +199,16 @@ const MapLayersDialog = () => {
         },
     ];
 
-     return (
+      return  ( !isThemeMenuOpen && 
         <StyledMapLayersDialog
             initial='closed'
             animate={isSideMenuOpen ? 'open' : 'closed'}
+            transition={{duration: 0.4}}
+            exit={{pointerEvents: 'none',
+            x: '-100%',
+            opacity: 0,
+            filter: 'blur(10px)'}}
             variants={variants}
-            transition={{
-                duration: 0.4,
-                type: 'tween',
-            }}
         >
             <DialogHeader
                 title={strings.layerlist.layerlistLabels.mapLayers}

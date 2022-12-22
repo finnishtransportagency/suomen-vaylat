@@ -50,18 +50,17 @@ const StyledSearchIcon  = styled.div`
 
 const StyledSearchContainer = styled.div`
     z-index: 2;
-    position: relative;
-    grid-column-start: 3;
-    grid-column-end: 4;
+    position: absolute;
+    right: 0px;
+    padding-right: 8px;
     width: 100%;
     display: flex;
     justify-content: flex-end;
     height: 48px;
-    @media ${(props) => props.theme.device.mobileL} {
-        grid-column-start: ${(props) => (props.isSearchOpen ? 1 : 2)};
-        grid-column-end: 4;
+    @media only screen and (max-width: 480px) {
         height: 40px;
-    } ;
+        width: 77%;
+    };
 `;
 
 const StyledSearchWrapper = styled(motion.div)`
