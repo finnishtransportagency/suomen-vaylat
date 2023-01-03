@@ -81,7 +81,7 @@ box-shadow: 0px -1px 11px ${(props) => (props.tabIndex === 0 ? 'rgba(0, 99, 175,
     &::after {
         position: absolute;
         content: '';
-        width: calc(100% / 3);
+        width: calc(100% / 2);
         height: 100%;
         bottom: 0px;
         left: ${(props) => props.tabIndex * 50 + '%'};

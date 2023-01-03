@@ -159,12 +159,15 @@
           }
         }
       },
+      "themeMenu": {
+        "title": "Teemakartat",
+        "content": "Teeman valinta asettaa näkyviin teemaan määritellyt karttatasot, piilottaa muut karttatasot näkyvistä, jotka eivät liity teemaan ja avaa valikon teemaan liittyvien kartta-aineistojen valintaan. Teeman sulkeminen palauttaa aiemmin valitut karttatasot takaisin näkyviin. Osalla kartta-aineistoista on oma tyylinsä teemalle. Teemoja voi olla auki vain yksi kerrallaan. Teeman ollessa valittuna voi Karttatasot-valikon Kaikki tasot -välilehdeltä valita myös muita kartta-aineistoja näkyviin kuin mitä teemaan on määritelty. Teema suljetaan kartan yläreunasta löytyvästä teema-merkistä.Teeman valinta asettaa näkyviin teemaan määritellyt karttatasot ja avaa valikon teemaan liittyvien kartta-aineistojen valintaan. Osalla kartta-aineistoista on oma tyylinsä teemalle. Teemoja voi olla auki vain yksi kerrallaan. Teeman ollessa valittuna voi Karttatasot-valikon Kaikki tasot -välilehdeltä valita myös muita kartta-aineistoja näkyviin kuin mitä teemaan on määritelty. Teema suljetaan kartan yläreunasta löytyvästä teema-merkistä."
+      },
       "mapLevelMenu": {
         "title": "Karttatasovalikko",
         "subTitle": "Karttatasovalikko avautuu vasemmasta yläreunasta. Valittavissa on 3 välilehteä",
         "tabsContent": {
           "materList": "Aineistolistausta voi suodattaa aiheittain suodatin-painikkeen takaa. Karttatasoa voi hakea nimellä kirjoittamalla vähintään 3 kirjainta haku-kenttään.",
-          "themeLayerSelection": "Teeman valinta asettaa näkyviin teemaan määritellyt karttatasot ja avaa valikon teemaan liittyvien kartta-aineistojen valintaan. Osalla kartta-aineistoista on oma tyylinsä teemalle. Teemoja voi olla auki vain yksi kerrallaan. Teeman ollessa valittuna voi Kaikki tasot -valikosta valita myös muita kartta-aineistoja näkyviin kuin mitä teemaan on määritelty. Teema suljetaan kartan yläreunasta löytyvästä teema-merkistä.Teeman valinta asettaa näkyviin teemaan määritellyt karttatasot ja avaa valikon teemaan liittyvien kartta-aineistojen valintaan. Osalla kartta-aineistoista on oma tyylinsä teemalle. Teemoja voi olla auki vain yksi kerrallaan. Teeman ollessa valittuna voi Kaikki tasot -valikosta valita myös muita kartta-aineistoja näkyviin kuin mitä teemaan on määritelty. Teema suljetaan kartan yläreunasta löytyvästä teema-merkistä.",
           "selectedLayers": "Lista kartalle valituista karttatasoista. Tasojen järjestystä voi vaihtaa raahaamalla niitä oikean reunan ikonista. Läpinäkyvyyttä voi säätää liukusäätimellä ja tason valinnan voi poistaa ruksista."
         }
       },
