@@ -149,7 +149,7 @@ const StyledRightSection = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
-`; 
+`;
 
 const StyledLayerNamesList = styled.ul`
     padding-inline-start: 20px;
@@ -353,7 +353,7 @@ const Content = () => {
     const supportsWebSockets = 'WebSocket' in window || 'MozWebSocket' in window;
 
     const connectWebsocket = (count) => {
-        const MAX_RECONNECTIONS_TRY = 5;
+        const MAX_RECONNECTIONS_TRY = 20;
 
         setWebsocketFirstTimeTryConnecting(true);
 
@@ -384,7 +384,6 @@ const Content = () => {
             setInterval(() => {
                 sendPing();
             }, 1000 * 60 * 10);
-
         };
         ws.onmessage = function (evt)
         {
