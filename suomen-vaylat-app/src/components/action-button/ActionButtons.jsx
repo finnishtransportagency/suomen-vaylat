@@ -197,8 +197,7 @@ const ActionButtons = ({
         gfiLocations
     } = useAppSelector((state) => state.rpc);
     const {
-        minimizeGfi,
-        geoJsonArray
+        minimizeGfi,        
     } = useAppSelector((state) => state.ui);
 
     const handleSelectGroup = (index, theme) => {

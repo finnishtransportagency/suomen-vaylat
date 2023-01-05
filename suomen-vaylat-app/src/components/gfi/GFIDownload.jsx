@@ -108,10 +108,28 @@ const DownloadItem = ({
                         <ul key={'download-ul-' + download.id}>
                             {
                                 download.layers.map(layer => {
-                                    return <li key={'li-'+layer.id}>{layer.name}</li>
+                                    if (!download.errorLayers.includes(layer.id)) {
+                                        return <li key={'li-'+layer.id}>{layer.name}</li>
+                                    }
+                                    return null;
                                 })
                             }
                         </ul>
+                    {download.errorLayers && download.errorLayers.length > 0 &&
+                        <>
+                        <li key={'download-wrapper-layers-' + download.id}>{strings.downloads.errorLayers}: </li>
+                            <ul key={'download-ul-error-' + download.id}>
+                                {
+                                    download.layers.map(layer => {
+                                        if (download.errorLayers.includes(layer.id)) {
+                                            return <li key={'li-'+layer.id}>{layer.name}</li>
+                                        }
+                                        return null;
+                                    })
+                                }
+                            </ul>
+                        </>
+                    }
                 </StyledListItemTitleWrapper>
             }
             closeAction={closeAction}

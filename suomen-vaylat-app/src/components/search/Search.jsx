@@ -230,7 +230,7 @@ const Search = () => {
     const [showToast, setShowToast] = useState(JSON.parse(localStorage.getItem(SEARCH_TIP_LOCALSTORAGE)));
 
     const handleAddressSearch = (value) => {
-        store.dispatch(setGeoJsonArray({}));
+        store.dispatch(setGeoJsonArray([]));
         setFirstSearchResultShown(false);
         setSearchClickedRow(null);
         removeMarkersAndFeatures();
@@ -380,9 +380,9 @@ const Search = () => {
                 },
             ]);
 
-            store.dispatch(setGeoJsonArray({data: {
+            store.dispatch(setGeoJsonArray([{data: {
                 geom: geom
-            }, style: style, hover: hover, featureStyle: featureStyle }));
+            }, style: style, hover: hover, featureStyle: featureStyle }]));
         } else if (type === 'track') {
             let featureStyle = VKMGeoJsonStyles['track'];
             let hover = VKMGeoJsonHoverStyles['track'];
@@ -397,9 +397,9 @@ const Search = () => {
                     maxZoomLevel: 10
                 }
             ]);
-            store.dispatch(setGeoJsonArray({data: {
+            store.dispatch(setGeoJsonArray([{data: {
                 geom: geom
-            }, style: 'track', hover: hover, featureStyle: featureStyle }));
+            }, style: 'track', hover: hover, featureStyle: featureStyle }]));
         };
     };
 
@@ -490,17 +490,23 @@ const Search = () => {
     const vkmKeys = ['vali', 'tie', 'osa', 'etaisyys', 'track'];
 
     useEffect(() => {
-        Object.keys(geoJsonArray).length > 0 && isSearchOpen && !hasToastBeenShown.includes('searchTipToast') && showToast !== false && vkmKeys.includes(geoJsonArray.style)  ? toast.info(<TipToast handleButtonClick={() => handleCloseToast()} localStorageName={SEARCH_TIP_LOCALSTORAGE} text={<div> <h6>{searchDownloadTips.tip}</h6> <p>{searchDownloadTips.guide}</p></div>} />, 
-        {icon: <StyledToastIcon icon={faInfoCircle} />,
-        toastId: 'searchTipToast',
-        onClose: () => handleCloseToast(),
-        position: 'bottom-left',
-        draggable: false
-        })
-        : toast.dismiss('searchTipToast');
+        if(geoJsonArray.length > 0 && isSearchOpen && !hasToastBeenShown.includes('searchTipToast') && showToast !== false) {
+            geoJsonArray.forEach(geoj => {
+                if(vkmKeys.some(vkmStyle => vkmStyle === geoj.style)) {
+                    toast.info(<TipToast handleButtonClick={() => handleCloseToast()} localStorageName={SEARCH_TIP_LOCALSTORAGE} text={<div> <h6>{searchDownloadTips.tip}</h6> <p>{searchDownloadTips.guide}</p></div>} />, 
+                    {icon: <StyledToastIcon icon={faInfoCircle} />,
+                    toastId: 'searchTipToast',
+                    onClose: () => handleCloseToast(),
+                    position: 'bottom-left',
+                    draggable: false
+                    })
+                    store.dispatch(setHasToastBeenShown({toastId: 'searchTipToast', shown: true}));
+                    return;
+                }
+            })
+        }
+        else toast.dismiss('searchTipToast');
     }, [geoJsonArray]);
-
-
 
     return (
         <StyledSearchContainer isSearchOpen={isSearchOpen}>
@@ -510,7 +516,7 @@ const Search = () => {
                 toggleState={isSearchOpen}
                 tooltipDirection={'left'}
                 clickAction={() => {
-                    isSearchOpen && store.dispatch(setGeoJsonArray({}));
+                    isSearchOpen && store.dispatch(setGeoJsonArray([]));
                     setIsSearching(false);
                     isSearchOpen && removeMarkersAndFeatures();
                     isSearchOpen && setSearchResults(null);
@@ -524,7 +530,7 @@ const Search = () => {
             <AnimatePresence>
                 {isSearchOpen && (
                     <StyledSearchWrapper
-                        hasGeometry={Object.keys(geoJsonArray).length > 0}
+                        hasGeometry={geoJsonArray.length > 0}
                         variants={variants}
                         initial={'initial'}
                         animate={'animate'}
@@ -580,7 +586,7 @@ const Search = () => {
                         searchValue === lastSearchValue ? (
                             <StyledSearchActionButton
                                 onClick={() => {
-                                    store.dispatch(setGeoJsonArray({}));
+                                    store.dispatch(setGeoJsonArray([]));
                                     setSearchResults(null);
                                     setSearchValue('');
                                     removeMarkersAndFeatures();
