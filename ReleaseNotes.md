@@ -9,8 +9,6 @@ For a full list of changes see: https://github.com/finnishtransportagency/suomen
 
 For a full list of changes see: https://github.com/finnishtransportagency/suomen-vaylat/milestone/11?closed=1
 
-* GFI list view text eplaining ids
-* Fix GFI tools loading animation stuck
 * Download fix (websocket improvement)
 
 ## 1.7.0
