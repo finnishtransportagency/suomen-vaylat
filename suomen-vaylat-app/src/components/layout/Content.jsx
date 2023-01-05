@@ -28,7 +28,6 @@ import {
     setWarning,
     setIsDownloadLinkModalOpen,
     setMaximizeGfi,
-    setGeoJsonArray
 } from '../../state/slices/uiSlice';
 
 import {
@@ -183,6 +182,10 @@ const Content = () => {
 
     const [currentAnnouncement, setCurrentAnnouncement] = useState(null);
 
+    const [downloadUuids, setDownloadUuids] = useState([]);
+
+    const [websocketFirstTimeTryConnecting, setWebsocketFirstTimeTryConnecting] = useState(false);
+
     useEffect(() => {
         announcements && setCurrentAnnouncement(0);
     }, [announcements]);
@@ -233,7 +236,6 @@ const Content = () => {
     };
 
     const handleCloseGFIModal = () => {
-        store.dispatch(setGeoJsonArray({}));
         store.dispatch(resetGFILocations([]));
         store.dispatch(setIsGfiOpen(false));
         store.dispatch(setMinimizeGfi(false));
@@ -273,104 +275,130 @@ const Content = () => {
     }
 
     const handleGfiDownload = (format, layers, croppingArea) => {
+        // Open websocket if is not already opened
+        if(supportsWebSockets) {
+            !websocketFirstTimeTryConnecting && connectWebsocket(0);
+        } else {
+            toast.error(strings.downloads.noWebSocketSupport, {position: "top-center"});
+        }
+
         let sessionId = '';
-        let finishedDownload = null;
-        const supportsWebSockets = 'WebSocket' in window || 'MozWebSocket' in window;
-        
+
         let layerIds = layers.map((layer) => {
             return layer.id;
         });
 
-        var newDownload = {
-            id: uuidv4(),
-            format: format.title,
-            layers: layers,
-            title: (
-                <StyledLayerNamesList>
-                    {layers.map((layer) => {
-                        return (
-                            <StyledLayerNamesListItem>
-                                {layer.name}
-                            </StyledLayerNamesListItem>
-                        );
-                    })}
-                </StyledLayerNamesList>
-            ),
-            loading: true,
-            date: Date.now(),
-            url: null,
-        };
-
-        store.dispatch(setIsGfiDownloadOpen(true));
-        store.dispatch(setDownloadActive(newDownload));
-
         channel.downloadFeaturesByGeoJSON && channel.downloadFeaturesByGeoJSON([layerIds, croppingArea, format.format, sessionId], (data) => {
+
+            if (data && data.uuid && downloadUuids) {
+                let newArray = downloadUuids;
+                newArray.push(data.uuid);
+                setDownloadUuids(newArray);
+
+                var newDownload = {
+                    id: data.uuid,
+                    format: format.title,
+                    layers: layers,
+                    title: (
+                        <StyledLayerNamesList>
+                            {layers.map((layer) => {
+                                return (
+                                    <StyledLayerNamesListItem>
+                                        {layer.name}
+                                    </StyledLayerNamesListItem>
+                                );
+                            })}
+                        </StyledLayerNamesList>
+                    ),
+                    loading: true,
+                    date: Date.now(),
+                    url: null,
+                    errorLayers: []
+                };
+
+                store.dispatch(setIsGfiDownloadOpen(true));
+                store.dispatch(setDownloadActive(newDownload));
+            }
             return;
         });
 
-        const connectWebsocket = (count) =>
-        {
-            const MAX_RECONNECTIONS_TRY = 4;
-            let isDownloadReady = false;
-            if (supportsWebSockets) {
-                // Open WebSocket
-                const ws = new WebSocket(process.env.REACT_APP_WEBSOCKET_URL);
 
-                const handleDownloadFailure = () => {
-                    handleCloseGfiDownloadModal();
-                    handleCloseSaveViewModal();
-                    ws.close();
-                    toast.error(strings.downloads.downloadFailure, {position: "top-center"});
-                };
-
-                ws.onopen = function ()
-                {
-                    const sendPing = () => {
-                        var json = {type:'ping', data: {}};
-                        ws.send(JSON.stringify(json));
-                    }
-                    setInterval(() => {
-                        sendPing();
-                    }, 1000 * 60 * 10);
-                };
-                ws.onmessage = function (evt)
-                {
-                    let data = JSON.parse(evt.data);
-
-                    if(data.type === "DOWNLOAD_READY") {
-                        let data = JSON.parse(evt.data);
-                        finishedDownload = {
-                            ...newDownload,
-                            url: data.data.url !== null && data.data.url,
-                            fileSize: data.data.fileSize !== null && data.data.fileSize,
-                            loading: false,
-                        };
-                        store.dispatch(setDownloadFinished(finishedDownload));
-                        isDownloadReady = true;
-                        ws.close();
-                    }
-                }
-                ws.onerror = () => {
-                    handleDownloadFailure();
-                };
-                ws.onclose = (event) => {
-                    // If the download is ready don't try to reconnect
-                    if(isDownloadReady) return;
-
-                    if (count < MAX_RECONNECTIONS_TRY) {
-                        setTimeout(() => {
-                            connectWebsocket(count + 1);
-                        }, 1000);
-                    }
-                    else {
-                        handleDownloadFailure();
-                    };
-                };
-            }
-                else toast.error(strings.downloads.noWebSocketSupport, {position: "top-center"});
-            }
-            connectWebsocket(0);
     };
+
+    const supportsWebSockets = 'WebSocket' in window || 'MozWebSocket' in window;
+
+    const connectWebsocket = (count) => {
+        const MAX_RECONNECTIONS_TRY = 5;
+
+        setWebsocketFirstTimeTryConnecting(true);
+
+        // Open WebSocket
+        const ws = new WebSocket(process.env.REACT_APP_WEBSOCKET_URL);
+
+        const handleDownloadFailure = () => {
+            handleCloseGfiDownloadModal();
+            handleCloseSaveViewModal();
+            ws.close();
+            toast.error(strings.downloads.downloadFailure, {position: "top-center"});
+        };
+
+        ws.onopen = function ()
+        {
+            // when opened connection send resend download status message
+            if (downloadUuids.length > 0) {
+                var json = {type:'resendDownloadStatuses', data: {uuids:downloadUuids}};
+                ws.send(JSON.stringify(json));
+            }
+
+            // ping 10 min interval
+            const sendPing = () => {
+                var json = {type:'ping', data: {}};
+                ws.send(JSON.stringify(json));
+            }
+
+            setInterval(() => {
+                sendPing();
+            }, 1000 * 60 * 10);
+
+        };
+        ws.onmessage = function (evt)
+        {
+            let data = JSON.parse(evt.data);
+
+            if(data.type === 'DOWNLOAD_READY') {
+                if (data.data && data.data.uuid && downloadUuids.includes(data.data.uuid)) {
+                    var index = downloadUuids.indexOf(data.data.uuid);
+                    let newArray = downloadUuids;
+                    if (index > -1) {
+                        newArray.splice(index, 1);
+                    }
+                    setDownloadUuids(newArray);
+
+                    store.dispatch(setDownloadFinished({
+                        id: data.data.uuid,
+                        url: data.data.url,
+                        fileSize: data.data.fileSize !== null && data.data.fileSize,
+                        errorLayers: data.data.errorLayers
+                    }));
+                }
+            }
+        }
+        ws.onerror = () => {
+            handleDownloadFailure();
+        };
+        ws.onclose = () => {
+            if (count < MAX_RECONNECTIONS_TRY) {
+                setTimeout(() => {
+                    connectWebsocket(count + 1);
+                }, 1000 * 30);
+            }
+            else {
+                handleDownloadFailure();
+            };
+        };
+    }
+
+
 
     return (
         <>
@@ -446,8 +474,6 @@ const Content = () => {
                     minHeight={'530px'}
                     height='100vw'
                     width='50vw'
-                    //maxWidth={'1000px'}
-                    //maxWidth={'calc(100vw - 100px)'}
                     minimize={minimizeGfi}
                     maximize={maximizeGfi}
                 >

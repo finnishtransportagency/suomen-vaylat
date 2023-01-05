@@ -1,4 +1,5 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, current } from '@reduxjs/toolkit';
+import { theme } from '../../theme/theme';
 
 const initialState = {
     isFullScreen: false,
@@ -12,7 +13,7 @@ const initialState = {
     },
     searchParams: '',
     isInfoOpen: false,
-    geoJsonArray: {},
+    geoJsonArray: [],
     isSavedOpen: false,
     savedTabIndex: 0,
     isUserGuideOpen: false,
@@ -85,6 +86,55 @@ export const uiSlice = createSlice({
         },
         setGeoJsonArray: (state, action) => {
             state.geoJsonArray = action.payload;
+        }, 
+        addToGeoJsonArray: (state, action) => {
+            /*
+             * looppaa state.geojsonarray läpi -> looppaa jokaisen iteroitavan kohdalla iteroitavan lapsen läpi ja katso onko child.id === action.payload[0].id
+             * jos löytyy matchi niin ei pusketa arrayhin vaan vaan palautetaan indexit
+             * jos ei löydy matchia pusketaan arrayhin
+             */
+
+            /*
+            let duplicate = {isDuplicate : false ,geoJsonArrayIndex : null, duplicateIndex: null}
+            console.log("action.payload : ", action.payload);
+            state.geoJsonArray.forEach((geoj, i) => {
+                geoj.forEach(child => {
+                    console.log("child.id : ", current(child));
+                    console.log("action.payload[0] : ", action.payload[0])
+                    console.log("child.id === action.payload[0] ? ", child.id === action.payload[0].id);
+                })
+                let duplicateIndex = geoj.findIndex(child => child.id === action.payload[0].id)
+                console.log("DUPLICATE INDEX : ", duplicateIndex)
+                if(duplicateIndex !== -1 ) {
+                    duplicate = {isDuplicate: true ,geoJsonArrayIndex: i, duplicateIndex: duplicateIndex};
+                    return duplicate
+                }
+            });
+
+            if(duplicate.isDuplicate) {
+                console.log("is duplicate, replacing element");
+                state.geoJsonArray[duplicate.geoJsonArrayIndex][duplicate.duplicateIndex] = action.payload[0];
+            }
+            else {
+                console.log("is not duplicate, pushing to array");
+                state.geoJsonArray.push(action.payload);
+            } */
+            /*let duplicate = {isDuplicate : false ,geoJsonArrayIndex : null, duplicateIndex: null}
+            console.log("action.payload : ", action.payload); */
+            /*
+            state.geoJsonArray.forEach((geoj, i) => {
+                let duplicateIndex = geoj.findIndex(child => child.id === action.payload.id)
+                console.log("DUPLICATE INDEX : ", duplicateIndex)
+                if(duplicateIndex !== -1 ) {
+                    duplicate = {isDuplicate: true ,geoJsonArrayIndex: i, duplicateIndex: duplicateIndex};
+                    return duplicate
+                }
+            }); */
+            
+            let duplicateIndex = state.geoJsonArray.findIndex(geoj => geoj.id === action.payload.id);
+
+            if(duplicateIndex !== -1) state.geoJsonArray[duplicateIndex] = action.payload;
+            else state.geoJsonArray.push(action.payload);
         },
         setSavedTabIndex: (state, action) => {
             state.savedTabIndex = action.payload;
@@ -168,7 +218,11 @@ export const uiSlice = createSlice({
             state.selectedMarker = action.payload;
         },
         addToDrawToolMarkers: (state, action) => {
-            state.drawToolMarkers.push(action.payload);
+            let marker = {...action.payload, color: theme.colors.secondaryColor1}
+            state.drawToolMarkers.push(marker);
+        },
+        removeFromDrawToolMarkers: (state, action) => {
+            action.payload? state.drawToolMarkers = state.drawToolMarkers.filter((marker) => marker.markerId !== action.payload) : state.drawToolMarkers = [];
         },
         setMarkerLabel: (state, action) => {
             state.markerLabel = action.payload;
@@ -210,11 +264,13 @@ export const {
     setGfiCroppingTypes,
     setWarning,
     setGeoJsonArray,
+    addToGeoJsonArray,
     setIsSavedOpen,
     setSavedTabIndex,
     setHasToastBeenShown,
     setSelectedMarker,
     addToDrawToolMarkers,
+    removeFromDrawToolMarkers,
     setMarkerLabel,
     addToActiveGeometries,
     removeActiveGeometry

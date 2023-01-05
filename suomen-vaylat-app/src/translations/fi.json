@@ -43,12 +43,12 @@
     "showUserGuide": "Näytä käyttöohje"
   },
   "savedContent" : {
-    "savedContent" : "Tallennettu sisältö",
+    "savedContent" : "Näkymän ja geometrian tallennus",
     "viewTitle" : "Näkymät",
     "geometryTitle" : "Geometriat",
     "saveView" : {
       "confirmDeleteAll" : "Haluatko varmasti poistaa kaikki tallennetut näkymät?",
-      "saveView" : "Tallenna näkymä",
+      "saveView" : "Näkymän ja geometrian tallennus",
       "savingView" : "Näkymän tallennus",
       "saveViewDescription1" : "Näkymä tallentuu selaimen välimuistiin",
       "saveViewDescription2" : "Tallennettu näkymä voidaan aktivoida vain selaimessa johon se on tallennettu",
@@ -92,7 +92,12 @@
     "list": "Lista",
     "table" : "Taulukko",
     "featureAmount" : "Kohteita",
-    "getMoreFeatures": "Hae lisää kohteita"
+    "getMoreFeatures": "Hae lisää kohteita",
+    "savedGeometries" : {
+      "title": "Tallennetut geometriat (Poissa käytöstä)",
+      "description": "Omat tallennetut geometriat",
+      "disabled": "Väliaikaisesti poissa käytöstä"
+    }
   },
   "vkm": {
     "locationInfo": "Sijaintitiedot",
@@ -109,6 +114,7 @@
     "date": "Päivämäärä",
     "fileSize": "Tiedostokoko",
     "layers": "Tasot",
+    "errorLayers": "Virheelliset tasot",
     "failedDownloads": "Virheelliset lataukset",
     "errorOccuredDuringDownloadProcessing" : "Virhe tapahtui paketin prosessoinnin aikana",
     "noWebSocketSupport": "Selaimesi ei tue latauksia. Voit kokeilla uudelleen eri selaimella tai päivittämällä nykyisen selaimesi version.",
@@ -167,7 +173,7 @@
       },
       "drawingTools": {
         "title": "Piirtotyökalut",
-        "content": "Piirtotyökalut avautuvat vasemman reunan piirto-painikkeesta. Työkaluilla voi lisätä kartalle geometrioita ja mitata pituutta tai pinta-alaa. Mittaustulokset voi poistaa kartalta oranssilla kumi-painikkeella."
+        "content": "Piirtotyökalut avautuvat vasemman reunan piirto-painikkeesta. Työkaluilla voidaan lisätä kartalle geometrioita ja mitata pituutta tai pinta-alaa. Piirretyt geometriat ja karttamerkinnät voidaan tallentaa muistiin klikkaamalla Tallenna-painiketta, joka on piirtotyökalujen alin painike.  Piirretyt geometriat voidaan poistaa kartalta oranssilla kumi-painikkeella."
       },
       "gfi": {
         "content": "Kohdetiedot avautuvat klikkaamalla mistä tahansa kartalla, tai vasemman reunan panikkeesta, jonka ikonissa on karttamerkintä. Kohdetiedot-ikkunasta voit hakea kohdetietoja sekä näet tietoja valitsemistasi kohteista ja sijainneista, jotka voit myös halutessasi ladata suoraan laitteellesi valitsemassasi tiedostomuodossa."
@@ -176,9 +182,9 @@
         "title": "Lataukset",
         "content": "Lataukset avautuvat vasemman reunan lataukset-painikkeesta. Latauksista löydät valitsemistasi kohdetiedoista tekemäsi lataukset, jotka voit ladata eri muodoissa laitteellesi."
       },
-      "savingView": {
-        "title": "Näkymän tallennus",
-        "content": "Näkymän tallennuksella voidaan tallentaa karttanäkymä selaimen välimuistiin. Näkymään tallennetaan kartan kohdistus, lähestymistaso sekä valitut kartta-aineistot. Tallennetut näkymät ovat käytettävissä sillä laitteella ja selaimessa, jossa näkymä on tallennettu. Tallennettujen näkymien välillä voi siirtyä klikkaamalla/täppäämällä haluttua näkymää. Näkymän voi poistaa roskakori-kuvakkeesta."
+      "viewsAndGeometries": {
+        "title": "Näkymän ja geometrian tallennus",
+        "content": "Näkymän tallennuksella voidaan tallentaa karttanäkymä selaimen välimuistiin. Näkymään tallennetaan kartan kohdistus, lähestymistaso sekä valitut kartta-aineistot. Geometrian tallennus voidaan tehdä, kun kartalla on piirrettyjä geometrioita. Tallennetut näkymät ja geometriat ovat käytettävissä sillä laitteella ja selaimessa, jossa näkymä tai geometria on tallennettu. Tallennettujen näkymien ja geometrioiden välillä voi siirtyä klikkaamalla/täppäämällä haluttua tallennusta. Tallennuksen voi poistaa roskakori-painikkeesta."
       },
       "setFullScreen": {
         "title": "Laajenna",

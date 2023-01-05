@@ -34,6 +34,7 @@ import {
     setIsGfiOpen,
     setMinimizeGfi,
     addToDrawToolMarkers,
+    removeFromDrawToolMarkers,
 } from '../../state/slices/uiSlice';
 import { getActiveAnnouncements, updateLayers } from '../../utils/rpcUtil';
 import SvLoder from '../../components/loader/SvLoader';
@@ -73,6 +74,7 @@ const StyledLoaderWrapper = styled.div`
 const PublishedMap = () => {
     const { store } = useContext(ReactReduxContext);
     const { loading } = useAppSelector((state) => state.rpc);
+    const { drawToolMarkers } = useAppSelector(state => state.ui);
     const language = useAppSelector((state) => state.language);
     const lang = language.current;
 
@@ -232,20 +234,23 @@ const PublishedMap = () => {
                     }
                     if(store.getState().ui.activeTool === strings.tooltips.drawingTools.marker) {
                         let marker_id = data.coordinates.x + data.coordinates.y + "_id";
-                        store.getState().ui.selectedMarker !== 7 && store.dispatch(
-                            addMarkerRequest({
-                                x: data.coordinates.x,
-                                y: data.coordinates.y,
-                                markerId: marker_id,
-                                shape: store.getState().ui.selectedMarker,
-                                msg: store.getState().ui.markerLabel,
-                                color: theme.colors.mainColor2,
-                                size: 5,
-                                offsetX: 0,
-                                offsetY: 7,
-                            })
-                        )
-                        store.dispatch(addToDrawToolMarkers(marker_id));
+                        const customMarker = {
+                            x: data.coordinates.x,
+                            y: data.coordinates.y,
+                            markerId: marker_id,
+                            shape: store.getState().ui.selectedMarker,
+                            msg: store.getState().ui.markerLabel,
+                            color: theme.colors.mainColor2,
+                            size: 5,
+                            offsetX: 0,
+                            offsetY: 7,
+                        }
+                        if(store.getState().ui.selectedMarker !== 7 ) {
+                            store.dispatch(addToDrawToolMarkers(customMarker));
+                            store.getState().ui.selectedMarker !== 7 && store.dispatch(
+                                addMarkerRequest(customMarker)
+                            );
+                        }
                     }
                 })
 
@@ -278,11 +283,11 @@ const PublishedMap = () => {
                     }
                 });
 
-
                 if (data.MarkerClickEvent) {
                     channel.handleEvent('MarkerClickEvent', (event) => {
-                        if(store.getState().ui.selectedMarker === 7) {
+                        if(store.getState().ui.selectedMarker === 7 && store.getState().ui.drawToolMarkers.length > 0) {
                             store.dispatch(removeMarkerRequest({markerId: event.id}));
+                            store.dispatch(removeFromDrawToolMarkers(event.id));
                         }
                     });
                 }
