@@ -69,20 +69,7 @@
       "savedGeometries" : "Tallennetut geometriat",
       "geometryName" : "Geometrian nimi",
       "noGeometry" : "Ei uusia geometrioita kartalla",
-      "saveNewGeometry" : "Tallenna uusi geometria"
-    },
-    "saveGeometryDraft" : {
-      "confirmDeleteAll" : "Är du säker på att du vill ta bort alla sparade geometrier?",
-      "saveGeometry" : "Spara geometri",
-      "savingGeometry" : "Geometrilagrings",
-      "saveGeometryDescription1" : "Geometrin sparas i webbläsarens cache",
-      "saveGeometryDescription2" : "Den sparade geometrin kan endast aktiveras i webbläsaren där den är sparad",
-      "noSavedGeometries" : "Inga sparade geometrier",
-      "deleteAllSavedGeometries" : "Ta bort alla sparade geometrier",
-      "savedGeometries" : "Sparade geometrier",
-      "geometryName" : "Namnet på geometrin",
-      "noGeometry" : "Inga nya geometrier på kartan",
-      "saveNewGeometry" : "Spara den nya geometrin"
+      "saveNewGeometry": "Tallenna uusi geometria"
     }
   },
   "gfi": {
@@ -181,7 +168,6 @@
         "subTitle": "Kartnivåmenyn öppnas uppe till vänster. Det finns 3 flikar att välja mellan",
         "tabsContent": {
           "materList": "Du kan filtrera materiallistan efter ämne bakom filterknappen. Du kan söka på kartnivån efter namn genom att ange minst 3 bokstäver i sökfältet.",
-          "themeLayerSelection": "Att välja ett tema visar kartnivåerna som definierats för temat och öppnar en meny för att välja kartmaterial som är relaterat till temat. En del av kartmaterialen har sin egen stil för temat. Det kan bara finnas ett tema åt gången. När ett tema är valt kan du också välja andra kartmaterial än de som definierats för temat i menyn Alla nivåer. Temat avslutas med temamarkören överst på kartan.",
           "selectedLayers": "Lista över valda kartnivåer på kartan. Du kan ändra ordningen på nivåerna genom att dra dem från ikonen till höger. Transparensen kan justeras med skjutreglaget och nivåvalet kan avmarkeras."
         }
       },
@@ -340,7 +326,9 @@
         "91-17-16-1",
         "091-017-16-001"
       ],
-      "example": "Esim."
+      "example": "Esim.",
+      "toastTip": "Tiesitkö, että voit tallentaa rata- ja tiehausta kartalle tulleen geometrian?",
+      "toastTipContent": "Geometrian voit tallentaa sivun vasemman reunan tallennus-ikonin kautta, toiselta välilehdeltä."
     }
   },
   "layerlist": {
