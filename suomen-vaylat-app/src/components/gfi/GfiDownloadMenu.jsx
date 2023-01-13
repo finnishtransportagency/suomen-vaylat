@@ -157,6 +157,13 @@ const GfiDownloadMenu = ({ handleGfiDownloadsMenu, handleGfiDownload }) => {
             selected: false,
             loading: false,
         },
+        {
+            id: 'download-format-geopkg',
+            title: '.GEOPKG',
+            format: 'geopkg',
+            selected: false,
+            loading: false,
+        },
     ]);
 
     const handleSelectLayer = (layer) => {

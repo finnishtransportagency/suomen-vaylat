@@ -33,6 +33,7 @@ const StyledLayerGroups = styled.div`
     justify-content: center;
     background-color: ${props => props.theme.colors.mainWhite};
     margin: 8px 0px 8px 0px;
+    padding: 0px 8px;
     &:last-child {
         ${props => props.parentId === -1 ? '1px solid '+props.theme.colors.mainColor2 : 'none'};
     };
@@ -280,7 +281,7 @@ export const ThemeGroup = ({
     const [isExcerptOpen, setIsExcerptOpen] = useState(false);
     const [totalVisibleGroupLayersCount, setTotalVisibleGroupLayersCount] = useState(0);
 
-    useEffect(() => {
+    useEffect(() => {      
         var layersCount = 0;
         var visibleLayersCount = 0;
         const layersCounter = (theme) => {
@@ -290,6 +291,7 @@ export const ThemeGroup = ({
             };
             setTotalGroupLayersCount(layersCount);
             setTotalVisibleGroupLayersCount(visibleLayersCount);
+            
         };
         layersCounter(theme);
     },[theme, layers]);

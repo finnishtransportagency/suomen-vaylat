@@ -58,58 +58,60 @@ const StyledTabs = styled.div`
     position: relative;
     display: flex;
     align-items: center;
+    justify-content: space-between;
     min-height: 40px;
-    background-color: #F2F2F2;
+    background-color: #f2f2f2;
     margin: 16px 8px 0px 8px;
     &::before {
         z-index: 2;
         position: absolute;
         content: '';
-        width: calc(100% / 3);
+        width: calc(100% / 2);
         height: 100%;
-        background-color: ${props => props.theme.colors.mainWhite};
+        background-color: ${(props) => (props.tabIndex === 0 ? 'rgba(0, 99, 175, 1)' : 'rgba(229, 0, 130, 1)')};
         bottom: 0px;
-        left: ${props => props.tabIndex * 50+'%'};
-        border-radius: 4px 4px 0px 0px;
+        left: ${(props) => props.tabIndex * 75 + '%'};
+        border-radius: 8px 8px 0px 0px;
         transform: translateX(
-            ${props => {
-            return props.tabIndex * -50+'%';
+            ${(props) => {
+                return props.tabIndex * -50 + '%';
             }}
         );
         transition: all 0.3s ease-out;
-    };
+        border-top: 3px solid ${(props) => (props.tabIndex === 0 ? 'rgba(0, 99, 175, 1)' :'rgba(229, 0, 130, 1)')};
+        border-left: 3px solid ${(props) => (props.tabIndex === 0 ? 'rgba(0, 99, 175, 1)' : 'rgba(229, 0, 130, 1)')};
+        border-right: 3px solid ${(props) => (props.tabIndex === 0 ? 'rgba(0, 99, 175, 1)' : 'rgba(229, 0, 130, 1)')};
+            
+box-shadow: 0px -1px 11px ${(props) => (props.tabIndex === 0 ? 'rgba(0, 99, 175, 0.3)' : 'rgba(229, 0, 130, 0.3)')};
+
+    }
     &::after {
         position: absolute;
         content: '';
-        width: calc(100% / 3);
+        width: calc(100% / 2);
         height: 100%;
         bottom: 0px;
-        left: ${props => props.tabIndex * 50+'%'};
-        border-radius: 4px 4px 0px 0px;
+        left: ${(props) => props.tabIndex * 50 + '%'};
+        border-radius: 6px 6px 0px 0px;
         transform: translateX(
-            ${props => {
-            return props.tabIndex * -50+'%';
+            ${(props) => {
+                return props.tabIndex * -50 + '%';
             }}
         );
         transition: all 0.3s ease-out;
-        box-shadow: 0px -1px 11px ${props => props.tabIndex === 0 ?
-        "rgba(0, 99, 175, 0.3)" : props.tabIndex === 1 ?
-        "rgba(32, 122, 66, 0.3)" :
-        "rgba(229, 0, 130, 0.3)"};
     }
 `;
 
 const StyledTab = styled.div`
     z-index: 2;
     user-select: none;
-    width: calc(100% / 3);
+    width: calc(100% / 2);
     cursor: pointer;
-    color: ${props => props.isSelected ? props.theme.colors[props.color] : "#656565"};
+    color: ${props => props.isSelected ? props.theme.colors.mainWhite : "#656565"};
     text-align: center;
     transition: color 0.2s ease-out;
     display: flex;
     justify-content: center;
-
     p {
         font-size: 13px;
         font-weight: bold;
@@ -129,9 +131,7 @@ const StyledSwiper = styled(Swiper)`
   };
   transition: box-shadow 0.3s ease-out;
   box-shadow: 0px -1px 11px ${props => props.tabIndex === 0 ?
-        'rgba(0, 99, 175, 0.3)' : props.tabIndex === 1 ?
-        'rgba(32, 122, 66, 0.3)' :
-        'rgba(229, 0, 130, 0.3)'};
+        'rgba(0, 99, 175, 0.3)' : 'rgba(229, 0, 130, 0.3)'};
 `;
 
 
@@ -147,12 +147,6 @@ const UserGuideTabs = () => {
             title: strings.layerlist.layerlistLabels.allLayers,
             titleColor: 'mainColor1',
             content: <p>{strings.appGuide.modalContent.mapLevelMenu.tabsContent.materList}</p>
-        },
-        {
-            id: 'swipeAbleTab_1',
-            titleColor: 'secondaryColor2',
-            title: strings.layerlist.layerlistLabels.themeLayers,
-            content: <p>{strings.appGuide.modalContent.mapLevelMenu.tabsContent.themeLayerSelection}</p>
         },
         {
             id: 'swipeAbleTab_2',

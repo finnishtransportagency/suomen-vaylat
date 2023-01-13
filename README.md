@@ -17,9 +17,10 @@ You can read the release notes from another [ReleaseNotes.md](ReleaseNotes.md) f
 - [ ] Create Oskari.org published map (this published map need contains also new created RPC functions)
 - [ ] Create Environment variable files under suomen-vaylat-app folder and copy following into it (change `<PUBLISHED_OSKARI_MAP_DOMAIN>` and `<PROXY_DOMAIN>` to correct ones):
     ```
-    REACT_APP_PUBLISHED_MAP_URL=https://<PUBLISHED_OSKARI_MAP_DOMAIN>?uuid=8b65cd2c-9f8c-474d-93db-56788131d3e2
+    REACT_APP_PUBLISHED_MAP_URL=https://<PUBLISHED_OSKARI_MAP_DOMAIN>?uuid=aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee
     REACT_APP_PUBLISHED_MAP_DOMAIN=<PUBLISHED_OSKARI_MAP_DOMAIN>
     REACT_APP_PROXY_URL=https://<PROXY_DOMAIN>
+    REACT_APP_WEBSOCKET_URL=wss://<WEBSOCKET URL>
 
     REACT_APP_SITE_URL=http://localhost:3000
     REACT_APP_ROUTER_PREFIX=/
@@ -29,9 +30,10 @@ You can read the release notes from another [ReleaseNotes.md](ReleaseNotes.md) f
 
     | Key                            | Value                                                                                                                                                                                        |
     |--------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-    | REACT_APP_PUBLISHED_MAP_URL    | Published Oskari map url, example: `https://<PUBLISHED_OSKARI_MAP_DOMAIN>?uuid=8b65cd2c-9f8c-474d-93db-56788131d3e2` (this published map need contains also new created RPC functions)       |
+    | REACT_APP_PUBLISHED_MAP_URL    | Published Oskari map url, example: `https://<PUBLISHED_OSKARI_MAP_DOMAIN>?uuid=aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee` (this published map need contains also new created RPC functions)       |
     | REACT_APP_PUBLISHED_MAP_DOMAIN | Published map domain, example: `<PUBLISHED_OSKARI_MAP_DOMAIN>`                                                                                                                               |
     | REACT_APP_PROXY_URL            | Proxy url, example: `https://<PROXY_DOMAIN>`                                                                                                                                                 |
+    | REACT_APP_WEBSOCKET_URL        | Backend server websocket url for support downloads, example: `wss://<WEBSOCKET URL>`                                                                                                         |
     | REACT_APP_SITE_URL             | App site url, example: `http://localhost:3000`                                                                                                                                               |
     | REACT_APP_ROUTER_PREFIX        | React router prefix, example: `/` or `/suomen-vaylat/`  (if application is not in domain root folder, then define subfolder here)                                                            |
 

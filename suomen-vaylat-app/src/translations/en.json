@@ -91,6 +91,7 @@
     "downloadMaterials": "Download materials",
     "list": "List",
     "table" : "Table",
+    "uniqueId" : "Yksilöivä tunniste",
     "featureAmount" : "Kohteita",
     "getMoreFeatures": "Hae lisää kohteita",
     "savedGeometries" : {
@@ -158,12 +159,15 @@
           }
         }
       },
+      "themeMenu": {
+        "title": "Themes",
+        "content": "Selecting a theme displays the map layers defined for the theme and opens a menu for selecting map materials related to the theme. Some of the map materials have their own style for the theme. There can be only one theme at a time. When a theme is selected, you can also select map materials other than those defined for the theme in the All Levels menu. The theme closes with the theme marker at the top of the map."
+      },
       "mapLevelMenu": {
         "title": "Map Level Menu",
         "subTitle": "The map level menu opens at the top left. There are 3 tabs to choose from",
         "tabsContent": {
           "materList": "You can filter the material list by topic behind the filter button. You can search the map level by name by entering at least 3 letters in the search field.",
-          "themeLayerSelection": "Selecting a theme displays the map layers defined for the theme and opens a menu for selecting map materials related to the theme. Some of the map materials have their own style for the theme. There can be only one theme at a time. When a theme is selected, you can also select map materials other than those defined for the theme in the All Levels menu. The theme closes with the theme marker at the top of the map.",
           "selectedLayers": "List of selected map levels on the map. You can change the order of the levels by dragging them from the icon on the right. The transparency can be adjusted with the slider and the level selec-tion can be deselected."
         }
       },
@@ -322,7 +326,9 @@
         "91-17-16-1",
         "091-017-16-001"
       ],
-      "example": "Esim."
+      "example": "Esim.",
+      "toastTip": "Tiesitkö, että voit tallentaa rata- ja tiehausta kartalle tulleen geometrian?",
+      "toastTipContent": "Geometrian voit tallentaa sivun vasemman reunan tallennus-ikonin kautta, toiselta välilehdeltä."
     }
   },
   "layerlist": {

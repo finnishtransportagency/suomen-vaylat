@@ -1,46 +1,28 @@
-import { useRef, useContext, useEffect } from 'react';
+import { useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import { useAppSelector } from '../../state/hooks';
-import { ReactReduxContext } from 'react-redux';
 import {
     setIsSideMenuOpen,
     setSelectedMapLayersMenuTab,
 } from '../../state/slices/uiSlice';
 import { motion } from 'framer-motion';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import store from '../../state/store';
 
 // Import Swiper styles
 import 'swiper/css';
 
 import DialogHeader from './DialogHeader';
 import LayerListTEMP from '../menus/hierarchical-layerlist/LayerListTEMP';
-import ThemeLayerList from '../menus/hierarchical-layerlist/ThemeLayerList';
 import SelectedLayers from '../menus/selected-layers/SelectedLayers';
 
 import { faLayerGroup } from '@fortawesome/free-solid-svg-icons';
 
 import strings from '../../translations';
 
-const variants = {
-    open: {
-        pointerEvents: 'auto',
-        x: 0,
-        opacity: 1,
-        filter: 'blur(0px)',
-    },
-    closed: {
-        pointerEvents: 'none',
-        x: '-100%',
-        opacity: 0,
-        filter: 'blur(10px)',
-    },
-};
-
 const StyledMapLayersDialog = styled(motion.div)`
-    grid-row-start: 1;
-    grid-row-end: 3;
-    width: 100%;
-    height: auto;
+    width: 350px;
+    max-height: 100%;
     display: flex;
     flex-direction: column;
     pointer-events: auto;
@@ -62,13 +44,14 @@ const StyledMapLayersDialog = styled(motion.div)`
         width: 100%;
         height: 100%;
         margin-left: unset;
-    } ;
+    };
 `;
 
 const StyledTabs = styled.div`
     position: relative;
     display: flex;
     align-items: center;
+    justify-content: space-between;
     min-height: 40px;
     background-color: #f2f2f2;
     margin: 16px 8px 0px 8px;
@@ -76,11 +59,11 @@ const StyledTabs = styled.div`
         z-index: 2;
         position: absolute;
         content: '';
-        width: calc(100% / 3);
+        width: calc(100% / 2);
         height: 100%;
-        background-color: ${(props) => (props.tabIndex === 0 ? 'rgba(0, 99, 175, 1)' : props.tabIndex === 1 ? 'rgba(32, 122, 66, 1)' : 'rgba(229, 0, 130, 1)')};
+        background-color: ${(props) => (props.tabIndex === 0 ? 'rgba(0, 99, 175, 1)' : 'rgba(229, 0, 130, 1)')};
         bottom: 0px;
-        left: ${(props) => props.tabIndex * 50 + '%'};
+        left: ${(props) => props.tabIndex * 75 + '%'};
         border-radius: 8px 8px 0px 0px;
         transform: translateX(
             ${(props) => {
@@ -88,17 +71,17 @@ const StyledTabs = styled.div`
             }}
         );
         transition: all 0.3s ease-out;
-        border-top: 3px solid ${(props) => (props.tabIndex === 0 ? 'rgba(0, 99, 175, 1)' : props.tabIndex === 1 ? 'rgba(32, 122, 66, 1)' : 'rgba(229, 0, 130, 1)')};
-        border-left: 3px solid ${(props) => (props.tabIndex === 0 ? 'rgba(0, 99, 175, 1)' : props.tabIndex === 1 ? 'rgba(32, 122, 66, 1)' : 'rgba(229, 0, 130, 1)')};
-        border-right: 3px solid ${(props) => (props.tabIndex === 0 ? 'rgba(0, 99, 175, 1)' : props.tabIndex === 1 ? 'rgba(32, 122, 66, 1)' : 'rgba(229, 0, 130, 1)')};
+        border-top: 3px solid ${(props) => (props.tabIndex === 0 ? 'rgba(0, 99, 175, 1)' :'rgba(229, 0, 130, 1)')};
+        border-left: 3px solid ${(props) => (props.tabIndex === 0 ? 'rgba(0, 99, 175, 1)' : 'rgba(229, 0, 130, 1)')};
+        border-right: 3px solid ${(props) => (props.tabIndex === 0 ? 'rgba(0, 99, 175, 1)' : 'rgba(229, 0, 130, 1)')};
             
-box-shadow: 0px -1px 11px ${(props) => (props.tabIndex === 0 ? 'rgba(0, 99, 175, 0.3)' : props.tabIndex === 1 ? 'rgba(32, 122, 66, 0.3)' : 'rgba(229, 0, 130, 0.3)')};
+box-shadow: 0px -1px 11px ${(props) => (props.tabIndex === 0 ? 'rgba(0, 99, 175, 0.3)' : 'rgba(229, 0, 130, 0.3)')};
 
     }
     &::after {
         position: absolute;
         content: '';
-        width: calc(100% / 3);
+        width: calc(100% / 2);
         height: 100%;
         bottom: 0px;
         left: ${(props) => props.tabIndex * 50 + '%'};
@@ -115,7 +98,7 @@ box-shadow: 0px -1px 11px ${(props) => (props.tabIndex === 0 ? 'rgba(0, 99, 175,
 const StyledTab = styled.div`
     z-index: 2;
     user-select: none;
-    width: calc(100% / 3);
+    width: calc(100% / 2);
     cursor: pointer;
     font-size: 13px;
     font-weight: bold;
@@ -127,8 +110,8 @@ const StyledTab = styled.div`
 
 const StyledLayerCount = styled.div`
     position: absolute;
-    top: -8px;
-    right: -4px;
+    top: -6px;
+    right: 15px;
     width: 25px;
     height: 18px;
     display: flex;
@@ -151,34 +134,43 @@ const StyledSwiper = styled(Swiper)`
         overflow: auto;
     }
     transition: box-shadow 0.3s ease-out;
-    border-top: 3px solid ${(props) => (props.tabIndex === 0 ? 'rgba(0, 99, 175, 1)' : props.tabIndex === 1 ? 'rgba(32, 122, 66, 1)' : 'rgba(229, 0, 130, 1)')};
+    border-top: 3px solid ${(props) => (props.tabIndex === 0 ? 'rgba(0, 99, 175, 1)' : 'rgba(229, 0, 130, 1)')};
 `;
 
 const MapLayersDialog = () => {
-    const { store } = useContext(ReactReduxContext);
-
+    const { isSideMenuOpen, selectedMapLayersMenuTab, isThemeMenuOpen } = useAppSelector((state) => state.ui);
     const {
         allGroups,
         allLayers,
         selectedLayers,
-        allThemesWithLayers,
         allTags,
         currentZoomLevel,
     } = useAppSelector((state) => state.rpc);
 
-    const { selectedMapLayersMenuTab } = useAppSelector((state) => state.ui);
-
-    const { isSideMenuOpen } = useAppSelector((state) => state.ui);
-
     const inputEl = useRef(null);
+    
+    useEffect(() => {
+        inputEl?.current?.swiper?.slideTo(selectedMapLayersMenuTab);
+    }, [selectedMapLayersMenuTab, isSideMenuOpen]);
 
-    const hideWarn = () => {
+    const closeSideMenu = () => {
         store.dispatch(setIsSideMenuOpen(!isSideMenuOpen));
     };
 
-    useEffect(() => {
-        inputEl.current.swiper.slideTo(selectedMapLayersMenuTab);
-    }, [selectedMapLayersMenuTab]);
+    const variants = {
+        open: {
+            pointerEvents: 'auto',
+            x: 0,
+            opacity: 1,
+            filter: 'blur(0px)',
+        },
+        closed: {
+            pointerEvents: 'none',
+            x: '-100%',
+            opacity: 0,
+            filter: 'blur(10px)',
+        },
+    };
 
     const tabsContent = [
         {
@@ -190,17 +182,6 @@ const MapLayersDialog = () => {
                     groups={allGroups}
                     layers={allLayers}
                     tags={allTags}
-                />
-            ),
-        },
-        {
-            id: 'swipeAbleTab_1',
-            titleColor: 'secondaryColor2',
-            title: strings.layerlist.layerlistLabels.themeLayers,
-            content: (
-                <ThemeLayerList
-                    allLayers={allLayers}
-                    allThemes={allThemesWithLayers}
                 />
             ),
         },
@@ -218,19 +199,20 @@ const MapLayersDialog = () => {
         },
     ];
 
-    return (
+      return  ( !isThemeMenuOpen && 
         <StyledMapLayersDialog
             initial='closed'
             animate={isSideMenuOpen ? 'open' : 'closed'}
+            transition={{duration: 0.4}}
+            exit={{pointerEvents: 'none',
+            x: '-100%',
+            opacity: 0,
+            filter: 'blur(10px)'}}
             variants={variants}
-            transition={{
-                duration: 0.4,
-                type: 'tween',
-            }}
         >
             <DialogHeader
                 title={strings.layerlist.layerlistLabels.mapLayers}
-                hideWarn={hideWarn}
+                handleClose={closeSideMenu}
                 icon={faLayerGroup}
             />
             <StyledTabs tabIndex={selectedMapLayersMenuTab}>
@@ -277,7 +259,6 @@ const MapLayersDialog = () => {
                         </SwiperSlide>
                     );
                 })}
-                {/* <div className='swiper-pagination'></div> */}
             </StyledSwiper>
         </StyledMapLayersDialog>
     );
