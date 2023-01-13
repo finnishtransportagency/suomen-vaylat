@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import strings from '../../../translations';
 import {
     faCompress,
@@ -8,6 +8,7 @@ import {
     faSave,
     faMapMarkedAlt,
     faDownload,
+    faMap
 } from '@fortawesome/free-solid-svg-icons';
 import { ReactReduxContext } from 'react-redux';
 import styled from 'styled-components';
@@ -21,7 +22,8 @@ import {
     setMinimizeGfi,
     setIsGfiDownloadOpen,
     setGeoJsonArray,
-    setSelectedMarker
+    setSelectedMarker,
+    setIsThemeMenuOpen
 } from '../../../state/slices/uiSlice';
 
 import { removeMarkerRequest } from '../../../state/slices/rpcSlice';
@@ -82,6 +84,7 @@ const MenuBar = () => {
     const {
         isFullScreen,
         isSideMenuOpen,
+        isThemeMenuOpen,
         isDrawingToolsOpen,
         isSearchOpen,
         isSaveViewOpen,
@@ -89,6 +92,8 @@ const MenuBar = () => {
         isGfiDownloadOpen,
         activeTool,
     } = useAppSelector((state) => state.ui);
+
+    const [animationUnfinished, setAnimationUnfinished] = useState(false);
 
     const handleFullScreen = () => {
         var elem = document.documentElement;
@@ -143,17 +148,71 @@ const MenuBar = () => {
         store.dispatch(setSelectedMarker(2));
     };
 
+    const waitForAnimationFinish = () => {
+        setAnimationUnfinished(true);
+        setTimeout(() => {
+            setAnimationUnfinished(false);
+        }, 400);
+    }
+
+    const handleSideMenuClick = () => {
+        if(!animationUnfinished) {
+            if(isThemeMenuOpen) {
+                store.dispatch(setIsThemeMenuOpen(false));
+                setAnimationUnfinished(true);
+                setTimeout(() => {
+                    store.dispatch(setIsSideMenuOpen(true));
+                    setAnimationUnfinished(false);
+                }, 600);
+            }
+            else if(!isSideMenuOpen && !isThemeMenuOpen) {
+                store.dispatch(setIsSideMenuOpen(true));
+            } 
+            else if(isSideMenuOpen) {
+                store.dispatch(setIsSideMenuOpen(false));
+            } 
+            waitForAnimationFinish();
+        }
+        else return;
+    };
+
+    const handleThemeMenuClick = () => {
+        if(!animationUnfinished) {
+            if(isSideMenuOpen) {
+                store.dispatch(setIsSideMenuOpen(false));
+                setAnimationUnfinished(true);
+                setTimeout(() => {
+                    setAnimationUnfinished(false);
+                    store.dispatch(setIsThemeMenuOpen(true));
+                }, 600);
+            }
+            else if(!isSideMenuOpen && !isThemeMenuOpen) {
+                store.dispatch(setIsThemeMenuOpen(true));
+            } 
+            else if(isThemeMenuOpen) {
+                store.dispatch(setIsThemeMenuOpen(false));
+            } 
+            waitForAnimationFinish();
+        }
+        else return;
+    };
+
     return (
         <>
             <StyledMenuBar isSearchOpen={isSearchOpen}>
+                <CircleButton 
+                    icon={faMap}
+                    text={strings.layerlist.layerlistLabels.themeLayers}
+                    toggleState={isThemeMenuOpen}
+                    tooltipDirection="right"
+                    clickAction={handleThemeMenuClick}
+                />
                 <CircleButton
                     icon={faLayerGroup}
                     text={strings.layerlist.layerlistLabels.mapLayers}
                     toggleState={isSideMenuOpen}
                     tooltipDirection={"right"}
-                    clickAction={() =>
-                        store.dispatch(setIsSideMenuOpen(!isSideMenuOpen))
-                    }
+                    clickAction={handleSideMenuClick}
                 >
                     <StyledLayerCount>{selectedLayers.length}</StyledLayerCount>
                 </CircleButton>

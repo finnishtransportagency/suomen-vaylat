@@ -18,6 +18,7 @@ const initialState = {
     savedTabIndex: 0,
     isUserGuideOpen: false,
     shareUrl: '',
+    isThemeMenuOpen: false,
     isDrawingToolsOpen: false,
     isLegendOpen: false,
     isZoomBarOpen: false,
@@ -88,49 +89,6 @@ export const uiSlice = createSlice({
             state.geoJsonArray = action.payload;
         }, 
         addToGeoJsonArray: (state, action) => {
-            /*
-             * looppaa state.geojsonarray läpi -> looppaa jokaisen iteroitavan kohdalla iteroitavan lapsen läpi ja katso onko child.id === action.payload[0].id
-             * jos löytyy matchi niin ei pusketa arrayhin vaan vaan palautetaan indexit
-             * jos ei löydy matchia pusketaan arrayhin
-             */
-
-            /*
-            let duplicate = {isDuplicate : false ,geoJsonArrayIndex : null, duplicateIndex: null}
-            console.log("action.payload : ", action.payload);
-            state.geoJsonArray.forEach((geoj, i) => {
-                geoj.forEach(child => {
-                    console.log("child.id : ", current(child));
-                    console.log("action.payload[0] : ", action.payload[0])
-                    console.log("child.id === action.payload[0] ? ", child.id === action.payload[0].id);
-                })
-                let duplicateIndex = geoj.findIndex(child => child.id === action.payload[0].id)
-                console.log("DUPLICATE INDEX : ", duplicateIndex)
-                if(duplicateIndex !== -1 ) {
-                    duplicate = {isDuplicate: true ,geoJsonArrayIndex: i, duplicateIndex: duplicateIndex};
-                    return duplicate
-                }
-            });
-
-            if(duplicate.isDuplicate) {
-                console.log("is duplicate, replacing element");
-                state.geoJsonArray[duplicate.geoJsonArrayIndex][duplicate.duplicateIndex] = action.payload[0];
-            }
-            else {
-                console.log("is not duplicate, pushing to array");
-                state.geoJsonArray.push(action.payload);
-            } */
-            /*let duplicate = {isDuplicate : false ,geoJsonArrayIndex : null, duplicateIndex: null}
-            console.log("action.payload : ", action.payload); */
-            /*
-            state.geoJsonArray.forEach((geoj, i) => {
-                let duplicateIndex = geoj.findIndex(child => child.id === action.payload.id)
-                console.log("DUPLICATE INDEX : ", duplicateIndex)
-                if(duplicateIndex !== -1 ) {
-                    duplicate = {isDuplicate: true ,geoJsonArrayIndex: i, duplicateIndex: duplicateIndex};
-                    return duplicate
-                }
-            }); */
-            
             let duplicateIndex = state.geoJsonArray.findIndex(geoj => geoj.id === action.payload.id);
 
             if(duplicateIndex !== -1) state.geoJsonArray[duplicateIndex] = action.payload;
@@ -141,6 +99,9 @@ export const uiSlice = createSlice({
         },
         setIsSavedOpen: (state, action) => {
             state.isSavedOpen = action.payload;
+        },
+        setIsThemeMenuOpen: (state, action) => {
+            state.isThemeMenuOpen = action.payload;
         },
         setIsDownloadLinkModalOpen: (state, action) => {
             state.downloadLink = {
@@ -243,6 +204,7 @@ export const {
     setIsSideMenuOpen,
     setIsSearchOpen,
     setSearchParams,
+    setIsThemeMenuOpen,
     setIsInfoOpen,
     setIsUserGuideOpen,
     setIsLegendOpen,
