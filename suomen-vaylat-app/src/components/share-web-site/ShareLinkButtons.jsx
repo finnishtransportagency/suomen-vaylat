@@ -60,7 +60,7 @@ export const ThemeGroupShareButton = ({ themeId, color }) => {
 
     return(
         <>
-            <ReactTooltip backgroundColor={theme.colors.mainColor1} disable={isMobile} id={'share_' + themeId} place='top' type='dark' effect='float'>
+            <ReactTooltip backgroundColor={theme.colors.secondaryColor2} disable={isMobile} id={'share_' + themeId} place='bottom' type='dark' effect='solid'>
                 <span>{strings.tooltips.shareTheme}</span>
             </ReactTooltip>
             <StyledShareButton

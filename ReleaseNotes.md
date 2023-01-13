@@ -1,5 +1,16 @@
 # Release Notes
 
+## 1.9.0
+
+For a full list of changes see: https://github.com/finnishtransportagency/suomen-vaylat/milestone/12?closed=1
+
+* Themegroup own menu
+* GFI list view explaining ids
+* Fix gfitools loading animation stuck
+
+Backend changes:
+* Fix VKM search some search cases
+
 ## 1.8.0
 
 For a full list of changes see: https://github.com/finnishtransportagency/suomen-vaylat/milestone/11?closed=1

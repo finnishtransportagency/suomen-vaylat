@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect, useRef } from 'react';
+import { useState, useContext, useEffect, useRef } from 'react';
 import { ReactReduxContext } from 'react-redux';
 import { ToastContainer, Slide, toast} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
@@ -61,15 +61,14 @@ import GFIPopup from '../gfi/GFIPopup';
 import GFIDownload from '../gfi/GFIDownload';
 import MetadataModal from '../metadata-modal/MetadataModal';
 import { ANNOUNCEMENTS_LOCALSTORAGE } from '../../utils/constants';
+import ThemeMenu from '../menus/theme-menu/ThemeMenu';
 
 const StyledContent = styled.div`
     z-index: 1;
     position: relative;
     width: 100%;
     height: 100%;
-    overflow: hidden;
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
     .Toastify {
@@ -92,14 +91,26 @@ const StyledContent = styled.div`
             top: 9em;
         }
     };
-
-    @media ${(props) => props.theme.device.mobileL} {
-        .Toastify__toast-container {
-            width: 100%;
+    @media only screen and (max-width: 480px) {
+        .Toastify__toast-container--top-right {
+            top: 8em;
+            left: unset;
+            rigth: 0;
+            width: 75%;
         }
+    }
+    @media ${(props) => props.theme.device.mobileL} {
         .Toastify__toast-container--top-right {
             top: 7em;
+            width: 75%;
         }
+    @media only screen and (max-width: 370px) {
+        .Toastify__toast-container--top-right {
+            width: 100%;
+            left: 0;
+            right: 0;
+        }
+    }
     };
 
 
@@ -111,25 +122,39 @@ const StyledContent = styled.div`
 
 const StyledContentGrid = styled.div`
     position: absolute;
-    left: 0px;
-    top: 0px;
+    left: 0;
+    top: 0;
     width: 100%;
     height: 100%;
     box-sizing: border-box;
-    display: grid;
-    grid-template-columns: 48px 344px 1fr;
-    grid-template-rows: 48px 1fr;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
     padding: 16px;
     pointer-events: none;
     @media ${(props) => props.theme.device.mobileL} {
         padding: 8px;
-        grid-template-columns: 48px 1fr;
     };
+`;
+
+const StyledLeftSection = styled.div`
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+`;
+
+const StyledRightSection = styled.div`
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
 `;
 
 const StyledLayerNamesList = styled.ul`
     padding-inline-start: 20px;
 `;
+
 
 const StyledToastContainer = styled(ToastContainer)`
 `;
@@ -328,7 +353,7 @@ const Content = () => {
     const supportsWebSockets = 'WebSocket' in window || 'MozWebSocket' in window;
 
     const connectWebsocket = (count) => {
-        const MAX_RECONNECTIONS_TRY = 5;
+        const MAX_RECONNECTIONS_TRY = 20;
 
         setWebsocketFirstTimeTryConnecting(true);
 
@@ -359,7 +384,6 @@ const Content = () => {
             setInterval(() => {
                 sendPing();
             }, 1000 * 60 * 10);
-
         };
         ws.onmessage = function (evt)
         {
@@ -725,11 +749,16 @@ const Content = () => {
                 <ScaleBar />
                 <StyledToastContainer position="bottom-left" pauseOnFocusLoss={false} transition={Slide} autoClose={false} closeOnClick={false} />
                 <StyledContentGrid>
-                    <MenuBar />
-                    <MapLayersDialog />
-                    <Search />
-                    <ZoomMenu />
-                    <ActionButtons closeAction={handleCloseGFIModal} />
+                    <StyledLeftSection>
+                        <MenuBar />
+                        <ThemeMenu />
+                        <MapLayersDialog />
+                    </StyledLeftSection>
+                    <StyledRightSection>
+                        <Search />
+                        <ZoomMenu />
+                        <ActionButtons closeAction={handleCloseGFIModal} />
+                    </StyledRightSection>
                 </StyledContentGrid>
             </StyledContent>
         </>

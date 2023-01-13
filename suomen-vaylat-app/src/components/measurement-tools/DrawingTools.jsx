@@ -204,25 +204,6 @@ export const DrawingTools = ({isOpen}) => {
     }
 
     useEffect(() => {
-        /**
-         * FIX ME 
-         * This use effect runs when we clear the geoJsonArray and puts the data back in -> save geometries button becomes active when it should not
-         */
-        const drawHandler = (data) => {
-            if (data.isFinished && data.isFinished === true && data.geojson.features.length > 0) {
-                activeTool !== strings.tooltips.drawingTools.marker && store.dispatch(addToGeoJsonArray(data));
-            }
-        };
-        
-        channel && channel.handleEvent('DrawingEvent', drawHandler);
-
-        return () => {
-            channel &&
-                channel.unregisterEventHandler('DrawingEvent', drawHandler);
-        };
-    }, [channel, store]);
-
-    useEffect(() => {
         if(showToast === false) store.dispatch(setHasToastBeenShown({toastId: 'drawToast', shown: true}));
     }, [showToast, store]);
 

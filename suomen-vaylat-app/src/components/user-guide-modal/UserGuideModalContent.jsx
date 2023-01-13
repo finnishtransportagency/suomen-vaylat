@@ -13,6 +13,7 @@ import {
     faDownload,
     faAngleRight,
     faList,
+    faMap,
 } from '@fortawesome/free-solid-svg-icons';
 import { ReactComponent as VaylaLogo } from '../layout/images/vayla_v_white.svg';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -115,6 +116,17 @@ export const UserGuideModalContent = () => {
             content: <StyledGuideContent>
                         <UserGuideUpperBarContent />
                     </StyledGuideContent> 
+        },
+        {
+            title: <StyledTitleWrapper>
+                        <StyledIconButton>
+                            <StyledFAIcon icon={faMap} />
+                        </StyledIconButton>
+                        <p>{strings.appGuide.modalContent.themeMenu.title}</p>
+                    </StyledTitleWrapper>,
+            content: <StyledGuideContent>
+                        <p>{strings.appGuide.modalContent.themeMenu.content}</p>
+                     </StyledGuideContent>
         },
         {
             title: <StyledTitleWrapper>

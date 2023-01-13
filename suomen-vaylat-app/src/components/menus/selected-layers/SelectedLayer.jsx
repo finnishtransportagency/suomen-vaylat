@@ -1,5 +1,5 @@
-import {  useState, useContext } from 'react';
-import { faInfoCircle, faTimes, faCaretDown, faCaretUp, faGripLines, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import { useEffect, useState, useContext } from 'react';
+import { faInfoCircle, faTimes, faCaretDown, faCaretUp, faGripLines, faEye, faEyeSlash, faLayerGroup, faMap } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ReactReduxContext, useSelector } from 'react-redux';
 import styled from 'styled-components';
@@ -8,6 +8,8 @@ import { updateLayers } from '../../../utils/rpcUtil';
 import { sortableHandle } from 'react-sortable-hoc';
 
 import strings from '../../../translations';
+import { useAppSelector } from '../../../state/hooks';
+import { theme } from '../../../theme/theme';
 
 const StyledLayerContainer = styled.li`
     z-index: 9999;
@@ -32,6 +34,8 @@ const StyledlayerHeader = styled.div`
     width: 100%;
     display: flex;
     align-items: center;
+    justify-content: space-between;
+    align-items: center;
 `;
 
 const StyledMidContent = styled.div`
@@ -39,14 +43,15 @@ const StyledMidContent = styled.div`
 `;
 
 const StyledLayerName = styled.p`
-    max-width: 220px;
+    display: inline-block;
+    max-width: 210px;
     margin: 0;
     user-select: none;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     font-size: 14px;
-    color: ${props => props.theme.colors.secondaryColor8};
+    color: ${props => props.theme.colors.mainColor1};
 `;
 
 const StyledBottomContent = styled.div`
@@ -56,28 +61,6 @@ const StyledBottomContent = styled.div`
         margin: 0;
         color: ${props => props.theme.colors.mainColor1};
         font-size: 12px;
-    }
-`;
-
-const StyledLayerDeleteIcon = styled.div`
-    position: absolute;
-    top: 0px;
-    right: 0px;
-    min-width: 28px;
-    min-height: 28px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    svg {
-        color: ${props => props.theme.colors.mainColor1};
-        font-size: 18px;
-        transition: all 0.1s ease-out;
-    };
-    &:hover {
-        svg {
-            color: ${props => props.theme.colors.mainColor2};
-        };
     }
 `;
 
@@ -122,7 +105,7 @@ const StyledLayerGripControl = styled.div`
     transition: all 0.1s ease-out;
     svg {
         font-size: 17px;
-        color: ${props => props.theme.colors.mainColor1};
+        color: ${props => props.theme.colors.secondaryColor8};
     };
     &:hover {
         transform: scale(1.1);
@@ -132,10 +115,18 @@ const StyledLayerGripControl = styled.div`
     };
 `;
 
-const StyledLayerInfoIconWrapper = styled.div`
-    cursor: pointer;
+const StyledIconsWrapper = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 8px 0px;
+`;
 
-    padding-left: 8px;
+const StyledIconWrapper = styled.button`
+    border: none;
+    background: none;
+    cursor: pointer;
     svg {
         color: ${props => props.theme.colors.mainColor1};
         font-size: 18px;
@@ -209,14 +200,22 @@ export const SelectedLayer = ({
     uuid,
     currentZoomLevel,
     sortIndex,
-    opacityZero
 }) => {
     const { store } = useContext(ReactReduxContext);
     const [opacity, setOpacity] = useState(layer.opacity);
     const [prevOpacity, setPrevOpacity] = useState(layer.opacity);
-    const [isLayerVisible, setIsLayerVisible] = useState(true);
+    const [isLayerVisible, setIsLayerVisible] = useState(layer.opacity !== 0);
     const channel = useSelector(state => state.rpc.channel);
 
+    const { allSelectedThemeLayers } = useAppSelector(state => state.rpc);
+
+
+    
+    useEffect(() => {
+        setOpacity(layer.opacity);
+        layer.opacity === 0 ? setIsLayerVisible(false) : setIsLayerVisible(true)
+    }, [layer.opacity])
+    
     const handleLayerRemoveSelectedLayer = (channel, layer) => {
         channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, false]);
         updateLayers(store, channel);
@@ -230,10 +229,16 @@ export const SelectedLayer = ({
 
     const handleLayerOpacityToggle = (channel, layer) => {
         setIsLayerVisible(!isLayerVisible);
-        !opacityZero ? setPrevOpacity(layer.opacity) : setPrevOpacity(100);
-        const newOpacity = opacityZero? prevOpacity: 0;
-        channel.postRequest('ChangeMapLayerOpacityRequest', [layer.id, newOpacity]);
+        let newOpacity = opacity === 0 ? prevOpacity: 0;
+        if(opacity === 0 && prevOpacity) {
+            newOpacity = prevOpacity;
+        };
+        if(opacity === 0 && !prevOpacity) {
+            newOpacity = 100
+        }
         setOpacity(newOpacity);
+        channel.postRequest('ChangeMapLayerOpacityRequest', [layer.id, newOpacity]);
+        opacity !== 0 ? setPrevOpacity(layer.opacity) : setPrevOpacity(100);
         updateLayers(store, channel);
     };
 
@@ -260,34 +265,17 @@ export const SelectedLayer = ({
         layerInfoText = strings.layerlist.selectedLayers.zoomOutToShowLayer;
     }
 
+    const isLayerSelectedThemeLayer = allSelectedThemeLayers.find(themeLayer => themeLayer === layer.id);
+
     return (
             <StyledLayerContainer>
                 <DragHandle />
                 <StyledLayerContent>
-                    <StyledLayerDeleteIcon
-                        className="swiper-no-swiping"
-                        onClick={() => {
-                            handleLayerRemoveSelectedLayer(channel, layer);
-                        }}>
-                        <FontAwesomeIcon
-                            icon={faTimes}
-                        />
-                    </StyledLayerDeleteIcon>
                     <StyledlayerHeader>
-                        <StyledLayerName>
+                        <StyledLayerName style={{color: isLayerSelectedThemeLayer ? theme.colors.secondaryColor2 : theme.colors.mainColor1}}>
+                        <FontAwesomeIcon style={{marginRight: '4px', color: isLayerSelectedThemeLayer ? theme.colors.secondaryColor2 : theme.colors.mainColor1 }} icon={isLayerSelectedThemeLayer ? faMap : faLayerGroup} />
                             {layer.name}
                         </StyledLayerName>
-                        { uuid &&
-                            <StyledLayerInfoIconWrapper
-                                className="swiper-no-swiping"
-                                uuid={uuid}
-                                onClick={() => {
-                                    handleLayerMetadata(layer, uuid);
-                                }}
-                            >
-                                <FontAwesomeIcon icon={faInfoCircle} />
-                            </StyledLayerInfoIconWrapper>
-                        }
                     </StyledlayerHeader>
                     <StyledMidContent>
                         {isCurrentZoomTooFar || isCurrentZoomTooClose ? <StyledLayerInfoContainer>
@@ -314,6 +302,28 @@ export const SelectedLayer = ({
                         </StyledToggleOpacityIconWrapper>
                     </StyledBottomContent>
                 </StyledLayerContent>
+                <StyledIconsWrapper>
+                { uuid &&
+                    <StyledIconWrapper
+                        className="swiper-no-swiping"
+                        uuid={uuid}
+                        onClick={() => {
+                            handleLayerMetadata(layer, uuid);
+                        }}
+                    >
+                        <FontAwesomeIcon icon={faInfoCircle} />
+                    </StyledIconWrapper>
+                }
+                    <StyledIconWrapper
+                        className="swiper-no-swiping"
+                        onClick={() => {
+                            handleLayerRemoveSelectedLayer(channel, layer);
+                        }}>
+                        <FontAwesomeIcon
+                            icon={faTimes}
+                        />
+                    </StyledIconWrapper>
+                </StyledIconsWrapper>
             </StyledLayerContainer>
     );
 };
