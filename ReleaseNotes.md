@@ -1,5 +1,11 @@
 # Release Notes
 
+## 1.10.0
+
+For a full list of changes see: https://github.com/finnishtransportagency/suomen-vaylat/milestone/13?closed=1
+
+* Fix bacground maps check
+
 ## 1.9.0
 
 For a full list of changes see: https://github.com/finnishtransportagency/suomen-vaylat/milestone/12?closed=1
