@@ -44,7 +44,7 @@ export const getSelectedThemeLayers = (theme, selectedMapLayers) => {
     const recurseThemeLayers = (theme) => {
         if(theme.layers) {
             theme.layers.forEach(layer => {
-                array.push(layer);  
+                array.push(layer);
             });
         }
         if(theme.subthemes) {
@@ -106,7 +106,7 @@ export const selectGroup = (store, channel, index, theme, lastSelectedTheme, sel
                 channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layerId, true]);
             });
             updateLayers(store, channel);
-    
+
         const selectedMapLayers =  store.getState().rpc.selectedLayersByType.mapLayers;
         const selectedTheme = store.getState().rpc.selectedTheme;
         const selectedThemeLayers = getSelectedThemeLayers(selectedTheme, selectedMapLayers);
@@ -121,8 +121,8 @@ export const selectGroup = (store, channel, index, theme, lastSelectedTheme, sel
     }
         },700);
 
-    } 
-    
+    }
+
     else if (selectedThemeIndex !== index ){
          // set selectedLayers opacities to 0 on every layer but theme layers
         store.dispatch(setSelectedTheme(theme));
@@ -135,7 +135,7 @@ export const selectGroup = (store, channel, index, theme, lastSelectedTheme, sel
                         channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layerId, true]);
                     });
                 updateLayers(store, channel);
-    
+
     const selectedMapLayers =  store.getState().rpc.selectedLayersByType.mapLayers;
     const selectedTheme = store.getState().rpc.selectedTheme;
     const selectedThemeLayers = getSelectedThemeLayers(selectedTheme, selectedMapLayers);
@@ -145,13 +145,13 @@ export const selectGroup = (store, channel, index, theme, lastSelectedTheme, sel
             if(!selectedThemeLayers.find(themelayer => themelayer === layer.id)) {
                 channel.postRequest('ChangeMapLayerOpacityRequest', [layer.id, 0]);
                 updateLayers(store, channel);
-            } 
+            }
         })
     }
             },700);
         },1000);
-    } 
-    
+    }
+
     else {
         store.dispatch(setSelectedTheme(null));
         store.dispatch(setAllSelectedThemeLayers([]));
@@ -230,7 +230,9 @@ export const reArrangeSelectedLayersOrder = (selectedLayers, store) => {
         else return;
     };
     clearUnselectedMaps();
-    getBackgroundMaps(store.getState().rpc.allGroups[12]);
+    getBackgroundMaps(
+        store.getState().rpc.allGroups.find((group) => group.id === 1)
+    );
     let layers = selectedLayers.filter(layer => !bgMaps.find(map => map.id === layer.id));
     store.dispatch(setBackgroundMaps(bgMaps));
     store.dispatch(setMapLayers(layers));
