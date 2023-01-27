@@ -130,6 +130,13 @@ const GfiDownloadMenu = ({ handleGfiDownloadsMenu, handleGfiDownload }) => {
 
     const [downloadFormats] = useState([
         {
+            id: 'download-format-gpkg',
+            title: '.GPKG',
+            format: 'gpkg',
+            selected: false,
+            loading: false,
+        },
+        {
             id: 'download-format-shape',
             title: '.SHP',
             format: 'shape-zip',
@@ -156,14 +163,7 @@ const GfiDownloadMenu = ({ handleGfiDownloadsMenu, handleGfiDownload }) => {
             format: 'application/json',
             selected: false,
             loading: false,
-        },
-        {
-            id: 'download-format-geopkg',
-            title: '.GEOPKG',
-            format: 'geopkg',
-            selected: false,
-            loading: false,
-        },
+        }
     ]);
 
     const handleSelectLayer = (layer) => {
