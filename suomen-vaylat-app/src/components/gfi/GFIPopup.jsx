@@ -18,7 +18,7 @@ import { useAppSelector } from '../../state/hooks';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { FreeMode, Controller } from 'swiper';
 import { isMobile } from '../../theme/theme';
-import { setIsSaveViewOpen, setMinimizeGfi, setSavedTabIndex, setActiveSelectionTool } from '../../state/slices/uiSlice';
+import { setIsSaveViewOpen, setMinimizeGfi, setSavedTabIndex, setActiveSelectionTool, setWarning } from '../../state/slices/uiSlice';
 import { resetGFILocations, addFeaturesToGFILocations } from '../../state/slices/rpcSlice';
 
 import { FormattedGFI } from './FormattedGFI';
@@ -728,10 +728,31 @@ export const GFIPopup = ({ handleGfiDownload }) => {
             }
         );
         setIsLoading(false);
-    }, function(errors) {
-            setIsLoading(false);
+    }, () => {
+        store.dispatch(setWarning({
+            title: strings.bodySizeWarning,
+            subtitle: null,
+            cancel: {
+                text: strings.general.cancel,
+                action: () => {
+                    setIsLoading(false);
+                    store.dispatch(setWarning(null))
+                }
+            },
+            confirm: {
+                text: strings.general.continue,
+                action: () => {
+                    simplifyGeometry();
+                    store.dispatch(setWarning(null));
+                }
+            },
+        }))
         });
     };
+
+    const simplifyGeometry = () => {
+        console.log("simplify");
+    }
 
     useEffect(() => {
         vkmData? setIsVKMInfoOpen(true) : setIsVKMInfoOpen(false);

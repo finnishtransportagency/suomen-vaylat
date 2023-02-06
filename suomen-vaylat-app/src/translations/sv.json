@@ -131,6 +131,7 @@
     "OkLowerCaseK": "Ok"
   },
   "multipleLayersWarning": "Du håller på att lägga till minst 10 kartnivåer på kartan och det kan påverka tjänstens prestanda",
+  "bodySizeWarning": "Rajausgeometria on liian suuri, yksinkertaistetaanko geometria? (sv)",
   "appGuide": {
     "title": "Användarguide",
     "modalContent": {
