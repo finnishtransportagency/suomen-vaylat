@@ -163,7 +163,7 @@ const GFIDownload = () => {
             <StyledSubtitle>{strings.downloads.readyForDownload}:</StyledSubtitle>
             {
                 downloads.filter(download => download.loading === false).length > 0 ?
-                downloads.filter(download => download.loading === false && !download.error).map(download => {
+                downloads.filter(download => download.loading === false && download.errorLayers.length === 0).map(download => {
                     return <DownloadItem
                         download={download}
                         closeAction={() => {
@@ -184,12 +184,12 @@ const GFIDownload = () => {
             : <StyledDescription>- {strings.downloads.noDownloads}</StyledDescription>
             }
             {
-                downloads.filter(download => download.loading === false && download.error).length > 0 && (
+                downloads.filter(download => download.loading === false && download.errorLayers.length > 0).length > 0 && (
                     <>
                         <StyledSubtitle>{strings.downloads.failedDownloads}:</StyledSubtitle>
                         <StyledDescription>- {strings.downloads.errorOccuredDuringDownloadProcessing}:</StyledDescription>
                         {
-                            downloads.filter(download => download.loading === false && download.error).map(download => {
+                            downloads.filter(download => download.loading === false && download.errorLayers.length > 0).map(download => {
                                 return <DownloadItem
                                     download={download}
                                     closeAction={() => {

@@ -352,6 +352,10 @@ const Content = () => {
 
     const supportsWebSockets = 'WebSocket' in window || 'MozWebSocket' in window;
 
+    const simplifyGeometry = () => {
+        console.log("simplify");
+    }
+
     const connectWebsocket = (count) => {
         const MAX_RECONNECTIONS_TRY = 20;
 
@@ -388,6 +392,26 @@ const Content = () => {
         ws.onmessage = function (evt)
         {
             let data = JSON.parse(evt.data);
+            
+            if(data.type === 'BODY_SIZE_EXCEEDED') {
+                store.dispatch(setWarning({
+                    title: strings.bodySizeWarning,
+                    subtitle: null,
+                    cancel: {
+                        text: strings.general.cancel,
+                        action: () => {
+                            store.dispatch(setWarning(null))
+                        }
+                    },
+                    confirm: {
+                        text: strings.general.continue,
+                        action: () => {
+                            simplifyGeometry();
+                            store.dispatch(setWarning(null));
+                        }
+                    },
+                }))
+            }
 
             if(data.type === 'DOWNLOAD_READY') {
                 if (data.data && data.data.uuid && downloadUuids.includes(data.data.uuid)) {

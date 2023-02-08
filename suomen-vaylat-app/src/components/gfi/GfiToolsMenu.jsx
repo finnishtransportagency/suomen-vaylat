@@ -603,25 +603,27 @@ const GfiToolsMenu = ({ handleGfiToolsMenu }) => {
                                                 setIsGfiLoading(false);
                                                 handleGfiToolsMenu(gfiData.gfi);
                                             },
-                                            () => {
-                                                store.dispatch(setWarning({
-                                                    title: strings.bodySizeWarning,
-                                                    subtitle: null,
-                                                    cancel: {
-                                                        text: strings.general.cancel,
-                                                        action: () => {
-                                                            setIsGfiLoading(false);
-                                                            store.dispatch(setWarning(null))
-                                                        }
-                                                    },
-                                                    confirm: {
-                                                        text: strings.general.continue,
-                                                        action: () => {
-                                                            simplifyGeometry();
-                                                            store.dispatch(setWarning(null));
-                                                        }
-                                                    },
-                                                }))
+                                            function (error) {
+                                                if (error.BODY_SIZE_EXCEEDED_ERROR) {
+                                                    store.dispatch(setWarning({
+                                                        title: strings.bodySizeWarning,
+                                                        subtitle: null,
+                                                        cancel: {
+                                                            text: strings.general.cancel,
+                                                            action: () => {
+                                                                setIsGfiLoading(false);
+                                                                store.dispatch(setWarning(null))
+                                                            }
+                                                        },
+                                                        confirm: {
+                                                            text: strings.general.continue,
+                                                            action: () => {
+                                                                simplifyGeometry();
+                                                                store.dispatch(setWarning(null));
+                                                            }
+                                                        },
+                                                    }))
+                                                }
                                             }
                                         );
                                 }
