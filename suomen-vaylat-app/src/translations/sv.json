@@ -24,17 +24,17 @@
     "zoomOut": "Zooma ut",
     "opacity": "Transparens",
     "drawingTools": {
-      "drawingToolsButton": "Drawing tools",
+      "drawingToolsButton": "Ritverktyg",
       "point": "Point",
       "circle": "Cirkel",
       "square": "Kvadrat",
       "box": "Ruta",
       "linestring": "Linje",
       "polygon": "Polygon",
-      "marker": "Karttamerkintä",
+      "marker": "Kartanteckning",
       "erase": "Töm",
-      "drawingToast": "Voit viimeistellä piirron tuplaklikkaamalla tai klikkaamalla viimeksi piirretystä taitepisteestä uudelleen",
-      "labelPlaceholder": "Merkinnän teksti..."
+      "drawingToast": "Du kan färdigställa det du ritat genom att dubbelklicka eller klicka på den senast ritade brytningspunkten igen",
+      "labelPlaceholder": "Text till anteckningen..."
     },
     "share": "Dela denna sida",
     "shareTheme": "Dela detta tema",
@@ -59,17 +59,17 @@
       "saveNewView" : "Spara ny vy"
     },
     "saveGeometry" : {
-      "confirmDeleteAll" : "Haluatko varmasti poistaa kaikki tallennetut geometriat?",
-      "saveGeometry" : "Tallenna geometria",
-      "savingGeometry" : "Geometrian tallennus",
-      "saveGeometryDescription1" : "Geometria tallentuu selaimen välimuistiin",
-      "saveGeometryDescription2" : "Tallennettu geometria voidaan aktivoida vain selaimessa johon se on tallennettu",
-      "noSavedGeometries" : "Ei tallennettuja geometrioita",
-      "deleteAllSavedGeometries" : "Poista kaikki tallennetut geometriat",
-      "savedGeometries" : "Tallennetut geometriat",
-      "geometryName" : "Geometrian nimi",
-      "noGeometry" : "Ei uusia geometrioita kartalla",
-      "saveNewGeometry": "Tallenna uusi geometria"
+      "confirmDeleteAll": "Är du säker på att du vill ta bort all sparad geometri?",
+      "saveGeometry": "Spara geometrin",
+      "savingGeometry": "Spara geometri",
+      "saveGeometryDescription1": "Geometrin lagras i webbläsarens cacheminne",
+      "saveGeometryDescription2": "Sparad geometri kan endast aktiveras i den webbläsare där den har lagrats",
+      "noSavedGeometries": "Ingen sparad geometri",
+      "deleteAllSavedGeometries": "Ta bort all sparad geometri",
+      "savedGeometries": "Sparad geometri",
+      "geometryName": "Geometrins namn",
+      "noGeometry": "Ingen ny geometri på kartan",
+      "saveNewGeometry": "Spara ny geometri"
     }
   },
   "gfi": {
@@ -78,48 +78,48 @@
     "additionalInfo": "Tilläggsinformation",
     "gfiLocation": "Zooma in på objektet",
     "target": "Mål",
-    "selectLocations": "Select locations",
-    "focusToLocations": "Focus to locations",
-    "choosingGfi": "Choosing feature data",
-    "choosingGfiDescription0": "Varmista että olet aktivoinut tasoja Karttatasot valikosta",
+    "selectLocations": "Välj objekt",
+    "focusToLocations": "Precisera objekt",
+    "choosingGfi": "Val av objektdata",
+    "choosingGfiDescription0": "Kontrollera att du har aktiverat nivåer i menyn Kartnivåer",
     "choosingGfiDescription1": "Show feature data selection tools by choosing Select Locations",
     "choosingGfiDescription2": "You can choose locations by using drawing tools or cropping presets",
     "draw": "Draw",
     "drawSubtitle": "Select locations by using drawing tools",
     "search": "Sökning",
     "dataTableView": "Listvy",
-    "downloadMaterials": "Lataa aineistoja",
-    "list": "List",
-    "table" : "Table",
-    "uniqueId" : "Yksilöivä tunniste",
-    "featureAmount" : "Kohteita",
-    "getMoreFeatures": "Hae lisää kohteita",
-    "savedGeometries" : {
-      "title": "Tallennetut geometriat (Poissa käytöstä)",
-      "description": "Omat tallennetut geometriat",
-      "disabled": "Väliaikaisesti poissa käytöstä"
+    "downloadMaterials": "Ladda ner material",
+    "list": "Lista",
+    "table": "Tabell",
+    "uniqueId": "Identifikationskod",
+    "featureAmount": "Objekt",
+    "getMoreFeatures": "Sök fler objekt",
+    "savedGeometries": {
+      "title": "Sparad geometri (Används inte)",
+      "description": "Egen sparad geometri",
+      "disabled": "Tillfälligt ur bruk"
     }
   },
   "vkm": {
-    "locationInfo": "Location info",
-    "roadAddressInfo": "Tieosoitetiedot",
-    "roadAddressInstructions": "Tieosoitetietoja ei pystytty hakemaan. Lähennä karttaa ja klikkaa pistettä, jolle haluat hakea tieosoitetiedot."
+    "locationInfo": "Positionsdata",
+    "roadAddressInfo": "Vägadressuppgifter",
+    "roadAddressInstructions": "Vägadressuppgifterna kunde inte hämtas. Zooma in på kartan och klicka på den punkt som du vill söka vägadressuppgifter för."
   },
   "downloads": {
-    "downloads": "Downloads",
-    "processing": "Processing",
-    "noProcessingDownloads": "No processing downloads",
-    "readyForDownload": "Ready for download",
-    "noDownloads": "No downloads",
-    "format": "Format",
-    "date": "Date",
-    "fileSize": "File size",
-    "layers": "Layers",
-    "errorLayers": "Virheelliset tasot",
-    "failedDownloads": "Failed downloads",
-    "errorOccuredDuringDownloadProcessing" : "Error occured during download processing",
-    "noWebSocketSupport": "Selaimesi ei tue latauksia. Voit kokeilla uudelleen eri selaimella tai päivittämällä nykyisen selaimesi version.",
-    "downloadFailure": "Something went wrong. Please try again."
+    "downloads": "Nedladdningar",
+    "processing": "Bearbetas",
+    "noProcessingDownloads": "Inga nedladdningar att bearbeta",
+    "readyForDownload": "Färdiga nedladdningar",
+    "noDownloads": "Inga nedladdningar",
+    "format": "Filformat",
+    "date": "Datum",
+    "fileSize": "Filstorlek",
+    "layers": "Nivåer",
+    "errorLayers": "Felaktiga nivåer",
+    "failedDownloads": "Felaktiga nedladdningar",
+    "errorOccuredDuringDownloadProcessing": "Ett fel uppstod under bearbetningen av paketet",
+    "noWebSocketSupport": "Din webbläsare stöder inte nedladdningar. Du kan prova på nytt med en annan webbläsare eller uppdatera din nuvarande webbläsare.",
+    "downloadFailure": "Något gick fel vid nedladdningen, försök igen."
   },
   "general": {
     "close": "Stänga",
@@ -176,19 +176,19 @@
         "content": "Sökningen öppnas i kartans övre högra hörn med hjälp av förstoringsglasknappen till vänster. Sökfunktionen låter dig söka efter dig och adresser genom att välja den sökning du vill använda från rullgardinsmenyn. Du kan ta bort ett sökresultat från kartan genom att trycka på papperskorgen i sökrutan."
       },
       "drawingTools": {
-        "title": "Drawing tools",
-        "content": "Piirtotyökalut avautuvat vasemman reunan piirto-painikkeesta. Työkaluilla voidaan lisätä kartalle geometrioita ja mitata pituutta tai pinta-alaa. Piirretyt geometriat ja karttamerkinnät voidaan tallentaa muistiin klikkaamalla Tallenna-painiketta, joka on piirtotyökalujen alin painike.  Piirretyt geometriat voidaan poistaa kartalta oranssilla kumi-painikkeella."
+        "title": "Ritverktyg",
+        "content": "Ritverktygen öppnas genom att klicka på ritknappen i vänstra kanten. Med verktygen kan man lägga till geometri på kartan och mäta längd eller yta. Ritad geometri och kartanteckningar kan sparas i minnet genom att klicka på knappen Spara, som är knappen längst ned bland ritverktygen.  Ritad geometri kan avlägsnas från kartan genom att klicka på den orange suddgummiknappen."
       },
       "gfi": {
-        "content": "Kohdetiedot avautuvat klikkaamalla mistä tahansa kartalla, tai vasemman reunan panikkeesta, jonka ikonissa on karttamerkintä. Kohdetiedot-ikkunasta voit hakea kohdetietoja sekä näet tietoja valitsemistasi kohteista ja sijainneista, jotka voit myös halutessasi ladata suoraan laitteellesi valitsemassasi tiedostomuodossa."
+        "content": "Objektdata öppnas genom att klicka var som helst på kartan eller via knappen i vänstra kanten som har en kartanteckning som ikon. I fönstret Objektdata kan du söka objektdata och se uppgifter om valda objekt och platser som du också kan ladda ner direkt till din enhet i valfritt filformat."
       },
       "downloads": {
-        "title": "Lataukset",
-        "content": "Lataukset avautuvat vasemman reunan lataukset-painikkeesta. Latauksista löydät valitsemistasi kohdetiedoista tekemäsi lataukset, jotka voit ladata eri muodoissa laitteellesi."
+        "title": "Nedladdningar",
+        "content": "Nedladdningarna öppnas genom att klicka på nedladdningsknappen i vänstra kanten. Där hittar du de nedladdningar som du har gjort av vald objektsdata och som du kan ladda ner i olika format på din enhet."
       },
       "viewsAndGeometries": {
-        "title": "Näkymän ja geometrian tallennus",
-        "content": "Näkymän tallennuksella voidaan tallentaa karttanäkymä selaimen välimuistiin. Näkymään tallennetaan kartan kohdistus, lähestymistaso sekä valitut kartta-aineistot. Geometrian tallennus voidaan tehdä, kun kartalla on piirrettyjä geometrioita. Tallennetut näkymät ja geometriat ovat käytettävissä sillä laitteella ja selaimessa, jossa näkymä tai geometria on tallennettu. Tallennettujen näkymien ja geometrioiden välillä voi siirtyä klikkaamalla/täppäämällä haluttua tallennusta. Tallennuksen voi poistaa roskakori-painikkeesta."
+        "title": "Spara vy och geometri",
+        "content": "Genom att spara vyn kan du spara kartvyn i webbläsarens cacheminne. I vyn sparas kartans justering, inställningsnivå och utvalt kartmaterial. Geometri kan sparas när det finns geometri inritad på kartan. De sparade vyerna och geometrin är tillgängliga på den enhet och i den webbläsare där vyn eller geometrin har sparats. Du kan förflytta dig mellan sparade vyer och sparad geometri genom att klicka/trycka på önskad sparad fil. Du kan ta bort det du sparat genom att klicka på papperskorgen."
       },
       "setFullScreen": {
         "title": "Bygga ut",
@@ -233,54 +233,54 @@
         "link": "https://vayla.fi/vaylista/aineistot/kartat"
       },
       "3": {
-        "text": "Aineiston välitysalusta, josta voi ladata avointen aineistojen tiedostoja.",
+        "text": "Förmedlingsplattform för material där man kan ladda ned filer med öppet material.",
         "link": "https://ava.vaylapilvi.fi"
       }
     },
     "dataSourcesAndTermsOfUse" :{
-      "tabTitle": "Tietolähteet ja käyttöehdot"
+      "tabTitle": "Informationskällor och användarvillkor"
     },
     "dataSources": {
       "tabTitle": "Datakällor",
-      "municipalityImage": "Sijaintitietojen kuntien vaakunoiden kuvat haetaan kuntaliiton sivuilta:",
+      "municipalityImage": "Bilder på kommuners vapen hämtas på kommunförbundets webbplats:",
       "municipalityLink": "https://www.kuntaliitto.fi",
-      "landSurvey": "Maanmittauslaitoksen taustakartat sekä kiinteistötunnukset ja -rajat ovat avointa dataa ja käytössä lisenssiehdoilla: ",
+      "landSurvey": "Lantmäteriverkets bakgrundskartor samt fastighetsbeteckningar och -gränser är öppna data och får användas enligt licensvillkoren:",
       "landSurveyLink": "https://www.maanmittauslaitos.fi/avoindata-lisenssi-cc40",
-      "roadmaps": "Tiekartat (AT ja GT) ovat CGI Suomi Oy aineistoja käytössä käyttöoikeusluvalla n:o S10325081",
-      "syke": "Asemakaavoitetut aluejaot ovat Suomen Ympäristökeskus (SYKE) avointa dataa. SYKEn avointen aineistojen käyttölupa on Creative Commons Nimeä 4.0"
+      "roadmaps": "Vägkartorna (AT och GT) används av CGI Suomi Oy med användningslicens nr S10325081",
+      "syke": "De detaljplanerade områdesindelningarna är öppna data från Finlands miljöcentral (SYKE). Licensen för att använda SYKEs öppna data är Creative Commons Nimeä 4.0"
     },
     "termsOfUse": {
-      "title": "Käyttöehdot",
-      "description": "Suomen Väylät -palvelun Väyläviraston tietoaineistoja koskee Creative Commons 4.0 Nimeä -käyttölupa.",
-      "moreInfo": "Lisätietoja käyttöehdoista:",
+      "title": "Användarvillkor",
+      "description": "Trafikledsverkets datamaterial i tjänsten Suomen Väylät omfattas av licensen Creative Commons 4.0 Nimeä.",
+      "moreInfo": "Mer information om användarvillkoren:",
       "link": "https://vayla.fi/vaylista/aineistot/avoindata/kayttoehdot"
     }
   },
   "search": {
-    "fill_all_fields": "Täytä kaikki hakukentät",
+    "fill_all_fields": "Fyll i alla sökfält",
     "required_field_missing": "Kontrollera de obligatoriska fälten.",
     "vkm": {
       "tie": "Vägnummer",
       "title": "Sök efter vägnummer",
       "subtitle": "Sök på vägnummer",
       "osa": "Vägsträcka",
-      "osaLoppu": "Tieosa loppu",
+      "osaLoppu": "Vägavsnitt slut",
       "ajorata": "Körbana",
       "etaisyys": "Avstånd (m)",
-      "etaisyysLoppu": "Etäisyys loppu (m)",
+      "etaisyysLoppu": "Avstånd slut (m)",
       "error": {
         "text": "Inga resultat hittades för vägsökning."
       },
-      "sijaintiraide": "Sijaintiraide",
-      "kuvaus": "Kuvaus",
-      "tyyppi": "Tyyppi",
-      "ratanumero": "Ratanumero",
-      "ratakilometri": "Ratakilometri",
-      "ratametri": "Ratametri",
-      "trackTitle": "Ratahaku",
-      "trackSubtitle": "Hae ratatietoja",
+      "sijaintiraide": "Positionsspår",
+      "kuvaus": "Beskrivning",
+      "tyyppi": "Typ",
+      "ratanumero": "Bannummer",
+      "ratakilometri": "Spårkilometer",
+      "ratametri": "Banmeter",
+      "trackTitle": "Bansökning",
+      "trackSubtitle": "Sök banuppgifter",
       "trackError": {
-        "text": "Tuloksia ei löytynyt ratahaulla."
+        "text": "Bansökningen gav inga resultat."
       }
     },
     "address": {
@@ -299,8 +299,8 @@
       }
     },
     "tips": {
-      "title": "Paikkahaulla voit hakea kuntaa, osoitetta, kiinteistötunnusta, tieosoitetta tai rataosoitetta.",
-      "address": "Osoitehaku, kirjoita muodossa 'kunta', 'osoite' tai 'osoite, kunta'.",
+      "title": "Med platssökning kan du söka en kommun, adress, fastighetsbeteckning, vägadress eller banadress.",
+      "address": "Adressökning, skriv i formatet 'kommun', 'adress' eller 'adress, kommun'.",
       "addressExamples": [
         "Helsinki",
         "Opastinsilta 12",
@@ -317,18 +317,18 @@
         "5/116//50 5/348//100",
         "start:5/116/0/50 slut:5/348/0/100"
       ],
-      "vkmTrack": "Ratahaku, kirjoita muodossa 'ratanumero/ratakilometri/ratametri'.",
-      "vkmTrackExamples": [
-        "001/2/10"
-      ],
-      "realEstateUnitIdentifier": "Kiinteistötunnushaku, kirjoita muodossa 'aa-bb-cc-d' tai 'aaa-bbb-cc-ddd'.",
+      "vkmTrack": "Bansökning, skriv i formatet 'bannummer/bankilometer/banmeter'.",
+      "vkmTrackExamples": {
+        "0": "001/2/10"
+      },
+      "realEstateUnitIdentifier": "Fastighetsbeteckning, skriv i formatet 'aa-bb-cc-d' eller 'aaa-bbb-cc-ddd'.",
       "realEstateUnitIdentifierExamples": [
         "91-17-16-1",
         "091-017-16-001"
       ],
-      "example": "Esim.",
-      "toastTip": "Tiesitkö, että voit tallentaa rata- ja tiehausta kartalle tulleen geometrian?",
-      "toastTipContent": "Geometrian voit tallentaa sivun vasemman reunan tallennus-ikonin kautta, toiselta välilehdeltä."
+      "example": "T.ex.",
+      "toastTip": "Visste du att du kan spara den geometri som kommit upp på kartan vid ban- och vägsökningen?",
+      "toastTipContent": "Du kan spara geometrin via ikonen spara i vänstra kanten, på den andra fliken."
     }
   },
   "layerlist": {
@@ -359,52 +359,52 @@
     }
   },
   "downloadLink": {
-    "downloadLinkModalHeader": "Aineiston lataus",
-    "downloadLinkModalNameText": "Aineiston nimi",
-    "downloadLinkModalButtonText": "Lataa aineisto",
-    "downloadSize": "Aineiston koko"
+    "downloadLinkModalHeader": "Nedladdning av material",
+    "downloadLinkModalNameText": "Materialets namn",
+    "downloadLinkModalButtonText": "Ladda ner material",
+    "downloadSize": "Materialets storlek"
   },
   "groupLayerList": {
-    "readMore" : "Lue lisää",
-    "readLess" : "Vähemmän",
+    "readMore": "Läs mer",
+    "readLess": "Mindre",
     "298": {
       "title": "Digiroad",
-      "description": "Digiroad on Väyläviraston vastuulla oleva valtakunnallinen aineistokokonaisuus, joka sisältää tieverkon keskilinjageometriat sekä liikenteeseen liittyviä ominaisuustietoja. Digiroad on kokoava tietojärjestelmä, johon kerätään aineistoa Väyläviraston Tierekisteristä, Maanmittauslaitoksen Maastotietokannasta, kuntien katutietojärjestelmistä sekä muutamien muiden viranomaisten tietojärjestelmistä (mm. Helsingin seudun liikenne HSL)."
+      "description": "Digiroad är en riksomfattande materialhelhet som Trafikledsverket ansvarar för och som innehåller vägnätets mittlinjegeometri samt trafikrelaterade egenskapsuppgifter. Digiroad är ett datasystem i vilket man samlar material från Trafikledsverkets Vägregister, Lantmäteriverkets Terrängdatabas, kommunernas gatuinformationssystem samt vissa andra myndigheters datasystem (bl.a. Helsingforsregionens trafik HRT)."
     },
     "562": {
-      "title": "Euroopan laajuinen liikenneverkko TEN-T",
-      "description": "TEN-T-verkosto koostuu kahdesta tasosta: vuoteen 2030 mennessä rakennettavasta ydinverkosta (core network) ja vuoteen 2050 mennessä rakennettavasta kattavasta verkosta (comprehensive network). TEN-T ydinverkko keskittyy tärkeimpiin yhteyksiin ja solmukohtiin. Ydinverkon toteuttamista edistää käytäviin perustuva lähestymistapa. TEN-T-verkko kattaa kaikki liikennemuodot: maantie-, ilma-, sisävesi-, meri- sekä liikennemuotojen yhdistelyn mahdollistavat alustat."
+      "title": "Det transeuropeiska trafiknätet TEN-T",
+      "description": "TEN-T-nätverket består av två nivåer: ett stomnät (core network) som ska byggas före 2030 och ett övergripande nät (comprehensive network) som ska byggas före 2050. TEN-T-stomnätet koncentreras till de viktigaste förbindelserna och knutpunkterna. Genomförandet av stomnätet främjas av ett tillvägagångssätt som grundar sig på korridorer. TEN-T-nätet omfattar alla trafikformer: landsvägs-, flyg-, insjö- och sjötrafik samt plattformar som gör det möjligt att kombinera de olika trafikformerna."
     },
     "2": {
-      "title": "Ratatiedot",
-      "description": "Aineisto kattaa Väyläviraston omistamat rautatiet. Aineiston lähdejärjestelmä on Ratainfratietojen hallintajärjestelmän ratakohteiden hallintasovellus (RATKO)."
+      "title": "Banuppgifter",
+      "description": "Materialet omfattar järnvägarna som ägs av Trafikledsverket. Källsystem för materialet är hanteringsverktyget för banobjekt (RATKO) i operativsystemet för baninfrastrukturdata."
     },
     "199": {
-      "title": "Taitorakennerekisteri",
-      "description": "Taitorakennerekisteri on Väyläviraston taitorakenteiden perustietovarasto ja omaisuudenhallintajärjestelmä, joka sisältää hallinnollista ja rakenteellista tietoa. Taitorakennerekisterin tietosisältöä ovat mm sillat, tunnelit, rautatierummut,  tie- ja yhteysaluslaiturit sekä kanavarakenteet."
+      "title": "Konstbyggnadsregistret",
+      "description": "Konstbyggnadsregistret är Trafikledsverkets basdatalager för bärande konstruktioner och ett system för egendomsförvaltning som innehåller administrativa och strukturella uppgifter. Konstbyggnadsregistrets datainnehåll omfattar bland annat broar, tunnlar, järnvägstrummor, väg- och förbindelsebåtsbryggor samt kanalkonstruktioner."
     },
     "727": {
-      "title": "Tierekisteri",
-      "description": "Tierekisteri sisältää tietoja Väyläviraston vastuulla olevista maanteistä ja niiden liikenteestä. Tierekisteri on poistuva tietojärjestelmä. Suomen Väylissä esitetyt tierekisterin aineistot ovat irroitettu tierekisteristä 17.2.2022 ",
+      "title": "Vägregistret",
+      "description": "Vägregistret innehåller information om de landsvägar som Trafikledsverket ansvarar för och om trafiken på dem. Vägregistret ska tas ur bruk. Materialet från vägregistret som presenteras i Suomen Väylät har lösgjorts från vägregistret den 17 februari 2022",
       "link_description": "Beskrivning av vägregistrets informationsinnehåll",
       "link": "https://vayla.fi/documents/25230764/35411006/tierekisteri_tietosisallon_kuvaus.pdf/f8b86e12-f362-d89e-e518-5b54e884ebb8/tierekisteri_tietosisallon_kuvaus.pdf?t=1631166164551"
     },
     "101": {
-      "title": "Vesiväylätiedot",
-      "description": "Aineisto kattaa Väyläviraston vastuulla olevat vesiväylät ja kanavat. Niiden ylläpidossa ja kehittämisessä otetaan huomioon niin kauppamerenkulun kuin muunkin vesiliikenteen tarpeet."
+      "title": "Farledsuppgifter",
+      "description": "Materialet omfattar de farleder och kanaler som Trafikledsverket ansvarar för. Behoven hos både handelssjöfarten och den övriga sjötrafiken beaktas i underhållet och utvecklingen av dem."
     }
   },
   "themelayerlist": {
     "readMore" : "Läs mer",
     "readLess" : "Mindre",
-    "moreInfo": "Lisätietoja: ",
+    "moreInfo": "Mer information:",
     "0": {
       "title": "Projektkarta",
       "description": "På kartan syns Trafikledsverkets investeringsprojekt och projektplaneringsobjekt som är tänkta att genomföras."
     },
     "1": {
       "title": "Karta över beläggningarnas skick",
-      "description": "Kartalla esitetään tiet ja sillat, joiden kuntoluokka on erittäin huono, huono, tyydyttävä, hyvä tai erittäin hyvä. Päällysteiden kuntotiedot ovat arvioita 31.12.2021 tilanteessa huomioiden vuoden 2021 päällystyskohteet, tiedot päivitetty 8.9.2021"
+      "description": "På kartan visas vägar och broar med konditionsklass mycket dålig, dålig, nöjaktig, god eller mycket god. Uppgifterna om beläggningsskick är uppskattningar av situationen den 31 december 2021 med beaktande av beläggningsobjekten 2021. Uppgifterna har uppdaterats den 8 september 2021"
     },
     "2": {
       "title": "Karta över brobegränsningar",
@@ -412,7 +412,7 @@
     },
     "3": {
       "title": "Karta med vägnummer",
-      "description": "Tienumerokartalla esitetään tieosoitejärjestelmän tiet ja tieosat numeroineen, sekä jakopisteiden paikat. Tienumeroita käytetään paikantamisen osoitetietona ja ne näkyvät tienkäyttäjille viitoituksessa. Tienumerointi perustuu tieluokkiin ja tieverkon muodostamiin yhteysväleihin, kun taas tieosanumeroinnilla jaetaan tie lyhyempiin hallittaviin tieosuuksiin. "
+      "description": "På vägnummerkartan presenteras vägarna och vägavsnitten i vägadressystemet jämte nummer samt delningspunkternas placering. Vägnumren används som adressuppgifter för lokalisering och vägtrafikanterna kan se dem på vägmärkena. Vägnumreringen baserar sig på vägklasserna och de sträckor som bildas av vägnätet, medan vägavsnittsnumreringen används för att dela in vägen i kortare vägavsnitt."
     },
     "4": {
       "title": "Karta över bannätets skick",
@@ -424,19 +424,19 @@
     },
     "6": {
       "title": "Beskrivning av bannätet",
-      "description": "Verkkoselostuksen karttapalvelussa voi tarkastella rataverkon ominaisuustietoja, kuten sähköistystä ja liikennepaikkojen tietoja. Tiedot perustuvat ratarekisteritietoihin ja ERAan toimitettaviin RINF-tietoihin."
+      "description": "I nätbeskrivningens karttjänst kan man granska bannätets egenskapsuppgifter, såsom elektrifiering och uppgifter om trafikplatser. Uppgifterna grundar sig på banregisteruppgifter och RINF-uppgifter som skickas till ERA."
     },
     "7": {
-      "title": "Tasoristeyspalvelu",
-      "description": "Väyläviraston tasoristeys.fi-karttapalvelu tukee alueellista liikenneturvallisuuden ja maankäytön suunnittelua. Palvelusta löytyvät valtion rataverkon tasoristeysten rekisteri- ja inventointiedot sekä myös tasoristeysten kuvat. Tiedot saa esiin klikkaamalla tasoristeystä karttapohjalla. Palveluun on lisätty myös ratapihojen, laituripolkujen ja huoltoteiden tasoristeykset sekä omana karttatasonaan sivuraiteiden tasoristeykset. "
+      "title": "Plankorsningstjänst",
+      "description": "Trafikledsverkets karttjänst tasoristeys.fi stöder den regionala planeringen av trafiksäkerheten och markanvändningen. I tjänsten finns register- och inventeringsuppgifter om plankorsningar i statens bannät samt bilder på plankorsningar. Uppgifterna får man fram genom att klicka på plankorsningen på kartunderlaget. Till tjänsten har man också lagt till plankorsningar på bangårdar, plattformsstigar och servicevägar samt plankorsningar på sidospår som ett eget lager på kartan."
     },
     "8": {
-      "title": "Tiestötiedot lupapalveluun",
-      "description": "Karttapalvelun avulla johtojen ja kaapeleiden ilmoitusmenettelyn edellyttämiä tieosoitteita ja tiestötietoja voidaan tarkastella sijaintipaikan osalata ennen ilmoituksen jättämistä. Lisäksi palvelussa esitetään muita tiestön perustietoja, jotka auttavat työn suunnittelussa."
+      "title": "Vägdata till tillståndstjänsten",
+      "description": "Med hjälp av karttjänsten kan de vägadresser och uppgifter om vägnätet som krävs för anmälningsförfarandet för ledningar och kablar granskas innan anmälan lämnas in. I tjänsten presenteras dessutom andra grundläggande uppgifter om vägnätet som hjälper till att planera arbetet."
     },
     "9": {
-      "title": "Maanteiden talvihoitoluokat",
-      "description": "Kartalle esitetään maanteiden talvihoitoluokat. Väylän merkitys, liikennemäärä ja -koostumus määrittelevät teiden hoidon palvelutason. Koska kaikkia teitä ei voida hoitaa kohtuullisin kustannuksin välittömästi, tiet on luokiteltu eri hoitoluokkiin. Lisätietoja",
+      "title": "Landsvägarnas vinterunderhållsklasser",
+      "description": "På kartan visas landsvägarnas vinterunderhållsklasser. Trafikledens betydelse, trafikmängd och -sammansättning bestämmer servicenivån för vägunderhållet. Eftersom det inte är möjligt att till skäliga kostnader underhålla alla vägar genast, har vägarna indelats i olika underhållsklasser.",
       "links": {
         "0": "https://vayla.fi/kunnossapito/tieverkon-kunnossapito/talvihoito"
       }
