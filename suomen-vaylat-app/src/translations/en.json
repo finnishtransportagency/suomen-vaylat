@@ -33,7 +33,7 @@
       "polygon": "Polygon",
       "marker": "Marker",
       "erase": "Erase",
-      "drawingToast": "Voit viimeistellä piirron tuplaklikkaamalla tai klikkaamalla viimeksi piirretystä taitepisteestä uudelleen",
+      "drawingToast": "You can complete the drawing by double-clicking or by clicking the last drawn breakpoint again",
       "labelPlaceholder": "Label..."
     },
     "share": "Share this page",
@@ -58,18 +58,18 @@
       "viewName" : "View name",
       "saveNewView" : "Save new view"
     },
-    "saveGeometry" : {
-      "confirmDeleteAll" : "Haluatko varmasti poistaa kaikki tallennetut geometriat?",
-      "saveGeometry" : "Tallenna geometria",
-      "savingGeometry" : "Geometrian tallennus",
-      "saveGeometryDescription1" : "Geometria tallentuu selaimen välimuistiin",
-      "saveGeometryDescription2" : "Tallennettu geometria voidaan aktivoida vain selaimessa johon se on tallennettu",
-      "noSavedGeometries" : "Ei tallennettuja geometrioita",
-      "deleteAllSavedGeometries" : "Poista kaikki tallennetut geometriat",
-      "savedGeometries" : "Tallennetut geometriat",
-      "geometryName" : "Geometrian nimi",
-      "noGeometry" : "Ei uusia geometrioita kartalla",
-      "saveNewGeometry" : "Tallenna uusi geometria"
+    "saveGeometry": {
+      "confirmDeleteAll": "Are you sure you want to delete all saved geometries?",
+      "saveGeometry": "Save geometry",
+      "savingGeometry": "Save geometries",
+      "saveGeometryDescription1": "Geometries will be saved to the browser’s cache",
+      "saveGeometryDescription2": "Saved geometries can only be accessed in the browser where they are saved",
+      "noSavedGeometries": "No saved geometries",
+      "deleteAllSavedGeometries": "Delete all saved geometries",
+      "savedGeometries": "Saved geometries",
+      "geometryName": "Geometry name",
+      "noGeometry": "No new geometries on the map",
+      "saveNewGeometry": "Save new geometry"
     }
   },
   "gfi": {
@@ -81,7 +81,7 @@
     "selectLocations": "Select locations",
     "focusToLocations": "Focus to locations",
     "choosingGfi": "Choosing feature data",
-    "choosingGfiDescription0": "Varmista että olet aktivoinut tasoja Karttatasot valikosta",
+    "choosingGfiDescription0": "Make sure that you have activated layers from the Layers menu",
     "choosingGfiDescription1": "Show feature data selection tools by choosing Select Locations",
     "choosingGfiDescription2": "You can choose locations by using drawing tools or cropping presets",
     "draw": "Draw",
@@ -90,20 +90,20 @@
     "dataTableView": "List view",
     "downloadMaterials": "Download materials",
     "list": "List",
-    "table" : "Table",
-    "uniqueId" : "Yksilöivä tunniste",
-    "featureAmount" : "Kohteita",
-    "getMoreFeatures": "Hae lisää kohteita",
-    "savedGeometries" : {
-      "title": "Tallennetut geometriat (Poissa käytöstä)",
-      "description": "Omat tallennetut geometriat",
-      "disabled": "Väliaikaisesti poissa käytöstä"
+    "table": "Table",
+    "uniqueId": "Unique identifier",
+    "featureAmount": "Locations",
+    "getMoreFeatures": "Retrieve more locations",
+    "savedGeometries": {
+      "title": "Saved geometries (Disabled)",
+      "description": "My saved geometries",
+      "disabled": "Temporarily unavailable"
     }
   },
   "vkm": {
     "locationInfo": "Location info",
-    "roadAddressInfo": "Tieosoitetiedot",
-    "roadAddressInstructions": "Tieosoitetietoja ei pystytty hakemaan. Lähennä karttaa ja klikkaa pistettä, jolle haluat hakea tieosoitetiedot."
+    "roadAddressInfo": "Road address data",
+    "roadAddressInstructions": "Unable to retrieve road address data. Zoom in on the map and click on the point for which you want to retrieve road address data."
   },
   "downloads": {
     "downloads": "Downloads",
@@ -115,10 +115,10 @@
     "date": "Date",
     "fileSize": "File size",
     "layers": "Layers",
-    "errorLayers": "Virheelliset tasot",
+    "errorLayers": "Invalid layers",
     "failedDownloads": "Failed downloads",
-    "errorOccuredDuringDownloadProcessing" : "Error occured during download processing",
-    "noWebSocketSupport": "Selaimesi ei tue latauksia. Voit kokeilla uudelleen eri selaimella tai päivittämällä nykyisen selaimesi version.",
+    "errorOccuredDuringDownloadProcessing": "Error occurred during download processing",
+    "noWebSocketSupport": "Your browser does not support downloads. You can try again using a different browser or by updating your current browser.",
     "downloadFailure": "Something went wrong. Please try again."
   },
   "general": {
@@ -177,18 +177,18 @@
       },
       "drawingTools": {
         "title": "Drawing tools",
-        "content": "Piirtotyökalut avautuvat vasemman reunan piirto-painikkeesta. Työkaluilla voidaan lisätä kartalle geometrioita ja mitata pituutta tai pinta-alaa. Piirretyt geometriat ja karttamerkinnät voidaan tallentaa muistiin klikkaamalla Tallenna-painiketta, joka on piirtotyökalujen alin painike.  Piirretyt geometriat voidaan poistaa kartalta oranssilla kumi-painikkeella."
+        "content": "Drawing tools open from the drawing button on the left. The tools can be used to add geometries to the map and to measure length or area. Drawn geometries and markers can be saved by clicking the Save button, which is at the very bottom in the Drawing tools menu.  Drawn geometries can be deleted from the map with the orange rubber button."
       },
       "gfi": {
-        "content": "Kohdetiedot avautuvat klikkaamalla mistä tahansa kartalla, tai vasemman reunan panikkeesta, jonka ikonissa on karttamerkintä. Kohdetiedot-ikkunasta voit hakea kohdetietoja sekä näet tietoja valitsemistasi kohteista ja sijainneista, jotka voit myös halutessasi ladata suoraan laitteellesi valitsemassasi tiedostomuodossa."
+        "content": "To access feature data, click anywhere on the map or click the button with the marker icon on the left. In the Feature Data window, you can search for feature data and view information about the features and locations you select, which you can also download directly to your device in a file format of your choosing."
       },
       "downloads": {
-        "title": "Lataukset",
-        "content": "Lataukset avautuvat vasemman reunan lataukset-painikkeesta. Latauksista löydät valitsemistasi kohdetiedoista tekemäsi lataukset, jotka voit ladata eri muodoissa laitteellesi."
+        "title": "Downloads",
+        "content": "Downloads open from the Downloads button on the left. In Downloads, you can find the downloads you have made of the feature data you have selected, which you can download in different formats to your device."
       },
       "viewsAndGeometries": {
-        "title": "Näkymän ja geometrian tallennus",
-        "content": "Näkymän tallennuksella voidaan tallentaa karttanäkymä selaimen välimuistiin. Näkymään tallennetaan kartan kohdistus, lähestymistaso sekä valitut kartta-aineistot. Geometrian tallennus voidaan tehdä, kun kartalla on piirrettyjä geometrioita. Tallennetut näkymät ja geometriat ovat käytettävissä sillä laitteella ja selaimessa, jossa näkymä tai geometria on tallennettu. Tallennettujen näkymien ja geometrioiden välillä voi siirtyä klikkaamalla/täppäämällä haluttua tallennusta. Tallennuksen voi poistaa roskakori-painikkeesta."
+        "title": "Save views and geometries",
+        "content": "By saving a view, you can save the map view in the browser’s cache. The map’s focus, approach level and selected map materials are saved in the view. Geometries can be saved when there are drawn geometries on the map. Saved views and geometries are available on the device and browser where the view or geometry is saved. You can switch between saved views and geometries by clicking on the desired save. You can delete a save from the recycle bin button."
       },
       "setFullScreen": {
         "title": "Expand",
@@ -233,52 +233,52 @@
         "link": "https://vayla.fi/vaylista/aineistot/kartat"
       },
       "3": {
-        "text": "Aineiston välitysalusta, josta voi ladata avointen aineistojen tiedostoja.",
+        "text": "A forwarding service for open data from which you can download open data files.",
         "link": "https://ava.vaylapilvi.fi"
       }
     },
     "dataSourcesAndTermsOfUse" :{
-      "tabTitle": "Tietolähteet ja käyttöehdot"
+      "tabTitle": "Data sources and terms of use"
     },
     "dataSources": {
       "tabTitle": "Data Sources",
-      "municipalityImage": "Sijaintitietojen kuntien vaakunoiden kuvat haetaan kuntaliiton sivuilta:",
+      "municipalityImage": "Images of the municipalities’ coats of arms in location data are retrieved from the website of the Association of Finnish Municipalities:",
       "municipalityLink": "https://www.kuntaliitto.fi",
-      "landSurvey": "Maanmittauslaitoksen taustakartat sekä kiinteistötunnukset ja -rajat ovat avointa dataa ja käytössä lisenssiehdoilla: ",
+      "landSurvey": "The National Land Survey of Finland’s background maps and property identifiers and boundaries are open data and available under licence conditions:",
       "landSurveyLink": "https://www.maanmittauslaitos.fi/avoindata-lisenssi-cc40",
-      "roadmaps": "Tiekartat (AT ja GT) ovat CGI Suomi Oy aineistoja käytössä käyttöoikeusluvalla n:o S10325081",
-      "syke": "Asemakaavoitetut aluejaot ovat Suomen Ympäristökeskus (SYKE) avointa dataa. SYKEn avointen aineistojen käyttölupa on Creative Commons Nimeä 4.0"
+      "roadmaps": "Roadmaps (AT and GT) are CGI Suomi Oy datasets under license no. S10325081",
+      "syke": "Areas with local detailed plans are open data from the Finnish Environment Institute (SYKE). The license for SYKE’s open datasets is Creative Commons Attribution 4.0"
     },
     "termsOfUse": {
-      "title": "Käyttöehdot",
-      "description": "Suomen Väylät -palvelun Väyläviraston tietoaineistoja koskee Creative Commons 4.0 Nimeä -käyttölupa.",
-      "moreInfo": "Lisätietoja käyttöehdoista:",
+      "title": "Terms of use",
+      "description": "The datasets of the Finnish Transport Infrastructure Agency’s Suomen Väylät service are subject to the Creative Commons 4.0 Attribution licence.",
+      "moreInfo": "More information on the terms of use:",
       "link": "https://vayla.fi/vaylista/aineistot/avoindata/kayttoehdot"
     }
   },
   "search": {
-    "fill_all_fields": "Täytä kaikki hakukentät",
+    "fill_all_fields": "Fill in all search fields",
     "required_field_missing": "Check the required fields.",
     "vkm": {
       "tie": "Road number",
       "title": "Road number search",
       "subtitle": "Search by road number",
       "osa": "Road section",
-      "osaLoppu": "Tieosa loppu",
+      "osaLoppu": "End of road section",
       "ajorata": "Carriageway",
       "etaisyys": "Distance (m)",
-      "etaisyysLoppu": "Etäisyys loppu (m)",
+      "etaisyysLoppu": "End of distance (m)",
       "error": {
         "text": "No results were found for the road search."
       },
-      "sijaintiraide": "Sijaintiraide",
-      "kuvaus": "Kuvaus",
-      "tyyppi": "Tyyppi",
-      "ratanumero": "Ratanumero",
-      "ratakilometri": "Ratakilometri",
-      "ratametri": "Ratametri",
-      "trackTitle": "Ratahaku",
-      "trackSubtitle": "Hae ratatietoja",
+      "sijaintiraide": "Location track",
+      "kuvaus": "Description",
+      "tyyppi": "Type",
+      "ratanumero": "Track number",
+      "ratakilometri": "Track kilometre",
+      "ratametri": "Track metre",
+      "trackTitle": "Track search",
+      "trackSubtitle": "Search for track data",
       "trackError": {
         "text": "No results were found for the track search."
       }
@@ -299,8 +299,8 @@
       }
     },
     "tips": {
-      "title": "Paikkahaulla voit hakea kuntaa, osoitetta, kiinteistötunnusta, tieosoitetta tai rataosoitetta.",
-      "address": "Osoitehaku, kirjoita muodossa 'kunta', 'osoite' tai 'osoite, kunta'.",
+      "title": "Use location search to search for a municipality, address, property identifier, road address or track address.",
+      "address": "Address search, type in the format 'municipality', 'address' or 'address, municipality'.",
       "addressExamples": [
         "Helsinki",
         "Opastinsilta 12",
@@ -317,18 +317,18 @@
         "5/116//50 5/348//100",
         "start:5/116/0/50 end:5/348/0/100"
       ],
-      "vkmTrack": "Ratahaku, kirjoita muodossa 'ratanumero/ratakilometri/ratametri'.",
-      "vkmTrackExamples": [
-        "001/2/10"
-      ],
-      "realEstateUnitIdentifier": "Kiinteistötunnushaku, kirjoita muodossa 'aa-bb-cc-d' tai 'aaa-bbb-cc-ddd'.",
+      "vkmTrack": "Track search, type in the format 'track number/track kilometre/track metre'.",
+      "vkmTrackExamples": {
+        "0": "001/2/10"
+      },
+      "realEstateUnitIdentifier": "Property identifier search, type in the format 'aa-bb-cc-d' or 'aaa-bbb-cc-ddd'.",
       "realEstateUnitIdentifierExamples": [
         "91-17-16-1",
         "091-017-16-001"
       ],
-      "example": "Esim.",
-      "toastTip": "Tiesitkö, että voit tallentaa rata- ja tiehausta kartalle tulleen geometrian?",
-      "toastTipContent": "Geometrian voit tallentaa sivun vasemman reunan tallennus-ikonin kautta, toiselta välilehdeltä."
+      "example": "For example,",
+      "toastTip": "Did you know that you can save the geometry that was placed on the map from a track and road search?",
+      "toastTipContent": "You can save the geometry through the save icon on the left side of the page, from another tab."
     }
   },
   "layerlist": {
@@ -359,52 +359,52 @@
     }
   },
   "downloadLink": {
-    "downloadLinkModalHeader": "Aineiston lataus",
-    "downloadLinkModalNameText": "Aineiston nimi",
-    "downloadLinkModalButtonText": "Lataa aineisto",
-    "downloadSize": "Aineiston koko"
+    "downloadLinkModalHeader": "Download dataset",
+    "downloadLinkModalNameText": "Dataset name",
+    "downloadLinkModalButtonText": "Download dataset",
+    "downloadSize": "Dataset size"
   },
   "groupLayerList": {
-    "readMore" : "Lue lisää",
-    "readLess" : "Vähemmän",
+    "readMore": "Read more",
+    "readLess": "Less",
     "298": {
       "title": "Digiroad",
-      "description": "Digiroad on Väyläviraston vastuulla oleva valtakunnallinen aineistokokonaisuus, joka sisältää tieverkon keskilinjageometriat sekä liikenteeseen liittyviä ominaisuustietoja. Digiroad on kokoava tietojärjestelmä, johon kerätään aineistoa Väyläviraston Tierekisteristä, Maanmittauslaitoksen Maastotietokannasta, kuntien katutietojärjestelmistä sekä muutamien muiden viranomaisten tietojärjestelmistä (mm. Helsingin seudun liikenne HSL)."
+      "description": "Digiroad is a national dataset under the responsibility of the Finnish Transport Infrastructure Agency, which contains the centre line geometries of the road network and attribute data related to traffic. Digiroad is an information system that collects data from the Finnish Transport Infrastructure Agency’s Road Register, the National Land Survey of Finland’s Topographic Database, municipal street information systems and the information systems of a few other authorities (for example, HSL Helsinki Region Transport."
     },
     "562": {
-      "title": "Euroopan laajuinen liikenneverkko TEN-T",
-      "description": "TEN-T-verkosto koostuu kahdesta tasosta: vuoteen 2030 mennessä rakennettavasta ydinverkosta (core network) ja vuoteen 2050 mennessä rakennettavasta kattavasta verkosta (comprehensive network). TEN-T ydinverkko keskittyy tärkeimpiin yhteyksiin ja solmukohtiin. Ydinverkon toteuttamista edistää käytäviin perustuva lähestymistapa. TEN-T-verkko kattaa kaikki liikennemuodot: maantie-, ilma-, sisävesi-, meri- sekä liikennemuotojen yhdistelyn mahdollistavat alustat."
+      "title": "Trans-European transport network TEN-T",
+      "description": "The TEN-T network comprises two levels: the core network, to be completed by 2030 and the comprehensive network to be completed by 2050. The TEN-T core network focuses on the most important connections and hubs. The implementation of the core network is advanced by a corridor-based approach. The TEN-T network covers all forms of transport: road, air, internal waterways and sea, as well as platforms enabling a combination of different forms of transport."
     },
     "2": {
-      "title": "Ratatiedot",
-      "description": "Aineisto kattaa Väyläviraston omistamat rautatiet. Aineiston lähdejärjestelmä on Ratainfratietojen hallintajärjestelmän ratakohteiden hallintasovellus (RATKO)."
+      "title": "Rail traffic",
+      "description": "The dataset covers the railways owned by the Finnish Transport Infrastructure Agency. The source system of the dataset is the railway infrastructure information management system's track object management application RATKO."
     },
     "199": {
-      "title": "Taitorakennerekisteri",
-      "description": "Taitorakennerekisteri on Väyläviraston taitorakenteiden perustietovarasto ja omaisuudenhallintajärjestelmä, joka sisältää hallinnollista ja rakenteellista tietoa. Taitorakennerekisterin tietosisältöä ovat mm sillat, tunnelit, rautatierummut,  tie- ja yhteysaluslaiturit sekä kanavarakenteet."
+      "title": "Engineering structure",
+      "description": "The engineering structure register is the Finnish Transport Infrastructure Agency’s basic data repository and asset management system, which contains administrative and structural information. The data content of the engineering structure register includes bridges, tunnels, railway drums, docks and canal structures."
     },
     "727": {
-      "title": "Tierekisteri",
-      "description": "Tierekisteri sisältää tietoja Väyläviraston vastuulla olevista maanteistä ja niiden liikenteestä. Tierekisteri on poistuva tietojärjestelmä. Suomen Väylissä esitetyt tierekisterin aineistot ovat irroitettu tierekisteristä 17.2.2022 ",
+      "title": "Road Register",
+      "description": "The Road Register contains information on highways that are under the responsibility of the Finnish Transport Infrastructure Agency and traffic on the highways. The Road Register is being decommissioned. The road register datasets presented in Suomen Väylät have been removed from the Road Register on 17 February 2022",
       "link_description": "Description of the information content of the road register",
       "link": "https://vayla.fi/documents/25230764/35411006/tierekisteri_tietosisallon_kuvaus.pdf/f8b86e12-f362-d89e-e518-5b54e884ebb8/tierekisteri_tietosisallon_kuvaus.pdf?t=1631166164551"
     },
     "101": {
-      "title": "Vesiväylätiedot",
-      "description": "Aineisto kattaa Väyläviraston vastuulla olevat vesiväylät ja kanavat. Niiden ylläpidossa ja kehittämisessä otetaan huomioon niin kauppamerenkulun kuin muunkin vesiliikenteen tarpeet."
+      "title": "Waterway",
+      "description": "The dataset covers the waterways and canals under the responsibility of the Finnish Transport Infrastructure Agency. The maintenance and development of waterways and canals take account of the navigation needs of merchant shipping and other waterborne traffic."
     }
   },
   "themelayerlist": {
     "readMore" : "Read more",
     "readLess" : "Show less",
-    "moreInfo": "Lisätietoja: ",
+    "moreInfo": "Further information:",
     "0": {
       "title": "Project map",
       "description": "The map shows the agency’s investment projects and the projects at planning stage aimed for implementation."
     },
     "1": {
       "title": "Map showing the condition of the road pavement",
-      "description": "Kartalla esitetään tiet ja sillat, joiden kuntoluokka on erittäin huono, huono, tyydyttävä, hyvä tai erittäin hyvä. Päällysteiden kuntotiedot ovat arvioita 31.12.2021 tilanteessa huomioiden vuoden 2021 päällystyskohteet, tiedot päivitetty 8.9.2021"
+      "description": "The map shows roads and bridges whose condition has been classified as very poor, poor, satisfactory, good or very good. The condition data of road pavement consists of estimations of the situation on 31 December 2021, taking into account the road pavement sites in 2021, updated on 8 September 2021"
     },
     "2": {
       "title": "Map showing bridge restrictions",
@@ -412,7 +412,7 @@
     },
     "3": {
       "title": "Road number map",
-      "description": "Tienumerokartalla esitetään tieosoitejärjestelmän tiet ja tieosat numeroineen, sekä jakopisteiden paikat. Tienumeroita käytetään paikantamisen osoitetietona ja ne näkyvät tienkäyttäjille viitoituksessa. Tienumerointi perustuu tieluokkiin ja tieverkon muodostamiin yhteysväleihin, kun taas tieosanumeroinnilla jaetaan tie lyhyempiin hallittaviin tieosuuksiin. "
+      "description": "The road number map shows the roads and road sections of the road address system with their numbers and the locations of division points. Road numbers are used as address information in locating and are visible to road users through signs. Road numbering is based on road categories and routes formed by the road network, while road section numbering divides the road into shorter manageable road sections."
     },
     "4": {
       "title": "Map showing the condition of the railway network",
@@ -424,18 +424,18 @@
     },
     "6": {
       "title": "Finnish Railway Network Statement",
-      "description": "Verkkoselostuksen karttapalvelussa voi tarkastella rataverkon ominaisuustietoja, kuten sähköistystä ja liikennepaikkojen tietoja. Tiedot perustuvat ratarekisteritietoihin ja ERAan toimitettaviin RINF-tietoihin."
+      "description": "The Network Statement’s map service provides information on the attributes of the railway network, such as electrification and traffic operating point data. The data are based on track register data and RINF data submitted to ERA."
     },
     "7": {
-      "title": "Tasoristeyspalvelu",
-      "description": "Väyläviraston tasoristeys.fi-karttapalvelu tukee alueellista liikenneturvallisuuden ja maankäytön suunnittelua. Palvelusta löytyvät valtion rataverkon tasoristeysten rekisteri- ja inventointiedot sekä myös tasoristeysten kuvat. Tiedot saa esiin klikkaamalla tasoristeystä karttapohjalla. Palveluun on lisätty myös ratapihojen, laituripolkujen ja huoltoteiden tasoristeykset sekä omana karttatasonaan sivuraiteiden tasoristeykset. "
+      "title": "Level crossing service",
+      "description": "The Finnish Transport Infrastructure Agency’s level crossing map service (tasoristeys.fi) supports regional traffic safety and land use planning. The service contains register and inventory information for level crossings in the state-owned railway network as well as images of the level crossings. The information can be accessed by clicking on a level crossing on the map. Level crossings of railway yards, track crossings and service roads have been added to the service, and the level crossings of sidings have also been added as a separate map layer."
     },
     "8": {
-      "title": "Tiestötiedot lupapalveluun",
-      "description": "Karttapalvelun avulla johtojen ja kaapeleiden ilmoitusmenettelyn edellyttämiä tieosoitteita ja tiestötietoja voidaan tarkastella sijaintipaikan osalata ennen ilmoituksen jättämistä. Lisäksi palvelussa esitetään muita tiestön perustietoja, jotka auttavat työn suunnittelussa."
+      "title": "Road data for the permit service",
+      "description": "The map service can be used to view the road addresses and road data required by the notification procedure for wires and cables before submitting the notification. In addition, the service shows other basic information on roads that helps in work planning."
     },
     "9": {
-      "title": "Maanteiden talvihoitoluokat",
+      "title": "Winter maintenance categories for highways",
       "description": "Kartalle esitetään maanteiden talvihoitoluokat. Väylän merkitys, liikennemäärä ja -koostumus määrittelevät teiden hoidon palvelutason. Koska kaikkia teitä ei voida hoitaa kohtuullisin kustannuksin välittömästi, tiet on luokiteltu eri hoitoluokkiin. Lisätietoja",
       "links": {
         "0": "https://vayla.fi/kunnossapito/tieverkon-kunnossapito/talvihoito"

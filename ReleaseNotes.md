@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.11.0
+
+For a full list of changes see: https://github.com/finnishtransportagency/suomen-vaylat/milestone/14?closed=1
+
 ## 1.10.0
 
 For a full list of changes see: https://github.com/finnishtransportagency/suomen-vaylat/milestone/13?closed=1
