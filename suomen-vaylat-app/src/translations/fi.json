@@ -44,9 +44,9 @@
   },
   "savedContent" : {
     "savedContent" : "Näkymän ja geometrian tallennus",
-    "viewTitle" : "Näkymät",
+    "viewTitle": "Näkymät",
     "geometryTitle" : "Geometriat",
-    "saveView" : {
+    "saveView": {
       "confirmDeleteAll" : "Haluatko varmasti poistaa kaikki tallennetut näkymät?",
       "saveView" : "Näkymän ja geometrian tallennus",
       "savingView" : "Näkymän tallennus",
@@ -58,18 +58,18 @@
       "viewName" : "Näkymän nimi",
       "saveNewView" : "Tallenna uusi näkymä"
     },
-    "saveGeometry" : {
-      "confirmDeleteAll" : "Haluatko varmasti poistaa kaikki tallennetut geometriat?",
-      "saveGeometry" : "Tallenna geometria",
-      "savingGeometry" : "Geometrian tallennus",
-      "saveGeometryDescription1" : "Geometria tallentuu selaimen välimuistiin",
-      "saveGeometryDescription2" : "Tallennettu geometria voidaan aktivoida vain selaimessa johon se on tallennettu",
-      "noSavedGeometries" : "Ei tallennettuja geometrioita",
-      "deleteAllSavedGeometries" : "Poista kaikki tallennetut geometriat",
-      "savedGeometries" : "Tallennetut geometriat",
-      "geometryName" : "Geometrian nimi",
-      "noGeometry" : "Ei uusia geometrioita kartalla",
-      "saveNewGeometry" : "Tallenna uusi geometria"
+    "saveGeometry": {
+      "confirmDeleteAll": "Haluatko varmasti poistaa kaikki tallennetut geometriat?",
+      "saveGeometry": "Tallenna geometria",
+      "savingGeometry": "Geometrian tallennus",
+      "saveGeometryDescription1": "Geometria tallentuu selaimen välimuistiin",
+      "saveGeometryDescription2": "Tallennettu geometria voidaan aktivoida vain selaimessa johon se on tallennettu",
+      "noSavedGeometries": "Ei tallennettuja geometrioita",
+      "deleteAllSavedGeometries": "Poista kaikki tallennetut geometriat",
+      "savedGeometries": "Tallennetut geometriat",
+      "geometryName": "Geometrian nimi",
+      "noGeometry": "Ei uusia geometrioita kartalla",
+      "saveNewGeometry": "Tallenna uusi geometria"
     }
   },
   "gfi": {
@@ -90,11 +90,11 @@
     "dataTableView": "Listanäkymä",
     "downloadMaterials": "Lataa aineistoja",
     "list": "Lista",
-    "table" : "Taulukko",
-    "uniqueId" : "Yksilöivä tunniste",
-    "featureAmount" : "Kohteita",
+    "table": "Taulukko",
+    "uniqueId": "Yksilöivä tunniste",
+    "featureAmount": "Kohteita",
     "getMoreFeatures": "Hae lisää kohteita",
-    "savedGeometries" : {
+    "savedGeometries": {
       "title": "Tallennetut geometriat (Poissa käytöstä)",
       "description": "Omat tallennetut geometriat",
       "disabled": "Väliaikaisesti poissa käytöstä"
@@ -244,7 +244,7 @@
       "title": "Tietolähteet",
       "municipalityImage": "Sijaintitietojen kuntien vaakunoiden kuvat haetaan kuntaliiton sivuilta:",
       "municipalityLink": "https://www.kuntaliitto.fi",
-      "landSurvey": "Maanmittauslaitoksen taustakartat sekä kiinteistötunnukset ja -rajat ovat avointa dataa ja käytössä lisenssiehdoilla: ",
+      "landSurvey": "Maanmittauslaitoksen taustakartat sekä kiinteistötunnukset ja -rajat ovat avointa dataa ja käytössä lisenssiehdoilla:",
       "landSurveyLink": "https://www.maanmittauslaitos.fi/avoindata-lisenssi-cc40",
       "roadmaps": "Tiekartat (AT ja GT) ovat CGI Suomi Oy aineistoja käytössä käyttöoikeusluvalla n:o S10325081",
       "syke": "Asemakaavoitetut aluejaot ovat Suomen Ympäristökeskus (SYKE) avointa dataa. SYKEn avointen aineistojen käyttölupa on Creative Commons Nimeä 4.0"
@@ -395,9 +395,9 @@
     }
   },
   "themelayerlist": {
-    "readMore" : "Lue lisää",
-    "readLess" : "Näytä vähemmän",
-    "moreInfo": "Lisätietoja: ",
+    "readMore": "Lue lisää",
+    "readLess": "Vähemmän",
+    "moreInfo": "Lisätietoja:",
     "0": {
       "title": "Hankekartta",
       "description": "Kartalla esitetään Väyläviraston investointihankkeet ja toteutukseen tähtäävät hankesuunnittelukohteet."
@@ -412,7 +412,7 @@
     },
     "3": {
       "title": "Tienumerokartta",
-      "description": "Tienumerokartalla esitetään tieosoitejärjestelmän tiet ja tieosat numeroineen, sekä jakopisteiden paikat. Tienumeroita käytetään paikantamisen osoitetietona ja ne näkyvät tienkäyttäjille viitoituksessa. Tienumerointi perustuu tieluokkiin ja tieverkon muodostamiin yhteysväleihin, kun taas tieosanumeroinnilla jaetaan tie lyhyempiin hallittaviin tieosuuksiin. "
+      "description": "Tienumerokartalla esitetään tieosoitejärjestelmän tiet ja tieosat numeroineen, sekä jakopisteiden paikat. Tienumeroita käytetään paikantamisen osoitetietona ja ne näkyvät tienkäyttäjille viitoituksessa. Tienumerointi perustuu tieluokkiin ja tieverkon muodostamiin yhteysväleihin, kun taas tieosanumeroinnilla jaetaan tie lyhyempiin hallittaviin tieosuuksiin."
     },
     "4": {
       "title": "Rataverkon kuntokartta",
@@ -428,7 +428,7 @@
     },
     "7": {
       "title": "Tasoristeyspalvelu",
-      "description": "Väyläviraston tasoristeys.fi-karttapalvelu tukee alueellista liikenneturvallisuuden ja maankäytön suunnittelua. Palvelusta löytyvät valtion rataverkon tasoristeysten rekisteri- ja inventointiedot sekä myös tasoristeysten kuvat. Tiedot saa esiin klikkaamalla tasoristeystä karttapohjalla. Palveluun on lisätty myös ratapihojen, laituripolkujen ja huoltoteiden tasoristeykset sekä omana karttatasonaan sivuraiteiden tasoristeykset. "
+      "description": "Väyläviraston tasoristeys.fi-karttapalvelu tukee alueellista liikenneturvallisuuden ja maankäytön suunnittelua. Palvelusta löytyvät valtion rataverkon tasoristeysten rekisteri- ja inventointiedot sekä myös tasoristeysten kuvat. Tiedot saa esiin klikkaamalla tasoristeystä karttapohjalla. Palveluun on lisätty myös ratapihojen, laituripolkujen ja huoltoteiden tasoristeykset sekä omana karttatasonaan sivuraiteiden tasoristeykset."
     },
     "8": {
       "title": "Tiestötiedot lupapalveluun",
