@@ -6,6 +6,8 @@ import { Button } from 'react-bootstrap';
 import { setDownloadRemove, setIsGfiLocationsOpen } from '../../state/slices/rpcSlice';
 import { ReactReduxContext } from 'react-redux';
 
+import { setIsGfiDownloadOpen} from '../../state/slices/uiSlice';
+
 import { useAppSelector } from '../../state/hooks';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -143,15 +145,23 @@ const DownloadItem = ({
     )
 };
 
+
+
 const GFIDownload = () => {
     let { downloads } = useAppSelector((state) => state.rpc);
     const { store } = useContext(ReactReduxContext);
+
+    const handleGfiLocationsOpen = () => {
+        store.dispatch(setIsGfiLocationsOpen(true));
+        store.dispatch(setIsGfiDownloadOpen(false));
+    
+    }
 
     return (
         <StyledDownloadsContainer>
 
         <Button
-            onClick={() => store.dispatch(setIsGfiLocationsOpen(true))}
+            onClick={handleGfiLocationsOpen}
         >
                 RAJAUKSET
         </Button>

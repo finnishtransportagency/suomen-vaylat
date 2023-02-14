@@ -225,7 +225,8 @@ const Content = () => {
     }, [announcements]);
 
     useEffect(() => {
-        isGfiLocationsOpen && setIsGfiLocationsOpenLocal(isGfiLocationsOpen);
+        console.log(isGfiLocationsOpen)
+        setIsGfiLocationsOpenLocal(isGfiLocationsOpen);
     }, [isGfiLocationsOpen]);
 
     const closeAnnouncement = (selected, id) => {
@@ -235,6 +236,7 @@ const Content = () => {
         announcements.length > currentAnnouncement + 1 &&
             setCurrentAnnouncement(currentAnnouncement + 1);
     };
+    console.log(isGfiLocationsOpenLocal)
 
     const hideWarn = () => {
         store.dispatch(
@@ -803,42 +805,21 @@ const Content = () => {
                         true
                     } /* Scale modal full width / height when using mobile device */
                     titleIcon={
-                        faExclamationCircle
+                        null
                     } /* Use icon on title or null */
-                    title={strings.general.warning} /* Modal header title */
+                    title={strings.gfi.selectLocations} /* Modal header title */
                     type={'normal'} /* Modal type */
                     closeAction={
                         handleCloseGfiLocations
                     } /* Action when pressing modal close button or backdrop */
-                    isOpen={isGfiLocationsOpenLocal} /* Modal state */
+                    isOpen={isGfiLocationsOpen} /* Modal state */
                     id={null}
                 >
-                    <GfiToolsMenu handleGfiToolsMenu={handleGfiToolsMenu} closeButton={false}/>
-                </Modal>
-                <Modal
-                    constraintsRef={
-                        constraintsRef
-                    } /* Reference div for modal drag boundaries */
-                    drag={true} /* Enable (true) or disable (false) drag */
-                    resize={true}
-                    backdrop={
-                        false
-                    } /* Is backdrop enabled (true) or disabled (false) */
-                    fullScreenOnMobile={
-                        true
-                    } /* Scale modal full width / height when using mobile device */
-                    titleIcon={
-                        faExclamationCircle
-                    } /* Use icon on title or null */
-                    title={strings.general.warning} /* Modal header title */
-                    type={'normal'} /* Modal type */
-                    closeAction={
-                        handleCloseGfiDownloads
-                    } /* Action when pressing modal close button or backdrop */
-                    isOpen={isGfiDownloadToolsOpen} /* Modal state */
-                    id={null}
-                >
-                    <GfiDownloadMenu closeButton={false}></GfiDownloadMenu>
+                    { !isGfiDownloadToolsOpen ?
+                        <GfiToolsMenu handleGfiToolsMenu={handleGfiToolsMenu} closeButton={false}/>
+                    :
+                        <GfiDownloadMenu closeButton={false} handleGfiDownload={handleGfiDownload}></GfiDownloadMenu>
+                    }
                 </Modal>
                 <ScaleBar />
                 <StyledToastContainer position="bottom-left" pauseOnFocusLoss={false} transition={Slide} autoClose={false} closeOnClick={false} />
