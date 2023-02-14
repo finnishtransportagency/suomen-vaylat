@@ -212,7 +212,7 @@ const icons = {
     }
 };
 
-const GfiToolsMenu = ({ handleGfiToolsMenu }) => {
+const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
     const drawinToolsData = [
         {
             id: 'sv-measure-linestring',
@@ -677,9 +677,11 @@ const GfiToolsMenu = ({ handleGfiToolsMenu }) => {
 
     return (
         <StyledGfiToolContainer>
-            <StyledCloseButton onClick={() => handleGfiToolsMenu()}>
-                <FontAwesomeIcon icon={faTimes} />
-            </StyledCloseButton>
+            { closeButton &&
+                <StyledCloseButton onClick={() => handleGfiToolsMenu()}>
+                    <FontAwesomeIcon icon={faTimes} />
+                </StyledCloseButton>
+            }
             <AnimatePresence>
                 {isGfiLoading && (
                     <StyledLoadingOverlay

@@ -342,9 +342,6 @@ const Content = () => {
     };
     console.log(isGfiDownloadToolsOpen)
 
-    const handleGfiDownloadsMenu = () => {
-        setIsGfiDownloadToolsOpen(false);
-    };
 
     const handleGfiDownload = (format, layers, croppingArea) => {
         // Open websocket if is not already opened
@@ -816,7 +813,7 @@ const Content = () => {
                     isOpen={isGfiLocationsOpenLocal} /* Modal state */
                     id={null}
                 >
-                    <GfiToolsMenu handleGfiToolsMenu={handleGfiToolsMenu} />
+                    <GfiToolsMenu handleGfiToolsMenu={handleGfiToolsMenu} closeButton={false}/>
                 </Modal>
                 <Modal
                     constraintsRef={
@@ -841,7 +838,7 @@ const Content = () => {
                     isOpen={isGfiDownloadToolsOpen} /* Modal state */
                     id={null}
                 >
-                    <GfiDownloadMenu handleGfiDownloadsMenu={handleGfiDownloadsMenu} ></GfiDownloadMenu>
+                    <GfiDownloadMenu closeButton={false}></GfiDownloadMenu>
                 </Modal>
                 <ScaleBar />
                 <StyledToastContainer position="bottom-left" pauseOnFocusLoss={false} transition={Slide} autoClose={false} closeOnClick={false} />

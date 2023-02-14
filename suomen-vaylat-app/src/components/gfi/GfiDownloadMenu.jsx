@@ -119,7 +119,7 @@ const StyledLoaderWrapper = styled.div`
     }
 `;
 
-const GfiDownloadMenu = ({ handleGfiDownloadsMenu, handleGfiDownload }) => {
+const GfiDownloadMenu = ({ handleGfiDownloadsMenu, handleGfiDownload, closeButton = true }) => {
     const [loading] = useState(false);
 
     let { gfiLocations, allLayers, gfiCroppingArea } = useAppSelector(
@@ -197,9 +197,11 @@ const GfiDownloadMenu = ({ handleGfiDownloadsMenu, handleGfiDownload }) => {
 
     return (
         <StyledGfiDownloadsContainer>
-            <StyledCloseButton onClick={() => handleGfiDownloadsMenu()}>
-                <FontAwesomeIcon icon={faTimes} />
-            </StyledCloseButton>
+            { closeButton &&
+                <StyledCloseButton onClick={() => handleGfiDownloadsMenu()}>
+                    <FontAwesomeIcon icon={faTimes} />
+                </StyledCloseButton>
+            }
             <AnimatePresence>
                 {loading && (
                     <StyledLoadingOverlay
