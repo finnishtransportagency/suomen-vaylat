@@ -25,7 +25,6 @@ import { ReactComponent as SvPolygon } from '../../theme/icons/drawtools_polygon
 import { ReactComponent as SvLinestring } from '../../theme/icons/drawtools_linestring.svg';
 import { theme } from '../../theme/theme';
 
-
 import {
     setGFILocations,
     resetGFILocations,
@@ -33,7 +32,7 @@ import {
     setVKMData
 } from '../../state/slices/rpcSlice';
 
-import { setMinimizeGfi, setSelectedGfiTool, setGeoJsonArray, setHasToastBeenShown, setActiveSelectionTool } from '../../state/slices/uiSlice';
+import { setMinimizeGfi, setSelectedGfiTool, setGeoJsonArray, setHasToastBeenShown, setActiveSelectionTool, setWarning } from '../../state/slices/uiSlice';
 
 import SVLoader from '../loader/SvLoader';
 import { DRAWING_TIP_LOCALSTORAGE } from '../../utils/constants';
@@ -603,6 +602,28 @@ const GfiToolsMenu = ({ handleGfiToolsMenu }) => {
                                                 store.dispatch(setGeoJsonArray([data]));
                                                 setIsGfiLoading(false);
                                                 handleGfiToolsMenu(gfiData.gfi);
+                                            },
+                                            function (error) {
+                                                if (error.BODY_SIZE_EXCEEDED_ERROR) {
+                                                    store.dispatch(setWarning({
+                                                        title: strings.bodySizeWarning,
+                                                        subtitle: null,
+                                                        cancel: {
+                                                            text: strings.general.cancel,
+                                                            action: () => {
+                                                                setIsGfiLoading(false);
+                                                                store.dispatch(setWarning(null))
+                                                            }
+                                                        },
+                                                        confirm: {
+                                                            text: strings.general.continue,
+                                                            action: () => {
+                                                                simplifyGeometry();
+                                                                store.dispatch(setWarning(null));
+                                                            }
+                                                        },
+                                                    }))
+                                                }
                                             }
                                         );
                                 }
@@ -613,6 +634,10 @@ const GfiToolsMenu = ({ handleGfiToolsMenu }) => {
             }
         }
     };
+
+    const simplifyGeometry = () => {
+        console.log("simplify");
+    }
 
     useEffect(() => {
         channel.handleEvent("DrawingEvent", (data) => {
@@ -649,6 +674,26 @@ const GfiToolsMenu = ({ handleGfiToolsMenu }) => {
                                     });
                                 setIsGfiLoading(false);
                                 handleGfiToolsMenu();
+                            },
+                            () => {
+                                store.dispatch(setWarning({
+                                    title: strings.bodySizeWarning,
+                                    subtitle: null,
+                                    cancel: {
+                                        text: strings.general.cancel,
+                                        action: () => {
+                                            setIsGfiLoading(false);
+                                            store.dispatch(setWarning(null))
+                                        }
+                                    },
+                                    confirm: {
+                                        text: strings.general.continue,
+                                        action: () => {
+                                            simplifyGeometry();
+                                            store.dispatch(setWarning(null));
+                                        }
+                                    },
+                                }))
                             }
                         );
                     });
