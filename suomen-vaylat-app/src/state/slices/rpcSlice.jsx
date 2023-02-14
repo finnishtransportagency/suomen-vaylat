@@ -4,6 +4,8 @@ import { Logger } from '../../utils/logger';
 const LOG = new Logger('RPCSlice');
 
 const initialState = {
+    isGfiLocationsOpen: false,
+    isGfiDownloadToolsOpen: false,
     loading: true,
     channel: null,
     allGroups: [],
@@ -774,6 +776,26 @@ export const rpcSlice = createSlice({
         },
 
         /**
+         * Remove download.
+         * @method setDownloadRemove
+         * @param {Object} state
+         * @param {Object} action
+         */
+        setIsGfiLocationsOpen: (state, action) => {
+            state.isGfiLocationsOpen = action.payload;
+        },
+
+        /**
+         * Remove download.
+         * @method setDownloadRemove
+         * @param {Object} state
+         * @param {Object} action
+         */
+        setIsGfiDownloadToolsOpen: (state, action) => {
+            state.isGfiDownloadToolsOpen = action.payload;
+        },
+
+        /**
          * Remove all selected layers.
          * @method removeAllSeelctedLayers
          * @param {Object} state
@@ -878,7 +900,9 @@ export const {
     addFeaturesToGFILocations,
     setBackgroundMaps,
     setMapLayers,
-    setAllSelectedThemeLayers
+    setAllSelectedThemeLayers,
+    setIsGfiLocationsOpen,
+    setIsGfiDownloadToolsOpen
 } = rpcSlice.actions;
 
 export default rpcSlice.reducer;

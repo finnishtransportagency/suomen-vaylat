@@ -615,7 +615,8 @@ const GfiToolsMenu = ({ handleGfiToolsMenu }) => {
     };
 
     useEffect(() => {
-        channel.handleEvent("DrawingEvent", (data) => {
+        console.log(channel)
+        channel && channel.handleEvent("DrawingEvent", (data) => {
             if(store.getState().ui.selectedGfiTool) {
                 if (data.isFinished && data.isFinished === true) {
                     channel.postRequest('DrawTools.StopDrawingRequest', [

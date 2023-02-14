@@ -6,6 +6,8 @@ import { useAppSelector } from '../../state/hooks';
 import styled from 'styled-components';
 import strings from '../../translations';
 import { v4 as uuidv4 } from 'uuid';
+import GfiToolsMenu from '../gfi/GfiToolsMenu';
+import GfiDownloadMenu from '../gfi/GfiDownloadMenu';
 
 import {
     setSelectError,
@@ -14,7 +16,8 @@ import {
     setDownloadActive,
     setDownloadFinished,
     removeMarkerRequest,
-    setVKMData
+    setVKMData,
+    setIsGfiLocationsOpen
 } from '../../state/slices/rpcSlice';
 
 import {
@@ -164,7 +167,8 @@ const StyledLayerNamesListItem = styled.li``;
 const Content = () => {
     const constraintsRef = useRef(null);
 
-    const { warnings } = useAppSelector((state) => state.rpc);
+    const { warnings, isGfiLocationsOpen } = useAppSelector((state) => state.rpc);
+
 
     const {
         shareUrl,
@@ -207,6 +211,11 @@ const Content = () => {
 
     const [currentAnnouncement, setCurrentAnnouncement] = useState(null);
 
+    const [isGfiLocationsOpenLocal, setIsGfiLocationsOpenLocal] = useState(false);
+
+    const [isGfiDownloadToolsOpen, setIsGfiDownloadToolsOpen] = useState(false);
+
+
     const [downloadUuids, setDownloadUuids] = useState([]);
 
     const [websocketFirstTimeTryConnecting, setWebsocketFirstTimeTryConnecting] = useState(false);
@@ -214,6 +223,10 @@ const Content = () => {
     useEffect(() => {
         announcements && setCurrentAnnouncement(0);
     }, [announcements]);
+
+    useEffect(() => {
+        isGfiLocationsOpen && setIsGfiLocationsOpenLocal(isGfiLocationsOpen);
+    }, [isGfiLocationsOpen]);
 
     const closeAnnouncement = (selected, id) => {
         if (selected) {
@@ -290,6 +303,14 @@ const Content = () => {
         store.dispatch(setWarning(null));
     };
 
+    const handleCloseGfiLocations = () => {
+        store.dispatch(setIsGfiLocationsOpen(false));
+    };
+
+    const handleCloseGfiDownloads = () => {
+        store.dispatch(setIsGfiDownloadToolsOpen(false));
+    };
+
     const viewHelp = () => {
         return (
             <ul>
@@ -298,6 +319,32 @@ const Content = () => {
             </ul>
         )
     }
+
+    const handleGfiToolsMenu = () => {
+        setIsGfiLocationsOpen(false);
+        console.log("TTTT")
+        channel &&
+            channel.postRequest('DrawTools.StopDrawingRequest', [
+                'gfi-selection-tool',
+                true,
+            ]);
+
+        isGfiLocationsOpen && channel &&
+            channel.postRequest('VectorLayerRequest', [
+                {
+                    layerId: 'download-tool-layer',
+                    remove: true,
+                },
+            ]);
+
+        setIsGfiDownloadToolsOpen(true);
+        console.log(isGfiDownloadToolsOpen)
+    };
+    console.log(isGfiDownloadToolsOpen)
+
+    const handleGfiDownloadsMenu = () => {
+        setIsGfiDownloadToolsOpen(false);
+    };
 
     const handleGfiDownload = (format, layers, croppingArea) => {
         // Open websocket if is not already opened
@@ -745,6 +792,56 @@ const Content = () => {
                     id={null}
                 >
                     <WarningModalContent warning={warning} />
+                </Modal>
+                <Modal
+                    constraintsRef={
+                        constraintsRef
+                    } /* Reference div for modal drag boundaries */
+                    drag={true} /* Enable (true) or disable (false) drag */
+                    resize={true}
+                    backdrop={
+                        false
+                    } /* Is backdrop enabled (true) or disabled (false) */
+                    fullScreenOnMobile={
+                        true
+                    } /* Scale modal full width / height when using mobile device */
+                    titleIcon={
+                        faExclamationCircle
+                    } /* Use icon on title or null */
+                    title={strings.general.warning} /* Modal header title */
+                    type={'normal'} /* Modal type */
+                    closeAction={
+                        handleCloseGfiLocations
+                    } /* Action when pressing modal close button or backdrop */
+                    isOpen={isGfiLocationsOpenLocal} /* Modal state */
+                    id={null}
+                >
+                    <GfiToolsMenu handleGfiToolsMenu={handleGfiToolsMenu} />
+                </Modal>
+                <Modal
+                    constraintsRef={
+                        constraintsRef
+                    } /* Reference div for modal drag boundaries */
+                    drag={true} /* Enable (true) or disable (false) drag */
+                    resize={true}
+                    backdrop={
+                        false
+                    } /* Is backdrop enabled (true) or disabled (false) */
+                    fullScreenOnMobile={
+                        true
+                    } /* Scale modal full width / height when using mobile device */
+                    titleIcon={
+                        faExclamationCircle
+                    } /* Use icon on title or null */
+                    title={strings.general.warning} /* Modal header title */
+                    type={'normal'} /* Modal type */
+                    closeAction={
+                        handleCloseGfiDownloads
+                    } /* Action when pressing modal close button or backdrop */
+                    isOpen={isGfiDownloadToolsOpen} /* Modal state */
+                    id={null}
+                >
+                    <GfiDownloadMenu handleGfiDownloadsMenu={handleGfiDownloadsMenu} ></GfiDownloadMenu>
                 </Modal>
                 <ScaleBar />
                 <StyledToastContainer position="bottom-left" pauseOnFocusLoss={false} transition={Slide} autoClose={false} closeOnClick={false} />

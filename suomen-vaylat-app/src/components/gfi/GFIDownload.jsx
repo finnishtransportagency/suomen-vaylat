@@ -1,6 +1,10 @@
 import styled from 'styled-components';
 import strings from '../../translations';
 import Moment from 'react-moment';
+import { useContext, useState, useEffect, useRef } from 'react';
+import { Button } from 'react-bootstrap';
+import { setDownloadRemove, setIsGfiLocationsOpen } from '../../state/slices/rpcSlice';
+import { ReactReduxContext } from 'react-redux';
 
 import { useAppSelector } from '../../state/hooks';
 
@@ -10,7 +14,6 @@ import { faDownload, faFileArchive, faExclamationTriangle } from '@fortawesome/f
 import ModalListItem from '../modals/ModalListItem';
 import SvLoader from '../loader/SvLoader';
 import store from '../../state/store';
-import { setDownloadRemove } from '../../state/slices/rpcSlice';
 
 const StyledDownloadsContainer = styled.div`
     padding: 16px;
@@ -142,9 +145,19 @@ const DownloadItem = ({
 
 const GFIDownload = () => {
     let { downloads } = useAppSelector((state) => state.rpc);
+    const { store } = useContext(ReactReduxContext);
 
     return (
         <StyledDownloadsContainer>
+
+        <Button
+            onClick={() => store.dispatch(setIsGfiLocationsOpen(true))}
+        >
+                RAJAUKSET
+        </Button>
+        
+
+
             <StyledSubtitle>{strings.downloads.processing}:</StyledSubtitle>
             {
                 downloads.filter(download => download.loading === true).length > 0 ?
