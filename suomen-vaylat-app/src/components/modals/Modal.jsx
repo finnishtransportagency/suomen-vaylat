@@ -204,7 +204,6 @@ const Modal = ({
         }, [500]);
     };
 
-    console.log(children)
     const clonedChildren = cloneElement(children, { handleAnnouncementModal }); // If announce modal type is passed as prop, add additional 'handleAnnouncementModal' function to modal children to handle modal state
 
     return (

@@ -776,8 +776,8 @@ export const rpcSlice = createSlice({
         },
 
         /**
-         * Remove download.
-         * @method setDownloadRemove
+         * Set gfi tools open.
+         * @method setIsGfiLocationsOpen
          * @param {Object} state
          * @param {Object} action
          */
@@ -786,8 +786,8 @@ export const rpcSlice = createSlice({
         },
 
         /**
-         * Remove download.
-         * @method setDownloadRemove
+         * Set download tools open.
+         * @method setIsGfiDownloadToolsOpen
          * @param {Object} state
          * @param {Object} action
          */
