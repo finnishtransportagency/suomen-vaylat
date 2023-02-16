@@ -5,7 +5,6 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useAppSelector } from '../../state/hooks';
 import styled from 'styled-components';
 import strings from '../../translations';
-import { v4 as uuidv4 } from 'uuid';
 import GfiToolsMenu from '../gfi/GfiToolsMenu';
 import GfiDownloadMenu from '../gfi/GfiDownloadMenu';
 
@@ -16,8 +15,7 @@ import {
     setDownloadActive,
     setDownloadFinished,
     removeMarkerRequest,
-    setVKMData,
-    setIsGfiLocationsOpen
+    setVKMData
 } from '../../state/slices/rpcSlice';
 
 import {
@@ -32,6 +30,7 @@ import {
     setIsDownloadLinkModalOpen,
     setMaximizeGfi,
     setActiveSelectionTool,
+    setIsGfiToolsOpen
 } from '../../state/slices/uiSlice';
 
 import {
@@ -168,7 +167,7 @@ const StyledLayerNamesListItem = styled.li``;
 const Content = () => {
     const constraintsRef = useRef(null);
 
-    const { warnings, isGfiLocationsOpen } = useAppSelector((state) => state.rpc);
+    const { warnings, isGfiToolsOpen } = useAppSelector((state) => state.rpc);
 
 
     const {
@@ -214,7 +213,7 @@ const Content = () => {
 
     const [isGfiDownloadToolsOpen, setIsGfiDownloadToolsOpen] = useState(false);
 
-    const [isGfiLocationsOpenLocal, setIsGfiLocationsOpenLocal] = useState(false);
+    const [isGfiToolsOpenLocal, setIsGfiToolsOpenLocal] = useState(false);
 
 
     const [downloadUuids, setDownloadUuids] = useState([]);
@@ -226,9 +225,8 @@ const Content = () => {
     }, [announcements]);
 
     useEffect(() => {
-       console.log(isGfiLocationsOpen)
-        setIsGfiLocationsOpenLocal(isGfiLocationsOpen);
-    }, [isGfiLocationsOpen])
+        setIsGfiToolsOpenLocal(isGfiToolsOpen);
+    }, [isGfiToolsOpen])
 
     const closeAnnouncement = (selected, id) => {
         if (selected) {
@@ -306,11 +304,23 @@ const Content = () => {
     };
 
     const handleCloseGfiDownloadTools = () => {
-        store.dispatch(setIsGfiDownloadToolsOpen(false));
+        setIsGfiDownloadToolsOpen(false);
+        store.dispatch(resetGFILocations([]));
+        setTimeout(() => {store.dispatch(setVKMData(null))}, 500) ; // VKM info does not disappear during modal close animation.
+        store.dispatch(removeMarkerRequest({markerId: "VKM_MARKER"}));
+        channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [
+            null,
+            null,
+            'download-tool-layer',
+        ]);
+        channel.postRequest('DrawTools.StopDrawingRequest', [
+            'gfi-selection-tool',
+            true,
+        ]);
     }
 
     const handleCloseGfiLocations = () => {
-        store.dispatch(setIsGfiLocationsOpen(false));
+        store.dispatch(setIsGfiToolsOpen(false));
     };
 
     const viewHelp = () => {
@@ -323,15 +333,14 @@ const Content = () => {
     }
 
     const handleGfiToolsMenu = () => {
-        store.dispatch(setIsGfiLocationsOpen(false));
-        console.log("TTTT")
+        store.dispatch(setIsGfiToolsOpen(false));
         channel &&
             channel.postRequest('DrawTools.StopDrawingRequest', [
                 'gfi-selection-tool',
                 true,
             ]);
 
-        isGfiLocationsOpen && channel &&
+        isGfiToolsOpen && channel &&
             channel.postRequest('VectorLayerRequest', [
                 {
                     layerId: 'download-tool-layer',
@@ -341,7 +350,6 @@ const Content = () => {
         store.dispatch(setActiveSelectionTool(null));
         setIsGfiDownloadToolsOpen(!isGfiDownloadToolsOpen);
     };
-    console.log(isGfiLocationsOpenLocal)
 
 
     const handleGfiDownload = (format, layers, croppingArea) => {
@@ -388,12 +396,24 @@ const Content = () => {
 
                 store.dispatch(setIsGfiDownloadOpen(true));
                 store.dispatch(setDownloadActive(newDownload));
-
-                isGfiDownloadToolsOpen && store.dispatch(setIsGfiDownloadToolsOpen(false));
             }
             return;
         });
 
+        if (!isGfiOpen) {
+            store.dispatch(resetGFILocations([]));
+            store.dispatch(removeMarkerRequest({markerId: "VKM_MARKER"}));
+            channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [
+                null,
+                null,
+                'download-tool-layer',
+            ]);
+            channel.postRequest('DrawTools.StopDrawingRequest', [
+                'gfi-selection-tool',
+                true,
+            ]);
+        }
+        isGfiDownloadToolsOpen && setIsGfiDownloadToolsOpen(false);
 
     };
 
@@ -813,7 +833,7 @@ const Content = () => {
                     closeAction={
                         handleCloseGfiLocations
                     } /* Action when pressing modal close button or backdrop */
-                    isOpen={isGfiLocationsOpenLocal} /* Modal state */
+                    isOpen={isGfiToolsOpenLocal} /* Modal state */
                     id={null}
                     minimize={minimizeGfi}
                     maximize={maximizeGfi}

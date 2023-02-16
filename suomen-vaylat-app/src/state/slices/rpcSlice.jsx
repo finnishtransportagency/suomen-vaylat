@@ -4,8 +4,6 @@ import { Logger } from '../../utils/logger';
 const LOG = new Logger('RPCSlice');
 
 const initialState = {
-    isGfiLocationsOpen: false,
-    isGfiDownloadToolsOpen: false,
     loading: true,
     channel: null,
     allGroups: [],
@@ -777,22 +775,12 @@ export const rpcSlice = createSlice({
 
         /**
          * Set gfi tools open.
-         * @method setIsGfiLocationsOpen
+         * @method setisGfiToolsOpen
          * @param {Object} state
          * @param {Object} action
          */
-        setIsGfiLocationsOpen: (state, action) => {
-            state.isGfiLocationsOpen = action.payload;
-        },
-
-        /**
-         * Set download tools open.
-         * @method setIsGfiDownloadToolsOpen
-         * @param {Object} state
-         * @param {Object} action
-         */
-        setIsGfiDownloadToolsOpen: (state, action) => {
-            state.isGfiDownloadToolsOpen = action.payload;
+        setIsGfiToolsOpen: (state, action) => {
+            state.isGfiToolsOpen = action.payload;
         },
 
         /**
@@ -901,8 +889,6 @@ export const {
     setBackgroundMaps,
     setMapLayers,
     setAllSelectedThemeLayers,
-    setIsGfiLocationsOpen,
-    setIsGfiDownloadToolsOpen
 } = rpcSlice.actions;
 
 export default rpcSlice.reducer;
