@@ -167,7 +167,7 @@ const StyledLayerNamesListItem = styled.li``;
 const Content = () => {
     const constraintsRef = useRef(null);
 
-    const { warnings, isGfiToolsOpen } = useAppSelector((state) => state.rpc);
+    const { warnings } = useAppSelector((state) => state.rpc);
 
 
     const {
@@ -180,6 +180,7 @@ const Content = () => {
         minimizeGfi,
         maximizeGfi,
         warning,
+        isGfiToolsOpen
     } = useAppSelector((state) => state.ui);
 
     const search = useAppSelector((state) => state.search);
@@ -225,6 +226,7 @@ const Content = () => {
     }, [announcements]);
 
     useEffect(() => {
+        console.log(isGfiToolsOpen)
         setIsGfiToolsOpenLocal(isGfiToolsOpen);
     }, [isGfiToolsOpen])
 
