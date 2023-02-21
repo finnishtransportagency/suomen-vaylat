@@ -161,7 +161,7 @@ const GFIDownload = () => {
         <Button
             onClick={handleGfiLocationsOpen}
         >
-                RAJAUKSET
+                UUSI LATAUS
         </Button>
         
 
