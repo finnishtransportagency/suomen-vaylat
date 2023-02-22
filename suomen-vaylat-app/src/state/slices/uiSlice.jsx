@@ -53,6 +53,7 @@ export const uiSlice = createSlice({
         setIsMainScreen: (state) => {
             state.isFullScreen = false;
             state.isSideMenuOpen = false;
+            state.isThemeMenuOpen = false;
             state.isSearchOpen = false;
             state.isInfoOpen = false;
 
