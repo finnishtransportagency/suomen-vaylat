@@ -1,5 +1,5 @@
 import { useContext, useState, useEffect } from 'react';
-import { faMap } from '@fortawesome/free-solid-svg-icons';
+import { faMap, faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ReactReduxContext } from 'react-redux';
 import { motion } from 'framer-motion';
@@ -137,6 +137,17 @@ const StyledMasterGroupHeaderIcon = styled.div`
     };
 `;
 
+const StyledMasterGroupLinkIcon = styled.div`
+    width: 48px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    svg {
+        font-size: 18px;
+        color: ${props => props.theme.colors.mainWhite};
+    };
+`;
+
 const StyledSelectButton = styled.div`
     position: relative;
     width: 18px;
@@ -250,6 +261,12 @@ export const ThemeLayerList = ({
         if (currentZoomLevel < selectedTheme?.minZoomLevel) store.dispatch(setZoomTo(selectedTheme.minZoomLevel));
     }, [selectedTheme]);
 
+    var linksArray = [];
+
+    for(var i in strings.themeLinks) {
+        linksArray.push(strings.themeLinks [i]);
+    }
+
     return (
         <>
             {allThemes?.map((theme, index) => {
@@ -264,9 +281,47 @@ export const ThemeLayerList = ({
                         isSubtheme={false}
                     />
             })}
+            {linksArray.map((link, index) => {
+                return <ThemeLinkList index={index} link={link}/>
+            })}
         </>
     );
   };
+
+export const ThemeLinkList = ({
+    link,
+    index
+}) => {
+
+    return (
+        <>
+            <StyledLayerGroups index={index}>
+                <StyledMasterGroupHeader
+                    key={'theme_link_'+link.title}
+                    onClick={() => {
+                        window.open(link.url, '_blank');;
+                    }}
+                >
+                    <StyledLeftContent>
+                        <StyledMasterGroupHeaderIcon>
+                            <FontAwesomeIcon
+                                icon={faMap}
+                            />
+                        </StyledMasterGroupHeaderIcon>
+                        <StyledMasterGroupName>{link.title}</StyledMasterGroupName>
+                    </StyledLeftContent>
+                    <StyledRightContent>
+                        <StyledMasterGroupLinkIcon>
+                            <FontAwesomeIcon
+                                icon={faExternalLinkAlt}
+                            />
+                        </StyledMasterGroupLinkIcon>
+                    </StyledRightContent>
+                </StyledMasterGroupHeader>
+            </StyledLayerGroups>
+        </>
+    );
+};
 
 export const ThemeGroup = ({
     theme,
