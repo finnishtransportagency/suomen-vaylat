@@ -211,7 +211,7 @@ const icons = {
     }
 };
 
-const GfiToolsMenu = ({ handleGfiToolsMenu }) => {
+const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
     const drawinToolsData = [
         {
             id: 'sv-measure-linestring',
@@ -640,7 +640,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu }) => {
     }
 
     useEffect(() => {
-        channel.handleEvent("DrawingEvent", (data) => {
+        channel && channel.handleEvent("DrawingEvent", (data) => {
             if(store.getState().ui.selectedGfiTool) {
                 if (data.isFinished && data.isFinished === true) {
                     channel.postRequest('DrawTools.StopDrawingRequest', [
@@ -721,9 +721,11 @@ const GfiToolsMenu = ({ handleGfiToolsMenu }) => {
 
     return (
         <StyledGfiToolContainer>
-            <StyledCloseButton onClick={() => handleGfiToolsMenu()}>
-                <FontAwesomeIcon icon={faTimes} />
-            </StyledCloseButton>
+            { closeButton &&
+                <StyledCloseButton onClick={() => handleGfiToolsMenu()}>
+                    <FontAwesomeIcon icon={faTimes} />
+                </StyledCloseButton>
+            }
             <AnimatePresence>
                 {isGfiLoading && (
                     <StyledLoadingOverlay

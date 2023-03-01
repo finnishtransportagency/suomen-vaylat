@@ -5,7 +5,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useAppSelector } from '../../state/hooks';
 import styled from 'styled-components';
 import strings from '../../translations';
-import { v4 as uuidv4 } from 'uuid';
+import GfiToolsMenu from '../gfi/GfiToolsMenu';
+import GfiDownloadMenu from '../gfi/GfiDownloadMenu';
 
 import {
     setSelectError,
@@ -28,6 +29,8 @@ import {
     setWarning,
     setIsDownloadLinkModalOpen,
     setMaximizeGfi,
+    setActiveSelectionTool,
+    setIsGfiToolsOpen
 } from '../../state/slices/uiSlice';
 
 import {
@@ -166,6 +169,7 @@ const Content = () => {
 
     const { warnings } = useAppSelector((state) => state.rpc);
 
+
     const {
         shareUrl,
         isInfoOpen,
@@ -176,6 +180,7 @@ const Content = () => {
         minimizeGfi,
         maximizeGfi,
         warning,
+        isGfiToolsOpen
     } = useAppSelector((state) => state.ui);
 
     const search = useAppSelector((state) => state.search);
@@ -207,6 +212,11 @@ const Content = () => {
 
     const [currentAnnouncement, setCurrentAnnouncement] = useState(null);
 
+    const [isGfiDownloadToolsOpen, setIsGfiDownloadToolsOpen] = useState(false);
+
+    const [isGfiToolsOpenLocal, setIsGfiToolsOpenLocal] = useState(false);
+
+
     const [downloadUuids, setDownloadUuids] = useState([]);
 
     const [websocketFirstTimeTryConnecting, setWebsocketFirstTimeTryConnecting] = useState(false);
@@ -214,6 +224,11 @@ const Content = () => {
     useEffect(() => {
         announcements && setCurrentAnnouncement(0);
     }, [announcements]);
+
+    useEffect(() => {
+        console.log(isGfiToolsOpen)
+        setIsGfiToolsOpenLocal(isGfiToolsOpen);
+    }, [isGfiToolsOpen])
 
     const closeAnnouncement = (selected, id) => {
         if (selected) {
@@ -290,6 +305,26 @@ const Content = () => {
         store.dispatch(setWarning(null));
     };
 
+    const handleCloseGfiDownloadTools = () => {
+        setIsGfiDownloadToolsOpen(false);
+        store.dispatch(resetGFILocations([]));
+        setTimeout(() => {store.dispatch(setVKMData(null))}, 500) ; // VKM info does not disappear during modal close animation.
+        store.dispatch(removeMarkerRequest({markerId: "VKM_MARKER"}));
+        channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [
+            null,
+            null,
+            'download-tool-layer',
+        ]);
+        channel.postRequest('DrawTools.StopDrawingRequest', [
+            'gfi-selection-tool',
+            true,
+        ]);
+    }
+
+    const handleCloseGfiLocations = () => {
+        store.dispatch(setIsGfiToolsOpen(false));
+    };
+
     const viewHelp = () => {
         return (
             <ul>
@@ -298,6 +333,26 @@ const Content = () => {
             </ul>
         )
     }
+
+    const handleGfiToolsMenu = () => {
+        store.dispatch(setIsGfiToolsOpen(false));
+        channel &&
+            channel.postRequest('DrawTools.StopDrawingRequest', [
+                'gfi-selection-tool',
+                true,
+            ]);
+
+        isGfiToolsOpen && channel &&
+            channel.postRequest('VectorLayerRequest', [
+                {
+                    layerId: 'download-tool-layer',
+                    remove: true,
+                },
+            ]);
+        store.dispatch(setActiveSelectionTool(null));
+        setIsGfiDownloadToolsOpen(!isGfiDownloadToolsOpen);
+    };
+
 
     const handleGfiDownload = (format, layers, croppingArea) => {
         // Open websocket if is not already opened
@@ -347,6 +402,20 @@ const Content = () => {
             return;
         });
 
+        if (!isGfiOpen) {
+            store.dispatch(resetGFILocations([]));
+            store.dispatch(removeMarkerRequest({markerId: "VKM_MARKER"}));
+            channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [
+                null,
+                null,
+                'download-tool-layer',
+            ]);
+            channel.postRequest('DrawTools.StopDrawingRequest', [
+                'gfi-selection-tool',
+                true,
+            ]);
+        }
+        isGfiDownloadToolsOpen && setIsGfiDownloadToolsOpen(false);
 
     };
 
@@ -769,6 +838,58 @@ const Content = () => {
                     id={null}
                 >
                     <WarningModalContent warning={warning} />
+                </Modal>
+                <Modal
+                    constraintsRef={
+                        constraintsRef
+                    } /* Reference div for modal drag boundaries */
+                    drag={true} /* Enable (true) or disable (false) drag */
+                    resize={true}
+                    backdrop={
+                        false
+                    } /* Is backdrop enabled (true) or disabled (false) */
+                    fullScreenOnMobile={
+                        true
+                    } /* Scale modal full width / height when using mobile device */
+                    titleIcon={
+                        null
+                    } /* Use icon on title or null */
+                    title={strings.gfi.selectLocations} /* Modal header title */
+                    type={'normal'} /* Modal type */
+                    closeAction={
+                        handleCloseGfiLocations
+                    } /* Action when pressing modal close button or backdrop */
+                    isOpen={isGfiToolsOpenLocal} /* Modal state */
+                    id={null}
+                    minimize={minimizeGfi}
+                    maximize={maximizeGfi}
+                >
+                    <GfiToolsMenu handleGfiToolsMenu={handleGfiToolsMenu} closeButton={false}/>
+                </Modal>
+                <Modal
+                    constraintsRef={
+                        constraintsRef
+                    } /* Reference div for modal drag boundaries */
+                    drag={true} /* Enable (true) or disable (false) drag */
+                    resize={true}
+                    backdrop={
+                        false
+                    } /* Is backdrop enabled (true) or disabled (false) */
+                    fullScreenOnMobile={
+                        true
+                    } /* Scale modal full width / height when using mobile device */
+                    titleIcon={
+                        null
+                    } /* Use icon on title or null */
+                    title={strings.gfi.downloadMaterials} /* Modal header title */
+                    type={'normal'} /* Modal type */
+                    closeAction={
+                        handleCloseGfiDownloadTools
+                    } /* Action when pressing modal close button or backdrop */
+                    isOpen={isGfiDownloadToolsOpen} /* Modal state */
+                    id={null}
+                >
+                    <GfiDownloadMenu closeButton={false} handleGfiDownload={handleGfiDownload}></GfiDownloadMenu>
                 </Modal>
                 <ScaleBar />
                 <StyledToastContainer position="bottom-left" pauseOnFocusLoss={false} transition={Slide} autoClose={false} closeOnClick={false} />

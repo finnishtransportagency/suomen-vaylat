@@ -2,6 +2,7 @@ import { createSlice, current } from '@reduxjs/toolkit';
 import { theme } from '../../theme/theme';
 
 const initialState = {
+    isGfiToolsOpen: false,
     isFullScreen: false,
     modalConstrainsRef: null,
     isSideMenuOpen: false,
@@ -194,7 +195,11 @@ export const uiSlice = createSlice({
         },
         removeActiveGeometry: (state, action) => {
             state.activeGeometries = state.activeGeometries.filter((activeGeometry) => activeGeometry.id !== action.payload);
-        }
+        },
+        setIsGfiToolsOpen: (state, action) => {
+            state.isGfiToolsOpen = action.payload;
+        },
+
     },
 });
 
@@ -236,7 +241,8 @@ export const {
     removeFromDrawToolMarkers,
     setMarkerLabel,
     addToActiveGeometries,
-    removeActiveGeometry
+    removeActiveGeometry,
+    setIsGfiToolsOpen
 } = uiSlice.actions;
 
 export default uiSlice.reducer;

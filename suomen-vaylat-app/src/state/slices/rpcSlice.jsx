@@ -774,6 +774,16 @@ export const rpcSlice = createSlice({
         },
 
         /**
+         * Set gfi tools open.
+         * @method setisGfiToolsOpen
+         * @param {Object} state
+         * @param {Object} action
+         */
+        setIsGfiToolsOpen: (state, action) => {
+            state.isGfiToolsOpen = action.payload;
+        },
+
+        /**
          * Remove all selected layers.
          * @method removeAllSeelctedLayers
          * @param {Object} state
@@ -878,7 +888,7 @@ export const {
     addFeaturesToGFILocations,
     setBackgroundMaps,
     setMapLayers,
-    setAllSelectedThemeLayers
+    setAllSelectedThemeLayers,
 } = rpcSlice.actions;
 
 export default rpcSlice.reducer;
