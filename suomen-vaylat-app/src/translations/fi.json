@@ -185,7 +185,7 @@
       },
       "downloads": {
         "title": "Lataukset",
-        "content": "Lataukset avautuvat vasemman reunan lataukset-painikkeesta. Latauksista löydät valitsemistasi kohdetiedoista tekemäsi lataukset, jotka voit ladata eri muodoissa laitteellesi."
+        "content": "Lataukset avautuvat vasemman reunan lataukset-painikkeesta. Avautuvasta ikkunasta voit luoda uuden rajauksen ladattavaksi, sekä hallita myös kohdetietojen kautta tehtyjä latauksia."
       },
       "viewsAndGeometries": {
         "title": "Näkymän ja geometrian tallennus",
