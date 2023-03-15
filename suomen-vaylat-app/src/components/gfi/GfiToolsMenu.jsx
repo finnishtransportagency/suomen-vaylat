@@ -5,6 +5,8 @@ import { toast } from 'react-toastify';
 import strings from '../../translations';
 import { isMobile } from '../../theme/theme';
 import { ReactReduxContext } from 'react-redux';
+import Moment from 'react-moment';
+
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -249,7 +251,8 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
 
     const { store } = useContext(ReactReduxContext);
 
-    const { channel } = useAppSelector((state) => state.rpc);
+    const { channel, selectedLayers } = useAppSelector((state) => state.rpc);
+    console.log(selectedLayers)
 
     const { gfiCroppingTypes, selectedGfiTool, hasToastBeenShown, activeSelectionTool } = useAppSelector(state => state.ui);
     const [isGfiLoading, setIsGfiLoading] = useState(false);
@@ -265,6 +268,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
 
     const handleSelectTool = (id) => {
         if (activeSelectionTool  !== id) {
+            console.log(id)
             store.dispatch(setActiveSelectionTool(id));
             if (id === 0 || id === 505) {
                 store.dispatch(setActiveSelectionTool(id));
@@ -437,6 +441,8 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
             [null, null, vectorLayerId]
         );
 
+        console.log(features)
+
         //Others than drawtools
         if (features.data.operation === 'click') {
             if (features.data.features) {
@@ -521,40 +527,71 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
                         }
                     );
             })
-        }  else if (features.data.data.geom) {
-            features.data.data.geom.features.forEach(feature => {
-                store.dispatch(setGFICroppingArea(feature));
-                feature.geometry &&
-                    channel &&
-                    channel.getFeaturesByGeoJSON(
-                        [feature],
-                        (gfiData) => {
-                            store.dispatch(resetGFILocations([]));
-                            store.dispatch(setVKMData(null));
-                            channel.postRequest('MapModulePlugin.RemoveMarkersRequest', ["VKM_MARKER"]);
-                            gfiData.gfi &&
-                                gfiData.gfi.forEach((gfi) => {
-                                    store.dispatch(
-                                        setGFILocations({
-                                            content: gfi.geojson,
-                                            layerId: gfi.layerId,
-                                            gfiCroppingArea:
-                                                features.data.geojson,
-                                            type: 'geojson',
-                                        })
-                                    );
-                                });
-                            setIsGfiLoading(false);
-                            handleGfiToolsMenu(gfiData.gfi);
-                        }
-                    );
+        }  else if (features.data[0].data.geom) {
+            console.log(features)
+
+            let content = [];
+            let layerId = [];
+            let gfiCroppingArea = [];
+
+
+            store.dispatch(resetGFILocations([]));
+            store.dispatch(setVKMData(null));
+            channel.postRequest('MapModulePlugin.RemoveMarkersRequest', ["VKM_MARKER"]);
+
+
+
+            selectedLayers.forEach((layer) => {
+
+                features.data[0].data.geom.features.forEach(feature => {
+                    store.dispatch(setGFICroppingArea(feature));
+                    console.log(feature.geometry)
+    
+    
+                    feature.geometry &&
+                        channel &&
+                        channel.getFeaturesByGeoJSON(
+                            [feature,0,[layer]],
+                            (gfiData) => {
+                                console.log(gfiData)
+    
+                                gfiData.gfi &&
+                                    gfiData.gfi.forEach((gfi) => {
+
+                                        content.push(gfi.geojson);
+                                        layerId.push(gfi.layerId);
+                                        gfiCroppingArea.push(features.data.geojson);
+                                        
+                                    });
+                                setIsGfiLoading(false);
+                                console.log(features)
+                                store.dispatch(setGeoJsonArray(features.data[0].data.geom));
+    
+                                handleGfiToolsMenu(gfiData.gfi);
+                            }
+                        );
+                })
+                console.log(content)
+                /*
+                store.dispatch(
+                    setGFILocations({
+                        content: content,
+                        layerId: layerId,
+                        gfiCroppingArea: gfiCroppingArea,
+                        type: 'geojson',
+                    })
+                );
+                */
+                    
             })
+            
         }
     };
 
     const featureEventHandler = (data) => {
         if (data.operation === 'click') {
             if (data.features) {
+                console.log(data.features)
                 Object.values(data.features).forEach((feature) => {
                     if (
                         feature.layerId &&
@@ -569,17 +606,21 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
                                     store.dispatch(
                                         setGFICroppingArea(subfeature)
                                     );
+                                    console.log(subfeature)
                                     subfeature.geometry &&
                                         channel &&
                                         channel.getFeaturesByGeoJSON(
                                             [subfeature],
                                             (gfiData) => {
+                                                console.log(gfiData)
+
                                                 store.dispatch(
                                                     resetGFILocations([])
                                                 );
                                                 gfiData.gfi &&
                                                     gfiData.gfi.forEach(
                                                         (gfi) => {
+                                                            console.log(gfi)
                                                             store.dispatch(
                                                                 setGFILocations(
                                                                     {
@@ -651,6 +692,8 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
                     store.dispatch(setGeoJsonArray([data]));
                     store.dispatch(setSelectedGfiTool(null));
                     toast.dismiss("measurementToast")
+                    console.log(data.geojson.features)
+
                     data.geojson.features?.forEach(feature => {
                         store.dispatch(setGFICroppingArea(feature));
                         channel.getFeaturesByGeoJSON(
@@ -718,6 +761,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
         };
         
     }, [store, channel]);
+
 
     return (
         <StyledGfiToolContainer>
@@ -806,21 +850,16 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
                 </AnimatePresence>
 
                 <CircleButtonListItem
-                    bgColor={"gray"}
                     key={'saved'}
                     id={505}
                     icon={faDownload}
-                    title={strings.gfi.savedGeometries.title}
-                    subtitle={strings.gfi.savedGeometries.disabled}
+                    title={"Omat geometriat"}
+                    subtitle={"Omat tallennetut geometriat"}
                     selectedItem={activeSelectionTool}
-                    handleSelectTool={ () => {}} 
-                    /**
-                     * 
-                     * FIX ME WHEN LOGIC HAS BEEN REWORKED
-                     */
+                    handleSelectTool={handleSelectTool}
                 />
-{/*                 <AnimatePresence>
-                    {activeSelectionTool === 505 && null === 0 && (
+                <AnimatePresence>
+                    {activeSelectionTool === 505 && (
                         <StyledDrawingToolsContainer
                             transition={{
                                 duration: 0.2,
@@ -841,25 +880,6 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
                         >
                             {geometries.map((geometry) => {
                                 return (
-                                    <StyledSavedViewContainer
-                                        key={geometry.id}
-                                        transition={{
-                                            duration: 0.2,
-                                            type: 'tween',
-                                        }}
-                                        initial={{
-                                            opacity: 0,
-                                            height: 0,
-                                        }}
-                                        animate={{
-                                            opacity: 1,
-                                            height: 'auto',
-                                        }}
-                                        exit={{
-                                            opacity: 0,
-                                            height: 0,
-                                        }}
-                                    >
                                         <StyledSavedView
                                             onClick={(e) => {
                                                 e.preventDefault();
@@ -895,13 +915,12 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
                                             <StyledRightContent>
                                             </StyledRightContent>
                                         </StyledSavedView>
-                                    </StyledSavedViewContainer>
                                 )
                                 })
                             }
                         </StyledDrawingToolsContainer>
                     )}
-                </AnimatePresence> */}
+                </AnimatePresence>
                 {gfiCroppingTypes &&
                     gfiCroppingTypes.map((croppingType) => {
                         return (
