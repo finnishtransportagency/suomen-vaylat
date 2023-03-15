@@ -185,7 +185,7 @@
       },
       "downloads": {
         "title": "Nedladdningar",
-        "content": "Nedladdningarna öppnas genom att klicka på nedladdningsknappen i vänstra kanten. Där hittar du de nedladdningar som du har gjort av vald objektsdata och som du kan ladda ner i olika format på din enhet."
+        "content": "Nedladdningarna öppnas genom att klicka på nedladdningsknappen i vänstra kanten. Från popup-fönstret kan du göra ett nytt funktionsval för att ladda ner och hantera tidigare nedladdningar från funktionsdatafönstret."
       },
       "viewsAndGeometries": {
         "title": "Spara vy och geometri",
