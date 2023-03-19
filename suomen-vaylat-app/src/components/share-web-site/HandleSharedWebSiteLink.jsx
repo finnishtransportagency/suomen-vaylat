@@ -2,11 +2,10 @@ import { useContext } from 'react';
 import { ReactReduxContext, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import { setLocale } from '../../state/slices/languageSlice';
-import { changeLayerStyle, reArrangeSelectedMapLayers, setLegends, setSelectedTheme, setLastSelectedTheme, setSelectedThemeIndex, removeAllSelectedLayers } from '../../state/slices/rpcSlice';
-import { setIsLegendOpen, setIsSideMenuOpen, setIsZoomBarOpen, setSelectedMapLayersMenuTab } from '../../state/slices/uiSlice';
+import { changeLayerStyle, reArrangeSelectedMapLayers, setLegends, removeAllSelectedLayers } from '../../state/slices/rpcSlice';
+import {  setIsSideMenuOpen, setSelectedMapLayersMenuTab } from '../../state/slices/uiSlice';
 import { Logger } from '../../utils/logger';
-import { updateLayers } from '../../utils/rpcUtil';
-import { isMobile } from '../../theme/theme';
+import { updateLayers, selectGroup } from '../../utils/rpcUtil';
 
 const LOG = new Logger('HandleSharedWebSiteLink');
 
@@ -56,20 +55,8 @@ export const HandleSharedWebSiteLink = () => {
 
         if (theme){
             store.dispatch(setSelectedMapLayersMenuTab(1));
-            store.dispatch(setLastSelectedTheme(theme));
-            store.dispatch(setSelectedTheme(theme));
-            store.dispatch(setSelectedThemeIndex(themeGroupIndex));
             setTimeout(() => {
-                // remove all layers needs do some timeout
-                store.dispatch(removeAllSelectedLayers({notRemoveLayersByGroupId: 1}));
-                theme?.defaultLayers?.forEach(layerId => {
-                    channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layerId, true]);
-                });
-                if(!isMobile) {
-                    store.dispatch(setIsLegendOpen(true));
-                    store.dispatch(setIsZoomBarOpen(true));
-                }
-                updateLayers(store, channel);
+                selectGroup(store, channel, themeGroupIndex, theme, theme, null);
             },700);
         }
     }
