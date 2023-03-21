@@ -1,5 +1,5 @@
 import { useContext, useState, useEffect } from 'react';
-import { faMap, faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
+import { faMap, faExternalLinkAlt, faLink } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ReactReduxContext } from 'react-redux';
 import { motion } from 'framer-motion';
@@ -7,7 +7,7 @@ import styled from 'styled-components';
 import { useAppSelector } from '../../../state/hooks';
 import strings from '../../../translations';
 import { setZoomTo } from '../../../state/slices/rpcSlice';
-import { selectGroup } from '../../../utils/rpcUtil';
+import { selectGroup, reArrangeArray } from '../../../utils/rpcUtil';
 import Layers from './Layers';
 
 import hankekartta from './hankekartta.JPG';
@@ -267,9 +267,13 @@ export const ThemeLayerList = ({
         linksArray.push(strings.themeLinks [i]);
     }
 
+    // Required ID order of the the groups
+    const themeOrderById = [0,9,1,100047,2,3,8,4,5,7,6,100046];
+    const sortedArray = reArrangeArray(allThemes, themeOrderById, 'id');
+
     return (
         <>
-            {allThemes?.map((theme, index) => {
+            {sortedArray?.map((theme, index) => {
                    return <ThemeGroup
                         key={index}
                         theme={theme}
@@ -305,7 +309,7 @@ export const ThemeLinkList = ({
                     <StyledLeftContent>
                         <StyledMasterGroupHeaderIcon>
                             <FontAwesomeIcon
-                                icon={faMap}
+                                icon={faLink}
                             />
                         </StyledMasterGroupHeaderIcon>
                         <StyledMasterGroupName>{link.title}</StyledMasterGroupName>

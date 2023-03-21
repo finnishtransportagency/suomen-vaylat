@@ -441,6 +441,14 @@
       "links": {
         "0": "https://vayla.fi/kunnossapito/tieverkon-kunnossapito/talvihoito"
       }
+    },
+    "100046": {
+      "title": "Yksityistiekartta",
+      "description": ""
+    },
+    "100047": {
+      "title": "Tieliikenteen liikennemäärät",
+      "description": ""
     }
   },
   "metadata": {
@@ -1023,9 +1031,17 @@
     }
   },
   "themeLinks": {
+    "timeTravelFinland": {
+      "title": "Aikamatkalla Suomessa",
+      "url": "https://vayla.fi/vaylista/aineistot/kartat/aikamatkalla-suomessa#.XOOasBFlJNs"
+    },
     "bikeNetwork": {
       "title": "Valtakunnallinen ja seudullinen pyörätieverkko",
       "url": "https://paikkatieto.vaylapilvi.fi/arcgis/apps/webappviewer/index.html?id=aa98d035ba254776895d092a3d1c3a9f"
+    },
+    "baltice": {
+      "title": "Baltice",
+      "url": "https://baltice.org/map/"
     },
     "safetyDeviceFaults": {
       "title": "Kauppamerenkulun väylien turvalaiteviat",
@@ -1035,17 +1051,13 @@
       "title": "Varoituksia merenkulkijoille",
       "url": "https://vayla.fi/palveluntuottajat/ammattimerenkulku/meriliikenteen-hairiot/varoituksia-merenkulkijoille"
     },
-    "baltice": {
-      "title": "Baltice",
-      "url": "https://baltice.org/map/"
+    "restrictedAreas": {
+      "title": "Vesiliikenteen kielto- ja rajoitusalueet",
+      "url": "https://vayla.fi/vaylista/vesivaylat/rajoitusalueet"
     },
     "pookiFeedback": {
       "title": "Vesiväylien palautteet",
       "url": "https://extranet.vayla.fi/pooki_www/palaute"
-    },
-    "timeTravelFinland": {
-      "title": "Aikamatkalla Suomessa",
-      "url": "https://vayla.fi/vaylista/aineistot/kartat/aikamatkalla-suomessa#.XOOasBFlJNs"
     }
   }
 }

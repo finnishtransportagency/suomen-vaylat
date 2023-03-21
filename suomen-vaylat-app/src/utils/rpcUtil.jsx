@@ -169,6 +169,27 @@ export const selectGroup = (store, channel, index, theme, lastSelectedTheme, sel
 };
 
 /**
+* Rearrange object array according to other array.
+* @param {Object} objectArray
+* @param {Array} order
+* @param {String} key
+* @method reArrangeRPCLayerOrder
+*/
+export const reArrangeArray = (objectArray, order, key) => {
+    let arrayForSort = [...objectArray]
+    let sortedArray = arrayForSort.sort( function (a, b) {
+        var A = a[key], B = b[key];
+        
+        if (order.indexOf(A) > order.indexOf(B)) {
+          return 1;
+        } else {
+          return -1;
+        }
+    });
+    return sortedArray;
+}
+
+/**
  * Rearrange RPC layer order.
  * @method reArrangeRPCLayerOrder
  * @param {Object} store
