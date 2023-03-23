@@ -3,7 +3,7 @@ import { ReactReduxContext, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import { setLocale } from '../../state/slices/languageSlice';
 import { changeLayerStyle, reArrangeSelectedMapLayers, setLegends, removeAllSelectedLayers } from '../../state/slices/rpcSlice';
-import {  setIsSideMenuOpen, setSelectedMapLayersMenuTab } from '../../state/slices/uiSlice';
+import {  setIsSideMenuOpen, setIsThemeMenuOpen, setSelectedMapLayersMenuTab } from '../../state/slices/uiSlice';
 import { Logger } from '../../utils/logger';
 import { updateLayers, selectGroup } from '../../utils/rpcUtil';
 
@@ -49,14 +49,14 @@ export const HandleSharedWebSiteLink = () => {
 
     // If theme given then select wanted theme
     if (themeId) {
-        store.dispatch(setIsSideMenuOpen(true));
         const theme = allThemesWithLayers.find(theme => theme.id === parseInt(themeId));
         const themeGroupIndex = allThemesWithLayers.findIndex(theme => theme.id === parseInt(themeId));
 
         if (theme){
-            store.dispatch(setSelectedMapLayersMenuTab(1));
             setTimeout(() => {
                 selectGroup(store, channel, themeGroupIndex, theme, theme, null);
+                store.dispatch(setIsThemeMenuOpen(true));
+
             },700);
         }
     }
