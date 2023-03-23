@@ -451,7 +451,6 @@ export const GFIPopup = ({ handleGfiDownload }) => {
     }, [isGfiToolsOpen, activeSelectionTool]);
 
     useEffect(() => {
-        console.log(gfiLocations)
         const mapResults = gfiLocations.map((location) => {
             location?.content?.features?.length > GFI_MAX_LENGTH && setIsDataTable(true);
             const layers = allLayers.filter(
@@ -967,11 +966,8 @@ export const GFIPopup = ({ handleGfiDownload }) => {
                     speed={300}
                 >
                     {gfiLocations.map((location) => {
-                                                    console.log(location)
-
                             const layers = allLayers.filter(layer => layer.id === location.layerId);
                             const title = layers.length > 0 && layers[0].name;
-                            console.log(title)
                             const tableProps = tablePropsInit(location);
                             if (location.type === 'geojson') {
                                 return (
