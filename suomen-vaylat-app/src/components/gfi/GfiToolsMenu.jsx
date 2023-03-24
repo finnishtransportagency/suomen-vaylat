@@ -649,68 +649,56 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
                         'gfi-selection-tool',
                         true,
                     ]);
+                    //selectedLayers.length = selectedLayers.filter((layer)=> )
                     store.dispatch(setMinimizeGfi(false));
                     store.dispatch(setGeoJsonArray([data]));
                     store.dispatch(setSelectedGfiTool(null));
                     toast.dismiss("measurementToast")
                     store.dispatch(resetGFILocations([]));
-                    let totalLayers  = selectedLayers.length;
-                    data.geojson.features?.forEach(feature => {
+                    const fetchableLayers = selectedLayers.filter((layer) =>  layer.groups?.every((group)=> group !==1));
+                    let numberedLoaderEnables = false; 
+                    if (fetchableLayers.length>3){
+                        numberedLoaderEnables = true;
+                        setNumberedLoader({current: 0, total:  fetchableLayers.length, enabled: true})
+                    }
+                    data.geojson.features?.forEach(async feature => {
                         store.dispatch(setGFICroppingArea(feature));
-                        setNumberedLoader({current: 0, total:  totalLayers })
-                        for(const layer of selectedLayers) {  
-                            channel.getFeaturesByGeoJSON(
-                                [feature, 0, [layer.id]],
-                                (gfiData) => {
-                                    store.dispatch(setVKMData(null));
-                                    channel.postRequest('MapModulePlugin.RemoveMarkersRequest', ["VKM_MARKER"]);
-                                        gfiData?.gfi?.forEach((gfi) => {
-                                            store.dispatch(setGFILocations({
-                                                content: gfi.geojson,
-                                                layerId: gfi.layerId,
-                                                gfiCroppingArea:
-                                                    data.geojson,
-                                                type: 'geojson',
-                                                moreFeatures: gfi.moreFeatures,
-                                                nextStartIndex: gfi.nextStartIndex
-                                            })) 
-                                        });
-                                        setNumberedLoader(prevState => {
-                                            return {current: prevState.current + 1, total: prevState.total}
-                                        })                             
-                                },
-                                function (error) {
-                                    setNumberedLoader(prevState => {
-                                        return {current: prevState.current + 1, total: prevState.total}
-                                    })
-                                    if (error.BODY_SIZE_EXCEEDED_ERROR) {
-                                        store.dispatch(setWarning({
-                                            title: strings.bodySizeWarning,
-                                            subtitle: null,
-                                            cancel: {
-                                                text: strings.general.cancel,
-                                                action: () => {
-                                                    setIsGfiLoading(false);
-                                                    store.dispatch(setWarning(null))
-                                                }
-                                            },
-                                            confirm: {
-                                                text: strings.general.continue,
-                                                action: () => {
-                                                    simplifyGeometry();
-                                                    store.dispatch(setWarning(null));
-                                                }
-                                            },
-                                        }))
-                                    }
+                        let index = 0;
+                        for(const layer of fetchableLayers) {  
+                            await fetchFeaturesSynchronous(feature, layer, data, numberedLoaderEnables)
+                            .then(
+                                index++
+                            ).catch((error) => {
+                                    if (error==='liianiso')
+                                    store.dispatch(setWarning({
+                                        title: strings.bodySizeWarning,
+                                        subtitle: null,
+                                        cancel: {
+                                            text: strings.general.cancel,
+                                            action: () => {
+                                                setIsGfiLoading(false);
+                                                store.dispatch(setWarning(null))
+                                            }
+                                        },
+                                        confirm: {
+                                            text: strings.general.continue,
+                                            action: () => {
+                                                simplifyGeometry();
+                                                store.dispatch(setWarning(null));
+                                            }
+                                        },
+                                    }))
                                 }
                             );
+                            if (fetchableLayers.length === index){
+                                handleGfiToolsMenu();
+                                setIsGfiLoading(false)
+                            }
+
                         } 
                         
+                        
                     }); 
-                    console.info("end of async loop, should manage to make it synchronous")
-                    handleGfiToolsMenu();
-                    setIsGfiLoading(false)
                 }
             }
         })
@@ -719,6 +707,46 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
                         handleGfiToolsMenu();}
     }, [channel])
 
+
+    const fetchFeaturesSynchronous = (feature, layer, data, numberedLoaderEnables) => {
+        return new Promise(function(resolve, reject) {
+            // executor (the producing code, "singer")
+        
+        channel.getFeaturesByGeoJSON(
+            [feature, 0, [layer.id]],
+            (gfiData) => {
+                store.dispatch(setVKMData(null));
+                channel.postRequest('MapModulePlugin.RemoveMarkersRequest', ["VKM_MARKER"]);
+                    gfiData?.gfi?.forEach((gfi) => {
+                        store.dispatch(setGFILocations({
+                            content: gfi.geojson,
+                            layerId: gfi.layerId,
+                            gfiCroppingArea:
+                            data.geojson,
+                            type: 'geojson',
+                            moreFeatures: gfi.moreFeatures,
+                            nextStartIndex: gfi.nextStartIndex
+                        })) 
+                    });
+                    if (numberedLoaderEnables)
+                    setNumberedLoader(prevState => {
+                        return {current: prevState.current + 1, total: prevState.total, enabled: prevState.enabled}
+                    }) 
+                    resolve("ok");                  
+            },
+            function (error) {
+                if (numberedLoaderEnables)
+                setNumberedLoader(prevState => {
+                    return {current: prevState.current + 1, total: prevState.total, enabled: prevState.enabled}
+                })
+                if (error.BODY_SIZE_EXCEEDED_ERROR) {
+                    reject("liianiso");
+                }
+                resolve("ok")
+            }
+        )
+        });
+    }  
 
     useEffect(() => {
         window.localStorage.getItem('geometries') !== null &&
@@ -763,7 +791,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
                     >
                         <StyledLoaderWrapper>
                             <SVLoader />
-                        {numberedLoader && <>Ladataan aineistoa {numberedLoader.current} / {numberedLoader.total} </>}
+                        {numberedLoader &&  numberedLoader.enabled && <>Ladataan aineistoa {numberedLoader.current} / {numberedLoader.total} </>}
                         </StyledLoaderWrapper>
                     </StyledLoadingOverlay>
                 )}

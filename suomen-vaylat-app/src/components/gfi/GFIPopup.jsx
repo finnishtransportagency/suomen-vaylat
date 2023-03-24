@@ -19,7 +19,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { FreeMode, Controller } from 'swiper';
 import { isMobile } from '../../theme/theme';
 import { setIsSaveViewOpen, setMinimizeGfi, setSavedTabIndex, setActiveSelectionTool, setWarning } from '../../state/slices/uiSlice';
-import { resetGFILocations, addFeaturesToGFILocations } from '../../state/slices/rpcSlice';
+import { resetGFILocations, addFeaturesToGFILocations} from '../../state/slices/rpcSlice';
 
 import { FormattedGFI } from './FormattedGFI';
 import GfiTabContent from './GfiTabContent';
@@ -30,6 +30,8 @@ import SVLoader from '../loader/SvLoader';
 import { isValidUrl } from '../../utils/validUrlUtil';
 
 import { SortingMode, PagingPosition } from 'ka-table/enums';
+import SelectedLayersCount from '../menus/selected-layers/SelectedLayersCount';
+import SelectedLayers from '../menus/selected-layers/SelectedLayers';
 
 // Max amount of features that wont trigger react-data-table-component
 const GFI_MAX_LENGTH = 5;
@@ -427,7 +429,7 @@ const StyledLoaderWrapper = styled.div`
 export const GFIPopup = ({ handleGfiDownload }) => {
     const LAYER_ID = 'gfi-result-layer';
     const { store } = useContext(ReactReduxContext);
-    const { channel, allLayers, gfiLocations, vkmData, pointInfoImageError, setPointInfoImageError, gfiCroppingArea } = useAppSelector(state => state.rpc);
+    const { channel, allLayers, gfiLocations, vkmData, pointInfoImageError, setPointInfoImageError, gfiCroppingArea, selectedLayers } = useAppSelector(state => state.rpc);
     const { geoJsonArray } = useAppSelector(
         (state) => state.ui
     );
@@ -601,15 +603,39 @@ export const GFIPopup = ({ handleGfiDownload }) => {
         };
         return tablePropsInit;
     }
+    const handleGfiToolsMenuWithConfirmDialog = () => {
+        if (selectedLayers.length-1 > 10){
+            //delete group 1 taustakartat
+            store.dispatch(setWarning({
+                title: strings.multipleLayersFetchWarning,
+                subtitle: null,
+                cancel: {
+                    text: strings.general.cancel,
+                    action: () => store.dispatch(setWarning(null))
+                },
+                confirm: {
+                    text: strings.general.continue,
+                    action: () => {
+                        store.dispatch(setWarning(null))
+                        handleGfiToolsMenu();
+                    } 
+                },
+            }))
+        }else {
+            handleGfiToolsMenu();
+        }
+          
+    }
 
     const handleGfiToolsMenu = () => {
         setIsGfiDownloadsOpen(false);
         setIsGfiToolsOpen(!isGfiToolsOpen);
+
         channel &&
-            channel.postRequest('DrawTools.StopDrawingRequest', [
-                'gfi-selection-tool',
-                true,
-            ]);
+        channel.postRequest('DrawTools.StopDrawingRequest', [
+            'gfi-selection-tool',
+            true,
+        ]);
 
         isGfiToolsOpen && channel &&
             channel.postRequest('VectorLayerRequest', [
@@ -617,7 +643,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
                     layerId: 'download-tool-layer',
                     remove: true,
                 },
-            ]);
+        ]);
     };
 
     const handleGfiDownloadsMenu = () => {
@@ -1039,7 +1065,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
                     text={strings.gfi.selectLocations}
                     toggleState={isGfiToolsOpen}
                     tooltipDirection={'bottom'}
-                    clickAction={handleGfiToolsMenu}
+                    clickAction={handleGfiToolsMenuWithConfirmDialog}
                 />
                 <CircleButton
                     icon={faFileDownload}
