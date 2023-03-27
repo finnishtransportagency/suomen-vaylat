@@ -446,6 +446,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
         console.log(features)
 
         //Others than drawtools
+        /*
         if (features.data.operation === 'click') {
             if (features.data.features) {
                 Object.values(features.data.features).forEach((feature) => {
@@ -501,20 +502,26 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
                     }
                 });
             }
-        } else if (features.data[0].name === 'DrawingEvent') {
+        }*/
+        if (features.data[0].name === 'DrawingEvent') {
             /*
             TOIMII NYT
+            TODO: YHDISTÄ SAMAN TASON TULOKSET SAMALLE VÄLILEHDELLE
             */
             console.log(features.data[0].geojson.features)
             
             store.dispatch(resetGFILocations([]));
             store.dispatch(setVKMData(null));
             channel.postRequest('MapModulePlugin.RemoveMarkersRequest', ["VKM_MARKER"]);
+            // loopataan jokainen feature eli geometriapalanen
             features.data[0].geojson.features?.forEach(feature => {
                 store.dispatch(setGFICroppingArea(feature));
                 channel.getFeaturesByGeoJSON(
                     [feature],
                     (gfiData) => {
+                        //loopataan ja lisätään data rivi kerrallaan
+                        // TODO kerätään nämä yhteen arrayhyn per taso
+
                             gfiData?.gfi?.forEach((gfi) => {
                                 store.dispatch(
                                     setGFILocations({
@@ -554,17 +561,21 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
                 );
             });
         }  else if (features.data[0].data.geom) {
-            console.log(selectedLayers)
+            //TODO: YHDISTÄ SAMAN TASON TULOKSET SAMALLE VÄLILEHDELLE
+
             store.dispatch(resetGFILocations([]));
             store.dispatch(setVKMData(null));
             channel.postRequest('MapModulePlugin.RemoveMarkersRequest', ["VKM_MARKER"]);
 
+            // loopataan taso kerrallaan
             selectedLayers.forEach((layer) => {
 
                 let content = [];
                 let layerId = [];
                 let gfiCroppingArea = [];
+                //jätetään pois taustakartat (group 1)
                 if (!layer.groups.includes(1)) {
+                    // loopataan feature kerrallaan
                     features.data[0].data.geom.features.forEach(feature => {
                         console.log(feature)
                         store.dispatch(setGFICroppingArea(feature));
@@ -573,13 +584,13 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
                             channel.getFeaturesByGeoJSON(
                                 [feature, 0, [layer.id]],
                                 (gfiData) => {
+                                    // TODO kerätään nämä yhteen arrayhyn per taso
                                     gfiData.gfi &&
                                         gfiData.gfi.forEach((gfi) => {
                                             console.log(gfiLocations)
-                                            
                                             store.dispatch(
                                                 setGFILocations({
-                                                    content: gfi.geojson,
+                                                    content: CONTENT,
                                                     layerId: gfi.layerId,
                                                     gfiCroppingArea:
                                                         features.data.geojson,
