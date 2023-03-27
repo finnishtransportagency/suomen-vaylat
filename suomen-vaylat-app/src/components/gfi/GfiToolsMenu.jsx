@@ -590,7 +590,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
                                             console.log(gfiLocations)
                                             store.dispatch(
                                                 setGFILocations({
-                                                    content: CONTENT,
+                                                    content: gfi.content,
                                                     layerId: gfi.layerId,
                                                     gfiCroppingArea:
                                                         features.data.geojson,
