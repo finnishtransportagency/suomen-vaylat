@@ -399,6 +399,38 @@
     "readMore" : "Läs mer",
     "readLess" : "Mindre",
     "moreInfo": "Mer information:",
+    "themeGroups": {
+      "0": {
+        "title": "Gemensamma kartor",
+        "themes": {
+
+        }
+      },
+      "1": {
+        "title": "Vägnätets kartor",
+        "themes": {
+
+        }
+      },
+      "2": {
+        "title": "Bannätets kartor",
+        "themes": {
+          
+        }
+      },
+      "3": {
+        "title": "Kartor över farleder",
+        "themes": {
+          
+        }
+      },
+      "4": {
+        "title": "Karttjänster på annat håll",
+        "themes": {
+          
+        }
+      }
+    },
     "0": {
       "title": "Projektkarta",
       "description": "På kartan syns Trafikledsverkets investeringsprojekt och projektplaneringsobjekt som är tänkta att genomföras."

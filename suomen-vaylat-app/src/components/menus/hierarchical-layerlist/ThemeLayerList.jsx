@@ -53,6 +53,38 @@ const StyledMasterGroupName = styled.p`
     transition: all 0.1s ease-in;
 `;
 
+const StyledThemeGroup = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: ${props => props.parentId === -1 ? props.theme.colors.mainWhite : "#F2F2F2"};
+    margin: 8px 0px 8px 0px;
+    border-radius: 4px;
+
+    &:last-child {
+        ${props => props.parentId === -1 ? '1px solid '+props.theme.colors.mainColor2 : "none"};
+    };
+`;
+
+const StyledMasterThemeHeader = styled.div`
+    position: sticky;
+    top: -8px;
+    z-index: 1;
+    min-height: 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    background-color: ${props => props.theme.colors.secondaryColor2};
+    border-radius: 4px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    box-shadow: 0px 3px 6px 0px rgba(0,0,0,0.16);
+    @-moz-document url-prefix() {
+        position: initial;
+    };
+`;
+
 const StyledSubthemeName = styled.p`
     user-select: none;
     white-space: nowrap;
@@ -244,6 +276,8 @@ export const ThemeLayerList = ({
 }) => {
 
     const { store } = useContext(ReactReduxContext);
+    const [isOpen, setIsOpen] = useState(null);
+    console.log(isOpen)
 
     const {
         channel,
@@ -253,9 +287,6 @@ export const ThemeLayerList = ({
         currentZoomLevel
     } = useAppSelector((state) => state.rpc);
 
-    const handleSelectGroup = (index, theme) => {
-        selectGroup(store, channel, index, theme, lastSelectedTheme, selectedThemeIndex);
-    };
 
     useEffect(() => {
         if (currentZoomLevel < selectedTheme?.minZoomLevel) store.dispatch(setZoomTo(selectedTheme.minZoomLevel));
@@ -267,30 +298,97 @@ export const ThemeLayerList = ({
         linksArray.push(strings.themeLinks [i]);
     }
 
-    // Required ID order of the the groups
-    const themeOrderById = [0,9,1,100047,2,3,8,4,5,7,6,100046];
-    const sortedArray = reArrangeArray(allThemes, themeOrderById, 'id');
+    var themeGroups = Object.values(strings.themelayerlist.themeGroups)
 
     return (
         <>
-            {sortedArray?.map((theme, index) => {
-                   return <ThemeGroup
-                        key={index}
-                        theme={theme}
-                        layers={allLayers}
-                        index={index}
-                        selectedTheme={selectedTheme}
-                        selectGroup={handleSelectGroup}
-                        selectedThemeIndex={selectedThemeIndex}
-                        isSubtheme={false}
-                    />
-            })}
+            { themeGroups.map((themeGroup, index) => {
+                return (
+                    <>
+                        <StyledThemeGroup
+                            onClick={() => isOpen == index ? setIsOpen(null) : setIsOpen(index)}
+                        >
+                            <StyledMasterThemeHeader>
+                            <StyledMasterGroupName>
+                                { themeGroup.title }
+                            </StyledMasterGroupName>
+                            </StyledMasterThemeHeader>
+                        </StyledThemeGroup>
+                        <StyledLayerGroupContainer
+                            key={'slg_' + index}
+                            initial='hidden'
+                            animate={isOpen == index ? 'visible' : 'hidden'}
+                            variants={listVariants}
+                            transition={{
+                                duration: 0.3,
+                                type: "tween"
+                            }}
+                        >
+                            { themeGroup.themes && Object.values(themeGroup.themes).map((theme, index) => {
+                                return <Theme
+                                    key={index}
+                                    themeLocale={theme}
+                                    allLayers={allLayers}
+                                    allThemes={allThemes}
+                                    index={index}
+                                />
+                            })}
+                            { themeGroup.themeLinks && Object.values(themeGroup.themeLinks).map((themeLink, index) => {
+                                return <ThemeLinkList index={index} link={themeLink}/>
+                            })}
+
+                        </StyledLayerGroupContainer>
+                    </>
+                )
+                })
+            }
             {linksArray.map((link, index) => {
                 return <ThemeLinkList index={index} link={link}/>
             })}
         </>
     );
   };
+
+  export const Theme = ({
+    allLayers,
+    allThemes,
+    themeLocale,
+    index
+}) => {
+    const { store } = useContext(ReactReduxContext);
+    
+    const {
+        channel,
+        selectedTheme,
+        lastSelectedTheme,
+        selectedThemeIndex,
+        currentZoomLevel
+    } = useAppSelector((state) => state.rpc);
+    
+    const handleSelectGroup = (index, theme) => {
+        selectGroup(store, channel, index, theme, lastSelectedTheme, selectedThemeIndex);
+    };
+
+    //const theme = allThemes.filter(theme => theme.id == themeLocale.id).map((theme))
+
+    return (
+        <>
+            { allThemes.filter(theme => theme.id == themeLocale.id).map((theme) => {
+                return <ThemeGroup
+                    key={index}
+                    theme={theme}
+                    layers={allLayers}
+                    index={index}
+                    selectedTheme={selectedTheme}
+                    selectGroup={handleSelectGroup}
+                    selectedThemeIndex={selectedThemeIndex}
+                    isSubtheme={false}
+                />
+            })
+            }
+        </>
+    )
+};
 
 export const ThemeLinkList = ({
     link,

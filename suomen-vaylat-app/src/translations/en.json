@@ -399,6 +399,13 @@
     "readMore" : "Read more",
     "readLess" : "Show less",
     "moreInfo": "Further information:",
+    "themeGroups": {
+      "0": "Yhteiset",
+      "1": "Tieverkko",
+      "2": "Rataverkko",
+      "3": "Vesiväylät",
+      "4": "Karttapalveluita muualla"
+    },
     "0": {
       "title": "Project map",
       "description": "The map shows the agency’s investment projects and the projects at planning stage aimed for implementation."
