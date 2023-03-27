@@ -38,6 +38,8 @@ import SVLoader from '../loader/SvLoader';
 import { DRAWING_TIP_LOCALSTORAGE } from '../../utils/constants';
 import { useAppSelector } from '../../state/hooks';
 
+const BODY_SIZE_EXCEED = "BODY_SIZE_EXCEED";
+const GENERAL_FAIL = "GENERAL_FAIL";
 const vectorLayerId = 'SEARCH_VECTORLAYER';
 
 const StyledGfiToolContainer = styled.div`
@@ -649,7 +651,6 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
                         'gfi-selection-tool',
                         true,
                     ]);
-                    //selectedLayers.length = selectedLayers.filter((layer)=> )
                     store.dispatch(setMinimizeGfi(false));
                     store.dispatch(setGeoJsonArray([data]));
                     store.dispatch(setSelectedGfiTool(null));
@@ -664,39 +665,56 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
                     data.geojson.features?.forEach(async feature => {
                         store.dispatch(setGFICroppingArea(feature));
                         let index = 0;
-                        for(const layer of fetchableLayers) {  
-                            await fetchFeaturesSynchronous(feature, layer, data, numberedLoaderEnables)
-                            .then(
-                                index++
-                            ).catch((error) => {
-                                    if (error==='liianiso')
-                                    store.dispatch(setWarning({
-                                        title: strings.bodySizeWarning,
-                                        subtitle: null,
-                                        cancel: {
-                                            text: strings.general.cancel,
-                                            action: () => {
-                                                setIsGfiLoading(false);
-                                                store.dispatch(setWarning(null))
-                                            }
-                                        },
-                                        confirm: {
-                                            text: strings.general.continue,
-                                            action: () => {
-                                                simplifyGeometry();
-                                                store.dispatch(setWarning(null));
-                                            }
-                                        },
-                                    }))
+                        try {
+                            for(const layer of fetchableLayers) {  
+                                await fetchFeaturesSynchronous(feature, layer, data, numberedLoaderEnables)
+                                .then(
+                                    index++
+                                ).catch((error) => {
+                                        if (error===BODY_SIZE_EXCEED){
+                                            handleGfiToolsMenu();
+                                            setIsGfiLoading(false)
+                                            store.dispatch(setWarning({
+                                                title: strings.bodySizeWarningTemporary,
+                                                subtitle: null,
+                                                cancel: {
+                                                    text: strings.general.cancel,
+                                                    action: () => {
+                                                        setIsGfiLoading(false);
+                                                        store.dispatch(setWarning(null))
+                                                    }
+                                                },
+                                                /*TODO return when simplify geometry feature ready 
+                                                    confirm: {
+                                                    text: strings.general.continue,
+                                                    action: () => {
+                                                        simplifyGeometry();
+                                                        store.dispatch(setWarning(null));
+                                                    }
+                                                },*/
+                                            }))
+                                        
+                                            //throw error to break synchronous loop
+                                            throw new Error(BODY_SIZE_EXCEED);
+                                        }else if (error === GENERAL_FAIL){
+                                            console.info("general fail thrown") 
+                                        }
+                                        handleGfiToolsMenu();
+                                        setIsGfiLoading(false)
+                                    }
+                                );
+                                if (fetchableLayers.length === index){
+                                    handleGfiToolsMenu();
+                                    setIsGfiLoading(false)
                                 }
-                            );
-                            if (fetchableLayers.length === index){
-                                handleGfiToolsMenu();
-                                setIsGfiLoading(false)
-                            }
 
-                        } 
-                        
+                            } 
+                        } catch (error) {
+                            //catch exception, when simplify geometry feature ready, catch BODY_SIZE_EXCEED
+                            //and make simplify and rerun query
+                            handleGfiToolsMenu();
+                            setIsGfiLoading(false)
+                        }
                         
                     }); 
                 }
@@ -710,8 +728,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
 
     const fetchFeaturesSynchronous = (feature, layer, data, numberedLoaderEnables) => {
         return new Promise(function(resolve, reject) {
-            // executor (the producing code, "singer")
-        
+        // executor (the producing code, "singer")
         channel.getFeaturesByGeoJSON(
             [feature, 0, [layer.id]],
             (gfiData) => {
@@ -740,9 +757,29 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
                     return {current: prevState.current + 1, total: prevState.total, enabled: prevState.enabled}
                 })
                 if (error.BODY_SIZE_EXCEEDED_ERROR) {
-                    reject("liianiso");
-                }
-                resolve("ok")
+                     // simplify modal removed for now, uncomment when simplifyGeometry feature ready, make new call after
+                    /*store.dispatch(setWarning({
+                        title: strings.bodySizeWarning,
+                        subtitle: null,
+                        cancel: {
+                            text: strings.general.cancel,
+                            action: () => {
+                                setIsGfiLoading(false);
+                                store.dispatch(setWarning(null))
+                            }
+                        },
+                        confirm: {
+                            text: strings.general.continue,
+                            action: () => {
+                                simplifyGeometry();
+                                store.dispatch(setWarning(null));
+                            }
+                        },
+                    }))
+                    */
+                    reject(BODY_SIZE_EXCEED)
+                }      
+                reject(GENERAL_FAIL)
             }
         )
         });
