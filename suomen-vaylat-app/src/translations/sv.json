@@ -131,7 +131,9 @@
     "OkLowerCaseK": "Ok"
   },
   "multipleLayersWarning": "Du håller på att lägga till minst 10 kartnivåer på kartan och det kan påverka tjänstens prestanda",
+  "multipleLayersFetchWarning": "You are about to fetch data from 10 or more maplayers, it might affect the performance of the service.",
   "bodySizeWarning": "Rajausgeometria on liian suuri, yksinkertaistetaanko geometria? (sv)",
+  "bodySizeWarningTemporary": "Geometry is too big and data cannot be fetched right now.",
   "appGuide": {
     "title": "Användarguide",
     "modalContent": {

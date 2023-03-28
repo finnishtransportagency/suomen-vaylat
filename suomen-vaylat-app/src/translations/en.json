@@ -131,7 +131,9 @@
     "OkLowerCaseK": "Ok"
   },
   "multipleLayersWarning": "You are about to activate 10 or more maplayers and it might affect the performance of the service",
+  "multipleLayersFetchWarning": "You are about to fetch data from 10 or more maplayers, it might affect the performance of the service.",
   "bodySizeWarning": "Geometry is too big, do you want to simplify it?",
+  "bodySizeWarningTemporary": "Geometry is too big and data cannot be fetched right now.",
   "appGuide": {
     "title": "User Guide",
     "modalContent": {
