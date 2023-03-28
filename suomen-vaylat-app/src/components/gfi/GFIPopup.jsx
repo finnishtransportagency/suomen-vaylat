@@ -30,8 +30,6 @@ import SVLoader from '../loader/SvLoader';
 import { isValidUrl } from '../../utils/validUrlUtil';
 
 import { SortingMode, PagingPosition } from 'ka-table/enums';
-import SelectedLayersCount from '../menus/selected-layers/SelectedLayersCount';
-import SelectedLayers from '../menus/selected-layers/SelectedLayers';
 
 // Max amount of features that wont trigger react-data-table-component
 const GFI_MAX_LENGTH = 5;
@@ -604,7 +602,8 @@ export const GFIPopup = ({ handleGfiDownload }) => {
         return tablePropsInit;
     }
     const handleGfiToolsMenuWithConfirmDialog = () => {
-        if (selectedLayers.length-1 > 10){
+        const fetchableLayers = selectedLayers.filter((layer) =>  layer.groups?.every((group)=> group !==1));
+        if (fetchableLayers.length >= 10){
             //delete group 1 taustakartat
             store.dispatch(setWarning({
                 title: strings.multipleLayersFetchWarning,
