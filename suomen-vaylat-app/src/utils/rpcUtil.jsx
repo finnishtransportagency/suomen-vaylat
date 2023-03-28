@@ -4,7 +4,7 @@ import {
     setSelectedLayers,
     setSelectedTheme,
     setLastSelectedTheme,
-    setSelectedThemeIndex,
+    setSelectedThemeId,
     reArrangeSelectedMapLayers,
     setBackgroundMaps,
     setMapLayers,
@@ -72,12 +72,11 @@ export const showNonThemeLayers = (store, channel) => {
  * @method selectGroup
  * @param {Object} store
  * @param {Object} channel
- * @param {Number} index
  * @param {String} theme
  * @param {String} lastSelectedTheme
- * @param {Number} selectedThemeIndex
+ * @param {Number} selectedThemeId
  */
-export const selectGroup = (store, channel, index, theme, lastSelectedTheme, selectedThemeIndex) => {
+export const selectGroup = (store, channel, theme, lastSelectedTheme, selectedThemeId) => {
 
     const closeAllThemeLayers = (theme) => {
         // close all theme layers
@@ -93,10 +92,10 @@ export const selectGroup = (store, channel, index, theme, lastSelectedTheme, sel
     };
     store.dispatch(setLastSelectedTheme(theme));
 
-    if (selectedThemeIndex === null){
+    if (selectedThemeId === null){
         // set selectedLayers opacities to 0 on every layer but theme layers
         store.dispatch(setSelectedTheme(theme));
-        store.dispatch(setSelectedThemeIndex(index));
+        store.dispatch(setSelectedThemeId(theme.id));
         setTimeout(() => {
             if(!isMobile) {
                 store.dispatch(setIsLegendOpen(true));
@@ -123,13 +122,13 @@ export const selectGroup = (store, channel, index, theme, lastSelectedTheme, sel
 
     }
 
-    else if (selectedThemeIndex !== index ){
+    else if (selectedThemeId !== theme.id ){
          // set selectedLayers opacities to 0 on every layer but theme layers
         store.dispatch(setSelectedTheme(theme));
         closeAllThemeLayers(lastSelectedTheme);
         updateLayers(store, channel);
         setTimeout(() => {
-            store.dispatch(setSelectedThemeIndex(index));
+            store.dispatch(setSelectedThemeId(theme.id));
             setTimeout(() => {
                 theme.defaultLayers.forEach(layerId => {
                         channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layerId, true]);
@@ -162,7 +161,7 @@ export const selectGroup = (store, channel, index, theme, lastSelectedTheme, sel
                 store.dispatch(setIsLegendOpen(false));
                 store.dispatch(setIsZoomBarOpen(false));
             }
-            store.dispatch(setSelectedThemeIndex(null));
+            store.dispatch(setSelectedThemeId(null));
             showNonThemeLayers(store, channel);
         },700);
     };
@@ -269,12 +268,12 @@ export const reArrangeSelectedLayersOrder = (selectedLayers, store) => {
  * @param {Number} index
  * @param {String} theme
  * @param {String} lastSelectedTheme
- * @param {Number} selectedThemeIndex
+ * @param {Number} selectedThemeId
  */
-export const resetThemeGroups = (store, channel, index, theme, lastSelectedTheme, selectedThemeIndex) => {
+export const resetThemeGroups = (store, channel, index, theme, lastSelectedTheme, selectedThemeId) => {
     store.dispatch(setSelectedTheme(null));
     store.dispatch(setLastSelectedTheme(null));
-    store.dispatch(setSelectedThemeIndex(null));
+    store.dispatch(setSelectedThemeId(null));
     store.dispatch(setAllSelectedThemeLayers([]));
 };
 
@@ -286,9 +285,9 @@ export const resetThemeGroups = (store, channel, index, theme, lastSelectedTheme
  * @param {Number} index
  * @param {String} theme
  * @param {String} lastSelectedTheme
- * @param {Number} selectedThemeIndex
+ * @param {Number} selectedThemeId
  */
-export const resetThemeGroupsForMainScreen = (store, channel, index, theme, lastSelectedTheme, selectedThemeIndex) => {
+export const resetThemeGroupsForMainScreen = (store, channel, index, theme, lastSelectedTheme, selectedThemeId) => {
     if(theme){
         theme.layers.forEach(layerId => {
             channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layerId, false]);
@@ -297,7 +296,7 @@ export const resetThemeGroupsForMainScreen = (store, channel, index, theme, last
     store.dispatch(setSelectedMapLayersMenuThemeIndex(0));
     store.dispatch(setSelectedTheme(null));
     store.dispatch(setLastSelectedTheme(null));
-    store.dispatch(setSelectedThemeIndex(null));
+    store.dispatch(setSelectedThemeId(null));
 };
 
 /**

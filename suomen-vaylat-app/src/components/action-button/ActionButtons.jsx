@@ -193,7 +193,7 @@ const ActionButtons = ({
         channel,
         selectedTheme,
         lastSelectedTheme,
-        selectedThemeIndex,
+        selectedThemeId,
         gfiLocations
     } = useAppSelector((state) => state.rpc);
     const {
@@ -201,7 +201,7 @@ const ActionButtons = ({
     } = useAppSelector((state) => state.ui);
 
     const handleSelectGroup = (index, theme) => {
-        selectGroup(store, channel, index, theme, lastSelectedTheme, selectedThemeIndex);
+        selectGroup(store, channel, index, theme, lastSelectedTheme, selectedThemeId);
     };
     
     const handleShowGeometry = () => {
@@ -297,7 +297,7 @@ const ActionButtons = ({
                                 <StyledRightContent>
                                     <ThemeGroupShareButton themeId={selectedTheme && selectedTheme.id}/>
                                         <StyledActionButtonClose
-                                            onClick={() => handleSelectGroup(selectedThemeIndex, selectedTheme)}
+                                            onClick={() => handleSelectGroup(selectedThemeId, selectedTheme)}
                                         >
                                             <FontAwesomeIcon
                                                 icon={faTimes}

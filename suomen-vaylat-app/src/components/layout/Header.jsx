@@ -154,14 +154,14 @@ export const Header = () => {
         channel,
         selectedLayers,
         lastSelectedTheme,
-        selectedThemeIndex,
+        selectedThemeId,
         startState
     } = useAppSelector((state) => state.rpc);
 
     const { isInfoOpen, isUserGuideOpen, activeTool, activeGeometries } = useAppSelector(state => state.ui);
 
     const handleSelectGroup = (index, theme) => {
-        resetThemeGroupsForMainScreen(store, channel, index, theme, lastSelectedTheme, selectedThemeIndex);
+        resetThemeGroupsForMainScreen(store, channel, index, theme, lastSelectedTheme, selectedThemeId);
     };
 
     const setToMainScreen = () => {

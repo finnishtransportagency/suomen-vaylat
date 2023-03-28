@@ -1,5 +1,5 @@
 import { useContext, useState, useEffect } from 'react';
-import { faMap, faExternalLinkAlt, faLink } from '@fortawesome/free-solid-svg-icons';
+import { faMap, faExternalLinkAlt, faLink, faAngleDown } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ReactReduxContext } from 'react-redux';
 import { motion } from 'framer-motion';
@@ -31,9 +31,8 @@ const StyledLayerGroups = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: center;
-    background-color: ${props => props.theme.colors.mainWhite};
     margin: 8px 0px 8px 0px;
-    padding: 0px 8px;
+    padding: 0px 16px;
     &:last-child {
         ${props => props.parentId === -1 ? '1px solid '+props.theme.colors.mainColor2 : 'none'};
     };
@@ -57,7 +56,6 @@ const StyledThemeGroup = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: center;
-    background-color: ${props => props.parentId === -1 ? props.theme.colors.mainWhite : "#F2F2F2"};
     margin: 8px 0px 8px 0px;
     border-radius: 4px;
 
@@ -68,6 +66,8 @@ const StyledThemeGroup = styled.div`
 
 const StyledMasterThemeHeader = styled.div`
     position: sticky;
+    padding: 0 16px 0 16px;
+    margin: 0px 8px 0px 8px;
     top: -8px;
     z-index: 1;
     min-height: 48px;
@@ -213,7 +213,11 @@ const StyledReadMoreButton = styled.button`
 `;
 
 const StyledLayerGroupContainer = styled(motion.div)`
-    overflow: hidden;
+    overflow: auto;
+`;
+
+const StyledInfoHeaderIconContainer = styled(motion.div)`
+    color: ${props => props.theme.colors.mainWhite};
 `;
 
 const StyledLayerGroupImage = styled.img`
@@ -277,13 +281,9 @@ export const ThemeLayerList = ({
 
     const { store } = useContext(ReactReduxContext);
     const [isOpen, setIsOpen] = useState(null);
-    console.log(isOpen)
 
     const {
-        channel,
         selectedTheme,
-        lastSelectedTheme,
-        selectedThemeIndex,
         currentZoomLevel
     } = useAppSelector((state) => state.rpc);
 
@@ -309,9 +309,20 @@ export const ThemeLayerList = ({
                             onClick={() => isOpen == index ? setIsOpen(null) : setIsOpen(index)}
                         >
                             <StyledMasterThemeHeader>
-                            <StyledMasterGroupName>
-                                { themeGroup.title }
-                            </StyledMasterGroupName>
+                                <StyledMasterGroupName>
+                                    { themeGroup.title }
+                                </StyledMasterGroupName>
+                                <StyledInfoHeaderIconContainer
+                                    animate={{
+                                        transform: isOpen == index
+                                            ? 'rotate(180deg)'
+                                            : 'rotate(0deg)',
+                                    }}
+                                >
+                                    <FontAwesomeIcon
+                                        icon={faAngleDown}
+                                    />
+                                </StyledInfoHeaderIconContainer>
                             </StyledMasterThemeHeader>
                         </StyledThemeGroup>
                         <StyledLayerGroupContainer
@@ -325,7 +336,7 @@ export const ThemeLayerList = ({
                             }}
                         >
                             { themeGroup.themes && Object.values(themeGroup.themes).map((theme, index) => {
-                                return <Theme
+                                return <Themes
                                     key={index}
                                     themeLocale={theme}
                                     allLayers={allLayers}
@@ -342,14 +353,11 @@ export const ThemeLayerList = ({
                 )
                 })
             }
-            {linksArray.map((link, index) => {
-                return <ThemeLinkList index={index} link={link}/>
-            })}
         </>
     );
   };
 
-  export const Theme = ({
+  export const Themes = ({
     allLayers,
     allThemes,
     themeLocale,
@@ -361,15 +369,12 @@ export const ThemeLayerList = ({
         channel,
         selectedTheme,
         lastSelectedTheme,
-        selectedThemeIndex,
-        currentZoomLevel
+        selectedThemeId,
     } = useAppSelector((state) => state.rpc);
     
-    const handleSelectGroup = (index, theme) => {
-        selectGroup(store, channel, index, theme, lastSelectedTheme, selectedThemeIndex);
+    const handleSelectGroup = (theme) => {
+        selectGroup(store, channel, theme, lastSelectedTheme, selectedThemeId);
     };
-
-    //const theme = allThemes.filter(theme => theme.id == themeLocale.id).map((theme))
 
     return (
         <>
@@ -381,7 +386,7 @@ export const ThemeLayerList = ({
                     index={index}
                     selectedTheme={selectedTheme}
                     selectGroup={handleSelectGroup}
-                    selectedThemeIndex={selectedThemeIndex}
+                    selectedThemeId={selectedThemeId}
                     isSubtheme={false}
                 />
             })
@@ -429,7 +434,7 @@ export const ThemeGroup = ({
     theme,
     layers,
     index,
-    selectedThemeIndex,
+    selectedThemeId,
     selectGroup,
     isSubtheme
 }) => {
@@ -461,7 +466,7 @@ export const ThemeGroup = ({
     }
 
     var filteredLayers = layers.filter(layer => theme.layers.includes(layer.id));
-    const isOpen = isSubtheme ? subthemeIsOpen : selectedThemeIndex === index;
+    const isOpen = isSubtheme ? subthemeIsOpen : selectedThemeId === theme.id;
 
     return (
         <StyledLayerGroups index={index}>
@@ -469,7 +474,7 @@ export const ThemeGroup = ({
                 <StyledMasterGroupHeader
                     key={'smgh_' + theme.id}
                     onClick={() => {
-                        selectGroup(index, theme);
+                        selectGroup(theme);
                     }}
                     isOpen={isOpen}
                 >
@@ -574,7 +579,7 @@ export const ThemeGroup = ({
                                 layers={layers}
                                 index={index}
                                 selectGroup={selectGroup}
-                                selectedThemeIndex={selectedThemeIndex}
+                                selectedThemeId={selectedThemeId}
                                 isSubtheme={true}
                             />
                         );
