@@ -518,6 +518,47 @@ export const ThemeGroup = ({
                 </StyledSubthemeHeader>
             }
 
+            
+                    { !isOpen && themeGroupIndex != undefined && strings.themelayerlist.themeGroups[themeGroupIndex].themes.hasOwnProperty(theme.id) && strings.themelayerlist.themeGroups[themeGroupIndex].themes[theme.id].title !== null &&
+                        <StyledSubHeader>{strings.themelayerlist.themeGroups[themeGroupIndex].themes[theme.id].title}</StyledSubHeader>
+                    }
+
+                    {
+                        !isOpen && themeGroupIndex != undefined && strings.themelayerlist.themeGroups[themeGroupIndex].themes.hasOwnProperty(theme.id) && strings.themelayerlist.themeGroups[themeGroupIndex].themes[theme.id].description !== null &&
+                        <StyledThemeContent>
+                            {
+                                isExcerptOpen ?
+                                <div>
+                                    <StyledSubText>
+                                        {strings.themelayerlist.themeGroups[themeGroupIndex].themes[theme.id].description} 
+                                    </StyledSubText>
+                                    {
+                                        strings.themelayerlist.themeGroups[themeGroupIndex].themes[theme.id].links &&
+                                        <>
+                                            <StyledMoreInfo>{strings.themelayerlist.moreInfo}</StyledMoreInfo>
+                                            <ul>
+                                                {Object.values(strings.themelayerlist.themeGroups[themeGroupIndex].themes[theme.id].links).map((link, i) => {
+                                                    return(
+                                                        <li>
+                                                            <StyledLinkText rel="noreferrer" target="_blank" href={link} key={i}>{link}</StyledLinkText>
+                                                        </li> 
+                                                    )
+                                                })}
+                                            </ul>
+                                        </>
+                                    }
+                                    {
+                                        <StyledReadMoreButton onClick={() => setIsExcerptOpen(!isExcerptOpen)}> {strings.themelayerlist.readLess} </StyledReadMoreButton>
+                                    }
+                                </div> 
+                                :
+                                <StyledSubText>
+                                    {truncatedString(strings.themelayerlist.themeGroups[themeGroupIndex].themes[theme.id].description, 135, strings.themelayerlist.readMore)}
+                                </StyledSubText>
+                            }
+                        </StyledThemeContent>
+                    }
+
 
             <StyledLayerGroupContainer
                 key={'slg_' + index}
