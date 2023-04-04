@@ -302,11 +302,11 @@ export const ThemeLayerList = ({
 
     return (
         <>
-            { themeGroups.map((themeGroup, index) => {
+            { themeGroups.map((themeGroup, themeGroupIndex) => {
                 return (
                     <>
                         <StyledThemeGroup
-                            onClick={() => isOpen == index ? setIsOpen(null) : setIsOpen(index)}
+                            onClick={() => isOpen == themeGroupIndex ? setIsOpen(null) : setIsOpen(themeGroupIndex)}
                         >
                             <StyledMasterThemeHeader>
                                 <StyledMasterGroupName>
@@ -314,7 +314,7 @@ export const ThemeLayerList = ({
                                 </StyledMasterGroupName>
                                 <StyledInfoHeaderIconContainer
                                     animate={{
-                                        transform: isOpen == index
+                                        transform: isOpen == themeGroupIndex
                                             ? 'rotate(180deg)'
                                             : 'rotate(0deg)',
                                     }}
@@ -326,9 +326,9 @@ export const ThemeLayerList = ({
                             </StyledMasterThemeHeader>
                         </StyledThemeGroup>
                         <StyledLayerGroupContainer
-                            key={'slg_' + index}
+                            key={'slg_' + themeGroupIndex}
                             initial='hidden'
-                            animate={isOpen == index ? 'visible' : 'hidden'}
+                            animate={isOpen == themeGroupIndex ? 'visible' : 'hidden'}
                             variants={listVariants}
                             transition={{
                                 duration: 0.3,
@@ -337,6 +337,7 @@ export const ThemeLayerList = ({
                         >
                             { themeGroup.themes && Object.values(themeGroup.themes).map((theme, index) => {
                                 return <Themes
+                                    themeGroupIndex={themeGroupIndex}
                                     key={index}
                                     themeLocale={theme}
                                     allLayers={allLayers}
@@ -358,6 +359,7 @@ export const ThemeLayerList = ({
   };
 
   export const Themes = ({
+    themeGroupIndex,
     allLayers,
     allThemes,
     themeLocale,
@@ -381,6 +383,7 @@ export const ThemeLayerList = ({
             { allThemes.filter(theme => theme.id == themeLocale.id).map((theme) => {
                 return <ThemeGroup
                     key={index}
+                    themeGroupIndex={themeGroupIndex}
                     theme={theme}
                     layers={allLayers}
                     index={index}
@@ -432,6 +435,7 @@ export const ThemeLinkList = ({
 
 export const ThemeGroup = ({
     theme,
+    themeGroupIndex,
     layers,
     index,
     selectedThemeId,
@@ -527,25 +531,25 @@ export const ThemeGroup = ({
             >
                 <div>
                     {themeImages[theme.id] && <StyledLayerGroupImage src={themeImages[theme.id]} alt=''/>}
-                    {strings.themelayerlist.hasOwnProperty(theme.id) && strings.themelayerlist[theme.id].title !== null &&
-                        <StyledSubHeader>{strings.themelayerlist[theme.id].title}</StyledSubHeader>
+                    {themeGroupIndex != undefined && strings.themelayerlist.themeGroups[themeGroupIndex].themes.hasOwnProperty(theme.id) && strings.themelayerlist.themeGroups[themeGroupIndex].themes[theme.id].title !== null &&
+                        <StyledSubHeader>{strings.themelayerlist.themeGroups[themeGroupIndex].themes[theme.id].title}</StyledSubHeader>
                     }
 
                     {
-                        strings.themelayerlist.hasOwnProperty(theme.id) && strings.themelayerlist[theme.id].description !== null &&
+                        themeGroupIndex != undefined && strings.themelayerlist.themeGroups[themeGroupIndex].themes.hasOwnProperty(theme.id) && strings.themelayerlist.themeGroups[themeGroupIndex].themes[theme.id].description !== null &&
                         <StyledThemeContent>
                             {
                                 isExcerptOpen ?
                                 <div>
                                     <StyledSubText>
-                                        {strings.themelayerlist[theme.id].description} 
+                                        {strings.themelayerlist.themeGroups[themeGroupIndex].themes[theme.id].description} 
                                     </StyledSubText>
                                     {
-                                        strings.themelayerlist[theme.id].links &&
+                                        strings.themelayerlist.themeGroups[themeGroupIndex].themes[theme.id].links &&
                                         <>
                                             <StyledMoreInfo>{strings.themelayerlist.moreInfo}</StyledMoreInfo>
                                             <ul>
-                                                {Object.values(strings.themelayerlist[theme.id].links).map((link, i) => {
+                                                {Object.values(strings.themelayerlist.themeGroups[themeGroupIndex].themes[theme.id].links).map((link, i) => {
                                                     return(
                                                         <li>
                                                             <StyledLinkText rel="noreferrer" target="_blank" href={link} key={i}>{link}</StyledLinkText>
@@ -561,7 +565,7 @@ export const ThemeGroup = ({
                                 </div> 
                                 :
                                 <StyledSubText>
-                                    {truncatedString(strings.themelayerlist[theme.id].description, 135, strings.themelayerlist.readMore)}
+                                    {truncatedString(strings.themelayerlist.themeGroups[themeGroupIndex].themes[theme.id].description, 135, strings.themelayerlist.readMore)}
                                 </StyledSubText>
                             }
                         </StyledThemeContent>

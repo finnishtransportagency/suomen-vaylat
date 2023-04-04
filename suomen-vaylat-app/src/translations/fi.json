@@ -509,16 +509,6 @@
             "url": "https://extranet.vayla.fi/pooki_www/palaute"
           }
         }
-      },
-      "4": {
-        "title": "Karttapalveluita muualla",
-        "themes": {
-          "5": {
-            "id": 5,
-            "title": "TEN-T verkosto",
-            "description": "TEN-T-verkosto koostuu kahdesta tasosta: vuoteen 2030 mennessä rakennettavasta ydinverkosta (core network) ja vuoteen 2050 mennessä rakennettavasta kattavasta verkosta (comprehensive network). TEN-T ydinverkko keskittyy tärkeimpiin yhteyksiin ja solmukohtiin. Ydinverkon toteuttamista edistää käytäviin perustuva lähestymistapa. TEN-T-verkko kattaa kaikki liikennemuodot: maantie-, ilma-, sisävesi-, meri- sekä liikennemuotojen yhdistelyn mahdollistavat alustat."
-          }
-        }
       }
     }
   },
