@@ -1,5 +1,5 @@
 import { useContext, useState, useEffect } from 'react';
-import { faMap, faExternalLinkAlt, faLink, faAngleDown } from '@fortawesome/free-solid-svg-icons';
+import { faMap, faExternalLinkAlt, faLink, faAngleDown, faRoad, faShip, faTrain } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ReactReduxContext } from 'react-redux';
 import { motion } from 'framer-motion';
@@ -282,6 +282,7 @@ const StyledMoreInfo = styled.span`
 `;
 
 const StyledMasterGroupHeaderIconLetter = styled.div`
+    width: 25px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -304,6 +305,18 @@ const themeImages = {
     3: tienumerokartta,
     4: kuntokartta
 
+};
+
+const mainThemeImages = {
+    3: {
+        icon: faShip
+    },
+    2: {
+        icon: faTrain
+    },
+    1: {
+        icon: faRoad
+    }
 };
 
 export const ThemeLayerList = ({
@@ -342,7 +355,12 @@ export const ThemeLayerList = ({
                         >
                             <StyledMasterThemeHeader>
                                     <StyledMasterGroupHeaderIconLetter>
-                                        <p>{ themeGroup.title.charAt(0).toUpperCase() }</p>
+                                        {
+                                            mainThemeImages.hasOwnProperty(themeGroup.id) ?
+                                            <FontAwesomeIcon
+                                                icon={mainThemeImages[themeGroup.id].icon}
+                                            /> : <p>{ themeGroup.title.charAt(0).toUpperCase() }</p>
+                                        }
                                     </StyledMasterGroupHeaderIconLetter>
                                     <StyledMasterGroupName>
                                         { themeGroup.title }

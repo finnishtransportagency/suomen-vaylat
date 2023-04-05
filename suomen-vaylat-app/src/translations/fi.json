@@ -403,6 +403,7 @@
     "moreInfo": "Lisätietoja:",
     "themeGroups": {
       "0": {
+        "id": 0,
         "title": "Yhteiset",
         "themes": {
           "0": {
@@ -419,6 +420,7 @@
         }
       },
       "1": {
+        "id": 1,
         "title": "Tieverkko",
         "themes": {
           "1": {
@@ -465,6 +467,7 @@
         }
       },
       "2": {
+        "id": 2,
         "title": "Rataverkko",
         "themes": {
           "4": {
@@ -493,6 +496,7 @@
         }
       },
       "3": {
+        "id": 3,
         "title": "Vesiväylät",
         "themeLinks": {
           "baltice": {
