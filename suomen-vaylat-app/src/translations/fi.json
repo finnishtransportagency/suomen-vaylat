@@ -440,6 +440,21 @@
             "id": 8,
             "title": "Tiestötiedot lupapalveluun",
             "description": "Karttapalvelun avulla johtojen ja kaapeleiden ilmoitusmenettelyn edellyttämiä tieosoitteita ja tiestötietoja voidaan tarkastella sijaintipaikan osalata ennen ilmoituksen jättämistä. Lisäksi palvelussa esitetään muita tiestön perustietoja, jotka auttavat työn suunnittelussa."
+          },
+          "100105": {
+            "id": 100105,
+            "title": "Yksityistiekartta",
+            "description": ""
+          },
+          "100106": {
+            "id": 100106,
+            "title": "Tieliikenteen liikennemäärät",
+            "description": ""
+          },
+          "100107": {
+            "id": 100107,
+            "title": "Korjausvelkakartta",
+            "description": ""
           }
         },
         "themeLinks": {
@@ -474,16 +489,6 @@
             "links": {
               "0": "https://vayla.fi/kunnossapito/tieverkon-kunnossapito/talvihoito"
             }
-          },
-          "100046": {
-            "id": 100046,
-            "title": "Yksityistiekartta",
-            "description": ""
-          },
-          "100047": {
-            "id": 100047,
-            "title": "Tieliikenteen liikennemäärät",
-            "description": ""
           }
         }
       },

@@ -366,7 +366,6 @@ export const ThemeLayerList = ({
     index
 }) => {
     const { store } = useContext(ReactReduxContext);
-    
     const {
         channel,
         selectedTheme,
@@ -519,12 +518,12 @@ export const ThemeGroup = ({
             }
 
             
-                    { !isOpen && themeGroupIndex != undefined && strings.themelayerlist.themeGroups[themeGroupIndex].themes.hasOwnProperty(theme.id) && strings.themelayerlist.themeGroups[themeGroupIndex].themes[theme.id].title !== null &&
+                    { !isOpen && themeGroupIndex != undefined && strings.themelayerlist.themeGroups[themeGroupIndex].themes.hasOwnProperty(theme.id) && strings.themelayerlist.themeGroups[themeGroupIndex].themes[theme.id].description !== null && strings.themelayerlist.themeGroups[themeGroupIndex].themes[theme.id].description.length > 0 && strings.themelayerlist.themeGroups[themeGroupIndex].themes[theme.id].title !== null &&
                         <StyledSubHeader>{strings.themelayerlist.themeGroups[themeGroupIndex].themes[theme.id].title}</StyledSubHeader>
                     }
 
                     {
-                        !isOpen && themeGroupIndex != undefined && strings.themelayerlist.themeGroups[themeGroupIndex].themes.hasOwnProperty(theme.id) && strings.themelayerlist.themeGroups[themeGroupIndex].themes[theme.id].description !== null &&
+                        !isOpen && themeGroupIndex != undefined && strings.themelayerlist.themeGroups[themeGroupIndex].themes.hasOwnProperty(theme.id) && strings.themelayerlist.themeGroups[themeGroupIndex].themes[theme.id].description !== null && strings.themelayerlist.themeGroups[themeGroupIndex].themes[theme.id].description.length > 0 && 
                         <StyledThemeContent>
                             {
                                 isExcerptOpen ?
