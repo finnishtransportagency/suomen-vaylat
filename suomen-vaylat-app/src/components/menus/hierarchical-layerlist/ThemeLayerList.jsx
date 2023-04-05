@@ -47,7 +47,22 @@ const StyledMasterGroupName = styled.p`
     color: ${props => props.theme.colors.mainWhite};
     margin: 0;
     padding: 0px;
-    font-size: 14px;
+    font-size: 16px;
+    font-weight: 600;
+    transition: all 0.1s ease-in;
+`;
+
+
+const StyledLinkName = styled.p`
+    user-select: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 200px;
+    color: ${props => props.theme.colors.mainWhite};
+    margin: 0;
+    padding: 0px;
+    font-size: 16px;
     font-weight: 600;
     transition: all 0.1s ease-in;
 `;
@@ -75,7 +90,7 @@ const StyledMasterThemeHeader = styled.div`
     justify-content: space-between;
     align-items: center;
     cursor: pointer;
-    background-color: ${props => props.theme.colors.secondaryColor2};
+    background-color: #1a5e34;
     border-radius: 4px;
     padding-top: 8px;
     padding-bottom: 8px;
@@ -142,6 +157,7 @@ const StyledLeftContent = styled.div`
 `;
 
 const StyledSubthemeLeftContent = styled.div`
+    max-width: 200px;
     display: flex;
     align-items: center;
     margin-left: 10px;
@@ -246,7 +262,7 @@ const StyledSubHeader = styled.h6`
 
 const StyledThemeContent = styled.div`
     margin: 0px;
-    padding: 0px 8px 8px 8px;
+    padding: 8px 8px 8px 8px;
     font-size: 14px;
     font-weight: 400;
 `;
@@ -263,6 +279,22 @@ const StyledLinkText = styled.a`
 const StyledMoreInfo = styled.span`
     display: block;
     margin: 10px 0px;
+`;
+
+const StyledMasterGroupHeaderIconLetter = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    svg {
+        font-size: 20px;
+        color: ${props => props.theme.colors.mainWhite};
+    };
+    p {
+        margin: 0;
+        font-weight: bold;
+        font-size: 22px;
+        color: ${props => props.theme.colors.mainWhite};
+    }
 `;
 
 const themeImages = {
@@ -309,9 +341,12 @@ export const ThemeLayerList = ({
                             onClick={() => isOpen == themeGroupIndex ? setIsOpen(null) : setIsOpen(themeGroupIndex)}
                         >
                             <StyledMasterThemeHeader>
-                                <StyledMasterGroupName>
-                                    { themeGroup.title }
-                                </StyledMasterGroupName>
+                                    <StyledMasterGroupHeaderIconLetter>
+                                        <p>{ themeGroup.title.charAt(0).toUpperCase() }</p>
+                                    </StyledMasterGroupHeaderIconLetter>
+                                    <StyledMasterGroupName>
+                                        { themeGroup.title }
+                                    </StyledMasterGroupName>
                                 <StyledInfoHeaderIconContainer
                                     animate={{
                                         transform: isOpen == themeGroupIndex
@@ -417,7 +452,7 @@ export const ThemeLinkList = ({
                                 icon={faLink}
                             />
                         </StyledMasterGroupHeaderIcon>
-                        <StyledMasterGroupName>{link.title}</StyledMasterGroupName>
+                        <StyledLinkName>{link.title}</StyledLinkName>
                     </StyledLeftContent>
                     <StyledRightContent>
                         <StyledMasterGroupLinkIcon>
@@ -432,6 +467,55 @@ export const ThemeLinkList = ({
     );
 };
 
+export const ThemeDesc = ({
+    theme,
+    themeGroupIndex
+}) => {
+    const [isExcerptOpen, setIsExcerptOpen] = useState(false);
+
+    const truncatedString = (string, characterAmount, text) => {
+        return (
+            string.length > characterAmount + 20 ? <>{string.substring(0, characterAmount) + '...'} <StyledReadMoreButton
+                onClick={() => setIsExcerptOpen(!isExcerptOpen)}>{text}</StyledReadMoreButton></> : string
+        )
+    }
+
+    return (
+        <StyledThemeContent>
+            {
+                isExcerptOpen ?
+                <div>
+                    <StyledSubText>
+                        {strings.themelayerlist.themeGroups[themeGroupIndex].themes[theme.id].description} 
+                    </StyledSubText>
+                    {
+                        strings.themelayerlist.themeGroups[themeGroupIndex].themes[theme.id].links &&
+                        <>
+                            <StyledMoreInfo>{strings.themelayerlist.moreInfo}</StyledMoreInfo>
+                            <ul>
+                                {Object.values(strings.themelayerlist.themeGroups[themeGroupIndex].themes[theme.id].links).map((link, i) => {
+                                    return(
+                                        <li>
+                                            <StyledLinkText rel="noreferrer" target="_blank" href={link} key={i}>{link}</StyledLinkText>
+                                        </li> 
+                                    )
+                                })}
+                            </ul>
+                        </>
+                    }
+                    {
+                        <StyledReadMoreButton onClick={() => setIsExcerptOpen(!isExcerptOpen)}> {strings.themelayerlist.readLess} </StyledReadMoreButton>
+                    }
+                </div> 
+                :
+                <StyledSubText>
+                    {truncatedString(strings.themelayerlist.themeGroups[themeGroupIndex].themes[theme.id].description, 135, strings.themelayerlist.readMore)}
+                </StyledSubText>
+            }
+        </StyledThemeContent>
+    );
+};
+
 export const ThemeGroup = ({
     theme,
     themeGroupIndex,
@@ -443,7 +527,6 @@ export const ThemeGroup = ({
 }) => {
     const [subthemeIsOpen, setSubthemeIsOpen] = useState(false);
     const [totalGroupLayersCount, setTotalGroupLayersCount] = useState(0);
-    const [isExcerptOpen, setIsExcerptOpen] = useState(false);
     const [totalVisibleGroupLayersCount, setTotalVisibleGroupLayersCount] = useState(0);
 
     useEffect(() => {      
@@ -460,13 +543,6 @@ export const ThemeGroup = ({
         };
         layersCounter(theme);
     },[theme, layers]);
-
-    const truncatedString = (string, characterAmount, text) => {
-        return (
-            string.length > characterAmount + 20 ? <>{string.substring(0, characterAmount) + '...'} <StyledReadMoreButton
-                onClick={() => setIsExcerptOpen(!isExcerptOpen)}>{text}</StyledReadMoreButton></> : string
-        )
-    }
 
     var filteredLayers = layers.filter(layer => theme.layers.includes(layer.id));
     const isOpen = isSubtheme ? subthemeIsOpen : selectedThemeId === theme.id;
@@ -513,49 +589,27 @@ export const ThemeGroup = ({
                                 totalVisibleGroupLayersCount +" / "+ totalGroupLayersCount
                             }
                         </StyledSubGroupLayersCount>
+                        <StyledInfoHeaderIconContainer
+                                    animate={{
+                                        transform: isOpen
+                                            ? 'rotate(180deg)'
+                                            : 'rotate(0deg)',
+                                    }}
+                                    style={{marginLeft: '10px'}}
+                                >
+                                    <FontAwesomeIcon
+                                        icon={faAngleDown}
+                                    />
+                                </StyledInfoHeaderIconContainer>
                     </StyledSubthemeRightContent>
                 </StyledSubthemeHeader>
             }
-
-            
-                    { !isOpen && themeGroupIndex != undefined && strings.themelayerlist.themeGroups[themeGroupIndex].themes.hasOwnProperty(theme.id) && strings.themelayerlist.themeGroups[themeGroupIndex].themes[theme.id].description !== null && strings.themelayerlist.themeGroups[themeGroupIndex].themes[theme.id].description.length > 0 && strings.themelayerlist.themeGroups[themeGroupIndex].themes[theme.id].title !== null &&
-                        <StyledSubHeader>{strings.themelayerlist.themeGroups[themeGroupIndex].themes[theme.id].title}</StyledSubHeader>
-                    }
-
                     {
                         !isOpen && themeGroupIndex != undefined && strings.themelayerlist.themeGroups[themeGroupIndex].themes.hasOwnProperty(theme.id) && strings.themelayerlist.themeGroups[themeGroupIndex].themes[theme.id].description !== null && strings.themelayerlist.themeGroups[themeGroupIndex].themes[theme.id].description.length > 0 && 
-                        <StyledThemeContent>
-                            {
-                                isExcerptOpen ?
-                                <div>
-                                    <StyledSubText>
-                                        {strings.themelayerlist.themeGroups[themeGroupIndex].themes[theme.id].description} 
-                                    </StyledSubText>
-                                    {
-                                        strings.themelayerlist.themeGroups[themeGroupIndex].themes[theme.id].links &&
-                                        <>
-                                            <StyledMoreInfo>{strings.themelayerlist.moreInfo}</StyledMoreInfo>
-                                            <ul>
-                                                {Object.values(strings.themelayerlist.themeGroups[themeGroupIndex].themes[theme.id].links).map((link, i) => {
-                                                    return(
-                                                        <li>
-                                                            <StyledLinkText rel="noreferrer" target="_blank" href={link} key={i}>{link}</StyledLinkText>
-                                                        </li> 
-                                                    )
-                                                })}
-                                            </ul>
-                                        </>
-                                    }
-                                    {
-                                        <StyledReadMoreButton onClick={() => setIsExcerptOpen(!isExcerptOpen)}> {strings.themelayerlist.readLess} </StyledReadMoreButton>
-                                    }
-                                </div> 
-                                :
-                                <StyledSubText>
-                                    {truncatedString(strings.themelayerlist.themeGroups[themeGroupIndex].themes[theme.id].description, 135, strings.themelayerlist.readMore)}
-                                </StyledSubText>
-                            }
-                        </StyledThemeContent>
+                            <ThemeDesc
+                                theme={theme}
+                                themeGroupIndex={themeGroupIndex}
+                            />
                     }
 
 
@@ -571,44 +625,13 @@ export const ThemeGroup = ({
             >
                 <div>
                     {themeImages[theme.id] && <StyledLayerGroupImage src={themeImages[theme.id]} alt=''/>}
-                    {themeGroupIndex != undefined && strings.themelayerlist.themeGroups[themeGroupIndex].themes.hasOwnProperty(theme.id) && strings.themelayerlist.themeGroups[themeGroupIndex].themes[theme.id].title !== null &&
-                        <StyledSubHeader>{strings.themelayerlist.themeGroups[themeGroupIndex].themes[theme.id].title}</StyledSubHeader>
-                    }
 
                     {
                         themeGroupIndex != undefined && strings.themelayerlist.themeGroups[themeGroupIndex].themes.hasOwnProperty(theme.id) && strings.themelayerlist.themeGroups[themeGroupIndex].themes[theme.id].description !== null &&
-                        <StyledThemeContent>
-                            {
-                                isExcerptOpen ?
-                                <div>
-                                    <StyledSubText>
-                                        {strings.themelayerlist.themeGroups[themeGroupIndex].themes[theme.id].description} 
-                                    </StyledSubText>
-                                    {
-                                        strings.themelayerlist.themeGroups[themeGroupIndex].themes[theme.id].links &&
-                                        <>
-                                            <StyledMoreInfo>{strings.themelayerlist.moreInfo}</StyledMoreInfo>
-                                            <ul>
-                                                {Object.values(strings.themelayerlist.themeGroups[themeGroupIndex].themes[theme.id].links).map((link, i) => {
-                                                    return(
-                                                        <li>
-                                                            <StyledLinkText rel="noreferrer" target="_blank" href={link} key={i}>{link}</StyledLinkText>
-                                                        </li> 
-                                                    )
-                                                })}
-                                            </ul>
-                                        </>
-                                    }
-                                    {
-                                        <StyledReadMoreButton onClick={() => setIsExcerptOpen(!isExcerptOpen)}> {strings.themelayerlist.readLess} </StyledReadMoreButton>
-                                    }
-                                </div> 
-                                :
-                                <StyledSubText>
-                                    {truncatedString(strings.themelayerlist.themeGroups[themeGroupIndex].themes[theme.id].description, 135, strings.themelayerlist.readMore)}
-                                </StyledSubText>
-                            }
-                        </StyledThemeContent>
+                            <ThemeDesc
+                                theme={theme}
+                                themeGroupIndex={themeGroupIndex}
+                            />
                     }
                 </div>
                 <StyledLayerGroup>
