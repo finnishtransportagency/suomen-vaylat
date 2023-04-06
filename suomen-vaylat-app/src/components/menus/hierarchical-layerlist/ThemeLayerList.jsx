@@ -325,13 +325,21 @@ export const ThemeLayerList = ({
 }) => {
 
     const { store } = useContext(ReactReduxContext);
-    const [isOpen, setIsOpen] = useState(null);
 
     const {
         selectedTheme,
         currentZoomLevel
     } = useAppSelector((state) => state.rpc);
 
+    const [isOpen, setIsOpen] = useState(null);
+
+    var themeGroups = Object.values(strings.themelayerlist.themeGroups)
+
+    useEffect(() => {
+        themeGroups.map(themeGroup => {
+            themeGroup.themes?.hasOwnProperty(selectedTheme.id) && setIsOpen(themeGroup.id)
+        })
+    }, []);
 
     useEffect(() => {
         if (currentZoomLevel < selectedTheme?.minZoomLevel) store.dispatch(setZoomTo(selectedTheme.minZoomLevel));
@@ -343,7 +351,6 @@ export const ThemeLayerList = ({
         linksArray.push(strings.themeLinks [i]);
     }
 
-    var themeGroups = Object.values(strings.themelayerlist.themeGroups)
 
     return (
         <>
