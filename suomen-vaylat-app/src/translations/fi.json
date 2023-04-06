@@ -443,18 +443,18 @@
             "title": "Tiestötiedot lupapalveluun",
             "description": "Karttapalvelun avulla johtojen ja kaapeleiden ilmoitusmenettelyn edellyttämiä tieosoitteita ja tiestötietoja voidaan tarkastella sijaintipaikan osalata ennen ilmoituksen jättämistä. Lisäksi palvelussa esitetään muita tiestön perustietoja, jotka auttavat työn suunnittelussa."
           },
-          "100105": {
-            "id": 100105,
+          "12": {
+            "id": 12,
             "title": "Yksityistiekartta",
             "description": ""
           },
-          "100106": {
-            "id": 100106,
+          "11": {
+            "id": 11,
             "title": "Tieliikenteen liikennemäärät",
             "description": ""
           },
-          "100107": {
-            "id": 100107,
+          "10": {
+            "id": 10,
             "title": "Korjausvelkakartta",
             "description": ""
           }

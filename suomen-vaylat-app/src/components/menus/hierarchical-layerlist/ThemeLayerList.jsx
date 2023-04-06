@@ -336,7 +336,7 @@ export const ThemeLayerList = ({
     var themeGroups = Object.values(strings.themelayerlist.themeGroups)
 
     useEffect(() => {
-        themeGroups.map(themeGroup => {
+        selectedTheme != null && themeGroups.map(themeGroup => {
             themeGroup.themes?.hasOwnProperty(selectedTheme.id) && setIsOpen(themeGroup.id)
         })
     }, []);
