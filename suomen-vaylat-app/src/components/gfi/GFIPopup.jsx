@@ -451,6 +451,8 @@ export const GFIPopup = ({ handleGfiDownload }) => {
     }, [isGfiToolsOpen, activeSelectionTool]);
 
     useEffect(() => {
+        /*
+        
         const mapResults = gfiLocations.map((location) => {
             location?.content?.features?.length > GFI_MAX_LENGTH && setIsDataTable(true);
             const layers = allLayers.filter(
@@ -480,6 +482,64 @@ export const GFIPopup = ({ handleGfiDownload }) => {
         });
 
         setTabsContent(mapResults);
+        
+       */
+        console.log(gfiLocations)
+
+        const moviesMap = {}
+        gfiLocations.forEach(location => {
+            const title = Object.keys(location)
+            if (moviesMap[title]) {
+              moviesMap[title].push(location[title])
+            } else {
+              moviesMap[title] = [location[title]]
+            }
+          })
+
+          console.log(moviesMap)
+
+          let results = [];
+
+          for (var i in moviesMap) {
+            console.log(i)
+            const mapResults = moviesMap[i].map((location) => {
+                console.log(Object.keys(location))
+                console.log(tabsContent)
+                location?.content?.features?.length > GFI_MAX_LENGTH && setIsDataTable(true);
+                const layers = allLayers.filter(
+                    (layer) => layer.id === location.layerId
+                );
+                const layerIds =
+                    layers && layers.length > 0 ? layers[0].id : location.layerId;
+                let content;
+                if (location.type === 'text') {
+                    content = location.content;
+                    const popupContent = (
+                        <div dangerouslySetInnerHTML={{ __html: content }}></div>
+                    );
+                    var contentWrapper = <div>{popupContent}</div>;
+                    const contentDiv = <div id={layerIds}>{contentWrapper}</div>;
+                    return contentDiv;
+                }
+                else if (location.type === 'geojson') {
+                    return <FormattedGFI
+                        id={layerIds}
+                        data={location.content}
+                        type='geoJson'
+                        isDataTable={isDataTable}
+                    />;
+                }
+                return null;
+            }
+            );
+            console.log(mapResults)
+            results = results.concat(mapResults)
+
+          }
+          console.log(results)
+
+
+        setTabsContent(results);
     }, [allLayers, gfiLocations, isDataTable, selectedTab]);
 
     useEffect(() => {
@@ -757,6 +817,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
     useEffect(() => {
         vkmData? setIsVKMInfoOpen(true) : setIsVKMInfoOpen(false);
     }, [vkmData]);
+    console.log(tabsContent)
 
     return (
         <StyledGfiContainer>
@@ -965,6 +1026,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
                     allowTouchMove={false} // Disable swiping
                     speed={300}
                 >
+                    /** PERKELE tähän for in looppi */
                     {gfiLocations.map((location) => {
                             const layers = allLayers.filter(layer => layer.id === location.layerId);
                             const title = layers.length > 0 && layers[0].name;
