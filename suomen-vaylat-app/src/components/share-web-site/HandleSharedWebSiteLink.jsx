@@ -50,11 +50,10 @@ export const HandleSharedWebSiteLink = () => {
     // If theme given then select wanted theme
     if (themeId) {
         const theme = allThemesWithLayers.find(theme => theme.id === parseInt(themeId));
-        const themeGroupIndex = allThemesWithLayers.findIndex(theme => theme.id === parseInt(themeId));
 
         if (theme){
             setTimeout(() => {
-                selectGroup(store, channel, themeGroupIndex, theme, theme, null);
+                selectGroup(store, channel, theme, theme, null);
                 store.dispatch(setIsThemeMenuOpen(true));
 
             },700);

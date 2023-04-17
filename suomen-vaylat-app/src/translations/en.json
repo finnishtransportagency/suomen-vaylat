@@ -402,62 +402,125 @@
     "readLess" : "Show less",
     "moreInfo": "Further information:",
     "themeGroups": {
-      "0": "Yhteiset",
-      "1": "Tieverkko",
-      "2": "Rataverkko",
-      "3": "Vesiväylät",
-      "4": "Karttapalveluita muualla"
-    },
-    "0": {
-      "title": "Project map",
-      "description": "The map shows the agency’s investment projects and the projects at planning stage aimed for implementation."
-    },
-    "1": {
-      "title": "Map showing the condition of the road pavement",
-      "description": "The map shows roads and bridges whose condition has been classified as very poor, poor, satisfactory, good or very good. The condition data of road pavement consists of estimations of the situation on 31 December 2021, taking into account the road pavement sites in 2021, updated on 8 September 2021"
-    },
-    "2": {
-      "title": "Map showing bridge restrictions",
-      "description": "The map shows bridges with weight restrictions and underpasses with restrictions. Restrictions now in effect may be lifted and new restrictions introduced, and for this reason you should check the map frequently. Remember also to check any restrictions with municipalities and private road maintenance associations."
-    },
-    "3": {
-      "title": "Road number map",
-      "description": "The road number map shows the roads and road sections of the road address system with their numbers and the locations of division points. Road numbers are used as address information in locating and are visible to road users through signs. Road numbering is based on road categories and routes formed by the road network, while road section numbering divides the road into shorter manageable road sections."
-    },
-    "4": {
-      "title": "Map showing the condition of the railway network",
-      "description": "-"
-    },
-    "5": {
-      "title": "TEN-T network",
-      "description": "The TEN-T network comprises two levels: the core network, to be completed by 2030 and the comprehensive network to be completed by 2050. The TEN-T core network focuses on the most important connections and hubs. The implementation of the core network is advanced by a corridor-based approach. The TEN-T network covers all forms of transport: road, air, internal waterways and sea, as well as platforms enabling a combination of different forms of transport."
-    },
-    "6": {
-      "title": "Finnish Railway Network Statement",
-      "description": "The Network Statement’s map service provides information on the attributes of the railway network, such as electrification and traffic operating point data. The data are based on track register data and RINF data submitted to ERA."
-    },
-    "7": {
-      "title": "Level crossing service",
-      "description": "The Finnish Transport Infrastructure Agency’s level crossing map service (tasoristeys.fi) supports regional traffic safety and land use planning. The service contains register and inventory information for level crossings in the state-owned railway network as well as images of the level crossings. The information can be accessed by clicking on a level crossing on the map. Level crossings of railway yards, track crossings and service roads have been added to the service, and the level crossings of sidings have also been added as a separate map layer."
-    },
-    "8": {
-      "title": "Road data for the permit service",
-      "description": "The map service can be used to view the road addresses and road data required by the notification procedure for wires and cables before submitting the notification. In addition, the service shows other basic information on roads that helps in work planning."
-    },
-    "9": {
-      "title": "Winter maintenance categories for highways",
-      "description": "Kartalle esitetään maanteiden talvihoitoluokat. Väylän merkitys, liikennemäärä ja -koostumus määrittelevät teiden hoidon palvelutason. Koska kaikkia teitä ei voida hoitaa kohtuullisin kustannuksin välittömästi, tiet on luokiteltu eri hoitoluokkiin. Lisätietoja",
-      "links": {
-        "0": "https://vayla.fi/kunnossapito/tieverkon-kunnossapito/talvihoito"
+      "0": {
+        "id": 0,
+        "title": "Yhteiset",
+        "themes": {
+          "0": {
+            "id": 0,
+            "title": "Project map",
+            "description": "The map shows the agency’s investment projects and the projects at planning stage aimed for implementation."
+          }
+        },
+        "themeLinks": {
+          "timeTravelFinland": {
+            "title": "Aikamatkalla Suomessa",
+            "url": "https://vayla.fi/vaylista/aineistot/kartat/aikamatkalla-suomessa#.XOOasBFlJNs"
+          }
+        }
+      },
+      "1": {
+        "id": 1,
+        "title": "Tieverkko",
+        "themes": {
+          "1": {
+            "id": 1,
+            "title": "Map showing the condition of the road pavement",
+            "description": "The map shows roads and bridges whose condition has been classified as very poor, poor, satisfactory, good or very good. The condition data of road pavement consists of estimations of the situation on 31 December 2021, taking into account the road pavement sites in 2021, updated on 8 September 2021"
+           },
+          "2": {
+            "id": 2,
+            "title": "Map showing bridge restrictions",
+            "description": "The map shows bridges with weight restrictions and underpasses with restrictions. Restrictions now in effect may be lifted and new restrictions introduced, and for this reason you should check the map frequently. Remember also to check any restrictions with municipalities and private road maintenance associations."
+          },
+          "3": {
+            "id": 3,
+            "title": "Road number map",
+            "description": "The road number map shows the roads and road sections of the road address system with their numbers and the locations of division points. Road numbers are used as address information in locating and are visible to road users through signs. Road numbering is based on road categories and routes formed by the road network, while road section numbering divides the road into shorter manageable road sections."
+          },
+          "8": {
+            "id": 8,
+            "title": "Road data for the permit service",
+            "description": "The map service can be used to view the road addresses and road data required by the notification procedure for wires and cables before submitting the notification. In addition, the service shows other basic information on roads that helps in work planning."
+          },
+          "12": {
+            "id": 12,
+            "title": "Yksityistiekartta",
+            "description": ""
+          },
+          "11": {
+            "id": 11,
+            "title": "Traffic volumes",
+            "description": ""
+          },
+          "10": {
+            "id": 10,
+            "title": "Korjausvelkakartta",
+            "description": ""
+          }
+        },
+        "themeLinks": {
+          "bikeNetwork": {
+            "title": "Valtakunnallinen ja seudullinen pyörätieverkko",
+            "url": "https://paikkatieto.vaylapilvi.fi/arcgis/apps/webappviewer/index.html?id=aa98d035ba254776895d092a3d1c3a9f"
+          }
+        }
+      },
+      "2": {
+        "id": 2,
+        "title": "Rataverkko",
+        "themes": {
+          "4": {
+            "id": 4,
+            "title": "Map showing the condition of the railway network",
+            "description": "-"
+          },
+          "6": {
+            "id": 6,
+            "title": "Finnish Railway Network Statement",
+            "description": "The Network Statement’s map service provides information on the attributes of the railway network, such as electrification and traffic operating point data. The data are based on track register data and RINF data submitted to ERA."
+          },
+          "7": {
+            "id": 7,
+            "title": "Level crossing service",
+            "description": "The Finnish Transport Infrastructure Agency’s level crossing map service (tasoristeys.fi) supports regional traffic safety and land use planning. The service contains register and inventory information for level crossings in the state-owned railway network as well as images of the level crossings. The information can be accessed by clicking on a level crossing on the map. Level crossings of railway yards, track crossings and service roads have been added to the service, and the level crossings of sidings have also been added as a separate map layer."
+          },
+          "9": {
+            "id": 9,
+            "title": "Winter maintenance categories for highways",
+            "description": "Kartalle esitetään maanteiden talvihoitoluokat. Väylän merkitys, liikennemäärä ja -koostumus määrittelevät teiden hoidon palvelutason. Koska kaikkia teitä ei voida hoitaa kohtuullisin kustannuksin välittömästi, tiet on luokiteltu eri hoitoluokkiin. Lisätietoja",
+            "links": {
+              "0": "https://vayla.fi/kunnossapito/tieverkon-kunnossapito/talvihoito"
+            }
+          }
+        }
+      },
+      "3": {
+        "id": 3,
+        "title": "Vesiväylät",
+        "themeLinks": {
+          "baltice": {
+            "title": "Baltice",
+            "url": "https://baltice.org/map/"
+          },
+          "safetyDeviceFaults": {
+            "title": "Kauppamerenkulun väylien turvalaiteviat",
+            "url": "https://vayla.fi/vaylista/vesivaylat/turvalaitteet/turvalaiteviat#.XLWWTegzYuU"
+          },
+          "seaWarnings": {
+            "title": "Varoituksia merenkulkijoille",
+            "url": "https://vayla.fi/palveluntuottajat/ammattimerenkulku/meriliikenteen-hairiot/varoituksia-merenkulkijoille"
+          },
+          "restrictedAreas": {
+            "title": "Vesiliikenteen kielto- ja rajoitusalueet",
+            "url": "https://vayla.fi/vaylista/vesivaylat/rajoitusalueet"
+          },
+          "pookiFeedback": {
+            "title": "Vesiväylien palautteet",
+            "url": "https://extranet.vayla.fi/pooki_www/palaute"
+          }
+        }
       }
-    },
-    "100046": {
-      "title": "Yksityistiekartta",
-      "description": ""
-    },
-    "100047": {
-      "title": "Tieliikenteen liikennemäärät",
-      "description": ""
     }
   },
   "metadata": {

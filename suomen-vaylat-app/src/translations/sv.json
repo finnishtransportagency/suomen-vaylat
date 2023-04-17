@@ -403,86 +403,124 @@
     "moreInfo": "Mer information:",
     "themeGroups": {
       "0": {
-        "title": "Gemensamma kartor",
+        "id": 0,
+        "title": "Yhteiset",
         "themes": {
-
+          "0": {
+            "id": 0,
+            "title": "Projektkarta",
+            "description": "På kartan syns Trafikledsverkets investeringsprojekt och projektplaneringsobjekt som är tänkta att genomföras."
+          }
+        },
+        "themeLinks": {
+          "timeTravelFinland": {
+            "title": "Aikamatkalla Suomessa",
+            "url": "https://vayla.fi/vaylista/aineistot/kartat/aikamatkalla-suomessa#.XOOasBFlJNs"
+          }
         }
       },
       "1": {
-        "title": "Vägnätets kartor",
+        "id": 1,
+        "title": "Tieverkko",
         "themes": {
-
+          "1": {
+            "id": 1,
+            "title": "Karta över beläggningarnas skick",
+            "description": "På kartan visas vägar och broar med konditionsklass mycket dålig, dålig, nöjaktig, god eller mycket god. Uppgifterna om beläggningsskick är uppskattningar av situationen den 31 december 2021 med beaktande av beläggningsobjekten 2021. Uppgifterna har uppdaterats den 8 september 2021"
+          },
+          "2": {
+            "id": 2,
+            "title": "Karta över brobegränsningar",
+            "description": "På kartan syns viktbegränsade broar och begränsningar för tunnlar. Begränsningar kan tas bort och läggas till, så det är skäl att kontrollera kartan ofta. Kom ihåg att även kontrollera eventuella begränsningar hos kommuner och väglag för enskilda vägar."
+          },
+          "3": {
+            "id": 3,
+            "title": "Karta med vägnummer",
+            "description": "På vägnummerkartan presenteras vägarna och vägavsnitten i vägadressystemet jämte nummer samt delningspunkternas placering. Vägnumren används som adressuppgifter för lokalisering och vägtrafikanterna kan se dem på vägmärkena. Vägnumreringen baserar sig på vägklasserna och de sträckor som bildas av vägnätet, medan vägavsnittsnumreringen används för att dela in vägen i kortare vägavsnitt."
+          },
+          "8": {
+            "id": 8,
+            "title": "Vägdata till tillståndstjänsten",
+            "description": "Med hjälp av karttjänsten kan de vägadresser och uppgifter om vägnätet som krävs för anmälningsförfarandet för ledningar och kablar granskas innan anmälan lämnas in. I tjänsten presenteras dessutom andra grundläggande uppgifter om vägnätet som hjälper till att planera arbetet."
+          },
+          "12": {
+            "id": 12,
+            "title": "Yksityistiekartta",
+            "description": ""
+          },
+          "11": {
+            "id": 11,
+            "title": "Trafikmängder på vägar",
+            "description": ""
+          },
+          "10": {
+            "id": 10,
+            "title": "Korjausvelkakartta",
+            "description": ""
+          }
+        },
+        "themeLinks": {
+          "bikeNetwork": {
+            "title": "Valtakunnallinen ja seudullinen pyörätieverkko",
+            "url": "https://paikkatieto.vaylapilvi.fi/arcgis/apps/webappviewer/index.html?id=aa98d035ba254776895d092a3d1c3a9f"
+          }
         }
       },
       "2": {
-        "title": "Bannätets kartor",
+        "id": 2,
+        "title": "Rataverkko",
         "themes": {
-          
+          "4": {
+            "id": 4,
+            "title": "Karta över bannätets skick",
+            "description": "-"
+           },
+          "6": {
+            "id": 6,
+            "title": "Beskrivning av bannätet",
+            "description": "I nätbeskrivningens karttjänst kan man granska bannätets egenskapsuppgifter, såsom elektrifiering och uppgifter om trafikplatser. Uppgifterna grundar sig på banregisteruppgifter och RINF-uppgifter som skickas till ERA."
+          },
+          "7": {
+            "id": 7,
+            "title": "Plankorsningstjänst",
+            "description": "Trafikledsverkets karttjänst tasoristeys.fi stöder den regionala planeringen av trafiksäkerheten och markanvändningen. I tjänsten finns register- och inventeringsuppgifter om plankorsningar i statens bannät samt bilder på plankorsningar. Uppgifterna får man fram genom att klicka på plankorsningen på kartunderlaget. Till tjänsten har man också lagt till plankorsningar på bangårdar, plattformsstigar och servicevägar samt plankorsningar på sidospår som ett eget lager på kartan."
+          },
+          "9": {
+            "id": 9,
+            "title": "Landsvägarnas vinterunderhållsklasser",
+            "description": "På kartan visas landsvägarnas vinterunderhållsklasser. Trafikledens betydelse, trafikmängd och -sammansättning bestämmer servicenivån för vägunderhållet. Eftersom det inte är möjligt att till skäliga kostnader underhålla alla vägar genast, har vägarna indelats i olika underhållsklasser.",
+            "links": {
+              "0": "https://vayla.fi/kunnossapito/tieverkon-kunnossapito/talvihoito"
+            }
+           }
         }
       },
       "3": {
-        "title": "Kartor över farleder",
-        "themes": {
-          
-        }
-      },
-      "4": {
-        "title": "Karttjänster på annat håll",
-        "themes": {
-          
+        "id": 3,
+        "title": "Vesiväylät",
+        "themeLinks": {
+          "baltice": {
+            "title": "Baltice",
+            "url": "https://baltice.org/map/"
+          },
+          "safetyDeviceFaults": {
+            "title": "Kauppamerenkulun väylien turvalaiteviat",
+            "url": "https://vayla.fi/vaylista/vesivaylat/turvalaitteet/turvalaiteviat#.XLWWTegzYuU"
+          },
+          "seaWarnings": {
+            "title": "Varoituksia merenkulkijoille",
+            "url": "https://vayla.fi/palveluntuottajat/ammattimerenkulku/meriliikenteen-hairiot/varoituksia-merenkulkijoille"
+          },
+          "restrictedAreas": {
+            "title": "Vesiliikenteen kielto- ja rajoitusalueet",
+            "url": "https://vayla.fi/vaylista/vesivaylat/rajoitusalueet"
+          },
+          "pookiFeedback": {
+            "title": "Vesiväylien palautteet",
+            "url": "https://extranet.vayla.fi/pooki_www/palaute"
+          }
         }
       }
-    },
-    "0": {
-      "title": "Projektkarta",
-      "description": "På kartan syns Trafikledsverkets investeringsprojekt och projektplaneringsobjekt som är tänkta att genomföras."
-    },
-    "1": {
-      "title": "Karta över beläggningarnas skick",
-      "description": "På kartan visas vägar och broar med konditionsklass mycket dålig, dålig, nöjaktig, god eller mycket god. Uppgifterna om beläggningsskick är uppskattningar av situationen den 31 december 2021 med beaktande av beläggningsobjekten 2021. Uppgifterna har uppdaterats den 8 september 2021"
-    },
-    "2": {
-      "title": "Karta över brobegränsningar",
-      "description": "På kartan syns viktbegränsade broar och begränsningar för tunnlar. Begränsningar kan tas bort och läggas till, så det är skäl att kontrollera kartan ofta. Kom ihåg att även kontrollera eventuella begränsningar hos kommuner och väglag för enskilda vägar."
-    },
-    "3": {
-      "title": "Karta med vägnummer",
-      "description": "På vägnummerkartan presenteras vägarna och vägavsnitten i vägadressystemet jämte nummer samt delningspunkternas placering. Vägnumren används som adressuppgifter för lokalisering och vägtrafikanterna kan se dem på vägmärkena. Vägnumreringen baserar sig på vägklasserna och de sträckor som bildas av vägnätet, medan vägavsnittsnumreringen används för att dela in vägen i kortare vägavsnitt."
-    },
-    "4": {
-      "title": "Karta över bannätets skick",
-      "description": "-"
-    },
-    "5": {
-      "title": "TENT-T-nätet",
-      "description": "TEN-T-nätet består av två plan: kärnnätet (core network) som ska färdigställas före 2030 och det heltäckande nätet (comprehensive network) som ska färdigställas före 2050. TEN-T-kärnnätet koncentreras till de viktigaste förbindelserna och knutpunkterna. Genomförandet av kärnnätet främjas av ett tillvägagångssätt som grundar sig på korridorer. TEN-T-nätet omfattar alla trafikformer: landsvägs-, luft-, insjö-, havs- samt plattformar som gör det möjligt att kombinera de olika trafikformerna."
-    },
-    "6": {
-      "title": "Beskrivning av bannätet",
-      "description": "I nätbeskrivningens karttjänst kan man granska bannätets egenskapsuppgifter, såsom elektrifiering och uppgifter om trafikplatser. Uppgifterna grundar sig på banregisteruppgifter och RINF-uppgifter som skickas till ERA."
-    },
-    "7": {
-      "title": "Plankorsningstjänst",
-      "description": "Trafikledsverkets karttjänst tasoristeys.fi stöder den regionala planeringen av trafiksäkerheten och markanvändningen. I tjänsten finns register- och inventeringsuppgifter om plankorsningar i statens bannät samt bilder på plankorsningar. Uppgifterna får man fram genom att klicka på plankorsningen på kartunderlaget. Till tjänsten har man också lagt till plankorsningar på bangårdar, plattformsstigar och servicevägar samt plankorsningar på sidospår som ett eget lager på kartan."
-    },
-    "8": {
-      "title": "Vägdata till tillståndstjänsten",
-      "description": "Med hjälp av karttjänsten kan de vägadresser och uppgifter om vägnätet som krävs för anmälningsförfarandet för ledningar och kablar granskas innan anmälan lämnas in. I tjänsten presenteras dessutom andra grundläggande uppgifter om vägnätet som hjälper till att planera arbetet."
-    },
-    "9": {
-      "title": "Landsvägarnas vinterunderhållsklasser",
-      "description": "På kartan visas landsvägarnas vinterunderhållsklasser. Trafikledens betydelse, trafikmängd och -sammansättning bestämmer servicenivån för vägunderhållet. Eftersom det inte är möjligt att till skäliga kostnader underhålla alla vägar genast, har vägarna indelats i olika underhållsklasser.",
-      "links": {
-        "0": "https://vayla.fi/kunnossapito/tieverkon-kunnossapito/talvihoito"
-      }
-    },
-    "100046": {
-      "title": "Yksityistiekartta",
-      "description": ""
-    },
-    "100047": {
-      "title": "Tieliikenteen liikennemäärät",
-      "description": ""
     }
   },
   "metadata": {

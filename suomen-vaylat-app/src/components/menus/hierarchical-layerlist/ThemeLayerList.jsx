@@ -1,5 +1,5 @@
 import { useContext, useState, useEffect } from 'react';
-import { faMap, faExternalLinkAlt, faLink, faAngleDown } from '@fortawesome/free-solid-svg-icons';
+import { faMap, faExternalLinkAlt, faLink, faAngleDown, faRoad, faShip, faTrain } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ReactReduxContext } from 'react-redux';
 import { motion } from 'framer-motion';
@@ -47,7 +47,22 @@ const StyledMasterGroupName = styled.p`
     color: ${props => props.theme.colors.mainWhite};
     margin: 0;
     padding: 0px;
-    font-size: 14px;
+    font-size: 16px;
+    font-weight: 600;
+    transition: all 0.1s ease-in;
+`;
+
+
+const StyledLinkName = styled.p`
+    user-select: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 200px;
+    color: ${props => props.theme.colors.mainWhite};
+    margin: 0;
+    padding: 0px;
+    font-size: 16px;
     font-weight: 600;
     transition: all 0.1s ease-in;
 `;
@@ -75,7 +90,7 @@ const StyledMasterThemeHeader = styled.div`
     justify-content: space-between;
     align-items: center;
     cursor: pointer;
-    background-color: ${props => props.theme.colors.secondaryColor2};
+    background-color: #1a5e34;
     border-radius: 4px;
     padding-top: 8px;
     padding-bottom: 8px;
@@ -142,6 +157,7 @@ const StyledLeftContent = styled.div`
 `;
 
 const StyledSubthemeLeftContent = styled.div`
+    max-width: 200px;
     display: flex;
     align-items: center;
     margin-left: 10px;
@@ -246,7 +262,7 @@ const StyledSubHeader = styled.h6`
 
 const StyledThemeContent = styled.div`
     margin: 0px;
-    padding: 0px 8px 8px 8px;
+    padding: 8px 8px 8px 8px;
     font-size: 14px;
     font-weight: 400;
 `;
@@ -265,6 +281,23 @@ const StyledMoreInfo = styled.span`
     margin: 10px 0px;
 `;
 
+const StyledMasterGroupHeaderIconLetter = styled.div`
+    width: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    svg {
+        font-size: 20px;
+        color: ${props => props.theme.colors.mainWhite};
+    };
+    p {
+        margin: 0;
+        font-weight: bold;
+        font-size: 22px;
+        color: ${props => props.theme.colors.mainWhite};
+    }
+`;
+
 const themeImages = {
     0: hankekartta,
     1: intersection,
@@ -274,19 +307,39 @@ const themeImages = {
 
 };
 
+const mainThemeImages = {
+    3: {
+        icon: faShip
+    },
+    2: {
+        icon: faTrain
+    },
+    1: {
+        icon: faRoad
+    }
+};
+
 export const ThemeLayerList = ({
     allLayers,
     allThemes
 }) => {
 
     const { store } = useContext(ReactReduxContext);
-    const [isOpen, setIsOpen] = useState(null);
 
     const {
         selectedTheme,
         currentZoomLevel
     } = useAppSelector((state) => state.rpc);
 
+    const [isOpen, setIsOpen] = useState(null);
+
+    var themeGroups = Object.values(strings.themelayerlist.themeGroups)
+
+    useEffect(() => {
+        selectedTheme != null && themeGroups.map(themeGroup => {
+            themeGroup.themes?.hasOwnProperty(selectedTheme.id) && setIsOpen(themeGroup.id)
+        })
+    }, []);
 
     useEffect(() => {
         if (currentZoomLevel < selectedTheme?.minZoomLevel) store.dispatch(setZoomTo(selectedTheme.minZoomLevel));
@@ -298,23 +351,30 @@ export const ThemeLayerList = ({
         linksArray.push(strings.themeLinks [i]);
     }
 
-    var themeGroups = Object.values(strings.themelayerlist.themeGroups)
 
     return (
         <>
-            { themeGroups.map((themeGroup, index) => {
+            { themeGroups.map((themeGroup, themeGroupIndex) => {
                 return (
                     <>
                         <StyledThemeGroup
-                            onClick={() => isOpen == index ? setIsOpen(null) : setIsOpen(index)}
+                            onClick={() => isOpen == themeGroupIndex ? setIsOpen(null) : setIsOpen(themeGroupIndex)}
                         >
                             <StyledMasterThemeHeader>
-                                <StyledMasterGroupName>
-                                    { themeGroup.title }
-                                </StyledMasterGroupName>
+                                    <StyledMasterGroupHeaderIconLetter>
+                                        {
+                                            mainThemeImages.hasOwnProperty(themeGroup.id) ?
+                                            <FontAwesomeIcon
+                                                icon={mainThemeImages[themeGroup.id].icon}
+                                            /> : <p>{ themeGroup.title.charAt(0).toUpperCase() }</p>
+                                        }
+                                    </StyledMasterGroupHeaderIconLetter>
+                                    <StyledMasterGroupName>
+                                        { themeGroup.title }
+                                    </StyledMasterGroupName>
                                 <StyledInfoHeaderIconContainer
                                     animate={{
-                                        transform: isOpen == index
+                                        transform: isOpen == themeGroupIndex
                                             ? 'rotate(180deg)'
                                             : 'rotate(0deg)',
                                     }}
@@ -326,9 +386,9 @@ export const ThemeLayerList = ({
                             </StyledMasterThemeHeader>
                         </StyledThemeGroup>
                         <StyledLayerGroupContainer
-                            key={'slg_' + index}
+                            key={'slg_' + themeGroupIndex}
                             initial='hidden'
-                            animate={isOpen == index ? 'visible' : 'hidden'}
+                            animate={isOpen == themeGroupIndex ? 'visible' : 'hidden'}
                             variants={listVariants}
                             transition={{
                                 duration: 0.3,
@@ -337,6 +397,7 @@ export const ThemeLayerList = ({
                         >
                             { themeGroup.themes && Object.values(themeGroup.themes).map((theme, index) => {
                                 return <Themes
+                                    themeGroupIndex={themeGroupIndex}
                                     key={index}
                                     themeLocale={theme}
                                     allLayers={allLayers}
@@ -358,13 +419,13 @@ export const ThemeLayerList = ({
   };
 
   export const Themes = ({
+    themeGroupIndex,
     allLayers,
     allThemes,
     themeLocale,
     index
 }) => {
     const { store } = useContext(ReactReduxContext);
-    
     const {
         channel,
         selectedTheme,
@@ -381,6 +442,7 @@ export const ThemeLayerList = ({
             { allThemes.filter(theme => theme.id == themeLocale.id).map((theme) => {
                 return <ThemeGroup
                     key={index}
+                    themeGroupIndex={themeGroupIndex}
                     theme={theme}
                     layers={allLayers}
                     index={index}
@@ -415,7 +477,7 @@ export const ThemeLinkList = ({
                                 icon={faLink}
                             />
                         </StyledMasterGroupHeaderIcon>
-                        <StyledMasterGroupName>{link.title}</StyledMasterGroupName>
+                        <StyledLinkName>{link.title}</StyledLinkName>
                     </StyledLeftContent>
                     <StyledRightContent>
                         <StyledMasterGroupLinkIcon>
@@ -430,8 +492,58 @@ export const ThemeLinkList = ({
     );
 };
 
+export const ThemeDesc = ({
+    theme,
+    themeGroupIndex
+}) => {
+    const [isExcerptOpen, setIsExcerptOpen] = useState(false);
+
+    const truncatedString = (string, characterAmount, text) => {
+        return (
+            string.length > characterAmount + 20 ? <>{string.substring(0, characterAmount) + '...'} <StyledReadMoreButton
+                onClick={() => setIsExcerptOpen(!isExcerptOpen)}>{text}</StyledReadMoreButton></> : string
+        )
+    }
+
+    return (
+        <StyledThemeContent>
+            {
+                isExcerptOpen ?
+                <div>
+                    <StyledSubText>
+                        {strings.themelayerlist.themeGroups[themeGroupIndex].themes[theme.id].description} 
+                    </StyledSubText>
+                    {
+                        strings.themelayerlist.themeGroups[themeGroupIndex].themes[theme.id].links &&
+                        <>
+                            <StyledMoreInfo>{strings.themelayerlist.moreInfo}</StyledMoreInfo>
+                            <ul>
+                                {Object.values(strings.themelayerlist.themeGroups[themeGroupIndex].themes[theme.id].links).map((link, i) => {
+                                    return(
+                                        <li>
+                                            <StyledLinkText rel="noreferrer" target="_blank" href={link} key={i}>{link}</StyledLinkText>
+                                        </li> 
+                                    )
+                                })}
+                            </ul>
+                        </>
+                    }
+                    {
+                        <StyledReadMoreButton onClick={() => setIsExcerptOpen(!isExcerptOpen)}> {strings.themelayerlist.readLess} </StyledReadMoreButton>
+                    }
+                </div> 
+                :
+                <StyledSubText>
+                    {truncatedString(strings.themelayerlist.themeGroups[themeGroupIndex].themes[theme.id].description, 135, strings.themelayerlist.readMore)}
+                </StyledSubText>
+            }
+        </StyledThemeContent>
+    );
+};
+
 export const ThemeGroup = ({
     theme,
+    themeGroupIndex,
     layers,
     index,
     selectedThemeId,
@@ -440,7 +552,6 @@ export const ThemeGroup = ({
 }) => {
     const [subthemeIsOpen, setSubthemeIsOpen] = useState(false);
     const [totalGroupLayersCount, setTotalGroupLayersCount] = useState(0);
-    const [isExcerptOpen, setIsExcerptOpen] = useState(false);
     const [totalVisibleGroupLayersCount, setTotalVisibleGroupLayersCount] = useState(0);
 
     useEffect(() => {      
@@ -457,13 +568,6 @@ export const ThemeGroup = ({
         };
         layersCounter(theme);
     },[theme, layers]);
-
-    const truncatedString = (string, characterAmount, text) => {
-        return (
-            string.length > characterAmount + 20 ? <>{string.substring(0, characterAmount) + '...'} <StyledReadMoreButton
-                onClick={() => setIsExcerptOpen(!isExcerptOpen)}>{text}</StyledReadMoreButton></> : string
-        )
-    }
 
     var filteredLayers = layers.filter(layer => theme.layers.includes(layer.id));
     const isOpen = isSubtheme ? subthemeIsOpen : selectedThemeId === theme.id;
@@ -510,9 +614,28 @@ export const ThemeGroup = ({
                                 totalVisibleGroupLayersCount +" / "+ totalGroupLayersCount
                             }
                         </StyledSubGroupLayersCount>
+                        <StyledInfoHeaderIconContainer
+                                    animate={{
+                                        transform: isOpen
+                                            ? 'rotate(180deg)'
+                                            : 'rotate(0deg)',
+                                    }}
+                                    style={{marginLeft: '10px'}}
+                                >
+                                    <FontAwesomeIcon
+                                        icon={faAngleDown}
+                                    />
+                                </StyledInfoHeaderIconContainer>
                     </StyledSubthemeRightContent>
                 </StyledSubthemeHeader>
             }
+                    {
+                        !isOpen && themeGroupIndex != undefined && strings.themelayerlist.themeGroups[themeGroupIndex].themes.hasOwnProperty(theme.id) && strings.themelayerlist.themeGroups[themeGroupIndex].themes[theme.id].description !== null && strings.themelayerlist.themeGroups[themeGroupIndex].themes[theme.id].description.length > 0 && 
+                            <ThemeDesc
+                                theme={theme}
+                                themeGroupIndex={themeGroupIndex}
+                            />
+                    }
 
 
             <StyledLayerGroupContainer
@@ -527,44 +650,13 @@ export const ThemeGroup = ({
             >
                 <div>
                     {themeImages[theme.id] && <StyledLayerGroupImage src={themeImages[theme.id]} alt=''/>}
-                    {strings.themelayerlist.hasOwnProperty(theme.id) && strings.themelayerlist[theme.id].title !== null &&
-                        <StyledSubHeader>{strings.themelayerlist[theme.id].title}</StyledSubHeader>
-                    }
 
                     {
-                        strings.themelayerlist.hasOwnProperty(theme.id) && strings.themelayerlist[theme.id].description !== null &&
-                        <StyledThemeContent>
-                            {
-                                isExcerptOpen ?
-                                <div>
-                                    <StyledSubText>
-                                        {strings.themelayerlist[theme.id].description} 
-                                    </StyledSubText>
-                                    {
-                                        strings.themelayerlist[theme.id].links &&
-                                        <>
-                                            <StyledMoreInfo>{strings.themelayerlist.moreInfo}</StyledMoreInfo>
-                                            <ul>
-                                                {Object.values(strings.themelayerlist[theme.id].links).map((link, i) => {
-                                                    return(
-                                                        <li>
-                                                            <StyledLinkText rel="noreferrer" target="_blank" href={link} key={i}>{link}</StyledLinkText>
-                                                        </li> 
-                                                    )
-                                                })}
-                                            </ul>
-                                        </>
-                                    }
-                                    {
-                                        <StyledReadMoreButton onClick={() => setIsExcerptOpen(!isExcerptOpen)}> {strings.themelayerlist.readLess} </StyledReadMoreButton>
-                                    }
-                                </div> 
-                                :
-                                <StyledSubText>
-                                    {truncatedString(strings.themelayerlist[theme.id].description, 135, strings.themelayerlist.readMore)}
-                                </StyledSubText>
-                            }
-                        </StyledThemeContent>
+                        themeGroupIndex != undefined && strings.themelayerlist.themeGroups[themeGroupIndex].themes.hasOwnProperty(theme.id) && strings.themelayerlist.themeGroups[themeGroupIndex].themes[theme.id].description !== null &&
+                            <ThemeDesc
+                                theme={theme}
+                                themeGroupIndex={themeGroupIndex}
+                            />
                     }
                 </div>
                 <StyledLayerGroup>

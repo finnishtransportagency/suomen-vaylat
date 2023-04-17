@@ -264,13 +264,8 @@ export const reArrangeSelectedLayersOrder = (selectedLayers, store) => {
  * Reset theme groups.
  * @method resetThemeGroup
  * @param {Object} store
- * @param {Object} channel
- * @param {Number} index
- * @param {String} theme
- * @param {String} lastSelectedTheme
- * @param {Number} selectedThemeId
  */
-export const resetThemeGroups = (store, channel, index, theme, lastSelectedTheme, selectedThemeId) => {
+export const resetThemeGroups = (store) => {
     store.dispatch(setSelectedTheme(null));
     store.dispatch(setLastSelectedTheme(null));
     store.dispatch(setSelectedThemeId(null));
@@ -282,12 +277,9 @@ export const resetThemeGroups = (store, channel, index, theme, lastSelectedTheme
  * @method resetThemeGroupsForMainScreen
  * @param {Object} store
  * @param {Object} channel
- * @param {Number} index
  * @param {String} theme
- * @param {String} lastSelectedTheme
- * @param {Number} selectedThemeId
  */
-export const resetThemeGroupsForMainScreen = (store, channel, index, theme, lastSelectedTheme, selectedThemeId) => {
+export const resetThemeGroupsForMainScreen = (store, channel, theme) => {
     if(theme){
         theme.layers.forEach(layerId => {
             channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layerId, false]);
