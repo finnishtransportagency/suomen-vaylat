@@ -53,11 +53,11 @@ const App = () => {
                                 <Layout />
                             </StyledAppContainer>
                         }/>
-                        <Route exact path={routerPrefix + 'theme/:lang/:zoom/:x/:y/:themeId?'} render={() => {
+                        <Route exact path={routerPrefix + 'theme/:zoom/:x/:y/:themeId/:lang?'} render={() => {
                             return (appContainer);
                         }}/>
 
-                        <Route exact path={routerPrefix + 'link/:lang/:zoom/:x/:y/:maplayers?'} render={() => {
+                        <Route exact path={routerPrefix + 'link/:zoom/:x/:y/:maplayers/:lang?'} render={() => {
                             return (appContainer);
                         }}/>
                     </Theme>
