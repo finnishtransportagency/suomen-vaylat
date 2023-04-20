@@ -1,5 +1,11 @@
 # Release Notes
 
+## 1.12.0
+For a full list changes see: https://github.com/finnishtransportagency/suomen-vaylat/milestone/15?closed=1
+* Theme map layout changes
+* Feature data load alert when loading on many layers and loader counter
+* Translation updates on ui components 
+
 ## 1.11.0
 
 For a full list of changes see: https://github.com/finnishtransportagency/suomen-vaylat/milestone/14?closed=1
