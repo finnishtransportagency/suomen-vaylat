@@ -6,6 +6,7 @@ import { changeLayerStyle, reArrangeSelectedMapLayers, setLegends, removeAllSele
 import {  setIsSideMenuOpen, setIsThemeMenuOpen, setSelectedMapLayersMenuTab } from '../../state/slices/uiSlice';
 import { Logger } from '../../utils/logger';
 import { updateLayers, selectGroup } from '../../utils/rpcUtil';
+import { isMobile} from '../../theme/theme';
 
 const LOG = new Logger('HandleSharedWebSiteLink');
 
@@ -54,8 +55,7 @@ export const HandleSharedWebSiteLink = () => {
         if (theme){
             setTimeout(() => {
                 selectGroup(store, channel, theme, theme, null);
-                store.dispatch(setIsThemeMenuOpen(true));
-
+                !isMobile && store.dispatch(setIsThemeMenuOpen(true));
             },700);
         }
     }

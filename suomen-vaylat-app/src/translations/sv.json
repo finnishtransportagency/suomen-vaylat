@@ -404,12 +404,17 @@
     "themeGroups": {
       "0": {
         "id": 0,
-        "title": "Yhteiset",
+        "title": "Gemensamma kartor",
         "themes": {
           "0": {
             "id": 0,
             "title": "Projektkarta",
             "description": "På kartan syns Trafikledsverkets investeringsprojekt och projektplaneringsobjekt som är tänkta att genomföras."
+          },
+          "10": {
+            "id": 10,
+            "title": "Korjausvelkakartta",
+            "description": ""
           }
         },
         "themeLinks": {
@@ -421,7 +426,7 @@
       },
       "1": {
         "id": 1,
-        "title": "Tieverkko",
+        "title": "Vägnätets kartor",
         "themes": {
           "1": {
             "id": 1,
@@ -452,11 +457,6 @@
             "id": 11,
             "title": "Trafikmängder på vägar",
             "description": ""
-          },
-          "10": {
-            "id": 10,
-            "title": "Korjausvelkakartta",
-            "description": ""
           }
         },
         "themeLinks": {
@@ -468,7 +468,7 @@
       },
       "2": {
         "id": 2,
-        "title": "Rataverkko",
+        "title": "Bannätets kartor",
         "themes": {
           "4": {
             "id": 4,
@@ -497,7 +497,7 @@
       },
       "3": {
         "id": 3,
-        "title": "Vesiväylät",
+        "title": "Kartor över farleder ",
         "themeLinks": {
           "baltice": {
             "title": "Baltice",
