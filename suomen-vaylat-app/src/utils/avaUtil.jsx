@@ -9,7 +9,7 @@ export async function fetchAvaFileSize(downloadUrl) {
     if (avaFileSizes[downloadUrl]) {
         return avaFileSizes[downloadUrl];
     }
-    let temp = downloadUrl.replace('https://ava.vaylapilvi.fi/ava', 'https://api.vaylapilvi.fi/ava/hakemisto/ava');
+    let temp = downloadUrl.replace('https://ava.vaylapilvi.fi/ava', 'https://apiava.vaylapilvi.fi/ava/hakemisto/ava');
     let splitted = temp.split('/');
     const fileName = splitted[splitted.length - 1];
     delete splitted[splitted.length - 1];

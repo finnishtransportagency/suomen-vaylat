@@ -1,6 +1,12 @@
 import styled from 'styled-components';
 import strings from '../../translations';
 import Moment from 'react-moment';
+import { useContext } from 'react';
+import { Button } from 'react-bootstrap';
+import { setDownloadRemove } from '../../state/slices/rpcSlice';
+import { ReactReduxContext } from 'react-redux';
+
+import { setIsGfiDownloadOpen, setIsGfiToolsOpen } from '../../state/slices/uiSlice';
 
 import { useAppSelector } from '../../state/hooks';
 
@@ -9,8 +15,6 @@ import { faDownload, faFileArchive, faExclamationTriangle } from '@fortawesome/f
 
 import ModalListItem from '../modals/ModalListItem';
 import SvLoader from '../loader/SvLoader';
-import store from '../../state/store';
-import { setDownloadRemove } from '../../state/slices/rpcSlice';
 
 const StyledDownloadsContainer = styled.div`
     padding: 16px;
@@ -140,11 +144,28 @@ const DownloadItem = ({
     )
 };
 
+
+
 const GFIDownload = () => {
     let { downloads } = useAppSelector((state) => state.rpc);
+    const { store } = useContext(ReactReduxContext);
+
+    const handleGfiLocationsOpen = () => {
+        store.dispatch(setIsGfiToolsOpen(true));
+        store.dispatch(setIsGfiDownloadOpen(false));
+    }
 
     return (
         <StyledDownloadsContainer>
+
+        <Button
+            onClick={handleGfiLocationsOpen}
+        >
+                UUSI LATAUS
+        </Button>
+        
+
+
             <StyledSubtitle>{strings.downloads.processing}:</StyledSubtitle>
             {
                 downloads.filter(download => download.loading === true).length > 0 ?
@@ -163,7 +184,7 @@ const GFIDownload = () => {
             <StyledSubtitle>{strings.downloads.readyForDownload}:</StyledSubtitle>
             {
                 downloads.filter(download => download.loading === false).length > 0 ?
-                downloads.filter(download => download.loading === false && !download.error).map(download => {
+                downloads.filter(download => download.loading === false && download.errorLayers.length === 0).map(download => {
                     return <DownloadItem
                         download={download}
                         closeAction={() => {
@@ -184,12 +205,12 @@ const GFIDownload = () => {
             : <StyledDescription>- {strings.downloads.noDownloads}</StyledDescription>
             }
             {
-                downloads.filter(download => download.loading === false && download.error).length > 0 && (
+                downloads.filter(download => download.loading === false && download.errorLayers.length > 0).length > 0 && (
                     <>
                         <StyledSubtitle>{strings.downloads.failedDownloads}:</StyledSubtitle>
                         <StyledDescription>- {strings.downloads.errorOccuredDuringDownloadProcessing}:</StyledDescription>
                         {
-                            downloads.filter(download => download.loading === false && download.error).map(download => {
+                            downloads.filter(download => download.loading === false && download.errorLayers.length > 0).map(download => {
                                 return <DownloadItem
                                     download={download}
                                     closeAction={() => {

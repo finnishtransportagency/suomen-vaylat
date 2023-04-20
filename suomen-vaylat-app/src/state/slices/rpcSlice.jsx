@@ -36,7 +36,7 @@ const initialState = {
     allSelectedThemeLayers: [],
     selectedTheme: null,
     lastSelectedTheme: null,
-    selectedThemeIndex: null,
+    selectedThemeId: null,
     filter: null,
     layerMetadata: { data: null, layer: null, uuid: null },
     legends: [],
@@ -241,14 +241,14 @@ export const rpcSlice = createSlice({
         },
 
         /**
-         * Set selected theme index.
-         * @method setSelectedThemeIndex
+         * Set selected theme id.
+         * @method setSelectedThemeId
          * @param {Object} state
          * @param {Object} action
          */
-        setSelectedThemeIndex: (state, action) => {
-            state.selectedThemeIndex = action.payload;
-            LOG.log('setSelectedThemeIndex to ' + action.payload);
+        setSelectedThemeId: (state, action) => {
+            state.selectedThemeId = action.payload;
+            LOG.log('setSelectedThemeId to ' + action.payload);
         },
 
         /**
@@ -774,6 +774,16 @@ export const rpcSlice = createSlice({
         },
 
         /**
+         * Set gfi tools open.
+         * @method setisGfiToolsOpen
+         * @param {Object} state
+         * @param {Object} action
+         */
+        setIsGfiToolsOpen: (state, action) => {
+            state.isGfiToolsOpen = action.payload;
+        },
+
+        /**
          * Remove all selected layers.
          * @method removeAllSeelctedLayers
          * @param {Object} state
@@ -851,7 +861,7 @@ export const {
     setAllThemesWithLayers,
     setSelectedTheme,
     setLastSelectedTheme,
-    setSelectedThemeIndex,
+    setSelectedThemeId,
     setActiveAnnouncements,
     setFilter,
     getLayerMetadata,
@@ -878,7 +888,7 @@ export const {
     addFeaturesToGFILocations,
     setBackgroundMaps,
     setMapLayers,
-    setAllSelectedThemeLayers
+    setAllSelectedThemeLayers,
 } = rpcSlice.actions;
 
 export default rpcSlice.reducer;
