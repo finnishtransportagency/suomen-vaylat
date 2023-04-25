@@ -265,6 +265,12 @@ export const SourcesAndTermsOfUse = () => {
                     <p>{strings.appInfo.termsOfUse.moreInfo} <StyledLink target='_blank' href={strings.appInfo.termsOfUse.link}>{strings.appInfo.termsOfUse.link}</StyledLink></p>
                 </div>
             </div>
+            <div>
+                <StyledHeading>{strings.appInfo.privacyPolicy.title}</StyledHeading>
+                <div>
+                    <StyledLink target='_blank' href={strings.appInfo.privacyPolicy.link}>{strings.appInfo.privacyPolicy.link}</StyledLink>
+                </div>
+            </div>
         </div>
     )
 };
