@@ -264,10 +264,13 @@
     }
   },
   "search": {
+    "lessSearchOptions": "Vähemmän hakuehtoja",
+    "moreSearchOptions": "Lisää hakuehtoja",
     "fill_all_fields": "Fyll i alla sökfält",
-    "required_field_missing": "Kontrollera de obligatoriska fälten.",
+    "required_field_missing": "Kontrollera de obl igatoriska fälten.",
     "vkm": {
       "tie": "Vägnummer",
+      "tieloppu" : "Vägnummer slut",
       "title": "Sök efter vägnummer",
       "subtitle": "Sök på vägnummer",
       "osa": "Vägsträcka",
@@ -288,7 +291,18 @@
       "trackSubtitle": "Sök banuppgifter",
       "trackError": {
         "text": "Bansökningen gav inga resultat."
-      }
+      },
+      "toolptip": ["Tiehaku, kirjoita muodossa 'tie/osa/ajorata/etäisyys' tai 'tie/osa/ajorata/etäisyys tie/osa_loppu/ajorata/etäisyys_loppu'.",
+      "Esim.",
+      "5",
+      "5/116",
+      "5/116/0",
+      "5/116/0/50",
+      "5/116/0/50",
+      "5/116/0/50 5/348/0/100",
+      "5/116/0/50 5/348/0/100",
+      "alku:5/116/0/50 loppu:5/348/0/100"
+    ]
     },
     "address": {
       "title": "Sök plats",
@@ -305,6 +319,10 @@
           "text": "No results found for the metadata search."
       }
     },
+    "layer": {
+      "title": "Aineistohaku",
+      "description": "Aineistohaku kuvaus"
+    },  
     "tips": {
       "title": "Med platssökning kan du söka en kommun, adress, fastighetsbeteckning, vägadress eller banadress.",
       "address": "Adressökning, skriv i formatet 'kommun', 'adress' eller 'adress, kommun'.",
@@ -335,7 +353,21 @@
       ],
       "example": "T.ex.",
       "toastTip": "Visste du att du kan spara den geometri som kommit upp på kartan vid ban- och vägsökningen?",
-      "toastTipContent": "Du kan spara geometrin via ikonen spara i vänstra kanten, på den andra fliken."
+      "toastTipContent": "Du kan spara geometrin via ikonen spara i vänstra kanten, på den andra fliken.",
+      "nomenclature" : "Kiinteistöhaulla voit hakea kohteita kiinteistörekisteristö kiinteistötunnuksella",
+      "nomenclatureExamples" : [
+        "834-442-2-85"
+      ],
+      "layer" : "Aineistohaulla voit hakea karttatasoista sanalla tai sanan osalla",
+      "layerExamples" : [
+        "pölkytys"
+      ]
+    },
+    "nomenclature" : {
+      "title": "Nimistöhaku"
+    },
+    "premise" : {
+      "title": "Kiinteistöhaku"
     }
   },
   "layerlist": {
