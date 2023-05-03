@@ -45,7 +45,7 @@ export const MetadataModal = ({
   const [uuid, setUuid] = useState(true);
 
   const identification = (metadata.data && metadata.data.identifications) ? metadata.data.identifications[0] : {};
-  const layerDesc = (metadata.layer && metadata.layer.config && metadata.layer.config.descLoc) ? metadata.layer.config.descLoc[lang.current] : "";
+  const layerDesc = (metadata.layer && metadata.layer.config && metadata.layer.config.PDPUpdateDate) ? metadata.layer.config.PDPUpdateDate[lang.current] : "";
 
   if (metadata.uuid !== uuid) {
     setUuid(metadata.uuid);
