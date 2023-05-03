@@ -564,6 +564,7 @@
       "spatialResolution": "Rumslig upplösning",
       "temporalExtent": "Temporära utsträckningar",
       "topicCategory": "Ämneskategorier",
+      "updateDate": "Data update",
       "useLimitation": "Använd begränsningar",
       "absoluteExternalPositionalAccuracy": "Absolut lägesnoggrannhet",
       "accuracyOfTimeMeasurement": "Tidsnoggrannhet",

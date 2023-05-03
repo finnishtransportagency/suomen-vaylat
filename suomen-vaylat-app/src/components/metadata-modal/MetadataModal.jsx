@@ -40,12 +40,12 @@ const StyledContent = styled.div`
 export const MetadataModal = ({
   metadata
 }) => {
-
+    const lang = useAppSelector((state) => state.language);
   useAppSelector((state) => state.language);
-
   const [uuid, setUuid] = useState(true);
 
   const identification = (metadata.data && metadata.data.identifications) ? metadata.data.identifications[0] : {};
+  const layerDesc = (metadata.layer && metadata.layer.config && metadata.layer.config.descLoc) ? metadata.layer.config.descLoc[lang.current] : "";
 
   if (metadata.uuid !== uuid) {
     setUuid(metadata.uuid);
@@ -55,6 +55,11 @@ export const MetadataModal = ({
           <StyledContent>
             <MetadataGraphic identification={identification}></MetadataGraphic>
             <Citation identification={identification}></Citation>
+            <HeaderAndParagraph
+              visible={layerDesc.length > 0}
+              header={strings.metadata.heading.updateDate}
+              text={layerDesc}
+            />
             <HeaderAndParagraph
               visible={identification.abstractText.length > 0}
               header={(identification.type === 'data' ? strings.metadata.heading.abstractTextData : strings.metadata.heading.abstractTextService)}
