@@ -560,6 +560,7 @@
       "spatialResolution": "Spatial resolution",
       "temporalExtent": "Temporal extents",
       "topicCategory": "Topic categories",
+      "updateDate": "Data update",
       "useLimitation": "Use limitations",
       "absoluteExternalPositionalAccuracy": "Absolute external positional accuracy",
       "accuracyOfTimeMeasurement": "Accuracy of time measurement",

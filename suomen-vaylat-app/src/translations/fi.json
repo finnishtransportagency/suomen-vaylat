@@ -564,6 +564,7 @@
       "spatialResolution": "Sijaintitiedon erotuskyky",
       "temporalExtent": "Ajallinen kattavuus",
       "topicCategory": "Aiheluokka",
+      "updateDate": "Aineiston päivitys",
       "useLimitation": "Käyttöehdot",
       "absoluteExternalPositionalAccuracy": "Absoluuttinen sijaintitarkkuus",
       "accuracyOfTimeMeasurement": "Ajallisen mittauksen oikeellisuus",
