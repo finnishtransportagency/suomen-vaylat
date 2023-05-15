@@ -325,9 +325,9 @@
         "start:5/116/0/50 slut:5/348/0/100"
       ],
       "vkmTrack": "Bansökning, skriv i formatet 'bannummer/bankilometer/banmeter'.",
-      "vkmTrackExamples": {
-        "0": "001/2/10"
-      },
+      "vkmTrackExamples": [
+        "001/2/10"
+      ],
       "realEstateUnitIdentifier": "Fastighetsbeteckning, skriv i formatet 'aa-bb-cc-d' eller 'aaa-bbb-cc-ddd'.",
       "realEstateUnitIdentifierExamples": [
         "91-17-16-1",
