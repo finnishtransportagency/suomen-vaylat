@@ -254,6 +254,10 @@
       "description": "The datasets of the Finnish Transport Infrastructure Agency’s Suomen Väylät service are subject to the Creative Commons 4.0 Attribution licence.",
       "moreInfo": "More information on the terms of use:",
       "link": "https://vayla.fi/vaylista/aineistot/avoindata/kayttoehdot"
+    },
+    "privacyPolicy": {
+      "title": "Privacy statement",
+      "link": "https://vayla.fi/documents/25230764/35601500/Tietosuojaseloste+Avoimen+datan+palvelut+14.3.2023_allekirjoitettu.pdf/738884e8-28b8-ce84-050a-83bde6b51a2c/Tietosuojaseloste+Avoimen+datan+palvelut+14.3.2023_allekirjoitettu.pdf?t=1681210558717"
     }
   },
   "search": {
@@ -318,9 +322,9 @@
         "start:5/116/0/50 end:5/348/0/100"
       ],
       "vkmTrack": "Track search, type in the format 'track number/track kilometre/track metre'.",
-      "vkmTrackExamples": {
-        "0": "001/2/10"
-      },
+      "vkmTrackExamples": [
+        "001/2/10"
+      ],
       "realEstateUnitIdentifier": "Property identifier search, type in the format 'aa-bb-cc-d' or 'aaa-bbb-cc-ddd'.",
       "realEstateUnitIdentifierExamples": [
         "91-17-16-1",
