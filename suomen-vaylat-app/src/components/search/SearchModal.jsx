@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import strings from '../../translations';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Switch from '../switch/Switch';
 import {
@@ -73,9 +73,9 @@ const getSearchValuePart = (searchValue, searchType, part) => {
     let retVa;
     if(splittedSearchArray !== undefined && (splittedSearchArray.length -1) >= part
         && typeof splittedSearchArray[part] !== 'undefined') {
-        retVa= splittedSearchArray[part];
+        retVa= splittedSearchArray[part];       
     }else {
-        retVa = undefined;
+        retVa = "";
     }
     return retVa;
 }
@@ -163,6 +163,9 @@ const SearchModal = ({
         setSearchType('address');
       };
  
+    useEffect(() => {
+       setSearchValue(searchValue)
+    }, [searchValue, setSearchValue]);  
 
     return (
         <StyledSearchModal>   
