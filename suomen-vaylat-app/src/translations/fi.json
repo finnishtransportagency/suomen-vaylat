@@ -291,7 +291,18 @@
       "trackSubtitle": "Hae ratatietoja",
       "trackError": {
         "text": "Tuloksia ei löytynyt ratahaulla."
-      }
+      },
+      "tooltip": ["Tiehaku, kirjoita muodossa 'tie/osa/ajorata/etäisyys' tai 'tie/osa/ajorata/etäisyys tie/osa_loppu/ajorata/etäisyys_loppu'.",
+      "Esim.",
+      "5",
+      "5/116",
+      "5/116/0",
+      "5/116/0/50",
+      "5/116/0/50",
+      "5/116/0/50 5/348/0/100",
+      "5/116/0/50 5/348/0/100",
+      "alku:5/116/0/50 loppu:5/348/0/100"
+      ]
     },
     "address": {
       "title": "Paikkahaku",

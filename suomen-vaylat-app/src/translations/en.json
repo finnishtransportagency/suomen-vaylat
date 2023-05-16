@@ -292,7 +292,7 @@
       "trackError": {
         "text": "No results were found for the track search."
       },
-      "toolptip": ["Tiehaku, kirjoita muodossa 'tie/osa/ajorata/etäisyys' tai 'tie/osa/ajorata/etäisyys tie/osa_loppu/ajorata/etäisyys_loppu'.",
+      "tooltip": ["Tiehaku, kirjoita muodossa 'tie/osa/ajorata/etäisyys' tai 'tie/osa/ajorata/etäisyys tie/osa_loppu/ajorata/etäisyys_loppu'.",
       "Esim.",
       "5",
       "5/116",
@@ -306,6 +306,7 @@
     },
     "address": {
       "title": "Search place",
+      "description" : "Paikkahaku kuvaus",
       "subtitle": "Search by address, municipality or property identifier",
       "address": "Opastinsilta 12 Helsinki",
       "error": {
