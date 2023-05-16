@@ -547,6 +547,9 @@ const Search = () => {
                                     );
                             }}
                         >
+                        {  
+                            searchTypes[searchType].content
+                        }
                         </StyledSelectedSearchMethod>
                         ) : (
                             <StyledLoaderWrapper>
