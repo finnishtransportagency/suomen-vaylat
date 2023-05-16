@@ -267,7 +267,7 @@
     "lessSearchOptions": "Vähemmän hakuehtoja",
     "moreSearchOptions": "Lisää hakuehtoja",
     "fill_all_fields": "Fyll i alla sökfält",
-    "required_field_missing": "Kontrollera de obl igatoriska fälten.",
+    "required_field_missing": "Kontrollera de obligatoriska fälten.",
     "vkm": {
       "tie": "Vägnummer",
       "tieloppu" : "Vägnummer slut",
@@ -292,7 +292,7 @@
       "trackError": {
         "text": "Bansökningen gav inga resultat."
       },
-      "toolptip": ["Tiehaku, kirjoita muodossa 'tie/osa/ajorata/etäisyys' tai 'tie/osa/ajorata/etäisyys tie/osa_loppu/ajorata/etäisyys_loppu'.",
+      "tooltip": ["Tiehaku, kirjoita muodossa 'tie/osa/ajorata/etäisyys' tai 'tie/osa/ajorata/etäisyys tie/osa_loppu/ajorata/etäisyys_loppu'.",
       "Esim.",
       "5",
       "5/116",
@@ -306,6 +306,7 @@
     },
     "address": {
       "title": "Sök plats",
+      "description" : "Paikkahaku kuvaus",
       "subtitle": "Sök på adress, kommunnamn eller fastighetskod",
       "address": "Opastinsilta 12 Helsinki",
       "error": {
