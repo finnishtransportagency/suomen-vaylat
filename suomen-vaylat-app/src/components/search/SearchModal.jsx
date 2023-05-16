@@ -74,7 +74,12 @@ const getSearchValuePart = (searchValue, searchType, part) => {
     if(splittedSearchArray !== undefined && (splittedSearchArray.length -1) >= part
         && typeof splittedSearchArray[part] !== 'undefined') {
         retVa= splittedSearchArray[part];       
-    }else {
+    }
+    //first value set whole searchvalue
+    else if (part === 0){
+         retVa = searchValue; 
+    } 
+    else {
         retVa = "";
     }
     return retVa;
@@ -82,9 +87,16 @@ const getSearchValuePart = (searchValue, searchType, part) => {
 
 const splitSearchValue = (searchValue, searchType) => {
     let roadParts;
-    if (searchValue!== undefined && searchType !== undefined &&
-         searchType === 'address' && searchValue.includes("/")){
-        roadParts =  searchValue.split("/");
+    if (searchValue!== "" && searchType !== undefined &&
+        searchType === 'address' && searchValue.includes("/")){
+        //if roadsearch contains space, ingnore and handle on search field, range search case
+        if (searchValue.includes(' ')){
+            let partsArray = searchValue.split(" ");
+            roadParts = partsArray[0].split("/").concat(partsArray[1].split("/"));
+        }else {
+            roadParts =  searchValue.split("/");
+        }            
+       
     }
     return roadParts;
 }
@@ -97,36 +109,44 @@ const splitSearchValue = (searchValue, searchType) => {
  * @param {*} part part of roadsearch to update 0=tie, 1=osa, 2= ajorata, 3= etäisyys
  */
 const updateRoadSearchValue = (searchValue, searchType, setSearchValue, part, value) => {
-    if (searchValue !== undefined){
-        //const oldPart = getSearchValuePart(searchValue, searchType, part);
-        let searchArray = splitSearchValue(searchValue, searchType);
-        if ((searchArray!==undefined && searchArray!=="") && searchArray.length >= part){
-            //empty value in the middle remove values on right side
-            if (value === ""){
-                searchArray.length=part
-            }
-            searchArray[part] = value;   
-            const updatedSearchValue= parseSearchValueFromParts(searchArray)
-            if (updatedSearchValue!==undefined){
-                setSearchValue(updatedSearchValue);
-            }
-        } else if ((searchArray===undefined || searchArray==="") && value !== undefined && part === 0) {
-            //first part
-            setSearchValue(value);
-        } else if ((searchArray===undefined || searchArray==="") && searchValue !== undefined && part === 1) {
-            //add second part to search
-            setSearchValue(searchValue + "/" + value);
-        } else if ((searchArray!==undefined && searchArray!=="") && searchArray.length === (part -1)) {
-            //any bigger new part than 0 or 1
-            setSearchValue(searchValue + "/" + value);
+    //const oldPart = getSearchValuePart(searchValue, searchType, part);
+    let searchArray = splitSearchValue(searchValue, searchType);
+    if ((searchArray!==undefined && searchArray!=="") && searchArray.length >= part){
+        //empty value in the middle remove values on right side
+        if (value === ""){
+            searchArray.length=part
         }
-     
-            
-    }    
+        console.info("täsä",part)
+        searchArray[part] = value; 
+        //range search add empty space between parts
+        if (part > 3){
+            //add empty space between range search values
+            searchArray.splice(4, 0, " ");
+        }   
+        const updatedSearchValue= parseSearchValueFromParts(searchArray)
+        if (updatedSearchValue!==undefined){
+            setSearchValue(updatedSearchValue);
+        }
+    } else if ((searchArray===undefined || searchArray==="") && value !== undefined && part === 0) {
+        //first part
+        setSearchValue(value);
+    } else if ((searchArray===undefined || searchArray==="") && searchValue !== undefined && part === 1) {
+        //add second part to search
+        setSearchValue(searchValue + "/" + value);
+    } else if ((searchArray!==undefined && searchArray!=="") && searchArray.length === (part -1)) {
+        //any bigger new part than 0 or 1
+        setSearchValue(searchValue + "/" + value);
+    } 
 }
 
 const parseSearchValueFromParts = (partsArray) => {
-    let newSearchValue = partsArray.join("/");
+    let newSearchValue;
+    //if range search (more than 4 params) add space between
+    if (partsArray !== undefined && partsArray.length > 3 && partsArray.includes(' ')){
+        newSearchValue = [partsArray.slice(0, 4).join('/'), ' ',partsArray.slice(5).join('/')].join('') ;
+    }else {
+        newSearchValue = partsArray.join('/');
+    }
     return newSearchValue.endsWith('/') ? newSearchValue.slice(0, -1) : newSearchValue;;
 }
 
