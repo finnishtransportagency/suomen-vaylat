@@ -596,6 +596,9 @@ const Content = () => {
                     <GFIPopup
                         gfiLocations={gfiLocations}
                         handleGfiDownload={handleGfiDownload}
+                        constraintsRef={constraintsRef}
+                        minimize={minimizeGfi}
+                        maximize={maximizeGfi}
                     />
                 </Modal>
                 <Modal

@@ -98,7 +98,8 @@
       "title": "Tallennetut geometriat (Poissa käytöstä)",
       "description": "Omat tallennetut geometriat",
       "disabled": "Väliaikaisesti poissa käytöstä"
-    }
+    }, 
+    "filter" : "Suodata"
   },
   "vkm": {
     "locationInfo": "Sijaintitiedot",

@@ -1,14 +1,16 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback  } from 'react';
 import styled from 'styled-components';
 
 import GfiTabContentItem from './GfiTabContentItem';
 import strings from '../../translations';
 
-import { faTable, faList } from '@fortawesome/free-solid-svg-icons';
+import { faTable, faList, faFilter, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { kaReducer, Table } from 'ka-table';
 import "ka-table/style.scss";
+import Modal from '../modals/Modal';
+import Dropdown from '../select/Dropdown';
 
 const StyledSelectedTabHeader = styled.div`
     position: relative;
@@ -30,7 +32,7 @@ const StyledSelectedTabTitle = styled.div`
 `;
 
 const StyledSelectedTabDisplayOptionsButton = styled.div`
-    position: absolute;
+    position: relative;
     right: 0px;
     padding: 8px;
     cursor: pointer;
@@ -53,18 +55,82 @@ const StyledTabContent = styled.div`
         border-bottom: 1px solid #ddd;
     }
 `;
+/*
+    min-width: 600px;
+    max-width: 600px;
+    padding: 16px;
+    overflow: auto;
+    @media ${props => props.theme.device.mobileL} {
+        min-width: initial;
+    };
+    width: 600px;
+    height: 400px;
+    padding: 16px;
+    position: absolute;
+    top: 300px;
+    border: solid;
+    background-color: #0064af;
+    left: 500px;
+*/
+const StyledModalContainer = styled.div`
+    :after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+    padding-left: 20px;
+    padding-right: 20px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    
+`;
+
+const StyledModalFloatingChapter = styled.div`
+    float: left;
+    width: 23%;
+    margin-left: 6px;
+`;
+
+const StyledInput = styled.input`
+    width: 100%;
+    padding-left: 26px;
+    font-size: 16px;
+    padding-top: 10px;
+    border-radius: 4px;
+    border: 2px solid grey;
+`;
+
+const StyledFilterContainer = styled.div`
+    margin-left: 6px;
+    position: relative;
+`;
+
+const StyledFilter = styled.div`
+    background-color: #f2f2f2;
+`;
 
 
 const GfiTabContent = ({
     data,
     title,
-    tablePropsInit
+    tablePropsInit,
+    constraintsRef,
+    minimize,
+    maximize
 }) => {
 
     const [tableProps, changeTableProps] = useState(tablePropsInit);
+    const [filtering, setFiltering] = useState(false);
+    const [filters, setFilters] = useState([]);
+    const [filteredData, setFilteredData] = useState(data?.content?.features);
     const dispatch = action => {
       changeTableProps(prevState => kaReducer(prevState, action));
     };
+
+
+    useEffect(() => {
+        console.info("filteredData", filteredData)
+    }, [filteredData, data])
 
     useEffect(() => {
         changeTableProps(tablePropsInit);
@@ -128,7 +194,149 @@ const GfiTabContent = ({
             'gfi-result-layer-overlay',
         ]);
     };
+    const propOptions = [
+        { value: 'prop1', label: 'Ominaisuus1' },
+        { value: 'prop2', label: 'Ominaisuus2' },
+        { value: 'prop3', label: 'Ominaisuus3' },
+      ];
+      const gfiFilteringOptions = [
+        { value: 'equals', label: 'Yhtäsuuri kuin' },
+        { value: 'notEquals', label: 'Erisuuri kuin' },
+        { value: 'smallerThan', label: 'Pienempi kuin' },
+        { value: 'biggerThan', label: 'Suurempi kuin' },
+      ];
 
+
+    const filterFeatures =  useCallback(() => {
+        let filteredFeatures = [];
+        filters.forEach(filter => {
+            // updateFilteredData = updateFilteredData?.content?.features.filter((feature) => {
+            //     return feature.properties.hasOwnProperty(filter.property)
+            //     && feature.properties[filter.property] === filter.value 
+
+            // }
+            //let features = updateFilteredData?.content?.features;
+            //const filteredFeatures = filteredData?.content?.features.filter((feature) => {
+            filteredFeatures = filteredData?.filter((feature) => {
+                console.info("isMatch", feature.properties.hasOwnProperty(filter.property)
+                && feature.properties[filter.property] === filter.value
+                );
+                console.info("filter prop", filter.property)
+                return feature.properties.hasOwnProperty(filter.property)
+                && feature.properties[filter.property] === filter.value; 
+            })
+          
+          
+            //setFilteredData(filteredFeatures)
+            //updatedFilteredData.content.features = filteredFeatures;
+            //setFilteredData({filteredData.content.features = filteredFeatures
+            //    filteredData.content.features = filteredFeatures})
+         
+            //console.info("datski ", filteredFeatures)
+            //if (data?.content?.features?)
+            
+        }
+        )
+        if (filteredFeatures && filteredFeatures.length >0)
+        setFilteredData(filteredFeatures)
+    }, [filteredData, filters] )
+
+    // useEffect (() => {
+    //     let filteredFeatures = [];
+    //     filters.forEach(filter => {
+    //         filteredFeatures = filteredData?.filter((feature) => {
+    //             console.info("isMatch", feature.properties.hasOwnProperty(filter.property)
+    //             && feature.properties[filter.property] === filter.value
+    //             );
+    //             console.info("filter prop", filter.property)
+    //             return feature.properties.hasOwnProperty(filter.property)
+    //             && feature.properties[filter.property] === filter.value; 
+    //         })
+    //     }
+    //     )
+    //     if (filteredFeatures && filteredFeatures.length >0)
+    //     setFilteredData(filteredFeatures)
+    // }, [filteredData, filters])
+    // useEffect(() => {
+       
+    //    // const filterFeatures = (datuuki)  => {
+    //         //var updatedFilteredData = {...filteredData};
+    //         console.info("features", filteredData);
+    //         //if (filters && filters.length > 0 && 
+    //         //    filters.some((filter)  => filter.title = title ) ){
+    //             let filteredFeatures = [];
+    //                 filters.forEach(filter => {
+    //                     // updateFilteredData = updateFilteredData?.content?.features.filter((feature) => {
+    //                     //     return feature.properties.hasOwnProperty(filter.property)
+    //                     //     && feature.properties[filter.property] === filter.value 
+            
+    //                     // }
+    //                     //let features = updateFilteredData?.content?.features;
+    //                     //const filteredFeatures = filteredData?.content?.features.filter((feature) => {
+    //                     filteredFeatures = filteredData?.filter((feature) => {
+    //                         console.info("isMatch", feature.properties.hasOwnProperty(filter.property)
+    //                         && feature.properties[filter.property] === filter.value
+    //                         );
+    //                         console.info("filter prop", filter.property)
+    //                         return feature.properties.hasOwnProperty(filter.property)
+    //                         && feature.properties[filter.property] === filter.value; 
+    //                     })
+                      
+                      
+    //                     //setFilteredData(filteredFeatures)
+    //                     //updatedFilteredData.content.features = filteredFeatures;
+    //                     //setFilteredData({filteredData.content.features = filteredFeatures
+    //                     //    filteredData.content.features = filteredFeatures})
+                     
+    //                     //console.info("datski ", filteredFeatures)
+    //                     //if (data?.content?.features?)
+                        
+    //                 }
+    //                 )
+    //                 if (filteredFeatures && filteredFeatures.length >0)
+    //                 setFilteredData(filteredFeatures)
+    //            // }
+          
+    //         //
+    //         //setFilteredData(updatedFilteredData)
+    //         //console.info("updatedFilteredData ", updatedFilteredData)
+    //         //return updatedFilteredData;
+    //    //}
+    //     //filterFeatures();
+       
+    //     //filterFeatures(data)
+    //     console.info("datski effect", filteredData)
+    //     console.info("filters effect", filters)
+    // }, [filteredData, filters]);
+  
+     useEffect (( ) => {
+        console.info("filters", filters)
+     }, [filters])
+   
+
+    const addFilter = () => {
+        const prop = "ilman_lampotila";
+        const value = -4;
+        const oper = "equals";
+        const layer = title
+        console.info("nyt filtteröidään", prop, oper, value)
+        setFilters([...filters ,
+            {   
+                "layer" : layer,
+                "property": prop,
+                "operator": oper,
+                "value": value
+            }
+        ]
+        )
+        filterFeatures()
+    }
+
+
+    const [ operatorValue,  setOperatorValue] = useState("");
+    const [ filterValue, setFilterValue] = useState("");
+    const [ propValue, setPropValue] = useState("");
+    
     return <>
             <StyledSelectedTabHeader>
                 <StyledSelectedTabTitle>
@@ -139,12 +347,100 @@ const GfiTabContent = ({
                     </p>
                 </StyledSelectedTabTitle>
                 <StyledSelectedTabDisplayOptionsButton
-                    onClick={() => setShowDataTable(!showDataTable)}
+                    onClick={() =>  setFiltering(!filtering)}
+                >
+                    <FontAwesomeIcon icon={filtering ? faFilter : faFilter} />
+                </StyledSelectedTabDisplayOptionsButton>
+                {filtering && 
+                <Modal
+                constraintsRef={
+                    {constraintsRef}
+                } /* Reference div for modal drag boundaries */
+                drag={true} /* Enable (true) or disable (false) drag */
+                resize={true}
+                backdrop={
+                    false
+                } /* Is backdrop enabled (true) or disabled (false) */
+                fullScreenOnMobile={
+                    true
+                } /* Scale modal full width / height when using mobile device */
+                titleIcon={
+                    null
+                } /* Use icon on title or null */
+                title={strings.gfi.filter} /* Modal header title */
+                type={'normal'} /* Modal type */
+                closeAction={
+                    console.info("A")
+                } /* Action when pressing modal close button or backdrop */
+                isOpen={filtering} /* Modal state */
+                id={null}
+                minimize={minimize}
+                maximize={maximize}
+            >
+                <StyledModalContainer>
+                    <StyledModalFloatingChapter>
+                    <Dropdown 
+                      options={propOptions}
+                      action={()=>{console.info("valittu propsu", propValue)}}
+                      placeholder="Valitse propsu"
+                      value={propValue}
+                      setValue={setPropValue}
+                    />
+
+                    </StyledModalFloatingChapter>
+                    <StyledModalFloatingChapter>
+                    <Dropdown 
+                      options={gfiFilteringOptions}
+                      action={()=>{console.info("valittu tyyppä", operatorValue)}}
+                      placeholder="Valitse operaattori"
+                      value={operatorValue}
+                      setValue={setOperatorValue}
+                    />
+
+                    </StyledModalFloatingChapter>
+                    <StyledModalFloatingChapter>
+                    <StyledInput
+                        type="text"
+                        value={filterValue}
+                        placeholder={"syötä suodettava arvo"}
+                        onChange={e => setFilterValue(e.target.value)}
+                        // onKeyPress={e => {
+                        //     if (e.key === 'Enter') {
+                        //         console.info( "lähetään suodattaa ", e.target.value );
+                        //         setFilterValue(e.target.value);
+                        //     }
+                        // }}
+                    />
+                    </StyledModalFloatingChapter>
+                    <StyledModalFloatingChapter>
+                        <StyledSelectedTabDisplayOptionsButton
+                            onClick={() =>  addFilter()}
+                        >
+                        <FontAwesomeIcon icon={faPlus} />
+                        </StyledSelectedTabDisplayOptionsButton>
+                    </StyledModalFloatingChapter>
+                    {filters && filters.length > 0 && (
+                        <StyledFilterContainer>
+                            <span>Aktiiviset filtterit</span>
+                            {filters.map( (filter) => 
+                                <StyledFilter>Ominaisuus: {filter.property} <br/>
+                                Operaattori: {filter.operator}<br/>
+                                Arvo: {filter.value}
+                                </StyledFilter>
+                             )}                        
+                        </StyledFilterContainer>
+                    )
+                    }
+                </StyledModalContainer>
+            </Modal>
+            }
+                <StyledSelectedTabDisplayOptionsButton
+                    onClick={() =>  setShowDataTable(!showDataTable)}
                 >
                     <FontAwesomeIcon icon={showDataTable ? faList : faTable} />
                 </StyledSelectedTabDisplayOptionsButton>
             </StyledSelectedTabHeader>
-
+                        
         {
             showDataTable ?
                 <Table
@@ -157,18 +453,26 @@ const GfiTabContent = ({
             }}>
                 <StyledTabContent>
                     {
-                        data?.content?.features?.map((feature, index) => {
-                            return <GfiTabContentItem
-                                    key={feature.id}
-                                    title={feature.id.split('.')[1] ? title + ` | ${strings.gfi.uniqueId } ` + feature.id.split('.')[1] : title + ' ' + feature.id}
-                                    data={feature}
-                                    index={index}
-                                    selectFeature={selectFeature}
-                                    deSelectFeature={deSelectFeature}
-                                />
-                            })
+                        //filterFeatures(data)
+                        //.then(filtered => {
+                        //filterFeatures()
+                        //    .then(() => {            
+                            filteredData.map((feature, index) => {
+                                console.info(feature)
+                                return <GfiTabContentItem
+                                        key={feature.id}
+                                        title={feature.id.split('.')[1] ? title + ` | ${strings.gfi.uniqueId } ` + feature.id.split('.')[1] : title + ' ' + feature.id}
+                                        data={feature}
+                                        index={index}
+                                        selectFeature={selectFeature}
+                                        deSelectFeature={deSelectFeature}
+                                    />
+                                })
+                        //} )
+
                     }
                 </StyledTabContent>
+  
             </div>
 
         }
