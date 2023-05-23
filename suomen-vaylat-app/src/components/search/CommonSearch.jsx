@@ -21,7 +21,7 @@ const CommonSearch = ({
         <StyledInput
             type="text"
             value={searchValue}
-            placeholder={strings.search.address.title + '...'}
+            placeholder={ strings.search.address.title + '...' }
             onChange={e => setSearchValue(e.target.value)}
             onKeyPress={e => {
                 if (e.key === 'Enter') {

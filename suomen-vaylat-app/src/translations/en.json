@@ -264,10 +264,13 @@
     }
   },
   "search": {
+    "lessSearchOptions": "Vähemmän hakuehtoja",
+    "moreSearchOptions": "Lisää hakuehtoja",
     "fill_all_fields": "Fill in all search fields",
     "required_field_missing": "Check the required fields.",
     "vkm": {
       "tie": "Road number",
+      "tieloppu" : "Road end",
       "title": "Road number search",
       "subtitle": "Search by road number",
       "osa": "Road section",
@@ -288,10 +291,22 @@
       "trackSubtitle": "Search for track data",
       "trackError": {
         "text": "No results were found for the track search."
-      }
+      },
+      "tooltip": ["Tiehaku, kirjoita muodossa 'tie/osa/ajorata/etäisyys' tai 'tie/osa/ajorata/etäisyys tie/osa_loppu/ajorata/etäisyys_loppu'.",
+      "Esim.",
+      "5",
+      "5/116",
+      "5/116/0",
+      "5/116/0/50",
+      "5/116/0/50",
+      "5/116/0/50 5/348/0/100",
+      "5/116/0/50 5/348/0/100",
+      "alku:5/116/0/50 loppu:5/348/0/100"
+      ] 
     },
     "address": {
       "title": "Search place",
+      "description" : "Paikkahaku kuvaus",
       "subtitle": "Search by address, municipality or property identifier",
       "address": "Opastinsilta 12 Helsinki",
       "error": {
@@ -304,6 +319,10 @@
       "error": {
           "text": "No results found for the metadata search."
       }
+    },
+    "layer": {
+      "title": "Aineistohaku",
+      "description": "Aineistohaku kuvaus"
     },
     "tips": {
       "title": "Use location search to search for a municipality, address, property identifier, road address or track address.",
@@ -335,7 +354,21 @@
       ],
       "example": "For example,",
       "toastTip": "Did you know that you can save the geometry that was placed on the map from a track and road search?",
-      "toastTipContent": "You can save the geometry through the save icon on the left side of the page, from another tab."
+      "toastTipContent": "You can save the geometry through the save icon on the left side of the page, from another tab.",
+      "nomenclature" : "Kiinteistöhaulla voit hakea kohteita kiinteistörekisteristö kiinteistötunnuksella",
+      "nomenclatureExamples" : [
+        "834-442-2-85"
+      ],
+      "layer" : "Aineistohaulla voit hakea karttatasoista sanalla tai sanan osalla",
+      "layerExamples" : [
+        "pölkytys"
+      ]
+    },
+    "nomenclature" : {
+      "title": "Nimistöhaku"
+    },
+    "premise" : {
+      "title": "Kiinteistöhaku"
     }
   },
   "layerlist": {
