@@ -8,6 +8,7 @@ import { useAppSelector } from "../../../state/hooks";
 import { sortableContainer, sortableElement } from 'react-sortable-hoc';
 import {arrayMoveImmutable} from 'array-move';
 import SelectedLayer from './SelectedLayer';
+import { filter } from "lodash";
 
 const StyledSelectedLayers = styled.div`
 
@@ -47,12 +48,18 @@ const StyledListSubtitle = styled.div`
     };
 `;
 
-const SortableElement = sortableElement(({value, currentZoomLevel}) =>
-    <SelectedLayer
+
+const SortableElement = sortableElement((props) => {
+    const {value, currentZoomLevel, filtersEnabled, handleOpenFilteringModal} = props;
+    return <SelectedLayer
         layer={value}
-        uuid={value.metadataIdentifier}
+        uuid={value.metadataIdentifier}db
         currentZoomLevel={currentZoomLevel}
+        filtersEnabled={filtersEnabled}
+        handleOpenFilteringModal={handleOpenFilteringModal}
     />
+}
+    
 );
 
 const SortableContainer = sortableContainer(({children}) => {
@@ -60,12 +67,10 @@ const SortableContainer = sortableContainer(({children}) => {
 });
 
 
-export const SelectedLayers = ({ selectedLayers, currentZoomLevel }) => {
-
+export const SelectedLayers = (props) => {
+    const { selectedLayers, currentZoomLevel, filters, handleOpenFilteringModal } = props;
     const { store } = useContext(ReactReduxContext);
-
     const {channel, selectedLayersByType, allSelectedThemeLayers, selectedTheme} = useAppSelector(state => state.rpc);
-
     let backgroundMaps = selectedLayersByType.backgroundMaps;
     let mapLayers = selectedLayersByType.mapLayers;
 
@@ -118,10 +123,12 @@ export const SelectedLayers = ({ selectedLayers, currentZoomLevel }) => {
                 >
                     {mapLayers.map((item, index) => (
                         <SortableElement
-                            key={'maplayer-' + item.id}
+                            key={'maplayer-' + item.id} 
                             value={item}
                             index={index}
                             currentZoomLevel={currentZoomLevel}
+                            filtersEnabled={filters && filters.length > 0 && filters.some(filter => (filter.layer ===  item.name))}
+                            handleOpenFilteringModal={handleOpenFilteringModal}
                         />
                     ))}
                 </ul>

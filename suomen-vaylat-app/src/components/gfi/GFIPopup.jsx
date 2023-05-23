@@ -399,7 +399,13 @@ const StyledLoaderWrapper = styled.div`
 `;
 
 
-export const GFIPopup = ({ handleGfiDownload }) => {
+export const GFIPopup = ({ 
+    handleGfiDownload, 
+    filteringInfo,
+    setFilteringInfo, 
+    filters,
+    chosenQueryGeometry,
+    setChosenQueryGeometry  }) => {
     const LAYER_ID = 'gfi-result-layer';
     const { store } = useContext(ReactReduxContext);
     const { channel, allLayers, gfiLocations, vkmData, pointInfoImageError, setPointInfoImageError, gfiCroppingArea, selectedLayers, pointInfo } = useAppSelector(state => state.rpc);
@@ -416,7 +422,6 @@ export const GFIPopup = ({ handleGfiDownload }) => {
     const [gfiTabsSwiper, setGfiTabsSwiper] = useState(null);
     const [gfiTabsSnapGridLength, setGfiTabsSnapGridLength] = useState(0);
     const [isLoading, setIsLoading] = useState(false);
-
     const gfiInputEl = useRef(null);
 
     useEffect(() => {
@@ -1014,6 +1019,9 @@ export const GFIPopup = ({ handleGfiDownload }) => {
                                             data={location}
                                             title={title}
                                             tablePropsInit={tableProps}
+                                            filteringInfo={filteringInfo}
+                                            setFilteringInfo={setFilteringInfo}
+                                            filters={filters}
                                         />
                                         {location?.content?.some(content => content.geojson.features) &&
 
@@ -1096,7 +1104,10 @@ export const GFIPopup = ({ handleGfiDownload }) => {
                             x: '-100%',
                         }}
                     >
-                        <GfiToolsMenu handleGfiToolsMenu={handleGfiToolsMenu} />
+                        <GfiToolsMenu handleGfiToolsMenu={handleGfiToolsMenu} 
+                        filters={filters}
+                        chosenQueryGeometry={chosenQueryGeometry}
+                        setChosenQueryGeometry={setChosenQueryGeometry} />
                     </StyledGfiToolsContainer>
                 )}
             </AnimatePresence>

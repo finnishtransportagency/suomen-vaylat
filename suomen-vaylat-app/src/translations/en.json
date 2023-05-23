@@ -1153,5 +1153,22 @@
       "whatsapp": "Share on WhatsApp",
       "telegram": "Share on Telegram"
     }
+  },
+  "gfifiltering": {
+    "placeholders" : {
+      "chooseProp" : "Valitse ominaisuustieto",
+      "chooseOperator" : "Valitse operaattori",
+      "chooseValue" : "Suodettava arvo"
+    },
+    "activeFilters" : "Aktiiviset suodattimet",
+    "property" : "Ominaisuus",
+    "operator" : "Operaattori",
+    "value" : "Arvo",
+    "operators": {
+      "equals" : "Yhtäsuuri kuin",
+      "notEquals" : "Erisuuri kuin",
+      "smallerThan" : "Pienempi kuin",
+      "biggerThan" : "Suurempi kuin"
+    }
   }
 }

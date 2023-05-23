@@ -1,14 +1,15 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback  } from 'react';
 import styled from 'styled-components';
 
 import GfiTabContentItem from './GfiTabContentItem';
 import strings from '../../translations';
 
-import { faTable, faList } from '@fortawesome/free-solid-svg-icons';
+import { faTable, faList, faFilter, faExclamation } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { kaReducer, Table } from 'ka-table';
 import "ka-table/style.scss";
+import { layer } from '@fortawesome/fontawesome-svg-core';
 
 const StyledSelectedTabHeader = styled.div`
     position: relative;
@@ -30,7 +31,7 @@ const StyledSelectedTabTitle = styled.div`
 `;
 
 const StyledSelectedTabDisplayOptionsButton = styled.div`
-    position: absolute;
+    position: relative;
     right: 0px;
     padding: 8px;
     cursor: pointer;
@@ -53,12 +54,32 @@ const StyledTabContent = styled.div`
         border-bottom: 1px solid #ddd;
     }
 `;
+/*
+    min-width: 600px;
+    max-width: 600px;
+    padding: 16px;
+    overflow: auto;
+    @media ${props => props.theme.device.mobileL} {
+        min-width: initial;
+    };
+    width: 600px;
+    height: 400px;
+    padding: 16px;
+    position: absolute;
+    top: 300px;
+    border: solid;
+    background-color: #0064af;
+    left: 500px;
+*/
 
 
 const GfiTabContent = ({
     data,
     title,
-    tablePropsInit
+    tablePropsInit,
+    filteringInfo,
+    setFilteringInfo,
+    filters
 }) => {
     const [tableProps, changeTableProps] = useState(tablePropsInit);
     const dispatch = action => {
@@ -68,9 +89,7 @@ const GfiTabContent = ({
     useEffect(() => {
         changeTableProps(tablePropsInit);
     }, [tablePropsInit]);
-
     const [showDataTable, setShowDataTable] = useState(false);
-
     const selectFeature = (channel, features) => {
         let featureStyle = {
             fill: {
@@ -128,6 +147,17 @@ const GfiTabContent = ({
         ]);
     };
 
+    const activeFilteringOnLayer = useCallback(() => {
+        return filters.some(filter => (filter.layer ===  title))
+    })
+
+    const [isActiveFiltering, setIsActiveFiltering] = useState(false);
+
+
+    useEffect(() => {
+        setIsActiveFiltering(activeFilteringOnLayer());
+      }, [filters, filteringInfo.chosenLayer, activeFilteringOnLayer, title]);
+      
     return <>
             <StyledSelectedTabHeader>
                 <StyledSelectedTabTitle>
@@ -138,12 +168,26 @@ const GfiTabContent = ({
                     </p>
                 </StyledSelectedTabTitle>
                 <StyledSelectedTabDisplayOptionsButton
-                    onClick={() => setShowDataTable(!showDataTable)}
+                    onClick={() =>  setFilteringInfo( {modalOpen: true, chosenLayer: title, layers: [ { title: title, tableProps : tableProps }]} )}
+                >
+                <FontAwesomeIcon icon={faFilter} style={{ color: filteringInfo?.chosenLayer && filters && isActiveFiltering ? 'red' : '0064AF' }}  />
+                {filteringInfo?.title && filters && activeFilteringOnLayer() && 
+                <FontAwesomeIcon 
+                    icon={faExclamation}   
+                    style={{
+                        color: 'red',
+                        marginLeft: '10px',
+                        }}/
+                >
+                } 
+                    </StyledSelectedTabDisplayOptionsButton>
+                <StyledSelectedTabDisplayOptionsButton
+                    onClick={() =>  setShowDataTable(!showDataTable)}
                 >
                     <FontAwesomeIcon icon={showDataTable ? faList : faTable} />
                 </StyledSelectedTabDisplayOptionsButton>
             </StyledSelectedTabHeader>
-
+                        
         {
             showDataTable ?
                 <Table
@@ -171,6 +215,7 @@ const GfiTabContent = ({
                         })
                     }
                 </StyledTabContent>
+  
             </div>
 
         }

@@ -11,6 +11,7 @@ import { updateLayers } from '../../../utils/rpcUtil';
 import LayerDownloadLinkButton from './LayerDownloadLinkButton';
 import {setIsDownloadLinkModalOpen} from '../../../state/slices/uiSlice';
 import LayerMetadataButton from './LayerMetadataButton';
+import { getLayerMetadata } from '../../../state/slices/rpcSlice';
 
 const StyledLayerContainer = styled.li`
     background-color: ${props => props.themeStyle && "#F5F5F5"};
@@ -84,9 +85,25 @@ export const Layer = ({ layer, theme }) => {
         selectedTheme
     } = useSelector(state => state.rpc);
 
+    const handleRessu = (data, buli, gebo) => {
+        console.info(data)
+        console.info(buli)
+        console.info(gebo)
+    } 
+
     const handleLayerVisibility = (channel, layer) => {
+        console.info(layer)
+
+        getLayerMetadata({ layer: layer, uuid: layer.metadataIdentifier, handler: handleRessu, errorHandler: (e) => console.info("error", e) });
         store.dispatch(setMapLayerVisibility(layer));
         updateLayers(store, channel);
+
+        channel.postRequest('MetadataSearchRequest', [
+            {
+                search: layer.title
+            },
+        ]);
+
     };
 
     const handleIsDownloadLinkModalOpen = () => {

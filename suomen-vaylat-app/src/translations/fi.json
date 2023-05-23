@@ -99,7 +99,8 @@
       "description": "Omat tallennetut geometriat",
       "disabled": "Väliaikaisesti poissa käytöstä"
     },
-    "openGoogleStreetView": "Avaa Google Street View"
+    "openGoogleStreetView": "Avaa Google Street View", 
+    "filter" : "Suodata"
   },
   "vkm": {
     "locationInfo": "Sijaintitiedot",
@@ -1153,6 +1154,23 @@
       "linkedin": "Jaa LinkedInissä",
       "whatsapp": "Jaa WhatsAppissa",
       "telegram": "Jaa Telegrammissa"
+    }
+  },
+  "gfifiltering": {
+    "placeholders" : {
+      "chooseProp" : "Valitse ominaisuustieto",
+      "chooseOperator" : "Valitse operaattori",
+      "chooseValue" : "Suodettava arvo"
+    },
+    "activeFilters" : "Aktiiviset suodattimet",
+    "property" : "Ominaisuus",
+    "operator" : "Operaattori",
+    "value" : "Arvo",
+    "operators": {
+      "equals" : "Yhtäsuuri kuin",
+      "notEquals" : "Erisuuri kuin",
+      "smallerThan" : "Pienempi kuin",
+      "biggerThan" : "Suurempi kuin"
     }
   }
 }
