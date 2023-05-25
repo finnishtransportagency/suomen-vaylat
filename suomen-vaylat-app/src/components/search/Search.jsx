@@ -567,19 +567,10 @@ const Search = () => {
                                 }}
                                 icon={faTrash}
                             />
-                        ) : (
+                        ) : !isSearching && (
                             <StyledSearchActionButton
                                 onClick={() => {
-                                    switch (searchType) {
-                                        case 'address':
-                                            handleAddressSearch(searchValue);
-                                            break;
-                                        case 'metadata':
-                                            handleMetadataSearch(searchValue);
-                                            break;
-                                        default:
-                                            break;
-                                    }
+                                    handleSeach(searchValue)
                                 }}
                                 icon={faSearch}
                                 size="lg"

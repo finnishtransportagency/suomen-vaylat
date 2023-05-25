@@ -61,17 +61,18 @@ const StyledToolTipContainer = styled.div`
     font-size: 15px;
     opacity: 1;
     padding: 8px 21px;
-    position: ${(props) => props.isMobile ? "static;" : "position: absolute;"};
+    position: ${(props) => props.isMobile ? "static;" : "relative;"};
     pointer-events: none;
     visibility: visible;
     z-index: 999;
     background: #0064af;
     color: white;
-    left: -92%;
     ::selection {
         color: red;
         background: yellow;
     }
+    border-radius: 5px;
+    margin-top: 8px;
 `;
 
 const Switch = ({   
@@ -81,7 +82,8 @@ const Switch = ({
     tooltipText, 
     tooltipAddress,
     id,
-    tooltipEnabled=false
+    tooltipEnabled=false,
+    isMobile
     }) => {
     const [isOpen, setOpen] = useState(false);
     return (
@@ -109,17 +111,15 @@ const Switch = ({
                     }}
                     size='lg'  
                 />
-                {isOpen && tooltipText !== undefined && tooltipEnabled &&
-                    <StyledToolTipContainer>
+
+            </StyledHeaderButton>   
+            {isOpen && tooltipText !== undefined && tooltipEnabled &&
+                    <StyledToolTipContainer 
+                    isMobile={isMobile}>
                     <span>{tooltipAddress}  <br />  
                     {tooltipText.map(element => { return<span>   {element}  <br /> </span>}  )} </span>
                     </StyledToolTipContainer>
-                 }
-            </StyledHeaderButton>   
-            {
-         
             }
-            
         </SwitchWrapper> 
     );
 };
