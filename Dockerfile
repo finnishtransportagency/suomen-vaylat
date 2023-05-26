@@ -31,7 +31,7 @@ FROM builder AS dev-builder
 
 ARG BASE_PATH
 
-ENV MAP_DOMAIN=https://d442co92ufwmq.cloudfront.net
+ENV MAP_DOMAIN=https://suomenvaylatdev.testivaylapilvi.fi
 
 ENV PUBLIC_URL=/$BASE_PATH
 ENV REACT_APP_PUBLISHED_MAP_URL=${MAP_DOMAIN}/sv-kartta/?uuid=8b65cd2c-9f8c-474d-93db-56788131d3e2
@@ -39,7 +39,7 @@ ENV REACT_APP_PUBLISHED_MAP_DOMAIN=${MAP_DOMAIN}
 ENV REACT_APP_PROXY_URL=${MAP_DOMAIN}/sv-kartta/
 ENV REACT_APP_SITE_URL=https://paikkatietodev.testivaylapilvi.fi/$BASE_PATH
 ENV REACT_APP_ROUTER_PREFIX=/$BASE_PATH/
-ENV REACT_APP_WEBSOCKET_URL=wss://d442co92ufwmq.cloudfront.net/sv-kartta/ws-suomen-vaylat
+ENV REACT_APP_WEBSOCKET_URL=wss://suomenvaylatdev.testivaylapilvi.fi/sv-kartta/ws-suomen-vaylat
 
 RUN cd /suomen-vaylat && \
     npm ci && \
