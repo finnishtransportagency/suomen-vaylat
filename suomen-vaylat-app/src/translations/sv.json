@@ -494,6 +494,16 @@
             "id": 11,
             "title": "Trafikmängder på vägar",
             "description": ""
+          },
+          "14": {
+            "id": 14,
+            "title": "Nationellt och regionalt cykelnät",
+            "description": ""
+          },
+          "15": {
+            "id": 15,
+            "title": "Vedtransporter på vägar",
+            "description": ""
           }
         },
         "themeLinks": {
