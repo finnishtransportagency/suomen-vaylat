@@ -226,7 +226,6 @@ const Content = () => {
     }, [announcements]);
 
     useEffect(() => {
-        console.log(isGfiToolsOpen)
         setIsGfiToolsOpenLocal(isGfiToolsOpen);
     }, [isGfiToolsOpen])
 
