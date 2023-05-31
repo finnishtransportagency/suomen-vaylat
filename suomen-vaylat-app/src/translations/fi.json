@@ -306,7 +306,6 @@
     },
     "address": {
       "title": "Paikkahaku",
-      "description" : "Paikkahaku kuvaus",
       "subtitle": "Hae osoitteella, kunnan nimellä, kiinteistötunnuksella, tieosoitteella tai rataosoitteella",
       "address": "Opastinsilta 12 Helsinki",
       "error": {
@@ -321,8 +320,7 @@
       }
     },
     "layer": {
-      "title": "Aineistohaku",
-      "description": "Aineistohaku kuvaus"
+      "title": "Aineistohaku"
     },
     "track" : {
       "tracknumber" : "Ratanumero",
@@ -360,9 +358,9 @@
       "example": "Esim.",
       "toastTip": "Tiesitkö, että voit tallentaa rata- ja tiehausta kartalle tulleen geometrian?",
       "toastTipContent": "Geometrian voit tallentaa sivun vasemman reunan tallennus-ikonin kautta, toiselta välilehdeltä.",
-      "nomenclature" : "Kiinteistöhaulla voit hakea kohteita kiinteistörekisteristö kiinteistötunnuksella. Esim.",
+      "nomenclature" : "Nimistöhaulla voit voit hakea kohteita paikkatietonimistöstä. Esim.",
       "nomenclatureExamples" : [
-        "834-442-2-85"
+        "Tampere", "Rautatieasema", "Eduskuntatalo"
       ],
       "layer" : "Aineistohaulla voit hakea karttatasojen metatiedoista sanalla tai sanan osalla ja kytkeä tasoja päälle hakutuloksista.  Esim. ",
       "layerExamples" : [

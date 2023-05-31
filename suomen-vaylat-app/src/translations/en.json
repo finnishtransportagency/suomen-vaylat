@@ -264,8 +264,8 @@
     }
   },
   "search": {
-    "lessSearchOptions": "Vähemmän hakuehtoja",
-    "moreSearchOptions": "Lisää hakuehtoja",
+    "lessSearchOptions": "Less search options",
+    "moreSearchOptions": "More search options",
     "fill_all_fields": "Fill in all search fields",
     "required_field_missing": "Check the required fields.",
     "vkm": {
@@ -306,7 +306,6 @@
     },
     "address": {
       "title": "Search place",
-      "description" : "Paikkahaku kuvaus",
       "subtitle": "Search by address, municipality or property identifier",
       "address": "Opastinsilta 12 Helsinki",
       "error": {
@@ -321,8 +320,7 @@
       }
     },
     "layer": {
-      "title": "Aineistohaku",
-      "description": "Aineistohaku kuvaus"
+      "title": "Aineistohaku"
     },
     "tips": {
       "title": "Use location search to search for a municipality, address, property identifier, road address or track address.",
@@ -355,11 +353,11 @@
       "example": "For example,",
       "toastTip": "Did you know that you can save the geometry that was placed on the map from a track and road search?",
       "toastTipContent": "You can save the geometry through the save icon on the left side of the page, from another tab.",
-      "nomenclature" : "Kiinteistöhaulla voit hakea kohteita kiinteistörekisteristö kiinteistötunnuksella",
+      "nomenclature" : "Nimistöhaulla voit voit hakea kohteita paikkatietonimistöstä. Esim.",
       "nomenclatureExamples" : [
-        "834-442-2-85"
+        "Tampere", "Rautatieasema", "Eduskuntatalo"
       ],
-      "layer" : "Aineistohaulla voit hakea karttatasoista sanalla tai sanan osalla",
+      "layer" : "Aineistohaulla voit hakea karttatasojen metatiedoista sanalla tai sanan osalla ja kytkeä tasoja päälle hakutuloksista.  Esim. ",
       "layerExamples" : [
         "pölkytys"
       ]

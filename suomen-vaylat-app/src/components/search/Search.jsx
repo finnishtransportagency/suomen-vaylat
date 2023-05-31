@@ -539,7 +539,6 @@ const Search = () => {
                         {!isSearching ? (
                         <StyledSelectedSearchMethod
                             onClick={() => {
-                                console.info(isSearchMethodSelectorOpen)
                                 setShowSearchResults(true);
                                 isSearchMethodSelectorOpen &&
                                     setIsSearchMethodSelectorOpen(

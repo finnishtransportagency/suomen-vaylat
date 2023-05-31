@@ -16,7 +16,8 @@ const SearchResultPanel = ({
     setShowSearchResults,
     setSearchClickedRow,
     searchClickedRow,
-    allLayers
+    allLayers,
+    showOnlyType='all'
 }) => {
     return (
         <>
@@ -35,6 +36,7 @@ const SearchResultPanel = ({
                 setShowSearchResults={setShowSearchResults}
                 setSearchClickedRow={setSearchClickedRow}
                 searchClickedRow={searchClickedRow}
+                showOnlyType={showOnlyType}
             />  : (
                 isSearchOpen &&
                 searchResults !== null &&
