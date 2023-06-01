@@ -292,8 +292,8 @@
       "trackError": {
         "text": "Bansökningen gav inga resultat."
       },
-      "tooltip": ["Tiehaku, kirjoita muodossa 'tie/osa/ajorata/etäisyys' tai 'tie/osa/ajorata/etäisyys tie/osa_loppu/ajorata/etäisyys_loppu'.",
-      "Esim.",
+      "tooltip": ["Vägsökning, skriv i formatet ’väg/del/körbana/avstånd’ eller ’väg/del/körbana/avstånd väg/del_slut/körbana/avstånd_slut’",
+      "T.ex.",
       "5",
       "5/116",
       "5/116/0",
@@ -313,14 +313,14 @@
       }
     },
     "metadata": {
-      "title": "Search metadata",
-      "subtitle": "Search by metadata",
+      "title": "Sök metadata",
+      "subtitle": "Sök vid metadata",
       "error": {
-          "text": "No results found for the metadata search."
+          "text": "Inga resultat hittades för metadata sök."
       }
     },
     "layer": {
-      "title": "Aineistohaku"
+      "title": "Materialsökning"
     },  
     "tips": {
       "title": "Med platssökning kan du söka en kommun, adress, fastighetsbeteckning, vägadress eller banadress.",
@@ -353,20 +353,20 @@
       "example": "T.ex.",
       "toastTip": "Visste du att du kan spara den geometri som kommit upp på kartan vid ban- och vägsökningen?",
       "toastTipContent": "Du kan spara geometrin via ikonen spara i vänstra kanten, på den andra fliken.",
-      "nomenclature" : "Nimistöhaulla voit voit hakea kohteita paikkatietonimistöstä. Esim.",
+      "nomenclature" : "Med namnsökning kan du söka efter objekt på basen av ortsnamn. T.ex.",
       "nomenclatureExamples" : [
         "Tampere", "Rautatieasema", "Eduskuntatalo"
       ],
-      "layer" : "Aineistohaulla voit hakea karttatasojen metatiedoista sanalla tai sanan osalla ja kytkeä tasoja päälle hakutuloksista.  Esim. ",
+      "layer" : "Genom sökning av material kan du söka bland kartlagrens metadata med ett ord eller en del av ett ord och aktivera kartlager från sökresultaten. T.ex. ",
       "layerExamples" : [
         "pölkytys"
       ]
     },
     "nomenclature" : {
-      "title": "Nimistöhaku"
+      "title": "Namnsökning"
     },
     "premise" : {
-      "title": "Kiinteistöhaku"
+      "title": "Fastighetssökning"
     }
   },
   "layerlist": {
