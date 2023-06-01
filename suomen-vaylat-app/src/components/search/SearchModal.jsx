@@ -116,7 +116,6 @@ const updateRoadSearchValue = (searchValue, searchType, setSearchValue, part, va
         if (value === ""){
             searchArray.length=part
         }
-        console.info("täsä",part)
         searchArray[part] = value; 
         //range search add empty space between parts
         if (part > 3){
@@ -340,6 +339,7 @@ const SearchModal = ({
                         setSearchClickedRow={setSearchClickedRow}
                         searchClickedRow={searchClickedRow}
                         allLayers={allLayers}
+                        showOnlyType='road'
                     />        
 
                 </StyledSearchSection>  
@@ -413,6 +413,7 @@ const SearchModal = ({
                         setSearchClickedRow={setSearchClickedRow}
                         searchClickedRow={searchClickedRow}
                         allLayers={allLayers}
+                        showOnlyType='track'
                     />        
                 </StyledSearchSection>    
                 </>
@@ -461,6 +462,7 @@ const SearchModal = ({
                         setSearchClickedRow={setSearchClickedRow}
                         searchClickedRow={searchClickedRow}
                         allLayers={allLayers}
+                        showOnlyType='address'
                     />        
                 </StyledSearchSection>    
                 </>
@@ -509,6 +511,7 @@ const SearchModal = ({
                         setSearchClickedRow={setSearchClickedRow}
                         searchClickedRow={searchClickedRow}
                         allLayers={allLayers}
+                        showOnlyType='nomenclature'
                     />        
                 </StyledSearchSection>
                 </>
@@ -557,6 +560,7 @@ const SearchModal = ({
                         setSearchClickedRow={setSearchClickedRow}
                         searchClickedRow={searchClickedRow}
                         allLayers={allLayers}
+                        showOnlyType='premise'
                     />        
                 </StyledSearchSection>        
                 </>
@@ -605,6 +609,7 @@ const SearchModal = ({
                         setSearchClickedRow={setSearchClickedRow}
                         searchClickedRow={searchClickedRow}
                         allLayers={allLayers}
+                        showOnlyType='layer'
                     /> 
                 </StyledSearchSection>       
                 </>

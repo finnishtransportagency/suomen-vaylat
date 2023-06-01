@@ -21,8 +21,24 @@ const AddRessSearchResultPanel = ({
     setShowSearchResults,
     setSearchClickedRow,
     searchClickedRow,
+    showOnlyType
 }) => {
-
+    const typeResolvTable = [  ['address', 'Osoite'],
+                               ['premise', 'Kiinteistötunnus']  ]
+    const typeMap = new Map(typeResolvTable);
+    const nonNomenclatureTypes = Array.from(typeMap.values());              
+    let filteredResult = searchResults;
+    if ( searchResults.result &&
+        searchResults.result.locations &&
+        searchResults.result.locations.length > 0){
+            filteredResult =  searchResults.result.locations.filter(res => { 
+                return  showOnlyType === 'all' || 
+                res.vkmType === showOnlyType || 
+                res.type === typeMap.get(showOnlyType) ||
+                ( showOnlyType === 'nomenclature' && res.channelId === 'NLSFI_GEOCODING' 
+                && !nonNomenclatureTypes.includes(res.type) )
+            });
+        }
     return (
         <StyledDropDown
         key={'dropdown-content-address'}
@@ -33,11 +49,8 @@ const AddRessSearchResultPanel = ({
         transition={'transition'}
     >
         {
-
-        searchResults.result &&
-        searchResults.result.locations &&
-        searchResults.result.locations.length > 0 ? (
-            searchResults.result.locations.map(
+        filteredResult.length > 0 ? (
+            filteredResult.map(
                 (
                     { name, region, type, lon, lat, vkmType, geom, osa, ajorata, etaisyys, osa_loppu, etaisyys_loppu },
                     index
