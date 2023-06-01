@@ -257,13 +257,20 @@
       "description": "Suomen Väylät -palvelun Väyläviraston tietoaineistoja koskee Creative Commons 4.0 Nimeä -käyttölupa.",
       "moreInfo": "Lisätietoja käyttöehdoista:",
       "link": "https://vayla.fi/vaylista/aineistot/avoindata/kayttoehdot"
+    },
+    "privacyPolicy": {
+      "title": "Tietosuojaseloste",
+      "link": "https://vayla.fi/documents/25230764/35601500/Tietosuojaseloste+Avoimen+datan+palvelut+14.3.2023_allekirjoitettu.pdf/738884e8-28b8-ce84-050a-83bde6b51a2c/Tietosuojaseloste+Avoimen+datan+palvelut+14.3.2023_allekirjoitettu.pdf?t=1681210558717"
     }
   },
   "search": {
+    "lessSearchOptions": "Vähemmän hakuehtoja",
+    "moreSearchOptions": "Lisää hakuehtoja",
     "fill_all_fields": "Täytä kaikki hakukentät",
     "required_field_missing": "Tarkista tarvittavat kentät.",
     "vkm": {
       "tie": "Tienumero",
+      "tieloppu" : "Tienumero loppu",
       "title": "Tiehaku",
       "subtitle": "Hae tien numerolla",
       "osa": "Tieosa",
@@ -284,7 +291,18 @@
       "trackSubtitle": "Hae ratatietoja",
       "trackError": {
         "text": "Tuloksia ei löytynyt ratahaulla."
-      }
+      },
+      "tooltip": ["Tiehaku, kirjoita muodossa 'tie/osa/ajorata/etäisyys' tai 'tie/osa/ajorata/etäisyys tie/osa_loppu/ajorata/etäisyys_loppu'.",
+      "Esim.",
+      "5",
+      "5/116",
+      "5/116/0",
+      "5/116/0/50",
+      "5/116/0/50",
+      "5/116/0/50 5/348/0/100",
+      "5/116/0/50 5/348/0/100",
+      "alku:5/116/0/50 loppu:5/348/0/100"
+      ]
     },
     "address": {
       "title": "Paikkahaku",
@@ -301,6 +319,14 @@
           "text": "Tuloksia ei löytynyt metatietohaulla."
       }
     },
+    "layer": {
+      "title": "Aineistohaku"
+    },
+    "track" : {
+      "tracknumber" : "Ratanumero",
+      "trackkm" : "Ratakilometri",
+      "trackm" : "Ratametri"
+    },
     "tips": {
       "title": "Paikkahaulla voit hakea kuntaa, osoitetta, kiinteistötunnusta, tieosoitetta tai rataosoitetta.",
       "address": "Osoitehaku, kirjoita muodossa 'kunta', 'osoite' tai 'osoite, kunta'.",
@@ -315,9 +341,9 @@
         "5/116",
         "5/116/0",
         "5/116/0/50",
-        "5/116//50",
+        "5/116/0/50",
         "5/116/0/50 5/348/0/100",
-        "5/116//50 5/348//100",
+        "5/116/0/50 5/348/0/100",
         "alku:5/116/0/50 loppu:5/348/0/100"
       ],
       "vkmTrack": "Ratahaku, kirjoita muodossa 'ratanumero/ratakilometri/ratametri'.",
@@ -331,7 +357,22 @@
       ],
       "example": "Esim.",
       "toastTip": "Tiesitkö, että voit tallentaa rata- ja tiehausta kartalle tulleen geometrian?",
-      "toastTipContent": "Geometrian voit tallentaa sivun vasemman reunan tallennus-ikonin kautta, toiselta välilehdeltä."
+      "toastTipContent": "Geometrian voit tallentaa sivun vasemman reunan tallennus-ikonin kautta, toiselta välilehdeltä.",
+      "nomenclature" : "Nimistöhaulla voit voit hakea kohteita paikkatietonimistöstä. Esim.",
+      "nomenclatureExamples" : [
+        "Tampere", "Rautatieasema", "Eduskuntatalo"
+      ],
+      "layer" : "Aineistohaulla voit hakea karttatasojen metatiedoista sanalla tai sanan osalla ja kytkeä tasoja päälle hakutuloksista.  Esim. ",
+      "layerExamples" : [
+        "pölkytys",
+        "liikennemerkit"
+      ]
+    },
+    "nomenclature" : {
+      "title": "Nimistöhaku"
+    },
+    "premise" : {
+      "title": "Kiinteistöhaku"
     }
   },
   "layerlist": {
@@ -414,7 +455,7 @@
           "10": {
             "id": 10,
             "title": "Korjausvelkakartta",
-            "description": ""
+            "description": "Korjausvelkakartalla on esitetty valtion tie- ja rataverkolla olevaa korjausvelkaa. Alla olevista ryhmistä voit tarkastella erikseen eri vuosien korjausvelkatilannetta. Karttapalveluun päivitetään uutta aineistoa kerran vuodessa."
           }
         },
         "themeLinks": {
@@ -431,7 +472,7 @@
           "1": {
             "id": 1,
             "title": "Päällysteiden kuntokartta",
-            "description": "Kartalla esitetään tiet ja sillat, joiden kuntoluokka on erittäin huono, huono, tyydyttävä, hyvä tai erittäin hyvä. Päällysteiden kuntotiedot ovat arvioita 31.12.2021 tilanteessa huomioiden vuoden 2021 päällystyskohteet, tiedot päivitetty 8.9.2021"
+            "description": "Kartalla esitetään tiet ja sillat, joiden kuntoluokka on erittäin huono, huono, tyydyttävä, hyvä tai erittäin hyvä. Päällysteiden kuntotiedot ovat arvioita 1.2.2023 tilanteessa. Aineistosta puuttuu vuoden 2022 päällystyskohteet. Päällysteiden kuntotiedot on päivitetty 8.2.2023. Siltatiedot on päivitetty vuonna 2021. Seuraava päivitys tehdään kesällä 2023."
           },
           "2": {
             "id": 2,
@@ -451,12 +492,12 @@
           "12": {
             "id": 12,
             "title": "Yksityistiekartta",
-            "description": ""
+            "description": "Yksityistiekartalla esitetään kuuden Digiroad-tietolajin aineistot, joissa on mukana vain ne kohteet, jotka sijaitsevat yksityisteillä."
           },
           "11": {
             "id": 11,
             "title": "Tieliikenteen liikennemäärät",
-            "description": ""
+            "description": "Kartalla esitetään liikennemääriä Suomen tieverkolla vuodesta 2012 alkaen. Liikennemäärät kertovat keskimääräisen vuorokausiliikenteen määrän tieverkolla. Liikennemäärät on visualisoitu kahteen eri ryhmään, joista toiseen on laskettu yhteen kaikki tieosuuden liikenne ja toisessa pelkästään raskas liikenne. Teemakarttaan päivitetään edellisen vuoden liikennemäärät kerran vuodessa."
           }
         },
         "themeLinks": {
@@ -492,6 +533,11 @@
             "links": {
               "0": "https://vayla.fi/kunnossapito/tieverkon-kunnossapito/talvihoito"
             }
+          },
+          "13": {
+            "id": 13,
+            "title": "Ratadata",
+            "description": ""
           }
         }
       },
@@ -555,6 +601,7 @@
       "spatialResolution": "Sijaintitiedon erotuskyky",
       "temporalExtent": "Ajallinen kattavuus",
       "topicCategory": "Aiheluokka",
+      "updateDate": "Aineiston päivitys",
       "useLimitation": "Käyttöehdot",
       "absoluteExternalPositionalAccuracy": "Absoluuttinen sijaintitarkkuus",
       "accuracyOfTimeMeasurement": "Ajallisen mittauksen oikeellisuus",
