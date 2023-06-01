@@ -257,20 +257,13 @@
       "description": "Trafikledsverkets datamaterial i tjänsten Suomen Väylät omfattas av licensen Creative Commons 4.0 Nimeä.",
       "moreInfo": "Mer information om användarvillkoren:",
       "link": "https://vayla.fi/vaylista/aineistot/avoindata/kayttoehdot"
-    },
-    "privacyPolicy": {
-      "title": "Dataskyddsbeskrivning",
-      "link": "https://vayla.fi/documents/25230764/35601500/Tietosuojaseloste+Avoimen+datan+palvelut+14.3.2023_SV.pdf/8911232e-c6dd-8b63-7698-7b0b561a1e4b/Tietosuojaseloste+Avoimen+datan+palvelut+14.3.2023_SV.pdf?t=1680166904775"
     }
   },
   "search": {
-    "lessSearchOptions": "Mindre sök alternativs",
-    "moreSearchOptions": "Mera sök alternativs",
     "fill_all_fields": "Fyll i alla sökfält",
     "required_field_missing": "Kontrollera de obligatoriska fälten.",
     "vkm": {
       "tie": "Vägnummer",
-      "tieloppu" : "Vägnummer slut",
       "title": "Sök efter vägnummer",
       "subtitle": "Sök på vägnummer",
       "osa": "Vägsträcka",
@@ -291,18 +284,7 @@
       "trackSubtitle": "Sök banuppgifter",
       "trackError": {
         "text": "Bansökningen gav inga resultat."
-      },
-      "tooltip": ["Vägsökning, skriv i formatet ’väg/del/körbana/avstånd’ eller ’väg/del/körbana/avstånd väg/del_slut/körbana/avstånd_slut’",
-      "T.ex.",
-      "5",
-      "5/116",
-      "5/116/0",
-      "5/116/0/50",
-      "5/116/0/50",
-      "5/116/0/50 5/348/0/100",
-      "5/116/0/50 5/348/0/100",
-      "alku:5/116/0/50 loppu:5/348/0/100"
-    ]
+      }
     },
     "address": {
       "title": "Sök plats",
@@ -313,15 +295,12 @@
       }
     },
     "metadata": {
-      "title": "Sök metadata",
-      "subtitle": "Sök vid metadata",
+      "title": "Search metadata",
+      "subtitle": "Search by metadata",
       "error": {
-          "text": "Inga resultat hittades för metadata sök."
+          "text": "No results found for the metadata search."
       }
     },
-    "layer": {
-      "title": "Materialsökning"
-    },  
     "tips": {
       "title": "Med platssökning kan du söka en kommun, adress, fastighetsbeteckning, vägadress eller banadress.",
       "address": "Adressökning, skriv i formatet 'kommun', 'adress' eller 'adress, kommun'.",
@@ -336,9 +315,9 @@
         "5/116",
         "5/116/0",
         "5/116/0/50",
-        "5/116/0/50",
+        "5/116//50",
         "5/116/0/50 5/348/0/100",
-        "5/116/0/50 5/348/0/100",
+        "5/116//50 5/348//100",
         "start:5/116/0/50 slut:5/348/0/100"
       ],
       "vkmTrack": "Bansökning, skriv i formatet 'bannummer/bankilometer/banmeter'.",
@@ -352,21 +331,7 @@
       ],
       "example": "T.ex.",
       "toastTip": "Visste du att du kan spara den geometri som kommit upp på kartan vid ban- och vägsökningen?",
-      "toastTipContent": "Du kan spara geometrin via ikonen spara i vänstra kanten, på den andra fliken.",
-      "nomenclature" : "Med namnsökning kan du söka efter objekt på basen av ortsnamn. T.ex.",
-      "nomenclatureExamples" : [
-        "Tampere", "Rautatieasema", "Eduskuntatalo"
-      ],
-      "layer" : "Genom sökning av material kan du söka bland kartlagrens metadata med ett ord eller en del av ett ord och aktivera kartlager från sökresultaten. T.ex. ",
-      "layerExamples" : [
-        "pölkytys"
-      ]
-    },
-    "nomenclature" : {
-      "title": "Namnsökning"
-    },
-    "premise" : {
-      "title": "Fastighetssökning"
+      "toastTipContent": "Du kan spara geometrin via ikonen spara i vänstra kanten, på den andra fliken."
     }
   },
   "layerlist": {
@@ -462,7 +427,7 @@
       "1": {
         "id": 1,
         "title": "Vägnätets kartor",
-        "themes": { 
+        "themes": {
           "1": {
             "id": 1,
             "title": "Karta över beläggningarnas skick",
@@ -527,12 +492,7 @@
             "links": {
               "0": "https://vayla.fi/kunnossapito/tieverkon-kunnossapito/talvihoito"
             }
-          },
-          "13": {
-            "id": 13,
-            "title": "Järnvägsdata",
-            "description": ""
-          }
+           }
         }
       },
       "3": {
@@ -595,7 +555,6 @@
       "spatialResolution": "Rumslig upplösning",
       "temporalExtent": "Temporära utsträckningar",
       "topicCategory": "Ämneskategorier",
-      "updateDate": "Data update",
       "useLimitation": "Använd begränsningar",
       "absoluteExternalPositionalAccuracy": "Absolut lägesnoggrannhet",
       "accuracyOfTimeMeasurement": "Tidsnoggrannhet",
