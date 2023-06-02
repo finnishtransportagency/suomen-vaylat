@@ -25,6 +25,7 @@ suomen-vaylat-app/yarn-error.log*
 # local codebuild
 artifacts/
 my_build_env.txt
+.vscode/
 
 #package.lock
 suomen-vaylat-app/package.lock

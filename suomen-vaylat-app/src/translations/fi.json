@@ -131,7 +131,9 @@
     "OkLowerCaseK": "Ok"
   },
   "multipleLayersWarning": "Olet lisäämässä kartalle 10 tai enemmän karttatasoa ja se saattaa vaikuttaa palvelun suorituskykyyn",
+  "multipleLayersFetchWarning": "Olet hakemassa aineistoa 10 tai useammalta karttatasolta ja se saattaa vaikuttaa palvelun suorituskykyyn.",
   "bodySizeWarning": "Rajausgeometria on liian suuri, yksinkertaistetaanko geometria?",
+  "bodySizeWarningTemporary": "Rajausgeometria on liian suuri eikä hakua voida tehdä.",
   "appGuide": {
     "title": "Käyttöohje",
     "modalContent": {
@@ -185,7 +187,7 @@
       },
       "downloads": {
         "title": "Lataukset",
-        "content": "Lataukset avautuvat vasemman reunan lataukset-painikkeesta. Latauksista löydät valitsemistasi kohdetiedoista tekemäsi lataukset, jotka voit ladata eri muodoissa laitteellesi."
+        "content": "Lataukset avautuvat vasemman reunan lataukset-painikkeesta. Avautuvasta ikkunasta voit luoda uuden rajauksen ladattavaksi, sekä hallita myös kohdetietojen kautta tehtyjä latauksia."
       },
       "viewsAndGeometries": {
         "title": "Näkymän ja geometrian tallennus",
@@ -255,13 +257,20 @@
       "description": "Suomen Väylät -palvelun Väyläviraston tietoaineistoja koskee Creative Commons 4.0 Nimeä -käyttölupa.",
       "moreInfo": "Lisätietoja käyttöehdoista:",
       "link": "https://vayla.fi/vaylista/aineistot/avoindata/kayttoehdot"
+    },
+    "privacyPolicy": {
+      "title": "Tietosuojaseloste",
+      "link": "https://vayla.fi/documents/25230764/35601500/Tietosuojaseloste+Avoimen+datan+palvelut+14.3.2023_allekirjoitettu.pdf/738884e8-28b8-ce84-050a-83bde6b51a2c/Tietosuojaseloste+Avoimen+datan+palvelut+14.3.2023_allekirjoitettu.pdf?t=1681210558717"
     }
   },
   "search": {
+    "lessSearchOptions": "Vähemmän hakuehtoja",
+    "moreSearchOptions": "Lisää hakuehtoja",
     "fill_all_fields": "Täytä kaikki hakukentät",
     "required_field_missing": "Tarkista tarvittavat kentät.",
     "vkm": {
       "tie": "Tienumero",
+      "tieloppu" : "Tienumero loppu",
       "title": "Tiehaku",
       "subtitle": "Hae tien numerolla",
       "osa": "Tieosa",
@@ -282,10 +291,22 @@
       "trackSubtitle": "Hae ratatietoja",
       "trackError": {
         "text": "Tuloksia ei löytynyt ratahaulla."
-      }
+      },
+      "tooltip": ["Tiehaku, kirjoita muodossa 'tie/osa/ajorata/etäisyys' tai 'tie/osa/ajorata/etäisyys tie/osa_loppu/ajorata/etäisyys_loppu'.",
+      "Esim.",
+      "5",
+      "5/116",
+      "5/116/0",
+      "5/116/0/50",
+      "5/116/0/50",
+      "5/116/0/50 5/348/0/100",
+      "5/116/0/50 5/348/0/100",
+      "alku:5/116/0/50 loppu:5/348/0/100"
+      ]
     },
     "address": {
       "title": "Paikkahaku",
+      "description" : "Paikkahaku kuvaus",
       "subtitle": "Hae osoitteella, kunnan nimellä, kiinteistötunnuksella, tieosoitteella tai rataosoitteella",
       "address": "Opastinsilta 12 Helsinki",
       "error": {
@@ -298,6 +319,15 @@
       "error": {
           "text": "Tuloksia ei löytynyt metatietohaulla."
       }
+    },
+    "layer": {
+      "title": "Aineistohaku",
+      "description": "Aineistohaku kuvaus"
+    },
+    "track" : {
+      "tracknumber" : "Ratanumero",
+      "trackkm" : "Ratakilometri",
+      "trackm" : "Ratametri"
     },
     "tips": {
       "title": "Paikkahaulla voit hakea kuntaa, osoitetta, kiinteistötunnusta, tieosoitetta tai rataosoitetta.",
@@ -313,9 +343,9 @@
         "5/116",
         "5/116/0",
         "5/116/0/50",
-        "5/116//50",
+        "5/116/0/50",
         "5/116/0/50 5/348/0/100",
-        "5/116//50 5/348//100",
+        "5/116/0/50 5/348/0/100",
         "alku:5/116/0/50 loppu:5/348/0/100"
       ],
       "vkmTrack": "Ratahaku, kirjoita muodossa 'ratanumero/ratakilometri/ratametri'.",
@@ -329,7 +359,22 @@
       ],
       "example": "Esim.",
       "toastTip": "Tiesitkö, että voit tallentaa rata- ja tiehausta kartalle tulleen geometrian?",
-      "toastTipContent": "Geometrian voit tallentaa sivun vasemman reunan tallennus-ikonin kautta, toiselta välilehdeltä."
+      "toastTipContent": "Geometrian voit tallentaa sivun vasemman reunan tallennus-ikonin kautta, toiselta välilehdeltä.",
+      "nomenclature" : "Kiinteistöhaulla voit hakea kohteita kiinteistörekisteristö kiinteistötunnuksella. Esim.",
+      "nomenclatureExamples" : [
+        "834-442-2-85"
+      ],
+      "layer" : "Aineistohaulla voit hakea karttatasojen metatiedoista sanalla tai sanan osalla ja kytkeä tasoja päälle hakutuloksista.  Esim. ",
+      "layerExamples" : [
+        "pölkytys",
+        "liikennemerkit"
+      ]
+    },
+    "nomenclature" : {
+      "title": "Nimistöhaku"
+    },
+    "premise" : {
+      "title": "Kiinteistöhaku"
     }
   },
   "layerlist": {
@@ -399,47 +444,140 @@
     "readMore": "Lue lisää",
     "readLess": "Vähemmän",
     "moreInfo": "Lisätietoja:",
-    "0": {
-      "title": "Hankekartta",
-      "description": "Kartalla esitetään Väyläviraston investointihankkeet ja toteutukseen tähtäävät hankesuunnittelukohteet."
-    },
-    "1": {
-      "title": "Päällysteiden kuntokartta",
-      "description": "Kartalla esitetään tiet ja sillat, joiden kuntoluokka on erittäin huono, huono, tyydyttävä, hyvä tai erittäin hyvä. Päällysteiden kuntotiedot ovat arvioita 31.12.2021 tilanteessa huomioiden vuoden 2021 päällystyskohteet, tiedot päivitetty 8.9.2021"
-    },
-    "2": {
-      "title": "Siltarajoituskartta",
-      "description": "Kartalla on esitetty painorajoitetut sillat ja alikulkujen rajoitukset. Rajoituksia voi poistua ja tulla lisää, joten karttaa kannattaa tarkastella usein. Muistakaa tarkistaa mahdolliset rajoitukset myös kunnista ja yksityisteiden tiekunnilta."
-    },
-    "3": {
-      "title": "Tienumerokartta",
-      "description": "Tienumerokartalla esitetään tieosoitejärjestelmän tiet ja tieosat numeroineen, sekä jakopisteiden paikat. Tienumeroita käytetään paikantamisen osoitetietona ja ne näkyvät tienkäyttäjille viitoituksessa. Tienumerointi perustuu tieluokkiin ja tieverkon muodostamiin yhteysväleihin, kun taas tieosanumeroinnilla jaetaan tie lyhyempiin hallittaviin tieosuuksiin."
-    },
-    "4": {
-      "title": "Rataverkon kuntokartta",
-      "description": "-"
-    },
-    "5": {
-      "title": "TEN-T verkosto",
-      "description": "TEN-T-verkosto koostuu kahdesta tasosta: vuoteen 2030 mennessä rakennettavasta ydinverkosta (core network) ja vuoteen 2050 mennessä rakennettavasta kattavasta verkosta (comprehensive network). TEN-T ydinverkko keskittyy tärkeimpiin yhteyksiin ja solmukohtiin. Ydinverkon toteuttamista edistää käytäviin perustuva lähestymistapa. TEN-T-verkko kattaa kaikki liikennemuodot: maantie-, ilma-, sisävesi-, meri- sekä liikennemuotojen yhdistelyn mahdollistavat alustat."
-    },
-    "6": {
-      "title": "Rautateiden verkkoselostus",
-      "description": "Verkkoselostuksen karttapalvelussa voi tarkastella rataverkon ominaisuustietoja, kuten sähköistystä ja liikennepaikkojen tietoja. Tiedot perustuvat ratarekisteritietoihin ja ERAan toimitettaviin RINF-tietoihin."
-    },
-    "7": {
-      "title": "Tasoristeyspalvelu",
-      "description": "Väyläviraston tasoristeys.fi-karttapalvelu tukee alueellista liikenneturvallisuuden ja maankäytön suunnittelua. Palvelusta löytyvät valtion rataverkon tasoristeysten rekisteri- ja inventointiedot sekä myös tasoristeysten kuvat. Tiedot saa esiin klikkaamalla tasoristeystä karttapohjalla. Palveluun on lisätty myös ratapihojen, laituripolkujen ja huoltoteiden tasoristeykset sekä omana karttatasonaan sivuraiteiden tasoristeykset."
-    },
-    "8": {
-      "title": "Tiestötiedot lupapalveluun",
-      "description": "Karttapalvelun avulla johtojen ja kaapeleiden ilmoitusmenettelyn edellyttämiä tieosoitteita ja tiestötietoja voidaan tarkastella sijaintipaikan osalata ennen ilmoituksen jättämistä. Lisäksi palvelussa esitetään muita tiestön perustietoja, jotka auttavat työn suunnittelussa."
-    },
-    "9": {
-      "title": "Maanteiden talvihoitoluokat",
-      "description": "Kartalle esitetään maanteiden talvihoitoluokat. Väylän merkitys, liikennemäärä ja -koostumus määrittelevät teiden hoidon palvelutason. Koska kaikkia teitä ei voida hoitaa kohtuullisin kustannuksin välittömästi, tiet on luokiteltu eri hoitoluokkiin.",
-      "links": {
-        "0": "https://vayla.fi/kunnossapito/tieverkon-kunnossapito/talvihoito"
+    "themeGroups": {
+      "0": {
+        "id": 0,
+        "title": "Yhteiset",
+        "themes": {
+          "0": {
+            "id": 0,
+            "title": "Hankekartta",
+            "description": "Kartalla esitetään Väyläviraston investointihankkeet ja toteutukseen tähtäävät hankesuunnittelukohteet."
+          },
+          "10": {
+            "id": 10,
+            "title": "Korjausvelkakartta",
+            "description": "Korjausvelkakartalla on esitetty valtion tie- ja rataverkolla olevaa korjausvelkaa. Alla olevista ryhmistä voit tarkastella erikseen eri vuosien korjausvelkatilannetta. Karttapalveluun päivitetään uutta aineistoa kerran vuodessa."
+          }
+        },
+        "themeLinks": {
+          "timeTravelFinland": {
+            "title": "Aikamatkalla Suomessa",
+            "url": "https://vayla.fi/vaylista/aineistot/kartat/aikamatkalla-suomessa#.XOOasBFlJNs"
+          }
+        }
+      },
+      "1": {
+        "id": 1,
+        "title": "Tieverkko",
+        "themes": {
+          "1": {
+            "id": 1,
+            "title": "Päällysteiden kuntokartta",
+            "description": "Kartalla esitetään tiet ja sillat, joiden kuntoluokka on erittäin huono, huono, tyydyttävä, hyvä tai erittäin hyvä. Päällysteiden kuntotiedot ovat arvioita 1.2.2023 tilanteessa. Aineistosta puuttuu vuoden 2022 päällystyskohteet. Päällysteiden kuntotiedot on päivitetty 8.2.2023. Siltatiedot on päivitetty vuonna 2021. Seuraava päivitys tehdään kesällä 2023."
+          },
+          "2": {
+            "id": 2,
+            "title": "Siltarajoituskartta",
+            "description": "Kartalla on esitetty painorajoitetut sillat ja alikulkujen rajoitukset. Rajoituksia voi poistua ja tulla lisää, joten karttaa kannattaa tarkastella usein. Muistakaa tarkistaa mahdolliset rajoitukset myös kunnista ja yksityisteiden tiekunnilta."
+          },
+          "3": {
+            "id": 3,
+            "title": "Tienumerokartta",
+            "description": "Tienumerokartalla esitetään tieosoitejärjestelmän tiet ja tieosat numeroineen, sekä jakopisteiden paikat. Tienumeroita käytetään paikantamisen osoitetietona ja ne näkyvät tienkäyttäjille viitoituksessa. Tienumerointi perustuu tieluokkiin ja tieverkon muodostamiin yhteysväleihin, kun taas tieosanumeroinnilla jaetaan tie lyhyempiin hallittaviin tieosuuksiin."
+          },
+          "8": {
+            "id": 8,
+            "title": "Tiestötiedot lupapalveluun",
+            "description": "Karttapalvelun avulla johtojen ja kaapeleiden ilmoitusmenettelyn edellyttämiä tieosoitteita ja tiestötietoja voidaan tarkastella sijaintipaikan osalata ennen ilmoituksen jättämistä. Lisäksi palvelussa esitetään muita tiestön perustietoja, jotka auttavat työn suunnittelussa."
+          },
+          "12": {
+            "id": 12,
+            "title": "Yksityistiekartta",
+            "description": "Yksityistiekartalla esitetään kuuden Digiroad-tietolajin aineistot, joissa on mukana vain ne kohteet, jotka sijaitsevat yksityisteillä."
+          },
+          "11": {
+            "id": 11,
+            "title": "Tieliikenteen liikennemäärät",
+            "description": "Kartalla esitetään liikennemääriä Suomen tieverkolla vuodesta 2012 alkaen. Liikennemäärät kertovat keskimääräisen vuorokausiliikenteen määrän tieverkolla. Liikennemäärät on visualisoitu kahteen eri ryhmään, joista toiseen on laskettu yhteen kaikki tieosuuden liikenne ja toisessa pelkästään raskas liikenne. Teemakarttaan päivitetään edellisen vuoden liikennemäärät kerran vuodessa."
+          },
+          "14": {
+            "id": 14,
+            "title": "Valtakunnallinen ja seudullinen pyöräilyverkosto",
+            "description": "Kartalla esitetään valtakunnallinen pyöräilyverkosto sekä seudullisia pyöräilyreittejä Suomessa. Lisäksi mukana on Suomen alueella oleva EuroVelo-reitti, joka on osa Euroopan pyöräilyliiton ajamaa hanketta, jonka tavoitteena on kehittää koko Euroopan laajuinen pyöräilyreittiverkosto. Suomessa on neljä EuroVelo-reittiä, mutta mikään niistä ei ole vielä valmis. Lisätietoa EuroVelo-hankkeesta löydät osoitteesta https://en.eurovelo.com/."
+          },
+          "15": {
+            "id": 15,
+            "title": "Maanteiden puuvirrat",
+            "description": "Kartalla esitetään maanteiden puuvirtoja kuljetusten lukumäärä- ja painoluokittain vuodelta 2022. Aineiston pohjana on Digiroad-aineisto 1/2021"
+          }
+        },
+        "themeLinks": {
+          "bikeNetwork": {
+            "title": "Valtakunnallinen ja seudullinen pyörätieverkko",
+            "url": "https://paikkatieto.vaylapilvi.fi/arcgis/apps/webappviewer/index.html?id=aa98d035ba254776895d092a3d1c3a9f"
+          }
+        }
+      },
+      "2": {
+        "id": 2,
+        "title": "Rataverkko",
+        "themes": {
+          "4": {
+            "id": 4,
+            "title": "Rataverkon kuntokartta",
+            "description": "-"
+          },
+          "6": {
+            "id": 6,
+            "title": "Rautateiden verkkoselostus",
+            "description": "Verkkoselostuksen karttapalvelussa voi tarkastella rataverkon ominaisuustietoja, kuten sähköistystä ja liikennepaikkojen tietoja. Tiedot perustuvat ratarekisteritietoihin ja ERAan toimitettaviin RINF-tietoihin."
+          },
+          "7": {
+            "id": 7,
+            "title": "Tasoristeyspalvelu",
+            "description": "Väyläviraston tasoristeys.fi-karttapalvelu tukee alueellista liikenneturvallisuuden ja maankäytön suunnittelua. Palvelusta löytyvät valtion rataverkon tasoristeysten rekisteri- ja inventointiedot sekä myös tasoristeysten kuvat. Tiedot saa esiin klikkaamalla tasoristeystä karttapohjalla. Palveluun on lisätty myös ratapihojen, laituripolkujen ja huoltoteiden tasoristeykset sekä omana karttatasonaan sivuraiteiden tasoristeykset."
+          },
+          "9": {
+            "id": 9,
+            "title": "Maanteiden talvihoitoluokat",
+            "description": "Kartalle esitetään maanteiden talvihoitoluokat. Väylän merkitys, liikennemäärä ja -koostumus määrittelevät teiden hoidon palvelutason. Koska kaikkia teitä ei voida hoitaa kohtuullisin kustannuksin välittömästi, tiet on luokiteltu eri hoitoluokkiin.",
+            "links": {
+              "0": "https://vayla.fi/kunnossapito/tieverkon-kunnossapito/talvihoito"
+            }
+          },
+          "13": {
+            "id": 13,
+            "title": "Ratadata",
+            "description": ""
+          }
+        }
+      },
+      "3": {
+        "id": 3,
+        "title": "Vesiväylät",
+        "themeLinks": {
+          "baltice": {
+            "title": "Baltice",
+            "url": "https://baltice.org/map/"
+          },
+          "safetyDeviceFaults": {
+            "title": "Kauppamerenkulun väylien turvalaiteviat",
+            "url": "https://vayla.fi/vaylista/vesivaylat/turvalaitteet/turvalaiteviat#.XLWWTegzYuU"
+          },
+          "seaWarnings": {
+            "title": "Varoituksia merenkulkijoille",
+            "url": "https://vayla.fi/palveluntuottajat/ammattimerenkulku/meriliikenteen-hairiot/varoituksia-merenkulkijoille"
+          },
+          "restrictedAreas": {
+            "title": "Vesiliikenteen kielto- ja rajoitusalueet",
+            "url": "https://vayla.fi/vaylista/vesivaylat/rajoitusalueet"
+          },
+          "pookiFeedback": {
+            "title": "Vesiväylien palautteet",
+            "url": "https://extranet.vayla.fi/pooki_www/palaute"
+          }
+        }
       }
     }
   },
@@ -475,6 +613,7 @@
       "spatialResolution": "Sijaintitiedon erotuskyky",
       "temporalExtent": "Ajallinen kattavuus",
       "topicCategory": "Aiheluokka",
+      "updateDate": "Aineiston päivitys",
       "useLimitation": "Käyttöehdot",
       "absoluteExternalPositionalAccuracy": "Absoluuttinen sijaintitarkkuus",
       "accuracyOfTimeMeasurement": "Ajallisen mittauksen oikeellisuus",
@@ -1020,32 +1159,6 @@
       "linkedin": "Jaa LinkedInissä",
       "whatsapp": "Jaa WhatsAppissa",
       "telegram": "Jaa Telegrammissa"
-    }
-  },
-  "themeLinks": {
-    "bikeNetwork": {
-      "title": "Valtakunnallinen ja seudullinen pyörätieverkko",
-      "url": "https://paikkatieto.vaylapilvi.fi/arcgis/apps/webappviewer/index.html?id=aa98d035ba254776895d092a3d1c3a9f"
-    },
-    "safetyDeviceFaults": {
-      "title": "Kauppamerenkulun väylien turvalaiteviat",
-      "url": "https://vayla.fi/vaylista/vesivaylat/turvalaitteet/turvalaiteviat#.XLWWTegzYuU"
-    },
-    "seaWarnings": {
-      "title": "Varoituksia merenkulkijoille",
-      "url": "https://vayla.fi/palveluntuottajat/ammattimerenkulku/meriliikenteen-hairiot/varoituksia-merenkulkijoille"
-    },
-    "baltice": {
-      "title": "Baltice",
-      "url": "https://baltice.org/map/"
-    },
-    "pookiFeedback": {
-      "title": "Vesiväylien palautteet",
-      "url": "https://extranet.vayla.fi/pooki_www/palaute"
-    },
-    "timeTravelFinland": {
-      "title": "Aikamatkalla Suomessa",
-      "url": "https://vayla.fi/vaylista/aineistot/kartat/aikamatkalla-suomessa#.XOOasBFlJNs"
     }
   }
 }

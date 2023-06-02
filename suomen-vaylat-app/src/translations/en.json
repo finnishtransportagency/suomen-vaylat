@@ -131,7 +131,9 @@
     "OkLowerCaseK": "Ok"
   },
   "multipleLayersWarning": "You are about to activate 10 or more maplayers and it might affect the performance of the service",
+  "multipleLayersFetchWarning": "You are about to fetch data from 10 or more maplayers, it might affect the performance of the service.",
   "bodySizeWarning": "Geometry is too big, do you want to simplify it?",
+  "bodySizeWarningTemporary": "Geometry is too big and data cannot be fetched right now.",
   "appGuide": {
     "title": "User Guide",
     "modalContent": {
@@ -185,7 +187,7 @@
       },
       "downloads": {
         "title": "Downloads",
-        "content": "Downloads open from the Downloads button on the left. In Downloads, you can find the downloads you have made of the feature data you have selected, which you can download in different formats to your device."
+        "content": "Downloads open from the Downloads button on the left. From the popup you can make a new feature selection to download and manage previous downloads made from feature data window."
       },
       "viewsAndGeometries": {
         "title": "Save views and geometries",
@@ -255,13 +257,20 @@
       "description": "The datasets of the Finnish Transport Infrastructure Agency’s Suomen Väylät service are subject to the Creative Commons 4.0 Attribution licence.",
       "moreInfo": "More information on the terms of use:",
       "link": "https://vayla.fi/vaylista/aineistot/avoindata/kayttoehdot"
+    },
+    "privacyPolicy": {
+      "title": "Privacy statement",
+      "link": "https://vayla.fi/documents/25230764/35601500/Tietosuojaseloste+Avoimen+datan+palvelut+14.3.2023_allekirjoitettu.pdf/738884e8-28b8-ce84-050a-83bde6b51a2c/Tietosuojaseloste+Avoimen+datan+palvelut+14.3.2023_allekirjoitettu.pdf?t=1681210558717"
     }
   },
   "search": {
+    "lessSearchOptions": "Vähemmän hakuehtoja",
+    "moreSearchOptions": "Lisää hakuehtoja",
     "fill_all_fields": "Fill in all search fields",
     "required_field_missing": "Check the required fields.",
     "vkm": {
       "tie": "Road number",
+      "tieloppu" : "Road end",
       "title": "Road number search",
       "subtitle": "Search by road number",
       "osa": "Road section",
@@ -282,10 +291,22 @@
       "trackSubtitle": "Search for track data",
       "trackError": {
         "text": "No results were found for the track search."
-      }
+      },
+      "tooltip": ["Tiehaku, kirjoita muodossa 'tie/osa/ajorata/etäisyys' tai 'tie/osa/ajorata/etäisyys tie/osa_loppu/ajorata/etäisyys_loppu'.",
+      "Esim.",
+      "5",
+      "5/116",
+      "5/116/0",
+      "5/116/0/50",
+      "5/116/0/50",
+      "5/116/0/50 5/348/0/100",
+      "5/116/0/50 5/348/0/100",
+      "alku:5/116/0/50 loppu:5/348/0/100"
+      ] 
     },
     "address": {
       "title": "Search place",
+      "description" : "Paikkahaku kuvaus",
       "subtitle": "Search by address, municipality or property identifier",
       "address": "Opastinsilta 12 Helsinki",
       "error": {
@@ -298,6 +319,10 @@
       "error": {
           "text": "No results found for the metadata search."
       }
+    },
+    "layer": {
+      "title": "Aineistohaku",
+      "description": "Aineistohaku kuvaus"
     },
     "tips": {
       "title": "Use location search to search for a municipality, address, property identifier, road address or track address.",
@@ -313,15 +338,15 @@
         "5/116",
         "5/116/0",
         "5/116/0/50",
-        "5/116//50",
+        "5/116/0/50",
         "5/116/0/50 5/348/0/100",
-        "5/116//50 5/348//100",
+        "5/116/0/50 5/348/0/100",
         "start:5/116/0/50 end:5/348/0/100"
       ],
       "vkmTrack": "Track search, type in the format 'track number/track kilometre/track metre'.",
-      "vkmTrackExamples": {
-        "0": "001/2/10"
-      },
+      "vkmTrackExamples": [
+        "001/2/10"
+      ],
       "realEstateUnitIdentifier": "Property identifier search, type in the format 'aa-bb-cc-d' or 'aaa-bbb-cc-ddd'.",
       "realEstateUnitIdentifierExamples": [
         "91-17-16-1",
@@ -329,7 +354,21 @@
       ],
       "example": "For example,",
       "toastTip": "Did you know that you can save the geometry that was placed on the map from a track and road search?",
-      "toastTipContent": "You can save the geometry through the save icon on the left side of the page, from another tab."
+      "toastTipContent": "You can save the geometry through the save icon on the left side of the page, from another tab.",
+      "nomenclature" : "Kiinteistöhaulla voit hakea kohteita kiinteistörekisteristö kiinteistötunnuksella",
+      "nomenclatureExamples" : [
+        "834-442-2-85"
+      ],
+      "layer" : "Aineistohaulla voit hakea karttatasoista sanalla tai sanan osalla",
+      "layerExamples" : [
+        "pölkytys"
+      ]
+    },
+    "nomenclature" : {
+      "title": "Nimistöhaku"
+    },
+    "premise" : {
+      "title": "Kiinteistöhaku"
     }
   },
   "layerlist": {
@@ -399,47 +438,140 @@
     "readMore" : "Read more",
     "readLess" : "Show less",
     "moreInfo": "Further information:",
-    "0": {
-      "title": "Project map",
-      "description": "The map shows the agency’s investment projects and the projects at planning stage aimed for implementation."
-    },
-    "1": {
-      "title": "Map showing the condition of the road pavement",
-      "description": "The map shows roads and bridges whose condition has been classified as very poor, poor, satisfactory, good or very good. The condition data of road pavement consists of estimations of the situation on 31 December 2021, taking into account the road pavement sites in 2021, updated on 8 September 2021"
-    },
-    "2": {
-      "title": "Map showing bridge restrictions",
-      "description": "The map shows bridges with weight restrictions and underpasses with restrictions. Restrictions now in effect may be lifted and new restrictions introduced, and for this reason you should check the map frequently. Remember also to check any restrictions with municipalities and private road maintenance associations."
-    },
-    "3": {
-      "title": "Road number map",
-      "description": "The road number map shows the roads and road sections of the road address system with their numbers and the locations of division points. Road numbers are used as address information in locating and are visible to road users through signs. Road numbering is based on road categories and routes formed by the road network, while road section numbering divides the road into shorter manageable road sections."
-    },
-    "4": {
-      "title": "Map showing the condition of the railway network",
-      "description": "-"
-    },
-    "5": {
-      "title": "TEN-T network",
-      "description": "The TEN-T network comprises two levels: the core network, to be completed by 2030 and the comprehensive network to be completed by 2050. The TEN-T core network focuses on the most important connections and hubs. The implementation of the core network is advanced by a corridor-based approach. The TEN-T network covers all forms of transport: road, air, internal waterways and sea, as well as platforms enabling a combination of different forms of transport."
-    },
-    "6": {
-      "title": "Finnish Railway Network Statement",
-      "description": "The Network Statement’s map service provides information on the attributes of the railway network, such as electrification and traffic operating point data. The data are based on track register data and RINF data submitted to ERA."
-    },
-    "7": {
-      "title": "Level crossing service",
-      "description": "The Finnish Transport Infrastructure Agency’s level crossing map service (tasoristeys.fi) supports regional traffic safety and land use planning. The service contains register and inventory information for level crossings in the state-owned railway network as well as images of the level crossings. The information can be accessed by clicking on a level crossing on the map. Level crossings of railway yards, track crossings and service roads have been added to the service, and the level crossings of sidings have also been added as a separate map layer."
-    },
-    "8": {
-      "title": "Road data for the permit service",
-      "description": "The map service can be used to view the road addresses and road data required by the notification procedure for wires and cables before submitting the notification. In addition, the service shows other basic information on roads that helps in work planning."
-    },
-    "9": {
-      "title": "Winter maintenance categories for highways",
-      "description": "Kartalle esitetään maanteiden talvihoitoluokat. Väylän merkitys, liikennemäärä ja -koostumus määrittelevät teiden hoidon palvelutason. Koska kaikkia teitä ei voida hoitaa kohtuullisin kustannuksin välittömästi, tiet on luokiteltu eri hoitoluokkiin. Lisätietoja",
-      "links": {
-        "0": "https://vayla.fi/kunnossapito/tieverkon-kunnossapito/talvihoito"
+    "themeGroups": {
+      "0": {
+        "id": 0,
+        "title": "Common maps",
+        "themes": {
+          "0": {
+            "id": 0,
+            "title": "Project map",
+            "description": "The map shows the agency’s investment projects and the projects at planning stage aimed for implementation."
+          },
+          "10": {
+            "id": 10,
+            "title": "Korjausvelkakartta",
+            "description": ""
+          }
+        },
+        "themeLinks": {
+          "timeTravelFinland": {
+            "title": "Aikamatkalla Suomessa",
+            "url": "https://vayla.fi/vaylista/aineistot/kartat/aikamatkalla-suomessa#.XOOasBFlJNs"
+          }
+        }
+      },
+      "1": {
+        "id": 1,
+        "title": "Road network maps",
+        "themes": {
+          "1": {
+            "id": 1,
+            "title": "Map showing the condition of the road pavement",
+            "description": "The map shows roads and bridges whose condition has been classified as very poor, poor, satisfactory, good or very good. The condition data of road pavement consists of estimations of the situation on 31 December 2021, taking into account the road pavement sites in 2021, updated on 8 September 2021"
+           },
+          "2": {
+            "id": 2,
+            "title": "Map showing bridge restrictions",
+            "description": "The map shows bridges with weight restrictions and underpasses with restrictions. Restrictions now in effect may be lifted and new restrictions introduced, and for this reason you should check the map frequently. Remember also to check any restrictions with municipalities and private road maintenance associations."
+          },
+          "3": {
+            "id": 3,
+            "title": "Road number map",
+            "description": "The road number map shows the roads and road sections of the road address system with their numbers and the locations of division points. Road numbers are used as address information in locating and are visible to road users through signs. Road numbering is based on road categories and routes formed by the road network, while road section numbering divides the road into shorter manageable road sections."
+          },
+          "8": {
+            "id": 8,
+            "title": "Road data for the permit service",
+            "description": "The map service can be used to view the road addresses and road data required by the notification procedure for wires and cables before submitting the notification. In addition, the service shows other basic information on roads that helps in work planning."
+          },
+          "12": {
+            "id": 12,
+            "title": "Yksityistiekartta",
+            "description": ""
+          },
+          "11": {
+            "id": 11,
+            "title": "Traffic volumes",
+            "description": ""
+          },
+          "14": {
+            "id": 14,
+            "title": "National and regional cycling network",
+            "description": ""
+          },
+          "15": {
+            "id": 15,
+            "title": "Wood transportations on roads",
+            "description": ""
+          }
+        },
+        "themeLinks": {
+          "bikeNetwork": {
+            "title": "Valtakunnallinen ja seudullinen pyörätieverkko",
+            "url": "https://paikkatieto.vaylapilvi.fi/arcgis/apps/webappviewer/index.html?id=aa98d035ba254776895d092a3d1c3a9f"
+          }
+        }
+      },
+      "2": {
+        "id": 2,
+        "title": "Railway network maps",
+        "themes": {
+          "4": {
+            "id": 4,
+            "title": "Map showing the condition of the railway network",
+            "description": "-"
+          },
+          "6": {
+            "id": 6,
+            "title": "Finnish Railway Network Statement",
+            "description": "The Network Statement’s map service provides information on the attributes of the railway network, such as electrification and traffic operating point data. The data are based on track register data and RINF data submitted to ERA."
+          },
+          "7": {
+            "id": 7,
+            "title": "Level crossing service",
+            "description": "The Finnish Transport Infrastructure Agency’s level crossing map service (tasoristeys.fi) supports regional traffic safety and land use planning. The service contains register and inventory information for level crossings in the state-owned railway network as well as images of the level crossings. The information can be accessed by clicking on a level crossing on the map. Level crossings of railway yards, track crossings and service roads have been added to the service, and the level crossings of sidings have also been added as a separate map layer."
+          },
+          "9": {
+            "id": 9,
+            "title": "Winter maintenance categories for highways",
+            "description": "Kartalle esitetään maanteiden talvihoitoluokat. Väylän merkitys, liikennemäärä ja -koostumus määrittelevät teiden hoidon palvelutason. Koska kaikkia teitä ei voida hoitaa kohtuullisin kustannuksin välittömästi, tiet on luokiteltu eri hoitoluokkiin. Lisätietoja",
+            "links": {
+              "0": "https://vayla.fi/kunnossapito/tieverkon-kunnossapito/talvihoito"
+            }
+          },
+          "13": {
+            "id": 13,
+            "title": "Railway data",
+            "description": ""
+          }
+        }
+      },
+      "3": {
+        "id": 3,
+        "title": "Waterway maps",
+        "themeLinks": {
+          "baltice": {
+            "title": "Baltice",
+            "url": "https://baltice.org/map/"
+          },
+          "safetyDeviceFaults": {
+            "title": "Kauppamerenkulun väylien turvalaiteviat",
+            "url": "https://vayla.fi/vaylista/vesivaylat/turvalaitteet/turvalaiteviat#.XLWWTegzYuU"
+          },
+          "seaWarnings": {
+            "title": "Varoituksia merenkulkijoille",
+            "url": "https://vayla.fi/palveluntuottajat/ammattimerenkulku/meriliikenteen-hairiot/varoituksia-merenkulkijoille"
+          },
+          "restrictedAreas": {
+            "title": "Vesiliikenteen kielto- ja rajoitusalueet",
+            "url": "https://vayla.fi/vaylista/vesivaylat/rajoitusalueet"
+          },
+          "pookiFeedback": {
+            "title": "Vesiväylien palautteet",
+            "url": "https://extranet.vayla.fi/pooki_www/palaute"
+          }
+        }
       }
     }
   },
@@ -475,6 +607,7 @@
       "spatialResolution": "Spatial resolution",
       "temporalExtent": "Temporal extents",
       "topicCategory": "Topic categories",
+      "updateDate": "Data update",
       "useLimitation": "Use limitations",
       "absoluteExternalPositionalAccuracy": "Absolute external positional accuracy",
       "accuracyOfTimeMeasurement": "Accuracy of time measurement",
@@ -1023,9 +1156,17 @@
     }
   },
   "themeLinks": {
+    "timeTravelFinland": {
+      "title": "Aikamatkalla Suomessa",
+      "url": "https://vayla.fi/vaylista/aineistot/kartat/aikamatkalla-suomessa#.XOOasBFlJNs"
+    },
     "bikeNetwork": {
       "title": "Valtakunnallinen ja seudullinen pyörätieverkko",
       "url": "https://paikkatieto.vaylapilvi.fi/arcgis/apps/webappviewer/index.html?id=aa98d035ba254776895d092a3d1c3a9f"
+    },
+    "baltice": {
+      "title": "Baltice",
+      "url": "https://baltice.org/map/"
     },
     "safetyDeviceFaults": {
       "title": "Kauppamerenkulun väylien turvalaiteviat",
@@ -1035,17 +1176,13 @@
       "title": "Varoituksia merenkulkijoille",
       "url": "https://vayla.fi/palveluntuottajat/ammattimerenkulku/meriliikenteen-hairiot/varoituksia-merenkulkijoille"
     },
-    "baltice": {
-      "title": "Baltice",
-      "url": "https://baltice.org/map/"
+    "restrictedAreas": {
+      "title": "Vesiliikenteen kielto- ja rajoitusalueet",
+      "url": "https://vayla.fi/vaylista/vesivaylat/rajoitusalueet"
     },
     "pookiFeedback": {
       "title": "Vesiväylien palautteet",
       "url": "https://extranet.vayla.fi/pooki_www/palaute"
-    },
-    "timeTravelFinland": {
-      "title": "Aikamatkalla Suomessa",
-      "url": "https://vayla.fi/vaylista/aineistot/kartat/aikamatkalla-suomessa#.XOOasBFlJNs"
     }
   }
 }

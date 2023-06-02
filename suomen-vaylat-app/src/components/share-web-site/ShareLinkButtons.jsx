@@ -56,7 +56,7 @@ const StyledHeaderButton = styled.div`
  */
 export const ThemeGroupShareButton = ({ themeId, color }) => {
     const { store } = useContext(ReactReduxContext);
-    const url = process.env.REACT_APP_SITE_URL + '/theme/{lang}/{zoom}/{x}/{y}/' + themeId;
+    const url = process.env.REACT_APP_SITE_URL + '/theme/{zoom}/{x}/{y}/' + themeId + '/?lang={lang}';
 
     return(
         <>
@@ -85,7 +85,7 @@ export const ThemeGroupShareButton = ({ themeId, color }) => {
  */
 export const WebSiteShareButton = ({setSubNavOpen}) => {
     const { store } = useContext(ReactReduxContext);
-    const url = process.env.REACT_APP_SITE_URL + '/link/{lang}/{zoom}/{x}/{y}/{maplayers}';
+    const url = process.env.REACT_APP_SITE_URL + '/link/{zoom}/{x}/{y}/{maplayers}/?lang={lang}';
     return (
         <>
             <ReactTooltip backgroundColor={theme.colors.mainColor1} disable={isMobile} id={'share_website'} place='bottom' type='dark' effect='float'>

@@ -103,7 +103,7 @@ export const SelectedLayers = ({ selectedLayers, currentZoomLevel }) => {
             resetThemeGroups(store);
             showNonThemeLayers(store, channel);
         }
-    }, [selectedTheme, selectedLayers])
+    }, [selectedLayers])
 
     return (
         <StyledSelectedLayers>
