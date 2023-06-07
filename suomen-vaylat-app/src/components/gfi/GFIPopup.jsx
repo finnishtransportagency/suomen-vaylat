@@ -451,7 +451,6 @@ export const GFIPopup = ({ handleGfiDownload }) => {
     }, [isGfiToolsOpen, activeSelectionTool]);
 
     useEffect(() => {
-        /*
         
         const mapResults = gfiLocations.map((location) => {
             location?.content?.features?.length > GFI_MAX_LENGTH && setIsDataTable(true);
@@ -483,63 +482,63 @@ export const GFIPopup = ({ handleGfiDownload }) => {
 
         setTabsContent(mapResults);
         
-       */
+      /*
         console.log(gfiLocations)
 
-        const moviesMap = {}
+        const gfiLocationsMap = {}
         gfiLocations.forEach(location => {
-            const title = Object.keys(location)
-            if (moviesMap[title]) {
-              moviesMap[title].push(location[title])
+            const layerId = location.layerId
+            if (gfiLocationsMap[layerId]) {
+              gfiLocationsMap[layerId].push(location)
             } else {
-              moviesMap[title] = [location[title]]
+              gfiLocationsMap[layerId] = [location]
             }
           })
 
-          console.log(moviesMap)
+          console.log(gfiLocationsMap)
 
           let results = [];
 
-          for (var i in moviesMap) {
-            console.log(i)
-            const mapResults = moviesMap[i].map((location) => {
-                console.log(Object.keys(location))
-                console.log(tabsContent)
-                location?.content?.features?.length > GFI_MAX_LENGTH && setIsDataTable(true);
-                const layers = allLayers.filter(
-                    (layer) => layer.id === location.layerId
-                );
-                const layerIds =
-                    layers && layers.length > 0 ? layers[0].id : location.layerId;
-                let content;
-                if (location.type === 'text') {
+          for (var i in gfiLocationsMap) {
+            console.log(gfiLocationsMap[i])
+            console.log(gfiLocationsMap[i][0])
+            gfiLocationsMap[i][0].content?.features?.length > GFI_MAX_LENGTH && setIsDataTable(true);
+            const layers = allLayers.filter(
+                (layer) => layer.id === gfiLocationsMap[i][0].layerId
+            );
+            const layerIds =
+                layers && layers.length > 0 ? layers[0].id : gfiLocationsMap[i][0].layerId;
+            let content;
+            let mapResults;
+                
+                if (gfiLocationsMap[i][0].type === 'text') {
+                    const allContent = gfiLocationsMap[i].map((location) => {
+
                     content = location.content;
                     const popupContent = (
                         <div dangerouslySetInnerHTML={{ __html: content }}></div>
                     );
-                    var contentWrapper = <div>{popupContent}</div>;
-                    const contentDiv = <div id={layerIds}>{contentWrapper}</div>;
-                    return contentDiv;
+                    return popupContent;
+                    });
+
+                    var contentWrapper = <div>{allContent}</div>;
+                    mapResults = <div id={layerIds}>{contentWrapper}</div>;
                 }
-                else if (location.type === 'geojson') {
+                else if (gfiLocationsMap[i][0].type === 'geojson') {
+                    mapResults = gfiLocationsMap[i].map((location) => {
+
                     return <FormattedGFI
                         id={layerIds}
                         data={location.content}
                         type='geoJson'
                         isDataTable={isDataTable}
                     />;
+                });
+
                 }
-                return null;
-            }
-            );
-            console.log(mapResults)
             results = results.concat(mapResults)
-
           }
-          console.log(results)
-
-
-        setTabsContent(results);
+        setTabsContent(results);*/
     }, [allLayers, gfiLocations, isDataTable, selectedTab]);
 
     useEffect(() => {
