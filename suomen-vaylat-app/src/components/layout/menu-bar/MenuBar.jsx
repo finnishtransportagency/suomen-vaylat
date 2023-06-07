@@ -74,8 +74,6 @@ const StyledLayerCount = styled.div`
 
 const MenuBar = (filters) => {
     const { store } = useContext(ReactReduxContext);
-    const [activeFilters, setActiveFilters ] = useState([]);
-
     const { selectedLayers, downloads, channel } = useAppSelector(
         (state) => state.rpc
     );
@@ -95,22 +93,9 @@ const MenuBar = (filters) => {
     } = useAppSelector((state) => state.ui);
 
     const [animationUnfinished, setAnimationUnfinished] = useState(false);
-    /*useEffect (() => {
-        setActiveFilters(filters)
-        console.info("activeFilters",activeFilters)
-     }, [filters, setActiveFilters] )
-    */
      useEffect(() => {
-        console.info("filterit päivittyneet", filters)
-        //forceUpdate();
-      }, [filters]);
-      //const [state, updateState] = useState();
-      //const forceUpdate = useCallback(() => updateState({}), []);
-
-     const getFilterCountComponent = () => {
-        if (filters && filters.length>0)
-        return <StyledLayerCount>{filters.length}</StyledLayerCount>;
-      }
+        console.info(filters.filters)
+     }, [filters]);
 
     const handleFullScreen = () => {
 
@@ -244,7 +229,7 @@ const MenuBar = (filters) => {
                         isGfiOpen && store.dispatch(setMinimizeGfi(false));
                     }}
                 >
-                    { filters && (getFilterCountComponent())}
+                { filters?.filters && filters?.filters?.length >0 &&  <StyledLayerCount>{filters?.filters?.length}</StyledLayerCount>  /*(getFilterCountComponent())*/}
                 </CircleButton>
                 <CircleButton
                     icon={faDownload}

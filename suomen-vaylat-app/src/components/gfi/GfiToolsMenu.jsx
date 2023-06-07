@@ -728,7 +728,10 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true, filters }) => {
 
 
     const fetchFeaturesSynchronous = (feature, layer, data, numberedLoaderEnables, filters) => {
-       const activeFilters = filters?.filter(filter => filter.layer === layer.name)
+       //const activeFilters = filters?.filters.filter(filter => filter.layer === layer.name)
+       
+       const activeFilters = undefined;
+       console.info(activeFilters);
         return new Promise(function(resolve, reject) {
         // executor (the producing code, "singer")
         channel.getFeaturesByGeoJSON(

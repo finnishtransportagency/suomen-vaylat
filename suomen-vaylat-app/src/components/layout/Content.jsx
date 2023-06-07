@@ -220,7 +220,11 @@ const Content = () => {
     const [downloadUuids, setDownloadUuids] = useState([]);
 
     const [websocketFirstTimeTryConnecting, setWebsocketFirstTimeTryConnecting] = useState(false);
-    const [filters, setFilters] = useState(Array);
+    const [filters, setFilters] = useState([]);
+
+    //const setFilters = (value) => {
+    //    setFiltersFooBar(value);
+    //}
 
     useEffect(() => {
         announcements && setCurrentAnnouncement(0);
@@ -515,10 +519,10 @@ const Content = () => {
         };
     }
 
-    useEffect(() => {
-      console.info("filterit päivittyneet", filters)
-      forceUpdate();
-    }, [filters, setFilters]);
+    //useEffect(() => {
+    //  console.info("filterit päivittyneet", filters)
+    //  forceUpdate();
+    //}, [filters, setFilters]);
     const [state, updateState] = useState();
     const forceUpdate = useCallback(() => updateState({}), []);
     return (
@@ -873,8 +877,11 @@ const Content = () => {
                     minimize={minimizeGfi}
                     maximize={maximizeGfi}
                 >
-                    <GfiToolsMenu handleGfiToolsMenu={handleGfiToolsMenu} closeButton={false} 
-                    filters={filters}/>
+                    <GfiToolsMenu 
+                        handleGfiToolsMenu={handleGfiToolsMenu} 
+                        closeButton={false} 
+                        filters={filters}
+                    />
                 </Modal>
                 <Modal
                     constraintsRef={

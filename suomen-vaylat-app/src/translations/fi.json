@@ -1159,5 +1159,16 @@
       "whatsapp": "Jaa WhatsAppissa",
       "telegram": "Jaa Telegrammissa"
     }
+  },
+  "gfifiltering": {
+    "placeholders" : {
+      "chooseProp" : "Valitse ominaisuustieto",
+      "chooseOperator" : "Valitse operaattori",
+      "chooseValue" : "Suodettava arvo"
+    },
+    "activeFilters" : "Aktiiviset filtterit",
+    "property" : "Ominaisuus",
+    "operator" : "Operaattori",
+    "value" : "Arvo"
   }
 }

@@ -85,6 +85,8 @@ const StyledModalContainer = styled.div`
     margin-bottom: 30px;
     min-height: 160px;
     min-width: 800px;
+    position: relative;
+    //left: calc(-50vw + 50%);
 `;
 
 const StyledModalFloatingChapter = styled.div`
@@ -105,16 +107,18 @@ const StyledModalFloatingActionChapter = styled.div`
 
 const StyledInput = styled.input`
     width: 100%;
-    padding-left: 26px;
+    padding-left: 12px;
     font-size: 16px;
     padding-top: 10px;
     border-radius: 4px;
-    border: 2px solid grey;
+    border: 2px solid;
+    border-color: hsl(0, 0%, 80%);
+    padding: 5px 10px;
 `;
 
 const StyledFilterContainer = styled.div`
     margin-left: 6px;
-    position: relative;
+    //position: relative;
     width: 100%;
     height: 100%;
     
@@ -380,7 +384,8 @@ const GfiTabContent = ({
             return
         }
         //console.info("nyt filtteröidään", prop, oper, value)
-        setFilters(current => [...current,
+        setFilters(//current => [...current,
+            [...filters,
             {   
                 "layer" : layer,
                 "property": prop,
@@ -418,36 +423,39 @@ const GfiTabContent = ({
                 </StyledSelectedTabDisplayOptionsButton>
                 {filtering && 
                 <Modal
-                constraintsRef={
-                    {constraintsRef}
-                } /* Reference div for modal drag boundaries */
-                drag={true} /* Enable (true) or disable (false) drag */
-                resize={true}
-                backdrop={
-                    false
-                } /* Is backdrop enabled (true) or disabled (false) */
-                fullScreenOnMobile={
-                    true
-                } /* Scale modal full width / height when using mobile device */
-                titleIcon={
-                    null
-                } /* Use icon on title or null */
-                title={strings.gfi.filter} /* Modal header title */
-                type={'normal'} /* Modal type */
-                closeAction={
-                    closeFilteringModal
-                } /* Action when pressing modal close button or backdrop */
-                isOpen={filtering} /* Modal state */
-                id={null}
-                minimize={minimize}
-                maximize={maximize}
-            >
+                    constraintsRef={
+                        {constraintsRef}
+                    } /* Reference div for modal drag boundaries */
+                    drag={true} /* Enable (true) or disable (false) drag */
+                    resize={true}
+                    backdrop={
+                        false
+                    } /* Is backdrop enabled (true) or disabled (false) */
+                    fullScreenOnMobile={
+                        true
+                    } /* Scale modal full width / height when using mobile device */
+                    titleIcon={
+                        null
+                    } /* Use icon on title or null */
+                    title={strings.gfi.filter} /* Modal header title */
+                    type={'normal'} /* Modal type */
+                    closeAction={
+                        closeFilteringModal
+                    } /* Action when pressing modal close button or backdrop */
+                    isOpen={filtering} /* Modal state */
+                    id={null}
+                    minimize={minimize}
+                    maximize={maximize}
+                    height='180px'
+                    width='800px'
+                >
                 <StyledModalContainer>
+                   
                     <StyledModalFloatingChapter>
                     <Dropdown 
                       options={propOptions}
                       action={()=>{console.info("valittu propsu", propValue)}}
-                      placeholder="Valitse ominaisuustieto"
+                      placeholder={strings.gfifiltering.placeholders.chooseProp}
                       value={propValue}
                       setValue={setPropValue}
                     />
@@ -457,7 +465,7 @@ const GfiTabContent = ({
                     <Dropdown 
                       options={gfiFilteringOptions}
                       action={()=>{console.info("valittu tyyppä", operatorValue)}}
-                      placeholder="Valitse operaattori"
+                      placeholder={strings.gfifiltering.placeholders.chooseOperator}
                       value={operatorValue}
                       setValue={setOperatorValue}
                     />
@@ -467,7 +475,7 @@ const GfiTabContent = ({
                     <StyledInput
                         type="text"
                         value={filterValue}
-                        placeholder={"Syötä suodettava arvo"}
+                        placeholder={strings.gfifiltering.placeholders.chooseValue}
                         onChange={e => setFilterValue(e.target.value)}
                         onKeyPress={e => {
                              if (e.key === 'Enter') {
@@ -487,14 +495,13 @@ const GfiTabContent = ({
                     </StyledModalFloatingActionChapter>
                    
                     {filters && filters.length > 0 && (
-                        
                         <StyledFilterContainer>
-                            <div>Aktiiviset filtterit</div>
+                            <div>{strings.gfifiltering.activeFilters}</div>
                             {activeFilters && activeFilters.length >0 && activeFilters.map( (filter) =>  
                             //filters && filters.length >0 && filters.map( (filter) =>  
-                            <StyledFilter>Ominaisuus: {filter.property} <br/>
-                                Operaattori: {filter.operator}<br/>
-                                Arvo: {filter.value}
+                            <StyledFilter>{strings.gfifiltering.property}: {filter.property} <br/>
+                                {strings.gfifiltering.operator}:  {filter.operator}<br/>
+                                {strings.gfifiltering.value}: {filter.value}
                                 </StyledFilter>
                              )}                        
                         </StyledFilterContainer>
