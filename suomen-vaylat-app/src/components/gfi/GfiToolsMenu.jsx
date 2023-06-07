@@ -213,7 +213,7 @@ const icons = {
     }
 };
 
-const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
+const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true, filters }) => {
     const drawinToolsData = [
         {
             id: 'sv-measure-linestring',
@@ -643,6 +643,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
     }
 
     useEffect(() => {
+        console.info("gfitoolmenu filters", filters)
         let isSubscribed = true;
         channel && channel.handleEvent("DrawingEvent", (data) => {
             if(store.getState().ui.selectedGfiTool) {
@@ -667,7 +668,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
                         let index = 0;
                         try {
                             for(const layer of fetchableLayers) {  
-                                await fetchFeaturesSynchronous(feature, layer, data, numberedLoaderEnables)
+                                await fetchFeaturesSynchronous(feature, layer, data, numberedLoaderEnables, filters)
                                 .then(
                                     index++
                                 ).catch((error) => {
@@ -723,10 +724,11 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
         return () => { setIsGfiLoading(false); 
                         isSubscribed = false; 
                         handleGfiToolsMenu();}
-    }, [channel])
+    }, [channel, filters])
 
 
-    const fetchFeaturesSynchronous = (feature, layer, data, numberedLoaderEnables) => {
+    const fetchFeaturesSynchronous = (feature, layer, data, numberedLoaderEnables, filters) => {
+       const activeFilters = filters?.filter(filter => filter.layer === layer.name)
         return new Promise(function(resolve, reject) {
         // executor (the producing code, "singer")
         channel.getFeaturesByGeoJSON(
@@ -780,7 +782,8 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
                     reject(BODY_SIZE_EXCEED)
                 }      
                 reject(GENERAL_FAIL)
-            }
+            }, 
+            activeFilters
         )
         });
     }  

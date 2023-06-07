@@ -11,6 +11,7 @@ import { kaReducer, Table } from 'ka-table';
 import "ka-table/style.scss";
 import Modal from '../modals/Modal';
 import Dropdown from '../select/Dropdown';
+import { setFilter } from '../../state/slices/rpcSlice';
 
 const StyledSelectedTabHeader = styled.div`
     position: relative;
@@ -82,14 +83,25 @@ const StyledModalContainer = styled.div`
     padding-right: 20px;
     margin-top: 30px;
     margin-bottom: 30px;
-    
+    min-height: 160px;
+    min-width: 800px;
 `;
 
 const StyledModalFloatingChapter = styled.div`
     float: left;
-    width: 23%;
+    width: 29%;
     margin-left: 6px;
+    //z-index: 1;
+    position: relative; 
 `;
+const StyledModalFloatingActionChapter = styled.div`
+    width: 7%;
+    margin-left: 6px;
+    float: left;
+    //z-index: 1;
+    position: relative; 
+`;
+
 
 const StyledInput = styled.input`
     width: 100%;
@@ -103,10 +115,28 @@ const StyledInput = styled.input`
 const StyledFilterContainer = styled.div`
     margin-left: 6px;
     position: relative;
+    width: 100%;
+    height: 100%;
+    
 `;
 
 const StyledFilter = styled.div`
     background-color: #f2f2f2;
+    width: 300px;
+    float: left;
+    border: solid 1px black;
+    border-radius: 7px;
+    //margin-left: 5px;
+    margin-bottom: 5px;
+    padding-left: 3px;
+    padding-right: 3px;
+    :nth-child(odd) {
+        background-color: white;
+        margin-left: 5px;
+    }
+    :nth-child(3) {
+        //float: none;
+    }
 `;
 
 
@@ -116,25 +146,35 @@ const GfiTabContent = ({
     tablePropsInit,
     constraintsRef,
     minimize,
-    maximize
+    maximize,
+    filters,
+    setFilters
 }) => {
 
     const [tableProps, changeTableProps] = useState(tablePropsInit);
     const [filtering, setFiltering] = useState(false);
-    const [filters, setFilters] = useState([]);
+    //const [filters, setFilters] = useState([]);
     const [filteredData, setFilteredData] = useState(data?.content?.features);
+    const [ operatorValue,  setOperatorValue] = useState({});
+    const [ filterValue, setFilterValue] = useState("");
+    const [ propValue, setPropValue] = useState({});
+    const [ activeFilters, setActiveFilters ]= useState([]);
     const dispatch = action => {
       changeTableProps(prevState => kaReducer(prevState, action));
     };
 
 
-    useEffect(() => {
-        console.info("filteredData", filteredData)
-    }, [filteredData, data])
+    //useEffect(() => {
+    //    //console.info("filteredData", filteredData)
+    //}, [filteredData, data])
 
     useEffect(() => {
         changeTableProps(tablePropsInit);
     }, [tablePropsInit]);
+
+    //useEffect(() => {
+    //   console.info("filters", filters)
+    //}, [filters]);
 
     const [showDataTable, setShowDataTable] = useState(data.content && data.content.features && data.content.features.length > 5);
 
@@ -194,11 +234,16 @@ const GfiTabContent = ({
             'gfi-result-layer-overlay',
         ]);
     };
-    const propOptions = [
+    /*const propOptions = [
         { value: 'prop1', label: 'Ominaisuus1' },
         { value: 'prop2', label: 'Ominaisuus2' },
         { value: 'prop3', label: 'Ominaisuus3' },
       ];
+     */
+    
+    const propOptions = tableProps?.columns.map( column => {  
+        return { value: column.key, label: column.title}
+    } )
       const gfiFilteringOptions = [
         { value: 'equals', label: 'Yhtäsuuri kuin' },
         { value: 'notEquals', label: 'Erisuuri kuin' },
@@ -218,10 +263,11 @@ const GfiTabContent = ({
             //let features = updateFilteredData?.content?.features;
             //const filteredFeatures = filteredData?.content?.features.filter((feature) => {
             filteredFeatures = filteredData?.filter((feature) => {
-                console.info("isMatch", feature.properties.hasOwnProperty(filter.property)
-                && feature.properties[filter.property] === filter.value
-                );
-                console.info("filter prop", filter.property)
+                //console.info("isMatch", feature.properties.hasOwnProperty(filter.property)
+                //&& 
+                //feature.properties[filter.property] === filter.value
+                //);
+                //console.info("filter prop", filter.property)
                 return feature.properties.hasOwnProperty(filter.property)
                 && feature.properties[filter.property] === filter.value; 
             })
@@ -310,17 +356,31 @@ const GfiTabContent = ({
     // }, [filteredData, filters]);
   
      useEffect (( ) => {
-        console.info("filters", filters)
-     }, [filters])
+        console.info("propValue", propValue)
+        console.info("filterValue", filterValue)
+        console.info("operatorValue", operatorValue)
+     }, [propValue, filterValue, operatorValue])
    
 
+    useEffect (() => {
+       setActiveFilters(filters && filters.length >0 && filters.filter(filter => filter.layer === title) )
+    }, [filters] )
+    
     const addFilter = () => {
-        const prop = "ilman_lampotila";
-        const value = -4;
-        const oper = "equals";
-        const layer = title
-        console.info("nyt filtteröidään", prop, oper, value)
-        setFilters([...filters ,
+        // const prop = "ilman_lampotila";
+        // const value = -4;
+        // const oper = "equals";
+        // const layer = title;
+        const prop = propValue.value;
+        const value = filterValue;
+        const oper = operatorValue.value;
+        const layer = title;
+
+        if (!prop || !value || !oper){
+            return
+        }
+        //console.info("nyt filtteröidään", prop, oper, value)
+        setFilters(current => [...current,
             {   
                 "layer" : layer,
                 "property": prop,
@@ -329,14 +389,19 @@ const GfiTabContent = ({
             }
         ]
         )
-        filterFeatures()
+        //filterFeatures()
+        setPropValue({})
+        setFilterValue("")
+        setOperatorValue({})
     }
 
 
-    const [ operatorValue,  setOperatorValue] = useState("");
-    const [ filterValue, setFilterValue] = useState("");
-    const [ propValue, setPropValue] = useState("");
-    
+   
+    const closeFilteringModal = () => {
+        setFiltering(false);
+        console.info("closefiltering")
+    }
+    //console.info("tableProps", propOptions, tableProps  )
     return <>
             <StyledSelectedTabHeader>
                 <StyledSelectedTabTitle>
@@ -370,7 +435,7 @@ const GfiTabContent = ({
                 title={strings.gfi.filter} /* Modal header title */
                 type={'normal'} /* Modal type */
                 closeAction={
-                    console.info("A")
+                    closeFilteringModal
                 } /* Action when pressing modal close button or backdrop */
                 isOpen={filtering} /* Modal state */
                 id={null}
@@ -382,7 +447,7 @@ const GfiTabContent = ({
                     <Dropdown 
                       options={propOptions}
                       action={()=>{console.info("valittu propsu", propValue)}}
-                      placeholder="Valitse propsu"
+                      placeholder="Valitse ominaisuustieto"
                       value={propValue}
                       setValue={setPropValue}
                     />
@@ -402,28 +467,32 @@ const GfiTabContent = ({
                     <StyledInput
                         type="text"
                         value={filterValue}
-                        placeholder={"syötä suodettava arvo"}
+                        placeholder={"Syötä suodettava arvo"}
                         onChange={e => setFilterValue(e.target.value)}
-                        // onKeyPress={e => {
-                        //     if (e.key === 'Enter') {
-                        //         console.info( "lähetään suodattaa ", e.target.value );
-                        //         setFilterValue(e.target.value);
-                        //     }
-                        // }}
+                        onKeyPress={e => {
+                             if (e.key === 'Enter') {
+                                 console.info( "lähetään suodattaa ", e.target.value );
+                                 addFilter();
+                                //setFilterValue(e.target.value);
+                             }
+                         }}
                     />
                     </StyledModalFloatingChapter>
-                    <StyledModalFloatingChapter>
+                    <StyledModalFloatingActionChapter>
                         <StyledSelectedTabDisplayOptionsButton
                             onClick={() =>  addFilter()}
                         >
                         <FontAwesomeIcon icon={faPlus} />
                         </StyledSelectedTabDisplayOptionsButton>
-                    </StyledModalFloatingChapter>
+                    </StyledModalFloatingActionChapter>
+                   
                     {filters && filters.length > 0 && (
+                        
                         <StyledFilterContainer>
-                            <span>Aktiiviset filtterit</span>
-                            {filters.map( (filter) => 
-                                <StyledFilter>Ominaisuus: {filter.property} <br/>
+                            <div>Aktiiviset filtterit</div>
+                            {activeFilters && activeFilters.length >0 && activeFilters.map( (filter) =>  
+                            //filters && filters.length >0 && filters.map( (filter) =>  
+                            <StyledFilter>Ominaisuus: {filter.property} <br/>
                                 Operaattori: {filter.operator}<br/>
                                 Arvo: {filter.value}
                                 </StyledFilter>
@@ -458,7 +527,6 @@ const GfiTabContent = ({
                         //filterFeatures()
                         //    .then(() => {            
                             filteredData.map((feature, index) => {
-                                console.info(feature)
                                 return <GfiTabContentItem
                                         key={feature.id}
                                         title={feature.id.split('.')[1] ? title + ` | ${strings.gfi.uniqueId } ` + feature.id.split('.')[1] : title + ' ' + feature.id}

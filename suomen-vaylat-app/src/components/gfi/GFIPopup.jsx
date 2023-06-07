@@ -424,7 +424,13 @@ const StyledLoaderWrapper = styled.div`
 `;
 
 
-export const GFIPopup = ({ handleGfiDownload, constraintsRef, minimize, maximize  }) => {
+export const GFIPopup = ({ 
+    handleGfiDownload, 
+    constraintsRef, 
+    minimize, 
+    maximize,
+    filters,
+    setFilters  }) => {
     const LAYER_ID = 'gfi-result-layer';
     const { store } = useContext(ReactReduxContext);
     const { channel, allLayers, gfiLocations, vkmData, pointInfoImageError, setPointInfoImageError, gfiCroppingArea, selectedLayers } = useAppSelector(state => state.rpc);
@@ -443,7 +449,7 @@ export const GFIPopup = ({ handleGfiDownload, constraintsRef, minimize, maximize
     const [gfiTabsSwiper, setGfiTabsSwiper] = useState(null);
     const [gfiTabsSnapGridLength, setGfiTabsSnapGridLength] = useState(0);
     const [isLoading, setIsLoading] = useState(false);
-
+    //const [filters, setFilters] = useState([]);
     const gfiInputEl = useRef(null);
 
     useEffect(() => {
@@ -1021,6 +1027,8 @@ export const GFIPopup = ({ handleGfiDownload, constraintsRef, minimize, maximize
                                             constraintsRef={constraintsRef}
                                             minimize={minimize}
                                             maximize={maximize}
+                                            filters={filters}
+                                            setFilters={setFilters}
                                         />
                                         {location.content.features && <StyledFeaturesInfo>
                                         <StyledFeatureAmount>
@@ -1109,7 +1117,8 @@ export const GFIPopup = ({ handleGfiDownload, constraintsRef, minimize, maximize
                             x: '-100%',
                         }}
                     >
-                        <GfiToolsMenu handleGfiToolsMenu={handleGfiToolsMenu} />
+                        <GfiToolsMenu handleGfiToolsMenu={handleGfiToolsMenu} 
+                        filters={filters} />
                     </StyledGfiToolsContainer>
                 )}
             </AnimatePresence>

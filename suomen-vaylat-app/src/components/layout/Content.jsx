@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect, useRef } from 'react';
+import { useState, useContext, useEffect, useRef, useCallback } from 'react';
 import { ReactReduxContext } from 'react-redux';
 import { ToastContainer, Slide, toast} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
@@ -220,6 +220,7 @@ const Content = () => {
     const [downloadUuids, setDownloadUuids] = useState([]);
 
     const [websocketFirstTimeTryConnecting, setWebsocketFirstTimeTryConnecting] = useState(false);
+    const [filters, setFilters] = useState(Array);
 
     useEffect(() => {
         announcements && setCurrentAnnouncement(0);
@@ -514,8 +515,12 @@ const Content = () => {
         };
     }
 
-
-
+    useEffect(() => {
+      console.info("filterit päivittyneet", filters)
+      forceUpdate();
+    }, [filters, setFilters]);
+    const [state, updateState] = useState();
+    const forceUpdate = useCallback(() => updateState({}), []);
     return (
         <>
             <StyledContent ref={constraintsRef}>
@@ -599,6 +604,8 @@ const Content = () => {
                         constraintsRef={constraintsRef}
                         minimize={minimizeGfi}
                         maximize={maximizeGfi}
+                        filters={filters}
+                        setFilters={setFilters}
                     />
                 </Modal>
                 <Modal
@@ -866,7 +873,8 @@ const Content = () => {
                     minimize={minimizeGfi}
                     maximize={maximizeGfi}
                 >
-                    <GfiToolsMenu handleGfiToolsMenu={handleGfiToolsMenu} closeButton={false}/>
+                    <GfiToolsMenu handleGfiToolsMenu={handleGfiToolsMenu} closeButton={false} 
+                    filters={filters}/>
                 </Modal>
                 <Modal
                     constraintsRef={
@@ -897,7 +905,7 @@ const Content = () => {
                 <StyledToastContainer position="bottom-left" pauseOnFocusLoss={false} transition={Slide} autoClose={false} closeOnClick={false} />
                 <StyledContentGrid>
                     <StyledLeftSection>
-                        <MenuBar />
+                        <MenuBar filters={filters} />
                         <ThemeMenu />
                         <MapLayersDialog />
                     </StyledLeftSection>

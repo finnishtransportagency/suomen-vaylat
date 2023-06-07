@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useState, useEffect, useCallback } from 'react';
 import strings from '../../../translations';
 import {
     faCompress,
@@ -72,8 +72,9 @@ const StyledLayerCount = styled.div`
     font-weight: 600;
 `;
 
-const MenuBar = () => {
+const MenuBar = (filters) => {
     const { store } = useContext(ReactReduxContext);
+    const [activeFilters, setActiveFilters ] = useState([]);
 
     const { selectedLayers, downloads, channel } = useAppSelector(
         (state) => state.rpc
@@ -94,8 +95,25 @@ const MenuBar = () => {
     } = useAppSelector((state) => state.ui);
 
     const [animationUnfinished, setAnimationUnfinished] = useState(false);
+    /*useEffect (() => {
+        setActiveFilters(filters)
+        console.info("activeFilters",activeFilters)
+     }, [filters, setActiveFilters] )
+    */
+     useEffect(() => {
+        console.info("filterit päivittyneet", filters)
+        //forceUpdate();
+      }, [filters]);
+      //const [state, updateState] = useState();
+      //const forceUpdate = useCallback(() => updateState({}), []);
+
+     const getFilterCountComponent = () => {
+        if (filters && filters.length>0)
+        return <StyledLayerCount>{filters.length}</StyledLayerCount>;
+      }
 
     const handleFullScreen = () => {
+
         var elem = document.documentElement;
         /* View in fullscreen */
 
@@ -225,7 +243,9 @@ const MenuBar = () => {
                         store.dispatch(setIsGfiOpen(!isGfiOpen));
                         isGfiOpen && store.dispatch(setMinimizeGfi(false));
                     }}
-                />
+                >
+                    { filters && (getFilterCountComponent())}
+                </CircleButton>
                 <CircleButton
                     icon={faDownload}
                     text={strings.downloads.downloads}
