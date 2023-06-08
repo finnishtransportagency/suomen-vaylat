@@ -1166,7 +1166,7 @@
       "chooseOperator" : "Valitse operaattori",
       "chooseValue" : "Suodettava arvo"
     },
-    "activeFilters" : "Aktiiviset filtterit",
+    "activeFilters" : "Aktiiviset suodattimet",
     "property" : "Ominaisuus",
     "operator" : "Operaattori",
     "value" : "Arvo"

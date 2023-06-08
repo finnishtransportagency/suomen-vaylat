@@ -426,11 +426,9 @@ const StyledLoaderWrapper = styled.div`
 
 export const GFIPopup = ({ 
     handleGfiDownload, 
-    constraintsRef, 
-    minimize, 
-    maximize,
-    filters,
-    setFilters  }) => {
+    filteringInfo,
+    setFilteringInfo, 
+    filters  }) => {
     const LAYER_ID = 'gfi-result-layer';
     const { store } = useContext(ReactReduxContext);
     const { channel, allLayers, gfiLocations, vkmData, pointInfoImageError, setPointInfoImageError, gfiCroppingArea, selectedLayers } = useAppSelector(state => state.rpc);
@@ -1024,11 +1022,9 @@ export const GFIPopup = ({
                                             data={location}
                                             title={title}
                                             tablePropsInit={tableProps}
-                                            constraintsRef={constraintsRef}
-                                            minimize={minimize}
-                                            maximize={maximize}
+                                            filteringInfo={filteringInfo}
+                                            setFilteringInfo={setFilteringInfo}
                                             filters={filters}
-                                            setFilters={setFilters}
                                         />
                                         {location.content.features && <StyledFeaturesInfo>
                                         <StyledFeatureAmount>

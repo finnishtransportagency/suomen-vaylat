@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect, useRef, useCallback } from 'react';
+import { useState, useContext, useEffect, useRef } from 'react';
 import { ReactReduxContext } from 'react-redux';
 import { ToastContainer, Slide, toast} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
@@ -7,6 +7,9 @@ import styled from 'styled-components';
 import strings from '../../translations';
 import GfiToolsMenu from '../gfi/GfiToolsMenu';
 import GfiDownloadMenu from '../gfi/GfiDownloadMenu';
+import Dropdown from '../select/Dropdown';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import {
     setSelectError,
@@ -158,6 +161,96 @@ const StyledLayerNamesList = styled.ul`
     padding-inline-start: 20px;
 `;
 
+const StyledModalContainer = styled.div`
+    :after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+    padding-left: 20px;
+    padding-right: 20px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    min-height: 160px;
+    min-width: 800px;
+    position: relative;
+    //left: calc(-50vw + 50%);
+`;
+
+const StyledModalFloatingChapter = styled.div`
+    float: left;
+    width: 29%;
+    margin-left: 6px;
+    //z-index: 1;
+    position: relative; 
+`;
+const StyledModalFloatingActionChapter = styled.div`
+    width: 7%;
+    margin-left: 6px;
+    float: left;
+    //z-index: 1;
+    position: relative; 
+`;
+
+
+const StyledInput = styled.input`
+    width: 100%;
+    padding-left: 12px;
+    font-size: 16px;
+    padding-top: 10px;
+    border-radius: 4px;
+    border: 2px solid;
+    border-color: hsl(0, 0%, 80%);
+    padding: 5px 10px;
+`;
+
+const StyledFilterContainer = styled.div`
+    margin-left: 6px;
+    //position: relative;
+    width: 100%;
+    height: 100%;
+    
+`;
+
+const StyledFilter = styled.div`
+    background-color: #f2f2f2;
+    width: 300px;
+    float: left;
+    border: solid 1px black;
+    border-radius: 7px;
+    //margin-left: 5px;
+    margin-bottom: 5px;
+    padding-left: 3px;
+    padding-right: 3px;
+    :nth-child(odd) {
+        background-color: white;
+        margin-left: 5px;
+    }
+    :nth-child(3) {
+        //float: none;
+    }
+`;
+
+const StyledSelectedTabTitle = styled.div`
+    padding: 8px;
+    p {
+        color: ${(props) => props.theme.colors.mainColor1};
+        margin: 0;
+        font-size: 16px;
+        font-weight: 600;
+    }
+`;
+
+const StyledSelectedTabDisplayOptionsButton = styled.div`
+    position: relative;
+    right: 0px;
+    padding: 8px;
+    cursor: pointer;
+    color: ${(props) => props.theme.colors.mainColor1};
+    svg {
+        font-size: 24px;
+    };
+`;
 
 const StyledToastContainer = styled(ToastContainer)`
 `;
@@ -523,8 +616,81 @@ const Content = () => {
     //  console.info("filterit päivittyneet", filters)
     //  forceUpdate();
     //}, [filters, setFilters]);
-    const [state, updateState] = useState();
-    const forceUpdate = useCallback(() => updateState({}), []);
+    //const [state, updateState] = useState();
+    //const forceUpdate = useCallback(() => updateState({}), []);
+    const [ operatorValue,  setOperatorValue] = useState({});
+    const [ filterValue, setFilterValue] = useState("");
+    const [ propValue, setPropValue] = useState({});
+    const addFilter = () => {
+        // const prop = "ilman_lampotila";
+        // const value = -4;
+        // const oper = "equals";
+        // const layer = title;
+        const prop = propValue.value;
+        const value = filterValue;
+        const oper = operatorValue.value;
+        const layer = filteringInfo.title; //TODO tähän oikea layer title jostain
+
+        if (!prop || !value || !oper){
+            return
+        }
+        //console.info("nyt filtteröidään", prop, oper, value)
+        setFilters(//current => [...current,
+            [...filters,
+            {   
+                "layer" : layer,
+                "property": prop,
+                "operator": oper,
+                "value": value
+            }
+        ]
+        )
+        //filterFeatures()
+        setPropValue({})
+        setFilterValue("")
+        setOperatorValue({})
+    }
+
+
+    
+      const gfiFilteringOptions = [
+        { value: 'equals', label: 'Yhtäsuuri kuin' },
+        { value: 'notEquals', label: 'Erisuuri kuin' },
+        { value: 'smallerThan', label: 'Pienempi kuin' },
+        { value: 'biggerThan', label: 'Suurempi kuin' },
+      ];
+
+    const [filteringInfo, setFilteringInfo] = useState({ modalOpen: false }); //format { modalOpen: false, tableProps: [], title: "" }
+    
+    const propOptions =  //[{ value: "valu", label: "title"},{ value: "valu2", label: "title2"} ] /* 
+        filteringInfo?.tableProps?.columns.map( column => {  
+        return { value: column.key, label: column.title}
+    } )
+
+    const handleCloseFilteringModal = () => {
+        console.info("modaali kii")
+        //setFilteringInfo(filteringInfo => ({...filteringInfo, modalOpen: false})) 
+        setFilteringInfo({...filteringInfo, modalOpen: false}) 
+    }
+    const [activeFilters, setActiveFilters] = useState();
+    useEffect(() => {
+        console.info("filters", filters)
+        console.info("filteringInfo", filteringInfo)
+        if (filteringInfo && filteringInfo?.title && filters){
+            const updatedActivefilters = filters.filter(filter => filter.layer === filteringInfo?.title)
+            setActiveFilters(updatedActivefilters)
+        }
+        console.info("activeFilters", activeFilters)
+ 
+
+     }, [filters, filteringInfo]);
+
+     useEffect(() => {
+        console.info(filteringInfo)
+     }, [filteringInfo]);
+
+   
+
     return (
         <>
             <StyledContent ref={constraintsRef}>
@@ -603,13 +769,10 @@ const Content = () => {
                     maximize={maximizeGfi}
                 >
                     <GFIPopup
-                        gfiLocations={gfiLocations}
                         handleGfiDownload={handleGfiDownload}
-                        constraintsRef={constraintsRef}
-                        minimize={minimizeGfi}
-                        maximize={maximizeGfi}
+                        filteringInfo={filteringInfo}
+                        setFilteringInfo={setFilteringInfo}
                         filters={filters}
-                        setFilters={setFilters}
                     />
                 </Modal>
                 <Modal
@@ -907,6 +1070,90 @@ const Content = () => {
                     id={null}
                 >
                     <GfiDownloadMenu closeButton={false} handleGfiDownload={handleGfiDownload}></GfiDownloadMenu>
+                </Modal>
+                <Modal
+                    constraintsRef={
+                        {constraintsRef}
+                    } /* Reference div for modal drag boundaries */
+                    drag={true} /* Enable (true) or disable (false) drag */
+                    resize={true}
+                    backdrop={
+                        false
+                    } /* Is backdrop enabled (true) or disabled (false) */
+                    fullScreenOnMobile={
+                        true
+                    } /* Scale modal full width / height when using mobile device */
+                    titleIcon={
+                        null
+                    } /* Use icon on title or null */
+                    title={strings.gfi.filter} /* Modal header title */
+                    type={'normal'} /* Modal type */
+                    closeAction={
+                        handleCloseFilteringModal
+                    } /* Action when pressing modal close button or backdrop */
+                    isOpen={filteringInfo.modalOpen} /* Modal state */
+                    id={null}
+                    minimize={minimizeGfi}
+                    maximize={maximizeGfi}
+                    height='240px'
+                    width='840px'
+                >
+                    <StyledModalContainer>
+                        <StyledModalFloatingChapter>
+                        <Dropdown 
+                        options={propOptions}
+                        action={()=>{console.info("valittu propsu", propValue)}}
+                        placeholder={strings.gfifiltering.placeholders.chooseProp}
+                        value={propValue}
+                        setValue={setPropValue}
+                        />
+                        </StyledModalFloatingChapter>
+                        <StyledModalFloatingChapter>
+                        <Dropdown 
+                        options={gfiFilteringOptions}
+                        action={()=>{console.info("valittu tyyppä", operatorValue)}}
+                        placeholder={strings.gfifiltering.placeholders.chooseOperator}
+                        value={operatorValue}
+                        setValue={setOperatorValue}
+                        />
+                        </StyledModalFloatingChapter>
+                        <StyledModalFloatingChapter>
+                        <StyledInput
+                            type="text"
+                            value={filterValue}
+                            placeholder={strings.gfifiltering.placeholders.chooseValue}
+                            onChange={e => setFilterValue(e.target.value)}
+                            onKeyPress={e => {
+                                if (e.key === 'Enter') {
+                                    console.info( "lähetään suodattaa ", e.target.value );
+                                    addFilter();
+                                    //setFilterValue(e.target.value);
+                                }
+                            }}
+                        />
+                        </StyledModalFloatingChapter>
+                        <StyledModalFloatingActionChapter>
+                            <StyledSelectedTabDisplayOptionsButton
+                                onClick={() =>  addFilter()}
+                            >
+                            <FontAwesomeIcon icon={faPlus} />
+                            </StyledSelectedTabDisplayOptionsButton>
+                        </StyledModalFloatingActionChapter>
+                    
+                        {activeFilters && activeFilters.length > 0 && (
+                            <StyledFilterContainer>
+                                <div>{strings.gfifiltering.activeFilters}</div>
+                                {
+                                activeFilters.map( (filter) =>  
+                                <StyledFilter>{strings.gfifiltering.property}: {filter.property} <br/>
+                                    {strings.gfifiltering.operator}:  {filter.operator}<br/>
+                                    {strings.gfifiltering.value}: {filter.value}
+                                </StyledFilter>
+                                )}                        
+                            </StyledFilterContainer>
+                        )
+                        }
+                    </StyledModalContainer>
                 </Modal>
                 <ScaleBar />
                 <StyledToastContainer position="bottom-left" pauseOnFocusLoss={false} transition={Slide} autoClose={false} closeOnClick={false} />

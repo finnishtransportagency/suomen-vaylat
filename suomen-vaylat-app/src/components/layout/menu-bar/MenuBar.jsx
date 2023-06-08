@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect, useCallback } from 'react';
+import { useContext, useState } from 'react';
 import strings from '../../../translations';
 import {
     faCompress,
@@ -93,10 +93,6 @@ const MenuBar = (filters) => {
     } = useAppSelector((state) => state.ui);
 
     const [animationUnfinished, setAnimationUnfinished] = useState(false);
-     useEffect(() => {
-        console.info(filters.filters)
-     }, [filters]);
-
     const handleFullScreen = () => {
 
         var elem = document.documentElement;
@@ -229,7 +225,9 @@ const MenuBar = (filters) => {
                         isGfiOpen && store.dispatch(setMinimizeGfi(false));
                     }}
                 >
-                { filters?.filters && filters?.filters?.length >0 &&  <StyledLayerCount>{filters?.filters?.length}</StyledLayerCount>  /*(getFilterCountComponent())*/}
+                { filters?.filters && filters?.filters?.length >0 && 
+                 <StyledLayerCount>{filters?.filters?.length}</StyledLayerCount>
+                }
                 </CircleButton>
                 <CircleButton
                     icon={faDownload}
