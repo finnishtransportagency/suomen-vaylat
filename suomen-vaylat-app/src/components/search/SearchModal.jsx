@@ -25,9 +25,9 @@ const StyledSearchModal = styled.div`
     font-size: 16px;
     padding-top: 30px;
     z-index: -10;
-    600px;
-    ${(props) => props.isMobile ? "height: 500px" : ""};
+    max-height: ${(props) => props.isMobile ? window.innerHeight-50 + "px": window.innerHeight-200 + "px"};
     padding-bottom: 16px;
+    overflow: auto;
 `;
 
 const StyledInput = styled.input`

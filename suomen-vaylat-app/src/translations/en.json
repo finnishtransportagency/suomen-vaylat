@@ -322,6 +322,11 @@
     "layer": {
       "title": "Material search"
     },
+    "track" : {
+      "tracknumber" : "Track number",
+      "trackkm" : "Track kilometre",
+      "trackm" : "Track metre"
+    },
     "tips": {
       "title": "Use location search to search for a municipality, address, property identifier, road address or track address.",
       "address": "Address search, type in the format 'municipality', 'address' or 'address, municipality'.",
@@ -330,7 +335,7 @@
         "Opastinsilta 12",
         "Opastinsilta 12, Helsinki"
       ],
-      "vkmRoad": "Tiehaku, kirjoita muodossa 'tie/osa/ajorata/etäisyys' tai 'tie/osa/ajorata/etäisyys tie/osa_loppu/ajorata/etäisyys_loppu'.",
+      "vkmRoad": "Road search, write in the format ’road/part/driving_lane/distance’ or ’road/part/driving_lane/distance road/part_end/driving_lane/distance_end’.",
       "vkmRoadExamples": [
         "5",
         "5/116",
@@ -357,7 +362,7 @@
       "nomenclatureExamples" : [
         "Tampere", "Rautatieasema", "Eduskuntatalo"
       ],
-      "layer" : "Using material search, you can search for words or or parts of words in the metadata of map layers and activate layers from the search results. Eg. ",
+      "layer" : "Using material search, you can search for words or parts of words in the metadata of map layers and activate layers from the search results. Eg. ",
       "layerExamples" : [
         "pölkytys"
       ]

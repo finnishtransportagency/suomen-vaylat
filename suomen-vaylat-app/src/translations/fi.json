@@ -358,7 +358,7 @@
       "example": "Esim.",
       "toastTip": "Tiesitkö, että voit tallentaa rata- ja tiehausta kartalle tulleen geometrian?",
       "toastTipContent": "Geometrian voit tallentaa sivun vasemman reunan tallennus-ikonin kautta, toiselta välilehdeltä.",
-      "nomenclature" : "Nimistöhaulla voit voit hakea kohteita paikkatietonimistöstä. Esim.",
+      "nomenclature" : "Nimistöhaulla voit hakea kohteita paikkatietonimistöstä. Esim.",
       "nomenclatureExamples" : [
         "Tampere", "Rautatieasema", "Eduskuntatalo"
       ],
