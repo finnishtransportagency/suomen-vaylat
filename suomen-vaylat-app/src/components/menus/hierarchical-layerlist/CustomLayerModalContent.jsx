@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useAppSelector } from '../../../state/hooks';
 import strings from "../../../translations";
 import styled from "styled-components";
@@ -76,8 +75,6 @@ export const CustomLayerList = ({
   groups,
   layers,
   recurse = false,
-  layer,
-  theme
 }) => {
 
 
@@ -108,7 +105,7 @@ export const CustomLayerList = ({
   return (
       <>
               <StyledLayerList>
-                  {sortedGroups.map((group, index) => {
+                  {sortedGroups.map((group) => {
                       const recursiveCheckSubGroupLayers = (group) => {
                           var hasChildrenLayers = false;
                           if (group.layers && group.layers.length) {
@@ -154,7 +151,6 @@ export const CustomLayerModalContent = () => {
     allGroups,
     allLayers,
   } = useAppSelector((state) => state.rpc);
-  const {isSavedLayer} = useAppSelector((state) => state.ui);
 
   const modalContent = [
     {
@@ -181,6 +177,7 @@ export const CustomLayerModalContent = () => {
 
   const removeLayers =() => {
     store.dispatch(setIsSavedLayer(false));
+    localStorage.removeItem("checkedLayers");
   }
 
   return (

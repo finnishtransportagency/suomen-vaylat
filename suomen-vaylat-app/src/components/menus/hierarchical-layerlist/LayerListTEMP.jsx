@@ -124,63 +124,7 @@ const StyledFilterButton = styled.div`
   };
 `;
 
-const StyledLayerGroups = styled.div`
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    //opacity: 0;
-    background-color: ${props => props.theme.colors.mainWhite};
-    margin: ${props => props.parentId === -1 && '10px 0px 10px 0px'};
-    margin-bottom: 10px;
-    border-radius: 2px;
-    &:last-child {
-        ${props => props.parentId === -1 ? '1px solid '+props.theme.colors.mainColor2 : 'none'};
-    };
-`;
-
-const StyledSavedLayers = styled.div`
-  margin-top: 20px;
-`;
-
-const StyledSavedLayersTitle = styled.h3`
-  font-size: 18px;
-  font-weight: bold;
-  margin-bottom: 10px;
-`;
-
-const StyledSavedLayersList = styled.ul`
-  list-style-type: none;
-  padding: 0;
-`;
-
-const StyledSavedLayerItem = styled.li`
-  display: flex;
-  align-items: center;
-  margin-bottom: 5px;
-`;
-
-const StyledSavedLayerName = styled.span`
-  margin-left: 10px;
-`;
-
-const StyledRemoveLayerButton = styled.button`
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: red;
-  margin-left: 5px;
-`;
-
-const StyledSavedLayer = styled.li`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 5px;
-  background-color: #f5f5f5;
-  margin-bottom: 4px;
-`;
-
-const SavedLayer = (layer) => {
+const SavedLayer = () => {
   const { isSavedLayer } = useAppSelector(state => state.ui)
   
   const customLayers = localStorage.getItem("checkedLayers");
@@ -202,7 +146,7 @@ const SavedLayer = (layer) => {
 const LayerListTEMP = ({
   groups,
   layers,
-  tags,
+  tags
 }) => {
   useAppSelector((state) => state.language);
 
@@ -235,21 +179,6 @@ const LayerListTEMP = ({
       console.error();
     }
   };
-
-  const removeLayer = (layer) => {
-    if (!layer || savedLayers.length === 0) {
-      return; // Exit early if layer is undefined or savedLayers is empty
-    }
-  
-    const updatedLayers = savedLayers.filter(
-      (savedLayer) => savedLayer.id !== layer.id
-    );
-    setSavedLayers(updatedLayers);
-  
-    // Update localStorage with the updated saved layers
-    localStorage.setItem("checkedLayers", JSON.stringify(updatedLayers));
-  };
-
 
   return (
     <>
@@ -307,7 +236,7 @@ const LayerListTEMP = ({
         </StyledDeleteAllSelectedFilters>
       </StyledFilterList>
 
-      {shouldShowSavedLayer && <SavedLayer />}
+      {isSavedLayer && <SavedLayer />}
      
       {shouldShowLayerList && (
         <LayerList
