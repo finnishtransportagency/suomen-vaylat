@@ -176,7 +176,7 @@ export const CustomLayerModalContent = () => {
   ];
 
   const saveLayers = () => {
-    store.dispatch(setIsSavedLayer(isSavedLayer));
+    store.dispatch(setIsSavedLayer(true));
   };
 
   const removeLayers =() => {

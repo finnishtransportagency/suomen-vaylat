@@ -183,7 +183,6 @@ const StyledSavedLayer = styled.li`
 const SavedLayer = (layer) => {
   const { isSavedLayer } = useAppSelector(state => state.ui)
   
-  store.dispatch(setIsSavedLayer(isSavedLayer));
   const customLayers = localStorage.getItem("checkedLayers");
   const parsedLayers = JSON.parse(customLayers);
 
@@ -191,13 +190,12 @@ const SavedLayer = (layer) => {
     return (
       <div>
         {parsedLayers && parsedLayers.map((layer) => (
-          <Layer layer={layer} key={layer.id} /> // Render a Layer component for each saved layer
+          <Layer layer={layer} key={layer.id} />
         ))}
       </div>
     );
   }
 
-  // Return null or an alternative component if isSavedLayer is false
   return null; 
 };
 
@@ -205,7 +203,6 @@ const LayerListTEMP = ({
   groups,
   layers,
   tags,
-  isChecked
 }) => {
   useAppSelector((state) => state.language);
 
