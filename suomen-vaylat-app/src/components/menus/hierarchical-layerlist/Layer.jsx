@@ -9,8 +9,9 @@ import {
 } from '../../../state/slices/rpcSlice';
 import { updateLayers } from '../../../utils/rpcUtil';
 import LayerDownloadLinkButton from './LayerDownloadLinkButton';
-import {setIsDownloadLinkModalOpen} from '../../../state/slices/uiSlice';
+import {setIsDownloadLinkModalOpen, setIsSavedLayer} from '../../../state/slices/uiSlice';
 import LayerMetadataButton from './LayerMetadataButton';
+import { useAppSelector } from '../../../state/hooks';
 
 const StyledLayerContainer = styled.li`
     background-color: ${props => props.themeStyle && "#F5F5F5"};
@@ -59,9 +60,53 @@ const StyledSwitchButton = styled.div`
     margin-right: 2px;
     transition: all 0.3s ease-out;
     background-color: ${props => props.theme.colors.mainWhite};
+`; 
+
+const StyledCheckbox = styled.div`
+    position: absolute;
+    left: ${props => props.isSelected ? "15px" : "0px"};
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-left: 2px;
+    margin-right: 2px;
+    transition: all 0.3s ease-out;
+    background-color: ${props => props.theme.colors.mainWhite};
 `;
 
-const Switch = ({ action, layer, isSelected }) => {
+const StyledCheckboxContainer = styled.label`
+
+  input[type="checkbox"] {
+    position: relative;
+    width: 15px;
+    height: 15px;
+    border-radius: 70%;
+    margin-left: 2px;
+    margin-right: 2px;
+    transition: all 0.3s ease-out;
+
+    input[type="checkbox"]:isChecked {
+        color: #fff;
+    }
+  }
+`;
+
+const Checkbox = ({ action, isChecked }) => {
+  return (
+    <StyledCheckboxContainer isChecked={isChecked}>
+      <input
+        type="checkbox"
+        checked={isChecked}
+        onChange={(event) => {
+          action(event.target.checked);
+        }}
+      />
+        <StyledCheckbox isSelected={isChecked}/>
+    </StyledCheckboxContainer>
+  );
+}; 
+
+export const Switch = ({ action, layer, isSelected }) => {
     return (
         <StyledSwitchContainer
         isSelected={isSelected}
@@ -78,6 +123,8 @@ export const Layer = ({ layer, theme }) => {
     const { store } = useContext(ReactReduxContext);
     const [layerStyle, setLayerStyle] = useState(null);
     const [themeSelected, setThemeSelected] = useState(false);
+    const [isChecked, setIsChecked] = useState(false);
+    const {isCustomFilterOpen} = useAppSelector(state => state.ui)
 
     const {
         channel,
@@ -85,9 +132,28 @@ export const Layer = ({ layer, theme }) => {
     } = useSelector(state => state.rpc);
 
     const handleLayerVisibility = (channel, layer) => {
-        store.dispatch(setMapLayerVisibility(layer));
-        updateLayers(store, channel);
-    };
+      store.dispatch(setMapLayerVisibility(layer));
+      updateLayers(store, channel);
+  };
+
+  const handleCheckboxChange = (checked) => {
+    setIsChecked(checked);
+    const storedLayers = localStorage.getItem("checkedLayers");
+    if (checked) {
+      let updatedLayers = [];
+      if (storedLayers) {
+        const parsedLayers = JSON.parse(storedLayers);
+        updatedLayers = [...parsedLayers, layer];
+      } else {
+        updatedLayers = [layer];
+      }
+      localStorage.setItem("checkedLayers", JSON.stringify(updatedLayers));
+    } else if (storedLayers) {
+      const parsedLayers = JSON.parse(storedLayers);
+      const updatedLayers = parsedLayers.filter((storedLayer) => storedLayer.id !== layer.id);
+      localStorage.setItem("checkedLayers", JSON.stringify(updatedLayers));
+    }
+  };
 
     const handleIsDownloadLinkModalOpen = () => {
         store.dispatch(setIsDownloadLinkModalOpen({ layerDownloadLinkModalOpen: true, layerDownloadLink: downloadLink, layerDownloadLinkName: layer.name }))
@@ -148,11 +214,19 @@ export const Layer = ({ layer, theme }) => {
                 {downloadLink && <LayerDownloadLinkButton
                     handleIsDownloadLinkModalOpen={handleIsDownloadLinkModalOpen} />
                 }
+                {isCustomFilterOpen === true ? (
+                <Checkbox
+                    action={handleCheckboxChange}
+                    layer={layer} // Pass the group information to the Checkbox component
+                    isChecked={isChecked}
+                />
+                    ) : (
                 <Switch
                     action={() => handleLayerVisibility(channel, layer)}
                     isSelected={layer.visible}
                     layer={layer}
                 />
+                    )}
             </StyledLayerContainer>
     );
   };

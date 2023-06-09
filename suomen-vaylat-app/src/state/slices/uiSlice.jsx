@@ -18,6 +18,8 @@ const initialState = {
     isSavedOpen: false,
     savedTabIndex: 0,
     isUserGuideOpen: false,
+    isCustomFilterOpen: false,
+    isSavedLayer: false,
     shareUrl: '',
     isThemeMenuOpen: false,
     isDrawingToolsOpen: false,
@@ -116,6 +118,12 @@ export const uiSlice = createSlice({
         setIsUserGuideOpen: (state, action) => {
             state.isUserGuideOpen = action.payload;
         },
+        setIsCustomFilterOpen: (state, action) => {
+            state.isCustomFilterOpen = action.payload;
+        },
+        setIsSavedLayer: (state, action) => {
+            state.isSavedLayer = action.payload;
+        },
         setIsLegendOpen: (state, action) => {
             state.isLegendOpen = action.payload;
         },
@@ -213,6 +221,8 @@ export const {
     setIsThemeMenuOpen,
     setIsInfoOpen,
     setIsUserGuideOpen,
+    setIsCustomFilterOpen,
+    setIsSavedLayer,
     setIsLegendOpen,
     setIsZoomBarOpen,
     setIsSaveViewOpen,

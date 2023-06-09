@@ -4,7 +4,7 @@ export const Layers = ({
     layers,
     isOpen,
     theme,
-    isSelected = false
+    isSelected
 }) => {
     return (
         <>
