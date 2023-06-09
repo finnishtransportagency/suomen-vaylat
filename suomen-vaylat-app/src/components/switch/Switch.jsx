@@ -104,10 +104,10 @@ const Switch = ({
                 <FontAwesomeIcon
                     icon={faInfoCircle}
                     style={{
-                    float: 'right',
-                    marginRight: '16px',
-                    color: 'blue', 
-                    marginBottom: '10px',
+                        float: 'right',
+                        marginRight: '16px',
+                        color: tooltipEnabled ? '#0064af': '#aaaaaa', 
+                        marginBottom: '10px',
                     }}
                     size='lg'  
                 />

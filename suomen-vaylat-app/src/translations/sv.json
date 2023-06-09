@@ -321,6 +321,11 @@
     },
     "layer": {
       "title": "Materialsökning"
+    },
+    "track" : {
+      "tracknumber" : "Bannummer",
+      "trackkm" : "Spårkilometer",
+      "trackm" : "Banmeter"
     },  
     "tips": {
       "title": "Med platssökning kan du söka en kommun, adress, fastighetsbeteckning, vägadress eller banadress.",
@@ -330,7 +335,7 @@
         "Opastinsilta 12",
         "Opastinsilta 12, Helsinki"
       ],
-      "vkmRoad": "Tiehaku, kirjoita muodossa 'tie/osa/ajorata/etäisyys' tai 'tie/osa/ajorata/etäisyys tie/osa_loppu/ajorata/etäisyys_loppu'.",
+      "vkmRoad": "Vägsökning, skriv i formatet ’väg/del/körbana/avstånd’ eller ’väg/del/körbana/avstånd väg/del_slut/körbana/avstånd_slut’.",
       "vkmRoadExamples": [
         "5",
         "5/116",
