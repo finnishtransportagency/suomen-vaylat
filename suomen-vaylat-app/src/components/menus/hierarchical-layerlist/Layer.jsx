@@ -91,6 +91,7 @@ const StyledCheckboxContainer = styled.label`
   }
 `;
 
+// Creates checkboxes that are used in CustomLayerList
 const Checkbox = ({ action, isChecked }) => {
   return (
     <StyledCheckboxContainer isChecked={isChecked}>

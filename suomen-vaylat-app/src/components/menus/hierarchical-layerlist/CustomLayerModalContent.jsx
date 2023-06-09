@@ -71,6 +71,9 @@ const StyledLayerList = styled.div`
 
 const StyledLayerGroupWrapper = styled.div``;
 
+// Layer list that renders in CustomLayerModal 
+// Checkbox logic and rendering is done in Layer.jsx
+
 export const CustomLayerList = ({
   groups,
   layers,
@@ -143,7 +146,7 @@ export const CustomLayerList = ({
   );
 };
 
-
+// Renders custom filter guide for user and CustomLayerList
 export const CustomLayerModalContent = () => {
   useAppSelector((state) => state.language);
 

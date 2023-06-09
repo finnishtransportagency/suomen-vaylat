@@ -152,9 +152,6 @@ const LayerListTEMP = ({
 
   const [isOpen, setIsOpen] = useState(false);
   const [isCustomOpen, setIsCustomOpen] = useState(false);
-  const [showSaveButton, setShowSaveButton] = useState(false);
-  const [showCheckboxes, setShowCheckboxes] = useState(false);
-  const [savedLayers, setSavedLayers] = useState([]);
   const { isSavedLayer } = useAppSelector((state) => state.ui);
 
   const selectedLayers = localStorage.getItem("checkedLayers");
@@ -172,9 +169,6 @@ const LayerListTEMP = ({
   const customFilterToggle = () => {
     if (isCustomOpen === true) {
       store.dispatch(setIsCustomFilterOpen(true));
-      console.log("on true");
-      setShowSaveButton(true);
-      setShowCheckboxes(true);
     } else {
       console.error();
     }
