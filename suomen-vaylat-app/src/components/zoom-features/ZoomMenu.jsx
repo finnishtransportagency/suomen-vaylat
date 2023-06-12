@@ -13,7 +13,7 @@ const StyledContainer = styled.div`
     -webkit-align-items: flex-end;
 `;
 
-const ZoomMenu = () => {
+const ZoomMenu = (filters) => {
 
     const { store } = useContext(ReactReduxContext);
 
@@ -47,6 +47,7 @@ const ZoomMenu = () => {
                     isZoomBarOpen={isZoomBarOpen}
                     setIsZoomBarOpen={handleZoomBarState}
                     setIsLegendOpen={handleLegendState}
+                    filters={filters}
                 />
             </StyledContainer>
         </>

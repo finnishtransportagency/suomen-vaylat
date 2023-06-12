@@ -8,7 +8,7 @@ import strings from '../../translations';
 import GfiToolsMenu from '../gfi/GfiToolsMenu';
 import GfiDownloadMenu from '../gfi/GfiDownloadMenu';
 import Dropdown from '../select/Dropdown';
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faTimes, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import {
@@ -256,6 +256,48 @@ const StyledToastContainer = styled(ToastContainer)`
 `;
 
 const StyledLayerNamesListItem = styled.li``;
+
+const StyledIconWrapper = styled.div`
+    border: none;
+    background: none;
+    cursor: pointer;
+    svg {
+        color: ${props => props.theme.colors.mainColor1};
+        font-size: 20px;
+        transition: all 0.1s ease-out;
+    };
+    &:hover {
+        svg {
+            color: ${props => props.theme.colors.mainColor2};
+        }
+    };
+    float: right;
+    margin-right: 8px;
+`;
+
+const StyledFloatingDiv = styled.div`
+    :after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+`;
+
+const StyledFilterProp = styled.div`
+    margin-left: 6px;
+`;  
+
+const StyledFilterPropContainer = styled.div`
+    width: 80%;
+    float: left;
+`;  
+
+
+const StyledFilterHeader = styled.div`
+    font-size: 16px;
+    //color: '0064AF
+`;  
+
 
 const Content = () => {
     const constraintsRef = useRef(null);
@@ -690,6 +732,20 @@ const Content = () => {
      }, [filteringInfo]);
 
    
+    const handleRemoveFilter = (filter) => {
+        if (filters && filters.length > 0 && filters.includes(filter)){
+            const updatedFilters = filters.filter(existingFilter => existingFilter !== filter )
+            setFilters(updatedFilters)
+        }
+    }
+
+    const handleRemoveAllFilters = () => {
+        if (filters && filters.length > 0){
+            setFilters([])
+        }
+    }
+
+    
 
     return (
         <>
@@ -1142,12 +1198,27 @@ const Content = () => {
                     
                         {activeFilters && activeFilters.length > 0 && (
                             <StyledFilterContainer>
-                                <div>{strings.gfifiltering.activeFilters}</div>
+                                <StyledFilterHeader>{strings.gfifiltering.activeFilters}</StyledFilterHeader>
+                                <StyledIconWrapper 
+                                 onClick={() => {
+                                    handleRemoveAllFilters();
+                                }}>
+                                <StyledFloatingDiv><FontAwesomeIcon icon={faTrash} size="6x" style={{}}/>Poista kaikki suodattimet</StyledFloatingDiv>
+                                </StyledIconWrapper>
                                 {
                                 activeFilters.map( (filter) =>  
-                                <StyledFilter>{strings.gfifiltering.property}: {filter.property} <br/>
-                                    {strings.gfifiltering.operator}:  {filter.operator}<br/>
-                                    {strings.gfifiltering.value}: {filter.value}
+                                <StyledFilter>
+                                <StyledFilterPropContainer>      
+                                    <StyledFilterProp>{strings.gfifiltering.property}: {filter.property}</StyledFilterProp> 
+                                    <StyledFilterProp>{strings.gfifiltering.operator}:  {filter.operator}</StyledFilterProp> 
+                                    <StyledFilterProp>{strings.gfifiltering.value}: {filter.value}</StyledFilterProp> 
+                                </StyledFilterPropContainer>
+                                <StyledIconWrapper
+                                onClick={() => {
+                                    handleRemoveFilter(filter);
+                                }}>
+                                <StyledFloatingDiv><FontAwesomeIcon icon={faTimes} size="6x" style={{}}/></StyledFloatingDiv>
+                                </StyledIconWrapper>
                                 </StyledFilter>
                                 )}                        
                             </StyledFilterContainer>
@@ -1161,11 +1232,11 @@ const Content = () => {
                     <StyledLeftSection>
                         <MenuBar filters={filters} />
                         <ThemeMenu />
-                        <MapLayersDialog />
+                        <MapLayersDialog filters={filters} />
                     </StyledLeftSection>
                     <StyledRightSection>
                         <Search />
-                        <ZoomMenu />
+                        <ZoomMenu  filters={filters}/>
                         <ActionButtons closeAction={handleCloseGFIModal} />
                     </StyledRightSection>
                 </StyledContentGrid>

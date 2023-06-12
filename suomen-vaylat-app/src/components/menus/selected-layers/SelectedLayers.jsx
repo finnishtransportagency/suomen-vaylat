@@ -8,6 +8,7 @@ import { useAppSelector } from "../../../state/hooks";
 import { sortableContainer, sortableElement } from 'react-sortable-hoc';
 import {arrayMoveImmutable} from 'array-move';
 import SelectedLayer from './SelectedLayer';
+import { filter } from "lodash";
 
 const StyledSelectedLayers = styled.div`
 
@@ -47,12 +48,19 @@ const StyledListSubtitle = styled.div`
     };
 `;
 
-const SortableElement = sortableElement(({value, currentZoomLevel}) =>
-    <SelectedLayer
+const SortableElement = sortableElement(({value, currentZoomLevel, filtersEnabled, filters}) => {
+    console.info("value", value)
+    console.info("currentZoomLevel", currentZoomLevel)
+    console.info("filtersEnabled", filtersEnabled)
+    console.info("filters",  filters)
+    return <SelectedLayer
         layer={value}
         uuid={value.metadataIdentifier}
         currentZoomLevel={currentZoomLevel}
+        filtersEnabled={filtersEnabled}
     />
+}
+    
 );
 
 const SortableContainer = sortableContainer(({children}) => {
@@ -60,7 +68,8 @@ const SortableContainer = sortableContainer(({children}) => {
 });
 
 
-export const SelectedLayers = ({ selectedLayers, currentZoomLevel }) => {
+export const SelectedLayers = ({ selectedLayers, currentZoomLevel, filters }) => {
+    console.info("filteritSelectedlayersissa",filters)
 
     const { store } = useContext(ReactReduxContext);
 
@@ -118,10 +127,12 @@ export const SelectedLayers = ({ selectedLayers, currentZoomLevel }) => {
                 >
                     {mapLayers.map((item, index) => (
                         <SortableElement
-                            key={'maplayer-' + item.id}
+                            key={'maplayer-' + item.id} 
                             value={item}
                             index={index}
                             currentZoomLevel={currentZoomLevel}
+                            filtersEnabled={filters && filters.filters.length > 0 && filters.filters.some(filter => (filter.layer ===  item.name))}
+                            filters={filters}
                         />
                     ))}
                 </ul>

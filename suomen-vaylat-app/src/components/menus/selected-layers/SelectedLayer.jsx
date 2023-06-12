@@ -1,5 +1,5 @@
 import { useEffect, useState, useContext } from 'react';
-import { faInfoCircle, faTimes, faCaretDown, faCaretUp, faGripLines, faEye, faEyeSlash, faLayerGroup, faMap } from '@fortawesome/free-solid-svg-icons';
+import { faInfoCircle, faTimes, faCaretDown, faCaretUp, faGripLines, faEye, faEyeSlash, faLayerGroup, faMap, faFilter } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ReactReduxContext, useSelector } from 'react-redux';
 import styled from 'styled-components';
@@ -195,11 +195,16 @@ const DragHandle = sortableHandle(() => (
     </StyledLayerGripControl>
 ));
 
+const StyledFloatingSpan = styled.div`
+    float: right;
+    margin-left: 6px;
+`;
+
 export const SelectedLayer = ({
     layer,
     uuid,
     currentZoomLevel,
-    sortIndex,
+    filtersEnabled
 }) => {
     const { store } = useContext(ReactReduxContext);
     const [opacity, setOpacity] = useState(layer.opacity);
@@ -210,7 +215,7 @@ export const SelectedLayer = ({
     const { allSelectedThemeLayers } = useAppSelector(state => state.rpc);
 
 
-    
+    console.info(layer.name, filtersEnabled)
     useEffect(() => {
         setOpacity(layer.opacity);
         layer.opacity === 0 ? setIsLayerVisible(false) : setIsLayerVisible(true)
@@ -276,8 +281,21 @@ export const SelectedLayer = ({
                         <FontAwesomeIcon style={{marginRight: '4px', color: isLayerSelectedThemeLayer ? theme.colors.secondaryColor2 : theme.colors.mainColor1 }} icon={isLayerSelectedThemeLayer ? faMap : faLayerGroup} />
                             {layer.name}
                         </StyledLayerName>
+                        {filtersEnabled && 
+
+                            (
+                                <StyledIconWrapper
+                                onClick={() => {
+                                    console.info("tehhään jottai")
+                                }}>
+                                <StyledFloatingSpan><FontAwesomeIcon icon={faFilter}  style={{ color: 'red'}}/></StyledFloatingSpan>
+                                </StyledIconWrapper>
+                            )}
+
+                            
                     </StyledlayerHeader>
                     <StyledMidContent>
+                
                         {isCurrentZoomTooFar || isCurrentZoomTooClose ? <StyledLayerInfoContainer>
                             <StyledShowLayerButton onClick={() => store.dispatch(setZoomTo(layer.minZoomLevel))}>
                                 {isCurrentZoomTooFar? strings.tooltips.zoomIn : isCurrentZoomTooClose && strings.tooltips.zoomOut}

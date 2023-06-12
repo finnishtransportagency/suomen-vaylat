@@ -156,7 +156,6 @@ const GfiTabContent = ({
      }, [filteringInfo, filters]);
 
     const activeFilteringOnLayer = () => {
-        console.info("löytyykö filtteriä tasolle", filters.some(filter => (filter.layer ===  filteringInfo?.title)));
         return filters.some(filter => (filter.layer ===  filteringInfo?.title))
     }
     return <>
@@ -171,7 +170,7 @@ const GfiTabContent = ({
                 <StyledSelectedTabDisplayOptionsButton
                     onClick={() =>  setFilteringInfo( {modalOpen: true, tableProps: tableProps, title: title }  )}
                 >
-                <FontAwesomeIcon icon={faFilter} />
+                <FontAwesomeIcon icon={faFilter} style={{ color: filteringInfo?.title && filters && activeFilteringOnLayer() ? '0064AF' : '0064AF' }}  />
                 {filteringInfo?.title && filters && activeFilteringOnLayer() && 
                 <FontAwesomeIcon 
                     icon={faExclamation}   
