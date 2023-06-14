@@ -48,16 +48,16 @@ const StyledListSubtitle = styled.div`
     };
 `;
 
-const SortableElement = sortableElement(({value, currentZoomLevel, filtersEnabled, filters}) => {
-    console.info("value", value)
-    console.info("currentZoomLevel", currentZoomLevel)
-    console.info("filtersEnabled", filtersEnabled)
-    console.info("filters",  filters)
+
+const SortableElement = sortableElement((props) => {
+    const {value, currentZoomLevel, filtersEnabled, handleOpenFilteringModal} = props;
+    console.info("sortableElement", value, currentZoomLevel, filtersEnabled, handleOpenFilteringModal)
     return <SelectedLayer
         layer={value}
-        uuid={value.metadataIdentifier}
+        uuid={value.metadataIdentifier}db
         currentZoomLevel={currentZoomLevel}
         filtersEnabled={filtersEnabled}
+        handleOpenFilteringModal={handleOpenFilteringModal}
     />
 }
     
@@ -68,13 +68,12 @@ const SortableContainer = sortableContainer(({children}) => {
 });
 
 
-export const SelectedLayers = ({ selectedLayers, currentZoomLevel, filters }) => {
-    console.info("filteritSelectedlayersissa",filters)
-
+export const SelectedLayers = (props) => {
+    const { selectedLayers, currentZoomLevel, filters, handleOpenFilteringModal } = props;
+    console.info("SelectedLayers",filters )
     const { store } = useContext(ReactReduxContext);
-
     const {channel, selectedLayersByType, allSelectedThemeLayers, selectedTheme} = useAppSelector(state => state.rpc);
-
+    console.info("channel",channel )
     let backgroundMaps = selectedLayersByType.backgroundMaps;
     let mapLayers = selectedLayersByType.mapLayers;
 
@@ -114,6 +113,11 @@ export const SelectedLayers = ({ selectedLayers, currentZoomLevel, filters }) =>
         }
     }, [selectedLayers])
 
+   // useEffect(() => {
+   //   console.info("filtersOnSelectedLayerSSSS",filters)
+//}, [filters])
+
+
     return (
         <StyledSelectedLayers>
             <StyledListSubtitle>{strings.layerlist.layerlistLabels.mapLayers}</StyledListSubtitle>
@@ -131,8 +135,8 @@ export const SelectedLayers = ({ selectedLayers, currentZoomLevel, filters }) =>
                             value={item}
                             index={index}
                             currentZoomLevel={currentZoomLevel}
-                            filtersEnabled={filters && filters.filters.length > 0 && filters.filters.some(filter => (filter.layer ===  item.name))}
-                            filters={filters}
+                            filtersEnabled={filters && filters.length > 0 && filters.some(filter => (filter.layer ===  item.name))}
+                            handleOpenFilteringModal={handleOpenFilteringModal}
                         />
                     ))}
                 </ul>

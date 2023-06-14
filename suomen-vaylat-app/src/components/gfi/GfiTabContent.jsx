@@ -9,9 +9,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { kaReducer, Table } from 'ka-table';
 import "ka-table/style.scss";
-import Modal from '../modals/Modal';
-import Dropdown from '../select/Dropdown';
-import { setFilter } from '../../state/slices/rpcSlice';
 
 const StyledSelectedTabHeader = styled.div`
     position: relative;
@@ -151,9 +148,9 @@ const GfiTabContent = ({
         ]);
     };
 
-    useEffect(() => {
-        console.info(filteringInfo, filters)
-     }, [filteringInfo, filters]);
+    //useEffect(() => {
+    //    console.info(filteringInfo, filters)
+    // }, [filteringInfo, filters]);
 
     const activeFilteringOnLayer = () => {
         return filters.some(filter => (filter.layer ===  filteringInfo?.title))

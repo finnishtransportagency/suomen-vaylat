@@ -447,7 +447,6 @@ export const GFIPopup = ({
     const [gfiTabsSwiper, setGfiTabsSwiper] = useState(null);
     const [gfiTabsSnapGridLength, setGfiTabsSnapGridLength] = useState(0);
     const [isLoading, setIsLoading] = useState(false);
-    //const [filters, setFilters] = useState([]);
     const gfiInputEl = useRef(null);
 
     useEffect(() => {

@@ -9,7 +9,6 @@ const StyledSelect = styled(Select)`
 
 const Dropdown = ({   
     options,
-    action,
     placeholder,
     value, 
     setValue

@@ -137,7 +137,8 @@ const StyledSwiper = styled(Swiper)`
     border-top: 3px solid ${(props) => (props.tabIndex === 0 ? 'rgba(0, 99, 175, 1)' : 'rgba(229, 0, 130, 1)')};
 `;
 
-const MapLayersDialog = (filters) => {
+const MapLayersDialog = (props) => {
+    const {filters, handleOpenFilteringModal} = props;
     const { isSideMenuOpen, selectedMapLayersMenuTab, isThemeMenuOpen } = useAppSelector((state) => state.ui);
     const {
         allGroups,
@@ -195,6 +196,7 @@ const MapLayersDialog = (filters) => {
                     selectedLayers={selectedLayers}
                     currentZoomLevel={currentZoomLevel}
                     filters={filters}
+                    handleOpenFilteringModal={handleOpenFilteringModal}
                 />
             ),
         },

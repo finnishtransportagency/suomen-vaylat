@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect, useRef } from 'react';
+import { useState, useContext, useEffect, useRef, useCallback } from 'react';
 import { ReactReduxContext } from 'react-redux';
 import { ToastContainer, Slide, toast} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
@@ -357,9 +357,16 @@ const Content = () => {
     const [websocketFirstTimeTryConnecting, setWebsocketFirstTimeTryConnecting] = useState(false);
     const [filters, setFilters] = useState([]);
 
-    //const setFilters = (value) => {
-    //    setFiltersFooBar(value);
-    //}
+    useEffect(() => {
+        const filtersFromLocalStorage = JSON.parse(localStorage.getItem('filters'));
+        if (filtersFromLocalStorage) {
+            setFilters(filtersFromLocalStorage);
+        }
+      }, []);
+
+    useEffect(() => {
+        localStorage.setItem('filters', JSON.stringify(filters));
+    }, [filters]);    
 
     useEffect(() => {
         announcements && setCurrentAnnouncement(0);
@@ -664,10 +671,6 @@ const Content = () => {
     const [ filterValue, setFilterValue] = useState("");
     const [ propValue, setPropValue] = useState({});
     const addFilter = () => {
-        // const prop = "ilman_lampotila";
-        // const value = -4;
-        // const oper = "equals";
-        // const layer = title;
         const prop = propValue.value;
         const value = filterValue;
         const oper = operatorValue.value;
@@ -676,8 +679,7 @@ const Content = () => {
         if (!prop || !value || !oper){
             return
         }
-        //console.info("nyt filtteröidään", prop, oper, value)
-        setFilters(//current => [...current,
+        setFilters(
             [...filters,
             {   
                 "layer" : layer,
@@ -687,50 +689,46 @@ const Content = () => {
             }
         ]
         )
-        //filterFeatures()
         setPropValue({})
         setFilterValue("")
         setOperatorValue({})
     }
+    const gfiFilteringOptions = [
+    { value: 'equals', label: 'Yhtäsuuri kuin' },
+    { value: 'notEquals', label: 'Erisuuri kuin' },
+    { value: 'smallerThan', label: 'Pienempi kuin' },
+    { value: 'biggerThan', label: 'Suurempi kuin' },
+    ];
 
-
+    const [filteringInfo, setFilteringInfo] = useState({ modalOpen: false });
     
-      const gfiFilteringOptions = [
-        { value: 'equals', label: 'Yhtäsuuri kuin' },
-        { value: 'notEquals', label: 'Erisuuri kuin' },
-        { value: 'smallerThan', label: 'Pienempi kuin' },
-        { value: 'biggerThan', label: 'Suurempi kuin' },
-      ];
-
-    const [filteringInfo, setFilteringInfo] = useState({ modalOpen: false }); //format { modalOpen: false, tableProps: [], title: "" }
-    
-    const propOptions =  //[{ value: "valu", label: "title"},{ value: "valu2", label: "title2"} ] /* 
+    const propOptions =  
         filteringInfo?.tableProps?.columns.map( column => {  
         return { value: column.key, label: column.title}
     } )
-
-    const handleCloseFilteringModal = () => {
-        console.info("modaali kii")
-        //setFilteringInfo(filteringInfo => ({...filteringInfo, modalOpen: false})) 
+    const handleCloseFilteringModal = useCallback(() => {
         setFilteringInfo({...filteringInfo, modalOpen: false}) 
-    }
+    }, [filteringInfo]);
+
+    //const handleCloseFilteringModal = () => {
+    //    setFilteringInfo({...filteringInfo, modalOpen: false}) 
+    //}
+
+    /*const handleOpenFilteringModal = () => {
+        setFilteringInfo({...filteringInfo, modalOpen: true}) 
+    }*/
+    const handleOpenFilteringModal = useCallback(() => {
+        console.info("setFilteringInfo ")
+        setFilteringInfo({...filteringInfo, modalOpen: true}) 
+     }, [filteringInfo]);
+
     const [activeFilters, setActiveFilters] = useState();
     useEffect(() => {
-        console.info("filters", filters)
-        console.info("filteringInfo", filteringInfo)
         if (filteringInfo && filteringInfo?.title && filters){
             const updatedActivefilters = filters.filter(filter => filter.layer === filteringInfo?.title)
             setActiveFilters(updatedActivefilters)
         }
-        console.info("activeFilters", activeFilters)
- 
-
      }, [filters, filteringInfo]);
-
-     useEffect(() => {
-        console.info(filteringInfo)
-     }, [filteringInfo]);
-
    
     const handleRemoveFilter = (filter) => {
         if (filters && filters.length > 0 && filters.includes(filter)){
@@ -1157,20 +1155,18 @@ const Content = () => {
                     <StyledModalContainer>
                         <StyledModalFloatingChapter>
                         <Dropdown 
-                        options={propOptions}
-                        action={()=>{console.info("valittu propsu", propValue)}}
-                        placeholder={strings.gfifiltering.placeholders.chooseProp}
-                        value={propValue}
-                        setValue={setPropValue}
+                            options={propOptions}
+                            placeholder={strings.gfifiltering.placeholders.chooseProp}
+                            value={propValue}
+                            setValue={setPropValue}
                         />
                         </StyledModalFloatingChapter>
                         <StyledModalFloatingChapter>
                         <Dropdown 
-                        options={gfiFilteringOptions}
-                        action={()=>{console.info("valittu tyyppä", operatorValue)}}
-                        placeholder={strings.gfifiltering.placeholders.chooseOperator}
-                        value={operatorValue}
-                        setValue={setOperatorValue}
+                            options={gfiFilteringOptions}
+                            placeholder={strings.gfifiltering.placeholders.chooseOperator}
+                            value={operatorValue}
+                            setValue={setOperatorValue}
                         />
                         </StyledModalFloatingChapter>
                         <StyledModalFloatingChapter>
@@ -1181,9 +1177,7 @@ const Content = () => {
                             onChange={e => setFilterValue(e.target.value)}
                             onKeyPress={e => {
                                 if (e.key === 'Enter') {
-                                    console.info( "lähetään suodattaa ", e.target.value );
                                     addFilter();
-                                    //setFilterValue(e.target.value);
                                 }
                             }}
                         />
@@ -1232,7 +1226,10 @@ const Content = () => {
                     <StyledLeftSection>
                         <MenuBar filters={filters} />
                         <ThemeMenu />
-                        <MapLayersDialog filters={filters} />
+                        <MapLayersDialog 
+                            filters={filters}
+                            handleOpenFilteringModal={handleOpenFilteringModal}
+                        />
                     </StyledLeftSection>
                     <StyledRightSection>
                         <Search />

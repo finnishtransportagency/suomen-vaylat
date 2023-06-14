@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext } from 'react';
+import { useEffect, useState, useContext, useCallback } from 'react';
 import { faInfoCircle, faTimes, faCaretDown, faCaretUp, faGripLines, faEye, faEyeSlash, faLayerGroup, faMap, faFilter } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ReactReduxContext, useSelector } from 'react-redux';
@@ -200,12 +200,15 @@ const StyledFloatingSpan = styled.div`
     margin-left: 6px;
 `;
 
-export const SelectedLayer = ({
-    layer,
-    uuid,
-    currentZoomLevel,
-    filtersEnabled
-}) => {
+export const SelectedLayer = (
+    {
+        layer,
+        uuid,
+        currentZoomLevel,
+        filtersEnabled,
+        handleOpenFilteringModal
+    }
+) => {
     const { store } = useContext(ReactReduxContext);
     const [opacity, setOpacity] = useState(layer.opacity);
     const [prevOpacity, setPrevOpacity] = useState(layer.opacity);
@@ -214,8 +217,17 @@ export const SelectedLayer = ({
 
     const { allSelectedThemeLayers } = useAppSelector(state => state.rpc);
 
+    const [localfilterenabled, setLocalfilterenabled] = useState(false)
+    const [, updateState] = useState();
+    const forceUpdate = useCallback(() => updateState({}), []);
 
-    console.info(layer.name, filtersEnabled)
+    useEffect(() => {
+        console.info(layer.name, filtersEnabled, handleOpenFilteringModal)
+        setLocalfilterenabled(filtersEnabled)
+        forceUpdate()
+    }, [filtersEnabled, layer.name, handleOpenFilteringModal, forceUpdate])
+
+
     useEffect(() => {
         setOpacity(layer.opacity);
         layer.opacity === 0 ? setIsLayerVisible(false) : setIsLayerVisible(true)
@@ -279,20 +291,18 @@ export const SelectedLayer = ({
                     <StyledlayerHeader>
                         <StyledLayerName style={{color: isLayerSelectedThemeLayer ? theme.colors.secondaryColor2 : theme.colors.mainColor1}}>
                         <FontAwesomeIcon style={{marginRight: '4px', color: isLayerSelectedThemeLayer ? theme.colors.secondaryColor2 : theme.colors.mainColor1 }} icon={isLayerSelectedThemeLayer ? faMap : faLayerGroup} />
-                            {layer.name}
+                            {layer.name} {localfilterenabled} {filtersEnabled} {localfilterenabled}
                         </StyledLayerName>
-                        {filtersEnabled && 
-
+                        { localfilterenabled && 
                             (
                                 <StyledIconWrapper
                                 onClick={() => {
-                                    console.info("tehhään jottai")
+                                    handleOpenFilteringModal();
                                 }}>
                                 <StyledFloatingSpan><FontAwesomeIcon icon={faFilter}  style={{ color: 'red'}}/></StyledFloatingSpan>
                                 </StyledIconWrapper>
-                            )}
-
-                            
+                            )
+                        }                 
                     </StyledlayerHeader>
                     <StyledMidContent>
                 
