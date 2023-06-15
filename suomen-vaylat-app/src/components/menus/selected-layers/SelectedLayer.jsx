@@ -222,7 +222,6 @@ export const SelectedLayer = (
     const forceUpdate = useCallback(() => updateState({}), []);
 
     useEffect(() => {
-        console.info(layer.name, filtersEnabled, handleOpenFilteringModal)
         setLocalfilterenabled(filtersEnabled)
         forceUpdate()
     }, [filtersEnabled, layer.name, handleOpenFilteringModal, forceUpdate])

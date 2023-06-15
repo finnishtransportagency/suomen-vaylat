@@ -668,7 +668,8 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true, filters }) => {
                         let index = 0;
                         try {
                             for(const layer of fetchableLayers) {  
-                                await fetchFeaturesSynchronous(feature, layer, data, numberedLoaderEnables, filters)
+                                const activeFilters = filters && filters?.length > 0 ?  filters?.filter(filter => (filter.layer ===  layer.name)) : [];
+                                await fetchFeaturesSynchronous(feature, layer, data, numberedLoaderEnables, activeFilters)
                                 .then(
                                     index++
                                 ).catch((error) => {
@@ -727,13 +728,13 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true, filters }) => {
     }, [channel, filters])
 
 
-    const fetchFeaturesSynchronous = (feature, layer, data, numberedLoaderEnables, filters) => {
-       const activeFilters = filters && filters.filters.length > 0 && filters.filters.some(filter => (filter.layer ===  layer.name));
-        console.info(activeFilters)
+    const fetchFeaturesSynchronous = (feature, layer, data, numberedLoaderEnables, activeFilters) => {
+      
+        console.info("activeFilters", activeFilters)
         return new Promise(function(resolve, reject) {
         // executor (the producing code, "singer")
-        channel.getFeaturesByGeoJSON(
-            [feature, 0, [layer.id]],
+        channel.getFeaturesByGeoJSON2(
+            [feature, 0, [layer.id], activeFilters],
             (gfiData) => {
                 store.dispatch(setVKMData(null));
                 channel.postRequest('MapModulePlugin.RemoveMarkersRequest', ["VKM_MARKER"]);
@@ -783,8 +784,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true, filters }) => {
                     reject(BODY_SIZE_EXCEED)
                 }      
                 reject(GENERAL_FAIL)
-            }, 
-            activeFilters
+            }
         )
         });
     }  

@@ -165,7 +165,7 @@ const GfiTabContent = ({
                     </p>
                 </StyledSelectedTabTitle>
                 <StyledSelectedTabDisplayOptionsButton
-                    onClick={() =>  setFilteringInfo( {modalOpen: true, tableProps: tableProps, title: title }  )}
+                    onClick={() =>  setFilteringInfo( {modalOpen: true, layers: [ {tableProps: tableProps, title: title} ] }  )}
                 >
                 <FontAwesomeIcon icon={faFilter} style={{ color: filteringInfo?.title && filters && activeFilteringOnLayer() ? '0064AF' : '0064AF' }}  />
                 {filteringInfo?.title && filters && activeFilteringOnLayer() && 
