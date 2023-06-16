@@ -296,7 +296,7 @@ export const SelectedLayer = (
                             (
                                 <StyledIconWrapper
                                 onClick={() => {
-                                    handleOpenFilteringModal();
+                                    handleOpenFilteringModal(layer.name);
                                 }}>
                                 <StyledFloatingSpan><FontAwesomeIcon icon={faFilter}  style={{ color: 'red'}}/></StyledFloatingSpan>
                                 </StyledIconWrapper>

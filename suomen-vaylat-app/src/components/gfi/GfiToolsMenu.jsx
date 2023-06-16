@@ -733,7 +733,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true, filters }) => {
         console.info("activeFilters", activeFilters)
         return new Promise(function(resolve, reject) {
         // executor (the producing code, "singer")
-        channel.getFeaturesByGeoJSON2(
+        channel.getFeaturesByGeoJSON(
             [feature, 0, [layer.id], activeFilters],
             (gfiData) => {
                 store.dispatch(setVKMData(null));

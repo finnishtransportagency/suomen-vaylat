@@ -674,7 +674,7 @@ const Content = () => {
         const prop = propValue.value;
         const value = filterValue;
         const oper = operatorValue.value;
-        const layer = filteringInfo.title; //TODO tähän oikea layer title jostain
+        const layer = filteringInfo?.chosenLayer; 
 
         if (!prop || !value || !oper){
             return
@@ -702,10 +702,21 @@ const Content = () => {
 
     const [filteringInfo, setFilteringInfo] = useState({ modalOpen: false });
     
-    const propOptions =  
-        filteringInfo?.tableProps?.columns.map( column => {  
-        return { value: column.key, label: column.title}
-    } )
+    useEffect(() => {
+        const filterInfoFromlStorage = JSON.parse(localStorage.getItem('filteringInfo'));
+        if (filterInfoFromlStorage) {
+            setFilteringInfo(filterInfoFromlStorage);
+        }
+      }, []);
+
+    useEffect(() => {
+        localStorage.setItem('filteringInfo', JSON.stringify(filteringInfo));
+    }, [filteringInfo]);    
+
+    //const propOptions =  
+    //    filteringInfo?.tableProps?.columns.map( column => {  
+    //    return { value: column.key, label: column.title}
+    //} )
     const handleCloseFilteringModal = useCallback(() => {
         setFilteringInfo({...filteringInfo, modalOpen: false}) 
     }, [filteringInfo]);
@@ -717,17 +728,18 @@ const Content = () => {
     /*const handleOpenFilteringModal = () => {
         setFilteringInfo({...filteringInfo, modalOpen: true}) 
     }*/
-    const handleOpenFilteringModal = useCallback(() => {
+    const handleOpenFilteringModal = useCallback((layerTitle) => {
         console.info("setFilteringInfo ")
-        setFilteringInfo({...filteringInfo, modalOpen: true}) 
+        setFilteringInfo({...filteringInfo, modalOpen: true, chosenLayer: layerTitle}) 
      }, [filteringInfo]);
 
     const [activeFilters, setActiveFilters] = useState();
     useEffect(() => {
-        if (filteringInfo && filteringInfo?.title && filters){
-            const updatedActivefilters = filters.filter(filter => filter.layer === filteringInfo?.title)
+        if (filteringInfo && filteringInfo?.chosenLayer && filters){
+            const updatedActivefilters = filters.filter(filter => filter.layer === filteringInfo?.chosenLayer)
             setActiveFilters(updatedActivefilters)
         }
+        console.info("activeFilters", activeFilters)
      }, [filters, filteringInfo]);
    
     const handleRemoveFilter = (filter) => {
@@ -743,7 +755,24 @@ const Content = () => {
         }
     }
 
-    
+    const filterOptions = () => {
+        console.info("filteringInfo", filteringInfo)
+        const curLayer = filteringInfo?.chosenLayer;
+        //const layerinfo = filteringInfo?.layers[curLayer]; 
+
+        var layer = filteringInfo?.layers?.find(layer => {
+            return layer.title === curLayer
+          })
+        const options = layer?.tableProps?.columns?.map( column => {
+            return { value: column.key, label: column.title}
+        }
+        )
+        console.info("options", options)
+        return options;
+        //return filteringInfolayers?[curLayer].tableProps?.columns.map( column => {  
+        //    return { value: column.key, label: column.title}
+        //})
+    }
 
     return (
         <>
@@ -1155,7 +1184,7 @@ const Content = () => {
                     <StyledModalContainer>
                         <StyledModalFloatingChapter>
                         <Dropdown 
-                            options={propOptions}
+                            options={filterOptions()}
                             placeholder={strings.gfifiltering.placeholders.chooseProp}
                             value={propValue}
                             setValue={setPropValue}

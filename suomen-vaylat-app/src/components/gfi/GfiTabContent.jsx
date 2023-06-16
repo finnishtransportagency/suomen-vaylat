@@ -153,7 +153,7 @@ const GfiTabContent = ({
     // }, [filteringInfo, filters]);
 
     const activeFilteringOnLayer = () => {
-        return filters.some(filter => (filter.layer ===  filteringInfo?.title))
+        return filters.some(filter => (filter.layer ===  filteringInfo?.chosenLayer))
     }
     return <>
             <StyledSelectedTabHeader>
@@ -165,9 +165,9 @@ const GfiTabContent = ({
                     </p>
                 </StyledSelectedTabTitle>
                 <StyledSelectedTabDisplayOptionsButton
-                    onClick={() =>  setFilteringInfo( {modalOpen: true, layers: [ {tableProps: tableProps, title: title} ] }  )}
+                    onClick={() =>  setFilteringInfo( {modalOpen: true, chosenLayer: title, layers: [ { title: title, tableProps : tableProps }]} )}
                 >
-                <FontAwesomeIcon icon={faFilter} style={{ color: filteringInfo?.title && filters && activeFilteringOnLayer() ? '0064AF' : '0064AF' }}  />
+                <FontAwesomeIcon icon={faFilter} style={{ color: filteringInfo?.chosenLayer && filters && activeFilteringOnLayer() ? '0064AF' : '0064AF' }}  />
                 {filteringInfo?.title && filters && activeFilteringOnLayer() && 
                 <FontAwesomeIcon 
                     icon={faExclamation}   
