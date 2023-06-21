@@ -110,11 +110,6 @@ export const SelectedLayers = (props) => {
         }
     }, [selectedLayers])
 
-   // useEffect(() => {
-   //   console.info("filtersOnSelectedLayerSSSS",filters)
-//}, [filters])
-
-
     return (
         <StyledSelectedLayers>
             <StyledListSubtitle>{strings.layerlist.layerlistLabels.mapLayers}</StyledListSubtitle>

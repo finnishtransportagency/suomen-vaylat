@@ -1187,5 +1187,22 @@
       "title": "Vesiväylien palautteet",
       "url": "https://extranet.vayla.fi/pooki_www/palaute"
     }
+  },
+  "gfifiltering": {
+    "placeholders" : {
+      "chooseProp" : "Valitse ominaisuustieto",
+      "chooseOperator" : "Valitse operaattori",
+      "chooseValue" : "Suodettava arvo"
+    },
+    "activeFilters" : "Aktiiviset suodattimet",
+    "property" : "Ominaisuus",
+    "operator" : "Operaattori",
+    "value" : "Arvo",
+    "operators": {
+      "equals" : "Yhtäsuuri kuin",
+      "notEquals" : "Erisuuri kuin",
+      "smallerThan" : "Pienempi kuin",
+      "biggerThan" : "Suurempi kuin"
+    }
   }
 }

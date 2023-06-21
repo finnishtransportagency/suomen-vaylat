@@ -1169,6 +1169,12 @@
     "activeFilters" : "Aktiiviset suodattimet",
     "property" : "Ominaisuus",
     "operator" : "Operaattori",
-    "value" : "Arvo"
+    "value" : "Arvo",
+    "operators": {
+      "equals" : "Yhtäsuuri kuin",
+      "notEquals" : "Erisuuri kuin",
+      "smallerThan" : "Pienempi kuin",
+      "biggerThan" : "Suurempi kuin"
+    }
   }
 }

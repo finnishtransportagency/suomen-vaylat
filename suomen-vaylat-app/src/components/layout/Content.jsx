@@ -174,21 +174,18 @@ const StyledModalContainer = styled.div`
     min-height: 160px;
     min-width: 800px;
     position: relative;
-    //left: calc(-50vw + 50%);
 `;
 
 const StyledModalFloatingChapter = styled.div`
     float: left;
     width: 29%;
     margin-left: 6px;
-    //z-index: 1;
     position: relative; 
 `;
 const StyledModalFloatingActionChapter = styled.div`
     width: 7%;
     margin-left: 6px;
     float: left;
-    //z-index: 1;
     position: relative; 
 `;
 
@@ -214,8 +211,8 @@ const StyledFilterContainer = styled.div`
 
 const StyledFilter = styled.div`
     background-color: #f2f2f2;
-    width: 300px;
-    float: left;
+    width: 40%;
+    //float: left;
     border: solid 1px black;
     border-radius: 7px;
     //margin-left: 5px;
@@ -224,21 +221,12 @@ const StyledFilter = styled.div`
     padding-right: 3px;
     :nth-child(odd) {
         background-color: white;
-        margin-left: 5px;
+        //margin-left: 5px;
     }
     :nth-child(3) {
         //float: none;
     }
-`;
-
-const StyledSelectedTabTitle = styled.div`
-    padding: 8px;
-    p {
-        color: ${(props) => props.theme.colors.mainColor1};
-        margin: 0;
-        font-size: 16px;
-        font-weight: 600;
-    }
+    display: flex;
 `;
 
 const StyledSelectedTabDisplayOptionsButton = styled.div`
@@ -284,18 +272,17 @@ const StyledFloatingDiv = styled.div`
 `;
 
 const StyledFilterProp = styled.div`
-    margin-left: 6px;
+
 `;  
 
 const StyledFilterPropContainer = styled.div`
-    width: 80%;
-    float: left;
+    width: 95%;
 `;  
 
 
 const StyledFilterHeader = styled.div`
     font-size: 16px;
-    //color: '0064AF
+    font-weight: bold;
 `;  
 
 
@@ -713,23 +700,11 @@ const Content = () => {
         localStorage.setItem('filteringInfo', JSON.stringify(filteringInfo));
     }, [filteringInfo]);    
 
-    //const propOptions =  
-    //    filteringInfo?.tableProps?.columns.map( column => {  
-    //    return { value: column.key, label: column.title}
-    //} )
     const handleCloseFilteringModal = useCallback(() => {
         setFilteringInfo({...filteringInfo, modalOpen: false}) 
     }, [filteringInfo]);
 
-    //const handleCloseFilteringModal = () => {
-    //    setFilteringInfo({...filteringInfo, modalOpen: false}) 
-    //}
-
-    /*const handleOpenFilteringModal = () => {
-        setFilteringInfo({...filteringInfo, modalOpen: true}) 
-    }*/
     const handleOpenFilteringModal = useCallback((layerTitle) => {
-        console.info("setFilteringInfo ")
         setFilteringInfo({...filteringInfo, modalOpen: true, chosenLayer: layerTitle}) 
      }, [filteringInfo]);
 
@@ -739,7 +714,6 @@ const Content = () => {
             const updatedActivefilters = filters.filter(filter => filter.layer === filteringInfo?.chosenLayer)
             setActiveFilters(updatedActivefilters)
         }
-        console.info("activeFilters", activeFilters)
      }, [filters, filteringInfo]);
    
     const handleRemoveFilter = (filter) => {
@@ -756,7 +730,6 @@ const Content = () => {
     }
 
     const filterOptions = () => {
-        console.info("filteringInfo", filteringInfo)
         const curLayer = filteringInfo?.chosenLayer;
         //const layerinfo = filteringInfo?.layers[curLayer]; 
 
@@ -767,11 +740,7 @@ const Content = () => {
             return { value: column.key, label: column.title}
         }
         )
-        console.info("options", options)
         return options;
-        //return filteringInfolayers?[curLayer].tableProps?.columns.map( column => {  
-        //    return { value: column.key, label: column.title}
-        //})
     }
 
     return (
@@ -1169,7 +1138,7 @@ const Content = () => {
                     titleIcon={
                         null
                     } /* Use icon on title or null */
-                    title={strings.gfi.filter} /* Modal header title */
+                    title={ strings.gfi.filter + " - "+ filteringInfo?.chosenLayer } /* Modal header title */
                     type={'normal'} /* Modal type */
                     closeAction={
                         handleCloseFilteringModal
@@ -1222,18 +1191,12 @@ const Content = () => {
                         {activeFilters && activeFilters.length > 0 && (
                             <StyledFilterContainer>
                                 <StyledFilterHeader>{strings.gfifiltering.activeFilters}</StyledFilterHeader>
-                                <StyledIconWrapper 
-                                 onClick={() => {
-                                    handleRemoveAllFilters();
-                                }}>
-                                <StyledFloatingDiv><FontAwesomeIcon icon={faTrash} size="6x" style={{}}/>Poista kaikki suodattimet</StyledFloatingDiv>
-                                </StyledIconWrapper>
                                 {
                                 activeFilters.map( (filter) =>  
                                 <StyledFilter>
                                 <StyledFilterPropContainer>      
-                                    <StyledFilterProp>{strings.gfifiltering.property}: {filter.property}</StyledFilterProp> 
-                                    <StyledFilterProp>{strings.gfifiltering.operator}:  {filter.operator}</StyledFilterProp> 
+                                    <StyledFilterProp>{strings.gfifiltering.property}:  {filter.property}</StyledFilterProp> 
+                                    <StyledFilterProp>{strings.gfifiltering.operator}:  {strings.gfifiltering.operators[filter.operator]} </StyledFilterProp> 
                                     <StyledFilterProp>{strings.gfifiltering.value}: {filter.value}</StyledFilterProp> 
                                 </StyledFilterPropContainer>
                                 <StyledIconWrapper
@@ -1243,7 +1206,13 @@ const Content = () => {
                                 <StyledFloatingDiv><FontAwesomeIcon icon={faTimes} size="6x" style={{}}/></StyledFloatingDiv>
                                 </StyledIconWrapper>
                                 </StyledFilter>
-                                )}                        
+                                )} 
+                                <StyledIconWrapper 
+                                    onClick={() => {
+                                        handleRemoveAllFilters();
+                                    }}>
+                                    <StyledFloatingDiv>Poista kaikki suodattimet <FontAwesomeIcon icon={faTrash} size="6x" style={{}}/></StyledFloatingDiv>
+                                </StyledIconWrapper>                       
                             </StyledFilterContainer>
                         )
                         }

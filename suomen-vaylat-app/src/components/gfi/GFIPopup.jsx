@@ -562,7 +562,6 @@ export const GFIPopup = ({
 
     const tablePropsInit = (data) => {
         const properties = data && data.content && data.content.features && data.content.features[0].properties;
-
         var hightPriorityColumns = properties?._orderHigh && JSON.parse(properties?._orderHigh);
         var lowPriorityColumns = properties?._order && JSON.parse(properties?._order);
         var columnsArray = [];

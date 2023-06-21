@@ -9,6 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { kaReducer, Table } from 'ka-table';
 import "ka-table/style.scss";
+import { layer } from '@fortawesome/fontawesome-svg-core';
 
 const StyledSelectedTabHeader = styled.div`
     position: relative;
@@ -148,13 +149,17 @@ const GfiTabContent = ({
         ]);
     };
 
-    //useEffect(() => {
-    //    console.info(filteringInfo, filters)
-    // }, [filteringInfo, filters]);
+    const activeFilteringOnLayer = useCallback(() => {
+        return filters.some(filter => (filter.layer ===  title))
+    })
 
-    const activeFilteringOnLayer = () => {
-        return filters.some(filter => (filter.layer ===  filteringInfo?.chosenLayer))
-    }
+    const [isActiveFiltering, setIsActiveFiltering] = useState(false);
+
+
+    useEffect(() => {
+        setIsActiveFiltering(activeFilteringOnLayer());
+      }, [filters, filteringInfo.chosenLayer, activeFilteringOnLayer, title]);
+      
     return <>
             <StyledSelectedTabHeader>
                 <StyledSelectedTabTitle>
@@ -167,7 +172,7 @@ const GfiTabContent = ({
                 <StyledSelectedTabDisplayOptionsButton
                     onClick={() =>  setFilteringInfo( {modalOpen: true, chosenLayer: title, layers: [ { title: title, tableProps : tableProps }]} )}
                 >
-                <FontAwesomeIcon icon={faFilter} style={{ color: filteringInfo?.chosenLayer && filters && activeFilteringOnLayer() ? '0064AF' : '0064AF' }}  />
+                <FontAwesomeIcon icon={faFilter} style={{ color: filteringInfo?.chosenLayer && filters && isActiveFiltering ? 'red' : '0064AF' }}  />
                 {filteringInfo?.title && filters && activeFilteringOnLayer() && 
                 <FontAwesomeIcon 
                     icon={faExclamation}   

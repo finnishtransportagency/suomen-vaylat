@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'react-toastify';
 import strings from '../../translations';
 import { isMobile } from '../../theme/theme';
-import { ReactReduxContext } from 'react-redux';
+import { ReactReduxContext, useSelector } from 'react-redux';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -642,6 +642,95 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true, filters }) => {
         console.log("simplify");
     }
 
+
+    const emptyGFIResults = () => {
+        store.dispatch(setMinimizeGfi(false));
+        store.dispatch(setSelectedGfiTool(null));
+        toast.dismiss("measurementToast")
+        store.dispatch(resetGFILocations([]));
+        const fetchableLayers = selectedLayers.filter((layer) =>  layer.groups?.every((group)=> group !==1));
+        let numberedLoaderEnables = false; 
+        if (fetchableLayers.length>3){
+            numberedLoaderEnables = true;
+            setNumberedLoader({current: 0, total:  fetchableLayers.length, enabled: true})
+        }
+    }
+
+    const featureArray = useSelector(state => state.rpc.gfiLocations);
+    useEffect (() => {
+        console.info("filters uploaded geojsonarray", featureArray)
+        // const fetchableLayers = selectedLayers.filter((layer) =>  layer.groups?.every((group)=> group !==1));
+        // let numberedLoaderEnabled = false; 
+        // if (fetchableLayers.length>3){
+        //     numberedLoaderEnabled = true;
+        //     setNumberedLoader({current: 0, total:  fetchableLayers.length, enabled: true})
+        // }
+        // fetchContentFromChannel(fetchableLayers, numberedLoaderEnabled, featureArray)
+    }, [filters])
+
+    const fetchContentFromChannel = (fetchableLayers, numberedLoaderEnables, featureArray) => {
+        console.info("featurearray", featureArray)
+        featureArray?.forEach(async feature => {
+            store.dispatch(setGFICroppingArea(feature));
+            
+            let index = 0;
+            try {
+                for(const layer of fetchableLayers) {  
+                    const activeFilters = filters && filters?.length > 0 ?  filters?.filter(filter => (filter.layer ===  layer.name)) : [];
+                    await fetchFeaturesSynchronous(feature, layer, featureArray, numberedLoaderEnables, activeFilters)
+                    .then(
+                        index++
+                    ).catch((error) => {
+                            if (error===BODY_SIZE_EXCEED){
+                                handleGfiToolsMenu();
+                                setIsGfiLoading(false)
+                                store.dispatch(setWarning({
+                                    title: strings.bodySizeWarningTemporary,
+                                    subtitle: null,
+                                    cancel: {
+                                        text: strings.general.cancel,
+                                        action: () => {
+                                            setIsGfiLoading(false);
+                                            store.dispatch(setWarning(null))
+                                        }
+                                    },
+                                    /*TODO return when simplify geometry feature ready 
+                                        confirm: {
+                                        text: strings.general.continue,
+                                        action: () => {
+                                            simplifyGeometry();
+                                            store.dispatch(setWarning(null));
+                                        }
+                                    },*/
+                                }))
+                            
+                                //throw error to break synchronous loop
+                                throw new Error(BODY_SIZE_EXCEED);
+                            }else if (error === GENERAL_FAIL){
+                                console.info("general fail thrown") 
+                            }
+                            handleGfiToolsMenu();
+                            setIsGfiLoading(false)
+                        }
+                    );
+                    if (fetchableLayers.length === index){
+                        handleGfiToolsMenu();
+                        setIsGfiLoading(false)
+                    }
+
+                } 
+            } catch (error) {
+                //catch exception, when simplify geometry feature ready, catch BODY_SIZE_EXCEED
+                //and make simplify and rerun query
+                handleGfiToolsMenu();
+                setIsGfiLoading(false)
+            }
+            
+        }); 
+    }
+
+    
+
     useEffect(() => {
         console.info("gfitoolmenu filters", filters)
         let isSubscribed = true;
@@ -652,6 +741,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true, filters }) => {
                         'gfi-selection-tool',
                         true,
                     ]);
+                    console.info("data", data)
                     store.dispatch(setMinimizeGfi(false));
                     store.dispatch(setGeoJsonArray([data]));
                     store.dispatch(setSelectedGfiTool(null));
@@ -663,62 +753,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true, filters }) => {
                         numberedLoaderEnables = true;
                         setNumberedLoader({current: 0, total:  fetchableLayers.length, enabled: true})
                     }
-                    data.geojson.features?.forEach(async feature => {
-                        store.dispatch(setGFICroppingArea(feature));
-                        let index = 0;
-                        try {
-                            for(const layer of fetchableLayers) {  
-                                const activeFilters = filters && filters?.length > 0 ?  filters?.filter(filter => (filter.layer ===  layer.name)) : [];
-                                await fetchFeaturesSynchronous(feature, layer, data, numberedLoaderEnables, activeFilters)
-                                .then(
-                                    index++
-                                ).catch((error) => {
-                                        if (error===BODY_SIZE_EXCEED){
-                                            handleGfiToolsMenu();
-                                            setIsGfiLoading(false)
-                                            store.dispatch(setWarning({
-                                                title: strings.bodySizeWarningTemporary,
-                                                subtitle: null,
-                                                cancel: {
-                                                    text: strings.general.cancel,
-                                                    action: () => {
-                                                        setIsGfiLoading(false);
-                                                        store.dispatch(setWarning(null))
-                                                    }
-                                                },
-                                                /*TODO return when simplify geometry feature ready 
-                                                    confirm: {
-                                                    text: strings.general.continue,
-                                                    action: () => {
-                                                        simplifyGeometry();
-                                                        store.dispatch(setWarning(null));
-                                                    }
-                                                },*/
-                                            }))
-                                        
-                                            //throw error to break synchronous loop
-                                            throw new Error(BODY_SIZE_EXCEED);
-                                        }else if (error === GENERAL_FAIL){
-                                            console.info("general fail thrown") 
-                                        }
-                                        handleGfiToolsMenu();
-                                        setIsGfiLoading(false)
-                                    }
-                                );
-                                if (fetchableLayers.length === index){
-                                    handleGfiToolsMenu();
-                                    setIsGfiLoading(false)
-                                }
-
-                            } 
-                        } catch (error) {
-                            //catch exception, when simplify geometry feature ready, catch BODY_SIZE_EXCEED
-                            //and make simplify and rerun query
-                            handleGfiToolsMenu();
-                            setIsGfiLoading(false)
-                        }
-                        
-                    }); 
+                    fetchContentFromChannel(fetchableLayers, numberedLoaderEnables, data?.geojson?.features)
                 }
             }
         })
@@ -728,9 +763,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true, filters }) => {
     }, [channel, filters])
 
 
-    const fetchFeaturesSynchronous = (feature, layer, data, numberedLoaderEnables, activeFilters) => {
-      
-        console.info("activeFilters", activeFilters)
+    const fetchFeaturesSynchronous = (feature, layer, featureArray, numberedLoaderEnables, activeFilters) => {
         return new Promise(function(resolve, reject) {
         // executor (the producing code, "singer")
         channel.getFeaturesByGeoJSON(
@@ -743,7 +776,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true, filters }) => {
                             content: gfi.geojson,
                             layerId: gfi.layerId,
                             gfiCroppingArea:
-                            data.geojson,
+                            featureArray,
                             type: 'geojson',
                             moreFeatures: gfi.moreFeatures,
                             nextStartIndex: gfi.nextStartIndex
