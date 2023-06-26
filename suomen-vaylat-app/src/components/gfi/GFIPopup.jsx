@@ -431,8 +431,8 @@ export const GFIPopup = ({ handleGfiDownload }) => {
     const { geoJsonArray } = useAppSelector(
         (state) => state.ui
     );
-    const { activeSelectionTool } = useAppSelector((state) => state.ui);
 
+    const { activeSelectionTool } = useAppSelector((state) => state.ui);
     const [selectedTab, setSelectedTab] = useState(0);
     const [tabsContent, setTabsContent] = useState([]);
     const [geoJsonToShow, setGeoJsonToShow] = useState(null);
@@ -453,7 +453,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
     useEffect(() => {
         
         const mapResults = gfiLocations.map((location) => {
-            location?.content?.features?.length > GFI_MAX_LENGTH && setIsDataTable(true);
+            location?.content[0]?.features?.length > GFI_MAX_LENGTH && setIsDataTable(true);
             const layers = allLayers.filter(
                 (layer) => layer.id === location.layerId
             );
@@ -482,63 +482,6 @@ export const GFIPopup = ({ handleGfiDownload }) => {
 
         setTabsContent(mapResults);
         
-      /*
-        console.log(gfiLocations)
-
-        const gfiLocationsMap = {}
-        gfiLocations.forEach(location => {
-            const layerId = location.layerId
-            if (gfiLocationsMap[layerId]) {
-              gfiLocationsMap[layerId].push(location)
-            } else {
-              gfiLocationsMap[layerId] = [location]
-            }
-          })
-
-          console.log(gfiLocationsMap)
-
-          let results = [];
-
-          for (var i in gfiLocationsMap) {
-            console.log(gfiLocationsMap[i])
-            console.log(gfiLocationsMap[i][0])
-            gfiLocationsMap[i][0].content?.features?.length > GFI_MAX_LENGTH && setIsDataTable(true);
-            const layers = allLayers.filter(
-                (layer) => layer.id === gfiLocationsMap[i][0].layerId
-            );
-            const layerIds =
-                layers && layers.length > 0 ? layers[0].id : gfiLocationsMap[i][0].layerId;
-            let content;
-            let mapResults;
-                
-                if (gfiLocationsMap[i][0].type === 'text') {
-                    const allContent = gfiLocationsMap[i].map((location) => {
-
-                    content = location.content;
-                    const popupContent = (
-                        <div dangerouslySetInnerHTML={{ __html: content }}></div>
-                    );
-                    return popupContent;
-                    });
-
-                    var contentWrapper = <div>{allContent}</div>;
-                    mapResults = <div id={layerIds}>{contentWrapper}</div>;
-                }
-                else if (gfiLocationsMap[i][0].type === 'geojson') {
-                    mapResults = gfiLocationsMap[i].map((location) => {
-
-                    return <FormattedGFI
-                        id={layerIds}
-                        data={location.content}
-                        type='geoJson'
-                        isDataTable={isDataTable}
-                    />;
-                });
-
-                }
-            results = results.concat(mapResults)
-          }
-        setTabsContent(results);*/
     }, [allLayers, gfiLocations, isDataTable, selectedTab]);
 
     useEffect(() => {
@@ -598,26 +541,8 @@ export const GFIPopup = ({ handleGfiDownload }) => {
         setIsVKMInfoOpen(!isVKMInfoOpen);
     };
 
-    const handleAddGeometry = () => {/* FIX ME when multiple geometry selecting is available
-        geoJsonArray.features && geoJsonArray.features.forEach(feature => {
-            channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', [
-                feature.geojson,
-                addFeaturesToMapParams
-            ]);
-        })
-
-        geoJsonArray.geojson &&
-        channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', [
-            geoJsonArray.geojson ,
-            addFeaturesToMapParams
-        ]); */
-        store.dispatch(setMinimizeGfi(true));
-        store.dispatch(setIsSaveViewOpen(true));
-        store.dispatch(setSavedTabIndex(1));
-    };
-
     const tablePropsInit = (data) => {
-        const properties = data && data.content && data.content.features && data.content.features[0].properties;
+        const properties = data && data.content && data.content[0] && data.content[0].geojson && data.content[0].geojson.features && data.content[0].geojson.features[0].properties;
 
         var hightPriorityColumns = properties?._orderHigh && JSON.parse(properties?._orderHigh);
         var lowPriorityColumns = properties?._order && JSON.parse(properties?._order);
@@ -630,14 +555,18 @@ export const GFIPopup = ({ handleGfiDownload }) => {
             }
         });
 
-        var cells = data && data.content && data.content.features && data.content.features.map(feature => {
+        var cells = [];
+        data && data.content.forEach(cont => {
+            var featureCells = cont.geojson.features && cont.geojson.features.map(feature => {
                 var cell = {...feature.properties};
                 cell['id'] = feature.id;
                 cell.hasOwnProperty('UID') && delete cell['UID'];
                 cell.hasOwnProperty('_orderHigh') && delete cell['_orderHigh'];
                 cell.hasOwnProperty('_order') && delete cell['_order'];
                 return cell;
-        });
+            });
+            cells.push(...featureCells);
+        })
 
         const tablePropsInit = {
             columns: columnsArray,
@@ -717,9 +646,10 @@ export const GFIPopup = ({ handleGfiDownload }) => {
             );
 
         if (geoJsonToShow !== null) {
-            channel &&
+            geoJsonToShow.forEach(geoJson => {
+                channel &&
                 channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', [
-                    geoJsonToShow,
+                    geoJson.geojson,
                     {
                         layerId: LAYER_ID,
                         cursor: 'pointer',
@@ -773,6 +703,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
                         },
                     },
                 ]);
+            })
         }
     }, [channel, geoJsonToShow]);
 
@@ -797,41 +728,44 @@ export const GFIPopup = ({ handleGfiDownload }) => {
         gfiInputEl.current.swiper.slideTo(selectedTab);
     }, [selectedTab]);
 
-    const getMoreFeatures = (nextStartIndex, layerId) => {
+    const getMoreFeatures = (content, layerId) => {
         setIsLoading(true);
-        channel.getFeaturesByGeoJSON && channel.getFeaturesByGeoJSON([gfiCroppingArea, nextStartIndex, [layerId]], function (data) {
-        data.gfi.forEach(
-            (gfi) => {
-                store.dispatch(addFeaturesToGFILocations({
-                    layerId: gfi.layerId,
-                    geojson: gfi.geojson,
-                    moreFeatures: gfi.moreFeatures,
-                    nextStartIndex: gfi.nextStartIndex,
-                    selectedGFI: selectedTab
-                }));
-            }
-        );
-        setIsLoading(false);
-    }, () => {
-        store.dispatch(setWarning({
-            title: strings.bodySizeWarning,
-            subtitle: null,
-            cancel: {
-                text: strings.general.cancel,
-                action: () => {
+
+        for (var i = 0; i < content.length; i++) {
+            content[i].moreFeatures && channel.getFeaturesByGeoJSON && channel.getFeaturesByGeoJSON([[gfiCroppingArea[i]], content[i].nextStartIndex, [layerId]], function (data) {
+
+                    data.gfi.forEach(
+                        (gfi) => {
+                            gfi.content.length > 0 && store.dispatch(addFeaturesToGFILocations({
+                                layerId: gfi.layerId,
+                                content: gfi.content[0],
+                                moreFeatures: gfi.content[0].moreFeatures,
+                                selectedGFI: selectedTab,
+                            }));
+                        }
+                    );
                     setIsLoading(false);
-                    store.dispatch(setWarning(null))
-                }
-            },
-            confirm: {
-                text: strings.general.continue,
-                action: () => {
-                    simplifyGeometry();
-                    store.dispatch(setWarning(null));
-                }
-            },
-        }))
-        });
+                }, () => {
+                    store.dispatch(setWarning({
+                        title: strings.bodySizeWarning,
+                        subtitle: null,
+                        cancel: {
+                            text: strings.general.cancel,
+                            action: () => {
+                                setIsLoading(false);
+                                store.dispatch(setWarning(null))
+                            }
+                        },
+                        confirm: {
+                            text: strings.general.continue,
+                            action: () => {
+                                simplifyGeometry();
+                                store.dispatch(setWarning(null));
+                            }
+                        },
+                    }))
+                });
+        }
     };
 
     const simplifyGeometry = () => {
@@ -841,7 +775,6 @@ export const GFIPopup = ({ handleGfiDownload }) => {
     useEffect(() => {
         vkmData? setIsVKMInfoOpen(true) : setIsVKMInfoOpen(false);
     }, [vkmData]);
-    console.log(tabsContent)
 
     return (
         <StyledGfiContainer>
@@ -1050,11 +983,18 @@ export const GFIPopup = ({ handleGfiDownload }) => {
                     allowTouchMove={false} // Disable swiping
                     speed={300}
                 >
-                    /** PERKELE tähän for in looppi */
                     {gfiLocations.map((location) => {
                             const layers = allLayers.filter(layer => layer.id === location.layerId);
                             const title = layers.length > 0 && layers[0].name;
                             const tableProps = tablePropsInit(location);
+
+                            let featuresLength = 0;
+                            let totalFeatures = 0;
+                            location.content.forEach(cont => {
+                                featuresLength += cont.geojson.features.length;
+                                totalFeatures += cont.geojson.totalFeatures;
+                            })
+
                             if (location.type === 'geojson') {
                                 return (
                                     <SwiperSlide
@@ -1072,18 +1012,21 @@ export const GFIPopup = ({ handleGfiDownload }) => {
                                             title={title}
                                             tablePropsInit={tableProps}
                                         />
-                                        {location.content.features && <StyledFeaturesInfo>
-                                        <StyledFeatureAmount>
-                                            {`${strings.gfi.featureAmount} : `}
-                                            <span>{location.content.features.length} {location.moreFeatures && ` / ${location.content.totalFeatures}`}</span>
-                                        </StyledFeatureAmount>
-                                        {location.moreFeatures &&
-                                            <StyledShowMoreButtonWrapper>
-                                                <StyledShowMoreButton onClick={() => getMoreFeatures(location.nextStartIndex, location.layerId)}>
-                                                {strings.gfi.getMoreFeatures}</StyledShowMoreButton>
-                                            </StyledShowMoreButtonWrapper>
+                                        {location.content.some(content => content.geojson.features) &&
+
+                                            <StyledFeaturesInfo>
+                                                <StyledFeatureAmount>
+                                                    {`${strings.gfi.featureAmount} : `}
+                                                    <span>{featuresLength} {location.moreFeatures && ` / ${totalFeatures}`}</span>
+                                                </StyledFeatureAmount>
+                                                {location.moreFeatures &&
+                                                    <StyledShowMoreButtonWrapper>
+                                                        <StyledShowMoreButton onClick={() => getMoreFeatures(location.content, location.layerId)}>
+                                                        {strings.gfi.getMoreFeatures}</StyledShowMoreButton>
+                                                    </StyledShowMoreButtonWrapper>
+                                                }
+                                            </StyledFeaturesInfo>
                                         }
-                                    </StyledFeaturesInfo>}
                                     </SwiperSlide>
                                 );
                             }
@@ -1091,17 +1034,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
                     })}
                 </StyledSwiper>
             </StyledTabContent>
-            <StyledButtonsContainer> 
-                {/* FIX ME when multiple geometry selecting is available
-                    Object.keys(geoJsonArray).length > 0 &&
-                    <>
-                        <CircleButton
-                            text={strings.savedContent.saveGeometry.saveGeometry}
-                            tooltipDirection={'bottom'}
-                            clickAction={handleAddGeometry}
-                        />
-                    </> */
-                }
+            <StyledButtonsContainer>
                 {
                     vkmData &&
                     <CircleButton
