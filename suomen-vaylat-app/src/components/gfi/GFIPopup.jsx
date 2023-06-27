@@ -1051,6 +1051,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
                     toggleState={isGfiToolsOpen}
                     tooltipDirection={'bottom'}
                     clickAction={handleGfiToolsMenuWithConfirmDialog}
+                    disabled={!selectedLayers.some((layer) =>  layer.groups?.every((group)=> group !==1))}
                 />
                 <CircleButton
                     icon={faFileDownload}

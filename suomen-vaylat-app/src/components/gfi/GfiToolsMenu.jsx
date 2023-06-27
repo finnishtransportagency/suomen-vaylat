@@ -451,32 +451,32 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
             channel.postRequest('MapModulePlugin.RemoveMarkersRequest', ["VKM_MARKER"]);
             const fetchableLayers = selectedLayers.filter((layer) =>  layer.groups?.every((group)=> group !==1));
             const loaderLength = fetchableLayers.length * features.data[0].geojson.features.length;
-                    let numberedLoaderEnables = false; 
-                    if (loaderLength > 3){
-                        numberedLoaderEnables = true;
-                        setNumberedLoader({current: 0, total: loaderLength, enabled: true})
-                    }
-                        store.dispatch(setGFICroppingArea(features.data[0].geojson.features));
-                        let index = 0;
-                        try {
-                            for(const layer of fetchableLayers) {  
-                                await fetchFeaturesSynchronous(features.data[0].geojson.features, layer, features.data[0], numberedLoaderEnables)
-                                .then(
-                                    index++
-                                ).catch((error) => {
-                                        if (error===BODY_SIZE_EXCEED){
-                                            handleGfiToolsMenu();
-                                            setIsGfiLoading(false)
-                                            store.dispatch(setWarning({
-                                                title: strings.bodySizeWarningTemporary,
-                                                subtitle: null,
-                                                cancel: {
-                                                    text: strings.general.cancel,
-                                                    action: () => {
-                                                        setIsGfiLoading(false);
-                                                        store.dispatch(setWarning(null))
-                                                    }
-                                                },
+            let numberedLoaderEnables = false; 
+            if (loaderLength > 3){
+                numberedLoaderEnables = true;
+                setNumberedLoader({current: 0, total: loaderLength, enabled: true})
+            }
+            store.dispatch(setGFICroppingArea(features.data[0].geojson.features));
+            let index = 0;
+            try {
+                for(const layer of fetchableLayers) {  
+                    await fetchFeaturesSynchronous(features.data[0].geojson.features, layer, features.data[0], numberedLoaderEnables)
+                        .then(
+                            index++
+                        ).catch((error) => {
+                            if (error===BODY_SIZE_EXCEED){
+                                handleGfiToolsMenu();
+                                setIsGfiLoading(false)
+                                store.dispatch(setWarning({
+                                    title: strings.bodySizeWarningTemporary,
+                                    subtitle: null,
+                                    cancel: {
+                                        text: strings.general.cancel,
+                                        action: () => {
+                                            setIsGfiLoading(false);
+                                            store.dispatch(setWarning(null))
+                                        }
+                                    },
                                                 /*TODO return when simplify geometry feature ready 
                                                     confirm: {
                                                     text: strings.general.continue,
@@ -485,31 +485,31 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
                                                         store.dispatch(setWarning(null));
                                                     }
                                                 },*/
-                                            }))
+                                }))
                                         
-                                            //throw error to break synchronous loop
-                                            throw new Error(BODY_SIZE_EXCEED);
-                                        }else if (error === GENERAL_FAIL){
-                                            console.info("general fail thrown") 
-                                        }
-                                        handleGfiToolsMenu();
-                                        setIsGfiLoading(false)
-                                    }
-                                );
-                                if (fetchableLayers.length === index){
-                                    handleGfiToolsMenu();
-                                    setIsGfiLoading(false)
+                                    //throw error to break synchronous loop
+                                throw new Error(BODY_SIZE_EXCEED);
+
+                                } else if (error === GENERAL_FAIL){
+                                    console.info("general fail thrown") 
                                 }
 
+                                handleGfiToolsMenu();
+                                setIsGfiLoading(false)
+                            });
+                            if (fetchableLayers.length === index){
+                                handleGfiToolsMenu();
+                                setIsGfiLoading(false)
                             }
-                        } catch (error) {
-                            //catch exception, when simplify geometry feature ready, catch BODY_SIZE_EXCEED
-                            //and make simplify and rerun query
-                            handleGfiToolsMenu();
-                            setIsGfiLoading(false)
-                        }
-                        
-        }  else if (features.data[0].data.geom) {
+
+                }
+            } catch (error) {
+                //catch exception, when simplify geometry feature ready, catch BODY_SIZE_EXCEED
+                //and make simplify and rerun query
+                handleGfiToolsMenu();
+                setIsGfiLoading(false)
+            }        
+        } else if (features.data[0].data.geom) {
             store.dispatch(resetGFILocations([]));
             store.dispatch(setVKMData(null));
             channel.postRequest('MapModulePlugin.RemoveMarkersRequest', ["VKM_MARKER"]);
@@ -743,21 +743,21 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
                 (gfiData) => {
                     store.dispatch(setVKMData(null));
                     channel.postRequest('MapModulePlugin.RemoveMarkersRequest', ["VKM_MARKER"]);
-                        gfiData?.gfi?.forEach((gfi) => {
-                            store.dispatch(setGFILocations({
-                                content: gfi.content,
-                                layerId: gfi.layerId,
-                                gfiCroppingArea:
-                                data.geojson,
-                                type: 'geojson',
-                                moreFeatures: gfi.content.some(content => content.moreFeatures),
-                            })) 
-                        });
-                        if (numberedLoaderEnables)
+                    gfiData?.gfi?.forEach((gfi) => {
+                        gfi.content.length > 0 && store.dispatch(setGFILocations({
+                            content: gfi.content,
+                            layerId: gfi.layerId,
+                            gfiCroppingArea:
+                            data.geojson,
+                            type: 'geojson',
+                            moreFeatures: gfi.content.some(content => content.moreFeatures),
+                        })) 
+                    });
+                    if (numberedLoaderEnables)
                         setNumberedLoader(prevState => {
                             return {current: prevState.current + 1, total: prevState.total, enabled: prevState.enabled}
-                        }) 
-                        resolve("ok");                  
+                    }) 
+                    resolve("ok");                  
                 },
                 function (error) {
                     if (numberedLoaderEnables)
