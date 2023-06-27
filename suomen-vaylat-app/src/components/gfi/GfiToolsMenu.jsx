@@ -575,7 +575,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
         }
     };
 
-    const featureEventHandler = (data) => {
+    const featureEventHandler = async (data) => {
         if (data.operation === 'click') {
             if (data.features) {
                         store.dispatch(setMinimizeGfi(false));
@@ -594,7 +594,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
                                 let index = 0;
                                 try {
                                     for(const layer of fetchableLayers) {  
-                                        fetchFeaturesSynchronous(data.features[0].geojson.features, layer, data.features[0], numberedLoaderEnables)
+                                        await fetchFeaturesSynchronous(data.features[0].geojson.features, layer, data.features[0], numberedLoaderEnables)
                                         .then(
                                             index++
                                         ).catch((error) => {
@@ -654,7 +654,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
 
     useEffect(() => {
         let isSubscribed = true;
-        channel && channel.handleEvent("DrawingEvent", (data) => {
+        channel && channel.handleEvent("DrawingEvent", async (data) => {
             if(store.getState().ui.selectedGfiTool) {
                 if (isSubscribed && data.isFinished && data.isFinished === true) {
                     channel.postRequest('DrawTools.StopDrawingRequest', [
@@ -676,7 +676,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
                         let index = 0;
                         try {
                             for(const layer of fetchableLayers) {  
-                                fetchFeaturesSynchronous(data.geojson.features, layer, data, numberedLoaderEnables)
+                                await fetchFeaturesSynchronous(data.geojson.features, layer, data, numberedLoaderEnables)
                                 .then(
                                     index++
                                 ).catch((error) => {
