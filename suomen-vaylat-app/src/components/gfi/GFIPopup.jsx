@@ -453,7 +453,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
     useEffect(() => {
         
         const mapResults = gfiLocations.map((location) => {
-            location?.content[0]?.features?.length > GFI_MAX_LENGTH && setIsDataTable(true);
+            location.content && location?.content[0]?.features?.length > GFI_MAX_LENGTH && setIsDataTable(true);
             const layers = allLayers.filter(
                 (layer) => layer.id === location.layerId
             );
@@ -556,7 +556,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
         });
 
         var cells = [];
-        data && data.content.forEach(cont => {
+        data && data?.content?.forEach(cont => {
             var featureCells = cont.geojson.features && cont.geojson.features.map(feature => {
                 var cell = {...feature.properties};
                 cell['id'] = feature.id;
@@ -776,6 +776,8 @@ export const GFIPopup = ({ handleGfiDownload }) => {
         vkmData? setIsVKMInfoOpen(true) : setIsVKMInfoOpen(false);
     }, [vkmData]);
 
+    console.log(gfiLocations)
+
     return (
         <StyledGfiContainer>
             <AnimatePresence>
@@ -973,6 +975,14 @@ export const GFIPopup = ({ handleGfiDownload }) => {
                         </StyledInfoTextContainer>
                     </StyledNoGfisContainer>
                 )}
+                {gfiLocations.content && gfiLocations.content[0].noContent && (
+                    <StyledNoGfisContainer>
+                        <StyledSubtitle>Ei tuloksia</StyledSubtitle>
+                        <StyledInfoTextContainer>
+                            <p>Ei tuloksia rajauksella, valitse uusi rajaus tai uusia tasoja</p>
+                        </StyledInfoTextContainer>
+                    </StyledNoGfisContainer>
+                )}
                 <StyledSwiper
                     ref={gfiInputEl}
                     id={'gfi-swiper'}
@@ -990,7 +1000,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
 
                             let featuresLength = 0;
                             let totalFeatures = 0;
-                            location.content.forEach(cont => {
+                            location?.content?.forEach(cont => {
                                 featuresLength += cont.geojson.features.length;
                                 totalFeatures += cont.geojson.totalFeatures;
                             })
@@ -1012,7 +1022,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
                                             title={title}
                                             tablePropsInit={tableProps}
                                         />
-                                        {location.content.some(content => content.geojson.features) &&
+                                        {location?.content?.some(content => content.geojson.features) &&
 
                                             <StyledFeaturesInfo>
                                                 <StyledFeatureAmount>

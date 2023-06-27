@@ -34,7 +34,7 @@ import {
     setVKMData
 } from '../../state/slices/rpcSlice';
 
-import { setMinimizeGfi, setSelectedGfiTool, setGeoJsonArray, setHasToastBeenShown, setActiveSelectionTool, setWarning } from '../../state/slices/uiSlice';
+import { setMinimizeGfi, setSelectedGfiTool, setGeoJsonArray, setHasToastBeenShown, setActiveSelectionTool, setWarning, setIsGfiToolsOpen } from '../../state/slices/uiSlice';
 
 import SVLoader from '../loader/SvLoader';
 import { DRAWING_TIP_LOCALSTORAGE } from '../../utils/constants';
@@ -503,6 +503,20 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
                             }
 
                 }
+                
+                if (gfiLocations.length === 0) {
+                    store.dispatch(setWarning({
+                        title: strings.noGfiLocationsWarning,
+                        subtitle: null,
+                        confirm: {
+                            text: strings.general.continue,
+                            action: () => {
+                                simplifyGeometry();
+                                store.dispatch(setWarning(null));
+                            }
+                        },
+                    }))
+                }
             } catch (error) {
                 //catch exception, when simplify geometry feature ready, catch BODY_SIZE_EXCEED
                 //and make simplify and rerun query
@@ -566,6 +580,20 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
                                 }
 
                             } 
+                
+                            if (gfiLocations.length === 0) {
+                                store.dispatch(setWarning({
+                                    title: strings.noGfiLocationsWarning,
+                                    subtitle: null,
+                                    confirm: {
+                                        text: strings.general.continue,
+                                        action: () => {
+                                            simplifyGeometry();
+                                            store.dispatch(setWarning(null));
+                                        }
+                                    },
+                                }))
+                            }
                         } catch (error) {
                             //catch exception, when simplify geometry feature ready, catch BODY_SIZE_EXCEED
                             //and make simplify and rerun query
@@ -635,6 +663,20 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
                                             setIsGfiLoading(false)
                                         }
         
+                                    }
+                
+                                    if (gfiLocations.length === 0) {
+                                        store.dispatch(setWarning({
+                                            title: strings.noGfiLocationsWarning,
+                                            subtitle: null,
+                                            confirm: {
+                                                text: strings.general.continue,
+                                                action: () => {
+                                                    simplifyGeometry();
+                                                    store.dispatch(setWarning(null));
+                                                }
+                                            },
+                                        }))
                                     }
                                 } catch (error) {
                                     //catch exception, when simplify geometry feature ready, catch BODY_SIZE_EXCEED
@@ -718,6 +760,20 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
                                 }
 
                             } 
+                
+                            if (gfiLocations.length === 0) {
+                                store.dispatch(setWarning({
+                                    title: strings.noGfiLocationsWarning,
+                                    subtitle: null,
+                                    confirm: {
+                                        text: strings.general.continue,
+                                        action: () => {
+                                            simplifyGeometry();
+                                            store.dispatch(setWarning(null));
+                                        }
+                                    },
+                                }))
+                            }
                         } catch (error) {
                             //catch exception, when simplify geometry feature ready, catch BODY_SIZE_EXCEED
                             //and make simplify and rerun query
@@ -744,14 +800,16 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
                     store.dispatch(setVKMData(null));
                     channel.postRequest('MapModulePlugin.RemoveMarkersRequest', ["VKM_MARKER"]);
                     gfiData?.gfi?.forEach((gfi) => {
-                        gfi.content.length > 0 && store.dispatch(setGFILocations({
-                            content: gfi.content,
-                            layerId: gfi.layerId,
-                            gfiCroppingArea:
-                            data.geojson,
-                            type: 'geojson',
-                            moreFeatures: gfi.content.some(content => content.moreFeatures),
-                        })) 
+                        if (gfi.content.length > 0) {
+                            store.dispatch(setGFILocations({
+                                content: gfi.content,
+                                layerId: gfi.layerId,
+                                gfiCroppingArea:
+                                data.geojson,
+                                type: 'geojson',
+                                moreFeatures: gfi.content.some(content => content.moreFeatures),
+                            })) 
+                        }
                     });
                     if (numberedLoaderEnables)
                         setNumberedLoader(prevState => {

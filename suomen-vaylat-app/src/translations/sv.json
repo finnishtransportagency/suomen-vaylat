@@ -134,6 +134,7 @@
   "multipleLayersFetchWarning": "You are about to fetch data from 10 or more maplayers, it might affect the performance of the service.",
   "bodySizeWarning": "Rajausgeometria on liian suuri, yksinkertaistetaanko geometria? (sv)",
   "bodySizeWarningTemporary": "Geometry is too big and data cannot be fetched right now.",
+  "noGfiLocationsWarning": "No results found, try another geometry.",
   "appGuide": {
     "title": "Användarguide",
     "modalContent": {
