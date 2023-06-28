@@ -258,6 +258,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
 
     const { gfiCroppingTypes, selectedGfiTool, hasToastBeenShown, activeSelectionTool } = useAppSelector(state => state.ui);
     const [isGfiLoading, setIsGfiLoading] = useState(false);
+    const [isFetchDone, setIsFetchDone] = useState(false);
 
     const [numberedLoader, setNumberedLoader] = useState(null);
 
@@ -501,21 +502,6 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
                                 handleGfiToolsMenu();
                                 setIsGfiLoading(false)
                             }
-
-                }
-                
-                if (gfiLocations.length === 0) {
-                    store.dispatch(setWarning({
-                        title: strings.noGfiLocationsWarning,
-                        subtitle: null,
-                        confirm: {
-                            text: strings.general.continue,
-                            action: () => {
-                                simplifyGeometry();
-                                store.dispatch(setWarning(null));
-                            }
-                        },
-                    }))
                 }
             } catch (error) {
                 //catch exception, when simplify geometry feature ready, catch BODY_SIZE_EXCEED
@@ -579,20 +565,6 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
                                     setIsGfiLoading(false)
                                 }
 
-                            } 
-                
-                            if (gfiLocations.length === 0) {
-                                store.dispatch(setWarning({
-                                    title: strings.noGfiLocationsWarning,
-                                    subtitle: null,
-                                    confirm: {
-                                        text: strings.general.continue,
-                                        action: () => {
-                                            simplifyGeometry();
-                                            store.dispatch(setWarning(null));
-                                        }
-                                    },
-                                }))
                             }
                         } catch (error) {
                             //catch exception, when simplify geometry feature ready, catch BODY_SIZE_EXCEED
@@ -601,91 +573,75 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
                             setIsGfiLoading(false)
                         }
         }
+        setIsFetchDone(true);
     };
 
     const featureEventHandler = async (data) => {
         if (data.operation === 'click') {
             if (data.features) {
-                        store.dispatch(setMinimizeGfi(false));
-
-                            setIsGfiLoading(true)
+                store.dispatch(setMinimizeGfi(false));
+                setIsGfiLoading(true)
+                const fetchableLayers = selectedLayers.filter((layer) =>  layer.groups?.every((group)=> group !==1));
+                const loaderLength = fetchableLayers.length * data.features[0].geojson.features.length;
                             
-                            const fetchableLayers = selectedLayers.filter((layer) =>  layer.groups?.every((group)=> group !==1));
-                            const loaderLength = fetchableLayers.length * data.features[0].geojson.features.length;
-                            
-                            let numberedLoaderEnables = false; 
-                            if (loaderLength > 3){
-                                numberedLoaderEnables = true;
-                                setNumberedLoader({current: 0, total: loaderLength, enabled: true})
-                            }
-                                store.dispatch(setGFICroppingArea(data.features[0].geojson.features));
-                                let index = 0;
-                                try {
-                                    for(const layer of fetchableLayers) {  
-                                        await fetchFeaturesSynchronous(data.features[0].geojson.features, layer, data.features[0], numberedLoaderEnables)
-                                        .then(
-                                            index++
-                                        ).catch((error) => {
-                                                if (error===BODY_SIZE_EXCEED){
-                                                    handleGfiToolsMenu();
-                                                    setIsGfiLoading(false)
-                                                    store.dispatch(setWarning({
-                                                        title: strings.bodySizeWarningTemporary,
-                                                        subtitle: null,
-                                                        cancel: {
-                                                            text: strings.general.cancel,
-                                                            action: () => {
-                                                                setIsGfiLoading(false);
-                                                                store.dispatch(setWarning(null))
-                                                            }
-                                                        },
-                                                        /*TODO return when simplify geometry feature ready 
-                                                            confirm: {
-                                                            text: strings.general.continue,
-                                                            action: () => {
-                                                                simplifyGeometry();
-                                                                store.dispatch(setWarning(null));
-                                                            }
-                                                        },*/
-                                                    }))
-                                                
-                                                    //throw error to break synchronous loop
-                                                    throw new Error(BODY_SIZE_EXCEED);
-                                                }else if (error === GENERAL_FAIL){
-                                                    console.info("general fail thrown") 
-                                                }
-                                                handleGfiToolsMenu();
-                                                setIsGfiLoading(false)
-                                            }
-                                        );
-                                        if (fetchableLayers.length === index){
-                                            handleGfiToolsMenu();
-                                            setIsGfiLoading(false)
-                                        }
-        
-                                    }
-                
-                                    if (gfiLocations.length === 0) {
-                                        store.dispatch(setWarning({
-                                            title: strings.noGfiLocationsWarning,
-                                            subtitle: null,
-                                            confirm: {
-                                                text: strings.general.continue,
-                                                action: () => {
-                                                    simplifyGeometry();
-                                                    store.dispatch(setWarning(null));
-                                                }
-                                            },
-                                        }))
-                                    }
-                                } catch (error) {
-                                    //catch exception, when simplify geometry feature ready, catch BODY_SIZE_EXCEED
-                                    //and make simplify and rerun query
+                let numberedLoaderEnables = false; 
+                if (loaderLength > 3){
+                    numberedLoaderEnables = true;
+                    setNumberedLoader({current: 0, total: loaderLength, enabled: true})
+                }
+                store.dispatch(setGFICroppingArea(data.features[0].geojson.features));
+                let index = 0;
+                try {
+                    for(const layer of fetchableLayers) {  
+                        await fetchFeaturesSynchronous(data.features[0].geojson.features, layer, data.features[0], numberedLoaderEnables)
+                            .then(
+                                index++
+                            ).catch((error) => {
+                                if (error===BODY_SIZE_EXCEED){
                                     handleGfiToolsMenu();
                                     setIsGfiLoading(false)
+                                    store.dispatch(setWarning({
+                                        title: strings.bodySizeWarningTemporary,
+                                        subtitle: null,
+                                        cancel: {
+                                            text: strings.general.cancel,
+                                            action: () => {
+                                                setIsGfiLoading(false);
+                                                store.dispatch(setWarning(null))
+                                            }
+                                        },
+                                        /*TODO return when simplify geometry feature ready 
+                                            confirm: {
+                                            text: strings.general.continue,
+                                            action: () => {
+                                                simplifyGeometry();
+                                                store.dispatch(setWarning(null));
+                                            }
+                                        },*/
+                                    }))
+                                                
+                                    //throw error to break synchronous loop
+                                    throw new Error(BODY_SIZE_EXCEED);
+                                } else if (error === GENERAL_FAIL) {
+                                    console.info("general fail thrown") 
                                 }
-
-
+                                
+                                handleGfiToolsMenu();
+                                setIsGfiLoading(false)
+                            });
+                        if (fetchableLayers.length === index){
+                            handleGfiToolsMenu();
+                            setIsGfiLoading(false)
+                        }
+        
+                    }
+                } catch (error) {
+                    //catch exception, when simplify geometry feature ready, catch BODY_SIZE_EXCEED
+                    //and make simplify and rerun query
+                    handleGfiToolsMenu();
+                    setIsGfiLoading(false)
+                }
+                setIsFetchDone(true);
             }
         }
     };
@@ -693,6 +649,23 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
     const simplifyGeometry = () => {
         console.log("simplify");
     }
+
+    useEffect(() => {
+        if (isFetchDone && gfiLocations.length === 0) {
+            store.dispatch(setWarning({
+                title: strings.noGfiLocationsWarning,
+                subtitle: null,
+                confirm: {
+                    text: strings.general.continue,
+                    action: () => {
+                        simplifyGeometry();
+                        store.dispatch(setWarning(null));
+                    }
+                },
+            }))
+            setIsFetchDone(!isFetchDone);
+        }
+    }, [isFetchDone])
 
     useEffect(() => {
         let isSubscribed = true;
@@ -759,20 +732,6 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
                                     setIsGfiLoading(false)
                                 }
 
-                            } 
-                
-                            if (gfiLocations.length === 0) {
-                                store.dispatch(setWarning({
-                                    title: strings.noGfiLocationsWarning,
-                                    subtitle: null,
-                                    confirm: {
-                                        text: strings.general.continue,
-                                        action: () => {
-                                            simplifyGeometry();
-                                            store.dispatch(setWarning(null));
-                                        }
-                                    },
-                                }))
                             }
                         } catch (error) {
                             //catch exception, when simplify geometry feature ready, catch BODY_SIZE_EXCEED
@@ -780,7 +739,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
                             handleGfiToolsMenu();
                             setIsGfiLoading(false)
                         }
-                        
+                        setIsFetchDone(true);
                 }
             }
         })
