@@ -98,7 +98,8 @@
       "title": "Saved geometries (Disabled)",
       "description": "My saved geometries",
       "disabled": "Temporarily unavailable"
-    }
+    },
+    "openGoogleStreetView": "Open in Google Street View"
   },
   "vkm": {
     "locationInfo": "Location info",

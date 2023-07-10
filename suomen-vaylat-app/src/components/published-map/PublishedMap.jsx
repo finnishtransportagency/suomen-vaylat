@@ -25,7 +25,8 @@ import {
     setStartState,
     resetGFILocations,
     addMarkerRequest,
-    removeMarkerRequest
+    removeMarkerRequest,
+    setPointInfo
 } from '../../state/slices/rpcSlice';
 
 import {
@@ -209,6 +210,7 @@ const PublishedMap = () => {
                 if (data.MapClickedEvent && store.getState().ui.activeTool === null) {
                     channel.handleEvent('MapClickedEvent', (data) => {
                         store.getState().ui.activeTool !== strings.tooltips.drawingTools.marker && store.dispatch(resetGFILocations([]));
+                        store.dispatch(setPointInfo(data));
                     });
                 }
 

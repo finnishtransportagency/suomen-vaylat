@@ -9,7 +9,13 @@ import {
     faAngleRight,
     faLayerGroup,
     faMapMarkerAlt,
+    faStreetView
 } from '@fortawesome/free-solid-svg-icons';
+import proj4 from 'proj4';
+import defs from 'proj4js-definitions';
+
+import ReactTooltip from 'react-tooltip';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ReactReduxContext } from 'react-redux';
 import styled from 'styled-components';
@@ -17,7 +23,6 @@ import strings from '../../translations';
 import { useAppSelector } from '../../state/hooks';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { FreeMode, Controller } from 'swiper';
-import { isMobile } from '../../theme/theme';
 import { setIsSaveViewOpen, setMinimizeGfi, setSavedTabIndex, setActiveSelectionTool, setWarning } from '../../state/slices/uiSlice';
 import { resetGFILocations, addFeaturesToGFILocations} from '../../state/slices/rpcSlice';
 
@@ -28,6 +33,8 @@ import GfiDownloadMenu from './GfiDownloadMenu';
 import CircleButton from '../circle-button/CircleButton';
 import SVLoader from '../loader/SvLoader';
 import { isValidUrl } from '../../utils/validUrlUtil';
+import { theme, isMobile } from '../../theme/theme';
+
 
 import { SortingMode, PagingPosition } from 'ka-table/enums';
 
@@ -427,12 +434,13 @@ const StyledLoaderWrapper = styled.div`
 export const GFIPopup = ({ handleGfiDownload }) => {
     const LAYER_ID = 'gfi-result-layer';
     const { store } = useContext(ReactReduxContext);
-    const { channel, allLayers, gfiLocations, vkmData, pointInfoImageError, setPointInfoImageError, gfiCroppingArea, selectedLayers } = useAppSelector(state => state.rpc);
+    const { channel, allLayers, gfiLocations, vkmData, pointInfoImageError, setPointInfoImageError, gfiCroppingArea, selectedLayers, pointInfo } = useAppSelector(state => state.rpc);
     const { geoJsonArray } = useAppSelector(
         (state) => state.ui
     );
     const { activeSelectionTool } = useAppSelector((state) => state.ui);
 
+    const [point, setPoint] = useState(null);
     const [selectedTab, setSelectedTab] = useState(0);
     const [tabsContent, setTabsContent] = useState([]);
     const [geoJsonToShow, setGeoJsonToShow] = useState(null);
@@ -781,7 +789,15 @@ export const GFIPopup = ({ handleGfiDownload }) => {
 
     useEffect(() => {
         vkmData? setIsVKMInfoOpen(true) : setIsVKMInfoOpen(false);
-    }, [vkmData]);
+        
+        // our projection EPSG:3067
+        var oskariProjection = '+proj=utm +zone=35 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs +type=crs';
+        // Google maps EPSG:4326
+        var mapsProjection = "+proj=longlat +datum=WGS84 +no_defs +type=crs";
+        const pointCoords = proj4(oskariProjection,mapsProjection,[pointInfo.lon, pointInfo.lat]);
+        // our coords are flipped compared to google so we need to flip them back for the right point
+        setPoint([pointCoords[1],pointCoords[0]].toString());
+     }, [vkmData]);
 
     return (
         <StyledGfiContainer>
@@ -844,6 +860,15 @@ export const GFIPopup = ({ handleGfiDownload }) => {
                                     <p style={{fontWeight: '600'}}>{vkmData.vkm.Katunimi}</p>
                                     <p>Lat: <span style={{fontWeight: '600'}}>{vkmData.coordinates.y}</span></p>
                                     <p>Lon: <span style={{fontWeight: '600'}}>{vkmData.coordinates.x}</span></p>
+                                    <a 
+                                        data-tip data-for={'streetview'} 
+                                        href={"http://maps.google.com/maps?q=&layer=c&cbll=" + point} target="_blank"
+                                    >
+                                        <FontAwesomeIcon icon={faStreetView} />
+                                        <ReactTooltip backgroundColor={theme.colors.mainColor1} textColor={theme.colors.mainWhite} disable={isMobile} id="streetview" place="bottom" type='dark' effect="float">
+                                            <span>{strings.gfi.openGoogleStreetView}</span>
+                                        </ReactTooltip>
+                                    </a>
                                 </div>
                             </StyledCoordinatesWrapper>
                         }

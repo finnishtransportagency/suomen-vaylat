@@ -98,7 +98,8 @@
       "title": "Sparad geometri (Används inte)",
       "description": "Egen sparad geometri",
       "disabled": "Tillfälligt ur bruk"
-    }
+    },
+    "openGoogleStreetView": "Avaa Google Street View"
   },
   "vkm": {
     "locationInfo": "Positionsdata",

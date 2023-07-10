@@ -57,6 +57,7 @@ const initialState = {
         selectedLayers: [],
         zoom: null,
     },
+    pointInfo: {}
 };
 
 export const rpcSlice = createSlice({
@@ -811,6 +812,16 @@ export const rpcSlice = createSlice({
         },
 
         /**
+         * Set information of clicked point on the map
+         * @method setPointInfo
+         * @param {Object} state
+         * @param {Object} action
+         */
+        setPointInfo: (state, action) => {
+            state.pointInfo = action.payload;
+        },
+
+        /**
          * Set start state.
          * @method setStartState
          * @param {Object} state
@@ -889,6 +900,7 @@ export const {
     setBackgroundMaps,
     setMapLayers,
     setAllSelectedThemeLayers,
+    setPointInfo,
 } = rpcSlice.actions;
 
 export default rpcSlice.reducer;
