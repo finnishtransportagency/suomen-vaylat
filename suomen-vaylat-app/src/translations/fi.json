@@ -457,12 +457,16 @@
             "id": 11,
             "title": "Tieliikenteen liikennemäärät",
             "description": "Kartalla esitetään liikennemääriä Suomen tieverkolla vuodesta 2012 alkaen. Liikennemäärät kertovat keskimääräisen vuorokausiliikenteen määrän tieverkolla. Liikennemäärät on visualisoitu kahteen eri ryhmään, joista toiseen on laskettu yhteen kaikki tieosuuden liikenne ja toisessa pelkästään raskas liikenne. Teemakarttaan päivitetään edellisen vuoden liikennemäärät kerran vuodessa."
-          }
-        },
-        "themeLinks": {
-          "bikeNetwork": {
-            "title": "Valtakunnallinen ja seudullinen pyörätieverkko",
-            "url": "https://paikkatieto.vaylapilvi.fi/arcgis/apps/webappviewer/index.html?id=aa98d035ba254776895d092a3d1c3a9f"
+          },
+          "13": {
+            "id": 13,
+            "title": "Valtakunnallinen ja seudullinen pyöräilyverkosto",
+            "description": "Kartalla esitetään valtakunnallinen pyöräilyverkosto sekä seudullisia pyöräilyreittejä Suomessa. Lisäksi mukana on Suomen alueella oleva EuroVelo-reitti, joka on osa Euroopan pyöräilyliiton ajamaa hanketta, jonka tavoitteena on kehittää koko Euroopan laajuinen pyöräilyreittiverkosto. Suomessa on neljä EuroVelo-reittiä, mutta mikään niistä ei ole vielä valmis. Lisätietoa EuroVelo-hankkeesta löydät osoitteesta https://en.eurovelo.com/."
+          },
+          "14": {
+            "id": 14,
+            "title": "Maanteiden puuvirrat",
+            "description": "Kartalla esitetään maanteiden puuvirtoja kuljetusten lukumäärä- ja painoluokittain. Lisä-tietoja ja tarkennuksia aineistojen infosivuilla."
           }
         }
       },
