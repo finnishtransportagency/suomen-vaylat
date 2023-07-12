@@ -5,7 +5,6 @@ import styled from 'styled-components';
 import { useAppSelector } from '../../state/hooks';
 import strings from '../../translations';
 import {
-    setActiveAnnouncements,
     setAllGroups,
     setAllTags,
     setAllThemesWithLayers,
@@ -37,7 +36,7 @@ import {
     removeFromDrawToolMarkers,
     addToGeoJsonArray,
 } from '../../state/slices/uiSlice';
-import { getActiveAnnouncements, updateLayers } from '../../utils/rpcUtil';
+import { updateLayers } from '../../utils/rpcUtil';
 import SvLoder from '../../components/loader/SvLoader';
 import './PublishedMap.scss';
 import { theme } from '../../theme/theme';
@@ -127,14 +126,6 @@ const PublishedMap = () => {
                 if (data.getTagsWithLayers) {
                     channel.getTagsWithLayers(function (data) {
                         store.dispatch(setTagsWithLayers(data));
-                    });
-                }
-
-                if (data.getAnnouncements) {
-                    channel.getAnnouncements(function (data) {
-                        store.dispatch(
-                            setActiveAnnouncements(getActiveAnnouncements(data))
-                        );
                     });
                 }
 

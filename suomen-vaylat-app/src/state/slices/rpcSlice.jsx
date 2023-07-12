@@ -30,8 +30,6 @@ const initialState = {
         indeterminate: false,
         isChecked: null,
     },
-    announcements: [],
-    activeAnnouncements: [],
     allThemesWithLayers: [],
     allSelectedThemeLayers: [],
     selectedTheme: null,
@@ -249,28 +247,6 @@ export const rpcSlice = createSlice({
         setSelectedThemeId: (state, action) => {
             state.selectedThemeId = action.payload;
             LOG.log('setSelectedThemeId to ' + action.payload);
-        },
-
-        /**
-         * Set announcements.
-         * @method setAnnouncements
-         * @param {Object} state
-         * @param {Object} action
-         */
-        setAnnouncements: (state, action) => {
-            state.announcements = action.payload;
-            LOG.log('setAnnounchements to ', action.payload);
-        },
-
-        /**
-         * Set active announcements.
-         * @method setActiveAnnouncements
-         * @param {Object} state
-         * @param {Object} action
-         */
-        setActiveAnnouncements: (state, action) => {
-            state.activeAnnouncements = action.payload;
-            LOG.log('setActiveAnnounchements to ', action.payload);
         },
 
         /**
@@ -862,7 +838,6 @@ export const {
     setSelectedTheme,
     setLastSelectedTheme,
     setSelectedThemeId,
-    setActiveAnnouncements,
     setFilter,
     getLayerMetadata,
     clearLayerMetadata,

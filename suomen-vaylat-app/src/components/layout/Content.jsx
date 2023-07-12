@@ -45,7 +45,6 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 import Modal from '../modals/Modal';
-import AnnouncementsModal from '../announcements-modal/AnnouncementsModal';
 import LayerDownloadLinkButtonModal from '../menus/hierarchical-layerlist/LayerDownloadLinkButtonModal';
 import AppInfoModalContent from '../app-info-modal/AppInfoModalContent';
 import UserGuideModalContent from '../user-guide-modal/UserGuideModalContent';
@@ -63,7 +62,6 @@ import WarningModalContent from '../warning/WarningModalContent';
 import GFIPopup from '../gfi/GFIPopup';
 import GFIDownload from '../gfi/GFIDownload';
 import MetadataModal from '../metadata-modal/MetadataModal';
-import { ANNOUNCEMENTS_LOCALSTORAGE } from '../../utils/constants';
 import ThemeMenu from '../menus/theme-menu/ThemeMenu';
 
 const StyledContent = styled.div`
@@ -188,9 +186,6 @@ const Content = () => {
     const isShareOpen = shareUrl && shareUrl.length > 0 ? true : false;
     const downloadLink = useAppSelector((state) => state.ui.downloadLink);
 
-    const announcements = useAppSelector(
-        (state) => state.rpc.activeAnnouncements
-    );
     const metadata = useAppSelector((state) => state.rpc.layerMetadata);
 
     let { channel, gfiLocations } = useAppSelector((state) => state.rpc);
@@ -210,7 +205,6 @@ const Content = () => {
         localStorage.setItem(name, existing.toString());
     };
 
-    const [currentAnnouncement, setCurrentAnnouncement] = useState(null);
 
     const [isGfiDownloadToolsOpen, setIsGfiDownloadToolsOpen] = useState(false);
 
@@ -222,20 +216,8 @@ const Content = () => {
     const [websocketFirstTimeTryConnecting, setWebsocketFirstTimeTryConnecting] = useState(false);
 
     useEffect(() => {
-        announcements && setCurrentAnnouncement(0);
-    }, [announcements]);
-
-    useEffect(() => {
         setIsGfiToolsOpenLocal(isGfiToolsOpen);
     }, [isGfiToolsOpen])
-
-    const closeAnnouncement = (selected, id) => {
-        if (selected) {
-            addToLocalStorageArray(ANNOUNCEMENTS_LOCALSTORAGE, id);
-        }
-        announcements.length > currentAnnouncement + 1 &&
-            setCurrentAnnouncement(currentAnnouncement + 1);
-    };
 
     const hideWarn = () => {
         store.dispatch(
@@ -520,52 +502,6 @@ const Content = () => {
         <>
             <StyledContent ref={constraintsRef}>
                 <PublishedMap />
-                {currentAnnouncement !== null &&
-                    announcements[currentAnnouncement] && (
-                        <Modal
-                            key={
-                                'announcement-modal-' +
-                                announcements[currentAnnouncement].id
-                            }
-                            constraintsRef={
-                                constraintsRef
-                            } /* Reference div for modal drag boundaries */
-                            drag={
-                                false
-                            } /* Enable (true) or disable (false) drag */
-                            resize={false}
-                            backdrop={
-                                true
-                            } /* Is backdrop enabled (true) or disabled (false) */
-                            fullScreenOnMobile={
-                                false
-                            } /* Scale modal full width / height when using mobile device */
-                            titleIcon={
-                                faBullhorn
-                            } /* Use icon on title or null */
-                            title={
-                                announcements[currentAnnouncement].title
-                            } /* Modal header title */
-                            type={'announcement'} /* Modal type */
-                            closeAction={
-                                closeAnnouncement
-                            } /* Action when pressing modal close button or backdrop */
-                            isOpen={null} /* Modal state */
-                            id={announcements[currentAnnouncement].id}
-                        >
-                            <AnnouncementsModal
-                                id={announcements[currentAnnouncement].id}
-                                title={announcements[currentAnnouncement].title}
-                                content={
-                                    announcements[currentAnnouncement].content
-                                }
-                                key={
-                                    'announcement_modal_' +
-                                    announcements[currentAnnouncement].id
-                                }
-                            />
-                        </Modal>
-                    )}
                 <Modal
                     constraintsRef={
                         constraintsRef

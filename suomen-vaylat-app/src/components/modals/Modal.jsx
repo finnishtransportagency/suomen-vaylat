@@ -195,20 +195,9 @@ const Modal = ({
     const { store } = useContext(ReactReduxContext);
     const dragControls = useDragControls();
 
-    const [localState, setLocalState] = useState(type === 'announcement');
-
-    const handleAnnouncementModal = (selected, id) => {
-        setLocalState(false);
-        setTimeout(() => {
-            closeAction(selected, id);
-        }, [500]);
-    };
-
-    const clonedChildren = cloneElement(children, { handleAnnouncementModal }); // If announce modal type is passed as prop, add additional 'handleAnnouncementModal' function to modal children to handle modal state
-
     return (
         <AnimatePresence>
-            {(isOpen || localState) && (
+            {(isOpen) && (
                 <>
                     <StyledModalWrapper
                         key="modal"
@@ -309,24 +298,14 @@ const Modal = ({
                                     )}
                                     
                                     <StyledCloseButton
-                                        onClick={() => {
-                                            type !== 'announcement' &&
-                                                closeAction();
-                                            type === 'announcement' &&
-                                                handleAnnouncementModal(
-                                                    null,
-                                                    null
-                                                );
-                                        }}
+                                        onClick={() => {closeAction();}}
                                     >
                                         <StyledCloseIcon icon={faTimes} />
                                     </StyledCloseButton>
                                 </StyledRightContent>
                             </StyledModalHeader>
                             <StyledModalContent overflow={overflow}>
-                                {!type === 'announcement'
-                                    ? children
-                                    : clonedChildren}
+                                {children}
                             </StyledModalContent>
                         </StyledModal>
                     </StyledModalWrapper>
@@ -343,10 +322,7 @@ const Modal = ({
                             onClick={() => {
                                 backdrop &&
                                 closeAction &&
-                                type !== 'announcement'
-                                    ? closeAction()
-                                    : type === 'announcement' &&
-                                      handleAnnouncementModal(null, null);
+                                closeAction()
                             }}
                             resize={resize}
                             type={type}
