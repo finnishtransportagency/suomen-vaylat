@@ -130,8 +130,8 @@ const PublishedMap = () => {
                     });
                 }
 
-                if (data.getAnnouncements) {
-                    channel.getAnnouncements(function (data) {
+                if (data.getSelectedAnnouncements) {
+                    channel.getSelectedAnnouncements(function (data) {
                         store.dispatch(
                             setActiveAnnouncements(getActiveAnnouncements(data))
                         );
