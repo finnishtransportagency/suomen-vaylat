@@ -220,6 +220,8 @@
       "0": "The application is the responsibility of the Finnish Transport Infrastructure Agency and it is supplied by Sitowise Oy.",
       "1": "Send your feedback to",
       "2": "suomenvaylat@vayla.fi",
+      "3": "You can give feedback regarding roads, rail network and waterways at",
+      "4": "https://liikenne.palautevayla.fi/feedback",
       "emailSubject": "Feedback on Suomen Väylät"
     },
     "appInfoLinks": {
