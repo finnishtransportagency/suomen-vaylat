@@ -17,6 +17,7 @@ import Layer from './Layer';
 import { Switch } from './Layer';
 import { updateLayers } from '../../../utils/rpcUtil';
 import { useSelector } from 'react-redux';
+import { createEmitAndSemanticDiagnosticsBuilderProgram } from 'typescript';
 
 const listVariants = {
   visible: {
@@ -124,7 +125,28 @@ const StyledFilterButton = styled.div`
   };
 `;
 
-const SavedLayer = () => {
+const StyledButtonContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  gap: 30px;
+`;
+
+const StyledSaveButton = styled.div`
+  width: 78px;
+  height: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 30px;
+  background-color: ${props => props.isOpen ? "#004477" : props.theme.colors.mainColor1};
+  cursor: pointer;
+  font-size: 13px;
+  color: #fff;
+`;
+
+const SavedLayer = (isSelected) => {
   const { isSavedLayer } = useAppSelector(state => state.ui)
   
   const customLayers = localStorage.getItem("checkedLayers");
@@ -133,8 +155,13 @@ const SavedLayer = () => {
   if (isSavedLayer) {
     return (
       <div>
+      <StyledButtonContainer>
+        <StyledSaveButton>
+        {strings.layerlist.customLayerInfo.editLayers}
+        </StyledSaveButton>
+      </StyledButtonContainer>
         {parsedLayers && parsedLayers.map((layer) => (
-          <Layer layer={layer} key={layer.id} />
+          <Layer layer={layer} key={layer.id} isSelected={isSelected} />
         ))}
       </div>
     );

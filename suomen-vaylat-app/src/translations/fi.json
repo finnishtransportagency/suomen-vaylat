@@ -371,8 +371,9 @@
       "modalTitle": "Luo oma suodatin",
       "closeInfo": "Sulje ohje",
       "infoContent": "MUOKATTAVA Omalla suodattimella voidaan tallentaa valittuja tasoja selaimen välimuistiin. Tallennetut tasot ovat näkyvissä Karttatasojen Kaikki tasot välilehdessä sillä laitteella ja selaimessa, jossa näkymä tai geometria on tallennettu. Listasta voi säädellä valittujen tasojen näkyvyyttä kartalla. Tallennuksen voi poistaa Poista tasot-painikkeesta.",
-      "saveLayers": "Tallenna",
-      "removeLayers":"Poista tasot"
+      "saveLayers": "Valmis",
+      "removeLayers":"Tyhjennä",
+      "editLayers": "Muokkaa"
     }
   },
   "downloadLink": {
@@ -410,7 +411,7 @@
       "title": "Vesiväylätiedot",
       "description": "Aineisto kattaa Väyläviraston vastuulla olevat vesiväylät ja kanavat. Niiden ylläpidossa ja kehittämisessä otetaan huomioon niin kauppamerenkulun kuin muunkin vesiliikenteen tarpeet."
     }
-  },
+  },   
   "themelayerlist": {
     "readMore": "Lue lisää",
     "readLess": "Vähemmän",
