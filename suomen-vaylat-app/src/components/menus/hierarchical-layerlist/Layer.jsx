@@ -132,6 +132,15 @@ export const Layer = ({ layer, theme }) => {
         selectedTheme
     } = useSelector(state => state.rpc);
 
+    const isLayerSelected = () => {
+        const storedLayers = localStorage.getItem("checkedLayers");
+        if (storedLayers) {
+          const parsedLayers = JSON.parse(storedLayers);
+          return parsedLayers.some((storedLayer) => storedLayer.id === layer.id);
+        }
+        return false;
+      };
+
     const handleLayerVisibility = (channel, layer) => {
       store.dispatch(setMapLayerVisibility(layer));
       updateLayers(store, channel);
@@ -220,12 +229,14 @@ export const Layer = ({ layer, theme }) => {
                     action={handleCheckboxChange}
                     layer={layer} // Pass the group information to the Checkbox component
                     isChecked={isChecked}
+                    disabled={isLayerSelected()}
                 />
                     ) : (
                 <Switch
                     action={() => handleLayerVisibility(channel, layer)}
                     isSelected={layer.visible}
                     layer={layer}
+                    disabled={isLayerSelected()}
                 />
                     )}
             </StyledLayerContainer>

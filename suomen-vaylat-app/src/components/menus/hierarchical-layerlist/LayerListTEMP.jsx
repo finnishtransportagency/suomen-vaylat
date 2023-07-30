@@ -14,10 +14,7 @@ import ReactTooltip from 'react-tooltip';
 import { isMobile, theme } from '../../../theme/theme';
 import { setIsCustomFilterOpen, setIsSavedLayer } from '../../../state/slices/uiSlice';
 import Layer from './Layer';
-import { Switch } from './Layer';
-import { updateLayers } from '../../../utils/rpcUtil';
-import { useSelector } from 'react-redux';
-import { createEmitAndSemanticDiagnosticsBuilderProgram } from 'typescript';
+import { CustomLayerModal } from './CustomLayerModal';
 
 const listVariants = {
   visible: {
@@ -148,15 +145,29 @@ const StyledSaveButton = styled.div`
 
 const SavedLayer = (isSelected) => {
   const { isSavedLayer } = useAppSelector(state => state.ui)
+  const [isCustomOpen, setIsCustomOpen] = useState(false);
   
   const customLayers = localStorage.getItem("checkedLayers");
   const parsedLayers = JSON.parse(customLayers);
 
+  const customFilterToggle = () => {
+    if (isCustomOpen === true) {
+      // Dispatch the action to store the selected layers in the Redux state
+      const selectedLayers = parsedLayers || []; // If parsedLayers is null, set an empty array
+      store.dispatch(setIsSavedLayer(selectedLayers));
+      store.dispatch(setIsCustomFilterOpen(true));
+    } else {
+      console.error();
+    }
+  };
   if (isSavedLayer) {
     return (
       <div>
       <StyledButtonContainer>
-        <StyledSaveButton>
+        <StyledSaveButton onClick={() => {
+            setIsCustomOpen(true);
+            customFilterToggle();
+          }}>
         {strings.layerlist.customLayerInfo.editLayers}
         </StyledSaveButton>
       </StyledButtonContainer>
