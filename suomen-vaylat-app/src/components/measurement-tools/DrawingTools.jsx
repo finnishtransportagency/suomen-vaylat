@@ -264,7 +264,6 @@ export const DrawingTools = ({isOpen}) => {
             store.dispatch(removeMarkerRequest({markerId: marker.markerId}));
             store.dispatch(removeFromDrawToolMarkers(marker.markerId));
         });
-        store.dispatch(setIsDrawingToolsOpen(!isDrawingToolsOpen));
     };
 
     const markerShapes = [
