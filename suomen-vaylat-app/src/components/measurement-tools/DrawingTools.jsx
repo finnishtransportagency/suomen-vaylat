@@ -200,7 +200,6 @@ export const DrawingTools = ({isOpen}) => {
 
     const resetTools = () => {
         store.dispatch(setActiveTool(null));
-        console.log("is called");
         setLabel('');
     }
 
