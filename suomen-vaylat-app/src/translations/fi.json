@@ -98,7 +98,8 @@
       "title": "Tallennetut geometriat (Poissa käytöstä)",
       "description": "Omat tallennetut geometriat",
       "disabled": "Väliaikaisesti poissa käytöstä"
-    }
+    },
+    "openGoogleStreetView": "Avaa Google Street View"
   },
   "vkm": {
     "locationInfo": "Sijaintitiedot",
