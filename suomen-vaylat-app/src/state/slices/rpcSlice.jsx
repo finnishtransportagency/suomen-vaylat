@@ -57,6 +57,7 @@ const initialState = {
         selectedLayers: [],
         zoom: null,
     },
+    test: null,
 };
 
 export const rpcSlice = createSlice({
@@ -669,17 +670,25 @@ export const rpcSlice = createSlice({
          */
          addFeaturesToGFILocations: (state, action) => {
             const layerId = action.payload.layerId;
-            const geojson = action.payload.geojson;
-            const nextStartIndex = action.payload.nextStartIndex;
+            const content = action.payload.content;
             const moreFeatures = action.payload.moreFeatures;
+
             const selectedGFI = action.payload.selectedGFI;
-            state.gfiLocations.forEach((l) => {
-                if (l.layerId === layerId && l.content && l.content.features) {
-                    l.content.features.push(...geojson.features);
-                }
-            });
+            if (state.gfiLocations[selectedGFI].layerId === layerId && state.gfiLocations[selectedGFI].content) {
+                state.gfiLocations[selectedGFI].content.forEach(cont => {
+                    if (cont.id === content.id) {
+                        cont.geojson.features.push(...content.geojson.features);
+                        cont.moreFeatures = content.moreFeatures;
+                        
+                        if (content.nextStartIndex) {
+                            cont.nextStartIndex = content.nextStartIndex;
+                        } else {
+                            cont.nextStartIndex = null;
+                        }
+                    }
+                })
+            }
             state.gfiLocations[selectedGFI].moreFeatures = moreFeatures;
-            state.gfiLocations[selectedGFI].nextStartIndex = nextStartIndex;
         },
 
         /**
