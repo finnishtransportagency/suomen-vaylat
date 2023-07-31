@@ -34,7 +34,7 @@ import {
     setVKMData
 } from '../../state/slices/rpcSlice';
 
-import { setMinimizeGfi, setSelectedGfiTool, setGeoJsonArray, setHasToastBeenShown, setActiveSelectionTool, setWarning, setIsGfiToolsOpen } from '../../state/slices/uiSlice';
+import { setMinimizeGfi, setSelectedGfiTool, setGeoJsonArray, setHasToastBeenShown, setActiveSelectionTool, setWarning } from '../../state/slices/uiSlice';
 
 import SVLoader from '../loader/SvLoader';
 import { DRAWING_TIP_LOCALSTORAGE } from '../../utils/constants';
@@ -117,10 +117,6 @@ const StyledSubtitle = styled.div`
     padding: 10px 0px 10px 5px;
     font-size: 16px;
     font-weight: bold;
-`;
-
-const StyledSavedViewContainer = styled(motion.div)`
-    display: flex;
 `;
 
 const StyledSavedView = styled.div`

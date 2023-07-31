@@ -12,7 +12,6 @@ import {
     faStreetView
 } from '@fortawesome/free-solid-svg-icons';
 import proj4 from 'proj4';
-import defs from 'proj4js-definitions';
 
 import ReactTooltip from 'react-tooltip';
 
@@ -23,7 +22,7 @@ import strings from '../../translations';
 import { useAppSelector } from '../../state/hooks';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { FreeMode, Controller } from 'swiper';
-import { setIsSaveViewOpen, setMinimizeGfi, setSavedTabIndex, setActiveSelectionTool, setWarning } from '../../state/slices/uiSlice';
+import { setMinimizeGfi, setActiveSelectionTool, setWarning } from '../../state/slices/uiSlice';
 import { resetGFILocations, addFeaturesToGFILocations} from '../../state/slices/rpcSlice';
 
 import { FormattedGFI } from './FormattedGFI';
@@ -41,7 +40,6 @@ import { SortingMode, PagingPosition } from 'ka-table/enums';
 // Max amount of features that wont trigger react-data-table-component
 const GFI_MAX_LENGTH = 5;
 const KUNTA_IMAGE_URL = 'https://www.kuntaliitto.fi/sites/default/files/styles/narrow_320_x_600_/public/media/profile_pictures/';
-const SAVED_GEOMETRY_LAYER_ID = 'saved-geometry-layer';
 
 const StyledGfiContainer = styled.div`
     position: relative;
@@ -373,36 +371,6 @@ const StyledGfiBackdrop = styled(motion.div)`
     cursor: pointer;
 `;
 
-const addFeaturesToMapParams =
-    {
-        clearPrevious: true,
-        layerId: SAVED_GEOMETRY_LAYER_ID,
-        centerTo: true,
-        featureStyle: {
-            fill: {
-                color: 'rgba(10, 140, 247, 0.3)',
-            },
-            stroke: {
-                color: 'rgba(10, 140, 247, 0.3)',
-                width: 5,
-                lineDash: 'solid',
-                lineCap: 'round',
-                lineJoin: 'round',
-                area: {
-                    color: 'rgba(100, 255, 95, 0.7)',
-                    width: 8,
-                    lineJoin: 'round',
-                },
-            },
-            image: {
-                shape: 5,
-                size: 3,
-                fill: {
-                    color: 'rgba(100, 255, 95, 0.7)',
-                },
-            },
-        },
-    };
 const StyledLoadingOverlay = styled(motion.div)`
     z-index: 2;
     position: fixed;
@@ -435,9 +403,6 @@ export const GFIPopup = ({ handleGfiDownload }) => {
     const LAYER_ID = 'gfi-result-layer';
     const { store } = useContext(ReactReduxContext);
     const { channel, allLayers, gfiLocations, vkmData, pointInfoImageError, setPointInfoImageError, gfiCroppingArea, selectedLayers, pointInfo } = useAppSelector(state => state.rpc);
-    const { geoJsonArray } = useAppSelector(
-        (state) => state.ui
-    );
 
     const [point, setPoint] = useState(null);
     const { activeSelectionTool } = useAppSelector((state) => state.ui);
@@ -857,7 +822,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
                                     <p>Lon: <span style={{fontWeight: '600'}}>{vkmData.coordinates.x}</span></p>
                                     <a 
                                         data-tip data-for={'streetview'} 
-                                        href={"http://maps.google.com/maps?q=&layer=c&cbll=" + point} target="_blank"
+                                        href={"http://maps.google.com/maps?q=&layer=c&cbll=" + point} rel="noreferrer" target="_blank"
                                     >
                                         <FontAwesomeIcon icon={faStreetView} />
                                         <ReactTooltip backgroundColor={theme.colors.mainColor1} textColor={theme.colors.mainWhite} disable={isMobile} id="streetview" place="bottom" type='dark' effect="float">
