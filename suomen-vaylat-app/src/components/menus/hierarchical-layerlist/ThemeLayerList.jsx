@@ -534,7 +534,7 @@ export const ThemeDesc = ({
                 </div> 
                 :
                 <StyledSubText>
-                    {truncatedString(strings.themelayerlist.themeGroups[themeGroupIndex].themes[theme.id].description, 135, strings.themelayerlist.readMore)}
+                    {truncatedString(strings.themelayerlist.themeGroups[themeGroupIndex].themes[theme.id].description, 70, strings.themelayerlist.readMore)}
                 </StyledSubText>
             }
         </StyledThemeContent>
