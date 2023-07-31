@@ -15,7 +15,7 @@ import svLinestring from '../../theme/icons/drawtools_linestring.svg';
 import { useSelector } from 'react-redux';
 
 import strings from '../../translations';
-import { setActiveTool, setHasToastBeenShown, setIsSaveViewOpen, setSavedTabIndex , setGeoJsonArray, addToGeoJsonArray, setSelectedMarker, setMarkerLabel, removeFromDrawToolMarkers} from '../../state/slices/uiSlice';
+import { setIsDrawingToolsOpen, setActiveTool, setHasToastBeenShown, setIsSaveViewOpen, setSavedTabIndex , setGeoJsonArray, addToGeoJsonArray, setSelectedMarker, setMarkerLabel, removeFromDrawToolMarkers} from '../../state/slices/uiSlice';
 import { removeMarkerRequest } from '../../state/slices/rpcSlice';
 
 import { theme } from '../../theme/theme';
@@ -172,7 +172,7 @@ const variants = {
 export const DrawingTools = ({isOpen}) => {
     const { store } = useContext(ReactReduxContext);
     const { channel } = useSelector(state => state.rpc);
-    const { activeTool, geoJsonArray, hasToastBeenShown, selectedMarker, drawToolMarkers} = useSelector(state => state.ui);
+    const { isDrawingToolsOpen, activeTool, geoJsonArray, hasToastBeenShown, selectedMarker, drawToolMarkers} = useSelector(state => state.ui);
     const [ showToast, setShowToast] = useState(JSON.parse(localStorage.getItem(DRAWING_TIP_LOCALSTORAGE)));
     const [label, setLabel] = useState('');
 
@@ -200,6 +200,7 @@ export const DrawingTools = ({isOpen}) => {
 
     const resetTools = () => {
         store.dispatch(setActiveTool(null));
+        console.log("is called");
         setLabel('');
     }
 
@@ -254,15 +255,16 @@ export const DrawingTools = ({isOpen}) => {
         // stop the drawing tool
         channel && channel.postRequest('DrawTools.StopDrawingRequest', [activeTool]);
         store.dispatch(setGeoJsonArray([]));
-        store.dispatch(removeFromDrawToolMarkers());
+        store.dispatch(removeFromDrawToolMarkers(false));
         // remove geometries off the map
-        channel && channel.postRequest('DrawTools.StopDrawingRequest', [true]);
+        channel && channel.postRequest('DrawTools.StopDrawingRequest', []);
         store.dispatch(setActiveTool(null));
         // remove all markers made with drawing tools
         drawToolMarkers.forEach(marker => {
             store.dispatch(removeMarkerRequest({markerId: marker.markerId}));
             store.dispatch(removeFromDrawToolMarkers(marker.markerId));
         });
+        store.dispatch(setIsDrawingToolsOpen(!isDrawingToolsOpen));
     };
 
     const markerShapes = [
