@@ -747,15 +747,18 @@ export const GFIPopup = ({ handleGfiDownload }) => {
 
     useEffect(() => {
         vkmData? setIsVKMInfoOpen(true) : setIsVKMInfoOpen(false);
-        
-        // our projection EPSG:3067
-        var oskariProjection = '+proj=utm +zone=35 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs +type=crs';
-        // Google maps EPSG:4326
-        var mapsProjection = "+proj=longlat +datum=WGS84 +no_defs +type=crs";
-        const pointCoords = proj4(oskariProjection,mapsProjection,[pointInfo.lon, pointInfo.lat]);
-        // our coords are flipped compared to google so we need to flip them back for the right point
-        setPoint([pointCoords[1],pointCoords[0]].toString());
-     }, [vkmData]);
+
+        if (pointInfo.lon && pointInfo.lat) {
+            // our projection EPSG:3067
+            var oskariProjection = '+proj=utm +zone=35 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs +type=crs';
+            // Google maps EPSG:4326
+            var mapsProjection = "+proj=longlat +datum=WGS84 +no_defs +type=crs";
+            console.log(pointInfo)
+            const pointCoords = proj4(oskariProjection,mapsProjection,[pointInfo.lon, pointInfo.lat]);
+            // our coords are flipped compared to google so we need to flip them back for the right point
+            setPoint([pointCoords[1],pointCoords[0]].toString());
+        }
+     }, [vkmData, pointInfo]);
 
     console.log(gfiLocations)
 
