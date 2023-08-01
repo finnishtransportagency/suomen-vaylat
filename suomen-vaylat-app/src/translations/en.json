@@ -98,7 +98,8 @@
       "title": "Saved geometries (Disabled)",
       "description": "My saved geometries",
       "disabled": "Temporarily unavailable"
-    }
+    },
+    "openGoogleStreetView": "Open in Google Street View"
   },
   "vkm": {
     "locationInfo": "Location info",
@@ -134,6 +135,7 @@
   "multipleLayersFetchWarning": "You are about to fetch data from 10 or more maplayers, it might affect the performance of the service.",
   "bodySizeWarning": "Geometry is too big, do you want to simplify it?",
   "bodySizeWarningTemporary": "Geometry is too big and data cannot be fetched right now.",
+  "noGfiLocationsWarning": "No results found, try another geometry.",
   "appGuide": {
     "title": "User Guide",
     "modalContent": {
@@ -249,7 +251,7 @@
       "municipalityLink": "https://www.kuntaliitto.fi",
       "landSurvey": "The National Land Survey of Finland’s background maps and property identifiers and boundaries are open data and available under licence conditions:",
       "landSurveyLink": "https://www.maanmittauslaitos.fi/avoindata-lisenssi-cc40",
-      "roadmaps": "Roadmaps (AT and GT) are CGI Suomi Oy datasets under license no. S10325081",
+      "roadmaps": "Roadmaps (AT and GT) are CGI Suomi Oy datasets under license no. S10422112",
       "syke": "Areas with local detailed plans are open data from the Finnish Environment Institute (SYKE). The license for SYKE’s open datasets is Creative Commons Attribution 4.0"
     },
     "termsOfUse": {
@@ -1150,36 +1152,6 @@
       "linkedin": "Share on LinkedIn",
       "whatsapp": "Share on WhatsApp",
       "telegram": "Share on Telegram"
-    }
-  },
-  "themeLinks": {
-    "timeTravelFinland": {
-      "title": "Aikamatkalla Suomessa",
-      "url": "https://vayla.fi/vaylista/aineistot/kartat/aikamatkalla-suomessa#.XOOasBFlJNs"
-    },
-    "bikeNetwork": {
-      "title": "Valtakunnallinen ja seudullinen pyörätieverkko",
-      "url": "https://paikkatieto.vaylapilvi.fi/arcgis/apps/webappviewer/index.html?id=aa98d035ba254776895d092a3d1c3a9f"
-    },
-    "baltice": {
-      "title": "Baltice",
-      "url": "https://baltice.org/map/"
-    },
-    "safetyDeviceFaults": {
-      "title": "Kauppamerenkulun väylien turvalaiteviat",
-      "url": "https://vayla.fi/vaylista/vesivaylat/turvalaitteet/turvalaiteviat#.XLWWTegzYuU"
-    },
-    "seaWarnings": {
-      "title": "Varoituksia merenkulkijoille",
-      "url": "https://vayla.fi/palveluntuottajat/ammattimerenkulku/meriliikenteen-hairiot/varoituksia-merenkulkijoille"
-    },
-    "restrictedAreas": {
-      "title": "Vesiliikenteen kielto- ja rajoitusalueet",
-      "url": "https://vayla.fi/vaylista/vesivaylat/rajoitusalueet"
-    },
-    "pookiFeedback": {
-      "title": "Vesiväylien palautteet",
-      "url": "https://extranet.vayla.fi/pooki_www/palaute"
     }
   }
 }

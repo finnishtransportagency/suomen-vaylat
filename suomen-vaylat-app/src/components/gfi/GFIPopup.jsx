@@ -9,7 +9,12 @@ import {
     faAngleRight,
     faLayerGroup,
     faMapMarkerAlt,
+    faStreetView
 } from '@fortawesome/free-solid-svg-icons';
+import proj4 from 'proj4';
+
+import ReactTooltip from 'react-tooltip';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ReactReduxContext } from 'react-redux';
 import styled from 'styled-components';
@@ -17,8 +22,7 @@ import strings from '../../translations';
 import { useAppSelector } from '../../state/hooks';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { FreeMode, Controller } from 'swiper';
-import { isMobile } from '../../theme/theme';
-import { setIsSaveViewOpen, setMinimizeGfi, setSavedTabIndex, setActiveSelectionTool, setWarning } from '../../state/slices/uiSlice';
+import { setMinimizeGfi, setActiveSelectionTool, setWarning } from '../../state/slices/uiSlice';
 import { resetGFILocations, addFeaturesToGFILocations} from '../../state/slices/rpcSlice';
 
 import { FormattedGFI } from './FormattedGFI';
@@ -28,13 +32,14 @@ import GfiDownloadMenu from './GfiDownloadMenu';
 import CircleButton from '../circle-button/CircleButton';
 import SVLoader from '../loader/SvLoader';
 import { isValidUrl } from '../../utils/validUrlUtil';
+import { theme, isMobile } from '../../theme/theme';
+
 
 import { SortingMode, PagingPosition } from 'ka-table/enums';
 
 // Max amount of features that wont trigger react-data-table-component
 const GFI_MAX_LENGTH = 5;
 const KUNTA_IMAGE_URL = 'https://www.kuntaliitto.fi/sites/default/files/styles/narrow_320_x_600_/public/media/profile_pictures/';
-const SAVED_GEOMETRY_LAYER_ID = 'saved-geometry-layer';
 
 const StyledGfiContainer = styled.div`
     position: relative;
@@ -366,36 +371,6 @@ const StyledGfiBackdrop = styled(motion.div)`
     cursor: pointer;
 `;
 
-const addFeaturesToMapParams =
-    {
-        clearPrevious: true,
-        layerId: SAVED_GEOMETRY_LAYER_ID,
-        centerTo: true,
-        featureStyle: {
-            fill: {
-                color: 'rgba(10, 140, 247, 0.3)',
-            },
-            stroke: {
-                color: 'rgba(10, 140, 247, 0.3)',
-                width: 5,
-                lineDash: 'solid',
-                lineCap: 'round',
-                lineJoin: 'round',
-                area: {
-                    color: 'rgba(100, 255, 95, 0.7)',
-                    width: 8,
-                    lineJoin: 'round',
-                },
-            },
-            image: {
-                shape: 5,
-                size: 3,
-                fill: {
-                    color: 'rgba(100, 255, 95, 0.7)',
-                },
-            },
-        },
-    };
 const StyledLoadingOverlay = styled(motion.div)`
     z-index: 2;
     position: fixed;
@@ -427,12 +402,10 @@ const StyledLoaderWrapper = styled.div`
 export const GFIPopup = ({ handleGfiDownload }) => {
     const LAYER_ID = 'gfi-result-layer';
     const { store } = useContext(ReactReduxContext);
-    const { channel, allLayers, gfiLocations, vkmData, pointInfoImageError, setPointInfoImageError, gfiCroppingArea, selectedLayers } = useAppSelector(state => state.rpc);
-    const { geoJsonArray } = useAppSelector(
-        (state) => state.ui
-    );
-    const { activeSelectionTool } = useAppSelector((state) => state.ui);
+    const { channel, allLayers, gfiLocations, vkmData, pointInfoImageError, setPointInfoImageError, gfiCroppingArea, selectedLayers, pointInfo } = useAppSelector(state => state.rpc);
 
+    const [point, setPoint] = useState(null);
+    const { activeSelectionTool } = useAppSelector((state) => state.ui);
     const [selectedTab, setSelectedTab] = useState(0);
     const [tabsContent, setTabsContent] = useState([]);
     const [geoJsonToShow, setGeoJsonToShow] = useState(null);
@@ -451,8 +424,9 @@ export const GFIPopup = ({ handleGfiDownload }) => {
     }, [isGfiToolsOpen, activeSelectionTool]);
 
     useEffect(() => {
+        
         const mapResults = gfiLocations.map((location) => {
-            location?.content?.features?.length > GFI_MAX_LENGTH && setIsDataTable(true);
+            location.content && location?.content[0]?.features?.length > GFI_MAX_LENGTH && setIsDataTable(true);
             const layers = allLayers.filter(
                 (layer) => layer.id === location.layerId
             );
@@ -480,6 +454,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
         });
 
         setTabsContent(mapResults);
+        
     }, [allLayers, gfiLocations, isDataTable, selectedTab]);
 
     useEffect(() => {
@@ -539,26 +514,8 @@ export const GFIPopup = ({ handleGfiDownload }) => {
         setIsVKMInfoOpen(!isVKMInfoOpen);
     };
 
-    const handleAddGeometry = () => {/* FIX ME when multiple geometry selecting is available
-        geoJsonArray.features && geoJsonArray.features.forEach(feature => {
-            channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', [
-                feature.geojson,
-                addFeaturesToMapParams
-            ]);
-        })
-
-        geoJsonArray.geojson &&
-        channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', [
-            geoJsonArray.geojson ,
-            addFeaturesToMapParams
-        ]); */
-        store.dispatch(setMinimizeGfi(true));
-        store.dispatch(setIsSaveViewOpen(true));
-        store.dispatch(setSavedTabIndex(1));
-    };
-
     const tablePropsInit = (data) => {
-        const properties = data && data.content && data.content.features && data.content.features[0].properties;
+        const properties = data && data.content && data.content[0] && data.content[0].geojson && data.content[0].geojson.features && data.content[0].geojson.features[0].properties;
 
         var hightPriorityColumns = properties?._orderHigh && JSON.parse(properties?._orderHigh);
         var lowPriorityColumns = properties?._order && JSON.parse(properties?._order);
@@ -571,14 +528,18 @@ export const GFIPopup = ({ handleGfiDownload }) => {
             }
         });
 
-        var cells = data && data.content && data.content.features && data.content.features.map(feature => {
+        var cells = [];
+        data && data?.content?.forEach(cont => {
+            var featureCells = cont.geojson.features && cont.geojson.features.map(feature => {
                 var cell = {...feature.properties};
                 cell['id'] = feature.id;
                 cell.hasOwnProperty('UID') && delete cell['UID'];
                 cell.hasOwnProperty('_orderHigh') && delete cell['_orderHigh'];
                 cell.hasOwnProperty('_order') && delete cell['_order'];
                 return cell;
-        });
+            });
+            cells.push(...featureCells);
+        })
 
         const tablePropsInit = {
             columns: columnsArray,
@@ -658,9 +619,10 @@ export const GFIPopup = ({ handleGfiDownload }) => {
             );
 
         if (geoJsonToShow !== null) {
-            channel &&
+            geoJsonToShow.forEach(geoJson => {
+                channel &&
                 channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', [
-                    geoJsonToShow,
+                    geoJson.geojson,
                     {
                         layerId: LAYER_ID,
                         cursor: 'pointer',
@@ -714,6 +676,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
                         },
                     },
                 ]);
+            })
         }
     }, [channel, geoJsonToShow]);
 
@@ -738,41 +701,44 @@ export const GFIPopup = ({ handleGfiDownload }) => {
         gfiInputEl.current.swiper.slideTo(selectedTab);
     }, [selectedTab]);
 
-    const getMoreFeatures = (nextStartIndex, layerId) => {
+    const getMoreFeatures = (content, layerId) => {
         setIsLoading(true);
-        channel.getFeaturesByGeoJSON && channel.getFeaturesByGeoJSON([gfiCroppingArea, nextStartIndex, [layerId]], function (data) {
-        data.gfi.forEach(
-            (gfi) => {
-                store.dispatch(addFeaturesToGFILocations({
-                    layerId: gfi.layerId,
-                    geojson: gfi.geojson,
-                    moreFeatures: gfi.moreFeatures,
-                    nextStartIndex: gfi.nextStartIndex,
-                    selectedGFI: selectedTab
-                }));
-            }
-        );
-        setIsLoading(false);
-    }, () => {
-        store.dispatch(setWarning({
-            title: strings.bodySizeWarning,
-            subtitle: null,
-            cancel: {
-                text: strings.general.cancel,
-                action: () => {
+
+        for (var i = 0; i < content.length; i++) {
+            content[i].moreFeatures && channel.getFeaturesByGeoJSON && channel.getFeaturesByGeoJSON([[gfiCroppingArea[i]], content[i].nextStartIndex, [layerId]], function (data) {
+
+                    data.gfi.forEach(
+                        (gfi) => {
+                            gfi.content.length > 0 && store.dispatch(addFeaturesToGFILocations({
+                                layerId: gfi.layerId,
+                                content: gfi.content[0],
+                                moreFeatures: gfi.content[0].moreFeatures,
+                                selectedGFI: selectedTab,
+                            }));
+                        }
+                    );
                     setIsLoading(false);
-                    store.dispatch(setWarning(null))
-                }
-            },
-            confirm: {
-                text: strings.general.continue,
-                action: () => {
-                    simplifyGeometry();
-                    store.dispatch(setWarning(null));
-                }
-            },
-        }))
-        });
+                }, () => {
+                    store.dispatch(setWarning({
+                        title: strings.bodySizeWarning,
+                        subtitle: null,
+                        cancel: {
+                            text: strings.general.cancel,
+                            action: () => {
+                                setIsLoading(false);
+                                store.dispatch(setWarning(null))
+                            }
+                        },
+                        confirm: {
+                            text: strings.general.continue,
+                            action: () => {
+                                simplifyGeometry();
+                                store.dispatch(setWarning(null));
+                            }
+                        },
+                    }))
+                });
+        }
     };
 
     const simplifyGeometry = () => {
@@ -781,7 +747,17 @@ export const GFIPopup = ({ handleGfiDownload }) => {
 
     useEffect(() => {
         vkmData? setIsVKMInfoOpen(true) : setIsVKMInfoOpen(false);
-    }, [vkmData]);
+        
+        // our projection EPSG:3067
+        var oskariProjection = '+proj=utm +zone=35 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs +type=crs';
+        // Google maps EPSG:4326
+        var mapsProjection = "+proj=longlat +datum=WGS84 +no_defs +type=crs";
+        const pointCoords = proj4(oskariProjection,mapsProjection,[pointInfo.lon, pointInfo.lat]);
+        // our coords are flipped compared to google so we need to flip them back for the right point
+        setPoint([pointCoords[1],pointCoords[0]].toString());
+     }, [vkmData]);
+
+    console.log(gfiLocations)
 
     return (
         <StyledGfiContainer>
@@ -844,6 +820,15 @@ export const GFIPopup = ({ handleGfiDownload }) => {
                                     <p style={{fontWeight: '600'}}>{vkmData.vkm.Katunimi}</p>
                                     <p>Lat: <span style={{fontWeight: '600'}}>{vkmData.coordinates.y}</span></p>
                                     <p>Lon: <span style={{fontWeight: '600'}}>{vkmData.coordinates.x}</span></p>
+                                    <a 
+                                        data-tip data-for={'streetview'} 
+                                        href={"http://maps.google.com/maps?q=&layer=c&cbll=" + point} rel="noreferrer" target="_blank"
+                                    >
+                                        <FontAwesomeIcon icon={faStreetView} />
+                                        <ReactTooltip backgroundColor={theme.colors.mainColor1} textColor={theme.colors.mainWhite} disable={isMobile} id="streetview" place="bottom" type='dark' effect="float">
+                                            <span>{strings.gfi.openGoogleStreetView}</span>
+                                        </ReactTooltip>
+                                    </a>
                                 </div>
                             </StyledCoordinatesWrapper>
                         }
@@ -980,6 +965,14 @@ export const GFIPopup = ({ handleGfiDownload }) => {
                         </StyledInfoTextContainer>
                     </StyledNoGfisContainer>
                 )}
+                {gfiLocations.content && gfiLocations.content[0].noContent && (
+                    <StyledNoGfisContainer>
+                        <StyledSubtitle>Ei tuloksia</StyledSubtitle>
+                        <StyledInfoTextContainer>
+                            <p>Ei tuloksia rajauksella, valitse uusi rajaus tai uusia tasoja</p>
+                        </StyledInfoTextContainer>
+                    </StyledNoGfisContainer>
+                )}
                 <StyledSwiper
                     ref={gfiInputEl}
                     id={'gfi-swiper'}
@@ -994,23 +987,23 @@ export const GFIPopup = ({ handleGfiDownload }) => {
                             const layers = allLayers.filter(layer => layer.id === location.layerId);
                             const title = layers.length > 0 && layers[0].name;
                             const tableProps = tablePropsInit(location);
+
+                            let featuresLength = 0;
+                            let totalFeatures = 0;
+                            location?.content?.forEach(cont => {
+                                featuresLength += cont.geojson.features.length;
+                                totalFeatures += cont.geojson.totalFeatures;
+                            })
+
                             if (location.type === 'geojson') {
                                 return (
                                     <SwiperSlide
                                         id={
                                             'gfi_tab_content_' +
-                                            +location.x +
-                                            '_' +
-                                            location.y +
-                                            '_' +
                                             location.layerId
                                         }
                                         key={
                                             'gfi_tab_content_' +
-                                            location.x +
-                                            '_' +
-                                            location.y +
-                                            '_' +
                                             location.layerId
                                         }
                                     >
@@ -1019,18 +1012,21 @@ export const GFIPopup = ({ handleGfiDownload }) => {
                                             title={title}
                                             tablePropsInit={tableProps}
                                         />
-                                        {location.content.features && <StyledFeaturesInfo>
-                                        <StyledFeatureAmount>
-                                            {`${strings.gfi.featureAmount} : `}
-                                            <span>{location.content.features.length} {location.moreFeatures && ` / ${location.content.totalFeatures}`}</span>
-                                        </StyledFeatureAmount>
-                                        {location.moreFeatures &&
-                                            <StyledShowMoreButtonWrapper>
-                                                <StyledShowMoreButton onClick={() => getMoreFeatures(location.nextStartIndex, location.layerId)}>
-                                                {strings.gfi.getMoreFeatures}</StyledShowMoreButton>
-                                            </StyledShowMoreButtonWrapper>
+                                        {location?.content?.some(content => content.geojson.features) &&
+
+                                            <StyledFeaturesInfo>
+                                                <StyledFeatureAmount>
+                                                    {`${strings.gfi.featureAmount} : `}
+                                                    <span>{featuresLength} {location.moreFeatures && ` / ${totalFeatures}`}</span>
+                                                </StyledFeatureAmount>
+                                                {location.moreFeatures &&
+                                                    <StyledShowMoreButtonWrapper>
+                                                        <StyledShowMoreButton onClick={() => getMoreFeatures(location.content, location.layerId)}>
+                                                        {strings.gfi.getMoreFeatures}</StyledShowMoreButton>
+                                                    </StyledShowMoreButtonWrapper>
+                                                }
+                                            </StyledFeaturesInfo>
                                         }
-                                    </StyledFeaturesInfo>}
                                     </SwiperSlide>
                                 );
                             }
@@ -1038,17 +1034,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
                     })}
                 </StyledSwiper>
             </StyledTabContent>
-            <StyledButtonsContainer> 
-                {/* FIX ME when multiple geometry selecting is available
-                    Object.keys(geoJsonArray).length > 0 &&
-                    <>
-                        <CircleButton
-                            text={strings.savedContent.saveGeometry.saveGeometry}
-                            tooltipDirection={'bottom'}
-                            clickAction={handleAddGeometry}
-                        />
-                    </> */
-                }
+            <StyledButtonsContainer>
                 {
                     vkmData &&
                     <CircleButton
@@ -1065,6 +1051,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
                     toggleState={isGfiToolsOpen}
                     tooltipDirection={'bottom'}
                     clickAction={handleGfiToolsMenuWithConfirmDialog}
+                    disabled={!selectedLayers.some((layer) =>  layer.groups?.every((group)=> group !==1))}
                 />
                 <CircleButton
                     icon={faFileDownload}

@@ -482,9 +482,10 @@ const Search = () => {
         toast.dismiss('searchToast');
     }
 
-    const vkmKeys = ['vali', 'tie', 'osa', 'etaisyys', 'track'];
 
     useEffect(() => {
+        const vkmKeys = ['vali', 'tie', 'osa', 'etaisyys', 'track'];
+
         if(geoJsonArray.length > 0 && isSearchOpen && !hasToastBeenShown.includes('searchTipToast') && showToast !== false) {
             geoJsonArray.forEach(geoj => {
                 if(vkmKeys.some(vkmStyle => vkmStyle === geoj.style)) {

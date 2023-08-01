@@ -98,7 +98,8 @@
       "title": "Tallennetut geometriat (Poissa käytöstä)",
       "description": "Omat tallennetut geometriat",
       "disabled": "Väliaikaisesti poissa käytöstä"
-    }
+    },
+    "openGoogleStreetView": "Avaa Google Street View"
   },
   "vkm": {
     "locationInfo": "Sijaintitiedot",
@@ -134,6 +135,7 @@
   "multipleLayersFetchWarning": "Olet hakemassa aineistoa 10 tai useammalta karttatasolta ja se saattaa vaikuttaa palvelun suorituskykyyn.",
   "bodySizeWarning": "Rajausgeometria on liian suuri, yksinkertaistetaanko geometria?",
   "bodySizeWarningTemporary": "Rajausgeometria on liian suuri eikä hakua voida tehdä.",
+  "noGfiLocationsWarning": "Tuloksia ei löytynyt, valitse uusi rajaus.",
   "appGuide": {
     "title": "Käyttöohje",
     "modalContent": {
@@ -249,7 +251,7 @@
       "municipalityLink": "https://www.kuntaliitto.fi",
       "landSurvey": "Maanmittauslaitoksen taustakartat sekä kiinteistötunnukset ja -rajat ovat avointa dataa ja käytössä lisenssiehdoilla:",
       "landSurveyLink": "https://www.maanmittauslaitos.fi/avoindata-lisenssi-cc40",
-      "roadmaps": "Tiekartat (AT ja GT) ovat CGI Suomi Oy aineistoja käytössä käyttöoikeusluvalla n:o S10325081",
+      "roadmaps": "Tiekartat (AT ja GT) ovat CGI Suomi Oy aineistoja käytössä käyttöoikeusluvalla n:o S10422112",
       "syke": "Asemakaavoitetut aluejaot ovat Suomen Ympäristökeskus (SYKE) avointa dataa. SYKEn avointen aineistojen käyttölupa on Creative Commons Nimeä 4.0"
     },
     "termsOfUse": {

@@ -1,4 +1,3 @@
-import styled from 'styled-components';
 import strings from '../../translations';
 import { StyledDropDown, StyledDropdownContentItem, StyledSearchIcon, StyledDropdownContentItemTitle, StyledHideSearchResultsButton } from './Search';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

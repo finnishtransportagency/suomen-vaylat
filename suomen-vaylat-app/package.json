@@ -27,6 +27,7 @@
     "oskari-rpc": "^2.1.0",
     "preval.macro": "^5.0.0",
     "process": "^0.11.10",
+    "proj4": "^2.9.0",
     "react": "^17.0.2",
     "react-bootstrap": "^2.0.0-rc.0",
     "react-copy-to-clipboard": "^5.0.4",

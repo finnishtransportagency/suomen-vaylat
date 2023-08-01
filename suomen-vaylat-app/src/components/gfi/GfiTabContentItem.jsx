@@ -98,17 +98,17 @@ const StyledGfiTabContentItemSubCollapseContent = styled(motion.div)`
 
 const GfiTabContentItem = ({
     index,
+    contentIndex,
     title,
     data,
     selectFeature,
     deSelectFeature
 }) => {
-    const [isExpanded, setIsExpanded] = useState(index === 0);
+    const [isExpanded, setIsExpanded] = useState(contentIndex === 0 && index === 0);
     const [isHovered, setHovered] = useState(false);
     const [isSubExpanded, setIsSubExpanded] = useState(false);
     const [orderHigh, setOrderHigh] = useState(null);
     const [orderLow, setOrderLow] = useState(null);
-
     const { channel } = useAppSelector(state => state.rpc);
 
     useEffect(() => {
