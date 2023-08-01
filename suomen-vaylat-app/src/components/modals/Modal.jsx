@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect } from 'react';
+import { useState, useContext } from 'react';
 import { cloneElement } from 'react';
 import styled from 'styled-components';
 import { motion, AnimatePresence, useDragControls } from 'framer-motion';

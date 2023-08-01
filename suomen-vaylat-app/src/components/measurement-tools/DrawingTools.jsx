@@ -15,7 +15,7 @@ import svLinestring from '../../theme/icons/drawtools_linestring.svg';
 import { useSelector } from 'react-redux';
 
 import strings from '../../translations';
-import { setActiveTool, setHasToastBeenShown, setIsSaveViewOpen, setSavedTabIndex , setGeoJsonArray, addToGeoJsonArray, setSelectedMarker, setMarkerLabel, removeFromDrawToolMarkers} from '../../state/slices/uiSlice';
+import { setActiveTool, setHasToastBeenShown, setIsSaveViewOpen, setSavedTabIndex , setGeoJsonArray, setSelectedMarker, setMarkerLabel, removeFromDrawToolMarkers} from '../../state/slices/uiSlice';
 import { removeMarkerRequest } from '../../state/slices/rpcSlice';
 
 import { theme } from '../../theme/theme';
