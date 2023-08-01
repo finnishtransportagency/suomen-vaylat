@@ -254,9 +254,9 @@ export const DrawingTools = ({isOpen}) => {
         // stop the drawing tool
         channel && channel.postRequest('DrawTools.StopDrawingRequest', [activeTool]);
         store.dispatch(setGeoJsonArray([]));
-        store.dispatch(removeFromDrawToolMarkers());
+        store.dispatch(removeFromDrawToolMarkers(true));
         // remove geometries off the map
-        channel && channel.postRequest('DrawTools.StopDrawingRequest', [true]);
+        channel && channel.postRequest('DrawTools.StopDrawingRequest', []);
         store.dispatch(setActiveTool(null));
         // remove all markers made with drawing tools
         drawToolMarkers.forEach(marker => {
