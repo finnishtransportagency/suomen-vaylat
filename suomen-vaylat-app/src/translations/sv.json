@@ -119,7 +119,8 @@
     "failedDownloads": "Felaktiga nedladdningar",
     "errorOccuredDuringDownloadProcessing": "Ett fel uppstod under bearbetningen av paketet",
     "noWebSocketSupport": "Din webbläsare stöder inte nedladdningar. Du kan prova på nytt med en annan webbläsare eller uppdatera din nuvarande webbläsare.",
-    "downloadFailure": "Något gick fel vid nedladdningen, försök igen."
+    "downloadFailure": "Något gick fel vid nedladdningen, försök igen.",
+    "downloadsInfo":"En del av materialet kan laddas ner i hela Finland-området från nedladdningsknappen i kartnivåmeny bredvid datanamnet. Om nedladdningsknappen saknas måste du välja ett objekt på kartan för att ladda ner materialet."
   },
   "general": {
     "close": "Stänga",

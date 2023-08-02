@@ -17,7 +17,7 @@ import ModalListItem from '../modals/ModalListItem';
 import SvLoader from '../loader/SvLoader';
 
 const StyledDownloadsContainer = styled.div`
-    width: 350px;
+    width:100%;
     padding: 16px;
     display: flex;
     flex-direction: column;
@@ -45,8 +45,8 @@ const StyledDescription = styled.p`
 `;
 
 const StyledInfo = styled.p`
+    display: inline-block;
     word-break: break-word;
-    display: flex;
     justify-content: flex-start;
     color: ${props => props.theme.colors.mainColor1};
     font-size: 14px;
@@ -168,10 +168,9 @@ const GFIDownload = () => {
 
     return (
         <>
+    
         <StyledDownloadsContainer>
-
         <StyledInfo>{strings.downloads.downloadsInfo}</StyledInfo>
-
         <Button
             onClick={handleGfiLocationsOpen}
         >
