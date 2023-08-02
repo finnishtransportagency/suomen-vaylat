@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import store from '../../../state/store';
 import { faFilter, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -14,7 +14,8 @@ import ReactTooltip from 'react-tooltip';
 import { isMobile, theme } from '../../../theme/theme';
 import { setIsCustomFilterOpen, setIsSavedLayer } from '../../../state/slices/uiSlice';
 import Layer from './Layer';
-import { CustomLayerModal } from './CustomLayerModal';
+import { Switch } from './Layer';
+import { useSelector } from 'react-redux';
 
 const listVariants = {
   visible: {
@@ -26,6 +27,46 @@ const listVariants = {
       opacity: 0
   },
 };
+
+const StyledRowContainer = styled.div`
+  display: flex;
+  align-items: center; // Align items vertically in the center
+  justify-content: space-between; // Distribute space between items evenly
+`;
+
+const StyledSwitchContainer = styled.div`
+    position: relative;
+    width: 32px; // add a specific width
+    height: 16px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    background-color: ${props => props.checked ? "#8DCB6D" : "#AAAAAA"};
+    cursor: pointer;
+    margin-right: 16px;
+`;
+
+const StyledButtonContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  padding: 5px;
+  align-items: center;
+  margin-top: 20px;
+  gap: 30px;
+`;
+
+const StyledSaveButton = styled.div`
+  width: 78px;
+  height: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 30px;
+  background-color: ${props => props.isOpen ? "#004477" : props.theme.colors.mainColor1};
+  cursor: pointer;
+  font-size: 13px;
+  color: #fff;
+`;
 
 const StyledFilterList = styled(motion.div)`
     height: ${props => props.isOpen ? "auto" : 0};
@@ -122,57 +163,89 @@ const StyledFilterButton = styled.div`
   };
 `;
 
-const StyledButtonContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 20px;
-  gap: 30px;
-`;
-
-const StyledSaveButton = styled.div`
-  width: 78px;
-  height: 32px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 30px;
-  background-color: ${props => props.isOpen ? "#004477" : props.theme.colors.mainColor1};
-  cursor: pointer;
-  font-size: 13px;
-  color: #fff;
-`;
-
-const SavedLayer = (isSelected) => {
-  const { isSavedLayer } = useAppSelector(state => state.ui)
+const SavedLayer = ({isSelected, action}) => {
+  const { isSavedLayer } = useAppSelector(state => state.ui);
+  const { triggerUpdate } = useAppSelector(state => state.ui);
   const [isCustomOpen, setIsCustomOpen] = useState(false);
-  
+  const [savedLayers, setSavedLayers] = useState([]);
+  const { channel } = useSelector(state => state.rpc);
+
   const customLayers = localStorage.getItem("checkedLayers");
   const parsedLayers = JSON.parse(customLayers);
+  console.log(parsedLayers); 
 
   const customFilterToggle = () => {
-    if (isCustomOpen === true) {
+    if (isCustomOpen) {
       // Dispatch the action to store the selected layers in the Redux state
-      const selectedLayers = parsedLayers || []; // If parsedLayers is null, set an empty array
+      const selectedLayers = parsedLayers || [];
       store.dispatch(setIsSavedLayer(selectedLayers));
       store.dispatch(setIsCustomFilterOpen(true));
     } else {
-      console.error();
+      console.error("customFilterToggle - isCustomOpen is false");
     }
   };
-  if (isSavedLayer) {
+
+    // Load saved layers from local storage when component mounts
+    useEffect(() => {
+      const handleStorageChange = () => {
+        const loadedLayers = localStorage.getItem("checkedLayers");
+        if (loadedLayers) {
+          setSavedLayers(JSON.parse(loadedLayers));
+        }
+      };
+    
+      // Listen to storage event across tabs
+      window.addEventListener('storage', handleStorageChange);
+    
+      // Initial load
+      handleStorageChange();
+    
+      // Cleanup
+      return () => {
+        window.removeEventListener('storage', handleStorageChange);
+      };
+    }, [triggerUpdate]);
+  
+    // Function to toggle visibility of a layer with a specific ID
+    const toggleLayerVisibility = (id) => {
+
+      const newLayers = savedLayers.map(layer => 
+        layer.id === id ? { ...layer, visible: !layer.visible } : layer
+      );
+      
+      setSavedLayers(newLayers);
+      
+      localStorage.setItem("checkedLayers", JSON.stringify(newLayers));
+    
+      // Call MapLayerVisibilityRequest for the modified layer
+      const modifiedLayer = newLayers.find(layer => layer.id === id);
+      try {
+        channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [id, modifiedLayer.visible]);
+      } catch (error) {
+        console.error('Error posting MapLayerVisibilityRequest:', error);
+      }
+    };
+  
+  if (isSavedLayer === true) {
     return (
       <div>
-      <StyledButtonContainer>
-        <StyledSaveButton onClick={() => {
+        <StyledButtonContainer>
+          <StyledSaveButton onClick={() => {
             setIsCustomOpen(true);
             customFilterToggle();
           }}>
-        {strings.layerlist.customLayerInfo.editLayers}
-        </StyledSaveButton>
-      </StyledButtonContainer>
+            {strings.layerlist.customLayerInfo.editLayers}
+          </StyledSaveButton>
+        </StyledButtonContainer>
         {parsedLayers && parsedLayers.map((layer) => (
-          <Layer layer={layer} key={layer.id} isSelected={isSelected} />
+          <StyledRowContainer key={layer.id}>
+            <Layer layer={layer} isSelected={isSelected} />
+            <StyledSwitchContainer isSelected={isSelected} onClick={action}>
+            <Switch action={() => {
+              toggleLayerVisibility(layer.id);
+            }} isSelected={layer.visible} />
+            </StyledSwitchContainer>
+          </StyledRowContainer>
         ))}
       </div>
     );
@@ -193,7 +266,9 @@ const LayerListTEMP = ({
   const { isSavedLayer } = useAppSelector((state) => state.ui);
 
   const selectedLayers = localStorage.getItem("checkedLayers");
-  const parsedLayers = selectedLayers ? JSON.parse(selectedLayers) : [];
+  const parsedLayers = useMemo(() => {
+    return selectedLayers ? JSON.parse(selectedLayers) : [];
+  }, [selectedLayers]);
 
   const shouldShowSavedLayer = parsedLayers.length > 0;
   const shouldShowLayerList = !shouldShowSavedLayer;
@@ -204,11 +279,21 @@ const LayerListTEMP = ({
     store.dispatch(setTags([]));
   };
 
+  // Re-renders layers saved to local storage if page is refreshed
+  useEffect(() => {
+    const selectedLayers = localStorage.getItem("checkedLayers");
+    const parsedLayers = selectedLayers ? JSON.parse(selectedLayers) : [];
+    if (parsedLayers.length > 0) {
+      store.dispatch(setIsSavedLayer(true));
+    }
+  }, []);
+
   const customFilterToggle = () => {
-    if (isCustomOpen === true) {
+    if (isCustomOpen) {
+      store.dispatch(setIsSavedLayer(selectedLayers));
       store.dispatch(setIsCustomFilterOpen(true));
     } else {
-      console.error();
+      console.error("customFilterToggle - isCustomOpen is false");
     }
   };
 

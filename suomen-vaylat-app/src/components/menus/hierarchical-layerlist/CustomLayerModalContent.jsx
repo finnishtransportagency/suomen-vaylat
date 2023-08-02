@@ -3,7 +3,7 @@ import strings from "../../../translations";
 import styled from "styled-components";
 import LayerGroup from './LayerGroup';
 import store from '../../../state/store';
-import { setIsSavedLayer } from '../../../state/slices/uiSlice';
+import { setIsSavedLayer, incrementTriggerUpdate } from '../../../state/slices/uiSlice';
 
 const StyledContent = styled.div`
   display: flex;
@@ -176,6 +176,7 @@ export const CustomLayerModalContent = () => {
 
   const saveLayers = () => {
     store.dispatch(setIsSavedLayer(true));
+    store.dispatch(incrementTriggerUpdate());
   };
 
   const removeLayers =() => {
@@ -193,16 +194,16 @@ export const CustomLayerModalContent = () => {
       ))}
     </StyledContent>
     <StyledButtonContainer>
+    <StyledRemoveButton onClick={() => {
+        removeLayers();
+      }}>
+        {strings.layerlist.customLayerInfo.removeLayers}
+      </StyledRemoveButton>
       <StyledSaveButton onClick={() => {
         saveLayers();
       }}>
         {strings.layerlist.customLayerInfo.saveLayers}
       </StyledSaveButton>
-      <StyledRemoveButton onClick={() => {
-        removeLayers();
-      }}>
-        {strings.layerlist.customLayerInfo.removeLayers}
-      </StyledRemoveButton>
     </StyledButtonContainer>
 
         <StyledLayerList>

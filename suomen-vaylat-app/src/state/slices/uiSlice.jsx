@@ -44,6 +44,7 @@ const initialState = {
     drawToolMarkers: [],
     markerLabel: '',
     activeGeometries: [],
+    triggerUpdate: 0,
 };
 
 export const uiSlice = createSlice({
@@ -207,6 +208,9 @@ export const uiSlice = createSlice({
         setIsGfiToolsOpen: (state, action) => {
             state.isGfiToolsOpen = action.payload;
         },
+        incrementTriggerUpdate: state => {
+            state.triggerUpdate += 1; // increment value
+          },
 
     },
 });
@@ -252,7 +256,8 @@ export const {
     setMarkerLabel,
     addToActiveGeometries,
     removeActiveGeometry,
-    setIsGfiToolsOpen
+    setIsGfiToolsOpen,
+    incrementTriggerUpdate
 } = uiSlice.actions;
 
 export default uiSlice.reducer;
