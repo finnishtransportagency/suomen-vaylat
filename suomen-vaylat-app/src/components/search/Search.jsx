@@ -197,6 +197,7 @@ const Search = () => {
     const [isSearchMethodSelectorOpen, setIsSearchMethodSelectorOpen] =
         useState(false);
     const [searchType, setSearchType] = useState('address');
+    const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
   
     const { isSearchOpen, geoJsonArray, hasToastBeenShown } = useAppSelector((state) => state.ui);
     const { channel, allLayers } = useAppSelector((state) => state.rpc);
@@ -233,6 +234,10 @@ const Search = () => {
         setSearchValue(value);
         setLastSearchValue(value);
         setSearchResults(null);
+    };
+
+    const toggleSearchModal = () => {
+        setIsSearchModalOpen(prevState => !prevState);
     };
 
     const handleMetadataSearch = (value) => {
@@ -286,6 +291,7 @@ const Search = () => {
                     setSearchValue={setSearchValue}
                     setIsSearching={setIsSearching}
                     handleAddressSearch={handleAddressSearch}
+                    toggleSearchModal={toggleSearchModal}
                 />
             ),
             visible: true,
@@ -577,6 +583,7 @@ const Search = () => {
                         )}
                     </StyledLeftContentWrapper>
 
+                {isSearchModalOpen && ( 
                     <SearchModal 
                         searchValue={searchValue}
                         setSearchValue={setSearchValue}
@@ -596,7 +603,10 @@ const Search = () => {
                         searchType={searchType}
                         setSearchType={setSearchType}
                         handleSeach={handleSeach}
-                    />              
+                        isOpen={isSearchModalOpen} 
+                        toggleModal={toggleSearchModal} 
+                    />            
+                )}  
                 </StyledSearchWrapper>
              
         
