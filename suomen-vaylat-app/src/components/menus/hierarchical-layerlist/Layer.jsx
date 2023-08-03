@@ -140,6 +140,15 @@ export const Layer = ({ layer, theme }) => {
           isSaved = JSON.parse(checkedLayers).findIndex(savedLayer => savedLayer.id === layer.id) !== -1;
         }
 
+        useEffect(() => {
+          let isSaved = false;
+          const checkedLayers = localStorage.getItem('checkedLayers');
+          if (checkedLayers) {
+            isSaved = JSON.parse(checkedLayers).findIndex(savedLayer => savedLayer.id === layer.id) !== -1;
+          }
+          setIsChecked(isSaved);
+        }, [layer.id]);
+
 
     const isLayerSelected = () => {
         const storedLayers = localStorage.getItem("checkedLayers");

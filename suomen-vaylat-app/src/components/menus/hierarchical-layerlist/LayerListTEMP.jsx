@@ -172,18 +172,6 @@ const SavedLayer = ({isSelected, action}) => {
 
   const customLayers = localStorage.getItem("checkedLayers");
   const parsedLayers = JSON.parse(customLayers);
-  console.log(parsedLayers); 
-
-  const customFilterToggle = () => {
-    if (isCustomOpen) {
-      // Dispatch the action to store the selected layers in the Redux state
-      const selectedLayers = parsedLayers || [];
-      store.dispatch(setIsSavedLayer(selectedLayers));
-      store.dispatch(setIsCustomFilterOpen(true));
-    } else {
-      console.error("customFilterToggle - isCustomOpen is false");
-    }
-  };
 
     // Load saved layers from local storage when component mounts
     useEffect(() => {
@@ -232,7 +220,13 @@ const SavedLayer = ({isSelected, action}) => {
         <StyledButtonContainer>
           <StyledSaveButton onClick={() => {
             setIsCustomOpen(true);
-            customFilterToggle();
+            if (!isCustomOpen) { // it was previously false
+              const selectedLayers = parsedLayers || [];
+              store.dispatch(setIsSavedLayer(selectedLayers));
+              store.dispatch(setIsCustomFilterOpen(true));
+            } else {
+              console.error("customFilterToggle - isCustomOpen is false");
+            }
           }}>
             {strings.layerlist.customLayerInfo.editLayers}
           </StyledSaveButton>
@@ -338,10 +332,15 @@ const LayerListTEMP = ({
         <StyledFiltersContainer>
         <StyledCustomFilterButton
           onClick={() => {
-            setIsCustomOpen(true);
-            customFilterToggle();
-          }}
-        >
+              setIsCustomOpen(true);
+              if (!isCustomOpen) { // it was previously false
+                store.dispatch(setIsSavedLayer(selectedLayers));
+                store.dispatch(setIsCustomFilterOpen(true));
+              } else {
+                console.error("customFilterToggle - isCustomOpen is false");
+              }
+            }}
+          >
           {strings.layerlist.layerlistLabels.createCustomFilter}
         </StyledCustomFilterButton>
           {tags?.map((tag, index) => {

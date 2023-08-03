@@ -1,3 +1,4 @@
+import { useState, useEffect} from 'react';
 import { useAppSelector } from '../../../state/hooks';
 import strings from "../../../translations";
 import styled from "styled-components";
@@ -79,6 +80,18 @@ export const CustomLayerList = ({
   layers,
   recurse = false,
 }) => {
+
+    const [savedLayers, setSavedLayers] = useState([]);
+
+  // Load saved layers from local storage when component mounts
+  useEffect(() => {
+    const loadedLayers = localStorage.getItem("checkedLayers");
+    if (loadedLayers) {
+      setSavedLayers(JSON.parse(loadedLayers));
+    } else {
+      setSavedLayers([]);
+    }
+  }, []);
 
 
   // const slicedGroups = groups ? groups.slice() : [];

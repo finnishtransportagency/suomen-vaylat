@@ -370,7 +370,7 @@
     "customLayerInfo": {
       "modalTitle": "Luo oma suodatin",
       "closeInfo": "Sulje ohje",
-      "infoContent": "Omalla suodattimella voidaan tallentaa valittuja tasoja selaimen välimuistiin. Tallennetut tasot ovat näkyvissä Karttatasojen Kaikki tasot välilehdessä sillä laitteella ja selaimessa, jossa karttatasot on tallennettu. Listasta voi säädellä valittujen tasojen näkyvyyttä kartalla. Kun oelt valinnut halutut tasot, paina Valmis-painiketta. Tallennuksen voi poistaa Tyhjennä-painikkeesta.",
+      "infoContent": "Omalla suodattimella voidaan tallentaa valittuja tasoja selaimen välimuistiin. Tallennetut tasot ovat näkyvissä karttatasojen Kaikki tasot-välilehdessä sillä laitteella ja selaimessa, jossa karttatasot on tallennettu. Listasta voi säädellä valittujen tasojen näkyvyyttä kartalla. Kun oelt valinnut halutut tasot, paina Valmis-painiketta. Tallennuksen voi poistaa Tyhjennä-painikkeesta.",
       "saveLayers": "Valmis",
       "removeLayers":"Tyhjennä",
       "editLayers": "Muokkaa"
