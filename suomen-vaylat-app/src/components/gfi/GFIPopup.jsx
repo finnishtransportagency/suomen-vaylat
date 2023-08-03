@@ -765,8 +765,6 @@ export const GFIPopup = ({
         }
      }, [vkmData, pointInfo]);
 
-    console.log(gfiLocations)
-
     return (
         <StyledGfiContainer>
             <AnimatePresence>

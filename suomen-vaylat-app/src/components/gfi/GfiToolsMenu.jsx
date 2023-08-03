@@ -677,15 +677,17 @@ const GfiToolsMenu = ({
     // }, [filters, chosenQueryGeometry])
 
     const fetchContentFromChannel = (fetchableLayers, numberedLoaderEnables, featureArray) => {
+        
         console.info("featurearray", featureArray)
-        featureArray?.forEach(async feature => {
-            store.dispatch(setGFICroppingArea(feature));
+        //featureArray?.forEach(async feature => {
+            store.dispatch(setGFICroppingArea(featureArray));
             
             let index = 0;
             try {
                 for(const layer of fetchableLayers) {  
                     const activeFilters = filters && filters?.length > 0 ?  filters?.filter(filter => (filter.layer ===  layer.name)) : [];
-                    await fetchFeaturesSynchronous(feature, layer, featureArray, numberedLoaderEnables, activeFilters)
+                    //console.info("feature" ,feature)
+                    fetchFeaturesSynchronous(featureArray, layer, featureArray, numberedLoaderEnables, activeFilters)
                     .then(
                         index++
                     ).catch((error) => {
@@ -734,17 +736,17 @@ const GfiToolsMenu = ({
                 setIsGfiLoading(false)
             }
             
-        }); 
+        //}); 
     }
 
 
         useEffect(() => {
-            console.info("bilbobaggins", filters, chosenQueryGeometry)
-        if (filters && chosenQueryGeometry){
-            handleGfiToolReset();
-            const loader = initNumberedLoader(selectedLayers);
-            fetchContentFromChannel(loader.fetchableLayers, loader.numberedLoaderEnabled, chosenQueryGeometry)
-        }
+            console.info("tässä useeffect jossa pitäs ladata uudelleen haetut kohteet, jos näkymä auki", filters, chosenQueryGeometry)
+        //if (filters && chosenQueryGeometry){
+        //    handleGfiToolReset();
+        //    const loader = initNumberedLoader(selectedLayers);
+        //    fetchContentFromChannel(loader.fetchableLayers, loader.numberedLoaderEnabled, chosenQueryGeometry)
+        //}
 
      }, [filters, chosenQueryGeometry]);
 
@@ -806,12 +808,13 @@ const GfiToolsMenu = ({
                         handleGfiToolsMenu();}
     }, [channel, filters])
 
-    const fetchFeaturesSynchronous = (feature, layer, featureArray, numberedLoaderEnables, activeFilters) => {
+    const fetchFeaturesSynchronous = (features, layer, featureArray, numberedLoaderEnables, activeFilters) => {
         return new Promise(function(resolve, reject) {
         // executor (the producing code, "singer")
         channel.getFeaturesByGeoJSON(
-            [feature, 0, [layer.id], activeFilters],
+            [features, 0, [layer.id], activeFilters],
             (gfiData) => {
+                console.info("datski", gfiData)
                 store.dispatch(setVKMData(null));
                 channel.postRequest('MapModulePlugin.RemoveMarkersRequest', ["VKM_MARKER"]);
                     gfiData?.gfi?.forEach((gfi) => {
@@ -832,6 +835,7 @@ const GfiToolsMenu = ({
                     resolve("ok");                  
                 },
                 function (error) {
+                    console.info("erska", error)
                     if (numberedLoaderEnables)
                     setNumberedLoader(prevState => {
                         return {current: prevState.current + 1, total: prevState.total, enabled: prevState.enabled}
