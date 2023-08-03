@@ -59,7 +59,7 @@ const StyledSearchInputContainerIcon = styled.div`
 
 const StyledSearchInput = styled.input`
     font-size: 16px;
-    height: 100%;
+    height: 260px;
    // border-radius: 5px;
     border: none;
     &::-webkit-search-cancel-button {

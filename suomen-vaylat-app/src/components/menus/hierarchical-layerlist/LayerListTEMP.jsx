@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { faFilter } from '@fortawesome/free-solid-svg-icons';
+import { faAngleUp, faAngleDown } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styled from 'styled-components';
 import { useAppSelector } from '../../../state/hooks';
@@ -76,7 +76,7 @@ const StyledDeleteAllSelectedFilters = styled.div`
 
 const StyledSearchAndFilter = styled.div`
     display: flex;
-    align-items: flex-start;
+    align-items: column;
     margin-left: 8px;
     margin-right: 8px;
     margin-bottom: 16px;
@@ -88,14 +88,18 @@ const StyledFilterButton = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 50%;
-  background-color: ${props => props.isOpen ? "#004477" : props.theme.colors.mainColor1};
+  padding: 0 10px;
+  border-radius: 1px;
+  color: ${props => props.isOpen ? "#004477" : props.theme.colors.mainColor1};
   margin-right: 4px;
   margin-top: 4px;
   cursor: pointer;
   svg {
-    font-size: 12px;
-    color: ${props => props.theme.colors.mainWhite};
+    font-size: 16px;
+    margin: 10px;
+    position: relative;
+    top: 2px;
+    color: ${props => props.theme.colors.mainColor1};
   };
 `;
 
@@ -120,17 +124,20 @@ const LayerListTEMP = ({
           <span>{strings.tooltips.layerlist.filter}</span>
       </ReactTooltip>
        <StyledListSubtitle>{strings.layerlist.layerlistLabels.filterOrSearchLayers}</StyledListSubtitle>
-        <StyledSearchAndFilter>
-            <StyledFilterButton
-              data-tip data-for='layerlist-filter'
-              onClick={() => setIsOpen(!isOpen)}
-              isOpen={isOpen}
-            >
-                <FontAwesomeIcon
-                    icon={faFilter}
-                />
-            </StyledFilterButton>
+       <StyledSearchAndFilter>
           <LayerSearch layers={layers}/>
+          <StyledFilterButton
+            data-tip data-for='layerlist-filter'
+            onClick={() =>{ 
+              console.log("Button clicked");
+            setIsOpen(!isOpen)}}
+            isOpen={isOpen}
+          >
+          <FontAwesomeIcon
+            icon={isOpen ? faAngleUp : faAngleDown}
+          />
+            {strings.layerlist.layerlistLabels.filterByType}
+          </StyledFilterButton>
         </StyledSearchAndFilter>
         <StyledFilterList
           initial="hidden"
