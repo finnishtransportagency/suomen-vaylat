@@ -218,8 +218,10 @@
     },
     "contactInfoFeedback": {
       "0": "Trafikledsverket ansvarar för applikationen som levereras av Sitowise Oy.",
-      "1": "Respons kan skickas till adressen",
+      "1": "Respons på Suomen Väylät karttjänsten kan skickas till adressen",
       "2": "suomenvaylat@vayla.fi",
+      "3": "Respons som gäller landsvägar, järnvägar och farleder kan ges på",
+      "4": "https://liikenne.palautevayla.fi/feedback",
       "emailSubject": "Respons om Finlands Trafikleder"
     },
     "appInfoLinks": {
