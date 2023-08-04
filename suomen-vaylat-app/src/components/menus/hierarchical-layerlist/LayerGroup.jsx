@@ -24,7 +24,6 @@ import {
     setWarning,
 } from "../../../state/slices/uiSlice";
 import strings from "../../../translations";
-import { CustomLayerList } from './CustomLayerModalContent';
 import { useAppSelector } from '../../../state/hooks';
 
 const masterHeaderIconVariants = {

@@ -1,12 +1,12 @@
 import { useState, useEffect, useMemo } from 'react';
 import store from '../../../state/store';
-import { faFilter, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faFilter } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styled from 'styled-components';
 import { useAppSelector } from '../../../state/hooks';
 import { motion } from "framer-motion";
 import strings from '../../../translations';
-import { setMapLayerVisibility, setTagLayers, setTags } from '../../../state/slices/rpcSlice';
+import { setTagLayers, setTags } from '../../../state/slices/rpcSlice';
 import Filter from './Filter';
 import LayerList from './LayerList';
 import LayerSearch from './LayerSearch';
