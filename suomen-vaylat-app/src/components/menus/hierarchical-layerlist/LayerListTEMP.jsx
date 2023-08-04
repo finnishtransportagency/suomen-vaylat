@@ -220,13 +220,9 @@ const SavedLayer = ({isSelected, action}) => {
         <StyledButtonContainer>
           <StyledSaveButton onClick={() => {
             setIsCustomOpen(true);
-            if (!isCustomOpen) { // it was previously false
-              const selectedLayers = parsedLayers || [];
-              store.dispatch(setIsSavedLayer(selectedLayers));
-              store.dispatch(setIsCustomFilterOpen(true));
-            } else {
-              console.error("customFilterToggle - isCustomOpen is false");
-            }
+            const selectedLayers = parsedLayers || [];
+            store.dispatch(setIsSavedLayer(selectedLayers));
+            store.dispatch(setIsCustomFilterOpen(true));
           }}>
             {strings.layerlist.customLayerInfo.editLayers}
           </StyledSaveButton>
@@ -282,15 +278,6 @@ const LayerListTEMP = ({
     }
   }, []);
 
-  const customFilterToggle = () => {
-    if (isCustomOpen) {
-      store.dispatch(setIsSavedLayer(selectedLayers));
-      store.dispatch(setIsCustomFilterOpen(true));
-    } else {
-      console.error("customFilterToggle - isCustomOpen is false");
-    }
-  };
-
   return (
     <>
       <ReactTooltip
@@ -333,12 +320,9 @@ const LayerListTEMP = ({
         <StyledCustomFilterButton
           onClick={() => {
               setIsCustomOpen(true);
-              if (!isCustomOpen) { // it was previously false
-                store.dispatch(setIsSavedLayer(selectedLayers));
-                store.dispatch(setIsCustomFilterOpen(true));
-              } else {
-                console.error("customFilterToggle - isCustomOpen is false");
-              }
+              const selectedLayers = parsedLayers || [];
+              store.dispatch(setIsSavedLayer(selectedLayers));
+              store.dispatch(setIsCustomFilterOpen(true));
             }}
           >
           {strings.layerlist.layerlistLabels.createCustomFilter}

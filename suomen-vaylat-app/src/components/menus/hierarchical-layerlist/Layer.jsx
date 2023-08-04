@@ -113,7 +113,6 @@ export const Switch = ({ action,layer,isSelected }) => {
         isSelected={isSelected}
         onClick={() => {
             action(layer);
-            console.log("clicked");
         }}>
             <StyledSwitchButton isSelected={isSelected}/>
         </StyledSwitchContainer>
