@@ -76,7 +76,7 @@ const StyledDeleteAllSelectedFilters = styled.div`
 
 const StyledSearchAndFilter = styled.div`
     display: flex;
-    align-items: column;
+    flex-direction: column;
     margin-left: 8px;
     margin-right: 8px;
     margin-bottom: 16px;
@@ -91,16 +91,20 @@ const StyledFilterButton = styled.div`
   padding: 0 10px;
   border-radius: 1px;
   color: ${props => props.isOpen ? "#004477" : props.theme.colors.mainColor1};
+  margin-left:70px;
   margin-right: 4px;
   margin-top: 4px;
   cursor: pointer;
   svg {
-    font-size: 16px;
-    margin: 10px;
+    font-size: 18px;
+    margin: 5px;
     position: relative;
     top: 2px;
     color: ${props => props.theme.colors.mainColor1};
   };
+  span {
+    white-space: nowrap;
+  }
 `;
 
 const LayerListTEMP = ({
@@ -127,16 +131,16 @@ const LayerListTEMP = ({
        <StyledSearchAndFilter>
           <LayerSearch layers={layers}/>
           <StyledFilterButton
-            data-tip data-for='layerlist-filter'
+            data-tip 
+            data-for='layerlist-filter'
             onClick={() =>{ 
-              console.log("Button clicked");
             setIsOpen(!isOpen)}}
             isOpen={isOpen}
           >
           <FontAwesomeIcon
             icon={isOpen ? faAngleUp : faAngleDown}
           />
-            {strings.layerlist.layerlistLabels.filterByType}
+            <span>{strings.layerlist.layerlistLabels.filterByType}</span>
           </StyledFilterButton>
         </StyledSearchAndFilter>
         <StyledFilterList
@@ -148,9 +152,6 @@ const LayerListTEMP = ({
             type: "tween"
         }}
         >
-          <StyledListSubtitle>
-            {strings.layerlist.layerlistLabels.filterByType}
-          </StyledListSubtitle>
           <StyledFiltersContainer>
             {tags?.map((tag, index) => {
               return(
