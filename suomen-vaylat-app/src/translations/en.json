@@ -120,7 +120,7 @@
     "errorOccuredDuringDownloadProcessing": "Error occurred during download processing",
     "noWebSocketSupport": "Your browser does not support downloads. You can try again using a different browser or by updating your current browser.",
     "downloadFailure": "Something went wrong. Please try again.",
-    "downloadsInfo": "Some of the datasets can be downloaded at the whole Finland area from the download button in the layer menu, next to the data name. If the download button is missing, downloading the material requires selecting an object on the map."
+    "downloadsInfo": "Some of the datasets can be downloaded from the whole area of Finland via the download button in the layer menu, next to the data name. If the download button is missing, downloading the material requires selecting an object on the map."
   },
   "general": {
     "close": "Close",
