@@ -120,7 +120,8 @@
     "errorOccuredDuringDownloadProcessing" : "Virhe tapahtui paketin prosessoinnin aikana",
     "noWebSocketSupport": "Selaimesi ei tue latauksia. Voit kokeilla uudelleen eri selaimella tai päivittämällä nykyisen selaimesi version.",
     "downloadFailure": "Latauksessa meni jokin pieleen, yritä uudelleen.",
-    "downloadsInfo": "Osa aineistoista on ladattavissa koko Suomen alueelta karttatasovalikon latauspainikkeesta, aineiston nimen vierestä. Mikäli latauspainike puuttuu, aineiston lataus edellyttää kohteen valintaa kartalta."
+    "downloadsInfo": "Osa aineistoista on ladattavissa koko Suomen alueelta karttatasovalikon latauspainikkeesta, aineiston nimen vierestä.",
+    "downloadsInfo2": "Mikäli latauspainike puuttuu, aineiston lataus edellyttää kohteen valintaa kartalta."
   },
   "general": {
     "close": "Sulje",

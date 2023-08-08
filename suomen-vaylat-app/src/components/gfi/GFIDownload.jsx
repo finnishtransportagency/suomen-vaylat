@@ -44,16 +44,6 @@ const StyledDescription = styled.p`
     margin: 0;
 `;
 
-const StyledInfo = styled.p`
-    display: inline-block;
-    word-break: break-word;
-    justify-content: flex-start;
-    color: ${props => props.theme.colors.mainColor1};
-    font-size: 14px;
-    font-weight: 300;
-    padding: 16px 0px 8px 0px;
-`;
-
 const StyledListItemTitleWrapper = styled.ul`
     margin: 0;
     li {
@@ -170,7 +160,8 @@ const GFIDownload = () => {
         <>
     
         <StyledDownloadsContainer>
-        <StyledInfo>{strings.downloads.downloadsInfo}</StyledInfo>
+        <StyledDescription>{strings.downloads.downloadsInfo}</StyledDescription>
+        <StyledDescription>{strings.downloads.downloadsInfo2}</StyledDescription>
         <Button
             onClick={handleGfiLocationsOpen}
         >
