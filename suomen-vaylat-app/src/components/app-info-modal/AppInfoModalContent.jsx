@@ -227,6 +227,7 @@ export const ContactAndFeedback = () => {
             {isMobile && <StyledHeading>{strings.appInfo.versionInfo.appContactAndFeedback}</StyledHeading>}
             <p>{contactInfoFeedback[0]}</p>
             <p>{contactInfoFeedback[1]} <StyledLink href={'mailto:' + contactInfoFeedback[2] + '?subject='+contactInfoFeedback.emailSubject}>{contactInfoFeedback[2]}</StyledLink></p>
+            <p>{contactInfoFeedback[3]} <StyledLink href={contactInfoFeedback[4]}>{contactInfoFeedback[4]}</StyledLink></p>
         </div>
     );
 };

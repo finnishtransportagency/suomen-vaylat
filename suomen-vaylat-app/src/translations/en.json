@@ -220,8 +220,10 @@
     },
     "contactInfoFeedback": {
       "0": "The application is the responsibility of the Finnish Transport Infrastructure Agency and it is supplied by Sitowise Oy.",
-      "1": "Send your feedback to",
+      "1": "Send your feedback on the Suomen Väylät map service to",
       "2": "suomenvaylat@vayla.fi",
+      "3": "Feedback regarding roads, railways and waterways can be given at",
+      "4": "https://liikenne.palautevayla.fi/feedback",
       "emailSubject": "Feedback on Suomen Väylät"
     },
     "appInfoLinks": {

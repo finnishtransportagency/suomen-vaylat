@@ -220,8 +220,10 @@
     },
     "contactInfoFeedback": {
       "0": "Sovelluksesta vastaa Väylävirasto ja sovelluksen toimittaa Sitowise Oy.",
-      "1": "Palautetta toivotaan lähetettävän osoitteeseen",
+      "1": "Palautetta Suomen Väylät -palvelusta toivotaan lähetettävän osoitteeseen",
       "2": "suomenvaylat@vayla.fi",
+      "3": "Palautetta maanteihin, rataverkkoon ja vesiväyliin liittyen voit antaa osoitteessa",
+      "4": "https://liikenne.palautevayla.fi/feedback",
       "emailSubject": "Suomen Väylät palaute"
     },
     "appInfoLinks": {
