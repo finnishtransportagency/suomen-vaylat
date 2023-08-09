@@ -6,7 +6,6 @@ const StyledModalWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  height: auto;
 `;
 
 const StyledModalContent = styled.div`
@@ -25,7 +24,6 @@ const StyledModalContent = styled.div`
 `;
 
 const StyledModalTitle = styled.h2`
-  margin-left: 10px;
   font-size: 24px;
   color: #333333;
 `;
@@ -38,7 +36,6 @@ const StyledModalBody = styled.div`
 export const CustomLayerModal = () => {
   return (
     <StyledModalWrapper>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
       <StyledModalContent>
         <StyledModalTitle>{strings.layerlist.customLayerInfo.modalTitle}</StyledModalTitle>
         <StyledModalBody>

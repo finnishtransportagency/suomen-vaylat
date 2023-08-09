@@ -6,23 +6,6 @@ import LayerGroup from './LayerGroup';
 import store from '../../../state/store';
 import { setIsSavedLayer, incrementTriggerUpdate } from '../../../state/slices/uiSlice';
 
-const StyledContent = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items:center;
-  width: 100%;
-  height: 100%;
-  min-width: 600px;
-  max-width: 600px;
-  padding: 20px;
-
-  @media (max-width: 1025px) {
-    margin-left: 5px;
-    min-width: 300px;
-    max-width: 450px;
-  }
-`;
-
 const StyledGuideContent = styled.div`
 `;
 
@@ -70,17 +53,19 @@ const StyledButtonContainer = styled.div`
 `;
 
 const StyledLayerList = styled.div`
-  max-height: 450px;
+  max-height: 520px;
   padding: 5px;
   margin: 5px;
   overflow: auto;
 
   @media (max-width: 1024px) {  // For devices larger than 480px but not desktop
-    padding: 5px 10px 70px 10px;
+    padding: 5px 10px 5px 10px;
+    height: 450px;
   }
 
   @media (max-width: 350px) { 
-    padding: 5px 10px 150px 10px;
+    padding: 5px 10px 55px 10px;
+    height: 450px;
   }
 `;
 
@@ -168,7 +153,6 @@ export const CustomLayerList = ({
                   })
                   }
               </StyledLayerList>
-
       </>
   );
 };
@@ -213,13 +197,11 @@ export const CustomLayerModalContent = () => {
 
   return (
     <>
-    <StyledContent>
       {modalContent.map((content) => (
         <div key={content.content}>
           {content.content}
         </div>
       ))}
-    </StyledContent>
     <StyledButtonContainer>
     <StyledRemoveButton onClick={() => {
         removeLayers();
