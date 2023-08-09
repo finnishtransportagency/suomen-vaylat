@@ -15,6 +15,12 @@ const StyledContent = styled.div`
   min-width: 600px;
   max-width: 600px;
   padding: 20px;
+
+  @media (max-width: 1025px) {
+    margin-left: 5px;
+    min-width: 300px;
+    max-width: 450px;
+  }
 `;
 
 const StyledGuideContent = styled.div`
@@ -65,9 +71,17 @@ const StyledButtonContainer = styled.div`
 
 const StyledLayerList = styled.div`
   max-height: 450px;
-  padding: 6px;
-  margin: 15px;
+  padding: 5px;
+  margin: 5px;
   overflow: auto;
+
+  @media (max-width: 1024px) {  // For devices larger than 480px but not desktop
+    padding: 5px 10px 70px 10px;
+  }
+
+  @media (max-width: 350px) { 
+    padding: 5px 10px 150px 10px;
+  }
 `;
 
 const StyledLayerGroupWrapper = styled.div``;
@@ -219,7 +233,6 @@ export const CustomLayerModalContent = () => {
       </StyledSaveButton>
     </StyledButtonContainer>
 
-        <StyledLayerList>
         <StyledSearchAndFilter>
       </StyledSearchAndFilter>
           {modalContent.map((content, index) => (
@@ -227,9 +240,6 @@ export const CustomLayerModalContent = () => {
               <div>{content.layerlist}</div>
             </div>
           ))}
-        </StyledLayerList>
     </>
   );
 };
-/*
- */
