@@ -21,8 +21,8 @@ const StyledSearchModal = styled.div`
     background-color: white;
     border-radius: 5px;
     box-shadow: rgb(0 0 0 / 16%) 0px 3px 6px, rgb(0 0 0 / 23%) 0px 6px 6px;
-    padding-top: 10px
-    font-size: 16px;
+    padding-top: 10px;
+    font-size: 15px;
     font-weight: 400;
     padding-top: 30px;
     z-index: -10;
