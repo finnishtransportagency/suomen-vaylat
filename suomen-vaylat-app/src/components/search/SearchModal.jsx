@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Switch from '../switch/Switch';
 import {
-    faLongArrowDown
+    faLongArrowDown,
 } from '@fortawesome/free-solid-svg-icons';
 import SearchResultPanel from './SearchResultPanel';
 
@@ -21,8 +21,9 @@ const StyledSearchModal = styled.div`
     background-color: white;
     border-radius: 5px;
     box-shadow: rgb(0 0 0 / 16%) 0px 3px 6px, rgb(0 0 0 / 23%) 0px 6px 6px;
-    padding-top: 10px
-    font-size: 16px;
+    padding-top: 10px;
+    font-size: 15px;
+    font-weight: 400;
     padding-top: 30px;
     z-index: -10;
     max-height: ${(props) => props.isMobile ? window.innerHeight-50 + "px": window.innerHeight-200 + "px"};
@@ -33,7 +34,7 @@ const StyledSearchModal = styled.div`
 const StyledInput = styled.input`
     width: 100%;
     padding: 5px;
-    border-radius: 5px;
+    border-radius: 15px;
     border-color: #A0A0A0;
     margin-top: 3px;
     margin-bottom: 3px;
@@ -42,7 +43,7 @@ const StyledInput = styled.input`
 const StyledInputHalf = styled.input`
     width: 49%;
     font-size: 16px;
-    border-radius: 5px;
+    border-radius: 15px;
     border-color: #A0A0A0;
     margin-top: 3px;
     margin-bottom: 3px;
@@ -168,8 +169,9 @@ const SearchModal = ({
     searchType,
     setSearchType,
     handleSeach,
+    isOpen,
+    toggleModal
 }) => {
-    const [moreOptions, setMoreOptions] =  useState(false);
     const [activeSwitch, setActiveSwitch] = useState("road");
     const updateActiveSwitch = (type) => {
         setActiveSwitch(type);
@@ -186,20 +188,15 @@ const SearchModal = ({
        setSearchValue(searchValue)
     }, [searchValue, setSearchValue]);  
 
-    return (
+    return isOpen ? (
         <StyledSearchModal>   
             <StyledLinkText rel="noreferrer" 
                 target=""
                 id = "addressLink" 
                 href="#" 
-                onClick={() => { setMoreOptions(!moreOptions); } }> 
-                { moreOptions === false ?  
-                strings.search.moreSearchOptions :  
-                strings.search.lessSearchOptions
-                }
+                onClick={toggleModal }> 
             </StyledLinkText>
             <div style= {{clear: "both"}} />
-            {moreOptions ? ( 
             <>
                 {
                     <Switch 
@@ -616,7 +613,6 @@ const SearchModal = ({
                 )
                 }  
          </>
-        ):
         <SearchResultPanel 
         isSearchOpen={isSearchOpen}
         searchResults={searchResults}
@@ -632,9 +628,8 @@ const SearchModal = ({
         searchClickedRow={searchClickedRow}
         allLayers={allLayers}
         />        
-        }
         </StyledSearchModal>
-    );
+    ) : null
 };
 
 export default SearchModal;
