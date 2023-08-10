@@ -383,14 +383,17 @@
     "layerlistLabels": {
       "allLayers": "Kaikki tasot",
       "themeLayers": "Teemakartat",
-      "selectedLayers": "Valitut tasot",
       "mapLayers": "Karttatasot",
       "backgroundMaps": "Taustakartat",
       "selectAll": "Valitse kaikki",
+      "selectedLayers": "Valitut tasot",
       "show": "Näytä",
       "filterOrSearchLayers": "Suodata tai hae tasoja",
       "filterByType": "Suodata tyypeittäin",
       "searchForLayers": "Hae karttatasoja",
+      "createFilter": "Suodata",
+      "createCustomFilter": "oma suodatin",
+      "saveCustomFilter": "Tallenna",
       "clearFilters": "Tyhjennä suodatinvalinnat",
       "searchResults": "Hakutulokset",
       "clearSelectedMapLayers": "Tyhjennä valitut karttatasot",
@@ -404,6 +407,14 @@
       "zoomOutToShowLayer": "Loitonna nähdäksesi taso",
       "toShowLayer" : "nähdäksesi taso",
       "opacity": "Läpinäkyvyys"
+    },
+    "customLayerInfo": {
+      "modalTitle": "Luo oma suodatin",
+      "closeInfo": "Sulje ohje",
+      "infoContent": "Omalla suodattimella voidaan tallentaa valittuja tasoja selaimen välimuistiin. Tallennetut tasot ovat näkyvissä karttatasojen Kaikki tasot-välilehdessä sillä laitteella ja selaimessa, jossa karttatasot on tallennettu. Listasta voi säädellä valittujen tasojen näkyvyyttä kartalla. Kun olet valinnut halutut tasot, paina Valmis-painiketta. Tallennuksen voi poistaa Tyhjennä-painikkeesta.",
+      "saveLayers": "Valmis",
+      "removeLayers":"Tyhjennä",
+      "editLayers": "Muokkaa"
     }
   },
   "downloadLink": {
@@ -441,7 +452,7 @@
       "title": "Vesiväylätiedot",
       "description": "Aineisto kattaa Väyläviraston vastuulla olevat vesiväylät ja kanavat. Niiden ylläpidossa ja kehittämisessä otetaan huomioon niin kauppamerenkulun kuin muunkin vesiliikenteen tarpeet."
     }
-  },
+  },   
   "themelayerlist": {
     "readMore": "Lue lisää",
     "readLess": "Vähemmän",
