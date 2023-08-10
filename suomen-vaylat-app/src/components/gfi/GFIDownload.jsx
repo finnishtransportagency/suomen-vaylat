@@ -17,6 +17,7 @@ import ModalListItem from '../modals/ModalListItem';
 import SvLoader from '../loader/SvLoader';
 
 const StyledDownloadsContainer = styled.div`
+    width:100%;
     padding: 16px;
     display: flex;
     flex-direction: column;
@@ -156,8 +157,11 @@ const GFIDownload = () => {
     }
 
     return (
+        <>
+    
         <StyledDownloadsContainer>
-
+        <StyledDescription>{strings.downloads.downloadsInfo}</StyledDescription>
+        <StyledDescription>{strings.downloads.downloadsInfo2}</StyledDescription>
         <Button
             onClick={handleGfiLocationsOpen}
         >
@@ -233,6 +237,7 @@ const GFIDownload = () => {
                 )
             }
         </StyledDownloadsContainer>
+        </>
     );
 };
 
