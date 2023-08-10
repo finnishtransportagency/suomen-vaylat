@@ -94,10 +94,12 @@ const StyledMessage = styled.p`
     font-weight: 600;
 `;
 
-const LayerSearch = ({ layers }) => {
+const LayerSearch = ({ layers, group }) => {
     const { store } = useContext(ReactReduxContext);
     const searchParams = useSelector(state => state.ui.searchParams);
-    const searchResults = searchParams.length > 2 ? layers.filter(layer => layer.name.toLowerCase().includes(searchParams.toLowerCase())) : '';
+    const searchResults = searchParams.length > 2 
+    ? layers.filter(layer => layer.name.toLowerCase().includes(searchParams.toLowerCase())) 
+    : [];
     return (
         <StyledLayerSearchContainer>
             <StyledSearchInputContainer>
@@ -129,7 +131,9 @@ const LayerSearch = ({ layers }) => {
                         </StyledListSubtitle>
                         <StyledLayerList>
                             {searchResults.length > 0 && searchParams !== '' && searchResults.map(layer => {
-                                return <Layer key={'search_resutlt_'+layer.id} layer={layer}/>
+                                const groupName = group.find(group => group.name === layer.groups);
+                                const matchingGroup = groupName ? groupName.name : 'Unknown';
+                                return <Layer key={'search_resutlt_'+layer.id} layer={layer} layerGroup={matchingGroup}/>
                             })}
                         </StyledLayerList>
                     </motion.div>

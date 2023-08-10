@@ -102,7 +102,8 @@ const StyledFilterButton = styled.div`
 const LayerListTEMP = ({
   groups,
   layers,
-  tags
+  tags,
+  group
 }) => {
 
     useAppSelector((state) => state.language);
@@ -130,7 +131,7 @@ const LayerListTEMP = ({
                     icon={faFilter}
                 />
             </StyledFilterButton>
-          <LayerSearch layers={layers}/>
+          <LayerSearch layers={layers} group={group}/>
         </StyledSearchAndFilter>
         <StyledFilterList
           initial="hidden"

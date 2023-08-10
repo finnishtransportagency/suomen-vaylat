@@ -73,7 +73,7 @@ const Switch = ({ action, layer, isSelected }) => {
     );
 };
 
-export const Layer = ({ layer, theme }) => {
+export const Layer = ({ layer, theme, group }) => {
 
     const { store } = useContext(ReactReduxContext);
     const [layerStyle, setLayerStyle] = useState(null);
@@ -141,7 +141,7 @@ export const Layer = ({ layer, theme }) => {
                     <StyledLayerName
                         themeStyle={themeStyle}
                     >
-                        {layer.name}
+                        {layer.name}({group})
                     </StyledLayerName>
                 </StyledlayerHeader>
                 {layer.metadataIdentifier && <LayerMetadataButton layer={layer}/>}
