@@ -107,6 +107,7 @@
     "roadAddressInstructions": "Vägadressuppgifterna kunde inte hämtas. Zooma in på kartan och klicka på den punkt som du vill söka vägadressuppgifter för."
   },
   "downloads": {
+    "newDownload": "NY NEDLADDNING",
     "downloads": "Nedladdningar",
     "processing": "Bearbetas",
     "noProcessingDownloads": "Inga nedladdningar att bearbeta",

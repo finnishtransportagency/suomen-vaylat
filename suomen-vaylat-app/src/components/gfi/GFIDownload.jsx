@@ -161,7 +161,7 @@ const GFIDownload = () => {
         <Button
             onClick={handleGfiLocationsOpen}
         >
-                UUSI LATAUS
+                {strings.downloads.newDownload}
         </Button>
         
 

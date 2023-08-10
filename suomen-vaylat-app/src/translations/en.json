@@ -107,6 +107,7 @@
     "roadAddressInstructions": "Unable to retrieve road address data. Zoom in on the map and click on the point for which you want to retrieve road address data."
   },
   "downloads": {
+    "newDownload": "NEW DOWNLOAD",
     "downloads": "Downloads",
     "processing": "Processing",
     "noProcessingDownloads": "No processing downloads",
