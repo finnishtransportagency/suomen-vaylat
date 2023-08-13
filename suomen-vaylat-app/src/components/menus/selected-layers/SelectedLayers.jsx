@@ -50,13 +50,12 @@ const StyledListSubtitle = styled.div`
 
 
 const SortableElement = sortableElement((props) => {
-    const {value, currentZoomLevel, filtersEnabled, handleOpenFilteringModal} = props;
+    const {value, currentZoomLevel, filtersEnabled} = props;
     return <SelectedLayer
         layer={value}
         uuid={value.metadataIdentifier}db
         currentZoomLevel={currentZoomLevel}
         filtersEnabled={filtersEnabled}
-        handleOpenFilteringModal={handleOpenFilteringModal}
     />
 }
     
@@ -68,9 +67,9 @@ const SortableContainer = sortableContainer(({children}) => {
 
 
 export const SelectedLayers = (props) => {
-    const { selectedLayers, currentZoomLevel, filters, handleOpenFilteringModal } = props;
+    const { selectedLayers, currentZoomLevel } = props;
     const { store } = useContext(ReactReduxContext);
-    const {channel, selectedLayersByType, allSelectedThemeLayers, selectedTheme} = useAppSelector(state => state.rpc);
+    const {channel, selectedLayersByType, allSelectedThemeLayers, selectedTheme, filters} = useAppSelector(state => state.rpc);
     let backgroundMaps = selectedLayersByType.backgroundMaps;
     let mapLayers = selectedLayersByType.mapLayers;
 
@@ -128,7 +127,6 @@ export const SelectedLayers = (props) => {
                             index={index}
                             currentZoomLevel={currentZoomLevel}
                             filtersEnabled={filters && filters.length > 0 && filters.some(filter => (filter.layer ===  item.name))}
-                            handleOpenFilteringModal={handleOpenFilteringModal}
                         />
                     ))}
                 </ul>

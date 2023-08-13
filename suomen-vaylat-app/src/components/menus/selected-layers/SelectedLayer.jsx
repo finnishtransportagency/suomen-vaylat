@@ -206,7 +206,6 @@ export const SelectedLayer = (
         uuid,
         currentZoomLevel,
         filtersEnabled,
-        handleOpenFilteringModal
     }
 ) => {
     const { store } = useContext(ReactReduxContext);
@@ -224,7 +223,7 @@ export const SelectedLayer = (
     useEffect(() => {
         setLocalfilterenabled(filtersEnabled)
         forceUpdate()
-    }, [filtersEnabled, layer.name, handleOpenFilteringModal, forceUpdate])
+    }, [filtersEnabled, layer.name, forceUpdate])
 
 
     useEffect(() => {
@@ -294,10 +293,7 @@ export const SelectedLayer = (
                         </StyledLayerName>
                         { localfilterenabled && 
                             (
-                                <StyledIconWrapper
-                                onClick={() => {
-                                    handleOpenFilteringModal(layer.name);
-                                }}>
+                                <StyledIconWrapper>
                                 <StyledFloatingSpan><FontAwesomeIcon icon={faFilter}  style={{ color: 'red'}}/></StyledFloatingSpan>
                                 </StyledIconWrapper>
                             )

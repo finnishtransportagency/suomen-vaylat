@@ -1,15 +1,20 @@
-import { useState, useEffect, useCallback  } from 'react';
+import { useState, useEffect, useCallback, useContext } from 'react';
 import styled from 'styled-components';
 
 import GfiTabContentItem from './GfiTabContentItem';
 import strings from '../../translations';
+import { ReactReduxContext } from 'react-redux';
 
 import { faTable, faList, faFilter, faExclamation } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useAppSelector } from '../../state/hooks';
+
+import { setFilteringInfo } from '../../state/slices/rpcSlice';
 
 import { kaReducer, Table } from 'ka-table';
 import "ka-table/style.scss";
 import { layer } from '@fortawesome/fontawesome-svg-core';
+import store from '../../state/store';
 
 const StyledSelectedTabHeader = styled.div`
     position: relative;
@@ -77,11 +82,12 @@ const GfiTabContent = ({
     data,
     title,
     tablePropsInit,
-    filteringInfo,
-    setFilteringInfo,
     filters
 }) => {
     const [tableProps, changeTableProps] = useState(tablePropsInit);
+    const { filteringInfo } = useAppSelector((state) => state.rpc);
+    const { store } = useContext(ReactReduxContext);
+
     const dispatch = action => {
       changeTableProps(prevState => kaReducer(prevState, action));
     };
@@ -168,7 +174,7 @@ const GfiTabContent = ({
                     </p>
                 </StyledSelectedTabTitle>
                 <StyledSelectedTabDisplayOptionsButton
-                    onClick={() =>  setFilteringInfo( {modalOpen: true, chosenLayer: title, layers: [ { title: title, tableProps : tableProps }]} )}
+                    onClick={() =>  store.dispatch(setFilteringInfo( {modalOpen: true, chosenLayer: title, layers: [ { title: title, tableProps : tableProps }]} ))}
                 >
                 <FontAwesomeIcon icon={faFilter} style={{ color: filteringInfo?.chosenLayer && filters && isActiveFiltering ? 'red' : '0064AF' }}  />
                 {filteringInfo?.title && filters && activeFilteringOnLayer() && 

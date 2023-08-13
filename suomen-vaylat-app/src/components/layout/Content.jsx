@@ -7,9 +7,7 @@ import styled from 'styled-components';
 import strings from '../../translations';
 import GfiToolsMenu from '../gfi/GfiToolsMenu';
 import GfiDownloadMenu from '../gfi/GfiDownloadMenu';
-import Dropdown from '../select/Dropdown';
-import { faPlus, faTimes, faTrash } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FilterModal } from '../filter/FilterModal';
 
 import {
     setSelectError,
@@ -18,7 +16,9 @@ import {
     setDownloadActive,
     setDownloadFinished,
     removeMarkerRequest,
-    setVKMData
+    setVKMData,
+    setFilters,
+    setFilteringInfo
 } from '../../state/slices/rpcSlice';
 
 import {
@@ -201,17 +201,9 @@ const StyledInput = styled.input`
     padding: 5px 10px;
 `;
 
-const StyledFilterContainer = styled.div`
-    margin-left: 6px;
-    //position: relative;
-    width: 100%;
-    height: 100%;
-    
-`;
-
 const StyledFilter = styled.div`
     background-color: #f2f2f2;
-    width: 40%;
+    //width: 40%;
     //float: left;
     border: solid 1px black;
     border-radius: 7px;
@@ -289,8 +281,7 @@ const StyledFilterHeader = styled.div`
 const Content = () => {
     const constraintsRef = useRef(null);
 
-    const { warnings } = useAppSelector((state) => state.rpc);
-
+    const { warnings, filters, selectedLayers, activeGFILayer, filteringInfo } = useAppSelector((state) => state.rpc);
 
     const {
         shareUrl,
@@ -338,16 +329,14 @@ const Content = () => {
 
     const [isGfiToolsOpenLocal, setIsGfiToolsOpenLocal] = useState(false);
 
-
     const [downloadUuids, setDownloadUuids] = useState([]);
 
     const [websocketFirstTimeTryConnecting, setWebsocketFirstTimeTryConnecting] = useState(false);
-    const [filters, setFilters] = useState([]);
 
     useEffect(() => {
         const filtersFromLocalStorage = JSON.parse(localStorage.getItem('filters'));
         if (filtersFromLocalStorage) {
-            setFilters(filtersFromLocalStorage);
+            store.dispatch(setFilters(filtersFromLocalStorage));
         }
       }, []);
 
@@ -660,7 +649,7 @@ const Content = () => {
         if (!prop || !value || !oper){
             return
         }
-        setFilters(
+        store.dispatch(setFilters(
             [...filters,
             {   
                 "layer" : layer,
@@ -669,7 +658,7 @@ const Content = () => {
                 "value": value
             }
         ]
-        )
+        ));
         setPropValue({})
         setFilterValue("")
         setOperatorValue({})
@@ -681,75 +670,15 @@ const Content = () => {
     { value: 'biggerThan', label: 'Suurempi kuin' },
     ];
 
-    const [filteringInfo, setFilteringInfo] = useState({ modalOpen: false });
-    
-    useEffect(() => {
-        const filterInfoFromlStorage = JSON.parse(localStorage.getItem('filteringInfo'));
-        if (filterInfoFromlStorage) {
-            setFilteringInfo(filterInfoFromlStorage);
-        }
-      }, []);
-
     useEffect(() => {
         localStorage.setItem('filteringInfo', JSON.stringify(filteringInfo));
     }, [filteringInfo]);    
 
     const handleCloseFilteringModal = useCallback(() => {
-        setFilteringInfo({...filteringInfo, modalOpen: false}) 
+        store.dispatch(setFilteringInfo({...filteringInfo, modalOpen: false}));
     }, [filteringInfo]);
 
-    const handleOpenFilteringModal = useCallback((layerTitle) => {
-        setFilteringInfo({...filteringInfo, modalOpen: true, chosenLayer: layerTitle}) 
-     }, [filteringInfo]);
-
-    const [activeFilters, setActiveFilters] = useState();
-    useEffect(() => {
-        if (filteringInfo && filteringInfo?.chosenLayer && filters){
-            const updatedActivefilters = filters.filter(filter => filter.layer === filteringInfo?.chosenLayer)
-            setActiveFilters(updatedActivefilters)
-        }
-     }, [filters, filteringInfo]);
-   
-    const handleRemoveFilter = (filter) => {
-        if (filters && filters.length > 0 && filters.includes(filter)){
-            const updatedFilters = filters.filter(existingFilter => existingFilter !== filter )
-            setFilters(updatedFilters)
-        }
-    }
-
-    const handleRemoveAllFilters = () => {
-        if (filters && filters.length > 0){
-            setFilters([])
-        }
-    }
-
-    const filterOptions = () => {
-        const curLayer = filteringInfo?.chosenLayer;
-        //const layerinfo = filteringInfo?.layers[curLayer]; 
-
-        var layer = filteringInfo?.layers?.find(layer => {
-            return layer.title === curLayer
-          })
-        const options = layer?.tableProps?.columns?.map( column => {
-            return { value: column.key, label: column.title}
-        }
-        )
-        return options;
-    }
-
     const [chosenQueryGeometry, setChosenQueryGeometry] = useState();
-
-    // useEffect(() => {
-    //     console.info("filters or chosegeometry change", filters, chosenQueryGeometry)
-
-    //     console.info("bilbobaggins", filters, chosenQueryGeometry)
-    //     if (filters && chosenQueryGeometry){
-    //         handleGfiToolReset();
-    //         const loader = initNumberedLoader(selectedLayers);
-    //         fetchContentFromChannel(loader.fetchableLayers, loader.numberedLoaderEnabled, chosenQueryGeometry)
-    //     }
-
-    //  }, [filters, chosenQueryGeometry]);
     
     return (
         <>
@@ -830,8 +759,6 @@ const Content = () => {
                 >
                     <GFIPopup
                         handleGfiDownload={handleGfiDownload}
-                        filteringInfo={filteringInfo}
-                        setFilteringInfo={setFilteringInfo}
                         filters={filters}
                         chosenQueryGeometry={chosenQueryGeometry}
                         setChosenQueryGeometry={setChosenQueryGeometry}
@@ -1106,7 +1033,6 @@ const Content = () => {
                         handleGfiToolsMenu={handleGfiToolsMenu} 
                         closeButton={false} 
                         filters={filters}
-                        chosenQueryGeometry={chosenQueryGeometry}
                         setChosenQueryGeometry={setChosenQueryGeometry}
                     />
                 </Modal>
@@ -1159,76 +1085,8 @@ const Content = () => {
                     id={null}
                     minimize={minimizeGfi}
                     maximize={maximizeGfi}
-                    height='240px'
-                    width='840px'
                 >
-                    <StyledModalContainer>
-                        <StyledModalFloatingChapter>
-                        <Dropdown 
-                            options={filterOptions()}
-                            placeholder={strings.gfifiltering.placeholders.chooseProp}
-                            value={propValue}
-                            setValue={setPropValue}
-                        />
-                        </StyledModalFloatingChapter>
-                        <StyledModalFloatingChapter>
-                        <Dropdown 
-                            options={gfiFilteringOptions}
-                            placeholder={strings.gfifiltering.placeholders.chooseOperator}
-                            value={operatorValue}
-                            setValue={setOperatorValue}
-                        />
-                        </StyledModalFloatingChapter>
-                        <StyledModalFloatingChapter>
-                        <StyledInput
-                            type="text"
-                            value={filterValue}
-                            placeholder={strings.gfifiltering.placeholders.chooseValue}
-                            onChange={e => setFilterValue(e.target.value)}
-                            onKeyPress={e => {
-                                if (e.key === 'Enter') {
-                                    addFilter();
-                                }
-                            }}
-                        />
-                        </StyledModalFloatingChapter>
-                        <StyledModalFloatingActionChapter>
-                            <StyledSelectedTabDisplayOptionsButton
-                                onClick={() =>  addFilter()}
-                            >
-                            <FontAwesomeIcon icon={faPlus} />
-                            </StyledSelectedTabDisplayOptionsButton>
-                        </StyledModalFloatingActionChapter>
-                    
-                        {activeFilters && activeFilters.length > 0 && (
-                            <StyledFilterContainer>
-                                <StyledFilterHeader>{strings.gfifiltering.activeFilters}</StyledFilterHeader>
-                                {
-                                activeFilters.map( (filter) =>  
-                                <StyledFilter>
-                                <StyledFilterPropContainer>      
-                                    <StyledFilterProp>{strings.gfifiltering.property}:  {filter.property}</StyledFilterProp> 
-                                    <StyledFilterProp>{strings.gfifiltering.operator}:  {strings.gfifiltering.operators[filter.operator]} </StyledFilterProp> 
-                                    <StyledFilterProp>{strings.gfifiltering.value}: {filter.value}</StyledFilterProp> 
-                                </StyledFilterPropContainer>
-                                <StyledIconWrapper
-                                onClick={() => {
-                                    handleRemoveFilter(filter);
-                                }}>
-                                <StyledFloatingDiv><FontAwesomeIcon icon={faTimes} size="6x" style={{}}/></StyledFloatingDiv>
-                                </StyledIconWrapper>
-                                </StyledFilter>
-                                )} 
-                                <StyledIconWrapper 
-                                    onClick={() => {
-                                        handleRemoveAllFilters();
-                                    }}>
-                                    <StyledFloatingDiv>Poista kaikki suodattimet <FontAwesomeIcon icon={faTrash} size="6x" style={{}}/></StyledFloatingDiv>
-                                </StyledIconWrapper>                       
-                            </StyledFilterContainer>
-                        )
-                        }
-                    </StyledModalContainer>
+                    <FilterModal chosenQueryGeometry={chosenQueryGeometry}/>
                 </Modal>
                 <ScaleBar />
                 <StyledToastContainer position="bottom-left" pauseOnFocusLoss={false} transition={Slide} autoClose={false} closeOnClick={false} />
@@ -1238,7 +1096,6 @@ const Content = () => {
                         <ThemeMenu />
                         <MapLayersDialog 
                             filters={filters}
-                            handleOpenFilteringModal={handleOpenFilteringModal}
                         />
                     </StyledLeftSection>
                     <StyledRightSection>

@@ -1,5 +1,6 @@
 import { useState, useContext, useEffect } from 'react';
 import styled from 'styled-components';
+import { fetchFeaturesSynchronous, fetchContentFromChannel } from '../../utils/gfiUtil';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'react-toastify';
 import strings from '../../translations';
@@ -214,10 +215,10 @@ const icons = {
 const GfiToolsMenu = ({ 
         handleGfiToolsMenu, 
         closeButton = true, 
-        filters,   
         chosenQueryGeometry,
         setChosenQueryGeometry 
     }) => {
+
     const drawinToolsData = [
         {
             id: 'sv-measure-linestring',
@@ -254,7 +255,7 @@ const GfiToolsMenu = ({
     ];
     const { store } = useContext(ReactReduxContext);
 
-    const { channel, selectedLayers, gfiLocations } = useAppSelector((state) => state.rpc);
+    const { channel, selectedLayers, gfiLocations, filters } = useAppSelector((state) => state.rpc);
 
     const { gfiCroppingTypes, selectedGfiTool, hasToastBeenShown, activeSelectionTool } = useAppSelector(state => state.ui);
     const [isGfiLoading, setIsGfiLoading] = useState(false);
@@ -676,69 +677,9 @@ const GfiToolsMenu = ({
       
     // }, [filters, chosenQueryGeometry])
 
-    const fetchContentFromChannel = (fetchableLayers, numberedLoaderEnables, featureArray) => {
-        
-        console.info("featurearray", featureArray)
-        //featureArray?.forEach(async feature => {
-            store.dispatch(setGFICroppingArea(featureArray));
-            
-            let index = 0;
-            try {
-                for(const layer of fetchableLayers) {  
-                    const activeFilters = filters && filters?.length > 0 ?  filters?.filter(filter => (filter.layer ===  layer.name)) : [];
-                    //console.info("feature" ,feature)
-                    fetchFeaturesSynchronous(featureArray, layer, featureArray, numberedLoaderEnables, activeFilters)
-                    .then(
-                        index++
-                    ).catch((error) => {
-                            if (error===BODY_SIZE_EXCEED){
-                                handleGfiToolsMenu();
-                                setIsGfiLoading(false)
-                                store.dispatch(setWarning({
-                                    title: strings.bodySizeWarningTemporary,
-                                    subtitle: null,
-                                    cancel: {
-                                        text: strings.general.cancel,
-                                        action: () => {
-                                            setIsGfiLoading(false);
-                                            store.dispatch(setWarning(null))
-                                        }
-                                    },
-                                    /*TODO return when simplify geometry feature ready 
-                                        confirm: {
-                                        text: strings.general.continue,
-                                        action: () => {
-                                            simplifyGeometry();
-                                            store.dispatch(setWarning(null));
-                                        }
-                                    },*/
-                                }))
-                            
-                                //throw error to break synchronous loop
-                                throw new Error(BODY_SIZE_EXCEED);
-                            }else if (error === GENERAL_FAIL){
-                                console.info("general fail thrown") 
-                            }
-                            handleGfiToolsMenu();
-                            setIsGfiLoading(false)
-                        }
-                    );
-                    if (fetchableLayers.length === index){
-                        handleGfiToolsMenu();
-                        setIsGfiLoading(false)
-                    }
+    
 
-                } 
-            } catch (error) {
-                //catch exception, when simplify geometry feature ready, catch BODY_SIZE_EXCEED
-                //and make simplify and rerun query
-                handleGfiToolsMenu();
-                setIsGfiLoading(false)
-            }
-            
-        //}); 
-    }
-
+    console.log(filters)
 
         useEffect(() => {
             console.info("tässä useeffect jossa pitäs ladata uudelleen haetut kohteet, jos näkymä auki", filters, chosenQueryGeometry)
@@ -771,6 +712,7 @@ const GfiToolsMenu = ({
         return {fetchableLayers: fetchableLayers, numberedLoaderEnabled: numberedLoaderEnabled}
     } 
 
+
     useEffect(() => {
         if (isFetchDone && gfiLocations.length === 0) {
             store.dispatch(setWarning({
@@ -789,6 +731,7 @@ const GfiToolsMenu = ({
     }, [isFetchDone])
 
     useEffect(() => {
+        console.log("FILTER")
         let isSubscribed = true;
         channel && channel.handleEvent("DrawingEvent", async (data) => {
             if(store.getState().ui.selectedGfiTool) {
@@ -799,7 +742,7 @@ const GfiToolsMenu = ({
                     ]);
                     handleGfiToolReset(data, true);
                     const loader = initNumberedLoader(selectedLayers);
-                    fetchContentFromChannel(loader.fetchableLayers, loader.numberedLoaderEnabled, data?.geojson?.features)
+                    fetchContentFromChannel(loader.fetchableLayers, data?.geojson?.features, filters, store, channel)
                 }
             }
         })
@@ -808,66 +751,7 @@ const GfiToolsMenu = ({
                         handleGfiToolsMenu();}
     }, [channel, filters])
 
-    const fetchFeaturesSynchronous = (features, layer, featureArray, numberedLoaderEnables, activeFilters) => {
-        return new Promise(function(resolve, reject) {
-        // executor (the producing code, "singer")
-        channel.getFeaturesByGeoJSON(
-            [features, 0, [layer.id], activeFilters],
-            (gfiData) => {
-                console.info("datski", gfiData)
-                store.dispatch(setVKMData(null));
-                channel.postRequest('MapModulePlugin.RemoveMarkersRequest', ["VKM_MARKER"]);
-                    gfiData?.gfi?.forEach((gfi) => {
-                        store.dispatch(setGFILocations({
-                            content: gfi.geojson,
-                            layerId: gfi.layerId,
-                            gfiCroppingArea:
-                            featureArray,
-                            type: 'geojson',
-                            moreFeatures: gfi.moreFeatures,
-                            nextStartIndex: gfi.nextStartIndex
-                        })) 
-                    });
-                    if (numberedLoaderEnables)
-                        setNumberedLoader(prevState => {
-                            return {current: prevState.current + 1, total: prevState.total, enabled: prevState.enabled}
-                    }) 
-                    resolve("ok");                  
-                },
-                function (error) {
-                    console.info("erska", error)
-                    if (numberedLoaderEnables)
-                    setNumberedLoader(prevState => {
-                        return {current: prevState.current + 1, total: prevState.total, enabled: prevState.enabled}
-                    })
-                    if (error.BODY_SIZE_EXCEEDED_ERROR) {
-                        // simplify modal removed for now, uncomment when simplifyGeometry feature ready, make new call after
-                        /*store.dispatch(setWarning({
-                            title: strings.bodySizeWarning,
-                            subtitle: null,
-                            cancel: {
-                                text: strings.general.cancel,
-                                action: () => {
-                                    setIsGfiLoading(false);
-                                    store.dispatch(setWarning(null))
-                                }
-                            },
-                            confirm: {
-                                text: strings.general.continue,
-                                action: () => {
-                                    simplifyGeometry();
-                                    store.dispatch(setWarning(null));
-                                }
-                            },
-                        }))
-                        */
-                        reject(BODY_SIZE_EXCEED)
-                    }      
-                    reject(GENERAL_FAIL)
-                }
-            )
-        });
-    }  
+    
 
     useEffect(() => {
         window.localStorage.getItem('geometries') !== null &&

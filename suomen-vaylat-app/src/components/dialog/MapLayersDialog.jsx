@@ -138,7 +138,7 @@ const StyledSwiper = styled(Swiper)`
 `;
 
 const MapLayersDialog = (props) => {
-    const {filters, handleOpenFilteringModal} = props;
+    const {filters} = props;
     const { isSideMenuOpen, selectedMapLayersMenuTab, isThemeMenuOpen } = useAppSelector((state) => state.ui);
     const {
         allGroups,
@@ -196,7 +196,6 @@ const MapLayersDialog = (props) => {
                     selectedLayers={selectedLayers}
                     currentZoomLevel={currentZoomLevel}
                     filters={filters}
-                    handleOpenFilteringModal={handleOpenFilteringModal}
                 />
             ),
         },

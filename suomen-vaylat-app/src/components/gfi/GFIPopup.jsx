@@ -23,7 +23,7 @@ import { useAppSelector } from '../../state/hooks';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { FreeMode, Controller } from 'swiper';
 import { setMinimizeGfi, setActiveSelectionTool, setWarning } from '../../state/slices/uiSlice';
-import { resetGFILocations, addFeaturesToGFILocations} from '../../state/slices/rpcSlice';
+import { resetGFILocations, addFeaturesToGFILocations, setActiveGFILayer} from '../../state/slices/rpcSlice';
 
 import { FormattedGFI } from './FormattedGFI';
 import GfiTabContent from './GfiTabContent';
@@ -401,8 +401,6 @@ const StyledLoaderWrapper = styled.div`
 
 export const GFIPopup = ({ 
     handleGfiDownload, 
-    filteringInfo,
-    setFilteringInfo, 
     filters,
     chosenQueryGeometry,
     setChosenQueryGeometry  }) => {
@@ -471,6 +469,13 @@ export const GFIPopup = ({
     useEffect(() => {
         isGfiDownloadsOpen && setIsGfiDownloadsOpen(false);
     }, [gfiLocations]);
+
+    const handleSelectTab = (index) => {
+        setSelectedTab(index);
+        const layer = selectedLayers.filter(l => l.id == tabsContent[index].props.id);
+
+        store.dispatch(setActiveGFILayer(layer));
+    }
 
     const handleOverlayGeometry = (geoJson) => {
         channel &&
@@ -696,9 +701,9 @@ export const GFIPopup = ({
                 [null, null, LAYER_ID]
             );
         if (index > 0) {
-            setSelectedTab(index - 1);
+            handleSelectTab(index - 1);
         } else {
-            setSelectedTab(0);
+            handleSelectTab(0);
         }
     };
 
@@ -917,7 +922,7 @@ export const GFIPopup = ({
                                     key={'tab_' + index}
                                 >
                                     <StyledGfiTab
-                                        onClick={() => setSelectedTab(index)}
+                                        onClick={() => handleSelectTab(index)}
                                         selected={selectedTab === index}
                                     >
                                         <StyledTabName>
@@ -983,7 +988,7 @@ export const GFIPopup = ({
                     ref={gfiInputEl}
                     id={'gfi-swiper'}
                     onSlideChange={(e) => {
-                        setSelectedTab(e.activeIndex);
+                        handleSelectTab(e.activeIndex);
                     }}
                     tabIndex={selectedTab}
                     allowTouchMove={false} // Disable swiping
@@ -1017,8 +1022,6 @@ export const GFIPopup = ({
                                             data={location}
                                             title={title}
                                             tablePropsInit={tableProps}
-                                            filteringInfo={filteringInfo}
-                                            setFilteringInfo={setFilteringInfo}
                                             filters={filters}
                                         />
                                         {location?.content?.some(content => content.geojson.features) &&
