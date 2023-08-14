@@ -94,9 +94,10 @@ const StyledMessage = styled.p`
     font-weight: 600;
 `;
 
-const LayerSearch = ({ layers, group }) => {
+const LayerSearch = ({ layers, groups }) => {
     const { store } = useContext(ReactReduxContext);
     const searchParams = useSelector(state => state.ui.searchParams);
+    const currentLang = strings.getLanguage();
     const searchResults = searchParams.length > 2 
     ? layers.filter(layer => layer.name.toLowerCase().includes(searchParams.toLowerCase())) 
     : [];
@@ -130,11 +131,23 @@ const LayerSearch = ({ layers, group }) => {
                             {strings.layerlist.layerlistLabels.searchResults}
                         </StyledListSubtitle>
                         <StyledLayerList>
-                            {searchResults.length > 0 && searchParams !== '' && searchResults.map(layer => {
-                                const groupName = group.find(group => group.name === layer.groups);
-                                const matchingGroup = groupName ? groupName.name : 'Unknown';
-                                return <Layer key={'search_resutlt_'+layer.id} layer={layer} layerGroup={matchingGroup}/>
-                            })}
+                        {searchResults.length > 0 && searchParams !== '' && searchResults.map(layer => {
+                            const findGroupForLayer = (groups, layerId) => {
+                                for (let group of groups) {
+                                    if (group.layers && group.layers.includes(layerId)) {
+                                        return group;
+                                    }
+                                    if (group.groups) {
+                                        const nestedGroup = findGroupForLayer(group.groups, layerId);
+                                        if (nestedGroup) return nestedGroup;
+                                    }
+                                }
+                                return null;
+                            };
+                            const groupObj = findGroupForLayer(groups, layer.id);
+                            const matchingGroup = groupObj ? groupObj.locale[currentLang].name : 'Unknown';
+                            return <Layer key={'search_resutlt_'+layer.id} layer={layer} groupName={matchingGroup}/>
+                        })}
                         </StyledLayerList>
                     </motion.div>
                 <StyledMessage>
