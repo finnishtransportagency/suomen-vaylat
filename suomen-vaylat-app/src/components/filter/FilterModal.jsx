@@ -8,12 +8,16 @@ import strings from '../../translations';
 import Dropdown from '../select/Dropdown';
 import { faPlus, faTimes, faTrash, faBullhorn } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { fetchFeaturesSynchronous, fetchContentFromChannel } from '../../utils/gfiUtil';
+//import { fetchFeaturesSynchronous, fetchContentFromChannel } from '../../utils/gfiUtil';
+import { setWarning } from '../../state/slices/uiSlice';
 
-import {
-    setFilters,
-    setFilteringInfo
-} from '../../state/slices/rpcSlice';
+
+import { setFilters, setFilteringInfo , setVKMData, setGFICroppingArea, setGFILocations } from '../../state/slices/rpcSlice';
+
+
+const BODY_SIZE_EXCEED = "BODY_SIZE_EXCEED";
+const GENERAL_FAIL = "GENERAL_FAIL";
+
 
 const StyledFilterProp = styled.div`
 
@@ -148,13 +152,12 @@ const StyledFloatingDiv = styled.div`
 
 export const FilterModal = ({chosenQueryGeometry}) => {
     console.log("?")
-    const { warnings, filters, selectedLayers, activeGFILayer, filteringInfo } = useAppSelector((state) => state.rpc);
+    const { warnings, filters, selectedLayers, activeGFILayer, filteringInfo, channel, gfiLocations } = useAppSelector((state) => state.rpc);
     const { store } = useContext(ReactReduxContext);
 
     const [ operatorValue,  setOperatorValue] = useState({});
     const [ filterValue, setFilterValue] = useState("");
     const [ propValue, setPropValue] = useState({});
-    let { channel, gfiLocations } = useAppSelector((state) => state.rpc);
 
     useEffect(() => {
         const filtersFromLocalStorage = JSON.parse(localStorage.getItem('filters'));
@@ -218,7 +221,7 @@ export const FilterModal = ({chosenQueryGeometry}) => {
         if (filteringInfo && filteringInfo?.chosenLayer && filters){
             const updatedActivefilters = filters.filter(filter => filter.layer === filteringInfo?.chosenLayer)
             setActiveFilters(updatedActivefilters)
-            fetchContentFromChannel(activeGFILayer, chosenQueryGeometry, filters, store, channel)
+            //fetchContentFromChannel(activeGFILayer, chosenQueryGeometry, filters, store, channel)
         }
      }, [filters, filteringInfo]);
    
@@ -238,6 +241,7 @@ export const FilterModal = ({chosenQueryGeometry}) => {
     
     const handleApplyFilters = () => {
         if (filters && filters.length > 0){
+            console.log("lisää filtteri")
             // lisää suodattimet
             fetchContentFromChannel(activeGFILayer, chosenQueryGeometry, filters, store, channel)
         }
@@ -257,6 +261,123 @@ export const FilterModal = ({chosenQueryGeometry}) => {
         )
         return options;
     }
+
+    const fetchContentFromChannel = (fetchableLayers, featureArray, filters, store, channel) => {
+
+        console.log(gfiLocations)
+        console.info("featurearray", featureArray)
+        //featureArray?.forEach(async feature => {
+            store.dispatch(setGFICroppingArea(featureArray));
+            
+            let index = 0;
+            try {
+                for(const layer of fetchableLayers) {  
+                    console.log(filters)
+                    console.log(layer)
+    
+                    const activeFilters = filters && filters?.length > 0 ?  filters?.filter(filter => (filter.layer ===  layer.name)) : [];
+                    console.log(activeFilters)
+                    //console.info("feature" ,feature)
+                    fetchFeaturesSynchronous(featureArray, layer, featureArray, activeFilters, store, channel, gfiLocations)
+                    .then(
+                        index++
+                    ).catch((error) => {
+                            if (error===BODY_SIZE_EXCEED){
+                                store.dispatch(setWarning({
+                                    title: strings.bodySizeWarningTemporary,
+                                    subtitle: null,
+                                    cancel: {
+                                        text: strings.general.cancel,
+                                        action: () => {
+                                            store.dispatch(setWarning(null))
+                                        }
+                                    },
+                                    /*TODO return when simplify geometry feature ready 
+                                        confirm: {
+                                        text: strings.general.continue,
+                                        action: () => {
+                                            simplifyGeometry();
+                                            store.dispatch(setWarning(null));
+                                        }
+                                    },*/
+                                }))
+                            
+                                //throw error to break synchronous loop
+                                throw new Error(BODY_SIZE_EXCEED);
+                            }else if (error === GENERAL_FAIL){
+                                console.info("general fail thrown") 
+                            }
+                        }
+                    );
+    
+                } 
+            } catch (error) {
+                //catch exception, when simplify geometry feature ready, catch BODY_SIZE_EXCEED
+                //and make simplify and rerun query
+            }
+            
+        //}); 
+    }
+    
+    const fetchFeaturesSynchronous = (features, layer, data, activeFilters, store, channel, gfiLocations) => {
+        return new Promise(function(resolve, reject) {
+        // executor (the producing code, "singer")
+        console.log(gfiLocations)
+
+        channel.getFeaturesByGeoJSON(
+            [features, 0, [layer.id], activeFilters],
+            (gfiData, gfiLocations) => {
+                console.info("datski", gfiData)
+                store.dispatch(setVKMData(null));
+                console.log(gfiLocations)
+
+                channel.postRequest('MapModulePlugin.RemoveMarkersRequest', ["VKM_MARKER"]);
+                    gfiData?.gfi?.forEach((gfi, gfiLocations) => {
+                        if (gfi.content.length > 0) {
+                            console.log(gfiLocations)
+
+                            store.dispatch(setGFILocations({
+                                content: gfi.content,
+                                layerId: gfi.layerId,
+                                gfiCroppingArea:
+                                data.geojson,
+                                type: 'geojson',
+                                moreFeatures: gfi.content.some(content => content.moreFeatures),
+                            })) 
+                        }
+                    });
+                    resolve("ok");                  
+                },
+                function (error) {
+                    console.info("erska", error)
+                    if (error.BODY_SIZE_EXCEEDED_ERROR) {
+                        // simplify modal removed for now, uncomment when simplifyGeometry feature ready, make new call after
+                        /*store.dispatch(setWarning({
+                            title: strings.bodySizeWarning,
+                            subtitle: null,
+                            cancel: {
+                                text: strings.general.cancel,
+                                action: () => {
+                                    setIsGfiLoading(false);
+                                    store.dispatch(setWarning(null))
+                                }
+                            },
+                            confirm: {
+                                text: strings.general.continue,
+                                action: () => {
+                                    simplifyGeometry();
+                                    store.dispatch(setWarning(null));
+                                }
+                            },
+                        }))
+                        */
+                        reject(BODY_SIZE_EXCEED)
+                    }      
+                    reject(GENERAL_FAIL)
+                }
+            )
+        });
+    }  
 
     return (
         <StyledModalContainer>
@@ -300,7 +421,7 @@ export const FilterModal = ({chosenQueryGeometry}) => {
             {activeFilters && activeFilters.length > 0 && (
                             <StyledFilterContainer>
                                 <StyledFilterResultContainer>
-                                    <StyledFilterHeader>{strings.gfifiltering.activeFilters}</StyledFilterHeader>
+                                    <StyledFilterHeader style={{marginBottom: '.5em'}}>{strings.gfifiltering.activeFilters}</StyledFilterHeader>
                                         {
                                         activeFilters.map( (filter) =>  
                                         <StyledFilter>
