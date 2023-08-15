@@ -130,7 +130,9 @@ const LayerListTEMP = ({
                     icon={faFilter}
                 />
             </StyledFilterButton>
+
           <LayerSearch layers={layers} groups={groups}/>
+
         </StyledSearchAndFilter>
         <StyledFilterList
           initial="hidden"
