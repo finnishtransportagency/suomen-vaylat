@@ -79,6 +79,8 @@ export const Layer = ({ layer, theme, groupName }) => {
     const [layerStyle, setLayerStyle] = useState(null);
     const [themeSelected, setThemeSelected] = useState(false);
 
+    const excludeGroups = ["Digiroad", "Tierekisteri (Poistuva)"];
+
     const {
         channel,
         selectedTheme
@@ -141,7 +143,8 @@ export const Layer = ({ layer, theme, groupName }) => {
                     <StyledLayerName
                         themeStyle={themeStyle}
                     >
-                         {layer.name} {groupName && groupName !== 'Unknown' && `(${groupName})`}
+                         {layer.name} 
+                         {groupName && groupName !== 'Unknown' && !excludeGroups.includes(groupName) && ` (${groupName})`}
                     </StyledLayerName>
                 </StyledlayerHeader>
                 {layer.metadataIdentifier && <LayerMetadataButton layer={layer}/>}
