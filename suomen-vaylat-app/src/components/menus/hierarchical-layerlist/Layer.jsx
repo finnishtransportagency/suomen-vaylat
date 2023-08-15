@@ -61,6 +61,19 @@ const StyledSwitchButton = styled.div`
     background-color: ${props => props.theme.colors.mainWhite};
 `;
 
+export const findGroupForLayer = (groups, layerId) => {
+    for (let group of groups) {
+        if (group.layers && group.layers.includes(layerId)) {
+            return group;
+        }
+        if (group.groups) {
+            const nestedGroup = findGroupForLayer(group.groups, layerId);
+            if (nestedGroup) return nestedGroup;
+        }
+    }
+    return null;
+};
+
 const Switch = ({ action, layer, isSelected }) => {
     return (
         <StyledSwitchContainer

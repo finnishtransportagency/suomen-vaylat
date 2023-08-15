@@ -1,5 +1,6 @@
 import Layer from './Layer';
 import strings from '../../../translations';
+import { findGroupForLayer } from './Layer';
 
 export const Layers = ({
     layers,
@@ -10,28 +11,10 @@ export const Layers = ({
 }) => {
     const currentLang = strings.getLanguage();
 
-    const findGroupNameOfLayer = (groups, layerId) => {
-        for (let group of groups) {
-    
-            if (group.layers && group.layers.includes(layerId)) {
-                return group;
-            }
-    
-            if (group.groups) {
-                const nestedGroup = findGroupNameOfLayer(group.groups, layerId);
-                if (nestedGroup) {
-                    return nestedGroup;
-                }
-            }
-        }
-        return null;
-    };
-
     return (
         <>
             {layers.map((layer, index) => {
-                const groupObj = findGroupNameOfLayer(groups, layer.id);
-
+                const groupObj = findGroupForLayer(groups, layer.id);
                 const matchingGroup = groupObj ? groupObj.locale[currentLang].name : 'Unknown';
                 return (
                     <Layer
