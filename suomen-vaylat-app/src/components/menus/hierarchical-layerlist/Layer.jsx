@@ -141,7 +141,7 @@ export const Layer = ({ layer, theme, groupName }) => {
                     <StyledLayerName
                         themeStyle={themeStyle}
                     >
-                        {layer.name}({groupName})
+                         {layer.name} {groupName && groupName !== 'Unknown' && `(${groupName})`}
                     </StyledLayerName>
                 </StyledlayerHeader>
                 {layer.metadataIdentifier && <LayerMetadataButton layer={layer}/>}

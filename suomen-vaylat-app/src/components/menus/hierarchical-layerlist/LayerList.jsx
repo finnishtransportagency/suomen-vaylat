@@ -200,6 +200,7 @@ export const LayerList = ({
                                     tag={tag}
                                     layers={layers}
                                     index={index}
+                                    groups={groups}
                                     key={'taglayerlist-' + tag + '-' + index}
                                 />
                             );
@@ -249,16 +250,17 @@ export const LayerList = ({
   const TagLayerList = ({
       tag,
       layers,
-      index
+      index,
+      groups
     }) => {
     const tagsWithLayers = useSelector(state => state.rpc.tagsWithLayers);
     const tagLayers = tagsWithLayers[tag];
 
     const [ isOpen, setIsOpen ] = useState(false);
+    const currentLang = strings.getLanguage();
 
     let visibleLayers = [];
     var filteredLayers = [];
-
     if (tagLayers) {
         tagLayers.forEach((tagLayerId) => {
             var layer = layers.find(layer => layer.id === tagLayerId);
@@ -322,7 +324,7 @@ export const LayerList = ({
                             type: "tween"
                         }}
                     >
-                        <Layers layers={filteredLayers} isOpen={isOpen} />
+                        <Layers layers={filteredLayers} isOpen={isOpen} groups={groups} />
                     </StyledLayerGroup>
             </StyledLayerGroups>
     );
