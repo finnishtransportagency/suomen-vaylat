@@ -154,7 +154,7 @@ const GfiTabContent = ({
     };
 
     const activeFilteringOnLayer = useCallback(() => {
-        return filters.some(filter => (filter.layer ===  title))
+        return filters.some(filter => (filter.layer ===  data.layerId))
     })
 
     const [isActiveFiltering, setIsActiveFiltering] = useState(false);
@@ -162,7 +162,7 @@ const GfiTabContent = ({
 
     useEffect(() => {
         setIsActiveFiltering(activeFilteringOnLayer());
-      }, [filters, filteringInfo.chosenLayer, activeFilteringOnLayer, title]);
+      }, [filters, filteringInfo.chosenLayer, activeFilteringOnLayer]);
       
     return <>
             <StyledSelectedTabHeader>
@@ -174,7 +174,7 @@ const GfiTabContent = ({
                     </p>
                 </StyledSelectedTabTitle>
                 <StyledSelectedTabDisplayOptionsButton
-                    onClick={() =>  store.dispatch(setFilteringInfo( {modalOpen: true, chosenLayer: title, layers: [ { title: title, tableProps : tableProps }]} ))}
+                    onClick={() =>  store.dispatch(setFilteringInfo( {modalOpen: true, chosenLayer: title, layers: [ { id: data.layerId, title: title, tableProps : tableProps }]} ))}
                 >
                 <FontAwesomeIcon icon={faFilter} style={{ color: filteringInfo?.chosenLayer && filters && isActiveFiltering ? 'red' : '0064AF' }}  />
                 {filteringInfo?.title && filters && activeFilteringOnLayer() && 

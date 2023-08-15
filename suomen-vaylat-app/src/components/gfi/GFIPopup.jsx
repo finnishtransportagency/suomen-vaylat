@@ -23,7 +23,7 @@ import { useAppSelector } from '../../state/hooks';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { FreeMode, Controller } from 'swiper';
 import { setMinimizeGfi, setActiveSelectionTool, setWarning } from '../../state/slices/uiSlice';
-import { resetGFILocations, addFeaturesToGFILocations, setActiveGFILayer} from '../../state/slices/rpcSlice';
+import { resetGFILocations, addFeaturesToGFILocations, setActiveGFILayer, setFilters} from '../../state/slices/rpcSlice';
 
 import { FormattedGFI } from './FormattedGFI';
 import GfiTabContent from './GfiTabContent';
@@ -697,7 +697,10 @@ export const GFIPopup = ({
         }
     }, [channel, geoJsonToShow]);
 
-    const closeTab = (index, id) => {
+    const closeTab = (index, id, tabcontent) => {
+        const updatedFilters = filters.filter(filter => filter.layer !== tabcontent.props.id);
+        store.dispatch(setFilters(updatedFilters));
+
         var filteredLocations = gfiLocations.filter(
             (gfi) => gfi.layerId !== id
         );
@@ -950,7 +953,8 @@ export const GFIPopup = ({
                                                 e.stopPropagation();
                                                 closeTab(
                                                     index,
-                                                    tabContent.props.id
+                                                    tabContent.props.id,
+                                                    tabContent
                                                 );
                                             }}
                                         >

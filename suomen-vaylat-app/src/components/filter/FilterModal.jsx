@@ -209,7 +209,7 @@ export const FilterModal = ({chosenQueryGeometry}) => {
 
      useEffect(() => {
         console.log(activeGFILayer)
-        store.dispatch(setFilteringInfo({...filteringInfo, chosenLayer: activeGFILayer[0]?.name}));
+        store.dispatch(setFilteringInfo({...filteringInfo, chosenLayer: activeGFILayer[0]?.id}));
     }, [activeGFILayer]);  
 
     const [activeFilters, setActiveFilters] = useState();
@@ -253,7 +253,7 @@ export const FilterModal = ({chosenQueryGeometry}) => {
         //const layerinfo = filteringInfo?.layers[curLayer]; 
 
         var layer = filteringInfo?.layers?.find(layer => {
-            return layer.title === curLayer
+            return layer.id === curLayer
           })
         const options = layer?.tableProps?.columns?.map( column => {
             return { value: column.key, label: column.title}

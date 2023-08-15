@@ -398,6 +398,7 @@ const Content = () => {
     };
 
     const handleCloseGFIModal = () => {
+        store.dispatch(setFilters([]));
         store.dispatch(resetGFILocations([]));
         store.dispatch(setIsGfiOpen(false));
         store.dispatch(setMinimizeGfi(false));
@@ -1076,7 +1077,7 @@ const Content = () => {
                     titleIcon={
                         null
                     } /* Use icon on title or null */
-                    title={ strings.gfi.filter + " - "+ filteringInfo?.chosenLayer } /* Modal header title */
+                    title={ filteringInfo?.layers?.length > 0 && strings.gfi.filter + " - "+ filteringInfo?.layers[0]?.title } /* Modal header title */
                     type={'normal'} /* Modal type */
                     closeAction={
                         handleCloseFilteringModal
