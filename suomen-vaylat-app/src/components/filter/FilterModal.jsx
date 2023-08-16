@@ -215,11 +215,8 @@ export const FilterModal = ({chosenQueryGeometry}) => {
     const [activeFilters, setActiveFilters] = useState();
 
     useEffect(() => {
-        console.log(filteringInfo)
-        console.log(filters)
-
-        if (filteringInfo && filteringInfo?.chosenLayer && filters){
-            const updatedActivefilters = filters.filter(filter => filter.layer === filteringInfo?.chosenLayer)
+        if (filteringInfo && filteringInfo?.layer && filters){
+            const updatedActivefilters = filters.filter(filter => filter.layer === filteringInfo?.layer.id)
             setActiveFilters(updatedActivefilters)
             //fetchContentFromChannel(activeGFILayer, chosenQueryGeometry, filters, store, channel)
         }
@@ -248,13 +245,7 @@ export const FilterModal = ({chosenQueryGeometry}) => {
     }
 
     const filterOptions = () => {
-        console.log(filteringInfo)
-        const curLayer = filteringInfo?.chosenLayer;
-        //const layerinfo = filteringInfo?.layers[curLayer]; 
-
-        var layer = filteringInfo?.layers?.find(layer => {
-            return layer.id === curLayer
-          })
+        var layer = filteringInfo?.layer;
         const options = layer?.tableProps?.columns?.map( column => {
             return { value: column.key, label: column.title}
         }

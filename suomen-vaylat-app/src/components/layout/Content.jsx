@@ -1077,7 +1077,7 @@ const Content = () => {
                     titleIcon={
                         null
                     } /* Use icon on title or null */
-                    title={ filteringInfo?.layers?.length > 0 && strings.gfi.filter + " - "+ filteringInfo?.layers[0]?.title } /* Modal header title */
+                    title={ filteringInfo?.layer && strings.gfi.filter + " - "+ filteringInfo?.layer?.title } /* Modal header title */
                     type={'normal'} /* Modal type */
                     closeAction={
                         handleCloseFilteringModal
