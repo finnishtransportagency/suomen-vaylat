@@ -119,6 +119,19 @@ export const Switch = ({ action,layer,isSelected }) => {
     );
 };
 
+export const findGroupForLayer = (groups, layerId) => {
+    for (let group of groups) {
+        if (group.layers && group.layers.includes(layerId)) {
+            return group;
+        }
+        if (group.groups) {
+            const nestedGroup = findGroupForLayer(group.groups, layerId);
+            if (nestedGroup) return nestedGroup;
+        }
+    }
+    return null;
+};
+
 export const Layer = ({ layer, theme, groupName }) => {
 
     const { store } = useContext(ReactReduxContext);
@@ -131,6 +144,8 @@ export const Layer = ({ layer, theme, groupName }) => {
         channel,
         selectedTheme
     } = useSelector(state => state.rpc);
+
+    const excludeGroups = ["Digiroad", "Tierekisteri (Poistuva)"];
 
       // Get the checked layers from local storage
         const checkedLayers = localStorage.getItem('checkedLayers');
@@ -234,7 +249,7 @@ export const Layer = ({ layer, theme, groupName }) => {
                     <StyledLayerName
                         themeStyle={themeStyle}
                     >
-                        {layer.name} ({groupName})
+                        {layer.name} {groupName && groupName !== 'Unknown' && !excludeGroups.includes(groupName) && ` (${groupName})`}
                     </StyledLayerName>
                 </StyledlayerHeader>
                 {layer.metadataIdentifier && <LayerMetadataButton layer={layer}/>}

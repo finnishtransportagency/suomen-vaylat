@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { setSearchParams } from '../../../state/slices/uiSlice';
 import strings from '../../../translations';
 import Layer from '../hierarchical-layerlist/Layer';
+import { findGroupForLayer } from '../hierarchical-layerlist/Layer';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -133,18 +134,6 @@ const LayerSearch = ({ layers, groups }) => {
                         </StyledListSubtitle>
                         <StyledLayerList>
                         {searchResults.length > 0 && searchParams !== '' && searchResults.map(layer => {
-                            const findGroupForLayer = (groups, layerId) => {
-                                for (let group of groups) {
-                                    if (group.layers && group.layers.includes(layerId)) {
-                                        return group;
-                                    }
-                                    if (group.groups) {
-                                        const nestedGroup = findGroupForLayer(group.groups, layerId);
-                                        if (nestedGroup) return nestedGroup;
-                                    }
-                                }
-                                return null;
-                            };
                             const groupObj = findGroupForLayer(groups, layer.id);
                             const matchingGroup = groupObj ? groupObj.locale[currentLang].name : 'Unknown';
                             return <Layer key={'search_resutlt_'+layer.id} layer={layer} groupName={matchingGroup}/>
