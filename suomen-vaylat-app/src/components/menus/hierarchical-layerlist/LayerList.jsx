@@ -201,6 +201,7 @@ const LayerList = ({
                                     tag={tag}
                                     layers={layers}
                                     index={index}
+                                    groups={groups}
                                     key={'taglayerlist-' + tag + '-' + index}
                                 />
                             );
@@ -250,7 +251,8 @@ const LayerList = ({
   const TagLayerList = ({
       tag,
       layers,
-      index
+      index,
+      groups
     }) => {
     const tagsWithLayers = useSelector(state => state.rpc.tagsWithLayers);
     const tagLayers = tagsWithLayers[tag];
@@ -324,7 +326,7 @@ const LayerList = ({
                             type: "tween"
                         }}
                     >
-                        <Layers layers={filteredLayers} isOpen={isOpen} />
+                        <Layers layers={filteredLayers} isOpen={isOpen} groups={groups}/>
                     </StyledLayerGroup>
             </StyledLayerGroups>
     );
