@@ -534,16 +534,23 @@ export const GFIPopup = ({
     const tablePropsInit = (data) => {
         const properties = data && data.content && data.content[0] && data.content[0].geojson && data.content[0].geojson.features && data.content[0].geojson.features[0].properties;
 
-        var hightPriorityColumns = properties?._orderHigh && JSON.parse(properties?._orderHigh);
+        var highPriorityColumns = properties?._orderHigh && JSON.parse(properties?._orderHigh);
         var lowPriorityColumns = properties?._order && JSON.parse(properties?._order);
+        var filteringColumns = properties?.filterFields && JSON.parse(properties?.filterFields);
+
         var columnsArray = [];
 
-        var columns = hightPriorityColumns && hightPriorityColumns.concat(lowPriorityColumns);
+        var columns = highPriorityColumns && highPriorityColumns.concat(lowPriorityColumns);
         columns && columns.forEach(column => {
             if (column !== 'UID') {
                 columnsArray.push({ key: column, title: column, width: 180, colGroup: { style: { minWidth: 120 } }});
             }
         });
+
+        var filterColumnsArray = [];
+        filteringColumns && filteringColumns.forEach(column => {
+            filterColumnsArray.push({ key: column, title: column});
+        })
 
         var cells = [];
         data && data?.content?.forEach(cont => {
@@ -560,6 +567,7 @@ export const GFIPopup = ({
 
         const tablePropsInit = {
             columns: columnsArray,
+            filterableColumns: filterColumnsArray,
             data: cells,
             rowKeyField: 'id',
             sortingMode: SortingMode.SingleTripleState,
