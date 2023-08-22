@@ -174,6 +174,10 @@ const GfiTabContent = ({
                 return "<";
             case "biggerThan":
                 return ">";
+            case "includes":
+                return "includes";
+            case "doesntInclude":
+                return "doesntInclude";
             default:
                 return "===";
         }
@@ -190,8 +194,10 @@ const GfiTabContent = ({
             '>=': function(a, b) { return a >= b; },
             '<=': function(a, b) { return a <= b; },
             '==': function(a, b) { return a == b; },
-            '!==': function(a, b) { return a !== b; },
-            '===': function(a, b) { return a === b; }, 
+            '!==': function(a, b) { return a.toLowerCase()  !== b.toLowerCase(); },
+            '===': function(a, b) { return a.toLowerCase() === b.toLowerCase(); },
+            'includes': function(a, b) { return a.toLowerCase().includes(b.toLowerCase()); },
+            'doesntInclude': function(a, b) { return !a.toLowerCase().includes(b); },
         };
 
         const properties = feature.properties;

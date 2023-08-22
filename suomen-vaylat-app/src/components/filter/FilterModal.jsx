@@ -324,7 +324,7 @@ export const FilterModal = () => {
                                         onClick={() => {
                                             handleRemoveAllFilters();
                                         }}>
-                                        <StyledFloatingDiv>{strings.gfifiltering.removeAllFilters} <FontAwesomeIcon icon={faTrash} size="6x" style={{}}/></StyledFloatingDiv>
+                                        <StyledFloatingDiv>{strings.gfifiltering.removeAllFilters} <FontAwesomeIcon icon={faTrash} size="6x" style={{marginLeft: '.5em'}}/></StyledFloatingDiv>
                                     </StyledIconWrapper>
                                 </StyledFilterReusltButtons>                   
                             </StyledFilterContainer>
