@@ -20,7 +20,8 @@ const Dropdown = ({
       ...provided,
       zIndex: 101,
       position: 'relative'
-    })
+    }),
+    menuPortal: base => ({ ...base, zIndex: 9999 })
   };
 
   return (
@@ -35,6 +36,7 @@ const Dropdown = ({
       styles={styles3}
       autoFocus={false}
       isDisabled={isDisabled}
+      menuPortalTarget={document.body} 
     />
   );
 };
