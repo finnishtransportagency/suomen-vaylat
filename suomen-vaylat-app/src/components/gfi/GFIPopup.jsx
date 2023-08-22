@@ -428,7 +428,6 @@ export const GFIPopup = ({
     }, [isGfiToolsOpen, activeSelectionTool]);
 
     useEffect(() => {
-        
         const mapResults = gfiLocations.map((location) => {
             location.content && location?.content[0]?.features?.length > GFI_MAX_LENGTH && setIsDataTable(true);
             const layers = allLayers.filter(
@@ -549,7 +548,7 @@ export const GFIPopup = ({
 
         var filterColumnsArray = [];
         filteringColumns && filteringColumns.forEach(column => {
-            filterColumnsArray.push({ key: column, title: column});
+            filterColumnsArray.push({ key: column.field, title: column.field, type: column.type});
         })
 
         var cells = [];
@@ -781,7 +780,6 @@ export const GFIPopup = ({
             var oskariProjection = '+proj=utm +zone=35 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs +type=crs';
             // Google maps EPSG:4326
             var mapsProjection = "+proj=longlat +datum=WGS84 +no_defs +type=crs";
-            console.log(pointInfo)
             const pointCoords = proj4(oskariProjection,mapsProjection,[pointInfo.lon, pointInfo.lat]);
             // our coords are flipped compared to google so we need to flip them back for the right point
             setPoint([pointCoords[1],pointCoords[0]].toString());
@@ -1014,6 +1012,7 @@ export const GFIPopup = ({
                     speed={300}
                 >
                     {gfiLocations.map((location) => {
+                        //täällä
                             const layers = allLayers.filter(layer => layer.id === location.layerId);
                             const title = layers.length > 0 && layers[0].name;
                             const tableProps = tablePropsInit(location);

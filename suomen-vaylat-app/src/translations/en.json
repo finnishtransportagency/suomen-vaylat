@@ -1155,6 +1155,7 @@
     }
   },
   "gfifiltering": {
+    "removeAllFilters": "Remove all filters",
     "placeholders" : {
       "chooseProp" : "Valitse ominaisuustieto",
       "chooseOperator" : "Valitse operaattori",
@@ -1168,7 +1169,9 @@
       "equals" : "Yhtäsuuri kuin",
       "notEquals" : "Erisuuri kuin",
       "smallerThan" : "Pienempi kuin",
-      "biggerThan" : "Suurempi kuin"
+      "biggerThan" : "Suurempi kuin",
+      "includes" : "Includes",
+      "doesntInclude" : "Doesn't include"
     }
   }
 }

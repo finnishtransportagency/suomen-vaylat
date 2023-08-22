@@ -1157,6 +1157,7 @@
     }
   },
   "gfifiltering": {
+    "removeAllFilters": "Poista kaikki suodattimet",
     "placeholders" : {
       "chooseProp" : "Valitse ominaisuustieto",
       "chooseOperator" : "Valitse operaattori",
@@ -1170,7 +1171,9 @@
       "equals" : "Yhtäsuuri kuin",
       "notEquals" : "Erisuuri kuin",
       "smallerThan" : "Pienempi kuin",
-      "biggerThan" : "Suurempi kuin"
+      "biggerThan" : "Suurempi kuin",
+      "includes" : "Sisältää",
+      "doesntInclude" : "Ei sisällä"
     }
   }
 }

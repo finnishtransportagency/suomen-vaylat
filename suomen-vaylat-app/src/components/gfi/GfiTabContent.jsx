@@ -163,6 +163,53 @@ const GfiTabContent = ({
     useEffect(() => {
         setIsActiveFiltering(activeFilteringOnLayer());
       }, [filters, filteringInfo.chosenLayer, activeFilteringOnLayer]);
+
+    const getPropertyOperator = (operator) => {
+        switch (operator) {
+            case "equals":
+                return "===";
+            case "notEquals":
+                return "!==";
+            case "smallerThan":
+                return "<";
+            case "biggerThan":
+                return ">";
+            default:
+                return "===";
+        }
+    }
+
+    const filterFeature = (feature) => {
+        if (filters.length === 0) {
+            return true;
+        }
+
+        var comparisonOperatorsHash = {
+            '<': function(a, b) { return a < b; },
+            '>': function(a, b) { return a > b; },
+            '>=': function(a, b) { return a >= b; },
+            '<=': function(a, b) { return a <= b; },
+            '==': function(a, b) { return a == b; },
+            '!==': function(a, b) { return a !== b; },
+            '===': function(a, b) { return a === b; }, 
+        };
+
+        const properties = feature.properties;
+
+        const filterMatch = filters.every(filter => {
+            if (data.layerId === filter.layer) {
+                const operator = getPropertyOperator(filter.operator);
+                var comparisonOperator = comparisonOperatorsHash[operator];
+                const value = properties[filter.property];
+                const doFilter = comparisonOperator(value, filter.value);
+                return doFilter;
+            } else {
+                return true;
+            }
+        })
+
+        return filterMatch;
+    }
       
     return <>
             <StyledSelectedTabHeader>
@@ -208,15 +255,17 @@ const GfiTabContent = ({
                     {
                         data?.content?.map((cont, contentIndex) => {
                             return cont.geojson?.features?.map((feature, index) => {
-                            return <GfiTabContentItem
-                                    key={feature.id}
-                                    title={feature.id.split('.')[1] ? title + ` | ${strings.gfi.uniqueId } ` + feature.id.split('.')[1] : title + ' ' + feature.id}
-                                    data={feature}
-                                    index={index}
-                                    contentIndex={contentIndex}
-                                    selectFeature={selectFeature}
-                                    deSelectFeature={deSelectFeature}
-                                />
+                                if (filterFeature(feature)) {
+                                    return <GfiTabContentItem
+                                            key={feature.id}
+                                            title={feature.id.split('.')[1] ? title + ` | ${strings.gfi.uniqueId } ` + feature.id.split('.')[1] : title + ' ' + feature.id}
+                                            data={feature}
+                                            index={index}
+                                            contentIndex={contentIndex}
+                                            selectFeature={selectFeature}
+                                            deSelectFeature={deSelectFeature}
+                                        />
+                                }
                             })
                         })
                     }
