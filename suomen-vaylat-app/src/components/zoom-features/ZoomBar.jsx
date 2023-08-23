@@ -92,7 +92,6 @@ const ZoomBar = ({
     isZoomBarOpen,
     setIsLegendOpen,
     setIsZoomBarOpen,
-    filters
 }) => {
     const { store } = useContext(ReactReduxContext);
     const rpc = useAppSelector((state) => state.rpc);
@@ -118,7 +117,6 @@ const ZoomBar = ({
                 selectedLayers={rpc.selectedLayers}
                 isExpanded={isLegendOpen}
                 setIsExpanded={setIsLegendOpen}
-                filters={filters}
             />
             <StyledZoomBarContent>
                 <CircleButton

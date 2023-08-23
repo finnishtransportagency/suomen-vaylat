@@ -5,7 +5,7 @@ import '../../custom.scss';
 import styled from 'styled-components';
 import strings from '../../translations';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimes, faFilter } from '@fortawesome/free-solid-svg-icons';
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { LegendGroup } from './LegendGroup';
 import {theme, isMobile} from "../../theme/theme";
 import ReactTooltip from "react-tooltip";
@@ -94,7 +94,6 @@ export const Legend = ({
     isExpanded,
     setIsExpanded,
     height,
-    filters
 }) => {
     const legends = [];
     const noLegends = [];
@@ -145,7 +144,6 @@ export const Legend = ({
                     return <LegendGroup
                         key={'legend-group-' + legend.layerId}
                         legend={legend}
-                        filters={filters}
                     />
                 })}
             </StyledGroupsContainer>

@@ -241,7 +241,8 @@ export const FilterModal = () => {
 
     const handleRemoveAllFilters = () => {
         if (filters && filters.length > 0){
-            store.dispatch(setFilters([]));
+            const updatedFilters = filters.filter(filter => filter.layer !== activeGFILayer[0]?.id)
+            store.dispatch(setFilters(updatedFilters));
         }
     }
 

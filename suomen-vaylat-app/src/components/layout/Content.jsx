@@ -938,19 +938,17 @@ const Content = () => {
                 >
                     <FilterModal chosenQueryGeometry={chosenQueryGeometry}/>
                 </Modal>
-                <ScaleBar />
+                <ScaleBar/>
                 <StyledToastContainer position="bottom-left" pauseOnFocusLoss={false} transition={Slide} autoClose={false} closeOnClick={false} />
                 <StyledContentGrid>
                     <StyledLeftSection>
                         <MenuBar/>
                         <ThemeMenu />
-                        <MapLayersDialog 
-                            filters={filters}
-                        />
+                        <MapLayersDialog/>
                     </StyledLeftSection>
                     <StyledRightSection>
-                        <Search />
-                        <ZoomMenu  filters={filters}/>
+                        <Search/>
+                        <ZoomMenu/>
                         <ActionButtons closeAction={handleCloseGFIModal} />
                     </StyledRightSection>
                 </StyledContentGrid>

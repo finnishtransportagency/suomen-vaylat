@@ -4,6 +4,8 @@ import { faAngleDown, faFilter } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styled from 'styled-components';
 import strings from '../../translations';
+import { useAppSelector } from '../../state/hooks';
+import theme from '../../theme/theme';
 
 const StyledLegendGroup = styled.div`
 `;
@@ -101,9 +103,11 @@ const listVariants = {
 };
 
 
-export const LegendGroup = ({ legend, filters }) => {
+export const LegendGroup = ({ legend }) => {
 
     const [isOpen, setIsOpen] = useState(true);
+    const filters = useAppSelector((state) => state.rpc);
+
     return (
         <StyledLegendGroup key={'legend-' + legend.layerId}>
             <StyledGroupHeader
@@ -114,7 +118,7 @@ export const LegendGroup = ({ legend, filters }) => {
                 <StyledLeftContent>
                     <StyledGroupName>{legend.layerName}
                     {filters && filters.filters.length > 0 && filters.filters.some(filter => (filter.layer ===  legend.layerName)) && 
-                <StyledFloatingSpan><FontAwesomeIcon icon={faFilter}  style={{ color: 'red'}}/></StyledFloatingSpan>}
+                <StyledFloatingSpan><FontAwesomeIcon icon={faFilter}  style={{ color: theme.colors.secondaryColor8 }}/></StyledFloatingSpan>}
                 </StyledGroupName>
               
                

@@ -215,7 +215,7 @@ const GfiTabContent = ({
                     onClick={() =>  store.dispatch(setFilteringInfo( {modalOpen: true, chosenLayer: title, layer: { id: data.layerId, title: title, tableProps : tableProps }} ))}
                     data-tip data-for={'gfiFilter'}
                 >
-                    <FontAwesomeIcon icon={faFilter} style={{ color: filteringInfo?.chosenLayer && filters && isActiveFiltering ? 'red' : '0064AF' }}  />
+                    <FontAwesomeIcon icon={faFilter} style={{ color: filteringInfo?.chosenLayer && filters && isActiveFiltering ? theme.colors.secondaryColor8 : theme.colors.mainColor1 }}  />
                     {filteringInfo?.title && filters && activeFilteringOnLayer() && 
                     <FontAwesomeIcon
                         icon={faExclamation}
