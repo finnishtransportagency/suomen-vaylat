@@ -1155,6 +1155,7 @@
     }
   },
   "gfifiltering": {
+    "filter": "Suodata tuloksia",
     "removeAllFilters": "Poista kaikki suodattimet",
     "placeholders" : {
       "chooseProp" : "Valitse ominaisuustieto",

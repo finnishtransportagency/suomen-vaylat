@@ -217,14 +217,10 @@ export const SelectedLayer = (
     const { allSelectedThemeLayers } = useAppSelector(state => state.rpc);
 
     const [localfilterenabled, setLocalfilterenabled] = useState(false)
-    const [, updateState] = useState();
-    const forceUpdate = useCallback(() => updateState({}), []);
 
     useEffect(() => {
         setLocalfilterenabled(filtersEnabled)
-        forceUpdate()
-    }, [filtersEnabled, layer.name, forceUpdate])
-
+    }, [filtersEnabled])
 
     useEffect(() => {
         setOpacity(layer.opacity);

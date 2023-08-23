@@ -157,13 +157,6 @@ export const FilterModal = () => {
     const [ filterValue, setFilterValue] = useState("");
     const [ propValue, setPropValue] = useState({});
 
-    useEffect(() => {
-        const filtersFromLocalStorage = JSON.parse(localStorage.getItem('filters'));
-        if (filtersFromLocalStorage) {
-            store.dispatch(setFilters(filtersFromLocalStorage));
-        }
-      }, []);
-
     const addFilter = () => {
         const prop = propValue.value;
         const value = filterValue;
@@ -213,6 +206,11 @@ export const FilterModal = () => {
             store.dispatch(setFilteringInfo(filterInfoFromlStorage));
         }
       }, []);
+      
+
+    useEffect(() => {
+        localStorage.setItem('filters', JSON.stringify(filters));
+    }, [filters]);    
 
     useEffect(() => {
         localStorage.setItem('filteringInfo', JSON.stringify(filteringInfo));
@@ -227,6 +225,8 @@ export const FilterModal = () => {
     useEffect(() => {
         if (filteringInfo && filteringInfo?.layer && filters){
             const updatedActivefilters = filters.filter(filter => filter.layer === filteringInfo?.layer.id)
+            console.log(updatedActivefilters)
+
             setActiveFilters(updatedActivefilters)
         }
      }, [filters, filteringInfo]);

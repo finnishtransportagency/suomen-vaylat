@@ -401,13 +401,12 @@ const StyledLoaderWrapper = styled.div`
 
 export const GFIPopup = ({ 
     handleGfiDownload, 
-    filters,
     chosenQueryGeometry,
     setChosenQueryGeometry  }) => {
 
     const LAYER_ID = 'gfi-result-layer';
     const { store } = useContext(ReactReduxContext);
-    const { channel, allLayers, gfiLocations, vkmData, pointInfoImageError, setPointInfoImageError, gfiCroppingArea, selectedLayers, pointInfo } = useAppSelector(state => state.rpc);
+    const { channel, allLayers, gfiLocations, vkmData, pointInfoImageError, setPointInfoImageError, gfiCroppingArea, selectedLayers, pointInfo, filters } = useAppSelector(state => state.rpc);
 
     const [point, setPoint] = useState(null);
     const { activeSelectionTool } = useAppSelector((state) => state.ui);
@@ -464,12 +463,6 @@ export const GFIPopup = ({
         tabsContent[selectedTab] !== undefined &&
             tabsContent[selectedTab].props.type === 'geoJson' &&
             setGeoJsonToShow(tabsContent[selectedTab].props.data);
-
-            if (tabsContent.length > 0) {
-                const layer = selectedLayers.filter(l => l.id == tabsContent[0].props.id);
-        
-                store.dispatch(setActiveGFILayer(layer));
-            }
     }, [selectedTab, tabsContent]);
 
     useEffect(() => {
@@ -479,7 +472,6 @@ export const GFIPopup = ({
     const handleSelectTab = (index) => {
         setSelectedTab(index);
         const layer = selectedLayers.filter(l => l.id == tabsContent[index].props.id);
-
         store.dispatch(setActiveGFILayer(layer));
     }
 

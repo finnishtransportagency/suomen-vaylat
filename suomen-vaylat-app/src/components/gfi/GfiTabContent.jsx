@@ -13,8 +13,8 @@ import { setFilteringInfo } from '../../state/slices/rpcSlice';
 
 import { kaReducer, Table } from 'ka-table';
 import "ka-table/style.scss";
-import { layer } from '@fortawesome/fontawesome-svg-core';
-import store from '../../state/store';
+import { theme, isMobile } from '../../theme/theme';
+import ReactTooltip from 'react-tooltip';
 
 const StyledSelectedTabHeader = styled.div`
     position: relative;
@@ -59,33 +59,15 @@ const StyledTabContent = styled.div`
         border-bottom: 1px solid #ddd;
     }
 `;
-/*
-    min-width: 600px;
-    max-width: 600px;
-    padding: 16px;
-    overflow: auto;
-    @media ${props => props.theme.device.mobileL} {
-        min-width: initial;
-    };
-    width: 600px;
-    height: 400px;
-    padding: 16px;
-    position: absolute;
-    top: 300px;
-    border: solid;
-    background-color: #0064af;
-    left: 500px;
-*/
 
 
 const GfiTabContent = ({
     data,
     title,
     tablePropsInit,
-    filters
 }) => {
     const [tableProps, changeTableProps] = useState(tablePropsInit);
-    const { filteringInfo } = useAppSelector((state) => state.rpc);
+    const { filteringInfo, filters } = useAppSelector((state) => state.rpc);
     const { store } = useContext(ReactReduxContext);
 
     const dispatch = action => {
@@ -194,10 +176,10 @@ const GfiTabContent = ({
             '>=': function(a, b) { return a >= b; },
             '<=': function(a, b) { return a <= b; },
             '==': function(a, b) { return a == b; },
-            '!==': function(a, b) { return a.toLowerCase()  !== b.toLowerCase(); },
-            '===': function(a, b) { return a.toLowerCase() === b.toLowerCase(); },
-            'includes': function(a, b) { return a.toLowerCase().includes(b.toLowerCase()); },
-            'doesntInclude': function(a, b) { return !a.toLowerCase().includes(b); },
+            '!==': function(a, b) { return isNaN(a) && isNaN(b) ? a.toLowerCase() !== b.toLowerCase() : a !== b; },
+            '===': function(a, b) { return isNaN(a) && isNaN(b) ? a.toLowerCase() === b.toLowerCase() : a === b; },
+            'includes': function(a, b) { return isNaN(a) && isNaN(b) && a.toLowerCase().includes(b.toLowerCase()); },
+            'doesntInclude': function(a, b) { return isNaN(a) && isNaN(b) && !a.toLowerCase().includes(b); },
         };
 
         const properties = feature.properties;
@@ -219,6 +201,9 @@ const GfiTabContent = ({
       
     return <>
             <StyledSelectedTabHeader>
+                <ReactTooltip backgroundColor={theme.colors.mainColor1} textColor={theme.colors.mainWhite} disable={isMobile} id={"gfiFilter"} place="bottom" type='dark' effect="float">
+                    <span>{strings.gfifiltering.filter}</span>
+                </ReactTooltip>
                 <StyledSelectedTabTitle>
                     <p>
                         {
@@ -228,18 +213,19 @@ const GfiTabContent = ({
                 </StyledSelectedTabTitle>
                 <StyledSelectedTabDisplayOptionsButton
                     onClick={() =>  store.dispatch(setFilteringInfo( {modalOpen: true, chosenLayer: title, layer: { id: data.layerId, title: title, tableProps : tableProps }} ))}
+                    data-tip data-for={'gfiFilter'}
                 >
-                <FontAwesomeIcon icon={faFilter} style={{ color: filteringInfo?.chosenLayer && filters && isActiveFiltering ? 'red' : '0064AF' }}  />
-                {filteringInfo?.title && filters && activeFilteringOnLayer() && 
-                <FontAwesomeIcon 
-                    icon={faExclamation}   
-                    style={{
-                        color: 'red',
-                        marginLeft: '10px',
-                        }}/
-                >
-                } 
-                    </StyledSelectedTabDisplayOptionsButton>
+                    <FontAwesomeIcon icon={faFilter} style={{ color: filteringInfo?.chosenLayer && filters && isActiveFiltering ? 'red' : '0064AF' }}  />
+                    {filteringInfo?.title && filters && activeFilteringOnLayer() && 
+                    <FontAwesomeIcon
+                        icon={faExclamation}
+                        style={{
+                            color: 'red',
+                            marginLeft: '10px',
+                            }}/
+                    >
+                    }
+                </StyledSelectedTabDisplayOptionsButton>
                 <StyledSelectedTabDisplayOptionsButton
                     onClick={() =>  setShowDataTable(!showDataTable)}
                 >

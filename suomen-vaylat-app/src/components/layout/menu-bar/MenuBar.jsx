@@ -72,9 +72,9 @@ const StyledLayerCount = styled.div`
     font-weight: 600;
 `;
 
-const MenuBar = (filters) => {
+const MenuBar = () => {
     const { store } = useContext(ReactReduxContext);
-    const { selectedLayers, downloads, channel } = useAppSelector(
+    const { selectedLayers, downloads, channel, filters } = useAppSelector(
         (state) => state.rpc
     );
 

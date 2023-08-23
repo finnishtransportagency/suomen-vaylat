@@ -161,127 +161,15 @@ const StyledLayerNamesList = styled.ul`
     padding-inline-start: 20px;
 `;
 
-const StyledModalContainer = styled.div`
-    :after {
-        content: "";
-        display: table;
-        clear: both;
-    }
-    padding-left: 20px;
-    padding-right: 20px;
-    margin-top: 30px;
-    margin-bottom: 30px;
-    min-height: 160px;
-    min-width: 800px;
-    position: relative;
-`;
-
-const StyledModalFloatingChapter = styled.div`
-    float: left;
-    width: 29%;
-    margin-left: 6px;
-    position: relative; 
-`;
-const StyledModalFloatingActionChapter = styled.div`
-    width: 7%;
-    margin-left: 6px;
-    float: left;
-    position: relative; 
-`;
-
-
-const StyledInput = styled.input`
-    width: 100%;
-    padding-left: 12px;
-    font-size: 16px;
-    padding-top: 10px;
-    border-radius: 4px;
-    border: 2px solid;
-    border-color: hsl(0, 0%, 80%);
-    padding: 5px 10px;
-`;
-
-const StyledFilter = styled.div`
-    background-color: #f2f2f2;
-    //width: 40%;
-    //float: left;
-    border: solid 1px black;
-    border-radius: 7px;
-    //margin-left: 5px;
-    margin-bottom: 5px;
-    padding-left: 3px;
-    padding-right: 3px;
-    :nth-child(odd) {
-        background-color: white;
-        //margin-left: 5px;
-    }
-    :nth-child(3) {
-        //float: none;
-    }
-    display: flex;
-`;
-
-const StyledSelectedTabDisplayOptionsButton = styled.div`
-    position: relative;
-    right: 0px;
-    padding: 8px;
-    cursor: pointer;
-    color: ${(props) => props.theme.colors.mainColor1};
-    svg {
-        font-size: 24px;
-    };
-`;
-
 const StyledToastContainer = styled(ToastContainer)`
 `;
 
 const StyledLayerNamesListItem = styled.li``;
 
-const StyledIconWrapper = styled.div`
-    border: none;
-    background: none;
-    cursor: pointer;
-    svg {
-        color: ${props => props.theme.colors.mainColor1};
-        font-size: 20px;
-        transition: all 0.1s ease-out;
-    };
-    &:hover {
-        svg {
-            color: ${props => props.theme.colors.mainColor2};
-        }
-    };
-    float: right;
-    margin-right: 8px;
-`;
-
-const StyledFloatingDiv = styled.div`
-    :after {
-        content: "";
-        display: table;
-        clear: both;
-    }
-`;
-
-const StyledFilterProp = styled.div`
-
-`;  
-
-const StyledFilterPropContainer = styled.div`
-    width: 95%;
-`;  
-
-
-const StyledFilterHeader = styled.div`
-    font-size: 16px;
-    font-weight: bold;
-`;  
-
-
 const Content = () => {
     const constraintsRef = useRef(null);
 
-    const { warnings, filters, selectedLayers, activeGFILayer, filteringInfo } = useAppSelector((state) => state.rpc);
+    const { warnings, filters, filteringInfo } = useAppSelector((state) => state.rpc);
 
     const {
         shareUrl,
@@ -306,7 +194,7 @@ const Content = () => {
     );
     const metadata = useAppSelector((state) => state.rpc.layerMetadata);
 
-    let { channel, gfiLocations } = useAppSelector((state) => state.rpc);
+    let { channel } = useAppSelector((state) => state.rpc);
 
     const addToLocalStorageArray = (name, value) => {
         // Get the existing data
@@ -338,11 +226,7 @@ const Content = () => {
         if (filtersFromLocalStorage) {
             store.dispatch(setFilters(filtersFromLocalStorage));
         }
-      }, []);
-
-    useEffect(() => {
-        localStorage.setItem('filters', JSON.stringify(filters));
-    }, [filters]);    
+      }, []); 
 
     useEffect(() => {
         announcements && setCurrentAnnouncement(0);
@@ -638,39 +522,6 @@ const Content = () => {
         };
     }
 
-    const [ operatorValue,  setOperatorValue] = useState({});
-    const [ filterValue, setFilterValue] = useState("");
-    const [ propValue, setPropValue] = useState({});
-    const addFilter = () => {
-        const prop = propValue.value;
-        const value = filterValue;
-        const oper = operatorValue.value;
-        const layer = filteringInfo?.chosenLayer; 
-
-        if (!prop || !value || !oper){
-            return
-        }
-        store.dispatch(setFilters(
-            [...filters,
-            {   
-                "layer" : layer,
-                "property": prop,
-                "operator": oper,
-                "value": value
-            }
-        ]
-        ));
-        setPropValue({})
-        setFilterValue("")
-        setOperatorValue({})
-    }
-    const gfiFilteringOptions = [
-    { value: 'equals', label: 'Yhtäsuuri kuin' },
-    { value: 'notEquals', label: 'Erisuuri kuin' },
-    { value: 'smallerThan', label: 'Pienempi kuin' },
-    { value: 'biggerThan', label: 'Suurempi kuin' },
-    ];
-
     useEffect(() => {
         localStorage.setItem('filteringInfo', JSON.stringify(filteringInfo));
     }, [filteringInfo]);    
@@ -760,7 +611,6 @@ const Content = () => {
                 >
                     <GFIPopup
                         handleGfiDownload={handleGfiDownload}
-                        filters={filters}
                         chosenQueryGeometry={chosenQueryGeometry}
                         setChosenQueryGeometry={setChosenQueryGeometry}
                     />
@@ -1033,7 +883,6 @@ const Content = () => {
                     <GfiToolsMenu 
                         handleGfiToolsMenu={handleGfiToolsMenu} 
                         closeButton={false} 
-                        filters={filters}
                         setChosenQueryGeometry={setChosenQueryGeometry}
                     />
                 </Modal>
@@ -1093,7 +942,7 @@ const Content = () => {
                 <StyledToastContainer position="bottom-left" pauseOnFocusLoss={false} transition={Slide} autoClose={false} closeOnClick={false} />
                 <StyledContentGrid>
                     <StyledLeftSection>
-                        <MenuBar filters={filters} />
+                        <MenuBar/>
                         <ThemeMenu />
                         <MapLayersDialog 
                             filters={filters}

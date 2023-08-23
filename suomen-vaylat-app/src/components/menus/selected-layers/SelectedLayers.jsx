@@ -126,7 +126,7 @@ export const SelectedLayers = (props) => {
                             value={item}
                             index={index}
                             currentZoomLevel={currentZoomLevel}
-                            filtersEnabled={filters && filters.length > 0 && filters.some(filter => (filter.layer ===  item.name))}
+                            filtersEnabled={filters && filters.length > 0 && filters.some(filter => (filter.layer ===  item.id))}
                         />
                     ))}
                 </ul>
