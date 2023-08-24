@@ -226,7 +226,7 @@ export const FilterModal = () => {
 
     const filterOptions = () => {
         var layer = filteringInfo?.layer;
-        const options = layer?.tableProps?.columns?.map( column => {
+        const options = layer?.tableProps?.filterableColumns?.map( column => {
             return { value: column.key, label: column.title, type: column.type}
         }
         )
