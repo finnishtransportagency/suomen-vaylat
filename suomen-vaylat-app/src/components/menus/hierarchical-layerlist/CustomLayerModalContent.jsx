@@ -4,7 +4,7 @@ import strings from "../../../translations";
 import styled from "styled-components";
 import LayerGroup from './LayerGroup';
 import store from '../../../state/store';
-import { setIsSavedLayer, incrementTriggerUpdate } from '../../../state/slices/uiSlice';
+import { setIsSavedLayer, incrementTriggerUpdate, setIsCustomFilterOpen } from '../../../state/slices/uiSlice';
 
 const StyledGuideContent = styled.div`
 `;
@@ -165,6 +165,30 @@ export const CustomLayerModalContent = () => {
     allGroups,
     allLayers,
   } = useAppSelector((state) => state.rpc);
+  const [areLayersSelected, setAreLayersSelected] = useState(false);
+
+  useEffect(() => {
+    const loadedLayers = localStorage.getItem("checkedLayers");
+    if (loadedLayers && JSON.parse(loadedLayers).length > 0) {
+      setAreLayersSelected(true);
+    } else {
+      setAreLayersSelected(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    const handleStorageChange = () => {
+      const loadedLayers = localStorage.getItem("checkedLayers");
+      if (loadedLayers && JSON.parse(loadedLayers).length > 0) {
+        setAreLayersSelected(true);
+      } else {
+        setAreLayersSelected(false);
+      }
+    };
+  
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
+  }, []);
 
   const modalContent = [
     {
@@ -193,7 +217,11 @@ export const CustomLayerModalContent = () => {
   const removeLayers =() => {
     store.dispatch(setIsSavedLayer(false));
     localStorage.removeItem("checkedLayers");
-  }
+  };
+
+  const handleCustomFilterClose = () => {
+    store.dispatch(setIsCustomFilterOpen(false));
+  };
 
   return (
     <>
@@ -208,11 +236,17 @@ export const CustomLayerModalContent = () => {
       }}>
         {strings.layerlist.customLayerInfo.removeLayers}
       </StyledRemoveButton>
-      <StyledSaveButton onClick={() => {
-        saveLayers();
-      }}>
-        {strings.layerlist.customLayerInfo.saveLayers}
-      </StyledSaveButton>
+      <StyledSaveButton
+        disabled={!areLayersSelected}
+        onClick={() => {
+          if (areLayersSelected) {
+            saveLayers();
+            handleCustomFilterClose();
+          }
+        }}
+      >
+  {strings.layerlist.customLayerInfo.saveLayers}
+</StyledSaveButton>
     </StyledButtonContainer>
 
         <StyledSearchAndFilter>
