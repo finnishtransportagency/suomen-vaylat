@@ -33,7 +33,8 @@ import {
     setIsDownloadLinkModalOpen,
     setMaximizeGfi,
     setActiveSelectionTool,
-    setIsGfiToolsOpen
+    setIsGfiToolsOpen,
+    setIsCustomFilterOpen,
 } from '../../state/slices/uiSlice';
 
 import {
@@ -68,6 +69,7 @@ import GFIDownload from '../gfi/GFIDownload';
 import MetadataModal from '../metadata-modal/MetadataModal';
 import { ANNOUNCEMENTS_LOCALSTORAGE } from '../../utils/constants';
 import ThemeMenu from '../menus/theme-menu/ThemeMenu';
+import { CustomLayerModal } from '../menus/hierarchical-layerlist/CustomLayerModal';
 
 const StyledContent = styled.div`
     z-index: 1;
@@ -175,6 +177,7 @@ const Content = () => {
         shareUrl,
         isInfoOpen,
         isUserGuideOpen,
+        isCustomFilterOpen,
         isSaveViewOpen,
         isGfiOpen,
         isGfiDownloadOpen,
@@ -210,6 +213,8 @@ const Content = () => {
         // Save back to localStorage
         localStorage.setItem(name, existing.toString());
     };
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     const [currentAnnouncement, setCurrentAnnouncement] = useState(null);
 
@@ -251,6 +256,10 @@ const Content = () => {
     const handleCloseAppInfoModal = () => {
         store.dispatch(setIsInfoOpen(false));
     };
+
+    const handleCustomFilterClose = () => {
+        store.dispatch(setIsCustomFilterOpen(false));
+      };
 
     const handleCloseShareWebSite = () => {
         store.dispatch(setShareUrl(''));
@@ -651,6 +660,30 @@ const Content = () => {
                     height="860px"
                 >
                     <UserGuideModalContent />
+                </Modal>
+                <Modal
+                    constraintsRef={
+                        constraintsRef
+                    } /* Reference div for modal drag boundaries */
+                    drag={false} /* Enable (true) or disable (false) drag */
+                    resize={false}
+                    backdrop={
+                        true
+                    } /* Is backdrop enabled (true) or disabled (false) */
+                    fullScreenOnMobile={
+                        true
+                    } /* Scale modal full width / height when using mobile device */
+                    titleIcon={null} /* Use icon on title or null */
+                    title={strings.layerlist.customLayerInfo.infoTitle} /* Modal header title */
+                    type={'normal'} /* Modal type */
+                    closeAction={
+                        handleCustomFilterClose
+                    } /* Action when pressing modal close button or backdrop */
+                    isOpen={isCustomFilterOpen} /* Modal state */
+                    id={null}
+                    height="860px"
+                >
+                    <CustomLayerModal />
                 </Modal>
                 <Modal
                     constraintsRef={

@@ -107,6 +107,7 @@
     "roadAddressInstructions": "Vägadressuppgifterna kunde inte hämtas. Zooma in på kartan och klicka på den punkt som du vill söka vägadressuppgifter för."
   },
   "downloads": {
+    "newDownloads": "NY NEDLADDNING",
     "downloads": "Nedladdningar",
     "processing": "Bearbetas",
     "noProcessingDownloads": "Inga nedladdningar att bearbeta",
@@ -120,7 +121,9 @@
     "failedDownloads": "Felaktiga nedladdningar",
     "errorOccuredDuringDownloadProcessing": "Ett fel uppstod under bearbetningen av paketet",
     "noWebSocketSupport": "Din webbläsare stöder inte nedladdningar. Du kan prova på nytt med en annan webbläsare eller uppdatera din nuvarande webbläsare.",
-    "downloadFailure": "Något gick fel vid nedladdningen, försök igen."
+    "downloadFailure": "Något gick fel vid nedladdningen, försök igen.",
+    "downloadsInfo":"En del av datan kan laddas ner från hela Finlands område via menyn för datalager bredvid datalagret i fråga.",
+    "downloadsInfo2": "Om nedladdningsknappen saknas måste du välja ett objekt på kartan för att ladda ner datan."
   },
   "general": {
     "close": "Stänga",
@@ -220,8 +223,10 @@
     },
     "contactInfoFeedback": {
       "0": "Trafikledsverket ansvarar för applikationen som levereras av Sitowise Oy.",
-      "1": "Respons kan skickas till adressen",
+      "1": "Respons om Suomen Väylät -karttjänsten kan skickas till adressen",
       "2": "suomenvaylat@vayla.fi",
+      "3": "Respons gällande landsvägar, järnvägar och farleder kan ges via",
+      "4": "https://liikenne.palautevayla.fi/feedback",
       "emailSubject": "Respons om Finlands Trafikleder"
     },
     "appInfoLinks": {

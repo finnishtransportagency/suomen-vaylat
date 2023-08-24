@@ -11,7 +11,7 @@ import { updateLayers } from '../../../utils/rpcUtil';
 import LayerDownloadLinkButton from './LayerDownloadLinkButton';
 import {setIsDownloadLinkModalOpen} from '../../../state/slices/uiSlice';
 import LayerMetadataButton from './LayerMetadataButton';
-import { getLayerMetadata } from '../../../state/slices/rpcSlice';
+import { useAppSelector } from '../../../state/hooks';
 
 const StyledLayerContainer = styled.li`
     background-color: ${props => props.themeStyle && "#F5F5F5"};
@@ -60,9 +60,54 @@ const StyledSwitchButton = styled.div`
     margin-right: 2px;
     transition: all 0.3s ease-out;
     background-color: ${props => props.theme.colors.mainWhite};
+`; 
+
+const StyledCheckbox = styled.div`
+    position: absolute;
+    left: ${props => props.isSelected ? "15px" : "0px"};
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-left: 2px;
+    margin-right: 2px;
+    transition: all 0.3s ease-out;
+    background-color: ${props => props.theme.colors.mainWhite};
 `;
 
-const Switch = ({ action, layer, isSelected }) => {
+const StyledCheckboxContainer = styled.label`
+
+  input[type="checkbox"] {
+    position: relative;
+    width: 15px;
+    height: 15px;
+    border-radius: 70%;
+    margin-left: 2px;
+    margin-right: 2px;
+    transition: all 0.3s ease-out;
+
+    input[type="checkbox"]:isChecked {
+        color: #fff;
+    }
+  }
+`;
+
+// Creates checkboxes that are used in CustomLayerList
+const Checkbox = ({ action, isChecked }) => {
+  return (
+    <StyledCheckboxContainer isChecked={isChecked}>
+      <input
+        type="checkbox"
+        checked={isChecked}
+        onChange={(event) => {
+          action(event.target.checked);
+        }}
+      />
+        <StyledCheckbox isSelected={isChecked}/>
+    </StyledCheckboxContainer>
+  );
+}; 
+
+export const Switch = ({ action,layer,isSelected }) => {
     return (
         <StyledSwitchContainer
         isSelected={isSelected}
@@ -74,37 +119,83 @@ const Switch = ({ action, layer, isSelected }) => {
     );
 };
 
-export const Layer = ({ layer, theme }) => {
+export const findGroupForLayer = (groups, layerId) => {
+    for (let group of groups) {
+        if (group.layers && group.layers.includes(layerId)) {
+            return group;
+        }
+        if (group.groups) {
+            const nestedGroup = findGroupForLayer(group.groups, layerId);
+            if (nestedGroup) return nestedGroup;
+        }
+    }
+    return null;
+};
+
+export const Layer = ({ layer, theme, groupName }) => {
 
     const { store } = useContext(ReactReduxContext);
     const [layerStyle, setLayerStyle] = useState(null);
     const [themeSelected, setThemeSelected] = useState(false);
+    const [isChecked, setIsChecked] = useState(false);
+    const {isCustomFilterOpen} = useAppSelector(state => state.ui)
 
     const {
         channel,
         selectedTheme
     } = useSelector(state => state.rpc);
 
-    const handleRessu = (data, buli, gebo) => {
-        console.info(data)
-        console.info(buli)
-        console.info(gebo)
-    } 
+    const excludeGroups = ["Digiroad", "Tierekisteri (Poistuva)"];
+
+      // Get the checked layers from local storage
+        const checkedLayers = localStorage.getItem('checkedLayers');
+        let isSaved = false;
+        if (checkedLayers) {
+          isSaved = JSON.parse(checkedLayers).findIndex(savedLayer => savedLayer.id === layer.id) !== -1;
+        }
+
+        useEffect(() => {
+          let isSaved = false;
+          const checkedLayers = localStorage.getItem('checkedLayers');
+          if (checkedLayers) {
+            isSaved = JSON.parse(checkedLayers).findIndex(savedLayer => savedLayer.id === layer.id) !== -1;
+          }
+          setIsChecked(isSaved);
+        }, [layer.id]);
+
+
+    const isLayerSelected = () => {
+        const storedLayers = localStorage.getItem("checkedLayers");
+        if (storedLayers) {
+          const parsedLayers = JSON.parse(storedLayers);
+          return parsedLayers.some((storedLayer) => storedLayer.id === layer.id);
+        }
+        return false;
+      };
 
     const handleLayerVisibility = (channel, layer) => {
-        console.info(layer)
+      store.dispatch(setMapLayerVisibility(layer));
+      updateLayers(store, channel);
+  };
 
-        getLayerMetadata({ layer: layer, uuid: layer.metadataIdentifier, handler: handleRessu, errorHandler: (e) => console.info("error", e) });
-        store.dispatch(setMapLayerVisibility(layer));
-        updateLayers(store, channel);
-
-        channel.postRequest('MetadataSearchRequest', [
-            {
-                search: layer.title
-            },
-        ]);
-
-    };
+  const handleCheckboxChange = (checked) => {
+    setIsChecked(checked);
+    const storedLayers = localStorage.getItem("checkedLayers");
+    if (checked) {
+      let updatedLayers = [];
+      if (storedLayers) {
+        const parsedLayers = JSON.parse(storedLayers);
+        updatedLayers = [...parsedLayers, layer];
+      } else {
+        updatedLayers = [layer];
+      }
+      localStorage.setItem("checkedLayers", JSON.stringify(updatedLayers));
+    } else if (storedLayers) {
+      const parsedLayers = JSON.parse(storedLayers);
+      const updatedLayers = parsedLayers.filter((storedLayer) => storedLayer.id !== layer.id);
+      localStorage.setItem("checkedLayers", JSON.stringify(updatedLayers));
+    }
+  };
 
     const handleIsDownloadLinkModalOpen = () => {
         store.dispatch(setIsDownloadLinkModalOpen({ layerDownloadLinkModalOpen: true, layerDownloadLink: downloadLink, layerDownloadLinkName: layer.name }))
@@ -158,19 +249,32 @@ export const Layer = ({ layer, theme }) => {
                     <StyledLayerName
                         themeStyle={themeStyle}
                     >
-                        {layer.name}
+                        {layer.name} {groupName && groupName !== 'Unknown' && !excludeGroups.includes(groupName) && ` (${groupName})`}
                     </StyledLayerName>
                 </StyledlayerHeader>
                 {layer.metadataIdentifier && <LayerMetadataButton layer={layer}/>}
                 {downloadLink && <LayerDownloadLinkButton
                     handleIsDownloadLinkModalOpen={handleIsDownloadLinkModalOpen} />
                 }
-                <Switch
-                    action={() => handleLayerVisibility(channel, layer)}
-                    isSelected={layer.visible}
-                    layer={layer}
-                />
-            </StyledLayerContainer>
+                {isCustomFilterOpen === true ? (
+                    <Checkbox
+                      action={handleCheckboxChange}
+                      layer={layer} // Pass the group information to the Checkbox component
+                      isChecked={isChecked}
+                      disabled={isLayerSelected()}
+                     />
+                    ) : (
+                    // Do not render Switch if the layer is a saved layer
+                    !isSaved && (
+                      <Switch
+                        action={() => handleLayerVisibility(channel, layer)}
+                        isSelected={layer.visible}
+                        layer={layer}
+                        disabled={isLayerSelected()}
+                      />
+                    )
+                    )}
+                </StyledLayerContainer>
     );
   };
 
