@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect, useRef, useCallback } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { useAppSelector } from '../../state/hooks';
 import { ReactReduxContext } from 'react-redux';
 
@@ -6,17 +6,10 @@ import 'react-toastify/dist/ReactToastify.css';
 import styled from 'styled-components';
 import strings from '../../translations';
 import Dropdown from '../select/Dropdown';
-import { faPlus, faTimes, faTrash, faBullhorn } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faTimes, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-//import { fetchFeaturesSynchronous, fetchContentFromChannel } from '../../utils/gfiUtil';
-import { setWarning } from '../../state/slices/uiSlice';
 
-
-import { setFilters, setFilteringInfo , setVKMData, setGFICroppingArea, setGFILocations } from '../../state/slices/rpcSlice';
-
-
-const BODY_SIZE_EXCEED = "BODY_SIZE_EXCEED";
-const GENERAL_FAIL = "GENERAL_FAIL";
+import { setFilters , setActiveGFILayer } from '../../state/slices/rpcSlice';
 
 
 const StyledFilterProp = styled.div`
@@ -26,7 +19,6 @@ const StyledFilterProp = styled.div`
 const StyledFilterPropContainer = styled.div`
     width: 95%;
 `;  
-
 
 const StyledFilterHeader = styled.div`
     font-size: 16px;
@@ -60,7 +52,6 @@ const StyledModalFloatingActionChapter = styled.div`
     float: left;
     position: relative; 
 `;
-
 
 const StyledInput = styled.input`
     width: 100%;
@@ -151,7 +142,7 @@ const StyledFloatingDiv = styled.div`
 `;
 
 export const FilterModal = () => {
-    const { filters, activeGFILayer, filteringInfo } = useAppSelector((state) => state.rpc);
+    const { filters, activeGFILayer, filteringInfo, gfiLocations, selectedLayers } = useAppSelector((state) => state.rpc);
     const { store } = useContext(ReactReduxContext);
     const [ operatorValue,  setOperatorValue] = useState({});
     const [ filterValue, setFilterValue] = useState("");
@@ -161,7 +152,7 @@ export const FilterModal = () => {
         const prop = propValue.value;
         const value = filterValue;
         const oper = operatorValue.value;
-        const layer = filteringInfo?.chosenLayer; 
+        const layer = filteringInfo?.layer?.id; 
 
         if (!prop || !value || !oper){
             return
@@ -201,24 +192,11 @@ export const FilterModal = () => {
     };
     
     useEffect(() => {
-        const filterInfoFromlStorage = JSON.parse(localStorage.getItem('filteringInfo'));
-        if (filterInfoFromlStorage) {
-            store.dispatch(setFilteringInfo(filterInfoFromlStorage));
+        if (activeGFILayer === null) {
+            const layer = selectedLayers.filter(l => l.id == gfiLocations[0].layerId);
+            store.dispatch(setActiveGFILayer(layer));
         }
       }, []);
-      
-
-    useEffect(() => {
-        localStorage.setItem('filters', JSON.stringify(filters));
-    }, [filters]);    
-
-    useEffect(() => {
-        localStorage.setItem('filteringInfo', JSON.stringify(filteringInfo));
-    }, [filteringInfo]);
-
-     useEffect(() => {
-        store.dispatch(setFilteringInfo({...filteringInfo, chosenLayer: activeGFILayer[0]?.id}));
-    }, [activeGFILayer]);  
 
     const [activeFilters, setActiveFilters] = useState();
 
@@ -249,9 +227,7 @@ export const FilterModal = () => {
     const filterOptions = () => {
         var layer = filteringInfo?.layer;
         const options = layer?.tableProps?.columns?.map( column => {
-            return { value: column.key, label: column.title, type: "string"}
-
-            //return { value: column.key, label: column.title, type: column.type}
+            return { value: column.key, label: column.title, type: column.type}
         }
         )
         return options;

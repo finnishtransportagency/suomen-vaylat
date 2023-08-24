@@ -144,7 +144,7 @@ const GfiTabContent = ({
 
     useEffect(() => {
         setIsActiveFiltering(activeFilteringOnLayer());
-      }, [filters, filteringInfo.chosenLayer, activeFilteringOnLayer]);
+      }, [filters, activeFilteringOnLayer]);
 
     const getPropertyOperator = (operator) => {
         switch (operator) {
@@ -212,10 +212,10 @@ const GfiTabContent = ({
                     </p>
                 </StyledSelectedTabTitle>
                 <StyledSelectedTabDisplayOptionsButton
-                    onClick={() =>  store.dispatch(setFilteringInfo( {modalOpen: true, chosenLayer: title, layer: { id: data.layerId, title: title, tableProps : tableProps }} ))}
+                    onClick={() =>  store.dispatch(setFilteringInfo( {modalOpen: true, layer: { id: data.layerId, title: title, tableProps : tableProps }} ))}
                     data-tip data-for={'gfiFilter'}
                 >
-                    <FontAwesomeIcon icon={faFilter} style={{ color: filteringInfo?.chosenLayer && filters && isActiveFiltering ? theme.colors.secondaryColor8 : theme.colors.mainColor1 }}  />
+                    <FontAwesomeIcon icon={faFilter} style={{ color: filters && isActiveFiltering ? theme.colors.secondaryColor8 : theme.colors.mainColor1 }}  />
                     {filteringInfo?.title && filters && activeFilteringOnLayer() && 
                     <FontAwesomeIcon
                         icon={faExclamation}

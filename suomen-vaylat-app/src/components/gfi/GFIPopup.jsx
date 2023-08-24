@@ -463,11 +463,6 @@ export const GFIPopup = ({
         tabsContent[selectedTab] !== undefined &&
             tabsContent[selectedTab].props.type === 'geoJson' &&
             setGeoJsonToShow(tabsContent[selectedTab].props.data);
-
-        if (tabsContent.length > 0) {
-            const layer = selectedLayers.filter(l => l.id == tabsContent[0].props.id);
-            store.dispatch(setActiveGFILayer(layer));
-        }
     }, [selectedTab, tabsContent]);
 
     useEffect(() => {
@@ -708,9 +703,9 @@ export const GFIPopup = ({
                 [null, null, LAYER_ID]
             );
         if (index > 0) {
-            setSelectedTab(index - 1);
+            handleSelectTab(index - 1);
         } else {
-            setSelectedTab(0);
+            handleSelectTab(0);
         }
     };
 
@@ -775,6 +770,12 @@ export const GFIPopup = ({
             setPoint([pointCoords[1],pointCoords[0]].toString());
         }
      }, [vkmData, pointInfo]);
+
+     const handleSelectTab = (index) => {
+        setSelectedTab(index);
+        const layer = selectedLayers.filter(l => l.id == tabsContent[index].props.id);
+        store.dispatch(setActiveGFILayer(layer));
+    }
 
     return (
         <StyledGfiContainer>
@@ -928,7 +929,7 @@ export const GFIPopup = ({
                                     key={'tab_' + index}
                                 >
                                     <StyledGfiTab
-                                        onClick={() => setSelectedTab(index)}
+                                        onClick={() => handleSelectTab(index)}
                                         selected={selectedTab === index}
                                     >
                                         <StyledTabName>
@@ -995,7 +996,7 @@ export const GFIPopup = ({
                     ref={gfiInputEl}
                     id={'gfi-swiper'}
                     onSlideChange={(e) => {
-                        setSelectedTab(e.activeIndex);
+                        handleSelectTab(e.activeIndex);
                     }}
                     tabIndex={selectedTab}
                     allowTouchMove={false} // Disable swiping

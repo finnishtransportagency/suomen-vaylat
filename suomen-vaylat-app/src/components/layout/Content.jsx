@@ -222,13 +222,6 @@ const Content = () => {
     const [websocketFirstTimeTryConnecting, setWebsocketFirstTimeTryConnecting] = useState(false);
 
     useEffect(() => {
-        const filtersFromLocalStorage = JSON.parse(localStorage.getItem('filters'));
-        if (filtersFromLocalStorage) {
-            store.dispatch(setFilters(filtersFromLocalStorage));
-        }
-      }, []); 
-
-    useEffect(() => {
         announcements && setCurrentAnnouncement(0);
     }, [announcements]);
 
@@ -521,10 +514,6 @@ const Content = () => {
             };
         };
     }
-
-    useEffect(() => {
-        localStorage.setItem('filteringInfo', JSON.stringify(filteringInfo));
-    }, [filteringInfo]);    
 
     const handleCloseFilteringModal = useCallback(() => {
         store.dispatch(setFilteringInfo({...filteringInfo, modalOpen: false}));

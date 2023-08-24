@@ -290,7 +290,7 @@ export const SelectedLayer = (
                         { localfilterenabled && 
                             (
                                 <StyledIconWrapper>
-                                <StyledFloatingSpan><FontAwesomeIcon icon={faFilter}  style={{ color: theme.colors.secondaryColor8 }}/></StyledFloatingSpan>
+                                    <StyledFloatingSpan><FontAwesomeIcon icon={faFilter}  style={{ color: theme.colors.secondaryColor8 }}/></StyledFloatingSpan>
                                 </StyledIconWrapper>
                             )
                         }                 

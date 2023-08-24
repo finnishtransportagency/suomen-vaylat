@@ -117,11 +117,10 @@ export const LegendGroup = ({ legend }) => {
             >
                 <StyledLeftContent>
                     <StyledGroupName>{legend.layerName}
-                    {filters && filters.filters.length > 0 && filters.filters.some(filter => (filter.layer ===  legend.layerName)) && 
-                <StyledFloatingSpan><FontAwesomeIcon icon={faFilter}  style={{ color: theme.colors.secondaryColor8 }}/></StyledFloatingSpan>}
-                </StyledGroupName>
-              
-               
+                        {filters && filters.filters.length > 0 && filters.filters.some(filter => (filter.layer ===  legend.layerName)) && 
+                        <StyledFloatingSpan><FontAwesomeIcon icon={faFilter}  style={{ color: theme.colors.secondaryColor8 }}/></StyledFloatingSpan>}
+                    </StyledGroupName>
+
                 </StyledLeftContent>
                 <StyledRightContent>
                     <StyledSelectButton>
@@ -139,7 +138,6 @@ export const LegendGroup = ({ legend }) => {
                                 />
                             </StyledMotionIconWrapper>
                         </StyledSelectButton>
-
 
                 </StyledRightContent>
             </StyledGroupHeader>
