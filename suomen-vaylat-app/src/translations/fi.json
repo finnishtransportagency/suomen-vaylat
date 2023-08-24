@@ -586,6 +586,10 @@
           "pookiFeedback": {
             "title": "Vesiväylien palautteet",
             "url": "https://extranet.vayla.fi/pooki_www/palaute"
+          },
+          "digitalCard": {
+            "title": "Digitaalinen väyläkortti",
+            "url": "https://dvk.vaylapilvi.fi/vaylakortti/"
           }
         }
       }
