@@ -99,7 +99,12 @@
       "description": "My saved geometries",
       "disabled": "Temporarily unavailable"
     },
-    "openGoogleStreetView": "Open in Google Street View"
+    "streetView": {
+      "title": "Google Street View",
+      "openGoogleStreetView": "Open Google Street View",
+      "googleStreetviewTitle": "Google Street View",
+      "googleStreetviewContent": "Open selected point in Google Street View in new tab"
+    }
   },
   "vkm": {
     "locationInfo": "Location info",
