@@ -99,7 +99,12 @@
       "description": "Egen sparad geometri",
       "disabled": "Tillfälligt ur bruk"
     },
-    "openGoogleStreetView": "Avaa Google Street View"
+    "streetView": {
+      "title": "Google Street View",
+      "openGoogleStreetView": "Avaa Google Street View",
+      "googleStreetviewTitle": "Google Street View",
+      "googleStreetviewContent": "Avaa valittu piste Google Street View:ssä uudelle välilehdelle"
+    }
   },
   "vkm": {
     "locationInfo": "Positionsdata",

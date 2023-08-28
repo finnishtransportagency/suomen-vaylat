@@ -99,7 +99,12 @@
       "description": "Omat tallennetut geometriat",
       "disabled": "Väliaikaisesti poissa käytöstä"
     },
-    "openGoogleStreetView": "Avaa Google Street View"
+    "streetView": {
+      "title": "Google Street View",
+      "openGoogleStreetView": "Avaa Google Street View",
+      "googleStreetviewTitle": "Google Street View",
+      "googleStreetviewContent": "Avaa valittu piste Google Street View:ssä uudelle välilehdelle"
+    }
   },
   "vkm": {
     "locationInfo": "Sijaintitiedot",
