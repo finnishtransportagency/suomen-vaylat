@@ -17,6 +17,7 @@ const initialState = {
     geoJsonArray: [],
     isSavedOpen: false,
     savedTabIndex: 0,
+    isChecked: false,
     isUserGuideOpen: false,
     isCustomFilterOpen: false,
     isSavedLayer: false,
@@ -83,6 +84,9 @@ export const uiSlice = createSlice({
         },
         setIsSearchOpen: (state, action) => {
             state.isSearchOpen = action.payload;
+        },
+        setIsChecked: (state, action) => {
+            state.isChecked = action.payload;
         },
         setSearchParams: (state, action) => {
             state.searchParams = action.payload;
@@ -221,6 +225,7 @@ export const {
     setModalConstrainsRef,
     setIsSideMenuOpen,
     setIsSearchOpen,
+    setIsChecked,
     setSearchParams,
     setIsThemeMenuOpen,
     setIsInfoOpen,

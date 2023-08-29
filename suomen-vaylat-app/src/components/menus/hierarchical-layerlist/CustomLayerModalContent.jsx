@@ -78,6 +78,8 @@ export const CustomLayerList = ({
   groups,
   layers,
   recurse = false,
+  shouldReset,
+  onResetComplete
 }) => {
 
     const [savedLayers, setSavedLayers] = useState([]);
@@ -91,6 +93,15 @@ export const CustomLayerList = ({
       setSavedLayers([]);
     }
   }, []);
+
+  useEffect(() => {
+    if (shouldReset) {
+      setSavedLayers([]);
+      if (typeof onResetComplete === 'function') {
+        onResetComplete();
+      }
+    }
+}, [shouldReset, onResetComplete]);
 
 
   // const slicedGroups = groups ? groups.slice() : [];
@@ -167,6 +178,8 @@ export const CustomLayerModalContent = () => {
   } = useAppSelector((state) => state.rpc);
   const [areLayersSelected, setAreLayersSelected] = useState(false);
 
+  const [shouldReset, setShouldReset] = useState(false);
+
   useEffect(() => {
     const loadedLayers = localStorage.getItem("checkedLayers");
     if (loadedLayers && JSON.parse(loadedLayers).length > 0) {
@@ -204,6 +217,7 @@ export const CustomLayerModalContent = () => {
           groups={allGroups}
           layers={allLayers}
           recurse={false}
+          onResetComplete={() => setShouldReset(false)}
         />
       )
     }
@@ -217,6 +231,7 @@ export const CustomLayerModalContent = () => {
   const removeLayers =() => {
     store.dispatch(setIsSavedLayer(false));
     localStorage.removeItem("checkedLayers");
+    setShouldReset(true);
   };
 
   const handleCustomFilterClose = () => {

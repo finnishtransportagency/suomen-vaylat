@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from 'react';
-import { ReactReduxContext, useSelector } from 'react-redux';
+import { ReactReduxContext, useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import {
     changeLayerStyle,
@@ -9,7 +9,7 @@ import {
 } from '../../../state/slices/rpcSlice';
 import { updateLayers } from '../../../utils/rpcUtil';
 import LayerDownloadLinkButton from './LayerDownloadLinkButton';
-import {setIsDownloadLinkModalOpen} from '../../../state/slices/uiSlice';
+import {setIsDownloadLinkModalOpen, setIsChecked} from '../../../state/slices/uiSlice';
 import LayerMetadataButton from './LayerMetadataButton';
 import { useAppSelector } from '../../../state/hooks';
 
@@ -102,7 +102,7 @@ const Checkbox = ({ action, isChecked }) => {
           action(event.target.checked);
         }}
       />
-        <StyledCheckbox isSelected={isChecked}/>
+        <StyledCheckbox isChecked={isChecked}/>
     </StyledCheckboxContainer>
   );
 }; 
@@ -124,8 +124,8 @@ export const Layer = ({ layer, theme }) => {
     const { store } = useContext(ReactReduxContext);
     const [layerStyle, setLayerStyle] = useState(null);
     const [themeSelected, setThemeSelected] = useState(false);
-    const [isChecked, setIsChecked] = useState(false);
-    const {isCustomFilterOpen} = useAppSelector(state => state.ui)
+    const {isCustomFilterOpen, isChecked} = useAppSelector(state => state.ui)
+    const dispatch = useDispatch();
 
     const {
         channel,
@@ -140,12 +140,24 @@ export const Layer = ({ layer, theme }) => {
         }
 
         useEffect(() => {
-          let isSaved = false;
-          const checkedLayers = localStorage.getItem('checkedLayers');
-          if (checkedLayers) {
-            isSaved = JSON.parse(checkedLayers).findIndex(savedLayer => savedLayer.id === layer.id) !== -1;
-          }
-          setIsChecked(isSaved);
+          const updateIsChecked = () => {
+            let isSaved = false;
+            const checkedLayers = localStorage.getItem('checkedLayers');
+            if (checkedLayers) {
+              isSaved = JSON.parse(checkedLayers).findIndex(savedLayer => savedLayer.id === layer.id) !== -1;
+            }
+            setIsChecked(isSaved);
+          };
+          
+          // Initial fetch
+          updateIsChecked();
+          
+          // Setup event listener for local storage changes
+          window.addEventListener('storage', updateIsChecked);
+          
+          // Cleanup
+          return () => window.removeEventListener('storage', updateIsChecked);
+          
         }, [layer.id]);
 
 
@@ -164,7 +176,7 @@ export const Layer = ({ layer, theme }) => {
   };
 
   const handleCheckboxChange = (checked) => {
-    setIsChecked(checked);
+    dispatch(setIsChecked(checked));
     const storedLayers = localStorage.getItem("checkedLayers");
     if (checked) {
       let updatedLayers = [];
