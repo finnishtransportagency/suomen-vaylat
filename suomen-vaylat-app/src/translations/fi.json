@@ -270,7 +270,7 @@
       "link": "https://vayla.fi/documents/25230764/35601500/Tietosuojaseloste+Avoimen+datan+palvelut+14.3.2023_allekirjoitettu.pdf/738884e8-28b8-ce84-050a-83bde6b51a2c/Tietosuojaseloste+Avoimen+datan+palvelut+14.3.2023_allekirjoitettu.pdf?t=1681210558717"
     },
     "appCode": {
-      "appCodeInfo": "Käyttöehtojen mukaisesti sovelluksen koodit ovat katselmoitavissa ja kommentoitavissa osoitteessa:",
+      "appCodeInfo": "Käyttöehtojen mukaisesti sovelluksen lähdekoodit ovat hyödynnettävissä osoitteesta: ",
       "appCodeLink": "https://github.com/finnishtransportagency/suomen-vaylat"
     }
   },
