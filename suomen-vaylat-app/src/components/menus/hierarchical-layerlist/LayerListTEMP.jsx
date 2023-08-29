@@ -34,20 +34,6 @@ const StyledFilterList = styled(motion.div)`
     background-color: ${props => props.theme.colors.mainWhite};
 `;
 
-const StyledListSubtitle = styled.div`
-    display: flex;
-    justify-content: flex-start;
-    align-items: flex-start;
-    color: ${props => props.theme.colors.mainColor1};
-    padding: 0px 0px 16px 0px;
-    font-size: 14px;
-    svg {
-      margin-left: 8px;
-      font-size: 20px;
-      transition: all 0.3s ease-out;
-    };
-`;
-
 const StyledFiltersContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
@@ -77,9 +63,7 @@ const StyledDeleteAllSelectedFilters = styled.div`
 const StyledSearchAndFilter = styled.div`
     display: flex;
     flex-direction: column;
-    margin-left: 8px;
-    margin-right: 8px;
-    margin-bottom: 16px;
+    margin: 5px 8px 8px 16px;
 `;
 
 const StyledFilterButton = styled.div`
@@ -91,19 +75,18 @@ const StyledFilterButton = styled.div`
   padding: 0 10px;
   border-radius: 1px;
   color: ${props => props.isOpen ? "#004477" : props.theme.colors.mainColor1};
-  margin-left:70px;
-  margin-right: 4px;
-  margin-top: 4px;
+  margin: 4px 0px 1px 70px;
   cursor: pointer;
   svg {
     font-size: 18px;
     margin: 5px;
-    position: relative;
     top: 2px;
+    position: relative;
     color: ${props => props.theme.colors.mainColor1};
   };
   span {
     white-space: nowrap;
+    position: relative;
   }
 `;
 
@@ -127,7 +110,6 @@ const LayerListTEMP = ({
       <ReactTooltip backgroundColor={theme.colors.mainColor1} disable={isMobile} id='layerlist-filter' place="right" type="dark" effect="float">
           <span>{strings.tooltips.layerlist.filter}</span>
       </ReactTooltip>
-       <StyledListSubtitle>{strings.layerlist.layerlistLabels.filterOrSearchLayers}</StyledListSubtitle>
        <StyledSearchAndFilter>
           <LayerSearch layers={layers}/>
           <StyledFilterButton
