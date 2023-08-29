@@ -89,6 +89,7 @@
     "search": "Haku",
     "dataTableView": "Listanäkymä",
     "downloadMaterials": "Lataa aineistoja",
+    "downloadMaterialsDisabled": "Lataus edellyttää kohteiden valintaa",
     "list": "Lista",
     "table": "Taulukko",
     "uniqueId": "Yksilöivä tunniste",
