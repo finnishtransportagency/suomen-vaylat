@@ -89,6 +89,7 @@
     "search": "Search",
     "dataTableView": "List view",
     "downloadMaterials": "Download materials",
+    "downloadMaterialsDisabled":"Download requires selection of objects",
     "list": "List",
     "table": "Table",
     "uniqueId": "Unique identifier",
