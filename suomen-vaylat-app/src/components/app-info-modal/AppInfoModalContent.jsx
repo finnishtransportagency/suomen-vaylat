@@ -14,7 +14,7 @@ import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 
 const StyledContent = styled.div`
     max-width: 660px;
-    overflow: hidden;
+    overflow: auto;
     flex-direction: column;
     display: flex;
     height: 100%;
@@ -146,11 +146,11 @@ const StyledHeading = styled.h5`
 const StyledSwiper = styled(Swiper)`
     margin-left: 0;
     margin-right: 0;
+    overflow-y: auto;
 
     .swiper-slide {
         background-color: ${props => props.theme.colors.mainWhite};
         padding: 16px 16px 16px 16px;
-        overflow-y: auto;
         height:100%;
     };
   transition: box-shadow 0.3s ease-out;
@@ -264,6 +264,9 @@ export const SourcesAndTermsOfUse = () => {
                 <div>
                     <p>{strings.appInfo.termsOfUse.moreInfo} <StyledLink target='_blank' href={strings.appInfo.termsOfUse.link}>{strings.appInfo.termsOfUse.link}</StyledLink></p>
                 </div>
+            </div>
+            <div>
+                <p>{strings.appInfo.appCode.appCodeInfo} <StyledLink target='_blank' href={strings.appInfo.appCode.appCodeLink}>{strings.appInfo.appCode.appCodeLink}</StyledLink> </p>
             </div>
             <div>
                 <StyledHeading>{strings.appInfo.privacyPolicy.title}</StyledHeading>

@@ -274,6 +274,10 @@
     "privacyPolicy": {
       "title": "Dataskyddsbeskrivning",
       "link": "https://vayla.fi/documents/25230764/35601500/Tietosuojaseloste+Avoimen+datan+palvelut+14.3.2023_SV.pdf/8911232e-c6dd-8b63-7698-7b0b561a1e4b/Tietosuojaseloste+Avoimen+datan+palvelut+14.3.2023_SV.pdf?t=1680166904775"
+    },
+    "appCode": {
+      "appCodeInfo": "Enligt användingsvillkoren är applikationens källkod tillgänglig här:",
+      "appCodeLink": "https://github.com/finnishtransportagency/suomen-vaylat"
     }
   },
   "search": {
