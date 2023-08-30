@@ -824,9 +824,10 @@ export const GFIPopup = ({ handleGfiDownload }) => {
                                         data-tip data-for={'streetview'} 
                                         href={"http://maps.google.com/maps?q=&layer=c&cbll=" + point} rel="noreferrer" target="_blank"
                                     >
-                                        <FontAwesomeIcon icon={faStreetView} />
+                                        <FontAwesomeIcon icon={faStreetView}/>
+                                        <span style={{fontSize: '14px', marginLeft: '.5em'}}>{strings.gfi.streetView.title}</span>
                                         <ReactTooltip backgroundColor={theme.colors.mainColor1} textColor={theme.colors.mainWhite} disable={isMobile} id="streetview" place="bottom" type='dark' effect="float">
-                                            <span>{strings.gfi.openGoogleStreetView}</span>
+                                            <span>{strings.gfi.streetView.openGoogleStreetView}</span>
                                         </ReactTooltip>
                                     </a>
                                 </div>
@@ -963,6 +964,10 @@ export const GFIPopup = ({ handleGfiDownload }) => {
                             <li>{strings.gfi.choosingGfiDescription1}.&nbsp; <FontAwesomeIcon icon={faMapMarkedAlt} style={{fontSize: '16px'}}/></li>
                             <li>{strings.gfi.choosingGfiDescription2}.</li>
                         </StyledInfoTextContainer>
+                        <StyledSubtitle>{strings.gfi.streetView.googleStreetviewTitle}:</StyledSubtitle>
+                        <StyledInfoTextContainer>
+                            <li>{strings.gfi.streetView.googleStreetviewContent}.&nbsp; <FontAwesomeIcon icon={faStreetView} style={{fontSize: '16px'}}/></li>
+                        </StyledInfoTextContainer>
                     </StyledNoGfisContainer>
                 )}
                 {gfiLocations.content && gfiLocations.content[0].noContent && (
@@ -1055,7 +1060,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
                 />
                 <CircleButton
                     icon={faFileDownload}
-                    text={strings.gfi.downloadMaterials}
+                    text={gfiLocations.length > 0 ? strings.gfi.downloadMaterials : strings.gfi.downloadMaterialsDisabled}
                     toggleState={isGfiDownloadsOpen}
                     tooltipDirection={'bottom'}
                     clickAction={handleGfiDownloadsMenu}

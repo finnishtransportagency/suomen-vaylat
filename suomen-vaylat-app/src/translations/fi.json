@@ -89,6 +89,7 @@
     "search": "Haku",
     "dataTableView": "Listanäkymä",
     "downloadMaterials": "Lataa aineistoja",
+    "downloadMaterialsDisabled": "Lataus edellyttää kohteiden valintaa",
     "list": "Lista",
     "table": "Taulukko",
     "uniqueId": "Yksilöivä tunniste",
@@ -99,7 +100,12 @@
       "description": "Omat tallennetut geometriat",
       "disabled": "Väliaikaisesti poissa käytöstä"
     },
-    "openGoogleStreetView": "Avaa Google Street View"
+    "streetView": {
+      "title": "Google Street View",
+      "openGoogleStreetView": "Avaa Google Street View",
+      "googleStreetviewTitle": "Google Street View",
+      "googleStreetviewContent": "Avaa valittu piste Google Street View:ssä uudelle välilehdelle"
+    }
   },
   "vkm": {
     "locationInfo": "Sijaintitiedot",
@@ -586,6 +592,10 @@
           "pookiFeedback": {
             "title": "Vesiväylien palautteet",
             "url": "https://extranet.vayla.fi/pooki_www/palaute"
+          },
+          "digitalCard": {
+            "title": "Digitaalinen väyläkortti",
+            "url": "https://dvk.vaylapilvi.fi/vaylakortti/"
           }
         }
       }

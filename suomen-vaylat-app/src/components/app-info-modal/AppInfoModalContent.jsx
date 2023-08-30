@@ -136,7 +136,6 @@ const StyledLink = styled.a`
 `;
 
 const StyledTitle = styled.em`
-    color: ${props => props.theme.colors.mainColor1};
 `;
 
 const StyledHeading = styled.h5`
@@ -212,9 +211,9 @@ export const VersionInfo = ({currentAppVersion, currentAppBuildDate}) => {
     return (
         <div>
             {isMobile && <StyledHeading>{strings.appInfo.versionInfo.title}</StyledHeading>}
-            <StyledTitle><p>{strings.appInfo.versionInfo.appVersion + currentAppVersion}</p></StyledTitle>
+            <StyledLink><p style={{fontStyle: "italic"}}><a href='https://github.com/finnishtransportagency/suomen-vaylat/releases'>{strings.appInfo.versionInfo.appVersion + currentAppVersion}</a></p></StyledLink>
             <StyledTitle><p>{strings.appInfo.versionInfo.appLastUpdate + currentAppBuildDate}</p></StyledTitle>
-            <StyledTitle><p>{strings.appInfo.versionInfo.oskari} {oskariVersion}</p></StyledTitle>
+            <StyledLink><p style={{fontStyle: "italic"}}><a href='https://github.com/oskariorg/oskari-frontend/blob/master/ReleaseNotes.md'>{strings.appInfo.versionInfo.oskari} {oskariVersion}</a></p></StyledLink>
         </div>
     );
 };
