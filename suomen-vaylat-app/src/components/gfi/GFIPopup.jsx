@@ -1063,7 +1063,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
                 />
                 <CircleButton
                     icon={faFileDownload}
-                    text={strings.gfi.downloadMaterials}
+                    text={gfiLocations.length > 0 ? strings.gfi.downloadMaterials : strings.gfi.downloadMaterialsDisabled}
                     toggleState={isGfiDownloadsOpen}
                     tooltipDirection={'bottom'}
                     clickAction={handleGfiDownloadsMenu}

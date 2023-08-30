@@ -89,6 +89,7 @@
     "search": "Sökning",
     "dataTableView": "Listvy",
     "downloadMaterials": "Ladda ner material",
+    "downloadMaterialsDisabled":"Nedladdning kräver val av objekt",
     "list": "Lista",
     "table": "Tabell",
     "uniqueId": "Identifikationskod",
