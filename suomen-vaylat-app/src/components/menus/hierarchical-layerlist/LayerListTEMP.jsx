@@ -12,7 +12,7 @@ import LayerList from './LayerList';
 import LayerSearch from './LayerSearch';
 import ReactTooltip from 'react-tooltip';
 import { isMobile, theme } from '../../../theme/theme';
-import { setIsCustomFilterOpen, setIsSavedLayer } from '../../../state/slices/uiSlice';
+import { setIsCustomFilterOpen, setIsSavedLayer, setShowCustomLayerList } from '../../../state/slices/uiSlice';
 import Layer from './Layer';
 import { Switch } from './Layer';
 import { useSelector } from 'react-redux';
@@ -164,8 +164,7 @@ const StyledFilterButton = styled.div`
 `;
 
 const SavedLayer = ({isSelected, action}) => {
-  const { isSavedLayer } = useAppSelector(state => state.ui);
-  const { triggerUpdate } = useAppSelector(state => state.ui);
+  const { isSavedLayer, triggerUpdate } = useAppSelector(state => state.ui);
   const [isCustomOpen, setIsCustomOpen] = useState(false);
   const [savedLayers, setSavedLayers] = useState([]);
   const { channel } = useSelector(state => state.rpc);
@@ -251,18 +250,18 @@ const LayerListTEMP = ({
 }) => {
   useAppSelector((state) => state.language);
 
+  const {showCustomLayerList} = useAppSelector((state) => state.ui);
+
   const [isOpen, setIsOpen] = useState(false);
   const [isCustomOpen, setIsCustomOpen] = useState(false);
-  const { isSavedLayer } = useAppSelector((state) => state.ui);
 
   const selectedLayers = localStorage.getItem("checkedLayers");
   const parsedLayers = useMemo(() => {
-    return selectedLayers ? JSON.parse(selectedLayers) : [];
+      return selectedLayers ? JSON.parse(selectedLayers) : [];
   }, [selectedLayers]);
-
+  
   const shouldShowSavedLayer = parsedLayers.length > 0;
-  const shouldShowLayerList = !shouldShowSavedLayer;
-
+  const [showSavedLayers, setShowSavedLayers] = useState(shouldShowSavedLayer);
 
   const emptyFilters = () => {
     store.dispatch(setTagLayers([]));
@@ -318,13 +317,17 @@ const LayerListTEMP = ({
         </StyledListSubtitle>
         <StyledFiltersContainer>
         <StyledCustomFilterButton
+        isSelected={showSavedLayers && parsedLayers.length > 0}
           onClick={() => {
-              setIsCustomOpen(true);
-              const selectedLayers = parsedLayers || [];
-              store.dispatch(setIsSavedLayer(selectedLayers));
-              store.dispatch(setIsCustomFilterOpen(true));
-            }}
-          >
+              if (parsedLayers && parsedLayers.length > 0) {
+                  setShowSavedLayers(prevState => !prevState);
+              } else {
+                  setIsCustomOpen(true);
+                  store.dispatch(setIsSavedLayer(parsedLayers));
+                  store.dispatch(setIsCustomFilterOpen(true));
+              }
+          }}
+        >
           {strings.layerlist.layerlistLabels.createCustomFilter}
         </StyledCustomFilterButton>
           {tags?.map((tag, index) => {
@@ -336,16 +339,18 @@ const LayerListTEMP = ({
         </StyledDeleteAllSelectedFilters>
       </StyledFilterList>
 
-      {isSavedLayer && <SavedLayer />}
-     
-      {shouldShowLayerList && (
-        <LayerList
-          label={strings.layerlist.layerlistLabels.allLayers}
-          groups={groups}
-          layers={layers}
-          recurse={false}
-        />
-      )}
+      {
+  showSavedLayers && showCustomLayerList ? (
+    <SavedLayer />
+  ) : (
+    <LayerList
+      label={strings.layerlist.layerlistLabels.allLayers}
+      groups={groups}
+      layers={layers}
+      recurse={false}
+    />
+  )
+}
     </>
   );
 };

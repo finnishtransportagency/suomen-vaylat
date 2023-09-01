@@ -4,23 +4,34 @@ import strings from "../../../translations";
 import styled from "styled-components";
 import LayerGroup from './LayerGroup';
 import store from '../../../state/store';
-import { setIsSavedLayer, incrementTriggerUpdate, setIsCustomFilterOpen } from '../../../state/slices/uiSlice';
+import { setIsSavedLayer, incrementTriggerUpdate, setIsCustomFilterOpen, setShowCustomLayerList } from '../../../state/slices/uiSlice';
 
-const StyledGuideContent = styled.div`
+const StyledModalContainer = styled.div`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 `;
 
-const StyledSearchAndFilter = styled.div`
-    display: flex;
-    align-items: flex-start;
-    margin-left: 8px;
-    margin-right: 8px;
-    margin-bottom: 16px;
+const StyledGuideContent = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
+const StyledButtonContainer = styled.div`
+  display: flex;
+  margin-right: 35px;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 25px;
 `;
 
 const StyledSaveButton = styled.div`
   width: 78px;
   height: 32px;
   display: flex;
+  margin-top: 10px;
+  margin-bottom: 10px;
   justify-content: center;
   align-items: center;
   border-radius: 30px;
@@ -32,30 +43,22 @@ const StyledSaveButton = styled.div`
 
 const StyledRemoveButton = styled.div`
   width: 78px;
-  height: 32px;
+  height: 15px;
+  white-space: nowrap;
+  text-align: center;
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 30px;
-  background-color: ${props => props.isOpen ? "#004477" : props.theme.colors.mainColor1};
+  background-color: #ffffff;
   cursor: pointer;
-  font-size: 13px;
-  color: #fff;
-  margin-right: 5px;
-`;
-
-const StyledButtonContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 20px;
-  gap: 30px;
+  font-size: 15px;
+  color: ${props => props.isOpen ? "#004477" : props.theme.colors.mainColor1};
 `;
 
 const StyledLayerList = styled.div`
   max-height: 520px;
-  padding: 5px;
-  margin: 5px;
+  padding: 0 5px 15px 5px;
+  margin: 0 5px 10px 5px;
   overflow: auto;
 
   @media (max-width: 1024px) {  // For devices larger than 480px but not desktop
@@ -78,8 +81,6 @@ export const CustomLayerList = ({
   groups,
   layers,
   recurse = false,
-  shouldReset,
-  onResetComplete
 }) => {
 
     const [savedLayers, setSavedLayers] = useState([]);
@@ -93,15 +94,6 @@ export const CustomLayerList = ({
       setSavedLayers([]);
     }
   }, []);
-
-  useEffect(() => {
-    if (shouldReset) {
-      setSavedLayers([]);
-      if (typeof onResetComplete === 'function') {
-        onResetComplete();
-      }
-    }
-}, [shouldReset, onResetComplete]);
 
 
   // const slicedGroups = groups ? groups.slice() : [];
@@ -176,32 +168,8 @@ export const CustomLayerModalContent = () => {
     allGroups,
     allLayers,
   } = useAppSelector((state) => state.rpc);
-  const [areLayersSelected, setAreLayersSelected] = useState(false);
 
-  const [shouldReset, setShouldReset] = useState(false);
-
-  useEffect(() => {
-    const loadedLayers = localStorage.getItem("checkedLayers");
-    if (loadedLayers && JSON.parse(loadedLayers).length > 0) {
-      setAreLayersSelected(true);
-    } else {
-      setAreLayersSelected(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    const handleStorageChange = () => {
-      const loadedLayers = localStorage.getItem("checkedLayers");
-      if (loadedLayers && JSON.parse(loadedLayers).length > 0) {
-        setAreLayersSelected(true);
-      } else {
-        setAreLayersSelected(false);
-      }
-    };
-  
-    window.addEventListener('storage', handleStorageChange);
-    return () => window.removeEventListener('storage', handleStorageChange);
-  }, []);
+  // const {showCustomLayerList} = useAppSelector((state) => state.ui);
 
   const modalContent = [
     {
@@ -217,7 +185,6 @@ export const CustomLayerModalContent = () => {
           groups={allGroups}
           layers={allLayers}
           recurse={false}
-          onResetComplete={() => setShouldReset(false)}
         />
       )
     }
@@ -226,51 +193,33 @@ export const CustomLayerModalContent = () => {
   const saveLayers = () => {
     store.dispatch(setIsSavedLayer(true));
     store.dispatch(incrementTriggerUpdate());
+    store.dispatch(setIsCustomFilterOpen(false));
+    store.dispatch(setShowCustomLayerList(true));
   };
 
   const removeLayers =() => {
     store.dispatch(setIsSavedLayer(false));
     localStorage.removeItem("checkedLayers");
-    setShouldReset(true);
-  };
-
-  const handleCustomFilterClose = () => {
-    store.dispatch(setIsCustomFilterOpen(false));
-  };
+  }
 
   return (
-    <>
-      {modalContent.map((content) => (
-        <div key={content.content}>
-          {content.content}
-        </div>
-      ))}
-    <StyledButtonContainer>
-    <StyledRemoveButton onClick={() => {
-        removeLayers();
-      }}>
-        {strings.layerlist.customLayerInfo.removeLayers}
-      </StyledRemoveButton>
-      <StyledSaveButton
-        disabled={!areLayersSelected}
-        onClick={() => {
-          if (areLayersSelected) {
-            saveLayers();
-            handleCustomFilterClose();
-          }
-        }}
-      >
-  {strings.layerlist.customLayerInfo.saveLayers}
-</StyledSaveButton>
-    </StyledButtonContainer>
+    <StyledModalContainer>
+        {modalContent.map((content) => (
+            <div key={content.content}>
+                <div>{content.content}</div>
 
-        <StyledSearchAndFilter>
-      </StyledSearchAndFilter>
-          {modalContent.map((content, index) => (
-            <div key={index}>
-              <div>{content.layerlist}</div>
+                <StyledButtonContainer>
+                    <StyledSaveButton onClick={saveLayers}>
+                        {strings.layerlist.customLayerInfo.saveLayers}
+                    </StyledSaveButton>
+                    <StyledRemoveButton onClick={removeLayers}>
+                        {strings.layerlist.customLayerInfo.removeLayers}
+                    </StyledRemoveButton>
+                </StyledButtonContainer>
+
+                <div>{content.layerlist}</div>
             </div>
-          ))}
-    </>
-  );
+        ))}
+    </StyledModalContainer>
+);
 };

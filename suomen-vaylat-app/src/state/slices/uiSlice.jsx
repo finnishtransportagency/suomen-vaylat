@@ -46,6 +46,9 @@ const initialState = {
     markerLabel: '',
     activeGeometries: [],
     triggerUpdate: 0,
+    showCustomLayerList: false,
+    showSavedLayers: true,
+    isUsingCustomLayers: false
 };
 
 export const uiSlice = createSlice({
@@ -215,6 +218,15 @@ export const uiSlice = createSlice({
         incrementTriggerUpdate: state => {
             state.triggerUpdate += 1; // increment value
           },
+        setShowCustomLayerList: (state, action) => {
+            state.showCustomLayerList = action.payload;
+        },
+        setShowSavedLayers: (state, action) => {
+            state.showSavedLayers = action.payload;
+        },
+        setIsUsingCustomLayers: (state, action) => {
+            state.isUsingCustomLayers = action.payload;
+          },
 
     },
 });
@@ -262,7 +274,10 @@ export const {
     addToActiveGeometries,
     removeActiveGeometry,
     setIsGfiToolsOpen,
-    incrementTriggerUpdate
+    incrementTriggerUpdate,
+    setShowCustomLayerList,
+    setShowSavedLayers,
+    setIsUsingCustomLayers
 } = uiSlice.actions;
 
 export default uiSlice.reducer;
