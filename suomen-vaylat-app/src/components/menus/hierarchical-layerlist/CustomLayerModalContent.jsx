@@ -199,6 +199,7 @@ export const CustomLayerModalContent = () => {
 
   const removeLayers =() => {
     store.dispatch(setIsSavedLayer(false));
+    store.dispatch(setShowCustomLayerList(false));
     localStorage.removeItem("checkedLayers");
   }
 
