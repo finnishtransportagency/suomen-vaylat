@@ -470,8 +470,9 @@ const Search = () => {
         guide: strings.search.tips.toastTipContent
     }
 
-    
-    const vkmKeys = ['vali', 'tie', 'osa', 'etaisyys', 'track'];
+    useEffect(() => {
+        ReactTooltip.rebuild();
+    }, [isSearchOpen]);
 
     const handleCloseToast = () => {
         setShowToast(false);
@@ -491,10 +492,8 @@ const Search = () => {
     } else if (!isSearchOpen || searchType !== 'address') {
         toast.dismiss('searchToast');
     }
-    
-    useEffect(() => {
-        ReactTooltip.rebuild();
-    }, [isSearchOpen]);
+        
+    const vkmKeys = ['vali', 'tie', 'osa', 'etaisyys', 'track'];
 
     useEffect(() => {
         if(geoJsonArray.length > 0 && isSearchOpen && !hasToastBeenShown.includes('searchTipToast') && showToast !== false) {
