@@ -9,7 +9,7 @@ import {
 } from '../../../state/slices/rpcSlice';
 import { updateLayers } from '../../../utils/rpcUtil';
 import LayerDownloadLinkButton from './LayerDownloadLinkButton';
-import {setIsDownloadLinkModalOpen} from '../../../state/slices/uiSlice';
+import {setIsDownloadLinkModalOpen, setUpdateCustomLayers} from '../../../state/slices/uiSlice';
 import LayerMetadataButton from './LayerMetadataButton';
 import { useAppSelector } from '../../../state/hooks';
 
@@ -125,7 +125,7 @@ export const Layer = ({ layer, theme }) => {
     const [layerStyle, setLayerStyle] = useState(null);
     const [themeSelected, setThemeSelected] = useState(false);
     const [isChecked, setIsChecked] = useState(false);
-    const {isCustomFilterOpen} = useAppSelector(state => state.ui)
+    const {isCustomFilterOpen, updateCustomLayer} = useAppSelector(state => state.ui)
 
     const {
         channel,
@@ -176,6 +176,7 @@ export const Layer = ({ layer, theme }) => {
         updatedLayers = [layer];
       }
       localStorage.setItem("checkedLayers", JSON.stringify(updatedLayers));
+      store.dispatch(setUpdateCustomLayers(true));
     } else if (storedLayers) {
       const parsedLayers = JSON.parse(storedLayers);
       const updatedLayers = parsedLayers.filter((storedLayer) => storedLayer.id !== layer.id);

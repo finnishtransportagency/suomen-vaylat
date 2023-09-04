@@ -1,10 +1,10 @@
-import { useState, useEffect} from 'react';
+import { useState, useEffect, useReducer} from 'react';
 import { useAppSelector } from '../../../state/hooks';
 import strings from "../../../translations";
 import styled from "styled-components";
 import LayerGroup from './LayerGroup';
 import store from '../../../state/store';
-import { setIsSavedLayer, incrementTriggerUpdate, setIsCustomFilterOpen, setShowCustomLayerList } from '../../../state/slices/uiSlice';
+import { setIsSavedLayer, incrementTriggerUpdate, setIsCustomFilterOpen, setShowCustomLayerList, setUpdateCustomLayers } from '../../../state/slices/uiSlice';
 
 const StyledModalContainer = styled.div`
   position: relative;
@@ -35,8 +35,8 @@ const StyledSaveButton = styled.div`
   justify-content: center;
   align-items: center;
   border-radius: 30px;
-  background-color: ${props => props.isOpen ? "#004477" : props.theme.colors.mainColor1};
-  cursor: pointer;
+  background-color: ${props => props.isDisabled ? "#DDDDDD" : props.theme.colors.mainColor1};
+  cursor: ${props => props.isDisabled ? 'not-allowed' : 'pointer'};
   font-size: 13px;
   color: #fff;
 `;
@@ -169,7 +169,7 @@ export const CustomLayerModalContent = () => {
     allLayers,
   } = useAppSelector((state) => state.rpc);
 
-  // const {showCustomLayerList} = useAppSelector((state) => state.ui);
+  const {updateCustomLayer} = useAppSelector((state) => state.ui);
 
   const modalContent = [
     {
@@ -190,7 +190,9 @@ export const CustomLayerModalContent = () => {
     }
   ];
 
+
   const saveLayers = () => {
+    if (!updateCustomLayer) return;
     store.dispatch(setIsSavedLayer(true));
     store.dispatch(incrementTriggerUpdate());
     store.dispatch(setIsCustomFilterOpen(false));
@@ -201,6 +203,7 @@ export const CustomLayerModalContent = () => {
     store.dispatch(setIsSavedLayer(false));
     store.dispatch(setShowCustomLayerList(false));
     localStorage.removeItem("checkedLayers");
+    store.dispatch(setUpdateCustomLayers(false));
   }
 
   return (
@@ -210,7 +213,11 @@ export const CustomLayerModalContent = () => {
                 <div>{content.content}</div>
 
                 <StyledButtonContainer>
-                    <StyledSaveButton onClick={saveLayers}>
+                    <StyledSaveButton 
+                        onClick={() => {
+                            saveLayers();
+                        }}
+                        isDisabled={!updateCustomLayer}>
                         {strings.layerlist.customLayerInfo.saveLayers}
                     </StyledSaveButton>
                     <StyledRemoveButton onClick={removeLayers}>

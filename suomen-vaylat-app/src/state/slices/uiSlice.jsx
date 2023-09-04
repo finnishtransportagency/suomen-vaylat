@@ -48,7 +48,7 @@ const initialState = {
     triggerUpdate: 0,
     showCustomLayerList: false,
     showSavedLayers: true,
-    isUsingCustomLayers: false
+    updateCustomLayer: false,
 };
 
 export const uiSlice = createSlice({
@@ -224,8 +224,8 @@ export const uiSlice = createSlice({
         setShowSavedLayers: (state, action) => {
             state.showSavedLayers = action.payload;
         },
-        setIsUsingCustomLayers: (state, action) => {
-            state.isUsingCustomLayers = action.payload;
+        setUpdateCustomLayers: (state, action) => {
+            state.updateCustomLayer = action.payload;
           },
 
     },
@@ -277,7 +277,7 @@ export const {
     incrementTriggerUpdate,
     setShowCustomLayerList,
     setShowSavedLayers,
-    setIsUsingCustomLayers
+    setUpdateCustomLayers
 } = uiSlice.actions;
 
 export default uiSlice.reducer;
