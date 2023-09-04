@@ -470,6 +470,9 @@ const Search = () => {
         guide: strings.search.tips.toastTipContent
     }
 
+    
+    const vkmKeys = ['vali', 'tie', 'osa', 'etaisyys', 'track'];
+
     const handleCloseToast = () => {
         setShowToast(false);
         toast.dismiss('searchTipToast');
@@ -488,9 +491,7 @@ const Search = () => {
     } else if (!isSearchOpen || searchType !== 'address') {
         toast.dismiss('searchToast');
     }
-
-    const vkmKeys = ['vali', 'tie', 'osa', 'etaisyys', 'track'];
-
+    
     useEffect(() => {
         ReactTooltip.rebuild();
     }, [isSearchOpen]);
