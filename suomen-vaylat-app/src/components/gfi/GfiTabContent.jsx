@@ -60,7 +60,6 @@ const GfiTabContent = ({
     title,
     tablePropsInit
 }) => {
-
     const [tableProps, changeTableProps] = useState(tablePropsInit);
     const dispatch = action => {
       changeTableProps(prevState => kaReducer(prevState, action));
@@ -70,7 +69,7 @@ const GfiTabContent = ({
         changeTableProps(tablePropsInit);
     }, [tablePropsInit]);
 
-    const [showDataTable, setShowDataTable] = useState(data.content && data.content.features && data.content.features.length > 5);
+    const [showDataTable, setShowDataTable] = useState(false);
 
     const selectFeature = (channel, features) => {
         let featureStyle = {
@@ -157,16 +156,19 @@ const GfiTabContent = ({
             }}>
                 <StyledTabContent>
                     {
-                        data?.content?.features?.map((feature, index) => {
+                        data?.content?.map((cont, contentIndex) => {
+                            return cont.geojson?.features?.map((feature, index) => {
                             return <GfiTabContentItem
                                     key={feature.id}
                                     title={feature.id.split('.')[1] ? title + ` | ${strings.gfi.uniqueId } ` + feature.id.split('.')[1] : title + ' ' + feature.id}
                                     data={feature}
                                     index={index}
+                                    contentIndex={contentIndex}
                                     selectFeature={selectFeature}
                                     deSelectFeature={deSelectFeature}
                                 />
                             })
+                        })
                     }
                 </StyledTabContent>
             </div>

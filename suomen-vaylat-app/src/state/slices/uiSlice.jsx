@@ -1,4 +1,4 @@
-import { createSlice, current } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 import { theme } from '../../theme/theme';
 
 const initialState = {
@@ -18,6 +18,8 @@ const initialState = {
     isSavedOpen: false,
     savedTabIndex: 0,
     isUserGuideOpen: false,
+    isCustomFilterOpen: false,
+    isSavedLayer: false,
     shareUrl: '',
     isThemeMenuOpen: false,
     isDrawingToolsOpen: false,
@@ -42,6 +44,7 @@ const initialState = {
     drawToolMarkers: [],
     markerLabel: '',
     activeGeometries: [],
+    triggerUpdate: 0,
 };
 
 export const uiSlice = createSlice({
@@ -115,6 +118,12 @@ export const uiSlice = createSlice({
         },
         setIsUserGuideOpen: (state, action) => {
             state.isUserGuideOpen = action.payload;
+        },
+        setIsCustomFilterOpen: (state, action) => {
+            state.isCustomFilterOpen = action.payload;
+        },
+        setIsSavedLayer: (state, action) => {
+            state.isSavedLayer = action.payload;
         },
         setIsLegendOpen: (state, action) => {
             state.isLegendOpen = action.payload;
@@ -199,6 +208,9 @@ export const uiSlice = createSlice({
         setIsGfiToolsOpen: (state, action) => {
             state.isGfiToolsOpen = action.payload;
         },
+        incrementTriggerUpdate: state => {
+            state.triggerUpdate += 1; // increment value
+          },
 
     },
 });
@@ -213,6 +225,8 @@ export const {
     setIsThemeMenuOpen,
     setIsInfoOpen,
     setIsUserGuideOpen,
+    setIsCustomFilterOpen,
+    setIsSavedLayer,
     setIsLegendOpen,
     setIsZoomBarOpen,
     setIsSaveViewOpen,
@@ -242,7 +256,8 @@ export const {
     setMarkerLabel,
     addToActiveGeometries,
     removeActiveGeometry,
-    setIsGfiToolsOpen
+    setIsGfiToolsOpen,
+    incrementTriggerUpdate
 } = uiSlice.actions;
 
 export default uiSlice.reducer;

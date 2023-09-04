@@ -593,7 +593,7 @@ const Views = () => {
 
 const Geometries = () => {
     const { store } = useContext(ReactReduxContext);
-    const { channel, currentZoomLevel } = useSelector((state) => state.rpc);
+    const { channel } = useSelector((state) => state.rpc);
     const { activeGeometries, drawToolMarkers } = useSelector(state => state.ui);
     const [geometries, setGeometries] = useState([]);
     const [geometryName, setGeometryName] = useState('');

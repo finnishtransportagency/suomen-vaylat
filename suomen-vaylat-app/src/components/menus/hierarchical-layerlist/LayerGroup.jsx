@@ -24,6 +24,7 @@ import {
     setWarning,
 } from "../../../state/slices/uiSlice";
 import strings from "../../../translations";
+import { useAppSelector } from '../../../state/hooks';
 
 const masterHeaderIconVariants = {
     open: { rotate: 180 },
@@ -289,6 +290,51 @@ const StyledSwitchButton = styled.div`
     background-color: ${props => props.theme.colors.mainWhite};
 `;
 
+const StyledCheckbox = styled.div`
+    position: absolute;
+    left: ${props => props.isSelected ? "15px" : "0px"};
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-left: 2px;
+    margin-right: 2px;
+    transition: all 0.3s ease-out;
+    background-color: ${props => props.theme.colors.mainWhite};
+`;
+
+const StyledCheckboxContainer = styled.label`
+  position: relative;
+  color: #fff;
+  width: 12px;
+  height: 12px;
+  display: inline-block;
+  margin-left: 5px;
+  margin-right: 5px;
+  cursor: pointer;
+
+  input[type="checkbox"]:checked ~ span.checkbox-icon {
+    background-color: #008000;
+  }
+`;
+
+
+const Checkbox = ({ action, isChecked }) => {
+  return (
+    <StyledCheckboxContainer isChecked={isChecked}>
+      <input
+        type="checkbox"
+        checked={isChecked}
+        onChange={(event) => {
+          action(event.target.checked);
+        }}
+      />
+        <StyledCheckbox isSelected={isChecked}/>
+    </StyledCheckboxContainer>
+  );
+}; 
+
+
+
 const Switch = ({ action, isSelected }) => {
     return (
         <StyledSwitchContainer
@@ -309,15 +355,18 @@ export const LayerGroup = ({
 }) => {
 
     const [isOpen, setIsOpen] = useState(false);
-    const [isChecked, setIsChecked] = useState(false);
     const [isExcerptOpen, setIsExcerptOpen] = useState(false);
     const { store } = useContext(ReactReduxContext);
     const channel = useSelector(state => state.rpc.channel);
+    const [isChecked, setIsChecked] = useState(false);
 
     const [filteredLayers, setFilteredLayers] = useState([]);
     const [totalGroupLayersCount, setTotalGroupLayersCoun] = useState(0);
     const [totalVisibleGroupLayersCount, setTotalVisibleGroupLayersCount] = useState(0);
     const [visibleLayers, setVisibleLayers] = useState([]);
+
+    const {isCustomFilterOpen} = useAppSelector(state => state.ui);
+
 
     //Find matching layers from all layers and groups, then push this group's layers into 'filteredLayers'
     useEffect(() => {
@@ -356,13 +405,15 @@ export const LayerGroup = ({
     useEffect(() => {
         totalVisibleGroupLayersCount === totalGroupLayersCount && totalVisibleGroupLayersCount !== 0 && setIsChecked(true);
     }, [totalVisibleGroupLayersCount, totalGroupLayersCount])
-
-    const truncatedString = (string, characterAmount, text) => {
+    
+      const truncatedString = (string, characterAmount, text) => {
         return (
-            string.length > characterAmount + 20 ? <>{string.substring(0, characterAmount) + '...'} <StyledReadMoreButton
-                onClick={() => setIsExcerptOpen(!isExcerptOpen)}>{text}</StyledReadMoreButton></> : string
-        )
-    }
+          string.length > characterAmount + 20 ? <>{string.substring(0, characterAmount) + '...'} <StyledReadMoreButton
+            onClick={() => setIsExcerptOpen(!isExcerptOpen)}>{text}</StyledReadMoreButton></> : string
+        );
+      };
+
+    
 
     const showWarning = () => {
         store.dispatch(setWarning({
@@ -522,12 +573,19 @@ export const LayerGroup = ({
                     </div>
                 </StyledLefContent>
                     <StyledRightContent>
+                    {isCustomFilterOpen === true ? (
+                        <Checkbox
+                            action={setIsChecked} // Update the state directly
+                            isChecked={isChecked}
+                        />
+                            ) : (
                         <Switch
                             isSelected={
-                                (totalVisibleGroupLayersCount === totalGroupLayersCount && totalVisibleGroupLayersCount !== 0)
+                            (totalVisibleGroupLayersCount === totalGroupLayersCount && totalVisibleGroupLayersCount !== 0)
                             }
                             action={selectGroup}
                         />
+                        )}
                     </StyledRightContent>
                 </StyledGroupHeader>
             )}

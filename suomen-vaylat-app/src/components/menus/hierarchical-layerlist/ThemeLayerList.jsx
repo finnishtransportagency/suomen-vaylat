@@ -7,7 +7,7 @@ import styled from 'styled-components';
 import { useAppSelector } from '../../../state/hooks';
 import strings from '../../../translations';
 import { setZoomTo } from '../../../state/slices/rpcSlice';
-import { selectGroup, reArrangeArray } from '../../../utils/rpcUtil';
+import { selectGroup } from '../../../utils/rpcUtil';
 import Layers from './Layers';
 
 import hankekartta from './hankekartta.JPG';
@@ -248,18 +248,6 @@ const StyledLayerGroup = styled.ul`
     margin: 0;
 `;
 
-const StyledSubHeader = styled.h6`
-    height: 30px;
-    display: flex;
-    align-items: center;
-    color: ${props => props.theme.colors.secondaryColor2};
-    margin: 0px;
-    margin-top: 8px;
-    padding-left: 8px;
-    font-size: 15px;
-    font-weight: bold;
-`;
-
 const StyledThemeContent = styled.div`
     margin: 0px;
     padding: 8px 8px 8px 8px;
@@ -336,7 +324,7 @@ export const ThemeLayerList = ({
     var themeGroups = Object.values(strings.themelayerlist.themeGroups)
 
     useEffect(() => {
-        selectedTheme != null && themeGroups.map(themeGroup => {
+        selectedTheme != null && themeGroups.forEach(themeGroup => {
             themeGroup.themes?.hasOwnProperty(selectedTheme.id) && setIsOpen(themeGroup.id)
         })
     }, []);
@@ -348,7 +336,7 @@ export const ThemeLayerList = ({
     var linksArray = [];
 
     for(var i in strings.themeLinks) {
-        linksArray.push(strings.themeLinks [i]);
+        linksArray.push(strings.themeLinks[i]);
     }
 
 
@@ -358,7 +346,7 @@ export const ThemeLayerList = ({
                 return (
                     <>
                         <StyledThemeGroup
-                            onClick={() => isOpen == themeGroupIndex ? setIsOpen(null) : setIsOpen(themeGroupIndex)}
+                            onClick={() => isOpen === themeGroupIndex ? setIsOpen(null) : setIsOpen(themeGroupIndex)}
                         >
                             <StyledMasterThemeHeader>
                                     <StyledMasterGroupHeaderIconLetter>
@@ -374,7 +362,7 @@ export const ThemeLayerList = ({
                                     </StyledMasterGroupName>
                                 <StyledInfoHeaderIconContainer
                                     animate={{
-                                        transform: isOpen == themeGroupIndex
+                                        transform: isOpen === themeGroupIndex
                                             ? 'rotate(180deg)'
                                             : 'rotate(0deg)',
                                     }}
@@ -388,7 +376,7 @@ export const ThemeLayerList = ({
                         <StyledLayerGroupContainer
                             key={'slg_' + themeGroupIndex}
                             initial='hidden'
-                            animate={isOpen == themeGroupIndex ? 'visible' : 'hidden'}
+                            animate={isOpen === themeGroupIndex ? 'visible' : 'hidden'}
                             variants={listVariants}
                             transition={{
                                 duration: 0.3,
@@ -439,7 +427,7 @@ export const ThemeLayerList = ({
 
     return (
         <>
-            { allThemes.filter(theme => theme.id == themeLocale.id).map((theme) => {
+            { allThemes.filter(theme => theme.id === themeLocale.id).map((theme) => {
                 return <ThemeGroup
                     key={index}
                     themeGroupIndex={themeGroupIndex}
@@ -534,7 +522,7 @@ export const ThemeDesc = ({
                 </div> 
                 :
                 <StyledSubText>
-                    {truncatedString(strings.themelayerlist.themeGroups[themeGroupIndex].themes[theme.id].description, 135, strings.themelayerlist.readMore)}
+                    {truncatedString(strings.themelayerlist.themeGroups[themeGroupIndex].themes[theme.id].description, 70, strings.themelayerlist.readMore)}
                 </StyledSubText>
             }
         </StyledThemeContent>
@@ -630,7 +618,7 @@ export const ThemeGroup = ({
                 </StyledSubthemeHeader>
             }
                     {
-                        !isOpen && themeGroupIndex != undefined && strings.themelayerlist.themeGroups[themeGroupIndex].themes.hasOwnProperty(theme.id) && strings.themelayerlist.themeGroups[themeGroupIndex].themes[theme.id].description !== null && strings.themelayerlist.themeGroups[themeGroupIndex].themes[theme.id].description.length > 0 && 
+                        !isOpen && themeGroupIndex !== undefined && strings.themelayerlist.themeGroups[themeGroupIndex].themes.hasOwnProperty(theme.id) && strings.themelayerlist.themeGroups[themeGroupIndex].themes[theme.id].description !== null && strings.themelayerlist.themeGroups[themeGroupIndex].themes[theme.id].description.length > 0 && 
                             <ThemeDesc
                                 theme={theme}
                                 themeGroupIndex={themeGroupIndex}
@@ -652,7 +640,7 @@ export const ThemeGroup = ({
                     {themeImages[theme.id] && <StyledLayerGroupImage src={themeImages[theme.id]} alt=''/>}
 
                     {
-                        themeGroupIndex != undefined && strings.themelayerlist.themeGroups[themeGroupIndex].themes.hasOwnProperty(theme.id) && strings.themelayerlist.themeGroups[themeGroupIndex].themes[theme.id].description !== null &&
+                        themeGroupIndex !== undefined && strings.themelayerlist.themeGroups[themeGroupIndex].themes.hasOwnProperty(theme.id) && strings.themelayerlist.themeGroups[themeGroupIndex].themes[theme.id].description !== null &&
                             <ThemeDesc
                                 theme={theme}
                                 themeGroupIndex={themeGroupIndex}

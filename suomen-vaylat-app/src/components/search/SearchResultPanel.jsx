@@ -1,5 +1,3 @@
-import styled from 'styled-components';
-import strings from '../../translations';
 import AddRessSearchResultPanel from './AddRessSearchResultPanel';
 import MetaSearchResultPanel from './MetaSearchResultPane';
 

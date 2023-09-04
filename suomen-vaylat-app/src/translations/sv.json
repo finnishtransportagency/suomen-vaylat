@@ -89,6 +89,7 @@
     "search": "Sökning",
     "dataTableView": "Listvy",
     "downloadMaterials": "Ladda ner material",
+    "downloadMaterialsDisabled":"Nedladdning kräver val av objekt",
     "list": "Lista",
     "table": "Tabell",
     "uniqueId": "Identifikationskod",
@@ -98,6 +99,12 @@
       "title": "Sparad geometri (Används inte)",
       "description": "Egen sparad geometri",
       "disabled": "Tillfälligt ur bruk"
+    },
+    "streetView": {
+      "title": "Google Street View",
+      "openGoogleStreetView": "Avaa Google Street View",
+      "googleStreetviewTitle": "Google Street View",
+      "googleStreetviewContent": "Avaa valittu piste Google Street View:ssä uudelle välilehdelle"
     }
   },
   "vkm": {
@@ -106,6 +113,7 @@
     "roadAddressInstructions": "Vägadressuppgifterna kunde inte hämtas. Zooma in på kartan och klicka på den punkt som du vill söka vägadressuppgifter för."
   },
   "downloads": {
+    "newDownloads": "NY NEDLADDNING",
     "downloads": "Nedladdningar",
     "processing": "Bearbetas",
     "noProcessingDownloads": "Inga nedladdningar att bearbeta",
@@ -119,7 +127,9 @@
     "failedDownloads": "Felaktiga nedladdningar",
     "errorOccuredDuringDownloadProcessing": "Ett fel uppstod under bearbetningen av paketet",
     "noWebSocketSupport": "Din webbläsare stöder inte nedladdningar. Du kan prova på nytt med en annan webbläsare eller uppdatera din nuvarande webbläsare.",
-    "downloadFailure": "Något gick fel vid nedladdningen, försök igen."
+    "downloadFailure": "Något gick fel vid nedladdningen, försök igen.",
+    "downloadsInfo":"En del av datan kan laddas ner från hela Finlands område via menyn för datalager bredvid datalagret i fråga.",
+    "downloadsInfo2": "Om nedladdningsknappen saknas måste du välja ett objekt på kartan för att ladda ner datan."
   },
   "general": {
     "close": "Stänga",
@@ -134,6 +144,7 @@
   "multipleLayersFetchWarning": "You are about to fetch data from 10 or more maplayers, it might affect the performance of the service.",
   "bodySizeWarning": "Rajausgeometria on liian suuri, yksinkertaistetaanko geometria? (sv)",
   "bodySizeWarningTemporary": "Geometry is too big and data cannot be fetched right now.",
+  "noGfiLocationsWarning": "No results found, try another geometry.",
   "appGuide": {
     "title": "Användarguide",
     "modalContent": {
@@ -218,8 +229,10 @@
     },
     "contactInfoFeedback": {
       "0": "Trafikledsverket ansvarar för applikationen som levereras av Sitowise Oy.",
-      "1": "Respons kan skickas till adressen",
+      "1": "Respons om Suomen Väylät -karttjänsten kan skickas till adressen",
       "2": "suomenvaylat@vayla.fi",
+      "3": "Respons gällande landsvägar, järnvägar och farleder kan ges via",
+      "4": "https://liikenne.palautevayla.fi/feedback",
       "emailSubject": "Respons om Finlands Trafikleder"
     },
     "appInfoLinks": {
@@ -249,7 +262,7 @@
       "municipalityLink": "https://www.kuntaliitto.fi",
       "landSurvey": "Lantmäteriverkets bakgrundskartor samt fastighetsbeteckningar och -gränser är öppna data och får användas enligt licensvillkoren:",
       "landSurveyLink": "https://www.maanmittauslaitos.fi/avoindata-lisenssi-cc40",
-      "roadmaps": "Vägkartorna (AT och GT) används av CGI Suomi Oy med användningslicens nr S10325081",
+      "roadmaps": "Vägkartorna (AT och GT) används av CGI Suomi Oy med användningslicens nr S10422112",
       "syke": "De detaljplanerade områdesindelningarna är öppna data från Finlands miljöcentral (SYKE). Licensen för att använda SYKEs öppna data är Creative Commons Nimeä 4.0"
     },
     "termsOfUse": {
@@ -261,6 +274,10 @@
     "privacyPolicy": {
       "title": "Dataskyddsbeskrivning",
       "link": "https://vayla.fi/documents/25230764/35601500/Tietosuojaseloste+Avoimen+datan+palvelut+14.3.2023_SV.pdf/8911232e-c6dd-8b63-7698-7b0b561a1e4b/Tietosuojaseloste+Avoimen+datan+palvelut+14.3.2023_SV.pdf?t=1680166904775"
+    },
+    "appCode": {
+      "appCodeInfo": "Enligt användingsvillkoren är applikationens källkod tillgänglig här:",
+      "appCodeLink": "https://github.com/finnishtransportagency/suomen-vaylat"
     }
   },
   "search": {
@@ -383,7 +400,6 @@
       "backgroundMaps": "Bakgrundskartor",
       "selectAll": "Välj alla",
       "show": "Visa",
-      "filterOrSearchLayers": "Filtrera eller sök nivåer",
       "filterByType": "Filtrera enligt typ",
       "searchForLayers": "Sök kartnivåer",
       "clearFilters": "Ta bort valda filter",
@@ -508,12 +524,6 @@
             "title": "Vedtransporter på vägar",
             "description": ""
           }
-        },
-        "themeLinks": {
-          "bikeNetwork": {
-            "title": "Valtakunnallinen ja seudullinen pyörätieverkko",
-            "url": "https://paikkatieto.vaylapilvi.fi/arcgis/apps/webappviewer/index.html?id=aa98d035ba254776895d092a3d1c3a9f"
-          }
         }
       },
       "2": {
@@ -573,6 +583,10 @@
           "pookiFeedback": {
             "title": "Vesiväylien palautteet",
             "url": "https://extranet.vayla.fi/pooki_www/palaute"
+          },
+          "digitalCard": {
+            "title": "Digitaalinen väyläkortti",
+            "url": "https://dvk.vaylapilvi.fi/vaylakortti/"
           }
         }
       }
@@ -1156,36 +1170,6 @@
       "linkedin": "Dela på LinkedIn",
       "whatsapp": "Dela på WhatsApp",
       "telegram": "Dela på Telegram"
-    }
-  },
-  "themeLinks": {
-    "timeTravelFinland": {
-      "title": "Aikamatkalla Suomessa",
-      "url": "https://vayla.fi/vaylista/aineistot/kartat/aikamatkalla-suomessa#.XOOasBFlJNs"
-    },
-    "bikeNetwork": {
-      "title": "Valtakunnallinen ja seudullinen pyörätieverkko",
-      "url": "https://paikkatieto.vaylapilvi.fi/arcgis/apps/webappviewer/index.html?id=aa98d035ba254776895d092a3d1c3a9f"
-    },
-    "baltice": {
-      "title": "Baltice",
-      "url": "https://baltice.org/map/"
-    },
-    "safetyDeviceFaults": {
-      "title": "Kauppamerenkulun väylien turvalaiteviat",
-      "url": "https://vayla.fi/vaylista/vesivaylat/turvalaitteet/turvalaiteviat#.XLWWTegzYuU"
-    },
-    "seaWarnings": {
-      "title": "Varoituksia merenkulkijoille",
-      "url": "https://vayla.fi/palveluntuottajat/ammattimerenkulku/meriliikenteen-hairiot/varoituksia-merenkulkijoille"
-    },
-    "restrictedAreas": {
-      "title": "Vesiliikenteen kielto- ja rajoitusalueet",
-      "url": "https://vayla.fi/vaylista/vesivaylat/rajoitusalueet"
-    },
-    "pookiFeedback": {
-      "title": "Vesiväylien palautteet",
-      "url": "https://extranet.vayla.fi/pooki_www/palaute"
     }
   }
 }

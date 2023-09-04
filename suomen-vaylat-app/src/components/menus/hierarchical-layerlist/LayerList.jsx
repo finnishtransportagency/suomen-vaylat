@@ -154,7 +154,7 @@ const StyledLayerGroup = styled(motion.ul)`
 
 const StyledLayerGroupWrapper = styled.div``;
 
-export const LayerList = ({
+const LayerList = ({
     groups,
     layers,
     recurse = false
@@ -162,7 +162,8 @@ export const LayerList = ({
 
     const { tagLayers, tags } = useSelector((state) => state.rpc);
 
-    const slicedGroups = groups.slice()
+    // const slicedGroups = groups ? groups.slice() : [];
+    const slicedGroups = groups.slice();
     
     const currentLang = strings.getLanguage();
 
@@ -200,6 +201,7 @@ export const LayerList = ({
                                     tag={tag}
                                     layers={layers}
                                     index={index}
+                                    groups={groups}
                                     key={'taglayerlist-' + tag + '-' + index}
                                 />
                             );
@@ -249,7 +251,8 @@ export const LayerList = ({
   const TagLayerList = ({
       tag,
       layers,
-      index
+      index,
+      groups
     }) => {
     const tagsWithLayers = useSelector(state => state.rpc.tagsWithLayers);
     const tagLayers = tagsWithLayers[tag];
@@ -279,6 +282,7 @@ export const LayerList = ({
                         setIsOpen(!isOpen);
                     }}
                 >
+
                     <StyledLeftContent>
                         <StyledMasterGroupHeaderIcon>
                             <p>{tag.charAt(0).toUpperCase()}</p>
@@ -322,7 +326,7 @@ export const LayerList = ({
                             type: "tween"
                         }}
                     >
-                        <Layers layers={filteredLayers} isOpen={isOpen} />
+                        <Layers layers={filteredLayers} isOpen={isOpen} groups={groups}/>
                     </StyledLayerGroup>
             </StyledLayerGroups>
     );

@@ -1,6 +1,4 @@
 import styled from 'styled-components';
-import ReactTooltip from 'react-tooltip';
-import { theme, isMobile } from '../../theme/theme';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faInfoCircle,

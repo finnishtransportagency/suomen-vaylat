@@ -89,6 +89,7 @@
     "search": "Haku",
     "dataTableView": "Listanäkymä",
     "downloadMaterials": "Lataa aineistoja",
+    "downloadMaterialsDisabled": "Lataus edellyttää kohteiden valintaa",
     "list": "Lista",
     "table": "Taulukko",
     "uniqueId": "Yksilöivä tunniste",
@@ -98,6 +99,12 @@
       "title": "Tallennetut geometriat (Poissa käytöstä)",
       "description": "Omat tallennetut geometriat",
       "disabled": "Väliaikaisesti poissa käytöstä"
+    },
+    "streetView": {
+      "title": "Google Street View",
+      "openGoogleStreetView": "Avaa Google Street View",
+      "googleStreetviewTitle": "Google Street View",
+      "googleStreetviewContent": "Avaa valittu piste Google Street View:ssä uudelle välilehdelle"
     }
   },
   "vkm": {
@@ -106,6 +113,7 @@
     "roadAddressInstructions": "Tieosoitetietoja ei pystytty hakemaan. Lähennä karttaa ja klikkaa pistettä, jolle haluat hakea tieosoitetiedot."
   },
   "downloads": {
+    "newDownloads": "UUSI LATAUS",
     "downloads": "Lataukset",
     "processing": "Prosessoidaan",
     "noProcessingDownloads": "Ei prosessoitavia latauksia",
@@ -119,7 +127,9 @@
     "failedDownloads": "Virheelliset lataukset",
     "errorOccuredDuringDownloadProcessing" : "Virhe tapahtui paketin prosessoinnin aikana",
     "noWebSocketSupport": "Selaimesi ei tue latauksia. Voit kokeilla uudelleen eri selaimella tai päivittämällä nykyisen selaimesi version.",
-    "downloadFailure": "Latauksessa meni jokin pieleen, yritä uudelleen."
+    "downloadFailure": "Latauksessa meni jokin pieleen, yritä uudelleen.",
+    "downloadsInfo": "Osa aineistoista on ladattavissa koko Suomen alueelta karttatasovalikon latauspainikkeesta, aineiston nimen vierestä.",
+    "downloadsInfo2": "Mikäli latauspainike puuttuu, aineiston lataus edellyttää kohteen valintaa kartalta."
   },
   "general": {
     "close": "Sulje",
@@ -134,6 +144,7 @@
   "multipleLayersFetchWarning": "Olet hakemassa aineistoa 10 tai useammalta karttatasolta ja se saattaa vaikuttaa palvelun suorituskykyyn.",
   "bodySizeWarning": "Rajausgeometria on liian suuri, yksinkertaistetaanko geometria?",
   "bodySizeWarningTemporary": "Rajausgeometria on liian suuri eikä hakua voida tehdä.",
+  "noGfiLocationsWarning": "Tuloksia ei löytynyt, valitse uusi rajaus.",
   "appGuide": {
     "title": "Käyttöohje",
     "modalContent": {
@@ -218,8 +229,10 @@
     },
     "contactInfoFeedback": {
       "0": "Sovelluksesta vastaa Väylävirasto ja sovelluksen toimittaa Sitowise Oy.",
-      "1": "Palautetta toivotaan lähetettävän osoitteeseen",
+      "1": "Palautetta Suomen Väylät -palvelusta toivotaan lähetettävän osoitteeseen",
       "2": "suomenvaylat@vayla.fi",
+      "3": "Palautetta maanteihin, rataverkkoon ja vesiväyliin liittyen voit antaa osoitteessa",
+      "4": "https://liikenne.palautevayla.fi/feedback",
       "emailSubject": "Suomen Väylät palaute"
     },
     "appInfoLinks": {
@@ -249,7 +262,7 @@
       "municipalityLink": "https://www.kuntaliitto.fi",
       "landSurvey": "Maanmittauslaitoksen taustakartat sekä kiinteistötunnukset ja -rajat ovat avointa dataa ja käytössä lisenssiehdoilla:",
       "landSurveyLink": "https://www.maanmittauslaitos.fi/avoindata-lisenssi-cc40",
-      "roadmaps": "Tiekartat (AT ja GT) ovat CGI Suomi Oy aineistoja käytössä käyttöoikeusluvalla n:o S10325081",
+      "roadmaps": "Tiekartat (AT ja GT) ovat CGI Suomi Oy aineistoja käytössä käyttöoikeusluvalla n:o S10422112",
       "syke": "Asemakaavoitetut aluejaot ovat Suomen Ympäristökeskus (SYKE) avointa dataa. SYKEn avointen aineistojen käyttölupa on Creative Commons Nimeä 4.0"
     },
     "termsOfUse": {
@@ -261,6 +274,10 @@
     "privacyPolicy": {
       "title": "Tietosuojaseloste",
       "link": "https://vayla.fi/documents/25230764/35601500/Tietosuojaseloste+Avoimen+datan+palvelut+14.3.2023_allekirjoitettu.pdf/738884e8-28b8-ce84-050a-83bde6b51a2c/Tietosuojaseloste+Avoimen+datan+palvelut+14.3.2023_allekirjoitettu.pdf?t=1681210558717"
+    },
+    "appCode": {
+      "appCodeInfo": "Käyttöehtojen mukaisesti sovelluksen lähdekoodit ovat hyödynnettävissä osoitteesta: ",
+      "appCodeLink": "https://github.com/finnishtransportagency/suomen-vaylat"
     }
   },
   "search": {
@@ -379,14 +396,16 @@
     "layerlistLabels": {
       "allLayers": "Kaikki tasot",
       "themeLayers": "Teemakartat",
-      "selectedLayers": "Valitut tasot",
       "mapLayers": "Karttatasot",
       "backgroundMaps": "Taustakartat",
       "selectAll": "Valitse kaikki",
+      "selectedLayers": "Valitut tasot",
       "show": "Näytä",
-      "filterOrSearchLayers": "Suodata tai hae tasoja",
       "filterByType": "Suodata tyypeittäin",
       "searchForLayers": "Hae karttatasoja",
+      "createFilter": "Suodata",
+      "createCustomFilter": "oma suodatin",
+      "saveCustomFilter": "Tallenna",
       "clearFilters": "Tyhjennä suodatinvalinnat",
       "searchResults": "Hakutulokset",
       "clearSelectedMapLayers": "Tyhjennä valitut karttatasot",
@@ -400,6 +419,14 @@
       "zoomOutToShowLayer": "Loitonna nähdäksesi taso",
       "toShowLayer" : "nähdäksesi taso",
       "opacity": "Läpinäkyvyys"
+    },
+    "customLayerInfo": {
+      "modalTitle": "Luo oma suodatin",
+      "closeInfo": "Sulje ohje",
+      "infoContent": "Omalla suodattimella voidaan tallentaa valittuja tasoja selaimen välimuistiin. Tallennetut tasot ovat näkyvissä karttatasojen Kaikki tasot-välilehdessä sillä laitteella ja selaimessa, jossa karttatasot on tallennettu. Listasta voi säädellä valittujen tasojen näkyvyyttä kartalla. Kun olet valinnut halutut tasot, paina Valmis-painiketta. Tallennuksen voi poistaa Tyhjennä-painikkeesta.",
+      "saveLayers": "Valmis",
+      "removeLayers":"Tyhjennä",
+      "editLayers": "Muokkaa"
     }
   },
   "downloadLink": {
@@ -437,7 +464,7 @@
       "title": "Vesiväylätiedot",
       "description": "Aineisto kattaa Väyläviraston vastuulla olevat vesiväylät ja kanavat. Niiden ylläpidossa ja kehittämisessä otetaan huomioon niin kauppamerenkulun kuin muunkin vesiliikenteen tarpeet."
     }
-  },
+  },   
   "themelayerlist": {
     "readMore": "Lue lisää",
     "readLess": "Vähemmän",
@@ -509,12 +536,6 @@
             "title": "Maanteiden puuvirrat",
             "description": "Kartalla esitetään maanteiden puuvirtoja kuljetusten lukumäärä- ja painoluokittain. Lisä-tietoja ja tarkennuksia aineistojen infosivuilla."
           }
-        },
-        "themeLinks": {
-          "bikeNetwork": {
-            "title": "Valtakunnallinen ja seudullinen pyörätieverkko",
-            "url": "https://paikkatieto.vaylapilvi.fi/arcgis/apps/webappviewer/index.html?id=aa98d035ba254776895d092a3d1c3a9f"
-          }
         }
       },
       "2": {
@@ -574,6 +595,10 @@
           "pookiFeedback": {
             "title": "Vesiväylien palautteet",
             "url": "https://extranet.vayla.fi/pooki_www/palaute"
+          },
+          "digitalCard": {
+            "title": "Digitaalinen väyläkortti",
+            "url": "https://dvk.vaylapilvi.fi/vaylakortti/"
           }
         }
       }
