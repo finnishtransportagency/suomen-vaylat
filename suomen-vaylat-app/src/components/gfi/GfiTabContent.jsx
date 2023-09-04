@@ -141,10 +141,15 @@ const GfiTabContent = ({
 
     const [isActiveFiltering, setIsActiveFiltering] = useState(false);
 
+    const [isFiltering, setIsFiltering] = useState(false);//if filtering possible for layer
 
     useEffect(() => {
         setIsActiveFiltering(activeFilteringOnLayer());
       }, [filters, activeFilteringOnLayer]);
+
+    useEffect(() => {
+        setIsFiltering(tablePropsInit?.filterableColumns.length === 0 ? false : true);
+    }, [tablePropsInit])
 
     const getPropertyOperator = (operator) => {
         switch (operator) {
@@ -175,20 +180,22 @@ const GfiTabContent = ({
             '>': function(a, b) { return a > b; },
             '>=': function(a, b) { return a >= b; },
             '<=': function(a, b) { return a <= b; },
-            '==': function(a, b) { return a == b; },
+            '==': function(a, b) { return a === b; },
             '!==': function(a, b) { return isNaN(a) && isNaN(b) ? a.toLowerCase() !== b.toLowerCase() : a !== b; },
             '===': function(a, b) { return isNaN(a) && isNaN(b) ? a.toLowerCase() === b.toLowerCase() : a === b; },
             'includes': function(a, b) { return isNaN(a) && isNaN(b) && a.toLowerCase().includes(b.toLowerCase()); },
             'doesntInclude': function(a, b) { return isNaN(a) && isNaN(b) && !a.toLowerCase().includes(b); },
         };
 
-        const properties = feature.properties;
-
+        const properties = feature.keyValueProperties;
+        console.info("keyValueProperties", properties)
         const filterMatch = filters.every(filter => {
             if (data.layerId === filter.layer) {
-                const operator = getPropertyOperator(filter.operator);
+                const operator = getPropertyOperator(filter.o1perator);
                 var comparisonOperator = comparisonOperatorsHash[operator];
                 const value = properties[filter.property];
+                if (value === undefined)
+                return false
                 const doFilter = comparisonOperator(value, filter.value);
                 return doFilter;
             } else {
@@ -215,7 +222,7 @@ const GfiTabContent = ({
                     onClick={() =>  store.dispatch(setFilteringInfo( {modalOpen: true, layer: { id: data.layerId, title: title, tableProps : tableProps }} ))}
                     data-tip data-for={'gfiFilter'}
                 >
-                    <FontAwesomeIcon icon={faFilter} style={{ color: filters && isActiveFiltering ? theme.colors.secondaryColor8 : theme.colors.mainColor1 }}  />
+                    {isFiltering && <FontAwesomeIcon icon={faFilter} style={{ color: filters && isActiveFiltering ? theme.colors.secondaryColor8 : theme.colors.mainColor1 }}  />}
                     {filteringInfo?.title && filters && activeFilteringOnLayer() && 
                     <FontAwesomeIcon
                         icon={faExclamation}

@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styled from 'styled-components';
 import strings from '../../translations';
 import { useAppSelector } from '../../state/hooks';
-import theme from '../../theme/theme';
+import { theme } from '../../theme/theme';
 
 const StyledLegendGroup = styled.div`
 `;
@@ -107,7 +107,6 @@ export const LegendGroup = ({ legend }) => {
 
     const [isOpen, setIsOpen] = useState(true);
     const filters = useAppSelector((state) => state.rpc);
-
     return (
         <StyledLegendGroup key={'legend-' + legend.layerId}>
             <StyledGroupHeader
@@ -117,7 +116,7 @@ export const LegendGroup = ({ legend }) => {
             >
                 <StyledLeftContent>
                     <StyledGroupName>{legend.layerName}
-                        {filters && filters.filters.length > 0 && filters.filters.some(filter => (filter.layer ===  legend.layerName)) && 
+                        {filters && filters.filters.length > 0 && filters.filters.some(filter => (filter.layer ===  legend.layerId)) && 
                         <StyledFloatingSpan><FontAwesomeIcon icon={faFilter}  style={{ color: theme.colors.secondaryColor8 }}/></StyledFloatingSpan>}
                     </StyledGroupName>
 

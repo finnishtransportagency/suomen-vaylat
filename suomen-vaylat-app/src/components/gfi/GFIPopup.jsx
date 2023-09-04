@@ -519,11 +519,10 @@ export const GFIPopup = ({
         const properties = data && data.content && data.content[0] && data.content[0].geojson && data.content[0].geojson.features && data.content[0].geojson.features[0].properties;
 
         var highPriorityColumns = properties?._orderHigh && JSON.parse(properties?._orderHigh);
-        var lowPriorityColumns = properties?._order && JSON.parse(properties?._order);
-        var filteringColumns = properties?.filterFields && JSON.parse(properties?.filterFields);
+        var lowPriorityColumns = properties?._order && JSON.parse(properties?._order); 
 
+        const curLayerMeta = allLayers.filter(l =>  l.id === data.layerId )[0];
         var columnsArray = [];
-
         var columns = highPriorityColumns && highPriorityColumns.concat(lowPriorityColumns);
         columns && columns.forEach(column => {
             if (column !== 'UID') {
@@ -532,7 +531,8 @@ export const GFIPopup = ({
         });
 
         var filterColumnsArray = [];
-        filteringColumns && filteringColumns.forEach(column => {
+        console.info("curLayerMeta", curLayerMeta)
+        curLayerMeta?.config?.gfi?.filterFields && curLayerMeta?.config?.gfi?.filterFields.forEach(column => {
             filterColumnsArray.push({ key: column.field, title: column.field, type: column.type});
         })
 

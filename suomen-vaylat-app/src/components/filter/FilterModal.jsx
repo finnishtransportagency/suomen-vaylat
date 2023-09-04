@@ -203,8 +203,6 @@ export const FilterModal = () => {
     useEffect(() => {
         if (filteringInfo && filteringInfo?.layer && filters){
             const updatedActivefilters = filters.filter(filter => filter.layer === filteringInfo?.layer.id)
-            console.log(updatedActivefilters)
-
             setActiveFilters(updatedActivefilters)
         }
      }, [filters, filteringInfo]);
