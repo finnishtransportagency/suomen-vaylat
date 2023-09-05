@@ -373,7 +373,8 @@
       "infoContent": "Omalla suodattimella voidaan tallentaa valittuja tasoja selaimen välimuistiin. Tallennetut tasot ovat näkyvissä karttatasojen Kaikki tasot-välilehdessä sillä laitteella ja selaimessa, jossa karttatasot on tallennettu. Listasta voi säädellä valittujen tasojen näkyvyyttä kartalla. Kun olet valinnut halutut tasot, paina Valmis-painiketta. Tallennuksen voi poistaa Tyhjennä-painikkeesta.",
       "saveLayers": "Tallenna",
       "removeLayers":"Tyhjennä kaikki",
-      "editLayers": "Muokkaa"
+      "editLayers": "Muokkaa",
+      "saveTooltip": "Valitse tallennettavat tasot"
     }
   },
   "downloadLink": {

@@ -1,10 +1,17 @@
-import { useState, useEffect, useReducer} from 'react';
+import { useState, useEffect} from 'react';
 import { useAppSelector } from '../../../state/hooks';
 import strings from "../../../translations";
 import styled from "styled-components";
 import LayerGroup from './LayerGroup';
 import store from '../../../state/store';
-import { setIsSavedLayer, incrementTriggerUpdate, setIsCustomFilterOpen, setShowCustomLayerList, setUpdateCustomLayers } from '../../../state/slices/uiSlice';
+import {  setIsSavedLayer, 
+          incrementTriggerUpdate, 
+          setIsCustomFilterOpen, 
+          setShowCustomLayerList, 
+          setUpdateCustomLayers,
+          setCheckedLayer } from '../../../state/slices/uiSlice';
+import { theme, isMobile } from '../../../theme/theme';
+import ReactTooltip from 'react-tooltip';
 
 const StyledModalContainer = styled.div`
   position: relative;
@@ -161,7 +168,11 @@ export const CustomLayerList = ({
 };
 
 // Renders custom filter guide for user and CustomLayerList
-export const CustomLayerModalContent = () => {
+export const CustomLayerModalContent = ({
+  tooltipBackgroundColor = theme.colors.mainColor1,
+  tooltipColor = theme.colors.mainWhite,
+  isChecked
+}) => {
   useAppSelector((state) => state.language);
 
   const {
@@ -204,10 +215,17 @@ export const CustomLayerModalContent = () => {
     store.dispatch(setShowCustomLayerList(false));
     localStorage.removeItem("checkedLayers");
     store.dispatch(setUpdateCustomLayers(false));
+    store.dispatch(setCheckedLayer([]));
   }
 
   return (
     <StyledModalContainer>
+      <ReactTooltip id={'save-button-tooltip'} backgroundColor={tooltipBackgroundColor} 
+                    textColor={tooltipColor} place='bottom' type='dark' 
+                    effect='float' disable={updateCustomLayer || isMobile}
+      >
+        <span>{strings.layerlist.customLayerInfo.saveTooltip}</span>
+      </ReactTooltip>
         {modalContent.map((content) => (
             <div key={content.content}>
                 <div>{content.content}</div>
@@ -217,10 +235,13 @@ export const CustomLayerModalContent = () => {
                         onClick={() => {
                             saveLayers();
                         }}
+                        data-tip={strings.layerlist.customLayerInfo.saveTooltip}
+                        data-for="save-button-tooltip"
                         isDisabled={!updateCustomLayer}>
                         {strings.layerlist.customLayerInfo.saveLayers}
                     </StyledSaveButton>
-                    <StyledRemoveButton onClick={removeLayers}>
+                    <StyledRemoveButton onClick={removeLayers}
+                                        checked={!isChecked}>
                         {strings.layerlist.customLayerInfo.removeLayers}
                     </StyledRemoveButton>
                 </StyledButtonContainer>
