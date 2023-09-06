@@ -375,7 +375,11 @@ const Content = () => {
         let layerIds = layers.map((layer) => {
             return layer.id;
         });
-
+        //bit hackish way to force datatype when using with single geometry download
+        if (! croppingArea?.isArray)
+            croppingArea = [croppingArea]
+        
+    
         channel.downloadFeaturesByGeoJSON && channel.downloadFeaturesByGeoJSON([layerIds, croppingArea, format.format, sessionId], (data) => {
 
             if (data && data.uuid && downloadUuids) {
