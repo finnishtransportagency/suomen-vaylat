@@ -191,7 +191,7 @@ const GfiTabContent = ({
         console.info("keyValueProperties", properties)
         const filterMatch = filters.every(filter => {
             if (data.layerId === filter.layer) {
-                const operator = getPropertyOperator(filter.o1perator);
+                const operator = getPropertyOperator(filter.operator);
                 var comparisonOperator = comparisonOperatorsHash[operator];
                 const value = properties[filter.property];
                 if (value === undefined)
