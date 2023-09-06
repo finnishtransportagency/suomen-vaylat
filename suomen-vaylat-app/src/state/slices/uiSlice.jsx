@@ -1,5 +1,6 @@
 import { createSlice, current } from '@reduxjs/toolkit';
 import { theme } from '../../theme/theme';
+import { act } from '@testing-library/react';
 
 const initialState = {
     isGfiToolsOpen: false,
@@ -47,9 +48,9 @@ const initialState = {
     activeGeometries: [],
     triggerUpdate: 0,
     showCustomLayerList: false,
-    showSavedLayers: true,
+    showSavedLayers: false,
     updateCustomLayer: false,
-    checkedLayer:[]
+    checkedLayer:[],
 };
 
 export const uiSlice = createSlice({
@@ -282,7 +283,7 @@ export const {
     setShowCustomLayerList,
     setShowSavedLayers,
     setUpdateCustomLayers,
-    setCheckedLayer
+    setCheckedLayer,
 } = uiSlice.actions;
 
 export default uiSlice.reducer;

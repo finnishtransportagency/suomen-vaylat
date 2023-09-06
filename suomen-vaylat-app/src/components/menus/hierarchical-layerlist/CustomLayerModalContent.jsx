@@ -9,7 +9,8 @@ import {  setIsSavedLayer,
           setIsCustomFilterOpen, 
           setShowCustomLayerList, 
           setUpdateCustomLayers,
-          setCheckedLayer } from '../../../state/slices/uiSlice';
+          setCheckedLayer,
+          setShowSavedLayers } from '../../../state/slices/uiSlice';
 import { theme, isMobile } from '../../../theme/theme';
 import ReactTooltip from 'react-tooltip';
 
@@ -208,12 +209,13 @@ export const CustomLayerModalContent = ({
     store.dispatch(incrementTriggerUpdate());
     store.dispatch(setIsCustomFilterOpen(false));
     store.dispatch(setShowCustomLayerList(true));
+    store.dispatch(setShowSavedLayers(true));
   };
 
   const removeLayers =() => {
+    localStorage.removeItem("checkedLayers");
     store.dispatch(setIsSavedLayer(false));
     store.dispatch(setShowCustomLayerList(false));
-    localStorage.removeItem("checkedLayers");
     store.dispatch(setUpdateCustomLayers(false));
     store.dispatch(setCheckedLayer([]));
   }

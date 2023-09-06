@@ -12,7 +12,7 @@ import LayerList from './LayerList';
 import LayerSearch from './LayerSearch';
 import ReactTooltip from 'react-tooltip';
 import { isMobile, theme } from '../../../theme/theme';
-import { setIsCustomFilterOpen, setIsSavedLayer, setShowCustomLayerList } from '../../../state/slices/uiSlice';
+import { setIsCustomFilterOpen, setIsSavedLayer, setShowSavedLayers } from '../../../state/slices/uiSlice';
 import Layer from './Layer';
 import { Switch } from './Layer';
 import { useSelector } from 'react-redux';
@@ -250,7 +250,7 @@ const LayerListTEMP = ({
 }) => {
   useAppSelector((state) => state.language);
 
-  const {showCustomLayerList} = useAppSelector((state) => state.ui);
+  const {isSavedLayer, showSavedLayers} = useAppSelector((state) => state.ui);
 
   const [isOpen, setIsOpen] = useState(false);
   const [isCustomOpen, setIsCustomOpen] = useState(false);
@@ -260,8 +260,7 @@ const LayerListTEMP = ({
       return selectedLayers ? JSON.parse(selectedLayers) : [];
   }, [selectedLayers]);
   
-  const shouldShowSavedLayer = parsedLayers.length > 0;
-  const [showSavedLayers, setShowSavedLayers] = useState(shouldShowSavedLayer);
+  // const shouldShowSavedLayer = parsedLayers.length > 0;
 
   const emptyFilters = () => {
     store.dispatch(setTagLayers([]));
@@ -320,7 +319,7 @@ const LayerListTEMP = ({
         isSelected={showSavedLayers && parsedLayers.length > 0}
           onClick={() => {
               if (parsedLayers && parsedLayers.length > 0) {
-                  setShowSavedLayers(prevState => !prevState);
+                  store.dispatch(setShowSavedLayers(!showSavedLayers));
               } else {
                   setIsCustomOpen(true);
                   store.dispatch(setIsSavedLayer(parsedLayers));
@@ -340,7 +339,7 @@ const LayerListTEMP = ({
       </StyledFilterList>
 
       {
-  showSavedLayers && showCustomLayerList ? (
+  showSavedLayers && isSavedLayer ? (
     <SavedLayer />
   ) : (
     <LayerList
