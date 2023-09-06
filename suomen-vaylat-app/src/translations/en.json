@@ -89,6 +89,7 @@
     "search": "Search",
     "dataTableView": "List view",
     "downloadMaterials": "Download materials",
+    "downloadMaterialsDisabled":"Download requires selection of objects",
     "list": "List",
     "table": "Table",
     "uniqueId": "Unique identifier",
@@ -99,7 +100,12 @@
       "description": "My saved geometries",
       "disabled": "Temporarily unavailable"
     },
-    "openGoogleStreetView": "Open in Google Street View"
+    "streetView": {
+      "title": "Google Street View",
+      "openGoogleStreetView": "Open Google Street View",
+      "googleStreetviewTitle": "Google Street View",
+      "googleStreetviewContent": "Open selected point in Google Street View in new tab"
+    }
   },
   "vkm": {
     "locationInfo": "Location info",
@@ -268,6 +274,10 @@
     "privacyPolicy": {
       "title": "Privacy statement",
       "link": "https://vayla.fi/documents/25230764/35601500/Tietosuojaseloste+Avoimen+datan+palvelut+14.3.2023_allekirjoitettu.pdf/738884e8-28b8-ce84-050a-83bde6b51a2c/Tietosuojaseloste+Avoimen+datan+palvelut+14.3.2023_allekirjoitettu.pdf?t=1681210558717"
+    },
+    "appCode": {
+      "appCodeInfo": "In accordance to the terms of use the source codes of the application are available here:",
+      "appCodeLink": "https://github.com/finnishtransportagency/suomen-vaylat"
     }
   },
   "search": {
@@ -390,7 +400,6 @@
       "backgroundMaps": "Background maps",
       "selectAll": "Select all",
       "show": "Show",
-      "filterOrSearchLayers": "Filter or search layers",
       "filterByType": "Filter by type",
       "searchForLayers": "Search for layers",
       "clearFilters": "Clear filters",
@@ -574,6 +583,10 @@
           "pookiFeedback": {
             "title": "Vesiväylien palautteet",
             "url": "https://extranet.vayla.fi/pooki_www/palaute"
+          },
+          "digitalCard": {
+            "title": "Digitaalinen väyläkortti",
+            "url": "https://dvk.vaylapilvi.fi/vaylakortti/"
           }
         }
       }
