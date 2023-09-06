@@ -528,7 +528,6 @@ const Content = () => {
         store.dispatch(setFilteringInfo({...filteringInfo, modalOpen: false}));
     }, [filteringInfo]);
 
-    const [chosenQueryGeometry, setChosenQueryGeometry] = useState();
     
     return (
         <>
@@ -609,8 +608,6 @@ const Content = () => {
                 >
                     <GFIPopup
                         handleGfiDownload={handleGfiDownload}
-                        chosenQueryGeometry={chosenQueryGeometry}
-                        setChosenQueryGeometry={setChosenQueryGeometry}
                     />
                 </Modal>
                 <Modal
@@ -905,7 +902,6 @@ const Content = () => {
                     <GfiToolsMenu 
                         handleGfiToolsMenu={handleGfiToolsMenu} 
                         closeButton={false} 
-                        setChosenQueryGeometry={setChosenQueryGeometry}
                     />
                 </Modal>
                 <Modal
@@ -958,7 +954,7 @@ const Content = () => {
                     minimize={minimizeGfi}
                     maximize={maximizeGfi}
                 >
-                    <FilterModal chosenQueryGeometry={chosenQueryGeometry}/>
+                    <FilterModal/>
                 </Modal>
                 <ScaleBar/>
                 <StyledToastContainer position="bottom-left" pauseOnFocusLoss={false} transition={Slide} autoClose={false} closeOnClick={false} />

@@ -399,10 +399,7 @@ const StyledLoaderWrapper = styled.div`
 `;
 
 
-export const GFIPopup = ({ 
-    handleGfiDownload, 
-    chosenQueryGeometry,
-    setChosenQueryGeometry  }) => {
+export const GFIPopup = ({ handleGfiDownload }) => {
 
     const LAYER_ID = 'gfi-result-layer';
     const { store } = useContext(ReactReduxContext);
@@ -1114,10 +1111,10 @@ export const GFIPopup = ({
                             x: '-100%',
                         }}
                     >
-                        <GfiToolsMenu handleGfiToolsMenu={handleGfiToolsMenu} 
-                        filters={filters}
-                        chosenQueryGeometry={chosenQueryGeometry}
-                        setChosenQueryGeometry={setChosenQueryGeometry} />
+                        <GfiToolsMenu
+                            handleGfiToolsMenu={handleGfiToolsMenu} 
+                            filters={filters}
+                        />
                     </StyledGfiToolsContainer>
                 )}
             </AnimatePresence>
