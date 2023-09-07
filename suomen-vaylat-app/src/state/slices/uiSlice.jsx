@@ -51,6 +51,7 @@ const initialState = {
     showSavedLayers: false,
     updateCustomLayer: false,
     checkedLayer:[],
+    isCheckmark: false
 };
 
 export const uiSlice = createSlice({
@@ -232,6 +233,9 @@ export const uiSlice = createSlice({
           setCheckedLayer: (state, action) => {
             state.checkedLayer = action.payload;
           },
+          setIsCheckmark: (state, action) => {
+            state.isCheckmark = action.payload;
+          },
 
     },
 });
@@ -284,6 +288,7 @@ export const {
     setShowSavedLayers,
     setUpdateCustomLayers,
     setCheckedLayer,
+    setIsCheckmark,
 } = uiSlice.actions;
 
 export default uiSlice.reducer;
