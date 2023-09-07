@@ -582,6 +582,7 @@ export const LayerGroup = ({
                             action={selectGroup}
                         />
                         )}
+
                     </StyledRightContent>
                 </StyledGroupHeader>
             )}
