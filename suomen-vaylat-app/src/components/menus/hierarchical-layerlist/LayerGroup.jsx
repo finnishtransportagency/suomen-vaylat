@@ -574,11 +574,7 @@ export const LayerGroup = ({
                 </StyledLefContent>
                     <StyledRightContent>
                     {isCustomFilterOpen === true ? (
-                        <Checkbox
-                            action={setIsChecked} // Update the state directly
-                            isChecked={isChecked}
-                        />
-                            ) : (
+                        null ): (
                         <Switch
                             isSelected={
                             (totalVisibleGroupLayersCount === totalGroupLayersCount && totalVisibleGroupLayersCount !== 0)
