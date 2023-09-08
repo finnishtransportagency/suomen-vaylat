@@ -15,7 +15,7 @@ import { isMobile } from '../../theme/theme';
 const InputContainer = styled.div`
     display: flex;
     align-items: center;
-    justify-content: flex-start; /* Align content to the left */
+    justify-content: flex-start;
     position: relative;
     width: 100%;
 `;
@@ -26,9 +26,6 @@ const DropdownIcon = styled(FontAwesomeIcon)`
     transform: translateY(-10%);
     cursor: pointer;
     color: ${props => props.theme.colors.mainColor1};
-    @media (max-width: 320px) {
-        /* Adjust styles as needed */
-    }
     @media (max-width: 768px) {
         margin-top: 10px;
     }
@@ -38,15 +35,13 @@ const StyledInput = styled.input`
     border: none;
     height: 40px;
     padding-left: 10px;
-    /* Remove right: 20em; */
     &:focus {
         outline: none;
     };
     font-size: 16px;
     padding-top: 10px;
     border-radius: 24px;
-    flex: 1; /* Take remaining space */
-
+    flex: 1;
     @media (max-width: 768px) {
         font-size: 14px;
         padding-left: 10px;
