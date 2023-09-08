@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import { useAppSelector } from '../../../state/hooks';
 import { motion } from "framer-motion";
 import strings from '../../../translations';
-import { setTagLayers, setTags } from '../../../state/slices/rpcSlice';
+import { setMapLayerVisibility, setTagLayers, setTags } from '../../../state/slices/rpcSlice';
 import Filter from './Filter';
 import LayerList from './LayerList';
 import LayerSearch from './LayerSearch';
@@ -16,6 +16,7 @@ import { setIsCustomFilterOpen, setIsSavedLayer, setShowSavedLayers } from '../.
 import Layer from './Layer';
 import { Switch } from './Layer';
 import { useSelector } from 'react-redux';
+import { updateLayers } from '../../../utils/rpcUtil';
 
 const listVariants = {
   visible: {
@@ -163,7 +164,7 @@ const StyledFilterButton = styled.div`
   };
 `;
 
-const SavedLayer = ({isSelected, action}) => {
+const SavedLayer = ({isSelected, action, layer}) => {
   const { isSavedLayer, triggerUpdate } = useAppSelector(state => state.ui);
   const [isCustomOpen, setIsCustomOpen] = useState(false);
   const [savedLayers, setSavedLayers] = useState([]);
@@ -192,26 +193,19 @@ const SavedLayer = ({isSelected, action}) => {
         window.removeEventListener('storage', handleStorageChange);
       };
     }, [triggerUpdate]);
-  
-    // Function to toggle visibility of a layer with a specific ID
-    const toggleLayerVisibility = (id) => {
 
-      const newLayers = savedLayers.map(layer => 
-        layer.id === id ? { ...layer, visible: !layer.visible } : layer
-      );
-      
-      setSavedLayers(newLayers);
-      
-      localStorage.setItem("checkedLayers", JSON.stringify(newLayers));
-    
-      // Call MapLayerVisibilityRequest for the modified layer
-      const modifiedLayer = newLayers.find(layer => layer.id === id);
-      try {
-        channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [id, modifiedLayer.visible]);
-      } catch (error) {
-        console.error('Error posting MapLayerVisibilityRequest:', error);
+    const isLayerSelected = () => {
+      const storedLayers = localStorage.getItem("checkedLayers");
+      if (storedLayers && layer) {
+        const parsedLayers = JSON.parse(storedLayers);
+        return parsedLayers.some((storedLayer) => storedLayer.id === layer.id);
       }
+      return false;
     };
+    const handleLayerVisibility = (channel, layer) => {
+      store.dispatch(setMapLayerVisibility(layer));
+      updateLayers(store, channel);
+  };
   
   if (isSavedLayer === true) {
     return (
@@ -230,9 +224,12 @@ const SavedLayer = ({isSelected, action}) => {
           <StyledRowContainer key={layer.id}>
             <Layer layer={layer} isSelected={isSelected} />
             <StyledSwitchContainer isSelected={isSelected} onClick={action}>
-            <Switch action={() => {
-              toggleLayerVisibility(layer.id);
-            }} isSelected={layer.visible} />
+            <Switch
+              action={() => handleLayerVisibility(channel, layer)}
+              isSelected={layer.visible}
+              layer={layer}
+              disabled={isLayerSelected()}
+            />
             </StyledSwitchContainer>
           </StyledRowContainer>
         ))}
