@@ -27,6 +27,7 @@ import CircleButton from '../circle-button/CircleButton';
 import { VKMGeoJsonHoverStyles, VKMGeoJsonStyles } from './VKMSearchStyles';
 import { toast } from 'react-toastify';
 import SearchToast from '../toasts/SearchToast';
+import ReactTooltip from 'react-tooltip';
 import TipToast from '../toasts/TipToast';
 import SearchModal from './SearchModal';
 
@@ -469,6 +470,10 @@ const Search = () => {
         guide: strings.search.tips.toastTipContent
     }
 
+    useEffect(() => {
+        ReactTooltip.rebuild();
+    }, [isSearchOpen]);
+
     const handleCloseToast = () => {
         setShowToast(false);
         toast.dismiss('searchTipToast');
@@ -487,7 +492,8 @@ const Search = () => {
     } else if (!isSearchOpen || searchType !== 'address') {
         toast.dismiss('searchToast');
     }
-
+        
+    const vkmKeys = ['vali', 'tie', 'osa', 'etaisyys', 'track'];
 
     useEffect(() => {
         const vkmKeys = ['vali', 'tie', 'osa', 'etaisyys', 'track'];
@@ -512,6 +518,7 @@ const Search = () => {
 
     return (
         <StyledSearchContainer isSearchOpen={isSearchOpen}>
+        <ReactTooltip backgroundColor={theme.colors.mainColor1} disable={isMobile} place='bottom' type='dark' effect='float' />
             <CircleButton
                 icon={isSearchOpen ? faTimes : faSearch}
                 text={strings.tooltips.search}

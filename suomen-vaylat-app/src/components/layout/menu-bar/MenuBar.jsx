@@ -23,7 +23,8 @@ import {
     setIsGfiDownloadOpen,
     setGeoJsonArray,
     setSelectedMarker,
-    setIsThemeMenuOpen
+    setIsThemeMenuOpen,
+    removeFromDrawToolMarkers
 } from '../../../state/slices/uiSlice';
 
 import { removeMarkerRequest } from '../../../state/slices/rpcSlice';
@@ -145,6 +146,11 @@ const MenuBar = () => {
         });
         store.dispatch(setIsDrawingToolsOpen(!isDrawingToolsOpen));
         store.dispatch(setSelectedMarker(2));
+        // remove all markers made with drawing tools
+        drawToolMarkers.forEach(marker => {
+            store.dispatch(removeMarkerRequest({markerId: marker.markerId}));
+            store.dispatch(removeFromDrawToolMarkers(marker.markerId));
+        });
     };
 
     const waitForAnimationFinish = () => {

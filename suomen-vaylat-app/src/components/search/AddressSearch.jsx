@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 import {
     faAngleUp,
     faAngleDown
@@ -6,6 +6,8 @@ import {
 import styled from 'styled-components';
 import strings from '../../translations';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import ReactTooltip from 'react-tooltip';
+import { useAppSelector } from '../../state/hooks';
 
 const InputContainer = styled.div`
     position: relative;
@@ -41,6 +43,11 @@ const AddressSearch = ({
     toggleSearchModal // Prop to toggle the SearchModal
 }) => {
     const [isOpen, setIsOpen] = useState(false);
+    const {isSearchOpen} = useAppSelector((state) => state.ui);
+
+    useEffect(() => {
+        ReactTooltip.rebuild();
+    }, [isOpen, isSearchOpen]);
 
     const handleIconClick = () => {
         setIsOpen(!isOpen);
@@ -61,6 +68,7 @@ const AddressSearch = ({
                 }}
             />
                 <DropdownIcon
+                    data-tip={isOpen ? strings.search.lessSearchOptions : strings.search.moreSearchOptions}
                     icon={isOpen ? faAngleUp : faAngleDown}
                     onClick={handleIconClick} // Call the toggleSearchModal function when the dropdown icon is clicked
                 />

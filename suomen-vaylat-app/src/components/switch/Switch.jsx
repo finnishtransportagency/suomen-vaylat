@@ -33,11 +33,11 @@ const StyledSwitchButton = styled.div`
 
 const StyledBold = styled.div`
     display: inline-block;
-    font-weigt: bold;
+    font-weight: 500;
     padding-left: 12px;
-    font-size: 18px;
+    font-size: 15px;
     color: grey;
-    padding-top: 6px;
+    padding-top: 7px;
 `;
 
 
