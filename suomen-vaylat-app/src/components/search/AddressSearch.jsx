@@ -10,32 +10,48 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import ReactTooltip from 'react-tooltip';
 import { useAppSelector } from '../../state/hooks';
 import { setIsMoreSearchOpen } from '../../state/slices/uiSlice';
+import { isMobile } from '../../theme/theme';
 
 const InputContainer = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: flex-start; /* Align content to the left */
     position: relative;
     width: 100%;
 `;
 
+const DropdownIcon = styled(FontAwesomeIcon)`
+    margin-top: 15px;
+    margin-left: 20px;
+    transform: translateY(-10%);
+    cursor: pointer;
+    color: ${props => props.theme.colors.mainColor1};
+    @media (max-width: 320px) {
+        /* Adjust styles as needed */
+    }
+    @media (max-width: 768px) {
+        margin-top: 10px;
+    }
+`;
+
 const StyledInput = styled.input`
     border: none;
-    width: 100%;
     height: 40px;
-    padding-left: 40px;
+    padding-left: 10px;
+    /* Remove right: 20em; */
     &:focus {
         outline: none;
     };
     font-size: 16px;
     padding-top: 10px;
     border-radius: 24px;
-`;
+    flex: 1; /* Take remaining space */
 
-const DropdownIcon = styled(FontAwesomeIcon)`
-    position: absolute;
-    right: 295px;
-    top: 50%;
-    transform: translateY(-10%);
-    cursor: pointer;
-    color: ${props => props.theme.colors.mainColor1};
+    @media (max-width: 768px) {
+        font-size: 14px;
+        padding-left: 10px;
+        padding-bottom: 10px;
+    }
 `;
 
 const AddressSearch = ({
@@ -57,6 +73,11 @@ const AddressSearch = ({
 
       return (
         <InputContainer>
+            <DropdownIcon
+                data-tip={isMobile ? '' : (isMoreSearchOpen ? strings.search.lessSearchOptions : strings.search.moreSearchOptions)}
+                icon={isMoreSearchOpen ? faAngleUp : faAngleDown}
+                onClick={handleIconClick}
+            />
             <StyledInput
                 type="text"
                 value={searchValue}
@@ -68,13 +89,8 @@ const AddressSearch = ({
                     }
                 }}
             />
-                <DropdownIcon
-                    data-tip={isMoreSearchOpen ? strings.search.lessSearchOptions : strings.search.moreSearchOptions}
-                    icon={isMoreSearchOpen ? faAngleUp : faAngleDown}
-                    onClick={handleIconClick} // Call the toggleSearchModal function when the dropdown icon is clicked
-                />
         </InputContainer>
     );
-};
+  };
 
 export default AddressSearch;
