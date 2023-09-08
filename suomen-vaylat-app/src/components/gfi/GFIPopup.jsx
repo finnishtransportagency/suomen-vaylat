@@ -524,7 +524,6 @@ export const GFIPopup = ({ handleGfiDownload }) => {
         });
 
         var filterColumnsArray = [];
-        console.info("curLayerMeta", curLayerMeta)
         curLayerMeta?.config?.filterFields && curLayerMeta?.config?.filterFields.forEach(column => {
             filterColumnsArray.push({ key: column.field, title: column.field, type: column.type});
         })
