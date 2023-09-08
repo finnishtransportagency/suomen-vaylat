@@ -13,6 +13,7 @@ const initialState = {
         layerDownloadLinkName: null,
     },
     searchParams: '',
+    isMoreSearchOpen: false,
     isInfoOpen: false,
     geoJsonArray: [],
     isSavedOpen: false,
@@ -83,6 +84,9 @@ export const uiSlice = createSlice({
         },
         setSearchParams: (state, action) => {
             state.searchParams = action.payload;
+        },
+        setIsMoreSearchOpen: (state, action) => {
+            state.isMoreSearchOpen = action.payload;
         },
         setIsInfoOpen: (state, action) => {
             state.isInfoOpen = action.payload;
@@ -211,6 +215,7 @@ export const {
     setIsSearchOpen,
     setSearchParams,
     setIsThemeMenuOpen,
+    setIsMoreSearchOpen,
     setIsInfoOpen,
     setIsUserGuideOpen,
     setIsLegendOpen,

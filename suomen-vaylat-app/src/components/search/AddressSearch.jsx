@@ -1,13 +1,15 @@
-import {useState, useEffect} from 'react';
+import {useEffect} from 'react';
 import {
     faAngleUp,
     faAngleDown
 } from '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
 import strings from '../../translations';
+import store from '../../state/store';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import ReactTooltip from 'react-tooltip';
 import { useAppSelector } from '../../state/hooks';
+import { setIsMoreSearchOpen } from '../../state/slices/uiSlice';
 
 const InputContainer = styled.div`
     position: relative;
@@ -17,7 +19,7 @@ const InputContainer = styled.div`
 const StyledInput = styled.input`
     border: none;
     width: 100%;
-    height: 40px; /* Adjust the height as needed */
+    height: 40px;
     padding-left: 40px;
     &:focus {
         outline: none;
@@ -40,19 +42,18 @@ const AddressSearch = ({
     searchValue,
     setSearchValue,
     handleAddressSearch,
-    toggleSearchModal // Prop to toggle the SearchModal
+    toggleSearchModal
 }) => {
-    const [isOpen, setIsOpen] = useState(false);
-    const {isSearchOpen} = useAppSelector((state) => state.ui);
+    const {isSearchOpen, isMoreSearchOpen} = useAppSelector((state) => state.ui);
 
     useEffect(() => {
         ReactTooltip.rebuild();
-    }, [isOpen, isSearchOpen]);
+    }, [isMoreSearchOpen, isSearchOpen]);
 
     const handleIconClick = () => {
-        setIsOpen(!isOpen);
-        toggleSearchModal(); // Call the toggleSearchModal function when the dropdown icon is clicked
-      };
+        store.dispatch(setIsMoreSearchOpen(!isMoreSearchOpen));
+        toggleSearchModal();
+    };
 
       return (
         <InputContainer>
@@ -68,8 +69,8 @@ const AddressSearch = ({
                 }}
             />
                 <DropdownIcon
-                    data-tip={isOpen ? strings.search.lessSearchOptions : strings.search.moreSearchOptions}
-                    icon={isOpen ? faAngleUp : faAngleDown}
+                    data-tip={isMoreSearchOpen ? strings.search.lessSearchOptions : strings.search.moreSearchOptions}
+                    icon={isMoreSearchOpen ? faAngleUp : faAngleDown}
                     onClick={handleIconClick} // Call the toggleSearchModal function when the dropdown icon is clicked
                 />
         </InputContainer>
