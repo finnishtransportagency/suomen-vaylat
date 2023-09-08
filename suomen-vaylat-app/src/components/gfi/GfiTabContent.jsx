@@ -1,16 +1,13 @@
 import { useState, useEffect, useCallback, useContext } from 'react';
 import styled from 'styled-components';
-
 import GfiTabContentItem from './GfiTabContentItem';
 import strings from '../../translations';
 import { ReactReduxContext } from 'react-redux';
-
 import { faTable, faList, faFilter, faExclamation } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useAppSelector } from '../../state/hooks';
-
 import { setFilteringInfo } from '../../state/slices/rpcSlice';
-
+import { filterFeature } from '../../utils/gfiUtil'
 import { kaReducer, Table } from 'ka-table';
 import "ka-table/style.scss";
 import { theme, isMobile } from '../../theme/theme';
@@ -78,6 +75,7 @@ const GfiTabContent = ({
         changeTableProps(tablePropsInit);
     }, [tablePropsInit]);
     const [showDataTable, setShowDataTable] = useState(false);
+
     const selectFeature = (channel, features) => {
         let featureStyle = {
             fill: {
@@ -151,61 +149,6 @@ const GfiTabContent = ({
         setIsFiltering(tablePropsInit?.filterableColumns.length === 0 ? false : true);
     }, [tablePropsInit])
 
-    const getPropertyOperator = (operator) => {
-        switch (operator) {
-            case "equals":
-                return "===";
-            case "notEquals":
-                return "!==";
-            case "smallerThan":
-                return "<";
-            case "biggerThan":
-                return ">";
-            case "includes":
-                return "includes";
-            case "doesntInclude":
-                return "doesntInclude";
-            default:
-                return "===";
-        }
-    }
-
-    const filterFeature = (feature) => {
-        if (filters.length === 0) {
-            return true;
-        }
-
-        var comparisonOperatorsHash = {
-            '<': function(a, b) { return a < b; },
-            '>': function(a, b) { return a > b; },
-            '>=': function(a, b) { return a >= b; },
-            '<=': function(a, b) { return a <= b; },
-            '==': function(a, b) { return a === b; },
-            '!==': function(a, b) { return isNaN(a) && isNaN(b) ? a.toLowerCase() !== b.toLowerCase() : a !== b; },
-            '===': function(a, b) { return isNaN(a) && isNaN(b) ? a.toLowerCase() === b.toLowerCase() : a === b; },
-            'includes': function(a, b) { return isNaN(a) && isNaN(b) && a.toLowerCase().includes(b.toLowerCase()); },
-            'doesntInclude': function(a, b) { return isNaN(a) && isNaN(b) && !a.toLowerCase().includes(b); },
-        };
-
-        const properties = feature.keyValueProperties;
-        console.info("keyValueProperties", properties)
-        const filterMatch = filters.every(filter => {
-            if (data.layerId === filter.layer) {
-                const operator = getPropertyOperator(filter.operator);
-                var comparisonOperator = comparisonOperatorsHash[operator];
-                const value = properties[filter.property];
-                if (value === undefined)
-                return false
-                const doFilter = comparisonOperator(value, filter.value);
-                return doFilter;
-            } else {
-                return true;
-            }
-        })
-
-        return filterMatch;
-    }
-      
     return <>
             <StyledSelectedTabHeader>
                 <ReactTooltip backgroundColor={theme.colors.mainColor1} textColor={theme.colors.mainWhite} disable={isMobile} id={"gfiFilter"} place="bottom" type='dark' effect="float">
