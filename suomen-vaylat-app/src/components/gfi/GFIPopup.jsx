@@ -12,9 +12,7 @@ import {
     faStreetView
 } from '@fortawesome/free-solid-svg-icons';
 import proj4 from 'proj4';
-
 import ReactTooltip from 'react-tooltip';
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ReactReduxContext } from 'react-redux';
 import styled from 'styled-components';
@@ -24,7 +22,6 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { FreeMode, Controller } from 'swiper';
 import { setMinimizeGfi, setActiveSelectionTool, setWarning } from '../../state/slices/uiSlice';
 import { resetGFILocations, addFeaturesToGFILocations, setActiveGFILayer, setFilters} from '../../state/slices/rpcSlice';
-
 import { FormattedGFI } from './FormattedGFI';
 import GfiTabContent from './GfiTabContent';
 import GfiToolsMenu from './GfiToolsMenu';
@@ -33,8 +30,7 @@ import CircleButton from '../circle-button/CircleButton';
 import SVLoader from '../loader/SvLoader';
 import { isValidUrl } from '../../utils/validUrlUtil';
 import { theme, isMobile } from '../../theme/theme';
-
-
+import { filterFeature } from '../../utils/gfiUtil'
 import { SortingMode, PagingPosition } from 'ka-table/enums';
 
 // Max amount of features that wont trigger react-data-table-component
@@ -529,7 +525,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
 
         var filterColumnsArray = [];
         console.info("curLayerMeta", curLayerMeta)
-        curLayerMeta?.config?.gfi?.filterFields && curLayerMeta?.config?.gfi?.filterFields.forEach(column => {
+        curLayerMeta?.config?.filterFields && curLayerMeta?.config?.filterFields.forEach(column => {
             filterColumnsArray.push({ key: column.field, title: column.field, type: column.type});
         })
 
@@ -568,6 +564,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
         };
         return tablePropsInit;
     }
+
     const handleGfiToolsMenuWithConfirmDialog = () => {
         const fetchableLayers = selectedLayers.filter((layer) =>  layer.groups?.every((group)=> group !==1));
         if (fetchableLayers.length >= 10){
@@ -1000,16 +997,24 @@ export const GFIPopup = ({ handleGfiDownload }) => {
                     speed={300}
                 >
                     {gfiLocations.map((location) => {
-                        //täällä
                             const layers = allLayers.filter(layer => layer.id === location.layerId);
                             const title = layers.length > 0 && layers[0].name;
                             const tableProps = tablePropsInit(location);
 
-                            let featuresLength = 0;
                             let totalFeatures = 0;
                             location?.content?.forEach(cont => {
-                                featuresLength += cont.geojson.features.length;
                                 totalFeatures += cont.geojson.totalFeatures;
+                            })
+
+                            let featuresAmount = 0;
+
+                            // count the amount of results when filtered
+                            location?.content?.forEach((cont) => {
+                                cont.geojson?.features?.forEach((feature) => {
+                                    if (filterFeature(feature, location, filters)) {
+                                        featuresAmount += 1;
+                                    }
+                                })
                             })
 
                             if (location.type === 'geojson') {
@@ -1035,7 +1040,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
                                             <StyledFeaturesInfo>
                                                 <StyledFeatureAmount>
                                                     {`${strings.gfi.featureAmount} : `}
-                                                    <span>{featuresLength} {location.moreFeatures && ` / ${totalFeatures}`}</span>
+                                                    <span>{featuresAmount} {location.moreFeatures && ` / ${totalFeatures}`}</span>
                                                 </StyledFeatureAmount>
                                                 {location.moreFeatures &&
                                                     <StyledShowMoreButtonWrapper>
