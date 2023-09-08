@@ -91,7 +91,7 @@ const ZoomBar = ({
     isLegendOpen,
     isZoomBarOpen,
     setIsLegendOpen,
-    setIsZoomBarOpen
+    setIsZoomBarOpen,
 }) => {
     const { store } = useContext(ReactReduxContext);
     const rpc = useAppSelector((state) => state.rpc);

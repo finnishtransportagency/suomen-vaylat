@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
+import { faAngleDown, faFilter } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styled from 'styled-components';
 import strings from '../../translations';
+import { useAppSelector } from '../../state/hooks';
+import { theme } from '../../theme/theme';
 
 const StyledLegendGroup = styled.div`
 `;
@@ -26,7 +28,7 @@ const StyledGroupHeader = styled.div`
 
 const StyledGroupName = styled.p`
     user-select: none;
-    max-width: 200px;
+    max-width: 3    00px;
     color: ${props => props.theme.colors.mainWhite};
     margin: 0;
     padding-left: 8px;
@@ -79,6 +81,11 @@ const StyledLegend = styled.div`
 
 const StyledLegendImage = styled.img``;
 
+const StyledFloatingSpan = styled.span`
+    float: right;
+    margin-left: 6px;
+`;
+
 const masterHeaderIconVariants = {
     open: { rotate: 180 },
     closed: { rotate: 0 },
@@ -99,6 +106,7 @@ const listVariants = {
 export const LegendGroup = ({ legend }) => {
 
     const [isOpen, setIsOpen] = useState(true);
+    const filters = useAppSelector((state) => state.rpc);
     return (
         <StyledLegendGroup key={'legend-' + legend.layerId}>
             <StyledGroupHeader
@@ -107,7 +115,11 @@ export const LegendGroup = ({ legend }) => {
                 hasLegend={legend.legend !== null}
             >
                 <StyledLeftContent>
-                    <StyledGroupName>{legend.layerName}</StyledGroupName>
+                    <StyledGroupName>{legend.layerName}
+                        {filters && filters.filters.length > 0 && filters.filters.some(filter => (filter.layer ===  legend.layerId)) && 
+                        <StyledFloatingSpan><FontAwesomeIcon icon={faFilter}  style={{ color: theme.colors.secondaryColor8 }}/></StyledFloatingSpan>}
+                    </StyledGroupName>
+
                 </StyledLeftContent>
                 <StyledRightContent>
                     <StyledSelectButton>
@@ -125,7 +137,6 @@ export const LegendGroup = ({ legend }) => {
                                 />
                             </StyledMotionIconWrapper>
                         </StyledSelectButton>
-
 
                 </StyledRightContent>
             </StyledGroupHeader>

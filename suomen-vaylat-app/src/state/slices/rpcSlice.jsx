@@ -57,7 +57,10 @@ const initialState = {
         selectedLayers: [],
         zoom: null,
     },
-    pointInfo: {}
+    pointInfo: {},
+    filters: [],
+    activeGFILayer: null,
+    filteringInfo: { modalOpen: false }
 };
 
 export const rpcSlice = createSlice({
@@ -74,6 +77,16 @@ export const rpcSlice = createSlice({
             state.loading = action.payload;
             LOG.log('setLoading to ' + action.payload);
         },
+        
+        /**
+        * Set selected layer on gfi popup
+        * @method setLoading
+        * @param {Object} state
+        * @param {Object} action
+        */
+        setActiveGFILayer: (state, action) => {
+           state.activeGFILayer = action.payload;
+       },
 
         /**
          * Set channel.
@@ -84,6 +97,28 @@ export const rpcSlice = createSlice({
         setChannel: (state, action) => {
             state.channel = action.payload;
             LOG.log('setChannel to ', action.payload);
+        },
+
+        /**
+         * Set filters.
+         * @method setChannel
+         * @param {Object} state
+         * @param {Object} action
+         */
+        setFilters: (state, action) => {
+            console.log(action.payload)
+            state.filters = action.payload;
+        },
+
+        /**
+         * Set filters.
+         * @method setChannel
+         * @param {Object} state
+         * @param {Object} action
+         */
+        setFilteringInfo: (state, action) => {
+            console.log(action.payload)
+            state.filteringInfo = action.payload;
         },
 
         /**
@@ -718,6 +753,7 @@ export const rpcSlice = createSlice({
          * @param {Object} action
          */
         setVKMData: (state, action) => {
+            console.log("vkmdata")
             state.vkmData = action.payload;
             state.vkmDataImageError = false;
         },
@@ -909,6 +945,9 @@ export const {
     setMapLayers,
     setAllSelectedThemeLayers,
     setPointInfo,
+    setFilters,
+    setActiveGFILayer,
+    setFilteringInfo
 } = rpcSlice.actions;
 
 export default rpcSlice.reducer;
