@@ -306,6 +306,7 @@ const Search = () => {
                     setSearchValue={setSearchValue}
                     setIsSearching={setIsSearching}
                     handleMetadataSearch={handleMetadataSearch}
+                    toggleSearchModal={toggleSearchModal}
                 />
             ),
             visible: true,
