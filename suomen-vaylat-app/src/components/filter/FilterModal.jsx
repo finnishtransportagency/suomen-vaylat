@@ -142,11 +142,12 @@ const StyledFloatingDiv = styled.div`
 `;
 
 export const FilterModal = () => {
-    const { filters, activeGFILayer, filteringInfo, gfiLocations, selectedLayers } = useAppSelector((state) => state.rpc);
+    const { filters, activeGFILayer, filteringInfo, gfiLocations, selectedLayers, channel } = useAppSelector((state) => state.rpc);
     const { store } = useContext(ReactReduxContext);
     const [ operatorValue,  setOperatorValue] = useState({});
     const [ filterValue, setFilterValue] = useState("");
     const [ propValue, setPropValue] = useState({});
+    const [ fieldNameLocales, setFieldNameLocales] = useState({});
 
     const addFilter = () => {
         const prop = propValue.value;
@@ -190,12 +191,21 @@ export const FilterModal = () => {
         'number': gfiFilteringNumberOptions,
         'string': gfiFilteringStringOptions
     };
-    
+
     useEffect(() => {
         if (activeGFILayer === null) {
             const layer = selectedLayers.filter(l => l.id == gfiLocations[0].layerId);
             store.dispatch(setActiveGFILayer(layer));
         }
+
+        var layer = filteringInfo?.layer;
+        channel.getFieldNameLocales([layer?.id], (data) => {
+            setFieldNameLocales(data);
+        },
+        (err) => {
+            console.log(err);
+        }
+    );
       }, []);
 
     const [activeFilters, setActiveFilters] = useState();
@@ -225,9 +235,12 @@ export const FilterModal = () => {
     const filterOptions = () => {
         var layer = filteringInfo?.layer;
         const options = layer?.tableProps?.filterableColumns?.map( column => {
-            return { value: column.key, label: column.title, type: column.type}
-        }
-        )
+            if (fieldNameLocales) {
+                return { value: column.key, label: fieldNameLocales[column.title], type: column.type};
+            } else {
+                return {};
+            }
+        })
         return options;
     }
 
@@ -281,7 +294,7 @@ export const FilterModal = () => {
                                         activeFilters.map( (filter) =>  
                                         <StyledFilter>
                                         <StyledFilterPropContainer>      
-                                            <StyledFilterProp>{strings.gfifiltering.property}:  {filter.property}</StyledFilterProp> 
+                                            <StyledFilterProp>{strings.gfifiltering.property}:  {fieldNameLocales && fieldNameLocales[filter.property]}</StyledFilterProp> 
                                             <StyledFilterProp>{strings.gfifiltering.operator}:  {strings.gfifiltering.operators[filter.operator]} </StyledFilterProp> 
                                             <StyledFilterProp>{strings.gfifiltering.value}: {filter.value}</StyledFilterProp> 
                                         </StyledFilterPropContainer>
