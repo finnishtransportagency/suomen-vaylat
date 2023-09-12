@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect, useRef } from 'react';
+import { useState, useContext, useEffect, useRef, useCallback } from 'react';
 import { ReactReduxContext } from 'react-redux';
 import { ToastContainer, Slide, toast} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
@@ -7,6 +7,7 @@ import styled from 'styled-components';
 import strings from '../../translations';
 import GfiToolsMenu from '../gfi/GfiToolsMenu';
 import GfiDownloadMenu from '../gfi/GfiDownloadMenu';
+import { FilterModal } from '../filter/FilterModal';
 
 import {
     setSelectError,
@@ -15,7 +16,9 @@ import {
     setDownloadActive,
     setDownloadFinished,
     removeMarkerRequest,
-    setVKMData
+    setVKMData,
+    setFilters,
+    setFilteringInfo
 } from '../../state/slices/rpcSlice';
 
 import {
@@ -160,7 +163,6 @@ const StyledLayerNamesList = styled.ul`
     padding-inline-start: 20px;
 `;
 
-
 const StyledToastContainer = styled(ToastContainer)`
 `;
 
@@ -169,8 +171,7 @@ const StyledLayerNamesListItem = styled.li``;
 const Content = () => {
     const constraintsRef = useRef(null);
 
-    const { warnings } = useAppSelector((state) => state.rpc);
-
+    const { warnings, filters, filteringInfo } = useAppSelector((state) => state.rpc);
 
     const {
         shareUrl,
@@ -196,7 +197,7 @@ const Content = () => {
     );
     const metadata = useAppSelector((state) => state.rpc.layerMetadata);
 
-    let { channel, gfiLocations } = useAppSelector((state) => state.rpc);
+    let { channel } = useAppSelector((state) => state.rpc);
 
     const addToLocalStorageArray = (name, value) => {
         // Get the existing data
@@ -220,7 +221,6 @@ const Content = () => {
     const [isGfiDownloadToolsOpen, setIsGfiDownloadToolsOpen] = useState(false);
 
     const [isGfiToolsOpenLocal, setIsGfiToolsOpenLocal] = useState(false);
-
 
     const [downloadUuids, setDownloadUuids] = useState([]);
 
@@ -284,6 +284,7 @@ const Content = () => {
     };
 
     const handleCloseGFIModal = () => {
+        store.dispatch(setFilters([]));
         store.dispatch(resetGFILocations([]));
         store.dispatch(setIsGfiOpen(false));
         store.dispatch(setMinimizeGfi(false));
@@ -375,6 +376,10 @@ const Content = () => {
         let layerIds = layers.map((layer) => {
             return layer.id;
         });
+        
+        //bit hackish way to force datatype when using with single geometry download
+        if (! croppingArea?.isArray)
+            croppingArea = [croppingArea]
 
         channel.downloadFeaturesByGeoJSON && channel.downloadFeaturesByGeoJSON([layerIds, croppingArea, format.format, sessionId], (data) => {
 
@@ -523,8 +528,11 @@ const Content = () => {
         };
     }
 
+    const handleCloseFilteringModal = useCallback(() => {
+        store.dispatch(setFilteringInfo({...filteringInfo, modalOpen: false}));
+    }, [filteringInfo]);
 
-
+    
     return (
         <>
             <StyledContent ref={constraintsRef}>
@@ -603,7 +611,6 @@ const Content = () => {
                     maximize={maximizeGfi}
                 >
                     <GFIPopup
-                        gfiLocations={gfiLocations}
                         handleGfiDownload={handleGfiDownload}
                     />
                 </Modal>
@@ -896,7 +903,10 @@ const Content = () => {
                     minimize={minimizeGfi}
                     maximize={maximizeGfi}
                 >
-                    <GfiToolsMenu handleGfiToolsMenu={handleGfiToolsMenu} closeButton={false}/>
+                    <GfiToolsMenu 
+                        handleGfiToolsMenu={handleGfiToolsMenu} 
+                        closeButton={false} 
+                    />
                 </Modal>
                 <Modal
                     constraintsRef={
@@ -923,17 +933,44 @@ const Content = () => {
                 >
                     <GfiDownloadMenu closeButton={false} handleGfiDownload={handleGfiDownload}></GfiDownloadMenu>
                 </Modal>
-                <ScaleBar />
+                <Modal
+                    constraintsRef={
+                        {constraintsRef}
+                    } /* Reference div for modal drag boundaries */
+                    drag={true} /* Enable (true) or disable (false) drag */
+                    resize={true}
+                    backdrop={
+                        false
+                    } /* Is backdrop enabled (true) or disabled (false) */
+                    fullScreenOnMobile={
+                        true
+                    } /* Scale modal full width / height when using mobile device */
+                    titleIcon={
+                        null
+                    } /* Use icon on title or null */
+                    title={ filteringInfo?.layer && strings.gfi.filter + " - "+ filteringInfo?.layer?.title } /* Modal header title */
+                    type={'normal'} /* Modal type */
+                    closeAction={
+                        handleCloseFilteringModal
+                    } /* Action when pressing modal close button or backdrop */
+                    isOpen={filteringInfo.modalOpen} /* Modal state */
+                    id={null}
+                    minimize={minimizeGfi}
+                    maximize={maximizeGfi}
+                >
+                    <FilterModal/>
+                </Modal>
+                <ScaleBar/>
                 <StyledToastContainer position="bottom-left" pauseOnFocusLoss={false} transition={Slide} autoClose={false} closeOnClick={false} />
                 <StyledContentGrid>
                     <StyledLeftSection>
-                        <MenuBar />
+                        <MenuBar/>
                         <ThemeMenu />
-                        <MapLayersDialog />
+                        <MapLayersDialog/>
                     </StyledLeftSection>
                     <StyledRightSection>
-                        <Search />
-                        <ZoomMenu />
+                        <Search/>
+                        <ZoomMenu/>
                         <ActionButtons closeAction={handleCloseGFIModal} />
                     </StyledRightSection>
                 </StyledContentGrid>

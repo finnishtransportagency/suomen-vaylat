@@ -1,5 +1,5 @@
-import { useEffect, useState, useContext } from 'react';
-import { faInfoCircle, faTimes, faCaretDown, faCaretUp, faGripLines, faEye, faEyeSlash, faLayerGroup, faMap } from '@fortawesome/free-solid-svg-icons';
+import { useEffect, useState, useContext, useCallback } from 'react';
+import { faInfoCircle, faTimes, faCaretDown, faCaretUp, faGripLines, faEye, faEyeSlash, faLayerGroup, faMap, faFilter } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ReactReduxContext, useSelector } from 'react-redux';
 import styled from 'styled-components';
@@ -195,12 +195,19 @@ const DragHandle = sortableHandle(() => (
     </StyledLayerGripControl>
 ));
 
-export const SelectedLayer = ({
-    layer,
-    uuid,
-    currentZoomLevel,
-    sortIndex,
-}) => {
+const StyledFloatingSpan = styled.div`
+    float: right;
+    margin-left: 6px;
+`;
+
+export const SelectedLayer = (
+    {
+        layer,
+        uuid,
+        currentZoomLevel,
+        filtersEnabled,
+    }
+) => {
     const { store } = useContext(ReactReduxContext);
     const [opacity, setOpacity] = useState(layer.opacity);
     const [prevOpacity, setPrevOpacity] = useState(layer.opacity);
@@ -209,8 +216,12 @@ export const SelectedLayer = ({
 
     const { allSelectedThemeLayers } = useAppSelector(state => state.rpc);
 
+    const [localfilterenabled, setLocalfilterenabled] = useState(false)
 
-    
+    useEffect(() => {
+        setLocalfilterenabled(filtersEnabled)
+    }, [filtersEnabled])
+
     useEffect(() => {
         setOpacity(layer.opacity);
         layer.opacity === 0 ? setIsLayerVisible(false) : setIsLayerVisible(true)
@@ -274,10 +285,18 @@ export const SelectedLayer = ({
                     <StyledlayerHeader>
                         <StyledLayerName style={{color: isLayerSelectedThemeLayer ? theme.colors.secondaryColor2 : theme.colors.mainColor1}}>
                         <FontAwesomeIcon style={{marginRight: '4px', color: isLayerSelectedThemeLayer ? theme.colors.secondaryColor2 : theme.colors.mainColor1 }} icon={isLayerSelectedThemeLayer ? faMap : faLayerGroup} />
-                            {layer.name}
+                            {layer.name} {localfilterenabled} {filtersEnabled} {localfilterenabled}
                         </StyledLayerName>
+                        { localfilterenabled && 
+                            (
+                                <StyledIconWrapper>
+                                    <StyledFloatingSpan><FontAwesomeIcon icon={faFilter}  style={{ color: theme.colors.secondaryColor8 }}/></StyledFloatingSpan>
+                                </StyledIconWrapper>
+                            )
+                        }                 
                     </StyledlayerHeader>
                     <StyledMidContent>
+                
                         {isCurrentZoomTooFar || isCurrentZoomTooClose ? <StyledLayerInfoContainer>
                             <StyledShowLayerButton onClick={() => store.dispatch(setZoomTo(layer.minZoomLevel))}>
                                 {isCurrentZoomTooFar? strings.tooltips.zoomIn : isCurrentZoomTooClose && strings.tooltips.zoomOut}
