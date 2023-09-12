@@ -41,8 +41,7 @@ export const filterFeature = (feature, location, filters) => {
         'doesntInclude': function(a, b) { return isNaN(a) && isNaN(b) && !a.toLowerCase().includes(b); },
     };
 
-    const properties = feature.properties;
-
+    const properties = feature.keyValueProperties;
     const filterMatch = filters.every(filter => {
         if (location.layerId === filter.layer) {
             const operator = getPropertyOperator(filter.operator);
