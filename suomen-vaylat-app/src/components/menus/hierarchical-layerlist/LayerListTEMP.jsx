@@ -169,6 +169,7 @@ const SavedLayer = ({isSelected, action, layer}) => {
   const [isCustomOpen, setIsCustomOpen] = useState(false);
   const [savedLayers, setSavedLayers] = useState([]);
   const { channel } = useSelector(state => state.rpc);
+  const [selectedLayers, setSelectedLayers] = useState({});
 
   const customLayers = localStorage.getItem("checkedLayers");
   const parsedLayers = JSON.parse(customLayers);
@@ -193,19 +194,25 @@ const SavedLayer = ({isSelected, action, layer}) => {
         window.removeEventListener('storage', handleStorageChange);
       };
     }, [triggerUpdate]);
+  
+    const toggleLayerVisibility = (id) => {
 
-    const isLayerSelected = () => {
-      const storedLayers = localStorage.getItem("checkedLayers");
-      if (storedLayers && layer) {
-        const parsedLayers = JSON.parse(storedLayers);
-        return parsedLayers.some((storedLayer) => storedLayer.id === layer.id);
+      const newLayers = savedLayers.map(layer => 
+        layer.id === id ? { ...layer, visible: !layer.visible } : layer
+      );
+
+      setSavedLayers(newLayers);
+
+      localStorage.setItem("checkedLayers", JSON.stringify(newLayers));
+
+      // Call MapLayerVisibilityRequest for the modified layer
+      const modifiedLayer = newLayers.find(layer => layer.id === id);
+      try {
+        channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [id, modifiedLayer.visible]);
+      } catch (error) {
+        console.error('Error posting MapLayerVisibilityRequest:', error);
       }
-      return false;
     };
-    const handleLayerVisibility = (channel, layer) => {
-      store.dispatch(setMapLayerVisibility(layer));
-      updateLayers(store, channel);
-  };
   
   if (isSavedLayer === true) {
     return (
@@ -223,13 +230,10 @@ const SavedLayer = ({isSelected, action, layer}) => {
         {parsedLayers && parsedLayers.map((layer) => (
           <StyledRowContainer key={layer.id}>
             <Layer layer={layer} isSelected={isSelected} />
-            <StyledSwitchContainer isSelected={isSelected} onClick={action}>
-            <Switch
-              action={() => handleLayerVisibility(channel, layer)}
-              isSelected={layer.visible}
-              layer={layer}
-              disabled={isLayerSelected()}
-            />
+            <StyledSwitchContainer isSelected={selectedLayers[layer.id]} onClick={action}>
+            <Switch action={() => {
+              toggleLayerVisibility(layer.id);
+            }} isSelected={layer.visible} />
             </StyledSwitchContainer>
           </StyledRowContainer>
         ))}
