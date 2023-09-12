@@ -1,14 +1,17 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useContext } from 'react';
 import styled from 'styled-components';
-
 import GfiTabContentItem from './GfiTabContentItem';
 import strings from '../../translations';
-
-import { faTable, faList } from '@fortawesome/free-solid-svg-icons';
+import { ReactReduxContext } from 'react-redux';
+import { faTable, faList, faFilter, faExclamation } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
+import { useAppSelector } from '../../state/hooks';
+import { setFilteringInfo } from '../../state/slices/rpcSlice';
+import { filterFeature } from '../../utils/gfiUtil'
 import { kaReducer, Table } from 'ka-table';
 import "ka-table/style.scss";
+import { theme, isMobile } from '../../theme/theme';
+import ReactTooltip from 'react-tooltip';
 
 const StyledSelectedTabHeader = styled.div`
     position: relative;
@@ -30,7 +33,7 @@ const StyledSelectedTabTitle = styled.div`
 `;
 
 const StyledSelectedTabDisplayOptionsButton = styled.div`
-    position: absolute;
+    position: relative;
     right: 0px;
     padding: 8px;
     cursor: pointer;
@@ -58,9 +61,12 @@ const StyledTabContent = styled.div`
 const GfiTabContent = ({
     data,
     title,
-    tablePropsInit
+    tablePropsInit,
 }) => {
     const [tableProps, changeTableProps] = useState(tablePropsInit);
+    const { filteringInfo, filters } = useAppSelector((state) => state.rpc);
+    const { store } = useContext(ReactReduxContext);
+
     const dispatch = action => {
       changeTableProps(prevState => kaReducer(prevState, action));
     };
@@ -68,7 +74,6 @@ const GfiTabContent = ({
     useEffect(() => {
         changeTableProps(tablePropsInit);
     }, [tablePropsInit]);
-
     const [showDataTable, setShowDataTable] = useState(false);
 
     const selectFeature = (channel, features) => {
@@ -128,8 +133,27 @@ const GfiTabContent = ({
         ]);
     };
 
+    const activeFilteringOnLayer = useCallback(() => {
+        return filters.some(filter => (filter.layer ===  data.layerId))
+    })
+
+    const [isActiveFiltering, setIsActiveFiltering] = useState(false);
+
+    const [isFiltering, setIsFiltering] = useState(false);//if filtering possible for layer
+
+    useEffect(() => {
+        setIsActiveFiltering(activeFilteringOnLayer());
+      }, [filters, activeFilteringOnLayer]);
+
+    useEffect(() => {
+        setIsFiltering(tablePropsInit?.filterableColumns.length === 0 ? false : true);
+    }, [tablePropsInit])
+
     return <>
             <StyledSelectedTabHeader>
+                <ReactTooltip backgroundColor={theme.colors.mainColor1} textColor={theme.colors.mainWhite} disable={isMobile} id={"gfiFilter"} place="bottom" type='dark' effect="float">
+                    <span>{strings.gfifiltering.filter}</span>
+                </ReactTooltip>
                 <StyledSelectedTabTitle>
                     <p>
                         {
@@ -138,12 +162,27 @@ const GfiTabContent = ({
                     </p>
                 </StyledSelectedTabTitle>
                 <StyledSelectedTabDisplayOptionsButton
-                    onClick={() => setShowDataTable(!showDataTable)}
+                    onClick={() =>  store.dispatch(setFilteringInfo( {modalOpen: true, layer: { id: data.layerId, title: title, tableProps : tableProps }} ))}
+                    data-tip data-for={'gfiFilter'}
+                >
+                    {isFiltering && <FontAwesomeIcon icon={faFilter} style={{ color: filters && isActiveFiltering ? theme.colors.secondaryColor8 : theme.colors.mainColor1 }}  />}
+                    {filteringInfo?.title && filters && activeFilteringOnLayer() && 
+                    <FontAwesomeIcon
+                        icon={faExclamation}
+                        style={{
+                            color: 'red',
+                            marginLeft: '10px',
+                            }}/
+                    >
+                    }
+                </StyledSelectedTabDisplayOptionsButton>
+                <StyledSelectedTabDisplayOptionsButton
+                    onClick={() =>  setShowDataTable(!showDataTable)}
                 >
                     <FontAwesomeIcon icon={showDataTable ? faList : faTable} />
                 </StyledSelectedTabDisplayOptionsButton>
             </StyledSelectedTabHeader>
-
+                        
         {
             showDataTable ?
                 <Table
@@ -158,19 +197,22 @@ const GfiTabContent = ({
                     {
                         data?.content?.map((cont, contentIndex) => {
                             return cont.geojson?.features?.map((feature, index) => {
-                            return <GfiTabContentItem
-                                    key={feature.id}
-                                    title={feature.id.split('.')[1] ? title + ` | ${strings.gfi.uniqueId } ` + feature.id.split('.')[1] : title + ' ' + feature.id}
-                                    data={feature}
-                                    index={index}
-                                    contentIndex={contentIndex}
-                                    selectFeature={selectFeature}
-                                    deSelectFeature={deSelectFeature}
-                                />
+                                if (filterFeature(feature, data, filters)) {
+                                    return <GfiTabContentItem
+                                            key={feature.id}
+                                            title={feature.id.split('.')[1] ? title + ` | ${strings.gfi.uniqueId } ` + feature.id.split('.')[1] : title + ' ' + feature.id}
+                                            data={feature}
+                                            index={index}
+                                            contentIndex={contentIndex}
+                                            selectFeature={selectFeature}
+                                            deSelectFeature={deSelectFeature}
+                                        />
+                                }
                             })
                         })
                     }
                 </StyledTabContent>
+  
             </div>
 
         }

@@ -93,7 +93,7 @@ export const Legend = ({
     currentZoomLevel,
     isExpanded,
     setIsExpanded,
-    height
+    height,
 }) => {
     const legends = [];
     const noLegends = [];
