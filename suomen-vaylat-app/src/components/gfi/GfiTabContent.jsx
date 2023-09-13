@@ -150,7 +150,6 @@ const GfiTabContent = ({ data, title, tablePropsInit }) => {
       tablePropsInit?.filterableColumns.length === 0 ? false : true
     );
   }, [tablePropsInit]);
-  console.log(tableProps);
 
   return (
     <>

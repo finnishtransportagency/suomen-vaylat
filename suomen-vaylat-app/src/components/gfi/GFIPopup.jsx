@@ -559,13 +559,16 @@ export const GFIPopup = ({ handleGfiDownload }) => {
       });
 
     var filterColumnsArray = [];
+
     curLayerMeta?.config?.gfi?.filterFields &&
       curLayerMeta?.config?.gfi?.filterFields.forEach((column) => {
-        filterColumnsArray.push({
-          key: column.field,
-          title: column.field,
-          type: column.type,
-        });
+        if (column.field && column.type) {
+          filterColumnsArray.push({
+            key: column.field,
+            title: column.field,
+            type: column.type,
+          });
+        }
       });
 
     var cells = [];
