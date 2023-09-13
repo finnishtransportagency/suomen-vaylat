@@ -285,6 +285,7 @@ const Content = () => {
 
     const handleCloseGFIModal = () => {
         store.dispatch(setFilters([]));
+        handleCloseFilteringModal();
         store.dispatch(resetGFILocations([]));
         store.dispatch(setIsGfiOpen(false));
         store.dispatch(setMinimizeGfi(false));
