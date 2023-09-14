@@ -26,6 +26,11 @@ suomen-vaylat-app/yarn-error.log*
 artifacts/
 my_build_env.txt
 .vscode/
+#except settings.json for linter conf
+!.vscode/settings.json
 
 #package.lock
 suomen-vaylat-app/package.lock
+
+#linter reports
+/suomen-vaylat-app/linter/*.log

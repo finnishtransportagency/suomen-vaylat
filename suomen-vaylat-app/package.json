@@ -63,7 +63,8 @@
     "start": "cross-env REACT_APP_VERSION=$npm_package_version react-scripts start",
     "build": "cross-env REACT_APP_VERSION=$npm_package_version react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "lint": "eslint src --ext .jsx --ext .js --ext .json --ext .css  > linter/linter-report-$(date +'%Y%m%d%H%M').log 2>&1"
   },
   "eslintConfig": {
     "extends": [
@@ -87,7 +88,9 @@
     "@types/lodash": "^4.14.168",
     "@types/preval.macro": "^3.0.0",
     "@types/react-router-dom": "^5.1.7",
+    "eslint": "^8.48.0",
     "eslint-config-react-app": "^7.0.0",
+    "prettier": "^2.8.8",
     "redux-devtools-extension": "^2.13.9"
   }
 }
