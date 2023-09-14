@@ -284,7 +284,6 @@ const PublishedMap = () => {
                     let reformattedData = {};
                     reformattedData.content = [geojson];
                     data.content = reformattedData.content;
-
                     if (store.getState().ui.activeSelectionTool === null && store.getState().ui.activeTool === null) {
                         store.dispatch(resetGFILocations([]));
                         const croppingArea = {
