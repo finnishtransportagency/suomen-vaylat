@@ -25,7 +25,8 @@ import {
     setStartState,
     resetGFILocations,
     addMarkerRequest,
-    removeMarkerRequest
+    removeMarkerRequest,
+    setPointInfo
 } from '../../state/slices/rpcSlice';
 
 import {
@@ -209,6 +210,7 @@ const PublishedMap = () => {
                 if (data.MapClickedEvent && store.getState().ui.activeTool === null) {
                     channel.handleEvent('MapClickedEvent', (data) => {
                         store.getState().ui.activeTool !== strings.tooltips.drawingTools.marker && store.dispatch(resetGFILocations([]));
+                        store.dispatch(setPointInfo(data));
                     });
                 }
 
@@ -274,6 +276,14 @@ const PublishedMap = () => {
                             }
                         });
                     }
+
+                    // reformat data to same way croppings are
+                    // might need to be 'fixed' later
+                    const features = data.content;
+                    let geojson = {"geojson": features}
+                    let reformattedData = {};
+                    reformattedData.content = [geojson];
+                    data.content = reformattedData.content;
                     if (store.getState().ui.activeSelectionTool === null && store.getState().ui.activeTool === null) {
                         store.dispatch(resetGFILocations([]));
                         const croppingArea = {

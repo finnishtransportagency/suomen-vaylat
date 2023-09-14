@@ -89,6 +89,7 @@
     "search": "Search",
     "dataTableView": "List view",
     "downloadMaterials": "Download materials",
+    "downloadMaterialsDisabled":"Download requires selection of objects",
     "list": "List",
     "table": "Table",
     "uniqueId": "Unique identifier",
@@ -98,6 +99,12 @@
       "title": "Saved geometries (Disabled)",
       "description": "My saved geometries",
       "disabled": "Temporarily unavailable"
+    },
+    "streetView": {
+      "title": "Google Street View",
+      "openGoogleStreetView": "Open Google Street View",
+      "googleStreetviewTitle": "Google Street View",
+      "googleStreetviewContent": "Open selected point in Google Street View in new tab"
     }
   },
   "vkm": {
@@ -106,6 +113,7 @@
     "roadAddressInstructions": "Unable to retrieve road address data. Zoom in on the map and click on the point for which you want to retrieve road address data."
   },
   "downloads": {
+    "newDownloads": "NEW DOWNLOAD",
     "downloads": "Downloads",
     "processing": "Processing",
     "noProcessingDownloads": "No processing downloads",
@@ -119,7 +127,9 @@
     "failedDownloads": "Failed downloads",
     "errorOccuredDuringDownloadProcessing": "Error occurred during download processing",
     "noWebSocketSupport": "Your browser does not support downloads. You can try again using a different browser or by updating your current browser.",
-    "downloadFailure": "Something went wrong. Please try again."
+    "downloadFailure": "Something went wrong. Please try again.",
+    "downloadsInfo": "Some of the datasets can be downloaded from the whole area of Finland via the download button in the layer menu, next to the data name.",
+    "downloadsInfo2": "If the download button is missing, downloading the material requires selecting an object on the map."
   },
   "general": {
     "close": "Close",
@@ -134,6 +144,7 @@
   "multipleLayersFetchWarning": "You are about to fetch data from 10 or more maplayers, it might affect the performance of the service.",
   "bodySizeWarning": "Geometry is too big, do you want to simplify it?",
   "bodySizeWarningTemporary": "Geometry is too big and data cannot be fetched right now.",
+  "noGfiLocationsWarning": "No results found, try another geometry.",
   "appGuide": {
     "title": "User Guide",
     "modalContent": {
@@ -218,8 +229,10 @@
     },
     "contactInfoFeedback": {
       "0": "The application is the responsibility of the Finnish Transport Infrastructure Agency and it is supplied by Sitowise Oy.",
-      "1": "Send your feedback to",
+      "1": "Send your feedback on the Suomen Väylät map service to",
       "2": "suomenvaylat@vayla.fi",
+      "3": "Feedback regarding roads, railways and waterways can be given at",
+      "4": "https://liikenne.palautevayla.fi/feedback",
       "emailSubject": "Feedback on Suomen Väylät"
     },
     "appInfoLinks": {
@@ -249,7 +262,7 @@
       "municipalityLink": "https://www.kuntaliitto.fi",
       "landSurvey": "The National Land Survey of Finland’s background maps and property identifiers and boundaries are open data and available under licence conditions:",
       "landSurveyLink": "https://www.maanmittauslaitos.fi/avoindata-lisenssi-cc40",
-      "roadmaps": "Roadmaps (AT and GT) are CGI Suomi Oy datasets under license no. S10325081",
+      "roadmaps": "Roadmaps (AT and GT) are CGI Suomi Oy datasets under license no. S10422112",
       "syke": "Areas with local detailed plans are open data from the Finnish Environment Institute (SYKE). The license for SYKE’s open datasets is Creative Commons Attribution 4.0"
     },
     "termsOfUse": {
@@ -261,13 +274,20 @@
     "privacyPolicy": {
       "title": "Privacy statement",
       "link": "https://vayla.fi/documents/25230764/35601500/Tietosuojaseloste+Avoimen+datan+palvelut+14.3.2023_allekirjoitettu.pdf/738884e8-28b8-ce84-050a-83bde6b51a2c/Tietosuojaseloste+Avoimen+datan+palvelut+14.3.2023_allekirjoitettu.pdf?t=1681210558717"
+    },
+    "appCode": {
+      "appCodeInfo": "In accordance to the terms of use the source codes of the application are available here:",
+      "appCodeLink": "https://github.com/finnishtransportagency/suomen-vaylat"
     }
   },
   "search": {
+    "lessSearchOptions": "Less search options",
+    "moreSearchOptions": "More search options",
     "fill_all_fields": "Fill in all search fields",
     "required_field_missing": "Check the required fields.",
     "vkm": {
       "tie": "Road number",
+      "tieloppu" : "Road end",
       "title": "Road number search",
       "subtitle": "Search by road number",
       "osa": "Road section",
@@ -288,7 +308,18 @@
       "trackSubtitle": "Search for track data",
       "trackError": {
         "text": "No results were found for the track search."
-      }
+      },
+      "tooltip": ["Road search, write in the format ’road/part/driving_lane/distance’ or ’road/part/driving_lane/distance road/part_end/driving_lane/distance_end’",
+      "Eg.",
+      "5",
+      "5/116",
+      "5/116/0",
+      "5/116/0/50",
+      "5/116/0/50",
+      "5/116/0/50 5/348/0/100",
+      "5/116/0/50 5/348/0/100",
+      "start:5/116/0/50 end:5/348/0/100"
+      ] 
     },
     "address": {
       "title": "Search place",
@@ -305,6 +336,14 @@
           "text": "No results found for the metadata search."
       }
     },
+    "layer": {
+      "title": "Material search"
+    },
+    "track" : {
+      "tracknumber" : "Track number",
+      "trackkm" : "Track kilometre",
+      "trackm" : "Track metre"
+    },
     "tips": {
       "title": "Use location search to search for a municipality, address, property identifier, road address or track address.",
       "address": "Address search, type in the format 'municipality', 'address' or 'address, municipality'.",
@@ -313,15 +352,15 @@
         "Opastinsilta 12",
         "Opastinsilta 12, Helsinki"
       ],
-      "vkmRoad": "Tiehaku, kirjoita muodossa 'tie/osa/ajorata/etäisyys' tai 'tie/osa/ajorata/etäisyys tie/osa_loppu/ajorata/etäisyys_loppu'.",
+      "vkmRoad": "Road search, write in the format ’road/part/driving_lane/distance’ or ’road/part/driving_lane/distance road/part_end/driving_lane/distance_end’.",
       "vkmRoadExamples": [
         "5",
         "5/116",
         "5/116/0",
         "5/116/0/50",
-        "5/116//50",
+        "5/116/0/50",
         "5/116/0/50 5/348/0/100",
-        "5/116//50 5/348//100",
+        "5/116/0/50 5/348/0/100",
         "start:5/116/0/50 end:5/348/0/100"
       ],
       "vkmTrack": "Track search, type in the format 'track number/track kilometre/track metre'.",
@@ -335,7 +374,21 @@
       ],
       "example": "For example,",
       "toastTip": "Did you know that you can save the geometry that was placed on the map from a track and road search?",
-      "toastTipContent": "You can save the geometry through the save icon on the left side of the page, from another tab."
+      "toastTipContent": "You can save the geometry through the save icon on the left side of the page, from another tab.",
+      "nomenclature" : "With name search, you can search for objects in a geographic name registry. Eg.",
+      "nomenclatureExamples" : [
+        "Tampere", "Rautatieasema", "Eduskuntatalo"
+      ],
+      "layer" : "Using material search, you can search for words or parts of words in the metadata of map layers and activate layers from the search results. Eg. ",
+      "layerExamples" : [
+        "pölkytys"
+      ]
+    },
+    "nomenclature" : {
+      "title": "Name search"
+    },
+    "premise" : {
+      "title": "Property search"
     }
   },
   "layerlist": {
@@ -347,7 +400,6 @@
       "backgroundMaps": "Background maps",
       "selectAll": "Select all",
       "show": "Show",
-      "filterOrSearchLayers": "Filter or search layers",
       "filterByType": "Filter by type",
       "searchForLayers": "Search for layers",
       "clearFilters": "Clear filters",
@@ -461,12 +513,16 @@
             "id": 11,
             "title": "Traffic volumes",
             "description": ""
-          }
-        },
-        "themeLinks": {
-          "bikeNetwork": {
-            "title": "Valtakunnallinen ja seudullinen pyörätieverkko",
-            "url": "https://paikkatieto.vaylapilvi.fi/arcgis/apps/webappviewer/index.html?id=aa98d035ba254776895d092a3d1c3a9f"
+          },
+          "14": {
+            "id": 14,
+            "title": "National and regional cycling network",
+            "description": ""
+          },
+          "15": {
+            "id": 15,
+            "title": "Wood transportations on roads",
+            "description": ""
           }
         }
       },
@@ -527,6 +583,10 @@
           "pookiFeedback": {
             "title": "Vesiväylien palautteet",
             "url": "https://extranet.vayla.fi/pooki_www/palaute"
+          },
+          "digitalCard": {
+            "title": "Digitaalinen väyläkortti",
+            "url": "https://dvk.vaylapilvi.fi/vaylakortti/"
           }
         }
       }
@@ -1112,34 +1172,25 @@
       "telegram": "Share on Telegram"
     }
   },
-  "themeLinks": {
-    "timeTravelFinland": {
-      "title": "Aikamatkalla Suomessa",
-      "url": "https://vayla.fi/vaylista/aineistot/kartat/aikamatkalla-suomessa#.XOOasBFlJNs"
+  "gfifiltering": {
+    "filter": "Filter",
+    "removeAllFilters": "Remove all filters",
+    "placeholders" : {
+      "chooseProp" : "Valitse ominaisuustieto",
+      "chooseOperator" : "Valitse operaattori",
+      "chooseValue" : "Suodettava arvo"
     },
-    "bikeNetwork": {
-      "title": "Valtakunnallinen ja seudullinen pyörätieverkko",
-      "url": "https://paikkatieto.vaylapilvi.fi/arcgis/apps/webappviewer/index.html?id=aa98d035ba254776895d092a3d1c3a9f"
-    },
-    "baltice": {
-      "title": "Baltice",
-      "url": "https://baltice.org/map/"
-    },
-    "safetyDeviceFaults": {
-      "title": "Kauppamerenkulun väylien turvalaiteviat",
-      "url": "https://vayla.fi/vaylista/vesivaylat/turvalaitteet/turvalaiteviat#.XLWWTegzYuU"
-    },
-    "seaWarnings": {
-      "title": "Varoituksia merenkulkijoille",
-      "url": "https://vayla.fi/palveluntuottajat/ammattimerenkulku/meriliikenteen-hairiot/varoituksia-merenkulkijoille"
-    },
-    "restrictedAreas": {
-      "title": "Vesiliikenteen kielto- ja rajoitusalueet",
-      "url": "https://vayla.fi/vaylista/vesivaylat/rajoitusalueet"
-    },
-    "pookiFeedback": {
-      "title": "Vesiväylien palautteet",
-      "url": "https://extranet.vayla.fi/pooki_www/palaute"
+    "activeFilters" : "Aktiiviset suodattimet",
+    "property" : "Ominaisuus",
+    "operator" : "Operaattori",
+    "value" : "Arvo",
+    "operators": {
+      "equals" : "Yhtäsuuri kuin",
+      "notEquals" : "Erisuuri kuin",
+      "smallerThan" : "Pienempi kuin",
+      "biggerThan" : "Suurempi kuin",
+      "includes" : "Includes",
+      "doesntInclude" : "Doesn't include"
     }
   }
 }

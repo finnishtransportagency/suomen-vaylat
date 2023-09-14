@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from 'react';
 import store from '../../../state/store';
-import { faFilter } from '@fortawesome/free-solid-svg-icons';
+import { faAngleUp, faAngleDown } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styled from 'styled-components';
 import { useAppSelector } from '../../../state/hooks';
@@ -79,20 +79,6 @@ const StyledFilterList = styled(motion.div)`
     background-color: ${props => props.theme.colors.mainWhite};
 `;
 
-const StyledListSubtitle = styled.div`
-    display: flex;
-    justify-content: flex-start;
-    align-items: flex-start;
-    color: ${props => props.theme.colors.mainColor1};
-    padding: 0px 0px 16px 0px;
-    font-size: 14px;
-    svg {
-      margin-left: 8px;
-      font-size: 20px;
-      transition: all 0.3s ease-out;
-    };
-`;
-
 const StyledFiltersContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
@@ -121,10 +107,8 @@ const StyledDeleteAllSelectedFilters = styled.div`
 
 const StyledSearchAndFilter = styled.div`
     display: flex;
-    align-items: flex-start;
-    margin-left: 8px;
-    margin-right: 8px;
-    margin-bottom: 16px;
+    flex-direction: column;
+    margin: 5px 8px 8px 16px;
 `;
 
 const StyledCustomFilterButton = styled.div`
@@ -145,23 +129,27 @@ const StyledCustomFilterButton = styled.div`
 `;
 
 const StyledFilterButton = styled.div`
-  width: 42px;
+  width: 32px;
   height: 32px;
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 30px;
-  background-color: ${props => props.isOpen ? "#004477" : props.theme.colors.mainColor1};
-  margin-right: 6px;
-  margin-top: 4px;
+  padding: 0 10px;
+  border-radius: 1px;
+  color: ${props => props.isOpen ? "#004477" : props.theme.colors.mainColor1};
+  margin: 4px 0px 1px 70px;
   cursor: pointer;
-  font-size: 13px;
-  color: #fff;
   svg {
-    margin-right: 5px;
-    font-size: 12px;
-    color: ${props => props.theme.colors.mainWhite};
+    font-size: 18px;
+    margin: 5px;
+    top: 2px;
+    position: relative;
+    color: ${props => props.theme.colors.mainColor1};
   };
+  span {
+    white-space: nowrap;
+    position: relative;
+  }
 `;
 
 const SavedLayer = ({isSelected, action, layer}) => {
@@ -311,19 +299,20 @@ const LayerListTEMP = ({
       >
         <span>{strings.tooltips.layerlist.filter}</span>
       </ReactTooltip>
-      <StyledListSubtitle>
-        {strings.layerlist.layerlistLabels.filterOrSearchLayers}
-      </StyledListSubtitle>
       <StyledSearchAndFilter>
+        <LayerSearch layers={layers} groups={groups} />
         <StyledFilterButton
-          data-tip
-          data-for="layerlist-filter"
-          onClick={() => setIsOpen(!isOpen)}
-          isOpen={isOpen}
-        >
-          <FontAwesomeIcon icon={faFilter} />
+              data-tip 
+              data-for='layerlist-filter'
+              onClick={() =>{ 
+              setIsOpen(!isOpen)}}
+              isOpen={isOpen}
+            >
+            <FontAwesomeIcon
+              icon={isOpen ? faAngleUp : faAngleDown}
+            />
+              <span>{strings.layerlist.layerlistLabels.filterByType}</span>
         </StyledFilterButton>
-        <LayerSearch layers={layers} />
       </StyledSearchAndFilter>
       <StyledFilterList
         initial="hidden"
@@ -334,9 +323,6 @@ const LayerListTEMP = ({
           type: "tween"
         }}
       >
-        <StyledListSubtitle>
-          {strings.layerlist.layerlistLabels.filterByType}
-        </StyledListSubtitle>
         <StyledFiltersContainer>
         <StyledCustomFilterButton
         isSelected={showSavedLayers && parsedLayers.length > 0}

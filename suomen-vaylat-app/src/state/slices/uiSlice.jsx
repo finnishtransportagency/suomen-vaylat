@@ -1,4 +1,4 @@
-import { createSlice, current } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 import { theme } from '../../theme/theme';
 import { act } from '@testing-library/react';
 
@@ -14,6 +14,7 @@ const initialState = {
         layerDownloadLinkName: null,
     },
     searchParams: '',
+    isMoreSearchOpen: false,
     isInfoOpen: false,
     geoJsonArray: [],
     isSavedOpen: false,
@@ -96,6 +97,9 @@ export const uiSlice = createSlice({
         },
         setSearchParams: (state, action) => {
             state.searchParams = action.payload;
+        },
+        setIsMoreSearchOpen: (state, action) => {
+            state.isMoreSearchOpen = action.payload;
         },
         setIsInfoOpen: (state, action) => {
             state.isInfoOpen = action.payload;
@@ -249,6 +253,7 @@ export const {
     setIsChecked,
     setSearchParams,
     setIsThemeMenuOpen,
+    setIsMoreSearchOpen,
     setIsInfoOpen,
     setIsUserGuideOpen,
     setIsCustomFilterOpen,
