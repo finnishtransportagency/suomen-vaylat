@@ -12,7 +12,7 @@ import LayerList from './LayerList';
 import LayerSearch from './LayerSearch';
 import ReactTooltip from 'react-tooltip';
 import { isMobile, theme } from '../../../theme/theme';
-import { setIsCustomFilterOpen, setIsSavedLayer, setShowSavedLayers } from '../../../state/slices/uiSlice';
+import { setIsCustomFilterOpen, setIsSavedLayer, setShowSavedLayers, setIsCheckmark, setShowCustomLayerList, setUpdateCustomLayers, setCheckedLayer } from '../../../state/slices/uiSlice';
 import Layer from './Layer';
 import { Switch } from './Layer';
 import { useSelector } from 'react-redux';
@@ -174,12 +174,28 @@ const SavedLayer = ({isSelected, action, layer}) => {
   const customLayers = localStorage.getItem("checkedLayers");
   const parsedLayers = JSON.parse(customLayers);
 
+      const handleLayerVisibility = (channel, layer) => {
+      store.dispatch(setMapLayerVisibility(layer));
+      updateLayers(store, channel);
+  };
+
     // Load saved layers from local storage when component mounts
     useEffect(() => {
       const handleStorageChange = () => {
         const loadedLayers = localStorage.getItem("checkedLayers");
         if (loadedLayers) {
-          setSavedLayers(JSON.parse(loadedLayers));
+          const layersWithVisibility = JSON.parse(loadedLayers).map(layer => ({ ...layer, visible: true }));
+          setSavedLayers(layersWithVisibility);
+          localStorage.setItem("checkedLayers", JSON.stringify(layersWithVisibility));
+    
+          // Call MapLayerVisibilityRequest for each layer
+          layersWithVisibility.forEach(layer => {
+            try {
+              channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, true]);
+            } catch (error) {
+              console.error('Error posting MapLayerVisibilityRequest:', error);
+            }
+          });
         }
       };
     
@@ -223,6 +239,7 @@ const SavedLayer = ({isSelected, action, layer}) => {
             const selectedLayers = parsedLayers || [];
             store.dispatch(setIsSavedLayer(selectedLayers));
             store.dispatch(setIsCustomFilterOpen(true));
+            store.dispatch(setIsCheckmark(true));
           }}>
             {strings.layerlist.customLayerInfo.editLayers}
           </StyledSaveButton>
@@ -233,6 +250,7 @@ const SavedLayer = ({isSelected, action, layer}) => {
             <StyledSwitchContainer isSelected={selectedLayers[layer.id]} onClick={action}>
             <Switch action={() => {
               toggleLayerVisibility(layer.id);
+              handleLayerVisibility(channel, layer);
             }} isSelected={layer.visible} />
             </StyledSwitchContainer>
           </StyledRowContainer>
@@ -262,12 +280,16 @@ const LayerListTEMP = ({
   }, [selectedLayers]);
   
   // const shouldShowSavedLayer = parsedLayers.length > 0;
-
   const emptyFilters = () => {
     store.dispatch(setTagLayers([]));
     store.dispatch(setTags([]));
+    localStorage.removeItem("checkedLayers");
+    store.dispatch(setIsSavedLayer(false));
+    store.dispatch(setShowCustomLayerList(false));
+    store.dispatch(setUpdateCustomLayers(false));
+    store.dispatch(setCheckedLayer([]));
   };
-
+/*
   // Re-renders layers saved to local storage if page is refreshed
   useEffect(() => {
     const selectedLayers = localStorage.getItem("checkedLayers");
@@ -276,7 +298,7 @@ const LayerListTEMP = ({
       store.dispatch(setIsSavedLayer(true));
     }
   }, []);
-
+*/
   return (
     <>
       <ReactTooltip

@@ -32,6 +32,10 @@ import {
     setActiveSelectionTool,
     setIsGfiToolsOpen,
     setIsCustomFilterOpen,
+    setIsSavedLayer,
+    setShowCustomLayerList,
+    setUpdateCustomLayers,
+    setCheckedLayer,
 } from '../../state/slices/uiSlice';
 
 import {
@@ -260,6 +264,11 @@ const Content = () => {
 
     const handleCustomFilterClose = () => {
         store.dispatch(setIsCustomFilterOpen(false));
+        localStorage.removeItem("checkedLayers");
+        store.dispatch(setIsSavedLayer(false));
+        store.dispatch(setShowCustomLayerList(false));
+        store.dispatch(setUpdateCustomLayers(false));
+        store.dispatch(setCheckedLayer([]));
       };
 
     const handleCloseShareWebSite = () => {
@@ -660,7 +669,7 @@ const Content = () => {
                     constraintsRef={
                         constraintsRef
                     } /* Reference div for modal drag boundaries */
-                    drag={false} /* Enable (true) or disable (false) drag */
+                    drag={true} /* Enable (true) or disable (false) drag */
                     resize={false}
                     backdrop={
                         true
