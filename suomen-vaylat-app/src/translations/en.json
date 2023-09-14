@@ -341,7 +341,7 @@
         "Opastinsilta 12",
         "Opastinsilta 12, Helsinki"
       ],
-      "vkmRoad": "Road search, write in the format ’road/part/driving_lane/distance’, road/part/distance, 'road/part/driving_lane' ( must use 'Use driving_lane search' -choice ) or ’road/part/driving_lane/distance road/part_end/driving_lane/distance_end’.",
+      "vkmRoad": "Road search, write in the format ’road/part/driving_lane/distance’, road/part/distance, 'road/part/driving_lane' (use the 'Use driving_lane search' option) or ’road/part/driving_lane/distance road/part_end/driving_lane/distance_end’.",
       "vkmRoadExamples": [
         "5",
         "5/116",
@@ -351,7 +351,7 @@
         "5/116/0/50 5/348/0/100",
         "5/116/0/50 5/348/0/100",
         "start:5/116/0/50 end:5/348/0/100",
-        "'Use driving_lane search' -choice changes third parameter to use either driving_lane or distance when searching with three parameters"
+        "The 'Use driving_lane search' option changes the search to use either the lane or distance when searching with three parameters"
       ],
       "vkmTrack": "Track search, type in the format 'track number/track kilometre/track metre'.",
       "vkmTrackExamples": [

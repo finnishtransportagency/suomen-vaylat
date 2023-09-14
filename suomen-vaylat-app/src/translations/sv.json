@@ -341,7 +341,7 @@
         "Opastinsilta 12",
         "Opastinsilta 12, Helsinki"
       ],
-      "vkmRoad": "Vägsökning, skriv i formatet ’väg/del/körbana/avstånd’, ’väg/del/avstånd’, ’väg/del/körbana' ( moste använda) eller ’väg/del/körbana/avstånd väg/del_slut/körbana/avstånd_slut’.",
+      "vkmRoad": "Vägsökning, skriv i formatet ’väg/del/körbana/avstånd’, ’väg/del/avstånd’, 'väg/del/körfil' (använd alternativet 'Använd körfilen i sökningen') eller ’väg/del/körbana/avstånd väg/del_slut/körbana/avstånd_slut’.",
       "vkmRoadExamples": [
         "5",
         "5/116",
@@ -351,7 +351,7 @@
         "5/116/0/50 5/348/0/100",
         "5/116/0/50 5/348/0/100",
         "start:5/116/0/50 slut:5/348/0/100",
-        "'Använda körbanasökning' -valinta vaihtaa kolmella parametrilla haettaessa haun käyttämään joko ajorataa tai etäisyyttä kolmantena parametrina"
+        "Alternativet 'Använd körfilen i sökningen' ändrar sökningen så att den använder antingen filen eller avståndet som den tredje parametern när du söker med tre parametrar."
       ],
       "vkmTrack": "Bansökning, skriv i formatet 'bannummer/bankilometer/banmeter'.",
       "vkmTrackExamples": [
