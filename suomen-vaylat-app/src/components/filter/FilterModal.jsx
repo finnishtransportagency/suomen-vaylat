@@ -417,7 +417,7 @@ export const FilterModal = () => {
                   <StyledFilterPropContainer>
                     <StyledFilterProp>
                       {strings.gfifiltering.property}:{" "}
-                      {fieldNameLocales && fieldNameLocales[filter.property]}
+                      {Object.keys(fieldNameLocales).length > 0 ? fieldNameLocales[filter.property] : filter.property}
                     </StyledFilterProp>
                     <StyledFilterProp>
                       {filter.operator === "date" ? (
