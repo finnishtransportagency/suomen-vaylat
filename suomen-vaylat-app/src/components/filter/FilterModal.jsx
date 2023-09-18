@@ -166,7 +166,7 @@ const StyledTrashIconWrapper = styled.div`
   display: flex;
   align-items: center;
   text-align: end;
-  margin: 1em 1em 0 1em;
+  margin: 1em 0 0 1em;
   border: none;
   background: none;
   cursor: pointer;
@@ -197,6 +197,14 @@ export const FilterModal = () => {
   const [fieldNameLocales, setFieldNameLocales] = useState({});
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
+
+  const handleSetPropValue = (value) => {
+    setStartDate(null);
+    setEndDate(null);
+    setFilterValue({ value: "", type: null });
+    setOperatorValue({});
+    setPropValue(value);
+  };
 
   const addFilter = () => {
     const prop = propValue.value;
@@ -232,7 +240,7 @@ export const FilterModal = () => {
     setStartDate(null);
     setEndDate(null);
     setPropValue({});
-    setFilterValue({});
+    setFilterValue({ value: "", type: null });
     setOperatorValue({});
   };
 
@@ -310,14 +318,18 @@ export const FilterModal = () => {
   const filterOptions = () => {
     var layer = filteringInfo?.layer;
     const options = layer?.tableProps?.filterableColumns?.map((column) => {
-      if (fieldNameLocales) {
+      if (fieldNameLocales.length > 0) {
         return {
           value: column.key,
           label: fieldNameLocales[column.title],
           type: column.type,
         };
       } else {
-        return {};
+        return {
+          value: column.key,
+          label: column.title,
+          type: column.type,
+        };
       }
     });
     return options;
@@ -331,7 +343,7 @@ export const FilterModal = () => {
             options={filterOptions()}
             placeholder={strings.gfifiltering.placeholders.chooseProp}
             value={propValue}
-            setValue={setPropValue}
+            setValue={(value) => handleSetPropValue(value)}
             isDisabled={false}
           />
         </StyledModalFloatingChapter>
@@ -422,7 +434,7 @@ export const FilterModal = () => {
                     {filter.type === "date" ? (
                       <>
                         <StyledFilterProp>
-                          {strings.gfifiltering.value}:{" "}
+                          {strings.gfifiltering.startDate}:{" "}
                           {filter.value.start
                             ? filter.value.start.toLocaleString([], {
                                 year: "numeric",
@@ -432,7 +444,7 @@ export const FilterModal = () => {
                             : "-"}
                         </StyledFilterProp>
                         <StyledFilterProp>
-                          {strings.gfifiltering.value}:{" "}
+                          {strings.gfifiltering.endDate}:{" "}
                           {filter.value.end
                             ? filter.value.end.toLocaleString([], {
                                 year: "numeric",
