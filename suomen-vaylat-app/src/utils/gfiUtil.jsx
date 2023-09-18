@@ -106,7 +106,7 @@ export const filterFeature = (feature, location, filters) => {
       if (endDate) {
         isBeforeEnd = value <= endDate;
       }
-      return isAfterStart && isBeforeEnd
+      return startDate && endDate
         ? isAfterStart && isBeforeEnd
         : isAfterStart || isBeforeEnd;
     } else {
