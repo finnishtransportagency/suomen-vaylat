@@ -318,7 +318,7 @@ export const FilterModal = () => {
   const filterOptions = () => {
     var layer = filteringInfo?.layer;
     const options = layer?.tableProps?.filterableColumns?.map((column) => {
-      if (fieldNameLocales.length > 0) {
+      if (Object.keys(fieldNameLocales).length > 0) {
         return {
           value: column.key,
           label: fieldNameLocales[column.title],
