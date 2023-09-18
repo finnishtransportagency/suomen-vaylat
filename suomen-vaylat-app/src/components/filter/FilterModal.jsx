@@ -1,6 +1,11 @@
 import { useState, useContext, useEffect } from "react";
 import { useAppSelector } from "../../state/hooks";
 import { ReactReduxContext } from "react-redux";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import "dayjs/locale/fi";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 import "react-toastify/dist/ReactToastify.css";
 import styled from "styled-components";
@@ -28,26 +33,56 @@ const StyledModalContainer = styled.div`
     display: table;
     clear: both;
   }
-  padding-left: 20px;
-  padding-right: 20px;
-  margin-top: 30px;
-  margin-bottom: 30px;
-  min-height: 160px;
-  min-width: 800px;
+  margin-left: 1em;
+  margin-right: 1em;
+  margin-top: 1em;
+  margin-bottom: 1em;
+  min-width: 20em;
   position: relative;
+  display: flex;
+  flex-direction: column;
+`;
+
+const StyledModalSelectionContainer = styled.div`
+  :after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+  position: relative;
+  display: flex;
+  flex-direction: column;
+`;
+
+const StyledModalResultContainer = styled.div`
+  :after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+  margin-top: 1em;
+  position: relative;
+  display: flex;
+  flex-direction: column;
 `;
 
 const StyledModalFloatingChapter = styled.div`
   float: left;
-  width: 29%;
-  margin-left: 6px;
+  height: '3em'
+  width: 100%;
   position: relative;
 `;
 const StyledModalFloatingActionChapter = styled.div`
   width: 7%;
-  margin-left: 6px;
+  margin-left: ".5em";
   float: left;
   position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  justify-content: flex-end;
+  align-self: flex-end;
 `;
 
 const StyledInput = styled.input`
@@ -63,8 +98,7 @@ const StyledInput = styled.input`
 
 const StyledFilterContainer = styled.div`
   padding-top: 1em;
-  margin-left: 6px;
-  //position: relative;
+  margin-left: ".5em";
   width: 100%;
   height: 100%;
   display: flex;
@@ -84,16 +118,13 @@ const StyledFilterReusltButtons = styled.div`
 
 const StyledFilter = styled.div`
   background-color: #f2f2f2;
-  //float: left;
   border: solid 1px black;
   border-radius: 7px;
-  //margin-left: 5px;
   margin-bottom: 5px;
   padding-left: 3px;
   padding-right: 3px;
   :nth-child(odd) {
     background-color: white;
-    //margin-left: 5px;
   }
   :nth-child(3) {
     //float: none;
@@ -102,9 +133,10 @@ const StyledFilter = styled.div`
 `;
 
 const StyledSelectedTabDisplayOptionsButton = styled.div`
+  display: flex;
   position: relative;
   right: 0px;
-  padding: 8px;
+  margin: 0.5em 0 0.5em 0.5em;
   cursor: pointer;
   color: ${(props) => props.theme.colors.mainColor1};
   svg {
@@ -112,12 +144,13 @@ const StyledSelectedTabDisplayOptionsButton = styled.div`
   }
 `;
 
-const StyledIconWrapper = styled.div`
+const StyledTimesIconWrapper = styled.div`
+  margin: 0.5em;
   border: none;
   background: none;
   cursor: pointer;
+  color: ${(props) => props.theme.colors.mainColor1};
   svg {
-    color: ${(props) => props.theme.colors.mainColor1};
     font-size: 20px;
     transition: all 0.1s ease-out;
   }
@@ -127,14 +160,24 @@ const StyledIconWrapper = styled.div`
     }
   }
   float: right;
-  margin-right: 8px;
 `;
 
-const StyledFloatingDiv = styled.div`
-  :after {
-    content: "";
-    display: table;
-    clear: both;
+const StyledTrashIconWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  text-align: end;
+  margin: 1em 1em 0 1em;
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: ${(props) => props.theme.colors.mainColor1};
+  svg {
+    font-size: 20px;
+  }
+  &:hover {
+    svg {
+      color: ${(props) => props.theme.colors.mainColor2};
+    }
   }
 `;
 
@@ -152,15 +195,26 @@ export const FilterModal = () => {
   const [filterValue, setFilterValue] = useState({ value: "", type: null });
   const [propValue, setPropValue] = useState({});
   const [fieldNameLocales, setFieldNameLocales] = useState({});
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
 
   const addFilter = () => {
     const prop = propValue.value;
-    const value = filterValue.value;
-    const type = filterValue.type;
-    const oper = operatorValue.value;
+    var value;
+    if (startDate || endDate) {
+      value = {
+        start: startDate ? new Date(startDate) : null,
+        end: endDate ? new Date(endDate) : null,
+      };
+    } else {
+      value = filterValue.value;
+    }
+    const type = propValue.type;
+    const oper = type === "date" ? "date" : operatorValue.value;
     const layer = filteringInfo?.layer?.id;
 
-    if (!prop || !value || !oper) {
+    if (!prop || !value) {
+      //lisää popup varoitus
       return;
     }
     store.dispatch(
@@ -175,6 +229,8 @@ export const FilterModal = () => {
         },
       ])
     );
+    setStartDate(null);
+    setEndDate(null);
     setPropValue({});
     setFilterValue({});
     setOperatorValue({});
@@ -269,101 +325,160 @@ export const FilterModal = () => {
 
   return (
     <StyledModalContainer>
-      <StyledModalFloatingChapter>
-        <Dropdown
-          options={filterOptions()}
-          placeholder={strings.gfifiltering.placeholders.chooseProp}
-          value={propValue}
-          setValue={setPropValue}
-          isDisabled={false}
-        />
-      </StyledModalFloatingChapter>
-      <StyledModalFloatingChapter>
-        <Dropdown
-          options={comparisonOperatorsHash[propValue.type]}
-          placeholder={strings.gfifiltering.placeholders.chooseOperator}
-          value={operatorValue}
-          setValue={setOperatorValue}
-          isDisabled={Object.keys(propValue).length === 0}
-        />
-      </StyledModalFloatingChapter>
-      <StyledModalFloatingChapter>
-        <StyledInput
-          type="text"
-          value={filterValue.value}
-          placeholder={strings.gfifiltering.placeholders.chooseValue}
-          onChange={(e) =>
-            setFilterValue({ value: e.target.value, type: propValue.type })
-          }
-          onKeyPress={(e) => {
-            if (e.key === "Enter") {
-              addFilter();
-            }
-          }}
-          disabled={Object.keys(operatorValue).length === 0}
-        />
-      </StyledModalFloatingChapter>
-      <StyledModalFloatingActionChapter>
-        <StyledSelectedTabDisplayOptionsButton onClick={() => addFilter()}>
-          <FontAwesomeIcon icon={faPlus} />
-        </StyledSelectedTabDisplayOptionsButton>
-      </StyledModalFloatingActionChapter>
+      <StyledModalSelectionContainer>
+        <StyledModalFloatingChapter>
+          <Dropdown
+            options={filterOptions()}
+            placeholder={strings.gfifiltering.placeholders.chooseProp}
+            value={propValue}
+            setValue={setPropValue}
+            isDisabled={false}
+          />
+        </StyledModalFloatingChapter>
+        {propValue.type === "date" ? (
+          <>
+            <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="fi">
+              <DatePicker
+                sx={{ marginTop: ".5em" }}
+                label={strings.gfifiltering.startDate}
+                value={startDate}
+                onChange={(newValue) => setStartDate(newValue)}
+              />
+              <DatePicker
+                sx={{ marginTop: ".5em" }}
+                label={strings.gfifiltering.endDate}
+                value={endDate}
+                onChange={(newValue) => setEndDate(newValue)}
+              />
+            </LocalizationProvider>
+          </>
+        ) : (
+          <>
+            <StyledModalFloatingChapter style={{ marginTop: ".5em" }}>
+              <Dropdown
+                options={comparisonOperatorsHash[propValue.type]}
+                placeholder={strings.gfifiltering.placeholders.chooseOperator}
+                value={operatorValue}
+                setValue={setOperatorValue}
+                isDisabled={Object.keys(propValue).length === 0}
+              />
+            </StyledModalFloatingChapter>
+            <StyledModalFloatingChapter style={{ marginTop: ".5em" }}>
+              <StyledInput
+                type="text"
+                value={filterValue.value}
+                placeholder={strings.gfifiltering.placeholders.chooseValue}
+                onChange={(e) =>
+                  setFilterValue({
+                    value: e.target.value,
+                    type: propValue.type,
+                  })
+                }
+                onKeyPress={(e) => {
+                  if (e.key === "Enter") {
+                    addFilter();
+                  }
+                }}
+                disabled={Object.keys(operatorValue).length === 0}
+              />
+            </StyledModalFloatingChapter>
+          </>
+        )}
+        <StyledModalFloatingActionChapter>
+          <StyledSelectedTabDisplayOptionsButton onClick={() => addFilter()}>
+            {strings.gfifiltering.addFilter}{" "}
+            <FontAwesomeIcon style={{ marginLeft: ".3em" }} icon={faPlus} />
+          </StyledSelectedTabDisplayOptionsButton>
+        </StyledModalFloatingActionChapter>
+      </StyledModalSelectionContainer>
 
-      {activeFilters && activeFilters.length > 0 && (
-        <StyledFilterContainer>
-          <StyledFilterResultContainer>
-            <StyledFilterHeader style={{ marginBottom: ".5em" }}>
-              {strings.gfifiltering.activeFilters}
-            </StyledFilterHeader>
-            {activeFilters.map((filter) => (
-              <StyledFilter>
-                <StyledFilterPropContainer>
-                  <StyledFilterProp>
-                    {strings.gfifiltering.property}:{" "}
-                    {fieldNameLocales && fieldNameLocales[filter.property]}
-                  </StyledFilterProp>
-                  <StyledFilterProp>
-                    {strings.gfifiltering.operator}:{" "}
-                    {strings.gfifiltering.operators[filter.operator]}{" "}
-                  </StyledFilterProp>
-                  <StyledFilterProp>
-                    {strings.gfifiltering.value}: {filter.value}
-                  </StyledFilterProp>
-                </StyledFilterPropContainer>
-                <StyledIconWrapper
-                  onClick={() => {
-                    handleRemoveFilter(filter);
-                  }}
-                >
-                  <StyledFloatingDiv>
+      <StyledModalResultContainer>
+        {activeFilters && activeFilters.length > 0 && (
+          <StyledFilterContainer>
+            <StyledFilterResultContainer>
+              <StyledFilterHeader style={{ marginBottom: ".5em" }}>
+                {strings.gfifiltering.activeFilters}
+              </StyledFilterHeader>
+              {activeFilters.map((filter) => (
+                <StyledFilter>
+                  <StyledFilterPropContainer>
+                    <StyledFilterProp>
+                      {strings.gfifiltering.property}:{" "}
+                      {fieldNameLocales && fieldNameLocales[filter.property]}
+                    </StyledFilterProp>
+                    <StyledFilterProp>
+                      {filter.operator === "date" ? (
+                        <>
+                          {strings.gfifiltering.operator}:{" "}
+                          {strings.gfifiltering.dateRange}{" "}
+                        </>
+                      ) : (
+                        <>
+                          {strings.gfifiltering.operator}:{" "}
+                          {strings.gfifiltering.operators[filter.operator]}{" "}
+                        </>
+                      )}
+                    </StyledFilterProp>
+                    {filter.type === "date" ? (
+                      <>
+                        <StyledFilterProp>
+                          {strings.gfifiltering.value}:{" "}
+                          {filter.value.start
+                            ? filter.value.start.toLocaleString([], {
+                                year: "numeric",
+                                month: "numeric",
+                                day: "numeric",
+                              })
+                            : "-"}
+                        </StyledFilterProp>
+                        <StyledFilterProp>
+                          {strings.gfifiltering.value}:{" "}
+                          {filter.value.end
+                            ? filter.value.end.toLocaleString([], {
+                                year: "numeric",
+                                month: "numeric",
+                                day: "numeric",
+                              })
+                            : "-"}
+                        </StyledFilterProp>
+                      </>
+                    ) : (
+                      <StyledFilterProp>
+                        {strings.gfifiltering.value}: {filter.value}
+                      </StyledFilterProp>
+                    )}
+                  </StyledFilterPropContainer>
+                  <StyledTimesIconWrapper
+                    onClick={() => {
+                      handleRemoveFilter(filter);
+                    }}
+                  >
                     <FontAwesomeIcon
                       icon={faTimes}
                       size="6x"
                       style={{ marginLeft: ".5em" }}
                     />
-                  </StyledFloatingDiv>
-                </StyledIconWrapper>
-              </StyledFilter>
-            ))}
-          </StyledFilterResultContainer>
-          <StyledFilterReusltButtons>
-            <StyledIconWrapper
-              onClick={() => {
-                handleRemoveAllFilters();
-              }}
-            >
-              <StyledFloatingDiv>
+                  </StyledTimesIconWrapper>
+                </StyledFilter>
+              ))}
+            </StyledFilterResultContainer>
+            <StyledFilterReusltButtons>
+              <StyledTrashIconWrapper
+                onClick={() => {
+                  handleRemoveAllFilters();
+                }}
+              >
                 {strings.gfifiltering.removeAllFilters}{" "}
                 <FontAwesomeIcon
                   icon={faTrash}
                   size="6x"
                   style={{ marginLeft: ".5em" }}
                 />
-              </StyledFloatingDiv>
-            </StyledIconWrapper>
-          </StyledFilterReusltButtons>
-        </StyledFilterContainer>
-      )}
+              </StyledTrashIconWrapper>
+            </StyledFilterReusltButtons>
+          </StyledFilterContainer>
+        )}
+      </StyledModalResultContainer>
     </StyledModalContainer>
   );
 };

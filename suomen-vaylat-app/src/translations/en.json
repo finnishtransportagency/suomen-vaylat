@@ -1174,6 +1174,10 @@
   },
   "gfifiltering": {
     "filter": "Filter",
+    "startDate": "Start date",
+    "endDate": "End date",
+    "addFilter": "Add filter",
+    "dateRange": "Date range",
     "removeAllFilters": "Remove all filters",
     "placeholders" : {
       "chooseProp" : "Valitse ominaisuustieto",
