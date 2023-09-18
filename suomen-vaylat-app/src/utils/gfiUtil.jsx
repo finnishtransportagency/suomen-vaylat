@@ -49,12 +49,14 @@ export const filterFeature = (feature, location, filters) => {
     },
     "!==": function (a, b) {
       return b.type === "string"
-        ? a.toLowerCase() !== b.value.toLowerCase()
+        ? a.toString().trim().toLowerCase() !==
+            b.value.toString().trim().toLowerCase()
         : a !== b;
     },
     "===": function (a, b) {
       return b.type === "string"
-        ? a.toLowerCase() === b.value.toLowerCase()
+        ? a.toString().trim().toLowerCase() ===
+            b.value.toString().trim().toLowerCase()
         : a === b;
     },
     includes: function (a, b) {
@@ -62,6 +64,7 @@ export const filterFeature = (feature, location, filters) => {
         b.type === "string" &&
         a
           .toString()
+          .trim()
           .toLowerCase()
           .includes(b.value.toString().trim().toLowerCase())
       );
@@ -71,6 +74,7 @@ export const filterFeature = (feature, location, filters) => {
         b.type === "string" &&
         !a
           .toString()
+          .trim()
           .toLowerCase()
           .includes(b.value.toString().trim().toLowerCase())
       );
@@ -79,13 +83,32 @@ export const filterFeature = (feature, location, filters) => {
 
   const properties = feature.keyValueProperties;
   const filterMatch = filters.every((filter) => {
-    if (location.layerId === filter.layer) {
+    if (location.layerId === filter.layer && filter.type !== "date") {
       const operator = getPropertyOperator(filter.operator);
       var comparisonOperator = comparisonOperatorsHash[operator];
       const value = getParameterCaseInsensitive(properties, filter.property);
       if (value === undefined) return false;
       const doFilter = comparisonOperator(value, filter);
       return doFilter;
+    } else if (filter.type === "date") {
+      const value = new Date(
+        getParameterCaseInsensitive(properties, filter.property)
+      );
+      const startDate = filter.value.start;
+      const endDate = filter.value.end;
+
+      var isAfterStart;
+      var isBeforeEnd;
+
+      if (startDate) {
+        isAfterStart = value >= startDate;
+      }
+      if (endDate) {
+        isBeforeEnd = value <= endDate;
+      }
+      return startDate && endDate
+        ? isAfterStart && isBeforeEnd
+        : isAfterStart || isBeforeEnd;
     } else {
       return true;
     }

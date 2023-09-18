@@ -1174,6 +1174,10 @@
   },
   "gfifiltering": {
     "filter": "Suodata tuloksia",
+    "startDate": "Alku pvm",
+    "endDate": "Loppu pvm",
+    "addFilter": "Lisää suodatin",
+    "dateRange": "Aikaväli",
     "removeAllFilters": "Poista kaikki suodattimet",
     "placeholders" : {
       "chooseProp" : "Valitse ominaisuustieto",
