@@ -3,6 +3,7 @@ import { useAppSelector } from "../../state/hooks";
 import { ReactReduxContext } from "react-redux";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import "dayjs/locale/fi";
+import "dayjs/locale/sv";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
@@ -349,7 +350,7 @@ export const FilterModal = () => {
         </StyledModalFloatingChapter>
         {propValue.type === "date" ? (
           <>
-            <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="fi">
+            <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={strings.getLanguage()}>
               <DatePicker
                 sx={{ marginTop: ".5em" }}
                 label={strings.gfifiltering.startDate}
@@ -436,7 +437,7 @@ export const FilterModal = () => {
                         <StyledFilterProp>
                           {strings.gfifiltering.startDate}:{" "}
                           {filter.value.start
-                            ? filter.value.start.toLocaleString([], {
+                            ? filter.value.start.toLocaleString([strings.getLanguage()], {
                                 year: "numeric",
                                 month: "numeric",
                                 day: "numeric",
@@ -446,7 +447,7 @@ export const FilterModal = () => {
                         <StyledFilterProp>
                           {strings.gfifiltering.endDate}:{" "}
                           {filter.value.end
-                            ? filter.value.end.toLocaleString([], {
+                            ? filter.value.end.toLocaleString([strings.getLanguage()], {
                                 year: "numeric",
                                 month: "numeric",
                                 day: "numeric",
