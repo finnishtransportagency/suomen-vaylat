@@ -51,13 +51,13 @@ export const filterFeature = (feature, location, filters) => {
       return b.type === "string" && typeof(a) === "string"
         ? a.toString().trim().toLowerCase() !==
             b.value.toString().trim().toLowerCase()
-        : a !== b;
+        : a !== b.value;
     },
     "===": function (a, b) {
       return b.type === "string" && typeof(a) === "string"
         ? a.toString().trim().toLowerCase() ===
             b.value.toString().trim().toLowerCase()
-        : a === b;
+        : a === b.value;
     },
     includes: function (a, b) {
       return (
