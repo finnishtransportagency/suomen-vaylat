@@ -1174,25 +1174,25 @@
   },
   "gfifiltering": {
     "filter": "Filter",
-    "startDate": "Start date",
-    "endDate": "End date",
+    "startDate": "Starting date",
+    "endDate": "Ending date",
     "addFilter": "Add filter",
     "dateRange": "Date range",
     "removeAllFilters": "Remove all filters",
     "placeholders" : {
-      "chooseProp" : "Valitse ominaisuustieto",
-      "chooseOperator" : "Valitse operaattori",
-      "chooseValue" : "Suodettava arvo"
+      "chooseProp" : "Select attribute",
+      "chooseOperator" : "Select operator",
+      "chooseValue" : "Value"
     },
-    "activeFilters" : "Aktiiviset suodattimet",
-    "property" : "Ominaisuus",
-    "operator" : "Operaattori",
-    "value" : "Arvo",
+    "activeFilters" : "Active filters",
+    "property" : "Attribute",
+    "operator" : "Operator",
+    "value" : "Value",
     "operators": {
-      "equals" : "Yhtäsuuri kuin",
-      "notEquals" : "Erisuuri kuin",
-      "smallerThan" : "Pienempi kuin",
-      "biggerThan" : "Suurempi kuin",
+      "equals" : "Equals",
+      "notEquals" : "Does not equal",
+      "smallerThan" : "Smaller than",
+      "biggerThan" : "Bigger than",
       "includes" : "Includes",
       "doesntInclude" : "Doesn't include"
     }

@@ -1173,28 +1173,28 @@
     }
   },
   "gfifiltering": {
-    "filter": "Suodata tuloksia",
-    "startDate": "Alku pvm",
-    "endDate": "Loppu pvm",
-    "addFilter": "Lisää suodatin",
-    "dateRange": "Aikaväli",
-    "removeAllFilters": "Poista kaikki suodattimet",
+    "filter": "Filtrera",
+    "startDate": "Startdatum",
+    "endDate": "Slutdatum",
+    "addFilter": "Lägg till ett filter",
+    "dateRange": "Datumintervall",
+    "removeAllFilters": "Ta bort alla filter",
     "placeholders" : {
-      "chooseProp" : "Valitse ominaisuustieto",
-      "chooseOperator" : "Valitse operaattori",
-      "chooseValue" : "Suodettava arvo"
+      "chooseProp" : "Välj attribut",
+      "chooseOperator" : "Välj operator",
+      "chooseValue" : "Värde"
     },
-    "activeFilters" : "Aktiiviset suodattimet",
-    "property" : "Ominaisuus",
-    "operator" : "Operaattori",
-    "value" : "Arvo",
+    "activeFilters" : "Aktiva filter",
+    "property" : "Attribut",
+    "operator" : "Operatör",
+    "value" : "Värde",
     "operators": {
-      "equals" : "Yhtäsuuri kuin",
-      "notEquals" : "Erisuuri kuin",
-      "smallerThan" : "Pienempi kuin",
-      "biggerThan" : "Suurempi kuin",
-      "includes" : "Sisältää",
-      "doesntInclude" : "Ei sisällä"
+      "equals" : "Är lika med",
+      "notEquals" : "Är inte lika med",
+      "smallerThan" : "Mindre än",
+      "biggerThan" : "Större än",
+      "includes" : "Innehåller",
+      "doesntInclude" : "Inte innehåller"
     }
   }
 }
