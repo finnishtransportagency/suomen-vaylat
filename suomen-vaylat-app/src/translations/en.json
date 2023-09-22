@@ -308,18 +308,7 @@
       "trackSubtitle": "Search for track data",
       "trackError": {
         "text": "No results were found for the track search."
-      },
-      "tooltip": ["Road search, write in the format ’road/part/driving_lane/distance’ or ’road/part/driving_lane/distance road/part_end/driving_lane/distance_end’",
-      "Eg.",
-      "5",
-      "5/116",
-      "5/116/0",
-      "5/116/0/50",
-      "5/116/0/50",
-      "5/116/0/50 5/348/0/100",
-      "5/116/0/50 5/348/0/100",
-      "start:5/116/0/50 end:5/348/0/100"
-      ] 
+      }
     },
     "address": {
       "title": "Search place",
@@ -352,16 +341,17 @@
         "Opastinsilta 12",
         "Opastinsilta 12, Helsinki"
       ],
-      "vkmRoad": "Road search, write in the format ’road/part/driving_lane/distance’ or ’road/part/driving_lane/distance road/part_end/driving_lane/distance_end’.",
+      "vkmRoad": "Road search, write in the format ’road/part/driving_lane/distance’, road/part/distance, 'road/part/driving_lane' (use the 'Use driving_lane search' option) or ’road/part/driving_lane/distance road/part_end/driving_lane/distance_end’.",
       "vkmRoadExamples": [
         "5",
         "5/116",
-        "5/116/0",
-        "5/116/0/50",
+        "5/116/0 ( driving_lane search )",
+        "5/116/100 ( distance search )",
         "5/116/0/50",
         "5/116/0/50 5/348/0/100",
         "5/116/0/50 5/348/0/100",
-        "start:5/116/0/50 end:5/348/0/100"
+        "start:5/116/0/50 end:5/348/0/100",
+        "The 'Use driving_lane search' option changes the search to use either the lane or distance when searching with three parameters"
       ],
       "vkmTrack": "Track search, type in the format 'track number/track kilometre/track metre'.",
       "vkmTrackExamples": [
@@ -389,7 +379,8 @@
     },
     "premise" : {
       "title": "Property search"
-    }
+    },
+    "carriageWaySearch": "Use driving_lane search"
   },
   "layerlist": {
     "layerlistLabels": {

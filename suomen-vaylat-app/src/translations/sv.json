@@ -308,18 +308,7 @@
       "trackSubtitle": "Sök banuppgifter",
       "trackError": {
         "text": "Bansökningen gav inga resultat."
-      },
-      "tooltip": ["Vägsökning, skriv i formatet ’väg/del/körbana/avstånd’ eller ’väg/del/körbana/avstånd väg/del_slut/körbana/avstånd_slut’",
-      "T.ex.",
-      "5",
-      "5/116",
-      "5/116/0",
-      "5/116/0/50",
-      "5/116/0/50",
-      "5/116/0/50 5/348/0/100",
-      "5/116/0/50 5/348/0/100",
-      "alku:5/116/0/50 loppu:5/348/0/100"
-    ]
+      }
     },
     "address": {
       "title": "Sök plats",
@@ -352,16 +341,17 @@
         "Opastinsilta 12",
         "Opastinsilta 12, Helsinki"
       ],
-      "vkmRoad": "Vägsökning, skriv i formatet ’väg/del/körbana/avstånd’ eller ’väg/del/körbana/avstånd väg/del_slut/körbana/avstånd_slut’.",
+      "vkmRoad": "Vägsökning, skriv i formatet ’väg/del/körbana/avstånd’, ’väg/del/avstånd’, 'väg/del/körfil' (använd alternativet 'Använd körfilen i sökningen') eller ’väg/del/körbana/avstånd väg/del_slut/körbana/avstånd_slut’.",
       "vkmRoadExamples": [
         "5",
         "5/116",
-        "5/116/0",
-        "5/116/0/50",
+        "5/116/0 ( körbanasökning )",
+        "5/116/100 ( avståndsökning )",
         "5/116/0/50",
         "5/116/0/50 5/348/0/100",
         "5/116/0/50 5/348/0/100",
-        "start:5/116/0/50 slut:5/348/0/100"
+        "start:5/116/0/50 slut:5/348/0/100",
+        "Alternativet 'Använd körfilen i sökningen' ändrar sökningen så att den använder antingen filen eller avståndet som den tredje parametern när du söker med tre parametrar."
       ],
       "vkmTrack": "Bansökning, skriv i formatet 'bannummer/bankilometer/banmeter'.",
       "vkmTrackExamples": [
@@ -389,7 +379,8 @@
     },
     "premise" : {
       "title": "Fastighetssökning"
-    }
+    },
+    "carriageWaySearch": "Använda körbanasökning"
   },
   "layerlist": {
     "layerlistLabels": {

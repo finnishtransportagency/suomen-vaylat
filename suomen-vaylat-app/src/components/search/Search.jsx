@@ -189,6 +189,7 @@ const StyledToastIcon = styled(FontAwesomeIcon)`
     color: ${theme.colors.mainColor1};
 `;
 
+
 const Search = () => {
     const [searchValue, setSearchValue] = useState('');
     const [lastSearchValue, setLastSearchValue] = useState('');
@@ -210,6 +211,8 @@ const Search = () => {
     const [searchClickedRow, setSearchClickedRow] = useState(null);
     const [firstSearchResultShown, setFirstSearchResultShown] = useState(false);
     const [showToast, setShowToast] = useState(JSON.parse(localStorage.getItem(SEARCH_TIP_LOCALSTORAGE)));
+    const [carriageWaySearch, setCarriageWaySearch] = useState(false);
+
 
     const handleSeach = (searchValue) => {
         setShowSearchResults(true);
@@ -226,12 +229,22 @@ const Search = () => {
     }
 
     const handleAddressSearch = (value) => {
+        let searchValueCopy = value
+        //special case, roadsearch with 3 params is road/part/distance, 
+        //unless search ajorata and etaisyys flag ( carriageWaySearch ) found
+        if ( !carriageWaySearch && value && value.includes("/") && (value.split("/").length === 3 || value.split("/").length === 5)){
+            let splittedValue = value.split("/");
+            searchValueCopy = splittedValue[0]+"/"+splittedValue[1]+"//"+splittedValue[2];
+            if (splittedValue.length===5){
+                searchValueCopy += "/"+ splittedValue[3]+"//"+splittedValue[4]
+            }
+        }
         store.dispatch(setGeoJsonArray([]));
         setFirstSearchResultShown(false);
         setSearchClickedRow(null);
         removeMarkersAndFeatures();
         setIsSearching(true);
-        channel.postRequest('SearchRequest', [value]);
+        channel.postRequest('SearchRequest', [searchValueCopy]);
         setSearchValue(value);
         setLastSearchValue(value);
         setSearchResults(null);
@@ -520,6 +533,8 @@ const Search = () => {
     return (
         <StyledSearchContainer isSearchOpen={isSearchOpen}>
         <ReactTooltip backgroundColor={theme.colors.mainColor1} disable={isMobile} place='bottom' type='dark' effect='float' />
+       
+       
             <CircleButton
                 icon={isSearchOpen ? faTimes : faSearch}
                 text={strings.tooltips.search}
@@ -537,7 +552,9 @@ const Search = () => {
                     setSearchType('address');
                 }}
             />
+          
             <AnimatePresence>
+         
                 {isSearchOpen && (
              
                 <StyledSearchWrapper
@@ -550,7 +567,9 @@ const Search = () => {
                     searchType={searchType}
                     showSearchResults={showSearchResults}
                 >
+     
                     <StyledLeftContentWrapper>
+                   
                         {!isSearching ? (
                         <StyledSelectedSearchMethod
                             onClick={() => {
@@ -614,6 +633,8 @@ const Search = () => {
                         handleSeach={handleSeach}
                         isOpen={isSearchModalOpen} 
                         toggleModal={toggleSearchModal} 
+                        carriageWaySearch={carriageWaySearch}
+                        setCarriageWaySearch={setCarriageWaySearch}
                     />            
                 )}  
                 </StyledSearchWrapper>
