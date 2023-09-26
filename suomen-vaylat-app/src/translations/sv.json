@@ -514,6 +514,11 @@
             "id": 15,
             "title": "Vedtransporter på vägar",
             "description": ""
+          },
+          "16": {
+            "id": 16,
+            "title": "Underhållsklasser karta",
+            "description": "Teemakartassa on esitetty Velhon hoitoluokka-aineistot staattisella tilannepäivämäärällä 1.10.2024."
           }
         }
       },
@@ -546,7 +551,7 @@
           },
           "13": {
             "id": 13,
-            "title": "Järnvägsdata",
+            "title": "Område för svag mark och frost",
             "description": ""
           }
         }
