@@ -42,23 +42,23 @@
     "showPageInfo": "Visa sidinformation",
     "showUserGuide": "Visa bruksanvisningen"
   },
-  "savedContent" : {
-    "savedContent" : "Save views and geometries",
-    "viewTitle" : "Syn",
-    "geometryTitle" : "Geometrier",
-    "saveView" : {
-      "confirmDeleteAll" : "Är du säker på att du vill ta bort alla sparade vyer?",
-      "saveView" : "Save views and geometries",
-      "savingView" : "Sparar vy",
-      "saveViewDescription1" : "Visa kommer att sparas i webbläsarens lokala lagring",
-      "saveViewDescription2" : "Sparad vy kan endast nås av webbläsaren som den har sparats",
-      "noSavedViews" : "Inga sparade vyer",
-      "deleteAllSavedViews" : "Ta bort alla sparade vyer",
-      "savedViews" : "Sparade vyer",
-      "viewName" : "Visa namn",
-      "saveNewView" : "Spara ny vy"
+  "savedContent": {
+    "savedContent": "Save views and geometries",
+    "viewTitle": "Syn",
+    "geometryTitle": "Geometrier",
+    "saveView": {
+      "confirmDeleteAll": "Är du säker på att du vill ta bort alla sparade vyer?",
+      "saveView": "Save views and geometries",
+      "savingView": "Sparar vy",
+      "saveViewDescription1": "Visa kommer att sparas i webbläsarens lokala lagring",
+      "saveViewDescription2": "Sparad vy kan endast nås av webbläsaren som den har sparats",
+      "noSavedViews": "Inga sparade vyer",
+      "deleteAllSavedViews": "Ta bort alla sparade vyer",
+      "savedViews": "Sparade vyer",
+      "viewName": "Visa namn",
+      "saveNewView": "Spara ny vy"
     },
-    "saveGeometry" : {
+    "saveGeometry": {
       "confirmDeleteAll": "Är du säker på att du vill ta bort all sparad geometri?",
       "saveGeometry": "Spara geometrin",
       "savingGeometry": "Spara geometri",
@@ -240,7 +240,7 @@
         "link": "https://ava.vaylapilvi.fi"
       }
     },
-    "dataSourcesAndTermsOfUse" :{
+    "dataSourcesAndTermsOfUse": {
       "tabTitle": "Informationskällor och användarvillkor"
     },
     "dataSources": {
@@ -298,7 +298,7 @@
       "title": "Search metadata",
       "subtitle": "Search by metadata",
       "error": {
-          "text": "No results found for the metadata search."
+        "text": "No results found for the metadata search."
       }
     },
     "tips": {
@@ -321,14 +321,9 @@
         "start:5/116/0/50 slut:5/348/0/100"
       ],
       "vkmTrack": "Bansökning, skriv i formatet 'bannummer/bankilometer/banmeter'.",
-      "vkmTrackExamples": [
-        "001/2/10"
-      ],
+      "vkmTrackExamples": ["001/2/10"],
       "realEstateUnitIdentifier": "Fastighetsbeteckning, skriv i formatet 'aa-bb-cc-d' eller 'aaa-bbb-cc-ddd'.",
-      "realEstateUnitIdentifierExamples": [
-        "91-17-16-1",
-        "091-017-16-001"
-      ],
+      "realEstateUnitIdentifierExamples": ["91-17-16-1", "091-017-16-001"],
       "example": "T.ex.",
       "toastTip": "Visste du att du kan spara den geometri som kommit upp på kartan vid ban- och vägsökningen?",
       "toastTipContent": "Du kan spara geometrin via ikonen spara i vänstra kanten, på den andra fliken."
@@ -357,7 +352,7 @@
       "layerVisible": "Lager synligt",
       "zoomInToShowLayer": "Zooma in för att se kartlagret",
       "zoomOutToShowLayer": "Zooma ut för att se kartlagret",
-      "toShowLayer" : "för att se kartlagret",
+      "toShowLayer": "för att se kartlagret",
       "opacity": "Genomskinlighet"
     }
   },
@@ -398,8 +393,8 @@
     }
   },
   "themelayerlist": {
-    "readMore" : "Läs mer",
-    "readLess" : "Mindre",
+    "readMore": "Läs mer",
+    "readLess": "Mindre",
     "moreInfo": "Mer information:",
     "themeGroups": {
       "0": {
@@ -467,6 +462,11 @@
             "id": 14,
             "title": "Vedtransporter på vägar",
             "description": ""
+          },
+          "15": {
+            "id": 15,
+            "title": "Underhållsklasser karta",
+            "description": "Teemakartassa on esitetty Velhon hoitoluokka-aineistot staattisella tilannepäivämäärällä 1.10.2024."
           }
         }
       },
@@ -478,7 +478,7 @@
             "id": 4,
             "title": "Karta över bannätets skick",
             "description": "-"
-           },
+          },
           "6": {
             "id": 6,
             "title": "Beskrivning av bannätet",
@@ -496,7 +496,7 @@
             "links": {
               "0": "https://vayla.fi/kunnossapito/tieverkon-kunnossapito/talvihoito"
             }
-           }
+          }
         }
       },
       "3": {
