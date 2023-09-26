@@ -1172,7 +1172,7 @@
     "removeAllFilters": "Ta bort alla filter",
     "placeholders" : {
       "chooseProp" : "Välj attribut",
-      "chooseOperator" : "Välj operator",
+      "chooseOperator" : "Välj operatör",
       "chooseValue" : "Värde"
     },
     "activeFilters" : "Aktiva filter",
