@@ -462,12 +462,12 @@
             "id": 14,
             "title": "Maanteiden puuvirrat",
             "description": "Kartalla esitetään maanteiden puuvirtoja kuljetusten lukumäärä- ja painoluokittain. Lisätietoja ja tarkennuksia aineistojen infosivuilla."
+          },
+          "15": {
+            "id": 15,
+            "title": "Hoitoluokka-kartta",
+            "description": "Teemakartassa on esitetty Velhon hoitoluokka-aineistot staattisella tilannepäivämäärällä 1.10.2024."
           }
-        },
-        "15": {
-          "id": 15,
-          "title": "Hoitoluokka-kartta",
-          "description": "Teemakartassa on esitetty Velhon hoitoluokka-aineistot staattisella tilannepäivämäärällä 1.10.2024."
         }
       },
       "2": {
