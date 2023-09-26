@@ -514,6 +514,11 @@
             "id": 15,
             "title": "Wood transportations on roads",
             "description": ""
+          },
+          "16": {
+            "id": 16,
+            "title": "Treatment category map",
+            "description": "Teemakartassa on esitetty Velhon hoitoluokka-aineistot staattisella tilannepäivämäärällä 1.10.2024."
           }
         }
       },
@@ -546,7 +551,7 @@
           },
           "13": {
             "id": 13,
-            "title": "Railway data",
+            "title": "Area of instability and frost objects",
             "description": ""
           }
         }
