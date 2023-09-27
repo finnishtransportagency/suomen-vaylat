@@ -1,6 +1,14 @@
 import AddRessSearchResultPanel from './AddRessSearchResultPanel';
 import MetaSearchResultPanel from './MetaSearchResultPane';
+import styled, { css } from 'styled-components';
 
+const SearchPanelMain = styled.div`
+  ${props =>
+    props.hidden &&
+    css`
+      display: none;
+    `}
+`;
 const SearchResultPanel = ({
     isSearchOpen,
     searchResults,
@@ -15,10 +23,11 @@ const SearchResultPanel = ({
     setSearchClickedRow,
     searchClickedRow,
     allLayers,
-    showOnlyType='all'
+    showOnlyType='all',
+    hidden=false
 }) => {
     return (
-        <>
+        <SearchPanelMain hidden={hidden}>
         { 
             isSearchOpen &&
             searchResults !== null &&
@@ -47,7 +56,7 @@ const SearchResultPanel = ({
                 />
                 )
         )}
-        </>
+        </SearchPanelMain>
     );
 };
 

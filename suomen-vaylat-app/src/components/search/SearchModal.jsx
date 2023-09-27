@@ -99,15 +99,24 @@ const getSearchValuePart = (searchValue, searchType, part, carriageWaySearch) =>
     //actual value tells from which cell value is fetched
     //differenct cell of value array choosed if ajorata search not enabled 
     if (carriageWaySearch === true) {
-        actualPart = part;
-    } else if (part > 6) {
-        actualPart = part - 2;
-    } else if (part >= 3) {
-        actualPart = part - 1;
+        if (splittedSearchArray && part > splittedSearchArray.length){
+            return ""
+        }else {
+            actualPart = part;
+        }
     } else {
-        actualPart = part;
-    }
-
+        if (part === 2 || part ===6){
+            return ""
+        }
+        else 
+            if (part > 6) {
+            actualPart = part - 2;
+        } else if ( part >= 3) {
+            actualPart = part - 1;
+        } else {
+            actualPart = part;
+        }
+    }   
     if(splittedSearchArray !== undefined && (splittedSearchArray.length -1) >= actualPart
         && typeof splittedSearchArray[actualPart] !== 'undefined') {
         retVa= splittedSearchArray[ actualPart];       
@@ -121,8 +130,6 @@ const getSearchValuePart = (searchValue, searchType, part, carriageWaySearch) =>
     }
     return retVa;
 }
-
-
 
 const splitSearchValue = (searchValue, searchType) => {
     let roadParts;
@@ -227,17 +234,6 @@ const SearchModal = ({
        setSearchValue(searchValue)
     }, [searchValue, setSearchValue]);  
 
-    useEffect(() => {
-        if (searchValue && searchValue.includes("/") && 
-            (searchValue.replace(/[^/]/g, "").length === 3|| searchValue.replace(/[^/]/g, "").length === 6) ){
-            setCarriageWaySearch(true)
-        }
-        /*else { 
-            setCarriageWaySearch(false)
-        }
-        */
-        
-     }, [searchValue, setCarriageWaySearch]);
     return isOpen ? (
         <StyledSearchModal>   
             <StyledLinkText rel="noreferrer" 
@@ -301,8 +297,8 @@ const SearchModal = ({
                     <StyledInputHalf
                         type="text"
                         placeholder={ strings.search.vkm.ajorata}
-                        value={carriageWaySearch ? getSearchValuePart(searchValue, searchType, 2 ) : ""}
                         onChange={(e) => updateRoadSearchValue(searchValue, searchType, setSearchValue, 2, e.target.value) }
+                        value={getSearchValuePart(searchValue, searchType, 2, carriageWaySearch )}
                         onKeyPress={e => {
                             if (e.key === 'Enter') {
                                 handleSeach(searchValue);
@@ -314,8 +310,8 @@ const SearchModal = ({
                     <StyledInput
                         type="text"
                         placeholder={ strings.search.vkm.etaisyys }
-                        value={getSearchValuePart(searchValue, searchType, 3, carriageWaySearch)}
                         onChange={(e) => updateRoadSearchValue(searchValue, searchType, setSearchValue, carriageWaySearch ? 3 : 2, e.target.value) }
+                        value={getSearchValuePart(searchValue, searchType, 3, carriageWaySearch)}
                         onKeyPress={e => {
                             if (e.key === 'Enter') {
                                 handleSeach(searchValue);
@@ -361,13 +357,14 @@ const SearchModal = ({
                     <StyledInputHalf
                         type="text"
                         placeholder={ strings.search.vkm.ajorata}
-                        value={carriageWaySearch ? getSearchValuePart(searchValue, searchType, 6 ) : ""}
+                        value={getSearchValuePart(searchValue, searchType, 6, carriageWaySearch)}
                         onChange={(e) =>  updateRoadSearchValue(searchValue, searchType, setSearchValue, 6, e.target.value)}
                         onKeyPress={e => {
                             if (e.key === 'Enter') {
                                 handleSeach(searchValue);
                             }
                         }}
+                        disabled={!carriageWaySearch}
                     />
                     </div>
                     <StyledInput
