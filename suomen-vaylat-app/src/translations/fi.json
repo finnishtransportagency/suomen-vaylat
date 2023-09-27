@@ -309,18 +309,7 @@
       "trackSubtitle": "Hae ratatietoja",
       "trackError": {
         "text": "Tuloksia ei löytynyt ratahaulla."
-      },
-      "tooltip": ["Tiehaku, kirjoita muodossa 'tie/osa/ajorata/etäisyys' tai 'tie/osa/ajorata/etäisyys tie/osa_loppu/ajorata/etäisyys_loppu'.",
-      "Esim.",
-      "5",
-      "5/116",
-      "5/116/0",
-      "5/116/0/50",
-      "5/116/0/50",
-      "5/116/0/50 5/348/0/100",
-      "5/116/0/50 5/348/0/100",
-      "alku:5/116/0/50 loppu:5/348/0/100"
-      ]
+      }
     },
     "address": {
       "title": "Paikkahaku",
@@ -353,16 +342,17 @@
         "Opastinsilta 12",
         "Opastinsilta 12, Helsinki"
       ],
-      "vkmRoad": "Tiehaku, kirjoita muodossa 'tie/osa/ajorata/etäisyys' tai 'tie/osa/ajorata/etäisyys tie/osa_loppu/ajorata/etäisyys_loppu'.",
+      "vkmRoad": "Tiehaku, kirjoita muodossa 'tie/osa/ajorata/etäisyys', 'tie/osa/etäisyys', 'tie/osa/ajorata' ( käytettävä 'Käytä ajorataa haussa' -valintaa )  tai 'tie/osa/ajorata/etäisyys tie/osa_loppu/ajorata/etäisyys_loppu'.",
       "vkmRoadExamples": [
         "5",
         "5/116",
-        "5/116/0",
-        "5/116/0/50",
+        "5/116/0 ( ajoratahaku )",
+        "5/116/100 ( etäisyyshaku )",
         "5/116/0/50",
         "5/116/0/50 5/348/0/100",
         "5/116/0/50 5/348/0/100",
-        "alku:5/116/0/50 loppu:5/348/0/100"
+        "alku:5/116/0/50 loppu:5/348/0/100",
+        "'Käytä ajorataa haussa' -valinta vaihtaa kolmella parametrilla haettaessa haun käyttämään joko ajorataa tai etäisyyttä kolmantena parametrina"
       ],
       "vkmTrack": "Ratahaku, kirjoita muodossa 'ratanumero/ratakilometri/ratametri'.",
       "vkmTrackExamples": [
@@ -391,7 +381,8 @@
     },
     "premise" : {
       "title": "Kiinteistöhaku"
-    }
+    }, 
+    "carriageWaySearch": "Käytä ajorataa haussa"
   },
   "layerlist": {
     "layerlistLabels": {
@@ -537,6 +528,11 @@
             "id": 15,
             "title": "Maanteiden puuvirrat",
             "description": "Kartalla esitetään maanteiden puuvirtoja kuljetusten lukumäärä- ja painoluokittain. Lisätietoja ja tarkennuksia aineistojen infosivuilla."
+          },
+          "16": {
+            "id": 16,
+            "title": "Hoitoluokka-kartta",
+            "description": "Teemakartassa on esitetty Velhon hoitoluokka-aineistot staattisella tilannepäivämäärällä 1.10.2024."
           }
         }
       },
@@ -569,7 +565,7 @@
           },
           "13": {
             "id": 13,
-            "title": "Ratadata",
+            "title": "Pehmeikkö- ja routakohteet",
             "description": ""
           }
         }
@@ -1188,6 +1184,10 @@
   },
   "gfifiltering": {
     "filter": "Suodata tuloksia",
+    "addFilter": "Lisää suodatin",
+    "startDate": "Alku pvm",
+    "endDate": "Loppu pvm",
+    "dateRange": "Aikaväli",
     "removeAllFilters": "Poista kaikki suodattimet",
     "placeholders" : {
       "chooseProp" : "Valitse ominaisuustieto",

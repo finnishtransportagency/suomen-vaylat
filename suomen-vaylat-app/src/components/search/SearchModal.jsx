@@ -69,12 +69,48 @@ const VerticalAlign = styled.div`
     align-items: center;
 `;
 
-const getSearchValuePart = (searchValue, searchType, part) => {
+const StyledCheckbox = styled.input`
+    #margin-right: 7px;
+    float: right;
+    margin-top: 8px;
+    margin-left: 10px;
+    width: 16px;
+    height: 16px;
+    margin-top: 1px
+`;
+
+const CheckboxWrapper = styled.div`
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    margin-top: 15px;
+`;
+
+const CheckboxLabel = styled.label`
+    font-size: 16px;
+    margin-top: 5px;
+    color: grey;
+`
+
+const getSearchValuePart = (searchValue, searchType, part, carriageWaySearch) => {
     const splittedSearchArray = splitSearchValue(searchValue, searchType, part);
     let retVa;
-    if(splittedSearchArray !== undefined && (splittedSearchArray.length -1) >= part
-        && typeof splittedSearchArray[part] !== 'undefined') {
-        retVa= splittedSearchArray[part];       
+    let actualPart;
+    //actual value tells from which cell value is fetched
+    //differenct cell of value array choosed if ajorata search not enabled 
+    if (carriageWaySearch === true) {
+        actualPart = part;
+    } else if (part > 6) {
+        actualPart = part - 2;
+    } else if (part >= 3) {
+        actualPart = part - 1;
+    } else {
+        actualPart = part;
+    }
+
+    if(splittedSearchArray !== undefined && (splittedSearchArray.length -1) >= actualPart
+        && typeof splittedSearchArray[actualPart] !== 'undefined') {
+        retVa= splittedSearchArray[ actualPart];       
     }
     //first value set whole searchvalue
     else if (part === 0){
@@ -85,6 +121,8 @@ const getSearchValuePart = (searchValue, searchType, part) => {
     }
     return retVa;
 }
+
+
 
 const splitSearchValue = (searchValue, searchType) => {
     let roadParts;
@@ -97,17 +135,16 @@ const splitSearchValue = (searchValue, searchType) => {
         }else {
             roadParts =  searchValue.split("/");
         }            
-       
     }
     return roadParts;
 }
 
 /**
  * update searchValue attribute
- * @param {*} searchValue 
+ * @param {*} searchValue whole search query 
  * @param {*} searchType 
- * @param {*} value 
- * @param {*} part part of roadsearch to update 0=tie, 1=osa, 2= ajorata, 3= etäisyys
+ * @param {*} part part of roadsearch to update 0=tie, 1=osa, 2= ajorata, 3= etäisyys 
+ * @param {*} value value to add
  */
 const updateRoadSearchValue = (searchValue, searchType, setSearchValue, part, value) => {
     //const oldPart = getSearchValuePart(searchValue, searchType, part);
@@ -170,7 +207,9 @@ const SearchModal = ({
     setSearchType,
     handleSeach,
     isOpen,
-    toggleModal
+    toggleModal,
+    carriageWaySearch, 
+    setCarriageWaySearch
 }) => {
     const [activeSwitch, setActiveSwitch] = useState("road");
     const updateActiveSwitch = (type) => {
@@ -188,6 +227,17 @@ const SearchModal = ({
        setSearchValue(searchValue)
     }, [searchValue, setSearchValue]);  
 
+    useEffect(() => {
+        if (searchValue && searchValue.includes("/") && 
+            (searchValue.replace(/[^/]/g, "").length === 3|| searchValue.replace(/[^/]/g, "").length === 6) ){
+            setCarriageWaySearch(true)
+        }
+        /*else { 
+            setCarriageWaySearch(false)
+        }
+        */
+        
+     }, [searchValue, setCarriageWaySearch]);
     return isOpen ? (
         <StyledSearchModal>   
             <StyledLinkText rel="noreferrer" 
@@ -212,10 +262,19 @@ const SearchModal = ({
                     isMobile={isMobile}
                 /> 
                 }
-
                 {activeSwitch === 'road' &&  (
                 <>
                 <StyledSearchSection>   
+
+                    <CheckboxWrapper> 
+                            <CheckboxLabel>{strings.search.carriageWaySearch}</CheckboxLabel>
+                            <StyledCheckbox
+                                name='carriageWaySearchBox'
+                                type='checkbox'
+                                onChange={() => (setCarriageWaySearch(!carriageWaySearch))}
+                                checked={carriageWaySearch}
+                            />
+                    </CheckboxWrapper> 
                     <StyledInput
                         type="text"
                         placeholder={ strings.search.vkm.tie }
@@ -242,20 +301,21 @@ const SearchModal = ({
                     <StyledInputHalf
                         type="text"
                         placeholder={ strings.search.vkm.ajorata}
-                        value={getSearchValuePart(searchValue, searchType, 2)}
+                        value={carriageWaySearch ? getSearchValuePart(searchValue, searchType, 2 ) : ""}
                         onChange={(e) => updateRoadSearchValue(searchValue, searchType, setSearchValue, 2, e.target.value) }
                         onKeyPress={e => {
                             if (e.key === 'Enter') {
                                 handleSeach(searchValue);
                             }
                         }}
+                        disabled={!carriageWaySearch}
                     />
                     </div>
                     <StyledInput
                         type="text"
                         placeholder={ strings.search.vkm.etaisyys }
-                        value={getSearchValuePart(searchValue, searchType, 3)}
-                        onChange={(e) => updateRoadSearchValue(searchValue, searchType, setSearchValue, 3, e.target.value) }
+                        value={getSearchValuePart(searchValue, searchType, 3, carriageWaySearch)}
+                        onChange={(e) => updateRoadSearchValue(searchValue, searchType, setSearchValue, carriageWaySearch ? 3 : 2, e.target.value) }
                         onKeyPress={e => {
                             if (e.key === 'Enter') {
                                 handleSeach(searchValue);
@@ -279,7 +339,7 @@ const SearchModal = ({
                         type="text"
                         placeholder={ strings.search.vkm.tieloppu }
                         onChange={(e) => updateRoadSearchValue(searchValue, searchType, setSearchValue, 4, e.target.value) }
-                        value={getSearchValuePart(searchValue, searchType, 4)}
+                        value={getSearchValuePart(searchValue, searchType, 4, carriageWaySearch)}
                         onKeyPress={e => {
                             if (e.key === 'Enter') {
                                 handleSeach(searchValue);
@@ -291,7 +351,7 @@ const SearchModal = ({
                         type="text"
                         placeholder={ strings.search.vkm.osaLoppu }
                         onChange={(e) => updateRoadSearchValue(searchValue, searchType, setSearchValue, 5, e.target.value) }
-                        value={getSearchValuePart(searchValue, searchType, 5)}
+                        value={getSearchValuePart(searchValue, searchType, 5, carriageWaySearch)}
                         onKeyPress={e => {
                             if (e.key === 'Enter') {
                                 handleSeach(searchValue);
@@ -301,8 +361,8 @@ const SearchModal = ({
                     <StyledInputHalf
                         type="text"
                         placeholder={ strings.search.vkm.ajorata}
-                        value={getSearchValuePart(searchValue, searchType, 6)}
-                        onChange={(e) => updateRoadSearchValue(searchValue, searchType, setSearchValue, 6, e.target.value) }
+                        value={carriageWaySearch ? getSearchValuePart(searchValue, searchType, 6 ) : ""}
+                        onChange={(e) =>  updateRoadSearchValue(searchValue, searchType, setSearchValue, 6, e.target.value)}
                         onKeyPress={e => {
                             if (e.key === 'Enter') {
                                 handleSeach(searchValue);
@@ -313,8 +373,8 @@ const SearchModal = ({
                     <StyledInput
                         type="text"
                         placeholder={ strings.search.vkm.etaisyysLoppu }
-                        value={getSearchValuePart(searchValue, searchType, 7)}
-                        onChange={(e) => updateRoadSearchValue(searchValue, searchType, setSearchValue, 7, e.target.value) }
+                        value={ getSearchValuePart(searchValue, searchType, 7, carriageWaySearch)}
+                        onChange={(e) => updateRoadSearchValue(searchValue, searchType, setSearchValue, carriageWaySearch ? 7 : 6, e.target.value) }
                         onKeyPress={e => {
                             if (e.key === 'Enter') {
                                 handleSeach(searchValue);

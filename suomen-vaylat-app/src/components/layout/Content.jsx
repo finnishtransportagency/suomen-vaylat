@@ -933,6 +933,9 @@ const Content = () => {
           id={null}
           minimize={minimizeGfi}
           maximize={maximizeGfi}
+          minWidth={"25em"}
+          minHeight={"30em"}
+          overflow={"auto"}
         >
           <FilterModal />
         </Modal>
