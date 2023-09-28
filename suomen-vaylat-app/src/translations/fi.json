@@ -349,7 +349,7 @@
         "5/116/0 ( ajoratahaku )",
         "5/116/100 ( etäisyyshaku )",
         "5/116/0/50",
-        "5/116/0/50 5/348/0/100",
+        "5/116/100 5/116/400",
         "5/116/0/50 5/348/0/100",
         "alku:5/116/0/50 loppu:5/348/0/100",
         "'Käytä ajorataa haussa' -valinta vaihtaa kolmella parametrilla haettaessa haun käyttämään joko ajorataa tai etäisyyttä kolmantena parametrina"
