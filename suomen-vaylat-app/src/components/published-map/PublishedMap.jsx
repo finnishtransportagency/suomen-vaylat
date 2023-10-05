@@ -119,6 +119,14 @@ const PublishedMap = () => {
         channel.onReady(() => {
             store.dispatch(setChannel(channel));
             channel.getSupportedFunctions(function (data) {
+                if (data.getSelectedAnnouncements) {
+                    channel.getSelectedAnnouncements(function (data) {
+                        store.dispatch(
+                            setActiveAnnouncements(getActiveAnnouncements(data))
+                        );
+                    });
+                }
+
                 if (data.getTags) {
                     channel.getTags(function (data) {
                         store.dispatch(setAllTags(data));
@@ -128,14 +136,6 @@ const PublishedMap = () => {
                 if (data.getTagsWithLayers) {
                     channel.getTagsWithLayers(function (data) {
                         store.dispatch(setTagsWithLayers(data));
-                    });
-                }
-
-                if (data.getAnnouncements) {
-                    channel.getAnnouncements(function (data) {
-                        store.dispatch(
-                            setActiveAnnouncements(getActiveAnnouncements(data))
-                        );
                     });
                 }
 
