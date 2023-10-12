@@ -73,6 +73,7 @@
     }
   },
   "gfi": {
+    "filter": "Filtrera",
     "title": "Objektuppgifter",
     "close": "Stänga",
     "additionalInfo": "Tilläggsinformation",
