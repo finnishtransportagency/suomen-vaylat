@@ -105,18 +105,18 @@ const getSearchValuePart = (searchValue, searchType, part, carriageWaySearch) =>
             actualPart = part;
         }
     } else {
+        //no ajorata part on etäisyys search
         if (part === 2 || part ===6){
             return ""
         }
-        else 
-            if (part > 6) {
+        else if (part > 6) {
             actualPart = part - 2;
         } else if ( part >= 3) {
             actualPart = part - 1;
         } else {
             actualPart = part;
         }
-    }   
+    }  
     if(splittedSearchArray !== undefined && (splittedSearchArray.length -1) >= actualPart
         && typeof splittedSearchArray[actualPart] !== 'undefined') {
         retVa= splittedSearchArray[ actualPart];       
@@ -131,14 +131,22 @@ const getSearchValuePart = (searchValue, searchType, part, carriageWaySearch) =>
     return retVa;
 }
 
+/**
+ * Split search value string to single values
+ * @param {*} searchValue search query string
+ * @param {*} searchType type
+ * @returns array containing search values
+ */
 const splitSearchValue = (searchValue, searchType) => {
     let roadParts;
     if (searchValue!== "" && searchType !== undefined &&
         searchType === 'address' && searchValue.includes("/")){
         //if roadsearch contains space, ingnore and handle on search field, range search case
         if (searchValue.includes(' ')){
-            let partsArray = searchValue.split(" ");
-            roadParts = partsArray[0].split("/").concat(partsArray[1].split("/"));
+            const partsArray = searchValue.split(" ");
+            const part1 = partsArray[0].split("/").filter((val) => val !=="")
+            const part2 = partsArray[1].split("/").filter((val) => val !=="")
+            roadParts = part1.concat(part2)
         }else {
             roadParts =  searchValue.split("/");
         }            
@@ -153,21 +161,24 @@ const splitSearchValue = (searchValue, searchType) => {
  * @param {*} part part of roadsearch to update 0=tie, 1=osa, 2= ajorata, 3= etäisyys 
  * @param {*} value value to add
  */
-const updateRoadSearchValue = (searchValue, searchType, setSearchValue, part, value) => {
+const updateRoadSearchValue = (searchValue, searchType, setSearchValue, part, value, carriageWaySearch=false) => {
     //const oldPart = getSearchValuePart(searchValue, searchType, part);
     let searchArray = splitSearchValue(searchValue, searchType);
-    if ((searchArray!==undefined && searchArray!=="") && searchArray.length >= part){
+    const effectivePart = carriageWaySearch ? part : part -1
+    if ((searchArray!==undefined && searchArray!=="") && searchArray.length >= effectivePart){
+        //replace existing value
         //empty value in the middle remove values on right side
         if (value === ""){
             searchArray.length=part
         }
-        searchArray[part] = value; 
+        const blancSpacePosition = carriageWaySearch ? 4 : 3
+        if (part > blancSpacePosition){
+            searchArray[effectivePart] = value;
+        }else {
+            searchArray[part] = value;
+        }
         //range search add empty space between parts
-        if (part > 3){
-            //add empty space between range search values
-            searchArray.splice(4, 0, " ");
-        }   
-        const updatedSearchValue= parseSearchValueFromParts(searchArray)
+        const updatedSearchValue= parseSearchValueFromParts(searchArray, blancSpacePosition)
         if (updatedSearchValue!==undefined){
             setSearchValue(updatedSearchValue);
         }
@@ -183,11 +194,19 @@ const updateRoadSearchValue = (searchValue, searchType, setSearchValue, part, va
     } 
 }
 
-const parseSearchValueFromParts = (partsArray) => {
+/**
+ * Parse value from value array
+ * @param {*} partsArray array containing searchvalues
+ * @param {*} blancSpacePosition position of space 3|4
+ * @returns string searchvalue string on oskari vkm api undertandable format
+ */
+const parseSearchValueFromParts = (partsArray, blancSpacePosition) => {
     let newSearchValue;
-    //if range search (more than 4 params) add space between
-    if (partsArray !== undefined && partsArray.length > 3 && partsArray.includes(' ')){
-        newSearchValue = [partsArray.slice(0, 4).join('/'), ' ',partsArray.slice(5).join('/')].join('') ;
+    //if range search (more than blancSpacePosition params) add space between
+    if (partsArray !== undefined && partsArray.length > (blancSpacePosition -1)){ 
+        let firstPart = partsArray.slice(0, blancSpacePosition).join('/')
+        let secondi = partsArray.slice(blancSpacePosition).join('/')
+        newSearchValue = [firstPart, ' ',secondi].join('') ;
     }else {
         newSearchValue = partsArray.join('/');
     }
@@ -274,7 +293,7 @@ const SearchModal = ({
                     <StyledInput
                         type="text"
                         placeholder={ strings.search.vkm.tie }
-                        onChange={(e) => updateRoadSearchValue(searchValue, searchType, setSearchValue, 0, e.target.value) }
+                        onChange={(e) => updateRoadSearchValue(searchValue, searchType, setSearchValue, 0, e.target.value, carriageWaySearch) }
                         value={getSearchValuePart(searchValue, searchType, 0)}
                         onKeyPress={e => {
                             if (e.key === 'Enter') {
@@ -286,7 +305,7 @@ const SearchModal = ({
                     <StyledInputHalf
                         type="text"
                         placeholder={ strings.search.vkm.osa }
-                        onChange={(e) => updateRoadSearchValue(searchValue, searchType, setSearchValue, 1, e.target.value) }
+                        onChange={(e) => updateRoadSearchValue(searchValue, searchType, setSearchValue, 1, e.target.value, carriageWaySearch) }
                         value={getSearchValuePart(searchValue, searchType, 1)}
                         onKeyPress={e => {
                             if (e.key === 'Enter') {
@@ -297,7 +316,7 @@ const SearchModal = ({
                     <StyledInputHalf
                         type="text"
                         placeholder={ strings.search.vkm.ajorata}
-                        onChange={(e) => updateRoadSearchValue(searchValue, searchType, setSearchValue, 2, e.target.value) }
+                        onChange={(e) => updateRoadSearchValue(searchValue, searchType, setSearchValue, 2, e.target.value, carriageWaySearch) }
                         value={getSearchValuePart(searchValue, searchType, 2, carriageWaySearch )}
                         onKeyPress={e => {
                             if (e.key === 'Enter') {
@@ -310,7 +329,7 @@ const SearchModal = ({
                     <StyledInput
                         type="text"
                         placeholder={ strings.search.vkm.etaisyys }
-                        onChange={(e) => updateRoadSearchValue(searchValue, searchType, setSearchValue, carriageWaySearch ? 3 : 2, e.target.value) }
+                        onChange={(e) => updateRoadSearchValue(searchValue, searchType, setSearchValue, carriageWaySearch ? 3 : 2, e.target.value, carriageWaySearch) }
                         value={getSearchValuePart(searchValue, searchType, 3, carriageWaySearch)}
                         onKeyPress={e => {
                             if (e.key === 'Enter') {
@@ -334,7 +353,7 @@ const SearchModal = ({
                     <StyledInput
                         type="text"
                         placeholder={ strings.search.vkm.tieloppu }
-                        onChange={(e) => updateRoadSearchValue(searchValue, searchType, setSearchValue, 4, e.target.value) }
+                        onChange={(e) => updateRoadSearchValue(searchValue, searchType, setSearchValue, 4, e.target.value, carriageWaySearch) }
                         value={getSearchValuePart(searchValue, searchType, 4, carriageWaySearch)}
                         onKeyPress={e => {
                             if (e.key === 'Enter') {
@@ -346,7 +365,7 @@ const SearchModal = ({
                     <StyledInputHalf
                         type="text"
                         placeholder={ strings.search.vkm.osaLoppu }
-                        onChange={(e) => updateRoadSearchValue(searchValue, searchType, setSearchValue, 5, e.target.value) }
+                        onChange={(e) => updateRoadSearchValue(searchValue, searchType, setSearchValue, 5, e.target.value, carriageWaySearch) }
                         value={getSearchValuePart(searchValue, searchType, 5, carriageWaySearch)}
                         onKeyPress={e => {
                             if (e.key === 'Enter') {
@@ -358,7 +377,7 @@ const SearchModal = ({
                         type="text"
                         placeholder={ strings.search.vkm.ajorata}
                         value={getSearchValuePart(searchValue, searchType, 6, carriageWaySearch)}
-                        onChange={(e) =>  updateRoadSearchValue(searchValue, searchType, setSearchValue, 6, e.target.value)}
+                        onChange={(e) =>  updateRoadSearchValue(searchValue, searchType, setSearchValue, 6, e.target.value, carriageWaySearch)}
                         onKeyPress={e => {
                             if (e.key === 'Enter') {
                                 handleSeach(searchValue);
@@ -371,7 +390,7 @@ const SearchModal = ({
                         type="text"
                         placeholder={ strings.search.vkm.etaisyysLoppu }
                         value={ getSearchValuePart(searchValue, searchType, 7, carriageWaySearch)}
-                        onChange={(e) => updateRoadSearchValue(searchValue, searchType, setSearchValue, carriageWaySearch ? 7 : 6, e.target.value) }
+                        onChange={(e) => updateRoadSearchValue(searchValue, searchType, setSearchValue, carriageWaySearch ? 7 : 6, e.target.value, carriageWaySearch) }
                         onKeyPress={e => {
                             if (e.key === 'Enter') {
                                 handleSeach(searchValue);
