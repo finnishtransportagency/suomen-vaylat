@@ -490,7 +490,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
     if (geoJson !== null) {
       channel &&
         channel.postRequest("MapModulePlugin.AddFeaturesToMapRequest", [
-          geoJson,
+          geoJson[0].geojson,
           {
             layerId: LAYER_ID,
             centerTo: true,
