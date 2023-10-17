@@ -12,8 +12,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useAppSelector } from "../../state/hooks";
 import { setFilteringInfo } from "../../state/slices/rpcSlice";
-import { filterFeature } from "../../utils/gfiUtil";
-import { kaReducer, Table } from "ka-table";
+import { Table } from "ka-table";
 import "ka-table/style.scss";
 import { theme, isMobile } from "../../theme/theme";
 import ReactTooltip from "react-tooltip";
