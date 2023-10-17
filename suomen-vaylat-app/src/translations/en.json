@@ -73,6 +73,7 @@
     }
   },
   "gfi": {
+    "filter": "Filter",
     "title": "Feature Data",
     "close": "Close",
     "additionalInfo": "Additional information",

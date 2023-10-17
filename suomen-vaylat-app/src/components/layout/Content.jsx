@@ -384,8 +384,7 @@ const Content = () => {
     });
 
     //bit hackish way to force datatype when using with single geometry download
-    if (!croppingArea?.isArray) croppingArea = [croppingArea];
-
+    if (!Array.isArray(croppingArea)) croppingArea = [croppingArea];
     channel.downloadFeaturesByGeoJSON &&
       channel.downloadFeaturesByGeoJSON(
         [layerIds, croppingArea, format.format, sessionId],
