@@ -85,7 +85,7 @@ export const filterFeature = (feature, location, filters) => {
       const operator = getPropertyOperator(filter.operator);
       var comparisonOperator = comparisonOperatorsHash[operator];
       const value = getParameterCaseInsensitive(properties, filter.property);
-      if (value === undefined) return false;
+      if (value === undefined || value === null) return false;
       const doFilter = comparisonOperator(value, filter);
       return doFilter;
     } else if (filter.type === "date") {
