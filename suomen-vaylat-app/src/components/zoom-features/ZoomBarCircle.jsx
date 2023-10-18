@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import ReactTooltip from 'react-tooltip';
 
 const StyledZoomLevelContainer = styled.div`
     position: relative;
@@ -43,14 +44,16 @@ const ZoomBarCircle = ({
 
     return (
         <StyledZoomLevelContainer>
-            <StyledZoomLevelCircle
-                index={index}
-                zoomLevel={zoomLevel}
-                hoveringIndex={hoveringIndex}
-                isExpanded={isExpanded}
-                isActive={isActive}
-            >
+            <div data-tip={`Zoom Level: ${index}`} data-for={`zoom-circle-${index}`}>
+                <StyledZoomLevelCircle
+                    index={index}
+                    zoomLevel={zoomLevel}
+                    hoveringIndex={hoveringIndex}
+                    isExpanded={isExpanded}
+                    isActive={isActive}
+                >
             </StyledZoomLevelCircle>
+            </div>
         </StyledZoomLevelContainer>
 
     )

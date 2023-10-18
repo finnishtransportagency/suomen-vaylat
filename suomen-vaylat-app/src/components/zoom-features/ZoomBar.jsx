@@ -14,6 +14,7 @@ import { setZoomTo, setZoomIn, setZoomOut } from '../../state/slices/rpcSlice';
 import strings from '../../translations';
 import CircleButton from '../circle-button/CircleButton';
 import ZoomBarCircle from './ZoomBarCircle';
+import ReactTooltip from 'react-tooltip';
 
 import { Legend } from '../legend/Legend';
 
@@ -155,6 +156,8 @@ const ZoomBar = ({
                                         parseInt(index) ===
                                         parseInt(hoveringIndex)
                                     }
+                                    data-tip={`Zoom Level: ${index}`}
+                                    data-for={`zoom-circle-${index}`}
                                 />
                             );
                         })}
@@ -196,6 +199,7 @@ const ZoomBar = ({
                     tooltipDirection={'left'}
                 />
             </StyledZoomBarContent>
+            <ReactTooltip effect="solid" place="right" />
         </StyledZoomBarContainer>
     );
 };
