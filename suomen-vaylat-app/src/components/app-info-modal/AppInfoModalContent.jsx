@@ -269,6 +269,9 @@ export const SourcesAndTermsOfUse = () => {
                 <p>{strings.appInfo.appCode.appCodeInfo} <StyledLink target='_blank' href={strings.appInfo.appCode.appCodeLink}>{strings.appInfo.appCode.appCodeLink}</StyledLink> </p>
             </div>
             <div>
+                <p>{strings.appInfo.googleTerms.googleTermsInfo} <StyledLink target='_blank' href={strings.appInfo.googleTerms.googleTermsLink}>{strings.appInfo.googleTerms.googleTermsLink}</StyledLink> </p>
+            </div>
+            <div>
                 <StyledHeading>{strings.appInfo.privacyPolicy.title}</StyledHeading>
                 <div>
                     <StyledLink target='_blank' href={strings.appInfo.privacyPolicy.link}>{strings.appInfo.privacyPolicy.link}</StyledLink>

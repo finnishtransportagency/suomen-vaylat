@@ -279,6 +279,10 @@
     "appCode": {
       "appCodeInfo": "Enligt användingsvillkoren är applikationens källkod tillgänglig här:",
       "appCodeLink": "https://github.com/finnishtransportagency/suomen-vaylat"
+    },
+    "googleTerms": {
+      "googleTermsInfo": "Användarvillkor för Googles karttjänster: ",
+      "googleTermsLink": "https://cloud.google.com/maps-platform/terms"
     }
   },
   "search": {
