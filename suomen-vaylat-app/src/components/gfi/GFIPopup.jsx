@@ -577,7 +577,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
         var featureCells =
           cont.geojson.features &&
           cont.geojson.features
-            .filter((feature) => filterFeature(feature, data, filters))
+            .filter((feature) => filterFeature(feature, data, filters, channel))
             .map((feature) => {
               var cell = { ...feature.properties };
               cell["id"] = feature.id;

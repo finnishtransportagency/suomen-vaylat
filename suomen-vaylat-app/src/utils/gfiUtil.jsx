@@ -17,6 +17,38 @@ const getPropertyOperator = (operator) => {
   }
 };
 
+// string arvot
+const getCQLStringPropertyOperator = (property, operator, value) => {
+  switch (operator) {
+    case "equals":
+      return "strToLowerCase(" + property + ")" + " = " + "'" + value.toString().trim().toLowerCase() + "'" ;
+    case "notEquals":
+      return "strToLowerCase(" + property + ")" + " <> " + "'" + value.toString().trim().toLowerCase() + "'" ;
+    case "includes":
+      return "strToLowerCase(" + property + ")" + " LIKE " + "'%" + value.toString().trim().toLowerCase() + "%'" ;
+    case "doesntInclude":
+      return "strToLowerCase(" + property + ")" + " NOT LIKE " + "'%" + value.toString().trim().toLowerCase() + "%'" ;
+    default:
+      return property + " = " + "'" + value.toString().trim().toLowerCase() + "'" ;
+  }
+};
+
+// number arvot
+const getCQLNumberPropertyOperator = (property, operator, value) => {
+  switch (operator) {
+    case "equals":
+      return property + " = " + value
+    case "notEquals":
+      return property + " <> " + value;
+    case "smallerThan":
+      return property + " < " + value;
+    case "biggerThan":
+      return property + " < " + value;
+    default:
+      return property + " = " + value;
+  }
+};
+
 const getParameterCaseInsensitive = (object, key) => {
   const asLowercase = key.toLowerCase();
   return object[
@@ -26,8 +58,24 @@ const getParameterCaseInsensitive = (object, key) => {
   ];
 };
 
-export const filterFeature = (feature, location, filters) => {
+const updateMapByFilter = (filter, channel) => {
+  var cqlFilter = filter.type === 'string' ? 
+    getCQLStringPropertyOperator(filter.property, filter.operator, filter.value)
+    :
+    getCQLNumberPropertyOperator(filter.property, filter.operator, filter.value);
+  console.log(cqlFilter)
+  channel && channel.postRequest(
+    'MapModulePlugin.MapLayerUpdateRequest',
+    [filter.layer, true, { 'CQL_FILTER': cqlFilter }]
+  );
+}
+
+export const filterFeature = (feature, location, filters, channel) => {
   if (filters.length === 0) {
+    channel && channel.postRequest(
+      'MapModulePlugin.MapLayerUpdateRequest',
+      [location.layerId, true, { 'CQL_FILTER': null }]
+    );
     return true;
   }
 
@@ -87,6 +135,7 @@ export const filterFeature = (feature, location, filters) => {
       const value = getParameterCaseInsensitive(properties, filter.property);
       if (value === undefined || value === null) return false;
       const doFilter = comparisonOperator(value, filter);
+      !doFilter && updateMapByFilter(filter, channel);
       return doFilter;
     } else if (filter.type === "date") {
       const value = new Date(
