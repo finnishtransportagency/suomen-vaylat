@@ -800,16 +800,9 @@ export const GFIPopup = ({ handleGfiDownload }) => {
                 title: strings.bodySizeWarning,
                 subtitle: null,
                 cancel: {
-                  text: strings.general.cancel,
+                  text: strings.general.ok,
                   action: () => {
                     setIsLoading(false);
-                    store.dispatch(setWarning(null));
-                  },
-                },
-                confirm: {
-                  text: strings.general.continue,
-                  action: () => {
-                    simplifyGeometry();
                     store.dispatch(setWarning(null));
                   },
                 },
@@ -818,10 +811,6 @@ export const GFIPopup = ({ handleGfiDownload }) => {
           }
         );
     }
-  };
-
-  const simplifyGeometry = () => {
-    console.log("simplify");
   };
 
   useEffect(() => {
