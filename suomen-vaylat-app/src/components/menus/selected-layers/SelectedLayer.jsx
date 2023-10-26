@@ -285,15 +285,8 @@ export const SelectedLayer = (
                     <StyledlayerHeader>
                         <StyledLayerName style={{color: isLayerSelectedThemeLayer ? theme.colors.secondaryColor2 : theme.colors.mainColor1}}>
                         <FontAwesomeIcon style={{marginRight: '4px', color: isLayerSelectedThemeLayer ? theme.colors.secondaryColor2 : theme.colors.mainColor1 }} icon={isLayerSelectedThemeLayer ? faMap : faLayerGroup} />
-                            {layer.name} {localfilterenabled} {filtersEnabled} {localfilterenabled}
-                        </StyledLayerName>
-                        { localfilterenabled && 
-                            (
-                                <StyledIconWrapper>
-                                    <StyledFloatingSpan><FontAwesomeIcon icon={faFilter}  style={{ color: theme.colors.secondaryColor8 }}/></StyledFloatingSpan>
-                                </StyledIconWrapper>
-                            )
-                        }                 
+                            {layer.name}
+                        </StyledLayerName>            
                     </StyledlayerHeader>
                     <StyledMidContent>
                 
