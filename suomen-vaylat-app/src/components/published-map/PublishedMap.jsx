@@ -119,14 +119,16 @@ const PublishedMap = () => {
         channel.onReady(() => {
             store.dispatch(setChannel(channel));
             channel.getSupportedFunctions(function (data) {
-                if (data.getSelectedAnnouncements) {
-                    channel.getSelectedAnnouncements(function (data) {
-                        store.dispatch(
-                            setActiveAnnouncements(getActiveAnnouncements(data))
-                        );
-                    });
-                }
-
+                //minor hack to make sure announcements are shown
+                setTimeout(() => {
+                    if (data.getSelectedAnnouncements) {
+                        channel.getSelectedAnnouncements(function (data) {
+                            store.dispatch(
+                                setActiveAnnouncements(getActiveAnnouncements(data))
+                            );
+                        });
+                    }
+                  }, 1000);
                 if (data.getTags) {
                     channel.getTags(function (data) {
                         store.dispatch(setAllTags(data));
