@@ -2,8 +2,8 @@ import { useState, useEffect, useContext } from "react";
 import styled from "styled-components";
 import { ReactReduxContext, useSelector } from "react-redux";
 import { motion } from "framer-motion";
-import LayerList from "./LayerList";
-import Layers from "./Layers";
+import FilterLayerList from "./FilterLayerList";
+import FilterLayers from "./FilterLayers";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faAngleRight,
@@ -18,11 +18,10 @@ import {
   faGlobeEurope,
 } from "@fortawesome/free-solid-svg-icons";
 
-import { updateLayers } from "../../../utils/rpcUtil";
 
-import { setWarning } from "../../../state/slices/uiSlice";
-import strings from "../../../translations";
-import { useAppSelector } from "../../../state/hooks";
+import { setSelectedCustomFilterLayers } from "../../../../state/slices/uiSlice";
+import strings from "../../../../translations";
+import { useAppSelector } from "../../../../state/hooks";
 
 const masterHeaderIconVariants = {
   open: { rotate: 180 },
@@ -293,48 +292,6 @@ const StyledSwitchButton = styled.div`
   background-color: ${(props) => props.theme.colors.mainWhite};
 `;
 
-const StyledCheckbox = styled.div`
-  position: absolute;
-  left: ${(props) => (props.isSelected ? "15px" : "0px")};
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  margin-left: 2px;
-  margin-right: 2px;
-  transition: all 0.3s ease-out;
-  background-color: ${(props) => props.theme.colors.mainWhite};
-`;
-
-const StyledCheckboxContainer = styled.label`
-  position: relative;
-  color: #fff;
-  width: 12px;
-  height: 12px;
-  display: inline-block;
-  margin-left: 5px;
-  margin-right: 5px;
-  cursor: pointer;
-
-  input[type="checkbox"]:checked ~ span.checkbox-icon {
-    background-color: #008000;
-  }
-`;
-
-const Checkbox = ({ action, isChecked }) => {
-  return (
-    <StyledCheckboxContainer isChecked={isChecked}>
-      <input
-        type="checkbox"
-        checked={isChecked}
-        onChange={(event) => {
-          action(event.target.checked);
-        }}
-      />
-      <StyledCheckbox isSelected={isChecked} />
-    </StyledCheckboxContainer>
-  );
-};
-
 const Switch = ({ action, isSelected }) => {
   return (
     <StyledSwitchContainer
@@ -348,22 +305,19 @@ const Switch = ({ action, isSelected }) => {
   );
 };
 
-export const LayerGroup = ({ group, layers, hasChildren }) => {
+export const FilterLayerGroup = ({ group, layers, hasChildren }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isExcerptOpen, setIsExcerptOpen] = useState(false);
   const { store } = useContext(ReactReduxContext);
-  const channel = useSelector((state) => state.rpc.channel);
   const [isChecked, setIsChecked] = useState(false);
 
   const [filteredLayers, setFilteredLayers] = useState([]);
   const [totalGroupLayersCount, setTotalGroupLayersCoun] = useState(0);
   const [totalVisibleGroupLayersCount, setTotalVisibleGroupLayersCount] =
     useState(0);
-  const [totalSelectedCustomFilterLayersCount, setSelectedCustomFilterLayersCount] =
-      useState(0);
-  const [visibleLayers, setVisibleLayers] = useState([]);
 
   const { isCustomFilterOpen, selectedCustomFilterLayers } = useAppSelector((state) => state.ui);
+  const { allLayers } = useAppSelector((state) => state.rpc);
 
   //Find matching layers from all layers and groups, then push this group's layers into 'filteredLayers'
   useEffect(() => {
@@ -377,25 +331,17 @@ export const LayerGroup = ({ group, layers, hasChildren }) => {
         }
       });
       setFilteredLayers(getLayers);
-      setVisibleLayers(getLayers.filter((layer) => layer.visible === true));
     }
 
     var layersCount = 0;
     var visibleLayersCount = 0;
-    var selectedCustomFilterLayersCount = 0;
     const layersCounter = (group) => {
       if (group.hasOwnProperty("layers") && group.layers.length > 0) {
-        visibleLayersCount += layers.filter(
-          (l) => group.layers.includes(l.id) && l.visible === true
-        ).length;
 
-        if (isCustomFilterOpen) {
-          selectedCustomFilterLayersCount += layers.filter(
-            (l) => group.layers.includes(l.id) && selectedCustomFilterLayers.filter(
-              (selectedLayer) => selectedLayer.id === l.id
-            ).length > 0
-          ).length;
-        }
+        //EI KATSOTA layer.visible vaan otetaan suoraan slice listasta valitut
+        visibleLayersCount += selectedCustomFilterLayers.filter(
+          (l) => group.layers.includes(l.id)
+        ).length;
         layersCount = layersCount + group.layers.length;
       }
 
@@ -406,7 +352,6 @@ export const LayerGroup = ({ group, layers, hasChildren }) => {
         });
       setTotalGroupLayersCoun(layersCount);
       setTotalVisibleGroupLayersCount(visibleLayersCount);
-      setSelectedCustomFilterLayersCount(selectedCustomFilterLayersCount);
 
     };
     layersCounter(group);
@@ -431,63 +376,66 @@ export const LayerGroup = ({ group, layers, hasChildren }) => {
     );
   };
 
-  const showWarning = () => {
-    store.dispatch(
-      setWarning({
-        title: strings.multipleLayersWarning,
-        subtitle: null,
-        cancel: {
-          text: strings.general.cancel,
-          action: () => store.dispatch(setWarning(null)),
-        },
-        confirm: {
-          text: strings.general.continue,
-          action: () => {
-            groupLayersVisibility();
-            store.dispatch(setWarning(null));
-          },
-        },
-      })
-    );
-  };
-
-  const selectGroup = (e) => {
-    console.log(e);
-    e.stopPropagation();
-    let invisibleLayers = filteredLayers.length - visibleLayers.length;
-    if (
-      (filteredLayers.length > 9 &&
-        invisibleLayers > 9 &&
-        isChecked === false) ||
-      (totalGroupLayersCount > 9 && totalVisibleGroupLayersCount < 9)
-    ) {
-      showWarning();
+  const setFilteredLayersVisible = (boolean) => {
+        
+    if (!boolean) {
+        const filteredCustomLayers = selectedCustomFilterLayers.filter(
+            (filterLayer) => !filteredLayers.includes(filterLayer)
+          );
+        store.dispatch(setSelectedCustomFilterLayers(filteredCustomLayers));
     } else {
-      groupLayersVisibility();
+        store.dispatch(setSelectedCustomFilterLayers([...selectedCustomFilterLayers, ...filteredLayers]))
     }
-  };
+};
 
-  const groupLayersVisibility = () => {
-    const setFilteredLayersVisible = (boolean) => {
-      filteredLayers.forEach((layer) => {
-        channel.postRequest("MapModulePlugin.MapLayerVisibilityRequest", [
-          layer.id,
-          boolean,
-        ]);
-      });
-    };
+const setGroupLayersVisible = (boolean) => {
+  group.groups.forEach((group) => {
+    
+    if (!boolean) {
+        const filteredCustomLayers = selectedCustomFilterLayers.filter(
+            (filterLayer) => !filteredLayers.includes(filterLayer)
+          );
+        store.dispatch(setSelectedCustomFilterLayers(filteredCustomLayers));
+    } else {
+        const layers = allLayers.filter(l => group.layers.includes(l.id))
+        store.dispatch(setSelectedCustomFilterLayers([...selectedCustomFilterLayers, ...layers]))
+    }
 
-    const setGroupLayersVisible = (boolean) => {
-      group.groups.forEach((group) => {
-        group.layers.forEach((layer) => {
-          channel.postRequest("MapModulePlugin.MapLayerVisibilityRequest", [
-            layer,
-            boolean,
-          ]);
-        });
-      });
-    };
+  });
+};
 
+const setLayersVisible = (boolean) => {
+        
+    if (!boolean) {
+        const filteredCustomLayers = selectedCustomFilterLayers.filter(
+            (filterLayer) => !filteredLayers.includes(filterLayer)
+          );
+        store.dispatch(setSelectedCustomFilterLayers(filteredCustomLayers));
+    } else {
+        store.dispatch(setSelectedCustomFilterLayers([...selectedCustomFilterLayers, ...filteredLayers]))
+    }
+
+    
+  group.groups.forEach((group) => {
+    
+    if (!boolean) {
+        const filteredCustomLayers = selectedCustomFilterLayers.filter(
+            (filterLayer) => !filteredLayers.includes(filterLayer)
+          );
+        store.dispatch(setSelectedCustomFilterLayers(filteredCustomLayers));
+    } else {
+        const layers = allLayers.filter(l => group.layers.includes(l.id))
+        store.dispatch(setSelectedCustomFilterLayers([...selectedCustomFilterLayers, ...layers]))
+    }
+
+  });
+};
+
+
+  const groupLayersVisibility = (e) => {
+    e.stopPropagation();
+
+    
     if (group.hasOwnProperty("groups")) {
       if (
         totalGroupLayersCount === totalVisibleGroupLayersCount &&
@@ -498,21 +446,20 @@ export const LayerGroup = ({ group, layers, hasChildren }) => {
         setIsChecked(false);
       } else if (totalGroupLayersCount !== totalVisibleGroupLayersCount) {
         setFilteredLayersVisible(true);
-        setGroupLayersVisible(true);
+        //setGroupLayersVisible(true);
         setIsChecked(true);
       }
     }
     if (!group.hasOwnProperty("groups")) {
-      if (filteredLayers.length === visibleLayers.length && isChecked) {
+      if (filteredLayers.length === selectedCustomFilterLayers.length && isChecked) {
         setFilteredLayersVisible(false);
         setIsChecked(false);
       }
-      if (filteredLayers.length !== visibleLayers.length) {
+      if (filteredLayers.length !== selectedCustomFilterLayers.length) {
         setFilteredLayersVisible(true);
         setIsChecked(true);
       }
     }
-    updateLayers(store, channel);
   };
 
   const currentLang = strings.getLanguage();
@@ -568,11 +515,7 @@ export const LayerGroup = ({ group, layers, hasChildren }) => {
                     : group.id}
                 </StyledMasterGroupName>
                 <StyledMasterGroupLayersCount>
-                  { isCustomFilterOpen ?
-                  totalSelectedCustomFilterLayersCount + " / " + totalGroupLayersCount
-                  :
-                  totalVisibleGroupLayersCount + " / " + totalGroupLayersCount
-                  }
+                  {totalVisibleGroupLayersCount + " / " + totalGroupLayersCount}
                 </StyledMasterGroupLayersCount>
               </StyledMasterGroupTitleContent>
             </StyledLeftContent>
@@ -631,7 +574,7 @@ export const LayerGroup = ({ group, layers, hasChildren }) => {
                   totalVisibleGroupLayersCount === totalGroupLayersCount &&
                   totalVisibleGroupLayersCount !== 0
                 }
-                action={selectGroup}
+                action={groupLayersVisibility}
               />
             </StyledRightContent>
           </StyledGroupHeader>
@@ -703,20 +646,20 @@ export const LayerGroup = ({ group, layers, hasChildren }) => {
             )}
           {hasChildren && (
             <>
-              <LayerList
+              <FilterLayerList
                 key={"layer-list" + group.id}
                 groups={group.groups || []}
                 layers={layers}
                 recurse={true}
               />
-              <Layers layers={filteredLayers} isOpen={isOpen} />
+              <FilterLayers layers={filteredLayers}/>
             </>
           )}
-          {!hasChildren && <Layers layers={filteredLayers} isOpen={isOpen} />}
+          {!hasChildren && <FilterLayers layers={filteredLayers} />}
         </StyledLayerGroup>
       </StyledLayerGroups>
     </>
   );
 };
 
-export default LayerGroup;
+export default FilterLayerGroup;

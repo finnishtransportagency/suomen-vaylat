@@ -73,7 +73,7 @@ import GFIDownload from "../gfi/GFIDownload";
 import MetadataModal from "../metadata-modal/MetadataModal";
 import { ANNOUNCEMENTS_LOCALSTORAGE } from "../../utils/constants";
 import ThemeMenu from "../menus/theme-menu/ThemeMenu";
-import { CustomLayerModal } from "../menus/hierarchical-layerlist/CustomLayerModal";
+import { CustomLayerModal } from "../menus/hierarchical-layerlist/CustomFilter/CustomLayerModal";
 
 const StyledContent = styled.div`
   z-index: 1;
@@ -179,7 +179,6 @@ const Content = () => {
     shareUrl,
     isInfoOpen,
     isUserGuideOpen,
-    isCustomFilterOpen,
     isSaveViewOpen,
     isGfiOpen,
     isGfiDownloadOpen,
@@ -192,14 +191,14 @@ const Content = () => {
   const search = useAppSelector((state) => state.search);
   const { store } = useContext(ReactReduxContext);
   const isShareOpen = shareUrl && shareUrl.length > 0 ? true : false;
-  const downloadLink = useAppSelector((state) => state.ui.downloadLink);
+  let { downloadLink, isCustomFilterOpen, updateCustomLayer } = useAppSelector((state) => state.ui);
 
   const announcements = useAppSelector(
     (state) => state.rpc.activeAnnouncements
   );
   const metadata = useAppSelector((state) => state.rpc.layerMetadata);
 
-  let { channel } = useAppSelector((state) => state.rpc);
+  let { channel, selectedLayers } = useAppSelector((state) => state.rpc);
 
   const addToLocalStorageArray = (name, value) => {
     // Get the existing data
@@ -222,11 +221,11 @@ const Content = () => {
 
     const handleCustomFilterClose = () => {
         store.dispatch(setIsCustomFilterOpen(false));
-        localStorage.removeItem("checkedLayers");
-        store.dispatch(setIsSavedLayer(false));
-        store.dispatch(setShowCustomLayerList(false));
+        //localStorage.removeItem("checkedLayers");
+        //store.dispatch(setIsSavedLayer(false));
+        //store.dispatch(setShowCustomLayerList(false));
         store.dispatch(setUpdateCustomLayers(false));
-        store.dispatch(setCheckedLayer([]));
+        //store.dispatch(setCheckedLayer([]));
       };
 
   const [isGfiDownloadToolsOpen, setIsGfiDownloadToolsOpen] = useState(false);
@@ -244,7 +243,6 @@ const Content = () => {
   useEffect(() => {
     setIsGfiToolsOpenLocal(isGfiToolsOpen);
   }, [isGfiToolsOpen]);
-
   const closeAnnouncement = (selected, id) => {
     if (selected) {
       addToLocalStorageArray(ANNOUNCEMENTS_LOCALSTORAGE, id);

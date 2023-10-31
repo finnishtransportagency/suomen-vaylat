@@ -1,5 +1,5 @@
 import { CustomLayerModalContent } from "./CustomLayerModalContent";
-import strings from "../../../translations";
+import strings from "../../../../translations";
 import styled from "styled-components"; 
 
 const StyledModalWrapper = styled.div`
