@@ -98,21 +98,11 @@ export const Layer = ({ layer, theme, groupName }) => {
   const { store } = useContext(ReactReduxContext);
   const [layerStyle, setLayerStyle] = useState(null);
   const [themeSelected, setThemeSelected] = useState(false);
-  const { isCustomFilterOpen, selectedCustomFilterLayers } = useAppSelector(
-    (state) => state.ui
-  );
 
-  const { channel, selectedTheme } = useSelector((state) => state.rpc);
-
-  const excludeGroups = ["Digiroad", "Tierekisteri (Poistuva)"];
-
-
-
-  
   const handleLayerVisibility = (channel, layer) => {
       store.dispatch(setMapLayerVisibility(layer));
       updateLayers(store, channel);
-  };
+  }
 
   const handleIsDownloadLinkModalOpen = () => {
     store.dispatch(
@@ -174,7 +164,6 @@ export const Layer = ({ layer, theme, groupName }) => {
     downloadLink = layer.config.downloadLink;
   }
 
-  console.log(layer.visible)
   return (
     <StyledLayerContainer
       themeStyle={themeStyle}
