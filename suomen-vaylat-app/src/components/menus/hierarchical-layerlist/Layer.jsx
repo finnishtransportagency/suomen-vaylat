@@ -98,6 +98,8 @@ export const Layer = ({ layer, theme, groupName }) => {
   const { store } = useContext(ReactReduxContext);
   const [layerStyle, setLayerStyle] = useState(null);
   const [themeSelected, setThemeSelected] = useState(false);
+  const { channel, selectedTheme } = useSelector((state) => state.rpc);
+  const excludeGroups = ["Digiroad", "Tierekisteri (Poistuva)"];
 
   const handleLayerVisibility = (channel, layer) => {
       store.dispatch(setMapLayerVisibility(layer));
