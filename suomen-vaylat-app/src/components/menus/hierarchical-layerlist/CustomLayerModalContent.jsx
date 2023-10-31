@@ -1,18 +1,21 @@
-import { useState, useEffect} from 'react';
-import { useAppSelector } from '../../../state/hooks';
+import { useState, useEffect } from "react";
+import { useAppSelector } from "../../../state/hooks";
 import strings from "../../../translations";
 import styled from "styled-components";
-import LayerGroup from './LayerGroup';
-import store from '../../../state/store';
-import {  setIsSavedLayer, 
-          incrementTriggerUpdate, 
-          setIsCustomFilterOpen, 
-          setShowCustomLayerList, 
-          setUpdateCustomLayers,
-          setCheckedLayer,
-          setShowSavedLayers } from '../../../state/slices/uiSlice';
-import { theme, isMobile } from '../../../theme/theme';
-import ReactTooltip from 'react-tooltip';
+import LayerGroup from "./LayerGroup";
+import store from "../../../state/store";
+import {
+  setIsSavedLayer,
+  incrementTriggerUpdate,
+  setIsCustomFilterOpen,
+  setShowCustomLayerList,
+  setUpdateCustomLayers,
+  setCheckedLayer,
+  setShowSavedLayers,
+  setSelectedCustomFilterLayers,
+} from "../../../state/slices/uiSlice";
+import { theme, isMobile } from "../../../theme/theme";
+import ReactTooltip from "react-tooltip";
 
 const StyledModalContainer = styled.div`
   position: relative;
@@ -43,8 +46,9 @@ const StyledSaveButton = styled.div`
   justify-content: center;
   align-items: center;
   border-radius: 30px;
-  background-color: ${props => props.isDisabled ? "#DDDDDD" : props.theme.colors.mainColor1};
-  cursor: ${props => props.isDisabled ? 'not-allowed' : 'pointer'};
+  background-color: ${(props) =>
+    props.isDisabled ? "#DDDDDD" : props.theme.colors.mainColor1};
+  cursor: ${(props) => (props.isDisabled ? "not-allowed" : "pointer")};
   font-size: 13px;
   color: #fff;
 `;
@@ -60,7 +64,8 @@ const StyledRemoveButton = styled.div`
   background-color: #ffffff;
   cursor: pointer;
   font-size: 15px;
-  color: ${props => props.isOpen ? "#004477" : props.theme.colors.mainColor1};
+  color: ${(props) =>
+    props.isOpen ? "#004477" : props.theme.colors.mainColor1};
 `;
 
 const StyledLayerList = styled.div`
@@ -69,12 +74,13 @@ const StyledLayerList = styled.div`
   margin: 0 5px 10px 5px;
   overflow: auto;
 
-  @media (max-width: 1024px) {  // For devices larger than 480px but not desktop
+  @media (max-width: 1024px) {
+    // For devices larger than 480px but not desktop
     padding: 5px 10px 5px 10px;
     height: 450px;
   }
 
-  @media (max-width: 350px) { 
+  @media (max-width: 350px) {
     padding: 5px 10px 55px 10px;
     height: 450px;
   }
@@ -82,89 +88,83 @@ const StyledLayerList = styled.div`
 
 const StyledLayerGroupWrapper = styled.div``;
 
-// Layer list that renders in CustomLayerModal 
+// Layer list that renders in CustomLayerModal
 // Checkbox logic and rendering is done in Layer.jsx
 
-export const CustomLayerList = ({
-  groups,
-  layers,
-  recurse = false,
-}) => {
-
-    const [savedLayers, setSavedLayers] = useState([]);
-
-  // Load saved layers from local storage when component mounts
-  useEffect(() => {
-    const loadedLayers = localStorage.getItem("checkedLayers");
-    if (loadedLayers) {
-      setSavedLayers(JSON.parse(loadedLayers));
-    } else {
-      setSavedLayers([]);
-    }
-  }, []);
-
+export const CustomLayerList = ({ groups, layers, recurse = false }) => {
+  const [savedLayers, setSavedLayers] = useState([]);
 
   // const slicedGroups = groups ? groups.slice() : [];
   const slicedGroups = groups.slice();
-  
+
   const currentLang = strings.getLanguage();
 
-  const sortedGroups = slicedGroups.length > 0 ? slicedGroups.sort(function(a, b) {
-      const aName = a.locale[currentLang] && a.locale[currentLang].name ? a.locale[currentLang].name : null;
-      const bName = b.locale[currentLang] && b.locale[currentLang].name ? b.locale[currentLang].name : null;
+  const sortedGroups =
+    slicedGroups.length > 0
+      ? slicedGroups.sort(function (a, b) {
+          const aName =
+            a.locale[currentLang] && a.locale[currentLang].name
+              ? a.locale[currentLang].name
+              : null;
+          const bName =
+            b.locale[currentLang] && b.locale[currentLang].name
+              ? b.locale[currentLang].name
+              : null;
 
-      // b.id 727 is Tierekisteri (Poistuva) and should be the lowest element on the list 
-      if(b.id === 727) {
-          return -1
-      }
-      // a.id 727 is Tierekisteri (Poistuva) only on Firefox 
-      else if(a.id === 727) {
-          return 1;
-      }
-      else if (aName && bName) {
-          return aName.toLowerCase().localeCompare(bName.toLowerCase());
-      } else {
-          return 0;
-      }
-  }) : []
+          // b.id 727 is Tierekisteri (Poistuva) and should be the lowest element on the list
+          if (b.id === 727) {
+            return -1;
+          }
+          // a.id 727 is Tierekisteri (Poistuva) only on Firefox
+          else if (a.id === 727) {
+            return 1;
+          } else if (aName && bName) {
+            return aName.toLowerCase().localeCompare(bName.toLowerCase());
+          } else {
+            return 0;
+          }
+        })
+      : [];
 
   return (
-      <>
-              <StyledLayerList>
-                  {sortedGroups.map((group) => {
-                      const recursiveCheckSubGroupLayers = (group) => {
-                          var hasChildrenLayers = false;
-                          if (group.layers && group.layers.length) {
-                              hasChildrenLayers = true;
-                          } else if (group.groups && group.groups.length > 0) {
-                              group.groups.forEach(subgroup => {
-                                  const hasLayers = recursiveCheckSubGroupLayers(subgroup);
-                                  if (hasLayers === true) {
-                                      hasChildrenLayers = true;
-                                  }
-                              });
-                          }
-                          return hasChildrenLayers;
-                      }
+    <>
+      <StyledLayerList>
+        {sortedGroups.map((group) => {
+          const recursiveCheckSubGroupLayers = (group) => {
+            var hasChildrenLayers = false;
+            if (group.layers && group.layers.length) {
+              hasChildrenLayers = true;
+            } else if (group.groups && group.groups.length > 0) {
+              group.groups.forEach((subgroup) => {
+                const hasLayers = recursiveCheckSubGroupLayers(subgroup);
+                if (hasLayers === true) {
+                  hasChildrenLayers = true;
+                }
+              });
+            }
+            return hasChildrenLayers;
+          };
 
-                      var hasChildren = recursiveCheckSubGroupLayers(group);
-                      let isVisible = (group.layers && group.layers.length > 0) || hasChildren;
-                      return group.id !== 826 && (
-                          <StyledLayerGroupWrapper key={'group-sl-' + group.id }>
-                          {isVisible ? (
-                <LayerGroup
-                  key={'layer-group-' + group.id}
-                  group={group}
-                  layers={layers}
-                  hasChildren={hasChildren}
-                />
-              ) : null}
-                          </StyledLayerGroupWrapper>
-                      );
-                  })
-                  }
-              </StyledLayerList>
-      </>
+          var hasChildren = recursiveCheckSubGroupLayers(group);
+          let isVisible =
+            (group.layers && group.layers.length > 0) || hasChildren;
+          return (
+            group.id !== 826 && (
+              <StyledLayerGroupWrapper key={"group-sl-" + group.id}>
+                {isVisible ? (
+                  <LayerGroup
+                    key={"layer-group-" + group.id}
+                    group={group}
+                    layers={layers}
+                    hasChildren={hasChildren}
+                  />
+                ) : null}
+              </StyledLayerGroupWrapper>
+            )
+          );
+        })}
+      </StyledLayerList>
+    </>
   );
 };
 
@@ -172,20 +172,16 @@ export const CustomLayerList = ({
 export const CustomLayerModalContent = ({
   tooltipBackgroundColor = theme.colors.mainColor1,
   tooltipColor = theme.colors.mainWhite,
-  isChecked
+  isChecked,
 }) => {
   useAppSelector((state) => state.language);
 
-  const {
-    allGroups,
-    allLayers,
-  } = useAppSelector((state) => state.rpc);
+  const { allGroups, allLayers } = useAppSelector((state) => state.rpc);
 
-  const {updateCustomLayer} = useAppSelector((state) => state.ui);
-
+  const { updateCustomLayer, selectedCustomFilterLayers } = useAppSelector((state) => state.ui);
   const modalContent = [
     {
-      titleColor: 'mainColor1',
+      titleColor: "mainColor1",
       content: (
         <StyledGuideContent>
           {strings.layerlist.customLayerInfo.infoContent}
@@ -198,59 +194,65 @@ export const CustomLayerModalContent = ({
           layers={allLayers}
           recurse={false}
         />
-      )
-    }
+      ),
+    },
   ];
-
 
   const saveLayers = () => {
     if (!updateCustomLayer) return;
-    store.dispatch(setIsSavedLayer(true));
+    //store.dispatch(setIsSavedLayer(true));
     store.dispatch(incrementTriggerUpdate());
     store.dispatch(setIsCustomFilterOpen(false));
-    store.dispatch(setShowCustomLayerList(true));
+    //store.dispatch(setShowCustomLayerList(true));
     store.dispatch(setShowSavedLayers(true));
+    selectedCustomFilterLayers.length > 0 ? localStorage.setItem("checkedLayers", JSON.stringify(selectedCustomFilterLayers)) : localStorage.removeItem("checkedLayers");
   };
 
-  const removeLayers =() => {
+  const removeLayers = () => {
     localStorage.removeItem("checkedLayers");
-    store.dispatch(setIsSavedLayer(false));
-    store.dispatch(setShowCustomLayerList(false));
-    store.dispatch(setUpdateCustomLayers(false));
+    //store.dispatch(setIsSavedLayer(false));
+    //store.dispatch(setShowCustomLayerList(false));
+    //store.dispatch(setUpdateCustomLayers(false));
     store.dispatch(setCheckedLayer([]));
-  }
+    store.dispatch(setSelectedCustomFilterLayers([]));
+  };
 
   return (
     <StyledModalContainer>
-      <ReactTooltip id={'save-button-tooltip'} backgroundColor={tooltipBackgroundColor} 
-                    textColor={tooltipColor} place='bottom' type='dark' 
-                    effect='float' disable={updateCustomLayer || isMobile}
+      <ReactTooltip
+        id={"save-button-tooltip"}
+        backgroundColor={tooltipBackgroundColor}
+        textColor={tooltipColor}
+        place="bottom"
+        type="dark"
+        effect="float"
+        disable={updateCustomLayer}
       >
         <span>{strings.layerlist.customLayerInfo.saveTooltip}</span>
       </ReactTooltip>
-        {modalContent.map((content) => (
-            <div key={content.content}>
-                <div>{content.content}</div>
+      {modalContent.map((content) => (
+        <div key={content.content}>
+          <div>{content.content}</div>
 
-                <StyledButtonContainer>
-                    <StyledSaveButton 
-                        onClick={() => {
-                            saveLayers();
-                        }}
-                        data-tip={strings.layerlist.customLayerInfo.saveTooltip}
-                        data-for="save-button-tooltip"
-                        isDisabled={!updateCustomLayer}>
-                        {strings.layerlist.customLayerInfo.saveLayers}
-                    </StyledSaveButton>
-                    <StyledRemoveButton onClick={removeLayers}
-                                        checked={!isChecked}>
-                        {strings.layerlist.customLayerInfo.removeLayers}
-                    </StyledRemoveButton>
-                </StyledButtonContainer>
+          <StyledButtonContainer>
+            <StyledSaveButton
+              onClick={() => {
+                saveLayers();
+              }}
+              data-tip={strings.layerlist.customLayerInfo.saveTooltip}
+              data-for="save-button-tooltip"
+              isDisabled={!updateCustomLayer}
+            >
+              {strings.layerlist.layerlistLabels.saveCustomFilter}
+            </StyledSaveButton>
+            <StyledRemoveButton onClick={removeLayers} checked={!isChecked}>
+              {strings.layerlist.customLayerInfo.removeLayers}
+            </StyledRemoveButton>
+          </StyledButtonContainer>
 
-                <div>{content.layerlist}</div>
-            </div>
-        ))}
+          <div>{content.layerlist}</div>
+        </div>
+      ))}
     </StyledModalContainer>
-);
+  );
 };
