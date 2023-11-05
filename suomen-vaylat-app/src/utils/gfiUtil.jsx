@@ -18,7 +18,7 @@ const getPropertyOperator = (operator) => {
 };
 
 // string arvot
-const getCQLStringPropertyOperator = (property, operator, value) => {
+export const getCQLStringPropertyOperator = (property, operator, value) => {
   switch (operator) {
     case "equals":
       return "strToLowerCase(" + property + ")" + " = " + "'" + value.toString().trim().toLowerCase() + "'" ;
@@ -34,7 +34,7 @@ const getCQLStringPropertyOperator = (property, operator, value) => {
 };
 
 // number arvot
-const getCQLNumberPropertyOperator = (property, operator, value) => {
+export const getCQLNumberPropertyOperator = (property, operator, value) => {
   switch (operator) {
     case "equals":
       return property + " = " + value
@@ -57,18 +57,6 @@ const getParameterCaseInsensitive = (object, key) => {
     })[0]
   ];
 };
-
-const updateMapByFilter = (filter, channel) => {
-  var cqlFilter = filter.type === 'string' ? 
-    getCQLStringPropertyOperator(filter.property, filter.operator, filter.value)
-    :
-    getCQLNumberPropertyOperator(filter.property, filter.operator, filter.value);
-  console.log(cqlFilter)
-  channel && channel.postRequest(
-    'MapModulePlugin.MapLayerUpdateRequest',
-    [filter.layer, true, { 'CQL_FILTER': cqlFilter }]
-  );
-}
 
 export const filterFeature = (feature, location, filters, channel) => {
   if (filters.length === 0) {
@@ -128,14 +116,15 @@ export const filterFeature = (feature, location, filters, channel) => {
   };
 
   const properties = feature.keyValueProperties;
+  //let cqlFilters = "";
   const filterMatch = filters.every((filter) => {
+
     if (location.layerId === filter.layer && filter.type !== "date") {
       const operator = getPropertyOperator(filter.operator);
       var comparisonOperator = comparisonOperatorsHash[operator];
       const value = getParameterCaseInsensitive(properties, filter.property);
       if (value === undefined || value === null) return false;
       const doFilter = comparisonOperator(value, filter);
-      !doFilter && updateMapByFilter(filter, channel);
       return doFilter;
     } else if (filter.type === "date") {
       const value = new Date(
@@ -160,6 +149,25 @@ export const filterFeature = (feature, location, filters, channel) => {
       return true;
     }
   });
+
+  /*
+  filters.forEach((filter, index) => {
+    var cqlFilter = filter.type === 'string' ? 
+      getCQLStringPropertyOperator(filter.property, filter.operator, filter.value)
+      :
+      getCQLNumberPropertyOperator(filter.property, filter.operator, filter.value);
+    index === 0 ? cqlFilters += cqlFilter : cqlFilters += " AND " + cqlFilter;
+    console.log(cqlFilters)
+  })
+
+  if (cqlFilters.length > 0) {
+    console.log(cqlFilters)
+    channel && channel.postRequest(
+      'MapModulePlugin.MapLayerUpdateRequest',
+      [location.layerId, true, { 'CQL_FILTER': cqlFilters }]
+    );
+  }
+  */
 
   return filterMatch;
 };
