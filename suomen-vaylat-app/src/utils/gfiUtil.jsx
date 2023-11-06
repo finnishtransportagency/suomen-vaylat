@@ -116,7 +116,6 @@ export const filterFeature = (feature, location, filters, channel) => {
   };
 
   const properties = feature.keyValueProperties;
-  //let cqlFilters = "";
   const filterMatch = filters.every((filter) => {
 
     if (location.layerId === filter.layer && filter.type !== "date") {
@@ -149,25 +148,6 @@ export const filterFeature = (feature, location, filters, channel) => {
       return true;
     }
   });
-
-  /*
-  filters.forEach((filter, index) => {
-    var cqlFilter = filter.type === 'string' ? 
-      getCQLStringPropertyOperator(filter.property, filter.operator, filter.value)
-      :
-      getCQLNumberPropertyOperator(filter.property, filter.operator, filter.value);
-    index === 0 ? cqlFilters += cqlFilter : cqlFilters += " AND " + cqlFilter;
-    console.log(cqlFilters)
-  })
-
-  if (cqlFilters.length > 0) {
-    console.log(cqlFilters)
-    channel && channel.postRequest(
-      'MapModulePlugin.MapLayerUpdateRequest',
-      [location.layerId, true, { 'CQL_FILTER': cqlFilters }]
-    );
-  }
-  */
 
   return filterMatch;
 };
