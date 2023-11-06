@@ -43,6 +43,12 @@ You can read the release notes from another [ReleaseNotes.md](ReleaseNotes.md) f
   * Localhost development (npm start) create file `.env.development.local` under suomen-vaylat-app folder
   * Production build (npm create build) create file `.env.production.local` under suomen-vaylat-app folder
 
+### !Error Module not found: Error: Can't resolve '@mui/material/styles' in
+After building application from scratch ( delete node_modules and package-lock.json ) start may fail
+to error mentioned on header. It is caused by mui bug which causes components to render unsynced. 
+It can be fixed by running command:
+`npm install @mui/material @emotion/react @emotion/styled`
+
 
 ### Run in development
 

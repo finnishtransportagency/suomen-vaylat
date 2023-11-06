@@ -144,7 +144,7 @@
   },
   "multipleLayersWarning": "Olet lisäämässä kartalle 10 tai enemmän karttatasoa ja se saattaa vaikuttaa palvelun suorituskykyyn",
   "multipleLayersFetchWarning": "Olet hakemassa aineistoa 10 tai useammalta karttatasolta ja se saattaa vaikuttaa palvelun suorituskykyyn.",
-  "bodySizeWarning": "Rajausgeometria on liian suuri, yksinkertaistetaanko geometria?",
+  "bodySizeWarning": "Geometry is too big, choose a smaller area.",
   "bodySizeWarningTemporary": "Rajausgeometria on liian suuri eikä hakua voida tehdä.",
   "noGfiLocationsWarning": "Tuloksia ei löytynyt, valitse uusi rajaus.",
   "appGuide": {
@@ -565,7 +565,7 @@
           },
           "13": {
             "id": 13,
-            "title": "Pehmeikkö- ja routakohteet",
+            "title": "Ratus- ja ROPE-kohteet",
             "description": "Teemakartassa esitetään ROPE-hankkeessa kehitetyn radan rakenteellisen ja toiminnallisen kunnon yhdistetyn analyysin tuloksiin perustuvat toimenpide-ehdotukset routakohteiden parantamiseksi. Ratojen YTE-luokituksen (Ratus-hanke) yhteydessä kerätty pehmeikkö- ja stabilitteettiaineisto toimivat pehmeikkökohteiden vakavuuden ja korjaamisesta saatavan hyödyn suhteen toteutettavan priorisoinnin perustana. Ratus-prosessin läpikäyneet pehmeikkökohteet esitetään kolmena ryhmänä (F<1, F=1-1,3 ja F=1,3-1,5). Muut esitettävät tasot kuvaavat luokitustyön ensimmäisen vaiheen tulosta sekä ROPE-hankkeessa tarkennustyön alla olevia pehmeikkökohteita."
           }
         }

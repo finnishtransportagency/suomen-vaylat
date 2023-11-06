@@ -144,7 +144,7 @@
   },
   "multipleLayersWarning": "Du håller på att lägga till minst 10 kartnivåer på kartan och det kan påverka tjänstens prestanda",
   "multipleLayersFetchWarning": "You are about to fetch data from 10 or more maplayers, it might affect the performance of the service.",
-  "bodySizeWarning": "Rajausgeometria on liian suuri, yksinkertaistetaanko geometria? (sv)",
+  "bodySizeWarning": "Beskärning geometrin är för stor, begränsa till en mindre yta.",
   "bodySizeWarningTemporary": "Geometry is too big and data cannot be fetched right now.",
   "noGfiLocationsWarning": "No results found, try another geometry.",
   "appGuide": {
@@ -554,7 +554,7 @@
           },
           "13": {
             "id": 13,
-            "title": "Område för svag mark och frost",
+            "title": "Ratus- och ROPE-data",
             "description": ""
           }
         }
