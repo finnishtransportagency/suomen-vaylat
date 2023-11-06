@@ -982,6 +982,10 @@ const Content = () => {
           layerId={cqlFilteringInfo?.layer?.id}
           minimize={minimizeCQLFilter}
           maximize={maximizeCQLFilter}
+          minimizable={true}
+          maximizable={true}
+          minimizeAction={() => store.dispatch(setMinimizeCQLFilterModal(!minimizeCQLFilter))}
+          maximizeAction={() => store.dispatch(setMaximizeCQLFilterModal(!maximizeCQLFilter))}
           minWidth={"25em"}
           minHeight={"30em"}
           overflow={"auto"}
