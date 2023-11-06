@@ -74,6 +74,7 @@
   },
   "gfi": {
     "filter": "Filtrera",
+    "cqlFilter": "Filter på kartan",
     "title": "Objektuppgifter",
     "close": "Stänga",
     "additionalInfo": "Tilläggsinformation",

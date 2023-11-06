@@ -101,6 +101,7 @@
       "disabled": "Väliaikaisesti poissa käytöstä"
     },
     "filter" : "Suodata",
+    "cqlFilter" : "Suodata kartalla",
     "streetView": {
       "title": "Google Street View",
       "openGoogleStreetView": "Avaa Google Street View",

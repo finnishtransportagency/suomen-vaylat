@@ -74,6 +74,7 @@
   },
   "gfi": {
     "filter": "Filter",
+    "cqlFilter": "Filter on map",
     "title": "Feature Data",
     "close": "Close",
     "additionalInfo": "Additional information",
