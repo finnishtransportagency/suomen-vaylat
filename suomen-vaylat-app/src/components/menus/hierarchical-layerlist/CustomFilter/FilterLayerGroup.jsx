@@ -388,21 +388,44 @@ export const FilterLayerGroup = ({ group, layers, hasChildren }) => {
     }
 };
 
-const setGroupLayersVisible = (boolean) => {
-  group.groups.forEach((group) => {
-    
-    if (!boolean) {
-        const filteredCustomLayers = selectedCustomFilterLayers.filter(
-            (filterLayer) => !filteredLayers.includes(filterLayer)
-          );
-        store.dispatch(setSelectedCustomFilterLayers(filteredCustomLayers));
-    } else {
-        const layers = allLayers.filter(l => group.layers.includes(l.id))
-        store.dispatch(setSelectedCustomFilterLayers([...selectedCustomFilterLayers, ...layers]))
-    }
+const setGroupLayersVisible = (boolean, group) => {
+  const filteredCustomLayers = [...selectedCustomFilterLayers];
 
-  });
+  // Recursive function to traverse and select layers in nested groups
+  const selectLayersInNestedGroups = (groups) => {
+    for (const nestedGroup of groups) {
+      if (nestedGroup.groups) {
+        // If the nested group has further nested groups, recurse
+        selectLayersInNestedGroups(nestedGroup.groups);
+      }
+      
+      if (!boolean) {
+        nestedGroup.layers.forEach((layerId) => {
+          const index = filteredCustomLayers.findIndex(
+            (filterLayer) => filterLayer.id === layerId
+          );
+          if (index !== -1) {
+            filteredCustomLayers.splice(index, 1);
+          }
+        });
+      } else {
+        nestedGroup.layers.forEach((layerId) => {
+          const layer = allLayers.find((l) => l.id === layerId);
+          if (layer) {
+            filteredCustomLayers.push(layer);
+          }
+        });
+      }
+    }
+  };
+
+  if (group.groups) {
+    selectLayersInNestedGroups(group.groups);
+  }
+
+  store.dispatch(setSelectedCustomFilterLayers(filteredCustomLayers));
 };
+
 
 const setLayersVisible = (boolean) => {
         
@@ -432,35 +455,34 @@ const setLayersVisible = (boolean) => {
 };
 
 
-  const groupLayersVisibility = (e) => {
-    e.stopPropagation();
+const groupLayersVisibility = (e) => {
+  e.stopPropagation();
 
-    
-    if (group.hasOwnProperty("groups")) {
-      if (
-        totalGroupLayersCount === totalVisibleGroupLayersCount &&
-        totalGroupLayersCount !== 0
-      ) {
-        setFilteredLayersVisible(false);
-        setGroupLayersVisible(false);
-        setIsChecked(false);
-      } else if (totalGroupLayersCount !== totalVisibleGroupLayersCount) {
-        setFilteredLayersVisible(true);
-        //setGroupLayersVisible(true);
-        setIsChecked(true);
-      }
+  if (group.hasOwnProperty("groups")) {
+    // Select or deselect the first group
+    if (
+      totalGroupLayersCount === totalVisibleGroupLayersCount &&
+      totalGroupLayersCount !== 0
+    ) {
+      setFilteredLayersVisible(false);
+      setGroupLayersVisible(false, group);
+      setIsChecked(false);
+    } else if (totalGroupLayersCount !== totalVisibleGroupLayersCount) {
+      setFilteredLayersVisible(true);
+      setGroupLayersVisible(true, group);
+      setIsChecked(true);
     }
-    if (!group.hasOwnProperty("groups")) {
-      if (filteredLayers.length === selectedCustomFilterLayers.length && isChecked) {
-        setFilteredLayersVisible(false);
-        setIsChecked(false);
-      }
-      if (filteredLayers.length !== selectedCustomFilterLayers.length) {
-        setFilteredLayersVisible(true);
-        setIsChecked(true);
-      }
+  } else {
+    // Handle the case when the group contains only layers
+    if (filteredLayers.length === selectedCustomFilterLayers.length && isChecked) {
+      setFilteredLayersVisible(false);
+      setIsChecked(false);
+    } else {
+      setFilteredLayersVisible(true);
+      setIsChecked(true);
     }
-  };
+  }
+};
 
   const currentLang = strings.getLanguage();
   const defaultLang = strings.getAvailableLanguages()[0];

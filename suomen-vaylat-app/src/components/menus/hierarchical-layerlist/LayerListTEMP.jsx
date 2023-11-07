@@ -25,9 +25,6 @@ import {
   setCheckedLayer,
 } from "../../../state/slices/uiSlice";
 import Layer from "./Layer";
-import { Switch } from "./Layer";
-import { useSelector } from "react-redux";
-import { updateLayers } from "../../../utils/rpcUtil";
 
 const listVariants = {
   visible: {
@@ -41,21 +38,7 @@ const listVariants = {
 };
 
 const StyledRowContainer = styled.div`
-  display: flex;
-  align-items: center; // Align items vertically in the center
-  justify-content: space-between; // Distribute space between items evenly
-`;
 
-const StyledSwitchContainer = styled.div`
-  position: relative;
-  width: 32px; // add a specific width
-  height: 16px;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  background-color: ${(props) => (props.checked ? "#8DCB6D" : "#AAAAAA")};
-  cursor: pointer;
-  margin-right: 16px;
 `;
 
 const StyledButtonContainer = styled.div`
@@ -215,6 +198,7 @@ const LayerListTEMP = ({ groups, layers, tags }) => {
     store.dispatch(setTags([]));
     store.dispatch(setCheckedLayer([]));
     store.dispatch(setShowSavedLayers(false));
+    localStorage.removeItem("checkedLayers")
   };
 
   return (
