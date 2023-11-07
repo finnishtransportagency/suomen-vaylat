@@ -17,6 +17,38 @@ const getPropertyOperator = (operator) => {
   }
 };
 
+// string arvot
+export const getCQLStringPropertyOperator = (property, operator, value) => {
+  switch (operator) {
+    case "equals":
+      return "strToLowerCase(" + property + ")" + " = " + "'" + value.toString().trim().toLowerCase() + "'" ;
+    case "notEquals":
+      return "strToLowerCase(" + property + ")" + " <> " + "'" + value.toString().trim().toLowerCase() + "'" ;
+    case "includes":
+      return "strToLowerCase(" + property + ")" + " LIKE " + "'%" + value.toString().trim().toLowerCase() + "%'" ;
+    case "doesntInclude":
+      return "strToLowerCase(" + property + ")" + " NOT LIKE " + "'%" + value.toString().trim().toLowerCase() + "%'" ;
+    default:
+      return property + " = " + "'" + value.toString().trim().toLowerCase() + "'" ;
+  }
+};
+
+// number arvot
+export const getCQLNumberPropertyOperator = (property, operator, value) => {
+  switch (operator) {
+    case "equals":
+      return property + " = " + value
+    case "notEquals":
+      return property + " <> " + value;
+    case "smallerThan":
+      return property + " < " + value;
+    case "biggerThan":
+      return property + " < " + value;
+    default:
+      return property + " = " + value;
+  }
+};
+
 const getParameterCaseInsensitive = (object, key) => {
   const asLowercase = key.toLowerCase();
   return object[
@@ -26,8 +58,12 @@ const getParameterCaseInsensitive = (object, key) => {
   ];
 };
 
-export const filterFeature = (feature, location, filters) => {
+export const filterFeature = (feature, location, filters, channel) => {
   if (filters.length === 0) {
+    channel && channel.postRequest(
+      'MapModulePlugin.MapLayerUpdateRequest',
+      [location.layerId, true, { 'CQL_FILTER': null }]
+    );
     return true;
   }
 
@@ -81,6 +117,7 @@ export const filterFeature = (feature, location, filters) => {
 
   const properties = feature.keyValueProperties;
   const filterMatch = filters.every((filter) => {
+
     if (location.layerId === filter.layer && filter.type !== "date") {
       const operator = getPropertyOperator(filter.operator);
       var comparisonOperator = comparisonOperatorsHash[operator];

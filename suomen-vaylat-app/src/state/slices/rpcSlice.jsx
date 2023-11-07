@@ -59,8 +59,10 @@ const initialState = {
   },
   pointInfo: {},
   filters: [],
+  cqlFilters: [],
   activeGFILayer: null,
   filteringInfo: { modalOpen: false },
+  cqlFilteringInfo: { modalOpen: false }
 };
 
 export const rpcSlice = createSlice({
@@ -80,7 +82,7 @@ export const rpcSlice = createSlice({
 
     /**
      * Set selected layer on gfi popup
-     * @method setLoading
+     * @method setActiveGFILayer
      * @param {Object} state
      * @param {Object} action
      */
@@ -101,7 +103,7 @@ export const rpcSlice = createSlice({
 
     /**
      * Set filters.
-     * @method setChannel
+     * @method setFilters
      * @param {Object} state
      * @param {Object} action
      */
@@ -110,13 +112,33 @@ export const rpcSlice = createSlice({
     },
 
     /**
-     * Set filters.
+     * Set CQL filters.
      * @method setChannel
+     * @param {Object} state
+     * @param {Object} action
+     */
+    setCQLFilters: (state, action) => {
+      state.cqlFilters = action.payload;
+    },
+
+    /**
+     * Set filtering info.
+     * @method setFilteringInfo
      * @param {Object} state
      * @param {Object} action
      */
     setFilteringInfo: (state, action) => {
       state.filteringInfo = action.payload;
+    },
+
+    /**
+     * Set CQL filtering info.
+     * @method setCQLFilteringInfo
+     * @param {Object} state
+     * @param {Object} action
+     */
+    setCQLFilteringInfo: (state, action) => {
+      state.cqlFilteringInfo = action.payload;
     },
 
     /**
@@ -131,19 +153,9 @@ export const rpcSlice = createSlice({
     },
 
     /**
-     * Set maplayer filter
-     * @method setFilter
-     * @param {Object} state
-     * @param {Object} action
-     */
-    setFilter: (state, action) => {
-      state.filter = action.payload;
-      LOG.log("setFilter to " + action.payload);
-    },
-
-    /**
      * Set all layers.
      * Not use this function directly, use rpcUtil/updateLayers function.
+     * @method setAllLayers
      * @param {Object} state
      * @param {Object} action
      */
@@ -914,7 +926,6 @@ export const {
   setLastSelectedTheme,
   setSelectedThemeId,
   setActiveAnnouncements,
-  setFilter,
   getLayerMetadata,
   clearLayerMetadata,
   setLayerMetadata,
@@ -941,9 +952,11 @@ export const {
   setMapLayers,
   setAllSelectedThemeLayers,
   setPointInfo,
+  setCQLFilters,
   setFilters,
   setActiveGFILayer,
   setFilteringInfo,
+  setCQLFilteringInfo
 } = rpcSlice.actions;
 
 export default rpcSlice.reducer;
