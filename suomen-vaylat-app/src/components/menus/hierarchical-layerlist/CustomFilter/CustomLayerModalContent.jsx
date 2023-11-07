@@ -228,6 +228,7 @@ export const CustomLayerModalContent = ({
   };
 
   const removeLayers = () => {
+    localStorage.removeItem("checkedLayers");
     store.dispatch(setCheckedLayer([]));
     store.dispatch(setSelectedCustomFilterLayers([]));
   };
