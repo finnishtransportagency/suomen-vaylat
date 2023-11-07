@@ -30,6 +30,7 @@ import SearchToast from '../toasts/SearchToast';
 import ReactTooltip from 'react-tooltip';
 import TipToast from '../toasts/TipToast';
 import SearchModal from './SearchModal';
+import SearchResultPanel from './SearchResultPanel';
 
 
 export const StyledSearchIcon  = styled.div`
@@ -211,7 +212,7 @@ const Search = () => {
     const [searchClickedRow, setSearchClickedRow] = useState(null);
     const [firstSearchResultShown, setFirstSearchResultShown] = useState(false);
     const [showToast, setShowToast] = useState(JSON.parse(localStorage.getItem(SEARCH_TIP_LOCALSTORAGE)));
-    const [carriageWaySearch, setCarriageWaySearch] = useState(false);
+    const [carriageWaySearch, setCarriageWaySearch] = useState(false);
 
 
     const handleSeach = (searchValue) => {
@@ -241,7 +242,6 @@ const Search = () => {
         }
         store.dispatch(setGeoJsonArray([]));
         setFirstSearchResultShown(false);
-        setSearchClickedRow(null);
         removeMarkersAndFeatures();
         setIsSearching(true);
         channel.postRequest('SearchRequest', [searchValueCopy]);
@@ -530,6 +530,11 @@ const Search = () => {
         else toast.dismiss('searchTipToast');
     }, [geoJsonArray]);
 
+    useEffect(() => {
+        //when carriagewaysearch ( ajordalla haku ) changes, reset searchValue
+        setSearchValue('');
+     }, [carriageWaySearch, setSearchValue]);
+
     return (
         <StyledSearchContainer isSearchOpen={isSearchOpen}>
         <ReactTooltip backgroundColor={theme.colors.mainColor1} disable={isMobile} place='bottom' type='dark' effect='float' />
@@ -554,10 +559,8 @@ const Search = () => {
             />
           
             <AnimatePresence>
-         
                 {isSearchOpen && (
-             
-                <StyledSearchWrapper
+                 <StyledSearchWrapper
                     hasGeometry={geoJsonArray.length > 0}
                     variants={variants}
                     initial={'initial'}
@@ -567,7 +570,6 @@ const Search = () => {
                     searchType={searchType}
                     showSearchResults={showSearchResults}
                 >
-     
                     <StyledLeftContentWrapper>
                    
                         {!isSearching ? (
@@ -610,7 +612,22 @@ const Search = () => {
                             />
                         )}
                     </StyledLeftContentWrapper>
-
+                    <SearchResultPanel 
+                        isSearchOpen={isSearchOpen}
+                        searchResults={searchResults}
+                        showSearchResults={showSearchResults}
+                        searchType={searchType}
+                        dropdownVariants={dropdownVariants}
+                        firstSearchResultShown={firstSearchResultShown}
+                        handleSearchSelect={handleSearchSelect}
+                        setFirstSearchResultShown={setFirstSearchResultShown}
+                        isMobile={isMobile}
+                        setShowSearchResults={setShowSearchResults}
+                        setSearchClickedRow={setSearchClickedRow}
+                        searchClickedRow={searchClickedRow}
+                        allLayers={allLayers}
+                        hidden={true}
+                    />        
                 {isSearchModalOpen && ( 
                     <SearchModal 
                         searchValue={searchValue}

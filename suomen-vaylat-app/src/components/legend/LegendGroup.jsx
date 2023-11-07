@@ -158,7 +158,7 @@ export const LegendGroup = ({ legend }) => {
                 {legend.legend !== null &&
                     <StyledLegend>
                         <StyledLegendImage key={legend.legend}
-                            src={legend.legend.indexOf('action') > -1 ? process.env.REACT_APP_PROXY_URL + legend.legend : (legend.legend.indexOf('?') > 0 ? legend.legend : legend.legend )}
+                            src={legend.legend.indexOf('action') > -1 ? process.env.REACT_APP_PUBLISHED_MAP_DOMAIN + legend.legend : (legend.legend.indexOf('?') > 0 ? legend.legend : legend.legend )}
                         ></StyledLegendImage>
                     </StyledLegend>
                 }

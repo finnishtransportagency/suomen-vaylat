@@ -12,8 +12,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useAppSelector } from "../../state/hooks";
 import { setFilteringInfo } from "../../state/slices/rpcSlice";
-import { filterFeature } from "../../utils/gfiUtil";
-import { kaReducer, Table } from "ka-table";
+import { Table } from "ka-table";
 import "ka-table/style.scss";
 import { theme, isMobile } from "../../theme/theme";
 import ReactTooltip from "react-tooltip";
@@ -63,17 +62,9 @@ const StyledTabContent = styled.div`
 `;
 
 const GfiTabContent = ({ data, title, tablePropsInit }) => {
-  const [tableProps, changeTableProps] = useState(tablePropsInit);
   const { filteringInfo, filters } = useAppSelector((state) => state.rpc);
   const { store } = useContext(ReactReduxContext);
 
-  const dispatch = (action) => {
-    changeTableProps((prevState) => kaReducer(prevState, action));
-  };
-
-  useEffect(() => {
-    changeTableProps(tablePropsInit);
-  }, [tablePropsInit]);
   const [showDataTable, setShowDataTable] = useState(false);
 
   const selectFeature = (channel, features) => {
@@ -176,7 +167,7 @@ const GfiTabContent = ({ data, title, tablePropsInit }) => {
                 layer: {
                   id: data.layerId,
                   title: title,
-                  tableProps: tableProps,
+                  tableProps: tablePropsInit,
                 },
               })
             )
@@ -213,7 +204,7 @@ const GfiTabContent = ({ data, title, tablePropsInit }) => {
       </StyledSelectedTabHeader>
 
       {showDataTable ? (
-        <Table {...tableProps} dispatch={dispatch} />
+        <Table {...tablePropsInit}/>
       ) : (
         <div
           style={{
@@ -221,9 +212,7 @@ const GfiTabContent = ({ data, title, tablePropsInit }) => {
           }}
         >
           <StyledTabContent>
-            {data?.content?.map((cont, contentIndex) => {
-              return cont.geojson?.features?.map((feature, index) => {
-                if (filterFeature(feature, data, filters)) {
+              {tablePropsInit.filteredFeatures.map( (feature, index) => {
                   return (
                     <GfiTabContentItem
                       key={feature.id}
@@ -236,14 +225,13 @@ const GfiTabContent = ({ data, title, tablePropsInit }) => {
                       }
                       data={feature}
                       index={index}
-                      contentIndex={contentIndex}
+                      contentIndex={index}
                       selectFeature={selectFeature}
                       deSelectFeature={deSelectFeature}
                     />
                   );
                 }
-              });
-            })}
+              )}
           </StyledTabContent>
         </div>
       )}

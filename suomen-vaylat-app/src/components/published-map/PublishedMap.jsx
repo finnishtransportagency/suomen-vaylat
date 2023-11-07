@@ -73,6 +73,44 @@ const StyledLoaderWrapper = styled.div`
     }
 `;
 
+
+//fetch and save announcements to state
+const fetchAnnounmentsAsync = async (data, channel, store) => {
+    let activeAnnoucements = [];
+    await new Promise((resolve) => {   
+        setTimeout(() => {
+            if (data.getSelectedAnnouncements) {
+                channel.getSelectedAnnouncements(function (data) {
+                    activeAnnoucements = getActiveAnnouncements(data);
+                    if (activeAnnoucements && activeAnnoucements.length > 0){
+                        store.dispatch(
+                            setActiveAnnouncements(activeAnnoucements)
+                        );
+                    }
+                });
+            }
+            resolve(activeAnnoucements);
+        }, 1000);
+    }).then( (announments) => {
+        //due bug announments not showing on safari, check again after 3 seconds if announcements list empty
+        if (announments.length ===0){
+            setTimeout(() => {
+                if (data.getSelectedAnnouncements) {
+                    channel.getSelectedAnnouncements(function (data) {
+                        activeAnnoucements = getActiveAnnouncements(data);
+                        if (activeAnnoucements && activeAnnoucements.length > 0){
+                            store.dispatch(
+                                setActiveAnnouncements(activeAnnoucements)
+                            );
+                        }
+                    });
+                }
+            }, 8000);
+        }
+    } );
+}
+
+
 const PublishedMap = () => {
     const { store } = useContext(ReactReduxContext);
     const { loading } = useAppSelector((state) => state.rpc);
@@ -116,9 +154,12 @@ const PublishedMap = () => {
         );
         var synchronizer = OskariRPC.synchronizerFactory(channel, handlers);
 
+        
         channel.onReady(() => {
             store.dispatch(setChannel(channel));
             channel.getSupportedFunctions(function (data) {
+                //minor hack to make sure announcements are shown
+                fetchAnnounmentsAsync(data, channel, store);
                 if (data.getTags) {
                     channel.getTags(function (data) {
                         store.dispatch(setAllTags(data));
@@ -128,14 +169,6 @@ const PublishedMap = () => {
                 if (data.getTagsWithLayers) {
                     channel.getTagsWithLayers(function (data) {
                         store.dispatch(setTagsWithLayers(data));
-                    });
-                }
-
-                if (data.getAnnouncements) {
-                    channel.getAnnouncements(function (data) {
-                        store.dispatch(
-                            setActiveAnnouncements(getActiveAnnouncements(data))
-                        );
                     });
                 }
 

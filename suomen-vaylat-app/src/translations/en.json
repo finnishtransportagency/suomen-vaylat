@@ -73,6 +73,10 @@
     }
   },
   "gfi": {
+    "noResultsTitle": "No results",
+    "noResultsDesc": "No results with geometry, select new geometry or new layers",
+    "filter": "Filter",
+    "cqlFilter": "Filter on map",
     "title": "Feature Data",
     "close": "Close",
     "additionalInfo": "Additional information",
@@ -142,7 +146,7 @@
   },
   "multipleLayersWarning": "You are about to activate 10 or more maplayers and it might affect the performance of the service",
   "multipleLayersFetchWarning": "You are about to fetch data from 10 or more maplayers, it might affect the performance of the service.",
-  "bodySizeWarning": "Geometry is too big, do you want to simplify it?",
+  "bodySizeWarning": "The cropping geometry is too big, limit to a smaller area.",
   "bodySizeWarningTemporary": "Geometry is too big and data cannot be fetched right now.",
   "noGfiLocationsWarning": "No results found, try another geometry.",
   "appGuide": {
@@ -348,6 +352,7 @@
         "5/116/0 ( driving_lane search )",
         "5/116/100 ( distance search )",
         "5/116/0/50",
+        "5/116/100 5/116/400",
         "5/116/0/50 5/348/0/100",
         "5/116/0/50 5/348/0/100",
         "start:5/116/0/50 end:5/348/0/100",
@@ -551,7 +556,7 @@
           },
           "13": {
             "id": 13,
-            "title": "Area of instability and frost objects",
+            "title": "Ratus- and ROPE-data",
             "description": ""
           }
         }

@@ -3,7 +3,7 @@ import { faInfoCircle, faTimes, faCaretDown, faCaretUp, faGripLines, faEye, faEy
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ReactReduxContext, useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { clearLayerMetadata, getLayerMetadata, setLayerMetadata, setZoomTo } from '../../../state/slices/rpcSlice';
+import { clearLayerMetadata, getLayerMetadata, setLayerMetadata, setZoomTo, setCQLFilteringInfo } from '../../../state/slices/rpcSlice';
 import { updateLayers } from '../../../utils/rpcUtil';
 import { sortableHandle } from 'react-sortable-hoc';
 
@@ -13,7 +13,6 @@ import { theme } from '../../../theme/theme';
 
 const StyledLayerContainer = styled.li`
     z-index: 9999;
-    height: 80px;
     display: flex;
     margin-bottom: 8px;
     background-color: #F5F5F5;
@@ -94,7 +93,6 @@ const StyledlayerOpacityControl = styled.input`
 `;
 
 const StyledLayerGripControl = styled.div`
-    height: 100%;
     width: 100%;
     max-width: 40px;
     display: flex;
@@ -205,27 +203,47 @@ export const SelectedLayer = (
         layer,
         uuid,
         currentZoomLevel,
-        filtersEnabled,
     }
 ) => {
     const { store } = useContext(ReactReduxContext);
     const [opacity, setOpacity] = useState(layer.opacity);
     const [prevOpacity, setPrevOpacity] = useState(layer.opacity);
     const [isLayerVisible, setIsLayerVisible] = useState(layer.opacity !== 0);
-    const channel = useSelector(state => state.rpc.channel);
+    const { channel, cqlFilters } = useAppSelector(
+        (state) => state.rpc
+      );
 
     const { allSelectedThemeLayers } = useAppSelector(state => state.rpc);
 
-    const [localfilterenabled, setLocalfilterenabled] = useState(false)
-
-    useEffect(() => {
-        setLocalfilterenabled(filtersEnabled)
-    }, [filtersEnabled])
+    const isFilterable = typeof layer.config?.gfi?.filterFields !== "undefined" && layer.config?.gfi?.filterFields.length > 0 ;
 
     useEffect(() => {
         setOpacity(layer.opacity);
         layer.opacity === 0 ? setIsLayerVisible(false) : setIsLayerVisible(true)
     }, [layer.opacity])
+
+    const handleOpenCQLFilteringModal = (layer) => {
+        var filterColumnsArray = [];
+        layer.config?.gfi?.filterFields &&
+        layer.config?.gfi?.filterFields.forEach((column) => {
+          if (column.field && column.type) {
+            filterColumnsArray.push({
+              key: column.field,
+              title: column.field,
+              type: column.type,
+            });
+          }
+        });
+
+        store.dispatch(setCQLFilteringInfo({
+            modalOpen: true,
+            layer: {
+              id: layer.id,
+              title: layer.name,
+              filterColumnsArray: filterColumnsArray,
+            },
+          }));
+    };
     
     const handleLayerRemoveSelectedLayer = (channel, layer) => {
         channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, false]);
@@ -277,7 +295,6 @@ export const SelectedLayer = (
     }
 
     const isLayerSelectedThemeLayer = allSelectedThemeLayers.find(themeLayer => themeLayer === layer.id);
-
     return (
             <StyledLayerContainer>
                 <DragHandle />
@@ -285,15 +302,33 @@ export const SelectedLayer = (
                     <StyledlayerHeader>
                         <StyledLayerName style={{color: isLayerSelectedThemeLayer ? theme.colors.secondaryColor2 : theme.colors.mainColor1}}>
                         <FontAwesomeIcon style={{marginRight: '4px', color: isLayerSelectedThemeLayer ? theme.colors.secondaryColor2 : theme.colors.mainColor1 }} icon={isLayerSelectedThemeLayer ? faMap : faLayerGroup} />
-                            {layer.name} {localfilterenabled} {filtersEnabled} {localfilterenabled}
+                            {layer.name}
                         </StyledLayerName>
-                        { localfilterenabled && 
-                            (
-                                <StyledIconWrapper>
-                                    <StyledFloatingSpan><FontAwesomeIcon icon={faFilter}  style={{ color: theme.colors.secondaryColor8 }}/></StyledFloatingSpan>
-                                </StyledIconWrapper>
-                            )
-                        }                 
+
+                        <StyledIconsWrapper>
+                { uuid &&
+                    <StyledIconWrapper
+                        className="swiper-no-swiping"
+                        uuid={uuid}
+                        onClick={() => {
+                            handleLayerMetadata(layer, uuid);
+                        }}
+                    >
+                        <FontAwesomeIcon icon={faInfoCircle} />
+                    </StyledIconWrapper>
+                }
+                    <StyledIconWrapper
+                        className="swiper-no-swiping"
+                        onClick={() => {
+                            handleLayerRemoveSelectedLayer(channel, layer);
+                        }}>
+                        <FontAwesomeIcon
+                            icon={faTimes}
+                        />
+                    </StyledIconWrapper>
+                </StyledIconsWrapper>
+
+
                     </StyledlayerHeader>
                     <StyledMidContent>
                 
@@ -319,30 +354,18 @@ export const SelectedLayer = (
                         <StyledToggleOpacityIconWrapper onClick={() => handleLayerOpacityToggle(channel, layer)}>
                             <FontAwesomeIcon icon={isLayerVisible? faEye : faEyeSlash} />
                         </StyledToggleOpacityIconWrapper>
+
+                        { isFilterable &&
+                            <StyledIconWrapper
+                                onClick={() => {
+                                    handleOpenCQLFilteringModal(layer);
+                                }}
+                            >
+                                <StyledFloatingSpan><FontAwesomeIcon icon={faFilter}  style={{ color: cqlFilters.length > 0 ? theme.colors.secondaryColor8 : theme.colors.primaryColor1 }}/></StyledFloatingSpan>
+                            </StyledIconWrapper> 
+                        }
                     </StyledBottomContent>
                 </StyledLayerContent>
-                <StyledIconsWrapper>
-                { uuid &&
-                    <StyledIconWrapper
-                        className="swiper-no-swiping"
-                        uuid={uuid}
-                        onClick={() => {
-                            handleLayerMetadata(layer, uuid);
-                        }}
-                    >
-                        <FontAwesomeIcon icon={faInfoCircle} />
-                    </StyledIconWrapper>
-                }
-                    <StyledIconWrapper
-                        className="swiper-no-swiping"
-                        onClick={() => {
-                            handleLayerRemoveSelectedLayer(channel, layer);
-                        }}>
-                        <FontAwesomeIcon
-                            icon={faTimes}
-                        />
-                    </StyledIconWrapper>
-                </StyledIconsWrapper>
             </StyledLayerContainer>
     );
 };

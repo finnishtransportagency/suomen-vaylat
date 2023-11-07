@@ -335,14 +335,10 @@ export const getActiveAnnouncements = (annoucements) => {
         );
 
 
-        const currentTime = Date.now();
         const currentLang = strings.getLanguage();
         const defaultLang = strings.getAvailableLanguages()[0];
 
         activeAnnouncements.forEach(annoucement => {
-            const start = new Date(annoucement.beginDate);
-            const end = new Date(annoucement.endDate);
-            if (moment(currentTime).isBetween(start, end)) {
                 const localeObj = annoucement.locale[currentLang] ? annoucement.locale[currentLang] : (
                         annoucement.locale[defaultLang] ? annoucement.locale[defaultLang] : annoucement.locale[Object.keys(annoucement.locale)[0]]
                     )
@@ -351,7 +347,6 @@ export const getActiveAnnouncements = (annoucements) => {
                     title: localeObj.title,
                     content: localeObj.content
                 });
-            }
         });
     }
     return activeAnnoucements;

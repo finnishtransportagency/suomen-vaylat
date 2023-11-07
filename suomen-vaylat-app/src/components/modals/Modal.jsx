@@ -185,6 +185,10 @@ const Modal = ({
     minWidth,
     maxWidth,
     overflow,
+    minimizable,
+    minimizeAction,
+    maximizable,
+    maximizeAction,
     minimize,
     maximize,
     children,
@@ -272,29 +276,27 @@ const Modal = ({
                                     <p>{title}</p>
                                 </StyledModalTitle>
                                 <StyledRightContent>
-                                    {type === 'gfi' && (
-                                        <>
+                                    {minimizable && (
                                             <StyledHeaderButton
-                                                onClick={() => store.dispatch(setMinimizeGfi(true))}
+                                                onClick={() => minimizeAction()}
                                             >
                                                 <FontAwesomeIcon
                                                     icon={faWindowMinimize}
                                                 />
                                             </StyledHeaderButton>
-                                            {
-                                                window.screen.width > MIN_SCREEN_WIDTH_MAXIMIZE &&
-                                                    <StyledHeaderButton
-                                                        onClick={(e) => {
-                                                            e.preventDefault();
-                                                            store.dispatch(setMaximizeGfi(!maximize));
-                                                        }}
-                                                    >
-                                                        <FontAwesomeIcon
-                                                            icon={maximize ? faWindowRestore : faWindowMaximize}
-                                                        />
-                                                    </StyledHeaderButton>
-                                            }
-                                        </>
+                                    )}
+
+                                    { maximizable && window.screen.width > MIN_SCREEN_WIDTH_MAXIMIZE && (
+                                        <StyledHeaderButton
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                maximizeAction();
+                                            }}
+                                        >
+                                            <FontAwesomeIcon
+                                                icon={maximize ? faWindowRestore : faWindowMaximize}
+                                            />
+                                        </StyledHeaderButton>
                                     )}
 
                                     {hasHelp && (

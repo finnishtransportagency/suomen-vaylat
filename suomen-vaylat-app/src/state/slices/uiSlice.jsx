@@ -22,6 +22,7 @@ const initialState = {
     isChecked: false,
     isUserGuideOpen: false,
     isCustomFilterOpen: false,
+    isCQLFilterModalOpen: false,
     isSavedLayer: false,
     shareUrl: '',
     isThemeMenuOpen: false,
@@ -40,6 +41,8 @@ const initialState = {
     selectedMapLayersMenuThemeIndex: null,
     minimizeGfi: false,
     maximizeGfi: false,
+    minimizeCQLFilter: false,
+    maximizeCQLFilter: false,
     gfiCroppingTypes: [],
     warning: null,
     hasToastBeenShown : [],
@@ -185,6 +188,12 @@ export const uiSlice = createSlice({
         setMaximizeGfi: (state, action) => {
             state.maximizeGfi = action.payload;
         },
+        setMinimizeCQLFilterModal: (state, action) => {
+            state.minimizeCQLFilter = action.payload;
+        },
+        setMaximizeCQLFilterModal: (state, action) => {
+            state.maximizeCQLFilter = action.payload;
+        },
         setGfiCroppingTypes: (state, action) => {
             state.gfiCroppingTypes = action.payload;
         },
@@ -223,6 +232,9 @@ export const uiSlice = createSlice({
         setIsGfiToolsOpen: (state, action) => {
             state.isGfiToolsOpen = action.payload;
         },
+        setIsCQLFilterModalOpen: (state, action) => {
+            state.isCQLFilterModalOpen = action.payload;
+        },
         incrementTriggerUpdate: state => {
             state.triggerUpdate += 1; // increment value
           },
@@ -249,6 +261,9 @@ export const uiSlice = createSlice({
 });
 
 export const {
+    setMinimizeCQLFilterModal,
+    setMaximizeCQLFilterModal,
+    setIsCQLFilterModalOpen,
     setIsFullScreen,
     setIsMainScreen,
     setModalConstrainsRef,

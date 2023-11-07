@@ -480,17 +480,21 @@ export const GFIPopup = ({ handleGfiDownload }) => {
   useEffect(() => {
     isGfiDownloadsOpen && setIsGfiDownloadsOpen(false);
   }, [gfiLocations]);
+
   const handleOverlayGeometry = (geoJson) => {
+    // empty possible earlier overlays
     channel &&
       channel.postRequest("MapModulePlugin.RemoveFeaturesFromMapRequest", [
         null,
         null,
         LAYER_ID,
       ]);
+    
+    // add new overlay
     if (geoJson !== null) {
       channel &&
         channel.postRequest("MapModulePlugin.AddFeaturesToMapRequest", [
-          geoJson,
+          geoJson[0].geojson,
           {
             layerId: LAYER_ID,
             centerTo: true,
@@ -572,13 +576,16 @@ export const GFIPopup = ({ handleGfiDownload }) => {
       });
 
     var cells = [];
+    var filteredFeatures = [];
+
     data &&
       data?.content?.forEach((cont) => {
         var featureCells =
           cont.geojson.features &&
           cont.geojson.features
-            .filter((feature) => filterFeature(feature, data, filters))
+            .filter((feature) => filterFeature(feature, data, filters, channel))
             .map((feature) => {
+              filteredFeatures.push(feature);
               var cell = { ...feature.properties };
               cell["id"] = feature.id;
               cell.hasOwnProperty("UID") && delete cell["UID"];
@@ -592,6 +599,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
     const tablePropsInit = {
       columns: columnsArray,
       filterableColumns: filterColumnsArray,
+      filteredFeatures: filteredFeatures,
       data: cells,
       rowKeyField: "id",
       sortingMode: SortingMode.SingleTripleState,
@@ -792,16 +800,9 @@ export const GFIPopup = ({ handleGfiDownload }) => {
                 title: strings.bodySizeWarning,
                 subtitle: null,
                 cancel: {
-                  text: strings.general.cancel,
+                  text: strings.general.ok,
                   action: () => {
                     setIsLoading(false);
-                    store.dispatch(setWarning(null));
-                  },
-                },
-                confirm: {
-                  text: strings.general.continue,
-                  action: () => {
-                    simplifyGeometry();
                     store.dispatch(setWarning(null));
                   },
                 },
@@ -810,10 +811,6 @@ export const GFIPopup = ({ handleGfiDownload }) => {
           }
         );
     }
-  };
-
-  const simplifyGeometry = () => {
-    console.log("simplify");
   };
 
   useEffect(() => {
@@ -1091,10 +1088,10 @@ export const GFIPopup = ({ handleGfiDownload }) => {
         )}
         {gfiLocations.content && gfiLocations.content[0].noContent && (
           <StyledNoGfisContainer>
-            <StyledSubtitle>Ei tuloksia</StyledSubtitle>
+            <StyledSubtitle>{strings.gfi.noResultsTitle}</StyledSubtitle>
             <StyledInfoTextContainer>
               <p>
-                Ei tuloksia rajauksella, valitse uusi rajaus tai uusia tasoja
+                {strings.gfi.noResultsDesc}
               </p>
             </StyledInfoTextContainer>
           </StyledNoGfisContainer>
@@ -1115,7 +1112,6 @@ export const GFIPopup = ({ handleGfiDownload }) => {
             );
             const title = layers.length > 0 && layers[0].name;
             const tableProps = tablePropsInit(location);
-
             let totalFeatures = 0;
             location?.content?.forEach((cont) => {
               totalFeatures += cont.geojson.totalFeatures;
