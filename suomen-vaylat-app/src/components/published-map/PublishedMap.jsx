@@ -105,7 +105,7 @@ const fetchAnnounmentsAsync = async (data, channel, store) => {
                         }
                     });
                 }
-            }, 3000);
+            }, 8000);
         }
     } );
 }
