@@ -35,10 +35,7 @@ import {
     setActiveSelectionTool,
     setIsGfiToolsOpen,
     setIsCustomFilterOpen,
-    setIsSavedLayer,
-    setShowCustomLayerList,
     setUpdateCustomLayers,
-    setCheckedLayer,
 } from '../../state/slices/uiSlice';
 
 import {
