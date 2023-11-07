@@ -305,6 +305,7 @@ const Switch = ({ action, isSelected }) => {
   );
 };
 
+
 export const FilterLayerGroup = ({ group, layers, hasChildren }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isExcerptOpen, setIsExcerptOpen] = useState(false);
@@ -318,6 +319,23 @@ export const FilterLayerGroup = ({ group, layers, hasChildren }) => {
 
   const { isCustomFilterOpen, selectedCustomFilterLayers } = useAppSelector((state) => state.ui);
   const { allLayers } = useAppSelector((state) => state.rpc);
+
+  useEffect(() => {
+    if (group) {
+      const checkedLayers = localStorage.getItem("checkedLayers"); // Change "checkedLayers" to the key you use in local storage
+      if (checkedLayers) {
+        // Check if this group or any of its subgroups have any layers saved in local storage
+        const mainGroupHasSavedLayers = group.layers && group.layers.some((layerId) => checkedLayers.includes(layerId));
+        const subgroupsHaveSavedLayers = group.groups && group.groups.some((subgroup) =>
+          subgroup.layers && subgroup.layers.some((layerId) => checkedLayers.includes(layerId))
+        );
+  
+        if (mainGroupHasSavedLayers || subgroupsHaveSavedLayers) {
+          setIsOpen(true);
+        }
+      }
+    }
+  }, [group]);
 
   //Find matching layers from all layers and groups, then push this group's layers into 'filteredLayers'
   useEffect(() => {
