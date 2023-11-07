@@ -73,6 +73,8 @@
     }
   },
   "gfi": {
+    "noResultsTitle": "Ei tuloksia",
+    "noResultsDesc": "Ei tuloksia rajauksella, valitse uusi rajaus tai uusia tasoja",
     "title": "Kohdetiedot",
     "close": "Sulje",
     "additionalInfo": "Lisätiedot",
