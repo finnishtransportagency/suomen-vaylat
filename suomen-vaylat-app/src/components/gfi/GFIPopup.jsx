@@ -1088,10 +1088,10 @@ export const GFIPopup = ({ handleGfiDownload }) => {
         )}
         {gfiLocations.content && gfiLocations.content[0].noContent && (
           <StyledNoGfisContainer>
-            <StyledSubtitle>Ei tuloksia</StyledSubtitle>
+            <StyledSubtitle>{strings.gfi.noResultsTitle}</StyledSubtitle>
             <StyledInfoTextContainer>
               <p>
-                Ei tuloksia rajauksella, valitse uusi rajaus tai uusia tasoja
+                {strings.gfi.noResultsDesc}
               </p>
             </StyledInfoTextContainer>
           </StyledNoGfisContainer>
