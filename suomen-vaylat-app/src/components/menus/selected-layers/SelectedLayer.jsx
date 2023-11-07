@@ -361,7 +361,7 @@ export const SelectedLayer = (
                                     handleOpenCQLFilteringModal(layer);
                                 }}
                             >
-                                <StyledFloatingSpan><FontAwesomeIcon icon={faFilter}  style={{ color: cqlFilters.length > 0 ? theme.colors.secondaryColor8 : theme.colors.primaryColor1 }}/></StyledFloatingSpan>
+                                <StyledFloatingSpan><FontAwesomeIcon icon={faFilter}  style={{ color: cqlFilters.filter(f => f.layer === layer.id).length > 0 ? theme.colors.secondaryColor8 : theme.colors.primaryColor1 }}/></StyledFloatingSpan>
                             </StyledIconWrapper> 
                         }
                     </StyledBottomContent>
