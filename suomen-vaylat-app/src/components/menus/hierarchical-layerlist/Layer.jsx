@@ -1,5 +1,8 @@
 import { useContext, useEffect, useState } from 'react';
 import { ReactReduxContext, useSelector } from 'react-redux';
+import { faFilter } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 import styled from 'styled-components';
 import {
     changeLayerStyle,
@@ -91,6 +94,11 @@ const StyledCheckboxContainer = styled.label`
   }
 `;
 
+const StyledFilterIcon = styled.div`
+  padding-right: 8px;
+  color: ${props => props.theme.colors.mainColor1};
+`;
+
 // Creates checkboxes that are used in CustomLayerList
 const Checkbox = ({ action, isChecked }) => {
   return (
@@ -139,6 +147,7 @@ export const Layer = ({ layer, theme, groupName }) => {
     const [themeSelected, setThemeSelected] = useState(false);
     const [isChecked, setIsChecked] = useState(false);
     const {isCustomFilterOpen} = useAppSelector(state => state.ui)
+    const isFilterable = typeof layer.config?.gfi?.filterFields !== "undefined" && layer.config?.gfi?.filterFields.length > 0 ;
 
     const {
         channel,
@@ -253,6 +262,11 @@ export const Layer = ({ layer, theme, groupName }) => {
                     </StyledLayerName>
                 </StyledlayerHeader>
                 {layer.metadataIdentifier && <LayerMetadataButton layer={layer}/>}
+                { isFilterable &&
+                  <StyledFilterIcon>
+                    <FontAwesomeIcon icon={faFilter} />
+                  </StyledFilterIcon>
+                }
                 {downloadLink && <LayerDownloadLinkButton
                     handleIsDownloadLinkModalOpen={handleIsDownloadLinkModalOpen} />
                 }
