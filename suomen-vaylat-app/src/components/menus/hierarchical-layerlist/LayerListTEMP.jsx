@@ -23,6 +23,7 @@ import {
   setIsCheckmark,
   setShowCustomLayerList,
   setCheckedLayer,
+  setSelectedCustomFilterLayers,
 } from "../../../state/slices/uiSlice";
 import Layer from "./Layer";
 
@@ -199,6 +200,7 @@ const LayerListTEMP = ({ groups, layers, tags }) => {
     store.dispatch(setCheckedLayer([]));
     store.dispatch(setShowSavedLayers(false));
     localStorage.removeItem("checkedLayers")
+    store.dispatch(setSelectedCustomFilterLayers([]));
   };
 
   return (
