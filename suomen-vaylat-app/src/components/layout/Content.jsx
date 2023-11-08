@@ -37,6 +37,7 @@ import {
   setActiveSelectionTool,
   setIsGfiToolsOpen,
   setIsCustomFilterOpen,
+  setUpdateCustomLayers,
   setIsCQLFilterModalOpen,
   setMinimizeCQLFilterModal,
   setMaximizeCQLFilterModal
@@ -74,7 +75,8 @@ import GFIDownload from "../gfi/GFIDownload";
 import MetadataModal from "../metadata-modal/MetadataModal";
 import { ANNOUNCEMENTS_LOCALSTORAGE } from "../../utils/constants";
 import ThemeMenu from "../menus/theme-menu/ThemeMenu";
-import { CustomLayerModal } from "../menus/hierarchical-layerlist/CustomLayerModal";
+
+import { CustomLayerModal } from "../menus/hierarchical-layerlist/CustomFilter/CustomLayerModal";
 import { CQLFilterModal } from "../filter/CQLFilterModal";
 
 const StyledContent = styled.div`
@@ -181,7 +183,6 @@ const Content = () => {
     shareUrl,
     isInfoOpen,
     isUserGuideOpen,
-    isCustomFilterOpen,
     isSaveViewOpen,
     isGfiOpen,
     isGfiDownloadOpen,
@@ -196,14 +197,14 @@ const Content = () => {
   const search = useAppSelector((state) => state.search);
   const { store } = useContext(ReactReduxContext);
   const isShareOpen = shareUrl && shareUrl.length > 0 ? true : false;
-  const downloadLink = useAppSelector((state) => state.ui.downloadLink);
+  let { downloadLink, isCustomFilterOpen, updateCustomLayer } = useAppSelector((state) => state.ui);
 
   const announcements = useAppSelector(
     (state) => state.rpc.activeAnnouncements
   );
   const metadata = useAppSelector((state) => state.rpc.layerMetadata);
 
-  let { channel } = useAppSelector((state) => state.rpc);
+  let { channel, selectedLayers } = useAppSelector((state) => state.rpc);
 
   const addToLocalStorageArray = (name, value) => {
     // Get the existing data
@@ -224,8 +225,16 @@ const Content = () => {
 
   const [currentAnnouncement, setCurrentAnnouncement] = useState(null);
 
-  const [isGfiDownloadToolsOpen, setIsGfiDownloadToolsOpen] = useState(false);
+    const handleCustomFilterClose = () => {
+        store.dispatch(setIsCustomFilterOpen(false));
+        //localStorage.removeItem("checkedLayers");
+        //store.dispatch(setIsSavedLayer(false));
+        //store.dispatch(setShowCustomLayerList(false));
+        store.dispatch(setUpdateCustomLayers(false));
+        //store.dispatch(setCheckedLayer([]));
+      };
 
+  const [isGfiDownloadToolsOpen, setIsGfiDownloadToolsOpen] = useState(false);
   const [isGfiToolsOpenLocal, setIsGfiToolsOpenLocal] = useState(false);
 
   const [downloadUuids, setDownloadUuids] = useState([]);
@@ -240,7 +249,6 @@ const Content = () => {
   useEffect(() => {
     setIsGfiToolsOpenLocal(isGfiToolsOpen);
   }, [isGfiToolsOpen]);
-
   const closeAnnouncement = (selected, id) => {
     if (selected) {
       addToLocalStorageArray(ANNOUNCEMENTS_LOCALSTORAGE, id);
@@ -262,10 +270,6 @@ const Content = () => {
 
   const handleCloseAppInfoModal = () => {
     store.dispatch(setIsInfoOpen(false));
-  };
-
-  const handleCustomFilterClose = () => {
-    store.dispatch(setIsCustomFilterOpen(false));
   };
 
   const handleCloseShareWebSite = () => {
@@ -507,7 +511,6 @@ const Content = () => {
     };
     ws.onmessage = function (evt) {
       let data = JSON.parse(evt.data);
-
       if (data.type === "BODY_SIZE_EXCEEDED") {
         store.dispatch(
           setWarning({
@@ -688,7 +691,7 @@ const Content = () => {
           constraintsRef={
             constraintsRef
           } /* Reference div for modal drag boundaries */
-          drag={false} /* Enable (true) or disable (false) drag */
+          drag={true} /* Enable (true) or disable (false) drag */
           resize={false}
           backdrop={true} /* Is backdrop enabled (true) or disabled (false) */
           fullScreenOnMobile={

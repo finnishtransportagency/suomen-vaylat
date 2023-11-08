@@ -5,16 +5,12 @@ import {
   changeLayerStyle,
   getLegends,
   setLegends,
-  setMapLayerVisibility,
-} from "../../../state/slices/rpcSlice";
-import { updateLayers } from "../../../utils/rpcUtil";
-import LayerDownloadLinkButton from "./LayerDownloadLinkButton";
+} from "../../../../state/slices/rpcSlice";
 import {
-  setIsDownloadLinkModalOpen,
   setSelectedCustomFilterLayers,
-} from "../../../state/slices/uiSlice";
-import LayerMetadataButton from "./LayerMetadataButton";
-import { useAppSelector } from "../../../state/hooks";
+} from "../../../../state/slices/uiSlice";
+import LayerMetadataButton from "../LayerMetadataButton";
+import { useAppSelector } from "../../../../state/hooks";
 
 const StyledLayerContainer = styled.li`
   background-color: ${(props) => props.themeStyle && "#F5F5F5"};
@@ -94,26 +90,34 @@ export const findGroupForLayer = (groups, layerId) => {
   return null;
 };
 
-export const Layer = ({ layer, theme, groupName }) => {
+export const FilterLayer = ({ layer, theme, groupName }) => {
   const { store } = useContext(ReactReduxContext);
   const [layerStyle, setLayerStyle] = useState(null);
   const [themeSelected, setThemeSelected] = useState(false);
+  const { isCustomFilterOpen, selectedCustomFilterLayers } = useAppSelector(
+    (state) => state.ui
+  );
+
   const { channel, selectedTheme } = useSelector((state) => state.rpc);
+
   const excludeGroups = ["Digiroad", "Tierekisteri (Poistuva)"];
 
-  const handleLayerVisibility = (channel, layer) => {
-      store.dispatch(setMapLayerVisibility(layer));
-      updateLayers(store, channel);
-  }
-
-  const handleIsDownloadLinkModalOpen = () => {
-    store.dispatch(
-      setIsDownloadLinkModalOpen({
-        layerDownloadLinkModalOpen: true,
-        layerDownloadLink: downloadLink,
-        layerDownloadLinkName: layer.name,
-      })
-    );
+  const handleLayerSelect = (layer) => {
+      // lisää valitut tasot väliaikaiseen arrayhyn
+      if (
+        selectedCustomFilterLayers.filter(
+          (selectedLayer) => selectedLayer.id === layer.id
+        ).length > 0
+      ) {
+        const filteredLayers = selectedCustomFilterLayers.filter(
+          (filterLayer) => filterLayer.id !== layer.id
+        );
+        store.dispatch(setSelectedCustomFilterLayers(filteredLayers));
+      } else {
+        store.dispatch(
+          setSelectedCustomFilterLayers([...selectedCustomFilterLayers, layer])
+        );
+      }
   };
 
   const updateLayerLegends = () => {
@@ -131,8 +135,13 @@ export const Layer = ({ layer, theme, groupName }) => {
   };
 
   useEffect(() => {
+    const checkedLayers = localStorage.getItem('checkedLayers');
+    checkedLayers && store.dispatch(
+        setSelectedCustomFilterLayers(JSON.parse(checkedLayers))
+      );
     // Clear the timeout when the component unmounts
     return () => clearTimeout(window.legendUpdateTimer);
+
   }, []);
 
   const themeStyle = theme || null;
@@ -166,6 +175,11 @@ export const Layer = ({ layer, theme, groupName }) => {
     downloadLink = layer.config.downloadLink;
   }
 
+  const isSelected =
+    selectedCustomFilterLayers.filter(
+      (selectedLayer) => selectedLayer.id === layer.id
+    ).length > 0;
+
   return (
     <StyledLayerContainer
       themeStyle={themeStyle}
@@ -182,18 +196,13 @@ export const Layer = ({ layer, theme, groupName }) => {
         </StyledLayerName>
       </StyledlayerHeader>
       {layer.metadataIdentifier && <LayerMetadataButton layer={layer} />}
-      {downloadLink && (
-        <LayerDownloadLinkButton
-          handleIsDownloadLinkModalOpen={handleIsDownloadLinkModalOpen}
-        />
-      )}
         <Switch
-          action={() => handleLayerVisibility(channel, layer)}
-          isSelected={layer.visible}
+          action={() => handleLayerSelect(layer)}
+          isSelected={isSelected}
           layer={layer}
         />
     </StyledLayerContainer>
   );
 };
 
-export default Layer;
+export default FilterLayer;

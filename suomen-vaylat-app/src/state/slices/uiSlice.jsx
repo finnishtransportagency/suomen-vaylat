@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { theme } from '../../theme/theme';
+import { act } from '@testing-library/react';
 
 const initialState = {
     isGfiToolsOpen: false,
@@ -18,6 +19,7 @@ const initialState = {
     geoJsonArray: [],
     isSavedOpen: false,
     savedTabIndex: 0,
+    isChecked: false,
     isUserGuideOpen: false,
     isCustomFilterOpen: false,
     isCQLFilterModalOpen: false,
@@ -49,6 +51,12 @@ const initialState = {
     markerLabel: '',
     activeGeometries: [],
     triggerUpdate: 0,
+    showCustomLayerList: false,
+    showSavedLayers: false,
+    updateCustomLayer: false,
+    checkedLayer:[],
+    isCheckmark: false,
+    selectedCustomFilterLayers: []
 };
 
 export const uiSlice = createSlice({
@@ -87,6 +95,9 @@ export const uiSlice = createSlice({
         },
         setIsSearchOpen: (state, action) => {
             state.isSearchOpen = action.payload;
+        },
+        setIsChecked: (state, action) => {
+            state.isChecked = action.payload;
         },
         setSearchParams: (state, action) => {
             state.searchParams = action.payload;
@@ -227,6 +238,24 @@ export const uiSlice = createSlice({
         incrementTriggerUpdate: state => {
             state.triggerUpdate += 1; // increment value
           },
+        setShowCustomLayerList: (state, action) => {
+            state.showCustomLayerList = action.payload;
+        },
+        setShowSavedLayers: (state, action) => {
+            state.showSavedLayers = action.payload;
+        },
+        setUpdateCustomLayers: (state, action) => {
+            state.updateCustomLayer = action.payload;
+          },
+          setCheckedLayer: (state, action) => {
+            state.checkedLayer = action.payload;
+          },
+          setIsCheckmark: (state, action) => {
+            state.isCheckmark = action.payload;
+          },
+          setSelectedCustomFilterLayers: (state, action) => {
+            state.selectedCustomFilterLayers = action.payload;
+          },
 
     },
 });
@@ -240,6 +269,7 @@ export const {
     setModalConstrainsRef,
     setIsSideMenuOpen,
     setIsSearchOpen,
+    setIsChecked,
     setSearchParams,
     setIsThemeMenuOpen,
     setIsMoreSearchOpen,
@@ -277,7 +307,13 @@ export const {
     addToActiveGeometries,
     removeActiveGeometry,
     setIsGfiToolsOpen,
-    incrementTriggerUpdate
+    incrementTriggerUpdate,
+    setShowCustomLayerList,
+    setShowSavedLayers,
+    setUpdateCustomLayers,
+    setCheckedLayer,
+    setIsCheckmark,
+    setSelectedCustomFilterLayers
 } = uiSlice.actions;
 
 export default uiSlice.reducer;
