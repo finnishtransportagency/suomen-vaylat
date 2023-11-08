@@ -13,14 +13,14 @@ import ReactTooltip from "react-tooltip";
 
 const StyledLegendContainer = styled(motion.div)`
     position: absolute;
-    top: 0px;
+    top: 15px;
     right: 100%;
     border-radius: 4px;
     margin-right: 8px;
     height: 100%;
     min-width: 350px;
     max-width: 450px;
-    max-height: ${props => props.height && props.height+"px"};
+    max-height: 100%;
     display: flex;
     flex-direction: column;
     background: ${props => props.theme.colors.mainWhite};
