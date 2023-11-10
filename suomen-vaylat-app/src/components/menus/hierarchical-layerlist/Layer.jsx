@@ -2,6 +2,9 @@ import { useContext, useEffect, useState } from 'react';
 import { ReactReduxContext, useSelector } from 'react-redux';
 import { faFilter } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { theme, isMobile } from '../../../theme/theme';
+import ReactTooltip from "react-tooltip";
+import strings from '../../../translations';
 
 import styled from 'styled-components';
 import {
@@ -140,7 +143,7 @@ export const findGroupForLayer = (groups, layerId) => {
     return null;
 };
 
-export const Layer = ({ layer, theme, groupName }) => {
+export const Layer = ({ layer, groupName }) => {
 
     const { store } = useContext(ReactReduxContext);
     const [layerStyle, setLayerStyle] = useState(null);
@@ -263,9 +266,22 @@ export const Layer = ({ layer, theme, groupName }) => {
                 </StyledlayerHeader>
                 {layer.metadataIdentifier && <LayerMetadataButton layer={layer}/>}
                 { isFilterable &&
-                  <StyledFilterIcon>
+                  <>
+                    <ReactTooltip
+                    backgroundColor={theme.colors.mainColor1}
+                    textColor={theme.colors.mainWhite}
+                    disable={isMobile}
+                    id="filterableLayer"
+                    place="top"
+                    type="dark"
+                    effect="float"
+                  >
+                    <span>{strings.tooltips.layerlist.filterable}</span>
+                  </ReactTooltip>
+                  <StyledFilterIcon data-tip data-for={"filterableLayer"}>
                     <FontAwesomeIcon icon={faFilter} />
                   </StyledFilterIcon>
+                  </>
                 }
                 {downloadLink && <LayerDownloadLinkButton
                     handleIsDownloadLinkModalOpen={handleIsDownloadLinkModalOpen} />
