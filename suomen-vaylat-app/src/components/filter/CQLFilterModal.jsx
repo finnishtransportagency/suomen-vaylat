@@ -184,10 +184,9 @@ const StyledTrashIconWrapper = styled.div`
   }
 `;
 
-export const CQLFilterModal = () => {
+export const CQLFilterModal = ({cqlFilterInfo}) => {
   const {
     cqlFilters,
-    cqlFilteringInfo,
     channel,
   } = useAppSelector((state) => state.rpc);
   const { store } = useContext(ReactReduxContext);
@@ -219,14 +218,13 @@ export const CQLFilterModal = () => {
     }
     const type = propValue.type;
     const oper = type === "date" ? "date" : operatorValue.value;
-    const layer = cqlFilteringInfo?.layer?.id;
+    const layer = cqlFilterInfo?.layer?.id;
 
     if (!prop || !value) {
       //lisää popup varoitus
       return;
     }
-    store.dispatch(
-      setCQLFilters([
+    const updatedCQLFilters = [
         ...cqlFilters,
         {
           layer: layer,
@@ -235,7 +233,11 @@ export const CQLFilterModal = () => {
           value: value,
           type: type,
         },
-      ])
+      ]
+
+    updateFiltersOnMap(updatedCQLFilters);
+    store.dispatch(
+      setCQLFilters(updatedCQLFilters)
     );
     setStartDate(null);
     setEndDate(null);
@@ -267,7 +269,7 @@ export const CQLFilterModal = () => {
   };
 
   useEffect(() => {
-    var layer = cqlFilteringInfo?.layer;
+    var layer = cqlFilterInfo?.layer;
     channel.getFieldNameLocales(
       [layer?.id],
       (data) => {
@@ -282,57 +284,50 @@ export const CQLFilterModal = () => {
   const [activeFilters, setActiveFilters] = useState();
 
   useEffect(() => {
-    if (cqlFilteringInfo && cqlFilteringInfo?.layer && cqlFilters) {
+    if (cqlFilterInfo && cqlFilterInfo?.layer && cqlFilters) {
       const updatedActivefilters = cqlFilters.filter(
-        (filter) => filter.layer === cqlFilteringInfo?.layer.id
+        (filter) => filter.layer === cqlFilterInfo?.layer?.id
       );
       setActiveFilters(updatedActivefilters);
     }
-  }, [cqlFilters, cqlFilteringInfo]);
+  }, [cqlFilters, cqlFilterInfo]);
 
-const useDidMountEffect = (func, deps) => {
-    const didMount = useRef(false);
-
-    useEffect(() => {
-        if (didMount.current) func();
-        else didMount.current = true;
-    }, deps);
-}
  
-useDidMountEffect(() => {
-    let filters = "";
-    cqlFilters && cqlFilters.forEach((filter, index) => {
-        var cqlFilter = filter.type === 'string' ? 
-        getCQLStringPropertyOperator(filter.property, filter.operator, filter.value)
-        :
-        getCQLNumberPropertyOperator(filter.property, filter.operator, filter.value);
-        index === 0 ? filters += cqlFilter : filters += " AND " + cqlFilter;
-    })
+const updateFiltersOnMap = (updatedCQLFilters) => {
+        let filters = "";
+        updatedCQLFilters && updatedCQLFilters.filter(f => f.layer === cqlFilterInfo?.layer?.id).forEach((filter, index) => {
+            var cqlFilter = filter.type === 'string' ? 
+            getCQLStringPropertyOperator(filter.property, filter.operator, filter.value)
+            :
+            getCQLNumberPropertyOperator(filter.property, filter.operator, filter.value);
+            index === 0 ? filters += cqlFilter : filters += " AND " + cqlFilter;
+        })
 
-    if (filters.length > 0) {
-        channel && channel.postRequest(
-        'MapModulePlugin.MapLayerUpdateRequest',
-        [cqlFilteringInfo.layer.id, true, { 'CQL_FILTER': filters }]
-        );
-    } else {
-        cqlFilteringInfo.layer && channel && channel.postRequest(
+        if (filters.length > 0) {
+            channel && channel.postRequest(
             'MapModulePlugin.MapLayerUpdateRequest',
-            [cqlFilteringInfo.layer.id, true, { 'CQL_FILTER': null }]
+            [cqlFilterInfo.layer.id, true, { 'CQL_FILTER': filters }]
             );
-    }
-  }, [cqlFilters]);
+        } else {
+            cqlFilterInfo.layer && channel && channel.postRequest(
+                'MapModulePlugin.MapLayerUpdateRequest',
+                [cqlFilterInfo.layer.id, true, { 'CQL_FILTER': null }]
+                );
+        }
+};
 
-  const handleRemoveFilter = (filter) => {
+const handleRemoveFilter = (filter) => {
     if (cqlFilters && cqlFilters.length > 0 && cqlFilters.includes(filter)) {
       const updatedFilters = cqlFilters.filter(
         (existingFilter) => existingFilter !== filter
       );
+      updateFiltersOnMap(updatedFilters)
       store.dispatch(setCQLFilters(updatedFilters));
     }
   };
 
-  const filterOptions = () => {
-    var layer = cqlFilteringInfo?.layer;
+const filterOptions = () => {
+    var layer = cqlFilterInfo?.layer;
     const options = layer?.filterColumnsArray.map((column) => {
       if (Object.keys(fieldNameLocales).length > 0) {
         return {
@@ -348,6 +343,7 @@ useDidMountEffect(() => {
         };
       }
     });
+
     return options;
   };
 

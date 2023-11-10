@@ -81,6 +81,30 @@ const StyledFilterActionButton = styled(motion.div)`
     z-index:100;
 `;
 
+const StyledCQLLeftContent = styled.div`
+    height: 100%;
+    display: flex;
+    align-items: center;
+    max-width: 70%;
+    overflow: hidden;
+`;
+
+const StyledCQLRightContent = styled.div`
+    height: 100%;
+    display: flex;
+    align-items: center;
+    max-width: 40%;
+`;
+
+const StyledCQLText = styled.div`
+    font-size: 14px;
+    font-weight: 600;
+    user-select: none;
+    @media ${props => props.theme.device.mobileL} {
+        font-size: 12px;
+    };
+`;
+
 const StyledLeftContent = styled.div`
     height: 100%;
     display: flex;
@@ -204,7 +228,8 @@ const addFeaturesToMapParams =
     };
 
 const ActionButtons = ({
-    closeAction
+    closeAction,
+    closeActionCQL
 }) => {
 
     const { store } = useContext(ReactReduxContext);
@@ -246,6 +271,13 @@ const ActionButtons = ({
         }
         setActiveGeometries(!activeGeometries);
     };
+
+    // Get titles of filtered layers
+    var cqlInfoTitle = "";
+    cqlFilteringInfo.forEach((fil, index) => {
+        const title = fil.layer.title.length > 10 ? fil.layer.title.substring(0, 10) + '... ' : fil.layer.title;
+        index === 0 ? cqlInfoTitle += title : cqlInfoTitle += ", " + title
+    })
 
     return (
             <StyledContent>
@@ -331,7 +363,7 @@ const ActionButtons = ({
 
                             </StyledActionButton>
                         }
-                        { minimizeCQLFilter &&
+                        { minimizeCQLFilter.minimized &&
 
                             <StyledFilterActionButton
                                 key="filter_action_button"
@@ -344,30 +376,32 @@ const ActionButtons = ({
                                     type: "tween"
                                 }}
                             >
-                                <StyledLeftContent>
+                                <StyledCQLLeftContent>
                                     <StyledActionButtonIcon>
                                         <FontAwesomeIcon
                                             icon={faFilter}
                                         />
                                     </StyledActionButtonIcon>
-                                    <StyledActionButtonText>{cqlFilteringInfo?.layer?.title}</StyledActionButtonText>
-                                </StyledLeftContent>
-                                <StyledRightContent>
+                                    <StyledCQLText>
+                                    {cqlInfoTitle}
+                                    </StyledCQLText>
+                                </StyledCQLLeftContent>
+                                <StyledCQLRightContent>
                                     <StyledExpandButton
-                                        onClick={() => store.dispatch(setMinimizeCQLFilterModal(false))}
+                                        onClick={() => store.dispatch(setMinimizeCQLFilterModal({minimized: false}))}
                                     >
                                         <FontAwesomeIcon
                                             icon={faExpand}
                                         />
                                     </StyledExpandButton>
                                     <StyledActionButtonClose
-                                        onClick={() => closeAction()}
+                                        onClick={() => closeActionCQL()}
                                     >
                                         <FontAwesomeIcon
                                             icon={faTimes}
                                         />
                                     </StyledActionButtonClose>
-                                </StyledRightContent>
+                                </StyledCQLRightContent>
 
                             </StyledFilterActionButton>
                         }
