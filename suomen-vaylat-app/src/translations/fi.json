@@ -10,6 +10,7 @@
   "tooltips": {
     "layerlist": {
       "filter": "Suodata",
+      "filterable": "Suodatettava taso",
       "opacity": "Opasiteetti"
     },
     "search": "Haku",

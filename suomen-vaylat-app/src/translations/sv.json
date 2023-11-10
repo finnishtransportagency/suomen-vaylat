@@ -10,6 +10,7 @@
   "tooltips": {
     "layerlist": {
       "filter": "Filtrera",
+      "filterable": "Filtrerbart kartlager",
       "opacity": "Opacitet"
     },
     "search": "Sökning",

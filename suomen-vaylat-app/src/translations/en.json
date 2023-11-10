@@ -10,6 +10,7 @@
   "tooltips": {
     "layerlist": {
       "filter": "Filter",
+      "filterable": "Filterable layer",
       "opacity": "Opacity"
     },
     "search": "Search",
