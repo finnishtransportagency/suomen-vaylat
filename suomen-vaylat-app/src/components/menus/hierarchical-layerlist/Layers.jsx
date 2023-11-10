@@ -1,12 +1,12 @@
 import Layer from './Layer';
 import strings from '../../../translations';
 import { findGroupForLayer } from './Layer';
+import { theme } from '../../../theme/theme';
 
 export const Layers = ({
     layers,
     groups = [],
     isOpen,
-    theme,
     isSelected
 }) => {
     const currentLang = strings.getLanguage();
@@ -23,7 +23,6 @@ export const Layers = ({
                         isOpen={isOpen}
                         groupName={matchingGroup}
                         index={index}
-                        theme={theme}
                         isSelected={isSelected}
                     />
             )})}
