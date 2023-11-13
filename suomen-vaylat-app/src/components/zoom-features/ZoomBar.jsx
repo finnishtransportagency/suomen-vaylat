@@ -18,7 +18,7 @@ import ZoomBarCircle from './ZoomBarCircle';
 import { Legend } from '../legend/Legend';
 
 const StyledZoomBarContainer = styled.div`
-    z-index: 1;
+    z-index: 5;
     position: relative;
     pointer-events: none;
     cursor: pointer;
