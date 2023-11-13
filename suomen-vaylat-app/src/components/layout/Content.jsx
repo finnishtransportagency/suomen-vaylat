@@ -987,6 +987,7 @@ const Content = () => {
           maximizable={true}
           minimizeAction={() => store.dispatch(setMinimizeCQLFilterModal({minimized: !minimizeCQLFilter.minimized}))}
           maximizeAction={() => store.dispatch(setMaximizeCQLFilterModal(!maximizeCQLFilter))}
+          maxWidth={maximizeCQLFilter ? null : "40em"}
           minWidth={"25em"}
           minHeight={"30em"}
           overflow={"auto"}
