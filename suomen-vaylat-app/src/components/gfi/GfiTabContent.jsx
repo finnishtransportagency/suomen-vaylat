@@ -145,37 +145,37 @@ const GfiTabContent = ({ data, title, tablePropsInit }) => {
   return (
     <>
       <StyledSelectedTabHeader>
-        <ReactTooltip
-          backgroundColor={theme.colors.mainColor1}
-          textColor={theme.colors.mainWhite}
-          disable={isMobile}
-          id={"gfiFilter"}
-          place="bottom"
-          type="dark"
-          effect="float"
-        >
-          <span>{strings.gfifiltering.filter}</span>
-        </ReactTooltip>
         <StyledSelectedTabTitle>
           <p>{title.toUpperCase()}</p>
         </StyledSelectedTabTitle>
-        <StyledSelectedTabDisplayOptionsButton
-          onClick={() =>
-            store.dispatch(
-              setFilteringInfo({
-                modalOpen: true,
-                layer: {
-                  id: data.layerId,
-                  title: title,
-                  tableProps: tablePropsInit,
-                },
-              })
-            )
-          }
-          data-tip
-          data-for={"gfiFilter"}
-        >
-          {isFiltering && (
+        {isFiltering && (
+          <StyledSelectedTabDisplayOptionsButton
+            onClick={() =>
+              store.dispatch(
+                setFilteringInfo({
+                  modalOpen: true,
+                  layer: {
+                    id: data.layerId,
+                    title: title,
+                    tableProps: tablePropsInit,
+                  },
+                })
+              )
+            }
+            data-tip
+            data-for={"gfiFilter"}
+          >
+            <ReactTooltip
+              backgroundColor={theme.colors.mainColor1}
+              textColor={theme.colors.mainWhite}
+              disable={isMobile}
+              id={"gfiFilter"}
+              place="bottom"
+              type="dark"
+              effect="float"
+            >
+              <span>{strings.gfifiltering.filter}</span>
+            </ReactTooltip>   
             <FontAwesomeIcon
               icon={faFilter}
               style={{
@@ -185,17 +185,8 @@ const GfiTabContent = ({ data, title, tablePropsInit }) => {
                     : theme.colors.mainColor1,
               }}
             />
-          )}
-          {filteringInfo?.title && filters && activeFilteringOnLayer() && (
-            <FontAwesomeIcon
-              icon={faExclamation}
-              style={{
-                color: "red",
-                marginLeft: "10px",
-              }}
-            />
-          )}
-        </StyledSelectedTabDisplayOptionsButton>
+          </StyledSelectedTabDisplayOptionsButton>
+        )}
         <StyledSelectedTabDisplayOptionsButton
           onClick={() => setShowDataTable(!showDataTable)}
         >
