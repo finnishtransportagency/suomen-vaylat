@@ -297,7 +297,6 @@ const Content = () => {
   };
 
   const handleCloseCQLFilterModal = () => {
-    console.log("??+")
     // reset map
     cqlFilteringInfo.forEach(filteringInfo => {
       cqlFilters.length > 0 && filteringInfo.layer && channel && channel.postRequest(

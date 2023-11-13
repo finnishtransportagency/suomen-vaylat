@@ -7,11 +7,10 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ReactReduxContext } from "react-redux";
 import styled from "styled-components";
-import strings from "../../translations";
 import { useAppSelector } from "../../state/hooks";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { FreeMode, Controller } from "swiper";
-import { theme, isMobile } from "../../theme/theme";
+import { isMobile } from "../../theme/theme";
 import { CQLFilterModal } from "./CQLFilterModal";
 import { setCQLFilteringInfo } from "../../state/slices/rpcSlice";
 
@@ -121,12 +120,9 @@ const StyledTabContent = styled.div`
 export const ModalContainer = ({}) => {
   // GET ALL FILTERS WITH LAYER AND MAP THEM BY LAYER TO RETURN CQLFILTERMODAL
   const [selectedTab, setSelectedTab] = useState(0);
-  const [tabsContent, setTabsContent] = useState([]);
   const {
-    cqlFilters,
     cqlFilteringInfo,
     allLayers,
-    channel,
   } = useAppSelector((state) => state.rpc);
   const {
     minimizeCQLFilter
@@ -145,7 +141,7 @@ export const ModalContainer = ({}) => {
 
   // open the right tab when clicked on a layers filter button in selected layers
   useEffect(() => {
-    if (!minimizeCQLFilter.minimized) {
+    if (!minimizeCQLFilter.minimized && minimizeCQLFilter.layer) {
         const index = cqlFilteringInfo.findIndex(f => f.layer.id === minimizeCQLFilter.layer)
         gfiInputEl.current.swiper.slideTo(index);
     }
@@ -191,7 +187,6 @@ export const ModalContainer = ({}) => {
             onSwiper={setGfiTabsSwiper}
             controller={{ control: gfiTabsSwiper }}
             onSnapGridLengthChange={(e) => {
-                console.log(e.snapGrid.length)
               setGfiTabsSnapGridLength(e.snapGrid.length)}
             }
           >
