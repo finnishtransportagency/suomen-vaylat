@@ -143,7 +143,7 @@ export const findGroupForLayer = (groups, layerId) => {
     return null;
 };
 
-export const Layer = ({ layer, groupName }) => {
+export const Layer = ({ layer, themeName, groupName }) => {
 
     const { store } = useContext(ReactReduxContext);
     const [layerStyle, setLayerStyle] = useState(null);
@@ -228,7 +228,7 @@ export const Layer = ({ layer, groupName }) => {
         return () => clearTimeout(window.legendUpdateTimer);
       }, []);
 
-    const themeStyle = theme || null;
+    const themeStyle = themeName || null;
 
     if (selectedTheme && selectedTheme.name && themeSelected === false) {
         setThemeSelected(true);
@@ -255,7 +255,7 @@ export const Layer = ({ layer, groupName }) => {
             <StyledLayerContainer
                 themeStyle={themeStyle}
                 className={`list-layer ${layer.visible && "list-layer-active"}`}
-                key={'layer' + layer.id + '_' + theme}
+                key={'layer' + layer.id + '_' + themeName}
             >
                 <StyledlayerHeader>
                     <StyledLayerName

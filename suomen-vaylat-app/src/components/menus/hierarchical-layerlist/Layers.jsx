@@ -6,6 +6,7 @@ import { theme } from '../../../theme/theme';
 export const Layers = ({
     layers,
     groups = [],
+    themeName,
     isOpen,
     isSelected
 }) => {
@@ -18,12 +19,13 @@ export const Layers = ({
                 const matchingGroup = groupObj ? groupObj.locale[currentLang].name : 'Unknown';
                 return (
                     <Layer
-                        key={layer.id + '_' + theme}
+                        key={layer.id + '_' + themeName}
                         layer={layer} 
                         isOpen={isOpen}
                         groupName={matchingGroup}
                         index={index}
                         isSelected={isSelected}
+                        themeName={themeName}
                     />
             )})}
         </>
