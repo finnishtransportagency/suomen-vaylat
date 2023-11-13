@@ -193,6 +193,7 @@ export const CQLFilterModal = ({cqlFilterInfo}) => {
   const [operatorValue, setOperatorValue] = useState({});
   const [filterValue, setFilterValue] = useState({ value: "", type: null });
   const [propValue, setPropValue] = useState({});
+  const [filterOptions, setFilterOptions] = useState([]);
   const [fieldNameLocales, setFieldNameLocales] = useState({});
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
@@ -281,6 +282,30 @@ export const CQLFilterModal = ({cqlFilterInfo}) => {
     );
   }, []);
 
+  useEffect(() => {
+    var layer = cqlFilterInfo?.layer;
+    const options = layer?.filterColumnsArray.map((column) => {
+      if (Object.keys(fieldNameLocales).length > 0) {
+        const props = {
+          value: column.key,
+          label: fieldNameLocales[column.title],
+          type: column.type
+        };
+        column.default && handleSetPropValue(props)
+        return props;
+      } else {
+        const props = {
+          value: column.key,
+          label: column.title,
+          type: column.type
+        };
+        column.default && handleSetPropValue(props)
+        return props;
+      }
+    });
+    setFilterOptions(options);
+  }, [fieldNameLocales]);
+
   const [activeFilters, setActiveFilters] = useState();
 
   useEffect(() => {
@@ -333,35 +358,15 @@ const handleRemoveFilter = (filter) => {
     }
   };
 
-const filterOptions = () => {
-    var layer = cqlFilterInfo?.layer;
-    const options = layer?.filterColumnsArray.map((column) => {
-      if (Object.keys(fieldNameLocales).length > 0) {
-        return {
-          value: column.key,
-          label: fieldNameLocales[column.title],
-          type: column.type,
-        };
-      } else {
-        return {
-          value: column.key,
-          label: column.title,
-          type: column.type,
-        };
-      }
-    });
-
-    return options;
-  };
-
   return (
     <StyledModalContainer>
       <StyledModalSelectionContainer>
         <StyledModalFloatingChapter>
           <Dropdown
-            options={filterOptions()}
+            options={filterOptions}
             placeholder={strings.gfifiltering.placeholders.chooseProp}
             value={propValue}
+            defaultProperty={[cqlFilterInfo?.layer.defaultFilterProperty]}
             setValue={(value) => handleSetPropValue(value)}
             isDisabled={false}
           />

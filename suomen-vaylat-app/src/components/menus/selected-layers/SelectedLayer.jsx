@@ -236,6 +236,7 @@ export const SelectedLayer = (
                   key: column.field,
                   title: column.field,
                   type: column.type,
+                  default: column.default || false
                 });
               }
             });
@@ -246,7 +247,7 @@ export const SelectedLayer = (
                 layer: {
                   id: layer.id,
                   title: layer.name,
-                  filterColumnsArray: filterColumnsArray,
+                  filterColumnsArray: filterColumnsArray
                 }
             }
             )
