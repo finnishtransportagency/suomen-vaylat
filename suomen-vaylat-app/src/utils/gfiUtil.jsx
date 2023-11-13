@@ -33,6 +33,18 @@ export const getCQLStringPropertyOperator = (property, operator, value) => {
   }
 };
 
+// string arvot
+export const getCQLDatePropertyOperator = (property, value) => {
+  var options = { year: 'numeric', month: 'long', day: 'numeric' };
+  if (value.start && value.end) {
+    return "strToLowerCase(" + property + ")" + " > " + "dateParse('MMM d, yyyy','" + value.start.toLocaleDateString("en-EN", options) + "')" + " AND " + "strToLowerCase(" + property + ")" + " < " + "dateParse('MMM d, yyyy','" + value.end.toLocaleDateString("en-EN", options) + "')"
+  } else if (value.start && !value.end) {
+    return "strToLowerCase(" + property + ")" + " > " + "dateParse('MMM d, yyyy','" + value.start.toLocaleDateString("en-EN", options) + "')" ;
+  } else if (!value.start && value.end) {
+    return "strToLowerCase(" + property + ")" + " < " + "dateParse('MMM d, yyyy','" + value.end.toLocaleDateString("en-EN", options) + "')" ;
+  }
+};
+
 // number arvot
 export const getCQLNumberPropertyOperator = (property, operator, value) => {
   switch (operator) {

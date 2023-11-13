@@ -251,13 +251,14 @@ export const ModalContainer = ({}) => {
                 handleSelectTab(e.activeIndex);
             }}
             tabIndex={selectedTab}
-            allowTouchMove={true} // Disable swiping
+            allowTouchMove={isMobile} // Disable swiping
             speed={300}
             >
             {cqlFilteringInfo.map((filterInfo) => {
                 
                 return (
                     <SwiperSlide
+                    style={{width: "20em"}}
                     id={"cql_tab_content_" + filterInfo?.layer?.id}
                     key={"cql_tab_content_" + filterInfo?.layer?.id}
                     >

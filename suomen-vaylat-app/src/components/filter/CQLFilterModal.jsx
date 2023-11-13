@@ -6,7 +6,7 @@ import "dayjs/locale/fi";
 import "dayjs/locale/sv";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 
-import { getCQLStringPropertyOperator, getCQLNumberPropertyOperator } from "../../utils/gfiUtil"
+import { getCQLStringPropertyOperator, getCQLNumberPropertyOperator, getCQLDatePropertyOperator } from "../../utils/gfiUtil"
 
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
@@ -292,14 +292,21 @@ export const CQLFilterModal = ({cqlFilterInfo}) => {
     }
   }, [cqlFilters, cqlFilterInfo]);
 
- 
+  const getPropertyOperator = (filter) => {
+    switch (filter.type) {
+      case "string":
+        return getCQLStringPropertyOperator(filter.property, filter.operator, filter.value)
+      case "number":
+        return getCQLNumberPropertyOperator(filter.property, filter.operator, filter.value);
+      case "date":
+        return getCQLDatePropertyOperator(filter.property, filter.value);
+  };
+}
+
 const updateFiltersOnMap = (updatedCQLFilters) => {
         let filters = "";
         updatedCQLFilters && updatedCQLFilters.filter(f => f.layer === cqlFilterInfo?.layer?.id).forEach((filter, index) => {
-            var cqlFilter = filter.type === 'string' ? 
-            getCQLStringPropertyOperator(filter.property, filter.operator, filter.value)
-            :
-            getCQLNumberPropertyOperator(filter.property, filter.operator, filter.value);
+            var cqlFilter = getPropertyOperator(filter);
             index === 0 ? filters += cqlFilter : filters += " AND " + cqlFilter;
         })
 
