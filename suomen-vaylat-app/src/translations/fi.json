@@ -284,6 +284,10 @@
     "appCode": {
       "appCodeInfo": "Käyttöehtojen mukaisesti sovelluksen lähdekoodit ovat hyödynnettävissä osoitteesta: ",
       "appCodeLink": "https://github.com/finnishtransportagency/suomen-vaylat"
+    },
+    "googleTerms": {
+      "googleTermsInfo": "Google-karttapalveluiden käyttöehdot: ",
+      "googleTermsLink": "https://cloud.google.com/maps-platform/terms"
     }
   },
   "search": {

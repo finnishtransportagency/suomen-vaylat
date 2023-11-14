@@ -284,6 +284,10 @@
     "appCode": {
       "appCodeInfo": "In accordance to the terms of use the source codes of the application are available here:",
       "appCodeLink": "https://github.com/finnishtransportagency/suomen-vaylat"
+    },
+    "googleTerms": {
+      "googleTermsInfo": "Terms of use for Google map services: ",
+      "googleTermsLink": "https://cloud.google.com/maps-platform/terms"
     }
   },
   "search": {
