@@ -41,7 +41,6 @@ import { isValidUrl } from "../../utils/validUrlUtil";
 import { theme, isMobile } from "../../theme/theme";
 import { filterFeature } from "../../utils/gfiUtil";
 import { SortingMode, PagingPosition } from "ka-table/enums";
-import ExitConfirmationModal from "../modals/ExitConfirmationModal";
 
 // Max amount of features that wont trigger react-data-table-component
 const GFI_MAX_LENGTH = 5;
@@ -439,16 +438,33 @@ export const GFIPopup = ({ handleGfiDownload }) => {
     const dontShow = JSON.parse(localStorage.getItem('dontShowModal'));
     if (!dontShow) {
       event.preventDefault();
-      setIsModalOpen(true);
+      const savedState = localStorage.getItem("GoogleStreetViewWarn");
+      if (!savedState) {
+        store.dispatch(setWarning({
+        title: strings.exitConfirmation,
+        subtitle: null,
+        confirm: {
+            text: strings.general.continue,
+            action: () => {
+              window.open("http://maps.google.com/maps?q=&layer=c&cbll=" + point, "_blank");
+              store.dispatch(setWarning(null));
+            }
+        },
+        cancel: {
+            text: strings.general.cancel,
+            action: () => {
+              store.dispatch(setWarning(null))
+            }
+        },
+        dontShowAgain: {
+          id: "GoogleStreetViewWarn"
+        }
+        }))
+      } else {
+        window.open("http://maps.google.com/maps?q=&layer=c&cbll=" + point, "_blank");
+      }
     }
   };
-
-  const handleConfirmLeave = () => {
-    setIsModalOpen(false);
-
-    window.open("http://maps.google.com/maps?q=&layer=c&cbll=" + point, "_blank");
-  };
-  
 
   useEffect(() => {
     if (!isGfiToolsOpen && activeSelectionTool !== null)
@@ -955,11 +971,6 @@ export const GFIPopup = ({ handleGfiDownload }) => {
             </div>
           </StyledCoordinatesWrapper>
         )}
-        <ExitConfirmationModal
-        isOpen={isModalOpen}
-        onRequestClose={() => setIsModalOpen(false)}
-        onConfirm={handleConfirmLeave}
-      />
         {vkmData &&
         vkmData.vkm._orderHigh &&
         vkmData.vkm._orderHigh.filter((value) => value !== "kuntanimi").length >

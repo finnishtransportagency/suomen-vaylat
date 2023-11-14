@@ -1,7 +1,9 @@
 import styled from 'styled-components';
+import {useEffect, useState} from "react";
+import strings from "../../translations";
 
 const StyledWarningModalContainer = styled.div`
-    padding: 16px;
+    padding: 32px 32px 16px 32px;
     color: ${props => props.theme.colors.mainColor1};
 `;
 
@@ -16,7 +18,9 @@ const StyledWarningSubtitle = styled.p`
 const StyledWarningButtonsContainer = styled.div`
     display: flex;
     justify-content: space-around;
+    align-items: baseline;
     padding: 18px;
+    border-top: 1px solid #dee2e6;
 `;
 
 const StyledActionButton = styled.button`
@@ -27,7 +31,7 @@ const StyledActionButton = styled.button`
     align-items: center;
     cursor: pointer;
     background-color: ${props => props.theme.colors.mainColor1};
-    border-radius: 4px;
+    border-radius: 30px;
     padding: 8px 0px 8px 0px;
     box-shadow: 0px 3px 6px 0px rgba(0,0,0,0.16);
     border: none;
@@ -35,13 +39,35 @@ const StyledActionButton = styled.button`
     padding: 8px 16px 8px 16px;
 `;
 
+const CheckboxContainer = styled.div`
+    margin-bottom: 10px;
+    input[type="checkbox"] {
+      margin-right: 10px;
+  }
+  `;
+
 const WarningModalContent = ({
     warning
 }) => {
+    const [dontShowAgain, setDontShowAgain] = useState(false);
+
+    const handleConfirm = (event) => {
+        event.preventDefault();
+        dontShowAgain && localStorage.setItem(warning.dontShowAgain.id, JSON.stringify(dontShowAgain));
+        warning.confirm.action();
+    };
+
     return <StyledWarningModalContainer>
         <StyledWarningTitle>{warning.title && warning.title}</StyledWarningTitle>
         <StyledWarningSubtitle>{warning.subtitle && warning.subtitle}</StyledWarningSubtitle>
         <StyledWarningButtonsContainer>
+            {  warning.dontShowAgain &&
+                <CheckboxContainer>
+                    <input type="checkbox" id="dontShowAgain" checked={dontShowAgain} onChange={() => setDontShowAgain(!dontShowAgain)}/>
+                    <label for="dontShowAgain">{strings.general.dontShowAgain}</label>
+
+                </CheckboxContainer>
+            }
             {
                 warning.cancel &&
                 <StyledActionButton
@@ -53,7 +79,7 @@ const WarningModalContent = ({
             {
                 warning.confirm &&
                 <StyledActionButton
-                    onClick={() => warning.confirm.action()}
+                    onClick={handleConfirm}
                 >
                      {warning.confirm.text}
                 </StyledActionButton>
