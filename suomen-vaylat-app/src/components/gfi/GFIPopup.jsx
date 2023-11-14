@@ -432,6 +432,39 @@ export const GFIPopup = ({ handleGfiDownload }) => {
   const [gfiTabsSnapGridLength, setGfiTabsSnapGridLength] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const gfiInputEl = useRef(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleLinkClick = (event) => {
+    const dontShow = JSON.parse(localStorage.getItem('dontShowModal'));
+    if (!dontShow) {
+      event.preventDefault();
+      const savedState = localStorage.getItem("GoogleStreetViewWarn");
+      if (!savedState) {
+        store.dispatch(setWarning({
+        title: strings.exitConfirmation,
+        subtitle: null,
+        confirm: {
+            text: strings.general.continue,
+            action: () => {
+              window.open("http://maps.google.com/maps?q=&layer=c&cbll=" + point, "_blank");
+              store.dispatch(setWarning(null));
+            }
+        },
+        cancel: {
+            text: strings.general.cancel,
+            action: () => {
+              store.dispatch(setWarning(null))
+            }
+        },
+        dontShowAgain: {
+          id: "GoogleStreetViewWarn"
+        }
+        }))
+      } else {
+        window.open("http://maps.google.com/maps?q=&layer=c&cbll=" + point, "_blank");
+      }
+    }
+  };
 
   useEffect(() => {
     if (!isGfiToolsOpen && activeSelectionTool !== null)
@@ -917,6 +950,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
                 href={"http://maps.google.com/maps?q=&layer=c&cbll=" + point}
                 rel="noreferrer"
                 target="_blank"
+                onClick={handleLinkClick}
               >
                 <FontAwesomeIcon icon={faStreetView} />
                 <span style={{ fontSize: "14px", marginLeft: ".5em" }}>

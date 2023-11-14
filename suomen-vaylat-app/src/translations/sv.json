@@ -150,6 +150,7 @@
   "bodySizeWarning": "Beskärning geometrin är för stor, begränsa till en mindre yta.",
   "bodySizeWarningTemporary": "Geometry is too big and data cannot be fetched right now.",
   "noGfiLocationsWarning": "No results found, try another geometry.",
+  "exitConfirmation": "Du lämnar tjänsten Suomen Väylät. Vill du fortsätta?",
   "appGuide": {
     "title": "Användarguide",
     "modalContent": {
