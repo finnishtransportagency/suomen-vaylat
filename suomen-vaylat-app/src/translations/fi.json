@@ -149,6 +149,7 @@
   "bodySizeWarning": "Rajausgeometria on liian suuri, yksinkertaistetaanko geometria?",
   "bodySizeWarningTemporary": "Rajausgeometria on liian suuri eikä hakua voida tehdä.",
   "noGfiLocationsWarning": "Tuloksia ei löytynyt, valitse uusi rajaus.",
+  "exitConfirmation": "Olet poistumassa Suomen Väylät-palvelusta. Haluatko jatkaa?",
   "appGuide": {
     "title": "Käyttöohje",
     "modalContent": {

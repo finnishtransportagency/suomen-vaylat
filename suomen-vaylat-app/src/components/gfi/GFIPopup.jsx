@@ -41,6 +41,7 @@ import { isValidUrl } from "../../utils/validUrlUtil";
 import { theme, isMobile } from "../../theme/theme";
 import { filterFeature } from "../../utils/gfiUtil";
 import { SortingMode, PagingPosition } from "ka-table/enums";
+import ExitConfirmationModal from "../modals/ExitConfirmationModal";
 
 // Max amount of features that wont trigger react-data-table-component
 const GFI_MAX_LENGTH = 5;
@@ -432,6 +433,22 @@ export const GFIPopup = ({ handleGfiDownload }) => {
   const [gfiTabsSnapGridLength, setGfiTabsSnapGridLength] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const gfiInputEl = useRef(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleLinkClick = (event) => {
+    const dontShow = JSON.parse(localStorage.getItem('dontShowModal'));
+    if (!dontShow) {
+      event.preventDefault();
+      setIsModalOpen(true);
+    }
+  };
+
+  const handleConfirmLeave = () => {
+    setIsModalOpen(false);
+
+    window.open("http://maps.google.com/maps?q=&layer=c&cbll=" + point, "_blank");
+  };
+  
 
   useEffect(() => {
     if (!isGfiToolsOpen && activeSelectionTool !== null)
@@ -917,6 +934,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
                 href={"http://maps.google.com/maps?q=&layer=c&cbll=" + point}
                 rel="noreferrer"
                 target="_blank"
+                onClick={handleLinkClick}
               >
                 <FontAwesomeIcon icon={faStreetView} />
                 <span style={{ fontSize: "14px", marginLeft: ".5em" }}>
@@ -937,6 +955,11 @@ export const GFIPopup = ({ handleGfiDownload }) => {
             </div>
           </StyledCoordinatesWrapper>
         )}
+        <ExitConfirmationModal
+        isOpen={isModalOpen}
+        onRequestClose={() => setIsModalOpen(false)}
+        onConfirm={handleConfirmLeave}
+      />
         {vkmData &&
         vkmData.vkm._orderHigh &&
         vkmData.vkm._orderHigh.filter((value) => value !== "kuntanimi").length >

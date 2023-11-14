@@ -149,6 +149,7 @@
   "bodySizeWarning": "The cropping geometry is too big, limit to a smaller area.",
   "bodySizeWarningTemporary": "Geometry is too big and data cannot be fetched right now.",
   "noGfiLocationsWarning": "No results found, try another geometry.",
+  "exitConfirmation": "You are leaving the Suomen Väylät. Do you want to continue?",
   "appGuide": {
     "title": "User Guide",
     "modalContent": {
