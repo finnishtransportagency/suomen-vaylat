@@ -62,7 +62,7 @@ const initialState = {
   cqlFilters: [],
   activeGFILayer: null,
   filteringInfo: { modalOpen: false },
-  cqlFilteringInfo: { modalOpen: false }
+  cqlFilteringInfo: []
 };
 
 export const rpcSlice = createSlice({

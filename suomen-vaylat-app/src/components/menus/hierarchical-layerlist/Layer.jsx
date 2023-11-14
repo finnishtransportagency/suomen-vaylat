@@ -1,6 +1,12 @@
-import { useContext, useEffect, useState } from "react";
-import { ReactReduxContext, useSelector } from "react-redux";
-import styled from "styled-components";
+import { useContext, useEffect, useState } from 'react';
+import { ReactReduxContext, useSelector } from 'react-redux';
+import { faFilter } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { theme, isMobile } from '../../../theme/theme';
+import ReactTooltip from "react-tooltip";
+import strings from '../../../translations';
+
+import styled from 'styled-components';
 import {
   changeLayerStyle,
   getLegends,
@@ -68,6 +74,11 @@ const StyledSwitchButton = styled.div`
   background-color: ${(props) => props.theme.colors.mainWhite};
 `;
 
+const StyledFilterIcon = styled.div`
+  padding-right: 8px;
+  color: ${props => props.theme.colors.mainColor1};
+`;
+
 export const Switch = ({ action, layer, isSelected }) => {
   return (
     <StyledSwitchContainer
@@ -94,14 +105,32 @@ export const findGroupForLayer = (groups, layerId) => {
   return null;
 };
 
-export const Layer = ({ layer, theme, groupName }) => {
-  const { store } = useContext(ReactReduxContext);
-  const [layerStyle, setLayerStyle] = useState(null);
-  const [themeSelected, setThemeSelected] = useState(false);
-  const { channel, selectedTheme } = useSelector((state) => state.rpc);
-  const excludeGroups = ["Digiroad", "Tierekisteri (Poistuva)"];
+export const Layer = ({ layer, themeName, groupName }) => {
 
-  const handleLayerVisibility = (channel, layer) => {
+    const { store } = useContext(ReactReduxContext);
+    const [layerStyle, setLayerStyle] = useState(null);
+    const [themeSelected, setThemeSelected] = useState(false);
+    const [isChecked, setIsChecked] = useState(false);
+    const {isCustomFilterOpen} = useAppSelector(state => state.ui)
+    const isFilterable = typeof layer.config?.gfi?.filterFields !== "undefined" && layer.config?.gfi?.filterFields.length > 0 ;
+
+    const {
+        channel,
+        selectedTheme
+    } = useSelector(state => state.rpc);
+
+    const excludeGroups = ["Digiroad", "Tierekisteri (Poistuva)"];
+
+    const isLayerSelected = () => {
+        const storedLayers = localStorage.getItem("checkedLayers");
+        if (storedLayers) {
+          const parsedLayers = JSON.parse(storedLayers);
+          return parsedLayers.some((storedLayer) => storedLayer.id === layer.id);
+        }
+        return false;
+      };
+
+    const handleLayerVisibility = (channel, layer) => {
       store.dispatch(setMapLayerVisibility(layer));
       updateLayers(store, channel);
   }
@@ -135,7 +164,7 @@ export const Layer = ({ layer, theme, groupName }) => {
     return () => clearTimeout(window.legendUpdateTimer);
   }, []);
 
-  const themeStyle = theme || null;
+    const themeStyle = themeName || null;
 
   if (selectedTheme && selectedTheme.name && themeSelected === false) {
     setThemeSelected(true);
@@ -166,34 +195,48 @@ export const Layer = ({ layer, theme, groupName }) => {
     downloadLink = layer.config.downloadLink;
   }
 
-  return (
-    <StyledLayerContainer
-      themeStyle={themeStyle}
-      className={`list-layer ${layer.visible && "list-layer-active"}`}
-      key={"layer" + layer.id + "_" + theme}
-    >
-      <StyledlayerHeader>
-        <StyledLayerName themeStyle={themeStyle}>
-          {layer.name}{" "}
-          {groupName &&
-            groupName !== "Unknown" &&
-            !excludeGroups.includes(groupName) &&
-            ` (${groupName})`}
-        </StyledLayerName>
-      </StyledlayerHeader>
-      {layer.metadataIdentifier && <LayerMetadataButton layer={layer} />}
-      {downloadLink && (
-        <LayerDownloadLinkButton
-          handleIsDownloadLinkModalOpen={handleIsDownloadLinkModalOpen}
-        />
-      )}
-        <Switch
-          action={() => handleLayerVisibility(channel, layer)}
-          isSelected={layer.visible}
-          layer={layer}
-        />
-    </StyledLayerContainer>
-  );
-};
+    return (
+            <StyledLayerContainer
+                themeStyle={themeStyle}
+                className={`list-layer ${layer.visible && "list-layer-active"}`}
+                key={'layer' + layer.id + '_' + themeName}
+            >
+                <StyledlayerHeader>
+                    <StyledLayerName
+                        themeStyle={themeStyle}
+                    >
+                        {layer.name} {groupName && groupName !== 'Unknown' && !excludeGroups.includes(groupName) && ` (${groupName})`}
+                    </StyledLayerName>
+                </StyledlayerHeader>
+                {layer.metadataIdentifier && <LayerMetadataButton layer={layer}/>}
+                { isFilterable &&
+                  <>
+                    <ReactTooltip
+                    backgroundColor={theme.colors.mainColor1}
+                    textColor={theme.colors.mainWhite}
+                    disable={isMobile}
+                    id="filterableLayer"
+                    place="top"
+                    type="dark"
+                    effect="float"
+                  >
+                    <span>{strings.tooltips.layerlist.filterable}</span>
+                  </ReactTooltip>
+                  <StyledFilterIcon data-tip data-for={"filterableLayer"}>
+                    <FontAwesomeIcon icon={faFilter} />
+                  </StyledFilterIcon>
+                  </>
+                }
+                {downloadLink && <LayerDownloadLinkButton
+                    handleIsDownloadLinkModalOpen={handleIsDownloadLinkModalOpen} />
+                }
+                <Switch
+                  action={() => handleLayerVisibility(channel, layer)}
+                  isSelected={layer.visible}
+                  layer={layer}
+                />
+                </StyledLayerContainer>
+    );
+  };
 
 export default Layer;

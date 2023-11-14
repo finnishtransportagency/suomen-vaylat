@@ -41,7 +41,7 @@ const initialState = {
     selectedMapLayersMenuThemeIndex: null,
     minimizeGfi: false,
     maximizeGfi: false,
-    minimizeCQLFilter: false,
+    minimizeCQLFilter: {minimized: false},
     maximizeCQLFilter: false,
     gfiCroppingTypes: [],
     warning: null,

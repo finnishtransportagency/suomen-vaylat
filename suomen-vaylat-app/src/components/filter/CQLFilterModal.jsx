@@ -6,7 +6,7 @@ import "dayjs/locale/fi";
 import "dayjs/locale/sv";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 
-import { getCQLStringPropertyOperator, getCQLNumberPropertyOperator } from "../../utils/gfiUtil"
+import { getCQLStringPropertyOperator, getCQLNumberPropertyOperator, getCQLDatePropertyOperator } from "../../utils/gfiUtil"
 
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
@@ -184,16 +184,16 @@ const StyledTrashIconWrapper = styled.div`
   }
 `;
 
-export const CQLFilterModal = () => {
+export const CQLFilterModal = ({cqlFilterInfo}) => {
   const {
     cqlFilters,
-    cqlFilteringInfo,
     channel,
   } = useAppSelector((state) => state.rpc);
   const { store } = useContext(ReactReduxContext);
   const [operatorValue, setOperatorValue] = useState({});
   const [filterValue, setFilterValue] = useState({ value: "", type: null });
   const [propValue, setPropValue] = useState({});
+  const [filterOptions, setFilterOptions] = useState([]);
   const [fieldNameLocales, setFieldNameLocales] = useState({});
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
@@ -219,14 +219,13 @@ export const CQLFilterModal = () => {
     }
     const type = propValue.type;
     const oper = type === "date" ? "date" : operatorValue.value;
-    const layer = cqlFilteringInfo?.layer?.id;
+    const layer = cqlFilterInfo?.layer?.id;
 
     if (!prop || !value) {
       //lisää popup varoitus
       return;
     }
-    store.dispatch(
-      setCQLFilters([
+    const updatedCQLFilters = [
         ...cqlFilters,
         {
           layer: layer,
@@ -235,7 +234,11 @@ export const CQLFilterModal = () => {
           value: value,
           type: type,
         },
-      ])
+      ]
+
+    updateFiltersOnMap(updatedCQLFilters);
+    store.dispatch(
+      setCQLFilters(updatedCQLFilters)
     );
     setStartDate(null);
     setEndDate(null);
@@ -267,7 +270,7 @@ export const CQLFilterModal = () => {
   };
 
   useEffect(() => {
-    var layer = cqlFilteringInfo?.layer;
+    var layer = cqlFilterInfo?.layer;
     channel.getFieldNameLocales(
       [layer?.id],
       (data) => {
@@ -279,76 +282,80 @@ export const CQLFilterModal = () => {
     );
   }, []);
 
+  useEffect(() => {
+    var layer = cqlFilterInfo?.layer;
+    const options = layer?.filterColumnsArray.map((column) => {
+      if (Object.keys(fieldNameLocales).length > 0) {
+        const props = {
+          value: column.key,
+          label: fieldNameLocales[column.title],
+          type: column.type
+        };
+        column.default && handleSetPropValue(props)
+        return props;
+      } else {
+        const props = {
+          value: column.key,
+          label: column.title,
+          type: column.type
+        };
+        column.default && handleSetPropValue(props)
+        return props;
+      }
+    });
+    setFilterOptions(options);
+  }, [fieldNameLocales]);
+
   const [activeFilters, setActiveFilters] = useState();
 
   useEffect(() => {
-    if (cqlFilteringInfo && cqlFilteringInfo?.layer && cqlFilters) {
+    if (cqlFilterInfo && cqlFilterInfo?.layer && cqlFilters) {
       const updatedActivefilters = cqlFilters.filter(
-        (filter) => filter.layer === cqlFilteringInfo?.layer.id
+        (filter) => filter.layer === cqlFilterInfo?.layer?.id
       );
       setActiveFilters(updatedActivefilters);
     }
-  }, [cqlFilters, cqlFilteringInfo]);
+  }, [cqlFilters, cqlFilterInfo]);
 
-const useDidMountEffect = (func, deps) => {
-    const didMount = useRef(false);
-
-    useEffect(() => {
-        if (didMount.current) func();
-        else didMount.current = true;
-    }, deps);
+  const getPropertyOperator = (filter) => {
+    switch (filter.type) {
+      case "string":
+        return getCQLStringPropertyOperator(filter.property, filter.operator, filter.value)
+      case "number":
+        return getCQLNumberPropertyOperator(filter.property, filter.operator, filter.value);
+      case "date":
+        return getCQLDatePropertyOperator(filter.property, filter.value);
+  };
 }
- 
-useDidMountEffect(() => {
-    let filters = "";
-    cqlFilters && cqlFilters.forEach((filter, index) => {
-        var cqlFilter = filter.type === 'string' ? 
-        getCQLStringPropertyOperator(filter.property, filter.operator, filter.value)
-        :
-        getCQLNumberPropertyOperator(filter.property, filter.operator, filter.value);
-        index === 0 ? filters += cqlFilter : filters += " AND " + cqlFilter;
-    })
 
-    if (filters.length > 0) {
-        channel && channel.postRequest(
-        'MapModulePlugin.MapLayerUpdateRequest',
-        [cqlFilteringInfo.layer.id, true, { 'CQL_FILTER': filters }]
-        );
-    } else {
-        cqlFilteringInfo.layer && channel && channel.postRequest(
+const updateFiltersOnMap = (updatedCQLFilters) => {
+        let filters = "";
+        updatedCQLFilters && updatedCQLFilters.filter(f => f.layer === cqlFilterInfo?.layer?.id).forEach((filter, index) => {
+            var cqlFilter = getPropertyOperator(filter);
+            index === 0 ? filters += cqlFilter : filters += " AND " + cqlFilter;
+        })
+
+        if (filters.length > 0) {
+            channel && channel.postRequest(
             'MapModulePlugin.MapLayerUpdateRequest',
-            [cqlFilteringInfo.layer.id, true, { 'CQL_FILTER': null }]
+            [cqlFilterInfo.layer.id, true, { 'CQL_FILTER': filters }]
             );
-    }
-  }, [cqlFilters]);
+        } else {
+            cqlFilterInfo.layer && channel && channel.postRequest(
+                'MapModulePlugin.MapLayerUpdateRequest',
+                [cqlFilterInfo.layer.id, true, { 'CQL_FILTER': null }]
+                );
+        }
+};
 
-  const handleRemoveFilter = (filter) => {
+const handleRemoveFilter = (filter) => {
     if (cqlFilters && cqlFilters.length > 0 && cqlFilters.includes(filter)) {
       const updatedFilters = cqlFilters.filter(
         (existingFilter) => existingFilter !== filter
       );
+      updateFiltersOnMap(updatedFilters)
       store.dispatch(setCQLFilters(updatedFilters));
     }
-  };
-
-  const filterOptions = () => {
-    var layer = cqlFilteringInfo?.layer;
-    const options = layer?.filterColumnsArray.map((column) => {
-      if (Object.keys(fieldNameLocales).length > 0) {
-        return {
-          value: column.key,
-          label: fieldNameLocales[column.title],
-          type: column.type,
-        };
-      } else {
-        return {
-          value: column.key,
-          label: column.title,
-          type: column.type,
-        };
-      }
-    });
-    return options;
   };
 
   return (
@@ -356,9 +363,10 @@ useDidMountEffect(() => {
       <StyledModalSelectionContainer>
         <StyledModalFloatingChapter>
           <Dropdown
-            options={filterOptions()}
+            options={filterOptions}
             placeholder={strings.gfifiltering.placeholders.chooseProp}
             value={propValue}
+            defaultProperty={[cqlFilterInfo?.layer.defaultFilterProperty]}
             setValue={(value) => handleSetPropValue(value)}
             isDisabled={false}
           />

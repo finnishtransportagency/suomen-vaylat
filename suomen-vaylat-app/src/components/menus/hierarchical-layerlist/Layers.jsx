@@ -1,12 +1,13 @@
 import Layer from './Layer';
 import strings from '../../../translations';
 import { findGroupForLayer } from './Layer';
+import { theme } from '../../../theme/theme';
 
 export const Layers = ({
     layers,
     groups = [],
+    themeName,
     isOpen,
-    theme,
     isSelected
 }) => {
     const currentLang = strings.getLanguage();
@@ -18,13 +19,13 @@ export const Layers = ({
                 const matchingGroup = groupObj ? groupObj.locale[currentLang].name : 'Unknown';
                 return (
                     <Layer
-                        key={layer.id + '_' + theme}
+                        key={layer.id + '_' + themeName}
                         layer={layer} 
                         isOpen={isOpen}
                         groupName={matchingGroup}
                         index={index}
-                        theme={theme}
                         isSelected={isSelected}
+                        themeName={themeName}
                     />
             )})}
         </>

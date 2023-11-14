@@ -78,6 +78,8 @@ import ThemeMenu from "../menus/theme-menu/ThemeMenu";
 
 import { CustomLayerModal } from "../menus/hierarchical-layerlist/CustomFilter/CustomLayerModal";
 import { CQLFilterModal } from "../filter/CQLFilterModal";
+import { ModalContainer } from "../filter/ModalContainer";
+
 
 const StyledContent = styled.div`
   z-index: 1;
@@ -296,17 +298,19 @@ const Content = () => {
 
   const handleCloseCQLFilterModal = () => {
     // reset map
-    cqlFilters.length > 0 && cqlFilteringInfo.layer && channel && channel.postRequest(
-      'MapModulePlugin.MapLayerUpdateRequest',
-      [cqlFilteringInfo.layer.id, true, { 'CQL_FILTER': null }]
-      );
+    cqlFilteringInfo.forEach(filteringInfo => {
+      cqlFilters.length > 0 && filteringInfo.layer && channel && channel.postRequest(
+        'MapModulePlugin.MapLayerUpdateRequest',
+        [filteringInfo.layer.id, true, { 'CQL_FILTER': null }]
+        );
+    })
 
     // reset states
     store.dispatch(setIsCQLFilterModalOpen(false));
-    store.dispatch(setMinimizeCQLFilterModal(false));
+    store.dispatch(setMinimizeCQLFilterModal({minimized: false}));
     store.dispatch(setMaximizeCQLFilterModal(false));    
     store.dispatch(setCQLFilters([]));
-    store.dispatch(setCQLFilteringInfo({ modalOpen: false }));
+    store.dispatch(setCQLFilteringInfo([]));
 
   }
 
@@ -973,27 +977,24 @@ const Content = () => {
             true
           } /* Scale modal full width / height when using mobile device */
           titleIcon={null} /* Use icon on title or null */
-          title={
-            cqlFilteringInfo?.layer &&
-            strings.gfi.cqlFilter + " - " + cqlFilteringInfo?.layer?.title
-          } /* Modal header title */
+          title={strings.gfi.cqlFilter} /* Modal header title */
           type={"normal"} /* Modal type */
           closeAction={
             handleCloseCQLFilterModal
           } /* Action when pressing modal close button or backdrop */
-          isOpen={cqlFilteringInfo.modalOpen} /* Modal state */
-          layerId={cqlFilteringInfo?.layer?.id}
-          minimize={minimizeCQLFilter}
+          isOpen={cqlFilteringInfo.some(f => f.modalOpen)} /* Modal state */
+          minimize={minimizeCQLFilter.minimized}
           maximize={maximizeCQLFilter}
           minimizable={true}
           maximizable={true}
-          minimizeAction={() => store.dispatch(setMinimizeCQLFilterModal(!minimizeCQLFilter))}
+          minimizeAction={() => store.dispatch(setMinimizeCQLFilterModal({minimized: !minimizeCQLFilter.minimized}))}
           maximizeAction={() => store.dispatch(setMaximizeCQLFilterModal(!maximizeCQLFilter))}
+          maxWidth={maximizeCQLFilter ? null : "40em"}
           minWidth={"25em"}
           minHeight={"30em"}
           overflow={"auto"}
         >
-          <CQLFilterModal/>
+          <ModalContainer/>
         </Modal>
         <ScaleBar />
         <StyledToastContainer
@@ -1012,7 +1013,7 @@ const Content = () => {
           <StyledRightSection>
             <Search />
             <ZoomMenu />
-            <ActionButtons closeAction={handleCloseGFIModal} />
+            <ActionButtons closeAction={handleCloseGFIModal} closeActionCQL={handleCloseCQLFilterModal}/>
           </StyledRightSection>
         </StyledContentGrid>
       </StyledContent>

@@ -6,10 +6,14 @@ import styled from 'styled-components';
 import { clearLayerMetadata, getLayerMetadata, setLayerMetadata, setZoomTo, setCQLFilteringInfo } from '../../../state/slices/rpcSlice';
 import { updateLayers } from '../../../utils/rpcUtil';
 import { sortableHandle } from 'react-sortable-hoc';
+import ReactTooltip from "react-tooltip";
+import {
+   setMinimizeCQLFilterModal
+  } from "../../../state/slices/uiSlice";
 
 import strings from '../../../translations';
 import { useAppSelector } from '../../../state/hooks';
-import { theme } from '../../../theme/theme';
+import { theme, isMobile } from '../../../theme/theme';
 
 const StyledLayerContainer = styled.li`
     z-index: 9999;
@@ -209,11 +213,11 @@ export const SelectedLayer = (
     const [opacity, setOpacity] = useState(layer.opacity);
     const [prevOpacity, setPrevOpacity] = useState(layer.opacity);
     const [isLayerVisible, setIsLayerVisible] = useState(layer.opacity !== 0);
-    const { channel, cqlFilters } = useAppSelector(
+    const { channel, cqlFilters, cqlFilteringInfo, allSelectedThemeLayers } = useAppSelector(
         (state) => state.rpc
       );
 
-    const { allSelectedThemeLayers } = useAppSelector(state => state.rpc);
+    const { minimizeCQLFilter } = useAppSelector(state => state.ui);
 
     const isFilterable = typeof layer.config?.gfi?.filterFields !== "undefined" && layer.config?.gfi?.filterFields.length > 0 ;
 
@@ -223,26 +227,35 @@ export const SelectedLayer = (
     }, [layer.opacity])
 
     const handleOpenCQLFilteringModal = (layer) => {
-        var filterColumnsArray = [];
-        layer.config?.gfi?.filterFields &&
-        layer.config?.gfi?.filterFields.forEach((column) => {
-          if (column.field && column.type) {
-            filterColumnsArray.push({
-              key: column.field,
-              title: column.field,
-              type: column.type,
+        if (cqlFilteringInfo.filter(f => f.layer.id === layer.id).length === 0) {
+            var filterColumnsArray = [];
+            layer.config?.gfi?.filterFields &&
+            layer.config?.gfi?.filterFields.forEach((column) => {
+              if (column.field && column.type) {
+                filterColumnsArray.push({
+                  key: column.field,
+                  title: column.field,
+                  type: column.type,
+                  default: column.default || false
+                });
+              }
             });
-          }
-        });
-
-        store.dispatch(setCQLFilteringInfo({
-            modalOpen: true,
-            layer: {
-              id: layer.id,
-              title: layer.name,
-              filterColumnsArray: filterColumnsArray,
-            },
-          }));
+    
+            const updateFilter = [...cqlFilteringInfo]
+            updateFilter.push({
+                modalOpen: true,
+                layer: {
+                  id: layer.id,
+                  title: layer.name,
+                  filterColumnsArray: filterColumnsArray
+                }
+            }
+            )
+            store.dispatch(setCQLFilteringInfo(updateFilter));
+            minimizeCQLFilter && store.dispatch(setMinimizeCQLFilterModal({minimized: false, layer: layer.id}))
+        } else {
+            minimizeCQLFilter && store.dispatch(setMinimizeCQLFilterModal({minimized: false, layer: layer.id}))
+        }
     };
     
     const handleLayerRemoveSelectedLayer = (channel, layer) => {
@@ -356,13 +369,28 @@ export const SelectedLayer = (
                         </StyledToggleOpacityIconWrapper>
 
                         { isFilterable &&
+                            <>
+                            <ReactTooltip
+                                backgroundColor={theme.colors.mainColor1}
+                                textColor={theme.colors.mainWhite}
+                                disable={isMobile}
+                                id="filter"
+                                place="top"
+                                type="dark"
+                                effect="float"
+                            >
+                                <span>{strings.tooltips.layerlist.filter}</span>
+                            </ReactTooltip>
                             <StyledIconWrapper
                                 onClick={() => {
                                     handleOpenCQLFilteringModal(layer);
                                 }}
+                                data-tip
+                                data-for={"filter"}
                             >
-                                <StyledFloatingSpan><FontAwesomeIcon icon={faFilter}  style={{ color: cqlFilters.length > 0 ? theme.colors.secondaryColor8 : theme.colors.primaryColor1 }}/></StyledFloatingSpan>
+                                <StyledFloatingSpan><FontAwesomeIcon icon={faFilter}  style={{ color: cqlFilters.filter(f => f.layer === layer.id).length > 0 ? theme.colors.secondaryColor8 : theme.colors.primaryColor1 }}/></StyledFloatingSpan>
                             </StyledIconWrapper> 
+                            </>
                         }
                     </StyledBottomContent>
                 </StyledLayerContent>

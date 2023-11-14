@@ -648,7 +648,7 @@ export const ThemeGroup = ({
                     }
                 </div>
                 <StyledLayerGroup>
-                    <Layers layers={filteredLayers} isOpen={isOpen} theme={theme.name}/>
+                    <Layers layers={filteredLayers} isOpen={isOpen} themeName={theme.name}/>
                 </StyledLayerGroup>
 
                 {theme.subthemes && theme.subthemes.map((subtheme, index) => {
