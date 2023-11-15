@@ -145,6 +145,7 @@
   "multipleLayersFetchWarning": "Olet hakemassa aineistoa 10 tai useammalta karttatasolta ja se saattaa vaikuttaa palvelun suorituskykyyn.",
   "bodySizeWarning": "Rajausgeometria on liian suuri, yksinkertaistetaanko geometria?",
   "bodySizeWarningTemporary": "Rajausgeometria on liian suuri eikä hakua voida tehdä.",
+  "generalError": "Järjestelmässä tapahtui virhe.",
   "noGfiLocationsWarning": "Tuloksia ei löytynyt, valitse uusi rajaus.",
   "appGuide": {
     "title": "Käyttöohje",
