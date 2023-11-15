@@ -248,7 +248,7 @@ const LayerList = ({
     );
   };
 
-  const TagLayerList = ({
+  export const TagLayerList = ({
       tag,
       layers,
       index,

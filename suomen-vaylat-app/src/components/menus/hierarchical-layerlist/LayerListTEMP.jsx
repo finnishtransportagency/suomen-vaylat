@@ -12,7 +12,7 @@ import {
   setTags,
 } from "../../../state/slices/rpcSlice";
 import Filter from "./Filter";
-import LayerList from "./LayerList";
+import LayerList, { TagLayerList } from "./LayerList";
 import LayerSearch from "./LayerSearch";
 import ReactTooltip from "react-tooltip";
 import { isMobile, theme } from "../../../theme/theme";
@@ -26,6 +26,7 @@ import {
   setSelectedCustomFilterLayers,
 } from "../../../state/slices/uiSlice";
 import Layer from "./Layer";
+import { useSelector } from "react-redux";
 
 const listVariants = {
   visible: {
@@ -152,20 +153,44 @@ const StyledFilterButton = styled.div`
   }
 `;
 
-const SavedLayer = ({layers}) => {
+const StyledLayerList = styled.div`
+
+`;
+
+const SavedLayer = ({layers, groups}) => {
   const customLayers = localStorage.getItem("checkedLayers");
   const parsedLayers = JSON.parse(customLayers) || [];
   const parsedAllLayers = layers.filter(l => parsedLayers.filter(p => p.id === l.id).length > 0)
+
+  const { tagLayers, tags } = useSelector((state) => state.rpc);
   
   if (parsedLayers.length > 0) {
     return (
       <>
-        {parsedAllLayers &&
-          parsedAllLayers.map((layer) => (
-            <StyledRowContainer key={layer.id}>
-              <Layer layer={layer} />
-            </StyledRowContainer>
-          ))}
+            {tagLayers.length > 0 ?
+                <StyledLayerList>
+                    {
+                        tags.map((tag, index) => {
+                            return (
+                                <TagLayerList
+                                    tag={tag}
+                                    layers={parsedAllLayers}
+                                    index={index}
+                                    groups={groups}
+                                    key={'taglayerlist-' + tag + '-' + index}
+                                />
+                            );
+                        })
+                    }
+                </StyledLayerList>
+                :
+                parsedAllLayers &&
+                parsedAllLayers.map((layer) => (
+                    <StyledRowContainer key={layer.id}>
+                        <Layer layer={layer} />
+                    </StyledRowContainer>
+                ))
+            }
         <StyledButtonContainer>
           <StyledSaveButton
             onClick={() => {
