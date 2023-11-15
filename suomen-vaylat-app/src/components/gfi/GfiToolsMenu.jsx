@@ -778,26 +778,17 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
                         return {current: prevState.current + 1, total: prevState.total, enabled: prevState.enabled}
                     })
                     if (error.BODY_SIZE_EXCEEDED_ERROR) {
-                        // simplify modal removed for now, uncomment when simplifyGeometry feature ready, make new call after
-                        /*store.dispatch(setWarning({
+                        store.dispatch(setWarning({
                             title: strings.bodySizeWarning,
                             subtitle: null,
                             cancel: {
-                                text: strings.general.cancel,
+                                text: strings.general.ok,
                                 action: () => {
                                     setIsGfiLoading(false);
                                     store.dispatch(setWarning(null))
                                 }
                             },
-                            confirm: {
-                                text: strings.general.continue,
-                                action: () => {
-                                    simplifyGeometry();
-                                    store.dispatch(setWarning(null));
-                                }
-                            },
                         }))
-                        */
                         reject(BODY_SIZE_EXCEED)
                     }      
                     reject(GENERAL_FAIL)
