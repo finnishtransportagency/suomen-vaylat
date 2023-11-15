@@ -224,7 +224,6 @@ const LayerListTEMP = ({ groups, layers, tags }) => {
     store.dispatch(setTags([]));
     store.dispatch(setCheckedLayer([]));
     store.dispatch(setShowSavedLayers(false));
-    localStorage.removeItem("checkedLayers")
     store.dispatch(setSelectedCustomFilterLayers([]));
   };
 
