@@ -149,6 +149,7 @@
   "multipleLayersFetchWarning": "You are about to fetch data from 10 or more maplayers, it might affect the performance of the service.",
   "bodySizeWarning": "Beskärning geometrin är för stor, begränsa till en mindre yta.",
   "bodySizeWarningTemporary": "Geometry is too big and data cannot be fetched right now.",
+  "generalError": "An error occurred.",
   "noGfiLocationsWarning": "No results found, try another geometry.",
   "exitConfirmation": "Du lämnar tjänsten Suomen Väylät. Vill du fortsätta?",
   "appGuide": {
