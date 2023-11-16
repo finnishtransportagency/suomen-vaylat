@@ -70,6 +70,37 @@ const getParameterCaseInsensitive = (object, key) => {
   ];
 };
 
+export const getPropertyOperatorCQL = (filter) => {
+  switch (filter.type) {
+    case "string":
+      return getCQLStringPropertyOperator(filter.property, filter.operator, filter.value)
+    case "number":
+      return getCQLNumberPropertyOperator(filter.property, filter.operator, filter.value);
+    case "date":
+      return getCQLDatePropertyOperator(filter.property, filter.value);
+};
+}
+
+export const updateFiltersOnMap = (updatedCQLFilters, cqlFilterInfo, channel) => {
+  let filters = "";
+  updatedCQLFilters && updatedCQLFilters.filter(f => f.layer === cqlFilterInfo?.layer?.id).forEach((filter, index) => {
+      var cqlFilter = getPropertyOperatorCQL(filter);
+      index === 0 ? filters += cqlFilter : filters += " AND " + cqlFilter;
+  })
+
+  if (filters.length > 0) {
+      channel && channel.postRequest(
+      'MapModulePlugin.MapLayerUpdateRequest',
+      [cqlFilterInfo.layer.id, true, { 'CQL_FILTER': filters }]
+      );
+  } else {
+      cqlFilterInfo.layer && channel && channel.postRequest(
+          'MapModulePlugin.MapLayerUpdateRequest',
+          [cqlFilterInfo.layer.id, true, { 'CQL_FILTER': null }]
+          );
+  }
+};
+
 export const filterFeature = (feature, location, filters, cqlFilters, channel) => {
   if (filters.length === 0 && cqlFilters === 0) {
     channel && channel.postRequest(

@@ -6,7 +6,7 @@ import "dayjs/locale/fi";
 import "dayjs/locale/sv";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 
-import { getCQLStringPropertyOperator, getCQLNumberPropertyOperator, getCQLDatePropertyOperator } from "../../utils/gfiUtil"
+import { updateFiltersOnMap } from "../../utils/gfiUtil"
 
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
@@ -236,7 +236,7 @@ export const CQLFilterModal = ({cqlFilterInfo}) => {
         },
       ]
 
-    updateFiltersOnMap(updatedCQLFilters);
+    updateFiltersOnMap(updatedCQLFilters, cqlFilterInfo, channel);
     store.dispatch(
       setCQLFilters(updatedCQLFilters)
     );
@@ -317,43 +317,12 @@ export const CQLFilterModal = ({cqlFilterInfo}) => {
     }
   }, [cqlFilters, cqlFilterInfo]);
 
-  const getPropertyOperator = (filter) => {
-    switch (filter.type) {
-      case "string":
-        return getCQLStringPropertyOperator(filter.property, filter.operator, filter.value)
-      case "number":
-        return getCQLNumberPropertyOperator(filter.property, filter.operator, filter.value);
-      case "date":
-        return getCQLDatePropertyOperator(filter.property, filter.value);
-  };
-}
-
-const updateFiltersOnMap = (updatedCQLFilters) => {
-        let filters = "";
-        updatedCQLFilters && updatedCQLFilters.filter(f => f.layer === cqlFilterInfo?.layer?.id).forEach((filter, index) => {
-            var cqlFilter = getPropertyOperator(filter);
-            index === 0 ? filters += cqlFilter : filters += " AND " + cqlFilter;
-        })
-
-        if (filters.length > 0) {
-            channel && channel.postRequest(
-            'MapModulePlugin.MapLayerUpdateRequest',
-            [cqlFilterInfo.layer.id, true, { 'CQL_FILTER': filters }]
-            );
-        } else {
-            cqlFilterInfo.layer && channel && channel.postRequest(
-                'MapModulePlugin.MapLayerUpdateRequest',
-                [cqlFilterInfo.layer.id, true, { 'CQL_FILTER': null }]
-                );
-        }
-};
-
 const handleRemoveFilter = (filter) => {
     if (cqlFilters && cqlFilters.length > 0 && cqlFilters.includes(filter)) {
       const updatedFilters = cqlFilters.filter(
         (existingFilter) => existingFilter !== filter
       );
-      updateFiltersOnMap(updatedFilters)
+      updateFiltersOnMap(updatedFilters, cqlFilterInfo, channel)
       store.dispatch(setCQLFilters(updatedFilters));
     }
   };

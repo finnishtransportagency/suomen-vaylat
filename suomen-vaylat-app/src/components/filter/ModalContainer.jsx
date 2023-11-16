@@ -13,6 +13,7 @@ import { FreeMode, Controller } from "swiper";
 import { isMobile } from "../../theme/theme";
 import { CQLFilterModal } from "./CQLFilterModal";
 import { setCQLFilteringInfo, setCQLFilters } from "../../state/slices/rpcSlice";
+import { updateFiltersOnMap } from "../../utils/gfiUtil"
 
 const StyledModalContainer = styled.div`
   :after {
@@ -123,7 +124,8 @@ export const ModalContainer = ({}) => {
   const {
     cqlFilteringInfo,
     allLayers,
-    cqlFilters
+    cqlFilters,
+    channel
   } = useAppSelector((state) => state.rpc);
   const {
     minimizeCQLFilter
@@ -157,7 +159,9 @@ export const ModalContainer = ({}) => {
 
   const closeTab = (index, id) => {
     // delete filter by layer
-    store.dispatch(setCQLFilters(cqlFilters.filter(f => f.layer !== id)));
+    const updatedCQLFilters = cqlFilters.filter(f => f.layer !== id);
+    updateFiltersOnMap(updatedCQLFilters, cqlFilteringInfo.filter(f => f.layer.id === id)[0], channel)
+    store.dispatch(setCQLFilters(updatedCQLFilters));
     store.dispatch(setCQLFilteringInfo(cqlFilteringInfo.filter(f => f.layer.id !== id)))
     if (index > 0) {
       handleSelectTab(index - 1);
