@@ -70,8 +70,8 @@ const getParameterCaseInsensitive = (object, key) => {
   ];
 };
 
-export const filterFeature = (feature, location, filters, channel) => {
-  if (filters.length === 0) {
+export const filterFeature = (feature, location, filters, cqlFilters, channel) => {
+  if (filters.length === 0 && cqlFilters === 0) {
     channel && channel.postRequest(
       'MapModulePlugin.MapLayerUpdateRequest',
       [location.layerId, true, { 'CQL_FILTER': null }]

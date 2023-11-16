@@ -417,6 +417,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
     selectedLayers,
     pointInfo,
     filters,
+    cqlFilters
   } = useAppSelector((state) => state.rpc);
 
   const [point, setPoint] = useState(null);
@@ -616,7 +617,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
         var featureCells =
           cont.geojson.features &&
           cont.geojson.features
-            .filter((feature) => filterFeature(feature, data, filters, channel))
+            .filter((feature) => filterFeature(feature, data, filters, cqlFilters, channel))
             .map((feature) => {
               filteredFeatures.push(feature);
               var cell = { ...feature.properties };
@@ -1156,7 +1157,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
             // count the amount of results when filtered
             location?.content?.forEach((cont) => {
               cont.geojson?.features?.forEach((feature) => {
-                if (filterFeature(feature, location, filters)) {
+                if (filterFeature(feature, location, filters, cqlFilters, channel)) {
                   featuresAmount += 1;
                 }
               });

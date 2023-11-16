@@ -3,7 +3,7 @@ import { faInfoCircle, faTimes, faCaretDown, faCaretUp, faGripLines, faEye, faEy
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ReactReduxContext, useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { clearLayerMetadata, getLayerMetadata, setLayerMetadata, setZoomTo, setCQLFilteringInfo } from '../../../state/slices/rpcSlice';
+import { clearLayerMetadata, getLayerMetadata, setLayerMetadata, setZoomTo, setCQLFilteringInfo, setCQLFilters } from '../../../state/slices/rpcSlice';
 import { updateLayers } from '../../../utils/rpcUtil';
 import { sortableHandle } from 'react-sortable-hoc';
 import ReactTooltip from "react-tooltip";
@@ -259,6 +259,16 @@ export const SelectedLayer = (
     };
     
     const handleLayerRemoveSelectedLayer = (channel, layer) => {
+        // Remove possible cql filters
+        store.dispatch(setCQLFilters(cqlFilters.filter(f => f.layer !== layer.id)));
+        const updatedCqlInfo = cqlFilteringInfo.filter(f => f.layer.id !== layer.id);
+        store.dispatch(setCQLFilteringInfo(updatedCqlInfo));
+        updatedCqlInfo.length === 0 && store.dispatch(setMinimizeCQLFilterModal({minimized: false}));
+        channel && channel.postRequest(
+            'MapModulePlugin.MapLayerUpdateRequest',
+            [layer.id, true, { 'CQL_FILTER': null }]
+            );
+
         channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, false]);
         updateLayers(store, channel);
     };

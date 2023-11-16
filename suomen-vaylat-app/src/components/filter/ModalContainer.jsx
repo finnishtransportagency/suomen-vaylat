@@ -12,7 +12,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { FreeMode, Controller } from "swiper";
 import { isMobile } from "../../theme/theme";
 import { CQLFilterModal } from "./CQLFilterModal";
-import { setCQLFilteringInfo } from "../../state/slices/rpcSlice";
+import { setCQLFilteringInfo, setCQLFilters } from "../../state/slices/rpcSlice";
 
 const StyledModalContainer = styled.div`
   :after {
@@ -123,6 +123,7 @@ export const ModalContainer = ({}) => {
   const {
     cqlFilteringInfo,
     allLayers,
+    cqlFilters
   } = useAppSelector((state) => state.rpc);
   const {
     minimizeCQLFilter
@@ -156,6 +157,7 @@ export const ModalContainer = ({}) => {
 
   const closeTab = (index, id) => {
     // delete filter by layer
+    store.dispatch(setCQLFilters(cqlFilters.filter(f => f.layer !== id)));
     store.dispatch(setCQLFilteringInfo(cqlFilteringInfo.filter(f => f.layer.id !== id)))
     if (index > 0) {
       handleSelectTab(index - 1);
