@@ -40,7 +40,8 @@ import {
   setUpdateCustomLayers,
   setIsCQLFilterModalOpen,
   setMinimizeCQLFilterModal,
-  setMaximizeCQLFilterModal
+  setMaximizeCQLFilterModal,
+  setShowSavedLayers
 } from "../../state/slices/uiSlice";
 
 import {
@@ -227,14 +228,14 @@ const Content = () => {
 
   const [currentAnnouncement, setCurrentAnnouncement] = useState(null);
 
-    const handleCustomFilterClose = () => {
-        store.dispatch(setIsCustomFilterOpen(false));
-        //localStorage.removeItem("checkedLayers");
-        //store.dispatch(setIsSavedLayer(false));
-        //store.dispatch(setShowCustomLayerList(false));
-        store.dispatch(setUpdateCustomLayers(false));
-        //store.dispatch(setCheckedLayer([]));
-      };
+  const handleCustomFilterClose = () => {
+    store.dispatch(setIsCustomFilterOpen(false));
+    store.dispatch(setUpdateCustomLayers(false));
+    const checkedLayers = localStorage.getItem('checkedLayers');
+    if (!checkedLayers || JSON.parse(checkedLayers).length === 0) {
+      store.dispatch(setShowSavedLayers(false));
+    }
+  };
 
   const [isGfiDownloadToolsOpen, setIsGfiDownloadToolsOpen] = useState(false);
   const [isGfiToolsOpenLocal, setIsGfiToolsOpenLocal] = useState(false);
