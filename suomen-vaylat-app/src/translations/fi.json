@@ -186,22 +186,22 @@
       },
       "mapLevelMenu": {
         "title": "Karttatasovalikko",
-        "subTitle": "Karttatasovalikko avautuu vasemmasta yläreunasta. Valittavissa on 3 välilehteä",
+        "subTitle": "Karttatasovalikko avautuu vasemmasta yläreunasta. Valittavissa on kaksi välilehteä.",
         "tabsContent": {
-          "materList": "Aineistolistausta voi suodattaa aiheittain suodatin-painikkeen takaa. Karttatasoa voi hakea nimellä kirjoittamalla vähintään 3 kirjainta haku-kenttään.",
-          "selectedLayers": "Lista kartalle valituista karttatasoista. Tasojen järjestystä voi vaihtaa raahaamalla niitä oikean reunan ikonista. Läpinäkyvyyttä voi säätää liukusäätimellä ja tason valinnan voi poistaa ruksista."
+          "allLayers": "Karttatasoa voi hakea nimellä kirjoittamalla 3 kirjainta haku-kenttään. Aineistolistausta voi suodattaa aihealueittain Suodata tyypeittäin -valikon alta tai tallentaa oma suodatin halutuista aineistoista selaimen välimuistiin. Oma suodatin on käytettävissä sillä laitteella ja selaimessa, johon oma suodatin on tallennettu.\nKarttatason nimen vieressä olevasta info-kuvakkeesta avautuu aineiston metatiedot. Mikäli karttatason kohdalla näkyy latauspainike, aineisto on ladattavissa koko Suomen alueelta. Latauspainikkeen puuttuessa aineiston lataus edellyttää kohteen valintaa kartalta.\nOsa aineistoista on suodatettavissa aineiston ominaisuustietojen pohjalta. Mikäli aineistoa voidaan suodattaa, karttatason kohdalla näkyy suodatin-kuvake. Aineiston suodatus onnistuu valitsemalla taso ensin aktiiviseksi ja siirtymällä tämän jälkeen Valitut tasot -välilehdelle, mistä karttatason suodatustoiminto avautuu suodatin-painikkeesta.",
+          "selectedLayers": "Lista kartalle valituista karttatasoista. Tasojen järjestystä voi vaihtaa raahaamalla niitä vasemman reunan ikonista. Läpinäkyvyyttä voi säätää liukusäätimellä ja tason valinnan voi poistaa ruksista. Suodatin-painikkeesta avautuu suodatustoiminto, mistä kartalla näkyviä tietoja voidaan suodattaa ominaisuustietojen pohjalta."
         }
       },
       "search": {
         "title": "Haku",
-        "content": "Haku avautuu kartan oikean yläkulman suurennuslasi-painikkeesta. Haku-toiminnolla voi hakea kuntia, osoitteita, kiinteistötunnuksia, tieosoitteita tai rataosoitteita. Tarkempi ohje aukeaa, kun avaa haun. Hakuohjeen voi piilottaa painamalla hakukentän kysymysmerkkiä.  Hakutuloksen voi poistaa kartalta painamalla hakukentän roskakoria."
+        "content": "Haku avautuu kartan oikean yläkulman suurennuslasi-painikkeesta. Haku-toiminnolla voi hakea kuntia, osoitteita, kiinteistötunnuksia, tieosoitteita tai rataosoitteita. Tarkemmat hakuohjeet löytyvät avaamalla lisää hakuehtoja hakukentässä näkyvästä nuolipainikkeesta. Hakuohjeet voi avata ja sulkea hakukohtaisesti info-kuvakkeesta. Hakutuloksen voi poistaa kartalta painamalla hakukentän roskakoria."
       },
       "drawingTools": {
         "title": "Piirtotyökalut",
         "content": "Piirtotyökalut avautuvat vasemman reunan piirto-painikkeesta. Työkaluilla voidaan lisätä kartalle geometrioita ja mitata pituutta tai pinta-alaa. Piirretyt geometriat ja karttamerkinnät voidaan tallentaa muistiin klikkaamalla Tallenna-painiketta, joka on piirtotyökalujen alin painike.  Piirretyt geometriat voidaan poistaa kartalta oranssilla kumi-painikkeella."
       },
       "gfi": {
-        "content": "Kohdetiedot avautuvat klikkaamalla mistä tahansa kartalla, tai vasemman reunan panikkeesta, jonka ikonissa on karttamerkintä. Kohdetiedot-ikkunasta voit hakea kohdetietoja sekä näet tietoja valitsemistasi kohteista ja sijainneista, jotka voit myös halutessasi ladata suoraan laitteellesi valitsemassasi tiedostomuodossa."
+        "content": "Kohdetiedot avautuvat klikkaamalla mistä tahansa kartalla, tai vasemman reunan panikkeesta, jonka ikonissa on karttamerkintä. Kohdetiedot-ikkunasta voit hakea kohdetietoja, sekä näet tietoja valitsemistasi kohteista ja sijainneista, jotka voit myös halutessasi ladata suoraan laitteellesi valitsemassasi tiedostomuodossa. Mikäli karttatason nimen vieressä on suodatin-painike, voit suodattaa kohdetiedot-ikkunassa listattuja kohdetietoja.\nJos kohde on valittu klikkaamalla karttaa, Kohdetiedot-ikkunan sijaintitiedoista voidaan siirtyä tarkastelemaan kohdetta Google Street View -palvelussa. "
       },
       "downloads": {
         "title": "Lataukset",

@@ -186,22 +186,22 @@
       },
       "mapLevelMenu": {
         "title": "Map Level Menu",
-        "subTitle": "The map level menu opens at the top left. There are 3 tabs to choose from",
+        "subTitle": "The map level menu opens at the top left. There are two tabs to choose from.",
         "tabsContent": {
-          "materList": "You can filter the material list by topic behind the filter button. You can search the map level by name by entering at least 3 letters in the search field.",
-          "selectedLayers": "List of selected map levels on the map. You can change the order of the levels by dragging them from the icon on the right. The transparency can be adjusted with the slider and the level selec-tion can be deselected."
+          "allLayers": "You can search the map level by name by entering at least 3 letters in the search field. You can filter the material list by topic behind the Filter by type selection or you can save your own filter in the browser’s cache. Own filter is available on the device and browser where the filter is saved.\nFrom info-icon next to the map layer name you can open metadata for material. If there is a download button visible for the material, it can be downloaded from the whole area of Finland. If the download button is missing, downloading the material requires selecting an object on the map.\nSome of the materials can be filtered by the attribute data. You can use attribute filtering for the material if there is a filter-icon visible next to the map layer name. Filtering can be done by first selecting the map layer and then moving to the Selected layers tab where you can open filtering menu from the filter-button.",
+          "selectedLayers": "List of selected map levels on the map. You can change the order of the levels by dragging them from the icon on the left. The transparency can be adjusted with the slider and the level selection can be deselected. From the filter-button you can open filtering menu to filter material by the attribute data."
         }
       },
       "search": {
         "title": "Search",
-        "content": "The search opens in the upper right corner of the map using the magnifying glass button on the left. The Search function allows you to search for you and addresses by selecting the search you want to use from the drop-down menu. You can delete a search result from the map by tapping the trash in the search box."
+        "content": "The search opens in the upper right corner of the map using the magnifying glass button on the left. The Search function allows you to search for municipalities, addresses, real estate unit identifiers, street addresses or railway addresses by selecting the search you want to use from the drop-down menu. More detailed instructions can be found from info-icons shown in the drop-down menu. You can delete a search result from the map by tapping the trash in the search box."
       },
       "drawingTools": {
         "title": "Drawing tools",
         "content": "Drawing tools open from the drawing button on the left. The tools can be used to add geometries to the map and to measure length or area. Drawn geometries and markers can be saved by clicking the Save button, which is at the very bottom in the Drawing tools menu.  Drawn geometries can be deleted from the map with the orange rubber button."
       },
       "gfi": {
-        "content": "To access feature data, click anywhere on the map or click the button with the marker icon on the left. In the Feature Data window, you can search for feature data and view information about the features and locations you select, which you can also download directly to your device in a file format of your choosing."
+        "content": "To access feature data, click anywhere on the map or click the button with the marker icon on the left. In the Feature Data window, you can search for feature data and view information about the features and locations you select, which you can also download directly to your device in a file format of your choosing. If there is a filter-button next to the map layer name, you can filter data listed in the Feature Data window.\nIf you have selected the object by clicking the map, you can explore the same location from Google Street View service. Google Street View can be opened from location informations at the Feature Data window."
       },
       "downloads": {
         "title": "Downloads",

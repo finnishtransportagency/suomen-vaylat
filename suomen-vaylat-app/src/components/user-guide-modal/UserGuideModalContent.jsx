@@ -145,7 +145,11 @@ export const UserGuideModalContent = () => {
                         <p>{strings.gfi.title}</p>
                     </StyledTitleWrapper>,
             content: <StyledGuideContent style={{display: 'grid', gridTemplateColumns: '1fr'}}>
-                        <p>{strings.appGuide.modalContent.gfi.content}</p>
+                {
+                    strings.appGuide.modalContent.gfi.content.split('\n').map(c => {
+                        return ( <p> {c} </p>) 
+                    })
+                }
                     </StyledGuideContent>
         },
         {

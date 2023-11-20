@@ -186,22 +186,22 @@
       },
       "mapLevelMenu": {
         "title": "Kartnivåmeny",
-        "subTitle": "Kartnivåmenyn öppnas uppe till vänster. Det finns 3 flikar att välja mellan",
+        "subTitle": "Kartnivåmenyn öppnas uppe till vänster. Det finns två flikar att välja mellan.",
         "tabsContent": {
-          "materList": "Du kan filtrera materiallistan efter ämne bakom filterknappen. Du kan söka på kartnivån efter namn genom att ange minst 3 bokstäver i sökfältet.",
-          "selectedLayers": "Lista över valda kartnivåer på kartan. Du kan ändra ordningen på nivåerna genom att dra dem från ikonen till höger. Transparensen kan justeras med skjutreglaget och nivåvalet kan avmarkeras."
+          "allLayers": "Du kan söka på kartnivån efter namn genom att ange minst 3 bokstäver i sökfältet. Du kan filtrera materiallistan efter ämne bakom filterknappen eller du kan spara ditt eget filter i webbläsarens cacheminne. Egett filter är tillgängliga på den enhet och i den webbläsare där filter är sparats.\nInfo-ikonen bredvid kartnivå namnet öppnar materialets metadata. Om en nedladdningsknapp är synlig på kartnivå kan materialet laddas ner från hela Finlands område. Om nedladdningsknappen saknas måste du välja ett objekt på kartan för att ladda ner datan.E\nn del av materialen kan filtreras utifrån materialets attribut data. Om materialet kan filtreras visas en filterikon på kartnivå. Du kan filtrera data genom att först välja lagret som aktivt och sedan byta till fliken Valda lagert, där filtermenyn öppnas från filterknappen.",
+          "selectedLayers": "Lista över valda kartnivåer på kartan. Du kan ändra ordningen på nivåerna genom att dra dem från ikonen till vänster. Transparensen kan justeras med skjutreglaget och nivåvalet kan avmarkeras. Filterknappen öppnar filtermenyn, där informationen som visas på kartan kan filtreras utifrån attribut data."
         }
       },
       "search": {
         "title": "Sök",
-        "content": "Sökningen öppnas i kartans övre högra hörn med hjälp av förstoringsglasknappen till vänster. Sökfunktionen låter dig söka efter dig och adresser genom att välja den sökning du vill använda från rullgardinsmenyn. Du kan ta bort ett sökresultat från kartan genom att trycka på papperskorgen i sökrutan."
+        "content": "Sökningen öppnas i kartans övre högra hörn med hjälp av förstoringsglasknappen till vänster. Sökfunktionen låter dig söka efter kommuner, adresser, fastighetsbeteckningar, gatuadresser eller järnvägsadresser genom att välja den sökning du vill använda från rullgardinsmenyn. Mer detaljerade instruktioner kan hittas från info-ikoner som visas i rullgardinsmenyn. Du kan ta bort ett sökresultat från kartan genom att trycka på papperskorgen i sökrutan."
       },
       "drawingTools": {
         "title": "Ritverktyg",
         "content": "Ritverktygen öppnas genom att klicka på ritknappen i vänstra kanten. Med verktygen kan man lägga till geometri på kartan och mäta längd eller yta. Ritad geometri och kartanteckningar kan sparas i minnet genom att klicka på knappen Spara, som är knappen längst ned bland ritverktygen.  Ritad geometri kan avlägsnas från kartan genom att klicka på den orange suddgummiknappen."
       },
       "gfi": {
-        "content": "Objektdata öppnas genom att klicka var som helst på kartan eller via knappen i vänstra kanten som har en kartanteckning som ikon. I fönstret Objektdata kan du söka objektdata och se uppgifter om valda objekt och platser som du också kan ladda ner direkt till din enhet i valfritt filformat."
+        "content": "Objektdata öppnas genom att klicka var som helst på kartan eller via knappen i vänstra kanten som har en kartanteckning som ikon. I fönstret Objektdata kan du söka objektdata och se uppgifter om valda objekt och platser som du också kan ladda ner direkt till din enhet i valfritt filformat. Om det finns en filterknapp bredvid kartnivå namnet kan du filtrera objektdata som listas i fönstret Objektdata.\nOm du har valt objektet genom att klicka på kartan kan du utforska samma plats från tjänsten Google Street View. Google Street View kan öppnas från positionsdata i fönstret Objektdata."
       },
       "downloads": {
         "title": "Nedladdningar",
