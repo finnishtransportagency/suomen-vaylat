@@ -184,7 +184,7 @@
         "title": "Teman",
         "content": "Att välja ett tema visar kartnivåerna som definierats för temat och öppnar en meny för att välja kartmaterial som är relaterat till temat. En del av kartmaterialen har sin egen stil för temat. Det kan bara finnas ett tema åt gången. När ett tema är valt kan du också välja andra kartmaterial än de som definierats för temat i menyn Alla nivåer. Temat avslutas med temamarkören överst på kartan."
       },
-      "mapLevelMenu": {
+      "mapLayerMenu": {
         "title": "Kartnivåmeny",
         "subTitle": "Kartnivåmenyn öppnas uppe till vänster. Det finns två flikar att välja mellan.",
         "tabsContent": {

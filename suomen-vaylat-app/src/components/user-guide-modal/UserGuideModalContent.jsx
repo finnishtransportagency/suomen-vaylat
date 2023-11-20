@@ -133,7 +133,7 @@ export const UserGuideModalContent = () => {
                         <StyledIconButton>
                             <StyledFAIcon icon={faLayerGroup} />
                         </StyledIconButton>
-                        <p>{strings.appGuide.modalContent.mapLevelMenu.title}</p>
+                        <p>{strings.appGuide.modalContent.mapLayerMenu.title}</p>
                     </StyledTitleWrapper>,
             content: <UserGuideTabs />
         },
