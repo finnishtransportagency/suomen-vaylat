@@ -185,11 +185,11 @@
         "content": "Selecting a theme displays the map layers defined for the theme and opens a menu for selecting map materials related to the theme. Some of the map materials have their own style for the theme. There can be only one theme at a time. When a theme is selected, you can also select map materials other than those defined for the theme in the All Levels menu. The theme closes with the theme marker at the top of the map."
       },
       "mapLevelMenu": {
-        "title": "Map Level Menu",
-        "subTitle": "The map level menu opens at the top left. There are two tabs to choose from.",
+        "title": "Map Layer Menu",
+        "subTitle": "The map layer menu opens at the top left. There are two tabs to choose from.",
         "tabsContent": {
-          "allLayers": "You can search the map level by name by entering at least 3 letters in the search field. You can filter the material list by topic behind the Filter by type selection or you can save your own filter in the browser’s cache. Own filter is available on the device and browser where the filter is saved.\nFrom info-icon next to the map layer name you can open metadata for material. If there is a download button visible for the material, it can be downloaded from the whole area of Finland. If the download button is missing, downloading the material requires selecting an object on the map.\nSome of the materials can be filtered by the attribute data. You can use attribute filtering for the material if there is a filter-icon visible next to the map layer name. Filtering can be done by first selecting the map layer and then moving to the Selected layers tab where you can open filtering menu from the filter-button.",
-          "selectedLayers": "List of selected map levels on the map. You can change the order of the levels by dragging them from the icon on the left. The transparency can be adjusted with the slider and the level selection can be deselected. From the filter-button you can open filtering menu to filter material by the attribute data."
+          "allLayers": "You can search the map layer by name by entering at least 3 letters in the search field. You can filter the material list by topic behind the Filter by type selection or you can save your own filter in the browser’s cache. Own filter is available on the device and browser where the filter is saved.\nFrom info-icon next to the map layer name you can open metadata for material. If there is a download button visible for the material, it can be downloaded from the whole area of Finland. If the download button is missing, downloading the material requires selecting an object on the map.\nSome of the materials can be filtered by the attribute data. You can use attribute filtering for the material if there is a filter-icon visible next to the map layer name. Filtering can be done by first selecting the map layer and then moving to the Selected layers tab where you can open filtering menu from the filter-button.",
+          "selectedLayers": "List of selected map layers on the map. You can change the order of the levels by dragging them from the icon on the left. The transparency can be adjusted with the slider and the level selection can be deselected. From the filter-button you can open filtering menu to filter material by the attribute data."
         }
       },
       "search": {
@@ -217,7 +217,7 @@
       },
       "zoomBar": {
         "title": "Captions / Zoom Bar",
-        "content": "You can open the zoom level and the map levels with their captions on the map at that zoom level from the caption icon at the bottom right. Map levels are listed at the top first. Selecting another scale from the zoom bar moves to the selected approach level."
+        "content": "You can open the zoom level and the map layers with their captions on the map at that zoom level from the caption icon at the bottom right. Map layers are listed at the top first. Selecting another scale from the zoom bar moves to the selected approach level."
       }
     }
   },
