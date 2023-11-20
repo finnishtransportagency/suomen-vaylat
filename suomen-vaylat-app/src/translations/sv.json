@@ -44,12 +44,12 @@
     "showUserGuide": "Visa bruksanvisningen"
   },
   "savedContent" : {
-    "savedContent" : "Save views and geometries",
+    "savedContent" : "Spara vyer och geometrier",
     "viewTitle" : "Syn",
     "geometryTitle" : "Geometrier",
     "saveView" : {
       "confirmDeleteAll" : "Är du säker på att du vill ta bort alla sparade vyer?",
-      "saveView" : "Save views and geometries",
+      "saveView" : "Spara vyer och geometrier",
       "savingView" : "Sparar vy",
       "saveViewDescription1" : "Visa kommer att sparas i webbläsarens lokala lagring",
       "saveViewDescription2" : "Sparad vy kan endast nås av webbläsaren som den har sparats",
@@ -74,8 +74,8 @@
     }
   },
   "gfi": {
-    "noResultsTitle": "No results",
-    "noResultsDesc": "No results with geometry, select new geometry or new layers",
+    "noResultsTitle": "Inga resultat",
+    "noResultsDesc": "Inga resultat med geometri, välj ny geometri eller nya lager",
     "filter": "Filtrera",
     "cqlFilter": "Filter på kartan",
     "title": "Objektuppgifter",
@@ -87,10 +87,10 @@
     "focusToLocations": "Precisera objekt",
     "choosingGfi": "Val av objektdata",
     "choosingGfiDescription0": "Kontrollera att du har aktiverat nivåer i menyn Kartnivåer",
-    "choosingGfiDescription1": "Show feature data selection tools by choosing Select Locations",
-    "choosingGfiDescription2": "You can choose locations by using drawing tools or cropping presets",
+    "choosingGfiDescription1": "Visa verktyg för val av funktionsdata genom att välja Välj Platser",
+    "choosingGfiDescription2": "Du kan välja platser genom att använda ritverktyg eller beskärning förinställningar",
     "draw": "Draw",
-    "drawSubtitle": "Select locations by using drawing tools",
+    "drawSubtitle": "Välj platser med hjälp av ritverktyg",
     "search": "Sökning",
     "dataTableView": "Listvy",
     "downloadMaterials": "Ladda ner material",
@@ -107,9 +107,9 @@
     },
     "streetView": {
       "title": "Google Street View",
-      "openGoogleStreetView": "Avaa Google Street View",
+      "openGoogleStreetView": "Öppna Google Street View",
       "googleStreetviewTitle": "Google Street View",
-      "googleStreetviewContent": "Avaa valittu piste Google Street View:ssä uudelle välilehdelle"
+      "googleStreetviewContent": "Öppna den valda punkten i Google Street View på en ny flik"
     }
   },
   "vkm": {
@@ -139,18 +139,18 @@
   "general": {
     "close": "Stänga",
     "warning": "Obs!",
-    "continue": "Continue",
-    "cancel": "Cancel",
+    "continue": "Fortsätta",
+    "cancel": "Avbryt",
     "dontShowAgain": "Visa inte igen",
     "ok": "OK",
     "OkLowerCaseK": "Ok"
   },
   "multipleLayersWarning": "Du håller på att lägga till minst 10 kartnivåer på kartan och det kan påverka tjänstens prestanda",
-  "multipleLayersFetchWarning": "You are about to fetch data from 10 or more maplayers, it might affect the performance of the service.",
+  "multipleLayersFetchWarning": "Du är på väg att hämta data från 10 eller fler maplayers, det kan påverka tjänstens prestanda.",
   "bodySizeWarning": "Beskärning geometrin är för stor, begränsa till en mindre yta.",
-  "bodySizeWarningTemporary": "Geometry is too big and data cannot be fetched right now.",
-  "generalError": "An error occurred.",
-  "noGfiLocationsWarning": "No results found, try another geometry.",
+  "bodySizeWarningTemporary": "Geometrin är för stor och data kan inte hämtas just nu.",
+  "generalError": "Ett fel uppstod.",
+  "noGfiLocationsWarning": "Inga resultat hittades, prova en annan geometri.",
   "exitConfirmation": "Du lämnar tjänsten Suomen Väylät. Vill du fortsätta?",
   "appGuide": {
     "title": "Användarguide",
