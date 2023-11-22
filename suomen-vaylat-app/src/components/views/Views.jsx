@@ -10,7 +10,7 @@ import { useSelector } from 'react-redux';
 
 import { v4 as uuidv4 } from 'uuid';
 
-import { setIsSaveViewOpen, setWarning, setSavedTabIndex, setGeoJsonArray, addToActiveGeometries, removeActiveGeometry, } from '../../state/slices/uiSlice';
+import { setIsSaveViewOpen, setWarning, setSavedTabIndex, setGeoJsonArray, addToActiveGeometries, removeActiveGeometry, removeFromDrawToolMarkers, setActiveTool, } from '../../state/slices/uiSlice';
 
 import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -696,21 +696,36 @@ const Geometries = () => {
         setGeometryName('');
     };
 
-    const handleRemoveGeometry = (geometry) => {
-        let updatedGeometries = geometries.filter((geometryData) => geometryData.id !== geometry.id);
-        window.localStorage.setItem('geometries', JSON.stringify(updatedGeometries));
-        setGeometries(JSON.parse(window.localStorage.getItem('geometries')));
-        if(activeGeometries.find(g => g.id === geometry.id)) {
-            store.dispatch(removeActiveGeometry(geometry.id));
-            channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [null, null, geometry.id]);
-            return;
-        };
+const handleRemoveGeometry = (geometry) => {
+    let updatedGeometries = geometries.filter((geometryData) => geometryData.id !== geometry.id);
+    window.localStorage.setItem('geometries', JSON.stringify(updatedGeometries));
+    setGeometries(JSON.parse(window.localStorage.getItem('geometries')));
+
+    // Only remove markers associated with the specific geometry
+    geometry.markers.forEach(marker => {
+        store.dispatch(removeMarkerRequest({markerId: marker.markerId}));
+        store.dispatch(removeFromDrawToolMarkers(marker.markerId));
+    });
+
+    if(activeGeometries.find(g => g.id === geometry.id)) {
+        store.dispatch(removeActiveGeometry(geometry.id));
+        channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [null, null, geometry.id]);
+        return;
     };
+};
+
+    
 
     const handleDeleteAllGeometries = () => {
         activeGeometries.forEach(geometry => {
             store.dispatch(removeActiveGeometry(geometry.id));
             channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [null, null, geometry.id]);
+        });
+        channel && channel.postRequest('DrawTools.StopDrawingRequest', []);
+        store.dispatch(setGeoJsonArray([]));
+        drawToolMarkers.forEach(marker => {
+            store.dispatch(removeMarkerRequest({markerId: marker.markerId}));
+            store.dispatch(removeFromDrawToolMarkers(marker.markerId));
         });
         window.localStorage.setItem('geometries', JSON.stringify([]));
         setGeometries(JSON.parse(window.localStorage.getItem('geometries')));
