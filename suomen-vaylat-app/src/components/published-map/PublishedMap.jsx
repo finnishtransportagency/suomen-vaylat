@@ -43,6 +43,8 @@ import SvLoder from '../../components/loader/SvLoader';
 import './PublishedMap.scss';
 import { theme } from '../../theme/theme';
 
+const GFI_GEOMETRY_LAYER_ID = 'drawtools-geometry-layer';
+
 const StyledPublishedMap = styled.div`
     position: absolute;
     top: 0px;
@@ -260,6 +262,11 @@ const PublishedMap = () => {
                         store.dispatch(setMinimizeGfi(false));
                         store.dispatch(setVKMData(data));
                         store.dispatch(setIsGfiOpen(true));
+
+                        channel && channel.postRequest(
+                            'MapModulePlugin.RemoveFeaturesFromMapRequest',
+                            [null, null, GFI_GEOMETRY_LAYER_ID]
+                        );
 
                         var MARKER_ID = 'VKM_MARKER';
 

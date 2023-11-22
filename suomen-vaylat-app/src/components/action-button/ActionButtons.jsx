@@ -213,7 +213,7 @@ const addFeaturesToMapParams =
                 lineJoin: 'round',
                 area: {
                     color: 'rgba(100, 255, 95, 0.7)',
-                    width: 8,
+                    width: 4,
                     lineJoin: 'round',
                 },
             },
@@ -234,7 +234,7 @@ const ActionButtons = ({
 
     const { store } = useContext(ReactReduxContext);
     
-    const [activeGeometries, setActiveGeometries] = useState(false);
+    const [activeGeometries, setActiveGeometries] = useState(true);
 
     const {
         channel,

@@ -40,6 +40,7 @@ import SVLoader from '../loader/SvLoader';
 import { DRAWING_TIP_LOCALSTORAGE } from '../../utils/constants';
 import { useAppSelector } from '../../state/hooks';
 
+const GFI_GEOMETRY_LAYER_ID = 'drawtools-geometry-layer';
 const BODY_SIZE_EXCEED = "BODY_SIZE_EXCEED";
 const GENERAL_FAIL = "GENERAL_FAIL";
 const vectorLayerId = 'SEARCH_VECTORLAYER';
@@ -211,7 +212,34 @@ const icons = {
     }
 };
 
-// TODO: IF THERE'S NO RESULTS, NOTIFY IT 
+const addFeaturesToMapParams = 
+    {
+        layerId: GFI_GEOMETRY_LAYER_ID,
+        featureStyle: {
+            fill: {
+                color: 'rgba(10, 140, 247, 0.3)',
+            },
+            stroke: {
+                color: 'rgba(10, 140, 247, 0.3)',
+                width: 5,
+                lineDash: 'solid',
+                lineCap: 'round',
+                lineJoin: 'round',
+                area: {
+                    color: 'rgba(100, 255, 95, 0.7)',
+                    width: 4,
+                    lineJoin: 'round',
+                },
+            },
+            image: {
+                shape: 5,
+                size: 3,
+                fill: {
+                    color: 'rgba(100, 255, 95, 0.7)',
+                },
+            },
+        },
+    };
 
 const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
     const drawinToolsData = [
@@ -507,6 +535,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
 
     const featureEventHandler = async (data) => {
         if (data.operation === 'click') {
+
             if (data.features) {
                 store.dispatch(setMinimizeGfi(false));
                 setIsGfiLoading(true)
@@ -593,6 +622,11 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
 
 
     const fetchFeaturesSynchronous = (feature, layer, data, numberedLoaderEnables) => {
+        
+        channel && channel.postRequest(
+            'MapModulePlugin.RemoveFeaturesFromMapRequest',
+            [null, null, GFI_GEOMETRY_LAYER_ID]
+        );
 
         return new Promise(function(resolve, reject) {
             // executor (the producing code, "singer")
@@ -601,18 +635,21 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
                 (gfiData) => {
                     store.dispatch(setVKMData(null));
                     channel.postRequest('MapModulePlugin.RemoveMarkersRequest', ["VKM_MARKER"]);
+                    
                     gfiData?.gfi?.forEach((gfi) => {
                         if (gfi.content.length > 0) {
-                            store.dispatch(setGFILocations({
+                            const gfiLoc = {
                                 content: gfi.content,
                                 layerId: gfi.layerId,
                                 gfiCroppingArea:
                                 data.geojson,
                                 type: 'geojson',
                                 moreFeatures: gfi.content.some(content => content.moreFeatures),
-                            })) 
+                            }
+                            store.dispatch(setGFILocations(gfiLoc))
                         }
                     });
+
                     if (numberedLoaderEnables)
                         setNumberedLoader(prevState => {
                             return {current: prevState.current + 1, total: prevState.total, enabled: prevState.enabled}
@@ -660,6 +697,16 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
             )
         });
     }  
+
+    useEffect(() => {
+        gfiLocations.forEach(gfiLocation => {
+            gfiLocation.gfiCroppingArea &&
+            channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', [
+                gfiLocation.gfiCroppingArea,
+                addFeaturesToMapParams
+            ]);
+        })
+    }, [gfiLocations]);
 
     useEffect(() => {
         window.localStorage.getItem('geometries') !== null &&

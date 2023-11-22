@@ -733,20 +733,20 @@ export const GFIPopup = ({ handleGfiDownload }) => {
                 },
                 stroke: {
                   color: "rgba(10, 140, 247, 0.3)",
-                  width: 5,
+                  width: 10,
                   lineDash: "solid",
                   lineCap: "round",
                   lineJoin: "round",
                   area: {
                     color: "rgba(100, 255, 95, 0.7)",
-                    width: 4,
+                    width: 3,
                     lineJoin: "round",
                   },
                 },
                 image: {
-                  size: 3,
+                  size: 5,
                   fill: {
-                    color: "rgba(100, 255, 95, 0.7)",
+                    color: "rgba(100, 255, 95, 0)",
                   },
                 },
               },

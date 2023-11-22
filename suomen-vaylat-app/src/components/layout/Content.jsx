@@ -78,9 +78,9 @@ import { ANNOUNCEMENTS_LOCALSTORAGE } from "../../utils/constants";
 import ThemeMenu from "../menus/theme-menu/ThemeMenu";
 
 import { CustomLayerModal } from "../menus/hierarchical-layerlist/CustomFilter/CustomLayerModal";
-import { CQLFilterModal } from "../filter/CQLFilterModal";
 import { ModalContainer } from "../filter/ModalContainer";
 
+const GFI_GEOMETRY_LAYER_ID = 'drawtools-geometry-layer';
 
 const StyledContent = styled.div`
   z-index: 1;
@@ -331,6 +331,10 @@ const Content = () => {
       null,
       "download-tool-layer",
     ]);
+    channel && channel.postRequest(
+      'MapModulePlugin.RemoveFeaturesFromMapRequest',
+      [null, null, GFI_GEOMETRY_LAYER_ID]
+    );
     channel.postRequest("DrawTools.StopDrawingRequest", [
       "gfi-selection-tool",
       true,
