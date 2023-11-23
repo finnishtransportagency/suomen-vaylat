@@ -423,7 +423,6 @@ export const GFIPopup = ({ handleGfiDownload }) => {
   const { activeSelectionTool } = useAppSelector((state) => state.ui);
   const [selectedTab, setSelectedTab] = useState(0);
   const [tabsContent, setTabsContent] = useState([]);
-  const [geoJsonToShow, setGeoJsonToShow] = useState(null);
   const [isGfiToolsOpen, setIsGfiToolsOpen] = useState(false);
   const [isDataTable, setIsDataTable] = useState(false);
   const [isGfiDownloadsOpen, setIsGfiDownloadsOpen] = useState(false);
@@ -432,7 +431,6 @@ export const GFIPopup = ({ handleGfiDownload }) => {
   const [gfiTabsSnapGridLength, setGfiTabsSnapGridLength] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const gfiInputEl = useRef(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleLinkClick = (event) => {
     const dontShow = JSON.parse(localStorage.getItem('dontShowModal'));
@@ -503,12 +501,6 @@ export const GFIPopup = ({ handleGfiDownload }) => {
 
     setTabsContent(mapResults);
   }, [allLayers, gfiLocations, isDataTable, selectedTab]);
-
-  useEffect(() => {
-    tabsContent[selectedTab] !== undefined &&
-      tabsContent[selectedTab].props.type === "geoJson" &&
-      setGeoJsonToShow(tabsContent[selectedTab].props.data);
-  }, [selectedTab, tabsContent]);
 
   useEffect(() => {
     isGfiDownloadsOpen && setIsGfiDownloadsOpen(false);
@@ -770,16 +762,6 @@ export const GFIPopup = ({ handleGfiDownload }) => {
     setIsGfiToolsOpen(false);
     setIsGfiDownloadsOpen(!isGfiDownloadsOpen);
   };
-
-  useEffect(() => {
-    channel &&
-      channel.postRequest("MapModulePlugin.RemoveFeaturesFromMapRequest", [
-        null,
-        null,
-        LAYER_ID,
-      ]);
-
-  }, [channel, geoJsonToShow]);
 
   const closeTab = (index, id, tabcontent) => {
     const updatedFilters = filters.filter(
