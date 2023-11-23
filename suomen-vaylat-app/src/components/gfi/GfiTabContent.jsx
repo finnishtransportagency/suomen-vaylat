@@ -11,11 +11,19 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useAppSelector } from "../../state/hooks";
-import { setFilteringInfo } from "../../state/slices/rpcSlice";
+import { setFilteringInfo,  setMapLayerVisibility,
+} from "../../state/slices/rpcSlice";
 import { Table } from "ka-table";
 import "ka-table/style.scss";
 import { theme, isMobile } from "../../theme/theme";
 import ReactTooltip from "react-tooltip";
+import { updateLayers } from "../../utils/rpcUtil";
+
+import {
+  setMinimizeCQLFilterModal,
+  setSelectedMapLayersMenuTab
+ } from "../../state/slices/uiSlice";
+
 
 const StyledSelectedTabHeader = styled.div`
   position: relative;
@@ -61,9 +69,11 @@ const StyledTabContent = styled.div`
   }
 `;
 
-const GfiTabContent = ({ data, title, tablePropsInit }) => {
-  const { filteringInfo, filters } = useAppSelector((state) => state.rpc);
+const GfiTabContent = ({ layer, data, title, tablePropsInit }) => {
+  const { channel, filteringInfo, filters } = useAppSelector((state) => state.rpc);
   const { store } = useContext(ReactReduxContext);
+  const { minimizeCQLFilter } = useAppSelector(state => state.ui);
+
 
   const [showDataTable, setShowDataTable] = useState(false);
 
@@ -142,6 +152,38 @@ const GfiTabContent = ({ data, title, tablePropsInit }) => {
     );
   }, [tablePropsInit]);
 
+  const handleFilterClick = () => {
+    if (!filteringInfo.some(f => f.layer.id === layer.id)) {
+      if (filteringInfo.filter(f => f.layer.id === layer.id).length === 0) {
+        var filterColumnsArray = [];
+        layer.config?.gfi?.filterFields &&
+        layer.config?.gfi?.filterFields.forEach((column) => {
+          if (column.field && column.type) {
+            filterColumnsArray.push({
+              key: column.field,
+              title: column.field,
+              type: column.type,
+              default: column.default || false
+            });
+          }
+        });
+  
+        const updateFilter = [...filteringInfo]
+        updateFilter.push({
+            modalOpen: true,
+            layer: {
+              id: layer.id,
+              title: layer.name,
+              filterColumnsArray: filterColumnsArray
+            }
+        }
+        )
+        store.dispatch(setFilteringInfo(updateFilter));
+      }
+    }
+    minimizeCQLFilter && store.dispatch(setMinimizeCQLFilterModal({minimized: false, layer: layer.id}))
+  }
+
   return (
     <>
       <StyledSelectedTabHeader>
@@ -150,18 +192,7 @@ const GfiTabContent = ({ data, title, tablePropsInit }) => {
         </StyledSelectedTabTitle>
         {isFiltering && (
           <StyledSelectedTabDisplayOptionsButton
-            onClick={() =>
-              store.dispatch(
-                setFilteringInfo({
-                  modalOpen: true,
-                  layer: {
-                    id: data.layerId,
-                    title: title,
-                    tableProps: tablePropsInit,
-                  },
-                })
-              )
-            }
+            onClick={handleFilterClick}
             data-tip
             data-for={"gfiFilter"}
           >

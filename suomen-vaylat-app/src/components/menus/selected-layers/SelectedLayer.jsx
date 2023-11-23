@@ -3,7 +3,7 @@ import { faInfoCircle, faTimes, faCaretDown, faCaretUp, faGripLines, faEye, faEy
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ReactReduxContext, useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { clearLayerMetadata, getLayerMetadata, setLayerMetadata, setZoomTo, setCQLFilteringInfo, setCQLFilters } from '../../../state/slices/rpcSlice';
+import { clearLayerMetadata, getLayerMetadata, setLayerMetadata, setZoomTo, setFilteringInfo, setCQLFilters } from '../../../state/slices/rpcSlice';
 import { updateLayers } from '../../../utils/rpcUtil';
 import { sortableHandle } from 'react-sortable-hoc';
 import ReactTooltip from "react-tooltip";
@@ -213,7 +213,7 @@ export const SelectedLayer = (
     const [opacity, setOpacity] = useState(layer.opacity);
     const [prevOpacity, setPrevOpacity] = useState(layer.opacity);
     const [isLayerVisible, setIsLayerVisible] = useState(layer.opacity !== 0);
-    const { channel, cqlFilters, cqlFilteringInfo, allSelectedThemeLayers } = useAppSelector(
+    const { channel, filters, filteringInfo, allSelectedThemeLayers } = useAppSelector(
         (state) => state.rpc
       );
 
@@ -227,7 +227,7 @@ export const SelectedLayer = (
     }, [layer.opacity])
 
     const handleOpenCQLFilteringModal = (layer) => {
-        if (cqlFilteringInfo.filter(f => f.layer.id === layer.id).length === 0) {
+        if (filteringInfo.filter(f => f.layer.id === layer.id).length === 0) {
             var filterColumnsArray = [];
             layer.config?.gfi?.filterFields &&
             layer.config?.gfi?.filterFields.forEach((column) => {
@@ -241,7 +241,7 @@ export const SelectedLayer = (
               }
             });
     
-            const updateFilter = [...cqlFilteringInfo]
+            const updateFilter = [...filteringInfo]
             updateFilter.push({
                 modalOpen: true,
                 layer: {
@@ -251,7 +251,7 @@ export const SelectedLayer = (
                 }
             }
             )
-            store.dispatch(setCQLFilteringInfo(updateFilter));
+            store.dispatch(setFilteringInfo(updateFilter));
             minimizeCQLFilter && store.dispatch(setMinimizeCQLFilterModal({minimized: false, layer: layer.id}))
         } else {
             minimizeCQLFilter && store.dispatch(setMinimizeCQLFilterModal({minimized: false, layer: layer.id}))
@@ -260,9 +260,9 @@ export const SelectedLayer = (
     
     const handleLayerRemoveSelectedLayer = (channel, layer) => {
         // Remove possible cql filters
-        store.dispatch(setCQLFilters(cqlFilters.filter(f => f.layer !== layer.id)));
-        const updatedCqlInfo = cqlFilteringInfo.filter(f => f.layer.id !== layer.id);
-        store.dispatch(setCQLFilteringInfo(updatedCqlInfo));
+        store.dispatch(setCQLFilters(filters.filter(f => f.layer !== layer.id)));
+        const updatedCqlInfo = filteringInfo.filter(f => f.layer.id !== layer.id);
+        store.dispatch(setFilteringInfo(updatedCqlInfo));
         updatedCqlInfo.length === 0 && store.dispatch(setMinimizeCQLFilterModal({minimized: false}));
         channel && channel.postRequest(
             'MapModulePlugin.MapLayerUpdateRequest',
@@ -398,7 +398,7 @@ export const SelectedLayer = (
                                 data-tip
                                 data-for={"filter"}
                             >
-                                <StyledFloatingSpan><FontAwesomeIcon icon={faFilter}  style={{ color: cqlFilters.filter(f => f.layer === layer.id).length > 0 ? theme.colors.secondaryColor8 : theme.colors.primaryColor1 }}/></StyledFloatingSpan>
+                                <StyledFloatingSpan><FontAwesomeIcon icon={faFilter}  style={{ color: filters.filter(f => f.layer === layer.id).length > 0 ? theme.colors.secondaryColor8 : theme.colors.primaryColor1 }}/></StyledFloatingSpan>
                             </StyledIconWrapper> 
                             </>
                         }

@@ -81,7 +81,7 @@ const StyledFilterActionButton = styled(motion.div)`
     z-index:100;
 `;
 
-const StyledCQLLeftContent = styled.div`
+const StyledFIlterLeftContent = styled.div`
     height: 100%;
     display: flex;
     align-items: center;
@@ -89,14 +89,14 @@ const StyledCQLLeftContent = styled.div`
     overflow: hidden;
 `;
 
-const StyledCQLRightContent = styled.div`
+const StyledFilterRightContent = styled.div`
     height: 100%;
     display: flex;
     align-items: center;
     max-width: 40%;
 `;
 
-const StyledCQLText = styled.div`
+const StyledFilterText = styled.div`
     font-size: 14px;
     font-weight: 600;
     user-select: none;
@@ -242,7 +242,7 @@ const ActionButtons = ({
         lastSelectedTheme,
         selectedThemeId,
         gfiLocations,
-        cqlFilteringInfo
+        filteringInfo
     } = useAppSelector((state) => state.rpc);
     const {
         minimizeGfi,
@@ -273,10 +273,10 @@ const ActionButtons = ({
     };
 
     // Get titles of filtered layers
-    var cqlInfoTitle = "";
-    cqlFilteringInfo.forEach((fil, index) => {
+    var filterInfoTitle = "";
+    filteringInfo.forEach((fil, index) => {
         const title = fil.layer.title.length > 10 ? fil.layer.title.substring(0, 10) + '... ' : fil.layer.title;
-        index === 0 ? cqlInfoTitle += title : cqlInfoTitle += ", " + title
+        index === 0 ? filterInfoTitle += title : filterInfoTitle += ", " + title
     })
 
     return (
@@ -376,17 +376,17 @@ const ActionButtons = ({
                                     type: "tween"
                                 }}
                             >
-                                <StyledCQLLeftContent>
+                                <StyledFilterLeftContent>
                                     <StyledActionButtonIcon>
                                         <FontAwesomeIcon
                                             icon={faFilter}
                                         />
                                     </StyledActionButtonIcon>
-                                    <StyledCQLText>
-                                    {cqlInfoTitle}
-                                    </StyledCQLText>
-                                </StyledCQLLeftContent>
-                                <StyledCQLRightContent>
+                                    <StyledFilterText>
+                                    {filterInfoTitle}
+                                    </StyledFilterText>
+                                </StyledFilterLeftContent>
+                                <StyledFilterRightContent>
                                     <StyledExpandButton
                                         onClick={() => store.dispatch(setMinimizeCQLFilterModal({minimized: false}))}
                                     >
@@ -401,7 +401,7 @@ const ActionButtons = ({
                                             icon={faTimes}
                                         />
                                     </StyledActionButtonClose>
-                                </StyledCQLRightContent>
+                                </StyledFilterRightContent>
 
                             </StyledFilterActionButton>
                         }

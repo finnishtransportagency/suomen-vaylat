@@ -416,8 +416,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
     gfiCroppingArea,
     selectedLayers,
     pointInfo,
-    filters,
-    cqlFilters
+    filters
   } = useAppSelector((state) => state.rpc);
 
   const [point, setPoint] = useState(null);
@@ -567,52 +566,61 @@ export const GFIPopup = ({ handleGfiDownload }) => {
   };
 
   const addGFIResultsToMap = (filteredFeatures) => {
-    let featureStyle = {
-      fill: {
-          color: '#e50083',
-      },
-      stroke: {
-          color: '#e50083',
-          width: 5,
-          lineDash: 'solid',
-          lineCap: 'round',
-          lineJoin: 'round',
-          area: {
-              color: '#e50083',
-              width: 4,
-              lineJoin: 'round'
-          }
-      },
-      image: {
-          shape: 5,
-          size: 3,
-          fill: {
-              color: '#e50083',
-          }
-      }
-    };
-
-    let options = {
-      featureStyle: featureStyle,
-      layerId: LAYER_ID,
-      animationDuration: 200,
-      clearPrevious: true,
-      };
-
-    let rn = 'MapModulePlugin.AddFeaturesToMapRequest';
-
-    var geojsonObject = {
-        type: 'FeatureCollection',
-        crs: {
-            type: 'name',
-            properties: {
-                name: 'EPSG:3067'
+    if (filteredFeatures.length === 0) {
+      channel &&
+      channel.postRequest("MapModulePlugin.RemoveFeaturesFromMapRequest", [
+        null,
+        null,
+        LAYER_ID,
+      ]);
+    } else {
+      let featureStyle = {
+        fill: {
+            color: '#e50083',
+        },
+        stroke: {
+            color: '#e50083',
+            width: 5,
+            lineDash: 'solid',
+            lineCap: 'round',
+            lineJoin: 'round',
+            area: {
+                color: '#e50083',
+                width: 4,
+                lineJoin: 'round'
             }
         },
-        features: filteredFeatures
-    };
+        image: {
+            shape: 5,
+            size: 3,
+            fill: {
+                color: '#e50083',
+            }
+        }
+      };
 
-    channel.postRequest(rn, [geojsonObject, options]);
+      let options = {
+        featureStyle: featureStyle,
+        layerId: LAYER_ID,
+        animationDuration: 200,
+        clearPrevious: true,
+        };
+
+      let rn = 'MapModulePlugin.AddFeaturesToMapRequest';
+
+      var geojsonObject = {
+          type: 'FeatureCollection',
+          crs: {
+              type: 'name',
+              properties: {
+                  name: 'EPSG:3067'
+              }
+          },
+          features: filteredFeatures
+      };
+
+      channel.postRequest(rn, [geojsonObject, options]);
+    }
   }
 
   const tablePropsInit = (index, data) => {
@@ -666,7 +674,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
         var featureCells =
           cont.geojson.features &&
           cont.geojson.features
-            .filter((feature) => filterFeature(feature, data, filters, cqlFilters, channel))
+            .filter((feature) => filterFeature(feature, data, filters, channel))
             .map((feature) => {
               filteredFeatures.push(feature);
               var cell = { ...feature.properties };
@@ -678,6 +686,8 @@ export const GFIPopup = ({ handleGfiDownload }) => {
             });
         cells.push(...featureCells);
       });
+
+      console.log(filteredFeatures)
 
     // Set filtered results to map
     selectedTab == index && addGFIResultsToMap(filteredFeatures)
@@ -1149,7 +1159,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
             // count the amount of results when filtered
             location?.content?.forEach((cont) => {
               cont.geojson?.features?.forEach((feature) => {
-                if (filterFeature(feature, location, filters, cqlFilters, channel)) {
+                if (filterFeature(feature, location, filters, channel)) {
                   featuresAmount += 1;
                 }
               });
@@ -1162,6 +1172,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
                   key={"gfi_tab_content_" + location.layerId}
                 >
                   <GfiTabContent
+                    layer={layers[0]}
                     data={location}
                     title={title}
                     tablePropsInit={tableProps}

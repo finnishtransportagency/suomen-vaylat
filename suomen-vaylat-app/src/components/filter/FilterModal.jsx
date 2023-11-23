@@ -1,10 +1,12 @@
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext, useEffect, useRef } from "react";
 import { useAppSelector } from "../../state/hooks";
 import { ReactReduxContext } from "react-redux";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import "dayjs/locale/fi";
 import "dayjs/locale/sv";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+
+import { updateFiltersOnMap } from "../../utils/gfiUtil"
 
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
@@ -15,7 +17,7 @@ import Dropdown from "../select/Dropdown";
 import { faPlus, faTimes, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import { setFilters, setActiveGFILayer } from "../../state/slices/rpcSlice";
+import { setFilters } from "../../state/slices/rpcSlice";
 
 const StyledFilterProp = styled.div``;
 
@@ -182,19 +184,16 @@ const StyledTrashIconWrapper = styled.div`
   }
 `;
 
-export const FilterModal = () => {
+export const FilterModal = ({cqlFilterInfo}) => {
   const {
     filters,
-    activeGFILayer,
-    filteringInfo,
-    gfiLocations,
-    selectedLayers,
     channel,
   } = useAppSelector((state) => state.rpc);
   const { store } = useContext(ReactReduxContext);
   const [operatorValue, setOperatorValue] = useState({});
   const [filterValue, setFilterValue] = useState({ value: "", type: null });
   const [propValue, setPropValue] = useState({});
+  const [filterOptions, setFilterOptions] = useState([]);
   const [fieldNameLocales, setFieldNameLocales] = useState({});
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
@@ -220,14 +219,13 @@ export const FilterModal = () => {
     }
     const type = propValue.type;
     const oper = type === "date" ? "date" : operatorValue.value;
-    const layer = filteringInfo?.layer?.id;
+    const layer = cqlFilterInfo?.layer?.id;
 
     if (!prop || !value) {
       //lisää popup varoitus
       return;
     }
-    store.dispatch(
-      setFilters([
+    const updatedCQLFilters = [
         ...filters,
         {
           layer: layer,
@@ -236,7 +234,11 @@ export const FilterModal = () => {
           value: value,
           type: type,
         },
-      ])
+      ]
+
+    updateFiltersOnMap(updatedCQLFilters, cqlFilterInfo, channel);
+    store.dispatch(
+      setFilters(updatedCQLFilters)
     );
     setStartDate(null);
     setEndDate(null);
@@ -268,14 +270,7 @@ export const FilterModal = () => {
   };
 
   useEffect(() => {
-    if (activeGFILayer === null) {
-      const layer = selectedLayers.filter(
-        (l) => l.id == gfiLocations[0].layerId
-      );
-      store.dispatch(setActiveGFILayer(layer));
-    }
-
-    var layer = filteringInfo?.layer;
+    var layer = cqlFilterInfo?.layer;
     channel.getFieldNameLocales(
       [layer?.id],
       (data) => {
@@ -287,53 +282,49 @@ export const FilterModal = () => {
     );
   }, []);
 
+  useEffect(() => {
+    var layer = cqlFilterInfo?.layer;
+    const options = layer?.filterColumnsArray.map((column) => {
+      if (Object.keys(fieldNameLocales).length > 0) {
+        const props = {
+          value: column.key,
+          label: fieldNameLocales[column.title],
+          type: column.type
+        };
+        column.default && handleSetPropValue(props)
+        return props;
+      } else {
+        const props = {
+          value: column.key,
+          label: column.title,
+          type: column.type
+        };
+        column.default && handleSetPropValue(props)
+        return props;
+      }
+    });
+    setFilterOptions(options);
+  }, [fieldNameLocales]);
+
   const [activeFilters, setActiveFilters] = useState();
 
   useEffect(() => {
-    if (filteringInfo && filteringInfo?.layer && filters) {
+    if (cqlFilterInfo && cqlFilterInfo?.layer && filters) {
       const updatedActivefilters = filters.filter(
-        (filter) => filter.layer === filteringInfo?.layer.id
+        (filter) => filter.layer === cqlFilterInfo?.layer?.id
       );
       setActiveFilters(updatedActivefilters);
     }
-  }, [filters, filteringInfo]);
+  }, [filters, cqlFilterInfo]);
 
-  const handleRemoveFilter = (filter) => {
+const handleRemoveFilter = (filter) => {
     if (filters && filters.length > 0 && filters.includes(filter)) {
       const updatedFilters = filters.filter(
         (existingFilter) => existingFilter !== filter
       );
+      updateFiltersOnMap(updatedFilters, cqlFilterInfo, channel)
       store.dispatch(setFilters(updatedFilters));
     }
-  };
-
-  const handleRemoveAllFilters = () => {
-    if (filters && filters.length > 0) {
-      const updatedFilters = filters.filter(
-        (filter) => filter.layer !== activeGFILayer[0]?.id
-      );
-      store.dispatch(setFilters(updatedFilters));
-    }
-  };
-
-  const filterOptions = () => {
-    var layer = filteringInfo?.layer;
-    const options = layer?.tableProps?.filterableColumns?.map((column) => {
-      if (Object.keys(fieldNameLocales).length > 0) {
-        return {
-          value: column.key,
-          label: fieldNameLocales[column.title],
-          type: column.type,
-        };
-      } else {
-        return {
-          value: column.key,
-          label: column.title,
-          type: column.type,
-        };
-      }
-    });
-    return options;
   };
 
   return (
@@ -341,9 +332,10 @@ export const FilterModal = () => {
       <StyledModalSelectionContainer>
         <StyledModalFloatingChapter>
           <Dropdown
-            options={filterOptions()}
+            options={filterOptions}
             placeholder={strings.gfifiltering.placeholders.chooseProp}
             value={propValue}
+            defaultProperty={[cqlFilterInfo?.layer.defaultFilterProperty]}
             setValue={(value) => handleSetPropValue(value)}
             isDisabled={false}
           />
@@ -478,7 +470,7 @@ export const FilterModal = () => {
             <StyledFilterReusltButtons>
               <StyledTrashIconWrapper
                 onClick={() => {
-                  handleRemoveAllFilters();
+                    store.dispatch(setFilters([]));
                 }}
               >
                 {strings.gfifiltering.removeAllFilters}{" "}

@@ -9,7 +9,7 @@ import {
    setMinimizeCQLFilterModal,
    setSelectedMapLayersMenuTab
   } from "../../../state/slices/uiSlice";
-import { setCQLFilteringInfo } from '../../../state/slices/rpcSlice';
+import { setFilteringInfo } from '../../../state/slices/rpcSlice';
 
 import styled from 'styled-components';
 import {
@@ -123,14 +123,14 @@ export const Layer = ({ layer, themeName, groupName }) => {
     const { store } = useContext(ReactReduxContext);
     const [layerStyle, setLayerStyle] = useState(null);
     const [themeSelected, setThemeSelected] = useState(false);
-    const {cqlFilteringInfo} = useAppSelector(state => state.rpc)
     const { minimizeCQLFilter } = useAppSelector(state => state.ui);
 
     const isFilterable = typeof layer.config?.gfi?.filterFields !== "undefined" && layer.config?.gfi?.filterFields.length > 0 ;
 
     const {
         channel,
-        selectedTheme
+        selectedTheme,
+        filteringInfo
     } = useSelector(state => state.rpc);
 
     const excludeGroups = ["Digiroad", "Tierekisteri (Poistuva)"];
@@ -199,7 +199,7 @@ export const Layer = ({ layer, themeName, groupName }) => {
     handleLayerVisibility(channel, layer)
     store.dispatch(setSelectedMapLayersMenuTab(2));
 
-    if (cqlFilteringInfo.filter(f => f.layer.id === layer.id).length === 0) {
+    if (filteringInfo.filter(f => f.layer.id === layer.id).length === 0) {
       var filterColumnsArray = [];
       layer.config?.gfi?.filterFields &&
       layer.config?.gfi?.filterFields.forEach((column) => {
@@ -213,7 +213,7 @@ export const Layer = ({ layer, themeName, groupName }) => {
         }
       });
 
-      const updateFilter = [...cqlFilteringInfo]
+      const updateFilter = [...filteringInfo]
       updateFilter.push({
           modalOpen: true,
           layer: {
@@ -223,7 +223,7 @@ export const Layer = ({ layer, themeName, groupName }) => {
           }
       }
       )
-      store.dispatch(setCQLFilteringInfo(updateFilter));
+      store.dispatch(setFilteringInfo(updateFilter));
       minimizeCQLFilter && store.dispatch(setMinimizeCQLFilterModal({minimized: false, layer: layer.id}))
     } else {
         minimizeCQLFilter && store.dispatch(setMinimizeCQLFilterModal({minimized: false, layer: layer.id}))
