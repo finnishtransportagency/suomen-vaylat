@@ -566,7 +566,56 @@ export const GFIPopup = ({ handleGfiDownload }) => {
     setIsVKMInfoOpen(!isVKMInfoOpen);
   };
 
-  const tablePropsInit = (data) => {
+  const addGFIResultsToMap = (filteredFeatures) => {
+    let featureStyle = {
+      fill: {
+          color: '#e50083',
+      },
+      stroke: {
+          color: '#e50083',
+          width: 5,
+          lineDash: 'solid',
+          lineCap: 'round',
+          lineJoin: 'round',
+          area: {
+              color: '#e50083',
+              width: 4,
+              lineJoin: 'round'
+          }
+      },
+      image: {
+          shape: 5,
+          size: 3,
+          fill: {
+              color: '#e50083',
+          }
+      }
+    };
+
+    let options = {
+      featureStyle: featureStyle,
+      layerId: LAYER_ID,
+      animationDuration: 200,
+      clearPrevious: true,
+      };
+
+    let rn = 'MapModulePlugin.AddFeaturesToMapRequest';
+
+    var geojsonObject = {
+        type: 'FeatureCollection',
+        crs: {
+            type: 'name',
+            properties: {
+                name: 'EPSG:3067'
+            }
+        },
+        features: filteredFeatures
+    };
+
+    channel.postRequest(rn, [geojsonObject, options]);
+  }
+
+  const tablePropsInit = (index, data) => {
     const properties =
       data &&
       data.content &&
@@ -629,6 +678,9 @@ export const GFIPopup = ({ handleGfiDownload }) => {
             });
         cells.push(...featureCells);
       });
+
+    // Set filtered results to map
+    selectedTab == index && addGFIResultsToMap(filteredFeatures)
 
     const tablePropsInit = {
       columns: columnsArray,
@@ -719,66 +771,6 @@ export const GFIPopup = ({ handleGfiDownload }) => {
         LAYER_ID,
       ]);
 
-    if (geoJsonToShow !== null) {
-      geoJsonToShow.forEach((geoJson) => {
-        channel &&
-          channel.postRequest("MapModulePlugin.AddFeaturesToMapRequest", [
-            geoJson.geojson,
-            {
-              layerId: LAYER_ID,
-              cursor: "pointer",
-              featureStyle: {
-                fill: {
-                  color: "rgba(10, 140, 247, 0.3)",
-                },
-                stroke: {
-                  color: "rgba(10, 140, 247, 0.3)",
-                  width: 10,
-                  lineDash: "solid",
-                  lineCap: "round",
-                  lineJoin: "round",
-                  area: {
-                    color: "rgba(100, 255, 95, 0.7)",
-                    width: 3,
-                    lineJoin: "round",
-                  },
-                },
-                image: {
-                  size: 5,
-                  fill: {
-                    color: "rgba(100, 255, 95, 0)",
-                  },
-                },
-              },
-              hover: {
-                featureStyle: {
-                  fill: {
-                    color: "rgba(0, 99, 175, 0.7)",
-                  },
-                  stroke: {
-                    color: "#0064af",
-                    width: 2,
-                  },
-                  text: {
-                    fill: {
-                      color: "#ffffff",
-                    },
-                    stroke: {
-                      color: "#0064af",
-                      width: 5,
-                    },
-                    font: "bold 16px Arial",
-                    textAlign: "center",
-                    textBaseline: "middle",
-                    offsetX: 0,
-                    offsetY: 0,
-                  },
-                },
-              },
-            },
-          ]);
-      });
-    }
   }, [channel, geoJsonToShow]);
 
   const closeTab = (index, id, tabcontent) => {
@@ -1141,12 +1133,12 @@ export const GFIPopup = ({ handleGfiDownload }) => {
           allowTouchMove={false} // Disable swiping
           speed={300}
         >
-          {gfiLocations.map((location) => {
+          {gfiLocations.map((location, index) => {
             const layers = allLayers.filter(
               (layer) => layer.id === location.layerId
             );
             const title = layers.length > 0 && layers[0].name;
-            const tableProps = tablePropsInit(location);
+            const tableProps = tablePropsInit(index, location);
             let totalFeatures = 0;
             location?.content?.forEach((cont) => {
               totalFeatures += cont.geojson.totalFeatures;
