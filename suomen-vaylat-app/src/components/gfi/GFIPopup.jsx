@@ -687,8 +687,6 @@ export const GFIPopup = ({ handleGfiDownload }) => {
         cells.push(...featureCells);
       });
 
-      console.log(filteredFeatures)
-
     // Set filtered results to map
     selectedTab == index && addGFIResultsToMap(filteredFeatures)
 

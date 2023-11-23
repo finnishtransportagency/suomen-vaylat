@@ -217,14 +217,9 @@ const addFeaturesToMapParams =
         layerId: GFI_GEOMETRY_LAYER_ID,
         featureStyle: {
             fill: {
-                color: 'rgba(10, 140, 247, 0.3)',
+                color: 'rgba(10, 140, 247, 0.1)',
             },
             stroke: {
-                color: 'rgba(10, 140, 247, 0.3)',
-                width: 5,
-                lineDash: 'solid',
-                lineCap: 'round',
-                lineJoin: 'round',
                 area: {
                     color: 'rgba(100, 255, 95, 0.7)',
                     width: 4,
