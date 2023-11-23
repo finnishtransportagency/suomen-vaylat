@@ -128,7 +128,7 @@ export const ModalContainer = ({}) => {
     channel
   } = useAppSelector((state) => state.rpc);
   const {
-    minimizeCQLFilter
+    minimizeFilter
   } = useAppSelector((state) => state.ui);
   const gfiInputEl = useRef(null);
   const { store } = useContext(ReactReduxContext);
@@ -144,11 +144,11 @@ export const ModalContainer = ({}) => {
 
   // open the right tab when clicked on a layers filter button in selected layers
   useEffect(() => {
-    if (!minimizeCQLFilter.minimized && minimizeCQLFilter.layer) {
-        const index = filteringInfo.findIndex(f => f.layer.id === minimizeCQLFilter.layer)
+    if (!minimizeFilter.minimized && minimizeFilter.layer) {
+        const index = filteringInfo.findIndex(f => f.layer.id === minimizeFilter.layer)
         gfiInputEl.current.swiper.slideTo(index);
     }
-  }, [minimizeCQLFilter]);
+  }, [minimizeFilter]);
 
   const [gfiTabsSwiper, setGfiTabsSwiper] = useState(null);
   const [gfiTabsSnapGridLength, setGfiTabsSnapGridLength] = useState(0);

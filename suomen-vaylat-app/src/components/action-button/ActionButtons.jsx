@@ -16,7 +16,7 @@ import strings from '../../translations';
 import { selectGroup } from '../../utils/rpcUtil';
 import { ThemeGroupShareButton } from '../share-web-site/ShareLinkButtons';
 
-import { setMinimizeGfi, setMinimizeCQLFilterModal } from '../../state/slices/uiSlice';
+import { setMinimizeGfi, setMinimizeFilterModal } from '../../state/slices/uiSlice';
 
 const GFI_GEOMETRY_LAYER_ID = 'drawtools-geometry-layer';
 
@@ -81,7 +81,7 @@ const StyledFilterActionButton = styled(motion.div)`
     z-index:100;
 `;
 
-const StyledFIlterLeftContent = styled.div`
+const StyledFilterLeftContent = styled.div`
     height: 100%;
     display: flex;
     align-items: center;
@@ -246,7 +246,7 @@ const ActionButtons = ({
     } = useAppSelector((state) => state.rpc);
     const {
         minimizeGfi,
-        minimizeCQLFilter        
+        minimizeFilter        
     } = useAppSelector((state) => state.ui);
 
     const handleSelectGroup = (index, theme) => {
@@ -363,7 +363,7 @@ const ActionButtons = ({
 
                             </StyledActionButton>
                         }
-                        { minimizeCQLFilter.minimized &&
+                        { minimizeFilter.minimized &&
 
                             <StyledFilterActionButton
                                 key="filter_action_button"
@@ -388,7 +388,7 @@ const ActionButtons = ({
                                 </StyledFilterLeftContent>
                                 <StyledFilterRightContent>
                                     <StyledExpandButton
-                                        onClick={() => store.dispatch(setMinimizeCQLFilterModal({minimized: false}))}
+                                        onClick={() => store.dispatch(setMinimizeFilterModal({minimized: false}))}
                                     >
                                         <FontAwesomeIcon
                                             icon={faExpand}

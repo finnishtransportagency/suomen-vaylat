@@ -6,7 +6,7 @@ import { theme, isMobile } from '../../../theme/theme';
 import ReactTooltip from "react-tooltip";
 import strings from '../../../translations';
 import {
-   setMinimizeCQLFilterModal,
+   setMinimizeFilterModal,
    setSelectedMapLayersMenuTab
   } from "../../../state/slices/uiSlice";
 import { setFilteringInfo } from '../../../state/slices/rpcSlice';
@@ -123,7 +123,7 @@ export const Layer = ({ layer, themeName, groupName }) => {
     const { store } = useContext(ReactReduxContext);
     const [layerStyle, setLayerStyle] = useState(null);
     const [themeSelected, setThemeSelected] = useState(false);
-    const { minimizeCQLFilter } = useAppSelector(state => state.ui);
+    const { minimizeFilter } = useAppSelector(state => state.ui);
 
     const isFilterable = typeof layer.config?.gfi?.filterFields !== "undefined" && layer.config?.gfi?.filterFields.length > 0 ;
 
@@ -224,9 +224,9 @@ export const Layer = ({ layer, themeName, groupName }) => {
       }
       )
       store.dispatch(setFilteringInfo(updateFilter));
-      minimizeCQLFilter && store.dispatch(setMinimizeCQLFilterModal({minimized: false, layer: layer.id}))
+      minimizeFilter && store.dispatch(setMinimizeFilterModal({minimized: false, layer: layer.id}))
     } else {
-        minimizeCQLFilter && store.dispatch(setMinimizeCQLFilterModal({minimized: false, layer: layer.id}))
+        minimizeFilter && store.dispatch(setMinimizeFilterModal({minimized: false, layer: layer.id}))
     }
   }
 

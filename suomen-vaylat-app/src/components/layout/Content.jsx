@@ -36,9 +36,9 @@ import {
   setIsGfiToolsOpen,
   setIsCustomFilterOpen,
   setUpdateCustomLayers,
-  setIsCQLFilterModalOpen,
-  setMinimizeCQLFilterModal,
-  setMaximizeCQLFilterModal,
+  setIsFilterModalOpen,
+  setMinimizeFilterModal,
+  setMaximizeFilterModal,
   setShowSavedLayers
 } from "../../state/slices/uiSlice";
 
@@ -189,8 +189,8 @@ const Content = () => {
     isGfiDownloadOpen,
     minimizeGfi,
     maximizeGfi,
-    minimizeCQLFilter,
-    maximizeCQLFilter,
+    minimizeFilter,
+    maximizeFilter,
     warning,
     isGfiToolsOpen,
   } = useAppSelector((state) => state.ui);
@@ -305,9 +305,9 @@ const Content = () => {
     })
 
     // reset states
-    store.dispatch(setIsCQLFilterModalOpen(false));
-    store.dispatch(setMinimizeCQLFilterModal({minimized: false}));
-    store.dispatch(setMaximizeCQLFilterModal(false));    
+    store.dispatch(setIsFilterModalOpen(false));
+    store.dispatch(setMinimizeFilterModal({minimized: false}));
+    store.dispatch(setMaximizeFilterModal(false));    
     store.dispatch(setCQLFilters([]));
     store.dispatch(setFilteringInfo([]));
 
@@ -951,13 +951,13 @@ const Content = () => {
             handleCloseCQLFilterModal
           } /* Action when pressing modal close button or backdrop */
           isOpen={filteringInfo.some(f => f.modalOpen)} /* Modal state */
-          minimize={minimizeCQLFilter.minimized}
-          maximize={maximizeCQLFilter}
+          minimize={minimizeFilter.minimized}
+          maximize={maximizeFilter}
           minimizable={true}
           maximizable={true}
-          minimizeAction={() => store.dispatch(setMinimizeCQLFilterModal({minimized: !minimizeCQLFilter.minimized}))}
-          maximizeAction={() => store.dispatch(setMaximizeCQLFilterModal(!maximizeCQLFilter))}
-          maxWidth={maximizeCQLFilter ? null : "40em"}
+          minimizeAction={() => store.dispatch(setMinimizeFilterModal({minimized: !minimizeFilter.minimized}))}
+          maximizeAction={() => store.dispatch(setMaximizeFilterModal(!maximizeFilter))}
+          maxWidth={maximizeFilter ? null : "40em"}
           minWidth={"25em"}
           minHeight={"30em"}
           overflow={"auto"}

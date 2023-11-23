@@ -22,7 +22,7 @@ const initialState = {
     isChecked: false,
     isUserGuideOpen: false,
     isCustomFilterOpen: false,
-    isCQLFilterModalOpen: false,
+    isFilterModalOpen: false,
     isSavedLayer: false,
     shareUrl: '',
     isThemeMenuOpen: false,
@@ -41,8 +41,8 @@ const initialState = {
     selectedMapLayersMenuThemeIndex: null,
     minimizeGfi: false,
     maximizeGfi: false,
-    minimizeCQLFilter: {minimized: false},
-    maximizeCQLFilter: false,
+    minimizeFilter: {minimized: false},
+    maximizeFilter: false,
     gfiCroppingTypes: [],
     warning: null,
     hasToastBeenShown : [],
@@ -188,11 +188,11 @@ export const uiSlice = createSlice({
         setMaximizeGfi: (state, action) => {
             state.maximizeGfi = action.payload;
         },
-        setMinimizeCQLFilterModal: (state, action) => {
-            state.minimizeCQLFilter = action.payload;
+        setMinimizeFilterModal: (state, action) => {
+            state.minimizeFilter = action.payload;
         },
-        setMaximizeCQLFilterModal: (state, action) => {
-            state.maximizeCQLFilter = action.payload;
+        setMaximizeFilterModal: (state, action) => {
+            state.maximizeFilter = action.payload;
         },
         setGfiCroppingTypes: (state, action) => {
             state.gfiCroppingTypes = action.payload;
@@ -232,8 +232,8 @@ export const uiSlice = createSlice({
         setIsGfiToolsOpen: (state, action) => {
             state.isGfiToolsOpen = action.payload;
         },
-        setIsCQLFilterModalOpen: (state, action) => {
-            state.isCQLFilterModalOpen = action.payload;
+        setIsFilterModalOpen: (state, action) => {
+            state.isFilterModalOpen = action.payload;
         },
         incrementTriggerUpdate: state => {
             state.triggerUpdate += 1; // increment value
@@ -261,9 +261,9 @@ export const uiSlice = createSlice({
 });
 
 export const {
-    setMinimizeCQLFilterModal,
-    setMaximizeCQLFilterModal,
-    setIsCQLFilterModalOpen,
+    setMinimizeFilterModal,
+    setMaximizeFilterModal,
+    setIsFilterModalOpen,
     setIsFullScreen,
     setIsMainScreen,
     setModalConstrainsRef,

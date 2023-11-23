@@ -8,7 +8,7 @@ import { updateLayers } from '../../../utils/rpcUtil';
 import { sortableHandle } from 'react-sortable-hoc';
 import ReactTooltip from "react-tooltip";
 import {
-   setMinimizeCQLFilterModal
+   setMinimizeFilterModal
   } from "../../../state/slices/uiSlice";
 
 import strings from '../../../translations';
@@ -217,7 +217,7 @@ export const SelectedLayer = (
         (state) => state.rpc
       );
 
-    const { minimizeCQLFilter } = useAppSelector(state => state.ui);
+    const { minimizeFilter } = useAppSelector(state => state.ui);
 
     const isFilterable = typeof layer.config?.gfi?.filterFields !== "undefined" && layer.config?.gfi?.filterFields.length > 0 ;
 
@@ -252,9 +252,9 @@ export const SelectedLayer = (
             }
             )
             store.dispatch(setFilteringInfo(updateFilter));
-            minimizeCQLFilter && store.dispatch(setMinimizeCQLFilterModal({minimized: false, layer: layer.id}))
+            minimizeFilter && store.dispatch(setMinimizeFilterModal({minimized: false, layer: layer.id}))
         } else {
-            minimizeCQLFilter && store.dispatch(setMinimizeCQLFilterModal({minimized: false, layer: layer.id}))
+            minimizeFilter && store.dispatch(setMinimizeFilterModal({minimized: false, layer: layer.id}))
         }
     };
     
@@ -263,7 +263,7 @@ export const SelectedLayer = (
         store.dispatch(setCQLFilters(filters.filter(f => f.layer !== layer.id)));
         const updatedCqlInfo = filteringInfo.filter(f => f.layer.id !== layer.id);
         store.dispatch(setFilteringInfo(updatedCqlInfo));
-        updatedCqlInfo.length === 0 && store.dispatch(setMinimizeCQLFilterModal({minimized: false}));
+        updatedCqlInfo.length === 0 && store.dispatch(setMinimizeFilterModal({minimized: false}));
         channel && channel.postRequest(
             'MapModulePlugin.MapLayerUpdateRequest',
             [layer.id, true, { 'CQL_FILTER': null }]

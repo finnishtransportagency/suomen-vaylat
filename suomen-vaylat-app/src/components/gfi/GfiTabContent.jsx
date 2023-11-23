@@ -20,7 +20,7 @@ import ReactTooltip from "react-tooltip";
 import { updateLayers } from "../../utils/rpcUtil";
 
 import {
-  setMinimizeCQLFilterModal,
+  setMinimizeFilterModal,
   setSelectedMapLayersMenuTab
  } from "../../state/slices/uiSlice";
 
@@ -72,7 +72,7 @@ const StyledTabContent = styled.div`
 const GfiTabContent = ({ layer, data, title, tablePropsInit }) => {
   const { channel, filteringInfo, filters } = useAppSelector((state) => state.rpc);
   const { store } = useContext(ReactReduxContext);
-  const { minimizeCQLFilter } = useAppSelector(state => state.ui);
+  const { minimizeFilter } = useAppSelector(state => state.ui);
 
 
   const [showDataTable, setShowDataTable] = useState(false);
@@ -181,7 +181,7 @@ const GfiTabContent = ({ layer, data, title, tablePropsInit }) => {
         store.dispatch(setFilteringInfo(updateFilter));
       }
     }
-    minimizeCQLFilter && store.dispatch(setMinimizeCQLFilterModal({minimized: false, layer: layer.id}))
+    minimizeFilter && store.dispatch(setMinimizeFilterModal({minimized: false, layer: layer.id}))
   }
 
   return (
