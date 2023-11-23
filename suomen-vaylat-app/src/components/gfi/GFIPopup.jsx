@@ -534,27 +534,27 @@ export const GFIPopup = ({ handleGfiDownload }) => {
             cursor: "pointer",
             featureStyle: {
               fill: {
-                color: "rgba(10, 140, 247, 0.3)",
+                  color: 'rgba(10, 140, 247, 0.3)',
               },
               stroke: {
-                color: "rgba(10, 140, 247, 0.3)",
-                width: 5,
-                lineDash: "solid",
-                lineCap: "round",
-                lineJoin: "round",
-                area: {
-                  color: "rgba(100, 255, 95, 0.7)",
-                  width: 8,
-                  lineJoin: "round",
-                },
+                  color: 'rgba(10, 140, 247, 0.3)',
+                  width: 5,
+                  lineDash: 'solid',
+                  lineCap: 'round',
+                  lineJoin: 'round',
+                  area: {
+                      color: 'rgba(100, 255, 95, 0.7)',
+                      width: 4,
+                      lineJoin: 'round'
+                  }
               },
               image: {
-                shape: 5,
-                size: 3,
-                fill: {
-                  color: "rgba(100, 255, 95, 0.7)",
-                },
-              },
+                  shape: 2,
+                  size: 4,
+                  fill: {
+                      color: 'rgba(100, 255, 95, 0.7)',
+                  }
+              }
             },
           },
         ]);
@@ -576,25 +576,25 @@ export const GFIPopup = ({ handleGfiDownload }) => {
     } else {
       let featureStyle = {
         fill: {
-            color: '#e50083',
+            color: 'rgba(10, 140, 247, 0.3)',
         },
         stroke: {
-            color: '#e50083',
+            color: 'rgba(10, 140, 247, 0.3)',
             width: 5,
             lineDash: 'solid',
             lineCap: 'round',
             lineJoin: 'round',
             area: {
-                color: '#e50083',
+                color: 'rgba(100, 255, 95, 0.7)',
                 width: 4,
                 lineJoin: 'round'
             }
         },
         image: {
-            shape: 5,
-            size: 3,
+            shape: 2,
+            size: 4,
             fill: {
-                color: '#e50083',
+                color: 'rgba(100, 255, 95, 0.7)',
             }
         }
       };

@@ -619,26 +619,26 @@ const Geometries = () => {
             layerId: geometry.id,
             featureStyle: {
                 fill: {
-                    color: 'rgba(10, 140, 247, 0.3)',
+                  color: "rgba(10, 140, 247, 0.3)",
                 },
                 stroke: {
-                    color: 'rgba(10, 140, 247, 0.3)',
-                    width: 5,
-                    lineDash: 'solid',
-                    lineCap: 'round',
-                    lineJoin: 'round',
-                    area: {
-                        color: 'rgba(100, 255, 95, 0.7)',
-                        width: 8,
-                        lineJoin: 'round',
-                    },
+                  color: "rgba(10, 140, 247, 0.3)",
+                  width: 5,
+                  lineDash: "solid",
+                  lineCap: "round",
+                  lineJoin: "round",
+                  area: {
+                    color: "rgba(100, 255, 95, 0.7)",
+                    width: 8,
+                    lineJoin: "round",
+                  },
                 },
                 image: {
-                    shape: 5,
-                    size: 3,
-                    fill: {
-                        color: 'rgba(100, 255, 95, 0.7)',
-                    },
+                  shape: 5,
+                  size: 3,
+                  fill: {
+                    color: "rgba(100, 255, 95, 0.7)",
+                  },
                 },
             },
         };

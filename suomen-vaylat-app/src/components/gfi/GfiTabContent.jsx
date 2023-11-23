@@ -95,12 +95,14 @@ const GfiTabContent = ({ layer, data, title, tablePropsInit }) => {
         },
       },
       image: {
-        shape: 5,
-        size: 3,
-        fill: {
-          color: "#e50083",
-        },
-      },
+          shape: 2,
+          size: 5,
+          offsetX: 13,
+          offsetY: 7,
+          fill: {
+              color: '#e50083',
+          }
+      }
     };
 
     let options = {
