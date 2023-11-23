@@ -184,7 +184,7 @@ const StyledTrashIconWrapper = styled.div`
   }
 `;
 
-export const FilterModal = ({cqlFilterInfo}) => {
+export const FilterModal = ({filterInfo}) => {
   const {
     filters,
     channel,
@@ -219,13 +219,13 @@ export const FilterModal = ({cqlFilterInfo}) => {
     }
     const type = propValue.type;
     const oper = type === "date" ? "date" : operatorValue.value;
-    const layer = cqlFilterInfo?.layer?.id;
+    const layer = filterInfo?.layer?.id;
 
     if (!prop || !value) {
       //lisää popup varoitus
       return;
     }
-    const updatedCQLFilters = [
+    const updatedFilters = [
         ...filters,
         {
           layer: layer,
@@ -236,9 +236,9 @@ export const FilterModal = ({cqlFilterInfo}) => {
         },
       ]
 
-    updateFiltersOnMap(updatedCQLFilters, cqlFilterInfo, channel);
+    updateFiltersOnMap(updatedFilters, filterInfo, channel);
     store.dispatch(
-      setFilters(updatedCQLFilters)
+      setFilters(updatedFilters)
     );
     setStartDate(null);
     setEndDate(null);
@@ -270,7 +270,7 @@ export const FilterModal = ({cqlFilterInfo}) => {
   };
 
   useEffect(() => {
-    var layer = cqlFilterInfo?.layer;
+    var layer = filterInfo?.layer;
     channel.getFieldNameLocales(
       [layer?.id],
       (data) => {
@@ -283,7 +283,7 @@ export const FilterModal = ({cqlFilterInfo}) => {
   }, []);
 
   useEffect(() => {
-    var layer = cqlFilterInfo?.layer;
+    var layer = filterInfo?.layer;
     const options = layer?.filterColumnsArray.map((column) => {
       if (Object.keys(fieldNameLocales).length > 0) {
         const props = {
@@ -309,20 +309,20 @@ export const FilterModal = ({cqlFilterInfo}) => {
   const [activeFilters, setActiveFilters] = useState();
 
   useEffect(() => {
-    if (cqlFilterInfo && cqlFilterInfo?.layer && filters) {
+    if (filterInfo && filterInfo?.layer && filters) {
       const updatedActivefilters = filters.filter(
-        (filter) => filter.layer === cqlFilterInfo?.layer?.id
+        (filter) => filter.layer === filterInfo?.layer?.id
       );
       setActiveFilters(updatedActivefilters);
     }
-  }, [filters, cqlFilterInfo]);
+  }, [filters, filterInfo]);
 
 const handleRemoveFilter = (filter) => {
     if (filters && filters.length > 0 && filters.includes(filter)) {
       const updatedFilters = filters.filter(
         (existingFilter) => existingFilter !== filter
       );
-      updateFiltersOnMap(updatedFilters, cqlFilterInfo, channel)
+      updateFiltersOnMap(updatedFilters, filterInfo, channel)
       store.dispatch(setFilters(updatedFilters));
     }
   };
@@ -335,7 +335,7 @@ const handleRemoveFilter = (filter) => {
             options={filterOptions}
             placeholder={strings.gfifiltering.placeholders.chooseProp}
             value={propValue}
-            defaultProperty={[cqlFilterInfo?.layer.defaultFilterProperty]}
+            defaultProperty={[filterInfo?.layer.defaultFilterProperty]}
             setValue={(value) => handleSetPropValue(value)}
             isDisabled={false}
           />

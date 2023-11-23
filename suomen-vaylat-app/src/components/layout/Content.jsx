@@ -18,7 +18,6 @@ import {
   setVKMData,
   setFilters,
   setFilteringInfo,
-  setCQLFilters
 } from "../../state/slices/rpcSlice";
 
 import {
@@ -295,7 +294,7 @@ const Content = () => {
     store.dispatch(clearLayerMetadata());
   };
 
-  const handleCloseCQLFilterModal = () => {
+  const handleCloseFilterModal = () => {
     // reset map
     filteringInfo.forEach(filteringInfo => {
       filters.length > 0 && filteringInfo.layer && channel && channel.postRequest(
@@ -308,7 +307,7 @@ const Content = () => {
     store.dispatch(setIsFilterModalOpen(false));
     store.dispatch(setMinimizeFilterModal({minimized: false}));
     store.dispatch(setMaximizeFilterModal(false));    
-    store.dispatch(setCQLFilters([]));
+    store.dispatch(setFilters([]));
     store.dispatch(setFilteringInfo([]));
 
   }
@@ -945,10 +944,10 @@ const Content = () => {
             true
           } /* Scale modal full width / height when using mobile device */
           titleIcon={null} /* Use icon on title or null */
-          title={strings.gfi.cqlFilter} /* Modal header title */
+          title={strings.gfi.filter} /* Modal header title */
           type={"normal"} /* Modal type */
           closeAction={
-            handleCloseCQLFilterModal
+            handleCloseFilterModal
           } /* Action when pressing modal close button or backdrop */
           isOpen={filteringInfo.some(f => f.modalOpen)} /* Modal state */
           minimize={minimizeFilter.minimized}
@@ -981,7 +980,7 @@ const Content = () => {
           <StyledRightSection>
             <Search />
             <ZoomMenu />
-            <ActionButtons closeAction={handleCloseGFIModal} closeActionCQL={handleCloseCQLFilterModal}/>
+            <ActionButtons closeAction={handleCloseGFIModal} closeActionFilter={handleCloseFilterModal}/>
           </StyledRightSection>
         </StyledContentGrid>
       </StyledContent>

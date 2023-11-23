@@ -159,9 +159,9 @@ export const ModalContainer = ({}) => {
 
   const closeTab = (index, id) => {
     // delete filter by layer
-    const updatedCQLFilters = filters.filter(f => f.layer !== id);
-    updateFiltersOnMap(updatedCQLFilters, filteringInfo.filter(f => f.layer.id === id)[0], channel)
-    store.dispatch(setFilters(updatedCQLFilters));
+    const updatedFilters = filters.filter(f => f.layer !== id);
+    updateFiltersOnMap(updatedFilters, filteringInfo.filter(f => f.layer.id === id)[0], channel)
+    store.dispatch(setFilters(updatedFilters));
     store.dispatch(setFilteringInfo(filteringInfo.filter(f => f.layer.id !== id)))
     if (index > 0) {
       handleSelectTab(index - 1);
@@ -185,7 +185,7 @@ export const ModalContainer = ({}) => {
           )}
 
           <StyledTabsSwiper
-            id={"cql-tabs-swiper"}
+            id={"filter-tabs-swiper"}
             spaceBetween={4}
             slidesPerView={"auto"}
             freeMode={true}
@@ -247,7 +247,7 @@ export const ModalContainer = ({}) => {
         <StyledTabContent>
             <StyledSwiper
             ref={gfiInputEl}
-            id={"cql-swiper"}
+            id={"filter-swiper"}
             onSlideChange={(e) => {
                 handleSelectTab(e.activeIndex);
             }}
@@ -260,10 +260,10 @@ export const ModalContainer = ({}) => {
                 return (
                     <SwiperSlide
                     style={{width: "20em"}}
-                    id={"cql_tab_content_" + filterInfo?.layer?.id}
-                    key={"cql_tab_content_" + filterInfo?.layer?.id}
+                    id={"filter_tab_content_" + filterInfo?.layer?.id}
+                    key={"filter_tab_content_" + filterInfo?.layer?.id}
                     >
-                        <FilterModal cqlFilterInfo={filterInfo}/>
+                        <FilterModal filterInfo={filterInfo}/>
                     </SwiperSlide>
                 );
             })}

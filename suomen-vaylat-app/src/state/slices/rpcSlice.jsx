@@ -111,16 +111,6 @@ export const rpcSlice = createSlice({
     },
 
     /**
-     * Set CQL filters.
-     * @method setChannel
-     * @param {Object} state
-     * @param {Object} action
-     */
-    setCQLFilters: (state, action) => {
-      state.filters = action.payload;
-    },
-
-    /**
      * Set filtering info.
      * @method setFilteringInfo
      * @param {Object} state
@@ -941,7 +931,6 @@ export const {
   setMapLayers,
   setAllSelectedThemeLayers,
   setPointInfo,
-  setCQLFilters,
   setFilters,
   setActiveGFILayer,
   setFilteringInfo,

@@ -81,9 +81,9 @@ export const getPropertyOperatorCQL = (filter) => {
 };
 }
 
-export const updateFiltersOnMap = (updatedCQLFilters, cqlFilterInfo, channel) => {
+export const updateFiltersOnMap = (updatedFilters, filterInfo, channel) => {
   let filters = "";
-  updatedCQLFilters && updatedCQLFilters.filter(f => f.layer === cqlFilterInfo?.layer?.id).forEach((filter, index) => {
+  updatedFilters && updatedFilters.filter(f => f.layer === filterInfo?.layer?.id).forEach((filter, index) => {
       var cqlFilter = getPropertyOperatorCQL(filter);
       index === 0 ? filters += cqlFilter : filters += " AND " + cqlFilter;
   })
@@ -91,12 +91,12 @@ export const updateFiltersOnMap = (updatedCQLFilters, cqlFilterInfo, channel) =>
   if (filters.length > 0) {
       channel && channel.postRequest(
       'MapModulePlugin.MapLayerUpdateRequest',
-      [cqlFilterInfo.layer.id, true, { 'CQL_FILTER': filters }]
+      [filterInfo.layer.id, true, { 'CQL_FILTER': filters }]
       );
   } else {
-      cqlFilterInfo.layer && channel && channel.postRequest(
+      filterInfo.layer && channel && channel.postRequest(
           'MapModulePlugin.MapLayerUpdateRequest',
-          [cqlFilterInfo.layer.id, true, { 'CQL_FILTER': null }]
+          [filterInfo.layer.id, true, { 'CQL_FILTER': null }]
           );
   }
 };

@@ -3,7 +3,7 @@ import { faInfoCircle, faTimes, faCaretDown, faCaretUp, faGripLines, faEye, faEy
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ReactReduxContext, useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { clearLayerMetadata, getLayerMetadata, setLayerMetadata, setZoomTo, setFilteringInfo, setCQLFilters } from '../../../state/slices/rpcSlice';
+import { clearLayerMetadata, getLayerMetadata, setLayerMetadata, setZoomTo, setFilteringInfo, setFilters } from '../../../state/slices/rpcSlice';
 import { updateLayers } from '../../../utils/rpcUtil';
 import { sortableHandle } from 'react-sortable-hoc';
 import ReactTooltip from "react-tooltip";
@@ -226,7 +226,7 @@ export const SelectedLayer = (
         layer.opacity === 0 ? setIsLayerVisible(false) : setIsLayerVisible(true)
     }, [layer.opacity])
 
-    const handleOpenCQLFilteringModal = (layer) => {
+    const handleOpenFilteringModal = (layer) => {
         if (filteringInfo.filter(f => f.layer.id === layer.id).length === 0) {
             var filterColumnsArray = [];
             layer.config?.gfi?.filterFields &&
@@ -259,11 +259,11 @@ export const SelectedLayer = (
     };
     
     const handleLayerRemoveSelectedLayer = (channel, layer) => {
-        // Remove possible cql filters
-        store.dispatch(setCQLFilters(filters.filter(f => f.layer !== layer.id)));
-        const updatedCqlInfo = filteringInfo.filter(f => f.layer.id !== layer.id);
-        store.dispatch(setFilteringInfo(updatedCqlInfo));
-        updatedCqlInfo.length === 0 && store.dispatch(setMinimizeFilterModal({minimized: false}));
+        // Remove possible filters
+        store.dispatch(setFilters(filters.filter(f => f.layer !== layer.id)));
+        const updatedFilterInfo = filteringInfo.filter(f => f.layer.id !== layer.id);
+        store.dispatch(setFilteringInfo(updatedFilterInfo));
+        updatedFilterInfo.length === 0 && store.dispatch(setMinimizeFilterModal({minimized: false}));
         channel && channel.postRequest(
             'MapModulePlugin.MapLayerUpdateRequest',
             [layer.id, true, { 'CQL_FILTER': null }]
@@ -393,7 +393,7 @@ export const SelectedLayer = (
                             </ReactTooltip>
                             <StyledIconWrapper
                                 onClick={() => {
-                                    handleOpenCQLFilteringModal(layer);
+                                    handleOpenFilteringModal(layer);
                                 }}
                                 data-tip
                                 data-for={"filter"}

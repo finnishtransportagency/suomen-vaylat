@@ -77,7 +77,6 @@
     "noResultsTitle": "Inga resultat",
     "noResultsDesc": "Inga resultat med geometri, välj ny geometri eller nya lager",
     "filter": "Filtrera",
-    "cqlFilter": "Filter på kartan",
     "title": "Objektuppgifter",
     "close": "Stänga",
     "additionalInfo": "Tilläggsinformation",

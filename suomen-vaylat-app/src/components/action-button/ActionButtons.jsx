@@ -229,7 +229,7 @@ const addFeaturesToMapParams =
 
 const ActionButtons = ({
     closeAction,
-    closeActionCQL
+    closeActionFilter
 }) => {
 
     const { store } = useContext(ReactReduxContext);
@@ -395,7 +395,7 @@ const ActionButtons = ({
                                         />
                                     </StyledExpandButton>
                                     <StyledActionButtonClose
-                                        onClick={() => closeActionCQL()}
+                                        onClick={() => closeActionFilter()}
                                     >
                                         <FontAwesomeIcon
                                             icon={faTimes}
