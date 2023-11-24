@@ -77,7 +77,6 @@
     "noResultsTitle": "No results",
     "noResultsDesc": "No results with geometry, select new geometry or new layers",
     "filter": "Filter",
-    "cqlFilter": "Filter on map",
     "title": "Feature Data",
     "close": "Close",
     "additionalInfo": "Additional information",

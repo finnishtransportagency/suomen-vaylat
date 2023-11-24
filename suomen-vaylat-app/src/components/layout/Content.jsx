@@ -7,7 +7,6 @@ import styled from "styled-components";
 import strings from "../../translations";
 import GfiToolsMenu from "../gfi/GfiToolsMenu";
 import GfiDownloadMenu from "../gfi/GfiDownloadMenu";
-import { FilterModal } from "../filter/FilterModal";
 
 import {
   setSelectError,
@@ -19,8 +18,6 @@ import {
   setVKMData,
   setFilters,
   setFilteringInfo,
-  setCQLFilteringInfo,
-  setCQLFilters
 } from "../../state/slices/rpcSlice";
 
 import {
@@ -38,9 +35,9 @@ import {
   setIsGfiToolsOpen,
   setIsCustomFilterOpen,
   setUpdateCustomLayers,
-  setIsCQLFilterModalOpen,
-  setMinimizeCQLFilterModal,
-  setMaximizeCQLFilterModal,
+  setIsFilterModalOpen,
+  setMinimizeFilterModal,
+  setMaximizeFilterModal,
   setShowSavedLayers
 } from "../../state/slices/uiSlice";
 
@@ -78,9 +75,9 @@ import { ANNOUNCEMENTS_LOCALSTORAGE } from "../../utils/constants";
 import ThemeMenu from "../menus/theme-menu/ThemeMenu";
 
 import { CustomLayerModal } from "../menus/hierarchical-layerlist/CustomFilter/CustomLayerModal";
-import { CQLFilterModal } from "../filter/CQLFilterModal";
 import { ModalContainer } from "../filter/ModalContainer";
 
+const GFI_GEOMETRY_LAYER_ID = 'drawtools-geometry-layer';
 
 const StyledContent = styled.div`
   z-index: 1;
@@ -178,7 +175,7 @@ const StyledLayerNamesListItem = styled.li``;
 const Content = () => {
   const constraintsRef = useRef(null);
 
-  const { warnings, filteringInfo, cqlFilteringInfo, cqlFilters } = useAppSelector(
+  const { warnings, filteringInfo, filters } = useAppSelector(
     (state) => state.rpc
   );
 
@@ -191,8 +188,8 @@ const Content = () => {
     isGfiDownloadOpen,
     minimizeGfi,
     maximizeGfi,
-    minimizeCQLFilter,
-    maximizeCQLFilter,
+    minimizeFilter,
+    maximizeFilter,
     warning,
     isGfiToolsOpen,
   } = useAppSelector((state) => state.ui);
@@ -297,27 +294,25 @@ const Content = () => {
     store.dispatch(clearLayerMetadata());
   };
 
-  const handleCloseCQLFilterModal = () => {
+  const handleCloseFilterModal = () => {
     // reset map
-    cqlFilteringInfo.forEach(filteringInfo => {
-      cqlFilters.length > 0 && filteringInfo.layer && channel && channel.postRequest(
+    filteringInfo.forEach(filteringInfo => {
+      filters.length > 0 && filteringInfo.layer && channel && channel.postRequest(
         'MapModulePlugin.MapLayerUpdateRequest',
         [filteringInfo.layer.id, true, { 'CQL_FILTER': null }]
         );
     })
 
     // reset states
-    store.dispatch(setIsCQLFilterModalOpen(false));
-    store.dispatch(setMinimizeCQLFilterModal({minimized: false}));
-    store.dispatch(setMaximizeCQLFilterModal(false));    
-    store.dispatch(setCQLFilters([]));
-    store.dispatch(setCQLFilteringInfo([]));
+    store.dispatch(setIsFilterModalOpen(false));
+    store.dispatch(setMinimizeFilterModal({minimized: false}));
+    store.dispatch(setMaximizeFilterModal(false));    
+    store.dispatch(setFilters([]));
+    store.dispatch(setFilteringInfo([]));
 
   }
 
   const handleCloseGFIModal = () => {
-    store.dispatch(setFilters([]));
-    handleCloseFilteringModal();
     store.dispatch(resetGFILocations([]));
     store.dispatch(setIsGfiOpen(false));
     store.dispatch(setMinimizeGfi(false));
@@ -331,6 +326,10 @@ const Content = () => {
       null,
       "download-tool-layer",
     ]);
+    channel && channel.postRequest(
+      'MapModulePlugin.RemoveFeaturesFromMapRequest',
+      [null, null, GFI_GEOMETRY_LAYER_ID]
+    );
     channel.postRequest("DrawTools.StopDrawingRequest", [
       "gfi-selection-tool",
       true,
@@ -575,10 +574,6 @@ const Content = () => {
       }
     };
   };
-
-  const handleCloseFilteringModal = useCallback(() => {
-    store.dispatch(setFilteringInfo({ ...filteringInfo, modalOpen: false }));
-  }, [filteringInfo]);
 
   return (
     <>
@@ -949,48 +944,19 @@ const Content = () => {
             true
           } /* Scale modal full width / height when using mobile device */
           titleIcon={null} /* Use icon on title or null */
-          title={
-            filteringInfo?.layer &&
-            strings.gfi.filter + " - " + filteringInfo?.layer?.title
-          } /* Modal header title */
+          title={strings.gfi.filter} /* Modal header title */
           type={"normal"} /* Modal type */
           closeAction={
-            handleCloseFilteringModal
+            handleCloseFilterModal
           } /* Action when pressing modal close button or backdrop */
-          isOpen={filteringInfo.modalOpen} /* Modal state */
-          id={null}
-          minimize={minimizeGfi}
-          maximize={maximizeGfi}
-          minWidth={"25em"}
-          minHeight={"30em"}
-          overflow={"auto"}
-        >
-          <FilterModal />
-        </Modal>
-        <Modal
-          constraintsRef={{
-            constraintsRef,
-          }} /* Reference div for modal drag boundaries */
-          drag={true} /* Enable (true) or disable (false) drag */
-          resize={true}
-          backdrop={false} /* Is backdrop enabled (true) or disabled (false) */
-          fullScreenOnMobile={
-            true
-          } /* Scale modal full width / height when using mobile device */
-          titleIcon={null} /* Use icon on title or null */
-          title={strings.gfi.cqlFilter} /* Modal header title */
-          type={"normal"} /* Modal type */
-          closeAction={
-            handleCloseCQLFilterModal
-          } /* Action when pressing modal close button or backdrop */
-          isOpen={cqlFilteringInfo.some(f => f.modalOpen)} /* Modal state */
-          minimize={minimizeCQLFilter.minimized}
-          maximize={maximizeCQLFilter}
+          isOpen={filteringInfo.some(f => f.modalOpen)} /* Modal state */
+          minimize={minimizeFilter.minimized}
+          maximize={maximizeFilter}
           minimizable={true}
           maximizable={true}
-          minimizeAction={() => store.dispatch(setMinimizeCQLFilterModal({minimized: !minimizeCQLFilter.minimized}))}
-          maximizeAction={() => store.dispatch(setMaximizeCQLFilterModal(!maximizeCQLFilter))}
-          maxWidth={maximizeCQLFilter ? null : "40em"}
+          minimizeAction={() => store.dispatch(setMinimizeFilterModal({minimized: !minimizeFilter.minimized}))}
+          maximizeAction={() => store.dispatch(setMaximizeFilterModal(!maximizeFilter))}
+          maxWidth={maximizeFilter ? null : "40em"}
           minWidth={"25em"}
           minHeight={"30em"}
           overflow={"auto"}
@@ -1014,7 +980,7 @@ const Content = () => {
           <StyledRightSection>
             <Search />
             <ZoomMenu />
-            <ActionButtons closeAction={handleCloseGFIModal} closeActionCQL={handleCloseCQLFilterModal}/>
+            <ActionButtons closeAction={handleCloseGFIModal} closeActionFilter={handleCloseFilterModal}/>
           </StyledRightSection>
         </StyledContentGrid>
       </StyledContent>

@@ -16,7 +16,7 @@ import strings from '../../translations';
 import { selectGroup } from '../../utils/rpcUtil';
 import { ThemeGroupShareButton } from '../share-web-site/ShareLinkButtons';
 
-import { setMinimizeGfi, setMinimizeCQLFilterModal } from '../../state/slices/uiSlice';
+import { setMinimizeGfi, setMinimizeFilterModal } from '../../state/slices/uiSlice';
 
 const GFI_GEOMETRY_LAYER_ID = 'drawtools-geometry-layer';
 
@@ -81,7 +81,7 @@ const StyledFilterActionButton = styled(motion.div)`
     z-index:100;
 `;
 
-const StyledCQLLeftContent = styled.div`
+const StyledFilterLeftContent = styled.div`
     height: 100%;
     display: flex;
     align-items: center;
@@ -89,14 +89,14 @@ const StyledCQLLeftContent = styled.div`
     overflow: hidden;
 `;
 
-const StyledCQLRightContent = styled.div`
+const StyledFilterRightContent = styled.div`
     height: 100%;
     display: flex;
     align-items: center;
     max-width: 40%;
 `;
 
-const StyledCQLText = styled.div`
+const StyledFilterText = styled.div`
     font-size: 14px;
     font-weight: 600;
     user-select: none;
@@ -203,17 +203,12 @@ const addFeaturesToMapParams =
         layerId: GFI_GEOMETRY_LAYER_ID,
         featureStyle: {
             fill: {
-                color: 'rgba(10, 140, 247, 0.3)',
+                color: 'rgba(10, 140, 247, 0.1)',
             },
             stroke: {
-                color: 'rgba(10, 140, 247, 0.3)',
-                width: 5,
-                lineDash: 'solid',
-                lineCap: 'round',
-                lineJoin: 'round',
                 area: {
                     color: 'rgba(100, 255, 95, 0.7)',
-                    width: 8,
+                    width: 4,
                     lineJoin: 'round',
                 },
             },
@@ -229,12 +224,12 @@ const addFeaturesToMapParams =
 
 const ActionButtons = ({
     closeAction,
-    closeActionCQL
+    closeActionFilter
 }) => {
 
     const { store } = useContext(ReactReduxContext);
     
-    const [activeGeometries, setActiveGeometries] = useState(false);
+    const [activeGeometries, setActiveGeometries] = useState(true);
 
     const {
         channel,
@@ -242,11 +237,11 @@ const ActionButtons = ({
         lastSelectedTheme,
         selectedThemeId,
         gfiLocations,
-        cqlFilteringInfo
+        filteringInfo
     } = useAppSelector((state) => state.rpc);
     const {
         minimizeGfi,
-        minimizeCQLFilter        
+        minimizeFilter        
     } = useAppSelector((state) => state.ui);
 
     const handleSelectGroup = (index, theme) => {
@@ -273,10 +268,10 @@ const ActionButtons = ({
     };
 
     // Get titles of filtered layers
-    var cqlInfoTitle = "";
-    cqlFilteringInfo.forEach((fil, index) => {
+    var filterInfoTitle = "";
+    filteringInfo.forEach((fil, index) => {
         const title = fil.layer.title.length > 10 ? fil.layer.title.substring(0, 10) + '... ' : fil.layer.title;
-        index === 0 ? cqlInfoTitle += title : cqlInfoTitle += ", " + title
+        index === 0 ? filterInfoTitle += title : filterInfoTitle += ", " + title
     })
 
     return (
@@ -363,7 +358,7 @@ const ActionButtons = ({
 
                             </StyledActionButton>
                         }
-                        { minimizeCQLFilter.minimized &&
+                        { minimizeFilter.minimized &&
 
                             <StyledFilterActionButton
                                 key="filter_action_button"
@@ -376,32 +371,32 @@ const ActionButtons = ({
                                     type: "tween"
                                 }}
                             >
-                                <StyledCQLLeftContent>
+                                <StyledFilterLeftContent>
                                     <StyledActionButtonIcon>
                                         <FontAwesomeIcon
                                             icon={faFilter}
                                         />
                                     </StyledActionButtonIcon>
-                                    <StyledCQLText>
-                                    {cqlInfoTitle}
-                                    </StyledCQLText>
-                                </StyledCQLLeftContent>
-                                <StyledCQLRightContent>
+                                    <StyledFilterText>
+                                    {filterInfoTitle}
+                                    </StyledFilterText>
+                                </StyledFilterLeftContent>
+                                <StyledFilterRightContent>
                                     <StyledExpandButton
-                                        onClick={() => store.dispatch(setMinimizeCQLFilterModal({minimized: false}))}
+                                        onClick={() => store.dispatch(setMinimizeFilterModal({minimized: false}))}
                                     >
                                         <FontAwesomeIcon
                                             icon={faExpand}
                                         />
                                     </StyledExpandButton>
                                     <StyledActionButtonClose
-                                        onClick={() => closeActionCQL()}
+                                        onClick={() => closeActionFilter()}
                                     >
                                         <FontAwesomeIcon
                                             icon={faTimes}
                                         />
                                     </StyledActionButtonClose>
-                                </StyledCQLRightContent>
+                                </StyledFilterRightContent>
 
                             </StyledFilterActionButton>
                         }

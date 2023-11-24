@@ -416,15 +416,13 @@ export const GFIPopup = ({ handleGfiDownload }) => {
     gfiCroppingArea,
     selectedLayers,
     pointInfo,
-    filters,
-    cqlFilters
+    filters
   } = useAppSelector((state) => state.rpc);
 
   const [point, setPoint] = useState(null);
   const { activeSelectionTool } = useAppSelector((state) => state.ui);
   const [selectedTab, setSelectedTab] = useState(0);
   const [tabsContent, setTabsContent] = useState([]);
-  const [geoJsonToShow, setGeoJsonToShow] = useState(null);
   const [isGfiToolsOpen, setIsGfiToolsOpen] = useState(false);
   const [isDataTable, setIsDataTable] = useState(false);
   const [isGfiDownloadsOpen, setIsGfiDownloadsOpen] = useState(false);
@@ -433,7 +431,6 @@ export const GFIPopup = ({ handleGfiDownload }) => {
   const [gfiTabsSnapGridLength, setGfiTabsSnapGridLength] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const gfiInputEl = useRef(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleLinkClick = (event) => {
     const dontShow = JSON.parse(localStorage.getItem('dontShowModal'));
@@ -506,12 +503,6 @@ export const GFIPopup = ({ handleGfiDownload }) => {
   }, [allLayers, gfiLocations, isDataTable, selectedTab]);
 
   useEffect(() => {
-    tabsContent[selectedTab] !== undefined &&
-      tabsContent[selectedTab].props.type === "geoJson" &&
-      setGeoJsonToShow(tabsContent[selectedTab].props.data);
-  }, [selectedTab, tabsContent]);
-
-  useEffect(() => {
     isGfiDownloadsOpen && setIsGfiDownloadsOpen(false);
   }, [gfiLocations]);
 
@@ -535,27 +526,27 @@ export const GFIPopup = ({ handleGfiDownload }) => {
             cursor: "pointer",
             featureStyle: {
               fill: {
-                color: "rgba(10, 140, 247, 0.3)",
+                  color: 'rgba(10, 140, 247, 0.3)',
               },
               stroke: {
-                color: "rgba(10, 140, 247, 0.3)",
-                width: 5,
-                lineDash: "solid",
-                lineCap: "round",
-                lineJoin: "round",
-                area: {
-                  color: "rgba(100, 255, 95, 0.7)",
-                  width: 8,
-                  lineJoin: "round",
-                },
+                  color: 'rgba(10, 140, 247, 0.3)',
+                  width: 5,
+                  lineDash: 'solid',
+                  lineCap: 'round',
+                  lineJoin: 'round',
+                  area: {
+                      color: 'rgba(100, 255, 95, 0.7)',
+                      width: 4,
+                      lineJoin: 'round'
+                  }
               },
               image: {
-                shape: 5,
-                size: 3,
-                fill: {
-                  color: "rgba(100, 255, 95, 0.7)",
-                },
-              },
+                  shape: 2,
+                  size: 4,
+                  fill: {
+                      color: 'rgba(100, 255, 95, 0.7)',
+                  }
+              }
             },
           },
         ]);
@@ -566,7 +557,65 @@ export const GFIPopup = ({ handleGfiDownload }) => {
     setIsVKMInfoOpen(!isVKMInfoOpen);
   };
 
-  const tablePropsInit = (data) => {
+  const addGFIResultsToMap = (filteredFeatures) => {
+    if (filteredFeatures.length === 0) {
+      channel &&
+      channel.postRequest("MapModulePlugin.RemoveFeaturesFromMapRequest", [
+        null,
+        null,
+        LAYER_ID,
+      ]);
+    } else {
+      let featureStyle = {
+        fill: {
+            color: 'rgba(10, 140, 247, 0.3)',
+        },
+        stroke: {
+            color: 'rgba(10, 140, 247, 0.3)',
+            width: 5,
+            lineDash: 'solid',
+            lineCap: 'round',
+            lineJoin: 'round',
+            area: {
+                color: 'rgba(100, 255, 95, 0.7)',
+                width: 4,
+                lineJoin: 'round'
+            }
+        },
+        image: {
+            shape: 2,
+            size: 4,
+            fill: {
+                color: 'rgba(100, 255, 95, 0.7)',
+            }
+        }
+      };
+
+      let options = {
+        featureStyle: featureStyle,
+        layerId: LAYER_ID,
+        animationDuration: 200,
+        clearPrevious: true,
+        };
+
+      let rn = 'MapModulePlugin.AddFeaturesToMapRequest';
+
+      var geojsonObject = {
+          type: 'FeatureCollection',
+          crs: {
+              type: 'name',
+              properties: {
+                  name: 'EPSG:3067'
+              }
+          },
+          features: filteredFeatures
+      };
+
+      channel.postRequest(rn, [geojsonObject, options]);
+    }
+  }
+
+  const tablePropsInit = (index, data) => {
     const properties =
       data &&
       data.content &&
@@ -617,7 +666,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
         var featureCells =
           cont.geojson.features &&
           cont.geojson.features
-            .filter((feature) => filterFeature(feature, data, filters, cqlFilters, channel))
+            .filter((feature) => filterFeature(feature, data, filters, channel))
             .map((feature) => {
               filteredFeatures.push(feature);
               var cell = { ...feature.properties };
@@ -629,6 +678,9 @@ export const GFIPopup = ({ handleGfiDownload }) => {
             });
         cells.push(...featureCells);
       });
+
+    // Set filtered results to map
+    selectedTab == index && addGFIResultsToMap(filteredFeatures)
 
     const tablePropsInit = {
       columns: columnsArray,
@@ -710,76 +762,6 @@ export const GFIPopup = ({ handleGfiDownload }) => {
     setIsGfiToolsOpen(false);
     setIsGfiDownloadsOpen(!isGfiDownloadsOpen);
   };
-
-  useEffect(() => {
-    channel &&
-      channel.postRequest("MapModulePlugin.RemoveFeaturesFromMapRequest", [
-        null,
-        null,
-        LAYER_ID,
-      ]);
-
-    if (geoJsonToShow !== null) {
-      geoJsonToShow.forEach((geoJson) => {
-        channel &&
-          channel.postRequest("MapModulePlugin.AddFeaturesToMapRequest", [
-            geoJson.geojson,
-            {
-              layerId: LAYER_ID,
-              cursor: "pointer",
-              featureStyle: {
-                fill: {
-                  color: "rgba(10, 140, 247, 0.3)",
-                },
-                stroke: {
-                  color: "rgba(10, 140, 247, 0.3)",
-                  width: 5,
-                  lineDash: "solid",
-                  lineCap: "round",
-                  lineJoin: "round",
-                  area: {
-                    color: "rgba(100, 255, 95, 0.7)",
-                    width: 4,
-                    lineJoin: "round",
-                  },
-                },
-                image: {
-                  size: 3,
-                  fill: {
-                    color: "rgba(100, 255, 95, 0.7)",
-                  },
-                },
-              },
-              hover: {
-                featureStyle: {
-                  fill: {
-                    color: "rgba(0, 99, 175, 0.7)",
-                  },
-                  stroke: {
-                    color: "#0064af",
-                    width: 2,
-                  },
-                  text: {
-                    fill: {
-                      color: "#ffffff",
-                    },
-                    stroke: {
-                      color: "#0064af",
-                      width: 5,
-                    },
-                    font: "bold 16px Arial",
-                    textAlign: "center",
-                    textBaseline: "middle",
-                    offsetX: 0,
-                    offsetY: 0,
-                  },
-                },
-              },
-            },
-          ]);
-      });
-    }
-  }, [channel, geoJsonToShow]);
 
   const closeTab = (index, id, tabcontent) => {
     const updatedFilters = filters.filter(
@@ -1141,12 +1123,12 @@ export const GFIPopup = ({ handleGfiDownload }) => {
           allowTouchMove={false} // Disable swiping
           speed={300}
         >
-          {gfiLocations.map((location) => {
+          {gfiLocations.map((location, index) => {
             const layers = allLayers.filter(
               (layer) => layer.id === location.layerId
             );
             const title = layers.length > 0 && layers[0].name;
-            const tableProps = tablePropsInit(location);
+            const tableProps = tablePropsInit(index, location);
             let totalFeatures = 0;
             location?.content?.forEach((cont) => {
               totalFeatures += cont.geojson.totalFeatures;
@@ -1157,7 +1139,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
             // count the amount of results when filtered
             location?.content?.forEach((cont) => {
               cont.geojson?.features?.forEach((feature) => {
-                if (filterFeature(feature, location, filters, cqlFilters, channel)) {
+                if (filterFeature(feature, location, filters, channel)) {
                   featuresAmount += 1;
                 }
               });
@@ -1170,6 +1152,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
                   key={"gfi_tab_content_" + location.layerId}
                 >
                   <GfiTabContent
+                    layer={layers[0]}
                     data={location}
                     title={title}
                     tablePropsInit={tableProps}

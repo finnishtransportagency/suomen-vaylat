@@ -344,23 +344,25 @@ const getContent = (key, value, visibleFields, highPriorityFields, lowPriorityRo
 const selectFeature = (channel, features) => {
     let featureStyle = {
         fill: {
-            color: '#e50083',
+          color: "#e50083",
         },
         stroke: {
-            color: '#e50083',
-            width: 5,
-            lineDash: 'solid',
-            lineCap: 'round',
-            lineJoin: 'round',
-            area: {
-                color: '#e50083',
-                width: 4,
-                lineJoin: 'round'
-            }
+          color: "#e50083",
+          width: 5,
+          lineDash: "solid",
+          lineCap: "round",
+          lineJoin: "round",
+          area: {
+            color: "#e50083",
+            width: 4,
+            lineJoin: "round",
+          },
         },
         image: {
-            shape: 5,
-            size: 3,
+            shape: 2,
+            size: 5,
+            offsetX: 13,
+            offsetY: 7,
             fill: {
                 color: '#e50083',
             }

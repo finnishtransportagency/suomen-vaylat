@@ -11,8 +11,8 @@ import { useAppSelector } from "../../state/hooks";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { FreeMode, Controller } from "swiper";
 import { isMobile } from "../../theme/theme";
-import { CQLFilterModal } from "./CQLFilterModal";
-import { setCQLFilteringInfo, setCQLFilters } from "../../state/slices/rpcSlice";
+import { FilterModal } from "./FilterModal";
+import { setFilteringInfo, setFilters } from "../../state/slices/rpcSlice";
 import { updateFiltersOnMap } from "../../utils/gfiUtil"
 
 const StyledModalContainer = styled.div`
@@ -119,16 +119,16 @@ const StyledTabContent = styled.div`
 
 
 export const ModalContainer = ({}) => {
-  // GET ALL FILTERS WITH LAYER AND MAP THEM BY LAYER TO RETURN CQLFILTERMODAL
+  // GET ALL FILTERS WITH LAYER AND MAP THEM BY LAYER TO RETURN FilterModal
   const [selectedTab, setSelectedTab] = useState(0);
   const {
-    cqlFilteringInfo,
+    filteringInfo,
     allLayers,
-    cqlFilters,
+    filters,
     channel
   } = useAppSelector((state) => state.rpc);
   const {
-    minimizeCQLFilter
+    minimizeFilter
   } = useAppSelector((state) => state.ui);
   const gfiInputEl = useRef(null);
   const { store } = useContext(ReactReduxContext);
@@ -139,16 +139,16 @@ export const ModalContainer = ({}) => {
 
   // When added a new layer filter, select that one aka the last one
   useEffect(() => {
-    gfiInputEl.current.swiper.slideTo(cqlFilteringInfo.length);
-  }, [cqlFilteringInfo]);
+    gfiInputEl.current.swiper.slideTo(filteringInfo.length);
+  }, [filteringInfo]);
 
   // open the right tab when clicked on a layers filter button in selected layers
   useEffect(() => {
-    if (!minimizeCQLFilter.minimized && minimizeCQLFilter.layer) {
-        const index = cqlFilteringInfo.findIndex(f => f.layer.id === minimizeCQLFilter.layer)
+    if (!minimizeFilter.minimized && minimizeFilter.layer) {
+        const index = filteringInfo.findIndex(f => f.layer.id === minimizeFilter.layer)
         gfiInputEl.current.swiper.slideTo(index);
     }
-  }, [minimizeCQLFilter]);
+  }, [minimizeFilter]);
 
   const [gfiTabsSwiper, setGfiTabsSwiper] = useState(null);
   const [gfiTabsSnapGridLength, setGfiTabsSnapGridLength] = useState(0);
@@ -159,10 +159,10 @@ export const ModalContainer = ({}) => {
 
   const closeTab = (index, id) => {
     // delete filter by layer
-    const updatedCQLFilters = cqlFilters.filter(f => f.layer !== id);
-    updateFiltersOnMap(updatedCQLFilters, cqlFilteringInfo.filter(f => f.layer.id === id)[0], channel)
-    store.dispatch(setCQLFilters(updatedCQLFilters));
-    store.dispatch(setCQLFilteringInfo(cqlFilteringInfo.filter(f => f.layer.id !== id)))
+    const updatedFilters = filters.filter(f => f.layer !== id);
+    updateFiltersOnMap(updatedFilters, filteringInfo.filter(f => f.layer.id === id)[0], channel)
+    store.dispatch(setFilters(updatedFilters));
+    store.dispatch(setFilteringInfo(filteringInfo.filter(f => f.layer.id !== id)))
     if (index > 0) {
       handleSelectTab(index - 1);
     } else {
@@ -185,7 +185,7 @@ export const ModalContainer = ({}) => {
           )}
 
           <StyledTabsSwiper
-            id={"cql-tabs-swiper"}
+            id={"filter-tabs-swiper"}
             spaceBetween={4}
             slidesPerView={"auto"}
             freeMode={true}
@@ -196,7 +196,7 @@ export const ModalContainer = ({}) => {
               setGfiTabsSnapGridLength(e.snapGrid.length)}
             }
           >
-            {cqlFilteringInfo.map((filter, index) => {
+            {filteringInfo.map((filter, index) => {
               return (
 
                 <SwiperSlide id={"tab_" + index} key={"tab_" + index}>
@@ -247,7 +247,7 @@ export const ModalContainer = ({}) => {
         <StyledTabContent>
             <StyledSwiper
             ref={gfiInputEl}
-            id={"cql-swiper"}
+            id={"filter-swiper"}
             onSlideChange={(e) => {
                 handleSelectTab(e.activeIndex);
             }}
@@ -255,15 +255,15 @@ export const ModalContainer = ({}) => {
             allowTouchMove={isMobile} // Disable swiping
             speed={300}
             >
-            {cqlFilteringInfo.map((filterInfo) => {
+            {filteringInfo.map((filterInfo) => {
                 
                 return (
                     <SwiperSlide
                     style={{width: "20em"}}
-                    id={"cql_tab_content_" + filterInfo?.layer?.id}
-                    key={"cql_tab_content_" + filterInfo?.layer?.id}
+                    id={"filter_tab_content_" + filterInfo?.layer?.id}
+                    key={"filter_tab_content_" + filterInfo?.layer?.id}
                     >
-                        <CQLFilterModal cqlFilterInfo={filterInfo}/>
+                        <FilterModal filterInfo={filterInfo}/>
                     </SwiperSlide>
                 );
             })}

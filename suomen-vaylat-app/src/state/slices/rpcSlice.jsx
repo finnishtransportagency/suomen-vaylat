@@ -59,10 +59,9 @@ const initialState = {
   },
   pointInfo: {},
   filters: [],
-  cqlFilters: [],
+  filters: [],
   activeGFILayer: null,
-  filteringInfo: { modalOpen: false },
-  cqlFilteringInfo: []
+  filteringInfo: []
 };
 
 export const rpcSlice = createSlice({
@@ -112,16 +111,6 @@ export const rpcSlice = createSlice({
     },
 
     /**
-     * Set CQL filters.
-     * @method setChannel
-     * @param {Object} state
-     * @param {Object} action
-     */
-    setCQLFilters: (state, action) => {
-      state.cqlFilters = action.payload;
-    },
-
-    /**
      * Set filtering info.
      * @method setFilteringInfo
      * @param {Object} state
@@ -129,16 +118,6 @@ export const rpcSlice = createSlice({
      */
     setFilteringInfo: (state, action) => {
       state.filteringInfo = action.payload;
-    },
-
-    /**
-     * Set CQL filtering info.
-     * @method setCQLFilteringInfo
-     * @param {Object} state
-     * @param {Object} action
-     */
-    setCQLFilteringInfo: (state, action) => {
-      state.cqlFilteringInfo = action.payload;
     },
 
     /**
@@ -952,11 +931,9 @@ export const {
   setMapLayers,
   setAllSelectedThemeLayers,
   setPointInfo,
-  setCQLFilters,
   setFilters,
   setActiveGFILayer,
   setFilteringInfo,
-  setCQLFilteringInfo
 } = rpcSlice.actions;
 
 export default rpcSlice.reducer;

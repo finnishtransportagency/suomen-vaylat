@@ -5,6 +5,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { theme, isMobile } from '../../../theme/theme';
 import ReactTooltip from "react-tooltip";
 import strings from '../../../translations';
+import {
+   setMinimizeFilterModal,
+   setSelectedMapLayersMenuTab
+  } from "../../../state/slices/uiSlice";
+import { setFilteringInfo } from '../../../state/slices/rpcSlice';
 
 import styled from 'styled-components';
 import {
@@ -17,7 +22,6 @@ import { updateLayers } from "../../../utils/rpcUtil";
 import LayerDownloadLinkButton from "./LayerDownloadLinkButton";
 import {
   setIsDownloadLinkModalOpen,
-  setSelectedCustomFilterLayers,
 } from "../../../state/slices/uiSlice";
 import LayerMetadataButton from "./LayerMetadataButton";
 import { useAppSelector } from "../../../state/hooks";
@@ -75,8 +79,17 @@ const StyledSwitchButton = styled.div`
 `;
 
 const StyledFilterIcon = styled.div`
-  padding-right: 8px;
-  color: ${props => props.theme.colors.mainColor1};
+  padding-right: 8px;  
+  cursor: pointer;
+  svg {
+      color: ${props => props.theme.colors.mainColor1};
+      transition: all 0.1s ease-out;
+  };
+  &:hover {
+    svg {
+      color: ${props => props.theme.colors.mainColor2};
+    }
+  };
 `;
 
 export const Switch = ({ action, layer, isSelected }) => {
@@ -110,25 +123,17 @@ export const Layer = ({ layer, themeName, groupName }) => {
     const { store } = useContext(ReactReduxContext);
     const [layerStyle, setLayerStyle] = useState(null);
     const [themeSelected, setThemeSelected] = useState(false);
-    const [isChecked, setIsChecked] = useState(false);
-    const {isCustomFilterOpen} = useAppSelector(state => state.ui)
+    const { minimizeFilter } = useAppSelector(state => state.ui);
+
     const isFilterable = typeof layer.config?.gfi?.filterFields !== "undefined" && layer.config?.gfi?.filterFields.length > 0 ;
 
     const {
         channel,
-        selectedTheme
+        selectedTheme,
+        filteringInfo
     } = useSelector(state => state.rpc);
 
     const excludeGroups = ["Digiroad", "Tierekisteri (Poistuva)"];
-
-    const isLayerSelected = () => {
-        const storedLayers = localStorage.getItem("checkedLayers");
-        if (storedLayers) {
-          const parsedLayers = JSON.parse(storedLayers);
-          return parsedLayers.some((storedLayer) => storedLayer.id === layer.id);
-        }
-        return false;
-      };
 
     const handleLayerVisibility = (channel, layer) => {
       store.dispatch(setMapLayerVisibility(layer));
@@ -190,6 +195,41 @@ export const Layer = ({ layer, themeName, groupName }) => {
     );
   }
 
+  const handleFilterClick = (layer) => {
+    handleLayerVisibility(channel, layer)
+    store.dispatch(setSelectedMapLayersMenuTab(2));
+
+    if (filteringInfo.filter(f => f.layer.id === layer.id).length === 0) {
+      var filterColumnsArray = [];
+      layer.config?.gfi?.filterFields &&
+      layer.config?.gfi?.filterFields.forEach((column) => {
+        if (column.field && column.type) {
+          filterColumnsArray.push({
+            key: column.field,
+            title: column.field,
+            type: column.type,
+            default: column.default || false
+          });
+        }
+      });
+
+      const updateFilter = [...filteringInfo]
+      updateFilter.push({
+          modalOpen: true,
+          layer: {
+            id: layer.id,
+            title: layer.name,
+            filterColumnsArray: filterColumnsArray
+          }
+      }
+      )
+      store.dispatch(setFilteringInfo(updateFilter));
+      minimizeFilter && store.dispatch(setMinimizeFilterModal({minimized: false, layer: layer.id}))
+    } else {
+        minimizeFilter && store.dispatch(setMinimizeFilterModal({minimized: false, layer: layer.id}))
+    }
+  }
+
   let downloadLink = null;
   if (layer.config && layer.config.downloadLink) {
     downloadLink = layer.config.downloadLink;
@@ -220,9 +260,9 @@ export const Layer = ({ layer, themeName, groupName }) => {
                     type="dark"
                     effect="float"
                   >
-                    <span>{strings.tooltips.layerlist.filterable}</span>
+                    <span>{strings.tooltips.layerlist.filter}</span>
                   </ReactTooltip>
-                  <StyledFilterIcon data-tip data-for={"filterableLayer"}>
+                  <StyledFilterIcon data-tip data-for={"filterableLayer"} onClick={() => handleFilterClick(layer)}>
                     <FontAwesomeIcon icon={faFilter} />
                   </StyledFilterIcon>
                   </>
