@@ -357,7 +357,6 @@ const Views = () => {
     const { store } = useContext(ReactReduxContext);
     const [views, setViews] = useState([]);
     const [viewName, setViewName] = useState('');
-    const { activeGeometries } = useSelector(state => state.ui);
     const { selectedLayers, channel } = useAppSelector((state) => state.rpc);
 
     useEffect(() => {
