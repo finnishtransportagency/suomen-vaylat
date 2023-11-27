@@ -694,8 +694,6 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
     }  
 
     useEffect(() => {
-        console.log(gfiLocations)
-        console.log(gfiCroppingArea)
         gfiLocations.forEach(gfiLocation => {
             gfiLocation.gfiCroppingArea &&
             channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', [
