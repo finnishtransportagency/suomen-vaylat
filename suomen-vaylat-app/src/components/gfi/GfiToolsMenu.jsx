@@ -234,6 +234,7 @@ const addFeaturesToMapParams =
                 },
             },
         },
+        clearPrevious: true,
     };
 
 const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
@@ -617,12 +618,6 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
 
 
     const fetchFeaturesSynchronous = (feature, layer, data, numberedLoaderEnables) => {
-        
-        channel && channel.postRequest(
-            'MapModulePlugin.RemoveFeaturesFromMapRequest',
-            [null, null, GFI_GEOMETRY_LAYER_ID]
-        );
-
         return new Promise(function(resolve, reject) {
             // executor (the producing code, "singer")
             channel.getFeaturesByGeoJSON(
