@@ -850,7 +850,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
   const handleSelectTab = (index) => {
     setSelectedTab(index);
     const layer = selectedLayers.filter(
-      (l) => l.id == tabsContent[index].props.id
+      (l) => l.id == tabsContent[index]?.props?.id
     );
     store.dispatch(setActiveGFILayer(layer));
   };

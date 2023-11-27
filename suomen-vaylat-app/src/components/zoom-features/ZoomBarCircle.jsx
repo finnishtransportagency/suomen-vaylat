@@ -1,4 +1,3 @@
-import ReactTooltip from 'react-tooltip';
 import styled from 'styled-components';
 
 const StyledZoomLevelContainer = styled.div`
@@ -35,22 +34,6 @@ const StyledZoomLevelCircle = styled.div`
     };
 `;
 
-const StyledTooltip = styled(ReactTooltip)`
-  position: relative;
-  z-index: 1;
-  background-color: ${(props) => props.theme.colors.mainColor1} !important;
-  color: white;
-  padding: 10px;
-  border-radius: 5px;
-  font-size: 16px;
-  font-weight: bold;
-  text-align: center;
-  
-  &:after {
-    background-color: ${(props) => props.theme.colors.mainColor1} !important;
-  }
-`;
-
 const ZoomBarCircle = ({
     index,
     zoomLevel,
@@ -68,17 +51,8 @@ const ZoomBarCircle = ({
             hoveringIndex={hoveringIndex}
             isExpanded={isExpanded}
             isActive={isActive}
-            data-tip
-            data-for={`zoomLevel-${index}`}
           ></StyledZoomLevelCircle>
         </StyledZoomLevelContainer>
-        <StyledTooltip
-            id={`zoomLevel-${index}`}
-            place="left"
-            effect="solid"
-          >
-            {index}
-          </StyledTooltip>
       </>
     );
   };

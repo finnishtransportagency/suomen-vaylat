@@ -124,6 +124,8 @@ export const Layer = ({ layer, themeName, groupName }) => {
     const [layerStyle, setLayerStyle] = useState(null);
     const [themeSelected, setThemeSelected] = useState(false);
     const { minimizeFilter } = useAppSelector(state => state.ui);
+    const { filters } = useAppSelector(state => state.rpc);
+
 
     const isFilterable = typeof layer.config?.gfi?.filterFields !== "undefined" && layer.config?.gfi?.filterFields.length > 0 ;
 
@@ -196,7 +198,7 @@ export const Layer = ({ layer, themeName, groupName }) => {
   }
 
   const handleFilterClick = (layer) => {
-    handleLayerVisibility(channel, layer)
+    !layer.visible && handleLayerVisibility(channel, layer);
     store.dispatch(setSelectedMapLayersMenuTab(2));
 
     if (filteringInfo.filter(f => f.layer.id === layer.id).length === 0) {
@@ -263,7 +265,7 @@ export const Layer = ({ layer, themeName, groupName }) => {
                     <span>{strings.tooltips.layerlist.filter}</span>
                   </ReactTooltip>
                   <StyledFilterIcon data-tip data-for={"filterableLayer"} onClick={() => handleFilterClick(layer)}>
-                    <FontAwesomeIcon icon={faFilter} />
+                    <FontAwesomeIcon icon={faFilter} style={{ color: filters.filter(f => f.layer === layer.id).length > 0 ? theme.colors.secondaryColor8 : theme.colors.primaryColor1 }} />
                   </StyledFilterIcon>
                   </>
                 }
