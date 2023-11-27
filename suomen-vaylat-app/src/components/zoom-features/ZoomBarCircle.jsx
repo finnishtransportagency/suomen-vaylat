@@ -16,7 +16,6 @@ const StyledZoomLevelCircle = styled.div`
     transform: ${props => props.index === props.zoomLevel ? "scale(1.1)" : "scale(1)"};
     margin: 4px;
     transition: all 0.4s ease-out;
-    z-index: 3;
     transform: ${props => props.isActive && "scale(1.3)"};
     @media ${props => props.theme.device.mobileL} {
         width: 20px;
