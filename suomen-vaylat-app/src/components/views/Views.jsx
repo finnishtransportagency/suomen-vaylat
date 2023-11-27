@@ -357,7 +357,7 @@ const Views = () => {
     const { store } = useContext(ReactReduxContext);
     const [views, setViews] = useState([]);
     const [viewName, setViewName] = useState('');
-
+    const { activeGeometries } = useSelector(state => state.ui);
     const { selectedLayers, channel } = useAppSelector((state) => state.rpc);
 
     useEffect(() => {
@@ -696,37 +696,37 @@ const Geometries = () => {
         setGeometryName('');
     };
 
-const handleRemoveGeometry = (geometry) => {
-    let updatedGeometries = geometries.filter((geometryData) => geometryData.id !== geometry.id);
-    window.localStorage.setItem('geometries', JSON.stringify(updatedGeometries));
-    setGeometries(JSON.parse(window.localStorage.getItem('geometries')));
+    const handleRemoveGeometry = (geometry) => {
+        let updatedGeometries = geometries.filter((geometryData) => geometryData.id !== geometry.id);
+        window.localStorage.setItem('geometries', JSON.stringify(updatedGeometries));
+        setGeometries(JSON.parse(window.localStorage.getItem('geometries')));
 
-    // Only remove markers associated with the specific geometry
-    geometry.markers.forEach(marker => {
-        store.dispatch(removeMarkerRequest({markerId: marker.markerId}));
-        store.dispatch(removeFromDrawToolMarkers(marker.markerId));
-    });
+        // Only remove markers associated with the specific geometry
+        geometry.markers.forEach(marker => {
+            store.dispatch(removeMarkerRequest({markerId: marker.markerId}));
+            store.dispatch(removeFromDrawToolMarkers(marker.markerId));
+        });
 
-    if(activeGeometries.find(g => g.id === geometry.id)) {
-        store.dispatch(removeActiveGeometry(geometry.id));
-        channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [null, null, geometry.id]);
-        return;
+        if(activeGeometries.find(g => g.id === geometry.id)) {
+            store.dispatch(removeActiveGeometry(geometry.id));
+            channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [null, null, geometry.id]);
+            return;
+        };
     };
-};
 
     
 
     const handleDeleteAllGeometries = () => {
         activeGeometries.forEach(geometry => {
+            geometry.markers.forEach(marker => {
+                store.dispatch(removeMarkerRequest({markerId: marker.markerId}));
+                store.dispatch(removeFromDrawToolMarkers(marker.markerId));
+            });
             store.dispatch(removeActiveGeometry(geometry.id));
             channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [null, null, geometry.id]);
         });
         channel && channel.postRequest('DrawTools.StopDrawingRequest', []);
         store.dispatch(setGeoJsonArray([]));
-        drawToolMarkers.forEach(marker => {
-            store.dispatch(removeMarkerRequest({markerId: marker.markerId}));
-            store.dispatch(removeFromDrawToolMarkers(marker.markerId));
-        });
         window.localStorage.setItem('geometries', JSON.stringify([]));
         setGeometries(JSON.parse(window.localStorage.getItem('geometries')));
         store.dispatch(setWarning(null));
