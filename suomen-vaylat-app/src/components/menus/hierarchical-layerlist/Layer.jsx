@@ -198,7 +198,6 @@ export const Layer = ({ layer, themeName, groupName }) => {
   }
 
   const handleFilterClick = (layer) => {
-    console.log(layer)
     !layer.visible && handleLayerVisibility(channel, layer);
     store.dispatch(setSelectedMapLayersMenuTab(2));
 
