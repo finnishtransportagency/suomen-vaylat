@@ -393,7 +393,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
                         color: 'rgba(255,255,255,0.5)',
                     },
                     stroke: {
-                        color: '#fd7e14',
+                        color: 'rgba(100, 255, 95, 0.7)',
                         width: 3,
                     },
                     image: {
