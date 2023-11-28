@@ -62,7 +62,7 @@ export const HandleSharedWebSiteLink = () => {
     // else if mapLayers given, remove all layers and then add wanted layers to map
     else if (channel && maplayers) {
         store.dispatch(setIsSideMenuOpen(true));
-        store.dispatch(setSelectedMapLayersMenuTab(2));
+        store.dispatch(setSelectedMapLayersMenuTab(1));
         const layers = maplayers.split('++');
         store.dispatch(removeAllSelectedLayers());
         layers.reverse().forEach((l, index) => {

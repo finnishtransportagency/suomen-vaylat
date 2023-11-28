@@ -199,7 +199,7 @@ export const Layer = ({ layer, themeName, groupName }) => {
 
   const handleFilterClick = (layer) => {
     !layer.visible && handleLayerVisibility(channel, layer);
-    store.dispatch(setSelectedMapLayersMenuTab(2));
+    store.dispatch(setSelectedMapLayersMenuTab(1));
 
     if (filteringInfo.filter(f => f.layer.id === layer.id).length === 0) {
       var filterColumnsArray = [];
