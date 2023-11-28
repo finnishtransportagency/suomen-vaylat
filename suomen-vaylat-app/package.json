@@ -94,5 +94,8 @@
     "eslint-config-react-app": "^7.0.0",
     "prettier": "^2.8.8",
     "redux-devtools-extension": "^2.13.9"
+  },
+  "optionalDependencies": {
+    "fsevents": "^2.3.3"
   }
 }
