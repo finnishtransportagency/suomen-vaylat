@@ -627,7 +627,7 @@ const Geometries = () => {
                   lineCap: "round",
                   lineJoin: "round",
                   area: {
-                    color: "rgba(100, 255, 95, 0.7)",
+                    color: "#ff5100b3",
                     width: 4,
                     lineJoin: "round",
                   },
@@ -636,7 +636,7 @@ const Geometries = () => {
                   shape: 5,
                   size: 3,
                   fill: {
-                    color: "rgba(100, 255, 95, 0.7)",
+                    color: "#ff5100b3",
                   },
                 },
             },
@@ -681,7 +681,8 @@ const Geometries = () => {
         let layerId = uuidv4();
         let markers = drawToolMarkers.map(d => ({
             ...d,
-            markerId : uuidv4()
+            markerId : uuidv4(),
+            color: "#ff5100b3"
         }))
 
         let newGeometry = {
