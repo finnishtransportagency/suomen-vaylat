@@ -7,21 +7,18 @@ import {
   faTable,
   faList,
   faFilter,
-  faExclamation,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useAppSelector } from "../../state/hooks";
-import { setFilteringInfo,  setMapLayerVisibility,
+import { setFilteringInfo
 } from "../../state/slices/rpcSlice";
 import { Table } from "ka-table";
 import "ka-table/style.scss";
 import { theme, isMobile } from "../../theme/theme";
 import ReactTooltip from "react-tooltip";
-import { updateLayers } from "../../utils/rpcUtil";
 
 import {
   setMinimizeFilterModal,
-  setSelectedMapLayersMenuTab
  } from "../../state/slices/uiSlice";
 
 
