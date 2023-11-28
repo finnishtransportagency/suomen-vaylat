@@ -39,21 +39,22 @@ const ZoomBarCircle = ({
     hoveringIndex,
     isExpanded,
     isActive
-    }) => {
-
+  }) => {
+  
     return (
+      <>
         <StyledZoomLevelContainer>
-            <StyledZoomLevelCircle
-                index={index}
-                zoomLevel={zoomLevel}
-                hoveringIndex={hoveringIndex}
-                isExpanded={isExpanded}
-                isActive={isActive}
-            >
-            </StyledZoomLevelCircle>
+          <StyledZoomLevelCircle
+            index={index}
+            zoomLevel={zoomLevel}
+            hoveringIndex={hoveringIndex}
+            isExpanded={isExpanded}
+            isActive={isActive}
+          ></StyledZoomLevelCircle>
         </StyledZoomLevelContainer>
-
-    )
-};
+      </>
+    );
+  };
+  
 
 export default ZoomBarCircle;

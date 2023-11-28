@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect } from 'react';
+import { useState, useContext } from 'react';
 import { cloneElement } from 'react';
 import styled from 'styled-components';
 import { motion, AnimatePresence, useDragControls } from 'framer-motion';
@@ -110,7 +110,7 @@ const StyledModalTitle = styled.div`
     align-items: center;
     user-select: none;
     p {
-        margin: 0px;
+        margin: 0rem 1rem 0rem 0rem;
         font-size: 20px;
         font-weight: bold;
         color: ${(props) => props.theme.colors.mainWhite};
@@ -185,6 +185,10 @@ const Modal = ({
     minWidth,
     maxWidth,
     overflow,
+    minimizable,
+    minimizeAction,
+    maximizable,
+    maximizeAction,
     minimize,
     maximize,
     children,
@@ -272,29 +276,27 @@ const Modal = ({
                                     <p>{title}</p>
                                 </StyledModalTitle>
                                 <StyledRightContent>
-                                    {type === 'gfi' && (
-                                        <>
+                                    {minimizable && (
                                             <StyledHeaderButton
-                                                onClick={() => store.dispatch(setMinimizeGfi(true))}
+                                                onClick={() => minimizeAction()}
                                             >
                                                 <FontAwesomeIcon
                                                     icon={faWindowMinimize}
                                                 />
                                             </StyledHeaderButton>
-                                            {
-                                                window.screen.width > MIN_SCREEN_WIDTH_MAXIMIZE &&
-                                                    <StyledHeaderButton
-                                                        onClick={(e) => {
-                                                            e.preventDefault();
-                                                            store.dispatch(setMaximizeGfi(!maximize));
-                                                        }}
-                                                    >
-                                                        <FontAwesomeIcon
-                                                            icon={maximize ? faWindowRestore : faWindowMaximize}
-                                                        />
-                                                    </StyledHeaderButton>
-                                            }
-                                        </>
+                                    )}
+
+                                    { maximizable && window.screen.width > MIN_SCREEN_WIDTH_MAXIMIZE && (
+                                        <StyledHeaderButton
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                maximizeAction();
+                                            }}
+                                        >
+                                            <FontAwesomeIcon
+                                                icon={maximize ? faWindowRestore : faWindowMaximize}
+                                            />
+                                        </StyledHeaderButton>
                                     )}
 
                                     {hasHelp && (

@@ -8,14 +8,15 @@ import {
     faMapMarkedAlt,
     faTimes,
     faExpand,
-    faPencilRuler
+    faPencilRuler,
+    faFilter
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import strings from '../../translations';
 import { selectGroup } from '../../utils/rpcUtil';
 import { ThemeGroupShareButton } from '../share-web-site/ShareLinkButtons';
 
-import { setMinimizeGfi } from '../../state/slices/uiSlice';
+import { setMinimizeGfi, setMinimizeFilterModal } from '../../state/slices/uiSlice';
 
 const GFI_GEOMETRY_LAYER_ID = 'drawtools-geometry-layer';
 
@@ -57,6 +58,51 @@ const StyledActionButton = styled(motion.div)`
         height: 40px;
     };
     z-index:100;
+`;
+
+const StyledFilterActionButton = styled(motion.div)`
+    max-width: 312px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: ${props => props.theme.colors.secondaryColor8};
+    box-shadow: 2px 2px 4px #0000004D;
+    border-radius: 24px;
+    color: ${props => props.theme.colors.mainWhite};
+    pointer-events: auto;
+    svg {
+        color: ${props => props.theme.colors.mainWhite};
+    };
+    @media ${props => props.theme.device.mobileL} {
+        top: initial;
+        max-width: 212px;
+        height: 40px;
+    };
+    z-index:100;
+`;
+
+const StyledFilterLeftContent = styled.div`
+    height: 100%;
+    display: flex;
+    align-items: center;
+    max-width: 70%;
+    overflow: hidden;
+`;
+
+const StyledFilterRightContent = styled.div`
+    height: 100%;
+    display: flex;
+    align-items: center;
+    max-width: 40%;
+`;
+
+const StyledFilterText = styled.div`
+    font-size: 14px;
+    font-weight: 600;
+    user-select: none;
+    @media ${props => props.theme.device.mobileL} {
+        font-size: 12px;
+    };
 `;
 
 const StyledLeftContent = styled.div`
@@ -157,17 +203,12 @@ const addFeaturesToMapParams =
         layerId: GFI_GEOMETRY_LAYER_ID,
         featureStyle: {
             fill: {
-                color: 'rgba(10, 140, 247, 0.3)',
+                color: 'rgba(10, 140, 247, 0.1)',
             },
             stroke: {
-                color: 'rgba(10, 140, 247, 0.3)',
-                width: 5,
-                lineDash: 'solid',
-                lineCap: 'round',
-                lineJoin: 'round',
                 area: {
                     color: 'rgba(100, 255, 95, 0.7)',
-                    width: 8,
+                    width: 4,
                     lineJoin: 'round',
                 },
             },
@@ -182,22 +223,25 @@ const addFeaturesToMapParams =
     };
 
 const ActionButtons = ({
-    closeAction
+    closeAction,
+    closeActionFilter
 }) => {
 
     const { store } = useContext(ReactReduxContext);
     
-    const [activeGeometries, setActiveGeometries] = useState(false);
+    const [activeGeometries, setActiveGeometries] = useState(true);
 
     const {
         channel,
         selectedTheme,
         lastSelectedTheme,
         selectedThemeId,
-        gfiLocations
+        gfiLocations,
+        filteringInfo
     } = useAppSelector((state) => state.rpc);
     const {
-        minimizeGfi,        
+        minimizeGfi,
+        minimizeFilter        
     } = useAppSelector((state) => state.ui);
 
     const handleSelectGroup = (index, theme) => {
@@ -223,11 +267,18 @@ const ActionButtons = ({
         setActiveGeometries(!activeGeometries);
     };
 
+    // Get titles of filtered layers
+    var filterInfoTitle = "";
+    filteringInfo.forEach((fil, index) => {
+        const title = fil.layer.title.length > 10 ? fil.layer.title.substring(0, 10) + '... ' : fil.layer.title;
+        index === 0 ? filterInfoTitle += title : filterInfoTitle += ", " + title
+    })
+
     return (
             <StyledContent>
                     <AnimatePresence initial={false}>
-                        {
-                            minimizeGfi &&
+                        { minimizeGfi &&
+
                             <StyledActionButton
                                 key="gfi_action_button"
                                 type="gfi"
@@ -273,8 +324,8 @@ const ActionButtons = ({
                                 </StyledRightContent>
                             </StyledActionButton>
                         }
-                        {
-                            selectedTheme && selectedTheme !== '' &&
+                        { selectedTheme && selectedTheme !== '' &&
+
                             <StyledActionButton
                                 key="theme_action_button"
                                 positionTransition
@@ -306,6 +357,48 @@ const ActionButtons = ({
                                 </StyledRightContent>
 
                             </StyledActionButton>
+                        }
+                        { minimizeFilter.minimized &&
+
+                            <StyledFilterActionButton
+                                key="filter_action_button"
+                                positionTransition
+                                initial={{ y: 50, filter: "blur(10px)", opacity: 0 }}
+                                animate={{ y: 0, filter: "blur(0px)", opacity: 1 }}
+                                exit={{ y: 50, filter: "blur(10px)", opacity: 0 }}
+                                transition={{
+                                    duration: 0.4,
+                                    type: "tween"
+                                }}
+                            >
+                                <StyledFilterLeftContent>
+                                    <StyledActionButtonIcon>
+                                        <FontAwesomeIcon
+                                            icon={faFilter}
+                                        />
+                                    </StyledActionButtonIcon>
+                                    <StyledFilterText>
+                                    {filterInfoTitle}
+                                    </StyledFilterText>
+                                </StyledFilterLeftContent>
+                                <StyledFilterRightContent>
+                                    <StyledExpandButton
+                                        onClick={() => store.dispatch(setMinimizeFilterModal({minimized: false}))}
+                                    >
+                                        <FontAwesomeIcon
+                                            icon={faExpand}
+                                        />
+                                    </StyledExpandButton>
+                                    <StyledActionButtonClose
+                                        onClick={() => closeActionFilter()}
+                                    >
+                                        <FontAwesomeIcon
+                                            icon={faTimes}
+                                        />
+                                    </StyledActionButtonClose>
+                                </StyledFilterRightContent>
+
+                            </StyledFilterActionButton>
                         }
                     </AnimatePresence>
     </StyledContent>

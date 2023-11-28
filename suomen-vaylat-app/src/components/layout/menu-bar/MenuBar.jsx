@@ -23,7 +23,8 @@ import {
     setIsGfiDownloadOpen,
     setGeoJsonArray,
     setSelectedMarker,
-    setIsThemeMenuOpen
+    setIsThemeMenuOpen,
+    removeFromDrawToolMarkers
 } from '../../../state/slices/uiSlice';
 
 import { removeMarkerRequest } from '../../../state/slices/rpcSlice';
@@ -74,8 +75,7 @@ const StyledLayerCount = styled.div`
 
 const MenuBar = () => {
     const { store } = useContext(ReactReduxContext);
-
-    const { selectedLayers, downloads, channel } = useAppSelector(
+    const { selectedLayers, downloads, channel, filters } = useAppSelector(
         (state) => state.rpc
     );
 
@@ -94,8 +94,8 @@ const MenuBar = () => {
     } = useAppSelector((state) => state.ui);
 
     const [animationUnfinished, setAnimationUnfinished] = useState(false);
-
     const handleFullScreen = () => {
+
         var elem = document.documentElement;
         /* View in fullscreen */
 
@@ -135,7 +135,7 @@ const MenuBar = () => {
 
     const closeDrawingTools = () => {
         // remove geometries off the map
-        channel && channel.postRequest('DrawTools.StopDrawingRequest', [true]);
+        channel && channel.postRequest('DrawTools.StopDrawingRequest', []);
         store.dispatch(setGeoJsonArray([]));
         // stop the drawing tool
         channel &&
@@ -146,6 +146,11 @@ const MenuBar = () => {
         });
         store.dispatch(setIsDrawingToolsOpen(!isDrawingToolsOpen));
         store.dispatch(setSelectedMarker(2));
+        // remove all markers made with drawing tools
+        drawToolMarkers.forEach(marker => {
+            store.dispatch(removeMarkerRequest({markerId: marker.markerId}));
+            store.dispatch(removeFromDrawToolMarkers(marker.markerId));
+        });
     };
 
     const waitForAnimationFinish = () => {
@@ -225,7 +230,11 @@ const MenuBar = () => {
                         store.dispatch(setIsGfiOpen(!isGfiOpen));
                         isGfiOpen && store.dispatch(setMinimizeGfi(false));
                     }}
-                />
+                >
+                { filters?.filters && filters?.filters?.length >0 && 
+                 <StyledLayerCount>{filters?.filters?.length}</StyledLayerCount>
+                }
+                </CircleButton>
                 <CircleButton
                     icon={faDownload}
                     text={strings.downloads.downloads}

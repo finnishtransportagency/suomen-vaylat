@@ -146,14 +146,18 @@ const UserGuideTabs = () => {
             id: 'swipeAbleTab_0',
             title: strings.layerlist.layerlistLabels.allLayers,
             titleColor: 'mainColor1',
-            content: <p>{strings.appGuide.modalContent.mapLevelMenu.tabsContent.materList}</p>
+            content: strings.appGuide.modalContent.mapLayerMenu.tabsContent.allLayers.split('\n').map(c => {
+                return ( <p> {c} </p>) 
+                 })
         },
         {
             id: 'swipeAbleTab_2',
             title: strings.layerlist.layerlistLabels.selectedLayers,
             titleColor: 'secondaryColor8',
             titleContent: 'layerCounter',
-            content: <p>{strings.appGuide.modalContent.mapLevelMenu.tabsContent.selectedLayers}</p>
+            content: strings.appGuide.modalContent.mapLayerMenu.tabsContent.selectedLayers.split('\n').map(c => {
+                return ( <p> {c} </p>) 
+                 })
         }
     ];
     
@@ -170,7 +174,7 @@ const UserGuideTabs = () => {
                     }}
             >
                 <StyledTabSubTitle>
-                    {strings.appGuide.modalContent.mapLevelMenu.subTitle}
+                    {strings.appGuide.modalContent.mapLayerMenu.subTitle}
                 </StyledTabSubTitle>
                 <StyledTabs
                     tabIndex={tabIndex}

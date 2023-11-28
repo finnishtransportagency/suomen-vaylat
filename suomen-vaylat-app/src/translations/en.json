@@ -10,6 +10,7 @@
   "tooltips": {
     "layerlist": {
       "filter": "Filter",
+      "filterable": "Filterable layer",
       "opacity": "Opacity"
     },
     "search": "Search",
@@ -73,6 +74,9 @@
     }
   },
   "gfi": {
+    "noResultsTitle": "No results",
+    "noResultsDesc": "No results with geometry, select new geometry or new layers",
+    "filter": "Filter",
     "title": "Feature Data",
     "close": "Close",
     "additionalInfo": "Additional information",
@@ -89,6 +93,7 @@
     "search": "Search",
     "dataTableView": "List view",
     "downloadMaterials": "Download materials",
+    "downloadMaterialsDisabled":"Download requires selection of objects",
     "list": "List",
     "table": "Table",
     "uniqueId": "Unique identifier",
@@ -98,6 +103,12 @@
       "title": "Saved geometries (Disabled)",
       "description": "My saved geometries",
       "disabled": "Temporarily unavailable"
+    },
+    "streetView": {
+      "title": "Google Street View",
+      "openGoogleStreetView": "Open Google Street View",
+      "googleStreetviewTitle": "Google Street View",
+      "googleStreetviewContent": "Open selected point in Google Street View in new tab"
     }
   },
   "vkm": {
@@ -106,6 +117,7 @@
     "roadAddressInstructions": "Unable to retrieve road address data. Zoom in on the map and click on the point for which you want to retrieve road address data."
   },
   "downloads": {
+    "newDownloads": "NEW DOWNLOAD",
     "downloads": "Downloads",
     "processing": "Processing",
     "noProcessingDownloads": "No processing downloads",
@@ -119,7 +131,9 @@
     "failedDownloads": "Failed downloads",
     "errorOccuredDuringDownloadProcessing": "Error occurred during download processing",
     "noWebSocketSupport": "Your browser does not support downloads. You can try again using a different browser or by updating your current browser.",
-    "downloadFailure": "Something went wrong. Please try again."
+    "downloadFailure": "Something went wrong. Please try again.",
+    "downloadsInfo": "Some of the datasets can be downloaded from the whole area of Finland via the download button in the layer menu, next to the data name.",
+    "downloadsInfo2": "If the download button is missing, downloading the material requires selecting an object on the map."
   },
   "general": {
     "close": "Close",
@@ -132,8 +146,11 @@
   },
   "multipleLayersWarning": "You are about to activate 10 or more maplayers and it might affect the performance of the service",
   "multipleLayersFetchWarning": "You are about to fetch data from 10 or more maplayers, it might affect the performance of the service.",
-  "bodySizeWarning": "Geometry is too big, do you want to simplify it?",
+  "bodySizeWarning": "The cropping geometry is too big, limit to a smaller area.",
   "bodySizeWarningTemporary": "Geometry is too big and data cannot be fetched right now.",
+  "generalError": "An error occurred.",
+  "noGfiLocationsWarning": "No results found, try another geometry.",
+  "exitConfirmation": "You are leaving the Suomen Väylät. Do you want to continue?",
   "appGuide": {
     "title": "User Guide",
     "modalContent": {
@@ -166,24 +183,24 @@
         "title": "Themes",
         "content": "Selecting a theme displays the map layers defined for the theme and opens a menu for selecting map materials related to the theme. Some of the map materials have their own style for the theme. There can be only one theme at a time. When a theme is selected, you can also select map materials other than those defined for the theme in the All Levels menu. The theme closes with the theme marker at the top of the map."
       },
-      "mapLevelMenu": {
-        "title": "Map Level Menu",
-        "subTitle": "The map level menu opens at the top left. There are 3 tabs to choose from",
+      "mapLayerMenu": {
+        "title": "Map Layer Menu",
+        "subTitle": "The map layer menu opens at the top left. There are two tabs to choose from.",
         "tabsContent": {
-          "materList": "You can filter the material list by topic behind the filter button. You can search the map level by name by entering at least 3 letters in the search field.",
-          "selectedLayers": "List of selected map levels on the map. You can change the order of the levels by dragging them from the icon on the right. The transparency can be adjusted with the slider and the level selec-tion can be deselected."
+          "allLayers": "You can search the map layer by name by entering at least 3 letters in the search field. You can filter the layerlist by topic behind the Filter by type selection or you can save your own filter in the browser’s cache. Own filter is available on the device and browser where the filter is saved.\nFrom info-icon next to the map layer name you can open metadata for material. If there is a download button visible for the material, it can be downloaded from the whole area of Finland. If the download button is missing, downloading the material requires selecting an object on the map.\nSome of the layers can be filtered by the attribute data. You can use attribute filtering for the layer if there is a filter-icon visible next to the map layer name.",
+          "selectedLayers": "List of selected map layers on the map. You can change the order of the layers by dragging them from the icon on the left. The transparency can be adjusted with the slider and the layer can be deselected from the close button. From the filter-button you can open filtering menu to filter the layer by attribute data."
         }
       },
       "search": {
         "title": "Search",
-        "content": "The search opens in the upper right corner of the map using the magnifying glass button on the left. The Search function allows you to search for you and addresses by selecting the search you want to use from the drop-down menu. You can delete a search result from the map by tapping the trash in the search box."
+        "content": "The search opens from the upper right corner magnifying icon. The Search function allows you to search for municipalities, addresses, real estate unit identifiers, street addresses or railway addresses by selecting the search you want to use from the drop-down menu. More detailed instructions can be found from info-icons shown in the drop-down menu. You can delete a search result from the map with the trash-icon on the search menu."
       },
       "drawingTools": {
         "title": "Drawing tools",
         "content": "Drawing tools open from the drawing button on the left. The tools can be used to add geometries to the map and to measure length or area. Drawn geometries and markers can be saved by clicking the Save button, which is at the very bottom in the Drawing tools menu.  Drawn geometries can be deleted from the map with the orange rubber button."
       },
       "gfi": {
-        "content": "To access feature data, click anywhere on the map or click the button with the marker icon on the left. In the Feature Data window, you can search for feature data and view information about the features and locations you select, which you can also download directly to your device in a file format of your choosing."
+        "content": "To access feature data, click anywhere on the map or click the button with the marker icon on the left. In the Feature Data window, you can search for feature data and view information about the features and locations you select, which you can also download directly to your device in a file format of your choosing. If there is a filter-button next to the map layer name, you can filter data listed in the Feature Data window.\nIf you have selected the object by clicking the map, you can explore the same location from Google Street View service. Google Street View can be opened from the location informations at the Feature Data window."
       },
       "downloads": {
         "title": "Downloads",
@@ -199,7 +216,7 @@
       },
       "zoomBar": {
         "title": "Captions / Zoom Bar",
-        "content": "You can open the zoom level and the map levels with their captions on the map at that zoom level from the caption icon at the bottom right. Map levels are listed at the top first. Selecting another scale from the zoom bar moves to the selected approach level."
+        "content": "You can open the zoom level and the map layers with their captions on the map at that zoom level from the caption icon at the bottom right. Map layers are listed at the top first. Selecting another scale from the zoom bar moves to the selected approach level."
       }
     }
   },
@@ -218,8 +235,10 @@
     },
     "contactInfoFeedback": {
       "0": "The application is the responsibility of the Finnish Transport Infrastructure Agency and it is supplied by Sitowise Oy.",
-      "1": "Send your feedback to",
+      "1": "Send your feedback on the Suomen Väylät map service to",
       "2": "suomenvaylat@vayla.fi",
+      "3": "Feedback regarding roads, railways and waterways can be given at",
+      "4": "https://liikenne.palautevayla.fi/feedback",
       "emailSubject": "Feedback on Suomen Väylät"
     },
     "appInfoLinks": {
@@ -249,7 +268,7 @@
       "municipalityLink": "https://www.kuntaliitto.fi",
       "landSurvey": "The National Land Survey of Finland’s background maps and property identifiers and boundaries are open data and available under licence conditions:",
       "landSurveyLink": "https://www.maanmittauslaitos.fi/avoindata-lisenssi-cc40",
-      "roadmaps": "Roadmaps (AT and GT) are CGI Suomi Oy datasets under license no. S10325081",
+      "roadmaps": "Roadmaps (AT and GT) are CGI Suomi Oy datasets under license no. S10422112",
       "syke": "Areas with local detailed plans are open data from the Finnish Environment Institute (SYKE). The license for SYKE’s open datasets is Creative Commons Attribution 4.0"
     },
     "termsOfUse": {
@@ -261,13 +280,24 @@
     "privacyPolicy": {
       "title": "Privacy statement",
       "link": "https://vayla.fi/documents/25230764/35601500/Tietosuojaseloste+Avoimen+datan+palvelut+14.3.2023_allekirjoitettu.pdf/738884e8-28b8-ce84-050a-83bde6b51a2c/Tietosuojaseloste+Avoimen+datan+palvelut+14.3.2023_allekirjoitettu.pdf?t=1681210558717"
+    },
+    "appCode": {
+      "appCodeInfo": "In accordance to the terms of use the source codes of the application are available here:",
+      "appCodeLink": "https://github.com/finnishtransportagency/suomen-vaylat"
+    },
+    "googleTerms": {
+      "googleTermsInfo": "Terms of use for Google map services: ",
+      "googleTermsLink": "https://cloud.google.com/maps-platform/terms"
     }
   },
   "search": {
+    "lessSearchOptions": "Less search options",
+    "moreSearchOptions": "More search options",
     "fill_all_fields": "Fill in all search fields",
     "required_field_missing": "Check the required fields.",
     "vkm": {
       "tie": "Road number",
+      "tieloppu" : "Road end",
       "title": "Road number search",
       "subtitle": "Search by road number",
       "osa": "Road section",
@@ -305,6 +335,14 @@
         "text": "No results found for the metadata search."
       }
     },
+    "layer": {
+      "title": "Material search"
+    },
+    "track" : {
+      "tracknumber" : "Track number",
+      "trackkm" : "Track kilometre",
+      "trackm" : "Track metre"
+    },
     "tips": {
       "title": "Use location search to search for a municipality, address, property identifier, road address or track address.",
       "address": "Address search, type in the format 'municipality', 'address' or 'address, municipality'.",
@@ -313,25 +351,44 @@
         "Opastinsilta 12",
         "Opastinsilta 12, Helsinki"
       ],
-      "vkmRoad": "Tiehaku, kirjoita muodossa 'tie/osa/ajorata/etäisyys' tai 'tie/osa/ajorata/etäisyys tie/osa_loppu/ajorata/etäisyys_loppu'.",
+      "vkmRoad": "Road search, write in the format ’road/part/driving_lane/distance’, road/part/distance, 'road/part/driving_lane' (use the 'Use driving_lane search' option) or ’road/part/driving_lane/distance road/part_end/driving_lane/distance_end’.",
       "vkmRoadExamples": [
         "5",
         "5/116",
-        "5/116/0",
+        "5/116/0 ( driving_lane search )",
+        "5/116/100 ( distance search )",
         "5/116/0/50",
-        "5/116//50",
+        "5/116/100 5/116/400",
         "5/116/0/50 5/348/0/100",
-        "5/116//50 5/348//100",
-        "start:5/116/0/50 end:5/348/0/100"
+        "5/116/0/50 5/348/0/100",
+        "start:5/116/0/50 end:5/348/0/100",
+        "The 'Use driving_lane search' option changes the search to use either the lane or distance when searching with three parameters"
       ],
       "vkmTrack": "Track search, type in the format 'track number/track kilometre/track metre'.",
-      "vkmTrackExamples": ["001/2/10"],
+      "vkmTrackExamples": [
+        "001/2/10"
+      ],
       "realEstateUnitIdentifier": "Property identifier search, type in the format 'aa-bb-cc-d' or 'aaa-bbb-cc-ddd'.",
       "realEstateUnitIdentifierExamples": ["91-17-16-1", "091-017-16-001"],
       "example": "For example,",
       "toastTip": "Did you know that you can save the geometry that was placed on the map from a track and road search?",
-      "toastTipContent": "You can save the geometry through the save icon on the left side of the page, from another tab."
-    }
+      "toastTipContent": "You can save the geometry through the save icon on the left side of the page, from another tab.",
+      "nomenclature" : "With name search, you can search for objects in a geographic name registry. Eg.",
+      "nomenclatureExamples" : [
+        "Tampere", "Rautatieasema", "Eduskuntatalo"
+      ],
+      "layer" : "Using material search, you can search for words or parts of words in the metadata of map layers and activate layers from the search results. Eg. ",
+      "layerExamples" : [
+        "pölkytys"
+      ]
+    },
+    "nomenclature" : {
+      "title": "Name search"
+    },
+    "premise" : {
+      "title": "Property search"
+    },
+    "carriageWaySearch": "Use driving_lane search"
   },
   "layerlist": {
     "layerlistLabels": {
@@ -342,7 +399,6 @@
       "backgroundMaps": "Background maps",
       "selectAll": "Select all",
       "show": "Show",
-      "filterOrSearchLayers": "Filter or search layers",
       "filterByType": "Filter by type",
       "searchForLayers": "Search for layers",
       "clearFilters": "Clear filters",
@@ -531,6 +587,10 @@
           "pookiFeedback": {
             "title": "Vesiväylien palautteet",
             "url": "https://extranet.vayla.fi/pooki_www/palaute"
+          },
+          "digitalCard": {
+            "title": "Digitaalinen väyläkortti",
+            "url": "https://dvk.vaylapilvi.fi/vaylakortti/"
           }
         }
       }
@@ -568,6 +628,7 @@
       "spatialResolution": "Spatial resolution",
       "temporalExtent": "Temporal extents",
       "topicCategory": "Topic categories",
+      "updateDate": "Data update",
       "useLimitation": "Use limitations",
       "absoluteExternalPositionalAccuracy": "Absolute external positional accuracy",
       "accuracyOfTimeMeasurement": "Accuracy of time measurement",
@@ -1115,34 +1176,29 @@
       "telegram": "Share on Telegram"
     }
   },
-  "themeLinks": {
-    "timeTravelFinland": {
-      "title": "Aikamatkalla Suomessa",
-      "url": "https://vayla.fi/vaylista/aineistot/kartat/aikamatkalla-suomessa#.XOOasBFlJNs"
+  "gfifiltering": {
+    "filter": "Filter",
+    "startDate": "Starting date",
+    "endDate": "Ending date",
+    "addFilter": "Add filter",
+    "dateRange": "Date range",
+    "removeAllFilters": "Remove all filters",
+    "placeholders" : {
+      "chooseProp" : "Select attribute",
+      "chooseOperator" : "Select operator",
+      "chooseValue" : "Value"
     },
-    "bikeNetwork": {
-      "title": "Valtakunnallinen ja seudullinen pyörätieverkko",
-      "url": "https://paikkatieto.vaylapilvi.fi/arcgis/apps/webappviewer/index.html?id=aa98d035ba254776895d092a3d1c3a9f"
-    },
-    "baltice": {
-      "title": "Baltice",
-      "url": "https://baltice.org/map/"
-    },
-    "safetyDeviceFaults": {
-      "title": "Kauppamerenkulun väylien turvalaiteviat",
-      "url": "https://vayla.fi/vaylista/vesivaylat/turvalaitteet/turvalaiteviat#.XLWWTegzYuU"
-    },
-    "seaWarnings": {
-      "title": "Varoituksia merenkulkijoille",
-      "url": "https://vayla.fi/palveluntuottajat/ammattimerenkulku/meriliikenteen-hairiot/varoituksia-merenkulkijoille"
-    },
-    "restrictedAreas": {
-      "title": "Vesiliikenteen kielto- ja rajoitusalueet",
-      "url": "https://vayla.fi/vaylista/vesivaylat/rajoitusalueet"
-    },
-    "pookiFeedback": {
-      "title": "Vesiväylien palautteet",
-      "url": "https://extranet.vayla.fi/pooki_www/palaute"
+    "activeFilters" : "Active filters",
+    "property" : "Attribute",
+    "operator" : "Operator",
+    "value" : "Value",
+    "operators": {
+      "equals" : "Equals",
+      "notEquals" : "Does not equal",
+      "smallerThan" : "Smaller than",
+      "biggerThan" : "Bigger than",
+      "includes" : "Includes",
+      "doesntInclude" : "Doesn't include"
     }
   }
 }

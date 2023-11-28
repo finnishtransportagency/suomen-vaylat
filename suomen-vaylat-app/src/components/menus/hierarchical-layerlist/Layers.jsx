@@ -1,21 +1,31 @@
 import Layer from './Layer';
+import strings from '../../../translations';
+import { findGroupForLayer } from './Layer';
+import { theme } from '../../../theme/theme';
 
 export const Layers = ({
     layers,
+    groups = [],
+    themeName,
     isOpen,
-    theme,
-    isSelected = false
+    isSelected
 }) => {
+    const currentLang = strings.getLanguage();
+
     return (
         <>
             {layers.map((layer, index) => {
+                const groupObj = findGroupForLayer(groups, layer.id);
+                const matchingGroup = groupObj ? groupObj.locale[currentLang].name : 'Unknown';
                 return (
                     <Layer
-                        key={layer.id + '_' + theme}
-                        layer={layer} isOpen={isOpen}
+                        key={layer.id + '_' + themeName}
+                        layer={layer} 
+                        isOpen={isOpen}
+                        groupName={matchingGroup}
                         index={index}
-                        theme={theme}
                         isSelected={isSelected}
+                        themeName={themeName}
                     />
             )})}
         </>

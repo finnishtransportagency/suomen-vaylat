@@ -15,7 +15,7 @@ import svLinestring from '../../theme/icons/drawtools_linestring.svg';
 import { useSelector } from 'react-redux';
 
 import strings from '../../translations';
-import { setActiveTool, setHasToastBeenShown, setIsSaveViewOpen, setSavedTabIndex , setGeoJsonArray, addToGeoJsonArray, setSelectedMarker, setMarkerLabel, removeFromDrawToolMarkers} from '../../state/slices/uiSlice';
+import { setActiveTool, setHasToastBeenShown, setIsSaveViewOpen, setSavedTabIndex , setGeoJsonArray, setSelectedMarker, setMarkerLabel, removeFromDrawToolMarkers} from '../../state/slices/uiSlice';
 import { removeMarkerRequest } from '../../state/slices/rpcSlice';
 
 import { theme } from '../../theme/theme';
@@ -254,9 +254,9 @@ export const DrawingTools = ({isOpen}) => {
         // stop the drawing tool
         channel && channel.postRequest('DrawTools.StopDrawingRequest', [activeTool]);
         store.dispatch(setGeoJsonArray([]));
-        store.dispatch(removeFromDrawToolMarkers());
+        store.dispatch(removeFromDrawToolMarkers(true));
         // remove geometries off the map
-        channel && channel.postRequest('DrawTools.StopDrawingRequest', [true]);
+        channel && channel.postRequest('DrawTools.StopDrawingRequest', []);
         store.dispatch(setActiveTool(null));
         // remove all markers made with drawing tools
         drawToolMarkers.forEach(marker => {

@@ -108,7 +108,6 @@ const GfiTabContentItem = ({
     const [isSubExpanded, setIsSubExpanded] = useState(false);
     const [orderHigh, setOrderHigh] = useState(null);
     const [orderLow, setOrderLow] = useState(null);
-
     const { channel } = useAppSelector(state => state.rpc);
 
     useEffect(() => {

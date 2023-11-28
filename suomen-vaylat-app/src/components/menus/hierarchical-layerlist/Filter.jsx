@@ -33,18 +33,28 @@ export const Filter = ({ filter, isOpen }) => {
         tags
     } = useSelector(state => state.rpc);
 
-    const selectFilter = (filter) => {
-        var newTags = [...tagLayers];
-        var tags2 = [...tags];
-        tags2.includes(filter) ? tags2 = tags2.filter(tag => tag !== filter) : tags2.push(filter);
-        channel.getTagLayers([filter], function (data) {
-            if (tags.includes(filter)) {
-                newTags = newTags.filter(tag => !data.includes(tag));
-            } else {
-                newTags.push(...data);
-            }
-            store.dispatch(setTagLayers(newTags));
-            store.dispatch(setTags(tags2));
+    const selectFilter = (clickedFilter) => {
+        const isFilterActive = tags.includes(clickedFilter);
+        let updatedTags = isFilterActive 
+            ? tags.filter(tag => tag !== clickedFilter) 
+            : [...tags, clickedFilter];
+    
+        // Use Promise.all to fetch layers for all tags in parallel
+        const layerPromises = updatedTags.map(tag => {
+            return new Promise(resolve => {
+                channel.getTagLayers([tag], data => {
+                    resolve(data);
+                });
+            });
+        });
+    
+        Promise.all(layerPromises).then(allLayers => {
+            // Combine all the layers and remove duplicates
+            const combinedLayers = Array.from(new Set(allLayers.flat()));
+    
+            // Update the store
+            store.dispatch(setTagLayers(combinedLayers));
+            store.dispatch(setTags(updatedTags));
         });
     };
 

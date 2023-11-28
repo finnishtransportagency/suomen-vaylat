@@ -1,19 +1,22 @@
-import { useEffect, useState, useContext } from 'react';
-import { faInfoCircle, faTimes, faCaretDown, faCaretUp, faGripLines, faEye, faEyeSlash, faLayerGroup, faMap } from '@fortawesome/free-solid-svg-icons';
+import { useEffect, useState, useContext, useCallback } from 'react';
+import { faInfoCircle, faTimes, faCaretDown, faCaretUp, faGripLines, faEye, faEyeSlash, faLayerGroup, faMap, faFilter } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ReactReduxContext, useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { clearLayerMetadata, getLayerMetadata, setLayerMetadata, setZoomTo } from '../../../state/slices/rpcSlice';
+import { clearLayerMetadata, getLayerMetadata, setLayerMetadata, setZoomTo, setFilteringInfo, setFilters } from '../../../state/slices/rpcSlice';
 import { updateLayers } from '../../../utils/rpcUtil';
 import { sortableHandle } from 'react-sortable-hoc';
+import ReactTooltip from "react-tooltip";
+import {
+   setMinimizeFilterModal
+  } from "../../../state/slices/uiSlice";
 
 import strings from '../../../translations';
 import { useAppSelector } from '../../../state/hooks';
-import { theme } from '../../../theme/theme';
+import { theme, isMobile } from '../../../theme/theme';
 
 const StyledLayerContainer = styled.li`
     z-index: 9999;
-    height: 80px;
     display: flex;
     margin-bottom: 8px;
     background-color: #F5F5F5;
@@ -94,7 +97,6 @@ const StyledlayerOpacityControl = styled.input`
 `;
 
 const StyledLayerGripControl = styled.div`
-    height: 100%;
     width: 100%;
     max-width: 40px;
     display: flex;
@@ -195,28 +197,78 @@ const DragHandle = sortableHandle(() => (
     </StyledLayerGripControl>
 ));
 
-export const SelectedLayer = ({
-    layer,
-    uuid,
-    currentZoomLevel,
-    sortIndex,
-}) => {
+const StyledFloatingSpan = styled.div`
+    float: right;
+    margin-left: 6px;
+`;
+
+export const SelectedLayer = (
+    {
+        layer,
+        uuid,
+        currentZoomLevel,
+    }
+) => {
     const { store } = useContext(ReactReduxContext);
     const [opacity, setOpacity] = useState(layer.opacity);
     const [prevOpacity, setPrevOpacity] = useState(layer.opacity);
     const [isLayerVisible, setIsLayerVisible] = useState(layer.opacity !== 0);
-    const channel = useSelector(state => state.rpc.channel);
+    const { channel, filters, filteringInfo, allSelectedThemeLayers } = useAppSelector(
+        (state) => state.rpc
+      );
 
-    const { allSelectedThemeLayers } = useAppSelector(state => state.rpc);
+    const { minimizeFilter } = useAppSelector(state => state.ui);
 
+    const isFilterable = typeof layer.config?.gfi?.filterFields !== "undefined" && layer.config?.gfi?.filterFields.length > 0 ;
 
-    
     useEffect(() => {
         setOpacity(layer.opacity);
         layer.opacity === 0 ? setIsLayerVisible(false) : setIsLayerVisible(true)
     }, [layer.opacity])
+
+    const handleOpenFilteringModal = (layer) => {
+        if (filteringInfo.filter(f => f.layer.id === layer.id).length === 0) {
+            var filterColumnsArray = [];
+            layer.config?.gfi?.filterFields &&
+            layer.config?.gfi?.filterFields.forEach((column) => {
+              if (column.field && column.type) {
+                filterColumnsArray.push({
+                  key: column.field,
+                  title: column.field,
+                  type: column.type,
+                  default: column.default || false
+                });
+              }
+            });
+    
+            const updateFilter = [...filteringInfo]
+            updateFilter.push({
+                modalOpen: true,
+                layer: {
+                  id: layer.id,
+                  title: layer.name,
+                  filterColumnsArray: filterColumnsArray
+                }
+            }
+            )
+            store.dispatch(setFilteringInfo(updateFilter));
+            minimizeFilter && store.dispatch(setMinimizeFilterModal({minimized: false, layer: layer.id}))
+        } else {
+            minimizeFilter && store.dispatch(setMinimizeFilterModal({minimized: false, layer: layer.id}))
+        }
+    };
     
     const handleLayerRemoveSelectedLayer = (channel, layer) => {
+        // Remove possible filters
+        store.dispatch(setFilters(filters.filter(f => f.layer !== layer.id)));
+        const updatedFilterInfo = filteringInfo.filter(f => f.layer.id !== layer.id);
+        store.dispatch(setFilteringInfo(updatedFilterInfo));
+        updatedFilterInfo.length === 0 && store.dispatch(setMinimizeFilterModal({minimized: false}));
+        channel && channel.postRequest(
+            'MapModulePlugin.MapLayerUpdateRequest',
+            [layer.id, true, { 'CQL_FILTER': null }]
+            );
+
         channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, false]);
         updateLayers(store, channel);
     };
@@ -266,7 +318,6 @@ export const SelectedLayer = ({
     }
 
     const isLayerSelectedThemeLayer = allSelectedThemeLayers.find(themeLayer => themeLayer === layer.id);
-
     return (
             <StyledLayerContainer>
                 <DragHandle />
@@ -276,8 +327,34 @@ export const SelectedLayer = ({
                         <FontAwesomeIcon style={{marginRight: '4px', color: isLayerSelectedThemeLayer ? theme.colors.secondaryColor2 : theme.colors.mainColor1 }} icon={isLayerSelectedThemeLayer ? faMap : faLayerGroup} />
                             {layer.name}
                         </StyledLayerName>
+
+                        <StyledIconsWrapper>
+                { uuid &&
+                    <StyledIconWrapper
+                        className="swiper-no-swiping"
+                        uuid={uuid}
+                        onClick={() => {
+                            handleLayerMetadata(layer, uuid);
+                        }}
+                    >
+                        <FontAwesomeIcon icon={faInfoCircle} />
+                    </StyledIconWrapper>
+                }
+                    <StyledIconWrapper
+                        className="swiper-no-swiping"
+                        onClick={() => {
+                            handleLayerRemoveSelectedLayer(channel, layer);
+                        }}>
+                        <FontAwesomeIcon
+                            icon={faTimes}
+                        />
+                    </StyledIconWrapper>
+                </StyledIconsWrapper>
+
+
                     </StyledlayerHeader>
                     <StyledMidContent>
+                
                         {isCurrentZoomTooFar || isCurrentZoomTooClose ? <StyledLayerInfoContainer>
                             <StyledShowLayerButton onClick={() => store.dispatch(setZoomTo(layer.minZoomLevel))}>
                                 {isCurrentZoomTooFar? strings.tooltips.zoomIn : isCurrentZoomTooClose && strings.tooltips.zoomOut}
@@ -300,30 +377,33 @@ export const SelectedLayer = ({
                         <StyledToggleOpacityIconWrapper onClick={() => handleLayerOpacityToggle(channel, layer)}>
                             <FontAwesomeIcon icon={isLayerVisible? faEye : faEyeSlash} />
                         </StyledToggleOpacityIconWrapper>
+
+                        { isFilterable &&
+                            <>
+                            <ReactTooltip
+                                backgroundColor={theme.colors.mainColor1}
+                                textColor={theme.colors.mainWhite}
+                                disable={isMobile}
+                                id="filter"
+                                place="top"
+                                type="dark"
+                                effect="float"
+                            >
+                                <span>{strings.tooltips.layerlist.filter}</span>
+                            </ReactTooltip>
+                            <StyledIconWrapper
+                                onClick={() => {
+                                    handleOpenFilteringModal(layer);
+                                }}
+                                data-tip
+                                data-for={"filter"}
+                            >
+                                <StyledFloatingSpan><FontAwesomeIcon icon={faFilter}  style={{ color: filters.filter(f => f.layer === layer.id).length > 0 ? theme.colors.secondaryColor8 : theme.colors.primaryColor1 }}/></StyledFloatingSpan>
+                            </StyledIconWrapper> 
+                            </>
+                        }
                     </StyledBottomContent>
                 </StyledLayerContent>
-                <StyledIconsWrapper>
-                { uuid &&
-                    <StyledIconWrapper
-                        className="swiper-no-swiping"
-                        uuid={uuid}
-                        onClick={() => {
-                            handleLayerMetadata(layer, uuid);
-                        }}
-                    >
-                        <FontAwesomeIcon icon={faInfoCircle} />
-                    </StyledIconWrapper>
-                }
-                    <StyledIconWrapper
-                        className="swiper-no-swiping"
-                        onClick={() => {
-                            handleLayerRemoveSelectedLayer(channel, layer);
-                        }}>
-                        <FontAwesomeIcon
-                            icon={faTimes}
-                        />
-                    </StyledIconWrapper>
-                </StyledIconsWrapper>
             </StyledLayerContainer>
     );
 };

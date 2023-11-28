@@ -1,5 +1,6 @@
-import { createSlice, current } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 import { theme } from '../../theme/theme';
+import { act } from '@testing-library/react';
 
 const initialState = {
     isGfiToolsOpen: false,
@@ -13,11 +14,16 @@ const initialState = {
         layerDownloadLinkName: null,
     },
     searchParams: '',
+    isMoreSearchOpen: false,
     isInfoOpen: false,
     geoJsonArray: [],
     isSavedOpen: false,
     savedTabIndex: 0,
+    isChecked: false,
     isUserGuideOpen: false,
+    isCustomFilterOpen: false,
+    isFilterModalOpen: false,
+    isSavedLayer: false,
     shareUrl: '',
     isThemeMenuOpen: false,
     isDrawingToolsOpen: false,
@@ -35,6 +41,8 @@ const initialState = {
     selectedMapLayersMenuThemeIndex: null,
     minimizeGfi: false,
     maximizeGfi: false,
+    minimizeFilter: {minimized: false},
+    maximizeFilter: false,
     gfiCroppingTypes: [],
     warning: null,
     hasToastBeenShown : [],
@@ -42,6 +50,13 @@ const initialState = {
     drawToolMarkers: [],
     markerLabel: '',
     activeGeometries: [],
+    triggerUpdate: 0,
+    showCustomLayerList: false,
+    showSavedLayers: false,
+    updateCustomLayer: false,
+    checkedLayer:[],
+    isCheckmark: false,
+    selectedCustomFilterLayers: []
 };
 
 export const uiSlice = createSlice({
@@ -81,8 +96,14 @@ export const uiSlice = createSlice({
         setIsSearchOpen: (state, action) => {
             state.isSearchOpen = action.payload;
         },
+        setIsChecked: (state, action) => {
+            state.isChecked = action.payload;
+        },
         setSearchParams: (state, action) => {
             state.searchParams = action.payload;
+        },
+        setIsMoreSearchOpen: (state, action) => {
+            state.isMoreSearchOpen = action.payload;
         },
         setIsInfoOpen: (state, action) => {
             state.isInfoOpen = action.payload;
@@ -115,6 +136,12 @@ export const uiSlice = createSlice({
         },
         setIsUserGuideOpen: (state, action) => {
             state.isUserGuideOpen = action.payload;
+        },
+        setIsCustomFilterOpen: (state, action) => {
+            state.isCustomFilterOpen = action.payload;
+        },
+        setIsSavedLayer: (state, action) => {
+            state.isSavedLayer = action.payload;
         },
         setIsLegendOpen: (state, action) => {
             state.isLegendOpen = action.payload;
@@ -161,6 +188,12 @@ export const uiSlice = createSlice({
         setMaximizeGfi: (state, action) => {
             state.maximizeGfi = action.payload;
         },
+        setMinimizeFilterModal: (state, action) => {
+            state.minimizeFilter = action.payload;
+        },
+        setMaximizeFilterModal: (state, action) => {
+            state.maximizeFilter = action.payload;
+        },
         setGfiCroppingTypes: (state, action) => {
             state.gfiCroppingTypes = action.payload;
         },
@@ -199,20 +232,51 @@ export const uiSlice = createSlice({
         setIsGfiToolsOpen: (state, action) => {
             state.isGfiToolsOpen = action.payload;
         },
+        setIsFilterModalOpen: (state, action) => {
+            state.isFilterModalOpen = action.payload;
+        },
+        incrementTriggerUpdate: state => {
+            state.triggerUpdate += 1; // increment value
+          },
+        setShowCustomLayerList: (state, action) => {
+            state.showCustomLayerList = action.payload;
+        },
+        setShowSavedLayers: (state, action) => {
+            state.showSavedLayers = action.payload;
+        },
+        setUpdateCustomLayers: (state, action) => {
+            state.updateCustomLayer = action.payload;
+          },
+          setCheckedLayer: (state, action) => {
+            state.checkedLayer = action.payload;
+          },
+          setIsCheckmark: (state, action) => {
+            state.isCheckmark = action.payload;
+          },
+          setSelectedCustomFilterLayers: (state, action) => {
+            state.selectedCustomFilterLayers = action.payload;
+          },
 
     },
 });
 
 export const {
+    setMinimizeFilterModal,
+    setMaximizeFilterModal,
+    setIsFilterModalOpen,
     setIsFullScreen,
     setIsMainScreen,
     setModalConstrainsRef,
     setIsSideMenuOpen,
     setIsSearchOpen,
+    setIsChecked,
     setSearchParams,
     setIsThemeMenuOpen,
+    setIsMoreSearchOpen,
     setIsInfoOpen,
     setIsUserGuideOpen,
+    setIsCustomFilterOpen,
+    setIsSavedLayer,
     setIsLegendOpen,
     setIsZoomBarOpen,
     setIsSaveViewOpen,
@@ -242,7 +306,14 @@ export const {
     setMarkerLabel,
     addToActiveGeometries,
     removeActiveGeometry,
-    setIsGfiToolsOpen
+    setIsGfiToolsOpen,
+    incrementTriggerUpdate,
+    setShowCustomLayerList,
+    setShowSavedLayers,
+    setUpdateCustomLayers,
+    setCheckedLayer,
+    setIsCheckmark,
+    setSelectedCustomFilterLayers
 } = uiSlice.actions;
 
 export default uiSlice.reducer;

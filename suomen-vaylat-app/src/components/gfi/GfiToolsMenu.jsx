@@ -5,6 +5,8 @@ import { toast } from 'react-toastify';
 import strings from '../../translations';
 import { isMobile } from '../../theme/theme';
 import { ReactReduxContext } from 'react-redux';
+import Moment from 'react-moment';
+
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -38,6 +40,7 @@ import SVLoader from '../loader/SvLoader';
 import { DRAWING_TIP_LOCALSTORAGE } from '../../utils/constants';
 import { useAppSelector } from '../../state/hooks';
 
+const GFI_GEOMETRY_LAYER_ID = 'drawtools-geometry-layer';
 const BODY_SIZE_EXCEED = "BODY_SIZE_EXCEED";
 const GENERAL_FAIL = "GENERAL_FAIL";
 const vectorLayerId = 'SEARCH_VECTORLAYER';
@@ -115,10 +118,6 @@ const StyledSubtitle = styled.div`
     padding: 10px 0px 10px 5px;
     font-size: 16px;
     font-weight: bold;
-`;
-
-const StyledSavedViewContainer = styled(motion.div)`
-    display: flex;
 `;
 
 const StyledSavedView = styled.div`
@@ -213,6 +212,31 @@ const icons = {
     }
 };
 
+const addFeaturesToMapParams = 
+    {
+        layerId: GFI_GEOMETRY_LAYER_ID,
+        featureStyle: {
+            fill: {
+                color: 'rgba(10, 140, 247, 0.1)',
+            },
+            stroke: {
+                area: {
+                    color: 'rgba(100, 255, 95, 0.7)',
+                    width: 4,
+                    lineJoin: 'round',
+                },
+            },
+            image: {
+                shape: 5,
+                size: 3,
+                fill: {
+                    color: 'rgba(100, 255, 95, 0.7)',
+                },
+            },
+        },
+        clearPrevious: true,
+    };
+
 const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
     const drawinToolsData = [
         {
@@ -250,7 +274,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
     ];
     const { store } = useContext(ReactReduxContext);
 
-    const { channel, selectedLayers } = useAppSelector((state) => state.rpc);
+    const { channel, selectedLayers, gfiLocations, gfiCroppingArea } = useAppSelector((state) => state.rpc);
 
     const { gfiCroppingTypes, selectedGfiTool, hasToastBeenShown, activeSelectionTool } = useAppSelector(state => state.ui);
     const [isGfiLoading, setIsGfiLoading] = useState(false);
@@ -369,7 +393,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
                         color: 'rgba(255,255,255,0.5)',
                     },
                     stroke: {
-                        color: '#fd7e14',
+                        color: 'rgba(100, 255, 95, 0.7)',
                         width: 3,
                     },
                     image: {
@@ -434,206 +458,111 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
         }
     };
 
-    const handleActivateGeometry = (features) => {
+    const handleActivateGeometry = async (features) => {
         channel.postRequest(
             'MapModulePlugin.RemoveFeaturesFromMapRequest',
             [null, null, vectorLayerId]
         );
+        setIsGfiLoading(true);
 
-        //Others than drawtools
-        if (features.data.operation === 'click') {
-            if (features.data.features) {
-                Object.values(features.data.features).forEach((feature) => {
-                    if (
-                        feature.layerId &&
-                        feature.layerId === 'download-tool-layer'
-                    ) {
-                        store.dispatch(setMinimizeGfi(false));
-                        if (feature.geojson.features) {
-                            setIsGfiLoading(true);
-                            Object.values(feature.geojson.features).forEach(
-                                (subfeature) => {
-                                    store.dispatch(
-                                        setGFICroppingArea(subfeature)
-                                    );
-                                    subfeature.geometry &&
-                                        channel &&
-                                        channel.getFeaturesByGeoJSON(
-                                            [subfeature],
-                                            (gfiData) => {
-                                                store.dispatch(
-                                                    resetGFILocations([])
-                                                );
-                                                gfiData.gfi &&
-                                                    gfiData.gfi.forEach(
-                                                        (gfi) => {
-                                                            store.dispatch(
-                                                                setGFILocations(
-                                                                    {
-                                                                        content:
-                                                                            gfi.geojson,
-                                                                        layerId:
-                                                                            gfi.layerId,
-                                                                        gfiCroppingArea:
-                                                                        features
-                                                                                .data
-                                                                                .features[0]
-                                                                                .geojson,
-                                                                        type: 'geojson',
-                                                                    }
-                                                                )
-                                                            );
-                                                        }
-                                                    );
-
-                                                setIsGfiLoading(false)
-                                                handleGfiToolsMenu();
-                                            }
-                                        );
-                                }
-                            );
-                        }
-                    }
-                });
+        if (features.data[0].name === 'DrawingEvent') {
+            store.dispatch(resetGFILocations([]));
+            store.dispatch(setVKMData(null));
+            channel.postRequest('MapModulePlugin.RemoveMarkersRequest', ["VKM_MARKER"]);
+            const fetchableLayers = selectedLayers.filter((layer) =>  layer.groups?.every((group)=> group !==1));
+            const loaderLength = fetchableLayers.length * features.data[0].geojson.features.length;
+            let numberedLoaderEnables = false; 
+            if (loaderLength > 3){
+                numberedLoaderEnables = true;
+                setNumberedLoader({current: 0, total: loaderLength, enabled: true})
             }
-        } else if (features.data.geojson) {
-            features.data.geojson.features.forEach(feature => {
-                store.dispatch(setGFICroppingArea(feature));
-                feature.geometry &&
-                    channel &&
-                    channel.getFeaturesByGeoJSON(
-                        [feature],
-                        (gfiData) => {
-                            store.dispatch(resetGFILocations([]));
-                            store.dispatch(setVKMData(null));
-                            channel.postRequest('MapModulePlugin.RemoveMarkersRequest', ["VKM_MARKER"]);
-                            gfiData.gfi &&
-                                gfiData.gfi.forEach((gfi) => {
-                                    store.dispatch(
-                                        setGFILocations({
-                                            content: gfi.geojson,
-                                            layerId: gfi.layerId,
-                                            gfiCroppingArea:
-                                                features.data.geojson,
-                                            type: 'geojson',
-                                        })
-                                    );
-                                });
-                            setIsGfiLoading(false);
-                            handleGfiToolsMenu(gfiData.gfi);
+            store.dispatch(setGFICroppingArea(features.data[0].geojson.features));
+            let index = 0;
+            try {
+                for(const layer of fetchableLayers) {  
+                    await fetchFeaturesSynchronous(features.data[0].geojson.features, layer, features.data[0], numberedLoaderEnables)
+                        .then(
+                            index++
+                        )
+                        if (fetchableLayers.length === index){
+                            handleGfiToolsMenu();
+                            setIsGfiLoading(false)
                         }
-                    );
-            })
-        }  else if (features.data.data.geom) {
-            features.data.data.geom.features.forEach(feature => {
-                store.dispatch(setGFICroppingArea(feature));
-                feature.geometry &&
-                    channel &&
-                    channel.getFeaturesByGeoJSON(
-                        [feature],
-                        (gfiData) => {
-                            store.dispatch(resetGFILocations([]));
-                            store.dispatch(setVKMData(null));
-                            channel.postRequest('MapModulePlugin.RemoveMarkersRequest', ["VKM_MARKER"]);
-                            gfiData.gfi &&
-                                gfiData.gfi.forEach((gfi) => {
-                                    store.dispatch(
-                                        setGFILocations({
-                                            content: gfi.geojson,
-                                            layerId: gfi.layerId,
-                                            gfiCroppingArea:
-                                                features.data.geojson,
-                                            type: 'geojson',
-                                        })
-                                    );
-                                });
-                            setIsGfiLoading(false);
-                            handleGfiToolsMenu(gfiData.gfi);
+                }
+            } catch (error) {
+                //catch exception, when simplify geometry feature ready, catch BODY_SIZE_EXCEED
+                //and make simplify and rerun query
+                handleGfiToolsMenu();
+                setIsGfiLoading(false)
+            }        
+        } else if (features.data[0].data.geom) {
+            store.dispatch(resetGFILocations([]));
+            store.dispatch(setVKMData(null));
+            channel.postRequest('MapModulePlugin.RemoveMarkersRequest', ["VKM_MARKER"]);
+            const fetchableLayers = selectedLayers.filter((layer) =>  layer.groups?.every((group)=> group !==1));
+            const loaderLength = fetchableLayers.length * features.data[0].data.geom.features.length;
+                    let numberedLoaderEnables = false; 
+                    if (loaderLength > 3){
+                        numberedLoaderEnables = true;
+                        setNumberedLoader({current: 0, total: loaderLength, enabled: true})
+                    }
+                        store.dispatch(setGFICroppingArea(features.data[0].data.geom.features));
+                        let index = 0;
+                        try {
+                            for(const layer of fetchableLayers) {  
+                                await fetchFeaturesSynchronous(features.data[0].data.geom.features, layer, features.data[0], numberedLoaderEnables)
+                                .then(
+                                    index++
+                                )
+                                if (fetchableLayers.length === index){
+                                    handleGfiToolsMenu();
+                                    setIsGfiLoading(false)
+                                }
+
+                            }
+                        } catch (error) {
+                            //catch exception, when simplify geometry feature ready, catch BODY_SIZE_EXCEED
+                            //and make simplify and rerun query
+                            handleGfiToolsMenu();
+                            setIsGfiLoading(false)
                         }
-                    );
-            })
         }
     };
 
-    const featureEventHandler = (data) => {
+    const featureEventHandler = async (data) => {
         if (data.operation === 'click') {
-            if (data.features) {
-                Object.values(data.features).forEach((feature) => {
-                    if (
-                        feature.layerId &&
-                        feature.layerId === 'download-tool-layer'
-                    ) {
-                        store.dispatch(setMinimizeGfi(false));
-                        if (feature.geojson.features) {
 
-                            setIsGfiLoading(true)
-                            Object.values(feature.geojson.features).forEach(
-                                (subfeature) => {
-                                    store.dispatch(
-                                        setGFICroppingArea(subfeature)
-                                    );
-                                    subfeature.geometry &&
-                                        channel &&
-                                        channel.getFeaturesByGeoJSON(
-                                            [subfeature],
-                                            (gfiData) => {
-                                                store.dispatch(
-                                                    resetGFILocations([])
-                                                );
-                                                gfiData.gfi &&
-                                                    gfiData.gfi.forEach(
-                                                        (gfi) => {
-                                                            store.dispatch(
-                                                                setGFILocations(
-                                                                    {
-                                                                        content:
-                                                                            gfi.geojson,
-                                                                        layerId:
-                                                                            gfi.layerId,
-                                                                        gfiCroppingArea:
-                                                                            data
-                                                                                .features[0]
-                                                                                .geojson,
-                                                                        type: 'geojson',
-                                                                        moreFeatures: gfi.moreFeatures,
-                                                                        nextStartIndex: gfi.nextStartIndex
-                                                                    }
-                                                                )
-                                                            );
-                                                        }
-                                                    );
-                                                store.dispatch(setGeoJsonArray([data]));
-                                                setIsGfiLoading(false);
-                                                handleGfiToolsMenu(gfiData.gfi);
-                                            },
-                                            function (error) {
-                                                if (error.BODY_SIZE_EXCEEDED_ERROR) {
-                                                    store.dispatch(setWarning({
-                                                        title: strings.bodySizeWarning,
-                                                        subtitle: null,
-                                                        cancel: {
-                                                            text: strings.general.cancel,
-                                                            action: () => {
-                                                                setIsGfiLoading(false);
-                                                                store.dispatch(setWarning(null))
-                                                            }
-                                                        },
-                                                        confirm: {
-                                                            text: strings.general.continue,
-                                                            action: () => {
-                                                                simplifyGeometry();
-                                                                store.dispatch(setWarning(null));
-                                                            }
-                                                        },
-                                                    }))
-                                                }
-                                            }
-                                        );
-                                }
-                            );
+            if (data.features) {
+                store.dispatch(setMinimizeGfi(false));
+                setIsGfiLoading(true)
+                const fetchableLayers = selectedLayers.filter((layer) =>  layer.groups?.every((group)=> group !==1));
+                const loaderLength = fetchableLayers.length * data.features[0].geojson.features.length;
+                            
+                let numberedLoaderEnables = false; 
+                if (loaderLength > 3){
+                    numberedLoaderEnables = true;
+                    setNumberedLoader({current: 0, total: loaderLength, enabled: true})
+                }
+                store.dispatch(setGFICroppingArea(data.features[0].geojson.features));
+                let index = 0;
+                try {
+                    for(const layer of fetchableLayers) {  
+                        await fetchFeaturesSynchronous(data.features[0].geojson.features, layer, data.features[0], numberedLoaderEnables)
+                            .then(
+                                index++
+                            )
+                        if (fetchableLayers.length === index){
+                            handleGfiToolsMenu();
+                            setIsGfiLoading(false)
                         }
+        
                     }
-                });
+                } catch (error) {
+                    //catch exception, when simplify geometry feature ready, catch BODY_SIZE_EXCEED
+                    //and make simplify and rerun query
+                    handleGfiToolsMenu();
+                    setIsGfiLoading(false)
+                }
             }
         }
     };
@@ -644,7 +573,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
 
     useEffect(() => {
         let isSubscribed = true;
-        channel && channel.handleEvent("DrawingEvent", (data) => {
+        channel && channel.handleEvent("DrawingEvent", async (data) => {
             if(store.getState().ui.selectedGfiTool) {
                 if (isSubscribed && data.isFinished && data.isFinished === true) {
                     channel.postRequest('DrawTools.StopDrawingRequest', [
@@ -662,128 +591,112 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
                         numberedLoaderEnables = true;
                         setNumberedLoader({current: 0, total:  fetchableLayers.length, enabled: true})
                     }
-                    data.geojson.features?.forEach(async feature => {
-                        store.dispatch(setGFICroppingArea(feature));
+                        store.dispatch(setGFICroppingArea(data.geojson.features));
                         let index = 0;
                         try {
                             for(const layer of fetchableLayers) {  
-                                await fetchFeaturesSynchronous(feature, layer, data, numberedLoaderEnables)
+                                await fetchFeaturesSynchronous(data.geojson.features, layer, data, numberedLoaderEnables)
                                 .then(
                                     index++
-                                ).catch((error) => {
-                                        if (error===BODY_SIZE_EXCEED){
-                                            handleGfiToolsMenu();
-                                            setIsGfiLoading(false)
-                                            store.dispatch(setWarning({
-                                                title: strings.bodySizeWarningTemporary,
-                                                subtitle: null,
-                                                cancel: {
-                                                    text: strings.general.cancel,
-                                                    action: () => {
-                                                        setIsGfiLoading(false);
-                                                        store.dispatch(setWarning(null))
-                                                    }
-                                                },
-                                                /*TODO return when simplify geometry feature ready 
-                                                    confirm: {
-                                                    text: strings.general.continue,
-                                                    action: () => {
-                                                        simplifyGeometry();
-                                                        store.dispatch(setWarning(null));
-                                                    }
-                                                },*/
-                                            }))
-                                        
-                                            //throw error to break synchronous loop
-                                            throw new Error(BODY_SIZE_EXCEED);
-                                        }else if (error === GENERAL_FAIL){
-                                            console.info("general fail thrown") 
-                                        }
-                                        handleGfiToolsMenu();
-                                        setIsGfiLoading(false)
-                                    }
-                                );
+                                )
                                 if (fetchableLayers.length === index){
                                     handleGfiToolsMenu();
                                     setIsGfiLoading(false)
                                 }
-
-                            } 
+                            }
                         } catch (error) {
                             //catch exception, when simplify geometry feature ready, catch BODY_SIZE_EXCEED
                             //and make simplify and rerun query
                             handleGfiToolsMenu();
                             setIsGfiLoading(false)
                         }
-                        
-                    }); 
                 }
             }
         })
-        return () => { setIsGfiLoading(false); 
-                        isSubscribed = false; 
-                        handleGfiToolsMenu();}
+        return () => {isSubscribed = false}
     }, [channel])
 
 
     const fetchFeaturesSynchronous = (feature, layer, data, numberedLoaderEnables) => {
         return new Promise(function(resolve, reject) {
-        // executor (the producing code, "singer")
-        channel.getFeaturesByGeoJSON(
-            [feature, 0, [layer.id]],
-            (gfiData) => {
-                store.dispatch(setVKMData(null));
-                channel.postRequest('MapModulePlugin.RemoveMarkersRequest', ["VKM_MARKER"]);
+            // executor (the producing code, "singer")
+            channel.getFeaturesByGeoJSON(
+                [feature, 0, [layer.id]],
+                (gfiData) => {
+                    store.dispatch(setVKMData(null));
+                    channel.postRequest('MapModulePlugin.RemoveMarkersRequest', ["VKM_MARKER"]);
+                    
                     gfiData?.gfi?.forEach((gfi) => {
-                        store.dispatch(setGFILocations({
-                            content: gfi.geojson,
-                            layerId: gfi.layerId,
-                            gfiCroppingArea:
-                            data.geojson,
-                            type: 'geojson',
-                            moreFeatures: gfi.moreFeatures,
-                            nextStartIndex: gfi.nextStartIndex
-                        })) 
+                        if (gfi.content.length > 0) {
+                            const gfiLoc = {
+                                content: gfi.content,
+                                layerId: gfi.layerId,
+                                gfiCroppingArea:
+                                data.geojson,
+                                type: 'geojson',
+                                moreFeatures: gfi.content.some(content => content.moreFeatures),
+                            }
+                            store.dispatch(setGFILocations(gfiLoc))
+                        }
                     });
+
+                    if (numberedLoaderEnables)
+                        setNumberedLoader(prevState => {
+                            return {current: prevState.current + 1, total: prevState.total, enabled: prevState.enabled}
+                    }) 
+                    resolve("ok");                  
+                },
+                function (error) {
                     if (numberedLoaderEnables)
                     setNumberedLoader(prevState => {
                         return {current: prevState.current + 1, total: prevState.total, enabled: prevState.enabled}
-                    }) 
-                    resolve("ok");                  
-            },
-            function (error) {
-                if (numberedLoaderEnables)
-                setNumberedLoader(prevState => {
-                    return {current: prevState.current + 1, total: prevState.total, enabled: prevState.enabled}
-                })
-                if (error.BODY_SIZE_EXCEEDED_ERROR) {
-                     // simplify modal removed for now, uncomment when simplifyGeometry feature ready, make new call after
-                    /*store.dispatch(setWarning({
-                        title: strings.bodySizeWarning,
-                        subtitle: null,
-                        cancel: {
-                            text: strings.general.cancel,
-                            action: () => {
-                                setIsGfiLoading(false);
-                                store.dispatch(setWarning(null))
-                            }
-                        },
-                        confirm: {
-                            text: strings.general.continue,
-                            action: () => {
-                                simplifyGeometry();
-                                store.dispatch(setWarning(null));
-                            }
-                        },
-                    }))
-                    */
-                    reject(BODY_SIZE_EXCEED)
-                }      
-                reject(GENERAL_FAIL)
-            }
-        )
+                    })
+                    if (error.BODY_SIZE_EXCEEDED_ERROR) {
+                        store.dispatch(setWarning({
+                            title: strings.bodySizeWarningTemporary,
+                            subtitle: null,
+                            cancel: {
+                                text: strings.general.ok,
+                                action: () => {
+                                    setIsGfiLoading(false);
+                                    store.dispatch(setWarning(null))
+                                }
+                            },
+                        }))
+                        handleGfiToolsMenu();
+                        setIsGfiLoading(false)
+                        reject(BODY_SIZE_EXCEED)
+                    } 
+                    if (error === GENERAL_FAIL){
+                        store.dispatch(setWarning({
+                            title: strings.generalError,
+                            subtitle: null,
+                            cancel: {
+                                text: strings.general.ok,
+                                action: () => {
+                                    setIsGfiLoading(false);
+                                    store.dispatch(setWarning(null))
+                                }
+                            },
+                        }))
+                    }
+                    handleGfiToolsMenu();
+                    setIsGfiLoading(false)
+                    reject(GENERAL_FAIL)
+                }
+            )
         });
     }  
+
+    useEffect(() => {
+        gfiLocations.forEach(gfiLocation => {
+            gfiLocation.gfiCroppingArea &&
+            channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', [
+                gfiLocation.gfiCroppingArea,
+                addFeaturesToMapParams
+            ]);
+        })
+    }, [gfiLocations]);
 
     useEffect(() => {
         window.localStorage.getItem('geometries') !== null &&
@@ -796,8 +709,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
                     'FeatureEvent',
                     featureEventHandler
                 );
-            channel &&
-                setIsGfiLoading(false);
+            channel &&setIsGfiLoading(false);
         };
         
     }, [store, channel]);
@@ -890,21 +802,16 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
                 </AnimatePresence>
 
                 <CircleButtonListItem
-                    bgColor={"gray"}
                     key={'saved'}
                     id={505}
                     icon={faDownload}
-                    title={strings.gfi.savedGeometries.title}
-                    subtitle={strings.gfi.savedGeometries.disabled}
+                    title={"Omat geometriat"}
+                    subtitle={"Omat tallennetut geometriat"}
                     selectedItem={activeSelectionTool}
-                    handleSelectTool={ () => {}} 
-                    /**
-                     * 
-                     * FIX ME WHEN LOGIC HAS BEEN REWORKED
-                     */
+                    handleSelectTool={handleSelectTool}
                 />
-{/*                 <AnimatePresence>
-                    {activeSelectionTool === 505 && null === 0 && (
+                <AnimatePresence>
+                    {activeSelectionTool === 505 && (
                         <StyledDrawingToolsContainer
                             transition={{
                                 duration: 0.2,
@@ -925,25 +832,6 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
                         >
                             {geometries.map((geometry) => {
                                 return (
-                                    <StyledSavedViewContainer
-                                        key={geometry.id}
-                                        transition={{
-                                            duration: 0.2,
-                                            type: 'tween',
-                                        }}
-                                        initial={{
-                                            opacity: 0,
-                                            height: 0,
-                                        }}
-                                        animate={{
-                                            opacity: 1,
-                                            height: 'auto',
-                                        }}
-                                        exit={{
-                                            opacity: 0,
-                                            height: 0,
-                                        }}
-                                    >
                                         <StyledSavedView
                                             onClick={(e) => {
                                                 e.preventDefault();
@@ -979,13 +867,12 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
                                             <StyledRightContent>
                                             </StyledRightContent>
                                         </StyledSavedView>
-                                    </StyledSavedViewContainer>
                                 )
                                 })
                             }
                         </StyledDrawingToolsContainer>
                     )}
-                </AnimatePresence> */}
+                </AnimatePresence>
                 {gfiCroppingTypes &&
                     gfiCroppingTypes.map((croppingType) => {
                         return (
