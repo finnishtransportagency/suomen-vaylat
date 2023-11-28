@@ -618,7 +618,7 @@ const Geometries = () => {
             layerId: geometry.id,
             featureStyle: {
                 fill: {
-                  color: "rgba(10, 140, 247, 0.3)",
+                  color: "rgba(10, 140, 247, 0.1)",
                 },
                 stroke: {
                   color: "rgba(10, 140, 247, 0.3)",
