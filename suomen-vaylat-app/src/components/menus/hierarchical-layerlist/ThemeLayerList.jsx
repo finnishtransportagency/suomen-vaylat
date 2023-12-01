@@ -287,11 +287,11 @@ const StyledMasterGroupHeaderIconLetter = styled.div`
 `;
 
 const themeImages = {
-    0: hankekartta,
+    hankekartta: hankekartta,
     1: intersection,
-    2: siltarajoituskartta,
-    3: tienumerokartta,
-    4: kuntokartta
+    siltarajoituskartta: siltarajoituskartta,
+    tienumerokartta: tienumerokartta,
+    kuntokartta: kuntokartta
 
 };
 
@@ -307,12 +307,34 @@ const mainThemeImages = {
     }
 };
 
+const getLinks = (text, startTag, endTag) => {
+    let links = [];
+    let index = -1;
+    while (true)
+    {
+        let i = text.indexOf(startTag, index);
+
+        if (i == -1) break;
+
+        if (index == -1) {
+            index = i;
+        } else {
+            let j = text.indexOf(endTag, index);
+            links.push(text.substring(index + startTag.length, j));
+            index = j + endTag.length;
+        }
+    }
+    return links;
+}
+
 export const ThemeLayerList = ({
     allLayers,
     allThemes
 }) => {
+    console.log(allThemes)
 
     const { store } = useContext(ReactReduxContext);
+    const lang = strings.getLanguage();
 
     const {
         selectedTheme,
@@ -321,10 +343,8 @@ export const ThemeLayerList = ({
 
     const [isOpen, setIsOpen] = useState(null);
 
-    var themeGroups = Object.values(strings.themelayerlist.themeGroups)
-
     useEffect(() => {
-        selectedTheme != null && themeGroups.forEach(themeGroup => {
+        selectedTheme != null && allThemes.forEach(themeGroup => {
             themeGroup.themes?.hasOwnProperty(selectedTheme.id) && setIsOpen(themeGroup.id)
         })
     }, []);
@@ -339,10 +359,9 @@ export const ThemeLayerList = ({
         linksArray.push(strings.themeLinks[i]);
     }
 
-
     return (
         <>
-            { themeGroups.map((themeGroup, themeGroupIndex) => {
+            { allThemes.map((themeGroup, themeGroupIndex) => {
                 return (
                     <>
                         <StyledThemeGroup
@@ -354,11 +373,11 @@ export const ThemeLayerList = ({
                                             mainThemeImages.hasOwnProperty(themeGroup.id) ?
                                             <FontAwesomeIcon
                                                 icon={mainThemeImages[themeGroup.id].icon}
-                                            /> : <p>{ themeGroup.title.charAt(0).toUpperCase() }</p>
+                                            /> : <p>{ themeGroup.locale[lang].name.charAt(0).toUpperCase() }</p>
                                         }
                                     </StyledMasterGroupHeaderIconLetter>
                                     <StyledMasterGroupName>
-                                        { themeGroup.title }
+                                        { themeGroup.locale[lang].name }
                                     </StyledMasterGroupName>
                                 <StyledInfoHeaderIconContainer
                                     animate={{
@@ -383,13 +402,12 @@ export const ThemeLayerList = ({
                                 type: "tween"
                             }}
                         >
-                            { themeGroup.themes && Object.values(themeGroup.themes).map((theme, index) => {
+                            { themeGroup?.groups?.map((theme, index) => {
                                 return <Themes
-                                    themeGroupIndex={themeGroupIndex}
+                                    lang={lang}
                                     key={index}
-                                    themeLocale={theme}
+                                    themeGroup={theme}
                                     allLayers={allLayers}
-                                    allThemes={allThemes}
                                     index={index}
                                 />
                             })}
@@ -406,44 +424,194 @@ export const ThemeLayerList = ({
     );
   };
 
-  export const Themes = ({
-    themeGroupIndex,
+export const Themes = ({
+    lang,
     allLayers,
-    allThemes,
-    themeLocale,
+    themeGroup,
     index
 }) => {
     const { store } = useContext(ReactReduxContext);
+
     const {
         channel,
         selectedTheme,
         lastSelectedTheme,
         selectedThemeId,
     } = useAppSelector((state) => state.rpc);
+    console.log(themeGroup)
     
-    const handleSelectGroup = (theme) => {
-        selectGroup(store, channel, theme, lastSelectedTheme, selectedThemeId);
+    const handleSelectGroup = (themeGroup) => {
+        selectGroup(store, channel, themeGroup, lastSelectedTheme, selectedThemeId);
     };
 
     return (
         <>
-            { allThemes.filter(theme => theme.id === themeLocale.id).map((theme) => {
-                return <ThemeGroup
+            <ThemeGroup
                     key={index}
-                    themeGroupIndex={themeGroupIndex}
-                    theme={theme}
+                    lang={lang}
+                    theme={themeGroup}
                     layers={allLayers}
                     index={index}
                     selectedTheme={selectedTheme}
                     selectGroup={handleSelectGroup}
                     selectedThemeId={selectedThemeId}
                     isSubtheme={false}
-                />
-            })
-            }
+            />
         </>
     )
 };
+
+export const ThemeGroup = ({
+    lang,
+    theme,
+    layers,
+    index,
+    selectedThemeId,
+    selectGroup,
+    isSubtheme
+}) => {
+    const [subthemeIsOpen, setSubthemeIsOpen] = useState(false);
+    const [totalGroupLayersCount, setTotalGroupLayersCount] = useState(0);
+    const [totalVisibleGroupLayersCount, setTotalVisibleGroupLayersCount] = useState(0);
+
+    useEffect(() => {      
+        var layersCount = 0;
+        var visibleLayersCount = 0;
+        const layersCounter = (theme) => {
+            if (theme.hasOwnProperty("layers") && theme.layers.length > 0) {
+                visibleLayersCount += layers.filter(l => theme.layers?.includes(l.id) && l.visible === true).length;
+                layersCount = layersCount + theme.layers.length;
+            };
+            setTotalGroupLayersCount(layersCount);
+            setTotalVisibleGroupLayersCount(visibleLayersCount);
+            
+        };
+        layersCounter(theme);
+    },[theme, layers]);
+    console.log(theme)
+
+    var filteredLayers = layers.filter(layer => theme.layers?.includes(layer.id));
+    const isOpen = isSubtheme ? subthemeIsOpen : selectedThemeId === theme.id;
+    
+    const txt = theme.locale[lang].desc && theme.locale[lang].desc.length > 0 && theme.locale[lang].desc;
+
+    const images = txt && getLinks(txt.replace(/\s/g, ''), "<img>", "</img>")
+
+    return (
+        <StyledLayerGroups index={index}>
+            {!isSubtheme ?
+                <StyledMasterGroupHeader
+                    key={'smgh_' + theme.id}
+                    onClick={() => {
+                        selectGroup(theme);
+                    }}
+                    isOpen={isOpen}
+                >
+                    <StyledLeftContent>
+                        <StyledMasterGroupHeaderIcon>
+                            <FontAwesomeIcon
+                                icon={faMap}
+                            />
+                        </StyledMasterGroupHeaderIcon>
+                        <StyledMasterGroupName>{theme.locale[lang].name}</StyledMasterGroupName>
+                    </StyledLeftContent>
+                    <StyledRightContent>
+                        <StyledSelectButton
+                            isOpen={isOpen}
+                        >
+                        </StyledSelectButton>
+                    </StyledRightContent>
+                </StyledMasterGroupHeader>
+            :
+                <StyledSubthemeHeader
+                    key={'smgh_' + theme.id}
+                    onClick={() => {
+                        setSubthemeIsOpen(!subthemeIsOpen);
+                    }}
+                    isOpen={isOpen}
+                >
+                    <StyledSubthemeLeftContent>
+                        <StyledSubthemeName>{theme.locale[lang].name}</StyledSubthemeName>
+                    </StyledSubthemeLeftContent>
+                    <StyledSubthemeRightContent>
+                        <StyledSubGroupLayersCount>
+                            {
+                                totalVisibleGroupLayersCount +" / "+ totalGroupLayersCount
+                            }
+                        </StyledSubGroupLayersCount>
+                        <StyledInfoHeaderIconContainer
+                                    animate={{
+                                        transform: isOpen
+                                            ? 'rotate(180deg)'
+                                            : 'rotate(0deg)',
+                                    }}
+                                    style={{marginLeft: '10px'}}
+                                >
+                                    <FontAwesomeIcon
+                                        icon={faAngleDown}
+                                    />
+                                </StyledInfoHeaderIconContainer>
+                    </StyledSubthemeRightContent>
+                </StyledSubthemeHeader>
+            }
+                    {
+                        !isOpen && theme.locale[lang].hasOwnProperty("desc") && theme.locale[lang].desc.length > 0 &&
+                            <ThemeDesc
+                                theme={theme}
+                                lang={lang}
+                            />
+                    }
+
+
+            <StyledLayerGroupContainer
+                key={'slg_' + index}
+                initial='hidden'
+                animate={isOpen ? 'visible' : 'hidden'}
+                variants={listVariants}
+                transition={{
+                    duration: 0.3,
+                    type: "tween"
+                }}
+            >
+                <div>
+                    { images && images.map((img) => {
+                        return(
+                            <StyledLayerGroupImage src={img} alt=''/>
+                        )
+                    })
+                    }
+
+                    {
+                        isOpen && theme.locale[lang].hasOwnProperty("desc") && theme.locale[lang].desc.length > 0 &&
+                            <ThemeDesc
+                                theme={theme}
+                                lang={lang}
+                            />
+                    }
+                </div>
+                <StyledLayerGroup>
+                    <Layers layers={filteredLayers} isOpen={isOpen} themeName={theme.locale[lang].name}/>
+                </StyledLayerGroup>
+
+                {theme.groups && theme.groups.map((subtheme, index) => {
+                        return (
+                            <ThemeGroup
+                                key={index}
+                                lang={lang}
+                                theme={subtheme}
+                                layers={layers}
+                                index={index}
+                                selectGroup={selectGroup}
+                                selectedThemeId={selectedThemeId}
+                                isSubtheme={true}
+                            />
+                        );
+                    })
+                }
+            </StyledLayerGroupContainer>
+        </StyledLayerGroups>
+    );
+  };
 
 export const ThemeLinkList = ({
     link,
@@ -482,7 +650,7 @@ export const ThemeLinkList = ({
 
 export const ThemeDesc = ({
     theme,
-    themeGroupIndex
+    lang
 }) => {
     const [isExcerptOpen, setIsExcerptOpen] = useState(false);
 
@@ -493,20 +661,27 @@ export const ThemeDesc = ({
         )
     }
 
+    // Get content from desc (surrounded by HTMl tags)
+    const txt = theme.locale[lang].desc && theme.locale[lang].desc.length > 0 && theme.locale[lang].desc;
+
+    const links = getLinks(txt.replace(/\s/g, ''),"<a>", "</a>")
+    const desc = getLinks(txt, "<p>", "</p>")
+    console.log(desc)
+
     return (
         <StyledThemeContent>
             {
                 isExcerptOpen ?
                 <div>
                     <StyledSubText>
-                        {strings.themelayerlist.themeGroups[themeGroupIndex].themes[theme.id].description} 
+                        {desc.toString()} 
                     </StyledSubText>
                     {
-                        strings.themelayerlist.themeGroups[themeGroupIndex].themes[theme.id].links &&
+                        links && links.length > 0 &&
                         <>
                             <StyledMoreInfo>{strings.themelayerlist.moreInfo}</StyledMoreInfo>
                             <ul>
-                                {Object.values(strings.themelayerlist.themeGroups[themeGroupIndex].themes[theme.id].links).map((link, i) => {
+                                {links.map((link, i) => {
                                     return(
                                         <li>
                                             <StyledLinkText rel="noreferrer" target="_blank" href={link} key={i}>{link}</StyledLinkText>
@@ -522,152 +697,13 @@ export const ThemeDesc = ({
                 </div> 
                 :
                 <StyledSubText>
-                    {truncatedString(strings.themelayerlist.themeGroups[themeGroupIndex].themes[theme.id].description, 70, strings.themelayerlist.readMore)}
+                    {truncatedString(desc.toString(), 70, strings.themelayerlist.readMore)}
                 </StyledSubText>
             }
         </StyledThemeContent>
     );
 };
 
-export const ThemeGroup = ({
-    theme,
-    themeGroupIndex,
-    layers,
-    index,
-    selectedThemeId,
-    selectGroup,
-    isSubtheme
-}) => {
-    const [subthemeIsOpen, setSubthemeIsOpen] = useState(false);
-    const [totalGroupLayersCount, setTotalGroupLayersCount] = useState(0);
-    const [totalVisibleGroupLayersCount, setTotalVisibleGroupLayersCount] = useState(0);
 
-    useEffect(() => {      
-        var layersCount = 0;
-        var visibleLayersCount = 0;
-        const layersCounter = (theme) => {
-            if (theme.hasOwnProperty("layers") && theme.layers.length > 0) {
-                visibleLayersCount += layers.filter(l => theme.layers.includes(l.id) && l.visible === true).length;
-                layersCount = layersCount + theme.layers.length;
-            };
-            setTotalGroupLayersCount(layersCount);
-            setTotalVisibleGroupLayersCount(visibleLayersCount);
-            
-        };
-        layersCounter(theme);
-    },[theme, layers]);
-
-    var filteredLayers = layers.filter(layer => theme.layers.includes(layer.id));
-    const isOpen = isSubtheme ? subthemeIsOpen : selectedThemeId === theme.id;
-
-    return (
-        <StyledLayerGroups index={index}>
-            {!isSubtheme ?
-                <StyledMasterGroupHeader
-                    key={'smgh_' + theme.id}
-                    onClick={() => {
-                        selectGroup(theme);
-                    }}
-                    isOpen={isOpen}
-                >
-                    <StyledLeftContent>
-                        <StyledMasterGroupHeaderIcon>
-                            <FontAwesomeIcon
-                                icon={faMap}
-                            />
-                        </StyledMasterGroupHeaderIcon>
-                        <StyledMasterGroupName>{theme.name}</StyledMasterGroupName>
-                    </StyledLeftContent>
-                    <StyledRightContent>
-                        <StyledSelectButton
-                            isOpen={isOpen}
-                        >
-                        </StyledSelectButton>
-                    </StyledRightContent>
-                </StyledMasterGroupHeader>
-            :
-                <StyledSubthemeHeader
-                    key={'smgh_' + theme.id}
-                    onClick={() => {
-                        setSubthemeIsOpen(!subthemeIsOpen);
-                    }}
-                    isOpen={isOpen}
-                >
-                    <StyledSubthemeLeftContent>
-                        <StyledSubthemeName>{theme.name}</StyledSubthemeName>
-                    </StyledSubthemeLeftContent>
-                    <StyledSubthemeRightContent>
-                        <StyledSubGroupLayersCount>
-                            {
-                                totalVisibleGroupLayersCount +" / "+ totalGroupLayersCount
-                            }
-                        </StyledSubGroupLayersCount>
-                        <StyledInfoHeaderIconContainer
-                                    animate={{
-                                        transform: isOpen
-                                            ? 'rotate(180deg)'
-                                            : 'rotate(0deg)',
-                                    }}
-                                    style={{marginLeft: '10px'}}
-                                >
-                                    <FontAwesomeIcon
-                                        icon={faAngleDown}
-                                    />
-                                </StyledInfoHeaderIconContainer>
-                    </StyledSubthemeRightContent>
-                </StyledSubthemeHeader>
-            }
-                    {
-                        !isOpen && themeGroupIndex !== undefined && strings.themelayerlist.themeGroups[themeGroupIndex].themes.hasOwnProperty(theme.id) && strings.themelayerlist.themeGroups[themeGroupIndex].themes[theme.id].description !== null && strings.themelayerlist.themeGroups[themeGroupIndex].themes[theme.id].description.length > 0 && 
-                            <ThemeDesc
-                                theme={theme}
-                                themeGroupIndex={themeGroupIndex}
-                            />
-                    }
-
-
-            <StyledLayerGroupContainer
-                key={'slg_' + index}
-                initial='hidden'
-                animate={isOpen ? 'visible' : 'hidden'}
-                variants={listVariants}
-                transition={{
-                    duration: 0.3,
-                    type: "tween"
-                }}
-            >
-                <div>
-                    {themeImages[theme.id] && <StyledLayerGroupImage src={themeImages[theme.id]} alt=''/>}
-
-                    {
-                        themeGroupIndex !== undefined && strings.themelayerlist.themeGroups[themeGroupIndex].themes.hasOwnProperty(theme.id) && strings.themelayerlist.themeGroups[themeGroupIndex].themes[theme.id].description !== null &&
-                            <ThemeDesc
-                                theme={theme}
-                                themeGroupIndex={themeGroupIndex}
-                            />
-                    }
-                </div>
-                <StyledLayerGroup>
-                    <Layers layers={filteredLayers} isOpen={isOpen} themeName={theme.name}/>
-                </StyledLayerGroup>
-
-                {theme.subthemes && theme.subthemes.map((subtheme, index) => {
-                        return (
-                            <ThemeGroup
-                                key={index}
-                                theme={subtheme}
-                                layers={layers}
-                                index={index}
-                                selectGroup={selectGroup}
-                                selectedThemeId={selectedThemeId}
-                                isSubtheme={true}
-                            />
-                        );
-                    })
-                }
-            </StyledLayerGroupContainer>
-        </StyledLayerGroups>
-    );
-  };
 
   export default ThemeLayerList;

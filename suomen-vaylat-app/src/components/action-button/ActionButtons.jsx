@@ -230,6 +230,7 @@ const ActionButtons = ({
     const { store } = useContext(ReactReduxContext);
     
     const [activeGeometries, setActiveGeometries] = useState(true);
+    const lang = strings.getLanguage();
 
     const {
         channel,
@@ -343,7 +344,7 @@ const ActionButtons = ({
                                             icon={faMap}
                                         />
                                     </StyledActionButtonIcon>
-                                    <StyledActionButtonText>{selectedTheme && selectedTheme.name}</StyledActionButtonText>
+                                    <StyledActionButtonText>{selectedTheme && selectedTheme.locale[lang].name}</StyledActionButtonText>
                                 </StyledLeftContent>
                                 <StyledRightContent>
                                     <ThemeGroupShareButton themeId={selectedTheme && selectedTheme.id}/>

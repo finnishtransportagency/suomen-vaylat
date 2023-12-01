@@ -47,8 +47,8 @@ export const getSelectedThemeLayers = (theme, selectedMapLayers) => {
                 array.push(layer);
             });
         }
-        if(theme.subthemes) {
-            theme.subthemes.forEach(subtheme => {
+        if(theme.groups) {
+            theme.groups.forEach(subtheme => {
                 recurseThemeLayers(subtheme);
             })
         }
@@ -84,8 +84,8 @@ export const selectGroup = (store, channel, theme, lastSelectedTheme, selectedTh
             channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layerId, false]);
         });
         // close all subtheme layers and check if subthemes have subthemes and close their layers recursively
-        if(theme.subthemes) {
-            theme.subthemes.forEach(subtheme => {
+        if(theme.groups) {
+            theme.groups.forEach(subtheme => {
                 closeAllThemeLayers(subtheme);
             });
         }
@@ -101,6 +101,7 @@ export const selectGroup = (store, channel, theme, lastSelectedTheme, selectedTh
                 store.dispatch(setIsLegendOpen(true));
                 store.dispatch(setIsZoomBarOpen(true));
             }
+            console.log(theme.defaultLayers)
             theme.defaultLayers && theme.defaultLayers.forEach(layerId => {
                 channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layerId, true]);
             });
@@ -130,7 +131,7 @@ export const selectGroup = (store, channel, theme, lastSelectedTheme, selectedTh
         setTimeout(() => {
             store.dispatch(setSelectedThemeId(theme.id));
             setTimeout(() => {
-                theme.defaultLayers.forEach(layerId => {
+                theme.defaultLayers && theme.defaultLayers.forEach(layerId => {
                         channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layerId, true]);
                     });
                 updateLayers(store, channel);
