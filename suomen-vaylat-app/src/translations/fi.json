@@ -501,7 +501,7 @@
           "1": {
             "id": 1,
             "title": "Päällysteiden kuntokartta",
-            "description": "Kartalla esitetään tiet ja sillat, joiden kuntoluokka on erittäin huono, huono, tyydyttävä, hyvä tai erittäin hyvä. Päällysteiden kuntotiedot ovat arvioita 1.2.2023 tilanteessa. Aineistosta puuttuu vuoden 2022 päällystyskohteet. Päällysteiden kuntotiedot on päivitetty 8.2.2023. Siltatiedot on päivitetty vuonna 2021. Seuraava päivitys tehdään kesällä 2023."
+            "description": "Kartalla esitetään tiet, joiden kuntoluokka on erittäin huono, huono, tyydyttävä, hyvä tai erittäin hyvä. Päällysteiden kuntotiedot vastaavat vuoden 2023 lopun tilannetta."
           },
           "2": {
             "id": 2,
