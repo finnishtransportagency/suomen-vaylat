@@ -288,7 +288,7 @@ const StyledMasterGroupHeaderIconLetter = styled.div`
 
 const themeImages = {
     hankekartta: hankekartta,
-    1: intersection,
+    päällysteidenkuntokartta: intersection,
     siltarajoituskartta: siltarajoituskartta,
     tienumerokartta: tienumerokartta,
     kuntokartta: kuntokartta
@@ -296,13 +296,13 @@ const themeImages = {
 };
 
 const mainThemeImages = {
-    3: {
+    vesiväylät: {
         icon: faShip
     },
-    2: {
+    rataverkko: {
         icon: faTrain
     },
-    1: {
+    tieverkko: {
         icon: faRoad
     }
 };
@@ -369,9 +369,9 @@ export const ThemeLayerList = ({
                             <StyledMasterThemeHeader>
                                     <StyledMasterGroupHeaderIconLetter>
                                         {
-                                            mainThemeImages.hasOwnProperty(themeGroup.id) ?
+                                            mainThemeImages.hasOwnProperty(themeGroup.locale["fi"].name.toLowerCase()) ?
                                             <FontAwesomeIcon
-                                                icon={mainThemeImages[themeGroup.id].icon}
+                                                icon={mainThemeImages[themeGroup.locale["fi"].name.toLowerCase()].icon}
                                             /> : <p>{ themeGroup.locale[lang].name.charAt(0).toUpperCase() }</p>
                                         }
                                     </StyledMasterGroupHeaderIconLetter>
