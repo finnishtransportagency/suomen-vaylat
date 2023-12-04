@@ -331,7 +331,6 @@ export const ThemeLayerList = ({
     allLayers,
     allThemes
 }) => {
-    console.log(allThemes)
 
     const { store } = useContext(ReactReduxContext);
     const lang = strings.getLanguage();
@@ -440,7 +439,6 @@ export const Themes = ({
         lastSelectedTheme,
         selectedThemeId,
     } = useAppSelector((state) => state.rpc);
-    console.log(themeGroup)
     
     const handleSelectGroup = (themeGroup) => {
         selectGroup(store, channel, allLayers, parentTheme, themeGroup, lastSelectedTheme, selectedThemeId);
@@ -490,7 +488,6 @@ export const ThemeGroup = ({
         };
         layersCounter(theme);
     },[theme, layers]);
-    console.log(theme)
 
     var filteredLayers = layers.filter(layer => theme.layers?.includes(layer.id));
     const isOpen = isSubtheme ? subthemeIsOpen : selectedThemeId === theme.id;
@@ -668,7 +665,6 @@ export const ThemeDesc = ({
 
     const links = getLinks(txt.replace(/\s/g, ''),"<a>", "</a>")
     const desc = getLinks(txt, "<p>", "</p>")
-    console.log(desc)
 
     return (
         <StyledThemeContent>

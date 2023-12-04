@@ -78,7 +78,6 @@ export const showNonThemeLayers = (store, channel) => {
  */
 export const selectGroup = (store, channel, allLayers, parentTheme, theme, lastSelectedTheme, selectedThemeId) => {
 
-    console.log(theme)
     const closeAllThemeLayers = (theme) => {
         // close all theme layers
         theme?.layers?.forEach(layerId => {
