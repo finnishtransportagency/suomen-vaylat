@@ -76,8 +76,9 @@ export const showNonThemeLayers = (store, channel) => {
  * @param {String} lastSelectedTheme
  * @param {Number} selectedThemeId
  */
-export const selectGroup = (store, channel, theme, lastSelectedTheme, selectedThemeId) => {
+export const selectGroup = (store, channel, allLayers, parentTheme, theme, lastSelectedTheme, selectedThemeId) => {
 
+    console.log(theme)
     const closeAllThemeLayers = (theme) => {
         // close all theme layers
         theme?.layers?.forEach(layerId => {
@@ -101,9 +102,18 @@ export const selectGroup = (store, channel, theme, lastSelectedTheme, selectedTh
                 store.dispatch(setIsLegendOpen(true));
                 store.dispatch(setIsZoomBarOpen(true));
             }
-            console.log(theme.defaultLayers)
-            theme.defaultLayers && theme.defaultLayers.forEach(layerId => {
-                channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layerId, true]);
+
+            let layers = [];
+            theme.layers && layers.push(...theme.layers);
+            theme.groups && theme.groups.forEach(g => {
+                g.layers && layers.push(...g.layers)
+            })
+            layers.length > 0 && layers.forEach(layerId => {
+                const filteredLayer = allLayers.find(l => l.id === layerId);
+
+                if (filteredLayer.config?.themes?.default?.filter(name => name.toLowerCase === theme.locale["fi"].name.toLowerCase).length > 0) {
+                    channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layerId, true]);
+                }
             });
             updateLayers(store, channel);
 

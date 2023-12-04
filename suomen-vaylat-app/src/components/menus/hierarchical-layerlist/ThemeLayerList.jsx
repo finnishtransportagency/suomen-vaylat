@@ -406,6 +406,7 @@ export const ThemeLayerList = ({
                                 return <Themes
                                     lang={lang}
                                     key={index}
+                                    parentTheme={themeGroup}
                                     themeGroup={theme}
                                     allLayers={allLayers}
                                     index={index}
@@ -427,6 +428,7 @@ export const ThemeLayerList = ({
 export const Themes = ({
     lang,
     allLayers,
+    parentTheme,
     themeGroup,
     index
 }) => {
@@ -441,7 +443,7 @@ export const Themes = ({
     console.log(themeGroup)
     
     const handleSelectGroup = (themeGroup) => {
-        selectGroup(store, channel, themeGroup, lastSelectedTheme, selectedThemeId);
+        selectGroup(store, channel, allLayers, parentTheme, themeGroup, lastSelectedTheme, selectedThemeId);
     };
 
     return (
