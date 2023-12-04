@@ -490,11 +490,14 @@ export const ThemeGroup = ({
     },[theme, layers]);
 
     var filteredLayers = layers.filter(layer => theme.layers?.includes(layer.id));
+
     const isOpen = isSubtheme ? subthemeIsOpen : selectedThemeId === theme.id;
     
     const txt = theme.locale[lang].desc && theme.locale[lang].desc.length > 0 && theme.locale[lang].desc;
 
-    const images = txt && getLinks(txt.replace(/\s/g, ''), "<img>", "</img>")
+    const images = txt && getLinks(txt.replace(/\s/g, ''), "<img>", "</img>") || [];
+
+    const themeNameFi = theme.locale["fi"].name.toLowerCase().replace(/\s/g, '');
 
     return (
         <StyledLayerGroups index={index}>
@@ -573,11 +576,18 @@ export const ThemeGroup = ({
                 }}
             >
                 <div>
-                    { images && images.map((img) => {
-                        return(
-                            <StyledLayerGroupImage src={img} alt=''/>
+                    { images.length > 0 ?
+                        (
+                            images.map((img) => {
+                                return(
+                                    <StyledLayerGroupImage src={img} alt=''/>
+                                )
+                            })
                         )
-                    })
+                    :
+                        (
+                            themeImages[themeNameFi] && <StyledLayerGroupImage src={themeImages[themeNameFi]} alt=''/>
+                        )
                     }
 
                     {
