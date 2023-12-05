@@ -110,8 +110,7 @@ export const selectGroup = (store, channel, allLayers, theme, lastSelectedTheme,
             })
             allLayers && layers.length > 0 && layers.forEach(layerId => {
                 const filteredLayer = allLayers.find(l => l.id === layerId);
-
-                if (filteredLayer.config?.themes?.default?.filter(name => name.toLowerCase === theme.locale["fi"].name.toLowerCase).length > 0) {
+                if (Array.isArray(filteredLayer.config.themes) && filteredLayer.config?.themes?.find(t => t.name["fi"].toLowerCase === theme.locale["fi"].name.toLowerCase).default) {
                     channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layerId, true]);
                 }
             });
