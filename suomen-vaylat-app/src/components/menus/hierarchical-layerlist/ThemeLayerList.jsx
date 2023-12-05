@@ -343,8 +343,10 @@ export const ThemeLayerList = ({
     const [isOpen, setIsOpen] = useState(null);
 
     useEffect(() => {
-        selectedTheme != null && allThemes.forEach(themeGroup => {
-            themeGroup.themes?.hasOwnProperty(selectedTheme.id) && setIsOpen(themeGroup.id)
+        selectedTheme != null && allThemes.forEach((themeGroup, index) => {
+            themeGroup.hasOwnProperty("groups") 
+            && themeGroup.groups?.find(g => g === selectedTheme) 
+            && setIsOpen(index)
         })
     }, []);
 
@@ -405,7 +407,6 @@ export const ThemeLayerList = ({
                                 return <Themes
                                     lang={lang}
                                     key={index}
-                                    parentTheme={themeGroup}
                                     themeGroup={theme}
                                     allLayers={allLayers}
                                     index={index}
@@ -427,7 +428,6 @@ export const ThemeLayerList = ({
 export const Themes = ({
     lang,
     allLayers,
-    parentTheme,
     themeGroup,
     index
 }) => {
@@ -441,7 +441,7 @@ export const Themes = ({
     } = useAppSelector((state) => state.rpc);
     
     const handleSelectGroup = (themeGroup) => {
-        selectGroup(store, channel, allLayers, parentTheme, themeGroup, lastSelectedTheme, selectedThemeId);
+        selectGroup(store, channel, allLayers, themeGroup, lastSelectedTheme, selectedThemeId);
     };
 
     return (
@@ -491,7 +491,7 @@ export const ThemeGroup = ({
 
     var filteredLayers = layers.filter(layer => theme.layers?.includes(layer.id));
 
-    const isOpen = isSubtheme ? subthemeIsOpen : selectedThemeId === theme.id;
+    const isOpen = isSubtheme ? subthemeIsOpen : theme.id === selectedThemeId || (theme.hasOwnProperty("groups") && theme.groups.find(t => t.id === selectedThemeId));
     
     const txt = theme.locale[lang].desc && theme.locale[lang].desc.length > 0 && theme.locale[lang].desc;
 

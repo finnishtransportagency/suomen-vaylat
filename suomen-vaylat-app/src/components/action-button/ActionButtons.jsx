@@ -246,7 +246,7 @@ const ActionButtons = ({
     } = useAppSelector((state) => state.ui);
 
     const handleSelectGroup = (index, theme) => {
-        selectGroup(store, channel, null, null, theme, lastSelectedTheme, selectedThemeId);
+        selectGroup(store, channel, null, theme, lastSelectedTheme, selectedThemeId);
     };
     
     const handleShowGeometry = () => {

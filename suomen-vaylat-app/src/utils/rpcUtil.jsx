@@ -72,11 +72,12 @@ export const showNonThemeLayers = (store, channel) => {
  * @method selectGroup
  * @param {Object} store
  * @param {Object} channel
+ * @param {Object} allLayers
  * @param {String} theme
  * @param {String} lastSelectedTheme
  * @param {Number} selectedThemeId
  */
-export const selectGroup = (store, channel, allLayers, parentTheme, theme, lastSelectedTheme, selectedThemeId) => {
+export const selectGroup = (store, channel, allLayers, theme, lastSelectedTheme, selectedThemeId) => {
 
     const closeAllThemeLayers = (theme) => {
         // close all theme layers
@@ -107,7 +108,7 @@ export const selectGroup = (store, channel, allLayers, parentTheme, theme, lastS
             theme.groups && theme.groups.forEach(g => {
                 g.layers && layers.push(...g.layers)
             })
-            layers.length > 0 && layers.forEach(layerId => {
+            allLayers && layers.length > 0 && layers.forEach(layerId => {
                 const filteredLayer = allLayers.find(l => l.id === layerId);
 
                 if (filteredLayer.config?.themes?.default?.filter(name => name.toLowerCase === theme.locale["fi"].name.toLowerCase).length > 0) {
