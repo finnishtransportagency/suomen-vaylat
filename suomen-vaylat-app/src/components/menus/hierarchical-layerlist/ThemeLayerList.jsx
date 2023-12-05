@@ -444,6 +444,7 @@ export const Themes = ({
         selectGroup(store, channel, allLayers, theme, lastSelectedTheme, selectedThemeId);
     };
 
+    // Check if desc had url links so those can be displayed as links instead of group themes
     const txt = theme.locale[lang].desc && theme.locale[lang].desc.length > 0 && theme.locale[lang].desc;
     const link = txt && getLinks(txt.replace(/\s/g, ''), "<url>", "</url>")[0] || [];
     
@@ -500,8 +501,8 @@ export const ThemeGroup = ({
 
     const isOpen = isSubtheme ? subthemeIsOpen : theme.id === selectedThemeId || (theme.hasOwnProperty("groups") && theme.groups.find(t => t.id === selectedThemeId));
     
+    // check if group desc has img tags in order to display linked image instead of possible default
     const txt = theme.locale[lang].desc && theme.locale[lang].desc.length > 0 && theme.locale[lang].desc;
-
     const images = txt && getLinks(txt.replace(/\s/g, ''), "<img>", "</img>") || [];
 
     const themeNameFi = theme.locale["fi"].name.toLowerCase().replace(/\s/g, '');
@@ -629,6 +630,7 @@ export const ThemeGroup = ({
     );
   };
 
+  // Handle theme links
 export const ThemeLinkList = ({
     theme,
     link,
