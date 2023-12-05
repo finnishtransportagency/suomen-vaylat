@@ -407,7 +407,7 @@ export const ThemeLayerList = ({
                                 return <Themes
                                     lang={lang}
                                     key={index}
-                                    themeGroup={theme}
+                                    theme={theme}
                                     allLayers={allLayers}
                                     index={index}
                                 />
@@ -428,7 +428,7 @@ export const ThemeLayerList = ({
 export const Themes = ({
     lang,
     allLayers,
-    themeGroup,
+    theme,
     index
 }) => {
     const { store } = useContext(ReactReduxContext);
@@ -440,23 +440,30 @@ export const Themes = ({
         selectedThemeId,
     } = useAppSelector((state) => state.rpc);
     
-    const handleSelectGroup = (themeGroup) => {
-        selectGroup(store, channel, allLayers, themeGroup, lastSelectedTheme, selectedThemeId);
+    const handleSelectGroup = (theme) => {
+        selectGroup(store, channel, allLayers, theme, lastSelectedTheme, selectedThemeId);
     };
 
+    const txt = theme.locale[lang].desc && theme.locale[lang].desc.length > 0 && theme.locale[lang].desc;
+    const link = txt && getLinks(txt.replace(/\s/g, ''), "<url>", "</url>")[0] || [];
+    
     return (
         <>
-            <ThemeGroup
+            { link.length > 0 ?
+                <ThemeLinkList index={index} link={link} theme={theme} lang={lang}/>
+            :
+                <ThemeGroup
                     key={index}
                     lang={lang}
-                    theme={themeGroup}
+                    theme={theme}
                     layers={allLayers}
                     index={index}
                     selectedTheme={selectedTheme}
                     selectGroup={handleSelectGroup}
                     selectedThemeId={selectedThemeId}
                     isSubtheme={false}
-            />
+                />
+            }
         </>
     )
 };
@@ -623,7 +630,9 @@ export const ThemeGroup = ({
   };
 
 export const ThemeLinkList = ({
+    theme,
     link,
+    lang,
     index
 }) => {
 
@@ -631,9 +640,9 @@ export const ThemeLinkList = ({
         <>
             <StyledLayerGroups index={index}>
                 <StyledMasterGroupHeader
-                    key={'theme_link_'+link.title}
+                    key={'theme_link_'+theme.locale[lang].name}
                     onClick={() => {
-                        window.open(link.url, '_blank');;
+                        window.open(link, '_blank');;
                     }}
                 >
                     <StyledLeftContent>
@@ -642,7 +651,7 @@ export const ThemeLinkList = ({
                                 icon={faLink}
                             />
                         </StyledMasterGroupHeaderIcon>
-                        <StyledLinkName>{link.title}</StyledLinkName>
+                        <StyledLinkName>{theme.locale[lang].name}</StyledLinkName>
                     </StyledLeftContent>
                     <StyledRightContent>
                         <StyledMasterGroupLinkIcon>
