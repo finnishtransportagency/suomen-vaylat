@@ -140,23 +140,31 @@ export const selectGroup = (store, channel, allLayers, theme, lastSelectedTheme,
         setTimeout(() => {
             store.dispatch(setSelectedThemeId(theme.id));
             setTimeout(() => {
-                theme.defaultLayers && theme.defaultLayers.forEach(layerId => {
+                let layers = [];
+                theme.layers && layers.push(...theme.layers);
+                theme.groups && theme.groups.forEach(g => {
+                    g.layers && layers.push(...g.layers)
+                })
+                allLayers && layers.length > 0 && layers.forEach(layerId => {
+                    const filteredLayer = allLayers.find(l => l.id === layerId);
+                    if (Array.isArray(filteredLayer.config.themes) && filteredLayer.config?.themes?.find(t => t.name["fi"].toLowerCase === theme.locale["fi"].name.toLowerCase).default) {
                         channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layerId, true]);
-                    });
+                    }
+                });
                 updateLayers(store, channel);
 
-    const selectedMapLayers =  store.getState().rpc.selectedLayersByType.mapLayers;
-    const selectedTheme = store.getState().rpc.selectedTheme;
-    const selectedThemeLayers = getSelectedThemeLayers(selectedTheme, selectedMapLayers);
-    store.dispatch(setAllSelectedThemeLayers(selectedThemeLayers));
-    if(selectedTheme) {
-        selectedMapLayers.forEach(layer => {
-            if(!selectedThemeLayers.find(themelayer => themelayer === layer.id)) {
-                channel.postRequest('ChangeMapLayerOpacityRequest', [layer.id, 0]);
-                updateLayers(store, channel);
-            }
-        })
-    }
+                const selectedMapLayers =  store.getState().rpc.selectedLayersByType.mapLayers;
+                const selectedTheme = store.getState().rpc.selectedTheme;
+                const selectedThemeLayers = getSelectedThemeLayers(selectedTheme, selectedMapLayers);
+                store.dispatch(setAllSelectedThemeLayers(selectedThemeLayers));
+                if(selectedTheme) {
+                    selectedMapLayers.forEach(layer => {
+                        if(!selectedThemeLayers.find(themelayer => themelayer === layer.id)) {
+                            channel.postRequest('ChangeMapLayerOpacityRequest', [layer.id, 0]);
+                            updateLayers(store, channel);
+                        }
+                    })
+                }
             },700);
         },1000);
     }
