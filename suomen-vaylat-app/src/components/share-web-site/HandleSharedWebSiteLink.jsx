@@ -29,6 +29,7 @@ export const HandleSharedWebSiteLink = () => {
 
     const allThemesWithLayers = useSelector(state => state.rpc.allThemesWithLayers);
 
+
     if ((!isNaN(zoom) && x && y) || themeId) {
         LOG.log('The page was accessed via a link, initializing the map according to the link.');
     } else {
@@ -49,14 +50,21 @@ export const HandleSharedWebSiteLink = () => {
     }
 
     // If theme given then select wanted theme
-    if (themeId) {
-        const theme = allThemesWithLayers.find(theme => theme.id === parseInt(themeId));
+    if (themeId && allThemesWithLayers.length > 0) {
+        let activateTheme = {};
+        allThemesWithLayers.forEach(theme => {
+            if (theme.id === parseInt(themeId)) {
+                activateTheme = theme;
+            } else if (theme.groups && theme.groups.find(t => t.id === parseInt(themeId))) {
+                activateTheme = theme.groups.find(t => t.id === parseInt(themeId));
+            }
+        })
 
-        if (theme){
-            setTimeout(() => {
-                selectGroup(store, channel, theme, theme, null);
+        if (activateTheme){
+            channel && channel.getAllLayers(function (allLayers) {
+                selectGroup(store, channel, allLayers, activateTheme, null, null);
                 !isMobile && store.dispatch(setIsThemeMenuOpen(true));
-            },700);
+            });
         }
     }
     // else if mapLayers given, remove all layers and then add wanted layers to map
