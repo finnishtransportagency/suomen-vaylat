@@ -102,50 +102,52 @@ export const FormattedGFI = ({ data, isDataTable }) => {
             return values.join('-');
         };
 
-        geoJSON.features.forEach((f, index) => {
-            const keys = Object.keys(f.properties);
-            let highPriorityRows = [];
-            let lowPriorityRows = [];
-            const visibleFields =
-                f.properties._order && !Array.isArray(f.properties._order)
-                    ? JSON.parse(f.properties._order.replace('\\', ''))
-                    : f.properties._order && Array.isArray(f.properties._order)
-                    ? f.properties._order
-                    : [];
-            const highPriority =
-                f.properties._orderHigh && !Array.isArray(f.properties._orderHigh)
-                    ? JSON.parse(f.properties._orderHigh.replace('\\', ''))
-                    : f.properties._orderHigh &&
-                      Array.isArray(f.properties._orderHigh)
-                    ? f.properties._orderHigh
-                    : [];
-            const generatedKey = getKey(f.properties);
-            keys.forEach((key) => {
-                if (key !== '_order' && key !== '_orderHigh' && key !== 'UID') {
-                    getContent(
-                        key,
-                        f.properties[key],
-                        visibleFields,
-                        highPriority,
-                        lowPriorityRows,
-                        highPriorityRows,
-                        generatedKey
-                    );
-                }
+        geoJSON.forEach((geom, index) => {
+            geom.features.forEach((f, index) => {
+                const keys = Object.keys(f.properties);
+                let highPriorityRows = [];
+                let lowPriorityRows = [];
+                const visibleFields =
+                    f.properties._order && !Array.isArray(f.properties._order)
+                        ? JSON.parse(f.properties._order.replace('\\', ''))
+                        : f.properties._order && Array.isArray(f.properties._order)
+                        ? f.properties._order
+                        : [];
+                const highPriority =
+                    f.properties._orderHigh && !Array.isArray(f.properties._orderHigh)
+                        ? JSON.parse(f.properties._orderHigh.replace('\\', ''))
+                        : f.properties._orderHigh &&
+                          Array.isArray(f.properties._orderHigh)
+                        ? f.properties._orderHigh
+                        : [];
+                const generatedKey = getKey(f.properties);
+                keys.forEach((key) => {
+                    if (key !== '_order' && key !== '_orderHigh' && key !== 'UID') {
+                        getContent(
+                            key,
+                            f.properties[key],
+                            visibleFields,
+                            highPriority,
+                            lowPriorityRows,
+                            highPriorityRows,
+                            generatedKey
+                        );
+                    }
+                });
+    
+                pretty.push(
+                    <GFITables
+                        key={'gfi-table-' + generatedKey}
+                        index={index}
+                        lowPriorityRows={lowPriorityRows}
+                        highPriorityRows={highPriorityRows}
+                        geoJSON={geom}
+                        generatedKey={generatedKey}
+                        channel={channel}
+                    />
+                );
             });
-
-            pretty.push(
-                <GFITables
-                    key={'gfi-table-' + generatedKey}
-                    index={index}
-                    lowPriorityRows={lowPriorityRows}
-                    highPriorityRows={highPriorityRows}
-                    geoJSON={geoJSON}
-                    generatedKey={generatedKey}
-                    channel={channel}
-                />
-            );
-        });
+        })
 
         return (
             <>
@@ -163,7 +165,7 @@ export const FormattedGFI = ({ data, isDataTable }) => {
         var columns = [];
         var additionalColumns = [];
 
-        const properties = geoJSON.features[0].properties;
+        const properties = geoJSON[0].features[0].properties;
         const highPriorityFields =
             properties._orderHigh && !Array.isArray(properties._orderHigh)
             ? JSON.parse(properties._orderHigh.replace('\\',''))
@@ -177,16 +179,18 @@ export const FormattedGFI = ({ data, isDataTable }) => {
             ? properties._order
             : [];
 
-        geoJSON.features.forEach((f, index) => {
-            let rows = {};
-            const keys = Object.keys(f.properties);
-            keys.forEach(key => {
-                if (key !== '_order' && key !== '_orderHigh' && key !== 'UID') {
-                    getDataTableContent(key, f.properties[key], rows, geoJSON, index);
-                }
+        geoJSON.forEach((geom, index) => {
+            geom.features.forEach((f, index) => {
+                let rows = {};
+                const keys = Object.keys(f.properties);
+                keys.forEach(key => {
+                    if (key !== '_order' && key !== '_orderHigh' && key !== 'UID') {
+                        getDataTableContent(key, f.properties[key], rows, geoJSON, index);
+                    }
+                });
+                propertiesData.push(rows);
             });
-            propertiesData.push(rows);
-        });
+        })
 
         //set column options
         visibleFields.forEach(field => {
@@ -244,6 +248,7 @@ const dataTable = (columns, data, channel) => {
   }
 
 //highlight selected features on map
+//FIX
 const selectRow = ({ selectedRows}, channel ) => {
     deSelectFeature(channel);
     let features = [];
@@ -339,23 +344,25 @@ const getContent = (key, value, visibleFields, highPriorityFields, lowPriorityRo
 const selectFeature = (channel, features) => {
     let featureStyle = {
         fill: {
-            color: '#e50083',
+          color: "#e50083",
         },
         stroke: {
-            color: '#e50083',
-            width: 5,
-            lineDash: 'solid',
-            lineCap: 'round',
-            lineJoin: 'round',
-            area: {
-                color: '#e50083',
-                width: 4,
-                lineJoin: 'round'
-            }
+          color: "#e50083",
+          width: 5,
+          lineDash: "solid",
+          lineCap: "round",
+          lineJoin: "round",
+          area: {
+            color: "#e50083",
+            width: 4,
+            lineJoin: "round",
+          },
         },
         image: {
-            shape: 5,
-            size: 3,
+            shape: 2,
+            size: 5,
+            offsetX: 13,
+            offsetY: 7,
             fill: {
                 color: '#e50083',
             }

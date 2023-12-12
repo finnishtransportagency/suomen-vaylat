@@ -150,7 +150,7 @@ const MapLayersDialog = () => {
     const inputEl = useRef(null);
     
     useEffect(() => {
-        inputEl?.current?.swiper?.slideTo(selectedMapLayersMenuTab);
+        inputEl?.current?.swiper?.activeIndex !== selectedMapLayersMenuTab && inputEl?.current?.swiper?.slideTo(selectedMapLayersMenuTab);
     }, [selectedMapLayersMenuTab, isSideMenuOpen]);
 
     const closeSideMenu = () => {

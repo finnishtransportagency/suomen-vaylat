@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { setSearchParams } from '../../../state/slices/uiSlice';
 import strings from '../../../translations';
 import Layer from '../hierarchical-layerlist/Layer';
+import { findGroupForLayer } from '../hierarchical-layerlist/Layer';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -59,7 +60,7 @@ const StyledSearchInputContainerIcon = styled.div`
 
 const StyledSearchInput = styled.input`
     font-size: 16px;
-    height: 100%;
+    height: 260px;
    // border-radius: 5px;
     border: none;
     &::-webkit-search-cancel-button {
@@ -94,10 +95,14 @@ const StyledMessage = styled.p`
     font-weight: 600;
 `;
 
-const LayerSearch = ({ layers }) => {
+const LayerSearch = ({ layers, groups }) => {
     const { store } = useContext(ReactReduxContext);
     const searchParams = useSelector(state => state.ui.searchParams);
-    const searchResults = searchParams.length > 2 ? layers.filter(layer => layer.name.toLowerCase().includes(searchParams.toLowerCase())) : '';
+    const currentLang = strings.getLanguage();
+
+    const searchResults = searchParams.length > 2 
+    ? layers.filter(layer => layer.name.toLowerCase().includes(searchParams.toLowerCase())) 
+    : [];
     return (
         <StyledLayerSearchContainer>
             <StyledSearchInputContainer>
@@ -128,9 +133,11 @@ const LayerSearch = ({ layers }) => {
                             {strings.layerlist.layerlistLabels.searchResults}
                         </StyledListSubtitle>
                         <StyledLayerList>
-                            {searchResults.length > 0 && searchParams !== '' && searchResults.map(layer => {
-                                return <Layer key={'search_resutlt_'+layer.id} layer={layer}/>
-                            })}
+                        {searchResults.length > 0 && searchParams !== '' && searchResults.map(layer => {
+                            const groupObj = findGroupForLayer(groups, layer.id);
+                            const matchingGroup = groupObj ? groupObj.locale[currentLang].name : 'Unknown';
+                            return <Layer key={'search_resutlt_'+layer.id} layer={layer} groupName={matchingGroup}/>
+                        })}
                         </StyledLayerList>
                     </motion.div>
                 <StyledMessage>

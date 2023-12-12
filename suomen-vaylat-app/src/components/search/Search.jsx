@@ -7,18 +7,11 @@ import {
     faSearch,
     faTimes,
     faTrash,
-    faEllipsisV,
-    faAngleUp,
-    faCity,
-    faRoad,
-    faTrain,
     faInfoCircle,
-    faQuestion,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import AddressSearch from './AddressSearch';
 import MetadataSearch from './MetadataSearch';
-import Layer from '../menus/hierarchical-layerlist/Layer';
 import SvLoder from '../loader/SvLoader';
 import strings from '../../translations';
 import { SEARCH_TIP_LOCALSTORAGE } from '../../utils/constants';
@@ -34,9 +27,13 @@ import CircleButton from '../circle-button/CircleButton';
 import { VKMGeoJsonHoverStyles, VKMGeoJsonStyles } from './VKMSearchStyles';
 import { toast } from 'react-toastify';
 import SearchToast from '../toasts/SearchToast';
+import ReactTooltip from 'react-tooltip';
 import TipToast from '../toasts/TipToast';
+import SearchModal from './SearchModal';
+import SearchResultPanel from './SearchResultPanel';
 
-const StyledSearchIcon  = styled.div`
+
+export const StyledSearchIcon  = styled.div`
     min-width: 48px;
     padding-right: 16px;
     display: flex;
@@ -51,7 +48,7 @@ const StyledSearchIcon  = styled.div`
 const StyledSearchContainer = styled.div`
     z-index: 2;
     position: absolute;
-    right: 0px;
+    right: 8px;
     padding-right: 8px;
     width: 100%;
     display: flex;
@@ -67,7 +64,7 @@ const StyledSearchWrapper = styled(motion.div)`
     position: absolute;
     z-index: -1;
     transition: all 0.3s ease-out;
-    display: flex;
+    display: block;
     align-items: center;
     width: 100%;
     overflow: hidden;
@@ -84,6 +81,8 @@ const StyledSearchWrapper = styled(motion.div)`
         border-radius: 20px;
         padding-right: 40px;
     } ;
+    overflow: initial;
+    //border: solid 1px black;
 `;
 
 const StyledLeftContentWrapper = styled.div`
@@ -96,25 +95,8 @@ const StyledSearchActionButton = styled(FontAwesomeIcon)`
     color: rgba(0, 0, 0, 0.5);
     font-size: 16px;
     cursor: pointer;
-`;
-
-const StyledSearchMethodSelector = styled.div`
-    width: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-left: 8px;
-    cursor: pointer;
-    color: ${(props) =>
-        props.isSearchMethodSelectorOpen
-            ? props.theme.colors.mainColor1
-            : 'rgba(0,0,0,0.5)'};
-    p {
-        margin: 0;
-    }
-    svg {
-        font-size: 16px;
-    }
+    top: 0;
+    margin-top: 15px;
 `;
 
 const StyledSelectedSearchMethod = styled.div`
@@ -127,16 +109,16 @@ const StyledSelectedSearchMethod = styled.div`
     }
 `;
 
-const StyledDropDown = styled(motion.div)`
+export const StyledDropDown = styled(motion.div)`
     z-index: -2;
-    position: absolute;
+    //position: absolute;
     top: 0px;
     right: 0px;
     max-width: 400px;
     width: 100%;
     height: auto;
     border-radius: 24px;
-    box-shadow: rgb(0 0 0 / 16%) 0px 3px 6px, rgb(0 0 0 / 23%) 0px 3px 6px;
+    //box-shadow: rgb(0 0 0 / 16%) 0px 3px 6px, rgb(0 0 0 / 23%) 0px 3px 6px;
     background-color: ${(props) => props.theme.colors.mainWhite};
     padding: 64px 16px 0px 16px;
     pointer-events: auto;
@@ -144,9 +126,10 @@ const StyledDropDown = styled(motion.div)`
     @media ${(props) => props.theme.device.mobileL} {
         max-width: 100%;
     } ;
+   
 `;
 
-const StyledDropdownContentItem = styled.div`
+export const StyledDropdownContentItem = styled.div`
     display: ${(props) => props.type === 'searchResult' && 'flex'};
     user-select: none;
     cursor: pointer;
@@ -162,7 +145,7 @@ const StyledDropdownContentItem = styled.div`
     }
 `;
 
-const StyledDropdownContentItemTitle = styled.p`
+export const StyledDropdownContentItemTitle = styled.p`
     display: ${(props) => props.type === 'searchResult' && 'flex'};
     text-align: ${(props) => props.type === 'noResults' && 'center'};
     font-size: 14px;
@@ -174,7 +157,7 @@ const StyledDropdownContentItemSubtitle = styled.p`
     color: #807a7a;
 `;
 
-const StyledHideSearchResultsButton = styled.div`
+export const StyledHideSearchResultsButton = styled.div`
     position: sticky;
     bottom: 0px;
     background-color: white;
@@ -207,6 +190,7 @@ const StyledToastIcon = styled(FontAwesomeIcon)`
     color: ${theme.colors.mainColor1};
 `;
 
+
 const Search = () => {
     const [searchValue, setSearchValue] = useState('');
     const [lastSearchValue, setLastSearchValue] = useState('');
@@ -216,7 +200,8 @@ const Search = () => {
     const [isSearchMethodSelectorOpen, setIsSearchMethodSelectorOpen] =
         useState(false);
     const [searchType, setSearchType] = useState('address');
-
+    const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
+  
     const { isSearchOpen, geoJsonArray, hasToastBeenShown } = useAppSelector((state) => state.ui);
     const { channel, allLayers } = useAppSelector((state) => state.rpc);
 
@@ -227,17 +212,46 @@ const Search = () => {
     const [searchClickedRow, setSearchClickedRow] = useState(null);
     const [firstSearchResultShown, setFirstSearchResultShown] = useState(false);
     const [showToast, setShowToast] = useState(JSON.parse(localStorage.getItem(SEARCH_TIP_LOCALSTORAGE)));
+    const [carriageWaySearch, setCarriageWaySearch] = useState(false);
+
+
+    const handleSeach = (searchValue) => {
+        setShowSearchResults(true);
+        switch (searchType) {
+            case 'address':
+                handleAddressSearch(searchValue);
+                break;
+            case 'metadata':
+                handleMetadataSearch(searchValue);
+                break;
+            default:
+                break;
+        }
+    }
 
     const handleAddressSearch = (value) => {
+        let searchValueCopy = value
+        //special case, roadsearch with 3 params is road/part/distance, 
+        //unless search ajorata and etaisyys flag ( carriageWaySearch ) found
+        if ( !carriageWaySearch && value && value.includes("/") && (value.split("/").length === 3 || value.split("/").length === 5)){
+            let splittedValue = value.split("/");
+            searchValueCopy = splittedValue[0]+"/"+splittedValue[1]+"//"+splittedValue[2];
+            if (splittedValue.length===5){
+                searchValueCopy += "/"+ splittedValue[3]+"//"+splittedValue[4]
+            }
+        }
         store.dispatch(setGeoJsonArray([]));
         setFirstSearchResultShown(false);
-        setSearchClickedRow(null);
         removeMarkersAndFeatures();
         setIsSearching(true);
-        channel.postRequest('SearchRequest', [value]);
+        channel.postRequest('SearchRequest', [searchValueCopy]);
         setSearchValue(value);
         setLastSearchValue(value);
         setSearchResults(null);
+    };
+
+    const toggleSearchModal = () => {
+        setIsSearchModalOpen(prevState => !prevState);
     };
 
     const handleMetadataSearch = (value) => {
@@ -291,6 +305,7 @@ const Search = () => {
                     setSearchValue={setSearchValue}
                     setIsSearching={setIsSearching}
                     handleAddressSearch={handleAddressSearch}
+                    toggleSearchModal={toggleSearchModal}
                 />
             ),
             visible: true,
@@ -304,6 +319,7 @@ const Search = () => {
                     setSearchValue={setSearchValue}
                     setIsSearching={setIsSearching}
                     handleMetadataSearch={handleMetadataSearch}
+                    toggleSearchModal={toggleSearchModal}
                 />
             ),
             visible: true,
@@ -468,13 +484,18 @@ const Search = () => {
         guide: strings.search.tips.toastTipContent
     }
 
+    useEffect(() => {
+        ReactTooltip.rebuild();
+    }, [isSearchOpen]);
+
     const handleCloseToast = () => {
         setShowToast(false);
         toast.dismiss('searchTipToast');
         store.dispatch(setHasToastBeenShown({toastId: 'searchTipToast', shown: true}));
     };
 
-    if(searchType === 'address' && isSearchOpen && !hasToastBeenShown.includes('searchToast')) {
+    if(searchType === 'address' && isSearchOpen && !hasToastBeenShown.includes('searchToast') 
+        && 1===2 /*disable search help toast for now */) {
         toast(<SearchToast header={strings.search.tips.title} texts={texts}/>,
         {
             toastId: 'searchToast',
@@ -485,10 +506,12 @@ const Search = () => {
     } else if (!isSearchOpen || searchType !== 'address') {
         toast.dismiss('searchToast');
     }
-
+        
     const vkmKeys = ['vali', 'tie', 'osa', 'etaisyys', 'track'];
 
     useEffect(() => {
+        const vkmKeys = ['vali', 'tie', 'osa', 'etaisyys', 'track'];
+
         if(geoJsonArray.length > 0 && isSearchOpen && !hasToastBeenShown.includes('searchTipToast') && showToast !== false) {
             geoJsonArray.forEach(geoj => {
                 if(vkmKeys.some(vkmStyle => vkmStyle === geoj.style)) {
@@ -507,8 +530,16 @@ const Search = () => {
         else toast.dismiss('searchTipToast');
     }, [geoJsonArray]);
 
+    useEffect(() => {
+        //when carriagewaysearch ( ajordalla haku ) changes, reset searchValue
+        setSearchValue('');
+     }, [carriageWaySearch, setSearchValue]);
+
     return (
         <StyledSearchContainer isSearchOpen={isSearchOpen}>
+        <ReactTooltip backgroundColor={theme.colors.mainColor1} disable={isMobile} place='bottom' type='dark' effect='float' />
+       
+       
             <CircleButton
                 icon={isSearchOpen ? faTimes : faSearch}
                 text={strings.tooltips.search}
@@ -526,61 +557,40 @@ const Search = () => {
                     setSearchType('address');
                 }}
             />
+          
             <AnimatePresence>
                 {isSearchOpen && (
-                    <StyledSearchWrapper
-                        hasGeometry={geoJsonArray.length > 0}
-                        variants={variants}
-                        initial={'initial'}
-                        animate={'animate'}
-                        exit={'exit'}
-                        transition={'transition'}
-                        searchType={searchType}
-                        showSearchResults={showSearchResults}
-                    >
-                        <StyledLeftContentWrapper>
-                            <StyledSearchMethodSelector
-                                onClick={() => {
+                 <StyledSearchWrapper
+                    hasGeometry={geoJsonArray.length > 0}
+                    variants={variants}
+                    initial={'initial'}
+                    animate={'animate'}
+                    exit={'exit'}
+                    transition={'transition'}
+                    searchType={searchType}
+                    showSearchResults={showSearchResults}
+                >
+                    <StyledLeftContentWrapper>
+                   
+                        {!isSearching ? (
+                        <StyledSelectedSearchMethod
+                            onClick={() => {
+                                setShowSearchResults(true);
+                                isSearchMethodSelectorOpen &&
                                     setIsSearchMethodSelectorOpen(
-                                        !isSearchMethodSelectorOpen
+                                        false
                                     );
-                                }}
-                                isSearchMethodSelectorOpen={
-                                    isSearchMethodSelectorOpen
-                                }
-                            >
-                                <FontAwesomeIcon icon={faEllipsisV} />
-                            </StyledSearchMethodSelector>
-                            {!isSearching ? (
-                                <StyledSelectedSearchMethod
-                                    onClick={() => {
-                                        setShowSearchResults(true);
-                                        isSearchMethodSelectorOpen &&
-                                            setIsSearchMethodSelectorOpen(
-                                                false
-                                            );
-                                    }}
-                                >
-                                    {searchTypes[searchType].content}
-                                </StyledSelectedSearchMethod>
-                            ) : (
-                                <StyledLoaderWrapper>
-                                    <SvLoder />
-                                </StyledLoaderWrapper>
-                            )}
-                        </StyledLeftContentWrapper>
-                        {searchType === 'address' && <StyledSearchActionButton
-                                onClick={() => {
-                                    if (!hasToastBeenShown.includes('searchToast')) {
-                                        store.dispatch(setHasToastBeenShown({toastId: 'searchToast', shown: true}));
-                                        toast.dismiss('searchToast');
-                                    } else {
-                                        store.dispatch(setHasToastBeenShown({toastId: 'searchToast', shown: false}));
-                                    }
-                                }}
-                                icon={faQuestion}
-                            />
+                            }}
+                        >
+                        {  
+                            searchTypes[searchType].content
                         }
+                        </StyledSelectedSearchMethod>
+                        ) : (
+                            <StyledLoaderWrapper>
+                                <SvLoder />
+                            </StyledLoaderWrapper>
+                        )}
                         {searchResults !== null &&
                         searchValue === lastSearchValue ? (
                             <StyledSearchActionButton
@@ -592,28 +602,66 @@ const Search = () => {
                                 }}
                                 icon={faTrash}
                             />
-                        ) : (
+                        ) : !isSearching && (
                             <StyledSearchActionButton
                                 onClick={() => {
-                                    switch (searchType) {
-                                        case 'address':
-                                            handleAddressSearch(searchValue);
-                                            break;
-                                        case 'metadata':
-                                            handleMetadataSearch(searchValue);
-                                            break;
-                                        default:
-                                            break;
-                                    }
+                                    handleSeach(searchValue)
                                 }}
                                 icon={faSearch}
+                                size="lg"
                             />
                         )}
-                    </StyledSearchWrapper>
-                )}
+                    </StyledLeftContentWrapper>
+                    <SearchResultPanel 
+                        isSearchOpen={isSearchOpen}
+                        searchResults={searchResults}
+                        showSearchResults={showSearchResults}
+                        searchType={searchType}
+                        dropdownVariants={dropdownVariants}
+                        firstSearchResultShown={firstSearchResultShown}
+                        handleSearchSelect={handleSearchSelect}
+                        setFirstSearchResultShown={setFirstSearchResultShown}
+                        isMobile={isMobile}
+                        setShowSearchResults={setShowSearchResults}
+                        setSearchClickedRow={setSearchClickedRow}
+                        searchClickedRow={searchClickedRow}
+                        allLayers={allLayers}
+                        hidden={true}
+                    />        
+                {isSearchModalOpen && ( 
+                    <SearchModal 
+                        searchValue={searchValue}
+                        setSearchValue={setSearchValue}
+                        searchResults={searchResults} 
+                        setSearchResults={setSearchResults} 
+                        dropdownVariants={dropdownVariants} 
+                        firstSearchResultShown={firstSearchResultShown}
+                        handleSearchSelect={handleSearchSelect}
+                        setFirstSearchResultShown={setFirstSearchResultShown}
+                        isMobile={isMobile}
+                        setShowSearchResults={setShowSearchResults}
+                        setSearchClickedRow={setSearchClickedRow}
+                        searchClickedRow={searchClickedRow}
+                        allLayers={allLayers}
+                        isSearchOpen={isSearchOpen}
+                        showSearchResults={showSearchResults}
+                        searchType={searchType}
+                        setSearchType={setSearchType}
+                        handleSeach={handleSeach}
+                        isOpen={isSearchModalOpen} 
+                        toggleModal={toggleSearchModal} 
+                        carriageWaySearch={carriageWaySearch}
+                        setCarriageWaySearch={setCarriageWaySearch}
+                    />            
+                )}  
+                </StyledSearchWrapper>
+             
+        
+                ) 
+                }
             </AnimatePresence>
             <AnimatePresence>
-                {isSearchMethodSelectorOpen ? (
+                {isSearchMethodSelectorOpen && (
                     <StyledDropDown
                         key={'dropdown-content-searchmethods'}
                         variants={dropdownVariants}
@@ -633,6 +681,7 @@ const Search = () => {
                                             setIsSearchMethodSelectorOpen(
                                                 false
                                             );
+                                            //setSearchModalOpen(false);
                                             setSearchValue('');
                                             isSearchOpen &&
                                                 removeMarkersAndFeatures();
@@ -652,165 +701,10 @@ const Search = () => {
                             }
                         })}
                     </StyledDropDown>
-                ) : isSearchOpen &&
-                  searchResults !== null &&
-                  showSearchResults &&
-                  searchType === 'address' ? (
-                    <StyledDropDown
-                        key={'dropdown-content-address'}
-                        variants={dropdownVariants}
-                        initial={'initial'}
-                        animate={'animate'}
-                        exit={'exit'}
-                        transition={'transition'}
-                    >
-                        {
-
-                        searchResults.result &&
-                        searchResults.result.locations &&
-                        searchResults.result.locations.length > 0 ? (
-                            searchResults.result.locations.map(
-                                (
-                                    { name, region, type, lon, lat, vkmType, geom, osa, ajorata, etaisyys, osa_loppu, etaisyys_loppu },
-                                    index
-                                ) => {
-                                    let visibleText;
-                                    if (name === region) {
-                                        visibleText = name;
-                                        if (type) {
-                                            visibleText +=
-                                                ' (' + type.toLowerCase() + ')';
-                                        }
-                                    } else if (region && type) {
-                                        visibleText =
-                                            name +
-                                            ', ' +
-                                            region +
-                                            ' (' +
-                                            type.toLowerCase() +
-                                            ')';
-                                    } else if (type) {
-                                        visibleText =
-                                            name +
-                                            ' (' +
-                                            type.toLowerCase() +
-                                            ')';
-                                    } else {
-                                        visibleText = name;
-                                    }
-
-                                    // Show result on the map if search returns only one result
-                                    if (searchResults.result.locations.length === 1 && !firstSearchResultShown) {
-                                        handleSearchSelect(
-                                            name,
-                                            lon,
-                                            lat,
-                                            geom,
-                                            osa,
-                                            ajorata,
-                                            etaisyys,
-                                            osa_loppu,
-                                            etaisyys_loppu,
-                                            vkmType
-                                        );
-                                        setFirstSearchResultShown(true);
-                                        toast.dismiss('searchToast');
-                                    }
-
-                                    return (
-                                        <StyledDropdownContentItem
-                                            key={name + '_' + index}
-                                            type={'searchResult'}
-                                            onClick={() => {
-                                                handleSearchSelect(
-                                                    name,
-                                                    lon,
-                                                    lat,
-                                                    geom,
-                                                    osa,
-                                                    ajorata,
-                                                    etaisyys,
-                                                    osa_loppu,
-                                                    etaisyys_loppu,
-                                                    vkmType
-                                                );
-                                                isMobile &&
-                                                    setShowSearchResults(false);
-                                                setSearchClickedRow(index);
-                                            }}
-                                        >
-                                            <StyledSearchIcon active={searchClickedRow === index || searchResults.result.locations.length === 1}>
-                                                <FontAwesomeIcon
-                                                    icon={vkmType && vkmType === 'road' ? faRoad : (vkmType && vkmType === 'track') ? faTrain: faCity}
-                                                />
-                                            </StyledSearchIcon>
-                                            <StyledDropdownContentItemTitle type={'searchResult'} active={searchClickedRow === index || searchResults.result.locations.length === 1}>
-                                                {visibleText}
-                                            </StyledDropdownContentItemTitle>
-                                        </StyledDropdownContentItem>
-                                    );
-                                }
-                            )
-                        ) : (
-                            <StyledDropdownContentItem key={'no-results'}>
-                                <StyledDropdownContentItemTitle type="noResults">
-                                    {strings.search.address.error.text}
-                                </StyledDropdownContentItemTitle>
-                            </StyledDropdownContentItem>
-                        )}
-                        <StyledHideSearchResultsButton
-                            onClick={() => setShowSearchResults(false)}
-                        >
-                            <FontAwesomeIcon icon={faAngleUp} />
-                        </StyledHideSearchResultsButton>
-                    </StyledDropDown>
-                ) : (
-                    isSearchOpen &&
-                    searchResults !== null &&
-                    showSearchResults &&
-                    searchType === 'metadata' && (
-                        <StyledDropDown
-                            key={'dropdown-content-metadata'}
-                            variants={dropdownVariants}
-                            initial={'initial'}
-                            animate={'animate'}
-                            exit={'exit'}
-                            transition={'transition'}
-                        >
-                            {searchResults.length > 0 ? (
-                                searchResults.map((result) => {
-                                    const layers = allLayers.filter(
-                                        (layer) =>
-                                            layer.metadataIdentifier ===
-                                            result.id
-                                    );
-                                    return layers.map((layer) => {
-                                        return (
-                                            <Layer
-                                                key={`metadata_${layer.id}`}
-                                                layer={layer}
-                                            />
-                                        );
-                                    });
-                                })
-                            ) : (
-                                <StyledDropdownContentItem key={'no-results'}>
-                                    <StyledDropdownContentItemTitle type="noResults">
-                                        {strings.search.metadata.error.text}
-                                    </StyledDropdownContentItemTitle>
-                                </StyledDropdownContentItem>
-                            )}
-                            <StyledHideSearchResultsButton
-                                onClick={() => setShowSearchResults(false)}
-                            >
-                                <FontAwesomeIcon icon={faAngleUp} />
-                            </StyledHideSearchResultsButton>
-                        </StyledDropDown>
-                    )
                 )}
             </AnimatePresence>
         </StyledSearchContainer>
     );
 };
 
-export default Search;
+export  default Search;

@@ -10,7 +10,7 @@ import { useSelector } from 'react-redux';
 
 import { v4 as uuidv4 } from 'uuid';
 
-import { setIsSaveViewOpen, setWarning, setSavedTabIndex, setGeoJsonArray, addToActiveGeometries, removeActiveGeometry, } from '../../state/slices/uiSlice';
+import { setIsSaveViewOpen, setWarning, setSavedTabIndex, setGeoJsonArray, addToActiveGeometries, removeActiveGeometry, removeFromDrawToolMarkers, setActiveTool, } from '../../state/slices/uiSlice';
 
 import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -357,7 +357,6 @@ const Views = () => {
     const { store } = useContext(ReactReduxContext);
     const [views, setViews] = useState([]);
     const [viewName, setViewName] = useState('');
-
     const { selectedLayers, channel } = useAppSelector((state) => state.rpc);
 
     useEffect(() => {
@@ -593,7 +592,7 @@ const Views = () => {
 
 const Geometries = () => {
     const { store } = useContext(ReactReduxContext);
-    const { channel, currentZoomLevel } = useSelector((state) => state.rpc);
+    const { channel } = useSelector((state) => state.rpc);
     const { activeGeometries, drawToolMarkers } = useSelector(state => state.ui);
     const [geometries, setGeometries] = useState([]);
     const [geometryName, setGeometryName] = useState('');
@@ -619,26 +618,26 @@ const Geometries = () => {
             layerId: geometry.id,
             featureStyle: {
                 fill: {
-                    color: 'rgba(10, 140, 247, 0.3)',
+                  color: "rgba(10, 140, 247, 0.1)",
                 },
                 stroke: {
-                    color: 'rgba(10, 140, 247, 0.3)',
-                    width: 5,
-                    lineDash: 'solid',
-                    lineCap: 'round',
-                    lineJoin: 'round',
-                    area: {
-                        color: 'rgba(100, 255, 95, 0.7)',
-                        width: 8,
-                        lineJoin: 'round',
-                    },
+                  color: "rgba(10, 140, 247, 0.3)",
+                  width: 5,
+                  lineDash: "solid",
+                  lineCap: "round",
+                  lineJoin: "round",
+                  area: {
+                    color: "#ff5100b3",
+                    width: 4,
+                    lineJoin: "round",
+                  },
                 },
                 image: {
-                    shape: 5,
-                    size: 3,
-                    fill: {
-                        color: 'rgba(100, 255, 95, 0.7)',
-                    },
+                  shape: 5,
+                  size: 3,
+                  fill: {
+                    color: "#ff5100b3",
+                  },
                 },
             },
         };
@@ -680,19 +679,23 @@ const Geometries = () => {
 
     const handleSaveGeometry = () => {
         let layerId = uuidv4();
+        let markers = drawToolMarkers.map(d => ({
+            ...d,
+            markerId : uuidv4(),
+            color: "#ff5100b3"
+        }))
 
         let newGeometry = {
             id: layerId,
             name: geometryName,
             saveDate: Date.now(),
             data: [...geoJsonArray],
-            markers: [...drawToolMarkers]
+            markers: [...markers]
         };
 
         geometries.push(newGeometry);
         window.localStorage.setItem('geometries', JSON.stringify(geometries));
         setGeometries(JSON.parse(window.localStorage.getItem('geometries')));
-        store.dispatch(setGeoJsonArray([]));
         setGeometryName('');
     };
 
@@ -700,6 +703,12 @@ const Geometries = () => {
         let updatedGeometries = geometries.filter((geometryData) => geometryData.id !== geometry.id);
         window.localStorage.setItem('geometries', JSON.stringify(updatedGeometries));
         setGeometries(JSON.parse(window.localStorage.getItem('geometries')));
+        // Only remove markers associated with the specific geometry
+        geometry.markers.forEach(marker => {
+            store.dispatch(removeMarkerRequest({markerId: marker.markerId}));
+            store.dispatch(removeFromDrawToolMarkers(marker.markerId));
+        });
+
         if(activeGeometries.find(g => g.id === geometry.id)) {
             store.dispatch(removeActiveGeometry(geometry.id));
             channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [null, null, geometry.id]);
@@ -707,8 +716,14 @@ const Geometries = () => {
         };
     };
 
+    
+
     const handleDeleteAllGeometries = () => {
         activeGeometries.forEach(geometry => {
+            geometry.markers.forEach(marker => {
+                store.dispatch(removeMarkerRequest({markerId: marker.markerId}));
+                store.dispatch(removeFromDrawToolMarkers(marker.markerId));
+            });
             store.dispatch(removeActiveGeometry(geometry.id));
             channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [null, null, geometry.id]);
         });

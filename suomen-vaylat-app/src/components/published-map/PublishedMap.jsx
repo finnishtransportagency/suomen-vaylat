@@ -25,7 +25,8 @@ import {
     setStartState,
     resetGFILocations,
     addMarkerRequest,
-    removeMarkerRequest
+    removeMarkerRequest,
+    setPointInfo
 } from '../../state/slices/rpcSlice';
 
 import {
@@ -41,6 +42,8 @@ import { getActiveAnnouncements, updateLayers } from '../../utils/rpcUtil';
 import SvLoder from '../../components/loader/SvLoader';
 import './PublishedMap.scss';
 import { theme } from '../../theme/theme';
+
+const GFI_GEOMETRY_LAYER_ID = 'drawtools-geometry-layer';
 
 const StyledPublishedMap = styled.div`
     position: absolute;
@@ -71,6 +74,44 @@ const StyledLoaderWrapper = styled.div`
         fill: none;
     }
 `;
+
+
+//fetch and save announcements to state
+const fetchAnnounmentsAsync = async (data, channel, store) => {
+    let activeAnnoucements = [];
+    await new Promise((resolve) => {   
+        setTimeout(() => {
+            if (data.getSelectedAnnouncements) {
+                channel.getSelectedAnnouncements(function (data) {
+                    activeAnnoucements = getActiveAnnouncements(data);
+                    if (activeAnnoucements && activeAnnoucements.length > 0){
+                        store.dispatch(
+                            setActiveAnnouncements(activeAnnoucements)
+                        );
+                    }
+                });
+            }
+            resolve(activeAnnoucements);
+        }, 1000);
+    }).then( (announments) => {
+        //due bug announments not showing on safari, check again after 3 seconds if announcements list empty
+        if (announments.length ===0){
+            setTimeout(() => {
+                if (data.getSelectedAnnouncements) {
+                    channel.getSelectedAnnouncements(function (data) {
+                        activeAnnoucements = getActiveAnnouncements(data);
+                        if (activeAnnoucements && activeAnnoucements.length > 0){
+                            store.dispatch(
+                                setActiveAnnouncements(activeAnnoucements)
+                            );
+                        }
+                    });
+                }
+            }, 8000);
+        }
+    } );
+}
+
 
 const PublishedMap = () => {
     const { store } = useContext(ReactReduxContext);
@@ -115,9 +156,12 @@ const PublishedMap = () => {
         );
         var synchronizer = OskariRPC.synchronizerFactory(channel, handlers);
 
+        
         channel.onReady(() => {
             store.dispatch(setChannel(channel));
             channel.getSupportedFunctions(function (data) {
+                //minor hack to make sure announcements are shown
+                fetchAnnounmentsAsync(data, channel, store);
                 if (data.getTags) {
                     channel.getTags(function (data) {
                         store.dispatch(setAllTags(data));
@@ -127,14 +171,6 @@ const PublishedMap = () => {
                 if (data.getTagsWithLayers) {
                     channel.getTagsWithLayers(function (data) {
                         store.dispatch(setTagsWithLayers(data));
-                    });
-                }
-
-                if (data.getAnnouncements) {
-                    channel.getAnnouncements(function (data) {
-                        store.dispatch(
-                            setActiveAnnouncements(getActiveAnnouncements(data))
-                        );
                     });
                 }
 
@@ -209,6 +245,7 @@ const PublishedMap = () => {
                 if (data.MapClickedEvent && store.getState().ui.activeTool === null) {
                     channel.handleEvent('MapClickedEvent', (data) => {
                         store.getState().ui.activeTool !== strings.tooltips.drawingTools.marker && store.dispatch(resetGFILocations([]));
+                        store.dispatch(setPointInfo(data));
                     });
                 }
 
@@ -225,6 +262,11 @@ const PublishedMap = () => {
                         store.dispatch(setMinimizeGfi(false));
                         store.dispatch(setVKMData(data));
                         store.dispatch(setIsGfiOpen(true));
+
+                        channel && channel.postRequest(
+                            'MapModulePlugin.RemoveFeaturesFromMapRequest',
+                            [null, null, GFI_GEOMETRY_LAYER_ID]
+                        );
 
                         var MARKER_ID = 'VKM_MARKER';
 
@@ -274,6 +316,14 @@ const PublishedMap = () => {
                             }
                         });
                     }
+
+                    // reformat data to same way croppings are
+                    // might need to be 'fixed' later
+                    const features = data.content;
+                    let geojson = {"geojson": features}
+                    let reformattedData = {};
+                    reformattedData.content = [geojson];
+                    data.content = reformattedData.content;
                     if (store.getState().ui.activeSelectionTool === null && store.getState().ui.activeTool === null) {
                         store.dispatch(resetGFILocations([]));
                         const croppingArea = {

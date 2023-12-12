@@ -10,6 +10,7 @@
   "tooltips": {
     "layerlist": {
       "filter": "Filtrera",
+      "filterable": "Filtrerbart kartlager",
       "opacity": "Opacitet"
     },
     "search": "Sökning",
@@ -42,21 +43,21 @@
     "showPageInfo": "Visa sidinformation",
     "showUserGuide": "Visa bruksanvisningen"
   },
-  "savedContent": {
-    "savedContent": "Save views and geometries",
-    "viewTitle": "Syn",
-    "geometryTitle": "Geometrier",
-    "saveView": {
-      "confirmDeleteAll": "Är du säker på att du vill ta bort alla sparade vyer?",
-      "saveView": "Save views and geometries",
-      "savingView": "Sparar vy",
-      "saveViewDescription1": "Visa kommer att sparas i webbläsarens lokala lagring",
-      "saveViewDescription2": "Sparad vy kan endast nås av webbläsaren som den har sparats",
-      "noSavedViews": "Inga sparade vyer",
-      "deleteAllSavedViews": "Ta bort alla sparade vyer",
-      "savedViews": "Sparade vyer",
-      "viewName": "Visa namn",
-      "saveNewView": "Spara ny vy"
+  "savedContent" : {
+    "savedContent" : "Spara vyer och geometrier",
+    "viewTitle" : "Syn",
+    "geometryTitle" : "Geometrier",
+    "saveView" : {
+      "confirmDeleteAll" : "Är du säker på att du vill ta bort alla sparade vyer?",
+      "saveView" : "Spara vyer och geometrier",
+      "savingView" : "Sparar vy",
+      "saveViewDescription1" : "Visa kommer att sparas i webbläsarens lokala lagring",
+      "saveViewDescription2" : "Sparad vy kan endast nås av webbläsaren som den har sparats",
+      "noSavedViews" : "Inga sparade vyer",
+      "deleteAllSavedViews" : "Ta bort alla sparade vyer",
+      "savedViews" : "Sparade vyer",
+      "viewName" : "Visa namn",
+      "saveNewView" : "Spara ny vy"
     },
     "saveGeometry": {
       "confirmDeleteAll": "Är du säker på att du vill ta bort all sparad geometri?",
@@ -73,6 +74,9 @@
     }
   },
   "gfi": {
+    "noResultsTitle": "Inga resultat",
+    "noResultsDesc": "Inga resultat med geometri, välj ny geometri eller nya lager",
+    "filter": "Filtrera",
     "title": "Objektuppgifter",
     "close": "Stänga",
     "additionalInfo": "Tilläggsinformation",
@@ -82,13 +86,14 @@
     "focusToLocations": "Precisera objekt",
     "choosingGfi": "Val av objektdata",
     "choosingGfiDescription0": "Kontrollera att du har aktiverat nivåer i menyn Kartnivåer",
-    "choosingGfiDescription1": "Show feature data selection tools by choosing Select Locations",
-    "choosingGfiDescription2": "You can choose locations by using drawing tools or cropping presets",
+    "choosingGfiDescription1": "Visa verktyg för val av funktionsdata genom att välja Välj Platser",
+    "choosingGfiDescription2": "Du kan välja platser genom att använda ritverktyg eller beskärning förinställningar",
     "draw": "Draw",
-    "drawSubtitle": "Select locations by using drawing tools",
+    "drawSubtitle": "Välj platser med hjälp av ritverktyg",
     "search": "Sökning",
     "dataTableView": "Listvy",
     "downloadMaterials": "Ladda ner material",
+    "downloadMaterialsDisabled":"Nedladdning kräver val av objekt",
     "list": "Lista",
     "table": "Tabell",
     "uniqueId": "Identifikationskod",
@@ -98,6 +103,12 @@
       "title": "Sparad geometri (Används inte)",
       "description": "Egen sparad geometri",
       "disabled": "Tillfälligt ur bruk"
+    },
+    "streetView": {
+      "title": "Google Street View",
+      "openGoogleStreetView": "Öppna Google Street View",
+      "googleStreetviewTitle": "Google Street View",
+      "googleStreetviewContent": "Öppna den valda punkten i Google Street View på en ny flik"
     }
   },
   "vkm": {
@@ -106,6 +117,7 @@
     "roadAddressInstructions": "Vägadressuppgifterna kunde inte hämtas. Zooma in på kartan och klicka på den punkt som du vill söka vägadressuppgifter för."
   },
   "downloads": {
+    "newDownloads": "NY NEDLADDNING",
     "downloads": "Nedladdningar",
     "processing": "Bearbetas",
     "noProcessingDownloads": "Inga nedladdningar att bearbeta",
@@ -119,21 +131,26 @@
     "failedDownloads": "Felaktiga nedladdningar",
     "errorOccuredDuringDownloadProcessing": "Ett fel uppstod under bearbetningen av paketet",
     "noWebSocketSupport": "Din webbläsare stöder inte nedladdningar. Du kan prova på nytt med en annan webbläsare eller uppdatera din nuvarande webbläsare.",
-    "downloadFailure": "Något gick fel vid nedladdningen, försök igen."
+    "downloadFailure": "Något gick fel vid nedladdningen, försök igen.",
+    "downloadsInfo":"En del av datan kan laddas ner från hela Finlands område via menyn för datalager bredvid datalagret i fråga.",
+    "downloadsInfo2": "Om nedladdningsknappen saknas måste du välja ett objekt på kartan för att ladda ner datan."
   },
   "general": {
     "close": "Stänga",
     "warning": "Obs!",
-    "continue": "Continue",
-    "cancel": "Cancel",
+    "continue": "Fortsätta",
+    "cancel": "Avbryt",
     "dontShowAgain": "Visa inte igen",
     "ok": "OK",
     "OkLowerCaseK": "Ok"
   },
   "multipleLayersWarning": "Du håller på att lägga till minst 10 kartnivåer på kartan och det kan påverka tjänstens prestanda",
-  "multipleLayersFetchWarning": "You are about to fetch data from 10 or more maplayers, it might affect the performance of the service.",
-  "bodySizeWarning": "Rajausgeometria on liian suuri, yksinkertaistetaanko geometria? (sv)",
-  "bodySizeWarningTemporary": "Geometry is too big and data cannot be fetched right now.",
+  "multipleLayersFetchWarning": "Du är på väg att hämta data från 10 eller fler maplayers, det kan påverka tjänstens prestanda.",
+  "bodySizeWarning": "Beskärning geometrin är för stor, begränsa till en mindre yta.",
+  "bodySizeWarningTemporary": "Geometrin är för stor och data kan inte hämtas just nu.",
+  "generalError": "Ett fel uppstod.",
+  "noGfiLocationsWarning": "Inga resultat hittades, prova en annan geometri.",
+  "exitConfirmation": "Du lämnar tjänsten Suomen Väylät. Vill du fortsätta?",
   "appGuide": {
     "title": "Användarguide",
     "modalContent": {
@@ -166,24 +183,24 @@
         "title": "Teman",
         "content": "Att välja ett tema visar kartnivåerna som definierats för temat och öppnar en meny för att välja kartmaterial som är relaterat till temat. En del av kartmaterialen har sin egen stil för temat. Det kan bara finnas ett tema åt gången. När ett tema är valt kan du också välja andra kartmaterial än de som definierats för temat i menyn Alla nivåer. Temat avslutas med temamarkören överst på kartan."
       },
-      "mapLevelMenu": {
+      "mapLayerMenu": {
         "title": "Kartnivåmeny",
-        "subTitle": "Kartnivåmenyn öppnas uppe till vänster. Det finns 3 flikar att välja mellan",
+        "subTitle": "Kartnivåmenyn öppnas uppe till vänster. Det finns två flikar att välja mellan.",
         "tabsContent": {
-          "materList": "Du kan filtrera materiallistan efter ämne bakom filterknappen. Du kan söka på kartnivån efter namn genom att ange minst 3 bokstäver i sökfältet.",
-          "selectedLayers": "Lista över valda kartnivåer på kartan. Du kan ändra ordningen på nivåerna genom att dra dem från ikonen till höger. Transparensen kan justeras med skjutreglaget och nivåvalet kan avmarkeras."
+          "allLayers": "Du kan söka på kartnivån efter namn genom att ange minst 3 bokstäver i sökfältet. Du kan filtrera materiallistan efter ämne bakom filterknappen eller du kan spara ditt eget filter i webbläsarens cacheminne. Egett filter är tillgängliga på den enhet och i den webbläsare där filter är sparats.\nInfo-ikonen bredvid kartnivå namnet öppnar materialets metadata. Om en nedladdningsknapp är synlig på kartnivå kan materialet laddas ner från hela Finlands område. Om nedladdningsknappen saknas måste du välja ett objekt på kartan för att ladda ner datan.\nEn del av materialen kan filtreras utifrån materialets attribut data. Om materialet kan filtreras visas en filterikon på kartnivå.",
+          "selectedLayers": "Lista över valda kartnivåer på kartan. Du kan ändra ordningen på nivåerna genom att dra dem från ikonen till vänster. Transparensen kan justeras med skjutreglaget och nivåvalet kan avmarkeras. Filterknappen öppnar filtermenyn, där informationen som visas på kartan kan filtreras utifrån attribut data."
         }
       },
       "search": {
         "title": "Sök",
-        "content": "Sökningen öppnas i kartans övre högra hörn med hjälp av förstoringsglasknappen till vänster. Sökfunktionen låter dig söka efter dig och adresser genom att välja den sökning du vill använda från rullgardinsmenyn. Du kan ta bort ett sökresultat från kartan genom att trycka på papperskorgen i sökrutan."
+        "content": "Sökningen öppnas i kartans övre högra hörn med hjälp av förstoringsglasknappen till höger. Sökfunktionen låter dig söka efter kommuner, adresser, fastighetsbeteckningar, gatuadresser eller järnvägsadresser genom att välja den sökning du vill använda från rullgardinsmenyn. Mer detaljerade instruktioner kan hittas från info-ikoner som visas i rullgardinsmenyn. Du kan ta bort ett sökresultat från kartan genom att trycka på papperskorgen i sökrutan."
       },
       "drawingTools": {
         "title": "Ritverktyg",
         "content": "Ritverktygen öppnas genom att klicka på ritknappen i vänstra kanten. Med verktygen kan man lägga till geometri på kartan och mäta längd eller yta. Ritad geometri och kartanteckningar kan sparas i minnet genom att klicka på knappen Spara, som är knappen längst ned bland ritverktygen.  Ritad geometri kan avlägsnas från kartan genom att klicka på den orange suddgummiknappen."
       },
       "gfi": {
-        "content": "Objektdata öppnas genom att klicka var som helst på kartan eller via knappen i vänstra kanten som har en kartanteckning som ikon. I fönstret Objektdata kan du söka objektdata och se uppgifter om valda objekt och platser som du också kan ladda ner direkt till din enhet i valfritt filformat."
+        "content": "Objektdata öppnas genom att klicka var som helst på kartan eller via knappen i vänstra kanten som har en kartanteckning som ikon. I fönstret Objektdata kan du söka objektdata och se uppgifter om valda objekt och platser som du också kan ladda ner direkt till din enhet i valfritt filformat. Om det finns en filterknapp bredvid kartnivå namnet kan du filtrera objektdata som listas i fönstret Objektdata.\nOm du har valt objektet genom att klicka på kartan kan du utforska samma plats från tjänsten Google Street View. Google Street View kan öppnas från positionsdata i fönstret Objektdata."
       },
       "downloads": {
         "title": "Nedladdningar",
@@ -218,8 +235,10 @@
     },
     "contactInfoFeedback": {
       "0": "Trafikledsverket ansvarar för applikationen som levereras av Sitowise Oy.",
-      "1": "Respons kan skickas till adressen",
+      "1": "Respons om Suomen Väylät -karttjänsten kan skickas till adressen",
       "2": "suomenvaylat@vayla.fi",
+      "3": "Respons gällande landsvägar, järnvägar och farleder kan ges via",
+      "4": "https://liikenne.palautevayla.fi/feedback",
       "emailSubject": "Respons om Finlands Trafikleder"
     },
     "appInfoLinks": {
@@ -249,7 +268,7 @@
       "municipalityLink": "https://www.kuntaliitto.fi",
       "landSurvey": "Lantmäteriverkets bakgrundskartor samt fastighetsbeteckningar och -gränser är öppna data och får användas enligt licensvillkoren:",
       "landSurveyLink": "https://www.maanmittauslaitos.fi/avoindata-lisenssi-cc40",
-      "roadmaps": "Vägkartorna (AT och GT) används av CGI Suomi Oy med användningslicens nr S10325081",
+      "roadmaps": "Vägkartorna (AT och GT) används av CGI Suomi Oy med användningslicens nr S10422112",
       "syke": "De detaljplanerade områdesindelningarna är öppna data från Finlands miljöcentral (SYKE). Licensen för att använda SYKEs öppna data är Creative Commons Nimeä 4.0"
     },
     "termsOfUse": {
@@ -257,13 +276,28 @@
       "description": "Trafikledsverkets datamaterial i tjänsten Suomen Väylät omfattas av licensen Creative Commons 4.0 Nimeä.",
       "moreInfo": "Mer information om användarvillkoren:",
       "link": "https://vayla.fi/vaylista/aineistot/avoindata/kayttoehdot"
+    },
+    "privacyPolicy": {
+      "title": "Dataskyddsbeskrivning",
+      "link": "https://vayla.fi/documents/25230764/35601500/Tietosuojaseloste+Avoimen+datan+palvelut+14.3.2023_SV.pdf/8911232e-c6dd-8b63-7698-7b0b561a1e4b/Tietosuojaseloste+Avoimen+datan+palvelut+14.3.2023_SV.pdf?t=1680166904775"
+    },
+    "appCode": {
+      "appCodeInfo": "Enligt användingsvillkoren är applikationens källkod tillgänglig här:",
+      "appCodeLink": "https://github.com/finnishtransportagency/suomen-vaylat"
+    },
+    "googleTerms": {
+      "googleTermsInfo": "Användarvillkor för Googles karttjänster: ",
+      "googleTermsLink": "https://cloud.google.com/maps-platform/terms"
     }
   },
   "search": {
+    "lessSearchOptions": "Mindre sök alternativs",
+    "moreSearchOptions": "Mera sök alternativs",
     "fill_all_fields": "Fyll i alla sökfält",
     "required_field_missing": "Kontrollera de obligatoriska fälten.",
     "vkm": {
       "tie": "Vägnummer",
+      "tieloppu" : "Vägnummer slut",
       "title": "Sök efter vägnummer",
       "subtitle": "Sök på vägnummer",
       "osa": "Vägsträcka",
@@ -295,12 +329,20 @@
       }
     },
     "metadata": {
-      "title": "Search metadata",
-      "subtitle": "Search by metadata",
+      "title": "Sök metadata",
+      "subtitle": "Sök vid metadata",
       "error": {
-        "text": "No results found for the metadata search."
+          "text": "Inga resultat hittades för metadata sök."
       }
     },
+    "layer": {
+      "title": "Materialsökning"
+    },
+    "track" : {
+      "tracknumber" : "Bannummer",
+      "trackkm" : "Spårkilometer",
+      "trackm" : "Banmeter"
+    },  
     "tips": {
       "title": "Med platssökning kan du söka en kommun, adress, fastighetsbeteckning, vägadress eller banadress.",
       "address": "Adressökning, skriv i formatet 'kommun', 'adress' eller 'adress, kommun'.",
@@ -309,25 +351,44 @@
         "Opastinsilta 12",
         "Opastinsilta 12, Helsinki"
       ],
-      "vkmRoad": "Tiehaku, kirjoita muodossa 'tie/osa/ajorata/etäisyys' tai 'tie/osa/ajorata/etäisyys tie/osa_loppu/ajorata/etäisyys_loppu'.",
+      "vkmRoad": "Vägsökning, skriv i formatet ’väg/del/körbana/avstånd’, ’väg/del/avstånd’, 'väg/del/körfil' (använd alternativet 'Använd körfilen i sökningen') eller ’väg/del/körbana/avstånd väg/del_slut/körbana/avstånd_slut’.",
       "vkmRoadExamples": [
         "5",
         "5/116",
-        "5/116/0",
+        "5/116/0 ( körbanasökning )",
+        "5/116/100 ( avståndsökning )",
         "5/116/0/50",
-        "5/116//50",
+        "5/116/100 5/116/400",
         "5/116/0/50 5/348/0/100",
-        "5/116//50 5/348//100",
-        "start:5/116/0/50 slut:5/348/0/100"
+        "5/116/0/50 5/348/0/100",
+        "start:5/116/0/50 slut:5/348/0/100",
+        "Alternativet 'Använd körfilen i sökningen' ändrar sökningen så att den använder antingen filen eller avståndet som den tredje parametern när du söker med tre parametrar."
       ],
       "vkmTrack": "Bansökning, skriv i formatet 'bannummer/bankilometer/banmeter'.",
-      "vkmTrackExamples": ["001/2/10"],
+      "vkmTrackExamples": [
+        "001/2/10"
+      ],
       "realEstateUnitIdentifier": "Fastighetsbeteckning, skriv i formatet 'aa-bb-cc-d' eller 'aaa-bbb-cc-ddd'.",
       "realEstateUnitIdentifierExamples": ["91-17-16-1", "091-017-16-001"],
       "example": "T.ex.",
       "toastTip": "Visste du att du kan spara den geometri som kommit upp på kartan vid ban- och vägsökningen?",
-      "toastTipContent": "Du kan spara geometrin via ikonen spara i vänstra kanten, på den andra fliken."
-    }
+      "toastTipContent": "Du kan spara geometrin via ikonen spara i vänstra kanten, på den andra fliken.",
+      "nomenclature" : "Med namnsökning kan du söka efter objekt på basen av ortsnamn. T.ex.",
+      "nomenclatureExamples" : [
+        "Tampere", "Rautatieasema", "Eduskuntatalo"
+      ],
+      "layer" : "Genom sökning av material kan du söka bland kartlagrens metadata med ett ord eller en del av ett ord och aktivera kartlager från sökresultaten. T.ex. ",
+      "layerExamples" : [
+        "pölkytys"
+      ]
+    },
+    "nomenclature" : {
+      "title": "Namnsökning"
+    },
+    "premise" : {
+      "title": "Fastighetssökning"
+    },
+    "carriageWaySearch": "Använda körbanasökning"
   },
   "layerlist": {
     "layerlistLabels": {
@@ -338,7 +399,6 @@
       "backgroundMaps": "Bakgrundskartor",
       "selectAll": "Välj alla",
       "show": "Visa",
-      "filterOrSearchLayers": "Filtrera eller sök nivåer",
       "filterByType": "Filtrera enligt typ",
       "searchForLayers": "Sök kartnivåer",
       "clearFilters": "Ta bort valda filter",
@@ -527,6 +587,10 @@
           "pookiFeedback": {
             "title": "Vesiväylien palautteet",
             "url": "https://extranet.vayla.fi/pooki_www/palaute"
+          },
+          "digitalCard": {
+            "title": "Digitaalinen väyläkortti",
+            "url": "https://dvk.vaylapilvi.fi/vaylakortti/"
           }
         }
       }
@@ -564,6 +628,7 @@
       "spatialResolution": "Rumslig upplösning",
       "temporalExtent": "Temporära utsträckningar",
       "topicCategory": "Ämneskategorier",
+      "updateDate": "Data update",
       "useLimitation": "Använd begränsningar",
       "absoluteExternalPositionalAccuracy": "Absolut lägesnoggrannhet",
       "accuracyOfTimeMeasurement": "Tidsnoggrannhet",
@@ -1111,34 +1176,29 @@
       "telegram": "Dela på Telegram"
     }
   },
-  "themeLinks": {
-    "timeTravelFinland": {
-      "title": "Aikamatkalla Suomessa",
-      "url": "https://vayla.fi/vaylista/aineistot/kartat/aikamatkalla-suomessa#.XOOasBFlJNs"
+  "gfifiltering": {
+    "filter": "Filtrera",
+    "startDate": "Startdatum",
+    "endDate": "Slutdatum",
+    "addFilter": "Lägg till ett filter",
+    "dateRange": "Datumintervall",
+    "removeAllFilters": "Ta bort alla filter",
+    "placeholders" : {
+      "chooseProp" : "Välj attribut",
+      "chooseOperator" : "Välj operatör",
+      "chooseValue" : "Värde"
     },
-    "bikeNetwork": {
-      "title": "Valtakunnallinen ja seudullinen pyörätieverkko",
-      "url": "https://paikkatieto.vaylapilvi.fi/arcgis/apps/webappviewer/index.html?id=aa98d035ba254776895d092a3d1c3a9f"
-    },
-    "baltice": {
-      "title": "Baltice",
-      "url": "https://baltice.org/map/"
-    },
-    "safetyDeviceFaults": {
-      "title": "Kauppamerenkulun väylien turvalaiteviat",
-      "url": "https://vayla.fi/vaylista/vesivaylat/turvalaitteet/turvalaiteviat#.XLWWTegzYuU"
-    },
-    "seaWarnings": {
-      "title": "Varoituksia merenkulkijoille",
-      "url": "https://vayla.fi/palveluntuottajat/ammattimerenkulku/meriliikenteen-hairiot/varoituksia-merenkulkijoille"
-    },
-    "restrictedAreas": {
-      "title": "Vesiliikenteen kielto- ja rajoitusalueet",
-      "url": "https://vayla.fi/vaylista/vesivaylat/rajoitusalueet"
-    },
-    "pookiFeedback": {
-      "title": "Vesiväylien palautteet",
-      "url": "https://extranet.vayla.fi/pooki_www/palaute"
+    "activeFilters" : "Aktiva filter",
+    "property" : "Attribut",
+    "operator" : "Operatör",
+    "value" : "Värde",
+    "operators": {
+      "equals" : "Är lika med",
+      "notEquals" : "Är inte lika med",
+      "smallerThan" : "Mindre än",
+      "biggerThan" : "Större än",
+      "includes" : "Innehåller",
+      "doesntInclude" : "Inte innehåller"
     }
   }
 }
