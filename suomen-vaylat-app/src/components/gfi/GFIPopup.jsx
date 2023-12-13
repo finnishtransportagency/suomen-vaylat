@@ -433,34 +433,31 @@ export const GFIPopup = ({ handleGfiDownload }) => {
   const gfiInputEl = useRef(null);
 
   const handleLinkClick = (event) => {
-    const dontShow = JSON.parse(localStorage.getItem('dontShowModal'));
-    if (!dontShow) {
-      event.preventDefault();
-      const savedState = localStorage.getItem("GoogleStreetViewWarn");
-      if (!savedState) {
-        store.dispatch(setWarning({
-        title: strings.exitConfirmation,
-        subtitle: null,
-        confirm: {
-            text: strings.general.continue,
-            action: () => {
-              window.open("http://maps.google.com/maps?q=&layer=c&cbll=" + point, "_blank");
-              store.dispatch(setWarning(null));
-            }
-        },
-        cancel: {
-            text: strings.general.cancel,
-            action: () => {
-              store.dispatch(setWarning(null))
-            }
-        },
-        dontShowAgain: {
-          id: "GoogleStreetViewWarn"
+    event.preventDefault();
+    const savedState = localStorage.getItem("dontShowExitLinkWarn");
+    if (!savedState) {
+      store.dispatch(setWarning({
+      title: strings.exitConfirmation,
+      subtitle: null,
+      confirm: {
+        text: strings.general.continue,
+         action: () => {
+          window.open("http://maps.google.com/maps?q=&layer=c&cbll=" + point, "_blank");
+          store.dispatch(setWarning(null));
         }
-        }))
-      } else {
-        window.open("http://maps.google.com/maps?q=&layer=c&cbll=" + point, "_blank");
+      },
+      cancel: {
+        text: strings.general.cancel,
+          action: () => {
+            store.dispatch(setWarning(null))
+          }
+      },
+      dontShowAgain: {
+        id: "dontShowExitLinkWarn"
       }
+      }))
+    } else {
+        window.open("http://maps.google.com/maps?q=&layer=c&cbll=" + point, "_blank");
     }
   };
 
