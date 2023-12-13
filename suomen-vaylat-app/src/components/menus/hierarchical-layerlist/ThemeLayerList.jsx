@@ -412,10 +412,6 @@ export const ThemeLayerList = ({
                                     index={index}
                                 />
                             })}
-                            { themeGroup.themeLinks && Object.values(themeGroup.themeLinks).map((themeLink, index) => {
-                                return <ThemeLinkList index={index} link={themeLink}/>
-                            })}
-
                         </StyledLayerGroupContainer>
                     </>
                 )
