@@ -24,16 +24,19 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
-    <link href="./fonts/Exo2-VariableFont_wght.ttf" rel="stylesheet">
-    <link href="./fonts/Exo2-Italic-VariableFont_wght.ttf" rel="stylesheet">
 
     <title>Suomen Väylät</title>
 
-    <style>
+    <style media="screen, print">
+      @font-face {
+        font-family: "Exo 2";
+        src: url("./fonts/Exo2-VariableFont_wght.ttf"),url("./fonts/Exo2-Italic-VariableFont_wght.ttf");
+      }
+
       body {
-          font-family: "Exo 2",sans-serif !important;
-          /* Disable Pull-to-Refresh Feature on Mobile Browsers */
-          overscroll-behavior: contain;
+        font-family: "Exo 2",sans-serif !important;
+        /* Disable Pull-to-Refresh Feature on Mobile Browsers */
+        overscroll-behavior: contain;
       }
     </style>
   </head>
