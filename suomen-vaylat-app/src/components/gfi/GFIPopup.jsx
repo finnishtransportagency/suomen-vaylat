@@ -30,6 +30,7 @@ import {
   addFeaturesToGFILocations,
   setActiveGFILayer,
   setFilters,
+  removeMarkerRequest
 } from "../../state/slices/rpcSlice";
 import { FormattedGFI } from "./FormattedGFI";
 import GfiTabContent from "./GfiTabContent";
@@ -612,6 +613,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
       };
 
       channel.postRequest(rn, [geojsonObject, options]);
+      store.dispatch(removeMarkerRequest({ markerId: "VKM_MARKER" }));
     }
   }
 
@@ -831,7 +833,6 @@ export const GFIPopup = ({ handleGfiDownload }) => {
 
   useEffect(() => {
     vkmData ? setIsVKMInfoOpen(true) : setIsVKMInfoOpen(false);
-
     if (pointInfo.lon && pointInfo.lat) {
       // our projection EPSG:3067
       var oskariProjection =
