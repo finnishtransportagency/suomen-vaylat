@@ -276,7 +276,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
 
     const { channel, selectedLayers, gfiLocations } = useAppSelector((state) => state.rpc);
 
-    const { gfiCroppingTypes, selectedGfiTool, hasToastBeenShown } = useAppSelector(state => state.ui);
+    const { gfiCroppingTypes, selectedGfiTool, hasToastBeenShown, isGfiOpen } = useAppSelector(state => state.ui);
     const [isGfiLoading, setIsGfiLoading] = useState(false);
     const [numberedLoader, setNumberedLoader] = useState(null);
     const [activeSelectionTool, setActiveSelectionTool] = useState(null);
@@ -303,9 +303,8 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
                 );
             } else {
                 setIsGfiLoading(true);
-                console.log("!")
                 channel.getGfiCroppingArea([id], function (data) {
-                    store.dispatch(setMinimizeGfi(true));
+                    isGfiOpen && store.dispatch(setMinimizeGfi(true));
                     setIsGfiLoading(false);
 
                     let label = data.hasOwnProperty('labelProperty')
@@ -447,7 +446,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
                 },
             ];
             channel.postRequest('DrawTools.StartDrawingRequest', data);
-            store.dispatch(setMinimizeGfi(true));
+            isGfiOpen && store.dispatch(setMinimizeGfi(true));
             if(showToast !== false && !hasToastBeenShown.includes('measurementToast')) {
                 if(item.type === "LineString" || item.type === "Polygon") {
                     toast.info(<DrawingToast text={strings.tooltips.drawingTools.drawingToast} handleButtonClick={handleClick} />,
@@ -536,7 +535,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
         if (data.operation === 'click') {
 
             if (data.features) {
-                store.dispatch(setMinimizeGfi(false));
+                isGfiOpen && store.dispatch(setMinimizeGfi(false));
                 setIsGfiLoading(true)
                 const fetchableLayers = selectedLayers.filter((layer) =>  layer.groups?.every((group)=> group !==1));
                 const loaderLength = fetchableLayers.length * data.features[0].geojson.features.length;
@@ -583,7 +582,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
                         'gfi-selection-tool',
                         true,
                     ]);
-                    store.dispatch(setMinimizeGfi(false));
+                    isGfiOpen && store.dispatch(setMinimizeGfi(false));
                     store.dispatch(setGeoJsonArray([data]));
                     store.dispatch(setSelectedGfiTool(null));
                     toast.dismiss("measurementToast")
