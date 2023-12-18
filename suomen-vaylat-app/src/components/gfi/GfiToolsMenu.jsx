@@ -34,7 +34,7 @@ import {
     setVKMData
 } from '../../state/slices/rpcSlice';
 
-import { setMinimizeGfi, setSelectedGfiTool, setGeoJsonArray, setHasToastBeenShown, setActiveSelectionTool, setWarning } from '../../state/slices/uiSlice';
+import { setMinimizeGfi, setSelectedGfiTool, setGeoJsonArray, setHasToastBeenShown, setWarning } from '../../state/slices/uiSlice';
 
 import SVLoader from '../loader/SvLoader';
 import { DRAWING_TIP_LOCALSTORAGE } from '../../utils/constants';
@@ -276,10 +276,11 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
 
     const { channel, selectedLayers, gfiLocations } = useAppSelector((state) => state.rpc);
 
-    const { gfiCroppingTypes, selectedGfiTool, hasToastBeenShown, activeSelectionTool } = useAppSelector(state => state.ui);
+    const { gfiCroppingTypes, selectedGfiTool, hasToastBeenShown } = useAppSelector(state => state.ui);
     const [isGfiLoading, setIsGfiLoading] = useState(false);
-
     const [numberedLoader, setNumberedLoader] = useState(null);
+    const [activeSelectionTool, setActiveSelectionTool] = useState(null);
+
 
     const [geometries, setGeometries] = useState([]);
 
@@ -291,16 +292,18 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
     };
 
     const handleSelectTool = (id) => {
+
         if (activeSelectionTool  !== id) {
-            store.dispatch(setActiveSelectionTool(id));
+            setActiveSelectionTool(id);
             if (id === 0 || id === 505) {
-                store.dispatch(setActiveSelectionTool(id));
+                setActiveSelectionTool(id);
                 channel.postRequest(
                     'MapModulePlugin.RemoveFeaturesFromMapRequest',
                     [null, null, 'download-tool-layer']
                 );
             } else {
                 setIsGfiLoading(true);
+                console.log("!")
                 channel.getGfiCroppingArea([id], function (data) {
                     store.dispatch(setMinimizeGfi(true));
                     setIsGfiLoading(false);
@@ -375,7 +378,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
                 });
             }
         } else {
-            store.dispatch(setActiveSelectionTool(null));
+            setActiveSelectionTool(null);
             channel.postRequest(
                 'MapModulePlugin.RemoveFeaturesFromMapRequest',
                 [null, null, 'download-tool-layer']

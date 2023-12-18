@@ -22,7 +22,6 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { FreeMode, Controller } from "swiper";
 import {
   setMinimizeGfi,
-  setActiveSelectionTool,
   setWarning,
 } from "../../state/slices/uiSlice";
 import {
@@ -421,7 +420,6 @@ export const GFIPopup = ({ handleGfiDownload }) => {
   } = useAppSelector((state) => state.rpc);
 
   const [point, setPoint] = useState(null);
-  const { activeSelectionTool } = useAppSelector((state) => state.ui);
   const [selectedTab, setSelectedTab] = useState(0);
   const [tabsContent, setTabsContent] = useState([]);
   const [isGfiToolsOpen, setIsGfiToolsOpen] = useState(false);
@@ -464,11 +462,6 @@ export const GFIPopup = ({ handleGfiDownload }) => {
       }
     }
   };
-
-  useEffect(() => {
-    if (!isGfiToolsOpen && activeSelectionTool !== null)
-      store.dispatch(setActiveSelectionTool(null));
-  }, [isGfiToolsOpen, activeSelectionTool]);
 
   useEffect(() => {
     const mapResults = gfiLocations.map((location) => {
