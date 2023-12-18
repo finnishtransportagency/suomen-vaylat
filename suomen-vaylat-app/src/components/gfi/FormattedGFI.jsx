@@ -360,7 +360,7 @@ const selectFeature = (channel, features) => {
         },
         image: {
             shape: 2,
-            size: 5,
+            size: 4,
             offsetX: 13,
             offsetY: 7,
             fill: {

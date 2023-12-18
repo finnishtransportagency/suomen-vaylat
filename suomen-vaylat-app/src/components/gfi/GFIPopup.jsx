@@ -567,6 +567,8 @@ export const GFIPopup = ({ handleGfiDownload }) => {
         LAYER_ID,
       ]);
     } else {
+      store.dispatch(removeMarkerRequest({ markerId: "VKM_MARKER" }));
+      
       let featureStyle = {
         fill: {
             color: 'rgba(10, 140, 247, 0.3)',
@@ -613,7 +615,6 @@ export const GFIPopup = ({ handleGfiDownload }) => {
       };
 
       channel.postRequest(rn, [geojsonObject, options]);
-      store.dispatch(removeMarkerRequest({ markerId: "VKM_MARKER" }));
     }
   }
 
