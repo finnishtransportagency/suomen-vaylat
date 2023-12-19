@@ -61,6 +61,7 @@ const StyledToolsContainer = styled.div`
     display: flex;
     flex-direction: column;
     gap: 16px;
+    filter:  ${(props) => props.isGfiLoading ? 'blur(3px)' : 'none'};
 `;
 
 const StyledDrawingToolsContainer = styled(motion.div)`
@@ -70,16 +71,6 @@ const StyledDrawingToolsContainer = styled(motion.div)`
     gap: 16px;
 `;
 
-const StyledLoadingOverlay = styled(motion.div)`
-    z-index: 2;
-    position: fixed;
-    left: 0px;
-    top: 0px;
-    right: 0px;
-    bottom: 0px;
-    background-color: rgba(255, 255, 255, 0.5);
-    backdrop-filter: blur(4px);
-`;
 
 const StyledCloseButton = styled.div`
     z-index: 1;
@@ -717,7 +708,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
     }, [store, channel]);
     
     return (
-        <StyledGfiToolContainer>
+        <StyledGfiToolContainer id="gfiToolContainer">
             { closeButton &&
                 <StyledCloseButton onClick={() => handleGfiToolsMenu()}>
                     <FontAwesomeIcon icon={faTimes} />
@@ -725,7 +716,8 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
             }
             <AnimatePresence>
                 {isGfiLoading && (
-                    <StyledLoadingOverlay
+                    <StyledLoaderWrapper
+                        id="loadingOverlay"
                         transition={{
                             duration: 0.2,
                             type: 'tween',
@@ -738,16 +730,14 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
                         }}
                         exit={{
                             opacity: 0,
-                        }}
-                    >
-                        <StyledLoaderWrapper>
-                            <SVLoader />
+                        }}>
+                        <SVLoader />
                         {numberedLoader &&  numberedLoader.enabled && <>Ladataan aineistoa {numberedLoader.current} / {numberedLoader.total} </>}
-                        </StyledLoaderWrapper>
-                    </StyledLoadingOverlay>
+                    </StyledLoaderWrapper>
                 )}
             </AnimatePresence>
-            <StyledToolsContainer>
+            
+            <StyledToolsContainer isGfiLoading={isGfiLoading}>
                 <StyledSubtitle>{strings.gfi.selectLocations}:</StyledSubtitle>
                 <CircleButtonListItem
                     key={'cropping-type-draw'}
