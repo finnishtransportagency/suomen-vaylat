@@ -7,6 +7,7 @@ import styled from 'styled-components';
 import { useAppSelector } from '../../../state/hooks';
 import strings from '../../../translations';
 import { setZoomTo } from '../../../state/slices/rpcSlice';
+import { setWarning } from '../../../state/slices/uiSlice';
 import { selectGroup } from '../../../utils/rpcUtil';
 import Layers from './Layers';
 
@@ -633,15 +634,44 @@ export const ThemeLinkList = ({
     lang,
     index
 }) => {
+    
+    const { store } = useContext(ReactReduxContext);
+
+    const handleLinkClick = (event, link) => {
+        event.preventDefault();
+        const savedState = localStorage.getItem("dontShowExitLinkWarn");
+        if (!savedState) {
+            store.dispatch(setWarning({
+            title: strings.exitConfirmation,
+            subtitle: null,
+            confirm: {
+                text: strings.general.continue,
+                action: () => {
+                    window.open(link, "_blank");
+                    store.dispatch(setWarning(null));
+                }
+            },
+            cancel: {
+                text: strings.general.cancel,
+                action: () => {
+                store.dispatch(setWarning(null))
+                }
+            },
+            dontShowAgain: {
+            id: "dontShowExitLinkWarn"
+            }
+            }))
+        } else {
+            window.open(link, "_blank");
+        }
+    };
 
     return (
         <>
             <StyledLayerGroups index={index}>
                 <StyledMasterGroupHeader
                     key={'theme_link_'+theme.locale[lang].name}
-                    onClick={() => {
-                        window.open(link, '_blank');;
-                    }}
+                    onClick={(e) => handleLinkClick(e,link)}
                 >
                     <StyledLeftContent>
                         <StyledMasterGroupHeaderIcon>
@@ -682,6 +712,37 @@ export const ThemeDesc = ({
 
     const links = getLinks(txt.replace(/\s/g, ''),"<a>", "</a>")
     const desc = getLinks(txt, "<p>", "</p>")
+    
+    const { store } = useContext(ReactReduxContext);
+
+    const handleLinkClick = (event, link) => {
+        event.preventDefault();
+        const savedState = localStorage.getItem("dontShowExitLinkWarn");
+        if (!savedState) {
+            store.dispatch(setWarning({
+            title: strings.exitConfirmation,
+            subtitle: null,
+            confirm: {
+                text: strings.general.continue,
+                action: () => {
+                    window.open(link, "_blank");
+                    store.dispatch(setWarning(null));
+                }
+            },
+            cancel: {
+                text: strings.general.cancel,
+                action: () => {
+                store.dispatch(setWarning(null))
+                }
+            },
+            dontShowAgain: {
+            id: "dontShowExitLinkWarn"
+            }
+            }))
+        } else {
+            window.open(link, "_blank");
+        }
+    };
 
     return (
         <StyledThemeContent>
@@ -699,7 +760,7 @@ export const ThemeDesc = ({
                                 {links.map((link, i) => {
                                     return(
                                         <li>
-                                            <StyledLinkText rel="noreferrer" target="_blank" href={link} key={i}>{link}</StyledLinkText>
+                                            <StyledLinkText rel="noreferrer" target="_blank" onClick={(e) => handleLinkClick(e,link)} key={i}>{link}</StyledLinkText>
                                         </li> 
                                     )
                                 })}
