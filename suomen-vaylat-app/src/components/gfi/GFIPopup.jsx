@@ -22,7 +22,6 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { FreeMode, Controller } from "swiper";
 import {
   setMinimizeGfi,
-  setActiveSelectionTool,
   setWarning,
 } from "../../state/slices/uiSlice";
 import {
@@ -30,6 +29,7 @@ import {
   addFeaturesToGFILocations,
   setActiveGFILayer,
   setFilters,
+  removeMarkerRequest
 } from "../../state/slices/rpcSlice";
 import { FormattedGFI } from "./FormattedGFI";
 import GfiTabContent from "./GfiTabContent";
@@ -420,7 +420,6 @@ export const GFIPopup = ({ handleGfiDownload }) => {
   } = useAppSelector((state) => state.rpc);
 
   const [point, setPoint] = useState(null);
-  const { activeSelectionTool } = useAppSelector((state) => state.ui);
   const [selectedTab, setSelectedTab] = useState(0);
   const [tabsContent, setTabsContent] = useState([]);
   const [isGfiToolsOpen, setIsGfiToolsOpen] = useState(false);
@@ -463,11 +462,6 @@ export const GFIPopup = ({ handleGfiDownload }) => {
       }
     }
   };
-
-  useEffect(() => {
-    if (!isGfiToolsOpen && activeSelectionTool !== null)
-      store.dispatch(setActiveSelectionTool(null));
-  }, [isGfiToolsOpen, activeSelectionTool]);
 
   useEffect(() => {
     const mapResults = gfiLocations.map((location) => {
@@ -566,6 +560,8 @@ export const GFIPopup = ({ handleGfiDownload }) => {
         LAYER_ID,
       ]);
     } else {
+      store.dispatch(removeMarkerRequest({ markerId: "VKM_MARKER" }));
+      
       let featureStyle = {
         fill: {
             color: 'rgba(10, 140, 247, 0.3)',
@@ -831,7 +827,6 @@ export const GFIPopup = ({ handleGfiDownload }) => {
 
   useEffect(() => {
     vkmData ? setIsVKMInfoOpen(true) : setIsVKMInfoOpen(false);
-
     if (pointInfo.lon && pointInfo.lat) {
       // our projection EPSG:3067
       var oskariProjection =
