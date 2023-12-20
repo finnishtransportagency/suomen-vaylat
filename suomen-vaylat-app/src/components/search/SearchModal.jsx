@@ -76,7 +76,7 @@ const StyledCheckbox = styled.input`
     margin-left: 10px;
     width: 16px;
     height: 16px;
-    margin-top: 1px
+    margin-top: 1px;
 `;
 
 const CheckboxWrapper = styled.div`
@@ -237,9 +237,9 @@ const SearchModal = ({
     carriageWaySearch, 
     setCarriageWaySearch
 }) => {
-    const [activeSwitch, setActiveSwitch] = useState("road");
+    const [activeSwitch, setActiveSwitch] = useState(null);
     const updateActiveSwitch = (type) => {
-        setActiveSwitch(type);
+        activeSwitch != type ? setActiveSwitch(type) : setActiveSwitch(null);
         setSearchResults(null);
         setShowSearchResults(false);
         setSearchValue('');
@@ -689,21 +689,23 @@ const SearchModal = ({
                 )
                 }  
          </>
-        <SearchResultPanel 
-        isSearchOpen={isSearchOpen}
-        searchResults={searchResults}
-        showSearchResults={showSearchResults}
-        searchType={searchType}
-        dropdownVariants={dropdownVariants}
-        firstSearchResultShown={firstSearchResultShown}
-        handleSearchSelect={handleSearchSelect}
-        setFirstSearchResultShown={setFirstSearchResultShown}
-        isMobile={isMobile}
-        setShowSearchResults={setShowSearchResults}
-        setSearchClickedRow={setSearchClickedRow}
-        searchClickedRow={searchClickedRow}
-        allLayers={allLayers}
-        />        
+                { activeSwitch == null &&
+                    <SearchResultPanel 
+                        isSearchOpen={isSearchOpen}
+                        searchResults={searchResults}
+                        showSearchResults={showSearchResults}
+                        searchType={searchType}
+                        dropdownVariants={dropdownVariants}
+                        firstSearchResultShown={firstSearchResultShown}
+                        handleSearchSelect={handleSearchSelect}
+                        setFirstSearchResultShown={setFirstSearchResultShown}
+                        isMobile={isMobile}
+                        setShowSearchResults={setShowSearchResults}
+                        setSearchClickedRow={setSearchClickedRow}
+                        searchClickedRow={searchClickedRow}
+                        allLayers={allLayers}
+                    />
+                }
         </StyledSearchModal>
     ) : null
 };

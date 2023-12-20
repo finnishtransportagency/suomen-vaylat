@@ -611,23 +611,7 @@ const Search = () => {
                                 size="lg"
                             />
                         )}
-                    </StyledLeftContentWrapper>
-                    <SearchResultPanel 
-                        isSearchOpen={isSearchOpen}
-                        searchResults={searchResults}
-                        showSearchResults={showSearchResults}
-                        searchType={searchType}
-                        dropdownVariants={dropdownVariants}
-                        firstSearchResultShown={firstSearchResultShown}
-                        handleSearchSelect={handleSearchSelect}
-                        setFirstSearchResultShown={setFirstSearchResultShown}
-                        isMobile={isMobile}
-                        setShowSearchResults={setShowSearchResults}
-                        setSearchClickedRow={setSearchClickedRow}
-                        searchClickedRow={searchClickedRow}
-                        allLayers={allLayers}
-                        hidden={true}
-                    />        
+                    </StyledLeftContentWrapper>   
                 {isSearchModalOpen && ( 
                     <SearchModal 
                         searchValue={searchValue}
@@ -654,6 +638,7 @@ const Search = () => {
                         setCarriageWaySearch={setCarriageWaySearch}
                     />            
                 )}  
+                
                 </StyledSearchWrapper>
              
         
