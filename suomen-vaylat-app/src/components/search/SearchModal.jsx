@@ -55,7 +55,7 @@ const StyledInputHalf = styled.input`
 
 const StyledSearchSection = styled.div`
     width: 90%;
-    margin-bottom: 16px;
+    margin-bottom: 1em;
 `;
 
 

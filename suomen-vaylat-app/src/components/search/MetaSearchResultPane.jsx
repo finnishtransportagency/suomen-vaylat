@@ -1,10 +1,6 @@
 import strings from '../../translations';
-import { StyledDropDown, StyledDropdownContentItem, StyledDropdownContentItemTitle, StyledHideSearchResultsButton } from './Search';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { StyledDropDown, StyledDropdownContentItem, StyledDropdownContentItemTitle } from './Search';
 import Layer from '../menus/hierarchical-layerlist/Layer';
-import {
-    faAngleUp
-} from '@fortawesome/free-solid-svg-icons';
 
 const MetaSearchResultPanel = ({
     searchResults,
@@ -44,11 +40,6 @@ const MetaSearchResultPanel = ({
                 </StyledDropdownContentItemTitle>
             </StyledDropdownContentItem>
         )}
-        <StyledHideSearchResultsButton
-            onClick={() => setShowSearchResults(false)}
-        >
-            <FontAwesomeIcon icon={faAngleUp} />
-        </StyledHideSearchResultsButton>
     </StyledDropDown>
     );
 };
