@@ -706,7 +706,6 @@ const SearchModal = ({
                         allLayers={allLayers}
                     />
                 }
-         </>  
         </StyledSearchModal>
     ) : null
 };
