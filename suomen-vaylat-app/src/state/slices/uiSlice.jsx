@@ -1,6 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { theme } from '../../theme/theme';
-import { act } from '@testing-library/react';
 
 const initialState = {
     isGfiToolsOpen: false,

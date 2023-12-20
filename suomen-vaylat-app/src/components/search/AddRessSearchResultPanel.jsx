@@ -1,9 +1,8 @@
 import strings from '../../translations';
-import { StyledDropDown, StyledDropdownContentItem, StyledSearchIcon, StyledDropdownContentItemTitle, StyledHideSearchResultsButton } from './Search';
+import { StyledDropDown, StyledDropdownContentItem, StyledSearchIcon, StyledDropdownContentItemTitle } from './Search';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { toast } from 'react-toastify';
 import {
-    faAngleUp,
     faCity,
     faRoad,
     faTrain,
@@ -131,19 +130,11 @@ const AddRessSearchResultPanel = ({
                     );
                 }
             )
-        ) : ( <div> {strings.search.address.error.text}</div> 
-            /*<StyledDropdownContentItem key={'no-results'}>
-                <StyledDropdownContentItemTitle type="noResults">
-                    {strings.search.address.error.text}
-                </StyledDropdownContentItemTitle>
-            </StyledDropdownContentItem>
-            */
+        ) 
+        : 
+        ( 
+            <div> {strings.search.address.error.text}</div> 
         )}
-        <StyledHideSearchResultsButton
-            onClick={() => setShowSearchResults(false)}
-        >
-            <FontAwesomeIcon icon={faAngleUp} />
-        </StyledHideSearchResultsButton>
     </StyledDropDown>
     );
 };

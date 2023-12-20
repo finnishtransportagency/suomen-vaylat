@@ -30,8 +30,6 @@ import SearchToast from '../toasts/SearchToast';
 import ReactTooltip from 'react-tooltip';
 import TipToast from '../toasts/TipToast';
 import SearchModal from './SearchModal';
-import SearchResultPanel from './SearchResultPanel';
-
 
 export const StyledSearchIcon  = styled.div`
     min-width: 48px;
@@ -120,7 +118,7 @@ export const StyledDropDown = styled(motion.div)`
     border-radius: 24px;
     //box-shadow: rgb(0 0 0 / 16%) 0px 3px 6px, rgb(0 0 0 / 23%) 0px 3px 6px;
     background-color: ${(props) => props.theme.colors.mainWhite};
-    padding: 64px 16px 0px 16px;
+    padding: 1em 16px 0px 16px;
     pointer-events: auto;
     overflow: auto;
     @media ${(props) => props.theme.device.mobileL} {
@@ -163,6 +161,7 @@ export const StyledHideSearchResultsButton = styled.div`
     background-color: white;
     text-align: center;
     padding-bottom: 4px;
+    margin-top: 1em;
     cursor: pointer;
     svg {
         font-size: 23px;
@@ -333,6 +332,9 @@ const Search = () => {
                 if (data.success) {
                     if (data.result) {
                         setSearchResults(data);
+                    }
+                    if (data.result.locations.length > 1 && !isSearchModalOpen) {
+                        setIsSearchModalOpen(true);
                     }
                 }
             });
@@ -611,23 +613,7 @@ const Search = () => {
                                 size="lg"
                             />
                         )}
-                    </StyledLeftContentWrapper>
-                    <SearchResultPanel 
-                        isSearchOpen={isSearchOpen}
-                        searchResults={searchResults}
-                        showSearchResults={showSearchResults}
-                        searchType={searchType}
-                        dropdownVariants={dropdownVariants}
-                        firstSearchResultShown={firstSearchResultShown}
-                        handleSearchSelect={handleSearchSelect}
-                        setFirstSearchResultShown={setFirstSearchResultShown}
-                        isMobile={isMobile}
-                        setShowSearchResults={setShowSearchResults}
-                        setSearchClickedRow={setSearchClickedRow}
-                        searchClickedRow={searchClickedRow}
-                        allLayers={allLayers}
-                        hidden={true}
-                    />        
+                    </StyledLeftContentWrapper>   
                 {isSearchModalOpen && ( 
                     <SearchModal 
                         searchValue={searchValue}
@@ -654,6 +640,7 @@ const Search = () => {
                         setCarriageWaySearch={setCarriageWaySearch}
                     />            
                 )}  
+                
                 </StyledSearchWrapper>
              
         
