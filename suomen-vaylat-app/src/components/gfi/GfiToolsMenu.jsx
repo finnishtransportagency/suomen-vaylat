@@ -34,7 +34,7 @@ import {
     setVKMData
 } from '../../state/slices/rpcSlice';
 
-import { setMinimizeGfi, setSelectedGfiTool, setGeoJsonArray, setHasToastBeenShown, setActiveSelectionTool, setWarning } from '../../state/slices/uiSlice';
+import { setMinimizeGfi, setSelectedGfiTool, setGeoJsonArray, setHasToastBeenShown, setWarning } from '../../state/slices/uiSlice';
 
 import SVLoader from '../loader/SvLoader';
 import { DRAWING_TIP_LOCALSTORAGE } from '../../utils/constants';
@@ -61,6 +61,7 @@ const StyledToolsContainer = styled.div`
     display: flex;
     flex-direction: column;
     gap: 16px;
+    filter:  ${(props) => props.isGfiLoading ? 'blur(3px)' : 'none'};
 `;
 
 const StyledDrawingToolsContainer = styled(motion.div)`
@@ -70,16 +71,6 @@ const StyledDrawingToolsContainer = styled(motion.div)`
     gap: 16px;
 `;
 
-const StyledLoadingOverlay = styled(motion.div)`
-    z-index: 2;
-    position: fixed;
-    left: 0px;
-    top: 0px;
-    right: 0px;
-    bottom: 0px;
-    background-color: rgba(255, 255, 255, 0.5);
-    backdrop-filter: blur(4px);
-`;
 
 const StyledCloseButton = styled.div`
     z-index: 1;
@@ -276,10 +267,11 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
 
     const { channel, selectedLayers, gfiLocations, gfiCroppingArea } = useAppSelector((state) => state.rpc);
 
-    const { gfiCroppingTypes, selectedGfiTool, hasToastBeenShown, activeSelectionTool } = useAppSelector(state => state.ui);
+    const { gfiCroppingTypes, selectedGfiTool, hasToastBeenShown, isGfiOpen } = useAppSelector(state => state.ui);
     const [isGfiLoading, setIsGfiLoading] = useState(false);
-
     const [numberedLoader, setNumberedLoader] = useState(null);
+    const [activeSelectionTool, setActiveSelectionTool] = useState(null);
+
 
     const [geometries, setGeometries] = useState([]);
 
@@ -291,10 +283,11 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
     };
 
     const handleSelectTool = (id) => {
+
         if (activeSelectionTool  !== id) {
-            store.dispatch(setActiveSelectionTool(id));
+            setActiveSelectionTool(id);
             if (id === 0 || id === 505) {
-                store.dispatch(setActiveSelectionTool(id));
+                setActiveSelectionTool(id);
                 channel.postRequest(
                     'MapModulePlugin.RemoveFeaturesFromMapRequest',
                     [null, null, 'download-tool-layer']
@@ -302,7 +295,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
             } else {
                 setIsGfiLoading(true);
                 channel.getGfiCroppingArea([id], function (data) {
-                    store.dispatch(setMinimizeGfi(true));
+                    isGfiOpen && store.dispatch(setMinimizeGfi(true));
                     setIsGfiLoading(false);
 
                     let label = data.hasOwnProperty('labelProperty')
@@ -375,7 +368,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
                 });
             }
         } else {
-            store.dispatch(setActiveSelectionTool(null));
+            setActiveSelectionTool(null);
             channel.postRequest(
                 'MapModulePlugin.RemoveFeaturesFromMapRequest',
                 [null, null, 'download-tool-layer']
@@ -444,7 +437,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
                 },
             ];
             channel.postRequest('DrawTools.StartDrawingRequest', data);
-            store.dispatch(setMinimizeGfi(true));
+            isGfiOpen && store.dispatch(setMinimizeGfi(true));
             if(showToast !== false && !hasToastBeenShown.includes('measurementToast')) {
                 if(item.type === "LineString" || item.type === "Polygon") {
                     toast.info(<DrawingToast text={strings.tooltips.drawingTools.drawingToast} handleButtonClick={handleClick} />,
@@ -533,7 +526,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
         if (data.operation === 'click') {
 
             if (data.features) {
-                store.dispatch(setMinimizeGfi(false));
+                isGfiOpen && store.dispatch(setMinimizeGfi(false));
                 setIsGfiLoading(true)
                 const fetchableLayers = selectedLayers.filter((layer) =>  layer.groups?.every((group)=> group !==1));
                 const loaderLength = fetchableLayers.length * data.features[0].geojson.features.length;
@@ -580,7 +573,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
                         'gfi-selection-tool',
                         true,
                     ]);
-                    store.dispatch(setMinimizeGfi(false));
+                    isGfiOpen && store.dispatch(setMinimizeGfi(false));
                     store.dispatch(setGeoJsonArray([data]));
                     store.dispatch(setSelectedGfiTool(null));
                     toast.dismiss("measurementToast")
@@ -715,7 +708,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
     }, [store, channel]);
     
     return (
-        <StyledGfiToolContainer>
+        <StyledGfiToolContainer id="gfiToolContainer">
             { closeButton &&
                 <StyledCloseButton onClick={() => handleGfiToolsMenu()}>
                     <FontAwesomeIcon icon={faTimes} />
@@ -723,7 +716,8 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
             }
             <AnimatePresence>
                 {isGfiLoading && (
-                    <StyledLoadingOverlay
+                    <StyledLoaderWrapper
+                        id="loadingOverlay"
                         transition={{
                             duration: 0.2,
                             type: 'tween',
@@ -736,16 +730,14 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
                         }}
                         exit={{
                             opacity: 0,
-                        }}
-                    >
-                        <StyledLoaderWrapper>
-                            <SVLoader />
+                        }}>
+                        <SVLoader />
                         {numberedLoader &&  numberedLoader.enabled && <>Ladataan aineistoa {numberedLoader.current} / {numberedLoader.total} </>}
-                        </StyledLoaderWrapper>
-                    </StyledLoadingOverlay>
+                    </StyledLoaderWrapper>
                 )}
             </AnimatePresence>
-            <StyledToolsContainer>
+            
+            <StyledToolsContainer isGfiLoading={isGfiLoading}>
                 <StyledSubtitle>{strings.gfi.selectLocations}:</StyledSubtitle>
                 <CircleButtonListItem
                     key={'cropping-type-draw'}

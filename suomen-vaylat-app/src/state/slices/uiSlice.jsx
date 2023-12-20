@@ -1,6 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { theme } from '../../theme/theme';
-import { act } from '@testing-library/react';
 
 const initialState = {
     isGfiToolsOpen: false,
@@ -161,9 +160,6 @@ export const uiSlice = createSlice({
         setSelectedGfiTool: (state, action) => {
             state.selectedGfiTool = action.payload;
         },
-        setActiveSelectionTool: (state, action) => {
-            state.activeSelectionTool = action.payload;
-        },
         setShareUrl: (state, action) => {
             state.shareUrl = action.payload;
         },
@@ -283,7 +279,6 @@ export const {
     setIsGfiOpen,
     setIsGfiDownloadOpen,
     setSelectedGfiTool,
-    setActiveSelectionTool,
     setShareUrl,
     setIsDrawingToolsOpen,
     setActiveTool,

@@ -165,7 +165,7 @@ const GFIDownload = () => {
         <Button
             onClick={handleGfiLocationsOpen}
         >
-                {strings.downloads.newDownloads}
+            {strings.downloads.newDownloads}
         </Button>
         
 
