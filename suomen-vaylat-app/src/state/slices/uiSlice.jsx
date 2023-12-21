@@ -14,6 +14,7 @@ const initialState = {
         layerDownloadLinkName: null,
     },
     searchParams: '',
+    formSearchParams: '',
     isMoreSearchOpen: false,
     isInfoOpen: false,
     geoJsonArray: [],
@@ -56,7 +57,8 @@ const initialState = {
     updateCustomLayer: false,
     checkedLayer:[],
     isCheckmark: false,
-    selectedCustomFilterLayers: []
+    selectedCustomFilterLayers: [],
+    isFeedbackFormOpen: false
 };
 
 export const uiSlice = createSlice({
@@ -101,6 +103,9 @@ export const uiSlice = createSlice({
         },
         setSearchParams: (state, action) => {
             state.searchParams = action.payload;
+        },
+        setFormSearchParams: (state, action) => {
+            state.formSearchParams = action.payload;
         },
         setIsMoreSearchOpen: (state, action) => {
             state.isMoreSearchOpen = action.payload;
@@ -256,6 +261,9 @@ export const uiSlice = createSlice({
           setSelectedCustomFilterLayers: (state, action) => {
             state.selectedCustomFilterLayers = action.payload;
           },
+          setIsFeedBackFormOpen: (state, action) => {
+            state.isFeedbackFormOpen = action.payload;
+          },
 
     },
 });
@@ -271,6 +279,7 @@ export const {
     setIsSearchOpen,
     setIsChecked,
     setSearchParams,
+    setFormSearchParams,
     setIsThemeMenuOpen,
     setIsMoreSearchOpen,
     setIsInfoOpen,
@@ -313,7 +322,8 @@ export const {
     setUpdateCustomLayers,
     setCheckedLayer,
     setIsCheckmark,
-    setSelectedCustomFilterLayers
+    setSelectedCustomFilterLayers,
+    setIsFeedBackFormOpen
 } = uiSlice.actions;
 
 export default uiSlice.reducer;

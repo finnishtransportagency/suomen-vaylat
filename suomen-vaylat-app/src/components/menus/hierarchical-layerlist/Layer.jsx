@@ -118,7 +118,7 @@ export const findGroupForLayer = (groups, layerId) => {
   return null;
 };
 
-export const Layer = ({ layer, themeName, groupName }) => {
+export const Layer = ({ layer, themeName, groupName, showSwitch = true }) => {
 
     const { store } = useContext(ReactReduxContext);
     const [layerStyle, setLayerStyle] = useState(null);
@@ -272,11 +272,11 @@ export const Layer = ({ layer, themeName, groupName }) => {
                 {downloadLink && <LayerDownloadLinkButton
                     handleIsDownloadLinkModalOpen={handleIsDownloadLinkModalOpen} />
                 }
-                <Switch
-                  action={() => handleLayerVisibility(channel, layer)}
-                  isSelected={layer.visible}
-                  layer={layer}
-                />
+                {showSwitch && <Switch
+                action={() => handleLayerVisibility(channel, layer)}
+                isSelected={layer.visible}
+                layer={layer}
+            />}
                 </StyledLayerContainer>
     );
   };
