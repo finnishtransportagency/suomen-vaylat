@@ -265,7 +265,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
     ];
     const { store } = useContext(ReactReduxContext);
 
-    const { channel, selectedLayers, gfiLocations } = useAppSelector((state) => state.rpc);
+    const { channel, selectedLayers, gfiLocations, gfiCroppingArea } = useAppSelector((state) => state.rpc);
 
     const { gfiCroppingTypes, selectedGfiTool, hasToastBeenShown, isGfiOpen } = useAppSelector(state => state.ui);
     const [isGfiLoading, setIsGfiLoading] = useState(false);
