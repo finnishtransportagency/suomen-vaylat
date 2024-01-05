@@ -39,7 +39,8 @@ import {
   setMinimizeFilterModal,
   setMaximizeFilterModal,
   setShowSavedLayers,
-  setIsFeedBackFormOpen
+  setIsFeedBackFormOpen,
+  setIsWaterwayListOpen
 } from "../../state/slices/uiSlice";
 
 import {
@@ -78,6 +79,8 @@ import ThemeMenu from "../menus/theme-menu/ThemeMenu";
 import { CustomLayerModal } from "../menus/hierarchical-layerlist/CustomFilter/CustomLayerModal";
 import { ModalContainer } from "../filter/ModalContainer";
 import FeedbackForm from "../feedback-form/FeedbackForm";
+import WaterwayList from "../../waterway/WaterwayList";
+import WaterwayContent from "../../waterway/WaterwayContent";
 
 const GFI_GEOMETRY_LAYER_ID = 'drawtools-geometry-layer';
 
@@ -199,7 +202,7 @@ const Content = () => {
   const search = useAppSelector((state) => state.search);
   const { store } = useContext(ReactReduxContext);
   const isShareOpen = shareUrl && shareUrl.length > 0 ? true : false;
-  let { downloadLink, isCustomFilterOpen, updateCustomLayer, isFeedbackFormOpen } = useAppSelector((state) => state.ui);
+  let { downloadLink, isCustomFilterOpen, updateCustomLayer, isFeedbackFormOpen, isWaterwayListOpen } = useAppSelector((state) => state.ui);
 
   const announcements = useAppSelector(
     (state) => state.rpc.activeAnnouncements
@@ -285,6 +288,10 @@ const Content = () => {
   const handleCloseUserGuide = () => {
     store.dispatch(setIsUserGuideOpen(false));
   };
+
+  const handleWaterwayListClose = () => {
+    store.dispatch(setIsWaterwayListOpen(false));
+  }
 
   const handleCloseDownloadLinkModal = () => {
     store.dispatch(
@@ -670,6 +677,52 @@ const Content = () => {
           minWidth={"600px"}
         >
           <GFIDownload />
+        </Modal>
+        <Modal
+          constraintsRef={
+            constraintsRef
+          } /* Reference div for modal drag boundaries */
+          drag={false} /* Enable (true) or disable (false) drag */
+          resize={false}
+          backdrop={true} /* Is backdrop enabled (true) or disabled (false) */
+          fullScreenOnMobile={
+            true
+          } /* Scale modal full width / height when using mobile device */
+          titleIcon={faQuestion} /* Use icon on title or null */
+          title={strings.appGuide.title} /* Modal header title */
+          type={"normal"} /* Modal type */
+          closeAction={
+            handleCloseUserGuide
+          } /* Action when pressing modal close button or backdrop */
+          isOpen={isUserGuideOpen} /* Modal state */
+          id={null}
+          height="860px"
+        >
+          <UserGuideModalContent />
+        </Modal>
+        <Modal
+          constraintsRef={
+            constraintsRef
+          } /* Reference div for modal drag boundaries */
+          drag={true} /* Enable (true) or disable (false) drag */
+          resize={false}
+          backdrop={true} /* Is backdrop enabled (true) or disabled (false) */
+          fullScreenOnMobile={
+            true
+          } /* Scale modal full width / height when using mobile device */
+          titleIcon={null} /* Use icon on title or null */
+          title={
+            strings.layerlist.customLayerInfo.infoTitle
+          } /* Modal header title */
+          type={"normal"} /* Modal type */
+          closeAction={
+            handleWaterwayListClose
+          } /* Action when pressing modal close button or backdrop */
+          isOpen={isWaterwayListOpen} /* Modal state */
+          id={null}
+          height="860px"
+        >
+          <WaterwayContent />
         </Modal>
         <Modal
           constraintsRef={

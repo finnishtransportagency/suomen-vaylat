@@ -6,6 +6,7 @@ import { theme, isMobile } from '../../../theme/theme';
 import ReactTooltip from "react-tooltip";
 import strings from '../../../translations';
 import {
+  setIsWaterwayListOpen,
    setMinimizeFilterModal,
    setSelectedMapLayersMenuTab
   } from "../../../state/slices/uiSlice";
@@ -197,6 +198,10 @@ export const Layer = ({ layer, themeName, groupName, showSwitch = true }) => {
     );
   }
 
+  const handleOpenPop = () => {
+    store.dispatch(setIsWaterwayListOpen(true))
+  }
+
   const handleFilterClick = (layer) => {
     !layer.visible && handleLayerVisibility(channel, layer);
     store.dispatch(setSelectedMapLayersMenuTab(1));
@@ -269,6 +274,11 @@ export const Layer = ({ layer, themeName, groupName, showSwitch = true }) => {
                   </StyledFilterIcon>
                   </>
                 }
+                <StyledFilterIcon
+                    onClick={handleOpenPop} >
+                  <FontAwesomeIcon icon={faFilter} />
+                </StyledFilterIcon>
+                
                 {downloadLink && <LayerDownloadLinkButton
                     handleIsDownloadLinkModalOpen={handleIsDownloadLinkModalOpen} />
                 }

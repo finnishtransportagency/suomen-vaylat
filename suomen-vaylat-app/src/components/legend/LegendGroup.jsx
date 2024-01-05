@@ -107,6 +107,7 @@ export const LegendGroup = ({ legend }) => {
 
     const [isOpen, setIsOpen] = useState(true);
     const filters = useAppSelector((state) => state.rpc);
+
     return (
         <StyledLegendGroup key={'legend-' + legend.layerId}>
             <StyledGroupHeader
@@ -163,6 +164,32 @@ export const LegendGroup = ({ legend }) => {
                     </StyledLegend>
                 }
             </StyledGroupContainer>
+            {/* Render legend only for "Kielto- ja rajoitusalueet" layer */}
+            {legend.layerId === '299_undefined' && (
+                <StyledGroupContainer
+                    isOpen={isOpen}
+                    key={'legend-container-' + legend.layerId}
+                    hasLegend={legend.legend !== null}
+                    initial="visible"
+                    animate={isOpen ? "visible" : "hidden"}
+                    variants={listVariants}
+                    transition={{
+                        duration: 0.3,
+                        type: "tween"
+                    }}
+                >
+                    {legend.legend === null &&
+                        <StyledLegend>{strings.legend.nolegend}</StyledLegend>
+                    }
+                    {legend.legend !== null &&
+                        <StyledLegend>
+                            <StyledLegendImage key={legend.legend}
+                                src={legend.legend.indexOf('action') > -1 ? process.env.REACT_APP_PUBLISHED_MAP_DOMAIN + legend.legend : (legend.legend.indexOf('?') > 0 ? legend.legend : legend.legend)}
+                            ></StyledLegendImage>
+                        </StyledLegend>
+                    }
+                </StyledGroupContainer>
+            )}
         </StyledLegendGroup>
     );
 }

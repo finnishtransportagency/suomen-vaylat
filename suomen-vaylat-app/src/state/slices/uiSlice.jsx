@@ -58,7 +58,8 @@ const initialState = {
     checkedLayer:[],
     isCheckmark: false,
     selectedCustomFilterLayers: [],
-    isFeedbackFormOpen: false
+    isFeedbackFormOpen: false,
+    isWaterwayListOpen: false
 };
 
 export const uiSlice = createSlice({
@@ -264,6 +265,9 @@ export const uiSlice = createSlice({
           setIsFeedBackFormOpen: (state, action) => {
             state.isFeedbackFormOpen = action.payload;
           },
+          setIsWaterwayListOpen: (state, action) => {
+            state.isWaterwayListOpen = action.payload;
+          }
 
     },
 });
@@ -323,7 +327,8 @@ export const {
     setCheckedLayer,
     setIsCheckmark,
     setSelectedCustomFilterLayers,
-    setIsFeedBackFormOpen
+    setIsFeedBackFormOpen,
+    setIsWaterwayListOpen
 } = uiSlice.actions;
 
 export default uiSlice.reducer;
