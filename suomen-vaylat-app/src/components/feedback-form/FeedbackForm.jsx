@@ -5,6 +5,7 @@ import FormLayerSearch from './FormLayerSearch';
 import { useAppSelector } from '../../state/hooks';
 import store from '../../state/store';
 import { setIsFeedBackFormOpen } from '../../state/slices/uiSlice';
+import ReCAPTCHA from "react-google-recaptcha";
 
 const FormContainer = styled.div`
   display: flex;
@@ -75,6 +76,7 @@ const FeedbackForm = ({  groups, layers }) => {
   const [email, setEmail] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
+  const [recaptchaPassed, setRecaptchaPassed] = useState(false);
 
   const handleServiceChange = (event) => {
     setSelectedService(event.target.value);
@@ -120,14 +122,22 @@ const FeedbackForm = ({  groups, layers }) => {
     }
   };
   
+  function onChange(value) {
+    console.log("Captcha value:", value);
+    if (value) {
+      setRecaptchaPassed(true);
+    }
+  }
 
   const handleSubmit = () => {
-    setSuccessMessage('');
-    setErrorMessage('');
+    if (setRecaptchaPassed) {
+      setSuccessMessage('');
+      setErrorMessage('');
 
     if (!selectedService || selectedService === 'selectService' || !topic || topic === 'selectTopic' || !email) {
       setErrorMessage(strings.appInfo.feedbackForm.errorMessage);
       return;
+    }
     }
 
     console.log('Feedback submitted:', {
@@ -147,11 +157,8 @@ const FeedbackForm = ({  groups, layers }) => {
     store.dispatch(setIsFeedBackFormOpen(false))
   }
 
-
-  return (
-    <FormContainer>
-
-      <FormGroup>
+  /* 
+        <FormGroup>
         <Label htmlFor="serviceSelect">{strings.appInfo.feedbackForm.serviceSelect}</Label>
         <select
           id="serviceSelect"
@@ -164,6 +171,11 @@ const FeedbackForm = ({  groups, layers }) => {
         </select>
       </FormGroup>
 
+  */
+
+
+  return (
+    <FormContainer>
       <FormGroup>
         <Label htmlFor="topicSelect">{strings.appInfo.feedbackForm.topicSelect}</Label>
         <select
@@ -259,8 +271,13 @@ const FeedbackForm = ({  groups, layers }) => {
       {successMessage && <p style={{ color: 'green' }}>{successMessage}</p>}
       </StyledMessage>
 
+      <ReCAPTCHA
+        sitekey="6Lf5yEYpAAAAAEcAPxDwGO35kXzbC8QfV7Addd0m"
+        onChange={onChange}
+      />
+
       <StyledButtonContainer>
-        <StyledButton onClick={handleSubmit}>
+        <StyledButton onClick={handleSubmit} disabled={!recaptchaPassed}>
           {strings.general.submit}
         </StyledButton>
         <StyledButton onClick={handleClose}>
