@@ -31,7 +31,6 @@ import {
   setWarning,
   setIsDownloadLinkModalOpen,
   setMaximizeGfi,
-  setActiveSelectionTool,
   setIsGfiToolsOpen,
   setIsCustomFilterOpen,
   setUpdateCustomLayers,
@@ -235,7 +234,6 @@ const Content = () => {
   };
 
   const [isGfiDownloadToolsOpen, setIsGfiDownloadToolsOpen] = useState(false);
-  const [isGfiToolsOpenLocal, setIsGfiToolsOpenLocal] = useState(false);
 
   const [downloadUuids, setDownloadUuids] = useState([]);
 
@@ -246,9 +244,6 @@ const Content = () => {
     announcements && setCurrentAnnouncement(0);
   }, [announcements]);
 
-  useEffect(() => {
-    setIsGfiToolsOpenLocal(isGfiToolsOpen);
-  }, [isGfiToolsOpen]);
   const closeAnnouncement = (selected, id) => {
     if (selected) {
       addToLocalStorageArray(ANNOUNCEMENTS_LOCALSTORAGE, id);
@@ -338,6 +333,11 @@ const Content = () => {
 
   const handleCloseGfiDownloadModal = () => {
     store.dispatch(setIsGfiDownloadOpen(false));
+    
+    !isGfiOpen && channel && channel.postRequest(
+      'MapModulePlugin.RemoveFeaturesFromMapRequest',
+      [null, null, GFI_GEOMETRY_LAYER_ID]
+    );
   };
 
   const handleCloseSaveViewModal = () => {
@@ -350,20 +350,27 @@ const Content = () => {
 
   const handleCloseGfiDownloadTools = () => {
     setIsGfiDownloadToolsOpen(false);
-    store.dispatch(resetGFILocations([]));
-    setTimeout(() => {
-      store.dispatch(setVKMData(null));
-    }, 500); // VKM info does not disappear during modal close animation.
-    store.dispatch(removeMarkerRequest({ markerId: "VKM_MARKER" }));
-    channel.postRequest("MapModulePlugin.RemoveFeaturesFromMapRequest", [
-      null,
-      null,
-      "download-tool-layer",
-    ]);
-    channel.postRequest("DrawTools.StopDrawingRequest", [
-      "gfi-selection-tool",
-      true,
-    ]);
+    if (!isGfiOpen) {
+      store.dispatch(resetGFILocations([]));
+      setTimeout(() => {
+        store.dispatch(setVKMData(null));
+      }, 500); // VKM info does not disappear during modal close animation.
+      store.dispatch(removeMarkerRequest({ markerId: "VKM_MARKER" }));
+      
+      channel && channel.postRequest(
+        'MapModulePlugin.RemoveFeaturesFromMapRequest',
+        [null, null, GFI_GEOMETRY_LAYER_ID]
+      );
+      channel.postRequest("MapModulePlugin.RemoveFeaturesFromMapRequest", [
+        null,
+        null,
+        "download-tool-layer",
+      ]);
+      channel.postRequest("DrawTools.StopDrawingRequest", [
+        "gfi-selection-tool",
+        true,
+      ]);
+    }
   };
 
   const handleCloseGfiLocations = () => {
@@ -395,7 +402,6 @@ const Content = () => {
           remove: true,
         },
       ]);
-    store.dispatch(setActiveSelectionTool(null));
     setIsGfiDownloadToolsOpen(!isGfiDownloadToolsOpen);
   };
 
@@ -899,10 +905,8 @@ const Content = () => {
           closeAction={
             handleCloseGfiLocations
           } /* Action when pressing modal close button or backdrop */
-          isOpen={isGfiToolsOpenLocal} /* Modal state */
+          isOpen={isGfiToolsOpen} /* Modal state */
           id={null}
-          minimize={minimizeGfi}
-          maximize={maximizeGfi}
         >
           <GfiToolsMenu
             handleGfiToolsMenu={handleGfiToolsMenu}

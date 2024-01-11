@@ -1,6 +1,12 @@
 import AddRessSearchResultPanel from './AddRessSearchResultPanel';
 import MetaSearchResultPanel from './MetaSearchResultPane';
 import styled, { css } from 'styled-components';
+import {
+    faAngleDown,
+    faAngleUp
+} from '@fortawesome/free-solid-svg-icons';
+import { StyledHideSearchResultsButton } from './Search';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const SearchPanelMain = styled.div`
   ${props =>
@@ -47,6 +53,7 @@ const SearchResultPanel = ({
             />  : (
                 isSearchOpen &&
                 searchResults !== null &&
+                showSearchResults &&
                 searchType === 'metadata' && (
                 <MetaSearchResultPanel 
                     searchResults={searchResults}
@@ -56,6 +63,13 @@ const SearchResultPanel = ({
                 />
                 )
         )}
+        { searchResults !== null && 
+            <StyledHideSearchResultsButton
+                onClick={() => setShowSearchResults(!showSearchResults)}
+            >
+                <FontAwesomeIcon icon={showSearchResults ? faAngleUp : faAngleDown} />
+            </StyledHideSearchResultsButton>
+        }
         </SearchPanelMain>
     );
 };
