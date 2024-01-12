@@ -235,9 +235,10 @@ const SearchModal = ({
     isOpen,
     toggleModal,
     carriageWaySearch, 
-    setCarriageWaySearch
+    setCarriageWaySearch,
+    activeSwitch,
+    setActiveSwitch
 }) => {
-    const [activeSwitch, setActiveSwitch] = useState(null);
     const updateActiveSwitch = (type) => {
         activeSwitch != type ? setActiveSwitch(type) : setActiveSwitch(null);
         setSearchResults(null);
@@ -441,8 +442,8 @@ const SearchModal = ({
                         <StyledInput
                             type="text"
                             placeholder={strings.search.track.tracknumber  }
+                            value={getSearchValuePart(searchValue, searchType, 0, true)}
                             onChange={(e) => updateRoadSearchValue(searchValue, searchType, setSearchValue, 0, e.target.value) }
-                            value={getSearchValuePart(searchValue, searchType, 0)}
                             onKeyPress={e => {
                                 if (e.key === 'Enter') {
                                     handleSeach(searchValue);
@@ -452,7 +453,7 @@ const SearchModal = ({
                         <StyledInputHalf
                             type="text"
                             placeholder={ strings.search.track.trackkm}
-                            value={getSearchValuePart(searchValue, searchType, 1)}
+                            value={getSearchValuePart(searchValue, searchType, 1, true)}
                             onChange={(e) => updateRoadSearchValue(searchValue, searchType, setSearchValue, 1, e.target.value) }
                             onKeyPress={e => {
                                 if (e.key === 'Enter') {
@@ -463,7 +464,7 @@ const SearchModal = ({
                         <StyledInputHalf
                             type="text"
                             placeholder={ strings.search.track.trackm}
-                            value={getSearchValuePart(searchValue, searchType, 2)}
+                            value={getSearchValuePart(searchValue, searchType, 2, true)}
                             onChange={(e) => updateRoadSearchValue(searchValue, searchType, setSearchValue, 2, e.target.value) }
                             onKeyPress={e => {
                                 if (e.key === 'Enter') {

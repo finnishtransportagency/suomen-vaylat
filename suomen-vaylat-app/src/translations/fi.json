@@ -347,7 +347,6 @@
       "title": "Paikkahaulla voit hakea kuntaa, osoitetta, kiinteistötunnusta, tieosoitetta tai rataosoitetta.",
       "address": "Osoitehaku, kirjoita muodossa 'kunta', 'osoite' tai 'osoite, kunta'.",
       "addressExamples": [
-        "Helsinki",
         "Opastinsilta 12",
         "Opastinsilta 12, Helsinki"
       ],
