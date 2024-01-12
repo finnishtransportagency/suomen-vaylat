@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { ReactReduxContext } from 'react-redux';
 import { useAppSelector } from '../../state/hooks';
 import { motion, AnimatePresence } from 'framer-motion';
+import SearchResultPanel from './SearchResultPanel';
 import {
     faSearch,
     faTimes,
@@ -614,6 +615,22 @@ const Search = () => {
                             />
                         )}
                     </StyledLeftContentWrapper>   
+                    <SearchResultPanel 
+                        isSearchOpen={isSearchOpen}
+                        searchResults={searchResults}
+                        showSearchResults={showSearchResults}
+                        searchType={searchType}
+                        dropdownVariants={dropdownVariants}
+                        firstSearchResultShown={firstSearchResultShown}
+                        handleSearchSelect={handleSearchSelect}
+                        setFirstSearchResultShown={setFirstSearchResultShown}
+                        isMobile={isMobile}
+                        setShowSearchResults={setShowSearchResults}
+                        setSearchClickedRow={setSearchClickedRow}
+                        searchClickedRow={searchClickedRow}
+                        allLayers={allLayers}
+                        hidden={true}
+                    /> 
                 {isSearchModalOpen && ( 
                     <SearchModal 
                         searchValue={searchValue}
