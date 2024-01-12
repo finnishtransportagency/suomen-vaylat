@@ -19,10 +19,12 @@ const AddRessSearchResultPanel = ({
     setShowSearchResults,
     setSearchClickedRow,
     searchClickedRow,
-    showOnlyType
+    showOnlyType,
+    activeSwitch
 }) => {
     const typeResolvTable = [  ['address', 'Osoite'],
-                               ['premise', 'Kiinteistötunnus']  ]
+                               ['premise', 'Kiinteistötunnus'] ,
+                               ['track', 'VKM'] ]
     const typeMap = new Map(typeResolvTable);
     const nonNomenclatureTypes = Array.from(typeMap.values());              
     let filteredResult = searchResults;
@@ -30,11 +32,31 @@ const AddRessSearchResultPanel = ({
         searchResults.result.locations &&
         searchResults.result.locations.length > 0){
             filteredResult =  searchResults.result.locations.filter(res => { 
-                return  showOnlyType === 'all' || 
-                res.vkmType === showOnlyType || 
-                res.type === typeMap.get(showOnlyType) ||
-                ( showOnlyType === 'nomenclature' && res.channelId === 'NLSFI_GEOCODING' 
-                && !nonNomenclatureTypes.includes(res.type) )
+                if  (showOnlyType === 'all' && activeSwitch === undefined){
+                    return true;
+                }
+                let showResult = false;
+                switch (showOnlyType){
+                    case "track":
+                        showResult = res.type === "VKM" && res.vkmType === "track";
+                        break;
+                    case "address":
+                        showResult = res.type === typeMap.get(showOnlyType)
+                        break;
+                    case "premise":
+                        showResult = res.type === typeMap.get(showOnlyType)
+                        break;                        
+                    case "road":
+                        showResult = res.type === "VKM" && res.vkmType === "road";
+                        break;
+                    case "nomenclature":
+                        showResult = res.channelId === 'NLSFI_GEOCODING' 
+                        && !nonNomenclatureTypes.includes(res.type)
+                        break;        
+                    default:
+                        return false;
+                }   
+                return showResult;
             });
         }
     return (
@@ -133,7 +155,9 @@ const AddRessSearchResultPanel = ({
         ) 
         : 
         ( 
-            <div> {strings.search.address.error.text}</div> 
+            <div> 
+            {showOnlyType === 'track' ? strings.search.vkm.trackError.text : strings.search.address.error.text}
+            </div> 
         )}
     </StyledDropDown>
     );

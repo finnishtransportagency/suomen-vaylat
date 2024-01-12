@@ -347,7 +347,6 @@
       "title": "Use location search to search for a municipality, address, property identifier, road address or track address.",
       "address": "Address search, type in the format 'municipality', 'address' or 'address, municipality'.",
       "addressExamples": [
-        "Helsinki",
         "Opastinsilta 12",
         "Opastinsilta 12, Helsinki"
       ],

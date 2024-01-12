@@ -30,7 +30,8 @@ const SearchResultPanel = ({
     searchClickedRow,
     allLayers,
     showOnlyType='all',
-    hidden=false
+    hidden=false,
+    activeSwitch
 }) => {
     return (
         <SearchPanelMain hidden={hidden}>
@@ -50,6 +51,7 @@ const SearchResultPanel = ({
                 setSearchClickedRow={setSearchClickedRow}
                 searchClickedRow={searchClickedRow}
                 showOnlyType={showOnlyType}
+                activeSwitch={activeSwitch}
             />  : (
                 isSearchOpen &&
                 searchResults !== null &&
