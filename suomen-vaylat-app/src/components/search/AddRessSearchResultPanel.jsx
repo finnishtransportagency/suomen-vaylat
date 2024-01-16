@@ -19,7 +19,6 @@ const AddRessSearchResultPanel = ({
     setShowSearchResults,
     setSearchClickedRow,
     searchClickedRow,
-    showOnlyType,
     activeSwitch
 }) => {
     const typeResolvTable = [  ['address', 'Osoite'],
@@ -32,19 +31,19 @@ const AddRessSearchResultPanel = ({
         searchResults.result.locations &&
         searchResults.result.locations.length > 0){
             filteredResult =  searchResults.result.locations.filter(res => { 
-                if  (showOnlyType === 'all' && (activeSwitch === null || activeSwitch === undefined)){
+                if  (activeSwitch === null || activeSwitch === undefined){
                     return true;
                 }
                 let showResult = false;
-                switch (showOnlyType){
+                switch (activeSwitch){
                     case "track":
                         showResult = res.type === "VKM" && res.vkmType === "track";
                         break;
                     case "address":
-                        showResult = res.type === typeMap.get(showOnlyType)
+                        showResult = res.type === typeMap.get(activeSwitch)
                         break;
                     case "premise":
-                        showResult = res.type === typeMap.get(showOnlyType)
+                        showResult = res.type === typeMap.get(activeSwitch)
                         break;                        
                     case "road":
                         showResult = res.type === "VKM" && res.vkmType === "road";
@@ -156,7 +155,7 @@ const AddRessSearchResultPanel = ({
         : 
         ( 
             <div> 
-            {showOnlyType === 'track' ? strings.search.vkm.trackError.text : strings.search.address.error.text}
+            {activeSwitch === 'track' ? strings.search.vkm.trackError.text : strings.search.address.error.text}
             </div> 
         )}
     </StyledDropDown>

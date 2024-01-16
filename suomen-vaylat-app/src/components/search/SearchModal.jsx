@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import strings from '../../translations';
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Switch from '../switch/Switch';
 import {
@@ -413,7 +413,7 @@ const SearchModal = ({
                         setSearchClickedRow={setSearchClickedRow}
                         searchClickedRow={searchClickedRow}
                         allLayers={allLayers}
-                        showOnlyType='road'
+                        activeSwitch={activeSwitch}
                     />        
 
                 </StyledSearchSection>  
@@ -487,7 +487,7 @@ const SearchModal = ({
                         setSearchClickedRow={setSearchClickedRow}
                         searchClickedRow={searchClickedRow}
                         allLayers={allLayers}
-                        showOnlyType='track'
+                        activeSwitch={activeSwitch}
                     />        
                 </StyledSearchSection>    
                 </>
@@ -536,7 +536,7 @@ const SearchModal = ({
                         setSearchClickedRow={setSearchClickedRow}
                         searchClickedRow={searchClickedRow}
                         allLayers={allLayers}
-                        showOnlyType='address'
+                        activeSwitch={activeSwitch}
                     />        
                 </StyledSearchSection>    
                 </>
@@ -585,7 +585,7 @@ const SearchModal = ({
                         setSearchClickedRow={setSearchClickedRow}
                         searchClickedRow={searchClickedRow}
                         allLayers={allLayers}
-                        showOnlyType='nomenclature'
+                        activeSwitch={activeSwitch}
                     />        
                 </StyledSearchSection>
                 </>
@@ -634,7 +634,7 @@ const SearchModal = ({
                         setSearchClickedRow={setSearchClickedRow}
                         searchClickedRow={searchClickedRow}
                         allLayers={allLayers}
-                        showOnlyType='premise'
+                        activeSwitch={activeSwitch}
                     />        
                 </StyledSearchSection>        
                 </>
@@ -643,7 +643,7 @@ const SearchModal = ({
                 <div style= {{clear: "both"}} />
                 {
                     <Switch 
-                    isSelected={activeSwitch==='layer'}
+                    isSelected={activeSwitch ==='layer'}
                     action={() => {
                         updateActiveSwitch('layer')
                     }}
@@ -683,7 +683,7 @@ const SearchModal = ({
                         setSearchClickedRow={setSearchClickedRow}
                         searchClickedRow={searchClickedRow}
                         allLayers={allLayers}
-                        showOnlyType='layer'
+                        activeSwitch={activeSwitch}
                     /> 
                 </StyledSearchSection>       
                 </>
