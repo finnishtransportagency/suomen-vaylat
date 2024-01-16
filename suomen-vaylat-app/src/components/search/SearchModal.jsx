@@ -240,7 +240,7 @@ const SearchModal = ({
     setActiveSwitch
 }) => {
     const updateActiveSwitch = (type) => {
-        activeSwitch != type ? setActiveSwitch(type) : setActiveSwitch(null);
+        activeSwitch !== type ? setActiveSwitch(type) : setActiveSwitch(null);
         setSearchResults(null);
         setShowSearchResults(false);
         setSearchValue('');

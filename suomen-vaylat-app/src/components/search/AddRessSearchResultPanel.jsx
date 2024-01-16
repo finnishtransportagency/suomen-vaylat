@@ -32,7 +32,7 @@ const AddRessSearchResultPanel = ({
         searchResults.result.locations &&
         searchResults.result.locations.length > 0){
             filteredResult =  searchResults.result.locations.filter(res => { 
-                if  (showOnlyType === 'all' && activeSwitch === undefined){
+                if  (showOnlyType === 'all' && (activeSwitch === null || activeSwitch === undefined)){
                     return true;
                 }
                 let showResult = false;
