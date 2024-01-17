@@ -1,13 +1,15 @@
 import styled from 'styled-components';
 import strings from '../../translations';
-import { useState, useEffect } from 'react';
+import { ReactReduxContext } from 'react-redux';
+import { setActiveSwitch } from '../../state/slices/uiSlice';
+import { useAppSelector } from '../../state/hooks';
+import { useEffect, useContext } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Switch from '../switch/Switch';
 import {
     faLongArrowDown,
 } from '@fortawesome/free-solid-svg-icons';
 import SearchResultPanel from './SearchResultPanel';
-
 
 const StyledSearchModal = styled.div`
     border: none;
@@ -235,12 +237,13 @@ const SearchModal = ({
     isOpen,
     toggleModal,
     carriageWaySearch, 
-    setCarriageWaySearch,
-    activeSwitch,
-    setActiveSwitch
+    setCarriageWaySearch
 }) => {
+    const { store } = useContext(ReactReduxContext);
+    const { activeSwitch } = useAppSelector((state) => state.ui);
+
     const updateActiveSwitch = (type) => {
-        activeSwitch != type ? setActiveSwitch(type) : setActiveSwitch(null);
+        activeSwitch !== type ? store.dispatch(setActiveSwitch(type)) : store.dispatch(setActiveSwitch(null));
         setSearchResults(null);
         setShowSearchResults(false);
         setSearchValue('');
@@ -413,7 +416,7 @@ const SearchModal = ({
                         setSearchClickedRow={setSearchClickedRow}
                         searchClickedRow={searchClickedRow}
                         allLayers={allLayers}
-                        showOnlyType='road'
+                        activeSwitch={activeSwitch}
                     />        
 
                 </StyledSearchSection>  
@@ -487,7 +490,7 @@ const SearchModal = ({
                         setSearchClickedRow={setSearchClickedRow}
                         searchClickedRow={searchClickedRow}
                         allLayers={allLayers}
-                        showOnlyType='track'
+                        activeSwitch={activeSwitch}
                     />        
                 </StyledSearchSection>    
                 </>
@@ -536,7 +539,7 @@ const SearchModal = ({
                         setSearchClickedRow={setSearchClickedRow}
                         searchClickedRow={searchClickedRow}
                         allLayers={allLayers}
-                        showOnlyType='address'
+                        activeSwitch={activeSwitch}
                     />        
                 </StyledSearchSection>    
                 </>
@@ -585,7 +588,7 @@ const SearchModal = ({
                         setSearchClickedRow={setSearchClickedRow}
                         searchClickedRow={searchClickedRow}
                         allLayers={allLayers}
-                        showOnlyType='nomenclature'
+                        activeSwitch={activeSwitch}
                     />        
                 </StyledSearchSection>
                 </>
@@ -634,7 +637,7 @@ const SearchModal = ({
                         setSearchClickedRow={setSearchClickedRow}
                         searchClickedRow={searchClickedRow}
                         allLayers={allLayers}
-                        showOnlyType='premise'
+                        activeSwitch={activeSwitch}
                     />        
                 </StyledSearchSection>        
                 </>
@@ -643,7 +646,7 @@ const SearchModal = ({
                 <div style= {{clear: "both"}} />
                 {
                     <Switch 
-                    isSelected={activeSwitch==='layer'}
+                    isSelected={activeSwitch ==='layer'}
                     action={() => {
                         updateActiveSwitch('layer')
                     }}
@@ -683,7 +686,7 @@ const SearchModal = ({
                         setSearchClickedRow={setSearchClickedRow}
                         searchClickedRow={searchClickedRow}
                         allLayers={allLayers}
-                        showOnlyType='layer'
+                        activeSwitch={activeSwitch}
                     /> 
                 </StyledSearchSection>       
                 </>

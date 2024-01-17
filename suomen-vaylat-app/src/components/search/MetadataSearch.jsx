@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import ReactTooltip from 'react-tooltip';
 import { useAppSelector } from '../../state/hooks';
 import { useEffect } from 'react';
-import { setIsMoreSearchOpen } from '../../state/slices/uiSlice';
+import { setIsMoreSearchOpen, setActiveSwitch } from '../../state/slices/uiSlice';
 import store from '../../state/store';
 import { isMobile } from '../../theme/theme';
 
@@ -65,6 +65,8 @@ const MetadataSearch = ({
 
     const handleIconClick = () => {
         store.dispatch(setIsMoreSearchOpen(!isMoreSearchOpen));
+        store.dispatch(setActiveSwitch(null));
+
         toggleSearchModal();
     };
 

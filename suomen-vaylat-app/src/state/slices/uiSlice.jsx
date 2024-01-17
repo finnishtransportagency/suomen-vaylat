@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { theme } from '../../theme/theme';
 
 const initialState = {
+    activeSwitch: null,
     isGfiToolsOpen: false,
     isFullScreen: false,
     modalConstrainsRef: null,
@@ -252,6 +253,9 @@ export const uiSlice = createSlice({
           setSelectedCustomFilterLayers: (state, action) => {
             state.selectedCustomFilterLayers = action.payload;
           },
+          setActiveSwitch: (state, action) => {
+            state.activeSwitch = action.payload;
+          },
 
     },
 });
@@ -308,7 +312,8 @@ export const {
     setUpdateCustomLayers,
     setCheckedLayer,
     setIsCheckmark,
-    setSelectedCustomFilterLayers
+    setSelectedCustomFilterLayers,
+    setActiveSwitch
 } = uiSlice.actions;
 
 export default uiSlice.reducer;

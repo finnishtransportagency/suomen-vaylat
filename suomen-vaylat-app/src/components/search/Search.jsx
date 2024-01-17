@@ -201,8 +201,8 @@ const Search = () => {
         useState(false);
     const [searchType, setSearchType] = useState('address');
     const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
-  
-    const { isSearchOpen, geoJsonArray, hasToastBeenShown } = useAppSelector((state) => state.ui);
+
+    const { isSearchOpen, geoJsonArray, hasToastBeenShown, activeSwitch } = useAppSelector((state) => state.ui);
     const { channel, allLayers } = useAppSelector((state) => state.rpc);
 
     const { store } = useContext(ReactReduxContext);
@@ -213,7 +213,6 @@ const Search = () => {
     const [firstSearchResultShown, setFirstSearchResultShown] = useState(false);
     const [showToast, setShowToast] = useState(JSON.parse(localStorage.getItem(SEARCH_TIP_LOCALSTORAGE)));
     const [carriageWaySearch, setCarriageWaySearch] = useState(false);
-    const [activeSwitch, setActiveSwitch] = useState(null);
 
     const handleSeach = (searchValue) => {
         setShowSearchResults(true);
@@ -235,7 +234,7 @@ const Search = () => {
         //unless search ajorata and etaisyys flag ( carriageWaySearch ) found
         
         //TODO if and when we implement track range search, this should be enabled also to track, for now only road search 
-        if (activeSwitch === 'road' && !carriageWaySearch && value && value.includes("/") && (value.split("/").length === 3 || value.split("/").length === 5)){
+        if ((activeSwitch === 'road' || activeSwitch === null) && !carriageWaySearch && value && value.includes("/") && (value.split("/").length === 3 || value.split("/").length === 5)){
             let splittedValue = value.split("/");
             searchValueCopy = splittedValue[0]+"/"+splittedValue[1]+"//"+splittedValue[2];
             if (splittedValue.length===5){
@@ -634,7 +633,6 @@ const Search = () => {
                         searchClickedRow={searchClickedRow}
                         allLayers={allLayers}
                         hidden={true}
-                        activeSwitch={activeSwitch}
                     /> 
                 {isSearchModalOpen && ( 
                     <SearchModal 
@@ -660,8 +658,6 @@ const Search = () => {
                         toggleModal={toggleSearchModal} 
                         carriageWaySearch={carriageWaySearch}
                         setCarriageWaySearch={setCarriageWaySearch}
-                        activeSwitch={activeSwitch}
-                        setActiveSwitch={setActiveSwitch}
                     />            
                 )}  
                 
