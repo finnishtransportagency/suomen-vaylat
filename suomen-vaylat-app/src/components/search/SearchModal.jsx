@@ -1,13 +1,15 @@
 import styled from 'styled-components';
 import strings from '../../translations';
-import { useEffect } from 'react';
+import { ReactReduxContext } from 'react-redux';
+import { setActiveSwitch } from '../../state/slices/uiSlice';
+import { useAppSelector } from '../../state/hooks';
+import { useEffect, useContext } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Switch from '../switch/Switch';
 import {
     faLongArrowDown,
 } from '@fortawesome/free-solid-svg-icons';
 import SearchResultPanel from './SearchResultPanel';
-
 
 const StyledSearchModal = styled.div`
     border: none;
@@ -235,12 +237,13 @@ const SearchModal = ({
     isOpen,
     toggleModal,
     carriageWaySearch, 
-    setCarriageWaySearch,
-    activeSwitch,
-    setActiveSwitch
+    setCarriageWaySearch
 }) => {
+    const { store } = useContext(ReactReduxContext);
+    const { activeSwitch } = useAppSelector((state) => state.ui);
+
     const updateActiveSwitch = (type) => {
-        activeSwitch !== type ? setActiveSwitch(type) : setActiveSwitch(null);
+        activeSwitch !== type ? store.dispatch(setActiveSwitch(type)) : store.dispatch(setActiveSwitch(null));
         setSearchResults(null);
         setShowSearchResults(false);
         setSearchValue('');

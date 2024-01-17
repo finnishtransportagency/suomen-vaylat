@@ -202,7 +202,7 @@ const Search = () => {
     const [searchType, setSearchType] = useState('address');
     const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
 
-    const { isSearchOpen, geoJsonArray, hasToastBeenShown } = useAppSelector((state) => state.ui);
+    const { isSearchOpen, geoJsonArray, hasToastBeenShown, activeSwitch } = useAppSelector((state) => state.ui);
     const { channel, allLayers } = useAppSelector((state) => state.rpc);
 
     const { store } = useContext(ReactReduxContext);
@@ -213,7 +213,6 @@ const Search = () => {
     const [firstSearchResultShown, setFirstSearchResultShown] = useState(false);
     const [showToast, setShowToast] = useState(JSON.parse(localStorage.getItem(SEARCH_TIP_LOCALSTORAGE)));
     const [carriageWaySearch, setCarriageWaySearch] = useState(false);
-    const [activeSwitch, setActiveSwitch] = useState(null);
 
     const handleSeach = (searchValue) => {
         setShowSearchResults(true);
@@ -634,7 +633,6 @@ const Search = () => {
                         searchClickedRow={searchClickedRow}
                         allLayers={allLayers}
                         hidden={true}
-                        activeSwitch={activeSwitch}
                     /> 
                 {isSearchModalOpen && ( 
                     <SearchModal 
@@ -660,8 +658,6 @@ const Search = () => {
                         toggleModal={toggleSearchModal} 
                         carriageWaySearch={carriageWaySearch}
                         setCarriageWaySearch={setCarriageWaySearch}
-                        activeSwitch={activeSwitch}
-                        setActiveSwitch={setActiveSwitch}
                     />            
                 )}  
                 
