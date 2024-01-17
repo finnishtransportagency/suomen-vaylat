@@ -201,7 +201,7 @@ const Search = () => {
         useState(false);
     const [searchType, setSearchType] = useState('address');
     const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
-  
+
     const { isSearchOpen, geoJsonArray, hasToastBeenShown } = useAppSelector((state) => state.ui);
     const { channel, allLayers } = useAppSelector((state) => state.rpc);
 
@@ -235,7 +235,7 @@ const Search = () => {
         //unless search ajorata and etaisyys flag ( carriageWaySearch ) found
         
         //TODO if and when we implement track range search, this should be enabled also to track, for now only road search 
-        if (activeSwitch === 'road' && !carriageWaySearch && value && value.includes("/") && (value.split("/").length === 3 || value.split("/").length === 5)){
+        if ((activeSwitch === 'road' || activeSwitch === null) && !carriageWaySearch && value && value.includes("/") && (value.split("/").length === 3 || value.split("/").length === 5)){
             let splittedValue = value.split("/");
             searchValueCopy = splittedValue[0]+"/"+splittedValue[1]+"//"+splittedValue[2];
             if (splittedValue.length===5){
