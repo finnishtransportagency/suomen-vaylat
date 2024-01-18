@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { ReactReduxContext } from 'react-redux';
 import { useAppSelector } from '../../state/hooks';
 import { motion, AnimatePresence } from 'framer-motion';
+import SearchResultPanel from './SearchResultPanel';
 import {
     faSearch,
     faTimes,
@@ -30,8 +31,6 @@ import SearchToast from '../toasts/SearchToast';
 import ReactTooltip from 'react-tooltip';
 import TipToast from '../toasts/TipToast';
 import SearchModal from './SearchModal';
-import SearchResultPanel from './SearchResultPanel';
-
 
 export const StyledSearchIcon  = styled.div`
     min-width: 48px;
@@ -120,7 +119,7 @@ export const StyledDropDown = styled(motion.div)`
     border-radius: 24px;
     //box-shadow: rgb(0 0 0 / 16%) 0px 3px 6px, rgb(0 0 0 / 23%) 0px 3px 6px;
     background-color: ${(props) => props.theme.colors.mainWhite};
-    padding: 64px 16px 0px 16px;
+    padding: 1em 16px 0px 16px;
     pointer-events: auto;
     overflow: auto;
     @media ${(props) => props.theme.device.mobileL} {
@@ -163,6 +162,7 @@ export const StyledHideSearchResultsButton = styled.div`
     background-color: white;
     text-align: center;
     padding-bottom: 4px;
+    margin-top: 1em;
     cursor: pointer;
     svg {
         font-size: 23px;
@@ -201,8 +201,8 @@ const Search = () => {
         useState(false);
     const [searchType, setSearchType] = useState('address');
     const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
-  
-    const { isSearchOpen, geoJsonArray, hasToastBeenShown } = useAppSelector((state) => state.ui);
+
+    const { isSearchOpen, geoJsonArray, hasToastBeenShown, activeSwitch } = useAppSelector((state) => state.ui);
     const { channel, allLayers } = useAppSelector((state) => state.rpc);
 
     const { store } = useContext(ReactReduxContext);
@@ -213,7 +213,6 @@ const Search = () => {
     const [firstSearchResultShown, setFirstSearchResultShown] = useState(false);
     const [showToast, setShowToast] = useState(JSON.parse(localStorage.getItem(SEARCH_TIP_LOCALSTORAGE)));
     const [carriageWaySearch, setCarriageWaySearch] = useState(false);
-
 
     const handleSeach = (searchValue) => {
         setShowSearchResults(true);
@@ -233,13 +232,17 @@ const Search = () => {
         let searchValueCopy = value
         //special case, roadsearch with 3 params is road/part/distance, 
         //unless search ajorata and etaisyys flag ( carriageWaySearch ) found
-        if ( !carriageWaySearch && value && value.includes("/") && (value.split("/").length === 3 || value.split("/").length === 5)){
+        
+        //TODO if and when we implement track range search, this should be enabled also to track, for now only road search 
+        if ((activeSwitch === 'road' || activeSwitch === null) && !carriageWaySearch && value && value.includes("/") && (value.split("/").length === 3 || value.split("/").length === 5)){
             let splittedValue = value.split("/");
             searchValueCopy = splittedValue[0]+"/"+splittedValue[1]+"//"+splittedValue[2];
             if (splittedValue.length===5){
                 searchValueCopy += "/"+ splittedValue[3]+"//"+splittedValue[4]
             }
         }
+
+        searchValueCopy = searchValueCopy.trim(); 
         store.dispatch(setGeoJsonArray([]));
         setFirstSearchResultShown(false);
         removeMarkersAndFeatures();
@@ -333,6 +336,9 @@ const Search = () => {
                 if (data.success) {
                     if (data.result) {
                         setSearchResults(data);
+                    }
+                    if (data.result.locations.length > 1 && !isSearchModalOpen) {
+                        setIsSearchModalOpen(true);
                     }
                 }
             });
@@ -611,7 +617,7 @@ const Search = () => {
                                 size="lg"
                             />
                         )}
-                    </StyledLeftContentWrapper>
+                    </StyledLeftContentWrapper>   
                     <SearchResultPanel 
                         isSearchOpen={isSearchOpen}
                         searchResults={searchResults}
@@ -627,7 +633,7 @@ const Search = () => {
                         searchClickedRow={searchClickedRow}
                         allLayers={allLayers}
                         hidden={true}
-                    />        
+                    /> 
                 {isSearchModalOpen && ( 
                     <SearchModal 
                         searchValue={searchValue}
@@ -654,6 +660,7 @@ const Search = () => {
                         setCarriageWaySearch={setCarriageWaySearch}
                     />            
                 )}  
+                
                 </StyledSearchWrapper>
              
         

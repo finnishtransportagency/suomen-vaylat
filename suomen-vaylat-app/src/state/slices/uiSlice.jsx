@@ -1,8 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { theme } from '../../theme/theme';
-import { act } from '@testing-library/react';
 
 const initialState = {
+    activeSwitch: null,
     isGfiToolsOpen: false,
     isFullScreen: false,
     modalConstrainsRef: null,
@@ -161,9 +161,6 @@ export const uiSlice = createSlice({
         setSelectedGfiTool: (state, action) => {
             state.selectedGfiTool = action.payload;
         },
-        setActiveSelectionTool: (state, action) => {
-            state.activeSelectionTool = action.payload;
-        },
         setShareUrl: (state, action) => {
             state.shareUrl = action.payload;
         },
@@ -256,6 +253,9 @@ export const uiSlice = createSlice({
           setSelectedCustomFilterLayers: (state, action) => {
             state.selectedCustomFilterLayers = action.payload;
           },
+          setActiveSwitch: (state, action) => {
+            state.activeSwitch = action.payload;
+          },
 
     },
 });
@@ -283,7 +283,6 @@ export const {
     setIsGfiOpen,
     setIsGfiDownloadOpen,
     setSelectedGfiTool,
-    setActiveSelectionTool,
     setShareUrl,
     setIsDrawingToolsOpen,
     setActiveTool,
@@ -313,7 +312,8 @@ export const {
     setUpdateCustomLayers,
     setCheckedLayer,
     setIsCheckmark,
-    setSelectedCustomFilterLayers
+    setSelectedCustomFilterLayers,
+    setActiveSwitch
 } = uiSlice.actions;
 
 export default uiSlice.reducer;

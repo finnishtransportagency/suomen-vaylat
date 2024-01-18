@@ -9,7 +9,7 @@ import store from '../../state/store';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import ReactTooltip from 'react-tooltip';
 import { useAppSelector } from '../../state/hooks';
-import { setIsMoreSearchOpen } from '../../state/slices/uiSlice';
+import { setIsMoreSearchOpen, setActiveSwitch } from '../../state/slices/uiSlice';
 import { isMobile } from '../../theme/theme';
 
 const InputContainer = styled.div`
@@ -45,7 +45,6 @@ const StyledInput = styled.input`
     @media (max-width: 768px) {
         font-size: 14px;
         padding-left: 10px;
-        padding-bottom: 10px;
     }
 `;
 
@@ -63,6 +62,8 @@ const AddressSearch = ({
 
     const handleIconClick = () => {
         store.dispatch(setIsMoreSearchOpen(!isMoreSearchOpen));
+        store.dispatch(setActiveSwitch(null));
+
         toggleSearchModal();
     };
 

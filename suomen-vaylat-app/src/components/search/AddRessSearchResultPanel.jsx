@@ -1,9 +1,8 @@
 import strings from '../../translations';
-import { StyledDropDown, StyledDropdownContentItem, StyledSearchIcon, StyledDropdownContentItemTitle, StyledHideSearchResultsButton } from './Search';
+import { StyledDropDown, StyledDropdownContentItem, StyledSearchIcon, StyledDropdownContentItemTitle } from './Search';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { toast } from 'react-toastify';
 import {
-    faAngleUp,
     faCity,
     faRoad,
     faTrain,
@@ -20,10 +19,11 @@ const AddRessSearchResultPanel = ({
     setShowSearchResults,
     setSearchClickedRow,
     searchClickedRow,
-    showOnlyType
+    activeSwitch
 }) => {
     const typeResolvTable = [  ['address', 'Osoite'],
-                               ['premise', 'Kiinteistötunnus']  ]
+                               ['premise', 'Kiinteistötunnus'] ,
+                               ['track', 'VKM'] ]
     const typeMap = new Map(typeResolvTable);
     const nonNomenclatureTypes = Array.from(typeMap.values());              
     let filteredResult = searchResults;
@@ -31,11 +31,31 @@ const AddRessSearchResultPanel = ({
         searchResults.result.locations &&
         searchResults.result.locations.length > 0){
             filteredResult =  searchResults.result.locations.filter(res => { 
-                return  showOnlyType === 'all' || 
-                res.vkmType === showOnlyType || 
-                res.type === typeMap.get(showOnlyType) ||
-                ( showOnlyType === 'nomenclature' && res.channelId === 'NLSFI_GEOCODING' 
-                && !nonNomenclatureTypes.includes(res.type) )
+                if  (activeSwitch === null || activeSwitch === undefined){
+                    return true;
+                }
+                let showResult = false;
+                switch (activeSwitch){
+                    case "track":
+                        showResult = res.type === "VKM" && res.vkmType === "track";
+                        break;
+                    case "address":
+                        showResult = res.type === typeMap.get(activeSwitch)
+                        break;
+                    case "premise":
+                        showResult = res.type === typeMap.get(activeSwitch)
+                        break;                        
+                    case "road":
+                        showResult = res.type === "VKM" && res.vkmType === "road";
+                        break;
+                    case "nomenclature":
+                        showResult = res.channelId === 'NLSFI_GEOCODING' 
+                        && !nonNomenclatureTypes.includes(res.type)
+                        break;        
+                    default:
+                        return false;
+                }   
+                return showResult;
             });
         }
     return (
@@ -131,19 +151,13 @@ const AddRessSearchResultPanel = ({
                     );
                 }
             )
-        ) : ( <div> {strings.search.address.error.text}</div> 
-            /*<StyledDropdownContentItem key={'no-results'}>
-                <StyledDropdownContentItemTitle type="noResults">
-                    {strings.search.address.error.text}
-                </StyledDropdownContentItemTitle>
-            </StyledDropdownContentItem>
-            */
+        ) 
+        : 
+        ( 
+            <div> 
+            {activeSwitch === 'track' ? strings.search.vkm.trackError.text : strings.search.address.error.text}
+            </div> 
         )}
-        <StyledHideSearchResultsButton
-            onClick={() => setShowSearchResults(false)}
-        >
-            <FontAwesomeIcon icon={faAngleUp} />
-        </StyledHideSearchResultsButton>
     </StyledDropDown>
     );
 };
