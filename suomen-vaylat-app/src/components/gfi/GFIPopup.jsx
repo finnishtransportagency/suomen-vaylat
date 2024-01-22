@@ -557,7 +557,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
         LAYER_ID,
       ]);
     } else {
-      store.dispatch(removeMarkerRequest({ markerId: "VKM_MARKER" }));
+      filteredFeatures[0].geometry.type === 'Point' && store.dispatch(removeMarkerRequest({ markerId: "VKM_MARKER" }));
       
       let featureStyle = {
         fill: {
@@ -570,7 +570,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
             lineCap: 'round',
             lineJoin: 'round',
             area: {
-                color: 'rgba(100, 255, 95, 0.7)',
+                color: 'rgba(100, 255, 95, 0.8)',
                 width: 4,
                 lineJoin: 'round'
             }
@@ -579,7 +579,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
             shape: 2,
             size: 4,
             fill: {
-                color: 'rgba(100, 255, 95, 0.7)',
+                color: 'rgba(100, 255, 95, 0.8)',
             }
         }
       };
