@@ -37,6 +37,7 @@ const ContactInput = styled.input`
 
 const StyledMessage  = styled.div`
   margin-top: 15px;
+  margin-bottom: 15px;
   height: 10px
 `;
 
@@ -67,6 +68,7 @@ const StyledButton = styled.div`
 const FeedbackForm = ({  groups, layers }) => {
   useAppSelector((state) => state.language);
   const [selectedService, setSelectedService] = useState('');
+  const [category, setCategory] = useState('');
   const [topic, setTopic] = useState('');
   const [specificTopic, setSpecificTopic] = useState('');
   const [selectedAineisto, setSelectedAineisto] = useState([]);
@@ -81,6 +83,10 @@ const FeedbackForm = ({  groups, layers }) => {
   const handleServiceChange = (event) => {
     setSelectedService(event.target.value);
   };
+
+  const handleCategoryChange = (event) => {
+    setCategory(event.target.value);
+  }
 
   const handleTopicChange = (event) => {
     setTopic(event.target.value);
@@ -129,17 +135,34 @@ const FeedbackForm = ({  groups, layers }) => {
     }
   }
 
-  const handleSubmit = () => {
-    if (setRecaptchaPassed) {
-      setSuccessMessage('');
-      setErrorMessage('');
-
-    if (!selectedService || selectedService === 'selectService' || !topic || topic === 'selectTopic' || !email) {
-      setErrorMessage(strings.appInfo.feedbackForm.errorMessage);
-      return;
+  const handleSubmit = async () => {
+    try {
+      const formData = new FormData();
+  
+      // Append text data
+      formData.append('selectedService', selectedService);
+      formData.append('topic', topic);
+      formData.append('specificTopic', specificTopic);
+      formData.append('selectedAineisto', selectedAineisto);
+      formData.append('description', description);
+      formData.append('locationInfo', locationInfo);
+      formData.append('email', email);
+  
+      const response = await fetch('http://localhost:3000', {
+        method: 'POST',
+        body: formData,
+      });
+  
+      if (!response.ok) {
+        throw new Error(`Server returned ${response.status} ${response.statusText}`);
+      }
+  
+      const data = await response.json();
+      setSuccessMessage(data);
+    } catch (error) {
+      setErrorMessage(`Failed to submit form. ${error.message}`);
+      console.error('Error:', error);
     }
-    }
-
     console.log('Feedback submitted:', {
       selectedService,
       topic,
@@ -190,17 +213,36 @@ const FeedbackForm = ({  groups, layers }) => {
         </select>
       </FormGroup>
 
+
       {topic === 'aineistot' && (
-        <FormGroup>
-          <Label htmlFor="aineistoSelect">{strings.appInfo.feedbackForm.aineistoSelect}</Label>
-          <FormLayerSearch
-            layers={layers}
-            groups={groups}
-            onLayerSelect={handleAineistoChange}
-            required
-          />
-        </FormGroup>
-      )}
+      <FormGroup>
+        <select
+          id="categorySelect"
+          value={category}
+          onChange={handleCategoryChange}
+        >
+          <option value="selectCategory">{strings.appInfo.feedbackForm.selectCategory}</option>
+          <option value="tiestotiedot">{strings.appInfo.feedbackForm.tiestotiedot}</option>
+          <option value="hanketiedot">{strings.appInfo.feedbackForm.hanketiedot}</option>
+          <option value="digiroad">{strings.appInfo.feedbackForm.digiroad}</option>
+          <option value="taitorakennerekisteri">{strings.appInfo.feedbackForm.taitorakennerekisteri}</option>
+          <option value="ratatiedot">{strings.appInfo.feedbackForm.ratatiedot}</option>
+          <option value="vesivaylatiedot">{strings.appInfo.feedbackForm.vesivaylatiedot}</option>
+          <option value="muutaineistot">{strings.appInfo.feedbackForm.muutaineistot}</option>
+        </select>
+      </FormGroup>
+    )}
+
+    {topic === 'aineistot' && (
+      <FormGroup>
+        <Label htmlFor="aineistoSelect">{strings.appInfo.feedbackForm.aineistoSelect}</Label>
+        <FormLayerSearch
+          layers={layers}
+          groups={groups}
+          onLayerSelect={handleAineistoChange}
+        />
+      </FormGroup>
+    )}
 
       <FormGroup>
         <Label htmlFor="specificTopicInput">{strings.appInfo.feedbackForm.specificTopicInput}</Label>
