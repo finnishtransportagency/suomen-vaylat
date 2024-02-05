@@ -173,6 +173,7 @@ const GfiTabContent = ({ layer, data, title, tablePropsInit }) => {
             layer: {
               id: layer.id,
               title: layer.name,
+              filterFieldsInfo: layer.config?.gfi?.filterFieldsInfo || null,
               filterColumnsArray: filterColumnsArray
             }
         }
