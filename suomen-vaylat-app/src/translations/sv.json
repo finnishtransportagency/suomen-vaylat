@@ -8,6 +8,7 @@
   },
   "title": "Suomen Väylät",
   "tooltips": {
+    "showInfoLink": "Filtreringsinformation (öppnas på en ny flik)",
     "layerlist": {
       "filter": "Filtrera",
       "filterable": "Filtrerbart kartlager",

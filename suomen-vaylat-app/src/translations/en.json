@@ -8,6 +8,7 @@
   },
   "title": "Suomen Väylät",
   "tooltips": {
+    "showInfoLink": "Filtering info (opens in a new tab)",
     "layerlist": {
       "filter": "Filter",
       "filterable": "Filterable layer",
