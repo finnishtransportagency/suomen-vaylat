@@ -1,20 +1,23 @@
-import { useState, useContext, useEffect, useRef } from "react";
+import { useState, useContext, useEffect } from "react";
 import { useAppSelector } from "../../state/hooks";
 import { ReactReduxContext } from "react-redux";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import "dayjs/locale/fi";
 import "dayjs/locale/sv";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-
+import ReactTooltip from 'react-tooltip';
 import { updateFiltersOnMap } from "../../utils/gfiUtil"
-
+import { theme, isMobile } from '../../theme/theme';
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import {
+  setWarning,
+} from "../../state/slices/uiSlice";
 
 import "react-toastify/dist/ReactToastify.css";
 import styled from "styled-components";
 import strings from "../../translations";
 import Dropdown from "../select/Dropdown";
-import { faPlus, faTimes, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faTimes, faTrash, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { setFilters } from "../../state/slices/rpcSlice";
@@ -23,6 +26,29 @@ const StyledFilterProp = styled.div``;
 
 const StyledFilterPropContainer = styled.div`
   width: 95%;
+`;
+
+const StyledHeaderButton = styled.div`
+    position: relative;
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    border: none;
+    background: none;
+    svg {
+        color: ${props => props.theme.colors.mainColor1};
+        font-size: 20px;
+        transition: all 0.1s ease-out;
+    };
+    &:hover {
+        svg {
+            color: ${props => props.theme.colors.mainColor2};
+        }
+    }
 `;
 
 const StyledFilterHeader = styled.div`
@@ -75,6 +101,15 @@ const StyledModalFloatingChapter = styled.div`
   width: 100%;
   position: relative;
 `;
+
+const StyledModalInputFloatingChapter = styled.div`
+  float: left;
+  height: '3em'
+  width: 100%;
+  position: relative;
+  display: flex;
+`;
+
 const StyledModalFloatingActionChapter = styled.div`
   width: 7%;
   margin-left: ".5em";
@@ -139,7 +174,7 @@ const StyledSelectedTabDisplayOptionsButton = styled.div`
   display: flex;
   position: relative;
   right: 0px;
-  margin: 0.5em 0 0.5em 0.5em;
+  margin: 1em 0 0.5em 0.5em;
   cursor: pointer;
   color: ${(props) => props.theme.colors.mainColor1};
   svg {
@@ -327,8 +362,42 @@ const handleRemoveFilter = (filter) => {
     }
   };
 
+
+  // Warn user about leaving the page
+  const handleInfoClick = (event) => {
+    event.preventDefault();
+    const savedState = localStorage.getItem("dontShowExitLinkWarn");
+    if (!savedState) {
+      store.dispatch(setWarning({
+      title: strings.exitConfirmation,
+      subtitle: null,
+      confirm: {
+        text: strings.general.continue,
+        action: () => {
+          window.open(filterInfo.layer.filterFieldsInfo, "_blank");
+          store.dispatch(setWarning(null));
+        }
+      },
+      cancel: {
+        text: strings.general.cancel,
+          action: () => {
+            store.dispatch(setWarning(null))
+          }
+      },
+      dontShowAgain: {
+        id: "dontShowExitLinkWarn"
+      }
+      }))
+    } else {
+      window.open(filterInfo.layer.filterFieldsInfo, "_blank");
+    }
+  }
+
   return (
     <StyledModalContainer>
+      <ReactTooltip backgroundColor={theme.colors.mainColor1} disable={isMobile} id={'open_info_link'} place='left' type='dark' effect='float'>
+          <span>{strings.tooltips.showInfoLink}</span>
+      </ReactTooltip>
       <StyledModalSelectionContainer>
         <StyledModalFloatingChapter>
           <Dropdown
@@ -368,7 +437,7 @@ const handleRemoveFilter = (filter) => {
                 isDisabled={Object.keys(propValue).length === 0}
               />
             </StyledModalFloatingChapter>
-            <StyledModalFloatingChapter style={{ marginTop: ".5em" }}>
+            <StyledModalInputFloatingChapter style={{ marginTop: ".5em" }}>
               <StyledInput
                 type="text"
                 value={filterValue.value}
@@ -386,7 +455,14 @@ const handleRemoveFilter = (filter) => {
                 }}
                 disabled={Object.keys(operatorValue).length === 0}
               />
-            </StyledModalFloatingChapter>
+              { filterInfo.layer.filterFieldsInfo &&
+                <StyledHeaderButton data-tip data-for={'open_info_link'} onClick={handleInfoClick}>
+                  <FontAwesomeIcon
+                    icon={faInfoCircle}
+                  />
+                </StyledHeaderButton>
+              }
+            </StyledModalInputFloatingChapter>
           </>
         )}
         <StyledModalFloatingActionChapter>
