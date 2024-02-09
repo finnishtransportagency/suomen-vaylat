@@ -642,7 +642,41 @@ const SearchModal = ({
                 </StyledSearchSection>        
                 </>
                 )
-                } 
+                }
+                {activeSwitch === 'layer' &&  (
+                    <> 
+                        <StyledSearchSection>   
+                            <StyledInput
+                                type="text"
+                                placeholder={ strings.search.layer.title }
+                                value={searchValue}
+                                onChange={(e) => setSearchValue(e.target.value) }
+                                onKeyPress={e => {
+                                    if (e.key === 'Enter') {
+                                        handleSeach(searchValue);
+                                    }
+                                }}
+                            />
+                            <SearchResultPanel 
+                                isSearchOpen={isSearchOpen}
+                                searchResults={searchResults}
+                                showSearchResults={showSearchResults}
+                                searchType={searchType}
+                                dropdownVariants={dropdownVariants}
+                                firstSearchResultShown={firstSearchResultShown}
+                                handleSearchSelect={handleSearchSelect}
+                                setFirstSearchResultShown={setFirstSearchResultShown}
+                                isMobile={isMobile}
+                                setShowSearchResults={setShowSearchResults}
+                                setSearchClickedRow={setSearchClickedRow}
+                                searchClickedRow={searchClickedRow}
+                                allLayers={allLayers}
+                                    activeSwitch={activeSwitch}
+                            /> 
+                        </StyledSearchSection>   
+                    </>
+                )
+                }
          </>
                 { activeSwitch == null &&
                     <SearchResultPanel 
