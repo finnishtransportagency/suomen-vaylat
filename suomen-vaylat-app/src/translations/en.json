@@ -21,6 +21,7 @@
     "legendHeader": "The data displayed at this zoom level and their explanations",
     "legendButton": "Legend",
     "myLocButton": "My location",
+    "baseLayersButton": "Background maps",
     "zoomExpand": "Expand",
     "zoomIn": "Zoom in",
     "zoomOut": "Zoom out",
