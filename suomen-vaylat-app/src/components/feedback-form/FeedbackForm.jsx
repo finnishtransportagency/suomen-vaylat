@@ -5,7 +5,6 @@ import FormLayerSearch from './FormLayerSearch';
 import { useAppSelector } from '../../state/hooks';
 import store from '../../state/store';
 import { setIsFeedBackFormOpen } from '../../state/slices/uiSlice';
-import ReCAPTCHA from "react-google-recaptcha";
 
 const FormContainer = styled.div`
   display: flex;
@@ -75,10 +74,10 @@ const FeedbackForm = ({  groups, layers }) => {
   const [description, setDescription] = useState('');
   const [locationInfo, setLocationInfo] = useState('');
   const [screenshots, setScreenshots] = useState([]);
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
-  const [recaptchaPassed, setRecaptchaPassed] = useState(false);
 
   const handleServiceChange = (event) => {
     setSelectedService(event.target.value);
@@ -113,9 +112,14 @@ const FeedbackForm = ({  groups, layers }) => {
     setScreenshots([...screenshots, ...fileList]);
   };
 
+  const handleNameChange = (event) => {
+    const enteredName = event.target.value;
+    setName(enteredName);
+  };
+
   const handleEmailChange = (event) => {
     const enteredEmail = event.target.value;
-    setEmail(enteredEmail); // Set email state as you type
+    setEmail(enteredEmail);
   };
   
   const handleEmailValidation = () => {
@@ -128,73 +132,22 @@ const FeedbackForm = ({  groups, layers }) => {
     }
   };
   
-  function onChange(value) {
-    console.log("Captcha value:", value);
-    if (value) {
-      setRecaptchaPassed(true);
-    }
-  }
 
-  const handleSubmit = async () => {
-    try {
-      const formData = new FormData();
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
   
-      // Append text data
-      formData.append('selectedService', selectedService);
-      formData.append('topic', topic);
-      formData.append('specificTopic', specificTopic);
-      formData.append('selectedAineisto', selectedAineisto);
-      formData.append('description', description);
-      formData.append('locationInfo', locationInfo);
-      formData.append('email', email);
-  
-      const response = await fetch('http://localhost:3000', {
-        method: 'POST',
-        body: formData,
-      });
-  
-      if (!response.ok) {
-        throw new Error(`Server returned ${response.status} ${response.statusText}`);
-      }
-  
-      const data = await response.json();
-      setSuccessMessage(data);
-    } catch (error) {
-      setErrorMessage(`Failed to submit form. ${error.message}`);
-      console.error('Error:', error);
+    if (topic && description && name && email) {
+      setSuccessMessage(strings.appInfo.feedbackForm.successMessage);
+      store.dispatch(setIsFeedBackFormOpen(false))
+    } else {
+      setErrorMessage(strings.appInfo.feedbackForm.errorMessage);
     }
-    console.log('Feedback submitted:', {
-      selectedService,
-      topic,
-      specificTopic,
-      selectedAineisto,
-      description,
-      locationInfo,
-      screenshots,
-      email,
-    });
-    setSuccessMessage(strings.appInfo.feedbackForm.successMessage);
   };
-
+  
   const handleClose = () => {
     store.dispatch(setIsFeedBackFormOpen(false))
   }
-
-  /* 
-        <FormGroup>
-        <Label htmlFor="serviceSelect">{strings.appInfo.feedbackForm.serviceSelect}</Label>
-        <select
-          id="serviceSelect"
-          value={selectedService}
-          onChange={handleServiceChange}
-          required
-        >
-          <option value="selectService">{strings.appInfo.feedbackForm.selectService}</option>
-          <option value="suomenVaylat">{strings.appInfo.feedbackForm.suomenVaylat}</option>
-        </select>
-      </FormGroup>
-
-  */
 
 
   return (
@@ -244,21 +197,24 @@ const FeedbackForm = ({  groups, layers }) => {
       </FormGroup>
     )}
 
-      <FormGroup>
-        <Label htmlFor="specificTopicInput">{strings.appInfo.feedbackForm.specificTopicInput}</Label>
-        <select
-          id="specificTopicInput"
-          value={specificTopic}
-          onChange={handleSpecificTopicChange}
-        >
-          <option value="selectSpecificTopic">{strings.appInfo.feedbackForm.selectSpecificTopic}</option>
-          <option value="kaytontuki">{strings.appInfo.feedbackForm.kaytontuki}</option>
-          <option value="virhetilanteet">{strings.appInfo.feedbackForm.virhetilanteet}</option>
-          <option value="kehitysehdotus">{strings.appInfo.feedbackForm.kehitysehdotus}</option>
-          <option value="palaute">{strings.appInfo.feedbackForm.palaute}</option>
-          <option value="laatupuute">{strings.appInfo.feedbackForm.laatupuute}</option>
-        </select>
-      </FormGroup>
+    {topic !== 'aineistot' && (
+  <FormGroup>
+    <Label htmlFor="specificTopicInput">{strings.appInfo.feedbackForm.specificTopicInput}</Label>
+    <select
+      id="specificTopicInput"
+      value={specificTopic}
+      onChange={handleSpecificTopicChange}
+    >
+      <option value="selectSpecificTopic">{strings.appInfo.feedbackForm.selectSpecificTopic}</option>
+      <option value="kaytontuki">{strings.appInfo.feedbackForm.kaytontuki}</option>
+      <option value="virhetilanteet">{strings.appInfo.feedbackForm.virhetilanteet}</option>
+      <option value="kehitysehdotus">{strings.appInfo.feedbackForm.kehitysehdotus}</option>
+      <option value="palaute">{strings.appInfo.feedbackForm.palaute}</option>
+      <option value="laatupuute">{strings.appInfo.feedbackForm.laatupuute}</option>
+    </select>
+  </FormGroup>
+)}
+
 
       <FormGroup>
         <Label htmlFor="descriptionTextarea">{strings.appInfo.feedbackForm.descriptionTextarea}</Label>
@@ -295,6 +251,8 @@ const FeedbackForm = ({  groups, layers }) => {
         <Label>{strings.appInfo.feedbackForm.contactInfo}</Label>
         <ContactInput
           type="text"
+          value={name}
+          onChange={handleNameChange}
           placeholder={strings.appInfo.feedbackForm.contactName}
           required
         />
@@ -313,13 +271,8 @@ const FeedbackForm = ({  groups, layers }) => {
       {successMessage && <p style={{ color: 'green' }}>{successMessage}</p>}
       </StyledMessage>
 
-      <ReCAPTCHA
-        sitekey="6Lf5yEYpAAAAAEcAPxDwGO35kXzbC8QfV7Addd0m"
-        onChange={onChange}
-      />
-
       <StyledButtonContainer>
-        <StyledButton onClick={handleSubmit} disabled={!recaptchaPassed}>
+        <StyledButton onClick={handleSubmit}>
           {strings.general.submit}
         </StyledButton>
         <StyledButton onClick={handleClose}>
