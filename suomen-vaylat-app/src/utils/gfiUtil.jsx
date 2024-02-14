@@ -55,7 +55,7 @@ export const getCQLNumberPropertyOperator = (property, operator, value) => {
     case "smallerThan":
       return property + " < " + value;
     case "biggerThan":
-      return property + " < " + value;
+      return property + " > " + value;
     default:
       return property + " = " + value;
   }

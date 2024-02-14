@@ -8,6 +8,7 @@
   },
   "title": "Suomen Väylät",
   "tooltips": {
+    "showInfoLink": "Filtreringsinformation (öppnas på en ny flik)",
     "layerlist": {
       "filter": "Filtrera",
       "filterable": "Filtrerbart kartlager",
@@ -347,7 +348,6 @@
       "title": "Med platssökning kan du söka en kommun, adress, fastighetsbeteckning, vägadress eller banadress.",
       "address": "Adressökning, skriv i formatet 'kommun', 'adress' eller 'adress, kommun'.",
       "addressExamples": [
-        "Helsinki",
         "Opastinsilta 12",
         "Opastinsilta 12, Helsinki"
       ],

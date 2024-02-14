@@ -8,6 +8,7 @@
   },
   "title": "Suomen Väylät",
   "tooltips": {
+    "showInfoLink": "Filtering info (opens in a new tab)",
     "layerlist": {
       "filter": "Filter",
       "filterable": "Filterable layer",
@@ -347,7 +348,6 @@
       "title": "Use location search to search for a municipality, address, property identifier, road address or track address.",
       "address": "Address search, type in the format 'municipality', 'address' or 'address, municipality'.",
       "addressExamples": [
-        "Helsinki",
         "Opastinsilta 12",
         "Opastinsilta 12, Helsinki"
       ],

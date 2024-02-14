@@ -221,6 +221,7 @@ export const Layer = ({ layer, themeName, groupName, showSwitch = true }) => {
           layer: {
             id: layer.id,
             title: layer.name,
+            filterFieldsInfo: layer.config?.gfi?.filterFieldsInfo || null,
             filterColumnsArray: filterColumnsArray
           }
       }

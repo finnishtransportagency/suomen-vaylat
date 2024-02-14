@@ -1,13 +1,15 @@
 import styled from 'styled-components';
 import strings from '../../translations';
-import { useState, useEffect } from 'react';
+import { ReactReduxContext } from 'react-redux';
+import { setActiveSwitch } from '../../state/slices/uiSlice';
+import { useAppSelector } from '../../state/hooks';
+import { useEffect, useContext } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Switch from '../switch/Switch';
 import {
     faLongArrowDown,
 } from '@fortawesome/free-solid-svg-icons';
 import SearchResultPanel from './SearchResultPanel';
-
 
 const StyledSearchModal = styled.div`
     border: none;
@@ -55,7 +57,7 @@ const StyledInputHalf = styled.input`
 
 const StyledSearchSection = styled.div`
     width: 90%;
-    margin-bottom: 16px;
+    margin-bottom: 1em;
 `;
 
 
@@ -76,7 +78,7 @@ const StyledCheckbox = styled.input`
     margin-left: 10px;
     width: 16px;
     height: 16px;
-    margin-top: 1px
+    margin-top: 1px;
 `;
 
 const CheckboxWrapper = styled.div`
@@ -237,9 +239,11 @@ const SearchModal = ({
     carriageWaySearch, 
     setCarriageWaySearch
 }) => {
-    const [activeSwitch, setActiveSwitch] = useState("road");
+    const { store } = useContext(ReactReduxContext);
+    const { activeSwitch } = useAppSelector((state) => state.ui);
+
     const updateActiveSwitch = (type) => {
-        setActiveSwitch(type);
+        activeSwitch !== type ? store.dispatch(setActiveSwitch(type)) : store.dispatch(setActiveSwitch(null));
         setSearchResults(null);
         setShowSearchResults(false);
         setSearchValue('');
@@ -412,7 +416,7 @@ const SearchModal = ({
                         setSearchClickedRow={setSearchClickedRow}
                         searchClickedRow={searchClickedRow}
                         allLayers={allLayers}
-                        showOnlyType='road'
+                        activeSwitch={activeSwitch}
                     />        
 
                 </StyledSearchSection>  
@@ -441,8 +445,8 @@ const SearchModal = ({
                         <StyledInput
                             type="text"
                             placeholder={strings.search.track.tracknumber  }
+                            value={getSearchValuePart(searchValue, searchType, 0, true)}
                             onChange={(e) => updateRoadSearchValue(searchValue, searchType, setSearchValue, 0, e.target.value) }
-                            value={getSearchValuePart(searchValue, searchType, 0)}
                             onKeyPress={e => {
                                 if (e.key === 'Enter') {
                                     handleSeach(searchValue);
@@ -452,7 +456,7 @@ const SearchModal = ({
                         <StyledInputHalf
                             type="text"
                             placeholder={ strings.search.track.trackkm}
-                            value={getSearchValuePart(searchValue, searchType, 1)}
+                            value={getSearchValuePart(searchValue, searchType, 1, true)}
                             onChange={(e) => updateRoadSearchValue(searchValue, searchType, setSearchValue, 1, e.target.value) }
                             onKeyPress={e => {
                                 if (e.key === 'Enter') {
@@ -463,7 +467,7 @@ const SearchModal = ({
                         <StyledInputHalf
                             type="text"
                             placeholder={ strings.search.track.trackm}
-                            value={getSearchValuePart(searchValue, searchType, 2)}
+                            value={getSearchValuePart(searchValue, searchType, 2, true)}
                             onChange={(e) => updateRoadSearchValue(searchValue, searchType, setSearchValue, 2, e.target.value) }
                             onKeyPress={e => {
                                 if (e.key === 'Enter') {
@@ -486,7 +490,7 @@ const SearchModal = ({
                         setSearchClickedRow={setSearchClickedRow}
                         searchClickedRow={searchClickedRow}
                         allLayers={allLayers}
-                        showOnlyType='track'
+                        activeSwitch={activeSwitch}
                     />        
                 </StyledSearchSection>    
                 </>
@@ -535,7 +539,7 @@ const SearchModal = ({
                         setSearchClickedRow={setSearchClickedRow}
                         searchClickedRow={searchClickedRow}
                         allLayers={allLayers}
-                        showOnlyType='address'
+                        activeSwitch={activeSwitch}
                     />        
                 </StyledSearchSection>    
                 </>
@@ -584,7 +588,7 @@ const SearchModal = ({
                         setSearchClickedRow={setSearchClickedRow}
                         searchClickedRow={searchClickedRow}
                         allLayers={allLayers}
-                        showOnlyType='nomenclature'
+                        activeSwitch={activeSwitch}
                     />        
                 </StyledSearchSection>
                 </>
@@ -633,16 +637,16 @@ const SearchModal = ({
                         setSearchClickedRow={setSearchClickedRow}
                         searchClickedRow={searchClickedRow}
                         allLayers={allLayers}
-                        showOnlyType='premise'
+                        activeSwitch={activeSwitch}
                     />        
                 </StyledSearchSection>        
                 </>
                 )
-                }  
+                } 
                 <div style= {{clear: "both"}} />
                 {
                     <Switch 
-                    isSelected={activeSwitch==='layer'}
+                    isSelected={activeSwitch ==='layer'}
                     action={() => {
                         updateActiveSwitch('layer')
                     }}
@@ -682,28 +686,30 @@ const SearchModal = ({
                         setSearchClickedRow={setSearchClickedRow}
                         searchClickedRow={searchClickedRow}
                         allLayers={allLayers}
-                        showOnlyType='layer'
+                            activeSwitch={activeSwitch}
                     /> 
                 </StyledSearchSection>       
                 </>
                 )
-                }  
+                }
          </>
-        <SearchResultPanel 
-        isSearchOpen={isSearchOpen}
-        searchResults={searchResults}
-        showSearchResults={showSearchResults}
-        searchType={searchType}
-        dropdownVariants={dropdownVariants}
-        firstSearchResultShown={firstSearchResultShown}
-        handleSearchSelect={handleSearchSelect}
-        setFirstSearchResultShown={setFirstSearchResultShown}
-        isMobile={isMobile}
-        setShowSearchResults={setShowSearchResults}
-        setSearchClickedRow={setSearchClickedRow}
-        searchClickedRow={searchClickedRow}
-        allLayers={allLayers}
-        />        
+                { activeSwitch == null &&
+                    <SearchResultPanel 
+                        isSearchOpen={isSearchOpen}
+                        searchResults={searchResults}
+                        showSearchResults={showSearchResults}
+                        searchType={searchType}
+                        dropdownVariants={dropdownVariants}
+                        firstSearchResultShown={firstSearchResultShown}
+                        handleSearchSelect={handleSearchSelect}
+                        setFirstSearchResultShown={setFirstSearchResultShown}
+                        isMobile={isMobile}
+                        setShowSearchResults={setShowSearchResults}
+                        setSearchClickedRow={setSearchClickedRow}
+                        searchClickedRow={searchClickedRow}
+                        allLayers={allLayers}
+                    />
+                }
         </StyledSearchModal>
     ) : null
 };
