@@ -461,24 +461,18 @@ export const GFIPopup = ({ handleGfiDownload }) => {
   };
 
   useEffect(() => {
-    const mapResults = gfiLocations.map((location) => {
+    let mapResults = [];
+    gfiLocations.forEach((location) => {
       location.content &&
         location?.content[0]?.features?.length > GFI_MAX_LENGTH &&
         setIsDataTable(true);
       const layers = allLayers.filter((layer) => layer.id === location.layerId);
       const layerIds =
         layers && layers.length > 0 ? layers[0].id : location.layerId;
-      let content;
       if (location.type === "text") {
-        content = location.content;
-        const popupContent = (
-          <div dangerouslySetInnerHTML={{ __html: content }}></div>
-        );
-        var contentWrapper = <div>{popupContent}</div>;
-        const contentDiv = <div id={layerIds}>{contentWrapper}</div>;
-        return contentDiv;
+        return;
       } else if (location.type === "geojson") {
-        return (
+        mapResults.push(
           <FormattedGFI
             id={layerIds}
             data={location.content}
@@ -487,7 +481,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
           />
         );
       }
-      return null;
+      return;
     });
 
     setTabsContent(mapResults);
@@ -657,7 +651,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
     data &&
       data?.content?.forEach((cont) => {
         var featureCells =
-          cont.geojson.features &&
+          cont.geojson.features ?
           cont.geojson.features
             .filter((feature) => filterFeature(feature, data, filters, channel))
             .map((feature) => {
@@ -668,7 +662,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
               cell.hasOwnProperty("_orderHigh") && delete cell["_orderHigh"];
               cell.hasOwnProperty("_order") && delete cell["_order"];
               return cell;
-            });
+            }) : [];
         cells.push(...featureCells);
       });
 
