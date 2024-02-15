@@ -147,7 +147,7 @@ const GfiTabContent = ({ layer, data, title, tablePropsInit }) => {
 
   useEffect(() => {
     setIsFiltering(
-      tablePropsInit?.filterableColumns.length === 0 ? false : true
+      tablePropsInit?.filterableColumns?.length === 0 ? false : true
     );
   }, [tablePropsInit]);
 
@@ -234,7 +234,7 @@ const GfiTabContent = ({ layer, data, title, tablePropsInit }) => {
           }}
         >
           <StyledTabContent>
-              {tablePropsInit.filteredFeatures.map( (feature, index) => {
+              {tablePropsInit.filteredFeatures?.map( (feature, index) => {
                   return (
                     <GfiTabContentItem
                       key={feature.id}
