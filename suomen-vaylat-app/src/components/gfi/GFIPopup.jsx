@@ -1,4 +1,5 @@
 import { useContext, useState, useEffect, useRef } from "react";
+import { v4 as uuidv4 } from 'uuid';
 import { motion, AnimatePresence } from "framer-motion";
 import {
   faTimes,
@@ -655,9 +656,19 @@ export const GFIPopup = ({ handleGfiDownload }) => {
           cont.geojson.features
             .filter((feature) => filterFeature(feature, data, filters, channel))
             .map((feature) => {
-              filteredFeatures.push(feature);
+              if (!feature.hasOwnProperty("id")) {
+                var extendedFeature = { ...feature };
+                extendedFeature.id = uuidv4();
+                filteredFeatures.push(extendedFeature);
+              } else {
+                filteredFeatures.push(feature);
+              }
               var cell = { ...feature.properties };
-              cell["id"] = feature.id;
+              if (cell.hasOwnProperty("id")) {
+                cell["id"] = feature.id || uuidv4();
+              } else {
+                cell.id = feature.id || uuidv4();
+              }
               cell.hasOwnProperty("UID") && delete cell["UID"];
               cell.hasOwnProperty("_orderHigh") && delete cell["_orderHigh"];
               cell.hasOwnProperty("_order") && delete cell["_order"];

@@ -71,7 +71,6 @@ const GfiTabContent = ({ layer, data, title, tablePropsInit }) => {
   const { store } = useContext(ReactReduxContext);
   const { minimizeFilter } = useAppSelector(state => state.ui);
 
-
   const [showDataTable, setShowDataTable] = useState(false);
 
   const selectFeature = (channel, features) => {
@@ -239,7 +238,7 @@ const GfiTabContent = ({ layer, data, title, tablePropsInit }) => {
                     <GfiTabContentItem
                       key={feature.id}
                       title={
-                        feature.id.split(".")[1]
+                        Array.isArray(feature.id.split(".")) && feature.id.split(".")[1]
                           ? title +
                             ` | ${strings.gfi.uniqueId} ` +
                             feature.id.split(".")[1]
