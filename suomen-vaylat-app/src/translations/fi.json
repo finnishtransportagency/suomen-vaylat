@@ -143,7 +143,8 @@
     "cancel": "Peruuta",
     "dontShowAgain": "Älä näytä uudelleen",
     "ok": "OK",
-    "OkLowerCaseK": "Ok"
+    "OkLowerCaseK": "Ok",
+    "submit": "Lähetä"
   },
   "multipleLayersWarning": "Olet lisäämässä kartalle 10 tai enemmän karttatasoa ja se saattaa vaikuttaa palvelun suorituskykyyn",
   "multipleLayersFetchWarning": "Olet hakemassa aineistoa 10 tai useammalta karttatasolta ja se saattaa vaikuttaa palvelun suorituskykyyn.",
@@ -289,6 +290,42 @@
     "googleTerms": {
       "googleTermsInfo": "Google-karttapalveluiden käyttöehdot: ",
       "googleTermsLink": "https://cloud.google.com/maps-platform/terms"
+    },
+    "feedbackForm": {
+      "openFeedbackForm": "Lähetä palautetta",
+      "title": "Palautelomake",
+      "selectCategory": "Valitse kategoria *",
+      "tiestotiedot": "Tiestötiedot",
+      "hanketiedot": "Hanke- ja suunnitelmatiedot",
+      "digiroad": "Digiroad",
+      "taitorakennerekisteri": "Taitorakennerekisteri",
+      "ratatiedot": "Ratatiedot",
+      "vesivaylatiedot": "Vesiväylätiedot",
+      "muutaineistot": "Muut aineistot",
+      "serviceSelect": "Palvelun valinta *",
+      "selectService": "Valitse palvelu",
+      "suomenVaylat": "Suomen Väylät",
+      "topicSelect": "Aihe *",
+      "selectTopic": "Valitse aihe",
+      "toiminnot": "Toiminnot",
+      "aineistot": "Aineistot",
+      "aineistoSelect": "Aineiston valinta *",
+      "specificTopicInput": "Aiheen tarkenne",
+      "selectSpecificTopic": "Valitse tarkenne",
+      "kaytontuki": "Käytön tuki",
+      "virhetilanteet": "Virhetilanteet",
+      "kehitysehdotus": "Kehitysehdotus",
+      "palaute": "Yleinen palaute",
+      "laatupuute": "Laatupuute",
+      "descriptionTextarea": "Kuvaus *",
+      "descriptionPlaceholder": "Kirjoita kuvaus...",
+      "locationInfoInput": "Sijaintitieto",
+      "screenshotsInput": "Kuvankaappaukset",
+      "contactInfo": "Yhteystiedot *",
+      "contactName": "Nimi",
+      "contactEmail": "Sähköposti",
+      "errorMessage": "Täytä vaaditut kentät",
+      "successMessage": "Kiitos palautteestasi!"
     }
   },
   "search": {
