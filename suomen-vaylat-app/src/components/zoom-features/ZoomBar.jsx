@@ -17,7 +17,7 @@ import CircleButton from '../circle-button/CircleButton';
 import ZoomBarCircle from './ZoomBarCircle';
 
 import { Legend } from '../legend/Legend';
-import { BaseLayers } from '../baseLayers/BaseLayers';
+import { Baselayers } from '../base-layers/Baselayers';
 
 const StyledZoomBarContainer = styled.div`
     z-index: 5;
@@ -122,7 +122,7 @@ const ZoomBar = ({
                 isExpanded={isLegendOpen}
                 setIsExpanded={setIsLegendOpen}
             />
-            <BaseLayers
+            <Baselayers
                 selectedLayers={rpc.selectedLayers}
                 isExpanded={isBaselayersOpen}
                 setIsExpanded={setIsBaselayersOpen}
