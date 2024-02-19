@@ -86,7 +86,7 @@ const listVariants = {
     },
 };
 
-export const BaseLayers = ({
+export const Baselayers = ({
     isExpanded,
     setIsExpanded,
     height,
