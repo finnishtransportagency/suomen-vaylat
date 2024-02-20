@@ -318,7 +318,8 @@ export const {
     setIsCheckmark,
     setSelectedCustomFilterLayers,
     setActiveSwitch,
-    setIsBaselayersOpen
+    setIsBaselayersOpen,
+    setIsFeedBackFormOpen
 } = uiSlice.actions;
 
 export default uiSlice.reducer;
