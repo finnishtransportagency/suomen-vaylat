@@ -71,7 +71,6 @@ const GfiTabContent = ({ layer, data, title, tablePropsInit }) => {
   const { store } = useContext(ReactReduxContext);
   const { minimizeFilter } = useAppSelector(state => state.ui);
 
-
   const [showDataTable, setShowDataTable] = useState(false);
 
   const selectFeature = (channel, features) => {
@@ -147,7 +146,7 @@ const GfiTabContent = ({ layer, data, title, tablePropsInit }) => {
 
   useEffect(() => {
     setIsFiltering(
-      tablePropsInit?.filterableColumns.length === 0 ? false : true
+      tablePropsInit?.filterableColumns?.length === 0 ? false : true
     );
   }, [tablePropsInit]);
 
@@ -234,12 +233,12 @@ const GfiTabContent = ({ layer, data, title, tablePropsInit }) => {
           }}
         >
           <StyledTabContent>
-              {tablePropsInit.filteredFeatures.map( (feature, index) => {
+              {tablePropsInit.filteredFeatures?.map( (feature, index) => {
                   return (
                     <GfiTabContentItem
                       key={feature.id}
                       title={
-                        feature.id.split(".")[1]
+                        Array.isArray(feature.id.split(".")) && feature.id.split(".")[1]
                           ? title +
                             ` | ${strings.gfi.uniqueId} ` +
                             feature.id.split(".")[1]

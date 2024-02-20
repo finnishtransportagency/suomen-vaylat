@@ -1,10 +1,12 @@
 import React, { useRef, useState, useEffect} from 'react';
+import store from '../../state/store';
 import styled from 'styled-components';
 import strings from '../../translations';
 import { getAppBuildDate, getAppVersion } from '../../utils/appInfoUtil';
 import { isMobile, size} from '../../theme/theme';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSelector } from 'react-redux';
+import { setIsFeedBackFormOpen } from '../../state/slices/uiSlice';
 
 import { Swiper, SwiperSlide } from 'swiper/react';
 
@@ -156,6 +158,22 @@ const StyledSwiper = styled(Swiper)`
   transition: box-shadow 0.3s ease-out;
 `;
 
+const StyledButton = styled.div`
+  width: 85px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  height: 32px;
+  display: flex;
+  border-radius: 30px;
+  background-color: ${props => props.theme.colors.mainColor1};
+  cursor: pointer;
+  font-size: 13px;
+  color: #fff;
+  margin-bottom: 5px;
+  line-height: 1;
+`;
+
 export const ListComponent = ({listData}) => {
     return (
         <ul>
@@ -221,12 +239,19 @@ export const VersionInfo = ({currentAppVersion, currentAppBuildDate}) => {
 export const ContactAndFeedback = () => {
     const contactInfoFeedback = strings.appInfo.contactInfoFeedback;
 
+    const openFeedbackForm = () => {
+        store.dispatch(setIsFeedBackFormOpen(true))
+    };
+
     return (
         <div>
             {isMobile && <StyledHeading>{strings.appInfo.versionInfo.appContactAndFeedback}</StyledHeading>}
             <p>{contactInfoFeedback[0]}</p>
             <p>{contactInfoFeedback[1]} <StyledLink href={'mailto:' + contactInfoFeedback[2] + '?subject='+contactInfoFeedback.emailSubject}>{contactInfoFeedback[2]}</StyledLink></p>
             <p>{contactInfoFeedback[3]} <StyledLink href={contactInfoFeedback[4]}>{contactInfoFeedback[4]}</StyledLink></p>
+
+            <StyledButton onClick={openFeedbackForm}>{strings.appInfo.feedbackForm.openFeedbackForm}</StyledButton>
+
         </div>
     );
 };

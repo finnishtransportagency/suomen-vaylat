@@ -37,7 +37,8 @@ import {
   setIsFilterModalOpen,
   setMinimizeFilterModal,
   setMaximizeFilterModal,
-  setShowSavedLayers
+  setShowSavedLayers,
+  setIsFeedBackFormOpen
 } from "../../state/slices/uiSlice";
 
 import {
@@ -75,6 +76,7 @@ import ThemeMenu from "../menus/theme-menu/ThemeMenu";
 
 import { CustomLayerModal } from "../menus/hierarchical-layerlist/CustomFilter/CustomLayerModal";
 import { ModalContainer } from "../filter/ModalContainer";
+import FeedbackForm from "../feedback-form/FeedbackForm";
 
 const GFI_GEOMETRY_LAYER_ID = 'drawtools-geometry-layer';
 
@@ -196,14 +198,14 @@ const Content = () => {
   const search = useAppSelector((state) => state.search);
   const { store } = useContext(ReactReduxContext);
   const isShareOpen = shareUrl && shareUrl.length > 0 ? true : false;
-  let { downloadLink, isCustomFilterOpen, updateCustomLayer } = useAppSelector((state) => state.ui);
+  let { downloadLink, isCustomFilterOpen, updateCustomLayer, isFeedbackFormOpen } = useAppSelector((state) => state.ui);
 
   const announcements = useAppSelector(
     (state) => state.rpc.activeAnnouncements
   );
   const metadata = useAppSelector((state) => state.rpc.layerMetadata);
 
-  let { channel, selectedLayers } = useAppSelector((state) => state.rpc);
+  let { channel, selectedLayers, allLayers, allGroups } = useAppSelector((state) => state.rpc);
 
   const addToLocalStorageArray = (name, value) => {
     // Get the existing data
@@ -265,6 +267,10 @@ const Content = () => {
 
   const handleCloseAppInfoModal = () => {
     store.dispatch(setIsInfoOpen(false));
+  };
+
+  const handleCloseFeedbackForm = () => {
+    store.dispatch(setIsFeedBackFormOpen(false));
   };
 
   const handleCloseShareWebSite = () => {
@@ -738,6 +744,53 @@ const Content = () => {
           maxWidth={"800px"}
         >
           <AppInfoModalContent />
+        </Modal>
+        <Modal
+          constraintsRef={
+            constraintsRef
+          } /* Reference div for modal drag boundaries */
+          drag={true} /* Enable (true) or disable (false) drag */
+          resize={false}
+          backdrop={true} /* Is backdrop enabled (true) or disabled (false) */
+          fullScreenOnMobile={
+            true
+          } /* Scale modal full width / height when using mobile device */
+          titleIcon={null} /* Use icon on title or null */
+          title={
+            strings.layerlist.customLayerInfo.infoTitle
+          } /* Modal header title */
+          type={"normal"} /* Modal type */
+          closeAction={
+            handleCustomFilterClose
+          } /* Action when pressing modal close button or backdrop */
+          isOpen={isCustomFilterOpen} /* Modal state */
+          id={null}
+          height="860px"
+        >
+          <CustomLayerModal />
+        </Modal>
+        <Modal
+          constraintsRef={
+            constraintsRef
+          } /* Reference div for modal drag boundaries */
+          drag={true} /* Enable (true) or disable (false) drag */
+          resize={false}
+          backdrop={true} /* Is backdrop enabled (true) or disabled (false) */
+          fullScreenOnMobile={
+            true
+          } /* Scale modal full width / height when using mobile device */
+          titleIcon={faInfoCircle} /* Use icon on title or null */
+          title={strings.appInfo.feedbackForm.title} /* Modal header title */
+          type={"normal"} /* Modal type */
+          closeAction={
+            handleCloseFeedbackForm
+          } /* Action when pressing modal close button or backdrop */
+          isOpen={isFeedbackFormOpen} /* Modal state */
+          id={null}
+          maxWidth={"800px"}
+          overflow={"auto"}
+        >
+          <FeedbackForm layers={allLayers} groups={allGroups} />
         </Modal>
         <Modal
           constraintsRef={
