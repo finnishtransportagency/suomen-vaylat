@@ -6,6 +6,7 @@ import {
     faSearchMinus,
     faSearchPlus,
     faCrosshairs,
+    faMap,
 } from '@fortawesome/free-solid-svg-icons';
 
 import { useAppSelector } from '../../state/hooks';
@@ -16,6 +17,7 @@ import CircleButton from '../circle-button/CircleButton';
 import ZoomBarCircle from './ZoomBarCircle';
 
 import { Legend } from '../legend/Legend';
+import { Baselayers } from '../base-layers/Baselayers';
 
 const StyledZoomBarContainer = styled.div`
     z-index: 5;
@@ -88,10 +90,12 @@ const ZoomBar = ({
     setHoveringIndex,
     hoveringIndex,
     currentZoomLevel,
+    isBaselayersOpen,
     isLegendOpen,
     isZoomBarOpen,
     setIsLegendOpen,
     setIsZoomBarOpen,
+    setIsBaselayersOpen
 }) => {
     const { store } = useContext(ReactReduxContext);
     const rpc = useAppSelector((state) => state.rpc);
@@ -117,6 +121,11 @@ const ZoomBar = ({
                 selectedLayers={rpc.selectedLayers}
                 isExpanded={isLegendOpen}
                 setIsExpanded={setIsLegendOpen}
+            />
+            <Baselayers
+                selectedLayers={rpc.selectedLayers}
+                isExpanded={isBaselayersOpen}
+                setIsExpanded={setIsBaselayersOpen}
             />
             <StyledZoomBarContent>
                 <CircleButton
@@ -185,6 +194,13 @@ const ZoomBar = ({
                         tooltipDirection={'left'}
                     />
                 </StyledZoomBarZoomFeatures>
+                <CircleButton
+                    icon={faMap}
+                    text={strings.tooltips.baseLayersButton}
+                    toggleState={isBaselayersOpen}
+                    clickAction={() => setIsBaselayersOpen()}
+                    tooltipDirection={'left'}
+                />
                 <CircleButton
                     icon={faCrosshairs}
                     text={strings.tooltips.myLocButton}

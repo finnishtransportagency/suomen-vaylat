@@ -21,6 +21,7 @@
     "legendHeader": "Tällä zoom-tasolla näkyvissä olevat aineistot ja niiden selitteet",
     "legendButton": "Selitteet",
     "myLocButton": "Oma sijainti",
+    "baseLayersButton": "Taustakartat",
     "zoomExpand": "Laajenna",
     "zoomIn": "Lähennä",
     "zoomOut": "Loitonna",
