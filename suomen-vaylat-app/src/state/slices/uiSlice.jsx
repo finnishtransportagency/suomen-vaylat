@@ -327,7 +327,7 @@ export const {
     setIsCheckmark,
     setSelectedCustomFilterLayers,
     setActiveSwitch,
-    setIsBaselayersOpen
+    setIsBaselayersOpen,
     setIsFeedBackFormOpen
 } = uiSlice.actions;
 
