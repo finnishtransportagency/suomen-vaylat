@@ -265,7 +265,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
     ];
     const { store } = useContext(ReactReduxContext);
 
-    const { channel, selectedLayers, gfiLocations, gfiCroppingArea } = useAppSelector((state) => state.rpc);
+    const { channel, selectedLayers, gfiLocations, selectedLayersByType } = useAppSelector((state) => state.rpc);
 
     const { gfiCroppingTypes, selectedGfiTool, hasToastBeenShown, isGfiOpen } = useAppSelector(state => state.ui);
     const [isGfiLoading, setIsGfiLoading] = useState(false);
@@ -578,7 +578,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
                     store.dispatch(setSelectedGfiTool(null));
                     toast.dismiss("measurementToast")
                     store.dispatch(resetGFILocations([]));
-                    const fetchableLayers = selectedLayers.filter((layer) =>  layer.groups?.every((group)=> group !==1));
+                    const fetchableLayers = selectedLayers.filter((layer) =>  layer.groups?.every((group)=> group !==1) && selectedLayersByType.backgroundMaps.filter(l => l.id === layer.id).length === 0);
                     let numberedLoaderEnables = false; 
                     if (fetchableLayers.length>3){
                         numberedLoaderEnables = true;

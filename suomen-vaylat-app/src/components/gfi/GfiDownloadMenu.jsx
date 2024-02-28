@@ -122,7 +122,7 @@ const StyledLoaderWrapper = styled.div`
 const GfiDownloadMenu = ({ handleGfiDownloadsMenu, handleGfiDownload, closeButton = true }) => {
     const [loading] = useState(false);
 
-    let { gfiLocations, allLayers, gfiCroppingArea } = useAppSelector(
+    let { gfiLocations, allLayers, gfiCroppingArea, selectedLayersByType } = useAppSelector(
         (state) => state.rpc
     );
 
@@ -230,6 +230,12 @@ const GfiDownloadMenu = ({ handleGfiDownloadsMenu, handleGfiDownload, closeButto
                 {gfiLocations &&
                     gfiLocations.length > 0 &&
                     gfiLocations.map((location, index) => {
+                        const isBackgroundMap = selectedLayersByType.backgroundMaps.filter(l => 
+                            l.id !== location.layerId
+                        ).length > 0;
+                        if (isBackgroundMap) {
+                            return null;
+                        }
                         const layer = allLayers.find(
                             (layer) => layer.id === location.layerId
                         );
