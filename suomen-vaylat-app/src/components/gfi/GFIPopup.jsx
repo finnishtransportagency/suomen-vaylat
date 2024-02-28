@@ -417,7 +417,8 @@ export const GFIPopup = ({ handleGfiDownload }) => {
     gfiCroppingArea,
     selectedLayers,
     pointInfo,
-    filters
+    filters,
+    selectedLayersByType
   } = useAppSelector((state) => state.rpc);
 
   const [point, setPoint] = useState(null);
@@ -464,6 +465,12 @@ export const GFIPopup = ({ handleGfiDownload }) => {
   useEffect(() => {
     let mapResults = [];
     gfiLocations.forEach((location) => {
+      const isBackgroundMap = selectedLayersByType.backgroundMaps.filter(l => 
+        l.id !== location.layerId
+      ).length > 0;
+      if (isBackgroundMap) {
+        return;
+      }
       location.content &&
         location?.content[0]?.features?.length > GFI_MAX_LENGTH &&
         setIsDataTable(true);
@@ -486,7 +493,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
     });
 
     setTabsContent(mapResults);
-  }, [allLayers, gfiLocations, isDataTable, selectedTab]);
+  }, [allLayers, gfiLocations, isDataTable, selectedTab, selectedLayersByType.backgroundMaps]);
 
   useEffect(() => {
     isGfiDownloadsOpen && setIsGfiDownloadsOpen(false);
@@ -1227,7 +1234,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
           toggleState={isGfiDownloadsOpen}
           tooltipDirection={"bottom"}
           clickAction={handleGfiDownloadsMenu}
-          disabled={!gfiLocations.length > 0}
+          disabled={!gfiLocations.filter(l => l.type !== 'text').length > 0}
         />
         <CircleButton
           icon={faSearchLocation}
