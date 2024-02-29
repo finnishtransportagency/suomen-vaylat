@@ -466,7 +466,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
     let mapResults = [];
     gfiLocations.forEach((location) => {
       const isBackgroundMap = selectedLayersByType.backgroundMaps.filter(l => 
-        l.id !== location.layerId
+        l.id === location.layerId
       ).length > 0;
       if (isBackgroundMap) {
         return;
@@ -477,8 +477,15 @@ export const GFIPopup = ({ handleGfiDownload }) => {
       const layers = allLayers.filter((layer) => layer.id === location.layerId);
       const layerIds =
         layers && layers.length > 0 ? layers[0].id : location.layerId;
+      let content;
       if (location.type === "text") {
-        return;
+        content = location.content;
+        const popupContent = (
+          <div dangerouslySetInnerHTML={{ __html: content }}></div>
+        );
+        var contentWrapper = <div>{popupContent}</div>;
+        const contentDiv = <div id={layerIds}>{contentWrapper}</div>;
+        return contentDiv;
       } else if (location.type === "geojson") {
         mapResults.push(
           <FormattedGFI
@@ -859,6 +866,9 @@ export const GFIPopup = ({ handleGfiDownload }) => {
     store.dispatch(setActiveGFILayer(layer));
   };
 
+  // Download is disabled if there's no layers/locations that aren't background maps
+  const filteredLocations = gfiLocations.filter(g => selectedLayersByType.backgroundMaps.filter(l => l.id === g.layerId).length === 0);
+
   return (
     <StyledGfiContainer>
       <AnimatePresence>
@@ -1234,7 +1244,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
           toggleState={isGfiDownloadsOpen}
           tooltipDirection={"bottom"}
           clickAction={handleGfiDownloadsMenu}
-          disabled={!gfiLocations.filter(l => l.type !== 'text').length > 0}
+          disabled={filteredLocations.length === 0}
         />
         <CircleButton
           icon={faSearchLocation}
