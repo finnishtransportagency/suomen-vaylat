@@ -231,7 +231,7 @@ const GfiDownloadMenu = ({ handleGfiDownloadsMenu, handleGfiDownload, closeButto
                     gfiLocations.length > 0 &&
                     gfiLocations.map((location, index) => {
                         const isBackgroundMap = selectedLayersByType.backgroundMaps.filter(l => 
-                            l.id !== location.layerId
+                            l.id === location.layerId
                         ).length > 0;
                         if (isBackgroundMap) {
                             return null;
