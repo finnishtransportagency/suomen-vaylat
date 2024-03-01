@@ -867,7 +867,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
   };
 
   // Download is disabled if there's no layers/locations that aren't background maps
-  const filteredLocations = gfiLocations.filter(g => selectedLayersByType.backgroundMaps.filter(l => l.id === g.layerId).length === 0);
+  const filteredGFILocations = gfiLocations.filter(g => selectedLayersByType.backgroundMaps.filter(l => l.id === g.layerId).length === 0);
 
   return (
     <StyledGfiContainer>
@@ -1245,7 +1245,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
           toggleState={isGfiDownloadsOpen}
           tooltipDirection={"bottom"}
           clickAction={handleGfiDownloadsMenu}
-          disabled={filteredLocations.length === 0}
+          disabled={filteredGFILocations.length === 0}
         />
         <CircleButton
           icon={faSearchLocation}
@@ -1255,7 +1255,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
             handleOverlayGeometry(tabsContent[selectedTab].props.data);
             isMobile && store.dispatch(setMinimizeGfi(true));
           }}
-          disabled={gfiLocations.length === 0}
+          disabled={gfiLocations.length === 0 || filteredGFILocations.length === 0}
         />
       </StyledButtonsContainer>
 
