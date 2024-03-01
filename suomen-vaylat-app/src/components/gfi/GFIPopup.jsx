@@ -1231,6 +1231,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
           disabled={
             !selectedLayers.some((layer) =>
               layer.groups?.every((group) => group !== 1)
+              && selectedLayersByType.backgroundMaps.filter(l => l.id === layer.id).length === 0
             )
           }
         />
