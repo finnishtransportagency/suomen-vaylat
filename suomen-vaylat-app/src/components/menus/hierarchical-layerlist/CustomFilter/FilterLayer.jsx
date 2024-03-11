@@ -13,6 +13,7 @@ import LayerMetadataButton from "../LayerMetadataButton";
 import { useAppSelector } from "../../../../state/hooks";
 
 const StyledLayerContainer = styled.li`
+  margin-right: 0.5em;
   background-color: ${(props) => props.themeStyle && "#F5F5F5"};
   overflow: hidden;
   min-height: 32px;
