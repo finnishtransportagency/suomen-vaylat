@@ -31,6 +31,7 @@ const StyledlayerHeader = styled.div`
 `;
 
 const StyledLayerName = styled.p`
+  word-break: break-word;
   user-select: none;
   color: ${(props) =>
     props.themeStyle
