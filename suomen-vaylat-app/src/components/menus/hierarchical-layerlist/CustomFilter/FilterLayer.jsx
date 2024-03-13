@@ -20,6 +20,7 @@ const StyledLayerContainer = styled.li`
   align-items: center;
   margin-top: ${(props) => props.themeStyle && "8px"};
   border-radius: 4px;
+  margin-bottom: 4px;
 `;
 
 const StyledlayerHeader = styled.div`
