@@ -249,7 +249,9 @@ const SearchModal = ({
         setSearchValue('');
         if(type === 'layer')
         setSearchType('metadata');
-        else 
+        else if (type === 'feature')
+        setSearchType('feature');
+        else
         setSearchType('address');
       };
  
@@ -688,6 +690,53 @@ const SearchModal = ({
                         allLayers={allLayers}
                             activeSwitch={activeSwitch}
                     /> 
+                </StyledSearchSection>       
+                </>
+                )
+                }
+                <div style= {{clear: "both"}} />
+                {
+                    <Switch 
+                    isSelected={activeSwitch ==='feature'}
+                    action={() => {
+                        updateActiveSwitch('feature')
+                    }}
+                    title={strings.search.feature.title}
+                    tooltipText={strings.search.tips.layerExamples}
+                    tooltipAddress={strings.search.tips.layer}
+                    id='layer'
+                    tooltipEnabled={activeSwitch === 'feature'}
+                    isMobile={isMobile}
+                /> 
+                }
+                {activeSwitch === 'feature' &&  (
+                <> 
+                <StyledSearchSection>   
+                    <StyledInput
+                        type="text"
+                        placeholder={ strings.search.feature.title }
+                        value={searchValue}
+                        onChange={(e) => setSearchValue(e.target.value) }
+                        onKeyPress={e => {
+                            if (e.key === 'Enter') {
+                                handleSeach(searchValue);
+                            }
+                        }}
+                    />
+                    <SearchResultPanel 
+                        isSearchOpen={isSearchOpen}
+                        searchResults={searchResults}
+                        showSearchResults={showSearchResults}
+                        searchType={searchType}
+                        dropdownVariants={dropdownVariants}
+                        firstSearchResultShown={firstSearchResultShown}
+                        handleSearchSelect={handleSearchSelect}
+                        setFirstSearchResultShown={setFirstSearchResultShown}
+                        isMobile={isMobile}
+                        setShowSearchResults={setShowSearchResults}
+                        setSearchClickedRow={setSearchClickedRow}
+                        searchClickedRow={searchClickedRow}
+                    />
                 </StyledSearchSection>       
                 </>
                 )
