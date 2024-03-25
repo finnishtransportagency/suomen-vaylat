@@ -377,6 +377,11 @@
     "layer": {
       "title": "Aineistohaku"
     },
+    "feature": {
+      "title": "Kohdehaku",
+      "warn": "Hakutuloksien enimmäismäärä ylitetty, tarkenna hakuasi.",
+      "noResults": "Ei tuloksia"
+    },
     "track" : {
       "tracknumber" : "Ratanumero",
       "trackkm" : "Ratakilometri",

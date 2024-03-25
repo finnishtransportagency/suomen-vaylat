@@ -340,6 +340,11 @@
     "layer": {
       "title": "Material search"
     },
+    "feature": {
+      "title": "Feature search",
+      "warn": "Maximum number of results exceeded, try specifying your search.",
+      "noResults": "No results"
+    },
     "track" : {
       "tracknumber" : "Track number",
       "trackkm" : "Track kilometre",

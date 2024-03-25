@@ -340,6 +340,11 @@
     "layer": {
       "title": "Materialsökning"
     },
+    "feature": {
+      "title": "Objektsökning",
+      "warn": "Det maximala antalet sökresultat har överskridits, förfina din sökning.",
+      "noResults": "Inga resultat"
+    },
     "track" : {
       "tracknumber" : "Bannummer",
       "trackkm" : "Spårkilometer",
