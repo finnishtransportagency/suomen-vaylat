@@ -10,6 +10,8 @@ import {
     faLongArrowDown,
 } from '@fortawesome/free-solid-svg-icons';
 import SearchResultPanel from './SearchResultPanel';
+import { resetFeatureSearchResults } from '../../state/slices/rpcSlice';
+
 
 const StyledSearchModal = styled.div`
     border: none;
@@ -243,16 +245,23 @@ const SearchModal = ({
     const { activeSwitch } = useAppSelector((state) => state.ui);
 
     const updateActiveSwitch = (type) => {
-        activeSwitch !== type ? store.dispatch(setActiveSwitch(type)) : store.dispatch(setActiveSwitch(null));
+        // if no specific search is selected, default to address
+        if (activeSwitch !== type) {
+            store.dispatch(setActiveSwitch(type))
+            if(type === 'layer')
+            setSearchType('metadata');
+            else if (type === 'feature')
+            setSearchType('feature');
+            else
+            setSearchType('address');
+        } else {
+            store.dispatch(setActiveSwitch(null));
+            setSearchType('address');
+        }
         setSearchResults(null);
         setShowSearchResults(false);
         setSearchValue('');
-        if(type === 'layer')
-        setSearchType('metadata');
-        else if (type === 'feature')
-        setSearchType('feature');
-        else
-        setSearchType('address');
+        store.dispatch(resetFeatureSearchResults());
       };
  
     useEffect(() => {

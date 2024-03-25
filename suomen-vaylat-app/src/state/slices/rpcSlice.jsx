@@ -688,8 +688,7 @@ export const rpcSlice = createSlice({
      * @param {Object} action
      */
     resetFeatureSearchResults: (state, action) => {
-      console.log(action.payload)
-      state.featureSearchResults = action.payload;
+      state.featureSearchResults = [];
     },
 
     /**

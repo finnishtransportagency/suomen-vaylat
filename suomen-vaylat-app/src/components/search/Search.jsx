@@ -277,7 +277,7 @@ const Search = () => {
 
     const handleFeatureSearch = (searchValue) => {
         setIsSearching(true);
-        store.dispatch(resetFeatureSearchResults([]));
+        store.dispatch(resetFeatureSearchResults());
 
         selectedLayersByType.mapLayers.forEach(layer => {
             new Promise(function(resolve, reject) {
@@ -607,7 +607,7 @@ const Search = () => {
                 tooltipDirection={'left'}
                 clickAction={() => {
                     store.dispatch(setActiveSwitch(null));
-                    store.dispatch(resetFeatureSearchResults([]));
+                    store.dispatch(resetFeatureSearchResults());
                     isSearchOpen && store.dispatch(setGeoJsonArray([]));
                     setIsSearching(false);
                     isSearchOpen && removeMarkersAndFeatures();
