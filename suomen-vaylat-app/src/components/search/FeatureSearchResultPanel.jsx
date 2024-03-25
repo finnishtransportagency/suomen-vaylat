@@ -232,8 +232,6 @@ const FeatureSearchResultPanel = ({
         featureSearchResults.filter(layer => layer.limitExceeded).length > 0 && !showWarn && setShowWarn(true);
     }, [featureSearchResults]);
 
-    console.log(openLayer)
-
     const handleSetOpenLayer = (layer) => {
         if (openLayer === layer.layerId) {
             setOpenLayer(null);
@@ -244,7 +242,6 @@ const FeatureSearchResultPanel = ({
     }
 
 
-    console.log(featureSearchResults)
     return (
         <StyledDropDown
         key={'dropdown-content-feature'}
@@ -262,7 +259,7 @@ const FeatureSearchResultPanel = ({
                                 icon={faTriangleExclamation}
                             />
             </StyledWarningIcon>
-            <StyledWarningText>Hakutuloksien maksimimäärä ylitetty, tarkenna hakua.</StyledWarningText>
+            <StyledWarningText>{strings.search.feature.title}</StyledWarningText>
 
                 
             <StyledCloseButton
@@ -295,7 +292,7 @@ const FeatureSearchResultPanel = ({
 
         }
         { featureSearchResults.length === 0 &&
-            <p>Ei tuloksia</p>
+            <p>{strings.search.feature.noResults}</p>
         }
         
     </StyledDropDown>
