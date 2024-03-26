@@ -32,7 +32,8 @@ const SearchResultPanel = ({
     searchClickedRow,
     allLayers,
     hidden=false,
-    activeSwitch
+    activeSwitch,
+    isSearching
 }) => {
     const { featureSearchResults } = useAppSelector((state) => state.rpc);
 
@@ -79,6 +80,7 @@ const SearchResultPanel = ({
                     setShowSearchResults={setShowSearchResults}
                     allLayers={allLayers}
                     featureSearchResults={featureSearchResults}
+                    isSearching={isSearching}
                 />
                 )
         }

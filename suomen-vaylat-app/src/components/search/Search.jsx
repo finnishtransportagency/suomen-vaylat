@@ -567,8 +567,6 @@ const Search = () => {
         toast.dismiss('searchToast');
     }
         
-    const vkmKeys = ['vali', 'tie', 'osa', 'etaisyys', 'track'];
-
     useEffect(() => {
         const vkmKeys = ['vali', 'tie', 'osa', 'etaisyys', 'track'];
 
@@ -689,6 +687,7 @@ const Search = () => {
                         searchClickedRow={searchClickedRow}
                         allLayers={allLayers}
                         hidden={true}
+                        isSearching={isSearching}
                     /> 
                 {isSearchModalOpen && ( 
                     <SearchModal 
@@ -714,6 +713,7 @@ const Search = () => {
                         toggleModal={toggleSearchModal} 
                         carriageWaySearch={carriageWaySearch}
                         setCarriageWaySearch={setCarriageWaySearch}
+                        isSearching={isSearching}
                     />            
                 )}  
                 

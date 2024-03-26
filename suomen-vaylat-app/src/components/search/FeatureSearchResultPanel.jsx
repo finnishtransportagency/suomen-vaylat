@@ -160,6 +160,11 @@ const StyledWarningText = styled.div`
     padding: 0px 4px 0px 8px;
 `;
 
+const StyledNoResults = styled.div`
+    display: flex;
+    justify-content: center;
+    margin-top: 8px;
+`;
 
 const showFeatureOnMap = (channel, layer, feature) => {
     let geoJson = {...layer.content[0].geojson};
@@ -220,6 +225,7 @@ const FeatureSearchResultPanel = ({
     isMobile,
     setShowSearchResults,
     searchClickedRow,
+    isSearching
 }) => {
     const { featureSearchResults, channel } = useAppSelector((state) => state.rpc);
     const [selectedFeature, setSelectedFeature] = useState('');
@@ -228,8 +234,11 @@ const FeatureSearchResultPanel = ({
 
 
     useEffect(() => {
-        featureSearchResults.length > 0 && openLayer !== featureSearchResults[0].layerId && setOpenLayer(featureSearchResults[0].layerId );
-        featureSearchResults.filter(layer => layer.limitExceeded).length > 0 && !showWarn && setShowWarn(true);
+        if (featureSearchResults.length > 0) {
+            openLayer !== featureSearchResults[0].layerId && setOpenLayer(featureSearchResults[0].layerId );
+            featureSearchResults.filter(layer => layer.limitExceeded).length > 0 && !showWarn && setShowWarn(true);
+            handleSetOpenLayer(featureSearchResults[0])
+        }
     }, [featureSearchResults]);
 
     const handleSetOpenLayer = (layer) => {
@@ -243,59 +252,60 @@ const FeatureSearchResultPanel = ({
 
 
     return (
-        <StyledDropDown
-        key={'dropdown-content-feature'}
-        variants={dropdownVariants}
-        initial={'initial'}
-        animate={'animate'}
-        exit={'exit'}
-        transition={'transition'}
-    >
-        { showWarn &&
-            <StyledWarningContainer>
-                
-            <StyledWarningIcon>
-                <FontAwesomeIcon
-                                icon={faTriangleExclamation}
-                            />
-            </StyledWarningIcon>
-            <StyledWarningText>{strings.search.feature.title}</StyledWarningText>
-
-                
-            <StyledCloseButton
-                onClick={()=> setShowWarn(false)}
+        <>
+            <StyledDropDown
+            key={'dropdown-content-feature'}
+            variants={dropdownVariants}
+            initial={'initial'}
+            animate={'animate'}
+            exit={'exit'}
+            transition={'transition'}
             >
-                <FontAwesomeIcon
-                                icon={faTimes}
+                { showWarn &&
+                    <StyledWarningContainer>
+                        
+                    <StyledWarningIcon>
+                        <FontAwesomeIcon
+                                        icon={faTriangleExclamation}
+                                    />
+                    </StyledWarningIcon>
+                    <StyledWarningText>{strings.search.feature.warn}</StyledWarningText>
+
+                        
+                    <StyledCloseButton
+                        onClick={()=> setShowWarn(false)}
+                    >
+                        <FontAwesomeIcon
+                                        icon={faTimes}
+                                    />
+                    </StyledCloseButton>
+                    </StyledWarningContainer>
+                }
+                {featureSearchResults.length > 0 && featureSearchResults.map(layer => {
+                        console.log(openLayer === layer.layerId ? faAngleUp : faAngleDown)
+
+                    return(
+                    <>
+                        <StyledLayerTitle>
+                            <StyledGroupName>{layer.layerName}</StyledGroupName>
+                            <DropdownIcon 
+                                icon={openLayer === layer.layerId ? faAngleUp : faAngleDown} 
+                                onClick={()=> handleSetOpenLayer(layer)}
                             />
-            </StyledCloseButton>
-            </StyledWarningContainer>
-        }
-        {featureSearchResults.length > 0 && featureSearchResults.map(layer => {
-                console.log(openLayer === layer.layerId ? faAngleUp : faAngleDown)
+                        </StyledLayerTitle>
+                            { openLayer === layer.layerId &&
+                                <FeatureList layer={layer} isMobile={isMobile} setShowSearchResults={setShowSearchResults} searchClickedRow={searchClickedRow} setSelectedFeature={setSelectedFeature} selectedFeature={selectedFeature}></FeatureList>
+                            }
 
-            return(
-            <>
-                <StyledLayerTitle>
-                    <StyledGroupName>{layer.layerName}</StyledGroupName>
-                    <DropdownIcon 
-                        icon={openLayer === layer.layerId ? faAngleUp : faAngleDown} 
-                        onClick={()=> handleSetOpenLayer(layer)}
-                    />
-                </StyledLayerTitle>
-                    { openLayer === layer.layerId &&
-                        <FeatureList layer={layer} isMobile={isMobile} setShowSearchResults={setShowSearchResults} searchClickedRow={searchClickedRow} setSelectedFeature={setSelectedFeature} selectedFeature={selectedFeature}></FeatureList>
-                    }
+                    </>)
+                })
+                }
+            </StyledDropDown>
 
-            </>)
-        })
-
+        { featureSearchResults.length === 0 && !isSearching &&
+            <StyledNoResults>{strings.search.feature.noResults}</StyledNoResults>
         }
-        { featureSearchResults.length === 0 &&
-            <p>{strings.search.feature.noResults}</p>
-        }
-        
-    </StyledDropDown>
+        </>
     );
 };
 

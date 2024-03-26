@@ -239,7 +239,8 @@ const SearchModal = ({
     isOpen,
     toggleModal,
     carriageWaySearch, 
-    setCarriageWaySearch
+    setCarriageWaySearch,
+    isSearching
 }) => {
     const { store } = useContext(ReactReduxContext);
     const { activeSwitch } = useAppSelector((state) => state.ui);
@@ -711,8 +712,8 @@ const SearchModal = ({
                         updateActiveSwitch('feature')
                     }}
                     title={strings.search.feature.title}
-                    tooltipText={strings.search.tips.layerExamples}
-                    tooltipAddress={strings.search.tips.layer}
+                    tooltipText={strings.search.tips.featureExamples}
+                    tooltipAddress={strings.search.tips.feature}
                     id='layer'
                     tooltipEnabled={activeSwitch === 'feature'}
                     isMobile={isMobile}
@@ -745,6 +746,7 @@ const SearchModal = ({
                         setShowSearchResults={setShowSearchResults}
                         setSearchClickedRow={setSearchClickedRow}
                         searchClickedRow={searchClickedRow}
+                        isSearching={isSearching}
                     />
                 </StyledSearchSection>       
                 </>
