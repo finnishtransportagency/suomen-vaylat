@@ -391,7 +391,7 @@
         "pölkytys"
       ],
       "feature": "Kohdehaulla voit etsiä kohteita aktiivisista karttatasoista, joiden ominaisuustiedot sisältävät syötetyn arvon, esim.",
-      "featureExamples": ["Vesiväylä => 'Siilinjärven väylä"]
+      "featureExamples": ["Vesiväylä => 'Siilinjärven väylä'"]
     },
     "nomenclature" : {
       "title": "Namnsökning"

@@ -240,7 +240,6 @@ const SearchModal = ({
     toggleModal,
     carriageWaySearch, 
     setCarriageWaySearch,
-    isSearching
 }) => {
     const { store } = useContext(ReactReduxContext);
     const { activeSwitch } = useAppSelector((state) => state.ui);
@@ -746,7 +745,6 @@ const SearchModal = ({
                         setShowSearchResults={setShowSearchResults}
                         setSearchClickedRow={setSearchClickedRow}
                         searchClickedRow={searchClickedRow}
-                        isSearching={isSearching}
                     />
                 </StyledSearchSection>       
                 </>

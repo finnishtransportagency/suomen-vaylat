@@ -20,7 +20,7 @@ import { SEARCH_TIP_LOCALSTORAGE } from '../../utils/constants';
 
 import { isMobile, theme } from '../../theme/theme';
 
-import { addMarkerRequest, mapMoveRequest, setFeatureSearchResults, resetFeatureSearchResults } from '../../state/slices/rpcSlice';
+import { addMarkerRequest, mapMoveRequest, setFeatureSearchResults, resetFeatureSearchResults, setSearchOn } from '../../state/slices/rpcSlice';
 
 import { setIsSearchOpen, setGeoJsonArray, setHasToastBeenShown, setActiveSwitch } from '../../state/slices/uiSlice';
 
@@ -205,7 +205,7 @@ const Search = () => {
     const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
 
     const { isSearchOpen, geoJsonArray, hasToastBeenShown, activeSwitch } = useAppSelector((state) => state.ui);
-    const { channel, allLayers, selectedLayersByType } = useAppSelector((state) => state.rpc);
+    const { channel, allLayers, selectedLayersByType, featureSearchResults } = useAppSelector((state) => state.rpc);
 
     const { store } = useContext(ReactReduxContext);
 
@@ -277,6 +277,8 @@ const Search = () => {
 
     const handleFeatureSearch = (searchValue) => {
         setIsSearching(true);
+        store.dispatch(setSearchOn(true));
+
         store.dispatch(resetFeatureSearchResults());
 
         selectedLayersByType.mapLayers.forEach(layer => {
@@ -287,12 +289,13 @@ const Search = () => {
                     (data) => {
                         if (Object.keys(data).length > 0) {
                             setIsSearching(false);
-
+                            store.dispatch(setSearchOn(false));
                             store.dispatch(setFeatureSearchResults(data.gfi[0]));
                             setLastSearchValue(searchValue);
                             resolve("ok");                  
                         } else {
                             setIsSearching(false);
+                            store.dispatch(setSearchOn(false));
 
                             setLastSearchValue(searchValue);
                             resolve("ok");                  
@@ -300,6 +303,7 @@ const Search = () => {
                     },
                     function (error) {
                         setIsSearching(false);
+                        store.dispatch(setSearchOn(false));
 
                         setLastSearchValue(searchValue);
                         reject("Error fetching features:", error);
@@ -608,6 +612,7 @@ const Search = () => {
                     store.dispatch(resetFeatureSearchResults());
                     isSearchOpen && store.dispatch(setGeoJsonArray([]));
                     setIsSearching(false);
+                    store.dispatch(setSearchOn(null));
                     isSearchOpen && removeMarkersAndFeatures();
                     isSearchOpen && setSearchResults(null);
                     isSearchOpen && setSearchValue('');
@@ -651,7 +656,7 @@ const Search = () => {
                                 <SvLoder />
                             </StyledLoaderWrapper>
                         )}
-                        {searchResults !== null &&
+                        {(searchResults !== null || featureSearchResults.length > 0) &&
                         searchValue === lastSearchValue ? (
                             <StyledSearchActionButton
                                 onClick={() => {
@@ -687,7 +692,6 @@ const Search = () => {
                         searchClickedRow={searchClickedRow}
                         allLayers={allLayers}
                         hidden={true}
-                        isSearching={isSearching}
                     /> 
                 {isSearchModalOpen && ( 
                     <SearchModal 
@@ -713,7 +717,6 @@ const Search = () => {
                         toggleModal={toggleSearchModal} 
                         carriageWaySearch={carriageWaySearch}
                         setCarriageWaySearch={setCarriageWaySearch}
-                        isSearching={isSearching}
                     />            
                 )}  
                 

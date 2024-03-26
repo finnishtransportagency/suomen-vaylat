@@ -223,13 +223,11 @@ const FeatureSearchResultPanel = ({
     isMobile,
     setShowSearchResults,
     searchClickedRow,
-    isSearching
 }) => {
-    const { featureSearchResults, channel } = useAppSelector((state) => state.rpc);
+    const { featureSearchResults, searchOn, channel } = useAppSelector((state) => state.rpc);
     const [selectedFeature, setSelectedFeature] = useState('');
     const [openLayer, setOpenLayer] = useState(null);
     const [showWarn, setShowWarn] = useState(false);
-
 
     useEffect(() => {
         if (featureSearchResults.length > 0) {
@@ -247,7 +245,6 @@ const FeatureSearchResultPanel = ({
             showFeatureOnMap(channel, layer, null);
         }
     }
-
 
     return (
         <>
@@ -280,8 +277,6 @@ const FeatureSearchResultPanel = ({
                     </StyledWarningContainer>
                 }
                 {featureSearchResults.length > 0 && featureSearchResults.map(layer => {
-                        console.log(openLayer === layer.layerId ? faAngleUp : faAngleDown)
-
                     return(
                     <>
                         <StyledLayerTitle>
@@ -300,7 +295,7 @@ const FeatureSearchResultPanel = ({
                 }
             </StyledDropDown>
 
-        { featureSearchResults.length === 0 && !isSearching &&
+        { searchOn === false && featureSearchResults.length === 0 && 
             <StyledNoResults>{strings.search.feature.noResults}</StyledNoResults>
         }
         </>
