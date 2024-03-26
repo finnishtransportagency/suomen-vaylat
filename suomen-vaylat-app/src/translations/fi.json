@@ -377,6 +377,11 @@
     "layer": {
       "title": "Aineistohaku"
     },
+    "feature": {
+      "title": "Kohdehaku",
+      "warn": "Hakutuloksien enimmäismäärä ylitetty, tarkenna hakuasi.",
+      "noResults": "Ei tuloksia"
+    },
     "track" : {
       "tracknumber" : "Ratanumero",
       "trackkm" : "Ratakilometri",
@@ -421,7 +426,9 @@
       "layerExamples" : [
         "pölkytys",
         "liikennemerkit"
-      ]
+      ],
+      "feature": "Kohdehaulla voit etsiä kohteita aktiivisista karttatasoista, joiden ominaisuustiedot sisältävät syötetyn arvon, esim.",
+      "featureExamples": ["Vesiväylä => 'Siilinjärven väylä'"]
     },
     "nomenclature" : {
       "title": "Nimistöhaku"

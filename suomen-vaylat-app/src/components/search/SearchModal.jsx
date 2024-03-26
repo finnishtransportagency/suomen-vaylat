@@ -10,6 +10,8 @@ import {
     faLongArrowDown,
 } from '@fortawesome/free-solid-svg-icons';
 import SearchResultPanel from './SearchResultPanel';
+import { resetFeatureSearchResults } from '../../state/slices/rpcSlice';
+
 
 const StyledSearchModal = styled.div`
     border: none;
@@ -237,20 +239,29 @@ const SearchModal = ({
     isOpen,
     toggleModal,
     carriageWaySearch, 
-    setCarriageWaySearch
+    setCarriageWaySearch,
 }) => {
     const { store } = useContext(ReactReduxContext);
     const { activeSwitch } = useAppSelector((state) => state.ui);
 
     const updateActiveSwitch = (type) => {
-        activeSwitch !== type ? store.dispatch(setActiveSwitch(type)) : store.dispatch(setActiveSwitch(null));
+        // if no specific search is selected, default to address
+        if (activeSwitch !== type) {
+            store.dispatch(setActiveSwitch(type))
+            if(type === 'layer')
+            setSearchType('metadata');
+            else if (type === 'feature')
+            setSearchType('feature');
+            else
+            setSearchType('address');
+        } else {
+            store.dispatch(setActiveSwitch(null));
+            setSearchType('address');
+        }
         setSearchResults(null);
         setShowSearchResults(false);
         setSearchValue('');
-        if(type === 'layer')
-        setSearchType('metadata');
-        else 
-        setSearchType('address');
+        store.dispatch(resetFeatureSearchResults());
       };
  
     useEffect(() => {
@@ -688,6 +699,53 @@ const SearchModal = ({
                         allLayers={allLayers}
                             activeSwitch={activeSwitch}
                     /> 
+                </StyledSearchSection>       
+                </>
+                )
+                }
+                <div style= {{clear: "both"}} />
+                {
+                    <Switch 
+                    isSelected={activeSwitch ==='feature'}
+                    action={() => {
+                        updateActiveSwitch('feature')
+                    }}
+                    title={strings.search.feature.title}
+                    tooltipText={strings.search.tips.featureExamples}
+                    tooltipAddress={strings.search.tips.feature}
+                    id='layer'
+                    tooltipEnabled={activeSwitch === 'feature'}
+                    isMobile={isMobile}
+                /> 
+                }
+                {activeSwitch === 'feature' &&  (
+                <> 
+                <StyledSearchSection>   
+                    <StyledInput
+                        type="text"
+                        placeholder={ strings.search.feature.title }
+                        value={searchValue}
+                        onChange={(e) => setSearchValue(e.target.value) }
+                        onKeyPress={e => {
+                            if (e.key === 'Enter') {
+                                handleSeach(searchValue);
+                            }
+                        }}
+                    />
+                    <SearchResultPanel 
+                        isSearchOpen={isSearchOpen}
+                        searchResults={searchResults}
+                        showSearchResults={showSearchResults}
+                        searchType={searchType}
+                        dropdownVariants={dropdownVariants}
+                        firstSearchResultShown={firstSearchResultShown}
+                        handleSearchSelect={handleSearchSelect}
+                        setFirstSearchResultShown={setFirstSearchResultShown}
+                        isMobile={isMobile}
+                        setShowSearchResults={setShowSearchResults}
+                        setSearchClickedRow={setSearchClickedRow}
+                        searchClickedRow={searchClickedRow}
+                    />
                 </StyledSearchSection>       
                 </>
                 )

@@ -340,6 +340,11 @@
     "layer": {
       "title": "Materialsökning"
     },
+    "feature": {
+      "title": "Objektsökning",
+      "warn": "Det maximala antalet sökresultat har överskridits, förfina din sökning.",
+      "noResults": "Inga resultat"
+    },
     "track" : {
       "tracknumber" : "Bannummer",
       "trackkm" : "Spårkilometer",
@@ -384,7 +389,9 @@
       "layer" : "Genom sökning av material kan du söka bland kartlagrens metadata med ett ord eller en del av ett ord och aktivera kartlager från sökresultaten. T.ex. ",
       "layerExamples" : [
         "pölkytys"
-      ]
+      ],
+      "feature": "Kohdehaulla voit etsiä kohteita aktiivisista karttatasoista, joiden ominaisuustiedot sisältävät syötetyn arvon, esim.",
+      "featureExamples": ["Vesiväylä => 'Siilinjärven väylä'"]
     },
     "nomenclature" : {
       "title": "Namnsökning"

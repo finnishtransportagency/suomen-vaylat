@@ -59,9 +59,10 @@ const initialState = {
   },
   pointInfo: {},
   filters: [],
-  filters: [],
   activeGFILayer: null,
-  filteringInfo: []
+  filteringInfo: [],
+  featureSearchResults: [],
+  searchOn: null
 };
 
 export const rpcSlice = createSlice({
@@ -669,6 +670,36 @@ export const rpcSlice = createSlice({
     },
 
     /**
+     * Push feature to feature search results
+     * @method setGFILocations
+     * @param {Object} state
+     * @param {Object} action
+     */
+    setFeatureSearchResults: (state, action) => {
+      state.featureSearchResults.push(action.payload);
+    },
+
+    /**
+     * Reset feature search results
+     * @method setGFILocations
+     * @param {Object} state
+     * @param {Object} action
+     */
+    resetFeatureSearchResults: (state, action) => {
+      state.featureSearchResults = [];
+    },
+
+    /**
+     * Is search ongoing
+     * @method setGFILocations
+     * @param {Object} state
+     * @param {Object} action
+     */
+    setSearchOn: (state, action) => {
+      state.searchOn = action.payload;;
+    },
+
+    /**
      * Reset GFI locations.
      * @method resetGFILocations
      * @param {Object} state
@@ -934,6 +965,9 @@ export const {
   setFilters,
   setActiveGFILayer,
   setFilteringInfo,
+  setFeatureSearchResults,
+  resetFeatureSearchResults,
+  setSearchOn
 } = rpcSlice.actions;
 
 export default rpcSlice.reducer;

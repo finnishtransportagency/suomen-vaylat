@@ -13,15 +13,16 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import AddressSearch from './AddressSearch';
 import MetadataSearch from './MetadataSearch';
+import FeatureSearch from './FeatureSearch';
 import SvLoder from '../loader/SvLoader';
 import strings from '../../translations';
 import { SEARCH_TIP_LOCALSTORAGE } from '../../utils/constants';
 
 import { isMobile, theme } from '../../theme/theme';
 
-import { addMarkerRequest, mapMoveRequest } from '../../state/slices/rpcSlice';
+import { addMarkerRequest, mapMoveRequest, setFeatureSearchResults, resetFeatureSearchResults, setSearchOn } from '../../state/slices/rpcSlice';
 
-import { setIsSearchOpen, setGeoJsonArray, setHasToastBeenShown } from '../../state/slices/uiSlice';
+import { setIsSearchOpen, setGeoJsonArray, setHasToastBeenShown, setActiveSwitch } from '../../state/slices/uiSlice';
 
 import CircleButton from '../circle-button/CircleButton';
 
@@ -130,6 +131,7 @@ export const StyledDropDown = styled(motion.div)`
 
 export const StyledDropdownContentItem = styled.div`
     display: ${(props) => props.type === 'searchResult' && 'flex'};
+    align-items: center;
     user-select: none;
     cursor: pointer;
     padding-left: 8px;
@@ -203,7 +205,7 @@ const Search = () => {
     const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
 
     const { isSearchOpen, geoJsonArray, hasToastBeenShown, activeSwitch } = useAppSelector((state) => state.ui);
-    const { channel, allLayers } = useAppSelector((state) => state.rpc);
+    const { channel, allLayers, selectedLayersByType, featureSearchResults } = useAppSelector((state) => state.rpc);
 
     const { store } = useContext(ReactReduxContext);
 
@@ -222,6 +224,9 @@ const Search = () => {
                 break;
             case 'metadata':
                 handleMetadataSearch(searchValue);
+                break;
+            case 'feature':
+                handleFeatureSearch(searchValue)
                 break;
             default:
                 break;
@@ -268,6 +273,45 @@ const Search = () => {
             },
         ]);
         setLastSearchValue(value);
+    };
+
+    const handleFeatureSearch = (searchValue) => {
+        setIsSearching(true);
+        store.dispatch(setSearchOn(true));
+
+        store.dispatch(resetFeatureSearchResults());
+
+        selectedLayersByType.mapLayers.forEach(layer => {
+            new Promise(function(resolve, reject) {
+                // executor (the producing code, "singer")
+                channel.searchFeatures(
+                    [[layer.id], searchValue],
+                    (data) => {
+                        if (Object.keys(data).length > 0) {
+                            setIsSearching(false);
+                            store.dispatch(setSearchOn(false));
+                            store.dispatch(setFeatureSearchResults(data.gfi[0]));
+                            setLastSearchValue(searchValue);
+                            resolve("ok");                  
+                        } else {
+                            setIsSearching(false);
+                            store.dispatch(setSearchOn(false));
+
+                            setLastSearchValue(searchValue);
+                            resolve("ok");                  
+                        }
+                    },
+                    function (error) {
+                        setIsSearching(false);
+                        store.dispatch(setSearchOn(false));
+
+                        setLastSearchValue(searchValue);
+                        reject("Error fetching features:", error);
+                    }
+                )
+            });
+        })
+        
     };
 
     const markerIds = [markerId];
@@ -326,6 +370,20 @@ const Search = () => {
                 />
             ),
             visible: true,
+        },
+        feature: {
+            label: strings.search.address.title,
+            subtitle: strings.search.address.subtitle,
+            content: (
+                <FeatureSearch
+                    searchValue={searchValue}
+                    setSearchValue={setSearchValue}
+                    setIsSearching={setIsSearching}
+                    handleFeatureSearch={handleFeatureSearch}
+                    toggleSearchModal={toggleSearchModal}
+                />
+            ),
+            visible: false,
         },
     };
 
@@ -513,8 +571,6 @@ const Search = () => {
         toast.dismiss('searchToast');
     }
         
-    const vkmKeys = ['vali', 'tie', 'osa', 'etaisyys', 'track'];
-
     useEffect(() => {
         const vkmKeys = ['vali', 'tie', 'osa', 'etaisyys', 'track'];
 
@@ -552,8 +608,11 @@ const Search = () => {
                 toggleState={isSearchOpen}
                 tooltipDirection={'left'}
                 clickAction={() => {
+                    store.dispatch(setActiveSwitch(null));
+                    store.dispatch(resetFeatureSearchResults());
                     isSearchOpen && store.dispatch(setGeoJsonArray([]));
                     setIsSearching(false);
+                    store.dispatch(setSearchOn(null));
                     isSearchOpen && removeMarkersAndFeatures();
                     isSearchOpen && setSearchResults(null);
                     isSearchOpen && setSearchValue('');
@@ -597,7 +656,7 @@ const Search = () => {
                                 <SvLoder />
                             </StyledLoaderWrapper>
                         )}
-                        {searchResults !== null &&
+                        {(searchResults !== null || featureSearchResults.length > 0) &&
                         searchValue === lastSearchValue ? (
                             <StyledSearchActionButton
                                 onClick={() => {

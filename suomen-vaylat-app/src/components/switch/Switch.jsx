@@ -70,7 +70,7 @@ const StyledToolTipContainer = styled.div`
         background: yellow;
     }
     border-radius: 5px;
-    margin-top: 8px;
+    margin: 12px 0px 8px 0px;
 `;
 
 const Switch = ({   
@@ -114,7 +114,7 @@ const Switch = ({
             {isOpen && tooltipText !== undefined && tooltipEnabled &&
                     <StyledToolTipContainer 
                     isMobile={isMobile}>
-                    <span>{tooltipAddress}  <br />  
+                    <span>{tooltipAddress}  <br /> 
                     {tooltipText.map(element => { return<span>   {element}  <br /> </span>}  )} </span>
                     </StyledToolTipContainer>
             }

@@ -1,5 +1,6 @@
 import AddRessSearchResultPanel from './AddRessSearchResultPanel';
-import MetaSearchResultPanel from './MetaSearchResultPane';
+import MetaSearchResultPanel from './MetaSearchResultPanel';
+import FeatureSearchResultPanel from './FeatureSearchResultPanel';
 import styled, { css } from 'styled-components';
 import {
     faAngleDown,
@@ -7,6 +8,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { StyledHideSearchResultsButton } from './Search';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useAppSelector } from '../../state/hooks';
 
 const SearchPanelMain = styled.div`
   ${props =>
@@ -30,15 +32,16 @@ const SearchResultPanel = ({
     searchClickedRow,
     allLayers,
     hidden=false,
-    activeSwitch
+    activeSwitch,
 }) => {
+    const { featureSearchResults } = useAppSelector((state) => state.rpc);
     return (
         <SearchPanelMain hidden={hidden}>
         { 
             isSearchOpen &&
             searchResults !== null &&
             showSearchResults &&
-            searchType === 'address' ? 
+            searchType === 'address' &&
             <AddRessSearchResultPanel  
                 searchResults={searchResults}  
                 dropdownVariants={dropdownVariants} 
@@ -50,7 +53,9 @@ const SearchResultPanel = ({
                 setSearchClickedRow={setSearchClickedRow}
                 searchClickedRow={searchClickedRow}
                 activeSwitch={activeSwitch}
-            />  : (
+            /> 
+        }
+        {
                 isSearchOpen &&
                 searchResults !== null &&
                 showSearchResults &&
@@ -62,8 +67,21 @@ const SearchResultPanel = ({
                     allLayers={allLayers}
                 />
                 )
-        )}
-        { searchResults !== null && 
+        }
+        {
+                isSearchOpen &&
+                showSearchResults &&
+                searchType === 'feature' && (
+                <FeatureSearchResultPanel 
+                    searchResults={searchResults}
+                    dropdownVariants={dropdownVariants}
+                    setShowSearchResults={setShowSearchResults}
+                    allLayers={allLayers}
+                    featureSearchResults={featureSearchResults}
+                />
+                )
+        }
+        { (searchResults !== null || featureSearchResults.length > 0) && 
             <StyledHideSearchResultsButton
                 onClick={() => setShowSearchResults(!showSearchResults)}
             >

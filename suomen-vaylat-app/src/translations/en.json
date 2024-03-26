@@ -144,7 +144,8 @@
     "cancel": "Cancel",
     "dontShowAgain": "Don't show again",
     "ok": "OK",
-    "OkLowerCaseK": "Ok"
+    "OkLowerCaseK": "Ok",
+    "submit": "Submit"
   },
   "multipleLayersWarning": "You are about to activate 10 or more maplayers and it might affect the performance of the service",
   "multipleLayersFetchWarning": "You are about to fetch data from 10 or more maplayers, it might affect the performance of the service.",
@@ -340,6 +341,11 @@
     "layer": {
       "title": "Material search"
     },
+    "feature": {
+      "title": "Feature search",
+      "warn": "Maximum number of results exceeded, try specifying your search.",
+      "noResults": "No results"
+    },
     "track" : {
       "tracknumber" : "Track number",
       "trackkm" : "Track kilometre",
@@ -384,7 +390,9 @@
       "layer" : "Using material search, you can search for words or parts of words in the metadata of map layers and activate layers from the search results. Eg. ",
       "layerExamples" : [
         "pölkytys"
-      ]
+      ],
+      "feature": "Kohdehaulla voit etsiä kohteita aktiivisista karttatasoista, joiden ominaisuustiedot sisältävät syötetyn arvon, esim.",
+      "featureExamples": ["Vesiväylä => 'Siilinjärven väylä'"]
     },
     "nomenclature" : {
       "title": "Name search"
