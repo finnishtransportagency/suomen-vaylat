@@ -1,9 +1,8 @@
 import strings from '../../translations';
-import Layer from '../menus/hierarchical-layerlist/Layer';
 import { useAppSelector } from '../../state/hooks';
-import { useState, useContext, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 
 import {
     faAngleDown,
@@ -11,10 +10,9 @@ import {
     faTimes,
     faTriangleExclamation
 } from '@fortawesome/free-solid-svg-icons';
-import { StyledHideSearchResultsButton } from './Search';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-export const StyledDropDown = styled(motion.div)`
+const StyledDropDown = styled(motion.div)`
     z-index: -2;
     //position: absolute;
     top: 0px;
@@ -34,7 +32,7 @@ export const StyledDropDown = styled(motion.div)`
    
 `;
 
-export const StyledDropdownContentItem = styled.div`
+const StyledDropdownContentItem = styled.div`
     display: flex;
     flex-direction: row;
     user-select: none;
@@ -53,7 +51,7 @@ export const StyledDropdownContentItem = styled.div`
     }
 `;
 
-export const StyledWarningContainer = styled.div`
+const StyledWarningContainer = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -65,7 +63,7 @@ export const StyledWarningContainer = styled.div`
     color: ${(props) => props.theme.colors.mainWhite};
 `;
 
-export const StyledDropdownFeatureResultsContainer = styled.div`
+const StyledDropdownFeatureResultsContainer = styled.div`
     display: flex;
     flex-direction: column;
     user-select: none;
@@ -78,13 +76,13 @@ export const StyledDropdownFeatureResultsContainer = styled.div`
 `;
 
 
-export const StyledDropdownFeatureResults = styled.div`
+const StyledDropdownFeatureResults = styled.div`
     display: flex;
     flex-direction: column;
     user-select: none;
 `;
 
-export const StyledDropdownContentItemTitle = styled.div`
+const StyledDropdownContentItemTitle = styled.div`
     margin: 4px 0px 4px 0px;
 
     display: grid;
@@ -237,7 +235,7 @@ const FeatureSearchResultPanel = ({
         if (featureSearchResults.length > 0) {
             openLayer !== featureSearchResults[0].layerId && setOpenLayer(featureSearchResults[0].layerId );
             featureSearchResults.filter(layer => layer.limitExceeded).length > 0 && !showWarn && setShowWarn(true);
-            handleSetOpenLayer(featureSearchResults[0])
+            showFeatureOnMap(channel, featureSearchResults[0], null);
         }
     }, [featureSearchResults]);
 
