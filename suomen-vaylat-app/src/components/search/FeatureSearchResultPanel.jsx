@@ -331,7 +331,7 @@ const FeatureList = ({layer, isMobile, setShowSearchResults, searchClickedRow, s
                             {feature.match.map(match =>
                             {
                                 const key = Object.keys(match)[0];
-                                const value = Object.values(match)[0].slice(0, 25) + (Object.values(match)[0].length > 25 ? "..." : "");;
+                                const value = Object.values(match)[0].toString().slice(0, 25) + (Object.values(match)[0].toString().length > 25 ? "..." : "");
                                 return(
                                         <StyledDropdownContentItemTitle active={searchClickedRow === index}>
 
