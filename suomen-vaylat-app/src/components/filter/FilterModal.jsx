@@ -547,6 +547,7 @@ const handleRemoveFilter = (filter) => {
               <StyledTrashIconWrapper
                 onClick={() => {
                     store.dispatch(setFilters([]));
+                    updateFiltersOnMap(null, filterInfo, channel);
                 }}
               >
                 {strings.gfifiltering.removeAllFilters}{" "}
