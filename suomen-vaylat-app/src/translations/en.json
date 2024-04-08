@@ -102,7 +102,7 @@
     "featureAmount": "Locations",
     "getMoreFeatures": "Retrieve more locations",
     "savedGeometries": {
-      "title": "Saved geometries (Disabled)",
+      "title": "Saved geometries",
       "description": "My saved geometries",
       "disabled": "Temporarily unavailable"
     },

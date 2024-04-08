@@ -797,8 +797,8 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
                     key={'saved'}
                     id={505}
                     icon={faDownload}
-                    title={"Omat geometriat"}
-                    subtitle={"Omat tallennetut geometriat"}
+                    title={strings.gfi.savedGeometries.title}
+                    subtitle={strings.gfi.savedGeometries.subtitle}
                     selectedItem={activeSelectionTool}
                     handleSelectTool={handleSelectTool}
                 />

@@ -101,7 +101,7 @@
     "featureAmount": "Kohteita",
     "getMoreFeatures": "Hae lisää kohteita",
     "savedGeometries": {
-      "title": "Tallennetut geometriat (Poissa käytöstä)",
+      "title": "Tallennetut geometriat",
       "description": "Omat tallennetut geometriat",
       "disabled": "Väliaikaisesti poissa käytöstä"
     },

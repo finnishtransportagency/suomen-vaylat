@@ -102,7 +102,7 @@
     "featureAmount": "Objekt",
     "getMoreFeatures": "Sök fler objekt",
     "savedGeometries": {
-      "title": "Sparad geometri (Används inte)",
+      "title": "Sparad geometri",
       "description": "Egen sparad geometri",
       "disabled": "Tillfälligt ur bruk"
     },
