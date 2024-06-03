@@ -244,9 +244,10 @@ const MenuBar = () => {
                     text={strings.downloads.downloads}
                     toggleState={isGfiDownloadOpen}
                     tooltipDirection={"right"}
-                    clickAction={() =>
+                    clickAction={() => {
+                        closeDrawingTools();
                         store.dispatch(setIsGfiDownloadOpen(!isGfiDownloadOpen))
-                    }
+                    }}
                 >
                     <StyledLayerCount>
                         {
