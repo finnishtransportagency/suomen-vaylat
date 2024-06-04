@@ -33,7 +33,7 @@ const StyledLayerGroups = styled.div`
     flex-direction: column;
     justify-content: center;
     margin: 8px 0px 8px 0px;
-    padding: 0px 0px 0px 16px;
+    padding: 0px 16px;
     &:last-child {
         ${props => props.parentId === -1 ? '1px solid '+props.theme.colors.mainColor2 : 'none'};
     };
