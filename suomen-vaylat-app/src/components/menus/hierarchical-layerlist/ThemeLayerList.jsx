@@ -33,7 +33,7 @@ const StyledLayerGroups = styled.div`
     flex-direction: column;
     justify-content: center;
     margin: 8px 0px 8px 0px;
-    padding: 0px 16px;
+    padding: 0px 0px 0px 16px;
     &:last-child {
         ${props => props.parentId === -1 ? '1px solid '+props.theme.colors.mainColor2 : 'none'};
     };
@@ -158,7 +158,7 @@ const StyledLeftContent = styled.div`
 `;
 
 const StyledSubthemeLeftContent = styled.div`
-    max-width: 200px;
+    max-width: 70%;
     display: flex;
     align-items: center;
     margin-left: 10px;
@@ -170,6 +170,7 @@ const StyledRightContent = styled.div`
 `;
 
 const StyledSubthemeRightContent = styled.div`
+    max-width: 30%;
     display: flex;
     align-items: center;
     margin-right: 10px;
@@ -245,7 +246,7 @@ const StyledLayerGroupImage = styled.img`
 
 const StyledLayerGroup = styled.ul`
     list-style-type: none;
-    padding-inline-start: 10px;
+    padding-inline-start: 0px;
     margin: 0;
 `;
 
