@@ -158,7 +158,7 @@ const StyledLeftContent = styled.div`
 `;
 
 const StyledSubthemeLeftContent = styled.div`
-    max-width: 70%;
+    max-width: 60%;
     display: flex;
     align-items: center;
     margin-left: 10px;
