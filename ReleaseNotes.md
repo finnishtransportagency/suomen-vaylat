@@ -1,5 +1,36 @@
 # Release Notes
 
+## 2.1.0
+For a full list changes see: https://github.com/finnishtransportagency/suomen-vaylat/releases/tag/2.1.0
+* Bunch of small fixes to UI and GFI, general QoL improvements
+* Background maps button on the right
+* Info button option to layer filtering
+* Support address updated
+* Fixed issue with download
+* Reinstated metadata search
+* Disable downloads button if only bg maps are selected
+* Close drawing tools if user clicks downloads
+* Other small fixes
+
+## 2.0.1
+For a full list changes see: https://github.com/finnishtransportagency/suomen-vaylat/releases/tag/2.0.1
+* Themes rework
+* Fix download gfi bug
+* Fix issue with double markers for clicked point
+* Add warnings to links
+* Fix double results
+* Search bugfixes
+
+## 2.0.0
+For a full list changes see: https://github.com/finnishtransportagency/suomen-vaylat/releases/tag/2.0.0
+* Location search rework
+* Added filter feature for layers and GFI results
+* Added a feature to make your own filter with layers in maplayers menu
+* Added a feature to use saved geometries in GFI area cropping tools
+* Google Street View integration to GFI window
+* Quality of life changes, bugfixes, usability improvements
+* Guide has been updated
+
 ## 1.12.0
 For a full list changes see: https://github.com/finnishtransportagency/suomen-vaylat/milestone/15?closed=1
 * Theme map layout changes
