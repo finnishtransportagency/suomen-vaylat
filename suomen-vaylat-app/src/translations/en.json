@@ -8,6 +8,7 @@
   },
   "title": "Suomen Väylät",
   "tooltips": {
+    "showInfoLink": "Filtering info (opens in a new tab)",
     "layerlist": {
       "filter": "Filter",
       "filterable": "Filterable layer",
@@ -20,6 +21,7 @@
     "legendHeader": "The data displayed at this zoom level and their explanations",
     "legendButton": "Legend",
     "myLocButton": "My location",
+    "baseLayersButton": "Background maps",
     "zoomExpand": "Expand",
     "zoomIn": "Zoom in",
     "zoomOut": "Zoom out",
@@ -100,7 +102,7 @@
     "featureAmount": "Locations",
     "getMoreFeatures": "Retrieve more locations",
     "savedGeometries": {
-      "title": "Saved geometries (Disabled)",
+      "title": "Saved geometries",
       "description": "My saved geometries",
       "disabled": "Temporarily unavailable"
     },
@@ -236,7 +238,7 @@
     "contactInfoFeedback": {
       "0": "The application is the responsibility of the Finnish Transport Infrastructure Agency and it is supplied by Sitowise Oy.",
       "1": "Send your feedback on the Suomen Väylät map service to",
-      "2": "suomenvaylat@vayla.fi",
+      "2": "paikkatieto@vayla.fi",
       "3": "Feedback regarding roads, railways and waterways can be given at",
       "4": "https://liikenne.palautevayla.fi/feedback",
       "emailSubject": "Feedback on Suomen Väylät"

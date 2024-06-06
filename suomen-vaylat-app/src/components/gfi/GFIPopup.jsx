@@ -1,4 +1,5 @@
 import { useContext, useState, useEffect, useRef } from "react";
+import { v4 as uuidv4 } from 'uuid';
 import { motion, AnimatePresence } from "framer-motion";
 import {
   faTimes,
@@ -416,7 +417,8 @@ export const GFIPopup = ({ handleGfiDownload }) => {
     gfiCroppingArea,
     selectedLayers,
     pointInfo,
-    filters
+    filters,
+    selectedLayersByType
   } = useAppSelector((state) => state.rpc);
 
   const [point, setPoint] = useState(null);
@@ -461,7 +463,14 @@ export const GFIPopup = ({ handleGfiDownload }) => {
   };
 
   useEffect(() => {
-    const mapResults = gfiLocations.map((location) => {
+    let mapResults = [];
+    gfiLocations.forEach((location) => {
+      const isBackgroundMap = selectedLayersByType.backgroundMaps.filter(l => 
+        l.id === location.layerId
+      ).length > 0;
+      if (isBackgroundMap) {
+        return;
+      }
       location.content &&
         location?.content[0]?.features?.length > GFI_MAX_LENGTH &&
         setIsDataTable(true);
@@ -478,7 +487,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
         const contentDiv = <div id={layerIds}>{contentWrapper}</div>;
         return contentDiv;
       } else if (location.type === "geojson") {
-        return (
+        mapResults.push(
           <FormattedGFI
             id={layerIds}
             data={location.content}
@@ -487,11 +496,11 @@ export const GFIPopup = ({ handleGfiDownload }) => {
           />
         );
       }
-      return null;
+      return;
     });
 
     setTabsContent(mapResults);
-  }, [allLayers, gfiLocations, isDataTable, selectedTab]);
+  }, [allLayers, gfiLocations, isDataTable, selectedTab, selectedLayersByType.backgroundMaps]);
 
   useEffect(() => {
     isGfiDownloadsOpen && setIsGfiDownloadsOpen(false);
@@ -657,18 +666,28 @@ export const GFIPopup = ({ handleGfiDownload }) => {
     data &&
       data?.content?.forEach((cont) => {
         var featureCells =
-          cont.geojson.features &&
+          cont.geojson.features ?
           cont.geojson.features
             .filter((feature) => filterFeature(feature, data, filters, channel))
             .map((feature) => {
-              filteredFeatures.push(feature);
+              if (!feature.hasOwnProperty("id")) {
+                var extendedFeature = { ...feature };
+                extendedFeature.id = uuidv4();
+                filteredFeatures.push(extendedFeature);
+              } else {
+                filteredFeatures.push(feature);
+              }
               var cell = { ...feature.properties };
-              cell["id"] = feature.id;
+              if (cell.hasOwnProperty("id")) {
+                cell["id"] = feature.id || uuidv4();
+              } else {
+                cell.id = feature.id || uuidv4();
+              }
               cell.hasOwnProperty("UID") && delete cell["UID"];
               cell.hasOwnProperty("_orderHigh") && delete cell["_orderHigh"];
               cell.hasOwnProperty("_order") && delete cell["_order"];
               return cell;
-            });
+            }) : [];
         cells.push(...featureCells);
       });
 
@@ -778,7 +797,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
   };
 
   useEffect(() => {
-    gfiInputEl.current.swiper.slideTo(selectedTab);
+    gfiInputEl?.current?.swiper?.slideTo(selectedTab);
   }, [selectedTab]);
 
   const getMoreFeatures = (content, layerId) => {
@@ -846,6 +865,9 @@ export const GFIPopup = ({ handleGfiDownload }) => {
     );
     store.dispatch(setActiveGFILayer(layer));
   };
+
+  // Download is disabled if there's no layers/locations that aren't background maps
+  const filteredGFILocations = gfiLocations.filter(g => selectedLayersByType.backgroundMaps.filter(l => l.id === g.layerId).length === 0);
 
   return (
     <StyledGfiContainer>
@@ -1061,7 +1083,8 @@ export const GFIPopup = ({ handleGfiDownload }) => {
         </StyledTabSwiperContainer>
       )}
       <StyledTabContent isMobile={isMobile}>
-        {tabsContent[selectedTab] === undefined && (
+        {tabsContent[selectedTab] === undefined ?
+         (
           <StyledNoGfisContainer>
             <StyledSubtitle>{strings.gfi.choosingGfi}:</StyledSubtitle>
             <StyledInfoTextContainer>
@@ -1094,7 +1117,89 @@ export const GFIPopup = ({ handleGfiDownload }) => {
               </li>
             </StyledInfoTextContainer>
           </StyledNoGfisContainer>
-        )}
+        )
+        :
+        (
+          <StyledSwiper
+            ref={gfiInputEl}
+            id={"gfi-swiper"}
+            onSlideChange={(e) => {
+              handleSelectTab(e.activeIndex);
+            }}
+            tabIndex={selectedTab}
+            allowTouchMove={false} // Disable swiping
+            speed={300}
+          >
+            {gfiLocations.map((location, index) => {
+              const layers = allLayers.filter(
+                (layer) => layer.id === location.layerId
+              );
+              const title = layers.length > 0 && layers[0].name;
+              const tableProps = tablePropsInit(index, location);
+              let totalFeatures = 0;
+              location?.content?.forEach((cont) => {
+                totalFeatures += cont.geojson.totalFeatures;
+              });
+
+              let featuresAmount = 0;
+
+              // count the amount of results when filtered
+              location?.content?.forEach((cont) => {
+                cont.geojson?.features?.forEach((feature) => {
+                  if (filterFeature(feature, location, filters, channel)) {
+                    featuresAmount += 1;
+                  }
+                });
+              });
+
+              if (location.type === "geojson") {
+                return (
+                  <SwiperSlide
+                    id={"gfi_tab_content_" + location.layerId}
+                    key={"gfi_tab_content_" + location.layerId}
+                  >
+                    <GfiTabContent
+                      layer={layers[0]}
+                      data={location}
+                      title={title}
+                      tablePropsInit={tableProps}
+                      filters={filters}
+                    />
+                    {location?.content?.some(
+                      (content) => content.geojson.features
+                    ) && (
+                      <StyledFeaturesInfo>
+                        <StyledFeatureAmount>
+                          {`${strings.gfi.featureAmount} : `}
+                          <span>
+                            {featuresAmount}{" "}
+                            {location.moreFeatures && ` / ${totalFeatures}`}
+                          </span>
+                        </StyledFeatureAmount>
+                        {location.moreFeatures && (
+                          <StyledShowMoreButtonWrapper>
+                            <StyledShowMoreButton
+                              onClick={() =>
+                                getMoreFeatures(
+                                  location.content,
+                                  location.layerId
+                                )
+                              }
+                            >
+                              {strings.gfi.getMoreFeatures}
+                            </StyledShowMoreButton>
+                          </StyledShowMoreButtonWrapper>
+                        )}
+                      </StyledFeaturesInfo>
+                    )}
+                  </SwiperSlide>
+                );
+              }
+              return null;
+            })}
+          </StyledSwiper>
+        )
+      }
         {gfiLocations.content && gfiLocations.content[0].noContent && (
           <StyledNoGfisContainer>
             <StyledSubtitle>{strings.gfi.noResultsTitle}</StyledSubtitle>
@@ -1105,84 +1210,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
             </StyledInfoTextContainer>
           </StyledNoGfisContainer>
         )}
-        <StyledSwiper
-          ref={gfiInputEl}
-          id={"gfi-swiper"}
-          onSlideChange={(e) => {
-            handleSelectTab(e.activeIndex);
-          }}
-          tabIndex={selectedTab}
-          allowTouchMove={false} // Disable swiping
-          speed={300}
-        >
-          {gfiLocations.map((location, index) => {
-            const layers = allLayers.filter(
-              (layer) => layer.id === location.layerId
-            );
-            const title = layers.length > 0 && layers[0].name;
-            const tableProps = tablePropsInit(index, location);
-            let totalFeatures = 0;
-            location?.content?.forEach((cont) => {
-              totalFeatures += cont.geojson.totalFeatures;
-            });
-
-            let featuresAmount = 0;
-
-            // count the amount of results when filtered
-            location?.content?.forEach((cont) => {
-              cont.geojson?.features?.forEach((feature) => {
-                if (filterFeature(feature, location, filters, channel)) {
-                  featuresAmount += 1;
-                }
-              });
-            });
-
-            if (location.type === "geojson") {
-              return (
-                <SwiperSlide
-                  id={"gfi_tab_content_" + location.layerId}
-                  key={"gfi_tab_content_" + location.layerId}
-                >
-                  <GfiTabContent
-                    layer={layers[0]}
-                    data={location}
-                    title={title}
-                    tablePropsInit={tableProps}
-                    filters={filters}
-                  />
-                  {location?.content?.some(
-                    (content) => content.geojson.features
-                  ) && (
-                    <StyledFeaturesInfo>
-                      <StyledFeatureAmount>
-                        {`${strings.gfi.featureAmount} : `}
-                        <span>
-                          {featuresAmount}{" "}
-                          {location.moreFeatures && ` / ${totalFeatures}`}
-                        </span>
-                      </StyledFeatureAmount>
-                      {location.moreFeatures && (
-                        <StyledShowMoreButtonWrapper>
-                          <StyledShowMoreButton
-                            onClick={() =>
-                              getMoreFeatures(
-                                location.content,
-                                location.layerId
-                              )
-                            }
-                          >
-                            {strings.gfi.getMoreFeatures}
-                          </StyledShowMoreButton>
-                        </StyledShowMoreButtonWrapper>
-                      )}
-                    </StyledFeaturesInfo>
-                  )}
-                </SwiperSlide>
-              );
-            }
-            return null;
-          })}
-        </StyledSwiper>
+        
       </StyledTabContent>
       <StyledButtonsContainer>
         {vkmData && (
@@ -1203,6 +1231,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
           disabled={
             !selectedLayers.some((layer) =>
               layer.groups?.every((group) => group !== 1)
+              && selectedLayersByType.backgroundMaps.filter(l => l.id === layer.id).length === 0
             )
           }
         />
@@ -1216,7 +1245,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
           toggleState={isGfiDownloadsOpen}
           tooltipDirection={"bottom"}
           clickAction={handleGfiDownloadsMenu}
-          disabled={!gfiLocations.length > 0}
+          disabled={filteredGFILocations.length === 0}
         />
         <CircleButton
           icon={faSearchLocation}
@@ -1226,7 +1255,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
             handleOverlayGeometry(tabsContent[selectedTab].props.data);
             isMobile && store.dispatch(setMinimizeGfi(true));
           }}
-          disabled={gfiLocations.length === 0}
+          disabled={gfiLocations.length === 0 || filteredGFILocations.length === 0}
         />
       </StyledButtonsContainer>
 

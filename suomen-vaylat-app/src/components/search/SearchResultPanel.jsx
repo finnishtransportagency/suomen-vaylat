@@ -1,5 +1,5 @@
 import AddRessSearchResultPanel from './AddRessSearchResultPanel';
-import MetaSearchResultPanel from './MetaSearchResultPane';
+import MetaSearchResultPanel from './MetaSearchResultPanel';
 import styled, { css } from 'styled-components';
 import {
     faAngleDown,

@@ -56,6 +56,8 @@ export const theme = {
         mainWhite: '#ffffff',
         button: '#0064af',
         buttonActive: '#004477',
+        transparentMain: '#80dbff40',
+        hover: '#f0f0f0',
     },
     device: {
       mobileS: `(max-width: ${size.mobileS})`,

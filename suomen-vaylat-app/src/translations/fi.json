@@ -8,6 +8,7 @@
   },
   "title": "Suomen Väylät",
   "tooltips": {
+    "showInfoLink": "Suodatus info (avautuu uuteen välilehteen)",
     "layerlist": {
       "filter": "Suodata",
       "filterable": "Suodatettava taso",
@@ -20,6 +21,7 @@
     "legendHeader": "Tällä zoom-tasolla näkyvissä olevat aineistot ja niiden selitteet",
     "legendButton": "Selitteet",
     "myLocButton": "Oma sijainti",
+    "baseLayersButton": "Taustakartat",
     "zoomExpand": "Laajenna",
     "zoomIn": "Lähennä",
     "zoomOut": "Loitonna",
@@ -99,7 +101,7 @@
     "featureAmount": "Kohteita",
     "getMoreFeatures": "Hae lisää kohteita",
     "savedGeometries": {
-      "title": "Tallennetut geometriat (Poissa käytöstä)",
+      "title": "Tallennetut geometriat",
       "description": "Omat tallennetut geometriat",
       "disabled": "Väliaikaisesti poissa käytöstä"
     },
@@ -236,7 +238,7 @@
     "contactInfoFeedback": {
       "0": "Sovelluksesta vastaa Väylävirasto ja sovelluksen toimittaa Sitowise Oy.",
       "1": "Palautetta Suomen Väylät -palvelusta toivotaan lähetettävän osoitteeseen",
-      "2": "suomenvaylat@vayla.fi",
+      "2": "paikkatieto@vayla.fi",
       "3": "Palautetta maanteihin, rataverkkoon ja vesiväyliin liittyen voit antaa osoitteessa",
       "4": "https://liikenne.palautevayla.fi/feedback",
       "emailSubject": "Suomen Väylät palaute"

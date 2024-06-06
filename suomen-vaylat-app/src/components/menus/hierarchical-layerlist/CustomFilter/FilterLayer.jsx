@@ -20,9 +20,11 @@ const StyledLayerContainer = styled.li`
   align-items: center;
   margin-top: ${(props) => props.themeStyle && "8px"};
   border-radius: 4px;
+  margin-bottom: 4px;
 `;
 
 const StyledlayerHeader = styled.div`
+  margin-right: 0.5em;
   display: flex;
   width: 100%;
   justify-content: space-between;
@@ -30,6 +32,7 @@ const StyledlayerHeader = styled.div`
 `;
 
 const StyledLayerName = styled.p`
+  word-break: break-word;
   user-select: none;
   color: ${(props) =>
     props.themeStyle
