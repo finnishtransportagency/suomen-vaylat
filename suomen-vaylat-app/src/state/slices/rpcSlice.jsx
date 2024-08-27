@@ -787,16 +787,6 @@ export const rpcSlice = createSlice({
     },
 
     /**
-     * Set downloads.
-     * @method setDownloads
-     * @param {Object} state
-     * @param {Object} action
-     */
-    setDownloads: (state, action) => {
-      state.downloads.push(action.payload);
-    },
-
-    /**
      * Set active downloads.
      * @method setDownloadActive
      * @param {Object} state
@@ -951,7 +941,6 @@ export const {
   setGFICroppingArea,
   setVKMData,
   setPointInfoImageError,
-  setDownloads,
   setDownloadActive,
   setDownloadFinished,
   setDownloadRemove,
