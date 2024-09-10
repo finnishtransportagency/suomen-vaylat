@@ -211,7 +211,7 @@ const GfiTabContent = ({ layer, data, title, tablePropsInit }) => {
               style={{
                 color:
                   filters && isActiveFiltering
-                    ? theme.colors.secondaryColor8
+                    ? theme.colors.secondaryColorPink
                     : theme.colors.mainColor1,
               }}
             />

@@ -47,7 +47,7 @@ const StyledInput = styled.input`
     outline: none;
     }
     &.error {
-    border-color: red;
+        border-color: ${props => props.theme.colors.secondaryColorDarkOrange};
     }
     
 `;
@@ -67,7 +67,7 @@ const StyledInputHalf = styled.input`
     outline: none;
     }
     &.error {
-    border-color: red;
+        border-color: ${props => props.theme.colors.secondaryColorDarkOrange};
     }
 
 `;
@@ -108,10 +108,10 @@ const CheckboxWrapper = styled.div`
 const CheckboxLabel = styled.label`
     font-size: 16px;
     margin-top: 5px;
-    color: grey;
+    color: ${props => props.theme.colors.darkGrey};
 `
 const StyledValidationMessage = styled.div`
-    color: red;
+    color: ${props => props.theme.colors.secondaryColorDarkOrange};
 `
 
 const getSearchValuePart = (searchValue, searchType, part, carriageWaySearch) => {
@@ -322,13 +322,7 @@ const SearchModal = ({
     }, [activeSwitch, searchValue, setSearchValue, setTrackErrors, validateTrackSearch]);
 
     return isOpen ? (
-        <StyledSearchModal>   
-            <StyledLinkText rel="noreferrer" 
-                target=""
-                id = "addressLink" 
-                href="#" 
-                onClick={toggleModal }> 
-            </StyledLinkText>
+        <StyledSearchModal>
             <div style= {{clear: "both"}} />
             <>
                 {
@@ -350,8 +344,9 @@ const SearchModal = ({
                 <StyledSearchSection>   
 
                     <CheckboxWrapper> 
-                            <CheckboxLabel>{strings.search.carriageWaySearch}</CheckboxLabel>
+                            <CheckboxLabel for='carriageWaySearchBox'>{strings.search.carriageWaySearch}</CheckboxLabel>
                             <StyledCheckbox
+                                id='carriageWaySearchBox'
                                 name='carriageWaySearchBox'
                                 type='checkbox'
                                 onChange={() => (setCarriageWaySearch(!carriageWaySearch))}

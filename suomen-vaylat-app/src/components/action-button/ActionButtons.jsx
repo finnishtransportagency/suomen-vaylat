@@ -45,7 +45,7 @@ const StyledActionButton = styled(motion.div)`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: ${props => props.type === "gfi" ? props.theme.colors.mainColor1 : props.theme.colors.secondaryColor2};
+    background-color: ${props => props.type === "gfi" ? props.theme.colors.mainColor1 : props.theme.colors.secondaryColorGreen};
     box-shadow: 2px 2px 4px #0000004D;
     border-radius: 24px;
     color: ${props => props.theme.colors.mainWhite};
@@ -66,7 +66,7 @@ const StyledFilterActionButton = styled(motion.div)`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: ${props => props.theme.colors.secondaryColor8};
+    background-color: ${props => props.theme.colors.secondaryColorPink};
     box-shadow: 2px 2px 4px #0000004D;
     border-radius: 24px;
     color: ${props => props.theme.colors.mainWhite};

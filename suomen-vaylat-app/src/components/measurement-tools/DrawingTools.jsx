@@ -401,7 +401,7 @@ export const DrawingTools = ({isOpen}) => {
                                 text={tool.name}
                                 clickAction={eraseDrawing}
                                 type="drawingTool"
-                                color={theme.colors.secondaryColor7}
+                                color={theme.colors.secondaryColorDarkOrange}
                                 tooltipDirection={"right"}
                             >
                             </CircleButton> : tool.id === "sv-add-marker" &&
@@ -415,7 +415,7 @@ export const DrawingTools = ({isOpen}) => {
                                         <StyledOptionsButton style={{background: isSelected && theme.colors.buttonActive}} onClick={() => store.dispatch(setSelectedMarker(shape.id))}>
                                             <StyledOptionsIcon style={{transform: shape.icon === faFlag && "scale(-1,1)", color: isSelected && theme.colors.mainWhite + '!important'}} icon={shape.icon} />
                                         </StyledOptionsButton> :
-                                        <StyledOptionsButton style={{background: isSelected ? 'rgb(161 51 0)' : theme.colors.secondaryColor7}} onClick={() => store.dispatch(setSelectedMarker(shape.id))}>
+                                        <StyledOptionsButton style={{background: isSelected ? 'rgb(161 51 0)' : theme.colors.secondaryColorDarkOrange}} onClick={() => store.dispatch(setSelectedMarker(shape.id))}>
                                         <StyledOptionsIcon icon={shape.icon} />
                                     </StyledOptionsButton>
                                 )})}
@@ -439,7 +439,7 @@ export const DrawingTools = ({isOpen}) => {
                     tooltipDirection={'right'}
                     clickAction={handleAddGeometry}
                     icon={faCloudUploadAlt}
-                    color={theme.colors.secondaryColor2}
+                    color={theme.colors.secondaryColorGreen}
                 />
             </StyledTools>
     );

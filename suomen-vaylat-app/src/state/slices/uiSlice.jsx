@@ -217,7 +217,7 @@ export const uiSlice = createSlice({
             state.selectedMarker = action.payload;
         },
         addToDrawToolMarkers: (state, action) => {
-            let marker = {...action.payload, color: theme.colors.secondaryColor1}
+            let marker = {...action.payload, color: theme.colors.secondaryColorLightBlue}
             state.drawToolMarkers.push(marker);
         },
         removeFromDrawToolMarkers: (state, action) => {

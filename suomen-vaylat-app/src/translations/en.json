@@ -61,7 +61,8 @@
       "deleteAllSavedViews" : "Delete all saved views",
       "savedViews" : "Saved views",
       "viewName" : "View name",
-      "saveNewView" : "Save new view"
+      "saveNewView" : "Save new view",
+      "saveViewButton" : "Save view"
     },
     "saveGeometry": {
       "confirmDeleteAll": "Are you sure you want to delete all saved geometries?",

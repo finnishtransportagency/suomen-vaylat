@@ -57,7 +57,7 @@ const StyledLayerGroups = styled.div`
   &:last-child {
     ${(props) =>
       props.parentId === -1
-        ? "1px solid " + props.theme.colors.mainColor2
+        ? "1px solid " + props.theme.colors.mainColor1
         : "none"};
   }
 `;
@@ -174,7 +174,7 @@ const StyledSubGroupLayersCount = styled.p`
   padding: 0px;
   font-size: 12px;
   font-weight: 500;
-  color: ${(props) => props.theme.colors.mainColor2};
+  color: ${(props) => props.theme.colors.mainColor1};
 `;
 
 const StyledLefContent = styled.div`

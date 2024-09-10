@@ -36,7 +36,7 @@ const StyledLayerName = styled.p`
   user-select: none;
   color: ${(props) =>
     props.themeStyle
-      ? props.theme.colors.secondaryColor2
+      ? props.theme.colors.secondaryColorGreen
       : props.theme.colors.mainColor1};
   margin: 0px;
   font-size: 14px;

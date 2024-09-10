@@ -153,7 +153,7 @@ const UserGuideTabs = () => {
         {
             id: 'swipeAbleTab_2',
             title: strings.layerlist.layerlistLabels.selectedLayers,
-            titleColor: 'secondaryColor8',
+            titleColor: 'secondaryColorPink',
             titleContent: 'layerCounter',
             content: strings.appGuide.modalContent.mapLayerMenu.tabsContent.selectedLayers.split('\n').map(c => {
                 return ( <p> {c} </p>) 

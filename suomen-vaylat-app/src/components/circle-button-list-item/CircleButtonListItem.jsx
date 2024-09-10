@@ -85,6 +85,7 @@ const CircleButtonListItem = ({
         >
             <StyledCircleButton
                 aria-label={title}
+                role="button"
                 isActive={selectedItem === id}
                 animate={{
                     scale: selectedItem === id || isHovered ? 1.1 : 1,

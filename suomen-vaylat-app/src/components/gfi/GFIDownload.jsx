@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import strings from '../../translations';
 import Moment from 'react-moment';
 import { useContext } from 'react';
-import { Button } from 'react-bootstrap';
+import { theme } from '../../theme/theme';
 import { setDownloadRemove } from '../../state/slices/rpcSlice';
 import { ReactReduxContext } from 'react-redux';
 
@@ -40,7 +40,7 @@ const StyledDescription = styled.p`
     justify-content: flex-start;
     color: ${props => props.theme.colors.mainColor1};
     font-size: 14px;
-    font-weight: 300;
+    font-weight: 400;
     margin: 0;
 `;
 
@@ -91,6 +91,16 @@ const StyledLoaderWrapper = styled.div`
         height: 100%;
         fill: none;
     }
+`;
+
+const StyledShowMoreButton = styled.button`
+  height: 3em;
+  color: ${(props) => props.theme.colors.mainWhite};
+  background-color: ${(props) => props.theme.colors.mainColor1};
+  border-radius: 20px;
+  box-shadow: 0px 1px 3px #0000001f;
+  border: none;
+  margin: 0.5em 0 0.5em 0;
 `;
 
 const DownloadItem = ({
@@ -162,11 +172,11 @@ const GFIDownload = () => {
         <StyledDownloadsContainer>
         <StyledDescription>{strings.downloads.downloadsInfo}</StyledDescription>
         <StyledDescription>{strings.downloads.downloadsInfo2}</StyledDescription>
-        <Button
+        <StyledShowMoreButton
             onClick={handleGfiLocationsOpen}
         >
             {strings.downloads.newDownloads}
-        </Button>
+        </StyledShowMoreButton>
         
 
 
@@ -194,7 +204,7 @@ const GFIDownload = () => {
                         closeAction={() => {
                             store.dispatch(setDownloadRemove(download.id));
                         }}
-                        color={'#28a745'}
+                        color={theme.colors.secondaryColorGreen}
                         key={'download-item-ready-for-download-' + download.id}
                     >
                         <StyledDownloadButton
@@ -220,7 +230,7 @@ const GFIDownload = () => {
                                     closeAction={() => {
                                         store.dispatch(setDownloadRemove(download.id));
                                     }}
-                                    color={'#dc3545'}
+                                    color={theme.colors.secondaryColorDarkOrange}
                                     key={'download-item-error-' + download.id}
                                 >
                                         <FontAwesomeIcon

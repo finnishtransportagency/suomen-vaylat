@@ -91,7 +91,7 @@ const StyledLayerList = styled.div`
 
 const StyledMessage = styled.p`
     text-align: center;
-    color: ${props => props.theme.colors.secondaryColor7};
+    color: ${props => props.theme.colors.secondaryColorDarkOrange};
     margin: 0;
     font-size: 14px;
     font-weight: 600;
@@ -116,7 +116,7 @@ const LayerSearch = ({ layers, groups }) => {
                     />
                 </StyledSearchInputContainerIcon>
                 <StyledSearchInput
-                    //type='search'
+                    aria-label={strings.layerlist.layerlistLabels.searchForLayers}
                     placeholder={strings.layerlist.layerlistLabels.searchForLayers+'...'}
                     value={searchParams}
                     onChange={e => store.dispatch(setSearchParams(e.target.value))}

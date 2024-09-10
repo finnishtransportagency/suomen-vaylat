@@ -50,7 +50,7 @@ const StyledLayerName = styled.p`
   user-select: none;
   color: ${(props) =>
     props.themeStyle
-      ? props.theme.colors.secondaryColor2
+      ? props.theme.colors.secondaryColorGreen
       : props.theme.colors.mainColor1};
   margin: 0px;
   font-size: 14px;
@@ -251,7 +251,7 @@ export const Layer = ({ layer, themeName, groupName, showSwitch = true }) => {
                     <StyledLayerName
                         themeStyle={themeStyle}
                     >
-                        {layer.name} {groupName && groupName !== 'Unknown' && !excludeGroups.includes(groupName) && ` (${groupName})`}{layer.newLayer && <Badge style={{color: "white", marginLeft: ".5em"}} pill bg="primary">{strings.tooltips.layerlist.newLayer}</Badge>}
+                        {layer.name} {groupName && groupName !== 'Unknown' && !excludeGroups.includes(groupName) && ` (${groupName})`}{layer.newLayer && <Badge style={{color: theme.colors.mainWhite, backgroundColor: theme.colors.mainColor1, marginLeft: ".5em"}} pill bg='null'>{strings.tooltips.layerlist.newLayer}</Badge>}
                     </StyledLayerName>
                 </StyledlayerHeader>
                 {layer.metadataIdentifier && <LayerMetadataButton layer={layer}/>}
@@ -269,7 +269,7 @@ export const Layer = ({ layer, themeName, groupName, showSwitch = true }) => {
                     <span>{strings.tooltips.layerlist.filter}</span>
                   </ReactTooltip>
                   <StyledFilterIcon data-tip data-for={"filterableLayer"} onClick={() => handleFilterClick(layer)}>
-                    <FontAwesomeIcon icon={faFilter} style={{ color: filters.filter(f => f.layer === layer.id).length > 0 ? theme.colors.secondaryColor8 : theme.colors.primaryColor1 }} />
+                    <FontAwesomeIcon icon={faFilter} style={{ color: filters.filter(f => f.layer === layer.id).length > 0 ? theme.colors.secondaryColorPink : theme.colors.primaryColor1 }} />
                   </StyledFilterIcon>
                   </>
                 }

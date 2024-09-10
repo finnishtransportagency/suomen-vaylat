@@ -132,6 +132,7 @@ const StyledMobileTabContent = styled(motion.div)`
 `;
 
 const StyledLink = styled.a`
+    text-decoration: underline;
     cursor: pointer;
     color: ${props => props.theme.colors.mainColor1};
     word-wrap:break-word;

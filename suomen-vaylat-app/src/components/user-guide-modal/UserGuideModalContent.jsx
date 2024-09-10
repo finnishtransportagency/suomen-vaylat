@@ -221,8 +221,12 @@ export const UserGuideModalContent = () => {
     ];
 
     return (
-        <StyledContent>
-            <StyledAccordion activeKey={modalIndex}>
+        <StyledContent
+          id='user_guide_modal_content'
+          role='region' 
+          tabIndex='0' // Ensures the container is focusable
+        >
+            <StyledAccordion id='user_guide_modal_accordion' activeKey={modalIndex}>
                 {
                     modalContent.map((content, index) => {
                         return (

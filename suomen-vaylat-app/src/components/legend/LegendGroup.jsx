@@ -117,7 +117,7 @@ export const LegendGroup = ({ legend }) => {
                 <StyledLeftContent>
                     <StyledGroupName>{legend.layerName}
                         {filters && filters.filters.length > 0 && filters.filters.some(filter => (filter.layer ===  legend.layerId)) && 
-                        <StyledFloatingSpan><FontAwesomeIcon icon={faFilter}  style={{ color: theme.colors.secondaryColor8 }}/></StyledFloatingSpan>}
+                        <StyledFloatingSpan><FontAwesomeIcon icon={faFilter}  style={{ color: theme.colors.secondaryColorPink }}/></StyledFloatingSpan>}
                     </StyledGroupName>
 
                 </StyledLeftContent>

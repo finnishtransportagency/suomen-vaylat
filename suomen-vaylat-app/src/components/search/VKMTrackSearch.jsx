@@ -62,7 +62,7 @@ const StyledLabel = styled.label`
     font-size: 14px;
     font-weight: bold;
     margin: 0px;
-    color: ${props => props.error && props.theme.colors.secondaryColor6};
+    color: ${props => props.error && props.theme.colors.secondaryColorDarkOrange};
 `;
 
 const VKMTrackSearch = ({

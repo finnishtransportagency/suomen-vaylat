@@ -59,7 +59,7 @@ const StyledWarningContainer = styled.div`
     padding: 8px;
     margin-top: 8px;
     border-radius: 5px;
-    background-color: ${(props) => props.theme.colors.secondaryColor4};
+    background-color: ${(props) => props.theme.colors.secondaryColorYellow};
     color: ${(props) => props.theme.colors.mainWhite};
 `;
 
@@ -70,7 +70,7 @@ const StyledDropdownFeatureResultsContainer = styled.div`
     cursor: pointer;
     border-radius: 5px;
     border-color: ${(props) =>
-        props.itemSelected ? props.theme.colors.secondaryColor8 : ''};
+        props.itemSelected ? props.theme.colors.secondaryColorPink : ''};
     background-color: ${(props) =>
         props.itemSelected ? props.theme.colors.mainColor3 : ''};
 `;
@@ -88,7 +88,7 @@ const StyledDropdownContentItemTitle = styled.div`
     display: grid;
     grid-auto-flow: column;
     grid-auto-columns: 1fr;    font-size: 14px;
-    color: ${(props) => props.active ? props.theme.colors.secondaryColor8 : '#504d4d'};
+    color: ${(props) => props.active ? props.theme.colors.secondaryColorPink : '#504d4d'};
 `;
 
 const StyledGroupName = styled.div`

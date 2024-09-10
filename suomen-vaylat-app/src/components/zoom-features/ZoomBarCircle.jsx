@@ -12,7 +12,7 @@ const StyledZoomLevelCircle = styled.div`
     height: 22px;
     border: 4px solid ${props => props.theme.colors.mainColor1};
     border-radius: 50%;
-    background-color: ${props => props.index === props.zoomLevel || props.isActive ? props.theme.colors.secondaryColor4 : props.theme.colors.mainWhite};
+    background-color: ${props => props.index === props.zoomLevel || props.isActive ? props.theme.colors.secondaryColorYellow : props.theme.colors.mainWhite};
     transform: ${props => props.index === props.zoomLevel ? "scale(1.1)" : "scale(1)"};
     margin: 4px;
     transition: all 0.4s ease-out;

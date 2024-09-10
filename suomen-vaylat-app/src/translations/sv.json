@@ -61,7 +61,8 @@
       "deleteAllSavedViews" : "Ta bort alla sparade vyer",
       "savedViews" : "Sparade vyer",
       "viewName" : "Visa namn",
-      "saveNewView" : "Spara ny vy"
+      "saveNewView" : "Spara ny vy",
+      "saveViewButton" : "Spara vy"
     },
     "saveGeometry" : {
       "confirmDeleteAll": "Är du säker på att du vill ta bort all sparad geometri?",

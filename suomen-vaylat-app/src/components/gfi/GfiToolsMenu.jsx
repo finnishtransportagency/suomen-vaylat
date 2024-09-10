@@ -139,12 +139,12 @@ const StyledSavedViewName = styled.p`
     transition: all 0.1s ease-in;
 `;
 
-const StyledSavedViewDescription = styled.p`
+const StyledSavedViewDescription = styled(Moment)`
     margin: 0;
     padding: 0px;
     font-size: 12px;
     font-weight: 500;
-    color: rgba(255, 255, 255, 0.8);
+    color: ${(props) => props.theme.colors.mainWhite};
 `;
 
 const StyledLeftContent = styled.div`
@@ -704,12 +704,16 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
     }, [store, channel]);
     
     return (
-        <StyledGfiToolContainer id="gfiToolContainer">
-            { closeButton &&
+        <StyledGfiToolContainer 
+            id="gfiToolContainer"
+            role="region" 
+            tabIndex="0" // Ensures the container is focusable
+        >
+            {closeButton && (
                 <StyledCloseButton onClick={() => handleGfiToolsMenu()}>
                     <FontAwesomeIcon icon={faTimes} />
                 </StyledCloseButton>
-            }
+            )}
             <AnimatePresence>
                 {isGfiLoading && (
                     <StyledLoaderWrapper
@@ -840,16 +844,12 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
                                                     <StyledSavedViewName>
                                                         {geometry.name}
                                                     </StyledSavedViewName>
-                                                    <StyledSavedViewDescription>
-                                                        {
-                                                            <Moment
+                                                            <StyledSavedViewDescription
                                                                 format="DD.MM.YYYY"
                                                                 tz="Europe/Helsinki"
                                                             >
                                                                 {geometry.saveDate}
-                                                            </Moment>
-                                                        }
-                                                    </StyledSavedViewDescription>
+                                                            </StyledSavedViewDescription>
                                                 </StyledSavedViewTitleContent>
                                             </StyledLeftContent>
                                             <StyledRightContent>

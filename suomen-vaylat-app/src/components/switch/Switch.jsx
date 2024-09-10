@@ -36,7 +36,7 @@ const StyledBold = styled.div`
     font-weight: 500;
     padding-left: 12px;
     font-size: 15px;
-    color: grey;
+    color: #717070;
     padding-top: 7px;
 `;
 
@@ -66,7 +66,7 @@ const StyledToolTipContainer = styled.div`
     background: #0064af;
     color: white;
     ::selection {
-        color: red;
+        color: ${props => props.theme.colors.secondaryColorDarkOrange};
         background: yellow;
     }
     border-radius: 5px;

@@ -61,7 +61,8 @@
       "deleteAllSavedViews" : "Poista kaikki tallennetut näkymät",
       "savedViews" : "Tallennetut näkymät",
       "viewName" : "Näkymän nimi",
-      "saveNewView" : "Tallenna uusi näkymä"
+      "saveNewView" : "Tallenna uusi näkymä",
+      "saveViewButton" : "Tallenna näkymä"
     },
     "saveGeometry": {
       "confirmDeleteAll": "Haluatko varmasti poistaa kaikki tallennetut geometriat?",

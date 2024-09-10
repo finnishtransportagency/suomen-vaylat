@@ -14,7 +14,7 @@ export const Text = styled.p`
 `;
 
 export const Error = styled(Text)`
-  color: red;
+  color: ${props => props.theme.colors.secondaryColorDarkOrange};
   font-size: 12px;
 `;
 

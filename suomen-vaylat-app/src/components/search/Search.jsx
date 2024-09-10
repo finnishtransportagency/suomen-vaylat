@@ -39,7 +39,7 @@ export const StyledSearchIcon  = styled.div`
     display: flex;
     align-items: flex-start;
     justify-content: center;
-    color: ${(props) => props.active ? props.theme.colors.secondaryColor8 : 'rgba(0, 0, 0, 0.5)'};
+    color: ${(props) => props.active ? props.theme.colors.secondaryColorPink : 'rgba(0, 0, 0, 0.5)'};
     svg {
         font-size: 18px;
     };
@@ -150,7 +150,7 @@ export const StyledDropdownContentItemTitle = styled.p`
     display: ${(props) => props.type === 'searchResult' && 'flex'};
     text-align: ${(props) => props.type === 'noResults' && 'center'};
     font-size: 14px;
-    color: ${(props) => props.active ? props.theme.colors.secondaryColor8 : '#504d4d'};
+    color: ${(props) => props.active ? props.theme.colors.secondaryColorPink : '#504d4d'};
 `;
 
 const StyledDropdownContentItemSubtitle = styled.p`

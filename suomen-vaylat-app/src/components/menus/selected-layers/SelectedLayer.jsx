@@ -74,7 +74,7 @@ const StyledlayerOpacityControl = styled.input`
     -webkit-appearance: none;
     appearance: none;
     outline: none;
-    background: linear-gradient(90deg, rgba(0,100,175,0) 0%, ${props => props.theme.colors.secondaryColor8} 100%);
+    background: linear-gradient(90deg, rgba(0,100,175,0) 0%, ${props => props.theme.colors.secondaryColorPink} 100%);
     margin-left: 8px;
     border-radius: 5px;
     -webkit-transition: .2s;
@@ -86,12 +86,12 @@ const StyledlayerOpacityControl = styled.input`
         appearance: none;
         cursor: pointer;
         background: ${props => props.theme.colors.mainWhite};
-        border: 2px solid ${props => props.theme.colors.secondaryColor8};
+        border: 2px solid ${props => props.theme.colors.secondaryColorPink};
         border-radius: 50%;
         box-sizing: border-box;
         transition: all 0.1s ease-out;
         &:hover{
-            background: ${props => props.theme.colors.secondaryColor8};
+            background: ${props => props.theme.colors.secondaryColorPink};
         }
     }
 `;
@@ -107,7 +107,7 @@ const StyledLayerGripControl = styled.div`
     transition: all 0.1s ease-out;
     svg {
         font-size: 17px;
-        color: ${props => props.theme.colors.secondaryColor8};
+        color: ${props => props.theme.colors.secondaryColorPink};
     };
     &:hover {
         transform: scale(1.1);
@@ -324,8 +324,8 @@ export const SelectedLayer = (
                 <DragHandle />
                 <StyledLayerContent>
                     <StyledlayerHeader>
-                        <StyledLayerName style={{color: isLayerSelectedThemeLayer ? theme.colors.secondaryColor2 : theme.colors.mainColor1}}>
-                        <FontAwesomeIcon style={{marginRight: '4px', color: isLayerSelectedThemeLayer ? theme.colors.secondaryColor2 : theme.colors.mainColor1 }} icon={isLayerSelectedThemeLayer ? faMap : faLayerGroup} />
+                        <StyledLayerName style={{color: isLayerSelectedThemeLayer ? theme.colors.secondaryColorGreen : theme.colors.mainColor1}}>
+                        <FontAwesomeIcon style={{marginRight: '4px', color: isLayerSelectedThemeLayer ? theme.colors.secondaryColorGreen : theme.colors.mainColor1 }} icon={isLayerSelectedThemeLayer ? faMap : faLayerGroup} />
                             {layer.name}
                         </StyledLayerName>
 
@@ -403,7 +403,7 @@ export const SelectedLayer = (
                                 data-tip
                                 data-for={"filter"}
                             >
-                                <StyledFloatingSpan><FontAwesomeIcon icon={faFilter}  style={{ color: filters.filter(f => f.layer === layer.id).length > 0 ? theme.colors.secondaryColor8 : theme.colors.primaryColor1 }}/></StyledFloatingSpan>
+                                <StyledFloatingSpan><FontAwesomeIcon icon={faFilter}  style={{ color: filters.filter(f => f.layer === layer.id).length > 0 ? theme.colors.secondaryColorPink : theme.colors.primaryColor1 }}/></StyledFloatingSpan>
                             </StyledIconWrapper> 
                             </>
                         }

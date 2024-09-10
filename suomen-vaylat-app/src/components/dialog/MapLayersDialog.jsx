@@ -119,8 +119,8 @@ const StyledLayerCount = styled.div`
     align-items: center;
     border-radius: 4px;
     color: ${(props) => props.theme.colors.mainWhite};
-    background-color: ${(props) => props.theme.colors.secondaryColor7};
-    font-size: 11px;
+    background-color: ${(props) => props.theme.colors.secondaryColorDarkOrange};
+    font-size: 14px;
     font-weight: 600;
 `;
 
@@ -188,7 +188,7 @@ const MapLayersDialog = () => {
         {
             id: 'swipeAbleTab_2',
             title: strings.layerlist.layerlistLabels.selectedLayers,
-            titleColor: 'secondaryColor8',
+            titleColor: 'secondaryColorPink',
             titleContent: 'layerCounter',
             content: (
                 <SelectedLayers
@@ -230,7 +230,8 @@ const MapLayersDialog = () => {
                         >
                             {tab.title}
                             {tab.titleContent &&
-                                tab.titleContent === 'layerCounter' && (
+                                tab.titleContent === 'layerCounter' && 
+                                index !== selectedMapLayersMenuTab && (
                                     <StyledLayerCount>
                                         {selectedLayers.length}
                                     </StyledLayerCount>

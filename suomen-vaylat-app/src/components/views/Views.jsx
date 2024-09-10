@@ -133,8 +133,8 @@ const StyledDeleteAllSavedViews = styled.div`
     color: ${(props) => props.theme.colors.mainWhite};
     background-color: ${(props) =>
         props.disabled
-            ? 'rgba(177, 177, 177, 0.5)'
-            : props.theme.colors.secondaryColor7};
+            ? props.theme.colors.darkGrey
+            : props.theme.colors.secondaryColorDarkOrange};
     margin: 20px auto 20px auto;
     border-radius: 20px;
     p {
@@ -270,6 +270,10 @@ const StyledViewName = styled.input`
         outline-color: transparent;
         outline-style: none;
     }
+`;
+
+const StyledDeleteSavedGeometriesText = styled.p`
+
 `;
 
 export const SavedModalContent = () => {
@@ -455,6 +459,7 @@ const Views = () => {
                         placeholder={strings.savedContent.saveView.viewName}
                     />
                     <CircleButton
+                        text={strings.savedContent.saveView.saveViewButton}
                         icon={faPlus}
                         clickAction={() => {
                             viewName !== '' && handleSaveView();
@@ -748,6 +753,7 @@ const Geometries = () => {
                         disabled={!itemsToSave}
                     />
                     <CircleButton
+                        text={strings.savedContent.saveView.saveViewButton}
                         icon={faPlus}
                         clickAction={() => {
                             geometryName !== '' && itemsToSave && handleSaveGeometry();
@@ -876,7 +882,7 @@ const Geometries = () => {
                     }
                     disabled={geometries.length === 0}
                 >
-                    <p>{strings.savedContent.saveGeometry.deleteAllSavedGeometries}</p>
+                    <StyledDeleteSavedGeometriesText>{strings.savedContent.saveGeometry.deleteAllSavedGeometries}</StyledDeleteSavedGeometriesText>
                 </StyledDeleteAllSavedViews>
             </StyledSavedViews>
         </StyledViewsContainer>

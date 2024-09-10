@@ -79,7 +79,7 @@ const StyledModalHeader = styled.div`
     justify-content: space-between;
     background-color: ${(props) =>
         props.type === 'warning'
-            ? props.theme.colors.secondaryColor6
+            ? props.theme.colors.secondaryColorDarkOrange
             : props.theme.colors.mainColor1};
     box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.2);
     padding-left: 16px;

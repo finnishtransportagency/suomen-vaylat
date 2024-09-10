@@ -7,7 +7,7 @@ const StyledSelectedLayersCount = styled.div`
     justify-content: center;
     align-items: center;
     color: ${props => props.theme.colors.mainWhite};
-    background-color: ${props => props.theme.colors.secondaryColor7};
+    background-color: ${props => props.theme.colors.secondaryColorDarkOrange};
     margin-left: 10px;
     border-radius: 5px;
     font-size: 14px;
