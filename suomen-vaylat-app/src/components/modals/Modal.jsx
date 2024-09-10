@@ -26,7 +26,7 @@ const StyledModalBackdrop = styled(motion.div)`
 
 const StyledModalWrapper = styled(motion.div)`
     z-index: ${(props) =>
-        props.type === 'warning' ? 9999 : props.resize ? 4 : 9993};
+        props.type === 'warning' ? 9999 : props.resize ? 100 : 9993};
     position: absolute;
     width: ${(props) => props.maximize? '100% !important' : 'auto'};
     height: ${(props) => props.maximize? '100%' : 'auto'};
