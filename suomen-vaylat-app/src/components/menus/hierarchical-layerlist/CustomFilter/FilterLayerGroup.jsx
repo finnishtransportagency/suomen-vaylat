@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import styled from "styled-components";
 import { ReactReduxContext } from "react-redux";
 import { motion } from "framer-motion";
@@ -55,9 +55,9 @@ const StyledLayerGroups = styled.div`
 
   &:last-child {
     ${(props) =>
-      props.parentId === -1
-        ? "1px solid " + props.theme.colors.mainColor2
-        : "none"};
+    props.parentId === -1
+      ? "1px solid " + props.theme.colors.mainColor2
+      : "none"};
   }
 `;
 
@@ -219,9 +219,9 @@ const StyledSelectButton = styled.button`
   border: none;
   svg {
     color: ${(props) =>
-      props.subGroup
-        ? props.theme.colors.mainColor1
-        : props.theme.colors.mainWhite};
+    props.subGroup
+      ? props.theme.colors.mainColor1
+      : props.theme.colors.mainWhite};
     font-size: 19px;
     transition: all 0.3s ease-out;
   }
@@ -305,7 +305,7 @@ const Switch = ({ action, isSelected }) => {
 };
 
 
-export const FilterLayerGroup = ({ group, layers, hasChildren }) => {
+export const FilterLayerGroup = React.memo(({ group, layers, hasChildren }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isExcerptOpen, setIsExcerptOpen] = useState(false);
   const { store } = useContext(ReactReduxContext);
@@ -321,14 +321,13 @@ export const FilterLayerGroup = ({ group, layers, hasChildren }) => {
 
   useEffect(() => {
     if (group) {
-      const checkedLayers = localStorage.getItem("checkedLayers"); // Change "checkedLayers" to the key you use in local storage
-      if (checkedLayers) {
-        // Check if this group or any of its subgroups have any layers saved in local storage
-        const mainGroupHasSavedLayers = group.layers && group.layers.some((layerId) => checkedLayers.includes(layerId));
-        const subgroupsHaveSavedLayers = group.groups && group.groups.some((subgroup) =>
-          subgroup.layers && subgroup.layers.some((layerId) => checkedLayers.includes(layerId))
+      const checkedLayers = JSON.parse(localStorage.getItem("checkedLayers")) || [];
+      if (checkedLayers.length > 0) {
+        const mainGroupHasSavedLayers = group.hasOwnProperty("layers") && group.layers && group.layers.some((layerId) => checkedLayers.some(l => l.id === layerId));
+        const subgroupsHaveSavedLayers = group.hasOwnProperty("groups") && group.groups && group.groups.some((subgroup) =>
+          subgroup.layers && subgroup.layers.some((layerId) => checkedLayers.some(l => l.id === layerId))
         );
-  
+
         if (mainGroupHasSavedLayers || subgroupsHaveSavedLayers) {
           setIsOpen(true);
         }
@@ -394,83 +393,59 @@ export const FilterLayerGroup = ({ group, layers, hasChildren }) => {
   };
 
   const setFilteredLayersVisible = (boolean) => {
-        
+
     if (!boolean) {
-        const filteredCustomLayers = selectedCustomFilterLayers.filter(
-            (filterLayer) => !filteredLayers.includes(filterLayer)
-          );
-        store.dispatch(setSelectedCustomFilterLayers(filteredCustomLayers));
+      const filteredCustomLayers = selectedCustomFilterLayers.filter(
+        (filterLayer) => !filteredLayers.includes(filterLayer)
+      );
+      store.dispatch(setSelectedCustomFilterLayers(filteredCustomLayers));
     } else {
-        store.dispatch(setSelectedCustomFilterLayers([...selectedCustomFilterLayers, ...filteredLayers]))
-    }
-};
-
-const setGroupLayersVisible = (boolean, group) => {
-  const filteredCustomLayers = [...selectedCustomFilterLayers];
-
-  // Recursive function to traverse and select layers in nested groups
-  const selectLayersInNestedGroups = (groups) => {
-    for (const nestedGroup of groups) {
-      if (nestedGroup.groups) {
-        // If the nested group has further nested groups, recurse
-        selectLayersInNestedGroups(nestedGroup.groups);
-      }
-      
-      if (!boolean) {
-        nestedGroup.layers.forEach((layerId) => {
-          const index = filteredCustomLayers.findIndex(
-            (filterLayer) => filterLayer.id === layerId
-          );
-          if (index !== -1) {
-            filteredCustomLayers.splice(index, 1);
-          }
-        });
-      } else {
-        nestedGroup.layers.forEach((layerId) => {
-          const layer = allLayers.find((l) => l.id === layerId);
-          if (layer) {
-            filteredCustomLayers.push(layer);
-          }
-        });
-      }
+      store.dispatch(setSelectedCustomFilterLayers([...selectedCustomFilterLayers, ...filteredLayers]))
     }
   };
 
-  if (group.groups) {
-    selectLayersInNestedGroups(group.groups);
-  }
+  const setGroupLayersVisible = (isVisible, group) => {
+    let updatedLayers = [...selectedCustomFilterLayers];
 
-  store.dispatch(setSelectedCustomFilterLayers(filteredCustomLayers));
-};
+    const updateGroupLayers = (group, select) => {
+      if (group.layers) {
+        group.layers.forEach((layerId) => {
+          const layer = allLayers.find((l) => l.id === layerId);
+          if (layer) {
+            if (select && !updatedLayers.some((l) => l.id === layerId)) {
+              updatedLayers.push(layer);
+            } else if (!select) {
+              updatedLayers = updatedLayers.filter((l) => l.id !== layerId);
+            }
+          }
+        });
+      }
+      if (group.groups) {
+        group.groups.forEach((subgroup) => updateGroupLayers(subgroup, select));
+      }
+    };
 
-const groupLayersVisibility = (e) => {
-  e.stopPropagation();
+    updateGroupLayers(group, isVisible);
+    store.dispatch(setSelectedCustomFilterLayers(updatedLayers));
+  };
 
-  if (group.hasOwnProperty("groups")) {
-    // Select or deselect the first group
-    if (
+  const groupLayersVisibility = (e) => {
+    e.stopPropagation();
+
+    const isGroupFullySelected =
       totalGroupLayersCount === totalVisibleGroupLayersCount &&
-      totalGroupLayersCount !== 0
-    ) {
+      totalGroupLayersCount !== 0;
+
+    if (isGroupFullySelected) {
       setFilteredLayersVisible(false);
       setGroupLayersVisible(false, group);
       setIsChecked(false);
-    } else if (totalGroupLayersCount !== totalVisibleGroupLayersCount) {
+    } else {
       setFilteredLayersVisible(true);
       setGroupLayersVisible(true, group);
       setIsChecked(true);
     }
-  } else {
-    // Handle the case when the group contains only layers
-    if (filteredLayers.length === selectedCustomFilterLayers.length && isChecked) {
-      setFilteredLayersVisible(false);
-      setIsChecked(false);
-    } else {
-      setFilteredLayersVisible(true);
-      setIsChecked(true);
-    }
-  }
-};
+  };
 
   const currentLang = strings.getLanguage();
   const defaultLang = strings.getAvailableLanguages()[0];
@@ -487,8 +462,8 @@ const groupLayersVisibility = (e) => {
       ? group.locale[currentLang].desc
       : strings.groupLayerList.hasOwnProperty(group.id) &&
         strings.groupLayerList[group.id].description !== null
-      ? strings.groupLayerList[group.id].description
-      : null;
+        ? strings.groupLayerList[group.id].description
+        : null;
 
   return (
     <>
@@ -496,16 +471,16 @@ const groupLayersVisibility = (e) => {
         {group.parentId === -1 ? (
           <StyledMasterGroupHeader
             aria-label={isOpen ? (group.locale[currentLang] && group.locale[currentLang].name
-            ? group.locale[currentLang].name
-            : group.locale[defaultLang] &&
-              group.locale[defaultLang].name
-            ? group.locale[defaultLang].name
-            : group.id) : (group.locale[currentLang] && group.locale[currentLang].name
-            ? group.locale[currentLang].name
-            : group.locale[defaultLang] &&
-              group.locale[defaultLang].name
-            ? group.locale[defaultLang].name
-            : group.id)}
+              ? group.locale[currentLang].name
+              : group.locale[defaultLang] &&
+                group.locale[defaultLang].name
+                ? group.locale[defaultLang].name
+                : group.id) : (group.locale[currentLang] && group.locale[currentLang].name
+                  ? group.locale[currentLang].name
+                  : group.locale[defaultLang] &&
+                    group.locale[defaultLang].name
+                    ? group.locale[defaultLang].name
+                    : group.id)}
             key={"smgh_" + group.parentId + "_" + group.id}
             onClick={() => {
               setIsOpen(!isOpen);
@@ -521,8 +496,8 @@ const groupLayersVisibility = (e) => {
                       ? group.locale[currentLang].name.charAt(0).toUpperCase()
                       : group.locale[defaultLang] &&
                         group.locale[defaultLang].name
-                      ? group.locale[defaultLang].name.charAt(0).toUpperCase()
-                      : group.id}
+                        ? group.locale[defaultLang].name.charAt(0).toUpperCase()
+                        : group.id}
                   </p>
                 )}
               </StyledMasterGroupHeaderIcon>
@@ -532,8 +507,8 @@ const groupLayersVisibility = (e) => {
                     ? group.locale[currentLang].name
                     : group.locale[defaultLang] &&
                       group.locale[defaultLang].name
-                    ? group.locale[defaultLang].name
-                    : group.id}
+                      ? group.locale[defaultLang].name
+                      : group.id}
                 </StyledMasterGroupName>
                 <StyledMasterGroupLayersCount>
                   {totalVisibleGroupLayersCount + " / " + totalGroupLayersCount}
@@ -541,18 +516,18 @@ const groupLayersVisibility = (e) => {
               </StyledMasterGroupTitleContent>
             </StyledLeftContent>
             <StyledRightContent>
-              <StyledSelectButton 
-              aria-label={isOpen ? (group.locale[currentLang] && group.locale[currentLang].name
-              ? group.locale[currentLang].name
-              : group.locale[defaultLang] &&
-                group.locale[defaultLang].name
-              ? group.locale[defaultLang].name
-              : group.id) : (group.locale[currentLang] && group.locale[currentLang].name
-              ? group.locale[currentLang].name
-              : group.locale[defaultLang] &&
-                group.locale[defaultLang].name
-              ? group.locale[defaultLang].name
-              : group.id)}>
+              <StyledSelectButton
+                aria-label={isOpen ? (group.locale[currentLang] && group.locale[currentLang].name
+                  ? group.locale[currentLang].name
+                  : group.locale[defaultLang] &&
+                    group.locale[defaultLang].name
+                    ? group.locale[defaultLang].name
+                    : group.id) : (group.locale[currentLang] && group.locale[currentLang].name
+                      ? group.locale[currentLang].name
+                      : group.locale[defaultLang] &&
+                        group.locale[defaultLang].name
+                        ? group.locale[defaultLang].name
+                        : group.id)}>
                 <StyledMotionIconWrapper
                   initial="closed"
                   animate={isOpen ? "open" : "closed"}
@@ -573,29 +548,29 @@ const groupLayersVisibility = (e) => {
               ? group.locale[currentLang].name
               : group.locale[defaultLang] &&
                 group.locale[defaultLang].name
-              ? group.locale[defaultLang].name
-              : group.id) : (group.locale[currentLang] && group.locale[currentLang].name
-              ? group.locale[currentLang].name
-              : group.locale[defaultLang] &&
-                group.locale[defaultLang].name
-              ? group.locale[defaultLang].name
-              : group.id)}
+                ? group.locale[defaultLang].name
+                : group.id) : (group.locale[currentLang] && group.locale[currentLang].name
+                  ? group.locale[currentLang].name
+                  : group.locale[defaultLang] &&
+                    group.locale[defaultLang].name
+                    ? group.locale[defaultLang].name
+                    : group.id)}
             key={"smgh_" + group.parentId + "_" + group.id}
             onClick={() => setIsOpen(!isOpen)}
           >
             <StyledLefContent>
-              <StyledSelectButton subGroup={true} 
-              aria-label={isOpen ? (group.locale[currentLang] && group.locale[currentLang].name
-              ? group.locale[currentLang].name
-              : group.locale[defaultLang] &&
-                group.locale[defaultLang].name
-              ? group.locale[defaultLang].name
-              : group.id) : (group.locale[currentLang] && group.locale[currentLang].name
-              ? group.locale[currentLang].name
-              : group.locale[defaultLang] &&
-                group.locale[defaultLang].name
-              ? group.locale[defaultLang].name
-              : group.id)}>
+              <StyledSelectButton subGroup={true}
+                aria-label={isOpen ? (group.locale[currentLang] && group.locale[currentLang].name
+                  ? group.locale[currentLang].name
+                  : group.locale[defaultLang] &&
+                    group.locale[defaultLang].name
+                    ? group.locale[defaultLang].name
+                    : group.id) : (group.locale[currentLang] && group.locale[currentLang].name
+                      ? group.locale[currentLang].name
+                      : group.locale[defaultLang] &&
+                        group.locale[defaultLang].name
+                        ? group.locale[defaultLang].name
+                        : group.id)}>
                 <StyledMotionIconWrapper
                   initial="closed"
                   animate={isOpen ? "open" : "closed"}
@@ -614,8 +589,8 @@ const groupLayersVisibility = (e) => {
                     ? group.locale[currentLang].name
                     : group.locale[defaultLang] &&
                       group.locale[defaultLang].name
-                    ? group.locale[defaultLang].name
-                    : group.id}
+                      ? group.locale[defaultLang].name
+                      : group.id}
                 </StyledGroupName>
                 <StyledSubGroupLayersCount>
                   {totalVisibleGroupLayersCount + " / " + totalGroupLayersCount}
@@ -706,7 +681,7 @@ const groupLayersVisibility = (e) => {
                 layers={layers}
                 recurse={true}
               />
-              <FilterLayers layers={filteredLayers}/>
+              <FilterLayers layers={filteredLayers} />
             </>
           )}
           {!hasChildren && <FilterLayers layers={filteredLayers} />}
@@ -714,6 +689,6 @@ const groupLayersVisibility = (e) => {
       </StyledLayerGroups>
     </>
   );
-};
+});
 
 export default FilterLayerGroup;
