@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { Logger } from "../../utils/logger";
+import { act } from "react-dom/test-utils";
 
 const LOG = new Logger("RPCSlice");
 
@@ -389,7 +390,7 @@ export const rpcSlice = createSlice({
      * @param {Object} state
      */
     setZoomIn: (state) => {
-      state.channel !== null && state.channel.zoomIn(function () {});
+      state.channel !== null && state.channel.zoomIn(function () { });
       LOG.log("setZoomIn");
     },
 
@@ -399,7 +400,7 @@ export const rpcSlice = createSlice({
      * @param {Object} state
      */
     setZoomOut: (state) => {
-      state.channel !== null && state.channel.zoomOut(function () {});
+      state.channel !== null && state.channel.zoomOut(function () { });
       LOG.log("setZoomOut");
     },
 
@@ -411,7 +412,7 @@ export const rpcSlice = createSlice({
      */
     setZoomTo: (state, action) => {
       state.channel !== null &&
-        state.channel.zoomTo([action.payload], function (data) {});
+        state.channel.zoomTo([action.payload], function (data) { });
       LOG.log("setZoomTo to " + action.payload);
     },
 
@@ -436,6 +437,31 @@ export const rpcSlice = createSlice({
         );
       }
       LOG.log("searchVKMRoad ", action.payload);
+    },
+
+    searchVKMTrack: (state, action) => {
+      let ratanumero, ratakilometri, ratametri
+      if (action && action.payload.value.includes("/")) {
+        const values = action.payload.value.split("/");
+        ratanumero = values[0].trim();
+        ratakilometri = values[1].trim()
+        ratametri = values[2].trim()
+      }
+
+      if (state.channel !== null) {
+        state.channel.searchVKMTrack(
+          [ratanumero, Number(ratakilometri), Number(ratametri)],
+          function (data) {
+            if (typeof action.payload.handler === "function") {
+              action.payload.handler(data);
+              LOG.log("searchVKMTrack", data);
+            }
+          },
+          function (errors) {
+            LOG.error('Ratahaku epäonnistui', errors)
+          }
+        )
+      };
     },
 
     /**
@@ -496,8 +522,8 @@ export const rpcSlice = createSlice({
     removeMarkerRequest: (state, action) => {
       state.channel !== null && action.payload
         ? state.channel.postRequest("MapModulePlugin.RemoveMarkersRequest", [
-            action.payload.markerId,
-          ])
+          action.payload.markerId,
+        ])
         : state.channel.postRequest("MapModulePlugin.RemoveMarkersRequest");
       LOG.log("removeMarkerRequest ", action.payload);
     },
@@ -956,7 +982,8 @@ export const {
   setFilteringInfo,
   setFeatureSearchResults,
   resetFeatureSearchResults,
-  setSearchOn
+  setSearchOn,
+  searchVKMTrack
 } = rpcSlice.actions;
 
 export default rpcSlice.reducer;

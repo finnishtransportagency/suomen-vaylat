@@ -20,7 +20,7 @@ import { SEARCH_TIP_LOCALSTORAGE } from '../../utils/constants';
 
 import { isMobile, theme } from '../../theme/theme';
 
-import { addMarkerRequest, mapMoveRequest, setFeatureSearchResults, resetFeatureSearchResults, setSearchOn } from '../../state/slices/rpcSlice';
+import { addMarkerRequest, mapMoveRequest, setFeatureSearchResults, resetFeatureSearchResults, setSearchOn, searchVKMTrack } from '../../state/slices/rpcSlice';
 
 import { setIsSearchOpen, setGeoJsonArray, setHasToastBeenShown, setActiveSwitch } from '../../state/slices/uiSlice';
 
@@ -32,8 +32,9 @@ import SearchToast from '../toasts/SearchToast';
 import ReactTooltip from 'react-tooltip';
 import TipToast from '../toasts/TipToast';
 import SearchModal from './SearchModal';
+import VKMTrackSearch from './VKMTrackSearch';
 
-export const StyledSearchIcon  = styled.div`
+export const StyledSearchIcon = styled.div`
     min-width: 48px;
     padding-right: 16px;
     display: flex;
@@ -220,10 +221,10 @@ const Search = () => {
         setShowSearchResults(true);
         switch (searchType) {
             case 'address':
-                if (activeSwitch==='track'){
-                    if ( validateTrackSearch(searchValue, setTrackErrors))
-                    handleAddressSearch(searchValue);
-                }else {
+                if (activeSwitch === 'track') {
+                    if (validateTrackSearch(searchValue, setTrackErrors))
+                        handleAddressSearch(searchValue);
+                } else {
                     handleAddressSearch(searchValue);
                 }
  
@@ -245,11 +246,11 @@ const Search = () => {
         //unless search ajorata and etaisyys flag ( carriageWaySearch ) found
         
         //TODO if and when we implement track range search, this should be enabled also to track, for now only road search 
-        if ((activeSwitch === 'road' || activeSwitch === null) && !carriageWaySearch && value && value.includes("/") && (value.split("/").length === 3 || value.split("/").length === 5)){
+        if ((activeSwitch === 'road' || activeSwitch === null) && !carriageWaySearch && value && value.includes("/") && (value.split("/").length === 3 || value.split("/").length === 5)) {
             let splittedValue = value.split("/");
-            searchValueCopy = splittedValue[0]+"/"+splittedValue[1]+"//"+splittedValue[2];
-            if (splittedValue.length===5){
-                searchValueCopy += "/"+ splittedValue[3]+"//"+splittedValue[4]
+            searchValueCopy = splittedValue[0] + "/" + splittedValue[1] + "//" + splittedValue[2];
+            if (splittedValue.length === 5) {
+                searchValueCopy += "/" + splittedValue[3] + "//" + splittedValue[4]
             }
         }
 
@@ -258,7 +259,28 @@ const Search = () => {
         setFirstSearchResultShown(false);
         removeMarkersAndFeatures();
         setIsSearching(true);
-        channel.postRequest('SearchRequest', [searchValueCopy]);
+        if (activeSwitch === 'track') {
+            store.dispatch(
+                searchVKMTrack({
+                    value: value,
+                    handler: (data) => {
+                        if (data.ratanumero && data.geom) {
+                            //mimic search structure of old vkm search
+                            const name = `ratanumero=${data?.ratanumero}, ratakilometri=${data?.ratakilometri}, ratametri=${data?.ratametri}`;
+                            const mimicdata = { result: { locations: [{ type: "VKM", vkmType: "track", geom: data.geom, "name": name }] } };
+                            setSearchResults(mimicdata);
+                            if ((data?.result?.locations?.length > 1 || data?.result?.geom?.length > 1) && !isSearchModalOpen) {
+                                setIsSearchModalOpen(true);
+                            }
+                            setIsSearching(false);
+                        }
+                    },
+
+                })
+            );
+        } else {
+            channel.postRequest('SearchRequest', [searchValueCopy]);
+        }
         setSearchValue(value);
         setLastSearchValue(value);
         setSearchResults(null);
@@ -287,40 +309,40 @@ const Search = () => {
         store.dispatch(resetFeatureSearchResults());
 
         selectedLayersByType.mapLayers.forEach(layer => {
-                // executor (the producing code, "singer")
-                channel.searchFeatures(
-                    [[layer.id], searchValue],
-                    (data) => {
-                        if (Object.keys(data).length > 0 && data.gfi.length > 0) {
-                            setIsSearching(false);
-                            store.dispatch(setSearchOn(false));
-                            store.dispatch(setFeatureSearchResults(data.gfi[0]));
-                            setLastSearchValue(searchValue);
-                        } else {
-                            setIsSearching(false);
-                            store.dispatch(setSearchOn(false));
-
-                            setLastSearchValue(searchValue);
-                        }
-                    },
-                    function (error) {
+            // executor (the producing code, "singer")
+            channel.searchFeatures(
+                [[layer.id], searchValue],
+                (data) => {
+                    if (Object.keys(data).length > 0 && data.gfi.length > 0) {
                         setIsSearching(false);
                         store.dispatch(setSearchOn(false));
+                        store.dispatch(setFeatureSearchResults(data.gfi[0]));
                         setLastSearchValue(searchValue);
+                    } else {
+                        setIsSearching(false);
+                        store.dispatch(setSearchOn(false));
 
-                        toast.error(strings.search.feature.errorLayerStart + layer.name + strings.search.feature.errorLayerEnd, {
-                            position: "top-center",
-                            autoClose: 5000,
-                            hideProgressBar: false,
-                            closeOnClick: true,
-                            pauseOnHover: true,
-                            draggable: true,
-                            progress: undefined,
-                            theme: "colored",
-                            transition: Slide
-                            });
+                        setLastSearchValue(searchValue);
                     }
-                )
+                },
+                function (error) {
+                    setIsSearching(false);
+                    store.dispatch(setSearchOn(false));
+                    setLastSearchValue(searchValue);
+
+                    toast.error(strings.search.feature.errorLayerStart + layer.name + strings.search.feature.errorLayerEnd, {
+                        position: "top-center",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        theme: "colored",
+                        transition: Slide
+                    });
+                }
+            )
         })
         
     };
@@ -354,11 +376,11 @@ const Search = () => {
 
         // for feature search
         channel &&
-        channel.postRequest("MapModulePlugin.RemoveFeaturesFromMapRequest", [
-        null,
-        null,
-        "feature-search-results",
-        ]);
+            channel.postRequest("MapModulePlugin.RemoveFeaturesFromMapRequest", [
+                null,
+                null,
+                "feature-search-results",
+            ]);
     };
 
     const searchTypes = {
@@ -414,7 +436,7 @@ const Search = () => {
                     if (data.result) {
                         setSearchResults(data);
                     }
-                    if (data.result.locations.length > 1 && !isSearchModalOpen) {
+                    if ((data?.result?.locations?.length > 1 || data?.result?.geom?.length > 1) && !isSearchModalOpen) {
                         setIsSearchModalOpen(true);
                     }
                 }
@@ -429,7 +451,7 @@ const Search = () => {
                     }
                 }
             });
-    }, [channel]);
+    }, [channel, activeSwitch]);
 
     const handleSearchSelect = (name, lon, lat, geom, osa, ajorata, etaisyys, osaLoppu, etaisyysLoppu, type) => {
         removeMarkersAndFeatures();
@@ -478,9 +500,11 @@ const Search = () => {
                 },
             ]);
 
-            store.dispatch(setGeoJsonArray([{data: {
-                geom: geom
-            }, style: style, hover: hover, featureStyle: featureStyle }]));
+            store.dispatch(setGeoJsonArray([{
+                data: {
+                    geom: geom
+                }, style: style, hover: hover, featureStyle: featureStyle
+            }]));
         } else if (type === 'track') {
             let featureStyle = VKMGeoJsonStyles['track'];
             let hover = VKMGeoJsonHoverStyles['track'];
@@ -495,9 +519,11 @@ const Search = () => {
                     maxZoomLevel: 10
                 }
             ]);
-            store.dispatch(setGeoJsonArray([{data: {
-                geom: geom
-            }, style: 'track', hover: hover, featureStyle: featureStyle }]));
+            store.dispatch(setGeoJsonArray([{
+                data: {
+                    geom: geom
+                }, style: 'track', hover: hover, featureStyle: featureStyle
+            }]));
         };
     };
 
@@ -574,18 +600,18 @@ const Search = () => {
     const handleCloseToast = () => {
         setShowToast(false);
         toast.dismiss('searchTipToast');
-        store.dispatch(setHasToastBeenShown({toastId: 'searchTipToast', shown: true}));
+        store.dispatch(setHasToastBeenShown({ toastId: 'searchTipToast', shown: true }));
     };
 
-    if(searchType === 'address' && isSearchOpen && !hasToastBeenShown.includes('searchToast') 
-        && 1===2 /*disable search help toast for now */) {
-        toast(<SearchToast header={strings.search.tips.title} texts={texts}/>,
-        {
-            toastId: 'searchToast',
-            onClose: () => store.dispatch(setHasToastBeenShown({toastId: 'searchToast', shown: true})),
-            position: 'top-right',
-            draggable: false
-        })
+    if (searchType === 'address' && isSearchOpen && !hasToastBeenShown.includes('searchToast')
+        && 1 === 2 /*disable search help toast for now */) {
+        toast(<SearchToast header={strings.search.tips.title} texts={texts} />,
+            {
+                toastId: 'searchToast',
+                onClose: () => store.dispatch(setHasToastBeenShown({ toastId: 'searchToast', shown: true })),
+                position: 'top-right',
+                draggable: false
+            })
     } else if (!isSearchOpen || searchType !== 'address') {
         toast.dismiss('searchToast');
     }
@@ -593,17 +619,18 @@ const Search = () => {
     useEffect(() => {
         const vkmKeys = ['vali', 'tie', 'osa', 'etaisyys', 'track'];
 
-        if(geoJsonArray.length > 0 && isSearchOpen && !hasToastBeenShown.includes('searchTipToast') && showToast !== false) {
+        if (geoJsonArray.length > 0 && isSearchOpen && !hasToastBeenShown.includes('searchTipToast') && showToast !== false) {
             geoJsonArray.forEach(geoj => {
-                if(vkmKeys.some(vkmStyle => vkmStyle === geoj.style)) {
+                if (vkmKeys.some(vkmStyle => vkmStyle === geoj.style)) {
                     toast.info(<TipToast handleButtonClick={() => handleCloseToast()} localStorageName={SEARCH_TIP_LOCALSTORAGE} text={<div> <h6>{searchDownloadTips.tip}</h6> <p>{searchDownloadTips.guide}</p></div>} />, 
-                    {icon: <StyledToastIcon icon={faInfoCircle} />,
-                    toastId: 'searchTipToast',
-                    onClose: () => handleCloseToast(),
-                    position: 'bottom-left',
-                    draggable: false
-                    })
-                    store.dispatch(setHasToastBeenShown({toastId: 'searchTipToast', shown: true}));
+                        {
+                            icon: <StyledToastIcon icon={faInfoCircle} />,
+                            toastId: 'searchTipToast',
+                            onClose: () => handleCloseToast(),
+                            position: 'bottom-left',
+                            draggable: false
+                        })
+                    store.dispatch(setHasToastBeenShown({ toastId: 'searchTipToast', shown: true }));
                     return;
                 }
             })
@@ -611,7 +638,7 @@ const Search = () => {
         else toast.dismiss('searchTipToast');
     }, [geoJsonArray]);
 
-    const validateTrackSearch = useCallback( (searchValue, setTrackErrors) => {
+    const validateTrackSearch = useCallback((searchValue, setTrackErrors) => {
         let searchArray = searchValue.split("/");
         const newErrors = Array(3).fill(false);
         // If there are not exactly 3 values, populate the errors array accordingly
@@ -638,11 +665,11 @@ const Search = () => {
     useEffect(() => {
         //when carriagewaysearch ( ajordalla haku ) changes, reset searchValue
         setSearchValue('');
-     }, [carriageWaySearch, setSearchValue]);
+    }, [carriageWaySearch, setSearchValue]);
 
     return (
         <StyledSearchContainer isSearchOpen={isSearchOpen}>
-        <ReactTooltip backgroundColor={theme.colors.mainColor1} disable={isMobile} place='bottom' type='dark' effect='float' />
+            <ReactTooltip backgroundColor={theme.colors.mainColor1} disable={isMobile} place='bottom' type='dark' effect='float' />
        
        
             <CircleButton
@@ -668,107 +695,107 @@ const Search = () => {
           
             <AnimatePresence>
                 {isSearchOpen && (
-                 <StyledSearchWrapper
-                    hasGeometry={geoJsonArray.length > 0}
-                    variants={variants}
-                    initial={'initial'}
-                    animate={'animate'}
-                    exit={'exit'}
-                    transition={'transition'}
-                    searchType={searchType}
-                    showSearchResults={showSearchResults}
-                >
-                    <StyledLeftContentWrapper>
+                    <StyledSearchWrapper
+                        hasGeometry={geoJsonArray.length > 0}
+                        variants={variants}
+                        initial={'initial'}
+                        animate={'animate'}
+                        exit={'exit'}
+                        transition={'transition'}
+                        searchType={searchType}
+                        showSearchResults={showSearchResults}
+                    >
+                        <StyledLeftContentWrapper>
                    
-                        {!isSearching ? (
-                        <StyledSelectedSearchMethod
-                            onClick={() => {
-                                setShowSearchResults(true);
-                                isSearchMethodSelectorOpen &&
-                                    setIsSearchMethodSelectorOpen(
-                                        false
-                                    );
-                            }}
-                        >
-                        {  
-                            searchTypes[searchType].content
-                        }
-                        </StyledSelectedSearchMethod>
-                        ) : (
-                            <StyledLoaderWrapper>
-                                <SvLoder />
-                            </StyledLoaderWrapper>
-                        )}
-                        {(searchResults !== null || featureSearchResults.length > 0) &&
-                        searchValue === lastSearchValue ? (
-                            <StyledSearchActionButton
-                                onClick={() => {
-                                    store.dispatch(setGeoJsonArray([]));
-                                    setSearchResults(null);
-                                    setSearchValue('');
-                                    removeMarkersAndFeatures();
-                                }}
-                                icon={faTrash}
+                            {!isSearching ? (
+                                <StyledSelectedSearchMethod
+                                    onClick={() => {
+                                        setShowSearchResults(true);
+                                        isSearchMethodSelectorOpen &&
+                                            setIsSearchMethodSelectorOpen(
+                                                false
+                                            );
+                                    }}
+                                >
+                                    {
+                                        searchTypes[searchType].content
+                                    }
+                                </StyledSelectedSearchMethod>
+                            ) : (
+                                <StyledLoaderWrapper>
+                                    <SvLoder />
+                                </StyledLoaderWrapper>
+                            )}
+                            {(searchResults !== null || featureSearchResults.length > 0) &&
+                                searchValue === lastSearchValue ? (
+                                <StyledSearchActionButton
+                                    onClick={() => {
+                                        store.dispatch(setGeoJsonArray([]));
+                                        setSearchResults(null);
+                                        setSearchValue('');
+                                        removeMarkersAndFeatures();
+                                    }}
+                                    icon={faTrash}
+                                />
+                            ) : !isSearching && (
+                                <StyledSearchActionButton
+                                    onClick={() => {
+                                        handleSeach(searchValue)
+                                    }}
+                                    icon={faSearch}
+                                    size="lg"
+                                />
+                            )}
+                        </StyledLeftContentWrapper>
+                        <SearchResultPanel
+                            isSearchOpen={isSearchOpen}
+                            searchResults={searchResults}
+                            showSearchResults={showSearchResults}
+                            searchType={searchType}
+                            dropdownVariants={dropdownVariants}
+                            firstSearchResultShown={firstSearchResultShown}
+                            handleSearchSelect={handleSearchSelect}
+                            setFirstSearchResultShown={setFirstSearchResultShown}
+                            isMobile={isMobile}
+                            setShowSearchResults={setShowSearchResults}
+                            setSearchClickedRow={setSearchClickedRow}
+                            searchClickedRow={searchClickedRow}
+                            allLayers={allLayers}
+                            hidden={true}
+                        />
+                        {isSearchModalOpen && (
+                            <SearchModal
+                                searchValue={searchValue}
+                                setSearchValue={setSearchValue}
+                                searchResults={searchResults}
+                                setSearchResults={setSearchResults}
+                                dropdownVariants={dropdownVariants}
+                                firstSearchResultShown={firstSearchResultShown}
+                                handleSearchSelect={handleSearchSelect}
+                                setFirstSearchResultShown={setFirstSearchResultShown}
+                                isMobile={isMobile}
+                                setShowSearchResults={setShowSearchResults}
+                                setSearchClickedRow={setSearchClickedRow}
+                                searchClickedRow={searchClickedRow}
+                                allLayers={allLayers}
+                                isSearchOpen={isSearchOpen}
+                                showSearchResults={showSearchResults}
+                                searchType={searchType}
+                                setSearchType={setSearchType}
+                                handleSeach={handleSeach}
+                                isOpen={isSearchModalOpen}
+                                toggleModal={toggleSearchModal}
+                                carriageWaySearch={carriageWaySearch}
+                                setCarriageWaySearch={setCarriageWaySearch}
+                                removeMarkersAndFeatures={removeMarkersAndFeatures}
+                                activeSwitch={activeSwitch}
+                                trackErrors={trackErrors}
+                                setTrackErrors={setTrackErrors}
+                                validateTrackSearch={validateTrackSearch}
                             />
-                        ) : !isSearching && (
-                            <StyledSearchActionButton
-                                onClick={() => {
-                                    handleSeach(searchValue)
-                                }}
-                                icon={faSearch}
-                                size="lg"
-                            />
                         )}
-                    </StyledLeftContentWrapper>   
-                    <SearchResultPanel 
-                        isSearchOpen={isSearchOpen}
-                        searchResults={searchResults}
-                        showSearchResults={showSearchResults}
-                        searchType={searchType}
-                        dropdownVariants={dropdownVariants}
-                        firstSearchResultShown={firstSearchResultShown}
-                        handleSearchSelect={handleSearchSelect}
-                        setFirstSearchResultShown={setFirstSearchResultShown}
-                        isMobile={isMobile}
-                        setShowSearchResults={setShowSearchResults}
-                        setSearchClickedRow={setSearchClickedRow}
-                        searchClickedRow={searchClickedRow}
-                        allLayers={allLayers}
-                        hidden={true}
-                    /> 
-                {isSearchModalOpen && ( 
-                    <SearchModal 
-                        searchValue={searchValue}
-                        setSearchValue={setSearchValue}
-                        searchResults={searchResults} 
-                        setSearchResults={setSearchResults} 
-                        dropdownVariants={dropdownVariants} 
-                        firstSearchResultShown={firstSearchResultShown}
-                        handleSearchSelect={handleSearchSelect}
-                        setFirstSearchResultShown={setFirstSearchResultShown}
-                        isMobile={isMobile}
-                        setShowSearchResults={setShowSearchResults}
-                        setSearchClickedRow={setSearchClickedRow}
-                        searchClickedRow={searchClickedRow}
-                        allLayers={allLayers}
-                        isSearchOpen={isSearchOpen}
-                        showSearchResults={showSearchResults}
-                        searchType={searchType}
-                        setSearchType={setSearchType}
-                        handleSeach={handleSeach}
-                        isOpen={isSearchModalOpen} 
-                        toggleModal={toggleSearchModal} 
-                        carriageWaySearch={carriageWaySearch}
-                        setCarriageWaySearch={setCarriageWaySearch}
-                        removeMarkersAndFeatures={removeMarkersAndFeatures}
-                        activeSwitch={activeSwitch}
-                        trackErrors={trackErrors}
-                        setTrackErrors={setTrackErrors}
-                        validateTrackSearch={validateTrackSearch}
-                    />            
-                )}  
                 
-                </StyledSearchWrapper>
+                    </StyledSearchWrapper>
              
         
                 ) 
@@ -821,4 +848,4 @@ const Search = () => {
     );
 };
 
-export  default Search;
+export default Search;
