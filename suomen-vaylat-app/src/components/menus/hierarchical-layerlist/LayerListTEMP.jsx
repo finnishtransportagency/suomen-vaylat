@@ -124,7 +124,7 @@ const StyledLayerList = styled.div`
 
 `;
 
-const SavedLayer = ({layers, groups}) => {
+const SavedLayer = ({ layers, groups }) => {
   const customLayers = localStorage.getItem("checkedLayers");
   const parsedLayers = JSON.parse(customLayers) || [];
   const { tagLayers, tags } = useSelector((state) => state.rpc);
@@ -133,32 +133,32 @@ const SavedLayer = ({layers, groups}) => {
   if (parsedLayers.length > 0) {
     return (
       <>
-            {(tagLayers.length > 0 || layerArray.length > 0) &&
-                <StyledLayerList>
-                    {
-                        tags.map((tag, index) => {
-                            return (
-                                <TagLayerList
-                                    tag={tag}
-                                    layers={layers}
-                                    index={index}
-                                    groups={groups}
-                                    key={'taglayerlist-' + tag + '-' + index}
-                                />
-                            );
-                        })
-                    }
-                    { layerArray.length > 0 &&
-                      <TagLayerList
-                      tag={strings.layerlist.customLayerInfo.customFilter}
-                        layers={layers}
-                        groups={groups}
-                        key={'taglayerlist-' + strings.layerlist.customLayerInfo.customFilter}
-                        customTag={layerArray}
-                      />
-                    }
-                </StyledLayerList>
+        {(tagLayers.length > 0 || layerArray.length > 0) &&
+          <StyledLayerList>
+            {
+              tags.map((tag, index) => {
+                return (
+                  <TagLayerList
+                    tag={tag}
+                    layers={layers}
+                    index={index}
+                    groups={groups}
+                    key={'taglayerlist-' + tag + '-' + index}
+                  />
+                );
+              })
             }
+            {layerArray.length > 0 &&
+              <TagLayerList
+                tag={strings.layerlist.customLayerInfo.customFilter}
+                layers={layers}
+                groups={groups}
+                key={'taglayerlist-' + strings.layerlist.customLayerInfo.customFilter}
+                customTag={layerArray}
+              />
+            }
+          </StyledLayerList>
+        }
       </>
     );
   }
@@ -169,8 +169,7 @@ const SavedLayer = ({layers, groups}) => {
 const LayerListTEMP = ({ groups, layers, tags }) => {
   useAppSelector((state) => state.language);
 
-  const { showSavedLayers } = useAppSelector((state) => state.ui);
-
+  const { showSavedLayers, isCustomFilterOpen } = useAppSelector((state) => state.ui);
   const [isOpen, setIsOpen] = useState(false);
 
   const selectedLayers = localStorage.getItem("checkedLayers");
@@ -246,7 +245,7 @@ const LayerListTEMP = ({ groups, layers, tags }) => {
         </StyledDeleteAllSelectedFilters>
       </StyledFilterList>
 
-      {showSavedLayers && parsedLayers.length > 0 ? (
+      {showSavedLayers || isCustomFilterOpen ? (
         <SavedLayer layers={layers} />
       ) : (
         <LayerList

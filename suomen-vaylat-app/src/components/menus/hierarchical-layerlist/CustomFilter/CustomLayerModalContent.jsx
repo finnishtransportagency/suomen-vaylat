@@ -45,7 +45,7 @@ const StyledSaveButton = styled.div`
   align-items: center;
   border-radius: 30px;
   background-color: ${(props) =>
-    props.isDisabled ? "#DDDDDD" : props.theme.colors.mainColor1};
+    props.isDisabled ? props.theme.colors.darkGrey  : props.theme.colors.mainColor1};
   cursor: ${(props) => (props.isDisabled ? "not-allowed" : "pointer")};
   font-size: 14px;
   color:  ${(props) => props.theme.colors.mainWhite};
@@ -64,7 +64,9 @@ const StyledRemoveButton = styled.div`
   cursor: ${(props) => (props.isDisabled ? "not-allowed" : "pointer")};
   font-size: 14px;
   border-style: solid;
-  color:  ${(props) => props.theme.colors.mainColor1};
+  color:  ${(props) => (props.isDisabled ? props.theme.colors.mainWhite : props.theme.colors.mainColor1)};
+  background-color: ${(props) =>
+    props.isDisabled ? props.theme.colors.darkGrey : props.theme.colors.mainWhite};
   font-weight: 500;
 `;
 
@@ -167,16 +169,16 @@ export const CustomLayerList = ({ groups, layers, recurse = false }) => {
 };
 
 // Renders custom filter guide for user and CustomLayerList
-export const CustomLayerModalContent = ({
-  tooltipBackgroundColor = theme.colors.mainColor1,
-  tooltipColor = theme.colors.mainWhite,
-  isChecked,
-}) => {
+export const CustomLayerModalContent = ({}) => {
   useAppSelector((state) => state.language);
 
   const { allGroups, allLayers } = useAppSelector((state) => state.rpc);
 
   const { updateCustomLayer, selectedCustomFilterLayers } = useAppSelector((state) => state.ui);
+
+  const checkedLayers = localStorage.getItem('checkedLayers')
+  const checkedLayersJson = JSON.parse(checkedLayers);
+
   const modalContent = [
     {
       titleColor: "mainColor1",
@@ -197,22 +199,25 @@ export const CustomLayerModalContent = ({
   ];
 
   useEffect(() => {
-    const checkedLayers = localStorage.getItem('checkedLayers')
-    const checkedLayersJson = JSON.parse(checkedLayers);
-
     if (checkedLayersJson !== null && checkedLayersJson.length > 0 && selectedCustomFilterLayers.length === 0) {
       checkedLayers && store.dispatch(
           setSelectedCustomFilterLayers(checkedLayersJson)
         );
-    } else {  
-      if (checkedLayersJson !== null && checkedLayersJson.length !== selectedCustomFilterLayers.length) {
+    }
+  }, []);
+
+  useEffect(() => {
+    const selectedIds = selectedCustomFilterLayers.map(layer => layer.id);
+    const checkedIds = checkedLayersJson.map(layer => layer.id);
+    const matchingArrays = selectedIds.every(id => checkedIds.includes(id));
+
+      if (checkedLayersJson !== null && !matchingArrays) {
         store.dispatch(setUpdateCustomLayers(true));
       } else if (checkedLayersJson === null && selectedCustomFilterLayers.length > 0) {
         store.dispatch(setUpdateCustomLayers(true));
       } else {
         store.dispatch(setUpdateCustomLayers(false));
       }
-    }
   }, [selectedCustomFilterLayers, updateCustomLayer]);
 
 
@@ -237,31 +242,18 @@ export const CustomLayerModalContent = ({
 
   return (
     <StyledModalContainer>
-      <ReactTooltip
-        id={"save-button-tooltip"}
-        backgroundColor={tooltipBackgroundColor}
-        textColor={tooltipColor}
-        place="bottom"
-        type="dark"
-        effect="float"
-        disable={!updateCustomLayer}
-      >
-        <span>{strings.layerlist.customLayerInfo.saveTooltip}</span>
-      </ReactTooltip>
       {modalContent.map((content) => (
         <div key={content.content}>
           <div>{content.content}</div>
 
           <StyledButtonContainer>
-            <StyledRemoveButton onClick={removeLayers} checked={!isChecked}>
+            <StyledRemoveButton onClick={removeLayers} isDisabled={selectedCustomFilterLayers.length === 0}>
               {strings.layerlist.customLayerInfo.removeLayers}
             </StyledRemoveButton>
             <StyledSaveButton
               onClick={() => {
                 saveLayers();
               }}
-              data-tip={strings.layerlist.customLayerInfo.saveTooltip}
-              data-for="save-button-tooltip"
               isDisabled={!updateCustomLayer}
             >
               {strings.layerlist.layerlistLabels.saveCustomFilter}
