@@ -45,7 +45,7 @@ const StyledSaveButton = styled.div`
   align-items: center;
   border-radius: 30px;
   background-color: ${(props) =>
-    props.isDisabled ? props.theme.colors.darkGrey  : props.theme.colors.mainColor1};
+    props.isDisabled ? props.theme.colors.darkGrey : props.theme.colors.mainColor1};
   cursor: ${(props) => (props.isDisabled ? "not-allowed" : "pointer")};
   font-size: 14px;
   color:  ${(props) => props.theme.colors.mainWhite};
@@ -102,28 +102,28 @@ export const CustomLayerList = ({ groups, layers, recurse = false }) => {
   const sortedGroups =
     slicedGroups.length > 0
       ? slicedGroups.sort(function (a, b) {
-          const aName =
-            a.locale[currentLang] && a.locale[currentLang].name
-              ? a.locale[currentLang].name
-              : null;
-          const bName =
-            b.locale[currentLang] && b.locale[currentLang].name
-              ? b.locale[currentLang].name
-              : null;
+        const aName =
+          a.locale[currentLang] && a.locale[currentLang].name
+            ? a.locale[currentLang].name
+            : null;
+        const bName =
+          b.locale[currentLang] && b.locale[currentLang].name
+            ? b.locale[currentLang].name
+            : null;
 
-          // b.id 727 is Tierekisteri (Poistuva) and should be the lowest element on the list
-          if (b.id === 727) {
-            return -1;
-          }
-          // a.id 727 is Tierekisteri (Poistuva) only on Firefox
-          else if (a.id === 727) {
-            return 1;
-          } else if (aName && bName) {
-            return aName.toLowerCase().localeCompare(bName.toLowerCase());
-          } else {
-            return 0;
-          }
-        })
+        // b.id 727 is Tierekisteri (Poistuva) and should be the lowest element on the list
+        if (b.id === 727) {
+          return -1;
+        }
+        // a.id 727 is Tierekisteri (Poistuva) only on Firefox
+        else if (a.id === 727) {
+          return 1;
+        } else if (aName && bName) {
+          return aName.toLowerCase().localeCompare(bName.toLowerCase());
+        } else {
+          return 0;
+        }
+      })
       : [];
 
   return (
@@ -169,15 +169,14 @@ export const CustomLayerList = ({ groups, layers, recurse = false }) => {
 };
 
 // Renders custom filter guide for user and CustomLayerList
-export const CustomLayerModalContent = ({}) => {
+export const CustomLayerModalContent = ({ }) => {
   useAppSelector((state) => state.language);
 
   const { allGroups, allLayers } = useAppSelector((state) => state.rpc);
-
   const { updateCustomLayer, selectedCustomFilterLayers } = useAppSelector((state) => state.ui);
 
   const checkedLayers = localStorage.getItem('checkedLayers')
-  const checkedLayersJson = JSON.parse(checkedLayers);
+  const checkedLayersJson = checkedLayers !== null ? JSON.parse(checkedLayers) : [];
 
   const modalContent = [
     {
@@ -201,23 +200,23 @@ export const CustomLayerModalContent = ({}) => {
   useEffect(() => {
     if (checkedLayersJson !== null && checkedLayersJson.length > 0 && selectedCustomFilterLayers.length === 0) {
       checkedLayers && store.dispatch(
-          setSelectedCustomFilterLayers(checkedLayersJson)
-        );
+        setSelectedCustomFilterLayers(checkedLayersJson)
+      );
     }
   }, []);
 
   useEffect(() => {
-    const selectedIds = selectedCustomFilterLayers.map(layer => layer.id);
-    const checkedIds = checkedLayersJson.map(layer => layer.id);
-    const matchingArrays = selectedIds.every(id => checkedIds.includes(id));
+    const selectedIds = selectedCustomFilterLayers.map(layer => layer.id).sort() || [];
+    const checkedIds = checkedLayersJson.map(layer => layer.id).sort() || [];
+    const matchingArrays = (selectedIds.length === checkedIds.length) && selectedIds.every((id, index) => id === checkedIds[index]);
 
-      if (checkedLayersJson !== null && !matchingArrays) {
-        store.dispatch(setUpdateCustomLayers(true));
-      } else if (checkedLayersJson === null && selectedCustomFilterLayers.length > 0) {
-        store.dispatch(setUpdateCustomLayers(true));
-      } else {
-        store.dispatch(setUpdateCustomLayers(false));
-      }
+    if (checkedLayersJson !== null && selectedIds.length > 0 && !matchingArrays) {
+      store.dispatch(setUpdateCustomLayers(true));
+    } else if (checkedLayersJson === null && selectedCustomFilterLayers.length > 0) {
+      store.dispatch(setUpdateCustomLayers(true));
+    } else {
+      store.dispatch(setUpdateCustomLayers(false));
+    }
   }, [selectedCustomFilterLayers, updateCustomLayer]);
 
 
