@@ -34,7 +34,7 @@ import {
     setVKMData
 } from '../../state/slices/rpcSlice';
 
-import { setMinimizeGfi, setSelectedGfiTool, setGeoJsonArray, setHasToastBeenShown, setWarning } from '../../state/slices/uiSlice';
+import { setMinimizeGfi, setSelectedGfiTool, setGeoJsonArray, setHasToastBeenShown, setWarning, setActiveSelectionTool } from '../../state/slices/uiSlice';
 
 import SVLoader from '../loader/SvLoader';
 import { DRAWING_TIP_LOCALSTORAGE } from '../../utils/constants';
@@ -267,10 +267,9 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
 
     const { channel, selectedLayers, gfiLocations, selectedLayersByType } = useAppSelector((state) => state.rpc);
 
-    const { gfiCroppingTypes, selectedGfiTool, hasToastBeenShown, isGfiOpen } = useAppSelector(state => state.ui);
+    const { gfiCroppingTypes, selectedGfiTool, hasToastBeenShown, isGfiOpen, activeSelectionTool } = useAppSelector(state => state.ui);
     const [isGfiLoading, setIsGfiLoading] = useState(false);
     const [numberedLoader, setNumberedLoader] = useState(null);
-    const [activeSelectionTool, setActiveSelectionTool] = useState(null);
 
 
     const [geometries, setGeometries] = useState([]);
@@ -285,9 +284,9 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
     const handleSelectTool = (id) => {
 
         if (activeSelectionTool  !== id) {
-            setActiveSelectionTool(id);
+            store.dispatch(setActiveSelectionTool(id));
             if (id === 0 || id === 505) {
-                setActiveSelectionTool(id);
+                store.dispatch(setActiveSelectionTool(id));
                 channel.postRequest(
                     'MapModulePlugin.RemoveFeaturesFromMapRequest',
                     [null, null, 'download-tool-layer']
@@ -368,7 +367,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
                 });
             }
         } else {
-            setActiveSelectionTool(null);
+            store.dispatch(setActiveSelectionTool(null));
             channel.postRequest(
                 'MapModulePlugin.RemoveFeaturesFromMapRequest',
                 [null, null, 'download-tool-layer']
@@ -604,6 +603,10 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
         })
         return () => {isSubscribed = false}
     }, [channel])
+
+    useEffect(() => {
+        store.dispatch(setActiveSelectionTool(null));
+    }, [])
 
 
     const fetchFeaturesSynchronous = (feature, layer, data, numberedLoaderEnables) => {

@@ -161,6 +161,7 @@ const PublishedMap = () => {
             channel.getSupportedFunctions(function (data) {
                 //minor hack to make sure announcements are shown
                 fetchAnnounmentsAsync(data, channel, store);
+                updateLayers(store, channel);
 
                 if (data.getTags) {
                     channel.getTags(function (data) {
@@ -211,8 +212,6 @@ const PublishedMap = () => {
                     });
                 }
 
-                updateLayers(store, channel);
-
                 if (data.getCurrentState) {
                     channel.getCurrentState(function (data) {
                         store.dispatch(setCurrentState(data));
@@ -242,12 +241,6 @@ const PublishedMap = () => {
             });
 
             channel.getSupportedEvents(function (data) {
-                if (data.MapClickedEvent && store.getState().ui.activeTool === null) {
-                    channel.handleEvent('MapClickedEvent', (data) => {
-                        store.getState().ui.activeTool !== strings.tooltips.drawingTools.marker && store.dispatch(resetGFILocations([]));
-                        store.dispatch(setPointInfo(data));
-                    });
-                }
 
                 channel.handleEvent('DrawingEvent', (data) => {
                     if (store.getState().ui.activeTool) {
@@ -258,6 +251,8 @@ const PublishedMap = () => {
                 });
 
                 channel.handleEvent('PointInfoEvent', (data) => {
+                    store.dispatch(setPointInfo({lon: data.coordinates.x, lat: data.coordinates.y}));
+
                     if (data.vkm !== null && store.getState().ui.activeSelectionTool === null && store.getState().ui.activeTool === null && store.getState().ui.selectedMarker !== 7) {
                         store.dispatch(setMinimizeGfi(false));
                         store.dispatch(setVKMData(data));

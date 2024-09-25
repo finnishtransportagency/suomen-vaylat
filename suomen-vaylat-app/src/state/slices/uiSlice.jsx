@@ -36,6 +36,7 @@ const initialState = {
     selectedGfiTool: null,
     activeTool: null,
     activeSelectionTool: null,
+    activeSelectionTool: null,
     gfiLocations: null,
     isSwipingDisabled: false,
     selectedMapLayersMenuTab: 0,
@@ -176,6 +177,9 @@ export const uiSlice = createSlice({
         setActiveTool: (state, action) => {
             state.activeTool = action.payload;
         },
+        setActiveSelectionTool: (state, action) => {
+            state.activeSelectionTool = action.payload;
+        },
         setIsSwipingDisabled: (state, action) => {
             state.isSwipingDisabled = action.payload;
         },
@@ -299,6 +303,7 @@ export const {
     setShareUrl,
     setIsDrawingToolsOpen,
     setActiveTool,
+    setActiveSelectionTool,
     setIsDownloadLinkModalOpen,
     setIsSwipingDisabled,
     setSelectedMapLayersMenuTab,
