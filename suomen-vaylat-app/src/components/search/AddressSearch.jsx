@@ -51,8 +51,8 @@ const StyledInput = styled.input`
 const AddressSearch = ({
     searchValue,
     setSearchValue,
-    handleAddressSearch,
-    toggleSearchModal
+    toggleSearchModal,
+    handleSeach
 }) => {
     const {isSearchOpen, isMoreSearchOpen} = useAppSelector((state) => state.ui);
 
@@ -79,7 +79,7 @@ const AddressSearch = ({
                 onChange={e => setSearchValue(e.target.value)}
                 onKeyPress={e => {
                     if (e.key === 'Enter') {
-                        handleAddressSearch(e.target.value);
+                        handleSeach(e.target.value);
                     }
                 }}
             />

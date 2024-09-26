@@ -229,7 +229,7 @@ const Search = () => {
                 } else {
                     handleAddressSearch(searchValue);
                 }
-
+ 
                 break;
             case 'metadata':
                 handleMetadataSearch(searchValue);
@@ -244,11 +244,14 @@ const Search = () => {
         }
     }
 
+    const checkIfNonEmptyTrackResult = (data) => {
+        return data?.geom?.features[0].geometry?.coordinates?.length > 0
+    }
     const handleAddressSearch = (value) => {
         let searchValueCopy = value
         //special case, roadsearch with 3 params is road/part/distance, 
         //unless search ajorata and etaisyys flag ( carriageWaySearch ) found
-
+        
         //TODO if and when we implement track range search, this should be enabled also to track, for now only road search 
         if ((activeSwitch === 'road' || activeSwitch === null) && !carriageWaySearch && value && value.includes("/") && (value.split("/").length === 3 || value.split("/").length === 5)) {
             let splittedValue = value.split("/");
@@ -258,7 +261,7 @@ const Search = () => {
             }
         }
 
-        searchValueCopy = searchValueCopy.trim();
+        searchValueCopy = searchValueCopy.trim(); 
         store.dispatch(setGeoJsonArray([]));
         setFirstSearchResultShown(false);
         removeMarkersAndFeatures();
@@ -271,9 +274,17 @@ const Search = () => {
                         if (data.ratanumero && data.geom) {
                             //mimic search structure of old vkm search
                             const name = `ratanumero=${data?.ratanumero}, ratakilometri=${data?.ratakilometri}, ratametri=${data?.ratametri}`;
-                            const mimicdata = { result: { locations: [{ type: "VKM", vkmType: "track", geom: data.geom, "name": name }] } };
+                            
+                            let locations
+                            if (checkIfNonEmptyTrackResult(data)){  
+                                locations = [{ type: "VKM", vkmType: "track", geom: data.geom, "name": name }]
+                            }else {
+                                locations = []
+                            }
+
+                            const mimicdata = { result: { locations: locations } };
                             setSearchResults(mimicdata);
-                            if ((data?.result?.locations?.length > 1 || data?.result?.geom?.length > 1) && !isSearchModalOpen) {
+                            if ((data?.result?.locations?.length > 1 || checkIfNonEmptyTrackResult(data)) && !isSearchModalOpen) {
                                 setIsSearchModalOpen(true);
                             }
                             setIsSearching(false);
@@ -377,10 +388,10 @@ const Search = () => {
         setIsSearching(true);
         store.dispatch(setSearchOn(true));
         startIndex === 0 && store.dispatch(resetFeatureSearchResults());
-    
+
         const searchLayer = layerId !== -1 ? layerId : selectedLayersByType.mapLayers[0]?.id;
         const layerIdentifier = layerId !== -1 ? layerId : selectedLayersByType.mapLayers[0]?.name;
-    
+
         if (searchLayer) {
             channel.searchFeatures([[searchLayer], searchValue, startIndex], 
                 (data) => handleSearchResponse(data, searchLayer), 
@@ -434,8 +445,8 @@ const Search = () => {
                     searchValue={searchValue}
                     setSearchValue={setSearchValue}
                     setIsSearching={setIsSearching}
-                    handleAddressSearch={handleAddressSearch}
                     toggleSearchModal={toggleSearchModal}
+                    handleSeach={handleSeach}
                 />
             ),
             visible: true,
@@ -656,14 +667,14 @@ const Search = () => {
     } else if (!isSearchOpen || searchType !== 'address') {
         toast.dismiss('searchToast');
     }
-
+        
     useEffect(() => {
         const vkmKeys = ['vali', 'tie', 'osa', 'etaisyys', 'track'];
 
         if (geoJsonArray.length > 0 && isSearchOpen && !hasToastBeenShown.includes('searchTipToast') && showToast !== false) {
             geoJsonArray.forEach(geoj => {
                 if (vkmKeys.some(vkmStyle => vkmStyle === geoj.style)) {
-                    toast.info(<TipToast handleButtonClick={() => handleCloseToast()} localStorageName={SEARCH_TIP_LOCALSTORAGE} text={<div> <h6>{searchDownloadTips.tip}</h6> <p>{searchDownloadTips.guide}</p></div>} />,
+                    toast.info(<TipToast handleButtonClick={() => handleCloseToast()} localStorageName={SEARCH_TIP_LOCALSTORAGE} text={<div> <h6>{searchDownloadTips.tip}</h6> <p>{searchDownloadTips.guide}</p></div>} />, 
                         {
                             icon: <StyledToastIcon icon={faInfoCircle} />,
                             toastId: 'searchTipToast',
@@ -700,7 +711,7 @@ const Search = () => {
         setTrackErrors(newErrors);
         return newErrors.every((error) => error === false)
     }, [])
-
+    
     const validateFeatureSearch = useCallback((searchValue, setFeatureErrors) => {
         const newErrors = [];
         const regex = /[^A-Za-z0-9äöåÄÖÅ ]/;
@@ -730,7 +741,7 @@ const Search = () => {
     return (
         <StyledSearchContainer isSearchOpen={isSearchOpen}>
             <ReactTooltip backgroundColor={theme.colors.mainColor1} disable={isMobile} place='bottom' type='dark' effect='float' />
-
+       
             <CircleButton
                 icon={isSearchOpen ? faTimes : faSearch}
                 text={strings.tooltips.search}
@@ -751,7 +762,7 @@ const Search = () => {
                     setSearchType('address');
                 }}
             />
-
+          
             <AnimatePresence>
                 {isSearchOpen && (
                     <StyledSearchWrapper
@@ -854,11 +865,11 @@ const Search = () => {
                                 lastSearchValue={lastSearchValue}
                             />
                         )}
-
+                
                     </StyledSearchWrapper>
-
-
-                )
+             
+        
+                ) 
                 }
             </AnimatePresence>
             <AnimatePresence>
