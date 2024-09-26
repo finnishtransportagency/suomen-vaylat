@@ -40,7 +40,7 @@ const StyledContent = styled.div`
 export const MetadataModal = ({
   metadata
 }) => {
-    const lang = useAppSelector((state) => state.language);
+  const lang = useAppSelector((state) => state.language);
   useAppSelector((state) => state.language);
   const [uuid, setUuid] = useState(true);
 
@@ -52,80 +52,80 @@ export const MetadataModal = ({
   };
 
   return (
-          <StyledContent>
-            <MetadataGraphic identification={identification}></MetadataGraphic>
-            <Citation identification={identification}></Citation>
-            <HeaderAndParagraph
-              visible={layerDesc.length > 0}
-              header={strings.metadata.heading.updateDate}
-              text={layerDesc}
-            />
-            <HeaderAndParagraph
-              visible={identification.abstractText.length > 0}
-              header={(identification.type === 'data' ? strings.metadata.heading.abstractTextData : strings.metadata.heading.abstractTextService)}
-              text={identification.abstractText}
-            />
-            <HeaderAndParagraph
-              visible={metadata.data.metadataDateStamp.length > 0}
-              header={strings.metadata.heading.metadataDateStamp}
-              text={metadata.data.metadataDateStamp}
-              momentFormat={'DD.MM.YYYY hh:mm:ss'}
-            />
-            <OnlineResources onlineResources={metadata.data.onlineResources}/>
-            <Languages identification={identification}/>
-            <TopicCategories identification={identification}/>
-            <TemporalExtents identification={identification}/>
-            <LineageStatements lineageStatements={metadata.data.lineageStatements}/>
-            <SpatialResolutions identification={identification}/>
-            <ResponsibleParties
-              visible={identification.responsibleParties && identification.responsibleParties.length > 0}
-              header={strings.metadata.heading.responsibleParty}
-              responsibleParties={identification.responsibleParties}/>
-            <CitationDate identification={identification}/>
-            <ScopeCodes scopeCodes={metadata.data.scopeCodes}/>
-            <ResourceIdentifiers identification={identification}/>
-            <OperatesOn identification={identification}/>
-            <ServiceType identification={identification}/>
-            <DescriptiveKeywords identification={identification}/>
-            <DataQualities dataQualities={metadata.data.dataQualities}/>
-            <AccessConstraints identification={identification}/>
-            <OtherConstraints identification={identification}/>
-            <Classifications identification={identification}/>
-            <UseLimitations identification={identification}/>
-            <DistributionFormats distributionFormats={metadata.data.distributionFormats}/>
-            <SpatialRepresentationTypes identification={identification}/>
-            <HeaderAndParagraph
-              visible={metadata.data.fileIdentifier && metadata.data.fileIdentifier.length > 0}
-              header={strings.metadata.heading.fileIdentifier}
-              text={metadata.data.fileIdentifier}
-            />
-            <HeaderAndParagraph
-              visible={metadata.data.metadataStandardName && metadata.data.metadataStandardName.length > 0}
-              header={strings.metadata.heading.metadataStandardName}
-              text={metadata.data.metadataStandardName}
-            />
-            <HeaderAndParagraph
-              visible={metadata.data.metadataStandardVersion && metadata.data.metadataStandardVersion.length > 0}
-              header={strings.metadata.heading.metadataStandardVersion}
-              text={metadata.data.metadataStandardVersion}
-            />
-            <HeaderAndParagraph
-              visible={metadata.data.metadataLanguage && metadata.data.metadataLanguage.length > 0}
-              header={strings.metadata.heading.metadataLanguage}
-              text={strings.metadata.languages[metadata.data.metadataLanguage] || metadata.data.metadataLanguage}
-            />
-            <HeaderAndParagraph
-              visible={metadata.data.metadataCharacterSet && metadata.data.metadataCharacterSet.length > 0}
-              header={strings.metadata.heading.metadataCharacterSet}
-              title={(strings.metadata.codeLists['gmd:MD_CharacterSetCode'][metadata.data.metadataCharacterSet] || { description: metadata.data.metadataCharacterSet }).description}
-              text={(strings.metadata.codeLists['gmd:MD_CharacterSetCode'][metadata.data.metadataCharacterSet] || { label: metadata.data.metadataCharacterSet }).label}
-            />
-            <ResponsibleParties
-              visible={metadata.data.metadataResponsibleParties && metadata.data.metadataResponsibleParties.length > 0}
-              header={strings.metadata.heading.metadataOrganisation}
-              responsibleParties={metadata.data.metadataResponsibleParties}/>
-            <QualityTabDataQualities dataQualities={metadata.data.dataQualities}/>
-          </StyledContent>
+    <StyledContent>
+      <MetadataGraphic identification={identification}></MetadataGraphic>
+      <Citation identification={identification}></Citation>
+      <HeaderAndParagraph
+        visible={layerDesc.length > 0}
+        header={strings.metadata.heading.updateDate}
+        text={layerDesc}
+      />
+      <HeaderAndParagraph
+        visible={identification.abstractText.length > 0}
+        header={(identification.type === 'data' ? strings.metadata.heading.abstractTextData : strings.metadata.heading.abstractTextService)}
+        text={identification.abstractText}
+      />
+      <HeaderAndParagraph
+        visible={metadata?.data?.metadataDateStamp?.length > 0}
+        header={strings.metadata.heading.metadataDateStamp}
+        text={metadata?.data?.metadataDateStamp || ""}
+        momentFormat={'DD.MM.YYYY hh:mm:ss'}
+      />
+      <OnlineResources onlineResources={metadata?.data?.onlineResources || []} />
+      <Languages identification={identification} />
+      <TopicCategories identification={identification} />
+      <TemporalExtents identification={identification} />
+      <LineageStatements lineageStatements={metadata?.data?.lineageStatements || []} />
+      <SpatialResolutions identification={identification} />
+      <ResponsibleParties
+        visible={identification.responsibleParties && identification.responsibleParties.length > 0}
+        header={strings.metadata.heading.responsibleParty}
+        responsibleParties={identification.responsibleParties} />
+      <CitationDate identification={identification} />
+      <ScopeCodes scopeCodes={metadata?.data?.scopeCodes || []} />
+      <ResourceIdentifiers identification={identification} />
+      <OperatesOn identification={identification} />
+      <ServiceType identification={identification} />
+      <DescriptiveKeywords identification={identification} />
+      <DataQualities dataQualities={metadata?.data?.dataQualities || []} />
+      <AccessConstraints identification={identification} />
+      <OtherConstraints identification={identification} />
+      <Classifications identification={identification} />
+      <UseLimitations identification={identification} />
+      <DistributionFormats distributionFormats={metadata?.data?.distributionFormats || []} />
+      <SpatialRepresentationTypes identification={identification} />
+      <HeaderAndParagraph
+        visible={metadata?.data?.fileIdentifier && metadata?.data?.fileIdentifier?.length > 0}
+        header={strings.metadata.heading.fileIdentifier}
+        text={metadata.data.fileIdentifier}
+      />
+      <HeaderAndParagraph
+        visible={metadata?.data?.metadataStandardName && metadata?.data?.metadataStandardName?.length > 0}
+        header={strings.metadata.heading.metadataStandardName}
+        text={metadata?.data?.metadataStandardName || ""}
+      />
+      <HeaderAndParagraph
+        visible={metadata?.data?.metadataStandardVersion && metadata?.data?.metadataStandardVersion?.length > 0}
+        header={strings.metadata.heading.metadataStandardVersion}
+        text={metadata?.data?.metadataStandardVersion || ""}
+      />
+      <HeaderAndParagraph
+        visible={metadata?.data?.metadataLanguage && metadata?.data?.metadataLanguage?.length > 0}
+        header={strings.metadata.heading.metadataLanguage}
+        text={strings.metadata.languages[metadata?.data?.metadataLanguage] || metadata?.data?.metadataLanguage || ""}
+      />
+      <HeaderAndParagraph
+        visible={metadata?.data?.metadataCharacterSet && metadata?.data?.metadataCharacterSet?.length > 0}
+        header={strings.metadata.heading.metadataCharacterSet}
+        title={(strings.metadata.codeLists['gmd:MD_CharacterSetCode'][metadata?.data?.metadataCharacterSet] || { description: metadata?.data?.metadataCharacterSet }).description}
+        text={(strings.metadata.codeLists['gmd:MD_CharacterSetCode'][metadata?.data?.metadataCharacterSet] || { label: metadata?.data?.metadataCharacterSet }).label || ""}
+      />
+      <ResponsibleParties
+        visible={metadata?.data?.metadataResponsibleParties && metadata?.data?.metadataResponsibleParties?.length > 0}
+        header={strings.metadata.heading.metadataOrganisation}
+        responsibleParties={metadata?.data?.metadataResponsibleParties || []} />
+      <QualityTabDataQualities dataQualities={metadata?.data?.dataQualities || []} />
+    </StyledContent>
   );
 }
 export default MetadataModal;
