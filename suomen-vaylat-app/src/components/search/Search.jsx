@@ -20,7 +20,7 @@ import { SEARCH_TIP_LOCALSTORAGE } from '../../utils/constants';
 
 import { isMobile, theme } from '../../theme/theme';
 
-import { addMarkerRequest, mapMoveRequest, setFeatureSearchResults, resetFeatureSearchResults, setSearchOn, searchVKMTrack } from '../../state/slices/rpcSlice';
+import { addMarkerRequest, mapMoveRequest, pushToFeatureSearchResults, resetFeatureSearchResults, setSearchOn, searchVKMTrack, setFeatureSearchResults } from '../../state/slices/rpcSlice';
 
 import { setIsSearchOpen, setGeoJsonArray, setHasToastBeenShown, setActiveSwitch } from '../../state/slices/uiSlice';
 
@@ -217,6 +217,8 @@ const Search = () => {
     const [showToast, setShowToast] = useState(JSON.parse(localStorage.getItem(SEARCH_TIP_LOCALSTORAGE)));
     const [carriageWaySearch, setCarriageWaySearch] = useState(false);
     const [trackErrors, setTrackErrors] = useState([false, false, false]);
+    const [featureErrors, setFeatureErrors] = useState([]);
+
     const handleSeach = (searchValue) => {
         setShowSearchResults(true);
         switch (searchType) {
@@ -227,13 +229,15 @@ const Search = () => {
                 } else {
                     handleAddressSearch(searchValue);
                 }
- 
+
                 break;
             case 'metadata':
                 handleMetadataSearch(searchValue);
                 break;
             case 'feature':
-                handleFeatureSearch(searchValue)
+                if (validateFeatureSearch(searchValue, setFeatureErrors)) {
+                    handleFeatureSearch(searchValue);
+                }
                 break;
             default:
                 break;
@@ -244,7 +248,7 @@ const Search = () => {
         let searchValueCopy = value
         //special case, roadsearch with 3 params is road/part/distance, 
         //unless search ajorata and etaisyys flag ( carriageWaySearch ) found
-        
+
         //TODO if and when we implement track range search, this should be enabled also to track, for now only road search 
         if ((activeSwitch === 'road' || activeSwitch === null) && !carriageWaySearch && value && value.includes("/") && (value.split("/").length === 3 || value.split("/").length === 5)) {
             let splittedValue = value.split("/");
@@ -254,7 +258,7 @@ const Search = () => {
             }
         }
 
-        searchValueCopy = searchValueCopy.trim(); 
+        searchValueCopy = searchValueCopy.trim();
         store.dispatch(setGeoJsonArray([]));
         setFirstSearchResultShown(false);
         removeMarkersAndFeatures();
@@ -303,48 +307,86 @@ const Search = () => {
         setLastSearchValue(value);
     };
 
-    const handleFeatureSearch = (searchValue) => {
+    const mergeMatchedKeys = (oldMatchedKeys, newMatchedKeys) => {
+        // Create a new object that will hold the merged keys
+        const mergedMatchedKeys = { ...oldMatchedKeys };
+    
+        // Iterate through each key in the new matchedFeatures object
+        Object.keys(newMatchedKeys).forEach(key => {
+            if (mergedMatchedKeys.hasOwnProperty(key)) {
+                // If the key exists in the old object, concatenate the arrays
+                mergedMatchedKeys[key] = mergedMatchedKeys[key].concat(newMatchedKeys[key]);
+            } else {
+                // If the key doesn't exist, add it to the merged object
+                mergedMatchedKeys[key] = newMatchedKeys[key];
+            }
+        });
+    
+        // Return the merged object
+        return mergedMatchedKeys;
+    };
+
+    const handleFeatureSearch = (searchValue, startIndex = 0, layerId = -1) => {
+        const handleSearchResponse = (data) => {
+            if (Object.keys(data).length > 0 && Object.keys(data.gfi).length > 0) {
+                setIsSearching(false);
+                store.dispatch(setSearchOn(false));
+
+                if (startIndex !== 0) {
+                    // Update features for "more results"
+                    let oldFeatureSearchResults = JSON.parse(JSON.stringify(featureSearchResults));
+                        let newFeatureSearchResults = { ...data.gfi }
+                        const contentIndex = oldFeatureSearchResults.map(gfi => gfi.content.layerId).indexOf(data.gfi.content.layerId);
+                        const updatedFeatures = oldFeatureSearchResults[contentIndex].content.geojson.features.concat(data.gfi.content.geojson.features);
+                        newFeatureSearchResults.content.geojson.features = updatedFeatures;
+
+                        const updatedMatchedKeys = mergeMatchedKeys(oldFeatureSearchResults[contentIndex].content.geojson.matchedFeatures, data.gfi.content.geojson.matchedFeatures);
+                        newFeatureSearchResults.content.geojson.matchedFeatures = updatedMatchedKeys;
+
+                        oldFeatureSearchResults[contentIndex] = newFeatureSearchResults;
+
+                        store.dispatch(setFeatureSearchResults(oldFeatureSearchResults));
+                } else {
+                    store.dispatch(pushToFeatureSearchResults(data.gfi));
+                }
+            } else {
+                setIsSearching(false);
+                store.dispatch(setSearchOn(false));
+            }
+            setLastSearchValue(searchValue);
+        };
+    
+        const handleSearchError = (layerIdentifier, error) => {
+            setIsSearching(false);
+            store.dispatch(setSearchOn(false));
+            setLastSearchValue(searchValue);
+    
+            toast.error(`${strings.search.feature.errorLayerStart}${layerIdentifier}${strings.search.feature.errorLayerEnd}`, {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                transition: Slide
+            });
+        };
+    
         setIsSearching(true);
         store.dispatch(setSearchOn(true));
-        store.dispatch(resetFeatureSearchResults());
-
-        selectedLayersByType.mapLayers.forEach(layer => {
-            // executor (the producing code, "singer")
-            channel.searchFeatures(
-                [[layer.id], searchValue],
-                (data) => {
-                    if (Object.keys(data).length > 0 && data.gfi.length > 0) {
-                        setIsSearching(false);
-                        store.dispatch(setSearchOn(false));
-                        store.dispatch(setFeatureSearchResults(data.gfi[0]));
-                        setLastSearchValue(searchValue);
-                    } else {
-                        setIsSearching(false);
-                        store.dispatch(setSearchOn(false));
-
-                        setLastSearchValue(searchValue);
-                    }
-                },
-                function (error) {
-                    setIsSearching(false);
-                    store.dispatch(setSearchOn(false));
-                    setLastSearchValue(searchValue);
-
-                    toast.error(strings.search.feature.errorLayerStart + layer.name + strings.search.feature.errorLayerEnd, {
-                        position: "top-center",
-                        autoClose: 5000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                        theme: "colored",
-                        transition: Slide
-                    });
-                }
-            )
-        })
-        
+        startIndex === 0 && store.dispatch(resetFeatureSearchResults());
+    
+        const searchLayer = layerId !== -1 ? layerId : selectedLayersByType.mapLayers[0]?.id;
+        const layerIdentifier = layerId !== -1 ? layerId : selectedLayersByType.mapLayers[0]?.name;
+    
+        if (searchLayer) {
+            channel.searchFeatures([[searchLayer], searchValue, startIndex], 
+                (data) => handleSearchResponse(data, searchLayer), 
+                (error) => handleSearchError(layerIdentifier, error)
+            );
+        }
     };
 
     const markerIds = [markerId];
@@ -556,7 +598,6 @@ const Search = () => {
         },
         animate: {
             height: 'auto',
-            maxHeight: 'calc(var(--app-height) - 100px)',
             opacity: 1,
         },
         exit: {
@@ -615,14 +656,14 @@ const Search = () => {
     } else if (!isSearchOpen || searchType !== 'address') {
         toast.dismiss('searchToast');
     }
-        
+
     useEffect(() => {
         const vkmKeys = ['vali', 'tie', 'osa', 'etaisyys', 'track'];
 
         if (geoJsonArray.length > 0 && isSearchOpen && !hasToastBeenShown.includes('searchTipToast') && showToast !== false) {
             geoJsonArray.forEach(geoj => {
                 if (vkmKeys.some(vkmStyle => vkmStyle === geoj.style)) {
-                    toast.info(<TipToast handleButtonClick={() => handleCloseToast()} localStorageName={SEARCH_TIP_LOCALSTORAGE} text={<div> <h6>{searchDownloadTips.tip}</h6> <p>{searchDownloadTips.guide}</p></div>} />, 
+                    toast.info(<TipToast handleButtonClick={() => handleCloseToast()} localStorageName={SEARCH_TIP_LOCALSTORAGE} text={<div> <h6>{searchDownloadTips.tip}</h6> <p>{searchDownloadTips.guide}</p></div>} />,
                         {
                             icon: <StyledToastIcon icon={faInfoCircle} />,
                             toastId: 'searchTipToast',
@@ -658,20 +699,38 @@ const Search = () => {
         }
         setTrackErrors(newErrors);
         return newErrors.every((error) => error === false)
-    }, []
-    )
-    
+    }, [])
+
+    const validateFeatureSearch = useCallback((searchValue, setFeatureErrors) => {
+        const newErrors = [];
+        const regex = /[^A-Za-z0-9äöåÄÖÅ ]/;
+        if (searchValue.length < 3) {
+            newErrors.push("length")
+        }
+        if (regex.test(searchValue)) {
+            newErrors.push("regex")
+        }
+        setFeatureErrors(newErrors);
+        return newErrors.length === 0;
+    }, [])
 
     useEffect(() => {
         //when carriagewaysearch ( ajordalla haku ) changes, reset searchValue
         setSearchValue('');
     }, [carriageWaySearch, setSearchValue]);
 
+    const emptySearchResults = () => {
+        store.dispatch(setGeoJsonArray([]));
+        store.dispatch(setFeatureSearchResults([]));
+        setSearchResults(null);
+        setSearchValue('');
+        setLastSearchValue('');
+        removeMarkersAndFeatures();
+    }
     return (
         <StyledSearchContainer isSearchOpen={isSearchOpen}>
             <ReactTooltip backgroundColor={theme.colors.mainColor1} disable={isMobile} place='bottom' type='dark' effect='float' />
-       
-       
+
             <CircleButton
                 icon={isSearchOpen ? faTimes : faSearch}
                 text={strings.tooltips.search}
@@ -692,7 +751,7 @@ const Search = () => {
                     setSearchType('address');
                 }}
             />
-          
+
             <AnimatePresence>
                 {isSearchOpen && (
                     <StyledSearchWrapper
@@ -706,7 +765,6 @@ const Search = () => {
                         showSearchResults={showSearchResults}
                     >
                         <StyledLeftContentWrapper>
-                   
                             {!isSearching ? (
                                 <StyledSelectedSearchMethod
                                     onClick={() => {
@@ -727,14 +785,9 @@ const Search = () => {
                                 </StyledLoaderWrapper>
                             )}
                             {(searchResults !== null || featureSearchResults.length > 0) &&
-                                searchValue === lastSearchValue ? (
+                                searchValue === lastSearchValue && !isSearching ? (
                                 <StyledSearchActionButton
-                                    onClick={() => {
-                                        store.dispatch(setGeoJsonArray([]));
-                                        setSearchResults(null);
-                                        setSearchValue('');
-                                        removeMarkersAndFeatures();
-                                    }}
+                                    onClick={emptySearchResults}
                                     icon={faTrash}
                                 />
                             ) : !isSearching && (
@@ -759,6 +812,8 @@ const Search = () => {
                             isMobile={isMobile}
                             setShowSearchResults={setShowSearchResults}
                             setSearchClickedRow={setSearchClickedRow}
+                            handleFeatureSearch={handleFeatureSearch}
+                            lastSearchValue={lastSearchValue}
                             searchClickedRow={searchClickedRow}
                             allLayers={allLayers}
                             hidden={true}
@@ -792,13 +847,18 @@ const Search = () => {
                                 trackErrors={trackErrors}
                                 setTrackErrors={setTrackErrors}
                                 validateTrackSearch={validateTrackSearch}
+                                featureErrors={featureErrors}
+                                setFeatureErrors={setFeatureErrors}
+                                validateFeatureSearch={validateFeatureSearch}
+                                handleFeatureSearch={handleFeatureSearch}
+                                lastSearchValue={lastSearchValue}
                             />
                         )}
-                
+
                     </StyledSearchWrapper>
-             
-        
-                ) 
+
+
+                )
                 }
             </AnimatePresence>
             <AnimatePresence>

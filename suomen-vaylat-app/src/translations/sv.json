@@ -348,7 +348,13 @@
       "warn": "Det maximala antalet sökresultat har överskridits, förfina din sökning.",
       "noResults": "Inga resultat",
       "errorLayerStart": "Fel vid sökning efter objekt på kartnivån ' ",
-      "errorLayerEnd": " ' !"
+      "errorLayerEnd": " ' !",
+      "searchFromLayer": "Sök från kartlager:",
+      "noActiveLayers": "Inga aktiva kartlager",
+      "errors": {
+        "length": "Ange minst tre tecken",
+        "regex": "Sökningen får inte innehålla specialtecken"
+      }
     },
     "track" : {
       "tracknumber" : "Bannummer",
@@ -397,7 +403,7 @@
       "layerExamples" : [
         "pölkytys"
       ],
-      "feature": "Kohdehaulla voit etsiä kohteita aktiivisista karttatasoista, joiden ominaisuustiedot sisältävät syötetyn arvon, esim.",
+      "feature": "Destinationssökning kan användas för att söka efter destinationsinformation på den översta nivån av de valda kartlagren. Exempelsökning: ",
       "featureExamples": ["Vesiväylä => 'Siilinjärven väylä'"]
     },
     "nomenclature" : {

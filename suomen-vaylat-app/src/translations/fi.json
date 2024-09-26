@@ -382,10 +382,16 @@
     },
     "feature": {
       "title": "Kohdehaku",
-      "warn": "Hakutuloksien enimmäismäärä ylitetty, tarkenna hakuasi.",
+      "warn": "Hakutuloksien enimmäismäärä ylitetty, tarkenna hakua.",
       "noResults": "Ei tuloksia",
       "errorLayerStart": "Virhe tason ' ",
-      "errorLayerEnd": " ' kohteiden haussa!"
+      "errorLayerEnd": " ' kohteiden haussa!",
+      "searchFromLayer": "Haetaan tasolta:",
+      "noActiveLayers": "Ei aktiivisia tasoja",
+      "errors": {
+        "length": "Syötä vähintään kolme merkkiä",
+        "regex": "Haku ei saa sisältää erikoismerkkejä"
+      }
     },
     "track" : {
       "tracknumber" : "Ratanumero",
@@ -434,7 +440,7 @@
         "pölkytys",
         "liikennemerkit"
       ],
-      "feature": "Kohdehaulla voit etsiä kohteita aktiivisista karttatasoista, joiden ominaisuustiedot sisältävät syötetyn arvon, esim.",
+      "feature": "Kohdehakua voidaan käyttää kohdetietojen etsimiseen valittujen karttatasojen päällimmäiseltä tasolta. Esimerkkihaku: ",
       "featureExamples": ["Vesiväylä => 'Siilinjärven väylä'"]
     },
     "nomenclature" : {

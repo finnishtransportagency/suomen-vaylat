@@ -67,24 +67,24 @@ const FeatureSearch = ({
     };
 
       return (
-        <InputContainer>
-            <DropdownIcon
-                data-tip={isMobile ? '' : (isMoreSearchOpen ? strings.search.lessSearchOptions : strings.search.moreSearchOptions)}
-                icon={isMoreSearchOpen ? faAngleUp : faAngleDown}
-                onClick={handleIconClick}
-            />
-            <StyledInput
-                type="text"
-                value={searchValue}
-                placeholder={strings.search.feature.title}
-                onChange={e => setSearchValue(e.target.value)}
-                onKeyPress={e => {
-                    if (e.key === 'Enter') {
-                        handleFeatureSearch(e.target.value);
-                    }
-                }}
-            />
-        </InputContainer>
+            <InputContainer>
+                <DropdownIcon
+                    data-tip={isMobile ? '' : (isMoreSearchOpen ? strings.search.lessSearchOptions : strings.search.moreSearchOptions)}
+                    icon={isMoreSearchOpen ? faAngleUp : faAngleDown}
+                    onClick={handleIconClick}
+                />
+                <StyledInput
+                    type="text"
+                    value={searchValue}
+                    placeholder={strings.search.feature.title}
+                    onChange={e => setSearchValue(e.target.value)}
+                    onKeyPress={e => {
+                        if (e.key === 'Enter') {
+                            handleFeatureSearch(e.target.value);
+                        }
+                    }}
+                />
+            </InputContainer>
     );
   };
 

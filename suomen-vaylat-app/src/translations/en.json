@@ -349,7 +349,13 @@
       "warn": "Maximum number of results exceeded, try specifying your search.",
       "noResults": "No results",
       "errorLayerStart": "Error searching for layer ' ",
-      "errorLayerEnd": " ' features!"
+      "errorLayerEnd": " ' features!",
+      "searchFromLayer": "Search from maplayer:",
+      "noActiveLayers": "No active maplayers",
+      "errors": {
+        "length": "Enter at least three characters",
+        "regex": "Search can't include any special characters"
+      }
     },
     "track" : {
       "tracknumber" : "Track number",
@@ -398,7 +404,7 @@
       "layerExamples" : [
         "pölkytys"
       ],
-      "feature": "Kohdehaulla voit etsiä kohteita aktiivisista karttatasoista, joiden ominaisuustiedot sisältävät syötetyn arvon, esim.",
+      "feature": "With feature search you can search for specific features from the top layer on the map. You can Control the selected layer order from the maplayer menu, in 'selected layers' tab. Example search: ",
       "featureExamples": ["Vesiväylä => 'Siilinjärven väylä'"]
     },
     "nomenclature" : {

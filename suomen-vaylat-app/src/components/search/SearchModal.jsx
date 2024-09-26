@@ -3,7 +3,7 @@ import strings from '../../translations';
 import { ReactReduxContext } from 'react-redux';
 import { setActiveSwitch } from '../../state/slices/uiSlice';
 import { useAppSelector } from '../../state/hooks';
-import { useEffect, useContext, useState } from 'react';
+import { useEffect, useContext } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Switch from '../switch/Switch';
 import {
@@ -72,6 +72,13 @@ const StyledInputHalf = styled.input`
 
 `;
 
+const StyledFeatureSearchSection = styled.div`
+    display: flex;
+    flex-direction: column; 
+    width: 90%;
+    margin-bottom: 1em;
+`;
+
 const StyledSearchSection = styled.div`
     width: 90%;
     margin-bottom: 1em;
@@ -112,6 +119,37 @@ const CheckboxLabel = styled.label`
 `
 const StyledValidationMessage = styled.div`
     color: ${props => props.theme.colors.secondaryColorDarkOrange};
+`
+
+const StyledSelectedLayerWrapper = styled.div`
+    display: flex;
+    align-items: baseline;
+    margin-left: 0.5em;
+    margin-bottom: 4px
+    overflow: hidden;
+    white-space: nowrap;
+`
+const StyledSelectedLayerTitle = styled.div`
+    color: ${props => props.theme.colors.mainColor1};
+    font-size: 16px;
+    font-weight: 500;
+`
+const StyledSelectedLayerText = styled.div`
+    font-size: 15px;
+    font-weight: 400;
+    margin-left: 0.5em;
+    margin-right: 0.5em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    &:hover {
+        white-space: normal;
+    }
+`
+const StyledNoActivaLayers = styled.div`
+    color: ${props => props.theme.colors.secondaryColorDarkOrange};
+    font-size: 16px;
+    font-weight: 500;
 `
 
 const getSearchValuePart = (searchValue, searchType, part, carriageWaySearch) => {
@@ -287,9 +325,13 @@ const SearchModal = ({
     activeSwitch,
     trackErrors,
     setTrackErrors,
-    validateTrackSearch
+    validateTrackSearch,
+    featureErrors,
+    handleFeatureSearch,
+    lastSearchValue
 }) => {
     const { store } = useContext(ReactReduxContext);
+    const { selectedLayersByType } = useAppSelector((state) => state.rpc);
 
 
     const updateActiveSwitch = (type) => {
@@ -317,7 +359,7 @@ const SearchModal = ({
         //track validation every time searchValue changes
         if (activeSwitch === 'track' ){
             validateTrackSearch(searchValue, setTrackErrors)
-        }
+        } 
         setSearchValue(searchValue)
     }, [activeSwitch, searchValue, setSearchValue, setTrackErrors, validateTrackSearch]);
 
@@ -781,7 +823,21 @@ const SearchModal = ({
                 }
                 {activeSwitch === 'feature' &&  (
                 <> 
-                <StyledSearchSection>   
+                <StyledFeatureSearchSection>
+                    <StyledSelectedLayerWrapper>
+                        { selectedLayersByType.mapLayers.length > 0 ?
+                            (
+                                <>
+                                    <StyledSelectedLayerTitle>{ strings.search.feature.searchFromLayer }</StyledSelectedLayerTitle>
+                                    <StyledSelectedLayerText>{ selectedLayersByType.mapLayers[0].name }</StyledSelectedLayerText>
+                                </>
+                            )
+                        :
+                            (
+                                <StyledNoActivaLayers></StyledNoActivaLayers>
+                            )
+                        }
+                    </StyledSelectedLayerWrapper>
                     <StyledInput
                         type="text"
                         placeholder={ strings.search.feature.title }
@@ -792,7 +848,9 @@ const SearchModal = ({
                                 handleSeach(searchValue);
                             }
                         }}
+                        className={featureErrors.length > 0 ? 'error' : ''}
                     />
+                    { featureErrors.map( error => { return(<StyledValidationMessage>{strings.search.feature.errors[error]}</StyledValidationMessage>) })}
                     <SearchResultPanel 
                         isSearchOpen={isSearchOpen}
                         searchResults={searchResults}
@@ -806,8 +864,10 @@ const SearchModal = ({
                         setShowSearchResults={setShowSearchResults}
                         setSearchClickedRow={setSearchClickedRow}
                         searchClickedRow={searchClickedRow}
+                        handleFeatureSearch={handleFeatureSearch}
+                        lastSearchValue={lastSearchValue}
                     />
-                </StyledSearchSection>       
+                </StyledFeatureSearchSection>       
                 </>
                 )
                 }

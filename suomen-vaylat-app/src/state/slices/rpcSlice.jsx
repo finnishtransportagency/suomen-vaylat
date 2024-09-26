@@ -697,12 +697,22 @@ export const rpcSlice = createSlice({
 
     /**
      * Push feature to feature search results
+     * @method pushToFeatureSearchResults
+     * @param {Object} state
+     * @param {Object} action
+     */
+    pushToFeatureSearchResults: (state, action) => {
+      state.featureSearchResults.push(action.payload);
+    },
+
+    /**
+     * set features to feature search results
      * @method setFeatureSearchResults
      * @param {Object} state
      * @param {Object} action
      */
     setFeatureSearchResults: (state, action) => {
-      state.featureSearchResults.push(action.payload);
+      state.featureSearchResults = action.payload;
     },
 
     /**
@@ -980,8 +990,9 @@ export const {
   setFilters,
   setActiveGFILayer,
   setFilteringInfo,
-  setFeatureSearchResults,
+  pushToFeatureSearchResults,
   resetFeatureSearchResults,
+  setFeatureSearchResults,
   setSearchOn,
   searchVKMTrack
 } = rpcSlice.actions;

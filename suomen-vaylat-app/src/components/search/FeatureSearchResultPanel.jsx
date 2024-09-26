@@ -3,13 +3,7 @@ import { useAppSelector } from '../../state/hooks';
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
-
-import {
-    faAngleDown,
-    faAngleUp,
-    faTimes,
-    faTriangleExclamation
-} from '@fortawesome/free-solid-svg-icons';
+import { faAngleDown, faAngleUp, faTimes, faTriangleExclamation } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const StyledDropDown = styled(motion.div)`
@@ -20,10 +14,8 @@ const StyledDropDown = styled(motion.div)`
     max-width: 400px;
     width: 100%;
     height: auto;
-    border-radius: 24px;
-    //box-shadow: rgb(0 0 0 / 16%) 0px 3px 6px, rgb(0 0 0 / 23%) 0px 3px 6px;
+    padding: 0 1px;
     background-color: ${(props) => props.theme.colors.mainWhite};
-    padding: 0px 16px 0px 16px;
     pointer-events: auto;
     overflow: auto;
     @media ${(props) => props.theme.device.mobileL} {
@@ -37,10 +29,12 @@ const StyledDropdownContentItem = styled.div`
     flex-direction: row;
     user-select: none;
     cursor: pointer;
-    padding: 8px;
-    margin-bottom: 8px;
-    border: groove;
-    border-radius: 5px;
+    padding: 4px;
+    border-bottom: solid;
+    border-width: thin;
+    :last-child {
+      //border: none;
+    }
     &:hover {
         background-color: ${(props) => props.theme.colors.hover};
     }
@@ -65,14 +59,11 @@ const StyledWarningContainer = styled.div`
 
 const StyledDropdownFeatureResultsContainer = styled.div`
     display: flex;
+    width: 100%;
     flex-direction: column;
     user-select: none;
     cursor: pointer;
     border-radius: 5px;
-    border-color: ${(props) =>
-        props.itemSelected ? props.theme.colors.secondaryColorPink : ''};
-    background-color: ${(props) =>
-        props.itemSelected ? props.theme.colors.mainColor3 : ''};
 `;
 
 
@@ -84,50 +75,57 @@ const StyledDropdownFeatureResults = styled.div`
 
 const StyledDropdownContentItemTitle = styled.div`
     margin: 4px 0px 4px 0px;
-
+    overflow: hidden;
     display: grid;
     grid-auto-flow: column;
-    grid-auto-columns: 1fr;    font-size: 14px;
-    color: ${(props) => props.active ? props.theme.colors.secondaryColorPink : '#504d4d'};
+    grid-auto-columns: 1fr 2fr;
+    font-size: 14px;
 `;
 
 const StyledGroupName = styled.div`
   max-width: 220px;
   user-select: none;
   padding-left: 0px;
-  font-size: 16px;
-  font-weight: bold;
-  margin-bottom: 12px;
-  margin-top: 12px;
-  color: ${(props) => props.theme.colors.mainColor1};
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 4px;
+  margin-top: 4px;
+  color: ${(props) => props.theme.colors.mainWhite};
   @media ${(props) => props.theme.device.mobileL} {
     font-size: 12px;
   }
 `;
 
-const StyledFeatureName = styled.div`
+const StyledGroupAmount = styled.div`
   max-width: 220px;
   user-select: none;
   padding-left: 0px;
   font-size: 14px;
-  font-weight: bold;
-  margin-bottom: 8px;
-  color: ${(props) => props.theme.colors.mainColor1};
+  font-weight: 600;
+  margin: 4px 0 4px 4px;
+  color: ${(props) => props.theme.colors.mainWhite};
   @media ${(props) => props.theme.device.mobileL} {
     font-size: 12px;
   }
 `;
 
-const StyledLayerTitle = styled.div`
+const StyledLayerTitleWrapper = styled.div`
   display: flex;
   align-items: center;
+  cursor: pointer;
+  justify-content: space-between;
+  border-radius: 5px;
+  margin: .5em 0 0 0;
+  padding: 0 1em;
+  background-color: ${(props) => props.theme.colors.mainColor1};
 `;
 
 const DropdownIcon = styled(FontAwesomeIcon)`
-    margin: 18px 0px 12px 8px;
+    margin: 14px 0px 10px 6px;
     transform: translateY(-10%);
     cursor: pointer;
-    color: ${props => props.theme.colors.mainColor1};
+    color: ${props => props.theme.colors.mainWhite};
+    font-size: 1em;
     @media (max-width: 768px) {
         margin-top: 10px;
     }
@@ -164,189 +162,231 @@ const StyledNoResults = styled.div`
     margin-top: 8px;
 `;
 
-const showFeatureOnMap = (channel, layer, feature) => {
-    let geoJson = {...layer.content[0].geojson};
-    if (feature !== null) {
-        geoJson.features = [feature];
+const StyledResultId = styled.div`
+    margin-right: 0.5em;
+    font-weight: 600;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    &:hover {
+      white-space: wrap;
+      text-overflow: none;
     }
+`;
 
-    // empty possible earlier overlays
-    channel &&
-      channel.postRequest("MapModulePlugin.RemoveFeaturesFromMapRequest", [
+const StyledResultValue = styled.p`
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    &:hover {
+      white-space: wrap;
+      text-overflow: none;
+    }
+`;
+
+const FeatureListWrapper = styled.div`
+    display: flex;
+    flex-direction: column;
+    margin: 0 1px;
+`;
+
+const StyledShowMoreButtonWrapper = styled.div`
+    text-align: center;
+    margin-top: 1em;
+`;
+
+const StyledShowMoreButton = styled.button`
+    width: 250px;
+    height: 35px;
+    color: ${(props) => props.theme.colors.mainWhite};
+    background-color: ${(props) => props.theme.colors.mainColor1};
+    border-radius: 20px;
+    box-shadow: 0px 1px 3px #0000001f;
+    border: none;
+`;
+
+const StyledTitleWrapper = styled.div`
+    display: flex;
+`;
+
+// Function to handle displaying a feature on the map
+const showFeatureOnMap = (channel, layer, feature) => {
+    const geoJson = feature
+        ? { ...layer.content.geojson, features: [feature] }
+        : { ...layer.content.geojson };
+
+    channel?.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [
         null,
         null,
-        "feature-search-results",
-      ]);
-    
-    // add new overlay
+        'feature-search-results',
+    ]);
 
-    // HUOM tällä zoomataan haluttuun kohteeseen
-    if (geoJson !== null) {
-      channel &&
-        channel.postRequest("MapModulePlugin.AddFeaturesToMapRequest", [
-          geoJson,
-          {
-            layerId: "feature-search-results",
-            centerTo: true,
-            cursor: "pointer",
-            featureStyle: {
-              fill: {
-                  color: 'rgba(229, 0, 131, 1)',
-              },
-              stroke: {
-                  color: 'rgba(229, 0, 131, 1)',
-                  width: 5,
-                  lineDash: 'solid',
-                  lineCap: 'round',
-                  lineJoin: 'round',
-                  area: {
-                      color: 'rgba(229, 0, 131, 1)',
-                      width: 4,
-                      lineJoin: 'round'
-                  }
-              },
-              image: {
-                  shape: 2,
-                  size: 4,
-                  fill: {
-                      color: 'rgba(229, 0, 131, 1)',
-                  }
-              }
+    if (geoJson) {
+        channel?.postRequest('MapModulePlugin.AddFeaturesToMapRequest', [
+            geoJson,
+            {
+                layerId: 'feature-search-results',
+                centerTo: true,
+                cursor: 'pointer',
+                featureStyle: {
+                    fill: { color: 'rgba(229, 0, 131, 1)' },
+                    stroke: {
+                        color: 'rgba(229, 0, 131, 1)',
+                        width: 5,
+                        lineDash: 'solid',
+                        lineJoin: 'round',
+                    },
+                    image: {
+                        shape: 2,
+                        size: 4,
+                        fill: { color: 'rgba(229, 0, 131, 1)' },
+                    },
+                },
             },
-          },
         ]);
     }
-  };
+};
 
+// Feature Search Result Panel Component
 const FeatureSearchResultPanel = ({
     dropdownVariants,
     isMobile,
     setShowSearchResults,
-    searchClickedRow,
+    lastSearchValue,
+    handleFeatureSearch,
 }) => {
     const { featureSearchResults, searchOn, channel } = useAppSelector((state) => state.rpc);
     const [selectedFeature, setSelectedFeature] = useState('');
-    const [openLayer, setOpenLayer] = useState(null);
+    const [openAttribute, setOpenAttribute] = useState(null);
     const [showWarn, setShowWarn] = useState(false);
 
+    // Effect to handle warnings and map display
     useEffect(() => {
-        if (featureSearchResults.length > 0) {
-            openLayer !== featureSearchResults[0].layerId && setOpenLayer(featureSearchResults[0].layerId );
-            featureSearchResults.filter(layer => layer.limitExceeded).length > 0 && !showWarn && setShowWarn(true);
+        const hasFeatures = featureSearchResults?.[0]?.content?.geojson?.matchedFeatures;
+
+        if (hasFeatures) {
+            if (featureSearchResults.some((layer) => layer.limitExceeded) && !showWarn) {
+                setShowWarn(true);
+            }
             showFeatureOnMap(channel, featureSearchResults[0], null);
         } else {
             setShowWarn(false);
         }
     }, [featureSearchResults]);
 
-    const handleSetOpenLayer = (layer) => {
-        if (openLayer === layer.layerId) {
-            setOpenLayer(null);
-        } else {
-            setOpenLayer(layer.layerId);
-            showFeatureOnMap(channel, layer, null);
-        }
-    }
+    // Toggle feature details and show them on the map
+    const handleSetOpenMatchKey = (layer, matchedKey) => {
+        setOpenAttribute(openAttribute === matchedKey ? null : matchedKey);
+        setSelectedFeature('');
+        showFeatureOnMap(channel, layer, null);
+    };
 
     return (
         <>
             <StyledDropDown
-            key={'dropdown-content-feature'}
-            variants={dropdownVariants}
-            initial={'initial'}
-            animate={'animate'}
-            exit={'exit'}
-            transition={'transition'}
+                key={'dropdown-content-feature'}
+                variants={dropdownVariants}
+                initial={'initial'}
+                animate={'animate'}
+                exit={'exit'}
+                transition={'transition'}
             >
-                { showWarn &&
+                {showWarn && (
                     <StyledWarningContainer>
-                        
-                    <StyledWarningIcon>
-                        <FontAwesomeIcon
-                                        icon={faTriangleExclamation}
-                                    />
-                    </StyledWarningIcon>
-                    <StyledWarningText>{strings.search.feature.warn}</StyledWarningText>
-
-                        
-                    <StyledCloseButton
-                        onClick={()=> setShowWarn(false)}
-                    >
-                        <FontAwesomeIcon
-                                        icon={faTimes}
-                                    />
-                    </StyledCloseButton>
+                        <FontAwesomeIcon icon={faTriangleExclamation} />
+                        <StyledWarningText>{strings.search.feature.warn}</StyledWarningText>
+                        <StyledCloseButton onClick={() => setShowWarn(false)}>
+                            <FontAwesomeIcon icon={faTimes} />
+                        </StyledCloseButton>
                     </StyledWarningContainer>
-                }
-                {featureSearchResults.length > 0 && featureSearchResults.map((layer, index) => {
-                    return(
-                    <div key={layer + index}>
-                        <StyledLayerTitle>
-                            <StyledGroupName>{layer.layerName}</StyledGroupName>
-                            <DropdownIcon 
-                                icon={openLayer === layer.layerId ? faAngleUp : faAngleDown} 
-                                onClick={()=> handleSetOpenLayer(layer)}
-                            />
-                        </StyledLayerTitle>
-                            { openLayer === layer.layerId &&
-                                <FeatureList layer={layer} isMobile={isMobile} setShowSearchResults={setShowSearchResults} searchClickedRow={searchClickedRow} setSelectedFeature={setSelectedFeature} selectedFeature={selectedFeature}></FeatureList>
-                            }
+                )}
 
-                    </div>)
-                })
-                }
+                {featureSearchResults[0]?.content?.geojson?.matchedFeatures &&
+                    Object.keys(featureSearchResults[0].content.geojson.matchedFeatures).map((matchedKey, index) => (
+                        <div key={`${matchedKey}-${index}`}>
+                            <StyledLayerTitleWrapper onClick={() => handleSetOpenMatchKey(featureSearchResults[0], matchedKey)}>
+                                <StyledTitleWrapper>
+                                    <StyledGroupName>{matchedKey}</StyledGroupName>
+                                    <StyledGroupAmount>
+                                        {`(${featureSearchResults[0].content.geojson.matchedFeatures[matchedKey].length})`}
+                                    </StyledGroupAmount>
+                                </StyledTitleWrapper>
+                                <DropdownIcon icon={openAttribute === matchedKey ? faAngleUp : faAngleDown} />
+                            </StyledLayerTitleWrapper>
+                            {openAttribute === matchedKey && (
+                                <FeatureList
+                                    channel={channel}
+                                    layer={featureSearchResults[0]}
+                                    matchedKey={matchedKey}
+                                    isMobile={isMobile}
+                                    setShowSearchResults={setShowSearchResults}
+                                    setSelectedFeature={setSelectedFeature}
+                                    selectedFeature={selectedFeature}
+                                />
+                            )}
+                        </div>
+                    ))}
             </StyledDropDown>
 
-        { searchOn === false && featureSearchResults.length === 0 && 
-            <StyledNoResults>{strings.search.feature.noResults}</StyledNoResults>
-        }
+            {featureSearchResults[0]?.content?.moreFeatures && (
+                <StyledShowMoreButtonWrapper>
+                    <StyledShowMoreButton onClick={() => handleFeatureSearch(lastSearchValue, featureSearchResults[0].content.nextStartIndex, featureSearchResults[0].content.layerId)}>
+                        {strings.gfi.getMoreFeatures}
+                    </StyledShowMoreButton>
+                </StyledShowMoreButtonWrapper>
+            )}
+
+            {lastSearchValue.length > 0 &&
+                !searchOn &&
+                featureSearchResults[0]?.content?.geojson?.matchedFeatures &&
+                Object.keys(featureSearchResults[0].content.geojson.matchedFeatures).length === 0 && (
+                    <StyledNoResults>{strings.search.feature.noResults}</StyledNoResults>
+                )}
         </>
     );
 };
 
-const FeatureList = ({layer, isMobile, setShowSearchResults, searchClickedRow, setSelectedFeature, selectedFeature}) => {
-    const { channel } = useAppSelector((state) => state.rpc);
+// FeatureList Component to display matched features
+const FeatureList = ({
+    channel,
+    layer,
+    matchedKey,
+    isMobile,
+    setShowSearchResults,
+    setSelectedFeature,
+    selectedFeature,
+}) => {
+    return (
+        <StyledDropdownFeatureResults>
+            {layer.content.geojson.matchedFeatures[matchedKey].map((item, i) => {
+                const actualFeature = layer.content.geojson.features.find(f => f.id === item.feature_id);
 
-    return(
-        <>
-        {layer.content[0].geojson.features.map ((feature, index) => {
-            return (
-                <StyledDropdownContentItem
-                    key={"feature_" + feature + "_" + index}
-                    onClick={() => {
-                        isMobile &&
-                            setShowSearchResults(false);
-                        showFeatureOnMap(channel, layer, feature);
-                        selectedFeature === feature.id ? setSelectedFeature('') : setSelectedFeature(feature.id);
-                    }}
-                    selected={selectedFeature === feature.id ? true : false}
-                >
-                    <StyledDropdownFeatureResultsContainer>
-                        <StyledFeatureName>{feature.id}</StyledFeatureName>
-                        <StyledDropdownFeatureResults>
+                return (
+                    <StyledDropdownContentItem
+                        key={`search-result-feature-${i}`}
+                        selected={selectedFeature === item.feature_id}
+                        onClick={() => {
+                            if (isMobile) setShowSearchResults(false);
+                            showFeatureOnMap(channel, layer, actualFeature);
+                            selectedFeature === item.feature_id
+                                ? setSelectedFeature('')
+                                : setSelectedFeature(item.feature_id);
+                        }}
+                    >
+                        <StyledDropdownFeatureResultsContainer>
+                            <StyledDropdownFeatureResults>
+                                <StyledDropdownContentItemTitle>
+                                    <StyledResultId>{`${item.feature_id}:`}</StyledResultId>
+                                    <StyledResultValue>{item.value}</StyledResultValue>
+                                </StyledDropdownContentItemTitle>
+                            </StyledDropdownFeatureResults>
+                        </StyledDropdownFeatureResultsContainer>
+                    </StyledDropdownContentItem>
+                );
+            })}
+        </StyledDropdownFeatureResults>
+    );
+};
 
-                            {feature.match.map((match, index) =>
-                            {
-                                const key = Object.keys(match)[0];
-                                const value = Object.values(match)[0].toString().slice(0, 25) + (Object.values(match)[0].toString().length > 25 ? "..." : "");
-                                return(
-                                        <StyledDropdownContentItemTitle key={match + "_" + index} active={searchClickedRow === index}>
-
-                                        <b style={{marginRight: '0.5em'}}>{key + ":"}</b><p >{value}</p>
-                                        </StyledDropdownContentItemTitle>
-
-                                )
-                            }  
-                            )}
-                        </StyledDropdownFeatureResults>
-                        
-                    </StyledDropdownFeatureResultsContainer>
-
-                </StyledDropdownContentItem>
-            )})
-        }
-    </>
-
-)}
 
 export default FeatureSearchResultPanel;

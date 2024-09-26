@@ -17,6 +17,7 @@ const SearchPanelMain = styled.div`
       display: none;
     `}
 `;
+
 const SearchResultPanel = ({
     isSearchOpen,
     searchResults,
@@ -33,6 +34,8 @@ const SearchResultPanel = ({
     allLayers,
     hidden=false,
     activeSwitch,
+    handleFeatureSearch,
+    lastSearchValue
 }) => {
     const { featureSearchResults } = useAppSelector((state) => state.rpc);
     return (
@@ -78,6 +81,8 @@ const SearchResultPanel = ({
                     setShowSearchResults={setShowSearchResults}
                     allLayers={allLayers}
                     featureSearchResults={featureSearchResults}
+                    handleFeatureSearch={handleFeatureSearch}
+                    lastSearchValue={lastSearchValue}
                 />
                 )
         }
