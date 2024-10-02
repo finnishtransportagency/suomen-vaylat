@@ -61,9 +61,7 @@ const StyledVKMDataContainer = styled(motion.div)`
     display: flex;
     align-items: flex-start;
     color: ${(props) => props.theme.colors.mainColor1};
-    max-width: 500px;
-    margin-left: auto;
-    margin-right: auto;
+    justify-content: space-evenly;
     img {s
         max-width: 100px;
     };
@@ -91,6 +89,7 @@ const StyledVKMDataContainer = styled(motion.div)`
 
 const StyledVKMDataMunacipalityImageWrapper = styled.div`
   display: flex;
+  flex: 1;
   flex-direction: column;
   align-items: center;
   padding-right: 8px;
@@ -102,6 +101,7 @@ const StyledVKMDataMunacipalityImageWrapper = styled.div`
 
 const StyledVkmInstruction = styled.div`
   display: flex;
+  flex: 1;
   flex-direction: column;
   align-items: flex-start;
   && p {
@@ -115,6 +115,7 @@ const StyledVkmInstruction = styled.div`
 
 const StyledCoordinatesWrapper = styled.div`
   display: flex;
+  flex: 1;
   align-items: center;
   margin-left: 16px;
   p {
@@ -128,6 +129,7 @@ const StyledCoordinatesWrapper = styled.div`
 
 const StyledVKMDataInfoWrapper = styled.div`
   display: flex;
+  flex: 1;
   flex-direction: column;
   margin-left: 16px;
   user-select: text;
@@ -902,8 +904,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
         animate={{
           height: isVKMInfoOpen ? "auto" : 0,
           opacity: isVKMInfoOpen ? 1 : 0,
-          marginTop: isVKMInfoOpen ? "16px" : "0px",
-          marginBottom: isVKMInfoOpen ? "16px" : "0px",
+          margin: isVKMInfoOpen ? "16px" : "0px",
           y: isVKMInfoOpen ? 0 : -100,
         }}
         transition={{ duration: 0.4 }}
