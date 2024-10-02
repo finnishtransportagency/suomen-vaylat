@@ -255,30 +255,8 @@ const PublishedMap = () => {
 
                 channel.handleEvent('PointInfoEvent', (data) => {
                     store.dispatch(setPointInfo({lon: data.coordinates.x, lat: data.coordinates.y}));
-
                     if (data.vkm !== null && store.getState().ui.activeSelectionTool === null && store.getState().ui.activeTool === null && store.getState().ui.selectedMarker !== 7) {
-                        store.dispatch(setMinimizeGfi(false));
                         store.dispatch(setVKMData(data));
-                        store.dispatch(setIsGfiOpen(true));
-
-                        channel && channel.postRequest(
-                            'MapModulePlugin.RemoveFeaturesFromMapRequest',
-                            [null, null, GFI_GEOMETRY_LAYER_ID]
-                        );
-
-                        var MARKER_ID = 'VKM_MARKER';
-
-                        store.dispatch(
-                            addMarkerRequest({
-                                x: data.coordinates.x,
-                                y: data.coordinates.y,
-                                markerId: MARKER_ID,
-                                shape: '<svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="#0064af" viewBox="0 0 384 512"><path d="M172.268 501.67C26.97 291.031 0 269.413 0 192 0 85.961 85.961 0 192 0s192 85.961 192 192c0 77.413-26.97 99.031-172.268 309.67-9.535 13.774-29.93 13.773-39.464 0zM192 272c44.183 0 80-35.817 80-80s-35.817-80-80-80-80 35.817-80 80 35.817 80 80 80z"/></svg>',
-                                size: 5,
-                                offsetX: 13,
-                                offsetY: 7,
-                            })
-                        );
                     }
                     if (store.getState().ui.activeTool === strings.tooltips.drawingTools.marker) {
                         let marker_id = data.coordinates.x + data.coordinates.y + "_id";
@@ -323,6 +301,24 @@ const PublishedMap = () => {
                     reformattedData.content = [geojson];
                     data.content = reformattedData.content;
                     if (store.getState().ui.activeSelectionTool === null && store.getState().ui.activeTool === null) {
+                        channel && channel.postRequest(
+                            'MapModulePlugin.RemoveFeaturesFromMapRequest',
+                            [null, null, GFI_GEOMETRY_LAYER_ID]
+                        );
+
+                        var MARKER_ID = 'VKM_MARKER';
+
+                        store.dispatch(
+                            addMarkerRequest({
+                                x: data.x,
+                                y: data.y,
+                                markerId: MARKER_ID,
+                                shape: '<svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="#0064af" viewBox="0 0 384 512"><path d="M172.268 501.67C26.97 291.031 0 269.413 0 192 0 85.961 85.961 0 192 0s192 85.961 192 192c0 77.413-26.97 99.031-172.268 309.67-9.535 13.774-29.93 13.773-39.464 0zM192 272c44.183 0 80-35.817 80-80s-35.817-80-80-80-80 35.817-80 80 35.817 80 80 80z"/></svg>',
+                                size: 5,
+                                offsetX: 13,
+                                offsetY: 7,
+                            })
+                        );
                         store.dispatch(resetGFILocations([]));
                         const croppingArea = {
                             type: 'Feature',
@@ -333,8 +329,8 @@ const PublishedMap = () => {
                         };
 
                         store.dispatch(setGFICroppingArea(croppingArea));
-                        store.dispatch(setMinimizeGfi(false));
-                        store.dispatch(setIsGfiOpen(true));
+                        store.getState().ui.minimizeGfi && store.dispatch(setMinimizeGfi(false));
+                        !store.getState().ui.isGfiOpen && store.dispatch(setIsGfiOpen(true));
                         store.dispatch(setGFILocations(data));
                     }
                 });
