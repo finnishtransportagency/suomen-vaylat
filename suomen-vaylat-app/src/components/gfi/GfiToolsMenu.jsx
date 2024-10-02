@@ -450,7 +450,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
         }
     };
 
-    const handleActivateGeometry = async (features) => {
+    const handleActivateSavedGeometry = async (features) => {
         channel.postRequest(
             'MapModulePlugin.RemoveFeaturesFromMapRequest',
             [null, null, vectorLayerId]
@@ -525,6 +525,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
         if (data.operation === 'click') {
 
             if (data.features) {
+                store.dispatch(resetGFILocations([]))
                 isGfiOpen && store.dispatch(setMinimizeGfi(false));
                 setIsGfiLoading(true)
                 const fetchableLayers = selectedLayers.filter((layer) =>  layer.groups?.every((group)=> group !==1));
@@ -830,7 +831,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
                                         <StyledSavedView
                                             onClick={(e) => {
                                                 e.preventDefault();
-                                                handleActivateGeometry(geometry);
+                                                handleActivateSavedGeometry(geometry);
                                             }}
                                         >
                                             <StyledLeftContent>

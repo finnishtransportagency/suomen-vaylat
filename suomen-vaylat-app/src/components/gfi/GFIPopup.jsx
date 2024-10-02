@@ -24,6 +24,7 @@ import { FreeMode, Controller } from "swiper";
 import {
   setMinimizeGfi,
   setWarning,
+  setActiveSelectionTool,
 } from "../../state/slices/uiSlice";
 import {
   resetGFILocations,
@@ -756,6 +757,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
   const handleGfiToolsMenu = () => {
     setIsGfiDownloadsOpen(false);
     setIsGfiToolsOpen(!isGfiToolsOpen);
+    store.dispatch(setActiveSelectionTool(null));
 
     channel &&
       channel.postRequest("DrawTools.StopDrawingRequest", [

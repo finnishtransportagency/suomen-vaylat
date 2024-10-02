@@ -39,7 +39,8 @@ import {
   setMaximizeFilterModal,
   setShowSavedLayers,
   setIsFeedBackFormOpen,
-  setSelectedCustomFilterLayers
+  setSelectedCustomFilterLayers,
+  setActiveSelectionTool
 } from "../../state/slices/uiSlice";
 
 import {
@@ -315,6 +316,7 @@ const Content = () => {
   }
 
   const handleCloseGFIModal = () => {
+    store.dispatch(setActiveSelectionTool(null));
     store.dispatch(resetGFILocations([]));
     store.dispatch(setIsGfiOpen(false));
     store.dispatch(setMinimizeGfi(false));
@@ -381,6 +383,7 @@ const Content = () => {
   };
 
   const handleCloseGfiLocations = () => {
+    store.dispatch(setActiveSelectionTool(null));
     store.dispatch(setIsGfiToolsOpen(false));
   };
 
@@ -409,6 +412,7 @@ const Content = () => {
           remove: true,
         },
       ]);
+    store.dispatch(setActiveSelectionTool(null));
     setIsGfiDownloadToolsOpen(!isGfiDownloadToolsOpen);
   };
 

@@ -205,7 +205,6 @@ const PublishedMap = () => {
                             }
                             return 0;
                         };
-                        console.log("SETGROUPS")
                         store.dispatch(
                             setAllGroups(data.sort(arrangeAlphabetically))
                         );
