@@ -161,7 +161,6 @@ const PublishedMap = () => {
             channel.getSupportedFunctions(function (data) {
                 //minor hack to make sure announcements are shown
                 fetchAnnounmentsAsync(data, channel, store);
-                updateLayers(store, channel);
 
                 if (data.getTags) {
                     channel.getTags(function (data) {
@@ -206,11 +205,15 @@ const PublishedMap = () => {
                             }
                             return 0;
                         };
+                        console.log("SETGROUPS")
                         store.dispatch(
                             setAllGroups(data.sort(arrangeAlphabetically))
                         );
                     });
                 }
+
+                // Needs to have ""allGroups" set
+                updateLayers(store, channel);
 
                 if (data.getCurrentState) {
                     channel.getCurrentState(function (data) {
