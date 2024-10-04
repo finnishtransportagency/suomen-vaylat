@@ -230,6 +230,7 @@ export const FilterModal = ({filterInfo}) => {
   const [propValue, setPropValue] = useState({});
   const [filterOptions, setFilterOptions] = useState([]);
   const [fieldNameLocales, setFieldNameLocales] = useState({});
+  const [codeListValues, setCodeListValues] = useState(null);
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
 
@@ -268,6 +269,7 @@ export const FilterModal = ({filterInfo}) => {
           operator: oper,
           value: value,
           type: type,
+          codeValues: codeListValues[prop] || null
         },
       ]
 
@@ -310,6 +312,15 @@ export const FilterModal = ({filterInfo}) => {
       [layer?.id],
       (data) => {
         setFieldNameLocales(data);
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
+    channel.getCodeListValues(
+      [layer?.id],
+      (data) => {
+        setCodeListValues(data);
       },
       (err) => {
         console.log(err);

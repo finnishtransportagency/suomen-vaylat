@@ -136,38 +136,121 @@ const getParameterCaseInsensitive = (object, key) => {
   ];
 };
 
-export const getPropertyOperatorCQL = (filter) => {
-  switch (filter.type) {
-    case 'string':
-      return getCQLStringPropertyOperator(
-        filter.property,
-        filter.operator,
-        filter.value
-      );
-    case 'number':
-      return getCQLNumberPropertyOperator(
-        filter.property,
-        filter.operator,
-        filter.value
-      );
-    case 'date':
-      return getCQLDatePropertyOperator(filter.property, filter.value);
+const noResultsSearchString = (property, codeValues) => {
+  var searchString = '';
+  for (var i = 0; i < codeValues.length; i++) {
+    if (i === 0) {
+      searchString += '(';
+    }
+    searchString += property + ' <> ' + codeValues[i];
+    if (i !== codeValues.length - 1) {
+      searchString += ' AND ';
+    } else {
+      searchString += ')';
+    }
+  }
+  return searchString;
+}
+
+const resultsSearchString = (property, codeValueKeys) => {
+  var searchString = '';
+  for (var i = 0; i < codeValueKeys.length; i++) {
+    if (i === 0) {
+      searchString += '(';
+    }
+    searchString += property + ' = ' + codeValueKeys[i];
+    if (i !== codeValueKeys.length - 1) {
+      searchString += ' OR ';
+    } else {
+      searchString += ')';
+    }
+  }
+  return searchString;
+}
+
+const getCodeValuePropertyOperator = (property, operator, value, codeValues) => {
+  var codeValueKeys;
+
+  switch (operator) {
+    case 'equals':
+      codeValueKeys = Object.keys(codeValues).filter(key => codeValues[key] === value);
+      console.log(codeValueKeys)
+      break;
+
+    case 'notEquals':
+      codeValueKeys =  Object.keys(codeValues).filter(key => codeValues[key] !== value);
+      console.log(codeValueKeys)
+      break;
+
+    case 'includes':
+      codeValueKeys =  Object.keys(codeValues).filter(key => codeValues[key].toLowerCase().includes(value.toLowerCase()));
+      console.log(codeValueKeys)
+      break;
+
+    case 'doesntInclude':
+      codeValueKeys =  Object.keys(codeValues).filter(key => !codeValues[key].toLowerCase().includes(value.toLowerCase()));
+      console.log(codeValueKeys)
+      break;
+
     default:
-      return getCQLStringPropertyOperator(
-        filter.property,
-        filter.operator,
-        filter.value
-      );
+      codeValueKeys = Object.keys(codeValues).filter(key => codeValues[key] === value);
+      console.log(codeValueKeys)
+      break;
+
+  }
+
+  console.log(codeValueKeys)
+
+  if (codeValueKeys.length === 0) {
+    return noResultsSearchString(property, Object.keys(codeValues))
+  } else {
+    return resultsSearchString(property, codeValueKeys)
+  }
+}
+
+export const getPropertyOperatorCQL = (filter) => {
+  // if the values are coded we need to handle it differently
+  if (filter.codeValues) {
+    return getCodeValuePropertyOperator(
+          filter.property,
+          filter.operator,
+          filter.value,
+          filter.codeValues
+        );
+  } else {
+    switch (filter.type) {
+      case 'string':
+        return getCQLStringPropertyOperator(
+          filter.property,
+          filter.operator,
+          filter.value
+        );
+      case 'number':
+        return getCQLNumberPropertyOperator(
+          filter.property,
+          filter.operator,
+          filter.value
+        );
+      case 'date':
+        return getCQLDatePropertyOperator(filter.property, filter.value);
+      default:
+        return getCQLStringPropertyOperator(
+          filter.property,
+          filter.operator,
+          filter.value
+        );
+    }
   }
 };
 
 export const updateFiltersOnMap = (updatedFilters, filterInfo, channel) => {
   let filters = '';
-  updatedFilters &&
+  updatedFilters && !updatedFilters.codeValue &&
     updatedFilters
       .filter((f) => f.layer === filterInfo?.layer?.id)
       .forEach((filter, index) => {
         var cqlFilter = getPropertyOperatorCQL(filter);
+        console.log(cqlFilter)
         index === 0 ? (filters += cqlFilter) : (filters += ' AND ' + cqlFilter);
       });
 
