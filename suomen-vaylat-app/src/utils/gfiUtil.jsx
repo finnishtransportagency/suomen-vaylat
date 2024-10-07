@@ -205,23 +205,24 @@ const getCodeValuePropertyOperator = (property, operator, value, codeValues, fil
 
   switch (operator) {
     case 'equals':
-      codeValueKeys = Object.keys(codeValues).filter(key => codeValues[key] === value);
+      codeValueKeys = Object.keys(codeValues).filter(key => codeValues[key].toString().trim().toLowerCase() === value.toString().trim().toLowerCase());
       break;
 
     case 'notEquals':
-      codeValueKeys =  Object.keys(codeValues).filter(key => codeValues[key] !== value);
+      codeValueKeys =  Object.keys(codeValues).filter(key => codeValues[key].toString().trim().toLowerCase() !== value.toString().trim().toLowerCase());
       break;
 
     case 'includes':
-      codeValueKeys =  Object.keys(codeValues).filter(key => codeValues[key].toLowerCase().includes(value.toLowerCase()));
+      codeValueKeys =  Object.keys(codeValues).filter(key => codeValues[key].toString().trim().toLowerCase().includes(value.toString().trim().toLowerCase()));
       break;
 
     case 'doesntInclude':
-      codeValueKeys =  Object.keys(codeValues).filter(key => !codeValues[key].toLowerCase().includes(value.toLowerCase()));
+      codeValueKeys =  Object.keys(codeValues).filter(key => !codeValues[key].toString().trim().toLowerCase().includes(value.toString().trim().toLowerCase()));
       break;
 
     default:
-      codeValueKeys = Object.keys(codeValues).filter(key => codeValues[key] === value);
+      console.log("Error filtering:",property, operator, value, codeValues, filterType)
+      codeValueKeys = Object.keys(codeValues).filter(key => codeValues[key].toString().trim().toLowerCase() === value.toString().trim().toLowerCase());
       break;
 
   }
