@@ -136,7 +136,7 @@ const getParameterCaseInsensitive = (object, key) => {
   ];
 };
 
-const noResultsSearchString = (property, codeValues) => {
+const noResultsSearchNumber = (property, codeValues) => {
   var searchString = '';
   for (var i = 0; i < codeValues.length; i++) {
     if (i === 0) {
@@ -152,7 +152,7 @@ const noResultsSearchString = (property, codeValues) => {
   return searchString;
 }
 
-const resultsSearchString = (property, codeValueKeys) => {
+const resultsSearchNumber = (property, codeValueKeys) => {
   var searchString = '';
   for (var i = 0; i < codeValueKeys.length; i++) {
     if (i === 0) {
@@ -168,43 +168,69 @@ const resultsSearchString = (property, codeValueKeys) => {
   return searchString;
 }
 
-const getCodeValuePropertyOperator = (property, operator, value, codeValues) => {
+const noResultsSearchString = (property, codeValues) => {
+  var searchString = '';
+  for (var i = 0; i < codeValues.length; i++) {
+    if (i === 0) {
+      searchString += '(';
+    }
+    searchString += 'strToLowerCase(' + property + ") <> '" + codeValues[i].toString().trim().toLowerCase();
+    if (i !== codeValues.length - 1) {
+      searchString += "' AND ";
+    } else {
+      searchString += "')";
+    }
+  }
+  return searchString;
+}
+
+const resultsSearchString = (property, codeValueKeys) => {
+  var searchString = '';
+  for (var i = 0; i < codeValueKeys.length; i++) {
+    if (i === 0) {
+      searchString += '(';
+    }
+    searchString += 'strToLowerCase(' + property + ") = '" + codeValueKeys[i].toString().trim().toLowerCase();
+    if (i !== codeValueKeys.length - 1) {
+      searchString += "' OR ";
+    } else {
+      searchString += "')";
+    }
+  }
+  return searchString;
+}
+
+const getCodeValuePropertyOperator = (property, operator, value, codeValues, filterType) => {
   var codeValueKeys;
 
   switch (operator) {
     case 'equals':
       codeValueKeys = Object.keys(codeValues).filter(key => codeValues[key] === value);
-      console.log(codeValueKeys)
       break;
 
     case 'notEquals':
       codeValueKeys =  Object.keys(codeValues).filter(key => codeValues[key] !== value);
-      console.log(codeValueKeys)
       break;
 
     case 'includes':
       codeValueKeys =  Object.keys(codeValues).filter(key => codeValues[key].toLowerCase().includes(value.toLowerCase()));
-      console.log(codeValueKeys)
       break;
 
     case 'doesntInclude':
       codeValueKeys =  Object.keys(codeValues).filter(key => !codeValues[key].toLowerCase().includes(value.toLowerCase()));
-      console.log(codeValueKeys)
       break;
 
     default:
       codeValueKeys = Object.keys(codeValues).filter(key => codeValues[key] === value);
-      console.log(codeValueKeys)
       break;
 
   }
 
-  console.log(codeValueKeys)
-
   if (codeValueKeys.length === 0) {
-    return noResultsSearchString(property, Object.keys(codeValues))
+    return filterType === 'number' ? noResultsSearchNumber(property, Object.keys(codeValues)) : noResultsSearchString(property, codeValueKeys);
   } else {
-    return resultsSearchString(property, codeValueKeys)
+    // is the type number or string
+    return filterType === 'number' ? resultsSearchNumber(property, codeValueKeys) : resultsSearchString(property, codeValueKeys);
   }
 }
 
@@ -215,7 +241,8 @@ export const getPropertyOperatorCQL = (filter) => {
           filter.property,
           filter.operator,
           filter.value,
-          filter.codeValues
+          filter.codeValues,
+          filter.type
         );
   } else {
     switch (filter.type) {
@@ -250,7 +277,6 @@ export const updateFiltersOnMap = (updatedFilters, filterInfo, channel) => {
       .filter((f) => f.layer === filterInfo?.layer?.id)
       .forEach((filter, index) => {
         var cqlFilter = getPropertyOperatorCQL(filter);
-        console.log(cqlFilter)
         index === 0 ? (filters += cqlFilter) : (filters += ' AND ' + cqlFilter);
       });
 
