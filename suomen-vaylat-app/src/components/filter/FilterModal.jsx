@@ -25,6 +25,7 @@ import { setFilters } from "../../state/slices/rpcSlice";
 const StyledFilterProp = styled.div``;
 
 const StyledFilterPropContainer = styled.div`
+  padding: 0.3em;
   width: 95%;
 `;
 
@@ -89,7 +90,6 @@ const StyledModalResultContainer = styled.div`
     display: table;
     clear: both;
   }
-  margin-top: 1em;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -140,18 +140,13 @@ const StyledFilterContainer = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: space-between;
 `;
 
 const StyledFilterResultContainer = styled.div`
   display: flex;
   flex-direction: column;
-`;
-
-const StyledFilterReusltButtons = styled.div`
-  display: flex;
-  align-items: flex-end;
 `;
 
 const StyledFilter = styled.div`
@@ -202,9 +197,10 @@ const StyledTimesIconWrapper = styled.div`
 
 const StyledTrashIconWrapper = styled.div`
   display: flex;
-  align-items: center;
+  justify-content: flex-end;
+  align-items: flex-start;
   text-align: end;
-  margin: 1em 0 0 1em;
+  margin: 1em 0 1em 0;
   border: none;
   background: none;
   cursor: pointer;
@@ -554,21 +550,19 @@ const handleRemoveFilter = (filter) => {
                 </StyledFilter>
               ))}
             </StyledFilterResultContainer>
-            <StyledFilterReusltButtons>
-              <StyledTrashIconWrapper
-                onClick={() => {
-                    store.dispatch(setFilters([]));
-                    updateFiltersOnMap(null, filterInfo, channel);
-                }}
-              >
-                {strings.gfifiltering.removeAllFilters}{" "}
-                <FontAwesomeIcon
-                  icon={faTrash}
-                  size="6x"
-                  style={{ marginLeft: ".5em" }}
-                />
-              </StyledTrashIconWrapper>
-            </StyledFilterReusltButtons>
+            <StyledTrashIconWrapper
+              onClick={() => {
+                  store.dispatch(setFilters([]));
+                  updateFiltersOnMap(null, filterInfo, channel);
+              }}
+            >
+              {strings.gfifiltering.removeAllFilters}{" "}
+              <FontAwesomeIcon
+                icon={faTrash}
+                size="6x"
+                style={{ marginLeft: ".5em" }}
+              />
+            </StyledTrashIconWrapper>
           </StyledFilterContainer>
         )}
       </StyledModalResultContainer>
