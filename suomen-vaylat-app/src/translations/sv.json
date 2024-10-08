@@ -64,7 +64,7 @@
       "saveNewView" : "Spara ny vy",
       "saveViewButton" : "Spara vy"
     },
-    "saveGeometry" : {
+    "saveGeometry": {
       "confirmDeleteAll": "Är du säker på att du vill ta bort all sparad geometri?",
       "saveGeometry": "Spara geometrin",
       "savingGeometry": "Spara geometri",
@@ -264,7 +264,7 @@
         "link": "https://ava.vaylapilvi.fi"
       }
     },
-    "dataSourcesAndTermsOfUse" :{
+    "dataSourcesAndTermsOfUse": {
       "tabTitle": "Informationskällor och användarvillkor"
     },
     "dataSources": {
@@ -388,10 +388,7 @@
         "OL 122/750/30"
       ],
       "realEstateUnitIdentifier": "Fastighetsbeteckning, skriv i formatet 'aa-bb-cc-d' eller 'aaa-bbb-cc-ddd'.",
-      "realEstateUnitIdentifierExamples": [
-        "91-17-16-1",
-        "091-017-16-001"
-      ],
+      "realEstateUnitIdentifierExamples": ["91-17-16-1", "091-017-16-001"],
       "example": "T.ex.",
       "toastTip": "Visste du att du kan spara den geometri som kommit upp på kartan vid ban- och vägsökningen?",
       "toastTipContent": "Du kan spara geometrin via ikonen spara i vänstra kanten, på den andra fliken.",
@@ -439,7 +436,7 @@
       "layerVisible": "Lager synligt",
       "zoomInToShowLayer": "Zooma in för att se kartlagret",
       "zoomOutToShowLayer": "Zooma ut för att se kartlagret",
-      "toShowLayer" : "för att se kartlagret",
+      "toShowLayer": "för att se kartlagret",
       "opacity": "Genomskinlighet"
     },
     "customLayerInfo": {

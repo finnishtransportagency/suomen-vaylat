@@ -47,10 +47,10 @@
     "showPageInfo": "Näytä sivun info",
     "showUserGuide": "Näytä käyttöohje"
   },
-  "savedContent" : {
-    "savedContent" : "Näkymän ja geometrian tallennus",
+  "savedContent": {
+    "savedContent": "Näkymän ja geometrian tallennus",
     "viewTitle": "Näkymät",
-    "geometryTitle" : "Geometriat",
+    "geometryTitle": "Geometriat",
     "saveView": {
       "confirmDeleteAll" : "Haluatko varmasti poistaa kaikki tallennetut näkymät?",
       "saveView" : "Näkymän ja geometrian tallennus",
@@ -134,7 +134,7 @@
     "layers": "Tasot",
     "errorLayers": "Virheelliset tasot",
     "failedDownloads": "Virheelliset lataukset",
-    "errorOccuredDuringDownloadProcessing" : "Virhe tapahtui paketin prosessoinnin aikana",
+    "errorOccuredDuringDownloadProcessing": "Virhe tapahtui paketin prosessoinnin aikana",
     "noWebSocketSupport": "Selaimesi ei tue latauksia. Voit kokeilla uudelleen eri selaimella tai päivittämällä nykyisen selaimesi version.",
     "downloadFailure": "Latauksessa meni jokin pieleen, yritä uudelleen.",
     "downloadsInfo": "Osa aineistoista on ladattavissa koko Suomen alueelta karttatasovalikon latauspainikkeesta, aineiston nimen vierestä.",
@@ -265,7 +265,7 @@
         "link": "https://ava.vaylapilvi.fi"
       }
     },
-    "dataSourcesAndTermsOfUse" :{
+    "dataSourcesAndTermsOfUse": {
       "tabTitle": "Tietolähteet ja käyttöehdot"
     },
     "dataSources": {
@@ -374,7 +374,7 @@
       "title": "Metatietohaku",
       "subtitle": "Hae metatiedolla",
       "error": {
-          "text": "Tuloksia ei löytynyt metatietohaulla."
+        "text": "Tuloksia ei löytynyt metatietohaulla."
       }
     },
     "layer": {
@@ -424,10 +424,7 @@
         "OL 122/750/30"
       ],
       "realEstateUnitIdentifier": "Kiinteistötunnushaku, kirjoita muodossa 'aa-bb-cc-d' tai 'aaa-bbb-cc-ddd'.",
-      "realEstateUnitIdentifierExamples": [
-        "91-17-16-1",
-        "091-017-16-001"
-      ],
+      "realEstateUnitIdentifierExamples": ["91-17-16-1", "091-017-16-001"],
       "example": "Esim.",
       "toastTip": "Tiesitkö, että voit tallentaa rata- ja tiehausta kartalle tulleen geometrian?",
       "toastTipContent": "Geometrian voit tallentaa sivun vasemman reunan tallennus-ikonin kautta, toiselta välilehdeltä.",
@@ -477,7 +474,7 @@
       "layerVisible": "Taso näkyvillä",
       "zoomInToShowLayer": "Lähennä nähdäksesi taso",
       "zoomOutToShowLayer": "Loitonna nähdäksesi taso",
-      "toShowLayer" : "nähdäksesi taso",
+      "toShowLayer": "nähdäksesi taso",
       "opacity": "Läpinäkyvyys"
     },
     "customLayerInfo": {
@@ -498,8 +495,8 @@
     "downloadSize": "Aineiston koko"
   },
   "groupLayerList": {
-    "readMore" : "Lue lisää",
-    "readLess" : "Vähemmän",
+    "readMore": "Lue lisää",
+    "readLess": "Vähemmän",
     "298": {
       "title": "Digiroad",
       "description": "Digiroad on Väyläviraston vastuulla oleva valtakunnallinen aineistokokonaisuus, joka sisältää tieverkon keskilinjageometriat sekä liikenteeseen liittyviä ominaisuustietoja. Digiroad on kokoava tietojärjestelmä, johon kerätään aineistoa Väyläviraston Tierekisteristä, Maanmittauslaitoksen Maastotietokannasta, kuntien katutietojärjestelmistä sekä muutamien muiden viranomaisten tietojärjestelmistä (mm. Helsingin seudun liikenne HSL)."

@@ -265,7 +265,7 @@
         "link": "https://ava.vaylapilvi.fi"
       }
     },
-    "dataSourcesAndTermsOfUse" :{
+    "dataSourcesAndTermsOfUse": {
       "tabTitle": "Data sources and terms of use"
     },
     "dataSources": {
@@ -338,7 +338,7 @@
       "title": "Search metadata",
       "subtitle": "Search by metadata",
       "error": {
-          "text": "No results found for the metadata search."
+        "text": "No results found for the metadata search."
       }
     },
     "layer": {
@@ -389,10 +389,7 @@
         "OL 122/750/30"
       ],
       "realEstateUnitIdentifier": "Property identifier search, type in the format 'aa-bb-cc-d' or 'aaa-bbb-cc-ddd'.",
-      "realEstateUnitIdentifierExamples": [
-        "91-17-16-1",
-        "091-017-16-001"
-      ],
+      "realEstateUnitIdentifierExamples": ["91-17-16-1", "091-017-16-001"],
       "example": "For example,",
       "toastTip": "Did you know that you can save the geometry that was placed on the map from a track and road search?",
       "toastTipContent": "You can save the geometry through the save icon on the left side of the page, from another tab.",
@@ -439,7 +436,7 @@
       "layerVisible": "Layer visible",
       "zoomInToShowLayer": "Zoom in to see the map layer",
       "zoomOutToShowLayer": "Zoom out to see the map layer",
-      "toShowLayer" : "to see the map layer",
+      "toShowLayer": "to see the map layer",
       "opacity": "Transparency"
     },
     "customLayerInfo": {
