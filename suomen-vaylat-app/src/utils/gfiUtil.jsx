@@ -228,7 +228,7 @@ const getCodeValuePropertyOperator = (property, operator, value, codeValues, fil
   }
 
   if (codeValueKeys.length === 0) {
-    return filterType === 'number' ? noResultsSearchNumber(property, Object.keys(codeValues)) : noResultsSearchString(property, codeValueKeys);
+    return filterType === 'number' ? noResultsSearchNumber(property, Object.keys(codeValues)) : noResultsSearchString(property, Object.keys(codeValues));
   } else {
     // is the type number or string
     return filterType === 'number' ? resultsSearchNumber(property, codeValueKeys) : resultsSearchString(property, codeValueKeys);
