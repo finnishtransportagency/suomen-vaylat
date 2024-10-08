@@ -1,6 +1,6 @@
 {
   "name": "suomen-vaylat-app",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "private": true,
   "dependencies": {
     "@emotion/styled": "^11.11.0",
