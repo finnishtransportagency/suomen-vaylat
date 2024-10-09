@@ -81,7 +81,7 @@ const StyledCopiedToClipboardText = styled(motion.span)`
     color: ${props => props.theme.colors.mainColor1};
 `;
 
-export const StyledShareDescription = ({currentZoomLevel, selectedLayers, center, lang, hasThemeShare}) => {
+export const StyledShareDescription = ({ currentZoomLevel, selectedLayers, center, lang, hasThemeShare }) => {
     const stringArray = [];
 
     if (!hasThemeShare) {
@@ -148,7 +148,7 @@ export const ShareWebSitePopup = () => {
     const [isCopied, setIsCopied] = useState(false);
 
     const getMapLayerStyle = (layer) => {
-        const legend = legends.filter((l) => { return l.layerId === layer.id;});
+        const legend = legends.filter((l) => { return l.layerId === layer.id; });
         if (legend.length > 0) {
             return legend[0].legendStyle ? legend[0].legendStyle : 'default';
         }
@@ -159,7 +159,7 @@ export const ShareWebSitePopup = () => {
     selectedLayers.forEach((l) => {
         mapLayers += l.id + '+' + l.opacity + '+' + getMapLayerStyle(l) + '++';
     });
-    mapLayers = mapLayers.substring(0, mapLayers.length-2);
+    mapLayers = mapLayers.substring(0, mapLayers.length - 2);
 
     // Replace link placeholders to correct values
     let url = shareUrl.replace('{zoom}', currentZoomLevel);
@@ -175,34 +175,34 @@ export const ShareWebSitePopup = () => {
     const shareIconSize = 48;
     const inputRef = useRef(null);
 
-    const shareIconStyle= {margin: "8px", filter: "drop-shadow( 2px 2px 4px #0000004d)"};
+    const shareIconStyle = { margin: "8px", filter: "drop-shadow( 2px 2px 4px #0000004d)" };
 
     return (
-            <StyledContainer>
-                <StyledShareDescription
-                    currentZoomLevel={currentZoomLevel}
-                    selectedLayers={selectedLayers}
-                    center={center}
-                    lang={strings.getLanguage()}
-                    hasThemeShare={hasThemeShare}
-                />
-                <StyledInput value={url} ref={inputRef} readOnly />
-                <AnimatePresence>
-                    {isCopied &&
-                        <StyledCopiedToClipboardText
-                                    initial={{ opacity: 0 }}
-                                    animate={{ opacity: 1 }}
-                                    exit={{ opacity: 0 }}
-                                    transition={{
-                                        duration: 0.3,
-                                        type: "tween"
-                                    }}
-                                >
-                                    {strings.share.shareTexts.copiedToClipboard}
-                        </StyledCopiedToClipboardText>
-                    }
-                </AnimatePresence>
-                <StyledShareButtonsContainer>
+        <StyledContainer>
+            <StyledShareDescription
+                currentZoomLevel={currentZoomLevel}
+                selectedLayers={selectedLayers}
+                center={center}
+                lang={strings.getLanguage()}
+                hasThemeShare={hasThemeShare}
+            />
+            <StyledInput value={url} ref={inputRef} readOnly />
+            <AnimatePresence>
+                {isCopied &&
+                    <StyledCopiedToClipboardText
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{
+                            duration: 0.3,
+                            type: "tween"
+                        }}
+                    >
+                        {strings.share.shareTexts.copiedToClipboard}
+                    </StyledCopiedToClipboardText>
+                }
+            </AnimatePresence>
+            <StyledShareButtonsContainer>
                 <ReactTooltip backgroundColor={theme.colors.mainColor1} disable={isMobile} id='clipboard' place='bottom' type='dark' effect='float'>
                     <span>{strings.share.tooltips.clipboard}</span>
                 </ReactTooltip>
@@ -215,11 +215,11 @@ export const ShareWebSitePopup = () => {
                 </ReactTooltip>
 
                 <ReactTooltip backgroundColor={theme.colors.mainColor1} disable={isMobile} id='twitter' place='bottom' type='dark' effect='float'>
-                <span>{strings.share.tooltips.twitter}</span>
+                    <span>{strings.share.tooltips.twitter}</span>
                 </ReactTooltip>
 
                 <ReactTooltip backgroundColor={theme.colors.mainColor1} disable={isMobile} id='linkedin' place='bottom' type='dark' effect='float'>
-                <span>{strings.share.tooltips.linkedin}</span>
+                    <span>{strings.share.tooltips.linkedin}</span>
                 </ReactTooltip>
 
                 <ReactTooltip backgroundColor={theme.colors.mainColor1} disable={isMobile} id='whatsapp' place='bottom' type='dark' effect='float'>
@@ -229,37 +229,37 @@ export const ShareWebSitePopup = () => {
                 <ReactTooltip backgroundColor={theme.colors.mainColor1} disable={isMobile} id='telegram' place='bottom' type='dark' effect='float'>
                     <span>{strings.share.tooltips.telegram}</span>
                 </ReactTooltip>
-                    <CopyToClipboard text={url} onCopy={() => { setIsCopied(true); }} id="share-website-clipboard">
-                        <StyledCopyClipboardButton
-                            onClick={() => {
-                                inputRef.current.select();
-                            }}
-                            data-tip data-for='clipboard'
-                        >
-                            <StyledClipboardIcon>
-                                <FontAwesomeIcon icon={faCopy} />
-                            </StyledClipboardIcon>
-                        </StyledCopyClipboardButton>
-                    </CopyToClipboard>
-                    <EmailShareButton url={url} subject={title} body={emailBody} data-tip data-for='email'>
-                        <EmailIcon round={true} size={shareIconSize} style={shareIconStyle} />
-                    </EmailShareButton>
-                    <FacebookShareButton url={url} quote={title} data-tip data-for='facebook'>
-                        <FacebookIcon round={true} size={shareIconSize} style={shareIconStyle}/>
-                    </FacebookShareButton>
-                    <TwitterShareButton url={url} title={title} data-tip data-for='twitter'>
-                        <TwitterIcon round={true} size={shareIconSize} style={shareIconStyle}/>
-                    </TwitterShareButton>
-                    <LinkedinShareButton url={url} data-tip data-for='linkedin'>
-                        <LinkedinIcon round={true} size={shareIconSize} style={shareIconStyle}/>
-                    </LinkedinShareButton>
-                    <WhatsappShareButton url={url} title={title} separator=': ' data-tip data-for='whatsapp'>
-                        <WhatsappIcon round={true} size={shareIconSize} style={shareIconStyle}/>
-                    </WhatsappShareButton>
-                    <TelegramShareButton url={url} title={title} data-tip data-for='telegram'>
-                        <TelegramIcon round={true} size={shareIconSize} style={shareIconStyle}/>
-                    </TelegramShareButton>
-                </StyledShareButtonsContainer>
-            </StyledContainer>
+                <CopyToClipboard text={url} onCopy={() => { setIsCopied(true); }} id="share-website-clipboard">
+                    <StyledCopyClipboardButton
+                        onClick={() => {
+                            inputRef.current.select();
+                        }}
+                        data-tip data-for='clipboard'
+                    >
+                        <StyledClipboardIcon>
+                            <FontAwesomeIcon icon={faCopy} />
+                        </StyledClipboardIcon>
+                    </StyledCopyClipboardButton>
+                </CopyToClipboard>
+                <EmailShareButton url={url} subject={title} body={emailBody} data-tip data-for='email'>
+                    <EmailIcon round={true} size={shareIconSize} style={shareIconStyle} />
+                </EmailShareButton>
+                <FacebookShareButton url={url} quote={title} data-tip data-for='facebook'>
+                    <FacebookIcon round={true} size={shareIconSize} style={shareIconStyle} />
+                </FacebookShareButton>
+                <TwitterShareButton url={url} title={title} data-tip data-for='twitter'>
+                    <TwitterIcon round={true} size={shareIconSize} style={shareIconStyle} />
+                </TwitterShareButton>
+                <LinkedinShareButton url={url} data-tip data-for='linkedin'>
+                    <LinkedinIcon round={true} size={shareIconSize} style={shareIconStyle} />
+                </LinkedinShareButton>
+                <WhatsappShareButton url={url} title={title} separator=': ' data-tip data-for='whatsapp'>
+                    <WhatsappIcon round={true} size={shareIconSize} style={shareIconStyle} />
+                </WhatsappShareButton>
+                <TelegramShareButton url={url} title={title} data-tip data-for='telegram'>
+                    <TelegramIcon round={true} size={shareIconSize} style={shareIconStyle} />
+                </TelegramShareButton>
+            </StyledShareButtonsContainer>
+        </StyledContainer>
     );
 };
