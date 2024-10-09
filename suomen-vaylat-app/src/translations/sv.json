@@ -1049,17 +1049,23 @@
     "shareTexts": {
       "title": "Suomen Väylät - kartlänk",
       "emailBody": "Kartlänk:",
-      "copiedToClipboard": "Kopierat till urklipp"
+      "copiedToClipboard": "Kopierat till urklipp",
+      "linkTitle": "Dela länk",
+      "descTitle": "Delade funktioner"
     },
     "shareDescriptions": {
-      "chosenContent": "valda lager",
-      "contentTransparency": "lager transparens",
-      "currentZoomLevel": "zoom-nivå",
-      "center": "centrering",
+      "currentZoomLevel": "Zoom-nivå",
+      "center": "Centering",
       "and": "och",
       "share": "Dela med sig",
-      "lang": "språk",
-      "theme": "tema"
+      "lang": "Språk",
+      "theme": "Tema",
+      "selectedLayers": "Valda kartlager",
+      "languages": {
+        "fi": "Finska",
+        "en": "Engelska",
+        "sv": "Svenska"
+      }
     },
     "tooltips": {
       "clipboard": "Kopiera till Urklipp",

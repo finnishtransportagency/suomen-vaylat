@@ -1049,17 +1049,23 @@
     "shareTexts": {
       "title": "Suomen Väylät - map link",
       "emailBody": "Map link:",
-      "copiedToClipboard": "Copied to clipboard"
+      "copiedToClipboard": "Copied to clipboard",
+      "linkTitle": "Shared link",
+      "descTitle": "Shared attributes"
     },
     "shareDescriptions": {
-      "chosenContent": "selected layers",
-      "contentTransparency": "layer transparencies",
-      "currentZoomLevel": "zoom-level",
-      "center": "centering",
+      "currentZoomLevel": "Zoom-level",
+      "center": "Center point",
       "and": "and",
       "share": "Share",
-      "lang": "language",
-      "theme": "theme"
+      "lang": "Language",
+      "theme": "Theme",
+      "selectedLayers": "Selected layers",
+      "languages": {
+        "fi": "Finnish",
+        "en": "English",
+        "sv": "Swedish"
+      }
     },
     "tooltips": {
       "clipboard": "Copy to clipboard",

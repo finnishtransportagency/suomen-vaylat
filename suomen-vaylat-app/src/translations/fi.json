@@ -1087,17 +1087,23 @@
     "shareTexts": {
       "title": "Suomen Väylät - karttalinkki",
       "emailBody": "Karttalinkki:",
-      "copiedToClipboard": "Kopioitu leikepöydälle"
+      "copiedToClipboard": "Kopioitu leikepöydälle",
+      "linkTitle": "Jakolinkki",
+      "descTitle": "Jaettavat ominaisuudet"
     },
     "shareDescriptions": {
-      "chosenContent": "valitut aineistot",
-      "contentTransparency": "aineistojen läpinäkyvyys",
-      "currentZoomLevel": "zoom-taso",
-      "center": "kohdennus",
+      "currentZoomLevel": "Zoom-taso",
+      "center": "Keskipiste",
       "and": "ja",
       "share": "Jaa",
-      "lang": "kieli",
-      "theme": "teema"
+      "lang": "Kieli",
+      "theme": "Teema",
+      "selectedLayers": "Valitut tasot",
+      "languages": {
+        "fi": "Suomi",
+        "en": "Englanti",
+        "sv": "Ruotsi"
+      }
     },
     "tooltips": {
       "clipboard": "Kopioi leikepöydälle",

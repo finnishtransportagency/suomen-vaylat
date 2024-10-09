@@ -22,7 +22,7 @@ const StyledClipboardIcon = styled.div`
 `;
 
 const StyledContainer = styled.div`
-    text-align: center;
+    text-align: start;
     margin: 18px;
 `;
 
@@ -31,15 +31,6 @@ const StyledInput = styled.textarea`
     height: 80px;
     resize: none;
     border: none;
-`;
-
-const StyledShareDescriptionWrapper = styled.div`
-    width: 100%;
-    // height: 80px;
-    margin-bottom: 25px;
-    resize: none;
-    border: none;
-    text-align: left;
 `;
 
 const StyledShareButtonsContainer = styled.div`
@@ -73,61 +64,98 @@ const StyledCopyClipboardButton = styled.button`
     };
 `;
 
-const SharePageWord = styled.p`
-    margin: 0;
-`;
-
 const StyledCopiedToClipboardText = styled(motion.span)`
     color: ${props => props.theme.colors.mainColor1};
+`
+
+const StyledTitle = styled.div`
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 1em;
+`
+
+const StyledTable = styled.table`
+    margin-bottom: 1em;
+  font-family: arial, sans-serif;
+  border: none;
+  width: 100%;
+  td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+  vertical-align: baseline;
+  font-weight: 500;
+}
 `;
 
-export const StyledShareDescription = ({ currentZoomLevel, selectedLayers, center, lang, hasThemeShare }) => {
-    const stringArray = [];
-
+export const StyledShareDescription = ({ currentZoomLevel, selectedLayers, center, lang, hasThemeShare, selectedTheme }) => {
     if (!hasThemeShare) {
-        if (lang) {
-            stringArray.push(strings.share.shareDescriptions.lang);
-        }
-
-        if (currentZoomLevel !== null || currentZoomLevel !== undefined) {
-            stringArray.push(strings.share.shareDescriptions.currentZoomLevel);
-        }
-
-        if (center) {
-            stringArray.push(strings.share.shareDescriptions.center);
-        }
-
-        if (selectedLayers) {
-            stringArray.push(strings.share.shareDescriptions.chosenContent);
-            stringArray.push(strings.share.shareDescriptions.contentTransparency);
-        }
+        return (
+                <StyledTable>
+                    {lang &&
+                        <tr>
+                            <td>{strings.share.shareDescriptions.lang}</td>
+                            <td>{strings.share.shareDescriptions.languages[lang]}</td>
+                        </tr>
+                    }
+                    {(currentZoomLevel !== null || currentZoomLevel !== undefined) &&
+                        <tr>
+                            <td>{strings.share.shareDescriptions.currentZoomLevel}</td>
+                            <td>{currentZoomLevel}</td>
+                        </tr>
+                    }
+                    {center &&
+                        <tr>
+                            <td>{strings.share.shareDescriptions.center}</td>
+                            <td>
+                                <div>x: {center.x}</div>
+                                <div>y: {center.y}</div>
+                            </td>
+                        </tr>
+                    }
+                    {selectedLayers &&
+                        <tr>
+                            <td>{strings.share.shareDescriptions.selectedLayers}</td>
+                            <td>
+                                {selectedLayers.map(layer => {
+                                    return <div>{layer.name}</div>
+                                })}
+                            </td>
+                        </tr>
+                    }
+                </StyledTable>
+        )
     } else {
-        if (lang) {
-            stringArray.push(strings.share.shareDescriptions.lang);
-        }
-
-        if (currentZoomLevel !== null || currentZoomLevel !== undefined) {
-            stringArray.push(strings.share.shareDescriptions.currentZoomLevel);
-        }
-
-        if (center) {
-            stringArray.push(strings.share.shareDescriptions.center);
-        }
-
-        stringArray.push('teema');
+        return (
+                <StyledTable>
+                    {lang &&
+                        <tr>
+                            <td>{strings.share.shareDescriptions.lang}</td>
+                            <td>{strings.share.shareDescriptions.languages[lang]}</td>
+                        </tr>
+                    }
+                    {(currentZoomLevel !== null || currentZoomLevel !== undefined) &&
+                        <tr>
+                            <td>{strings.share.shareDescriptions.currentZoomLevel}</td>
+                            <td>{currentZoomLevel}</td>
+                        </tr>
+                    }
+                    {center &&
+                        <tr>
+                            <td>{strings.share.shareDescriptions.center}</td>
+                            <td>
+                                <div>x: {center.x}</div>
+                                <div>y: {center.y}</div>
+                            </td>
+                        </tr>
+                    }
+                    <tr>
+                            <td>{strings.share.shareDescriptions.theme}</td>
+                            <td>{selectedTheme.locale[lang].name}</td>
+                        </tr>
+                </StyledTable>
+        )
     }
-
-    const makeString = (stringArray) => {
-        return strings.share.shareDescriptions.share + ' ' + stringArray.reduce(function (p, d, i) {
-            return p + (i === stringArray.length - 1 ? ' ' + strings.share.shareDescriptions.and + ' ' : ', ') + d;
-        }) + '.';
-    }
-
-    return (
-        <StyledShareDescriptionWrapper>
-            <SharePageWord>{makeString(stringArray)}</SharePageWord>
-        </StyledShareDescriptionWrapper>
-    )
 }
 
 /**
@@ -138,7 +166,8 @@ export const ShareWebSitePopup = () => {
         center,
         currentZoomLevel,
         selectedLayers,
-        legends
+        legends,
+        selectedTheme
     } = useAppSelector(state => state.rpc);
 
     const {
@@ -179,13 +208,16 @@ export const ShareWebSitePopup = () => {
 
     return (
         <StyledContainer>
+            <StyledTitle>{strings.share.shareTexts.descTitle}</StyledTitle>
             <StyledShareDescription
                 currentZoomLevel={currentZoomLevel}
                 selectedLayers={selectedLayers}
                 center={center}
                 lang={strings.getLanguage()}
                 hasThemeShare={hasThemeShare}
+                selectedTheme={selectedTheme}
             />
+            <StyledTitle>{strings.share.shareTexts.linkTitle}</StyledTitle>
             <StyledInput value={url} ref={inputRef} readOnly />
             <AnimatePresence>
                 {isCopied &&
