@@ -1050,8 +1050,8 @@
       "title": "Suomen Väylät - map link",
       "emailBody": "Map link:",
       "copiedToClipboard": "Copied to clipboard",
-      "linkTitle": "Shared link",
-      "descTitle": "Shared attributes"
+      "linkTitle": "Shared link:",
+      "descTitle": "Shared attributes:"
     },
     "shareDescriptions": {
       "currentZoomLevel": "Zoom-level",
