@@ -80,7 +80,7 @@ const FeatureSearch = ({
                     onChange={e => setSearchValue(e.target.value)}
                     onKeyPress={e => {
                         if (e.key === 'Enter') {
-                            handleFeatureSearch(e.target.value);
+                            handleFeatureSearch(e.target.value.trim());
                         }
                     }}
                 />

@@ -235,9 +235,7 @@ const Search = () => {
                 handleMetadataSearch(searchValue);
                 break;
             case 'feature':
-                if (validateFeatureSearch(searchValue, setFeatureErrors)) {
-                    handleFeatureSearch(searchValue);
-                }
+                handleFeatureSearch(searchValue);
                 break;
             default:
                 break;
@@ -338,65 +336,67 @@ const Search = () => {
     };
 
     const handleFeatureSearch = (searchValue, startIndex = 0, layerId = -1) => {
-        const handleSearchResponse = (data) => {
-            if (Object.keys(data).length > 0 && Object.keys(data.gfi).length > 0) {
-                setIsSearching(false);
-                store.dispatch(setSearchOn(false));
+        if (validateFeatureSearch(searchValue, setFeatureErrors)) {
+            const handleSearchResponse = (data) => {
+                if (Object.keys(data).length > 0 && Object.keys(data.gfi).length > 0) {
+                    setIsSearching(false);
+                    store.dispatch(setSearchOn(false));
 
-                if (startIndex !== 0) {
-                    // Update features for "more results"
-                    let oldFeatureSearchResults = JSON.parse(JSON.stringify(featureSearchResults));
-                        let newFeatureSearchResults = { ...data.gfi }
-                        const contentIndex = oldFeatureSearchResults.map(gfi => gfi.content.layerId).indexOf(data.gfi.content.layerId);
-                        const updatedFeatures = oldFeatureSearchResults[contentIndex].content.geojson.features.concat(data.gfi.content.geojson.features);
-                        newFeatureSearchResults.content.geojson.features = updatedFeatures;
+                    if (startIndex !== 0) {
+                        // Update features for "more results"
+                        let oldFeatureSearchResults = JSON.parse(JSON.stringify(featureSearchResults));
+                            let newFeatureSearchResults = { ...data.gfi }
+                            const contentIndex = oldFeatureSearchResults.map(gfi => gfi.content.layerId).indexOf(data.gfi.content.layerId);
+                            const updatedFeatures = oldFeatureSearchResults[contentIndex].content.geojson.features.concat(data.gfi.content.geojson.features);
+                            newFeatureSearchResults.content.geojson.features = updatedFeatures;
 
-                        const updatedMatchedKeys = mergeMatchedKeys(oldFeatureSearchResults[contentIndex].content.geojson.matchedFeatures, data.gfi.content.geojson.matchedFeatures);
-                        newFeatureSearchResults.content.geojson.matchedFeatures = updatedMatchedKeys;
+                            const updatedMatchedKeys = mergeMatchedKeys(oldFeatureSearchResults[contentIndex].content.geojson.matchedFeatures, data.gfi.content.geojson.matchedFeatures);
+                            newFeatureSearchResults.content.geojson.matchedFeatures = updatedMatchedKeys;
 
-                        oldFeatureSearchResults[contentIndex] = newFeatureSearchResults;
+                            oldFeatureSearchResults[contentIndex] = newFeatureSearchResults;
 
-                        store.dispatch(setFeatureSearchResults(oldFeatureSearchResults));
+                            store.dispatch(setFeatureSearchResults(oldFeatureSearchResults));
+                    } else {
+                        store.dispatch(pushToFeatureSearchResults(data.gfi));
+                    }
                 } else {
-                    store.dispatch(pushToFeatureSearchResults(data.gfi));
+                    setIsSearching(false);
+                    store.dispatch(setSearchOn(false));
                 }
-            } else {
+                setLastSearchValue(searchValue);
+            };
+        
+            const handleSearchError = (layerIdentifier, error) => {
                 setIsSearching(false);
                 store.dispatch(setSearchOn(false));
+                setLastSearchValue(searchValue);
+        
+                toast.error(`${strings.search.feature.errorLayerStart}${layerIdentifier}${strings.search.feature.errorLayerEnd}`, {
+                    position: "top-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "colored",
+                    transition: Slide
+                });
+            };
+        
+            setIsSearching(true);
+            store.dispatch(setSearchOn(true));
+            startIndex === 0 && store.dispatch(resetFeatureSearchResults());
+
+            const searchLayer = layerId !== -1 ? layerId : selectedLayersByType.mapLayers[0]?.id;
+            const layerIdentifier = layerId !== -1 ? layerId : selectedLayersByType.mapLayers[0]?.name;
+
+            if (searchLayer) {
+                channel.searchFeatures([[searchLayer], searchValue, startIndex], 
+                    (data) => handleSearchResponse(data, searchLayer), 
+                    (error) => handleSearchError(layerIdentifier, error)
+                );
             }
-            setLastSearchValue(searchValue);
-        };
-    
-        const handleSearchError = (layerIdentifier, error) => {
-            setIsSearching(false);
-            store.dispatch(setSearchOn(false));
-            setLastSearchValue(searchValue);
-    
-            toast.error(`${strings.search.feature.errorLayerStart}${layerIdentifier}${strings.search.feature.errorLayerEnd}`, {
-                position: "top-center",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "colored",
-                transition: Slide
-            });
-        };
-    
-        setIsSearching(true);
-        store.dispatch(setSearchOn(true));
-        startIndex === 0 && store.dispatch(resetFeatureSearchResults());
-
-        const searchLayer = layerId !== -1 ? layerId : selectedLayersByType.mapLayers[0]?.id;
-        const layerIdentifier = layerId !== -1 ? layerId : selectedLayersByType.mapLayers[0]?.name;
-
-        if (searchLayer) {
-            channel.searchFeatures([[searchLayer], searchValue, startIndex], 
-                (data) => handleSearchResponse(data, searchLayer), 
-                (error) => handleSearchError(layerIdentifier, error)
-            );
         }
     };
 
@@ -714,7 +714,7 @@ const Search = () => {
     
     const validateFeatureSearch = useCallback((searchValue, setFeatureErrors) => {
         const newErrors = [];
-        const regex = /[^A-Za-z0-9äöåÄÖÅ ]/;
+        const regex = /[^A-Za-z0-9äöåÄÖÅ -,./()]/;
         if (searchValue.length < 3) {
             newErrors.push("length")
         }

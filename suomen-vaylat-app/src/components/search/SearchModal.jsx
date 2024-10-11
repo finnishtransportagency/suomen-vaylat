@@ -845,7 +845,7 @@ const SearchModal = ({
                         onChange={(e) => setSearchValue(e.target.value) }
                         onKeyPress={e => {
                             if (e.key === 'Enter') {
-                                handleSeach(searchValue);
+                                handleSeach(searchValue.trim());
                             }
                         }}
                         className={featureErrors.length > 0 ? 'error' : ''}
