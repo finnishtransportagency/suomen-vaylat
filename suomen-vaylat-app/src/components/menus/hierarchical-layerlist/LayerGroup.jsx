@@ -435,8 +435,8 @@ export const LayerGroup = ({ group, layers, hasChildren }) => {
     };
 
     const setGroupLayersVisible = (boolean) => {
-      group.groups.forEach((group) => {
-        group.layers.forEach((layer) => {
+      group.groups?.forEach((group) => {
+        group.layers?.forEach((layer) => {
           channel.postRequest("MapModulePlugin.MapLayerVisibilityRequest", [
             layer,
             boolean,
