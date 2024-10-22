@@ -606,13 +606,14 @@ const Content = () => {
             resize={false}
             backdrop={true} /* Is backdrop enabled (true) or disabled (false) */
             fullScreenOnMobile={
-              false
+              true
             } /* Scale modal full width / height when using mobile device */
             titleIcon={faBullhorn} /* Use icon on title or null */
             title={
               announcements[currentAnnouncement].title
             } /* Modal header title */
             type={"announcement"} /* Modal type */
+            overflow={"auto"}
             closeAction={
               closeAnnouncement
             } /* Action when pressing modal close button or backdrop */
