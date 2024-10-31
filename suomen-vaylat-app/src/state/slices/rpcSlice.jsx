@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { Logger } from "../../utils/logger";
-import { act } from "react-dom/test-utils";
+import { Slide, toast } from "react-toastify";
+import strings from '../../translations';
 
 const LOG = new Logger("RPCSlice");
 
@@ -568,6 +569,17 @@ export const rpcSlice = createSlice({
             );
           },
           (err) => {
+            toast.error(`${strings.metadata.error}`, {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: false,
+                progress: undefined,
+                theme: "colored",
+                transition: Slide
+            });
             if (typeof action.payload.errorHandler === "function") {
               action.payload.errorHandler(err);
               LOG.warn("metadata get error", err);

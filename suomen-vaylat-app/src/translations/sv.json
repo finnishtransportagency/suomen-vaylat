@@ -493,6 +493,7 @@
   },
   "metadata": {
     "title": "{0} -kartlager metadata",
+    "error": "metadata hittades inte",
     "heading": {
       "abstractTextService": "Sammanfattning text (data)",
       "abstractTextData": "Sammanfattning text (tjänst)",

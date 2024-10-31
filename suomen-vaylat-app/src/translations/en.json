@@ -493,6 +493,7 @@
   },
   "metadata": {
     "title": "{0} -map layer metadata",
+    "error": "Metadata not found",
     "heading": {
       "abstractTextService": "Abstract text (data)",
       "abstractTextData": "Abstract text (service)",
