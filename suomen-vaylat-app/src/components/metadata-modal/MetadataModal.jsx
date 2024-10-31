@@ -28,104 +28,134 @@ import Classifications from './Components/Classifications';
 import UseLimitations from './Components/UseLimitations';
 import QualityTabDataQualities from './Components/QualityTabDataQualities';
 
-
 const StyledContent = styled.div`
-    height: 100%;
-    padding: 16px;
-    overflow: auto;
-    @media ${props => props.theme.device.mobileL} {
-    };
+  height: 100%;
+  padding: 16px;
+  overflow: auto;
+  @media ${props => props.theme.device.mobileL} {
+  };
 `;
 
-export const MetadataModal = ({
-  metadata
-}) => {
+// Helper function to get deeply nested values with a fallback
+const getNestedValue = (obj, path, fallback = "") => {
+  return path.reduce((acc, key) => (acc && acc[key] !== undefined ? acc[key] : fallback), obj);
+};
+
+export const MetadataModal = ({ metadata }) => {
   const lang = useAppSelector((state) => state.language);
-  useAppSelector((state) => state.language);
   const [uuid, setUuid] = useState(true);
 
-  const identification = (metadata.data && metadata.data.identifications) ? metadata.data.identifications[0] : {};
-  const layerDesc = (metadata.layer && metadata.layer.config && metadata.layer.config.PDPUpdateDate) ? metadata.layer.config.PDPUpdateDate[lang.current] : "";
+  const identification = metadata.data.identifications ? metadata.data.identifications[0] : null;
+  const layerDesc = getNestedValue(metadata, ['layer', 'config', 'PDPUpdateDate', lang.current], "");
 
+  // Synchronize uuid state with metadata
   if (metadata.uuid !== uuid) {
     setUuid(metadata.uuid);
-  };
+  }
 
   return (
     <StyledContent>
-      <MetadataGraphic identification={identification}></MetadataGraphic>
-      <Citation identification={identification}></Citation>
+      {identification && <MetadataGraphic identification={identification} />}
+      {identification && <Citation identification={identification} />}
+      
       <HeaderAndParagraph
-        visible={layerDesc.length > 0}
+        visible={Boolean(layerDesc)}
         header={strings.metadata.heading.updateDate}
         text={layerDesc}
       />
       <HeaderAndParagraph
-        visible={identification.abstractText.length > 0}
-        header={(identification.type === 'data' ? strings.metadata.heading.abstractTextData : strings.metadata.heading.abstractTextService)}
-        text={identification.abstractText}
+        visible={Boolean(identification?.abstractText)}
+        header={
+          identification?.type === 'data' 
+            ? strings.metadata.heading.abstractTextData 
+            : strings.metadata.heading.abstractTextService
+        }
+        text={identification?.abstractText}
       />
       <HeaderAndParagraph
-        visible={metadata?.data?.metadataDateStamp?.length > 0}
+        visible={Boolean(metadata.data.metadataDateStamp)}
         header={strings.metadata.heading.metadataDateStamp}
-        text={metadata?.data?.metadataDateStamp || ""}
-        momentFormat={'DD.MM.YYYY hh:mm:ss'}
+        text={metadata.data.metadataDateStamp || ""}
+        momentFormat="DD.MM.YYYY hh:mm:ss"
       />
-      <OnlineResources onlineResources={metadata?.data?.onlineResources || []} />
-      <Languages identification={identification} />
-      <TopicCategories identification={identification} />
-      <TemporalExtents identification={identification} />
-      <LineageStatements lineageStatements={metadata?.data?.lineageStatements || []} />
-      <SpatialResolutions identification={identification} />
+
+      {metadata.data.onlineResources && (
+        <OnlineResources onlineResources={metadata.data.onlineResources} />
+      )}
+      {identification && <Languages identification={identification} />}
+      {identification && <TopicCategories identification={identification} />}
+      {identification && <TemporalExtents identification={identification} />}
+      {metadata.data.lineageStatements && (
+        <LineageStatements lineageStatements={metadata.data.lineageStatements} />
+      )}
+      {identification && <SpatialResolutions identification={identification} />}
+      
       <ResponsibleParties
-        visible={identification.responsibleParties && identification.responsibleParties.length > 0}
+        visible={Boolean(identification?.responsibleParties?.length)}
         header={strings.metadata.heading.responsibleParty}
-        responsibleParties={identification.responsibleParties} />
-      <CitationDate identification={identification} />
-      <ScopeCodes scopeCodes={metadata?.data?.scopeCodes || []} />
-      <ResourceIdentifiers identification={identification} />
-      <OperatesOn identification={identification} />
-      <ServiceType identification={identification} />
-      <DescriptiveKeywords identification={identification} />
-      <DataQualities dataQualities={metadata?.data?.dataQualities || []} />
-      <AccessConstraints identification={identification} />
-      <OtherConstraints identification={identification} />
-      <Classifications identification={identification} />
-      <UseLimitations identification={identification} />
-      <DistributionFormats distributionFormats={metadata?.data?.distributionFormats || []} />
-      <SpatialRepresentationTypes identification={identification} />
+        responsibleParties={identification?.responsibleParties || []}
+      />
+
+      {identification && <CitationDate identification={identification} />}
+      {metadata.data.scopeCodes && <ScopeCodes scopeCodes={metadata.data.scopeCodes} />}
+      {identification && <ResourceIdentifiers identification={identification} />}
+      {identification && <OperatesOn identification={identification} />}
+      {identification && <ServiceType identification={identification} />}
+      {identification && <DescriptiveKeywords identification={identification} />}
+      {metadata.data.dataQualities && (
+        <DataQualities dataQualities={metadata.data.dataQualities} />
+      )}
+      {identification && <AccessConstraints identification={identification} />}
+      {identification && <OtherConstraints identification={identification} />}
+      {identification && <Classifications identification={identification} />}
+      {identification && <UseLimitations identification={identification} />}
+      {metadata.data.distributionFormats && (
+        <DistributionFormats distributionFormats={metadata.data.distributionFormats} />
+      )}
+      {identification && <SpatialRepresentationTypes identification={identification} />}
+
       <HeaderAndParagraph
-        visible={metadata?.data?.fileIdentifier && metadata?.data?.fileIdentifier?.length > 0}
+        visible={Boolean(metadata.data.fileIdentifier)}
         header={strings.metadata.heading.fileIdentifier}
-        text={metadata.data.fileIdentifier}
+        text={metadata.data.fileIdentifier || ""}
       />
       <HeaderAndParagraph
-        visible={metadata?.data?.metadataStandardName && metadata?.data?.metadataStandardName?.length > 0}
+        visible={Boolean(metadata.data.metadataStandardName)}
         header={strings.metadata.heading.metadataStandardName}
-        text={metadata?.data?.metadataStandardName || ""}
+        text={metadata.data.metadataStandardName || ""}
       />
       <HeaderAndParagraph
-        visible={metadata?.data?.metadataStandardVersion && metadata?.data?.metadataStandardVersion?.length > 0}
+        visible={Boolean(metadata.data.metadataStandardVersion)}
         header={strings.metadata.heading.metadataStandardVersion}
-        text={metadata?.data?.metadataStandardVersion || ""}
+        text={metadata.data.metadataStandardVersion || ""}
       />
       <HeaderAndParagraph
-        visible={metadata?.data?.metadataLanguage && metadata?.data?.metadataLanguage?.length > 0}
+        visible={Boolean(metadata.data.metadataLanguage)}
         header={strings.metadata.heading.metadataLanguage}
-        text={strings.metadata.languages[metadata?.data?.metadataLanguage] || metadata?.data?.metadataLanguage || ""}
+        text={
+          getNestedValue(strings, ["metadata", "languages", metadata.data.metadataLanguage], metadata.data.metadataLanguage)
+        }
       />
       <HeaderAndParagraph
-        visible={metadata?.data?.metadataCharacterSet && metadata?.data?.metadataCharacterSet?.length > 0}
+        visible={Boolean(metadata.data.metadataCharacterSet)}
         header={strings.metadata.heading.metadataCharacterSet}
-        title={(strings.metadata.codeLists['gmd:MD_CharacterSetCode'][metadata?.data?.metadataCharacterSet] || { description: metadata?.data?.metadataCharacterSet }).description}
-        text={(strings.metadata.codeLists['gmd:MD_CharacterSetCode'][metadata?.data?.metadataCharacterSet] || { label: metadata?.data?.metadataCharacterSet }).label || ""}
+        title={
+          getNestedValue(strings, ["metadata", "codeLists", "gmd:MD_CharacterSetCode", metadata.data.metadataCharacterSet, "description"], metadata.data.metadataCharacterSet)
+        }
+        text={
+          getNestedValue(strings, ["metadata", "codeLists", "gmd:MD_CharacterSetCode", metadata.data.metadataCharacterSet, "label"], "")
+        }
       />
       <ResponsibleParties
-        visible={metadata?.data?.metadataResponsibleParties && metadata?.data?.metadataResponsibleParties?.length > 0}
+        visible={Boolean(metadata.data.metadataResponsibleParties?.length)}
         header={strings.metadata.heading.metadataOrganisation}
-        responsibleParties={metadata?.data?.metadataResponsibleParties || []} />
-      <QualityTabDataQualities dataQualities={metadata?.data?.dataQualities || []} />
+        responsibleParties={metadata.data.metadataResponsibleParties || []}
+      />
+      {metadata.data.dataQualities && (
+        <QualityTabDataQualities dataQualities={metadata.data.dataQualities} />
+      )}
     </StyledContent>
   );
 }
+
 export default MetadataModal;

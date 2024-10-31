@@ -531,6 +531,7 @@
   },
   "metadata": {
     "title": "{0} -karttatason metatiedot",
+    "error": "Metatietoja ei löytynyt",
     "heading": {
       "abstractTextService": "Palvelun tiivistelmä",
       "abstractTextData": "Aineiston tiivistelmä",
