@@ -63,22 +63,6 @@ export const HandleSharedWebSiteLink = () => {
         })
 
         if (activateTheme){
-            channel.getAllLayersSV(function (data) {
-                selectGroup(store, channel, data, activateTheme, null, null);
-                !isMobile && store.dispatch(setIsThemeMenuOpen(true));
-            }, function err() {
-                toast.error(strings.layerlist.errorLoadingLayers, {
-                    position: "top-center",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "colored",
-                    transition: Slide
-                });
-            });
             channel && channel.getAllLayersSV(function (allLayers) {
                 selectGroup(store, channel, allLayers, activateTheme, null, null);
                 !isMobile && store.dispatch(setIsThemeMenuOpen(true));
@@ -99,7 +83,7 @@ export const HandleSharedWebSiteLink = () => {
     }
     // else if mapLayers given, remove all layers and then add wanted layers to map
     else if (channel && maplayers) {
-        store.dispatch(setIsSideMenuOpen(true));
+        !isMobile && store.dispatch(setIsSideMenuOpen(true));
         store.dispatch(setSelectedMapLayersMenuTab(1));
         const layers = maplayers.split('++');
         store.dispatch(removeAllSelectedLayers());
