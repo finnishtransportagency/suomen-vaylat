@@ -385,6 +385,7 @@ export const ThemeLayerList = ({ allLayers, allThemes }) => {
                 return (
                     <>
                         <StyledThemeGroup
+                            key={'stg_' + themeGroupIndex}
                             onClick={() =>
                                 isOpen === themeGroupIndex
                                     ? setIsOpen(null)
@@ -860,7 +861,7 @@ export const ThemeDesc = ({ theme, lang }) => {
                             <ul>
                                 {links.map((link, i) => {
                                     return (
-                                        <li>
+                                        <li key={i}>
                                             <StyledLinkText
                                                 rel="noreferrer"
                                                 target="_blank"

@@ -27,12 +27,12 @@ const StyledContent = styled.div`
     transform: translateX(-50%);
     width: 100%;
     max-width: 312px;
+    height: 3em;
     display: grid;
     gap: 8px;
     margin-top: 16px;
     @media ${props => props.theme.device.mobileL} {
         top: unset;
-        bottom: 0px;
         max-width: 212px;
         margin-top: unset;
         margin-bottom: 8px;
@@ -41,6 +41,7 @@ const StyledContent = styled.div`
 
 const StyledActionButton = styled(motion.div)`
     max-width: 312px;
+    height: 3em;
     padding: .5em;
     display: flex;
     justify-content: space-between;
@@ -58,11 +59,17 @@ const StyledActionButton = styled(motion.div)`
         max-width: 212px;
         height: 40px;
     };
+    ${({ isExpanded }) =>
+        isExpanded &&
+        `
+        height: auto !important;
+    `}
     z-index:100;
 `;
 
 const StyledFilterActionButton = styled(motion.div)`
     max-width: 312px;
+    height: 3em;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -134,19 +141,6 @@ const StyledActionButtonIcon = styled.div`
         svg {
             font-size: 16px;
         };
-    };
-`;
-
-const StyledActionButtonText = styled.div`
-    width: 100%;
-    margin: 0;
-    padding: 0.5em;
-    font-size: 14px;
-    font-weight: 600;
-    user-select: none;
-    text-align: center;
-    @media ${props => props.theme.device.mobileL} {
-        font-size: 12px;
     };
 `;
 
@@ -225,14 +219,56 @@ const addFeaturesToMapParams =
         },
     };
 
+    const StyledContentWrapper = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    ${({ isExpanded }) =>
+        isExpanded &&
+        `
+        height: auto;
+    `}
+`;
+
+const StyledActionButtonText = styled.div`
+    width: 100%;
+    margin: 0;
+    padding: 0.5em;
+    font-size: 14px;
+    font-weight: 600;
+    user-select: none;
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: max-height 0.3s ease;
+
+    ${({ isExpanded }) =>
+        isExpanded &&
+        `
+        white-space: normal;
+        overflow: visible;
+        max-height: none;
+        padding: 0.5em;
+        background: ${props => props.theme.colors.secondaryColorGreen};
+        border-radius: 8px;
+    `}
+
+    @media ${props => props.theme.device.mobileL} {
+        font-size: 12px;
+    }
+`;
+
 const ActionButtons = ({
     closeAction,
     closeActionFilter
 }) => {
 
     const { store } = useContext(ReactReduxContext);
-    
     const [activeGeometries, setActiveGeometries] = useState(true);
+    const [isTextExpanded, setIsTextExpanded] = useState(false); // state to control text expansion
     const lang = strings.getLanguage();
 
     const {
@@ -275,139 +311,117 @@ const ActionButtons = ({
     var filterInfoTitle = "";
     filteringInfo.forEach((fil, index) => {
         const title = fil.layer.title.length > 10 ? fil.layer.title.substring(0, 10) + '... ' : fil.layer.title;
-        index === 0 ? filterInfoTitle += title : filterInfoTitle += ", " + title
-    })
+        index === 0 ? filterInfoTitle += title : filterInfoTitle += ", " + title;
+    });
 
     return (
-            <StyledContent>
-                    <AnimatePresence initial={false}>
-                        { minimizeGfi &&
-
-                            <StyledActionButton
-                                key="gfi_action_button"
-                                type="gfi"
-                                positionTransition
-                                initial={{ y: 50, filter: "blur(10px)", opacity: 0 }}
-                                animate={{ y: 0, filter: "blur(0px)", opacity: 1 }}
-                                exit={{ y: 50, filter: "blur(10px)", opacity: 0 }}
-                                transition={{
-                                    duration: 0.4,
-                                    type: "tween"
-                                }}
+        <StyledContent>
+            <AnimatePresence initial={false}>
+            { minimizeGfi &&
+                <StyledActionButton
+                    key="gfi_action_button"
+                    type="gfi"
+                    positionTransition
+                    initial={{ y: 50, filter: "blur(10px)", opacity: 0 }}
+                    animate={{ y: 0, filter: "blur(0px)", opacity: 1 }}
+                    exit={{ y: 50, filter: "blur(10px)", opacity: 0 }}
+                    transition={{
+                        duration: 0.4,
+                        type: "tween"
+                    }}
+                >
+                    <StyledLeftContent>
+                        <StyledActionButtonIcon>
+                            <FontAwesomeIcon
+                                icon={faMapMarkedAlt}
+                            />
+                        </StyledActionButtonIcon>
+                        <StyledActionButtonText>{strings.gfi.title}</StyledActionButtonText>
+                    </StyledLeftContent>
+                    <StyledRightContent>
+                        <StyledGeometryButton
+                            onClick={handleShowGeometry}
+                        >
+                            <FontAwesomeIcon
+                                icon={faPencilRuler}
+                            />
+                        </StyledGeometryButton>
+                        <StyledExpandButton
+                            onClick={() => store.dispatch(setMinimizeGfi(false))}
+                        >
+                            <FontAwesomeIcon
+                                icon={faExpand}
+                            />
+                        </StyledExpandButton>
+                        <StyledActionButtonClose
+                            onClick={() => closeAction()}
+                        >
+                            <FontAwesomeIcon
+                                icon={faTimes}
+                            />
+                        </StyledActionButtonClose>
+                    </StyledRightContent>
+                </StyledActionButton>
+                }
+                { selectedTheme && selectedTheme !== '' && (
+                    <StyledActionButton
+                        key="theme_action_button"
+                        isExpanded={isTextExpanded}
+                        positionTransition
+                        initial={{ y: 50, filter: "blur(10px)", opacity: 0 }}
+                        animate={{ y: 0, filter: "blur(0px)", opacity: 1 }}
+                        exit={{ y: 50, filter: "blur(10px)", opacity: 0 }}
+                        transition={{
+                            duration: 0.4,
+                            type: "tween"
+                        }}
+                    >
+                        <StyledContentWrapper>
+                            <StyledActionButtonIcon>
+                                <FontAwesomeIcon icon={faMap} />
+                            </StyledActionButtonIcon>
+                            <StyledActionButtonText
+                                isExpanded={isTextExpanded}
+                                onClick={() => setIsTextExpanded(!isTextExpanded)}
                             >
-                                <StyledLeftContent>
-                                    <StyledActionButtonIcon>
-                                        <FontAwesomeIcon
-                                            icon={faMapMarkedAlt}
-                                        />
-                                    </StyledActionButtonIcon>
-                                    <StyledActionButtonText>{strings.gfi.title}</StyledActionButtonText>
-                                </StyledLeftContent>
-                                <StyledRightContent>
-                                    <StyledGeometryButton
-                                        onClick={handleShowGeometry}
-                                    >
-                                        <FontAwesomeIcon
-                                            icon={faPencilRuler}
-                                        />
-                                    </StyledGeometryButton>
-                                    <StyledExpandButton
-                                        onClick={() => store.dispatch(setMinimizeGfi(false))}
-                                    >
-                                        <FontAwesomeIcon
-                                            icon={faExpand}
-                                        />
-                                    </StyledExpandButton>
-                                    <StyledActionButtonClose
-                                        onClick={() => closeAction()}
-                                    >
-                                        <FontAwesomeIcon
-                                            icon={faTimes}
-                                        />
-                                    </StyledActionButtonClose>
-                                </StyledRightContent>
-                            </StyledActionButton>
-                        }
-                        { selectedTheme && selectedTheme !== '' &&
-
-                            <StyledActionButton
-                                key="theme_action_button"
-                                positionTransition
-                                initial={{ y: 50, filter: "blur(10px)", opacity: 0 }}
-                                animate={{ y: 0, filter: "blur(0px)", opacity: 1 }}
-                                exit={{ y: 50, filter: "blur(10px)", opacity: 0 }}
-                                transition={{
-                                    duration: 0.4,
-                                    type: "tween"
-                                }}
-                            >
-                                <StyledLeftContent>
-                                    <StyledActionButtonIcon>
-                                        <FontAwesomeIcon
-                                            icon={faMap}
-                                        />
-                                    </StyledActionButtonIcon>
-                                    <StyledActionButtonText>{selectedTheme && selectedTheme.locale[lang].name}</StyledActionButtonText>
-                                </StyledLeftContent>
-                                <StyledRightContent>
-                                    <ThemeGroupShareButton themeId={selectedTheme && selectedTheme.id}/>
-                                        <StyledActionButtonClose
-                                            onClick={() => handleSelectGroup(selectedThemeId, selectedTheme)}
-                                        >
-                                            <FontAwesomeIcon
-                                                icon={faTimes}
-                                            />
-                                    </StyledActionButtonClose>
-                                </StyledRightContent>
-
-                            </StyledActionButton>
-                        }
-                        { minimizeFilter.minimized &&
-
-                            <StyledFilterActionButton
-                                key="filter_action_button"
-                                positionTransition
-                                initial={{ y: 50, filter: "blur(10px)", opacity: 0 }}
-                                animate={{ y: 0, filter: "blur(0px)", opacity: 1 }}
-                                exit={{ y: 50, filter: "blur(10px)", opacity: 0 }}
-                                transition={{
-                                    duration: 0.4,
-                                    type: "tween"
-                                }}
-                            >
-                                <StyledFilterLeftContent>
-                                    <StyledActionButtonIcon>
-                                        <FontAwesomeIcon
-                                            icon={faFilter}
-                                        />
-                                    </StyledActionButtonIcon>
-                                    <StyledFilterText>
-                                    {filterInfoTitle}
-                                    </StyledFilterText>
-                                </StyledFilterLeftContent>
-                                <StyledFilterRightContent>
-                                    <StyledExpandButton
-                                        onClick={() => store.dispatch(setMinimizeFilterModal({minimized: false}))}
-                                    >
-                                        <FontAwesomeIcon
-                                            icon={faExpand}
-                                        />
-                                    </StyledExpandButton>
-                                    <StyledActionButtonClose
-                                        onClick={() => closeActionFilter()}
-                                    >
-                                        <FontAwesomeIcon
-                                            icon={faTimes}
-                                        />
-                                    </StyledActionButtonClose>
-                                </StyledFilterRightContent>
-
-                            </StyledFilterActionButton>
-                        }
-                    </AnimatePresence>
-    </StyledContent>
-
-    )
+                                {selectedTheme.locale[lang].name}
+                            </StyledActionButtonText>
+                            <ThemeGroupShareButton themeId={selectedTheme.id} />
+                            <StyledActionButtonClose onClick={() => handleSelectGroup(selectedThemeId, selectedTheme)}>
+                                <FontAwesomeIcon icon={faTimes} />
+                            </StyledActionButtonClose>
+                        </StyledContentWrapper>
+                    </StyledActionButton>
+                )}
+                { minimizeFilter.minimized && (
+                    <StyledFilterActionButton
+                        key="filter_action_button"
+                        positionTransition
+                        initial={{ y: 50, filter: "blur(10px)", opacity: 0 }}
+                        animate={{ y: 0, filter: "blur(0px)", opacity: 1 }}
+                        exit={{ y: 50, filter: "blur(10px)", opacity: 0 }}
+                        transition={{
+                            duration: 0.4,
+                            type: "tween"
+                        }}
+                    >
+                        <StyledContentWrapper>
+                            <StyledActionButtonIcon>
+                                <FontAwesomeIcon icon={faFilter} />
+                            </StyledActionButtonIcon>
+                            <StyledFilterText>{filterInfoTitle}</StyledFilterText>
+                            <StyledExpandButton onClick={() => store.dispatch(setMinimizeFilterModal({ minimized: false }))}>
+                                <FontAwesomeIcon icon={faExpand} />
+                            </StyledExpandButton>
+                            <StyledActionButtonClose onClick={() => closeActionFilter()}>
+                                <FontAwesomeIcon icon={faTimes} />
+                            </StyledActionButtonClose>
+                        </StyledContentWrapper>
+                    </StyledFilterActionButton>
+                )}
+            </AnimatePresence>
+        </StyledContent>
+    );
 };
 
 export default ActionButtons;

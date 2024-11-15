@@ -127,18 +127,18 @@ export const selectGroup = (store, channel, allLayers, theme, lastSelectedTheme,
             });
             updateLayers(store, channel);
 
-        const selectedMapLayers =  store.getState().rpc.selectedLayersByType.mapLayers;
-        const selectedTheme = store.getState().rpc.selectedTheme;
-        const selectedThemeLayers = getSelectedThemeLayers(selectedTheme, selectedMapLayers);
-        store.dispatch(setAllSelectedThemeLayers(selectedThemeLayers));
-        if(selectedTheme) {
-            selectedMapLayers.forEach(layer => {
-                if(!selectedThemeLayers.find(themelayer => themelayer === layer.id)) {
-                    channel.postRequest('ChangeMapLayerOpacityRequest', [layer.id, 0]);
-                    updateLayers(store, channel);
-                }
-            })
-    }
+            const selectedMapLayers =  store.getState().rpc.selectedLayersByType.mapLayers;
+            const selectedThemeLayers = getSelectedThemeLayers(theme, selectedMapLayers);
+            store.dispatch(setAllSelectedThemeLayers(selectedThemeLayers));
+
+            if(theme) {
+                selectedMapLayers.forEach(layer => {
+                    if(!selectedThemeLayers.find(themelayer => themelayer === layer.id)) {
+                        channel.postRequest('ChangeMapLayerOpacityRequest', [layer.id, 0]);
+                        updateLayers(store, channel);
+                    }
+                })
+            }
         },700);
 
     }
@@ -167,10 +167,9 @@ export const selectGroup = (store, channel, allLayers, theme, lastSelectedTheme,
                 updateLayers(store, channel);
 
                 const selectedMapLayers =  store.getState().rpc.selectedLayersByType.mapLayers;
-                const selectedTheme = store.getState().rpc.selectedTheme;
-                const selectedThemeLayers = getSelectedThemeLayers(selectedTheme, selectedMapLayers);
+                const selectedThemeLayers = getSelectedThemeLayers(theme, selectedMapLayers);
                 store.dispatch(setAllSelectedThemeLayers(selectedThemeLayers));
-                if(selectedTheme) {
+                if(theme) {
                     selectedMapLayers.forEach(layer => {
                         if(!selectedThemeLayers.find(themelayer => themelayer === layer.id)) {
                             channel.postRequest('ChangeMapLayerOpacityRequest', [layer.id, 0]);
@@ -219,7 +218,7 @@ export const sortObjectAlphabetically = ( a, b ) => {
 * @param {Object} objectArray
 * @param {Array} order
 * @param {String} key
-* @method reArrangeRPCLayerOrder
+* @method reArrangeArray
 */
 export const reArrangeArray = (objectArray, order, key) => {
     let arrayForSort = [...objectArray]
