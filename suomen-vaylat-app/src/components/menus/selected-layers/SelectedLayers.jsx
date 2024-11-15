@@ -101,12 +101,15 @@ export const SelectedLayers = (props) => {
         updateLayers(store, channel);
     };
 
+    // TODO: handle situation where all themelayers have bewen unselected and so the theme should get unselected too
+    /*
     useEffect(() => {
-        if(selectedTheme && !selectedLayers.some(layer => allSelectedThemeLayers.includes(layer.id))) {
+        if(selectedTheme?.length > 0 && allSelectedThemeLayers?.length > 0 && !selectedLayers.some(layer => allSelectedThemeLayers.includes(layer.id))) {
             resetThemeGroups(store);
             showNonThemeLayers(store, channel);
         }
     }, [selectedLayers])
+    */
 
     return (
         <StyledSelectedLayers>
