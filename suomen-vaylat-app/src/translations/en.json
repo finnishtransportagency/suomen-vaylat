@@ -187,7 +187,7 @@
       },
       "themeMenu": {
         "title": "Themes",
-        "content": "Selecting a theme displays the map layers defined for the theme and opens a menu for selecting map materials related to the theme. Some of the map materials have their own style for the theme. There can be only one theme at a time. When a theme is selected, you can also select map materials other than those defined for the theme in the All Levels menu. The theme closes with the theme marker at the top of the map."
+        "content": "Selecting a theme displays the map layers defined for the theme and opens a menu for selecting map materials related to the theme. Some of the map materials have their own style for the theme. There can be only one theme at a time. When a theme is selected, you can also select map materials other than those defined for the theme in the All Levels menu. The theme closes with the theme marker at the top of the map. The name of the theme can be clipped in the theme marker, but by clicking it, the full name will be displayed and hidden."
       },
       "mapLayerMenu": {
         "title": "Map Layer Menu",
