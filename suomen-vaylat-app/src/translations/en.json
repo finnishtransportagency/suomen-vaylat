@@ -3,10 +3,10 @@
     "languageSelection": {
       "fi": "FI",
       "en": "EN",
-      "sv": "SV"
+      "sv": "Sv"
     }
   },
-  "title": "Suomen Väylät",
+  "title": "Suomen väylät",
   "extranet": "EXTRANET",
   "tooltips": {
     "showInfoLink": "Filtering info (opens in a new tab)",
@@ -156,7 +156,7 @@
   "bodySizeWarningTemporary": "Geometry is too big and data cannot be fetched right now.",
   "generalError": "An error occurred.",
   "noGfiLocationsWarning": "No results found, try another geometry.",
-  "exitConfirmation": "You are leaving the Suomen Väylät. Do you want to continue?",
+  "exitConfirmation": "You are leaving the Suomen väylät. Do you want to continue?",
   "appGuide": {
     "title": "User Guide",
     "modalContent": {
@@ -228,8 +228,8 @@
   },
   "appInfo": {
     "title": "Application details",
-    "headingText": "Suomen Väylät is a map service provided by the Finnish Transport Infrastructure Agency. The service, based on open data geographical information, was launched in 2022 and it currently contains more than 270 data types and their attributes. The service and its contents are continuously developed.",
-    "mainText": "Using the Suomen Väylät map service, you can view road data on the state-owned road network, rail data and waterway data. Data on infrastructure projects of the Finnish Transport Infrastructure Agency, and the data types of Digiroad (National Road and Street Database) are also included as separate datasets. The service contains several thematic maps, such as a project map and the Finnish Railway Network Statement. In Suomen Väylät, you can search for data by name or subject and filter data by theme. The map service also has separate address, road and metadata search functions. Suomen Väylät is supplied as desktop and mobile versions and the service is available in Finnish, Swedish and English.  For instructions, click the ? button (link). Suomen Väylät is currently operated and maintained by Sitowise Oy.",
+    "headingText": "Suomen väylät is a map service provided by the Finnish Transport Infrastructure Agency. The service, based on open data geographical information, was launched in 2022 and it currently contains more than 270 data types and their attributes. The service and its contents are continuously developed.",
+    "mainText": "Using the Suomen väylät map service, you can view road data on the state-owned road network, rail data and waterway data. Data on infrastructure projects of the Finnish Transport Infrastructure Agency, and the data types of Digiroad (National Road and Street Database) are also included as separate datasets. The service contains several thematic maps, such as a project map and the Finnish Railway Network Statement. In Suomen väylät, you can search for data by name or subject and filter data by theme. The map service also has separate address, road and metadata search functions. Suomen väylät is supplied as desktop and mobile versions and the service is available in Finnish, Swedish and English.  For instructions, click the ? button (link). Suomen väylät is currently operated and maintained by Sitowise Oy.",
     "versionInfo": {
       "title": "Version details",
       "appVersion": "Application version: ",
@@ -241,11 +241,11 @@
     },
     "contactInfoFeedback": {
       "0": "The application is the responsibility of the Finnish Transport Infrastructure Agency and it is supplied by Sitowise Oy.",
-      "1": "Send your feedback on the Suomen Väylät map service to",
+      "1": "Send your feedback on the Suomen väylät map service to",
       "2": "paikkatieto@vayla.fi",
       "3": "Feedback regarding roads, railways and waterways can be given at",
       "4": "https://liikenne.palautevayla.fi/feedback",
-      "emailSubject": "Feedback on Suomen Väylät"
+      "emailSubject": "Feedback on Suomen väylät"
     },
     "appInfoLinks": {
       "0": {
@@ -279,7 +279,7 @@
     },
     "termsOfUse": {
       "title": "Terms of use",
-      "description": "The datasets of the Finnish Transport Infrastructure Agency’s Suomen Väylät service are subject to the Creative Commons 4.0 Attribution licence.",
+      "description": "The datasets of the Finnish Transport Infrastructure Agency’s Suomen väylät service are subject to the Creative Commons 4.0 Attribution licence.",
       "moreInfo": "More information on the terms of use:",
       "link": "https://vayla.fi/vaylista/aineistot/avoindata/kayttoehdot"
     },
@@ -477,7 +477,7 @@
     },
     "727": {
       "title": "Road Register",
-      "description": "The Road Register contains information on highways that are under the responsibility of the Finnish Transport Infrastructure Agency and traffic on the highways. The Road Register is being decommissioned. The road register datasets presented in Suomen Väylät have been removed from the Road Register on 17 February 2022",
+      "description": "The Road Register contains information on highways that are under the responsibility of the Finnish Transport Infrastructure Agency and traffic on the highways. The Road Register is being decommissioned. The road register datasets presented in Suomen väylät have been removed from the Road Register on 17 February 2022",
       "link_description": "Description of the information content of the road register",
       "link": "https://vayla.fi/documents/25230764/35411006/tierekisteri_tietosisallon_kuvaus.pdf/f8b86e12-f362-d89e-e518-5b54e884ebb8/tierekisteri_tietosisallon_kuvaus.pdf?t=1631166164551"
     },
@@ -1048,7 +1048,7 @@
   "share": {
     "title": "Share this page",
     "shareTexts": {
-      "title": "Suomen Väylät - map link",
+      "title": "Suomen väylät - map link",
       "emailBody": "Map link:",
       "copiedToClipboard": "Copied to clipboard",
       "linkTitle": "Shared link:",

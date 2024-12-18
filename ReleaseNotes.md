@@ -160,4 +160,4 @@ New UI.
 
 ## 0.1.0
 
-Initial versio for Suomen Väylät app.
+Initial versio for Suomen väylät app.

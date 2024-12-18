@@ -3,10 +3,10 @@
     "languageSelection": {
       "fi": "FI",
       "en": "EN",
-      "sv": "SV"
+      "sv": "Sv"
     }
   },
-  "title": "Suomen Väylät",
+  "title": "Suomen väylät",
   "extranet": "EXTRANET",
   "tooltips": {
     "showInfoLink": "Suodatus info (avautuu uuteen välilehteen)",
@@ -156,7 +156,7 @@
   "bodySizeWarningTemporary": "Rajausgeometria on liian suuri eikä hakua voida tehdä.",
   "generalError": "Järjestelmässä tapahtui virhe.",
   "noGfiLocationsWarning": "Tuloksia ei löytynyt, valitse uusi rajaus.",
-  "exitConfirmation": "Olet poistumassa Suomen Väylät-palvelusta. Haluatko jatkaa?",
+  "exitConfirmation": "Olet poistumassa Suomen väylät-palvelusta. Haluatko jatkaa?",
   "appGuide": {
     "title": "Käyttöohje",
     "modalContent": {
@@ -187,7 +187,7 @@
       },
       "themeMenu": {
         "title": "Teemakartat",
-        "content": "Teeman valinta asettaa näkyviin teemaan määritellyt karttatasot, piilottaa muut karttatasot näkyvistä, jotka eivät liity teemaan ja avaa valikon teemaan liittyvien kartta-aineistojen valintaan. Teeman sulkeminen palauttaa aiemmin valitut karttatasot takaisin näkyviin. Osalla kartta-aineistoista on oma tyylinsä teemalle. Teemoja voi olla auki vain yksi kerrallaan. Teeman ollessa valittuna voi Karttatasot-valikon Kaikki tasot -välilehdeltä valita myös muita kartta-aineistoja näkyviin kuin mitä teemaan on määritelty. Teema suljetaan kartan yläreunasta löytyvästä teema-merkistä. Teema-merkissä teeman nimi saattaa olla lyhennetty, mutta koko nimen saa esiin ja takaisin piiloon sitä klikkaamalla."
+        "content": "Teeman valinta asettaa näkyviin teemaan määritellyt karttatasot, piilottaa muut karttatasot näkyvistä, jotka eivät liity teemaan ja avaa valikon teemaan liittyvien kartta-aineistojen valintaan. Teeman sulkeminen palauttaa aiemmin valitut karttatasot takaisin näkyviin. Osalla kartta-aineistoista on oma tyylinsä teemalle. Teemoja voi olla auki vain yksi kerrallaan. Teeman ollessa valittuna voi Karttatasot-valikon Kaikki tasot -välilehdeltä valita myös muita kartta-aineistoja näkyviin kuin mitä teemaan on määritelty. Teema suljetaan kartan yläreunasta löytyvästä teema-merkistä.Teeman valinta asettaa näkyviin teemaan määritellyt karttatasot ja avaa valikon teemaan liittyvien kartta-aineistojen valintaan. Osalla kartta-aineistoista on oma tyylinsä teemalle. Teemoja voi olla auki vain yksi kerrallaan. Teeman ollessa valittuna voi Karttatasot-valikon Kaikki tasot -välilehdeltä valita myös muita kartta-aineistoja näkyviin kuin mitä teemaan on määritelty. Teema suljetaan kartan yläreunasta löytyvästä teema-merkistä."
       },
       "mapLayerMenu": {
         "title": "Karttatasovalikko",
@@ -218,7 +218,7 @@
       },
       "setFullScreen": {
         "title": "Laajenna",
-        "content": "Laajenna-painikkeella voi laajentaa Suomen Väylät -sovelluksen täyttämään koko näyttöruudun."
+        "content": "Laajenna-painikkeella voi laajentaa Suomen väylät -sovelluksen täyttämään koko näyttöruudun."
       },
       "zoomBar": {
         "title": "Selitteet / zoom-palkki",
@@ -228,8 +228,8 @@
   },
   "appInfo": {
     "title": "Sovelluksen tiedot",
-    "headingText": "Suomen Väylät on Väyläviraston avoimen datan paikkatietoaineistoihin perustuva karttapalvelu, joka on julkaistu vuonna 2022 ja se sisältää tällä hetkellä yli 270 tietolajia ominaisuustietoineen. Palvelua ja sen sisältöä kehitetään edelleen.",
-    "mainText": "Suomen Väylät karttapalvelun kautta on katseltavissa tiestötietoja valtion tieverkolta, rautatietietoja sekä tietoja vesiväylistä. Lisäksi omiksi kokonaisuuksiksi on koottu Väyläviraston infrahanketietoja sekä kansallisen tie- ja katuverkon tietojärjestelmän, Digiroadin, tietolajit. Palveluun on rakennettu valmiiksi useita teemakarttoja, kuten esimerkiksi Hankekartta ja Rautateiden verkkoselostus. Suomen Väylissä aineistoja voi hakea aineistojen nimen tai aihealueen mukaan sekä suodattaa aineistoja teemojen mukaisesti. Lisäksi karttapalvelusta löytyy erilliset osoite- , tiehaku ja metatietohaut. Suomen Väylät on käytettävissä sekä desktop- että mobiiliversioilla. Palvelua tuotetaan suomen-, ruotsin- ja englannin kielillä.  Palvelun käyttöohjeet löytyvät ?-painikkeen(linkki) takaa. Suomen Väylien operoinnista ja ylläpidosta vastaa tällä hetkellä Sitowise Oy.",
+    "headingText": "Suomen väylät on Väyläviraston avoimen datan paikkatietoaineistoihin perustuva karttapalvelu, joka on julkaistu vuonna 2022 ja se sisältää tällä hetkellä yli 270 tietolajia ominaisuustietoineen. Palvelua ja sen sisältöä kehitetään edelleen.",
+    "mainText": "Suomen väylät karttapalvelun kautta on katseltavissa tiestötietoja valtion tieverkolta, rautatietietoja sekä tietoja vesiväylistä. Lisäksi omiksi kokonaisuuksiksi on koottu Väyläviraston infrahanketietoja sekä kansallisen tie- ja katuverkon tietojärjestelmän, Digiroadin, tietolajit. Palveluun on rakennettu valmiiksi useita teemakarttoja, kuten esimerkiksi Hankekartta ja Rautateiden verkkoselostus. Suomen Väylissä aineistoja voi hakea aineistojen nimen tai aihealueen mukaan sekä suodattaa aineistoja teemojen mukaisesti. Lisäksi karttapalvelusta löytyy erilliset osoite- , tiehaku ja metatietohaut. Suomen väylät on käytettävissä sekä desktop- että mobiiliversioilla. Palvelua tuotetaan suomen-, ruotsin- ja englannin kielillä.  Palvelun käyttöohjeet löytyvät ?-painikkeen(linkki) takaa. Suomen Väylien operoinnista ja ylläpidosta vastaa tällä hetkellä Sitowise Oy.",
     "versionInfo": {
       "title": "Versiotiedot",
       "appVersion": "Sovelluksen versio: ",
@@ -241,11 +241,11 @@
     },
     "contactInfoFeedback": {
       "0": "Sovelluksesta vastaa Väylävirasto ja sovelluksen toimittaa Sitowise Oy.",
-      "1": "Palautetta Suomen Väylät -palvelusta toivotaan lähetettävän osoitteeseen",
+      "1": "Palautetta Suomen väylät -palvelusta toivotaan lähetettävän osoitteeseen",
       "2": "paikkatieto@vayla.fi",
       "3": "Palautetta maanteihin, rataverkkoon ja vesiväyliin liittyen voit antaa osoitteessa",
       "4": "https://liikenne.palautevayla.fi/feedback",
-      "emailSubject": "Suomen Väylät palaute"
+      "emailSubject": "Suomen väylät palaute"
     },
     "appInfoLinks": {
       "0": {
@@ -274,12 +274,12 @@
       "municipalityLink": "https://www.kuntaliitto.fi",
       "landSurvey": "Maanmittauslaitoksen taustakartat sekä kiinteistötunnukset ja -rajat ovat avointa dataa ja käytössä lisenssiehdoilla:",
       "landSurveyLink": "https://www.maanmittauslaitos.fi/avoindata-lisenssi-cc40",
-      "roadmaps": "Tiekartat (AT ja GT) ovat Tapio Karttakeskus aineistoja käytössä käyttöoikeusluvalla n:o S10505398",
+      "roadmaps": "Tiekartat (AT ja GT) ovat CGI Suomi Oy aineistoja käytössä käyttöoikeusluvalla n:o S10505398",
       "syke": "Asemakaavoitetut aluejaot ovat Suomen Ympäristökeskus (SYKE) avointa dataa. SYKEn avointen aineistojen käyttölupa on Creative Commons Nimeä 4.0"
     },
     "termsOfUse": {
       "title": "Käyttöehdot",
-      "description": "Suomen Väylät -palvelun Väyläviraston tietoaineistoja koskee Creative Commons 4.0 Nimeä -käyttölupa.",
+      "description": "Suomen väylät -palvelun Väyläviraston tietoaineistoja koskee Creative Commons 4.0 Nimeä -käyttölupa.",
       "moreInfo": "Lisätietoja käyttöehdoista:",
       "link": "https://vayla.fi/vaylista/aineistot/avoindata/kayttoehdot"
     },
@@ -308,7 +308,7 @@
       "muutaineistot": "Muut aineistot",
       "serviceSelect": "Palvelun valinta *",
       "selectService": "Valitse palvelu",
-      "suomenVaylat": "Suomen Väylät",
+      "suomenVaylat": "Suomen väylät",
       "topicSelect": "Aihe *",
       "selectTopic": "Valitse aihe",
       "toiminnot": "Toiminnot",
@@ -531,7 +531,6 @@
   },
   "metadata": {
     "title": "{0} -karttatason metatiedot",
-    "error": "Metatietoja ei löytynyt",
     "heading": {
       "abstractTextService": "Palvelun tiivistelmä",
       "abstractTextData": "Aineiston tiivistelmä",
@@ -1086,7 +1085,7 @@
   "share": {
     "title": "Jaa sivu",
     "shareTexts": {
-      "title": "Suomen Väylät - karttalinkki",
+      "title": "Suomen väylät - karttalinkki",
       "emailBody": "Karttalinkki:",
       "copiedToClipboard": "Kopioitu leikepöydälle",
       "linkTitle": "Jakolinkki:",
