@@ -3,10 +3,10 @@
     "languageSelection": {
       "fi": "FI",
       "en": "EN",
-      "sv": "SV"
+      "sv": "Sv"
     }
   },
-  "title": "Suomen Väylät",
+  "title": "Suomen väylät",
   "extranet": "EXTRANET",
   "tooltips": {
     "showInfoLink": "Filtreringsinformation (öppnas på en ny flik)",
@@ -155,7 +155,7 @@
   "bodySizeWarningTemporary": "Geometrin är för stor och data kan inte hämtas just nu.",
   "generalError": "Ett fel uppstod.",
   "noGfiLocationsWarning": "Inga resultat hittades, prova en annan geometri.",
-  "exitConfirmation": "Du lämnar tjänsten Suomen Väylät. Vill du fortsätta?",
+  "exitConfirmation": "Du lämnar tjänsten Suomen väylät. Vill du fortsätta?",
   "appGuide": {
     "title": "Användarguide",
     "modalContent": {
@@ -240,7 +240,7 @@
     },
     "contactInfoFeedback": {
       "0": "Trafikledsverket ansvarar för applikationen som levereras av Sitowise Oy.",
-      "1": "Respons om Suomen Väylät -karttjänsten kan skickas till adressen",
+      "1": "Respons om Suomen väylät -karttjänsten kan skickas till adressen",
       "2": "paikkatieto@vayla.fi",
       "3": "Respons gällande landsvägar, järnvägar och farleder kan ges via",
       "4": "https://liikenne.palautevayla.fi/feedback",
@@ -278,7 +278,7 @@
     },
     "termsOfUse": {
       "title": "Användarvillkor",
-      "description": "Trafikledsverkets datamaterial i tjänsten Suomen Väylät omfattas av licensen Creative Commons 4.0 Nimeä.",
+      "description": "Trafikledsverkets datamaterial i tjänsten Suomen väylät omfattas av licensen Creative Commons 4.0 Nimeä.",
       "moreInfo": "Mer information om användarvillkoren:",
       "link": "https://vayla.fi/vaylista/aineistot/avoindata/kayttoehdot"
     },
@@ -477,7 +477,7 @@
     },
     "727": {
       "title": "Vägregistret",
-      "description": "Vägregistret innehåller information om de landsvägar som Trafikledsverket ansvarar för och om trafiken på dem. Vägregistret ska tas ur bruk. Materialet från vägregistret som presenteras i Suomen Väylät har lösgjorts från vägregistret den 17 februari 2022",
+      "description": "Vägregistret innehåller information om de landsvägar som Trafikledsverket ansvarar för och om trafiken på dem. Vägregistret ska tas ur bruk. Materialet från vägregistret som presenteras i Suomen väylät har lösgjorts från vägregistret den 17 februari 2022",
       "link_description": "Beskrivning av vägregistrets informationsinnehåll",
       "link": "https://vayla.fi/documents/25230764/35411006/tierekisteri_tietosisallon_kuvaus.pdf/f8b86e12-f362-d89e-e518-5b54e884ebb8/tierekisteri_tietosisallon_kuvaus.pdf?t=1631166164551"
     },
@@ -1048,7 +1048,7 @@
   "share": {
     "title": "Dela denna sida",
     "shareTexts": {
-      "title": "Suomen Väylät - kartlänk",
+      "title": "Suomen väylät - kartlänk",
       "emailBody": "Kartlänk:",
       "copiedToClipboard": "Kopierat till urklipp",
       "linkTitle": "Dela länk:",
