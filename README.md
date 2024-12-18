@@ -1,10 +1,10 @@
-# Suomen Väylät
+# Suomen väylät
 
 You can test this app at the following url: https://paikkatietotest.testivaylapilvi.fi/suomen-vaylat/
 
 ![Screenshot](screenshot.gif)
 
-The Suomen Väylät map service brings together the Finnish Transport Infrastructure Agency open materials related to different fairway formats. Through the service, we want to describe information as smoothly, visibly, up-to-date and in a variety of ways as possible for different user groups and needs.
+The Suomen väylät map service brings together the Finnish Transport Infrastructure Agency open materials related to different fairway formats. Through the service, we want to describe information as smoothly, visibly, up-to-date and in a variety of ways as possible for different user groups and needs.
 
 ## Release Notes
 
