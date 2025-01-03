@@ -1,5 +1,12 @@
 # Release Notes
 
+## 2.2.0
+* Accessibility fixes
+* Updated theme layerlist UI
+* New layers that have been added inside three months have a badge on layerlist
+* Feature search
+* Bunch of QoL and bugfixes
+
 ## 2.1.0
 For a full list changes see: https://github.com/finnishtransportagency/suomen-vaylat/releases/tag/2.1.0
 * Bunch of small fixes to UI and GFI, general QoL improvements
