@@ -37,12 +37,14 @@ export const LayerMetadataButton = ({
     const handleMetadataError = () => {
         store.dispatch(clearLayerMetadata());
     };
+    console.log(layer)
+
 
     return (
             <StyledLayerInfoIconWrapper
                 uuid={layer.metadataIdentifier}
                 onClick={() => {
-                    store.dispatch(getLayerMetadata({ layer: layer, uuid: layer.metadataIdentifier, handler: handleMetadataSuccess, errorHandler: handleMetadataError }));
+                    store.dispatch(getLayerMetadata({ layer: layer, layerId: layer.id, handler: handleMetadataSuccess, errorHandler: handleMetadataError }));
                 }}
             >
                 <FontAwesomeIcon icon={faInfoCircle} />
