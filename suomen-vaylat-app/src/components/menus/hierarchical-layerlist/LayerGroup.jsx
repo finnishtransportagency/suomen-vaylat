@@ -409,7 +409,6 @@ export const LayerGroup = ({ group, layers, hasChildren }) => {
   };
 
   const selectGroup = (e) => {
-    console.log(e);
     e.stopPropagation();
     let invisibleLayers = filteredLayers.length - visibleLayers.length;
     if (
