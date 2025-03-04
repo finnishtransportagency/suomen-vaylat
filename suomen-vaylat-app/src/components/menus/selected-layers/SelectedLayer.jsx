@@ -305,7 +305,7 @@ export const SelectedLayer = (
     };
 
     const handleLayerMetadata = (layer, uuid) => {
-        store.dispatch(getLayerMetadata({ layer: layer, uuid: uuid, handler: handleMetadataSuccess, errorHandler: handleMetadataError }));
+        store.dispatch(getLayerMetadata({ layer: layer, layerId: layer.id, handler: handleMetadataSuccess, errorHandler: handleMetadataError }));
     };
 
     const isCurrentZoomTooFar = layer.maxZoomLevel && layer.minZoomLevel && currentZoomLevel <  layer.minZoomLevel;
