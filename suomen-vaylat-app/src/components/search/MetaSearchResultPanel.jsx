@@ -17,8 +17,8 @@ const MetaSearchResultPanel = ({
         exit={'exit'}
         transition={'transition'}
     >
-        {searchResults.length > 0 ? (
-            searchResults.map((result) => {
+        {searchResults?.results?.length > 0 ? (
+            searchResults.results.map((result) => {
                 const layers = allLayers.filter(
                     (layer) =>
                         layer.metadataIdentifier ===
