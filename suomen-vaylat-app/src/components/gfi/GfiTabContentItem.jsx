@@ -82,6 +82,9 @@ const StyledLinkText = styled.a`
     word-break: break-all;
 `;
 
+const StyledPropertyValue = styled.div`
+    margin: 6px;
+`;
 const StyledGfiTabContentItemTableHeader = styled.th`
     padding-left: 16px;
     font-size: 14px;
@@ -122,6 +125,14 @@ const GfiTabContentItem = ({
             setOrderHigh(lowPriorityFields);
         }
     },[data]);
+
+    const formattedContent = (data) => {
+        if (isValidUrl(data)) {
+            return (<StyledLinkText target="_blank" rel="noreferrer" href={data}>{data}</StyledLinkText>);
+        } else {
+            return (<StyledPropertyValue dangerouslySetInnerHTML={{ __html: data.replace(/\n/g, '<br />')}}/>)
+        }
+    }
 
     return  <StyledGfiTabContentItem
                 onMouseEnter={() => {
@@ -184,14 +195,14 @@ const GfiTabContentItem = ({
                                         return <StyledGfiTabContentItemTableRow key={value + '_' + data.properties[value]}>
                                             <StyledGfiTabContentItemTableHeader>{value}</StyledGfiTabContentItemTableHeader>
                                             <StyledGfiTabContentItemTableData>
-                                                {isValidUrl(data.properties[value]) ? <StyledLinkText target="_blank" rel="noreferrer" href={data.properties[value]}>{data.properties[value]}</StyledLinkText> : data.properties[value]}
+                                                {formattedContent(data.properties[value])}
                                             </StyledGfiTabContentItemTableData>
                                         </StyledGfiTabContentItemTableRow>
                                     }) : orderLow && orderLow.filter(value => value !== 'UID').map(value => {
                                             return <StyledGfiTabContentItemTableRow key={value + '_' + data.properties[value]}>
                                                 <StyledGfiTabContentItemTableHeader>{value}</StyledGfiTabContentItemTableHeader>
                                                 <StyledGfiTabContentItemTableData>
-                                                    {isValidUrl(data.properties[value]) ? <StyledLinkText target="_blank" rel="noreferrer" href={data.properties[value]}>{data.properties[value]}</StyledLinkText> : data.properties[value]}
+                                                    {formattedContent(data.properties[value])}
                                                 </StyledGfiTabContentItemTableData>
                                             </StyledGfiTabContentItemTableRow>
                                     })
@@ -246,7 +257,7 @@ const GfiTabContentItem = ({
                                                         return <StyledGfiTabContentItemTableRow key={value+'_'+data.properties[value]}>
                                                             <StyledGfiTabContentItemTableHeader>{value}</StyledGfiTabContentItemTableHeader>
                                                             <StyledGfiTabContentItemTableData>
-                                                                {isValidUrl(data.properties[value]) ? <StyledLinkText target="_blank" rel="noreferrer" href={data.properties[value]}>{data.properties[value]}</StyledLinkText> : data.properties[value]}
+                                                                {formattedContent(data.properties[value])}
                                                             </StyledGfiTabContentItemTableData>
                                                         </StyledGfiTabContentItemTableRow>
                                                     })
