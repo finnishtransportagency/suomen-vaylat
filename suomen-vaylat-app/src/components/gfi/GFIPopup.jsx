@@ -33,7 +33,6 @@ import {
   setFilters,
   removeMarkerRequest
 } from "../../state/slices/rpcSlice";
-import { FormattedGFI } from "./FormattedGFI";
 import GfiTabContent from "./GfiTabContent";
 import GfiToolsMenu from "./GfiToolsMenu";
 import GfiDownloadMenu from "./GfiDownloadMenu";
@@ -426,7 +425,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
 
   const [point, setPoint] = useState(null);
   const [selectedTab, setSelectedTab] = useState(0);
-  const [tabsContent, setTabsContent] = useState([]);
+  const [tabsIds, setTabsIds] = useState([]);
   const [isGfiToolsOpen, setIsGfiToolsOpen] = useState(false);
   const [isDataTable, setIsDataTable] = useState(false);
   const [isGfiDownloadsOpen, setIsGfiDownloadsOpen] = useState(false);
@@ -466,7 +465,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
   };
 
   useEffect(() => {
-    let mapResults = [];
+    let layerIds = [];
     console.log("GFILOCATIONS", gfiLocations)
     gfiLocations.forEach((location) => {
       const isBackgroundMap = selectedLayersByType.backgroundMaps.filter(l => 
@@ -478,44 +477,21 @@ export const GFIPopup = ({ handleGfiDownload }) => {
       location.content &&
         location?.content[0]?.features?.length > GFI_MAX_LENGTH &&
         setIsDataTable(true);
-      const layers = allLayers.filter((layer) => layer.id === location.layerId);
-      const layerIds =
-        layers && layers.length > 0 ? layers[0].id : location.layerId;
-      let content;
-      if (location.type === "text") {
-        content = location.content;
-        console.log("content", content)
-        const popupContent = (
-          <div dangerouslySetInnerHTML={{ __html: content }}></div>
-        );
-        var contentWrapper = <div>{popupContent}</div>;
-        const contentDiv = <div id={layerIds}>{contentWrapper}</div>;
-        return contentDiv;
-      } else if (location.type === "geojson") {
 
-        //TODO: Does this even do anything, doesn't seem so
-        // Seems that this block is now only used to get the tab names, the content is irrelevant
-        mapResults.push(
-          <FormattedGFI
-            id={layerIds}
-            data={location.content}
-            type="geoJson"
-            isDataTable={isDataTable}
-          />
-        );
-      }
-      return;
+      layerIds.push(location.layerId)
     });
 
-    setTabsContent(mapResults);
-  }, [allLayers, gfiLocations, isDataTable, selectedTab, selectedLayersByType.backgroundMaps]);
+    setTabsIds(layerIds);
+  }, [ gfiLocations, selectedLayersByType.backgroundMaps]);
 
   useEffect(() => {
     isGfiDownloadsOpen && setIsGfiDownloadsOpen(false);
   }, [gfiLocations]);
 
   // Zoom to features
-  const handleOverlayGeometry = (geoJson) => {
+  const handleOverlayGeometry = (layerId) => {
+
+    const geoJson = gfiLocations.filter(l => l.layerId === layerId)[0].content;
     // empty possible earlier overlays
     channel &&
       channel.postRequest("MapModulePlugin.RemoveFeaturesFromMapRequest", [
@@ -726,7 +702,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
               {value}
             </a>
           );
-        } else {
+        } else if (typeof(value) === "string") {
           return (
             <span>
               {value.split('\n').map((line, index) => (
@@ -794,9 +770,9 @@ export const GFIPopup = ({ handleGfiDownload }) => {
     setIsGfiDownloadsOpen(!isGfiDownloadsOpen);
   };
 
-  const closeTab = (index, id, tabcontent) => {
+  const closeTab = (index, id) => {
     const updatedFilters = filters.filter(
-      (filter) => filter.layer !== tabcontent.props.id
+      (filter) => filter.layer !== id
     );
     store.dispatch(setFilters(updatedFilters));
 
@@ -880,7 +856,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
   const handleSelectTab = (index) => {
     setSelectedTab(index);
     const layer = selectedLayers.filter(
-      (l) => l.id === tabsContent[index]?.props?.id
+      (l) => l.id === tabsIds[index]
     );
     store.dispatch(setActiveGFILayer(layer));
   };
@@ -1036,7 +1012,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
           </StyledVkmInstruction>
         )}
       </StyledVKMDataContainer>
-      {tabsContent.length > 0 && (
+      {tabsIds.length > 0 && (
         <StyledTabSwiperContainer>
           {!isMobile && gfiTabsSnapGridLength > 1 && (
             <StyledSwiperNavigatorButton
@@ -1060,7 +1036,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
               setGfiTabsSnapGridLength(e.snapGrid.length)
             }
           >
-            {tabsContent.map((tabContent, index) => {
+            {tabsIds.map((tabId, index) => {
               return (
                 <SwiperSlide id={"tab_" + index} key={"tab_" + index}>
                   <StyledGfiTab
@@ -1069,17 +1045,17 @@ export const GFIPopup = ({ handleGfiDownload }) => {
                   >
                     <StyledTabName>
                       {allLayers.filter(
-                        (layer) => layer.id === tabContent.props.id
+                        (layer) => layer.id === tabId
                       ).length > 0
                         ? allLayers.filter(
-                            (layer) => layer.id === tabContent.props.id
+                            (layer) => layer.id === tabId
                           )[0].name
-                        : tabContent.props.id}
+                        : tabId}
                     </StyledTabName>
                     <StyledTabCloseButton
                       onClick={(e) => {
                         e.stopPropagation();
-                        closeTab(index, tabContent.props.id, tabContent);
+                        closeTab(index, tabId);
                       }}
                     >
                       <FontAwesomeIcon icon={faTimes} />
@@ -1101,7 +1077,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
         </StyledTabSwiperContainer>
       )}
       <StyledTabContent isMobile={isMobile}>
-        {tabsContent[selectedTab] === undefined ?
+        {tabsIds[selectedTab] === undefined ?
          (
           <StyledNoGfisContainer>
             <StyledSubtitle>{strings.gfi.choosingGfi}:</StyledSubtitle>
@@ -1270,7 +1246,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
           text={strings.gfi.focusToLocations}
           tooltipDirection={"bottom"}
           clickAction={() => {
-            handleOverlayGeometry(tabsContent[selectedTab].props.data);
+            handleOverlayGeometry(tabsIds[selectedTab]);
             isMobile && store.dispatch(setMinimizeGfi(true));
           }}
           disabled={gfiLocations.length === 0 || filteredGFILocations.length === 0}

@@ -130,7 +130,7 @@ const GfiTabContentItem = ({
         if (isValidUrl(data)) {
             return (<StyledLinkText target="_blank" rel="noreferrer" href={data}>{data}</StyledLinkText>);
         } else {
-            return (<StyledPropertyValue dangerouslySetInnerHTML={{ __html: data.replace(/\n/g, '<br />')}}/>)
+            return (<StyledPropertyValue dangerouslySetInnerHTML={{ __html: typeof(data) === "string" ? data.replace(/\n/g, '<br />') : data}}/>)
         }
     }
 
