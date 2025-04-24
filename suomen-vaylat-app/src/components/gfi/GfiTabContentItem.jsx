@@ -86,7 +86,7 @@ const StyledPropertyValue = styled.div`
     margin: 6px;
 `;
 const StyledGfiTabContentItemTableHeader = styled.th`
-    padding-left: 16px;
+    padding: 6px 6px 6px 16px;
     font-size: 14px;
     font-weight: 600;
 `;
