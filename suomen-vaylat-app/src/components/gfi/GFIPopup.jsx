@@ -467,6 +467,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
 
   useEffect(() => {
     let mapResults = [];
+    console.log("GFILOCATIONS", gfiLocations)
     gfiLocations.forEach((location) => {
       const isBackgroundMap = selectedLayersByType.backgroundMaps.filter(l => 
         l.id === location.layerId
@@ -483,6 +484,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
       let content;
       if (location.type === "text") {
         content = location.content;
+        console.log("content", content)
         const popupContent = (
           <div dangerouslySetInnerHTML={{ __html: content }}></div>
         );
@@ -624,6 +626,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
   }
 
   const tablePropsInit = (index, data) => {
+    console.log("tablePropsInit", data)
     const properties =
       data &&
       data.content &&
