@@ -490,6 +490,8 @@ export const GFIPopup = ({ handleGfiDownload }) => {
         const contentDiv = <div id={layerIds}>{contentWrapper}</div>;
         return contentDiv;
       } else if (location.type === "geojson") {
+
+        //TODO: remove id and type, they do nothing atm
         mapResults.push(
           <FormattedGFI
             id={layerIds}

@@ -89,6 +89,7 @@ export const FormattedGFI = ({ data, isDataTable }) => {
     let geoJSON = {...data};
     let pretty = [];
 
+    console.log("geoJSON FormattedGFI:",geoJSON)
     // if we want to show the normal dropdown list view
     if (!isDataTable) {
         const getKey = (properties) => {
