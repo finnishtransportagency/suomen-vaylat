@@ -493,7 +493,8 @@ export const GFIPopup = ({ handleGfiDownload }) => {
         return contentDiv;
       } else if (location.type === "geojson") {
 
-        //TODO: remove id and type, they do nothing atm
+        //TODO: Does this even do anything, doesn't seem so
+        // Seems that this block is now only used to get the tab names, the content is irrelevant
         mapResults.push(
           <FormattedGFI
             id={layerIds}
@@ -724,6 +725,14 @@ export const GFIPopup = ({ handleGfiDownload }) => {
             <a target="_blank" rel="noreferrer" href={value}>
               {value}
             </a>
+          );
+        } else {
+          return (
+            <span>
+              {value.split('\n').map((line, index) => (
+                <div key={index}>{line}</div>
+              ))}
+            </span>
           );
         }
       },
