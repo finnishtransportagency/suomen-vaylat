@@ -1138,7 +1138,8 @@
       "biggerThan" : "Suurempi kuin",
       "includes" : "Sisältää",
       "doesntInclude" : "Ei sisällä"
-    }
+    },
+    "validationError": "Syötetty arvo saa sisältää vain kirjaimia, numeroita ja erikoismerkkejä  - , . / ( ) "
   },
   "accessibility": {
     "langSelectMenu": "Kielen valinta menu",

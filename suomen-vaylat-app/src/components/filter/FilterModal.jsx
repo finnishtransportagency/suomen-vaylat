@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext, useEffect, useCallback } from "react";
 import { useAppSelector } from "../../state/hooks";
 import { ReactReduxContext } from "react-redux";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -165,15 +165,28 @@ const StyledFilter = styled.div`
   display: flex;
 `;
 
-const StyledSelectedTabDisplayOptionsButton = styled.div`
+const StyledSelectedTabDisplayOptionsButton = styled.button`
   display: flex;
+  align-items: center;
   position: relative;
   right: 0px;
   margin: 1em 0 0.5em 0.5em;
   cursor: pointer;
   color: ${(props) => props.theme.colors.mainColor1};
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  user-select: none;
+
   svg {
     font-size: 24px;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    color: ${(props) => props.theme.colors.darkGrey};
+    cursor: not-allowed;
   }
 `;
 
@@ -215,6 +228,11 @@ const StyledTrashIconWrapper = styled.div`
   }
 `;
 
+const StyledValidationMessage = styled.div`
+  color: ${props => props.theme.colors.secondaryColorDarkOrange};
+  margin: 0.3em 0 0 0.2em;
+`
+
 export const FilterModal = ({filterInfo}) => {
   const {
     filters,
@@ -229,6 +247,7 @@ export const FilterModal = ({filterInfo}) => {
   const [codeListValues, setCodeListValues] = useState(null);
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
+  const [validationError, setValidationError] = useState(false);
 
   const handleSetPropValue = (value) => {
     setStartDate(null);
@@ -400,6 +419,24 @@ const handleRemoveFilter = (filter) => {
     }
   }
 
+  const validateFilterInput = useCallback((searchValue) => {
+    const regex = /^[A-Za-z0-9äöåÄÖÅ \-.,/()]*$/;
+
+    if (regex.test(searchValue)) {
+      setValidationError(false);
+    } else {
+      setValidationError(true);
+    }
+  }, [])
+
+  const handleFilterInput = (value, type) => {
+    validateFilterInput(value);
+    setFilterValue({
+      value: value,
+      type: type,
+    })
+  }
+
   return (
     <StyledModalContainer>
       <ReactTooltip backgroundColor={theme.colors.mainColor1} disable={isMobile} id={'open_info_link'} place='left' type='dark' effect='float'>
@@ -444,19 +481,17 @@ const handleRemoveFilter = (filter) => {
                 isDisabled={Object.keys(propValue).length === 0}
               />
             </StyledModalFloatingChapter>
+
             <StyledModalInputFloatingChapter style={{ marginTop: ".5em" }}>
               <StyledInput
                 type="text"
                 value={filterValue.value}
                 placeholder={strings.gfifiltering.placeholders.chooseValue}
                 onChange={(e) =>
-                  setFilterValue({
-                    value: e.target.value,
-                    type: propValue.type,
-                  })
+                  handleFilterInput(e.target.value, propValue.type)
                 }
                 onKeyPress={(e) => {
-                  if (e.key === "Enter") {
+                  if (e.key === "Enter" && !validationError && Object.keys(propValue).length !== 0 && Object.keys(operatorValue).length !== 0) {
                     addFilter();
                   }
                 }}
@@ -470,10 +505,13 @@ const handleRemoveFilter = (filter) => {
                 </StyledHeaderButton>
               }
             </StyledModalInputFloatingChapter>
+
+            { validationError && <StyledValidationMessage>{strings.gfifiltering.validationError}</StyledValidationMessage> }
+
           </>
         )}
         <StyledModalFloatingActionChapter>
-          <StyledSelectedTabDisplayOptionsButton onClick={() => addFilter()}>
+          <StyledSelectedTabDisplayOptionsButton disabled={validationError || Object.keys(propValue).length === 0 || Object.keys(operatorValue).length === 0} onClick={() => addFilter()}>
             {strings.gfifiltering.addFilter}{" "}
             <FontAwesomeIcon style={{ marginLeft: ".3em" }} icon={faPlus} />
           </StyledSelectedTabDisplayOptionsButton>
@@ -487,8 +525,8 @@ const handleRemoveFilter = (filter) => {
               <StyledFilterHeader style={{ marginBottom: ".5em" }}>
                 {strings.gfifiltering.activeFilters}
               </StyledFilterHeader>
-              {activeFilters.map((filter) => (
-                <StyledFilter>
+              {activeFilters.map((filter, index) => (
+                <StyledFilter key={"filter_" + filter.value}>
                   <StyledFilterPropContainer>
                     <StyledFilterProp>
                       {strings.gfifiltering.property}:{" "}

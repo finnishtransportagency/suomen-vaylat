@@ -1101,7 +1101,8 @@
       "biggerThan" : "Större än",
       "includes" : "Innehåller",
       "doesntInclude" : "Inte innehåller"
-    }
+    },
+    "validationError": "Det angivna värdet får endast innehålla bokstäver, siffror och specialtecken - , . / ( )"
   },
   "tillgänglighet": {
     "langSelectMenu": "Språkvalsmeny",

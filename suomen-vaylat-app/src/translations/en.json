@@ -1101,7 +1101,9 @@
       "biggerThan" : "Bigger than",
       "includes" : "Includes",
       "doesntInclude" : "Doesn't include"
-    }
+    },
+    "validationError": "The input value may only contain letters, numbers, and the special characters - , . / ( )"
+
   },
   "accessibility": {
     "langSelectMenu": "Language selection menu",

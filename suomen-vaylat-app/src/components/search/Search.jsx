@@ -714,14 +714,14 @@ const Search = () => {
     
     const validateFeatureSearch = useCallback((searchValue, setFeatureErrors) => {
         const newErrors = [];
-        const regex = /[^A-Za-z0-9äöåÄÖÅ -,./()]/;
+        const regex = /^[A-Za-z0-9äöåÄÖÅ \-.,/()]*$/;
         if (searchValue.length < 3) {
             newErrors.push("length")
         }
         if (regex.test(searchValue)) {
             newErrors.push("regex")
         }
-        setFeatureErrors(newErrors);
+        newErrors.length > 0 && setFeatureErrors(newErrors);
         return newErrors.length === 0;
     }, [])
 
