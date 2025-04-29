@@ -3,7 +3,7 @@
     "languageSelection": {
       "fi": "FI",
       "en": "EN",
-      "sv": "Sv"
+      "sv": "SV"
     }
   },
   "title": "Suomen väylät",
@@ -229,7 +229,7 @@
   "appInfo": {
     "title": "Sovelluksen tiedot",
     "headingText": "Suomen väylät on Väyläviraston avoimen datan paikkatietoaineistoihin perustuva karttapalvelu, joka on julkaistu vuonna 2022 ja se sisältää tällä hetkellä yli 270 tietolajia ominaisuustietoineen. Palvelua ja sen sisältöä kehitetään edelleen.",
-    "mainText": "Suomen väylät karttapalvelun kautta on katseltavissa tiestötietoja valtion tieverkolta, rautatietietoja sekä tietoja vesiväylistä. Lisäksi omiksi kokonaisuuksiksi on koottu Väyläviraston infrahanketietoja sekä kansallisen tie- ja katuverkon tietojärjestelmän, Digiroadin, tietolajit. Palveluun on rakennettu valmiiksi useita teemakarttoja, kuten esimerkiksi Hankekartta ja Rautateiden verkkoselostus. Suomen Väylissä aineistoja voi hakea aineistojen nimen tai aihealueen mukaan sekä suodattaa aineistoja teemojen mukaisesti. Lisäksi karttapalvelusta löytyy erilliset osoite- , tiehaku ja metatietohaut. Suomen väylät on käytettävissä sekä desktop- että mobiiliversioilla. Palvelua tuotetaan suomen-, ruotsin- ja englannin kielillä.  Palvelun käyttöohjeet löytyvät ?-painikkeen(linkki) takaa. Suomen Väylien operoinnista ja ylläpidosta vastaa tällä hetkellä Sitowise Oy.",
+    "mainText": "Suomen väylät karttapalvelun kautta on katseltavissa tiestötietoja valtion tieverkolta, rautatietietoja sekä tietoja vesiväylistä. Lisäksi omiksi kokonaisuuksiksi on koottu Väyläviraston infrahanketietoja sekä kansallisen tie- ja katuverkon tietojärjestelmän, Digiroadin, tietolajit. Palveluun on rakennettu valmiiksi useita teemakarttoja, kuten esimerkiksi Hankekartta ja Rautateiden verkkoselostus. Suomen väylissä aineistoja voi hakea aineistojen nimen tai aihealueen mukaan sekä suodattaa aineistoja teemojen mukaisesti. Lisäksi karttapalvelusta löytyy erilliset osoite- , tiehaku ja metatietohaut. Suomen väylät on käytettävissä sekä desktop- että mobiiliversioilla. Palvelua tuotetaan suomen-, ruotsin- ja englannin kielillä.  Palvelun käyttöohjeet löytyvät ?-painikkeen(linkki) takaa. Suomen väylien operoinnista ja ylläpidosta vastaa tällä hetkellä Sitowise Oy.",
     "versionInfo": {
       "title": "Versiotiedot",
       "appVersion": "Sovelluksen versio: ",
@@ -515,7 +515,7 @@
     },
     "727": {
       "title": "Tierekisteri",
-      "description": "Tierekisteri sisältää tietoja Väyläviraston vastuulla olevista maanteistä ja niiden liikenteestä. Tierekisteri on poistuva tietojärjestelmä. Suomen Väylissä esitetyt tierekisterin aineistot ovat irroitettu tierekisteristä 17.2.2022 ",
+      "description": "Tierekisteri sisältää tietoja Väyläviraston vastuulla olevista maanteistä ja niiden liikenteestä. Tierekisteri on poistuva tietojärjestelmä. Suomen väylissä esitetyt tierekisterin aineistot ovat irroitettu tierekisteristä 17.2.2022 ",
       "link_description": "Tierekisterin tietosisällön kuvaus",
       "link": "https://vayla.fi/documents/25230764/35411006/tierekisteri_tietosisallon_kuvaus.pdf/f8b86e12-f362-d89e-e518-5b54e884ebb8/tierekisteri_tietosisallon_kuvaus.pdf?t=1631166164551"
     },
@@ -1125,7 +1125,7 @@
     "placeholders" : {
       "chooseProp" : "Valitse ominaisuustieto",
       "chooseOperator" : "Valitse operaattori",
-      "chooseValue" : "Suodettava arvo"
+      "chooseValue" : "Suodatettava arvo"
     },
     "activeFilters" : "Aktiiviset suodattimet",
     "property" : "Ominaisuus",
