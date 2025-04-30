@@ -103,6 +103,7 @@
     "uniqueId": "Yksilöivä tunniste",
     "featureAmount": "Kohteita",
     "getMoreFeatures": "Hae lisää kohteita",
+    "loadingData": "Ladataan aineistoja",
     "savedGeometries": {
       "title": "Tallennetut geometriat",
       "description": "Omat tallennetut geometriat",

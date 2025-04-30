@@ -28,6 +28,7 @@
     "zoomIn": "Zooma in",
     "zoomOut": "Zooma ut",
     "opacity": "Transparens",
+    "loadingData": "Laddar data",
     "drawingTools": {
       "drawingToolsButton": "Ritverktyg",
       "point": "Point",
@@ -93,7 +94,7 @@
     "choosingGfiDescription0": "Kontrollera att du har aktiverat nivåer i menyn Kartnivåer",
     "choosingGfiDescription1": "Visa verktyg för val av funktionsdata genom att välja Välj Platser",
     "choosingGfiDescription2": "Du kan välja platser genom att använda ritverktyg eller beskärning förinställningar",
-    "draw": "Draw",
+    "draw": "Rita",
     "drawSubtitle": "Välj platser med hjälp av ritverktyg",
     "search": "Sökning",
     "dataTableView": "Listvy",
@@ -268,7 +269,7 @@
       "tabTitle": "Informationskällor och användarvillkor"
     },
     "dataSources": {
-      "tabTitle": "Datakällor",
+      "title": "Datakällor",
       "municipalityImage": "Bilder på kommuners vapen hämtas på kommunförbundets webbplats:",
       "municipalityLink": "https://www.kuntaliitto.fi",
       "landSurvey": "Lantmäteriverkets bakgrundskartor samt fastighetsbeteckningar och -gränser är öppna data och får användas enligt licensvillkoren:",

@@ -736,7 +736,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
                             opacity: 0,
                         }}>
                         <SVLoader />
-                        {numberedLoader &&  numberedLoader.enabled && <>Ladataan aineistoa {numberedLoader.current} / {numberedLoader.total} </>}
+                        {numberedLoader &&  numberedLoader.enabled && <>{strings.gfi.loadingData} {numberedLoader.current} / {numberedLoader.total} </>}
                     </StyledLoaderWrapper>
                 )}
             </AnimatePresence>

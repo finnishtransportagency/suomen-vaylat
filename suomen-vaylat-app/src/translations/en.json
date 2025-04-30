@@ -104,6 +104,7 @@
     "uniqueId": "Unique identifier",
     "featureAmount": "Locations",
     "getMoreFeatures": "Retrieve more locations",
+    "loadingData": "Loading data",
     "savedGeometries": {
       "title": "Saved geometries",
       "description": "My saved geometries",
@@ -269,7 +270,7 @@
       "tabTitle": "Data sources and terms of use"
     },
     "dataSources": {
-      "tabTitle": "Data Sources",
+      "title": "Data Sources",
       "municipalityImage": "Images of the municipalities’ coats of arms in location data are retrieved from the website of the Association of Finnish Municipalities:",
       "municipalityLink": "https://www.kuntaliitto.fi",
       "landSurvey": "The National Land Survey of Finland’s background maps and property identifiers and boundaries are open data and available under licence conditions:",
