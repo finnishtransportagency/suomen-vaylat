@@ -27,7 +27,7 @@ import {
     removeFromDrawToolMarkers
 } from '../../../state/slices/uiSlice';
 
-import { removeMarkerRequest } from '../../../state/slices/rpcSlice';
+import { removeMarkerRequest, setVKMData } from '../../../state/slices/rpcSlice';
 
 import CircleButton from '../../circle-button/CircleButton';
 
@@ -230,8 +230,9 @@ const MenuBar = () => {
                     toggleState={isGfiOpen}
                     tooltipDirection={"right"}
                     clickAction={() => {
-                        store.dispatch(setIsGfiOpen(!isGfiOpen));
+                        isGfiOpen && store.dispatch(setVKMData(null));
                         isGfiOpen && store.dispatch(setMinimizeGfi(false));
+                        store.dispatch(setIsGfiOpen(!isGfiOpen));
                     }}
                 >
                 { filters?.filters && filters?.filters?.length >0 && 

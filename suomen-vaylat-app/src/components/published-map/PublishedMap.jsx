@@ -282,6 +282,8 @@ const PublishedMap = () => {
                 channel.handleEvent('MapClickedEvent', (data) => {
                     // if gfi window is open, close it first to load new results
                     store.dispatch(setIsGfiOpen(false));
+                    store.dispatch(setVKMData(null));
+                    
                     //make sure we are not drawing on the map
                     if (store.getState().ui.activeSelectionTool === null && store.getState().ui.activeTool === null) {
 

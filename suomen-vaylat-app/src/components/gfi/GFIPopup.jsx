@@ -1207,15 +1207,14 @@ export const GFIPopup = ({ handleGfiDownload }) => {
         
       </StyledTabContent>
       <StyledButtonsContainer>
-        {vkmData && (
-          <CircleButton
-            icon={faMapMarkerAlt}
-            text={strings.vkm.locationInfo}
-            toggleState={isVKMInfoOpen}
-            tooltipDirection={"bottom"}
-            clickAction={handleVKMInfo}
-          />
-        )}
+        <CircleButton
+          icon={faMapMarkerAlt}
+          text={strings.vkm.locationInfo}
+          toggleState={isVKMInfoOpen}
+          tooltipDirection={"bottom"}
+          clickAction={handleVKMInfo}
+          disabled={!vkmData}
+        />
         <CircleButton
           icon={faMapMarkedAlt}
           text={strings.gfi.selectLocations}

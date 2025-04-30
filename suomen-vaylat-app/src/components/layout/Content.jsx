@@ -319,6 +319,7 @@ const Content = () => {
     store.dispatch(setActiveSelectionTool(null));
     store.dispatch(resetGFILocations([]));
     store.dispatch(setIsGfiOpen(false));
+    store.dispatch(setVKMData(null));
     store.dispatch(setMinimizeGfi(false));
     store.dispatch(setMaximizeGfi(false));
     setTimeout(() => {
