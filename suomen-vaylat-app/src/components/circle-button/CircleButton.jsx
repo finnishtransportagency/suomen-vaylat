@@ -17,6 +17,7 @@ const StyledCircleButton = styled(motion.button)`
     align-items: center;
     background-color: ${ props =>
         props.disabled ? "#ddd" :
+        props.isActive ? props.activeColor : // Use activeColor when button is active
         props.color? props.color : 
         props.toggleState ?
         props.theme.colors.buttonActive : props.theme.colors.button
@@ -73,7 +74,8 @@ const variants = {
 };
 
 const CircleButton = ({
-    icon,
+    icon,              // Default icon when inactive
+    activeIcon,        // Icon to show when active (optional)
     text,
     toggleState,
     clickAction,
@@ -82,13 +84,22 @@ const CircleButton = ({
     tooltipColor = theme.colors.mainWhite,
     type,
     color,
+    activeColor,        // Use this color when active (optional)
     disabled,
     effect = "float",
     children,
 }) => {
-
+    const [isActive, setActive] = useState(false);
     const [isHovered, setHovered] = useState(false);
     const useReactTooltip = tooltipDirection !== "left" && tooltipDirection !== "right" && text;
+
+    const handleButtonClick = () => {
+        // Toggle active state
+        setActive(!isActive);
+        // Execute the passed click action
+        if (clickAction) clickAction();
+    };
+
     return (
         <>
         {useReactTooltip &&
@@ -99,7 +110,7 @@ const CircleButton = ({
 
         <StyledCircleButton
             aria-label={text}
-            onClick={() => clickAction()}
+            onClick={handleButtonClick}
             onHoverStart={() => { 
                 text && !useReactTooltip && setHovered(true);
             }}
@@ -110,16 +121,29 @@ const CircleButton = ({
             variants={variants}
             type={type}
             color={color}
+            activeColor={activeColor} // Pass activeColor dynamically
+            isActive={isActive} // Pass active status to styles
             disabled={disabled}
             data-tip
             data-for={text + "_id"}
         >
             {
-                icon && <StyledIconContainer>
-                        <FontAwesomeIcon
-                            icon={icon}
-                        />
-                    </StyledIconContainer>
+                <StyledIconContainer>
+                    {/* Conditionally render active icon or default icon */}
+                    {isActive && activeIcon ? (
+                        typeof activeIcon === 'object' && activeIcon.props ? (
+                            activeIcon // For Material UI
+                        ) : (
+                            <FontAwesomeIcon icon={activeIcon} /> // For FontAwesome
+                        )
+                    ) : (
+                        typeof icon === 'object' && icon.props ? (
+                            icon // For Material UI
+                        ) : (
+                            <FontAwesomeIcon icon={icon} /> // For FontAwesome
+                        )
+                    )}
+                </StyledIconContainer>
             }
              <AnimatePresence initial={false}>
                  {
