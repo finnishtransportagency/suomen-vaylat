@@ -6,9 +6,8 @@ import {
     faSearchMinus,
     faSearchPlus,
     faMap,
+    faCrosshairs,
 } from '@fortawesome/free-solid-svg-icons';
-import NearMeDisabledRoundedIcon from '@mui/icons-material/NearMeDisabledRounded';
-import NavigationRoundedIcon from '@mui/icons-material/NavigationRounded';
 
 import { useAppSelector } from '../../state/hooks';
 import { ReactReduxContext } from 'react-redux';
@@ -19,8 +18,6 @@ import ZoomBarCircle from './ZoomBarCircle';
 
 import { Legend } from '../legend/Legend';
 import { Baselayers } from '../base-layers/Baselayers';
-
-import { theme } from '../../theme/theme';
 
 const StyledZoomBarContainer = styled.div`
     z-index: 5;
@@ -206,9 +203,7 @@ const ZoomBar = ({
                     tooltipDirection={'left'}
                 />
                 <CircleButton
-                    icon={<NearMeDisabledRoundedIcon />}
-                    activeIcon={<NavigationRoundedIcon />}
-                    activeColor={theme.colors.secondaryColorGreen}
+                    icon={faCrosshairs}
                     text={strings.tooltips.myLocButton}
                     clickAction={() =>
                         rpc.channel.postRequest(
