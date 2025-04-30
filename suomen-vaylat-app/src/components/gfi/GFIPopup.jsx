@@ -466,7 +466,6 @@ export const GFIPopup = ({ handleGfiDownload }) => {
 
   useEffect(() => {
     let layerIds = [];
-    console.log("GFILOCATIONS", gfiLocations)
     gfiLocations.forEach((location) => {
       const isBackgroundMap = selectedLayersByType.backgroundMaps.filter(l => 
         l.id === location.layerId
@@ -603,7 +602,6 @@ export const GFIPopup = ({ handleGfiDownload }) => {
   }
 
   const tablePropsInit = (index, data) => {
-    console.log("tablePropsInit", data)
     const properties =
       data &&
       data.content &&
