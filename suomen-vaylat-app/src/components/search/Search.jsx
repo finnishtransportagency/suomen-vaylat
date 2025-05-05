@@ -714,7 +714,7 @@ const Search = () => {
     
     const validateFeatureSearch = useCallback((searchValue, setFeatureErrors) => {
         const newErrors = [];
-        const regex = regex = /[^A-Za-z0-9äöåÄÖÅ -,./()]/;
+        const regex = /[^A-Za-z0-9äöåÄÖÅ -,./()]/;
         if (searchValue.length < 3) {
             newErrors.push("length")
         }
