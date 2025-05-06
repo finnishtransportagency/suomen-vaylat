@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import {
@@ -6,8 +6,9 @@ import {
     faSearchMinus,
     faSearchPlus,
     faMap,
-    faCrosshairs,
 } from '@fortawesome/free-solid-svg-icons';
+import NearMeDisabledRoundedIcon from '@mui/icons-material/NearMeDisabledRounded';
+import NavigationRoundedIcon from '@mui/icons-material/NavigationRounded';
 
 import { useAppSelector } from '../../state/hooks';
 import { ReactReduxContext } from 'react-redux';
@@ -18,6 +19,8 @@ import ZoomBarCircle from './ZoomBarCircle';
 
 import { Legend } from '../legend/Legend';
 import { Baselayers } from '../base-layers/Baselayers';
+
+import { theme } from '../../theme/theme';
 
 const StyledZoomBarContainer = styled.div`
     z-index: 5;
@@ -114,6 +117,22 @@ const ZoomBar = ({
         else if(isLegendOpen && !isZoomBarOpen) setIsZoomBarOpen(true);
     };
 
+    const [isLocationTrackingActive, setIsLocationTrackingActive] = useState(false);
+
+    const handleLocationTrackingClick = () => {
+        if (isLocationTrackingActive) {
+            rpc.channel.postRequest(
+                'StopUserLocationTrackingRequest', [{clearMap: true, removePath: true}]
+            );
+            setIsLocationTrackingActive(false);
+        } else {
+            rpc.channel.postRequest(
+                'StartUserLocationTrackingRequest', [{addToMap: 'location', centerMap: 'update'}]
+            )
+            setIsLocationTrackingActive(true);
+        }
+    };
+
     return (
         <StyledZoomBarContainer>
             <Legend
@@ -203,13 +222,10 @@ const ZoomBar = ({
                     tooltipDirection={'left'}
                 />
                 <CircleButton
-                    icon={faCrosshairs}
+                    icon={isLocationTrackingActive ? <NavigationRoundedIcon /> : <NearMeDisabledRoundedIcon />}
+                    color={isLocationTrackingActive ? theme.colors.secondaryColorGreen : theme.colors.button} 
                     text={strings.tooltips.myLocButton}
-                    clickAction={() =>
-                        rpc.channel.postRequest(
-                            'MyLocationPlugin.GetUserLocationRequest'
-                        )
-                    }
+                    clickAction={() => handleLocationTrackingClick()}
                     tooltipDirection={'left'}
                 />
             </StyledZoomBarContent>

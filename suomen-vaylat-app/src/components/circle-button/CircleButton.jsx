@@ -114,11 +114,16 @@ const CircleButton = ({
             data-tip
             data-for={text + "_id"}
         >
-            { icon && 
-                <StyledIconContainer>
-                    <FontAwesomeIcon
-                        icon={icon}
-                    />
+            {
+                icon && <StyledIconContainer>
+                    {/* Check if the icon is a Material UI React component or FontAwesome icon */}
+                    {typeof icon === 'object' && icon.props ? (
+                        /* If the icon is a Material UI component (React component) */
+                        icon
+                    ) : (
+                        /* If the icon is a Font Awesome icon */
+                        <FontAwesomeIcon icon={icon} />
+                    )}
                 </StyledIconContainer>
             }
              <AnimatePresence initial={false}>
