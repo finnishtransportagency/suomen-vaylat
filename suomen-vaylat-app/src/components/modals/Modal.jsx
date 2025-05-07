@@ -49,7 +49,7 @@ const StyledModalWrapper = styled(motion.div)`
 
 const StyledModal = styled(motion.div)`
     position: relative;
-    width: ${(props) => props.maximize  || isMobile ? '100% !important' : props.width && props};
+    width: ${(props) => props.maximize  || isMobile ? '100% !important' : props.width && props.width};
     height: ${(props) => props.maximize || isMobile ? '100% !important' : props.height && props.height};
     min-width: ${(props) => props.minWidth && props.minWidth};
     max-width: ${(props) => (props.maxWidth ? props.maxWidth : '100vw')};

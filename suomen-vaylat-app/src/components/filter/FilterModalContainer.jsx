@@ -118,7 +118,7 @@ const StyledTabContent = styled.div`
 `;
 
 
-export const ModalContainer = () => {
+export const FilterModalContainer = () => {
   // GET ALL FILTERS WITH LAYER AND MAP THEM BY LAYER TO RETURN FilterModal
   const [selectedTab, setSelectedTab] = useState(0);
   const {

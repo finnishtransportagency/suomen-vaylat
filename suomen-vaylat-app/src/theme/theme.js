@@ -28,7 +28,7 @@ export const isMobile = isMobileTest.any();
 export const size = {
   mobileS: '320px',
   mobileM: '375px',
-  mobileL: '425px',
+  mobileL: '430px',
   tablet: '768px',
   laptop: '1024px',
   laptopL: '1640px',
@@ -68,7 +68,7 @@ export const theme = {
       laptop: `(max-width: ${size.laptop})`,
       laptopL: `(max-width: ${size.laptopL})`,
       desktop: `(max-width: ${size.desktop})`,
-      desktopL: `(max-width: ${size.desktop})`
+      lowResDesktop: `(max-height: 756px)`,
     }
 };
 

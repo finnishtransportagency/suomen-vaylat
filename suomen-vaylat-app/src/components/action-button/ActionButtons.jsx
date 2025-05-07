@@ -36,6 +36,15 @@ const StyledContent = styled.div`
         max-width: 212px;
         margin-top: unset;
         margin-bottom: 8px;
+        gap: 4px;
+    };
+
+    @media ${props => props.theme.device.lowresDesktop} {
+        top: unset;
+        max-width: 212px;
+        margin-top: unset;
+        margin-bottom: 8px;
+        gap: 4px;
     };
 `;
 

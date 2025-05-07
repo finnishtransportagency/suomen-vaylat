@@ -77,7 +77,7 @@ import { ANNOUNCEMENTS_LOCALSTORAGE } from "../../utils/constants";
 import ThemeMenu from "../menus/theme-menu/ThemeMenu";
 
 import { CustomLayerModal } from "../menus/hierarchical-layerlist/CustomFilter/CustomLayerModal";
-import { ModalContainer } from "../filter/ModalContainer";
+import { FilterModalContainer } from "../filter/FilterModalContainer";
 import FeedbackForm from "../feedback-form/FeedbackForm";
 
 const GFI_GEOMETRY_LAYER_ID = 'drawtools-geometry-layer';
@@ -648,7 +648,7 @@ const Content = () => {
             handleCloseGFIModal
           } /* Action when pressing modal close button or backdrop */
           isOpen={isGfiOpen} /* Modal state */
-          id={null}
+          id="gfi_modal"
           minWidth={"600px"}
           minHeight={"530px"}
           height="100vw"
@@ -679,7 +679,7 @@ const Content = () => {
             handleCloseGfiDownloadModal
           } /* Action when pressing modal close button or backdrop */
           isOpen={isGfiDownloadOpen} /* Modal state */
-          id={null}
+          id="gfi_download_modal"
           minWidth={"600px"}
         >
           <GFIDownload />
@@ -701,7 +701,7 @@ const Content = () => {
             handleCloseUserGuide
           } /* Action when pressing modal close button or backdrop */
           isOpen={isUserGuideOpen} /* Modal state */
-          id={null}
+          id="user_guide_modal"
           height="860px"
         >
           <UserGuideModalContent />
@@ -723,7 +723,7 @@ const Content = () => {
             handleCloseAppInfoModal
           } /* Action when pressing modal close button or backdrop */
           isOpen={isInfoOpen} /* Modal state */
-          id={null}
+          id="app_info_modal"
           maxWidth={"800px"}
         >
           <AppInfoModalContent />
@@ -747,7 +747,7 @@ const Content = () => {
             handleCustomFilterClose
           } /* Action when pressing modal close button or backdrop */
           isOpen={isCustomFilterOpen} /* Modal state */
-          id={null}
+          id="custom_layer_modal"
           height="860px"
         >
           <CustomLayerModal />
@@ -769,7 +769,7 @@ const Content = () => {
             handleCloseFeedbackForm
           } /* Action when pressing modal close button or backdrop */
           isOpen={isFeedbackFormOpen} /* Modal state */
-          id={null}
+          id="feedback_form_modal"
           maxWidth={"800px"}
           overflow={"auto"}
         >
@@ -795,7 +795,7 @@ const Content = () => {
             handleCloseMetadataModal
           } /* Action when pressing modal close button or backdrop */
           isOpen={metadata.data !== null} /* Modal state */
-          id={null}
+          id="metadata_modal"
           maxWidth={"800px"}
           overflow={"auto"}
         >
@@ -809,7 +809,7 @@ const Content = () => {
           resize={false}
           backdrop={true} /* Is backdrop enabled (true) or disabled (false) */
           fullScreenOnMobile={
-            false
+            true
           } /* Scale modal full width / height when using mobile device */
           titleIcon={faShareAlt} /* Use icon on title or null */
           title={strings.share.title} /* Modal header title */
@@ -818,7 +818,7 @@ const Content = () => {
             handleCloseShareWebSite
           } /* Action when pressing modal close button or backdrop */
           isOpen={isShareOpen} /* Modal state */
-          id={null}
+          id="share_website_popup"
         >
           <ShareWebSitePopup />
         </Modal>
@@ -873,7 +873,7 @@ const Content = () => {
             handleCloseSaveViewModal
           } /* Action when pressing modal close button or backdrop */
           isOpen={isSaveViewOpen} /* Modal state */
-          id={null}
+          id="saved_content_modal"
           minWidth={"600px"}
           hasHelp={true}
           helpId={"show_view_help"}
@@ -900,7 +900,7 @@ const Content = () => {
             handleCloseDownloadLinkModal
           } /* Action when pressing modal close button or backdrop */
           isOpen={downloadLink.layerDownloadLinkModalOpen} /* Modal state */
-          id={null}
+          id="layer_download_link_modal"
         >
           <LayerDownloadLinkButtonModal downloadLink={downloadLink} />
         </Modal>
@@ -942,7 +942,7 @@ const Content = () => {
             handleCloseGfiLocations
           } /* Action when pressing modal close button or backdrop */
           isOpen={isGfiToolsOpen} /* Modal state */
-          id={null}
+          id="gfi_tools_menu_modal"
         >
           <GfiToolsMenu
             handleGfiToolsMenu={handleGfiToolsMenu}
@@ -966,7 +966,7 @@ const Content = () => {
             handleCloseGfiDownloadTools
           } /* Action when pressing modal close button or backdrop */
           isOpen={isGfiDownloadToolsOpen} /* Modal state */
-          id={null}
+          id="gfi_download_menu_modal"
         >
           <GfiDownloadMenu
             closeButton={false}
@@ -974,6 +974,7 @@ const Content = () => {
           ></GfiDownloadMenu>
         </Modal>
         <Modal
+          id="filter_modal_container"
           constraintsRef={{
             constraintsRef,
           }} /* Reference div for modal drag boundaries */
@@ -1001,7 +1002,7 @@ const Content = () => {
           minHeight={"30em"}
           overflow={"auto"}
         >
-          <ModalContainer/>
+          <FilterModalContainer/>
         </Modal>
         <ScaleBar />
         <StyledToastContainer

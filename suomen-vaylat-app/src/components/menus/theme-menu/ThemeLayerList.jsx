@@ -15,7 +15,7 @@ import { useAppSelector } from '../../../state/hooks';
 import strings from '../../../translations';
 import { setZoomTo } from '../../../state/slices/rpcSlice';
 import { setWarning } from '../../../state/slices/uiSlice';
-import { selectGroup, sortObjectAlphabetically } from '../../../utils/rpcUtil';
+import { selectGroup, sortObjectAlphabetically, getDescTagContent } from '../../../utils/rpcUtil';
 import Layers from '../hierarchical-layerlist/Layers';
 
 import hankekartta from './hankekartta.JPG';
@@ -36,6 +36,7 @@ const listVariants = {
 };
 
 const StyledLayerGroups = styled.div`
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -244,7 +245,7 @@ const StyledReadMoreButton = styled.button`
 `;
 
 const StyledLayerGroupContainer = styled(motion.div)`
-  overflow: auto;
+  overflow: hidden;
 `;
 
 const StyledInfoHeaderIconContainer = styled(motion.div)`
@@ -326,26 +327,7 @@ const mainThemeImages = {
     }
 };
 
-const getDescTagContent = (text, startTag, endTag) => {
-    let links = [];
-    let index = 0;
-
-    while (index < text.length) {
-        let startPos = text.indexOf(startTag, index);
-        if (startPos === -1) break;
-
-        let endPos = text.indexOf(endTag, startPos + startTag.length);
-        if (endPos === -1) break; // Added this to handle cases where the end tag is not found
-
-        let link = text.substring(startPos + startTag.length, endPos);
-        links.push(link);
-
-        index = endPos + endTag.length;
-    }
-    return links;
-};
-
-export const ThemeLayerList = ({ allLayers, allThemes }) => {
+const ThemeLayerList = ({ allLayers, allThemes }) => {
     const { store } = useContext(ReactReduxContext);
     const lang = strings.getLanguage();
 
@@ -383,7 +365,7 @@ export const ThemeLayerList = ({ allLayers, allThemes }) => {
         <>
             {allThemes.map((themeGroup, themeGroupIndex) => {
                 return (
-                    <>
+                    <div key={themeGroupIndex} id={`theme-group-${themeGroupIndex}`}>
                         <StyledThemeGroup
                             key={'stg_' + themeGroupIndex}
                             onClick={() =>
@@ -392,8 +374,8 @@ export const ThemeLayerList = ({ allLayers, allThemes }) => {
                                     : setIsOpen(themeGroupIndex)
                             }
                         >
-                            <StyledMasterThemeHeader>
-                                <StyledMasterGroupHeaderIconLetter>
+                            <StyledMasterThemeHeader id={`master-theme-header-${themeGroupIndex}`}>
+                                <StyledMasterGroupHeaderIconLetter id={`icon-letter-${themeGroupIndex}`}>
                                     {mainThemeImages.hasOwnProperty(
                                         themeGroup.locale['fi'].name.toLowerCase()
                                     ) ? (
@@ -410,7 +392,7 @@ export const ThemeLayerList = ({ allLayers, allThemes }) => {
                                         </p>
                                     )}
                                 </StyledMasterGroupHeaderIconLetter>
-                                <StyledMasterGroupName>
+                                <StyledMasterGroupName id={`master-group-name-${themeGroupIndex}`}>
                                     {themeGroup.locale[lang].name}
                                 </StyledMasterGroupName>
                                 <StyledInfoHeaderIconContainer
@@ -420,6 +402,7 @@ export const ThemeLayerList = ({ allLayers, allThemes }) => {
                                                 ? 'rotate(180deg)'
                                                 : 'rotate(0deg)'
                                     }}
+                                    id={`info-header-icon-${themeGroupIndex}`}
                                 >
                                     <FontAwesomeIcon icon={faAngleDown} />
                                 </StyledInfoHeaderIconContainer>
@@ -434,10 +417,15 @@ export const ThemeLayerList = ({ allLayers, allThemes }) => {
                                 duration: 0.3,
                                 type: 'tween'
                             }}
+                            id={`layer-group-container-${themeGroupIndex}`}
                         >
-                            <Themes groups={[...themeGroup?.groups]} allLayers={allLayers} />
+                            <Themes
+                                groups={[...themeGroup?.groups]}
+                                allLayers={allLayers}
+                                id={`themes-${themeGroupIndex}`}
+                            />
                         </StyledLayerGroupContainer>
-                    </>
+                    </div>
                 );
             })}
         </>
@@ -448,8 +436,10 @@ export const Themes = ({ groups, allLayers }) => {
     const { store } = useContext(ReactReduxContext);
     const lang = strings.getLanguage();
 
-    const { channel, selectedTheme, lastSelectedTheme, selectedThemeId } =
-        useAppSelector((state) => state.rpc);
+    const { channel, selectedTheme, lastSelectedTheme, selectedThemeId } = useAppSelector(
+        (state) => state.rpc
+    );
+
     const handleSelectGroup = (theme) => {
         selectGroup(
             store,
@@ -486,7 +476,7 @@ export const Themes = ({ groups, allLayers }) => {
         });
 
     return (
-        <StyledSubthemes>
+        <StyledSubthemes id="themes">
             {themes.length > 0 &&
                 themes.map((theme) => {
                     return (
@@ -534,8 +524,7 @@ export const ThemeGroup = ({
     const [isThemeOpen, setIsThemeOpen] = useState(false);
     const [subthemeIsOpen, setSubthemeIsOpen] = useState(false);
     const [totalGroupLayersCount, setTotalGroupLayersCount] = useState(0);
-    const [totalVisibleGroupLayersCount, setTotalVisibleGroupLayersCount] =
-        useState(0);
+    const [totalVisibleGroupLayersCount, setTotalVisibleGroupLayersCount] = useState(0);
 
     useEffect(() => {
         let layersCount = 0;
@@ -585,6 +574,7 @@ export const ThemeGroup = ({
             tabIndex="0" // Make the container focusable
             role="region" // Define the role of the container
             aria-labelledby={`theme-group-heading-${index}`} // Associate with a heading
+            id={`styled-layer-groups-${index}`}
         >
             <h2
                 id={`theme-group-heading-${index}`}
@@ -593,7 +583,11 @@ export const ThemeGroup = ({
                 {theme.locale[lang].name}
             </h2>
             {!isSubtheme ? (
-                <StyledMasterGroupHeader key={'smgh_' + theme.id} isOpen={isThemeOpen}>
+                <StyledMasterGroupHeader
+                    key={'smgh_' + theme.id}
+                    isOpen={isThemeOpen}
+                    id={`master-group-header-${theme.id}`}
+                >
                     <StyledThemeArrow
                         onClick={() => setIsThemeOpen(!isThemeOpen)}
                         onKeyDown={(e) => {
@@ -606,6 +600,7 @@ export const ThemeGroup = ({
                         animate={{
                             transform: isThemeOpen ? 'rotate(180deg)' : 'rotate(0deg)'
                         }}
+                        id={`theme-arrow-${theme.id}`}
                     >
                         <FontAwesomeIcon icon={faAngleDown} />
                     </StyledThemeArrow>
@@ -617,6 +612,7 @@ export const ThemeGroup = ({
                         role="button"
                         aria-label={`Toggle ${theme.locale[lang].name} visibility`} // Accessible name
                         tabIndex="0" // Make the name focusable
+                        id={`master-group-name-${theme.id}`}
                     >
                         {theme.locale[lang].name}
                     </StyledMasterGroupName>
@@ -634,8 +630,9 @@ export const ThemeGroup = ({
                         role="button"
                         aria-label={`Select ${theme.locale[lang].name}`} // Accessible name
                         tabIndex="0" // Make the right content focusable
+                        id={`right-content-${theme.id}`}
                     >
-                        <StyledSelectButton isOpen={isOpen} />
+                        <StyledSelectButton isOpen={isOpen} id={`select-button-${theme.id}`} />
                     </StyledRightContent>
                 </StyledMasterGroupHeader>
             ) : (
@@ -650,12 +647,13 @@ export const ThemeGroup = ({
                     aria-label={`Toggle ${theme.locale[lang].name} subtheme visibility`} // Accessible name
                     tabIndex="0" // Make the subtheme header focusable
                     isOpen={isOpen}
+                    id={`subtheme-header-${theme.id}`}
                 >
                     <StyledSubthemeLeftContent>
-                        <StyledSubthemeName>{theme.locale[lang].name}</StyledSubthemeName>
+                        <StyledSubthemeName id={`subtheme-name-${theme.id}`}>{theme.locale[lang].name}</StyledSubthemeName>
                     </StyledSubthemeLeftContent>
                     <StyledSubthemeRightContent>
-                        <StyledSubGroupLayersCount>
+                        <StyledSubGroupLayersCount id={`subgroup-layers-count-${theme.id}`}>
                             {totalVisibleGroupLayersCount + ' / ' + totalGroupLayersCount}
                         </StyledSubGroupLayersCount>
                         <StyledInfoHeaderIconContainer
@@ -664,6 +662,7 @@ export const ThemeGroup = ({
                             }}
                             style={{ marginLeft: '10px' }}
                             aria-label={`Expand ${theme.locale[lang].name}`} // Accessible name
+                            id={`info-header-icon-container-${theme.id}`}
                         >
                             <FontAwesomeIcon icon={faAngleDown} />
                         </StyledInfoHeaderIconContainer>
@@ -681,39 +680,42 @@ export const ThemeGroup = ({
                 }}
                 role="region" // Define the role of the container
                 aria-hidden={!isThemeOpen && !isOpen} // Indicate when the content is hidden
+                id={`layer-group-container-${index}`}
             >
-                <div>
+                <div id={`theme-images-${index}`}>
                     {images.length > 0
-                        ? images.map((img, index) => (
-                            <StyledLayerGroupImage src={img} key={index} alt="" />
+                        ? images.map((img, imgIndex) => (
+                            <StyledLayerGroupImage src={img} key={imgIndex} alt="Theme image" id={`layer-group-image-${imgIndex}`} />
                         ))
                         : themeImages[themeNameFi] && (
-                            <StyledLayerGroupImage src={themeImages[themeNameFi]} alt="" />
+                            <StyledLayerGroupImage src={themeImages[themeNameFi]} alt="Theme image" id={`layer-group-image-${themeNameFi}`} />
                         )}
                     {isThemeOpen &&
                         theme.locale[lang].hasOwnProperty('desc') &&
                         theme.locale[lang].desc.length > 0 && (
-                            <ThemeDesc theme={theme} lang={lang} />
+                            <ThemeDesc theme={theme} lang={lang} id={`theme-desc-${index}`} />
                         )}
                 </div>
-                <StyledLayerGroup>
+                <StyledLayerGroup id={`layer-group-${index}`}>
                     <Layers
                         layers={filteredLayers}
                         isOpen={isOpen}
                         themeName={theme.locale[lang].name}
+                        id={`layers-${index}`}
                     />
                 </StyledLayerGroup>
-                {groups.map((subtheme, index) => (
+                {groups.map((subtheme, subIndex) => (
                     <ThemeGroup
-                        key={index}
+                        key={subIndex}
                         lang={lang}
                         theme={subtheme}
                         layers={layers}
-                        index={index}
+                        index={subIndex}
                         selectGroup={selectGroup}
                         selectedThemeId={selectedThemeId}
                         isSubtheme={true}
                         isFirstSubtheme={!isSubtheme}
+                        id={`subtheme-${subIndex}`}
                     />
                 ))}
             </StyledLayerGroupContainer>
@@ -768,18 +770,20 @@ export const ThemeLinkList = ({
                 isFirstSubtheme={isFirstSubtheme}
                 isSubtheme={false}
                 index={index}
+                id={`theme-link-list-${index}`}
             >
                 <StyledMasterGroupHeader
                     key={'theme_link_' + theme.locale[lang].name}
                     onClick={(e) => handleLinkClick(e, link)}
+                    id={`master-group-header-link-${theme.locale[lang].name}`}
                 >
-                    <StyledLeftContent>
+                    <StyledLeftContent id={`left-content-link-${theme.locale[lang].name}`}>
                         <StyledMasterGroupHeaderIcon>
                             <FontAwesomeIcon icon={faLink} />
                         </StyledMasterGroupHeaderIcon>
-                        <StyledLinkName>{theme.locale[lang].name}</StyledLinkName>
+                        <StyledLinkName id={`link-name-${theme.locale[lang].name}`}>{theme.locale[lang].name}</StyledLinkName>
                     </StyledLeftContent>
-                    <StyledRightContent>
+                    <StyledRightContent id={`right-content-link-${theme.locale[lang].name}`}>
                         <StyledMasterGroupLinkIcon>
                             <FontAwesomeIcon icon={faExternalLinkAlt} />
                         </StyledMasterGroupLinkIcon>
@@ -797,7 +801,10 @@ export const ThemeDesc = ({ theme, lang }) => {
         return string.length > characterAmount + 20 ? (
             <>
                 {string.substring(0, characterAmount) + '...'}{' '}
-                <StyledReadMoreButton onClick={() => setIsExcerptOpen(!isExcerptOpen)}>
+                <StyledReadMoreButton
+                  onClick={() => setIsExcerptOpen(!isExcerptOpen)}
+                  id={`read-more-button-${theme.locale[lang].name}`}
+                >
                     {text}
                 </StyledReadMoreButton>
             </>
@@ -806,7 +813,7 @@ export const ThemeDesc = ({ theme, lang }) => {
         );
     };
 
-    // Get content from desc (surrounded by HTMl tags)
+    // Get content from desc (surrounded by HTML tags)
 
     const txt =
         (theme.locale[lang].desc &&
@@ -851,22 +858,27 @@ export const ThemeDesc = ({ theme, lang }) => {
     };
 
     return (
-        <StyledThemeContent>
+        <StyledThemeContent id={`theme-desc-content-${theme.locale[lang].name}`}>
             {isExcerptOpen ? (
                 <div>
-                    <StyledSubText>{desc.toString()}</StyledSubText>
+                    <StyledSubText id={`subtext-${theme.locale[lang].name}`}>
+                      {desc.toString()}
+                    </StyledSubText>
                     {links && links.length > 0 && (
                         <>
-                            <StyledMoreInfo>{strings.themelayerlist.moreInfo}</StyledMoreInfo>
-                            <ul>
+                            <StyledMoreInfo id={`more-info-${theme.locale[lang].name}`}>
+                              {strings.themelayerlist.moreInfo}
+                            </StyledMoreInfo>
+                            <ul id={`link-list-${theme.locale[lang].name}`}>
                                 {links.map((link, i) => {
                                     return (
-                                        <li key={i}>
+                                        <li key={i} id={`link-item-${i}`}>
                                             <StyledLinkText
                                                 rel="noreferrer"
                                                 target="_blank"
                                                 onClick={(e) => handleLinkClick(e, link)}
                                                 key={i}
+                                                id={`link-${i}`}
                                             >
                                                 {link}
                                             </StyledLinkText>
@@ -879,6 +891,7 @@ export const ThemeDesc = ({ theme, lang }) => {
                     {
                         <StyledReadMoreButton
                             onClick={() => setIsExcerptOpen(!isExcerptOpen)}
+                            id={`read-less-button-${theme.locale[lang].name}`}
                         >
                             {' '}
                             {strings.themelayerlist.readLess}{' '}
@@ -886,7 +899,7 @@ export const ThemeDesc = ({ theme, lang }) => {
                     }
                 </div>
             ) : (
-                <StyledSubText>
+                <StyledSubText id={`truncated-subtext-${theme.locale[lang].name}`}>
                     {truncatedString(
                         desc.toString(),
                         70,

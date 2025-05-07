@@ -27,11 +27,28 @@ const StyledCircleButton = styled(motion.button)`
         color: ${props => props.theme.colors.mainWhite};
         font-size: 22px;
     };
+
     @media ${props => props.theme.device.mobileL} {
-        width: ${props => props.type === "drawingTool" ? "38px" : "40px"};
-        height: ${props => props.type === "drawingTool" ? "38px" : "40px"};
+        width: ${props => props.type === "drawingTool" ? "32px" : "36px"};
+        height: ${props => props.type === "drawingTool" ? "32px" : "36px"};
+        svg {
+            font-size: 16px;
+        };
+    };
+
+    @media ${props => props.theme.device.lowResDesktop} {
+        width: ${props => props.type === "drawingTool" ? "36px" : "40px"};
+        height: ${props => props.type === "drawingTool" ? "36px" : "40px"};
         svg {
             font-size: 18px;
+        };
+    };
+
+    @media ${props => props.theme.device.mobileS} {
+        width: ${props => props.type === "drawingTool" ? "30px" : "34px"};
+        height: ${props => props.type === "drawingTool" ? "30px" : "34px"};
+        svg {
+            font-size: 14px;
         };
     };
 `;

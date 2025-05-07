@@ -20,6 +20,32 @@ import strings from '../translations';
 import { ANNOUNCEMENTS_LOCALSTORAGE } from '../utils/constants';
 
 /**
+ * Get desc content for themes groups
+ * @method updateLayers
+ * @param String text
+ * @param String startTag
+ * @param String endTag
+ */
+export const getDescTagContent = (text, startTag, endTag) => {
+    let links = [];
+    let index = 0;
+
+    while (index < text.length) {
+        let startPos = text.indexOf(startTag, index);
+        if (startPos === -1) break;
+
+        let endPos = text.indexOf(endTag, startPos + startTag.length);
+        if (endPos === -1) break; // Added this to handle cases where the end tag is not found
+
+        let link = text.substring(startPos + startTag.length, endPos);
+        links.push(link);
+
+        index = endPos + endTag.length;
+    }
+    return links;
+};
+
+/**
  * Update layers. Use only this to update all layers and selected layers.
  * @method updateLayers
  * @param {Object} store
@@ -80,12 +106,12 @@ export const showNonThemeLayers = (store, channel) => {
 /**
  * Select group.
  * @method selectGroup
- * @param {Object} store
- * @param {Object} channel
- * @param {Object} allLayers
- * @param {String} theme
- * @param {String} lastSelectedTheme
- * @param {Number} selectedThemeId
+ * @param Object store
+ * @param Object channel
+ * @param Object allLayers
+ * @param String theme
+ * @param String lastSelectedTheme
+ * @param Number selectedThemeId
  */
 export const selectGroup = (store, channel, allLayers, theme, lastSelectedTheme, selectedThemeId) => {
     const closeAllThemeLayers = (theme) => {
@@ -199,8 +225,8 @@ export const selectGroup = (store, channel, allLayers, theme, lastSelectedTheme,
 
 /**
 * Sort object values alphabetically i.ex. themes group names
-* @param {string} a first comparable value
-* @param {string} b second comparable value
+* @param string a first comparable value
+* @param string b second comparable value
 * @method sortObjectAlphabetically
 */
 export const sortObjectAlphabetically = ( a, b ) => {
@@ -215,9 +241,9 @@ export const sortObjectAlphabetically = ( a, b ) => {
 
 /**
 * Rearrange object array according to other array.
-* @param {Object} objectArray
-* @param {Array} order
-* @param {String} key
+* @param Object objectArray
+* @param Array order
+* @param String key
 * @method reArrangeArray
 */
 export const reArrangeArray = (objectArray, order, key) => {

@@ -29,7 +29,6 @@ const StyledSearchModal = styled.div`
     font-size: 15px;
     font-weight: 400;
     padding-top: 30px;
-    z-index: -10;
     max-height: ${(props) => props.isMobile ? window.innerHeight-50 + "px": window.innerHeight-200 + "px"};
     padding-bottom: 16px;
     overflow: auto;
@@ -318,7 +317,6 @@ const SearchModal = ({
     setSearchType,
     handleSeach,
     isOpen,
-    toggleModal,
     carriageWaySearch, 
     setCarriageWaySearch,
     removeMarkersAndFeatures,

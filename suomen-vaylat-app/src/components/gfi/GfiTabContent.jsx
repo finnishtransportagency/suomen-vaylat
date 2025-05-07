@@ -53,6 +53,7 @@ const StyledSelectedTabDisplayOptionsButton = styled.div`
 `;
 
 const StyledTabContent = styled.div`
+  overflow: auto;
   td:nth-child(odd) {
     border-right: 1px solid #ddd;
   }
@@ -227,11 +228,6 @@ const GfiTabContent = ({ layer, data, title, tablePropsInit }) => {
       {showDataTable ? (
         <Table {...tablePropsInit}/>
       ) : (
-        <div
-          style={{
-            overflow: "auto",
-          }}
-        >
           <StyledTabContent>
               {tablePropsInit.filteredFeatures?.map( (feature, index) => {
                   return (
@@ -254,7 +250,6 @@ const GfiTabContent = ({ layer, data, title, tablePropsInit }) => {
                 }
               )}
           </StyledTabContent>
-        </div>
       )}
     </>
   );

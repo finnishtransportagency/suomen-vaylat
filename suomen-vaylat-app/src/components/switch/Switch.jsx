@@ -16,6 +16,12 @@ const StyledSwitchContainer = styled.div`
     cursor: pointer;
     float: left;
     margin-top: 6px;
+
+
+    @media ${props => props.theme.device.tablet} {
+        width: 44px;
+        height: 22px;
+    };
 `;
 
 const StyledSwitchButton = styled.div`
@@ -29,6 +35,12 @@ const StyledSwitchButton = styled.div`
     margin-top: 0.8px;
     transition: all 0.3s ease-out;
     background-color: ${props => props.theme.colors.mainWhite};
+
+    @media ${props => props.theme.device.tablet} {
+        width: 18px;
+        height: 18px;
+        left: ${props => props.isSelected ? "21px" : "1px"};
+    };
 `;
 
 const StyledBold = styled.div`

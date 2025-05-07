@@ -20,7 +20,7 @@ const StyledGfiTabContentItemHeader = styled(motion.div)`
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 16px;
+    margin: 12px;
 `;
 
 const StyledGfiSubTabContentItemHeader = styled(motion.div)`
@@ -28,7 +28,7 @@ const StyledGfiSubTabContentItemHeader = styled(motion.div)`
     height: 40px;
     display: flex;
     align-items: center;
-    padding: 16px;
+    margin: 0 0 0 16px;
 `;
 
 const StyledGfiTabContentItemName = styled.p`
@@ -50,6 +50,7 @@ const StyledGfiTabContentItemExpandIcon = styled(motion.div)`
     display: flex;
     align-items: center;
     font-size: 24px;
+    margin: 6px;
     svg {
         color: ${props => props.theme.colors.mainColor1};
     }

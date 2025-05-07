@@ -7,8 +7,6 @@ import { faAngleDown, faAngleUp, faTimes, faTriangleExclamation } from '@fortawe
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const StyledDropDown = styled(motion.div)`
-    z-index: -2;
-    //position: absolute;
     top: 0px;
     right: 0px;
     max-width: 400px;
@@ -121,14 +119,11 @@ const StyledLayerTitleWrapper = styled.div`
 `;
 
 const DropdownIcon = styled(FontAwesomeIcon)`
-    margin: 14px 0px 10px 6px;
+    margin-top: 6px;
+    margin-left: 20px;
     transform: translateY(-10%);
     cursor: pointer;
-    color: ${props => props.theme.colors.mainWhite};
-    font-size: 1em;
-    @media (max-width: 768px) {
-        margin-top: 10px;
-    }
+    color: ${props => props.theme.colors.mainColor1};
 `;
 
 const StyledWarningIcon = styled.div`
