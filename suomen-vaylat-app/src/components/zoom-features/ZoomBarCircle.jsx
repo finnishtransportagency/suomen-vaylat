@@ -7,36 +7,45 @@ const StyledZoomLevelContainer = styled.div`
 `;
 
 const StyledZoomLevelCircle = styled.div`
-    pointer-events: auto;
-    width: 22px;
-    height: 22px;
-    border: 4px solid ${props => props.theme.colors.mainColor1};
-    border-radius: 50%;
-    background-color: ${props => props.index === props.zoomLevel || props.isActive ? props.theme.colors.secondaryColorYellow : props.theme.colors.mainWhite};
-    transform: ${props => props.index === props.zoomLevel ? "scale(1.1)" : "scale(1)"};
-    margin: 4px;
-    transition: all 0.4s ease-out;
-    transform: ${props => props.isActive && "scale(1.3)"};
-    @media ${props => props.theme.device.mobileL} {
-        width: 20px;
-        height: 20px;
-        border: 4px solid ${props => props.theme.colors.mainColor1};
-        margin: 2px;
-        transform: ${props => props.isActive && "scale(1.4)"};
-    };
-    @media ${props => props.theme.device.mobileS} {
-        width: 16px;
-        height: 16px;
-        border: 3px solid ${props => props.theme.colors.mainColor1};
-        margin: 1px;
-        transform: ${props => props.isActive && "scale(1.4)"};
-    };
+  pointer-events: auto;
+  width: 16px;
+  height: 16px;
+  border: 4px solid ${props => props.theme.colors.mainColor1};
+  border-radius: 50%;
+  background-color: ${props =>
+    props.isActive
+      ? props.theme.colors.secondaryColorYellow
+      : props.theme.colors.mainWhite};
+  transform: ${props =>
+    props.isActive ? "scale(1.2)" : "scale(1)"};
+  margin: 2px;
+  transition: all 0.3s ease-out;
+  
+  @media ${props => props.theme.device.lowResDesktop} {
+    width: 12px;
+    height: 12px;
+    border: 3px solid ${props => props.theme.colors.mainColor1};
+    margin: 2px;
+  }
+
+  @media ${props => props.theme.device.mobileL} {
+    width: 12px;
+    height: 12px;
+    border: 3px solid ${props => props.theme.colors.mainColor1};
+    margin: 2px;
+  }
+
+  @media ${props => props.theme.device.mobileS} {
+    width: 8px;
+    height: 8px;
+    border: 2px solid ${props => props.theme.colors.mainColor1};
+    margin: 1px;
+  }
 `;
+
 
 const ZoomBarCircle = ({
     index,
-    zoomLevel,
-    hoveringIndex,
     isExpanded,
     isActive
   }) => {
@@ -46,8 +55,6 @@ const ZoomBarCircle = ({
         <StyledZoomLevelContainer>
           <StyledZoomLevelCircle
             index={index}
-            zoomLevel={zoomLevel}
-            hoveringIndex={hoveringIndex}
             isExpanded={isExpanded}
             isActive={isActive}
           ></StyledZoomLevelCircle>

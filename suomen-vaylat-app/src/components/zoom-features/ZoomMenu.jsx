@@ -25,10 +25,6 @@ const ZoomMenu = () => {
 
     const { store } = useContext(ReactReduxContext);
 
-    const [hoveringIndex, setHoveringIndex] = useState(null);
-
-    const rpc = useAppSelector((state) => state.rpc);
-
     const { isLegendOpen, isZoomBarOpen, isBaselayersOpen } = useAppSelector((state) => state.ui);
 
     const handleLegendState = () => {
@@ -46,17 +42,10 @@ const ZoomMenu = () => {
         isZoomBarOpen && store.dispatch(setIsZoomBarOpen(false));
     }
 
-    useEffect(() => {
-        setHoveringIndex(rpc.currentZoomLevel);
-    },[rpc.currentZoomLevel])
-
     return (
         <>
             <StyledContainer>
                 <ZoomBar
-                    setHoveringIndex={setHoveringIndex}
-                    hoveringIndex={hoveringIndex}
-                    currentZoomLevel={rpc.currentZoomLevel}
                     isBaselayersOpen={isBaselayersOpen}
                     isLegendOpen={isLegendOpen}
                     isZoomBarOpen={isZoomBarOpen}

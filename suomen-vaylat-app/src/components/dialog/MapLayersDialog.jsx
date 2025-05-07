@@ -112,7 +112,7 @@ const StyledLayerCount = styled.div`
     position: absolute;
     top: -6px;
     right: 15px;
-    width: 25px;
+    width: 24px;
     height: 18px;
     display: flex;
     justify-content: center;
@@ -122,6 +122,24 @@ const StyledLayerCount = styled.div`
     background-color: ${(props) => props.theme.colors.secondaryColorDarkOrange};
     font-size: 14px;
     font-weight: 600;
+
+    @media ${props => props.theme.device.mobileL} {
+        width: 22px;
+        height: 16px;
+        font-size: 12px;
+    }
+
+    @media ${props => props.theme.device.lowResDesktop} {
+        width: 22px;
+        height: 16px;
+        font-size: 12px;
+    }
+
+    @media ${props => props.theme.device.mobileS} {
+        width: 20px;
+        height: 14px;
+        font-size: 10px;
+    }
 `;
 
 const StyledSwiper = styled(Swiper)`

@@ -21,39 +21,32 @@ const InputContainer = styled.div`
 `;
 
 const DropdownIcon = styled(FontAwesomeIcon)`
-    margin-top: 15px;
+    margin-top: 6px;
     margin-left: 20px;
     transform: translateY(-10%);
     cursor: pointer;
     color: ${props => props.theme.colors.mainColor1};
-    @media (max-width: 768px) {
-        margin-top: 10px;
-    }
 `;
 
 const StyledInput = styled.input`
     border: none;
-    height: 40px;
-    padding-left: 10px;
+    padding-left: 12px;
     &:focus {
         outline: none;
     };
     font-size: 16px;
-    padding-top: 10px;
     border-radius: 24px;
     flex: 1;
-    @media (max-width: 768px) {
+    @media ${props => props.theme.device.tablet} {
         font-size: 14px;
         padding-left: 10px;
-    }
+    };
 `;
-
 
 const FeatureSearch = ({
     searchValue,
     setSearchValue,
     handleFeatureSearch,
-    toggleSearchModal
 }) => {
     const {isSearchOpen, isMoreSearchOpen} = useAppSelector((state) => state.ui);
 
@@ -63,7 +56,6 @@ const FeatureSearch = ({
 
     const handleIconClick = () => {
         store.dispatch(setIsMoreSearchOpen(!isMoreSearchOpen));
-        toggleSearchModal();
     };
 
       return (

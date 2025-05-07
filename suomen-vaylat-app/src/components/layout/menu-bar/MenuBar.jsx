@@ -44,10 +44,16 @@ const StyledMenuBar = styled.div`
     flex-direction: column;
     transition: all 0.5s ease-in-out;
     gap: 8px;
+
     @media ${(props) => props.theme.device.mobileL} {
         grid-row-start: ${(props) => (props.isSearchOpen ? 2 : 1)};
         grid-row-end: 3;
+        gap: 6px;
     } ;
+
+    @media ${props => props.theme.device.lowresDesktop} {
+        gap: 6px;
+    };
 `;
 
 const StyledMapToolsContainer = styled.div`
@@ -61,7 +67,7 @@ const StyledLayerCount = styled.div`
     position: absolute;
     top: -7px;
     right: -8px;
-    width: 25px;
+    width: 24px;
     height: 18px;
     display: flex;
     justify-content: center;
@@ -71,6 +77,24 @@ const StyledLayerCount = styled.div`
     background-color: ${(props) => props.theme.colors.secondaryColorDarkOrange};
     font-size: 14px;
     font-weight: 600;
+
+    @media ${props => props.theme.device.lowResDesktop} {
+        width: 22px;
+        height: 16px;
+        font-size: 12px;
+    }
+
+    @media ${props => props.theme.device.mobileL} {
+        width: 22px;
+        height: 16px;
+        font-size: 12px;
+    }
+
+    @media ${props => props.theme.device.mobileS} {
+        width: 20px;
+        height: 14px;
+        font-size: 10px;
+    }
 `;
 
 const MenuBar = () => {
@@ -135,11 +159,8 @@ const MenuBar = () => {
 
     const closeDrawingTools = (open) => {
         // remove geometries off the map
-        channel && channel.postRequest('DrawTools.StopDrawingRequest', []);
+        channel && channel.postRequest('DrawTools.StopDrawingRequest');
         store.dispatch(setGeoJsonArray([]));
-        // stop the drawing tool
-        channel &&
-            channel.postRequest('DrawTools.StopDrawingRequest', [activeTool]);
         store.dispatch(setActiveTool(null));
         drawToolMarkers.forEach(marker => {
             store.dispatch(removeMarkerRequest({markerId: marker}));

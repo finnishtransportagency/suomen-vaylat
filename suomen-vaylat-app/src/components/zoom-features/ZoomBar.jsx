@@ -11,7 +11,7 @@ import {
 
 import { useAppSelector } from '../../state/hooks';
 import { ReactReduxContext } from 'react-redux';
-import { setZoomTo, setZoomIn, setZoomOut } from '../../state/slices/rpcSlice';
+import { setZoomTo, setZoomIn, setZoomOut, setCurrentZoomLevel } from '../../state/slices/rpcSlice';
 import strings from '../../translations';
 import CircleButton from '../circle-button/CircleButton';
 import ZoomBarCircle from './ZoomBarCircle';
@@ -20,7 +20,7 @@ import { Legend } from '../legend/Legend';
 import { Baselayers } from '../base-layers/Baselayers';
 
 const StyledZoomBarContainer = styled.div`
-    z-index: 5;
+    z-index: 2;
     position: relative;
     pointer-events: none;
     cursor: pointer;
@@ -28,10 +28,17 @@ const StyledZoomBarContainer = styled.div`
 `;
 
 const StyledZoomBarContent = styled.div`
-    z-index: 2;
     display: flex;
     flex-direction: column;
     gap: 8px;
+
+    @media ${(props) => props.theme.device.mobileL} {
+        gap: 6px;
+    };
+
+    @media ${(props) => props.theme.device.lowResDesktop} {
+        gap: 6px;
+    };
 `;
 
 const StyledZoomBarZoomFeatures = styled.div`
@@ -87,9 +94,6 @@ const listVariants = {
 };
 
 const ZoomBar = ({
-    setHoveringIndex,
-    hoveringIndex,
-    currentZoomLevel,
     isBaselayersOpen,
     isLegendOpen,
     isZoomBarOpen,
@@ -98,11 +102,11 @@ const ZoomBar = ({
     setIsBaselayersOpen
 }) => {
     const { store } = useContext(ReactReduxContext);
-    const rpc = useAppSelector((state) => state.rpc);
+    const {currentZoomLevel, zoomRange, selectedLayers, channel} = useAppSelector((state) => state.rpc);
     const zooms = Array.apply(null, {
-        length: rpc.zoomRange.max + 1 - rpc.zoomRange.min,
+        length: zoomRange.max + 1 - zoomRange.min,
     }).map(function (_, idx) {
-        return idx + rpc.zoomRange.min;
+        return idx + zoomRange.min;
     });
 
     const handleLegendClick = () => {
@@ -117,13 +121,13 @@ const ZoomBar = ({
     return (
         <StyledZoomBarContainer>
             <Legend
-                currentZoomLevel={rpc.currentZoomLevel}
-                selectedLayers={rpc.selectedLayers}
+                currentZoomLevel={currentZoomLevel}
+                selectedLayers={selectedLayers}
                 isExpanded={isLegendOpen}
                 setIsExpanded={setIsLegendOpen}
             />
             <Baselayers
-                selectedLayers={rpc.selectedLayers}
+                selectedLayers={selectedLayers}
                 isExpanded={isBaselayersOpen}
                 setIsExpanded={setIsBaselayersOpen}
             />
@@ -139,7 +143,7 @@ const ZoomBar = ({
                     <CircleButton
                         icon={faSearchPlus}
                         text={strings.tooltips.zoomIn}
-                        disabled={currentZoomLevel === rpc.zoomRange.max}
+                        disabled={currentZoomLevel === zoomRange.max}
                         clickAction={() => store.dispatch(setZoomIn())}
                         tooltipDirection={'left'}
                     />
@@ -157,24 +161,21 @@ const ZoomBar = ({
                                 <ZoomBarCircle
                                     key={index}
                                     index={index}
-                                    zoomLevel={currentZoomLevel}
-                                    hoveringIndex={hoveringIndex}
-                                    setHoveringIndex={setHoveringIndex}
                                     isActive={
                                         parseInt(index) ===
-                                        parseInt(hoveringIndex)
+                                        parseInt(currentZoomLevel)
                                     }
                                 />
                             );
                         })}
                         <StyledZoomBarSlider
-                        aria-label={strings.accessibility.zoomRange}
+                            aria-label={strings.accessibility.zoomRange}
                             type="range"
                             orient="vertical"
-                            max="13"
-                            value={hoveringIndex}
+                            max="16"
+                            value={currentZoomLevel}
                             onChange={(e) => {
-                                setHoveringIndex(e.target.value);
+                                store.dispatch(setCurrentZoomLevel(e.target.value));
                             }}
                             onMouseUp={(e) => {
                                 store.dispatch(setZoomTo(e.target.value));
@@ -187,7 +188,7 @@ const ZoomBar = ({
                     <CircleButton
                         icon={faSearchMinus}
                         text={strings.tooltips.zoomOut}
-                        disabled={currentZoomLevel === rpc.zoomRange.min}
+                        disabled={currentZoomLevel === zoomRange.min}
                         clickAction={() => {
                             currentZoomLevel > 0 &&
                                 store.dispatch(setZoomOut());
@@ -206,7 +207,7 @@ const ZoomBar = ({
                     icon={faCrosshairs}
                     text={strings.tooltips.myLocButton}
                     clickAction={() =>
-                        rpc.channel.postRequest(
+                        channel.postRequest(
                             'MyLocationPlugin.GetUserLocationRequest'
                         )
                     }

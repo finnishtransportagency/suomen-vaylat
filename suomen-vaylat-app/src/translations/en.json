@@ -411,7 +411,7 @@
     "premise" : {
       "title": "Property search"
     },
-    "carriageWaySearch": "Use driving_lane search"
+    "carriageWaySearch": "Use driving lane search"
   },
   "layerlist": {
     "errorLoadingLayers": "Error loading maplayers",

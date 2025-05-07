@@ -22,7 +22,7 @@ import { isMobile, theme } from '../../theme/theme';
 
 import { addMarkerRequest, mapMoveRequest, pushToFeatureSearchResults, resetFeatureSearchResults, setSearchOn, searchVKMTrack, setFeatureSearchResults } from '../../state/slices/rpcSlice';
 
-import { setIsSearchOpen, setGeoJsonArray, setHasToastBeenShown, setActiveSwitch } from '../../state/slices/uiSlice';
+import { setIsSearchOpen, setGeoJsonArray, setHasToastBeenShown, setActiveSwitch, setIsMoreSearchOpen } from '../../state/slices/uiSlice';
 
 import CircleButton from '../circle-button/CircleButton';
 
@@ -32,7 +32,6 @@ import SearchToast from '../toasts/SearchToast';
 import ReactTooltip from 'react-tooltip';
 import TipToast from '../toasts/TipToast';
 import SearchModal from './SearchModal';
-import VKMTrackSearch from './VKMTrackSearch';
 
 export const StyledSearchIcon = styled.div`
     min-width: 48px;
@@ -47,7 +46,7 @@ export const StyledSearchIcon = styled.div`
     `;
 
 const StyledSearchContainer = styled.div`
-    z-index: 2;
+    z-index: 6;
     position: absolute;
     right: 8px;
     padding-right: 8px;
@@ -58,6 +57,20 @@ const StyledSearchContainer = styled.div`
     @media only screen and (max-width: 480px) {
         height: 40px;
         width: 77%;
+    };
+
+    @media ${props => props.theme.device.mobileL} {
+        width: 77%;
+        height: 36px;
+    };
+
+    @media ${props => props.theme.device.mobileS} {
+        width: 77%;
+        height: 34px;
+    };
+
+    @media ${props => props.theme.device.lowResDesktop} {
+        height: 40px;
     };
 `;
 
@@ -88,7 +101,9 @@ const StyledSearchWrapper = styled(motion.div)`
 
 const StyledLeftContentWrapper = styled.div`
     width: 100%;
+    height: 100%;
     display: flex;
+    align-items: center;
 `;
 
 const StyledSearchActionButton = styled(FontAwesomeIcon)`
@@ -97,7 +112,6 @@ const StyledSearchActionButton = styled(FontAwesomeIcon)`
     font-size: 16px;
     cursor: pointer;
     top: 0;
-    margin-top: 15px;
 `;
 
 const StyledSelectedSearchMethod = styled.div`
@@ -203,9 +217,8 @@ const Search = () => {
     const [isSearchMethodSelectorOpen, setIsSearchMethodSelectorOpen] =
         useState(false);
     const [searchType, setSearchType] = useState('address');
-    const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
 
-    const { isSearchOpen, geoJsonArray, hasToastBeenShown, activeSwitch } = useAppSelector((state) => state.ui);
+    const { isSearchOpen, geoJsonArray, hasToastBeenShown, activeSwitch, isMoreSearchOpen } = useAppSelector((state) => state.ui);
     const { channel, allLayers, selectedLayersByType, featureSearchResults } = useAppSelector((state) => state.rpc);
 
     const { store } = useContext(ReactReduxContext);
@@ -282,8 +295,8 @@ const Search = () => {
 
                             const mimicdata = { result: { locations: locations } };
                             setSearchResults(mimicdata);
-                            if ((data?.result?.locations?.length > 1 || checkIfNonEmptyTrackResult(data)) && !isSearchModalOpen) {
-                                setIsSearchModalOpen(true);
+                            if ((data?.result?.locations?.length > 1 || checkIfNonEmptyTrackResult(data)) && !isMoreSearchOpen) {
+                                store.dispatch(setIsMoreSearchOpen(true));
                             }
                             setIsSearching(false);
                         }
@@ -297,10 +310,6 @@ const Search = () => {
         setSearchValue(value);
         setLastSearchValue(value);
         setSearchResults(null);
-    };
-
-    const toggleSearchModal = () => {
-        setIsSearchModalOpen(prevState => !prevState);
     };
 
     const handleMetadataSearch = (value) => {
@@ -445,14 +454,13 @@ const Search = () => {
                     searchValue={searchValue}
                     setSearchValue={setSearchValue}
                     setIsSearching={setIsSearching}
-                    toggleSearchModal={toggleSearchModal}
                     handleSeach={handleSeach}
                 />
             ),
             visible: true,
         },
         metadata: {
-            label: strings.search.metadata.title,
+            label: strings.search.layer.title,
             subtitle: strings.search.metadata.subtitle,
             content: (
                 <MetadataSearch
@@ -460,7 +468,6 @@ const Search = () => {
                     setSearchValue={setSearchValue}
                     setIsSearching={setIsSearching}
                     handleMetadataSearch={handleMetadataSearch}
-                    toggleSearchModal={toggleSearchModal}
                 />
             ),
             visible: true,
@@ -474,7 +481,6 @@ const Search = () => {
                     setSearchValue={setSearchValue}
                     setIsSearching={setIsSearching}
                     handleFeatureSearch={handleFeatureSearch}
-                    toggleSearchModal={toggleSearchModal}
                 />
             ),
             visible: false,
@@ -489,8 +495,8 @@ const Search = () => {
                     if (data.result) {
                         setSearchResults(data);
                     }
-                    if ((data?.result?.locations?.length > 1 || data?.result?.geom?.length > 1) && !isSearchModalOpen) {
-                        setIsSearchModalOpen(true);
+                    if ((data?.result?.locations?.length > 1 || data?.result?.geom?.length > 1) && !isMoreSearchOpen) {
+                        store.dispatch(setIsMoreSearchOpen(true));
                     }
                 }
             });
@@ -748,6 +754,9 @@ const Search = () => {
                 toggleState={isSearchOpen}
                 tooltipDirection={'left'}
                 clickAction={() => {
+                    if (isSearchOpen) {
+                        store.dispatch(setIsMoreSearchOpen(false));
+                    }
                     store.dispatch(setActiveSwitch(null));
                     store.dispatch(resetFeatureSearchResults());
                     isSearchOpen && store.dispatch(setGeoJsonArray([]));
@@ -775,7 +784,7 @@ const Search = () => {
                         searchType={searchType}
                         showSearchResults={showSearchResults}
                     >
-                        <StyledLeftContentWrapper>
+                        <StyledLeftContentWrapper id="left_search_content_wrapper">
                             {!isSearching ? (
                                 <StyledSelectedSearchMethod
                                     onClick={() => {
@@ -829,7 +838,7 @@ const Search = () => {
                             allLayers={allLayers}
                             hidden={true}
                         />
-                        {isSearchModalOpen && (
+                        {isMoreSearchOpen && (
                             <SearchModal
                                 searchValue={searchValue}
                                 setSearchValue={setSearchValue}
@@ -849,8 +858,7 @@ const Search = () => {
                                 searchType={searchType}
                                 setSearchType={setSearchType}
                                 handleSeach={handleSeach}
-                                isOpen={isSearchModalOpen}
-                                toggleModal={toggleSearchModal}
+                                isOpen={isMoreSearchOpen}
                                 carriageWaySearch={carriageWaySearch}
                                 setCarriageWaySearch={setCarriageWaySearch}
                                 removeMarkersAndFeatures={removeMarkersAndFeatures}
