@@ -1,9 +1,9 @@
-import React, { useRef, useState, useEffect} from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import store from '../../state/store';
 import styled from 'styled-components';
 import strings from '../../translations';
 import { getAppBuildDate, getAppVersion } from '../../utils/appInfoUtil';
-import { isMobile, size} from '../../theme/theme';
+import { isMobile, size } from '../../theme/theme';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSelector } from 'react-redux';
 import { setIsFeedBackFormOpen } from '../../state/slices/uiSlice';
@@ -15,104 +15,105 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 
 const StyledContent = styled.div`
-    max-width: 660px;
-    overflow: auto;
-    flex-direction: column;
-    display: flex;
-    height: 100%;
+  max-width: 660px;
+  overflow: auto;
+  flex-direction: column;
+  display: flex;
+  height: 100%;
 `;
 
 const StyledTabs = styled.div`
-    position: relative;
-    display: flex;
-    align-items: center;
-    max-height: 100px;
-    background-color: #F2F2F2;
-    &::before {
-        z-index: 2;
-        position: absolute;
-        content: '';
-        width: ${props => 'calc(100% /' + props.tabsCount + ')'};
-        height: 100%;
-        background-color: ${props => props.theme.colors.mainWhite};
-        bottom: 0px;
-        left: ${props => props.tabIndex * (100 / (props.tabsCount - 1)) +'%'};
-        border-radius: 4px 4px 0px 0px;
-        transform: translateX(
-            ${props => {
-                return props.tabIndex * -(100 / (props.tabsCount - 1)) + '%';
-            }}
-        );
-        transition: all 0.3s ease-out;
-    };
-    &::after {
-        position: absolute;
-        content: '';
-        width: ${props => 'calc(100% /' + props.tabsCount + ')'};
-        height: 100%;
-        bottom: 0px;
-        left: ${props => props.tabIndex * (100 / (props.tabsCount - 1)) + '%'};
-        border-radius: 4px 4px 0px 0px;
-        transform: translateX(
-            ${props => {
-                return props.tabIndex * -(100 / (props.tabsCount - 1)) + '%';
-            }}
-        );
-        transition: all 0.3s ease-out;
-        box-shadow: 0px -1px 11px rgba(0, 99, 175, 0.3);
-    };
+  position: relative;
+  display: flex;
+  align-items: center;
+  max-height: 100px;
+  background-color: #f2f2f2;
+  &::before {
+    z-index: 2;
+    position: absolute;
+    content: '';
+    width: ${(props) => 'calc(100% /' + props.tabsCount + ')'};
+    height: 100%;
+    background-color: ${(props) => props.theme.colors.mainWhite};
+    bottom: 0px;
+    left: ${(props) => props.tabIndex * (100 / (props.tabsCount - 1)) + '%'};
+    border-radius: 4px 4px 0px 0px;
+    transform: translateX(
+      ${(props) => {
+        return props.tabIndex * -(100 / (props.tabsCount - 1)) + '%';
+      }}
+    );
+    transition: all 0.3s ease-out;
+  }
+  &::after {
+    position: absolute;
+    content: '';
+    width: ${(props) => 'calc(100% /' + props.tabsCount + ')'};
+    height: 100%;
+    bottom: 0px;
+    left: ${(props) => props.tabIndex * (100 / (props.tabsCount - 1)) + '%'};
+    border-radius: 4px 4px 0px 0px;
+    transform: translateX(
+      ${(props) => {
+        return props.tabIndex * -(100 / (props.tabsCount - 1)) + '%';
+      }}
+    );
+    transition: all 0.3s ease-out;
+    box-shadow: 0px -1px 11px rgba(0, 99, 175, 0.3);
+  }
 `;
 
 const StyledTab = styled(motion.div)`
-    z-index: 2;
-    user-select: none;
-    width: ${props => 'calc(100% /' + props.tabsCount + ')'};
-    cursor: pointer;
-    color: ${props => props.isSelected ? props.theme.colors[props.color] : "#656565"};
-    text-align: center;
-    transition: color 0.2s ease-out;
-    display: flex;
-    justify-content: center;
+  z-index: 2;
+  user-select: none;
+  width: ${(props) => 'calc(100% /' + props.tabsCount + ')'};
+  cursor: pointer;
+  color: ${(props) =>
+    props.isSelected ? props.theme.colors[props.color] : '#656565'};
+  text-align: center;
+  transition: color 0.2s ease-out;
+  display: flex;
+  justify-content: center;
 
-    p {
-        font-size: 13px;
-        font-weight: bold;
-        margin: 0;
-        padding: 8px;
-    }
+  p {
+    font-size: 13px;
+    font-weight: bold;
+    margin: 0;
+    padding: 8px;
+  }
 `;
 
 const StyledMobileContainer = styled(motion.div)`
-    padding: 0px 16px;
+  padding: 0px 16px;
 `;
 
 const StyledCloseMenuContainer = styled.div`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 5px 5px;
-    cursor: pointer;
-    height: 26px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 5px 5px;
+  cursor: pointer;
+  height: 26px;
 `;
 
 const StyledCloseMenuIcon = styled(FontAwesomeIcon)`
-    font-size: 18px;
-    position: absolute;
-    left: 16px;
-    top: 75px;
+  font-size: 18px;
+  position: absolute;
+  left: 16px;
+  top: 75px;
 `;
 
 const StyledMenuContainer = styled(motion.div)`
-    padding: 0px 12px;
-    display: flex;
-    justify-content: flex-start;
-    color: ${props => props.theme.colors.mainColor1};
+  padding: 0px 12px;
+  display: flex;
+  justify-content: flex-start;
+  color: ${(props) => props.theme.colors.mainColor1};
 `;
 
 const StyledMobileTabs = styled(motion.div)`
-    display: flex;
-    flex-direction: column;
-    margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  margin-top: 10px;
 `;
 
 const StyledMobileTab = styled.button`
@@ -120,42 +121,41 @@ const StyledMobileTab = styled.button`
     text-align: left;
     border: none;
     background: none;
-    color: ${props => props.theme.colors.mainColor1};
-    text-decoration: ${props => props.isSelected && 'underline'};
+    color: ${(props) => props.theme.colors.mainColor1};
+    text-decoration: ${(props) => props.isSelected && 'underline'};
     font-weight: bold;
     box-shadow: rgba(17, 17, 26, 0.1) 0px 1px 0px;
     margin: 5px 0px;
 `;
 
 const StyledMobileTabContent = styled(motion.div)`
-    padding: 0px 5px;
+  padding: 0px 5px;
 `;
 
 const StyledLink = styled.a`
-    text-decoration: underline;
-    cursor: pointer;
-    color: ${props => props.theme.colors.mainColor1};
-    word-wrap:break-word;
+  text-decoration: underline;
+  cursor: pointer;
+  color: ${(props) => props.theme.colors.mainColor1};
+  word-wrap: break-word;
 `;
 
-const StyledTitle = styled.em`
-`;
+const StyledTitle = styled.em``;
 
 const StyledHeading = styled.h5`
-    color: ${props => props.theme.colors.mainColor1};
+    color: ${(props) => props.theme.colors.mainColor1};
     margin 10px 0px 25px 0px;
 `;
 
 const StyledSwiper = styled(Swiper)`
-    margin-left: 0;
-    margin-right: 0;
-    overflow-y: auto;
+  margin-left: 0;
+  margin-right: 0;
+  overflow-y: auto;
 
-    .swiper-slide {
-        background-color: ${props => props.theme.colors.mainWhite};
-        padding: 16px 16px 16px 16px;
-        height:100%;
-    };
+  .swiper-slide {
+    background-color: ${(props) => props.theme.colors.mainWhite};
+    padding: 16px 16px 16px 16px;
+    height: 100%;
+  }
   transition: box-shadow 0.3s ease-out;
 `;
 
@@ -167,7 +167,7 @@ const StyledButton = styled.div`
   height: 32px;
   display: flex;
   border-radius: 30px;
-  background-color: ${props => props.theme.colors.mainColor1};
+  background-color: ${(props) => props.theme.colors.mainColor1};
   cursor: pointer;
   font-size: 13px;
   color: #fff;
@@ -175,307 +175,404 @@ const StyledButton = styled.div`
   line-height: 1;
 `;
 
-export const ListComponent = ({listData}) => {
-    return (
-        <ul>
-            {Object.values(listData).map((item) => {
-                return (
-                        <li key={'app-info-lc-li-' + item.title || item}>{item.title || item}
-                            {item.list &&
-                                <ul key={'app-info-lc-ul-' + item.title || item}>
-                                    {Object.values(item.list).map((listItem) => {
-                                        return (
-                                            <li key={'app-info-lc-ul-li-' + listItem.content}>{listItem.content}
-                                                {listItem.subContent &&
-                                                    <ul key={'app-info-lc-ul-li-ul-' + listItem.content}>
-                                                        {Object.values(listItem.subContent).map((subItem) => {
-                                                            return (
-                                                                <li key={'app-info-lc-ul-li-ul-li' + subItem}>{subItem}</li>
-                                                            )
-                                                        })}
-                                                    </ul>
-                                                }
-                                            </li>
-                                        )
-                                    })}
-                                </ul>
-                            }
-                        </li>
-                );
-            })}
-        </ul>
-    );
+export const ListComponent = ({ listData }) => {
+  return (
+    <ul>
+      {Object.values(listData).map((item) => {
+        return (
+          <li key={'app-info-lc-li-' + item.title || item}>
+            {item.title || item}
+            {item.list && (
+              <ul key={'app-info-lc-ul-' + item.title || item}>
+                {Object.values(item.list).map((listItem) => {
+                  return (
+                    <li key={'app-info-lc-ul-li-' + listItem.content}>
+                      {listItem.content}
+                      {listItem.subContent && (
+                        <ul key={'app-info-lc-ul-li-ul-' + listItem.content}>
+                          {Object.values(listItem.subContent).map((subItem) => {
+                            return (
+                              <li key={'app-info-lc-ul-li-ul-li' + subItem}>
+                                {subItem}
+                              </li>
+                            );
+                          })}
+                        </ul>
+                      )}
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
+          </li>
+        );
+      })}
+    </ul>
+  );
 };
 
 export const AppInfo = () => {
-    return(
-        <>
-            {isMobile && <StyledHeading>{strings.appInfo.versionInfo.appInfoTitle}</StyledHeading>}
-            <p> <b>{strings.appInfo.headingText}</b> </p>
-            <p>{strings.appInfo.mainText}</p>
-        </>
-    )
-}
+  return (
+    <>
+      {isMobile && (
+        <StyledHeading>
+          {strings.appInfo.versionInfo.appInfoTitle}
+        </StyledHeading>
+      )}
+      <p>
+        {' '}
+        <b>{strings.appInfo.headingText}</b>{' '}
+      </p>
+      <p>{strings.appInfo.mainText}</p>
+    </>
+  );
+};
 
-export const VersionInfo = ({currentAppVersion, currentAppBuildDate}) => {
-    const { channel } = useSelector(state => state.rpc);
-    const [oskariVersion, setOskariVersion] = useState(); 
-    
-    channel?.getInfo(function(oskariInfo) {
-        setOskariVersion(oskariInfo.version); 
-    });
+export const VersionInfo = ({ currentAppVersion, currentAppBuildDate }) => {
+  const { channel } = useSelector((state) => state.rpc);
+  const [oskariVersion, setOskariVersion] = useState();
 
-    return (
-        <div>
-            {isMobile && <StyledHeading>{strings.appInfo.versionInfo.title}</StyledHeading>}
-            <StyledLink href='https://github.com/finnishtransportagency/suomen-vaylat/releases'><p style={{fontStyle: "italic"}}>{strings.appInfo.versionInfo.appVersion + currentAppVersion}</p></StyledLink>
-            <StyledTitle><p>{strings.appInfo.versionInfo.appLastUpdate + currentAppBuildDate}</p></StyledTitle>
-            <StyledLink href='https://github.com/oskariorg/oskari-frontend/blob/master/ReleaseNotes.md'><p style={{fontStyle: "italic"}}>{strings.appInfo.versionInfo.oskari} {oskariVersion}</p></StyledLink>
-        </div>
-    );
+  channel?.getInfo(function (oskariInfo) {
+    setOskariVersion(oskariInfo.version);
+  });
+
+  return (
+    <div>
+      {isMobile && (
+        <StyledHeading>{strings.appInfo.versionInfo.title}</StyledHeading>
+      )}
+      <StyledLink href="https://github.com/finnishtransportagency/suomen-vaylat/releases">
+        <p style={{ fontStyle: 'italic' }}>
+          {strings.appInfo.versionInfo.appVersion + currentAppVersion}
+        </p>
+      </StyledLink>
+      <StyledTitle>
+        <p>{strings.appInfo.versionInfo.appLastUpdate + currentAppBuildDate}</p>
+      </StyledTitle>
+      <StyledLink href="https://github.com/oskariorg/oskari-frontend/blob/master/ReleaseNotes.md">
+        <p style={{ fontStyle: 'italic' }}>
+          {strings.appInfo.versionInfo.oskari} {oskariVersion}
+        </p>
+      </StyledLink>
+    </div>
+  );
 };
 
 export const ContactAndFeedback = () => {
-    const contactInfoFeedback = strings.appInfo.contactInfoFeedback;
+  const contactInfoFeedback = strings.appInfo.contactInfoFeedback;
 
-    const openFeedbackForm = () => {
-        store.dispatch(setIsFeedBackFormOpen(true))
-    };
+  const openFeedbackForm = () => {
+    store.dispatch(setIsFeedBackFormOpen(true));
+  };
 
-    return (
-        <div>
-            {isMobile && <StyledHeading>{strings.appInfo.versionInfo.appContactAndFeedback}</StyledHeading>}
-            <p>{contactInfoFeedback[0]}</p>
-            <p>{contactInfoFeedback[1]} <StyledLink href={'mailto:' + contactInfoFeedback[2] + '?subject='+contactInfoFeedback.emailSubject}>{contactInfoFeedback[2]}</StyledLink></p>
-            <p>{contactInfoFeedback[3]} <StyledLink href={contactInfoFeedback[4]}>{contactInfoFeedback[4]}</StyledLink></p>
+  return (
+    <div>
+      {isMobile && (
+        <StyledHeading>
+          {strings.appInfo.versionInfo.appContactAndFeedback}
+        </StyledHeading>
+      )}
+      <p>{contactInfoFeedback[0]}</p>
+      <p>
+        {contactInfoFeedback[1]}{' '}
+        <StyledLink
+          href={
+            'mailto:' +
+            contactInfoFeedback[2] +
+            '?subject=' +
+            contactInfoFeedback.emailSubject
+          }
+        >
+          {contactInfoFeedback[2]}
+        </StyledLink>
+      </p>
+      <p>
+        {contactInfoFeedback[3]}{' '}
+        <StyledLink href={contactInfoFeedback[4]}>
+          {contactInfoFeedback[4]}
+        </StyledLink>
+      </p>
 
-            <StyledButton onClick={openFeedbackForm}>{strings.appInfo.feedbackForm.openFeedbackForm}</StyledButton>
-
-        </div>
-    );
+      <StyledButton onClick={openFeedbackForm}>
+        {strings.appInfo.feedbackForm.openFeedbackForm}
+      </StyledButton>
+    </div>
+  );
 };
 
 export const AppInfoLinks = () => {
-    const appInfoLinks = strings.appInfo.appInfoLinks;
+  const appInfoLinks = strings.appInfo.appInfoLinks;
 
-    return (
-        <div>
-            {isMobile && <StyledHeading>{strings.appInfo.versionInfo.appInfoLinksTitle}</StyledHeading>}
-            <ul>
-                {Object.values(appInfoLinks).map((link, key) => {
-                    return(
-                        <li key={key}>{link.text} <StyledLink href={link.link} target={'_blank'}>{link.link}</StyledLink></li>
-                    )
-                })}
-            </ul>
-        </div>
-    )
+  return (
+    <div>
+      {isMobile && (
+        <StyledHeading>
+          {strings.appInfo.versionInfo.appInfoLinksTitle}
+        </StyledHeading>
+      )}
+      <ul>
+        {Object.values(appInfoLinks).map((link, key) => {
+          return (
+            <li key={key}>
+              {link.text}{' '}
+              <StyledLink href={link.link} target={'_blank'}>
+                {link.link}
+              </StyledLink>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  );
 };
 
 export const SourcesAndTermsOfUse = () => {
-    return(
+  return (
+    <div>
+      <div>
+        <StyledHeading> {strings.appInfo.dataSources.title}</StyledHeading>
+        <p>
+          {strings.appInfo.dataSources.municipalityImage}{' '}
+          <StyledLink
+            target="_blank"
+            href={strings.appInfo.dataSources.municipalityLink}
+          >
+            {strings.appInfo.dataSources.municipalityLink}
+          </StyledLink>{' '}
+        </p>
+        <p>
+          {strings.appInfo.dataSources.landSurvey}{' '}
+          <StyledLink
+            target="_blank"
+            href={strings.appInfo.dataSources.landSurveyLink}
+          >
+            {strings.appInfo.dataSources.landSurveyLink}
+          </StyledLink>{' '}
+        </p>
+        <p>{strings.appInfo.dataSources.roadmaps}</p>
+        <p>{strings.appInfo.dataSources.syke}</p>
+      </div>
+      <div>
+        <StyledHeading>{strings.appInfo.termsOfUse.title}</StyledHeading>
+        <p>{strings.appInfo.termsOfUse.description}</p>
         <div>
-            <div>
-                <StyledHeading> {strings.appInfo.dataSources.title}</StyledHeading>
-                <p>{strings.appInfo.dataSources.municipalityImage} <StyledLink target='_blank' href={strings.appInfo.dataSources.municipalityLink}>{strings.appInfo.dataSources.municipalityLink}</StyledLink> </p>
-                <p>{strings.appInfo.dataSources.landSurvey} <StyledLink target='_blank' href={strings.appInfo.dataSources.landSurveyLink}>{strings.appInfo.dataSources.landSurveyLink}</StyledLink> </p>
-                <p>{strings.appInfo.dataSources.roadmaps}</p>
-                <p>{strings.appInfo.dataSources.syke}</p>
-            </div>
-            <div>
-                <StyledHeading>{strings.appInfo.termsOfUse.title}</StyledHeading>
-                <p>{strings.appInfo.termsOfUse.description}</p>
-                <div>
-                    <p>{strings.appInfo.termsOfUse.moreInfo} <StyledLink target='_blank' href={strings.appInfo.termsOfUse.link}>{strings.appInfo.termsOfUse.link}</StyledLink></p>
-                </div>
-            </div>
-            <div>
-                <p>{strings.appInfo.appCode.appCodeInfo} <StyledLink target='_blank' href={strings.appInfo.appCode.appCodeLink}>{strings.appInfo.appCode.appCodeLink}</StyledLink> </p>
-            </div>
-            <div>
-                <p>{strings.appInfo.googleTerms.googleTermsInfo} <StyledLink target='_blank' href={strings.appInfo.googleTerms.googleTermsLink}>{strings.appInfo.googleTerms.googleTermsLink}</StyledLink> </p>
-            </div>
-            <div>
-                <StyledHeading>{strings.appInfo.privacyPolicy.title}</StyledHeading>
-                <div>
-                    <StyledLink target='_blank' href={strings.appInfo.privacyPolicy.link}>{strings.appInfo.privacyPolicy.link}</StyledLink>
-                </div>
-            </div>
+          <p>
+            {strings.appInfo.termsOfUse.moreInfo}{' '}
+            <StyledLink target="_blank" href={strings.appInfo.termsOfUse.link}>
+              {strings.appInfo.termsOfUse.link}
+            </StyledLink>
+          </p>
         </div>
-    )
+      </div>
+      <div>
+        <p>
+          {strings.appInfo.appCode.appCodeInfo}{' '}
+          <StyledLink
+            target="_blank"
+            href={strings.appInfo.appCode.appCodeLink}
+          >
+            {strings.appInfo.appCode.appCodeLink}
+          </StyledLink>{' '}
+        </p>
+      </div>
+      <div>
+        <p>
+          {strings.appInfo.googleTerms.googleTermsInfo}{' '}
+          <StyledLink
+            target="_blank"
+            href={strings.appInfo.googleTerms.googleTermsLink}
+          >
+            {strings.appInfo.googleTerms.googleTermsLink}
+          </StyledLink>{' '}
+        </p>
+      </div>
+      <div>
+        <StyledHeading>{strings.appInfo.privacyPolicy.title}</StyledHeading>
+        <div>
+          <StyledLink target="_blank" href={strings.appInfo.privacyPolicy.link}>
+            {strings.appInfo.privacyPolicy.link}
+          </StyledLink>
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export const AppInfoModalContent = () => {
+  const inputEl = useRef(null);
+  const [isNavOpen, setIsNavOpen] = useState(true);
 
-    const inputEl = useRef(null);
-    const [isNavOpen, setIsNavOpen] = useState(true);
+  const showMobileView = isMobile && window.innerWidth < parseInt(size.mobileL);
 
-    const showMobileView = isMobile && window.innerWidth < parseInt(size.mobileL);
+  // App build info
+  const currentAppVersion = getAppVersion();
+  const currentAppBuildDate = getAppBuildDate();
 
-    // App build info
-    const currentAppVersion = getAppVersion();
-    const currentAppBuildDate = getAppBuildDate();
+  const [tabIndex, setTabIndex] = useState(0);
 
-    const [tabIndex, setTabIndex] = useState(0);
+  useEffect(() => {
+    showMobileView && setTabIndex(-1);
+  }, []);
 
-    useEffect(() => {
-        showMobileView && setTabIndex(-1);
-    }, [])
+  const tabsContent = [
+    {
+      title: strings.appInfo.versionInfo.appInfoTitle,
+      titleColor: 'mainColor1',
+      content: <AppInfo />
+    },
+    {
+      title: strings.appInfo.versionInfo.appInfoLinksTitle,
+      titleColor: 'mainColor1',
+      content: <AppInfoLinks />
+    },
+    {
+      title: strings.appInfo.versionInfo.title,
+      titleColor: 'mainColor1',
+      content: (
+        <VersionInfo
+          currentAppVersion={currentAppVersion}
+          currentAppBuildDate={currentAppBuildDate}
+        />
+      )
+    },
+    {
+      title: strings.appInfo.versionInfo.appContactAndFeedback,
+      titleColor: 'mainColor1',
+      content: <ContactAndFeedback />
+    },
+    {
+      title: strings.appInfo.dataSourcesAndTermsOfUse.tabTitle,
+      titleColor: 'mainColor1',
+      content: <SourcesAndTermsOfUse />
+    }
+  ];
 
-    const tabsContent = [
-        {
-            title: strings.appInfo.versionInfo.appInfoTitle,
-            titleColor: 'mainColor1',
-            content: <AppInfo />
-        },
-        {
-            title: strings.appInfo.versionInfo.appInfoLinksTitle,
-            titleColor: 'mainColor1',
-            content: <AppInfoLinks />
-        },
-        {
-            title: strings.appInfo.versionInfo.title,
-            titleColor: 'mainColor1',
-            content: <VersionInfo
-                currentAppVersion={currentAppVersion}
-                currentAppBuildDate={currentAppBuildDate}
-            />
-        },
-        {
-            title: strings.appInfo.versionInfo.appContactAndFeedback,
-            titleColor: 'mainColor1',
-            content: <ContactAndFeedback />
-        },
-        {
-            title: strings.appInfo.dataSourcesAndTermsOfUse.tabTitle,
-            titleColor: 'mainColor1',
-            content: <SourcesAndTermsOfUse />
-        }
-    ];
+  useEffect(() => {
+    inputEl.current.swiper.slideTo(tabIndex);
+  }, [tabIndex]);
 
-    useEffect(() => {
-        inputEl.current.swiper.slideTo(tabIndex);
-    },[tabIndex]);
+  const variants = {
+    initial: { opacity: 0 },
+    hidden: { opacity: isNavOpen && 0, transition: { duration: 0.2 } },
+    visible: { opacity: 1, transition: { delay: 0.4 } },
+    exit: { opacity: 0, transition: { duration: 0.4 } }
+  };
 
-    const variants = {
-        initial : {opacity: 0},
-        hidden:{opacity: isNavOpen && 0, transition: {duration: 0.2}},
-        visible: {opacity : 1, transition: { delay: 0.4}},
-        exit: {opacity: 0, transition: {duration: 0.4}}
-    };
+  const containerAnimation = {
+    initial: false,
+    open: { height: 'auto', transition: { duration: 0.4, type: 'tween' } },
+    closed: { height: '0px', transition: { duration: 0.4, type: 'tween' } }
+  };
 
-    const containerAnimation = {
-        initial: false,
-        open: {height: "auto", transition: {duration: 0.4, type: "tween"}},
-        closed: {height: "0px", transition: {duration: 0.4, type: "tween"}}
-    };
-
-
-    return (
-        <>
-            <StyledContent>
-                {showMobileView && 
-                <>
-                    <StyledMenuContainer key="menuContainer">
-                        <StyledCloseMenuContainer>
-                            {!isNavOpen && <StyledCloseMenuIcon onClick={() => setIsNavOpen(!isNavOpen)} icon={faArrowLeft} />}
-                        </StyledCloseMenuContainer>
-                    </StyledMenuContainer>
-                    <StyledMobileContainer
-                    key="mobileContainer"
-                    variants={containerAnimation}
-                    animate={isNavOpen? "open" : "closed"}
-                    >
-                        <AnimatePresence>
-                            {isNavOpen &&
-                            <StyledMobileTabs
-                                exit={{opacity: 0}}
-                                tabIndex={tabIndex}
-                                tabsCount={tabsContent.length}
-                            >
-                                <AnimatePresence>
-                                {
-                                    tabsContent.map((tab, index) => {
-                                        return (
-                                            <StyledMobileTab
-                                                key={'ai_tab_' + tab.title}
-                                                isSelected={index === tabIndex}
-                                                color={tab.titleColor}
-                                                onClick={() => {
-                                                    setTabIndex(index);
-                                                    setIsNavOpen(false);
-                                                }}
-                                                tabsCount={tabsContent.length}
-                                                >
-                                                <p>{tab.title}</p>
-                                                </StyledMobileTab>
-                                            )
-                                        })
-                                    }
-                                </AnimatePresence>
-                            </StyledMobileTabs>
-                        }
-                        </AnimatePresence>
-                    </StyledMobileContainer>
-                </>
-                }
-
-                {!showMobileView &&
-                    <StyledTabs
+  return (
+    <>
+      <StyledContent>
+        {showMobileView && (
+          <>
+            <StyledMenuContainer key="menuContainer">
+              <StyledCloseMenuContainer>
+                {!isNavOpen && (
+                  <StyledCloseMenuIcon
+                    onClick={() => setIsNavOpen(!isNavOpen)}
+                    icon={faArrowLeft}
+                  />
+                )}
+              </StyledCloseMenuContainer>
+            </StyledMenuContainer>
+            <StyledMobileContainer
+              key="mobileContainer"
+              variants={containerAnimation}
+              animate={isNavOpen ? 'open' : 'closed'}
+            >
+              <AnimatePresence>
+                {isNavOpen && (
+                  <StyledMobileTabs
+                    exit={{ opacity: 0 }}
                     tabIndex={tabIndex}
                     tabsCount={tabsContent.length}
-                    >
-                {
-                    tabsContent.map((tab, index) => {
+                  >
+                    <AnimatePresence>
+                      {tabsContent.map((tab, index) => {
                         return (
-                            <StyledTab
-                                key={'ai_tab_' + tab.title}
-                                isSelected={index === tabIndex}
-                                color={tab.titleColor}
-                                onClick={() => {
-                                    setTabIndex(index);
-                                }}
-                                tabsCount={tabsContent.length}
-                                >
-                                <p>{tab.title}</p>
-                                </StyledTab>
-                            )
-                        })
-                    }
-                </StyledTabs>
-                }
-                <StyledSwiper
-                    ref={inputEl}
-                    id={'app-info-swiper'}
-                    tabIndex={tabIndex}
-                    onSlideChange={e => {
-                        setTabIndex(e.activeIndex);
-                    }}
-                    allowTouchMove={false} // Disable swiping
-                    speed={showMobileView? 0 : 300}
+                          <StyledMobileTab
+                            key={'ai_tab_' + tab.title}
+                            isSelected={index === tabIndex}
+                            color={tab.titleColor}
+                            onClick={() => {
+                              setTabIndex(index);
+                              setIsNavOpen(false);
+                            }}
+                            tabsCount={tabsContent.length}
+                          >
+                            <p>{tab.title}</p>
+                          </StyledMobileTab>
+                        );
+                      })}
+                    </AnimatePresence>
+                  </StyledMobileTabs>
+                )}
+              </AnimatePresence>
+            </StyledMobileContainer>
+          </>
+        )}
+
+        {!showMobileView && (
+          <StyledTabs tabIndex={tabIndex} tabsCount={tabsContent.length}>
+            {tabsContent.map((tab, index) => {
+              return (
+                <StyledTab
+                  key={'ai_tab_' + tab.title}
+                  isSelected={index === tabIndex}
+                  color={tab.titleColor}
+                  onClick={() => {
+                    setTabIndex(index);
+                  }}
+                  tabsCount={tabsContent.length}
                 >
-                    {
-                        tabsContent.map((tab, index) => {
-                            return (
-                                    <SwiperSlide
-                                    id={'ai_tab_content_' + index}
-                                    key={'ai_tab_content_' + index}
-                                >
-                                    <AnimatePresence>
-                                        {showMobileView && !isNavOpen ? 
-                                        <StyledMobileTabContent key={'tabContent_' + index} variants={showMobileView && variants} initial="initial" animate={isNavOpen ? "hidden" : "visible"} exit="exit">
-                                        {tab.content}
-                                        </StyledMobileTabContent> : !showMobileView && tab.content
-                                    }
-                                    </AnimatePresence>
-                                    </SwiperSlide>
-                            )
-                        })
-                    }
-                </StyledSwiper>
-            </StyledContent>
-        </>
-    );
+                  <p>{tab.title}</p>
+                </StyledTab>
+              );
+            })}
+          </StyledTabs>
+        )}
+        <StyledSwiper
+          ref={inputEl}
+          id={'app-info-swiper'}
+          tabIndex={tabIndex}
+          onSlideChange={(e) => {
+            setTabIndex(e.activeIndex);
+          }}
+          allowTouchMove={false} // Disable swiping
+          speed={showMobileView ? 0 : 300}
+        >
+          {tabsContent.map((tab, index) => {
+            return (
+              <SwiperSlide
+                id={'ai_tab_content_' + index}
+                key={'ai_tab_content_' + index}
+              >
+                <AnimatePresence>
+                  {showMobileView && !isNavOpen ? (
+                    <StyledMobileTabContent
+                      key={'tabContent_' + index}
+                      variants={showMobileView && variants}
+                      initial="initial"
+                      animate={isNavOpen ? 'hidden' : 'visible'}
+                      exit="exit"
+                    >
+                      {tab.content}
+                    </StyledMobileTabContent>
+                  ) : (
+                    !showMobileView && tab.content
+                  )}
+                </AnimatePresence>
+              </SwiperSlide>
+            );
+          })}
+        </StyledSwiper>
+      </StyledContent>
+    </>
+  );
 };
 
 export default AppInfoModalContent;
