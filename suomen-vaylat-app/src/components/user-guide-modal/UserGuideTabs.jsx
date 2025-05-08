@@ -146,8 +146,8 @@ const UserGuideTabs = () => {
             id: 'swipeAbleTab_0',
             title: strings.layerlist.layerlistLabels.allLayers,
             titleColor: 'mainColor1',
-            content: strings.appGuide.modalContent.mapLayerMenu.tabsContent.allLayers.split('\n').map(c => {
-                return ( <p> {c} </p>) 
+            content: strings.appGuide.modalContent.mapLayerMenu.tabsContent.allLayers.split('\n').map((c, index) => {
+                return ( <p key={`userguide_allLayers_content_row_${index}`}> {c} </p>) 
                  })
         },
         {
@@ -155,8 +155,8 @@ const UserGuideTabs = () => {
             title: strings.layerlist.layerlistLabels.selectedLayers,
             titleColor: 'secondaryColorPink',
             titleContent: 'layerCounter',
-            content: strings.appGuide.modalContent.mapLayerMenu.tabsContent.selectedLayers.split('\n').map(c => {
-                return ( <p> {c} </p>) 
+            content: strings.appGuide.modalContent.mapLayerMenu.tabsContent.selectedLayers.split('\n').map((c, index) => {
+                return ( <p key={`userguide_selectedLayers_content_row_${index}`}> {c} </p>) 
                  })
         }
     ];

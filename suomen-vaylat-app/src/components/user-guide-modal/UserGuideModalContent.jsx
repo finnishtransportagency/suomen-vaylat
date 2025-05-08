@@ -146,8 +146,8 @@ export const UserGuideModalContent = () => {
                     </StyledTitleWrapper>,
             content: <StyledGuideContent style={{display: 'grid', gridTemplateColumns: '1fr'}}>
                 {
-                    strings.appGuide.modalContent.gfi.content.split('\n').map(c => {
-                        return ( <p> {c} </p>) 
+                    strings.appGuide.modalContent.gfi.content.split('\n').map((c, index) => {
+                        return ( <p key={`userguide_gfi_content_row_${index}`}> {c} </p>) 
                     })
                 }
                     </StyledGuideContent>
@@ -233,7 +233,7 @@ export const UserGuideModalContent = () => {
                             <StyledAccordionItem
                                 eventKey={index}
                                 //bsPrefix={'user-guide-item'}
-                                key={'accordion_' + index}
+                                key={'user_guide_modal_content_accordion_' + index}
                             >
                                 <StyledAccordionButton
                                     //bsPrefix={'accordion-header'}
