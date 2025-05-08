@@ -125,12 +125,12 @@ const ZoomBar = ({
 
     const handleLocationTrackingClick = () => {
         if (isLocationTrackingActive) {
-            rpc.channel.postRequest(
+            channel.postRequest(
                 'StopUserLocationTrackingRequest'
             );
             setIsLocationTrackingActive(false);
         } else {
-            rpc.channel.postRequest(
+            channel.postRequest(
                 'StartUserLocationTrackingRequest', [{addToMap: 'location', centerMap: 'update'}]
             )
             setIsLocationTrackingActive(true);
