@@ -228,9 +228,9 @@ export const VersionInfo = ({currentAppVersion, currentAppBuildDate}) => {
     return (
         <div>
             {isMobile && <StyledHeading>{strings.appInfo.versionInfo.title}</StyledHeading>}
-            <StyledLink><p style={{fontStyle: "italic"}}><a href='https://github.com/finnishtransportagency/suomen-vaylat/releases'>{strings.appInfo.versionInfo.appVersion + currentAppVersion}</a></p></StyledLink>
+            <StyledLink href='https://github.com/finnishtransportagency/suomen-vaylat/releases'><p style={{fontStyle: "italic"}}>{strings.appInfo.versionInfo.appVersion + currentAppVersion}</p></StyledLink>
             <StyledTitle><p>{strings.appInfo.versionInfo.appLastUpdate + currentAppBuildDate}</p></StyledTitle>
-            <StyledLink><p style={{fontStyle: "italic"}}><a href='https://github.com/oskariorg/oskari-frontend/blob/master/ReleaseNotes.md'>{strings.appInfo.versionInfo.oskari} {oskariVersion}</a></p></StyledLink>
+            <StyledLink href='https://github.com/oskariorg/oskari-frontend/blob/master/ReleaseNotes.md'><p style={{fontStyle: "italic"}}>{strings.appInfo.versionInfo.oskari} {oskariVersion}</p></StyledLink>
         </div>
     );
 };
