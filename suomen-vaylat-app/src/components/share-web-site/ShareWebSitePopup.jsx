@@ -92,67 +92,71 @@ export const StyledShareDescription = ({ currentZoomLevel, selectedLayers, cente
     if (!hasThemeShare) {
         return (
                 <StyledTable>
-                    {lang &&
-                        <tr>
-                            <td>{strings.share.shareDescriptions.lang}</td>
-                            <td>{strings.share.shareDescriptions.languages[lang]}</td>
-                        </tr>
-                    }
-                    {(currentZoomLevel !== null || currentZoomLevel !== undefined) &&
-                        <tr>
-                            <td>{strings.share.shareDescriptions.currentZoomLevel}</td>
-                            <td>{currentZoomLevel}</td>
-                        </tr>
-                    }
-                    {center &&
-                        <tr>
-                            <td>{strings.share.shareDescriptions.center}</td>
-                            <td>
-                                <div>x: {center.x}</div>
-                                <div>y: {center.y}</div>
-                            </td>
-                        </tr>
-                    }
-                    {selectedLayers &&
-                        <tr>
-                            <td>{strings.share.shareDescriptions.selectedLayers}</td>
-                            <td>
-                                {selectedLayers.map(layer => {
-                                    return <div>{layer.name}</div>
-                                })}
-                            </td>
-                        </tr>
-                    }
+                    <tbody>
+                        {lang &&
+                            <tr>
+                                <td>{strings.share.shareDescriptions.lang}</td>
+                                <td>{strings.share.shareDescriptions.languages[lang]}</td>
+                            </tr>
+                        }
+                        {(currentZoomLevel !== null || currentZoomLevel !== undefined) &&
+                            <tr>
+                                <td>{strings.share.shareDescriptions.currentZoomLevel}</td>
+                                <td>{currentZoomLevel}</td>
+                            </tr>
+                        }
+                        {center &&
+                            <tr>
+                                <td>{strings.share.shareDescriptions.center}</td>
+                                <td>
+                                    <div>x: {center.x}</div>
+                                    <div>y: {center.y}</div>
+                                </td>
+                            </tr>
+                        }
+                        {selectedLayers &&
+                            <tr>
+                                <td>{strings.share.shareDescriptions.selectedLayers}</td>
+                                <td>
+                                    {selectedLayers.map(layer => {
+                                        return <div key={`share_layer_${layer.id}`}>{layer.name}</div>
+                                    })}
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
                 </StyledTable>
         )
     } else {
         return (
                 <StyledTable>
-                    {lang &&
+                    <tbody>
+                        {lang &&
+                            <tr>
+                                <td>{strings.share.shareDescriptions.lang}</td>
+                                <td>{strings.share.shareDescriptions.languages[lang]}</td>
+                            </tr>
+                        }
+                        {(currentZoomLevel !== null || currentZoomLevel !== undefined) &&
+                            <tr>
+                                <td>{strings.share.shareDescriptions.currentZoomLevel}</td>
+                                <td>{currentZoomLevel}</td>
+                            </tr>
+                        }
+                        {center &&
+                            <tr>
+                                <td>{strings.share.shareDescriptions.center}</td>
+                                <td>
+                                    <div>x: {center.x}</div>
+                                    <div>y: {center.y}</div>
+                                </td>
+                            </tr>
+                        }
                         <tr>
-                            <td>{strings.share.shareDescriptions.lang}</td>
-                            <td>{strings.share.shareDescriptions.languages[lang]}</td>
-                        </tr>
-                    }
-                    {(currentZoomLevel !== null || currentZoomLevel !== undefined) &&
-                        <tr>
-                            <td>{strings.share.shareDescriptions.currentZoomLevel}</td>
-                            <td>{currentZoomLevel}</td>
-                        </tr>
-                    }
-                    {center &&
-                        <tr>
-                            <td>{strings.share.shareDescriptions.center}</td>
-                            <td>
-                                <div>x: {center.x}</div>
-                                <div>y: {center.y}</div>
-                            </td>
-                        </tr>
-                    }
-                    <tr>
                             <td>{strings.share.shareDescriptions.theme}</td>
                             <td>{selectedTheme.locale[lang].name}</td>
                         </tr>
+                    </tbody>
                 </StyledTable>
         )
     }
