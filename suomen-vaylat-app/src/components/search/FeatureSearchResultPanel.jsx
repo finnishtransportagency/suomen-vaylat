@@ -233,7 +233,7 @@ const showFeatureOnMap = (channel, layer, feature) => {
                     },
                     image: {
                         shape: 2,
-                        size: 4,
+                        size: 5,
                         fill: { color: 'rgba(229, 0, 131, 1)' },
                     },
                 },

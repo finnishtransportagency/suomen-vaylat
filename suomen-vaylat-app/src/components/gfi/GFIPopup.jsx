@@ -526,7 +526,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
               },
               image: {
                   shape: 2,
-                  size: 4,
+                  size: 5,
                   fill: {
                       color: 'rgba(100, 255, 95, 0.7)',
                   }
@@ -570,7 +570,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
         },
         image: {
             shape: 2,
-            size: 4,
+            size: 5,
             fill: {
                 color: 'rgba(100, 255, 95, 0.8)',
             }
