@@ -176,6 +176,26 @@ const StyledButton = styled.div`
   line-height: 1;
 `;
 
+const AnnouncementContainer = styled.div`
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    cursor: pointer;
+`;
+
+const AnnouncementTitle = styled.h5`
+    margin: 0;
+    color: ${props => props.theme.colors.mainColor1};
+    display: flex;
+    justify-content: space-between;
+`;
+
+const AnnouncementContent = styled(motion.div)`
+    overflow: hidden;
+
+`;
+
 export const ListComponent = ({ listData }) => {
   return (
     <ul>
@@ -399,6 +419,54 @@ export const SourcesAndTermsOfUse = () => {
   );
 };
 
+const Announcements = () => {
+    const { announcements } = useSelector(state => state.rpc);
+    const currentLang = strings.getLanguage();
+    const defaultLang = strings.getAvailableLanguages()[0];
+    const [openAnnouncement, setOpenAnnouncement] = useState(null);
+
+    const handleToggle = (id) => {
+        setOpenAnnouncement(prev => (prev === id ? null : id));
+    };
+
+    const formattedAnnouncements = announcements.map(announcement => {
+        const localeKeys = Object.keys(announcement.locale);
+        const localeObj = announcement.locale[currentLang] || announcement.locale[defaultLang] || announcement.locale[localeKeys[0]];
+
+        const beginDate = new Date(announcement.beginDate);
+        const endDate = new Date(announcement.endDate);
+
+        const formattedBeginDate = new Intl.DateTimeFormat(currentLang).format(beginDate);
+        const formattedEndDate = new Intl.DateTimeFormat(currentLang).format(endDate);
+
+        return {
+            id: announcement.id,
+            title: localeObj.title,
+            content: `${localeObj.content}<p><strong>${strings.appInfo.announcements.valid}</br></strong> ${formattedBeginDate} - ${formattedEndDate}</p>`
+        };
+    });
+
+    return (
+        <div>
+            {isMobile && <StyledHeading>{strings.appInfo.tabs.announcementsTitle}</StyledHeading>}
+            {formattedAnnouncements.map((announcement) => (
+                <AnnouncementContainer key={announcement.id} onClick={() => handleToggle(announcement.id)}>
+                    <AnnouncementTitle>
+                        {announcement.title}
+                        <span>{openAnnouncement === announcement.id ? '-' : '+'}</span>
+                    </AnnouncementTitle>
+                    <AnnouncementContent
+                        initial={{ height: 0, opacity: 0, marginTop: 0}}
+                        animate={openAnnouncement === announcement.id ? { height: 'auto', opacity: 1, marginTop: '10px' } : { height: 0, opacity: 0, marginTop: 0 }}
+                        transition={{ duration: 0.3 }}
+                        dangerouslySetInnerHTML={{ __html: announcement.content }}
+                    />
+                </AnnouncementContainer>
+            ))}
+        </div>
+    );
+};
+
 export const AppInfoModalContent = () => {
   const inputEl = useRef(null);
   const [isNavOpen, setIsNavOpen] = useState(true);
@@ -415,38 +483,41 @@ export const AppInfoModalContent = () => {
     showMobileView && setTabIndex(-1);
   }, []);
 
-  const tabsContent = [
-    {
-      title: strings.appInfo.versionInfo.appInfoTitle,
-      titleColor: 'mainColor1',
-      content: <AppInfo />
-    },
-    {
-      title: strings.appInfo.versionInfo.appInfoLinksTitle,
-      titleColor: 'mainColor1',
-      content: <AppInfoLinks />
-    },
-    {
-      title: strings.appInfo.versionInfo.title,
-      titleColor: 'mainColor1',
-      content: (
-        <VersionInfo
-          currentAppVersion={currentAppVersion}
-          currentAppBuildDate={currentAppBuildDate}
-        />
-      )
-    },
-    {
-      title: strings.appInfo.versionInfo.appContactAndFeedback,
-      titleColor: 'mainColor1',
-      content: <ContactAndFeedback />
-    },
-    {
-      title: strings.appInfo.dataSourcesAndTermsOfUse.tabTitle,
-      titleColor: 'mainColor1',
-      content: <SourcesAndTermsOfUse />
-    }
-  ];
+    const tabsContent = [
+        {
+            title: strings.appInfo.tabs.appInfoTitle,
+            titleColor: 'mainColor1',
+            content: <AppInfo />
+        },
+        {
+            title: strings.appInfo.tabs.announcementsTitle,
+            titleColor: 'mainColor1',
+            content: <Announcements />
+        },
+        {
+            title: strings.appInfo.tabs.appInfoLinksTitle,
+            titleColor: 'mainColor1',
+            content: <AppInfoLinks />
+        },
+        {
+            title: strings.appInfo.tabs.versionInfoTitle,
+            titleColor: 'mainColor1',
+            content: <VersionInfo
+                currentAppVersion={currentAppVersion}
+                currentAppBuildDate={currentAppBuildDate}
+            />
+        },
+        {
+            title: strings.appInfo.tabs.appContactAndFeedback,
+            titleColor: 'mainColor1',
+            content: <ContactAndFeedback />
+        },
+        {
+            title: strings.appInfo.dataSourcesAndTermsOfUse.tabTitle,
+            titleColor: 'mainColor1',
+            content: <SourcesAndTermsOfUse />
+        }
+    ];
 
   useEffect(() => {
     inputEl.current.swiper.slideTo(tabIndex);

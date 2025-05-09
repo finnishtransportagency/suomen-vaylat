@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { useAppSelector } from '../../state/hooks';
 import strings from '../../translations';
 import {
+    setAnnouncements,
     setActiveAnnouncements,
     setAllGroups,
     setAllTags,
@@ -38,7 +39,7 @@ import {
     removeFromDrawToolMarkers,
     addToGeoJsonArray
 } from '../../state/slices/uiSlice';
-import { getActiveAnnouncements, updateLayers } from '../../utils/rpcUtil';
+import { getActiveAnnouncements, updateLayers, getAllStoredAnnouncements } from '../../utils/rpcUtil';
 import SvLoder from '../../components/loader/SvLoader';
 import './PublishedMap.scss';
 import { theme } from '../../theme/theme';
@@ -83,6 +84,9 @@ const fetchAnnounmentsAsync = async (data, channel, store) => {
         setTimeout(() => {
             if (data.getSelectedAnnouncements) {
                 channel.getSelectedAnnouncements(function (data) {
+                    store.dispatch(
+                        setAnnouncements(data)
+                    );
                     activeAnnoucements = getActiveAnnouncements(data);
                     if (activeAnnoucements && activeAnnoucements.length > 0){
                         store.dispatch(

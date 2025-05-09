@@ -231,14 +231,18 @@
     "title": "Sovelluksen tiedot",
     "headingText": "Suomen väylät on Väyläviraston avoimen datan paikkatietoaineistoihin perustuva karttapalvelu, joka on julkaistu vuonna 2022 ja se sisältää tällä hetkellä yli 270 tietolajia ominaisuustietoineen. Palvelua ja sen sisältöä kehitetään edelleen.",
     "mainText": "Suomen väylät karttapalvelun kautta on katseltavissa tiestötietoja valtion tieverkolta, rautatietietoja sekä tietoja vesiväylistä. Lisäksi omiksi kokonaisuuksiksi on koottu Väyläviraston infrahanketietoja sekä kansallisen tie- ja katuverkon tietojärjestelmän, Digiroadin, tietolajit. Palveluun on rakennettu valmiiksi useita teemakarttoja, kuten esimerkiksi Hankekartta ja Rautateiden verkkoselostus. Suomen väylissä aineistoja voi hakea aineistojen nimen tai aihealueen mukaan sekä suodattaa aineistoja teemojen mukaisesti. Lisäksi karttapalvelusta löytyy erilliset osoite- , tiehaku ja metatietohaut. Suomen väylät on käytettävissä sekä desktop- että mobiiliversioilla. Palvelua tuotetaan suomen-, ruotsin- ja englannin kielillä.  Palvelun käyttöohjeet löytyvät ?-painikkeen(linkki) takaa. Suomen väylien operoinnista ja ylläpidosta vastaa tällä hetkellä Sitowise Oy.",
-    "versionInfo": {
-      "title": "Versiotiedot",
+    "tabs": {
+      "versionInfoTitle": "Versiotiedot",
       "appVersion": "Sovelluksen versio: ",
       "appLastUpdate": "Sovellus päivitetty viimeksi: ",
       "appInfoTitle": "Tietoa palvelusta",
+      "announcementsTitle": "Ilmoitukset",
       "appInfoLinksTitle": "Linkkejä",
       "appContactAndFeedback": "Yhteystiedot ja palaute",
       "oskari": "Oskari.org -versio: "
+    },
+    "announcements": {
+      "valid": "Voimassa:"
     },
     "contactInfoFeedback": {
       "0": "Sovelluksesta vastaa Väylävirasto ja sovelluksen toimittaa Sitowise Oy.",

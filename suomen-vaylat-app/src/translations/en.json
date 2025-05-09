@@ -231,14 +231,18 @@
     "title": "Application details",
     "headingText": "Suomen väylät is a map service provided by the Finnish Transport Infrastructure Agency. The service, based on open data geographical information, was launched in 2022 and it currently contains more than 270 data types and their attributes. The service and its contents are continuously developed.",
     "mainText": "Using the Suomen väylät map service, you can view road data on the state-owned road network, rail data and waterway data. Data on infrastructure projects of the Finnish Transport Infrastructure Agency, and the data types of Digiroad (National Road and Street Database) are also included as separate datasets. The service contains several thematic maps, such as a project map and the Finnish Railway Network Statement. In Suomen väylät, you can search for data by name or subject and filter data by theme. The map service also has separate address, road and metadata search functions. Suomen väylät is supplied as desktop and mobile versions and the service is available in Finnish, Swedish and English.  For instructions, click the ? button (link). Suomen väylät is currently operated and maintained by Sitowise Oy.",
-    "versionInfo": {
-      "title": "Version details",
+    "tabs": {
+      "versionInfoTitle": "Version details",
       "appVersion": "Application version: ",
       "appLastUpdate": "Application last updated: ",
       "appInfoTitle": "Information on the service",
+      "announcementsTitle": "Ilmoitukset",
       "appInfoLinksTitle": "Links",
       "appContactAndFeedback": "Contact information and feedback",
       "oskari": "Oskari.org version: "
+    },
+    "announcements": {
+      "valid": "Valid trough:"
     },
     "contactInfoFeedback": {
       "0": "The application is the responsibility of the Finnish Transport Infrastructure Agency and it is supplied by Sitowise Oy.",

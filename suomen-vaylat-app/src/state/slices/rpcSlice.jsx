@@ -281,6 +281,23 @@ export const rpcSlice = createSlice({
 
     /**
      * Set announcements.
+     * object type:
+      [
+          {
+              "id": 463,
+              "locale": {
+                  "fi": {
+                      "title": "test",
+                      "content": "<p>Suomen Väyliin ....</p>"
+                  }
+              },
+              "options": {
+                  "showAsPopup": true
+              },
+              "beginDate": "2024-10-22T12:00:00Z",
+              "endDate": "2025-10-24T12:00:00Z"
+          }
+      ]
      * @method setAnnouncements
      * @param {Object} state
      * @param {Object} action
@@ -1006,7 +1023,8 @@ export const {
   resetFeatureSearchResults,
   setFeatureSearchResults,
   setSearchOn,
-  searchVKMTrack
+  searchVKMTrack,
+  setAnnouncements
 } = rpcSlice.actions;
 
 export default rpcSlice.reducer;
