@@ -21,7 +21,7 @@ import { ANNOUNCEMENTS_LOCALSTORAGE } from '../utils/constants';
 
 /**
  * Get desc content for themes groups
- * @method updateLayers
+ * @method getDescTagContent
  * @param String text
  * @param String startTag
  * @param String endTag
@@ -104,129 +104,98 @@ export const showNonThemeLayers = (store, channel) => {
 }
 
 /**
- * Select group.
- * @method selectGroup
- * @param Object store
- * @param Object channel
- * @param Object allLayers
- * @param String theme
- * @param String lastSelectedTheme
- * @param Number selectedThemeId
+ * Selects and manages layers based on the given theme.
+ * @function selectGroup
+ * @param {Object} store - Redux store for state management.
+ * @param {Object} channel - Communication channel for map layer actions.
+ * @param {Object} allLayers - All available layers.
+ * @param {Object} theme - The theme to be selected.
+ * @param {String} lastSelectedTheme - Previously selected theme.
+ * @param {Number} selectedThemeId - ID of currently selected theme.
  */
 export const selectGroup = (store, channel, allLayers, theme, lastSelectedTheme, selectedThemeId) => {
-    const closeAllThemeLayers = (theme) => {
-        // close all theme layers
-        theme?.layers?.forEach(layerId => {
+    const closeLayers = layers => {
+        layers.forEach(layerId => {
             channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layerId, false]);
         });
-        // close all subtheme layers and check if subthemes have subthemes and close their layers recursively
-        if(theme.groups) {
-            theme.groups.forEach(subtheme => {
-                closeAllThemeLayers(subtheme);
-            });
+    };
+
+    const closeThemeLayers = theme => {
+        if (theme) {
+            theme.layers && closeLayers(theme.layers);
+            theme.groups && theme.groups.forEach(closeThemeLayers);
         }
     };
     store.dispatch(setLastSelectedTheme(theme));
 
-    if (selectedThemeId === null){
-        // set selectedLayers opacities to 0 on every layer but theme layers
-        store.dispatch(setSelectedTheme(theme));
-        store.dispatch(setSelectedThemeId(theme.id));
-        setTimeout(() => {
-            if(!isMobile) {
-                store.dispatch(setIsLegendOpen(true));
-                store.dispatch(setIsZoomBarOpen(true));
+
+    const openThemeLayers = (theme, layers) => {
+        layers.forEach(layerId => {
+            const layer = allLayers?.find(l => l.id === layerId);
+            const hasDefaultTheme = layer?.config?.themes?.some(t => 
+                t.name["fi"].toLowerCase() === theme.locale["fi"].name.toLowerCase() && t.default
+            );
+            if (hasDefaultTheme) {
+                channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layerId, true]);
             }
+        });
+    };
 
-            let layers = [];
-            theme.layers && layers.push(...theme.layers);
-            theme.groups && theme.groups.forEach(g => {
-                g.layers && layers.push(...g.layers)
-            })
-            allLayers && layers.length > 0 && layers.forEach(layerId => {
-                const filteredLayer = allLayers.find(l => l.id === layerId);
-                const isThemesArray = Array.isArray(filteredLayer.config.themes);
-                const foundMatch = filteredLayer.config?.themes?.find(t => t.name["fi"].toLowerCase() === theme.locale["fi"].name.toLowerCase());
-                if (isThemesArray && foundMatch && foundMatch.default) {
-                    channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layerId, true]);
-                }
-            });
-            updateLayers(store, channel);
+    const toggleLegendAndZoomBar = isOpen => {
+        if (!isMobile) {
+            store.dispatch(setIsLegendOpen(isOpen));
+            store.dispatch(setIsZoomBarOpen(isOpen));
+        }
+    };
 
-            const selectedMapLayers =  store.getState().rpc.selectedLayersByType.mapLayers;
-            const selectedThemeLayers = getSelectedThemeLayers(theme, selectedMapLayers);
-            store.dispatch(setAllSelectedThemeLayers(selectedThemeLayers));
+    const processLayers = theme => {
+        let layers = [];
+        theme.layers && layers.push(...theme.layers);
+        theme.groups?.forEach(g => g.layers && layers.push(...g.layers));
 
-            if(theme) {
-                selectedMapLayers.forEach(layer => {
-                    if(!selectedThemeLayers.find(themelayer => themelayer === layer.id)) {
-                        channel.postRequest('ChangeMapLayerOpacityRequest', [layer.id, 0]);
-                        updateLayers(store, channel);
-                    }
-                })
+        openThemeLayers(theme, layers);
+        updateLayers(store, channel);
+
+        const selectedMapLayers = store.getState().rpc.selectedLayersByType.mapLayers;
+        const selectedThemeLayers = getSelectedThemeLayers(theme, selectedMapLayers);
+        store.dispatch(setAllSelectedThemeLayers(selectedThemeLayers));
+
+        selectedMapLayers.forEach(layer => {
+            if (!selectedThemeLayers.includes(layer.id)) {
+                channel.postRequest('ChangeMapLayerOpacityRequest', [layer.id, 0]);
+                updateLayers(store, channel);
             }
-        },700);
+        });
+    };
 
-    }
+    // Main Execution Logic
+    const isThemeChanged = selectedThemeId !== theme.id;
 
-    else if (selectedThemeId !== theme.id ){
-         // set selectedLayers opacities to 0 on every layer but theme layers
+    if (selectedThemeId === null || isThemeChanged) {
         store.dispatch(setSelectedTheme(theme));
-        closeAllThemeLayers(lastSelectedTheme);
+        closeThemeLayers(lastSelectedTheme);
         updateLayers(store, channel);
         setTimeout(() => {
             store.dispatch(setSelectedThemeId(theme.id));
-            setTimeout(() => {
-                let layers = [];
-                theme.layers && layers.push(...theme.layers);
-                theme.groups && theme.groups.forEach(g => {
-                    g.layers && layers.push(...g.layers)
-                })
-                allLayers && layers.length > 0 && layers.forEach(layerId => {
-                    const filteredLayer = allLayers.find(l => l.id === layerId);
-                    const isThemesArray = Array.isArray(filteredLayer.config.themes);
-                    const foundMatch = filteredLayer.config?.themes?.find(t => t.name["fi"].toLowerCase() === theme.locale["fi"].name.toLowerCase());
-                    if (isThemesArray && foundMatch && foundMatch.default) {
-                        channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layerId, true]);
-                    }
-                });
-                updateLayers(store, channel);
-
-                const selectedMapLayers =  store.getState().rpc.selectedLayersByType.mapLayers;
-                const selectedThemeLayers = getSelectedThemeLayers(theme, selectedMapLayers);
-                store.dispatch(setAllSelectedThemeLayers(selectedThemeLayers));
-                if(theme) {
-                    selectedMapLayers.forEach(layer => {
-                        if(!selectedThemeLayers.find(themelayer => themelayer === layer.id)) {
-                            channel.postRequest('ChangeMapLayerOpacityRequest', [layer.id, 0]);
-                            updateLayers(store, channel);
-                        }
-                    })
-                }
-            },700);
-        },1000);
-    }
-
-    else {
+            setTimeout(() => processLayers(theme), 700);
+        }, isThemeChanged ? 1000 : 700);
+    } else {
         store.dispatch(setSelectedTheme(null));
         store.dispatch(setAllSelectedThemeLayers([]));
-        closeAllThemeLayers(lastSelectedTheme);
+        closeThemeLayers(lastSelectedTheme);
         updateLayers(store, channel);
         setTimeout(() => {
-            if(!isMobile) {
-                store.dispatch(setIsLegendOpen(false));
-                store.dispatch(setIsZoomBarOpen(false));
-            }
+            toggleLegendAndZoomBar(false);
             store.dispatch(setSelectedThemeId(null));
             showNonThemeLayers(store, channel);
-        },700);
-    };
+        }, 700);
+    }
 };
 
 /**
 * Sort object values alphabetically i.ex. themes group names
-* @param string a first comparable value
-* @param string b second comparable value
+* @param {string} a first comparable value
+* @param {string} b second comparable value
 * @method sortObjectAlphabetically
 */
 export const sortObjectAlphabetically = ( a, b ) => {
@@ -241,9 +210,9 @@ export const sortObjectAlphabetically = ( a, b ) => {
 
 /**
 * Rearrange object array according to other array.
-* @param Object objectArray
-* @param Array order
-* @param String key
+* @param {Object} objectArray
+* @param {Array} order
+* @param {String} key
 * @method reArrangeArray
 */
 export const reArrangeArray = (objectArray, order, key) => {

@@ -98,21 +98,6 @@ const StyledFilterActionButton = styled(motion.div)`
     z-index:100;
 `;
 
-const StyledFilterLeftContent = styled.div`
-    height: 100%;
-    display: flex;
-    align-items: center;
-    max-width: 70%;
-    overflow: hidden;
-`;
-
-const StyledFilterRightContent = styled.div`
-    height: 100%;
-    display: flex;
-    align-items: center;
-    max-width: 40%;
-`;
-
 const StyledFilterText = styled.div`
     font-size: 14px;
     font-weight: 600;

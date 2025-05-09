@@ -494,7 +494,10 @@
   "themelayerlist": {
     "readMore" : "Läs mer",
     "readLess" : "Mindre",
-    "moreInfo": "Mer information:"
+    "moreInfo": "Mer information:",
+    "errors": {
+      "themeStyleError": "Det gick inte att hämta stilar för tema: "
+    }
   },
   "metadata": {
     "title": "{0} -kartlager metadata",

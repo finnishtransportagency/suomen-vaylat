@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from 'react';
 import { ReactReduxContext, useSelector } from 'react-redux';
 import { faFilter } from '@fortawesome/free-solid-svg-icons';
 import Badge from 'react-bootstrap/Badge';
+import { toast, Slide } from "react-toastify";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { theme, isMobile } from '../../../theme/theme';
 import ReactTooltip from "react-tooltip";
@@ -125,7 +126,6 @@ export const Layer = ({ layer, themeName, groupName, showSwitch = true }) => {
 
     const { store } = useContext(ReactReduxContext);
     const [layerStyle, setLayerStyle] = useState(null);
-    const [themeSelected, setThemeSelected] = useState(false);
     const { minimizeFilter } = useAppSelector(state => state.ui);
     const { filters } = useAppSelector(state => state.rpc);
 
@@ -176,29 +176,43 @@ export const Layer = ({ layer, themeName, groupName, showSwitch = true }) => {
 
     const themeStyle = themeName || null;
 
-  if (selectedTheme && selectedTheme.name && themeSelected === false) {
-    setThemeSelected(true);
-  }
+    // TODO laita useeffectin sisään
 
-  // needs only get new style or legends when toggling theme selection
-  if (layer.visible && themeSelected) {
-    channel.getLayerThemeStyle(
-      [
-        layer.id,
-        selectedTheme && selectedTheme.name ? selectedTheme.name : null,
-      ],
-      function (styleName) {
-        if (styleName && styleName !== layerStyle) {
-          setLayerStyle(styleName);
-          store.dispatch(
-            changeLayerStyle({ layerId: layer.id, style: styleName })
-          );
-          // update layers legends
-          updateLayerLegends();
+  useEffect(() => {
+    // needs only get new style or legends when toggling theme selection
+    if (layer.visible && selectedTheme && selectedTheme.layers.includes(layer.id)) {
+      const themeName = selectedTheme.locale?.["fi"]?.name || null;
+      channel.getLayerThemeStyle(
+        [
+          layer.id,
+          themeName,
+        ],
+        function (styleName) {
+          if (styleName && styleName !== layerStyle) {
+            setLayerStyle(styleName);
+            store.dispatch(
+              changeLayerStyle({ layerId: layer.id, style: styleName })
+            );
+            // update layers legends
+            updateLayerLegends();
+          }
+        },
+        function (error) {
+          toast.error(strings.themelayerlist.errors.themeStyleError + error, {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: false,
+            progress: undefined,
+            theme: "colored",
+            transition: Slide
+          });
         }
-      }
-    );
-  }
+      );  
+    }
+  }, [selectedTheme, layer.visible])  
 
   const handleFilterClick = (layer) => {
     !layer.visible && handleLayerVisibility(channel, layer);

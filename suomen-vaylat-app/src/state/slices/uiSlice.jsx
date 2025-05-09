@@ -36,7 +36,6 @@ const initialState = {
     selectedGfiTool: null,
     activeTool: null,
     activeSelectionTool: null,
-    activeSelectionTool: null,
     gfiLocations: null,
     isSwipingDisabled: false,
     selectedMapLayersMenuTab: 0,
