@@ -176,6 +176,26 @@ const StyledButton = styled.div`
   line-height: 1;
 `;
 
+const AnnouncementContainer = styled.div`
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    cursor: pointer;
+`;
+
+const AnnouncementTitle = styled.h5`
+    margin: 0;
+    color: ${props => props.theme.colors.mainColor1};
+    display: flex;
+    justify-content: space-between;
+`;
+
+const AnnouncementContent = styled(motion.div)`
+    overflow: hidden;
+
+`;
+
 export const ListComponent = ({listData}) => {
     return (
         <ul>
@@ -211,7 +231,7 @@ export const ListComponent = ({listData}) => {
 export const AppInfo = () => {
     return(
         <>
-            {isMobile && <StyledHeading>{strings.appInfo.versionInfo.appInfoTitle}</StyledHeading>}
+            {isMobile && <StyledHeading>{strings.appInfo.tabs.appInfoTitle}</StyledHeading>}
             <p> <b>{strings.appInfo.headingText}</b> </p>
             <p>{strings.appInfo.mainText}</p>
         </>
@@ -228,10 +248,10 @@ export const VersionInfo = ({currentAppVersion, currentAppBuildDate}) => {
 
     return (
         <div>
-            {isMobile && <StyledHeading>{strings.appInfo.versionInfo.title}</StyledHeading>}
-            <StyledLink><p style={{fontStyle: "italic"}}><a href='https://github.com/finnishtransportagency/suomen-vaylat/releases'>{strings.appInfo.versionInfo.appVersion + currentAppVersion}</a></p></StyledLink>
-            <StyledTitle><p>{strings.appInfo.versionInfo.appLastUpdate + currentAppBuildDate}</p></StyledTitle>
-            <StyledLink><p style={{fontStyle: "italic"}}><a href='https://github.com/oskariorg/oskari-frontend/blob/master/ReleaseNotes.md'>{strings.appInfo.versionInfo.oskari} {oskariVersion}</a></p></StyledLink>
+            {isMobile && <StyledHeading>{strings.appInfo.tabs.versionInfoTitle}</StyledHeading>}
+            <StyledLink><p style={{fontStyle: "italic"}}><a href='https://github.com/finnishtransportagency/suomen-vaylat/releases'>{strings.appInfo.tabs.appVersion + currentAppVersion}</a></p></StyledLink>
+            <StyledTitle><p>{strings.appInfo.tabs.appLastUpdate + currentAppBuildDate}</p></StyledTitle>
+            <StyledLink><p style={{fontStyle: "italic"}}><a href='https://github.com/oskariorg/oskari-frontend/blob/master/ReleaseNotes.md'>{strings.appInfo.tabs.oskari} {oskariVersion}</a></p></StyledLink>
         </div>
     );
 };
@@ -245,7 +265,7 @@ export const ContactAndFeedback = () => {
 
     return (
         <div>
-            {isMobile && <StyledHeading>{strings.appInfo.versionInfo.appContactAndFeedback}</StyledHeading>}
+            {isMobile && <StyledHeading>{strings.appInfo.tabs.appContactAndFeedback}</StyledHeading>}
             <p>{contactInfoFeedback[0]}</p>
             <p>{contactInfoFeedback[1]} <StyledLink href={'mailto:' + contactInfoFeedback[2] + '?subject='+contactInfoFeedback.emailSubject}>{contactInfoFeedback[2]}</StyledLink></p>
             <p>{contactInfoFeedback[3]} <StyledLink href={contactInfoFeedback[4]}>{contactInfoFeedback[4]}</StyledLink></p>
@@ -261,7 +281,7 @@ export const AppInfoLinks = () => {
 
     return (
         <div>
-            {isMobile && <StyledHeading>{strings.appInfo.versionInfo.appInfoLinksTitle}</StyledHeading>}
+            {isMobile && <StyledHeading>{strings.appInfo.tabs.appInfoLinksTitle}</StyledHeading>}
             <ul>
                 {Object.values(appInfoLinks).map((link, key) => {
                     return(
@@ -306,6 +326,54 @@ export const SourcesAndTermsOfUse = () => {
     )
 };
 
+const Announcements = () => {
+    const { announcements } = useSelector(state => state.rpc);
+    const currentLang = strings.getLanguage();
+    const defaultLang = strings.getAvailableLanguages()[0];
+    const [openAnnouncement, setOpenAnnouncement] = useState(null);
+
+    const handleToggle = (id) => {
+        setOpenAnnouncement(prev => (prev === id ? null : id));
+    };
+
+    const formattedAnnouncements = announcements.map(announcement => {
+        const localeKeys = Object.keys(announcement.locale);
+        const localeObj = announcement.locale[currentLang] || announcement.locale[defaultLang] || announcement.locale[localeKeys[0]];
+
+        const beginDate = new Date(announcement.beginDate);
+        const endDate = new Date(announcement.endDate);
+
+        const formattedBeginDate = new Intl.DateTimeFormat(currentLang).format(beginDate);
+        const formattedEndDate = new Intl.DateTimeFormat(currentLang).format(endDate);
+
+        return {
+            id: announcement.id,
+            title: localeObj.title,
+            content: `${localeObj.content}<p><strong>${strings.appInfo.announcements.valid}</br></strong> ${formattedBeginDate} - ${formattedEndDate}</p>`
+        };
+    });
+
+    return (
+        <div>
+            {isMobile && <StyledHeading>{strings.appInfo.tabs.announcementsTitle}</StyledHeading>}
+            {formattedAnnouncements.map((announcement) => (
+                <AnnouncementContainer key={announcement.id} onClick={() => handleToggle(announcement.id)}>
+                    <AnnouncementTitle>
+                        {announcement.title}
+                        <span>{openAnnouncement === announcement.id ? '-' : '+'}</span>
+                    </AnnouncementTitle>
+                    <AnnouncementContent
+                        initial={{ height: 0, opacity: 0, marginTop: 0}}
+                        animate={openAnnouncement === announcement.id ? { height: 'auto', opacity: 1, marginTop: '10px' } : { height: 0, opacity: 0, marginTop: 0 }}
+                        transition={{ duration: 0.3 }}
+                        dangerouslySetInnerHTML={{ __html: announcement.content }}
+                    />
+                </AnnouncementContainer>
+            ))}
+        </div>
+    );
+};
+
 export const AppInfoModalContent = () => {
 
     const inputEl = useRef(null);
@@ -325,17 +393,22 @@ export const AppInfoModalContent = () => {
 
     const tabsContent = [
         {
-            title: strings.appInfo.versionInfo.appInfoTitle,
+            title: strings.appInfo.tabs.appInfoTitle,
             titleColor: 'mainColor1',
             content: <AppInfo />
         },
         {
-            title: strings.appInfo.versionInfo.appInfoLinksTitle,
+            title: strings.appInfo.tabs.announcementsTitle,
+            titleColor: 'mainColor1',
+            content: <Announcements />
+        },
+        {
+            title: strings.appInfo.tabs.appInfoLinksTitle,
             titleColor: 'mainColor1',
             content: <AppInfoLinks />
         },
         {
-            title: strings.appInfo.versionInfo.title,
+            title: strings.appInfo.tabs.versionInfoTitle,
             titleColor: 'mainColor1',
             content: <VersionInfo
                 currentAppVersion={currentAppVersion}
@@ -343,7 +416,7 @@ export const AppInfoModalContent = () => {
             />
         },
         {
-            title: strings.appInfo.versionInfo.appContactAndFeedback,
+            title: strings.appInfo.tabs.appContactAndFeedback,
             titleColor: 'mainColor1',
             content: <ContactAndFeedback />
         },
