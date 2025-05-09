@@ -103,8 +103,11 @@ const LayerSearch = ({ layers, groups }) => {
     const currentLang = strings.getLanguage();
 
     const searchResults = searchParams.length > 2 
-    ? layers.filter(layer => layer.name.toLowerCase().includes(searchParams.toLowerCase())) 
+    ? layers
+        .filter(layer => layer.name.toLowerCase().includes(searchParams.toLowerCase()))
+        .sort((a, b) => a.name.localeCompare(b.name))
     : [];
+
     return (
         <StyledLayerSearchContainer>
             <StyledSearchInputContainer>
