@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { ReactReduxContext, useSelector } from "react-redux";
 import styled from "styled-components";
 import {
@@ -11,6 +11,8 @@ import {
 } from "../../../../state/slices/uiSlice";
 import LayerMetadataButton from "../LayerMetadataButton";
 import { useAppSelector } from "../../../../state/hooks";
+import { toast, Slide } from "react-toastify";
+import strings from "../../../../translations"
 
 const StyledLayerContainer = styled.div`
   background-color: ${(props) => props.themeStyle && "#F5F5F5"};
@@ -96,7 +98,6 @@ export const findGroupForLayer = (groups, layerId) => {
 export const FilterLayer = ({ layer, theme, groupName }) => {
   const { store } = useContext(ReactReduxContext);
   const [layerStyle, setLayerStyle] = useState(null);
-  const [themeSelected, setThemeSelected] = useState(false);
   const { selectedCustomFilterLayers } = useAppSelector(
     (state) => state.ui
   );
@@ -139,29 +140,42 @@ export const FilterLayer = ({ layer, theme, groupName }) => {
 
   const themeStyle = theme || null;
 
-  if (selectedTheme && selectedTheme.name && themeSelected === false) {
-    setThemeSelected(true);
-  }
 
-  // needs only get new style or legends when toggling theme selection
-  if (layer.visible && themeSelected) {
-    channel.getLayerThemeStyle(
-      [
-        layer.id,
-        selectedTheme && selectedTheme.name ? selectedTheme.name : null,
-      ],
-      function (styleName) {
-        if (styleName && styleName !== layerStyle) {
-          setLayerStyle(styleName);
-          store.dispatch(
-            changeLayerStyle({ layerId: layer.id, style: styleName })
-          );
-          // update layers legends
-          updateLayerLegends();
+  useEffect(() => {
+    // needs only get new style or legends when toggling theme selection
+    if (layer.visible && selectedTheme && selectedTheme.layers.includes(layer.id)) {
+      const themeName = selectedTheme.locale?.["fi"]?.name || null;
+      channel.getLayerThemeStyle(
+        [
+          layer.id,
+          themeName,
+        ],
+        function (styleName) {
+          if (styleName && styleName !== layerStyle) {
+            setLayerStyle(styleName);
+            store.dispatch(
+              changeLayerStyle({ layerId: layer.id, style: styleName })
+            );
+            // update layers legends
+            updateLayerLegends();
+          }
+        },
+        function (error) {
+          toast.error(strings.themelayerlist.errors.themeStyleError + error, {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: false,
+            progress: undefined,
+            theme: "colored",
+            transition: Slide
+          });
         }
-      }
-    );
-  }
+      );  
+    }
+  }, [selectedTheme])  
 
   const isSelected =
     selectedCustomFilterLayers.filter(

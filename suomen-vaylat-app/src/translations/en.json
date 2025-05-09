@@ -494,7 +494,10 @@
   "themelayerlist": {
     "readMore" : "Read more",
     "readLess" : "Show less",
-    "moreInfo": "Further information:"
+    "moreInfo": "Further information:",
+    "errors": {
+      "themeStyleError": "Error getting styles for theme: "
+    }
   },
   "metadata": {
     "title": "{0} -map layer metadata",

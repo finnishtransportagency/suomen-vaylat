@@ -68,7 +68,7 @@ const SortableContainer = sortableContainer(({children}) => {
 export const SelectedLayers = (props) => {
     const { selectedLayers, currentZoomLevel } = props;
     const { store } = useContext(ReactReduxContext);
-    const {channel, selectedLayersByType, allSelectedThemeLayers, selectedTheme, filters} = useAppSelector(state => state.rpc);
+    const {channel, selectedLayersByType, filters} = useAppSelector(state => state.rpc);
     let backgroundMaps = selectedLayersByType.backgroundMaps;
     let mapLayers = selectedLayersByType.mapLayers;
 

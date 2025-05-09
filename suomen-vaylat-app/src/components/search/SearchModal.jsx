@@ -83,11 +83,6 @@ const StyledSearchSection = styled.div`
     margin-bottom: 1em;
 `;
 
-
-const StyledLinkText = styled.a`
-    margin-bottom: 10px;
-`;
-
 const VerticalAlign = styled.div`
     display: flex;
     justify-content: center;
