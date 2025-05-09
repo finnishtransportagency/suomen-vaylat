@@ -47,9 +47,7 @@ export const StyledSearchIcon = styled.div`
 
 const StyledSearchContainer = styled.div`
     z-index: 6;
-    position: absolute;
-    right: 8px;
-    padding-right: 8px;
+    position: absolute
     width: 100%;
     display: flex;
     justify-content: flex-end;

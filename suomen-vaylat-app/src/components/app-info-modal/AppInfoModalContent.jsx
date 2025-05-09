@@ -15,11 +15,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 
 const StyledContent = styled.div`
-  max-width: 660px;
-  overflow: auto;
-  flex-direction: column;
-  display: flex;
-  height: 100%;
+    max-width: 660px;
+    flex-direction: column;
+    display: flex;
+    height: 100%;
+    overflow-y: auto;
 `;
 
 const StyledTabs = styled.div`
@@ -75,12 +75,12 @@ const StyledTab = styled(motion.div)`
   display: flex;
   justify-content: center;
 
-  p {
-    font-size: 13px;
-    font-weight: bold;
-    margin: 0;
-    padding: 8px;
-  }
+    p {
+        font-size: 13px;
+        font-weight: bold;
+        margin: 0;
+        padding: 12px 8px;
+    }
 `;
 
 const StyledMobileContainer = styled(motion.div)`
@@ -151,12 +151,13 @@ const StyledSwiper = styled(Swiper)`
   margin-right: 0;
   overflow-y: auto;
 
-  .swiper-slide {
-    background-color: ${(props) => props.theme.colors.mainWhite};
-    padding: 16px 16px 16px 16px;
-    height: 100%;
-  }
-  transition: box-shadow 0.3s ease-out;
+    .swiper-slide {
+        background-color: ${props => props.theme.colors.mainWhite};
+        padding: 16px;
+        height: auto;
+        overflow-y: auto;
+    }
+    transition: box-shadow 0.3s ease-out;
 `;
 
 const StyledButton = styled.div`
