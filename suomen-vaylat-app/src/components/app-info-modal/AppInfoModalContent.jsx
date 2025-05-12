@@ -468,6 +468,9 @@ const Announcements = () => {
                     />
                 </AnnouncementContainer>
             ))}
+            { formattedAnnouncements.length === 0 &&
+              <i>{strings.appInfo.announcements.noAnnouncements}</i>
+            }
         </div>
     );
 };

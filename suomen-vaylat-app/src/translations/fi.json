@@ -242,7 +242,8 @@
       "oskari": "Oskari.org -versio: "
     },
     "announcements": {
-      "valid": "Voimassa:"
+      "valid": "Voimassa:",
+      "noAnnouncements": "Ei voimassaolevia ilmoituksia"
     },
     "contactInfoFeedback": {
       "0": "Sovelluksesta vastaa Väylävirasto ja sovelluksen toimittaa Sitowise Oy.",

@@ -242,7 +242,8 @@
       "oskari": "Oskari.org version: "
     },
     "announcements": {
-      "valid": "Valid trough:"
+      "valid": "Valid trough:",
+      "noAnnouncements": "No active announcements"
     },
     "contactInfoFeedback": {
       "0": "The application is the responsibility of the Finnish Transport Infrastructure Agency and it is supplied by Sitowise Oy.",

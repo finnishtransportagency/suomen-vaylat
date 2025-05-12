@@ -241,7 +241,8 @@
       "oskari": "Oskari.org -version: "
     },
     "announcements": {
-      "valid": "Giltig:"
+      "valid": "Giltig:",
+      "noAnnouncements": "Inga aktiva aviseringar"
     },
     "contactInfoFeedback": {
       "0": "Trafikledsverket ansvarar för applikationen som levereras av Sitowise Oy.",
