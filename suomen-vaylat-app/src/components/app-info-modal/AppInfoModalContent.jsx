@@ -282,9 +282,11 @@ export const VersionInfo = ({ currentAppVersion, currentAppBuildDate }) => {
 export const ContactAndFeedback = () => {
   const contactInfoFeedback = strings.appInfo.contactInfoFeedback;
 
+  /*
   const openFeedbackForm = () => {
     store.dispatch(setIsFeedBackFormOpen(true));
   };
+  */
 
   return (
     <div>
@@ -314,9 +316,12 @@ export const ContactAndFeedback = () => {
         </StyledLink>
       </p>
 
-      <StyledButton onClick={openFeedbackForm}>
-        {strings.appInfo.feedbackForm.openFeedbackForm}
-      </StyledButton>
+    {/*
+        TODO: Its not actually currently sending anythign out
+        <StyledButton onClick={openFeedbackForm}>
+            {strings.appInfo.feedbackForm.openFeedbackForm}
+        </StyledButton>
+    */}
     </div>
   );
 };
