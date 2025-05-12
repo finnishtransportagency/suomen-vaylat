@@ -237,7 +237,7 @@ export const AppInfo = () => {
     <>
       {isMobile && (
         <StyledHeading>
-          {strings.appInfo.versionInfo.appInfoTitle}
+          {strings.appInfo.tabs.appInfoTitle}
         </StyledHeading>
       )}
       <p>
@@ -260,19 +260,19 @@ export const VersionInfo = ({ currentAppVersion, currentAppBuildDate }) => {
   return (
     <div>
       {isMobile && (
-        <StyledHeading>{strings.appInfo.versionInfo.title}</StyledHeading>
+        <StyledHeading>{strings.appInfo.tabs.versionInfoTitle}</StyledHeading>
       )}
       <StyledLink href="https://github.com/finnishtransportagency/suomen-vaylat/releases">
         <p style={{ fontStyle: 'italic' }}>
-          {strings.appInfo.versionInfo.appVersion + currentAppVersion}
+          {strings.appInfo.tabs.appVersion + currentAppVersion}
         </p>
       </StyledLink>
       <StyledTitle>
-        <p>{strings.appInfo.versionInfo.appLastUpdate + currentAppBuildDate}</p>
+        <p>{strings.appInfo.tabs.appLastUpdate + currentAppBuildDate}</p>
       </StyledTitle>
       <StyledLink href="https://github.com/oskariorg/oskari-frontend/blob/master/ReleaseNotes.md">
         <p style={{ fontStyle: 'italic' }}>
-          {strings.appInfo.versionInfo.oskari} {oskariVersion}
+          {strings.appInfo.tabs.oskari} {oskariVersion}
         </p>
       </StyledLink>
     </div>
@@ -290,7 +290,7 @@ export const ContactAndFeedback = () => {
     <div>
       {isMobile && (
         <StyledHeading>
-          {strings.appInfo.versionInfo.appContactAndFeedback}
+          {strings.appInfo.tabs.appContactAndFeedback}
         </StyledHeading>
       )}
       <p>{contactInfoFeedback[0]}</p>
@@ -328,7 +328,7 @@ export const AppInfoLinks = () => {
     <div>
       {isMobile && (
         <StyledHeading>
-          {strings.appInfo.versionInfo.appInfoLinksTitle}
+          {strings.appInfo.tabs.appInfoLinksTitle}
         </StyledHeading>
       )}
       <ul>
