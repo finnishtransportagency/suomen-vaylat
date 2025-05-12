@@ -78,29 +78,46 @@ const StyledLoaderWrapper = styled.div`
 
 
 //fetch and save announcements to state
-const fetchAnnounmentsAsync = async (data, channel, store) => {
-    let activeAnnoucements = [];
+const isSafari = () => {
+    return /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+};
+
+const fetchAnnouncementsAsync = async (data, channel, store) => {
+    let activeAnnouncements = [];
     await new Promise((resolve) => {   
         setTimeout(() => {
             if (data.getSelectedAnnouncements) {
-                channel.getSelectedAnnouncements(function (data) {
-                    store.dispatch(
-                        setAnnouncements(data)
-                    );
-                    activeAnnoucements = getActiveAnnouncements(data);
+                channel.getSelectedAnnouncements(function (responseData) {
+                    store.dispatch(setAnnouncements(responseData));
+                    activeAnnouncements = getActiveAnnouncements(responseData);
 
-                    if (activeAnnoucements && activeAnnoucements.length > 0){
-                        store.dispatch(
-                            setActiveAnnouncements(activeAnnoucements)
-                        );
+                    if (activeAnnouncements && activeAnnouncements.length > 0){
+                        store.dispatch(setActiveAnnouncements(activeAnnouncements));
                     }
+                    resolve(activeAnnouncements);
                 });
+            } else {
+                resolve(activeAnnouncements);
             }
-            resolve(activeAnnoucements);
         }, 1000);
-    });
-}
+    }).then((announcements) => {
+        console.log(announcements);
 
+        // due to a bug, check again after 3 seconds if announcements list is empty on Safari
+        if (isSafari() && announcements.length === 0) {
+            setTimeout(() => {
+                if (data.getSelectedAnnouncements) {
+                    channel.getSelectedAnnouncements(function (responseData) {
+                        activeAnnouncements = getActiveAnnouncements(responseData);
+                        if (activeAnnouncements && activeAnnouncements.length > 0){
+                            store.dispatch(setActiveAnnouncements(activeAnnouncements));
+                        }
+                    });
+                }
+            }, 8000);
+        }
+    });
+};
 
 const PublishedMap = () => {
     const { store } = useContext(ReactReduxContext);
@@ -149,7 +166,7 @@ const PublishedMap = () => {
             store.dispatch(setChannel(channel));
             channel.getSupportedFunctions(function (data) {
                 //minor hack to make sure announcements are shown
-                fetchAnnounmentsAsync(data, channel, store);
+                fetchAnnouncementsAsync(data, channel, store);
 
                 if (data.getTags) {
                     channel.getTags(function (data) {
