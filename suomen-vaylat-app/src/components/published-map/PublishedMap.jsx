@@ -88,6 +88,7 @@ const fetchAnnounmentsAsync = async (data, channel, store) => {
                         setAnnouncements(data)
                     );
                     activeAnnoucements = getActiveAnnouncements(data);
+
                     if (activeAnnoucements && activeAnnoucements.length > 0){
                         store.dispatch(
                             setActiveAnnouncements(activeAnnoucements)
@@ -97,23 +98,7 @@ const fetchAnnounmentsAsync = async (data, channel, store) => {
             }
             resolve(activeAnnoucements);
         }, 1000);
-    }).then( (announments) => {
-        //due bug announments not showing on safari, check again after 3 seconds if announcements list empty
-        if (announments.length ===0){
-            setTimeout(() => {
-                if (data.getSelectedAnnouncements) {
-                    channel.getSelectedAnnouncements(function (data) {
-                        activeAnnoucements = getActiveAnnouncements(data);
-                        if (activeAnnoucements && activeAnnoucements.length > 0){
-                            store.dispatch(
-                                setActiveAnnouncements(activeAnnoucements)
-                            );
-                        }
-                    });
-                }
-            }, 8000);
-        }
-    } );
+    });
 }
 
 
