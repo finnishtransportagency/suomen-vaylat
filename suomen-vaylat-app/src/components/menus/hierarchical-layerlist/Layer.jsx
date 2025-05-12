@@ -180,7 +180,7 @@ export const Layer = ({ layer, themeName, groupName, showSwitch = true }) => {
 
   useEffect(() => {
     // needs only get new style or legends when toggling theme selection
-    if (layer.visible && selectedTheme && selectedTheme.layers.includes(layer.id)) {
+    if (layer.visible && selectedTheme && selectedTheme.layers?.includes(layer.id)) {
       const themeName = selectedTheme.locale?.["fi"]?.name || null;
       channel.getLayerThemeStyle(
         [
