@@ -171,11 +171,14 @@ export const selectGroup = (store, channel, allLayers, theme, lastSelectedTheme,
     // Main Execution Logic
     const isThemeChanged = selectedThemeId !== theme.id;
 
+    console.log(selectedThemeId, isThemeChanged)
+
     if (selectedThemeId === null || isThemeChanged) {
         store.dispatch(setSelectedTheme(theme));
         closeThemeLayers(lastSelectedTheme);
         updateLayers(store, channel);
         setTimeout(() => {
+            toggleLegendAndZoomBar(true);
             store.dispatch(setSelectedThemeId(theme.id));
             setTimeout(() => processLayers(theme), 700);
         }, isThemeChanged ? 1000 : 700);
