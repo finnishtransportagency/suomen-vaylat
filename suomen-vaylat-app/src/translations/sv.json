@@ -45,8 +45,8 @@
     "share": "Dela denna sida",
     "shareTheme": "Dela detta tema",
     "metadata": "Visa kartlagers metadata",
-    "showPageInfo": "Visa sidinformation",
-    "showUserGuide": "Visa bruksanvisningen"
+    "showPageInfo": "Sidinformation",
+    "showUserGuide": "Uppgifter om applikationen"
   },
   "savedContent" : {
     "savedContent" : "Spara vyer och geometrier",

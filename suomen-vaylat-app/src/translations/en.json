@@ -45,7 +45,7 @@
     "shareTheme": "Share this theme",
     "metadata": "Show maplayer metadata",
     "showPageInfo": "Show page info",
-    "showUserGuide": "Show user guide"
+    "showUserGuide": "Application details"
   },
   "savedContent" : {
     "savedContent" : "Save views and geometries",
