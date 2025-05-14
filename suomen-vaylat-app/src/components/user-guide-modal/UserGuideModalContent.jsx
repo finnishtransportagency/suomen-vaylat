@@ -13,11 +13,13 @@ import {
   faDownload,
   faAngleRight,
   faList,
-  faMap
+  faMap,
+  faFilter
 } from '@fortawesome/free-solid-svg-icons';
 import { ReactComponent as VaylaLogo } from '../layout/images/vayla_v_white.svg';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import UserGuideUpperBarContent from './UserGuideUpperBarContent';
+import UserGuideFilterContent from './UserGuideFilterContent';
 import { theme } from '../../theme/theme';
 
 const StyledContent = styled.div`
@@ -162,6 +164,22 @@ export const UserGuideModalContent = () => {
             .map((c, index) => {
               return <p key={`userguide_gfi_content_row_${index}`}> {c} </p>;
             })}
+        </StyledGuideContent>
+      )
+    },
+    {
+      title: (
+        <StyledTitleWrapper>
+          <StyledIconButton>
+            <StyledFAIcon icon={faFilter} />
+          </StyledIconButton>
+          <p>{strings.appGuide.modalContent.filter.title}</p>
+        </StyledTitleWrapper>
+      ),
+      content: (
+        
+        <StyledGuideContent>
+          <UserGuideFilterContent />
         </StyledGuideContent>
       )
     },
