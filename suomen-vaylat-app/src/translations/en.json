@@ -44,8 +44,8 @@
     "share": "Share this page",
     "shareTheme": "Share this theme",
     "metadata": "Show maplayer metadata",
-    "showPageInfo": "Show page info",
-    "showUserGuide": "Application details"
+    "showPageInfo": "Application details",
+    "showUserGuide": "User guide"
   },
   "savedContent" : {
     "savedContent" : "Save views and geometries",
@@ -82,6 +82,7 @@
     "noResultsTitle": "No results",
     "noResultsDesc": "No results with geometry, select new geometry or new layers",
     "filter": "Filter",
+    "filterGuideTitle" : "Filtering",
     "title": "Feature Data",
     "close": "Close",
     "additionalInfo": "Additional information",
@@ -208,6 +209,45 @@
       },
       "gfi": {
         "content": "To access feature data, click anywhere on the map or click the button with the marker icon on the left. In the Feature Data window, you can search for feature data and view information about the features and locations you select, which you can also download directly to your device in a file format of your choosing. If there is a filter-button next to the map layer name, you can filter data listed in the Feature Data window.\nIf you have selected the object by clicking the map, you can explore the same location from Google Street View service. Google Street View can be opened from the location informations at the Feature Data window."
+      },
+      "filter": {
+        "title": "Filtering",
+        "steps": {
+          "step1": {
+            "title": "Press the layer's Filter button",
+            "content": ""
+          },
+          "step2": {
+            "title": "Select an attribute",
+            "content": "Choose an attribute from the dropdown menu to filter the layer's data."
+          },
+          "step3": {
+            "title": "Select a condition/operator",
+            "content": {
+              "equal": "Equals: Displays objects whose attribute is exactly the same as the given value.",
+              "notEqual": "Not equal: Displays objects whose attribute differs from the given value.",
+              "contains": "Contains: Displays objects whose attribute includes the given value.",
+              "notContains": "Does not contain: Displays objects whose attribute does not include the given value.",
+              "smallerThan" : "Smaller than: smaller than the given value",
+              "biggerThan" : "Bigger than: bigger than the given value"
+            }
+          },
+          "step4": {
+            "title": "Enter value",
+            "content": "Provide the value to use for filtering with your selected attribute."
+          },
+          "step5": {
+            "title": "Press 'add filter'",
+            "content": ""
+          },
+          "step6": {
+            "title": "Removing the filter",
+            "content": "If desired, you can remove the applied filter by pressing \"Remove all filters\" or by clicking the cross next to active filters."
+          }
+        },
+        "additionalInstructions": "Using the operators 'Contains' and 'Does not contain', the attribute value does not need to be perfectly correct. It is sufficient that the value is only part of the attribute's content. This facilitates filtering when the exact value is not known.",
+        "feedback": "If the filter tool is missing from the layer or the attribute to be filtered is missing an essential attribute, you can send feedback on the subject to",
+        "feedbackEmail": "paikkatieto@vayla.fi"
       },
       "downloads": {
         "title": "Downloads",

@@ -46,7 +46,7 @@
     "shareTheme": "Dela detta tema",
     "metadata": "Visa kartlagers metadata",
     "showPageInfo": "Sidinformation",
-    "showUserGuide": "Uppgifter om applikationen"
+    "showUserGuide": "Användarguide"
   },
   "savedContent" : {
     "savedContent" : "Spara vyer och geometrier",
@@ -207,6 +207,45 @@
       },
       "gfi": {
         "content": "Objektdata öppnas genom att klicka var som helst på kartan eller via knappen i vänstra kanten som har en kartanteckning som ikon. I fönstret Objektdata kan du söka objektdata och se uppgifter om valda objekt och platser som du också kan ladda ner direkt till din enhet i valfritt filformat. Om det finns en filterknapp bredvid kartnivå namnet kan du filtrera objektdata som listas i fönstret Objektdata.\nOm du har valt objektet genom att klicka på kartan kan du utforska samma plats från tjänsten Google Street View. Google Street View kan öppnas från positionsdata i fönstret Objektdata."
+      },
+      "filter": {
+        "title": "Filtrering",
+        "steps": {
+          "step1": {
+            "title": "Tryck på lagrets Filter-knapp",
+            "content": ""
+          },
+          "step2": {
+            "title": "Välj attribut",
+            "content": "Välj ett attribut från rullgardinsmenyn för att filtrera lagrets data."
+          },
+          "step3": {
+            "title": "Välj ett villkor/operator",
+            "content": {
+              "equal": "Lika med: Visar objekt vars attribut är exakt samma som det angivna värdet.",
+              "notEqual": "Inte lika med: Visar objekt vars attribut skiljer sig från det angivna värdet.",
+              "contains": "Innehåller: Visar objekt vars attribut inkluderar det angivna värdet.",
+              "notContains": "Innehåller inte: Visar objekt vars attribut inte inkluderar det angivna värdet.",
+              "smallerThan" : "Mindre än: mindre än det angivna värdet",
+              "biggerThan" : "Större än: större än det angivna värdet"
+            }
+          },
+          "step4": {
+            "title": "Ange värde",
+            "content": "Ange värdet att använda för att filtrera med ditt valda attribut."
+          },
+          "step5": {
+            "title": "Tryck på 'lägg till ett filter'",
+            "content": ""
+          },
+          "step6": {
+            "title": "Ta bort filtret",
+            "content": "Om så önskas kan du ta bort det applicerade filtret genom att trycka på \"Ta bort alla filter\" eller genom att klicka på krysset bredvid aktiva filter."
+          }
+        },
+        "additionalInstructions": "Genom att använda operatorerna 'Innehåller' och 'Innehåller inte' behöver attributvärdet inte vara helt korrekt. Det räcker att värdet bara är en del av attributets innehåll. Detta underlättar filtreringen när det exakta värdet inte är känt.",
+        "feedback": "Om filterverktyget saknas från lagret eller attributet som ska filtreras saknar ett väsentligt attribut kan du skicka feedback om ämnet till",
+        "feedbackEmail": "paikkatieto@vayla.fi"
       },
       "downloads": {
         "title": "Nedladdningar",
