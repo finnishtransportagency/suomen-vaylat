@@ -1,5 +1,5 @@
-import './_colors.scss';
-import './custom.scss';
+import './resources/css/_colors.scss'
+import './resources/css/custom.scss';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Provider } from 'react-redux';
 import { Route, Router } from 'react-router-dom';

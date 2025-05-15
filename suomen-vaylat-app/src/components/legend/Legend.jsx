@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { motion } from 'framer-motion';
-import '../../custom.scss';
+import '../../resources/css/custom.scss';
 import styled from 'styled-components';
 import strings from '../../translations';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

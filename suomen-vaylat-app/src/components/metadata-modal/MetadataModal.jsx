@@ -2,7 +2,6 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import { useAppSelector } from '../../state/hooks';
 import strings from '../../translations';
-import './MetadataModal.scss';
 import MetadataGraphic from './Components/MetadataGraphic';
 import Citation from './Components/Citation';
 import HeaderAndParagraph from './Components/HeaderAndParagraph';

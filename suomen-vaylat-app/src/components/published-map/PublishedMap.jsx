@@ -41,7 +41,6 @@ import {
 } from '../../state/slices/uiSlice';
 import { getActiveAnnouncements, updateLayers, getAllStoredAnnouncements } from '../../utils/rpcUtil';
 import SvLoder from '../../utils/components/SvLoader';
-import './PublishedMap.scss';
 import { theme } from '../../theme/theme';
 
 const GFI_GEOMETRY_LAYER_ID = 'drawtools-geometry-layer';
