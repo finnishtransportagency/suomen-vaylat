@@ -4,7 +4,7 @@ import { ReactReduxContext, useSelector } from 'react-redux';
 import { setTagLayers, setTags } from '../../../state/slices/rpcSlice';
 
 
-const StyledFilterButton = styled.div`
+const StyledTagButton = styled.div`
     cursor: pointer;
     display: flex;
     justify-content: center;
@@ -23,22 +23,22 @@ const StyledFilterButton = styled.div`
     color: ${props => props.isSelected && props.theme.colors.mainWhite};
 `;
 
-const StyledFilter = styled.span`
+const StyledTag = styled.span`
 
 `;
 
-export const Filter = ({ filter, isOpen }) => {
+export const Tag = ({ tag, isOpen }) => {
     const { store } = useContext(ReactReduxContext);
     const {
         channel,
         tags
     } = useSelector(state => state.rpc);
 
-    const selectFilter = (clickedFilter) => {
-        const isFilterActive = tags.includes(clickedFilter);
-        let updatedTags = isFilterActive 
-            ? tags.filter(tag => tag !== clickedFilter) 
-            : [...tags, clickedFilter];
+    const selectTag = (clickedTag) => {
+        const isTagActive = tags.includes(clickedTag);
+        let updatedTags = isTagActive 
+            ? tags.tag(tag => tag !== clickedTag) 
+            : [...tags, clickedTag];
     
         // Use Promise.all to fetch layers for all tags in parallel
         const layerPromises = updatedTags.map(tag => {
@@ -60,18 +60,18 @@ export const Filter = ({ filter, isOpen }) => {
     };
 
     return (
-        <StyledFilter>
-            <StyledFilterButton
-                onClick={() => selectFilter(filter)}
-                isSelected={tags.includes(filter)}
+        <StyledTag>
+            <StyledTagButton
+                onClick={() => selectTag(tag)}
+                isSelected={tags.includes(tag)}
                 isOpen={isOpen}
             >
                 {
-                    filter
+                    tag
                 }
-            </StyledFilterButton>
-        </StyledFilter>
+            </StyledTagButton>
+        </StyledTag>
     );
 };
 
-export default Filter;
+export default Tag;

@@ -10,7 +10,7 @@ import {
   setTagLayers,
   setTags,
 } from "../../../state/slices/rpcSlice";
-import Filter from "./Filter";
+import Tag from "./Tag";
 import LayerList, { TagLayerList } from "./LayerList";
 import LayerSearch from "./LayerSearch";
 import ReactTooltip from "react-tooltip";
@@ -236,7 +236,7 @@ const LayerListTEMP = ({ groups, layers, tags }) => {
           </StyledCustomFilterButton>
           {tags?.map((tag, index) => {
             return (
-              <Filter isOpen={isOpen} key={"fiter-tag-" + index} filter={tag} />
+              <Tag isOpen={isOpen} key={"fiter-tag-" + index} tag={tag} />
             );
           })}
         </StyledFiltersContainer>
