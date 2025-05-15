@@ -3,17 +3,17 @@ import { faInfoCircle, faTimes, faCaretDown, faCaretUp, faGripLines, faEye, faEy
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ReactReduxContext } from 'react-redux';
 import styled from 'styled-components';
-import { clearLayerMetadata, getLayerMetadata, setLayerMetadata, setZoomTo, setFilteringInfo, setFilters } from '../../../state/slices/rpcSlice';
-import { updateLayers } from '../../../utils/rpcUtil';
+import { clearLayerMetadata, getLayerMetadata, setLayerMetadata, setZoomTo, setFilteringInfo, setFilters } from '../../../../state/slices/rpcSlice';
+import { updateLayers } from '../../../../utils/rpcUtil';
 import { sortableHandle } from 'react-sortable-hoc';
 import ReactTooltip from "react-tooltip";
 import {
    setMinimizeFilterModal
-  } from "../../../state/slices/uiSlice";
+  } from "../../../../state/slices/uiSlice";
 
-import strings from '../../../translations';
-import { useAppSelector } from '../../../state/hooks';
-import { theme, isMobile } from '../../../theme/theme';
+import strings from '../../../../translations';
+import { useAppSelector } from '../../../../state/hooks';
+import { theme, isMobile } from '../../../../theme/theme';
 
 const StyledLayerContainer = styled.li`
     z-index: 9999;

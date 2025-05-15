@@ -14,7 +14,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import AddressSearch from './AddressSearch';
 import MetadataSearch from './MetadataSearch';
 import FeatureSearch from './FeatureSearch';
-import SvLoder from '../loader/SvLoader';
+import SvLoder from '../../utils/components/SvLoader';
 import strings from '../../translations';
 import { SEARCH_TIP_LOCALSTORAGE } from '../../utils/constants';
 

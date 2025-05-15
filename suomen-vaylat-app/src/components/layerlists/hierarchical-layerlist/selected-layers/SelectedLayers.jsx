@@ -1,13 +1,13 @@
 import { useContext, useEffect} from "react";
 import styled from 'styled-components';
-import { setBackgroundMaps, setMapLayers } from '../../../state/slices/rpcSlice';
-import strings from '../../../translations';
-import { updateLayers, resetThemeGroups, reArrangeRPCLayerOrder, showNonThemeLayers } from '../../../utils/rpcUtil';
+import { setBackgroundMaps, setMapLayers } from "../../../../state/slices/rpcSlice";
+import strings from "../../../../translations";
+import { updateLayers, resetThemeGroups, reArrangeRPCLayerOrder, showNonThemeLayers } from '../../../../utils/rpcUtil';
 import { ReactReduxContext } from 'react-redux';
-import { useAppSelector } from "../../../state/hooks";
+import { useAppSelector } from "../../../../state/hooks";
 import { sortableContainer, sortableElement } from 'react-sortable-hoc';
 import {arrayMoveImmutable} from 'array-move';
-import SelectedLayer from './SelectedLayer';
+import SelectedLayer from "./SelectedLayer";
 
 const StyledSelectedLayers = styled.div`
 

@@ -36,7 +36,7 @@ import {
 
 import { setMinimizeGfi, setSelectedGfiTool, setGeoJsonArray, setHasToastBeenShown, setWarning, setActiveSelectionTool } from '../../state/slices/uiSlice';
 
-import SVLoader from '../loader/SvLoader';
+import SVLoader from '../../utils/components/SvLoader';
 import { DRAWING_TIP_LOCALSTORAGE } from '../../utils/constants';
 import { useAppSelector } from '../../state/hooks';
 

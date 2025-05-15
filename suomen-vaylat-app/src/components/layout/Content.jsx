@@ -5,8 +5,8 @@ import "react-toastify/dist/ReactToastify.css";
 import { useAppSelector } from "../../state/hooks";
 import styled from "styled-components";
 import strings from "../../translations";
-import GfiToolsMenu from "../gfi/GfiToolsMenu";
-import GfiDownloadMenu from "../gfi/GfiDownloadMenu";
+import GfiToolsMenu from "../feature-data-window/GfiToolsMenu";
+import GfiDownloadMenu from "../feature-data-window/GfiDownloadMenu";
 
 import {
   setSelectError,
@@ -55,9 +55,9 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 import Modal from "../modals/Modal";
-import AnnouncementsModal from "../announcements-modal/AnnouncementsModal";
-import LayerDownloadLinkButtonModal from "../menus/hierarchical-layerlist/LayerDownloadLinkButtonModal";
-import AppInfoModalContent from "../app-info-modal/AppInfoModalContent";
+import AnnouncementsModal from "../announcements/AnnouncementsModal";
+import LayerDownloadLinkButtonModal from "../layerlists/hierarchical-layerlist/LayerDownloadLinkButtonModal";
+import AppInfoModalContent from "../app-info/AppInfoModalContent";
 import UserGuideModalContent from "../user-guide-modal/UserGuideModalContent";
 import MenuBar from "./menu-bar/MenuBar";
 import MapLayersDialog from "../dialog/MapLayersDialog";
@@ -70,13 +70,13 @@ import ScaleBar from "../scalebar/ScaleBar";
 import { ShareWebSitePopup } from "../share-web-site/ShareWebSitePopup";
 import ZoomMenu from "../zoom-features/ZoomMenu";
 import WarningModalContent from "../warning/WarningModalContent";
-import GFIPopup from "../gfi/GFIPopup";
-import GFIDownload from "../gfi/GFIDownload";
+import GFIPopup from "../feature-data-window/GFIPopup";
+import GFIDownload from "../feature-data-window/GFIDownload";
 import MetadataModal from "../metadata-modal/MetadataModal";
 import { ANNOUNCEMENTS_LOCALSTORAGE } from "../../utils/constants";
-import ThemeMenu from "../menus/theme-menu/ThemeMenu";
+import ThemeMenu from "../layerlists/theme-layerlist/ThemeMenu";
 
-import { CustomLayerModal } from "../menus/hierarchical-layerlist/CustomFilter/CustomLayerModal";
+import { CustomLayerModal } from "../layerlists/hierarchical-layerlist/CustomFilter/CustomLayerModal";
 import { FilterModalContainer } from "../filter/FilterModalContainer";
 import FeedbackForm from "../feedback-form/FeedbackForm";
 

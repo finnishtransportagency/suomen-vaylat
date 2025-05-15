@@ -13,8 +13,8 @@ import store from '../../state/store';
 import 'swiper/css';
 
 import DialogHeader from './DialogHeader';
-import LayerListTEMP from '../menus/hierarchical-layerlist/LayerListTEMP';
-import SelectedLayers from '../menus/selected-layers/SelectedLayers';
+import LayerListTEMP from '../layerlists/hierarchical-layerlist/LayerListTEMP';
+import SelectedLayers from '../layerlists/hierarchical-layerlist/selected-layers/SelectedLayers';
 
 import { faLayerGroup } from '@fortawesome/free-solid-svg-icons';
 

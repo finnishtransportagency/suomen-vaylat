@@ -40,7 +40,7 @@ import {
     addToGeoJsonArray
 } from '../../state/slices/uiSlice';
 import { getActiveAnnouncements, updateLayers, getAllStoredAnnouncements } from '../../utils/rpcUtil';
-import SvLoder from '../../components/loader/SvLoader';
+import SvLoder from '../../utils/components/SvLoader';
 import './PublishedMap.scss';
 import { theme } from '../../theme/theme';
 

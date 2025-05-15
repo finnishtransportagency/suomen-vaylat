@@ -1,6 +1,6 @@
 import strings from '../../translations';
 import { StyledDropDown, StyledDropdownContentItem, StyledDropdownContentItemTitle } from './Search';
-import Layer from '../menus/hierarchical-layerlist/Layer';
+import Layer from '../layerlists/hierarchical-layerlist/Layer';
 
 const MetaSearchResultPanel = ({
     searchResults,

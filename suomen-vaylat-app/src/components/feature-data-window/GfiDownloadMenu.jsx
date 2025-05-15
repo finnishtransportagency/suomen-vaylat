@@ -13,7 +13,7 @@ import {
 import ModalListItem from '../modals/ModalListItem';
 import CheckBox from '../checkbox/CheckBox';
 
-import SVLoader from '../loader/SvLoader';
+import SVLoader from '../../utils/components/SvLoader';
 import strings from '../../translations';
 
 const StyledGfiDownloadsContainer = styled.div`

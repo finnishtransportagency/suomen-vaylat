@@ -37,7 +37,7 @@ import GfiTabContent from "./GfiTabContent";
 import GfiToolsMenu from "./GfiToolsMenu";
 import GfiDownloadMenu from "./GfiDownloadMenu";
 import CircleButton from "../circle-button/CircleButton";
-import SVLoader from "../loader/SvLoader";
+import SVLoader from "../../utils/components/SvLoader";
 import { isValidUrl } from "../../utils/validUrlUtil";
 import { theme, isMobile } from "../../theme/theme";
 import { filterFeature } from "../../utils/gfiUtil";

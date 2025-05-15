@@ -14,7 +14,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDownload, faFileArchive, faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
 
 import ModalListItem from '../modals/ModalListItem';
-import SvLoader from '../loader/SvLoader';
+import SvLoader from '../../utils/components/SvLoader';
 
 const StyledDownloadsContainer = styled.div`
     width:100%;
