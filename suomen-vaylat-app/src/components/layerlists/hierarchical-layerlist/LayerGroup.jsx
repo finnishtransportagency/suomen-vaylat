@@ -19,7 +19,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 import { updateLayers } from "../../../utils/rpcUtil";
-
+import LayerlistSwitch from "./LayerlistSwitch";
 import { setWarning } from "../../../state/slices/uiSlice";
 import strings from "../../../translations";
 import { useAppSelector } from "../../../state/hooks";
@@ -266,43 +266,6 @@ const themeStyles = {
   562: {
     icon: faGlobeEurope,
   },
-};
-
-const StyledSwitchContainer = styled.div`
-  position: relative;
-  min-width: 32px;
-  height: 16px;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  background-color: ${(props) => (props.isSelected ? "#8DCB6D" : "#AAAAAA")};
-  cursor: pointer;
-  margin-right: 16px;
-`;
-
-const StyledSwitchButton = styled.div`
-  position: absolute;
-  left: ${(props) => (props.isSelected ? "15px" : "0px")};
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  margin-left: 2px;
-  margin-right: 2px;
-  transition: all 0.3s ease-out;
-  background-color: ${(props) => props.theme.colors.mainWhite};
-`;
-
-const Switch = ({ action, isSelected }) => {
-  return (
-    <StyledSwitchContainer
-      isSelected={isSelected}
-      onClick={(event) => {
-        action(event);
-      }}
-    >
-      <StyledSwitchButton isSelected={isSelected} />
-    </StyledSwitchContainer>
-  );
 };
 
 export const LayerGroup = ({ group, layers, hasChildren }) => {
@@ -602,7 +565,7 @@ export const LayerGroup = ({ group, layers, hasChildren }) => {
               </div>
             </StyledLefContent>
             <StyledRightContent>
-              <Switch
+              <LayerlistSwitch
                 isSelected={
                   totalVisibleGroupLayersCount === totalGroupLayersCount &&
                   totalVisibleGroupLayersCount !== 0

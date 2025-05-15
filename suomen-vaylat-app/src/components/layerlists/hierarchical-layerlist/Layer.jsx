@@ -27,6 +27,7 @@ import {
 } from "../../../state/slices/uiSlice";
 import LayerMetadataButton from "./LayerMetadataButton";
 import { useAppSelector } from "../../../state/hooks";
+import LayerlistSwitch from './LayerlistSwitch';
 
 const StyledLayerContainer = styled.div`
   background-color: ${(props) => props.themeStyle && "#F5F5F5"};
@@ -58,30 +59,6 @@ const StyledLayerName = styled.p`
   padding-left: 8px;
 `;
 
-const StyledSwitchContainer = styled.div`
-  position: relative;
-  min-width: 32px;
-  height: 16px;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  background-color: ${(props) => (props.isSelected ? "#8DCB6D" : "#AAAAAA")};
-  cursor: pointer;
-  margin-right: 16px;
-`;
-
-const StyledSwitchButton = styled.div`
-  position: absolute;
-  left: ${(props) => (props.isSelected ? "15px" : "0px")};
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  margin-left: 2px;
-  margin-right: 2px;
-  transition: all 0.3s ease-out;
-  background-color: ${(props) => props.theme.colors.mainWhite};
-`;
-
 const StyledFilterIcon = styled.div`
   padding-right: 8px;  
   cursor: pointer;
@@ -95,19 +72,6 @@ const StyledFilterIcon = styled.div`
     }
   };
 `;
-
-export const Switch = ({ action, layer, isSelected }) => {
-  return (
-    <StyledSwitchContainer
-      isSelected={isSelected}
-      onClick={() => {
-        action(layer);
-      }}
-    >
-      <StyledSwitchButton isSelected={isSelected} />
-    </StyledSwitchContainer>
-  );
-};
 
 export const findGroupForLayer = (groups, layerId) => {
   for (let group of groups) {
@@ -290,7 +254,7 @@ export const Layer = ({ layer, themeName, groupName, showSwitch = true }) => {
                 {downloadLink && <LayerDownloadLinkButton
                     handleIsDownloadLinkModalOpen={handleIsDownloadLinkModalOpen} />
                 }
-                {showSwitch && <Switch
+                {showSwitch && <LayerlistSwitch
                 action={() => handleLayerVisibility(channel, layer)}
                 isSelected={layer.visible}
                 layer={layer}

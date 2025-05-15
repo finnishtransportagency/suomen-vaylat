@@ -13,6 +13,7 @@ import LayerMetadataButton from "../LayerMetadataButton";
 import { useAppSelector } from "../../../../state/hooks";
 import { toast, Slide } from "react-toastify";
 import strings from "../../../../translations"
+import LayerlistSwitch from "../LayerlistSwitch";
 
 const StyledLayerContainer = styled.div`
   background-color: ${(props) => props.themeStyle && "#F5F5F5"};
@@ -44,43 +45,6 @@ const StyledLayerName = styled.p`
   font-size: 14px;
   padding-left: 8px;
 `;
-
-const StyledSwitchContainer = styled.div`
-  position: relative;
-  min-width: 32px;
-  height: 16px;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  background-color: ${(props) => (props.isSelected ? "#8DCB6D" : "#AAAAAA")};
-  cursor: pointer;
-  margin-right: 16px;
-`;
-
-const StyledSwitchButton = styled.div`
-  position: absolute;
-  left: ${(props) => (props.isSelected ? "15px" : "0px")};
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  margin-left: 2px;
-  margin-right: 2px;
-  transition: all 0.3s ease-out;
-  background-color: ${(props) => props.theme.colors.mainWhite};
-`;
-
-export const Switch = ({ action, layer, isSelected }) => {
-  return (
-    <StyledSwitchContainer
-      isSelected={isSelected}
-      onClick={() => {
-        action(layer);
-      }}
-    >
-      <StyledSwitchButton isSelected={isSelected} />
-    </StyledSwitchContainer>
-  );
-};
 
 export const findGroupForLayer = (groups, layerId) => {
   for (let group of groups) {
@@ -198,7 +162,7 @@ export const FilterLayer = ({ layer, theme, groupName }) => {
         </StyledLayerName>
       </StyledlayerHeader>
       {layer.metadataIdentifier && <LayerMetadataButton layer={layer} />}
-        <Switch
+        <LayerlistSwitch
           action={() => handleLayerSelect(layer)}
           isSelected={isSelected}
           layer={layer}

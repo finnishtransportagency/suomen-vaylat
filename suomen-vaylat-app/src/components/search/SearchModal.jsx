@@ -5,7 +5,7 @@ import { setActiveSwitch } from '../../state/slices/uiSlice';
 import { useAppSelector } from '../../state/hooks';
 import { useEffect, useContext } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import Switch from '../switch/Switch';
+import Switch from './SearchSwitch';
 import {
     faLongArrowDown,
 } from '@fortawesome/free-solid-svg-icons';
