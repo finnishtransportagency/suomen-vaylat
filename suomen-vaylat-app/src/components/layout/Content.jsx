@@ -62,7 +62,7 @@ import UserGuideModalContent from "../user-guide/UserGuideModalContent";
 import MenuBar from "./menu-bar/MenuBar";
 import MapLayersDialog from "../dialog/MapLayersDialog";
 import WarningDialog from "../dialog/WarningDialog";
-import SavedModalContent from "../views/Views";
+import SavedContent from "../SavedContent/SavedContent";
 import PublishedMap from "../published-map/PublishedMap";
 import Search from "../search/Search";
 import ActionButtons from "../action-button/ActionButtons";
@@ -896,7 +896,7 @@ const Content = () => {
           helpId={"show_view_help"}
           helpContent={viewHelp()}
         >
-          <SavedModalContent />
+          <SavedContent />
         </Modal>
         <Modal
           constraintsRef={

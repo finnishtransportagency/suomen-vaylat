@@ -276,7 +276,7 @@ const StyledDeleteSavedGeometriesText = styled.p`
 
 `;
 
-export const SavedModalContent = () => {
+export const SavedContent = () => {
 
     const inputEl = useRef(null);
 
@@ -889,4 +889,4 @@ const Geometries = () => {
     );
 };
 
-export default SavedModalContent;
+export default SavedContent;
