@@ -14,7 +14,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import strings from '../../translations';
 import { selectGroup } from '../../utils/rpcUtil';
-import { ThemeGroupShareButton } from '../share-web-site/ShareLinkButtons';
+import { ThemeGroupShareButton } from '../share-website/ShareLinkButtons';
 
 import { setMinimizeGfi, setMinimizeFilterModal } from '../../state/slices/uiSlice';
 

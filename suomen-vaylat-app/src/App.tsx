@@ -7,7 +7,7 @@ import SimpleReactLightbox from 'simple-react-lightbox';
 import styled from 'styled-components';
 import Layout from './components/layout/Layout';
 import PageTitle from './components/layout/PageTitle';
-import { HandleSharedWebSiteLink } from './components/share-web-site/HandleSharedWebSiteLink';
+import { HandleSharedWebSiteLink } from './components/share-website/HandleSharedWebSiteLink';
 import { history, store } from './state/store';
 import Theme from './theme/theme';
 
