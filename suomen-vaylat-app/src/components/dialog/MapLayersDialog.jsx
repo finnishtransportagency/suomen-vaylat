@@ -13,7 +13,7 @@ import store from '../../state/store';
 import 'swiper/css';
 
 import DialogHeader from './DialogHeader';
-import LayerListTEMP from '../layerlists/hierarchical-layerlist/LayerListTEMP';
+import LayerListContainer from '../layerlists/hierarchical-layerlist/LayerListContainer';
 import SelectedLayers from '../layerlists/hierarchical-layerlist/selected-layers/SelectedLayers';
 
 import { faLayerGroup } from '@fortawesome/free-solid-svg-icons';
@@ -196,7 +196,7 @@ const MapLayersDialog = () => {
             title: strings.layerlist.layerlistLabels.allLayers,
             titleColor: 'mainColor1',
             content: (
-                <LayerListTEMP
+                <LayerListContainer
                     groups={allGroups}
                     layers={allLayers}
                     tags={allTags}

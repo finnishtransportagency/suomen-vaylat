@@ -166,7 +166,7 @@ const SavedLayer = ({ layers, groups }) => {
   return null;
 };
 
-const LayerListTEMP = ({ groups, layers, tags }) => {
+const LayerListContainer = ({ groups, layers, tags }) => {
   useAppSelector((state) => state.language);
 
   const { showSavedLayers, isCustomFilterOpen } = useAppSelector((state) => state.ui);
@@ -259,4 +259,4 @@ const LayerListTEMP = ({ groups, layers, tags }) => {
   );
 };
 
-export default LayerListTEMP;
+export default LayerListContainer;
