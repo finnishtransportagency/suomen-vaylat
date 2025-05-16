@@ -19,6 +19,7 @@ import FeedbackFormModal from "../feedback-form/modal/FeedbackFormModal";
 import AnnouncementsModal from "../announcements/modal/AnnouncementsModal";
 import MetadataModal from "../metadata-modal/modal/MetadataModal";
 import ShareWebsiteModal from "../share-website/modal/ShareWebsiteModal";
+import SavedContentModal from "../saved-content/modal/SavedContentModal";
 
 import {
   resetGFILocations,
@@ -47,14 +48,12 @@ import {
 
 import {
   faExclamationCircle,
-  faSave,
 } from "@fortawesome/free-solid-svg-icons";
 
 import Modal from "../modals/Modal";
 import LayerDownloadLinkButtonModal from "../layerlists/hierarchical-layerlist/LayerDownloadLinkButtonModal";
 import MenuBar from "./menu-bar/MenuBar";
 import MapLayersDialog from "../dialog/MapLayersDialog";
-import SavedContent from "../saved-content/SavedContent";
 import PublishedMap from "../published-map/PublishedMap";
 import Search from "../search/Search";
 import ActionButtons from "../action-button/ActionButtons";
@@ -166,7 +165,6 @@ const Content = () => {
   );
 
   const {
-    isSaveViewOpen,
     isGfiOpen,
     warning,
     isGfiToolsOpen,
@@ -283,15 +281,6 @@ const Content = () => {
   const handleCloseGfiLocations = () => {
     store.dispatch(setActiveSelectionTool(null));
     store.dispatch(setIsGfiToolsOpen(false));
-  };
-
-  const viewHelp = () => {
-    return (
-      <ul>
-        <li>{strings.savedContent.saveView.saveViewDescription1}</li>
-        <li>{strings.savedContent.saveView.saveViewDescription2}</li>
-      </ul>
-    );
   };
 
   const handleGfiToolsMenu = () => {
@@ -530,31 +519,7 @@ const Content = () => {
 
         <ShareWebsiteModal constraintsRef={constraintsRef}/>
 
-        <Modal
-          constraintsRef={
-            constraintsRef
-          } /* Reference div for modal drag boundaries */
-          drag={true} /* Enable (true) or disable (false) drag */
-          resize={false}
-          backdrop={false} /* Is backdrop enabled (true) or disabled (false) */
-          fullScreenOnMobile={
-            true
-          } /* Scale modal full width / height when using mobile device */
-          titleIcon={faSave} /* Use icon on title or null */
-          title={strings.savedContent.savedContent} /* Modal header title */
-          type={"normal"} /* Modal type */
-          closeAction={
-            handleCloseSaveViewModal
-          } /* Action when pressing modal close button or backdrop */
-          isOpen={isSaveViewOpen} /* Modal state */
-          id="saved_content_modal"
-          minWidth={"600px"}
-          hasHelp={true}
-          helpId={"show_view_help"}
-          helpContent={viewHelp()}
-        >
-          <SavedContent />
-        </Modal>
+        <SavedContentModal constraintsRef={constraintsRef}/>
         <Modal
           constraintsRef={
             constraintsRef
