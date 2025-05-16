@@ -133,7 +133,7 @@ const GfiTabContent = ({ layer, data, title, tablePropsInit }) => {
 
   const activeFilteringOnLayer = useCallback(() => {
     return filters.some((filter) => filter.layer === data.layerId);
-  });
+  },[filters]);
 
   const [isActiveFiltering, setIsActiveFiltering] = useState(false);
 

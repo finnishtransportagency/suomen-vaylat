@@ -167,7 +167,7 @@ export const CustomLayerList = ({ groups, layers, recurse = false }) => {
 };
 
 // Renders custom filter guide for user and CustomLayerList
-const CustomLayerModalContent = ({ }) => {
+const CustomLayerModalContent = () => {
   useAppSelector((state) => state.language);
 
   const { allGroups, allLayers } = useAppSelector((state) => state.rpc);

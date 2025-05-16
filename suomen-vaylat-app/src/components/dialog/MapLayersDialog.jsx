@@ -210,7 +210,6 @@ const MapLayersDialog = () => {
             titleContent: 'layerCounter',
             content: (
                 <SelectedLayers
-                    selectedLayers={selectedLayers}
                     currentZoomLevel={currentZoomLevel}
                 />
             ),

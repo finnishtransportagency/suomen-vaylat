@@ -272,8 +272,6 @@ export const FilterLayerGroup = React.memo(({ group, layers, hasChildren }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isExcerptOpen, setIsExcerptOpen] = useState(false);
   const { store } = useContext(ReactReduxContext);
-  const [isChecked, setIsChecked] = useState(false);
-
   const [filteredLayers, setFilteredLayers] = useState([]);
   const [totalGroupLayersCount, setTotalGroupLayersCoun] = useState(0);
   const [totalVisibleGroupLayersCount, setTotalVisibleGroupLayersCount] =
@@ -336,12 +334,6 @@ export const FilterLayerGroup = React.memo(({ group, layers, hasChildren }) => {
     layersCounter(group);
   }, [group, layers, selectedCustomFilterLayers]);
 
-  useEffect(() => {
-    totalVisibleGroupLayersCount === totalGroupLayersCount &&
-      totalVisibleGroupLayersCount !== 0 &&
-      setIsChecked(true);
-  }, [totalVisibleGroupLayersCount, totalGroupLayersCount]);
-
   const truncatedString = (string, characterAmount, text) => {
     return string.length > characterAmount + 20 ? (
       <>
@@ -402,11 +394,9 @@ export const FilterLayerGroup = React.memo(({ group, layers, hasChildren }) => {
     if (isGroupFullySelected) {
       setFilteredLayersVisible(false);
       setGroupLayersVisible(false, group);
-      setIsChecked(false);
     } else {
       setFilteredLayersVisible(true);
       setGroupLayersVisible(true, group);
-      setIsChecked(true);
     }
   };
 

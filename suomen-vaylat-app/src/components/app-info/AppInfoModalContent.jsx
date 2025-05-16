@@ -1,12 +1,10 @@
-import React, { useRef, useState, useEffect } from 'react';
-import store from '../../state/store';
+import { useRef, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import strings from '../../translations';
 import { getAppBuildDate, getAppVersion } from '../../utils/appInfoUtil';
 import { isMobile, size } from '../../theme/theme';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSelector } from 'react-redux';
-import { setIsFeedBackFormOpen } from '../../state/slices/uiSlice';
 
 import { Swiper, SwiperSlide } from 'swiper/react';
 
@@ -158,22 +156,6 @@ const StyledSwiper = styled(Swiper)`
         overflow-y: auto;
     }
     transition: box-shadow 0.3s ease-out;
-`;
-
-const StyledButton = styled.div`
-  width: 85px;
-  display: flex;
-  align-items: center;
-  text-align: center;
-  height: 32px;
-  display: flex;
-  border-radius: 30px;
-  background-color: ${(props) => props.theme.colors.mainColor1};
-  cursor: pointer;
-  font-size: 13px;
-  color: #fff;
-  margin-bottom: 5px;
-  line-height: 1;
 `;
 
 const AnnouncementContainer = styled.div`

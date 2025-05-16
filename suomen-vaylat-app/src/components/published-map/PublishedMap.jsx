@@ -39,7 +39,7 @@ import {
     removeFromDrawToolMarkers,
     addToGeoJsonArray
 } from '../../state/slices/uiSlice';
-import { getActiveAnnouncements, updateLayers, getAllStoredAnnouncements } from '../../utils/rpcUtil';
+import { getActiveAnnouncements, updateLayers } from '../../utils/rpcUtil';
 import SvLoder from '../../utils/components/SvLoader';
 import { theme } from '../../theme/theme';
 

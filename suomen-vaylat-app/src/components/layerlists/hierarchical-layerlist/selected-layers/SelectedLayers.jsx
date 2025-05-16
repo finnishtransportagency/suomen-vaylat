@@ -1,8 +1,8 @@
-import { useContext, useEffect} from "react";
+import { useContext } from "react";
 import styled from 'styled-components';
 import { setBackgroundMaps, setMapLayers } from "../../../../state/slices/rpcSlice";
 import strings from "../../../../translations";
-import { updateLayers, resetThemeGroups, reArrangeRPCLayerOrder, showNonThemeLayers } from '../../../../utils/rpcUtil';
+import { updateLayers, resetThemeGroups, reArrangeRPCLayerOrder } from '../../../../utils/rpcUtil';
 import { ReactReduxContext } from 'react-redux';
 import { useAppSelector } from "../../../../state/hooks";
 import { sortableContainer, sortableElement } from 'react-sortable-hoc';
@@ -66,7 +66,7 @@ const SortableContainer = sortableContainer(({children}) => {
 
 
 export const SelectedLayers = (props) => {
-    const { selectedLayers, currentZoomLevel } = props;
+    const { currentZoomLevel } = props;
     const { store } = useContext(ReactReduxContext);
     const {channel, selectedLayersByType, filters} = useAppSelector(state => state.rpc);
     let backgroundMaps = selectedLayersByType.backgroundMaps;
