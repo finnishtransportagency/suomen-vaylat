@@ -62,7 +62,7 @@ import UserGuideModalContent from "../user-guide/UserGuideModalContent";
 import MenuBar from "./menu-bar/MenuBar";
 import MapLayersDialog from "../dialog/MapLayersDialog";
 import WarningDialog from "../dialog/WarningDialog";
-import SavedContent from "../SavedContent/SavedContent";
+import SavedContent from "../saved-content/SavedContent";
 import PublishedMap from "../published-map/PublishedMap";
 import Search from "../search/Search";
 import ActionButtons from "../action-button/ActionButtons";

@@ -12,14 +12,13 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import {
   setWarning,
 } from "../../state/slices/uiSlice";
+import Select from "react-select";
 
 import "react-toastify/dist/ReactToastify.css";
 import styled from "styled-components";
 import strings from "../../translations";
-import Dropdown from "../select/Dropdown";
 import { faPlus, faTimes, faTrash, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
 import { setFilters } from "../../state/slices/rpcSlice";
 
 const StyledFilterProp = styled.div``;
@@ -232,6 +231,45 @@ const StyledValidationMessage = styled.div`
   color: ${props => props.theme.colors.secondaryColorDarkOrange};
   margin: 0.3em 0 0 0.2em;
 `
+
+const StyledSelect = styled(Select)`
+  font-size: 14;
+  color: 'blue';
+`;
+
+const Dropdown = ({   
+    options,
+    placeholder,
+    value, 
+    setValue,
+    isDisabled
+  }) => {
+      
+  const styles3 = { 
+    option: (provided, state) => ({
+      ...provided,
+      zIndex: 101,
+      position: 'relative'
+    }),
+    menuPortal: base => ({ ...base, zIndex: 9999 })
+  };
+
+  return (
+    <StyledSelect
+      isSearchable={true}
+      options={options}
+      onChange={(e) => {
+        setValue(e);
+      }}
+      value={Object.keys(value).length === 0 ? null : value}
+      placeholder={placeholder}
+      styles={styles3}
+      autoFocus={false}
+      isDisabled={isDisabled}
+      menuPortalTarget={document.body} 
+    />
+  );
+};
 
 export const FilterModal = ({filterInfo}) => {
   const {

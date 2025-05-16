@@ -1,23 +1,23 @@
-import { useContext, useState, useEffect, useRef } from "react";
+import { useContext, useState, useEffect, useRef } from 'react';
 import {
   faTimes,
   faAngleLeft,
-  faAngleRight,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { ReactReduxContext } from "react-redux";
-import styled from "styled-components";
-import { useAppSelector } from "../../state/hooks";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { FreeMode, Controller } from "swiper";
-import { isMobile } from "../../theme/theme";
-import { FilterModal } from "./FilterModal";
-import { setFilteringInfo, setFilters } from "../../state/slices/rpcSlice";
-import { updateFiltersOnMap } from "../../utils/gfiUtil"
+  faAngleRight
+} from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { ReactReduxContext } from 'react-redux';
+import styled from 'styled-components';
+import { useAppSelector } from '../../state/hooks';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { FreeMode, Controller } from 'swiper';
+import { isMobile } from '../../theme/theme';
+import { FilterModal } from './FilterModal';
+import { setFilteringInfo, setFilters } from '../../state/slices/rpcSlice';
+import { updateFiltersOnMap } from '../../utils/gfiUtil';
 
 const StyledModalContainer = styled.div`
   :after {
-    content: "";
+    content: '';
     display: table;
     clear: both;
   }
@@ -27,7 +27,6 @@ const StyledModalContainer = styled.div`
   flex-direction: column;
   z-index: 2;
 `;
-
 
 const StyledGfiTab = styled.div`
   z-index: 10;
@@ -117,19 +116,13 @@ const StyledTabContent = styled.div`
   height: 100%;
 `;
 
-
 export const FilterModalContainer = () => {
   // GET ALL FILTERS WITH LAYER AND MAP THEM BY LAYER TO RETURN FilterModal
   const [selectedTab, setSelectedTab] = useState(0);
-  const {
-    filteringInfo,
-    allLayers,
-    filters,
-    channel
-  } = useAppSelector((state) => state.rpc);
-  const {
-    minimizeFilter
-  } = useAppSelector((state) => state.ui);
+  const { filteringInfo, allLayers, filters, channel } = useAppSelector(
+    (state) => state.rpc
+  );
+  const { minimizeFilter } = useAppSelector((state) => state.ui);
   const gfiInputEl = useRef(null);
   const { store } = useContext(ReactReduxContext);
 
@@ -145,8 +138,10 @@ export const FilterModalContainer = () => {
   // open the right tab when clicked on a layers filter button in selected layers
   useEffect(() => {
     if (!minimizeFilter.minimized && minimizeFilter.layer) {
-        const index = filteringInfo.findIndex(f => f.layer.id === minimizeFilter.layer)
-        gfiInputEl.current.swiper.slideTo(index);
+      const index = filteringInfo.findIndex(
+        (f) => f.layer.id === minimizeFilter.layer
+      );
+      gfiInputEl.current.swiper.slideTo(index);
     }
   }, [minimizeFilter]);
 
@@ -159,10 +154,16 @@ export const FilterModalContainer = () => {
 
   const closeTab = (index, id) => {
     // delete filter by layer
-    const updatedFilters = filters.filter(f => f.layer !== id);
-    updateFiltersOnMap(updatedFilters, filteringInfo.filter(f => f.layer.id === id)[0], channel)
+    const updatedFilters = filters.filter((f) => f.layer !== id);
+    updateFiltersOnMap(
+      updatedFilters,
+      filteringInfo.filter((f) => f.layer.id === id)[0],
+      channel
+    );
     store.dispatch(setFilters(updatedFilters));
-    store.dispatch(setFilteringInfo(filteringInfo.filter(f => f.layer.id !== id)))
+    store.dispatch(
+      setFilteringInfo(filteringInfo.filter((f) => f.layer.id !== id))
+    );
     if (index > 0) {
       handleSelectTab(index - 1);
     } else {
@@ -171,106 +172,95 @@ export const FilterModalContainer = () => {
   };
   return (
     <StyledModalContainer>
-{        /** HAVE TABS HERE  */
-}
-        <StyledTabSwiperContainer>
-          {!isMobile && gfiTabsSnapGridLength > 1 && (
-            <StyledSwiperNavigatorButton
-              onClick={() => {
-                gfiTabsSwiper.slidePrev();
-              }}
-            >
-              <FontAwesomeIcon icon={faAngleLeft} />
-            </StyledSwiperNavigatorButton>
-          )}
-
-          <StyledTabsSwiper
-            id={"filter-tabs-swiper"}
-            spaceBetween={4}
-            slidesPerView={"auto"}
-            freeMode={true}
-            modules={[Controller, FreeMode]}
-            onSwiper={setGfiTabsSwiper}
-            controller={{ control: gfiTabsSwiper }}
-            onSnapGridLengthChange={(e) => {
-              setGfiTabsSnapGridLength(e.snapGrid.length)}
-            }
-          >
-            {filteringInfo.map((filter, index) => {
-              return (
-
-                <SwiperSlide id={"tab_" + index} key={"tab_" + index}>
-
-                <StyledGfiTab
-                    onClick={() => handleSelectTab(index)}
-                    selected={selectedTab === index}
-                >
-{                    /** Get layer name compared to filter id */
-}                    <StyledTabName>
-                        {allLayers.filter(
-                        (l) => l.id === filter?.layer?.id
-                            ).length > 0
-                                ? allLayers.filter(
-                                    (l) => l.id === filter?.layer?.id
-                                )[0].name
-                                : filter?.layer?.id}
-                    </StyledTabName>
-
-{                    /** Close button for tab */
-}                    <StyledTabCloseButton
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            closeTab(index, filter.layer.id);
-                        }}
-                    >
-                        <FontAwesomeIcon icon={faTimes} />
-                    </StyledTabCloseButton>
-                </StyledGfiTab>
-                </SwiperSlide>
-              )})}
-
-
-        </StyledTabsSwiper>
-        
+      {/** HAVE TABS HERE  */}
+      <StyledTabSwiperContainer>
         {!isMobile && gfiTabsSnapGridLength > 1 && (
-            <StyledSwiperNavigatorButton
-              onClick={() => {
-                gfiTabsSwiper.slideNext();
-              }}
-            >
-              <FontAwesomeIcon icon={faAngleRight} />
-            </StyledSwiperNavigatorButton>
-          )}
-        </StyledTabSwiperContainer>
-
-
-        <StyledTabContent>
-            <StyledSwiper
-            ref={gfiInputEl}
-            id={"filter-swiper"}
-            onSlideChange={(e) => {
-                handleSelectTab(e.activeIndex);
+          <StyledSwiperNavigatorButton
+            onClick={() => {
+              gfiTabsSwiper.slidePrev();
             }}
-            tabIndex={selectedTab}
-            allowTouchMove={isMobile} // Disable swiping
-            speed={300}
-            >
-            {filteringInfo.map((filterInfo) => {
-                
-                return (
-                    <SwiperSlide
-                    style={{width: "20em"}}
-                    id={"filter_tab_content_" + filterInfo?.layer?.id}
-                    key={"filter_tab_content_" + filterInfo?.layer?.id}
-                    >
-                        <FilterModal filterInfo={filterInfo}/>
-                    </SwiperSlide>
-                );
-            })}
-            </StyledSwiper>
-      </StyledTabContent>
+          >
+            <FontAwesomeIcon icon={faAngleLeft} />
+          </StyledSwiperNavigatorButton>
+        )}
 
-      
+        <StyledTabsSwiper
+          id={'filter-tabs-swiper'}
+          spaceBetween={4}
+          slidesPerView={'auto'}
+          freeMode={true}
+          modules={[Controller, FreeMode]}
+          onSwiper={setGfiTabsSwiper}
+          controller={{ control: gfiTabsSwiper }}
+          onSnapGridLengthChange={(e) => {
+            setGfiTabsSnapGridLength(e.snapGrid.length);
+          }}
+        >
+          {filteringInfo.map((filter, index) => {
+            return (
+              <SwiperSlide id={'tab_' + index} key={'tab_' + index}>
+                <StyledGfiTab
+                  onClick={() => handleSelectTab(index)}
+                  selected={selectedTab === index}
+                >
+                  {/** Get layer name compared to filter id */}
+                  <StyledTabName>
+                    {allLayers.filter((l) => l.id === filter?.layer?.id)
+                      .length > 0
+                      ? allLayers.filter((l) => l.id === filter?.layer?.id)[0]
+                          .name
+                      : filter?.layer?.id}
+                  </StyledTabName>
+                  {/** Close button for tab */}
+                  <StyledTabCloseButton
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      closeTab(index, filter.layer.id);
+                    }}
+                  >
+                    <FontAwesomeIcon icon={faTimes} />
+                  </StyledTabCloseButton>
+                </StyledGfiTab>
+              </SwiperSlide>
+            );
+          })}
+        </StyledTabsSwiper>
+
+        {!isMobile && gfiTabsSnapGridLength > 1 && (
+          <StyledSwiperNavigatorButton
+            onClick={() => {
+              gfiTabsSwiper.slideNext();
+            }}
+          >
+            <FontAwesomeIcon icon={faAngleRight} />
+          </StyledSwiperNavigatorButton>
+        )}
+      </StyledTabSwiperContainer>
+
+      <StyledTabContent>
+        <StyledSwiper
+          ref={gfiInputEl}
+          id={'filter-swiper'}
+          onSlideChange={(e) => {
+            handleSelectTab(e.activeIndex);
+          }}
+          tabIndex={selectedTab}
+          allowTouchMove={isMobile} // Disable swiping
+          speed={300}
+        >
+          {filteringInfo.map((filterInfo) => {
+            return (
+              <SwiperSlide
+                style={{ width: '20em' }}
+                id={'filter_tab_content_' + filterInfo?.layer?.id}
+                key={'filter_tab_content_' + filterInfo?.layer?.id}
+              >
+                <FilterModal filterInfo={filterInfo} />
+              </SwiperSlide>
+            );
+          })}
+        </StyledSwiper>
+      </StyledTabContent>
     </StyledModalContainer>
   );
 };
