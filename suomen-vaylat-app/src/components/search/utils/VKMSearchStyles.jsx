@@ -1,4 +1,4 @@
-import strings from '../../translations';
+import strings from '../../../translations';
 
 export const VKMGeoJsonStyles = {
     road: {

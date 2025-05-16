@@ -26,7 +26,7 @@ import { setIsSearchOpen, setGeoJsonArray, setHasToastBeenShown, setActiveSwitch
 
 import CircleButton from '../circle-button/CircleButton';
 
-import { VKMGeoJsonHoverStyles, VKMGeoJsonStyles } from './VKMSearchStyles';
+import { VKMGeoJsonHoverStyles, VKMGeoJsonStyles } from './utils/VKMSearchStyles';
 import { Slide, toast } from "react-toastify";
 import SearchToast from '../toasts/SearchToast';
 import ReactTooltip from 'react-tooltip';
