@@ -15,6 +15,7 @@ import FeatureDataDownloadModal from "../feature-data-window/modal/FeatureDataDo
 import UserGuideModal from "../user-guide/modal/UserGuideModal";
 import AppInfoModal from "../app-info/modal/AppInfoModal";
 import CustomLayerModal from "../layerlists/hierarchical-layerlist/CustomFilter/modal/CustomLayerModal";
+import FeedbackFormModal from "../feedback-form/modal/FeedbackFormModal";
 
 import {
   setSelectError,
@@ -41,7 +42,6 @@ import {
   setIsFilterModalOpen,
   setMinimizeFilterModal,
   setMaximizeFilterModal,
-  setIsFeedBackFormOpen,
   setActiveSelectionTool
 } from "../../state/slices/uiSlice";
 
@@ -70,8 +70,6 @@ import WarningModalContent from "../warning/WarningModalContent";
 import MetadataModal from "../metadata-modal/MetadataModal";
 import { ANNOUNCEMENTS_LOCALSTORAGE } from "../../utils/constants";
 import ThemeMenu from "../layerlists/theme-layerlist/ThemeMenu";
-
-import FeedbackForm from "../feedback-form/FeedbackForm";
 
 const GFI_GEOMETRY_LAYER_ID = 'drawtools-geometry-layer';
 
@@ -186,14 +184,14 @@ const Content = () => {
   const search = useAppSelector((state) => state.search);
   const { store } = useContext(ReactReduxContext);
   const isShareOpen = shareUrl && shareUrl.length > 0 ? true : false;
-  let { downloadLink, isFeedbackFormOpen } = useAppSelector((state) => state.ui);
+  let { downloadLink } = useAppSelector((state) => state.ui);
 
   const announcements = useAppSelector(
     (state) => state.rpc.activeAnnouncements
   );
   const metadata = useAppSelector((state) => state.rpc.layerMetadata);
 
-  let { channel, allLayers, allGroups } = useAppSelector((state) => state.rpc);
+  let { channel } = useAppSelector((state) => state.rpc);
 
   const addToLocalStorageArray = (name, value) => {
     // Get the existing data
@@ -244,15 +242,9 @@ const Content = () => {
     );
   };
 
-  const handleCloseFeedbackForm = () => {
-    store.dispatch(setIsFeedBackFormOpen(false));
-  };
-
   const handleCloseShareWebSite = () => {
     store.dispatch(setShareUrl(""));
   };
-
-  
 
   const handleCloseDownloadLinkModal = () => {
     store.dispatch(
@@ -630,29 +622,8 @@ const Content = () => {
         
         <CustomLayerModal constraintsRef={constraintsRef}/>
         
-        <Modal
-          constraintsRef={
-            constraintsRef
-          } /* Reference div for modal drag boundaries */
-          drag={true} /* Enable (true) or disable (false) drag */
-          resize={false}
-          backdrop={true} /* Is backdrop enabled (true) or disabled (false) */
-          fullScreenOnMobile={
-            true
-          } /* Scale modal full width / height when using mobile device */
-          titleIcon={faInfoCircle} /* Use icon on title or null */
-          title={strings.appInfo.feedbackForm.title} /* Modal header title */
-          type={"normal"} /* Modal type */
-          closeAction={
-            handleCloseFeedbackForm
-          } /* Action when pressing modal close button or backdrop */
-          isOpen={isFeedbackFormOpen} /* Modal state */
-          id="feedback_form_modal"
-          maxWidth={"800px"}
-          overflow={"auto"}
-        >
-          <FeedbackForm layers={allLayers} groups={allGroups} />
-        </Modal>
+        <FeedbackFormModal constraintsRef={constraintsRef}/>
+
         <Modal
           constraintsRef={
             constraintsRef
