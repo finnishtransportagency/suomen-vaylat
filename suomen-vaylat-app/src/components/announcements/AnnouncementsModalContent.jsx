@@ -21,7 +21,7 @@ const StyledButton = styled(Button)`
     background-color: #0064af;
 `;
 
-export const AnnouncementsModal = ({
+export const AnnouncementsModalContent = ({
     id,
     content,
     handleAnnouncementModal
@@ -47,4 +47,4 @@ export const AnnouncementsModal = ({
             </StyledContent>
     );
 }
-export default AnnouncementsModal;
+export default AnnouncementsModalContent;

@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect, useRef } from "react";
+import { useState, useContext, useRef } from "react";
 import { ReactReduxContext } from "react-redux";
 import { ToastContainer, Slide, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -16,6 +16,7 @@ import UserGuideModal from "../user-guide/modal/UserGuideModal";
 import AppInfoModal from "../app-info/modal/AppInfoModal";
 import CustomLayerModal from "../layerlists/hierarchical-layerlist/CustomFilter/modal/CustomLayerModal";
 import FeedbackFormModal from "../feedback-form/modal/FeedbackFormModal";
+import AnnouncementsModal from "../announcements/modal/AnnouncementsModal";
 
 import {
   setSelectError,
@@ -48,13 +49,11 @@ import {
 import {
   faShareAlt,
   faInfoCircle,
-  faBullhorn,
   faExclamationCircle,
   faSave,
 } from "@fortawesome/free-solid-svg-icons";
 
 import Modal from "../modals/Modal";
-import AnnouncementsModal from "../announcements/AnnouncementsModal";
 import LayerDownloadLinkButtonModal from "../layerlists/hierarchical-layerlist/LayerDownloadLinkButtonModal";
 import MenuBar from "./menu-bar/MenuBar";
 import MapLayersDialog from "../dialog/MapLayersDialog";
@@ -68,7 +67,6 @@ import { ShareWebSitePopup } from "../share-website/ShareWebSitePopup";
 import ZoomMenu from "../zoom-features/ZoomMenu";
 import WarningModalContent from "../warning/WarningModalContent";
 import MetadataModal from "../metadata-modal/MetadataModal";
-import { ANNOUNCEMENTS_LOCALSTORAGE } from "../../utils/constants";
 import ThemeMenu from "../layerlists/theme-layerlist/ThemeMenu";
 
 const GFI_GEOMETRY_LAYER_ID = 'drawtools-geometry-layer';
@@ -186,31 +184,9 @@ const Content = () => {
   const isShareOpen = shareUrl && shareUrl.length > 0 ? true : false;
   let { downloadLink } = useAppSelector((state) => state.ui);
 
-  const announcements = useAppSelector(
-    (state) => state.rpc.activeAnnouncements
-  );
   const metadata = useAppSelector((state) => state.rpc.layerMetadata);
 
   let { channel } = useAppSelector((state) => state.rpc);
-
-  const addToLocalStorageArray = (name, value) => {
-    // Get the existing data
-    let existing = localStorage.getItem(name);
-
-    // If no existing data, create an array
-    // Otherwise, convert the localStorage string to an array
-    existing = existing ? existing.split(",") : [];
-
-    // Add new data to localStorage Array
-    existing.push(value);
-
-    // Save back to localStorage
-    localStorage.setItem(name, existing.toString());
-  };
-
-  const [currentAnnouncement, setCurrentAnnouncement] = useState(null);
-
-  
 
   const [isGfiDownloadToolsOpen, setIsGfiDownloadToolsOpen] = useState(false);
 
@@ -218,18 +194,6 @@ const Content = () => {
 
   const [websocketFirstTimeTryConnecting, setWebsocketFirstTimeTryConnecting] =
     useState(false);
-
-  useEffect(() => {
-    announcements && setCurrentAnnouncement(0);
-  }, [announcements]);
-
-  const closeAnnouncement = (selected, id) => {
-    if (selected) {
-      addToLocalStorageArray(ANNOUNCEMENTS_LOCALSTORAGE, id);
-    }
-    announcements.length > currentAnnouncement + 1 &&
-      setCurrentAnnouncement(currentAnnouncement + 1);
-  };
 
   const hideWarn = () => {
     store.dispatch(
@@ -577,40 +541,8 @@ const Content = () => {
     <>
       <StyledContent ref={constraintsRef}>
         <PublishedMap />
-        {currentAnnouncement !== null && announcements[currentAnnouncement] && (
-          <Modal
-            key={"announcement-modal-" + announcements[currentAnnouncement].id}
-            constraintsRef={
-              constraintsRef
-            } /* Reference div for modal drag boundaries */
-            drag={false} /* Enable (true) or disable (false) drag */
-            resize={false}
-            backdrop={true} /* Is backdrop enabled (true) or disabled (false) */
-            fullScreenOnMobile={
-              true
-            } /* Scale modal full width / height when using mobile device */
-            titleIcon={faBullhorn} /* Use icon on title or null */
-            title={
-              announcements[currentAnnouncement].title
-            } /* Modal header title */
-            type={"announcement"} /* Modal type */
-            overflow={"auto"}
-            closeAction={
-              closeAnnouncement
-            } /* Action when pressing modal close button or backdrop */
-            isOpen={null} /* Modal state */
-            id={announcements[currentAnnouncement].id}
-          >
-            <AnnouncementsModal
-              id={announcements[currentAnnouncement].id}
-              title={announcements[currentAnnouncement].title}
-              content={announcements[currentAnnouncement].content}
-              key={
-                "announcement_modal_" + announcements[currentAnnouncement].id
-              }
-            />
-          </Modal>
-        )}
+
+        <AnnouncementsModal constraintsRef={constraintsRef}/>
         
         <FeatureDataModal constraintsRef={constraintsRef}/>
 
