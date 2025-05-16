@@ -2,30 +2,30 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import { useAppSelector } from '../../state/hooks';
 import strings from '../../translations';
-import MetadataGraphic from './Components/MetadataGraphic';
-import Citation from './Components/Citation';
-import HeaderAndParagraph from './Components/HeaderAndParagraph';
-import OnlineResources from './Components/OnlineResources';
-import Languages from './Components/Languages';
-import TopicCategories from './Components/TopicCategories';
-import TemporalExtents from './Components/TemporalExtents';
-import LineageStatements from './Components/LineageStatements';
-import SpatialResolutions from './Components/SpatialResolutions';
-import ResponsibleParties from './Components/ResponsibleParties';
-import CitationDate from './Components/CitationDate';
-import DistributionFormats from './Components/DistributionFormats';
-import SpatialRepresentationTypes from './Components/SpatialRepresentationTypes';
-import ScopeCodes from './Components/ScopeCodes';
-import ResourceIdentifiers from './Components/ResourceIdentifiers';
-import OperatesOn from './Components/OperatesOn';
-import ServiceType from './Components/ServiceType';
-import DescriptiveKeywords from './Components/DescriptiveKeywords';
-import DataQualities from './Components/DataQualities';
-import AccessConstraints from './Components/AccessConstraints';
-import OtherConstraints from './Components/OtherConstraints';
-import Classifications from './Components/Classifications';
-import UseLimitations from './Components/UseLimitations';
-import QualityTabDataQualities from './Components/QualityTabDataQualities';
+import MetadataGraphic from './components/MetadataGraphic';
+import Citation from './components/Citation';
+import HeaderAndParagraph from './components/HeaderAndParagraph';
+import OnlineResources from './components/OnlineResources';
+import Languages from './components/Languages';
+import TopicCategories from './components/TopicCategories';
+import TemporalExtents from './components/TemporalExtents';
+import LineageStatements from './components/LineageStatements';
+import SpatialResolutions from './components/SpatialResolutions';
+import ResponsibleParties from './components/ResponsibleParties';
+import CitationDate from './components/CitationDate';
+import DistributionFormats from './components/DistributionFormats';
+import SpatialRepresentationTypes from './components/SpatialRepresentationTypes';
+import ScopeCodes from './components/ScopeCodes';
+import ResourceIdentifiers from './components/ResourceIdentifiers';
+import OperatesOn from './components/OperatesOn';
+import ServiceType from './components/ServiceType';
+import DescriptiveKeywords from './components/DescriptiveKeywords';
+import DataQualities from './components/DataQualities';
+import AccessConstraints from './components/AccessConstraints';
+import OtherConstraints from './components/OtherConstraints';
+import Classifications from './components/Classifications';
+import UseLimitations from './components/UseLimitations';
+import QualityTabDataQualities from './components/QualityTabDataQualities';
 
 const StyledContent = styled.div`
   height: 100%;
@@ -40,7 +40,7 @@ const getNestedValue = (obj, path, fallback = "") => {
   return path.reduce((acc, key) => (acc && acc[key] !== undefined ? acc[key] : fallback), obj);
 };
 
-export const MetadataModal = ({ metadata }) => {
+export const MetadataModalContent = ({ metadata }) => {
   const lang = useAppSelector((state) => state.language);
   const [uuid, setUuid] = useState(true);
 
@@ -157,4 +157,4 @@ export const MetadataModal = ({ metadata }) => {
   );
 }
 
-export default MetadataModal;
+export default MetadataModalContent;

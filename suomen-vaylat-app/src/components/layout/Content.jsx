@@ -17,10 +17,10 @@ import AppInfoModal from "../app-info/modal/AppInfoModal";
 import CustomLayerModal from "../layerlists/hierarchical-layerlist/CustomFilter/modal/CustomLayerModal";
 import FeedbackFormModal from "../feedback-form/modal/FeedbackFormModal";
 import AnnouncementsModal from "../announcements/modal/AnnouncementsModal";
+import MetadataModal from "../metadata-modal/modal/MetadataModal";
 
 import {
   setSelectError,
-  clearLayerMetadata,
   resetGFILocations,
   setDownloadActive,
   setDownloadFinished,
@@ -48,7 +48,6 @@ import {
 
 import {
   faShareAlt,
-  faInfoCircle,
   faExclamationCircle,
   faSave,
 } from "@fortawesome/free-solid-svg-icons";
@@ -66,7 +65,6 @@ import ScaleBar from "../scalebar/ScaleBar";
 import { ShareWebSitePopup } from "../share-website/ShareWebSitePopup";
 import ZoomMenu from "../zoom-features/ZoomMenu";
 import WarningModalContent from "../warning/WarningModalContent";
-import MetadataModal from "../metadata-modal/MetadataModal";
 import ThemeMenu from "../layerlists/theme-layerlist/ThemeMenu";
 
 const GFI_GEOMETRY_LAYER_ID = 'drawtools-geometry-layer';
@@ -184,8 +182,6 @@ const Content = () => {
   const isShareOpen = shareUrl && shareUrl.length > 0 ? true : false;
   let { downloadLink } = useAppSelector((state) => state.ui);
 
-  const metadata = useAppSelector((state) => state.rpc.layerMetadata);
-
   let { channel } = useAppSelector((state) => state.rpc);
 
   const [isGfiDownloadToolsOpen, setIsGfiDownloadToolsOpen] = useState(false);
@@ -218,10 +214,6 @@ const Content = () => {
         layerDownloadLinkName: null,
       })
     );
-  };
-
-  const handleCloseMetadataModal = () => {
-    store.dispatch(clearLayerMetadata());
   };
 
   const handleCloseFilterModal = () => {
@@ -556,32 +548,8 @@ const Content = () => {
         
         <FeedbackFormModal constraintsRef={constraintsRef}/>
 
-        <Modal
-          constraintsRef={
-            constraintsRef
-          } /* Reference div for modal drag boundaries */
-          drag={false} /* Enable (true) or disable (false) drag */
-          resize={false}
-          backdrop={true} /* Is backdrop enabled (true) or disabled (false) */
-          fullScreenOnMobile={
-            true
-          } /* Scale modal full width / height when using mobile device */
-          titleIcon={faInfoCircle} /* Use icon on title or null */
-          title={strings.formatString(
-            strings.metadata.title,
-            metadata.layer ? metadata.layer.name : ""
-          )} /* Modal header title */
-          type={"normal"} /* Modal type */
-          closeAction={
-            handleCloseMetadataModal
-          } /* Action when pressing modal close button or backdrop */
-          isOpen={metadata.data !== null} /* Modal state */
-          id="metadata_modal"
-          maxWidth={"800px"}
-          overflow={"auto"}
-        >
-          <MetadataModal metadata={metadata} />
-        </Modal>
+        <MetadataModal constraintsRef={constraintsRef}/>
+
         <Modal
           constraintsRef={
             constraintsRef
