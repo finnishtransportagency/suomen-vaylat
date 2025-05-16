@@ -38,7 +38,7 @@ const StyledContainer = styled.div`
     overflow: auto;
 `;
 
-export const LayerDownloadLinkButtonModal = ({
+export const LayerDownloadLinkButtonModalContent = ({
         downloadLink
     }) => {
 
@@ -77,4 +77,4 @@ export const LayerDownloadLinkButtonModal = ({
 };
 
 
-export default LayerDownloadLinkButtonModal;
+export default LayerDownloadLinkButtonModalContent;

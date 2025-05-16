@@ -20,6 +20,7 @@ import AnnouncementsModal from "../announcements/modal/AnnouncementsModal";
 import MetadataModal from "../metadata-modal/modal/MetadataModal";
 import ShareWebsiteModal from "../share-website/modal/ShareWebsiteModal";
 import SavedContentModal from "../saved-content/modal/SavedContentModal";
+import LayerDownloadButtonLinkModal from "../layerlists/hierarchical-layerlist/modal/LayerDownloadButtonLinkModal";
 
 import {
   resetGFILocations,
@@ -37,7 +38,6 @@ import {
   setIsGfiDownloadOpen,
   setMinimizeGfi,
   setWarning,
-  setIsDownloadLinkModalOpen,
   setMaximizeGfi,
   setIsGfiToolsOpen,
   setIsFilterModalOpen,
@@ -51,7 +51,6 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 import Modal from "../modals/Modal";
-import LayerDownloadLinkButtonModal from "../layerlists/hierarchical-layerlist/LayerDownloadLinkButtonModal";
 import MenuBar from "./menu-bar/MenuBar";
 import MapLayersDialog from "../dialog/MapLayersDialog";
 import PublishedMap from "../published-map/PublishedMap";
@@ -171,7 +170,6 @@ const Content = () => {
   } = useAppSelector((state) => state.ui);
 
   const { store } = useContext(ReactReduxContext);
-  let { downloadLink } = useAppSelector((state) => state.ui);
 
   let { channel } = useAppSelector((state) => state.rpc);
 
@@ -181,16 +179,6 @@ const Content = () => {
 
   const [websocketFirstTimeTryConnecting, setWebsocketFirstTimeTryConnecting] =
     useState(false);
-
-  const handleCloseDownloadLinkModal = () => {
-    store.dispatch(
-      setIsDownloadLinkModalOpen({
-        layerDownloadLinkModalOpen: false,
-        layerDownloadLink: null,
-        layerDownloadLinkName: null,
-      })
-    );
-  };
 
   const handleCloseFilterModal = () => {
     // reset map
@@ -520,29 +508,9 @@ const Content = () => {
         <ShareWebsiteModal constraintsRef={constraintsRef}/>
 
         <SavedContentModal constraintsRef={constraintsRef}/>
-        <Modal
-          constraintsRef={
-            constraintsRef
-          } /* Reference div for modal drag boundaries */
-          drag={false} /* Enable (true) or disable (false) drag */
-          resize={false}
-          backdrop={true} /* Is backdrop enabled (true) or disabled (false) */
-          fullScreenOnMobile={
-            true
-          } /* Scale modal full width / height when using mobile device */
-          titleIcon={null} /* Use icon on title or null */
-          title={
-            strings.downloadLink.downloadLinkModalHeader
-          } /* Modal header title */
-          type={"normal"} /* Modal type */
-          closeAction={
-            handleCloseDownloadLinkModal
-          } /* Action when pressing modal close button or backdrop */
-          isOpen={downloadLink.layerDownloadLinkModalOpen} /* Modal state */
-          id="layer_download_link_modal"
-        >
-          <LayerDownloadLinkButtonModal downloadLink={downloadLink} />
-        </Modal>
+
+        <LayerDownloadButtonLinkModal constraintsRef={constraintsRef}/>
+
         <Modal
           constraintsRef={
             constraintsRef
