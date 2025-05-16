@@ -33,7 +33,7 @@ const FeatureDataToolsModal = ({ constraintsRef }) => {
         },
       ]);
     store.dispatch(setActiveSelectionTool(null));
-    setIsGfiDownloadToolsOpen(!isGfiDownloadToolsOpen);
+    store.dispatch(setIsGfiDownloadToolsOpen(!isGfiDownloadToolsOpen));
   };
 
   return (
