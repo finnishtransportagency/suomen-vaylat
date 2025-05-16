@@ -11,7 +11,7 @@ import { useAppSelector } from '../../state/hooks';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { FreeMode, Controller } from 'swiper';
 import { isMobile } from '../../theme/theme';
-import { FilterModal } from './FilterModal';
+import { LayerFilter } from './LayerFilter';
 import { setFilteringInfo, setFilters } from '../../state/slices/rpcSlice';
 import { updateFiltersOnMap } from '../../utils/gfiUtil';
 
@@ -116,7 +116,7 @@ const StyledTabContent = styled.div`
   height: 100%;
 `;
 
-export const FilterModalContainer = () => {
+export const LayerFilterContainer = () => {
   // GET ALL FILTERS WITH LAYER AND MAP THEM BY LAYER TO RETURN FilterModal
   const [selectedTab, setSelectedTab] = useState(0);
   const { filteringInfo, allLayers, filters, channel } = useAppSelector(
@@ -143,7 +143,7 @@ export const FilterModalContainer = () => {
       );
       gfiInputEl.current.swiper.slideTo(index);
     }
-  }, [minimizeFilter]);
+  }, [minimizeFilter, filteringInfo]);
 
   const [gfiTabsSwiper, setGfiTabsSwiper] = useState(null);
   const [gfiTabsSnapGridLength, setGfiTabsSnapGridLength] = useState(0);
@@ -255,7 +255,7 @@ export const FilterModalContainer = () => {
                 id={'filter_tab_content_' + filterInfo?.layer?.id}
                 key={'filter_tab_content_' + filterInfo?.layer?.id}
               >
-                <FilterModal filterInfo={filterInfo} />
+                <LayerFilter filterInfo={filterInfo} />
               </SwiperSlide>
             );
           })}

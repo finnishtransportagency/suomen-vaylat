@@ -271,7 +271,7 @@ const Dropdown = ({
   );
 };
 
-export const FilterModal = ({filterInfo}) => {
+export const LayerFilter = ({filterInfo}) => {
   const {
     filters,
     channel,
@@ -403,7 +403,7 @@ export const FilterModal = ({filterInfo}) => {
       }
     });
     setFilterOptions(options);
-  }, [fieldNameLocales]);
+  }, [fieldNameLocales, filterInfo?.layer]);
 
   const [activeFilters, setActiveFilters] = useState();
 

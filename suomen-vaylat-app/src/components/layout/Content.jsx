@@ -8,6 +8,14 @@ import strings from "../../translations";
 import GfiToolsMenu from "../feature-data-window/GfiToolsMenu";
 import GfiDownloadMenu from "../feature-data-window/GfiDownloadMenu";
 
+// Import modals from their components
+import LayerFilterModal from "../layer-filter/modal/LayerFilterModal";
+import FeatureDataModal from "../feature-data-window/modal/FeatureDataModal";
+import FeatureDataDownloadModal from "../feature-data-window/modal/FeatureDataDownloadModal";
+import UserGuideModal from "../user-guide/modal/UserGuideModal";
+import AppInfoModal from "../app-info/modal/AppInfoModal";
+import CustomLayerModal from "../layerlists/hierarchical-layerlist/CustomFilter/modal/CustomLayerModal";
+
 import {
   setSelectError,
   clearLayerMetadata,
@@ -22,8 +30,6 @@ import {
 
 import {
   setShareUrl,
-  setIsInfoOpen,
-  setIsUserGuideOpen,
   setIsSaveViewOpen,
   setIsGfiOpen,
   setIsGfiDownloadOpen,
@@ -32,33 +38,24 @@ import {
   setIsDownloadLinkModalOpen,
   setMaximizeGfi,
   setIsGfiToolsOpen,
-  setIsCustomFilterOpen,
-  setUpdateCustomLayers,
   setIsFilterModalOpen,
   setMinimizeFilterModal,
   setMaximizeFilterModal,
-  setShowSavedLayers,
   setIsFeedBackFormOpen,
-  setSelectedCustomFilterLayers,
   setActiveSelectionTool
 } from "../../state/slices/uiSlice";
 
 import {
   faShareAlt,
   faInfoCircle,
-  faQuestion,
   faBullhorn,
   faExclamationCircle,
-  faMapMarkedAlt,
   faSave,
-  faDownload,
 } from "@fortawesome/free-solid-svg-icons";
 
 import Modal from "../modals/Modal";
 import AnnouncementsModal from "../announcements/AnnouncementsModal";
 import LayerDownloadLinkButtonModal from "../layerlists/hierarchical-layerlist/LayerDownloadLinkButtonModal";
-import AppInfoModalContent from "../app-info/AppInfoModalContent";
-import UserGuideModalContent from "../user-guide/UserGuideModalContent";
 import MenuBar from "./menu-bar/MenuBar";
 import MapLayersDialog from "../dialog/MapLayersDialog";
 import WarningDialog from "../dialog/WarningDialog";
@@ -70,14 +67,10 @@ import ScaleBar from "../scalebar/ScaleBar";
 import { ShareWebSitePopup } from "../share-website/ShareWebSitePopup";
 import ZoomMenu from "../zoom-features/ZoomMenu";
 import WarningModalContent from "../warning/WarningModalContent";
-import GFIPopup from "../feature-data-window/GFIPopup";
-import GFIDownload from "../feature-data-window/GFIDownload";
 import MetadataModal from "../metadata-modal/MetadataModal";
 import { ANNOUNCEMENTS_LOCALSTORAGE } from "../../utils/constants";
 import ThemeMenu from "../layerlists/theme-layerlist/ThemeMenu";
 
-import { CustomLayerModal } from "../layerlists/hierarchical-layerlist/CustomFilter/CustomLayerModal";
-import { FilterModalContainer } from "../filter/FilterModalContainer";
 import FeedbackForm from "../feedback-form/FeedbackForm";
 
 const GFI_GEOMETRY_LAYER_ID = 'drawtools-geometry-layer';
@@ -184,15 +177,8 @@ const Content = () => {
 
   const {
     shareUrl,
-    isInfoOpen,
-    isUserGuideOpen,
     isSaveViewOpen,
     isGfiOpen,
-    isGfiDownloadOpen,
-    minimizeGfi,
-    maximizeGfi,
-    minimizeFilter,
-    maximizeFilter,
     warning,
     isGfiToolsOpen,
   } = useAppSelector((state) => state.ui);
@@ -200,7 +186,7 @@ const Content = () => {
   const search = useAppSelector((state) => state.search);
   const { store } = useContext(ReactReduxContext);
   const isShareOpen = shareUrl && shareUrl.length > 0 ? true : false;
-  let { downloadLink, isCustomFilterOpen, isFeedbackFormOpen } = useAppSelector((state) => state.ui);
+  let { downloadLink, isFeedbackFormOpen } = useAppSelector((state) => state.ui);
 
   const announcements = useAppSelector(
     (state) => state.rpc.activeAnnouncements
@@ -226,16 +212,7 @@ const Content = () => {
 
   const [currentAnnouncement, setCurrentAnnouncement] = useState(null);
 
-  const handleCustomFilterClose = () => {
-    store.dispatch(setIsCustomFilterOpen(false));
-    store.dispatch(setUpdateCustomLayers(false));
-    store.dispatch(setSelectedCustomFilterLayers([]));
-
-    const checkedLayers = localStorage.getItem('checkedLayers');
-    if (!checkedLayers || JSON.parse(checkedLayers).length === 0) {
-      store.dispatch(setShowSavedLayers(false));
-    }
-  };
+  
 
   const [isGfiDownloadToolsOpen, setIsGfiDownloadToolsOpen] = useState(false);
 
@@ -267,10 +244,6 @@ const Content = () => {
     );
   };
 
-  const handleCloseAppInfoModal = () => {
-    store.dispatch(setIsInfoOpen(false));
-  };
-
   const handleCloseFeedbackForm = () => {
     store.dispatch(setIsFeedBackFormOpen(false));
   };
@@ -279,9 +252,7 @@ const Content = () => {
     store.dispatch(setShareUrl(""));
   };
 
-  const handleCloseUserGuide = () => {
-    store.dispatch(setIsUserGuideOpen(false));
-  };
+  
 
   const handleCloseDownloadLinkModal = () => {
     store.dispatch(
@@ -648,127 +619,17 @@ const Content = () => {
             />
           </Modal>
         )}
-        <Modal
-          constraintsRef={
-            constraintsRef
-          } /* Reference div for modal drag boundaries */
-          drag={true} /* Enable (true) or disable (false) drag */
-          resize={true}
-          backdrop={false} /* Is backdrop enabled (true) or disabled (false) */
-          fullScreenOnMobile={
-            true
-          } /* Scale modal full width / height when using mobile device */
-          titleIcon={faMapMarkedAlt} /* Use icon on title or null */
-          title={strings.gfi.title} /* Modal header title */
-          type={"gfi"} /* Modal type */
-          closeAction={
-            handleCloseGFIModal
-          } /* Action when pressing modal close button or backdrop */
-          isOpen={isGfiOpen} /* Modal state */
-          id="gfi_modal"
-          minWidth={"600px"}
-          minHeight={"530px"}
-          height="100vw"
-          width="50vw"
-          minimize={minimizeGfi}
-          maximize={maximizeGfi}
-          minimizable={true}
-          maximizable={true}
-          minimizeAction={() => store.dispatch(setMinimizeGfi(!minimizeGfi))}
-          maximizeAction={() => store.dispatch(setMaximizeGfi(!maximizeGfi))}
-        >
-          <GFIPopup handleGfiDownload={handleGfiDownload} />
-        </Modal>
-        <Modal
-          constraintsRef={
-            constraintsRef
-          } /* Reference div for modal drag boundaries */
-          drag={false} /* Enable (true) or disable (false) drag */
-          resize={false}
-          backdrop={true} /* Is backdrop enabled (true) or disabled (false) */
-          fullScreenOnMobile={
-            true
-          } /* Scale modal full width / height when using mobile device */
-          titleIcon={faDownload} /* Use icon on title or null */
-          title={strings.downloads.downloads} /* Modal header title */
-          type={"normal"} /* Modal type */
-          closeAction={
-            handleCloseGfiDownloadModal
-          } /* Action when pressing modal close button or backdrop */
-          isOpen={isGfiDownloadOpen} /* Modal state */
-          id="gfi_download_modal"
-          minWidth={"600px"}
-        >
-          <GFIDownload />
-        </Modal>
-        <Modal
-          constraintsRef={
-            constraintsRef
-          } /* Reference div for modal drag boundaries */
-          drag={false} /* Enable (true) or disable (false) drag */
-          resize={false}
-          backdrop={true} /* Is backdrop enabled (true) or disabled (false) */
-          fullScreenOnMobile={
-            true
-          } /* Scale modal full width / height when using mobile device */
-          titleIcon={faQuestion} /* Use icon on title or null */
-          title={strings.appGuide.title} /* Modal header title */
-          type={"normal"} /* Modal type */
-          closeAction={
-            handleCloseUserGuide
-          } /* Action when pressing modal close button or backdrop */
-          isOpen={isUserGuideOpen} /* Modal state */
-          id="user_guide_modal"
-          height="860px"
-        >
-          <UserGuideModalContent />
-        </Modal>
-        <Modal
-          constraintsRef={
-            constraintsRef
-          } /* Reference div for modal drag boundaries */
-          drag={false} /* Enable (true) or disable (false) drag */
-          resize={false}
-          backdrop={true} /* Is backdrop enabled (true) or disabled (false) */
-          fullScreenOnMobile={
-            true
-          } /* Scale modal full width / height when using mobile device */
-          titleIcon={faInfoCircle} /* Use icon on title or null */
-          title={strings.appInfo.title} /* Modal header title */
-          type={"normal"} /* Modal type */
-          closeAction={
-            handleCloseAppInfoModal
-          } /* Action when pressing modal close button or backdrop */
-          isOpen={isInfoOpen} /* Modal state */
-          id="app_info_modal"
-          maxWidth={"800px"}
-        >
-          <AppInfoModalContent />
-        </Modal>
-        <Modal
-          constraintsRef={
-            constraintsRef
-          } /* Reference div for modal drag boundaries */
-          drag={true} /* Enable (true) or disable (false) drag */
-          resize={false}
-          backdrop={true} /* Is backdrop enabled (true) or disabled (false) */
-          fullScreenOnMobile={
-            true
-          } /* Scale modal full width / height when using mobile device */
-          titleIcon={null} /* Use icon on title or null */
-          title={
-            strings.layerlist.customLayerInfo.modalTitle
-          } /* Modal header title */
-          type={"normal"} /* Modal type */
-          closeAction={
-            handleCustomFilterClose
-          } /* Action when pressing modal close button or backdrop */
-          isOpen={isCustomFilterOpen} /* Modal state */
-          id="custom_layer_modal"
-          height="860px"
-        >
-          <CustomLayerModal />
-        </Modal>
+        
+        <FeatureDataModal constraintsRef={constraintsRef}/>
+
+        <FeatureDataDownloadModal constraintsRef={constraintsRef}/>
+
+        <UserGuideModal constraintsRef={constraintsRef}/>
+
+        <AppInfoModal constraintsRef={constraintsRef}/>
+        
+        <CustomLayerModal constraintsRef={constraintsRef}/>
+        
         <Modal
           constraintsRef={
             constraintsRef
@@ -990,37 +851,7 @@ const Content = () => {
             handleGfiDownload={handleGfiDownload}
           ></GfiDownloadMenu>
         </Modal>
-        <Modal
-          id="filter_modal_container"
-          constraintsRef={{
-            constraintsRef,
-          }} /* Reference div for modal drag boundaries */
-          drag={true} /* Enable (true) or disable (false) drag */
-          resize={true}
-          backdrop={false} /* Is backdrop enabled (true) or disabled (false) */
-          fullScreenOnMobile={
-            true
-          } /* Scale modal full width / height when using mobile device */
-          titleIcon={null} /* Use icon on title or null */
-          title={strings.gfi.filter} /* Modal header title */
-          type={"normal"} /* Modal type */
-          closeAction={
-            handleCloseFilterModal
-          } /* Action when pressing modal close button or backdrop */
-          isOpen={filteringInfo.some(f => f.modalOpen)} /* Modal state */
-          minimize={minimizeFilter.minimized}
-          maximize={maximizeFilter}
-          minimizable={true}
-          maximizable={true}
-          minimizeAction={() => store.dispatch(setMinimizeFilterModal({minimized: !minimizeFilter.minimized}))}
-          maximizeAction={() => store.dispatch(setMaximizeFilterModal(!maximizeFilter))}
-          maxWidth={maximizeFilter ? null : "40em"}
-          minWidth={"25em"}
-          minHeight={"30em"}
-          overflow={"auto"}
-        >
-          <FilterModalContainer/>
-        </Modal>
+        <LayerFilterModal constraintsRef={constraintsRef}/>
         <ScaleBar />
         <StyledToastContainer
           position="bottom-left"

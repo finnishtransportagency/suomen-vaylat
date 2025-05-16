@@ -12,8 +12,6 @@ import {
   setShowSavedLayers,
   setSelectedCustomFilterLayers,
 } from "../../../../state/slices/uiSlice";
-import { theme } from "../../../../theme/theme";
-import ReactTooltip from "react-tooltip";
 
 const StyledModalContainer = styled.div`
   position: relative;
@@ -169,7 +167,7 @@ export const CustomLayerList = ({ groups, layers, recurse = false }) => {
 };
 
 // Renders custom filter guide for user and CustomLayerList
-export const CustomLayerModalContent = ({ }) => {
+const CustomLayerModalContent = ({ }) => {
   useAppSelector((state) => state.language);
 
   const { allGroups, allLayers } = useAppSelector((state) => state.rpc);
@@ -265,3 +263,5 @@ export const CustomLayerModalContent = ({ }) => {
     </StyledModalContainer>
   );
 };
+
+export default CustomLayerModalContent
