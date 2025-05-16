@@ -5,7 +5,6 @@ import "react-toastify/dist/ReactToastify.css";
 import { useAppSelector } from "../../state/hooks";
 import styled from "styled-components";
 import strings from "../../translations";
-import GfiToolsMenu from "../feature-data-window/GfiToolsMenu";
 import GfiDownloadMenu from "../feature-data-window/GfiDownloadMenu";
 
 // Import modals from their components
@@ -21,6 +20,7 @@ import MetadataModal from "../metadata-modal/modal/MetadataModal";
 import ShareWebsiteModal from "../share-website/modal/ShareWebsiteModal";
 import SavedContentModal from "../saved-content/modal/SavedContentModal";
 import LayerDownloadButtonLinkModal from "../layerlists/hierarchical-layerlist/modal/LayerDownloadButtonLinkModal";
+import FeatureDataToolsModal from "../feature-data-window/modal/FeatureDataToolsModal";
 
 import {
   resetGFILocations,
@@ -39,7 +39,7 @@ import {
   setMinimizeGfi,
   setWarning,
   setMaximizeGfi,
-  setIsGfiToolsOpen,
+  setIsGfiDownloadToolsOpen,
   setIsFilterModalOpen,
   setMinimizeFilterModal,
   setMaximizeFilterModal,
@@ -161,14 +161,12 @@ const Content = () => {
 
   const {
     isGfiOpen,
-    isGfiToolsOpen,
+    isGfiDownloadToolsOpen,
   } = useAppSelector((state) => state.ui);
 
   const { store } = useContext(ReactReduxContext);
 
   let { channel } = useAppSelector((state) => state.rpc);
-
-  const [isGfiDownloadToolsOpen, setIsGfiDownloadToolsOpen] = useState(false);
 
   const [downloadUuids, setDownloadUuids] = useState([]);
 
@@ -255,31 +253,6 @@ const Content = () => {
         true,
       ]);
     }
-  };
-
-  const handleCloseGfiLocations = () => {
-    store.dispatch(setActiveSelectionTool(null));
-    store.dispatch(setIsGfiToolsOpen(false));
-  };
-
-  const handleGfiToolsMenu = () => {
-    store.dispatch(setIsGfiToolsOpen(false));
-    channel &&
-      channel.postRequest("DrawTools.StopDrawingRequest", [
-        "gfi-selection-tool",
-        true,
-      ]);
-
-    isGfiToolsOpen &&
-      channel &&
-      channel.postRequest("VectorLayerRequest", [
-        {
-          layerId: "download-tool-layer",
-          remove: true,
-        },
-      ]);
-    store.dispatch(setActiveSelectionTool(null));
-    setIsGfiDownloadToolsOpen(!isGfiDownloadToolsOpen);
   };
 
   const handleGfiDownload = (format, layers, croppingArea) => {
@@ -503,30 +476,8 @@ const Content = () => {
         <LayerDownloadButtonLinkModal constraintsRef={constraintsRef}/>
 
         <WarningModal constraintsRef={constraintsRef}/>
-        <Modal
-          constraintsRef={
-            constraintsRef
-          } /* Reference div for modal drag boundaries */
-          drag={true} /* Enable (true) or disable (false) drag */
-          resize={true}
-          backdrop={false} /* Is backdrop enabled (true) or disabled (false) */
-          fullScreenOnMobile={
-            true
-          } /* Scale modal full width / height when using mobile device */
-          titleIcon={null} /* Use icon on title or null */
-          title={strings.gfi.selectLocations} /* Modal header title */
-          type={"normal"} /* Modal type */
-          closeAction={
-            handleCloseGfiLocations
-          } /* Action when pressing modal close button or backdrop */
-          isOpen={isGfiToolsOpen} /* Modal state */
-          id="gfi_tools_menu_modal"
-        >
-          <GfiToolsMenu
-            handleGfiToolsMenu={handleGfiToolsMenu}
-            closeButton={false}
-          />
-        </Modal>
+
+        <FeatureDataToolsModal constraintsRef={constraintsRef}/>
         <Modal
           constraintsRef={
             constraintsRef

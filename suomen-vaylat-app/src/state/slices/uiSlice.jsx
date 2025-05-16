@@ -4,6 +4,7 @@ import { theme } from '../../theme/theme';
 const initialState = {
     activeSwitch: null,
     isGfiToolsOpen: false,
+    isGfiDownloadToolsOpen: false,
     isFullScreen: false,
     modalConstrainsRef: null,
     isSideMenuOpen: false,
@@ -238,6 +239,9 @@ export const uiSlice = createSlice({
         setIsGfiToolsOpen: (state, action) => {
             state.isGfiToolsOpen = action.payload;
         },
+        setIsGfiDownloadToolsOpen: (state, action) => {
+            state.isGfiDownloadToolsOpen = action.payload;
+        },
         setIsFilterModalOpen: (state, action) => {
             state.isFilterModalOpen = action.payload;
         },
@@ -297,6 +301,7 @@ export const {
     setIsZoomBarOpen,
     setIsSaveViewOpen,
     setIsGfiOpen,
+    setIsGfiDownloadToolsOpen,
     setIsGfiDownloadOpen,
     setSelectedGfiTool,
     setShareUrl,
