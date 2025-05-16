@@ -46,10 +46,6 @@ import {
   setActiveSelectionTool
 } from "../../state/slices/uiSlice";
 
-import {
-  faExclamationCircle,
-} from "@fortawesome/free-solid-svg-icons";
-
 import Modal from "../modals/Modal";
 import MenuBar from "./menu-bar/MenuBar";
 import MapLayersDialog from "../dialog/MapLayersDialog";
@@ -58,7 +54,7 @@ import Search from "../search/Search";
 import ActionButtons from "../action-button/ActionButtons";
 import ScaleBar from "../scalebar/ScaleBar";
 import ZoomMenu from "../zoom-features/ZoomMenu";
-import WarningModalContent from "../warning/WarningModalContent";
+import WarningModal from "../warning/modal/WarningModal";
 import ThemeMenu from "../layerlists/theme-layerlist/ThemeMenu";
 
 const GFI_GEOMETRY_LAYER_ID = 'drawtools-geometry-layer';
@@ -165,7 +161,6 @@ const Content = () => {
 
   const {
     isGfiOpen,
-    warning,
     isGfiToolsOpen,
   } = useAppSelector((state) => state.ui);
 
@@ -235,10 +230,6 @@ const Content = () => {
 
   const handleCloseSaveViewModal = () => {
     store.dispatch(setIsSaveViewOpen(false));
-  };
-
-  const handleCloseWarning = () => {
-    store.dispatch(setWarning(null));
   };
 
   const handleCloseGfiDownloadTools = () => {
@@ -511,27 +502,7 @@ const Content = () => {
 
         <LayerDownloadButtonLinkModal constraintsRef={constraintsRef}/>
 
-        <Modal
-          constraintsRef={
-            constraintsRef
-          } /* Reference div for modal drag boundaries */
-          drag={false} /* Enable (true) or disable (false) drag */
-          resize={false}
-          backdrop={true} /* Is backdrop enabled (true) or disabled (false) */
-          fullScreenOnMobile={
-            false
-          } /* Scale modal full width / height when using mobile device */
-          titleIcon={faExclamationCircle} /* Use icon on title or null */
-          title={strings.general.warning} /* Modal header title */
-          type={"warning"} /* Modal type */
-          closeAction={
-            handleCloseWarning
-          } /* Action when pressing modal close button or backdrop */
-          isOpen={warning !== null} /* Modal state */
-          id={null}
-        >
-          <WarningModalContent warning={warning} />
-        </Modal>
+        <WarningModal constraintsRef={constraintsRef}/>
         <Modal
           constraintsRef={
             constraintsRef
