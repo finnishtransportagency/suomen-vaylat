@@ -1,16 +1,16 @@
 import styled from 'styled-components';
-import strings from '../../translations';
+import strings from '../../../translations';
 import {
     faAngleUp,
     faAngleDown
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import ReactTooltip from 'react-tooltip';
-import { useAppSelector } from '../../state/hooks';
+import { useAppSelector } from '../../../state/hooks';
 import { useEffect } from 'react';
-import { setIsMoreSearchOpen } from '../../state/slices/uiSlice';
-import store from '../../state/store';
-import { isMobile } from '../../theme/theme';
+import { setIsMoreSearchOpen } from '../../../state/slices/uiSlice';
+import store from '../../../state/store';
+import { isMobile } from '../../../theme/theme';
 
 const InputContainer = styled.div`
     display: flex;

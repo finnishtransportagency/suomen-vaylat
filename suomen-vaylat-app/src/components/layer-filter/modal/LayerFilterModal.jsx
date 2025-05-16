@@ -1,4 +1,4 @@
-import Modal from '../../modals/Modal';
+import Modal from '../../modal/Modal';
 import { LayerFilterContainer } from '../LayerFilterContainer';
 import strings from '../../../translations';
 import { useContext } from 'react';

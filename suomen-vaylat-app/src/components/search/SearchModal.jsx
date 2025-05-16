@@ -5,7 +5,7 @@ import { setActiveSwitch } from '../../state/slices/uiSlice';
 import { useAppSelector } from '../../state/hooks';
 import { useEffect, useContext } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import Switch from './SearchSwitch';
+import SearchSwitch from './SearchSwitch';
 import {
     faLongArrowDown,
 } from '@fortawesome/free-solid-svg-icons';
@@ -361,7 +361,7 @@ const SearchModal = ({
             <div style= {{clear: "both"}} />
             <>
                 {
-                    <Switch 
+                    <SearchSwitch 
                     action={() => {
                         updateActiveSwitch('road')
                     }}
@@ -379,7 +379,7 @@ const SearchModal = ({
                 <StyledSearchSection>   
 
                     <CheckboxWrapper> 
-                            <CheckboxLabel for='carriageWaySearchBox'>{strings.search.carriageWaySearch}</CheckboxLabel>
+                            <CheckboxLabel htmlFor='carriageWaySearchBox'>{strings.search.carriageWaySearch}</CheckboxLabel>
                             <StyledCheckbox
                                 id='carriageWaySearchBox'
                                 name='carriageWaySearchBox'
@@ -519,7 +519,7 @@ const SearchModal = ({
                 }
                 <div style= {{clear: "both"}} />
                 {
-                    <Switch 
+                    <SearchSwitch 
                     isSelected={activeSwitch==='track' }
                     action={() => {
                         updateActiveSwitch('track')
@@ -605,7 +605,7 @@ const SearchModal = ({
                 }
                 <div style= {{clear: "both"}} />
                 {
-                    <Switch 
+                    <SearchSwitch 
                     isSelected={activeSwitch==='address'}
                     action={() => {
                         updateActiveSwitch('address')
@@ -654,7 +654,7 @@ const SearchModal = ({
                 }   
                 <div style= {{clear: "both"}} />
                 {
-                    <Switch 
+                    <SearchSwitch 
                     isSelected={activeSwitch==='nomenclature'}
                     action={() => {
                         updateActiveSwitch('nomenclature')
@@ -703,7 +703,7 @@ const SearchModal = ({
                 }          
                 <div style= {{clear: "both"}} />
                 {
-                    <Switch 
+                    <SearchSwitch 
                     isSelected={activeSwitch==='premise'}
                     action={() => {
                         updateActiveSwitch('premise')
@@ -752,7 +752,7 @@ const SearchModal = ({
                 } 
                 <div style= {{clear: "both"}} />
                 {
-                    <Switch 
+                    <SearchSwitch 
                     isSelected={activeSwitch ==='layer'}
                     action={() => {
                         updateActiveSwitch('layer')
@@ -801,7 +801,7 @@ const SearchModal = ({
                 }
                 <div style= {{clear: "both"}} />
                 {
-                    <Switch 
+                    <SearchSwitch 
                     isSelected={activeSwitch ==='feature'}
                     action={() => {
                         updateActiveSwitch('feature')

@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import Modal from '../../modals/Modal';
+import Modal from '../../modal/Modal';
 import { faSave } from '@fortawesome/free-solid-svg-icons';
 import { useAppSelector } from "../../../state/hooks";
 import strings from "../../../translations";

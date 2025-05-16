@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import Modal from '../../modals/Modal';
+import Modal from '../../modal/Modal';
 import { useAppSelector } from '../../../state/hooks';
 import AnnouncementsModalContent from '../AnnouncementsModalContent';
 import { ANNOUNCEMENTS_LOCALSTORAGE } from '../../../utils/constants';

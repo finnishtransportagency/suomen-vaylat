@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import { ReactReduxContext } from 'react-redux';
-import Modal from '../../modals/Modal';
+import Modal from '../../modal/Modal';
 import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons';
 import { useAppSelector } from '../../../state/hooks';
 import strings from '../../../translations';

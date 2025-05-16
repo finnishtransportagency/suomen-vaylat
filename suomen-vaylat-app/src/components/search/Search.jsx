@@ -11,9 +11,9 @@ import {
     faInfoCircle,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import AddressSearch from './AddressSearch';
-import MetadataSearch from './MetadataSearch';
-import FeatureSearch from './FeatureSearch';
+import AddressSearch from './address-search/AddressSearch';
+import MetadataSearch from './metadata-search/MetadataSearch';
+import FeatureSearch from './feature-search/FeatureSearch';
 import SvLoder from '../../utils/components/SvLoader';
 import strings from '../../translations';
 import { SEARCH_TIP_LOCALSTORAGE } from '../../utils/constants';

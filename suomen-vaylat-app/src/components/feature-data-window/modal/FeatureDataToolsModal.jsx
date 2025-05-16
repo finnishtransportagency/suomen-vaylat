@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import { ReactReduxContext } from "react-redux";
-import Modal from '../../modals/Modal';
+import Modal from '../../modal/Modal';
 import { useAppSelector } from "../../../state/hooks";
 import strings from "../../../translations";
 import GfiToolsMenu from "../GfiToolsMenu";

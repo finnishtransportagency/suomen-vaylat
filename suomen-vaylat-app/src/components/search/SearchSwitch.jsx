@@ -85,7 +85,7 @@ const StyledToolTipContainer = styled.div`
     margin: 12px 0px 8px 0px;
 `;
 
-const Switch = ({   
+const SearchSwitch = ({   
     action,
     isSelected, 
     title,
@@ -134,4 +134,4 @@ const Switch = ({
     );
 };
 
-export default Switch;
+export default SearchSwitch;

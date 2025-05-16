@@ -1,11 +1,10 @@
-import strings from '../../translations';
-import { StyledDropDown, StyledDropdownContentItem, StyledDropdownContentItemTitle } from './Search';
-import Layer from '../layerlists/hierarchical-layerlist/Layer';
+import strings from '../../../translations';
+import { StyledDropDown, StyledDropdownContentItem, StyledDropdownContentItemTitle } from '../Search';
+import Layer from '../../layerlists/hierarchical-layerlist/Layer';
 
-const MetaSearchResultPanel = ({
+const MetadataSearchResultPanel = ({
     searchResults,
     dropdownVariants,
-    setShowSearchResults,
     allLayers
 }) => {
     return (
@@ -44,4 +43,4 @@ const MetaSearchResultPanel = ({
     );
 };
 
-export default MetaSearchResultPanel;
+export default MetadataSearchResultPanel;

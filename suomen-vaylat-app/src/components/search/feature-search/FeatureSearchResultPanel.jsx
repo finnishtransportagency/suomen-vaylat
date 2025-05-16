@@ -1,5 +1,5 @@
-import strings from '../../translations';
-import { useAppSelector } from '../../state/hooks';
+import strings from '../../../translations';
+import { useAppSelector } from '../../../state/hooks';
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';

@@ -93,18 +93,12 @@ const StyledSavedViewTitleContent = styled.div`
 `;
 
 const ModalListItem = ({
-        index,
         id,
-        type,
         title,
         subtitle,
-        checkedValue,
         icon,
         selectAction,
         closeAction,
-        removeAction,
-        hoverInAction,
-        hoverOutAction,
         data,
         color,
         children

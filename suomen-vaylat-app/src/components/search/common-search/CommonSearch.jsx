@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import strings from '../../translations';
+import strings from '../../../translations';
 
 const StyledInput = styled.input`
     border: none;

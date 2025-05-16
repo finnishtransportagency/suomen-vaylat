@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import Modal from '../../../modals/Modal';
+import Modal from '../../../modal/Modal';
 import strings from '../../../../translations';
 import { useAppSelector } from '../../../../state/hooks';
 import LayerDownloadLinkButtonModalContent from '../LayerDownloadLinkButtonModalContent';

@@ -10,7 +10,7 @@ import {
     faFileArchive,
 } from '@fortawesome/free-solid-svg-icons';
 
-import ModalListItem from '../modals/ModalListItem';
+import ModalListItem from '../modal/ModalListItem';
 import CheckBox from '../checkbox/CheckBox';
 
 import SVLoader from '../../utils/components/SvLoader';

@@ -1,4 +1,4 @@
-import Modal from '../../modals/Modal';
+import Modal from '../../modal/Modal';
 import strings from '../../../translations';
 import { useContext, useState } from 'react';
 import { ReactReduxContext } from 'react-redux';

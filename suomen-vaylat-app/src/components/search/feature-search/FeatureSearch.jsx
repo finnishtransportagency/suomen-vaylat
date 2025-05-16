@@ -4,13 +4,13 @@ import {
     faAngleDown
 } from '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
-import strings from '../../translations';
-import store from '../../state/store';
+import strings from '../../../translations';
+import store from '../../../state/store';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import ReactTooltip from 'react-tooltip';
-import { useAppSelector } from '../../state/hooks';
-import { setIsMoreSearchOpen } from '../../state/slices/uiSlice';
-import { isMobile } from '../../theme/theme';
+import { useAppSelector } from '../../../state/hooks';
+import { setIsMoreSearchOpen } from '../../../state/slices/uiSlice';
+import { isMobile } from '../../../theme/theme';
 
 const InputContainer = styled.div`
     display: flex;
@@ -43,10 +43,10 @@ const StyledInput = styled.input`
     };
 `;
 
-const AddressSearch = ({
+const FeatureSearch = ({
     searchValue,
     setSearchValue,
-    handleSeach
+    handleFeatureSearch,
 }) => {
     const {isSearchOpen, isMoreSearchOpen} = useAppSelector((state) => state.ui);
 
@@ -59,25 +59,25 @@ const AddressSearch = ({
     };
 
       return (
-        <InputContainer>
-            <DropdownIcon
-                data-tip={isMobile ? '' : (isMoreSearchOpen ? strings.search.lessSearchOptions : strings.search.moreSearchOptions)}
-                icon={isMoreSearchOpen ? faAngleUp : faAngleDown}
-                onClick={handleIconClick}
-            />
-            <StyledInput
-                type="text"
-                value={searchValue}
-                placeholder={strings.search.address.title}
-                onChange={e => setSearchValue(e.target.value)}
-                onKeyPress={e => {
-                    if (e.key === 'Enter') {
-                        handleSeach(e.target.value);
-                    }
-                }}
-            />
-        </InputContainer>
+            <InputContainer>
+                <DropdownIcon
+                    data-tip={isMobile ? '' : (isMoreSearchOpen ? strings.search.lessSearchOptions : strings.search.moreSearchOptions)}
+                    icon={isMoreSearchOpen ? faAngleUp : faAngleDown}
+                    onClick={handleIconClick}
+                />
+                <StyledInput
+                    type="text"
+                    value={searchValue}
+                    placeholder={strings.search.feature.title}
+                    onChange={e => setSearchValue(e.target.value)}
+                    onKeyPress={e => {
+                        if (e.key === 'Enter') {
+                            handleFeatureSearch(e.target.value.trim());
+                        }
+                    }}
+                />
+            </InputContainer>
     );
   };
 
-export default AddressSearch;
+export default FeatureSearch;
