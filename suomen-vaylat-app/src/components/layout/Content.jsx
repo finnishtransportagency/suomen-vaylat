@@ -11,7 +11,7 @@ import FeatureDataModal from '../feature-data-window/modal/FeatureDataModal';
 import FeatureDataDownloadModal from '../feature-data-window/modal/FeatureDataDownloadModal';
 import UserGuideModal from '../user-guide/modal/UserGuideModal';
 import AppInfoModal from '../app-info/modal/AppInfoModal';
-import CustomLayerModal from '../layerlists/hierarchical-layerlist/CustomFilter/modal/CustomLayerModal';
+import CustomLayerModal from '../layerlists/hierarchical-layerlist/custom-filter/modal/CustomLayerModal';
 import FeedbackFormModal from '../feedback-form/modal/FeedbackFormModal';
 import AnnouncementsModal from '../announcements/modal/AnnouncementsModal';
 import MetadataModal from '../metadata-modal/modal/MetadataModal';

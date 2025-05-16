@@ -69,7 +69,6 @@ const FeedbackForm = ({  groups, layers }) => {
   const [category, setCategory] = useState('');
   const [topic, setTopic] = useState('');
   const [specificTopic, setSpecificTopic] = useState('');
-  const [selectedAineisto, setSelectedAineisto] = useState([]);
   const [description, setDescription] = useState('');
   const [locationInfo, setLocationInfo] = useState('');
   const [screenshots, setScreenshots] = useState([]);
@@ -89,10 +88,6 @@ const FeedbackForm = ({  groups, layers }) => {
   const handleSpecificTopicChange = (event) => {
     setSpecificTopic(event.target.value);
   };
-
-  const handleAineistoChange = (selectedLayers) => {
-    setSelectedAineisto(selectedLayers.map(layer => layer.value));
-};
 
   const handleDescriptionChange = (event) => {
     setDescription(event.target.value);
@@ -187,7 +182,6 @@ const FeedbackForm = ({  groups, layers }) => {
         <FormLayerSearch
           layers={layers}
           groups={groups}
-          onLayerSelect={handleAineistoChange}
         />
       </FormGroup>
     )}

@@ -126,16 +126,6 @@ const DropdownIcon = styled(FontAwesomeIcon)`
     color: ${props => props.theme.colors.mainColor1};
 `;
 
-const StyledWarningIcon = styled.div`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 8px;
-    svg {
-        font-size: 22px;
-    }
-`;
-
 const StyledCloseButton = styled.div`
     display: flex;
     justify-content: center;
@@ -177,12 +167,6 @@ const StyledResultValue = styled.p`
       white-space: wrap;
       text-overflow: none;
     }
-`;
-
-const FeatureListWrapper = styled.div`
-    display: flex;
-    flex-direction: column;
-    margin: 0 1px;
 `;
 
 const StyledShowMoreButtonWrapper = styled.div`

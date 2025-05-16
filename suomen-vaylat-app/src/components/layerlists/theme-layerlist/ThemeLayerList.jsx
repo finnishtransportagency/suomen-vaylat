@@ -18,11 +18,11 @@ import { setWarning } from '../../../state/slices/uiSlice';
 import { selectGroup, sortObjectAlphabetically } from '../../../utils/rpcUtil';
 import Layers from '../hierarchical-layerlist/Layers';
 
-import hankekartta from './hankekartta.JPG';
-import intersection from './Intersection.jpg';
-import siltarajoituskartta from './siltarajoituskartta.jpg';
-import tienumerokartta from './tienumerokartta.jpg';
-import kuntokartta from './kuntokartta.jpg';
+import hankekartta from './resources/images/hankekartta.JPG';
+import intersection from './resources/images/Intersection.jpg';
+import siltarajoituskartta from './resources/images/siltarajoituskartta.jpg';
+import tienumerokartta from './resources/images/tienumerokartta.jpg';
+import kuntokartta from './resources/images/kuntokartta.jpg';
 
 const listVariants = {
     visible: {

@@ -113,7 +113,6 @@ const MenuBar = () => {
         isSaveViewOpen,
         isGfiOpen,
         isGfiDownloadOpen,
-        activeTool,
         drawToolMarkers
     } = useAppSelector((state) => state.ui);
 
