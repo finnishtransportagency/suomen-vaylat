@@ -1,61 +1,53 @@
-import { useState, useContext, useRef } from "react";
-import { ReactReduxContext } from "react-redux";
-import { ToastContainer, Slide, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { useAppSelector } from "../../state/hooks";
-import styled from "styled-components";
-import strings from "../../translations";
-import GfiDownloadMenu from "../feature-data-window/GfiDownloadMenu";
+import { useContext, useRef } from 'react';
+import { ReactReduxContext } from 'react-redux';
+import { ToastContainer, Slide } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { useAppSelector } from '../../state/hooks';
+import styled from 'styled-components';
 
 // Import modals from their components
-import LayerFilterModal from "../layer-filter/modal/LayerFilterModal";
-import FeatureDataModal from "../feature-data-window/modal/FeatureDataModal";
-import FeatureDataDownloadModal from "../feature-data-window/modal/FeatureDataDownloadModal";
-import UserGuideModal from "../user-guide/modal/UserGuideModal";
-import AppInfoModal from "../app-info/modal/AppInfoModal";
-import CustomLayerModal from "../layerlists/hierarchical-layerlist/CustomFilter/modal/CustomLayerModal";
-import FeedbackFormModal from "../feedback-form/modal/FeedbackFormModal";
-import AnnouncementsModal from "../announcements/modal/AnnouncementsModal";
-import MetadataModal from "../metadata-modal/modal/MetadataModal";
-import ShareWebsiteModal from "../share-website/modal/ShareWebsiteModal";
-import SavedContentModal from "../saved-content/modal/SavedContentModal";
-import LayerDownloadButtonLinkModal from "../layerlists/hierarchical-layerlist/modal/LayerDownloadButtonLinkModal";
-import FeatureDataToolsModal from "../feature-data-window/modal/FeatureDataToolsModal";
+import LayerFilterModal from '../layer-filter/modal/LayerFilterModal';
+import FeatureDataModal from '../feature-data-window/modal/FeatureDataModal';
+import FeatureDataDownloadModal from '../feature-data-window/modal/FeatureDataDownloadModal';
+import UserGuideModal from '../user-guide/modal/UserGuideModal';
+import AppInfoModal from '../app-info/modal/AppInfoModal';
+import CustomLayerModal from '../layerlists/hierarchical-layerlist/CustomFilter/modal/CustomLayerModal';
+import FeedbackFormModal from '../feedback-form/modal/FeedbackFormModal';
+import AnnouncementsModal from '../announcements/modal/AnnouncementsModal';
+import MetadataModal from '../metadata-modal/modal/MetadataModal';
+import ShareWebsiteModal from '../share-website/modal/ShareWebsiteModal';
+import SavedContentModal from '../saved-content/modal/SavedContentModal';
+import LayerDownloadButtonLinkModal from '../layerlists/hierarchical-layerlist/modal/LayerDownloadButtonLinkModal';
+import FeatureDataToolsModal from '../feature-data-window/modal/FeatureDataToolsModal';
+import FeatureDataDownloadMenuModal from '../feature-data-window/modal/FeatureDataDownloadMenuModal';
 
 import {
   resetGFILocations,
-  setDownloadActive,
-  setDownloadFinished,
   removeMarkerRequest,
   setVKMData,
   setFilters,
-  setFilteringInfo,
-} from "../../state/slices/rpcSlice";
+  setFilteringInfo
+} from '../../state/slices/rpcSlice';
 
 import {
-  setIsSaveViewOpen,
   setIsGfiOpen,
-  setIsGfiDownloadOpen,
   setMinimizeGfi,
-  setWarning,
   setMaximizeGfi,
-  setIsGfiDownloadToolsOpen,
   setIsFilterModalOpen,
   setMinimizeFilterModal,
   setMaximizeFilterModal,
   setActiveSelectionTool
-} from "../../state/slices/uiSlice";
+} from '../../state/slices/uiSlice';
 
-import Modal from "../modals/Modal";
-import MenuBar from "./menu-bar/MenuBar";
-import MapLayersDialog from "../dialog/MapLayersDialog";
-import PublishedMap from "../published-map/PublishedMap";
-import Search from "../search/Search";
-import ActionButtons from "../action-button/ActionButtons";
-import ScaleBar from "../scalebar/ScaleBar";
-import ZoomMenu from "../zoom-features/ZoomMenu";
-import WarningModal from "../warning/modal/WarningModal";
-import ThemeMenu from "../layerlists/theme-layerlist/ThemeMenu";
+import MenuBar from './menu-bar/MenuBar';
+import MapLayersDialog from '../dialog/MapLayersDialog';
+import PublishedMap from '../published-map/PublishedMap';
+import Search from '../search/Search';
+import ActionButtons from '../action-button/ActionButtons';
+import ScaleBar from '../scalebar/ScaleBar';
+import ZoomMenu from '../zoom-features/ZoomMenu';
+import WarningModal from '../warning/modal/WarningModal';
+import ThemeMenu from '../layerlists/theme-layerlist/ThemeMenu';
 
 const GFI_GEOMETRY_LAYER_ID = 'drawtools-geometry-layer';
 
@@ -144,52 +136,37 @@ const StyledRightSection = styled.div`
   justify-content: flex-end;
 `;
 
-const StyledLayerNamesList = styled.ul`
-  padding-inline-start: 20px;
-`;
-
 const StyledToastContainer = styled(ToastContainer)``;
-
-const StyledLayerNamesListItem = styled.li``;
 
 const Content = () => {
   const constraintsRef = useRef(null);
 
-  const { filteringInfo, filters } = useAppSelector(
+  const { channel, filteringInfo, filters } = useAppSelector(
     (state) => state.rpc
   );
 
-  const {
-    isGfiOpen,
-    isGfiDownloadToolsOpen,
-  } = useAppSelector((state) => state.ui);
-
   const { store } = useContext(ReactReduxContext);
-
-  let { channel } = useAppSelector((state) => state.rpc);
-
-  const [downloadUuids, setDownloadUuids] = useState([]);
-
-  const [websocketFirstTimeTryConnecting, setWebsocketFirstTimeTryConnecting] =
-    useState(false);
 
   const handleCloseFilterModal = () => {
     // reset map
-    filteringInfo.forEach(filteringInfo => {
-      filters.length > 0 && filteringInfo.layer && channel && channel.postRequest(
-        'MapModulePlugin.MapLayerUpdateRequest',
-        [filteringInfo.layer.id, true, { 'CQL_FILTER': null }]
-        );
-    })
+    filteringInfo.forEach((filteringInfo) => {
+      filters.length > 0 &&
+        filteringInfo.layer &&
+        channel &&
+        channel.postRequest('MapModulePlugin.MapLayerUpdateRequest', [
+          filteringInfo.layer.id,
+          true,
+          { CQL_FILTER: null }
+        ]);
+    });
 
     // reset states
     store.dispatch(setIsFilterModalOpen(false));
-    store.dispatch(setMinimizeFilterModal({minimized: false}));
-    store.dispatch(setMaximizeFilterModal(false));    
+    store.dispatch(setMinimizeFilterModal({ minimized: false }));
+    store.dispatch(setMaximizeFilterModal(false));
     store.dispatch(setFilters([]));
     store.dispatch(setFilteringInfo([]));
-
-  }
+  };
 
   const handleCloseGFIModal = () => {
     store.dispatch(setActiveSelectionTool(null));
@@ -201,251 +178,22 @@ const Content = () => {
     setTimeout(() => {
       store.dispatch(setVKMData(null));
     }, 500); // VKM info does not disappear during modal close animation.
-    store.dispatch(removeMarkerRequest({ markerId: "VKM_MARKER" }));
-    channel.postRequest("MapModulePlugin.RemoveFeaturesFromMapRequest", [
+    store.dispatch(removeMarkerRequest({ markerId: 'VKM_MARKER' }));
+    channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [
       null,
       null,
-      "download-tool-layer",
+      'download-tool-layer'
     ]);
-    channel && channel.postRequest(
-      'MapModulePlugin.RemoveFeaturesFromMapRequest',
-      [null, null, GFI_GEOMETRY_LAYER_ID]
-    );
-    channel.postRequest("DrawTools.StopDrawingRequest", [
-      "gfi-selection-tool",
-      true,
+    channel &&
+      channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [
+        null,
+        null,
+        GFI_GEOMETRY_LAYER_ID
+      ]);
+    channel.postRequest('DrawTools.StopDrawingRequest', [
+      'gfi-selection-tool',
+      true
     ]);
-  };
-
-  const handleCloseGfiDownloadModal = () => {
-    store.dispatch(setIsGfiDownloadOpen(false));
-    
-    !isGfiOpen && channel && channel.postRequest(
-      'MapModulePlugin.RemoveFeaturesFromMapRequest',
-      [null, null, GFI_GEOMETRY_LAYER_ID]
-    );
-  };
-
-  const handleCloseSaveViewModal = () => {
-    store.dispatch(setIsSaveViewOpen(false));
-  };
-
-  const handleCloseGfiDownloadTools = () => {
-    setIsGfiDownloadToolsOpen(false);
-    if (!isGfiOpen) {
-      store.dispatch(resetGFILocations([]));
-      setTimeout(() => {
-        store.dispatch(setVKMData(null));
-      }, 500); // VKM info does not disappear during modal close animation.
-      store.dispatch(removeMarkerRequest({ markerId: "VKM_MARKER" }));
-      
-      channel && channel.postRequest(
-        'MapModulePlugin.RemoveFeaturesFromMapRequest',
-        [null, null, GFI_GEOMETRY_LAYER_ID]
-      );
-      channel.postRequest("MapModulePlugin.RemoveFeaturesFromMapRequest", [
-        null,
-        null,
-        "download-tool-layer",
-      ]);
-      channel.postRequest("DrawTools.StopDrawingRequest", [
-        "gfi-selection-tool",
-        true,
-      ]);
-    }
-  };
-
-  const handleGfiDownload = (format, layers, croppingArea) => {
-    // Open websocket if is not already opened
-    if (supportsWebSockets) {
-      !websocketFirstTimeTryConnecting && connectWebsocket(0);
-    } else {
-      toast.error(strings.downloads.noWebSocketSupport, {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-        transition: Slide
-      });
-    }
-
-    let sessionId = "";
-
-    let layerIds = layers.map((layer) => {
-      return layer.id;
-    });
-
-    //bit hackish way to force datatype when using with single geometry download
-    if (!Array.isArray(croppingArea)) croppingArea = [croppingArea];
-    channel.downloadFeaturesByGeoJSON &&
-      channel.downloadFeaturesByGeoJSON(
-        [layerIds, croppingArea, format.format, sessionId],
-        (data) => {
-          if (data && data.uuid && downloadUuids) {
-            let newArray = downloadUuids;
-            newArray.push(data.uuid);
-            setDownloadUuids(newArray);
-
-            var newDownload = {
-              id: data.uuid,
-              format: format.title,
-              layers: layers,
-              title: (
-                <StyledLayerNamesList>
-                  {layers.map((layer) => {
-                    return (
-                      <StyledLayerNamesListItem>
-                        {layer.name}
-                      </StyledLayerNamesListItem>
-                    );
-                  })}
-                </StyledLayerNamesList>
-              ),
-              loading: true,
-              date: Date.now(),
-              url: null,
-              errorLayers: [],
-            };
-
-            store.dispatch(setIsGfiDownloadOpen(true));
-            store.dispatch(setDownloadActive(newDownload));
-          }
-          return;
-        }
-      );
-
-    if (!isGfiOpen) {
-      store.dispatch(resetGFILocations([]));
-      store.dispatch(removeMarkerRequest({ markerId: "VKM_MARKER" }));
-      channel.postRequest("MapModulePlugin.RemoveFeaturesFromMapRequest", [
-        null,
-        null,
-        "download-tool-layer",
-      ]);
-      channel.postRequest("DrawTools.StopDrawingRequest", [
-        "gfi-selection-tool",
-        true,
-      ]);
-    }
-    isGfiDownloadToolsOpen && setIsGfiDownloadToolsOpen(false);
-  };
-
-  const supportsWebSockets = "WebSocket" in window || "MozWebSocket" in window;
-
-  const simplifyGeometry = () => {
-    console.log("simplify");
-  };
-
-  const connectWebsocket = (count) => {
-    const MAX_RECONNECTIONS_TRY = 20;
-
-    setWebsocketFirstTimeTryConnecting(true);
-
-    // Open WebSocket
-    const ws = new WebSocket(process.env.REACT_APP_WEBSOCKET_URL);
-
-    const handleDownloadFailure = () => {
-      handleCloseGfiDownloadModal();
-      handleCloseSaveViewModal();
-      ws.close();
-        
-      toast.error(strings.downloads.downloadFailure, {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-        transition: Slide
-      });
-    };
-
-    ws.onopen = function () {
-      // when opened connection send resend download status message
-      if (downloadUuids.length > 0) {
-        var json = {
-          type: "resendDownloadStatuses",
-          data: { uuids: downloadUuids },
-        };
-        ws.send(JSON.stringify(json));
-      }
-
-      // ping 10 min interval
-      const sendPing = () => {
-        var json = { type: "ping", data: {} };
-        ws.send(JSON.stringify(json));
-      };
-
-      setInterval(() => {
-        sendPing();
-      }, 1000 * 60 * 10);
-    };
-    ws.onmessage = function (evt) {
-      let data = JSON.parse(evt.data);
-      if (data.type === "BODY_SIZE_EXCEEDED") {
-        store.dispatch(
-          setWarning({
-            title: strings.bodySizeWarning,
-            subtitle: null,
-            cancel: {
-              text: strings.general.cancel,
-              action: () => {
-                store.dispatch(setWarning(null));
-              },
-            },
-            confirm: {
-              text: strings.general.continue,
-              action: () => {
-                simplifyGeometry();
-                store.dispatch(setWarning(null));
-              },
-            },
-          })
-        );
-      }
-
-      if (data.type === "DOWNLOAD_READY") {
-        if (
-          data.data &&
-          data.data.uuid &&
-          downloadUuids.includes(data.data.uuid)
-        ) {
-          var index = downloadUuids.indexOf(data.data.uuid);
-          let newArray = downloadUuids;
-          if (index > -1) {
-            newArray.splice(index, 1);
-          }
-          setDownloadUuids(newArray);
-
-          store.dispatch(
-            setDownloadFinished({
-              id: data.data.uuid,
-              url: data.data.url,
-              fileSize: data.data.fileSize !== null && data.data.fileSize,
-              errorLayers: data.data.errorLayers,
-            })
-          );
-        }
-      }
-    };
-    ws.onerror = () => {
-      handleDownloadFailure();
-    };
-    ws.onclose = () => {
-      if (count < MAX_RECONNECTIONS_TRY) {
-        setTimeout(() => {
-          connectWebsocket(count + 1);
-        }, 1000 * 30);
-      } else {
-        handleDownloadFailure();
-      }
-    };
   };
 
   return (
@@ -453,57 +201,38 @@ const Content = () => {
       <StyledContent ref={constraintsRef}>
         <PublishedMap />
 
-        <AnnouncementsModal constraintsRef={constraintsRef}/>
-        
-        <FeatureDataModal constraintsRef={constraintsRef}/>
+        <AnnouncementsModal constraintsRef={constraintsRef} />
 
-        <FeatureDataDownloadModal constraintsRef={constraintsRef}/>
+        <FeatureDataModal constraintsRef={constraintsRef} />
 
-        <UserGuideModal constraintsRef={constraintsRef}/>
+        <FeatureDataDownloadModal constraintsRef={constraintsRef} />
 
-        <AppInfoModal constraintsRef={constraintsRef}/>
-        
-        <CustomLayerModal constraintsRef={constraintsRef}/>
-        
-        <FeedbackFormModal constraintsRef={constraintsRef}/>
+        <UserGuideModal constraintsRef={constraintsRef} />
 
-        <MetadataModal constraintsRef={constraintsRef}/>
+        <AppInfoModal constraintsRef={constraintsRef} />
 
-        <ShareWebsiteModal constraintsRef={constraintsRef}/>
+        <CustomLayerModal constraintsRef={constraintsRef} />
 
-        <SavedContentModal constraintsRef={constraintsRef}/>
+        <FeedbackFormModal constraintsRef={constraintsRef} />
 
-        <LayerDownloadButtonLinkModal constraintsRef={constraintsRef}/>
+        <MetadataModal constraintsRef={constraintsRef} />
 
-        <WarningModal constraintsRef={constraintsRef}/>
+        <ShareWebsiteModal constraintsRef={constraintsRef} />
 
-        <FeatureDataToolsModal constraintsRef={constraintsRef}/>
-        <Modal
-          constraintsRef={
-            constraintsRef
-          } /* Reference div for modal drag boundaries */
-          drag={true} /* Enable (true) or disable (false) drag */
-          resize={true}
-          backdrop={false} /* Is backdrop enabled (true) or disabled (false) */
-          fullScreenOnMobile={
-            true
-          } /* Scale modal full width / height when using mobile device */
-          titleIcon={null} /* Use icon on title or null */
-          title={strings.gfi.downloadMaterials} /* Modal header title */
-          type={"normal"} /* Modal type */
-          closeAction={
-            handleCloseGfiDownloadTools
-          } /* Action when pressing modal close button or backdrop */
-          isOpen={isGfiDownloadToolsOpen} /* Modal state */
-          id="gfi_download_menu_modal"
-        >
-          <GfiDownloadMenu
-            closeButton={false}
-            handleGfiDownload={handleGfiDownload}
-          ></GfiDownloadMenu>
-        </Modal>
-        <LayerFilterModal constraintsRef={constraintsRef}/>
+        <SavedContentModal constraintsRef={constraintsRef} />
+
+        <LayerDownloadButtonLinkModal constraintsRef={constraintsRef} />
+
+        <WarningModal constraintsRef={constraintsRef} />
+
+        <FeatureDataToolsModal constraintsRef={constraintsRef} />
+
+        <FeatureDataDownloadMenuModal constraintsRef={constraintsRef} />
+
+        <LayerFilterModal constraintsRef={constraintsRef} />
+
         <ScaleBar />
+
         <StyledToastContainer
           position="bottom-left"
           pauseOnFocusLoss={false}
@@ -520,7 +249,10 @@ const Content = () => {
           <StyledRightSection>
             <Search />
             <ZoomMenu />
-            <ActionButtons closeAction={handleCloseGFIModal} closeActionFilter={handleCloseFilterModal}/>
+            <ActionButtons
+              closeAction={handleCloseGFIModal}
+              closeActionFilter={handleCloseFilterModal}
+            />
           </StyledRightSection>
         </StyledContentGrid>
       </StyledContent>
