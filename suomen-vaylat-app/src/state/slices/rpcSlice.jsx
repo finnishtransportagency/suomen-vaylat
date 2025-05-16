@@ -23,15 +23,6 @@ const initialState = {
     backgroundMaps: [],
     mapLayers: [],
   },
-  warnings: {
-    show: false,
-    errors: [],
-    message: "",
-    type: "",
-    filteredLayers: [],
-    indeterminate: false,
-    isChecked: null,
-  },
   announcements: [],
   activeAnnouncements: [],
   allThemesWithLayers: [],
@@ -181,25 +172,6 @@ export const rpcSlice = createSlice({
     setAllSelectedThemeLayers: (state, action) => {
       state.allSelectedThemeLayers = action.payload;
       LOG.log("setThemeLayers", action.payload);
-    },
-
-    /**
-     * Set select error.
-     * @method setSelectError
-     * @param {Object} state
-     * @param {Object} action
-     */
-    setSelectError: (state, action) => {
-      state.warnings = {
-        show: action.payload.show,
-        errors: action.payload.errors,
-        message: action.payload.message,
-        type: action.payload.type,
-        filteredLayers: action.payload.filteredLayers,
-        indeterminate: action.payload.indeterminate,
-        isChecked: action.payload.isChecked,
-      };
-      LOG.log("setSelectError to ", action.payload);
     },
 
     /**
@@ -979,7 +951,6 @@ export const {
   setZoomIn,
   setZoomOut,
   setZoomTo,
-  setSelectError,
   searchVKMRoad,
   setCurrentZoomLevel,
   searchRequest,

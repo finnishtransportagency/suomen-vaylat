@@ -18,9 +18,9 @@ import CustomLayerModal from "../layerlists/hierarchical-layerlist/CustomFilter/
 import FeedbackFormModal from "../feedback-form/modal/FeedbackFormModal";
 import AnnouncementsModal from "../announcements/modal/AnnouncementsModal";
 import MetadataModal from "../metadata-modal/modal/MetadataModal";
+import ShareWebsiteModal from "../share-website/modal/ShareWebsiteModal";
 
 import {
-  setSelectError,
   resetGFILocations,
   setDownloadActive,
   setDownloadFinished,
@@ -31,7 +31,6 @@ import {
 } from "../../state/slices/rpcSlice";
 
 import {
-  setShareUrl,
   setIsSaveViewOpen,
   setIsGfiOpen,
   setIsGfiDownloadOpen,
@@ -47,7 +46,6 @@ import {
 } from "../../state/slices/uiSlice";
 
 import {
-  faShareAlt,
   faExclamationCircle,
   faSave,
 } from "@fortawesome/free-solid-svg-icons";
@@ -56,13 +54,11 @@ import Modal from "../modals/Modal";
 import LayerDownloadLinkButtonModal from "../layerlists/hierarchical-layerlist/LayerDownloadLinkButtonModal";
 import MenuBar from "./menu-bar/MenuBar";
 import MapLayersDialog from "../dialog/MapLayersDialog";
-import WarningDialog from "../dialog/WarningDialog";
 import SavedContent from "../saved-content/SavedContent";
 import PublishedMap from "../published-map/PublishedMap";
 import Search from "../search/Search";
 import ActionButtons from "../action-button/ActionButtons";
 import ScaleBar from "../scalebar/ScaleBar";
-import { ShareWebSitePopup } from "../share-website/ShareWebSitePopup";
 import ZoomMenu from "../zoom-features/ZoomMenu";
 import WarningModalContent from "../warning/WarningModalContent";
 import ThemeMenu from "../layerlists/theme-layerlist/ThemeMenu";
@@ -165,21 +161,18 @@ const StyledLayerNamesListItem = styled.li``;
 const Content = () => {
   const constraintsRef = useRef(null);
 
-  const { warnings, filteringInfo, filters } = useAppSelector(
+  const { filteringInfo, filters } = useAppSelector(
     (state) => state.rpc
   );
 
   const {
-    shareUrl,
     isSaveViewOpen,
     isGfiOpen,
     warning,
     isGfiToolsOpen,
   } = useAppSelector((state) => state.ui);
 
-  const search = useAppSelector((state) => state.search);
   const { store } = useContext(ReactReduxContext);
-  const isShareOpen = shareUrl && shareUrl.length > 0 ? true : false;
   let { downloadLink } = useAppSelector((state) => state.ui);
 
   let { channel } = useAppSelector((state) => state.rpc);
@@ -190,21 +183,6 @@ const Content = () => {
 
   const [websocketFirstTimeTryConnecting, setWebsocketFirstTimeTryConnecting] =
     useState(false);
-
-  const hideWarn = () => {
-    store.dispatch(
-      setSelectError({
-        show: false,
-        type: "",
-        filteredLayers: [],
-        indeterminate: false,
-      })
-    );
-  };
-
-  const handleCloseShareWebSite = () => {
-    store.dispatch(setShareUrl(""));
-  };
 
   const handleCloseDownloadLinkModal = () => {
     store.dispatch(
@@ -550,61 +528,8 @@ const Content = () => {
 
         <MetadataModal constraintsRef={constraintsRef}/>
 
-        <Modal
-          constraintsRef={
-            constraintsRef
-          } /* Reference div for modal drag boundaries */
-          drag={false} /* Enable (true) or disable (false) drag */
-          resize={false}
-          backdrop={true} /* Is backdrop enabled (true) or disabled (false) */
-          fullScreenOnMobile={
-            true
-          } /* Scale modal full width / height when using mobile device */
-          titleIcon={faShareAlt} /* Use icon on title or null */
-          title={strings.share.title} /* Modal header title */
-          type={"normal"} /* Modal type */
-          closeAction={
-            handleCloseShareWebSite
-          } /* Action when pressing modal close button or backdrop */
-          isOpen={isShareOpen} /* Modal state */
-          id="share_website_popup"
-        >
-          <ShareWebSitePopup />
-        </Modal>
-        <Modal
-          constraintsRef={
-            constraintsRef
-          } /* Reference div for modal drag boundaries */
-          drag={false} /* Enable (true) or disable (false) drag */
-          resize={false}
-          backdrop={true} /* Is backdrop enabled (true) or disabled (false) */
-          fullScreenOnMobile={
-            false
-          } /* Scale modal full width / height when using mobile device */
-          titleIcon={faExclamationCircle} /* Use icon on title or null */
-          title={
-            search.selected === "vkm"
-              ? strings.search.vkm.error.title
-              : strings.search.address.error.title
-          } /* Modal header title */
-          type={"warning"} /* Modal type */
-          warningType={warnings.type}
-          closeAction={
-            hideWarn
-          } /* Action when pressing modal close button or backdrop */
-          isOpen={
-            warnings.show && warnings.type === "searchWarning"
-          } /* Modal state */
-          id={null}
-        >
-          <WarningDialog
-            hideWarn={hideWarn}
-            message={warnings.message}
-            errors={warnings.errors}
-            filteredLayers={[]}
-            warningType={warnings.type}
-          />
-        </Modal>
+        <ShareWebsiteModal constraintsRef={constraintsRef}/>
+
         <Modal
           constraintsRef={
             constraintsRef
