@@ -19,7 +19,7 @@ import ShareWebsiteModal from '../share-website/modal/ShareWebsiteModal';
 import SavedContentModal from '../saved-content/modal/SavedContentModal';
 import LayerDownloadButtonLinkModal from '../layerlists/hierarchical-layerlist/modal/LayerDownloadButtonLinkModal';
 import FeatureDataToolsModal from '../feature-data-window/modal/FeatureDataToolsModal';
-import FeatureDataDownloadMenuModal from '../feature-data-window/modal/FeatureDataDownloadMenuModal';
+import FeatureDataDownloadMenuModal from '../feature-data-window/modal/FeatureDataDownloadToolsModal';
 
 import {
   resetGFILocations,
@@ -229,7 +229,7 @@ const Content = () => {
 
         <FeatureDataDownloadMenuModal constraintsRef={constraintsRef} />
 
-        <LayerFilterModal constraintsRef={constraintsRef} />
+        <LayerFilterModal constraintsRef={constraintsRef}/>
 
         <ScaleBar />
 

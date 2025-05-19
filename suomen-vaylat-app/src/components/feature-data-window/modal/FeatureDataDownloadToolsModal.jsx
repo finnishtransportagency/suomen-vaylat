@@ -3,7 +3,7 @@ import strings from '../../../translations';
 import { useContext } from 'react';
 import { ReactReduxContext } from 'react-redux';
 import { useAppSelector } from '../../../state/hooks';
-import GfiDownloadMenu from '../GfiDownloadMenu';
+import GfiDownloadTools from '../GfiDownloadTools';
 import { setIsGfiDownloadToolsOpen } from '../../../state/slices/uiSlice';
 import {
   resetGFILocations,
@@ -14,8 +14,7 @@ import {
 const GFI_GEOMETRY_LAYER_ID = 'drawtools-geometry-layer';
 
 const FeatureDataDownloadMenuModal = ({
-  constraintsRef,
-  handleGfiDownload
+  constraintsRef
 }) => {
   const { isGfiDownloadToolsOpen, isGfiOpen } = useAppSelector(
     (state) => state.ui
@@ -24,7 +23,7 @@ const FeatureDataDownloadMenuModal = ({
   const { channel } = useAppSelector((state) => state.rpc);
 
   const handleCloseGfiDownloadTools = () => {
-    setIsGfiDownloadToolsOpen(false);
+    store.dispatch(setIsGfiDownloadToolsOpen(false));
     if (!isGfiOpen) {
       store.dispatch(resetGFILocations([]));
       setTimeout(() => {
@@ -63,10 +62,7 @@ const FeatureDataDownloadMenuModal = ({
       isOpen={isGfiDownloadToolsOpen}
       id="gfi_download_menu_modal"
     >
-      <GfiDownloadMenu
-        closeButton={false}
-        handleGfiDownload={handleGfiDownload}
-      />
+      <GfiDownloadTools/>
     </Modal>
   );
 };

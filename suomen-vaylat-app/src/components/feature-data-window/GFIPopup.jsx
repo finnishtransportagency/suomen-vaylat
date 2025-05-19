@@ -24,7 +24,8 @@ import { FreeMode, Controller } from 'swiper';
 import {
   setMinimizeGfi,
   setWarning,
-  setActiveSelectionTool
+  setActiveSelectionTool,
+  setIsGfiToolsOpen
 } from '../../state/slices/uiSlice';
 import {
   resetGFILocations,
@@ -35,7 +36,7 @@ import {
 } from '../../state/slices/rpcSlice';
 import GfiTabContent from './GfiTabContent';
 import GfiToolsMenu from './GfiToolsMenu';
-import GfiDownloadMenu from './GfiDownloadMenu';
+import GfiDownloadTools from './GfiDownloadTools';
 import CircleButton from '../circle-button/CircleButton';
 import SVLoader from '../../utils/components/SvLoader';
 import { isValidUrl } from '../../utils/validUrlUtil';
@@ -405,8 +406,9 @@ const StyledLoaderWrapper = styled.div`
   }
 `;
 
-export const GFIPopup = ({ handleGfiDownload }) => {
+export const GFIPopup = () => {
   const LAYER_ID = 'gfi-result-layer';
+
   const { store } = useContext(ReactReduxContext);
   const {
     channel,
@@ -423,10 +425,12 @@ export const GFIPopup = ({ handleGfiDownload }) => {
   } = useAppSelector((state) => state.rpc);
 
   const [point, setPoint] = useState(null);
+  const [isGfiDownloadToolsOpen, setIsGfiDownloadToolsOpen] = useState(false);
+
   const [selectedTab, setSelectedTab] = useState(0);
   const [tabsIds, setTabsIds] = useState([]);
-  const [isGfiToolsOpen, setIsGfiToolsOpen] = useState(false);
-  const [isGfiDownloadsOpen, setIsGfiDownloadsOpen] = useState(false);
+    const [isGfiToolsOpen, setIsGfiToolsOpen] = useState(false);
+
   const [isVKMInfoOpen, setIsVKMInfoOpen] = useState(vkmData ? true : false);
   const [gfiTabsSwiper, setGfiTabsSwiper] = useState(null);
   const [gfiTabsSnapGridLength, setGfiTabsSnapGridLength] = useState(0);
@@ -487,7 +491,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
   }, [gfiLocations, selectedLayersByType.backgroundMaps]);
 
   useEffect(() => {
-    isGfiDownloadsOpen && setIsGfiDownloadsOpen(false);
+    isGfiDownloadToolsOpen && setIsGfiDownloadToolsOpen(false);
   }, [gfiLocations]);
 
   // Zoom to features
@@ -749,7 +753,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
   };
 
   const handleGfiToolsMenu = () => {
-    setIsGfiDownloadsOpen(false);
+    setIsGfiDownloadToolsOpen(false);
     setIsGfiToolsOpen(!isGfiToolsOpen);
     store.dispatch(setActiveSelectionTool(null));
 
@@ -771,7 +775,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
 
   const handleGfiDownloadsMenu = () => {
     setIsGfiToolsOpen(false);
-    setIsGfiDownloadsOpen(!isGfiDownloadsOpen);
+    setIsGfiDownloadToolsOpen(!isGfiDownloadToolsOpen);
   };
 
   const closeTab = (index, id) => {
@@ -1233,7 +1237,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
               ? strings.gfi.downloadMaterials
               : strings.gfi.downloadMaterialsDisabled
           }
-          toggleState={isGfiDownloadsOpen}
+          toggleState={isGfiDownloadToolsOpen}
           tooltipDirection={'bottom'}
           clickAction={handleGfiDownloadsMenu}
           disabled={filteredGFILocations.length === 0}
@@ -1280,7 +1284,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
         )}
       </AnimatePresence>
       <AnimatePresence>
-        {isGfiDownloadsOpen && (
+        {isGfiDownloadToolsOpen && (
           <StyledGfiToolsContainer
             transition={{
               duration: 0.4,
@@ -1299,15 +1303,12 @@ export const GFIPopup = ({ handleGfiDownload }) => {
               x: '-100%'
             }}
           >
-            <GfiDownloadMenu
-              handleGfiDownloadsMenu={handleGfiDownloadsMenu}
-              handleGfiDownload={handleGfiDownload}
-            />
+            <GfiDownloadTools/>
           </StyledGfiToolsContainer>
         )}
       </AnimatePresence>
       <AnimatePresence>
-        {(isGfiDownloadsOpen || isGfiToolsOpen) && (
+        {(isGfiDownloadToolsOpen || isGfiToolsOpen) && (
           <StyledGfiBackdrop
             transition={{
               duration: 0.4,
@@ -1324,7 +1325,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
             }}
             onClick={() => {
               isGfiToolsOpen && handleGfiToolsMenu();
-              isGfiDownloadsOpen && handleGfiDownloadsMenu();
+              isGfiDownloadToolsOpen && handleGfiDownloadsMenu();
             }}
           />
         )}
