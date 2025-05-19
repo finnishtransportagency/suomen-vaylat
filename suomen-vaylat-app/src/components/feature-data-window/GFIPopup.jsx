@@ -24,8 +24,7 @@ import { FreeMode, Controller } from 'swiper';
 import {
   setMinimizeGfi,
   setWarning,
-  setActiveSelectionTool,
-  setIsGfiToolsOpen
+  setActiveSelectionTool
 } from '../../state/slices/uiSlice';
 import {
   resetGFILocations,

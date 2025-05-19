@@ -86,6 +86,7 @@ const StyledLinkText = styled.a`
 const StyledPropertyValue = styled.div`
     margin: 6px;
 `;
+
 const StyledGfiTabContentItemTableHeader = styled.th`
     padding: 6px 6px 6px 16px;
     font-size: 14px;
@@ -115,17 +116,16 @@ const GfiTabContentItem = ({
     const { channel } = useAppSelector(state => state.rpc);
 
     useEffect(() => {
-
-        var hightPriorityFields = data.properties._orderHigh && JSON.parse(data.properties._orderHigh);
-        var lowPriorityFields = data.properties._order && JSON.parse(data.properties._order);
+        const hightPriorityFields = data.properties._orderHigh && JSON.parse(data.properties._orderHigh);
+        const lowPriorityFields = data.properties._order && JSON.parse(data.properties._order);
 
         if (hightPriorityFields.length > 0) {
             hightPriorityFields && setOrderHigh(hightPriorityFields);
             lowPriorityFields && lowPriorityFields.length > 0 && setOrderLow(lowPriorityFields);
-        } else if(lowPriorityFields.length > 0){
+        } else if (lowPriorityFields.length > 0) {
             setOrderHigh(lowPriorityFields);
         }
-    },[data]);
+    }, [data]);
 
     const formattedContent = (data) => {
         if (isValidUrl(data)) {
@@ -133,147 +133,145 @@ const GfiTabContentItem = ({
         } else {
             return (<StyledPropertyValue dangerouslySetInnerHTML={{ __html: typeof(data) === "string" ? data.replace(/\n/g, '<br />') : data}}/>)
         }
-    }
+    };
 
-    return  <StyledGfiTabContentItem
-                onMouseEnter={() => {
-                    setHovered(true);
-                    selectFeature(channel, [data]);
-                }}
-                onMouseLeave={() => {
-                    setHovered(false);
-                    deSelectFeature(channel, [data]);
-                }}
-                animate={{
-                    backgroundColor: isHovered ? '#f0f0f0' : '#ffffff',
+    return (
+        <StyledGfiTabContentItem
+            onMouseEnter={() => {
+                setHovered(true);
+                selectFeature(channel, [data]);
+            }}
+            onMouseLeave={() => {
+                setHovered(false);
+                deSelectFeature(channel, [data]);
+            }}
+            animate={{
+                backgroundColor: isHovered ? '#f0f0f0' : '#ffffff',
+            }}
+        >
+            <StyledGfiTabContentItemHeader
+                onClick={() => {
+                    setIsExpanded(!isExpanded);
+                    isExpanded && setIsSubExpanded(false);
                 }}
             >
-                    <StyledGfiTabContentItemHeader
-                        onClick={() => {
-                            setIsExpanded(!isExpanded);
-                            isExpanded && setIsSubExpanded(false);
+                <StyledGfiTabContentItemName>
+                    {title}
+                </StyledGfiTabContentItemName>
+                <StyledGfiTabContentItemExpandIcon
+                    animate={{
+                        rotate: isExpanded ? 180 : 0,
+                    }}
+                    transition={{
+                        duration: 0.3,
+                        type: 'tween',
+                    }}
+                >
+                    <FontAwesomeIcon icon={faAngleDown} />
+                </StyledGfiTabContentItemExpandIcon>
+            </StyledGfiTabContentItemHeader>
+            <AnimatePresence>
+                {isExpanded && (
+                    <StyledGfiTabContentItemCollapseContent
+                        initial={{
+                            height: 0,
+                            opacity: 0,
+                        }}
+                        animate={{
+                            height: 'auto',
+                            opacity: 1,
+                        }}
+                        exit={{
+                            height: 0,
+                            opacity: 0,
+                        }}
+                        transition={{
+                            duration: 0.3,
+                            type: 'tween',
                         }}
                     >
-                        <StyledGfiTabContentItemName>
-                            {title}
-                        </StyledGfiTabContentItemName>
-                        <StyledGfiTabContentItemExpandIcon
-                            animate={{
-                                rotate: isExpanded ? 180 : 0,
-                            }}
-                            transition={{
-                                duration: 0.3,
-                                type: 'tween',
-                            }}
-                        >
-                            <FontAwesomeIcon icon={faAngleDown} />
-                        </StyledGfiTabContentItemExpandIcon>
+                        <StyledGfiTabContentItemTable>
+                            <tbody>
+                                {orderHigh ? orderHigh.filter(value => value !== 'UID').map(value => (
+                                    <StyledGfiTabContentItemTableRow key={value + '_' + data.properties[value]}>
+                                        <StyledGfiTabContentItemTableHeader>{value}</StyledGfiTabContentItemTableHeader>
+                                        <StyledGfiTabContentItemTableData>
+                                            {formattedContent(data.properties[value])}
+                                        </StyledGfiTabContentItemTableData>
+                                    </StyledGfiTabContentItemTableRow>
+                                )) : orderLow && orderLow.filter(value => value !== 'UID').map(value => (
+                                    <StyledGfiTabContentItemTableRow key={value + '_' + data.properties[value]}>
+                                        <StyledGfiTabContentItemTableHeader>{value}</StyledGfiTabContentItemTableHeader>
+                                        <StyledGfiTabContentItemTableData>
+                                            {formattedContent(data.properties[value])}
+                                        </StyledGfiTabContentItemTableData>
+                                    </StyledGfiTabContentItemTableRow>
+                                ))}
+                            </tbody>
+                        </StyledGfiTabContentItemTable>
 
-                    </StyledGfiTabContentItemHeader>
-                    <AnimatePresence>
-                    {isExpanded && (
-                        <StyledGfiTabContentItemCollapseContent
-                            initial={{
-                                height: 0,
-                                opacity: 0,
-                            }}
-                            animate={{
-                                height: 'auto',
-                                opacity: 1,
-                            }}
-                            exit={{
-                                height: 0,
-                                opacity: 0,
-                            }}
-                            transition={{
-                                duration: 0.3,
-                                type: 'tween',
-                            }}
-                        >
-                            <StyledGfiTabContentItemTable>
-                                {
-                                    orderHigh ? orderHigh.filter(value => value !== 'UID').map(value => {
-                                        return <StyledGfiTabContentItemTableRow key={value + '_' + data.properties[value]}>
-                                            <StyledGfiTabContentItemTableHeader>{value}</StyledGfiTabContentItemTableHeader>
-                                            <StyledGfiTabContentItemTableData>
-                                                {formattedContent(data.properties[value])}
-                                            </StyledGfiTabContentItemTableData>
-                                        </StyledGfiTabContentItemTableRow>
-                                    }) : orderLow && orderLow.filter(value => value !== 'UID').map(value => {
-                                            return <StyledGfiTabContentItemTableRow key={value + '_' + data.properties[value]}>
-                                                <StyledGfiTabContentItemTableHeader>{value}</StyledGfiTabContentItemTableHeader>
-                                                <StyledGfiTabContentItemTableData>
-                                                    {formattedContent(data.properties[value])}
-                                                </StyledGfiTabContentItemTableData>
-                                            </StyledGfiTabContentItemTableRow>
-                                    })
-                                }
-                            </StyledGfiTabContentItemTable>
-
-                            {
-                                orderLow &&
-                                <>
-                                    <StyledGfiSubTabContentItemHeader
-                                        onClick={() => setIsSubExpanded(!isSubExpanded)}
+                        {orderLow && (
+                            <>
+                                <StyledGfiSubTabContentItemHeader
+                                    onClick={() => setIsSubExpanded(!isSubExpanded)}
+                                >
+                                    <StyledGfiSubTabContentItemName>
+                                        {strings.gfi.additionalInfo}
+                                    </StyledGfiSubTabContentItemName>
+                                    <StyledGfiSubTabContentItemExpandIcon
+                                        animate={{
+                                            rotate: isSubExpanded ? 180 : 0,
+                                        }}
+                                        transition={{
+                                            duration: 0.3,
+                                            type: 'tween',
+                                        }}
                                     >
-                                        <StyledGfiSubTabContentItemName>
-                                            {strings.gfi.additionalInfo}
-                                        </StyledGfiSubTabContentItemName>
-                                        <StyledGfiSubTabContentItemExpandIcon
+                                        <FontAwesomeIcon icon={faAngleDown} />
+                                    </StyledGfiSubTabContentItemExpandIcon>
+                                </StyledGfiSubTabContentItemHeader>
+                                <AnimatePresence>
+                                    {isSubExpanded && (
+                                        <StyledGfiTabContentItemSubCollapseContent
+                                            initial={{
+                                                height: 0,
+                                                opacity: 0,
+                                            }}
                                             animate={{
-                                                rotate: isSubExpanded ? 180 : 0,
+                                                height: 'auto',
+                                                opacity: 1,
+                                            }}
+                                            exit={{
+                                                height: 0,
+                                                opacity: 0,
                                             }}
                                             transition={{
                                                 duration: 0.3,
                                                 type: 'tween',
                                             }}
                                         >
-                                            <FontAwesomeIcon icon={faAngleDown} />
-                                        </StyledGfiSubTabContentItemExpandIcon>
-                                    </StyledGfiSubTabContentItemHeader>
-                                    <AnimatePresence>
-                                        {
-                                            isSubExpanded &&
-                                            <StyledGfiTabContentItemSubCollapseContent
-                                                initial={{
-                                                    height: 0,
-                                                    opacity: 0,
-                                                }}
-                                                animate={{
-                                                    height: 'auto',
-                                                    opacity: 1,
-                                                }}
-                                                exit={{
-                                                    height: 0,
-                                                    opacity: 0,
-                                                }}
-                                                transition={{
-                                                    duration: 0.3,
-                                                    type: 'tween',
-                                                }}
-                                            >
                                             <StyledGfiTabContentItemTable>
-                                                {
-                                                    orderLow && orderLow.map(value => {
-                                                        return <StyledGfiTabContentItemTableRow key={value+'_'+data.properties[value]}>
+                                                <tbody>
+                                                    {orderLow && orderLow.map(value => (
+                                                        <StyledGfiTabContentItemTableRow key={value + '_' + data.properties[value]}>
                                                             <StyledGfiTabContentItemTableHeader>{value}</StyledGfiTabContentItemTableHeader>
                                                             <StyledGfiTabContentItemTableData>
                                                                 {formattedContent(data.properties[value])}
                                                             </StyledGfiTabContentItemTableData>
                                                         </StyledGfiTabContentItemTableRow>
-                                                    })
-                                                }
+                                                    ))}
+                                                </tbody>
                                             </StyledGfiTabContentItemTable>
-                                            </StyledGfiTabContentItemSubCollapseContent>
-                                        }
-                                    </AnimatePresence>
-                                </>
-                            }
-
-                        </StyledGfiTabContentItemCollapseContent>
-                    )}
-                    </AnimatePresence>
-    </StyledGfiTabContentItem>
+                                        </StyledGfiTabContentItemSubCollapseContent>
+                                    )}
+                                </AnimatePresence>
+                            </>
+                        )}
+                    </StyledGfiTabContentItemCollapseContent>
+                )}
+            </AnimatePresence>
+        </StyledGfiTabContentItem>
+    );
 };
 
 export default GfiTabContentItem;

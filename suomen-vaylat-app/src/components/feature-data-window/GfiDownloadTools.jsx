@@ -154,7 +154,7 @@ const GfiDownloadTools = ({ closeButton = true }) => {
     selectedLayersByType
   } = useAppSelector((state) => state.rpc);
 
-  const { isGfiDownloadToolsOpen, isGfiOpen, isGfiDownloadOpen } =
+  const { isGfiDownloadToolsOpen, isGfiOpen } =
     useAppSelector((state) => state.ui);
   const { store } = useContext(ReactReduxContext);
   const [downloadUuids, setDownloadUuids] = useState([]);
