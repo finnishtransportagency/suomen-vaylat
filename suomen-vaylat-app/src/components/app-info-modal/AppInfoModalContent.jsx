@@ -187,6 +187,7 @@ const AnnouncementContainer = styled.div`
 const AnnouncementTitle = styled.h5`
     margin: 0;
     color: ${props => props.theme.colors.mainColor1};
+    font-weight: 600;
     display: flex;
     justify-content: space-between;
 `;
@@ -461,6 +462,7 @@ const Announcements = () => {
                         <span>{openAnnouncement === announcement.id ? '-' : '+'}</span>
                     </AnnouncementTitle>
                     <AnnouncementContent
+                        className='announcements-content'
                         initial={{ height: 0, opacity: 0, marginTop: 0}}
                         animate={openAnnouncement === announcement.id ? { height: 'auto', opacity: 1, marginTop: '10px' } : { height: 0, opacity: 0, marginTop: 0 }}
                         transition={{ duration: 0.3 }}
