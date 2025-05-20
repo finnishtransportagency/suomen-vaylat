@@ -3,7 +3,7 @@ import strings from '../../../translations';
 import { useContext } from 'react';
 import { ReactReduxContext } from 'react-redux';
 import { useAppSelector } from '../../../state/hooks';
-import GfiDownloadTools from '../GfiDownloadTools';
+import FeatureDataDownloadTools from '../download/FeatureDataDownloadTools';
 import { setIsGfiDownloadToolsOpen } from '../../../state/slices/uiSlice';
 import {
   resetGFILocations,
@@ -62,7 +62,7 @@ const FeatureDataDownloadMenuModal = ({
       isOpen={isGfiDownloadToolsOpen}
       id="gfi_download_menu_modal"
     >
-      <GfiDownloadTools/>
+      <FeatureDataDownloadTools/>
     </Modal>
   );
 };

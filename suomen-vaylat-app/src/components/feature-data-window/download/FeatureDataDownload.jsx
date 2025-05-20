@@ -1,20 +1,20 @@
 import styled from 'styled-components';
-import strings from '../../translations';
+import strings from '../../../translations';
 import Moment from 'react-moment';
 import { useContext } from 'react';
-import { theme } from '../../theme/theme';
-import { setDownloadRemove } from '../../state/slices/rpcSlice';
+import { theme } from '../../../theme/theme';
+import { setDownloadRemove } from '../../../state/slices/rpcSlice';
 import { ReactReduxContext } from 'react-redux';
 
-import { setIsGfiDownloadOpen, setIsGfiToolsOpen } from '../../state/slices/uiSlice';
+import { setIsGfiDownloadOpen, setIsGfiToolsOpen } from '../../../state/slices/uiSlice';
 
-import { useAppSelector } from '../../state/hooks';
+import { useAppSelector } from '../../../state/hooks';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDownload, faFileArchive, faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
 
-import ModalListItem from '../modal/ModalListItem';
-import SvLoader from '../../utils/components/SvLoader';
+import ModalListItem from '../../modal/ModalListItem';
+import SvLoader from '../../../utils/components/SvLoader';
 
 const StyledDownloadsContainer = styled.div`
     width:100%;
@@ -157,7 +157,7 @@ const DownloadItem = ({
 
 
 
-const GFIDownload = () => {
+const FeatureDataDownload = () => {
     let { downloads } = useAppSelector((state) => state.rpc);
     const { store } = useContext(ReactReduxContext);
 
@@ -251,4 +251,4 @@ const GFIDownload = () => {
     );
 };
 
-export default GFIDownload;
+export default FeatureDataDownload;

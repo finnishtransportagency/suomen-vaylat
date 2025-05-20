@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext } from 'react';
 import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useAppSelector } from '../../state/hooks';
+import { useAppSelector } from '../../../state/hooks';
 import { ReactReduxContext } from 'react-redux';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -11,17 +11,17 @@ import {
   faFileArchive
 } from '@fortawesome/free-solid-svg-icons';
 
-import ModalListItem from '../modal/ModalListItem';
-import CheckBox from '../checkbox/CheckBox';
-import SVLoader from '../../utils/components/SvLoader';
-import strings from '../../translations';
+import ModalListItem from '../../modal/ModalListItem';
+import CheckBox from '../../checkbox/CheckBox';
+import SVLoader from '../../../utils/components/SvLoader';
+import strings from '../../../translations';
 
 import {
   resetGFILocations,
   setDownloadActive,
   setDownloadFinished,
   removeMarkerRequest
-} from '../../state/slices/rpcSlice';
+} from '../../../state/slices/rpcSlice';
 
 import {
   setIsGfiDownloadOpen,
@@ -29,7 +29,7 @@ import {
   setIsSaveViewOpen,
   setIsGfiDownloadToolsOpen,
   setIsGfiToolsOpen
-} from '../../state/slices/uiSlice';
+} from '../../../state/slices/uiSlice';
 import { Slide, toast } from 'react-toastify';
 
 const StyledGfiDownloadsContainer = styled.div`
@@ -143,7 +143,7 @@ const StyledLayerNamesListItem = styled.li``;
 
 const GFI_GEOMETRY_LAYER_ID = 'drawtools-geometry-layer';
 
-const GfiDownloadTools = ({ closeButton = true }) => {
+const FeatureDataDownloadTools = ({ closeButton = true }) => {
   const [loading] = useState(false);
 
   let {
@@ -544,4 +544,4 @@ const GfiDownloadTools = ({ closeButton = true }) => {
   );
 };
 
-export default GfiDownloadTools;
+export default FeatureDataDownloadTools;

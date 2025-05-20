@@ -3,7 +3,7 @@ import strings from '../../../translations';
 import { useContext } from 'react';
 import { ReactReduxContext } from 'react-redux';
 import { useAppSelector } from '../../../state/hooks';
-import GFIPopup from '../GFIPopup';
+import FeatureDataPopup from '../FeatureDataPopup';
 
 import {
   resetGFILocations,
@@ -88,7 +88,7 @@ const FeatureDataModal = ({ constraintsRef }) => {
       minimizeAction={() => store.dispatch(setMinimizeGfi(!minimizeGfi))}
       maximizeAction={() => store.dispatch(setMaximizeGfi(!maximizeGfi))}
     >
-      <GFIPopup />
+      <FeatureDataPopup />
     </Modal>
   );
 };

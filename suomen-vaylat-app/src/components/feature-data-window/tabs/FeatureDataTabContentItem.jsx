@@ -4,10 +4,10 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
 
-import strings from '../../translations';
-import { isValidUrl } from '../../utils/validUrlUtil';
+import strings from '../../../translations';
+import { isValidUrl } from '../../../utils/validUrlUtil';
 
-import { useAppSelector } from '../../state/hooks';
+import { useAppSelector } from '../../../state/hooks';
 
 const StyledGfiTabContentItem = styled(motion.div)`
     overflow: hidden;
@@ -101,7 +101,7 @@ const StyledGfiTabContentItemSubCollapseContent = styled(motion.div)`
 
 `;
 
-const GfiTabContentItem = ({
+const FeatureDataTabContentItem = ({
     index,
     title,
     data,
@@ -274,4 +274,4 @@ const GfiTabContentItem = ({
     );
 };
 
-export default GfiTabContentItem;
+export default FeatureDataTabContentItem;

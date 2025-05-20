@@ -2,8 +2,8 @@ import { useState, useContext, useEffect } from 'react';
 import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'react-toastify';
-import strings from '../../translations';
-import { isMobile } from '../../theme/theme';
+import strings from '../../../translations';
+import { isMobile } from '../../../theme/theme';
 import { ReactReduxContext } from 'react-redux';
 import Moment from 'react-moment';
 
@@ -18,27 +18,27 @@ import {
     faInfoCircle
 } from '@fortawesome/free-solid-svg-icons';
 
-import CircleButtonListItem from '../circle-button-list-item/CircleButtonListItem';
-import DrawingToast from '../toasts/DrawingToast';
+import CircleButtonListItem from './CircleButtonListItem';
+import DrawingToast from '../../toasts/DrawingToast';
 
-import { ReactComponent as SvCircle } from '../../theme/icons/drawtools_circle.svg';
-import { ReactComponent as SvRectangle } from '../../theme/icons/drawtools_rectangle.svg';
-import { ReactComponent as SvPolygon } from '../../theme/icons/drawtools_polygon.svg';
-import { ReactComponent as SvLinestring } from '../../theme/icons/drawtools_linestring.svg';
-import { theme } from '../../theme/theme';
+import { ReactComponent as SvCircle } from '../../../theme/icons/drawtools_circle.svg';
+import { ReactComponent as SvRectangle } from '../../../theme/icons/drawtools_rectangle.svg';
+import { ReactComponent as SvPolygon } from '../../../theme/icons/drawtools_polygon.svg';
+import { ReactComponent as SvLinestring } from '../../../theme/icons/drawtools_linestring.svg';
+import { theme } from '../../../theme/theme';
 
 import {
     setGFILocations,
     resetGFILocations,
     setGFICroppingArea,
     setVKMData
-} from '../../state/slices/rpcSlice';
+} from '../../../state/slices/rpcSlice';
 
-import { setMinimizeGfi, setSelectedGfiTool, setGeoJsonArray, setHasToastBeenShown, setWarning, setActiveSelectionTool } from '../../state/slices/uiSlice';
+import { setMinimizeGfi, setSelectedGfiTool, setGeoJsonArray, setHasToastBeenShown, setWarning, setActiveSelectionTool } from '../../../state/slices/uiSlice';
 
-import SVLoader from '../../utils/components/SvLoader';
-import { DRAWING_TIP_LOCALSTORAGE } from '../../utils/constants';
-import { useAppSelector } from '../../state/hooks';
+import SVLoader from '../../../utils/components/SvLoader';
+import { DRAWING_TIP_LOCALSTORAGE } from '../../../utils/constants';
+import { useAppSelector } from '../../../state/hooks';
 
 const GFI_GEOMETRY_LAYER_ID = 'drawtools-geometry-layer';
 const BODY_SIZE_EXCEED = "BODY_SIZE_EXCEED";

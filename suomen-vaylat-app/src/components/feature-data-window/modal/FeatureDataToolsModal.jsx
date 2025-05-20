@@ -3,7 +3,7 @@ import { ReactReduxContext } from "react-redux";
 import Modal from '../../modal/Modal';
 import { useAppSelector } from "../../../state/hooks";
 import strings from "../../../translations";
-import GfiToolsMenu from "../GfiToolsMenu";
+import FeatureDataToolsMenu from "../tools/FeatureDataToolsMenu";
 import { setIsGfiToolsOpen, setIsGfiDownloadToolsOpen, setActiveSelectionTool } from "../../../state/slices/uiSlice";
 
 const FeatureDataToolsModal = ({ constraintsRef }) => {
@@ -49,7 +49,7 @@ const FeatureDataToolsModal = ({ constraintsRef }) => {
       isOpen={isGfiToolsOpen}
       id="gfi_tools_menu_modal"
     >
-      <GfiToolsMenu
+      <FeatureDataToolsMenu
         handleGfiToolsMenu={handleGfiToolsMenu}
         closeButton={false}
       />

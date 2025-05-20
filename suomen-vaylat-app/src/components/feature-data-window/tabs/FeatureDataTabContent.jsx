@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useContext } from "react";
 import styled from "styled-components";
-import GfiTabContentItem from "./GfiTabContentItem";
-import strings from "../../translations";
+import FeatureDataTabContentItem from "./FeatureDataTabContentItem";
+import strings from "../../../translations";
 import { ReactReduxContext } from "react-redux";
 import {
   faTable,
@@ -9,17 +9,17 @@ import {
   faFilter,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useAppSelector } from "../../state/hooks";
+import { useAppSelector } from "../../../state/hooks";
 import { setFilteringInfo
-} from "../../state/slices/rpcSlice";
+} from "../../../state/slices/rpcSlice";
 import { Table } from "ka-table";
 import "ka-table/style.scss";
-import { theme, isMobile } from "../../theme/theme";
+import { theme, isMobile } from "../../../theme/theme";
 import ReactTooltip from "react-tooltip";
 
 import {
   setMinimizeFilterModal,
- } from "../../state/slices/uiSlice";
+ } from "../../../state/slices/uiSlice";
 
 
 const StyledSelectedTabHeader = styled.div`
@@ -67,7 +67,7 @@ const StyledTabContent = styled.div`
   }
 `;
 
-const GfiTabContent = ({ layer, data, title, tablePropsInit }) => {
+const FeatureDataTabContent = ({ layer, data, title, tablePropsInit }) => {
   const { filteringInfo, filters } = useAppSelector((state) => state.rpc);
   const { store } = useContext(ReactReduxContext);
   const { minimizeFilter } = useAppSelector(state => state.ui);
@@ -229,7 +229,7 @@ const GfiTabContent = ({ layer, data, title, tablePropsInit }) => {
           <StyledTabContent>
               {tablePropsInit.filteredFeatures?.map( (feature, index) => {
                   return (
-                    <GfiTabContentItem
+                    <FeatureDataTabContentItem
                       key={feature.id}
                       title={
                         Array.isArray(feature.id.split(".")) && feature.id.split(".")[1]
@@ -253,4 +253,4 @@ const GfiTabContent = ({ layer, data, title, tablePropsInit }) => {
   );
 };
 
-export default GfiTabContent;
+export default FeatureDataTabContent;

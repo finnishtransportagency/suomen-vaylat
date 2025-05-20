@@ -3,7 +3,7 @@ import strings from '../../../translations';
 import { useContext } from 'react';
 import { ReactReduxContext } from 'react-redux';
 import { useAppSelector } from '../../../state/hooks';
-import GFIDownload from '../GFIDownload';
+import FeatureDataDownload from '../download/FeatureDataDownload';
 
 import { setIsGfiDownloadOpen } from '../../../state/slices/uiSlice';
 
@@ -50,7 +50,7 @@ const FeatureDataDownloadModal = ({ constraintsRef }) => {
       id="gfi_download_modal"
       minWidth={'600px'}
     >
-      <GFIDownload />
+      <FeatureDataDownload />
     </Modal>
   );
 };

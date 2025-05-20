@@ -33,9 +33,9 @@ import {
   setFilters,
   removeMarkerRequest
 } from '../../state/slices/rpcSlice';
-import GfiTabContent from './GfiTabContent';
-import GfiToolsMenu from './GfiToolsMenu';
-import GfiDownloadTools from './GfiDownloadTools';
+import FeatureDataTabContent from './tabs/FeatureDataTabContent';
+import FeatureDataToolsMenu from './tools/FeatureDataToolsMenu';
+import FeatureDataDownloadTools from './download/FeatureDataDownloadTools';
 import CircleButton from '../circle-button/CircleButton';
 import SVLoader from '../../utils/components/SvLoader';
 import { isValidUrl } from '../../utils/validUrlUtil';
@@ -405,7 +405,7 @@ const StyledLoaderWrapper = styled.div`
   }
 `;
 
-export const GFIPopup = () => {
+export const FeatureDataPopup = () => {
   const LAYER_ID = 'gfi-result-layer';
 
   const { store } = useContext(ReactReduxContext);
@@ -1154,7 +1154,7 @@ export const GFIPopup = () => {
                     id={'gfi_tab_content_' + location.layerId}
                     key={'gfi_tab_content_' + location.layerId}
                   >
-                    <GfiTabContent
+                    <FeatureDataTabContent
                       layer={layers[0]}
                       data={location}
                       title={title}
@@ -1275,7 +1275,7 @@ export const GFIPopup = () => {
               x: '-100%'
             }}
           >
-            <GfiToolsMenu
+            <FeatureDataToolsMenu
               handleGfiToolsMenu={handleGfiToolsMenu}
               filters={filters}
             />
@@ -1302,7 +1302,7 @@ export const GFIPopup = () => {
               x: '-100%'
             }}
           >
-            <GfiDownloadTools/>
+            <FeatureDataDownloadTools/>
           </StyledGfiToolsContainer>
         )}
       </AnimatePresence>
@@ -1333,4 +1333,4 @@ export const GFIPopup = () => {
   );
 };
 
-export default GFIPopup;
+export default FeatureDataPopup;
