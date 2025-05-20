@@ -67,6 +67,7 @@ import PublishedMap from "../published-map/PublishedMap";
 import Search from "../search/Search";
 import ActionButtons from "../action-button/ActionButtons";
 import ScaleBar from "../scalebar/ScaleBar";
+import BaseLayerSelector from "../base-layers-selector/BaseLayersSelector";
 import { ShareWebSitePopup } from "../share-web-site/ShareWebSitePopup";
 import ZoomMenu from "../zoom-features/ZoomMenu";
 import WarningModalContent from "../warning/WarningModalContent";
@@ -1022,6 +1023,7 @@ const Content = () => {
           <FilterModalContainer/>
         </Modal>
         <ScaleBar />
+        <BaseLayerSelector />
         <StyledToastContainer
           position="bottom-left"
           pauseOnFocusLoss={false}
