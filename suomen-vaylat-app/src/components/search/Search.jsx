@@ -346,7 +346,6 @@ const Search = () => {
     const handleFeatureSearch = (searchValue, startIndex = 0, layerId = -1) => {
         if (validateFeatureSearch(searchValue, setFeatureErrors)) {
             const handleSearchResponse = (data) => {
-                console.log(data)
                 if (Object.keys(data).length > 0 && Object.keys(data.gfi).length > 0) {
                     setIsSearching(false);
                     store.dispatch(setSearchOn(false));
@@ -376,7 +375,6 @@ const Search = () => {
             };
         
             const handleSearchError = (layerIdentifier, error) => {
-                console.log("???",error )
                 setIsSearching(false);
                 store.dispatch(setSearchOn(false));
                 setLastSearchValue(searchValue);
@@ -499,6 +497,8 @@ const Search = () => {
                     if ((data?.result?.locations?.length > 1 || data?.result?.geom?.length > 1) && !isMoreSearchOpen) {
                         store.dispatch(setIsMoreSearchOpen(true));
                     }
+                } else {
+
                 }
             });
 

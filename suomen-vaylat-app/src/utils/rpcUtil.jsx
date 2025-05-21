@@ -171,8 +171,6 @@ export const selectGroup = (store, channel, allLayers, theme, lastSelectedTheme,
     // Main Execution Logic
     const isThemeChanged = selectedThemeId !== theme.id;
 
-    console.log(selectedThemeId, isThemeChanged)
-
     if (selectedThemeId === null || isThemeChanged) {
         store.dispatch(setSelectedTheme(theme));
         closeThemeLayers(lastSelectedTheme);
