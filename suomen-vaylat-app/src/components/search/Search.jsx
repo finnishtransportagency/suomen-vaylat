@@ -303,6 +303,7 @@ const Search = () => {
                 })
             );
         } else {
+            // TODO: swap to rpcSlice function 
             channel.postRequest('SearchRequest', [searchValueCopy]);
         }
         setSearchValue(value);
@@ -345,6 +346,7 @@ const Search = () => {
     const handleFeatureSearch = (searchValue, startIndex = 0, layerId = -1) => {
         if (validateFeatureSearch(searchValue, setFeatureErrors)) {
             const handleSearchResponse = (data) => {
+                console.log(data)
                 if (Object.keys(data).length > 0 && Object.keys(data.gfi).length > 0) {
                     setIsSearching(false);
                     store.dispatch(setSearchOn(false));
@@ -374,6 +376,7 @@ const Search = () => {
             };
         
             const handleSearchError = (layerIdentifier, error) => {
+                console.log("???",error )
                 setIsSearching(false);
                 store.dispatch(setSearchOn(false));
                 setLastSearchValue(searchValue);
@@ -550,6 +553,7 @@ const Search = () => {
                 {
                     clearPrevious: true,
                     centerTo: true,
+                    maxZoomLevel: 13,
                     hover: hover,
                     featureStyle: featureStyle,
                     layerId: vectorLayerId + '_vkm_' + style,
@@ -570,6 +574,7 @@ const Search = () => {
                 geom,
                 {
                     centerTo: true,
+                    maxZoomLevel: 13,
                     hover: hover,
                     featureStyle: featureStyle,
                     layerId: vectorLayerId + '_vkm_track',

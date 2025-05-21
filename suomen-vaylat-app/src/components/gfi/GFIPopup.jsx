@@ -507,6 +507,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
           {
             layerId: LAYER_ID,
             centerTo: true,
+            maxZoomLevel: 13,
             cursor: "pointer",
             featureStyle: {
               fill: {
