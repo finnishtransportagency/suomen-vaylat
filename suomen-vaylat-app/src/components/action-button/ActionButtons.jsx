@@ -17,8 +17,7 @@ import { selectGroup } from '../../utils/rpcUtil';
 import { ThemeGroupShareButton } from '../share-website/ShareLinkButtons';
 
 import { setMinimizeGfi, setMinimizeFilterModal } from '../../state/slices/uiSlice';
-
-const GFI_GEOMETRY_LAYER_ID = 'drawtools-geometry-layer';
+import { GFI_GEOMETRY_LAYER_ID } from '../../utils/constants';
 
 const StyledContent = styled.div`
     position: absolute;

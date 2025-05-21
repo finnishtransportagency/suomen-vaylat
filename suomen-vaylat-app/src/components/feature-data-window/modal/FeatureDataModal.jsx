@@ -19,8 +19,7 @@ import {
 } from '../../../state/slices/uiSlice';
 
 import { faMapMarkedAlt } from '@fortawesome/free-solid-svg-icons';
-
-const GFI_GEOMETRY_LAYER_ID = 'drawtools-geometry-layer';
+import { GFI_GEOMETRY_LAYER_ID } from '../../../utils/constants';
 
 const FeatureDataModal = ({ constraintsRef }) => {
   const { store } = useContext(ReactReduxContext);

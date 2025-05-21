@@ -31,6 +31,7 @@ import {
   setIsGfiToolsOpen
 } from '../../../state/slices/uiSlice';
 import { Slide, toast } from 'react-toastify';
+import { GFI_GEOMETRY_LAYER_ID, MAX_RECONNECTIONS_FEATURE_DATA_DOWNLOAD } from '../../../utils/constants';
 
 const StyledGfiDownloadsContainer = styled.div`
   position: relative;
@@ -141,8 +142,6 @@ const StyledLayerNamesList = styled.ul`
 
 const StyledLayerNamesListItem = styled.li``;
 
-const GFI_GEOMETRY_LAYER_ID = 'drawtools-geometry-layer';
-
 const FeatureDataDownloadTools = ({ closeButton = true }) => {
   const [loading] = useState(false);
 
@@ -250,8 +249,6 @@ const FeatureDataDownloadTools = ({ closeButton = true }) => {
 
   // TODO: move to utils if this is used more than once
   const connectWebsocket = (count) => {
-    const MAX_RECONNECTIONS_TRY = 20;
-
     setWebsocketFirstTimeTryConnecting(true);
 
     // Open WebSocket
@@ -348,7 +345,7 @@ const FeatureDataDownloadTools = ({ closeButton = true }) => {
       handleDownloadFailure();
     };
     ws.onclose = () => {
-      if (count < MAX_RECONNECTIONS_TRY) {
+      if (count < MAX_RECONNECTIONS_FEATURE_DATA_DOWNLOAD) {
         setTimeout(() => {
           connectWebsocket(count + 1);
         }, 1000 * 30);

@@ -48,8 +48,7 @@ import ScaleBar from '../scalebar/ScaleBar';
 import ZoomMenu from '../zoom-features/ZoomMenu';
 import WarningModal from '../warning/modal/WarningModal';
 import ThemeMenu from '../layerlists/theme-layerlist/ThemeMenu';
-
-const GFI_GEOMETRY_LAYER_ID = 'drawtools-geometry-layer';
+import { GFI_GEOMETRY_LAYER_ID } from '../../utils/constants';
 
 const StyledContent = styled.div`
   z-index: 1;

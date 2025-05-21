@@ -42,8 +42,7 @@ import {
 import { getActiveAnnouncements, updateLayers } from '../../utils/rpcUtil';
 import SvLoder from '../../utils/components/SvLoader';
 import { theme } from '../../theme/theme';
-
-const GFI_GEOMETRY_LAYER_ID = 'drawtools-geometry-layer';
+import { GFI_GEOMETRY_LAYER_ID } from '../../utils/constants';
 
 const StyledPublishedMap = styled.div`
     position: absolute;

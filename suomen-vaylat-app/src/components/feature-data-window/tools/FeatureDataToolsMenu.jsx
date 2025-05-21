@@ -37,13 +37,9 @@ import {
 import { setMinimizeGfi, setSelectedGfiTool, setGeoJsonArray, setHasToastBeenShown, setWarning, setActiveSelectionTool } from '../../../state/slices/uiSlice';
 
 import SVLoader from '../../../utils/components/SvLoader';
-import { DRAWING_TIP_LOCALSTORAGE } from '../../../utils/constants';
+import { DRAWING_TIP_LOCALSTORAGE, GFI_GEOMETRY_LAYER_ID, BODY_SIZE_EXCEED, GENERAL_FAIL, VECTOR_LAYER_ID} from '../../../utils/constants';
 import { useAppSelector } from '../../../state/hooks';
 
-const GFI_GEOMETRY_LAYER_ID = 'drawtools-geometry-layer';
-const BODY_SIZE_EXCEED = "BODY_SIZE_EXCEED";
-const GENERAL_FAIL = "GENERAL_FAIL";
-const vectorLayerId = 'SEARCH_VECTORLAYER';
 
 const StyledGfiToolContainer = styled.div`
     position: relative;
@@ -453,7 +449,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
     const handleActivateSavedGeometry = async (features) => {
         channel.postRequest(
             'MapModulePlugin.RemoveFeaturesFromMapRequest',
-            [null, null, vectorLayerId]
+            [null, null, VECTOR_LAYER_ID]
         );
         setIsGfiLoading(true);
 

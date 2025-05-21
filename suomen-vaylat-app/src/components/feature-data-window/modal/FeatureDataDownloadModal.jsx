@@ -8,8 +8,7 @@ import FeatureDataDownload from '../download/FeatureDataDownload';
 import { setIsGfiDownloadOpen } from '../../../state/slices/uiSlice';
 
 import { faDownload } from '@fortawesome/free-solid-svg-icons';
-
-const GFI_GEOMETRY_LAYER_ID = 'drawtools-geometry-layer';
+import { GFI_GEOMETRY_LAYER_ID } from '../../../utils/constants';
 
 const FeatureDataDownloadModal = ({ constraintsRef }) => {
   const { store } = useContext(ReactReduxContext);

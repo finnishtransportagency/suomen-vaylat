@@ -10,8 +10,7 @@ import {
   setVKMData,
   removeMarkerRequest
 } from '../../../state/slices/rpcSlice';
-
-const GFI_GEOMETRY_LAYER_ID = 'drawtools-geometry-layer';
+import { GFI_GEOMETRY_LAYER_ID } from '../../../utils/constants';
 
 const FeatureDataDownloadMenuModal = ({
   constraintsRef
