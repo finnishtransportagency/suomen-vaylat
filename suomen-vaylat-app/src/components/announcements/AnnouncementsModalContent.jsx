@@ -31,7 +31,7 @@ export const AnnouncementsModalContent = ({
 
     return (
             <StyledContent>
-                <div dangerouslySetInnerHTML={{ __html: content }}></div>
+                <div className='announcements-content' dangerouslySetInnerHTML={{ __html: content }}></div>
                 <StyledFooter className='modal-footer'>
                     <label>
                         <StyledCheckbox

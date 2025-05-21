@@ -470,13 +470,15 @@
       "show": "Show",
       "filterByType": "Filter by type",
       "searchForLayers": "Search for layers",
+      "createFilter": "Filter",
       "clearFilters": "Clear filters",
       "searchResults": "Search results",
       "clearSelectedMapLayers": "Clear selected map layers",
       "clearSelectedBackgroundMaps": "Clear selected background maps",
       "noSearchResults": "No search results",
       "typeAtLeastThreeCharacters": "Type at least 3 characters",
-      "createCustomFilter": "custom filter"
+      "createCustomFilter": "custom filter",
+      "saveCustomFilter": "Save"
     },
     "selectedLayers": {
       "layerVisible": "Layer visible",

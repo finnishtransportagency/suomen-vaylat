@@ -28,7 +28,6 @@
     "zoomIn": "Zooma in",
     "zoomOut": "Zooma ut",
     "opacity": "Transparens",
-    "loadingData": "Laddar data",
     "drawingTools": {
       "drawingToolsButton": "Ritverktyg",
       "point": "Point",
@@ -105,6 +104,7 @@
     "uniqueId": "Identifikationskod",
     "featureAmount": "Objekt",
     "getMoreFeatures": "Sök fler objekt",
+    "loadingData": "Laddar data",
     "savedGeometries": {
       "title": "Sparad geometri",
       "description": "Egen sparad geometri",
@@ -148,7 +148,8 @@
     "cancel": "Avbryt",
     "dontShowAgain": "Visa inte igen",
     "ok": "OK",
-    "OkLowerCaseK": "Ok"
+    "OkLowerCaseK": "Ok",
+    "submit": "Skicka"
   },
   "multipleLayersWarning": "Du håller på att lägga till minst 10 kartnivåer på kartan och det kan påverka tjänstens prestanda",
   "multipleLayersFetchWarning": "Du är på väg att hämta data från 10 eller fler maplayers, det kan påverka tjänstens prestanda.",
@@ -468,14 +469,15 @@
       "show": "Visa",
       "filterByType": "Filtrera enligt typ",
       "searchForLayers": "Sök kartnivåer",
+      "createFilter": "Filtrera",
       "clearFilters": "Ta bort valda filter",
       "searchResults": "Sökresultat",
       "clearSelectedMapLayers": "Ta bort valda kartnivåer",
       "clearSelectedBackgroundMaps": "Ta bort valda bakgrundskartor",
       "noSearchResults": "Inga sökresultat",
       "typeAtLeastThreeCharacters": "Mata in minst 3 bokstäver",
-      "createCustomFilter": "eget filter"
-
+      "createCustomFilter": "eget filter",
+      "saveCustomFilter": "Spara"
     },
     "selectedLayers": {
       "layerVisible": "Lager synligt",

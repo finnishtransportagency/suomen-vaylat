@@ -872,7 +872,7 @@ export const FeatureDataPopup = () => {
   );
 
   return (
-    <StyledGfiContainer>
+    <StyledGfiContainer id="gfi_container">
       <AnimatePresence>
         {isLoading && (
           <StyledLoadingOverlay
@@ -890,7 +890,7 @@ export const FeatureDataPopup = () => {
               opacity: 0
             }}
           >
-            <StyledLoaderWrapper>
+            <StyledLoaderWrapper id='loader_wrapper'>
               <SVLoader />
             </StyledLoaderWrapper>
           </StyledLoadingOverlay>
