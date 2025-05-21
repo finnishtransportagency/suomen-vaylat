@@ -863,7 +863,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
   const filteredGFILocations = gfiLocations.filter(g => selectedLayersByType.backgroundMaps.filter(l => l.id === g.layerId).length === 0);
 
   return (
-    <StyledGfiContainer>
+    <StyledGfiContainer id="gfi_container">
       <AnimatePresence>
         {isLoading && (
           <StyledLoadingOverlay
@@ -881,7 +881,7 @@ export const GFIPopup = ({ handleGfiDownload }) => {
               opacity: 0,
             }}
           >
-            <StyledLoaderWrapper>
+            <StyledLoaderWrapper id='loader_wrapper'>
               <SVLoader />
             </StyledLoaderWrapper>
           </StyledLoadingOverlay>
