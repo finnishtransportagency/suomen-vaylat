@@ -4,7 +4,18 @@ import { motion } from 'framer-motion';
 import { ReactReduxContext } from 'react-redux';
 import { debounce } from 'lodash';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEraser, faInfoCircle, faMapMarkerAlt, faMapPin, faFlag, faCircle, faArrowDown, faCommentAlt, faThumbtack, faTimes, faCloudUploadAlt } from '@fortawesome/free-solid-svg-icons';
+import {
+  faEraser,
+  faMapMarkerAlt,
+  faMapPin,
+  faFlag,
+  faCircle,
+  faArrowDown,
+  faCommentAlt,
+  faThumbtack,
+  faTimes,
+  faCloudUploadAlt
+} from '@fortawesome/free-solid-svg-icons';
 import svCircle from '../../theme/icons/drawtools_circle.svg';
 import svSquare from '../../theme/icons/drawtools_square.svg';
 import svRectangle from '../../theme/icons/drawtools_rectangle.svg';
@@ -13,421 +24,291 @@ import svLinestring from '../../theme/icons/drawtools_linestring.svg';
 
 import { useSelector } from 'react-redux';
 import strings from '../../translations';
-import { setActiveTool, setHasToastBeenShown, setIsSaveViewOpen, setSavedTabIndex, setGeoJsonArray, setSelectedMarker, setMarkerLabel, removeFromDrawToolMarkers } from '../../state/slices/uiSlice';
+import {
+  setActiveTool,
+  setHasToastBeenShown,
+  setIsSaveViewOpen,
+  setSavedTabIndex,
+  setGeoJsonArray,
+  setSelectedMarker,
+  setMarkerLabel,
+  removeFromDrawToolMarkers
+} from '../../state/slices/uiSlice';
 import { removeMarkerRequest } from '../../state/slices/rpcSlice';
 
 import { theme } from '../../theme/theme';
-import DrawingToast from '../toasts/DrawingToast';
 import { toast } from 'react-toastify';
 import { DRAWING_TIP_LOCALSTORAGE } from '../../utils/constants';
-import CircleButton from '../circle-button/CircleButton';
+import PillButton from '../PillButton/PillButton';
 
 const StyledTools = styled(motion.div)`
-    display: flex;
-    align-items: center;
-    flex-direction: row;
-    background-color: ${props => props.color};
-    flex-direction: column;
-    gap: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  margin: 0;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+
+  &[data-hidden='true'] {
+    max-height: 0;
+    opacity: 0;
+    padding: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
 `;
 
-const StyledIcon = styled.img`
-    width: 1.3rem;
-    @media ${props => props.theme.device.mobileL} {
-        width: 1rem;
-    }
-`;
-
-const StyledToastIcon = styled(FontAwesomeIcon)`
-    color: ${theme.colors.mainColor1};
-`;
 
 const StyledOptionsWrapper = styled(motion.div)`
-    position: absolute;
-    background-color: ${props => props.theme.colors.mainWhite};
-    z-index: -1;
-    display: grid;
-    bottom: 40px;
-    grid-template-columns: 1fr;
-    grid-gap: 5px;
-    margin-left: 55px;
-    justify-content: center;
-    align-items: center;
-    white-space: nowrap;
-    padding: 10px;
-    overflow: visible;
-    color: ${props => props.theme.colors.mainColor1};
-    font-weight: 600;
-    box-shadow: 0px 2px 4px #0000004D;
-    gap: 5px;
-    svg {
-        color: ${props => props.theme.colors.mainWhite};
-    }
-    @media ${props => props.theme.device.mobileL} {
-        margin-left: 45px;
-        bottom: -15px;
-        button {
-            height: 33px;
-            width: 32px;
-        }
-    }
+  position: absolute;
+  left: 110%;
+  top: 0;
+  background-color: ${props => props.theme.colors.mainWhite};
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  white-space: nowrap;
+  box-shadow: 0px 2px 4px #0000004D;
+  border-radius: 6px;
+  color: ${props => props.theme.colors.mainColor1};
+  font-weight: 600;
 `;
 
 const StyledOptionButtonsWrapper = styled(motion.div)`
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 5px;
-    @media ${props => props.theme.device.mobileL} {
-        grid-template-columns: repeat(2, 1fr);
-    }
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 5px;
 `;
 
 const StyledOptionsButton = styled(motion.button)`
-    display: flex;
-    height: 35px;
-    width: 35px;
-    align-items: center;
-    justify-content: center;
-    z-index: 10;
-    border: none;
-    border-radius: 50%;
-    margin: 0 auto;
-    background-color: ${props => props.theme.colors.button};
+  display: flex;
+  height: 35px;
+  width: 35px;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  border: none;
+  border-radius: 50%;
+  margin: 0 auto;
+  padding: 0;
 `;
 
-const StyledOptionsIcon = styled(FontAwesomeIcon)``;
-
-const StyledLabelWrapper = styled.div`
-    border: none;
+const StyledOptionsIcon = styled(FontAwesomeIcon)`
+  font-size: 16px;
+  color: ${({ theme }) => theme.colors.mainWhite};
+  margin: 0;
+  line-height: 1;
+  position: relative;
+  top: 1px;
 `;
+
 
 const StyledLabelInput = styled.input`
-    width: 200px;
-    padding: 5px;
-    padding-right: 25px;
-    border: 1px solid ${theme.colors.mainColor1};
-    border-radius: 5%;
-    &&:disabled {
-        background-color: #ccc;
-        cursor: not-allowed;
-    }
-    @media ${props => props.theme.device.mobileL} {
-        width: 75px;
-        padding-right: 25px;
-    }
+  width: 200px;
+  padding: 5px 25px 5px 5px;
+  border: 1px solid ${theme.colors.mainColor1};
+  border-radius: 5%;
 `;
 
 const StyledClearLabelButton = styled.button`
-    position: absolute;
-    background: none;
-    border: none;
-    bottom: 15px;
-    right: 20px;
-    padding: 0px;
-    @media ${props => props.theme.device.mobileL} {
-        right: 10px;
-        bottom: 12px;
-    }
+  position: absolute;
+  background: none;
+  border: none;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  svg {
+    font-size: 16px;
+  }
+
+  @media ${({ theme }) => theme.device.mobileL} {
+    right: 6px;
+  }
 `;
 
+
 const variants = {
-    show: {
-        height: 'auto',
-        opacity: 1,
-        paddingTop: '4px',
-        paddingBottom: '1px',
-        filter: 'blur(0px)',
-        transition: {
-            when: 'beforeChildren',
-            duration: 0.3,
-            type: 'tween'
-        },
-        pointerEvents: 'auto'
-    },
-    hidden: {
-        height: 0,
-        opacity: 0,
-        paddingTop: '0px',
-        paddingBottom: '0px',
-        filter: 'blur(10px)',
-        transition: {
-            when: 'afterChildren',
-            duration: 0.2,
-            type: 'tween'
-        },
-        pointerEvents: 'none'
-    },
+  show: {
+    height: 'auto',
+    opacity: 1,
+    transition: { duration: 0.3 },
+    pointerEvents: 'auto'
+  },
+  hidden: {
+    height: 0,
+    opacity: 0,
+    transition: { duration: 0.2 },
+    pointerEvents: 'none'
+  }
 };
 
 export const DrawingTools = ({ isOpen }) => {
-    const { store } = useContext(ReactReduxContext);
-    const { channel } = useSelector(state => state.rpc);
-    const { activeTool, geoJsonArray, hasToastBeenShown, selectedMarker, drawToolMarkers } = useSelector(state => state.ui);
-    const [showToast, setShowToast] = useState(JSON.parse(localStorage.getItem(DRAWING_TIP_LOCALSTORAGE)));
-    const [label, setLabel] = useState('');
+  const { store } = useContext(ReactReduxContext);
+  const { channel } = useSelector(state => state.rpc);
+  const { activeTool, geoJsonArray, hasToastBeenShown, selectedMarker, drawToolMarkers } = useSelector(state => state.ui);
+  const [showToast, setShowToast] = useState(JSON.parse(localStorage.getItem(DRAWING_TIP_LOCALSTORAGE)));
+  const [label, setLabel] = useState('');
 
-    const updateMarkerLabel = label => store.dispatch(setMarkerLabel(label));
+  const updateMarkerLabel = label => store.dispatch(setMarkerLabel(label));
+  const debouncedChangeHandler = useCallback(debounce(updateMarkerLabel, 300), []);
 
-    const debouncedChangeHandler = useCallback(debounce(updateMarkerLabel, 300), []);
+  const handleChange = e => setLabel(e.target.value);
+  const handleKeyUp = e => e.keyCode === 13 && e.target.blur();
+  const resetTools = () => {
+    store.dispatch(setActiveTool(null));
+    setLabel('');
+  };
 
-    const handleChange = event => {
-        setLabel(event.target.value);
-    };
+  useEffect(() => {
+    if (showToast === false) store.dispatch(setHasToastBeenShown({ toastId: 'drawToast', shown: true }));
+  }, [showToast]);
 
-    const handleClick = () => {
-        setShowToast(false);
-        toast.dismiss('drawToast');
-    };
+  useEffect(() => {
+    if (activeTool === strings.tooltips.drawingTools.marker) setLabel('');
+  }, [activeTool]);
 
-    const handleKeyUp = event => {
-        if (event.keyCode === 13) {
-            event.preventDefault();
-            event.target.blur();
-        }
-    };
+  useEffect(() => {
+    debouncedChangeHandler(label);
+  }, [label]);
 
-    const resetTools = () => {
-        store.dispatch(setActiveTool(null));
-        setLabel('');
-    };
+  if (activeTool === null) toast.dismiss('drawToast');
 
-    useEffect(() => {
-        if (showToast === false) store.dispatch(setHasToastBeenShown({ toastId: 'drawToast', shown: true }));
-    }, [showToast, store]);
+  const startStopTool = tool => {
+    if (tool.name !== activeTool) {
+      channel?.postRequest('DrawTools.StartDrawingRequest', [tool.name, tool.type, { showMeasureOnMap: true }]);
+      store.dispatch(setActiveTool(tool.name));
+    } else {
+      channel?.postRequest('DrawTools.StopDrawingRequest', [activeTool]);
+      resetTools();
+    }
+  };
 
-    useEffect(() => {
-        if (activeTool !== strings.tooltips.drawingTools.marker) return;
-        setLabel('');
-    }, [activeTool]);
+  const addMarker = tool => {
+    if (tool.name !== activeTool) {
+      store.dispatch(setActiveTool(tool.name));
+    } else {
+      resetTools();
+    }
+  };
 
-    useEffect(() => {
-        debouncedChangeHandler(label);
-    }, [label]);
+  const eraseDrawing = () => {
+    channel?.postRequest('DrawTools.StopDrawingRequest', [activeTool]);
+    store.dispatch(setGeoJsonArray([]));
+    store.dispatch(removeFromDrawToolMarkers(true));
+    drawToolMarkers.forEach(marker => {
+      store.dispatch(removeMarkerRequest({ markerId: marker.markerId }));
+      store.dispatch(removeFromDrawToolMarkers(marker.markerId));
+    });
+    store.dispatch(setActiveTool(null));
+  };
 
-    if (activeTool === null) toast.dismiss('drawToast');
+  const handleAddGeometry = () => {
+    store.dispatch(setIsSaveViewOpen(true));
+    store.dispatch(setSavedTabIndex(1));
+  };
 
-    const startStopTool = tool => {
-        if (tool.name !== activeTool) {
-            const data = [tool.name, tool.type, { showMeasureOnMap: true }];
-            channel && channel.postRequest('DrawTools.StartDrawingRequest', data);
-            store.dispatch(setActiveTool(tool.name));
-            if (showToast !== false && !hasToastBeenShown.includes('drawToast')) {
-                if (tool.type === 'LineString' || tool.type === 'Polygon') {
-                    toast.info(<DrawingToast handleButtonClick={handleClick} text={strings.tooltips.drawingTools.drawingToast} />, {
-                        icon: <StyledToastIcon icon={faInfoCircle} />,
-                        toastId: 'drawToast',
-                        onClose: () => {
-                            store.dispatch(setHasToastBeenShown({ toastId: 'drawToast', shown: true }));
-                        }
-                    });
-                } else toast.dismiss('drawToast');
-            }
-        } else {
-            channel && channel.postRequest('DrawTools.StopDrawingRequest', [activeTool]);
-            resetTools();
-        }
-    };
+  const markerShapes = [
+    { id: 0, icon: faThumbtack },
+    { id: 1, icon: faCommentAlt },
+    { id: 2, icon: faMapMarkerAlt },
+    { id: 3, icon: faMapPin },
+    { id: 4, icon: faFlag },
+    { id: 5, icon: faCircle },
+    { id: 6, icon: faArrowDown },
+    { id: 7, icon: faTimes }
+  ];
 
-    const addMarker = tool => {
-        // Stop drawing only if drawing is currently ongoing
-        channel && activeTool !== strings.tooltips.drawingTools.marker && activeTool !== null && channel.postRequest('DrawTools.StopDrawingRequest', [activeTool, false]);
-        if (tool.name !== activeTool) {
-            store.dispatch(setActiveTool(tool.name));
-        } else {
-            resetTools();
-        }
-    };
+  const drawingToolsData = [
+    { id: 'linestring', name: strings.tooltips.drawingTools.linestring, style: { icon: svLinestring }, type: 'LineString' },
+    { id: 'polygon', name: strings.tooltips.drawingTools.polygon, style: { icon: svPolygon }, type: 'Polygon' },
+    { id: 'square', name: strings.tooltips.drawingTools.square, style: { icon: svSquare }, type: 'Square' },
+    { id: 'box', name: strings.tooltips.drawingTools.box, style: { icon: svRectangle }, type: 'Box' },
+    { id: 'circle', name: strings.tooltips.drawingTools.circle, style: { icon: svCircle }, type: 'Circle' },
+    { id: 'marker', name: strings.tooltips.drawingTools.marker, style: { icon: faMapMarkerAlt } },
+    { id: 'erase', name: strings.tooltips.drawingTools.erase, style: { icon: faEraser } }
+  ];
 
-    const eraseDrawing = () => {
-        channel && channel.postRequest('DrawTools.StopDrawingRequest', [activeTool]);
-        store.dispatch(setGeoJsonArray([]));
-        store.dispatch(removeFromDrawToolMarkers(true));
-        channel && channel.postRequest('DrawTools.StopDrawingRequest', []);
-        store.dispatch(setActiveTool(null));
-        drawToolMarkers.forEach(marker => {
-            store.dispatch(removeMarkerRequest({ markerId: marker.markerId }));
-            store.dispatch(removeFromDrawToolMarkers(marker.markerId));
-        });
-    };
-
-    const markerShapes = [
-        { id: 0, icon: faThumbtack },
-        { id: 1, icon: faCommentAlt },
-        { id: 2, icon: faMapMarkerAlt },
-        { id: 3, icon: faMapPin },
-        { id: 4, icon: faFlag },
-        { id: 5, icon: faCircle },
-        { id: 6, icon: faArrowDown },
-        { id: 7, icon: faTimes }
-    ];
-
-    const drawingToolsData = [
-        {
-            id: 'sv-measure-linestring',
-            title: strings.accessibility.drawtools.line,
-            name: strings.tooltips.drawingTools.linestring,
-            style: { icon: svLinestring },
-            type: 'LineString',
-        },
-        {
-            id: 'sv-measure-polygon',
-            title: strings.accessibility.drawtools.polygon,
-            name: strings.tooltips.drawingTools.polygon,
-            style: { icon: svPolygon },
-            type: 'Polygon',
-        },
-        {
-            id: 'sv-measure-square',
-            title: strings.accessibility.drawtools.square,
-            name: strings.tooltips.drawingTools.square,
-            style: { icon: svSquare },
-            type: 'Square',
-        },
-        {
-            id: 'sv-measure-box',
-            title: strings.accessibility.drawtools.box,
-            name: strings.tooltips.drawingTools.box,
-            style: { icon: svRectangle },
-            type: 'Box',
-        },
-        {
-            id: 'sv-measure-circle',
-            title: strings.accessibility.drawtools.circle,
-            name: strings.tooltips.drawingTools.circle,
-            style: { icon: svCircle },
-            type: 'Circle',
-        },
-        {
-            id: 'sv-add-marker',
-            title: strings.accessibility.drawtools.marker,
-            name: strings.tooltips.drawingTools.marker,
-            style: { icon: faMapMarkerAlt },
-        },
-        {
-            id: 'sv-erase',
-            title: strings.accessibility.drawtools.erase,
-            name: strings.tooltips.drawingTools.erase,
-            style: { icon: faEraser },
-        },
-    ];
-
-    const handleAddGeometry = () => {
-        store.dispatch(setIsSaveViewOpen(true));
-        store.dispatch(setSavedTabIndex(1));
-    };
-
-    return (
-        <StyledTools
-            isOpen={isOpen}
-            initial="hidden"
-            animate={isOpen ? 'show' : 'hidden'}
-            variants={variants}
-            transition={{
-                duration: 0.3,
-                type: 'tween',
-            }}
-            id="drawing-tools-wrapper"
-        >
-            {drawingToolsData.map(tool => (
-                tool.id !== 'sv-erase' && tool.id !== 'sv-add-marker' ? (
-                    <CircleButton
-                        key={tool.id}
-                        text={tool.name}
-                        toggleState={tool.name === activeTool ? true : false}
-                        clickAction={() => startStopTool(tool)}
-                        type="drawingTool"
-                        tooltipDirection={'right'}
-                        id={`circle-button-${tool.id}`}
-                    >
-                        <StyledIcon title={tool.title} src={tool.style.icon} key={`icon-${tool.id}`} id={`icon-${tool.id}`} />
-                    </CircleButton>
-                ) : tool.id === 'sv-erase' ? (
-                    <CircleButton
-                        key={tool.id}
-                        title={tool.title}
-                        icon={faEraser}
-                        text={tool.name}
-                        clickAction={eraseDrawing}
-                        type="drawingTool"
-                        color={theme.colors.secondaryColorDarkOrange}
-                        tooltipDirection={'right'}
-                        id={`circle-button-${tool.id}`}
+  return (
+    <StyledTools data-hidden={!isOpen} animate={isOpen ? 'show' : 'hidden'} variants={variants}>
+      {drawingToolsData.map(tool => {
+        if (tool.id === 'marker') {
+          return (
+            <div key={tool.id} style={{ position: 'relative' }}>
+              {tool.name === activeTool && (
+                <StyledOptionsWrapper>
+                  <StyledOptionButtonsWrapper>
+                    {markerShapes.map(shape => (
+                      <StyledOptionsButton
+                        key={shape.id}
+                        onClick={() => store.dispatch(setSelectedMarker(shape.id))}
+                        style={{ backgroundColor: shape.id === selectedMarker ? theme.colors.buttonActive : shape.id === 7 ? theme.colors.secondaryColorDarkOrange : theme.colors.button }}
+                      >
+                        <StyledOptionsIcon icon={shape.icon} />
+                      </StyledOptionsButton>
+                    ))}
+                  </StyledOptionButtonsWrapper>
+                  <div style={{ position: 'relative' }}>
+                    <StyledLabelInput
+                      value={label}
+                      onChange={handleChange}
+                      onKeyUp={handleKeyUp}
+                      placeholder={strings.tooltips.drawingTools.labelPlaceholder}
                     />
-                ) : tool.id === 'sv-add-marker' && (
-                    <div key={`wrapper-${tool.id}`} id={`marker-wrapper-${tool.id}`}>
-                        {tool.name === activeTool && (
-                            <StyledOptionsWrapper key={`options-wrapper-${tool.id}`} id={`options-wrapper-${tool.id}`}>
-                                <StyledOptionButtonsWrapper key={`option-buttons-wrapper-${tool.id}`} id={`option-buttons-wrapper-${tool.id}`}>
-                                    {markerShapes.map(shape => {
-                                        const isSelected = shape.id === selectedMarker;
-                                        return shape.id !== 7 ? (
-                                            <StyledOptionsButton
-                                                key={`options-button-${shape.id}`}
-                                                id={`options-button-${shape.id}`}
-                                                style={{ background: isSelected && theme.colors.buttonActive }}
-                                                onClick={() => store.dispatch(setSelectedMarker(shape.id))}
-                                            >
-                                                <StyledOptionsIcon
-                                                    key={`options-icon-${shape.id}`}
-                                                    id={`options-icon-${shape.id}`}
-                                                    style={{ transform: shape.icon === faFlag && 'scale(-1,1)', color: isSelected && theme.colors.mainWhite + '!important' }}
-                                                    icon={shape.icon}
-                                                />
-                                            </StyledOptionsButton>
-                                        ) : (
-                                            <StyledOptionsButton
-                                                key={`options-button-clear-${shape.id}`}
-                                                id={`options-button-clear-${shape.id}`}
-                                                style={{ background: isSelected ? 'rgb(161 51 0)' : theme.colors.secondaryColorDarkOrange }}
-                                                onClick={() => store.dispatch(setSelectedMarker(shape.id))}
-                                            >
-                                                <StyledOptionsIcon key={`options-icon-clear-${shape.id}`} id={`options-icon-clear-${shape.id}`} icon={shape.icon} />
-                                            </StyledOptionsButton>
-                                        );
-                                    })}
-                                </StyledOptionButtonsWrapper>
-                                <StyledLabelWrapper key={`label-wrapper-${tool.id}`} id={`label-wrapper-${tool.id}`}>
-                                    <StyledLabelInput
-                                        key={`label-input-${tool.id}`}
-                                        id={`label-input-${tool.id}`}
-                                        onKeyUp={(event) => handleKeyUp(event)}
-                                        value={label}
-                                        onChange={(event) => handleChange(event)}
-                                        placeholder={strings.tooltips.drawingTools.labelPlaceholder}
-                                        type="text"
-                                    />
-                                    <StyledClearLabelButton key={`clear-label-button-${tool.id}`} id={`clear-label-button-${tool.id}`} onClick={() => setLabel('')}>
-                                        <FontAwesomeIcon style={{ color: 'rgba(0, 0, 0, 0.5)' }} icon={faTimes} />
-                                    </StyledClearLabelButton>
-                                </StyledLabelWrapper>
-                            </StyledOptionsWrapper>
-                        )}
-                        <CircleButton
-                            key={`circle-button-${tool.id}`}
-                            id={`circle-button-${tool.id}`}
-                            type="drawingTool"
-                            showOptions={true}
-                            icon={faMapMarkerAlt}
-                            text={tool.name}
-                            clickAction={() => addMarker(tool)}
-                            toggleState={tool.name === activeTool}
-                            tooltipDirection="right"
-                        />
-                    </div>
-                ))
-            )}
-            <CircleButton
-                key="save-geometry-button"
-                id="save-geometry-button"
-                disabled={!geoJsonArray.length && drawToolMarkers.length <= 0}
-                text={strings.savedContent.saveGeometry.saveGeometry}
-                tooltipDirection={'right'}
-                clickAction={handleAddGeometry}
-                icon={faCloudUploadAlt}
-                color={theme.colors.secondaryColorGreen}
-            />
-        </StyledTools>
-    );
+                    <StyledClearLabelButton onClick={() => setLabel('')}>
+                      <FontAwesomeIcon style={{ color: 'rgba(0, 0, 0, 0.5)' }} icon={faTimes} />
+                    </StyledClearLabelButton>
+                  </div>
+                </StyledOptionsWrapper>
+              )}
+              <PillButton icon={tool.style.icon} onClick={() => addMarker(tool)}>{tool.name}</PillButton>
+            </div>
+          );
+        }
+
+        if (tool.id === 'erase') {
+          return (
+            <PillButton
+              key={tool.id}
+              onClick={eraseDrawing}
+              icon={tool.style.icon}
+              color={theme.colors.secondaryColorDarkOrange}
+              hoverColor={theme.colors.secondaryColorDarkOrange}
+            >
+              {tool.name}
+            </PillButton>
+          );
+        }
+
+        return (
+          <PillButton
+            key={tool.id}
+            onClick={() => startStopTool(tool)}
+            icon={tool.style.icon}
+            color={tool.name === activeTool ? theme.colors.buttonActive : undefined}
+          >
+            {tool.name}
+          </PillButton>
+        );
+      })}
+
+      <PillButton
+        key="save-geometry-button"
+        onClick={handleAddGeometry}
+        disabled={!geoJsonArray.length && drawToolMarkers.length <= 0}
+        icon={faCloudUploadAlt}
+        color={theme.colors.secondaryColorGreen}
+      >
+        {strings.savedContent.saveGeometry.saveGeometry}
+      </PillButton>
+    </StyledTools>
+  );
 };
 
 export default DrawingTools;
