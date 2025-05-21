@@ -463,16 +463,14 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
             channel.postRequest('MapModulePlugin.RemoveMarkersRequest', ["VKM_MARKER"]);
             const fetchableLayers = selectedLayers.filter((layer) =>  layer.groups?.every((group)=> group !==1));
             const loaderLength = fetchableLayers.length * features.data[0].geojson.features.length;
-            let numberedLoaderEnables = false; 
-            if (loaderLength > 3){
-                numberedLoaderEnables = true;
-                setNumberedLoader({current: 0, total: loaderLength, enabled: true})
-            }
+            
+            setNumberedLoader({current: 0, total: loaderLength})
+
             store.dispatch(setGFICroppingArea(features.data[0].geojson.features));
             let index = 0;
             try {
                 for(const layer of fetchableLayers) {  
-                    await fetchFeaturesSynchronous(features.data[0].geojson.features, layer, features.data[0], numberedLoaderEnables)
+                    await fetchFeaturesSynchronous(features.data[0].geojson.features, layer, features.data[0])
                         .then(
                             index++
                         )
@@ -493,16 +491,14 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
             channel.postRequest('MapModulePlugin.RemoveMarkersRequest', ["VKM_MARKER"]);
             const fetchableLayers = selectedLayers.filter((layer) =>  layer.groups?.every((group)=> group !==1));
             const loaderLength = fetchableLayers.length * features.data[0].data.geom.features.length;
-                    let numberedLoaderEnables = false; 
-                    if (loaderLength > 3){
-                        numberedLoaderEnables = true;
-                        setNumberedLoader({current: 0, total: loaderLength, enabled: true})
-                    }
+                    
+                    setNumberedLoader({current: 0, total: loaderLength})
+
                         store.dispatch(setGFICroppingArea(features.data[0].data.geom.features));
                         let index = 0;
                         try {
                             for(const layer of fetchableLayers) {  
-                                await fetchFeaturesSynchronous(features.data[0].data.geom.features, layer, features.data[0], numberedLoaderEnables)
+                                await fetchFeaturesSynchronous(features.data[0].data.geom.features, layer, features.data[0])
                                 .then(
                                     index++
                                 )
@@ -531,16 +527,13 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
                 const fetchableLayers = selectedLayers.filter((layer) =>  layer.groups?.every((group)=> group !==1));
                 const loaderLength = fetchableLayers.length * data.features[0].geojson.features.length;
                             
-                let numberedLoaderEnables = false; 
-                if (loaderLength > 3){
-                    numberedLoaderEnables = true;
-                    setNumberedLoader({current: 0, total: loaderLength, enabled: true})
-                }
+                setNumberedLoader({current: 0, total: loaderLength})
+
                 store.dispatch(setGFICroppingArea(data.features[0].geojson.features));
                 let index = 0;
                 try {
                     for(const layer of fetchableLayers) {  
-                        await fetchFeaturesSynchronous(data.features[0].geojson.features, layer, data.features[0], numberedLoaderEnables)
+                        await fetchFeaturesSynchronous(data.features[0].geojson.features, layer, data.features[0])
                             .then(
                                 index++
                             )
@@ -574,17 +567,15 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
                     store.dispatch(setSelectedGfiTool(null));
                     toast.dismiss("measurementToast")
                     store.dispatch(resetGFILocations([]));
+
                     const fetchableLayers = selectedLayers.filter((layer) =>  layer.groups?.every((group)=> group !==1) && selectedLayersByType.backgroundMaps.filter(l => l.id === layer.id).length === 0);
-                    let numberedLoaderEnables = false; 
-                    if (fetchableLayers.length>3){
-                        numberedLoaderEnables = true;
-                        setNumberedLoader({current: 0, total:  fetchableLayers.length, enabled: true})
-                    }
-                        store.dispatch(setGFICroppingArea(data.geojson.features));
-                        let index = 0;
+                    setNumberedLoader({current: 0, total:  fetchableLayers.length})
+
+                    store.dispatch(setGFICroppingArea(data.geojson.features));
+                    let index = 0;
                         try {
                             for(const layer of fetchableLayers) {  
-                                await fetchFeaturesSynchronous(data.geojson.features, layer, data, numberedLoaderEnables)
+                                await fetchFeaturesSynchronous(data.geojson.features, layer, data)
                                 .then(
                                     index++
                                 )
@@ -610,7 +601,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
     }, [])
 
 
-    const fetchFeaturesSynchronous = (feature, layer, data, numberedLoaderEnables) => {
+    const fetchFeaturesSynchronous = (feature, layer, data) => {
         return new Promise(function(resolve, reject) {
             // executor (the producing code, "singer")
             channel.getFeaturesByGeoJSON(
@@ -633,16 +624,14 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
                         }
                     });
 
-                    if (numberedLoaderEnables)
-                        setNumberedLoader(prevState => {
-                            return {current: prevState.current + 1, total: prevState.total, enabled: prevState.enabled}
+                    setNumberedLoader(prevState => {
+                            return {current: prevState.current + 1, total: prevState.total}
                     }) 
                     resolve("ok");                  
                 },
                 function (error) {
-                    if (numberedLoaderEnables)
                     setNumberedLoader(prevState => {
-                        return {current: prevState.current + 1, total: prevState.total, enabled: prevState.enabled}
+                        return {current: prevState.current + 1, total: prevState.total}
                     })
                     if (error.BODY_SIZE_EXCEEDED_ERROR) {
                         store.dispatch(setWarning({
@@ -736,7 +725,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
                             opacity: 0,
                         }}>
                         <SVLoader />
-                        {numberedLoader &&  numberedLoader.enabled && <>{strings.gfi.loadingData} {numberedLoader.current} / {numberedLoader.total} </>}
+                        {numberedLoader && <>{strings.gfi.loadingData} {numberedLoader.current} / {numberedLoader.total} </>}
                     </StyledLoaderWrapper>
                 )}
             </AnimatePresence>
