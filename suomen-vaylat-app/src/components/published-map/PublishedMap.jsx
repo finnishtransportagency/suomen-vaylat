@@ -101,8 +101,6 @@ const fetchAnnouncementsAsync = async (data, channel, store) => {
             }
         }, 1000);
     }).then((announcements) => {
-        console.log(announcements);
-
         // due to a bug, check again after 3 seconds if announcements list is empty on Safari
         if (isSafari() && announcements.length === 0) {
             setTimeout(() => {
