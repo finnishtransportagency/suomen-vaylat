@@ -191,23 +191,25 @@ const GfiTabContentItem = ({
                             }}
                         >
                             <StyledGfiTabContentItemTable>
-                                {
-                                    orderHigh ? orderHigh.filter(value => value !== 'UID').map(value => {
-                                        return <StyledGfiTabContentItemTableRow key={value + '_' + data.properties[value]}>
-                                            <StyledGfiTabContentItemTableHeader>{value}</StyledGfiTabContentItemTableHeader>
-                                            <StyledGfiTabContentItemTableData>
-                                                {formattedContent(data.properties[value])}
-                                            </StyledGfiTabContentItemTableData>
-                                        </StyledGfiTabContentItemTableRow>
-                                    }) : orderLow && orderLow.filter(value => value !== 'UID').map(value => {
+                                <tbody>
+                                    {
+                                        orderHigh ? orderHigh.filter(value => value !== 'UID').map(value => {
                                             return <StyledGfiTabContentItemTableRow key={value + '_' + data.properties[value]}>
                                                 <StyledGfiTabContentItemTableHeader>{value}</StyledGfiTabContentItemTableHeader>
                                                 <StyledGfiTabContentItemTableData>
                                                     {formattedContent(data.properties[value])}
                                                 </StyledGfiTabContentItemTableData>
                                             </StyledGfiTabContentItemTableRow>
-                                    })
-                                }
+                                        }) : orderLow && orderLow.filter(value => value !== 'UID').map(value => {
+                                                return <StyledGfiTabContentItemTableRow key={value + '_' + data.properties[value]}>
+                                                    <StyledGfiTabContentItemTableHeader>{value}</StyledGfiTabContentItemTableHeader>
+                                                    <StyledGfiTabContentItemTableData>
+                                                        {formattedContent(data.properties[value])}
+                                                    </StyledGfiTabContentItemTableData>
+                                                </StyledGfiTabContentItemTableRow>
+                                        })
+                                    }
+                                </tbody>
                             </StyledGfiTabContentItemTable>
 
                             {
@@ -253,16 +255,18 @@ const GfiTabContentItem = ({
                                                 }}
                                             >
                                             <StyledGfiTabContentItemTable>
-                                                {
-                                                    orderLow && orderLow.map(value => {
-                                                        return <StyledGfiTabContentItemTableRow key={value+'_'+data.properties[value]}>
-                                                            <StyledGfiTabContentItemTableHeader>{value}</StyledGfiTabContentItemTableHeader>
-                                                            <StyledGfiTabContentItemTableData>
-                                                                {formattedContent(data.properties[value])}
-                                                            </StyledGfiTabContentItemTableData>
-                                                        </StyledGfiTabContentItemTableRow>
-                                                    })
-                                                }
+                                                <tbody>
+                                                    {
+                                                        orderLow && orderLow.map(value => {
+                                                            return <StyledGfiTabContentItemTableRow key={value+'_'+data.properties[value]}>
+                                                                <StyledGfiTabContentItemTableHeader>{value}</StyledGfiTabContentItemTableHeader>
+                                                                <StyledGfiTabContentItemTableData>
+                                                                    {formattedContent(data.properties[value])}
+                                                                </StyledGfiTabContentItemTableData>
+                                                            </StyledGfiTabContentItemTableRow>
+                                                        })
+                                                    }
+                                                </tbody>
                                             </StyledGfiTabContentItemTable>
                                             </StyledGfiTabContentItemSubCollapseContent>
                                         }
