@@ -32,7 +32,7 @@ const StyledModalWrapper = styled(motion.div)`
     height: ${(props) => props.maximize? '100%' : 'auto'};
     top: ${(props) => props.resize && '0px'};
     left: ${(props) => props.resize && '0px'};
-    padding: ${props => props.maximize ? '4px 4px 4px 4px' : (props.resize || props.drag) && '8px 50px 50px 8px'};
+    padding: ${props => props.maximize ? '4px 4px 4px 4px' : (props.resize || props.drag) && '8px'};
     max-width: 100%;
     transform: ${props => props.maximize && 'initial !important'};
     @media ${(props) => props.theme.device.mobileL} {
@@ -210,7 +210,9 @@ const Modal = ({
             {(isOpen || localState) && (
                 <>
                     <StyledModalWrapper
-                        key="modal"
+                        key={"modal_wrapper_" + title}
+                        id={"modal_wrapper_" + title}
+                        className="modal_wrapper"
                         drag={isMobile? false : drag}
                         dragConstraints={constraintsRef && constraintsRef}
                         dragControls={dragControls}
@@ -243,6 +245,7 @@ const Modal = ({
 
                     >
                         <StyledModal
+                            id={"modal_" + title}
                             resize={resize}
                             minWidth={minWidth}
                             maxWidth={maxWidth}
@@ -253,6 +256,7 @@ const Modal = ({
                             width={width} 
                         >
                             <StyledModalHeader
+                                id={"modal_header_" + title}
                                 type={type}
                                 drag={drag}
                                 onPointerDown={(e) => {
