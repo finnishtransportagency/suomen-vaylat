@@ -303,6 +303,7 @@ const Search = () => {
                 })
             );
         } else {
+            // TODO: swap to rpcSlice function 
             channel.postRequest('SearchRequest', [searchValueCopy]);
         }
         setSearchValue(value);
@@ -496,6 +497,8 @@ const Search = () => {
                     if ((data?.result?.locations?.length > 1 || data?.result?.geom?.length > 1) && !isMoreSearchOpen) {
                         store.dispatch(setIsMoreSearchOpen(true));
                     }
+                } else {
+
                 }
             });
 
@@ -550,6 +553,7 @@ const Search = () => {
                 {
                     clearPrevious: true,
                     centerTo: true,
+                    maxZoomLevel: 13,
                     hover: hover,
                     featureStyle: featureStyle,
                     layerId: vectorLayerId + '_vkm_' + style,
@@ -570,6 +574,7 @@ const Search = () => {
                 geom,
                 {
                     centerTo: true,
+                    maxZoomLevel: 13,
                     hover: hover,
                     featureStyle: featureStyle,
                     layerId: vectorLayerId + '_vkm_track',
