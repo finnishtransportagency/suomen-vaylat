@@ -1,26 +1,21 @@
-import { useContext, useEffect, useState } from "react";
-import { ReactReduxContext, useSelector } from "react-redux";
-import styled from "styled-components";
-import {
-  changeLayerStyle,
-  getLegends,
-  setLegends,
-} from "../../../../state/slices/rpcSlice";
-import {
-  setSelectedCustomFilterLayers,
-} from "../../../../state/slices/uiSlice";
-import LayerMetadataButton from "../LayerMetadataButton";
-import { useAppSelector } from "../../../../state/hooks";
-import { toast, Slide } from "react-toastify";
-import strings from "../../../../translations"
+import { useContext, useEffect, useState } from 'react';
+import { ReactReduxContext, useSelector } from 'react-redux';
+import styled from 'styled-components';
+import { changeLayerStyle } from '../../../../state/slices/rpcSlice';
+import { updateLayerLegends } from '../../../../utils/rpcUtil';
+import { setSelectedCustomFilterLayers } from '../../../../state/slices/uiSlice';
+import LayerMetadataButton from '../LayerMetadataButton';
+import { useAppSelector } from '../../../../state/hooks';
+import { toast, Slide } from 'react-toastify';
+import strings from '../../../../translations';
 
 const StyledLayerContainer = styled.div`
-  background-color: ${(props) => props.themeStyle && "#F5F5F5"};
+  background-color: ${(props) => props.themeStyle && '#F5F5F5'};
   overflow: hidden;
   min-height: 32px;
   display: flex;
   align-items: center;
-  margin-top: ${(props) => props.themeStyle && "8px"};
+  margin-top: ${(props) => props.themeStyle && '8px'};
   border-radius: 4px;
   margin-bottom: 4px;
 `;
@@ -52,14 +47,14 @@ const StyledSwitchContainer = styled.div`
   border-radius: 12px;
   display: flex;
   align-items: center;
-  background-color: ${(props) => (props.isSelected ? "#8DCB6D" : "#AAAAAA")};
+  background-color: ${(props) => (props.isSelected ? '#8DCB6D' : '#AAAAAA')};
   cursor: pointer;
   margin-right: 16px;
 `;
 
 const StyledSwitchButton = styled.div`
   position: absolute;
-  left: ${(props) => (props.isSelected ? "15px" : "0px")};
+  left: ${(props) => (props.isSelected ? '15px' : '0px')};
   width: 12px;
   height: 12px;
   border-radius: 50%;
@@ -98,58 +93,42 @@ export const findGroupForLayer = (groups, layerId) => {
 export const FilterLayer = ({ layer, theme, groupName }) => {
   const { store } = useContext(ReactReduxContext);
   const [layerStyle, setLayerStyle] = useState(null);
-  const { selectedCustomFilterLayers } = useAppSelector(
-    (state) => state.ui
-  );
+  const { selectedCustomFilterLayers } = useAppSelector((state) => state.ui);
 
   const { channel, selectedTheme } = useSelector((state) => state.rpc);
 
-  const excludeGroups = ["Digiroad", "Tierekisteri (Poistuva)"];
+  const excludeGroups = ['Digiroad', 'Tierekisteri (Poistuva)'];
 
   const handleLayerSelect = (layer) => {
-      // lisää valitut tasot väliaikaiseen arrayhyn
-      if (
-        selectedCustomFilterLayers.filter(
-          (selectedLayer) => selectedLayer.id === layer.id
-        ).length > 0
-      ) {
-        const filteredLayers = selectedCustomFilterLayers.filter(
-          (filterLayer) => filterLayer.id !== layer.id
-        );
-        store.dispatch(setSelectedCustomFilterLayers(filteredLayers));
-      } else {
-        store.dispatch(
-          setSelectedCustomFilterLayers([...selectedCustomFilterLayers, layer])
-        );
-      }
-  };
-
-  const updateLayerLegends = () => {
-    // need use global window variable to limit legend updates
-    clearTimeout(window.legendUpdateTimer);
-    window.legendUpdateTimer = setTimeout(function () {
-      store.dispatch(
-        getLegends({
-          handler: (data) => {
-            store.dispatch(setLegends(data));
-          },
-        })
+    // lisää valitut tasot väliaikaiseen arrayhyn
+    if (
+      selectedCustomFilterLayers.filter(
+        (selectedLayer) => selectedLayer.id === layer.id
+      ).length > 0
+    ) {
+      const filteredLayers = selectedCustomFilterLayers.filter(
+        (filterLayer) => filterLayer.id !== layer.id
       );
-    }, 1000);
+      store.dispatch(setSelectedCustomFilterLayers(filteredLayers));
+    } else {
+      store.dispatch(
+        setSelectedCustomFilterLayers([...selectedCustomFilterLayers, layer])
+      );
+    }
   };
 
   const themeStyle = theme || null;
 
-
   useEffect(() => {
     // needs only get new style or legends when toggling theme selection
-    if (layer.visible && selectedTheme && selectedTheme.layers.includes(layer.id)) {
-      const themeName = selectedTheme.locale?.["fi"]?.name || null;
+    if (
+      layer.visible &&
+      selectedTheme &&
+      selectedTheme.layers.includes(layer.id)
+    ) {
+      const themeName = selectedTheme.locale?.['fi']?.name || null;
       channel.getLayerThemeStyle(
-        [
-          layer.id,
-          themeName,
-        ],
+        [layer.id, themeName],
         function (styleName) {
           if (styleName && styleName !== layerStyle) {
             setLayerStyle(styleName);
@@ -157,25 +136,25 @@ export const FilterLayer = ({ layer, theme, groupName }) => {
               changeLayerStyle({ layerId: layer.id, style: styleName })
             );
             // update layers legends
-            updateLayerLegends();
+            updateLayerLegends(store);
           }
         },
         function (error) {
           toast.error(strings.themelayerlist.errors.themeStyleError + error, {
-            position: "top-center",
+            position: 'top-center',
             autoClose: 5000,
             hideProgressBar: false,
             closeOnClick: true,
             pauseOnHover: true,
             draggable: false,
             progress: undefined,
-            theme: "colored",
+            theme: 'colored',
             transition: Slide
           });
         }
-      );  
+      );
     }
-  }, [selectedTheme])  
+  }, [selectedTheme]);
 
   const isSelected =
     selectedCustomFilterLayers.filter(
@@ -185,24 +164,24 @@ export const FilterLayer = ({ layer, theme, groupName }) => {
   return (
     <StyledLayerContainer
       themeStyle={themeStyle}
-      className={`list-layer ${layer.visible && "list-layer-active"}`}
-      key={"layer" + layer.id + "_" + theme}
+      className={`list-layer ${layer.visible && 'list-layer-active'}`}
+      key={'layer' + layer.id + '_' + theme}
     >
       <StyledlayerHeader>
         <StyledLayerName themeStyle={themeStyle}>
-          {layer.name}{" "}
+          {layer.name}{' '}
           {groupName &&
-            groupName !== "Unknown" &&
+            groupName !== 'Unknown' &&
             !excludeGroups.includes(groupName) &&
             ` (${groupName})`}
         </StyledLayerName>
       </StyledlayerHeader>
       {layer.metadataIdentifier && <LayerMetadataButton layer={layer} />}
-        <Switch
-          action={() => handleLayerSelect(layer)}
-          isSelected={isSelected}
-          layer={layer}
-        />
+      <Switch
+        action={() => handleLayerSelect(layer)}
+        isSelected={isSelected}
+        layer={layer}
+      />
     </StyledLayerContainer>
   );
 };
