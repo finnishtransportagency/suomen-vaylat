@@ -223,12 +223,12 @@
           "step3": {
             "title": "Välj ett villkor/operator",
             "content": {
-              "equal": "Lika med: Visar objekt vars attribut är exakt samma som det angivna värdet.",
-              "notEqual": "Inte lika med: Visar objekt vars attribut skiljer sig från det angivna värdet.",
-              "contains": "Innehåller: Visar objekt vars attribut inkluderar det angivna värdet.",
-              "notContains": "Innehåller inte: Visar objekt vars attribut inte inkluderar det angivna värdet.",
-              "smallerThan" : "Mindre än: mindre än det angivna värdet",
-              "biggerThan" : "Större än: större än det angivna värdet"
+              "equal": "<strong>Lika med</strong>: Visar objekt vars attribut är exakt samma som det angivna värdet.",
+              "notEqual": "<strong>Inte lika med</strong>: Visar objekt vars attribut skiljer sig från det angivna värdet.",
+              "contains": "<strong>Innehåller</strong>: Visar objekt vars attribut inkluderar det angivna värdet.",
+              "notContains": "<strong>Innehåller inte</strong>: Visar objekt vars attribut inte inkluderar det angivna värdet.",
+              "smallerThan" : "<strong>Mindre än</strong>: mindre än det angivna värdet",
+              "biggerThan" : "<strong>Större än</strong>: större än det angivna värdet"
             }
           },
           "step4": {
@@ -244,7 +244,7 @@
             "content": "Om så önskas kan du ta bort det applicerade filtret genom att trycka på \"Ta bort alla filter\" eller genom att klicka på krysset bredvid aktiva filter."
           }
         },
-        "additionalInstructions": "Genom att använda operatorerna 'Innehåller' och 'Innehåller inte' behöver attributvärdet inte vara helt korrekt. Det räcker att värdet bara är en del av attributets innehåll. Detta underlättar filtreringen när det exakta värdet inte är känt.",
+        "additionalInstructions": "Genom att använda operatorerna '<strong>Innehåller</strong>' och '<strong>Innehåller inte</strong>' behöver attributvärdet inte vara helt korrekt. Det räcker att värdet bara är en del av attributets innehåll. Detta underlättar filtreringen när det exakta värdet inte är känt.",
         "feedback": "Om filterverktyget saknas från lagret eller attributet som ska filtreras saknar ett väsentligt attribut kan du skicka feedback om ämnet till",
         "feedbackEmail": "paikkatieto@vayla.fi"
       },
