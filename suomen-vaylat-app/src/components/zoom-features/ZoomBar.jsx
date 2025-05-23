@@ -14,7 +14,7 @@ import { useAppSelector } from '../../state/hooks';
 import { ReactReduxContext } from 'react-redux';
 import { setZoomTo, setZoomIn, setZoomOut, setCurrentZoomLevel } from '../../state/slices/rpcSlice';
 import strings from '../../translations';
-import CircleButton from '../circle-button/CircleButton';
+import CircleButton from '../../utils/components/CircleButton';
 import ZoomBarCircle from './ZoomBarCircle';
 
 import { Legend } from '../legend/Legend';

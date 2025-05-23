@@ -15,7 +15,7 @@ import { setIsSaveViewOpen, setWarning, setSavedTabIndex, addToActiveGeometries,
 import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import CircleButton from '../circle-button/CircleButton';
+import CircleButton from '../../utils/components/CircleButton';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { theme } from '../../theme/theme';
 import { addMarkerRequest, removeMarkerRequest } from '../../state/slices/rpcSlice';

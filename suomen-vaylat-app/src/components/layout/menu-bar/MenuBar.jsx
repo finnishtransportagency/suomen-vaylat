@@ -29,7 +29,7 @@ import {
 
 import { removeMarkerRequest, setVKMData } from '../../../state/slices/rpcSlice';
 
-import CircleButton from '../../circle-button/CircleButton';
+import CircleButton from '../../../utils/components/CircleButton';
 
 import DrawingTools from '../../measurement-tools/DrawingTools';
 

@@ -20,7 +20,7 @@ import { theme } from '../../theme/theme';
 import DrawingToast from '../toasts/DrawingToast';
 import { toast } from 'react-toastify';
 import { DRAWING_TIP_LOCALSTORAGE } from '../../utils/constants';
-import CircleButton from '../circle-button/CircleButton';
+import CircleButton from '../../utils/components/CircleButton';
 
 const StyledTools = styled(motion.div)`
     display: flex;

@@ -24,7 +24,7 @@ import { addMarkerRequest, mapMoveRequest, pushToFeatureSearchResults, resetFeat
 
 import { setIsSearchOpen, setGeoJsonArray, setHasToastBeenShown, setActiveSwitch, setIsMoreSearchOpen } from '../../state/slices/uiSlice';
 
-import CircleButton from '../circle-button/CircleButton';
+import CircleButton from '../../utils/components/CircleButton';
 
 import { VKMGeoJsonHoverStyles, VKMGeoJsonStyles } from './utils/VKMSearchStyles';
 import { Slide, toast } from "react-toastify";

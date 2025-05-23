@@ -36,7 +36,7 @@ import {
 import FeatureDataTabContent from './tabs/FeatureDataTabContent';
 import FeatureDataToolsMenu from './tools/FeatureDataToolsMenu';
 import FeatureDataDownloadTools from './download/FeatureDataDownloadTools';
-import CircleButton from '../circle-button/CircleButton';
+import CircleButton from '../../utils/components/CircleButton';
 import SVLoader from '../../utils/components/SvLoader';
 import { isValidUrl } from '../../utils/validUrlUtil';
 import { theme, isMobile } from '../../theme/theme';
