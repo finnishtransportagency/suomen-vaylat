@@ -41,7 +41,7 @@ import {
 
 import MenuBar from './menu-bar/MenuBar';
 import MapLayersDialog from '../dialog/MapLayersDialog';
-import PublishedMap from '../published-map/PublishedMap';
+import PublishedMap from './published-map/PublishedMap';
 import Search from '../search/Search';
 import ActionButtons from '../action-button/ActionButtons';
 import ScaleBar from '../scalebar/ScaleBar';

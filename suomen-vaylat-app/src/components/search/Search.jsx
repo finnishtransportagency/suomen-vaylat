@@ -553,7 +553,6 @@ const Search = () => {
                 {
                     clearPrevious: true,
                     centerTo: true,
-                    maxZoomLevel: 13,
                     hover: hover,
                     featureStyle: featureStyle,
                     layerId: vectorLayerId + '_vkm_' + style,
@@ -574,7 +573,6 @@ const Search = () => {
                 geom,
                 {
                     centerTo: true,
-                    maxZoomLevel: 13,
                     hover: hover,
                     featureStyle: featureStyle,
                     layerId: vectorLayerId + '_vkm_track',
