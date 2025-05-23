@@ -1,5 +1,17 @@
 # Release Notes
 
+## 2.3.0
+* "My Location" feature can now be toggled on/off, allowing tracking of the user's location.
+* Additional zoom levels have been added, enabling closer inspection of map layers.
+* Active announcements (if any) are now visible in the "Application Information" window on their own tab, allowing users to easily view announcements that have the "do not show again" option selected.
+* Validation has been added to layer filtering to prevent potentially problematic characters from being added to the filter value.
+* The entire application's appearance has been improved for mobile devices and lower resolution screens.
+* Fixed an issue with layer styles for themes, where separate styles added for certain layers for themes were not added
+* Fixed an issue with location information, where the location details of the previous map click were momentarily displayed.
+* Fixed an issue where clicking a point on the map containing multiple map layer data did not load all results. Now results are correctly loaded onto their respective tabs.
+* Corrected several incomplete/incorrect translations.
+* Various minor fixes and usability improvements.
+
 ## 2.2.0
 * Accessibility fixes
 * Updated theme layerlist UI

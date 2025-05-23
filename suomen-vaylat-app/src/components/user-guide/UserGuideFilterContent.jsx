@@ -7,16 +7,17 @@ const InstructionsContainer = styled.div`
 `;
 
 const StepImage = styled.img`
-  width: 80%;  // Reduces width for better balancing
-  height: auto;
-  margin: 10px auto;
-  display: block; // Centers image
+  max-width: 100%;  /* Ensures the image does not overflow its container */
+  height: auto;     /* Maintains the image's aspect ratio */
+  display: inline-block; /* Aligns the image inline with other text or elements */
+  margin: 0;        /* Removes automatic centering adjustments */
   border-radius: 8px;
 `;
 
 const StepTitle = styled.h4`
   margin-top: 10px;
   font-size: 18px;
+  font-weight: 550;
   color: ${(props) => props.theme.colors.black}; // Emphasizes titles with different color
   text-align: left;  // Aligns left for readability
 `;
@@ -25,6 +26,10 @@ const StepContent = styled.div`
   font-size: 16px;
   margin-top: 8px;
   color: ${(props) => props.theme.colors.black};
+`;
+
+const StyledList = styled.ol`
+  padding-inline-start: 20px;
 `;
 
 const UserGuideFilterContent = () => {
@@ -45,12 +50,12 @@ const UserGuideFilterContent = () => {
       title: strings.appGuide.modalContent.filter.steps.step3.title || '',
       content: (
         <ul>
-          <li>{strings.appGuide.modalContent.filter.steps.step3.content.equal || ''}</li>
-          <li>{strings.appGuide.modalContent.filter.steps.step3.content.notEqual || ''}</li>
-          <li>{strings.appGuide.modalContent.filter.steps.step3.content.contains || ''}</li>
-          <li>{strings.appGuide.modalContent.filter.steps.step3.content.notContains || ''}</li>
-          <li>{strings.appGuide.modalContent.filter.steps.step3.content.smallerThan || ''}</li>
-          <li>{strings.appGuide.modalContent.filter.steps.step3.content.biggerThan || ''}</li>
+          <li dangerouslySetInnerHTML={{ __html: strings.appGuide.modalContent.filter.steps.step3.content.equal || '' }}/>
+          <li dangerouslySetInnerHTML={{ __html: strings.appGuide.modalContent.filter.steps.step3.content.notEqual || '' }}/>
+          <li dangerouslySetInnerHTML={{ __html: strings.appGuide.modalContent.filter.steps.step3.content.contains || '' }}/>
+          <li dangerouslySetInnerHTML={{ __html: strings.appGuide.modalContent.filter.steps.step3.content.notContains || '' }}/>
+          <li dangerouslySetInnerHTML={{ __html: strings.appGuide.modalContent.filter.steps.step3.content.smallerThan || '' }}/>
+          <li dangerouslySetInnerHTML={{ __html: strings.appGuide.modalContent.filter.steps.step3.content.biggerThan || '' }}/>
         </ul>
       ),
     },
@@ -73,15 +78,15 @@ const UserGuideFilterContent = () => {
 
   return (
     <InstructionsContainer>
-      <ol>
+      <StyledList>
         {stepsContent.map(({ step, title, content }) => (
           <li key={step}>
             <StepTitle>{title}</StepTitle>
             <StepContent>{content}</StepContent>
           </li>
         ))}
-      </ol>
-      <StepContent>{strings.appGuide.modalContent.filter.additionalInstructions || ''}</StepContent>
+      </StyledList>
+      <StepContent dangerouslySetInnerHTML={{ __html: strings.appGuide.modalContent.filter.additionalInstructions || '' }}/>
       <StepContent>
         {strings.appGuide.modalContent.filter.feedback || ''}{' '}
         <a href={`mailto:${strings.appGuide.modalContent.filter.feedbackEmail}`}>

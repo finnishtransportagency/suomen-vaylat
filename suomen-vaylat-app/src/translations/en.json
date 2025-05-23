@@ -224,12 +224,12 @@
           "step3": {
             "title": "Select a condition/operator",
             "content": {
-              "equal": "Equals: Displays objects whose attribute is exactly the same as the given value.",
-              "notEqual": "Not equal: Displays objects whose attribute differs from the given value.",
-              "contains": "Contains: Displays objects whose attribute includes the given value.",
-              "notContains": "Does not contain: Displays objects whose attribute does not include the given value.",
-              "smallerThan" : "Smaller than: smaller than the given value",
-              "biggerThan" : "Bigger than: bigger than the given value"
+              "equal": "<strong>Equals</strong>: Displays objects whose attribute is exactly the same as the given value.",
+              "notEqual": "<strong>Not equal</strong>: Displays objects whose attribute differs from the given value.",
+              "contains": "<strong>Contains</strong>: Displays objects whose attribute includes the given value.",
+              "notContains": "<strong>Does not contain</strong>: Displays objects whose attribute does not include the given value.",
+              "smallerThan" : "<strong>Smaller than</strong>: smaller than the given value",
+              "biggerThan" : "<strong>Bigger than</strong>: bigger than the given value"
             }
           },
           "step4": {
@@ -245,7 +245,7 @@
             "content": "If desired, you can remove the applied filter by pressing \"Remove all filters\" or by clicking the cross next to active filters."
           }
         },
-        "additionalInstructions": "Using the operators 'Contains' and 'Does not contain', the attribute value does not need to be perfectly correct. It is sufficient that the value is only part of the attribute's content. This facilitates filtering when the exact value is not known.",
+        "additionalInstructions": "Using the operators '<strong>Contains</strong>' and '<strong>Does not contain</strong>', the attribute value does not need to be perfectly correct. It is sufficient that the value is only part of the attribute's content. This facilitates filtering when the exact value is not known.",
         "feedback": "If the filter tool is missing from the layer or the attribute to be filtered is missing an essential attribute, you can send feedback on the subject to",
         "feedbackEmail": "paikkatieto@vayla.fi"
       },

@@ -69,7 +69,7 @@ const StyledCloseIcon = styled(FontAwesomeIcon)`
 `;
 
 const StyledGroupsContainer = styled.div`
-    overflow-y: scroll;
+    overflow-y: auto;
     padding: 8px 4px 8px 8px;
 `;
 

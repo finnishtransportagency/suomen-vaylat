@@ -513,7 +513,8 @@ export const FeatureDataPopup = () => {
           {
             layerId: LAYER_ID,
             centerTo: true,
-            cursor: 'pointer',
+            maxZoomLevel: 13,
+            cursor: "pointer",
             featureStyle: {
               fill: {
                 color: 'rgba(10, 140, 247, 0.3)'

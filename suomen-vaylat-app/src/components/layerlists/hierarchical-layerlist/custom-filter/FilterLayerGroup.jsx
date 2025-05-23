@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useContext } from "react";
-import styled from "styled-components";
-import { ReactReduxContext } from "react-redux";
-import { motion } from "framer-motion";
-import FilterLayerList from "./FilterLayerList";
-import FilterLayers from "./FilterLayers";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React, { useState, useEffect, useContext } from 'react';
+import styled from 'styled-components';
+import { ReactReduxContext } from 'react-redux';
+import { motion } from 'framer-motion';
+import FilterLayerList from './FilterLayerList';
+import FilterLayers from './FilterLayers';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faAngleRight,
   faAngleDown,
@@ -15,9 +15,8 @@ import {
   faRoad,
   faShip,
   faTrain,
-  faGlobeEurope,
-} from "@fortawesome/free-solid-svg-icons";
-
+  faGlobeEurope
+} from '@fortawesome/free-solid-svg-icons';
 
 import { setSelectedCustomFilterLayers } from "../../../../state/slices/uiSlice";
 import strings from "../../../../translations";
@@ -26,23 +25,23 @@ import LayerlistSwitch from "../LayerlistSwitch";
 
 const masterHeaderIconVariants = {
   open: { rotate: 180 },
-  closed: { rotate: 0 },
+  closed: { rotate: 0 }
 };
 
 const layerGroupIconVariants = {
   open: { rotate: 90 },
-  closed: { rotate: 0 },
+  closed: { rotate: 0 }
 };
 
 const listVariants = {
   visible: {
-    height: "auto",
-    opacity: 1,
+    height: 'auto',
+    opacity: 1
   },
   hidden: {
     height: 0,
-    opacity: 0,
-  },
+    opacity: 0
+  }
 };
 
 const StyledLayerGroups = styled.div`
@@ -50,15 +49,15 @@ const StyledLayerGroups = styled.div`
   flex-direction: column;
   justify-content: center;
   background-color: ${(props) =>
-    props.parentId === -1 ? props.theme.colors.mainWhite : "#F2F2F2"};
+    props.parentId === -1 ? props.theme.colors.mainWhite : '#F2F2F2'};
   margin: 8px 0px 8px 0px;
   border-radius: 4px;
 
   &:last-child {
     ${(props) =>
-    props.parentId === -1
-      ? "1px solid " + props.theme.colors.mainColor2
-      : "none"};
+      props.parentId === -1
+        ? '1px solid ' + props.theme.colors.mainColor2
+        : 'none'};
   }
 `;
 
@@ -220,9 +219,9 @@ const StyledSelectButton = styled.button`
   border: none;
   svg {
     color: ${(props) =>
-    props.subGroup
-      ? props.theme.colors.mainColor1
-      : props.theme.colors.mainWhite};
+      props.subGroup
+        ? props.theme.colors.mainColor1
+        : props.theme.colors.mainWhite};
     font-size: 19px;
     transition: all 0.3s ease-out;
   }
@@ -236,36 +235,36 @@ const StyledMotionIconWrapper = styled(motion.div)`
 
 const StyledLayerGroup = styled(motion.div)`
   margin: 0;
-  padding-inline-start: ${(props) => (props.parentId === -1 ? "8px" : "25px")};
+  padding-inline-start: ${(props) => (props.parentId === -1 ? '8px' : '25px')};
   overflow: hidden;
   transition: max-height 0.3s ease-out;
 `;
 
 const themeStyles = {
   100: {
-    icon: faCar,
+    icon: faCar
   },
   101: {
-    icon: faShip,
+    icon: faShip
   },
   34: {
-    icon: faHardHat,
+    icon: faHardHat
   },
   2: {
-    icon: faTrain,
+    icon: faTrain
   },
   199: {
-    icon: faLandmark,
+    icon: faLandmark
   },
   265: {
-    icon: faRoad,
+    icon: faRoad
   },
   1: {
-    icon: faMap,
+    icon: faMap
   },
   562: {
-    icon: faGlobeEurope,
-  },
+    icon: faGlobeEurope
+  }
 };
 
 export const FilterLayerGroup = React.memo(({ group, layers, hasChildren }) => {
@@ -282,12 +281,25 @@ export const FilterLayerGroup = React.memo(({ group, layers, hasChildren }) => {
 
   useEffect(() => {
     if (group) {
-      const checkedLayers = JSON.parse(localStorage.getItem("checkedLayers")) || [];
+      const checkedLayers =
+        JSON.parse(localStorage.getItem('checkedLayers')) || [];
       if (checkedLayers.length > 0) {
-        const mainGroupHasSavedLayers = group.hasOwnProperty("layers") && group.layers && group.layers.some((layerId) => checkedLayers.some(l => l.id === layerId));
-        const subgroupsHaveSavedLayers = group.hasOwnProperty("groups") && group.groups && group.groups.some((subgroup) =>
-          subgroup.layers && subgroup.layers.some((layerId) => checkedLayers.some(l => l.id === layerId))
-        );
+        const mainGroupHasSavedLayers =
+          group.hasOwnProperty('layers') &&
+          group.layers &&
+          group.layers.some((layerId) =>
+            checkedLayers.some((l) => l.id === layerId)
+          );
+        const subgroupsHaveSavedLayers =
+          group.hasOwnProperty('groups') &&
+          group.groups &&
+          group.groups.some(
+            (subgroup) =>
+              subgroup.layers &&
+              subgroup.layers.some((layerId) =>
+                checkedLayers.some((l) => l.id === layerId)
+              )
+          );
 
         if (mainGroupHasSavedLayers || subgroupsHaveSavedLayers) {
           setIsOpen(true);
@@ -313,23 +325,21 @@ export const FilterLayerGroup = React.memo(({ group, layers, hasChildren }) => {
     var layersCount = 0;
     var visibleLayersCount = 0;
     const layersCounter = (group) => {
-      if (group.hasOwnProperty("layers") && group.layers.length > 0) {
-
+      if (group.hasOwnProperty('layers') && group.layers.length > 0) {
         //EI KATSOTA layer.visible vaan otetaan suoraan slice listasta valitut
-        visibleLayersCount += selectedCustomFilterLayers.filter(
-          (l) => group.layers.includes(l.id)
+        visibleLayersCount += selectedCustomFilterLayers.filter((l) =>
+          group.layers.includes(l.id)
         ).length;
         layersCount = layersCount + group.layers.length;
       }
 
-      var hasGroups = group.hasOwnProperty("groups") && group.groups.length > 0;
+      var hasGroups = group.hasOwnProperty('groups') && group.groups.length > 0;
       hasGroups &&
         group.groups.forEach((group) => {
           layersCounter(group);
         });
       setTotalGroupLayersCoun(layersCount);
       setTotalVisibleGroupLayersCount(visibleLayersCount);
-
     };
     layersCounter(group);
   }, [group, layers, selectedCustomFilterLayers]);
@@ -337,7 +347,7 @@ export const FilterLayerGroup = React.memo(({ group, layers, hasChildren }) => {
   const truncatedString = (string, characterAmount, text) => {
     return string.length > characterAmount + 20 ? (
       <>
-        {string.substring(0, characterAmount) + "..."}{" "}
+        {string.substring(0, characterAmount) + '...'}{' '}
         <StyledReadMoreButton onClick={() => setIsExcerptOpen(!isExcerptOpen)}>
           {text}
         </StyledReadMoreButton>
@@ -348,14 +358,18 @@ export const FilterLayerGroup = React.memo(({ group, layers, hasChildren }) => {
   };
 
   const setFilteredLayersVisible = (boolean) => {
-
     if (!boolean) {
       const filteredCustomLayers = selectedCustomFilterLayers.filter(
         (filterLayer) => !filteredLayers.includes(filterLayer)
       );
       store.dispatch(setSelectedCustomFilterLayers(filteredCustomLayers));
     } else {
-      store.dispatch(setSelectedCustomFilterLayers([...selectedCustomFilterLayers, ...filteredLayers]))
+      store.dispatch(
+        setSelectedCustomFilterLayers([
+          ...selectedCustomFilterLayers,
+          ...filteredLayers
+        ])
+      );
     }
   };
 
@@ -415,26 +429,28 @@ export const FilterLayerGroup = React.memo(({ group, layers, hasChildren }) => {
       ? group.locale[currentLang].desc
       : strings.groupLayerList.hasOwnProperty(group.id) &&
         strings.groupLayerList[group.id].description !== null
-        ? strings.groupLayerList[group.id].description
-        : null;
+      ? strings.groupLayerList[group.id].description
+      : null;
 
   return (
     <>
       <StyledLayerGroups>
         {group.parentId === -1 ? (
           <StyledMasterGroupHeader
-            aria-label={isOpen ? (group.locale[currentLang] && group.locale[currentLang].name
-              ? group.locale[currentLang].name
-              : group.locale[defaultLang] &&
-                group.locale[defaultLang].name
-                ? group.locale[defaultLang].name
-                : group.id) : (group.locale[currentLang] && group.locale[currentLang].name
+            aria-label={
+              isOpen
+                ? group.locale[currentLang] && group.locale[currentLang].name
                   ? group.locale[currentLang].name
-                  : group.locale[defaultLang] &&
-                    group.locale[defaultLang].name
-                    ? group.locale[defaultLang].name
-                    : group.id)}
-            key={"smgh_" + group.parentId + "_" + group.id}
+                  : group.locale[defaultLang] && group.locale[defaultLang].name
+                  ? group.locale[defaultLang].name
+                  : group.id
+                : group.locale[currentLang] && group.locale[currentLang].name
+                ? group.locale[currentLang].name
+                : group.locale[defaultLang] && group.locale[defaultLang].name
+                ? group.locale[defaultLang].name
+                : group.id
+            }
+            key={'smgh_' + group.parentId + '_' + group.id}
             onClick={() => {
               setIsOpen(!isOpen);
             }}
@@ -449,8 +465,8 @@ export const FilterLayerGroup = React.memo(({ group, layers, hasChildren }) => {
                       ? group.locale[currentLang].name.charAt(0).toUpperCase()
                       : group.locale[defaultLang] &&
                         group.locale[defaultLang].name
-                        ? group.locale[defaultLang].name.charAt(0).toUpperCase()
-                        : group.id}
+                      ? group.locale[defaultLang].name.charAt(0).toUpperCase()
+                      : group.id}
                   </p>
                 )}
               </StyledMasterGroupHeaderIcon>
@@ -460,34 +476,41 @@ export const FilterLayerGroup = React.memo(({ group, layers, hasChildren }) => {
                     ? group.locale[currentLang].name
                     : group.locale[defaultLang] &&
                       group.locale[defaultLang].name
-                      ? group.locale[defaultLang].name
-                      : group.id}
+                    ? group.locale[defaultLang].name
+                    : group.id}
                 </StyledMasterGroupName>
                 <StyledMasterGroupLayersCount>
-                  {totalVisibleGroupLayersCount + " / " + totalGroupLayersCount}
+                  {totalVisibleGroupLayersCount + ' / ' + totalGroupLayersCount}
                 </StyledMasterGroupLayersCount>
               </StyledMasterGroupTitleContent>
             </StyledLeftContent>
             <StyledRightContent>
               <StyledSelectButton
-                aria-label={isOpen ? (group.locale[currentLang] && group.locale[currentLang].name
-                  ? group.locale[currentLang].name
-                  : group.locale[defaultLang] &&
-                    group.locale[defaultLang].name
-                    ? group.locale[defaultLang].name
-                    : group.id) : (group.locale[currentLang] && group.locale[currentLang].name
+                aria-label={
+                  isOpen
+                    ? group.locale[currentLang] &&
+                      group.locale[currentLang].name
                       ? group.locale[currentLang].name
                       : group.locale[defaultLang] &&
                         group.locale[defaultLang].name
-                        ? group.locale[defaultLang].name
-                        : group.id)}>
+                      ? group.locale[defaultLang].name
+                      : group.id
+                    : group.locale[currentLang] &&
+                      group.locale[currentLang].name
+                    ? group.locale[currentLang].name
+                    : group.locale[defaultLang] &&
+                      group.locale[defaultLang].name
+                    ? group.locale[defaultLang].name
+                    : group.id
+                }
+              >
                 <StyledMotionIconWrapper
                   initial="closed"
-                  animate={isOpen ? "open" : "closed"}
+                  animate={isOpen ? 'open' : 'closed'}
                   variants={masterHeaderIconVariants}
                   transition={{
                     duration: 0.3,
-                    type: "tween",
+                    type: 'tween'
                   }}
                 >
                   <FontAwesomeIcon icon={faAngleDown} />
@@ -497,40 +520,50 @@ export const FilterLayerGroup = React.memo(({ group, layers, hasChildren }) => {
           </StyledMasterGroupHeader>
         ) : (
           <StyledGroupHeader
-            aria-label={isOpen ? (group.locale[currentLang] && group.locale[currentLang].name
-              ? group.locale[currentLang].name
-              : group.locale[defaultLang] &&
-                group.locale[defaultLang].name
-                ? group.locale[defaultLang].name
-                : group.id) : (group.locale[currentLang] && group.locale[currentLang].name
+            aria-label={
+              isOpen
+                ? group.locale[currentLang] && group.locale[currentLang].name
                   ? group.locale[currentLang].name
-                  : group.locale[defaultLang] &&
-                    group.locale[defaultLang].name
-                    ? group.locale[defaultLang].name
-                    : group.id)}
-            key={"smgh_" + group.parentId + "_" + group.id}
+                  : group.locale[defaultLang] && group.locale[defaultLang].name
+                  ? group.locale[defaultLang].name
+                  : group.id
+                : group.locale[currentLang] && group.locale[currentLang].name
+                ? group.locale[currentLang].name
+                : group.locale[defaultLang] && group.locale[defaultLang].name
+                ? group.locale[defaultLang].name
+                : group.id
+            }
+            key={'smgh_' + group.parentId + '_' + group.id}
             onClick={() => setIsOpen(!isOpen)}
           >
             <StyledLefContent>
-              <StyledSelectButton subGroup={true}
-                aria-label={isOpen ? (group.locale[currentLang] && group.locale[currentLang].name
-                  ? group.locale[currentLang].name
-                  : group.locale[defaultLang] &&
-                    group.locale[defaultLang].name
-                    ? group.locale[defaultLang].name
-                    : group.id) : (group.locale[currentLang] && group.locale[currentLang].name
+              <StyledSelectButton
+                subGroup={true}
+                aria-label={
+                  isOpen
+                    ? group.locale[currentLang] &&
+                      group.locale[currentLang].name
                       ? group.locale[currentLang].name
                       : group.locale[defaultLang] &&
                         group.locale[defaultLang].name
-                        ? group.locale[defaultLang].name
-                        : group.id)}>
+                      ? group.locale[defaultLang].name
+                      : group.id
+                    : group.locale[currentLang] &&
+                      group.locale[currentLang].name
+                    ? group.locale[currentLang].name
+                    : group.locale[defaultLang] &&
+                      group.locale[defaultLang].name
+                    ? group.locale[defaultLang].name
+                    : group.id
+                }
+              >
                 <StyledMotionIconWrapper
                   initial="closed"
-                  animate={isOpen ? "open" : "closed"}
+                  animate={isOpen ? 'open' : 'closed'}
                   variants={layerGroupIconVariants}
                   transition={{
                     duration: 0.3,
-                    type: "tween",
+                    type: 'tween'
                   }}
                 >
                   <FontAwesomeIcon icon={faAngleRight} />
@@ -542,11 +575,11 @@ export const FilterLayerGroup = React.memo(({ group, layers, hasChildren }) => {
                     ? group.locale[currentLang].name
                     : group.locale[defaultLang] &&
                       group.locale[defaultLang].name
-                      ? group.locale[defaultLang].name
-                      : group.id}
+                    ? group.locale[defaultLang].name
+                    : group.id}
                 </StyledGroupName>
                 <StyledSubGroupLayersCount>
-                  {totalVisibleGroupLayersCount + " / " + totalGroupLayersCount}
+                  {totalVisibleGroupLayersCount + ' / ' + totalGroupLayersCount}
                 </StyledSubGroupLayersCount>
               </div>
             </StyledLefContent>
@@ -563,13 +596,13 @@ export const FilterLayerGroup = React.memo(({ group, layers, hasChildren }) => {
         )}
         <StyledLayerGroup
           parentId={group.parentId}
-          key={"slg_" + group.parentId + "_" + group.id}
+          key={'slg_' + group.parentId + '_' + group.id}
           initial="hidden"
-          animate={isOpen ? "visible" : "hidden"}
+          animate={isOpen ? 'visible' : 'hidden'}
           variants={listVariants}
           transition={{
             duration: 0.3,
-            type: "tween",
+            type: 'tween'
           }}
         >
           {group.parentId === -1 &&
@@ -589,14 +622,14 @@ export const FilterLayerGroup = React.memo(({ group, layers, hasChildren }) => {
                     <StyledSubText>
                       {isExcerptOpen ? (
                         <>
-                          {" "}
+                          {' '}
                           {groupDescription}
                           {strings.groupLayerList[group.id] &&
                             strings.groupLayerList[group.id]
                               .link_description && (
                               <>
                                 <StyledLinkButton
-                                  target={"_blank"}
+                                  target={'_blank'}
                                   href={strings.groupLayerList[group.id].link}
                                 >
                                   {
@@ -610,7 +643,7 @@ export const FilterLayerGroup = React.memo(({ group, layers, hasChildren }) => {
                           <StyledReadMoreButton
                             onClick={() => setIsExcerptOpen(!isExcerptOpen)}
                           >
-                            {" "}
+                            {' '}
                             {strings.groupLayerList.readLess}
                           </StyledReadMoreButton>
                         </>
@@ -629,7 +662,7 @@ export const FilterLayerGroup = React.memo(({ group, layers, hasChildren }) => {
           {hasChildren && (
             <>
               <FilterLayerList
-                key={"layer-list" + group.id}
+                key={'layer-list' + group.id}
                 groups={group.groups || []}
                 layers={layers}
                 recurse={true}

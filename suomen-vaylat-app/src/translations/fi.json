@@ -223,12 +223,12 @@
           "step3": {
             "title": "Valitse ehto/operaattori",
             "content": {
-              "equal": "Yhtäsuuri kuin: Näyttää kohteet, joiden attribuutti on täsmälleen sama kuin annettu arvo.",
-              "notEqual": "Erisuuri kuin: Näyttää kohteet, joiden attribuutti eroaa annetusta arvosta.",
-              "contains": "Sisältää: Näyttää kohteet, joiden attribuutti sisältää annetun arvon.",
-              "notContains": "Ei sisällä: Näyttää kohteet, joiden attribuutti ei sisällä annettua arvoa.",
-              "smallerThan" : "Pienempi kuin: pienempi kuin annettu arvo",
-              "biggerThan" : "Suurempi kuin: suurempi kuin annettu arvo"
+              "equal": "<strong>Yhtäsuuri kuin</strong>: Näyttää kohteet, joiden attribuutti on täsmälleen sama kuin annettu arvo.",
+              "notEqual": "<strong>Erisuuri kuin</strong>: Näyttää kohteet, joiden attribuutti eroaa annetusta arvosta.",
+              "contains": "<strong>Sisältää</strong>: Näyttää kohteet, joiden attribuutti sisältää annetun arvon.",
+              "notContains": "<strong>Ei sisällä</strong>: Näyttää kohteet, joiden attribuutti ei sisällä annettua arvoa.",
+              "smallerThan" : "<strong>Pienempi kuin</strong>: pienempi kuin annettu arvo",
+              "biggerThan" : "<strong>Suurempi kuin</strong>: suurempi kuin annettu arvo"
             }
           },
           "step4": {
@@ -244,7 +244,7 @@
             "content": "Halutessasi voit poistaa tehdyn suodatuksen painamalla ”Poista kaikki suodattimet” tai painamalla ruksia aktiivisten suodattimien kohdalla."
           }
         },
-        "additionalInstructions": "Käyttämällä operaattoreita 'Sisältää' sekä 'Ei sisällä', attribuutin arvoa ei tarvitse kirjoittaa täydellisesti oikein. Riittää, että arvona on vain osa attribuutin sisällöstä. Tämä helpottaa suodatusta silloin, kun tarkkaa arvoa ei ole tiedossa.",
+        "additionalInstructions": "Käyttämällä operaattoreita '<strong>Sisältää</strong>' sekä '<strong>Ei sisällä</strong>', attribuutin arvoa ei tarvitse kirjoittaa täydellisesti oikein. Riittää, että arvona on vain osa attribuutin sisällöstä. Tämä helpottaa suodatusta silloin, kun tarkkaa arvoa ei ole tiedossa.",
         "feedback": "Jos tasolta puuttuu suodata-työkalu tai suodatettavista attribuutista puuttuu jokin oleellinen attribuutti, voit lähettää aiheesta palautetta osoitteeseen",
         "feedbackEmail": "paikkatieto@vayla.fi"
       },

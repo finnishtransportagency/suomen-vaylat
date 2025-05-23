@@ -206,6 +206,7 @@ const showFeatureOnMap = (channel, layer, feature) => {
             {
                 layerId: 'feature-search-results',
                 centerTo: true,
+                maxZoomLevel: 13,
                 cursor: 'pointer',
                 featureStyle: {
                     fill: { color: 'rgba(229, 0, 131, 1)' },

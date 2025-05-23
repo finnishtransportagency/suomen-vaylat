@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect } from 'react';
+import { useContext, useState, useEffect, Fragment } from 'react';
 import {
     faExternalLinkAlt,
     faLink,
@@ -383,7 +383,7 @@ export const ThemeLayerList = ({ allLayers, allThemes }) => {
         <>
             {allThemes.map((themeGroup, themeGroupIndex) => {
                 return (
-                    <div key={`themeGroup-div-${themeGroupIndex}`}>
+                    <Fragment key={`themeGroup-div-${themeGroupIndex}`}>
                         <StyledThemeGroup
                             key={`stg-${themeGroupIndex}`}
                             onClick={() =>
@@ -437,7 +437,7 @@ export const ThemeLayerList = ({ allLayers, allThemes }) => {
                         >
                             <Themes groups={[...themeGroup?.groups]} allLayers={allLayers} />
                         </StyledLayerGroupContainer>
-                    </div>
+                    </Fragment>
                 );
             })}
         </>
