@@ -43,7 +43,7 @@ import MenuBar from './menu-bar/MenuBar';
 import MapLayersDialog from '../dialog/MapLayersDialog';
 import PublishedMap from './published-map/PublishedMap';
 import Search from '../search/Search';
-import ActionButtons from '../action-button/ActionButtons';
+import Badges from '../badges/Badges';
 import ScaleBar from '../scalebar/ScaleBar';
 import ZoomMenu from '../zoom-features/ZoomMenu';
 import WarningModal from '../warning/modal/WarningModal';
@@ -202,7 +202,7 @@ const Content = () => {
           <StyledRightSection>
             <Search />
             <ZoomMenu />
-            <ActionButtons/>
+            <Badges/>
           </StyledRightSection>
         </StyledContentGrid>
       </StyledContent>
