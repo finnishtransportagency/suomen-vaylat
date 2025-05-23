@@ -6,30 +6,64 @@ import { useContext } from 'react';
 import { Button } from "react-bootstrap";
 import { updateLayers } from '../../utils/rpcUtil';
 import { setMapLayerVisibility } from '../../state/slices/rpcSlice';
-import theme from '../../theme/theme';
-
 
 const StyledBaselayerButtonContainer = styled(motion.div)` 
-    position: fixed;
-    bottom: 10px;
+    position: absolute;
+    bottom: 5px;
     left: 50%;
     transform: translateX(-50%);
     display: flex;
-    gap: 10px; /* Adds space between buttons */
-    padding: 10px;
+    gap: 8px; /* Adds space between buttons */
+    padding: 6px;
     border-radius: 8px;
-    box-shadow: 1px 4px 6px #0000004D;
+    @media ${props => props.theme.device.tablet} {
+        gap: 6px;
+    };
+    @media ${props => props.theme.device.mobileL} {
+        gap: 4px;
+    };
+    @media ${props => props.theme.device.mobileS} {
+        gap: 2px;
+    };
 `;
 
 const StyledButton = styled(Button)`
+    cursor: pointer;
+    background-color: ${props => props.isSelected ? props.theme.colors.mainColor1 : "#AAAAAA"}; /* Blue or Gray */
+    box-shadow: 0px 2px 4px #0000004D;
     border-radius: 30px;
-    background-color: ${(props) => (props.isSelected ? props.theme.colors.mainColor1 : "#AAAAAA")}; /* Blue or Gray */
-    color: white; /* Ensure text color is visible */
-    padding: 10px 20px; /* Adjust padding as needed */
-    font-size: 18px; /* Increase font size */
-    width: auto; /* Width adjusts based on text length */
-    display: inline-block; /* Ensure the button takes only as much space as needed */
-    margin: 5px; /* Add margin to separate buttons */
+    border: none;
+    padding: 6px 12px;
+    max-width: 160px;
+    @media ${props => props.theme.device.laptop} {
+        max-width: 120px;
+    };
+    @media ${props => props.theme.device.tablet} {
+        max-width: 100px;
+    };
+    @media ${props => props.theme.device.mobileL} {
+        max-width: 80px;
+        padding: 4px 8px
+    };
+    @media ${props => props.theme.device.mobileS} {
+        max-width: 60px;
+        padding: 2px 6px
+    };
+`;
+
+const StyledButtonText = styled.div`
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 14px;
+    font-weight: 600;
+    user-select: none;
+    @media ${props => props.theme.device.mobileL} {
+        font-size: 12px;
+    };
+    @media ${props => props.theme.device.mobileS} {
+        font-size: 10px;
+    };
 `;
 
 const BaseLayerSelector = () => {
@@ -46,7 +80,9 @@ const BaseLayerSelector = () => {
     const BaseLayerButton = ({ action, layer, isSelected }) => {
         return(
             <StyledButton onClick={() => action(layer)} isSelected={isSelected}>
-                {layer.name} {/* Display layer name */}
+                <StyledButtonText>
+                    {layer.name} {/* Display layer name */}
+                </StyledButtonText>
             </StyledButton>
         );
     };

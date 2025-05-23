@@ -5,7 +5,7 @@ import { useAppSelector } from '../../state/hooks';
 const StyledScaleBarContainer = styled(motion.div)`
     position: fixed;
     bottom: 10px;
-    left: 70%;
+    left: 80%;
     display: flex;
     justify-content: center;
     //border-style: inset;
@@ -23,6 +23,15 @@ const StyledScaleBarText = styled.p`
     font-size: 14px;
     font-weight: 600;
     cursor: default;
+    @media ${props => props.theme.device.tablet} {
+        font-size: 12px;
+    };
+    @media ${props => props.theme.device.mobileL} {
+        font-size: 12px;
+    };
+    @media ${props => props.theme.device.mobileS} {
+       font-size: 10px;
+    };
 `;
 
 const ScaleBar = () => {
