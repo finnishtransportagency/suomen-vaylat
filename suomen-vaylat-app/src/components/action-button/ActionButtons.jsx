@@ -16,8 +16,26 @@ import strings from '../../translations';
 import { selectGroup } from '../../utils/rpcUtil';
 import { ThemeGroupShareButton } from '../share-website/ShareLinkButtons';
 
-import { setMinimizeGfi, setMinimizeFilterModal } from '../../state/slices/uiSlice';
 import { GFI_GEOMETRY_LAYER_ID } from '../../utils/constants';
+
+
+import {
+  resetGFILocations,
+  removeMarkerRequest,
+  setVKMData,
+  setFilters,
+  setFilteringInfo,
+} from '../../state/slices/rpcSlice';
+
+import {
+  setIsGfiOpen,
+  setMinimizeGfi,
+  setMaximizeGfi,
+  setIsFilterModalOpen,
+  setMinimizeFilterModal,
+  setMaximizeFilterModal,
+  setActiveSelectionTool
+} from '../../state/slices/uiSlice';
 
 const StyledContent = styled.div`
     position: absolute;
@@ -255,8 +273,6 @@ const StyledActionButtonText = styled.div`
 `;
 
 const ActionButtons = ({
-    closeAction,
-    closeActionFilter
 }) => {
 
     const { store } = useContext(ReactReduxContext);
@@ -270,7 +286,8 @@ const ActionButtons = ({
         lastSelectedTheme,
         selectedThemeId,
         gfiLocations,
-        filteringInfo
+        filteringInfo,
+        filters
     } = useAppSelector((state) => state.rpc);
     const {
         minimizeGfi,
@@ -280,7 +297,56 @@ const ActionButtons = ({
     const handleSelectGroup = (index, theme) => {
         selectGroup(store, channel, null, theme, lastSelectedTheme, selectedThemeId);
     };
+
+    const handleCloseFilterModal = () => {
+        // reset map
+        filteringInfo.forEach((filteringInfo) => {
+        filters.length > 0 &&
+            filteringInfo.layer &&
+            channel &&
+            channel.postRequest('MapModulePlugin.MapLayerUpdateRequest', [
+            filteringInfo.layer.id,
+            true,
+            { CQL_FILTER: null }
+            ]);
+        });
+
+        // reset states
+        store.dispatch(setIsFilterModalOpen(false));
+        store.dispatch(setMinimizeFilterModal({ minimized: false }));
+        store.dispatch(setMaximizeFilterModal(false));
+        store.dispatch(setFilters([]));
+        store.dispatch(setFilteringInfo([]));
+    };
     
+    const handleCloseGFIModal = () => {
+        store.dispatch(setActiveSelectionTool(null));
+        store.dispatch(resetGFILocations([]));
+        store.dispatch(setIsGfiOpen(false));
+        store.dispatch(setVKMData(null));
+        store.dispatch(setMinimizeGfi(false));
+        store.dispatch(setMaximizeGfi(false));
+        setTimeout(() => {
+        store.dispatch(setVKMData(null));
+        }, 500); // VKM info does not disappear during modal close animation.
+        store.dispatch(removeMarkerRequest({ markerId: 'VKM_MARKER' }));
+        channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [
+        null,
+        null,
+        'download-tool-layer'
+        ]);
+        channel &&
+        channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [
+            null,
+            null,
+            GFI_GEOMETRY_LAYER_ID
+        ]);
+        channel.postRequest('DrawTools.StopDrawingRequest', [
+        'gfi-selection-tool',
+        true
+        ]);
+    };
+
     const handleShowGeometry = () => {
         if (!activeGeometries) {
             gfiLocations.forEach(gfiLocation => {
@@ -347,7 +413,7 @@ const ActionButtons = ({
                             />
                         </StyledExpandButton>
                         <StyledActionButtonClose
-                            onClick={() => closeAction()}
+                            onClick={() => handleCloseGFIModal()}
                         >
                             <FontAwesomeIcon
                                 icon={faTimes}
@@ -406,7 +472,7 @@ const ActionButtons = ({
                             <StyledExpandButton onClick={() => store.dispatch(setMinimizeFilterModal({ minimized: false }))}>
                                 <FontAwesomeIcon icon={faExpand} />
                             </StyledExpandButton>
-                            <StyledActionButtonClose onClick={() => closeActionFilter()}>
+                            <StyledActionButtonClose onClick={() => handleCloseFilterModal()}>
                                 <FontAwesomeIcon icon={faTimes} />
                             </StyledActionButtonClose>
                         </StyledContentWrapper>

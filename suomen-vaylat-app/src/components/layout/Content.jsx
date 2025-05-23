@@ -146,54 +146,8 @@ const Content = () => {
 
   const { store } = useContext(ReactReduxContext);
 
-  const handleCloseFilterModal = () => {
-    // reset map
-    filteringInfo.forEach((filteringInfo) => {
-      filters.length > 0 &&
-        filteringInfo.layer &&
-        channel &&
-        channel.postRequest('MapModulePlugin.MapLayerUpdateRequest', [
-          filteringInfo.layer.id,
-          true,
-          { CQL_FILTER: null }
-        ]);
-    });
+  
 
-    // reset states
-    store.dispatch(setIsFilterModalOpen(false));
-    store.dispatch(setMinimizeFilterModal({ minimized: false }));
-    store.dispatch(setMaximizeFilterModal(false));
-    store.dispatch(setFilters([]));
-    store.dispatch(setFilteringInfo([]));
-  };
-
-  const handleCloseGFIModal = () => {
-    store.dispatch(setActiveSelectionTool(null));
-    store.dispatch(resetGFILocations([]));
-    store.dispatch(setIsGfiOpen(false));
-    store.dispatch(setVKMData(null));
-    store.dispatch(setMinimizeGfi(false));
-    store.dispatch(setMaximizeGfi(false));
-    setTimeout(() => {
-      store.dispatch(setVKMData(null));
-    }, 500); // VKM info does not disappear during modal close animation.
-    store.dispatch(removeMarkerRequest({ markerId: 'VKM_MARKER' }));
-    channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [
-      null,
-      null,
-      'download-tool-layer'
-    ]);
-    channel &&
-      channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [
-        null,
-        null,
-        GFI_GEOMETRY_LAYER_ID
-      ]);
-    channel.postRequest('DrawTools.StopDrawingRequest', [
-      'gfi-selection-tool',
-      true
-    ]);
-  };
 
   return (
     <>
@@ -248,10 +202,7 @@ const Content = () => {
           <StyledRightSection>
             <Search />
             <ZoomMenu />
-            <ActionButtons
-              closeAction={handleCloseGFIModal}
-              closeActionFilter={handleCloseFilterModal}
-            />
+            <ActionButtons/>
           </StyledRightSection>
         </StyledContentGrid>
       </StyledContent>
