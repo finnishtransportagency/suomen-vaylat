@@ -1,24 +1,24 @@
 import { useRef, useEffect } from 'react';
 import styled from 'styled-components';
-import { useAppSelector } from '../../state/hooks';
+import { useAppSelector } from '../../../../state/hooks';
 import {
     setIsSideMenuOpen,
     setSelectedMapLayersMenuTab,
-} from '../../state/slices/uiSlice';
+} from '../../../../state/slices/uiSlice';
 import { motion } from 'framer-motion';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import store from '../../state/store';
+import store from '../../../../state/store';
 
 // Import Swiper styles
 import 'swiper/css';
 
-import DialogHeader from './DialogHeader';
-import LayerListContainer from '../layerlists/hierarchical-layerlist/LayerListContainer';
-import SelectedLayers from '../layerlists/hierarchical-layerlist/selected-layers/SelectedLayers';
+import DialogHeader from '../../../../utils/components/DialogHeader';
+import LayerListContainer from '../LayerListContainer';
+import SelectedLayers from '../selected-layers/SelectedLayers';
 
 import { faLayerGroup } from '@fortawesome/free-solid-svg-icons';
 
-import strings from '../../translations';
+import strings from '../../../../translations';
 
 const StyledMapLayersDialog = styled(motion.div)`
     width: 350px;
@@ -155,7 +155,7 @@ const StyledSwiper = styled(Swiper)`
     border-top: 3px solid ${(props) => (props.tabIndex === 0 ? 'rgba(0, 99, 175, 1)' : 'rgba(229, 0, 130, 1)')};
 `;
 
-const MapLayersDialog = () => {
+const HierarchicalLayerlistDialog = () => {
     const { isSideMenuOpen, selectedMapLayersMenuTab, isThemeMenuOpen } = useAppSelector((state) => state.ui);
     const {
         allGroups,
@@ -282,4 +282,4 @@ const MapLayersDialog = () => {
     );
 };
 
-export default MapLayersDialog;
+export default HierarchicalLayerlistDialog;

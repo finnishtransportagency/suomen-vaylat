@@ -4,7 +4,7 @@ import { faMap } from '@fortawesome/free-solid-svg-icons';
 import { sortObjectAlphabetically } from '../../../utils/rpcUtil';
 import { useAppSelector } from '../../../state/hooks';
 import ThemeLayerList from './ThemeLayerList';
-import DialogHeader from '../../dialog/DialogHeader';
+import DialogHeader from '../../../utils/components/DialogHeader';
 import strings from '../../../translations';
 import store from '../../../state/store';
 import { setIsThemeMenuOpen } from '../../../state/slices/uiSlice';

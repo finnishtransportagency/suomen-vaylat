@@ -1,8 +1,6 @@
-import { useContext, useRef } from 'react';
-import { ReactReduxContext } from 'react-redux';
+import { useRef } from 'react';
 import { ToastContainer, Slide } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useAppSelector } from '../../state/hooks';
 import styled from 'styled-components';
 
 // Import modals from their components
@@ -21,26 +19,8 @@ import LayerDownloadButtonLinkModal from '../layerlists/hierarchical-layerlist/m
 import FeatureDataToolsModal from '../feature-data-window/modal/FeatureDataToolsModal';
 import FeatureDataDownloadMenuModal from '../feature-data-window/modal/FeatureDataDownloadToolsModal';
 
-import {
-  resetGFILocations,
-  removeMarkerRequest,
-  setVKMData,
-  setFilters,
-  setFilteringInfo
-} from '../../state/slices/rpcSlice';
-
-import {
-  setIsGfiOpen,
-  setMinimizeGfi,
-  setMaximizeGfi,
-  setIsFilterModalOpen,
-  setMinimizeFilterModal,
-  setMaximizeFilterModal,
-  setActiveSelectionTool
-} from '../../state/slices/uiSlice';
-
 import MenuBar from './menu-bar/MenuBar';
-import MapLayersDialog from '../dialog/MapLayersDialog';
+import MapLayersDialog from '../layerlists/hierarchical-layerlist/dialog/HierarchicalLayerlistDialog';
 import PublishedMap from './published-map/PublishedMap';
 import Search from '../search/Search';
 import Badges from '../badges/Badges';
@@ -48,7 +28,6 @@ import ScaleBar from '../scalebar/ScaleBar';
 import ZoomMenu from '../zoom-features/ZoomMenu';
 import WarningModal from '../warning/modal/WarningModal';
 import ThemeMenu from '../layerlists/theme-layerlist/ThemeMenu';
-import { GFI_GEOMETRY_LAYER_ID } from '../../utils/constants';
 
 const StyledContent = styled.div`
   z-index: 1;
@@ -139,15 +118,6 @@ const StyledToastContainer = styled(ToastContainer)``;
 
 const Content = () => {
   const constraintsRef = useRef(null);
-
-  const { channel, filteringInfo, filters } = useAppSelector(
-    (state) => state.rpc
-  );
-
-  const { store } = useContext(ReactReduxContext);
-
-  
-
 
   return (
     <>
