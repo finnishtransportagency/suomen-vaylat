@@ -20,7 +20,7 @@ import FeatureDataToolsModal from '../feature-data-window/modal/FeatureDataTools
 import FeatureDataDownloadMenuModal from '../feature-data-window/modal/FeatureDataDownloadToolsModal';
 
 import MenuBar from './menu-bar/MenuBar';
-import MapLayersDialog from '../layerlists/hierarchical-layerlist/dialog/HierarchicalLayerlistDialog';
+import HierarchicalLayerlistDialog from '../layerlists/hierarchical-layerlist/dialog/HierarchicalLayerlistDialog';
 import PublishedMap from './published-map/PublishedMap';
 import Search from '../search/Search';
 import Badges from '../badges/Badges';
@@ -152,7 +152,7 @@ const Content = () => {
 
         <FeatureDataDownloadMenuModal constraintsRef={constraintsRef} />
 
-        <LayerFilterModal constraintsRef={constraintsRef}/>
+        <LayerFilterModal constraintsRef={constraintsRef} />
 
         <ScaleBar />
 
@@ -167,12 +167,12 @@ const Content = () => {
           <StyledLeftSection>
             <MenuBar />
             <ThemeMenu />
-            <MapLayersDialog />
+            <HierarchicalLayerlistDialog />
           </StyledLeftSection>
           <StyledRightSection>
             <Search />
             <ZoomMenu />
-            <Badges/>
+            <Badges />
           </StyledRightSection>
         </StyledContentGrid>
       </StyledContent>
