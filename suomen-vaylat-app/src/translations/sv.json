@@ -160,7 +160,7 @@
   "exitConfirmation": "Du lämnar tjänsten Suomen väylät. Vill du fortsätta?",
   "appGuide": {
     "title": "Användarguide",
-    "modalContent": {
+    "dialogContent": {
       "upperBar": {
         "title": "Top Bar-funktioner",
         "content": {
@@ -488,7 +488,7 @@
     },
     "customLayerInfo": {
       "customFilter": "Eget filter",
-      "modalTitle": "Skapa ditt eget filter",
+      "dialogTitle": "Skapa ditt eget filter",
       "closeInfo": "Stäng hjälpen",
       "infoContent": "Du kan använda ditt eget filter för att spara valda lager i webbläsarens cache. Att redigera ditt eget filter är enhetsspecifikt. När du har valt önskade lager, tryck på knappen 'Spara'. Knappen 'Rensa alla' tar bort alla valda lager från filtret.",
       "saveLayers": "Spara",
@@ -498,9 +498,9 @@
     }
   },
   "downloadLink": {
-    "downloadLinkModalHeader": "Nedladdning av material",
-    "downloadLinkModalNameText": "Materialets namn",
-    "downloadLinkModalButtonText": "Ladda ner material",
+    "downloadLinkDialogHeader": "Nedladdning av material",
+    "downloadLinkDialogNameText": "Materialets namn",
+    "downloadLinkDialogButtonText": "Ladda ner material",
     "downloadSize": "Materialets storlek"
   },
   "groupLayerList": {

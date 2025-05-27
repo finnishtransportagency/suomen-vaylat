@@ -21,12 +21,12 @@ const StyledLayerDownloadIconWrapper = styled.div`
 `;
 
 export const LayerDownloadLinkButton = ({
-    handleIsDownloadLinkModalOpen
+    handleIsDownloadLinkDialogOpen
 }) => {
 
     return (
             <StyledLayerDownloadIconWrapper
-                onClick={() => handleIsDownloadLinkModalOpen()}
+                onClick={() => handleIsDownloadLinkDialogOpen()}
             >
                 <FontAwesomeIcon icon={faDownload} />
             </StyledLayerDownloadIconWrapper>

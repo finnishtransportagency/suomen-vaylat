@@ -11,7 +11,7 @@ import {
   faFileArchive
 } from '@fortawesome/free-solid-svg-icons';
 
-import ModalListItem from '../../modal/ModalListItem';
+import DialogListItem from '../../dialog/DialogListItem';
 import CheckBox from '../../checkbox/CheckBox';
 import SVLoader from '../../../utils/components/SvLoader';
 import strings from '../../../translations';
@@ -231,7 +231,7 @@ const FeatureDataDownloadTools = ({ closeButton = true }) => {
 
   const supportsWebSockets = 'WebSocket' in window || 'MozWebSocket' in window;
 
-  const handleCloseGfiDownloadModal = () => {
+  const handleCloseGfiDownloadDialog = () => {
     store.dispatch(setIsGfiDownloadOpen(false));
 
     !isGfiOpen &&
@@ -243,7 +243,7 @@ const FeatureDataDownloadTools = ({ closeButton = true }) => {
       ]);
   };
 
-  const handleCloseSaveViewModal = () => {
+  const handleCloseSaveViewDialog = () => {
     store.dispatch(setIsSaveViewOpen(false));
   };
 
@@ -255,8 +255,8 @@ const FeatureDataDownloadTools = ({ closeButton = true }) => {
     const ws = new WebSocket(process.env.REACT_APP_WEBSOCKET_URL);
 
     const handleDownloadFailure = () => {
-      handleCloseGfiDownloadModal();
-      handleCloseSaveViewModal();
+      handleCloseGfiDownloadDialog();
+      handleCloseSaveViewDialog();
       ws.close();
 
       toast.error(strings.downloads.downloadFailure, {
@@ -482,7 +482,7 @@ const FeatureDataDownloadTools = ({ closeButton = true }) => {
             );
 
             return (
-              <ModalListItem
+              <DialogListItem
                 key={'gfi_download_' + location.layerId}
                 index={index}
                 id={location.layerId}
@@ -500,7 +500,7 @@ const FeatureDataDownloadTools = ({ closeButton = true }) => {
                     handleSelectLayer(layer);
                   }}
                 />
-              </ModalListItem>
+              </DialogListItem>
             );
           })}
       </StyledListContainer>

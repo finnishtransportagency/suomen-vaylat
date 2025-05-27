@@ -18,7 +18,7 @@ import { theme, isMobile } from "../../../theme/theme";
 import ReactTooltip from "react-tooltip";
 
 import {
-  setMinimizeFilterModal,
+  setMinimizeFilterDialog,
  } from "../../../state/slices/uiSlice";
 
 
@@ -167,7 +167,7 @@ const FeatureDataTabContent = ({ layer, data, title, tablePropsInit }) => {
   
         const updateFilter = [...filteringInfo]
         updateFilter.push({
-            modalOpen: true,
+            dialogOpen: true,
             layer: {
               id: layer.id,
               title: layer.name,
@@ -179,7 +179,7 @@ const FeatureDataTabContent = ({ layer, data, title, tablePropsInit }) => {
         store.dispatch(setFilteringInfo(updateFilter));
       }
     }
-    minimizeFilter && store.dispatch(setMinimizeFilterModal({minimized: false, layer: layer.id}))
+    minimizeFilter && store.dispatch(setMinimizeFilterDialog({minimized: false, layer: layer.id}))
   }
 
   return (

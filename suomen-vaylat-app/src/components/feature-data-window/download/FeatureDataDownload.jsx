@@ -13,7 +13,7 @@ import { useAppSelector } from '../../../state/hooks';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDownload, faFileArchive, faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
 
-import ModalListItem from '../../modal/ModalListItem';
+import DialogListItem from '../../dialog/DialogListItem';
 import SvLoader from '../../../utils/components/SvLoader';
 
 const StyledDownloadsContainer = styled.div`
@@ -110,7 +110,7 @@ const DownloadItem = ({
     children
 }) => {
     return (
-        <ModalListItem
+        <DialogListItem
             key={download.id}
             id={download.id}
             icon={faFileArchive}
@@ -151,7 +151,7 @@ const DownloadItem = ({
             color={color}
         >
             {children && children}
-        </ModalListItem>
+        </DialogListItem>
     )
 };
 

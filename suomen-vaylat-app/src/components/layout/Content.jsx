@@ -3,30 +3,30 @@ import { ToastContainer, Slide } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import styled from 'styled-components';
 
-// Import modals from their components
-import LayerFilterModal from '../layer-filter/modal/LayerFilterModal';
-import FeatureDataModal from '../feature-data-window/modal/FeatureDataModal';
-import FeatureDataDownloadModal from '../feature-data-window/modal/FeatureDataDownloadModal';
-import UserGuideModal from '../user-guide/modal/UserGuideModal';
-import AppInfoModal from '../app-info/modal/AppInfoModal';
-import CustomLayerModal from '../layerlists/hierarchical-layerlist/custom-filter/modal/CustomLayerModal';
-import FeedbackFormModal from '../feedback-form/modal/FeedbackFormModal';
-import AnnouncementsModal from '../announcements/modal/AnnouncementsModal';
-import MetadataModal from '../metadata-modal/modal/MetadataModal';
-import ShareWebsiteModal from '../share-website/modal/ShareWebsiteModal';
-import SavedContentModal from '../saved-content/modal/SavedContentModal';
-import LayerDownloadButtonLinkModal from '../layerlists/hierarchical-layerlist/modal/LayerDownloadButtonLinkModal';
-import FeatureDataToolsModal from '../feature-data-window/modal/FeatureDataToolsModal';
-import FeatureDataDownloadMenuModal from '../feature-data-window/modal/FeatureDataDownloadToolsModal';
+// Import dialogs from their components
+import LayerFilterDialog from '../layer-filter/dialog/LayerFilterDialog';
+import FeatureDataDialog from '../feature-data-window/dialog/FeatureDataDialog';
+import FeatureDataDownloadDialog from '../feature-data-window/dialog/FeatureDataDownloadDialog';
+import UserGuideDialog from '../user-guide/dialog/UserGuideDialog';
+import AppInfoDialog from '../app-info/dialog/AppInfoDialog';
+import CustomLayerDialog from '../layerlists/hierarchical-layerlist/custom-filter/dialog/CustomLayerDialog';
+import FeedbackFormDialog from '../feedback-form/dialog/FeedbackFormDialog';
+import AnnouncementsDialog from '../announcements/dialog/AnnouncementsDialog';
+import MetadataDialog from '../metadata-dialog/dialog/MetadataDialog';
+import ShareWebsiteDialog from '../share-website/dialog/ShareWebsiteDialog';
+import SavedContentDialog from '../saved-content/dialog/SavedContentDialog';
+import LayerDownloadButtonLinkDialog from '../layerlists/hierarchical-layerlist/dialog/LayerDownloadButtonLinkDialog';
+import FeatureDataToolsDialog from '../feature-data-window/dialog/FeatureDataToolsDialog';
+import FeatureDataDownloadMenuDialog from '../feature-data-window/dialog/FeatureDataDownloadToolsDialog';
 
 import MenuBar from './menu-bar/MenuBar';
-import HierarchicalLayerlistModal from '../layerlists/hierarchical-layerlist/modal/HierarchicalLayerlistModal';
+import HierarchicalLayerlistDialog from '../layerlists/hierarchical-layerlist/dialog/HierarchicalLayerlistDialog';
 import PublishedMap from './published-map/PublishedMap';
 import Search from '../search/Search';
 import Badges from '../badges/Badges';
 import ScaleBar from '../scalebar/ScaleBar';
 import ZoomMenu from '../zoom-features/ZoomMenu';
-import WarningModal from '../warning-modal/modal/WarningModal';
+import WarningDialog from '../warning-dialog/dialog/WarningDialog';
 import ThemeMenu from '../layerlists/theme-layerlist/ThemeMenu';
 
 const StyledContent = styled.div`
@@ -124,35 +124,35 @@ const Content = () => {
       <StyledContent ref={constraintsRef}>
         <PublishedMap />
 
-        <AnnouncementsModal constraintsRef={constraintsRef} />
+        <AnnouncementsDialog constraintsRef={constraintsRef} />
 
-        <FeatureDataModal constraintsRef={constraintsRef} />
+        <FeatureDataDialog constraintsRef={constraintsRef} />
 
-        <FeatureDataDownloadModal constraintsRef={constraintsRef} />
+        <FeatureDataDownloadDialog constraintsRef={constraintsRef} />
 
-        <UserGuideModal constraintsRef={constraintsRef} />
+        <UserGuideDialog constraintsRef={constraintsRef} />
 
-        <AppInfoModal constraintsRef={constraintsRef} />
+        <AppInfoDialog constraintsRef={constraintsRef} />
 
-        <CustomLayerModal constraintsRef={constraintsRef} />
+        <CustomLayerDialog constraintsRef={constraintsRef} />
 
-        <FeedbackFormModal constraintsRef={constraintsRef} />
+        <FeedbackFormDialog constraintsRef={constraintsRef} />
 
-        <MetadataModal constraintsRef={constraintsRef} />
+        <MetadataDialog constraintsRef={constraintsRef} />
 
-        <ShareWebsiteModal constraintsRef={constraintsRef} />
+        <ShareWebsiteDialog constraintsRef={constraintsRef} />
 
-        <SavedContentModal constraintsRef={constraintsRef} />
+        <SavedContentDialog constraintsRef={constraintsRef} />
 
-        <LayerDownloadButtonLinkModal constraintsRef={constraintsRef} />
+        <LayerDownloadButtonLinkDialog constraintsRef={constraintsRef} />
 
-        <WarningModal constraintsRef={constraintsRef} />
+        <WarningDialog constraintsRef={constraintsRef} />
 
-        <FeatureDataToolsModal constraintsRef={constraintsRef} />
+        <FeatureDataToolsDialog constraintsRef={constraintsRef} />
 
-        <FeatureDataDownloadMenuModal constraintsRef={constraintsRef} />
+        <FeatureDataDownloadMenuDialog constraintsRef={constraintsRef} />
 
-        <LayerFilterModal constraintsRef={constraintsRef} />
+        <LayerFilterDialog constraintsRef={constraintsRef} />
 
         <ScaleBar />
 
@@ -167,7 +167,7 @@ const Content = () => {
           <StyledLeftSection>
             <MenuBar />
             <ThemeMenu />
-            <HierarchicalLayerlistModal />
+            <HierarchicalLayerlistDialog />
           </StyledLeftSection>
           <StyledRightSection>
             <Search />

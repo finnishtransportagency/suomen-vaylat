@@ -20,7 +20,7 @@ const variants = {
   }
 };
 
-const StyledMapLayersModal = styled(motion.div)`
+const StyledMapLayersDialog = styled(motion.div)`
   grid-row-start: 1;
   grid-row-end: 3;
   width: 100%;
@@ -150,7 +150,7 @@ const UserGuideTabs = () => {
       id: 'swipeAbleTab_0',
       title: strings.layerlist.layerlistLabels.allLayers,
       titleColor: 'mainColor1',
-      content: strings.appGuide.modalContent.mapLayerMenu.tabsContent.allLayers
+      content: strings.appGuide.dialogContent.mapLayerMenu.tabsContent.allLayers
         .split('\n')
         .map((c, index) => {
           return <p key={`userguide_allLayers_content_row_${index}`}> {c} </p>;
@@ -162,7 +162,7 @@ const UserGuideTabs = () => {
       titleColor: 'secondaryColorPink',
       titleContent: 'layerCounter',
       content:
-        strings.appGuide.modalContent.mapLayerMenu.tabsContent.selectedLayers
+        strings.appGuide.dialogContent.mapLayerMenu.tabsContent.selectedLayers
           .split('\n')
           .map((c, index) => {
             return (
@@ -177,7 +177,7 @@ const UserGuideTabs = () => {
   }, [tabIndex]);
 
   return (
-    <StyledMapLayersModal
+    <StyledMapLayersDialog
       initial="open"
       variants={variants}
       transition={{
@@ -185,7 +185,7 @@ const UserGuideTabs = () => {
       }}
     >
       <StyledTabSubTitle>
-        {strings.appGuide.modalContent.mapLayerMenu.subTitle}
+        {strings.appGuide.dialogContent.mapLayerMenu.subTitle}
       </StyledTabSubTitle>
       <StyledTabs tabIndex={tabIndex}>
         {tabsContent.map((tab, index) => {
@@ -225,7 +225,7 @@ const UserGuideTabs = () => {
           );
         })}
       </StyledSwiper>
-    </StyledMapLayersModal>
+    </StyledMapLayersDialog>
   );
 };
 

@@ -56,7 +56,7 @@ const StyledFilterHeader = styled.div`
   font-weight: bold;
 `;
 
-const StyledModalContainer = styled.div`
+const StyledDialogContainer = styled.div`
   :after {
     content: "";
     display: table;
@@ -72,7 +72,7 @@ const StyledModalContainer = styled.div`
   flex-direction: column;
 `;
 
-const StyledModalSelectionContainer = styled.div`
+const StyledDialogSelectionContainer = styled.div`
   :after {
     content: "";
     display: table;
@@ -83,7 +83,7 @@ const StyledModalSelectionContainer = styled.div`
   flex-direction: column;
 `;
 
-const StyledModalResultContainer = styled.div`
+const StyledDialogResultContainer = styled.div`
   :after {
     content: "";
     display: table;
@@ -94,14 +94,14 @@ const StyledModalResultContainer = styled.div`
   flex-direction: column;
 `;
 
-const StyledModalFloatingChapter = styled.div`
+const StyledDialogFloatingChapter = styled.div`
   float: left;
   height: '3em'
   width: 100%;
   position: relative;
 `;
 
-const StyledModalInputFloatingChapter = styled.div`
+const StyledDialogInputFloatingChapter = styled.div`
   float: left;
   height: '3em'
   width: 100%;
@@ -109,7 +109,7 @@ const StyledModalInputFloatingChapter = styled.div`
   display: flex;
 `;
 
-const StyledModalFloatingActionChapter = styled.div`
+const StyledDialogFloatingActionChapter = styled.div`
   width: 7%;
   margin-left: ".5em";
   float: left;
@@ -476,12 +476,12 @@ const handleRemoveFilter = (filter) => {
   }
 
   return (
-    <StyledModalContainer>
+    <StyledDialogContainer>
       <ReactTooltip backgroundColor={theme.colors.mainColor1} disable={isMobile} id={'open_info_link'} place='left' type='dark' effect='float'>
           <span>{strings.tooltips.showInfoLink}</span>
       </ReactTooltip>
-      <StyledModalSelectionContainer>
-        <StyledModalFloatingChapter>
+      <StyledDialogSelectionContainer>
+        <StyledDialogFloatingChapter>
           <Dropdown
             options={filterOptions}
             placeholder={strings.gfifiltering.placeholders.chooseProp}
@@ -490,7 +490,7 @@ const handleRemoveFilter = (filter) => {
             setValue={(value) => handleSetPropValue(value)}
             isDisabled={false}
           />
-        </StyledModalFloatingChapter>
+        </StyledDialogFloatingChapter>
         {propValue.type === "date" ? (
           <>
             <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={strings.getLanguage()}>
@@ -510,7 +510,7 @@ const handleRemoveFilter = (filter) => {
           </>
         ) : (
           <>
-            <StyledModalFloatingChapter style={{ marginTop: ".5em" }}>
+            <StyledDialogFloatingChapter style={{ marginTop: ".5em" }}>
               <Dropdown
                 options={comparisonOperatorsHash[propValue.type]}
                 placeholder={strings.gfifiltering.placeholders.chooseOperator}
@@ -518,9 +518,9 @@ const handleRemoveFilter = (filter) => {
                 setValue={setOperatorValue}
                 isDisabled={Object.keys(propValue).length === 0}
               />
-            </StyledModalFloatingChapter>
+            </StyledDialogFloatingChapter>
 
-            <StyledModalInputFloatingChapter style={{ marginTop: ".5em" }}>
+            <StyledDialogInputFloatingChapter style={{ marginTop: ".5em" }}>
               <StyledInput
                 type="text"
                 value={filterValue.value}
@@ -542,21 +542,21 @@ const handleRemoveFilter = (filter) => {
                   />
                 </StyledHeaderButton>
               }
-            </StyledModalInputFloatingChapter>
+            </StyledDialogInputFloatingChapter>
 
             { validationError && <StyledValidationMessage>{strings.gfifiltering.validationError}</StyledValidationMessage> }
 
           </>
         )}
-        <StyledModalFloatingActionChapter>
+        <StyledDialogFloatingActionChapter>
           <StyledSelectedTabDisplayOptionsButton disabled={validationError || Object.keys(propValue).length === 0 || Object.keys(operatorValue).length === 0} onClick={() => addFilter()}>
             {strings.gfifiltering.addFilter}{" "}
             <FontAwesomeIcon style={{ marginLeft: ".3em" }} icon={faPlus} />
           </StyledSelectedTabDisplayOptionsButton>
-        </StyledModalFloatingActionChapter>
-      </StyledModalSelectionContainer>
+        </StyledDialogFloatingActionChapter>
+      </StyledDialogSelectionContainer>
 
-      <StyledModalResultContainer>
+      <StyledDialogResultContainer>
         {activeFilters && activeFilters.length > 0 && (
           <StyledFilterContainer>
             <StyledFilterResultContainer>
@@ -641,7 +641,7 @@ const handleRemoveFilter = (filter) => {
             </StyledTrashIconWrapper>
           </StyledFilterContainer>
         )}
-      </StyledModalResultContainer>
-    </StyledModalContainer>
+      </StyledDialogResultContainer>
+    </StyledDialogContainer>
   );
 };

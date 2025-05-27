@@ -6,12 +6,12 @@ import { useAppSelector } from '../../../state/hooks';
 
 import CircleButton from '../../../utils/components/CircleButton';
 
-import HierarchicalLayerlistModalButton from '../../layerlists/hierarchical-layerlist/modal/modal-buttons/HierarchicalLayerlistModalButton';
-import ThemeLayerlistModalButton from '../../layerlists/theme-layerlist/modal/modal-buttons/ThemeLayerlistModalButton';
-import FeatureDataWindowModalButton from '../../feature-data-window/modal/modal-buttons/FeatureDataWindowModalButton';
-import FeatureDataDownloadModalButton from '../../feature-data-window/modal/modal-buttons/FeatureDataDownloadModalButton';
-import DrawingToolsModalButton from '../../measurement-tools/modal/modal-buttons/DrawingToolsModalButton';
-import SavedContentModalButton from '../../saved-content/modal/modal-buttons/SavedContentModalButton';
+import HierarchicalLayerlistDialogButton from '../../layerlists/hierarchical-layerlist/dialog/dialog-buttons/HierarchicalLayerlistDialogButton';
+import ThemeLayerlistDialogButton from '../../layerlists/theme-layerlist/dialog/dialog-buttons/ThemeLayerlistDialogButton';
+import FeatureDataWindowDialogButton from '../../feature-data-window/dialog/dialog-buttons/FeatureDataWindowDialogButton';
+import FeatureDataDownloadDialogButton from '../../feature-data-window/dialog/dialog-buttons/FeatureDataDownloadDialogButton';
+import DrawingToolsDialogButton from '../../measurement-tools/dialog/dialog-buttons/DrawingToolsDialogButton';
+import SavedContentDialogButton from '../../saved-content/dialog/dialog-buttons/SavedContentDialogButton';
 
 const StyledMenuBar = styled.div`
   z-index: 1;
@@ -84,18 +84,18 @@ const MenuBar = () => {
   return (
     <>
       <StyledMenuBar id="menu_bar">
-        <ThemeLayerlistModalButton
+        <ThemeLayerlistDialogButton
           animationUnfinished={animationUnfinished}
           waitForAnimationFinish={waitForAnimationFinish}
         />
-        <HierarchicalLayerlistModalButton
+        <HierarchicalLayerlistDialogButton
           animationUnfinished={animationUnfinished}
           waitForAnimationFinish={waitForAnimationFinish}
         />
-        <FeatureDataWindowModalButton />
-        <FeatureDataDownloadModalButton />
-        <DrawingToolsModalButton />
-        <SavedContentModalButton />
+        <FeatureDataWindowDialogButton />
+        <FeatureDataDownloadDialogButton />
+        <DrawingToolsDialogButton />
+        <SavedContentDialogButton />
         <CircleButton
           icon={isFullScreen ? faCompress : faExpand}
           text={strings.tooltips.fullscreenButton}

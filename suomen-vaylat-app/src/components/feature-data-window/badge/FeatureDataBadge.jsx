@@ -199,7 +199,7 @@ const FeatureDataBadge = ({}) => {
     (state) => state.rpc
   );
 
-  const handleCloseGFIModal = () => {
+  const handleCloseGFIDialog = () => {
     store.dispatch(setActiveSelectionTool(null));
     store.dispatch(resetGFILocations([]));
     store.dispatch(setIsGfiOpen(false));
@@ -208,7 +208,7 @@ const FeatureDataBadge = ({}) => {
     store.dispatch(setMaximizeGfi(false));
     setTimeout(() => {
       store.dispatch(setVKMData(null));
-    }, 500); // VKM info does not disappear during modal close animation.
+    }, 500); // VKM info does not disappear during dialog close animation.
     store.dispatch(removeMarkerRequest({ markerId: 'VKM_MARKER' }));
     channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [
       null,
@@ -288,7 +288,7 @@ const FeatureDataBadge = ({}) => {
         >
           <FontAwesomeIcon icon={faExpand} />
         </StyledExpandButton>
-        <StyledActionButtonClose onClick={() => handleCloseGFIModal()}>
+        <StyledActionButtonClose onClick={() => handleCloseGFIDialog()}>
           <FontAwesomeIcon icon={faTimes} />
         </StyledActionButtonClose>
       </StyledRightContent>

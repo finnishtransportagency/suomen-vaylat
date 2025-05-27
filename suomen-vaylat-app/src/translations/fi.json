@@ -160,7 +160,7 @@
   "exitConfirmation": "Olet poistumassa Suomen väylät-palvelusta. Haluatko jatkaa?",
   "appGuide": {
     "title": "Käyttöohje",
-    "modalContent": {
+    "dialogContent": {
       "upperBar": {
         "title": "Yläpalkin toiminnot",
         "content": {
@@ -524,7 +524,7 @@
     },
     "customLayerInfo": {
       "customFilter": "Oma suodatin",
-      "modalTitle": "Luo oma suodatin",
+      "dialogTitle": "Luo oma suodatin",
       "closeInfo": "Sulje ohje",
       "infoContent": "Omalla suodattimella voidaan tallentaa valittuja tasoja selaimen välimuistiin. Oman suodattimen muokkaaminen on laitekohtaista. Kun olet valinnut halutut tasot, paina 'Tallenna' -painiketta. 'Tyhjennä kaikki' -painike poistaa kaikki valitut tasot suodattimesta.",
       "saveLayers": "Tallenna",
@@ -534,9 +534,9 @@
     }
   },
   "downloadLink": {
-    "downloadLinkModalHeader": "Aineiston lataus",
-    "downloadLinkModalNameText": "Aineiston nimi",
-    "downloadLinkModalButtonText": "Lataa aineisto",
+    "downloadLinkDialogHeader": "Aineiston lataus",
+    "downloadLinkDialogNameText": "Aineiston nimi",
+    "downloadLinkDialogButtonText": "Lataa aineisto",
     "downloadSize": "Aineiston koko"
   },
   "groupLayerList": {

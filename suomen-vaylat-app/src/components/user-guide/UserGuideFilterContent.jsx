@@ -37,42 +37,42 @@ const UserGuideFilterContent = () => {
   const stepsContent = [
     {
       step: 1,
-      title: strings.appGuide.modalContent.filter.steps.step1.title || '',
+      title: strings.appGuide.dialogContent.filter.steps.step1.title || '',
       content: <StepImage src={filterImg} alt="Filter Button Image" />,
     },
     {
       step: 2,
-      title: strings.appGuide.modalContent.filter.steps.step2.title || '',
-      content: strings.appGuide.modalContent.filter.steps.step2.content || '',
+      title: strings.appGuide.dialogContent.filter.steps.step2.title || '',
+      content: strings.appGuide.dialogContent.filter.steps.step2.content || '',
     },
     {
       step: 3,
-      title: strings.appGuide.modalContent.filter.steps.step3.title || '',
+      title: strings.appGuide.dialogContent.filter.steps.step3.title || '',
       content: (
         <ul>
-          <li dangerouslySetInnerHTML={{ __html: strings.appGuide.modalContent.filter.steps.step3.content.equal || '' }}/>
-          <li dangerouslySetInnerHTML={{ __html: strings.appGuide.modalContent.filter.steps.step3.content.notEqual || '' }}/>
-          <li dangerouslySetInnerHTML={{ __html: strings.appGuide.modalContent.filter.steps.step3.content.contains || '' }}/>
-          <li dangerouslySetInnerHTML={{ __html: strings.appGuide.modalContent.filter.steps.step3.content.notContains || '' }}/>
-          <li dangerouslySetInnerHTML={{ __html: strings.appGuide.modalContent.filter.steps.step3.content.smallerThan || '' }}/>
-          <li dangerouslySetInnerHTML={{ __html: strings.appGuide.modalContent.filter.steps.step3.content.biggerThan || '' }}/>
+          <li dangerouslySetInnerHTML={{ __html: strings.appGuide.dialogContent.filter.steps.step3.content.equal || '' }}/>
+          <li dangerouslySetInnerHTML={{ __html: strings.appGuide.dialogContent.filter.steps.step3.content.notEqual || '' }}/>
+          <li dangerouslySetInnerHTML={{ __html: strings.appGuide.dialogContent.filter.steps.step3.content.contains || '' }}/>
+          <li dangerouslySetInnerHTML={{ __html: strings.appGuide.dialogContent.filter.steps.step3.content.notContains || '' }}/>
+          <li dangerouslySetInnerHTML={{ __html: strings.appGuide.dialogContent.filter.steps.step3.content.smallerThan || '' }}/>
+          <li dangerouslySetInnerHTML={{ __html: strings.appGuide.dialogContent.filter.steps.step3.content.biggerThan || '' }}/>
         </ul>
       ),
     },
     {
       step: 4,
-      title: strings.appGuide.modalContent.filter.steps.step4.title || '',
-      content: strings.appGuide.modalContent.filter.steps.step4.content || '',
+      title: strings.appGuide.dialogContent.filter.steps.step4.title || '',
+      content: strings.appGuide.dialogContent.filter.steps.step4.content || '',
     },
     {
       step: 5,
-      title: strings.appGuide.modalContent.filter.steps.step5.title || '',
+      title: strings.appGuide.dialogContent.filter.steps.step5.title || '',
       content: '',
     },
     {
       step: 6,
-      title: strings.appGuide.modalContent.filter.steps.step6.title || '',
-      content: strings.appGuide.modalContent.filter.steps.step6.content || '',
+      title: strings.appGuide.dialogContent.filter.steps.step6.title || '',
+      content: strings.appGuide.dialogContent.filter.steps.step6.content || '',
     },
   ];
 
@@ -86,11 +86,11 @@ const UserGuideFilterContent = () => {
           </li>
         ))}
       </StyledList>
-      <StepContent dangerouslySetInnerHTML={{ __html: strings.appGuide.modalContent.filter.additionalInstructions || '' }}/>
+      <StepContent dangerouslySetInnerHTML={{ __html: strings.appGuide.dialogContent.filter.additionalInstructions || '' }}/>
       <StepContent>
-        {strings.appGuide.modalContent.filter.feedback || ''}{' '}
-        <a href={`mailto:${strings.appGuide.modalContent.filter.feedbackEmail}`}>
-          {strings.appGuide.modalContent.filter.feedbackEmail}
+        {strings.appGuide.dialogContent.filter.feedback || ''}{' '}
+        <a href={`mailto:${strings.appGuide.dialogContent.filter.feedbackEmail}`}>
+          {strings.appGuide.dialogContent.filter.feedbackEmail}
         </a>
       </StepContent>
     </InstructionsContainer>

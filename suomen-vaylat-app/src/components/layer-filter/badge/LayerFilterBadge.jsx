@@ -9,9 +9,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { setFilters, setFilteringInfo } from '../../../state/slices/rpcSlice';
 
 import {
-  setIsFilterModalOpen,
-  setMinimizeFilterModal,
-  setMaximizeFilterModal
+  setIsFilterDialogOpen,
+  setMinimizeFilterDialog,
+  setMaximizeFilterDialog
 } from '../../../state/slices/uiSlice';
 
 const StyledFilterActionButton = styled(motion.div)`
@@ -116,7 +116,7 @@ const LayerFilterBadge = ({}) => {
     (state) => state.rpc
   );
 
-  const handleCloseFilterModal = () => {
+  const handleCloseFilterDialog = () => {
     // reset map
     filteringInfo.forEach((filteringInfo) => {
       filters.length > 0 &&
@@ -130,9 +130,9 @@ const LayerFilterBadge = ({}) => {
     });
 
     // reset states
-    store.dispatch(setIsFilterModalOpen(false));
-    store.dispatch(setMinimizeFilterModal({ minimized: false }));
-    store.dispatch(setMaximizeFilterModal(false));
+    store.dispatch(setIsFilterDialogOpen(false));
+    store.dispatch(setMinimizeFilterDialog({ minimized: false }));
+    store.dispatch(setMaximizeFilterDialog(false));
     store.dispatch(setFilters([]));
     store.dispatch(setFilteringInfo([]));
   };
@@ -167,12 +167,12 @@ const LayerFilterBadge = ({}) => {
         <StyledFilterText>{filterInfoTitle}</StyledFilterText>
         <StyledExpandButton
           onClick={() =>
-            store.dispatch(setMinimizeFilterModal({ minimized: false }))
+            store.dispatch(setMinimizeFilterDialog({ minimized: false }))
           }
         >
           <FontAwesomeIcon icon={faExpand} />
         </StyledExpandButton>
-        <StyledActionButtonClose onClick={() => handleCloseFilterModal()}>
+        <StyledActionButtonClose onClick={() => handleCloseFilterDialog()}>
           <FontAwesomeIcon icon={faTimes} />
         </StyledActionButtonClose>
       </StyledContentWrapper>

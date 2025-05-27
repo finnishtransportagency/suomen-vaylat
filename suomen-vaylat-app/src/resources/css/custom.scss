@@ -91,13 +91,13 @@ html {
   scrollbar-width: thin;
 }
 
-div.ReactModalPortal {
-  div.ReactModal__Overlay--after-open {
+div.ReactDialogPortal {
+  div.ReactDialog__Overlay--after-open {
     z-index: 20;
     position: fixed;
     inset: 0px;
     background-color: transparent !important;
-    div.metadata-modal {
+    div.metadata-dialog {
       position: absolute;
       transform: translate(-50%, -50%);
       padding: 0px;
@@ -130,6 +130,6 @@ div.ReactModalPortal {
   }
 }
 
-div.ReactModal__Overlay.ReactModal__Overlay--after-open {
+div.ReactDialog__Overlay.ReactDialog__Overlay--after-open {
   background: transparent !important;
 }

@@ -15,7 +15,7 @@ import { LayerFilter } from './LayerFilter';
 import { setFilteringInfo, setFilters } from '../../state/slices/rpcSlice';
 import { updateFiltersOnMap } from '../../utils/gfiUtil';
 
-const StyledModalContainer = styled.div`
+const StyledDialogContainer = styled.div`
   :after {
     content: '';
     display: table;
@@ -117,7 +117,7 @@ const StyledTabContent = styled.div`
 `;
 
 export const LayerFilterContainer = () => {
-  // GET ALL FILTERS WITH LAYER AND MAP THEM BY LAYER TO RETURN FilterModal
+  // GET ALL FILTERS WITH LAYER AND MAP THEM BY LAYER TO RETURN FilterDialog
   const [selectedTab, setSelectedTab] = useState(0);
   const { filteringInfo, allLayers, filters, channel } = useAppSelector(
     (state) => state.rpc
@@ -171,7 +171,7 @@ export const LayerFilterContainer = () => {
     }
   };
   return (
-    <StyledModalContainer>
+    <StyledDialogContainer>
       {/** HAVE TABS HERE  */}
       <StyledTabSwiperContainer>
         {!isMobile && gfiTabsSnapGridLength > 1 && (
@@ -261,6 +261,6 @@ export const LayerFilterContainer = () => {
           })}
         </StyledSwiper>
       </StyledTabContent>
-    </StyledModalContainer>
+    </StyledDialogContainer>
   );
 };

@@ -8,7 +8,7 @@ import { theme, isMobile } from '../../theme/theme';
 import ReactTooltip from 'react-tooltip';
 import strings from '../../translations';
 import {
-  setMinimizeFilterModal,
+  setMinimizeFilterDialog,
   setSelectedMapLayersMenuTab
 } from '../../state/slices/uiSlice';
 import { setFilteringInfo } from '../../state/slices/rpcSlice';
@@ -21,7 +21,7 @@ import {
 import { updateLayers, updateLayerLegends } from "../../utils/rpcUtil";
 import LayerDownloadLinkButton from "../layerlists/hierarchical-layerlist/LayerDownloadLinkButton";
 import {
-  setIsDownloadLinkModalOpen,
+  setIsDownloadLinkDialogOpen,
 } from "../../state/slices/uiSlice";
 import LayerMetadataButton from "../layerlists/hierarchical-layerlist/LayerMetadataButton";
 import { useAppSelector } from "../../state/hooks";
@@ -105,10 +105,10 @@ export const Layer = ({ layer, themeName, groupName, showSwitch = true }) => {
     updateLayers(store, channel);
   };
 
-  const handleIsDownloadLinkModalOpen = () => {
+  const handleIsDownloadLinkDialogOpen = () => {
     store.dispatch(
-      setIsDownloadLinkModalOpen({
-        layerDownloadLinkModalOpen: true,
+      setIsDownloadLinkDialogOpen({
+        layerDownloadLinkDialogOpen: true,
         layerDownloadLink: downloadLink,
         layerDownloadLinkName: layer.name
       })
@@ -179,7 +179,7 @@ export const Layer = ({ layer, themeName, groupName, showSwitch = true }) => {
 
       const updateFilter = [...filteringInfo];
       updateFilter.push({
-        modalOpen: true,
+        dialogOpen: true,
         layer: {
           id: layer.id,
           title: layer.name,
@@ -190,12 +190,12 @@ export const Layer = ({ layer, themeName, groupName, showSwitch = true }) => {
       store.dispatch(setFilteringInfo(updateFilter));
       minimizeFilter &&
         store.dispatch(
-          setMinimizeFilterModal({ minimized: false, layer: layer.id })
+          setMinimizeFilterDialog({ minimized: false, layer: layer.id })
         );
     } else {
       minimizeFilter &&
         store.dispatch(
-          setMinimizeFilterModal({ minimized: false, layer: layer.id })
+          setMinimizeFilterDialog({ minimized: false, layer: layer.id })
         );
     }
   };
@@ -266,7 +266,7 @@ export const Layer = ({ layer, themeName, groupName, showSwitch = true }) => {
       )}
       {downloadLink && (
         <LayerDownloadLinkButton
-          handleIsDownloadLinkModalOpen={handleIsDownloadLinkModalOpen}
+          handleIsDownloadLinkDialogOpen={handleIsDownloadLinkDialogOpen}
         />
       )}
       {showSwitch && (

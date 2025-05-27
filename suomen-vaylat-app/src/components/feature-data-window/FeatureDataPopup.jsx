@@ -724,7 +724,7 @@ export const FeatureDataPopup = () => {
     return tablePropsInit;
   };
 
-  const handleGfiToolsMenuWithConfirmModal = () => {
+  const handleGfiToolsMenuWithConfirmDialog = () => {
     const fetchableLayers = selectedLayers.filter((layer) =>
       layer.groups?.every((group) => group !== 1)
     );
@@ -1219,7 +1219,7 @@ export const FeatureDataPopup = () => {
           text={strings.gfi.selectLocations}
           toggleState={isGfiToolsOpen}
           tooltipDirection={'bottom'}
-          clickAction={handleGfiToolsMenuWithConfirmModal}
+          clickAction={handleGfiToolsMenuWithConfirmDialog}
           disabled={
             !selectedLayers.some(
               (layer) =>

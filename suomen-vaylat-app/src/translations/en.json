@@ -161,7 +161,7 @@
   "exitConfirmation": "You are leaving the Suomen väylät. Do you want to continue?",
   "appGuide": {
     "title": "User Guide",
-    "modalContent": {
+    "dialogContent": {
       "upperBar": {
         "title": "Top Bar Functions",
         "content": {
@@ -489,7 +489,7 @@
     },
     "customLayerInfo": {
       "customFilter": "Custom filter",
-      "modalTitle": "Create custom filter",
+      "dialogTitle": "Create custom filter",
       "closeInfo": "Close info",
       "infoContent": "You can use your custom filter to save selected layers in the browser's cache. Editing your custom filter is device-specific. Once you have selected the desired layers, press the 'Save' button. The 'Clear All' button removes all selected layers from the filter.",
       "saveLayers": "Save",
@@ -499,9 +499,9 @@
     }
   },
   "downloadLink": {
-    "downloadLinkModalHeader": "Download dataset",
-    "downloadLinkModalNameText": "Dataset name",
-    "downloadLinkModalButtonText": "Download dataset",
+    "downloadLinkDialogHeader": "Download dataset",
+    "downloadLinkDialogNameText": "Dataset name",
+    "downloadLinkDialogButtonText": "Download dataset",
     "downloadSize": "Dataset size"
   },
   "groupLayerList": {

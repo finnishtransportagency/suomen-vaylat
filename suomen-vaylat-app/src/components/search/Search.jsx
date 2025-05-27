@@ -31,7 +31,7 @@ import { Slide, toast } from "react-toastify";
 import SearchToast from '../toasts/SearchToast';
 import ReactTooltip from 'react-tooltip';
 import TipToast from '../toasts/TipToast';
-import SearchModal from './SearchModal';
+import SearchDialog from './SearchDialog';
 
 export const StyledSearchIcon = styled.div`
     min-width: 48px;
@@ -840,7 +840,7 @@ const Search = () => {
                             hidden={true}
                         />
                         {isMoreSearchOpen && (
-                            <SearchModal
+                            <SearchDialog
                                 searchValue={searchValue}
                                 setSearchValue={setSearchValue}
                                 searchResults={searchResults}
@@ -902,7 +902,7 @@ const Search = () => {
                                             setIsSearchMethodSelectorOpen(
                                                 false
                                             );
-                                            //setSearchModalOpen(false);
+                                            //setSearchDialogOpen(false);
                                             setSearchValue('');
                                             isSearchOpen &&
                                                 removeMarkersAndFeatures();

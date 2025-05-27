@@ -4,7 +4,7 @@ import { faMap } from '@fortawesome/free-solid-svg-icons';
 import { sortObjectAlphabetically } from '../../../utils/rpcUtil';
 import { useAppSelector } from '../../../state/hooks';
 import ThemeLayerList from './ThemeLayerList';
-import ModalHeader from '../../../utils/components/ModalHeader';
+import DialogHeader from '../../../utils/components/DialogHeader';
 import strings from '../../../translations';
 import store from '../../../state/store';
 import { setIsThemeMenuOpen } from '../../../state/slices/uiSlice';
@@ -76,7 +76,7 @@ function ThemeMenu() {
                 filter: 'blur(10px)'}}
                 variants={variants}
             >
-                <ModalHeader icon={faMap} title={strings.layerlist.layerlistLabels.themeLayers} handleClose={() => store.dispatch(setIsThemeMenuOpen(false))}/>
+                <DialogHeader icon={faMap} title={strings.layerlist.layerlistLabels.themeLayers} handleClose={() => store.dispatch(setIsThemeMenuOpen(false))}/>
                 <ThemeLayerList
                     allLayers={sortedLayers}
                     allThemes={[...allThemesWithLayers]}
