@@ -12,7 +12,7 @@ import store from '../../../../state/store';
 // Import Swiper styles
 import 'swiper/css';
 
-import DialogHeader from '../../../../utils/components/DialogHeader';
+import ModalHeader from '../../../../utils/components/ModalHeader';
 import LayerListContainer from '../LayerListContainer';
 import SelectedLayers from '../selected-layers/SelectedLayers';
 
@@ -20,7 +20,7 @@ import { faLayerGroup } from '@fortawesome/free-solid-svg-icons';
 
 import strings from '../../../../translations';
 
-const StyledMapLayersDialog = styled(motion.div)`
+const StyledMapLayersModal = styled(motion.div)`
     width: 350px;
     max-height: 100%;
     display: flex;
@@ -155,7 +155,7 @@ const StyledSwiper = styled(Swiper)`
     border-top: 3px solid ${(props) => (props.tabIndex === 0 ? 'rgba(0, 99, 175, 1)' : 'rgba(229, 0, 130, 1)')};
 `;
 
-const HierarchicalLayerlistDialog = () => {
+const HierarchicalLayerlistModal = () => {
     const { isSideMenuOpen, selectedMapLayersMenuTab, isThemeMenuOpen } = useAppSelector((state) => state.ui);
     const {
         allGroups,
@@ -217,7 +217,7 @@ const HierarchicalLayerlistDialog = () => {
     ];
 
       return  ( !isThemeMenuOpen && 
-        <StyledMapLayersDialog
+        <StyledMapLayersModal
             initial='closed'
             animate={isSideMenuOpen ? 'open' : 'closed'}
             transition={{duration: 0.4}}
@@ -227,7 +227,7 @@ const HierarchicalLayerlistDialog = () => {
             filter: 'blur(10px)'}}
             variants={variants}
         >
-            <DialogHeader
+            <ModalHeader
                 title={strings.layerlist.layerlistLabels.mapLayers}
                 handleClose={closeSideMenu}
                 icon={faLayerGroup}
@@ -278,8 +278,8 @@ const HierarchicalLayerlistDialog = () => {
                     );
                 })}
             </StyledSwiper>
-        </StyledMapLayersDialog>
+        </StyledMapLayersModal>
     );
 };
 
-export default HierarchicalLayerlistDialog;
+export default HierarchicalLayerlistModal;

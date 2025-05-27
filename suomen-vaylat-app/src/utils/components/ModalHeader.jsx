@@ -38,7 +38,7 @@ const StyledCloseIcon = styled(FontAwesomeIcon)`
     font-size: 20px;
 `;
 
-const DialogHeader = ({
+const ModalHeader = ({
     type,
     title,
     icon,
@@ -64,4 +64,4 @@ const DialogHeader = ({
     );
  }
 
- export default DialogHeader;
+ export default ModalHeader;

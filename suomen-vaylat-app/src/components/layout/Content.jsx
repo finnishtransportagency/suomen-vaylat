@@ -20,7 +20,7 @@ import FeatureDataToolsModal from '../feature-data-window/modal/FeatureDataTools
 import FeatureDataDownloadMenuModal from '../feature-data-window/modal/FeatureDataDownloadToolsModal';
 
 import MenuBar from './menu-bar/MenuBar';
-import HierarchicalLayerlistDialog from '../layerlists/hierarchical-layerlist/dialog/HierarchicalLayerlistDialog';
+import HierarchicalLayerlistModal from '../layerlists/hierarchical-layerlist/modal/HierarchicalLayerlistModal';
 import PublishedMap from './published-map/PublishedMap';
 import Search from '../search/Search';
 import Badges from '../badges/Badges';
@@ -167,7 +167,7 @@ const Content = () => {
           <StyledLeftSection>
             <MenuBar />
             <ThemeMenu />
-            <HierarchicalLayerlistDialog />
+            <HierarchicalLayerlistModal />
           </StyledLeftSection>
           <StyledRightSection>
             <Search />

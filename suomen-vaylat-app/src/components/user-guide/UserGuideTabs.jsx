@@ -20,7 +20,7 @@ const variants = {
   }
 };
 
-const StyledMapLayersDialog = styled(motion.div)`
+const StyledMapLayersModal = styled(motion.div)`
   grid-row-start: 1;
   grid-row-end: 3;
   width: 100%;
@@ -177,7 +177,7 @@ const UserGuideTabs = () => {
   }, [tabIndex]);
 
   return (
-    <StyledMapLayersDialog
+    <StyledMapLayersModal
       initial="open"
       variants={variants}
       transition={{
@@ -225,7 +225,7 @@ const UserGuideTabs = () => {
           );
         })}
       </StyledSwiper>
-    </StyledMapLayersDialog>
+    </StyledMapLayersModal>
   );
 };
 

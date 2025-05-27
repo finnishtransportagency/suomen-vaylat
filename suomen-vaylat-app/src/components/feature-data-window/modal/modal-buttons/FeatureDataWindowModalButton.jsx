@@ -1,12 +1,12 @@
 import React, { useContext } from 'react';
 import { ReactReduxContext } from 'react-redux';
 import { faMapMarkedAlt } from '@fortawesome/free-solid-svg-icons';
-import CircleButton from '../../../utils/components/CircleButton';
+import CircleButton from '../../../../utils/components/CircleButton';
 import styled from 'styled-components';
-import { useAppSelector } from '../../../state/hooks';
-import { setIsGfiOpen, setMinimizeGfi } from '../../../state/slices/uiSlice';
-import { setVKMData } from '../../../state/slices/rpcSlice';
-import strings from '../../../translations';
+import { useAppSelector } from '../../../../state/hooks';
+import { setIsGfiOpen, setMinimizeGfi } from '../../../../state/slices/uiSlice';
+import { setVKMData } from '../../../../state/slices/rpcSlice';
+import strings from '../../../../translations';
 
 const StyledLayerCount = styled.div`
   position: absolute;
@@ -24,7 +24,7 @@ const StyledLayerCount = styled.div`
   font-weight: 600;
 `;
 
-const FeatureDataWindowDialogButton = () => {
+const FeatureDataWindowModalButton = () => {
   const { store } = useContext(ReactReduxContext);
   const { filters, isGfiOpen } = useAppSelector((state) => ({
     filters: state.rpc.filters,
@@ -50,4 +50,4 @@ const FeatureDataWindowDialogButton = () => {
   );
 };
 
-export default FeatureDataWindowDialogButton;
+export default FeatureDataWindowModalButton;

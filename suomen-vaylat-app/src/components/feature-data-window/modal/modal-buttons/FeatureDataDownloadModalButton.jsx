@@ -2,10 +2,10 @@ import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { ReactReduxContext } from 'react-redux';
 import { faDownload } from '@fortawesome/free-solid-svg-icons';
-import CircleButton from '../../../utils/components/CircleButton';
-import { useAppSelector } from '../../../state/hooks';
-import { setIsGfiDownloadOpen } from '../../../state/slices/uiSlice';
-import strings from '../../../translations';
+import CircleButton from '../../../../utils/components/CircleButton';
+import { useAppSelector } from '../../../../state/hooks';
+import { setIsGfiDownloadOpen } from '../../../../state/slices/uiSlice';
+import strings from '../../../../translations';
 
 import {
   setIsDrawingToolsOpen,
@@ -13,9 +13,9 @@ import {
   setGeoJsonArray,
   setSelectedMarker,
   removeFromDrawToolMarkers
-} from '../../../state/slices/uiSlice';
+} from '../../../../state/slices/uiSlice';
 
-import { removeMarkerRequest } from '../../../state/slices/rpcSlice';
+import { removeMarkerRequest } from '../../../../state/slices/rpcSlice';
 
 const StyledLayerCount = styled.div`
   position: absolute;
@@ -33,7 +33,7 @@ const StyledLayerCount = styled.div`
   font-weight: 600;
 `;
 
-const FeatureDataDownloadDialogButton = () => {
+const FeatureDataDownloadModalButton = () => {
   const { store } = useContext(ReactReduxContext);
   const { channel } = useAppSelector((state) => state.rpc);
   const { drawToolMarkers } = useAppSelector((state) => state.ui);
@@ -88,4 +88,4 @@ const FeatureDataDownloadDialogButton = () => {
   );
 };
 
-export default FeatureDataDownloadDialogButton;
+export default FeatureDataDownloadModalButton;

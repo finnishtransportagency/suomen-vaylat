@@ -1,12 +1,12 @@
 import React, { useContext } from 'react';
 import { ReactReduxContext } from 'react-redux';
 import { faSave } from '@fortawesome/free-solid-svg-icons';
-import CircleButton from '../../../utils/components/CircleButton';
-import { useAppSelector } from '../../../state/hooks';
-import { setIsSaveViewOpen } from '../../../state/slices/uiSlice';
-import strings from '../../../translations';
+import CircleButton from '../../../../utils/components/CircleButton';
+import { useAppSelector } from '../../../../state/hooks';
+import { setIsSaveViewOpen } from '../../../../state/slices/uiSlice';
+import strings from '../../../../translations';
 
-const SavedContentDialogButton = () => {
+const SavedContentModalButton = () => {
   const { store } = useContext(ReactReduxContext);
   const { isSaveViewOpen } = useAppSelector((state) => state.ui);
 
@@ -21,4 +21,4 @@ const SavedContentDialogButton = () => {
   );
 };
 
-export default SavedContentDialogButton;
+export default SavedContentModalButton;

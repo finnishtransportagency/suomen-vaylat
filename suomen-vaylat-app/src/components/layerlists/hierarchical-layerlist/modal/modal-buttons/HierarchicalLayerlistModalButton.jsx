@@ -1,14 +1,14 @@
 import React, { useContext } from 'react';
 import { ReactReduxContext } from 'react-redux';
 import { faLayerGroup } from '@fortawesome/free-solid-svg-icons';
-import CircleButton from '../../../../utils/components/CircleButton';
+import CircleButton from '../../../../../utils/components/CircleButton';
 import styled from 'styled-components';
-import { useAppSelector } from '../../../../state/hooks';
+import { useAppSelector } from '../../../../../state/hooks';
 import {
   setIsSideMenuOpen,
   setIsThemeMenuOpen
-} from '../../../../state/slices/uiSlice';
-import strings from '../../../../translations';
+} from '../../../../../state/slices/uiSlice';
+import strings from '../../../../../translations';
 
 const StyledLayerCount = styled.div`
   position: absolute;
@@ -26,7 +26,7 @@ const StyledLayerCount = styled.div`
   font-weight: 600;
 `;
 
-const HierarchicalLayerlistDialogButton = ({
+const HierarchicalLayerlistModalButton = ({
   animationUnfinished,
   waitForAnimationFinish
 }) => {
@@ -67,4 +67,4 @@ const HierarchicalLayerlistDialogButton = ({
   );
 };
 
-export default HierarchicalLayerlistDialogButton;
+export default HierarchicalLayerlistModalButton;

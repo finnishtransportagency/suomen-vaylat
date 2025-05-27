@@ -1,18 +1,18 @@
 import React, { useContext } from 'react';
 import { ReactReduxContext } from 'react-redux';
 import { faPencilRuler } from '@fortawesome/free-solid-svg-icons';
-import CircleButton from '../../../utils/components/CircleButton';
-import { useAppSelector } from '../../../state/hooks';
+import CircleButton from '../../../../utils/components/CircleButton';
+import { useAppSelector } from '../../../../state/hooks';
 import {
   setIsDrawingToolsOpen,
   setGeoJsonArray,
   setActiveTool,
   setSelectedMarker,
   removeFromDrawToolMarkers
-} from '../../../state/slices/uiSlice';
-import { removeMarkerRequest } from '../../../state/slices/rpcSlice';
-import strings from '../../../translations';
-const DrawingToolsDialogButton = () => {
+} from '../../../../state/slices/uiSlice';
+import { removeMarkerRequest } from '../../../../state/slices/rpcSlice';
+import strings from '../../../../translations';
+const DrawingToolsModalButton = () => {
   const { store } = useContext(ReactReduxContext);
   const { channel, drawToolMarkers, isDrawingToolsOpen } = useAppSelector(
     (state) => ({
@@ -45,4 +45,4 @@ const DrawingToolsDialogButton = () => {
   );
 };
 
-export default DrawingToolsDialogButton;
+export default DrawingToolsModalButton;

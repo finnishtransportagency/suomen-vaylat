@@ -1,15 +1,15 @@
 import React, { useContext } from 'react';
 import { ReactReduxContext } from 'react-redux';
 import { faMap } from '@fortawesome/free-solid-svg-icons';
-import CircleButton from '../../../../utils/components/CircleButton';
-import { useAppSelector } from '../../../../state/hooks';
+import CircleButton from '../../../../../utils/components/CircleButton';
+import { useAppSelector } from '../../../../../state/hooks';
 import {
   setIsThemeMenuOpen,
   setIsSideMenuOpen
-} from '../../../../state/slices/uiSlice';
-import strings from '../../../../translations';
+} from '../../../../../state/slices/uiSlice';
+import strings from '../../../../../translations';
 
-const ThemeLayerlistDialogButton = ({
+const ThemeLayerlistModalButton = ({
   animationUnfinished,
   waitForAnimationFinish
 }) => {
@@ -45,4 +45,4 @@ const ThemeLayerlistDialogButton = ({
   );
 };
 
-export default ThemeLayerlistDialogButton;
+export default ThemeLayerlistModalButton;
