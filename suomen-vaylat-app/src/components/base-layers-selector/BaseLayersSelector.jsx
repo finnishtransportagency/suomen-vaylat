@@ -39,14 +39,6 @@ const StyledButton = styled(Button)`
     @media ${props => props.theme.device.tablet} {
         max-width: 100px;
     };
-    @media ${props => props.theme.device.mobileL} {
-        max-width: 80px;
-        padding: 4px 8px
-    };
-    @media ${props => props.theme.device.mobileS} {
-        max-width: 60px;
-        padding: 2px 6px
-    };
 `;
 
 const StyledButtonText = styled.div`
@@ -56,12 +48,6 @@ const StyledButtonText = styled.div`
     font-size: 14px;
     font-weight: 600;
     user-select: none;
-    @media ${props => props.theme.device.mobileL} {
-        font-size: 12px;
-    };
-    @media ${props => props.theme.device.mobileS} {
-        font-size: 10px;
-    };
 `;
 
 const BaseLayerSelector = () => {
