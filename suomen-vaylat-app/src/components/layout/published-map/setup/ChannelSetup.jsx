@@ -20,30 +20,44 @@ const isSafari = () => {
   return /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 };
 
-const setupSupportedFunctions = (data, channel, store) => {
-  // Fetch and save announcements to state
-  if (data.getSelectedAnnouncements) {
-    channel.getSelectedAnnouncements((responseData) => {
-      store.dispatch(setAnnouncements(responseData));
-      const activeAnnouncements = getActiveAnnouncements(responseData);
-      if (activeAnnouncements.length > 0) {
-        store.dispatch(setActiveAnnouncements(activeAnnouncements));
-      }
+const fetchAnnouncementsAsync = async (data, channel, store) => {
+  let activeAnnouncements = [];
+  await new Promise((resolve) => {
+    setTimeout(() => {
+      if (data.getSelectedAnnouncements) {
+        channel.getSelectedAnnouncements(function (responseData) {
+          store.dispatch(setAnnouncements(responseData));
+          activeAnnouncements = getActiveAnnouncements(responseData);
 
-      // Safari workaround
-      if (isSafari() && activeAnnouncements.length === 0) {
-        setTimeout(() => {
-          channel.getSelectedAnnouncements((safariResponseData) => {
-            const safariAnnouncements =
-              getActiveAnnouncements(safariResponseData);
-            if (safariAnnouncements.length > 0) {
-              store.dispatch(setActiveAnnouncements(safariAnnouncements));
+          if (activeAnnouncements && activeAnnouncements.length > 0) {
+            store.dispatch(setActiveAnnouncements(activeAnnouncements));
+          }
+          resolve(activeAnnouncements);
+        });
+      } else {
+        resolve(activeAnnouncements);
+      }
+    }, 1000);
+  }).then((announcements) => {
+    // due to a bug, check again after 3 seconds if announcements list is empty on Safari
+    if (isSafari() && announcements.length === 0) {
+      setTimeout(() => {
+        if (data.getSelectedAnnouncements) {
+          channel.getSelectedAnnouncements(function (responseData) {
+            activeAnnouncements = getActiveAnnouncements(responseData);
+            if (activeAnnouncements && activeAnnouncements.length > 0) {
+              store.dispatch(setActiveAnnouncements(activeAnnouncements));
             }
           });
-        }, 8000);
-      }
-    });
-  }
+        }
+      }, 8000);
+    }
+  });
+};
+
+const setupSupportedFunctions = (data, channel, store) => {
+  // Fetch and save announcements to state
+  fetchAnnouncementsAsync(data, channel, store);
 
   if (data.getTags) {
     channel.getTags((tagsData) => store.dispatch(setAllTags(tagsData)));
