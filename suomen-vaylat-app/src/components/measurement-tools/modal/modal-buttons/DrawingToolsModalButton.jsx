@@ -12,6 +12,16 @@ import {
 } from '../../../../state/slices/uiSlice';
 import { removeMarkerRequest } from '../../../../state/slices/rpcSlice';
 import strings from '../../../../translations';
+import styled from 'styled-components';
+import DrawingTools from '../../DrawingTools';
+
+const StyledMapToolsContainer = styled.div`
+    background-color: ${(props) => props.theme.colors.mainWhite};
+    border-radius: 24px;
+    box-shadow: 1px 2px 6px #0000004d;
+    z-index: -1;
+`;
+
 const DrawingToolsModalButton = () => {
   const { store } = useContext(ReactReduxContext);
   const { channel, drawToolMarkers, isDrawingToolsOpen } = useAppSelector(
@@ -35,13 +45,16 @@ const DrawingToolsModalButton = () => {
   };
 
   return (
-    <CircleButton
-      icon={faPencilRuler}
-      text={strings.tooltips.drawingTools.drawingToolsButton}
-      toggleState={isDrawingToolsOpen}
-      tooltipDirection="right"
-      clickAction={() => closeDrawingTools(!isDrawingToolsOpen)}
-    />
+    <StyledMapToolsContainer>
+      <CircleButton
+        icon={faPencilRuler}
+        text={strings.tooltips.drawingTools.drawingToolsButton}
+        toggleState={isDrawingToolsOpen}
+        tooltipDirection="right"
+        clickAction={() => closeDrawingTools(!isDrawingToolsOpen)}
+      />
+      <DrawingTools isOpen={isDrawingToolsOpen}/>
+    </StyledMapToolsContainer>
   );
 };
 
