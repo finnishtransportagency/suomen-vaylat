@@ -7,7 +7,9 @@ import {
   setGFILocations,
   setPointInfo,
   setVKMData,
-  setGFICroppingArea
+  setGFICroppingArea,
+  setCurrentMapCenter,
+  setScaleBarState
 } from '../../../../state/slices/rpcSlice';
 import {
   addToDrawToolMarkers,
@@ -141,6 +143,14 @@ const MapEventsHandler = ({ channel, store }) => {
       store.dispatch(removeMarkerRequest({ markerId: event.id }));
       store.dispatch(removeFromDrawToolMarkers(event.id));
     }
+  });
+
+  channel.handleEvent('AfterMapMoveEvent', (event) => {
+    store.dispatch(setCurrentMapCenter(event));
+  });
+
+  channel.handleEvent('ScaleBarEvent', function (data) {
+    store.dispatch(setScaleBarState(data));
   });
 
   return null;
