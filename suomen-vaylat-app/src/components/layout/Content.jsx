@@ -26,7 +26,7 @@ import Search from '../search/Search';
 import Badges from '../badges/Badges';
 import ScaleBar from '../scalebar/ScaleBar';
 import ZoomMenu from '../zoom-features/ZoomMenu';
-import WarningModal from '../warning/modal/WarningModal';
+import WarningModal from '../warning-modal/modal/WarningModal';
 import ThemeMenu from '../layerlists/theme-layerlist/ThemeMenu';
 
 const StyledContent = styled.div`
