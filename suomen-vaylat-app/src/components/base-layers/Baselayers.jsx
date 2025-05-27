@@ -6,7 +6,7 @@ import strings from '../../translations';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { useAppSelector } from '../../state/hooks';
-import Layer from '../layerlists/hierarchical-layerlist/Layer';
+import Layer from '../layer/Layer';
 
 
 const StyledLegendContainer = styled(motion.div)`

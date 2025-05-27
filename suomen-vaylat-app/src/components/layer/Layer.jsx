@@ -4,28 +4,28 @@ import { faFilter } from '@fortawesome/free-solid-svg-icons';
 import Badge from 'react-bootstrap/Badge';
 import { toast, Slide } from 'react-toastify';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { theme, isMobile } from '../../../theme/theme';
+import { theme, isMobile } from '../../theme/theme';
 import ReactTooltip from 'react-tooltip';
-import strings from '../../../translations';
+import strings from '../../translations';
 import {
   setMinimizeFilterModal,
   setSelectedMapLayersMenuTab
-} from '../../../state/slices/uiSlice';
-import { setFilteringInfo } from '../../../state/slices/rpcSlice';
+} from '../../state/slices/uiSlice';
+import { setFilteringInfo } from '../../state/slices/rpcSlice';
 
 import styled from 'styled-components';
 import {
   changeLayerStyle,
   setMapLayerVisibility,
-} from "../../../state/slices/rpcSlice";
-import { updateLayers, updateLayerLegends } from "../../../utils/rpcUtil";
-import LayerDownloadLinkButton from "./LayerDownloadLinkButton";
+} from "../../state/slices/rpcSlice";
+import { updateLayers, updateLayerLegends } from "../../utils/rpcUtil";
+import LayerDownloadLinkButton from "../layerlists/hierarchical-layerlist/LayerDownloadLinkButton";
 import {
   setIsDownloadLinkModalOpen,
-} from "../../../state/slices/uiSlice";
-import LayerMetadataButton from "./LayerMetadataButton";
-import { useAppSelector } from "../../../state/hooks";
-import LayerlistSwitch from './LayerlistSwitch';
+} from "../../state/slices/uiSlice";
+import LayerMetadataButton from "../layerlists/hierarchical-layerlist/LayerMetadataButton";
+import { useAppSelector } from "../../state/hooks";
+import LayerlistSwitch from '../layerlists/hierarchical-layerlist/LayerlistSwitch';
 
 const StyledLayerContainer = styled.div`
   background-color: ${(props) => props.themeStyle && '#F5F5F5'};

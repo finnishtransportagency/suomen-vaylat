@@ -5,7 +5,7 @@ const avaFileSizes = {};
  * @param {String} downloadUrl download url
  * @returns file size in bytes
  */
-export async function fetchAvaFileSize(downloadUrl) {
+export async function avaFileSizeUtil(downloadUrl) {
     if (avaFileSizes[downloadUrl]) {
         return avaFileSizes[downloadUrl];
     }

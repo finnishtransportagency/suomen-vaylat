@@ -33,9 +33,7 @@ const StyledMenuBar = styled.div`
 `;
 
 const MenuBar = () => {
-  const { isFullScreen } = useAppSelector(
-    (state) => state.ui
-  );
+  const { isFullScreen } = useAppSelector((state) => state.ui);
 
   const [animationUnfinished, setAnimationUnfinished] = useState(false);
   const handleFullScreen = () => {
@@ -83,10 +81,9 @@ const MenuBar = () => {
     }, 400);
   };
 
-  // TODO: closeDrawingTools should maybe be moved to a slice
   return (
     <>
-      <StyledMenuBar id='menu_bar'>
+      <StyledMenuBar id="menu_bar">
         <ThemeLayerlistDialogButton
           animationUnfinished={animationUnfinished}
           waitForAnimationFinish={waitForAnimationFinish}
@@ -96,7 +93,7 @@ const MenuBar = () => {
           waitForAnimationFinish={waitForAnimationFinish}
         />
         <FeatureDataWindowDialogButton />
-        <FeatureDataDownloadDialogButton/>
+        <FeatureDataDownloadDialogButton />
         <DrawingToolsDialogButton />
         <SavedContentDialogButton />
         <CircleButton

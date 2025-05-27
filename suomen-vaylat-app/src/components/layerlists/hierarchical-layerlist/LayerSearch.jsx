@@ -4,8 +4,8 @@ import { motion } from 'framer-motion';
 import styled from 'styled-components';
 import { setSearchParams } from '../../../state/slices/uiSlice';
 import strings from '../../../translations';
-import Layer from './Layer';
-import { findGroupForLayer } from './Layer';
+import Layer from '../../layer/Layer';
+import { findGroupForLayer } from '../../layer/Layer';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {

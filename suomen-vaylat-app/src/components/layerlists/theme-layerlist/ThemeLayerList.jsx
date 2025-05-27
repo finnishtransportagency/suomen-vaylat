@@ -16,7 +16,7 @@ import strings from '../../../translations';
 import { setZoomTo } from '../../../state/slices/rpcSlice';
 import { setWarning } from '../../../state/slices/uiSlice';
 import { selectGroup, sortObjectAlphabetically } from '../../../utils/rpcUtil';
-import Layers from '../hierarchical-layerlist/Layers';
+import Layers from '../../layer/Layers';
 
 import hankekartta from './resources/images/hankekartta.JPG';
 import intersection from './resources/images/Intersection.jpg';

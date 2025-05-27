@@ -1,5 +1,5 @@
 import Layer from './Layer';
-import strings from '../../../translations';
+import strings from '../../translations';
 import { findGroupForLayer } from './Layer';
 
 export const Layers = ({

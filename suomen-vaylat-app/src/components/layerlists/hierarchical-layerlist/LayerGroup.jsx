@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { ReactReduxContext, useSelector } from "react-redux";
 import { motion } from "framer-motion";
 import LayerList from "./LayerList";
-import Layers from "./Layers";
+import Layers from "../../layer/Layers";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faAngleRight,

@@ -7,7 +7,7 @@ import styled from 'styled-components';
 import store from '../../../state/store';
 
 import LayerGroup from './LayerGroup';
-import Layers from './Layers';
+import Layers from '../../layer/Layers';
 
 import { motion } from 'framer-motion';
 import strings from '../../../translations';

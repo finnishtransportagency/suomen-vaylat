@@ -5,8 +5,8 @@ import React from "react";
 import styled from "styled-components";
 import {Button} from "react-bootstrap";
 import strings from "../../../translations";
-import { bytesToHumanReadable } from "../../../utils/fileSizeUtil";
-import { fetchAvaFileSize } from "../../../utils/avaUtil";
+import { bytesToHumanReadable } from "./utils/bytesToHumanReadable";
+import { avaFileSizeUtil } from "./utils/avaFileSizeUtil";
 
 const StyledFooter = styled.div`
     justify-content: center;
@@ -45,7 +45,7 @@ export const LayerDownloadLinkButtonModalContent = ({
     const [fileSize, setFileSize] = useState('-');
 
     useEffect(() => {
-        fetchAvaFileSize(downloadLink.layerDownloadLink).then(size => {
+        avaFileSizeUtil(downloadLink.layerDownloadLink).then(size => {
                 if (size !== null) {
                     setFileSize(bytesToHumanReadable(size, false, 1));
                 } else {
