@@ -7,6 +7,7 @@ import { Button } from "react-bootstrap";
 import { updateLayers } from '../../utils/rpcUtil';
 import { setMapLayerVisibility } from '../../state/slices/rpcSlice';
 
+
 const StyledBaselayerButtonContainer = styled(motion.div)` 
     position: absolute;
     bottom: 5px;
@@ -20,10 +21,7 @@ const StyledBaselayerButtonContainer = styled(motion.div)`
         gap: 6px;
     };
     @media ${props => props.theme.device.mobileL} {
-        gap: 4px;
-    };
-    @media ${props => props.theme.device.mobileS} {
-        gap: 2px;
+        display: none; /* Hide on mobileL */
     };
 `;
 
@@ -98,7 +96,6 @@ const BaseLayerSelector = () => {
                 />
             ))}
         </StyledBaselayerButtonContainer>
-
     );
 };
 

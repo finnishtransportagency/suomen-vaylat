@@ -4,8 +4,8 @@ import { useAppSelector } from '../../state/hooks';
 
 const StyledScaleBarContainer = styled(motion.div)`
     position: fixed;
-    bottom: 10px;
-    left: 80%;
+    bottom: 50px;
+    left: 90px;
     display: flex;
     justify-content: center;
     //border-style: inset;
@@ -24,9 +24,6 @@ const StyledScaleBarText = styled.p`
     font-weight: 600;
     cursor: default;
     @media ${props => props.theme.device.tablet} {
-        font-size: 12px;
-    };
-    @media ${props => props.theme.device.mobileL} {
         font-size: 12px;
     };
     @media ${props => props.theme.device.mobileS} {
