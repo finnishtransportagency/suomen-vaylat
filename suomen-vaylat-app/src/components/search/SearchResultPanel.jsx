@@ -1,6 +1,6 @@
-import AddRessSearchResultPanel from './AddRessSearchResultPanel';
-import MetaSearchResultPanel from './MetaSearchResultPanel';
-import FeatureSearchResultPanel from './FeatureSearchResultPanel';
+import AddRessSearchResultPanel from './address-search/AddRessSearchResultPanel';
+import MetaSearchResultPanel from './metadata-search/MetadataSearchResultPanel';
+import FeatureSearchResultPanel from './feature-search/FeatureSearchResultPanel';
 import styled, { css } from 'styled-components';
 import {
     faAngleDown,

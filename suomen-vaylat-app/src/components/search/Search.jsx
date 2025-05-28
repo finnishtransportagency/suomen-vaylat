@@ -11,10 +11,10 @@ import {
     faInfoCircle,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import AddressSearch from './AddressSearch';
-import MetadataSearch from './MetadataSearch';
-import FeatureSearch from './FeatureSearch';
-import SvLoder from '../loader/SvLoader';
+import AddressSearch from './address-search/AddressSearch';
+import MetadataSearch from './metadata-search/MetadataSearch';
+import FeatureSearch from './feature-search/FeatureSearch';
+import SvLoder from '../../utils/components/SvLoader';
 import strings from '../../translations';
 import { SEARCH_TIP_LOCALSTORAGE } from '../../utils/constants';
 
@@ -24,14 +24,14 @@ import { addMarkerRequest, mapMoveRequest, pushToFeatureSearchResults, resetFeat
 
 import { setIsSearchOpen, setGeoJsonArray, setHasToastBeenShown, setActiveSwitch, setIsMoreSearchOpen } from '../../state/slices/uiSlice';
 
-import CircleButton from '../circle-button/CircleButton';
+import CircleButton from '../../utils/components/CircleButton';
 
-import { VKMGeoJsonHoverStyles, VKMGeoJsonStyles } from './VKMSearchStyles';
+import { VKMGeoJsonHoverStyles, VKMGeoJsonStyles } from './utils/VKMSearchStyles';
 import { Slide, toast } from "react-toastify";
 import SearchToast from '../toasts/SearchToast';
 import ReactTooltip from 'react-tooltip';
 import TipToast from '../toasts/TipToast';
-import SearchModal from './SearchModal';
+import SearchDialog from './SearchDialog';
 
 export const StyledSearchIcon = styled.div`
     min-width: 48px;
@@ -303,6 +303,7 @@ const Search = () => {
                 })
             );
         } else {
+            // TODO: swap to rpcSlice function 
             channel.postRequest('SearchRequest', [searchValueCopy]);
         }
         setSearchValue(value);
@@ -496,6 +497,8 @@ const Search = () => {
                     if ((data?.result?.locations?.length > 1 || data?.result?.geom?.length > 1) && !isMoreSearchOpen) {
                         store.dispatch(setIsMoreSearchOpen(true));
                     }
+                } else {
+
                 }
             });
 
@@ -837,7 +840,7 @@ const Search = () => {
                             hidden={true}
                         />
                         {isMoreSearchOpen && (
-                            <SearchModal
+                            <SearchDialog
                                 searchValue={searchValue}
                                 setSearchValue={setSearchValue}
                                 searchResults={searchResults}
@@ -899,7 +902,7 @@ const Search = () => {
                                             setIsSearchMethodSelectorOpen(
                                                 false
                                             );
-                                            //setSearchModalOpen(false);
+                                            //setSearchDialogOpen(false);
                                             setSearchValue('');
                                             isSearchOpen &&
                                                 removeMarkersAndFeatures();

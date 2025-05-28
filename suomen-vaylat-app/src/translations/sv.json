@@ -27,7 +27,6 @@
     "zoomIn": "Zooma in",
     "zoomOut": "Zooma ut",
     "opacity": "Transparens",
-    "loadingData": "Laddar data",
     "drawingTools": {
       "drawingToolsButton": "Ritverktyg",
       "point": "Point",
@@ -104,6 +103,7 @@
     "uniqueId": "Identifikationskod",
     "featureAmount": "Objekt",
     "getMoreFeatures": "Sök fler objekt",
+    "loadingData": "Laddar data",
     "savedGeometries": {
       "title": "Sparad geometri",
       "description": "Egen sparad geometri",
@@ -147,7 +147,8 @@
     "cancel": "Avbryt",
     "dontShowAgain": "Visa inte igen",
     "ok": "OK",
-    "OkLowerCaseK": "Ok"
+    "OkLowerCaseK": "Ok",
+    "submit": "Skicka"
   },
   "multipleLayersWarning": "Du håller på att lägga till minst 10 kartnivåer på kartan och det kan påverka tjänstens prestanda",
   "multipleLayersFetchWarning": "Du är på väg att hämta data från 10 eller fler maplayers, det kan påverka tjänstens prestanda.",
@@ -158,7 +159,7 @@
   "exitConfirmation": "Du lämnar tjänsten Suomen väylät. Vill du fortsätta?",
   "appGuide": {
     "title": "Användarguide",
-    "modalContent": {
+    "dialogContent": {
       "upperBar": {
         "title": "Top Bar-funktioner",
         "content": {
@@ -221,12 +222,12 @@
           "step3": {
             "title": "Välj ett villkor/operator",
             "content": {
-              "equal": "Lika med: Visar objekt vars attribut är exakt samma som det angivna värdet.",
-              "notEqual": "Inte lika med: Visar objekt vars attribut skiljer sig från det angivna värdet.",
-              "contains": "Innehåller: Visar objekt vars attribut inkluderar det angivna värdet.",
-              "notContains": "Innehåller inte: Visar objekt vars attribut inte inkluderar det angivna värdet.",
-              "smallerThan" : "Mindre än: mindre än det angivna värdet",
-              "biggerThan" : "Större än: större än det angivna värdet"
+              "equal": "<strong>Lika med</strong>: Visar objekt vars attribut är exakt samma som det angivna värdet.",
+              "notEqual": "<strong>Inte lika med</strong>: Visar objekt vars attribut skiljer sig från det angivna värdet.",
+              "contains": "<strong>Innehåller</strong>: Visar objekt vars attribut inkluderar det angivna värdet.",
+              "notContains": "<strong>Innehåller inte</strong>: Visar objekt vars attribut inte inkluderar det angivna värdet.",
+              "smallerThan" : "<strong>Mindre än</strong>: mindre än det angivna värdet",
+              "biggerThan" : "<strong>Större än</strong>: större än det angivna värdet"
             }
           },
           "step4": {
@@ -242,7 +243,7 @@
             "content": "Om så önskas kan du ta bort det applicerade filtret genom att trycka på \"Ta bort alla filter\" eller genom att klicka på krysset bredvid aktiva filter."
           }
         },
-        "additionalInstructions": "Genom att använda operatorerna 'Innehåller' och 'Innehåller inte' behöver attributvärdet inte vara helt korrekt. Det räcker att värdet bara är en del av attributets innehåll. Detta underlättar filtreringen när det exakta värdet inte är känt.",
+        "additionalInstructions": "Genom att använda operatorerna '<strong>Innehåller</strong>' och '<strong>Innehåller inte</strong>' behöver attributvärdet inte vara helt korrekt. Det räcker att värdet bara är en del av attributets innehåll. Detta underlättar filtreringen när det exakta värdet inte är känt.",
         "feedback": "Om filterverktyget saknas från lagret eller attributet som ska filtreras saknar ett väsentligt attribut kan du skicka feedback om ämnet till",
         "feedbackEmail": "paikkatieto@vayla.fi"
       },
@@ -467,14 +468,15 @@
       "show": "Visa",
       "filterByType": "Filtrera enligt typ",
       "searchForLayers": "Sök kartnivåer",
+      "createFilter": "Filtrera",
       "clearFilters": "Ta bort valda filter",
       "searchResults": "Sökresultat",
       "clearSelectedMapLayers": "Ta bort valda kartnivåer",
       "clearSelectedBackgroundMaps": "Ta bort valda bakgrundskartor",
       "noSearchResults": "Inga sökresultat",
       "typeAtLeastThreeCharacters": "Mata in minst 3 bokstäver",
-      "createCustomFilter": "eget filter"
-
+      "createCustomFilter": "eget filter",
+      "saveCustomFilter": "Spara"
     },
     "selectedLayers": {
       "layerVisible": "Lager synligt",
@@ -485,7 +487,7 @@
     },
     "customLayerInfo": {
       "customFilter": "Eget filter",
-      "modalTitle": "Skapa ditt eget filter",
+      "dialogTitle": "Skapa ditt eget filter",
       "closeInfo": "Stäng hjälpen",
       "infoContent": "Du kan använda ditt eget filter för att spara valda lager i webbläsarens cache. Att redigera ditt eget filter är enhetsspecifikt. När du har valt önskade lager, tryck på knappen 'Spara'. Knappen 'Rensa alla' tar bort alla valda lager från filtret.",
       "saveLayers": "Spara",
@@ -495,9 +497,9 @@
     }
   },
   "downloadLink": {
-    "downloadLinkModalHeader": "Nedladdning av material",
-    "downloadLinkModalNameText": "Materialets namn",
-    "downloadLinkModalButtonText": "Ladda ner material",
+    "downloadLinkDialogHeader": "Nedladdning av material",
+    "downloadLinkDialogNameText": "Materialets namn",
+    "downloadLinkDialogButtonText": "Ladda ner material",
     "downloadSize": "Materialets storlek"
   },
   "groupLayerList": {

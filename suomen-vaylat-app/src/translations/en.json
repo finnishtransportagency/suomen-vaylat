@@ -160,7 +160,7 @@
   "exitConfirmation": "You are leaving the Suomen väylät. Do you want to continue?",
   "appGuide": {
     "title": "User Guide",
-    "modalContent": {
+    "dialogContent": {
       "upperBar": {
         "title": "Top Bar Functions",
         "content": {
@@ -223,12 +223,12 @@
           "step3": {
             "title": "Select a condition/operator",
             "content": {
-              "equal": "Equals: Displays objects whose attribute is exactly the same as the given value.",
-              "notEqual": "Not equal: Displays objects whose attribute differs from the given value.",
-              "contains": "Contains: Displays objects whose attribute includes the given value.",
-              "notContains": "Does not contain: Displays objects whose attribute does not include the given value.",
-              "smallerThan" : "Smaller than: smaller than the given value",
-              "biggerThan" : "Bigger than: bigger than the given value"
+              "equal": "<strong>Equals</strong>: Displays objects whose attribute is exactly the same as the given value.",
+              "notEqual": "<strong>Not equal</strong>: Displays objects whose attribute differs from the given value.",
+              "contains": "<strong>Contains</strong>: Displays objects whose attribute includes the given value.",
+              "notContains": "<strong>Does not contain</strong>: Displays objects whose attribute does not include the given value.",
+              "smallerThan" : "<strong>Smaller than</strong>: smaller than the given value",
+              "biggerThan" : "<strong>Bigger than</strong>: bigger than the given value"
             }
           },
           "step4": {
@@ -244,7 +244,7 @@
             "content": "If desired, you can remove the applied filter by pressing \"Remove all filters\" or by clicking the cross next to active filters."
           }
         },
-        "additionalInstructions": "Using the operators 'Contains' and 'Does not contain', the attribute value does not need to be perfectly correct. It is sufficient that the value is only part of the attribute's content. This facilitates filtering when the exact value is not known.",
+        "additionalInstructions": "Using the operators '<strong>Contains</strong>' and '<strong>Does not contain</strong>', the attribute value does not need to be perfectly correct. It is sufficient that the value is only part of the attribute's content. This facilitates filtering when the exact value is not known.",
         "feedback": "If the filter tool is missing from the layer or the attribute to be filtered is missing an essential attribute, you can send feedback on the subject to",
         "feedbackEmail": "paikkatieto@vayla.fi"
       },
@@ -469,13 +469,15 @@
       "show": "Show",
       "filterByType": "Filter by type",
       "searchForLayers": "Search for layers",
+      "createFilter": "Filter",
       "clearFilters": "Clear filters",
       "searchResults": "Search results",
       "clearSelectedMapLayers": "Clear selected map layers",
       "clearSelectedBackgroundMaps": "Clear selected background maps",
       "noSearchResults": "No search results",
       "typeAtLeastThreeCharacters": "Type at least 3 characters",
-      "createCustomFilter": "custom filter"
+      "createCustomFilter": "custom filter",
+      "saveCustomFilter": "Save"
     },
     "selectedLayers": {
       "layerVisible": "Layer visible",
@@ -486,7 +488,7 @@
     },
     "customLayerInfo": {
       "customFilter": "Custom filter",
-      "modalTitle": "Create custom filter",
+      "dialogTitle": "Create custom filter",
       "closeInfo": "Close info",
       "infoContent": "You can use your custom filter to save selected layers in the browser's cache. Editing your custom filter is device-specific. Once you have selected the desired layers, press the 'Save' button. The 'Clear All' button removes all selected layers from the filter.",
       "saveLayers": "Save",
@@ -496,9 +498,9 @@
     }
   },
   "downloadLink": {
-    "downloadLinkModalHeader": "Download dataset",
-    "downloadLinkModalNameText": "Dataset name",
-    "downloadLinkModalButtonText": "Download dataset",
+    "downloadLinkDialogHeader": "Download dataset",
+    "downloadLinkDialogNameText": "Dataset name",
+    "downloadLinkDialogButtonText": "Download dataset",
     "downloadSize": "Dataset size"
   },
   "groupLayerList": {
