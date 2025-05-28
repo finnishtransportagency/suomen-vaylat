@@ -5,7 +5,7 @@ import { useAppSelector } from '../../state/hooks';
 const StyledScaleBarContainer = styled(motion.div)`
     position: fixed;
     bottom: 50px;
-    left: 90px;
+    left: 64px;
     display: flex;
     justify-content: center;
     //border-style: inset;
