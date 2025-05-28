@@ -843,7 +843,7 @@ const SearchDialog = ({
                         }}
                         className={featureErrors.length > 0 ? 'error' : ''}
                     />
-                    { featureErrors.map( error => { return(<StyledValidationMessage>{strings.search.feature.errors[error]}</StyledValidationMessage>) })}
+                    { featureErrors.map( (error, index) => { return(<StyledValidationMessage key={`search_dialog_feature_error_${index}`}>{strings.search.feature.errors[error]}</StyledValidationMessage>) })}
                     <SearchResultPanel 
                         isSearchOpen={isSearchOpen}
                         searchResults={searchResults}
