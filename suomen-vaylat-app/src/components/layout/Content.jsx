@@ -7,7 +7,7 @@ import styled from "styled-components";
 import strings from "../../translations";
 import GfiToolsMenu from "../gfi/GfiToolsMenu";
 import GfiDownloadMenu from "../gfi/GfiDownloadMenu";
-import { isTabletOrLarger } from "../../theme/theme";
+import { isMobile } from "../../theme/theme";
 
 import {
   setSelectError,
@@ -1023,7 +1023,7 @@ const Content = () => {
           <FilterModalContainer/>
         </Modal>
         <ScaleBar />
-        { isTabletOrLarger() &&
+        { !isMobile &&
           <BaseLayerSelector />
         }
         <StyledToastContainer

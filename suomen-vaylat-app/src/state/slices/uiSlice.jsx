@@ -58,7 +58,6 @@ const initialState = {
     checkedLayer:[],
     isCheckmark: false,
     selectedCustomFilterLayers: [],
-    isBaselayersOpen: false,
     isFeedbackFormOpen: false
 };
 
@@ -268,10 +267,6 @@ export const uiSlice = createSlice({
           setActiveSwitch: (state, action) => {
             state.activeSwitch = action.payload;
           },
-        setIsBaselayersOpen: (state, action) => {
-            state.isBaselayersOpen = action.payload;
-        }
-
     },
 });
 
@@ -331,7 +326,6 @@ export const {
     setIsCheckmark,
     setSelectedCustomFilterLayers,
     setActiveSwitch,
-    setIsBaselayersOpen,
     setIsFeedBackFormOpen
 } = uiSlice.actions;
 
