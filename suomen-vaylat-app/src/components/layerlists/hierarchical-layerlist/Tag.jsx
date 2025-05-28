@@ -37,7 +37,7 @@ export const Tag = ({ tag, isOpen }) => {
     const selectTag = (clickedTag) => {
         const isTagActive = tags.includes(clickedTag);
         let updatedTags = isTagActive 
-            ? tags.tag(tag => tag !== clickedTag) 
+            ? tags.filter(tag => tag !== clickedTag) 
             : [...tags, clickedTag];
     
         // Use Promise.all to fetch layers for all tags in parallel
