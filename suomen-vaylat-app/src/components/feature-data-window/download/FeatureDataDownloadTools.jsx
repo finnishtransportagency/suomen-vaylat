@@ -142,7 +142,7 @@ const StyledLayerNamesList = styled.ul`
 
 const StyledLayerNamesListItem = styled.li``;
 
-const FeatureDataDownloadTools = ({ closeButton = true }) => {
+const FeatureDataDownloadTools = ({ closeButton = true, handleGfiDownloadsMenu}) => {
   const [loading] = useState(false);
 
   let {
@@ -200,11 +200,6 @@ const FeatureDataDownloadTools = ({ closeButton = true }) => {
       loading: false
     }
   ]);
-
-  const handleGfiDownloadsMenu = () => {
-    store.dispatch(setIsGfiToolsOpen(false));
-    store.dispatch(setIsGfiDownloadOpen(false));
-  };
 
   const handleSelectLayer = (layer) => {
     if (

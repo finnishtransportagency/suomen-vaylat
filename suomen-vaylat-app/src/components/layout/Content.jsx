@@ -17,7 +17,7 @@ import ShareWebsiteModal from '../share-website/modal/ShareWebsiteModal';
 import SavedContentModal from '../saved-content/modal/SavedContentModal';
 import LayerDownloadButtonLinkModal from '../layerlists/hierarchical-layerlist/modal/LayerDownloadButtonLinkModal';
 import FeatureDataToolsModal from '../feature-data-window/modal/FeatureDataToolsModal';
-import FeatureDataDownloadMenuModal from '../feature-data-window/modal/FeatureDataDownloadToolsModal';
+import FeatureDataDownloadToolsModal from '../feature-data-window/modal/FeatureDataDownloadToolsModal';
 
 import MenuBar from './menu-bar/MenuBar';
 import HierarchicalLayerlistModal from '../layerlists/hierarchical-layerlist/modal/HierarchicalLayerlistModal';
@@ -150,7 +150,7 @@ const Content = () => {
 
         <FeatureDataToolsModal constraintsRef={constraintsRef} />
 
-        <FeatureDataDownloadMenuModal constraintsRef={constraintsRef} />
+        <FeatureDataDownloadToolsModal constraintsRef={constraintsRef} />
 
         <LayerFilterModal constraintsRef={constraintsRef} />
 

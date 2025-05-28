@@ -1303,7 +1303,7 @@ export const FeatureDataPopup = () => {
               x: '-100%'
             }}
           >
-            <FeatureDataDownloadTools/>
+            <FeatureDataDownloadTools handleGfiDownloadsMenu={handleGfiDownloadsMenu} />
           </StyledGfiToolsContainer>
         )}
       </AnimatePresence>
