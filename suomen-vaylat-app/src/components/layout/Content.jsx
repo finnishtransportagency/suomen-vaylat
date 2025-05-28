@@ -7,6 +7,7 @@ import styled from "styled-components";
 import strings from "../../translations";
 import GfiToolsMenu from "../gfi/GfiToolsMenu";
 import GfiDownloadMenu from "../gfi/GfiDownloadMenu";
+import { isTabletOrLarger } from "../../theme/theme";
 
 import {
   setSelectError,
@@ -178,7 +179,6 @@ const StyledLayerNamesListItem = styled.li``;
 
 const Content = () => {
   const constraintsRef = useRef(null);
-
   const { warnings, filteringInfo, filters } = useAppSelector(
     (state) => state.rpc
   );
@@ -1023,7 +1023,9 @@ const Content = () => {
           <FilterModalContainer/>
         </Modal>
         <ScaleBar />
-        <BaseLayerSelector />
+        { isTabletOrLarger() &&
+          <BaseLayerSelector />
+        }
         <StyledToastContainer
           position="bottom-left"
           pauseOnFocusLoss={false}

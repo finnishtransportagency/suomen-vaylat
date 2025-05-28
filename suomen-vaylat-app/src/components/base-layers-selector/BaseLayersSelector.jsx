@@ -20,19 +20,19 @@ const StyledBaselayerButtonContainer = styled(motion.div)`
     @media ${props => props.theme.device.tablet} {
         gap: 6px;
     };
-    @media ${props => props.theme.device.mobileL} {
-        display: none; /* Hide on mobileL */
-    };
 `;
 
 const StyledButton = styled(Button)`
     cursor: pointer;
-    background-color: ${props => props.isSelected ? props.theme.colors.mainColor1 : "#AAAAAA"}; /* Blue or Gray */
+    background-color: ${props => props.active ? props.theme.colors.mainColor1 : props.theme.colors.darkGrey } !important; /* Blue or Gray */
     box-shadow: 0px 2px 4px #0000004D;
     border-radius: 30px;
     border: none;
     padding: 6px 12px;
     max-width: 160px;
+    &:hover {
+        background-color: ${props => props.active ? props.theme.colors.buttonActive : props.theme.colors.buttonActive } !important; /* Blue or Gray */
+    }
     @media ${props => props.theme.device.laptop} {
         max-width: 120px;
     };
@@ -63,7 +63,7 @@ const BaseLayerSelector = () => {
 
     const BaseLayerButton = ({ action, layer, isSelected }) => {
         return(
-            <StyledButton onClick={() => action(layer)} isSelected={isSelected}>
+            <StyledButton onClick={() => action(layer)} active={isSelected}>
                 <StyledButtonText>
                     {layer.name} {/* Display layer name */}
                 </StyledButtonText>
