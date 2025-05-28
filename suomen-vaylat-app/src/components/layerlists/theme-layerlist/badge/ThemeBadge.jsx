@@ -153,8 +153,6 @@ const ThemeBadge = ({}) => {
       : (filterInfoTitle += ', ' + title);
   });
 
-  console.log(selectedTheme)
-
   return (
     <StyledActionButton
       key="theme_action_button"

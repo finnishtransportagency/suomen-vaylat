@@ -426,7 +426,6 @@ const FeatureDataDownloadTools = ({ closeButton = true, handleGfiDownloadsMenu})
         true
       ]);
     }
-    console.log("isGfiDownloadToolsOpen",isGfiDownloadToolsOpen)
     isGfiDownloadToolsOpen && store.dispatch(setIsGfiDownloadToolsOpen(false));
   };
 
