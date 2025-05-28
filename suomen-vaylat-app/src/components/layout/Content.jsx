@@ -17,7 +17,7 @@ import ShareWebsiteDialog from '../share-website/dialog/ShareWebsiteDialog';
 import SavedContentDialog from '../saved-content/dialog/SavedContentDialog';
 import LayerDownloadButtonLinkDialog from '../layerlists/hierarchical-layerlist/dialog/LayerDownloadButtonLinkDialog';
 import FeatureDataToolsDialog from '../feature-data-window/dialog/FeatureDataToolsDialog';
-import FeatureDataDownloadMenuDialog from '../feature-data-window/dialog/FeatureDataDownloadToolsDialog';
+import FeatureDataDownloadToolsDialog from '../feature-data-window/dialog/FeatureDataDownloadToolsDialog';
 
 import MenuBar from './menu-bar/MenuBar';
 import HierarchicalLayerlistDialog from '../layerlists/hierarchical-layerlist/dialog/HierarchicalLayerlistDialog';
@@ -150,7 +150,7 @@ const Content = () => {
 
         <FeatureDataToolsDialog constraintsRef={constraintsRef} />
 
-        <FeatureDataDownloadMenuDialog constraintsRef={constraintsRef} />
+        <FeatureDataDownloadToolsDialog constraintsRef={constraintsRef} />
 
         <LayerFilterDialog constraintsRef={constraintsRef} />
 

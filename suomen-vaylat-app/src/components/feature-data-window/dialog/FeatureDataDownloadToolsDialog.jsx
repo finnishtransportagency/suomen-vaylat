@@ -12,7 +12,7 @@ import {
 } from '../../../state/slices/rpcSlice';
 import { GFI_GEOMETRY_LAYER_ID } from '../../../utils/constants';
 
-const FeatureDataDownloadMenuDialog = ({
+const FeatureDataDownloadToolsDialog = ({
   constraintsRef
 }) => {
   const { isGfiDownloadToolsOpen, isGfiOpen } = useAppSelector(
@@ -61,9 +61,9 @@ const FeatureDataDownloadMenuDialog = ({
       isOpen={isGfiDownloadToolsOpen}
       id="gfi_download_menu_dialog"
     >
-      <FeatureDataDownloadTools/>
+      <FeatureDataDownloadTools closeButton={false} />
     </Dialog>
   );
 };
 
-export default FeatureDataDownloadMenuDialog;
+export default FeatureDataDownloadToolsDialog;
