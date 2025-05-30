@@ -29,7 +29,7 @@ const StyledButton = styled(Button)`
     border-radius: 30px;
     border: none;
     padding: 6px 12px;
-    max-width: 160px;
+    width: 10em;
     &:hover {
         background-color: ${props => props.active ? props.theme.colors.buttonActive : props.theme.colors.buttonActive } !important; /* Blue or Gray */
     }
