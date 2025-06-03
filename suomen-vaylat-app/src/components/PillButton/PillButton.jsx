@@ -15,8 +15,8 @@ const StyledPillButton = styled.button`
   font-weight: 600;
   font-size: 15px;
   cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
-  min-width: 200px;
   height: 45px;
+  width: fit-content; /* 👈 This is key */
   transition: background-color 0.2s ease;
   position: relative;
 
@@ -32,7 +32,6 @@ const StyledPillButton = styled.button`
   }
 
   @media ${({ theme }) => theme.device.mobileL} {
-    min-width: 160px;
     height: 40px;
     font-size: 13px;
     padding: 8px 14px;
@@ -43,6 +42,7 @@ const StyledPillButton = styled.button`
     }
   }
 `;
+
 
 
 const PillButton = ({ icon, text, children, onClick, disabled, color, hoverColor }) => (

@@ -149,7 +149,7 @@ const variants = {
   }
 };
 
-export const DrawingTools = ({ isOpen }) => {
+export const DrawingTools = ({ isOpen, children  }) => {
   const { store } = useContext(ReactReduxContext);
   const { channel } = useSelector(state => state.rpc);
   const { activeTool, geoJsonArray, hasToastBeenShown, selectedMarker, drawToolMarkers } = useSelector(state => state.ui);
@@ -307,6 +307,7 @@ export const DrawingTools = ({ isOpen }) => {
       >
         {strings.savedContent.saveGeometry.saveGeometry}
       </PillButton>
+      {children}
     </StyledTools>
   );
 };

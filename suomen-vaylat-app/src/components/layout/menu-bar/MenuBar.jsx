@@ -34,7 +34,6 @@ import PillButton from '../../PillButton/PillButton';
 
 const StyledMenuBar = styled.div`
   z-index: 1;
-  pointer-events: none;
   grid-row-start: 1;
   grid-row-end: 3;
   height: 100%;
@@ -165,14 +164,16 @@ const MenuBar = () => {
         toggleState={isGfiOpen}
         tooltipDirection="right"
         clickAction={() => {
-          isGfiOpen && store.dispatch(setVKMData(null));
-          isGfiOpen && store.dispatch(setMinimizeGfi(false));
+          if (isGfiOpen) {
+            store.dispatch(setVKMData(null));
+            store.dispatch(setMinimizeGfi(false));
+          }
           store.dispatch(setIsGfiOpen(!isGfiOpen));
         }}
       >
         {filters?.filters?.length > 0 && <StyledLayerCount>{filters.filters.length}</StyledLayerCount>}
       </CircleButton>
-
+  
       <CircleButton
         icon={<BuildIcon />}
         text={strings.tooltips.drawingTools.drawingToolsButton}
@@ -180,29 +181,27 @@ const MenuBar = () => {
         tooltipDirection="right"
         clickAction={() => closeDrawingTools(!isDrawingToolsOpen)}
       />
-
+  
       {isDrawingToolsOpen && (
         <StyledMapToolsContainer visible={isDrawingToolsOpen}>
-          <DrawingTools isOpen={isDrawingToolsOpen} />
-
-          <PillButton
-            icon={faDownload}
-            text={strings.downloads.downloads}
-            disabled={nonBgMaps.length === 0}
-            onClick={() => {
-              closeDrawingTools(false);
-              store.dispatch(setIsGfiDownloadOpen(!isGfiDownloadOpen));
-            }}
-          />
-
-          <PillButton
-            icon={faSave}
-            text={strings.savedContent.saveView.saveView}
-            onClick={() => store.dispatch(setIsSaveViewOpen(!isSaveViewOpen))}
-          />
+          <DrawingTools isOpen={isDrawingToolsOpen}>
+            <PillButton
+              icon={faDownload}
+              text={strings.downloads.downloads}
+              disabled={nonBgMaps.length === 0}
+              onClick={() => {
+                store.dispatch(setIsGfiDownloadOpen(!isGfiDownloadOpen));
+              }}
+            />
+            <PillButton
+              icon={faSave}
+              text={strings.savedContent.saveView.saveView}
+              onClick={() => store.dispatch(setIsSaveViewOpen(!isSaveViewOpen))}
+            />
+          </DrawingTools>
         </StyledMapToolsContainer>
       )}
-
+  
       <CircleButton
         icon={isFullScreen ? faCompress : faExpand}
         text={strings.tooltips.fullscreenButton}
@@ -215,6 +214,7 @@ const MenuBar = () => {
       />
     </StyledMenuBar>
   );
+  
 };
 
 export default MenuBar;
