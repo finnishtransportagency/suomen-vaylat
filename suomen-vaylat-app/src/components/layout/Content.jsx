@@ -29,6 +29,7 @@ import ZoomMenu from '../zoom-features/ZoomMenu';
 import WarningDialog from '../warning-dialog/dialog/WarningDialog';
 import ThemeMenu from '../layerlists/theme-layerlist/ThemeMenu';
 import BaseLayerSelector from '../base-layers-selector/BaseLayersSelector';
+import BaseLayerSelectorDialog from '../base-layers-selector/BaseLayersSelectorDialog';
 import { isMobile } from '../../theme/theme';
 
 const StyledContent = styled.div`
@@ -157,11 +158,12 @@ const Content = () => {
         <LayerFilterDialog constraintsRef={constraintsRef} />
 
         <ScaleBar />
-
+        { !isMobile && 
+        <BaseLayerSelectorDialog constraintsRef={constraintsRef}/>
+        }
         { !isMobile &&
           <BaseLayerSelector />
         }
-        
         <StyledToastContainer
           position="bottom-left"
           pauseOnFocusLoss={false}

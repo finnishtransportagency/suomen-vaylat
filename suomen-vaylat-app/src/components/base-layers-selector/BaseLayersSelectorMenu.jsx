@@ -2,27 +2,16 @@ import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { ReactReduxContext, useSelector } from "react-redux";
 import { useAppSelector } from '../../state/hooks';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
+import strings from '../../translations';
 import { Button } from "react-bootstrap";
 import { updateLayers } from '../../utils/rpcUtil';
 import { setMapLayerVisibility } from '../../state/slices/rpcSlice';
 import { setSelectedBaseLayers } from '../../state/slices/uiSlice';
-import { setIsBaseLayerSelectorMenuOpen } from '../../state/slices/uiSlice';
-import ModeEditOutlineTwoToneIcon from '@mui/icons-material/ModeEditOutlineTwoTone';
 
-
-const StyledBaselayerButtonContainer = styled(motion.div)` 
-    position: absolute;
-    bottom: 5px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
+const StyledMenuContainer = styled.div`
     gap: 8px; /* Adds space between buttons */
     padding: 6px;
-    border-radius: 8px;
-    @media ${props => props.theme.device.tablet} {
-        gap: 6px;
-    };
 `;
 
 const StyledButton = styled(Button)`
@@ -44,14 +33,14 @@ const StyledButton = styled(Button)`
     };
 `;
 
-const StyledMenuButton = styled(Button)`
+const StyledSaveButton = styled(Button)`
     cursor: pointer;
-    background-color: ${props => props.active ? props.theme.colors.mainColor1 : props.theme.colors.darkGrey } !important; /* Blue or Gray */
+    background-color: ${props => props.theme.colors.mainColor1};
     box-shadow: 0px 2px 4px #0000004D;
     border-radius: 30px;
     border: none;
     padding: 6px 12px;
-    width: 3em;
+    width: 10em;
     &:hover {
         background-color: ${props => props.active ? props.theme.colors.buttonActive : props.theme.colors.buttonActive } !important; /* Blue or Gray */
     }
@@ -72,16 +61,28 @@ const StyledButtonText = styled.div`
     user-select: none;
 `;
 
-const BaseLayerSelector = () => {
+
+
+const BaseLayerSelectorMenu = () => {
     const { allLayers } = useAppSelector((state) => state.rpc);
     const baselayers = allLayers.filter(layer => layer.config?.baseLayer)
     const { store } = useContext(ReactReduxContext);
     const channel = useSelector(state => state.rpc.channel);
     const { selectedBaseLayers } = useAppSelector((state) => state.ui);
 
-    const handleLayerVisibility = (channel, layer) => {
-        store.dispatch(setMapLayerVisibility(layer));
-        updateLayers(store, channel);
+    /*Store layers selected in the menu here.*/
+    let selectedLayersList = [];
+
+    /*"Save" button sends updated list of selected layers to the local store.*/
+    const SaveButton = () => {
+        return (
+            <StyledSaveButton onClick={() => store.dispatch(setSelectedBaseLayers(selectedLayersList))}>
+                 <StyledButtonText>
+                    {strings.baseLayerSelector.save}
+                </StyledButtonText>
+
+            </StyledSaveButton>
+        )
     }
 
     const BaseLayerButton = ({ action, layer, isSelected }) => {
@@ -94,29 +95,24 @@ const BaseLayerSelector = () => {
         );
     };
 
-    const BaseLayerSelectorMenuButton = () => {
-        return(
-            <StyledMenuButton onClick={() => store.dispatch(setIsBaseLayerSelectorMenuOpen(true))} >
-                <ModeEditOutlineTwoToneIcon />
-            </StyledMenuButton>
-        )
+    const addSelectedLayer = (layerID) => {
+        selectedLayersList.push(layerID);
     }
 
-    return(
-        
-        <StyledBaselayerButtonContainer>
+    return (
+        <StyledMenuContainer>
             {baselayers.map(layer => (
-                selectedBaseLayers.includes(layer.id) &&
                 <BaseLayerButton
                     key={layer.id}
-                    action={() => handleLayerVisibility(channel, layer)}
+                    action={() => addSelectedLayer(layer.id)}
                     layer={layer}
-                    isSelected={layer.visible}
+                    isSelected={() => selectedLayersList.includes(layer.id)}
                 />
             ))}
-            <BaseLayerSelectorMenuButton/>
-        </StyledBaselayerButtonContainer>
-    );
-};
+            <SaveButton></SaveButton>
+        </StyledMenuContainer>
+    )
+ }
 
-export default BaseLayerSelector;
+
+export default BaseLayerSelectorMenu;
