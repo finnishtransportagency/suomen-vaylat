@@ -105,15 +105,17 @@ const BaseLayerSelector = () => {
     return(
         
         <StyledBaselayerButtonContainer>
-            {baselayers.map(layer => (
-                selectedBaseLayers.includes(layer.id) &&
-                <BaseLayerButton
-                    key={layer.id}
-                    action={() => handleLayerVisibility(channel, layer)}
-                    layer={layer}
-                    isSelected={layer.visible}
-                />
-            ))}
+            {selectedBaseLayers.map((layerID) => {
+                const layer = baselayers.find(layer => layer.id === layerID);
+                return(
+                    <BaseLayerButton
+                        key={layer.id}
+                        action={() => handleLayerVisibility(channel, layer)}
+                        layer={layer}
+                        isSelected={layer.visible}
+                    />
+                );
+            })}
             <BaseLayerSelectorMenuButton/>
         </StyledBaselayerButtonContainer>
     );
