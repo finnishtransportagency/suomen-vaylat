@@ -12,6 +12,7 @@ import FeatureDataWindowDialogButton from '../../feature-data-window/dialog/dial
 import FeatureDataDownloadDialogButton from '../../feature-data-window/dialog/dialog-buttons/FeatureDataDownloadDialogButton';
 import DrawingToolsDialogButton from '../../measurement-tools/dialog/dialog-buttons/DrawingToolsDialogButton';
 import SavedContentDialogButton from '../../saved-content/dialog/dialog-buttons/SavedContentDialogButton';
+import { isMobile } from '../../../theme/theme';
 
 const StyledMenuBar = styled.div`
   z-index: 1;
@@ -96,13 +97,15 @@ const MenuBar = () => {
         <FeatureDataDownloadDialogButton />
         <DrawingToolsDialogButton />
         <SavedContentDialogButton />
-        <CircleButton
-          icon={isFullScreen ? faCompress : faExpand}
-          text={strings.tooltips.fullscreenButton}
-          toggleState={isFullScreen}
-          tooltipDirection={'right'}
-          clickAction={handleFullScreen}
-        />
+        { !isMobile &&
+          <CircleButton
+            icon={isFullScreen ? faCompress : faExpand}
+            text={strings.tooltips.fullscreenButton}
+            toggleState={isFullScreen}
+            tooltipDirection={'right'}
+            clickAction={handleFullScreen}
+          />
+        }
       </StyledMenuBar>
     </>
   );
