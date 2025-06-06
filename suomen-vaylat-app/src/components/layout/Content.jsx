@@ -32,8 +32,7 @@ import BaseLayerSelector from '../base-layers-selector/BaseLayersSelector';
 import { isMobile } from '../../theme/theme';
 
 const StyledContent = styled.div`
-  z-index: 1;
-  position: relative;
+  position: absolute;
   width: 100%;
   height: 100%;
   display: flex;
@@ -95,10 +94,11 @@ const StyledContentGrid = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  padding: 16px;
+  padding: 80px 16px 16px 16px;
   pointer-events: none;
   @media ${(props) => props.theme.device.mobileL} {
     padding: 8px;
+    padding-top: 70px;
   }
 `;
 

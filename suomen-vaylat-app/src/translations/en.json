@@ -43,8 +43,10 @@
     "share": "Share this page",
     "shareTheme": "Share this theme",
     "metadata": "Show maplayer metadata",
-    "showPageInfo": "Application details",
-    "showUserGuide": "User guide"
+    "showPageInfo": "Show page info",
+    "showUserGuide": "Show user guide",
+    "userGuide": "User guide",
+    "pageInfo": "Application details"
   },
   "savedContent" : {
     "savedContent" : "Save views and geometries",

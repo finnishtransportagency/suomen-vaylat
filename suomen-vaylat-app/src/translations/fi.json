@@ -43,8 +43,11 @@
     "share": "Jaa sivu",
     "shareTheme": "Jaa teema",
     "metadata": "Näytä tason metadata",
-    "showPageInfo": "Sovelluksen tiedot",
-    "showUserGuide": "Käyttöohjeet"
+    "showPageInfo": "Näytä sivun info",
+    "showUserGuide": "Näytä käyttöohje",
+    "userGuide": "Käyttöohjeet",
+    "pageInfo": "Sovelluksen tiedot",
+    "UserGuide": "Käyttöohjeet"
   },
   "savedContent": {
     "savedContent": "Näkymän ja geometrian tallennus",
