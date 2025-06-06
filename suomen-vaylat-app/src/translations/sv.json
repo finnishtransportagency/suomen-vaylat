@@ -43,8 +43,10 @@
     "share": "Dela denna sida",
     "shareTheme": "Dela detta tema",
     "metadata": "Visa kartlagers metadata",
-    "showPageInfo": "Sidinformation",
-    "showUserGuide": "Användarguide"
+    "showPageInfo": "Visa sidinformation",
+    "showUserGuide": "Visa användarguide",
+    "userGuide": "Användarguide",
+    "pageInfo": "Sidinformation"
   },
   "savedContent" : {
     "savedContent" : "Spara vyer och geometrier",
