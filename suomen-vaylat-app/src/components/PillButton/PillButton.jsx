@@ -8,58 +8,61 @@ const StyledPillButton = styled.button`
   gap: 10px;
   background-color: ${({ disabled, color, theme }) =>
     disabled ? '#ccc' : color || theme.colors.button};
-  color: ${({ disabled, theme }) => (disabled ? '#666' : theme.colors.mainWhite)};
+  color: ${({ disabled, theme }) =>
+    disabled ? '#666' : theme.colors.mainWhite};
   border: none;
   border-radius: 30px;
-  padding: 10px 18px;
+  padding: 8px 16px;
   font-weight: 600;
   font-size: 15px;
   cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
   width: fit-content;
-  height: 45px;
   transition: background-color 0.2s ease;
 
   svg,
   img {
-    width: 20px;
-    height: 20px;
+    width: 16px !important;
+    height: 16px !important;
     opacity: ${({ disabled }) => (disabled ? 0.5 : 1)};
   }
 
   @media ${({ theme }) => theme.device.mobileL} {
     font-size: 13px;
-    height: 38px;
-    padding: 8px 12px;
-
-    svg,
-    img {
-      width: 16px;
-      height: 16px;
+    padding: 6px 12px;
+    width: 20p svg, img {
+      width: 10px !important;
+      height: 10px !important;
     }
   }
 `;
 
-const ButtonText = styled.span`
-  @media ${({ theme }) => theme.device.mobileL} {
-    display: none;
-  }
-`;
+const ButtonText = styled.span``;
 
-const PillButton = ({ icon, text, children, onClick, disabled, color, hoverColor }) => (
-<StyledPillButton
-  onClick={onClick}
-  disabled={disabled}
-  color={color}
-  hoverColor={hoverColor}
->
-  {typeof icon === 'string' && icon.endsWith('.svg') ? (
-    <img src={icon} alt="icon" />
-  ) : (
-    <FontAwesomeIcon icon={icon} />
-  )}
-  <ButtonText>{children || text}</ButtonText>
-</StyledPillButton>
-
-);
+const PillButton = ({
+  icon,
+  text,
+  children,
+  onClick,
+  disabled,
+  color,
+  hoverColor
+}) => {
+  console.log(icon, text);
+  return (
+    <StyledPillButton
+      onClick={onClick}
+      disabled={disabled}
+      color={color}
+      hoverColor={hoverColor}
+    >
+      {typeof icon === 'string' && icon.endsWith('.svg') ? (
+        <img src={icon} alt="icon" />
+      ) : (
+        <FontAwesomeIcon icon={icon} />
+      )}
+      <ButtonText>{children || text}</ButtonText>
+    </StyledPillButton>
+  );
+};
 
 export default PillButton;

@@ -28,6 +28,7 @@
     "zoomIn": "Lähennä",
     "zoomOut": "Loitonna",
     "opacity": "Läpinäkyvyys",
+    "toolsButton": "Työkalut",
     "drawingTools": {
       "drawingToolsButton": "Piirtotyökalut",
       "point": "Piste",
@@ -48,12 +49,12 @@
     "showUserGuide": "Käyttöohjeet"
   },
   "savedContent": {
-    "savedContent": "Näkymän ja geometrian tallennus",
+    "savedContent": "Omat tiedot",
     "viewTitle": "Näkymät",
     "geometryTitle": "Geometriat",
     "saveView": {
       "confirmDeleteAll" : "Haluatko varmasti poistaa kaikki tallennetut näkymät?",
-      "saveView" : "Näkymän ja geometrian tallennus",
+      "saveView" : "Tallenna tila",
       "savingView" : "Näkymän tallennus",
       "saveViewDescription1" : "Näkymä tallentuu selaimen välimuistiin",
       "saveViewDescription2" : "Tallennettu näkymä voidaan aktivoida vain selaimessa johon se on tallennettu",

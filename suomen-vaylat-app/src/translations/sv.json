@@ -29,6 +29,7 @@
     "zoomOut": "Zooma ut",
     "opacity": "Transparens",
     "loadingData": "Laddar data",
+    "toolsButton": "Verktyg",
     "drawingTools": {
       "drawingToolsButton": "Ritverktyg",
       "point": "Point",
@@ -49,12 +50,12 @@
     "showUserGuide": "Användarguide"
   },
   "savedContent" : {
-    "savedContent" : "Spara vyer och geometrier",
+    "savedContent" : "Mina uppgifter",
     "viewTitle" : "Syn",
     "geometryTitle" : "Geometrier",
     "saveView" : {
       "confirmDeleteAll" : "Är du säker på att du vill ta bort alla sparade vyer?",
-      "saveView" : "Spara vyer och geometrier",
+      "saveView" : "Spara tillstånd",
       "savingView" : "Sparar vy",
       "saveViewDescription1" : "Visa kommer att sparas i webbläsarens lokala lagring",
       "saveViewDescription2" : "Sparad vy kan endast nås av webbläsaren som den har sparats",

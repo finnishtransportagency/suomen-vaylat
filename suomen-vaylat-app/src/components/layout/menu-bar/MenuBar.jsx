@@ -63,10 +63,9 @@ const StyledDrawingToolsWrapper = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  background-color: ${({ theme }) => theme.colors.mainColor1 + '50'};
+  gap: 4px;
+  background-color: ${({ theme }) => theme.colors.mainColor1 + '35'};
   border-radius: 24px;
-  box-shadow: 1px 2px 6px #0000004d;
   padding: 0px 12px 12px 0px; 
 `;
 
@@ -146,19 +145,18 @@ const MobileMenuContainer = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 10px;
-  background: ${({ theme }) => theme.colors.mainColor1 + '25'};
-  padding: 10px 8px;
+  background: ${({ theme }) => theme.colors.mainColor1 + '20'};
   border-radius: 16px;
   pointer-events: auto;
 `;
 
-const FloatingButton = styled.button`
+const StyledCloseMobileMenuButton = styled.button`
   background: ${({ theme }) => theme.colors.button};
   color: white;
   border: none;
   border-radius: 50%;
-  width: 36px;
-  height: 36px;
+  width: 40px;
+  height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -168,7 +166,29 @@ const FloatingButton = styled.button`
   z-index: 1;
   
   svg {
-    font-size: 30px;
+    height: 1.5em !important;
+    width: 1.5em !important;
+  }
+`;
+
+const StyledOpenMobileMenuButton = styled.button`
+  background: ${({ theme }) => theme.colors.button};
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  padding: 0;
+  z-index: 1;
+  
+  svg {
+    height: 1.2em !important;
+    width: 1.2em !important;
   }
 `;
 
@@ -284,7 +304,7 @@ const MenuBar = () => {
         ) : (
           <CircleButton
             icon={<BuildIcon />}
-            text={strings.tooltips.drawingTools.drawingToolsButton}
+            text={strings.tooltips.toolsButton}
             toggleState={false}
             tooltipDirection="right"
             clickAction={() => store.dispatch(setIsDrawingToolsOpen(true))}
@@ -298,16 +318,16 @@ const MenuBar = () => {
       {/* MOBILE MENU */}
       <MobileOnly>
       {!isMobileMenuOpen && (
-        <FloatingButton onClick={() => setIsMobileMenuOpen(true)}>
-          <ArrowDropDownCircleIcon />
-        </FloatingButton>
+        <StyledOpenMobileMenuButton onClick={() => setIsMobileMenuOpen(true)}>
+          <ArrowDropDownCircleIcon/>
+        </StyledOpenMobileMenuButton>
       )}
 
       {isMobileMenuOpen && (
         <MobileMenuContainer>
-          <FloatingButton onClick={() => setIsMobileMenuOpen(false)}>
-            <FontAwesomeIcon icon={faTimes} />
-          </FloatingButton>
+          <StyledCloseMobileMenuButton onClick={() => setIsMobileMenuOpen(false)}>
+            <FontAwesomeIcon icon={faTimes}/>
+          </StyledCloseMobileMenuButton>
 
           <CircleButton
             icon={faMap}
@@ -352,27 +372,29 @@ const MenuBar = () => {
           />
 
           {isDrawingToolsOpen && (
-            <DrawingTools isOpen={isDrawingToolsOpen}>
+            <>
+            <DrawingTools isOpen={isDrawingToolsOpen}/>
+
               <PillButton
                 icon={faDownload}
-                text=""
+                text={strings.downloads.downloads}
                 disabled={nonBgMaps.length === 0}
                 onClick={() => store.dispatch(setIsGfiDownloadOpen(!isGfiDownloadOpen))}
               />
               <PillButton
                 icon={faSave}
-                text=""
+                text={strings.savedContent.saveView.saveView}
                 onClick={() => store.dispatch(setIsSaveViewOpen(!isSaveViewOpen))}
               />
               <PillButton
                 icon={isFullScreen ? faCompress : faExpand}
-                text=""
+                text={strings.tooltips.fullscreenButton}
                 onClick={() => {
                   const elem = document.documentElement;
                   isFullScreen ? document.exitFullscreen?.() : elem.requestFullscreen?.();
                 }}
               />
-            </DrawingTools>
+            </>
 
           )}
         </MobileMenuContainer>
