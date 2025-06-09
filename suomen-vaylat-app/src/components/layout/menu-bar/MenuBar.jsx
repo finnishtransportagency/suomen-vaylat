@@ -11,6 +11,7 @@ import {
   faTimes
 } from '@fortawesome/free-solid-svg-icons';
 import BuildIcon from '@mui/icons-material/Build';
+import { WebSiteShareButton } from '../../share-web-site/ShareLinkButtons';
 import { ReactReduxContext } from 'react-redux';
 import styled from 'styled-components';
 import { useAppSelector } from '../../../state/hooks';
@@ -247,6 +248,7 @@ const MenuBar = () => {
         >
           {filters?.filters?.length > 0 && <StyledLayerCount>{filters.filters.length}</StyledLayerCount>}
         </CircleButton>
+        <WebSiteShareButton />
         
         {isDrawingToolsOpen ? (
           <StyledDrawingToolsWrapper>
@@ -339,6 +341,8 @@ const MenuBar = () => {
               <StyledLayerCount>{filters.filters.length}</StyledLayerCount>
             )}
           </CircleButton>
+
+          <WebSiteShareButton />
 
           <CircleButton
             icon={isDrawingToolsOpen ? faTimes : <BuildIcon />}

@@ -6,6 +6,7 @@ import ReactTooltip from 'react-tooltip';
 import { theme, isMobile } from '../../theme/theme';
 import styled from 'styled-components';
 import { setShareUrl } from '../../state/slices/uiSlice';
+import CircleButton from '../circle-button/CircleButton';
 import strings from '../../translations';
 
 const StyledShareButton = styled.button`
@@ -88,20 +89,17 @@ export const WebSiteShareButton = ({setSubNavOpen}) => {
     const url = process.env.REACT_APP_SITE_URL + '/link/{zoom}/{x}/{y}/{maplayers}/?lang={lang}';
     return (
         <>
-            <ReactTooltip backgroundColor={theme.colors.mainColor1} disable={isMobile} id={'share_website'} place='bottom' type='dark' effect='float'>
-                <span>{strings.tooltips.share}</span>
-            </ReactTooltip>
-            <StyledHeaderButton
-                data-tip data-for={'share_website'}
-                onClick={(e) => {
-                    e && e.stopPropagation();
-                    setSubNavOpen && setSubNavOpen(false);
-                    store.dispatch(setShareUrl(url));
-                }}>
-                <FontAwesomeIcon
-                    icon={faShareAlt}
-                />
-            </StyledHeaderButton>
+          <CircleButton
+            icon={faShareAlt}
+            text={strings.tooltips.share}
+            toggleState={false}
+            tooltipDirection="right"
+            clickAction={(e) => {
+              e?.stopPropagation();
+              setSubNavOpen?.(false);
+              store.dispatch(setShareUrl(url));
+            }}
+          />
         </>
-    );
-};
+      );
+    };

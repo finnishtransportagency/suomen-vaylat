@@ -23,7 +23,6 @@ import {
 import { resetThemeGroupsForMainScreen } from '../../utils/rpcUtil';
 import strings from '../../translations';
 import LanguageSelector from '../language-selector/LanguageSelector';
-import { WebSiteShareButton } from '../share-web-site/ShareLinkButtons';
 import { ReactComponent as VaylaLogoEn } from './images/vayla_sivussa_en_white.svg';
 import { ReactComponent as VaylaLogoFi } from './images/vayla_sivussa_fi_white.svg';
 import { ReactComponent as VaylaLogoSv } from './images/vayla_sivussa_sv_white.svg';
@@ -257,7 +256,6 @@ export const Header = () => {
                         </StyledHeaderButton>
                     </MobileButtons>
                     <DesktopButtons>
-                        <WebSiteShareButton />
                         <StyledHeaderButton data-tip data-for={'show_user_guide'} onClick={() => store.dispatch(setIsUserGuideOpen(!isUserGuideOpen))}>
                             <FontAwesomeIcon
                                 icon={faQuestion}
@@ -284,7 +282,6 @@ export const Header = () => {
                             }}
                         >
                             <StyledRightCornerButtonsMobile>
-                                <WebSiteShareButton setSubNavOpen={setSubNavOpen}/>
                                 <StyledHeaderButton data-tip data-for={'show_user_guide'}
                                                     onClick={() => {
                                                         setSubNavOpen(false);
