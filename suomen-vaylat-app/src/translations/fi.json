@@ -23,6 +23,7 @@
     "legendHeader": "Tällä zoom-tasolla näkyvissä olevat aineistot ja niiden selitteet",
     "legendButton": "Selitteet",
     "myLocButton": "Oma sijainti",
+    "coordinateTool": "Koordinaattityökalu",
     "zoomExpand": "Laajenna",
     "zoomIn": "Lähennä",
     "zoomOut": "Loitonna",
@@ -495,6 +496,19 @@
       "title": "Kiinteistöhaku"
     }, 
     "carriageWaySearch": "Käytä ajorataa haussa"
+  },
+  "coordinateTool": {
+    "title": "Koordinaattityökalu",
+    "intro": "Syötä koordinaatit tai valitse piste kartalta.",
+    "coordinateSystemTitle": "Koordinaatisto:",
+    "coordinateSystem": "ETRS89-TM35FIN",
+    "n": "N",
+    "e": "E",
+    "centerMap": "Keskitä kartta",
+    "addMarker": "Lisää merkintä",
+    "deleteMarkers": "Poista karttamerkinnät",
+    "onlyNumbers": "Vain numerot sallittu",
+    "closeCoordinateTool": "Sulje koordinaattityökalu"
   },
   "layerlist": {
     "errorLoadingLayers": "Virhe tasojen latauksessa",

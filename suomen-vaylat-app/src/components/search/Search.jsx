@@ -522,7 +522,7 @@ const Search = () => {
                     y: lat,
                     msg: name || '',
                     markerId: markerId,
-                    color: 'e50083'
+                    color: theme.colors.secondaryColorPink
                 })
             );
 

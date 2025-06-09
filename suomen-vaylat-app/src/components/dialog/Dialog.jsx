@@ -30,8 +30,10 @@ const StyledDialogWrapper = styled(motion.div)`
     position: absolute;
     width: ${(props) => props.maximize? '100% !important' : 'auto'};
     height: ${(props) => props.maximize? '100%' : 'auto'};
-    top: ${(props) => props.resize && '0px'};
-    left: ${(props) => props.resize && '0px'};
+    top: ${(props) => props.top && props.top};
+    left: ${(props) => props.left && props.left};
+    bottom: ${(props) => props.bottom && props.bottom};
+    right: ${(props) => props.right && props.right};
     padding: ${props => props.maximize ? '4px 4px 4px 4px' : (props.resize || props.drag) && '8px'};
     max-width: 100%;
     transform: ${props => props.maximize && 'initial !important'};
@@ -177,9 +179,12 @@ const Dialog = ({
     type,
     closeAction,
     isOpen,
-    id,
     minWidth,
     maxWidth,
+    top,
+    bottom,
+    right,
+    left,
     overflow,
     minimizable,
     minimizeAction,
@@ -242,7 +247,10 @@ const Dialog = ({
                         onClick={(e) => {
                             e.stopPropagation();
                         }}
-
+                        top={top}
+                        bottom={bottom}
+                        right={right}
+                        left={left}
                     >
                         <StyledDialog
                             id={"dialog_" + title}
