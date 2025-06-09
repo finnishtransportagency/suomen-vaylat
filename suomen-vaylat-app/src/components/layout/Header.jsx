@@ -30,7 +30,6 @@ import strings from '../../translations';
 import LanguageSelector from '../language-selector/LanguageSelector';
 import { ReactComponent as VaylaLogoMobile } from './images/vayla_v_white.svg';
 import MenuIcon from '@mui/icons-material/Menu';
-import { WebSiteShareButton } from '../share-website/ShareLinkButtons';
 import { ReactComponent as VaylaLogo } from './images/vayla_sivussa_fi_sv_white.svg';
 import { updateLayers } from '../../utils/rpcUtil';
 
@@ -440,7 +439,6 @@ export const Header = () => {
             >
               <FontAwesomeIcon icon={faInfoCircle} aria-hidden="true" focusable="false"/>
             </StyledHeaderButton>
-            <WebSiteShareButton />
           </DesktopButtons>
 
           <StyledHeaderButton 
