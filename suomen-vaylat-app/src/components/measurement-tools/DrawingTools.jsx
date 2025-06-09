@@ -45,10 +45,11 @@ const StyledTools = styled(motion.div)`
   display: flex;
   flex-direction: column;
   gap: 10px;
-
   margin: 0;
   border-radius: 12px;
   transition: all 0.3s ease;
+  pointer-events: auto;
+  padding: 0px 0px 10px 10px;
 
   &[data-hidden='true'] {
     max-height: 0;

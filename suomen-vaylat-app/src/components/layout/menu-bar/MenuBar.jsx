@@ -37,6 +37,14 @@ import ArrowDropDownCircleIcon from '@mui/icons-material/ArrowDropDownCircle';
 
 
 const StyledMenuBar = styled.div`
+  z-index: 1;
+  pointer-events: none;
+  height: 100%;
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  transition: all 0.5s ease-in-out;
+  gap: 8px;
 
   @media ${(props) => props.theme.device.mobileL} {
     pointer-events: none;
@@ -51,15 +59,22 @@ const StyledMenuBar = styled.div`
 `;
 
 const StyledDrawingToolsWrapper = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 8px;
   background-color: ${({ theme }) => theme.colors.mainColor1 + '50'};
   border-radius: 24px;
   box-shadow: 1px 2px 6px #0000004d;
-  padding: 12px;
+  padding: 0px 12px 12px 0px; 
 `;
 
+const StyledCornerCloseButton = styled(CircleButton)`
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 10;
+`;
 
 
 const StyledLayerCount = styled.div`
@@ -156,8 +171,6 @@ const FloatingButton = styled.button`
   }
 `;
 
-
-
 const MenuBar = () => {
   const { store } = useContext(ReactReduxContext);
   const { selectedLayers, downloads, channel, filters, selectedLayersByType } = useAppSelector(
@@ -207,14 +220,14 @@ const MenuBar = () => {
           icon={faMap}
           text={strings.layerlist.layerlistLabels.themeLayers}
           toggleState={isThemeMenuOpen}
-          tooltipDirection="right"
+          tooltipDirection={'right'}
           clickAction={() => store.dispatch(setIsThemeMenuOpen(!isThemeMenuOpen))}
         />
         <CircleButton
           icon={faLayerGroup}
           text={strings.layerlist.layerlistLabels.mapLayers}
           toggleState={isSideMenuOpen}
-          tooltipDirection="right"
+          tooltipDirection={'right'}
           clickAction={() => store.dispatch(setIsSideMenuOpen(!isSideMenuOpen))}
         >
           <StyledLayerCount>{selectedLayers.length}</StyledLayerCount>
@@ -223,7 +236,7 @@ const MenuBar = () => {
           icon={faMapMarkedAlt}
           text={strings.gfi.title}
           toggleState={isGfiOpen}
-          tooltipDirection="right"
+          tooltipDirection={'right'}
           clickAction={() => {
             if (isGfiOpen) {
               store.dispatch(setVKMData(null));
@@ -237,12 +250,12 @@ const MenuBar = () => {
         
         {isDrawingToolsOpen ? (
           <StyledDrawingToolsWrapper>
-            <CircleButton
-              icon={faTimes}
-              text={strings.tooltips.drawingTools.drawingToolsButton}
-              toggleState={isDrawingToolsOpen}
-              tooltipDirection="right"
-              clickAction={() => store.dispatch(setIsDrawingToolsOpen(false))}
+            <StyledCornerCloseButton
+                icon={faTimes}
+                text=""
+                toggleState={true}
+                tooltipDirection={'right'}
+                clickAction={() => store.dispatch(setIsDrawingToolsOpen(false))}
             />
             <DrawingTools isOpen={isDrawingToolsOpen}>
               <PillButton
@@ -256,6 +269,14 @@ const MenuBar = () => {
                 text={strings.savedContent.saveView.saveView}
                 onClick={() => store.dispatch(setIsSaveViewOpen(!isSaveViewOpen))}
               />
+              <PillButton
+                icon={isFullScreen ? faCompress : faExpand}
+                text={strings.tooltips.fullscreenButton}
+                onClick={() => {
+                  const elem = document.documentElement;
+                  isFullScreen ? document.exitFullscreen?.() : elem.requestFullscreen?.();
+                }}
+              />
             </DrawingTools>
           </StyledDrawingToolsWrapper>
         ) : (
@@ -267,17 +288,7 @@ const MenuBar = () => {
             clickAction={() => store.dispatch(setIsDrawingToolsOpen(true))}
           />
         )}
-      
-        <CircleButton
-          icon={isFullScreen ? faCompress : faExpand}
-          text={strings.tooltips.fullscreenButton}
-          toggleState={isFullScreen}
-          tooltipDirection="right"
-          clickAction={() => {
-            const elem = document.documentElement;
-            isFullScreen ? document.exitFullscreen?.() : elem.requestFullscreen?.();
-          }}
-        />
+
       </DesktopOnly>
     </StyledMenuBar>
 
@@ -349,7 +360,16 @@ const MenuBar = () => {
                 text=""
                 onClick={() => store.dispatch(setIsSaveViewOpen(!isSaveViewOpen))}
               />
+              <PillButton
+                icon={isFullScreen ? faCompress : faExpand}
+                text=""
+                onClick={() => {
+                  const elem = document.documentElement;
+                  isFullScreen ? document.exitFullscreen?.() : elem.requestFullscreen?.();
+                }}
+              />
             </DrawingTools>
+
           )}
         </MobileMenuContainer>
       )}
