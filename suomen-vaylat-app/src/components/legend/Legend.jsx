@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { motion } from 'framer-motion';
-import '../../custom.scss';
+import '../../resources/css/custom.scss';
 import styled from 'styled-components';
 import strings from '../../translations';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -69,7 +69,7 @@ const StyledCloseIcon = styled(FontAwesomeIcon)`
 `;
 
 const StyledGroupsContainer = styled.div`
-    overflow-y: scroll;
+    overflow-y: auto;
     padding: 8px 4px 8px 8px;
 `;
 

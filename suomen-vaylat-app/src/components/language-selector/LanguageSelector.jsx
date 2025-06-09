@@ -2,43 +2,45 @@ import styled from 'styled-components';
 import { useAppSelector } from '../../state/hooks';
 import strings from '../../translations';
 
-import {
-    faGlobe,
-} from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
 const StyledLanguageSelector = styled.div`
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    color: ${(props) => props.theme.colors.mainWhite};
-    padding-left: 8px;
-    svg {
-        font-size: 22px;
-    };
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  background-color: transparent;
+  position: relative;
 `;
 
-const StyledSelect = styled.select`
-    width: 45px;
-    height: 30px;
-    cursor: pointer;
-    color: ${(props) => props.theme.colors.mainWhite};
-    background-color: transparent;
-    border: none;
-    font-size: 18px;
-    option {
-        width: 45px;
-        height: 30px;
-        background-color: ${(props) => props.theme.colors.mainColor1};
-        border: none;
-        font-size: 18px;
-    };
-    &:focus {
-            outline: 0;
-            outline-color: transparent;
-            outline-style: none;
-    };
+const LanguageText = styled.span`
+  font-family: inherit;
+  font-weight: 600;
+  font-size: 18px;
+  color: ${(props) => props.theme.colors.mainWhite};
+  text-transform: uppercase;
+  pointer-events: none;
 `;
+
+const LanguageSelect = styled.select`
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+  z-index: 2;
+
+  option {
+    background-color: ${(props) => props.theme.colors.mainColor1};
+    color: ${(props) => props.theme.colors.mainWhite};
+    font-size: 18px;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+`;
+
+
 
 export const LanguageSelector = () => {
 
@@ -52,30 +54,20 @@ export const LanguageSelector = () => {
     };
 
     return (
-        <StyledLanguageSelector aria-label={strings.accessibility.langSelectMenu} >
-                <FontAwesomeIcon
-                    icon={faGlobe}
-                />
-            <StyledSelect
-                aria-label={strings.accessibility.langSelect}
-                name="language_selector"
-                value={lang.current}
-                onChange={(event) => {
-                    redirect('lang', event.target.value);
-                }}
-            >
-                {strings.getAvailableLanguages().map((value, index) => {
-                        return  (
-                        <option
-                            aria-label={strings.accessibility.lang + value}
-                            key={'lang-'+value}
-                            value={value}
-                        >
-                            {strings.getString('language.languageSelection.' + value)}
-                        </option>
-                    )})}
-            </StyledSelect>
-        </StyledLanguageSelector>
+        <StyledLanguageSelector>
+        <LanguageText>{lang.current}</LanguageText>
+        <LanguageSelect
+          value={lang.current}
+          onChange={(e) => redirect('lang', e.target.value)}
+          aria-label={strings.accessibility.langSelect}
+        >
+          {strings.getAvailableLanguages().map((value) => (
+            <option key={value} value={value}>
+              {strings.getString('language.languageSelection.' + value)}
+            </option>
+          ))}
+        </LanguageSelect>
+      </StyledLanguageSelector>
     );
  }
 

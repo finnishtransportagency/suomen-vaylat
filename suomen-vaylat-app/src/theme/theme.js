@@ -72,6 +72,10 @@ export const theme = {
     }
 };
 
+export const isTabletOrLarger = () => {
+  return window.innerWidth >= parseInt(size.tablet); // use parseInt to convert `${size.tablet}` to a number
+};
+
 const appHeight = () => {
   const doc = document.documentElement
   doc.style.setProperty('--app-height', `${window.innerHeight}px`)

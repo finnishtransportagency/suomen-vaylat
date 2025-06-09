@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useState, useContext } from 'react';
 import strings from '../../../translations';
 import {
   faCompress,
@@ -11,7 +11,7 @@ import {
   faTimes
 } from '@fortawesome/free-solid-svg-icons';
 import BuildIcon from '@mui/icons-material/Build';
-import { WebSiteShareButton } from '../../share-web-site/ShareLinkButtons';
+import { WebSiteShareButton } from '../../share-website/ShareLinkButtons';
 import { ReactReduxContext } from 'react-redux';
 import styled from 'styled-components';
 import { useAppSelector } from '../../../state/hooks';
@@ -31,7 +31,7 @@ import {
 } from '../../../state/slices/uiSlice';
 import { removeMarkerRequest, setVKMData } from '../../../state/slices/rpcSlice';
 
-import CircleButton from '../../circle-button/CircleButton';
+import CircleButton from '../../../utils/components/CircleButton';
 import DrawingTools from '../../measurement-tools/DrawingTools';
 import PillButton from '../../PillButton/PillButton';
 import ArrowDropDownCircleIcon from '@mui/icons-material/ArrowDropDownCircle';

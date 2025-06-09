@@ -1,5 +1,5 @@
-import './_colors.scss';
-import './custom.scss';
+import './resources/css/_colors.scss'
+import './resources/css/custom.scss';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Provider } from 'react-redux';
 import { Route, Router } from 'react-router-dom';
@@ -7,7 +7,7 @@ import SimpleReactLightbox from 'simple-react-lightbox';
 import styled from 'styled-components';
 import Layout from './components/layout/Layout';
 import PageTitle from './components/layout/PageTitle';
-import { HandleSharedWebSiteLink } from './components/share-web-site/HandleSharedWebSiteLink';
+import { HandleSharedWebSiteLink } from './components/share-website/HandleSharedWebSiteLink';
 import { history, store } from './state/store';
 import Theme from './theme/theme';
 

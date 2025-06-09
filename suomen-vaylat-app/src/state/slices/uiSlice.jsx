@@ -4,12 +4,13 @@ import { theme } from '../../theme/theme';
 const initialState = {
     activeSwitch: null,
     isGfiToolsOpen: false,
+    isGfiDownloadToolsOpen: false,
     isFullScreen: false,
-    modalConstrainsRef: null,
+    dialogConstrainsRef: null,
     isSideMenuOpen: false,
     isSearchOpen: false,
     downloadLink: {
-        layerDownloadLinkModalOpen: false,
+        layerDownloadLinkDialogOpen: false,
         layerDownloadLink: null,
         layerDownloadLinkName: null,
     },
@@ -23,7 +24,7 @@ const initialState = {
     isChecked: false,
     isUserGuideOpen: false,
     isCustomFilterOpen: false,
-    isFilterModalOpen: false,
+    isFilterDialogOpen: false,
     isSavedLayer: false,
     shareUrl: '',
     isThemeMenuOpen: false,
@@ -58,7 +59,6 @@ const initialState = {
     checkedLayer:[],
     isCheckmark: false,
     selectedCustomFilterLayers: [],
-    isBaselayersOpen: false,
     isFeedbackFormOpen: false
 };
 
@@ -90,8 +90,8 @@ export const uiSlice = createSlice({
             state.warning = null;
             state.isGfiOpen = false;
         },
-        setModalConstrainsRef: (state, action) => {
-            state.modalConstrainsRef = action.payload;
+        setDialogConstrainsRef: (state, action) => {
+            state.dialogConstrainsRef = action.payload;
         },
         setIsSideMenuOpen: (state, action) => {
             state.isSideMenuOpen = action.payload;
@@ -132,10 +132,10 @@ export const uiSlice = createSlice({
         setIsThemeMenuOpen: (state, action) => {
             state.isThemeMenuOpen = action.payload;
         },
-        setIsDownloadLinkModalOpen: (state, action) => {
+        setIsDownloadLinkDialogOpen: (state, action) => {
             state.downloadLink = {
-                layerDownloadLinkModalOpen:
-                    action.payload.layerDownloadLinkModalOpen,
+                layerDownloadLinkDialogOpen:
+                    action.payload.layerDownloadLinkDialogOpen,
                 layerDownloadLink: action.payload.layerDownloadLink,
                 layerDownloadLinkName: action.payload.layerDownloadLinkName,
             };
@@ -194,10 +194,10 @@ export const uiSlice = createSlice({
         setMaximizeGfi: (state, action) => {
             state.maximizeGfi = action.payload;
         },
-        setMinimizeFilterModal: (state, action) => {
+        setMinimizeFilterDialog: (state, action) => {
             state.minimizeFilter = action.payload;
         },
-        setMaximizeFilterModal: (state, action) => {
+        setMaximizeFilterDialog: (state, action) => {
             state.maximizeFilter = action.payload;
         },
         setGfiCroppingTypes: (state, action) => {
@@ -238,8 +238,11 @@ export const uiSlice = createSlice({
         setIsGfiToolsOpen: (state, action) => {
             state.isGfiToolsOpen = action.payload;
         },
-        setIsFilterModalOpen: (state, action) => {
-            state.isFilterModalOpen = action.payload;
+        setIsGfiDownloadToolsOpen: (state, action) => {
+            state.isGfiDownloadToolsOpen = action.payload;
+        },
+        setIsFilterDialogOpen: (state, action) => {
+            state.isFilterDialogOpen = action.payload;
         },
         incrementTriggerUpdate: state => {
             state.triggerUpdate += 1; // increment value
@@ -268,20 +271,16 @@ export const uiSlice = createSlice({
           setActiveSwitch: (state, action) => {
             state.activeSwitch = action.payload;
           },
-        setIsBaselayersOpen: (state, action) => {
-            state.isBaselayersOpen = action.payload;
-        }
-
     },
 });
 
 export const {
-    setMinimizeFilterModal,
-    setMaximizeFilterModal,
-    setIsFilterModalOpen,
+    setMinimizeFilterDialog,
+    setMaximizeFilterDialog,
+    setIsFilterDialogOpen,
     setIsFullScreen,
     setIsMainScreen,
-    setModalConstrainsRef,
+    setDialogConstrainsRef,
     setIsSideMenuOpen,
     setIsSearchOpen,
     setIsChecked,
@@ -297,13 +296,14 @@ export const {
     setIsZoomBarOpen,
     setIsSaveViewOpen,
     setIsGfiOpen,
+    setIsGfiDownloadToolsOpen,
     setIsGfiDownloadOpen,
     setSelectedGfiTool,
     setShareUrl,
     setIsDrawingToolsOpen,
     setActiveTool,
     setActiveSelectionTool,
-    setIsDownloadLinkModalOpen,
+    setIsDownloadLinkDialogOpen,
     setIsSwipingDisabled,
     setSelectedMapLayersMenuTab,
     setSelectedMapLayersMenuThemeIndex,
@@ -331,7 +331,6 @@ export const {
     setIsCheckmark,
     setSelectedCustomFilterLayers,
     setActiveSwitch,
-    setIsBaselayersOpen,
     setIsFeedBackFormOpen
 } = uiSlice.actions;
 

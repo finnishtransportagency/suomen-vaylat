@@ -23,7 +23,6 @@
     "legendHeader": "Tällä zoom-tasolla näkyvissä olevat aineistot ja niiden selitteet",
     "legendButton": "Selitteet",
     "myLocButton": "Oma sijainti",
-    "baseLayersButton": "Taustakartat",
     "zoomExpand": "Laajenna",
     "zoomIn": "Lähennä",
     "zoomOut": "Loitonna",
@@ -45,8 +44,11 @@
     "share": "Jaa sivu",
     "shareTheme": "Jaa teema",
     "metadata": "Näytä tason metadata",
-    "showPageInfo": "Sovelluksen tiedot",
-    "showUserGuide": "Käyttöohjeet"
+    "showPageInfo": "Näytä sivun info",
+    "showUserGuide": "Näytä käyttöohje",
+    "userGuide": "Käyttöohjeet",
+    "pageInfo": "Sovelluksen tiedot",
+    "UserGuide": "Käyttöohjeet"
   },
   "savedContent": {
     "savedContent": "Omat tiedot",
@@ -161,7 +163,7 @@
   "exitConfirmation": "Olet poistumassa Suomen väylät-palvelusta. Haluatko jatkaa?",
   "appGuide": {
     "title": "Käyttöohje",
-    "modalContent": {
+    "dialogContent": {
       "upperBar": {
         "title": "Yläpalkin toiminnot",
         "content": {
@@ -224,12 +226,12 @@
           "step3": {
             "title": "Valitse ehto/operaattori",
             "content": {
-              "equal": "Yhtäsuuri kuin: Näyttää kohteet, joiden attribuutti on täsmälleen sama kuin annettu arvo.",
-              "notEqual": "Erisuuri kuin: Näyttää kohteet, joiden attribuutti eroaa annetusta arvosta.",
-              "contains": "Sisältää: Näyttää kohteet, joiden attribuutti sisältää annetun arvon.",
-              "notContains": "Ei sisällä: Näyttää kohteet, joiden attribuutti ei sisällä annettua arvoa.",
-              "smallerThan" : "Pienempi kuin: pienempi kuin annettu arvo",
-              "biggerThan" : "Suurempi kuin: suurempi kuin annettu arvo"
+              "equal": "<strong>Yhtäsuuri kuin</strong>: Näyttää kohteet, joiden attribuutti on täsmälleen sama kuin annettu arvo.",
+              "notEqual": "<strong>Erisuuri kuin</strong>: Näyttää kohteet, joiden attribuutti eroaa annetusta arvosta.",
+              "contains": "<strong>Sisältää</strong>: Näyttää kohteet, joiden attribuutti sisältää annetun arvon.",
+              "notContains": "<strong>Ei sisällä</strong>: Näyttää kohteet, joiden attribuutti ei sisällä annettua arvoa.",
+              "smallerThan" : "<strong>Pienempi kuin</strong>: pienempi kuin annettu arvo",
+              "biggerThan" : "<strong>Suurempi kuin</strong>: suurempi kuin annettu arvo"
             }
           },
           "step4": {
@@ -245,7 +247,7 @@
             "content": "Halutessasi voit poistaa tehdyn suodatuksen painamalla ”Poista kaikki suodattimet” tai painamalla ruksia aktiivisten suodattimien kohdalla."
           }
         },
-        "additionalInstructions": "Käyttämällä operaattoreita 'Sisältää' sekä 'Ei sisällä', attribuutin arvoa ei tarvitse kirjoittaa täydellisesti oikein. Riittää, että arvona on vain osa attribuutin sisällöstä. Tämä helpottaa suodatusta silloin, kun tarkkaa arvoa ei ole tiedossa.",
+        "additionalInstructions": "Käyttämällä operaattoreita '<strong>Sisältää</strong>' sekä '<strong>Ei sisällä</strong>', attribuutin arvoa ei tarvitse kirjoittaa täydellisesti oikein. Riittää, että arvona on vain osa attribuutin sisällöstä. Tämä helpottaa suodatusta silloin, kun tarkkaa arvoa ei ole tiedossa.",
         "feedback": "Jos tasolta puuttuu suodata-työkalu tai suodatettavista attribuutista puuttuu jokin oleellinen attribuutti, voit lähettää aiheesta palautetta osoitteeseen",
         "feedbackEmail": "paikkatieto@vayla.fi"
       },
@@ -525,7 +527,7 @@
     },
     "customLayerInfo": {
       "customFilter": "Oma suodatin",
-      "modalTitle": "Luo oma suodatin",
+      "dialogTitle": "Luo oma suodatin",
       "closeInfo": "Sulje ohje",
       "infoContent": "Omalla suodattimella voidaan tallentaa valittuja tasoja selaimen välimuistiin. Oman suodattimen muokkaaminen on laitekohtaista. Kun olet valinnut halutut tasot, paina 'Tallenna' -painiketta. 'Tyhjennä kaikki' -painike poistaa kaikki valitut tasot suodattimesta.",
       "saveLayers": "Tallenna",
@@ -535,9 +537,9 @@
     }
   },
   "downloadLink": {
-    "downloadLinkModalHeader": "Aineiston lataus",
-    "downloadLinkModalNameText": "Aineiston nimi",
-    "downloadLinkModalButtonText": "Lataa aineisto",
+    "downloadLinkDialogHeader": "Aineiston lataus",
+    "downloadLinkDialogNameText": "Aineiston nimi",
+    "downloadLinkDialogButtonText": "Lataa aineisto",
     "downloadSize": "Aineiston koko"
   },
   "groupLayerList": {
