@@ -44,13 +44,20 @@ import PillButton from '../PillButton/PillButton';
 const StyledTools = styled(motion.div)`
   display: flex;
   flex-direction: column;
-  gap: 10px;
   margin: 0;
   border-radius: 12px;
   transition: all 0.3s ease;
   pointer-events: auto;
-  padding: 0px 0px 10px 10px;
+  gap: 8px;
 
+  @media ${(props) => props.theme.device.mobileL} {
+    gap: 6px;
+  }
+
+  @media ${(props) => props.theme.device.lowresDesktop} {
+    gap: 6px;
+  }
+    
   &[data-hidden='true'] {
     max-height: 0;
     opacity: 0;

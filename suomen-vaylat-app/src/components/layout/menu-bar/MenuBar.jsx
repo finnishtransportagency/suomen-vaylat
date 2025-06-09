@@ -29,13 +29,15 @@ import {
   setIsThemeMenuOpen,
   removeFromDrawToolMarkers
 } from '../../../state/slices/uiSlice';
-import { removeMarkerRequest, setVKMData } from '../../../state/slices/rpcSlice';
+import {
+  removeMarkerRequest,
+  setVKMData
+} from '../../../state/slices/rpcSlice';
 
 import CircleButton from '../../../utils/components/CircleButton';
 import DrawingTools from '../../measurement-tools/DrawingTools';
 import PillButton from '../../PillButton/PillButton';
 import ArrowDropDownCircleIcon from '@mui/icons-material/ArrowDropDownCircle';
-
 
 const StyledMenuBar = styled.div`
   z-index: 1;
@@ -60,22 +62,31 @@ const StyledMenuBar = styled.div`
 `;
 
 const StyledDrawingToolsWrapper = styled.div`
+  overflow: hidden;
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 6px;
   background-color: ${({ theme }) => theme.colors.mainColor1 + '35'};
-  border-radius: 24px;
-  padding: 0px 12px 12px 0px; 
+  border-radius: 22px 16px 16px 16px;
+  padding-bottom: 12px;
 `;
 
 const StyledCornerCloseButton = styled(CircleButton)`
-  position: absolute;
-  top: 0;
-  left: 0;
   z-index: 10;
 `;
 
+const StyledToolButtons = styled.div`
+  overflow: scroll;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 0 8px;
+
+  @media ${(props) => props.theme.device.mobileL} {
+    gap: 6px;
+  }
+`;
 
 const StyledLayerCount = styled.div`
   position: absolute;
@@ -131,9 +142,6 @@ const MobileOnly = styled.div`
   @media ${({ theme }) => theme.device.mobileL} {
     display: flex;
     flex-direction: column;
-    position: absolute;
-    top: 12px;
-    left: 12px;
     z-index: 1;
     gap: 10px;
     pointer-events: auto;
@@ -164,7 +172,7 @@ const StyledCloseMobileMenuButton = styled.button`
   cursor: pointer;
   padding: 0;
   z-index: 1;
-  
+
   svg {
     height: 1.5em !important;
     width: 1.5em !important;
@@ -185,7 +193,7 @@ const StyledOpenMobileMenuButton = styled.button`
   cursor: pointer;
   padding: 0;
   z-index: 1;
-  
+
   svg {
     height: 1.2em !important;
     width: 1.2em !important;
@@ -194,9 +202,8 @@ const StyledOpenMobileMenuButton = styled.button`
 
 const MenuBar = () => {
   const { store } = useContext(ReactReduxContext);
-  const { selectedLayers, downloads, channel, filters, selectedLayersByType } = useAppSelector(
-    (state) => state.rpc
-  );
+  const { selectedLayers, downloads, channel, filters, selectedLayersByType } =
+    useAppSelector((state) => state.rpc);
   const {
     isFullScreen,
     isSideMenuOpen,
@@ -229,126 +236,41 @@ const MenuBar = () => {
   const nonBgMaps = selectedLayers.filter(
     (layer) =>
       layer.groups?.every((group) => group !== 1) &&
-      selectedLayersByType.backgroundMaps.filter((l) => l.id === layer.id).length === 0
+      selectedLayersByType.backgroundMaps.filter((l) => l.id === layer.id)
+        .length === 0
   );
+  console.log(isMobileMenuOpen);
 
   return (
     <>
-    {/* DESKTOP MENU */}
-    <StyledMenuBar isSearchOpen={isSearchOpen}>
-      <DesktopOnly>
-        <CircleButton
-          icon={faMap}
-          text={strings.layerlist.layerlistLabels.themeLayers}
-          toggleState={isThemeMenuOpen}
-          tooltipDirection={'right'}
-          clickAction={() => store.dispatch(setIsThemeMenuOpen(!isThemeMenuOpen))}
-        />
-        <CircleButton
-          icon={faLayerGroup}
-          text={strings.layerlist.layerlistLabels.mapLayers}
-          toggleState={isSideMenuOpen}
-          tooltipDirection={'right'}
-          clickAction={() => store.dispatch(setIsSideMenuOpen(!isSideMenuOpen))}
-        >
-          <StyledLayerCount>{selectedLayers.length}</StyledLayerCount>
-        </CircleButton>
-        <CircleButton
-          icon={faMapMarkedAlt}
-          text={strings.gfi.title}
-          toggleState={isGfiOpen}
-          tooltipDirection={'right'}
-          clickAction={() => {
-            if (isGfiOpen) {
-              store.dispatch(setVKMData(null));
-              store.dispatch(setMinimizeGfi(false));
-            }
-            store.dispatch(setIsGfiOpen(!isGfiOpen));
-          }}
-        >
-          {filters?.filters?.length > 0 && <StyledLayerCount>{filters.filters.length}</StyledLayerCount>}
-        </CircleButton>
-        <WebSiteShareButton />
-        
-        {isDrawingToolsOpen ? (
-          <StyledDrawingToolsWrapper>
-            <StyledCornerCloseButton
-                icon={faTimes}
-                text=""
-                toggleState={true}
-                tooltipDirection={'right'}
-                clickAction={() => store.dispatch(setIsDrawingToolsOpen(false))}
-            />
-            <DrawingTools isOpen={isDrawingToolsOpen}>
-              <PillButton
-                icon={faDownload}
-                text={strings.downloads.downloads}
-                disabled={nonBgMaps.length === 0}
-                onClick={() => store.dispatch(setIsGfiDownloadOpen(!isGfiDownloadOpen))}
-              />
-              <PillButton
-                icon={faSave}
-                text={strings.savedContent.saveView.saveView}
-                onClick={() => store.dispatch(setIsSaveViewOpen(!isSaveViewOpen))}
-              />
-              <PillButton
-                icon={isFullScreen ? faCompress : faExpand}
-                text={strings.tooltips.fullscreenButton}
-                onClick={() => {
-                  const elem = document.documentElement;
-                  isFullScreen ? document.exitFullscreen?.() : elem.requestFullscreen?.();
-                }}
-              />
-            </DrawingTools>
-          </StyledDrawingToolsWrapper>
-        ) : (
-          <CircleButton
-            icon={<BuildIcon />}
-            text={strings.tooltips.toolsButton}
-            toggleState={false}
-            tooltipDirection="right"
-            clickAction={() => store.dispatch(setIsDrawingToolsOpen(true))}
-          />
-        )}
-
-      </DesktopOnly>
-    </StyledMenuBar>
-
-  
-      {/* MOBILE MENU */}
-      <MobileOnly>
-      {!isMobileMenuOpen && (
-        <StyledOpenMobileMenuButton onClick={() => setIsMobileMenuOpen(true)}>
-          <ArrowDropDownCircleIcon/>
-        </StyledOpenMobileMenuButton>
-      )}
-
-      {isMobileMenuOpen && (
-        <MobileMenuContainer>
-          <StyledCloseMobileMenuButton onClick={() => setIsMobileMenuOpen(false)}>
-            <FontAwesomeIcon icon={faTimes}/>
-          </StyledCloseMobileMenuButton>
-
+      {/* DESKTOP MENU */}
+      <StyledMenuBar isSearchOpen={isSearchOpen}>
+        <DesktopOnly id="desktop-only">
           <CircleButton
             icon={faMap}
-            text=""
+            text={strings.layerlist.layerlistLabels.themeLayers}
             toggleState={isThemeMenuOpen}
-            clickAction={() => store.dispatch(setIsThemeMenuOpen(!isThemeMenuOpen))}
+            tooltipDirection={'right'}
+            clickAction={() =>
+              store.dispatch(setIsThemeMenuOpen(!isThemeMenuOpen))
+            }
           />
-
           <CircleButton
             icon={faLayerGroup}
-            text=""
+            text={strings.layerlist.layerlistLabels.mapLayers}
             toggleState={isSideMenuOpen}
-            clickAction={() => store.dispatch(setIsSideMenuOpen(!isSideMenuOpen))}
+            tooltipDirection={'right'}
+            clickAction={() =>
+              store.dispatch(setIsSideMenuOpen(!isSideMenuOpen))
+            }
           >
             <StyledLayerCount>{selectedLayers.length}</StyledLayerCount>
           </CircleButton>
-
           <CircleButton
             icon={faMapMarkedAlt}
-            text=""
+            text={strings.gfi.title}
             toggleState={isGfiOpen}
+            tooltipDirection={'right'}
             clickAction={() => {
               if (isGfiOpen) {
                 store.dispatch(setVKMData(null));
@@ -361,47 +283,158 @@ const MenuBar = () => {
               <StyledLayerCount>{filters.filters.length}</StyledLayerCount>
             )}
           </CircleButton>
-
           <WebSiteShareButton />
 
-          <CircleButton
-            icon={isDrawingToolsOpen ? faTimes : <BuildIcon />}
-            text=""
-            toggleState={isDrawingToolsOpen}
-            clickAction={() => closeDrawingTools(!isDrawingToolsOpen)}
-          />
-
-          {isDrawingToolsOpen && (
-            <>
-            <DrawingTools isOpen={isDrawingToolsOpen}/>
-
-              <PillButton
-                icon={faDownload}
-                text={strings.downloads.downloads}
-                disabled={nonBgMaps.length === 0}
-                onClick={() => store.dispatch(setIsGfiDownloadOpen(!isGfiDownloadOpen))}
+          {isDrawingToolsOpen ? (
+            <StyledDrawingToolsWrapper>
+              <StyledCornerCloseButton
+                icon={faTimes}
+                text=""
+                toggleState={true}
+                tooltipDirection={'right'}
+                clickAction={() => store.dispatch(setIsDrawingToolsOpen(false))}
               />
-              <PillButton
-                icon={faSave}
-                text={strings.savedContent.saveView.saveView}
-                onClick={() => store.dispatch(setIsSaveViewOpen(!isSaveViewOpen))}
-              />
-              <PillButton
-                icon={isFullScreen ? faCompress : faExpand}
-                text={strings.tooltips.fullscreenButton}
-                onClick={() => {
-                  const elem = document.documentElement;
-                  isFullScreen ? document.exitFullscreen?.() : elem.requestFullscreen?.();
-                }}
-              />
-            </>
-
+              <StyledToolButtons>
+                <DrawingTools isOpen={isDrawingToolsOpen}>
+                  
+                </DrawingTools>
+                <PillButton
+                    icon={faDownload}
+                    text={strings.downloads.downloads}
+                    disabled={nonBgMaps.length === 0}
+                    onClick={() =>
+                      store.dispatch(setIsGfiDownloadOpen(!isGfiDownloadOpen))
+                    }
+                  />
+                  <PillButton
+                    icon={faSave}
+                    text={strings.savedContent.saveView.saveView}
+                    onClick={() =>
+                      store.dispatch(setIsSaveViewOpen(!isSaveViewOpen))
+                    }
+                  />
+                  <PillButton
+                    icon={isFullScreen ? faCompress : faExpand}
+                    text={strings.tooltips.fullscreenButton}
+                    onClick={() => {
+                      const elem = document.documentElement;
+                      isFullScreen
+                        ? document.exitFullscreen?.()
+                        : elem.requestFullscreen?.();
+                    }}
+                  />
+              </StyledToolButtons>
+            </StyledDrawingToolsWrapper>
+          ) : (
+            <CircleButton
+              icon={<BuildIcon />}
+              text={strings.tooltips.toolsButton}
+              toggleState={false}
+              tooltipDirection="right"
+              clickAction={() => store.dispatch(setIsDrawingToolsOpen(true))}
+            />
           )}
-        </MobileMenuContainer>
-      )}
-    </MobileOnly>
-  </>
-);
+        </DesktopOnly>
+      </StyledMenuBar>
+
+      {/* MOBILE MENU */}
+      <MobileOnly id="mobile-only">
+        {!isMobileMenuOpen && (
+          <StyledOpenMobileMenuButton onClick={() => setIsMobileMenuOpen(true)}>
+            <ArrowDropDownCircleIcon />
+          </StyledOpenMobileMenuButton>
+        )}
+
+        {isMobileMenuOpen && (
+          <MobileMenuContainer>
+            <StyledCloseMobileMenuButton
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              <FontAwesomeIcon icon={faTimes} />
+            </StyledCloseMobileMenuButton>
+
+            <CircleButton
+              icon={faMap}
+              text=""
+              toggleState={isThemeMenuOpen}
+              clickAction={() =>
+                store.dispatch(setIsThemeMenuOpen(!isThemeMenuOpen))
+              }
+            />
+
+            <CircleButton
+              icon={faLayerGroup}
+              text=""
+              toggleState={isSideMenuOpen}
+              clickAction={() =>
+                store.dispatch(setIsSideMenuOpen(!isSideMenuOpen))
+              }
+            >
+              <StyledLayerCount>{selectedLayers.length}</StyledLayerCount>
+            </CircleButton>
+
+            <CircleButton
+              icon={faMapMarkedAlt}
+              text=""
+              toggleState={isGfiOpen}
+              clickAction={() => {
+                if (isGfiOpen) {
+                  store.dispatch(setVKMData(null));
+                  store.dispatch(setMinimizeGfi(false));
+                }
+                store.dispatch(setIsGfiOpen(!isGfiOpen));
+              }}
+            >
+              {filters?.filters?.length > 0 && (
+                <StyledLayerCount>{filters.filters.length}</StyledLayerCount>
+              )}
+            </CircleButton>
+
+            <WebSiteShareButton />
+
+            <CircleButton
+              icon={isDrawingToolsOpen ? faTimes : <BuildIcon />}
+              text=""
+              toggleState={isDrawingToolsOpen}
+              clickAction={() => closeDrawingTools(!isDrawingToolsOpen)}
+            />
+
+            {isDrawingToolsOpen && (
+              <>
+                <DrawingTools isOpen={isDrawingToolsOpen} />
+
+                <PillButton
+                  icon={faDownload}
+                  text={strings.downloads.downloads}
+                  disabled={nonBgMaps.length === 0}
+                  onClick={() =>
+                    store.dispatch(setIsGfiDownloadOpen(!isGfiDownloadOpen))
+                  }
+                />
+                <PillButton
+                  icon={faSave}
+                  text={strings.savedContent.saveView.saveView}
+                  onClick={() =>
+                    store.dispatch(setIsSaveViewOpen(!isSaveViewOpen))
+                  }
+                />
+                <PillButton
+                  icon={isFullScreen ? faCompress : faExpand}
+                  text={strings.tooltips.fullscreenButton}
+                  onClick={() => {
+                    const elem = document.documentElement;
+                    isFullScreen
+                      ? document.exitFullscreen?.()
+                      : elem.requestFullscreen?.();
+                  }}
+                />
+              </>
+            )}
+          </MobileMenuContainer>
+        )}
+      </MobileOnly>
+    </>
+  );
 };
 
 export default MenuBar;
