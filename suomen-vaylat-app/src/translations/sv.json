@@ -23,6 +23,7 @@
     "legendHeader": "Data som visas på denna zoomnivå och deras förklaringar",
     "legendButton": "Förklaringar",
     "myLocButton": "Egen position",
+    "coordinateTool": "Koordinatverktyg",
     "zoomExpand": "Expandera",
     "zoomIn": "Zooma in",
     "zoomOut": "Zooma ut",
@@ -457,6 +458,19 @@
       "title": "Fastighetssökning"
     },
     "carriageWaySearch": "Använda körbanasökning"
+  },
+  "coordinateTool": {
+    "title": "Koordinatverktyg",
+    "intro": "Mata in koordinaterna eller peka på platsen på kartan.",
+    "coordinateSystemTitle": "Koordinatsystem:",
+    "coordinateSystem": "ETRS89-TM35FIN",
+    "n": "N",
+    "e": "E",
+    "centerMap": "Fokusera kartan",
+    "addMarker": "Tillägg markör",
+    "deleteMarkers": "Ta bort markörer",
+    "onlyNumbers": "Vänligen ange endast siffror",
+    "closeCoordinateTool": "Stäng koordinatverktyg"
   },
   "layerlist": {
     "errorLoadingLayers": "Det gick inte att ladda kartnivåer",

@@ -23,6 +23,7 @@
     "legendHeader": "The data displayed at this zoom level and their explanations",
     "legendButton": "Legend",
     "myLocButton": "My location",
+    "coordinateTool": "Coordinate tool",
     "zoomExpand": "Expand",
     "zoomIn": "Zoom in",
     "zoomOut": "Zoom out",
@@ -458,6 +459,19 @@
       "title": "Property search"
     },
     "carriageWaySearch": "Use driving lane search"
+  },
+  "coordinateTool": {
+    "title": "Coordinate tool",
+    "intro": "Type coordinates or click a point on the map.",
+    "coordinateSystemTitle": "Coordinate system:",
+    "coordinateSystem": "ETRS89-TM35FIN",
+    "n": "N",
+    "e": "E",
+    "centerMap": "Center map",
+    "addMarker": "Add marker",
+    "deleteMarkers": "Delete markers",
+    "onlyNumbers": "Please enter only numbers",
+    "closeCoordinateTool": "Close coordinate tool"
   },
   "layerlist": {
     "errorLoadingLayers": "Error loading maplayers",

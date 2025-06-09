@@ -10,7 +10,8 @@ import {
   setCurrentState,
   setFeatures,
   setLegends,
-  setCurrentMapCenter
+  setCurrentMapCenter,
+  setStartMapCenter
 } from '../../../../state/slices/rpcSlice';
 import { setGfiCroppingTypes } from '../../../../state/slices/uiSlice';
 import { updateLayers } from '../../../../utils/rpcUtil';
@@ -127,9 +128,10 @@ const setupSupportedFunctions = (data, channel, store) => {
   }
 
   if (data.getMapPosition) {
-    channel.getMapPosition((mapPositionData) =>
-      store.dispatch(setCurrentMapCenter(mapPositionData))
-    );
+    channel.getMapPosition((mapPositionData) => {
+      store.dispatch(setStartMapCenter(mapPositionData));
+      store.dispatch(setCurrentMapCenter(mapPositionData));
+    });
   }
 };
 

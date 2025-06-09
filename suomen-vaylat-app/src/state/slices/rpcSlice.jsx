@@ -35,6 +35,11 @@ const initialState = {
   legends: [],
   tagsWithLayers: {},
   gfiLocations: [],
+  startCenter: {
+    x: 0,
+    y: 0,
+    zoomlevel: null
+  },
   center: {
     x: 0,
     y: 0,
@@ -55,7 +60,8 @@ const initialState = {
   activeGFILayer: null,
   filteringInfo: [],
   featureSearchResults: [],
-  searchOn: null
+  searchOn: null,
+  coordMarkerIndex: 0
 };
 
 export const rpcSlice = createSlice({
@@ -643,6 +649,26 @@ export const rpcSlice = createSlice({
      * @param {Object} state
      * @param {Object} action
      */
+    setStartMapCenter: (state, action) => {
+      if (
+        state.startCenter.x === action.payload.centerX &&
+        state.startCenter.y === action.payload.centerY &&
+        state.startCenter.zoomLevel === action.payload.zoom
+      ) {
+        return;
+      }
+      state.startCenter.x = action.payload.centerX;
+      state.startCenter.y = action.payload.centerY;
+      state.startCenter.zoomLevel = action.payload.zoom;
+      LOG.log("setStartMapCenter to ", action.payload);
+    },
+
+    /**
+     * Set current map center.
+     * @method setCurrentMapCenter
+     * @param {Object} state
+     * @param {Object} action
+     */
     setCurrentMapCenter: (state, action) => {
       if (
         state.center.x === action.payload.centerX &&
@@ -900,6 +926,10 @@ export const rpcSlice = createSlice({
       state.pointInfo = action.payload;
     },
 
+    setCoordMarkerIndex: (state, action) => {
+      state.coordMarkerIndex = action.payload;
+    },
+
     /**
      * Set start state.
      * @method setStartState
@@ -959,6 +989,7 @@ export const {
   setLegends,
   setTagsWithLayers,
   setCurrentMapCenter,
+  setStartMapCenter,
   changeLayerStyle,
   reArrangeSelectedMapLayers,
   setGFILocations,
@@ -985,7 +1016,8 @@ export const {
   setFeatureSearchResults,
   setSearchOn,
   searchVKMTrack,
-  setAnnouncements
+  setAnnouncements,
+  setCoordMarkerIndex
 } = rpcSlice.actions;
 
 export default rpcSlice.reducer;

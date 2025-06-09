@@ -77,16 +77,16 @@ const FeatureDataTabContent = ({ layer, data, title, tablePropsInit }) => {
   const selectFeature = (channel, features) => {
     let featureStyle = {
       fill: {
-        color: "#e50083",
+        color: theme.colors.secondaryColorPink,
       },
       stroke: {
-        color: "#e50083",
+        color: theme.colors.secondaryColorPink,
         width: 5,
         lineDash: "solid",
         lineCap: "round",
         lineJoin: "round",
         area: {
-          color: "#e50083",
+          color: theme.colors.secondaryColorPink,
           width: 4,
           lineJoin: "round",
         },
@@ -95,7 +95,7 @@ const FeatureDataTabContent = ({ layer, data, title, tablePropsInit }) => {
           shape: 2,
           size: 5,
           fill: {
-              color: '#e50083',
+              color: theme.colors.secondaryColorPink,
           }
       }
     };
