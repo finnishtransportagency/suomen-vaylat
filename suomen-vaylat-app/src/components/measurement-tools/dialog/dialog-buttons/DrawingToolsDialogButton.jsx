@@ -22,6 +22,8 @@ const StyledMapToolsContainer = styled.div`
     z-index: -1;
 `;
 
+// TODO: this could be removed
+
 const DrawingToolsDialogButton = () => {
   const { store } = useContext(ReactReduxContext);
   const { channel, drawToolMarkers, isDrawingToolsOpen } = useAppSelector(

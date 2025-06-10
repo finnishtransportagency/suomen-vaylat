@@ -34,6 +34,7 @@ import ThemeMenu from '../layerlists/theme-layerlist/ThemeMenu';
 import BaseLayerSelector from '../base-layers-selector/BaseLayersSelector';
 import { isMobile } from '../../theme/theme';
 import { useAppSelector } from '../../state/hooks';
+import DrawtoolMarkersDialog from '../measurement-tools/dialog/DrawtoolMarkersDialog';
 
 const StyledContent = styled.div`
   position: absolute;
@@ -173,6 +174,8 @@ const Content = () => {
         {isMobile && isCoordinateToolOpen && <CoordinateToolMobile />}
 
         {isCoordinateToolOpen && <Crosshair />}
+
+        <DrawtoolMarkersDialog/>
         
         <StyledToastContainer
           position="bottom-left"

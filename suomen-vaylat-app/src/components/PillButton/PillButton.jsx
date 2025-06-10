@@ -47,7 +47,6 @@ const PillButton = ({
   color,
   hoverColor
 }) => {
-  console.log(icon, text);
   return (
     <StyledPillButton
       onClick={onClick}

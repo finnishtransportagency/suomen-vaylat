@@ -8,7 +8,7 @@ import {
   faDownload,
   faMap,
   faSave,
-  faTimes
+  faTimes,
 } from '@fortawesome/free-solid-svg-icons';
 import BuildIcon from '@mui/icons-material/Build';
 import { WebSiteShareButton } from '../../share-website/ShareLinkButtons';
@@ -70,6 +70,7 @@ const StyledDrawingToolsWrapper = styled.div`
   background-color: ${({ theme }) => theme.colors.mainColor1 + '35'};
   border-radius: 22px 16px 16px 16px;
   padding-bottom: 12px;
+  pointer-events: auto;
 `;
 
 const StyledCornerCloseButton = styled(CircleButton)`
@@ -82,6 +83,7 @@ const StyledToolButtons = styled.div`
   flex-direction: column;
   gap: 8px;
   padding: 0 8px;
+  pointer-events: auto;
 
   @media ${(props) => props.theme.device.mobileL} {
     gap: 6px;
@@ -213,8 +215,7 @@ const MenuBar = () => {
     isSaveViewOpen,
     isGfiOpen,
     isGfiDownloadOpen,
-    activeTool,
-    drawToolMarkers
+    drawToolMarkers,
   } = useAppSelector((state) => state.ui);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -239,7 +240,6 @@ const MenuBar = () => {
       selectedLayersByType.backgroundMaps.filter((l) => l.id === layer.id)
         .length === 0
   );
-  console.log(isMobileMenuOpen);
 
   return (
     <>
