@@ -181,6 +181,7 @@ export const DrawingTools = ({ isOpen, children }) => {
           return (
             <PillButton
               key={tool.id}
+              disabled={geoJsonArray.length === 0}
               onClick={eraseDrawing}
               icon={tool.style.icon}
               color={theme.colors.secondaryColorDarkOrange}
