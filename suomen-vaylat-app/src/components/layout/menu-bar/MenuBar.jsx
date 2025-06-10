@@ -8,7 +8,7 @@ import {
   faDownload,
   faMap,
   faSave,
-  faTimes,
+  faTimes
 } from '@fortawesome/free-solid-svg-icons';
 import BuildIcon from '@mui/icons-material/Build';
 import { WebSiteShareButton } from '../../share-website/ShareLinkButtons';
@@ -36,7 +36,7 @@ import {
 
 import CircleButton from '../../../utils/components/CircleButton';
 import DrawingTools from '../../measurement-tools/DrawingTools';
-import PillButton from '../../PillButton/PillButton';
+import PillButton from '../../../utils/components/PillButton';
 import ArrowDropDownCircleIcon from '@mui/icons-material/ArrowDropDownCircle';
 
 const StyledMenuBar = styled.div`
@@ -215,7 +215,7 @@ const MenuBar = () => {
     isSaveViewOpen,
     isGfiOpen,
     isGfiDownloadOpen,
-    drawToolMarkers,
+    drawToolMarkers
   } = useAppSelector((state) => state.ui);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -295,34 +295,35 @@ const MenuBar = () => {
                 clickAction={() => store.dispatch(setIsDrawingToolsOpen(false))}
               />
               <StyledToolButtons>
-                <DrawingTools isOpen={isDrawingToolsOpen}>
-                  
-                </DrawingTools>
+                <DrawingTools isOpen={isDrawingToolsOpen} />
                 <PillButton
-                    icon={faDownload}
-                    text={strings.downloads.downloads}
-                    disabled={nonBgMaps.length === 0}
-                    onClick={() =>
-                      store.dispatch(setIsGfiDownloadOpen(!isGfiDownloadOpen))
-                    }
-                  />
-                  <PillButton
-                    icon={faSave}
-                    text={strings.savedContent.saveView.saveView}
-                    onClick={() =>
-                      store.dispatch(setIsSaveViewOpen(!isSaveViewOpen))
-                    }
-                  />
-                  <PillButton
-                    icon={isFullScreen ? faCompress : faExpand}
-                    text={strings.tooltips.fullscreenButton}
-                    onClick={() => {
-                      const elem = document.documentElement;
-                      isFullScreen
-                        ? document.exitFullscreen?.()
-                        : elem.requestFullscreen?.();
-                    }}
-                  />
+                  id="tools-download"
+                  icon={faDownload}
+                  text={strings.downloads.downloads}
+                  disabled={nonBgMaps.length === 0}
+                  onClick={() =>
+                    store.dispatch(setIsGfiDownloadOpen(!isGfiDownloadOpen))
+                  }
+                />
+                <PillButton
+                  id="tools-save"
+                  icon={faSave}
+                  text={strings.savedContent.saveView.saveView}
+                  onClick={() =>
+                    store.dispatch(setIsSaveViewOpen(!isSaveViewOpen))
+                  }
+                />
+                <PillButton
+                  id="tools-full-screen"
+                  icon={isFullScreen ? faCompress : faExpand}
+                  text={strings.tooltips.fullscreenButton}
+                  onClick={() => {
+                    const elem = document.documentElement;
+                    isFullScreen
+                      ? document.exitFullscreen?.()
+                      : elem.requestFullscreen?.();
+                  }}
+                />
               </StyledToolButtons>
             </StyledDrawingToolsWrapper>
           ) : (
@@ -404,6 +405,7 @@ const MenuBar = () => {
                 <DrawingTools isOpen={isDrawingToolsOpen} />
 
                 <PillButton
+                  id="tools-download"
                   icon={faDownload}
                   text={strings.downloads.downloads}
                   disabled={nonBgMaps.length === 0}
@@ -412,6 +414,7 @@ const MenuBar = () => {
                   }
                 />
                 <PillButton
+                  id="tools-save"
                   icon={faSave}
                   text={strings.savedContent.saveView.saveView}
                   onClick={() =>
@@ -419,6 +422,7 @@ const MenuBar = () => {
                   }
                 />
                 <PillButton
+                  id="tools-full-screen"
                   icon={isFullScreen ? faCompress : faExpand}
                   text={strings.tooltips.fullscreenButton}
                   onClick={() => {

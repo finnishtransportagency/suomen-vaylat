@@ -39,6 +39,7 @@ const StyledPillButton = styled.button`
 const ButtonText = styled.span``;
 
 const PillButton = ({
+  id,
   icon,
   text,
   children,
@@ -49,6 +50,7 @@ const PillButton = ({
 }) => {
   return (
     <StyledPillButton
+      id={`pill-button-${id}`}
       onClick={onClick}
       disabled={disabled}
       color={color}

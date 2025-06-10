@@ -26,7 +26,7 @@ import { removeMarkerRequest } from '../../state/slices/rpcSlice';
 
 import { theme } from '../../theme/theme';
 import { toast } from 'react-toastify';
-import PillButton from '../PillButton/PillButton';
+import PillButton from '../../utils/components/PillButton';
 
 const StyledTools = styled(motion.div)`
   display: flex;
@@ -69,7 +69,7 @@ const variants = {
   }
 };
 
-export const DrawingTools = ({ isOpen, children }) => {
+export const DrawingTools = ({ isOpen }) => {
   const { store } = useContext(ReactReduxContext);
   const { channel } = useSelector((state) => state.rpc);
   const { activeTool, geoJsonArray, drawToolMarkers } = useSelector(
@@ -164,6 +164,7 @@ export const DrawingTools = ({ isOpen, children }) => {
 
   return (
     <StyledTools
+      id="drawing-tools-buttons-wrapper"
       data-hidden={!isOpen}
       animate={isOpen ? 'show' : 'hidden'}
       variants={variants}
@@ -171,7 +172,11 @@ export const DrawingTools = ({ isOpen, children }) => {
       {drawingToolsData.map((tool) => {
         if (tool.id === 'marker') {
           return (
-            <PillButton icon={tool.style.icon} onClick={() => addMarker(tool)}>
+            <PillButton
+              id={'drawing-tools-add-marker'}
+              icon={tool.style.icon}
+              onClick={() => addMarker(tool)}
+            >
               {tool.name}
             </PillButton>
           );
@@ -180,6 +185,7 @@ export const DrawingTools = ({ isOpen, children }) => {
         if (tool.id === 'erase') {
           return (
             <PillButton
+              id={'drawing-tools-erase-drawing'}
               key={tool.id}
               disabled={geoJsonArray.length === 0}
               onClick={eraseDrawing}
@@ -194,6 +200,7 @@ export const DrawingTools = ({ isOpen, children }) => {
 
         return (
           <PillButton
+            id={`drawing-tools-${tool.id}`}
             key={tool.id}
             onClick={() => startStopTool(tool)}
             icon={tool.style.icon}
@@ -207,6 +214,7 @@ export const DrawingTools = ({ isOpen, children }) => {
       })}
 
       <PillButton
+        id={'drawing-tools-save-geometry'}
         key="save-geometry-button"
         onClick={handleAddGeometry}
         disabled={!geoJsonArray.length && drawToolMarkers.length <= 0}
@@ -215,7 +223,6 @@ export const DrawingTools = ({ isOpen, children }) => {
       >
         {strings.savedContent.saveGeometry.saveGeometry}
       </PillButton>
-      {children}
     </StyledTools>
   );
 };
