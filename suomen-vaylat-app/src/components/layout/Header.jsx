@@ -329,7 +329,7 @@ export const Header = () => {
         ]);
     });
 
-    channel &&
+    channel && activeTool === 'gfi-selection-tool' &&
       channel.postRequest('DrawTools.StopDrawingRequest', [
         'gfi-selection-tool',
         true

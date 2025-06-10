@@ -153,7 +153,7 @@ const FeatureDataDownloadTools = ({ closeButton = true, handleGfiDownloadsMenu})
     selectedLayersByType
   } = useAppSelector((state) => state.rpc);
 
-  const { isGfiDownloadToolsOpen, isGfiOpen } =
+  const { isGfiDownloadToolsOpen, isGfiOpen, activeTool } =
     useAppSelector((state) => state.ui);
   const { store } = useContext(ReactReduxContext);
   const [downloadUuids, setDownloadUuids] = useState([]);
@@ -421,7 +421,7 @@ const FeatureDataDownloadTools = ({ closeButton = true, handleGfiDownloadsMenu})
         null,
         'download-tool-layer'
       ]);
-      channel.postRequest('DrawTools.StopDrawingRequest', [
+      activeTool === 'gfi-selection-tool' && channel.postRequest('DrawTools.StopDrawingRequest', [
         'gfi-selection-tool',
         true
       ]);

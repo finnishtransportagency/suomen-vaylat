@@ -7,7 +7,7 @@ import FeatureDataToolsMenu from "../tools/FeatureDataToolsMenu";
 import { setIsGfiToolsOpen, setIsGfiDownloadToolsOpen, setActiveSelectionTool } from "../../../state/slices/uiSlice";
 
 const FeatureDataToolsDialog = ({ constraintsRef }) => {
-  const { isGfiToolsOpen, isGfiDownloadToolsOpen } = useAppSelector((state) => state.ui);
+  const { isGfiToolsOpen, isGfiDownloadToolsOpen, activeTool } = useAppSelector((state) => state.ui);
   const { store } = useContext(ReactReduxContext);
   let { channel } = useAppSelector((state) => state.rpc);
 
@@ -18,7 +18,7 @@ const FeatureDataToolsDialog = ({ constraintsRef }) => {
 
   const handleGfiToolsMenu = () => {
     store.dispatch(setIsGfiToolsOpen(false));
-    channel &&
+    channel && activeTool === 'gfi-selection-tool' &&
       channel.postRequest("DrawTools.StopDrawingRequest", [
         "gfi-selection-tool",
         true,

@@ -15,7 +15,7 @@ import { GFI_GEOMETRY_LAYER_ID } from '../../../utils/constants';
 const FeatureDataDownloadToolsDialog = ({
   constraintsRef
 }) => {
-  const { isGfiDownloadToolsOpen, isGfiOpen } = useAppSelector(
+  const { isGfiDownloadToolsOpen, isGfiOpen, activeTool } = useAppSelector(
     (state) => state.ui
   );
   const { store } = useContext(ReactReduxContext);
@@ -41,7 +41,7 @@ const FeatureDataDownloadToolsDialog = ({
         null,
         'download-tool-layer'
       ]);
-      channel.postRequest('DrawTools.StopDrawingRequest', [
+      activeTool === 'gfi-selection-tool' && channel.postRequest('DrawTools.StopDrawingRequest', [
         'gfi-selection-tool',
         true
       ]);

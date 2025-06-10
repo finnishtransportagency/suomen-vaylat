@@ -25,7 +25,7 @@ const FeatureDataDialog = ({ constraintsRef }) => {
   const { store } = useContext(ReactReduxContext);
   const { channel, gfiLocations } = useAppSelector((state) => state.rpc);
 
-  const { isGfiOpen, minimizeGfi, maximizeGfi } = useAppSelector(
+  const { isGfiOpen, minimizeGfi, maximizeGfi, activeTool } = useAppSelector(
     (state) => state.ui
   );
 
@@ -51,7 +51,7 @@ const FeatureDataDialog = ({ constraintsRef }) => {
         null,
         GFI_GEOMETRY_LAYER_ID
       ]);
-    channel.postRequest('DrawTools.StopDrawingRequest', [
+    activeTool === 'gfi-selection-tool' && channel.postRequest('DrawTools.StopDrawingRequest', [
       'gfi-selection-tool',
       true
     ]);

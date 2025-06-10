@@ -84,7 +84,7 @@ export const DrawingTools = ({ isOpen, children }) => {
   const startStopTool = (tool) => {
     if (tool.id !== activeTool) {
       channel?.postRequest('DrawTools.StartDrawingRequest', [
-        tool.name,
+        tool.id,
         tool.type,
         { showMeasureOnMap: true }
       ]);
@@ -104,7 +104,7 @@ export const DrawingTools = ({ isOpen, children }) => {
   };
 
   const eraseDrawing = () => {
-    channel?.postRequest('DrawTools.StopDrawingRequest', [activeTool]);
+    channel?.postRequest('DrawTools.StopDrawingRequest', []);
     store.dispatch(setGeoJsonArray([]));
     store.dispatch(removeFromDrawToolMarkers(true));
     drawToolMarkers.forEach((marker) => {

@@ -423,6 +423,10 @@ export const FeatureDataPopup = () => {
     selectedLayersByType
   } = useAppSelector((state) => state.rpc);
 
+  const {
+    activeTool
+  } = useAppSelector((state) => state.ui);
+
   const [point, setPoint] = useState(null);
   const [isGfiDownloadToolsOpen, setIsGfiDownloadToolsOpen] = useState(false);
 
@@ -757,7 +761,7 @@ export const FeatureDataPopup = () => {
     setIsGfiToolsOpen(!isGfiToolsOpen);
     store.dispatch(setActiveSelectionTool(null));
 
-    channel &&
+    channel && activeTool === 'gfi-selection-tool' &&
       channel.postRequest('DrawTools.StopDrawingRequest', [
         'gfi-selection-tool',
         true
