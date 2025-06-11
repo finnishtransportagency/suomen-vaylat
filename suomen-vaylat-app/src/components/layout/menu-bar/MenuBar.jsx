@@ -231,11 +231,10 @@ const MenuBar = () => {
   };
 
   const MENU_ANIMATION = {
-    hidden: { y: -50, opacity: 0, pointerEvents: 'none' },
+    hidden: { y: -50, opacity: 0 },
     visible: {
       y: 0,
       opacity: 1,
-      pointerEvents: 'auto',
       transition: { type: 'tween', duration: 0.3 }
     }
   };
@@ -368,18 +367,20 @@ const MenuBar = () => {
                         }
                         aria-label={strings.savedContent?.saveView?.saveView}
                       />
-                      <PillButton
-                        id="menubar-tools-fullscreen-btn"
-                        icon={isFullScreen ? faCompress : faExpand}
-                        text={strings.tooltips.fullscreenButton}
-                        onClick={() => {
-                          const elem = document.documentElement;
-                          isFullScreen
-                            ? document.exitFullscreen?.()
-                            : elem.requestFullscreen?.();
-                        }}
-                        aria-label={strings.tooltips?.fullscreenButton}
-                      />
+                      {!isMobile && (
+                        <PillButton
+                          id="menubar-tools-fullscreen-btn"
+                          icon={isFullScreen ? faCompress : faExpand}
+                          text={strings.tooltips.fullscreenButton}
+                          onClick={() => {
+                            const elem = document.documentElement;
+                            isFullScreen
+                              ? document.exitFullscreen?.()
+                              : elem.requestFullscreen?.();
+                          }}
+                          aria-label={strings.tooltips?.fullscreenButton}
+                        />
+                      )}
                     </StyledToolButtons>
                   </StyledDrawingToolsWrapper>
                 ) : (
