@@ -10,14 +10,13 @@ import {
   faSave,
   faTimes
 } from '@fortawesome/free-solid-svg-icons';
-import { motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 
 import BuildIcon from '@mui/icons-material/Build';
 import { WebSiteShareButton } from '../../share-website/ShareLinkButtons';
 import { ReactReduxContext } from 'react-redux';
 import styled from 'styled-components';
 import { useAppSelector } from '../../../state/hooks';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   setIsDrawingToolsOpen,
   setIsSideMenuOpen,
@@ -56,7 +55,7 @@ const StyledMenuBar = styled.div`
     pointer-events: none;
     grid-row-start: ${(props) => (props.isSearchOpen ? 2 : 1)};
     grid-row-end: 3;
-    gap: 6px ;
+    gap: 6px;
   }
 
   @media ${(props) => props.theme.device.lowResDesktop} {
@@ -74,6 +73,10 @@ const StyledDrawingToolsWrapper = styled.div`
   border-radius: 22px 16px 16px 16px;
   padding-bottom: 12px;
   pointer-events: auto;
+
+  @media ${(props) => props.theme.device.mobileL} {
+    border-radius: 18px 12px 12px 12px;
+  }
 `;
 
 const StyledCornerCloseButton = styled(CircleButton)`
@@ -127,7 +130,7 @@ const StyledLayerCount = styled.div`
   }
 `;
 
-const DesktopOnly = styled.div`
+const StyledMenuButtonsContainer = styled(motion.div)`
   z-index: 1;
   grid-row-start: 1;
   grid-row-end: 3;
@@ -137,51 +140,13 @@ const DesktopOnly = styled.div`
   flex-direction: column;
   transition: all 0.5s ease-in-out;
   gap: 8px;
-  
-  @media ${({ theme }) => theme.device.lowResDesktop} {
-    gap: 6px ;
-  }
-`;
 
-const MobileOnly = styled.div`
-  display: none;
   @media ${({ theme }) => theme.device.mobileL} {
-    display: flex;
-    flex-direction: column;
-    z-index: 1;
-    gap: 10px;
-    pointer-events: auto;
+    gap: 6px;
   }
-`;
 
-const MobileMenuContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 10px;
-  background: ${({ theme }) => theme.colors.mainColor1 + '20'};
-  border-radius: 16px;
-  pointer-events: auto;
-`;
-
-const StyledCloseMobileMenuButton = styled.button`
-  background: ${({ theme }) => theme.colors.button};
-  color: white;
-  border: none;
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-  cursor: pointer;
-  padding: 0;
-  z-index: 1;
-
-  svg {
-    height: 1.5em !important;
-    width: 1.5em !important;
+  @media ${({ theme }) => theme.device.lowResDesktop} {
+    gap: 6px;
   }
 `;
 
@@ -217,6 +182,7 @@ const StyledOpenMobileMenuButton = styled.button`
 `;
 
 const StyledArrowDropDownCircleIconWrapper = styled(motion.div)`
+  z-index: 6;
   pointer-events: auto;
 `;
 
@@ -262,14 +228,29 @@ const MenuBar = () => {
   const handleCloseMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
     closeDrawingTools();
-  }
+  };
+
+  const MENU_ANIMATION = {
+    hidden: { y: -50, opacity: 0, pointerEvents: 'none' },
+    visible: {
+      y: 0,
+      opacity: 1,
+      pointerEvents: 'auto',
+      transition: { type: 'tween', duration: 0.3 }
+    }
+  };
 
   return (
     <>
       {/* DESKTOP MENU */}
-      <StyledMenuBar isSearchOpen={isSearchOpen}>
-        <DesktopOnly id="desktop-only">
+      <StyledMenuBar
+        isSearchOpen={isSearchOpen}
+        id="menubar-container"
+        role="navigation"
+      >
+        {isMobile && (
           <StyledArrowDropDownCircleIconWrapper
+            id="menubar-mobile-toggle-icon"
             animate={{
               rotate: isMobileMenuOpen ? -180 : 0
             }}
@@ -279,15 +260,28 @@ const MenuBar = () => {
             }}
           >
             <StyledOpenMobileMenuButton
+              id="menubar-mobile-toggle-btn"
               onClick={handleCloseMobileMenu}
             >
               <ArrowDropDownCircleIcon fontSize="inherit" />
             </StyledOpenMobileMenuButton>
           </StyledArrowDropDownCircleIconWrapper>
-          {!isMobile ||
-            (isMobileMenuOpen && (
+        )}
+        <AnimatePresence>
+          <StyledMenuButtonsContainer
+            id="menubar-buttons-container"
+            key="menubar-buttons-container"
+            initial={!isMobile || isMobileMenuOpen ? 'visible' : 'hidden'}
+            animate={!isMobile || isMobileMenuOpen ? 'visible' : 'hidden'}
+            exit="exit"
+            variants={MENU_ANIMATION}
+            style={{ flex: '1 1 auto', minHeight: 0 }}
+            role="region"
+          >
+            {(!isMobile || isMobileMenuOpen) && (
               <>
                 <CircleButton
+                  id="menubar-map-theme-btn"
                   icon={faMap}
                   text={strings.layerlist.layerlistLabels.themeLayers}
                   toggleState={isThemeMenuOpen}
@@ -295,8 +289,10 @@ const MenuBar = () => {
                   clickAction={() =>
                     store.dispatch(setIsThemeMenuOpen(!isThemeMenuOpen))
                   }
+                  aria-label={strings.layerlist?.layerlistLabels?.themeLayers}
                 />
                 <CircleButton
+                  id="menubar-map-layers-btn"
                   icon={faLayerGroup}
                   text={strings.layerlist.layerlistLabels.mapLayers}
                   toggleState={isSideMenuOpen}
@@ -304,10 +300,14 @@ const MenuBar = () => {
                   clickAction={() =>
                     store.dispatch(setIsSideMenuOpen(!isSideMenuOpen))
                   }
+                  aria-label={strings.layerlist?.layerlistLabels?.mapLayers}
                 >
-                  <StyledLayerCount>{selectedLayers.length}</StyledLayerCount>
+                  <StyledLayerCount id="menubar-map-layers-count">
+                    {selectedLayers.length}
+                  </StyledLayerCount>
                 </CircleButton>
                 <CircleButton
+                  id="menubar-gfi-btn"
                   icon={faMapMarkedAlt}
                   text={strings.gfi.title}
                   toggleState={isGfiOpen}
@@ -319,28 +319,36 @@ const MenuBar = () => {
                     }
                     store.dispatch(setIsGfiOpen(!isGfiOpen));
                   }}
+                  aria-label={strings.gfi?.title}
                 >
                   {filters?.filters?.length > 0 && (
-                    <StyledLayerCount>
+                    <StyledLayerCount id="menubar-filter-layer-count">
                       {filters.filters.length}
                     </StyledLayerCount>
                   )}
                 </CircleButton>
-                <WebSiteShareButton />
+                <WebSiteShareButton
+                  id="menubar-share-btn"
+                  aria-label={
+                    strings.accessibility?.shareWebsite ?? 'Share website'
+                  }
+                />
 
                 {isDrawingToolsOpen ? (
-                  <StyledDrawingToolsWrapper>
+                  <StyledDrawingToolsWrapper id="menubar-drawingtools-wrapper">
                     <StyledCornerCloseButton
+                      id="menubar-drawingtools-close-btn"
                       icon={faTimes}
                       text=""
                       toggleState={true}
                       tooltipDirection={'right'}
                       clickAction={closeDrawingTools}
+                      aria-label={strings.tooltips?.closeDrawingTools}
                     />
-                    <StyledToolButtons>
+                    <StyledToolButtons id="menubar-toolbuttons-container">
                       <DrawingTools isOpen={isDrawingToolsOpen} />
                       <PillButton
-                        id="tools-download"
+                        id="menubar-tools-download-btn"
                         icon={faDownload}
                         text={strings.downloads.downloads}
                         disabled={nonBgMaps.length === 0}
@@ -349,17 +357,19 @@ const MenuBar = () => {
                             setIsGfiDownloadOpen(!isGfiDownloadOpen)
                           )
                         }
+                        aria-label={strings.downloads?.downloads}
                       />
                       <PillButton
-                        id="tools-save"
+                        id="menubar-tools-save-btn"
                         icon={faSave}
                         text={strings.savedContent.saveView.saveView}
                         onClick={() =>
                           store.dispatch(setIsSaveViewOpen(!isSaveViewOpen))
                         }
+                        aria-label={strings.savedContent?.saveView?.saveView}
                       />
                       <PillButton
-                        id="tools-full-screen"
+                        id="menubar-tools-fullscreen-btn"
                         icon={isFullScreen ? faCompress : faExpand}
                         text={strings.tooltips.fullscreenButton}
                         onClick={() => {
@@ -368,11 +378,13 @@ const MenuBar = () => {
                             ? document.exitFullscreen?.()
                             : elem.requestFullscreen?.();
                         }}
+                        aria-label={strings.tooltips?.fullscreenButton}
                       />
                     </StyledToolButtons>
                   </StyledDrawingToolsWrapper>
                 ) : (
                   <CircleButton
+                    id="menubar-tools-btn"
                     icon={<BuildIcon />}
                     text={strings.tooltips.toolsButton}
                     toggleState={false}
@@ -380,11 +392,13 @@ const MenuBar = () => {
                     clickAction={() =>
                       store.dispatch(setIsDrawingToolsOpen(true))
                     }
+                    aria-label={strings.tooltips?.toolsButton}
                   />
                 )}
               </>
-            ))}
-        </DesktopOnly>
+            )}
+          </StyledMenuButtonsContainer>
+        </AnimatePresence>
       </StyledMenuBar>
     </>
   );

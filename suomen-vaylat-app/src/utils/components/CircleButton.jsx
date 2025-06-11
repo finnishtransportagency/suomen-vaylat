@@ -84,11 +84,6 @@ const StyledCircleButtonTextContainer = styled(motion.div)`
     pointer-events: none;
 `;
 
-const variants = {
-    hidden: { opacity: 0 },
-    show: { opacity: 1 },
-};
-
 const CircleButton = ({
     icon,
     text,
@@ -124,7 +119,6 @@ const CircleButton = ({
                text && !useReactTooltip && setHovered(false)
             }}
             toggleState={toggleState}
-            variants={variants}
             type={type}
             color={color}
             disabled={disabled}
