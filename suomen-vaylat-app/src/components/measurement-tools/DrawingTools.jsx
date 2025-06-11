@@ -41,7 +41,7 @@ const StyledTools = styled(motion.div)`
     gap: 6px;
   }
 
-  @media ${(props) => props.theme.device.lowresDesktop} {
+  @media ${(props) => props.theme.device.lowResDesktop} {
     gap: 6px;
   }
 

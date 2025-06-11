@@ -27,7 +27,7 @@ const StyledContent = styled.div`
     gap: 4px;
   }
 
-  @media ${(props) => props.theme.device.lowresDesktop} {
+  @media ${(props) => props.theme.device.lowResDesktop} {
     top: unset;
     max-width: 212px;
     margin-top: unset;

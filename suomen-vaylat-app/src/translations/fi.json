@@ -70,7 +70,7 @@
     },
     "saveGeometry": {
       "confirmDeleteAll": "Haluatko varmasti poistaa kaikki tallennetut geometriat?",
-      "saveGeometry": "Tallenna geometria",
+      "saveGeometry": "Tallenna",
       "savingGeometry": "Geometrian tallennus",
       "saveGeometryDescription1": "Geometria tallentuu selaimen välimuistiin",
       "saveGeometryDescription2": "Tallennettu geometria voidaan aktivoida vain selaimessa johon se on tallennettu",

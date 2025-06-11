@@ -69,7 +69,7 @@
     },
     "saveGeometry": {
       "confirmDeleteAll": "Are you sure you want to delete all saved geometries?",
-      "saveGeometry": "Save geometry",
+      "saveGeometry": "Save",
       "savingGeometry": "Save geometries",
       "saveGeometryDescription1": "Geometries will be saved to the browser’s cache",
       "saveGeometryDescription2": "Saved geometries can only be accessed in the browser where they are saved",
