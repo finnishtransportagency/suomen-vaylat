@@ -151,7 +151,7 @@ const StyledMenuButtonsContainer = styled(motion.div)`
 `;
 
 const StyledOpenMobileMenuButton = styled.button`
-  background: ${({ theme }) => theme.colors.button};
+  background: ${({ theme, isMobileMenuOpen }) => isMobileMenuOpen ? theme.colors.buttonActive : theme.colors.button};
   color: white;
   border: none;
   border-radius: 50%;
@@ -235,7 +235,7 @@ const MenuBar = () => {
     visible: {
       y: 0,
       opacity: 1,
-      transition: { type: 'tween', duration: 0.3 }
+      transition: { type: 'tween', duration: 0.1 }
     }
   };
 
@@ -260,6 +260,7 @@ const MenuBar = () => {
             <StyledOpenMobileMenuButton
               id="menubar-mobile-toggle-btn"
               onClick={handleCloseMobileMenu}
+              isMobileMenuOpen={isMobileMenuOpen}
             >
               <ArrowDropDownCircleIcon fontSize="inherit" />
             </StyledOpenMobileMenuButton>
