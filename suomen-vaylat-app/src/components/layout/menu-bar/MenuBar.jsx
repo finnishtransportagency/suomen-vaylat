@@ -241,7 +241,6 @@ const MenuBar = () => {
 
   return (
     <>
-      {/* DESKTOP MENU */}
       <StyledMenuBar
         isSearchOpen={isSearchOpen}
         id="menubar-container"
