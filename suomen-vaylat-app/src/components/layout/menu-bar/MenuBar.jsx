@@ -140,6 +140,7 @@ const StyledMenuButtonsContainer = styled(motion.div)`
   flex-direction: column;
   transition: all 0.5s ease-in-out;
   gap: 8px;
+  margin-left: 2px;
 
   @media ${({ theme }) => theme.device.mobileL} {
     gap: 6px;
@@ -151,12 +152,13 @@ const StyledMenuButtonsContainer = styled(motion.div)`
 `;
 
 const StyledOpenMobileMenuButton = styled.button`
-  background: ${({ theme, isMobileMenuOpen }) => isMobileMenuOpen ? theme.colors.buttonActive : theme.colors.button};
+  background: ${({ theme, isMobileMenuOpen }) =>
+    isMobileMenuOpen ? theme.colors.buttonActive : theme.colors.button};
   color: white;
   border: none;
   border-radius: 50%;
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -166,18 +168,18 @@ const StyledOpenMobileMenuButton = styled.button`
   font-size: 30px;
 
   @media ${(props) => props.theme.device.mobileL} {
-    width: 36px;
-    height: 36px;
-  }
-
-  @media ${(props) => props.theme.device.lowResDesktop} {
     width: 40px;
     height: 40px;
   }
 
+  @media ${(props) => props.theme.device.lowResDesktop} {
+    width: 44px;
+    height: 44px;
+  }
+
   @media ${(props) => props.theme.device.mobileS} {
-    width: 34px;
-    height: 34px;
+    width: 38px;
+    height: 38px;
   }
 `;
 
