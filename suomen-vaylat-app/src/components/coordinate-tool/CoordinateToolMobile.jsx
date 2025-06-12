@@ -19,6 +19,7 @@ import { useAppSelector } from '../../state/hooks';
 
 const StyledMobileCoordsContainer = styled(motion.div)`
   position: fixed;
+  width: 100%;
   bottom: 0;
   left: 0;
   right: 0;
@@ -27,8 +28,6 @@ const StyledMobileCoordsContainer = styled(motion.div)`
   box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
   @media ${(props) => props.theme.device.mobileL} {
     font-size: 13px;
-    min-width: 80vw;
-    max-width: calc(100vw - 70px);
   }
 `;
 
@@ -329,6 +328,7 @@ const CoordinateToolMobile = () => {
 
   return (
     <StyledMobileCoordsContainer
+      id="coordinate-tool-mobile-container"
       key="coordinate-tool-mobile-container"
       initial="hidden"
       animate={isCoordinateToolOpen ? 'visible' : 'hidden'}

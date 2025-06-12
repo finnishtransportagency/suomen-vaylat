@@ -25,6 +25,8 @@ import ZoomBarCircle from './ZoomBarCircle';
 import { Legend } from '../legend/Legend';
 import { theme } from '../../theme/theme';
 
+import XYicon from '../coordinate-tool/resources/images/xy_icon.svg';
+
 const StyledZoomBarContainer = styled.div`
   z-index: 2;
   position: relative;
@@ -88,6 +90,14 @@ const StyledZoombarCircles = styled(motion.div)`
   display: flex;
   flex-direction: column-reverse;
   width: 100%;
+`;
+
+const StyledXYIcon = styled.img`
+  height: 2em;
+
+  @media ${(props) => props.theme.device.mobileL} {
+    height: 1.7em;
+  }
 `;
 
 const listVariants = {
@@ -208,7 +218,7 @@ const ZoomBar = ({
           />
         </StyledZoomBarZoomFeatures>
         <CircleButton
-          icon={faCompass}
+          icon={<StyledXYIcon src={XYicon} />}
           text={strings.tooltips.coordinateTool}
           toggleState={isCoordinateToolOpen}
           clickAction={() =>
