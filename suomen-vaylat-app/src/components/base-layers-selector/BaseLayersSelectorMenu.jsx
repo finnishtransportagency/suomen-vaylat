@@ -12,9 +12,22 @@ import Draggable from 'react-draggable';
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 
 const StyledMenuContainer = styled.div`
-    gap: 8px; /* Adds space between buttons */
-    padding: 6px;
+    padding: 0px 10px 10px;
     display: grid;
+`;
+
+const HorizontalLine = styled.div`
+    width: 100%;
+    height: 1px;
+    background-color: ${props => props.theme.colors.mainColor1};
+    margin-top: 20px; /* Adjust the margin as needed */
+`;
+
+const StyledFooter = styled.div`
+    display: flex;
+    justify-content: flex-end;
+    padding: 20px 0px 0px;
+    align-items: center;
 `;
 
 const StyledDescription = styled.div`
@@ -27,13 +40,13 @@ const StyledDescription = styled.div`
 `;
 
 const StyledDescriptionText = styled.div`
-    padding: 0px 0px 5px;
+    padding: 0px 0px 10px;
 `;
 
-const StyledBaseLayerButtonContainer = styled.div`
-    gap: 8px; /* Adds space between buttons */
-    padding: 6px;
-    display: grid;
+const StyledLayerColumnContainer = styled.div`
+    gap: 30px; /* Adds space between buttons */
+    display: flex;
+    flex-direction: row;
 `;
 
 const StyledButton = styled(Button)`
@@ -42,7 +55,6 @@ const StyledButton = styled(Button)`
     box-shadow: 0px 2px 4px #0000004D;
     border-radius: 30px;
     border: none;
-    padding: 6px 12px;
     width: 10em;
     &:hover {
         background-color: ${props => props.active ? props.theme.colors.buttonActive : props.theme.colors.buttonActive } !important; /* Blue or Gray */
@@ -61,8 +73,8 @@ const StyledDraggableButton = styled(Button)`
     box-shadow: 0px 2px 4px #0000004D;
     border-radius: 8px;
     border: 20px;
-    padding: 6px 12px;
     width: 12em;
+    margin-top: 4px;
     &:hover {
         background-color: ${props => props.active ? props.theme.colors.buttonActive : props.theme.colors.buttonActive } !important; /* Blue or Gray */
     }
@@ -80,7 +92,6 @@ const StyledSaveButton = styled(Button)`
     box-shadow: 0px 2px 4px #0000004D;
     border-radius: 30px;
     border: none;
-    padding: 6px 12px;
     width: 10em;
     &:hover {
         background-color: ${props => props.active ? props.theme.colors.buttonActive : props.theme.colors.buttonActive } !important; /* Blue or Gray */
@@ -105,8 +116,38 @@ const StyledButtonText = styled.div`
 const StyledDraggableButtonContainer = styled.div`
     display: flex;
     gap: 10px;
-    padding: 12px 20px;
-    bottom: 6px;
+    min-height: 40.60px;
+    margin-bottom: 12px;
+`;
+
+const StyledDragIndicatorIcon = styled(DragIndicatorIcon)`
+    margin-right: 16px;
+`;
+
+const StyledDottedOutline = styled.div`
+    cursor: pointer;
+    background-color: transparent;
+    border-radius: 8px;
+    width: 12em;
+    margin-top: 4px;
+    border: 2px dashed ${props => props.theme.colors.mainColor1}; /* Blue dotted outline */
+    @media ${props => props.theme.device.laptop} {
+        max-width: 120px;
+    };
+    @media ${props => props.theme.device.tablet} {
+        max-width: 100px;
+    };
+`;
+
+const StyledMenuHeader = styled.th`
+    font-size: 20px;
+    font-weight: 600;
+`;
+
+const StyledLayerColumn = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
 `;
 
 const BaseLayerSelectorMenu = () => {
@@ -132,7 +173,7 @@ const BaseLayerSelectorMenu = () => {
                 <div>
                     <StyledDraggableButton>
                         <StyledButtonText>
-                            <DragIndicatorIcon />
+                            <StyledDragIndicatorIcon/>
                             {content}
                         </StyledButtonText>
                     </StyledDraggableButton>
@@ -199,13 +240,16 @@ const BaseLayerSelectorMenu = () => {
 
     return (
         <StyledMenuContainer>
+
             <StyledDescription>
                 <StyledDescriptionText>
                     {strings.baseLayerSelector.description}
                 </StyledDescriptionText>
             </StyledDescription>
+
+            <StyledMenuHeader>{strings.baseLayerSelector.selectedBaseLayers}</StyledMenuHeader>
             <StyledDraggableButtonContainer>
-                {draggableButtons.map((layerID, index) => {
+                {draggableButtons.slice(0, 4).map((layerID, index) => {
                     const layer = baselayers.find(layer => layer.id === layerID);
                     return (
                         <DraggableButton
@@ -216,18 +260,39 @@ const BaseLayerSelectorMenu = () => {
                         />
                     );
                 })}
+                {draggableButtons.length < 4 && <StyledDottedOutline />}
             </StyledDraggableButtonContainer>
-            <StyledBaseLayerButtonContainer>
-                {baselayers.map(layer => (
-                    <BaseLayerButton
-                        key={layer.id}
-                        action={() => addSelectedLayer(layer.id)}
-                        layer={layer}
-                        isSelected={selectedLayersListMenu.includes(layer.id)}
-                    />
-                ))}
-            </StyledBaseLayerButtonContainer>
-            <SaveButton></SaveButton>
+
+            <StyledLayerColumnContainer>
+                <StyledLayerColumn>
+                    <StyledMenuHeader>{"Maanmittauslaitos"}</StyledMenuHeader>
+                    {baselayers.map(layer => (
+                        <BaseLayerButton
+                            key={layer.id}
+                            action={() => addSelectedLayer(layer.id)}
+                            layer={layer}
+                            isSelected={selectedLayersListMenu.includes(layer.id)}
+                        />
+                    ))}
+                </StyledLayerColumn>
+                <StyledLayerColumn>
+                    <StyledMenuHeader>{"Merikartat"}</StyledMenuHeader>
+                    {baselayers.map(layer => (
+                        <BaseLayerButton
+                            key={layer.id}
+                            action={() => addSelectedLayer(layer.id)}
+                            layer={layer}
+                            isSelected={selectedLayersListMenu.includes(layer.id)}
+                        />
+                    ))}
+                </StyledLayerColumn>
+            </StyledLayerColumnContainer>
+            
+            <HorizontalLine></HorizontalLine>
+            <StyledFooter>
+                <SaveButton />
+            </StyledFooter>
+    
         </StyledMenuContainer>
     )
  }
