@@ -1,3 +1,4 @@
+import React from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { ReactReduxContext, useSelector } from "react-redux";
@@ -10,6 +11,7 @@ import { setMapLayerVisibility } from '../../state/slices/rpcSlice';
 import { setSelectedBaseLayers } from '../../state/slices/uiSlice';
 import Draggable from 'react-draggable';
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
+import LayerList from '../layerlists/hierarchical-layerlist/LayerList';
 
 const StyledMenuContainer = styled.div`
     padding: 0px 10px 10px;
@@ -151,12 +153,18 @@ const StyledLayerColumn = styled.div`
 `;
 
 const BaseLayerSelectorMenu = () => {
-    const { allLayers } = useAppSelector((state) => state.rpc);
+    const {
+        allGroups,
+        allLayers,
+        selectedLayers,
+        allTags,
+        currentZoomLevel,
+    } = useAppSelector((state) => state.rpc);
     const baselayers = allLayers.filter(layer => layer.config?.baseLayer)
     const { store } = useContext(ReactReduxContext);
     const channel = useSelector(state => state.rpc.channel);
     const { selectedBaseLayers } = useAppSelector((state) => state.ui);
-
+    
     /*Store layers selected in the menu here.*/
     const [selectedLayersListMenu, setSelectedLayersListMenu] = useState(selectedBaseLayers)
 
@@ -223,7 +231,6 @@ const BaseLayerSelectorMenu = () => {
         );
     };
 
-    
     const addSelectedLayer = (layerID) => {
         const filteredButtons = [...selectedLayersListMenu].filter(ID => ID !== layerID);
         const pushedButtons = [...selectedLayersListMenu]
@@ -237,6 +244,26 @@ const BaseLayerSelectorMenu = () => {
             setDraggableButtons(pushedButtons);
         }
     }
+
+    const LayerColumn = (group) => {
+        console.log(group);
+        return(
+            <StyledLayerColumn>
+                <StyledMenuHeader>{group.locale.fi.name}</StyledMenuHeader>
+                {group.layers?.map((layerID) => {
+                    const layer = allLayers.find(layer => layer.id === layerID);
+                    return(
+                        <BaseLayerButton
+                            key={layer.id}
+                            action={() => addSelectedLayer(layer.id)}
+                            layer={layer}
+                            isSelected={selectedLayersListMenu.includes(layer.id)}
+                        />
+                    );
+                })}
+            </StyledLayerColumn>
+        );
+    };
 
     return (
         <StyledMenuContainer>
@@ -264,30 +291,21 @@ const BaseLayerSelectorMenu = () => {
             </StyledDraggableButtonContainer>
 
             <StyledLayerColumnContainer>
-                <StyledLayerColumn>
-                    <StyledMenuHeader>{"Maanmittauslaitos"}</StyledMenuHeader>
-                    {baselayers.map(layer => (
-                        <BaseLayerButton
-                            key={layer.id}
-                            action={() => addSelectedLayer(layer.id)}
-                            layer={layer}
-                            isSelected={selectedLayersListMenu.includes(layer.id)}
-                        />
-                    ))}
-                </StyledLayerColumn>
-                <StyledLayerColumn>
-                    <StyledMenuHeader>{"Merikartat"}</StyledMenuHeader>
-                    {baselayers.map(layer => (
-                        <BaseLayerButton
-                            key={layer.id}
-                            action={() => addSelectedLayer(layer.id)}
-                            layer={layer}
-                            isSelected={selectedLayersListMenu.includes(layer.id)}
-                        />
-                    ))}
-                </StyledLayerColumn>
+            {allGroups.map((group) => {
+                if (group.id === 1) {
+                    return (
+                        <React.Fragment key={group.id}>
+                            <LayerColumn {...group} />
+                            {group.groups && group.groups.map((subGroup) => (
+                                <LayerColumn key={subGroup.id} {...subGroup} />
+                            ))}
+                        </React.Fragment>
+                    );
+                }
+                return null;
+            })}
             </StyledLayerColumnContainer>
-            
+
             <HorizontalLine></HorizontalLine>
             <StyledFooter>
                 <SaveButton />
