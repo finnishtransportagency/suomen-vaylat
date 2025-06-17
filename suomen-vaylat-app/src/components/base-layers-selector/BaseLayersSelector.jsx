@@ -6,7 +6,6 @@ import { useContext } from 'react';
 import { Button } from "react-bootstrap";
 import { updateLayers } from '../../utils/rpcUtil';
 import { setMapLayerVisibility } from '../../state/slices/rpcSlice';
-import { setSelectedBaseLayers } from '../../state/slices/uiSlice';
 import { setIsBaseLayerSelectorMenuOpen } from '../../state/slices/uiSlice';
 import ModeEditOutlineTwoToneIcon from '@mui/icons-material/ModeEditOutlineTwoTone';
 
@@ -74,7 +73,6 @@ const StyledButtonText = styled.div`
 
 const BaseLayerSelector = () => {
     const { allLayers } = useAppSelector((state) => state.rpc);
-    const baselayers = allLayers.filter(layer => layer.config?.baseLayer)
     const { store } = useContext(ReactReduxContext);
     const channel = useSelector(state => state.rpc.channel);
     const { selectedBaseLayers } = useAppSelector((state) => state.ui);
@@ -105,7 +103,7 @@ const BaseLayerSelector = () => {
     return(
         <StyledBaselayerButtonContainer>
             {selectedBaseLayers.slice(0, 4).map((layerID) => {
-                const layer = baselayers.find(layer => layer.id === layerID);
+                const layer = allLayers.find(layer => layer.id === layerID);
                 return(
                     <BaseLayerButton
                         key={layer.id}

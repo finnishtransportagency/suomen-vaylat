@@ -1,17 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
-import { motion } from 'framer-motion';
-import { ReactReduxContext, useSelector } from "react-redux";
+import { ReactReduxContext } from "react-redux";
 import { useAppSelector } from '../../state/hooks';
 import { useContext, useState } from 'react';
 import strings from '../../translations';
 import { Button } from "react-bootstrap";
-import { updateLayers } from '../../utils/rpcUtil';
-import { setMapLayerVisibility } from '../../state/slices/rpcSlice';
 import { setSelectedBaseLayers } from '../../state/slices/uiSlice';
-import Draggable from 'react-draggable';
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
-import LayerList from '../layerlists/hierarchical-layerlist/LayerList';
+
 
 const StyledMenuContainer = styled.div`
     padding: 0px 10px 10px;
@@ -51,34 +47,21 @@ const StyledLayerColumnContainer = styled.div`
     flex-direction: row;
 `;
 
-const StyledButton = styled(Button)`
-    cursor: pointer;
-    background-color: ${props => props.active ? props.theme.colors.mainColor1 : props.theme.colors.darkGrey } !important; /* Blue or Gray */
-    box-shadow: 0px 2px 4px #0000004D;
-    border-radius: 30px;
-    border: none;
-    width: 10em;
-    &:hover {
-        background-color: ${props => props.active ? props.theme.colors.buttonActive : props.theme.colors.buttonActive } !important; /* Blue or Gray */
-    }
-    @media ${props => props.theme.device.laptop} {
-        max-width: 120px;
-    };
-    @media ${props => props.theme.device.tablet} {
-        max-width: 100px;
-    };
-`;
-
-const StyledDraggableButton = styled(Button)`
-    cursor: move;
-    background-color: ${props => props.active ? props.theme.colors.mainColor1 : props.theme.colors.darkGrey } !important; /* Blue or Gray */
+const StyledDraggableButton = styled.div`
+    user-select: none;
+    cursor: grab;
+    background-color: ${props => props.theme.colors.mainWhite} !important; /* Blue or Gray */
+    outline: 2px solid ${props => props.theme.colors.mainColor1} !important; /* Blue dotted outline */
     box-shadow: 0px 2px 4px #0000004D;
     border-radius: 8px;
     border: 20px;
     width: 12em;
     margin-top: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     &:hover {
-        background-color: ${props => props.active ? props.theme.colors.buttonActive : props.theme.colors.buttonActive } !important; /* Blue or Gray */
+        background-color: ${props => props.active ? props.theme.colors.mainColor1 : props.theme.colors.mainColor1 } !important; /* Blue or Gray */
     }
     @media ${props => props.theme.device.laptop} {
         max-width: 120px;
@@ -113,6 +96,29 @@ const StyledButtonText = styled.div`
     font-size: 14px;
     font-weight: 600;
     user-select: none;
+    align-items: center;
+`;
+
+const StyledSwitchButtonText = styled.div`
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 14px;
+    font-weight: 600;
+    user-select: none;
+    align-items: center;
+`;
+
+const StyledDraggableButtonText = styled.div`
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 14px;
+    font-weight: 600;
+    user-select: none;
+    align-items: center;
+    margin-top: 6px;
+    margin-right: 3px;
 `;
 
 const StyledDraggableButtonContainer = styled.div`
@@ -123,7 +129,9 @@ const StyledDraggableButtonContainer = styled.div`
 `;
 
 const StyledDragIndicatorIcon = styled(DragIndicatorIcon)`
-    margin-right: 16px;
+    margin-right: 4px;
+    margin-left: 3px;
+    margin-bottom: 3px;
 `;
 
 const StyledDottedOutline = styled.div`
@@ -152,62 +160,123 @@ const StyledLayerColumn = styled.div`
     gap: 12px;
 `;
 
+const StyledLayerColumnField = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 10px;
+    max-width: 200px;
+`;
+
+const StyledSwitchContainer = styled.div`
+    position: relative;
+    min-width: 32px;
+    max-width: 30px;
+    height: 16px;
+    border-radius: 12px;
+    margin-top: 3px;
+    display: flex;
+    align-items: center;
+    background-color: ${(props) => (props.isSelected ? "#8DCB6D" : "#AAAAAA")};
+    cursor: pointer;
+    margin-right: 0px;
+`;
+
+const StyledSwitchButton = styled.div`
+    position: absolute;
+    left: ${(props) => (props.isSelected ? "15px" : "0px")};
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-left: 2px;
+    margin-right: 2px;
+    transition: all 0.3s ease-out;
+    background-color: ${(props) => props.theme.colors.mainWhite};
+`;
+
 const BaseLayerSelectorMenu = () => {
     const {
         allGroups,
         allLayers,
-        selectedLayers,
-        allTags,
-        currentZoomLevel,
     } = useAppSelector((state) => state.rpc);
-    const baselayers = allLayers.filter(layer => layer.config?.baseLayer)
     const { store } = useContext(ReactReduxContext);
-    const channel = useSelector(state => state.rpc.channel);
     const { selectedBaseLayers } = useAppSelector((state) => state.ui);
     
     /*Store layers selected in the menu here.*/
-    const [selectedLayersListMenu, setSelectedLayersListMenu] = useState(selectedBaseLayers)
+    const [selectedLayersListMenu, setSelectedLayersListMenu] = useState(selectedBaseLayers);
+    const [dragIndex, setDragIndex] = useState(null);      // index being dragged
+    const [hoverIndex, setHoverIndex] = useState(null);    // index hovered as drop target
 
-    // Draggable buttons use selected base layers
-    const [draggableButtons, setDraggableButtons] = useState(selectedBaseLayers);
+    // SWAP LOGIC
+    const swapLayers = (i, j) => {
+        if (i === j) return;
+        const updated = [...selectedLayersListMenu];
+        [updated[i], updated[j]] = [updated[j], updated[i]];
+        setSelectedLayersListMenu(updated);
+    };
 
-    const DraggableButton = ({ content, index, handleStop }) => {
+    // BUTTON COMPONENT
+    // Uses native HTML5 drag events.
+    const DraggableBtn = ({ content, index }) => {
         return (
-            <Draggable
-                axis="x"
-                bounds="parent"
-                onStop={(e, data) => handleStop(e, data, index)}
+            <StyledDraggableButton
+                draggable={true}
+                tabIndex={0}
+                onMouseOver={() => setDragIndex(index)} // THIS IS A HACK/BUGFIX. FOR SOME REASON THE FIRST DRAG ATTEMPT FAILS IF dragIndex IS null
+                // after the first attempt drag index is set and the button can be dragged and dropped succesfully ==> onMouseOver fixes this bug by setting the dragIndex immediately
+                // before the dragging starts, because mouse is naturally moved over the draggable button ==> the frist attempt works normally
+                onDragStart={e => setDragIndex(index)}
+                onDragOver={e => {
+                    e.preventDefault();
+                    setHoverIndex(index);
+                }}
+                onDragEnd={() => {
+                    setDragIndex(null);
+                    setHoverIndex(null);
+                }}
+                onDrop={e => {
+                    e.preventDefault();
+                    if (dragIndex !== null && dragIndex !== index) {
+                        swapLayers(dragIndex, index);
+                    }
+                    setDragIndex(null);
+                    setHoverIndex(null);
+                }}
+                style={{
+                    opacity: dragIndex === index ? 1 : 1,
+                    outline: hoverIndex === index ? "2px solid #2b7cd3" : "none",
+                    borderRadius: '8px',
+                    transition: "outline 0.15s",
+                    zIndex: dragIndex === index ? 0 : 1,
+                    display: 'inline-block'
+                }}
             >
-                <div>
-                    <StyledDraggableButton>
-                        <StyledButtonText>
-                            <StyledDragIndicatorIcon/>
-                            {content}
-                        </StyledButtonText>
-                    </StyledDraggableButton>
-                </div>
-            </Draggable>
+                <StyledDraggableButtonText draggable={false}>
+                    <StyledDragIndicatorIcon draggable={false}/>
+                    {content}
+                </StyledDraggableButtonText>
+            </StyledDraggableButton>
         );
     };
 
+    const LayerlistSwitch = ({ action, layer, isSelected }) => {
+        const handleClick = (e) => {
+            if (layer) {
+                action(layer);
+            } else {
+                action(e);
+            }
+        }
 
-
-    // Swaps draggable button order based on where they are dropped
-    const handleStop = (e, data, index) => {
-        const newButtons = [...draggableButtons];
-        const draggedButton = newButtons[index];
-        const dropIndex = Math.round(data.x / (e.target.offsetWidth + 8)); // Calculate the drop index based on the x position
-
-        // Remove the dragged button from its original position
-        newButtons.splice(index, 1);
-
-        // Insert the dragged button at the new position
-        newButtons.splice(dropIndex, 0, draggedButton);
-
-        setDraggableButtons(newButtons);
-        setSelectedLayersListMenu(newButtons);
+        return (
+            <StyledSwitchContainer
+                isSelected={isSelected}
+                onClick={(event) => handleClick(event)}
+            >   
+                <StyledSwitchButton isSelected={isSelected} />
+            </StyledSwitchContainer>
+        );
     };
-
 
     /*"Save" button sends updated list of selected layers to the local store.*/
     const SaveButton = () => {
@@ -218,47 +287,44 @@ const BaseLayerSelectorMenu = () => {
                 </StyledButtonText>
 
             </StyledSaveButton>
-        )
-    }
-
-    const BaseLayerButton = ({ action, layer, isSelected }) => {
-        return(
-            <StyledButton onClick={() => action(layer)} active={isSelected}>
-                <StyledButtonText>
-                    {layer.name} {/* Display layer name */}
-                </StyledButtonText>
-            </StyledButton>
         );
     };
 
     const addSelectedLayer = (layerID) => {
-        const filteredButtons = [...selectedLayersListMenu].filter(ID => ID !== layerID);
-        const pushedButtons = [...selectedLayersListMenu]
-        pushedButtons.push(layerID);
-
+        // Removes an existing layer from list
         if (selectedLayersListMenu.includes(layerID)) {
-            setSelectedLayersListMenu(filteredButtons);
-            setDraggableButtons(filteredButtons);
-        } else {
-            setSelectedLayersListMenu(pushedButtons);
-            setDraggableButtons(pushedButtons);
+            const newList = selectedLayersListMenu.filter(ID => ID !== layerID);
+            setSelectedLayersListMenu(newList);
+        // Adds a new layer to the list if its length < 4
+        } else if (selectedLayersListMenu.length < 4){
+            const newList = [...selectedLayersListMenu, layerID];
+            setSelectedLayersListMenu(newList);
         }
-    }
+    };
 
     const LayerColumn = (group) => {
-        console.log(group);
         return(
             <StyledLayerColumn>
                 <StyledMenuHeader>{group.locale.fi.name}</StyledMenuHeader>
                 {group.layers?.map((layerID) => {
                     const layer = allLayers.find(layer => layer.id === layerID);
                     return(
-                        <BaseLayerButton
-                            key={layer.id}
-                            action={() => addSelectedLayer(layer.id)}
-                            layer={layer}
-                            isSelected={selectedLayersListMenu.includes(layer.id)}
-                        />
+                        <React.Fragment key={layer.id}>
+                            <StyledLayerColumnField>
+                                <StyledSwitchButtonText>
+                                    {layer.name} {/* Display layer name */}
+                                </StyledSwitchButtonText>
+                                <LayerlistSwitch
+                                    key={layer.id}
+                                    action={() => addSelectedLayer(layer.id)}
+                                    layer={layer}
+                                    isSelected={selectedLayersListMenu.includes(layer.id)}
+                                >
+                                </LayerlistSwitch>
+                            </StyledLayerColumnField>
+                        </React.Fragment>
+                        
+
                     );
                 })}
             </StyledLayerColumn>
@@ -276,34 +342,27 @@ const BaseLayerSelectorMenu = () => {
 
             <StyledMenuHeader>{strings.baseLayerSelector.selectedBaseLayers}</StyledMenuHeader>
             <StyledDraggableButtonContainer>
-                {draggableButtons.slice(0, 4).map((layerID, index) => {
-                    const layer = baselayers.find(layer => layer.id === layerID);
-                    return (
-                        <DraggableButton
-                            key={layer.id}
-                            content={layer.name}
-                            index={index}
-                            handleStop={handleStop}
-                        />
-                    );
+                {selectedLayersListMenu.map((layerID, index) => {
+                    const layer = allLayers.find(layer => layer.id === layerID);
+                    return <DraggableBtn key={layer.id} content={layer.name} index={index}/>;
                 })}
-                {draggableButtons.length < 4 && <StyledDottedOutline />}
+                {selectedLayersListMenu.length < 4 && <StyledDottedOutline />}
             </StyledDraggableButtonContainer>
 
             <StyledLayerColumnContainer>
-            {allGroups.map((group) => {
-                if (group.id === 1) {
-                    return (
-                        <React.Fragment key={group.id}>
-                            <LayerColumn {...group} />
-                            {group.groups && group.groups.map((subGroup) => (
-                                <LayerColumn key={subGroup.id} {...subGroup} />
-                            ))}
-                        </React.Fragment>
-                    );
-                }
-                return null;
-            })}
+                {allGroups.map((group) => {
+                    if (group.id === 1) {
+                        return (
+                            <React.Fragment key={group.id}>
+                                <LayerColumn {...group} />
+                                {group.groups && group.groups.map((subGroup) => (
+                                    <LayerColumn key={subGroup.id} {...subGroup} />
+                                ))}
+                            </React.Fragment>
+                        );
+                    }
+                    return null;
+                })}
             </StyledLayerColumnContainer>
 
             <HorizontalLine></HorizontalLine>
@@ -312,8 +371,7 @@ const BaseLayerSelectorMenu = () => {
             </StyledFooter>
     
         </StyledMenuContainer>
-    )
- }
-
+    );
+};
 
 export default BaseLayerSelectorMenu;
