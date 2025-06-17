@@ -1182,5 +1182,11 @@
       "marker": "Marker",
       "erase": "Erase"
     }
+  },
+  "baseLayerSelector": {
+    "title": "Background maps for quick selection",
+    "description": "You can adjust the order and transparency of selected map layers in the selected layers section of the map layer menu.",
+    "selectedBaseLayers": "Selected background maps for quick selection and their order.",
+    "save": "Save"
   }
 }
