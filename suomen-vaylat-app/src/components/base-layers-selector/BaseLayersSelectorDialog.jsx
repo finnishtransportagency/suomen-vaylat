@@ -1,10 +1,8 @@
 import { useContext } from 'react';
 import Dialog from '../dialog/Dialog';
-import { faShareAlt } from '@fortawesome/free-solid-svg-icons';
 import { useAppSelector } from '../../state/hooks';
 import strings from '../../translations';
 import BaseLayerSelectorMenu from './BaseLayersSelectorMenu';
-import { setSelectedBaseLayers } from '../../state/slices/uiSlice';
 import { setIsBaseLayerSelectorMenuOpen } from '../../state/slices/uiSlice';
 import { ReactReduxContext } from 'react-redux';
 import ModeEditOutlineTwoToneIcon from '@mui/icons-material/ModeEditOutlineTwoTone';
