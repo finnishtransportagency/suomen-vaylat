@@ -23,10 +23,13 @@
     "legendHeader": "Data som visas på denna zoomnivå och deras förklaringar",
     "legendButton": "Förklaringar",
     "myLocButton": "Egen position",
+    "coordinateTool": "Koordinatverktyg",
     "zoomExpand": "Expandera",
     "zoomIn": "Zooma in",
     "zoomOut": "Zooma ut",
     "opacity": "Transparens",
+    "loadingData": "Laddar data",
+    "toolsButton": "Verktyg",
     "drawingTools": {
       "drawingToolsButton": "Ritverktyg",
       "point": "Point",
@@ -43,16 +46,18 @@
     "share": "Dela denna sida",
     "shareTheme": "Dela detta tema",
     "metadata": "Visa kartlagers metadata",
-    "showPageInfo": "Sidinformation",
-    "showUserGuide": "Användarguide"
+    "showPageInfo": "Visa sidinformation",
+    "showUserGuide": "Visa användarguide",
+    "userGuide": "Användarguide",
+    "pageInfo": "Sidinformation"
   },
   "savedContent" : {
-    "savedContent" : "Spara vyer och geometrier",
+    "savedContent" : "Mina uppgifter",
     "viewTitle" : "Syn",
     "geometryTitle" : "Geometrier",
     "saveView" : {
       "confirmDeleteAll" : "Är du säker på att du vill ta bort alla sparade vyer?",
-      "saveView" : "Spara vyer och geometrier",
+      "saveView" : "Spara tillstånd",
       "savingView" : "Sparar vy",
       "saveViewDescription1" : "Visa kommer att sparas i webbläsarens lokala lagring",
       "saveViewDescription2" : "Sparad vy kan endast nås av webbläsaren som den har sparats",
@@ -65,7 +70,7 @@
     },
     "saveGeometry": {
       "confirmDeleteAll": "Är du säker på att du vill ta bort all sparad geometri?",
-      "saveGeometry": "Spara geometrin",
+      "saveGeometry": "Spara",
       "savingGeometry": "Spara geometri",
       "saveGeometryDescription1": "Geometrin lagras i webbläsarens cacheminne",
       "saveGeometryDescription2": "Sparad geometri kan endast aktiveras i den webbläsare där den har lagrats",
@@ -455,6 +460,19 @@
       "title": "Fastighetssökning"
     },
     "carriageWaySearch": "Använda körbanasökning"
+  },
+  "coordinateTool": {
+    "title": "Koordinatverktyg",
+    "intro": "Mata in koordinaterna eller peka på platsen på kartan.",
+    "coordinateSystemTitle": "Koordinatsystem:",
+    "coordinateSystem": "ETRS89-TM35FIN",
+    "n": "N",
+    "e": "E",
+    "centerMap": "Fokusera kartan",
+    "addMarker": "Tillägg markör",
+    "deleteMarkers": "Ta bort markörer",
+    "onlyNumbers": "Vänligen ange endast siffror",
+    "closeCoordinateTool": "Stäng koordinatverktyg"
   },
   "layerlist": {
     "errorLoadingLayers": "Det gick inte att ladda kartnivåer",

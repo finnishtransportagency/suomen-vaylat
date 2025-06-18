@@ -198,6 +198,10 @@ const FeatureDataBadge = ({}) => {
   const { channel, gfiLocations, filteringInfo } = useAppSelector(
     (state) => state.rpc
   );
+  
+  const { activeTool} = useAppSelector(
+    (state) => state.ui
+  );
 
   const handleCloseGFIDialog = () => {
     store.dispatch(setActiveSelectionTool(null));
@@ -221,7 +225,7 @@ const FeatureDataBadge = ({}) => {
         null,
         GFI_GEOMETRY_LAYER_ID
       ]);
-    channel.postRequest('DrawTools.StopDrawingRequest', [
+    activeTool === 'gfi-selection-tool' && channel.postRequest('DrawTools.StopDrawingRequest', [
       'gfi-selection-tool',
       true
     ]);

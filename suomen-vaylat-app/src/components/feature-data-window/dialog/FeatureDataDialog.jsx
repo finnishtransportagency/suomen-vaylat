@@ -23,9 +23,9 @@ import { GFI_GEOMETRY_LAYER_ID } from '../../../utils/constants';
 
 const FeatureDataDialog = ({ constraintsRef }) => {
   const { store } = useContext(ReactReduxContext);
-  const { channel } = useAppSelector((state) => state.rpc);
+  const { channel, gfiLocations } = useAppSelector((state) => state.rpc);
 
-  const { isGfiOpen, minimizeGfi, maximizeGfi } = useAppSelector(
+  const { isGfiOpen, minimizeGfi, maximizeGfi, activeTool } = useAppSelector(
     (state) => state.ui
   );
 
@@ -51,7 +51,7 @@ const FeatureDataDialog = ({ constraintsRef }) => {
         null,
         GFI_GEOMETRY_LAYER_ID
       ]);
-    channel.postRequest('DrawTools.StopDrawingRequest', [
+    activeTool === 'gfi-selection-tool' && channel.postRequest('DrawTools.StopDrawingRequest', [
       'gfi-selection-tool',
       true
     ]);
@@ -78,8 +78,8 @@ const FeatureDataDialog = ({ constraintsRef }) => {
       id="gfi_dialog"
       minWidth={'600px'}
       minHeight={'530px'}
-      height="100vw"
-      width="50vw"
+      height={gfiLocations.length > 0 ? "100vw" : "40vw"}
+      width={gfiLocations.length > 0 ? "50vh" : "40vh"}
       minimize={minimizeGfi}
       maximize={maximizeGfi}
       minimizable={true}

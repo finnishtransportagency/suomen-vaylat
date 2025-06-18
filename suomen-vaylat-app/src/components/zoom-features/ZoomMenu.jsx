@@ -3,13 +3,11 @@ import { ReactReduxContext } from 'react-redux';
 import styled from 'styled-components';
 import { useAppSelector } from '../../state/hooks';
 import ZoomBar from './ZoomBar';
-
 import { setIsLegendOpen, setIsZoomBarOpen } from '../../state/slices/uiSlice';
-
 const StyledContainer = styled.div`
     position: fixed;
     right: 5;
-    bottom: 10px;
+    bottom: 16px;
     z-index: 5;
     display: flex;
     justify-content: flex-end;
@@ -22,31 +20,30 @@ const StyledContainer = styled.div`
 `;
 
 const ZoomMenu = () => {
+  const { store } = useContext(ReactReduxContext);
 
-    const { store } = useContext(ReactReduxContext);
+  const { isLegendOpen, isZoomBarOpen } = useAppSelector((state) => state.ui);
 
-    const { isLegendOpen, isZoomBarOpen } = useAppSelector((state) => state.ui);
+  const handleLegendState = () => {
+    store.dispatch(setIsLegendOpen(!isLegendOpen));
+  };
 
-    const handleLegendState = () => {
-        store.dispatch(setIsLegendOpen(!isLegendOpen));
-    };
+  const handleZoomBarState = () => {
+    store.dispatch(setIsZoomBarOpen(!isZoomBarOpen));
+  };
 
-    const handleZoomBarState = () => {
-        store.dispatch(setIsZoomBarOpen(!isZoomBarOpen));
-    }
-
-    return (
-        <>
-            <StyledContainer>
-                <ZoomBar
-                    isLegendOpen={isLegendOpen}
-                    isZoomBarOpen={isZoomBarOpen}
-                    setIsZoomBarOpen={handleZoomBarState}
-                    setIsLegendOpen={handleLegendState}
-                />
-            </StyledContainer>
-        </>
-    );
+  return (
+    <>
+      <StyledContainer>
+        <ZoomBar
+          isLegendOpen={isLegendOpen}
+          isZoomBarOpen={isZoomBarOpen}
+          setIsZoomBarOpen={handleZoomBarState}
+          setIsLegendOpen={handleLegendState}
+        />
+      </StyledContainer>
+    </>
+  );
 };
 
 export default ZoomMenu;

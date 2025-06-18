@@ -18,6 +18,9 @@ import SavedContentDialog from '../saved-content/dialog/SavedContentDialog';
 import LayerDownloadButtonLinkDialog from '../layerlists/hierarchical-layerlist/dialog/LayerDownloadButtonLinkDialog';
 import FeatureDataToolsDialog from '../feature-data-window/dialog/FeatureDataToolsDialog';
 import FeatureDataDownloadToolsDialog from '../feature-data-window/dialog/FeatureDataDownloadToolsDialog';
+import CoordinateToolDialog from '../coordinate-tool/dialog/CoordinateToolDialog';
+import CoordinateToolMobile from '../coordinate-tool/CoordinateToolMobile';
+import Crosshair from '../crosshair/Crosshair';
 
 import MenuBar from './menu-bar/MenuBar';
 import HierarchicalLayerlistDialog from '../layerlists/hierarchical-layerlist/dialog/HierarchicalLayerlistDialog';
@@ -31,10 +34,11 @@ import ThemeMenu from '../layerlists/theme-layerlist/ThemeMenu';
 import BaseLayerSelector from '../base-layers-selector/BaseLayersSelector';
 import BaseLayerSelectorDialog from '../base-layers-selector/BaseLayersSelectorDialog';
 import { isMobile } from '../../theme/theme';
+import { useAppSelector } from '../../state/hooks';
+import DrawtoolMarkersDialog from '../measurement-tools/dialog/DrawtoolMarkersDialog';
 
 const StyledContent = styled.div`
-  z-index: 1;
-  position: relative;
+  position: absolute;
   width: 100%;
   height: 100%;
   display: flex;
@@ -96,10 +100,11 @@ const StyledContentGrid = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  padding: 16px;
+  padding: 80px 16px 16px 16px;
   pointer-events: none;
   @media ${(props) => props.theme.device.mobileL} {
     padding: 8px;
+    padding-top: 70px;
   }
 `;
 
@@ -121,6 +126,7 @@ const StyledToastContainer = styled(ToastContainer)``;
 
 const Content = () => {
   const constraintsRef = useRef(null);
+  const { isCoordinateToolOpen } = useAppSelector((state) => state.ui);
 
   return (
     <>
@@ -161,9 +167,18 @@ const Content = () => {
         { !isMobile && 
         <BaseLayerSelectorDialog constraintsRef={constraintsRef}/>
         }
-        { !isMobile &&
-          <BaseLayerSelector />
-        }
+        {!isMobile && (
+          <>
+            <BaseLayerSelector />
+            <CoordinateToolDialog constraintsRef={constraintsRef} />
+          </>
+        )}
+
+        {isMobile && isCoordinateToolOpen && <CoordinateToolMobile />}
+
+        {isCoordinateToolOpen && <Crosshair />}
+
+        <DrawtoolMarkersDialog/>
         <StyledToastContainer
           position="bottom-left"
           pauseOnFocusLoss={false}

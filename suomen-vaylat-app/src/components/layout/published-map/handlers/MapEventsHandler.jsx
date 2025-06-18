@@ -18,7 +18,6 @@ import {
   setIsGfiOpen,
   setMinimizeGfi
 } from '../../../../state/slices/uiSlice';
-import strings from '../../../../translations';
 
 const MapEventsHandler = ({ channel, store }) => {
   channel.handleEvent('DrawingEvent', (data) => {
@@ -27,7 +26,7 @@ const MapEventsHandler = ({ channel, store }) => {
       data.isFinished &&
       data.geojson.features.length > 0
     ) {
-      store.getState().ui.activeTool !== strings.tooltips.drawingTools.marker &&
+      store.getState().ui.activeTool !== "marker" &&
         store.dispatch(addToGeoJsonArray(data));
     }
   });
@@ -45,7 +44,7 @@ const MapEventsHandler = ({ channel, store }) => {
       store.dispatch(setVKMData(data));
     }
     if (
-      store.getState().ui.activeTool === strings.tooltips.drawingTools.marker
+      store.getState().ui.activeTool === "marker"
     ) {
       let marker_id = data.coordinates.x + data.coordinates.y + '_id';
       const customMarker = {

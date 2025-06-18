@@ -263,7 +263,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
 
     const { channel, selectedLayers, gfiLocations, selectedLayersByType } = useAppSelector((state) => state.rpc);
 
-    const { gfiCroppingTypes, selectedGfiTool, hasToastBeenShown, isGfiOpen, activeSelectionTool } = useAppSelector(state => state.ui);
+    const { gfiCroppingTypes, selectedGfiTool, hasToastBeenShown, isGfiOpen, activeSelectionTool, activeTool } = useAppSelector(state => state.ui);
     const [isGfiLoading, setIsGfiLoading] = useState(false);
     const [numberedLoader, setNumberedLoader] = useState(null);
 
@@ -554,7 +554,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
         channel && channel.handleEvent("DrawingEvent", async (data) => {
             if(store.getState().ui.selectedGfiTool) {
                 if (isSubscribed && data.isFinished && data.isFinished === true) {
-                    channel.postRequest('DrawTools.StopDrawingRequest', [
+                    activeTool === 'gfi-selection-tool' && channel.postRequest('DrawTools.StopDrawingRequest', [
                         'gfi-selection-tool',
                         true,
                     ]);

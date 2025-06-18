@@ -23,10 +23,12 @@
     "legendHeader": "The data displayed at this zoom level and their explanations",
     "legendButton": "Legend",
     "myLocButton": "My location",
+    "coordinateTool": "Coordinate tool",
     "zoomExpand": "Expand",
     "zoomIn": "Zoom in",
     "zoomOut": "Zoom out",
     "opacity": "Opacity",
+    "toolsButton": "Tools",
     "drawingTools": {
       "drawingToolsButton": "Drawing tools",
       "point": "Point",
@@ -43,16 +45,18 @@
     "share": "Share this page",
     "shareTheme": "Share this theme",
     "metadata": "Show maplayer metadata",
-    "showPageInfo": "Application details",
-    "showUserGuide": "User guide"
+    "showPageInfo": "Show page info",
+    "showUserGuide": "Show user guide",
+    "userGuide": "User guide",
+    "pageInfo": "Application details"
   },
   "savedContent" : {
-    "savedContent" : "Save views and geometries",
+    "savedContent" : "My data",
     "viewTitle" : "Views",
     "geometryTitle" : "Geometries",
     "saveView" : {
       "confirmDeleteAll" : "Are you sure you want to delete all views?",
-      "saveView" : "Save views and geometries",
+      "saveView" : "Save state",
       "savingView" : "Saving view",
       "saveViewDescription1" : "View will be saved to browser local storage",
       "saveViewDescription2" : "Saved view can be accessed only by browser it has been saved",
@@ -65,7 +69,7 @@
     },
     "saveGeometry": {
       "confirmDeleteAll": "Are you sure you want to delete all saved geometries?",
-      "saveGeometry": "Save geometry",
+      "saveGeometry": "Save",
       "savingGeometry": "Save geometries",
       "saveGeometryDescription1": "Geometries will be saved to the browser’s cache",
       "saveGeometryDescription2": "Saved geometries can only be accessed in the browser where they are saved",
@@ -456,6 +460,19 @@
       "title": "Property search"
     },
     "carriageWaySearch": "Use driving lane search"
+  },
+  "coordinateTool": {
+    "title": "Coordinate tool",
+    "intro": "Type coordinates or click a point on the map.",
+    "coordinateSystemTitle": "Coordinate system:",
+    "coordinateSystem": "ETRS89-TM35FIN",
+    "n": "N",
+    "e": "E",
+    "centerMap": "Center map",
+    "addMarker": "Add marker",
+    "deleteMarkers": "Delete markers",
+    "onlyNumbers": "Please enter only numbers",
+    "closeCoordinateTool": "Close coordinate tool"
   },
   "layerlist": {
     "errorLoadingLayers": "Error loading maplayers",

@@ -23,10 +23,12 @@
     "legendHeader": "Tällä zoom-tasolla näkyvissä olevat aineistot ja niiden selitteet",
     "legendButton": "Selitteet",
     "myLocButton": "Oma sijainti",
+    "coordinateTool": "Koordinaattityökalu",
     "zoomExpand": "Laajenna",
     "zoomIn": "Lähennä",
     "zoomOut": "Loitonna",
     "opacity": "Läpinäkyvyys",
+    "toolsButton": "Työkalut",
     "drawingTools": {
       "drawingToolsButton": "Piirtotyökalut",
       "point": "Piste",
@@ -43,16 +45,19 @@
     "share": "Jaa sivu",
     "shareTheme": "Jaa teema",
     "metadata": "Näytä tason metadata",
-    "showPageInfo": "Sovelluksen tiedot",
-    "showUserGuide": "Käyttöohjeet"
+    "showPageInfo": "Näytä sivun info",
+    "showUserGuide": "Näytä käyttöohje",
+    "userGuide": "Käyttöohjeet",
+    "pageInfo": "Sovelluksen tiedot",
+    "UserGuide": "Käyttöohjeet"
   },
   "savedContent": {
-    "savedContent": "Näkymän ja geometrian tallennus",
+    "savedContent": "Omat tiedot",
     "viewTitle": "Näkymät",
     "geometryTitle": "Geometriat",
     "saveView": {
       "confirmDeleteAll" : "Haluatko varmasti poistaa kaikki tallennetut näkymät?",
-      "saveView" : "Näkymän ja geometrian tallennus",
+      "saveView" : "Tallenna tila",
       "savingView" : "Näkymän tallennus",
       "saveViewDescription1" : "Näkymä tallentuu selaimen välimuistiin",
       "saveViewDescription2" : "Tallennettu näkymä voidaan aktivoida vain selaimessa johon se on tallennettu",
@@ -65,7 +70,7 @@
     },
     "saveGeometry": {
       "confirmDeleteAll": "Haluatko varmasti poistaa kaikki tallennetut geometriat?",
-      "saveGeometry": "Tallenna geometria",
+      "saveGeometry": "Tallenna",
       "savingGeometry": "Geometrian tallennus",
       "saveGeometryDescription1": "Geometria tallentuu selaimen välimuistiin",
       "saveGeometryDescription2": "Tallennettu geometria voidaan aktivoida vain selaimessa johon se on tallennettu",
@@ -491,6 +496,19 @@
       "title": "Kiinteistöhaku"
     }, 
     "carriageWaySearch": "Käytä ajorataa haussa"
+  },
+  "coordinateTool": {
+    "title": "Koordinaattityökalu",
+    "intro": "Syötä koordinaatit tai valitse piste kartalta.",
+    "coordinateSystemTitle": "Koordinaatisto:",
+    "coordinateSystem": "ETRS89-TM35FIN",
+    "n": "N",
+    "e": "E",
+    "centerMap": "Keskitä kartta",
+    "addMarker": "Lisää merkintä",
+    "deleteMarkers": "Poista karttamerkinnät",
+    "onlyNumbers": "Vain numerot sallittu",
+    "closeCoordinateTool": "Sulje koordinaattityökalu"
   },
   "layerlist": {
     "errorLoadingLayers": "Virhe tasojen latauksessa",

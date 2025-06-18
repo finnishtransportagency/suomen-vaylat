@@ -12,7 +12,7 @@ import ModeEditOutlineTwoToneIcon from '@mui/icons-material/ModeEditOutlineTwoTo
 
 const StyledBaselayerButtonContainer = styled(motion.div)` 
     position: absolute;
-    bottom: 5px;
+    bottom: 10px;
     left: 50%;
     transform: translateX(-50%);
     display: flex;

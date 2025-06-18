@@ -49,9 +49,9 @@ const LayerFilterDialog = ({ constraintsRef }) => {
   return (
     <Dialog
       id="filter_dialog_container"
-      constraintsRef={{
+      constraintsRef={
         constraintsRef
-      }} /* Reference div for dialog drag boundaries */
+      } /* Reference div for dialog drag boundaries */
       drag={true} /* Enable (true) or disable (false) drag */
       resize={true}
       backdrop={false} /* Is backdrop enabled (true) or disabled (false) */
