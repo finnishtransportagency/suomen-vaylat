@@ -102,7 +102,7 @@ const BaseLayerSelector = () => {
 
     return(
         <StyledBaselayerButtonContainer>
-            {selectedBaseLayers.slice(0, 4).map((layerID) => {
+            {selectedBaseLayers.map((layerID) => {
                 const layer = allLayers.find(layer => layer.id === layerID);
                 return(
                     <BaseLayerButton
