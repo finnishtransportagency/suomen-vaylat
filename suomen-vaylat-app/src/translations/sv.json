@@ -163,6 +163,8 @@
   "noGfiLocationsWarning": "Inga resultat hittades, prova en annan geometri.",
   "exitConfirmation": "Du lämnar tjänsten Suomen väylät. Vill du fortsätta?",
   "appGuide": {
+    "noResults": "Inga resultat hittades",
+    "searchGuides": "Sök användarguider...",
     "title": "Användarguide",
     "dialogContent": {
       "upperBar": {

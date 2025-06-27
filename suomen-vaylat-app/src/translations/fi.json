@@ -163,6 +163,8 @@
   "noGfiLocationsWarning": "Tuloksia ei löytynyt, valitse uusi rajaus.",
   "exitConfirmation": "Olet poistumassa Suomen väylät-palvelusta. Haluatko jatkaa?",
   "appGuide": {
+    "noResults": "Ei hakutuloksia",
+    "searchGuides": "Hae käyttöohjeita...",
     "title": "Käyttöohje",
     "dialogContent": {
       "upperBar": {

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import styled from 'styled-components';
 import strings from '../../translations';
 import { Accordion } from 'react-bootstrap';
@@ -20,6 +20,7 @@ import { ReactComponent as VaylaLogo } from '../layout/images/vayla_v_white.svg'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import UserGuideUpperBarContent from './UserGuideUpperBarContent';
 import UserGuideFilterContent from './UserGuideFilterContent';
+import SearchBar from './UserGuideSearch';
 import { theme } from '../../theme/theme';
 
 const StyledContent = styled.div`
@@ -97,14 +98,34 @@ const StyledTitleWrapper = styled.div`
   user-select: none;
 `;
 
+// Extract all JSON-object values as one string
+function extractStringsFromJson(obj) {
+  let result = [];
+  if (typeof obj === 'string') {
+    result.push(obj);
+  } else if (Array.isArray(obj)) {
+    for (const item of obj) {
+      result = result.concat(extractStringsFromJson(item));
+    }
+  } else if (typeof obj === 'object' && obj !== null) {
+    for (const key in obj) {
+      if (Object.prototype.hasOwnProperty.call(obj, key)) {
+        result = result.concat(extractStringsFromJson(obj[key]));
+      }
+    }
+  }
+  return result.join(' ');
+}
+
 export const UserGuideDialogContent = () => {
   const [dialogIndex, setDialogIndex] = useState(null);
+  const [searchQuery, setSearchQuery] = useState('');
 
   const setAccordionIndex = (index) => {
     dialogIndex === index ? setDialogIndex(null) : setDialogIndex(index);
   };
 
-  const dialogContent = [
+  const dialogContent = useMemo(() => [
     {
       title: (
         <StyledTitleWrapper>
@@ -118,7 +139,8 @@ export const UserGuideDialogContent = () => {
         <StyledGuideContent>
           <UserGuideUpperBarContent />
         </StyledGuideContent>
-      )
+      ),
+      flatText: extractStringsFromJson(strings.appGuide.dialogContent.upperBar).toLowerCase()
     },
     {
       title: (
@@ -133,7 +155,8 @@ export const UserGuideDialogContent = () => {
         <StyledGuideContent>
           <p>{strings.appGuide.dialogContent.themeMenu.content}</p>
         </StyledGuideContent>
-      )
+      ),
+      flatText: extractStringsFromJson(strings.appGuide.dialogContent.themeMenu).toLowerCase()
     },
     {
       title: (
@@ -144,7 +167,8 @@ export const UserGuideDialogContent = () => {
           <p>{strings.appGuide.dialogContent.mapLayerMenu.title}</p>
         </StyledTitleWrapper>
       ),
-      content: <UserGuideTabs />
+      content: <UserGuideTabs />,
+      flatText: extractStringsFromJson(strings.appGuide.dialogContent.mapLayerMenu).toLowerCase()
     },
     {
       title: (
@@ -165,7 +189,8 @@ export const UserGuideDialogContent = () => {
               return <p key={`userguide_gfi_content_row_${index}`}> {c} </p>;
             })}
         </StyledGuideContent>
-      )
+      ),
+      flatText: extractStringsFromJson(strings.appGuide.dialogContent.gfi).toLowerCase()
     },
     {
       title: (
@@ -181,7 +206,8 @@ export const UserGuideDialogContent = () => {
         <StyledGuideContent>
           <UserGuideFilterContent />
         </StyledGuideContent>
-      )
+      ),
+      flatText: extractStringsFromJson(strings.appGuide.dialogContent.filter).toLowerCase()
     },
     {
       title: (
@@ -196,7 +222,8 @@ export const UserGuideDialogContent = () => {
         <StyledGuideContent>
           <p>{strings.appGuide.dialogContent.downloads.content}</p>
         </StyledGuideContent>
-      )
+      ),
+      flatText: extractStringsFromJson(strings.appGuide.dialogContent.downloads).toLowerCase()
     },
     {
       title: (
@@ -211,7 +238,8 @@ export const UserGuideDialogContent = () => {
         <StyledGuideContent>
           <p>{strings.appGuide.dialogContent.drawingTools.content}</p>
         </StyledGuideContent>
-      )
+      ),
+      flatText: extractStringsFromJson(strings.appGuide.dialogContent.drawingTools).toLowerCase()
     },
     {
       title: (
@@ -226,7 +254,8 @@ export const UserGuideDialogContent = () => {
         <StyledGuideContent>
           <p>{strings.appGuide.dialogContent.viewsAndGeometries.content}</p>
         </StyledGuideContent>
-      )
+      ),
+      flatText: extractStringsFromJson(strings.appGuide.dialogContent.viewsAndGeometries).toLowerCase()
     },
     {
       title: (
@@ -241,7 +270,8 @@ export const UserGuideDialogContent = () => {
         <StyledGuideContent>
           <p>{strings.appGuide.dialogContent.setFullScreen.content}</p>
         </StyledGuideContent>
-      )
+      ),
+      flatText: extractStringsFromJson(strings.appGuide.dialogContent.setFullScreen).toLowerCase()
     },
     {
       title: (
@@ -256,7 +286,8 @@ export const UserGuideDialogContent = () => {
         <StyledGuideContent>
           <p>{strings.appGuide.dialogContent.search.content}</p>
         </StyledGuideContent>
-      )
+      ),
+      flatText: extractStringsFromJson(strings.appGuide.dialogContent.search).toLowerCase()
     },
     {
       title: (
@@ -271,19 +302,32 @@ export const UserGuideDialogContent = () => {
         <StyledGuideContent>
           <p>{strings.appGuide.dialogContent.zoomBar.content}</p>
         </StyledGuideContent>
-      )
+      ),
+      flatText: extractStringsFromJson(strings.appGuide.dialogContent.zoomBar).toLowerCase()
     }
-  ];
+  ], []);
+
+  // Filtering logic
+  const normalizedQuery = searchQuery.trim().replace(/\s+/g, ' ').toLowerCase();
+  const filteredContent = dialogContent.filter(item =>
+    item.flatText.includes(normalizedQuery)
+  );
 
   return (
     <StyledContent
       id="user_guide_dialog_content"
       role="region"
-      tabIndex="0" // Ensures the container is focusable
+      tabIndex="0"
     >
+      <div style={{ marginBottom: '10px' }}>
+        <SearchBar
+          id="user_guide_search_bar"
+          onSearch={query => setSearchQuery(query)}
+        />
+      </div>
       <StyledAccordion id="user_guide_dialog_accordion" activeKey={dialogIndex}>
-        {dialogContent.map((content, index) => {
-          return (
+        {filteredContent.length > 0 ? (
+          filteredContent.map((content, index) => (
             <StyledAccordionItem
               eventKey={index}
               //bsPrefix={'user-guide-item'}
@@ -308,8 +352,10 @@ export const UserGuideDialogContent = () => {
                 {content.content}
               </StyledAccordionBody>
             </StyledAccordionItem>
-          );
-        })}
+          ))
+        ) : (
+          <p>{strings.appGuide.noResults || 'No results found.'}</p>
+        )}
       </StyledAccordion>
     </StyledContent>
   );

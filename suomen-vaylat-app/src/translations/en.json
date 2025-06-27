@@ -163,6 +163,8 @@
   "noGfiLocationsWarning": "No results found, try another geometry.",
   "exitConfirmation": "You are leaving the Suomen väylät. Do you want to continue?",
   "appGuide": {
+    "noResults": "No results found",
+    "searchGuides": "Search for user guides...",
     "title": "User Guide",
     "dialogContent": {
       "upperBar": {
