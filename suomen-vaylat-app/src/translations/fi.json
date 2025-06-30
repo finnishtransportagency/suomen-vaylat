@@ -65,6 +65,7 @@
       "languages": "Muut kielet",
       "english": "Englanti",
       "swedish": "Ruotsi",
+      "swedishSectionTitle": "Ruotsiksi",
       "swedishLayerName": "Karttatason nimi ruotsiksi",
       "swedishDesc": "Kuvaus ruotsiksi",
       "swedishSource": "Tietolähde ruotsiksi",
@@ -74,6 +75,7 @@
       "visTabText": "Visualisointi-asetukset tähän...",
       "fileNote": "Zip-tiedosto saa sisältää vain yhden karttatason ja sen maksimikoko on 10 Mt. Purettuna tiedoston koko saa olla korkeintaan 150 Mt.",
       "languagesTooltip": "Valitse lisäkielet, joille aineiston metatiedot annetaan.",
+      "englishSectionTitle": "Englanniksi",
       "englishLayerName": "Layer name in English",
       "englishDesc": "Description in English",
       "englishSource": "Source in English"

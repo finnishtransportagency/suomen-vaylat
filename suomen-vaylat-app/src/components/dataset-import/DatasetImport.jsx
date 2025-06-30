@@ -202,8 +202,8 @@ const GeneralTabContent = ({
         {strings.datasetImport.layerName} <span style={{ color: '#c00' }}>*</span>
       </Typography>
       <TextField
-        value={fi.nimi}
-        onChange={e => setFI({ ...fi, nimi: e.target.value })}
+        value={fi.name}
+        onChange={e => setFI({ ...fi, name: e.target.value })}
         fullWidth
         size="small"
         variant="outlined"
@@ -214,8 +214,8 @@ const GeneralTabContent = ({
     <StyledFormGroup>
       <Typography style={{ fontWeight: 500, marginBottom: 4 }}>{strings.datasetImport.desc}</Typography>
       <TextField
-        value={fi.kuvaus}
-        onChange={e => setFI({ ...fi, kuvaus: e.target.value })}
+        value={fi.desc}
+        onChange={e => setFI({ ...fi, desc: e.target.value })}
         fullWidth
         size="small"
         variant="outlined"
@@ -226,8 +226,8 @@ const GeneralTabContent = ({
     <StyledFormGroup>
       <Typography style={{ fontWeight: 500, marginBottom: 4 }}>{strings.datasetImport.source}</Typography>
       <TextField
-        value={fi.lahe}
-        onChange={e => setFI({ ...fi, lahe: e.target.value })}
+        value={fi.source}
+        onChange={e => setFI({ ...fi, source: e.target.value })}
         fullWidth
         size="small"
         variant="outlined"
@@ -266,14 +266,14 @@ const GeneralTabContent = ({
       <StyledLanguageGroup>
         <StyledLanguageDivider />
         <StyledSectionTitle variant="subtitle2">
-          {strings.datasetImport.swedishSectionTitle || "Ruotsinkieliset kentät"}
+          {strings.datasetImport.swedishSectionTitle}
         </StyledSectionTitle>
         <Typography style={{ fontWeight: 500, marginBottom: 4 }}>
           {strings.datasetImport.swedishLayerName} <span style={{ color: '#c00' }}>*</span>
         </Typography>
         <TextField
-          value={sv.nimi}
-          onChange={e => setSV({ ...sv, nimi: e.target.value })}
+          value={sv.name}
+          onChange={e => setSV({ ...sv, name: e.target.value })}
           fullWidth
           size="small"
           variant="outlined"
@@ -282,8 +282,8 @@ const GeneralTabContent = ({
         />
         <Typography style={{ fontWeight: 500, marginBottom: 4 }}>{strings.datasetImport.swedishDesc}</Typography>
         <TextField
-          value={sv.kuvaus}
-          onChange={e => setSV({ ...sv, kuvaus: e.target.value })}
+          value={sv.desc}
+          onChange={e => setSV({ ...sv, desc: e.target.value })}
           fullWidth
           size="small"
           variant="outlined"
@@ -292,8 +292,8 @@ const GeneralTabContent = ({
         />
         <Typography style={{ fontWeight: 500, marginBottom: 4 }}>{strings.datasetImport.swedishSource}</Typography>
         <TextField
-          value={sv.lahe}
-          onChange={e => setSV({ ...sv, lahe: e.target.value })}
+          value={sv.source}
+          onChange={e => setSV({ ...sv, source: e.target.value })}
           fullWidth
           size="small"
           variant="outlined"
@@ -306,14 +306,14 @@ const GeneralTabContent = ({
       <StyledLanguageGroup>
         <StyledLanguageDivider />
         <StyledSectionTitle variant="subtitle2">
-          {strings.datasetImport.englishSectionTitle || "English fields"}
+          {strings.datasetImport.englishSectionTitle}
         </StyledSectionTitle>
         <Typography style={{ fontWeight: 500, marginBottom: 4 }}>
           {strings.datasetImport.englishLayerName} <span style={{ color: '#c00' }}>*</span>
         </Typography>
         <TextField
-          value={en.nimi}
-          onChange={e => setEN({ ...en, nimi: e.target.value })}
+          value={en.name}
+          onChange={e => setEN({ ...en, name: e.target.value })}
           fullWidth
           size="small"
           variant="outlined"
@@ -322,8 +322,8 @@ const GeneralTabContent = ({
         />
         <Typography style={{ fontWeight: 500, marginBottom: 4 }}>{strings.datasetImport.englishDesc}</Typography>
         <TextField
-          value={en.kuvaus}
-          onChange={e => setEN({ ...en, kuvaus: e.target.value })}
+          value={en.desc}
+          onChange={e => setEN({ ...en, desc: e.target.value })}
           fullWidth
           size="small"
           variant="outlined"
@@ -332,8 +332,8 @@ const GeneralTabContent = ({
         />
         <Typography style={{ fontWeight: 500, marginBottom: 4 }}>{strings.datasetImport.englishSource}</Typography>
         <TextField
-          value={en.lahe}
-          onChange={e => setEN({ ...en, lahe: e.target.value })}
+          value={en.source}
+          onChange={e => setEN({ ...en, source: e.target.value })}
           fullWidth
           size="small"
           variant="outlined"
@@ -361,12 +361,11 @@ const VisualisointiTabContent = () => (
 );
 
 const DatasetImport = () => {
-  const theme = useTheme();
   const [selectedTab, setSelectedTab] = useState(0);
   const [uploadedFile, setUploadedFile] = useState(null);
-  const [fi, setFI] = useState({ nimi: '', kuvaus: '', lahe: '' });
-  const [sv, setSV] = useState({ nimi: '', kuvaus: '', lahe: '' });
-  const [en, setEN] = useState({ nimi: '', kuvaus: '', lahe: '' });
+  const [fi, setFI] = useState({ name: '', desc: '', source: '' });
+  const [sv, setSV] = useState({ name: '', desc: '', source: '' });
+  const [en, setEN] = useState({ name: '', desc: '', source: '' });
   const [lang, setLang] = useState({ en: false, sv: true });
   const fileInput = useRef();
   const swiperRef = useRef();
