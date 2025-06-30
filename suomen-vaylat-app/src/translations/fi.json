@@ -52,8 +52,31 @@
     "UserGuide": "Käyttöohjeet"
   },
   "datasetImport": {
-    "title": "Omien aineistojen tuonti",
-    "menuButtonTitle": "Tuo omia aineistoja"
+      "title": "Omien aineistojen tuonti",
+      "menuButtonTitle": "Tuo omia aineistoja",
+      "tabGeneral": "Yleiset",
+      "tabVisualization": "Visualisointi",
+      "infoText": "Lataa aineisto tietokoneeltasi yhdeksi zip-tiedostoksi pakattuna, joka sisältää tarvittavat tiedostot jostain seuraavasta tiedostomuodosta:",
+      "uploadTip": "Raahaa tiedosto tähän ja valitse selaamalla",
+      "uploadedFile": "Ladattu tiedosto:",
+      "layerName": "Karttatason nimi",
+      "desc": "Kuvaus",
+      "source": "Tietolähde",
+      "languages": "Muut kielet",
+      "english": "Englanti",
+      "swedish": "Ruotsi",
+      "swedishLayerName": "Karttatason nimi ruotsiksi",
+      "swedishDesc": "Kuvaus ruotsiksi",
+      "swedishSource": "Tietolähde ruotsiksi",
+      "mandatory": "(pakollinen)",
+      "cancel": "PERUUTA",
+      "import": "TUO AINEISTO",
+      "visTabText": "Visualisointi-asetukset tähän...",
+      "fileNote": "Zip-tiedosto saa sisältää vain yhden karttatason ja sen maksimikoko on 10 Mt. Purettuna tiedoston koko saa olla korkeintaan 150 Mt.",
+      "languagesTooltip": "Valitse lisäkielet, joille aineiston metatiedot annetaan.",
+      "englishLayerName": "Layer name in English",
+      "englishDesc": "Description in English",
+      "englishSource": "Source in English"
   },
   "savedContent": {
     "savedContent": "Omat tiedot",
