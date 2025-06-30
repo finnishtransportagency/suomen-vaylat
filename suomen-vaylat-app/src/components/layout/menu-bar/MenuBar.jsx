@@ -8,7 +8,8 @@ import {
   faDownload,
   faMap,
   faSave,
-  faTimes
+  faTimes,
+  faUpload
 } from '@fortawesome/free-solid-svg-icons';
 import { AnimatePresence, motion } from 'framer-motion';
 
@@ -28,7 +29,8 @@ import {
   setGeoJsonArray,
   setSelectedMarker,
   setIsThemeMenuOpen,
-  removeFromDrawToolMarkers
+  removeFromDrawToolMarkers,
+  setIsDatasetImportOpen
 } from '../../../state/slices/uiSlice';
 import {
   removeMarkerRequest,
@@ -199,6 +201,7 @@ const MenuBar = () => {
     isDrawingToolsOpen,
     isSearchOpen,
     isSaveViewOpen,
+    isDatasetImportOpen,
     isGfiOpen,
     isGfiDownloadOpen,
     drawToolMarkers
@@ -368,6 +371,15 @@ const MenuBar = () => {
                           store.dispatch(setIsSaveViewOpen(!isSaveViewOpen))
                         }
                         aria-label={strings.savedContent?.saveView?.saveView}
+                      />
+                      <PillButton
+                        id="menubar-tools-dataset-import-button"
+                        icon={faUpload}
+                        text={strings.datasetImport.menuButtonTitle}
+                        onClick={() =>
+                          store.dispatch(setIsDatasetImportOpen(!isDatasetImportOpen))
+                        }
+                        aria-label={strings.datasetImport?.menuButtonTitle}
                       />
                       {!isMobile && (
                         <PillButton

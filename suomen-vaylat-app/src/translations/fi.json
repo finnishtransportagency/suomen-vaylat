@@ -51,6 +51,10 @@
     "pageInfo": "Sovelluksen tiedot",
     "UserGuide": "Käyttöohjeet"
   },
+  "datasetImport": {
+    "title": "Omien aineistojen tuonti",
+    "menuButtonTitle": "Tuo omia aineistoja"
+  },
   "savedContent": {
     "savedContent": "Omat tiedot",
     "viewTitle": "Näkymät",

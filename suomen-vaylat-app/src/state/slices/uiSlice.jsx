@@ -63,6 +63,7 @@ const initialState = {
   isCoordinateToolOpen: false,
   selectedBaseLayers: [],
   isBaseLayerSelectorMenuOpen: false,
+  isDatasetImportOpen: false,
 };
 
 export const uiSlice = createSlice({
@@ -294,6 +295,9 @@ export const uiSlice = createSlice({
     },
     setIsBaseLayerSelectorMenuOpen: (state, action) => {
         state.isBaseLayerSelectorMenuOpen = action.payload;
+    },
+    setIsDatasetImportOpen: (state, action) => {
+        state.isDatasetImportOpen = action.payload;
     }
   }
 });
@@ -359,6 +363,7 @@ export const {
   setIsCoordinateToolOpen,
   setSelectedBaseLayers,
   setIsBaseLayerSelectorMenuOpen,
+  setIsDatasetImportOpen
 } = uiSlice.actions;
 
 export default uiSlice.reducer;
