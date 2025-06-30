@@ -71,8 +71,8 @@ const StyledUploadedFileWrapper = styled.div`
   align-items: center;
 `;
 
-const StyledFileLabel = styled(Typography)`
-  font-weight: 600 !important;
+const StyledFileLabel = styled.span`
+  font-weight: 600;
 `;
 
 const StyledFlexRow = styled.div`
@@ -90,6 +90,30 @@ const StyledLanguageCheckboxGroup = styled.div`
 `;
 
 const StyledFormGroup = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const StyledTextField = styled(TextField)`
+  &.MuiTextField-root {
+    margin-bottom: 16px;
+    background: #fff;
+  }
+`;
+
+const StyledLabel = styled(Typography)`
+  font-weight: 500 !important;
+  margin-bottom: 4px !important;
+`;
+
+const StyledLangSectionTitle = styled(Typography)`
+  font-weight: bold !important;
+  margin-bottom: 18px !important;
+  margin-top: 0 !important;
+`;
+
+const StyledLanguageDivider = styled(Divider)`
+  margin-bottom: 12px !important;
 `;
 
 const StyledLanguageGroup = styled.div`
@@ -97,14 +121,9 @@ const StyledLanguageGroup = styled.div`
   margin-bottom: 16px;
 `;
 
-const StyledSectionTitle = styled(Typography)`
-  font-weight: bold !important;
-  margin-bottom: 18px !important;
-  margin-top: 0;
-`;
-
-const StyledLanguageDivider = styled(Divider)`
-  margin-bottom: 12px !important;
+const StyledUploadButtonText = styled(Typography)`
+  color: #2285d7;
+  font-weight: 500 !important;
 `;
 
 const StyledButtonRow = styled.div`
@@ -115,7 +134,7 @@ const StyledButtonRow = styled.div`
   gap: 18px;
 `;
 
-const StyledPrimaryButton = styled.div`
+const StyledPrimaryButton = styled.button`
   min-width: 180px;
   height: 40px;
   cursor: pointer;
@@ -129,6 +148,7 @@ const StyledPrimaryButton = styled.div`
   font-size: 15px;
   font-weight: 700;
   transition: background 0.2s;
+  border: none;
   &:hover {
     background-color: ${({ theme }) => theme.colors.buttonActive};
   }
@@ -136,7 +156,6 @@ const StyledPrimaryButton = styled.div`
     margin-right: 7px;
     font-size: 18px;
   }
-  border: none;
 `;
 
 const StyledSecondaryButton = styled(StyledPrimaryButton)`
@@ -153,13 +172,24 @@ const StyledSecondaryButton = styled(StyledPrimaryButton)`
   }
 `;
 
+// Typo wrappers
+const StyledInfoText = styled(Typography)`
+  margin-bottom: 16px !important;
+`;
+
+const StyledLink = styled(Link)`
+  color: #2285d7 !important;
+  font-weight: 500 !important;
+`;
+
+// The actual component
 const GeneralTabContent = ({
   fi, setFI, sv, setSV, en, setEN, lang, setLang,
   uploadedFile, setUploadedFile, handleFileUpload, fileInput
 }) => (
   <>
     <StyledFormGroup>
-      <Typography variant="body2" style={{ marginBottom: 16 }}>
+      <StyledInfoText variant="body2">
         {strings.datasetImport.infoText}
         <ul style={{ marginBlock: 0 }}>
           <li>Shapefile (.shp, .shx, .dbf ja .prj sekä mahdollinen .cpg)</li>
@@ -169,7 +199,7 @@ const GeneralTabContent = ({
           <li>Google Maps (.kml)</li>
         </ul>
         {strings.datasetImport.fileNote}
-      </Typography>
+      </StyledInfoText>
     </StyledFormGroup>
     <StyledUploadBox onClick={() => fileInput.current.click()}>
       <input
@@ -180,59 +210,55 @@ const GeneralTabContent = ({
         onChange={handleFileUpload}
       />
       <FontAwesomeIcon icon={faUpload} style={{ fontSize: 32, color: '#4a90e2', marginBottom: 6 }} />
-      <Typography style={{ color: '#2285d7', fontWeight: 500 }}>
+      <StyledUploadButtonText>
         {strings.datasetImport.uploadTip}
-      </Typography>
+      </StyledUploadButtonText>
     </StyledUploadBox>
     {uploadedFile && (
       <StyledUploadedFileWrapper>
-        <StyledFileLabel component="span">
+        <StyledFileLabel>
           {strings.datasetImport.uploadedFile}&nbsp;
         </StyledFileLabel>
-        <Link href="#" style={{ color: '#2285d7', fontWeight: 500 }}>
-          {uploadedFile.name}
-        </Link>
-        <IconButton size="small" style={{ marginLeft: 8, color: '#c00' }} onClick={() => setUploadedFile(null)}>
+        <StyledLink href="#">{uploadedFile.name}</StyledLink>
+        <IconButton size="small" sx={{ marginLeft: 1, color: '#c00' }} onClick={() => setUploadedFile(null)}>
           <FontAwesomeIcon icon={faTimes} />
         </IconButton>
       </StyledUploadedFileWrapper>
     )}
+
     <StyledFormGroup>
-      <Typography style={{ fontWeight: 500, marginBottom: 4 }}>
+      <StyledLabel>
         {strings.datasetImport.layerName} <span style={{ color: '#c00' }}>*</span>
-      </Typography>
-      <TextField
+      </StyledLabel>
+      <StyledTextField
         value={fi.name}
         onChange={e => setFI({ ...fi, name: e.target.value })}
         fullWidth
         size="small"
         variant="outlined"
         InputLabelProps={{ shrink: true }}
-        style={{ marginBottom: 16, background: '#fff' }}
       />
     </StyledFormGroup>
     <StyledFormGroup>
-      <Typography style={{ fontWeight: 500, marginBottom: 4 }}>{strings.datasetImport.desc}</Typography>
-      <TextField
+      <StyledLabel>{strings.datasetImport.desc}</StyledLabel>
+      <StyledTextField
         value={fi.desc}
         onChange={e => setFI({ ...fi, desc: e.target.value })}
         fullWidth
         size="small"
         variant="outlined"
         InputLabelProps={{ shrink: true }}
-        style={{ marginBottom: 16, background: '#fff' }}
       />
     </StyledFormGroup>
     <StyledFormGroup>
-      <Typography style={{ fontWeight: 500, marginBottom: 4 }}>{strings.datasetImport.source}</Typography>
-      <TextField
+      <StyledLabel>{strings.datasetImport.source}</StyledLabel>
+      <StyledTextField
         value={fi.source}
         onChange={e => setFI({ ...fi, source: e.target.value })}
         fullWidth
         size="small"
         variant="outlined"
         InputLabelProps={{ shrink: true }}
-        style={{ marginBottom: 16, background: '#fff' }}
       />
     </StyledFormGroup>
     <StyledFlexRow>
@@ -265,88 +291,82 @@ const GeneralTabContent = ({
     {lang.sv && (
       <StyledLanguageGroup>
         <StyledLanguageDivider />
-        <StyledSectionTitle variant="subtitle2">
+        <StyledLangSectionTitle variant="subtitle2">
           {strings.datasetImport.swedishSectionTitle}
-        </StyledSectionTitle>
-        <Typography style={{ fontWeight: 500, marginBottom: 4 }}>
+        </StyledLangSectionTitle>
+        <StyledLabel>
           {strings.datasetImport.swedishLayerName} <span style={{ color: '#c00' }}>*</span>
-        </Typography>
-        <TextField
+        </StyledLabel>
+        <StyledTextField
           value={sv.name}
           onChange={e => setSV({ ...sv, name: e.target.value })}
           fullWidth
           size="small"
           variant="outlined"
           InputLabelProps={{ shrink: true }}
-          style={{ marginBottom: 16, background: '#fff' }}
         />
-        <Typography style={{ fontWeight: 500, marginBottom: 4 }}>{strings.datasetImport.swedishDesc}</Typography>
-        <TextField
+        <StyledLabel>{strings.datasetImport.swedishDesc}</StyledLabel>
+        <StyledTextField
           value={sv.desc}
           onChange={e => setSV({ ...sv, desc: e.target.value })}
           fullWidth
           size="small"
           variant="outlined"
           InputLabelProps={{ shrink: true }}
-          style={{ marginBottom: 16, background: '#fff' }}
         />
-        <Typography style={{ fontWeight: 500, marginBottom: 4 }}>{strings.datasetImport.swedishSource}</Typography>
-        <TextField
+        <StyledLabel>{strings.datasetImport.swedishSource}</StyledLabel>
+        <StyledTextField
           value={sv.source}
           onChange={e => setSV({ ...sv, source: e.target.value })}
           fullWidth
           size="small"
           variant="outlined"
           InputLabelProps={{ shrink: true }}
-          style={{ marginBottom: 16, background: '#fff' }}
         />
       </StyledLanguageGroup>
     )}
     {lang.en && (
       <StyledLanguageGroup>
         <StyledLanguageDivider />
-        <StyledSectionTitle variant="subtitle2">
+        <StyledLangSectionTitle variant="subtitle2">
           {strings.datasetImport.englishSectionTitle}
-        </StyledSectionTitle>
-        <Typography style={{ fontWeight: 500, marginBottom: 4 }}>
+        </StyledLangSectionTitle>
+        <StyledLabel>
           {strings.datasetImport.englishLayerName} <span style={{ color: '#c00' }}>*</span>
-        </Typography>
-        <TextField
+        </StyledLabel>
+        <StyledTextField
           value={en.name}
           onChange={e => setEN({ ...en, name: e.target.value })}
           fullWidth
           size="small"
           variant="outlined"
           InputLabelProps={{ shrink: true }}
-          style={{ marginBottom: 16, background: '#fff' }}
         />
-        <Typography style={{ fontWeight: 500, marginBottom: 4 }}>{strings.datasetImport.englishDesc}</Typography>
-        <TextField
+        <StyledLabel>{strings.datasetImport.englishDesc}</StyledLabel>
+        <StyledTextField
           value={en.desc}
           onChange={e => setEN({ ...en, desc: e.target.value })}
           fullWidth
           size="small"
           variant="outlined"
           InputLabelProps={{ shrink: true }}
-          style={{ marginBottom: 16, background: '#fff' }}
         />
-        <Typography style={{ fontWeight: 500, marginBottom: 4 }}>{strings.datasetImport.englishSource}</Typography>
-        <TextField
+        <StyledLabel>{strings.datasetImport.englishSource}</StyledLabel>
+        <StyledTextField
           value={en.source}
           onChange={e => setEN({ ...en, source: e.target.value })}
           fullWidth
           size="small"
           variant="outlined"
           InputLabelProps={{ shrink: true }}
-          style={{ marginBottom: 16, background: '#fff' }}
         />
       </StyledLanguageGroup>
     )}
     <StyledButtonRow>
-      <StyledSecondaryButton tabIndex={0}>
+      <StyledSecondaryButton type="button" tabIndex={0}>
         {strings.datasetImport.cancel}
       </StyledSecondaryButton>
-      <StyledPrimaryButton tabIndex={0}>
+      <StyledPrimaryButton type="button" tabIndex={0}>
         <FontAwesomeIcon icon={faUpload} />
         {strings.datasetImport.import}
       </StyledPrimaryButton>
@@ -366,7 +386,7 @@ const DatasetImport = () => {
   const [fi, setFI] = useState({ name: '', desc: '', source: '' });
   const [sv, setSV] = useState({ name: '', desc: '', source: '' });
   const [en, setEN] = useState({ name: '', desc: '', source: '' });
-  const [lang, setLang] = useState({ en: false, sv: true });
+  const [lang, setLang] = useState({ en: false, sv: false });
   const fileInput = useRef();
   const swiperRef = useRef();
 
