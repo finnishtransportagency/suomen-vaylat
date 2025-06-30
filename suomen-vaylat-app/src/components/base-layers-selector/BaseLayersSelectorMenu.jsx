@@ -308,6 +308,7 @@ const BaseLayerSelectorMenu = () => {
                 <StyledMenuHeader>{group.locale.fi.name}</StyledMenuHeader>
                 {group.layers?.map((layerID) => {
                     const layer = allLayers.find(layer => layer.id === layerID);
+                    if (!layer) return null;
                     return(
                         <React.Fragment key={layer.id}>
                             <StyledLayerColumnField>
@@ -351,11 +352,12 @@ const BaseLayerSelectorMenu = () => {
 
             <StyledLayerColumnContainer>
                 {allGroups.map((group) => {
+                    if (!group) return null;
                     if (group.id === 1) {
                         return (
                             <React.Fragment key={group.id}>
                                 <LayerColumn {...group} />
-                                {group.groups && group.groups.map((subGroup) => (
+                                {group.groups?.map((subGroup) => (
                                     <LayerColumn key={subGroup.id} {...subGroup} />
                                 ))}
                             </React.Fragment>
