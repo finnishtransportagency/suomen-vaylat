@@ -85,7 +85,8 @@
         "GeoPackage-tiedosto (.gpkg)",
         "MapInfo (.mif ja .mid)",
         "Google Maps (.kml)"
-      ]
+      ],
+      "validationMsg": "Vain isot/pienet kirjaimet, numerot, alaviiva, väliviiva ja sulut sallitaan."
   },
   "savedContent": {
     "savedContent": "Omat tiedot",

@@ -224,7 +224,7 @@ function GeneralTabContent({
           variant="outlined"
           InputLabelProps={{ shrink: true }}
         />
-        {errors.fi.name && <StyledErrorMsg>{allowedMsg}</StyledErrorMsg>}
+        {errors.fi.name && <StyledErrorMsg>{strings.datasetImport.validationMsg}</StyledErrorMsg>}
       </StyledFormGroup>
       <StyledFormGroup>
         <StyledLabel>{strings.datasetImport.desc}</StyledLabel>
@@ -236,7 +236,7 @@ function GeneralTabContent({
           variant="outlined"
           InputLabelProps={{ shrink: true }}
         />
-        {errors.fi.desc && <StyledErrorMsg>{allowedMsg}</StyledErrorMsg>}
+        {errors.fi.desc && <StyledErrorMsg>{strings.datasetImport.validationMsg}</StyledErrorMsg>}
       </StyledFormGroup>
       <StyledFormGroup>
         <StyledLabel>{strings.datasetImport.source}</StyledLabel>
@@ -248,7 +248,7 @@ function GeneralTabContent({
           variant="outlined"
           InputLabelProps={{ shrink: true }}
         />
-        {errors.fi.source && <StyledErrorMsg>{allowedMsg}</StyledErrorMsg>}
+        {errors.fi.source && <StyledErrorMsg>{strings.datasetImport.validationMsg}</StyledErrorMsg>}
       </StyledFormGroup>
       {/* Language selection */}
       <StyledFlexRow>
@@ -300,7 +300,7 @@ function GeneralTabContent({
             variant="outlined"
             InputLabelProps={{ shrink: true }}
           />
-          {errors.sv.name && <StyledErrorMsg>{allowedMsg}</StyledErrorMsg>}
+          {errors.sv.name && <StyledErrorMsg>{strings.datasetImport.validationMsg}</StyledErrorMsg>}
           <StyledLabel>{strings.datasetImport.swedishDesc}</StyledLabel>
           <StyledTextField
             value={fields.sv.desc}
@@ -310,7 +310,7 @@ function GeneralTabContent({
             variant="outlined"
             InputLabelProps={{ shrink: true }}
           />
-          {errors.sv.desc && <StyledErrorMsg>{allowedMsg}</StyledErrorMsg>}
+          {errors.sv.desc && <StyledErrorMsg>{strings.datasetImport.validationMsg}</StyledErrorMsg>}
           <StyledLabel>{strings.datasetImport.swedishSource}</StyledLabel>
           <StyledTextField
             value={fields.sv.source}
@@ -320,7 +320,7 @@ function GeneralTabContent({
             variant="outlined"
             InputLabelProps={{ shrink: true }}
           />
-          {errors.sv.source && <StyledErrorMsg>{allowedMsg}</StyledErrorMsg>}
+          {errors.sv.source && <StyledErrorMsg>{strings.datasetImport.validationMsg}</StyledErrorMsg>}
         </StyledLanguageGroup>
       )}
       {/* English fields */}
@@ -342,7 +342,7 @@ function GeneralTabContent({
             variant="outlined"
             InputLabelProps={{ shrink: true }}
           />
-          {errors.en.name && <StyledErrorMsg>{allowedMsg}</StyledErrorMsg>}
+          {errors.en.name && <StyledErrorMsg>{strings.datasetImport.validationMsg}</StyledErrorMsg>}
           <StyledLabel>{strings.datasetImport.englishDesc}</StyledLabel>
           <StyledTextField
             value={fields.en.desc}
@@ -352,7 +352,7 @@ function GeneralTabContent({
             variant="outlined"
             InputLabelProps={{ shrink: true }}
           />
-          {errors.en.desc && <StyledErrorMsg>{allowedMsg}</StyledErrorMsg>}
+          {errors.en.desc && <StyledErrorMsg>{strings.datasetImport.validationMsg}</StyledErrorMsg>}
           <StyledLabel>{strings.datasetImport.englishSource}</StyledLabel>
           <StyledTextField
             value={fields.en.source}
@@ -362,7 +362,7 @@ function GeneralTabContent({
             variant="outlined"
             InputLabelProps={{ shrink: true }}
           />
-          {errors.en.source && <StyledErrorMsg>{allowedMsg}</StyledErrorMsg>}
+          {errors.en.source && <StyledErrorMsg>{strings.datasetImport.validationMsg}</StyledErrorMsg>}
         </StyledLanguageGroup>
       )}
       {/* Bottom action bar */}
@@ -439,8 +439,6 @@ const VisualisointiTabContent = () => (
 );
 
 const allowedCharsExp = /^[A-Za-z0-9_\-\(\)]*$/;
-const allowedMsg =
-  'Vain isot/pienet kirjaimet, numerot, alaviiva, väliviiva, ( ja ) sallitaan.';
 const initialLangObj = { name: '', desc: '', source: '' };
 const initialFields = {
   fi: { ...initialLangObj },
