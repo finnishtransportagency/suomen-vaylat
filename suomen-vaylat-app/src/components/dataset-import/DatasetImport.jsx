@@ -7,27 +7,22 @@ import {
   Checkbox,
   FormControlLabel,
   Link,
-  IconButton,
   Tooltip,
   Divider,
   CircularProgress
 } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faInfoCircle,
-  faUpload,
-  faTimes
-} from '@fortawesome/free-solid-svg-icons';
+import { faInfoCircle, faUpload } from '@fortawesome/free-solid-svg-icons';
 import strings from '../../translations';
 import { setIsDatasetImportOpen } from '../../state/slices/uiSlice';
 import { ReactReduxContext } from 'react-redux';
 import ZipFileInput from './ZipFileInput';
 
-// --- Styled Components (your original styles) ---
+// --- Styled Components ---
 const StyledMainContainer = styled.div`
   background: #f6f7fa;
   border-radius: 16px;
-  position: relative; /* so overlay child is scoped here */
+  position: relative;
 `;
 const OverlaySpinner = styled.div`
   position: absolute;
@@ -174,6 +169,7 @@ const StyledSecondaryButton = styled(StyledPrimaryButton)`
   }
 `;
 
+// -------------- GeneralTabContent ----------------
 function GeneralTabContent({
   store,
   fields,
@@ -390,16 +386,40 @@ function GeneralTabContent({
               setIsSubmitting(true);
               setTimeout(() => {
                 setIsSubmitting(false);
-                const obj = {
-                  file: uploadedFile,
-                  fields: {
-                    fi: fields.fi,
-                    sv: lang.sv ? fields.sv : undefined,
-                    en: lang.en ? fields.en : undefined
+
+                // --- THE ONLY CHANGED PART: Make locale/style/file Oskari-style ---
+                const locale = {
+                  fi: fields.fi || {},
+                  sv: lang.sv ? fields.sv || {} : {},
+                  en: lang.en ? fields.en || {} : {}
+                };
+                // mock style
+                const style = {
+                  image: { shape: 5, size: 3, fill: { color: '#FAEBD7' } },
+                  fill: { area: { pattern: -1 }, color: '#FAEBD7' },
+                  stroke: {
+                    area: {
+                      color: '#000000',
+                      lineDash: 'solid',
+                      width: 1,
+                      lineJoin: 'round'
+                    },
+                    color: '#000000',
+                    lineCap: 'round',
+                    lineDash: 'solid',
+                    width: 1,
+                    lineJoin: 'round'
                   }
                 };
-                console.log('Lähetettävä aineisto:', obj);
-                alert('Konsoliin tulostettu lähetettävä objekti!');
+                const obj = {
+                  file: uploadedFile,
+                  locale,
+                  style
+                };
+                console.log('Lähetettävä aineisto (Oskari-yhteensopiva):', obj);
+                alert(
+                  'Konsoliin tulostettu lähetettävä Oskari-tyyppinen objekti!'
+                );
               }, 1200);
             }
           }}
