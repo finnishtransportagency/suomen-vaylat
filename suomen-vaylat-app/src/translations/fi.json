@@ -78,7 +78,14 @@
       "englishSectionTitle": "Englanniksi",
       "englishLayerName": "Layer name in English",
       "englishDesc": "Description in English",
-      "englishSource": "Source in English"
+      "englishSource": "Source in English",
+      "fileList": [
+        "Shapefile (.shp, .shx, .dbf ja .prj sekä mahdollinen .cpg)",
+        "GPX-siirtotiedosto (.gpx)",
+        "GeoPackage-tiedosto (.gpkg)",
+        "MapInfo (.mif ja .mid)",
+        "Google Maps (.kml)"
+      ]
   },
   "savedContent": {
     "savedContent": "Omat tiedot",

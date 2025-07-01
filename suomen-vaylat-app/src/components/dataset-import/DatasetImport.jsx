@@ -18,6 +18,9 @@ import {
   faUpload
 } from '@fortawesome/free-solid-svg-icons';
 import strings from '../../translations';
+import { setIsDatasetImportOpen } from '../../state/slices/uiSlice';
+import { useContext } from 'react';
+import { ReactReduxContext } from 'react-redux';
 
 const allowedCharsExp = /^[A-Za-z0-9_\-\(\)]*$/;
 const allowedMsg =
@@ -98,12 +101,12 @@ const StyledFlexRow = styled.div`
   display: flex;
   align-items: center;
   margin-bottom: 8px;
+  margin-top: 16px;
 `;
 const StyledLanguageCheckboxGroup = styled.div`
   display: flex;
   align-items: center;
   gap: 28px;
-  margin-bottom: 24px;
   margin-left: 6px;
 `;
 const StyledFormGroup = styled.div`
@@ -129,7 +132,7 @@ const StyledLanguageDivider = styled(Divider)`
   margin-bottom: 12px !important;
 `;
 const StyledLanguageGroup = styled.div`
-  margin-top: 32px;
+  margin-top: 24px;
   margin-bottom: 16px;
 `;
 const StyledErrorMsg = styled(Typography)`
@@ -145,7 +148,7 @@ const StyledLink = styled(Link)`
 const StyledButtonRow = styled.div`
   display: flex;
   justify-content: flex-start;
-  margin-top: 32px;
+  margin-top: 24px;
   margin-bottom: 8px;
   gap: 18px;
 `;
@@ -189,6 +192,7 @@ const StyledSecondaryButton = styled(StyledPrimaryButton)`
 `;
 
 function GeneralTabContent({
+  store,
   fields,
   errors,
   lang,
@@ -203,14 +207,12 @@ function GeneralTabContent({
   return (
     <>
       <StyledFormGroup>
-        <StyledInfoText variant="body2">
+        <StyledInfoText variant="body2" component="div">
           {strings.datasetImport.infoText}
           <ul style={{ marginBlock: 0 }}>
-            <li>Shapefile (.shp, .shx, .dbf ja .prj sekä mahdollinen .cpg)</li>
-            <li>GPX-siirtotiedosto (.gpx)</li>
-            <li>GeoPackage-tiedosto (.gpkg)</li>
-            <li>MapInfo (.mif ja .mid)</li>
-            <li>Google Maps (.kml)</li>
+            {strings.datasetImport.fileList.map((item, idx) => (
+              <li key={idx}>{item}</li>
+            ))}
           </ul>
           {strings.datasetImport.fileNote}
         </StyledInfoText>
@@ -293,7 +295,9 @@ function GeneralTabContent({
           {strings.datasetImport.languages}
         </Typography>
         <Tooltip title={strings.datasetImport.languagesTooltip}>
-          <FontAwesomeIcon icon={faInfoCircle} style={{ color: '#2285d7' }} />
+          <span>
+            <FontAwesomeIcon icon={faInfoCircle} style={{ color: '#2285d7' }} />
+          </span>
         </Tooltip>
       </StyledFlexRow>
       <StyledLanguageCheckboxGroup>
@@ -410,7 +414,11 @@ function GeneralTabContent({
 
       {/* Bottom action bar */}
       <StyledButtonRow>
-        <StyledSecondaryButton type="button" tabIndex={0}>
+        <StyledSecondaryButton
+          type="button"
+          tabIndex={0}
+          onClick={() => store.dispatch(setIsDatasetImportOpen(false))}
+        >
           {strings.datasetImport.cancel}
         </StyledSecondaryButton>
         <StyledPrimaryButton
@@ -446,6 +454,8 @@ const initialErrors = {
 };
 
 const DatasetImport = () => {
+  const { store } = useContext(ReactReduxContext);
+
   const [selectedTab, setSelectedTab] = useState(0);
   const [uploadedFile, setUploadedFile] = useState(null);
 
@@ -480,12 +490,12 @@ const DatasetImport = () => {
     Object.values(langObj).every((val) => !val)
   );
   const disableImport = !(
-    uploadedFile && 
-    requiredFi && 
-    requiredSv && 
-    requiredEn && 
+    uploadedFile &&
+    requiredFi &&
+    requiredSv &&
+    requiredEn &&
     allFieldsValid
-  );  
+  );
 
   const handleFileUpload = (event) => {
     const file = event.target.files && event.target.files[0];
@@ -524,6 +534,7 @@ const DatasetImport = () => {
       >
         <SwiperSlide>
           <GeneralTabContent
+            store={store}
             fields={fields}
             errors={errors}
             lang={lang}
