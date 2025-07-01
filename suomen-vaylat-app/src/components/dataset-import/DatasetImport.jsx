@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, useContext } from 'react';
 import styled from 'styled-components';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import {
@@ -9,26 +9,37 @@ import {
   Link,
   IconButton,
   Tooltip,
-  Divider
+  Divider,
+  CircularProgress
 } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faInfoCircle,
-  faTimes,
-  faUpload
+  faUpload,
+  faTimes
 } from '@fortawesome/free-solid-svg-icons';
 import strings from '../../translations';
 import { setIsDatasetImportOpen } from '../../state/slices/uiSlice';
-import { useContext } from 'react';
 import { ReactReduxContext } from 'react-redux';
+import ZipFileInput from './ZipFileInput';
 
-const allowedCharsExp = /^[A-Za-z0-9_\-\(\)]*$/;
-const allowedMsg =
-  'Vain isot/pienet kirjaimet, numerot, alaviiva, väliviiva, ( ja ) sallitaan.';
-
-// Styled components same as before...
+// --- Styled Components (your original styles) ---
 const StyledMainContainer = styled.div`
   background: #f6f7fa;
+  border-radius: 16px;
+  position: relative; /* so overlay child is scoped here */
+`;
+const OverlaySpinner = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.65);
+  z-index: 99;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border-radius: 16px;
 `;
 const StyledTabs = styled.div`
@@ -68,34 +79,6 @@ const StyledSwiper = styled(Swiper)`
     min-height: 200px;
   }
   transition: box-shadow 0.3s ease-out;
-`;
-const StyledUploadBox = styled.div`
-  padding: 24px 0;
-  margin-bottom: 16px;
-  background: #eaf3fa;
-  border-radius: 16px;
-  border: 2px dashed #6daae2;
-  text-align: center;
-  position: relative;
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
-const StyledUploadedFileWrapper = styled.div`
-  margin-bottom: 16px;
-  display: flex;
-  align-items: center;
-`;
-const StyledFileLabel = styled.span`
-  font-weight: 600;
-`;
-const StyledInfoText = styled(Typography)`
-  margin-bottom: 16px !important;
-`;
-const StyledUploadButtonText = styled(Typography)`
-  color: #2285d7;
-  font-weight: 500 !important;
 `;
 const StyledFlexRow = styled.div`
   display: flex;
@@ -197,57 +180,40 @@ function GeneralTabContent({
   errors,
   lang,
   setLang,
-  fileInput,
   uploadedFile,
   setUploadedFile,
-  handleFileUpload,
+  fileError,
+  setFileError,
   handleInput,
-  disableImport
+  disableImport,
+  isSubmitting,
+  setIsSubmitting
 }) {
   return (
     <>
-      <StyledFormGroup>
-        <StyledInfoText variant="body2" component="div">
-          {strings.datasetImport.infoText}
-          <ul style={{ marginBlock: 0 }}>
-            {strings.datasetImport.fileList.map((item, idx) => (
-              <li key={idx}>{item}</li>
-            ))}
-          </ul>
-          {strings.datasetImport.fileNote}
-        </StyledInfoText>
-      </StyledFormGroup>
-      <StyledUploadBox onClick={() => fileInput.current.click()}>
-        <input
-          ref={fileInput}
-          type="file"
-          accept=".zip"
-          hidden
-          onChange={handleFileUpload}
-        />
-        <FontAwesomeIcon
-          icon={faUpload}
-          style={{ fontSize: 32, color: '#4a90e2', marginBottom: 6 }}
-        />
-        <StyledUploadButtonText>
-          {strings.datasetImport.uploadTip}
-        </StyledUploadButtonText>
-      </StyledUploadBox>
-      {uploadedFile && (
-        <StyledUploadedFileWrapper>
-          <StyledFileLabel>
-            {strings.datasetImport.uploadedFile}&nbsp;
-          </StyledFileLabel>
-          <StyledLink href="#">{uploadedFile.name}</StyledLink>
-          <IconButton
-            size="small"
-            sx={{ marginLeft: 1, color: '#c00' }}
-            onClick={() => setUploadedFile(null)}
+      <ZipFileInput
+        value={uploadedFile}
+        onFileChange={setUploadedFile}
+        error={fileError}
+        setError={setFileError}
+        disabled={isSubmitting}
+      >
+        <StyledFormGroup>
+          <Typography
+            variant="body2"
+            component="div"
+            style={{ marginBottom: 16 }}
           >
-            <FontAwesomeIcon icon={faTimes} />
-          </IconButton>
-        </StyledUploadedFileWrapper>
-      )}
+            {strings.datasetImport.infoText}
+            <ul style={{ marginBlock: 0 }}>
+              {strings.datasetImport.fileList.map((item, idx) => (
+                <li key={idx}>{item}</li>
+              ))}
+            </ul>
+            {strings.datasetImport.fileNote}
+          </Typography>
+        </StyledFormGroup>
+      </ZipFileInput>
       {/* Finnish fields (always shown) */}
       <StyledFormGroup>
         <StyledLabel>
@@ -288,7 +254,6 @@ function GeneralTabContent({
         />
         {errors.fi.source && <StyledErrorMsg>{allowedMsg}</StyledErrorMsg>}
       </StyledFormGroup>
-
       {/* Language selection */}
       <StyledFlexRow>
         <Typography style={{ marginRight: 8 }}>
@@ -320,7 +285,6 @@ function GeneralTabContent({
           label={strings.datasetImport.swedish}
         />
       </StyledLanguageCheckboxGroup>
-
       {/* Swedish fields */}
       {lang.sv && (
         <StyledLanguageGroup>
@@ -328,7 +292,6 @@ function GeneralTabContent({
           <StyledLangSectionTitle variant="subtitle2">
             {strings.datasetImport.swedishSectionTitle}
           </StyledLangSectionTitle>
-
           <StyledLabel>
             {strings.datasetImport.swedishLayerName}{' '}
             <span style={{ color: '#c00' }}>*</span>
@@ -342,7 +305,6 @@ function GeneralTabContent({
             InputLabelProps={{ shrink: true }}
           />
           {errors.sv.name && <StyledErrorMsg>{allowedMsg}</StyledErrorMsg>}
-
           <StyledLabel>{strings.datasetImport.swedishDesc}</StyledLabel>
           <StyledTextField
             value={fields.sv.desc}
@@ -353,7 +315,6 @@ function GeneralTabContent({
             InputLabelProps={{ shrink: true }}
           />
           {errors.sv.desc && <StyledErrorMsg>{allowedMsg}</StyledErrorMsg>}
-
           <StyledLabel>{strings.datasetImport.swedishSource}</StyledLabel>
           <StyledTextField
             value={fields.sv.source}
@@ -366,7 +327,6 @@ function GeneralTabContent({
           {errors.sv.source && <StyledErrorMsg>{allowedMsg}</StyledErrorMsg>}
         </StyledLanguageGroup>
       )}
-
       {/* English fields */}
       {lang.en && (
         <StyledLanguageGroup>
@@ -387,7 +347,6 @@ function GeneralTabContent({
             InputLabelProps={{ shrink: true }}
           />
           {errors.en.name && <StyledErrorMsg>{allowedMsg}</StyledErrorMsg>}
-
           <StyledLabel>{strings.datasetImport.englishDesc}</StyledLabel>
           <StyledTextField
             value={fields.en.desc}
@@ -398,7 +357,6 @@ function GeneralTabContent({
             InputLabelProps={{ shrink: true }}
           />
           {errors.en.desc && <StyledErrorMsg>{allowedMsg}</StyledErrorMsg>}
-
           <StyledLabel>{strings.datasetImport.englishSource}</StyledLabel>
           <StyledTextField
             value={fields.en.source}
@@ -411,12 +369,13 @@ function GeneralTabContent({
           {errors.en.source && <StyledErrorMsg>{allowedMsg}</StyledErrorMsg>}
         </StyledLanguageGroup>
       )}
-
       {/* Bottom action bar */}
       <StyledButtonRow>
         <StyledSecondaryButton
           type="button"
           tabIndex={0}
+          disabled={isSubmitting}
+          aria-disabled={isSubmitting}
           onClick={() => store.dispatch(setIsDatasetImportOpen(false))}
         >
           {strings.datasetImport.cancel}
@@ -424,8 +383,26 @@ function GeneralTabContent({
         <StyledPrimaryButton
           type="button"
           tabIndex={0}
-          disabled={disableImport}
-          aria-disabled={disableImport}
+          disabled={disableImport || isSubmitting}
+          aria-disabled={disableImport || isSubmitting}
+          onClick={() => {
+            if (!disableImport && !isSubmitting) {
+              setIsSubmitting(true);
+              setTimeout(() => {
+                setIsSubmitting(false);
+                const obj = {
+                  file: uploadedFile,
+                  fields: {
+                    fi: fields.fi,
+                    sv: lang.sv ? fields.sv : undefined,
+                    en: lang.en ? fields.en : undefined
+                  }
+                };
+                console.log('Lähetettävä aineisto:', obj);
+                alert('Konsoliin tulostettu lähetettävä objekti!');
+              }, 1200);
+            }
+          }}
         >
           <FontAwesomeIcon icon={faUpload} />
           {strings.datasetImport.import}
@@ -441,6 +418,9 @@ const VisualisointiTabContent = () => (
   </Typography>
 );
 
+const allowedCharsExp = /^[A-Za-z0-9_\-\(\)]*$/;
+const allowedMsg =
+  'Vain isot/pienet kirjaimet, numerot, alaviiva, väliviiva, ( ja ) sallitaan.';
 const initialLangObj = { name: '', desc: '', source: '' };
 const initialFields = {
   fi: { ...initialLangObj },
@@ -458,15 +438,15 @@ const DatasetImport = () => {
 
   const [selectedTab, setSelectedTab] = useState(0);
   const [uploadedFile, setUploadedFile] = useState(null);
+  const [fileError, setFileError] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [fields, setFields] = useState(initialFields);
   const [errors, setErrors] = useState(initialErrors);
   const [lang, setLang] = useState({ en: false, sv: false });
 
-  const fileInput = useRef();
   const swiperRef = useRef();
 
-  // Universal handler for all fields/languages
   function handleInput(language, field, value) {
     setFields((old) => ({
       ...old,
@@ -481,26 +461,20 @@ const DatasetImport = () => {
     }));
   }
 
-  // Import button: only name fields of selected languages must be filled AND all errors must be false
   const requiredFi = !!fields.fi.name && !errors.fi.name;
   const requiredSv = !lang.sv || (!!fields.sv.name && !errors.sv.name);
   const requiredEn = !lang.en || (!!fields.en.name && !errors.en.name);
-  // All error fields must be false (if empty, false; if filled/illegal, true)
   const allFieldsValid = Object.values(errors).every((langObj) =>
     Object.values(langObj).every((val) => !val)
   );
   const disableImport = !(
     uploadedFile &&
+    !fileError &&
     requiredFi &&
     requiredSv &&
     requiredEn &&
     allFieldsValid
   );
-
-  const handleFileUpload = (event) => {
-    const file = event.target.files && event.target.files[0];
-    setUploadedFile(file ? file : null);
-  };
 
   useEffect(() => {
     if (swiperRef.current && swiperRef.current.swiper) {
@@ -510,6 +484,11 @@ const DatasetImport = () => {
 
   return (
     <StyledMainContainer>
+      {isSubmitting && (
+        <OverlaySpinner>
+          <CircularProgress size={62} thickness={4} />
+        </OverlaySpinner>
+      )}
       <StyledTabs>
         <StyledTab
           isSelected={selectedTab === 0}
@@ -539,12 +518,14 @@ const DatasetImport = () => {
             errors={errors}
             lang={lang}
             setLang={setLang}
-            fileInput={fileInput}
             uploadedFile={uploadedFile}
             setUploadedFile={setUploadedFile}
-            handleFileUpload={handleFileUpload}
+            fileError={fileError}
+            setFileError={setFileError}
             handleInput={handleInput}
             disableImport={disableImport}
+            isSubmitting={isSubmitting}
+            setIsSubmitting={setIsSubmitting}
           />
         </SwiperSlide>
         <SwiperSlide>
