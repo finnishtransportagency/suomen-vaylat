@@ -480,11 +480,12 @@ const DatasetImport = () => {
     Object.values(langObj).every((val) => !val)
   );
   const disableImport = !(
-    requiredFi &&
-    requiredSv &&
-    requiredEn &&
+    uploadedFile && 
+    requiredFi && 
+    requiredSv && 
+    requiredEn && 
     allFieldsValid
-  );
+  );  
 
   const handleFileUpload = (event) => {
     const file = event.target.files && event.target.files[0];
