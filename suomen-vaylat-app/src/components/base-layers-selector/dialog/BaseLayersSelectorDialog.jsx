@@ -1,9 +1,9 @@
 import { useContext } from 'react';
-import Dialog from '../dialog/Dialog';
-import { useAppSelector } from '../../state/hooks';
-import strings from '../../translations';
-import BaseLayerSelectorMenu from './BaseLayersSelectorMenu';
-import { setIsBaseLayerSelectorMenuOpen } from '../../state/slices/uiSlice';
+import Dialog from '../../dialog/Dialog';
+import { useAppSelector } from '../../../state/hooks';
+import strings from '../../../translations';
+import BaseLayerSelectorMenu from '../BaseLayersSelectorMenu';
+import { setIsBaseLayerSelectorMenuOpen } from '../../../state/slices/uiSlice';
 import { ReactReduxContext } from 'react-redux';
 import ModeEditOutlineTwoToneIcon from '@mui/icons-material/ModeEditOutlineTwoTone';
 

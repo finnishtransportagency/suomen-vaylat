@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { ReactReduxContext } from "react-redux";
 import { useAppSelector } from '../../state/hooks';
@@ -7,24 +7,24 @@ import strings from '../../translations';
 import { Button } from "react-bootstrap";
 import { setSelectedBaseLayers } from '../../state/slices/uiSlice';
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
-
+import { BASE_LAYERS_LOCALSTORAGE } from '../../utils/constants';
 
 const StyledMenuContainer = styled.div`
-    padding: 0px 10px 10px;
+    padding: 0px 12px 12px;
     display: grid;
 `;
 
 const HorizontalLine = styled.div`
     width: 100%;
     height: 1px;
-    background-color: ${props => props.theme.colors.mainColor1};
+    background-color: #D7D9DB;
     margin-top: 20px; /* Adjust the margin as needed */
 `;
 
 const StyledFooter = styled.div`
     display: flex;
     justify-content: flex-end;
-    padding: 20px 0px 0px;
+    padding: 12px 0px 0px;
     align-items: center;
 `;
 
@@ -42,8 +42,8 @@ const StyledDescriptionText = styled.div`
 `;
 
 const StyledLayerColumnContainer = styled.div`
-    gap: 30px; /* Adds space between buttons */
     display: flex;
+    justify-content: space-between;
     flex-direction: row;
 `;
 
@@ -51,10 +51,9 @@ const StyledDraggableButton = styled.div`
     user-select: none;
     cursor: grab;
     background-color: ${props => props.theme.colors.mainWhite} !important; /* Blue or Gray */
-    outline: 2px solid ${props => props.theme.colors.mainColor1} !important; /* Blue dotted outline */
+    outline: 1px solid ${props => props.theme.colors.mainColor1} !important; /* Blue dotted outline */
     box-shadow: 0px 2px 4px #0000004D;
     border-radius: 8px;
-    border: 20px;
     width: 12em;
     margin-top: 4px;
     display: flex;
@@ -104,7 +103,8 @@ const StyledSwitchButtonText = styled.div`
     text-overflow: ellipsis;
     white-space: nowrap;
     font-size: 14px;
-    font-weight: 600;
+    font-weight: 500;
+    color: ${props => props.theme.colors.mainColor1};
     user-select: none;
     align-items: center;
 `;
@@ -114,7 +114,8 @@ const StyledDraggableButtonText = styled.div`
     text-overflow: ellipsis;
     white-space: nowrap;
     font-size: 14px;
-    font-weight: 600;
+    font-weight: 500;
+    color: ${props => props.theme.colors.mainColor1};
     user-select: none;
     align-items: center;
     margin-top: 6px;
@@ -125,7 +126,7 @@ const StyledDraggableButtonContainer = styled.div`
     display: flex;
     gap: 10px;
     min-height: 40.60px;
-    margin-bottom: 12px;
+    margin-bottom: 20px;
 `;
 
 const StyledDragIndicatorIcon = styled(DragIndicatorIcon)`
@@ -140,7 +141,7 @@ const StyledDottedOutline = styled.div`
     border-radius: 8px;
     width: 12em;
     margin-top: 4px;
-    border: 2px dashed ${props => props.theme.colors.mainColor1}; /* Blue dotted outline */
+    border: 1px dashed ${props => props.theme.colors.mainColor1}; /* Blue dotted outline */
     @media ${props => props.theme.device.laptop} {
         max-width: 120px;
     };
@@ -149,9 +150,16 @@ const StyledDottedOutline = styled.div`
     };
 `;
 
-const StyledMenuHeader = styled.th`
+const StyledMenuHeader = styled.p`
     font-size: 20px;
     font-weight: 600;
+    margin-bottom: 12px;
+`;
+
+const StyledGroupHeader = styled.p`
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 0px;
 `;
 
 const StyledLayerColumn = styled.div`
@@ -177,7 +185,7 @@ const StyledSwitchContainer = styled.div`
     margin-top: 3px;
     display: flex;
     align-items: center;
-    background-color: ${(props) => (props.isSelected ? "#8DCB6D" : "#AAAAAA")};
+    background-color: ${(props) => props.isSelected ? props.theme.colors.mainColor1 : "#00000033"};
     cursor: pointer;
     margin-right: 0px;
 `;
@@ -305,7 +313,7 @@ const BaseLayerSelectorMenu = () => {
     const LayerColumn = (group) => {
         return(
             <StyledLayerColumn>
-                <StyledMenuHeader>{group.locale.fi.name}</StyledMenuHeader>
+                <StyledGroupHeader>{group.locale.fi.name}</StyledGroupHeader>
                 {group.layers?.map((layerID) => {
                     const layer = allLayers.find(layer => layer.id === layerID);
                     if (!layer) return null;

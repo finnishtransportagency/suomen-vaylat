@@ -33,7 +33,7 @@ import ZoomMenu from '../zoom-features/ZoomMenu';
 import WarningDialog from '../warning-dialog/dialog/WarningDialog';
 import ThemeMenu from '../layerlists/theme-layerlist/ThemeMenu';
 import BaseLayerSelector from '../base-layers-selector/BaseLayersSelector';
-import BaseLayerSelectorDialog from '../base-layers-selector/BaseLayersSelectorDialog';
+import BaseLayerSelectorDialog from '../base-layers-selector/dialog/BaseLayersSelectorDialog';
 import { isMobile } from '../../theme/theme';
 import { useAppSelector } from '../../state/hooks';
 import DrawtoolMarkersDialog from '../measurement-tools/dialog/DrawtoolMarkersDialog';
