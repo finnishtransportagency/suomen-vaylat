@@ -99,7 +99,7 @@ const BaseLayerSelector = () => {
     const BaseLayerButton = ({ action, layer, isSelected }) => {
         return(
             <StyledButton
-                id={`dataset-import-base-layer-btn-${layer.id}`}
+                id={`baselayer-selector-base-layer-btn-${layer.id}`}
                 onClick={() => action(layer)}
                 active={isSelected}
                 tabIndex={0}
@@ -107,7 +107,7 @@ const BaseLayerSelector = () => {
                 aria-pressed={isSelected}
                 role="button"
             >
-                <StyledButtonText id={`dataset-import-base-layer-btn-text-${layer.id}`}>
+                <StyledButtonText id={`baselayer-selector-base-layer-btn-text-${layer.id}`}>
                     {layer.name}
                 </StyledButtonText>
             </StyledButton>
@@ -117,7 +117,7 @@ const BaseLayerSelector = () => {
     const BaseLayerSelectorMenuButton = () => {
         return(
             <StyledMenuButton
-                id="dataset-import-base-layer-menu-btn"
+                id="baselayer-selector-base-layer-menu-btn"
                 onClick={() => store.dispatch(setIsBaseLayerSelectorMenuOpen(true))}
                 aria-label={strings.baseLayerSelector.labels.editBaseLayers}
                 tabIndex={0}
@@ -130,7 +130,7 @@ const BaseLayerSelector = () => {
     }
 
     return(
-        <StyledBaselayerButtonContainer id="dataset-import-base-layer-container">
+        <StyledBaselayerButtonContainer id="baselayer-selector-base-layer-container">
             {allLayers.length > 0 && selectedBaseLayers.map((layerID) => {
                 const layer = allLayers.find(layer => layer.id === layerID);
                 return(

@@ -276,7 +276,7 @@ const BaseLayerSelectorMenu = () => {
   const DraggableBtn = ({ content, index, layerId }) => {
     return (
       <StyledDraggableButton
-        id={`dataset-import-draggable-layer-btn-${layerId}`}
+        id={`baselayer-selector-draggable-layer-btn-${layerId}`}
         draggable={true}
         tabIndex={0}
         aria-label={
@@ -312,11 +312,11 @@ const BaseLayerSelectorMenu = () => {
         }}
       >
         <StyledDraggableButtonText
-          id={`dataset-import-draggable-layer-btn-text-${layerId}`}
+          id={`baselayer-selector-draggable-layer-btn-text-${layerId}`}
           draggable={false}
         >
           <StyledDragIndicatorIcon
-            id={`dataset-import-drag-icon-${layerId}`}
+            id={`baselayer-selector-drag-icon-${layerId}`}
             draggable={false}
             aria-hidden="true"
           />
@@ -337,7 +337,7 @@ const BaseLayerSelectorMenu = () => {
 
     return (
       <StyledSwitchContainer
-        id={`dataset-import-layer-switch-${layer.id}`}
+        id={`baselayer-selector-layer-switch-${layer.id}`}
         isSelected={isSelected}
         onClick={(event) => handleClick(event)}
         aria-checked={isSelected}
@@ -364,7 +364,7 @@ const BaseLayerSelectorMenu = () => {
   const SaveButton = () => {
     return (
       <StyledSaveButton
-        id="dataset-import-base-layer-save-button"
+        id="baselayer-selector-base-layer-save-button"
         aria-label={strings.baseLayerSelector.labels.saveAriaLabel}
         tabIndex={0}
         onClick={handleSaveBaseLayers}
@@ -377,7 +377,7 @@ const BaseLayerSelectorMenu = () => {
   const CancelButton = () => {
     return (
       <StyledCancelButton
-        id="dataset-import-base-layer-cancel-button"
+        id="baselayer-selector-base-layer-cancel-button"
         aria-label={strings.baseLayerSelector.labels.cancelAriaLabel}
         tabIndex={0}
         onClick={() => store.dispatch(setIsBaseLayerSelectorMenuOpen(false))}
@@ -403,8 +403,8 @@ const BaseLayerSelectorMenu = () => {
 
   const LayerColumn = (group) => {
     return (
-      <StyledLayerColumn id={`dataset-import-group-col-${group.id}`}>
-        <StyledGroupHeader id={`dataset-import-group-header-${group.id}`}>
+      <StyledLayerColumn id={`baselayer-selector-group-col-${group.id}`}>
+        <StyledGroupHeader id={`baselayer-selector-group-header-${group.id}`}>
           {group.locale.fi.name}
         </StyledGroupHeader>
         {group.layers?.map((layerID) => {
@@ -413,10 +413,10 @@ const BaseLayerSelectorMenu = () => {
           return (
             <React.Fragment key={layer.id}>
               <StyledLayerColumnField
-                id={`dataset-import-layer-field-${layer.id}`}
+                id={`baselayer-selector-layer-field-${layer.id}`}
               >
                 <StyledSwitchButtonText
-                  id={`dataset-import-layer-text-${layer.id}`}
+                  id={`baselayer-selector-layer-text-${layer.id}`}
                 >
                   {layer.name}
                 </StyledSwitchButtonText>
@@ -435,17 +435,17 @@ const BaseLayerSelectorMenu = () => {
   };
 
   return (
-    <StyledMenuContainer id="dataset-import-base-layer-selector-menu">
+    <StyledMenuContainer id="baselayer-selector-base-layer-selector-menu">
       <StyledDescription>
         <StyledDescriptionText>
           {strings.baseLayerSelector.description}
         </StyledDescriptionText>
       </StyledDescription>
 
-      <StyledMenuHeader id="dataset-import-selected-base-layers-header">
+      <StyledMenuHeader id="baselayer-selector-selected-base-layers-header">
         {strings.baseLayerSelector.selectedBaseLayers}
       </StyledMenuHeader>
-      <StyledDraggableButtonContainer id="dataset-import-selected-base-layers-container">
+      <StyledDraggableButtonContainer id="baselayer-selector-selected-base-layers-container">
         {selectedLayersListMenu.map((layerID, index) => {
           const layer = allLayers.find((layer) => layer.id === layerID);
           return (
@@ -458,11 +458,11 @@ const BaseLayerSelectorMenu = () => {
           );
         })}
         {selectedLayersListMenu.length < 4 && (
-          <StyledDottedOutline id="dataset-import-new-layer-dotted-outline" />
+          <StyledDottedOutline id="baselayer-selector-new-layer-dotted-outline" />
         )}
       </StyledDraggableButtonContainer>
 
-      <StyledLayerColumnContainer id="dataset-import-layer-columns">
+      <StyledLayerColumnContainer id="baselayer-selector-layer-columns">
         {allGroups.map((group) => {
           if (!group) return null;
           if (group.id === 1) {
