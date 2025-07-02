@@ -122,6 +122,7 @@ const BaseLayerSelector = () => {
                 aria-label={strings.baseLayerSelector.labels.editBaseLayers}
                 tabIndex={0}
                 role="button"
+                disabled={allLayers.length == 0}
             >
                 <ModeEditOutlineTwoToneIcon />
             </StyledMenuButton>
