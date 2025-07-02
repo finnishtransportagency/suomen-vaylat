@@ -1207,6 +1207,14 @@
     "description": "You can adjust the order and transparency of selected map layers in the selected layers section of the map layer menu.",
     "selectedBaseLayers": "Selected background maps for quick selection and their order.",
     "save": "Save",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "labels": {
+      "cancelAriaLabel": "Cancel base layer selection",
+      "saveAriaLabel": "Save selected base layers",
+      "layerSwitchAriaLabel": "Enable layer ",
+      "dragSelectedLayerAriaLabel": "Move layer ",
+      "selectBaseLayer": "Select base layer ",
+      "editBaseLayers": "Change base layers"
+    }
   }
 }

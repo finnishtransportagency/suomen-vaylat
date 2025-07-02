@@ -1278,6 +1278,14 @@
     "description": "Valittujen karttatasojen järjestystä ja läpinäkyvyyttä voit säätää valitut tasot -kohdassa karttataso-valikossa.",
     "selectedBaseLayers": "Valitut taustakartat pikavalikkoon ja niiden järjestys.",
     "save": "Tallenna",
-    "cancel": "Peruuta"
+    "cancel": "Peruuta",
+    "labels": {
+      "cancelAriaLabel": "Peruuta taustakarttavalinta",
+      "saveAriaLabel": "Tallenna valitut taustakartat",
+      "layerSwitchAriaLabel": "Ota käyttöön taso ",
+      "dragSelectedLayerAriaLabel": "Siirrä taso ",
+      "selectBaseLayer": "Valitse taustakartta ",
+      "editBaseLayers": "Vaihda taustakarttoja"
+    }
   }
 }

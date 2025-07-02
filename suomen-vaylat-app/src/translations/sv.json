@@ -1206,6 +1206,14 @@
     "description": "Du kan justera ordningen och genomskinligheten för valda kartlager i avsnittet valda lager i kartlagsmenyn.",
     "selectedBaseLayers": "Valda bakgrundskartor för snabbval och deras ordning.",
     "save": "Spara",
-    "cancel": "Avbryt"
+    "cancel": "Avbryt",
+    "labels": {
+      "cancelAriaLabel": "Avbryt bakgrundskartval",
+      "saveAriaLabel": "Spara valda bakgrundskartor",
+      "layerSwitchAriaLabel": "Aktivera lager ",
+      "dragSelectedLayerAriaLabel": "Flytta lager ",
+      "selectBaseLayer": "Välj bakgrundskarta ",
+      "editBaseLayers": "Byt bakgrundskartor"
+    }     
   }
 }

@@ -10,6 +10,7 @@ import { setIsBaseLayerSelectorMenuOpen } from '../../state/slices/uiSlice';
 import ModeEditOutlineTwoToneIcon from '@mui/icons-material/ModeEditOutlineTwoTone';
 import { BASE_LAYERS_LOCALSTORAGE } from '../../utils/constants';
 import { setSelectedBaseLayers } from '../../state/slices/uiSlice';
+import strings from '../../translations';
 
 const StyledBaselayerButtonContainer = styled(motion.div)` 
     position: absolute;
@@ -97,9 +98,17 @@ const BaseLayerSelector = () => {
 
     const BaseLayerButton = ({ action, layer, isSelected }) => {
         return(
-            <StyledButton onClick={() => action(layer)} active={isSelected}>
-                <StyledButtonText>
-                    {layer.name} {/* Display layer name */}
+            <StyledButton
+                id={`dataset-import-base-layer-btn-${layer.id}`}
+                onClick={() => action(layer)}
+                active={isSelected}
+                tabIndex={0}
+                aria-label={strings.baseLayerSelector.labels.selectBaseLayer + layer.name}
+                aria-pressed={isSelected}
+                role="button"
+            >
+                <StyledButtonText id={`dataset-import-base-layer-btn-text-${layer.id}`}>
+                    {layer.name}
                 </StyledButtonText>
             </StyledButton>
         );
@@ -107,18 +116,22 @@ const BaseLayerSelector = () => {
 
     const BaseLayerSelectorMenuButton = () => {
         return(
-            <StyledMenuButton onClick={() => store.dispatch(setIsBaseLayerSelectorMenuOpen(true))} >
+            <StyledMenuButton
+                id="dataset-import-base-layer-menu-btn"
+                onClick={() => store.dispatch(setIsBaseLayerSelectorMenuOpen(true))}
+                aria-label={strings.baseLayerSelector.labels.editBaseLayers}
+                tabIndex={0}
+                role="button"
+            >
                 <ModeEditOutlineTwoToneIcon />
             </StyledMenuButton>
         )
     }
-    console.log(allLayers)
 
     return(
-        <StyledBaselayerButtonContainer>
+        <StyledBaselayerButtonContainer id="dataset-import-base-layer-container">
             {allLayers.length > 0 && selectedBaseLayers.map((layerID) => {
                 const layer = allLayers.find(layer => layer.id === layerID);
-                console.log(layer)
                 return(
                     <BaseLayerButton
                         key={layer.id}
@@ -128,7 +141,7 @@ const BaseLayerSelector = () => {
                     />
                 );
             })}
-            <BaseLayerSelectorMenuButton/>
+            <BaseLayerSelectorMenuButton />
         </StyledBaselayerButtonContainer>
     );
 };
