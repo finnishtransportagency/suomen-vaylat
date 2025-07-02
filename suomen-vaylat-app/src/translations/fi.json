@@ -53,7 +53,7 @@
   },
   "datasetImport": {
       "title": "Omien aineistojen tuonti",
-      "menuButtonTitle": "Tuo omia aineistoja",
+      "menuButtonTitle": "Tuo aineistoja",
       "tabGeneral": "Yleiset",
       "tabVisualization": "Visualisointi",
       "infoText": "Lataa aineisto tietokoneeltasi yhdeksi zip-tiedostoksi pakattuna, joka sisältää tarvittavat tiedostot jostain seuraavasta tiedostomuodosta:",
