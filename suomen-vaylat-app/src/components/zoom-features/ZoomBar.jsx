@@ -218,7 +218,7 @@ const ZoomBar = ({
           />
         </StyledZoomBarZoomFeatures>
         <CircleButton
-          icon={<StyledXYIcon src={XYicon} />}
+          icon={<StyledXYIcon aria-label={strings.tooltips.coordinateTool + "icon"} src={XYicon} />}
           text={strings.tooltips.coordinateTool}
           toggleState={isCoordinateToolOpen}
           clickAction={() =>
