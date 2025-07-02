@@ -5,12 +5,12 @@ import { useAppSelector } from '../../state/hooks';
 import { useContext, useState } from 'react';
 import strings from '../../translations';
 import { Button } from "react-bootstrap";
-import { setSelectedBaseLayers } from '../../state/slices/uiSlice';
+import { setIsBaseLayerSelectorMenuOpen, setSelectedBaseLayers } from '../../state/slices/uiSlice';
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 import { BASE_LAYERS_LOCALSTORAGE } from '../../utils/constants';
 
 const StyledMenuContainer = styled.div`
-    padding: 0px 12px 12px;
+    padding: 16px;
     display: grid;
 `;
 
@@ -23,15 +23,15 @@ const HorizontalLine = styled.div`
 
 const StyledFooter = styled.div`
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
     padding: 12px 0px 0px;
     align-items: center;
 `;
 
 const StyledDescription = styled.div`
     display: block;
-    margin-block-start: 1em;
-    margin-block-end: 1em;
+    margin-block-start: .5em;
+    margin-block-end: .5em;
     margin-inline-start: 2px;
     margin-inline-end: 2px;
     unicode-bidi: isolate;
@@ -44,6 +44,7 @@ const StyledDescriptionText = styled.div`
 const StyledLayerColumnContainer = styled.div`
     display: flex;
     justify-content: space-between;
+    margin-right: 12px;
     flex-direction: row;
 `;
 
@@ -52,7 +53,6 @@ const StyledDraggableButton = styled.div`
     cursor: grab;
     background-color: ${props => props.theme.colors.mainWhite} !important; /* Blue or Gray */
     outline: 1px solid ${props => props.theme.colors.mainColor1} !important; /* Blue dotted outline */
-    box-shadow: 0px 2px 4px #0000004D;
     border-radius: 8px;
     width: 12em;
     margin-top: 4px;
@@ -60,7 +60,7 @@ const StyledDraggableButton = styled.div`
     align-items: center;
     justify-content: center;
     &:hover {
-        background-color: ${props => props.active ? props.theme.colors.mainColor1 : props.theme.colors.mainColor1 } !important; /* Blue or Gray */
+        background-color: ${props => props.theme.colors.buttonActive } !important;
     }
     @media ${props => props.theme.device.laptop} {
         max-width: 120px;
@@ -73,12 +73,11 @@ const StyledDraggableButton = styled.div`
 const StyledSaveButton = styled(Button)`
     cursor: pointer;
     background-color: ${props => props.theme.colors.mainColor1};
-    box-shadow: 0px 2px 4px #0000004D;
     border-radius: 30px;
     border: none;
     width: 10em;
     &:hover {
-        background-color: ${props => props.active ? props.theme.colors.buttonActive : props.theme.colors.buttonActive } !important; /* Blue or Gray */
+        background-color: ${props => props.theme.colors.buttonActive } !important;
     }
     @media ${props => props.theme.device.laptop} {
         max-width: 120px;
@@ -96,6 +95,37 @@ const StyledButtonText = styled.div`
     font-weight: 600;
     user-select: none;
     align-items: center;
+`;
+
+const StyledCancelButton = styled(Button)`
+    background-color: ${({ theme }) => theme.colors.mainWhite};
+    color: ${({ theme }) => theme.colors.mainColor1};
+    border: 2px solid ${({ theme }) => theme.colors.mainColor1};
+    font-weight: 600;
+    &:hover:enabled {
+    background-color: ${({ theme }) => theme.colors.hover};
+    color: ${({ theme }) => theme.colors.buttonActive};
+    }
+        cursor: pointer;
+    border-radius: 30px;
+    width: 10em;
+    @media ${props => props.theme.device.laptop} {
+        max-width: 120px;
+    };
+    @media ${props => props.theme.device.tablet} {
+        max-width: 100px;
+    };
+`;
+
+const StyledCancelButtonText = styled.div`
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 14px;
+    font-weight: 600;
+    user-select: none;
+    align-items: center;
+    color: ${props => props.theme.colors.mainColor1};
 `;
 
 const StyledSwitchButtonText = styled.div`
@@ -120,6 +150,9 @@ const StyledDraggableButtonText = styled.div`
     align-items: center;
     margin-top: 6px;
     margin-right: 3px;
+    &:hover {
+color: ${props => props.theme.colors.mainWhite } !important;
+    }
 `;
 
 const StyledDraggableButtonContainer = styled.div`
@@ -286,15 +319,32 @@ const BaseLayerSelectorMenu = () => {
         );
     };
 
+    const handleSaveBaseLayers = () => {
+        localStorage.setItem(BASE_LAYERS_LOCALSTORAGE, JSON.stringify(selectedLayersListMenu));
+        store.dispatch(setSelectedBaseLayers(selectedLayersListMenu))
+        store.dispatch(setIsBaseLayerSelectorMenuOpen(false))
+    }
+
     /*"Save" button sends updated list of selected layers to the local store.*/
     const SaveButton = () => {
         return (
-            <StyledSaveButton onClick={() => store.dispatch(setSelectedBaseLayers(selectedLayersListMenu))}>
+            <StyledSaveButton onClick={handleSaveBaseLayers}>
                  <StyledButtonText>
                     {strings.baseLayerSelector.save}
                 </StyledButtonText>
 
             </StyledSaveButton>
+        );
+    };
+
+    const CancelButton = () => {
+        return (
+            <StyledCancelButton onClick={() => store.dispatch(setIsBaseLayerSelectorMenuOpen(false))}>
+                 <StyledCancelButtonText>
+                    {strings.baseLayerSelector.cancel}
+                </StyledCancelButtonText>
+
+            </StyledCancelButton>
         );
     };
 
@@ -377,6 +427,7 @@ const BaseLayerSelectorMenu = () => {
 
             <HorizontalLine></HorizontalLine>
             <StyledFooter>
+                <CancelButton />
                 <SaveButton />
             </StyledFooter>
     

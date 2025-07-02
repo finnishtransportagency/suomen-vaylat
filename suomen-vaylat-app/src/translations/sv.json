@@ -1205,6 +1205,7 @@
     "title": "Bakgrundskartor för snabbval",
     "description": "Du kan justera ordningen och genomskinligheten för valda kartlager i avsnittet valda lager i kartlagsmenyn.",
     "selectedBaseLayers": "Valda bakgrundskartor för snabbval och deras ordning.",
-    "save": "Spara"
+    "save": "Spara",
+    "cancel": "Avbryt"
   }
 }

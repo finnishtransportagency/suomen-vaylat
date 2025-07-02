@@ -1240,6 +1240,7 @@
     "title": "Pikavalikon taustakartat",
     "description": "Valittujen karttatasojen järjestystä ja läpinäkyvyyttä voit säätää valitut tasot -kohdassa karttataso-valikossa.",
     "selectedBaseLayers": "Valitut taustakartat pikavalikkoon ja niiden järjestys.",
-    "save": "Tallenna"
+    "save": "Tallenna",
+    "cancel": "Peruuta"
   }
 }
