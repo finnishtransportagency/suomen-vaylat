@@ -9,6 +9,7 @@ import { setMapLayerVisibility } from '../../state/slices/rpcSlice';
 import { setIsBaseLayerSelectorMenuOpen } from '../../state/slices/uiSlice';
 import ModeEditOutlineTwoToneIcon from '@mui/icons-material/ModeEditOutlineTwoTone';
 import { BASE_LAYERS_LOCALSTORAGE } from '../../utils/constants';
+import { setSelectedBaseLayers } from '../../state/slices/uiSlice';
 
 const StyledBaselayerButtonContainer = styled(motion.div)` 
     position: absolute;
@@ -77,6 +78,18 @@ const BaseLayerSelector = () => {
     const channel = useSelector(state => state.rpc.channel);
     const { selectedBaseLayers } = useAppSelector((state) => state.ui);
 
+    useEffect(() => {
+        const stored = localStorage.getItem(BASE_LAYERS_LOCALSTORAGE);
+        if (stored) {
+            try {
+                store.dispatch(setSelectedBaseLayers(JSON.parse(stored)))
+            } catch (e) {
+                store.dispatch(setSelectedBaseLayers([]));
+            }
+        }
+    }, []);
+    
+
     const handleLayerVisibility = (channel, layer) => {
         store.dispatch(setMapLayerVisibility(layer));
         updateLayers(store, channel);
@@ -99,11 +112,13 @@ const BaseLayerSelector = () => {
             </StyledMenuButton>
         )
     }
+    console.log(allLayers)
 
     return(
         <StyledBaselayerButtonContainer>
-            {selectedBaseLayers.map((layerID) => {
+            {allLayers.length > 0 && selectedBaseLayers.map((layerID) => {
                 const layer = allLayers.find(layer => layer.id === layerID);
+                console.log(layer)
                 return(
                     <BaseLayerButton
                         key={layer.id}

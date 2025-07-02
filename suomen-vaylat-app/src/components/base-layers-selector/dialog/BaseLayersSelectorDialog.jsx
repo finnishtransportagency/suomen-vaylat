@@ -23,7 +23,6 @@ const BaseLayerSelectorDialog = ({ constraintsRef }) => {
       resize={false}
       backdrop={true}
       fullScreenOnMobile={true}
-      titleIcon={ModeEditOutlineTwoToneIcon}
       title={strings.baseLayerSelector.title}
       type={'normal'}
       closeAction={handleCloseBaseLayerSelectorDialog}
