@@ -60,7 +60,8 @@ export const theme = {
         buttonActive: '#004477',
         transparentMain: '#80dbff40',
         hover: '#f0f0f0',
-        darkGrey: '#717070'
+        darkGrey: '#717070',
+        lightGrey: '#D7D9DB'
     },
     device: {
       mobileS: `(max-width: ${size.mobileS})`,

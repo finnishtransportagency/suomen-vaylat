@@ -2,13 +2,13 @@ import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { ReactReduxContext, useSelector } from "react-redux";
 import { useAppSelector } from '../../state/hooks';
-import { useContext } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { Button } from "react-bootstrap";
 import { updateLayers } from '../../utils/rpcUtil';
 import { setMapLayerVisibility } from '../../state/slices/rpcSlice';
 import { setIsBaseLayerSelectorMenuOpen } from '../../state/slices/uiSlice';
 import ModeEditOutlineTwoToneIcon from '@mui/icons-material/ModeEditOutlineTwoTone';
-
+import { BASE_LAYERS_LOCALSTORAGE } from '../../utils/constants';
 
 const StyledBaselayerButtonContainer = styled(motion.div)` 
     position: absolute;
@@ -26,14 +26,14 @@ const StyledBaselayerButtonContainer = styled(motion.div)`
 
 const StyledButton = styled(Button)`
     cursor: pointer;
-    background-color: ${props => props.active ? props.theme.colors.mainColor1 : props.theme.colors.darkGrey } !important; /* Blue or Gray */
+    background-color: ${props => props.active ? props.theme.colors.buttonActive : props.theme.colors.mainColor1 + 'DB' } !important;
     box-shadow: 0px 2px 4px #0000004D;
     border-radius: 30px;
     border: none;
     padding: 6px 12px;
     width: 10em;
     &:hover {
-        background-color: ${props => props.active ? props.theme.colors.buttonActive : props.theme.colors.buttonActive } !important; /* Blue or Gray */
+        background-color: ${props => props.theme.colors.buttonActive} !important;
     }
     @media ${props => props.theme.device.laptop} {
         max-width: 120px;
@@ -45,14 +45,14 @@ const StyledButton = styled(Button)`
 
 const StyledMenuButton = styled(Button)`
     cursor: pointer;
-    background-color: ${props => props.active ? props.theme.colors.mainColor1 : props.theme.colors.darkGrey } !important; /* Blue or Gray */
+    background-color: ${props => props.active ? props.theme.colors.buttonActive : props.theme.colors.mainColor1 + 'DB' } !important;
     box-shadow: 0px 2px 4px #0000004D;
     border-radius: 30px;
     border: none;
     padding: 6px 12px;
     width: 3em;
     &:hover {
-        background-color: ${props => props.active ? props.theme.colors.buttonActive : props.theme.colors.buttonActive } !important; /* Blue or Gray */
+        background-color: ${props => props.theme.colors.buttonActive} !important;
     }
     @media ${props => props.theme.device.laptop} {
         max-width: 120px;
