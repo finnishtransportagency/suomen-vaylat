@@ -5,7 +5,6 @@ import strings from '../../../translations';
 import BaseLayerSelectorMenu from '../BaseLayersSelectorMenu';
 import { setIsBaseLayerSelectorMenuOpen } from '../../../state/slices/uiSlice';
 import { ReactReduxContext } from 'react-redux';
-import ModeEditOutlineTwoToneIcon from '@mui/icons-material/ModeEditOutlineTwoTone';
 
 const BaseLayerSelectorDialog = ({ constraintsRef }) => {
   const { isBaseLayerSelectorMenuOpen } = useAppSelector((state) => state.ui)
