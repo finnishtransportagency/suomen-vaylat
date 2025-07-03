@@ -86,7 +86,9 @@
         "MapInfo (.mif ja .mid)",
         "Google Maps (.kml)"
       ],
-      "validationMsg": "Vain isot/pienet kirjaimet, numerot, alaviiva, väliviiva ja sulut sallitaan."
+      "validationMsg": "Vain isot/pienet kirjaimet, numerot, alaviiva, väliviiva ja sulut sallitaan.",
+      "fileSelect": "Valitse tiedosto",
+      "file": "Tiedosto:"
   },
   "savedContent": {
     "savedContent": "Omat tiedot",

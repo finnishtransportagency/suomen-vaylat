@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { IconButton } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUpload, faTimes } from '@fortawesome/free-solid-svg-icons';
+import strings from '../../translations';
 
 export default function ZipFileInput({
   value,
@@ -101,7 +102,7 @@ export default function ZipFileInput({
           style={{ fontSize: 32, color: '#4a90e2', marginBottom: 6 }}
         />
         <span style={{ color: '#2285d7', fontWeight: 500, marginBottom: 5 }}>
-          Valitse tai raahaa zip-tiedosto
+          {strings.datasetImport.fileSelect}
         </span>
       </div>
       {value && (
@@ -112,7 +113,7 @@ export default function ZipFileInput({
             alignItems: 'center'
           }}
         >
-          <span style={{ fontWeight: 600 }}>Tiedosto:&nbsp;</span>
+          <span style={{ fontWeight: 600 }}>{strings.datasetImport.file}&nbsp;</span>
           <span
             style={{
               color: '#2285d7',
