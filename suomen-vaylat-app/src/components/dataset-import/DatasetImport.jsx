@@ -1,6 +1,8 @@
 import React, { useRef, useState, useEffect, useContext } from 'react';
 import styled from 'styled-components';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import { Slide, toast } from 'react-toastify';
+
 import {
   Typography,
   TextField,
@@ -17,6 +19,7 @@ import strings from '../../translations';
 import { setIsDatasetImportOpen } from '../../state/slices/uiSlice';
 import { ReactReduxContext } from 'react-redux';
 import ZipFileInput from './ZipFileInput';
+import { useAppSelector } from '../../state/hooks';
 
 // --- Styled Components ---
 const StyledMainContainer = styled.div`
@@ -172,6 +175,7 @@ const StyledSecondaryButton = styled(StyledPrimaryButton)`
 // -------------- GeneralTabContent ----------------
 function GeneralTabContent({
   store,
+  handleSubmitDataset,
   fields,
   errors,
   lang,
@@ -182,8 +186,7 @@ function GeneralTabContent({
   setFileError,
   handleInput,
   disableImport,
-  isSubmitting,
-  setIsSubmitting
+  isSubmitting
 }) {
   return (
     <>
@@ -224,7 +227,9 @@ function GeneralTabContent({
           variant="outlined"
           InputLabelProps={{ shrink: true }}
         />
-        {errors.fi.name && <StyledErrorMsg>{strings.datasetImport.validationMsg}</StyledErrorMsg>}
+        {errors.fi.name && (
+          <StyledErrorMsg>{strings.datasetImport.validationMsg}</StyledErrorMsg>
+        )}
       </StyledFormGroup>
       <StyledFormGroup>
         <StyledLabel>{strings.datasetImport.desc}</StyledLabel>
@@ -236,7 +241,9 @@ function GeneralTabContent({
           variant="outlined"
           InputLabelProps={{ shrink: true }}
         />
-        {errors.fi.desc && <StyledErrorMsg>{strings.datasetImport.validationMsg}</StyledErrorMsg>}
+        {errors.fi.desc && (
+          <StyledErrorMsg>{strings.datasetImport.validationMsg}</StyledErrorMsg>
+        )}
       </StyledFormGroup>
       <StyledFormGroup>
         <StyledLabel>{strings.datasetImport.source}</StyledLabel>
@@ -248,7 +255,9 @@ function GeneralTabContent({
           variant="outlined"
           InputLabelProps={{ shrink: true }}
         />
-        {errors.fi.source && <StyledErrorMsg>{strings.datasetImport.validationMsg}</StyledErrorMsg>}
+        {errors.fi.source && (
+          <StyledErrorMsg>{strings.datasetImport.validationMsg}</StyledErrorMsg>
+        )}
       </StyledFormGroup>
       {/* Language selection */}
       <StyledFlexRow>
@@ -300,7 +309,11 @@ function GeneralTabContent({
             variant="outlined"
             InputLabelProps={{ shrink: true }}
           />
-          {errors.sv.name && <StyledErrorMsg>{strings.datasetImport.validationMsg}</StyledErrorMsg>}
+          {errors.sv.name && (
+            <StyledErrorMsg>
+              {strings.datasetImport.validationMsg}
+            </StyledErrorMsg>
+          )}
           <StyledLabel>{strings.datasetImport.swedishDesc}</StyledLabel>
           <StyledTextField
             value={fields.sv.desc}
@@ -310,7 +323,11 @@ function GeneralTabContent({
             variant="outlined"
             InputLabelProps={{ shrink: true }}
           />
-          {errors.sv.desc && <StyledErrorMsg>{strings.datasetImport.validationMsg}</StyledErrorMsg>}
+          {errors.sv.desc && (
+            <StyledErrorMsg>
+              {strings.datasetImport.validationMsg}
+            </StyledErrorMsg>
+          )}
           <StyledLabel>{strings.datasetImport.swedishSource}</StyledLabel>
           <StyledTextField
             value={fields.sv.source}
@@ -320,7 +337,11 @@ function GeneralTabContent({
             variant="outlined"
             InputLabelProps={{ shrink: true }}
           />
-          {errors.sv.source && <StyledErrorMsg>{strings.datasetImport.validationMsg}</StyledErrorMsg>}
+          {errors.sv.source && (
+            <StyledErrorMsg>
+              {strings.datasetImport.validationMsg}
+            </StyledErrorMsg>
+          )}
         </StyledLanguageGroup>
       )}
       {/* English fields */}
@@ -342,7 +363,11 @@ function GeneralTabContent({
             variant="outlined"
             InputLabelProps={{ shrink: true }}
           />
-          {errors.en.name && <StyledErrorMsg>{strings.datasetImport.validationMsg}</StyledErrorMsg>}
+          {errors.en.name && (
+            <StyledErrorMsg>
+              {strings.datasetImport.validationMsg}
+            </StyledErrorMsg>
+          )}
           <StyledLabel>{strings.datasetImport.englishDesc}</StyledLabel>
           <StyledTextField
             value={fields.en.desc}
@@ -352,7 +377,11 @@ function GeneralTabContent({
             variant="outlined"
             InputLabelProps={{ shrink: true }}
           />
-          {errors.en.desc && <StyledErrorMsg>{strings.datasetImport.validationMsg}</StyledErrorMsg>}
+          {errors.en.desc && (
+            <StyledErrorMsg>
+              {strings.datasetImport.validationMsg}
+            </StyledErrorMsg>
+          )}
           <StyledLabel>{strings.datasetImport.englishSource}</StyledLabel>
           <StyledTextField
             value={fields.en.source}
@@ -362,7 +391,11 @@ function GeneralTabContent({
             variant="outlined"
             InputLabelProps={{ shrink: true }}
           />
-          {errors.en.source && <StyledErrorMsg>{strings.datasetImport.validationMsg}</StyledErrorMsg>}
+          {errors.en.source && (
+            <StyledErrorMsg>
+              {strings.datasetImport.validationMsg}
+            </StyledErrorMsg>
+          )}
         </StyledLanguageGroup>
       )}
       {/* Bottom action bar */}
@@ -381,48 +414,7 @@ function GeneralTabContent({
           tabIndex={0}
           disabled={disableImport || isSubmitting}
           aria-disabled={disableImport || isSubmitting}
-          onClick={() => {
-            if (!disableImport && !isSubmitting) {
-              setIsSubmitting(true);
-              setTimeout(() => {
-                setIsSubmitting(false);
-
-                // --- THE ONLY CHANGED PART: Make locale/style/file Oskari-style ---
-                const locale = {
-                  fi: fields.fi || {},
-                  sv: lang.sv ? fields.sv || {} : {},
-                  en: lang.en ? fields.en || {} : {}
-                };
-                // mock style
-                const style = {
-                  image: { shape: 5, size: 3, fill: { color: '#FAEBD7' } },
-                  fill: { area: { pattern: -1 }, color: '#FAEBD7' },
-                  stroke: {
-                    area: {
-                      color: '#000000',
-                      lineDash: 'solid',
-                      width: 1,
-                      lineJoin: 'round'
-                    },
-                    color: '#000000',
-                    lineCap: 'round',
-                    lineDash: 'solid',
-                    width: 1,
-                    lineJoin: 'round'
-                  }
-                };
-                const obj = {
-                  file: uploadedFile,
-                  locale,
-                  style
-                };
-                console.log('Lähetettävä aineisto (Oskari-yhteensopiva):', obj);
-                alert(
-                  'Konsoliin tulostettu lähetettävä Oskari-tyyppinen objekti!'
-                );
-              }, 1200);
-            }
-          }}
+          onClick={handleSubmitDataset}
         >
           <FontAwesomeIcon icon={faUpload} />
           {strings.datasetImport.import}
@@ -458,6 +450,7 @@ const DatasetImport = () => {
   const [uploadedFile, setUploadedFile] = useState(null);
   const [fileError, setFileError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { channel } = useAppSelector((state) => state.rpc);
 
   const [fields, setFields] = useState(initialFields);
   const [errors, setErrors] = useState(initialErrors);
@@ -465,7 +458,7 @@ const DatasetImport = () => {
 
   const swiperRef = useRef();
 
-  function handleInput(language, field, value) {
+  const handleInput = (language, field, value) => {
     setFields((old) => ({
       ...old,
       [language]: { ...old[language], [field]: value }
@@ -477,7 +470,101 @@ const DatasetImport = () => {
         [field]: !!value && !allowedCharsExp.test(value)
       }
     }));
-  }
+  };
+
+  const resetForm = () => {
+    setUploadedFile(null);
+    setFileError('');
+    setFields(initialFields);
+    setErrors(initialErrors);
+    setLang({ en: false, sv: false });
+    setSelectedTab(0); // Optionally move to General tab
+  };
+
+  const handleSubmitDataset = () => {
+    if (!disableImport && !isSubmitting) {
+      setIsSubmitting(true);
+      setTimeout(() => {
+        // --- THE ONLY CHANGED PART: Make locale/style/file Oskari-style ---
+        const locale = {
+          fi: fields.fi || {},
+          sv: lang.sv ? fields.sv || {} : {},
+          en: lang.en ? fields.en || {} : {}
+        };
+        // mock style
+        const style = {
+          image: { shape: 5, size: 3, fill: { color: '#FAEBD7' } },
+          fill: { area: { pattern: -1 }, color: '#FAEBD7' },
+          stroke: {
+            area: {
+              color: '#000000',
+              lineDash: 'solid',
+              width: 1,
+              lineJoin: 'round'
+            },
+            color: '#000000',
+            lineCap: 'round',
+            lineDash: 'solid',
+            width: 1,
+            lineJoin: 'round'
+          }
+        };
+
+        const fileToBase64 = (file) =>
+          new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = reject;
+            reader.readAsDataURL(file);
+          });
+
+        fileToBase64(uploadedFile).then((base64str) => {
+          const dataset = {
+            fileName: uploadedFile.name,
+            fileType: uploadedFile.type,
+            fileDataUrl: base64str,
+            locale,
+            style
+          };
+
+          // Send dataset to Oskari
+          channel.importDataset(
+            [dataset],
+            () => {
+              setIsSubmitting(false);
+              resetForm();
+              toast.success(`success`, {
+                    position: "top-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "colored",
+                    transition: Slide
+                });
+            },
+            (data) => {
+              setIsSubmitting(false);
+              setUploadedFile(null);
+              toast.error(`${data}`, {
+                    position: "top-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "colored",
+                    transition: Slide
+                });
+            }
+          );
+        });
+      }, 1200);
+    }
+  };
 
   const requiredFi = !!fields.fi.name && !errors.fi.name;
   const requiredSv = !lang.sv || (!!fields.sv.name && !errors.sv.name);
@@ -532,6 +619,7 @@ const DatasetImport = () => {
         <SwiperSlide>
           <GeneralTabContent
             store={store}
+            handleSubmitDataset={handleSubmitDataset}
             fields={fields}
             errors={errors}
             lang={lang}
@@ -543,7 +631,6 @@ const DatasetImport = () => {
             handleInput={handleInput}
             disableImport={disableImport}
             isSubmitting={isSubmitting}
-            setIsSubmitting={setIsSubmitting}
           />
         </SwiperSlide>
         <SwiperSlide>
