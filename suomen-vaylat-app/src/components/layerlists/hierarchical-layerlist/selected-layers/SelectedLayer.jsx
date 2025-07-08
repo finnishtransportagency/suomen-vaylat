@@ -308,8 +308,9 @@ export const SelectedLayer = (
         store.dispatch(getLayerMetadata({ layer: layer, layerId: layer.id, handler: handleMetadataSuccess, errorHandler: handleMetadataError }));
     };
 
-    const isCurrentZoomTooFar = layer.maxZoomLevel && layer.minZoomLevel && currentZoomLevel <  layer.minZoomLevel;
-    const isCurrentZoomTooClose = layer.maxZoomLevel && layer.minZoomLevel && currentZoomLevel >  layer.maxZoomLevel
+    // TODO : Currently there's some mismatch between the zoom levels so we fix it manually by adding or substracting 1
+    const isCurrentZoomTooFar = layer.maxZoomLevel && layer.minZoomLevel && currentZoomLevel <=  layer.minZoomLevel;
+    const isCurrentZoomTooClose = layer.maxZoomLevel && layer.minZoomLevel && currentZoomLevel >=  layer.maxZoomLevel
 
     let layerInfoText = strings.layerlist.selectedLayers.layerVisible;
     if (isCurrentZoomTooFar) {
@@ -358,8 +359,9 @@ export const SelectedLayer = (
                     </StyledlayerHeader>
                     <StyledMidContent>
                 
-                        {isCurrentZoomTooFar || isCurrentZoomTooClose ? <StyledLayerInfoContainer>
-                            <StyledShowLayerButton onClick={() => store.dispatch(setZoomTo(layer.minZoomLevel))}>
+                        {isCurrentZoomTooFar || isCurrentZoomTooClose ?
+                        <StyledLayerInfoContainer>
+                            <StyledShowLayerButton onClick={() => isCurrentZoomTooFar ? store.dispatch(setZoomTo(layer.minZoomLevel + 1)) : store.dispatch(setZoomTo(layer.maxZoomLevel - 1))}>
                                 {isCurrentZoomTooFar? strings.tooltips.zoomIn : isCurrentZoomTooClose && strings.tooltips.zoomOut}
                             </StyledShowLayerButton> <p>{strings.layerlist.selectedLayers.toShowLayer}</p>
                         </StyledLayerInfoContainer>
