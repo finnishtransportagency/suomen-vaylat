@@ -79,7 +79,6 @@ const MapEventsHandler = ({ channel, store }) => {
 
   channel.handleEvent('DataForMapLocationEvent', (data) => {
         console.log("DataForMapLocationEvent",data)
-        store.dispatch(resetGFILocations([]));
 
     if (data.content && data.content.features) {
       data.content.features.forEach((f) => {
@@ -137,6 +136,18 @@ const MapEventsHandler = ({ channel, store }) => {
       store.dispatch(setGFICroppingArea(croppingArea));
       store.getState().ui.minimizeGfi && store.dispatch(setMinimizeGfi(false));
       !store.getState().ui.isGfiOpen && store.dispatch(setIsGfiOpen(true));
+
+      const currentGfiLocations = [...store.getState().rpc.gfiLocations]; // or wherever your gfiLocations live
+      const newLayerId = data.layerId || (data.content && data.content[0] && data.content[0].layerId);
+
+      const alreadyPresent = currentGfiLocations.some(
+        loc => loc.layerId === newLayerId
+      );
+
+      console.log(alreadyPresent)
+      if (alreadyPresent) {
+        store.dispatch(resetGFILocations([]));
+      } 
       store.dispatch(pushGFILocations(data));
       
     }
