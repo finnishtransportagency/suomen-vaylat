@@ -5,6 +5,7 @@ import {
   removeMarkerRequest,
   resetGFILocations,
   setGFILocations,
+  pushGFILocations,
   setPointInfo,
   setVKMData,
   setGFICroppingArea,
@@ -32,6 +33,8 @@ const MapEventsHandler = ({ channel, store }) => {
   });
 
   channel.handleEvent('PointInfoEvent', (data) => {
+        console.log("PointInfoEvent",data)
+
     store.dispatch(
       setPointInfo({ lon: data.coordinates.x, lat: data.coordinates.y })
     );
@@ -66,14 +69,18 @@ const MapEventsHandler = ({ channel, store }) => {
     }
   });
 
-  channel.handleEvent('MapClickedEvent', () => {
+  channel.handleEvent('MapClickedEvent', (data) => {
+    console.log("MapClickedEvent",data)
     // TODO: have every mapclick put in a new marker, it's not working atm for some reason
     store.dispatch(setVKMData(null));
     store.dispatch(removeMarkerRequest({ markerId: 'VKM_MARKER' }));
-    store.dispatch(resetGFILocations([]));
+    //store.dispatch(resetGFILocations([]));
   });
 
   channel.handleEvent('DataForMapLocationEvent', (data) => {
+        console.log("DataForMapLocationEvent",data)
+        store.dispatch(resetGFILocations([]));
+
     if (data.content && data.content.features) {
       data.content.features.forEach((f) => {
         if (f.properties) {
@@ -130,7 +137,8 @@ const MapEventsHandler = ({ channel, store }) => {
       store.dispatch(setGFICroppingArea(croppingArea));
       store.getState().ui.minimizeGfi && store.dispatch(setMinimizeGfi(false));
       !store.getState().ui.isGfiOpen && store.dispatch(setIsGfiOpen(true));
-      store.dispatch(setGFILocations(data));
+      store.dispatch(pushGFILocations(data));
+      
     }
   });
 

@@ -713,13 +713,23 @@ export const rpcSlice = createSlice({
     },
 
     /**
+     * Push GFI locations.
+     * @method pushGFILocations
+     * @param {Object} state
+     * @param {Object} action
+     */
+    pushGFILocations: (state, action) => {
+      state.gfiLocations.push(action.payload);
+    },
+
+    /**
      * Set GFI locations.
      * @method setGFILocations
      * @param {Object} state
      * @param {Object} action
      */
     setGFILocations: (state, action) => {
-      state.gfiLocations.push(action.payload);
+      state.gfiLocations = action.payload;
     },
 
     /**
@@ -992,6 +1002,7 @@ export const {
   setStartMapCenter,
   changeLayerStyle,
   reArrangeSelectedMapLayers,
+  pushGFILocations,
   setGFILocations,
   resetGFILocations,
   setGFIPoint,

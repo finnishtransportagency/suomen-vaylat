@@ -439,6 +439,7 @@ export const FeatureDataPopup = () => {
   const [gfiTabsSnapGridLength, setGfiTabsSnapGridLength] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const gfiInputEl = useRef(null);
+  console.log("tabsIds", tabsIds)
 
   const handleLinkClick = (event) => {
     event.preventDefault();
@@ -614,7 +615,8 @@ export const FeatureDataPopup = () => {
   };
 
   const tablePropsInit = (index, data) => {
-    const properties =
+  // Handle legacy geojson structure
+  if (data.type === 'geojson') {const properties =
       data &&
       data.content &&
       data.content[0] &&
@@ -726,7 +728,104 @@ export const FeatureDataPopup = () => {
       }
     };
     return tablePropsInit;
+  }
+
+  // === Handle new flat json structure ===
+  if (data.type === 'json') {
+    // (support both cases: data.content can be [{...}] or something else)
+    let rows = [];
+    if (data.content && Array.isArray(data.content)) {
+      // If entries have "geojson" field, it's not our new structure
+      if (data.content[0] && typeof data.content[0] === 'object' && data.content[0].geojson) {
+        rows = data.content;
+      }
+    }
+    // Defensive, in case content is a single object (not array)
+    if (!rows.length && data.content && typeof data.content === 'object' && !Array.isArray(data.content)) {
+      rows = [data.content];
+    }
+
+    let columnsArray = [];
+    if (rows.length > 0) {
+      columnsArray = Object.keys(rows[0]).filter(k => k !== 'id' && k !== 'UID').map((key) => ({
+        key,
+        title: key,
+        width: 180,
+        colGroup: { style: { minWidth: 120 } },
+      }));
+    }
+
+    // For filterable columns support
+    let filterColumnsArray = columnsArray.map(({ key }) => ({
+      key,
+      title: key,
+      type: 'text',
+    }));
+
+    // Ensure every row/cell has a unique id (for Table needs)
+    const cells = rows.map((row, idx) => ({
+      ...row,
+      id: row.id || `row-${idx}`
+    }));
+
+    // Compose for Table
+    const tablePropsInit = {
+      columns: columnsArray,
+      filterableColumns: filterColumnsArray,
+      filteredFeatures: cells,
+      data: cells,
+      rowKeyField: 'id',
+      sortingMode: SortingMode.SingleTripleState,
+      columnResizing: true,
+      paging: {
+        enabled: true,
+        pageIndex: 0,
+        pageSize: 100,
+        pageSizes: [10, 50, 100],
+        position: PagingPosition.Bottom
+      },
+      format: ({ value }) => {
+        if (isValidUrl && isValidUrl(value)) {
+          return (
+            <a target="_blank" rel="noreferrer" href={value}>
+              {value}
+            </a>
+          );
+        } else if (typeof value === 'string') {
+          return (
+            <span>
+              {value.split('\n').map((line, index) => (
+                <div key={index}>{line}</div>
+              ))}
+            </span>
+          );
+        }
+        return value;
+      }
+    };
+    return tablePropsInit;
+  }
+
+  // Defensive: If falls through, return empty table structure
+  return {
+    columns: [],
+    filterableColumns: [],
+    filteredFeatures: [],
+    data: [],
+    rowKeyField: 'id',
+    sortingMode: SortingMode.SingleTripleState,
+    columnResizing: true,
+    paging: {
+      enabled: true,
+      pageIndex: 0,
+      pageSize: 100,
+      pageSizes: [10, 50, 100],
+      position: PagingPosition.Bottom
+    },
+    format: ({ value }) => value,
   };
+};
+
 
   const handleGfiToolsMenuWithConfirmDialog = () => {
     const fetchableLayers = selectedLayers.filter((layer) =>
@@ -1152,6 +1251,7 @@ export const FeatureDataPopup = () => {
                   }
                 });
               });
+              console.log("?")
 
               if (location.type === 'geojson') {
                 return (
@@ -1193,6 +1293,20 @@ export const FeatureDataPopup = () => {
                         )}
                       </StyledFeaturesInfo>
                     )}
+                  </SwiperSlide>
+                );
+              } else if (location.type === "json") {
+                return (
+                  <SwiperSlide
+                    id={'gfi_tab_content_' + location.layerId}
+                    key={'gfi_tab_content_' + location.layerId}
+                  >
+                    <FeatureDataTabContent
+                      layer={layers[0]}
+                      title={title}
+                      tablePropsInit={tableProps}
+                      filters={filters}
+                    />
                   </SwiperSlide>
                 );
               }

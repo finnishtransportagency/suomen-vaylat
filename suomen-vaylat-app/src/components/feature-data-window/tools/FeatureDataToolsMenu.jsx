@@ -28,7 +28,7 @@ import { ReactComponent as SvLinestring } from '../../../theme/icons/drawtools_l
 import { theme } from '../../../theme/theme';
 
 import {
-    setGFILocations,
+    pushGFILocations,
     resetGFILocations,
     setGFICroppingArea,
     setVKMData
@@ -616,7 +616,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
                                 type: 'geojson',
                                 moreFeatures: gfi.content.some(content => content.moreFeatures),
                             }
-                            store.dispatch(setGFILocations(gfiLoc))
+                            store.dispatch(pushGFILocations(gfiLoc))
                         }
                     });
 

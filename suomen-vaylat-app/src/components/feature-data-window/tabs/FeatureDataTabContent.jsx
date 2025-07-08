@@ -67,7 +67,8 @@ const StyledTabContent = styled.div`
   }
 `;
 
-const FeatureDataTabContent = ({ layer, data, title, tablePropsInit }) => {
+const FeatureDataTabContent = ({ layer, title, tablePropsInit }) => {
+  console.log(tablePropsInit)
   const { filteringInfo, filters } = useAppSelector((state) => state.rpc);
   const { store } = useContext(ReactReduxContext);
   const { minimizeFilter } = useAppSelector(state => state.ui);
@@ -132,7 +133,7 @@ const FeatureDataTabContent = ({ layer, data, title, tablePropsInit }) => {
   };
 
   const activeFilteringOnLayer = useCallback(() => {
-    return filters.some((filter) => filter.layer === data.layerId);
+    return filters.some((filter) => filter.layer === layer.id);
   },[filters]);
 
   const [isActiveFiltering, setIsActiveFiltering] = useState(false);
