@@ -82,7 +82,7 @@ function getColumnsFromRow(row) {
     }));
 }
 
-function tablePropsInit(inputFeatures) {
+function initUserLayerTableProps(inputFeatures) {
   const rows = Array.isArray(inputFeatures) ? inputFeatures : [];
   const flatRows = rows.map(flattenFeatureForTable);
 
@@ -93,7 +93,7 @@ function tablePropsInit(inputFeatures) {
 
   return {
     columns: columnsArray,
-    filterableColumns: columnsArray,
+    filterableColumns: [],
     filteredFeatures: rows, // For the card/list rendering
     data: flatRows, // For ka-table
     rowKeyField: 'id',
@@ -127,20 +127,27 @@ function tablePropsInit(inputFeatures) {
   };
 }
 
-const FeatureDataTabContent = ({
-  layer,
-  title,
-  tablePropsInit: inputTablePropsInit
-}) => {
+const FeatureDataTabContent = ({ layer, title, tablePropsInit }) => {
   const { filteringInfo, filters } = useAppSelector((state) => state.rpc);
   const { store } = useContext(ReactReduxContext);
   const { minimizeFilter } = useAppSelector((state) => state.ui);
 
   const [showDataTable, setShowDataTable] = useState(false);
 
-  // Decide whether to use the passed-in tablePropsInit or build from features:
-  const features = inputTablePropsInit?.filteredFeatures || [];
-  const tableProps = tablePropsInit(features);
+  // --- Universal logic for normal/userlayers ---
+  const isUserLayer =
+    typeof layer.id === 'string' && layer.id.startsWith('userlayer_');
+  
+  let features, tableProps;
+  if (isUserLayer) {
+    // Userlayer: use function to create props (pass features array)
+    features = tablePropsInit?.filteredFeatures || [];
+    tableProps = initUserLayerTableProps(features);
+  } else  {
+    // Normal layer: tablePropsInit is an object, use as is
+    tableProps = tablePropsInit;
+    features = tablePropsInit?.filteredFeatures || [];
+  }
 
   const selectFeature = (channel, features) => {
     let featureStyle = {

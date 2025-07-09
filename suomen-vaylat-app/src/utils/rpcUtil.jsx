@@ -1,5 +1,6 @@
 import {
   setAllLayers,
+  setUserLayers,
   setSelectedLayers,
   setSelectedTheme,
   setLastSelectedTheme,
@@ -57,7 +58,9 @@ export const updateLayers = (store, channel) => {
   channel &&
     channel.getAllLayersSV(
       function (data) {
+        const userLayers = data.filter(l => typeof l.id === 'string' && l.id.startsWith('userlayer_'));
         store.dispatch(setAllLayers(data));
+        store.dispatch(setUserLayers(userLayers));
       },
       function err(data) {
         toast.error(strings.layerlist.errorLoadingLayers, {

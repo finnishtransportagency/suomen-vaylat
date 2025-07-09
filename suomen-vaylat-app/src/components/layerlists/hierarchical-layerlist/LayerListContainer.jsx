@@ -170,6 +170,8 @@ const LayerListContainer = ({ groups, layers, tags }) => {
   useAppSelector((state) => state.language);
 
   const { showSavedLayers, isCustomFilterOpen } = useAppSelector((state) => state.ui);
+  const { userLayers } = useAppSelector((state) => state.rpc);
+
   const [isOpen, setIsOpen] = useState(false);
 
   const selectedLayers = localStorage.getItem("checkedLayers");
@@ -184,6 +186,23 @@ const LayerListContainer = ({ groups, layers, tags }) => {
     store.dispatch(setShowSavedLayers(false));
     store.dispatch(setSelectedCustomFilterLayers([]));
   };
+
+  // Add omat aineistot group
+  const omatAineistotGroup = {
+    id: 'userlayers', // must be unique and NOT collide with any numeric id
+    parentId: -1,
+    locale: {
+      fi: { name: 'Omat aineistot'},
+      en: { name: 'My datasets'},
+      sv: { name: 'Egna data'}
+    },
+    layers: userLayers.map(l => l.id),
+    groups: []
+  };
+
+  const newGroups = userLayers.length > 0
+  ? [...groups, omatAineistotGroup]
+  : groups;
 
   return (
     <>
@@ -250,7 +269,7 @@ const LayerListContainer = ({ groups, layers, tags }) => {
       ) : (
         <LayerList
           label={strings.layerlist.layerlistLabels.allLayers}
-          groups={groups}
+          groups={newGroups}
           layers={layers}
           recurse={false}
         />

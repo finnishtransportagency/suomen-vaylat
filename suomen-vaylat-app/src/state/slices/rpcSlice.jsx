@@ -10,6 +10,7 @@ const initialState = {
   channel: null,
   allGroups: [],
   allLayers: [],
+  userLayers: [],
   allTags: [],
   features: {},
   currentState: {},
@@ -141,6 +142,16 @@ export const rpcSlice = createSlice({
     setAllLayers: (state, action) => {
       state.allLayers = action.payload;
       LOG.log("setAllLayers to ", action.payload);
+    },
+
+    /**
+     * Set user layers.
+     * @method setUserLayers
+     * @param {Object} state
+     * @param {Object} action
+     */
+    setUserLayers: (state, action) => {
+      state.userLayers = action.payload;
     },
 
     /**
@@ -1028,7 +1039,8 @@ export const {
   setSearchOn,
   searchVKMTrack,
   setAnnouncements,
-  setCoordMarkerIndex
+  setCoordMarkerIndex,
+  setUserLayers
 } = rpcSlice.actions;
 
 export default rpcSlice.reducer;
