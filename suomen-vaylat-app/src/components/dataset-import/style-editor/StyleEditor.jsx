@@ -1,33 +1,64 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { POINT_SHAPES } from "./styleConstants";
-import { FILL_ORDER, FILLS, LINE_STYLES } from "./styleConstants"; // Adjust path!
+import { FILL_ORDER, FILLS, LINE_STYLES } from "./styleConstants"; // Adjust path if needed!
 
-const TabButtonGroup = styled.div`
+// ---- Styled Components ----
+const RadioTypeGroup = styled.div`
   display: flex;
-  margin-bottom: 19px;
+  gap: 10px;
+  margin-bottom: 22px;
 `;
 
-const TabButton = styled.button`
+const TypeRadioButton = styled.label`
   flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
   font-size: 16px;
   font-weight: 600;
-  border: none;
-  border-radius: 10px 10px 0 0;
-  background: ${(p) => p.selected ? "#fff" : "#f2f4f9"};
-  color: ${(p) => p.selected ? "#1976d2" : "#70768d"};
-  border-bottom: 3px solid ${(p) => p.selected ? "#ff8c28" : "transparent"};
-  box-shadow: ${(p) => p.selected ? "0 6px 12px #ffc68a24" : "none"};
-  transition: background .17s, color .17s;
+  background: ${({ selected }) => selected ? "#fff" : "#f2f4f9"};
+  color: ${({ selected }) => selected ? "#1976d2" : "#70768d"};
+  border: 2px solid ${({ selected }) => selected ? "#ff8c28" : "#e0e3e7"};
+  border-radius: 10px;
   cursor: pointer;
+  padding: 13px 0 13px 0;
+  box-shadow: ${({ selected }) => selected ? "0 4px 12px #ffc68a24" : "none"};
+  transition: background .17s, color .17s, border-color .17s;
 
-  padding: 10px 0 11px 0;
-  letter-spacing: 0.04em;
+  input[type="radio"] {
+    display: none;
+  }
 
-  &:hover, &:focus-visible {
+  &:hover, &:focus-within {
     background: #f9fbfc;
     color: #1976d2;
+    border-color: #ff8c28;
     outline: none;
+  }
+`;
+
+const RadioDot = styled.span`
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  box-sizing: border-box;
+  margin-right: 9px;
+  border: 2.2px solid ${({ selected }) => selected ? "#ff8c28" : "#b5b5d1"};
+  background: ${({ selected }) => selected ? "#ffd6a0" : "#fff"};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background .14s, border-color .14s;
+  &:after {
+    content: '';
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: ${({ selected }) => selected ? "#ff8c28" : "transparent"};
+    display: block;
+    transition: background .12s;
   }
 `;
 
@@ -265,17 +296,48 @@ export default function StyleEditor({ initialStyle = {}, onChange }) {
     // eslint-disable-next-line
   }, [type, pointColor, pointShape, pointSize,
       lineColor, lineDash, lineCap, lineJoin, lineWidth,
-      fillColor, fillPattern, areaBorderColor, areaBorderWidth, 
+      fillColor, fillPattern, areaBorderColor, areaBorderWidth,
       areaDash, areaJoin, onChange]);
 
   return (
     <>
-      <TabButtonGroup>
-        <TabButton selected={type==="point"} onClick={()=>setType("point")}>Point</TabButton>
-        <TabButton selected={type==="line"} onClick={()=>setType("line")}>Line</TabButton>
-        <TabButton selected={type==="area"} onClick={()=>setType("area")}>Area</TabButton>
-      </TabButtonGroup>
-      
+      <SvgLabel style={{ marginBottom: 0 }}>Choose type:</SvgLabel>
+      <RadioTypeGroup role="radiogroup" aria-label="Geometry type">
+        <TypeRadioButton selected={type === "point"}>
+          <input
+            type="radio"
+            name="geomtype"
+            value="point"
+            checked={type === "point"}
+            onChange={() => setType("point")}
+          />
+          <RadioDot selected={type === "point"} />
+          Point
+        </TypeRadioButton>
+        <TypeRadioButton selected={type === "line"}>
+          <input
+            type="radio"
+            name="geomtype"
+            value="line"
+            checked={type === "line"}
+            onChange={() => setType("line")}
+          />
+          <RadioDot selected={type === "line"} />
+          Line
+        </TypeRadioButton>
+        <TypeRadioButton selected={type === "area"}>
+          <input
+            type="radio"
+            name="geomtype"
+            value="area"
+            checked={type === "area"}
+            onChange={() => setType("area")}
+          />
+          <RadioDot selected={type === "area"} />
+          Area
+        </TypeRadioButton>
+      </RadioTypeGroup>
+
       {type === "point" && (
         <Grouping>
           <GroupLabel>Point style</GroupLabel>
