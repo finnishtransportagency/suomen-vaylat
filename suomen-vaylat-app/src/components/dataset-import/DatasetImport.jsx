@@ -20,6 +20,7 @@ import { setIsDatasetImportOpen } from '../../state/slices/uiSlice';
 import { ReactReduxContext } from 'react-redux';
 import ZipFileInput from './ZipFileInput';
 import { useAppSelector } from '../../state/hooks';
+import StyleEditor from './style-editor/StyleEditor'; // <--- HERE
 
 // --- Styled Components ---
 const StyledMainContainer = styled.div`
@@ -27,6 +28,7 @@ const StyledMainContainer = styled.div`
   border-radius: 16px;
   position: relative;
 `;
+// ... (other styled components omitted for brevity; use your originals) ...
 const OverlaySpinner = styled.div`
   position: absolute;
   top: 0;
@@ -424,13 +426,7 @@ function GeneralTabContent({
   );
 }
 
-const VisualisointiTabContent = () => (
-  <Typography variant="body2" style={{ color: '#888' }}>
-    {strings.datasetImport.visTabText}
-  </Typography>
-);
-
-const allowedCharsExp = /^[A-Za-z0-9_\-\(\)]*$/;
+const allowedCharsExp = /^[A-Za-z0-9_\-()]*$/;
 const initialLangObj = { name: '', desc: '', source: '' };
 const initialFields = {
   fi: { ...initialLangObj },
@@ -455,7 +451,9 @@ const DatasetImport = () => {
   const [fields, setFields] = useState(initialFields);
   const [errors, setErrors] = useState(initialErrors);
   const [lang, setLang] = useState({ en: false, sv: false });
+  const [style, setStyle] = useState({}); // <-- Add this to store output from StyleEditor
 
+  console.log("STYLE", style)
   const swiperRef = useRef();
 
   const handleInput = (language, field, value) => {
@@ -479,35 +477,17 @@ const DatasetImport = () => {
     setErrors(initialErrors);
     setLang({ en: false, sv: false });
     setSelectedTab(0); // Optionally move to General tab
+    setStyle({});
   };
 
   const handleSubmitDataset = () => {
     if (!disableImport && !isSubmitting) {
       setIsSubmitting(true);
       setTimeout(() => {
-        // --- THE ONLY CHANGED PART: Make locale/style/file Oskari-style ---
         const locale = {
           fi: fields.fi || {},
           sv: lang.sv ? fields.sv || {} : {},
           en: lang.en ? fields.en || {} : {}
-        };
-        // mock style
-        const style = {
-          image: { shape: 5, size: 3, fill: { color: '#FAEBD7' } },
-          fill: { area: { pattern: -1 }, color: '#FAEBD7' },
-          stroke: {
-            area: {
-              color: '#000000',
-              lineDash: 'solid',
-              width: 1,
-              lineJoin: 'round'
-            },
-            color: '#000000',
-            lineCap: 'round',
-            lineDash: 'solid',
-            width: 1,
-            lineJoin: 'round'
-          }
         };
 
         const fileToBase64 = (file) =>
@@ -524,10 +504,9 @@ const DatasetImport = () => {
             fileType: uploadedFile.type,
             fileDataUrl: base64str,
             locale,
-            style
+            style         // <---- use the current style state from StyleEditor
           };
 
-          // Send dataset to Oskari
           channel.importDataset(
             [dataset],
             () => {
@@ -634,7 +613,12 @@ const DatasetImport = () => {
           />
         </SwiperSlide>
         <SwiperSlide>
-          <VisualisointiTabContent />
+          <div style={{ maxWidth: 400, margin: "0 auto" }}>
+            <StyleEditor
+              initialStyle={style}
+              onChange={setStyle}
+            />
+          </div>
         </SwiperSlide>
       </StyledSwiper>
     </StyledMainContainer>

@@ -101,6 +101,8 @@ const setupSupportedFunctions = (data, channel, store) => {
         }
         return 0;
       };
+      console.log("allGroupsData", allGroupsData)
+
       store.dispatch(setAllGroups(allGroupsData.sort(arrangeAlphabetically)));
     });
   }
