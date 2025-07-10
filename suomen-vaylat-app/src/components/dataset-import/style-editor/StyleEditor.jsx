@@ -1,14 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { POINT_SHAPES} from "./styleConstants";
-
+import { POINT_SHAPES } from "./styleConstants";
 import { FILL_ORDER, FILLS, LINE_STYLES } from "./styleConstants"; // Adjust path!
-/* 
-Your oskariStyleConstants.js should export:
-- FILL_ORDER (array of string keys)
-- FILLS (mapping name -> number)
-- LINE_STYLES: { lineDash, corners, linecaps } (arrays of {name, data})
-*/
 
 const TabButtonGroup = styled.div`
   display: flex;
@@ -60,6 +53,13 @@ const Label = styled.label`
   font-size: 13.7px;
 `;
 
+const SvgLabel = styled.div`
+  color: #353a4a;
+  font-size: 13.7px;
+  font-weight: 500;
+  margin-bottom: 5px;
+`;
+
 const InputRow = styled.div`
   display: flex;
   gap: 13px 14px;
@@ -70,7 +70,6 @@ const InputRow = styled.div`
 
 const InputCol = styled.div`
   min-width: 126px;
-  flex: 1 1 0px;
   margin-bottom: 3px;
 `;
 
@@ -91,7 +90,7 @@ const SvgRadioButton = styled.button`
   justify-content: center;
   box-shadow: ${p => p.selected ? "0 0 8px #ffbe8b44" : "none"};
   padding: 0;
-  &:hover, &:focus { border-color: #ff8c28; background: #ffe6d2; }
+  &:hover { border-color: #ff0101; background: #0709cf; }
 `;
 
 const ColorInput = styled.input`
@@ -197,8 +196,6 @@ const FillPatternSvgPreview = ({ type }) => {
   }
 };
 
-
-
 // --- FILL PATTERNS ---
 const fillPatternOptions = FILL_ORDER.map((name) => ({
   id: name,
@@ -206,8 +203,6 @@ const fillPatternOptions = FILL_ORDER.map((name) => ({
   value: FILLS[name],
   preview: <FillPatternSvgPreview type={name}/>
 }));
-
-
 
 export default function StyleEditor({ initialStyle = {}, onChange }) {
   const [type, setType] = useState("point");
@@ -286,28 +281,30 @@ export default function StyleEditor({ initialStyle = {}, onChange }) {
           <GroupLabel>Point style</GroupLabel>
           <InputRow>
             <InputCol>
-              <Label>Colour: <ColorInput type="color" value={pointColor} onChange={e=>setPointColor(e.target.value)}/></Label>
-            </InputCol>
-            <InputCol style={{ minWidth: 140 }}>
               <Label>
-                Shape:
-                <SvgButtonGroup>
-                  {POINT_SHAPES.map(s=>(
-                    <SvgRadioButton
-                      key={s.id}
-                      selected={pointShape===s.id}
-                      onClick={()=>setPointShape(s.id)}
-                      type="button"
-                      title={s.label}
-                    >
-                      {s.preview}
-                    </SvgRadioButton>
-                  ))}
-                </SvgButtonGroup>
+                Colour: <ColorInput type="color" value={pointColor} onChange={e=>setPointColor(e.target.value)}/>
               </Label>
             </InputCol>
+            <InputCol style={{ minWidth: 140 }}>
+              <SvgLabel>Shape:</SvgLabel>
+              <SvgButtonGroup>
+                {POINT_SHAPES.map(s=>(
+                  <SvgRadioButton
+                    key={s.id}
+                    selected={pointShape===s.id}
+                    onClick={()=>setPointShape(s.id)}
+                    type="button"
+                    title={s.label}
+                  >
+                    {s.preview}
+                  </SvgRadioButton>
+                ))}
+              </SvgButtonGroup>
+            </InputCol>
             <InputCol style={{ maxWidth: 110 }}>
-              <Label>Size: <NumberInput type="number" min={1} max={5} value={pointSize} onChange={e=>setPointSize(Number(e.target.value))}/></Label>
+              <Label>
+                Size: <NumberInput type="number" min={1} max={5} value={pointSize} onChange={e=>setPointSize(Number(e.target.value))}/>
+              </Label>
             </InputCol>
           </InputRow>
         </Grouping>
@@ -318,63 +315,59 @@ export default function StyleEditor({ initialStyle = {}, onChange }) {
           <GroupLabel>Line style</GroupLabel>
           <InputRow>
             <InputCol>
-              <Label>Colour: <ColorInput type="color" value={lineColor} onChange={e=>setLineColor(e.target.value)} /></Label>
+              <Label>
+                Colour: <ColorInput type="color" value={lineColor} onChange={e=>setLineColor(e.target.value)} />
+              </Label>
             </InputCol>
             <InputCol>
-              <Label>
-                Dash:
-                <SvgButtonGroup>
-                  {LINE_STYLES.lineDash.map(opt => (
-                    <SvgRadioButton
-                      key={opt.name}
-                      selected={lineDash === opt.name}
-                      onClick={()=>setLineDash(opt.name)}
-                      title={opt.name}
-                      type="button"
-                    >
-                      {renderOskariSvg(opt.data, 30)}
-                    </SvgRadioButton>
-                  ))}
-                </SvgButtonGroup>
-              </Label>
+              <SvgLabel>Dash:</SvgLabel>
+              <SvgButtonGroup>
+                {LINE_STYLES.lineDash.map(opt => (
+                  <SvgRadioButton
+                    key={opt.name}
+                    selected={lineDash === opt.name}
+                    onClick={()=>setLineDash(opt.name)}
+                    title={opt.name}
+                    type="button"
+                  >
+                    {renderOskariSvg(opt.data, 30)}
+                  </SvgRadioButton>
+                ))}
+              </SvgButtonGroup>
             </InputCol>
           </InputRow>
           <InputRow>
             <InputCol>
-              <Label>
-                Cap:
-                <SvgButtonGroup>
-                  {LINE_STYLES.linecaps.map(opt => (
-                    <SvgRadioButton
-                      key={opt.name}
-                      selected={lineCap === opt.name}
-                      onClick={()=>setLineCap(opt.name)}
-                      title={opt.name}
-                      type="button"
-                    >
-                      {renderOskariSvg(opt.data, 30)}
-                    </SvgRadioButton>
-                  ))}
-                </SvgButtonGroup>
-              </Label>
+              <SvgLabel>Cap:</SvgLabel>
+              <SvgButtonGroup>
+                {LINE_STYLES.linecaps.map(opt => (
+                  <SvgRadioButton
+                    key={opt.name}
+                    selected={lineCap === opt.name}
+                    onClick={()=>setLineCap(opt.name)}
+                    title={opt.name}
+                    type="button"
+                  >
+                    {renderOskariSvg(opt.data, 30)}
+                  </SvgRadioButton>
+                ))}
+              </SvgButtonGroup>
             </InputCol>
             <InputCol>
-              <Label>
-                Join:
-                <SvgButtonGroup>
-                  {LINE_STYLES.corners.map(opt=>(
-                    <SvgRadioButton
-                      key={opt.name}
-                      selected={lineJoin===opt.name}
-                      onClick={()=>setLineJoin(opt.name)}
-                      title={opt.name}
-                      type="button"
-                    >
-                      {renderOskariSvg(opt.data, 30)}
-                    </SvgRadioButton>
-                  ))}
-                </SvgButtonGroup>
-              </Label>
+              <SvgLabel>Join:</SvgLabel>
+              <SvgButtonGroup>
+                {LINE_STYLES.corners.map(opt=>(
+                  <SvgRadioButton
+                    key={opt.name}
+                    selected={lineJoin===opt.name}
+                    onClick={()=>setLineJoin(opt.name)}
+                    title={opt.name}
+                    type="button"
+                  >
+                    {renderOskariSvg(opt.data, 30)}
+                  </SvgRadioButton>
+                ))}
+              </SvgButtonGroup>
             </InputCol>
             <InputCol style={{ maxWidth: 110 }}>
               <Label>
@@ -391,43 +384,41 @@ export default function StyleEditor({ initialStyle = {}, onChange }) {
           
           <InputRow>
             <InputCol>
-              <Label>Border color: <ColorInput type="color" value={areaBorderColor} onChange={e=>setAreaBorderColor(e.target.value)} /></Label>
-            </InputCol>
-            <InputCol>
               <Label>
-                Dash:
-                <SvgButtonGroup>
-                  {LINE_STYLES.lineDash.map(opt=>(
-                    <SvgRadioButton
-                      key={opt.name}
-                      selected={areaDash===opt.name}
-                      onClick={()=>setAreaDash(opt.name)}
-                      title={opt.name}
-                      type="button"
-                    >
-                      {renderOskariSvg(opt.data, 30)}
-                    </SvgRadioButton>
-                  ))}
-                </SvgButtonGroup>
+                Border color: <ColorInput type="color" value={areaBorderColor} onChange={e=>setAreaBorderColor(e.target.value)} />
               </Label>
             </InputCol>
             <InputCol>
-              <Label>
-                Join:
-                <SvgButtonGroup>
-                  {LINE_STYLES.corners.map(opt=>(
-                    <SvgRadioButton
-                      key={opt.name}
-                      selected={areaJoin===opt.name}
-                      onClick={()=>setAreaJoin(opt.name)}
-                      title={opt.name}
-                      type="button"
-                    >
-                      {renderOskariSvg(opt.data, 30)}
-                    </SvgRadioButton>
-                  ))}
-                </SvgButtonGroup>
-              </Label>
+              <SvgLabel>Dash:</SvgLabel>
+              <SvgButtonGroup>
+                {LINE_STYLES.lineDash.map(opt=>(
+                  <SvgRadioButton
+                    key={opt.name}
+                    selected={areaDash===opt.name}
+                    onClick={()=>setAreaDash(opt.name)}
+                    title={opt.name}
+                    type="button"
+                  >
+                    {renderOskariSvg(opt.data, 30)}
+                  </SvgRadioButton>
+                ))}
+              </SvgButtonGroup>
+            </InputCol>
+            <InputCol>
+              <SvgLabel>Join:</SvgLabel>
+              <SvgButtonGroup>
+                {LINE_STYLES.corners.map(opt=>(
+                  <SvgRadioButton
+                    key={opt.name}
+                    selected={areaJoin===opt.name}
+                    onClick={()=>setAreaJoin(opt.name)}
+                    title={opt.name}
+                    type="button"
+                  >
+                    {renderOskariSvg(opt.data, 30)}
+                  </SvgRadioButton>
+                ))}
+              </SvgButtonGroup>
             </InputCol>
             <InputCol style={{ maxWidth: 110 }}>
               <Label>
@@ -442,22 +433,20 @@ export default function StyleEditor({ initialStyle = {}, onChange }) {
               </Label>
             </InputCol>
             <InputCol>
-              <Label>
-                Fill pattern:
-                <SvgButtonGroup>
-                  {fillPatternOptions.map(opt=>(
-                    <SvgRadioButton
-                      key={opt.id}
-                      selected={fillPattern===opt.value}
-                      onClick={()=>setFillPattern(opt.value)}
-                      title={opt.label}
-                      type="button"
-                    >
-                      {opt.preview}
-                    </SvgRadioButton>
-                  ))}
-                </SvgButtonGroup>
-              </Label>
+              <SvgLabel>Fill pattern:</SvgLabel>
+              <SvgButtonGroup>
+                {fillPatternOptions.map(opt=>(
+                  <SvgRadioButton
+                    key={opt.id}
+                    selected={fillPattern===opt.value}
+                    onClick={()=>setFillPattern(opt.value)}
+                    title={opt.label}
+                    type="button"
+                  >
+                    {opt.preview}
+                  </SvgRadioButton>
+                ))}
+              </SvgButtonGroup>
             </InputCol>
           </InputRow>
         </Grouping>
