@@ -613,12 +613,10 @@ const DatasetImport = () => {
           />
         </SwiperSlide>
         <SwiperSlide>
-          <div style={{ maxWidth: 400, margin: "0 auto" }}>
             <StyleEditor
               initialStyle={style}
               onChange={setStyle}
             />
-          </div>
         </SwiperSlide>
       </StyledSwiper>
     </StyledMainContainer>

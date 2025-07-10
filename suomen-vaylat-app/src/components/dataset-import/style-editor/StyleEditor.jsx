@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import { POINT_SHAPES} from "./styleConstants";
 
 import { FILL_ORDER, FILLS, LINE_STYLES } from "./styleConstants"; // Adjust path!
 /* 
@@ -8,17 +9,6 @@ Your oskariStyleConstants.js should export:
 - FILLS (mapping name -> number)
 - LINE_STYLES: { lineDash, corners, linecaps } (arrays of {name, data})
 */
-
-// --- Point shapes: Add SVGs or unicode as needed ---
-const POINT_SHAPES = [
-  { id: 0, label: "Circle", preview: '●' },
-  { id: 1, label: "Square", preview: '■' },
-  { id: 2, label: "Triangle", preview: '▲' },
-  { id: 3, label: "Diamond", preview: '◆' },
-  { id: 4, label: "Star", preview: '★' },
-  { id: 5, label: "Cross", preview: '✚' },
-  { id: 6, label: "X", preview: '✖' }
-];
 
 const TabButtonGroup = styled.div`
   display: flex;
@@ -90,17 +80,17 @@ const SvgButtonGroup = styled.div`
 `;
 
 const SvgRadioButton = styled.button`
-  min-width: 38px;
+  width: 38px;
   height: 38px;
   background: ${p => p.selected ? "#ffe2c9" : "#f3f4f8"};
   border: 2px solid ${p => p.selected ? "#ff8c28" : "#e0e3e7"};
   border-radius: 8px;
   cursor: pointer;
-  font-size: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
   box-shadow: ${p => p.selected ? "0 0 8px #ffbe8b44" : "none"};
+  padding: 0;
   &:hover, &:focus { border-color: #ff8c28; background: #ffe6d2; }
 `;
 
