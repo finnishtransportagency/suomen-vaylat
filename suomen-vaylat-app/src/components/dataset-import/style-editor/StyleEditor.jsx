@@ -19,8 +19,8 @@ const TypeRadioButton = styled.label`
   font-size: 16px;
   font-weight: 600;
   background: ${({ selected }) => selected ? "#fff" : "#f2f4f9"};
-  color: ${({ selected }) => selected ? "#1976d2" : "#70768d"};
-  border: 2px solid ${({ selected }) => selected ? "#ff8c28" : "#e0e3e7"};
+  color: ${p => p.selected ? p.theme.colors.mainColor1 : p.theme.colors.darkGrey};
+  border: 2px solid ${p => p.selected ? p.theme.colors.mainColor1 : "#e0e3e7"};
   border-radius: 10px;
   cursor: pointer;
   padding: 13px 0 13px 0;
@@ -33,8 +33,7 @@ const TypeRadioButton = styled.label`
 
   &:hover, &:focus-within {
     background: #f9fbfc;
-    color: #1976d2;
-    border-color: #ff8c28;
+    border-color: ${p => !p.selected && p.theme.colors.mainColor1};
     outline: none;
   }
 `;
@@ -45,8 +44,10 @@ const RadioDot = styled.span`
   border-radius: 50%;
   box-sizing: border-box;
   margin-right: 9px;
-  border: 2.2px solid ${({ selected }) => selected ? "#ff8c28" : "#b5b5d1"};
-  background: ${({ selected }) => selected ? "#ffd6a0" : "#fff"};
+  border: 2.2px solid ${({ selected, theme }) =>
+    selected ? theme.colors.mainColor1 : theme.colors.lightGrey};
+  background: ${({ selected, theme }) =>
+    selected ? theme.colors.transparentMain : theme.colors.white};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -56,11 +57,13 @@ const RadioDot = styled.span`
     width: 7px;
     height: 7px;
     border-radius: 50%;
-    background: ${({ selected }) => selected ? "#ff8c28" : "transparent"};
+    background: ${({ selected, theme }) =>
+      selected ? theme.colors.mainColor1 : "transparent"};
     display: block;
     transition: background .12s;
   }
 `;
+
 
 const Grouping = styled.fieldset`
   border: none;
@@ -68,12 +71,9 @@ const Grouping = styled.fieldset`
   padding: 0;
 `;
 
-const GroupLabel = styled.legend`
-  font-weight: 700;
-  font-size: 14.5px;
-  color: #1976d2;
-  margin-bottom: 4px;
-  padding: 0 1px;
+const GroupTitle = styled.h6`
+  font-weight: 600;
+  color: ${p => p.theme.colors.mainColor1};
 `;
 
 const Label = styled.label`
@@ -93,7 +93,7 @@ const SvgLabel = styled.div`
 
 const InputRow = styled.div`
   display: flex;
-  gap: 13px 14px;
+  gap: 1em 2em;
   margin-bottom: 12px;
   align-items: center;
   flex-wrap: wrap;
@@ -112,8 +112,8 @@ const SvgButtonGroup = styled.div`
 const SvgRadioButton = styled.button`
   width: 38px;
   height: 38px;
-  background: ${p => p.selected ? "#ffe2c9" : "#f3f4f8"};
-  border: 2px solid ${p => p.selected ? "#ff8c28" : "#e0e3e7"};
+  background: ${p => p.selected ? p.theme.colors.mainColor3transparent80 : "#f3f4f8"};
+  border: 2px solid ${p => p.selected ? p.theme.colors.mainColor1 : "#e0e3e7"};
   border-radius: 8px;
   cursor: pointer;
   display: flex;
@@ -121,7 +121,7 @@ const SvgRadioButton = styled.button`
   justify-content: center;
   box-shadow: ${p => p.selected ? "0 0 8px #ffbe8b44" : "none"};
   padding: 0;
-  &:hover { border-color: #ff0101; background: #0709cf; }
+  &:hover { border-color: ${p => !p.selected && p.theme.colors.lightGrey}; background-color: ${p => !p.selected && p.theme.colors.lightGrey};}
 `;
 
 const ColorInput = styled.input`
@@ -301,7 +301,7 @@ export default function StyleEditor({ initialStyle = {}, onChange }) {
 
   return (
     <>
-      <SvgLabel style={{ marginBottom: 0 }}>Choose type:</SvgLabel>
+      <GroupTitle>Choose type:</GroupTitle>
       <RadioTypeGroup role="radiogroup" aria-label="Geometry type">
         <TypeRadioButton selected={type === "point"}>
           <input
@@ -340,12 +340,13 @@ export default function StyleEditor({ initialStyle = {}, onChange }) {
 
       {type === "point" && (
         <Grouping>
-          <GroupLabel>Point style</GroupLabel>
+          <GroupTitle>Point style</GroupTitle>
           <InputRow>
             <InputCol>
               <Label>
-                Colour: <ColorInput type="color" value={pointColor} onChange={e=>setPointColor(e.target.value)}/>
+                Colour:
               </Label>
+              <ColorInput type="color" value={pointColor} onChange={e=>setPointColor(e.target.value)}/>
             </InputCol>
             <InputCol style={{ minWidth: 140 }}>
               <SvgLabel>Shape:</SvgLabel>
@@ -365,8 +366,9 @@ export default function StyleEditor({ initialStyle = {}, onChange }) {
             </InputCol>
             <InputCol style={{ maxWidth: 110 }}>
               <Label>
-                Size: <NumberInput type="number" min={1} max={5} value={pointSize} onChange={e=>setPointSize(Number(e.target.value))}/>
+                Size:
               </Label>
+              <NumberInput type="number" min={1} max={5} value={pointSize} onChange={e=>setPointSize(Number(e.target.value))}/>
             </InputCol>
           </InputRow>
         </Grouping>
@@ -374,12 +376,13 @@ export default function StyleEditor({ initialStyle = {}, onChange }) {
 
       {type === "line" && (
         <Grouping>
-          <GroupLabel>Line style</GroupLabel>
+          <GroupTitle>Line style</GroupTitle>
           <InputRow>
             <InputCol>
               <Label>
-                Colour: <ColorInput type="color" value={lineColor} onChange={e=>setLineColor(e.target.value)} />
+                Colour:
               </Label>
+              <ColorInput type="color" value={lineColor} onChange={e=>setLineColor(e.target.value)} />
             </InputCol>
             <InputCol>
               <SvgLabel>Dash:</SvgLabel>
@@ -433,8 +436,9 @@ export default function StyleEditor({ initialStyle = {}, onChange }) {
             </InputCol>
             <InputCol style={{ maxWidth: 110 }}>
               <Label>
-                Width: <NumberInput type="number" min={1} max={5} value={lineWidth} onChange={e=>setLineWidth(Number(e.target.value))}/>
+                Width:
               </Label>
+              <NumberInput type="number" min={1} max={5} value={lineWidth} onChange={e=>setLineWidth(Number(e.target.value))}/>
             </InputCol>
           </InputRow>
         </Grouping>
@@ -442,13 +446,14 @@ export default function StyleEditor({ initialStyle = {}, onChange }) {
 
       {type === "area" && (
         <Grouping>
-          <GroupLabel>Area style</GroupLabel>
+          <GroupTitle>Area style</GroupTitle>
           
           <InputRow>
             <InputCol>
               <Label>
-                Border color: <ColorInput type="color" value={areaBorderColor} onChange={e=>setAreaBorderColor(e.target.value)} />
+                Border color:
               </Label>
+              <ColorInput type="color" value={areaBorderColor} onChange={e=>setAreaBorderColor(e.target.value)} />
             </InputCol>
             <InputCol>
               <SvgLabel>Dash:</SvgLabel>
@@ -484,15 +489,17 @@ export default function StyleEditor({ initialStyle = {}, onChange }) {
             </InputCol>
             <InputCol style={{ maxWidth: 110 }}>
               <Label>
-                Width: <NumberInput type="number" min={1} max={5} value={areaBorderWidth} onChange={e=>setAreaBorderWidth(Number(e.target.value))}/>
+                Width:
               </Label>
+              <NumberInput type="number" min={1} max={5} value={areaBorderWidth} onChange={e=>setAreaBorderWidth(Number(e.target.value))}/>
             </InputCol>
           </InputRow>
           <InputRow>
             <InputCol>
               <Label>
-                Fill color: <ColorInput type="color" value={fillColor} onChange={e=>setFillColor(e.target.value)} />
+                Fill color:
               </Label>
+              <ColorInput type="color" value={fillColor} onChange={e=>setFillColor(e.target.value)} />
             </InputCol>
             <InputCol>
               <SvgLabel>Fill pattern:</SvgLabel>

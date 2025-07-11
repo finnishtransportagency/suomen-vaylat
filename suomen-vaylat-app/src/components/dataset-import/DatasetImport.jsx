@@ -63,8 +63,6 @@ const StyledTab = styled.div`
   background: ${(props) => (props.isSelected ? '#fff' : '#F2F2F2')};
   border-radius: 4px 4px 0 0;
   font-weight: ${(props) => (props.isSelected ? 'bold' : 'normal')};
-  box-shadow: ${(props) =>
-    props.isSelected ? '0px -1px 11px rgba(0,99,175,0.08)' : 'none'};
   p {
     font-size: 15px;
     font-weight: bold;
@@ -76,7 +74,7 @@ const StyledSwiper = styled(Swiper)`
   .swiper-slide {
     background-color: #fff;
     padding: 32px 32px 24px 32px;
-    min-height: 200px;
+    height: auto;
   }
   transition: box-shadow 0.3s ease-out;
 `;
