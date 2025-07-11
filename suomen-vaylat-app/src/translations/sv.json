@@ -51,6 +51,74 @@
     "userGuide": "Användarguide",
     "pageInfo": "Sidinformation"
   },
+  "datasetImport": {
+    "title": "Importera egna dataset",
+    "menuButtonTitle": "Importera dataset",
+    "tabGeneral": "Allmänt",
+    "tabVisualization": "Visualisering",
+    "infoText": "Ladda upp ett dataset från din dator som en enda zip-fil som innehåller nödvändiga filer i något av följande format:",
+    "uploadTip": "Dra en fil hit och/eller välj en fil att ladda upp",
+    "uploadedFile": "Uppladdad fil:",
+    "layerName": "Lager namn",
+    "desc": "Beskrivning",
+    "source": "Källa",
+    "languages": "Andra språk",
+    "english": "Engelska",
+    "swedish": "Svenska",
+    "swedishSectionTitle": "På svenska",
+    "swedishLayerName": "Lagernamn på svenska",
+    "swedishDesc": "Beskrivning på svenska",
+    "swedishSource": "Källa på svenska",
+    "mandatory": "(obligatorisk)",
+    "cancel": "AVBRYT",
+    "import": "IMPORTERA DATASET",
+    "visTabText": "Visualiseringsinställningar här...",
+    "fileNote": "Zip-filen får endast innehålla ett lager och får vara högst 10 MB stor. När den packats upp får filen vara högst 150 MB.",
+    "languagesTooltip": "Välj ytterligare språk för vilka metadata för dataset ges.",
+    "englishSectionTitle": "På engelska",
+    "englishLayerName": "Lagernamn på engelska",
+    "englishDesc": "Beskrivning på engelska",
+    "englishSource": "Källa på engelska",
+    "fileList": [
+      "Shapefile (.shp, .shx, .dbf och .prj samt eventuell .cpg)",
+      "GPX-överföringsfil (.gpx)",
+      "GeoPackage-fil (.gpkg)",
+      "MapInfo (.mif och .mid)",
+      "Google Maps (.kml)"
+    ],
+    "validationMsg": "Endast bokstäver (a-z, A-Z), siffror, understreck, bindestreck och parenteser är tillåtna.",
+    "fileSelect": "Välj fil",
+    "file": "Fil:",
+    "styleEditor": {
+      "preview": { "label": "JSON-förhandsgranskning:" },
+      "subheaders": {
+        "style": "Stil"
+      },
+      "dot": {
+        "title": "Punktstil",
+        "color": { "label": "Färg" },
+        "symbol": { "label": "Symbol" },
+        "size": { "label": "Storlek" }
+      },
+      "line": {
+        "title": "Linjestil",
+        "color": { "label": "Färg" },
+        "style": { "label": "Stil" },
+        "cap": { "label": "Ändar" },
+        "corner": { "label": "Hörn" },
+        "width": { "label": "Bredd" } 
+      },
+      "area": {
+        "title": "Ytstil",
+        "linecolor": { "label": "Färg" },
+        "linestyle": { "label": "Stil" },
+        "linecorner": { "label": "Hörn" },
+        "linewidth": { "label": "Linjens bredd" },
+        "color": { "label": "Fyllnadsfärg" },
+        "fill": { "label": "Fyllnadsmönster" }
+      }
+    }
+  },
   "savedContent" : {
     "savedContent" : "Mina uppgifter",
     "viewTitle" : "Syn",

@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { POINT_SHAPES } from "./styleConstants";
-import { FILL_ORDER, FILLS, LINE_STYLES } from "./styleConstants"; // Adjust path if needed!
+import { FILL_ORDER, FILLS, LINE_STYLES } from "./styleConstants";
+import strings from '../../../translations';
 
 // ---- Styled Components ----
 const RadioTypeGroup = styled.div`
@@ -64,7 +65,6 @@ const RadioDot = styled.span`
   }
 `;
 
-
 const Grouping = styled.fieldset`
   border: none;
   margin: 0 0 10px 0;
@@ -74,6 +74,12 @@ const Grouping = styled.fieldset`
 const GroupTitle = styled.h6`
   font-weight: 600;
   color: ${p => p.theme.colors.mainColor1};
+`;
+
+const StyledJSONPreviewTitle = styled.p`
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 1em;
 `;
 
 const Label = styled.label`
@@ -121,7 +127,7 @@ const SvgRadioButton = styled.button`
   justify-content: center;
   box-shadow: ${p => p.selected ? "0 0 8px #ffbe8b44" : "none"};
   padding: 0;
-  &:hover { border-color: ${p => !p.selected && p.theme.colors.lightGrey}; background-color: ${p => !p.selected && p.theme.colors.lightGrey};}
+  &:hover { border-color: ${p => !p.selected && p.theme.colors.darkGrey}; background-color: ${p => !p.selected && p.theme.colors.lightGrey};}
 `;
 
 const ColorInput = styled.input`
@@ -172,7 +178,6 @@ const FillPatternSvgPreview = ({ type }) => {
   // Render different patterns
   switch (type) {
     case "TRANSPARENT":
-      // Checkerboard
       return (
         <svg width="24" height="15">
           <rect x="0" y="0" width="24" height="15" fill={LIGHT} stroke={BORDER} strokeWidth="1"/>
@@ -299,10 +304,15 @@ export default function StyleEditor({ initialStyle = {}, onChange }) {
       fillColor, fillPattern, areaBorderColor, areaBorderWidth,
       areaDash, areaJoin, onChange]);
 
+  // Shortcut to styleEditor section
+  const seStrings = strings?.datasetImport?.styleEditor || {};
+
   return (
     <>
-      <GroupTitle>Choose type:</GroupTitle>
-      <RadioTypeGroup role="radiogroup" aria-label="Geometry type">
+      <GroupTitle>
+        {seStrings.subheaders?.style || "Style"}
+      </GroupTitle>
+      <RadioTypeGroup role="radiogroup" aria-label={strings?.datasetImport?.styleEditor?.subheaders?.style || "Style"}>
         <TypeRadioButton selected={type === "point"}>
           <input
             type="radio"
@@ -310,9 +320,10 @@ export default function StyleEditor({ initialStyle = {}, onChange }) {
             value="point"
             checked={type === "point"}
             onChange={() => setType("point")}
+            aria-label={seStrings.dot?.title || "Point feature style"}
           />
           <RadioDot selected={type === "point"} />
-          Point
+          {seStrings.dot?.title || "Point feature style"}
         </TypeRadioButton>
         <TypeRadioButton selected={type === "line"}>
           <input
@@ -321,9 +332,10 @@ export default function StyleEditor({ initialStyle = {}, onChange }) {
             value="line"
             checked={type === "line"}
             onChange={() => setType("line")}
+            aria-label={seStrings.line?.title || "Line feature style"}
           />
           <RadioDot selected={type === "line"} />
-          Line
+          {seStrings.line?.title || "Line feature style"}
         </TypeRadioButton>
         <TypeRadioButton selected={type === "area"}>
           <input
@@ -332,24 +344,29 @@ export default function StyleEditor({ initialStyle = {}, onChange }) {
             value="area"
             checked={type === "area"}
             onChange={() => setType("area")}
+            aria-label={seStrings.area?.title || "Area feature style"}
           />
           <RadioDot selected={type === "area"} />
-          Area
+          {seStrings.area?.title || "Area feature style"}
         </TypeRadioButton>
       </RadioTypeGroup>
 
       {type === "point" && (
         <Grouping>
-          <GroupTitle>Point style</GroupTitle>
+          <GroupTitle>
+            {seStrings.dot?.title || "Point feature style"}
+          </GroupTitle>
           <InputRow>
             <InputCol>
               <Label>
-                Colour:
+                {seStrings.dot?.color?.label || "Colour"}:
               </Label>
               <ColorInput type="color" value={pointColor} onChange={e=>setPointColor(e.target.value)}/>
             </InputCol>
             <InputCol style={{ minWidth: 140 }}>
-              <SvgLabel>Shape:</SvgLabel>
+              <SvgLabel>
+                {seStrings.dot?.symbol?.label || "Icon"}:
+              </SvgLabel>
               <SvgButtonGroup>
                 {POINT_SHAPES.map(s=>(
                   <SvgRadioButton
@@ -366,7 +383,7 @@ export default function StyleEditor({ initialStyle = {}, onChange }) {
             </InputCol>
             <InputCol style={{ maxWidth: 110 }}>
               <Label>
-                Size:
+                {seStrings.dot?.size?.label || "Size"}:
               </Label>
               <NumberInput type="number" min={1} max={5} value={pointSize} onChange={e=>setPointSize(Number(e.target.value))}/>
             </InputCol>
@@ -376,16 +393,20 @@ export default function StyleEditor({ initialStyle = {}, onChange }) {
 
       {type === "line" && (
         <Grouping>
-          <GroupTitle>Line style</GroupTitle>
+          <GroupTitle>
+            {seStrings.line?.title || "Line feature style"}
+          </GroupTitle>
           <InputRow>
             <InputCol>
               <Label>
-                Colour:
+                {seStrings.line?.color?.label || "Colour"}:
               </Label>
               <ColorInput type="color" value={lineColor} onChange={e=>setLineColor(e.target.value)} />
             </InputCol>
             <InputCol>
-              <SvgLabel>Dash:</SvgLabel>
+              <SvgLabel>
+                {seStrings.line?.style?.label || "Dash"}:
+              </SvgLabel>
               <SvgButtonGroup>
                 {LINE_STYLES.lineDash.map(opt => (
                   <SvgRadioButton
@@ -403,7 +424,9 @@ export default function StyleEditor({ initialStyle = {}, onChange }) {
           </InputRow>
           <InputRow>
             <InputCol>
-              <SvgLabel>Cap:</SvgLabel>
+              <SvgLabel>
+                {seStrings.line?.cap?.label || "Endings"}:
+              </SvgLabel>
               <SvgButtonGroup>
                 {LINE_STYLES.linecaps.map(opt => (
                   <SvgRadioButton
@@ -419,7 +442,9 @@ export default function StyleEditor({ initialStyle = {}, onChange }) {
               </SvgButtonGroup>
             </InputCol>
             <InputCol>
-              <SvgLabel>Join:</SvgLabel>
+              <SvgLabel>
+                {seStrings.line?.corner?.label || "Corners"}:
+              </SvgLabel>
               <SvgButtonGroup>
                 {LINE_STYLES.corners.map(opt=>(
                   <SvgRadioButton
@@ -436,7 +461,7 @@ export default function StyleEditor({ initialStyle = {}, onChange }) {
             </InputCol>
             <InputCol style={{ maxWidth: 110 }}>
               <Label>
-                Width:
+                {seStrings.line?.width?.label || "Width"}:
               </Label>
               <NumberInput type="number" min={1} max={5} value={lineWidth} onChange={e=>setLineWidth(Number(e.target.value))}/>
             </InputCol>
@@ -446,17 +471,21 @@ export default function StyleEditor({ initialStyle = {}, onChange }) {
 
       {type === "area" && (
         <Grouping>
-          <GroupTitle>Area style</GroupTitle>
+          <GroupTitle>
+            {seStrings.area?.title || "Area feature style"}
+          </GroupTitle>
           
           <InputRow>
             <InputCol>
               <Label>
-                Border color:
+                {seStrings.area?.linecolor?.label || "Line colour"}:
               </Label>
               <ColorInput type="color" value={areaBorderColor} onChange={e=>setAreaBorderColor(e.target.value)} />
             </InputCol>
             <InputCol>
-              <SvgLabel>Dash:</SvgLabel>
+              <SvgLabel>
+                {seStrings.area?.linestyle?.label || "Line dash"}:
+              </SvgLabel>
               <SvgButtonGroup>
                 {LINE_STYLES.lineDash.map(opt=>(
                   <SvgRadioButton
@@ -472,7 +501,9 @@ export default function StyleEditor({ initialStyle = {}, onChange }) {
               </SvgButtonGroup>
             </InputCol>
             <InputCol>
-              <SvgLabel>Join:</SvgLabel>
+              <SvgLabel>
+                {seStrings.area?.linecorner?.label || "Line corners"}:
+              </SvgLabel>
               <SvgButtonGroup>
                 {LINE_STYLES.corners.map(opt=>(
                   <SvgRadioButton
@@ -489,7 +520,7 @@ export default function StyleEditor({ initialStyle = {}, onChange }) {
             </InputCol>
             <InputCol style={{ maxWidth: 110 }}>
               <Label>
-                Width:
+                {seStrings.area?.linewidth?.label || "Line width"}:
               </Label>
               <NumberInput type="number" min={1} max={5} value={areaBorderWidth} onChange={e=>setAreaBorderWidth(Number(e.target.value))}/>
             </InputCol>
@@ -497,12 +528,14 @@ export default function StyleEditor({ initialStyle = {}, onChange }) {
           <InputRow>
             <InputCol>
               <Label>
-                Fill color:
+                {seStrings.area?.color?.label || "Fill colour"}:
               </Label>
               <ColorInput type="color" value={fillColor} onChange={e=>setFillColor(e.target.value)} />
             </InputCol>
             <InputCol>
-              <SvgLabel>Fill pattern:</SvgLabel>
+              <SvgLabel>
+                {seStrings.area?.fill?.label || "Fill pattern"}:
+              </SvgLabel>
               <SvgButtonGroup>
                 {fillPatternOptions.map(opt=>(
                   <SvgRadioButton
@@ -522,22 +555,26 @@ export default function StyleEditor({ initialStyle = {}, onChange }) {
       )}
 
       <PreviewBox>
-        <b>Preview / JSON style to backend:</b>
-        <pre style={{margin:0}}>{JSON.stringify(
-          type==='point'?{
-            image: { shape: pointShape, size: pointSize, fill: { color: pointColor } }
-          }:type==='line'?{
-            stroke: {
-              color: lineColor, width: lineWidth, lineDash: lineDash,
-              lineCap: lineCap, lineJoin: lineJoin
-            }
-          }:{
-            fill: { color: fillColor, area: { pattern: fillPattern } },
-            stroke: { area: {
-              color: areaBorderColor, width: areaBorderWidth,
-              lineDash: areaDash, lineJoin: areaJoin
-            } }
-          }, null, 2)}</pre>
+        <StyledJSONPreviewTitle>
+          {seStrings.preview?.label || "Preview"}
+        </StyledJSONPreviewTitle>
+        <pre style={{margin:0}}>
+          {JSON.stringify(
+            type==='point'?{
+              image: { shape: pointShape, size: pointSize, fill: { color: pointColor } }
+            }:type==='line'?{
+              stroke: {
+                color: lineColor, width: lineWidth, lineDash: lineDash,
+                lineCap: lineCap, lineJoin: lineJoin
+              }
+            }:{
+              fill: { color: fillColor, area: { pattern: fillPattern } },
+              stroke: { area: {
+                color: areaBorderColor, width: areaBorderWidth,
+                lineDash: areaDash, lineJoin: areaJoin
+              } }
+            }, null, 2)}
+        </pre>
       </PreviewBox>
     </>
   );

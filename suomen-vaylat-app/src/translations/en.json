@@ -50,6 +50,74 @@
     "userGuide": "User guide",
     "pageInfo": "Application details"
   },
+  "datasetImport": {
+    "title": "Import your own datasets",
+    "menuButtonTitle": "Import datasets",
+    "tabGeneral": "General",
+    "tabVisualization": "Visualization",
+    "infoText": "Upload a dataset from your computer as a single zipped file containing the required files in one of the following formats:",
+    "uploadTip": "Drag a file here and/or choose a file to upload",
+    "uploadedFile": "Uploaded file:",
+    "layerName": "Layer name",
+    "desc": "Description",
+    "source": "Source",
+    "languages": "Other languages",
+    "english": "English",
+    "swedish": "Swedish",
+    "swedishSectionTitle": "In Swedish",
+    "swedishLayerName": "Layer name in Swedish",
+    "swedishDesc": "Description in Swedish",
+    "swedishSource": "Source in Swedish",
+    "mandatory": "(mandatory)",
+    "cancel": "CANCEL",
+    "import": "IMPORT DATASET",
+    "visTabText": "Visualization settings here...",
+    "fileNote": "The zip file must contain only one layer and its maximum size is 10 MB. When unzipped, the file size must not exceed 150 MB.",
+    "languagesTooltip": "Select additional languages for which to provide metadata for the dataset.",
+    "englishSectionTitle": "In English",
+    "englishLayerName": "Layer name in English",
+    "englishDesc": "Description in English",
+    "englishSource": "Source in English",
+    "fileList": [
+      "Shapefile (.shp, .shx, .dbf and .prj, optional .cpg)",
+      "GPX transfer file (.gpx)",
+      "GeoPackage file (.gpkg)",
+      "MapInfo (.mif and .mid)",
+      "Google Maps (.kml)"
+    ],
+    "validationMsg": "Only letters (a-z, A-Z), numbers, underscore, hyphen and parentheses are allowed.",
+    "fileSelect": "Select file",
+    "file": "File:",
+    "styleEditor": {
+      "preview": { "label": "JSON preview:" },
+      "subheaders": {
+        "style": "Style"
+      },
+      "dot": {
+        "title": "Point style",
+        "color": { "label": "Colour" },
+        "symbol": { "label": "Symbol" },
+        "size": { "label": "Size" }
+      },
+      "line": {
+        "title": "Line style",
+        "color": { "label": "Colour" },
+        "style": { "label": "Style" },
+        "cap": { "label": "Endings" },
+        "corner": { "label": "Corners" },
+        "width": { "label": "Width" } 
+      },
+      "area": {
+        "title": "Area style",
+        "linecolor": { "label": "Colour" },
+        "linestyle": { "label": "Style" },
+        "linecorner": { "label": "Corners" },
+        "linewidth": { "label": "Line width" },
+        "color": { "label": "Fill colour" },
+        "fill": { "label": "Fill pattern" }
+      }
+    }
+  },
   "savedContent" : {
     "savedContent" : "My data",
     "viewTitle" : "Views",

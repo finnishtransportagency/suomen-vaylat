@@ -52,147 +52,72 @@
     "UserGuide": "Käyttöohjeet"
   },
   "datasetImport": {
-      "title": "Omien aineistojen tuonti",
-      "menuButtonTitle": "Tuo aineistoja",
-      "tabGeneral": "Yleiset",
-      "tabVisualization": "Visualisointi",
-      "infoText": "Lataa aineisto tietokoneeltasi yhdeksi zip-tiedostoksi pakattuna, joka sisältää tarvittavat tiedostot jostain seuraavasta tiedostomuodosta:",
-      "uploadTip": "Raahaa tiedosto tähän ja valitse selaamalla",
-      "uploadedFile": "Ladattu tiedosto:",
-      "layerName": "Karttatason nimi",
-      "desc": "Kuvaus",
-      "source": "Tietolähde",
-      "languages": "Muut kielet",
-      "english": "Englanti",
-      "swedish": "Ruotsi",
-      "swedishSectionTitle": "Ruotsiksi",
-      "swedishLayerName": "Karttatason nimi ruotsiksi",
-      "swedishDesc": "Kuvaus ruotsiksi",
-      "swedishSource": "Tietolähde ruotsiksi",
-      "mandatory": "(pakollinen)",
-      "cancel": "PERUUTA",
-      "import": "TUO AINEISTO",
-      "visTabText": "Visualisointi-asetukset tähän...",
-      "fileNote": "Zip-tiedosto saa sisältää vain yhden karttatason ja sen maksimikoko on 10 Mt. Purettuna tiedoston koko saa olla korkeintaan 150 Mt.",
-      "languagesTooltip": "Valitse lisäkielet, joille aineiston metatiedot annetaan.",
-      "englishSectionTitle": "Englanniksi",
-      "englishLayerName": "Layer name in English",
-      "englishDesc": "Description in English",
-      "englishSource": "Source in English",
-      "fileList": [
-        "Shapefile (.shp, .shx, .dbf ja .prj sekä mahdollinen .cpg)",
-        "GPX-siirtotiedosto (.gpx)",
-        "GeoPackage-tiedosto (.gpkg)",
-        "MapInfo (.mif ja .mid)",
-        "Google Maps (.kml)"
-      ],
-      "validationMsg": "Vain isot/pienet kirjaimet, numerot, alaviiva, väliviiva ja sulut sallitaan.",
-      "fileSelect": "Valitse tiedosto",
-      "file": "Tiedosto:",
-      "styleEditor": {
-            "subheaders" : {
-                "name" : "Style name",
-                "style" : "Style"
-            },
-            "tooltips": {
-                "dot": "Edit point feature style",
-                "area": "Edit area feature style",
-                "line": "Edit line feature style"
-            },
-            "validation": {
-                "title": "The given data are invalid:",
-                "lineSize": "The line width is invalid. It must be between 1 and 50.",
-                "borderWidth": "The line width is invalid. It must be between 1 and 50."
-            },
-            "dot": {
-                "title": "Point feature style",
-                "tooltip": "Define a style for point features.",
-                "symbol": {
-                    "label": "Icon"
-                },
-                "size": {
-                    "label": "Size"
-                },
-                "color": {
-                    "label": "Colour",
-                    "labelOr": "or",
-                    "labelCustom": "Custom colour (RGB 0-255)"
-                },
-                "preview": {
-                    "label": "Preview"
-                },
-                "buttons": {
-                    "save": "Save",
-                    "cancel": "Cancel"
-                }
-            },
-            "line": {
-                "title": "Line feature style",
-                "tooltip": "Define a style for line features.",
-                "style": {
-                    "label": "Dash"
-                },
-                "cap": {
-                    "label": "Endings"
-                },
-                "corner": {
-                    "label": "Corners"
-                },
-                "width": {
-                    "label": "Width"
-                },
-                "color": {
-                    "label": "Colour",
-                    "labelOr": "or",
-                    "labelCustom": "Custom colour (RGB 0-255)"
-                },
-                "preview": {
-                    "label": "Preview"
-                },
-                "buttons": {
-                    "save": "Save",
-                    "cancel": "Cancel"
-                }
-            },
-            "area": {
-                "title": "Area feature style",
-                "tooltip": "Define a style for area features.",
-                "linestyle": {
-                    "label": "Line dash"
-                },
-                "linecap": {
-                    "label": "Line endings"
-                },
-                "linecorner": {
-                    "label": "Line corners"
-                },
-                "linewidth": {
-                    "label": "Line width"
-                },
-                "linecolor": {
-                    "label": "Line colour",
-                    "labelOr": "or",
-                    "labelCustom": "Custom colour (RGB 0-255)"
-                },
-                "lineRemove": "Remove line style and colour",
-                "color": {
-                    "label": "Fill colour",
-                    "labelOr": "or",
-                    "labelCustom": "Custom colour (RGB 0-255)"
-                },
-                "fill": {
-                    "label": "Fill pattern"
-                },
-                "fillRemove": "Remove fill colour and pattern",
-                "preview": {
-                    "label": "Preview"
-                },
-                "buttons": {
-                    "save": "Save",
-                    "cancel": "Cancel"
-                }
-            }
+    "title": "Omien aineistojen tuonti",
+    "menuButtonTitle": "Tuo aineistoja",
+    "tabGeneral": "Yleiset",
+    "tabVisualization": "Visualisointi",
+    "infoText": "Lataa aineisto tietokoneeltasi yhdeksi zip-tiedostoksi pakattuna, joka sisältää tarvittavat tiedostot jostain seuraavasta tiedostomuodosta:",
+    "uploadTip": "Raahaa tiedosto tähän ja valitse selaamalla",
+    "uploadedFile": "Ladattu tiedosto:",
+    "layerName": "Karttatason nimi",
+    "desc": "Kuvaus",
+    "source": "Tietolähde",
+    "languages": "Muut kielet",
+    "english": "Englanti",
+    "swedish": "Ruotsi",
+    "swedishSectionTitle": "Ruotsiksi",
+    "swedishLayerName": "Karttatason nimi ruotsiksi",
+    "swedishDesc": "Kuvaus ruotsiksi",
+    "swedishSource": "Tietolähde ruotsiksi",
+    "mandatory": "(pakollinen)",
+    "cancel": "PERUUTA",
+    "import": "TUO AINEISTO",
+    "visTabText": "Visualisointi-asetukset tähän...",
+    "fileNote": "Zip-tiedosto saa sisältää vain yhden karttatason ja sen maksimikoko on 10 Mt. Purettuna tiedoston koko saa olla korkeintaan 150 Mt.",
+    "languagesTooltip": "Valitse lisäkielet, joille aineiston metatiedot annetaan.",
+    "englishSectionTitle": "Englanniksi",
+    "englishLayerName": "Layer name in English",
+    "englishDesc": "Description in English",
+    "englishSource": "Source in English",
+    "fileList": [
+      "Shapefile (.shp, .shx, .dbf ja .prj sekä mahdollinen .cpg)",
+      "GPX-siirtotiedosto (.gpx)",
+      "GeoPackage-tiedosto (.gpkg)",
+      "MapInfo (.mif ja .mid)",
+      "Google Maps (.kml)"
+    ],
+    "validationMsg": "Vain isot/pienet kirjaimet, numerot, alaviiva, väliviiva ja sulut sallitaan.",
+    "fileSelect": "Valitse tiedosto",
+    "file": "Tiedosto:",
+    "styleEditor": {
+      "preview": { "label": "JSON esikatselu:" },
+      "subheaders": {
+        "style": "Tyyli"
+      },
+      "dot": {
+        "title": "Pisteen tyyli",
+        "color": { "label": "Väri" },
+        "symbol": { "label": "Symboli" },
+        "size": { "label": "Koko" }
+      },
+      "line": {
+        "title": "Viivan tyyli",
+        "color": { "label": "Väri" },
+        "style": { "label": "Tyyli" },
+        "cap": { "label": "Päädyt" },
+        "corner": { "label": "Kulmat" },
+        "width": { "label": "Leveys" } 
+      },
+      "area": {
+        "title": "Alueen tyyli",
+        "linecolor": { "label": "Väri" },
+        "linestyle": { "label": "Tyyli" },
+        "linecorner": { "label": "Kulmat" },
+        "linewidth": { "label": "Viivan paksuus" },
+        "color": { "label": "Täyttöväri" },
+        "fill": { "label": "Täyttökuvio" }
       }
+    }
   },
   "savedContent": {
     "savedContent": "Omat tiedot",
