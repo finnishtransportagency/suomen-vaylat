@@ -449,7 +449,8 @@ const DatasetImport = () => {
   const [fields, setFields] = useState(initialFields);
   const [errors, setErrors] = useState(initialErrors);
   const [lang, setLang] = useState({ en: false, sv: false });
-  const [style, setStyle] = useState({}); // <-- Add this to store output from StyleEditor
+  const [styleEditorKey, setStyleEditorKey] = useState(0);
+  const [style, setStyle] = useState({});
 
   console.log("STYLE", style)
   const swiperRef = useRef();
@@ -474,8 +475,9 @@ const DatasetImport = () => {
     setFields(initialFields);
     setErrors(initialErrors);
     setLang({ en: false, sv: false });
-    setSelectedTab(0); // Optionally move to General tab
+    setSelectedTab(0);
     setStyle({});
+    setStyleEditorKey(k => k + 1);
   };
 
   const handleSubmitDataset = () => {
@@ -502,7 +504,7 @@ const DatasetImport = () => {
             fileType: uploadedFile.type,
             fileDataUrl: base64str,
             locale,
-            style         // <---- use the current style state from StyleEditor
+            style
           };
 
           channel.importDataset(
@@ -612,6 +614,7 @@ const DatasetImport = () => {
         </SwiperSlide>
         <SwiperSlide>
             <StyleEditor
+              key={styleEditorKey}
               initialStyle={style}
               onChange={setStyle}
             />
