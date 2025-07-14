@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { POINT_SHAPES } from "./styleConstants";
-import { FILL_ORDER, FILLS, LINE_STYLES } from "./styleConstants";
+import { FILL_ORDER, FILLS, LINE_STYLES, FillPatternSvgPreview } from "./styleConstants";
 import strings from '../../../translations';
 
 // ---- Styled Components ----
@@ -170,67 +170,6 @@ function renderOskariSvg(data, size = 32) {
   );
 }
 
-const FillPatternSvgPreview = ({ type }) => {
-  // Colors for fill/stroke (match Oskari default preview)
-  const DARK = "#444";
-  const LIGHT = "#fff";
-  const BORDER = "#d2d8df";
-  // Render different patterns
-  switch (type) {
-    case "TRANSPARENT":
-      return (
-        <svg width="24" height="15">
-          <rect x="0" y="0" width="24" height="15" fill={LIGHT} stroke={BORDER} strokeWidth="1"/>
-          <rect x="0" y="0" width="6" height="7.5" fill="#e5e7ef"/>
-          <rect x="6" y="7.5" width="6" height="7.5" fill="#e5e7ef"/>
-          <rect x="12" y="0" width="6" height="7.5" fill="#e5e7ef"/>
-          <rect x="18" y="7.5" width="6" height="7.5" fill="#e5e7ef"/>
-        </svg>
-      );
-    case "SOLID":
-      return (
-        <svg width="24" height="15">
-          <rect x="0" y="0" width="24" height="15" fill={DARK} stroke={BORDER} strokeWidth="1"/>
-        </svg>
-      );
-    case "THIN_HORIZONTAL":
-      return (
-        <svg width="24" height="15">
-          <rect x="0" y="0" width="24" height="15" fill={LIGHT} stroke={BORDER} strokeWidth="1"/>
-          <line x1="0" y1="4" x2="24" y2="4" stroke={DARK} strokeWidth="1"/>
-          <line x1="0" y1="10" x2="24" y2="10" stroke={DARK} strokeWidth="1"/>
-        </svg>
-      );
-    case "THICK_HORIZONTAL":
-      return (
-        <svg width="24" height="15">
-          <rect x="0" y="0" width="24" height="15" fill={LIGHT} stroke={BORDER} strokeWidth="1"/>
-          <line x1="0" y1="4" x2="24" y2="4" stroke={DARK} strokeWidth="2"/>
-          <line x1="0" y1="10" x2="24" y2="10" stroke={DARK} strokeWidth="2"/>
-        </svg>
-      );
-    case "THIN_DIAGONAL":
-      return (
-        <svg width="24" height="15">
-          <rect x="0" y="0" width="24" height="15" fill={LIGHT} stroke={BORDER} strokeWidth="1"/>
-          <line x1="2" y1="13" x2="15" y2="0" stroke={DARK} strokeWidth="1"/>
-          <line x1="9" y1="15" x2="24" y2="0" stroke={DARK} strokeWidth="1"/>
-          <line x1="19" y1="15" x2="24" y2="10" stroke={DARK} strokeWidth="1"/>
-        </svg>
-      );
-    case "THICK_DIAGONAL":
-      return (
-        <svg width="24" height="15">
-          <rect x="0" y="0" width="24" height="15" fill={LIGHT} stroke={BORDER} strokeWidth="1"/>
-          <line x1="2" y1="13" x2="15" y2="0" stroke={DARK} strokeWidth="2"/>
-          <line x1="9" y1="15" x2="24" y2="0" stroke={DARK} strokeWidth="2"/>
-          <line x1="19" y1="15" x2="24" y2="10" stroke={DARK} strokeWidth="2"/>
-        </svg>
-      );
-    default:
-      return null;
-  }
-};
 
 // --- FILL PATTERNS ---
 const fillPatternOptions = FILL_ORDER.map((name) => ({

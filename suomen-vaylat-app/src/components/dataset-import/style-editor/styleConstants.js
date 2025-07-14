@@ -108,3 +108,67 @@ export const POINT_SHAPES = MARKER_SVGS.map((svg, idx) => ({
   label: `Shape ${idx + 1}`,
   preview: renderMarkerSvg(svg)
 }));
+
+export const FillPatternSvgPreview = ({ type }) => {
+  // Colors for fill/stroke (match Oskari default preview)
+  const DARK = "#444";
+  const LIGHT = "#fff";
+  const BORDER = "#d2d8df";
+  // Render different patterns
+  switch (type) {
+    case "TRANSPARENT":
+      return (
+        <svg width="24" height="16">
+          <rect x="0" y="0" width="24" height="16" fill={LIGHT} stroke={BORDER} strokeWidth="1"/>
+          <rect x="0" y="0" width="6" height="8" fill="#e5e7ef"/>
+          <rect x="6" y="8" width="6" height="8" fill="#e5e7ef"/>
+          <rect x="12" y="0" width="6" height="8" fill="#e5e7ef"/>
+          <rect x="18" y="8" width="6" height="8" fill="#e5e7ef"/>
+        </svg>
+      );
+    case "SOLID":
+      return (
+        <svg width="24" height="16">
+          <rect x="0" y="0" width="24" height="16" fill={DARK} stroke={BORDER} strokeWidth="1"/>
+        </svg>
+      );
+    case "THIN_HORIZONTAL":
+      return (
+        <svg width="24" height="16">
+          <rect x="0" y="0" width="24" height="16" fill={LIGHT} stroke={BORDER} strokeWidth="1"/>
+          <line x1="0" y1="4" x2="24" y2="4" stroke={DARK} strokeWidth="1"/>
+          <line x1="0" y1="8" x2="24" y2="8" stroke={DARK} strokeWidth="1"/>
+          <line x1="0" y1="12" x2="24" y2="12" stroke={DARK} strokeWidth="1"/>
+        </svg>
+      );
+    case "THICK_HORIZONTAL":
+      return (
+        <svg width="24" height="16">
+          <rect x="0" y="0" width="24" height="16" fill={LIGHT} stroke={BORDER} strokeWidth="1"/>
+          <line x1="0" y1="4" x2="24" y2="4" stroke={DARK} strokeWidth="2"/>
+          <line x1="0" y1="8" x2="24" y2="8" stroke={DARK} strokeWidth="2"/>
+          <line x1="0" y1="12" x2="24" y2="12" stroke={DARK} strokeWidth="2"/>
+        </svg>
+      );
+    case "THIN_DIAGONAL":
+      return (
+        <svg width="24" height="16">
+          <rect x="0" y="0" width="24" height="16" fill={LIGHT} stroke={BORDER} strokeWidth="1"/>
+          <line x1="0" y1="16" x2="8" y2="0" stroke={DARK} strokeWidth="1"/>
+          <line x1="8" y1="16" x2="16" y2="0" stroke={DARK} strokeWidth="1"/>
+          <line x1="16" y1="16" x2="24" y2="0" stroke={DARK} strokeWidth="1"/>
+        </svg>
+      );
+    case "THICK_DIAGONAL":
+      return (
+        <svg width="24" height="16">
+          <rect x="0" y="0" width="24" height="16" fill={LIGHT} stroke={BORDER} strokeWidth="1"/>
+          <line x1="0" y1="16" x2="8" y2="0" stroke={DARK} strokeWidth="2"/>
+          <line x1="8" y1="16" x2="16" y2="0" stroke={DARK} strokeWidth="2"/>
+          <line x1="16" y1="16" x2="24" y2="0" stroke={DARK} strokeWidth="2"/>
+        </svg>
+      );
+    default:
+      return null;
+  }
+};
