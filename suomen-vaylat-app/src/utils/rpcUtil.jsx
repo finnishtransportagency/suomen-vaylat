@@ -54,6 +54,17 @@ export const getDescTagContent = (text, startTag, endTag) => {
  * @param {Object} channel
  */
 export const updateLayers = (store, channel) => {
+  updateAllLayers(store,channel);
+  updateSelectedLayers(store,channel);
+};
+
+/**
+ * Update all layers
+ * @method updateAllLayers
+ * @param {Object} store
+ * @param {Object} channel
+ */
+export const updateAllLayers = (store, channel) => {
   channel &&
     channel.getAllLayersSV(
       function (data) {
@@ -73,6 +84,15 @@ export const updateLayers = (store, channel) => {
         });
       }
     );
+};
+
+/**
+ * Update selected layers
+ * @method updateSelectedLayers
+ * @param {Object} store
+ * @param {Object} channel
+ */
+export const updateSelectedLayers = (store, channel) => {
   channel &&
     channel.getSelectedLayers(function (data) {
       const reArrangedSelectedLayers = reArrangeSelectedLayersOrder(
