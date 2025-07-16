@@ -439,7 +439,10 @@ export const FeatureDataPopup = () => {
   const [gfiTabsSnapGridLength, setGfiTabsSnapGridLength] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const gfiInputEl = useRef(null);
-  console.log("tabsIds", tabsIds)
+  
+  useEffect(() => {
+    if (gfiLocations.length === 0) setSelectedTab(0);
+  }, [gfiLocations]);
 
   const handleLinkClick = (event) => {
     event.preventDefault();

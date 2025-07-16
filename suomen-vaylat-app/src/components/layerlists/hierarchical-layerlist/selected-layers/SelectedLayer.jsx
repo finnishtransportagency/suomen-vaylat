@@ -210,9 +210,8 @@ export const SelectedLayer = (
     }
 ) => {
     const { store } = useContext(ReactReduxContext);
-    const [opacity, setOpacity] = useState(layer.opacity);
-    const [prevOpacity, setPrevOpacity] = useState(layer.opacity);
-    const [isLayerVisible, setIsLayerVisible] = useState(layer.opacity !== 0);
+    const [opacity, setOpacity] = useState(parseInt(layer.opacity));
+    const [prevOpacity, setPrevOpacity] = useState(parseInt(layer.opacity));
     const { channel, filters, filteringInfo, allSelectedThemeLayers } = useAppSelector(
         (state) => state.rpc
       );
@@ -222,8 +221,7 @@ export const SelectedLayer = (
     const isFilterable = typeof layer.config?.gfi?.filterFields !== "undefined" && layer.config?.gfi?.filterFields.length > 0 ;
 
     useEffect(() => {
-        setOpacity(layer.opacity);
-        layer.opacity === 0 ? setIsLayerVisible(false) : setIsLayerVisible(true)
+        setOpacity(parseInt(layer.opacity));
     }, [layer.opacity])
 
     const handleOpenFilteringDialog = (layer) => {
@@ -275,13 +273,11 @@ export const SelectedLayer = (
     };
 
     const handleLayerOpacity = (channel, layer, value) => {
-        parseInt(value) === 0 ? setIsLayerVisible(false) : setIsLayerVisible(true);
         channel.postRequest('ChangeMapLayerOpacityRequest', [layer.id, value]);
         setOpacity(value);
     };
 
     const handleLayerOpacityToggle = (channel, layer) => {
-        setIsLayerVisible(!isLayerVisible);
         let newOpacity = opacity === 0 ? prevOpacity: 0;
         if(opacity === 0 && prevOpacity) {
             newOpacity = prevOpacity;
@@ -291,8 +287,7 @@ export const SelectedLayer = (
         }
         setOpacity(newOpacity);
         channel.postRequest('ChangeMapLayerOpacityRequest', [layer.id, newOpacity]);
-        opacity !== 0 ? setPrevOpacity(layer.opacity) : setPrevOpacity(100);
-        updateLayers(store, channel);
+        opacity !== 0 ? setPrevOpacity(opacity) : setPrevOpacity(100);
     };
 
     const handleMetadataSuccess = (data, layer, uuid) => {
@@ -308,8 +303,9 @@ export const SelectedLayer = (
         store.dispatch(getLayerMetadata({ layer: layer, layerId: layer.id, handler: handleMetadataSuccess, errorHandler: handleMetadataError }));
     };
 
-    const isCurrentZoomTooFar = layer.maxZoomLevel && layer.minZoomLevel && currentZoomLevel <  layer.minZoomLevel;
-    const isCurrentZoomTooClose = layer.maxZoomLevel && layer.minZoomLevel && currentZoomLevel >  layer.maxZoomLevel
+    // TODO : Currently there's some mismatch between the zoom levels so we fix it manually by adding or substracting 1
+    const isCurrentZoomTooFar = layer.maxZoomLevel && layer.minZoomLevel && currentZoomLevel <=  layer.minZoomLevel;
+    const isCurrentZoomTooClose = layer.maxZoomLevel && layer.minZoomLevel && currentZoomLevel >=  layer.maxZoomLevel
 
     let layerInfoText = strings.layerlist.selectedLayers.layerVisible;
     if (isCurrentZoomTooFar) {
@@ -358,8 +354,9 @@ export const SelectedLayer = (
                     </StyledlayerHeader>
                     <StyledMidContent>
                 
-                        {isCurrentZoomTooFar || isCurrentZoomTooClose ? <StyledLayerInfoContainer>
-                            <StyledShowLayerButton onClick={() => store.dispatch(setZoomTo(layer.minZoomLevel))}>
+                        {isCurrentZoomTooFar || isCurrentZoomTooClose ?
+                        <StyledLayerInfoContainer>
+                            <StyledShowLayerButton onClick={() => isCurrentZoomTooFar ? store.dispatch(setZoomTo(layer.minZoomLevel + 1)) : store.dispatch(setZoomTo(layer.maxZoomLevel - 1))}>
                                 {isCurrentZoomTooFar? strings.tooltips.zoomIn : isCurrentZoomTooClose && strings.tooltips.zoomOut}
                             </StyledShowLayerButton> <p>{strings.layerlist.selectedLayers.toShowLayer}</p>
                         </StyledLayerInfoContainer>
@@ -374,12 +371,10 @@ export const SelectedLayer = (
                             min="0"
                             max="100"
                             value={opacity}
-                            onChange={event => handleLayerOpacity(channel, layer, event.target.value)}
-                            onMouseUp={() => updateLayers(store, channel)}
-                            onTouchEnd={() => updateLayers(store, channel)}
+                            onChange={event => handleLayerOpacity(channel, layer, parseInt(event.target.value))}
                         />
                         <StyledToggleOpacityIconWrapper onClick={() => handleLayerOpacityToggle(channel, layer)}>
-                            <FontAwesomeIcon icon={isLayerVisible? faEye : faEyeSlash} />
+                            <FontAwesomeIcon icon={opacity > 0 ? faEye : faEyeSlash} />
                         </StyledToggleOpacityIconWrapper>
 
                         { isFilterable &&

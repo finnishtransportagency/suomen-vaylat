@@ -223,13 +223,6 @@ const MenuBar = () => {
     });
   };
 
-  const nonBgMaps = selectedLayers.filter(
-    (layer) =>
-      layer.groups?.every((group) => group !== 1) &&
-      selectedLayersByType.backgroundMaps.filter((l) => l.id === layer.id)
-        .length === 0
-  );
-
   const handleCloseMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
     closeDrawingTools();
@@ -355,7 +348,7 @@ const MenuBar = () => {
                         id="menubar-tools-download-btn"
                         icon={faDownload}
                         text={strings.downloads.downloads}
-                        disabled={nonBgMaps.length === 0}
+                        disabled={selectedLayersByType.mapLayers.length === 0}
                         onClick={() =>
                           store.dispatch(
                             setIsGfiDownloadOpen(!isGfiDownloadOpen)
