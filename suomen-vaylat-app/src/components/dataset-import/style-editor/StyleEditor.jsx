@@ -8,6 +8,9 @@ const RadioTypeGroup = styled.div`
   display: flex;
   gap: 10px;
   margin-bottom: 22px;
+  @media ${(props) => props.theme.device.mobileL} {
+    flex-direction: column;
+  }
 `;
 
 const TypeRadioButton = styled.label`

@@ -128,12 +128,15 @@ const StyledLink = styled(Link)`
   color: #2285d7 !important;
   font-weight: 500 !important;
 `;
-const StyledButtonRow = styled.div`
+const StyledSubmitButtonGroup = styled.div`
   display: flex;
   justify-content: flex-start;
   margin-top: 24px;
   margin-bottom: 8px;
   gap: 18px;
+  @media ${(props) => props.theme.device.mobileL} {
+    flex-direction: column;
+  }
 `;
 const StyledPrimaryButton = styled.button`
   min-width: 180px;
@@ -422,7 +425,7 @@ function GeneralTabContent({
         </StyledLanguageGroup>
       )}
       {/* Bottom action bar */}
-      <StyledButtonRow>
+      <StyledSubmitButtonGroup id="import-dataset-submit-button-group">
         <StyledSecondaryButton
           type="button"
           tabIndex={0}
@@ -444,7 +447,7 @@ function GeneralTabContent({
           <FontAwesomeIcon icon={faUpload} />
           {strings.datasetImport.import}
         </StyledPrimaryButton>
-      </StyledButtonRow>
+      </StyledSubmitButtonGroup>
     </>
   );
 }
