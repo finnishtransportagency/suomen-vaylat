@@ -79,6 +79,11 @@
     "englishLayerName": "Layer name in English",
     "englishDesc": "Description in English",
     "englishSource": "Source in English",
+    "zipFileInput": {
+      "onlyZipAllowed": "Only zip-files allowed",
+      "zipMaxSize": "Zip-file maximum size is 10 Mb.",
+      "removeFile": "Remove selected file"
+    },
     "fileList": [
       "Shapefile (.shp, .shx, .dbf and .prj, optional .cpg)",
       "GPX transfer file (.gpx)",
@@ -87,7 +92,7 @@
       "Google Maps (.kml)"
     ],
     "validationMsg": "Only letters (a-z, A-Z), numbers, underscore, hyphen and parentheses are allowed.",
-    "fileSelect": "Select file",
+    "fileSelect": "Drag a file here or select by browsing.",
     "file": "File:",
     "styleEditor": {
       "preview": { "label": "JSON preview:" },

@@ -80,6 +80,11 @@
     "englishLayerName": "Lagernamn på engelska",
     "englishDesc": "Beskrivning på engelska",
     "englishSource": "Källa på engelska",
+    "zipFileInput": {
+      "onlyZipAllowed": "Endast zip-filer är tillåtna",
+      "zipMaxSize": "Zip-filens maximala storlek är 10 MB.",
+      "removeFile": "Ta bort vald fil"
+    },
     "fileList": [
       "Shapefile (.shp, .shx, .dbf och .prj samt eventuell .cpg)",
       "GPX-överföringsfil (.gpx)",
@@ -88,7 +93,7 @@
       "Google Maps (.kml)"
     ],
     "validationMsg": "Endast bokstäver (a-z, A-Z), siffror, understreck, bindestreck och parenteser är tillåtna.",
-    "fileSelect": "Välj fil",
+    "fileSelect": "Dra fil hit, eller välj genom att bläddra.",
     "file": "Fil:",
     "styleEditor": {
       "preview": { "label": "JSON-förhandsgranskning:" },

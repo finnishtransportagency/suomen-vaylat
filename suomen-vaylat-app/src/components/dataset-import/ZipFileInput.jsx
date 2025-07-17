@@ -12,6 +12,7 @@ export default function ZipFileInput({
   setError,
   disabled,
   children,
+  id = 'import-dataset-zipfile',
   ...props
 }) {
   const fileInput = useRef();
@@ -23,10 +24,10 @@ export default function ZipFileInput({
       file.type !== 'application/zip' &&
       !file.name.toLowerCase().endsWith('.zip')
     ) {
-      return 'Vain zip-tiedostot ovat sallittuja.';
+      return strings.datasetImport?.zipFileInput?.onlyZipAllowed || 'Vain zip-tiedostot ovat sallittuja.';
     }
     if (file.size > 10 * 1024 * 1024) {
-      return 'Zip-tiedoston maksimikoko on 10 Mt.';
+      return strings.datasetImport?.zipFileInput?.zipMaxSize || 'Zip-tiedoston maksimikoko on 10 Mt.';
     }
     return '';
   };
@@ -58,10 +59,25 @@ export default function ZipFileInput({
     ? { borderColor: '#2285d7', background: '#e1f0fc' }
     : {};
 
+  const dropBoxId = `${id}-dropbox`;
+
+  // Keyboard accessibility: Space/Enter triggers click if focused.
+  const handleBoxKeyDown = (e) => {
+    if (disabled) return;
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      fileInput.current.click();
+    }
+  };
+
   return (
     <>
       {children}
+      <label htmlFor="import-dataset-file-input" className="sr-only" id={`${id}-input-label`}>
+        {strings.datasetImport.fileSelect}
+      </label>
       <div
+        id={dropBoxId}
         style={{
           padding: '24px 0',
           marginBottom: 16,
@@ -77,7 +93,13 @@ export default function ZipFileInput({
           transition: 'border-color 0.2s',
           ...uploadBoxStyle
         }}
+        role="button"
+        tabIndex={0}
+        aria-label={strings.datasetImport.fileSelect}
+        aria-disabled={disabled}
+        aria-describedby={`${id}-input-label`}
         onClick={() => !disabled && fileInput.current.click()}
+        onKeyDown={handleBoxKeyDown}
         onDrop={(e) => !disabled && handleDrop(e)}
         onDragOver={(e) => {
           if (!disabled) {
@@ -86,32 +108,41 @@ export default function ZipFileInput({
           }
         }}
         onDragLeave={() => !disabled && setIsDragActive(false)}
-        tabIndex={0}
-        aria-disabled={disabled}
+        {...props}
       >
         <input
           ref={fileInput}
+          id="import-dataset-file-input"
           type="file"
           accept=".zip"
           hidden
           disabled={disabled}
+          aria-disabled={disabled}
+          aria-labelledby={`${id}-input-label`}
           onChange={disabled ? undefined : handleInput}
         />
         <FontAwesomeIcon
           icon={faUpload}
           style={{ fontSize: 32, color: '#4a90e2', marginBottom: 6 }}
+          aria-hidden="true"
         />
-        <span style={{ color: '#2285d7', fontWeight: 500, marginBottom: 5 }}>
-          {strings.datasetImport.fileSelect}
+        <span
+          id={`${id}-file-select`}
+          style={{ color: '#2285d7', fontWeight: 500, margin: 5 }}
+        >
+          {strings.datasetImport?.fileSelect}
         </span>
       </div>
       {value && (
         <div
+          id={`${id}-file-info`}
           style={{
             marginBottom: 16,
             display: 'flex',
             alignItems: 'center'
           }}
+          role="status"
+          aria-live="polite"
         >
           <span style={{ fontWeight: 600 }}>{strings.datasetImport.file}&nbsp;</span>
           <span
@@ -125,6 +156,8 @@ export default function ZipFileInput({
           </span>
           <IconButton
             size="small"
+            aria-label={strings.datasetImport?.zipFileInput?.removeFile || "Remove selected file"}
+            id={`${id}-remove-button`}
             sx={{ marginLeft: 1, color: '#c00' }}
             onClick={() => {
               onFileChange(null);
@@ -138,6 +171,9 @@ export default function ZipFileInput({
       )}
       {error && (
         <div
+          id={`${id}-error`}
+          role="alert"
+          aria-live="assertive"
           style={{
             color: '#d32f2f',
             fontSize: 13,
@@ -148,6 +184,14 @@ export default function ZipFileInput({
           {error}
         </div>
       )}
+      <style>
+        {`.sr-only { 
+            border: 0 !important; 
+            clip: rect(1px, 1px, 1px, 1px); 
+            height: 1px; margin: -1px; overflow: hidden; padding: 0; 
+            position: absolute; width: 1px; white-space: nowrap;
+        }`}
+      </style>
     </>
   );
 }
@@ -158,5 +202,6 @@ ZipFileInput.propTypes = {
   error: PropTypes.string,
   setError: PropTypes.func.isRequired,
   disabled: PropTypes.bool,
-  children: PropTypes.node
+  children: PropTypes.node,
+  id: PropTypes.string
 };

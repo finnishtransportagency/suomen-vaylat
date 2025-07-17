@@ -80,6 +80,11 @@
     "englishLayerName": "Layer name in English",
     "englishDesc": "Description in English",
     "englishSource": "Source in English",
+    "zipFileInput": {
+      "onlyZipAllowed": "Vain zip-tiedostot ovat sallittuja.",
+      "zipMaxSize": "Zip-tiedoston maksimikoko on 10 Mt.",
+      "removeFile": "Poista valittu tiedosto"
+    },
     "fileList": [
       "Shapefile (.shp, .shx, .dbf ja .prj sekä mahdollinen .cpg)",
       "GPX-siirtotiedosto (.gpx)",
@@ -88,7 +93,7 @@
       "Google Maps (.kml)"
     ],
     "validationMsg": "Vain isot/pienet kirjaimet, numerot, alaviiva, väliviiva ja sulut sallitaan.",
-    "fileSelect": "Valitse tiedosto",
+    "fileSelect": "Raahaa tiedosto tähän tai valitse selaamalla.",
     "file": "Tiedosto:",
     "styleEditor": {
       "preview": { "label": "JSON esikatselu:" },

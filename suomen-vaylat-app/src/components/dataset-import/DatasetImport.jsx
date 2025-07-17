@@ -28,7 +28,7 @@ const StyledMainContainer = styled.div`
   border-radius: 16px;
   position: relative;
 `;
-// ... (other styled components omitted for brevity; use your originals) ...
+
 const OverlaySpinner = styled.div`
   position: absolute;
   top: 0;
@@ -42,6 +42,7 @@ const OverlaySpinner = styled.div`
   justify-content: center;
   border-radius: 16px;
 `;
+
 const StyledTabs = styled.div`
   position: relative;
   display: flex;
@@ -49,20 +50,21 @@ const StyledTabs = styled.div`
   max-height: 100px;
   background-color: #f2f2f2;
 `;
+
 const StyledTab = styled.div`
   z-index: 2;
   user-select: none;
   width: 50%;
   cursor: pointer;
   color: ${(props) =>
-    props.isSelected ? props.theme.colors.mainColor1 || '#0067b1' : '#656565'};
+    props['aria-selected'] ? props.theme.colors.mainColor1 || '#0067b1' : '#656565'};
   text-align: center;
   transition: color 0.2s ease-out;
   display: flex;
   justify-content: center;
-  background: ${(props) => (props.isSelected ? '#fff' : '#F2F2F2')};
+  background: ${(props) => (props['aria-selected'] ? '#fff' : '#F2F2F2')};
   border-radius: 4px 4px 0 0;
-  font-weight: ${(props) => (props.isSelected ? 'bold' : 'normal')};
+  font-weight: ${(props) => (props['aria-selected'] ? 'bold' : 'normal')};
   p {
     font-size: 15px;
     font-weight: bold;
@@ -196,9 +198,12 @@ function GeneralTabContent({
         error={fileError}
         setError={setFileError}
         disabled={isSubmitting}
+        id="import-dataset-zipfile"
+        aria-labelledby="import-dataset-zipfile-label"
       >
         <StyledFormGroup>
           <Typography
+            id="import-dataset-zipfile-label"
             variant="body2"
             component="div"
             style={{ marginBottom: 16 }}
@@ -213,27 +218,30 @@ function GeneralTabContent({
           </Typography>
         </StyledFormGroup>
       </ZipFileInput>
-      {/* Finnish fields (always shown) */}
+      {/* Finnish fields */}
       <StyledFormGroup>
-        <StyledLabel>
-          {strings.datasetImport.layerName}{' '}
+        <StyledLabel as="label" htmlFor="import-dataset-finnish-layerName">
+          {strings.datasetImport.layerName}
           <span style={{ color: '#c00' }}>*</span>
         </StyledLabel>
         <StyledTextField
+          id="import-dataset-finnish-layerName"
           value={fields.fi.name}
           onChange={(e) => handleInput('fi', 'name', e.target.value)}
           fullWidth
           size="small"
           variant="outlined"
           InputLabelProps={{ shrink: true }}
+          aria-required="true"
         />
         {errors.fi.name && (
-          <StyledErrorMsg>{strings.datasetImport.validationMsg}</StyledErrorMsg>
+          <StyledErrorMsg id="import-dataset-finnish-layerName-error">{strings.datasetImport.validationMsg}</StyledErrorMsg>
         )}
       </StyledFormGroup>
       <StyledFormGroup>
-        <StyledLabel>{strings.datasetImport.desc}</StyledLabel>
+        <StyledLabel as="label" htmlFor="import-dataset-finnish-desc">{strings.datasetImport.desc}</StyledLabel>
         <StyledTextField
+          id="import-dataset-finnish-desc"
           value={fields.fi.desc}
           onChange={(e) => handleInput('fi', 'desc', e.target.value)}
           fullWidth
@@ -242,12 +250,13 @@ function GeneralTabContent({
           InputLabelProps={{ shrink: true }}
         />
         {errors.fi.desc && (
-          <StyledErrorMsg>{strings.datasetImport.validationMsg}</StyledErrorMsg>
+          <StyledErrorMsg id="import-dataset-finnish-desc-error">{strings.datasetImport.validationMsg}</StyledErrorMsg>
         )}
       </StyledFormGroup>
       <StyledFormGroup>
-        <StyledLabel>{strings.datasetImport.source}</StyledLabel>
+        <StyledLabel as="label" htmlFor="import-dataset-finnish-source">{strings.datasetImport.source}</StyledLabel>
         <StyledTextField
+          id="import-dataset-finnish-source"
           value={fields.fi.source}
           onChange={(e) => handleInput('fi', 'source', e.target.value)}
           fullWidth
@@ -256,11 +265,11 @@ function GeneralTabContent({
           InputLabelProps={{ shrink: true }}
         />
         {errors.fi.source && (
-          <StyledErrorMsg>{strings.datasetImport.validationMsg}</StyledErrorMsg>
+          <StyledErrorMsg id="import-dataset-finnish-source-error">{strings.datasetImport.validationMsg}</StyledErrorMsg>
         )}
       </StyledFormGroup>
       {/* Language selection */}
-      <StyledFlexRow>
+      <StyledFlexRow id="import-dataset-language-checkbox-row">
         <Typography style={{ marginRight: 8 }}>
           {strings.datasetImport.languages}
         </Typography>
@@ -270,52 +279,61 @@ function GeneralTabContent({
           </span>
         </Tooltip>
       </StyledFlexRow>
-      <StyledLanguageCheckboxGroup>
+      <StyledLanguageCheckboxGroup role="group" aria-labelledby="import-dataset-language-checkbox-row">
         <FormControlLabel
           control={
             <Checkbox
+              id="import-dataset-lang-en"
               checked={lang.en}
               onChange={(e) => setLang((l) => ({ ...l, en: e.target.checked }))}
+              inputProps={{ 'aria-checked': lang.en }}
             />
           }
           label={strings.datasetImport.english}
+          htmlFor="import-dataset-lang-en"
         />
         <FormControlLabel
           control={
             <Checkbox
+              id="import-dataset-lang-sv"
               checked={lang.sv}
               onChange={(e) => setLang((l) => ({ ...l, sv: e.target.checked }))}
+              inputProps={{ 'aria-checked': lang.sv }}
             />
           }
           label={strings.datasetImport.swedish}
+          htmlFor="import-dataset-lang-sv"
         />
       </StyledLanguageCheckboxGroup>
       {/* Swedish fields */}
       {lang.sv && (
         <StyledLanguageGroup>
           <StyledLanguageDivider />
-          <StyledLangSectionTitle variant="subtitle2">
+          <StyledLangSectionTitle variant="subtitle2" id="import-dataset-swedish-section">
             {strings.datasetImport.swedishSectionTitle}
           </StyledLangSectionTitle>
-          <StyledLabel>
-            {strings.datasetImport.swedishLayerName}{' '}
+          <StyledLabel as="label" htmlFor="import-dataset-swedish-layerName">
+            {strings.datasetImport.swedishLayerName}
             <span style={{ color: '#c00' }}>*</span>
           </StyledLabel>
           <StyledTextField
+            id="import-dataset-swedish-layerName"
             value={fields.sv.name}
             onChange={(e) => handleInput('sv', 'name', e.target.value)}
             fullWidth
             size="small"
             variant="outlined"
             InputLabelProps={{ shrink: true }}
+            aria-required="true"
           />
           {errors.sv.name && (
-            <StyledErrorMsg>
+            <StyledErrorMsg id="import-dataset-swedish-layerName-error">
               {strings.datasetImport.validationMsg}
             </StyledErrorMsg>
           )}
-          <StyledLabel>{strings.datasetImport.swedishDesc}</StyledLabel>
+          <StyledLabel as="label" htmlFor="import-dataset-swedish-desc">{strings.datasetImport.swedishDesc}</StyledLabel>
           <StyledTextField
+            id="import-dataset-swedish-desc"
             value={fields.sv.desc}
             onChange={(e) => handleInput('sv', 'desc', e.target.value)}
             fullWidth
@@ -324,12 +342,13 @@ function GeneralTabContent({
             InputLabelProps={{ shrink: true }}
           />
           {errors.sv.desc && (
-            <StyledErrorMsg>
+            <StyledErrorMsg id="import-dataset-swedish-desc-error">
               {strings.datasetImport.validationMsg}
             </StyledErrorMsg>
           )}
-          <StyledLabel>{strings.datasetImport.swedishSource}</StyledLabel>
+          <StyledLabel as="label" htmlFor="import-dataset-swedish-source">{strings.datasetImport.swedishSource}</StyledLabel>
           <StyledTextField
+            id="import-dataset-swedish-source"
             value={fields.sv.source}
             onChange={(e) => handleInput('sv', 'source', e.target.value)}
             fullWidth
@@ -338,7 +357,7 @@ function GeneralTabContent({
             InputLabelProps={{ shrink: true }}
           />
           {errors.sv.source && (
-            <StyledErrorMsg>
+            <StyledErrorMsg id="import-dataset-swedish-source-error">
               {strings.datasetImport.validationMsg}
             </StyledErrorMsg>
           )}
@@ -348,28 +367,31 @@ function GeneralTabContent({
       {lang.en && (
         <StyledLanguageGroup>
           <StyledLanguageDivider />
-          <StyledLangSectionTitle variant="subtitle2">
+          <StyledLangSectionTitle variant="subtitle2" id="import-dataset-english-section">
             {strings.datasetImport.englishSectionTitle}
           </StyledLangSectionTitle>
-          <StyledLabel>
-            {strings.datasetImport.englishLayerName}{' '}
+          <StyledLabel as="label" htmlFor="import-dataset-english-layerName">
+            {strings.datasetImport.englishLayerName}
             <span style={{ color: '#c00' }}>*</span>
           </StyledLabel>
           <StyledTextField
+            id="import-dataset-english-layerName"
             value={fields.en.name}
             onChange={(e) => handleInput('en', 'name', e.target.value)}
             fullWidth
             size="small"
             variant="outlined"
             InputLabelProps={{ shrink: true }}
+            aria-required="true"
           />
           {errors.en.name && (
-            <StyledErrorMsg>
+            <StyledErrorMsg id="import-dataset-english-layerName-error">
               {strings.datasetImport.validationMsg}
             </StyledErrorMsg>
           )}
-          <StyledLabel>{strings.datasetImport.englishDesc}</StyledLabel>
+          <StyledLabel as="label" htmlFor="import-dataset-english-desc">{strings.datasetImport.englishDesc}</StyledLabel>
           <StyledTextField
+            id="import-dataset-english-desc"
             value={fields.en.desc}
             onChange={(e) => handleInput('en', 'desc', e.target.value)}
             fullWidth
@@ -378,12 +400,13 @@ function GeneralTabContent({
             InputLabelProps={{ shrink: true }}
           />
           {errors.en.desc && (
-            <StyledErrorMsg>
+            <StyledErrorMsg id="import-dataset-english-desc-error">
               {strings.datasetImport.validationMsg}
             </StyledErrorMsg>
           )}
-          <StyledLabel>{strings.datasetImport.englishSource}</StyledLabel>
+          <StyledLabel as="label" htmlFor="import-dataset-english-source">{strings.datasetImport.englishSource}</StyledLabel>
           <StyledTextField
+            id="import-dataset-english-source"
             value={fields.en.source}
             onChange={(e) => handleInput('en', 'source', e.target.value)}
             fullWidth
@@ -392,7 +415,7 @@ function GeneralTabContent({
             InputLabelProps={{ shrink: true }}
           />
           {errors.en.source && (
-            <StyledErrorMsg>
+            <StyledErrorMsg id="import-dataset-english-source-error">
               {strings.datasetImport.validationMsg}
             </StyledErrorMsg>
           )}
@@ -403,6 +426,7 @@ function GeneralTabContent({
         <StyledSecondaryButton
           type="button"
           tabIndex={0}
+          id="import-dataset-cancel-button"
           disabled={isSubmitting}
           aria-disabled={isSubmitting}
           onClick={() => store.dispatch(setIsDatasetImportOpen(false))}
@@ -412,6 +436,7 @@ function GeneralTabContent({
         <StyledPrimaryButton
           type="button"
           tabIndex={0}
+          id="import-dataset-import-button"
           disabled={disableImport || isSubmitting}
           aria-disabled={disableImport || isSubmitting}
           onClick={handleSubmitDataset}
@@ -568,21 +593,29 @@ const DatasetImport = () => {
   return (
     <StyledMainContainer>
       {isSubmitting && (
-        <OverlaySpinner>
+        <OverlaySpinner id="import-dataset-spinner" role="status" aria-live="polite" aria-label="Uploading">
           <CircularProgress size={62} thickness={4} />
         </OverlaySpinner>
       )}
-      <StyledTabs>
+      <StyledTabs role="tablist" aria-label={strings.datasetImport.title} id="import-dataset-tablist">
         <StyledTab
-          isSelected={selectedTab === 0}
-          color="mainColor1"
+          id="import-dataset-tab-general"
+          type="button"
+          role="tab"
+          aria-selected={selectedTab === 0}
+          aria-controls="import-dataset-panel-general"
+          tabIndex={selectedTab === 0 ? 0 : -1}
           onClick={() => setSelectedTab(0)}
         >
           <p>{strings.datasetImport.tabGeneral}</p>
         </StyledTab>
         <StyledTab
-          isSelected={selectedTab === 1}
-          color="mainColor1"
+          id="import-dataset-tab-visualization"
+          type="button"
+          role="tab"
+          aria-selected={selectedTab === 1}
+          aria-controls="import-dataset-panel-visualization"
+          tabIndex={selectedTab === 1 ? 0 : -1}
           onClick={() => setSelectedTab(1)}
         >
           <p>{strings.datasetImport.tabVisualization}</p>
@@ -594,7 +627,11 @@ const DatasetImport = () => {
         speed={250}
         onSlideChange={(swiper) => setSelectedTab(swiper.activeIndex)}
       >
-        <SwiperSlide>
+        <SwiperSlide
+          id="import-dataset-panel-general"
+          role="tabpanel"
+          aria-labelledby="import-dataset-tab-general"
+        >
           <GeneralTabContent
             store={store}
             handleSubmitDataset={handleSubmitDataset}
@@ -611,12 +648,16 @@ const DatasetImport = () => {
             isSubmitting={isSubmitting}
           />
         </SwiperSlide>
-        <SwiperSlide>
-            <StyleEditor
-              key={styleEditorKey}
-              initialStyle={style}
-              onChange={setStyle}
-            />
+        <SwiperSlide
+          id="import-dataset-panel-visualization"
+          role="tabpanel"
+          aria-labelledby="import-dataset-tab-visualization"
+        >
+          <StyleEditor
+            key={styleEditorKey}
+            initialStyle={style}
+            onChange={setStyle}
+          />
         </SwiperSlide>
       </StyledSwiper>
     </StyledMainContainer>

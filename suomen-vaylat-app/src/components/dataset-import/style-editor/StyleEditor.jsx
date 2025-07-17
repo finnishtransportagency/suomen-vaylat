@@ -4,7 +4,6 @@ import { POINT_SHAPES } from "./styleConstants";
 import { FILL_ORDER, FILLS, LINE_STYLES, FillPatternSvgPreview } from "./styleConstants";
 import strings from '../../../translations';
 
-// ---- Styled Components ----
 const RadioTypeGroup = styled.div`
   display: flex;
   gap: 10px;
@@ -28,9 +27,7 @@ const TypeRadioButton = styled.label`
   box-shadow: ${({ selected }) => selected ? "0 4px 12px #ffc68a24" : "none"};
   transition: background .17s, color .17s, border-color .17s;
 
-  input[type="radio"] {
-    display: none;
-  }
+  input[type="radio"] { display: none; }
 
   &:hover, &:focus-within {
     background: #f9fbfc;
@@ -170,8 +167,6 @@ function renderOskariSvg(data, size = 32) {
   );
 }
 
-
-// --- FILL PATTERNS ---
 const fillPatternOptions = FILL_ORDER.map((name) => ({
   id: name,
   label: name[0] + name.slice(1).toLowerCase().replace('_',' '),
@@ -243,77 +238,144 @@ export default function StyleEditor({ initialStyle = {}, onChange }) {
       fillColor, fillPattern, areaBorderColor, areaBorderWidth,
       areaDash, areaJoin, onChange]);
 
-  // Shortcut to styleEditor section
   const seStrings = strings?.datasetImport?.styleEditor || {};
+
+  // ---- IDS for controls ----
+  const ids = {
+    styleTab:    "import-dataset-style-tablist",
+    radioPoint:  "import-dataset-style-type-point",
+    radioLine:   "import-dataset-style-type-line",
+    radioArea:   "import-dataset-style-type-area",
+    panelPoint:  "import-dataset-style-panel-point",
+    panelLine:   "import-dataset-style-panel-line",
+    panelArea:   "import-dataset-style-panel-area",
+
+    pointColor:     "import-dataset-style-point-color",
+    pointShape:     "import-dataset-style-point-shape",
+    pointSize:      "import-dataset-style-point-size",
+
+    lineColor:      "import-dataset-style-line-color",
+    lineDash:       "import-dataset-style-line-dash",
+    lineCap:        "import-dataset-style-line-cap",
+    lineJoin:       "import-dataset-style-line-join",
+    lineWidth:      "import-dataset-style-line-width",
+
+    areaBorderColor: "import-dataset-style-area-border-color",
+    areaBorderDash:  "import-dataset-style-area-border-dash",
+    areaBorderJoin:  "import-dataset-style-area-border-join",
+    areaBorderWidth: "import-dataset-style-area-border-width",
+    fillColor:       "import-dataset-style-area-fill-color",
+    fillPattern:     "import-dataset-style-area-fill-pattern",
+
+    jsonPreview:     "import-dataset-style-json-preview"
+  };
+
+  // --- accessible tab-radio names
+  const radioGroupLabel = seStrings.subheaders?.style || "Style";
 
   return (
     <>
-      <GroupTitle>
-        {seStrings.subheaders?.style || "Style"}
+      <GroupTitle id={ids.styleTab}>
+        {radioGroupLabel}
       </GroupTitle>
-      <RadioTypeGroup role="radiogroup" aria-label={strings?.datasetImport?.styleEditor?.subheaders?.style || "Style"}>
-        <TypeRadioButton selected={type === "point"}>
+      <RadioTypeGroup
+        id={`${ids.styleTab}-group`}
+        role="radiogroup"
+        aria-label={radioGroupLabel}
+        aria-labelledby={ids.styleTab}
+      >
+        <TypeRadioButton
+          selected={type === "point"}
+          htmlFor={ids.radioPoint}
+          id={`${ids.radioPoint}-label`}
+          aria-pressed={type === "point"}
+        >
           <input
+            id={ids.radioPoint}
             type="radio"
             name="geomtype"
             value="point"
             checked={type === "point"}
             onChange={() => setType("point")}
+            aria-checked={type === "point"}
+            aria-controls={ids.panelPoint}
             aria-label={seStrings.dot?.title || "Point feature style"}
           />
-          <RadioDot selected={type === "point"} />
+          <RadioDot selected={type === "point"} aria-hidden="true" />
           {seStrings.dot?.title || "Point feature style"}
         </TypeRadioButton>
-        <TypeRadioButton selected={type === "line"}>
+        <TypeRadioButton
+          selected={type === "line"}
+          htmlFor={ids.radioLine}
+          id={`${ids.radioLine}-label`}
+          aria-pressed={type === "line"}
+        >
           <input
+            id={ids.radioLine}
             type="radio"
             name="geomtype"
             value="line"
             checked={type === "line"}
             onChange={() => setType("line")}
+            aria-checked={type === "line"}
+            aria-controls={ids.panelLine}
             aria-label={seStrings.line?.title || "Line feature style"}
           />
-          <RadioDot selected={type === "line"} />
+          <RadioDot selected={type === "line"} aria-hidden="true" />
           {seStrings.line?.title || "Line feature style"}
         </TypeRadioButton>
-        <TypeRadioButton selected={type === "area"}>
+        <TypeRadioButton
+          selected={type === "area"}
+          htmlFor={ids.radioArea}
+          id={`${ids.radioArea}-label`}
+          aria-pressed={type === "area"}
+        >
           <input
+            id={ids.radioArea}
             type="radio"
             name="geomtype"
             value="area"
             checked={type === "area"}
             onChange={() => setType("area")}
+            aria-checked={type === "area"}
+            aria-controls={ids.panelArea}
             aria-label={seStrings.area?.title || "Area feature style"}
           />
-          <RadioDot selected={type === "area"} />
+          <RadioDot selected={type === "area"} aria-hidden="true" />
           {seStrings.area?.title || "Area feature style"}
         </TypeRadioButton>
       </RadioTypeGroup>
 
+      {/* POINT PANEL */}
       {type === "point" && (
-        <Grouping>
+        <Grouping id={ids.panelPoint} role="region" aria-labelledby={ids.radioPoint}>
           <GroupTitle>
             {seStrings.dot?.title || "Point feature style"}
           </GroupTitle>
           <InputRow>
             <InputCol>
-              <Label>
+              <Label htmlFor={ids.pointColor}>
                 {seStrings.dot?.color?.label || "Colour"}:
               </Label>
-              <ColorInput type="color" value={pointColor} onChange={e=>setPointColor(e.target.value)}/>
+              <ColorInput id={ids.pointColor} type="color" value={pointColor} onChange={e=>setPointColor(e.target.value)} />
             </InputCol>
             <InputCol style={{ minWidth: 140 }}>
-              <SvgLabel>
+              <SvgLabel id={`${ids.pointShape}-label`}>
                 {seStrings.dot?.symbol?.label || "Icon"}:
               </SvgLabel>
-              <SvgButtonGroup>
+              <SvgButtonGroup role="group" aria-labelledby={`${ids.pointShape}-label`}>
                 {POINT_SHAPES.map(s=>(
                   <SvgRadioButton
                     key={s.id}
+                    id={`${ids.pointShape}-${s.id}`}
                     selected={pointShape===s.id}
+                    aria-pressed={pointShape===s.id}
+                    aria-label={s.label}
+                    aria-checked={pointShape === s.id}
                     onClick={()=>setPointShape(s.id)}
                     type="button"
                     title={s.label}
+                    tabIndex={0}
                   >
                     {s.preview}
                   </SvgRadioButton>
@@ -321,39 +383,45 @@ export default function StyleEditor({ initialStyle = {}, onChange }) {
               </SvgButtonGroup>
             </InputCol>
             <InputCol style={{ maxWidth: 110 }}>
-              <Label>
+              <Label htmlFor={ids.pointSize}>
                 {seStrings.dot?.size?.label || "Size"}:
               </Label>
-              <NumberInput type="number" min={1} max={5} value={pointSize} onChange={e=>setPointSize(Number(e.target.value))}/>
+              <NumberInput id={ids.pointSize} type="number" min={1} max={5} value={pointSize} onChange={e=>setPointSize(Number(e.target.value))}/>
             </InputCol>
           </InputRow>
         </Grouping>
       )}
 
+      {/* LINE PANEL */}
       {type === "line" && (
-        <Grouping>
+        <Grouping id={ids.panelLine} role="region" aria-labelledby={ids.radioLine}>
           <GroupTitle>
             {seStrings.line?.title || "Line feature style"}
           </GroupTitle>
           <InputRow>
             <InputCol>
-              <Label>
+              <Label htmlFor={ids.lineColor}>
                 {seStrings.line?.color?.label || "Colour"}:
               </Label>
-              <ColorInput type="color" value={lineColor} onChange={e=>setLineColor(e.target.value)} />
+              <ColorInput id={ids.lineColor} type="color" value={lineColor} onChange={e=>setLineColor(e.target.value)} />
             </InputCol>
             <InputCol>
-              <SvgLabel>
+              <SvgLabel id={`${ids.lineDash}-label`}>
                 {seStrings.line?.style?.label || "Dash"}:
               </SvgLabel>
-              <SvgButtonGroup>
+              <SvgButtonGroup role="group" aria-labelledby={`${ids.lineDash}-label`}>
                 {LINE_STYLES.lineDash.map(opt => (
                   <SvgRadioButton
                     key={opt.name}
+                    id={`${ids.lineDash}-${opt.name}`}
                     selected={lineDash === opt.name}
+                    aria-pressed={lineDash === opt.name}
+                    aria-label={opt.name}
+                    aria-checked={lineDash === opt.name}
                     onClick={()=>setLineDash(opt.name)}
                     title={opt.name}
                     type="button"
+                    tabIndex={0}
                   >
                     {renderOskariSvg(opt.data, 30)}
                   </SvgRadioButton>
@@ -363,17 +431,22 @@ export default function StyleEditor({ initialStyle = {}, onChange }) {
           </InputRow>
           <InputRow>
             <InputCol>
-              <SvgLabel>
+              <SvgLabel id={`${ids.lineCap}-label`}>
                 {seStrings.line?.cap?.label || "Endings"}:
               </SvgLabel>
-              <SvgButtonGroup>
+              <SvgButtonGroup role="group" aria-labelledby={`${ids.lineCap}-label`}>
                 {LINE_STYLES.linecaps.map(opt => (
                   <SvgRadioButton
                     key={opt.name}
+                    id={`${ids.lineCap}-${opt.name}`}
                     selected={lineCap === opt.name}
+                    aria-pressed={lineCap === opt.name}
+                    aria-label={opt.name}
+                    aria-checked={lineCap === opt.name}
                     onClick={()=>setLineCap(opt.name)}
                     title={opt.name}
                     type="button"
+                    tabIndex={0}
                   >
                     {renderOskariSvg(opt.data, 30)}
                   </SvgRadioButton>
@@ -381,17 +454,22 @@ export default function StyleEditor({ initialStyle = {}, onChange }) {
               </SvgButtonGroup>
             </InputCol>
             <InputCol>
-              <SvgLabel>
+              <SvgLabel id={`${ids.lineJoin}-label`}>
                 {seStrings.line?.corner?.label || "Corners"}:
               </SvgLabel>
-              <SvgButtonGroup>
+              <SvgButtonGroup role="group" aria-labelledby={`${ids.lineJoin}-label`}>
                 {LINE_STYLES.corners.map(opt=>(
                   <SvgRadioButton
                     key={opt.name}
+                    id={`${ids.lineJoin}-${opt.name}`}
                     selected={lineJoin===opt.name}
+                    aria-pressed={lineJoin===opt.name}
+                    aria-label={opt.name}
+                    aria-checked={lineJoin===opt.name}
                     onClick={()=>setLineJoin(opt.name)}
                     title={opt.name}
                     type="button"
+                    tabIndex={0}
                   >
                     {renderOskariSvg(opt.data, 30)}
                   </SvgRadioButton>
@@ -399,40 +477,45 @@ export default function StyleEditor({ initialStyle = {}, onChange }) {
               </SvgButtonGroup>
             </InputCol>
             <InputCol style={{ maxWidth: 110 }}>
-              <Label>
+              <Label htmlFor={ids.lineWidth}>
                 {seStrings.line?.width?.label || "Width"}:
               </Label>
-              <NumberInput type="number" min={1} max={5} value={lineWidth} onChange={e=>setLineWidth(Number(e.target.value))}/>
+              <NumberInput id={ids.lineWidth} type="number" min={1} max={5} value={lineWidth} onChange={e=>setLineWidth(Number(e.target.value))}/>
             </InputCol>
           </InputRow>
         </Grouping>
       )}
 
+      {/* AREA PANEL */}
       {type === "area" && (
-        <Grouping>
+        <Grouping id={ids.panelArea} role="region" aria-labelledby={ids.radioArea}>
           <GroupTitle>
             {seStrings.area?.title || "Area feature style"}
           </GroupTitle>
-          
           <InputRow>
             <InputCol>
-              <Label>
+              <Label htmlFor={ids.areaBorderColor}>
                 {seStrings.area?.linecolor?.label || "Line colour"}:
               </Label>
-              <ColorInput type="color" value={areaBorderColor} onChange={e=>setAreaBorderColor(e.target.value)} />
+              <ColorInput id={ids.areaBorderColor} type="color" value={areaBorderColor} onChange={e=>setAreaBorderColor(e.target.value)} />
             </InputCol>
             <InputCol>
-              <SvgLabel>
+              <SvgLabel id={`${ids.areaBorderDash}-label`}>
                 {seStrings.area?.linestyle?.label || "Line dash"}:
               </SvgLabel>
-              <SvgButtonGroup>
+              <SvgButtonGroup role="group" aria-labelledby={`${ids.areaBorderDash}-label`}>
                 {LINE_STYLES.lineDash.map(opt=>(
                   <SvgRadioButton
                     key={opt.name}
+                    id={`${ids.areaBorderDash}-${opt.name}`}
                     selected={areaDash===opt.name}
+                    aria-pressed={areaDash===opt.name}
+                    aria-label={opt.name}
+                    aria-checked={areaDash === opt.name}
                     onClick={()=>setAreaDash(opt.name)}
                     title={opt.name}
                     type="button"
+                    tabIndex={0}
                   >
                     {renderOskariSvg(opt.data, 30)}
                   </SvgRadioButton>
@@ -440,17 +523,22 @@ export default function StyleEditor({ initialStyle = {}, onChange }) {
               </SvgButtonGroup>
             </InputCol>
             <InputCol>
-              <SvgLabel>
+              <SvgLabel id={`${ids.areaBorderJoin}-label`}>
                 {seStrings.area?.linecorner?.label || "Line corners"}:
               </SvgLabel>
-              <SvgButtonGroup>
+              <SvgButtonGroup role="group" aria-labelledby={`${ids.areaBorderJoin}-label`}>
                 {LINE_STYLES.corners.map(opt=>(
                   <SvgRadioButton
                     key={opt.name}
+                    id={`${ids.areaBorderJoin}-${opt.name}`}
                     selected={areaJoin===opt.name}
+                    aria-pressed={areaJoin===opt.name}
+                    aria-label={opt.name}
+                    aria-checked={areaJoin === opt.name}
                     onClick={()=>setAreaJoin(opt.name)}
                     title={opt.name}
                     type="button"
+                    tabIndex={0}
                   >
                     {renderOskariSvg(opt.data, 30)}
                   </SvgRadioButton>
@@ -458,31 +546,36 @@ export default function StyleEditor({ initialStyle = {}, onChange }) {
               </SvgButtonGroup>
             </InputCol>
             <InputCol style={{ maxWidth: 110 }}>
-              <Label>
+              <Label htmlFor={ids.areaBorderWidth}>
                 {seStrings.area?.linewidth?.label || "Line width"}:
               </Label>
-              <NumberInput type="number" min={1} max={5} value={areaBorderWidth} onChange={e=>setAreaBorderWidth(Number(e.target.value))}/>
+              <NumberInput id={ids.areaBorderWidth} type="number" min={1} max={5} value={areaBorderWidth} onChange={e=>setAreaBorderWidth(Number(e.target.value))}/>
             </InputCol>
           </InputRow>
           <InputRow>
             <InputCol>
-              <Label>
+              <Label htmlFor={ids.fillColor}>
                 {seStrings.area?.color?.label || "Fill colour"}:
               </Label>
-              <ColorInput type="color" value={fillColor} onChange={e=>setFillColor(e.target.value)} />
+              <ColorInput id={ids.fillColor} type="color" value={fillColor} onChange={e=>setFillColor(e.target.value)} />
             </InputCol>
             <InputCol>
-              <SvgLabel>
+              <SvgLabel id={`${ids.fillPattern}-label`}>
                 {seStrings.area?.fill?.label || "Fill pattern"}:
               </SvgLabel>
-              <SvgButtonGroup>
+              <SvgButtonGroup role="group" aria-labelledby={`${ids.fillPattern}-label`}>
                 {fillPatternOptions.map(opt=>(
                   <SvgRadioButton
                     key={opt.id}
+                    id={`${ids.fillPattern}-${opt.id}`}
                     selected={fillPattern===opt.value}
+                    aria-pressed={fillPattern===opt.value}
+                    aria-label={opt.label}
+                    aria-checked={fillPattern === opt.value}
                     onClick={()=>setFillPattern(opt.value)}
                     title={opt.label}
                     type="button"
+                    tabIndex={0}
                   >
                     {opt.preview}
                   </SvgRadioButton>
@@ -493,7 +586,7 @@ export default function StyleEditor({ initialStyle = {}, onChange }) {
         </Grouping>
       )}
 
-      <PreviewBox>
+      <PreviewBox id={ids.jsonPreview} aria-label={seStrings.preview?.label || "Preview"} role="region">
         <StyledJSONPreviewTitle>
           {seStrings.preview?.label || "Preview"}
         </StyledJSONPreviewTitle>
