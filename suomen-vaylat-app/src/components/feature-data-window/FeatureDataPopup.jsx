@@ -1254,7 +1254,6 @@ export const FeatureDataPopup = () => {
                   }
                 });
               });
-              console.log("?")
 
               if (location.type === 'geojson') {
                 return (

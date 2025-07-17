@@ -452,7 +452,6 @@ const DatasetImport = () => {
   const [styleEditorKey, setStyleEditorKey] = useState(0);
   const [style, setStyle] = useState({});
 
-  console.log("STYLE", style)
   const swiperRef = useRef();
 
   const handleInput = (language, field, value) => {
@@ -509,7 +508,7 @@ const DatasetImport = () => {
 
           channel.importDataset(
             [dataset],
-            () => {
+            (data) => {
               setIsSubmitting(false);
               resetForm();
               toast.success(`success`, {

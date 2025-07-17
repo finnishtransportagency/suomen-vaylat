@@ -33,8 +33,6 @@ const MapEventsHandler = ({ channel, store }) => {
   });
 
   channel.handleEvent('PointInfoEvent', (data) => {
-        console.log("PointInfoEvent",data)
-
     store.dispatch(
       setPointInfo({ lon: data.coordinates.x, lat: data.coordinates.y })
     );
@@ -70,7 +68,6 @@ const MapEventsHandler = ({ channel, store }) => {
   });
 
   channel.handleEvent('MapClickedEvent', (data) => {
-    console.log("MapClickedEvent",data)
     // TODO: have every mapclick put in a new marker, it's not working atm for some reason
     store.dispatch(setVKMData(null));
     store.dispatch(removeMarkerRequest({ markerId: 'VKM_MARKER' }));
@@ -78,8 +75,6 @@ const MapEventsHandler = ({ channel, store }) => {
   });
 
   channel.handleEvent('DataForMapLocationEvent', (data) => {
-        console.log("DataForMapLocationEvent",data)
-
     if (data.content && data.content.features) {
       data.content.features.forEach((f) => {
         if (f.properties) {
@@ -144,7 +139,6 @@ const MapEventsHandler = ({ channel, store }) => {
         loc => loc.layerId === newLayerId
       );
 
-      console.log(alreadyPresent)
       if (alreadyPresent) {
         store.dispatch(resetGFILocations([]));
       } 
