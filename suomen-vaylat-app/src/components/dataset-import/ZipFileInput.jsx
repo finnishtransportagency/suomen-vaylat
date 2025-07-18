@@ -6,10 +6,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUpload, faCircleXmark } from '@fortawesome/free-solid-svg-icons';
 import strings from '../../translations';
 
+// Styled Components
+
 const StyledImportedFileNameWrapper = styled.div`
   display: flex;
   width: 100%;
   overflow: hidden;
+  margin-bottom: 12px;
+  align-items: center;
   @media ${(props) => props.theme.device.mobileL} {
     flex-direction: column;
   }
@@ -20,7 +24,7 @@ const StyledImportedFileNameGroup = styled.div`
   align-items: center;
   width: 100%;
   min-width: 0;
-  flex-wrap: nowrap; // Never allow wrap
+  flex-wrap: nowrap;
 
   .filename-group {
     display: flex;
@@ -55,13 +59,66 @@ const StyledImportedFileNameGroup = styled.div`
   }
 `;
 
+const StyledFileLabel = styled.label`
+  border: 0 !important; 
+  clip: rect(1px, 1px, 1px, 1px); 
+  height: 1px; 
+  margin: -1px; 
+  overflow: hidden; 
+  padding: 0; 
+  position: absolute; 
+  width: 1px; 
+  white-space: nowrap;
+`;
+
+const StyledDropBox = styled.div`
+  padding: 24px 0;
+  margin-bottom: 20px;
+  background: #eaf3fa;
+  border-radius: 16px;
+  border: 2px dashed ${props => props.isDragActive ? '#2285d7' : '#6daae2'};
+  text-align: center;
+  position: relative;
+  cursor: ${props => props.disabled ? 'default' : 'pointer'};
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: border-color 0.2s;
+  ${({ isDragActive }) => isDragActive && `
+    background: #e1f0fc;
+  `}
+`;
+
+const StyledUploadIcon = styled(FontAwesomeIcon)`
+  font-size: 32px;
+  color: #4a90e2;
+  margin-bottom: 6px;
+`;
+
+const StyledFileSelectText = styled.span`
+  color: #2285d7;
+  font-weight: 500;
+  margin: 5px;
+`;
+
+const StyledFileLabelText = styled.span`
+  font-weight: 600;
+`;
+
+const StyledErrorBox = styled.div`
+  color: #d32f2f;
+  font-size: 13px;
+  margin-bottom: 10px;
+  margin-top: -8px;
+`;
+
+// Utility function for middle ellipsis
 const middleEllipsis = (filename = '', maxLength = 30) => {
-  // If filename is short, return as is
   if (filename.length <= maxLength) return filename;
   const extMatch = filename.match(/\.[^/.]+$/);
   const ext = extMatch ? extMatch[0] : '';
   const name = filename.replace(ext, '');
-  const charsToShow = maxLength - ext.length - 3; // 3 for "..."
+  const charsToShow = maxLength - ext.length - 3;
   const frontChars = Math.ceil(charsToShow / 2);
   const backChars = Math.floor(charsToShow / 2);
 
@@ -71,7 +128,7 @@ const middleEllipsis = (filename = '', maxLength = 30) => {
     name.substring(name.length - backChars) +
     ext
   );
-}
+};
 
 export default function ZipFileInput({
   value,
@@ -123,13 +180,8 @@ export default function ZipFileInput({
     }
   };
 
-  const uploadBoxStyle = isDragActive
-    ? { borderColor: '#2285d7', background: '#e1f0fc' }
-    : {};
-
   const dropBoxId = `${id}-dropbox`;
 
-  // Keyboard accessibility: Space/Enter triggers click if focused.
   const handleBoxKeyDown = (e) => {
     if (disabled) return;
     if (e.key === 'Enter' || e.key === ' ') {
@@ -141,35 +193,22 @@ export default function ZipFileInput({
   return (
     <>
       {children}
-      <label htmlFor="import-dataset-file-input" className="sr-only" id={`${id}-input-label`}>
+      <StyledFileLabel htmlFor="import-dataset-file-input" id={`${id}-input-label`}>
         {strings.datasetImport.fileSelect}
-      </label>
-      <div
+      </StyledFileLabel>
+      <StyledDropBox
         id={dropBoxId}
-        style={{
-          padding: '24px 0',
-          marginBottom: 12,
-          background: '#eaf3fa',
-          borderRadius: 16,
-          border: `2px dashed ${isDragActive ? '#2285d7' : '#6daae2'}`,
-          textAlign: 'center',
-          position: 'relative',
-          cursor: disabled ? 'default' : 'pointer',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          transition: 'border-color 0.2s',
-          ...uploadBoxStyle
-        }}
         role="button"
         tabIndex={0}
         aria-label={strings.datasetImport.fileSelect}
         aria-disabled={disabled}
         aria-describedby={`${id}-input-label`}
+        isDragActive={isDragActive}
+        disabled={disabled}
         onClick={() => !disabled && fileInput.current.click()}
         onKeyDown={handleBoxKeyDown}
-        onDrop={(e) => !disabled && handleDrop(e)}
-        onDragOver={(e) => {
+        onDrop={e => !disabled && handleDrop(e)}
+        onDragOver={e => {
           if (!disabled) {
             e.preventDefault();
             setIsDragActive(true);
@@ -189,30 +228,20 @@ export default function ZipFileInput({
           aria-labelledby={`${id}-input-label`}
           onChange={disabled ? undefined : handleInput}
         />
-        <FontAwesomeIcon
-          icon={faUpload}
-          style={{ fontSize: 32, color: '#4a90e2', marginBottom: 6 }}
-          aria-hidden="true"
-        />
-        <span
-          id={`${id}-file-select`}
-          style={{ color: '#2285d7', fontWeight: 500, margin: 5 }}
-        >
+        <StyledUploadIcon icon={faUpload} aria-hidden="true" />
+        <StyledFileSelectText id={`${id}-file-select`}>
           {strings.datasetImport?.fileSelect}
-        </span>
-      </div>
+        </StyledFileSelectText>
+      </StyledDropBox>
       {value && (
         <StyledImportedFileNameWrapper
           id={`${id}-file-info`}
-          style={{
-            marginBottom: 16,
-            display: 'flex',
-            alignItems: 'center'
-          }}
           role="status"
           aria-live="polite"
         >
-          <span style={{ fontWeight: 600 }}>{strings.datasetImport.file}&nbsp;</span>
+          <StyledFileLabelText>
+            {strings.datasetImport.file}&nbsp;
+          </StyledFileLabelText>
           <StyledImportedFileNameGroup>
             <span className="filename-group">
               <span
@@ -242,28 +271,14 @@ export default function ZipFileInput({
         </StyledImportedFileNameWrapper>
       )}
       {error && (
-        <div
+        <StyledErrorBox
           id={`${id}-error`}
           role="alert"
           aria-live="assertive"
-          style={{
-            color: '#d32f2f',
-            fontSize: 13,
-            marginBottom: 10,
-            marginTop: -8
-          }}
         >
           {error}
-        </div>
+        </StyledErrorBox>
       )}
-      <style>
-        {`.sr-only { 
-            border: 0 !important; 
-            clip: rect(1px, 1px, 1px, 1px); 
-            height: 1px; margin: -1px; overflow: hidden; padding: 0; 
-            position: absolute; width: 1px; white-space: nowrap;
-        }`}
-      </style>
     </>
   );
 }
