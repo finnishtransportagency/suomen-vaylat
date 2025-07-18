@@ -1,9 +1,77 @@
 import React, { useRef, useState } from 'react';
+import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { IconButton } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUpload, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faUpload, faCircleXmark } from '@fortawesome/free-solid-svg-icons';
 import strings from '../../translations';
+
+const StyledImportedFileNameWrapper = styled.div`
+  display: flex;
+  width: 100%;
+  overflow: hidden;
+  @media ${(props) => props.theme.device.mobileL} {
+    flex-direction: column;
+  }
+`;
+
+const StyledImportedFileNameGroup = styled.div`
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-width: 0;
+  flex-wrap: nowrap; // Never allow wrap
+
+  .filename-group {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+    @media ${(props) => props.theme.device.mobileL} {
+      flex: 1;
+    }
+  }
+
+  .filename {
+    color: #2285d7;
+    font-weight: 500;
+    margin-right: 4px;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: inline-block;
+    @media ${(props) => props.theme.device.mobileL} {
+      font-size: 15px;
+    }
+  }
+
+  .filesize {
+    color: #2285d7;
+    font-weight: 400;
+    font-size: 0.96em;
+    margin-right: 4px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+`;
+
+const middleEllipsis = (filename = '', maxLength = 30) => {
+  // If filename is short, return as is
+  if (filename.length <= maxLength) return filename;
+  const extMatch = filename.match(/\.[^/.]+$/);
+  const ext = extMatch ? extMatch[0] : '';
+  const name = filename.replace(ext, '');
+  const charsToShow = maxLength - ext.length - 3; // 3 for "..."
+  const frontChars = Math.ceil(charsToShow / 2);
+  const backChars = Math.floor(charsToShow / 2);
+
+  return (
+    name.substring(0, frontChars) +
+    '...' +
+    name.substring(name.length - backChars) +
+    ext
+  );
+}
 
 export default function ZipFileInput({
   value,
@@ -80,7 +148,7 @@ export default function ZipFileInput({
         id={dropBoxId}
         style={{
           padding: '24px 0',
-          marginBottom: 16,
+          marginBottom: 12,
           background: '#eaf3fa',
           borderRadius: 16,
           border: `2px dashed ${isDragActive ? '#2285d7' : '#6daae2'}`,
@@ -134,7 +202,7 @@ export default function ZipFileInput({
         </span>
       </div>
       {value && (
-        <div
+        <StyledImportedFileNameWrapper
           id={`${id}-file-info`}
           style={{
             marginBottom: 16,
@@ -145,29 +213,33 @@ export default function ZipFileInput({
           aria-live="polite"
         >
           <span style={{ fontWeight: 600 }}>{strings.datasetImport.file}&nbsp;</span>
-          <span
-            style={{
-              color: '#2285d7',
-              fontWeight: 500,
-              marginRight: 4
-            }}
-          >
-            {value.name} ({(value.size / 1024 / 1024).toFixed(2)} Mt)
-          </span>
-          <IconButton
-            size="small"
-            aria-label={strings.datasetImport?.zipFileInput?.removeFile || "Remove selected file"}
-            id={`${id}-remove-button`}
-            sx={{ marginLeft: 1, color: '#c00' }}
-            onClick={() => {
-              onFileChange(null);
-              setError('');
-            }}
-            disabled={disabled}
-          >
-            <FontAwesomeIcon icon={faTimes} />
-          </IconButton>
-        </div>
+          <StyledImportedFileNameGroup>
+            <span className="filename-group">
+              <span
+                className="filename"
+                title={value.name}
+              >
+                {middleEllipsis(value.name, 32)}
+              </span>
+              <span className="filesize">
+                ({(value.size / 1024 / 1024).toFixed(2)} Mt)
+              </span>
+            </span>
+            <IconButton
+              size="small"
+              aria-label={strings.datasetImport?.zipFileInput?.removeFile || "Remove selected file"}
+              id={`${id}-remove-button`}
+              sx={{ marginLeft: 1, color: '#c00' }}
+              onClick={() => {
+                onFileChange(null);
+                setError('');
+              }}
+              disabled={disabled}
+            >
+              <FontAwesomeIcon icon={faCircleXmark} />
+            </IconButton>
+          </StyledImportedFileNameGroup>
+        </StyledImportedFileNameWrapper>
       )}
       {error && (
         <div
