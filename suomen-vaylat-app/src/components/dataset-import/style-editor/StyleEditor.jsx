@@ -135,9 +135,7 @@ const ColorInput = styled.input`
   background: none;
   width: 37px;
   height: 32px;
-  box-shadow: 0 1px 3px #0001;
-  margin-left: 5px;
-  margin-right: 2px;
+  box-shadow: 0 1px 3px #0002;
   cursor: pointer;
 `;
 
