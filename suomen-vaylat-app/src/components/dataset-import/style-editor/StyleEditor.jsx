@@ -289,7 +289,6 @@ export default function StyleEditor({ initialStyle = {}, onChange }) {
           selected={type === "point"}
           htmlFor={ids.radioPoint}
           id={`${ids.radioPoint}-label`}
-          aria-pressed={type === "point"}
         >
           <input
             id={ids.radioPoint}
@@ -298,7 +297,6 @@ export default function StyleEditor({ initialStyle = {}, onChange }) {
             value="point"
             checked={type === "point"}
             onChange={() => setType("point")}
-            aria-checked={type === "point"}
             aria-controls={ids.panelPoint}
             aria-label={seStrings.dot?.title || "Point feature style"}
           />
@@ -309,7 +307,6 @@ export default function StyleEditor({ initialStyle = {}, onChange }) {
           selected={type === "line"}
           htmlFor={ids.radioLine}
           id={`${ids.radioLine}-label`}
-          aria-pressed={type === "line"}
         >
           <input
             id={ids.radioLine}
@@ -318,7 +315,6 @@ export default function StyleEditor({ initialStyle = {}, onChange }) {
             value="line"
             checked={type === "line"}
             onChange={() => setType("line")}
-            aria-checked={type === "line"}
             aria-controls={ids.panelLine}
             aria-label={seStrings.line?.title || "Line feature style"}
           />
@@ -329,7 +325,6 @@ export default function StyleEditor({ initialStyle = {}, onChange }) {
           selected={type === "area"}
           htmlFor={ids.radioArea}
           id={`${ids.radioArea}-label`}
-          aria-pressed={type === "area"}
         >
           <input
             id={ids.radioArea}
@@ -338,7 +333,6 @@ export default function StyleEditor({ initialStyle = {}, onChange }) {
             value="area"
             checked={type === "area"}
             onChange={() => setType("area")}
-            aria-checked={type === "area"}
             aria-controls={ids.panelArea}
             aria-label={seStrings.area?.title || "Area feature style"}
           />
@@ -370,9 +364,7 @@ export default function StyleEditor({ initialStyle = {}, onChange }) {
                     key={s.id}
                     id={`${ids.pointShape}-${s.id}`}
                     selected={pointShape===s.id}
-                    aria-pressed={pointShape===s.id}
                     aria-label={s.label}
-                    aria-checked={pointShape === s.id}
                     onClick={()=>setPointShape(s.id)}
                     type="button"
                     title={s.label}
@@ -416,9 +408,7 @@ export default function StyleEditor({ initialStyle = {}, onChange }) {
                     key={opt.name}
                     id={`${ids.lineDash}-${opt.name}`}
                     selected={lineDash === opt.name}
-                    aria-pressed={lineDash === opt.name}
                     aria-label={opt.name}
-                    aria-checked={lineDash === opt.name}
                     onClick={()=>setLineDash(opt.name)}
                     title={opt.name}
                     type="button"
@@ -441,9 +431,7 @@ export default function StyleEditor({ initialStyle = {}, onChange }) {
                     key={opt.name}
                     id={`${ids.lineCap}-${opt.name}`}
                     selected={lineCap === opt.name}
-                    aria-pressed={lineCap === opt.name}
                     aria-label={opt.name}
-                    aria-checked={lineCap === opt.name}
                     onClick={()=>setLineCap(opt.name)}
                     title={opt.name}
                     type="button"
@@ -464,9 +452,7 @@ export default function StyleEditor({ initialStyle = {}, onChange }) {
                     key={opt.name}
                     id={`${ids.lineJoin}-${opt.name}`}
                     selected={lineJoin===opt.name}
-                    aria-pressed={lineJoin===opt.name}
                     aria-label={opt.name}
-                    aria-checked={lineJoin===opt.name}
                     onClick={()=>setLineJoin(opt.name)}
                     title={opt.name}
                     type="button"
@@ -510,9 +496,7 @@ export default function StyleEditor({ initialStyle = {}, onChange }) {
                     key={opt.name}
                     id={`${ids.areaBorderDash}-${opt.name}`}
                     selected={areaDash===opt.name}
-                    aria-pressed={areaDash===opt.name}
                     aria-label={opt.name}
-                    aria-checked={areaDash === opt.name}
                     onClick={()=>setAreaDash(opt.name)}
                     title={opt.name}
                     type="button"
@@ -533,9 +517,7 @@ export default function StyleEditor({ initialStyle = {}, onChange }) {
                     key={opt.name}
                     id={`${ids.areaBorderJoin}-${opt.name}`}
                     selected={areaJoin===opt.name}
-                    aria-pressed={areaJoin===opt.name}
                     aria-label={opt.name}
-                    aria-checked={areaJoin === opt.name}
                     onClick={()=>setAreaJoin(opt.name)}
                     title={opt.name}
                     type="button"
@@ -570,9 +552,7 @@ export default function StyleEditor({ initialStyle = {}, onChange }) {
                     key={opt.id}
                     id={`${ids.fillPattern}-${opt.id}`}
                     selected={fillPattern===opt.value}
-                    aria-pressed={fillPattern===opt.value}
                     aria-label={opt.label}
-                    aria-checked={fillPattern === opt.value}
                     onClick={()=>setFillPattern(opt.value)}
                     title={opt.label}
                     type="button"

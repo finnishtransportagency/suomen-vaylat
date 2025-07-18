@@ -36,7 +36,7 @@ const StyledImportedFileNameGroup = styled.div`
   }
 
   .filename {
-    color: #2285d7;
+    color: ${(props) => props.theme.colors.mainColor1};
     font-weight: 500;
     margin-right: 4px;
     min-width: 0;
@@ -50,7 +50,7 @@ const StyledImportedFileNameGroup = styled.div`
   }
 
   .filesize {
-    color: #2285d7;
+    color: ${(props) => props.theme.colors.mainColor1};
     font-weight: 400;
     font-size: 0.96em;
     margin-right: 4px;
@@ -76,7 +76,7 @@ const StyledDropBox = styled.div`
   margin-bottom: 20px;
   background: #eaf3fa;
   border-radius: 16px;
-  border: 2px dashed ${props => props.isDragActive ? '#2285d7' : '#6daae2'};
+  border: 2px dashed ${props => props.isDragActive ? props.theme.colors.mainColorselected1 : props.theme.colors.mainColor1 };
   text-align: center;
   position: relative;
   cursor: ${props => props.disabled ? 'default' : 'pointer'};
@@ -91,12 +91,12 @@ const StyledDropBox = styled.div`
 
 const StyledUploadIcon = styled(FontAwesomeIcon)`
   font-size: 32px;
-  color: #4a90e2;
+  color: ${(props) => props.theme.colors.mainColor1};
   margin-bottom: 6px;
 `;
 
 const StyledFileSelectText = styled.span`
-  color: #2285d7;
+  color: ${(props) => props.theme.colors.mainColor1};
   font-weight: 500;
   margin: 5px;
 `;

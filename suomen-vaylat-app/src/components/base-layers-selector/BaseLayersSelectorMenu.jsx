@@ -340,7 +340,6 @@ const BaseLayerSelectorMenu = () => {
         id={`baselayer-selector-layer-switch-${layer.id}`}
         isSelected={isSelected}
         onClick={(event) => handleClick(event)}
-        aria-checked={isSelected}
         aria-label={
           strings.baseLayerSelector.labels.layerSwitchAriaLabel + layer.name
         }

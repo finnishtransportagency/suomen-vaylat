@@ -104,7 +104,6 @@ const BaseLayerSelector = () => {
                 active={isSelected}
                 tabIndex={0}
                 aria-label={strings.baseLayerSelector.labels.selectBaseLayer + layer.name}
-                aria-pressed={isSelected}
                 role="button"
             >
                 <StyledButtonText id={`baselayer-selector-base-layer-btn-text-${layer.id}`}>

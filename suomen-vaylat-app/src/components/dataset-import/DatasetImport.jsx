@@ -235,7 +235,6 @@ function GeneralTabContent({
           size="small"
           variant="outlined"
           InputLabelProps={{ shrink: true }}
-          aria-required="true"
         />
         {errors.fi.name && (
           <StyledErrorMsg id="import-dataset-finnish-layerName-error">{strings.datasetImport.validationMsg}</StyledErrorMsg>
@@ -278,7 +277,7 @@ function GeneralTabContent({
         </Typography>
         <Tooltip title={strings.datasetImport.languagesTooltip}>
           <span>
-            <FontAwesomeIcon icon={faInfoCircle} style={{ color: '#2285d7' }} />
+            <FontAwesomeIcon icon={faInfoCircle} style={{ color: '#0064af' }} />
           </span>
         </Tooltip>
       </StyledFlexRow>
@@ -289,7 +288,6 @@ function GeneralTabContent({
               id="import-dataset-lang-en"
               checked={lang.en}
               onChange={(e) => setLang((l) => ({ ...l, en: e.target.checked }))}
-              inputProps={{ 'aria-checked': lang.en }}
             />
           }
           label={strings.datasetImport.english}
@@ -301,7 +299,6 @@ function GeneralTabContent({
               id="import-dataset-lang-sv"
               checked={lang.sv}
               onChange={(e) => setLang((l) => ({ ...l, sv: e.target.checked }))}
-              inputProps={{ 'aria-checked': lang.sv }}
             />
           }
           label={strings.datasetImport.swedish}
@@ -327,7 +324,6 @@ function GeneralTabContent({
             size="small"
             variant="outlined"
             InputLabelProps={{ shrink: true }}
-            aria-required="true"
           />
           {errors.sv.name && (
             <StyledErrorMsg id="import-dataset-swedish-layerName-error">
@@ -385,7 +381,6 @@ function GeneralTabContent({
             size="small"
             variant="outlined"
             InputLabelProps={{ shrink: true }}
-            aria-required="true"
           />
           {errors.en.name && (
             <StyledErrorMsg id="import-dataset-english-layerName-error">

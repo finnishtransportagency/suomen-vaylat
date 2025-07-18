@@ -341,6 +341,7 @@ const MenuBar = () => {
                       tooltipDirection={'right'}
                       clickAction={closeDrawingTools}
                       aria-label={strings.tooltips?.closeDrawingTools}
+                      title={strings.tooltips?.closeDrawingTools}
                     />
                     <StyledToolButtons id="menubar-toolbuttons-container">
                       <DrawingTools isOpen={isDrawingToolsOpen} />
