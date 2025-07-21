@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import strings from '../../../translations';
 import {
   faCompress,
@@ -204,6 +204,7 @@ const MenuBar = () => {
     drawToolMarkers
   } = useAppSelector((state) => state.ui);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [noDownloadableLayers, setNoDownloadableLayers] = useState(false);
 
   const closeDrawingTools = (open) => {
     channel && channel.postRequest('DrawTools.StopDrawingRequest');
@@ -224,6 +225,11 @@ const MenuBar = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
     closeDrawingTools();
   };
+
+  useEffect(() => {
+    const onlyUserLayers = selectedLayersByType.mapLayers?.length === 0 || (selectedLayersByType.mapLayers?.length > 0 && selectedLayersByType.mapLayers.filter(l => typeof l.id === 'string' && l.id.startsWith('userlayer_')).length === selectedLayersByType.mapLayers.length);
+    setNoDownloadableLayers(onlyUserLayers);
+  }, [selectedLayersByType]);
 
   const MENU_ANIMATION = {
     hidden: { y: -50, opacity: 0 },
@@ -345,7 +351,7 @@ const MenuBar = () => {
                         id="menubar-tools-download-btn"
                         icon={faDownload}
                         text={strings.downloads.downloads}
-                        disabled={selectedLayersByType.mapLayers.length === 0}
+                        disabled={noDownloadableLayers}
                         onClick={() =>
                           store.dispatch(
                             setIsGfiDownloadOpen(!isGfiDownloadOpen)

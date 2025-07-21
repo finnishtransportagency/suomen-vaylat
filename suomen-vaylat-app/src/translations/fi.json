@@ -144,7 +144,8 @@
     "noWebSocketSupport": "Selaimesi ei tue latauksia. Voit kokeilla uudelleen eri selaimella tai päivittämällä nykyisen selaimesi version.",
     "downloadFailure": "Latauksessa meni jokin pieleen, yritä uudelleen.",
     "downloadsInfo": "Osa aineistoista on ladattavissa koko Suomen alueelta karttatasovalikon latauspainikkeesta, aineiston nimen vierestä.",
-    "downloadsInfo2": "Mikäli latauspainike puuttuu, aineiston lataus edellyttää kohteen valintaa kartalta."
+    "downloadsInfo2": "Mikäli latauspainike puuttuu, aineiston lataus edellyttää kohteen valintaa kartalta.",
+    "noValidMaplayers": "Ei ladattavissa olevia tasoja valittuna"
   },
   "general": {
     "close": "Sulje",

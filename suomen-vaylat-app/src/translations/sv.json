@@ -144,7 +144,8 @@
     "noWebSocketSupport": "Din webbläsare stöder inte nedladdningar. Du kan prova på nytt med en annan webbläsare eller uppdatera din nuvarande webbläsare.",
     "downloadFailure": "Något gick fel vid nedladdningen, försök igen.",
     "downloadsInfo":"En del av datan kan laddas ner från hela Finlands område via menyn för datalager bredvid datalagret i fråga.",
-    "downloadsInfo2": "Om nedladdningsknappen saknas måste du välja ett objekt på kartan för att ladda ner datan."
+    "downloadsInfo2": "Om nedladdningsknappen saknas måste du välja ett objekt på kartan för att ladda ner datan.",
+    "noValidMaplayers": "Det finns inga nedladdningsbara lager valda för närvarande"
   },
   "general": {
     "close": "Stänga",
