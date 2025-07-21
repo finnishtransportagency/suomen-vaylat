@@ -8,6 +8,7 @@
   },
   "title": "Suomen väylät",
   "extranet": "EXTRANET",
+  "row": "rivi",
   "tooltips": {
     "showInfoLink": "Suodatus info (avautuu uuteen välilehteen)",
     "layerlist": {
@@ -201,7 +202,7 @@
     "roadAddressInstructions": "Tieosoitetietoja ei pystytty hakemaan. Lähennä karttaa ja klikkaa pistettä, jolle haluat hakea tieosoitetiedot."
   },
   "downloads": {
-    "newDownloads": "UUSI LATAUS",
+    "newDownload": "UUSI LATAUS",
     "downloads": "Lataukset",
     "processing": "Prosessoidaan",
     "noProcessingDownloads": "Ei prosessoitavia latauksia",

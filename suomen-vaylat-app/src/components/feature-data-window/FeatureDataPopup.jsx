@@ -438,10 +438,19 @@ export const FeatureDataPopup = () => {
   const [gfiTabsSwiper, setGfiTabsSwiper] = useState(null);
   const [gfiTabsSnapGridLength, setGfiTabsSnapGridLength] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
+  const [hasOnlyUserlayers, setHasOnlyUserlayers] = useState(false);
+  const [filteredGFILocations, setFilteredGFILocations] = useState([]);
   const gfiInputEl = useRef(null);
   
   useEffect(() => {
     if (gfiLocations.length === 0) setSelectedTab(0);
+    setHasOnlyUserlayers(gfiLocations.filter(l => typeof l.layerId === 'string' && l.layerId.startsWith('userlayer_')).length === gfiLocations.length);
+    // Download is disabled if there's no layers/locations that aren't background maps
+    setFilteredGFILocations(gfiLocations.filter(
+      (g) =>
+        selectedLayersByType.backgroundMaps.filter((l) => l.id === g.layerId)
+          .length === 0
+    ));
   }, [gfiLocations]);
 
   const handleLinkClick = (event) => {
@@ -768,7 +777,7 @@ export const FeatureDataPopup = () => {
     // Ensure every row/cell has a unique id (for Table needs)
     const cells = rows.map((row, idx) => ({
       ...row,
-      id: row.id || `row-${idx}`
+      id: row.id || `${strings.row}-${idx}`
     }));
 
     // Compose for Table
@@ -970,13 +979,6 @@ export const FeatureDataPopup = () => {
     const layer = selectedLayers.filter((l) => l.id === tabsIds[index]);
     store.dispatch(setActiveGFILayer(layer));
   };
-
-  // Download is disabled if there's no layers/locations that aren't background maps
-  const filteredGFILocations = gfiLocations.filter(
-    (g) =>
-      selectedLayersByType.backgroundMaps.filter((l) => l.id === g.layerId)
-        .length === 0
-  );
 
   return (
     <StyledGfiContainer id="gfi_container">
@@ -1347,20 +1349,20 @@ export const FeatureDataPopup = () => {
                 selectedLayersByType.backgroundMaps.filter(
                   (l) => l.id === layer.id
                 ).length === 0
-            )
+            ) || hasOnlyUserlayers
           }
         />
         <CircleButton
           icon={faFileDownload}
           text={
-            gfiLocations.length > 0
+            gfiLocations.length > 0 && !hasOnlyUserlayers
               ? strings.gfi.downloadMaterials
               : strings.gfi.downloadMaterialsDisabled
           }
           toggleState={isGfiDownloadToolsOpen}
           tooltipDirection={'bottom'}
           clickAction={handleGfiDownloadsMenu}
-          disabled={filteredGFILocations.length === 0}
+          disabled={filteredGFILocations.length === 0 || hasOnlyUserlayers}
         />
         <CircleButton
           icon={faSearchLocation}
@@ -1371,7 +1373,7 @@ export const FeatureDataPopup = () => {
             isMobile && store.dispatch(setMinimizeGfi(true));
           }}
           disabled={
-            gfiLocations.length === 0 || filteredGFILocations.length === 0
+            gfiLocations.length === 0 || filteredGFILocations.length === 0 || hasOnlyUserlayers
           }
         />
       </StyledButtonsContainer>
