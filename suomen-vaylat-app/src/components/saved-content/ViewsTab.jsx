@@ -10,38 +10,29 @@ import { v4 as uuidv4 } from 'uuid';
 import {
   setIsSaveViewOpen,
   setWarning,
-  setSavedTabIndex,
   addToActiveGeometries,
   removeActiveGeometry,
   removeFromDrawToolMarkers
 } from '../../state/slices/uiSlice';
-import { faPlus, faSave, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faSave, faTrash, faPen } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { TextField, Switch, FormControlLabel } from '@mui/material';
+import { Switch } from '@mui/material';
 import {
   addMarkerRequest,
   removeMarkerRequest
 } from '../../state/slices/rpcSlice';
 
+// --- Styled components ---
 const StyledMainContainer = styled.div`
   overflow: auto;
   padding: 0 12px 12px 12px;
-
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-
   @media ${(props) => props.theme.device.lowResDesktop} {
     max-height: 500px;
   }
 `;
-
-const StyledHeaderText = styled.div`
-  font-size: 16px;
-  color: #151515;
-  margin-bottom: 20px;
-`;
-
 const StyledForm = styled.form`
   margin-bottom: 28px;
   display: flex;
@@ -106,16 +97,6 @@ const StyledSwitchLabel = styled.div`
   margin-left: 10px;
 `;
 
-const StyledLink = styled.a`
-  margin-left: 12px;
-  color: #8e3fff !important;
-  font-size: 13px;
-  cursor: pointer;
-  &:hover {
-    text-decoration: underline;
-  }
-`;
-
 const StyledButtonsRow = styled.div`
   display: flex;
   width: 100%;
@@ -178,16 +159,12 @@ const StyledSavedViews = styled.div`
   flex-direction: column;
   gap: 8px;
 `;
+
 const StyledNoSavedViews = styled.div`
   font-size: 14px;
   text-align: center;
   color: #888;
   padding: 32px 0 18px 0;
-`;
-
-const StyledSavedViewDate = styled.div`
-  font-size: 12px;
-  color: #858d99;
 `;
 
 const StyledSavedViewContainer = styled(motion.div)`
@@ -206,10 +183,15 @@ const StyledSavedView = styled.div`
   border-radius: 4px;
   padding: 8px 0px 8px 0px;
   box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, 0.16);
-  @-moz-document url-prefix() {
-    position: initial;
-  }
 `;
+
+const StyledViewActions = styled.div`
+  display: flex;
+  align-items: center;
+  column-gap: 8px;
+  margin-right: 8px;
+`;
+
 
 const StyledRemoveSavedView = styled.div`
   display: flex;
@@ -217,10 +199,10 @@ const StyledRemoveSavedView = styled.div`
   align-items: center;
   padding: 8px;
   svg {
-    color: rgba(0, 0, 0, 0.5);
+    color: ${(props) => props.theme.colors.mainWhite};
     cursor: pointer;
     &:hover {
-      color: ${(props) => props.theme.colors.mainColor1};
+      color: ${(props) => props.theme.colors.hover};
     }
   }
 `;
@@ -297,11 +279,31 @@ const StyledDeleteAllSavedViews = styled.div`
     font-weight: 600;
   }
   opacity: ${(props) => (props.disabled ? '0.58' : '1')};
-
   &:hover {
-
-  background-color: ${(props) => props.theme.colors.secondaryColorDarkOrangeSelected};
+    background-color: ${(props) =>
+      props.theme.colors.secondaryColorDarkOrangeSelected};
   }
+`;
+
+const StyledIconButton = styled.button`
+  background: none;
+  border: none;
+  padding: 4px;
+  margin: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  color: ${(props) => props.theme.colors.mainWhite};
+  font-size: 16px;
+  &:hover {
+    color: ${(props) => props.theme.colors.hover};
+  }
+`;
+
+const StyledIsDefault = styled.div`
+  color: ${(props) => props.theme.colors.mainWhite};
+  font-size: 14px;
+  margin-right: 8px;
 `;
 
 const StyledSaveGeometryWrapper = styled.div``;
@@ -314,18 +316,41 @@ const ViewsTab = () => {
   const [viewName, setViewName] = useState('');
   const [viewDescription, setViewDescription] = useState('');
   const [includeGeometries, setIncludeGeometries] = useState(false);
+  const [editingViewId, setEditingViewId] = useState(null);
+  const [defaultViewId, setDefaultViewId] = useState(null);
+  const [isDefault, setIsDefault] = useState(false);
 
   const { selectedLayers, channel } = useAppSelector((state) => state.rpc);
   const { geoJsonArray, drawToolMarkers, activeGeometries } = useAppSelector(
     (state) => state.ui
   );
 
-  // Load saved views on mount
+  // Load saved views and default view on mount
   useEffect(() => {
-    window.localStorage.getItem('views') &&
-      setViews(JSON.parse(window.localStorage.getItem('views')));
+    const storedViews = window.localStorage.getItem('views');
+    if (storedViews) setViews(JSON.parse(storedViews));
+    const defaultId = window.localStorage.getItem('defaultViewId');
+    setDefaultViewId(defaultId ? defaultId : null);
+    setIsDefault(false);
   }, []);
 
+  // Persist defaultViewId on change
+  useEffect(() => {
+    if (defaultViewId !== null) {
+      window.localStorage.setItem('defaultViewId', defaultViewId);
+    }
+  }, [defaultViewId]);
+
+  // When entering edit mode, reset toggle accordingly
+  const handleEditView = (view) => {
+    setViewName(view.name);
+    setViewDescription(view.description);
+    setIncludeGeometries(Boolean(view.data.geometries));
+    setEditingViewId(view.id);
+    setIsDefault(view.id === defaultViewId);
+  };
+
+  // Save or update a view
   const handleSaveView = () => {
     let markers = drawToolMarkers?.map((d) => ({
       ...d,
@@ -334,8 +359,9 @@ const ViewsTab = () => {
     }));
 
     channel.getMapPosition(function (center) {
+      let thisId = editingViewId || uuidv4();
       let newView = {
-        id: uuidv4(),
+        id: thisId,
         name: viewName,
         description: viewDescription,
         saveDate: Date.now(),
@@ -348,13 +374,82 @@ const ViewsTab = () => {
           geometries: includeGeometries ? { geoJsonArray, markers } : undefined
         }
       };
-      const updatedViews = [...views, newView];
-      window.localStorage.setItem('views', JSON.stringify(updatedViews));
+
+      let updatedViews;
+
+      if (editingViewId) {
+        updatedViews = views.map((v) =>
+          v.id === editingViewId ? { ...newView, id: editingViewId } : v
+        );
+      } else {
+        updatedViews = [...views, newView];
+      }
+
       setViews(updatedViews);
+      window.localStorage.setItem('views', JSON.stringify(updatedViews));
+
+      // Manage default toggling (set or clear)
+      if (isDefault) {
+        setDefaultViewId(thisId);
+        window.localStorage.setItem('defaultViewId', thisId);
+      } else if (editingViewId && defaultViewId === editingViewId) {
+        setDefaultViewId(null);
+        window.localStorage.removeItem('defaultViewId');
+      }
+
       setViewName('');
       setViewDescription('');
       setIncludeGeometries(false);
+      setEditingViewId(null);
+      setIsDefault(false);
     });
+  };
+
+  // Handler for default in the view list
+  const handleListSwitch = (id, checked) => {
+    if (checked) {
+      setDefaultViewId(id);
+      window.localStorage.setItem('defaultViewId', id);
+    } else {
+      setDefaultViewId(null);
+      window.localStorage.removeItem('defaultViewId');
+    }
+  };
+
+  // Cancel edit mode
+  const handleCancelEdit = () => {
+    setViewName('');
+    setViewDescription('');
+    setEditingViewId(null);
+    setIncludeGeometries(false);
+    setIsDefault(false);
+  };
+
+  // Remove a view
+  const handleRemoveView = (view) => {
+    const updatedViews = views.filter((viewData) => viewData.id !== view.id);
+    window.localStorage.setItem('views', JSON.stringify(updatedViews));
+    setViews(updatedViews);
+
+    if (view.id === defaultViewId) {
+      setDefaultViewId(null);
+      window.localStorage.removeItem('defaultViewId');
+    }
+    if (view.id === editingViewId) {
+      setEditingViewId(null);
+      setViewName('');
+      setViewDescription('');
+      setIncludeGeometries(false);
+      setIsDefault(false);
+    }
+  };
+
+  const handleDeleteAllViews = () => {
+    window.localStorage.setItem('views', JSON.stringify([]));
+    setViews([]);
+    setDefaultViewId(null);
+    window.localStorage.removeItem('defaultViewId');
+    store.dispatch(setWarning(null));
   };
 
   const handleActivateView = (view) => {
@@ -380,27 +475,16 @@ const ViewsTab = () => {
     });
 
     selectedLayers.forEach((layer) => {
-      channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [
-        layer.id,
-        false
-      ]);
+      channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, false]);
     });
 
     view.data.layers.forEach((layer) => {
-      channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [
-        layer.id,
-        true
-      ]);
-      channel.postRequest('ChangeMapLayerOpacityRequest', [
-        layer.id,
-        layer.opacity
-      ]);
+      channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, true]);
+      channel.postRequest('ChangeMapLayerOpacityRequest', [layer.id, layer.opacity]);
     });
 
-    // Restore geometries if present
     if (view.data.geometries) {
       const geometry = view.data.geometries;
-      // Add markers
       geometry.markers.forEach((marker) => {
         store.dispatch(addMarkerRequest(marker));
       });
@@ -478,18 +562,6 @@ const ViewsTab = () => {
     store.dispatch(setIsSaveViewOpen(false));
   };
 
-  const handleRemoveView = (view) => {
-    const updatedViews = views.filter((viewData) => viewData.id !== view.id);
-    window.localStorage.setItem('views', JSON.stringify(updatedViews));
-    setViews(updatedViews);
-  };
-
-  const handleDeleteAllViews = () => {
-    window.localStorage.setItem('views', JSON.stringify([]));
-    setViews([]);
-    store.dispatch(setWarning(null));
-  };
-
   // --- RENDER ---
   return (
     <StyledMainContainer>
@@ -545,17 +617,35 @@ const ViewsTab = () => {
                 'Tallenna omat geometriat mukaan.'}
             </StyledSwitchLabel>
           </StyledSwitchRow>
+          <StyledSwitchRow style={{ alignItems: 'center', justifyContent: 'flex-start', marginBottom: 16 }}>
+            <Switch
+              checked={isDefault}
+              onChange={e => setIsDefault(e.target.checked)}
+              color="primary"
+              inputProps={{
+                'aria-label': isDefault
+                  ? (strings.savedContent.saveView.defaultView || "Poista oletusnäkymä")
+                  : (strings.savedContent.saveView.setDefaultView || "Aseta oletusnäkymä")
+              }}
+            />
+            <StyledSwitchLabel>
+              {isDefault
+                ? (strings.savedContent.saveView.defaultView || "Oletusnäkymä")
+                : (strings.savedContent.saveView.setDefaultView || "Aseta oletusnäkymä")}
+            </StyledSwitchLabel>
+          </StyledSwitchRow>
           <StyledButtonsRow>
             <StyledCancel
               type="button"
-              onClick={() => store.dispatch(setIsSaveViewOpen(false))}
+              onClick={handleCancelEdit}
             >
               {strings.general.cancel || 'Peruuta'}
             </StyledCancel>
             <StyledSave type="submit" disabled={!viewName}>
-              <FontAwesomeIcon icon={faSave} />
-              {strings.savedContent.saveView.saveViewButton ||
-                'Tallenna karttanäkymä'}
+              <FontAwesomeIcon icon={editingViewId ? faSave : faPlus} />
+              {editingViewId
+                ? strings.savedContent.saveView.saveViewButton || 'Tallenna muutokset'
+                : strings.savedContent.saveView.saveViewButton || 'Tallenna karttanäkymä'}
             </StyledSave>
           </StyledButtonsRow>
         </StyledForm>
@@ -569,6 +659,7 @@ const ViewsTab = () => {
           <AnimatePresence>
             {views.length > 0 ? (
               views.map((view) => {
+                const isDefaultView = (view.id === defaultViewId);
                 return (
                   <StyledSavedViewContainer
                     key={view.id}
@@ -591,6 +682,13 @@ const ViewsTab = () => {
                   >
                     <StyledSavedView
                       onClick={(e) => {
+                        // Don't open if clicking edit or star or switch
+                        if (
+                          e.target.closest('[data-action="edit"]') ||
+                          e.target.closest('[data-action="default"]') ||
+                          e.target.closest('[data-action="remove"]')
+                        )
+                          return;
                         e.preventDefault();
                         handleActivateView(view);
                       }}
@@ -613,14 +711,33 @@ const ViewsTab = () => {
                           </StyledSavedViewDescription>
                         </StyledSavedViewTitleContent>
                       </StyledLeftContent>
-                      <StyledRightContent />
+                      <StyledViewActions>
+                        { isDefaultView && <StyledIsDefault>{strings.savedContent.saveView.defaultView}</StyledIsDefault>}
+
+                        <StyledIconButton
+                          type="button"
+                          data-action="edit"
+                          title={strings.savedContent.saveView.editView || "Muokkaa"}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleEditView(view);
+                          }}
+                        >
+                          <FontAwesomeIcon icon={faPen} />
+                        </StyledIconButton>
+                        <StyledIconButton
+                          type="button"
+                          data-action="remove"
+                            title={strings.savedContent.saveView.deleteSavedView}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleRemoveView(view);
+                            }}
+                        >
+                          <FontAwesomeIcon icon={faTrash} />
+                        </StyledIconButton>
+                      </StyledViewActions>
                     </StyledSavedView>
-                    <StyledRemoveSavedView>
-                      <FontAwesomeIcon
-                        icon={faTrash}
-                        onClick={() => handleRemoveView(view)}
-                      />
-                    </StyledRemoveSavedView>
                   </StyledSavedViewContainer>
                 );
               })
