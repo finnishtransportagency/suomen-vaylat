@@ -493,17 +493,6 @@ const ViewsTab = () => {
               {strings.savedContent.saveView.includeGeometries || "Tallenna omat geometriat mukaan."}
             </StyledSwitchLabel>
           </StyledSwitchRow>
-          <StyledSwitchRow>
-            <Switch
-              checked={false}
-              disabled
-              color="primary"
-              inputProps={{ "aria-label": strings.savedContent.saveView.includeDatasets || "Tallenna omat aineistot mukaan." }}
-            />
-            <StyledSwitchLabel>
-              {strings.savedContent.saveView.includeDatasets || "Tallenna omat aineistot mukaan."}
-            </StyledSwitchLabel>
-          </StyledSwitchRow>
           <StyledButtonsRow>
             <StyledCancel type="button" onClick={() => store.dispatch(setIsSaveViewOpen(false))}>
               {strings.general.cancel || "Peruuta"}
