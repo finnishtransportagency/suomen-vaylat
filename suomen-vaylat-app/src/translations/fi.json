@@ -81,7 +81,9 @@
       "savedGeometries": "Tallennetut geometriat",
       "geometryName": "Geometrian nimi",
       "noGeometry": "Ei uusia geometrioita kartalla",
-      "saveNewGeometry": "Tallenna uusi geometria"
+      "saveNewGeometry": "Tallenna uusi geometria",
+      "saveGeometryButton" : "Tallenna geometria",
+      "geometryDesc": "Geometrian kuvaus"
     }
   },
   "gfi": {

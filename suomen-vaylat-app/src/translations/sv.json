@@ -81,7 +81,8 @@
       "savedGeometries": "Sparad geometri",
       "geometryName": "Geometrins namn",
       "noGeometry": "Ingen ny geometri på kartan",
-      "saveNewGeometry": "Spara ny geometri"
+      "saveNewGeometry": "Spara ny geometri",
+      "saveGeometryButton" : "Spara geometri"
     }
   },
   "gfi": {

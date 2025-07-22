@@ -80,7 +80,9 @@
       "savedGeometries": "Saved geometries",
       "geometryName": "Geometry name",
       "noGeometry": "No new geometries on the map",
-      "saveNewGeometry": "Save new geometry"
+      "saveNewGeometry": "Save new geometry",
+      "saveGeometryButton" : "Save geometry",
+      "geometryDesc": "Geometry description"
     }
   },
   "gfi": {

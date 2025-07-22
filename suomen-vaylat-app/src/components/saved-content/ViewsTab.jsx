@@ -15,7 +15,7 @@ import {
   removeActiveGeometry,
   removeFromDrawToolMarkers
 } from '../../state/slices/uiSlice';
-import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faSave, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { TextField, Switch, FormControlLabel } from '@mui/material';
 import {
@@ -151,11 +151,11 @@ const StyledSave = styled.button`
   align-items: center;
   transition: 0.1s;
   svg {
-    margin-right: 7px;
-    font-size: 18px;
+    margin-right: 12px;
+    font-size: 16px;
   }
   &:hover {
-    background: #154cb5;
+    background-color: ${(props) => props.theme?.colors?.mainColorselected1};
   }
   &:disabled {
     opacity: 0.45;
@@ -553,7 +553,7 @@ const ViewsTab = () => {
               {strings.general.cancel || 'Peruuta'}
             </StyledCancel>
             <StyledSave type="submit" disabled={!viewName}>
-              <FontAwesomeIcon icon={faPlus} />
+              <FontAwesomeIcon icon={faSave} />
               {strings.savedContent.saveView.saveViewButton ||
                 'Tallenna karttanäkymä'}
             </StyledSave>
