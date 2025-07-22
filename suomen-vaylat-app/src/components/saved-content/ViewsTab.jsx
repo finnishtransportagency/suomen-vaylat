@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext, useRef } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { ReactReduxContext } from 'react-redux';
 import { useAppSelector } from '../../state/hooks';
 import { updateLayers } from '../../utils/rpcUtil';
@@ -6,7 +6,6 @@ import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
 import strings from '../../translations';
 import Moment from 'react-moment';
-import { useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import {
     setIsSaveViewOpen,
@@ -18,67 +17,116 @@ import {
 } from '../../state/slices/uiSlice';
 import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
 import { TextField, Switch, FormControlLabel } from '@mui/material';
-
-import CircleButton from '../../utils/components/CircleButton';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { theme } from '../../theme/theme';
 import { addMarkerRequest, removeMarkerRequest } from '../../state/slices/rpcSlice';
 
-const StyledViewsContainer = styled.div`
+// ---- Styled Components for Layout ----
+const StyledMainContainer = styled.div`
     padding: 24px;
-    max-height: 500px;
-    overflow: auto;
-    @media ${(props) => props.theme.device.mobileL} {
-        max-height: unset;
+    max-width: 560px;
+    margin: 0 auto;
+    font-family: 'Roboto', sans-serif;
+`;
+
+const StyledHeaderText = styled.div`
+    font-size: 16px;
+    color: #151515;
+    margin-bottom: 18px;
+`;
+
+const StyledForm = styled.form`
+    margin-bottom: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+`;
+
+const StyledSwitchRow = styled.div`
+    display: flex;
+    align-items: center;
+    margin-top: 2px;
+    margin-bottom: 2px;
+`;
+
+const StyledSwitchLabel = styled.div`
+    font-size: 15px;
+    color: #292929;
+    margin-left: 10px;
+`;
+
+const StyledLink = styled.a`
+    margin-left: 12px;
+    color: #8e3fff !important;
+    font-size: 13px;
+    cursor: pointer;
+    &:hover { text-decoration: underline; }
+`;
+
+const StyledButtonsRow = styled.div`
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    margin-top: 24px;
+`;
+
+const StyledCancel = styled.button`
+    background: transparent;
+    color: #333;
+    border: 1px solid #b7bfc8;
+    border-radius: 24px;
+    font-size: 15px;
+    padding: 8px 26px;
+    cursor: pointer;
+    transition: 0.1s;
+    &:hover {
+        border-color: #1c478e;
+        color: #1c478e;
     }
 `;
 
+const StyledSave = styled.button`
+    color: #fff;
+    background: #1964e0;
+    border: none;
+    border-radius: 24px;
+    font-size: 16px;
+    font-weight: 600;
+    padding: 10px 36px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    transition: 0.1s;
+    svg {
+        margin-right: 7px;
+        font-size: 18px;
+    }
+    &:hover {
+        background: #154cb5;
+    }
+    &:disabled {
+        opacity: 0.45;
+        cursor: default;
+    }
+`;
+
+// --- Saved View List Styles ---
+const StyledSubtitle = styled.div`
+    font-size: 16px;
+    font-weight: bold;
+    color: ${(props) => props.theme?.colors?.mainColor1 || "#1964e0"};
+    margin-bottom: 12px;
+    margin-top: 22px;
+`;
 const StyledSavedViews = styled.div`
     display: flex;
     flex-direction: column;
     gap: 8px;
 `;
-
-const StyledNoSavedViews = styled(motion.div)`
+const StyledNoSavedViews = styled.div`
     font-size: 14px;
     text-align: center;
-    padding: 16px;
-`;
-
-const StyledDeleteAllSavedViews = styled.div`
-    width: 250px;
-    height: 40px;
-    cursor: pointer;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: ${(props) => props.theme.colors.mainWhite};
-    background-color: ${(props) =>
-        props.disabled
-            ? props.theme.colors.darkGrey
-            : props.theme.colors.secondaryColorDarkOrange};
-    margin: 20px auto 20px auto;
-    border-radius: 20px;
-    p {
-        margin: 0;
-        font-size: 14px;
-        font-weight: 600;
-    }
-`;
-
-const StyledSaveNewViewContainer = styled.div`
-    margin-bottom: 20px;
-`;
-
-const StyledSubtitle = styled.div`
-    display: flex;
-    justify-content: flex-start;
-    color: ${(props) => props.theme.colors.mainColor1};
-    padding: 10px 0px 10px 5px;
-    font-size: 16px;
-    font-weight: bold;
+    color: #888;
+    padding: 32px 0 18px 0;
 `;
 
 const StyledSavedViewContainer = styled(motion.div)`
@@ -163,47 +211,32 @@ const StyleSavedViewHeaderIcon = styled.div`
 `;
 
 const StyledSavedViewTitleContent = styled.div`
-    height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
 `;
 
-const StyledSaveNewViewWrapper = styled.div`
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-end;
-    align-items: center;
-    width: 100%;
-    min-height: 48px;
-    background-color: ${(props) => props.theme.colors.mainWhite};
-    border-radius: 24px;
-    box-shadow: 0px 2px 4px #0000004d;
-    overflow: hidden;
-    padding: 8px;
-    gap: 8px;
-    @media ${(props) => props.theme.device.mobileL} {
-        min-height: 40px;
-    }
-`;
 
-const StyledViewName = styled.input`
-    width: 160px;
-    height: 36px;
-    border: none;
-    padding-left: 16px;
-    border-radius: 16px;
-    margin-right: 8px;
-    font-size: 15px;
-    @media ${(props) => props.theme.device.mobileL} {
-        width: 100%;
-        margin-bottom: 8px;
+const StyledDeleteAllSavedViews = styled.div`
+    width: 250px;
+    height: 40px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    background-color: ${(props) =>
+        props.disabled
+            ? "#d8d8d8"
+            : "#e0603a"};
+    margin: 32px auto 20px auto;
+    border-radius: 20px;
+    p {
+        margin: 0;
+        font-size: 14px;
+        font-weight: 600;
     }
-    &:focus {
-        outline: 0;
-        outline-color: transparent;
-        outline-style: none;
-    }
+    opacity: ${props => props.disabled ? "0.58" : "1"};
 `;
 
 
@@ -217,18 +250,19 @@ const ViewsTab = () => {
     const { selectedLayers, channel } = useAppSelector((state) => state.rpc);
     const { geoJsonArray, drawToolMarkers, activeGeometries } = useAppSelector((state) => state.ui);
 
+    // Load saved views on mount
     useEffect(() => {
-        window.localStorage.getItem('views') !== null &&
+        window.localStorage.getItem('views') &&
             setViews(JSON.parse(window.localStorage.getItem('views')));
     }, []);
 
     const handleSaveView = () => {
-
         let markers = drawToolMarkers?.map(d => ({
             ...d,
             markerId : uuidv4(),
             color: "#ff5100b3"
-        }))
+        }));
+
         channel.getMapPosition(function (center) {
             let newView = {
                 id: uuidv4(),
@@ -246,10 +280,9 @@ const ViewsTab = () => {
                         : undefined
                 },
             };
-            // Save
-            views.push(newView);
-            window.localStorage.setItem('views', JSON.stringify(views));
-            setViews(JSON.parse(window.localStorage.getItem('views')));
+            const updatedViews = [...views, newView];
+            window.localStorage.setItem('views', JSON.stringify(updatedViews));
+            setViews(updatedViews);
             setViewName('');
             setViewDescription('');
             setIncludeGeometries(false);
@@ -258,22 +291,13 @@ const ViewsTab = () => {
 
     const handleActivateView = (view) => {
         channel.getMapPosition(function () {
-            var routeSteps = [
-                {
-                    lon: view.data.x,
-                    lat: view.data.y,
-                    duration: 3000,
-                    zoom: view.data.zoom,
-                    animation: 'zoomPan',
-                },
-            ];
+            var routeSteps = [{
+                lon: view.data.x, lat: view.data.y, duration: 3000, zoom: view.data.zoom, animation: 'zoomPan',
+            }];
             var stepDefaults = {
-                lon: view.data.x,
-                lat: view.data.y,
-                zoom: view.data.zoom,
-                animation: 'zoomPan',
-                duration: 3000,
-                srsName: 'EPSG:3067',
+                lon: view.data.x, lat: view.data.y,
+                zoom: view.data.zoom, animation: 'zoomPan',
+                duration: 3000, srsName: 'EPSG:3067',
             };
             channel.postRequest('MapTourRequest', [routeSteps, stepDefaults]);
         });
@@ -287,15 +311,10 @@ const ViewsTab = () => {
             channel.postRequest('ChangeMapLayerOpacityRequest', [layer.id, layer.opacity]);
         });
 
-        // --- Restore geometries if present and requested ---
+        // Restore geometries if present
         if (view.data.geometries) {
             const geometry = view.data.geometries;
-            // You would plug your geometry restore code here:
-            // For example: store.dispatch(setGeometries(view.data.geometries.geoJsonArray));
-            // and logic to restore drawToolMarkers if needed.
-            // You may want to coordinate this with your Geometries Redux slice/component.
-            // For now, you could do nothing or show a notification/mock:
-            // alert('Would restore geometries: ' + JSON.stringify(view.data.geometries));
+            // Add markers
             geometry.markers.forEach(marker => {
                 store.dispatch(addMarkerRequest(marker));
             });
@@ -370,68 +389,88 @@ const ViewsTab = () => {
     };
 
     const handleRemoveView = (view) => {
-        let updatedViews = views.filter((viewData) => viewData.id !== view.id);
+        const updatedViews = views.filter((viewData) => viewData.id !== view.id);
         window.localStorage.setItem('views', JSON.stringify(updatedViews));
-        setViews(JSON.parse(window.localStorage.getItem('views')));
+        setViews(updatedViews);
     };
 
     const handleDeleteAllViews = () => {
         window.localStorage.setItem('views', JSON.stringify([]));
-        setViews(JSON.parse(window.localStorage.getItem('views')));
+        setViews([]);
         store.dispatch(setWarning(null));
     };
 
+    // --- RENDER ---
     return (
-        <StyledViewsContainer>
-            <StyledSaveNewViewContainer>
-                <StyledSubtitle>{strings.savedContent.saveView.saveNewView}</StyledSubtitle>
-                <StyledViewInputGroup>
-<StyledSaveNewViewWrapper>
-                    <StyledViewName
-                        id="view-name"
-                        type="text"
-                        value={viewName}
-                        onChange={(e) => setViewName(e.target.value)}
-                        placeholder={strings.savedContent.saveView.viewName}
-                        aria-label={strings.savedContent.saveView.viewName}
-                    />
-                    <CircleButton
-                        text={strings.savedContent.saveView.saveViewButton}
-                        icon={faPlus}
-                        clickAction={() => {
-                            viewName !== '' && handleSaveView();
-                        }}
-                        disabled={viewName === ''}
-                    />
-                </StyledSaveNewViewWrapper>
+      <StyledMainContainer>
+        <StyledHeaderText>
+          {strings.savedContent.saveView.instruction || 'Karttanäkymä tallennetaan tähän ja näkyy alla listassa.'}
+        </StyledHeaderText>
 
-                    <TextField
-                        id="view-description"
-                        value={viewDescription}
-                        onChange={(e) => setViewDescription(e.target.value)}
-                        placeholder={strings.savedContent.saveView.description}
-                        size="small"
-                        variant="outlined"
-                        sx={{ flex: 1, marginLeft: 8, marginRight: 8, background: "#fff" }}
-                        aria-label={strings.savedContent.saveView.description}
-                    />
-                    <FormControlLabel
-                        control={
-                            <Switch
-                                checked={includeGeometries}
-                                onChange={(e) => setIncludeGeometries(e.target.checked)}
-                                color="primary"
-                                inputProps={{ 'aria-label': strings.savedContent.saveView.includeGeometries }}
-                            />
-                        }
-                        label={strings.savedContent.saveView.includeGeometries}
-                        style={{ marginLeft: "6px", marginRight: "6px" }}
-                    />
-                </StyledViewInputGroup>
-                
-            </StyledSaveNewViewContainer>
-            <StyledSubtitle>{strings.savedContent.saveView.savedViews}:</StyledSubtitle>
-            <StyledSavedViews>
+        <StyledForm
+          onSubmit={e => {
+            e.preventDefault();
+            if (viewName) handleSaveView();
+          }}
+          autoComplete="off"
+        >
+          <TextField
+            id="view-name"
+            label={strings.savedContent.saveView.viewName || "Näkymän nimi"}
+            required
+            fullWidth
+            size="small"
+            value={viewName}
+            onChange={e => setViewName(e.target.value)}
+            inputProps={{ maxLength: 80, "aria-label": strings.savedContent.saveView.viewName }}
+          />
+          <TextField
+            id="view-description"
+            label={strings.savedContent.saveView.description || "Kuvaus"}
+            fullWidth
+            size="small"
+            value={viewDescription}
+            onChange={e => setViewDescription(e.target.value)}
+            inputProps={{ maxLength: 200, "aria-label": strings.savedContent.saveView.description }}
+          />
+          <StyledSwitchRow>
+            <Switch
+              checked={includeGeometries}
+              onChange={e => setIncludeGeometries(e.target.checked)}
+              color="primary"
+              inputProps={{ "aria-label": strings.savedContent.saveView.includeGeometries }}
+            />
+            <StyledSwitchLabel>
+              {strings.savedContent.saveView.includeGeometries || "Tallenna omat geometriat mukaan."}
+            </StyledSwitchLabel>
+            <StyledLink href="#" tabIndex={-1}>
+              {strings.savedContent.saveView.userGroupsLink || "Käyttäjäryhmät?"}
+            </StyledLink>
+          </StyledSwitchRow>
+          <StyledSwitchRow>
+            <Switch
+              checked={false}
+              disabled
+              color="primary"
+              inputProps={{ "aria-label": strings.savedContent.saveView.includeDatasets || "Tallenna omat aineistot mukaan." }}
+            />
+            <StyledSwitchLabel>
+              {strings.savedContent.saveView.includeDatasets || "Tallenna omat aineistot mukaan."}
+            </StyledSwitchLabel>
+          </StyledSwitchRow>
+          <StyledButtonsRow>
+            <StyledCancel type="button" onClick={() => store.dispatch(setIsSaveViewOpen(false))}>
+              {strings.general.cancel || "Peruuta"}
+            </StyledCancel>
+            <StyledSave type="submit" disabled={!viewName}>
+              <FontAwesomeIcon icon={faPlus}/>
+              {strings.savedContent.saveView.saveViewButton || "Tallenna karttanäkymä"}
+            </StyledSave>
+          </StyledButtonsRow>
+        </StyledForm>
+
+        <StyledSubtitle>{strings.savedContent.saveView.savedViews || "Tallennetut näkymät"}:</StyledSubtitle>
+        <StyledSavedViews>
                 <AnimatePresence>
                     {views.length > 0 ? (
                         views.map((view) => {
@@ -545,8 +584,8 @@ const ViewsTab = () => {
                     <p>{strings.savedContent.saveView.deleteAllSavedViews}</p>
                 </StyledDeleteAllSavedViews>
             </StyledSavedViews>
-        </StyledViewsContainer>
+      </StyledMainContainer>
     );
 };
 
-export default ViewsTab
+export default ViewsTab;
