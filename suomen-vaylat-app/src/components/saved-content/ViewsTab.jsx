@@ -21,7 +21,12 @@ import { TextField, Switch, FormControlLabel } from '@mui/material';
 import { addMarkerRequest, removeMarkerRequest } from '../../state/slices/rpcSlice';
 
 const StyledMainContainer = styled.div`
+    overflow: auto;
     padding: 0 12px 12px 12px;
+
+    @media ${(props) => props.theme.device.lowResDesktop} {
+        max-height: 500px;
+    }
 `;
 
 const StyledHeaderText = styled.div`
