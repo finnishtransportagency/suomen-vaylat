@@ -14,7 +14,12 @@ import {
   removeActiveGeometry,
   removeFromDrawToolMarkers
 } from '../../state/slices/uiSlice';
-import { faPlus, faSave, faTrash, faPen } from '@fortawesome/free-solid-svg-icons';
+import {
+  faPlus,
+  faSave,
+  faTrash,
+  faPen
+} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Switch } from '@mui/material';
 import {
@@ -191,7 +196,6 @@ const StyledViewActions = styled.div`
   column-gap: 8px;
   margin-right: 8px;
 `;
-
 
 const StyledRemoveSavedView = styled.div`
   display: flex;
@@ -475,12 +479,21 @@ const ViewsTab = () => {
     });
 
     selectedLayers.forEach((layer) => {
-      channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, false]);
+      channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [
+        layer.id,
+        false
+      ]);
     });
 
     view.data.layers.forEach((layer) => {
-      channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, true]);
-      channel.postRequest('ChangeMapLayerOpacityRequest', [layer.id, layer.opacity]);
+      channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [
+        layer.id,
+        true
+      ]);
+      channel.postRequest('ChangeMapLayerOpacityRequest', [
+        layer.id,
+        layer.opacity
+      ]);
     });
 
     if (view.data.geometries) {
@@ -617,35 +630,43 @@ const ViewsTab = () => {
                 'Tallenna omat geometriat mukaan.'}
             </StyledSwitchLabel>
           </StyledSwitchRow>
-          <StyledSwitchRow style={{ alignItems: 'center', justifyContent: 'flex-start', marginBottom: 16 }}>
+          <StyledSwitchRow
+            style={{
+              alignItems: 'center',
+              justifyContent: 'flex-start',
+              marginBottom: 16
+            }}
+          >
             <Switch
               checked={isDefault}
-              onChange={e => setIsDefault(e.target.checked)}
+              onChange={(e) => setIsDefault(e.target.checked)}
               color="primary"
               inputProps={{
                 'aria-label': isDefault
-                  ? (strings.savedContent.saveView.defaultView || "Poista oletusnäkymä")
-                  : (strings.savedContent.saveView.setDefaultView || "Aseta oletusnäkymä")
+                  ? strings.savedContent.saveView.defaultView ||
+                    'Poista oletusnäkymä'
+                  : strings.savedContent.saveView.setDefaultView ||
+                    'Aseta oletusnäkymä'
               }}
             />
             <StyledSwitchLabel>
               {isDefault
-                ? (strings.savedContent.saveView.defaultView || "Oletusnäkymä")
-                : (strings.savedContent.saveView.setDefaultView || "Aseta oletusnäkymä")}
+                ? strings.savedContent.saveView.defaultView || 'Oletusnäkymä'
+                : strings.savedContent.saveView.setDefaultView ||
+                  'Aseta oletusnäkymä'}
             </StyledSwitchLabel>
           </StyledSwitchRow>
           <StyledButtonsRow>
-            <StyledCancel
-              type="button"
-              onClick={handleCancelEdit}
-            >
+            <StyledCancel type="button" onClick={handleCancelEdit}>
               {strings.general.cancel || 'Peruuta'}
             </StyledCancel>
             <StyledSave type="submit" disabled={!viewName}>
               <FontAwesomeIcon icon={editingViewId ? faSave : faPlus} />
               {editingViewId
-                ? strings.savedContent.saveView.saveViewButton || 'Tallenna muutokset'
-                : strings.savedContent.saveView.saveViewButton || 'Tallenna karttanäkymä'}
+                ? strings.savedContent.saveView.saveViewButton ||
+                  'Tallenna muutokset'
+                : strings.savedContent.saveView.saveViewButton ||
+                  'Tallenna karttanäkymä'}
             </StyledSave>
           </StyledButtonsRow>
         </StyledForm>
@@ -658,8 +679,13 @@ const ViewsTab = () => {
         <StyledSavedViews>
           <AnimatePresence>
             {views.length > 0 ? (
-              views.map((view) => {
-                const isDefaultView = (view.id === defaultViewId);
+              [
+                ...views.filter((v) => v.id === defaultViewId),
+                ...views
+                  .filter((v) => v.id !== defaultViewId)
+                  .sort((a, b) => b.saveDate - a.saveDate)
+              ].map((view) => {
+                const isDefaultView = view.id === defaultViewId;
                 return (
                   <StyledSavedViewContainer
                     key={view.id}
@@ -712,12 +738,18 @@ const ViewsTab = () => {
                         </StyledSavedViewTitleContent>
                       </StyledLeftContent>
                       <StyledViewActions>
-                        { isDefaultView && <StyledIsDefault>{strings.savedContent.saveView.defaultView}</StyledIsDefault>}
+                        {isDefaultView && (
+                          <StyledIsDefault>
+                            {strings.savedContent.saveView.defaultView}
+                          </StyledIsDefault>
+                        )}
 
                         <StyledIconButton
                           type="button"
                           data-action="edit"
-                          title={strings.savedContent.saveView.editView || "Muokkaa"}
+                          title={
+                            strings.savedContent.saveView.editView || 'Muokkaa'
+                          }
                           onClick={(e) => {
                             e.stopPropagation();
                             handleEditView(view);
@@ -728,11 +760,11 @@ const ViewsTab = () => {
                         <StyledIconButton
                           type="button"
                           data-action="remove"
-                            title={strings.savedContent.saveView.deleteSavedView}
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleRemoveView(view);
-                            }}
+                          title={strings.savedContent.saveView.deleteSavedView}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleRemoveView(view);
+                          }}
                         >
                           <FontAwesomeIcon icon={faTrash} />
                         </StyledIconButton>
