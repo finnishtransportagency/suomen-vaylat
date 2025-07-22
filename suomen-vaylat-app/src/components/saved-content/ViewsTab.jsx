@@ -21,6 +21,7 @@ import { TextField, Switch, FormControlLabel } from '@mui/material';
 import { addMarkerRequest, removeMarkerRequest } from '../../state/slices/rpcSlice';
 
 const StyledMainContainer = styled.div`
+    padding: 0 12px 12px 12px;
 `;
 
 const StyledHeaderText = styled.div`
@@ -155,7 +156,10 @@ const StyledSubtitle = styled.div`
     margin-bottom: 12px;
     margin-top: 22px;
 `;
+
 const StyledSavedViews = styled.div`
+    overflow: auto;
+    max-height: 300px;
     display: flex;
     flex-direction: column;
     gap: 8px;
@@ -281,7 +285,6 @@ const StyledDeleteAllSavedViews = styled.div`
     }
     opacity: ${props => props.disabled ? "0.58" : "1"};
 `;
-
 
 const ViewsTab = () => {
     const { store } = useContext(ReactReduxContext);
@@ -446,6 +449,7 @@ const ViewsTab = () => {
     // --- RENDER ---
     return (
       <StyledMainContainer>
+        
         <StyledSubtitle>{strings.savedContent.saveView.title || "Tallenna näkymä"}:</StyledSubtitle>
 
 
@@ -592,6 +596,8 @@ const ViewsTab = () => {
                         </StyledNoSavedViews>
                     )}
                 </AnimatePresence>
+            </StyledSavedViews>
+
                 <StyledDeleteAllSavedViews
                     onClick={() =>
                         views.length > 0 &&
@@ -618,7 +624,6 @@ const ViewsTab = () => {
                 >
                     <p>{strings.savedContent.saveView.deleteAllSavedViews}</p>
                 </StyledDeleteAllSavedViews>
-            </StyledSavedViews>
       </StyledMainContainer>
     );
 };

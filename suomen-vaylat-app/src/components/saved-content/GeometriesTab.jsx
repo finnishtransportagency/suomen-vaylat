@@ -22,12 +22,7 @@ import { theme } from '../../theme/theme';
 import { addMarkerRequest, removeMarkerRequest } from '../../state/slices/rpcSlice';
 
 const StyledViewsContainer = styled.div`
-    padding: 24px;
-    max-height: 500px;
-    overflow: auto;
-    @media ${(props) => props.theme.device.mobileL} {
-        max-height: unset;
-    }
+    padding: 0 12px 12px 12px;
 `;
 
 const StyledSavedViews = styled.div`
