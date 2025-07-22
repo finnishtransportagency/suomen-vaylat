@@ -57,6 +57,7 @@
     "viewTitle" : "Syn",
     "geometryTitle" : "Geometrier",
     "saveView" : {
+      "title": "Spara vy",
       "confirmDeleteAll" : "Är du säker på att du vill ta bort alla sparade vyer?",
       "saveView" : "Spara tillstånd",
       "savingView" : "Sparar vy",

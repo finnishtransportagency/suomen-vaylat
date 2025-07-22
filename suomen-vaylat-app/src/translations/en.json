@@ -56,6 +56,7 @@
     "viewTitle" : "Views",
     "geometryTitle" : "Geometries",
     "saveView" : {
+      "title": "Save view",
       "confirmDeleteAll" : "Are you sure you want to delete all views?",
       "saveView" : "Save state",
       "savingView" : "Saving view",

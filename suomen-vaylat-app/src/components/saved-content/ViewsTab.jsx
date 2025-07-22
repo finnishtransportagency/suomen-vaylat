@@ -20,32 +20,71 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { TextField, Switch, FormControlLabel } from '@mui/material';
 import { addMarkerRequest, removeMarkerRequest } from '../../state/slices/rpcSlice';
 
-// ---- Styled Components for Layout ----
 const StyledMainContainer = styled.div`
-    padding: 24px;
-    max-width: 560px;
-    margin: 0 auto;
-    font-family: 'Roboto', sans-serif;
 `;
 
 const StyledHeaderText = styled.div`
     font-size: 16px;
     color: #151515;
-    margin-bottom: 18px;
+    margin-bottom: 20px;
 `;
 
 const StyledForm = styled.form`
     margin-bottom: 28px;
     display: flex;
     flex-direction: column;
-    gap: 18px;
+`;
+
+const StyledFormGroup = styled.div`
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 8px;
+`;
+
+const StyledLabel = styled.label`
+    font-size: 15px;
+    color: #292929;
+    margin-bottom: 6px;
+    font-weight: 500;
+`;
+
+const StyledInput = styled.input`
+    font-size: 15px;
+    padding: 8px 12px;
+    border: 1px solid #c7c6c9;
+    border-radius: 7px;
+    width: 100%;
+    background: #f6f7fa;
+    outline: none;
+    transition: border .13s;
+    &:focus {
+        border-color: #1964e0;
+        background: #f0f2ff;
+    }
+`;
+
+const StyledTextarea = styled.textarea`
+    font-size: 15px;
+    min-height: 36px;
+    padding: 8px 12px;
+    border: 1px solid #c7c6c9;
+    border-radius: 7px;
+    width: 100%;
+    background: #f6f7fa;
+    outline: none;
+    transition: border .13s;
+    resize: vertical;
+    &:focus {
+        border-color: #1964e0;
+        background: #f0f2ff;
+    }
 `;
 
 const StyledSwitchRow = styled.div`
     display: flex;
     align-items: center;
-    margin-top: 2px;
-    margin-bottom: 2px;
+    margin-top: 3px;
+    margin-bottom: 6px;
 `;
 
 const StyledSwitchLabel = styled.div`
@@ -66,7 +105,7 @@ const StyledButtonsRow = styled.div`
     display: flex;
     width: 100%;
     justify-content: space-between;
-    margin-top: 24px;
+    margin-top: 19px;
 `;
 
 const StyledCancel = styled.button`
@@ -109,7 +148,6 @@ const StyledSave = styled.button`
     }
 `;
 
-// --- Saved View List Styles ---
 const StyledSubtitle = styled.div`
     font-size: 16px;
     font-weight: bold;
@@ -127,6 +165,11 @@ const StyledNoSavedViews = styled.div`
     text-align: center;
     color: #888;
     padding: 32px 0 18px 0;
+`;
+
+const StyledSavedViewDate = styled.div`
+    font-size: 12px;
+    color: #858d99;
 `;
 
 const StyledSavedViewContainer = styled(motion.div)`
@@ -403,9 +446,8 @@ const ViewsTab = () => {
     // --- RENDER ---
     return (
       <StyledMainContainer>
-        <StyledHeaderText>
-          {strings.savedContent.saveView.instruction || 'Karttanäkymä tallennetaan tähän ja näkyy alla listassa.'}
-        </StyledHeaderText>
+        <StyledSubtitle>{strings.savedContent.saveView.title || "Tallenna näkymä"}:</StyledSubtitle>
+
 
         <StyledForm
           onSubmit={e => {
@@ -414,25 +456,32 @@ const ViewsTab = () => {
           }}
           autoComplete="off"
         >
-          <TextField
-            id="view-name"
-            label={strings.savedContent.saveView.viewName || "Näkymän nimi"}
-            required
-            fullWidth
-            size="small"
-            value={viewName}
-            onChange={e => setViewName(e.target.value)}
-            inputProps={{ maxLength: 80, "aria-label": strings.savedContent.saveView.viewName }}
-          />
-          <TextField
-            id="view-description"
-            label={strings.savedContent.saveView.description || "Kuvaus"}
-            fullWidth
-            size="small"
-            value={viewDescription}
-            onChange={e => setViewDescription(e.target.value)}
-            inputProps={{ maxLength: 200, "aria-label": strings.savedContent.saveView.description }}
-          />
+          <StyledFormGroup>
+            <StyledLabel htmlFor="view-name">
+              {strings.savedContent.saveView.viewName || "Näkymän nimi"} *
+            </StyledLabel>
+            <StyledInput
+              id="view-name"
+              type="text"
+              value={viewName}
+              maxLength={80}
+              onChange={e => setViewName(e.target.value)}
+              required
+              aria-label={strings.savedContent.saveView.viewName}
+            />
+          </StyledFormGroup>
+          <StyledFormGroup>
+            <StyledLabel htmlFor="view-description">
+              {strings.savedContent.saveView.description || "Kuvaus"}
+            </StyledLabel>
+            <StyledTextarea
+              id="view-description"
+              value={viewDescription}
+              maxLength={200}
+              onChange={e => setViewDescription(e.target.value)}
+              aria-label={strings.savedContent.saveView.description}
+            />
+          </StyledFormGroup>
           <StyledSwitchRow>
             <Switch
               checked={includeGeometries}
@@ -443,9 +492,6 @@ const ViewsTab = () => {
             <StyledSwitchLabel>
               {strings.savedContent.saveView.includeGeometries || "Tallenna omat geometriat mukaan."}
             </StyledSwitchLabel>
-            <StyledLink href="#" tabIndex={-1}>
-              {strings.savedContent.saveView.userGroupsLink || "Käyttäjäryhmät?"}
-            </StyledLink>
           </StyledSwitchRow>
           <StyledSwitchRow>
             <Switch

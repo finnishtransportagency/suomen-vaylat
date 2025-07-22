@@ -57,6 +57,7 @@
     "viewTitle": "Näkymät",
     "geometryTitle": "Geometriat",
     "saveView": {
+      "title": "Tallenna näkymä",
       "confirmDeleteAll" : "Haluatko varmasti poistaa kaikki tallennetut näkymät?",
       "saveView" : "Tallenna tila",
       "savingView" : "Näkymän tallennus",
