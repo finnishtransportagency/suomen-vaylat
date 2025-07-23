@@ -38,10 +38,13 @@ const StyledMapCenterButton = styled.button`
   height: 2.5em;
   width: 100%;
   justify-content: center;
-  color: ${(props) => props.theme.colors.mainWhite};
+  color: ${(props) =>
+    props.disabled
+      ? props.theme.colors.disabledColor
+      : props.theme.colors.mainWhite};
   background-color: ${(props) =>
     props.disabled
-      ? props.theme.colors.darkGrey
+      ? props.theme.colors.disabledBg
       : props.theme.colors.mainColor1};
   border-radius: 20px;
   box-shadow: 0px 1px 3px #0000001f;
@@ -51,7 +54,7 @@ const StyledMapCenterButton = styled.button`
   &:hover {
     background-color: ${(props) =>
       props.disabled
-        ? props.theme.colors.darkGrey
+        ? props.theme.colors.disabledBg
         : props.theme.colors.mainColorselected1};
   }
 `;
@@ -62,10 +65,13 @@ const StyledMarkerAdditionButton = styled.button`
   height: 2.5em;
   width: 100%;
   justify-content: center;
-  color: ${(props) => props.theme.colors.mainWhite};
+  color: ${(props) =>
+    props.disabled
+      ? props.theme.colors.disabledColor
+      : props.theme.colors.mainWhite};
   background-color: ${(props) =>
     props.disabled
-      ? props.theme.colors.darkGrey
+      ? props.theme.colors.disabledBg
       : props.theme.colors.mainColor1};
   border-radius: 20px;
   box-shadow: 0px 1px 3px #0000001f;
@@ -75,7 +81,7 @@ const StyledMarkerAdditionButton = styled.button`
   &:hover {
     background-color: ${(props) =>
       props.disabled
-        ? props.theme.colors.darkGrey
+        ? props.theme.colors.disabledBg
         : props.theme.colors.mainColorselected1};
   }
 `;

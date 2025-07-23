@@ -16,7 +16,7 @@ const StyledCircleButton = styled(motion.button)`
     justify-content: center;
     align-items: center;
     background-color: ${ props =>
-        props.disabled ? "#ddd" :
+        props.disabled ? props.theme.colors.disabledBg :
         props.color? props.color : 
         props.toggleState ?
         props.theme.colors.buttonActive : props.theme.colors.button
@@ -24,7 +24,8 @@ const StyledCircleButton = styled(motion.button)`
     box-shadow: 0px 2px 4px #0000004D;
     border-radius: 50%;
     svg {
-        color: ${props => props.theme.colors.mainWhite};
+        color: ${(props) =>
+        props.disabled ? props.theme.colors.disabledColor : theme.colors.mainWhite};
         font-size: 22px;
     };
 
@@ -139,7 +140,7 @@ const CircleButton = ({
             }
              <AnimatePresence initial={false}>
                  {
-                      !toggleState && isHovered && <StyledCircleButtonTextContainer
+                      !toggleState && isHovered && !disabled && <StyledCircleButtonTextContainer
                         key={text +"_button"}
                         direction={tooltipDirection}
                         positionTransition

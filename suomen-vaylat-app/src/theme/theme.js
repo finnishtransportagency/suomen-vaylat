@@ -62,7 +62,9 @@ export const theme = {
         transparentMain: '#80dbff40',
         hover: '#f0f0f0',
         darkGrey: '#717070',
-        lightGrey: '#D7D9DB'
+        lightGrey: '#D7D9DB',
+        disabledBg: '#ccc',
+        disabledColor: '#66666680'
     },
     device: {
       mobileS: `(max-width: ${size.mobileS})`,
