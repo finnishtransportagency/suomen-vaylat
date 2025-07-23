@@ -47,6 +47,7 @@ export const theme = {
         mainColorselected1: '#024c85',
         secondaryColorLightBlue: '#00b0cc',
         secondaryColorGreen: '#207a43',
+        secondaryColorGreenSelected: '#1b6537',
         secondaryColorLightGreen: '#8dcb6d',
         secondaryColorYellow: '#ffc300',
         secondaryColorPurple: '#910aa3',

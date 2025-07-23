@@ -475,6 +475,7 @@
     "centerMap": "Fokusera kartan",
     "addMarker": "Tillägg markör",
     "deleteMarkers": "Ta bort markörer",
+    "saveMarkers": "Spara markörer",
     "onlyNumbers": "Vänligen ange endast siffror",
     "closeCoordinateTool": "Stäng koordinatverktyg"
   },

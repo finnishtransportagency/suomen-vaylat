@@ -475,6 +475,7 @@
     "centerMap": "Center map",
     "addMarker": "Add marker",
     "deleteMarkers": "Delete markers",
+    "saveMarkers": "Save markers",
     "onlyNumbers": "Please enter only numbers",
     "closeCoordinateTool": "Close coordinate tool"
   },

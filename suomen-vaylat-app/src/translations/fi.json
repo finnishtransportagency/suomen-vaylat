@@ -511,6 +511,7 @@
     "centerMap": "Keskitä kartta",
     "addMarker": "Lisää merkintä",
     "deleteMarkers": "Poista karttamerkinnät",
+    "saveMarkers": "Tallenna karttamerkinnät",
     "onlyNumbers": "Vain numerot sallittu",
     "closeCoordinateTool": "Sulje koordinaattityökalu"
   },
