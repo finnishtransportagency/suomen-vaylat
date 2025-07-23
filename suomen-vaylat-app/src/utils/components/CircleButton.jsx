@@ -25,7 +25,7 @@ const StyledCircleButton = styled(motion.button)`
     border-radius: 50%;
     svg {
         color: ${(props) =>
-        props.disabled ? props.theme.colors.disabledColor : theme.colors.mainWhite};
+        props.disabled ? props.theme.colors.disabledColor : props.theme.colors.mainWhite};
         font-size: 22px;
     };
 
