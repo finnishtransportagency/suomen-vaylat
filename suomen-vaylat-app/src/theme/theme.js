@@ -47,6 +47,7 @@ export const theme = {
         mainColorselected1: '#024c85',
         secondaryColorLightBlue: '#00b0cc',
         secondaryColorGreen: '#207a43',
+        secondaryColorGreenSelected: '#1b6537',
         secondaryColorLightGreen: '#8dcb6d',
         secondaryColorYellow: '#ffc300',
         secondaryColorPurple: '#910aa3',
@@ -61,7 +62,9 @@ export const theme = {
         transparentMain: '#80dbff40',
         hover: '#f0f0f0',
         darkGrey: '#717070',
-        lightGrey: '#D7D9DB'
+        lightGrey: '#D7D9DB',
+        disabledBg: '#ccc',
+        disabledColor: '#66666680'
     },
     device: {
       mobileS: `(max-width: ${size.mobileS})`,

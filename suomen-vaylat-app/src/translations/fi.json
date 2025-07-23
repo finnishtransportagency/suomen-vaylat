@@ -132,7 +132,7 @@
     "roadAddressInstructions": "Tieosoitetietoja ei pystytty hakemaan. Lähennä karttaa ja klikkaa pistettä, jolle haluat hakea tieosoitetiedot."
   },
   "downloads": {
-    "newDownloads": "UUSI LATAUS",
+    "newDownload": "UUSI LATAUS",
     "downloads": "Lataukset",
     "processing": "Prosessoidaan",
     "noProcessingDownloads": "Ei prosessoitavia latauksia",
@@ -515,6 +515,7 @@
     "centerMap": "Keskitä kartta",
     "addMarker": "Lisää merkintä",
     "deleteMarkers": "Poista karttamerkinnät",
+    "saveMarkers": "Tallenna karttamerkinnät",
     "onlyNumbers": "Vain numerot sallittu",
     "closeCoordinateTool": "Sulje koordinaattityökalu"
   },

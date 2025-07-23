@@ -6,10 +6,10 @@ const StyledPillButton = styled.button`
   align-items: center;
   justify-content: flex-start;
   gap: 10px;
-  background-color: ${({ disabled, color, theme }) =>
-    disabled ? '#ccc' : color || theme.colors.button};
-  color: ${({ disabled, theme }) =>
-    disabled ? '#666' : theme.colors.mainWhite};
+  background-color: ${(props) =>
+    props.disabled ? props.theme.colors.disabledBg : props.color || props.theme.colors.button};
+  color: ${(props) =>
+    props.disabled ? props.theme.colors.disabledColor : props.theme.colors.mainWhite};
   border: none;
   border-radius: 30px;
   padding: 8px 16px;

@@ -131,7 +131,7 @@
     "roadAddressInstructions": "Vägadressuppgifterna kunde inte hämtas. Zooma in på kartan och klicka på den punkt som du vill söka vägadressuppgifter för."
   },
   "downloads": {
-    "newDownloads": "NY NEDLADDNING",
+    "newDownload": "NY NEDLADDNING",
     "downloads": "Nedladdningar",
     "processing": "Bearbetas",
     "noProcessingDownloads": "Inga nedladdningar att bearbeta",
@@ -478,6 +478,7 @@
     "centerMap": "Fokusera kartan",
     "addMarker": "Tillägg markör",
     "deleteMarkers": "Ta bort markörer",
+    "saveMarkers": "Spara markörer",
     "onlyNumbers": "Vänligen ange endast siffror",
     "closeCoordinateTool": "Stäng koordinatverktyg"
   },

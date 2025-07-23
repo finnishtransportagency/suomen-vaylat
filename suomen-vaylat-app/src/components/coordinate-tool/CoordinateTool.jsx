@@ -10,8 +10,13 @@ import {
   removeMarkerRequest,
   setCoordMarkerIndex
 } from '../../state/slices/rpcSlice';
+import {
+  addToDrawToolMarkers,
+  setIsSaveViewOpen,
+  setSavedTabIndex
+} from '../../state/slices/uiSlice';
 import { theme } from '../../theme/theme';
-import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faSave, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const StyledCoordinateToolContainer = styled.div`
@@ -33,10 +38,13 @@ const StyledMapCenterButton = styled.button`
   height: 2.5em;
   width: 100%;
   justify-content: center;
-  color: ${(props) => props.theme.colors.mainWhite};
+  color: ${(props) =>
+    props.disabled
+      ? props.theme.colors.disabledColor
+      : props.theme.colors.mainWhite};
   background-color: ${(props) =>
     props.disabled
-      ? props.theme.colors.darkGrey
+      ? props.theme.colors.disabledBg
       : props.theme.colors.mainColor1};
   border-radius: 20px;
   box-shadow: 0px 1px 3px #0000001f;
@@ -46,7 +54,7 @@ const StyledMapCenterButton = styled.button`
   &:hover {
     background-color: ${(props) =>
       props.disabled
-        ? props.theme.colors.darkGrey
+        ? props.theme.colors.disabledBg
         : props.theme.colors.mainColorselected1};
   }
 `;
@@ -57,10 +65,13 @@ const StyledMarkerAdditionButton = styled.button`
   height: 2.5em;
   width: 100%;
   justify-content: center;
-  color: ${(props) => props.theme.colors.mainWhite};
+  color: ${(props) =>
+    props.disabled
+      ? props.theme.colors.disabledColor
+      : props.theme.colors.mainWhite};
   background-color: ${(props) =>
     props.disabled
-      ? props.theme.colors.darkGrey
+      ? props.theme.colors.disabledBg
       : props.theme.colors.mainColor1};
   border-radius: 20px;
   box-shadow: 0px 1px 3px #0000001f;
@@ -70,7 +81,7 @@ const StyledMarkerAdditionButton = styled.button`
   &:hover {
     background-color: ${(props) =>
       props.disabled
-        ? props.theme.colors.darkGrey
+        ? props.theme.colors.disabledBg
         : props.theme.colors.mainColorselected1};
   }
 `;
@@ -109,6 +120,7 @@ const StyledCoordinateInput = styled.input`
 const StyledActionBox = styled.div`
   display: flex;
   flex-direction: column;
+  gap: 12px;
 `;
 
 const StyledMarkerDeleteButton = styled.button`
@@ -130,6 +142,28 @@ const StyledMarkerDeleteButton = styled.button`
   &:hover {
     background-color: ${(props) =>
       props.theme.colors.secondaryColorDarkOrangeSelected};
+  }
+`;
+
+const StyledMarkerSaveButton = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  cursor: pointer;
+  height: 2.5em;
+  background-color: ${(props) => props.theme.colors.secondaryColorGreen};
+  color: ${(props) => props.theme.colors.mainWhite};
+  svg {
+    font-size: 16px;
+  }
+  border-radius: 20px;
+  box-shadow: 0px 1px 3px #0000001f;
+  border: none;
+  padding: 12px;
+  &:hover {
+    background-color: ${(props) =>
+      props.theme.colors.secondaryColorGreenSelected};
   }
 `;
 
@@ -220,18 +254,26 @@ const CoordinateTool = () => {
     }));
   };
 
+  const handleSaveMarkers = () => {
+    store.dispatch(setIsSaveViewOpen(true));
+    store.dispatch(setSavedTabIndex(1));
+  };
+
   const handleAddMarker = () => {
     const newMarkerId = `coordinate_tool_marker_${coordMarkerIndex}`;
-    store.dispatch(
-      addMarkerRequest({
+    const customMarker = {
         x: mapCenter.x,
         y: mapCenter.y,
         msg: `${mapCenter.y}, ${mapCenter.x}`,
         markerId: newMarkerId,
         color: theme.colors.secondaryColorOrange,
         size: 5
-      })
+      };
+    store.dispatch(
+      addMarkerRequest(customMarker)
     );
+    store.dispatch(addToDrawToolMarkers(customMarker));
+    
     store.dispatch(setCoordMarkerIndex(coordMarkerIndex + 1)); // Increment index after adding a marker
   };
 
@@ -358,20 +400,37 @@ const CoordinateTool = () => {
           </StyledMarkerAdditionButton>
         </StyledButtonGroup>
         {coordMarkerIndex > 0 && (
-          <StyledMarkerDeleteButton
-            id="coordinate-tool-marker-delete-button"
-            onClick={() => handleDeleteMarkers()}
-            aria-label={strings.coordinateTool.deleteMarkers}
-          >
-            <StyledButtonLabel>
-              {strings.coordinateTool.deleteMarkers}
-            </StyledButtonLabel>
-            <FontAwesomeIcon
-              icon={faTrash}
-              size="6x"
-              style={{ marginLeft: '.5em' }}
-            />
-          </StyledMarkerDeleteButton>
+          <>
+            
+            <StyledMarkerSaveButton
+              id="coordinate-tool-marker-save-button"
+              onClick={() => handleSaveMarkers()}
+              aria-label={strings.coordinateTool.saveMarkers}
+            >
+              <FontAwesomeIcon
+                icon={faSave}
+                size="6x"
+                style={{ marginRight: '1em' }}
+              />
+              <StyledButtonLabel>
+                {strings.coordinateTool.saveMarkers}
+              </StyledButtonLabel>
+            </StyledMarkerSaveButton>
+            <StyledMarkerDeleteButton
+              id="coordinate-tool-marker-delete-button"
+              onClick={() => handleDeleteMarkers()}
+              aria-label={strings.coordinateTool.deleteMarkers}
+            >
+              <FontAwesomeIcon
+                icon={faTrash}
+                size="6x"
+                style={{ marginRight: '1em' }}
+              />
+              <StyledButtonLabel>
+                {strings.coordinateTool.deleteMarkers}
+              </StyledButtonLabel>
+            </StyledMarkerDeleteButton>
+          </>
         )}
       </StyledActionBox>
     </StyledCoordinateToolContainer>

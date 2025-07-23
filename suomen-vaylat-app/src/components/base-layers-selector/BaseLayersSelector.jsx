@@ -47,7 +47,7 @@ const StyledButton = styled(Button)`
 
 const StyledMenuButton = styled(Button)`
     cursor: pointer;
-    background-color: ${props => props.active ? props.theme.colors.buttonActive : props.theme.colors.mainColor1 + 'DB' } !important;
+    background-color: ${props => props.active ? props.theme.colors.buttonActive : props.theme.colors.mainColor1 } !important;
     box-shadow: 0px 2px 4px #0000004D;
     border-radius: 30px;
     border: none;
