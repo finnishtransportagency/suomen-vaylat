@@ -1,31 +1,11 @@
-import { useState, useEffect, useContext } from 'react';
-import { ReactReduxContext } from 'react-redux';
-import { useAppSelector } from '../../state/hooks';
-import { updateLayers } from '../../utils/rpcUtil';
+import { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { motion, AnimatePresence } from 'framer-motion';
-import strings from '../../translations';
-import Moment from 'react-moment';
-import { v4 as uuidv4 } from 'uuid';
-import {
-  setIsSaveViewOpen,
-  setWarning,
-  addToActiveGeometries,
-  removeActiveGeometry,
-  removeFromDrawToolMarkers
-} from '../../state/slices/uiSlice';
 import {
   faPlus,
   faSave,
-  faTrash,
-  faPen
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Switch } from '@mui/material';
-import {
-  addMarkerRequest,
-  removeMarkerRequest
-} from '../../state/slices/rpcSlice';
 
 const StyledSave = styled.button`
   color: ${(props) => props.theme?.colors?.mainWhite};
@@ -44,7 +24,7 @@ const StyledSave = styled.button`
     font-size: 16px;
   }
   &:hover {
-    background-color: ${(props) => props.theme?.colors?.mainColorselected1};
+    background-color: ${(props) => props.theme?.colors?.mainColor1Selected};
   }
   &:disabled {
     opacity: 0.45;

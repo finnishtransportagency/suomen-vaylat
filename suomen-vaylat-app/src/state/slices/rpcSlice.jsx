@@ -34,7 +34,6 @@ const initialState = {
   layerMetadata: { data: null, layer: null, uuid: null },
   legends: [],
   tagsWithLayers: {},
-  showSavedContentViewForm: false,
   gfiLocations: [],
   startCenter: {
     x: 0,
@@ -931,10 +930,6 @@ export const rpcSlice = createSlice({
       state.coordMarkerIndex = action.payload;
     },
 
-    setShowSavedContentViewForm: (state, action) => {
-      state.showSavedContentViewForm = action.payload;
-    },
-
     /**
      * Set start state.
      * @method setStartState
@@ -1022,8 +1017,7 @@ export const {
   setSearchOn,
   searchVKMTrack,
   setAnnouncements,
-  setCoordMarkerIndex,
-  setShowSavedContentViewForm
+  setCoordMarkerIndex
 } = rpcSlice.actions;
 
 export default rpcSlice.reducer;

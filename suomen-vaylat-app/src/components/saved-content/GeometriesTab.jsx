@@ -7,19 +7,20 @@ import Moment from 'react-moment';
 import { useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import {
-  setIsSaveViewOpen,
   setWarning,
   addToActiveGeometries,
   removeActiveGeometry,
-  removeFromDrawToolMarkers
+  removeFromDrawToolMarkers,
+  setShowSavedContentGeometryForm
 } from '../../state/slices/uiSlice';
-import { faPlus, faSave, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { theme } from '../../theme/theme';
 import {
   addMarkerRequest,
   removeMarkerRequest
 } from '../../state/slices/rpcSlice';
+import GeometryForm from './GeometryForm'; 
 
 const StyledMainContainer = styled.div`
   overflow: auto;
@@ -41,101 +42,31 @@ const StyledSubtitle = styled.div`
   margin-top: 22px;
 `;
 
-const StyledForm = styled.form`
-  margin-bottom: 28px;
-  display: flex;
-  flex-direction: column;
-`;
-
-const StyledFormGroup = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 8px;
-`;
-
-const StyledLabel = styled.label`
-  font-size: 15px;
-  color: #292929;
-  margin-bottom: 6px;
-  font-weight: 500;
-`;
-
-const StyledInput = styled.input`
-  font-size: 15px;
-  padding: 8px 12px;
-  border: 1px solid #c7c6c9;
-  border-radius: 7px;
-  width: 100%;
-  background: #f6f7fa;
-  outline: none;
-  transition: border 0.13s;
-  &:focus {
-    border-color: #1964e0;
-    background: #f0f2ff;
-  }
-`;
-
-const StyledTextarea = styled.textarea`
-  font-size: 15px;
-  min-height: 36px;
-  padding: 8px 12px;
-  border: 1px solid #c7c6c9;
-  border-radius: 7px;
-  width: 100%;
-  background: #f6f7fa;
-  outline: none;
-  transition: border 0.13s;
-  resize: vertical;
-  &:focus {
-    border-color: #1964e0;
-    background: #f0f2ff;
-  }
-`;
-
-const StyledButtonsRow = styled.div`
-  display: flex;
-  width: 100%;
-  justify-content: space-between;
-  margin-top: 19px;
-`;
-
-const StyledCancel = styled.button`
-  background: transparent;
-  color: #333;
-  border: 1px solid #b7bfc8;
-  border-radius: 24px;
-  font-size: 15px;
-  padding: 8px 26px;
-  cursor: pointer;
-  transition: 0.1s;
-  &:hover {
-    border-color: #1c478e;
-    color: #1c478e;
-  }
-`;
-
 const StyledSave = styled.button`
-  color: ${(props) => props.theme?.colors?.mainWhite};
-  background-color: ${(props) => props.theme?.colors?.mainColor1};
-  border: none;
-  border-radius: 24px;
-  font-size: 16px;
-  font-weight: 600;
-  padding: 10px 36px;
+border: none;
+  width: 250px;
+  height: 40px;
   cursor: pointer;
   display: flex;
+  justify-content: center;
   align-items: center;
-  transition: 0.1s;
-  svg {
-    margin-right: 12px;
-    font-size: 16px;
+  color: ${(props) => props.theme.colors.mainWhite};
+  background-color: ${(props) =>
+    props.disabled
+      ? props.theme.colors.darkGrey
+      : props.theme.colors.mainColor1};
+  margin: 20px auto 20px auto;
+  border-radius: 20px;
+  p {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 600;
   }
+  opacity: ${(props) => (props.disabled ? '0.58' : '1')};
+
   &:hover {
-    background-color: ${(props) => props.theme?.colors?.mainColorselected1};
-  }
-  &:disabled {
-    opacity: 0.45;
-    cursor: default;
+    background-color: ${(props) =>
+      props.theme.colors.mainColor1Selected};
   }
 `;
 
@@ -148,7 +79,10 @@ const StyledGeometryListWrapper = styled.div`
 
 const StyledGeometryList = styled.div`
   overflow: auto;
-  max-height: 300px;
+  max-height: 400px;
+  @media ${(props) => props.theme.device.lowResDesktop} {
+    max-height: 300px;
+  }
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -161,7 +95,8 @@ const StyledNoSavedGeometries = styled(motion.div)`
   padding: 16px;
 `;
 
-const StyledDeleteAllSavedGeometries = styled.div`
+const StyledDeleteAllSavedGeometries = styled.button`
+  border: none;
   width: 250px;
   height: 40px;
   cursor: pointer;
@@ -209,17 +144,18 @@ const StyledGeometryItem = styled.div`
   }
 `;
 
-const StyledRemoveGeometry = styled.div`
+const StyledRemoveGeometry = styled.button`
+  background: none;
+  border: none;
+  padding: 4px;
+  margin: 0;
+  cursor: pointer;
   display: flex;
-  justify-content: center;
   align-items: center;
-  padding: 8px;
-  svg {
-    color: rgba(0, 0, 0, 0.5);
-    cursor: pointer;
-    &:hover {
-      color: ${(props) => props.theme.colors.mainColor1};
-    }
+  color: ${(props) => props.theme.colors.mainWhite};
+  font-size: 16px;
+  &:hover {
+    color: ${(props) => props.theme.colors.hover};
   }
 `;
 
@@ -250,6 +186,7 @@ const StyledLeftContent = styled.div`
 const StyledRightContent = styled.div`
   display: flex;
   align-items: center;
+  margin-right: 8px;
 `;
 
 const StyleGeometryIcon = styled.div`
@@ -276,15 +213,16 @@ const StyledGeometryTitleContent = styled.div`
   justify-content: center;
 `;
 
+const StyledGeometriesButtonsWrapper = styled.div`
+  justifyContent: space-between;
+  display: flex;
+`;
+
 const GeometriesTab = () => {
   const { store } = useContext(ReactReduxContext);
   const { channel } = useSelector((state) => state.rpc);
-  const { activeGeometries, drawToolMarkers } = useSelector(
-    (state) => state.ui
-  );
+  const { activeGeometries, drawToolMarkers, showSavedContentGeometryForm } = useSelector((state) => state.ui);
   const [geometries, setGeometries] = useState([]);
-  const [geometryName, setGeometryName] = useState('');
-  const [geometryDescription, setGeometryDescription] = useState('');
   const { geoJsonArray } = useSelector((state) => state.ui);
 
   useEffect(() => {
@@ -362,8 +300,7 @@ const GeometriesTab = () => {
 
     store.dispatch(addToActiveGeometries(geometry));
   };
-
-  const handleSaveGeometry = () => {
+  const handleSaveGeometry = (formData) => {
     let layerId = uuidv4();
     let markers = drawToolMarkers.map((d) => ({
       ...d,
@@ -373,21 +310,19 @@ const GeometriesTab = () => {
 
     let newGeometry = {
       id: layerId,
-      name: geometryName,
-      description: geometryDescription,
+      name: formData.name,
+      description: formData.description,
       saveDate: Date.now(),
       data: [...geoJsonArray],
       markers: [...markers]
     };
-
     const updatedGeometries = [...geometries, newGeometry];
     window.localStorage.setItem(
       'geometries',
       JSON.stringify(updatedGeometries)
     );
     setGeometries(updatedGeometries);
-    setGeometryName('');
-    setGeometryDescription('');
+    store.dispatch(setShowSavedContentGeometryForm(false));
   };
 
   const handleRemoveGeometry = (geometry) => {
@@ -403,7 +338,6 @@ const GeometriesTab = () => {
       store.dispatch(removeMarkerRequest({ markerId: marker.markerId }));
       store.dispatch(removeFromDrawToolMarkers(marker.markerId));
     });
-
     if (activeGeometries.find((g) => g.id === geometry.id)) {
       store.dispatch(removeActiveGeometry(geometry.id));
       channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [
@@ -411,7 +345,6 @@ const GeometriesTab = () => {
         null,
         geometry.id
       ]);
-      return;
     }
   };
 
@@ -437,77 +370,91 @@ const GeometriesTab = () => {
 
   return (
     <StyledMainContainer>
-      <div>
-        <StyledSubtitle>
-          {strings.savedContent.saveGeometry.saveNewGeometry}
-        </StyledSubtitle>
-        <StyledForm
-          onSubmit={(e) => {
-            e.preventDefault();
-            if (geometryName && itemsToSave) handleSaveGeometry();
-          }}
-          autoComplete="off"
-        >
-          <StyledFormGroup>
-            <StyledLabel htmlFor="geometry-name">
-              {strings.savedContent.saveGeometry.geometryName} *
-            </StyledLabel>
-            <StyledInput
-              id="geometry-name"
-              type="text"
-              value={geometryName}
-              placeholder={
-                !itemsToSave && strings.savedContent.saveGeometry.noGeometry
-              }
-              onChange={(e) => setGeometryName(e.target.value)}
-              disabled={!itemsToSave}
-              maxLength={80}
-            />
-          </StyledFormGroup>
-          <StyledFormGroup>
-            <StyledLabel htmlFor="geometry-description">
-              {strings.savedContent.saveGeometry.description || 'Kuvaus'}
-            </StyledLabel>
-            <StyledTextarea
-              id="geometry-description"
-              value={geometryDescription}
-              placeholder={
-                !itemsToSave && strings.savedContent.saveGeometry.noGeometry
-              }
-              disabled={!itemsToSave}
-              onChange={(e) => setGeometryDescription(e.target.value)}
-              maxLength={200}
-            />
-          </StyledFormGroup>
-          <StyledButtonsRow>
-            <StyledCancel
-              type="button"
-              onClick={() => store.dispatch(setIsSaveViewOpen(false))}
-            >
-              {strings.general.cancel || 'Peruuta'}
-            </StyledCancel>
-            <StyledSave type="submit" disabled={!geometryName || !itemsToSave}>
-              <FontAwesomeIcon icon={faSave} />
-              {strings.savedContent.saveGeometry.saveGeometryButton}
-            </StyledSave>
-          </StyledButtonsRow>
-        </StyledForm>
-      </div>
-
-      <StyledSavedGeometriesWrapper>
-        <StyledSubtitle>
-          {strings.savedContent.saveGeometry.savedGeometries}:
-        </StyledSubtitle>
-        <StyledGeometryListWrapper>
-          <StyledGeometryList>
-            <AnimatePresence>
-              {geometries.length > 0 ? (
-                geometries.map((geometry) => {
-                  return (
-                    <StyledGeometryItemContainer
-                      key={geometry.id}
+      {showSavedContentGeometryForm ? (
+        <>
+          <StyledSubtitle>
+            {strings.savedContent.saveGeometry.saveNewGeometry}
+          </StyledSubtitle>
+          <GeometryForm
+            initialData={{}}
+            onSave={handleSaveGeometry}
+            onCancel={() => store.dispatch(setShowSavedContentGeometryForm(false))}
+            itemsToSave={itemsToSave}
+            strings={strings}
+          />
+        </>
+      ) : (
+        <>
+          <StyledSavedGeometriesWrapper>
+            <StyledSubtitle>
+              {strings.savedContent.saveGeometry.savedGeometries}:
+            </StyledSubtitle>
+            <StyledGeometryListWrapper>
+              <StyledGeometryList>
+                <AnimatePresence>
+                  {geometries.length > 0 ? (
+                    geometries.map((geometry) => {
+                      return (
+                        <StyledGeometryItemContainer
+                          key={geometry.id}
+                          transition={{
+                            duration: 0.2,
+                            type: 'tween'
+                          }}
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: 'auto' }}
+                          exit={{ opacity: 0, height: 0 }}
+                        >
+                          <StyledGeometryItem
+                            style={{
+                              backgroundColor: activeGeometries.find(
+                                (g) => g.id === geometry.id
+                              )
+                                ? theme.colors.buttonActive
+                                : theme.colors.button
+                            }}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              handleActivateGeometry(geometry);
+                            }}
+                          >
+                            <StyledLeftContent>
+                              <StyleGeometryIcon>
+                                <p>{geometry.name.charAt(0).toUpperCase()}</p>
+                              </StyleGeometryIcon>
+                              <StyledGeometryTitleContent>
+                                <StyledGeometryName>
+                                  {geometry.name}
+                                </StyledGeometryName>
+                                {geometry.description && (
+                                  <StyledGeometryDescription>
+                                    {geometry.description}
+                                  </StyledGeometryDescription>
+                                )}
+                                <StyledGeometryDescription>
+                                  <Moment format="DD.MM.YYYY" tz="Europe/Helsinki">
+                                    {geometry.saveDate}
+                                  </Moment>
+                                </StyledGeometryDescription>
+                              </StyledGeometryTitleContent>
+                            </StyledLeftContent>
+                            <StyledRightContent>
+                              <StyledRemoveGeometry>
+                                <FontAwesomeIcon
+                                  icon={faTrash}
+                                  onClick={() => handleRemoveGeometry(geometry)}
+                                />
+                              </StyledRemoveGeometry>
+                            </StyledRightContent>
+                          </StyledGeometryItem>
+                        </StyledGeometryItemContainer>
+                      );
+                    })
+                  ) : (
+                    <StyledNoSavedGeometries
+                      key="no-saved-geometry"
                       transition={{
-                        duration: 0.2,
+                        duration: 0.3,
                         type: 'tween'
                       }}
                       initial={{
@@ -523,102 +470,46 @@ const GeometriesTab = () => {
                         height: 0
                       }}
                     >
-                      <StyledGeometryItem
-                        style={{
-                          backgroundColor: activeGeometries.find(
-                            (g) => g.id === geometry.id
-                          )
-                            ? theme.colors.buttonActive
-                            : theme.colors.button
-                        }}
-                        onClick={(e) => {
-                          e.preventDefault();
-                          handleActivateGeometry(geometry);
-                        }}
-                      >
-                        <StyledLeftContent>
-                          <StyleGeometryIcon>
-                            <p>{geometry.name.charAt(0).toUpperCase()}</p>
-                          </StyleGeometryIcon>
-                          <StyledGeometryTitleContent>
-                            <StyledGeometryName>
-                              {geometry.name}
-                            </StyledGeometryName>
-                            {geometry.description && (
-                              <StyledGeometryDescription>
-                                {geometry.description}
-                              </StyledGeometryDescription>
-                            )}
-                            <StyledGeometryDescription>
-                              <Moment format="DD.MM.YYYY" tz="Europe/Helsinki">
-                                {geometry.saveDate}
-                              </Moment>
-                            </StyledGeometryDescription>
-                          </StyledGeometryTitleContent>
-                        </StyledLeftContent>
-                        <StyledRightContent />
-                      </StyledGeometryItem>
-                      <StyledRemoveGeometry>
-                        <FontAwesomeIcon
-                          icon={faTrash}
-                          onClick={() => handleRemoveGeometry(geometry)}
-                        />
-                      </StyledRemoveGeometry>
-                    </StyledGeometryItemContainer>
-                  );
-                })
-              ) : (
-                <StyledNoSavedGeometries
-                  key="no-saved-geometry"
-                  transition={{
-                    duration: 0.3,
-                    type: 'tween'
-                  }}
-                  initial={{
-                    opacity: 0,
-                    height: 0
-                  }}
-                  animate={{
-                    opacity: 1,
-                    height: 'auto'
-                  }}
-                  exit={{
-                    opacity: 0,
-                    height: 0
-                  }}
-                >
-                  {strings.savedContent.saveGeometry.noSavedGeometries}
-                </StyledNoSavedGeometries>
-              )}
-            </AnimatePresence>
-          </StyledGeometryList>
-        </StyledGeometryListWrapper>
-        <StyledDeleteAllSavedGeometries
-          onClick={() =>
-            geometries.length > 0 &&
-            store.dispatch(
-              setWarning({
-                title: strings.savedContent.saveGeometry.confirmDeleteAll,
-                subtitle: null,
-                cancel: {
-                  text: strings.general.cancel,
-                  action: () => store.dispatch(setWarning(null))
-                },
-                confirm: {
-                  text: strings.general.continue,
-                  action: () => {
-                    handleDeleteAllGeometries();
-                    store.dispatch(setWarning(null));
-                  }
+                      {strings.savedContent.saveGeometry.noSavedGeometries}
+                    </StyledNoSavedGeometries>
+                  )}
+                </AnimatePresence>
+              </StyledGeometryList>
+            </StyledGeometryListWrapper>
+            <StyledGeometriesButtonsWrapper>
+              <StyledDeleteAllSavedGeometries
+                onClick={() =>
+                  geometries.length > 0 &&
+                  store.dispatch(
+                    setWarning({
+                      title: strings.savedContent.saveGeometry.confirmDeleteAll,
+                      subtitle: null,
+                      cancel: {
+                        text: strings.general.cancel,
+                        action: () => store.dispatch(setWarning(null))
+                      },
+                      confirm: {
+                        text: strings.general.continue,
+                        action: () => {
+                          handleDeleteAllGeometries();
+                          store.dispatch(setWarning(null));
+                        }
+                      }
+                    })
+                  )
                 }
-              })
-            )
-          }
-          disabled={geometries.length === 0}
-        >
-          <p>{strings.savedContent.saveGeometry.deleteAllSavedGeometries}</p>
-        </StyledDeleteAllSavedGeometries>
-      </StyledSavedGeometriesWrapper>
+                disabled={geometries.length === 0}
+              >
+                <p>{strings.savedContent.saveGeometry.deleteAllSavedGeometries}</p>
+              </StyledDeleteAllSavedGeometries>
+              <StyledSave type="button" onClick={() => store.dispatch(setShowSavedContentGeometryForm(true))}>
+                <FontAwesomeIcon icon={faPlus} style={{ marginRight: 8 }} />
+                {strings.savedContent.saveGeometry.addNewGeometry || "Uusi geometria"}
+              </StyledSave>
+            </StyledGeometriesButtonsWrapper>
+          </StyledSavedGeometriesWrapper>
+        </>
+      )}
     </StyledMainContainer>
   );
 };

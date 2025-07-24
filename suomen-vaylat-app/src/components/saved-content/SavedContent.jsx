@@ -2,10 +2,11 @@ import { useEffect, useContext, useRef } from 'react';
 import { ReactReduxContext } from 'react-redux';
 import { useAppSelector } from '../../state/hooks';
 import styled from 'styled-components';
-import { motion } from 'framer-motion';
 import strings from '../../translations';
 import {
     setSavedTabIndex,
+    setShowSavedContentGeometryForm,
+    setShowSavedContentViewForm,
 } from '../../state/slices/uiSlice';
 
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -94,7 +95,6 @@ const StyledSwiper = styled(Swiper)`
   transition: box-shadow 0.3s ease-out;
 `;
 
-// ------ MAIN COMPONENT WITH TABS -----
 export const SavedContent = () => {
     const inputEl = useRef(null);
 
@@ -117,6 +117,12 @@ export const SavedContent = () => {
         inputEl.current.swiper.slideTo(savedTabIndex);
     },[savedTabIndex]);
 
+    const handleChangeTab = (index) => {
+        store.dispatch(setShowSavedContentGeometryForm(false));
+        store.dispatch(setShowSavedContentViewForm(false));
+        store.dispatch(setSavedTabIndex(index));
+    }
+
     return (
         <>
             <StyledContent>
@@ -131,9 +137,7 @@ export const SavedContent = () => {
                                     key={'sc_tab_' + tab.title}
                                     isSelected={index === savedTabIndex}
                                     color={tab.titleColor}
-                                    onClick={() => {
-                                        store.dispatch(setSavedTabIndex(index));
-                                    }}
+                                    onClick={() => handleChangeTab(index)}
                                     tabsCount={tabsContent.length}
                                 >
                                     <p>{tab.title}</p>

@@ -63,7 +63,7 @@ const StyledCenterMapButton = styled.button`
     background-color: ${(props) =>
       props.disabled
         ? props.theme.colors.darkGrey
-        : props.theme.colors.mainColorselected1};
+        : props.theme.colors.mainColor1Selected};
   }
 `;
 
@@ -87,7 +87,7 @@ const StyledAddMarkerButton = styled.button`
     background-color: ${(props) =>
       props.disabled
         ? props.theme.colors.darkGrey
-        : props.theme.colors.mainColorselected1};
+        : props.theme.colors.mainColor1Selected};
   }
 `;
 

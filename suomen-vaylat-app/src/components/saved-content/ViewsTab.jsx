@@ -12,7 +12,7 @@ import {
   setWarning,
   addToActiveGeometries,
   removeActiveGeometry,
-  removeFromDrawToolMarkers
+  setShowSavedContentViewForm
 } from '../../state/slices/uiSlice';
 import {
   faPlus,
@@ -24,16 +24,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Switch } from '@mui/material';
 import {
   addMarkerRequest,
-  removeMarkerRequest,
-  setShowSavedContentViewForm
+  removeMarkerRequest
 } from '../../state/slices/rpcSlice';
-import ViewForm from './ViewForm'; // <-- Import your new form!
+import ViewForm from './ViewForm';
 
-// Styled components ... [CUT, same as your original file, or import from a styles file]
-
-// The rest of your styled components...
-
-// --- Styled components ---
 const StyledMainContainer = styled.div`
   overflow: auto;
   padding: 0 12px 12px 12px;
@@ -83,6 +77,9 @@ const StyledSubtitle = styled.div`
 const StyledSavedViews = styled.div`
   overflow: auto;
   max-height: 400px;
+  @media ${(props) => props.theme.device.lowResDesktop} {
+    max-height: 300px;
+  }
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -233,6 +230,7 @@ const StyledIsDefault = styled.div`
   font-size: 14px;
   margin-right: 8px;
 `;
+
 const StyledViewsButtonsWrapper = styled.div`
   justifyContent: space-between;
   display: flex;
@@ -247,8 +245,8 @@ const ViewsTab = () => {
   const [views, setViews] = useState([]);
   const [editingView, setEditingView] = useState(null);
   const [defaultViewId, setDefaultViewId] = useState(null);
-  const { selectedLayers, channel, showSavedContentViewForm } = useAppSelector((state) => state.rpc);
-  const { geoJsonArray, drawToolMarkers, activeGeometries } = useAppSelector(
+  const { selectedLayers, channel } = useAppSelector((state) => state.rpc);
+  const { geoJsonArray, drawToolMarkers, activeGeometries, showSavedContentViewForm } = useAppSelector(
     (state) => state.ui
   );
 
