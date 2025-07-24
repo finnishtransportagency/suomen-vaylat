@@ -152,7 +152,6 @@ const StyledGeometryList = styled.div`
   display: flex;
   flex-direction: column;
   gap: 8px;
-  border-radius: 8px;
   position: relative;
 `;
 
