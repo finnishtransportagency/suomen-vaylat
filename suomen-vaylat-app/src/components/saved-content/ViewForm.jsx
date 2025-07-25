@@ -1,11 +1,9 @@
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import {
-  faPlus,
-  faSave,
-} from '@fortawesome/free-solid-svg-icons';
+import { faSave } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Switch } from '@mui/material';
+import { isMobile } from '../../theme/theme';
 
 const StyledSave = styled.button`
   color: ${(props) => props.theme?.colors?.mainWhite};
@@ -18,6 +16,7 @@ const StyledSave = styled.button`
   cursor: pointer;
   display: flex;
   align-items: center;
+  justify-content: center;
   transition: 0.1s;
   svg {
     margin-right: 12px;
@@ -30,11 +29,14 @@ const StyledSave = styled.button`
     opacity: 0.45;
     cursor: default;
   }
+
+  @media ${(props) => props.theme.device.mobileL} {
+    margin: 18px 0px;
+    width: 100%;
+  }
 `;
 
-
 const StyledForm = styled.form`
-  margin-bottom: 28px;
   display: flex;
   flex-direction: column;
 `;
@@ -102,6 +104,10 @@ const StyledButtonsRow = styled.div`
   width: 100%;
   justify-content: space-between;
   margin-top: 19px;
+
+  @media ${(props) => props.theme.device.mobileL} {
+    flex-direction: column;
+  }
 `;
 
 const StyledCancel = styled.button`
@@ -119,6 +125,14 @@ const StyledCancel = styled.button`
   }
 `;
 
+const StyledSubtitle = styled.div`
+  font-size: 16px;
+  font-weight: bold;
+  color: ${(props) => props.theme.colors.mainColor1};
+  margin-top: 1em;
+  margin-bottom: 1em;
+`;
+
 const ViewForm = ({
   initialData = {},
   onSave,
@@ -127,8 +141,12 @@ const ViewForm = ({
   strings
 }) => {
   const [viewName, setViewName] = useState(initialData?.name || '');
-  const [viewDescription, setViewDescription] = useState(initialData?.description || '');
-  const [includeGeometries, setIncludeGeometries] = useState(initialData?.includeGeometries || false);
+  const [viewDescription, setViewDescription] = useState(
+    initialData?.description || ''
+  );
+  const [includeGeometries, setIncludeGeometries] = useState(
+    initialData?.includeGeometries || false
+  );
   const [isDefault, setIsDefault] = useState(initialData?.isDefault || false);
 
   useEffect(() => {
@@ -153,74 +171,113 @@ const ViewForm = ({
   };
 
   return (
-    <StyledForm onSubmit={handleSubmit} autoComplete="off">
-      <StyledFormGroup>
-        <StyledLabel htmlFor="view-name">
-          {strings.savedContent.saveView.viewName || 'Näkymän nimi'} *
-        </StyledLabel>
-        <StyledInput
-          id="view-name"
-          type="text"
-          value={viewName}
-          maxLength={80}
-          onChange={(e) => setViewName(e.target.value)}
-          required
-        />
-      </StyledFormGroup>
-      <StyledFormGroup>
-        <StyledLabel htmlFor="view-description">
-          {strings.savedContent.saveView.description || 'Kuvaus'}
-        </StyledLabel>
-        <StyledTextarea
-          id="view-description"
-          value={viewDescription}
-          maxLength={200}
-          onChange={(e) => setViewDescription(e.target.value)}
-        />
-      </StyledFormGroup>
-      <StyledSwitchRow>
-        <Switch
-          checked={includeGeometries}
-          onChange={(e) => setIncludeGeometries(e.target.checked)}
-          color="primary"
-          inputProps={{
-            'aria-label': strings.savedContent.saveView.includeGeometries
+    <>
+      <StyledSubtitle>
+        {strings.savedContent.saveView.saveNewView}
+      </StyledSubtitle>
+
+      <StyledForm onSubmit={handleSubmit} autoComplete="off">
+        <StyledFormGroup>
+          <StyledLabel htmlFor="view-name">
+            {strings.savedContent.saveView.viewName || 'Näkymän nimi'} *
+          </StyledLabel>
+          <StyledInput
+            id="view-name"
+            type="text"
+            value={viewName}
+            maxLength={80}
+            onChange={(e) => setViewName(e.target.value)}
+            required
+          />
+        </StyledFormGroup>
+        <StyledFormGroup>
+          <StyledLabel htmlFor="view-description">
+            {strings.savedContent.saveView.description || 'Kuvaus'}
+          </StyledLabel>
+          <StyledTextarea
+            id="view-description"
+            value={viewDescription}
+            maxLength={200}
+            onChange={(e) => setViewDescription(e.target.value)}
+          />
+        </StyledFormGroup>
+        <StyledSwitchRow>
+          <Switch
+            checked={includeGeometries}
+            onChange={(e) => setIncludeGeometries(e.target.checked)}
+            color="primary"
+            inputProps={{
+              'aria-label': strings.savedContent.saveView.includeGeometries
+            }}
+          />
+          <StyledSwitchLabel>
+            {strings.savedContent.saveView.includeGeometries ||
+              'Tallenna omat geometriat mukaan.'}
+          </StyledSwitchLabel>
+        </StyledSwitchRow>
+        <StyledSwitchRow
+          style={{
+            alignItems: 'center',
+            justifyContent: 'flex-start',
+            marginBottom: 16
           }}
-        />
-        <StyledSwitchLabel>
-          {strings.savedContent.saveView.includeGeometries ||
-            'Tallenna omat geometriat mukaan.'}
-        </StyledSwitchLabel>
-      </StyledSwitchRow>
-      <StyledSwitchRow style={{ alignItems: 'center', justifyContent: 'flex-start', marginBottom: 16 }}>
-        <Switch
-          checked={isDefault}
-          onChange={(e) => setIsDefault(e.target.checked)}
-          color="primary"
-          inputProps={{
-            'aria-label': isDefault
-              ? strings.savedContent.saveView.defaultView || 'Poista oletusnäkymä'
-              : strings.savedContent.saveView.setDefaultView || 'Aseta oletusnäkymä'
-          }}
-        />
-        <StyledSwitchLabel>
-          {isDefault
-            ? strings.savedContent.saveView.defaultView || 'Oletusnäkymä'
-            : strings.savedContent.saveView.setDefaultView || 'Aseta oletusnäkymä'}
-        </StyledSwitchLabel>
-      </StyledSwitchRow>
-      <StyledButtonsRow>
-        <StyledCancel type="button" onClick={onCancel}>
-          {strings.general.cancel || 'Peruuta'}
-        </StyledCancel>
-        <StyledSave type="submit" disabled={!viewName}>
-          <FontAwesomeIcon icon={isEditing ? faSave : faPlus} style={{ marginRight: 12 }} />
-          {isEditing
-            ? strings.savedContent.saveView.saveViewButton || 'Tallenna muutokset'
-            : strings.savedContent.saveView.saveViewButton || 'Tallenna karttanäkymä'}
-        </StyledSave>
-      </StyledButtonsRow>
-    </StyledForm>
+        >
+          <Switch
+            checked={isDefault}
+            onChange={(e) => setIsDefault(e.target.checked)}
+            color="primary"
+            inputProps={{
+              'aria-label': isDefault
+                ? strings.savedContent.saveView.defaultView ||
+                  'Poista oletusnäkymä'
+                : strings.savedContent.saveView.setDefaultView ||
+                  'Aseta oletusnäkymä'
+            }}
+          />
+          <StyledSwitchLabel>
+            {isDefault
+              ? strings.savedContent.saveView.defaultView || 'Oletusnäkymä'
+              : strings.savedContent.saveView.setDefaultView ||
+                'Aseta oletusnäkymä'}
+          </StyledSwitchLabel>
+        </StyledSwitchRow>
+        {isMobile ? (
+          <StyledButtonsRow>
+            <StyledSave type="submit" disabled={!viewName}>
+              <FontAwesomeIcon
+                icon={isEditing ? faSave : faSave}
+                style={{ marginRight: 12 }}
+              />
+              {isEditing
+                ? strings.savedContent.saveView.saveViewButton ||
+                  'Tallenna muutokset'
+                : strings.savedContent.saveView.saveViewButton ||
+                  'Tallenna karttanäkymä'}
+            </StyledSave>
+            <StyledCancel type="button" onClick={onCancel}>
+              {strings.general.cancel || 'Peruuta'}
+            </StyledCancel>
+          </StyledButtonsRow>
+        ) : (
+          <StyledButtonsRow>
+            <StyledCancel type="button" onClick={onCancel}>
+              {strings.general.cancel || 'Peruuta'}
+            </StyledCancel>
+            <StyledSave type="submit" disabled={!viewName}>
+              <FontAwesomeIcon
+                icon={isEditing ? faSave : faSave}
+                style={{ marginRight: 12 }}
+              />
+              {isEditing
+                ? strings.savedContent.saveView.saveViewButton ||
+                  'Tallenna muutokset'
+                : strings.savedContent.saveView.saveViewButton ||
+                  'Tallenna karttanäkymä'}
+            </StyledSave>
+          </StyledButtonsRow>
+        )}
+      </StyledForm>
+    </>
   );
 };
 

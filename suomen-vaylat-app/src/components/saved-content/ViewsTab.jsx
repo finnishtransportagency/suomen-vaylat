@@ -53,7 +53,6 @@ const StyledSave = styled.button`
     props.disabled
       ? props.theme.colors.darkGrey
       : props.theme.colors.mainColor1};
-  margin: 32px auto 20px auto;
   border-radius: 20px;
   p {
     margin: 0;
@@ -74,9 +73,8 @@ const StyledSave = styled.button`
 const StyledSubtitle = styled.div`
   font-size: 16px;
   font-weight: bold;
-  color: ${(props) => props.theme?.colors?.mainColor1 || '#1964e0'};
-  margin-bottom: 12px;
-  margin-top: 22px;
+  color: ${(props) => props.theme?.colors?.mainColor1};
+  margin-top: 1em;
 `;
 
 const StyledSavedViews = styled.div`
@@ -204,8 +202,6 @@ const StyledDeleteAllSavedViews = styled.button`
     props.disabled
       ? props.theme.colors.darkGrey
       : props.theme.colors.secondaryColorDarkOrange};
-  margin: 32px auto 20px auto;
-
   border-radius: 20px;
   p {
     margin: 0;
@@ -246,7 +242,7 @@ const StyledIsDefault = styled.div`
 `;
 
 const StyledViewsButtonsWrapper = styled.div`
-  justifycontent: space-between;
+  justify-content: space-around;
   display: flex;
   @media ${(props) => props.theme.device.mobileL} {
     flex-direction: column;
@@ -255,7 +251,14 @@ const StyledViewsButtonsWrapper = styled.div`
 
 const StyledSaveGeometryWrapper = styled.div``;
 
-const StyledSavedGeometriesWrapper = styled.div``;
+const StyledSavedGeometriesWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 2em;
+  @media ${(props) => props.theme.device.mobileL} {
+    gap: 1em;
+  }
+`;
 
 const ViewsTab = () => {
   const { store } = useContext(ReactReduxContext);
@@ -555,7 +558,8 @@ const ViewsTab = () => {
                               </StyledSavedViewName>
                               {view.description && (
                                 <StyledSavedViewDescription>
-                                  {view.description && view.description.length > 40
+                                  {view.description &&
+                                  view.description.length > 40
                                     ? view.description.slice(0, 40) + '…'
                                     : view.description}
                                 </StyledSavedViewDescription>
@@ -625,7 +629,9 @@ const ViewsTab = () => {
               <StyledViewsButtonsWrapper>
                 <StyledSave type="button" onClick={handleAddNew}>
                   <FontAwesomeIcon icon={faPlus} style={{ marginRight: 8 }} />
-                  {strings.savedContent.saveView.addNewView || 'Uusi näkymä'}
+                  <p>
+                    {strings.savedContent.saveView.addNewView || 'Uusi näkymä'}
+                  </p>
                 </StyledSave>
 
                 <StyledDeleteAllSavedViews
@@ -683,7 +689,9 @@ const ViewsTab = () => {
                 </StyledDeleteAllSavedViews>
                 <StyledSave type="button" onClick={handleAddNew}>
                   <FontAwesomeIcon icon={faPlus} style={{ marginRight: 8 }} />
-                  {strings.savedContent.saveView.addNewView || 'Uusi näkymä'}
+                  <p>
+                    {strings.savedContent.saveView.addNewView || 'Uusi näkymä'}
+                  </p>
                 </StyledSave>
               </StyledViewsButtonsWrapper>
             )}

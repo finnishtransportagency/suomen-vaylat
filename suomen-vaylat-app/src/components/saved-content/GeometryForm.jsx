@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faSave } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { isMobile } from '../../theme/theme';
 
 const StyledForm = styled.form`
-  margin-bottom: 28px;
   display: flex;
   flex-direction: column;
 `;
@@ -59,6 +59,10 @@ const StyledButtonsRow = styled.div`
   width: 100%;
   justify-content: space-between;
   margin-top: 19px;
+
+  @media ${(props) => props.theme.device.mobileL} {
+    flex-direction: column;
+  }
 `;
 
 const StyledCancel = styled.button`
@@ -87,6 +91,7 @@ const StyledSave = styled.button`
   cursor: pointer;
   display: flex;
   align-items: center;
+  justify-content: center;
   transition: 0.1s;
   svg {
     margin-right: 12px;
@@ -99,6 +104,19 @@ const StyledSave = styled.button`
     opacity: 0.45;
     cursor: default;
   }
+
+  @media ${(props) => props.theme.device.mobileL} {
+    margin: 18px 0px;
+    width: 100%;
+  }
+`;
+
+const StyledSubtitle = styled.div`
+  font-size: 16px;
+  font-weight: bold;
+  color: ${(props) => props.theme.colors.mainColor1};
+  margin-top: 1em;
+  margin-bottom: 1em;
 `;
 
 const GeometryForm = ({
@@ -106,10 +124,12 @@ const GeometryForm = ({
   onSave,
   onCancel,
   itemsToSave,
-  strings,
+  strings
 }) => {
   const [geometryName, setGeometryName] = useState(initialData.name || '');
-  const [geometryDescription, setGeometryDescription] = useState(initialData.description || '');
+  const [geometryDescription, setGeometryDescription] = useState(
+    initialData.description || ''
+  );
 
   useEffect(() => {
     setGeometryName(initialData.name || '');
@@ -127,51 +147,66 @@ const GeometryForm = ({
   };
 
   return (
-    <StyledForm
-      onSubmit={handleSubmit}
-      autoComplete="off"
-    >
-      <StyledFormGroup>
-        <StyledLabel htmlFor="geometry-name">
-          {strings.savedContent.saveGeometry.geometryName} *
-        </StyledLabel>
-        <StyledInput
-          id="geometry-name"
-          type="text"
-          value={geometryName}
-          placeholder={
-            !itemsToSave && strings.savedContent.saveGeometry.noGeometry
-          }
-          onChange={(e) => setGeometryName(e.target.value)}
-          disabled={!itemsToSave}
-          maxLength={80}
-        />
-      </StyledFormGroup>
-      <StyledFormGroup>
-        <StyledLabel htmlFor="geometry-description">
-          {strings.savedContent.saveGeometry.description || 'Kuvaus'}
-        </StyledLabel>
-        <StyledTextarea
-          id="geometry-description"
-          value={geometryDescription}
-          placeholder={
-            !itemsToSave && strings.savedContent.saveGeometry.noGeometry
-          }
-          disabled={!itemsToSave}
-          onChange={(e) => setGeometryDescription(e.target.value)}
-          maxLength={200}
-        />
-      </StyledFormGroup>
-      <StyledButtonsRow>
-        <StyledCancel type="button" onClick={onCancel}>
-          {strings.general.cancel || 'Peruuta'}
-        </StyledCancel>
-        <StyledSave type="submit" disabled={!geometryName || !itemsToSave}>
-          <FontAwesomeIcon icon={faPlus} />
-          {strings.savedContent.saveGeometry.saveGeometryButton}
-        </StyledSave>
-      </StyledButtonsRow>
-    </StyledForm>
+    <>
+      <StyledSubtitle>
+        {strings.savedContent.saveGeometry.saveNewGeometry}
+      </StyledSubtitle>
+
+      <StyledForm onSubmit={handleSubmit} autoComplete="off">
+        <StyledFormGroup>
+          <StyledLabel htmlFor="geometry-name">
+            {strings.savedContent.saveGeometry.geometryName} *
+          </StyledLabel>
+          <StyledInput
+            id="geometry-name"
+            type="text"
+            value={geometryName}
+            placeholder={
+              !itemsToSave && strings.savedContent.saveGeometry.noGeometry
+            }
+            onChange={(e) => setGeometryName(e.target.value)}
+            disabled={!itemsToSave}
+            maxLength={80}
+          />
+        </StyledFormGroup>
+        <StyledFormGroup>
+          <StyledLabel htmlFor="geometry-description">
+            {strings.savedContent.saveGeometry.description || 'Kuvaus'}
+          </StyledLabel>
+          <StyledTextarea
+            id="geometry-description"
+            value={geometryDescription}
+            placeholder={
+              !itemsToSave && strings.savedContent.saveGeometry.noGeometry
+            }
+            disabled={!itemsToSave}
+            onChange={(e) => setGeometryDescription(e.target.value)}
+            maxLength={200}
+          />
+        </StyledFormGroup>
+        {isMobile ? (
+          <StyledButtonsRow>
+            <StyledSave type="submit" disabled={!geometryName || !itemsToSave}>
+              <FontAwesomeIcon icon={faSave} />
+              {strings.savedContent.saveGeometry.saveGeometryButton}
+            </StyledSave>
+            <StyledCancel type="button" onClick={onCancel}>
+              {strings.general.cancel || 'Peruuta'}
+            </StyledCancel>
+          </StyledButtonsRow>
+        ) : (
+          <StyledButtonsRow>
+            <StyledCancel type="button" onClick={onCancel}>
+              {strings.general.cancel || 'Peruuta'}
+            </StyledCancel>
+            <StyledSave type="submit" disabled={!geometryName || !itemsToSave}>
+              <FontAwesomeIcon icon={faSave} />
+              {strings.savedContent.saveGeometry.saveGeometryButton}
+            </StyledSave>
+          </StyledButtonsRow>
+        )}
+      </StyledForm>
+    </>
   );
 };
 
