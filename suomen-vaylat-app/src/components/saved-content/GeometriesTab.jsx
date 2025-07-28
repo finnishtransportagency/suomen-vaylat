@@ -13,7 +13,7 @@ import {
   removeFromDrawToolMarkers,
   setShowSavedContentGeometryForm
 } from '../../state/slices/uiSlice';
-import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faTrash, faPen } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { isMobile, theme } from '../../theme/theme';
 import {
@@ -22,6 +22,13 @@ import {
 } from '../../state/slices/rpcSlice';
 import GeometryForm from './GeometryForm';
 
+const StyledGeometryActions = styled.div`
+  display: flex;
+  align-items: center;
+  column-gap: 8px;
+`;
+
+// Add/Update/Edit handlers here:
 const StyledMainContainer = styled.div`
   overflow: auto;
   padding: 0 12px 12px 12px;
@@ -96,8 +103,9 @@ const StyledGeometryList = styled.div`
   }
 `;
 
-const StyledNoSavedGeometries = styled(motion.div)`
+const StyledNoSavedGeometries = styled.div`
   font-size: 14px;
+  color: ${(props) => props.theme?.colors?.black};
   text-align: center;
   padding: 16px;
 `;
@@ -159,8 +167,6 @@ const StyledGeometryItem = styled.div`
 const StyledRemoveGeometry = styled.button`
   background: none;
   border: none;
-  padding: 4px;
-  margin: 0;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -221,6 +227,7 @@ const GeometriesTab = () => {
   const { activeGeometries, drawToolMarkers, showSavedContentGeometryForm } =
     useSelector((state) => state.ui);
   const [geometries, setGeometries] = useState([]);
+  const [editingGeometry, setEditingGeometry] = useState(null);
   const { geoJsonArray } = useSelector((state) => state.ui);
 
   useEffect(() => {
@@ -261,7 +268,7 @@ const GeometriesTab = () => {
         }
       }
     };
-    if (activeGeometries.find((g) => g.id === geometry.id)) {
+    if (activeGeometries?.find((g) => g.id === geometry.id)) {
       store.dispatch(removeActiveGeometry(geometry.id));
       geometry.markers.forEach((marker) => {
         store.dispatch(removeMarkerRequest({ markerId: marker.markerId }));
@@ -275,7 +282,7 @@ const GeometriesTab = () => {
     }
     const savedGeometries = [...geometry.data];
 
-    savedGeometries.forEach((geometry) => {
+    savedGeometries?.forEach((geometry) => {
       geometry.data &&
         geometry.data.geom &&
         channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', [
@@ -298,8 +305,9 @@ const GeometriesTab = () => {
 
     store.dispatch(addToActiveGeometries(geometry));
   };
+
   const handleSaveGeometry = (formData) => {
-    let layerId = uuidv4();
+    let layerId = editingGeometry?.id || uuidv4();
     let markers = drawToolMarkers.map((d) => ({
       ...d,
       markerId: uuidv4(),
@@ -311,20 +319,43 @@ const GeometriesTab = () => {
       name: formData.name,
       description: formData.description,
       saveDate: Date.now(),
-      data: [...geoJsonArray],
-      markers: [...markers]
+      data: editingGeometry ? editingGeometry.data : [...geoJsonArray],
+      markers: editingGeometry ? editingGeometry.markers : [...markers]
     };
-    const updatedGeometries = [...geometries, newGeometry];
+
+    let updatedGeometries;
+
+    if (editingGeometry) {
+      // update
+      updatedGeometries = geometries?.map((g) =>
+        g.id === editingGeometry.id ? newGeometry : g
+      );
+    } else {
+      // new
+      updatedGeometries = [...geometries, newGeometry];
+    }
+
     window.localStorage.setItem(
       'geometries',
       JSON.stringify(updatedGeometries)
     );
     setGeometries(updatedGeometries);
+    setEditingGeometry(null); // Reset editing
+    store.dispatch(setShowSavedContentGeometryForm(false));
+  };
+
+  const handleEditGeometry = (geometry) => {
+    setEditingGeometry(geometry);
+    store.dispatch(setShowSavedContentGeometryForm(true));
+  };
+
+  const handleCancelForm = () => {
+    setEditingGeometry(null);
     store.dispatch(setShowSavedContentGeometryForm(false));
   };
 
   const handleRemoveGeometry = (geometry) => {
-    let updatedGeometries = geometries.filter(
+    let updatedGeometries = geometries?.filter(
       (geometryData) => geometryData.id !== geometry.id
     );
     window.localStorage.setItem(
@@ -336,7 +367,7 @@ const GeometriesTab = () => {
       store.dispatch(removeMarkerRequest({ markerId: marker.markerId }));
       store.dispatch(removeFromDrawToolMarkers(marker.markerId));
     });
-    if (activeGeometries.find((g) => g.id === geometry.id)) {
+    if (activeGeometries?.find((g) => g.id === geometry.id)) {
       store.dispatch(removeActiveGeometry(geometry.id));
       channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [
         null,
@@ -347,7 +378,7 @@ const GeometriesTab = () => {
   };
 
   const handleDeleteAllGeometries = () => {
-    activeGeometries.forEach((geometry) => {
+    activeGeometries?.forEach((geometry) => {
       geometry.markers.forEach((marker) => {
         store.dispatch(removeMarkerRequest({ markerId: marker.markerId }));
         store.dispatch(removeFromDrawToolMarkers(marker.markerId));
@@ -364,18 +395,18 @@ const GeometriesTab = () => {
     store.dispatch(setWarning(null));
   };
 
-  const itemsToSave = geoJsonArray.length > 0 || drawToolMarkers.length > 0;
+  const itemsToSave = !!editingGeometry
+    ? true
+    : geoJsonArray.length > 0 || drawToolMarkers.length > 0;
 
   return (
     <StyledMainContainer>
       {showSavedContentGeometryForm ? (
         <>
           <GeometryForm
-            initialData={{}}
+            initialData={editingGeometry || {}}
             onSave={handleSaveGeometry}
-            onCancel={() =>
-              store.dispatch(setShowSavedContentGeometryForm(false))
-            }
+            onCancel={handleCancelForm}
             itemsToSave={itemsToSave}
             strings={strings}
           />
@@ -388,87 +419,85 @@ const GeometriesTab = () => {
             </StyledSubtitle>
             <StyledGeometryList>
               <AnimatePresence>
-                {geometries.length > 0 ? (
-                  geometries.map((geometry) => {
-                    return (
-                      <StyledGeometryItemContainer
-                        key={geometry.id}
-                        transition={{
-                          duration: 0.2,
-                          type: 'tween'
+                {geometries?.length > 0 ? (
+                  geometries?.map((geometry) => (
+                    <StyledGeometryItemContainer
+                      key={geometry.id}
+                      transition={{ duration: 0.2, type: 'tween' }}
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: 'auto' }}
+                      exit={{ opacity: 0, height: 0 }}
+                    >
+                      <StyledGeometryItem
+                        style={{
+                          backgroundColor: activeGeometries?.find(
+                            (g) => g.id === geometry.id
+                          )
+                            ? theme.colors.buttonActive
+                            : theme.colors.button
                         }}
-                        initial={{ opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: 'auto' }}
-                        exit={{ opacity: 0, height: 0 }}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          handleActivateGeometry(geometry);
+                        }}
                       >
-                        <StyledGeometryItem
-                          style={{
-                            backgroundColor: activeGeometries.find(
-                              (g) => g.id === geometry.id
-                            )
-                              ? theme.colors.buttonActive
-                              : theme.colors.button
-                          }}
-                          onClick={(e) => {
-                            e.preventDefault();
-                            handleActivateGeometry(geometry);
-                          }}
-                        >
-                          <StyledLeftContent>
-                            <StyledGeometryTitleContent>
-                              <StyledGeometryName>
-                                {geometry.name?.length > 30
-                                    ? geometry.name.slice(0, 30) + '…'
-                                    : geometry.name}
-                              </StyledGeometryName>
-                              {geometry.description && (
-                                <StyledGeometryDescription>
-                                  {geometry.description?.length > 100
-                                    ? geometry.description.slice(0, 100) + '…'
-                                    : geometry.description}
-                                </StyledGeometryDescription>
-                              )}
+                        <StyledLeftContent>
+                          <StyledGeometryTitleContent>
+                            <StyledGeometryName>
+                              {geometry.name?.length > 30
+                                ? geometry.name.slice(0, 30) + '…'
+                                : geometry.name}
+                            </StyledGeometryName>
+                            {geometry.description && (
                               <StyledGeometryDescription>
-                                <Moment
-                                  format="DD.MM.YYYY"
-                                  tz="Europe/Helsinki"
-                                >
-                                  {geometry.saveDate}
-                                </Moment>
+                                {geometry.description?.length > 100
+                                  ? geometry.description.slice(0, 100) + '…'
+                                  : geometry.description}
                               </StyledGeometryDescription>
-                            </StyledGeometryTitleContent>
-                          </StyledLeftContent>
-                          <StyledRightContent>
-                            <StyledRemoveGeometry>
-                              <FontAwesomeIcon
-                                icon={faTrash}
-                                onClick={() => handleRemoveGeometry(geometry)}
-                              />
-                            </StyledRemoveGeometry>
-                          </StyledRightContent>
-                        </StyledGeometryItem>
-                      </StyledGeometryItemContainer>
-                    );
-                  })
+                            )}
+                            <StyledGeometryDescription>
+                              <Moment format="DD.MM.YYYY" tz="Europe/Helsinki">
+                                {geometry.saveDate}
+                              </Moment>
+                            </StyledGeometryDescription>
+                          </StyledGeometryTitleContent>
+                        </StyledLeftContent>
+                        <StyledGeometryActions>
+                          <StyledRemoveGeometry
+                            title={
+                              strings.savedContent.saveGeometry.editGeometry ||
+                              'Muokkaa'
+                            }
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleEditGeometry(geometry);
+                            }}
+                          >
+                            <FontAwesomeIcon icon={faPen} />
+                          </StyledRemoveGeometry>
+                          <StyledRemoveGeometry
+                            title={
+                              strings.savedContent.saveGeometry
+                                .deleteSavedGeometry + " " + geometry.name
+                            }
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleRemoveGeometry(geometry);
+                            }}
+                          >
+                            <FontAwesomeIcon icon={faTrash} />
+                          </StyledRemoveGeometry>
+                        </StyledGeometryActions>
+                      </StyledGeometryItem>
+                    </StyledGeometryItemContainer>
+                  ))
                 ) : (
                   <StyledNoSavedGeometries
                     key="no-saved-geometry"
-                    transition={{
-                      duration: 0.3,
-                      type: 'tween'
-                    }}
-                    initial={{
-                      opacity: 0,
-                      height: 0
-                    }}
-                    animate={{
-                      opacity: 1,
-                      height: 'auto'
-                    }}
-                    exit={{
-                      opacity: 0,
-                      height: 0
-                    }}
+                    transition={{ duration: 0.3, type: 'tween' }}
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    exit={{ opacity: 0, height: 0 }}
                   >
                     {strings.savedContent.saveGeometry.noSavedGeometries}
                   </StyledNoSavedGeometries>
@@ -485,13 +514,12 @@ const GeometriesTab = () => {
                 >
                   <FontAwesomeIcon icon={faPlus} style={{ marginRight: 8 }} />
                   <p>
-                    {strings.savedContent.saveGeometry.addNewGeometry ||
-                      'Uusi geometria'}
+                    {strings.savedContent?.saveGeometry?.addNewGeometry}
                   </p>
                 </StyledSave>
                 <StyledDeleteAllSavedGeometries
                   onClick={() =>
-                    geometries.length > 0 &&
+                    geometries?.length > 0 &&
                     store.dispatch(
                       setWarning({
                         title:
@@ -511,7 +539,7 @@ const GeometriesTab = () => {
                       })
                     )
                   }
-                  disabled={geometries.length === 0}
+                  disabled={geometries?.length === 0}
                 >
                   <p>
                     {strings.savedContent.saveGeometry.deleteAllSavedGeometries}
@@ -522,7 +550,7 @@ const GeometriesTab = () => {
               <StyledGeometriesButtonsWrapper>
                 <StyledDeleteAllSavedGeometries
                   onClick={() =>
-                    geometries.length > 0 &&
+                    geometries?.length > 0 &&
                     store.dispatch(
                       setWarning({
                         title:
@@ -542,7 +570,7 @@ const GeometriesTab = () => {
                       })
                     )
                   }
-                  disabled={geometries.length === 0}
+                  disabled={geometries?.length === 0}
                 >
                   <p>
                     {strings.savedContent.saveGeometry.deleteAllSavedGeometries}
@@ -555,8 +583,7 @@ const GeometriesTab = () => {
                 >
                   <FontAwesomeIcon icon={faPlus} style={{ marginRight: 8 }} />
                   <p>
-                    {strings.savedContent.saveGeometry.addNewGeometry ||
-                      'Uusi geometria'}
+                    {strings.savedContent.saveGeometry.addNewGeometry}
                   </p>
                 </StyledSave>
               </StyledGeometriesButtonsWrapper>

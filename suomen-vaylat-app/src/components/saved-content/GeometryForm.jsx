@@ -171,7 +171,7 @@ const GeometryForm = ({
         </StyledFormGroup>
         <StyledFormGroup>
           <StyledLabel htmlFor="geometry-description">
-            {strings.savedContent.saveGeometry.description || 'Kuvaus'}
+            {strings.savedContent.description}
           </StyledLabel>
           <StyledTextarea
             id="geometry-description"
@@ -191,13 +191,13 @@ const GeometryForm = ({
               {strings.savedContent.saveGeometry.saveGeometryButton}
             </StyledSave>
             <StyledCancel type="button" onClick={onCancel}>
-              {strings.general.cancel || 'Peruuta'}
+              {strings.general.cancel}
             </StyledCancel>
           </StyledButtonsRow>
         ) : (
           <StyledButtonsRow>
             <StyledCancel type="button" onClick={onCancel}>
-              {strings.general.cancel || 'Peruuta'}
+              {strings.general.cancel}
             </StyledCancel>
             <StyledSave type="submit" disabled={!geometryName || !itemsToSave}>
               <FontAwesomeIcon icon={faSave} />

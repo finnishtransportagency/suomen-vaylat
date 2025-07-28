@@ -86,8 +86,8 @@ const StyledSavedViews = styled.div`
 const StyledNoSavedViews = styled.div`
   font-size: 14px;
   text-align: center;
-  color: #888;
-  padding: 32px 0 18px 0;
+  color: ${(props) => props.theme?.colors?.black};
+  padding: 16px;
 `;
 
 const StyledSavedViewContainer = styled(motion.div)`
@@ -274,7 +274,7 @@ const ViewsTab = () => {
       let updatedViews;
       if (editingView) {
         // Remove default from all others if the edited one is default
-        updatedViews = views.map((v) =>
+        updatedViews = views?.map((v) =>
           v.id === editingView.id
             ? { ...newView, id: editingView.id }
             : { ...v, default: false }
@@ -282,14 +282,14 @@ const ViewsTab = () => {
       } else {
         // Remove default from others if the new one is default
         updatedViews = [
-          ...views.map((v) => ({ ...v, default: false })),
+          ...views?.map((v) => ({ ...v, default: false })),
           newView
         ];
       }
 
       // If not default, make sure only existing 'default: true' remains
       if (!formData.isDefault && editingView) {
-        updatedViews = updatedViews.map((v) =>
+        updatedViews = updatedViews?.map((v) =>
           v.id === newView.id ? { ...v, default: false } : v
         );
       }
@@ -342,14 +342,14 @@ const ViewsTab = () => {
             </StyledSubtitle>
             <StyledSavedViews>
               <AnimatePresence>
-                {views.length > 0 ? (
+                {views?.length > 0 ? (
                   [
                     ...views.filter((v) => v.default),
                     ...views
                       .filter((v) => !v.default)
                       .sort((a, b) => b.saveDate - a.saveDate)
                   ].map((view) => {
-                    console.log(view.description.slice(0, 100))
+                    console.log(view.description.slice(0, 100));
                     const isDefaultView = !!view.default;
                     return (
                       <StyledSavedViewContainer
@@ -374,8 +374,8 @@ const ViewsTab = () => {
                             <StyledSavedViewTitleContent>
                               <StyledSavedViewName>
                                 {view.name?.length > 30
-                                    ? view.name.slice(0, 30) + '…'
-                                    : view.name}
+                                  ? view.name.slice(0, 30) + '…'
+                                  : view.name}
                               </StyledSavedViewName>
                               {view.description && (
                                 <StyledSavedViewDescription>
@@ -404,8 +404,7 @@ const ViewsTab = () => {
                               type="button"
                               data-action="edit"
                               title={
-                                strings.savedContent.saveView.editView ||
-                                'Muokkaa'
+                                strings.savedContent.saveView.editView + " " + view.name
                               }
                               onClick={(e) => {
                                 e.stopPropagation();
@@ -418,7 +417,7 @@ const ViewsTab = () => {
                               type="button"
                               data-action="remove"
                               title={
-                                strings.savedContent.saveView.deleteSavedView
+                                strings.savedContent.saveView.deleteSavedView + " " + view.name
                               }
                               onClick={(e) => {
                                 e.stopPropagation();
@@ -450,7 +449,7 @@ const ViewsTab = () => {
                 <StyledSave type="button" onClick={handleAddNew}>
                   <FontAwesomeIcon icon={faPlus} style={{ marginRight: 8 }} />
                   <p>
-                    {strings.savedContent.saveView.addNewView || 'Uusi näkymä'}
+                    {strings.savedContent.saveView.addNewView}
                   </p>
                 </StyledSave>
 
@@ -475,7 +474,7 @@ const ViewsTab = () => {
                       })
                     )
                   }
-                  disabled={views.length === 0}
+                  disabled={views?.length === 0}
                 >
                   <p>{strings.savedContent.saveView.deleteAllSavedViews}</p>
                 </StyledDeleteAllSavedViews>
@@ -484,7 +483,7 @@ const ViewsTab = () => {
               <StyledViewsButtonsWrapper>
                 <StyledDeleteAllSavedViews
                   onClick={() =>
-                    views.length > 0 &&
+                    views?.length > 0 &&
                     store.dispatch(
                       setWarning({
                         title: strings.savedContent.saveView.confirmDeleteAll,
@@ -503,14 +502,14 @@ const ViewsTab = () => {
                       })
                     )
                   }
-                  disabled={views.length === 0}
+                  disabled={views?.length === 0}
                 >
                   <p>{strings.savedContent.saveView.deleteAllSavedViews}</p>
                 </StyledDeleteAllSavedViews>
                 <StyledSave type="button" onClick={handleAddNew}>
                   <FontAwesomeIcon icon={faPlus} style={{ marginRight: 8 }} />
                   <p>
-                    {strings.savedContent.saveView.addNewView || 'Uusi näkymä'}
+                    {strings.savedContent.saveView.addNewView}
                   </p>
                 </StyledSave>
               </StyledViewsButtonsWrapper>

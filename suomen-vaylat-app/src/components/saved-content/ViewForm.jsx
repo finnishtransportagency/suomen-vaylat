@@ -5,6 +5,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Switch } from '@mui/material';
 import { isMobile } from '../../theme/theme';
 
+const MAX_NAME_LENGTH = 80;
+const MAX_DESC_LENGTH = 200;
+
 const StyledSave = styled.button`
   color: ${(props) => props.theme?.colors?.mainWhite};
   background-color: ${(props) => props.theme?.colors?.mainColor1};
@@ -29,7 +32,6 @@ const StyledSave = styled.button`
     opacity: 0.45;
     cursor: default;
   }
-
   @media ${(props) => props.theme.device.mobileL} {
     margin: 18px 0px;
     width: 100%;
@@ -86,6 +88,22 @@ const StyledTextarea = styled.textarea`
   }
 `;
 
+const StyledCharCounter = styled.span`
+  font-size: 12px;
+  align-self: flex-end;
+  margin-top: 3px;
+  color: ${({ atMax }) => (atMax ? '#d83131' : '#888')};
+  font-weight: ${({ atMax }) => (atMax ? 700 : 400)};
+  letter-spacing: 0.5px;
+`;
+
+const StyledWarning = styled.div`
+  color: #d83131;
+  font-size: 12px;
+  margin-top: 2px;
+  align-self: flex-end;
+`;
+
 const StyledSwitchRow = styled.div`
   display: flex;
   align-items: center;
@@ -104,7 +122,6 @@ const StyledButtonsRow = styled.div`
   width: 100%;
   justify-content: space-between;
   margin-top: 19px;
-
   @media ${(props) => props.theme.device.mobileL} {
     flex-direction: column;
   }
@@ -150,12 +167,29 @@ const ViewForm = ({
   const [isDefault, setIsDefault] = useState(initialData?.isDefault || false);
 
   useEffect(() => {
-    // Reset fields if initialData changes (for edit/new)
     setViewName(initialData?.name || '');
     setViewDescription(initialData?.description || '');
     setIncludeGeometries(initialData?.includeGeometries || false);
     setIsDefault(initialData?.isDefault || false);
   }, [initialData]);
+
+  // Handle paste/overflow for name
+  const handleNameChange = (e) => {
+    let val = e.target.value;
+    if (val.length > MAX_NAME_LENGTH) {
+      val = val.slice(0, MAX_NAME_LENGTH);
+    }
+    setViewName(val);
+  };
+
+  // Handle paste/overflow for description
+  const handleDescChange = (e) => {
+    let val = e.target.value;
+    if (val.length > MAX_DESC_LENGTH) {
+      val = val.slice(0, MAX_DESC_LENGTH);
+    }
+    setViewDescription(val);
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -179,29 +213,43 @@ const ViewForm = ({
       <StyledForm onSubmit={handleSubmit} autoComplete="off">
         <StyledFormGroup>
           <StyledLabel htmlFor="view-name">
-            {strings.savedContent.saveView.viewName || 'Näkymän nimi'} *
+            {strings.savedContent.saveView.viewName} *
           </StyledLabel>
           <StyledInput
             id="view-name"
             type="text"
             value={viewName}
-            maxLength={80}
-            onChange={(e) => setViewName(e.target.value)}
+            maxLength={MAX_NAME_LENGTH}
+            onChange={handleNameChange}
             required
+            aria-describedby="name-char-counter"
           />
+          <StyledCharCounter
+            id="name-char-counter"
+            atMax={viewName.length >= MAX_NAME_LENGTH}
+          >
+            {viewName.length} / {MAX_NAME_LENGTH}
+          </StyledCharCounter>
         </StyledFormGroup>
         <StyledFormGroup>
           <StyledLabel htmlFor="view-description">
-            {strings.savedContent.saveView.description || 'Kuvaus'}
+            {strings.savedContent.description}
           </StyledLabel>
           <StyledTextarea
             id="view-description"
             value={viewDescription}
-            maxLength={200}
-            onChange={(e) => setViewDescription(e.target.value)}
+            maxLength={MAX_DESC_LENGTH}
+            onChange={handleDescChange}
+            aria-describedby="desc-char-counter"
           />
+          <StyledCharCounter
+            id="desc-char-counter"
+            atMax={viewDescription.length >= MAX_DESC_LENGTH}
+          >
+            {viewDescription.length} / {MAX_DESC_LENGTH}
+          </StyledCharCounter>
         </StyledFormGroup>
-          {/* Lets not add the geometries just yet
+        {/* Lets not add the geometries just yet
             <StyledSwitchRow>
               <Switch
                 checked={includeGeometries}
@@ -216,7 +264,7 @@ const ViewForm = ({
                   'Tallenna omat geometriat mukaan.'}
               </StyledSwitchLabel>
             </StyledSwitchRow>
-          */}
+        */}
         <StyledSwitchRow
           style={{
             alignItems: 'center',
@@ -230,17 +278,15 @@ const ViewForm = ({
             color="primary"
             inputProps={{
               'aria-label': isDefault
-                ? strings.savedContent.saveView.defaultView ||
-                  'Poista oletusnäkymä'
-                : strings.savedContent.saveView.setDefaultView ||
-                  'Aseta oletusnäkymä'
+                ? strings.savedContent.saveView.defaultView
+                : strings.savedContent.saveView.setDefaultView
             }}
           />
           <StyledSwitchLabel>
             {isDefault
-              ? strings.savedContent.saveView.defaultView || 'Oletusnäkymä'
-              : strings.savedContent.saveView.setDefaultView ||
-                'Aseta oletusnäkymä'}
+              ? strings.savedContent.saveView.defaultView
+              : strings.savedContent.saveView.setDefaultView
+              }
           </StyledSwitchLabel>
         </StyledSwitchRow>
         {isMobile ? (
@@ -248,27 +294,25 @@ const ViewForm = ({
             <StyledSave type="submit" disabled={!viewName}>
               <FontAwesomeIcon icon={faSave} style={{ marginRight: 12 }} />
               {isEditing
-                ? strings.savedContent.saveView.saveViewButton ||
-                  'Tallenna muutokset'
-                : strings.savedContent.saveView.saveViewButton ||
-                  'Tallenna karttanäkymä'}
+                ? strings.savedContent.saveView.saveViewButton
+                : strings.savedContent.saveView.saveViewButton
+                }
             </StyledSave>
             <StyledCancel type="button" onClick={onCancel}>
-              {strings.general.cancel || 'Peruuta'}
+              {strings.general.cancel}
             </StyledCancel>
           </StyledButtonsRow>
         ) : (
           <StyledButtonsRow>
             <StyledCancel type="button" onClick={onCancel}>
-              {strings.general.cancel || 'Peruuta'}
+              {strings.general.cancel}
             </StyledCancel>
             <StyledSave type="submit" disabled={!viewName}>
               <FontAwesomeIcon icon={faSave} style={{ marginRight: 12 }} />
               {isEditing
-                ? strings.savedContent.saveView.saveViewButton ||
-                  'Tallenna muutokset'
-                : strings.savedContent.saveView.saveViewButton ||
-                  'Tallenna karttanäkymä'}
+                ? strings.savedContent.saveView.saveViewButton
+                : strings.savedContent.saveView.saveViewButton
+                }
             </StyledSave>
           </StyledButtonsRow>
         )}
