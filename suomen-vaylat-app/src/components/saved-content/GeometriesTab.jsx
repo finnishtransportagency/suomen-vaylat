@@ -417,11 +417,15 @@ const GeometriesTab = () => {
                           <StyledLeftContent>
                             <StyledGeometryTitleContent>
                               <StyledGeometryName>
-                                {geometry.name}
+                                {geometry.name?.length > 30
+                                    ? geometry.name.slice(0, 30) + '…'
+                                    : geometry.name}
                               </StyledGeometryName>
                               {geometry.description && (
                                 <StyledGeometryDescription>
-                                  {geometry.description}
+                                  {geometry.description?.length > 100
+                                    ? geometry.description.slice(0, 100) + '…'
+                                    : geometry.description}
                                 </StyledGeometryDescription>
                               )}
                               <StyledGeometryDescription>

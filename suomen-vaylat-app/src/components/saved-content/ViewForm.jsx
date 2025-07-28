@@ -201,20 +201,22 @@ const ViewForm = ({
             onChange={(e) => setViewDescription(e.target.value)}
           />
         </StyledFormGroup>
-        <StyledSwitchRow>
-          <Switch
-            checked={includeGeometries}
-            onChange={(e) => setIncludeGeometries(e.target.checked)}
-            color="primary"
-            inputProps={{
-              'aria-label': strings.savedContent.saveView.includeGeometries
-            }}
-          />
-          <StyledSwitchLabel>
-            {strings.savedContent.saveView.includeGeometries ||
-              'Tallenna omat geometriat mukaan.'}
-          </StyledSwitchLabel>
-        </StyledSwitchRow>
+          {/* Lets not add the geometries just yet
+            <StyledSwitchRow>
+              <Switch
+                checked={includeGeometries}
+                onChange={(e) => setIncludeGeometries(e.target.checked)}
+                color="primary"
+                inputProps={{
+                  'aria-label': strings.savedContent.saveView.includeGeometries
+                }}
+              />
+              <StyledSwitchLabel>
+                {strings.savedContent.saveView.includeGeometries ||
+                  'Tallenna omat geometriat mukaan.'}
+              </StyledSwitchLabel>
+            </StyledSwitchRow>
+          */}
         <StyledSwitchRow
           style={{
             alignItems: 'center',

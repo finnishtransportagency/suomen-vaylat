@@ -105,7 +105,7 @@ const StyledSavedView = styled.div`
   background-color: ${(props) => props.theme.colors.button};
   border-radius: 4px;
   padding: 8px 1em;
-  gap: 1em;
+  gap: 2em;
   box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, 0.16);
 `;
 
@@ -349,6 +349,7 @@ const ViewsTab = () => {
                       .filter((v) => !v.default)
                       .sort((a, b) => b.saveDate - a.saveDate)
                   ].map((view) => {
+                    console.log(view.description.slice(0, 100))
                     const isDefaultView = !!view.default;
                     return (
                       <StyledSavedViewContainer
@@ -372,12 +373,14 @@ const ViewsTab = () => {
                           <StyledLeftContent>
                             <StyledSavedViewTitleContent>
                               <StyledSavedViewName>
-                                {view.name}
+                                {view.name?.length > 30
+                                    ? view.name.slice(0, 30) + '…'
+                                    : view.name}
                               </StyledSavedViewName>
                               {view.description && (
                                 <StyledSavedViewDescription>
-                                  {view.description?.length > 40
-                                    ? view.description.slice(0, 40) + '…'
+                                  {view.description?.length > 100
+                                    ? view.description.slice(0, 100) + '…'
                                     : view.description}
                                 </StyledSavedViewDescription>
                               )}
