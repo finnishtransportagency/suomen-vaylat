@@ -244,10 +244,7 @@ const ViewForm = ({
         {isMobile ? (
           <StyledButtonsRow>
             <StyledSave type="submit" disabled={!viewName}>
-              <FontAwesomeIcon
-                icon={isEditing ? faSave : faSave}
-                style={{ marginRight: 12 }}
-              />
+              <FontAwesomeIcon icon={faSave} style={{ marginRight: 12 }} />
               {isEditing
                 ? strings.savedContent.saveView.saveViewButton ||
                   'Tallenna muutokset'
@@ -264,10 +261,7 @@ const ViewForm = ({
               {strings.general.cancel || 'Peruuta'}
             </StyledCancel>
             <StyledSave type="submit" disabled={!viewName}>
-              <FontAwesomeIcon
-                icon={isEditing ? faSave : faSave}
-                style={{ marginRight: 12 }}
-              />
+              <FontAwesomeIcon icon={faSave} style={{ marginRight: 12 }} />
               {isEditing
                 ? strings.savedContent.saveView.saveViewButton ||
                   'Tallenna muutokset'
