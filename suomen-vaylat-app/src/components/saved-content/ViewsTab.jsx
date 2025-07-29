@@ -131,7 +131,7 @@ const StyledSavedViewDescription = styled.p`
   padding: 0px;
   font-size: 12px;
   font-weight: 500;
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(255, 255, 255, 0.9);
 `;
 
 const StyledLeftContent = styled.div`
@@ -335,12 +335,16 @@ const ViewsTab = () => {
       ) : (
         <>
           <StyledSavedGeometriesWrapper>
-            <StyledSubtitle>
+            <StyledSubtitle id="views-tab-heading">
               {strings.savedContent.saveView.savedViews ||
                 'Tallennetut näkymät'}
               :
             </StyledSubtitle>
-            <StyledSavedViews>
+            <StyledSavedViews
+              id="views-tab-list"
+              role="list"
+              aria-labelledby="views-tab-heading"
+            >
               <AnimatePresence>
                 {views?.length > 0 ? (
                   [
@@ -349,7 +353,9 @@ const ViewsTab = () => {
                       .filter((v) => !v.default)
                       .sort((a, b) => b.saveDate - a.saveDate)
                   ].map((view) => {
-                    console.log(view.description.slice(0, 100));
+                    const viewId = `views-tab-item-${view.id}`;
+                    const editId = `views-tab-edit-${view.id}`;
+                    const deleteId = `views-tab-delete-${view.id}`;
                     const isDefaultView = !!view.default;
                     return (
                       <StyledSavedViewContainer
@@ -360,6 +366,11 @@ const ViewsTab = () => {
                         exit={{ opacity: 0, height: 0 }}
                       >
                         <StyledSavedView
+                          id={viewId}
+                          tabIndex={0}
+                          role="listitem"
+                          aria-labelledby={`${viewId}-name`}
+                          aria-describedby={`${viewId}-desc`}
                           onClick={(e) => {
                             if (
                               e.target.closest('[data-action="edit"]') ||
@@ -369,16 +380,23 @@ const ViewsTab = () => {
                             e.preventDefault();
                             activateView(store, channel, view);
                           }}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter' || e.key === ' ') {
+                              activateView(store, channel, view);
+                            }
+                          }}
                         >
                           <StyledLeftContent>
                             <StyledSavedViewTitleContent>
-                              <StyledSavedViewName>
+                              <StyledSavedViewName id={`${viewId}-name`}>
                                 {view.name?.length > 30
                                   ? view.name.slice(0, 30) + '…'
                                   : view.name}
                               </StyledSavedViewName>
                               {view.description && (
-                                <StyledSavedViewDescription>
+                                <StyledSavedViewDescription
+                                  id={`${viewId}-desc`}
+                                >
                                   {view.description?.length > 100
                                     ? view.description.slice(0, 100) + '…'
                                     : view.description}
@@ -396,16 +414,31 @@ const ViewsTab = () => {
                           </StyledLeftContent>
                           <StyledViewActions>
                             {isDefaultView && (
-                              <StyledIsDefault>
-                                <FontAwesomeIcon icon={faStar} />
+                              <StyledIsDefault id={`${viewId}-default`}>
+                                <FontAwesomeIcon
+                                  icon={faStar}
+                                  title={
+                                    strings.savedContent.saveView.defaultView
+                                  }
+                                />
                               </StyledIsDefault>
                             )}
                             <StyledIconButton
+                              id={editId}
                               type="button"
                               data-action="edit"
-                              title={
-                                strings.savedContent.saveView.editView + " " + view.name
+                              aria-label={
+                                (strings.savedContent.saveView.editView) +
+                                ' ' +
+                                (view.name)
                               }
+                              title={
+                                strings.savedContent.saveView.editView +
+                                ' ' +
+                                view.name
+                              }
+                              aria-controls={viewId}
+                              aria-describedby={`${viewId}-name`}
                               onClick={(e) => {
                                 e.stopPropagation();
                                 handleEdit(view);
@@ -414,11 +447,22 @@ const ViewsTab = () => {
                               <FontAwesomeIcon icon={faPen} />
                             </StyledIconButton>
                             <StyledIconButton
+                              id={deleteId}
                               type="button"
                               data-action="remove"
-                              title={
-                                strings.savedContent.saveView.deleteSavedView + " " + view.name
+                              aria-label={
+                                (strings.savedContent.saveView
+                                  .deleteSavedView) +
+                                ' ' +
+                                (view.name)
                               }
+                              title={
+                                strings.savedContent.saveView.deleteSavedView +
+                                ' ' +
+                                view.name
+                              }
+                              aria-controls={viewId}
+                              aria-describedby={`${viewId}-name`}
                               onClick={(e) => {
                                 e.stopPropagation();
                                 handleRemoveView(view);
@@ -438,6 +482,10 @@ const ViewsTab = () => {
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: 'auto' }}
                     exit={{ opacity: 0, height: 0 }}
+                    id="views-tab-empty"
+                    role="alert"
+                    aria-live="polite"
+                    tabIndex={0}
                   >
                     {strings.savedContent.saveView.noSavedViews}
                   </StyledNoSavedViews>
@@ -446,14 +494,20 @@ const ViewsTab = () => {
             </StyledSavedViews>
             {isMobile ? (
               <StyledViewsButtonsWrapper>
-                <StyledSave type="button" onClick={handleAddNew}>
+                <StyledSave
+                  type="button"
+                  id="views-tab-add-btn"
+                  aria-label={strings.savedContent.saveView.addNewView}
+                  aria-controls="views-tab-list"
+                  onClick={handleAddNew}
+                >
                   <FontAwesomeIcon icon={faPlus} style={{ marginRight: 8 }} />
-                  <p>
-                    {strings.savedContent.saveView.addNewView}
-                  </p>
+                  <p>{strings.savedContent.saveView.addNewView}</p>
                 </StyledSave>
-
                 <StyledDeleteAllSavedViews
+                  id="views-tab-delall-btn"
+                  aria-label={strings.savedContent.saveView.deleteAllSavedViews}
+                  aria-controls="views-tab-list"
                   onClick={() =>
                     views.length > 0 &&
                     store.dispatch(
@@ -482,6 +536,9 @@ const ViewsTab = () => {
             ) : (
               <StyledViewsButtonsWrapper>
                 <StyledDeleteAllSavedViews
+                  id="views-tab-delall-btn"
+                  aria-label={strings.savedContent.saveView.deleteAllSavedViews}
+                  aria-controls="views-tab-list"
                   onClick={() =>
                     views?.length > 0 &&
                     store.dispatch(
@@ -506,11 +563,15 @@ const ViewsTab = () => {
                 >
                   <p>{strings.savedContent.saveView.deleteAllSavedViews}</p>
                 </StyledDeleteAllSavedViews>
-                <StyledSave type="button" onClick={handleAddNew}>
+                <StyledSave
+                  type="button"
+                  id="views-tab-add-btn"
+                  aria-label={strings.savedContent.saveView.addNewView}
+                  aria-controls="views-tab-list"
+                  onClick={handleAddNew}
+                >
                   <FontAwesomeIcon icon={faPlus} style={{ marginRight: 8 }} />
-                  <p>
-                    {strings.savedContent.saveView.addNewView}
-                  </p>
+                  <p>{strings.savedContent.saveView.addNewView}</p>
                 </StyledSave>
               </StyledViewsButtonsWrapper>
             )}

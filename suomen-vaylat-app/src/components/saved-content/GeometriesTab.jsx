@@ -193,7 +193,7 @@ const StyledGeometryDescription = styled.p`
   padding: 0px;
   font-size: 12px;
   font-weight: 500;
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(255, 255, 255, 0.9);
 `;
 
 const StyledLeftContent = styled.div`
@@ -414,83 +414,124 @@ const GeometriesTab = () => {
       ) : (
         <>
           <StyledSavedGeometriesWrapper>
-            <StyledSubtitle>
+            <StyledSubtitle id="geometries-tab-heading">
               {strings.savedContent.saveGeometry.savedGeometries}:
             </StyledSubtitle>
-            <StyledGeometryList>
+            <StyledGeometryList
+              id="geometries-tab-list"
+              role="list"
+              aria-labelledby="geometries-tab-heading"
+            >
               <AnimatePresence>
                 {geometries?.length > 0 ? (
-                  geometries?.map((geometry) => (
-                    <StyledGeometryItemContainer
-                      key={geometry.id}
-                      transition={{ duration: 0.2, type: 'tween' }}
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: 'auto' }}
-                      exit={{ opacity: 0, height: 0 }}
-                    >
-                      <StyledGeometryItem
-                        style={{
-                          backgroundColor: activeGeometries?.find(
-                            (g) => g.id === geometry.id
-                          )
-                            ? theme.colors.buttonActive
-                            : theme.colors.button
-                        }}
-                        onClick={(e) => {
-                          e.preventDefault();
-                          handleActivateGeometry(geometry);
-                        }}
+                  geometries?.map((geometry, idx) => {
+                    const geometryId = `geometries-tab-item-${geometry.id}`;
+                    const editBtnId = `geometries-tab-edit-${geometry.id}`;
+                    const deleteBtnId = `geometries-tab-delete-${geometry.id}`;
+                    return (
+                      <StyledGeometryItemContainer
+                        key={geometry.id}
+                        transition={{ duration: 0.2, type: 'tween' }}
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        exit={{ opacity: 0, height: 0 }}
                       >
-                        <StyledLeftContent>
-                          <StyledGeometryTitleContent>
-                            <StyledGeometryName>
-                              {geometry.name?.length > 30
-                                ? geometry.name.slice(0, 30) + '…'
-                                : geometry.name}
-                            </StyledGeometryName>
-                            {geometry.description && (
+                        <StyledGeometryItem
+                          id={geometryId}
+                          tabIndex={0}
+                          aria-labelledby={`${geometryId}-name`}
+                          aria-describedby={`${geometryId}-desc`}
+                          role="listitem"
+                          style={{
+                            backgroundColor: activeGeometries?.find(
+                              (g) => g.id === geometry.id
+                            )
+                              ? theme.colors.buttonActive
+                              : theme.colors.button
+                          }}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            handleActivateGeometry(geometry);
+                          }}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter' || e.key === ' ') {
+                              handleActivateGeometry(geometry);
+                            }
+                          }}
+                        >
+                          <StyledLeftContent>
+                            <StyledGeometryTitleContent>
+                              <StyledGeometryName id={`${geometryId}-name`}>
+                                {geometry.name?.length > 30
+                                  ? geometry.name.slice(0, 30) + '…'
+                                  : geometry.name}
+                              </StyledGeometryName>
+                              {geometry.description && (
+                                <StyledGeometryDescription
+                                  id={`${geometryId}-desc`}
+                                >
+                                  {geometry.description?.length > 100
+                                    ? geometry.description.slice(0, 100) + '…'
+                                    : geometry.description}
+                                </StyledGeometryDescription>
+                              )}
                               <StyledGeometryDescription>
-                                {geometry.description?.length > 100
-                                  ? geometry.description.slice(0, 100) + '…'
-                                  : geometry.description}
+                                <Moment
+                                  format="DD.MM.YYYY"
+                                  tz="Europe/Helsinki"
+                                >
+                                  {geometry.saveDate}
+                                </Moment>
                               </StyledGeometryDescription>
-                            )}
-                            <StyledGeometryDescription>
-                              <Moment format="DD.MM.YYYY" tz="Europe/Helsinki">
-                                {geometry.saveDate}
-                              </Moment>
-                            </StyledGeometryDescription>
-                          </StyledGeometryTitleContent>
-                        </StyledLeftContent>
-                        <StyledGeometryActions>
-                          <StyledRemoveGeometry
-                            title={
-                              strings.savedContent.saveGeometry.editGeometry ||
-                              'Muokkaa'
-                            }
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleEditGeometry(geometry);
-                            }}
-                          >
-                            <FontAwesomeIcon icon={faPen} />
-                          </StyledRemoveGeometry>
-                          <StyledRemoveGeometry
-                            title={
-                              strings.savedContent.saveGeometry
-                                .deleteSavedGeometry + " " + geometry.name
-                            }
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleRemoveGeometry(geometry);
-                            }}
-                          >
-                            <FontAwesomeIcon icon={faTrash} />
-                          </StyledRemoveGeometry>
-                        </StyledGeometryActions>
-                      </StyledGeometryItem>
-                    </StyledGeometryItemContainer>
-                  ))
+                            </StyledGeometryTitleContent>
+                          </StyledLeftContent>
+                          <StyledGeometryActions>
+                            {/* EDIT BUTTON */}
+                            <StyledRemoveGeometry
+                              id={editBtnId}
+                              type="button"
+                              aria-label={
+                                strings.savedContent.saveGeometry
+                                  .editGeometry || 'Edit geometry'
+                              }
+                              aria-controls={geometryId}
+                              aria-describedby={`${geometryId}-name`}
+                              title={
+                                strings.savedContent.saveGeometry.editGeometry
+                              }
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleEditGeometry(geometry);
+                              }}
+                            >
+                              <FontAwesomeIcon icon={faPen} />
+                            </StyledRemoveGeometry>
+                            {/* DELETE BUTTON */}
+                            <StyledRemoveGeometry
+                              id={deleteBtnId}
+                              type="button"
+                              aria-label={
+                                strings.savedContent.saveGeometry
+                                  .deleteSavedGeometry + ` ${geometry.name}`
+                              }
+                              aria-controls={geometryId}
+                              aria-describedby={`${geometryId}-name`}
+                              title={
+                                strings.savedContent.saveGeometry
+                                  .deleteSavedGeometry + ` ${geometry.name}`
+                              }
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleRemoveGeometry(geometry);
+                              }}
+                            >
+                              <FontAwesomeIcon icon={faTrash} />
+                            </StyledRemoveGeometry>
+                          </StyledGeometryActions>
+                        </StyledGeometryItem>
+                      </StyledGeometryItemContainer>
+                    );
+                  })
                 ) : (
                   <StyledNoSavedGeometries
                     key="no-saved-geometry"
@@ -498,6 +539,10 @@ const GeometriesTab = () => {
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: 'auto' }}
                     exit={{ opacity: 0, height: 0 }}
+                    id="geometries-tab-empty"
+                    role="alert"
+                    aria-live="polite"
+                    tabIndex={0}
                   >
                     {strings.savedContent.saveGeometry.noSavedGeometries}
                   </StyledNoSavedGeometries>
@@ -508,16 +553,24 @@ const GeometriesTab = () => {
               <StyledGeometriesButtonsWrapper>
                 <StyledSave
                   type="button"
+                  id="geometries-tab-add-btn"
+                  aria-label={
+                    strings.savedContent?.saveGeometry?.addNewGeometry
+                  }
+                  aria-controls="geometries-tab-list"
                   onClick={() =>
                     store.dispatch(setShowSavedContentGeometryForm(true))
                   }
                 >
                   <FontAwesomeIcon icon={faPlus} style={{ marginRight: 8 }} />
-                  <p>
-                    {strings.savedContent?.saveGeometry?.addNewGeometry}
-                  </p>
+                  <p>{strings.savedContent?.saveGeometry?.addNewGeometry}</p>
                 </StyledSave>
                 <StyledDeleteAllSavedGeometries
+                  id="geometries-tab-delall-btn"
+                  aria-label={
+                    strings.savedContent.saveGeometry.deleteAllSavedGeometries
+                  }
+                  aria-controls="geometries-tab-list"
                   onClick={() =>
                     geometries?.length > 0 &&
                     store.dispatch(
@@ -549,6 +602,11 @@ const GeometriesTab = () => {
             ) : (
               <StyledGeometriesButtonsWrapper>
                 <StyledDeleteAllSavedGeometries
+                  id="geometries-tab-delall-btn"
+                  aria-label={
+                    strings.savedContent.saveGeometry.deleteAllSavedGeometries
+                  }
+                  aria-controls="geometries-tab-list"
                   onClick={() =>
                     geometries?.length > 0 &&
                     store.dispatch(
@@ -577,14 +635,17 @@ const GeometriesTab = () => {
                   </p>
                 </StyledDeleteAllSavedGeometries>
                 <StyledSave
+                  id="geometries-tab-add-btn"
+                  aria-label={
+                    strings.savedContent?.saveGeometry?.addNewGeometry
+                  }
+                  aria-controls="geometries-tab-list"
                   onClick={() =>
                     store.dispatch(setShowSavedContentGeometryForm(true))
                   }
                 >
                   <FontAwesomeIcon icon={faPlus} style={{ marginRight: 8 }} />
-                  <p>
-                    {strings.savedContent.saveGeometry.addNewGeometry}
-                  </p>
+                  <p>{strings.savedContent.saveGeometry.addNewGeometry}</p>
                 </StyledSave>
               </StyledGeometriesButtonsWrapper>
             )}

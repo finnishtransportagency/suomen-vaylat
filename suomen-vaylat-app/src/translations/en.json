@@ -90,7 +90,8 @@
       "saveGeometryButton" : "Save geometry",
       "geometryDesc": "Geometry description",
       "addNewGeometry": "Add new geometry",
-      "deleteSavedGeometry": "Delete saved geometry"
+      "deleteSavedGeometry": "Delete saved geometry",
+      "editGeometry": "Edit geometry information"
     }
   },
   "gfi": {

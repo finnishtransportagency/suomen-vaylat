@@ -91,7 +91,8 @@
       "saveGeometryButton" : "Spara geometri",
       "geometryDesc": "Geometribeskrivning",
       "addNewGeometry": "Lägg till ny geometri",
-      "deleteSavedGeometry": "Ta bort sparad geometri"
+      "deleteSavedGeometry": "Ta bort sparad geometri",
+      "editGeometry": "Redigera geometriinformation"
     }
   },
   "gfi": {

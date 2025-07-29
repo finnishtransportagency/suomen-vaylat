@@ -66,8 +66,8 @@ const StyledInput = styled.input`
   outline: none;
   transition: border 0.13s;
   &:focus {
-    border-color: #1964e0;
-    background: #f0f2ff;
+    border-color: ${(props) => props.theme?.colors?.mainColor1};
+    background: ${(props) => props.theme?.colors?.mainColor3transparent30};
   }
 `;
 
@@ -83,8 +83,8 @@ const StyledTextarea = styled.textarea`
   transition: border 0.13s;
   resize: vertical;
   &:focus {
-    border-color: #1964e0;
-    background: #f0f2ff;
+    border-color: ${(props) => props.theme?.colors?.mainColor1};
+    background: ${(props) => props.theme?.colors?.mainColor3transparent30};
   }
 `;
 
@@ -92,7 +92,7 @@ const StyledCharCounter = styled.span`
   font-size: 12px;
   align-self: flex-end;
   margin-top: 3px;
-  color: ${({ atMax }) => (atMax ? '#d83131' : '#888')};
+  color: ${(props) => (props.atMax ? props.theme?.colors?.secondaryColorDarkOrange : props.theme?.colors?.black )};
   font-weight: ${({ atMax }) => (atMax ? 700 : 400)};
   letter-spacing: 0.5px;
 `;
@@ -206,64 +206,74 @@ const ViewForm = ({
 
   return (
     <>
-      <StyledSubtitle>
+      <StyledSubtitle id="view-form-title">
         {strings.savedContent.saveView.saveNewView}
       </StyledSubtitle>
 
-      <StyledForm onSubmit={handleSubmit} autoComplete="off">
+      <StyledForm
+        onSubmit={handleSubmit}
+        autoComplete="off"
+        aria-labelledby="view-form-title"
+        id="view-form-main"
+      >
         <StyledFormGroup>
-          <StyledLabel htmlFor="view-name">
+          <StyledLabel htmlFor="view-form-name">
             {strings.savedContent.saveView.viewName} *
           </StyledLabel>
           <StyledInput
-            id="view-name"
+            id="view-form-name"
+            name="view-form-name"
             type="text"
             value={viewName}
             maxLength={MAX_NAME_LENGTH}
             onChange={handleNameChange}
             required
-            aria-describedby="name-char-counter"
+            aria-describedby="view-form-name-counter"
+            aria-invalid={!viewName ? 'true' : 'false'}
+            aria-required="true"
           />
           <StyledCharCounter
-            id="name-char-counter"
+            id="view-form-name-counter"
             atMax={viewName.length >= MAX_NAME_LENGTH}
+            aria-live="polite"
           >
             {viewName.length} / {MAX_NAME_LENGTH}
           </StyledCharCounter>
         </StyledFormGroup>
         <StyledFormGroup>
-          <StyledLabel htmlFor="view-description">
+          <StyledLabel htmlFor="view-form-description">
             {strings.savedContent.description}
           </StyledLabel>
           <StyledTextarea
-            id="view-description"
+            id="view-form-description"
+            name="view-form-description"
             value={viewDescription}
             maxLength={MAX_DESC_LENGTH}
             onChange={handleDescChange}
-            aria-describedby="desc-char-counter"
+            aria-describedby="view-form-desc-counter"
           />
           <StyledCharCounter
-            id="desc-char-counter"
+            id="view-form-desc-counter"
             atMax={viewDescription.length >= MAX_DESC_LENGTH}
+            aria-live="polite"
           >
             {viewDescription.length} / {MAX_DESC_LENGTH}
           </StyledCharCounter>
         </StyledFormGroup>
         {/* Lets not add the geometries just yet
-            <StyledSwitchRow>
-              <Switch
-                checked={includeGeometries}
-                onChange={(e) => setIncludeGeometries(e.target.checked)}
-                color="primary"
-                inputProps={{
-                  'aria-label': strings.savedContent.saveView.includeGeometries
-                }}
-              />
-              <StyledSwitchLabel>
-                {strings.savedContent.saveView.includeGeometries ||
-                  'Tallenna omat geometriat mukaan.'}
-              </StyledSwitchLabel>
-            </StyledSwitchRow>
+          <StyledSwitchRow>
+            <Switch
+              checked={includeGeometries}
+              onChange={(e) => setIncludeGeometries(e.target.checked)}
+              color="primary"
+              inputProps={{
+                'aria-label': strings.savedContent.saveView.includeGeometries
+              }}
+            />
+            <StyledSwitchLabel>
+              {strings.savedContent.saveView.includeGeometries || 'Tallenna omat geometriat mukaan.'}
+            </StyledSwitchLabel>
+          </StyledSwitchRow>
         */}
         <StyledSwitchRow
           style={{
@@ -277,42 +287,52 @@ const ViewForm = ({
             onChange={(e) => setIsDefault(e.target.checked)}
             color="primary"
             inputProps={{
+              id: 'view-form-default-switch',
               'aria-label': isDefault
                 ? strings.savedContent.saveView.defaultView
                 : strings.savedContent.saveView.setDefaultView
             }}
           />
-          <StyledSwitchLabel>
+          <StyledSwitchLabel id="view-form-default-label">
             {isDefault
               ? strings.savedContent.saveView.defaultView
-              : strings.savedContent.saveView.setDefaultView
-              }
+              : strings.savedContent.saveView.setDefaultView}
           </StyledSwitchLabel>
         </StyledSwitchRow>
         {isMobile ? (
           <StyledButtonsRow>
-            <StyledSave type="submit" disabled={!viewName}>
+            <StyledSave
+              id="view-form-submit-btn"
+              type="submit"
+              disabled={!viewName}
+            >
               <FontAwesomeIcon icon={faSave} style={{ marginRight: 12 }} />
-              {isEditing
-                ? strings.savedContent.saveView.saveViewButton
-                : strings.savedContent.saveView.saveViewButton
-                }
+              {strings.savedContent.saveView.saveViewButton}
             </StyledSave>
-            <StyledCancel type="button" onClick={onCancel}>
+            <StyledCancel
+              id="view-form-cancel-btn"
+              type="cancel"
+              onClick={onCancel}
+            >
               {strings.general.cancel}
             </StyledCancel>
           </StyledButtonsRow>
         ) : (
           <StyledButtonsRow>
-            <StyledCancel type="button" onClick={onCancel}>
+            <StyledCancel
+              id="view-form-cancel-btn"
+              type="cancel"
+              onClick={onCancel}
+            >
               {strings.general.cancel}
             </StyledCancel>
-            <StyledSave type="submit" disabled={!viewName}>
+            <StyledSave
+              id="view-form-submit-btn"
+              type="submit"
+              disabled={!viewName}
+            >
               <FontAwesomeIcon icon={faSave} style={{ marginRight: 12 }} />
-              {isEditing
-                ? strings.savedContent.saveView.saveViewButton
-                : strings.savedContent.saveView.saveViewButton
-                }
+              {strings.savedContent.saveView.saveViewButton}
             </StyledSave>
           </StyledButtonsRow>
         )}
