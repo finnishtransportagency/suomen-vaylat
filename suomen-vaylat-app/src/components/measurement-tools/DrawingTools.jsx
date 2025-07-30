@@ -20,7 +20,8 @@ import {
   setIsSaveViewOpen,
   setSavedTabIndex,
   setGeoJsonArray,
-  removeFromDrawToolMarkers
+  removeFromDrawToolMarkers,
+  setShowSavedContentGeometryForm
 } from '../../state/slices/uiSlice';
 import { removeMarkerRequest } from '../../state/slices/rpcSlice';
 
@@ -115,8 +116,9 @@ export const DrawingTools = ({ isOpen }) => {
   };
 
   const handleAddGeometry = () => {
-    store.dispatch(setIsSaveViewOpen(true));
+    store.dispatch(setShowSavedContentGeometryForm(true));
     store.dispatch(setSavedTabIndex(1));
+    store.dispatch(setIsSaveViewOpen(true));
   };
 
   const drawingToolsData = [

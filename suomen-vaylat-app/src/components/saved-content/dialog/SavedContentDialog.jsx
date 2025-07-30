@@ -4,8 +4,9 @@ import { faSave } from '@fortawesome/free-solid-svg-icons';
 import { useAppSelector } from "../../../state/hooks";
 import strings from "../../../translations";
 import SavedContent from "../SavedContent";
-import { setIsSaveViewOpen } from "../../../state/slices/uiSlice";
+import { setIsSaveViewOpen, setSavedTabIndex, setShowSavedContentViewForm, setShowSavedContentGeometryForm } from "../../../state/slices/uiSlice";
 import { ReactReduxContext } from "react-redux";
+import { theme } from "../../../theme/theme";
 
 const SavedContentDialog = ({ constraintsRef }) => {
   const { isSaveViewOpen } = useAppSelector((state) => state.ui);
@@ -13,6 +14,9 @@ const SavedContentDialog = ({ constraintsRef }) => {
 
   const handleCloseSaveViewDialog = () => {
     store.dispatch(setIsSaveViewOpen(false));
+    store.dispatch(setShowSavedContentGeometryForm(false));
+    store.dispatch(setShowSavedContentViewForm(false));
+    store.dispatch(setSavedTabIndex(0));
   };
 
   const viewHelp = () => (
@@ -21,6 +25,8 @@ const SavedContentDialog = ({ constraintsRef }) => {
       <li>{strings.savedContent.saveView.saveViewDescription2}</li>
     </ul>
   );
+
+  const isLowResScreen = window.matchMedia(theme.device.lowResDesktop).matches;
 
   return (
     <Dialog
@@ -36,6 +42,7 @@ const SavedContentDialog = ({ constraintsRef }) => {
       isOpen={isSaveViewOpen}
       id="saved_content_dialog"
       minWidth={"600px"}
+      minHeight={isLowResScreen ? "600px" : "700px"}
       hasHelp={true}
       helpId={"show_view_help"}
       helpContent={viewHelp()}
