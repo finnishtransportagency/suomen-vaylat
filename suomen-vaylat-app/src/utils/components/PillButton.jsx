@@ -7,9 +7,9 @@ const StyledPillButton = styled.button`
   justify-content: flex-start;
   gap: 10px;
   background-color: ${(props) =>
-    props.disabled ? props.theme.colors.disabledBg : props.color || props.theme.colors.button};
+    props.disabled ? props.theme.colors.disabledBg : props.color || props.theme.colors.button} !important;
   color: ${(props) =>
-    props.disabled ? props.theme.colors.disabledColor : props.theme.colors.mainWhite};
+    props.disabled ? props.theme.colors.disabledColor : props.theme.colors.mainWhite} !important;
   border: none;
   border-radius: 30px;
   padding: 8px 16px;
@@ -24,6 +24,8 @@ const StyledPillButton = styled.button`
     width: 16px !important;
     height: 16px !important;
     opacity: ${({ disabled }) => (disabled ? 0.5 : 1)};
+    color: ${(props) =>
+    props.disabled ? props.theme.colors.disabledColor : props.iconColor || props.theme.colors.button} !important;
   }
 
   @media ${({ theme }) => theme.device.mobileL} {
@@ -46,7 +48,8 @@ const PillButton = ({
   onClick,
   disabled,
   color,
-  hoverColor
+  hoverColor,
+  iconColor
 }) => {
   return (
     <StyledPillButton
@@ -55,6 +58,7 @@ const PillButton = ({
       disabled={disabled}
       color={color}
       hoverColor={hoverColor}
+      iconColor={iconColor}
     >
       {typeof icon === 'string' && icon.endsWith('.svg') ? (
         <img src={icon} alt="icon" />

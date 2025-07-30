@@ -1,11 +1,12 @@
 import styled from 'styled-components';
-import { faUser, faAngleDown, faQuestion, faInfoCircle, faArrowRightFromBracket, faIdBadge } from '@fortawesome/free-solid-svg-icons';
+import { faUser, faAngleDown, faQuestion, faInfoCircle, faArrowRightFromBracket, faIdBadge, faAngleUp } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { useRef, useState, useContext, useEffect } from 'react';
 import { useAppSelector } from '../../state/hooks';
 import { ReactReduxContext } from 'react-redux';
 import strings from '../../translations';
+import PillButton from '../../utils/components/PillButton';
 
 const useOnClickOutside = (ref, handler) => {
   useEffect(() => {
@@ -68,34 +69,50 @@ const DropdownMenuItem = styled.li`
   background: none;
   color: ${(props) => props.theme.colors.black};
   cursor: pointer;
-  white-space: nowrap;           /* Add this line */
+  white-space: nowrap;
+  transition: background 0.15s;
+  border-radius: 0;
 
-  &:hover {
-    background: ${(props) => props.theme.colors.lightGrey || "#F4F7FA"};
+  &:hover, &:focus {
+    background: ${(props) => props.theme.colors.hover};
     color: ${(props) => props.theme.colors.mainColor1};
     outline: none;
   }
+
+  &.logout {
+    justify-content: center;
+    padding-top: 18px;
+    padding-bottom: 18px;
+    background: none;
+    &:hover {
+      background: none;
+      color: ${(props) => props.theme.colors.black};
+    }
+  }
+
   svg, .MuiSvgIcon-root {
     color: ${(props) => props.theme.colors.mainColor1};
     min-width: 21px;
     min-height: 21px;
     font-size: 20px;
-    flex-shrink: 0;           /* Prevent icon from shrinking */
-    display: inline-block;    /* Ensure icon is in-row */
-    vertical-align: middle;   /* Vertically align with text */
+    flex-shrink: 0;
+    display: inline-block;
+    vertical-align: middle;
   }
   span {
-    display: inline-block;    /* Menu text stays in-line */
+    display: inline-block;
     vertical-align: middle;
   }
 `;
+
+
 
 
 const MenuDivider = styled.hr`
   border: none;
   height: 1px;
   background: ${(props) => props.theme.colors.lightGrey || "#eee"};
-  margin: 6px 5px;
+  margin: 0px 5px;
 `;
 
 const ProfileNameSpan = styled.span`
@@ -108,9 +125,9 @@ const ProfileNameSpan = styled.span`
 
 // Component - clean menu
 const ProfileDropdown = ({ languageLabel }) => {
-  const [open, setOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const ref = useRef();
-  useOnClickOutside(ref, () => setOpen(false));
+  useOnClickOutside(ref, () => setIsOpen(false));
   const { store } = useContext(ReactReduxContext);
 
   const { isInfoOpen, isUserGuideOpen } = useAppSelector((state) => state.ui);
@@ -118,12 +135,12 @@ const ProfileDropdown = ({ languageLabel }) => {
   // Menu actions
   const handleUserGuide = () => {
     store.dispatch({ type: 'ui/setIsUserGuideOpen', payload: !isUserGuideOpen });
-    setOpen(false);
+    setIsOpen(false);
   };
 
   const handleInfo = () => {
     store.dispatch({ type: 'ui/setIsInfoOpen', payload: !isInfoOpen });
-    setOpen(false);
+    setIsOpen(false);
   };
 
   return (
@@ -131,17 +148,18 @@ const ProfileDropdown = ({ languageLabel }) => {
       <ProfileNameSpan>{languageLabel}</ProfileNameSpan>
       <ProfileButton
         aria-haspopup="menu"
-        aria-expanded={open}
+        aria-expanded={isOpen}
         aria-controls="header-profile-dropdown"
         id="header-profile-btn"
         tabIndex={0}
-        onClick={() => setOpen((v) => !v)}
+        onClick={() => setIsOpen((v) => !v)}
         title={strings.accessibility?.openProfileMenu || "Open profile menu"}
       >
         <AccountCircleIcon fontSize="large" />
-        <FontAwesomeIcon style={{ marginLeft: "6px", fontSize: "19px" }} icon={faAngleDown} />
+        <FontAwesomeIcon style={{ marginLeft: "6px", fontSize: "19px" }}  icon={isOpen ? faAngleUp : faAngleDown}
+/>
       </ProfileButton>
-      {open && (
+      {isOpen && (
         <DropdownMenu
           id="header-profile-dropdown"
           role="menu"
@@ -170,10 +188,17 @@ const ProfileDropdown = ({ languageLabel }) => {
             {strings.tooltips.pageInfo || "Sovelluksen tiedot"}
           </DropdownMenuItem>
           <MenuDivider />
-          <DropdownMenuItem role="menuitem" tabIndex={0}>
-            <FontAwesomeIcon icon={faArrowRightFromBracket} />
-            {strings.menu?.logout || "Log out"}
-          </DropdownMenuItem>
+<DropdownMenuItem className="logout" role="menuitem" tabIndex={0}>
+  <PillButton
+    id="profile-dropdown-logout-btn"
+    icon={faArrowRightFromBracket}
+    iconColor={"#FFF"} // <-- add this prop and handle in PillButton
+    text={"Kirjaudu ulos"}
+    onClick={() => alert("kirjaudu ulos")}
+    aria-label={"Kirjaudu ulos"}
+  />
+</DropdownMenuItem>
+
         </DropdownMenu>
       )}
     </ProfileDropdownContainer>
