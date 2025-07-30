@@ -12,6 +12,7 @@ import {
 import { Swiper, SwiperSlide } from 'swiper/react';
 import ViewsTab from './ViewsTab';
 import GeometriesTab from './GeometriesTab';
+import ProfileTab from './ProfileTab';
 
 // -- Styled Components (unchanged unless noted) --
 const StyledContent = styled.div`
@@ -101,6 +102,11 @@ export const SavedContent = () => {
     const { store } = useContext(ReactReduxContext);
     const { savedTabIndex } = useAppSelector((state) => state.ui);
     const tabsContent = [
+        {
+            title: strings.savedContent.profileTitle,
+            titleColor: 'mainColor1',
+            content: <ProfileTab/>
+        },
         {
             title: strings.savedContent.viewTitle,
             titleColor: 'mainColor1',

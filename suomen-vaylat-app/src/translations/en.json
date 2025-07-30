@@ -53,6 +53,7 @@
   },
   "savedContent" : {
     "savedContent" : "My data",
+    "profileTitle": "Profile",
     "viewTitle" : "Views",
     "geometryTitle" : "Geometries",
     "description": "Description",
