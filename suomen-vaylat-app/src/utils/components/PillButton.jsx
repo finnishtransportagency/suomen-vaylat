@@ -25,7 +25,7 @@ const StyledPillButton = styled.button`
     height: 16px !important;
     opacity: ${({ disabled }) => (disabled ? 0.5 : 1)};
     color: ${(props) =>
-    props.disabled ? props.theme.colors.disabledColor : props.iconColor || props.theme.colors.button} !important;
+    props.disabled ? props.theme.colors.disabledColor : props.iconColor || props.theme.colors.mainWhite} !important;
   }
 
   @media ${({ theme }) => theme.device.mobileL} {
