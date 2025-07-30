@@ -4,7 +4,7 @@ import { faSave } from '@fortawesome/free-solid-svg-icons';
 import { useAppSelector } from "../../../state/hooks";
 import strings from "../../../translations";
 import SavedContent from "../SavedContent";
-import { setIsSaveViewOpen, setSavedTabIndex, setShowSavedContentViewForm, setShowSavedContentGeometryForm } from "../../../state/slices/uiSlice";
+import { setIsSaveViewOpen, setSavedTab, setShowSavedContentViewForm, setShowSavedContentGeometryForm } from "../../../state/slices/uiSlice";
 import { ReactReduxContext } from "react-redux";
 import { theme } from "../../../theme/theme";
 
@@ -16,7 +16,7 @@ const SavedContentDialog = ({ constraintsRef }) => {
     store.dispatch(setIsSaveViewOpen(false));
     store.dispatch(setShowSavedContentGeometryForm(false));
     store.dispatch(setShowSavedContentViewForm(false));
-    store.dispatch(setSavedTabIndex(0));
+    store.dispatch(setSavedTab(null));
   };
 
   const viewHelp = () => (

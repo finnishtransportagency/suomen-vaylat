@@ -35,10 +35,11 @@ import { ReactComponent as VaylaLogoMobile } from './images/vayla_v_white.svg';
 import MenuIcon from '@mui/icons-material/Menu';
 import { ReactComponent as VaylaLogo } from './images/vayla_sivussa_fi_sv_white.svg';
 import { updateLayers } from '../../utils/rpcUtil';
-import ProfileDropdown from './ProfileDropdown';
+import DesktopNav from './navigation/DesktopNav';
 
 import { createBrowserHistory } from 'history';
 import PillButton from '../../utils/components/PillButton';
+import MobileNav from './navigation/MobileNav';
 const history = createBrowserHistory();
 
 const StyledHeaderContainer = styled.div`
@@ -423,7 +424,7 @@ export const Header = () => {
           {/* Desktop profile/language dropdown */}
           <DesktopButtons id="header-desktop-buttons" aria-label={strings.accessibility.desktopButtons}>
             <LanguageSelector />
-            <ProfileDropdown/>
+            <DesktopNav/>
           </DesktopButtons>
 
           {/* Mobile menu toggle remains the same */}
@@ -439,117 +440,13 @@ export const Header = () => {
           </StyledHeaderButton>
         </HeaderRight>
 
+    <AnimatePresence>
 
-        <AnimatePresence>
-          {isSubNavOpen && (
-            <StyledMobileNavContainer 
-              id="header-mobile-nav-container"
-              initial={{ y: -100, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              exit={{ y: -100, opacity: 0 }}
-              transition={{ duration: 0.3 }}
-              aria-label={strings.accessibility.mobileNavigation}
-            >
-              <StyledMobileHeaderRow 
-                id="header-mobile-header-row" 
-                role="banner"
-                aria-label={strings.accessibility.mobileHeader}
-              >
-                <StyledHeaderLogoContainer id="header-mobile-header-logo-container">
-                  <VaylaLogoMobile aria-hidden="true" focusable="false"/>
-                </StyledHeaderLogoContainer>
+        {isSubNavOpen &&
+          <MobileNav setSubNavOpen={setSubNavOpen}></MobileNav>
+        }
+            </AnimatePresence>
 
-                <StyledMobileMenuTitle 
-                  id="header-mobile-menu-title"
-                  aria-hidden="true"
-                >
-                  {strings.title}
-                </StyledMobileMenuTitle>
-
-                <StyledHeaderButton 
-                  id="header-mobile-close-button"
-                  onClick={() => setSubNavOpen(false)}
-                  aria-label={strings.accessibility.closeMenu}
-                >
-                  <FontAwesomeIcon icon={faTimes} aria-hidden="true" focusable="false"/>
-                </StyledHeaderButton>
-              </StyledMobileHeaderRow>
-
-              <MobileMenuList 
-                id="header-mobile-menu-list" 
-                aria-label={strings.accessibility.mobileMenu}
-              >
-                <StyledMobileMenuButton 
-                  id="header-mobile-profile-button"
-                  onClick={() => store.dispatch(setIsSaveViewOpen(true))}
-                  aria-label={strings.tooltips.profile}
-                  aria-haspopup="true"
-                >
-                  <div className="icon-wrapper" id="header-user-guide-icon-wrapper">
-                    <AccountCircleIcon />
-                  </div>
-                  <div className="text-wrapper">
-                    {strings.tooltips.profile}
-                  </div>
-                </StyledMobileMenuButton>
-
-                <StyledMobileMenuButton 
-                  id="header-mobile-user-guide-button"
-                  onClick={() => store.dispatch(setIsUserGuideOpen(true))}
-                  aria-label={strings.tooltips.userGuide}
-                  aria-haspopup="true"
-                >
-                  <div className="icon-wrapper" id="header-user-guide-icon-wrapper">
-                    <FontAwesomeIcon icon={faQuestion} aria-hidden="true" focusable="false"/>
-                  </div>
-                  <div className="text-wrapper">
-                    {strings.tooltips.userGuide}
-                  </div>
-                </StyledMobileMenuButton>
-
-                <StyledMobileMenuButton 
-                  id="header-mobile-info-button"
-                  onClick={() => store.dispatch(setIsInfoOpen(true))}
-                  aria-label={strings.tooltips.pageInfo}
-                  aria-haspopup="true"
-                >
-                  <div className="icon-wrapper" id="header-info-icon-wrapper">
-                    <FontAwesomeIcon icon={faInfoCircle} aria-hidden="true" focusable="false"/>
-                  </div>
-                  <div className="text-wrapper">
-                    {strings.tooltips.pageInfo}
-                  </div>
-                </StyledMobileMenuButton>
-
-                <StyledMobileMenuButton 
-                  id="header-mobile-language-button"
-                  aria-label={strings.accessibility.languageSelect}
-                >
-                  <div className="icon-wrapper" id="header-language-icon-wrapper">
-                    <FontAwesomeIcon icon={faGlobe} aria-hidden="true" focusable="false"/>
-                  </div>
-                  <div className="text-wrapper" id="header-language-selector-wrapper">
-                    <HiddenLanguageIconWrapper>
-                      <LanguageSelector />
-                    </HiddenLanguageIconWrapper>
-                  </div>
-                </StyledMobileMenuButton>
-
-                <StyledMobileMenuButton 
-                  id="header-mobile-sign-out-button"
-                  aria-label={strings.signOut}
-                >
-                  <div className="icon-wrapper" id="header-sign-out-icon-wrapper">
-                    <FontAwesomeIcon icon={faArrowRightFromBracket} aria-hidden="true" focusable="false"/>
-                  </div>
-                  <div className="text-wrapper" id="header-sign-out-selector-wrapper">
-                    {strings.signOut}
-                  </div>
-                </StyledMobileMenuButton>
-              </MobileMenuList>
-            </StyledMobileNavContainer>
-          )}
-        </AnimatePresence>
       </StyledHeaderContainer>
     </>
   );

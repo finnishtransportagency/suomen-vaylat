@@ -11,11 +11,15 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { useRef, useState, useContext, useEffect } from 'react';
-import { useAppSelector } from '../../state/hooks';
+import { useAppSelector } from '../../../state/hooks';
 import { ReactReduxContext } from 'react-redux';
-import strings from '../../translations';
-import PillButton from '../../utils/components/PillButton';
-import { setIsInfoOpen, setIsSaveViewOpen, setIsUserGuideOpen } from '../../state/slices/uiSlice';
+import strings from '../../../translations';
+import PillButton from '../../../utils/components/PillButton';
+import {
+  setIsInfoOpen,
+  setIsSaveViewOpen,
+  setIsUserGuideOpen
+} from '../../../state/slices/uiSlice';
 
 const useOnClickOutside = (ref, handler) => {
   useEffect(() => {
@@ -32,7 +36,7 @@ const useOnClickOutside = (ref, handler) => {
   }, [ref, handler]);
 };
 
-const ProfileDropdownContainer = styled.div`
+const DesktopNavContainer = styled.div`
   display: flex;
   align-items: center;
 `;
@@ -132,8 +136,9 @@ const ProfileNameSpan = styled.span`
 `;
 
 // Component - clean menu
-const ProfileDropdown = ({ languageLabel }) => {
+const DesktopNav = ({ languageLabel }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const { isLoggedIn } = useAppSelector((state) => state.rpc);
   const ref = useRef();
   useOnClickOutside(ref, () => setIsOpen(false));
   const { store } = useContext(ReactReduxContext);
@@ -155,7 +160,7 @@ const ProfileDropdown = ({ languageLabel }) => {
   };
 
   return (
-    <ProfileDropdownContainer ref={ref}>
+    <DesktopNavContainer ref={ref}>
       <ProfileNameSpan>{languageLabel}</ProfileNameSpan>
       <ProfileButton
         aria-haspopup="menu"
@@ -182,7 +187,7 @@ const ProfileDropdown = ({ languageLabel }) => {
             role="menuitem"
             tabIndex={0}
             onClick={handleProfile}
-            aria-label={"Profiili"}
+            aria-label={'Profiili'}
           >
             <AccountCircleIcon />
             {strings.savedContent?.savedContent}
@@ -205,21 +210,25 @@ const ProfileDropdown = ({ languageLabel }) => {
             <FontAwesomeIcon icon={faInfoCircle} />
             {strings.tooltips.pageInfo}
           </DropdownMenuItem>
-          <MenuDivider />
-          <DropdownMenuItem className="logout" role="menuitem" tabIndex={0}>
-            <PillButton
-              id="profile-dropdown-logout-btn"
-              icon={faArrowRightFromBracket}
-              iconColor={'#FFF'} // <-- add this prop and handle in PillButton
-              text={strings.signOut}
-              onClick={() => alert('kirjaudu ulos')}
-              aria-label={strings.signOut}
-            />
-          </DropdownMenuItem>
+          {isLoggedIn && (
+            <>
+              <MenuDivider />
+              <DropdownMenuItem className="logout" role="menuitem" tabIndex={0}>
+                <PillButton
+                  id="profile-dropdown-logout-btn"
+                  icon={faArrowRightFromBracket}
+                  iconColor={'#FFF'} // <-- add this prop and handle in PillButton
+                  text={strings.signOut}
+                  onClick={() => alert('kirjaudu ulos')}
+                  aria-label={strings.signOut}
+                />
+              </DropdownMenuItem>
+            </>
+          )}
         </DropdownMenu>
       )}
-    </ProfileDropdownContainer>
+    </DesktopNavContainer>
   );
 };
 
-export default ProfileDropdown;
+export default DesktopNav;

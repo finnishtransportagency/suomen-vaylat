@@ -18,7 +18,7 @@ import strings from '../../translations';
 import {
   setActiveTool,
   setIsSaveViewOpen,
-  setSavedTabIndex,
+  setSavedTab,
   setGeoJsonArray,
   removeFromDrawToolMarkers,
   setShowSavedContentGeometryForm
@@ -117,7 +117,7 @@ export const DrawingTools = ({ isOpen }) => {
 
   const handleAddGeometry = () => {
     store.dispatch(setShowSavedContentGeometryForm(true));
-    store.dispatch(setSavedTabIndex(1));
+    store.dispatch(setSavedTab("geometry"));
     store.dispatch(setIsSaveViewOpen(true));
   };
 

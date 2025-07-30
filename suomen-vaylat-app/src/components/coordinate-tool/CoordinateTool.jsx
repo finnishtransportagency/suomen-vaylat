@@ -13,7 +13,7 @@ import {
 import {
   addToDrawToolMarkers,
   setIsSaveViewOpen,
-  setSavedTabIndex,
+  setSavedTab,
   setShowSavedContentGeometryForm
 } from '../../state/slices/uiSlice';
 import { theme } from '../../theme/theme';
@@ -257,7 +257,7 @@ const CoordinateTool = () => {
 
   const handleSaveMarkers = () => {
     store.dispatch(setIsSaveViewOpen(true));
-    store.dispatch(setSavedTabIndex(1));
+    store.dispatch(setSavedTab("geometry"));
     store.dispatch(setShowSavedContentGeometryForm(true));
   };
 

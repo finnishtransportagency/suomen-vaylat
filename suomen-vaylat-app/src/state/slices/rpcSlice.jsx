@@ -62,7 +62,8 @@ const initialState = {
   featureSearchResults: [],
   searchOn: null,
   coordMarkerIndex: 0,
-  views: null
+  views: null,
+  isLoggedIn: false,
 };
 
 export const rpcSlice = createSlice({
@@ -955,6 +956,10 @@ export const rpcSlice = createSlice({
     setViews: (state, action) => {
       state.views = action.payload;
     },
+
+    setIsLoggedIn: (state, action) => {
+      state.isLoggedIn = action.payload;
+    },
   },
 });
 
@@ -1023,7 +1028,8 @@ export const {
   searchVKMTrack,
   setAnnouncements,
   setCoordMarkerIndex,
-  setViews
+  setViews,
+  setIsLoggedIn
 } = rpcSlice.actions;
 
 export default rpcSlice.reducer;

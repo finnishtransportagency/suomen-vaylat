@@ -20,7 +20,7 @@ const initialState = {
   isInfoOpen: false,
   geoJsonArray: [],
   isSavedOpen: false,
-  savedTabIndex: 0,
+  savedTab: null,
   isChecked: false,
   isUserGuideOpen: false,
   isCustomFilterOpen: false,
@@ -130,8 +130,8 @@ export const uiSlice = createSlice({
         state.geoJsonArray[duplicateIndex] = action.payload;
       else state.geoJsonArray.push(action.payload);
     },
-    setSavedTabIndex: (state, action) => {
-      state.savedTabIndex = action.payload;
+    setSavedTab: (state, action) => {
+      state.savedTab = action.payload;
     },
     setIsSavedOpen: (state, action) => {
       state.isSavedOpen = action.payload;
@@ -346,7 +346,7 @@ export const {
   setGeoJsonArray,
   addToGeoJsonArray,
   setIsSavedOpen,
-  setSavedTabIndex,
+  setSavedTab,
   setHasToastBeenShown,
   setSelectedMarker,
   addToDrawToolMarkers,
