@@ -15,11 +15,10 @@ const StyledLanguageSelector = styled.div`
 
 const LanguageText = styled.span`
   font-family: inherit;
-  font-weight: 600;
-  font-size: 18px;
+  font-weight: 500;
+  font-size: 1.5em;
   color: ${(props) => props.theme.colors.mainWhite};
   text-transform: uppercase;
-  pointer-events: none;
 `;
 
 const LanguageSelect = styled.select`
@@ -55,18 +54,18 @@ export const LanguageSelector = () => {
 
     return (
         <StyledLanguageSelector>
-        <LanguageText>{lang.current}</LanguageText>
-        <LanguageSelect
-          value={lang.current}
-          onChange={(e) => redirect('lang', e.target.value)}
-          aria-label={strings.accessibility.langSelect}
-        >
-          {strings.getAvailableLanguages().map((value) => (
-            <option key={value} value={value}>
-              {strings.getString('language.languageSelection.' + value)}
-            </option>
-          ))}
-        </LanguageSelect>
+          <LanguageText>{lang.current.toUpperCase()}</LanguageText>
+          <LanguageSelect
+            value={lang.current}
+            onChange={(e) => redirect('lang', e.target.value)}
+            aria-label={strings.accessibility.langSelect}
+          >
+            {strings.getAvailableLanguages().map((value) => (
+              <option key={value} value={value}>
+                {strings.getString('language.languageSelection.' + value)}
+              </option>
+            ))}
+          </LanguageSelect>
       </StyledLanguageSelector>
     );
  }

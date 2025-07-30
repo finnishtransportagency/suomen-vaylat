@@ -32,6 +32,7 @@ import { ReactComponent as VaylaLogoMobile } from './images/vayla_v_white.svg';
 import MenuIcon from '@mui/icons-material/Menu';
 import { ReactComponent as VaylaLogo } from './images/vayla_sivussa_fi_sv_white.svg';
 import { updateLayers } from '../../utils/rpcUtil';
+import ProfileDropdown from './ProfileDropdown';
 
 import { createBrowserHistory } from 'history';
 const history = createBrowserHistory();
@@ -228,6 +229,7 @@ const StyledMobileMenuButton = styled.button`
 
 const DesktopButtons = styled.div`
   display: flex;
+  align-items: center;
   gap: 4px;
   @media ${(props) => props.theme.device.mobileL} {
     display: none;
@@ -414,35 +416,15 @@ export const Header = () => {
 
         {/* Right blue corner */}
         <HeaderRight id="header-right">
-          {/* Desktop buttons */}
+          {/* Desktop profile/language dropdown */}
           <DesktopButtons id="header-desktop-buttons" aria-label={strings.accessibility.desktopButtons}>
             <LanguageSelector />
-            <StyledHeaderButton 
-              id="header-user-guide-button"
-              data-tip
-              data-for="header-show-user-guide-tooltip"
-              onClick={() =>
-                store.dispatch(setIsUserGuideOpen(!isUserGuideOpen))
-              }
-              aria-label={strings.tooltips.showUserGuide}
-              aria-haspopup="true"
-            >
-              <FontAwesomeIcon icon={faQuestion} aria-hidden="true" focusable="false"/>
-            </StyledHeaderButton>
-            <StyledHeaderButton 
-              id="header-info-button"
-              data-tip
-              data-for="header-show-info-tooltip"
-              onClick={() => store.dispatch(setIsInfoOpen(!isInfoOpen))}
-              aria-label={strings.tooltips.showPageInfo}
-              aria-haspopup="true"
-            >
-              <FontAwesomeIcon icon={faInfoCircle} aria-hidden="true" focusable="false"/>
-            </StyledHeaderButton>
+            <ProfileDropdown/>
           </DesktopButtons>
 
-          <StyledHeaderButton 
-            id="header-menu-toggle-button" 
+          {/* Mobile menu toggle remains the same */}
+          <StyledHeaderButton
+            id="header-menu-toggle-button"
             className="menu-toggle-button"
             onClick={() => setSubNavOpen(!isSubNavOpen)}
             aria-label={strings.accessibility.menuToggle}
@@ -452,6 +434,7 @@ export const Header = () => {
             <MenuIcon aria-hidden="true" focusable="false"/>
           </StyledHeaderButton>
         </HeaderRight>
+
 
         <AnimatePresence>
           {isSubNavOpen && (
