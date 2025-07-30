@@ -173,6 +173,7 @@ export const DrawingTools = ({ isOpen }) => {
         if (tool.id === 'marker') {
           return (
             <PillButton
+              key={tool.id}
               id={'drawing-tools-add-marker'}
               icon={tool.style.icon}
               onClick={() => addMarker(tool)}
