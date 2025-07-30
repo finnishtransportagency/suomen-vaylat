@@ -3,14 +3,18 @@ import { useAppSelector } from '../../state/hooks';
 import strings from '../../translations';
 
 const StyledLanguageSelector = styled.div`
-  width: 40px;
-  height: 40px;
+  width: auto;
+  height: auto;
   display: flex;
   justify-content: center;
   align-items: center;
   border-radius: 50%;
   background-color: transparent;
   position: relative;
+  margin-left: 1em;
+  @media ${(props) => props.theme.device.mobileL} {
+    margin-left: 0px;
+  }
 `;
 
 const LanguageText = styled.span`
