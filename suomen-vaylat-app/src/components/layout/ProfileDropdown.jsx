@@ -1,5 +1,13 @@
 import styled from 'styled-components';
-import { faUser, faAngleDown, faQuestion, faInfoCircle, faArrowRightFromBracket, faIdBadge, faAngleUp } from '@fortawesome/free-solid-svg-icons';
+import {
+  faUser,
+  faAngleDown,
+  faQuestion,
+  faInfoCircle,
+  faArrowRightFromBracket,
+  faIdBadge,
+  faAngleUp
+} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { useRef, useState, useContext, useEffect } from 'react';
@@ -7,6 +15,7 @@ import { useAppSelector } from '../../state/hooks';
 import { ReactReduxContext } from 'react-redux';
 import strings from '../../translations';
 import PillButton from '../../utils/components/PillButton';
+import { setIsInfoOpen, setIsSaveViewOpen, setIsUserGuideOpen } from '../../state/slices/uiSlice';
 
 const useOnClickOutside = (ref, handler) => {
   useEffect(() => {
@@ -14,11 +23,11 @@ const useOnClickOutside = (ref, handler) => {
       if (!ref.current || ref.current.contains(event.target)) return;
       handler(event);
     };
-    document.addEventListener("mousedown", listener);
-    document.addEventListener("touchstart", listener);
+    document.addEventListener('mousedown', listener);
+    document.addEventListener('touchstart', listener);
     return () => {
-      document.removeEventListener("mousedown", listener);
-      document.removeEventListener("touchstart", listener);
+      document.removeEventListener('mousedown', listener);
+      document.removeEventListener('touchstart', listener);
     };
   }, [ref, handler]);
 };
@@ -52,7 +61,7 @@ const DropdownMenu = styled.ul`
   background: ${(props) => props.theme.colors.mainWhite};
   color: ${(props) => props.theme.colors.black};
   border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.13);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.13);
   margin: 0;
   padding: 0;
   z-index: 4000;
@@ -73,7 +82,8 @@ const DropdownMenuItem = styled.li`
   transition: background 0.15s;
   border-radius: 0;
 
-  &:hover, &:focus {
+  &:hover,
+  &:focus {
     background: ${(props) => props.theme.colors.hover};
     color: ${(props) => props.theme.colors.mainColor1};
     outline: none;
@@ -90,7 +100,8 @@ const DropdownMenuItem = styled.li`
     }
   }
 
-  svg, .MuiSvgIcon-root {
+  svg,
+  .MuiSvgIcon-root {
     color: ${(props) => props.theme.colors.mainColor1};
     min-width: 21px;
     min-height: 21px;
@@ -105,13 +116,10 @@ const DropdownMenuItem = styled.li`
   }
 `;
 
-
-
-
 const MenuDivider = styled.hr`
   border: none;
   height: 1px;
-  background: ${(props) => props.theme.colors.lightGrey || "#eee"};
+  background: ${(props) => props.theme.colors.lightGrey || '#eee'};
   margin: 0px 5px;
 `;
 
@@ -130,16 +138,19 @@ const ProfileDropdown = ({ languageLabel }) => {
   useOnClickOutside(ref, () => setIsOpen(false));
   const { store } = useContext(ReactReduxContext);
 
-  const { isInfoOpen, isUserGuideOpen } = useAppSelector((state) => state.ui);
-
   // Menu actions
+  const handleProfile = () => {
+    store.dispatch(setIsSaveViewOpen(true));
+    setIsOpen(false);
+  };
+
   const handleUserGuide = () => {
-    store.dispatch({ type: 'ui/setIsUserGuideOpen', payload: !isUserGuideOpen });
+    store.dispatch(setIsUserGuideOpen(true));
     setIsOpen(false);
   };
 
   const handleInfo = () => {
-    store.dispatch({ type: 'ui/setIsInfoOpen', payload: !isInfoOpen });
+    store.dispatch(setIsInfoOpen(true));
     setIsOpen(false);
   };
 
@@ -153,11 +164,13 @@ const ProfileDropdown = ({ languageLabel }) => {
         id="header-profile-btn"
         tabIndex={0}
         onClick={() => setIsOpen((v) => !v)}
-        title={strings.accessibility?.openProfileMenu || "Open profile menu"}
+        title={strings.accessibility?.openProfileMenu}
       >
         <AccountCircleIcon fontSize="large" />
-        <FontAwesomeIcon style={{ marginLeft: "6px", fontSize: "19px" }}  icon={isOpen ? faAngleUp : faAngleDown}
-/>
+        <FontAwesomeIcon
+          style={{ marginLeft: '6px', fontSize: '19px' }}
+          icon={isOpen ? faAngleUp : faAngleDown}
+        />
       </ProfileButton>
       {isOpen && (
         <DropdownMenu
@@ -165,9 +178,14 @@ const ProfileDropdown = ({ languageLabel }) => {
           role="menu"
           aria-labelledby="header-profile-btn"
         >
-          <DropdownMenuItem role="menuitem" tabIndex={0}>
-            <AccountCircleIcon/>
-            {strings.menu?.profile || "Omat tiedot"}
+          <DropdownMenuItem
+            role="menuitem"
+            tabIndex={0}
+            onClick={handleProfile}
+            aria-label={"Profiili"}
+          >
+            <AccountCircleIcon />
+            {strings.savedContent?.savedContent}
           </DropdownMenuItem>
           <DropdownMenuItem
             role="menuitem"
@@ -176,7 +194,7 @@ const ProfileDropdown = ({ languageLabel }) => {
             aria-label={strings.tooltips.showUserGuide}
           >
             <FontAwesomeIcon icon={faQuestion} />
-            {strings.tooltips.userGuide || "Käyttöohjeet"}
+            {strings.tooltips.userGuide}
           </DropdownMenuItem>
           <DropdownMenuItem
             role="menuitem"
@@ -185,20 +203,19 @@ const ProfileDropdown = ({ languageLabel }) => {
             aria-label={strings.tooltips.showPageInfo}
           >
             <FontAwesomeIcon icon={faInfoCircle} />
-            {strings.tooltips.pageInfo || "Sovelluksen tiedot"}
+            {strings.tooltips.pageInfo}
           </DropdownMenuItem>
           <MenuDivider />
-<DropdownMenuItem className="logout" role="menuitem" tabIndex={0}>
-  <PillButton
-    id="profile-dropdown-logout-btn"
-    icon={faArrowRightFromBracket}
-    iconColor={"#FFF"} // <-- add this prop and handle in PillButton
-    text={"Kirjaudu ulos"}
-    onClick={() => alert("kirjaudu ulos")}
-    aria-label={"Kirjaudu ulos"}
-  />
-</DropdownMenuItem>
-
+          <DropdownMenuItem className="logout" role="menuitem" tabIndex={0}>
+            <PillButton
+              id="profile-dropdown-logout-btn"
+              icon={faArrowRightFromBracket}
+              iconColor={'#FFF'} // <-- add this prop and handle in PillButton
+              text={strings.signOut}
+              onClick={() => alert('kirjaudu ulos')}
+              aria-label={strings.signOut}
+            />
+          </DropdownMenuItem>
         </DropdownMenu>
       )}
     </ProfileDropdownContainer>

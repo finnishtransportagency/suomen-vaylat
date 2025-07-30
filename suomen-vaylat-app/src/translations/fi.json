@@ -8,7 +8,9 @@
   },
   "title": "Suomen väylät",
   "extranet": "EXTRANET",
+  "signOut": "Kirjaudu ulos",
   "tooltips": {
+    "profile": "Omat tiedot",
     "showInfoLink": "Suodatus info (avautuu uuteen välilehteen)",
     "layerlist": {
       "newLayer": "Uusi",
@@ -58,6 +60,15 @@
     "viewTitle": "Näkymät",
     "geometryTitle": "Geometriat",
     "description": "Kuvaus",
+    "profile": {
+      "title": "Käyttäjän tiedot",
+      "firstName": "Etunimi",
+      "lastName": "Sukunimi",
+      "username": "Käyttäjätunnus",
+      "email": "Sähköpostiosoite",
+      "accountCreated": "Tili luotu",
+      "lastLogin": "Edellinen kirjautuminen"
+    },
     "saveView": {
       "title": "Tallenna uusi näkymä",
       "confirmDeleteAll" : "Haluatko varmasti poistaa kaikki tallennetut näkymät?",

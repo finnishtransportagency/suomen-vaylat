@@ -8,7 +8,9 @@
   },
   "title": "Suomen väylät",
   "extranet": "EXTRANET",
+  "signOut": "Logga ut",
   "tooltips": {
+    "profile": "Mina uppgifter",
     "showInfoLink": "Filtreringsinformation (öppnas på en ny flik)",
     "layerlist": {
       "newLayer": "Ny",
@@ -58,6 +60,15 @@
     "viewTitle" : "Vyn",
     "geometryTitle" : "Geometrier",
     "description": "Beskrivning",
+    "profile": {
+      "title": "Användarinformation",
+      "firstName": "Förnamn",
+      "lastName": "Efternamn",
+      "username": "Användarnamn",
+      "email": "E-postadress",
+      "accountCreated": "Konto skapat",
+      "lastLogin": "Senaste inloggning"
+    },
     "saveView" : {
       "title": "Spara ny vy",
       "confirmDeleteAll" : "Är du säker på att du vill ta bort alla sparade vyer?",

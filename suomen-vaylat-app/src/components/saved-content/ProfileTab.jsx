@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import strings from '../../translations';
 
 // Card-style wrapper
 const StyledProfileInfo = styled.div`
@@ -32,7 +33,7 @@ const StyledRowTitle = styled.div`
 `;
 
 const StyledRowValue = styled.div`
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 400;
   color: #444;
   text-align: left;
@@ -47,20 +48,22 @@ const StyledSubtitle = styled.div`
   margin-bottom: 1em;
 `;
 
+const dummyData = ["Maija", "Meikäläinen", "LX123456789", "maija@email.com", "23.4.2020 08.34.43", "23.4.2024 12.02.09"]
+
 const ProfileTab = () => {
   const rows = [
-    { title: "Etunimi", value: "Maija" },
-    { title: "Sukunimi", value: "Meikäläinen" },
-    { title: "Käyttäjätunnus", value: "LX123456789" },
-    { title: "Sähköpostiosoite", value: "maija@email.com" },
-    { title: "Tili luotu", value: "23.4.2020 08.34.43" },
-    { title: "Edellinen kirjautuminen", value: "23.4.2024 12.02.09" }
+    { title: strings.savedContent.profile.firstName, value: dummyData[0]},
+    { title: strings.savedContent.profile.lastName, value: dummyData[1]},
+    { title: strings.savedContent.profile.username, value: dummyData[2]},
+    { title: strings.savedContent.profile.email, value: dummyData[3]},
+    { title: strings.savedContent.profile.accountCreated, value: dummyData[4]},
+    { title: strings.savedContent.profile.lastLogin, value: dummyData[5]}
   ];
 
   return (
     <StyledProfileInfo>
             <StyledSubtitle id="profile-tab-heading">
-              {"Käyttäjän tiedot"}
+              {strings.savedContent.profile.title}
             </StyledSubtitle>
       {rows.map((row, idx) => (
         <StyledProfileRow key={row.title + idx}>

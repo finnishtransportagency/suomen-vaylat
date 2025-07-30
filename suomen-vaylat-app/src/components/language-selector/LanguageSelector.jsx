@@ -17,6 +17,9 @@ const LanguageText = styled.span`
   font-family: inherit;
   font-weight: 500;
   font-size: 1.5em;
+  @media ${(props) => props.theme.device.mobileL} {
+    font-size: 20px;
+  }
   color: ${(props) => props.theme.colors.mainWhite};
   text-transform: uppercase;
 `;

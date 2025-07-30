@@ -8,7 +8,9 @@
   },
   "title": "Suomen väylät",
   "extranet": "EXTRANET",
+  "signOut": "Sign out",
   "tooltips": {
+    "profile": "My data",
     "showInfoLink": "Filtering info (opens in a new tab)",
     "layerlist": {
       "newLayer": "New",
@@ -57,6 +59,15 @@
     "viewTitle" : "Views",
     "geometryTitle" : "Geometries",
     "description": "Description",
+    "profile": {
+      "title": "User information",
+      "firstName": "First name",
+      "lastName": "Last name",
+      "username": "Username",
+      "email": "Email address",
+      "accountCreated": "Account created",
+      "lastLogin": "Last login"
+    },
     "saveView" : {
       "title": "Save new view",
       "confirmDeleteAll" : "Are you sure you want to delete all views?",
