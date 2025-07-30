@@ -180,7 +180,7 @@ const GeometryForm = ({
             type="text"
             value={geometryName}
             placeholder={
-              !itemsToSave && strings.savedContent.saveGeometry.noGeometry
+              !itemsToSave ? strings.savedContent.saveGeometry.noGeometry : ""
             }
             onChange={(e) => setGeometryName(e.target.value)}
             disabled={!itemsToSave}
@@ -205,7 +205,7 @@ const GeometryForm = ({
             name="geometry-form-description"
             value={geometryDescription}
             placeholder={
-              !itemsToSave && strings.savedContent.saveGeometry.noGeometry
+              !itemsToSave ? strings.savedContent.saveGeometry.noGeometry : ""
             }
             disabled={!itemsToSave}
             onChange={(e) => setGeometryDescription(e.target.value)}
