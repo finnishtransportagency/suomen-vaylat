@@ -1,41 +1,11 @@
-import { faUser } from '@fortawesome/free-solid-svg-icons';
-import { useRef, useEffect, useContext } from 'react';
+import styled from 'styled-components';
+import { faUser, faAngleDown, faQuestion, faInfoCircle, faArrowRightFromBracket, faIdBadge } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import { useState } from 'react';
-import styled from 'styled-components';
+import { useRef, useState, useContext, useEffect } from 'react';
 import { useAppSelector } from '../../state/hooks';
-import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
-import {
-  faInfoCircle,
-  faQuestion,
-  faTimes,
-  faGlobe
-} from '@fortawesome/free-solid-svg-icons';
 import { ReactReduxContext } from 'react-redux';
-import ReactTooltip from 'react-tooltip';
-import { theme, isMobile } from '../../theme/theme';
-import { motion, AnimatePresence } from 'framer-motion';
-import {
-  setIsInfoOpen,
-  setIsMainScreen,
-  setIsUserGuideOpen,
-  setActiveTool,
-  removeActiveGeometry
-} from '../../state/slices/uiSlice';
-import {
-  mapMoveRequest,
-  removeMarkerRequest,
-  resetGFILocations,
-  setVKMData
-} from '../../state/slices/rpcSlice';
-import { resetThemeGroupsForMainScreen } from '../../utils/rpcUtil';
 import strings from '../../translations';
-import LanguageSelector from '../language-selector/LanguageSelector';
-import { ReactComponent as VaylaLogoMobile } from './images/vayla_v_white.svg';
-import MenuIcon from '@mui/icons-material/Menu';
-import { ReactComponent as VaylaLogo } from './images/vayla_sivussa_fi_sv_white.svg';
-import { updateLayers } from '../../utils/rpcUtil';
 
 const useOnClickOutside = (ref, handler) => {
   useEffect(() => {
@@ -50,8 +20,7 @@ const useOnClickOutside = (ref, handler) => {
       document.removeEventListener("touchstart", listener);
     };
   }, [ref, handler]);
-}
-
+};
 
 const ProfileDropdownContainer = styled.div`
   display: flex;
@@ -67,7 +36,7 @@ const ProfileButton = styled.button`
   color: ${(props) => props.theme.colors.mainWhite};
   padding: 0;
   margin: 0;
-  border-radius: 6px;
+  border-radius: 8px;
   transition: background 0.15s;
   &:hover {
     color: ${(props) => props.theme.colors.hover};
@@ -78,57 +47,88 @@ const DropdownMenu = styled.ul`
   position: absolute;
   top: 110%; /* just under profile button */
   right: 0;
-  min-width: 160px;
+  min-width: 200px;
   background: ${(props) => props.theme.colors.mainWhite};
   color: ${(props) => props.theme.colors.black};
-  border-radius: 6px;
+  border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0,0,0,0.13);
   margin: 0;
-  padding: 6px 0;
+  padding: 0;
   z-index: 4000;
   list-style: none;
+  font-size: 15px;
 `;
 
 const DropdownMenuItem = styled.li`
-  padding: 10px 20px;
-  cursor: pointer;
-  &:hover {
-    background: ${(props) => props.theme.colors.lightGrey || "#333"};
-    color: ${(props) => props.theme.colors.mainColor1 || "#1964e0"};
-  }
-`;
-
-const StyledHeaderButton = styled.button`
-  position: relative;
-  cursor: pointer;
-  width: 40px;
-  height: 40px;
+  width: 100%;
   display: flex;
-  justify-content: center;
   align-items: center;
-  background-color: transparent;
-  border-radius: 50%;
-  border: none;
-  svg {
-    color: ${(props) => props.theme.colors.mainWhite};
-    font-size: 22px;
+  gap: 12px;
+  padding: 12px;
+  background: none;
+  color: ${(props) => props.theme.colors.black};
+  cursor: pointer;
+  white-space: nowrap;           /* Add this line */
+
+  &:hover {
+    background: ${(props) => props.theme.colors.lightGrey || "#F4F7FA"};
+    color: ${(props) => props.theme.colors.mainColor1};
+    outline: none;
   }
-  &:focus {
-    outline: 2px solid ${(props) => props.theme.colors.secondaryColor};
+  svg, .MuiSvgIcon-root {
+    color: ${(props) => props.theme.colors.mainColor1};
+    min-width: 21px;
+    min-height: 21px;
+    font-size: 20px;
+    flex-shrink: 0;           /* Prevent icon from shrinking */
+    display: inline-block;    /* Ensure icon is in-row */
+    vertical-align: middle;   /* Vertically align with text */
+  }
+  span {
+    display: inline-block;    /* Menu text stays in-line */
+    vertical-align: middle;
   }
 `;
 
-const ProfileDropdown = ({languageLabel}) => {
+
+const MenuDivider = styled.hr`
+  border: none;
+  height: 1px;
+  background: ${(props) => props.theme.colors.lightGrey || "#eee"};
+  margin: 6px 5px;
+`;
+
+const ProfileNameSpan = styled.span`
+  color: ${(props) => props.theme.colors.mainWhite};
+  font-weight: 500;
+  font-size: 15px;
+  margin-right: 2px;
+  margin-left: 6px;
+`;
+
+// Component - clean menu
+const ProfileDropdown = ({ languageLabel }) => {
   const [open, setOpen] = useState(false);
   const ref = useRef();
   useOnClickOutside(ref, () => setOpen(false));
   const { store } = useContext(ReactReduxContext);
 
-  const { isInfoOpen, isUserGuideOpen, activeTool, activeGeometries } =
-    useAppSelector((state) => state.ui);
+  const { isInfoOpen, isUserGuideOpen } = useAppSelector((state) => state.ui);
+
+  // Menu actions
+  const handleUserGuide = () => {
+    store.dispatch({ type: 'ui/setIsUserGuideOpen', payload: !isUserGuideOpen });
+    setOpen(false);
+  };
+
+  const handleInfo = () => {
+    store.dispatch({ type: 'ui/setIsInfoOpen', payload: !isInfoOpen });
+    setOpen(false);
+  };
 
   return (
     <ProfileDropdownContainer ref={ref}>
+      <ProfileNameSpan>{languageLabel}</ProfileNameSpan>
       <ProfileButton
         aria-haspopup="menu"
         aria-expanded={open}
@@ -136,9 +136,10 @@ const ProfileDropdown = ({languageLabel}) => {
         id="header-profile-btn"
         tabIndex={0}
         onClick={() => setOpen((v) => !v)}
+        title={strings.accessibility?.openProfileMenu || "Open profile menu"}
       >
-        <AccountCircleIcon fontSize='large'/>
-        <FontAwesomeIcon style={{marginLeft: "8px"}} icon={faAngleDown} />
+        <AccountCircleIcon fontSize="large" />
+        <FontAwesomeIcon style={{ marginLeft: "6px", fontSize: "19px" }} icon={faAngleDown} />
       </ProfileButton>
       {open && (
         <DropdownMenu
@@ -147,44 +148,36 @@ const ProfileDropdown = ({languageLabel}) => {
           aria-labelledby="header-profile-btn"
         >
           <DropdownMenuItem role="menuitem" tabIndex={0}>
-            
-            <StyledHeaderButton 
-              id="header-user-guide-button"
-              data-tip
-              data-for="header-show-user-guide-tooltip"
-              onClick={() =>
-                store.dispatch(setIsUserGuideOpen(!isUserGuideOpen))
-              }
-              aria-label={strings.tooltips.showUserGuide}
-              aria-haspopup="true"
-            >
-              <FontAwesomeIcon icon={faQuestion} aria-hidden="true" focusable="false"/>
-              {"userguide"}
-            </StyledHeaderButton>
+            <AccountCircleIcon/>
+            {strings.menu?.profile || "Omat tiedot"}
           </DropdownMenuItem>
-          <DropdownMenuItem role="menuitem" tabIndex={0}>
-
-            <StyledHeaderButton 
-              id="header-info-button"
-              data-tip
-              data-for="header-show-info-tooltip"
-              onClick={() => store.dispatch(setIsInfoOpen(!isInfoOpen))}
-              aria-label={strings.tooltips.showPageInfo}
-              aria-haspopup="true"
-            >
-              <FontAwesomeIcon icon={faInfoCircle} aria-hidden="true" focusable="false"/>
-                {"info"}
-            </StyledHeaderButton>          </DropdownMenuItem>
-          <DropdownMenuItem role="menuitem" tabIndex={0}>
-            Profile
+          <DropdownMenuItem
+            role="menuitem"
+            tabIndex={0}
+            onClick={handleUserGuide}
+            aria-label={strings.tooltips.showUserGuide}
+          >
+            <FontAwesomeIcon icon={faQuestion} />
+            {strings.tooltips.userGuide || "Käyttöohjeet"}
           </DropdownMenuItem>
+          <DropdownMenuItem
+            role="menuitem"
+            tabIndex={0}
+            onClick={handleInfo}
+            aria-label={strings.tooltips.showPageInfo}
+          >
+            <FontAwesomeIcon icon={faInfoCircle} />
+            {strings.tooltips.pageInfo || "Sovelluksen tiedot"}
+          </DropdownMenuItem>
+          <MenuDivider />
           <DropdownMenuItem role="menuitem" tabIndex={0}>
-            Log out
+            <FontAwesomeIcon icon={faArrowRightFromBracket} />
+            {strings.menu?.logout || "Log out"}
           </DropdownMenuItem>
         </DropdownMenu>
       )}
     </ProfileDropdownContainer>
   );
-}
+};
 
 export default ProfileDropdown;
