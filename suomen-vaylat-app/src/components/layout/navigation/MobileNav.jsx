@@ -7,10 +7,10 @@ import {
   faSave
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 import { ReactReduxContext } from 'react-redux';
 import styled from 'styled-components';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useAppSelector } from '../../../state/hooks';
 import {
   setIsInfoOpen,
@@ -151,138 +151,160 @@ const MobileNav = ({ setSubNavOpen }) => {
   const { store } = useContext(ReactReduxContext);
   const { isLoggedIn } = useAppSelector((state) => state.rpc);
 
+  // Accessible ID constants
+  const menuId = 'mobile-nav-menu-list';
+  const bannerId = 'mobile-nav-header-row';
+  const profileBtnId = 'mobile-nav-profile-button';
+  const userGuideBtnId = 'mobile-nav-user-guide-button';
+  const infoBtnId = 'mobile-nav-info-button';
+  const langBtnId = 'mobile-nav-language-button';
+  const signOutBtnId = 'mobile-nav-sign-out-button';
+  const menuLabelId = 'mobile-nav-menu-title';
+
   return (
-    <>
-      <StyledMobileNavContainer
-        id="header-mobile-nav-container"
-        initial={{ y: -100, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        exit={{ y: -100, opacity: 0 }}
-        transition={{ duration: 0.3 }}
-        aria-label={strings.accessibility.mobileNavigation}
+    <StyledMobileNavContainer
+      id="mobile-nav-container"
+      initial={{ y: -100, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      exit={{ y: -100, opacity: 0 }}
+      transition={{ duration: 0.3 }}
+      aria-label={strings.accessibility.mobileNavigation}
+      role="navigation"
+      aria-labelledby={menuLabelId}
+    >
+      <StyledMobileHeaderRow
+        id={bannerId}
+        role="banner"
+        aria-label={strings.accessibility.mobileHeader}
+        aria-controls={menuId}
       >
-        <StyledMobileHeaderRow
-          id="header-mobile-header-row"
-          role="banner"
-          aria-label={strings.accessibility.mobileHeader}
+        <StyledHeaderLogoContainer id="mobile-nav-header-logo-container">
+          <VaylaLogoMobile aria-hidden="true" focusable="false" />
+        </StyledHeaderLogoContainer>
+
+        <StyledMobileMenuTitle id={menuLabelId} aria-hidden="false">
+          {strings.title}
+        </StyledMobileMenuTitle>
+
+        <StyledHeaderButton
+          id="mobile-nav-close-button"
+          onClick={() => setSubNavOpen(false)}
+          aria-label={strings.accessibility.closeMenu}
         >
-          <StyledHeaderLogoContainer id="header-mobile-header-logo-container">
-            <VaylaLogoMobile aria-hidden="true" focusable="false" />
-          </StyledHeaderLogoContainer>
-
-          <StyledMobileMenuTitle
-            id="header-mobile-menu-title"
+          <FontAwesomeIcon
+            icon={faTimes}
             aria-hidden="true"
-          >
-            {strings.title}
-          </StyledMobileMenuTitle>
+            focusable="false"
+          />
+        </StyledHeaderButton>
+      </StyledMobileHeaderRow>
 
-          <StyledHeaderButton
-            id="header-mobile-close-button"
-            onClick={() => setSubNavOpen(false)}
-            aria-label={strings.accessibility.closeMenu}
-          >
+      <MobileMenuList id={menuId} role="menu" aria-labelledby={menuLabelId}>
+        <StyledMobileMenuButton
+          id={profileBtnId}
+          onClick={() => store.dispatch(setIsSaveViewOpen(true))}
+          aria-label={strings.tooltips.profile}
+          aria-haspopup="true"
+          role="menuitem"
+          aria-controls={menuId}
+        >
+          <div className="icon-wrapper" id="mobile-nav-profile-icon-wrapper">
+            {isLoggedIn ? (
+              <AccountCircleIcon />
+            ) : (
+              <FontAwesomeIcon icon={faSave} />
+            )}
+          </div>
+          <div className="text-wrapper" id="mobile-nav-profile-text-wrapper">
+            {strings.tooltips.profile}
+          </div>
+        </StyledMobileMenuButton>
+
+        <StyledMobileMenuButton
+          id={userGuideBtnId}
+          onClick={() => store.dispatch(setIsUserGuideOpen(true))}
+          aria-label={strings.tooltips.userGuide}
+          aria-haspopup="true"
+          role="menuitem"
+          aria-controls={menuId}
+        >
+          <div className="icon-wrapper" id="mobile-nav-user-guide-icon-wrapper">
             <FontAwesomeIcon
-              icon={faTimes}
+              icon={faQuestion}
               aria-hidden="true"
               focusable="false"
             />
-          </StyledHeaderButton>
-        </StyledMobileHeaderRow>
+          </div>
+          <div className="text-wrapper" id="mobile-nav-user-guide-text-wrapper">
+            {strings.tooltips.userGuide}
+          </div>
+        </StyledMobileMenuButton>
 
-        <MobileMenuList
-          id="header-mobile-menu-list"
-          aria-label={strings.accessibility.mobileMenu}
+        <StyledMobileMenuButton
+          id={infoBtnId}
+          onClick={() => store.dispatch(setIsInfoOpen(true))}
+          aria-label={strings.tooltips.pageInfo}
+          aria-haspopup="true"
+          role="menuitem"
+          aria-controls={menuId}
         >
-          <StyledMobileMenuButton
-            id="header-mobile-profile-button"
-            onClick={() => store.dispatch(setIsSaveViewOpen(true))}
-            aria-label={strings.tooltips.profile}
-            aria-haspopup="true"
-          >
-            <div className="icon-wrapper" id="header-user-guide-icon-wrapper">
-              {isLoggedIn ? (
-                <AccountCircleIcon />
-              ) : (
-                <FontAwesomeIcon icon={faSave} />
-              )}
-            </div>
-            <div className="text-wrapper">{strings.tooltips.profile}</div>
-          </StyledMobileMenuButton>
+          <div className="icon-wrapper" id="mobile-nav-info-icon-wrapper">
+            <FontAwesomeIcon
+              icon={faInfoCircle}
+              aria-hidden="true"
+              focusable="false"
+            />
+          </div>
+          <div className="text-wrapper" id="mobile-nav-info-text-wrapper">
+            {strings.tooltips.pageInfo}
+          </div>
+        </StyledMobileMenuButton>
 
-          <StyledMobileMenuButton
-            id="header-mobile-user-guide-button"
-            onClick={() => store.dispatch(setIsUserGuideOpen(true))}
-            aria-label={strings.tooltips.userGuide}
-            aria-haspopup="true"
+        <StyledMobileMenuButton
+          id={langBtnId}
+          aria-label={strings.accessibility.languageSelect}
+          aria-haspopup="listbox"
+          role="menuitem"
+          aria-controls="mobile-nav-language-selector-wrapper"
+        >
+          <div className="icon-wrapper" id="mobile-nav-language-icon-wrapper">
+            <FontAwesomeIcon
+              icon={faGlobe}
+              aria-hidden="true"
+              focusable="false"
+            />
+          </div>
+          <div
+            className="text-wrapper"
+            id="mobile-nav-language-selector-wrapper"
           >
-            <div className="icon-wrapper" id="header-user-guide-icon-wrapper">
+            <HiddenLanguageIconWrapper>
+              <LanguageSelector />
+            </HiddenLanguageIconWrapper>
+          </div>
+        </StyledMobileMenuButton>
+
+        {isLoggedIn && (
+          <StyledMobileMenuButton
+            id={signOutBtnId}
+            aria-label={strings.signOut}
+            role="menuitem"
+            tabIndex={0}
+          >
+            <div className="icon-wrapper" id="mobile-nav-sign-out-icon-wrapper">
               <FontAwesomeIcon
-                icon={faQuestion}
+                icon={faArrowRightFromBracket}
                 aria-hidden="true"
                 focusable="false"
               />
             </div>
-            <div className="text-wrapper">{strings.tooltips.userGuide}</div>
-          </StyledMobileMenuButton>
-
-          <StyledMobileMenuButton
-            id="header-mobile-info-button"
-            onClick={() => store.dispatch(setIsInfoOpen(true))}
-            aria-label={strings.tooltips.pageInfo}
-            aria-haspopup="true"
-          >
-            <div className="icon-wrapper" id="header-info-icon-wrapper">
-              <FontAwesomeIcon
-                icon={faInfoCircle}
-                aria-hidden="true"
-                focusable="false"
-              />
-            </div>
-            <div className="text-wrapper">{strings.tooltips.pageInfo}</div>
-          </StyledMobileMenuButton>
-
-          <StyledMobileMenuButton
-            id="header-mobile-language-button"
-            aria-label={strings.accessibility.languageSelect}
-          >
-            <div className="icon-wrapper" id="header-language-icon-wrapper">
-              <FontAwesomeIcon
-                icon={faGlobe}
-                aria-hidden="true"
-                focusable="false"
-              />
-            </div>
-            <div className="text-wrapper" id="header-language-selector-wrapper">
-              <HiddenLanguageIconWrapper>
-                <LanguageSelector />
-              </HiddenLanguageIconWrapper>
+            <div className="text-wrapper" id="mobile-nav-sign-out-text-wrapper">
+              {strings.signOut}
             </div>
           </StyledMobileMenuButton>
-
-          {isLoggedIn && (
-            <StyledMobileMenuButton
-              id="header-mobile-sign-out-button"
-              aria-label={strings.signOut}
-            >
-              <div className="icon-wrapper" id="header-sign-out-icon-wrapper">
-                <FontAwesomeIcon
-                  icon={faArrowRightFromBracket}
-                  aria-hidden="true"
-                  focusable="false"
-                />
-              </div>
-              <div
-                className="text-wrapper"
-                id="header-sign-out-selector-wrapper"
-              >
-                {strings.signOut}
-              </div>
-            </StyledMobileMenuButton>
-          )}
-        </MobileMenuList>
-      </StyledMobileNavContainer>
-    </>
+        )}
+      </MobileMenuList>
+    </StyledMobileNavContainer>
   );
 };
 

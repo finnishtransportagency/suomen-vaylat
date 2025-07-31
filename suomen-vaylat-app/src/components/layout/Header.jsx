@@ -1,11 +1,4 @@
-import {
-  faInfoCircle,
-  faQuestion,
-  faTimes,
-  faGlobe,
-  faArrowRightFromBracket
-} from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 import { useContext, useState } from 'react';
 import { ReactReduxContext } from 'react-redux';
 import ReactTooltip from 'react-tooltip';
@@ -14,12 +7,9 @@ import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAppSelector } from '../../state/hooks';
 import {
-  setIsInfoOpen,
   setIsMainScreen,
-  setIsUserGuideOpen,
   setActiveTool,
   removeActiveGeometry,
-  setIsSaveViewOpen
 } from '../../state/slices/uiSlice';
 import {
   mapMoveRequest,
@@ -27,7 +17,6 @@ import {
   resetGFILocations,
   setVKMData
 } from '../../state/slices/rpcSlice';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { resetThemeGroupsForMainScreen } from '../../utils/rpcUtil';
 import strings from '../../translations';
 import LanguageSelector from '../language-selector/LanguageSelector';
@@ -36,10 +25,9 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { ReactComponent as VaylaLogo } from './images/vayla_sivussa_fi_sv_white.svg';
 import { updateLayers } from '../../utils/rpcUtil';
 import DesktopNav from './navigation/DesktopNav';
-
 import { createBrowserHistory } from 'history';
-import PillButton from '../../utils/components/PillButton';
 import MobileNav from './navigation/MobileNav';
+
 const history = createBrowserHistory();
 
 const StyledHeaderContainer = styled.div`

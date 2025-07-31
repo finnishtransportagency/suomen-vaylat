@@ -1,11 +1,9 @@
 import styled from 'styled-components';
 import {
-  faUser,
   faAngleDown,
   faQuestion,
   faInfoCircle,
   faArrowRightFromBracket,
-  faIdBadge,
   faAngleUp,
   faSave
 } from '@fortawesome/free-solid-svg-icons';
@@ -60,7 +58,7 @@ const ProfileButton = styled.button`
 
 const DropdownMenu = styled.ul`
   position: absolute;
-  top: 110%; /* just under profile button */
+  top: 110%;
   right: 0;
   min-width: 200px;
   background: ${(props) => props.theme.colors.mainWhite};
@@ -136,7 +134,6 @@ const ProfileNameSpan = styled.span`
   margin-left: 6px;
 `;
 
-// Component - clean menu
 const DesktopNav = ({ languageLabel }) => {
   const [isOpen, setIsOpen] = useState(false);
   const { isLoggedIn } = useAppSelector((state) => state.rpc);
@@ -160,14 +157,24 @@ const DesktopNav = ({ languageLabel }) => {
     setIsOpen(false);
   };
 
+  // IDs for aria-controls/aria-labelledby
+  const menuId = 'desktop-nav-profile-dropdown';
+  const profileBtnId = 'desktop-nav-profile-btn';
+  const menuProfileId = 'desktop-nav-profile-menuitem';
+  const menuUserGuideId = 'desktop-nav-userguide-menuitem';
+  const menuInfoId = 'desktop-nav-info-menuitem';
+  const menuLogoutId = 'desktop-nav-logout-menuitem';
+
   return (
-    <DesktopNavContainer ref={ref}>
-      <ProfileNameSpan>{languageLabel}</ProfileNameSpan>
+    <DesktopNavContainer ref={ref} id="desktop-nav-container">
+      <ProfileNameSpan id="desktop-nav-language">
+        {languageLabel}
+      </ProfileNameSpan>
       <ProfileButton
         aria-haspopup="menu"
         aria-expanded={isOpen}
-        aria-controls="header-profile-dropdown"
-        id="header-profile-btn"
+        aria-controls={menuId}
+        id={profileBtnId}
         tabIndex={0}
         onClick={() => setIsOpen((v) => !v)}
         title={strings.accessibility?.openProfileMenu}
@@ -176,53 +183,63 @@ const DesktopNav = ({ languageLabel }) => {
         <FontAwesomeIcon
           style={{ marginLeft: '6px', fontSize: '19px' }}
           icon={isOpen ? faAngleUp : faAngleDown}
+          aria-hidden="true"
         />
       </ProfileButton>
       {isOpen && (
-        <DropdownMenu
-          id="header-profile-dropdown"
-          role="menu"
-          aria-labelledby="header-profile-btn"
-        >
+        <DropdownMenu id={menuId} role="menu" aria-labelledby={profileBtnId}>
           <DropdownMenuItem
+            id={menuProfileId}
             role="menuitem"
             tabIndex={0}
             onClick={handleProfile}
-            aria-label={'Profiili'}
+            aria-label={
+              isLoggedIn
+                ? strings.menu?.profile
+                : strings.savedContent?.savedContent
+            }
           >
             {isLoggedIn ? (
-              <AccountCircleIcon />
+              <AccountCircleIcon aria-hidden="true" />
             ) : (
-              <FontAwesomeIcon icon={faSave} />
+              <FontAwesomeIcon icon={faSave} aria-hidden="true" />
             )}
             {strings.savedContent?.savedContent}
           </DropdownMenuItem>
           <DropdownMenuItem
+            id={menuUserGuideId}
             role="menuitem"
             tabIndex={0}
             onClick={handleUserGuide}
             aria-label={strings.tooltips.showUserGuide}
           >
-            <FontAwesomeIcon icon={faQuestion} />
+            <FontAwesomeIcon icon={faQuestion} aria-hidden="true" />
             {strings.tooltips.userGuide}
           </DropdownMenuItem>
           <DropdownMenuItem
+            id={menuInfoId}
             role="menuitem"
             tabIndex={0}
             onClick={handleInfo}
             aria-label={strings.tooltips.showPageInfo}
           >
-            <FontAwesomeIcon icon={faInfoCircle} />
+            <FontAwesomeIcon icon={faInfoCircle} aria-hidden="true" />
             {strings.tooltips.pageInfo}
           </DropdownMenuItem>
           {isLoggedIn && (
             <>
               <MenuDivider />
-              <DropdownMenuItem className="logout" role="menuitem" tabIndex={0}>
+              <DropdownMenuItem
+                className="logout"
+                id={menuLogoutId}
+                role="menuitem"
+                tabIndex={0}
+                aria-label={strings.signOut}
+              >
                 <PillButton
-                  id="profile-dropdown-logout-btn"
+                  id="desktop-nav-profile-dropdown-logout-btn"
                   icon={faArrowRightFromBracket}
-                  iconColor={'#FFF'} // <-- add this prop and handle in PillButton
+                  iconColor={'#FFF'}
                   text={strings.signOut}
                   onClick={() => alert('kirjaudu ulos')}
                   aria-label={strings.signOut}
