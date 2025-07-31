@@ -5,7 +5,8 @@ import {
   faInfoCircle,
   faArrowRightFromBracket,
   faAngleUp,
-  faSave
+  faSave,
+  faBars
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
@@ -179,12 +180,25 @@ const DesktopNav = ({ languageLabel }) => {
         onClick={() => setIsOpen((v) => !v)}
         title={strings.accessibility?.openProfileMenu}
       >
-        <AccountCircleIcon fontSize="large" />
-        <FontAwesomeIcon
-          style={{ marginLeft: '6px', fontSize: '19px' }}
-          icon={isOpen ? faAngleUp : faAngleDown}
-          aria-hidden="true"
-        />
+        {isLoggedIn ? (
+          <>
+            <AccountCircleIcon fontSize="large" />
+            <FontAwesomeIcon
+              style={{ marginLeft: '6px', fontSize: '19px' }}
+              icon={isOpen ? faAngleUp : faAngleDown}
+              aria-hidden="true"
+            />
+          </>
+        ) : (
+          <>
+            <FontAwesomeIcon
+              icon={faBars}
+              style={{ marginLeft: '6px', fontSize: '1.4em' }}
+              aria-hidden="true"
+              focusable="false"
+            />
+          </>
+        )}
       </ProfileButton>
       {isOpen && (
         <DropdownMenu id={menuId} role="menu" aria-labelledby={profileBtnId}>

@@ -5,6 +5,7 @@ import ReactTooltip from 'react-tooltip';
 import { theme, isMobile } from '../../theme/theme';
 import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useAppSelector } from '../../state/hooks';
 import {
   setIsMainScreen,
@@ -27,6 +28,7 @@ import { updateLayers } from '../../utils/rpcUtil';
 import DesktopNav from './navigation/DesktopNav';
 import { createBrowserHistory } from 'history';
 import MobileNav from './navigation/MobileNav';
+import { faBars } from '@fortawesome/free-solid-svg-icons';
 
 const history = createBrowserHistory();
 
@@ -424,7 +426,11 @@ export const Header = () => {
             aria-expanded={isSubNavOpen}
             aria-controls="header-mobile-nav-container"
           >
-            <MenuIcon aria-hidden="true" focusable="false"/>
+            <FontAwesomeIcon
+              icon={faBars}
+              aria-hidden="true"
+              focusable="false"
+            />
           </StyledHeaderButton>
         </HeaderRight>
 
