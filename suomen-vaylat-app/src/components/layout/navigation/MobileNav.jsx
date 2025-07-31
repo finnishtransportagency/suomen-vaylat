@@ -201,15 +201,11 @@ const MobileNav = ({ setSubNavOpen }) => {
             aria-haspopup="true"
           >
             <div className="icon-wrapper" id="header-user-guide-icon-wrapper">
-              { isLoggedIn ?
-              <AccountCircleIcon />
-              :
-
-                            <FontAwesomeIcon
-                              icon={faSave}
-                              size="6x"
-                            />
-              }
+              {isLoggedIn ? (
+                <AccountCircleIcon />
+              ) : (
+                <FontAwesomeIcon icon={faSave} />
+              )}
             </div>
             <div className="text-wrapper">{strings.tooltips.profile}</div>
           </StyledMobileMenuButton>

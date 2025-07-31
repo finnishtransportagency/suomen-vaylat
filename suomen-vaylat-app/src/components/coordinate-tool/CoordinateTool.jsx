@@ -411,7 +411,6 @@ const CoordinateTool = () => {
             >
               <FontAwesomeIcon
                 icon={faSave}
-                size="6x"
                 style={{ marginRight: '1em' }}
               />
               <StyledButtonLabel>
@@ -425,7 +424,6 @@ const CoordinateTool = () => {
             >
               <FontAwesomeIcon
                 icon={faTrash}
-                size="6x"
                 style={{ marginRight: '1em' }}
               />
               <StyledButtonLabel>

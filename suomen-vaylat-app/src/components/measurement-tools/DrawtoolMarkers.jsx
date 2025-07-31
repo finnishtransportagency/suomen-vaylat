@@ -164,7 +164,6 @@ export const DrawtoolMarkers = () => {
         <StyledTrashIconWrapper onClick={() => setLabel('')}>
           <FontAwesomeIcon
             icon={faTrash}
-            size="6x"
             style={{ marginLeft: '.5em' }}
           />
         </StyledTrashIconWrapper>

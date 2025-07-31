@@ -190,15 +190,11 @@ const DesktopNav = ({ languageLabel }) => {
             onClick={handleProfile}
             aria-label={'Profiili'}
           >
-              { isLoggedIn ?
+            {isLoggedIn ? (
               <AccountCircleIcon />
-              :
-
-                            <FontAwesomeIcon
-                              icon={faSave}
-                              size="6x"
-                            />
-              }
+            ) : (
+              <FontAwesomeIcon icon={faSave} />
+            )}
             {strings.savedContent?.savedContent}
           </DropdownMenuItem>
           <DropdownMenuItem
