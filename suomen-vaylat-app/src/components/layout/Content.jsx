@@ -195,7 +195,6 @@ const Content = () => {
           <StyledRightSection>
             <Search />
             <ZoomMenu />
-            <Badges />
           </StyledRightSection>
         </StyledContentGrid>
       </StyledContent>

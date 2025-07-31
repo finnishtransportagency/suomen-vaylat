@@ -21,14 +21,14 @@ import {
 import { resetThemeGroupsForMainScreen } from '../../utils/rpcUtil';
 import strings from '../../translations';
 import LanguageSelector from '../language-selector/LanguageSelector';
-import { ReactComponent as VaylaLogoMobile } from './images/vayla_v_white.svg';
+import { ReactComponent as VaylaLogo } from './images/vayla_v_white.svg';
 import MenuIcon from '@mui/icons-material/Menu';
-import { ReactComponent as VaylaLogo } from './images/vayla_sivussa_fi_sv_white.svg';
 import { updateLayers } from '../../utils/rpcUtil';
 import DesktopNav from './navigation/DesktopNav';
 import { createBrowserHistory } from 'history';
 import MobileNav from './navigation/MobileNav';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
+import Badges from '../badges/Badges';
 
 const history = createBrowserHistory();
 
@@ -54,7 +54,7 @@ const HeaderLeft = styled.div`
   border-bottom-right-radius: 30px;
   z-index: 11;
   pointer-events: all;
-  padding: 25px;
+  padding: 1em 1.5em 1em 0;
 
   @media ${(props) => props.theme.device.mobileL} {
     height: 60px;
@@ -93,7 +93,7 @@ const HeaderRight = styled.div`
   display: flex;
   align-items: center;
   background-color: ${(props) => props.theme.colors.mainColor1};
-  padding: 0 12px;
+  padding: 1em 1em 1em 0.5em;
   border-bottom-left-radius: 30px;
   z-index: 11;
   pointer-events: all;
@@ -127,7 +127,6 @@ const StyledHeaderTitleContainer = styled.p`
   justify-content: flex-start;
   align-items: center;
   margin: 0;
-  padding-left: 18px;
   color: ${(props) => props.theme.colors.mainWhite};
   font-weight: 600;
 
@@ -156,13 +155,6 @@ const StyledHeaderLogoContainer = styled.div`
 
   svg {
     height: inherit;
-  }
-
-  @media ${(props) => props.theme.device.desktop} {
-    width: 140px;
-  }
-  @media ${(props) => props.theme.device.mobileL} {
-    height: 45px;
   }
 `;
 
@@ -396,7 +388,7 @@ export const Header = () => {
               rel="noreferrer"
               id="header-vayla-logo-link"
             >
-              {isMobile ? <VaylaLogoMobile aria-hidden="true" focusable="false"/> : <VaylaLogo aria-hidden="true" focusable="false"/>}
+              <VaylaLogo aria-hidden="true" focusable="false"/>
             </a>
           </StyledHeaderLogoContainer>
           <StyledHeaderTitleContainer 
@@ -409,7 +401,8 @@ export const Header = () => {
           </StyledHeaderTitleContainer>
         </HeaderLeft>
 
-        {/* Right blue corner */}
+        <Badges />
+
         <HeaderRight id="header-right">
           {/* Desktop profile/language dropdown */}
           <DesktopButtons id="header-desktop-buttons" aria-label={strings.accessibility.desktopButtons}>
