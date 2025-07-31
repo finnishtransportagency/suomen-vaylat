@@ -143,7 +143,7 @@ export const DrawtoolMarkers = () => {
             style={{
               backgroundColor:
                 shape.id === selectedMarker
-                  ? theme.colors.buttonActive
+                  ? theme.colors.buttonSelected
                   : shape.id === 7
                   ? theme.colors.secondaryColorDarkOrange
                   : theme.colors.button

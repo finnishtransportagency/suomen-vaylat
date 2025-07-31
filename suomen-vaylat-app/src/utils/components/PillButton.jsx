@@ -19,6 +19,11 @@ const StyledPillButton = styled.button`
   width: fit-content;
   transition: background-color 0.2s ease;
 
+  &:hover {
+  background-color: ${(props) =>
+    !props.disabled && (props.hoverColor ? props.hoverColor : props.theme.colors.buttonSelected)} !important;
+  }
+
   svg,
   img {
     width: 16px !important;

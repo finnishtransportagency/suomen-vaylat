@@ -446,7 +446,7 @@ const GeometriesTab = () => {
                             backgroundColor: activeGeometries?.find(
                               (g) => g.id === geometry.id
                             )
-                              ? theme.colors.buttonActive
+                              ? theme.colors.buttonSelected
                               : theme.colors.button
                           }}
                           onClick={(e) => {

@@ -14,7 +14,6 @@ import ViewsTab from './ViewsTab';
 import GeometriesTab from './GeometriesTab';
 import ProfileTab from './ProfileTab';
 
-// -- Styled Components (unchanged unless noted) --
 const StyledContent = styled.div`
   max-width: 660px;
   overflow: hidden;
@@ -104,13 +103,12 @@ export const SavedContent = () => {
   const { savedTab, showSavedContentGeometryForm } = useAppSelector(
     (state) => state.ui
   );
-  console.log(showSavedContentGeometryForm);
   const { isLoggedIn } = useAppSelector((state) => state.rpc);
   const [tabIndex, setTabIndex] = useState(0);
 
   const isProgrammaticSlide = useRef(false);
 
-  const tabsContentLogged = [
+  const tabsContentLoggedIn = [
     {
       key: 'profile',
       title: strings.savedContent.profileTitle,
@@ -131,7 +129,7 @@ export const SavedContent = () => {
     }
   ];
 
-  const tabsContent = [
+  const tabsContentLoggedOut = [
     {
       key: 'views',
       title: strings.savedContent.viewTitle,
@@ -146,95 +144,68 @@ export const SavedContent = () => {
     }
   ];
 
+  // Choose correct content array for current login state
+  const tabsContent = isLoggedIn ? tabsContentLoggedIn : tabsContentLoggedOut;
+
   useEffect(() => {
     let newTabIndex = 0;
     if (savedTab !== null) {
-      if (isLoggedIn) {
-        newTabIndex = tabsContentLogged.findIndex(
-          (tab) => tab.key === savedTab
-        );
-      } else {
-        newTabIndex = tabsContent.findIndex((tab) => tab.key === savedTab);
-      }
+      newTabIndex = tabsContent.findIndex((tab) => tab.key === savedTab);
+      if (newTabIndex === -1) newTabIndex = 0; // fallback
     }
-    isProgrammaticSlide.current = true; // Mark as programmatic
+    isProgrammaticSlide.current = true;
     inputEl.current.swiper.slideTo(newTabIndex);
     setTabIndex(newTabIndex);
   }, [savedTab]);
 
   const handleChangeTab = (index) => {
-    let newTabName = 'views';
+    let newTabName = tabsContent[index].key;
     store.dispatch(setShowSavedContentGeometryForm(false));
     store.dispatch(setShowSavedContentViewForm(false));
-    if (isLoggedIn) {
-      newTabName = tabsContentLogged[index].key;
-    } else {
-      newTabName = tabsContent[index].key;
-    }
     store.dispatch(setSavedTab(newTabName));
   };
 
   return (
-    <>
-      <StyledContent>
-        <StyledTabs tabIndex={tabIndex} tabsCount={tabsContent.length}>
-          {isLoggedIn
-            ? tabsContentLogged.map((tab, index) => {
-                return (
-                  <StyledTab
-                    key={'sc_tab_' + tab.title}
-                    isSelected={index === tabIndex}
-                    color={tab.titleColor}
-                    onClick={() => handleChangeTab(index)}
-                    tabsCount={tabsContent.length}
-                  >
-                    <p>{tab.title}</p>
-                  </StyledTab>
-                );
-              })
-            : tabsContent.map((tab, index) => {
-                return (
-                  <StyledTab
-                    key={'sc_tab_' + tab.title}
-                    isSelected={index === tabIndex}
-                    color={tab.titleColor}
-                    onClick={() => handleChangeTab(index)}
-                    tabsCount={tabsContent.length}
-                  >
-                    <p>{tab.title}</p>
-                  </StyledTab>
-                );
-              })}
-        </StyledTabs>
-        <StyledSwiper
-          ref={inputEl}
-          id={'app-info-swiper'}
-          tabIndex={tabIndex}
-          onSlideChange={(e) => {
-            if (isProgrammaticSlide.current) {
-              // Reset the flag, this was a programmatic slide
-              isProgrammaticSlide.current = false;
-              return;
-            }
-            // User-triggered slide change: dispatch tab change etc
-            if (e.activeIndex !== tabIndex) {
-              handleChangeTab(e.activeIndex);
-            }
-          }}
-          allowTouchMove={false}
-          speed={300}
-        >
-          {tabsContent.map((tab, index) => (
-            <SwiperSlide
-              id={'sc_tab_content_' + index}
-              key={'sc_tab_content_' + index}
-            >
-              {tab.content}
-            </SwiperSlide>
-          ))}
-        </StyledSwiper>
-      </StyledContent>
-    </>
+    <StyledContent>
+      <StyledTabs tabIndex={tabIndex} tabsCount={tabsContent.length}>
+        {tabsContent.map((tab, index) => (
+          <StyledTab
+            key={'sc_tab_' + tab.title}
+            isSelected={index === tabIndex}
+            color={tab.titleColor}
+            onClick={() => handleChangeTab(index)}
+            tabsCount={tabsContent.length}
+          >
+            <p>{tab.title}</p>
+          </StyledTab>
+        ))}
+      </StyledTabs>
+      <StyledSwiper
+        ref={inputEl}
+        id={'app-info-swiper'}
+        tabIndex={tabIndex}
+        onSlideChange={(e) => {
+          if (isProgrammaticSlide.current) {
+            isProgrammaticSlide.current = false;
+            return;
+          }
+          if (e.activeIndex !== tabIndex) {
+            handleChangeTab(e.activeIndex);
+          }
+        }}
+        allowTouchMove={false}
+        speed={300}
+      >
+        {tabsContent.map((tab, index) => (
+          <SwiperSlide
+            id={'sc_tab_content_' + index}
+            key={'sc_tab_content_' + index}
+          >
+            {tab.content}
+          </SwiperSlide>
+        ))}
+      </StyledSwiper>
+    </StyledContent>
   );
 };
 

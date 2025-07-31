@@ -58,7 +58,7 @@ export const theme = {
         black: '#000000',
         mainWhite: '#ffffff',
         button: '#0064af',
-        buttonActive: '#004477',
+        buttonSelected: '#004477',
         transparentMain: '#80dbff40',
         hover: '#f0f0f0',
         darkGrey: '#717070',

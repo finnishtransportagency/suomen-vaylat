@@ -28,14 +28,14 @@ const StyledBaselayerButtonContainer = styled(motion.div)`
 
 const StyledButton = styled(Button)`
     cursor: pointer;
-    background-color: ${props => props.active ? props.theme.colors.buttonActive : props.theme.colors.mainColor1 + 'DB' } !important;
+    background-color: ${props => props.active ? props.theme.colors.buttonSelected : props.theme.colors.mainColor1 + 'DB' } !important;
     box-shadow: 0px 2px 4px #0000004D;
     border-radius: 30px;
     border: none;
     padding: 6px 12px;
     width: 10em;
     &:hover {
-        background-color: ${props => props.theme.colors.buttonActive} !important;
+        background-color: ${props => props.theme.colors.buttonSelected} !important;
     }
     @media ${props => props.theme.device.laptop} {
         max-width: 120px;
@@ -47,14 +47,14 @@ const StyledButton = styled(Button)`
 
 const StyledMenuButton = styled(Button)`
     cursor: pointer;
-    background-color: ${props => props.active ? props.theme.colors.buttonActive : props.theme.colors.mainColor1 } !important;
+    background-color: ${props => props.active ? props.theme.colors.buttonSelected : props.theme.colors.mainColor1 } !important;
     box-shadow: 0px 2px 4px #0000004D;
     border-radius: 30px;
     border: none;
     padding: 6px 12px;
     width: 3em;
     &:hover {
-        background-color: ${props => props.theme.colors.buttonActive} !important;
+        background-color: ${props => props.theme.colors.buttonSelected} !important;
     }
     @media ${props => props.theme.device.laptop} {
         max-width: 120px;

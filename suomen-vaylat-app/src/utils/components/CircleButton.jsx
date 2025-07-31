@@ -19,7 +19,7 @@ const StyledCircleButton = styled(motion.button)`
         props.disabled ? props.theme.colors.disabledBg :
         props.color? props.color : 
         props.toggleState ?
-        props.theme.colors.buttonActive : props.theme.colors.button
+        props.theme.colors.buttonSelected : props.theme.colors.button
     };
     box-shadow: 0px 2px 4px #0000004D;
     border-radius: 50%;

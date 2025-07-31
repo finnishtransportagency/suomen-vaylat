@@ -208,7 +208,7 @@ export const DrawingTools = ({ isOpen }) => {
             onClick={() => startStopTool(tool)}
             icon={tool.style.icon}
             color={
-              tool.id === activeTool ? theme.colors.buttonActive : undefined
+              tool.id === activeTool ? theme.colors.buttonSelected : undefined
             }
           >
             {tool.name}

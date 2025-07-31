@@ -28,7 +28,8 @@ import {
   setGeoJsonArray,
   setSelectedMarker,
   setIsThemeMenuOpen,
-  removeFromDrawToolMarkers
+  removeFromDrawToolMarkers,
+  setSavedTab
 } from '../../../state/slices/uiSlice';
 import {
   removeMarkerRequest,
@@ -153,7 +154,7 @@ const StyledMenuButtonsContainer = styled(motion.div)`
 
 const StyledOpenMobileMenuButton = styled.button`
   background: ${({ theme, isMobileMenuOpen }) =>
-    isMobileMenuOpen ? theme.colors.buttonActive : theme.colors.button};
+    isMobileMenuOpen ? theme.colors.buttonSelected : theme.colors.button};
   color: white;
   border: none;
   border-radius: 50%;
@@ -363,9 +364,10 @@ const MenuBar = () => {
                         id="menubar-tools-save-btn"
                         icon={faSave}
                         text={strings.savedContent.saveView.saveView}
-                        onClick={() =>
-                          store.dispatch(setIsSaveViewOpen(!isSaveViewOpen))
-                        }
+                        onClick={() => {
+                          store.dispatch(setSavedTab("views"));
+                          store.dispatch(setIsSaveViewOpen(!isSaveViewOpen));
+                        }}
                         aria-label={strings.savedContent?.saveView?.saveView}
                       />
                       {!isMobile && (

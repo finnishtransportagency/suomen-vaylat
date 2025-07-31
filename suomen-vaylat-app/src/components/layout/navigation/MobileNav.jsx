@@ -3,7 +3,8 @@ import {
   faQuestion,
   faTimes,
   faGlobe,
-  faArrowRightFromBracket
+  faArrowRightFromBracket,
+  faSave
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useContext, useState } from 'react';
@@ -200,7 +201,15 @@ const MobileNav = ({ setSubNavOpen }) => {
             aria-haspopup="true"
           >
             <div className="icon-wrapper" id="header-user-guide-icon-wrapper">
+              { isLoggedIn ?
               <AccountCircleIcon />
+              :
+
+                            <FontAwesomeIcon
+                              icon={faSave}
+                              size="6x"
+                            />
+              }
             </div>
             <div className="text-wrapper">{strings.tooltips.profile}</div>
           </StyledMobileMenuButton>

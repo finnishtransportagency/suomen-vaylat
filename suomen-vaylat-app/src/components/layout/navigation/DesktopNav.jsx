@@ -6,7 +6,8 @@ import {
   faInfoCircle,
   faArrowRightFromBracket,
   faIdBadge,
-  faAngleUp
+  faAngleUp,
+  faSave
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
@@ -189,7 +190,15 @@ const DesktopNav = ({ languageLabel }) => {
             onClick={handleProfile}
             aria-label={'Profiili'}
           >
-            <AccountCircleIcon />
+              { isLoggedIn ?
+              <AccountCircleIcon />
+              :
+
+                            <FontAwesomeIcon
+                              icon={faSave}
+                              size="6x"
+                            />
+              }
             {strings.savedContent?.savedContent}
           </DropdownMenuItem>
           <DropdownMenuItem

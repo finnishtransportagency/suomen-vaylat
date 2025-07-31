@@ -7,9 +7,11 @@ import SavedContent from "../SavedContent";
 import { setIsSaveViewOpen, setSavedTab, setShowSavedContentViewForm, setShowSavedContentGeometryForm } from "../../../state/slices/uiSlice";
 import { ReactReduxContext } from "react-redux";
 import { theme } from "../../../theme/theme";
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 const SavedContentDialog = ({ constraintsRef }) => {
   const { isSaveViewOpen } = useAppSelector((state) => state.ui);
+  const { isLoggedIn } = useAppSelector((state) => state.rpc);
   const { store } = useContext(ReactReduxContext);
 
   const handleCloseSaveViewDialog = () => {
@@ -35,7 +37,7 @@ const SavedContentDialog = ({ constraintsRef }) => {
       resize={false}
       backdrop={false}
       fullScreenOnMobile={true}
-      titleIcon={faSave}
+      titleIcon={isLoggedIn ? <AccountCircleIcon sx={{fontSize: "24px !important"}} /> : faSave}
       title={strings.savedContent.savedContent}
       type={"normal"}
       closeAction={handleCloseSaveViewDialog}
