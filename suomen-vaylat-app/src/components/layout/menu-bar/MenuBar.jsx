@@ -366,7 +366,7 @@ const MenuBar = () => {
                         text={strings.savedContent.saveView.saveView}
                         onClick={() => {
                           store.dispatch(setSavedTab("views"));
-                          store.dispatch(setIsSaveViewOpen(!isSaveViewOpen));
+                          store.dispatch(setIsSaveViewOpen(true));
                         }}
                         aria-label={strings.savedContent?.saveView?.saveView}
                       />
