@@ -5,8 +5,15 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 
 const StyledBadge = styled(motion.div)`
+  ${({ expanded }) =>
+    expanded
+        ? `
+    min-height: unset;
+    `
+        : `
+    min-height: 3em;
+  `}
   max-width: 312px;
-  min-height: 3em;
   padding: 1em;
   display: flex;
   align-items: center;
@@ -20,7 +27,14 @@ const StyledBadge = styled(motion.div)`
 
   @media ${(props) => props.theme.device.mobileL} {
     max-width: 212px;
-    min-height: 40px;
+    ${({ expanded }) =>
+        expanded
+            ? `
+    min-height: unset;
+    `
+            : `
+        min-height: 40px;
+    `}
   }
 `;
 
@@ -96,6 +110,7 @@ const Badge = ({
       animate={{ y: 0, filter: 'blur(0px)', opacity: 1 }}
       exit={{ y: 50, filter: 'blur(10px)', opacity: 0 }}
       transition={{ duration: 0.4, type: 'tween' }}
+      expanded={expanded}
     >
       <StyledLeft>
         {icon}
