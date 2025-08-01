@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 
@@ -29,50 +29,52 @@ const StyledLeft = styled.div`
   display: flex;
   align-items: center;
   gap: 1em;
+  flex: 1 1 auto;
+  min-width: 0; /* Important for children with ellipsis to allow flex shrinking! */
 `;
 
 const StyledTitle = styled.div`
-  max-width: 120px;
+  flex: 1 1 0;
+  min-width: 0; /* CRUCIAL for ellipsis truncation in flexbox! */
   font-size: 14px;
   font-weight: 600;
   user-select: none;
+  cursor: pointer;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  cursor: pointer;
-  padding: 0.2em 0.6em 0.2em 0;
+
   ${({ expanded }) =>
     expanded &&
     `
-    white-space: normal;
-    overflow: visible;
-    max-width: none;
-    background: ${(props) => props.theme.colors.overlay || '#fff8'};
-    border-radius: 5px;
-    z-index: 2;
-  `}
+      white-space: normal;
+      overflow: visible;
+      text-overflow: unset;
+    `}
   @media ${(props) => props.theme.device.mobileL} {
     font-size: 12px;
-    max-width: 70px;
   }
 `;
 
 const StyledRight = styled.div`
-  margin-left: auto;
   display: flex;
   align-items: center;
   gap: 1em;
+  flex-shrink: 0;
 `;
 
 const StyledCloseButton = styled.div`
-    font-size: 
-    cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 20px;
+  flex-shrink: 0;
 `;
 
 const Badge = ({
   icon,
   title,
-  truncateLength = 14,
   bg,
   color,
   actionButtons = [],
@@ -81,12 +83,9 @@ const Badge = ({
 }) => {
   const [expanded, setExpanded] = useState(false);
 
-  // If expanded, show full title, otherwise truncate with ellipsis
-  let shownTitle = title;
-  if (!expanded && typeof title === 'string' && title.length > truncateLength) {
-    shownTitle = title.substring(0, truncateLength) + '...';
-  }
-  console.log(expanded);
+  useEffect(() => {
+    setExpanded(false);
+  }, [title]);
 
   return (
     <StyledBadge
@@ -105,7 +104,7 @@ const Badge = ({
           onClick={() => setExpanded((e) => !e)}
           title={title}
         >
-          {shownTitle}
+          {title}
         </StyledTitle>
       </StyledLeft>
       <StyledRight>
