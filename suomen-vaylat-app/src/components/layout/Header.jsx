@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useState, useRef, useCallback } from 'react';
 import { ReactReduxContext } from 'react-redux';
 import ReactTooltip from 'react-tooltip';
 import { theme, isMobile } from '../../theme/theme';
@@ -6,6 +6,15 @@ import styled from 'styled-components';
 import { AnimatePresence } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useAppSelector } from '../../state/hooks';
+import strings from '../../translations';
+import LanguageSelector from '../language-selector/LanguageSelector';
+import { ReactComponent as VaylaLogo } from './images/vayla_v_white.svg';
+import DesktopNav from './navigation/DesktopNav';
+import { createBrowserHistory } from 'history';
+import MobileNav from './navigation/MobileNav';
+import { faBars } from '@fortawesome/free-solid-svg-icons';
+import Badges from '../badges/Badges';
+
 import {
   setIsMainScreen,
   setActiveTool,
@@ -17,16 +26,10 @@ import {
   resetGFILocations,
   setVKMData
 } from '../../state/slices/rpcSlice';
-import { resetThemeGroupsForMainScreen } from '../../utils/rpcUtil';
-import strings from '../../translations';
-import LanguageSelector from '../language-selector/LanguageSelector';
-import { ReactComponent as VaylaLogo } from './images/vayla_v_white.svg';
-import { updateLayers } from '../../utils/rpcUtil';
-import DesktopNav from './navigation/DesktopNav';
-import { createBrowserHistory } from 'history';
-import MobileNav from './navigation/MobileNav';
-import { faBars } from '@fortawesome/free-solid-svg-icons';
-import Badges from '../badges/Badges';
+import {
+  resetThemeGroupsForMainScreen,
+  updateLayers
+} from '../../utils/rpcUtil';
 
 const history = createBrowserHistory();
 
@@ -170,29 +173,17 @@ export const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { store } = useContext(ReactReduxContext);
 
-  const {
-    channel,
-    selectedLayers,
-    lastSelectedTheme,
-    selectedThemeId,
-    startState
-  } = useAppSelector((state) => state.rpc);
+  // This function now only accesses latest redux state when called
+  const setToMainScreen = useCallback(() => {
+    const state = store.getState();
+    const channel = state.rpc.channel;
+    const selectedLayers = state.rpc.selectedLayers;
+    const lastSelectedTheme = state.rpc.lastSelectedTheme;
+    const selectedThemeId = state.rpc.selectedThemeId;
+    const startState = state.rpc.startState;
+    const activeTool = state.ui.activeTool;
+    const activeGeometries = state.ui.activeGeometries;
 
-  const { activeTool, activeGeometries } =
-    useAppSelector((state) => state.ui);
-
-  const handleSelectGroup = (index, theme) => {
-    resetThemeGroupsForMainScreen(
-      store,
-      channel,
-      index,
-      theme,
-      lastSelectedTheme,
-      selectedThemeId
-    );
-  };
-
-  const setToMainScreen = () => {
     let routerPrefix = '/';
     if (process.env.REACT_APP_ROUTER_PREFIX) {
       routerPrefix = process.env.REACT_APP_ROUTER_PREFIX;
@@ -218,7 +209,14 @@ export const Header = () => {
     store.dispatch(setIsMainScreen());
     store.dispatch(resetGFILocations([]));
     history.push(routerPrefix);
-    handleSelectGroup(null, lastSelectedTheme);
+    resetThemeGroupsForMainScreen(
+      store,
+      channel,
+      null,
+      lastSelectedTheme,
+      lastSelectedTheme,
+      selectedThemeId
+    );
 
     // add start layers back (do it after than select group)
     startState.selectedLayers.forEach((layer) => {
@@ -263,7 +261,7 @@ export const Header = () => {
     activeGeometries.forEach((geometry) => {
       store.dispatch(removeActiveGeometry(geometry.id));
     });
-  };
+  }, [store]);
 
   return (
     <>
@@ -305,7 +303,7 @@ export const Header = () => {
               rel="noreferrer"
               id="header-vayla-logo-link"
             >
-              <VaylaLogo aria-hidden="true" focusable="false"/>
+              <VaylaLogo aria-hidden="true" focusable="false" />
             </a>
           </StyledHeaderLogoContainer>
           <StyledHeaderTitleContainer
@@ -346,9 +344,7 @@ export const Header = () => {
         </HeaderRight>
 
         <AnimatePresence>
-          {isMenuOpen && (
-            <MobileNav  setIsMenuOpen={setIsMenuOpen}></MobileNav>
-          )}
+          {isMenuOpen && <MobileNav setIsMenuOpen={setIsMenuOpen}></MobileNav>}
         </AnimatePresence>
       </StyledHeaderContainer>
     </>
