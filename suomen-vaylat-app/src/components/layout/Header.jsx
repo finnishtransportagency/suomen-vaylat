@@ -3,7 +3,7 @@ import { ReactReduxContext } from 'react-redux';
 import ReactTooltip from 'react-tooltip';
 import { theme, isMobile } from '../../theme/theme';
 import styled from 'styled-components';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useAppSelector } from '../../state/hooks';
 import {
@@ -21,7 +21,6 @@ import { resetThemeGroupsForMainScreen } from '../../utils/rpcUtil';
 import strings from '../../translations';
 import LanguageSelector from '../language-selector/LanguageSelector';
 import { ReactComponent as VaylaLogo } from './images/vayla_v_white.svg';
-import MenuIcon from '@mui/icons-material/Menu';
 import { updateLayers } from '../../utils/rpcUtil';
 import DesktopNav from './navigation/DesktopNav';
 import { createBrowserHistory } from 'history';
@@ -157,93 +156,11 @@ const StyledHeaderLogoContainer = styled.div`
   }
 `;
 
-const StyledMobileHeaderRow = styled.header`
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-`;
-
-const StyledMobileMenuTitle = styled.p`
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 18px;
-  font-weight: 600;
-  color: ${(props) => props.theme.colors.mainWhite};
-  margin: 0;
-`;
-
-const MobileMenuList = styled.nav`
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  margin-top: 30px;
-  margin-left: 20px;
-`;
-
-const StyledMobileMenuButton = styled.button`
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  padding: 10px 0;
-  color: ${(props) => props.theme.colors.mainWhite};
-  font-size: 20px;
-  font-weight: 500;
-  cursor: pointer;
-  margin-left: 20px;
-  background: none;
-  border: none;
-
-  .icon-wrapper {
-    width: 25px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-shrink: 0;
-  }
-
-  .text-wrapper {
-    display: flex;
-    align-items: center;
-  }
-
-  &:focus {
-    outline: 2px solid ${(props) => props.theme.colors.secondaryColor};
-  }
-`;
-
 const DesktopButtons = styled.div`
   display: flex;
   align-items: center;
   gap: 4px;
   @media ${(props) => props.theme.device.mobileL} {
-    display: none;
-  }
-`;
-
-const StyledMobileNavContainer = styled(motion.nav)`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: ${(props) => props.theme.colors.mainColor1};
-  z-index: 1001;
-
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-start;
-  padding: 20px;
-  gap: 20px;
-`;
-
-const HiddenLanguageIconWrapper = styled.div`
-  display: flex;
-  align-items: center;
-
-  svg {
     display: none;
   }
 `;
