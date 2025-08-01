@@ -54,7 +54,8 @@ const PillButton = ({
   disabled,
   color,
   hoverColor,
-  iconColor
+  iconColor,
+  ...rest
 }) => {
   return (
     <StyledPillButton
@@ -64,6 +65,7 @@ const PillButton = ({
       color={color}
       hoverColor={hoverColor}
       iconColor={iconColor}
+      {...rest}
     >
       {typeof icon === 'string' && icon.endsWith('.svg') ? (
         <img src={icon} alt="icon" />
