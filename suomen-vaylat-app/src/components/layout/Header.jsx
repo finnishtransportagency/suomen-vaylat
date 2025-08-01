@@ -1,4 +1,3 @@
-
 import { useContext, useState } from 'react';
 import { ReactReduxContext } from 'react-redux';
 import ReactTooltip from 'react-tooltip';
@@ -10,7 +9,7 @@ import { useAppSelector } from '../../state/hooks';
 import {
   setIsMainScreen,
   setActiveTool,
-  removeActiveGeometry,
+  removeActiveGeometry
 } from '../../state/slices/uiSlice';
 import {
   mapMoveRequest,
@@ -22,7 +21,6 @@ import { resetThemeGroupsForMainScreen } from '../../utils/rpcUtil';
 import strings from '../../translations';
 import LanguageSelector from '../language-selector/LanguageSelector';
 import { ReactComponent as VaylaLogoMobile } from './images/vayla_v_white.svg';
-import MenuIcon from '@mui/icons-material/Menu';
 import { ReactComponent as VaylaLogo } from './images/vayla_sivussa_fi_sv_white.svg';
 import { updateLayers } from '../../utils/rpcUtil';
 import DesktopNav from './navigation/DesktopNav';
@@ -259,7 +257,7 @@ const HiddenLanguageIconWrapper = styled.div`
 
 export const Header = () => {
   const lang = useAppSelector((state) => state.language);
-  const [isSubNavOpen, setSubNavOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { store } = useContext(ReactReduxContext);
 
   const {
@@ -270,7 +268,7 @@ export const Header = () => {
     startState
   } = useAppSelector((state) => state.rpc);
 
-  const { isInfoOpen, isUserGuideOpen, activeTool, activeGeometries } =
+  const { activeTool, activeGeometries } =
     useAppSelector((state) => state.ui);
 
   const handleSelectGroup = (index, theme) => {
@@ -326,7 +324,8 @@ export const Header = () => {
         ]);
     });
 
-    channel && activeTool === 'gfi-selection-tool' &&
+    channel &&
+      activeTool === 'gfi-selection-tool' &&
       channel.postRequest('DrawTools.StopDrawingRequest', [
         'gfi-selection-tool',
         true
@@ -396,11 +395,15 @@ export const Header = () => {
               rel="noreferrer"
               id="header-vayla-logo-link"
             >
-              {isMobile ? <VaylaLogoMobile aria-hidden="true" focusable="false"/> : <VaylaLogo aria-hidden="true" focusable="false"/>}
+              {isMobile ? (
+                <VaylaLogoMobile aria-hidden="true" focusable="false" />
+              ) : (
+                <VaylaLogo aria-hidden="true" focusable="false" />
+              )}
             </a>
           </StyledHeaderLogoContainer>
-          <StyledHeaderTitleContainer 
-            id="header-title" 
+          <StyledHeaderTitleContainer
+            id="header-title"
             onClick={setToMainScreen}
             aria-label={strings.accessibility.headerTitle}
           >
@@ -409,21 +412,21 @@ export const Header = () => {
           </StyledHeaderTitleContainer>
         </HeaderLeft>
 
-        {/* Right blue corner */}
         <HeaderRight id="header-right">
-          {/* Desktop profile/language dropdown */}
-          <DesktopButtons id="header-desktop-buttons" aria-label={strings.accessibility.desktopButtons}>
+          <DesktopButtons
+            id="header-desktop-buttons"
+            aria-label={strings.accessibility.desktopButtons}
+          >
             <LanguageSelector />
-            <DesktopNav/>
+            <DesktopNav setIsMenuOpen={setIsMenuOpen} isMenuOpen={isMenuOpen} />
           </DesktopButtons>
 
-          {/* Mobile menu toggle remains the same */}
           <StyledHeaderButton
             id="header-menu-toggle-button"
             className="menu-toggle-button"
-            onClick={() => setSubNavOpen(!isSubNavOpen)}
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
             aria-label={strings.accessibility.menuToggle}
-            aria-expanded={isSubNavOpen}
+            aria-expanded={isMenuOpen}
             aria-controls="header-mobile-nav-container"
           >
             <FontAwesomeIcon
@@ -434,13 +437,11 @@ export const Header = () => {
           </StyledHeaderButton>
         </HeaderRight>
 
-    <AnimatePresence>
-
-        {isSubNavOpen &&
-          <MobileNav setSubNavOpen={setSubNavOpen}></MobileNav>
-        }
-            </AnimatePresence>
-
+        <AnimatePresence>
+          {isMenuOpen && (
+            <MobileNav  setIsMenuOpen={setIsMenuOpen}></MobileNav>
+          )}
+        </AnimatePresence>
       </StyledHeaderContainer>
     </>
   );

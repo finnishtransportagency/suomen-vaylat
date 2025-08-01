@@ -39,6 +39,7 @@ const useOnClickOutside = (ref, handler) => {
 const DesktopNavContainer = styled.div`
   display: flex;
   align-items: center;
+  margin-left: 0.5em;
 `;
 
 const ProfileButton = styled.button`
@@ -135,27 +136,26 @@ const ProfileNameSpan = styled.span`
   margin-left: 6px;
 `;
 
-const DesktopNav = ({ languageLabel }) => {
-  const [isOpen, setIsOpen] = useState(false);
+const DesktopNav = ({ setIsMenuOpen, isMenuOpen }) => {
   const { isLoggedIn } = useAppSelector((state) => state.rpc);
   const ref = useRef();
-  useOnClickOutside(ref, () => setIsOpen(false));
+  useOnClickOutside(ref, () => setIsMenuOpen(false));
   const { store } = useContext(ReactReduxContext);
 
   // Menu actions
   const handleProfile = () => {
     store.dispatch(setIsSaveViewOpen(true));
-    setIsOpen(false);
+    setIsMenuOpen(false);
   };
 
   const handleUserGuide = () => {
     store.dispatch(setIsUserGuideOpen(true));
-    setIsOpen(false);
+    setIsMenuOpen(false);
   };
 
   const handleInfo = () => {
     store.dispatch(setIsInfoOpen(true));
-    setIsOpen(false);
+    setIsMenuOpen(false);
   };
 
   // IDs for aria-controls/aria-labelledby
@@ -168,16 +168,13 @@ const DesktopNav = ({ languageLabel }) => {
 
   return (
     <DesktopNavContainer ref={ref} id="desktop-nav-container">
-      <ProfileNameSpan id="desktop-nav-language">
-        {languageLabel}
-      </ProfileNameSpan>
       <ProfileButton
         aria-haspopup="menu"
-        aria-expanded={isOpen}
+        aria-expanded={isMenuOpen}
         aria-controls={menuId}
         id={profileBtnId}
         tabIndex={0}
-        onClick={() => setIsOpen((v) => !v)}
+        onClick={() => setIsMenuOpen((v) => !v)}
         title={strings.accessibility?.openProfileMenu}
       >
         {isLoggedIn ? (
@@ -185,7 +182,7 @@ const DesktopNav = ({ languageLabel }) => {
             <AccountCircleIcon fontSize="large" />
             <FontAwesomeIcon
               style={{ marginLeft: '6px', fontSize: '19px' }}
-              icon={isOpen ? faAngleUp : faAngleDown}
+              icon={isMenuOpen ? faAngleUp : faAngleDown}
               aria-hidden="true"
             />
           </>
@@ -200,7 +197,7 @@ const DesktopNav = ({ languageLabel }) => {
           </>
         )}
       </ProfileButton>
-      {isOpen && (
+      {isMenuOpen && (
         <DropdownMenu id={menuId} role="menu" aria-labelledby={profileBtnId}>
           <DropdownMenuItem
             id={menuProfileId}

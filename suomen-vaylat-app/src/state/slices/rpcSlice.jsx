@@ -63,6 +63,7 @@ const initialState = {
   searchOn: null,
   coordMarkerIndex: 0,
   views: null,
+  // TODO: waiting for logging in option
   isLoggedIn: false,
 };
 
