@@ -61,7 +61,8 @@ const initialState = {
   filteringInfo: [],
   featureSearchResults: [],
   searchOn: null,
-  coordMarkerIndex: 0
+  coordMarkerIndex: 0,
+  views: null
 };
 
 export const rpcSlice = createSlice({
@@ -950,6 +951,10 @@ export const rpcSlice = createSlice({
         state.startState.zoom = action.payload.zoom;
       }
     },
+
+    setViews: (state, action) => {
+      state.views = action.payload;
+    },
   },
 });
 
@@ -1017,7 +1022,8 @@ export const {
   setSearchOn,
   searchVKMTrack,
   setAnnouncements,
-  setCoordMarkerIndex
+  setCoordMarkerIndex,
+  setViews
 } = rpcSlice.actions;
 
 export default rpcSlice.reducer;

@@ -13,7 +13,8 @@ import {
 import {
   addToDrawToolMarkers,
   setIsSaveViewOpen,
-  setSavedTabIndex
+  setSavedTabIndex,
+  setShowSavedContentGeometryForm
 } from '../../state/slices/uiSlice';
 import { theme } from '../../theme/theme';
 import { faSave, faTrash } from '@fortawesome/free-solid-svg-icons';
@@ -55,7 +56,7 @@ const StyledMapCenterButton = styled.button`
     background-color: ${(props) =>
       props.disabled
         ? props.theme.colors.disabledBg
-        : props.theme.colors.mainColorselected1};
+        : props.theme.colors.mainColor1Selected};
   }
 `;
 
@@ -82,7 +83,7 @@ const StyledMarkerAdditionButton = styled.button`
     background-color: ${(props) =>
       props.disabled
         ? props.theme.colors.disabledBg
-        : props.theme.colors.mainColorselected1};
+        : props.theme.colors.mainColor1Selected};
   }
 `;
 
@@ -257,6 +258,7 @@ const CoordinateTool = () => {
   const handleSaveMarkers = () => {
     store.dispatch(setIsSaveViewOpen(true));
     store.dispatch(setSavedTabIndex(1));
+    store.dispatch(setShowSavedContentGeometryForm(true));
   };
 
   const handleAddMarker = () => {

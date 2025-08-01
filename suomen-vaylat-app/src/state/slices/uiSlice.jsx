@@ -63,6 +63,8 @@ const initialState = {
   isCoordinateToolOpen: false,
   selectedBaseLayers: [],
   isBaseLayerSelectorMenuOpen: false,
+  showSavedContentViewForm: false,
+  showSavedContentGeometryForm: false
 };
 
 export const uiSlice = createSlice({
@@ -294,6 +296,12 @@ export const uiSlice = createSlice({
     },
     setIsBaseLayerSelectorMenuOpen: (state, action) => {
         state.isBaseLayerSelectorMenuOpen = action.payload;
+    },
+    setShowSavedContentViewForm: (state, action) => {
+      state.showSavedContentViewForm = action.payload;
+    },
+    setShowSavedContentGeometryForm: (state, action) => {
+      state.showSavedContentGeometryForm = action.payload;
     }
   }
 });
@@ -359,6 +367,8 @@ export const {
   setIsCoordinateToolOpen,
   setSelectedBaseLayers,
   setIsBaseLayerSelectorMenuOpen,
+  setShowSavedContentViewForm,
+  setShowSavedContentGeometryForm
 } = uiSlice.actions;
 
 export default uiSlice.reducer;

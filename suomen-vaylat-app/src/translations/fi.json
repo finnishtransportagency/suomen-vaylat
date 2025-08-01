@@ -56,7 +56,9 @@
     "savedContent": "Omat tiedot",
     "viewTitle": "Näkymät",
     "geometryTitle": "Geometriat",
+    "description": "Kuvaus",
     "saveView": {
+      "title": "Tallenna uusi näkymä",
       "confirmDeleteAll" : "Haluatko varmasti poistaa kaikki tallennetut näkymät?",
       "saveView" : "Tallenna tila",
       "savingView" : "Näkymän tallennus",
@@ -67,7 +69,12 @@
       "savedViews" : "Tallennetut näkymät",
       "viewName" : "Näkymän nimi",
       "saveNewView" : "Tallenna uusi näkymä",
-      "saveViewButton" : "Tallenna näkymä"
+      "saveViewButton" : "Tallenna näkymä",
+      "defaultView": "Oletusnäkymä",
+      "setDefaultView": "Aseta oletusnäkymäksi",
+      "addNewView": "lisää uusi näkymä",
+      "deleteSavedView": "Poista tallennettu näkymä",
+      "editView": "Muokkaa näkymää"
     },
     "saveGeometry": {
       "confirmDeleteAll": "Haluatko varmasti poistaa kaikki tallennetut geometriat?",
@@ -80,7 +87,12 @@
       "savedGeometries": "Tallennetut geometriat",
       "geometryName": "Geometrian nimi",
       "noGeometry": "Ei uusia geometrioita kartalla",
-      "saveNewGeometry": "Tallenna uusi geometria"
+      "saveNewGeometry": "Tallenna uusi geometria",
+      "saveGeometryButton" : "Tallenna geometria",
+      "geometryDesc": "Geometrian kuvaus",
+      "addNewGeometry": "Uusi geometria",
+      "deleteSavedGeometry": "Poista tallennettu geometria",
+      "editGeometry": "Muokkaa geometrian tietoja"
     }
   },
   "gfi": {

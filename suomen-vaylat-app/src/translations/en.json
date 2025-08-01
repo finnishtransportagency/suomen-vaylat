@@ -55,7 +55,9 @@
     "savedContent" : "My data",
     "viewTitle" : "Views",
     "geometryTitle" : "Geometries",
+    "description": "Description",
     "saveView" : {
+      "title": "Save new view",
       "confirmDeleteAll" : "Are you sure you want to delete all views?",
       "saveView" : "Save state",
       "savingView" : "Saving view",
@@ -66,7 +68,12 @@
       "savedViews" : "Saved views",
       "viewName" : "View name",
       "saveNewView" : "Save new view",
-      "saveViewButton" : "Save view"
+      "saveViewButton" : "Save view",
+      "defaultView": "Default view",
+      "setDefaultView": "Set as default view",
+      "addNewView": "Add new view",
+      "deleteSavedView": "Delete saved view",
+      "editView": "Edit view"
     },
     "saveGeometry": {
       "confirmDeleteAll": "Are you sure you want to delete all saved geometries?",
@@ -79,7 +86,12 @@
       "savedGeometries": "Saved geometries",
       "geometryName": "Geometry name",
       "noGeometry": "No new geometries on the map",
-      "saveNewGeometry": "Save new geometry"
+      "saveNewGeometry": "Save new geometry",
+      "saveGeometryButton" : "Save geometry",
+      "geometryDesc": "Geometry description",
+      "addNewGeometry": "Add new geometry",
+      "deleteSavedGeometry": "Delete saved geometry",
+      "editGeometry": "Edit geometry information"
     }
   },
   "gfi": {

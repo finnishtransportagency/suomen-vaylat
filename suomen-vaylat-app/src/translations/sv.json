@@ -54,9 +54,11 @@
   },
   "savedContent" : {
     "savedContent" : "Mina uppgifter",
-    "viewTitle" : "Syn",
+    "viewTitle" : "Vyn",
     "geometryTitle" : "Geometrier",
+    "description": "Beskrivning",
     "saveView" : {
+      "title": "Spara ny vy",
       "confirmDeleteAll" : "Är du säker på att du vill ta bort alla sparade vyer?",
       "saveView" : "Spara tillstånd",
       "savingView" : "Sparar vy",
@@ -67,7 +69,12 @@
       "savedViews" : "Sparade vyer",
       "viewName" : "Visa namn",
       "saveNewView" : "Spara ny vy",
-      "saveViewButton" : "Spara vy"
+      "saveViewButton" : "Spara vy",
+      "defaultView": "Förvald kartvy",
+      "setDefaultView": "Ange som standardvy",
+      "addNewView": "Lägg till ny vy",
+      "deleteSavedView": "Ta bort sparad vy",
+      "editView": "Redigera vy"
     },
     "saveGeometry": {
       "confirmDeleteAll": "Är du säker på att du vill ta bort all sparad geometri?",
@@ -80,7 +87,12 @@
       "savedGeometries": "Sparad geometri",
       "geometryName": "Geometrins namn",
       "noGeometry": "Ingen ny geometri på kartan",
-      "saveNewGeometry": "Spara ny geometri"
+      "saveNewGeometry": "Spara ny geometri",
+      "saveGeometryButton" : "Spara geometri",
+      "geometryDesc": "Geometribeskrivning",
+      "addNewGeometry": "Lägg till ny geometri",
+      "deleteSavedGeometry": "Ta bort sparad geometri",
+      "editGeometry": "Redigera geometriinformation"
     }
   },
   "gfi": {
