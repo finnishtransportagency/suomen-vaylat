@@ -13,7 +13,6 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import ViewsTab from './ViewsTab';
 import GeometriesTab from './GeometriesTab';
 
-// -- Styled Components (unchanged unless noted) --
 const StyledContent = styled.div`
     max-width: 660px;
     overflow: hidden;

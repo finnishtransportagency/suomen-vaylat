@@ -28,7 +28,6 @@ const StyledGeometryActions = styled.div`
   column-gap: 8px;
 `;
 
-// Add/Update/Edit handlers here:
 const StyledMainContainer = styled.div`
   overflow: auto;
   padding: 0 12px 12px 12px;
