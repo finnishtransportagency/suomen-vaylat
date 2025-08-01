@@ -110,6 +110,7 @@
     "noResultsTitle": "No results",
     "noResultsDesc": "No results with geometry, select new geometry or new layers",
     "filter": "Filter",
+    "filterBadgeTitle" : "Filters",
     "filterGuideTitle" : "Filtering",
     "title": "Feature Data",
     "close": "Close",

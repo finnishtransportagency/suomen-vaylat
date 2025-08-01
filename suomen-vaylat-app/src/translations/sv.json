@@ -111,6 +111,7 @@
     "noResultsTitle": "Inga resultat",
     "noResultsDesc": "Inga resultat med geometri, välj ny geometri eller nya lager",
     "filter": "Filtrera",
+    "filterBadgeTitle" : "Filtrerar",
     "title": "Objektuppgifter",
     "close": "Stänga",
     "additionalInfo": "Tilläggsinformation",

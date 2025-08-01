@@ -139,6 +139,7 @@
       "disabled": "Väliaikaisesti poissa käytöstä"
     },
     "filter" : "Suodata",
+    "filterBadgeTitle" : "Suodattimet",
     "streetView": {
       "title": "Google Street View",
       "openGoogleStreetView": "Avaa Google Street View",
