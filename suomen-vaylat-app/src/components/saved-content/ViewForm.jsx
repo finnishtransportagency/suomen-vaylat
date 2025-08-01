@@ -154,7 +154,6 @@ const ViewForm = ({
   initialData = {},
   onSave,
   onCancel,
-  isEditing,
   strings
 }) => {
   const [viewName, setViewName] = useState(initialData?.name || '');

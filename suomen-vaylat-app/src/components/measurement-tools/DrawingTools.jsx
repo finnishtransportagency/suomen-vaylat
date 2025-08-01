@@ -179,6 +179,7 @@ export const DrawingTools = ({ isOpen }) => {
               id={'drawing-tools-add-marker'}
               icon={tool.style.icon}
               onClick={() => addMarker(tool)}
+              aria-label={tool.name}
             >
               {tool.name}
             </PillButton>
@@ -195,6 +196,7 @@ export const DrawingTools = ({ isOpen }) => {
               icon={tool.style.icon}
               color={theme.colors.secondaryColorDarkOrange}
               hoverColor={theme.colors.secondaryColorDarkOrange}
+              aria-label={tool.name}
             >
               {tool.name}
             </PillButton>
@@ -210,6 +212,7 @@ export const DrawingTools = ({ isOpen }) => {
             color={
               tool.id === activeTool ? theme.colors.buttonSelected : undefined
             }
+            aria-label={tool.name}
           >
             {tool.name}
           </PillButton>
@@ -223,6 +226,7 @@ export const DrawingTools = ({ isOpen }) => {
         disabled={!geoJsonArray.length && drawToolMarkers.length <= 0}
         icon={faCloudUploadAlt}
         color={theme.colors.secondaryColorGreen}
+        aria-label={strings.savedContent.saveGeometry.saveGeometry}
       >
         {strings.savedContent.saveGeometry.saveGeometry}
       </PillButton>

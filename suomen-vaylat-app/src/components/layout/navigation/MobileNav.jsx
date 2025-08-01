@@ -147,7 +147,7 @@ const HiddenLanguageIconWrapper = styled.div`
   }
 `;
 
-const MobileNav = ({ setSubNavOpen }) => {
+const MobileNav = ({ setIsMenuOpen }) => {
   const { store } = useContext(ReactReduxContext);
   const { isLoggedIn } = useAppSelector((state) => state.rpc);
 
@@ -160,6 +160,22 @@ const MobileNav = ({ setSubNavOpen }) => {
   const langBtnId = 'mobile-nav-language-button';
   const signOutBtnId = 'mobile-nav-sign-out-button';
   const menuLabelId = 'mobile-nav-menu-title';
+
+  // Menu actions
+  const handleProfile = () => {
+    store.dispatch(setIsSaveViewOpen(true));
+    setIsMenuOpen(false);
+  };
+
+  const handleUserGuide = () => {
+    store.dispatch(setIsUserGuideOpen(true));
+    setIsMenuOpen(false);
+  };
+
+  const handleInfo = () => {
+    store.dispatch(setIsInfoOpen(true));
+    setIsMenuOpen(false);
+  };
 
   return (
     <StyledMobileNavContainer
@@ -188,7 +204,7 @@ const MobileNav = ({ setSubNavOpen }) => {
 
         <StyledHeaderButton
           id="mobile-nav-close-button"
-          onClick={() => setSubNavOpen(false)}
+          onClick={() => setIsMenuOpen(false)}
           aria-label={strings.accessibility.closeMenu}
         >
           <FontAwesomeIcon
@@ -202,7 +218,7 @@ const MobileNav = ({ setSubNavOpen }) => {
       <MobileMenuList id={menuId} role="menu" aria-labelledby={menuLabelId}>
         <StyledMobileMenuButton
           id={profileBtnId}
-          onClick={() => store.dispatch(setIsSaveViewOpen(true))}
+          onClick={handleProfile}
           aria-label={strings.tooltips.profile}
           aria-haspopup="true"
           role="menuitem"
@@ -222,7 +238,7 @@ const MobileNav = ({ setSubNavOpen }) => {
 
         <StyledMobileMenuButton
           id={userGuideBtnId}
-          onClick={() => store.dispatch(setIsUserGuideOpen(true))}
+          onClick={handleUserGuide}
           aria-label={strings.tooltips.userGuide}
           aria-haspopup="true"
           role="menuitem"
@@ -242,7 +258,7 @@ const MobileNav = ({ setSubNavOpen }) => {
 
         <StyledMobileMenuButton
           id={infoBtnId}
-          onClick={() => store.dispatch(setIsInfoOpen(true))}
+          onClick={handleInfo}
           aria-label={strings.tooltips.pageInfo}
           aria-haspopup="true"
           role="menuitem"
