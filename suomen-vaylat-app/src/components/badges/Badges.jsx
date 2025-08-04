@@ -15,19 +15,17 @@ const StyledContent = styled.div`
   max-width: 312px;
   display: grid;
   gap: 8px;
-  margin-top: 16px;
+  margin-top: 0.7em;
 
   @media ${(props) => props.theme.device.mobileL} {
     top: unset;
     max-width: 212px;
-    margin-top: unset;
     margin-bottom: 8px;
     gap: 4px;
   }
   @media ${(props) => props.theme.device.lowResDesktop} {
     top: unset;
     max-width: 212px;
-    margin-top: unset;
     margin-bottom: 8px;
     gap: 4px;
   }
