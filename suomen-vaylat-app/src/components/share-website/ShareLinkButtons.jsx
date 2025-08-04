@@ -43,31 +43,18 @@ export const ThemeGroupShareButton = ({ themeId, color }) => {
     '/?lang={lang}';
 
   return (
-    <>
-      <ReactTooltip
-        backgroundColor={theme.colors.secondaryColorGreen}
-        disable={isMobile}
-        id={'share_' + themeId}
-        place="bottom"
-        type="dark"
-        effect="solid"
-        aria-label={strings.tooltips.shareTheme}
-      >
-        <span>{strings.tooltips.shareTheme}</span>
-      </ReactTooltip>
-      <StyledShareButton
-        data-tip
-        data-for={'share_' + themeId}
-        onClick={(e) => {
-          e && e.stopPropagation();
-          store.dispatch(setShareUrl(url));
-        }}
-        color={color}
-        aria-label={strings.tooltips.shareTheme}
-      >
-        <FontAwesomeIcon icon={faShareAlt} />
-      </StyledShareButton>
-    </>
+    <StyledShareButton
+      data-tip
+      data-for={'share_' + themeId}
+      onClick={(e) => {
+        e && e.stopPropagation();
+        store.dispatch(setShareUrl(url));
+      }}
+      color={color}
+      aria-label={strings.tooltips.shareTheme}
+    >
+      <FontAwesomeIcon icon={faShareAlt} />
+    </StyledShareButton>
   );
 };
 

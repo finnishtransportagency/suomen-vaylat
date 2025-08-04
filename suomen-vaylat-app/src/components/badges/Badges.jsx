@@ -32,7 +32,6 @@ const StyledContent = styled.div`
   }
 `;
 
-// A mapping from badge id to badge component
 const badgeMap = {
   gfi: <FeatureDataBadge key="gfi" />,
   theme: <ThemeBadge key="theme" />,

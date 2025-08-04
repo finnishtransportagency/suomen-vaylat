@@ -93,7 +93,7 @@ const Badge = ({
   color,
   actionButtons = [],
   closeAction,
-  idPrefix = '', // Optionally allow consumers to pass a suffix for unique ids
+  idPrefix = '',
   ...rest
 }) => {
   const [expanded, setExpanded] = useState(false);
@@ -102,7 +102,6 @@ const Badge = ({
     setExpanded(false);
   }, [title]);
 
-  // Generate unique ids for ARIA linkage
   const baseId = `${idPrefix}-badge`;
   const titleId = `${baseId}-title`;
   const closeBtnId = `${baseId}-close`;
