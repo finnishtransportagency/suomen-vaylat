@@ -19,7 +19,7 @@ const StyledGroupHeader = styled.div`
     justify-content: space-between;
     align-items: center;
     cursor: pointer;
-    background-color: ${props => props.hasLegend ? props.theme.colors.mainColor1 : '#bbb'};
+    background-color: ${props => props.hasLegend ? props.theme.colors.mainColor1 : props.theme.colors.disabledBg};
     border-radius: 4px;
     transition: all 0.1s ease-in;
     padding: 8px;
@@ -29,7 +29,7 @@ const StyledGroupHeader = styled.div`
 const StyledGroupName = styled.p`
     user-select: none;
     max-width: 3    00px;
-    color: ${props => props.theme.colors.mainWhite};
+    color: ${props => props.hasLegend ? props.theme.colors.mainWhite : props.theme.colors.disabledColor};
     margin: 0;
     padding-left: 8px;
     font-size: 14px;
@@ -57,7 +57,7 @@ const StyledSelectButton = styled.button`
     background-color: transparent;
     border: none;
     svg {
-        color: ${props => props.subGroup ? props.theme.colors.mainColor1 : props.theme.colors.mainWhite};
+        color: ${props => props.hasLegend ? props.theme.colors.mainWhite : props.theme.colors.disabledColor};
         font-size: 19px;
         transition: all 0.3s ease-out;
     };
@@ -115,7 +115,8 @@ export const LegendGroup = ({ legend }) => {
                 hasLegend={legend.legend !== null}
             >
                 <StyledLeftContent>
-                    <StyledGroupName>{legend.layerName}
+                    <StyledGroupName hasLegend={legend.legend !== null}>
+                        {legend.layerName}
                         {filters && filters.filters.length > 0 && filters.filters.some(filter => (filter.layer ===  legend.layerId)) && 
                         <StyledFloatingSpan><FontAwesomeIcon icon={faFilter}  style={{ color: theme.colors.secondaryColorPink }}/></StyledFloatingSpan>}
                     </StyledGroupName>
