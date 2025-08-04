@@ -169,6 +169,7 @@ const DesktopNav = ({ setIsMenuOpen, isMenuOpen }) => {
   return (
     <DesktopNavContainer ref={ref} id="desktop-nav-container">
       <ProfileButton
+        aria-label={strings.accessibility?.openProfileMenu}
         aria-haspopup="menu"
         aria-expanded={isMenuOpen}
         aria-controls={menuId}

@@ -51,6 +51,7 @@ export const ThemeGroupShareButton = ({ themeId, color }) => {
         place="bottom"
         type="dark"
         effect="solid"
+        aria-label={strings.tooltips.shareTheme}
       >
         <span>{strings.tooltips.shareTheme}</span>
       </ReactTooltip>
