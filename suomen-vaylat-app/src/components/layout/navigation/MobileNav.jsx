@@ -48,6 +48,7 @@ const StyledHeaderLogoContainer = styled.div`
   justify-content: center;
   align-items: center;
   padding-left: 0px;
+  padding-right: 1em;
 
   a {
     height: inherit;
@@ -76,7 +77,7 @@ const StyledMobileMenuTitle = styled.p`
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  font-size: 18px;
+  font-size: 24px;
   font-weight: 600;
   color: ${(props) => props.theme.colors.mainWhite};
   margin: 0;

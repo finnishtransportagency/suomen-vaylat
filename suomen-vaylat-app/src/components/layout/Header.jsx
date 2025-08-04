@@ -343,9 +343,11 @@ export const Header = () => {
           </StyledHeaderButton>
         </HeaderRight>
 
-        <AnimatePresence>
-          {isMenuOpen && <MobileNav setIsMenuOpen={setIsMenuOpen}></MobileNav>}
-        </AnimatePresence>
+        { isMobile &&
+          <AnimatePresence>
+            {isMenuOpen && <MobileNav setIsMenuOpen={setIsMenuOpen}/>}
+           </AnimatePresence>
+        }
       </StyledHeaderContainer>
     </>
   );
