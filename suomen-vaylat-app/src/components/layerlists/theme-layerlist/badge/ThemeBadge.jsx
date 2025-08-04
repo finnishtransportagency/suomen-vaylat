@@ -29,6 +29,7 @@ const ThemeBadge = () => {
 
   return (
     <Badge
+      idPrefix={"theme"}
       icon={<FontAwesomeIcon icon={faMap} />}
       title={selectedTheme?.locale[lang].name || ''}
       bg={theme.colors.secondaryColorGreen}

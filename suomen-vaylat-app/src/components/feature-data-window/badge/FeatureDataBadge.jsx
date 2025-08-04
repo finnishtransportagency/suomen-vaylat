@@ -107,6 +107,7 @@ const FeatureDataBadge = () => {
 
   return (
     <Badge
+      idPrefix={"feature-data"}
       icon={<FontAwesomeIcon icon={faMapMarkedAlt} />}
       title={title}
       bg={theme.colors.mainColor1}

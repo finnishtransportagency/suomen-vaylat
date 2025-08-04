@@ -63,6 +63,7 @@ export const ThemeGroupShareButton = ({ themeId, color }) => {
           store.dispatch(setShareUrl(url));
         }}
         color={color}
+        aria-label={strings.tooltips.shareTheme}
       >
         <FontAwesomeIcon icon={faShareAlt} />
       </StyledShareButton>

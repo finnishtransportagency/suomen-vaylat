@@ -7,10 +7,10 @@ import { faTimes } from '@fortawesome/free-solid-svg-icons';
 const StyledBadge = styled(motion.div)`
   ${({ expanded }) =>
     expanded
-        ? `
+      ? `
     min-height: unset;
     `
-        : `
+      : `
     min-height: 3em;
   `}
   max-width: 312px;
@@ -28,11 +28,11 @@ const StyledBadge = styled(motion.div)`
   @media ${(props) => props.theme.device.mobileL} {
     max-width: 212px;
     ${({ expanded }) =>
-        expanded
-            ? `
+      expanded
+        ? `
     min-height: unset;
     `
-            : `
+        : `
         min-height: 40px;
     `}
   }
@@ -44,12 +44,12 @@ const StyledLeft = styled.div`
   align-items: center;
   gap: 1em;
   flex: 1 1 auto;
-  min-width: 0; /* Important for children with ellipsis to allow flex shrinking! */
+  min-width: 0;
 `;
 
 const StyledTitle = styled.div`
   flex: 1 1 0;
-  min-width: 0; /* CRUCIAL for ellipsis truncation in flexbox! */
+  min-width: 0;
   font-size: 14px;
   font-weight: 600;
   user-select: none;
@@ -93,6 +93,7 @@ const Badge = ({
   color,
   actionButtons = [],
   closeAction,
+  idPrefix = '', // Optionally allow consumers to pass a suffix for unique ids
   ...rest
 }) => {
   const [expanded, setExpanded] = useState(false);
@@ -101,31 +102,66 @@ const Badge = ({
     setExpanded(false);
   }, [title]);
 
+  // Generate unique ids for ARIA linkage
+  const baseId = `${idPrefix}-badge`;
+  const titleId = `${baseId}-title`;
+  const closeBtnId = `${baseId}-close`;
+  const leftId = `${baseId}-left`;
+  const rightId = `${baseId}-right`;
+
   return (
     <StyledBadge
       {...rest}
       bg={bg}
       color={color}
+      id={baseId}
+      role="region"
+      aria-labelledby={titleId}
+      aria-expanded={expanded}
       initial={{ y: 50, filter: 'blur(10px)', opacity: 0 }}
       animate={{ y: 0, filter: 'blur(0px)', opacity: 1 }}
       exit={{ y: 50, filter: 'blur(10px)', opacity: 0 }}
       transition={{ duration: 0.4, type: 'tween' }}
       expanded={expanded}
     >
-      <StyledLeft>
-        {icon}
+      <StyledLeft id={leftId}>
+        {icon && (
+          <span
+            id={`${baseId}-icon`}
+            aria-hidden="true"
+            style={{ display: 'flex', alignItems: 'center' }}
+          >
+            {icon}
+          </span>
+        )}
         <StyledTitle
+          id={titleId}
           expanded={expanded}
+          tabIndex={0}
+          aria-expanded={expanded}
+          aria-label={typeof title === 'string' ? title : undefined}
+          title={typeof title === 'string' ? title : undefined}
+          role="heading"
+          aria-level={3}
           onClick={() => setExpanded((e) => !e)}
-          title={title}
         >
           {title}
         </StyledTitle>
       </StyledLeft>
-      <StyledRight>
+      <StyledRight id={rightId} role="group" aria-label="Badge actions">
         {actionButtons &&
-          actionButtons.map((btn, i) => <span key={i}>{btn}</span>)}
-        <StyledCloseButton onClick={closeAction}>
+          actionButtons.map((btn, i) => (
+            <span key={i} id={`${baseId}-action-${i}`}>
+              {btn}
+            </span>
+          ))}
+        <StyledCloseButton
+          id={closeBtnId}
+          role="button"
+          aria-label="Close badge"
+          tabIndex={0}
+          onClick={closeAction}
+        >
           <FontAwesomeIcon icon={faTimes} />
         </StyledCloseButton>
       </StyledRight>

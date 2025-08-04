@@ -39,6 +39,7 @@ const LayerFilterBadge = () => {
 
   return (
     <Badge
+      idPrefix={"layer-filter"}
       icon={<FontAwesomeIcon icon={faFilter} />}
       title={strings.gfi.filterBadgeTitle}
       bg={theme.colors.secondaryColorPink}
