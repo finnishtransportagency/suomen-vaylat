@@ -38,9 +38,9 @@ import {
 
 import CircleButton from '../../../utils/components/CircleButton';
 import DrawingTools from '../../measurement-tools/DrawingTools';
-import PillButton from '../../../utils/components/PillButton';
 import ArrowDropDownCircleIcon from '@mui/icons-material/ArrowDropDownCircle';
 import { isMobile } from '../../../theme/theme';
+import ToolsPanel from './ToolsPanel';
 
 const StyledMenuBar = styled.div`
   z-index: 1;
@@ -72,11 +72,11 @@ const StyledDrawingToolsWrapper = styled.div`
   gap: 6px;
   background-color: ${({ theme }) => theme.colors.mainColor1 + '35'};
   border-radius: 22px 16px 16px 16px;
-  padding-bottom: 12px;
   pointer-events: auto;
 
   @media ${(props) => props.theme.device.mobileL} {
     border-radius: 18px 12px 12px 12px;
+    padding-bottom: 12px;
   }
 `;
 
@@ -88,7 +88,6 @@ const StyledToolButtons = styled.div`
   overflow: scroll;
   display: flex;
   flex-direction: column;
-  gap: 8px;
   padding: 0 8px;
   pointer-events: auto;
 
@@ -347,43 +346,7 @@ const MenuBar = () => {
                       aria-label={strings.tooltips?.closeDrawingTools}
                     />
                     <StyledToolButtons id="menubar-toolbuttons-container">
-                      <DrawingTools isOpen={isDrawingToolsOpen} />
-                      <PillButton
-                        id="menubar-tools-download-btn"
-                        icon={faDownload}
-                        text={strings.downloads.downloads}
-                        disabled={noDownloadableLayers}
-                        onClick={() =>
-                          store.dispatch(
-                            setIsGfiDownloadOpen(!isGfiDownloadOpen)
-                          )
-                        }
-                        aria-label={strings.downloads?.downloads}
-                      />
-                      <PillButton
-                        id="menubar-tools-save-btn"
-                        icon={faSave}
-                        text={strings.savedContent.saveView.saveView}
-                        onClick={() => {
-                          store.dispatch(setSavedTab("views"));
-                          store.dispatch(setIsSaveViewOpen(true));
-                        }}
-                        aria-label={strings.savedContent?.saveView?.saveView}
-                      />
-                      {!isMobile && (
-                        <PillButton
-                          id="menubar-tools-fullscreen-btn"
-                          icon={isFullScreen ? faCompress : faExpand}
-                          text={strings.tooltips.fullscreenButton}
-                          onClick={() => {
-                            const elem = document.documentElement;
-                            isFullScreen
-                              ? document.exitFullscreen?.()
-                              : elem.requestFullscreen?.();
-                          }}
-                          aria-label={strings.tooltips?.fullscreenButton}
-                        />
-                      )}
+                      <ToolsPanel isOpen={isDrawingToolsOpen} />
                     </StyledToolButtons>
                   </StyledDrawingToolsWrapper>
                 ) : (

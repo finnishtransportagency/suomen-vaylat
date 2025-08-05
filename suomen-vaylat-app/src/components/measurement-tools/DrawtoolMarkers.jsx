@@ -12,54 +12,77 @@ import {
   faArrowDown,
   faCommentAlt,
   faThumbtack,
-  faTimes,
-  faTrash
+  faTimes
 } from '@fortawesome/free-solid-svg-icons';
 
 import { useSelector } from 'react-redux';
 import strings from '../../translations';
-import {
-  setSelectedMarker,
-  setMarkerLabel
-} from '../../state/slices/uiSlice';
+import { setSelectedMarker, setMarkerLabel } from '../../state/slices/uiSlice';
 
 import { theme } from '../../theme/theme';
 
 const StyledOptionsWrapper = styled.div`
-  background-color: ${(props) => props.theme.colors.mainWhite};
   z-index: 100;
   display: flex;
   flex-direction: column;
-  padding: 10px;
+  padding: 0px;
   white-space: nowrap;
-  box-shadow: 0px 2px 4px #0000004d;
   border-radius: 6px;
   color: ${(props) => props.theme.colors.mainColor1};
   font-weight: 600;
-  overflow: visible; // Ensure children visible outside constraints
+  overflow: visible;
+  width: 100%;
 `;
 
 const StyledOptionButtonsWrapper = styled(motion.div)`
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 5px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  @media ${({ theme }) => theme.device.mobileL} {
+    grid-template-columns: repeat(2, 1fr);
+  }
 `;
 
 const StyledOptionsButton = styled(motion.button)`
+  font-weight: 600;
+  font-size: 15px;
   display: flex;
-  height: 35px;
-  width: 35px;
+  min-height: 38.5px;
   align-items: center;
   justify-content: center;
-  z-index: 10;
   border: none;
-  border-radius: 50%;
-  margin: 0 auto;
-  padding: 0;
+  border-radius: 30px;
+  padding: 8px 16px;
+  transition: background-color 0.2s ease;
+  background-color: ${({ shape, selected }) =>
+    selected
+      ? shape === 7
+        ? theme.colors.secondaryColorDarkOrangeSelected
+        : theme.colors.buttonSelected
+      : shape === 7
+      ? theme.colors.secondaryColorDarkOrange
+      : theme.colors.button};
+
+  svg,
+  img {
+    width: 16px !important;
+    height: 16px !important;
+    opacity: ${({ disabled }) => (disabled ? 0.5 : 1)};
+  }
+
+  @media ${({ theme }) => theme.device.mobileL} {
+    min-height: 31.5px;
+    font-size: 13px;
+    padding: 6px 12px;
+    width: 20p svg, img {
+      width: 10px !important;
+      height: 10px !important;
+    }
+  }
 `;
 
 const StyledOptionsIcon = styled(FontAwesomeIcon)`
-  font-size: 16px;
+  font-size: 15px;
   color: ${({ theme }) => theme.colors.mainWhite};
   margin: 0;
   line-height: 1;
@@ -71,32 +94,46 @@ const StyledInputWrapper = styled.div`
   padding-top: 8px;
   display: flex;
   align-items: center;
+  width: 100%;
+  position: relative; /* Needed for positioning the x button */
 `;
 
 const StyledLabelInput = styled.input`
-  width: 200px;
-  padding: 5px 25px 5px 5px;
+  padding: 5px 28px 5px 5px; /* extra right padding for x button */
   border: 1px solid ${theme.colors.mainColor1};
   border-radius: 5%;
+  width: 100%;
+  @media ${({ theme }) => theme.device.mobileL} {
+    font-size: 13px;
+  }
 `;
 
-const StyledTrashIconWrapper = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  align-items: flex-start;
-  text-align: end;
-  margin: 1em 0 1em 0;
+const StyledClearButton = styled.button`
+  position: absolute;
+  right: 4px;
+  top: 60%;
+  transform: translateY(-50%);
+  height: 22px;
+  width: 22px;
   border: none;
   background: none;
   cursor: pointer;
-  color: ${(props) => props.theme.colors.mainColor1};
-  svg {
-    font-size: 20px;
+  color: ${({ theme }) => theme.colors.mainColor1};
+  opacity: 0.7;
+  padding: 0;
+  display: ${(props) => (props.show ? 'flex' : 'none')};
+  align-items: center;
+  justify-content: center;
+
+  &:hover,
+  &:focus {
+    opacity: 1;
+    color: ${({ theme }) => theme.colors.secondaryColorDarkOrange};
   }
-  &:hover {
-    svg {
-      color: ${(props) => props.theme.colors.mainColor2};
-    }
+
+  svg {
+    width: 18px;
+    height: 18px;
   }
 `;
 
@@ -113,6 +150,7 @@ export const DrawtoolMarkers = () => {
 
   const handleChange = (e) => setLabel(e.target.value);
   const handleKeyUp = (e) => e.keyCode === 13 && e.target.blur();
+  const clearLabel = () => setLabel('');
 
   useEffect(() => {
     if (activeTool === 'marker') setLabel('');
@@ -140,14 +178,8 @@ export const DrawtoolMarkers = () => {
           <StyledOptionsButton
             key={shape.id}
             onClick={() => store.dispatch(setSelectedMarker(shape.id))}
-            style={{
-              backgroundColor:
-                shape.id === selectedMarker
-                  ? theme.colors.buttonSelected
-                  : shape.id === 7
-                  ? theme.colors.secondaryColorDarkOrange
-                  : theme.colors.button
-            }}
+            selected={shape.id === selectedMarker}
+            shape={shape.id}
           >
             <StyledOptionsIcon icon={shape.icon} />
           </StyledOptionsButton>
@@ -155,18 +187,23 @@ export const DrawtoolMarkers = () => {
       </StyledOptionButtonsWrapper>
       <StyledInputWrapper>
         <StyledLabelInput
-          id="markers-label-input"
+          id={'markers-label-input'}
+          key={'markers-label-input'}
           value={label}
           onChange={handleChange}
           onKeyUp={handleKeyUp}
           placeholder={strings.tooltips.drawingTools.labelPlaceholder}
+          aria-label={strings.tooltips.drawingTools.labelPlaceholder}
         />
-        <StyledTrashIconWrapper onClick={() => setLabel('')}>
-          <FontAwesomeIcon
-            icon={faTrash}
-            style={{ marginLeft: '.5em' }}
-          />
-        </StyledTrashIconWrapper>
+        <StyledClearButton
+          type="button"
+          show={!!label}
+          onClick={clearLabel}
+          tabIndex={label ? 0 : -1}
+          aria-label={strings.tooltips.drawingTools.clearLabel ?? 'Clear label'}
+        >
+          <FontAwesomeIcon icon={faTimes} />
+        </StyledClearButton>
       </StyledInputWrapper>
     </StyledOptionsWrapper>
   );

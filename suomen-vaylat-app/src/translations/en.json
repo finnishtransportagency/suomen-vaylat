@@ -9,6 +9,7 @@
   "title": "Suomen väylät",
   "extranet": "EXTRANET",
   "signOut": "Sign out",
+  "back": "Back",
   "tooltips": {
     "profile": "My data",
     "showInfoLink": "Filtering info (opens in a new tab)",

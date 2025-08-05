@@ -9,6 +9,7 @@
   "title": "Suomen väylät",
   "extranet": "EXTRANET",
   "signOut": "Kirjaudu ulos",
+  "back": "Takaisin",
   "tooltips": {
     "profile": "Omat tiedot",
     "showInfoLink": "Suodatus info (avautuu uuteen välilehteen)",
