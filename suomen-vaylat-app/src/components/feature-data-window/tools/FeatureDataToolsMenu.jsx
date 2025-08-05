@@ -34,7 +34,7 @@ import {
     setVKMData
 } from '../../../state/slices/rpcSlice';
 
-import { setMinimizeGfi, setSelectedGfiTool, setGeoJsonArray, setHasToastBeenShown, setWarning, setActiveSelectionTool } from '../../../state/slices/uiSlice';
+import { setMinimizeGfi, setSelectedGfiTool, setGeoJsonArray, setHasToastBeenShown, setWarning, setActiveSelectionTool, setActiveTool } from '../../../state/slices/uiSlice';
 
 import SVLoader from '../../../utils/components/SvLoader';
 import { DRAWING_TIP_LOCALSTORAGE, GFI_GEOMETRY_LAYER_ID, BODY_SIZE_EXCEED, GENERAL_FAIL, VECTOR_LAYER_ID} from '../../../utils/constants';
@@ -431,6 +431,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
                     style: style,
                 },
             ];
+            store.dispatch(setActiveTool('gfi-selection-tool'));
             channel.postRequest('DrawTools.StartDrawingRequest', data);
             isGfiOpen && store.dispatch(setMinimizeGfi(true));
             if(showToast !== false && !hasToastBeenShown.includes('measurementToast')) {
@@ -590,7 +591,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
             }
         })
         return () => {isSubscribed = false}
-    }, [channel])
+    }, [channel, activeTool])
 
     useEffect(() => {
         store.dispatch(setActiveSelectionTool(null));
