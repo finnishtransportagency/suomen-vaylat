@@ -5,6 +5,8 @@ import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { faAngleDown, faAngleUp, faTimes, faTriangleExclamation } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { dropdownVariants } from '../utils/SearchUtil';
+import { isMobile } from '../../../theme/theme';
 
 const StyledDropDown = styled(motion.div)`
     top: 0px;
@@ -229,8 +231,6 @@ const showFeatureOnMap = (channel, layer, feature) => {
 
 // Feature Search Result Panel Component
 const FeatureSearchResultPanel = ({
-    dropdownVariants,
-    isMobile,
     setShowSearchResults,
     lastSearchValue,
     handleFeatureSearch,
@@ -240,8 +240,10 @@ const FeatureSearchResultPanel = ({
     const [openAttribute, setOpenAttribute] = useState(null);
     const [showWarn, setShowWarn] = useState(false);
 
+    console.log(featureSearchResults)
     // Effect to handle warnings and map display
     useEffect(() => {
+    console.log(featureSearchResults)
         const hasFeatures = featureSearchResults?.[0]?.content?.geojson?.matchedFeatures;
 
         if (hasFeatures) {
@@ -281,7 +283,7 @@ const FeatureSearchResultPanel = ({
                     </StyledWarningContainer>
                 )}
 
-                {featureSearchResults[0]?.content?.geojson?.matchedFeatures &&
+                {featureSearchResults.length > 0 && featureSearchResults[0]?.content?.geojson?.matchedFeatures &&
                     Object.keys(featureSearchResults[0].content.geojson.matchedFeatures).map((matchedKey, index) => (
                         <div key={`${matchedKey}-${index}`}>
                             <StyledLayerTitleWrapper onClick={() => handleSetOpenMatchKey(featureSearchResults[0], matchedKey)}>
@@ -308,7 +310,7 @@ const FeatureSearchResultPanel = ({
                     ))}
             </StyledDropDown>
 
-            {featureSearchResults[0]?.content?.moreFeatures && (
+            {featureSearchResults.length > 0 && featureSearchResults[0]?.content?.moreFeatures && (
                 <StyledShowMoreButtonWrapper>
                     <StyledShowMoreButton onClick={() => handleFeatureSearch(lastSearchValue, featureSearchResults[0].content.nextStartIndex, featureSearchResults[0].content.layerId)}>
                         {strings.gfi.getMoreFeatures}
@@ -331,7 +333,6 @@ const FeatureList = ({
     channel,
     layer,
     matchedKey,
-    isMobile,
     setShowSearchResults,
     setSelectedFeature,
     selectedFeature,

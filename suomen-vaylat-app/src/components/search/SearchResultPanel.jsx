@@ -9,6 +9,7 @@ import {
 import { StyledHideSearchResultsButton } from './Search';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useAppSelector } from '../../state/hooks';
+import { isMobile } from '../../theme/theme';
 
 const SearchPanelMain = styled.div`
   ${props =>
@@ -23,21 +24,18 @@ const SearchResultPanel = ({
     searchResults,
     showSearchResults,
     searchType,
-    dropdownVariants,
     firstSearchResultShown,
-    handleSearchSelect,
     setFirstSearchResultShown,
-    isMobile,
     setShowSearchResults,
     setSearchClickedRow,
     searchClickedRow,
     allLayers,
     hidden=false,
-    activeSwitch,
     handleFeatureSearch,
     lastSearchValue
 }) => {
     const { featureSearchResults } = useAppSelector((state) => state.rpc);
+    console.log(searchType)
     return (
         <SearchPanelMain hidden={hidden}>
         { 
@@ -47,15 +45,12 @@ const SearchResultPanel = ({
             searchType === 'address' &&
             <AddRessSearchResultPanel  
                 searchResults={searchResults}  
-                dropdownVariants={dropdownVariants} 
                 firstSearchResultShown={firstSearchResultShown}
-                handleSearchSelect={handleSearchSelect}
                 setFirstSearchResultShown={setFirstSearchResultShown}
                 isMobile={isMobile}
                 setShowSearchResults={setShowSearchResults}
                 setSearchClickedRow={setSearchClickedRow}
                 searchClickedRow={searchClickedRow}
-                activeSwitch={activeSwitch}
             /> 
         }
         {
@@ -65,7 +60,6 @@ const SearchResultPanel = ({
                 searchType === 'metadata' && (
                 <MetaSearchResultPanel 
                     searchResults={searchResults}
-                    dropdownVariants={dropdownVariants}
                     setShowSearchResults={setShowSearchResults}
                     allLayers={allLayers}
                 />
@@ -76,11 +70,7 @@ const SearchResultPanel = ({
                 showSearchResults &&
                 searchType === 'feature' && (
                 <FeatureSearchResultPanel 
-                    searchResults={searchResults}
-                    dropdownVariants={dropdownVariants}
                     setShowSearchResults={setShowSearchResults}
-                    allLayers={allLayers}
-                    featureSearchResults={featureSearchResults}
                     handleFeatureSearch={handleFeatureSearch}
                     lastSearchValue={lastSearchValue}
                 />

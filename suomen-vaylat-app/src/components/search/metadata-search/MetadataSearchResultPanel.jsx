@@ -1,10 +1,10 @@
 import strings from '../../../translations';
 import { StyledDropDown, StyledDropdownContentItem, StyledDropdownContentItemTitle } from '../Search';
 import Layer from '../../layer/Layer';
+import { dropdownVariants } from '../utils/SearchUtil';
 
 const MetadataSearchResultPanel = ({
     searchResults,
-    dropdownVariants,
     allLayers
 }) => {
     return (

@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect } from 'react';
+import { useState, useContext, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
 import { ReactReduxContext } from 'react-redux';
 import { useAppSelector } from '../../state/hooks';
@@ -20,18 +20,18 @@ import { SEARCH_TIP_LOCALSTORAGE } from '../../utils/constants';
 
 import { isMobile, theme } from '../../theme/theme';
 
-import { pushToFeatureSearchResults, resetFeatureSearchResults, setSearchOn, searchVKMTrack, setFeatureSearchResults } from '../../state/slices/rpcSlice';
+import { addMarkerRequest, mapMoveRequest, pushToFeatureSearchResults, resetFeatureSearchResults, setSearchOn, searchVKMTrack, setFeatureSearchResults } from '../../state/slices/rpcSlice';
 
 import { setIsSearchOpen, setGeoJsonArray, setHasToastBeenShown, setActiveSwitch, setIsMoreSearchOpen } from '../../state/slices/uiSlice';
 
 import CircleButton from '../../utils/components/CircleButton';
 
+import { VKMGeoJsonHoverStyles, VKMGeoJsonStyles } from './utils/VKMSearchStyles';
 import { Slide, toast } from "react-toastify";
 import SearchToast from '../toasts/SearchToast';
 import ReactTooltip from 'react-tooltip';
 import TipToast from '../toasts/TipToast';
 import SearchDialog from './SearchDialog';
-import { dropdownVariants, mergeMatchedKeys, removeMarkersAndFeatures, searchDownloadTips, texts, validateFeatureSearch, validateTrackSearch, variants } from './utils/SearchUtil';
 
 export const StyledSearchIcon = styled.div`
     min-width: 48px;
@@ -221,6 +221,8 @@ const Search = () => {
 
     const { store } = useContext(ReactReduxContext);
 
+    const markerId = 'SEARCH_MARKER';
+    const vectorLayerId = 'SEARCH_VECTORLAYER';
     const [searchClickedRow, setSearchClickedRow] = useState(null);
     const [firstSearchResultShown, setFirstSearchResultShown] = useState(false);
     const [showToast, setShowToast] = useState(JSON.parse(localStorage.getItem(SEARCH_TIP_LOCALSTORAGE)));
@@ -228,8 +230,6 @@ const Search = () => {
     const [trackErrors, setTrackErrors] = useState([false, false, false]);
     const [featureErrors, setFeatureErrors] = useState([]);
 
-
-    // Handle search click and direct to the right search handler based on type
     const handleSeach = (searchValue) => {
         setShowSearchResults(true);
         switch (searchType) {
@@ -253,7 +253,9 @@ const Search = () => {
         }
     }
 
-    // Handle every search except feature and metadata
+    const checkIfNonEmptyTrackResult = (data) => {
+        return data?.geom?.features[0].geometry?.coordinates?.length > 0
+    }
     const handleAddressSearch = (value) => {
         let searchValueCopy = value
         //special case, roadsearch with 3 params is road/part/distance, 
@@ -283,7 +285,7 @@ const Search = () => {
                             const name = `ratanumero=${data?.ratanumero}, ratakilometri=${data?.ratakilometri}, ratametri=${data?.ratametri}`;
                             
                             let locations
-                            if (data?.geom?.features[0].geometry?.coordinates?.length > 0){  
+                            if (checkIfNonEmptyTrackResult(data)){  
                                 locations = [{ type: "VKM", vkmType: "track", geom: data.geom, "name": name }]
                             }else {
                                 locations = []
@@ -291,7 +293,7 @@ const Search = () => {
 
                             const mimicdata = { result: { locations: locations } };
                             setSearchResults(mimicdata);
-                            if ((data?.result?.locations?.length > 1 || data?.geom?.features[0].geometry?.coordinates?.length > 0) && !isMoreSearchOpen) {
+                            if ((data?.result?.locations?.length > 1 || checkIfNonEmptyTrackResult(data)) && !isMoreSearchOpen) {
                                 store.dispatch(setIsMoreSearchOpen(true));
                             }
                             setIsSearching(false);
@@ -309,7 +311,6 @@ const Search = () => {
         setSearchResults(null);
     };
 
-    // Handle metadata search
     const handleMetadataSearch = (value) => {
         removeMarkersAndFeatures(channel);
         setIsSearching(true);
@@ -323,11 +324,28 @@ const Search = () => {
         setLastSearchValue(value);
     };
 
-    // Handle feature search
+    const mergeMatchedKeys = (oldMatchedKeys, newMatchedKeys) => {
+        // Create a new object that will hold the merged keys
+        const mergedMatchedKeys = { ...oldMatchedKeys };
+    
+        // Iterate through each key in the new matchedFeatures object
+        Object.keys(newMatchedKeys).forEach(key => {
+            if (mergedMatchedKeys.hasOwnProperty(key)) {
+                // If the key exists in the old object, concatenate the arrays
+                mergedMatchedKeys[key] = mergedMatchedKeys[key].concat(newMatchedKeys[key]);
+            } else {
+                // If the key doesn't exist, add it to the merged object
+                mergedMatchedKeys[key] = newMatchedKeys[key];
+            }
+        });
+    
+        // Return the merged object
+        return mergedMatchedKeys;
+    };
+
     const handleFeatureSearch = (searchValue, startIndex = 0, layerId = -1) => {
         if (validateFeatureSearch(searchValue, setFeatureErrors)) {
             const handleSearchResponse = (data) => {
-                console.log(data)
                 if (Object.keys(data).length > 0 && Object.keys(data.gfi).length > 0) {
                     setIsSearching(false);
                     store.dispatch(setSearchOn(false));
@@ -345,11 +363,8 @@ const Search = () => {
 
                             oldFeatureSearchResults[contentIndex] = newFeatureSearchResults;
 
-                            console.log(oldFeatureSearchResults)
                             store.dispatch(setFeatureSearchResults(oldFeatureSearchResults));
                     } else {
-                                                    console.log(data.gfi)
-
                         store.dispatch(pushToFeatureSearchResults(data.gfi));
                     }
                 } else {
@@ -391,6 +406,42 @@ const Search = () => {
                 );
             }
         }
+    };
+
+    const markerIds = [markerId];
+
+    const vectorLayerIds = [
+        vectorLayerId + '_vkm_tie',
+        vectorLayerId + '_vkm_vali',
+        vectorLayerId + '_vkm_osa',
+        vectorLayerId + '_vkm_etaisyys',
+        vectorLayerId + '_vkm_track',
+        vectorLayerId + '_vkm',
+    ];
+
+    const removeMarkersAndFeatures = () => {
+        if (!channel) {
+            return;
+        }
+        markerIds.forEach((markerId) => {
+            channel.postRequest('MapModulePlugin.RemoveMarkersRequest', [
+                markerId,
+            ]);
+        });
+        vectorLayerIds.forEach((vectorLayerId) => {
+            channel.postRequest(
+                'MapModulePlugin.RemoveFeaturesFromMapRequest',
+                [null, null, vectorLayerId]
+            );
+        });
+
+        // for feature search
+        channel &&
+            channel.postRequest("MapModulePlugin.RemoveFeaturesFromMapRequest", [
+                null,
+                null,
+                "feature-search-results",
+            ]);
     };
 
     const searchTypes = {
@@ -462,6 +513,145 @@ const Search = () => {
             });
     }, [channel, activeSwitch]);
 
+    const handleSearchSelect = (name, lon, lat, geom, osa, ajorata, etaisyys, osaLoppu, etaisyysLoppu, type) => {
+        removeMarkersAndFeatures(channel);
+        if (!geom) {
+            store.dispatch(
+                addMarkerRequest({
+                    x: lon,
+                    y: lat,
+                    msg: name || '',
+                    markerId: markerId,
+                    color: theme.colors.secondaryColorPink
+                })
+            );
+
+            store.dispatch(
+                mapMoveRequest({
+                    x: lon,
+                    y: lat,
+                })
+            );
+        } else if (type === 'road') {
+            let style = 'tie';
+            if (osaLoppu && etaisyysLoppu) {
+                style = 'vali';
+            } else if ((osa || ajorata) && !etaisyys) {
+                style = 'osa';
+            } else if (etaisyys) {
+                style = 'etaisyys';
+            }
+            let featureStyle = VKMGeoJsonStyles.road[style];
+            let hover = VKMGeoJsonHoverStyles.road[style];
+
+            if (style === 'tie') {
+                removeMarkersAndFeatures(channel);
+            }
+
+            channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', [
+                geom,
+                {
+                    clearPrevious: true,
+                    centerTo: true,
+                    hover: hover,
+                    featureStyle: featureStyle,
+                    layerId: vectorLayerId + '_vkm_' + style,
+                    maxZoomLevel: 10,
+                },
+            ]);
+
+            store.dispatch(setGeoJsonArray([{
+                data: {
+                    geom: geom
+                }, style: style, hover: hover, featureStyle: featureStyle
+            }]));
+        } else if (type === 'track') {
+            let featureStyle = VKMGeoJsonStyles['track'];
+            let hover = VKMGeoJsonHoverStyles['track'];
+
+            channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', [
+                geom,
+                {
+                    centerTo: true,
+                    hover: hover,
+                    featureStyle: featureStyle,
+                    layerId: vectorLayerId + '_vkm_track',
+                    maxZoomLevel: 10
+                }
+            ]);
+            store.dispatch(setGeoJsonArray([{
+                data: {
+                    geom: geom
+                }, style: 'track', hover: hover, featureStyle: featureStyle
+            }]));
+        };
+    };
+
+    const variants = {
+        initial: {
+            maxWidth: 0,
+            opacity: 0,
+            filter: 'blur(10px)',
+        },
+        animate: {
+            maxWidth: '400px',
+            opacity: 1,
+            filter: 'blur(0px)',
+        },
+        exit: {
+            maxWidth: 0,
+            opacity: 0,
+            filter: 'blur(10px)',
+        },
+        transition: {
+            duration: 0.3,
+            type: 'tween',
+        },
+    };
+
+    const dropdownVariants = {
+        initial: {
+            height: 0,
+            opacity: 0,
+        },
+        animate: {
+            height: 'auto',
+            opacity: 1,
+        },
+        exit: {
+            height: 0,
+            opacity: 0,
+        },
+        transition: {
+            duration: 0.5,
+            type: 'tween',
+        },
+    };
+
+    const texts = [
+        {
+            text: strings.search.tips.address,
+            examples: strings.search.tips.addressExamples
+        },
+        {
+            text: strings.search.tips.realEstateUnitIdentifier,
+            examples: strings.search.tips.realEstateUnitIdentifierExamples
+        },
+        {
+            text: strings.search.tips.vkmRoad,
+            examples: strings.search.tips.vkmRoadExamples
+        },
+        {
+            text: strings.search.tips.vkmTrack,
+            examples: strings.search.tips.vkmTrackExamples
+        }
+    ];
+
+    const searchDownloadTips = {
+        tip: strings.search.tips.toastTip,
+        guide: strings.search.tips.toastTipContent
+    }
+
     useEffect(() => {
         ReactTooltip.rebuild();
     }, [isSearchOpen]);
@@ -507,6 +697,40 @@ const Search = () => {
         else toast.dismiss('searchTipToast');
     }, [geoJsonArray]);
 
+    const validateTrackSearch = useCallback((searchValue, setTrackErrors) => {
+        let searchArray = searchValue.split("/");
+        const newErrors = Array(3).fill(false);
+        // If there are not exactly 3 values, populate the errors array accordingly
+        if (searchArray.length !== 3) {
+            for (let i = 0; i < 3; i++) {
+                if (!searchArray[i]) {
+                    newErrors[i] = true;
+                }
+            }
+        } else {
+            // Check for any empty values
+            searchArray.forEach((value, index) => {
+                if (value === '') {
+                    newErrors[index] = true;
+                }
+            });
+        }
+        setTrackErrors(newErrors);
+        return newErrors.every((error) => error === false)
+    }, [])
+    
+    const validateFeatureSearch = useCallback((searchValue, setFeatureErrors) => {
+        const newErrors = [];
+        const regex = /[^A-Za-z0-9äöåÄÖÅ -,./()]/;
+        if (searchValue.length < 3) {
+            newErrors.push("length")
+        }
+        if (regex.test(searchValue)) {
+            newErrors.push("regex")
+        }
+        newErrors.length > 0 && setFeatureErrors(newErrors);
+        return newErrors.length === 0;
+    }, [])
 
     useEffect(() => {
         //when carriagewaysearch ( ajordalla haku ) changes, reset searchValue
@@ -514,7 +738,6 @@ const Search = () => {
     }, [carriageWaySearch, setSearchValue]);
 
     const emptySearchResults = () => {
-        console.log("woopsss!!!!!")
         store.dispatch(setGeoJsonArray([]));
         store.dispatch(setFeatureSearchResults([]));
         setSearchResults(null);
@@ -598,6 +821,23 @@ const Search = () => {
                                 />
                             )}
                         </StyledLeftContentWrapper>
+                        <SearchResultPanel
+                            isSearchOpen={isSearchOpen}
+                            searchResults={searchResults}
+                            showSearchResults={showSearchResults}
+                            searchType={searchType}
+                            dropdownVariants={dropdownVariants}
+                            firstSearchResultShown={firstSearchResultShown}
+                            setFirstSearchResultShown={setFirstSearchResultShown}
+                            isMobile={isMobile}
+                            setShowSearchResults={setShowSearchResults}
+                            setSearchClickedRow={setSearchClickedRow}
+                            handleFeatureSearch={handleFeatureSearch}
+                            lastSearchValue={lastSearchValue}
+                            searchClickedRow={searchClickedRow}
+                            allLayers={allLayers}
+                            hidden={true}
+                        />
                         {isMoreSearchOpen && (
                             <SearchDialog
                                 searchValue={searchValue}
@@ -606,6 +846,7 @@ const Search = () => {
                                 setSearchResults={setSearchResults}
                                 firstSearchResultShown={firstSearchResultShown}
                                 setFirstSearchResultShown={setFirstSearchResultShown}
+                                isMobile={isMobile}
                                 setShowSearchResults={setShowSearchResults}
                                 setSearchClickedRow={setSearchClickedRow}
                                 searchClickedRow={searchClickedRow}
@@ -619,6 +860,7 @@ const Search = () => {
                                 carriageWaySearch={carriageWaySearch}
                                 setCarriageWaySearch={setCarriageWaySearch}
                                 removeMarkersAndFeatures={removeMarkersAndFeatures}
+                                activeSwitch={activeSwitch}
                                 trackErrors={trackErrors}
                                 setTrackErrors={setTrackErrors}
                                 validateTrackSearch={validateTrackSearch}
@@ -635,6 +877,49 @@ const Search = () => {
         
                 ) 
                 }
+            </AnimatePresence>
+            <AnimatePresence>
+                {isSearchMethodSelectorOpen && (
+                    <StyledDropDown
+                        key={'dropdown-content-searchmethods'}
+                        variants={dropdownVariants}
+                        initial={'initial'}
+                        animate={'animate'}
+                        exit={'exit'}
+                        transition={'transition'}
+                    >
+                        {Object.keys(searchTypes).map((searchType) => {
+                            const type = searchTypes[searchType];
+                            if (type.visible) {
+                                return (
+                                    <StyledDropdownContentItem
+                                        onClick={() => {
+                                            setSearchResults(null);
+                                            setSearchType(searchType);
+                                            setIsSearchMethodSelectorOpen(
+                                                false
+                                            );
+                                            //setSearchDialogOpen(false);
+                                            setSearchValue('');
+                                            isSearchOpen &&
+                                                removeMarkersAndFeatures(channel);
+                                        }}
+                                        key={'search-type-' + searchType}
+                                    >
+                                        <StyledDropdownContentItemTitle>
+                                            {type.label}
+                                        </StyledDropdownContentItemTitle>
+                                        <StyledDropdownContentItemSubtitle>
+                                            {type.subtitle}
+                                        </StyledDropdownContentItemSubtitle>
+                                    </StyledDropdownContentItem>
+                                );
+                            } else {
+                                return null;
+                            }
+                        })}
+                    </StyledDropDown>
+                )}
             </AnimatePresence>
         </StyledSearchContainer>
     );

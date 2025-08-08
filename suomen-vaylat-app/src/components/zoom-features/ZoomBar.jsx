@@ -5,7 +5,6 @@ import {
   faList,
   faSearchMinus,
   faSearchPlus,
-  faCompass
 } from '@fortawesome/free-solid-svg-icons';
 import NearMeDisabledRoundedIcon from '@mui/icons-material/NearMeDisabledRounded';
 import NavigationRoundedIcon from '@mui/icons-material/NavigationRounded';

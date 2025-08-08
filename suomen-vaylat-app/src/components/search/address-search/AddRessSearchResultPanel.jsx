@@ -7,20 +7,29 @@ import {
     faRoad,
     faTrain,
 } from '@fortawesome/free-solid-svg-icons';
+import { markerId, removeMarkersAndFeatures, vectorLayerId, dropdownVariants } from '../utils/SearchUtil'
+import { isMobile, theme } from '../../../theme/theme';
+import { useAppSelector } from '../../../state/hooks';
+import { useContext } from 'react';
+import { ReactReduxContext } from 'react-redux';
+import { setGeoJsonArray } from '../../../state/slices/uiSlice';
+import { VKMGeoJsonHoverStyles, VKMGeoJsonStyles } from '../utils/VKMSearchStyles';
+import { addMarkerRequest, mapMoveRequest } from '../../../state/slices/rpcSlice';
 
 
 const AddRessSearchResultPanel = ({
     searchResults,
-    dropdownVariants,
     firstSearchResultShown,
-    handleSearchSelect,
     setFirstSearchResultShown,
-    isMobile,
     setShowSearchResults,
     setSearchClickedRow,
     searchClickedRow,
-    activeSwitch
 }) => {
+
+    const { activeSwitch } = useAppSelector((state) => state.ui);
+    const { channel } = useAppSelector((state) => state.rpc);
+        const { store } = useContext(ReactReduxContext);
+    
     const typeResolvTable = [  ['address', 'Osoite'],
                                ['premise', 'Kiinteistötunnus'] ,
                                ['track', 'VKM'] ]
@@ -58,6 +67,82 @@ const AddRessSearchResultPanel = ({
                 return showResult;
             });
         }
+
+
+
+    const handleSearchSelect = (name, lon, lat, geom, osa, ajorata, etaisyys, osaLoppu, etaisyysLoppu, type) => {
+        removeMarkersAndFeatures(channel);
+        if (!geom) {
+            store.dispatch(
+                addMarkerRequest({
+                    x: lon,
+                    y: lat,
+                    msg: name || '',
+                    markerId: markerId,
+                    color: theme.colors.secondaryColorPink
+                })
+            );
+
+            store.dispatch(
+                mapMoveRequest({
+                    x: lon,
+                    y: lat,
+                })
+            );
+        } else if (type === 'road') {
+            let style = 'tie';
+            if (osaLoppu && etaisyysLoppu) {
+                style = 'vali';
+            } else if ((osa || ajorata) && !etaisyys) {
+                style = 'osa';
+            } else if (etaisyys) {
+                style = 'etaisyys';
+            }
+            let featureStyle = VKMGeoJsonStyles.road[style];
+            let hover = VKMGeoJsonHoverStyles.road[style];
+
+            if (style === 'tie') {
+                removeMarkersAndFeatures(channel);
+            }
+
+            channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', [
+                geom,
+                {
+                    clearPrevious: true,
+                    centerTo: true,
+                    hover: hover,
+                    featureStyle: featureStyle,
+                    layerId: vectorLayerId + '_vkm_' + style,
+                    maxZoomLevel: 10,
+                },
+            ]);
+
+            store.dispatch(setGeoJsonArray([{
+                data: {
+                    geom: geom
+                }, style: style, hover: hover, featureStyle: featureStyle
+            }]));
+        } else if (type === 'track') {
+            let featureStyle = VKMGeoJsonStyles['track'];
+            let hover = VKMGeoJsonHoverStyles['track'];
+
+            channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', [
+                geom,
+                {
+                    centerTo: true,
+                    hover: hover,
+                    featureStyle: featureStyle,
+                    layerId: vectorLayerId + '_vkm_track',
+                    maxZoomLevel: 10
+                }
+            ]);
+            store.dispatch(setGeoJsonArray([{
+                data: {
+                    geom: geom
+                }, style: 'track', hover: hover, featureStyle: featureStyle
+            }]));
+        };
+    };
     return (
         <StyledDropDown
         key={'dropdown-content-address'}

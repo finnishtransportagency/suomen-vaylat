@@ -11,6 +11,8 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import SearchResultPanel from './SearchResultPanel';
 import { resetFeatureSearchResults } from '../../state/slices/rpcSlice';
+import { removeMarkersAndFeatures } from './utils/SearchUtil';
+import { isMobile } from '../../theme/theme';
 
 
 const StyledSearchDialog = styled.div`
@@ -297,11 +299,8 @@ const SearchDialog = ({
     setSearchValue,
     searchResults,
     setSearchResults,
-    dropdownVariants,
     firstSearchResultShown,
-    handleSearchSelect,
     setFirstSearchResultShown,
-    isMobile,
     setShowSearchResults,
     setSearchClickedRow,
     searchClickedRow,
@@ -314,8 +313,6 @@ const SearchDialog = ({
     isOpen,
     carriageWaySearch, 
     setCarriageWaySearch,
-    removeMarkersAndFeatures,
-    activeSwitch,
     trackErrors,
     setTrackErrors,
     validateTrackSearch,
@@ -324,7 +321,8 @@ const SearchDialog = ({
     lastSearchValue
 }) => {
     const { store } = useContext(ReactReduxContext);
-    const { selectedLayersByType } = useAppSelector((state) => state.rpc);
+    const { selectedLayersByType, channel } = useAppSelector((state) => state.rpc);
+    const { activeSwitch } = useAppSelector((state) => state.ui);
 
 
     const updateActiveSwitch = (type) => {
@@ -345,7 +343,7 @@ const SearchDialog = ({
         setShowSearchResults(false);
         setSearchValue('');
         store.dispatch(resetFeatureSearchResults());
-        removeMarkersAndFeatures();
+        removeMarkersAndFeatures(channel);
     };
  
     useEffect(() => {
@@ -494,24 +492,7 @@ const SearchDialog = ({
                                 handleSeach(searchValue);
                             }
                         }}
-                    />
-                    <div className="clearboth" style= {{clear: "left"}} />
-                    <SearchResultPanel 
-                        isSearchOpen={isSearchOpen}
-                        searchResults={searchResults}
-                        showSearchResults={showSearchResults}
-                        searchType={searchType}
-                        dropdownVariants={dropdownVariants}
-                        firstSearchResultShown={firstSearchResultShown}
-                        handleSearchSelect={handleSearchSelect}
-                        setFirstSearchResultShown={setFirstSearchResultShown}
-                        isMobile={isMobile}
-                        setShowSearchResults={setShowSearchResults}
-                        setSearchClickedRow={setSearchClickedRow}
-                        searchClickedRow={searchClickedRow}
-                        allLayers={allLayers}
-                        activeSwitch={activeSwitch}
-                    />        
+                    />   
 
                 </StyledSearchSection>  
                 </>
@@ -582,23 +563,7 @@ const SearchDialog = ({
                             className={trackErrors[2] ? 'error' : ''}
                         />
                         { trackErrors.some((error) => error === true) && (<StyledValidationMessage>{strings.search.track.trackMandatoryMessage}</StyledValidationMessage>) }
-                    </>
-                    <SearchResultPanel 
-                        isSearchOpen={isSearchOpen}
-                        searchResults={searchResults}
-                        showSearchResults={showSearchResults}
-                        searchType={searchType}
-                        dropdownVariants={dropdownVariants}
-                        firstSearchResultShown={firstSearchResultShown}
-                        handleSearchSelect={handleSearchSelect}
-                        setFirstSearchResultShown={setFirstSearchResultShown}
-                        isMobile={isMobile}
-                        setShowSearchResults={setShowSearchResults}
-                        setSearchClickedRow={setSearchClickedRow}
-                        searchClickedRow={searchClickedRow}
-                        allLayers={allLayers}
-                        activeSwitch={activeSwitch}
-                    />        
+                    </>    
                 </StyledSearchSection>    
                 </>
                 )
@@ -631,23 +596,7 @@ const SearchDialog = ({
                                 handleSeach(searchValue);
                             }
                         }}
-                    />
-                    <SearchResultPanel 
-                        isSearchOpen={isSearchOpen}
-                        searchResults={searchResults}
-                        showSearchResults={showSearchResults}
-                        searchType={searchType}
-                        dropdownVariants={dropdownVariants}
-                        firstSearchResultShown={firstSearchResultShown}
-                        handleSearchSelect={handleSearchSelect}
-                        setFirstSearchResultShown={setFirstSearchResultShown}
-                        isMobile={isMobile}
-                        setShowSearchResults={setShowSearchResults}
-                        setSearchClickedRow={setSearchClickedRow}
-                        searchClickedRow={searchClickedRow}
-                        allLayers={allLayers}
-                        activeSwitch={activeSwitch}
-                    />        
+                    />     
                 </StyledSearchSection>    
                 </>
                 )
@@ -680,23 +629,7 @@ const SearchDialog = ({
                                 handleSeach(searchValue);
                             }
                         }}
-                    />
-                    <SearchResultPanel 
-                        isSearchOpen={isSearchOpen}
-                        searchResults={searchResults}
-                        showSearchResults={showSearchResults}
-                        searchType={searchType}
-                        dropdownVariants={dropdownVariants}
-                        firstSearchResultShown={firstSearchResultShown}
-                        handleSearchSelect={handleSearchSelect}
-                        setFirstSearchResultShown={setFirstSearchResultShown}
-                        isMobile={isMobile}
-                        setShowSearchResults={setShowSearchResults}
-                        setSearchClickedRow={setSearchClickedRow}
-                        searchClickedRow={searchClickedRow}
-                        allLayers={allLayers}
-                        activeSwitch={activeSwitch}
-                    />        
+                    />      
                 </StyledSearchSection>
                 </>
                 )
@@ -729,23 +662,7 @@ const SearchDialog = ({
                                 handleSeach(searchValue);
                             }
                         }}
-                    />
-                    <SearchResultPanel 
-                        isSearchOpen={isSearchOpen}
-                        searchResults={searchResults}
-                        showSearchResults={showSearchResults}
-                        searchType={searchType}
-                        dropdownVariants={dropdownVariants}
-                        firstSearchResultShown={firstSearchResultShown}
-                        handleSearchSelect={handleSearchSelect}
-                        setFirstSearchResultShown={setFirstSearchResultShown}
-                        isMobile={isMobile}
-                        setShowSearchResults={setShowSearchResults}
-                        setSearchClickedRow={setSearchClickedRow}
-                        searchClickedRow={searchClickedRow}
-                        allLayers={allLayers}
-                        activeSwitch={activeSwitch}
-                    />        
+                    />       
                 </StyledSearchSection>        
                 </>
                 )
@@ -779,22 +696,6 @@ const SearchDialog = ({
                             }
                         }}
                     />
-                    <SearchResultPanel 
-                        isSearchOpen={isSearchOpen}
-                        searchResults={searchResults}
-                        showSearchResults={showSearchResults}
-                        searchType={searchType}
-                        dropdownVariants={dropdownVariants}
-                        firstSearchResultShown={firstSearchResultShown}
-                        handleSearchSelect={handleSearchSelect}
-                        setFirstSearchResultShown={setFirstSearchResultShown}
-                        isMobile={isMobile}
-                        setShowSearchResults={setShowSearchResults}
-                        setSearchClickedRow={setSearchClickedRow}
-                        searchClickedRow={searchClickedRow}
-                        allLayers={allLayers}
-                            activeSwitch={activeSwitch}
-                    /> 
                 </StyledSearchSection>       
                 </>
                 )
@@ -843,45 +744,26 @@ const SearchDialog = ({
                         }}
                         className={featureErrors.length > 0 ? 'error' : ''}
                     />
-                    { featureErrors.map( (error, index) => { return(<StyledValidationMessage key={`search_dialog_feature_error_${index}`}>{strings.search.feature.errors[error]}</StyledValidationMessage>) })}
-                    <SearchResultPanel 
-                        isSearchOpen={isSearchOpen}
-                        searchResults={searchResults}
-                        showSearchResults={showSearchResults}
-                        searchType={searchType}
-                        dropdownVariants={dropdownVariants}
-                        firstSearchResultShown={firstSearchResultShown}
-                        handleSearchSelect={handleSearchSelect}
-                        setFirstSearchResultShown={setFirstSearchResultShown}
-                        isMobile={isMobile}
-                        setShowSearchResults={setShowSearchResults}
-                        setSearchClickedRow={setSearchClickedRow}
-                        searchClickedRow={searchClickedRow}
-                        handleFeatureSearch={handleFeatureSearch}
-                        lastSearchValue={lastSearchValue}
-                    />
                 </StyledFeatureSearchSection>       
                 </>
                 )
                 }
          </>
-                { activeSwitch == null &&
                     <SearchResultPanel 
-                        isSearchOpen={isSearchOpen}
-                        searchResults={searchResults}
-                        showSearchResults={showSearchResults}
-                        searchType={searchType}
-                        dropdownVariants={dropdownVariants}
-                        firstSearchResultShown={firstSearchResultShown}
-                        handleSearchSelect={handleSearchSelect}
-                        setFirstSearchResultShown={setFirstSearchResultShown}
-                        isMobile={isMobile}
-                        setShowSearchResults={setShowSearchResults}
-                        setSearchClickedRow={setSearchClickedRow}
-                        searchClickedRow={searchClickedRow}
-                        allLayers={allLayers}
+                            isSearchOpen={isSearchOpen}
+                            searchResults={searchResults}
+                            showSearchResults={showSearchResults}
+                            searchType={searchType}
+                            firstSearchResultShown={firstSearchResultShown}
+                            setFirstSearchResultShown={setFirstSearchResultShown}
+                            setShowSearchResults={setShowSearchResults}
+                            setSearchClickedRow={setSearchClickedRow}
+                            handleFeatureSearch={handleFeatureSearch}
+                            lastSearchValue={lastSearchValue}
+                            searchClickedRow={searchClickedRow}
+                            allLayers={allLayers}
+                            hidden={false}
                     />
-                }
         </StyledSearchDialog>
     ) : null
 };

@@ -2,8 +2,6 @@ import { useContext } from 'react';
 import { faShareAlt } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ReactReduxContext } from 'react-redux';
-import ReactTooltip from 'react-tooltip';
-import { theme, isMobile } from '../../theme/theme';
 import styled from 'styled-components';
 import { setShareUrl } from '../../state/slices/uiSlice';
 import CircleButton from '../../utils/components/CircleButton';
