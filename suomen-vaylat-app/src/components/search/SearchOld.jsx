@@ -821,23 +821,6 @@ const Search = () => {
                                 />
                             )}
                         </StyledLeftContentWrapper>
-                        <SearchResultPanel
-                            isSearchOpen={isSearchOpen}
-                            searchResults={searchResults}
-                            showSearchResults={showSearchResults}
-                            searchType={searchType}
-                            dropdownVariants={dropdownVariants}
-                            firstSearchResultShown={firstSearchResultShown}
-                            setFirstSearchResultShown={setFirstSearchResultShown}
-                            isMobile={isMobile}
-                            setShowSearchResults={setShowSearchResults}
-                            setSearchClickedRow={setSearchClickedRow}
-                            handleFeatureSearch={handleFeatureSearch}
-                            lastSearchValue={lastSearchValue}
-                            searchClickedRow={searchClickedRow}
-                            allLayers={allLayers}
-                            hidden={true}
-                        />
                         {isMoreSearchOpen && (
                             <SearchDialog
                                 searchValue={searchValue}
