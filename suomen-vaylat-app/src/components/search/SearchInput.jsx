@@ -315,7 +315,9 @@ const SearchInput = ({
         <>
             {activeSwitch === 'road' && (
                 <StyledSearchSection>
-                    <SectionDivider>Alku</SectionDivider>
+                    {roadEndEnabled && 
+                        <SectionDivider>Alku</SectionDivider>
+                    }
                     <FieldGroup>
                         <LabelRow>
                             <RoadInputLabel htmlFor="road-tie">{strings.search.vkm.tie}</RoadInputLabel>
