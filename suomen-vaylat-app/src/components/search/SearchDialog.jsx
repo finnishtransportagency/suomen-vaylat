@@ -48,7 +48,6 @@ const DropdownHeader = styled.div`
   color: ${(props) => props.theme.colors.mainColor1};
   cursor: pointer;
   font-size: 16px;
-  margin-bottom: 12px;
   padding: 8px 0;
   user-select: none;
 `;
@@ -58,12 +57,6 @@ const DropdownContent = styled.div`
   padding-bottom: 8px;
   transition: all 0.3s;
   display: ${(props) => (props.open ? 'block' : 'none')};
-`;
-
-const SwitchRow = styled.div`
-  display: flex;
-  align-items: center;
-  margin-bottom: 12px;
 `;
 
 const InfoText = styled.div`
@@ -224,7 +217,6 @@ const SearchDialog = ({
         <DropdownContent open={dropdownOpen}>
           {switchDefinitions.map((sw, index) => (
             <Fragment key={sw.id}>
-              <SwitchRow id={"swrow_" + index}>
                 <SearchSwitch
                   isSelected={activeSwitch === sw.id}
                   action={() => updateActiveSwitch(sw.id)}
@@ -234,7 +226,6 @@ const SearchDialog = ({
                   id={sw.id}
                   isMobile={isMobile}
                 />
-              </SwitchRow>
               {infoOpenId === sw.id && (
                 <InfoText>
                   <strong>{sw.title}</strong>

@@ -1,88 +1,63 @@
-import styled from 'styled-components';
+import styled, { useTheme } from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
+import Radio from '@mui/material/Radio';
 
-const StyledSwitchContainer = styled.div`
-  position: relative;
-  width: 52px;
-  height: 26px;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  background-color: ${(props) => (props.isSelected ? '#8DCB6D' : '#AAAAAA')};
-  cursor: pointer;
-  float: left;
-  margin-top: 6px;
-
-  @media ${(props) => props.theme.device.tablet} {
-    width: 44px;
-    height: 22px;
-  }
-`;
-
-const StyledSwitchButton = styled.div`
-  position: absolute;
-  left: ${(props) => (props.isSelected ? '25px' : '1px')};
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  margin-left: 2px;
-  margin-right: 2px;
-  margin-top: 0.8px;
-  transition: all 0.3s ease-out;
-  background-color: ${(props) => props.theme.colors.mainWhite};
-
-  @media ${(props) => props.theme.device.tablet} {
-    width: 18px;
-    height: 18px;
-    left: ${(props) => (props.isSelected ? '21px' : '1px')};
-  }
-`;
-
-const StyledBold = styled.div`
-  display: inline-block;
-  font-weight: 500;
-  padding-left: 12px;
-  font-size: 15px;
-  color: #717070;
-  padding-top: 7px;
-`;
-
-const StyledHeaderButton = styled.div`
-  cursor: pointer;
-  float: right;
-      color: ${(props) => props.theme.colors.mainColor1};
-`;
+/* --- reuse (or re-declare) small styled pieces to match existing layout --- */
 
 const SwitchWrapper = styled.div`
   width: 100%;
-      display: flex;
-    justify-content: space-between;
-    align-items: baseline;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const LeftArea = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+`;
+
+const StyledBold = styled.div`
+  font-weight: 500;
+  font-size: 15px;
+  color: #717070;
+`;
+
+const StyledHeaderButton = styled.button`
+  cursor: pointer;
+  border: none;
+  background: none;
+  padding: 6px;
+  color: ${(props) => props.theme.colors.mainColor1};
+  display: inline-flex;
+  align-items: center;
 `;
 
 const StyledToolTipContainer = styled.div`
-  width: 80%;
+  width: 100%;
   border-radius: 3px;
-  display: inline-block;
   font-size: 15px;
-  opacity: 1;
-  padding: 8px 21px;
-  position: ${(props) => (props.isMobile ? 'static;' : 'relative;')};
-  pointer-events: none;
-  visibility: visible;
-  z-index: 999;
-  background: #0064af;
-  color: white;
-  ::selection {
-    color: ${(props) => props.theme.colors.secondaryColorDarkOrange};
-    background: yellow;
-  }
+  padding: 8px 12px;
+  margin-top: 8px;
+  background: #eef3fb;
+  color: #234167;
   border-radius: 5px;
-  margin: 12px 0px 8px 0px;
 `;
 
+/**
+ * SearchSwitch (MUI radio + info)
+ * Props:
+ *  - action: function called to select this switch (e.g. updateActiveSwitch(sw.id))
+ *  - isSelected: boolean
+ *  - title: label text
+ *  - tooltipText: string or array of strings (examples)
+ *  - tooltipAddress: short address/help text
+ *  - id: identifier
+ *  - isMobile: passed to tooltip if needed (kept for compatibility)
+ */
 const SearchSwitch = ({
   action,
   isSelected,
@@ -90,51 +65,68 @@ const SearchSwitch = ({
   tooltipText,
   tooltipAddress,
   id,
-  tooltipEnabled = false,
   isMobile
 }) => {
   const [isOpen, setOpen] = useState(false);
-  return (
-    <SwitchWrapper>
-      <div>
-      <StyledSwitchContainer
-        isSelected={isSelected}
-        onClick={(event) => {
-          action(event);
-        }}
-      >
-        <StyledSwitchButton isSelected={isSelected} />
-      </StyledSwitchContainer>
-      <StyledBold>{title}</StyledBold>
-      </div>
+  const theme = useTheme();
 
-      <StyledHeaderButton
-        data-tip
-        data-for={id}
-        onClick={() => {
-          setOpen(!isOpen);
-        }}
-      >
-        <FontAwesomeIcon
-          icon={faInfoCircle}
-          size="lg"
-        />
-      </StyledHeaderButton>
-      {isOpen && tooltipText !== undefined && (
-        <StyledToolTipContainer isMobile={isMobile}>
-          <span>
-            {tooltipAddress} <br />
-            {tooltipText.map((element, index) => {
-              return (
-                <span key={`tooltip_text_${index}`}>
-                  {element} <br />{' '}
-                </span>
-              );
-            })}{' '}
-          </span>
+  const handleSelect = (e) => {
+    // keep behavior same as before: call parent action
+    if (typeof action === 'function') action();
+  };
+
+  const handleInfoClick = (e) => {
+    // prevent row click/select when toggling info
+    e.stopPropagation();
+    setOpen((o) => !o);
+  };
+
+  return (
+    <div>
+      <SwitchWrapper onClick={handleSelect} role="button" aria-pressed={!!isSelected}>
+        <LeftArea>
+          <Radio
+            checked={!!isSelected}
+            onChange={handleSelect}
+            value={id}
+            name="search-switch-group"
+            size="small"
+            disableRipple
+            sx={{
+              color: '#BDBDBD',
+              '&.Mui-checked': {
+                color: theme?.colors?.mainColor1 ?? '#1976d2'
+              }
+            }}
+            inputProps={{ 'aria-label': title }}
+            onClick={(e) => e.stopPropagation()} /* stop propagation so outer onClick works only once */
+          />
+          <StyledBold>{title}</StyledBold>
+        </LeftArea>
+
+        <div>
+          <StyledHeaderButton
+            aria-label={`Show info for ${title}`}
+            onClick={handleInfoClick}
+            type="button"
+          >
+            <FontAwesomeIcon icon={faInfoCircle} size="lg" />
+          </StyledHeaderButton>
+        </div>
+      </SwitchWrapper>
+
+      {isOpen && (
+        <StyledToolTipContainer isMobile={isMobile} role="dialog" aria-live="polite">
+          <strong>{title}</strong>
+          <div>{tooltipAddress}</div>
+          <div style={{ marginTop: 6, color: '#666', fontSize: '0.96em' }}>
+            {Array.isArray(tooltipText)
+              ? tooltipText.map((txt, i) => <div key={i}>{txt}</div>)
+              : tooltipText}
+          </div>
         </StyledToolTipContainer>
       )}
-    </SwitchWrapper>
+    </div>
   );
 };
 
