@@ -3,83 +3,104 @@ import strings from '../../translations';
 import { useAppSelector } from '../../state/hooks';
 import { useState } from 'react';
 
-const StyledInput = styled.input`
+// Label and input group
+const InputRow = styled.div`
+    display: flex;
+    gap: 18px;
     width: 100%;
-    padding: 5px;
-    border-radius: 15px;
-    border-color: #A0A0A0;
-    margin: 8px 0;
-    &:focus {
-    border-color: #007bff;
+    justify-content: flex-start;
+    margin-bottom: 20px;
+`;
+
+const InputGroup = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 72px;
+`;
+
+const InputLabel = styled.label`
+    font-size: 15px;
+    margin-bottom: 4px;
+    margin-left: 0.5em;
+    font-weight: normal;
+    color: #222;
+    text-align: left;
+`;
+
+const PillInput = styled.input`
+    width: 72px;
+    height: 48px;
+    border: 1.5px solid #ccc;
+    border-radius: 24px;
+    text-align: center;
+    font-size: 22px;
     outline: none;
-    }
+    transition: border-color 0.2s;
+    background: #fff;
+    margin-bottom: 0;
     &.error {
-        border-color: ${props => props.theme.colors.secondaryColorDarkOrange};
+        border-color: ${props => props.theme.colors.secondaryColorDarkOrange || "#c55"};
     }
+    &:focus {
+        border-color: #888;
+    }
+`;
+
+// Standard full width input for address etc.
+const WideInputGroup = styled(InputGroup)`
+    width: 100%;
+    align-items: stretch;
+`;
+
+const WidePillInput = styled(PillInput)`
+    width: 100%;
+    min-width: 180px;
+    max-width: 600px;
 `;
 
 const StyledFeatureSearchSection = styled.div`
     display: flex;
-    flex-direction: column; 
+    flex-direction: column;
     width: 90%;
     margin-bottom: 1em;
 `;
-
 const StyledSearchSection = styled.div`
     width: 90%;
     margin-bottom: 1em;
     display: flex;
     flex-direction: column;
-`;
-
-const StyledRoadStart = styled.div`
-    display: flex;
-    flex-direction: row;
-    gap: 8px;
-`;
-
-const StyledRoadEnd = styled.div`
-    display: flex;
-    flex-direction: row;
-    gap: 8px;
-`;
-
-const StyledTrackWrapper = styled.div`
-    display: flex;
-    flex-direction: column;
-`;
-
-const StyledTrackInputWrapper = styled.div`
-    display: flex;
-    flex-direction: row;
-    gap: 8px;
-`;
-
-const StyledCheckbox = styled.input`
-    float: right;
-    width: 16px;
-    height: 16px;
+    align-items: flex-start;
 `;
 
 const CheckboxWrapper = styled.div`
     display: flex;
     align-items: center;
+    margin-top: 10px;
+`;
+
+const StyledCheckbox = styled.input`
+    margin-left: 0;
+    margin-right: 8px;
+    width: 16px;
+    height: 16px;
 `;
 
 const CheckboxLabel = styled.label`
     font-size: 16px;
-    margin-left: 8px;
-    color: ${props => props.theme.colors.darkGrey};
-`
+    color: ${props => props.theme.colors.darkGrey || "#333"};
+`;
+
 const StyledValidationMessage = styled.div`
-    color: ${props => props.theme.colors.secondaryColorDarkOrange};
-`
+    color: ${props => props.theme.colors.secondaryColorDarkOrange || "#c55"};
+    margin-top: 4px;
+`;
 
 const StyledSelectedLayerWrapper = styled.div`
     display: flex;
     align-items: baseline;
     margin-left: 0.5em;
-    margin-bottom: 4px
+    margin-top: 4px;
     overflow: hidden;
     white-space: nowrap;
 `
@@ -106,7 +127,9 @@ const StyledNoActivaLayers = styled.div`
     font-weight: 500;
 `
 
+// Utility methods for road/track parsing (same as before, abbreviated for brevity)
 const getSearchValuePart = (searchValue, searchType, part, carriageWaySearch) => {
+    // ... (keep your existing logic here)
     const splittedSearchArray = splitSearchValue(searchValue, searchType, part);
     let retVa;
     let actualPart;
@@ -140,7 +163,6 @@ const getSearchValuePart = (searchValue, searchType, part, carriageWaySearch) =>
     }
     return retVa;
 }
-
 const splitSearchValue = (searchValue, searchType) => {
     let roadParts;
     if (searchValue!== "" && searchType !== undefined &&
@@ -156,7 +178,6 @@ const splitSearchValue = (searchValue, searchType) => {
     }
     return roadParts;
 }
-
 const updateRoadSearchValue = (searchValue, searchType, setSearchValue, part, value, carriageWaySearch=false) => {
     let searchArray = splitSearchValue(searchValue, searchType);
     const effectivePart = carriageWaySearch ? part : part -1
@@ -182,7 +203,6 @@ const updateRoadSearchValue = (searchValue, searchType, setSearchValue, part, va
         setSearchValue(searchValue + "/" + value);
     } 
 }
-
 const parseSearchValueFromParts = (partsArray, blancSpacePosition) => {
     let newSearchValue;
     if (partsArray !== undefined && partsArray.length > (blancSpacePosition -1)){ 
@@ -194,13 +214,11 @@ const parseSearchValueFromParts = (partsArray, blancSpacePosition) => {
     }
     return newSearchValue.endsWith('/') ? newSearchValue.slice(0, -1) : newSearchValue;
 }
-
 const getTrackSearchValuePart = (position, searchValue) => {
     if (!searchValue) return '';
     const searchArray = searchValue.split("/");
     return searchArray[position] || '';
 }
-
 const updateTrackSearchValue = (newValue, position, searchValue, setSearchValue, trackErrors, setTrackErrors ) => {
     const newErrors = [...(trackErrors ?? [])];
     newErrors[position] = newValue === '';
@@ -210,7 +228,6 @@ const updateTrackSearchValue = (newValue, position, searchValue, setSearchValue,
     const newSearchValue = searchArray.join("/");
     setSearchValue(newSearchValue.endsWith('/') ? newSearchValue.slice(0, -1) : newSearchValue);
 }
-
 const parseTrackSearchQuery = (searchQuery) => {
     return searchQuery.endsWith('/') ? searchQuery.slice(0, -1) : searchQuery;
 }
@@ -232,149 +249,128 @@ const SearchInput = ({
     const [roadEndEnabled, setRoadEndEnabled] = useState(false);
 
     return (
-            <>
-                {activeSwitch === 'road' &&  (
+        <>
+            {activeSwitch === 'road' &&  (
                 <>
-                <StyledSearchSection role="group" aria-labelledby="road-start-group">
-                    <StyledRoadStart id="road-start-group">
-                        <StyledInput
-                            id="road-tie"
-                            name={ strings.search.vkm.tie }
-                            aria-label={ strings.search.vkm.tie }
-                            type="text"
-                            placeholder={ strings.search.vkm.tie }
-                            onChange={(e) => updateRoadSearchValue(searchValue, searchType, setSearchValue, 0, e.target.value, carriageWaySearch) }
-                            value={getSearchValuePart(searchValue, searchType, 0)}
-                            onKeyPress={e => {
-                                if (e.key === 'Enter') {
-                                    handleSeach(searchValue);
-                                }
-                            }}
-                        />
-                        <StyledInput
-                            id="road-osa"
-                            name={ strings.search.vkm.osa }
-                            aria-label={ strings.search.vkm.osa }
-                            type="text"
-                            placeholder={ strings.search.vkm.osa }
-                            onChange={(e) => updateRoadSearchValue(searchValue, searchType, setSearchValue, 1, e.target.value, carriageWaySearch) }
-                            value={getSearchValuePart(searchValue, searchType, 1)}
-                            onKeyPress={e => {
-                                if (e.key === 'Enter') {
-                                    handleSeach(searchValue);
-                                }
-                            }}
-                        />
-                        <StyledInput
-                            id="road-majorata"
-                            name={ strings.search.vkm.ajorata}
-                            aria-label={ strings.search.vkm.ajorata }
-                            type="text"
-                            placeholder={ strings.search.vkm.ajorata}
-                            onChange={(e) => updateRoadSearchValue(searchValue, searchType, setSearchValue, 2, e.target.value, carriageWaySearch) }
-                            value={getSearchValuePart(searchValue, searchType, 2, carriageWaySearch )}
-                            onKeyPress={e => {
-                                if (e.key === 'Enter') {
-                                    handleSeach(searchValue);
-                                }
-                            }}
-                            disabled={!carriageWaySearch}
-                        />
-                        <StyledInput
-                            id="road-etaisyys"
-                            name={ strings.search.vkm.etaisyys }
-                            aria-label={ strings.search.vkm.etaisyys }
-                            type="text"
-                            placeholder={ strings.search.vkm.etaisyys }
-                            onChange={(e) => updateRoadSearchValue(searchValue, searchType, setSearchValue, carriageWaySearch ? 3 : 2, e.target.value, carriageWaySearch) }
-                            value={getSearchValuePart(searchValue, searchType, 3, carriageWaySearch)}
-                            onKeyPress={e => {
-                                if (e.key === 'Enter') {
-                                    handleSeach(searchValue);
-                                }
-                            }}
-                        />
-                    </StyledRoadStart>
+                <StyledSearchSection>
+                    {/* Start fields */}
+                    <InputRow>
+                    <div><InputGroup>
+                            <InputLabel htmlFor="road-tie">{strings.search.vkm.tie}</InputLabel>
+                            <PillInput
+                                id="road-tie"
+                                type="text"
+                                placeholder=""
+                                onChange={(e) => updateRoadSearchValue(searchValue, searchType, setSearchValue, 0, e.target.value, carriageWaySearch) }
+                                value={getSearchValuePart(searchValue, searchType, 0)}
+                                onKeyPress={e => { if (e.key === 'Enter') handleSeach(searchValue); }}
+                            />
+                        </InputGroup>
+                        <InputGroup>
+                            <InputLabel htmlFor="road-osa">{strings.search.vkm.osa}</InputLabel>
+                            <PillInput
+                                id="road-osa"
+                                type="text"
+                                placeholder=""
+                                onChange={(e) => updateRoadSearchValue(searchValue, searchType, setSearchValue, 1, e.target.value, carriageWaySearch) }
+                                value={getSearchValuePart(searchValue, searchType, 1)}
+                                onKeyPress={e => { if (e.key === 'Enter') handleSeach(searchValue); }}
+                            />
+                        </InputGroup>
+                    </div>
+                    <div>
+                        <InputGroup>
+                            <InputLabel htmlFor="road-majorata">{strings.search.vkm.ajorata}</InputLabel>
+                            <PillInput
+                                id="road-majorata"
+                                type="text"
+                                placeholder=""
+                                onChange={(e) => updateRoadSearchValue(searchValue, searchType, setSearchValue, 2, e.target.value, carriageWaySearch) }
+                                value={getSearchValuePart(searchValue, searchType, 2, carriageWaySearch )}
+                                onKeyPress={e => { if (e.key === 'Enter') handleSeach(searchValue); }}
+                                disabled={!carriageWaySearch}
+                            />
+                        </InputGroup>
+                        <InputGroup>
+                            <InputLabel htmlFor="road-etaisyys">{strings.search.vkm.etaisyys}</InputLabel>
+                            <PillInput
+                                id="road-etaisyys"
+                                type="text"
+                                placeholder=""
+                                onChange={(e) => updateRoadSearchValue(searchValue, searchType, setSearchValue, carriageWaySearch ? 3 : 2, e.target.value, carriageWaySearch) }
+                                value={getSearchValuePart(searchValue, searchType, 3, carriageWaySearch)}
+                                onKeyPress={e => { if (e.key === 'Enter') handleSeach(searchValue); }}
+                            />
+                        </InputGroup>
+                    </div>
+                        
+                        
+                    </InputRow>
+                    {/* End fields (optional) */}
                     { roadEndEnabled &&
-                        <StyledRoadEnd>
-                        <StyledInput
-                            id="road-tieloppu"
-                            name={ strings.search.vkm.tieloppu }
-                            aria-label={ strings.search.vkm.tieloppu }
-                            type="text"
-                            placeholder={ strings.search.vkm.tieloppu }
-                            onChange={(e) => updateRoadSearchValue(searchValue, searchType, setSearchValue, 4, e.target.value, carriageWaySearch) }
-                            value={getSearchValuePart(searchValue, searchType, 4, carriageWaySearch)}
-                            onKeyPress={e => {
-                                if (e.key === 'Enter') {
-                                    handleSeach(searchValue);
-                                }
-                            }}
-                        />
-                        <StyledInput
-                            id="road-osa-loppu"
-                            name={ strings.search.vkm.osaLoppu }
-                            aria-label={ strings.search.vkm.osaLoppu }
-                            type="text"
-                            placeholder={ strings.search.vkm.osaLoppu }
-                            onChange={(e) => updateRoadSearchValue(searchValue, searchType, setSearchValue, 5, e.target.value, carriageWaySearch) }
-                            value={getSearchValuePart(searchValue, searchType, 5, carriageWaySearch)}
-                            onKeyPress={e => {
-                                if (e.key === 'Enter') {
-                                    handleSeach(searchValue);
-                                }
-                            }}
-                        />
-                        <StyledInput
-                            id="road-majorata-loppu"
-                            name={ strings.search.vkm.ajorata }
-                            aria-label={ strings.search.vkm.ajorata }
-                            type="text"
-                            placeholder={ strings.search.vkm.ajorata }
-                            value={getSearchValuePart(searchValue, searchType, 6, carriageWaySearch)}
-                            onChange={(e) =>  updateRoadSearchValue(searchValue, searchType, setSearchValue, 6, e.target.value, carriageWaySearch)}
-                            onKeyPress={e => {
-                                if (e.key === 'Enter') {
-                                    handleSeach(searchValue);
-                                }
-                            }}
-                            disabled={!carriageWaySearch}
-                        />
-                        <StyledInput
-                            id="road-etaisyys-loppu"
-                            name={ strings.search.vkm.etaisyysLoppu }
-                            aria-label={ strings.search.vkm.etaisyysLoppu }
-                            type="text"
-                            placeholder={ strings.search.vkm.etaisyysLoppu }
-                            value={ getSearchValuePart(searchValue, searchType, 7, carriageWaySearch)}
-                            onChange={(e) => updateRoadSearchValue(searchValue, searchType, setSearchValue, carriageWaySearch ? 7 : 6, e.target.value, carriageWaySearch) }
-                            onKeyPress={e => {
-                                if (e.key === 'Enter') {
-                                    handleSeach(searchValue);
-                                }
-                            }}
-                        />   
-                    </StyledRoadEnd>
+                        <InputRow>
+                            <InputGroup>
+                                <InputLabel htmlFor="road-tieloppu">{strings.search.vkm.tieloppu}</InputLabel>
+                                <PillInput
+                                    id="road-tieloppu"
+                                    type="text"
+                                    placeholder=""
+                                    onChange={(e) => updateRoadSearchValue(searchValue, searchType, setSearchValue, 4, e.target.value, carriageWaySearch) }
+                                    value={getSearchValuePart(searchValue, searchType, 4, carriageWaySearch)}
+                                    onKeyPress={e => { if (e.key === 'Enter') handleSeach(searchValue); }}
+                                />
+                            </InputGroup>
+                            <InputGroup>
+                                <InputLabel htmlFor="road-osa-loppu">{strings.search.vkm.osaLoppu}</InputLabel>
+                                <PillInput
+                                    id="road-osa-loppu"
+                                    type="text"
+                                    placeholder=""
+                                    onChange={(e) => updateRoadSearchValue(searchValue, searchType, setSearchValue, 5, e.target.value, carriageWaySearch) }
+                                    value={getSearchValuePart(searchValue, searchType, 5, carriageWaySearch)}
+                                    onKeyPress={e => { if (e.key === 'Enter') handleSeach(searchValue); }}
+                                />
+                            </InputGroup>
+                            <InputGroup>
+                                <InputLabel htmlFor="road-majorata-loppu">{strings.search.vkm.ajorata}</InputLabel>
+                                <PillInput
+                                    id="road-majorata-loppu"
+                                    type="text"
+                                    placeholder=""
+                                    value={getSearchValuePart(searchValue, searchType, 6, carriageWaySearch)}
+                                    onChange={(e) =>  updateRoadSearchValue(searchValue, searchType, setSearchValue, 6, e.target.value, carriageWaySearch)}
+                                    onKeyPress={e => { if (e.key === 'Enter') handleSeach(searchValue); }}
+                                    disabled={!carriageWaySearch}
+                                />
+                            </InputGroup>
+                            <InputGroup>
+                                <InputLabel htmlFor="road-etaisyys-loppu">{strings.search.vkm.etaisyysLoppu}</InputLabel>
+                                <PillInput
+                                    id="road-etaisyys-loppu"
+                                    type="text"
+                                    placeholder=""
+                                    value={ getSearchValuePart(searchValue, searchType, 7, carriageWaySearch)}
+                                    onChange={(e) => updateRoadSearchValue(searchValue, searchType, setSearchValue, carriageWaySearch ? 7 : 6, e.target.value, carriageWaySearch) }
+                                    onKeyPress={e => { if (e.key === 'Enter') handleSeach(searchValue); }}
+                                />
+                            </InputGroup>
+                        </InputRow>
                     }
-                    {/* Checkbox - Carriage Way */}
                     <CheckboxWrapper>
                         <StyledCheckbox
                             id='carriageWaySearchBox'
                             name='carriageWaySearchBox'
                             type='checkbox'
-                            aria-label={strings.search.carriageWaySearch}
                             onChange={() => (setCarriageWaySearch(!carriageWaySearch))}
                             checked={carriageWaySearch}
                         />
                         <CheckboxLabel htmlFor='carriageWaySearchBox'>{strings.search.carriageWaySearch}</CheckboxLabel>
                     </CheckboxWrapper>
-                    {/* Checkbox - Road End Info */}
                     <CheckboxWrapper>
                         <StyledCheckbox
                             id='roadEndCheckbox'
                             name='roadEndCheckbox'
                             type='checkbox'
-                            aria-label="Anna tien loppu tiedot"
                             onChange={() => (setRoadEndEnabled(!roadEndEnabled))}
                             checked={roadEndEnabled}
                         />
@@ -382,16 +378,16 @@ const SearchInput = ({
                     </CheckboxWrapper>
                 </StyledSearchSection>  
                 </>
-                )}
-                {activeSwitch === 'track' &&  (
-                <>
-                <StyledSearchSection role="group" aria-labelledby="track-input-group">
-                    <StyledTrackWrapper id="track-input-group">
-                        <StyledTrackInputWrapper>
-                            <StyledInput
+            )}
+
+            {activeSwitch === 'track' && (
+                <StyledSearchSection>
+                    <InputRow>
+                        <InputGroup>
+                            <InputLabel htmlFor="track-tracknumber">{strings.search.track.tracknumber}</InputLabel>
+                            <PillInput
                                 id="track-tracknumber"
                                 type="text"
-                                placeholder={strings.search.track.tracknumber}
                                 value={getTrackSearchValuePart(0, searchValue)}
                                 onChange={(e) => updateTrackSearchValue(e.target.value, 0, searchValue, setSearchValue, trackErrors, setTrackErrors)}
                                 onKeyPress={e => {
@@ -402,13 +398,13 @@ const SearchInput = ({
                                     }
                                 }}
                                 className={trackErrors[0] ? 'error' : ''}
-                                aria-label={strings.search.track.tracknumber}
-                                aria-describedby={trackErrors[0] ? "track-error-msg" : undefined}
                             />
-                            <StyledInput
+                        </InputGroup>
+                        <InputGroup>
+                            <InputLabel htmlFor="track-trackkm">{strings.search.track.trackkm}</InputLabel>
+                            <PillInput
                                 id="track-trackkm"
                                 type="text"
-                                placeholder={strings.search.track.trackkm}
                                 value={getTrackSearchValuePart(1, searchValue)}
                                 onChange={(e) => updateTrackSearchValue(e.target.value,1, searchValue, setSearchValue, trackErrors, setTrackErrors) }
                                 onKeyPress={e => {
@@ -419,13 +415,13 @@ const SearchInput = ({
                                     }
                                 }}
                                 className={trackErrors[1] ? 'error' : ''}
-                                aria-label={strings.search.track.trackkm}
-                                aria-describedby={trackErrors[1] ? "track-error-msg" : undefined}
                             />
-                            <StyledInput
+                        </InputGroup>
+                        <InputGroup>
+                            <InputLabel htmlFor="track-trackm">{strings.search.track.trackm}</InputLabel>
+                            <PillInput
                                 id="track-trackm"
                                 type="text"
-                                placeholder={strings.search.track.trackm}
                                 value={getTrackSearchValuePart(2, searchValue)}
                                 onChange={(e) => updateTrackSearchValue(e.target.value,2, searchValue, setSearchValue, trackErrors, setTrackErrors)}
                                 onKeyPress={e => {
@@ -436,98 +432,101 @@ const SearchInput = ({
                                     }
                                 }}
                                 className={trackErrors[2] ? 'error' : ''}
-                                aria-label={strings.search.track.trackm}
-                                aria-describedby={trackErrors[2] ? "track-error-msg" : undefined}
                             />
-                        </StyledTrackInputWrapper>
-                        { trackErrors.some((error) => error === true) && (
-                            <StyledValidationMessage id="track-error-msg">
-                                {strings.search.track.trackMandatoryMessage}
-                            </StyledValidationMessage>
-                        )}
-                    </StyledTrackWrapper>    
-                </StyledSearchSection>    
-                </>
-                )}
-                {activeSwitch === 'address' &&  (
-                <>
-                <StyledSearchSection>
-                    <StyledInput
-                        id="address-search"
-                        type="text"
-                        placeholder={strings.tooltips.searchButton}
-                        value={searchValue}
-                        onChange={(e) => setSearchValue(e.target.value) }
-                        onKeyPress={e => {
-                            if (e.key === 'Enter') {
-                                handleSeach(searchValue);
-                            }
-                        }}
-                        aria-label={strings.tooltips.searchButton}
-                    />     
-                </StyledSearchSection>    
-                </>
-                )}
-                {activeSwitch === 'nomenclature' &&  (
-                <>    
-                <StyledSearchSection>
-                    <StyledInput
-                        id="nomenclature-search"
-                        type="text"
-                        placeholder={strings.search.nomenclature.title}
-                        value={searchValue}
-                        onChange={(e) => setSearchValue(e.target.value) }
-                        onKeyPress={e => {
-                            if (e.key === 'Enter') {
-                                handleSeach(searchValue);
-                            }
-                        }}
-                        aria-label={strings.search.nomenclature.title}
-                    />      
+                        </InputGroup>
+                    </InputRow>
+                    { trackErrors.some((error) => error === true) && (
+                        <StyledValidationMessage>
+                            {strings.search.track.trackMandatoryMessage}
+                        </StyledValidationMessage>
+                    )}
                 </StyledSearchSection>
-                </>
-                )}
-                {activeSwitch === 'premise' &&  (
-                <>    
+            )}
+
+            {activeSwitch === 'address' && (
                 <StyledSearchSection>
-                    <StyledInput
-                        id="premise-search"
-                        type="text"
-                        placeholder={strings.search.premise.title}
-                        value={searchValue}
-                        onChange={(e) => setSearchValue(e.target.value) }
-                        onKeyPress={e => {
-                            if (e.key === 'Enter') {
-                                handleSeach(searchValue);
-                            }
-                        }}
-                        aria-label={strings.search.premise.title}
-                    />       
-                </StyledSearchSection>        
-                </>
-                )}
-                {activeSwitch === 'layer' &&  (
-                <> 
-                <StyledSearchSection>   
-                    <StyledInput
-                        id="metadata-search"
-                        type="text"
-                        placeholder={strings.search.layer.title}
-                        value={searchValue}
-                        onChange={(e) => setSearchValue(e.target.value) }
-                        onKeyPress={e => {
-                            if (e.key === 'Enter') {
-                                handleSeach(searchValue);
-                            }
-                        }}
-                        aria-label={strings.search.layer.title}
-                    />
-                </StyledSearchSection>       
-                </>
-                )}
-                {activeSwitch === 'feature' &&  (
-                <> 
+                    <WideInputGroup>
+                        <InputLabel htmlFor="address-search">{strings.tooltips.searchButton}</InputLabel>
+                        <WidePillInput
+                            id="address-search"
+                            type="text"
+                            value={searchValue}
+                            onChange={(e) => setSearchValue(e.target.value)}
+                            onKeyPress={e => {
+                                if (e.key === 'Enter') handleSeach(searchValue);
+                            }}
+                        />
+                    </WideInputGroup>
+                </StyledSearchSection>
+            )}
+
+            {activeSwitch === 'nomenclature' && (
+                <StyledSearchSection>
+                    <WideInputGroup>
+                        <InputLabel htmlFor="nomenclature-search">{strings.search.nomenclature.title}</InputLabel>
+                        <WidePillInput
+                            id="nomenclature-search"
+                            type="text"
+                            value={searchValue}
+                            onChange={(e) => setSearchValue(e.target.value)}
+                            onKeyPress={e => {
+                                if (e.key === 'Enter') handleSeach(searchValue);
+                            }}
+                        />
+                    </WideInputGroup>
+                </StyledSearchSection>
+            )}
+
+            {activeSwitch === 'premise' && (
+                <StyledSearchSection>
+                    <WideInputGroup>
+                        <InputLabel htmlFor="premise-search">{strings.search.premise.title}</InputLabel>
+                        <WidePillInput
+                            id="premise-search"
+                            type="text"
+                            value={searchValue}
+                            onChange={(e) => setSearchValue(e.target.value)}
+                            onKeyPress={e => {
+                                if (e.key === 'Enter') handleSeach(searchValue);
+                            }}
+                        />
+                    </WideInputGroup>
+                </StyledSearchSection>
+            )}
+
+            {activeSwitch === 'layer' && (
+                <StyledSearchSection>
+                    <WideInputGroup>
+                        <InputLabel htmlFor="metadata-search">{strings.search.layer.title}</InputLabel>
+                        <WidePillInput
+                            id="metadata-search"
+                            type="text"
+                            value={searchValue}
+                            onChange={(e) => setSearchValue(e.target.value)}
+                            onKeyPress={e => {
+                                if (e.key === 'Enter') handleSeach(searchValue);
+                            }}
+                        />
+                    </WideInputGroup>
+                </StyledSearchSection>
+            )}
+
+            {activeSwitch === 'feature' && (
                 <StyledFeatureSearchSection>
+                    <WideInputGroup>
+                        <InputLabel htmlFor="feature-search">{strings.search.feature.title}</InputLabel>
+                        <WidePillInput
+                            id="feature-search"
+                            type="text"
+                            value={searchValue}
+                            onChange={(e) => setSearchValue(e.target.value)}
+                            onKeyPress={e => {
+                                if (e.key === 'Enter') handleSeach(searchValue.trim());
+                            }}
+                            className={featureErrors.length > 0 ? 'error' : ''}
+                        />
+                    </WideInputGroup>
+
                     <StyledSelectedLayerWrapper>
                         { selectedLayersByType.mapLayers.length > 0 ?
                             (
@@ -542,25 +541,10 @@ const SearchInput = ({
                             )
                         }
                     </StyledSelectedLayerWrapper>
-                    <StyledInput
-                        id="feature-search"
-                        type="text"
-                        placeholder={strings.search.feature.title}
-                        value={searchValue}
-                        onChange={(e) => setSearchValue(e.target.value) }
-                        onKeyPress={e => {
-                            if (e.key === 'Enter') {
-                                handleSeach(searchValue.trim());
-                            }
-                        }}
-                        className={featureErrors.length > 0 ? 'error' : ''}
-                        aria-label={strings.search.feature.title}
-                    />
-                </StyledFeatureSearchSection>       
-                </>
-                )}
-         </>
-    )
+                </StyledFeatureSearchSection>
+            )}
+        </>
+    );
 };
 
 export default SearchInput;
