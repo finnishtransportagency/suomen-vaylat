@@ -75,12 +75,6 @@ const InfoText = styled.div`
   color: #234167;
 `;
 
-const HorizontalLine = styled.div`
-  width: 100%;
-  height: 1px;
-  background-color: #d7d9db;
-`;
-
 const switchDefinitions = [
   {
     id: 'road',
@@ -243,7 +237,6 @@ const SearchDialog = ({
                   tooltipText={sw.tooltipText}
                   tooltipAddress={sw.tooltipAddress}
                   id={sw.id}
-                  tooltipEnabled={activeSwitch === sw.id}
                   isMobile={isMobile}
                 />
               </SwitchRow>
@@ -263,7 +256,6 @@ const SearchDialog = ({
         </DropdownContent>
       </DropdownWrapper>
 
-      <HorizontalLine/>
 
       <SearchResultPanel
         isSearchOpen={isSearchOpen}

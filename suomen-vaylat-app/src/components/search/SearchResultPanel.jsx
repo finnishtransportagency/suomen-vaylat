@@ -36,6 +36,12 @@ const StyledSearchResultsTitleWrapper = styled.div`
   user-select: none;
 `;
 
+const HorizontalLine = styled.div`
+  width: 100%;
+  height: 1px;
+  background-color: #d7d9db;
+`;
+
 const SearchResultPanel = ({
     isSearchOpen,
     searchResults,
@@ -55,6 +61,8 @@ const SearchResultPanel = ({
         <SearchPanelMain>
 
         { (searchResults !== null || featureSearchResults.length > 0) && 
+        <>
+              <HorizontalLine/>
         <StyledSearchResultsTitleWrapper
                 onClick={() => setShowSearchResults(!showSearchResults)}>
             <span>
@@ -65,6 +73,7 @@ const SearchResultPanel = ({
             rotation={showSearchResults ? 180 : undefined}
           />
         </StyledSearchResultsTitleWrapper>
+        </>
         }
         { 
             isSearchOpen &&

@@ -52,6 +52,7 @@ const StyledBold = styled.div`
 const StyledHeaderButton = styled.div`
   cursor: pointer;
   float: right;
+      color: ${(props) => props.theme.colors.mainColor1};
 `;
 
 const SwitchWrapper = styled.div`
@@ -116,13 +117,10 @@ const SearchSwitch = ({
       >
         <FontAwesomeIcon
           icon={faInfoCircle}
-          style={{
-            color: tooltipEnabled ? '#0064af' : '#aaaaaa',
-          }}
           size="lg"
         />
       </StyledHeaderButton>
-      {isOpen && tooltipText !== undefined && tooltipEnabled && (
+      {isOpen && tooltipText !== undefined && (
         <StyledToolTipContainer isMobile={isMobile}>
           <span>
             {tooltipAddress} <br />

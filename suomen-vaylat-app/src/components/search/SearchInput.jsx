@@ -2,10 +2,6 @@ import styled from 'styled-components';
 import strings from '../../translations';
 import { useAppSelector } from '../../state/hooks';
 import { useState } from 'react';
-import SearchSwitch from './utils/SearchSwitch';
-import { isMobile } from '../../theme/theme';
-
-
 
 const StyledInput = styled.input`
     width: 100%;
@@ -20,27 +16,6 @@ const StyledInput = styled.input`
     &.error {
         border-color: ${props => props.theme.colors.secondaryColorDarkOrange};
     }
-    
-`;
-const StyledInputHalf = styled.input`
-    width: 49%;
-    font-size: 16px;
-    border-radius: 15px;
-    border-color: #A0A0A0;
-    margin-top: 3px;
-    margin-bottom: 3px;
-    padding: 5px;
-    :last-of-type {
-        margin-left: 2%;
-    }
-    &:focus {
-    border-color: #007bff;
-    outline: none;
-    }
-    &.error {
-        border-color: ${props => props.theme.colors.secondaryColorDarkOrange};
-    }
-
 `;
 
 const StyledFeatureSearchSection = styled.div`
@@ -66,6 +41,7 @@ const StyledRoadStart = styled.div`
 const StyledRoadEnd = styled.div`
     display: flex;
     flex-direction: row;
+    gap: 8px;
 `;
 
 const StyledTrackWrapper = styled.div`
@@ -134,8 +110,6 @@ const getSearchValuePart = (searchValue, searchType, part, carriageWaySearch) =>
     const splittedSearchArray = splitSearchValue(searchValue, searchType, part);
     let retVa;
     let actualPart;
-    //actual value tells from which cell value is fetched
-    //differenct cell of value array choosed if ajorata search not enabled 
     if (carriageWaySearch === true) {
         if (splittedSearchArray && part > splittedSearchArray.length){
             return ""
@@ -143,8 +117,7 @@ const getSearchValuePart = (searchValue, searchType, part, carriageWaySearch) =>
             actualPart = part;
         }
     } else {
-        //no ajorata part on etäisyys search
-        if (part === 2 || part ===6){
+        if (part === 2 || part ===6){
             return ""
         }
         else if (part > 6) {
@@ -159,7 +132,6 @@ const getSearchValuePart = (searchValue, searchType, part, carriageWaySearch) =>
         && typeof splittedSearchArray[actualPart] !== 'undefined') {
         retVa= splittedSearchArray[ actualPart];       
     }
-    //first value set whole searchvalue
     else if (part === 0){
          retVa = searchValue; 
     } 
@@ -169,17 +141,10 @@ const getSearchValuePart = (searchValue, searchType, part, carriageWaySearch) =>
     return retVa;
 }
 
-/**
- * Split search value string to single values
- * @param {*} searchValue search query string
- * @param {*} searchType type
- * @returns array containing search values
- */
 const splitSearchValue = (searchValue, searchType) => {
     let roadParts;
     if (searchValue!== "" && searchType !== undefined &&
         searchType === 'address' && searchValue.includes("/")){
-        //if roadsearch contains space, ingnore and handle on search field, range search case
         if (searchValue.includes(' ')){
             const partsArray = searchValue.split(" ");
             const part1 = partsArray[0].split("/").filter((val) => val !=="")
@@ -192,20 +157,10 @@ const splitSearchValue = (searchValue, searchType) => {
     return roadParts;
 }
 
-/**
- * update searchValue attribute
- * @param {*} searchValue whole search query 
- * @param {*} searchType 
- * @param {*} part part of roadsearch to update 0=tie, 1=osa, 2= ajorata, 3= etäisyys 
- * @param {*} value value to add
- */
 const updateRoadSearchValue = (searchValue, searchType, setSearchValue, part, value, carriageWaySearch=false) => {
-    //const oldPart = getSearchValuePart(searchValue, searchType, part);
     let searchArray = splitSearchValue(searchValue, searchType);
     const effectivePart = carriageWaySearch ? part : part -1
     if ((searchArray!==undefined && searchArray!=="") && searchArray.length >= effectivePart){
-        //replace existing value
-        //empty value in the middle remove values on right side
         if (value === ""){
             searchArray.length=part
         }
@@ -215,32 +170,21 @@ const updateRoadSearchValue = (searchValue, searchType, setSearchValue, part, va
         }else {
             searchArray[part] = value;
         }
-        //range search add empty space between parts
         const updatedSearchValue= parseSearchValueFromParts(searchArray, blancSpacePosition)
         if (updatedSearchValue!==undefined){
             setSearchValue(updatedSearchValue);
         }
     } else if ((searchArray===undefined || searchArray==="") && value !== undefined && part === 0) {
-        //first part
         setSearchValue(value);
     } else if ((searchArray===undefined || searchArray==="") && searchValue !== undefined && part === 1) {
-        //add second part to search
         setSearchValue(searchValue + "/" + value);
     } else if ((searchArray!==undefined && searchArray!=="") && searchArray.length === (part -1)) {
-        //any bigger new part than 0 or 1
         setSearchValue(searchValue + "/" + value);
     } 
 }
 
-/**
- * Parse value from value array
- * @param {*} partsArray array containing searchvalues
- * @param {*} blancSpacePosition position of space 3|4
- * @returns string searchvalue string on oskari vkm api undertandable format
- */
 const parseSearchValueFromParts = (partsArray, blancSpacePosition) => {
     let newSearchValue;
-    //if range search (more than blancSpacePosition params) add space between
     if (partsArray !== undefined && partsArray.length > (blancSpacePosition -1)){ 
         let firstPart = partsArray.slice(0, blancSpacePosition).join('/')
         let secondi = partsArray.slice(blancSpacePosition).join('/')
@@ -258,14 +202,11 @@ const getTrackSearchValuePart = (position, searchValue) => {
 }
 
 const updateTrackSearchValue = (newValue, position, searchValue, setSearchValue, trackErrors, setTrackErrors ) => {
-    // Update errors
     const newErrors = [...(trackErrors ?? [])];
     newErrors[position] = newValue === '';
     setTrackErrors(newErrors);
-    // Modify the search value
     let searchArray = searchValue ? searchValue.split("/") : ['','',''];
     searchArray[position] = newValue;
-    // Join the parts back into a single string
     const newSearchValue = searchArray.join("/");
     setSearchValue(newSearchValue.endsWith('/') ? newSearchValue.slice(0, -1) : newSearchValue);
 }
@@ -273,8 +214,6 @@ const updateTrackSearchValue = (newValue, position, searchValue, setSearchValue,
 const parseTrackSearchQuery = (searchQuery) => {
     return searchQuery.endsWith('/') ? searchQuery.slice(0, -1) : searchQuery;
 }
-
-
 
 const SearchInput = ({
     searchValue,
@@ -292,14 +231,16 @@ const SearchInput = ({
     const { activeSwitch } = useAppSelector((state) => state.ui);
     const [roadEndEnabled, setRoadEndEnabled] = useState(false);
 
-
     return (
             <>
                 {activeSwitch === 'road' &&  (
                 <>
-                <StyledSearchSection>   
-                    <StyledRoadStart>
+                <StyledSearchSection role="group" aria-labelledby="road-start-group">
+                    <StyledRoadStart id="road-start-group">
                         <StyledInput
+                            id="road-tie"
+                            name={ strings.search.vkm.tie }
+                            aria-label={ strings.search.vkm.tie }
                             type="text"
                             placeholder={ strings.search.vkm.tie }
                             onChange={(e) => updateRoadSearchValue(searchValue, searchType, setSearchValue, 0, e.target.value, carriageWaySearch) }
@@ -311,6 +252,9 @@ const SearchInput = ({
                             }}
                         />
                         <StyledInput
+                            id="road-osa"
+                            name={ strings.search.vkm.osa }
+                            aria-label={ strings.search.vkm.osa }
                             type="text"
                             placeholder={ strings.search.vkm.osa }
                             onChange={(e) => updateRoadSearchValue(searchValue, searchType, setSearchValue, 1, e.target.value, carriageWaySearch) }
@@ -322,6 +266,9 @@ const SearchInput = ({
                             }}
                         />
                         <StyledInput
+                            id="road-majorata"
+                            name={ strings.search.vkm.ajorata}
+                            aria-label={ strings.search.vkm.ajorata }
                             type="text"
                             placeholder={ strings.search.vkm.ajorata}
                             onChange={(e) => updateRoadSearchValue(searchValue, searchType, setSearchValue, 2, e.target.value, carriageWaySearch) }
@@ -334,6 +281,9 @@ const SearchInput = ({
                             disabled={!carriageWaySearch}
                         />
                         <StyledInput
+                            id="road-etaisyys"
+                            name={ strings.search.vkm.etaisyys }
+                            aria-label={ strings.search.vkm.etaisyys }
                             type="text"
                             placeholder={ strings.search.vkm.etaisyys }
                             onChange={(e) => updateRoadSearchValue(searchValue, searchType, setSearchValue, carriageWaySearch ? 3 : 2, e.target.value, carriageWaySearch) }
@@ -344,12 +294,13 @@ const SearchInput = ({
                                 }
                             }}
                         />
-                        <div className="clearboth" style= {{clear: "left"}} />
                     </StyledRoadStart>
                     { roadEndEnabled &&
                         <StyledRoadEnd>
-
                         <StyledInput
+                            id="road-tieloppu"
+                            name={ strings.search.vkm.tieloppu }
+                            aria-label={ strings.search.vkm.tieloppu }
                             type="text"
                             placeholder={ strings.search.vkm.tieloppu }
                             onChange={(e) => updateRoadSearchValue(searchValue, searchType, setSearchValue, 4, e.target.value, carriageWaySearch) }
@@ -360,8 +311,10 @@ const SearchInput = ({
                                 }
                             }}
                         />
-                        <div>
-                        <StyledInputHalf
+                        <StyledInput
+                            id="road-osa-loppu"
+                            name={ strings.search.vkm.osaLoppu }
+                            aria-label={ strings.search.vkm.osaLoppu }
                             type="text"
                             placeholder={ strings.search.vkm.osaLoppu }
                             onChange={(e) => updateRoadSearchValue(searchValue, searchType, setSearchValue, 5, e.target.value, carriageWaySearch) }
@@ -372,9 +325,12 @@ const SearchInput = ({
                                 }
                             }}
                         />
-                        <StyledInputHalf
+                        <StyledInput
+                            id="road-majorata-loppu"
+                            name={ strings.search.vkm.ajorata }
+                            aria-label={ strings.search.vkm.ajorata }
                             type="text"
-                            placeholder={ strings.search.vkm.ajorata}
+                            placeholder={ strings.search.vkm.ajorata }
                             value={getSearchValuePart(searchValue, searchType, 6, carriageWaySearch)}
                             onChange={(e) =>  updateRoadSearchValue(searchValue, searchType, setSearchValue, 6, e.target.value, carriageWaySearch)}
                             onKeyPress={e => {
@@ -384,8 +340,10 @@ const SearchInput = ({
                             }}
                             disabled={!carriageWaySearch}
                         />
-                        </div>
                         <StyledInput
+                            id="road-etaisyys-loppu"
+                            name={ strings.search.vkm.etaisyysLoppu }
+                            aria-label={ strings.search.vkm.etaisyysLoppu }
                             type="text"
                             placeholder={ strings.search.vkm.etaisyysLoppu }
                             value={ getSearchValuePart(searchValue, searchType, 7, carriageWaySearch)}
@@ -396,47 +354,45 @@ const SearchInput = ({
                                 }
                             }}
                         />   
-
                     </StyledRoadEnd>
-
                     }
-                    
-
-                    <CheckboxWrapper> 
-                            <StyledCheckbox
-                                id='carriageWaySearchBox'
-                                name='carriageWaySearchBox'
-                                type='checkbox'
-                                onChange={() => (setCarriageWaySearch(!carriageWaySearch))}
-                                checked={carriageWaySearch}
-                            />
-                            <CheckboxLabel htmlFor='carriageWaySearchBox'>{strings.search.carriageWaySearch}</CheckboxLabel>
+                    {/* Checkbox - Carriage Way */}
+                    <CheckboxWrapper>
+                        <StyledCheckbox
+                            id='carriageWaySearchBox'
+                            name='carriageWaySearchBox'
+                            type='checkbox'
+                            aria-label={strings.search.carriageWaySearch}
+                            onChange={() => (setCarriageWaySearch(!carriageWaySearch))}
+                            checked={carriageWaySearch}
+                        />
+                        <CheckboxLabel htmlFor='carriageWaySearchBox'>{strings.search.carriageWaySearch}</CheckboxLabel>
                     </CheckboxWrapper>
-
-                    <CheckboxWrapper> 
-                            <StyledCheckbox
-                                id='roadEndcehckbox'
-                                name='roadEndcehckbox'
-                                type='checkbox'
-                                onChange={() => (setRoadEndEnabled(!roadEndEnabled))}
-                                checked={roadEndEnabled}
-                            />
-                            <CheckboxLabel htmlFor='roadEndcehckbox'>{"Anna tien loppu tiedot"}</CheckboxLabel>
+                    {/* Checkbox - Road End Info */}
+                    <CheckboxWrapper>
+                        <StyledCheckbox
+                            id='roadEndCheckbox'
+                            name='roadEndCheckbox'
+                            type='checkbox'
+                            aria-label="Anna tien loppu tiedot"
+                            onChange={() => (setRoadEndEnabled(!roadEndEnabled))}
+                            checked={roadEndEnabled}
+                        />
+                        <CheckboxLabel htmlFor='roadEndCheckbox'>{"Anna tien loppu tiedot"}</CheckboxLabel>
                     </CheckboxWrapper>
-
                 </StyledSearchSection>  
                 </>
-                )
-                }
+                )}
                 {activeSwitch === 'track' &&  (
                 <>
-                <StyledSearchSection>
-                    <StyledTrackWrapper>
+                <StyledSearchSection role="group" aria-labelledby="track-input-group">
+                    <StyledTrackWrapper id="track-input-group">
                         <StyledTrackInputWrapper>
                             <StyledInput
+                                id="track-tracknumber"
                                 type="text"
-                                placeholder={strings.search.track.tracknumber  }
-                                value={  getTrackSearchValuePart(0, searchValue)}
+                                placeholder={strings.search.track.tracknumber}
+                                value={getTrackSearchValuePart(0, searchValue)}
                                 onChange={(e) => updateTrackSearchValue(e.target.value, 0, searchValue, setSearchValue, trackErrors, setTrackErrors)}
                                 onKeyPress={e => {
                                     if (e.key === 'Enter') {
@@ -444,14 +400,16 @@ const SearchInput = ({
                                             handleSeach(parseTrackSearchQuery(searchValue));
                                         }
                                     }
-                                    
                                 }}
                                 className={trackErrors[0] ? 'error' : ''}
+                                aria-label={strings.search.track.tracknumber}
+                                aria-describedby={trackErrors[0] ? "track-error-msg" : undefined}
                             />
                             <StyledInput
+                                id="track-trackkm"
                                 type="text"
-                                placeholder={ strings.search.track.trackkm}
-                                value={ getTrackSearchValuePart(1, searchValue, searchValue)}
+                                placeholder={strings.search.track.trackkm}
+                                value={getTrackSearchValuePart(1, searchValue)}
                                 onChange={(e) => updateTrackSearchValue(e.target.value,1, searchValue, setSearchValue, trackErrors, setTrackErrors) }
                                 onKeyPress={e => {
                                     if (e.key === 'Enter') {
@@ -459,14 +417,16 @@ const SearchInput = ({
                                             handleSeach(parseTrackSearchQuery(searchValue));
                                         }
                                     }
-                                    
                                 }}
                                 className={trackErrors[1] ? 'error' : ''}
+                                aria-label={strings.search.track.trackkm}
+                                aria-describedby={trackErrors[1] ? "track-error-msg" : undefined}
                             />
                             <StyledInput
+                                id="track-trackm"
                                 type="text"
-                                placeholder={ strings.search.track.trackm}
-                                value={ getTrackSearchValuePart(2, searchValue)}
+                                placeholder={strings.search.track.trackm}
+                                value={getTrackSearchValuePart(2, searchValue)}
                                 onChange={(e) => updateTrackSearchValue(e.target.value,2, searchValue, setSearchValue, trackErrors, setTrackErrors)}
                                 onKeyPress={e => {
                                     if (e.key === 'Enter') {
@@ -474,21 +434,26 @@ const SearchInput = ({
                                             handleSeach(parseTrackSearchQuery(searchValue));
                                         }
                                     }
-                                    
                                 }}
                                 className={trackErrors[2] ? 'error' : ''}
+                                aria-label={strings.search.track.trackm}
+                                aria-describedby={trackErrors[2] ? "track-error-msg" : undefined}
                             />
                         </StyledTrackInputWrapper>
-                        { trackErrors.some((error) => error === true) && (<StyledValidationMessage>{strings.search.track.trackMandatoryMessage}</StyledValidationMessage>) }
+                        { trackErrors.some((error) => error === true) && (
+                            <StyledValidationMessage id="track-error-msg">
+                                {strings.search.track.trackMandatoryMessage}
+                            </StyledValidationMessage>
+                        )}
                     </StyledTrackWrapper>    
                 </StyledSearchSection>    
                 </>
-                )
-                }
+                )}
                 {activeSwitch === 'address' &&  (
                 <>
                 <StyledSearchSection>
                     <StyledInput
+                        id="address-search"
                         type="text"
                         placeholder={strings.tooltips.searchButton}
                         value={searchValue}
@@ -498,17 +463,18 @@ const SearchInput = ({
                                 handleSeach(searchValue);
                             }
                         }}
+                        aria-label={strings.tooltips.searchButton}
                     />     
                 </StyledSearchSection>    
                 </>
-                )
-                }
+                )}
                 {activeSwitch === 'nomenclature' &&  (
                 <>    
                 <StyledSearchSection>
                     <StyledInput
+                        id="nomenclature-search"
                         type="text"
-                        placeholder={ strings.search.nomenclature.title }
+                        placeholder={strings.search.nomenclature.title}
                         value={searchValue}
                         onChange={(e) => setSearchValue(e.target.value) }
                         onKeyPress={e => {
@@ -516,17 +482,18 @@ const SearchInput = ({
                                 handleSeach(searchValue);
                             }
                         }}
+                        aria-label={strings.search.nomenclature.title}
                     />      
                 </StyledSearchSection>
                 </>
-                )
-                }
+                )}
                 {activeSwitch === 'premise' &&  (
                 <>    
                 <StyledSearchSection>
                     <StyledInput
+                        id="premise-search"
                         type="text"
-                        placeholder={ strings.search.premise.title }
+                        placeholder={strings.search.premise.title}
                         value={searchValue}
                         onChange={(e) => setSearchValue(e.target.value) }
                         onKeyPress={e => {
@@ -534,17 +501,18 @@ const SearchInput = ({
                                 handleSeach(searchValue);
                             }
                         }}
+                        aria-label={strings.search.premise.title}
                     />       
                 </StyledSearchSection>        
                 </>
-                )
-                }
+                )}
                 {activeSwitch === 'layer' &&  (
                 <> 
                 <StyledSearchSection>   
                     <StyledInput
+                        id="metadata-search"
                         type="text"
-                        placeholder={ strings.search.layer.title }
+                        placeholder={strings.search.layer.title}
                         value={searchValue}
                         onChange={(e) => setSearchValue(e.target.value) }
                         onKeyPress={e => {
@@ -552,11 +520,11 @@ const SearchInput = ({
                                 handleSeach(searchValue);
                             }
                         }}
+                        aria-label={strings.search.layer.title}
                     />
                 </StyledSearchSection>       
                 </>
-                )
-                }
+                )}
                 {activeSwitch === 'feature' &&  (
                 <> 
                 <StyledFeatureSearchSection>
@@ -575,8 +543,9 @@ const SearchInput = ({
                         }
                     </StyledSelectedLayerWrapper>
                     <StyledInput
+                        id="feature-search"
                         type="text"
-                        placeholder={ strings.search.feature.title }
+                        placeholder={strings.search.feature.title}
                         value={searchValue}
                         onChange={(e) => setSearchValue(e.target.value) }
                         onKeyPress={e => {
@@ -585,11 +554,11 @@ const SearchInput = ({
                             }
                         }}
                         className={featureErrors.length > 0 ? 'error' : ''}
+                        aria-label={strings.search.feature.title}
                     />
                 </StyledFeatureSearchSection>       
                 </>
-                )
-                }
+                )}
          </>
     )
 };
