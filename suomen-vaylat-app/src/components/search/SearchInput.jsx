@@ -17,7 +17,6 @@ const SectionDivider = styled.div`
 const FieldGroup = styled.div`
   display: flex;
   flex-direction: column;
-  margin-bottom: 14px;
   width: 100%;
   overflow-x: auto;
 `;
@@ -438,67 +437,66 @@ const SearchInput = ({
             )}
 
             {activeSwitch === 'track' && (
-                <StyledSearchSection>
-                    <InputRow>
-                        <InputGroup>
-                            <InputLabel htmlFor="track-tracknumber">{strings.search.track.tracknumber}</InputLabel>
-                            <PillInput
-                                id="track-tracknumber"
-                                type="text"
-                                value={getTrackSearchValuePart(0, searchValue)}
-                                onChange={(e) => updateTrackSearchValue(e.target.value, 0, searchValue, setSearchValue, trackErrors, setTrackErrors)}
-                                onKeyPress={e => {
-                                    if (e.key === 'Enter') {
-                                        if (validateTrackSearch(searchValue, setTrackErrors)){
-                                            handleSeach(parseTrackSearchQuery(searchValue));
-                                        }
-                                    }
-                                }}
-                                className={trackErrors[0] ? 'error' : ''}
-                            />
-                        </InputGroup>
-                        <InputGroup>
-                            <InputLabel htmlFor="track-trackkm">{strings.search.track.trackkm}</InputLabel>
-                            <PillInput
-                                id="track-trackkm"
-                                type="text"
-                                value={getTrackSearchValuePart(1, searchValue)}
-                                onChange={(e) => updateTrackSearchValue(e.target.value,1, searchValue, setSearchValue, trackErrors, setTrackErrors) }
-                                onKeyPress={e => {
-                                    if (e.key === 'Enter') {
-                                        if (validateTrackSearch(searchValue, setTrackErrors)){
-                                            handleSeach(parseTrackSearchQuery(searchValue));
-                                        }
-                                    }
-                                }}
-                                className={trackErrors[1] ? 'error' : ''}
-                            />
-                        </InputGroup>
-                        <InputGroup>
-                            <InputLabel htmlFor="track-trackm">{strings.search.track.trackm}</InputLabel>
-                            <PillInput
-                                id="track-trackm"
-                                type="text"
-                                value={getTrackSearchValuePart(2, searchValue)}
-                                onChange={(e) => updateTrackSearchValue(e.target.value,2, searchValue, setSearchValue, trackErrors, setTrackErrors)}
-                                onKeyPress={e => {
-                                    if (e.key === 'Enter') {
-                                        if (validateTrackSearch(searchValue, setTrackErrors)){
-                                            handleSeach(parseTrackSearchQuery(searchValue));
-                                        }
-                                    }
-                                }}
-                                className={trackErrors[2] ? 'error' : ''}
-                            />
-                        </InputGroup>
-                    </InputRow>
-                    { trackErrors.some((error) => error === true) && (
-                        <StyledValidationMessage>
-                            {strings.search.track.trackMandatoryMessage}
-                        </StyledValidationMessage>
-                    )}
-                </StyledSearchSection>
-            )}
+  <StyledSearchSection>
+    <FieldGroup>
+      <LabelRow>
+        <RoadInputLabel htmlFor="track-tracknumber">{strings.search.track.tracknumber}</RoadInputLabel>
+        <RoadInputLabel htmlFor="track-trackkm">{strings.search.track.trackkm}</RoadInputLabel>
+        <RoadInputLabel htmlFor="track-trackm">{strings.search.track.trackm}</RoadInputLabel>
+      </LabelRow>
+      <InputRow>
+        <PillInput
+          id="track-tracknumber"
+          type="text"
+          value={getTrackSearchValuePart(0, searchValue)}
+          onChange={(e) => updateTrackSearchValue(e.target.value, 0, searchValue, setSearchValue, trackErrors, setTrackErrors)}
+          onKeyPress={e => {
+            if (e.key === 'Enter') {
+              if (validateTrackSearch(searchValue, setTrackErrors)){
+                handleSeach(parseTrackSearchQuery(searchValue));
+              }
+            }
+          }}
+          className={trackErrors[0] ? 'error' : ''}
+        />
+        <PillInput
+          id="track-trackkm"
+          type="text"
+          value={getTrackSearchValuePart(1, searchValue)}
+          onChange={(e) => updateTrackSearchValue(e.target.value, 1, searchValue, setSearchValue, trackErrors, setTrackErrors) }
+          onKeyPress={e => {
+            if (e.key === 'Enter') {
+              if (validateTrackSearch(searchValue, setTrackErrors)){
+                handleSeach(parseTrackSearchQuery(searchValue));
+              }
+            }
+          }}
+          className={trackErrors[1] ? 'error' : ''}
+        />
+        <PillInput
+          id="track-trackm"
+          type="text"
+          value={getTrackSearchValuePart(2, searchValue)}
+          onChange={(e) => updateTrackSearchValue(e.target.value, 2, searchValue, setSearchValue, trackErrors, setTrackErrors)}
+          onKeyPress={e => {
+            if (e.key === 'Enter') {
+              if (validateTrackSearch(searchValue, setTrackErrors)){
+                handleSeach(parseTrackSearchQuery(searchValue));
+              }
+            }
+          }}
+          className={trackErrors[2] ? 'error' : ''}
+        />
+      </InputRow>
+    </FieldGroup>
+    { trackErrors.some((error) => error === true) && (
+      <StyledValidationMessage>
+        {strings.search.track.trackMandatoryMessage}
+      </StyledValidationMessage>
+    )}
+  </StyledSearchSection>
+)}
+
 
             {activeSwitch === 'address' && (
                 <StyledSearchSection>
