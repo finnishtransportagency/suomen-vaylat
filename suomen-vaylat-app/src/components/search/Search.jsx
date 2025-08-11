@@ -101,7 +101,6 @@ export const StyledDropDown = styled(motion.div)`
     border-radius: 24px;
     //box-shadow: rgb(0 0 0 / 16%) 0px 3px 6px, rgb(0 0 0 / 23%) 0px 3px 6px;
     background-color: ${(props) => props.theme.colors.mainWhite};
-    padding: 1em 16px 0px 16px;
     pointer-events: auto;
     overflow: auto;
     @media ${(props) => props.theme.device.mobileL} {
@@ -115,8 +114,7 @@ export const StyledDropdownContentItem = styled.div`
     align-items: center;
     user-select: none;
     cursor: pointer;
-    padding-left: 8px;
-    padding-bottom: 16px;
+    padding-bottom: 8px;
     border-radius: 5px;
 
     background-color: ${(props) =>
@@ -136,17 +134,6 @@ export const StyledDropdownContentItemTitle = styled.p`
 
 
 export const StyledHideSearchResultsButton = styled.div`
-    position: sticky;
-    bottom: 0px;
-    background-color: white;
-    text-align: center;
-    padding-bottom: 4px;
-    margin-top: 1em;
-    cursor: pointer;
-    svg {
-        font-size: 23px;
-        color: ${(props) => props.theme.colors.mainColor1};
-    }
 `;
 
 const StyledToastIcon = styled(FontAwesomeIcon)`

@@ -50,14 +50,15 @@ const StyledBold = styled.div`
 `;
 
 const StyledHeaderButton = styled.div`
-  margin-right: 8px;
-  padding: 8px;
   cursor: pointer;
   float: right;
 `;
 
 const SwitchWrapper = styled.div`
   width: 100%;
+      display: flex;
+    justify-content: space-between;
+    align-items: baseline;
 `;
 
 const StyledToolTipContainer = styled.div`
@@ -94,6 +95,7 @@ const SearchSwitch = ({
   const [isOpen, setOpen] = useState(false);
   return (
     <SwitchWrapper>
+      <div>
       <StyledSwitchContainer
         isSelected={isSelected}
         onClick={(event) => {
@@ -103,6 +105,7 @@ const SearchSwitch = ({
         <StyledSwitchButton isSelected={isSelected} />
       </StyledSwitchContainer>
       <StyledBold>{title}</StyledBold>
+      </div>
 
       <StyledHeaderButton
         data-tip
@@ -114,10 +117,7 @@ const SearchSwitch = ({
         <FontAwesomeIcon
           icon={faInfoCircle}
           style={{
-            float: 'right',
-            marginRight: '16px',
             color: tooltipEnabled ? '#0064af' : '#aaaaaa',
-            marginBottom: '10px'
           }}
           size="lg"
         />

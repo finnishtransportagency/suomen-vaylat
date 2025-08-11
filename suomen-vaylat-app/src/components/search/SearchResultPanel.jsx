@@ -4,7 +4,7 @@ import FeatureSearchResultPanel from './feature-search/FeatureSearchResultPanel'
 import styled, { css } from 'styled-components';
 import {
     faAngleDown,
-    faAngleUp
+    faChevronDown
 } from '@fortawesome/free-solid-svg-icons';
 import { StyledHideSearchResultsButton } from './Search';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -12,11 +12,28 @@ import { useAppSelector } from '../../state/hooks';
 import { isMobile } from '../../theme/theme';
 
 const SearchPanelMain = styled.div`
-  ${props =>
-    props.hidden &&
-    css`
-      display: none;
-    `}
+
+  width: 100%;
+  margin-bottom: 1em;
+`;
+
+const StyledSearchResultsTitle = styled.p`
+  font-size: 16px;
+  font-weight: 600;
+  color: ${(props) => props.theme.colors.mainColor1};
+`;
+
+const StyledSearchResultsTitleWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 600;
+  color: ${(props) => props.theme.colors.mainColor1};
+  cursor: pointer;
+  font-size: 16px;
+  margin-bottom: 12px;
+  padding: 8px 0;
+  user-select: none;
 `;
 
 const SearchResultPanel = ({
@@ -30,13 +47,25 @@ const SearchResultPanel = ({
     setSearchClickedRow,
     searchClickedRow,
     allLayers,
-    hidden=false,
     handleFeatureSearch,
     lastSearchValue
 }) => {
     const { featureSearchResults } = useAppSelector((state) => state.rpc);
     return (
-        <SearchPanelMain hidden={hidden}>
+        <SearchPanelMain>
+
+        { (searchResults !== null || featureSearchResults.length > 0) && 
+        <StyledSearchResultsTitleWrapper
+                onClick={() => setShowSearchResults(!showSearchResults)}>
+            <span>
+                {"Hakutulokset"}
+            </span>
+          <FontAwesomeIcon
+            icon={faChevronDown}
+            rotation={showSearchResults ? 180 : undefined}
+          />
+        </StyledSearchResultsTitleWrapper>
+        }
         { 
             isSearchOpen &&
             searchResults !== null &&
@@ -74,13 +103,6 @@ const SearchResultPanel = ({
                     lastSearchValue={lastSearchValue}
                 />
                 )
-        }
-        { (searchResults !== null || featureSearchResults.length > 0) && 
-            <StyledHideSearchResultsButton
-                onClick={() => setShowSearchResults(!showSearchResults)}
-            >
-                <FontAwesomeIcon icon={showSearchResults ? faAngleUp : faAngleDown} />
-            </StyledHideSearchResultsButton>
         }
         </SearchPanelMain>
     );
