@@ -14,7 +14,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import AddressSearch from './address-search/AddressSearch';
 import MetadataSearch from './metadata-search/MetadataSearch';
 import FeatureSearch from './feature-search/FeatureSearch';
-import SvLoder from '../../utils/components/SvLoader';
+import SvLoader from '../../utils/components/SvLoader';
 import strings from '../../translations';
 import { SEARCH_TIP_LOCALSTORAGE } from '../../utils/constants';
 
@@ -802,7 +802,7 @@ const Search = () => {
                                 </StyledSelectedSearchMethod>
                             ) : (
                                 <StyledLoaderWrapper>
-                                    <SvLoder />
+                                    <SvLoader />
                                 </StyledLoaderWrapper>
                             )}
                             {(searchResults !== null || featureSearchResults.length > 0) &&

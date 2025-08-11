@@ -732,7 +732,6 @@ export const rpcSlice = createSlice({
      * @param {Object} action
      */
     pushToFeatureSearchResults: (state, action) => {
-      console.log("TÄH",state.featureSearchResults, action.payload)
       state.featureSearchResults.push(action.payload);
     },
 
@@ -743,7 +742,6 @@ export const rpcSlice = createSlice({
      * @param {Object} action
      */
     setFeatureSearchResults: (state, action) => {
-      console.log("TÄH1",action.payload)
       state.featureSearchResults = action.payload;
     },
 

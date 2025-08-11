@@ -14,7 +14,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import AddressSearch from './address-search/AddressSearch';
 import MetadataSearch from './metadata-search/MetadataSearch';
 import FeatureSearch from './feature-search/FeatureSearch';
-import SvLoder from '../../utils/components/SvLoader';
+import SvLoader from '../../utils/components/SvLoader';
 import strings from '../../translations';
 import { SEARCH_TIP_LOCALSTORAGE } from '../../utils/constants';
 
@@ -31,7 +31,7 @@ import SearchToast from '../toasts/SearchToast';
 import ReactTooltip from 'react-tooltip';
 import TipToast from '../toasts/TipToast';
 import SearchDialog from './SearchDialog';
-import { dropdownVariants, mergeMatchedKeys, removeMarkersAndFeatures, searchDownloadTips, texts, validateFeatureSearch, validateTrackSearch, variants } from './utils/SearchUtil';
+import { mergeMatchedKeys, removeMarkersAndFeatures, searchDownloadTips, texts, validateFeatureSearch, validateTrackSearch, variants } from './utils/SearchUtil';
 
 export const StyledSearchIcon = styled.div`
     min-width: 48px;
@@ -82,44 +82,12 @@ const StyledSearchWrapper = styled(motion.div)`
     overflow: hidden;
     padding-right: 48px;
     height: 100%;
-    background-color: ${(props) => props.theme.colors.mainWhite};
-    border-radius: 24px;
-    box-shadow: ${(props) =>
-        props.searchType === 'vkmtrack' && props.showSearchResults
-            ? 'none'
-            : 'rgb(0 0 0 / 16%) 0px 3px 6px, rgb(0 0 0 / 23%) 0px 3px 6px'};
     pointer-events: auto;
     @media ${(props) => props.theme.device.mobileL} {
         border-radius: 20px;
         padding-right: 40px;
     } ;
     overflow: initial;
-    //border: solid 1px black;
-`;
-
-const StyledLeftContentWrapper = styled.div`
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-`;
-
-const StyledSearchActionButton = styled(FontAwesomeIcon)`
-    margin-right: 8px;
-    color: rgba(0, 0, 0, 0.5);
-    font-size: 16px;
-    cursor: pointer;
-    top: 0;
-`;
-
-const StyledSelectedSearchMethod = styled.div`
-    width: 100%;
-    p {
-        padding: 6px 8px;
-        font-size: 14px;
-        margin: 0;
-        color: #6c757d;
-    }
 `;
 
 export const StyledDropDown = styled(motion.div)`
@@ -166,10 +134,6 @@ export const StyledDropdownContentItemTitle = styled.p`
     color: ${(props) => props.active ? props.theme.colors.secondaryColorPink : '#504d4d'};
 `;
 
-const StyledDropdownContentItemSubtitle = styled.p`
-    font-size: 12px;
-    color: #807a7a;
-`;
 
 export const StyledHideSearchResultsButton = styled.div`
     position: sticky;
@@ -182,22 +146,6 @@ export const StyledHideSearchResultsButton = styled.div`
     svg {
         font-size: 23px;
         color: ${(props) => props.theme.colors.mainColor1};
-    }
-`;
-
-const StyledLoaderWrapper = styled.div`
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    z-index: 999;
-    height: 100%;
-    max-width: 200px;
-    max-height: 200px;
-    transform: translate(-50%, -50%);
-    svg {
-        width: 100%;
-        height: 100%;
-        fill: none;
     }
 `;
 
@@ -327,7 +275,6 @@ const Search = () => {
     const handleFeatureSearch = (searchValue, startIndex = 0, layerId = -1) => {
         if (validateFeatureSearch(searchValue, setFeatureErrors)) {
             const handleSearchResponse = (data) => {
-                console.log(data)
                 if (Object.keys(data).length > 0 && Object.keys(data.gfi).length > 0) {
                     setIsSearching(false);
                     store.dispatch(setSearchOn(false));
@@ -345,11 +292,8 @@ const Search = () => {
 
                             oldFeatureSearchResults[contentIndex] = newFeatureSearchResults;
 
-                            console.log(oldFeatureSearchResults)
                             store.dispatch(setFeatureSearchResults(oldFeatureSearchResults));
                     } else {
-                                                    console.log(data.gfi)
-
                         store.dispatch(pushToFeatureSearchResults(data.gfi));
                     }
                 } else {
@@ -514,7 +458,6 @@ const Search = () => {
     }, [carriageWaySearch, setSearchValue]);
 
     const emptySearchResults = () => {
-        console.log("woopsss!!!!!")
         store.dispatch(setGeoJsonArray([]));
         store.dispatch(setFeatureSearchResults([]));
         setSearchResults(null);
@@ -562,43 +505,6 @@ const Search = () => {
                         searchType={searchType}
                         showSearchResults={showSearchResults}
                     >
-                        <StyledLeftContentWrapper id="left_search_content_wrapper">
-                            {!isSearching ? (
-                                <StyledSelectedSearchMethod
-                                    onClick={() => {
-                                        setShowSearchResults(true);
-                                        isSearchMethodSelectorOpen &&
-                                            setIsSearchMethodSelectorOpen(
-                                                false
-                                            );
-                                    }}
-                                >
-                                    {
-                                        searchTypes[searchType].content
-                                    }
-                                </StyledSelectedSearchMethod>
-                            ) : (
-                                <StyledLoaderWrapper>
-                                    <SvLoder />
-                                </StyledLoaderWrapper>
-                            )}
-                            {(searchResults !== null || featureSearchResults.length > 0) &&
-                                searchValue === lastSearchValue && !isSearching ? (
-                                <StyledSearchActionButton
-                                    onClick={emptySearchResults}
-                                    icon={faTrash}
-                                />
-                            ) : !isSearching && (
-                                <StyledSearchActionButton
-                                    onClick={() => {
-                                        handleSeach(searchValue)
-                                    }}
-                                    icon={faSearch}
-                                    size="lg"
-                                />
-                            )}
-                        </StyledLeftContentWrapper>
-                        {isMoreSearchOpen && (
                             <SearchDialog
                                 searchValue={searchValue}
                                 setSearchValue={setSearchValue}
@@ -615,7 +521,6 @@ const Search = () => {
                                 searchType={searchType}
                                 setSearchType={setSearchType}
                                 handleSeach={handleSeach}
-                                isOpen={isMoreSearchOpen}
                                 carriageWaySearch={carriageWaySearch}
                                 setCarriageWaySearch={setCarriageWaySearch}
                                 removeMarkersAndFeatures={removeMarkersAndFeatures}
@@ -628,7 +533,6 @@ const Search = () => {
                                 handleFeatureSearch={handleFeatureSearch}
                                 lastSearchValue={lastSearchValue}
                             />
-                        )}
                 
                     </StyledSearchWrapper>
              

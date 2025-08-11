@@ -35,7 +35,6 @@ const SearchResultPanel = ({
     lastSearchValue
 }) => {
     const { featureSearchResults } = useAppSelector((state) => state.rpc);
-    console.log(searchType)
     return (
         <SearchPanelMain hidden={hidden}>
         { 

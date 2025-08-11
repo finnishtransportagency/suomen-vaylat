@@ -240,10 +240,8 @@ const FeatureSearchResultPanel = ({
     const [openAttribute, setOpenAttribute] = useState(null);
     const [showWarn, setShowWarn] = useState(false);
 
-    console.log(featureSearchResults)
     // Effect to handle warnings and map display
     useEffect(() => {
-    console.log(featureSearchResults)
         const hasFeatures = featureSearchResults?.[0]?.content?.geojson?.matchedFeatures;
 
         if (hasFeatures) {
