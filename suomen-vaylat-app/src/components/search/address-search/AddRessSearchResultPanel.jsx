@@ -21,7 +21,6 @@ const AddRessSearchResultPanel = ({
     searchResults,
     firstSearchResultShown,
     setFirstSearchResultShown,
-    setShowSearchResults,
     setSearchClickedRow,
     searchClickedRow,
 }) => {
@@ -219,8 +218,6 @@ const AddRessSearchResultPanel = ({
                                     etaisyys_loppu,
                                     vkmType
                                 );
-                                isMobile &&
-                                    setShowSearchResults(false);
                                 setSearchClickedRow(index);
                             }}
                         >

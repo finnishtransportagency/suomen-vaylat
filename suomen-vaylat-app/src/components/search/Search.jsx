@@ -146,7 +146,6 @@ const Search = () => {
     const [lastSearchValue, setLastSearchValue] = useState('');
     const [isSearching, setIsSearching] = useState(false);
     const [searchResults, setSearchResults] = useState(null);
-    const [showSearchResults, setShowSearchResults] = useState(true);
     const [isSearchMethodSelectorOpen, setIsSearchMethodSelectorOpen] =
         useState(false);
     const [searchType, setSearchType] = useState('address');
@@ -166,7 +165,6 @@ const Search = () => {
 
     // Handle search click and direct to the right search handler based on type
     const handleSeach = (searchValue) => {
-        setShowSearchResults(true);
         switch (searchType) {
             case 'address':
                 if (activeSwitch === 'track') {
@@ -490,7 +488,6 @@ const Search = () => {
                         exit={'exit'}
                         transition={'transition'}
                         searchType={searchType}
-                        showSearchResults={showSearchResults}
                     >
                             <SearchDialog
                                 searchValue={searchValue}
@@ -499,12 +496,10 @@ const Search = () => {
                                 setSearchResults={setSearchResults}
                                 firstSearchResultShown={firstSearchResultShown}
                                 setFirstSearchResultShown={setFirstSearchResultShown}
-                                setShowSearchResults={setShowSearchResults}
                                 setSearchClickedRow={setSearchClickedRow}
                                 searchClickedRow={searchClickedRow}
                                 allLayers={allLayers}
                                 isSearchOpen={isSearchOpen}
-                                showSearchResults={showSearchResults}
                                 searchType={searchType}
                                 setSearchType={setSearchType}
                                 handleSeach={handleSeach}

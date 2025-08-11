@@ -231,7 +231,6 @@ const showFeatureOnMap = (channel, layer, feature) => {
 
 // Feature Search Result Panel Component
 const FeatureSearchResultPanel = ({
-    setShowSearchResults,
     lastSearchValue,
     handleFeatureSearch,
 }) => {
@@ -299,7 +298,6 @@ const FeatureSearchResultPanel = ({
                                     layer={featureSearchResults[0]}
                                     matchedKey={matchedKey}
                                     isMobile={isMobile}
-                                    setShowSearchResults={setShowSearchResults}
                                     setSelectedFeature={setSelectedFeature}
                                     selectedFeature={selectedFeature}
                                 />
@@ -331,7 +329,6 @@ const FeatureList = ({
     channel,
     layer,
     matchedKey,
-    setShowSearchResults,
     setSelectedFeature,
     selectedFeature,
 }) => {
@@ -345,7 +342,6 @@ const FeatureList = ({
                         key={`search-result-feature-${i}`}
                         selected={selectedFeature === item.feature_id}
                         onClick={() => {
-                            if (isMobile) setShowSearchResults(false);
                             showFeatureOnMap(channel, layer, actualFeature);
                             selectedFeature === item.feature_id
                                 ? setSelectedFeature('')

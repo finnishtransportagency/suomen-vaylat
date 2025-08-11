@@ -20,7 +20,8 @@ const SearchPanelMain = styled.div`
 const StyledSearchResultsTitle = styled.p`
   font-size: 16px;
   font-weight: 600;
-  color: ${(props) => props.theme.colors.mainColor1};
+  color: ${(props) => props.theme.colors.black};
+  margin: 1em 0;
 `;
 
 const StyledSearchResultsTitleWrapper = styled.div`
@@ -45,11 +46,9 @@ const HorizontalLine = styled.div`
 const SearchResultPanel = ({
     isSearchOpen,
     searchResults,
-    showSearchResults,
     searchType,
     firstSearchResultShown,
     setFirstSearchResultShown,
-    setShowSearchResults,
     setSearchClickedRow,
     searchClickedRow,
     allLayers,
@@ -63,29 +62,20 @@ const SearchResultPanel = ({
         { (searchResults !== null || featureSearchResults.length > 0) && 
         <>
               <HorizontalLine/>
-        <StyledSearchResultsTitleWrapper
-                onClick={() => setShowSearchResults(!showSearchResults)}>
-            <span>
+        <StyledSearchResultsTitle>
                 {"Hakutulokset"}
-            </span>
-          <FontAwesomeIcon
-            icon={faChevronDown}
-            rotation={showSearchResults ? 180 : undefined}
-          />
-        </StyledSearchResultsTitleWrapper>
+        </StyledSearchResultsTitle>
         </>
         }
         { 
             isSearchOpen &&
             searchResults !== null &&
-            showSearchResults &&
             searchType === 'address' &&
             <AddRessSearchResultPanel  
                 searchResults={searchResults}  
                 firstSearchResultShown={firstSearchResultShown}
                 setFirstSearchResultShown={setFirstSearchResultShown}
                 isMobile={isMobile}
-                setShowSearchResults={setShowSearchResults}
                 setSearchClickedRow={setSearchClickedRow}
                 searchClickedRow={searchClickedRow}
             /> 
@@ -93,21 +83,17 @@ const SearchResultPanel = ({
         {
                 isSearchOpen &&
                 searchResults !== null &&
-                showSearchResults &&
                 searchType === 'metadata' && (
                 <MetaSearchResultPanel 
                     searchResults={searchResults}
-                    setShowSearchResults={setShowSearchResults}
                     allLayers={allLayers}
                 />
                 )
         }
         {
                 isSearchOpen &&
-                showSearchResults &&
                 searchType === 'feature' && (
                 <FeatureSearchResultPanel 
-                    setShowSearchResults={setShowSearchResults}
                     handleFeatureSearch={handleFeatureSearch}
                     lastSearchValue={lastSearchValue}
                 />

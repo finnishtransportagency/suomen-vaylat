@@ -16,7 +16,7 @@ import SearchInput from './SearchInput';
 const StyledSearchDialog = styled.div`
   border: none;
   width: 100%;
-  padding: 1em;
+  padding: 1.5em 1em 1em 1em;
   &:focus {
     outline: none;
   }
@@ -127,12 +127,10 @@ const SearchDialog = ({
   setSearchResults,
   firstSearchResultShown,
   setFirstSearchResultShown,
-  setShowSearchResults,
   setSearchClickedRow,
   searchClickedRow,
   allLayers,
   isSearchOpen,
-  showSearchResults,
   searchType,
   setSearchType,
   handleSeach,
@@ -165,7 +163,6 @@ const SearchDialog = ({
       setSearchType('address');
     }
     setSearchResults(null);
-    setShowSearchResults(false);
     setSearchValue('');
     store.dispatch(resetFeatureSearchResults());
     removeMarkersAndFeatures(channel);
@@ -198,12 +195,10 @@ const SearchDialog = ({
         setSearchResults={setSearchResults}
         firstSearchResultShown={firstSearchResultShown}
         setFirstSearchResultShown={setFirstSearchResultShown}
-        setShowSearchResults={setShowSearchResults}
         setSearchClickedRow={setSearchClickedRow}
         searchClickedRow={searchClickedRow}
         allLayers={allLayers}
         isSearchOpen={isSearchOpen}
-        showSearchResults={showSearchResults}
         searchType={searchType}
         setSearchType={setSearchType}
         handleSeach={handleSeach}
@@ -260,11 +255,9 @@ const SearchDialog = ({
       <SearchResultPanel
         isSearchOpen={isSearchOpen}
         searchResults={searchResults}
-        showSearchResults={showSearchResults}
         searchType={searchType}
         firstSearchResultShown={firstSearchResultShown}
         setFirstSearchResultShown={setFirstSearchResultShown}
-        setShowSearchResults={setShowSearchResults}
         setSearchClickedRow={setSearchClickedRow}
         handleFeatureSearch={handleFeatureSearch}
         lastSearchValue={lastSearchValue}
