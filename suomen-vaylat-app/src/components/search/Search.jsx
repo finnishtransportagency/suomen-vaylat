@@ -401,6 +401,7 @@ const Search = () => {
         store.dispatch(setHasToastBeenShown({ toastId: 'searchTipToast', shown: true }));
     };
 
+    // TODO: Not in use
     if (searchType === 'address' && isSearchOpen && !hasToastBeenShown.includes('searchToast')
         && 1 === 2 /*disable search help toast for now */) {
         toast(<SearchToast header={strings.search.tips.title} texts={texts} />,
@@ -462,8 +463,8 @@ const Search = () => {
                 clickAction={() => {
                     if (isSearchOpen) {
                         store.dispatch(setIsMoreSearchOpen(false));
+                        store.dispatch(setActiveSwitch("default"));
                     }
-                    store.dispatch(setActiveSwitch(null));
                     store.dispatch(resetFeatureSearchResults());
                     isSearchOpen && store.dispatch(setGeoJsonArray([]));
                     setIsSearching(false);

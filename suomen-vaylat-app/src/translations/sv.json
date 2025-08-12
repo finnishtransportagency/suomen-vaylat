@@ -481,7 +481,8 @@
         "pölkytys"
       ],
       "feature": "Destinationssökning kan användas för att söka efter destinationsinformation på den översta nivån av de valda kartlagren. Exempelsökning: ",
-      "featureExamples": ["Vesiväylä => 'Siilinjärven väylä'"]
+      "featureExamples": ["Vesiväylä => 'Siilinjärven väylä'"],
+      "location": "Platssökning är en standardsöktyp som inkluderar alla andra söktyper förutom material- och objektsökningar."
     },
     "nomenclature" : {
       "title": "Namnsökning"

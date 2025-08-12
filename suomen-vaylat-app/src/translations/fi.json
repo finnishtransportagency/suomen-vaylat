@@ -517,7 +517,8 @@
         "liikennemerkit"
       ],
       "feature": "Kohdehakua voidaan käyttää kohdetietojen etsimiseen valittujen karttatasojen päällimmäiseltä tasolta. Esimerkkihaku: ",
-      "featureExamples": ["Vesiväylä => 'Siilinjärven väylä'"]
+      "featureExamples": ["Vesiväylä => 'Siilinjärven väylä'"],
+      "location": "Paikkahaku on oletusarvoinen hakukanava, joka sisältää kaikki muut hakutyypit, paitsi aineisto- ja kohdehaun."
     },
     "nomenclature" : {
       "title": "Nimistöhaku"

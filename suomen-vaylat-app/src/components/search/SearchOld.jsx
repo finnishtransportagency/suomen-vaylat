@@ -758,7 +758,7 @@ const Search = () => {
                     if (isSearchOpen) {
                         store.dispatch(setIsMoreSearchOpen(false));
                     }
-                    store.dispatch(setActiveSwitch(null));
+                    store.dispatch(setActiveSwitch("default"));
                     store.dispatch(resetFeatureSearchResults());
                     isSearchOpen && store.dispatch(setGeoJsonArray([]));
                     setIsSearching(false);

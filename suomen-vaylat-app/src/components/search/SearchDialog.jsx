@@ -70,6 +70,11 @@ const InfoText = styled.div`
 
 const switchDefinitions = [
   {
+    id: 'default',
+    title: strings.search.address.title,
+    tooltipText: strings.search.tips.location,
+  },
+  {
     id: 'road',
     title: strings.search.vkm.title,
     tooltipText: strings.search.tips.vkmRoadExamples,
@@ -141,7 +146,7 @@ const SearchDialog = ({
     (state) => state.rpc
   );
   const { activeSwitch } = useAppSelector((state) => state.ui);
-  const [dropdownOpen, setDropdownOpen] = useState(true);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
   const [infoOpenId, setInfoOpenId] = useState(null);
 
   const updateActiveSwitch = (type) => {
@@ -152,7 +157,7 @@ const SearchDialog = ({
       else if (type === 'feature') setSearchType('feature');
       else setSearchType('address');
     } else {
-      store.dispatch(setActiveSwitch(null));
+      store.dispatch(setActiveSwitch("default"));
       setSearchType('address');
     }
     setSearchResults(null);

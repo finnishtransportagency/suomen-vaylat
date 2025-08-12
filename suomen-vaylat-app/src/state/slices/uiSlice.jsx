@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { theme } from '../../theme/theme';
 
 const initialState = {
-  activeSwitch: null,
+  activeSwitch: 'default',
   isGfiToolsOpen: false,
   isGfiDownloadToolsOpen: false,
   isFullScreen: false,

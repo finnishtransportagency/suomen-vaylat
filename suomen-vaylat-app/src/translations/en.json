@@ -481,7 +481,8 @@
         "pölkytys"
       ],
       "feature": "With feature search you can search for specific features from the top layer on the map. You can Control the selected layer order from the maplayer menu, in 'selected layers' tab. Example search: ",
-      "featureExamples": ["Vesiväylä => 'Siilinjärven väylä'"]
+      "featureExamples": ["Vesiväylä => 'Siilinjärven väylä'"],
+      "location": "Location search is a default search type that includes all other search types except material- and feature searches."
     },
     "nomenclature" : {
       "title": "Name search"
