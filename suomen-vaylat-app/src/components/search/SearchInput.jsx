@@ -50,15 +50,6 @@ const InputGroup = styled.div`
   min-width: 72px;
 `;
 
-const InputLabel = styled.label`
-  font-size: 15px;
-  margin-bottom: 4px;
-  margin-left: 0.5em;
-  font-weight: normal;
-  color: #222;
-  text-align: left;
-`;
-
 const RoadInputLabel = styled.label`
   flex: 1 1 0px;
   min-width: 70px;
@@ -120,6 +111,7 @@ const StyledFeatureSearchSection = styled.div`
   display: flex;
   flex-direction: column;
   margin-bottom: 1em;
+  width: 100%
 `;
 const StyledSearchSection = styled.div`
   width: 100%;
@@ -356,9 +348,6 @@ const SearchInput = ({
       {activeSwitch === 'default' && (
         <StyledSearchSection>
           <WideInputGroup>
-            <InputLabel htmlFor="default-search">
-              {strings.search.address.title}
-            </InputLabel>
             <WidePillInput
               id="default-search"
               type="text"
@@ -729,9 +718,6 @@ const SearchInput = ({
       {activeSwitch === 'address' && (
         <StyledSearchSection>
           <WideInputGroup>
-            <InputLabel htmlFor="address-search">
-              {strings.tooltips.searchButton}
-            </InputLabel>
             <WidePillInput
               id="address-search"
               type="text"
@@ -748,9 +734,6 @@ const SearchInput = ({
       {activeSwitch === 'nomenclature' && (
         <StyledSearchSection>
           <WideInputGroup>
-            <InputLabel htmlFor="nomenclature-search">
-              {strings.search.nomenclature.title}
-            </InputLabel>
             <WidePillInput
               id="nomenclature-search"
               type="text"
@@ -767,9 +750,6 @@ const SearchInput = ({
       {activeSwitch === 'premise' && (
         <StyledSearchSection>
           <WideInputGroup>
-            <InputLabel htmlFor="premise-search">
-              {strings.search.premise.title}
-            </InputLabel>
             <WidePillInput
               id="premise-search"
               type="text"
@@ -786,9 +766,6 @@ const SearchInput = ({
       {activeSwitch === 'layer' && (
         <StyledSearchSection>
           <WideInputGroup>
-            <InputLabel htmlFor="metadata-search">
-              {strings.search.layer.title}
-            </InputLabel>
             <WidePillInput
               id="metadata-search"
               type="text"
@@ -805,9 +782,6 @@ const SearchInput = ({
       {activeSwitch === 'feature' && (
         <StyledFeatureSearchSection>
           <WideInputGroup>
-            <InputLabel htmlFor="feature-search">
-              {strings.search.feature.title}
-            </InputLabel>
             <WidePillInput
               id="feature-search"
               type="text"

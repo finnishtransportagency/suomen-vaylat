@@ -121,11 +121,10 @@ const StyledLayerTitleWrapper = styled.div`
 `;
 
 const DropdownIcon = styled(FontAwesomeIcon)`
-    margin-top: 6px;
     margin-left: 20px;
     transform: translateY(-10%);
     cursor: pointer;
-    color: ${props => props.theme.colors.mainColor1};
+    color: ${props => props.theme.colors.mainWhite};
 `;
 
 const StyledCloseButton = styled.div`

@@ -41,7 +41,7 @@ const StyledSearchDialog = styled.div`
 
 const DropdownWrapper = styled.div`
   width: 100%;
-  margin-bottom: 1em;
+  margin-bottom: 0.5em;
 `;
 
 const DropdownHeader = styled.div`
@@ -171,6 +171,10 @@ const SearchDialog = ({
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [infoOpenId, setInfoOpenId] = useState(null);
 
+  // Determine the header title: if an active switch matches, show its title; otherwise fallback to "Hakuasetukset"
+  const activeDef = switchDefinitions.find((sw) => sw.id === activeSwitch);
+  const headerTitle = activeDef ? activeDef.title : 'Hakuasetukset';
+
   const updateActiveSwitch = (type) => {
     // if no specific search is selected, default to address
     if (activeSwitch !== type) {
@@ -208,34 +212,9 @@ const SearchDialog = ({
 
   return (
     <StyledSearchDialog>
-      <SearchInput
-        searchValue={searchValue}
-        setSearchValue={setSearchValue}
-        searchResults={searchResults}
-        setSearchResults={setSearchResults}
-        firstSearchResultShown={firstSearchResultShown}
-        setFirstSearchResultShown={setFirstSearchResultShown}
-        setSearchClickedRow={setSearchClickedRow}
-        searchClickedRow={searchClickedRow}
-        allLayers={allLayers}
-        isSearchOpen={isSearchOpen}
-        searchType={searchType}
-        setSearchType={setSearchType}
-        handleSeach={handleSeach}
-        carriageWaySearch={carriageWaySearch}
-        setCarriageWaySearch={setCarriageWaySearch}
-        removeMarkersAndFeatures={removeMarkersAndFeatures}
-        trackErrors={trackErrors}
-        setTrackErrors={setTrackErrors}
-        validateTrackSearch={validateTrackSearch}
-        featureErrors={featureErrors}
-        handleFeatureSearch={handleFeatureSearch}
-        lastSearchValue={lastSearchValue}
-      />
-
       <DropdownWrapper>
         <DropdownHeader onClick={() => setDropdownOpen((o) => !o)}>
-          <span>Hakuasetukset</span>
+          <span>{headerTitle}</span>
           <FontAwesomeIcon
             icon={faChevronDown}
             rotation={dropdownOpen ? 180 : undefined}
@@ -270,6 +249,31 @@ const SearchDialog = ({
           ))}
         </DropdownContent>
       </DropdownWrapper>
+
+      <SearchInput
+        searchValue={searchValue}
+        setSearchValue={setSearchValue}
+        searchResults={searchResults}
+        setSearchResults={setSearchResults}
+        firstSearchResultShown={firstSearchResultShown}
+        setFirstSearchResultShown={setFirstSearchResultShown}
+        setSearchClickedRow={setSearchClickedRow}
+        searchClickedRow={searchClickedRow}
+        allLayers={allLayers}
+        isSearchOpen={isSearchOpen}
+        searchType={searchType}
+        setSearchType={setSearchType}
+        handleSeach={handleSeach}
+        carriageWaySearch={carriageWaySearch}
+        setCarriageWaySearch={setCarriageWaySearch}
+        removeMarkersAndFeatures={removeMarkersAndFeatures}
+        trackErrors={trackErrors}
+        setTrackErrors={setTrackErrors}
+        validateTrackSearch={validateTrackSearch}
+        featureErrors={featureErrors}
+        handleFeatureSearch={handleFeatureSearch}
+        lastSearchValue={lastSearchValue}
+      />
 
       {isSearching && (
         <>
