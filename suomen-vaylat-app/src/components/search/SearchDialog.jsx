@@ -6,12 +6,13 @@ import { useAppSelector } from '../../state/hooks';
 import { useEffect, useContext, useState, Fragment } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import SearchSwitch from './utils/SearchSwitch';
-import { faChevronDown, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
+import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import SearchResultPanel from './SearchResultPanel';
 import { resetFeatureSearchResults } from '../../state/slices/rpcSlice';
 import { removeMarkersAndFeatures } from './utils/SearchUtil';
 import { isMobile } from '../../theme/theme';
 import SearchInput from './SearchInput';
+import SvLoader from '../../utils/components/SvLoader';
 
 const StyledSearchDialog = styled.div`
   border: none;
@@ -21,6 +22,9 @@ const StyledSearchDialog = styled.div`
     outline: none;
   }
   position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   top: 24px;
   right: 24px;
   background-color: white;
@@ -68,11 +72,28 @@ const InfoText = styled.div`
   color: #234167;
 `;
 
+const StyledLoaderWrapper = styled.div`
+  z-index: 999;
+  height: 100%;
+  max-width: 30%;
+  svg {
+    width: 100%;
+    height: 100%;
+    fill: none;
+  }
+`;
+
+const HorizontalLine = styled.div`
+  width: 100%;
+  height: 1px;
+  background-color: #d7d9db;
+`;
+
 const switchDefinitions = [
   {
     id: 'default',
     title: strings.search.address.title,
-    tooltipText: strings.search.tips.location,
+    tooltipText: strings.search.tips.location
   },
   {
     id: 'road',
@@ -129,6 +150,7 @@ const SearchDialog = ({
   searchClickedRow,
   allLayers,
   isSearchOpen,
+  isSearching,
   searchType,
   setSearchType,
   handleSeach,
@@ -142,7 +164,7 @@ const SearchDialog = ({
   lastSearchValue
 }) => {
   const { store } = useContext(ReactReduxContext);
-  const { selectedLayersByType, channel } = useAppSelector(
+  const { featureSearchResults, channel } = useAppSelector(
     (state) => state.rpc
   );
   const { activeSwitch } = useAppSelector((state) => state.ui);
@@ -157,7 +179,7 @@ const SearchDialog = ({
       else if (type === 'feature') setSearchType('feature');
       else setSearchType('address');
     } else {
-      store.dispatch(setActiveSwitch("default"));
+      store.dispatch(setActiveSwitch('default'));
       setSearchType('address');
     }
     setSearchResults(null);
@@ -222,20 +244,22 @@ const SearchDialog = ({
         <DropdownContent open={dropdownOpen}>
           {switchDefinitions.map((sw, index) => (
             <Fragment key={sw.id}>
-                <SearchSwitch
-                  isSelected={activeSwitch === sw.id}
-                  action={() => updateActiveSwitch(sw.id)}
-                  title={sw.title}
-                  tooltipText={sw.tooltipText}
-                  tooltipAddress={sw.tooltipAddress}
-                  id={sw.id}
-                  isMobile={isMobile}
-                />
+              <SearchSwitch
+                isSelected={activeSwitch === sw.id}
+                action={() => updateActiveSwitch(sw.id)}
+                title={sw.title}
+                tooltipText={sw.tooltipText}
+                tooltipAddress={sw.tooltipAddress}
+                id={sw.id}
+                isMobile={isMobile}
+              />
               {infoOpenId === sw.id && (
                 <InfoText>
                   <strong>{sw.title}</strong>
                   <div>{sw.tooltipAddress}</div>
-                  <div style={{ marginTop: 6, color: "#666", fontSize: "0.96em"}}>
+                  <div
+                    style={{ marginTop: 6, color: '#666', fontSize: '0.96em' }}
+                  >
                     {Array.isArray(sw.tooltipText)
                       ? sw.tooltipText.map((txt, i) => <div key={i}>{txt}</div>)
                       : sw.tooltipText}
@@ -247,19 +271,34 @@ const SearchDialog = ({
         </DropdownContent>
       </DropdownWrapper>
 
+      {isSearching && (
+        <>
+          <HorizontalLine />
+          <StyledLoaderWrapper>
+            <SvLoader />
+          </StyledLoaderWrapper>
+        </>
+      )}
 
-      <SearchResultPanel
-        isSearchOpen={isSearchOpen}
-        searchResults={searchResults}
-        searchType={searchType}
-        firstSearchResultShown={firstSearchResultShown}
-        setFirstSearchResultShown={setFirstSearchResultShown}
-        setSearchClickedRow={setSearchClickedRow}
-        handleFeatureSearch={handleFeatureSearch}
-        lastSearchValue={lastSearchValue}
-        searchClickedRow={searchClickedRow}
-        allLayers={allLayers}
-      />
+      {(searchResults !== null || featureSearchResults.length > 0) &&
+        !isSearching && (
+          <>
+            <HorizontalLine />
+            <SearchResultPanel
+              isSearchOpen={isSearchOpen}
+              isSearching={isSearching}
+              searchResults={searchResults}
+              searchType={searchType}
+              firstSearchResultShown={firstSearchResultShown}
+              setFirstSearchResultShown={setFirstSearchResultShown}
+              setSearchClickedRow={setSearchClickedRow}
+              handleFeatureSearch={handleFeatureSearch}
+              lastSearchValue={lastSearchValue}
+              searchClickedRow={searchClickedRow}
+              allLayers={allLayers}
+            />
+          </>
+        )}
     </StyledSearchDialog>
   );
 };

@@ -3,18 +3,12 @@ import styled from 'styled-components';
 import { ReactReduxContext } from 'react-redux';
 import { useAppSelector } from '../../state/hooks';
 import { motion, AnimatePresence } from 'framer-motion';
-import SearchResultPanel from './SearchResultPanel';
 import {
     faSearch,
     faTimes,
-    faTrash,
     faInfoCircle,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import AddressSearch from './address-search/AddressSearch';
-import MetadataSearch from './metadata-search/MetadataSearch';
-import FeatureSearch from './feature-search/FeatureSearch';
-import SvLoader from '../../utils/components/SvLoader';
 import strings from '../../translations';
 import { SEARCH_TIP_LOCALSTORAGE } from '../../utils/constants';
 
@@ -144,7 +138,7 @@ const StyledToastIcon = styled(FontAwesomeIcon)`
 const Search = () => {
     const [searchValue, setSearchValue] = useState('');
     const [lastSearchValue, setLastSearchValue] = useState('');
-    const [isSearching, setIsSearching] = useState(false);
+    const [isSearching, setIsSearching] = useState(true);
     const [searchResults, setSearchResults] = useState(null);
     const [isSearchMethodSelectorOpen, setIsSearchMethodSelectorOpen] =
         useState(false);
@@ -322,48 +316,6 @@ const Search = () => {
         }
     };
 
-    const searchTypes = {
-        address: {
-            label: strings.search.address.title,
-            subtitle: strings.search.address.subtitle,
-            content: (
-                <AddressSearch
-                    searchValue={searchValue}
-                    setSearchValue={setSearchValue}
-                    setIsSearching={setIsSearching}
-                    handleSeach={handleSeach}
-                />
-            ),
-            visible: true,
-        },
-        metadata: {
-            label: strings.search.layer.title,
-            subtitle: strings.search.metadata.subtitle,
-            content: (
-                <MetadataSearch
-                    searchValue={searchValue}
-                    setSearchValue={setSearchValue}
-                    setIsSearching={setIsSearching}
-                    handleMetadataSearch={handleMetadataSearch}
-                />
-            ),
-            visible: true,
-        },
-        feature: {
-            label: strings.search.address.title,
-            subtitle: strings.search.address.subtitle,
-            content: (
-                <FeatureSearch
-                    searchValue={searchValue}
-                    setSearchValue={setSearchValue}
-                    setIsSearching={setIsSearching}
-                    handleFeatureSearch={handleFeatureSearch}
-                />
-            ),
-            visible: false,
-        },
-    };
-
     useEffect(() => {
         channel &&
             channel.handleEvent('SearchResultEvent', function (data) {
@@ -501,6 +453,7 @@ const Search = () => {
                                 searchClickedRow={searchClickedRow}
                                 allLayers={allLayers}
                                 isSearchOpen={isSearchOpen}
+                                isSearching={isSearching}
                                 searchType={searchType}
                                 setSearchType={setSearchType}
                                 handleSeach={handleSeach}

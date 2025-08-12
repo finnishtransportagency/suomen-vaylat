@@ -77,9 +77,9 @@ const PillInput = styled.input`
   max-width: 130px;
   height: 42px;
   border: 1.5px solid #ccc;
-  border-radius: 21px;
+  border-radius: 20px;
+  padding: 1em;
   text-align: center;
-  font-size: 19px;
   outline: none;
   transition: border-color 0.17s;
   background: #fff;
@@ -109,18 +109,11 @@ const WideInputGroup = styled.div`
   width: 100%;
 `;
 
-const WideInputLabel = styled.label`
-  display: block;
-  margin-bottom: 4px;
-  font-size: 15px;
-  font-weight: 500;
-  color: #222;
-`;
-
 const WidePillInput = styled(PillInput)`
   width: 100%;
   min-width: 150px;
   max-width: 600px;
+  text-align: left;
 `;
 
 const StyledFeatureSearchSection = styled.div`
@@ -129,6 +122,7 @@ const StyledFeatureSearchSection = styled.div`
   margin-bottom: 1em;
 `;
 const StyledSearchSection = styled.div`
+  width: 100%;
   margin-bottom: 1em;
   display: flex;
   flex-direction: column;
