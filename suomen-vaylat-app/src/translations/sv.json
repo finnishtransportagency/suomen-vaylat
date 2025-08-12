@@ -444,12 +444,12 @@
     },  
     "tips": {
       "title": "Med platssökning kan du söka en kommun, adress, fastighetsbeteckning, vägadress eller banadress.",
-      "address": "Adressökning, skriv i formatet 'kommun', 'adress' eller 'adress, kommun'.",
+      "address": "Skriv i formatet 'kommun', 'adress' eller 'adress, kommun'.",
       "addressExamples": [
         "Opastinsilta 12",
         "Opastinsilta 12, Helsinki"
       ],
-      "vkmRoad": "Vägsökning, skriv i formatet ’väg/del/körbana/avstånd’, ’väg/del/avstånd’, 'väg/del/körfil' (använd alternativet 'Använd körfilen i sökningen') eller ’väg/del/körbana/avstånd väg/del_slut/körbana/avstånd_slut’.",
+      "vkmRoad": "Skriv i formatet ’väg/del/körbana/avstånd’, ’väg/del/avstånd’, 'väg/del/körfil' (använd alternativet 'Använd körfilen i sökningen') eller ’väg/del/körbana/avstånd väg/del_slut/körbana/avstånd_slut’.",
       "vkmRoadExamples": [
         "5",
         "5/116",
@@ -462,12 +462,12 @@
         "start:5/116/0/50 slut:5/348/0/100",
         "Alternativet 'Använd körfilen i sökningen' ändrar sökningen så att den använder antingen filen eller avståndet som den tredje parametern när du söker med tre parametrar."
       ],
-      "vkmTrack": "Bansökning, skriv i formatet 'bannummer/bankilometer/banmeter'. Alla tre parametrarna är obligatoriska.",
+      "vkmTrack": "Skriv i formatet 'bannummer/bankilometer/banmeter'. Alla tre parametrarna är obligatoriska.",
       "vkmTrackExamples": [
         "001/2/10",
         "OL 122/750/30"
       ],
-      "realEstateUnitIdentifier": "Fastighetsbeteckning, skriv i formatet 'aa-bb-cc-d' eller 'aaa-bbb-cc-ddd'.",
+      "realEstateUnitIdentifier": "Skriv i formatet 'aa-bb-cc-d' eller 'aaa-bbb-cc-ddd'.",
       "realEstateUnitIdentifierExamples": ["91-17-16-1", "091-017-16-001"],
       "example": "T.ex.",
       "toastTip": "Visste du att du kan spara den geometri som kommit upp på kartan vid ban- och vägsökningen?",

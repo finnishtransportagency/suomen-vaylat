@@ -14,9 +14,9 @@ import {
   vectorLayerId,
   dropdownVariants
 } from '../utils/SearchUtil';
-import { isMobile, theme } from '../../../theme/theme';
+import { theme } from '../../../theme/theme';
 import { useAppSelector } from '../../../state/hooks';
-import { useContext } from 'react';
+import { useContext, useEffect, useMemo } from 'react';
 import { ReactReduxContext } from 'react-redux';
 import { setGeoJsonArray } from '../../../state/slices/uiSlice';
 import {
@@ -46,14 +46,16 @@ const AddRessSearchResultPanel = ({
   ];
   const typeMap = new Map(typeResolvTable);
   const nonNomenclatureTypes = Array.from(typeMap.values());
-  console.log(searchResults)
-  let filteredResult = searchResults;
-  if (
-    searchResults.result &&
-    searchResults.result.locations &&
-    searchResults.result.locations.length > 0
-  ) {
-    filteredResult = searchResults.result.locations.filter((res) => {
+
+  // Guard: ensure we always work with an array
+  const locations = (searchResults && searchResults.result && Array.isArray(searchResults.result.locations))
+    ? searchResults.result.locations
+    : [];
+
+  // compute filteredResult via useMemo for stability
+  const filteredResult = useMemo(() => {
+    if (!locations.length) return [];
+    return locations.filter((res) => {
       if (activeSwitch === null || activeSwitch === undefined) {
         return true;
       }
@@ -81,8 +83,7 @@ const AddRessSearchResultPanel = ({
       }
       return showResult;
     });
-  }
-  console.log(searchResults)
+  }, [locations, activeSwitch, typeMap, nonNomenclatureTypes]);
 
   const handleSearchSelect = (
     name,
@@ -183,8 +184,34 @@ const AddRessSearchResultPanel = ({
     }
   };
 
-  console.log(filteredResult)
-  console.log(filteredResult.length > 0)
+  // SIDE EFFECT: when there's exactly one filtered result and we haven't shown it yet,
+  // do the map selection and mark it shown. This runs AFTER render (no setState during render).
+  useEffect(() => {
+    if (!filteredResult || filteredResult.length !== 1) return;
+    if (firstSearchResultShown) return;
+
+    const res = filteredResult[0];
+    // call the same handler as before
+    handleSearchSelect(
+      res.name,
+      res.lon,
+      res.lat,
+      res.geom,
+      res.osa,
+      res.ajorata,
+      res.etaisyys,
+      res.osa_loppu,
+      res.etaisyys_loppu,
+      res.vkmType
+    );
+
+    // mark as shown and dismiss toast (these are safe here)
+    setFirstSearchResultShown(true);
+    toast.dismiss('searchToast');
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filteredResult, firstSearchResultShown]);
+
   return (
     <StyledDropDown
       key={'dropdown-content-address'}
@@ -194,7 +221,7 @@ const AddRessSearchResultPanel = ({
       exit={'exit'}
       transition={'transition'}
     >
-      {filteredResult.length > 0 ? (
+      {filteredResult && filteredResult.length > 0 ? (
         filteredResult.map(
           (
             {
@@ -228,27 +255,6 @@ const AddRessSearchResultPanel = ({
               visibleText = name;
             }
 
-            // Show result on the map if search returns only one result
-            if (
-              searchResults.result.locations.length === 1 &&
-              !firstSearchResultShown
-            ) {
-              handleSearchSelect(
-                name,
-                lon,
-                lat,
-                geom,
-                osa,
-                ajorata,
-                etaisyys,
-                osa_loppu,
-                etaisyys_loppu,
-                vkmType
-              );
-              setFirstSearchResultShown(true);
-              toast.dismiss('searchToast');
-            }
-
             return (
               <StyledDropdownContentItem
                 key={name + '_' + index}
@@ -272,7 +278,7 @@ const AddRessSearchResultPanel = ({
                 <StyledSearchIcon
                   active={
                     searchClickedRow === index ||
-                    searchResults.result.locations.length === 1
+                    locations.length === 1
                   }
                 >
                   <FontAwesomeIcon
@@ -289,7 +295,7 @@ const AddRessSearchResultPanel = ({
                   type={'searchResult'}
                   active={
                     searchClickedRow === index ||
-                    searchResults.result.locations.length === 1
+                    locations.length === 1
                   }
                 >
                   {visibleText}

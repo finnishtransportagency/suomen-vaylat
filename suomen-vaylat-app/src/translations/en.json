@@ -444,12 +444,12 @@
     },
     "tips": {
       "title": "Use location search to search for a municipality, address, property identifier, road address or track address.",
-      "address": "Address search, type in the format 'municipality', 'address' or 'address, municipality'.",
+      "address": "Type in the format 'municipality', 'address' or 'address, municipality'.",
       "addressExamples": [
         "Opastinsilta 12",
         "Opastinsilta 12, Helsinki"
       ],
-      "vkmRoad": "Road search, write in the format ’road/part/driving_lane/distance’, road/part/distance, 'road/part/driving_lane' (use the 'Use driving_lane search' option) or ’road/part/driving_lane/distance road/part_end/driving_lane/distance_end’.",
+      "vkmRoad": "Type in the format ’road/part/driving_lane/distance’, road/part/distance, 'road/part/driving_lane' (use the 'Use driving_lane search' option) or ’road/part/driving_lane/distance road/part_end/driving_lane/distance_end’.",
       "vkmRoadExamples": [
         "5",
         "5/116",
@@ -462,12 +462,12 @@
         "start:5/116/0/50 end:5/348/0/100",
         "The 'Use driving_lane search' option changes the search to use either the lane or distance when searching with three parameters"
       ],
-      "vkmTrack": "Track search, type in the format 'track number/track kilometre/track metre'. All 3 parameters are mandatory.",
+      "vkmTrack": "Type in the format 'track number/track kilometre/track metre'. All 3 parameters are mandatory.",
       "vkmTrackExamples": [
         "001/2/10",
         "OL 122/750/30"
       ],
-      "realEstateUnitIdentifier": "Property identifier search, type in the format 'aa-bb-cc-d' or 'aaa-bbb-cc-ddd'.",
+      "realEstateUnitIdentifier": "Type in the format 'aa-bb-cc-d' or 'aaa-bbb-cc-ddd'.",
       "realEstateUnitIdentifierExamples": ["91-17-16-1", "091-017-16-001"],
       "example": "For example,",
       "toastTip": "Did you know that you can save the geometry that was placed on the map from a track and road search?",

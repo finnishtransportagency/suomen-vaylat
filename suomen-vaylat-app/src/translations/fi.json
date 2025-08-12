@@ -480,12 +480,12 @@
     },
     "tips": {
       "title": "Paikkahaulla voit hakea kuntaa, osoitetta, kiinteistötunnusta, tieosoitetta tai rataosoitetta.",
-      "address": "Osoitehaku, kirjoita muodossa 'kunta', 'osoite' tai 'osoite, kunta'.",
+      "address": "Kirjoita muodossa 'kunta', 'osoite' tai 'osoite, kunta'.",
       "addressExamples": [
         "Opastinsilta 12",
         "Opastinsilta 12, Helsinki"
       ],
-      "vkmRoad": "Tiehaku, kirjoita muodossa 'tie/osa/ajorata/etäisyys', 'tie/osa/etäisyys', 'tie/osa/ajorata' ( käytettävä 'Käytä ajorataa haussa' -valintaa )  tai 'tie/osa/ajorata/etäisyys tie/osa_loppu/ajorata/etäisyys_loppu'.",
+      "vkmRoad": "Kirjoita muodossa 'tie/osa/ajorata/etäisyys', 'tie/osa/etäisyys', 'tie/osa/ajorata' ( käytettävä 'Käytä ajorataa haussa' -valintaa )  tai 'tie/osa/ajorata/etäisyys tie/osa_loppu/ajorata/etäisyys_loppu'.",
       "vkmRoadExamples": [
         "5",
         "5/116",
@@ -497,12 +497,12 @@
         "alku:5/116/0/50 loppu:5/348/0/100",
         "'Käytä ajorataa haussa' -valinta vaihtaa kolmella parametrilla haettaessa haun käyttämään joko ajorataa tai etäisyyttä kolmantena parametrina"
       ],
-      "vkmTrack": "Ratahaku, kirjoita muodossa 'ratanumero/ratakilometri/ratametri'. Kaikki 3 parametria on pakollisia.",
+      "vkmTrack": "Kirjoita muodossa 'ratanumero/ratakilometri/ratametri'. Kaikki 3 parametria on pakollisia.",
       "vkmTrackExamples": [
         "001/2/10",
         "OL 122/750/30"
       ],
-      "realEstateUnitIdentifier": "Kiinteistötunnushaku, kirjoita muodossa 'aa-bb-cc-d' tai 'aaa-bbb-cc-ddd'.",
+      "realEstateUnitIdentifier": "Kirjoita muodossa 'aa-bb-cc-d' tai 'aaa-bbb-cc-ddd'.",
       "realEstateUnitIdentifierExamples": ["91-17-16-1", "091-017-16-001"],
       "example": "Esim.",
       "toastTip": "Tiesitkö, että voit tallentaa rata- ja tiehausta kartalle tulleen geometrian?",
