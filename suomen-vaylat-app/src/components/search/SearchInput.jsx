@@ -85,7 +85,7 @@ const ButtonsRow = styled.div`
 /* Search button styling (right) */
 const StyledStandardSearchButton = styled.button`
   background: none;
-  font-size: 1.2em;;
+  font-size: 1.2em;
   border: none;
   color: ${(p) => p.theme.colors.mainColor1};
   display: inline-flex;
@@ -116,7 +116,7 @@ const StyledSearchButton = styled.button`
   gap: 1em;
 
   &:hover {
-  background-color: ${(p) => p.theme.colors.mainColor1Selected};
+    background-color: ${(p) => p.theme.colors.mainColor1Selected};
   }
 
   @media (max-width: 680px) {
@@ -142,12 +142,44 @@ const StyledTrashButton = styled.button`
   gap: 1em;
 
   &:hover {
-  background-color: ${(p) => p.theme.colors.secondaryColorDarkOrangeSelected};
+    background-color: ${(p) => p.theme.colors.secondaryColorDarkOrangeSelected};
   }
 
   @media (max-width: 680px) {
     flex: 1 1 0;
     height: 40px;
+  }
+`;
+
+/* Relative wrapper for an input that has a clear icon inside it */
+const RelativeInputWrapper = styled.div`
+  position: relative;
+  width: 100%;
+`;
+
+/* Clear icon button positioned inside the input (right) */
+const ClearIconButton = styled.button`
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  background: transparent;
+  color: ${(p) => p.theme.colors.darkGrey};
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  cursor: pointer;
+  z-index: 2;
+
+  &:hover {
+    opacity: 0.9;
+  }
+
+  &:focus {
+    outline: 2px solid ${(p) => (p.theme.colors.mainColor1 || '#1976d2')};
+    outline-offset: 2px;
   }
 `;
 
@@ -191,8 +223,7 @@ const PillInput = styled.input`
     max-width: 100%;
   }
   &.error {
-    border-color: ${(props) =>
-      props.theme.colors.secondaryColorDarkOrange || '#c55'};
+    border-color: ${(props) => props.theme.colors.secondaryColorDarkOrange || '#c55'};
   }
   &:focus {
     border-color: #888;
@@ -208,13 +239,16 @@ const WideInputGroup = styled.div`
   width: 100%;
 `;
 
+/* ensure room for inside clear button */
 const WidePillInput = styled(PillInput)`
   width: 100%;
   min-width: 150px;
   max-width: 600px;
   text-align: left;
+  padding-right: 44px; /* room for clear button */
 `;
 
+/* keep feature input same (we'll add wrapper + clear button) */
 const StyledFeatureSearchSection = styled.div`
   display: flex;
   flex-direction: column;
@@ -232,7 +266,7 @@ const StyledSearchSection = styled.div`
 const CheckboxWrapper = styled.div`
   display: flex;
   align-items: center;
-  margin-top: 10px;
+  margin: 8px 0 0 8px;
 `;
 
 const StyledCheckbox = styled.input`
@@ -285,12 +319,7 @@ const StyledNoActivaLayers = styled.div`
 `;
 
 // Utility methods (your original versions, unchanged)
-const getSearchValuePart = (
-  searchValue,
-  searchType,
-  part,
-  carriageWaySearch
-) => {
+const getSearchValuePart = (searchValue, searchType, part, carriageWaySearch) => {
   const splittedSearchArray = splitSearchValue(searchValue, searchType, part);
   let retVa;
   let actualPart;
@@ -367,30 +396,15 @@ const updateRoadSearchValue = (
     } else {
       searchArray[part] = value;
     }
-    const updatedSearchValue = parseSearchValueFromParts(
-      searchArray,
-      blancSpacePosition
-    );
+    const updatedSearchValue = parseSearchValueFromParts(searchArray, blancSpacePosition);
     if (updatedSearchValue !== undefined) {
       setSearchValue(updatedSearchValue);
     }
-  } else if (
-    (searchArray === undefined || searchArray === '') &&
-    value !== undefined &&
-    part === 0
-  ) {
+  } else if ((searchArray === undefined || searchArray === '') && value !== undefined && part === 0) {
     setSearchValue(value);
-  } else if (
-    (searchArray === undefined || searchArray === '') &&
-    searchValue !== undefined &&
-    part === 1
-  ) {
+  } else if ((searchArray === undefined || searchArray === '') && searchValue !== undefined && part === 1) {
     setSearchValue(searchValue + '/' + value);
-  } else if (
-    searchArray !== undefined &&
-    searchArray !== '' &&
-    searchArray.length === part - 1
-  ) {
+  } else if (searchArray !== undefined && searchArray !== '' && searchArray.length === part - 1) {
     setSearchValue(searchValue + '/' + value);
   }
 };
@@ -403,32 +417,21 @@ const parseSearchValueFromParts = (partsArray, blancSpacePosition) => {
   } else {
     newSearchValue = partsArray.join('/');
   }
-  return newSearchValue.endsWith('/')
-    ? newSearchValue.slice(0, -1)
-    : newSearchValue;
+  return newSearchValue.endsWith('/') ? newSearchValue.slice(0, -1) : newSearchValue;
 };
 const getTrackSearchValuePart = (position, searchValue) => {
   if (!searchValue) return '';
   const searchArray = searchValue.split('/');
   return searchArray[position] || '';
 };
-const updateTrackSearchValue = (
-  newValue,
-  position,
-  searchValue,
-  setSearchValue,
-  trackErrors,
-  setTrackErrors
-) => {
+const updateTrackSearchValue = (newValue, position, searchValue, setSearchValue, trackErrors, setTrackErrors) => {
   const newErrors = [...(trackErrors ?? [])];
   newErrors[position] = newValue === '';
   setTrackErrors(newErrors);
   let searchArray = searchValue ? searchValue.split('/') : ['', '', ''];
   searchArray[position] = newValue;
   const newSearchValue = searchArray.join('/');
-  setSearchValue(
-    newSearchValue.endsWith('/') ? newSearchValue.slice(0, -1) : newSearchValue
-  );
+  setSearchValue(newSearchValue.endsWith('/') ? newSearchValue.slice(0, -1) : newSearchValue);
 };
 const parseTrackSearchQuery = (searchQuery) => {
   return searchQuery.endsWith('/') ? searchQuery.slice(0, -1) : searchQuery;
@@ -486,6 +489,13 @@ const SearchInput = ({
     }
   };
 
+  /* clearing for wide inputs (address/nomenclature/premise/layer/default/feature) */
+  const clearWideInput = (e) => {
+    // prevent bubbling click to row or other handlers
+    if (e && typeof e.stopPropagation === 'function') e.stopPropagation();
+    setSearchValue('');
+  };
+
   return (
     <>
       {activeSwitch === 'default' && (
@@ -493,15 +503,26 @@ const SearchInput = ({
           <RowWithButton>
             <InputsContainer>
               <WideInputGroup>
-                <WidePillInput
-                  id="default-search"
-                  type="text"
-                  value={searchValue}
-                  onChange={(e) => setSearchValue(e.target.value)}
-                  onKeyPress={(e) => {
-                    if (e.key === 'Enter') handleSeach(searchValue);
-                  }}
-                />
+                <RelativeInputWrapper>
+                  <WidePillInput
+                    id="default-search"
+                    type="text"
+                    value={searchValue}
+                    onChange={(e) => setSearchValue(e.target.value)}
+                    onKeyPress={(e) => {
+                      if (e.key === 'Enter') handleSeach(searchValue);
+                    }}
+                  />
+                  { searchValue.length > 0 &&
+                    <ClearIconButton
+                      type="button"
+                      aria-label="Clear"
+                      onClick={clearWideInput}
+                    >
+                      <FontAwesomeIcon icon={faTrash} />
+                    </ClearIconButton>
+                  }
+                </RelativeInputWrapper>
               </WideInputGroup>
             </InputsContainer>
 
@@ -523,106 +544,44 @@ const SearchInput = ({
             <InputsContainer>
               <FieldGroup>
                 <LabelRow>
-                  <RoadInputLabel htmlFor="road-tie">
-                    {strings.search.vkm.tie}
-                  </RoadInputLabel>
-                  <RoadInputLabel htmlFor="road-osa">
-                    {strings.search.vkm.osa}
-                  </RoadInputLabel>
-                  <RoadInputLabel htmlFor="road-majorata">
-                    {strings.search.vkm.ajorata}
-                  </RoadInputLabel>
-                  <RoadInputLabel htmlFor="road-etaisyys">
-                    {strings.search.vkm.etaisyys}
-                  </RoadInputLabel>
+                  <RoadInputLabel htmlFor="road-tie">{strings.search.vkm.tie}</RoadInputLabel>
+                  <RoadInputLabel htmlFor="road-osa">{strings.search.vkm.osa}</RoadInputLabel>
+                  <RoadInputLabel htmlFor="road-majorata">{strings.search.vkm.ajorata}</RoadInputLabel>
+                  <RoadInputLabel htmlFor="road-etaisyys">{strings.search.vkm.etaisyys}</RoadInputLabel>
                 </LabelRow>
                 <InputRow>
                   <PillInput
                     id="road-tie"
                     type="text"
                     placeholder=""
-                    onChange={(e) =>
-                      updateRoadSearchValue(
-                        searchValue,
-                        searchType,
-                        setSearchValue,
-                        0,
-                        e.target.value,
-                        carriageWaySearch
-                      )
-                    }
+                    onChange={(e) => updateRoadSearchValue(searchValue, searchType, setSearchValue, 0, e.target.value, carriageWaySearch)}
                     value={getSearchValuePart(searchValue, searchType, 0)}
-                    onKeyPress={(e) => {
-                      if (e.key === 'Enter') handleSeach(searchValue);
-                    }}
+                    onKeyPress={(e) => { if (e.key === 'Enter') handleSeach(searchValue); }}
                   />
                   <PillInput
                     id="road-osa"
                     type="text"
                     placeholder=""
-                    onChange={(e) =>
-                      updateRoadSearchValue(
-                        searchValue,
-                        searchType,
-                        setSearchValue,
-                        1,
-                        e.target.value,
-                        carriageWaySearch
-                      )
-                    }
+                    onChange={(e) => updateRoadSearchValue(searchValue, searchType, setSearchValue, 1, e.target.value, carriageWaySearch)}
                     value={getSearchValuePart(searchValue, searchType, 1)}
-                    onKeyPress={(e) => {
-                      if (e.key === 'Enter') handleSeach(searchValue);
-                    }}
+                    onKeyPress={(e) => { if (e.key === 'Enter') handleSeach(searchValue); }}
                   />
                   <PillInput
                     id="road-majorata"
                     type="text"
                     placeholder=""
-                    onChange={(e) =>
-                      updateRoadSearchValue(
-                        searchValue,
-                        searchType,
-                        setSearchValue,
-                        2,
-                        e.target.value,
-                        carriageWaySearch
-                      )
-                    }
-                    value={getSearchValuePart(
-                      searchValue,
-                      searchType,
-                      2,
-                      carriageWaySearch
-                    )}
-                    onKeyPress={(e) => {
-                      if (e.key === 'Enter') handleSeach(searchValue);
-                    }}
+                    onChange={(e) => updateRoadSearchValue(searchValue, searchType, setSearchValue, 2, e.target.value, carriageWaySearch)}
+                    value={getSearchValuePart(searchValue, searchType, 2, carriageWaySearch)}
+                    onKeyPress={(e) => { if (e.key === 'Enter') handleSeach(searchValue); }}
                     disabled={!carriageWaySearch}
                   />
                   <PillInput
                     id="road-etaisyys"
                     type="text"
                     placeholder=""
-                    onChange={(e) =>
-                      updateRoadSearchValue(
-                        searchValue,
-                        searchType,
-                        setSearchValue,
-                        carriageWaySearch ? 3 : 2,
-                        e.target.value,
-                        carriageWaySearch
-                      )
-                    }
-                    value={getSearchValuePart(
-                      searchValue,
-                      searchType,
-                      3,
-                      carriageWaySearch
-                    )}
-                    onKeyPress={(e) => {
-                      if (e.key === 'Enter') handleSeach(searchValue);
-                    }}
+                    onChange={(e) => updateRoadSearchValue(searchValue, searchType, setSearchValue, carriageWaySearch ? 3 : 2, e.target.value, carriageWaySearch)}
+                    value={getSearchValuePart(searchValue, searchType, 3, carriageWaySearch)}
+                    onKeyPress={(e) => { if (e.key === 'Enter') handleSeach(searchValue); }}
                   />
                 </InputRow>
               </FieldGroup>
@@ -636,18 +595,10 @@ const SearchInput = ({
                 <InputsContainer>
                   <FieldGroup>
                     <LabelRow>
-                      <RoadInputLabel htmlFor="road-tieloppu">
-                        {strings.search.vkm.tie}
-                      </RoadInputLabel>
-                      <RoadInputLabel htmlFor="road-osa-loppu">
-                        {strings.search.vkm.osa}
-                      </RoadInputLabel>
-                      <RoadInputLabel htmlFor="road-majorata-loppu">
-                        {strings.search.vkm.ajorata}
-                      </RoadInputLabel>
-                      <RoadInputLabel htmlFor="road-etaisyys-loppu">
-                        {strings.search.vkm.etaisyys}
-                      </RoadInputLabel>
+                      <RoadInputLabel htmlFor="road-tieloppu">{strings.search.vkm.tie}</RoadInputLabel>
+                      <RoadInputLabel htmlFor="road-osa-loppu">{strings.search.vkm.osa}</RoadInputLabel>
+                      <RoadInputLabel htmlFor="road-majorata-loppu">{strings.search.vkm.ajorata}</RoadInputLabel>
+                      <RoadInputLabel htmlFor="road-etaisyys-loppu">{strings.search.vkm.etaisyys}</RoadInputLabel>
                     </LabelRow>
                     <InputRow>
                       <PillInput
@@ -655,75 +606,27 @@ const SearchInput = ({
                         aria-label={strings.search.vkm.tieloppu}
                         type="text"
                         placeholder=""
-                        onChange={(e) =>
-                          updateRoadSearchValue(
-                            searchValue,
-                            searchType,
-                            setSearchValue,
-                            4,
-                            e.target.value,
-                            carriageWaySearch
-                          )
-                        }
-                        value={getSearchValuePart(
-                          searchValue,
-                          searchType,
-                          4,
-                          carriageWaySearch
-                        )}
-                        onKeyPress={(e) => {
-                          if (e.key === 'Enter') handleSeach(searchValue);
-                        }}
+                        onChange={(e) => updateRoadSearchValue(searchValue, searchType, setSearchValue, 4, e.target.value, carriageWaySearch)}
+                        value={getSearchValuePart(searchValue, searchType, 4, carriageWaySearch)}
+                        onKeyPress={(e) => { if (e.key === 'Enter') handleSeach(searchValue); }}
                       />
                       <PillInput
                         id="road-osa-loppu"
                         aria-label={strings.search.vkm.osaLoppu}
                         type="text"
                         placeholder=""
-                        onChange={(e) =>
-                          updateRoadSearchValue(
-                            searchValue,
-                            searchType,
-                            setSearchValue,
-                            5,
-                            e.target.value,
-                            carriageWaySearch
-                          )
-                        }
-                        value={getSearchValuePart(
-                          searchValue,
-                          searchType,
-                          5,
-                          carriageWaySearch
-                        )}
-                        onKeyPress={(e) => {
-                          if (e.key === 'Enter') handleSeach(searchValue);
-                        }}
+                        onChange={(e) => updateRoadSearchValue(searchValue, searchType, setSearchValue, 5, e.target.value, carriageWaySearch)}
+                        value={getSearchValuePart(searchValue, searchType, 5, carriageWaySearch)}
+                        onKeyPress={(e) => { if (e.key === 'Enter') handleSeach(searchValue); }}
                       />
                       <PillInput
                         id="road-majorata-loppu"
                         aria-label={strings.search.vkm.ajorata}
                         type="text"
                         placeholder=""
-                        value={getSearchValuePart(
-                          searchValue,
-                          searchType,
-                          6,
-                          carriageWaySearch
-                        )}
-                        onChange={(e) =>
-                          updateRoadSearchValue(
-                            searchValue,
-                            searchType,
-                            setSearchValue,
-                            6,
-                            e.target.value,
-                            carriageWaySearch
-                          )
-                        }
-                        onKeyPress={(e) => {
-                          if (e.key === 'Enter') handleSeach(searchValue);
-                        }}
+                        value={getSearchValuePart(searchValue, searchType, 6, carriageWaySearch)}
+                        onChange={(e) => updateRoadSearchValue(searchValue, searchType, setSearchValue, 6, e.target.value, carriageWaySearch)}
+                        onKeyPress={(e) => { if (e.key === 'Enter') handleSeach(searchValue); }}
                         disabled={!carriageWaySearch}
                       />
                       <PillInput
@@ -731,25 +634,9 @@ const SearchInput = ({
                         aria-label={strings.search.vkm.etaisyysLoppu}
                         type="text"
                         placeholder=""
-                        value={getSearchValuePart(
-                          searchValue,
-                          searchType,
-                          7,
-                          carriageWaySearch
-                        )}
-                        onChange={(e) =>
-                          updateRoadSearchValue(
-                            searchValue,
-                            searchType,
-                            setSearchValue,
-                            carriageWaySearch ? 7 : 6,
-                            e.target.value,
-                            carriageWaySearch
-                          )
-                        }
-                        onKeyPress={(e) => {
-                          if (e.key === 'Enter') handleSeach(searchValue);
-                        }}
+                        value={getSearchValuePart(searchValue, searchType, 7, carriageWaySearch)}
+                        onChange={(e) => updateRoadSearchValue(searchValue, searchType, setSearchValue, carriageWaySearch ? 7 : 6, e.target.value, carriageWaySearch)}
+                        onKeyPress={(e) => { if (e.key === 'Enter') handleSeach(searchValue); }}
                       />
                     </InputRow>
                   </FieldGroup>
@@ -766,9 +653,7 @@ const SearchInput = ({
               onChange={() => setCarriageWaySearch(!carriageWaySearch)}
               checked={carriageWaySearch}
             />
-            <CheckboxLabel htmlFor="carriageWaySearchBox">
-              {strings.search.carriageWaySearch}
-            </CheckboxLabel>
+            <CheckboxLabel htmlFor="carriageWaySearchBox">{strings.search.carriageWaySearch}</CheckboxLabel>
           </CheckboxWrapper>
           <CheckboxWrapper>
             <StyledCheckbox
@@ -778,31 +663,21 @@ const SearchInput = ({
               onChange={() => setRoadEndEnabled(!roadEndEnabled)}
               checked={roadEndEnabled}
             />
-            <CheckboxLabel htmlFor="roadEndCheckbox">
-              {'Anna tien loppu tiedot'}
-            </CheckboxLabel>
+            <CheckboxLabel htmlFor="roadEndCheckbox">{'Anna tien loppu tiedot'}</CheckboxLabel>
           </CheckboxWrapper>
 
+          {/* Buttons under the start group */}
+          <ButtonsRow>
+            <StyledSearchButton type="button" aria-label="Search road" onClick={onClickSearchRoad}>
+              <FontAwesomeIcon icon={faMagnifyingGlass} />
+              {strings.search.search}
+            </StyledSearchButton>
 
-                {/* Buttons under the start group */}
-                <ButtonsRow>
-                  <StyledSearchButton
-                    type="button"
-                    aria-label="Search road"
-                    onClick={onClickSearchRoad}
-                  >
-                    <FontAwesomeIcon icon={faMagnifyingGlass} />
-                    {strings.search.search}
-                  </StyledSearchButton>
-                  <StyledTrashButton
-                    type="button"
-                    aria-label="Clear road start fields"
-                    onClick={clearAllRoadFields}
-                  >
-                    <FontAwesomeIcon icon={faTrash} />
-                    {strings.search.erase}
-                  </StyledTrashButton>
-                </ButtonsRow>
+            <StyledTrashButton type="button" aria-label="Clear road start fields" onClick={clearAllRoadFields}>
+              <FontAwesomeIcon icon={faTrash} />
+              {strings.search.erase}
+            </StyledTrashButton>
+          </ButtonsRow>
         </StyledSearchSection>
       )}
 
@@ -812,31 +687,16 @@ const SearchInput = ({
             <InputsContainer>
               <FieldGroup>
                 <LabelRow>
-                  <RoadInputLabel htmlFor="track-tracknumber">
-                    {strings.search.track.tracknumber}
-                  </RoadInputLabel>
-                  <RoadInputLabel htmlFor="track-trackkm">
-                    {strings.search.track.trackkm}
-                  </RoadInputLabel>
-                  <RoadInputLabel htmlFor="track-trackm">
-                    {strings.search.track.trackm}
-                  </RoadInputLabel>
+                  <RoadInputLabel htmlFor="track-tracknumber">{strings.search.track.tracknumber}</RoadInputLabel>
+                  <RoadInputLabel htmlFor="track-trackkm">{strings.search.track.trackkm}</RoadInputLabel>
+                  <RoadInputLabel htmlFor="track-trackm">{strings.search.track.trackm}</RoadInputLabel>
                 </LabelRow>
                 <InputRow>
                   <PillInput
                     id="track-tracknumber"
                     type="text"
                     value={getTrackSearchValuePart(0, searchValue)}
-                    onChange={(e) =>
-                      updateTrackSearchValue(
-                        e.target.value,
-                        0,
-                        searchValue,
-                        setSearchValue,
-                        trackErrors,
-                        setTrackErrors
-                      )
-                    }
+                    onChange={(e) => updateTrackSearchValue(e.target.value, 0, searchValue, setSearchValue, trackErrors, setTrackErrors)}
                     onKeyPress={(e) => {
                       if (e.key === 'Enter') {
                         if (validateTrackSearch(searchValue, setTrackErrors)) {
@@ -850,16 +710,7 @@ const SearchInput = ({
                     id="track-trackkm"
                     type="text"
                     value={getTrackSearchValuePart(1, searchValue)}
-                    onChange={(e) =>
-                      updateTrackSearchValue(
-                        e.target.value,
-                        1,
-                        searchValue,
-                        setSearchValue,
-                        trackErrors,
-                        setTrackErrors
-                      )
-                    }
+                    onChange={(e) => updateTrackSearchValue(e.target.value, 1, searchValue, setSearchValue, trackErrors, setTrackErrors)}
                     onKeyPress={(e) => {
                       if (e.key === 'Enter') {
                         if (validateTrackSearch(searchValue, setTrackErrors)) {
@@ -873,16 +724,7 @@ const SearchInput = ({
                     id="track-trackm"
                     type="text"
                     value={getTrackSearchValuePart(2, searchValue)}
-                    onChange={(e) =>
-                      updateTrackSearchValue(
-                        e.target.value,
-                        2,
-                        searchValue,
-                        setSearchValue,
-                        trackErrors,
-                        setTrackErrors
-                      )
-                    }
+                    onChange={(e) => updateTrackSearchValue(e.target.value, 2, searchValue, setSearchValue, trackErrors, setTrackErrors)}
                     onKeyPress={(e) => {
                       if (e.key === 'Enter') {
                         if (validateTrackSearch(searchValue, setTrackErrors)) {
@@ -894,28 +736,17 @@ const SearchInput = ({
                   />
                 </InputRow>
 
-
-          {trackErrors.some((error) => error === true) && (
-            <StyledValidationMessage>
-              {strings.search.track.trackMandatoryMessage}
-            </StyledValidationMessage>
-          )}
+                {trackErrors.some((error) => error === true) && (
+                  <StyledValidationMessage>{strings.search.track.trackMandatoryMessage}</StyledValidationMessage>
+                )}
 
                 {/* Buttons under track inputs */}
                 <ButtonsRow>
-                  <StyledSearchButton
-                    type="button"
-                    aria-label="Search track"
-                    onClick={onClickSearchTrack}
-                  >
+                  <StyledSearchButton type="button" aria-label="Search track" onClick={onClickSearchTrack}>
                     <FontAwesomeIcon icon={faMagnifyingGlass} />
                     {strings.search.search}
                   </StyledSearchButton>
-                  <StyledTrashButton
-                    type="button"
-                    aria-label="Clear track fields"
-                    onClick={clearTrackFields}
-                  >
+                  <StyledTrashButton type="button" aria-label="Clear track fields" onClick={clearTrackFields}>
                     <FontAwesomeIcon icon={faTrash} />
                     {strings.search.erase}
                   </StyledTrashButton>
@@ -931,22 +762,29 @@ const SearchInput = ({
           <RowWithButton>
             <InputsContainer>
               <WideInputGroup>
-                <WidePillInput
-                  id="address-search"
-                  type="text"
-                  value={searchValue}
-                  onChange={(e) => setSearchValue(e.target.value)}
-                  onKeyPress={(e) => {
-                    if (e.key === 'Enter') handleSeach(searchValue);
-                  }}
-                />
+                <RelativeInputWrapper>
+                  <WidePillInput
+                    id="address-search"
+                    type="text"
+                    value={searchValue}
+                    onChange={(e) => setSearchValue(e.target.value)}
+                    onKeyPress={(e) => {
+                      if (e.key === 'Enter') handleSeach(searchValue);
+                    }}
+                  />
+                  { searchValue.length > 0 &&
+                    <ClearIconButton
+                      type="button"
+                      aria-label="Clear"
+                      onClick={clearWideInput}
+                    >
+                      <FontAwesomeIcon icon={faTrash} />
+                    </ClearIconButton>
+                  }
+                </RelativeInputWrapper>
               </WideInputGroup>
             </InputsContainer>
-            <StyledStandardSearchButton
-              type="button"
-              aria-label="Search address"
-              onClick={onClickSearchWide}
-            >
+            <StyledStandardSearchButton type="button" aria-label="Search address" onClick={onClickSearchWide}>
               <FontAwesomeIcon icon={faMagnifyingGlass} />
             </StyledStandardSearchButton>
           </RowWithButton>
@@ -958,22 +796,29 @@ const SearchInput = ({
           <RowWithButton>
             <InputsContainer>
               <WideInputGroup>
-                <WidePillInput
-                  id="nomenclature-search"
-                  type="text"
-                  value={searchValue}
-                  onChange={(e) => setSearchValue(e.target.value)}
-                  onKeyPress={(e) => {
-                    if (e.key === 'Enter') handleSeach(searchValue);
-                  }}
-                />
+                <RelativeInputWrapper>
+                  <WidePillInput
+                    id="nomenclature-search"
+                    type="text"
+                    value={searchValue}
+                    onChange={(e) => setSearchValue(e.target.value)}
+                    onKeyPress={(e) => {
+                      if (e.key === 'Enter') handleSeach(searchValue);
+                    }}
+                  />
+                  { searchValue.length > 0 &&
+                    <ClearIconButton
+                      type="button"
+                      aria-label="Clear"
+                      onClick={clearWideInput}
+                    >
+                      <FontAwesomeIcon icon={faTrash} />
+                    </ClearIconButton>
+                  }
+                </RelativeInputWrapper>
               </WideInputGroup>
             </InputsContainer>
-            <StyledStandardSearchButton
-              type="button"
-              aria-label="Search nomenclature"
-              onClick={onClickSearchWide}
-            >
+            <StyledStandardSearchButton type="button" aria-label="Search nomenclature" onClick={onClickSearchWide}>
               <FontAwesomeIcon icon={faMagnifyingGlass} />
             </StyledStandardSearchButton>
           </RowWithButton>
@@ -985,22 +830,29 @@ const SearchInput = ({
           <RowWithButton>
             <InputsContainer>
               <WideInputGroup>
-                <WidePillInput
-                  id="premise-search"
-                  type="text"
-                  value={searchValue}
-                  onChange={(e) => setSearchValue(e.target.value)}
-                  onKeyPress={(e) => {
-                    if (e.key === 'Enter') handleSeach(searchValue);
-                  }}
-                />
+                <RelativeInputWrapper>
+                  <WidePillInput
+                    id="premise-search"
+                    type="text"
+                    value={searchValue}
+                    onChange={(e) => setSearchValue(e.target.value)}
+                    onKeyPress={(e) => {
+                      if (e.key === 'Enter') handleSeach(searchValue);
+                    }}
+                  />
+                  { searchValue.length > 0 &&
+                    <ClearIconButton
+                      type="button"
+                      aria-label="Clear"
+                      onClick={clearWideInput}
+                    >
+                      <FontAwesomeIcon icon={faTrash} />
+                    </ClearIconButton>
+                  }
+                </RelativeInputWrapper>
               </WideInputGroup>
             </InputsContainer>
-            <StyledStandardSearchButton
-              type="button"
-              aria-label="Search premise"
-              onClick={onClickSearchWide}
-            >
+            <StyledStandardSearchButton type="button" aria-label="Search premise" onClick={onClickSearchWide}>
               <FontAwesomeIcon icon={faMagnifyingGlass} />
             </StyledStandardSearchButton>
           </RowWithButton>
@@ -1012,22 +864,29 @@ const SearchInput = ({
           <RowWithButton>
             <InputsContainer>
               <WideInputGroup>
-                <WidePillInput
-                  id="metadata-search"
-                  type="text"
-                  value={searchValue}
-                  onChange={(e) => setSearchValue(e.target.value)}
-                  onKeyPress={(e) => {
-                    if (e.key === 'Enter') handleSeach(searchValue);
-                  }}
-                />
+                <RelativeInputWrapper>
+                  <WidePillInput
+                    id="metadata-search"
+                    type="text"
+                    value={searchValue}
+                    onChange={(e) => setSearchValue(e.target.value)}
+                    onKeyPress={(e) => {
+                      if (e.key === 'Enter') handleSeach(searchValue);
+                    }}
+                  />
+                  { searchValue.length > 0 &&
+                    <ClearIconButton
+                      type="button"
+                      aria-label="Clear"
+                      onClick={clearWideInput}
+                    >
+                      <FontAwesomeIcon icon={faTrash} />
+                    </ClearIconButton>
+                  }
+                </RelativeInputWrapper>
               </WideInputGroup>
             </InputsContainer>
-            <StyledStandardSearchButton
-              type="button"
-              aria-label="Search layer"
-              onClick={onClickSearchWide}
-            >
+            <StyledStandardSearchButton type="button" aria-label="Search layer" onClick={onClickSearchWide}>
               <FontAwesomeIcon icon={faMagnifyingGlass} />
             </StyledStandardSearchButton>
           </RowWithButton>
@@ -1039,24 +898,27 @@ const SearchInput = ({
           <RowWithButton>
             <InputsContainer>
               <WideInputGroup>
-                <WidePillInput
-                  id="feature-search"
-                  type="text"
-                  value={searchValue}
-                  onChange={(e) => setSearchValue(e.target.value)}
-                  onKeyPress={(e) => {
-                    if (e.key === 'Enter') handleSeach(searchValue.trim());
-                  }}
-                  className={featureErrors.length > 0 ? 'error' : ''}
-                />
+                <RelativeInputWrapper>
+                  <WidePillInput
+                    id="feature-search"
+                    type="text"
+                    value={searchValue}
+                    onChange={(e) => setSearchValue(e.target.value)}
+                    onKeyPress={(e) => {
+                      if (e.key === 'Enter') handleSeach(searchValue.trim());
+                    }}
+                    className={featureErrors.length > 0 ? 'error' : ''}
+                  />
+                  { searchValue.length > 0 &&
+                    <ClearIconButton type="button" aria-label="Clear feature" onClick={clearWideInput}>
+                      <FontAwesomeIcon icon={faTrash} />
+                    </ClearIconButton>
+                  }
+                </RelativeInputWrapper>
               </WideInputGroup>
             </InputsContainer>
 
-            <StyledStandardSearchButton
-              type="button"
-              aria-label="Search feature"
-              onClick={onClickSearchFeature}
-            >
+            <StyledStandardSearchButton type="button" aria-label="Search feature" onClick={onClickSearchFeature}>
               <FontAwesomeIcon icon={faMagnifyingGlass} />
             </StyledStandardSearchButton>
           </RowWithButton>
@@ -1064,12 +926,8 @@ const SearchInput = ({
           <StyledSelectedLayerWrapper>
             {selectedLayersByType.mapLayers.length > 0 ? (
               <>
-                <StyledSelectedLayerTitle>
-                  {strings.search.feature.searchFromLayer}
-                </StyledSelectedLayerTitle>
-                <StyledSelectedLayerText>
-                  {selectedLayersByType.mapLayers[0].name}
-                </StyledSelectedLayerText>
+                <StyledSelectedLayerTitle>{strings.search.feature.searchFromLayer}</StyledSelectedLayerTitle>
+                <StyledSelectedLayerText>{selectedLayersByType.mapLayers[0].name}</StyledSelectedLayerText>
               </>
             ) : (
               <StyledNoActivaLayers></StyledNoActivaLayers>
