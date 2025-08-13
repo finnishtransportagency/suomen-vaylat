@@ -376,6 +376,8 @@
     }
   },
   "search": {
+    "search": "Sök",
+    "erase": "Radera",
     "lessSearchOptions": "Mindre sök alternativs",
     "moreSearchOptions": "Mera sök alternativs",
     "fill_all_fields": "Fyll i alla sökfält",

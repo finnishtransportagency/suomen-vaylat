@@ -412,6 +412,8 @@
     }
   },
   "search": {
+    "search": "Hae",
+    "erase": "Tyhjennä",
     "lessSearchOptions": "Vähemmän hakuehtoja",
     "moreSearchOptions": "Lisää hakuehtoja",
     "fill_all_fields": "Täytä kaikki hakukentät",

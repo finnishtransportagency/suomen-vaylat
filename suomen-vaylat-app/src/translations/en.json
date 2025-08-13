@@ -376,6 +376,8 @@
     }
   },
   "search": {
+    "search": "Search",
+    "erase": "Erase",
     "lessSearchOptions": "Less search options",
     "moreSearchOptions": "More search options",
     "fill_all_fields": "Fill in all search fields",
