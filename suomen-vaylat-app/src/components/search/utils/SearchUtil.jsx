@@ -70,7 +70,7 @@ export const validateFeatureSearch = (searchValue, setFeatureErrors) => {
             filter: 'blur(10px)',
         },
         animate: {
-            maxWidth: '400px',
+            maxWidth: '450px',
             opacity: 1,
             filter: 'blur(0px)',
         },

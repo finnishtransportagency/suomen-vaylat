@@ -35,7 +35,7 @@ const LabelRow = styled.div`
 
 const InputRow = styled.div`
   display: flex;
-  gap: 16px;
+  gap: 0.5em;
   width: 100%;
   justify-content: flex-start;
   margin-bottom: 8px;
@@ -64,7 +64,10 @@ const RowWithButton = styled.div`
 const InputsContainer = styled.div`
   flex: 1 1 0;
   min-width: 0; /* ensure proper shrinking inside flex */
+  display: flex;
+  align-items: center; /* vertically center the input row so the button aligns middle */
 `;
+
 
 /* Button row placed under inputs (two buttons: left trash, right search) */
 const ButtonsRow = styled.div`
@@ -593,6 +596,15 @@ const SearchInput = ({
                     value={getSearchValuePart(searchValue, searchType, 3, carriageWaySearch)}
                     onKeyPress={(e) => { if (e.key === 'Enter') handleSeach(searchValue); }}
                   />
+
+            {/* <-- ADDED SEARCH BUTTON TO RIGHT OF ROAD START INPUTS */}
+            <StyledStandardSearchButton
+              type="button"
+              aria-label="Search road"
+              onClick={onClickSearchRoad}
+            >
+              <FontAwesomeIcon icon={faMagnifyingGlass} />
+            </StyledStandardSearchButton>
                 </InputRow>
               </FieldGroup>
             </InputsContainer>
@@ -650,6 +662,15 @@ const SearchInput = ({
                         onChange={(e) => updateRoadSearchValue(searchValue, searchType, setSearchValue, carriageWaySearch ? 7 : 6, e.target.value, carriageWaySearch)}
                         onKeyPress={(e) => { if (e.key === 'Enter') handleSeach(searchValue); }}
                       />
+
+                {/* <-- ADDED SEARCH BUTTON TO RIGHT OF ROAD END INPUTS */}
+                <StyledStandardSearchButton
+                  type="button"
+                  aria-label="Search road end"
+                  onClick={onClickSearchRoad}
+                >
+                  <FontAwesomeIcon icon={faMagnifyingGlass} />
+                </StyledStandardSearchButton>
                     </InputRow>
                   </FieldGroup>
                 </InputsContainer>
@@ -679,19 +700,6 @@ const SearchInput = ({
             />
             <CheckboxLabel htmlFor="search-input-roadEndCheckbox">{'Anna tien loppu tiedot'}</CheckboxLabel>
           </CheckboxWrapper>
-
-          {/* Buttons under the start group */}
-          <ButtonsRow>
-            <StyledSearchButton type="button" aria-label="Search road" onClick={onClickSearchRoad}>
-              <FontAwesomeIcon icon={faMagnifyingGlass} />
-              <span aria-hidden="true" style={{ marginLeft: 8 }}>{strings.search.search}</span>
-            </StyledSearchButton>
-
-            <StyledTrashButton type="button" aria-label="Clear road start fields" onClick={clearAllRoadFields}>
-              <FontAwesomeIcon icon={faTrash} />
-              <span aria-hidden="true" style={{ marginLeft: 8 }}>{strings.search.erase}</span>
-            </StyledTrashButton>
-          </ButtonsRow>
         </StyledSearchSection>
       )}
 
@@ -757,23 +765,20 @@ const SearchInput = ({
                     }}
                     className={trackErrors[2] ? 'error' : ''}
                   />
+
+            {/* <-- ADDED SEARCH BUTTON TO RIGHT OF TRACK INPUTS */}
+            <StyledStandardSearchButton
+              type="button"
+              aria-label="Search track"
+              onClick={onClickSearchTrack}
+            >
+              <FontAwesomeIcon icon={faMagnifyingGlass} />
+            </StyledStandardSearchButton>
                 </InputRow>
 
                 {trackErrors.some((error) => error === true) && (
                   <StyledValidationMessage id={trackErrorsId}>{strings.search.track.trackMandatoryMessage}</StyledValidationMessage>
                 )}
-
-                {/* Buttons under track inputs */}
-                <ButtonsRow>
-                  <StyledSearchButton type="button" aria-label="Search track" onClick={onClickSearchTrack}>
-                    <FontAwesomeIcon icon={faMagnifyingGlass} />
-                    <span aria-hidden="true" style={{ marginLeft: 8 }}>{strings.search.search}</span>
-                  </StyledSearchButton>
-                  <StyledTrashButton type="button" aria-label="Clear track fields" onClick={clearTrackFields}>
-                    <FontAwesomeIcon icon={faTrash} />
-                    <span aria-hidden="true" style={{ marginLeft: 8 }}>{strings.search.erase}</span>
-                  </StyledTrashButton>
-                </ButtonsRow>
               </FieldGroup>
             </InputsContainer>
           </RowWithButton>
