@@ -6,7 +6,7 @@ import { useState } from 'react';
 
 const Row = styled.div`
   display: flex;
-  align-items: center; /* vertically center all children */
+  align-items: center;
   width: 100%;
   justify-content: space-between;
   gap: 8px;
@@ -14,13 +14,13 @@ const Row = styled.div`
 
 const Left = styled.div`
   display: flex;
-  align-items: center; /* center radio + label */
+  align-items: center;
   gap: 8px;
   flex: 1 1 auto;
   min-width: 0;
 `;
 
-/* Using a plain label gives us full control over spacing */
+/* Focusable label used as the primary tab stop for each option */
 const StyledLabel = styled.label`
   font-size: 16px;
   color: #2b2b2b;
@@ -29,10 +29,23 @@ const StyledLabel = styled.label`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  cursor: pointer; /* click label toggles radio */
+  cursor: pointer;
+  outline: none;
+
+  /* clicking with mouse should not show the keyboard focus ring */
+  &:focus {
+    box-shadow: none;
+    outline: none;
+  }
+
+  /* show visible ring only when focus comes from keyboard (Tab) */
+  &:focus-visible {
+    box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.15);
+    border-radius: 4px;
+  }
 `;
 
-/* Info button (sibling) - no extra margins, vertically centered */
+/* Info button (sibling) - keyboard focusable */
 const InfoButton = styled.button`
   border: none;
   background: none;
@@ -43,9 +56,21 @@ const InfoButton = styled.button`
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  border-radius: 6px;
+
+  /* no ring on mouse click */
+  &:focus {
+    outline: none;
+  }
+
+  /* visible ring only for keyboard focus */
+  &:focus-visible {
+    outline: 2px solid ${(p) => p.theme.colors.mainColor1};
+    outline-offset: 2px;
+  }
 `;
 
-/* Tooltip / info panel */
+
 const StyledToolTipContainer = styled.div`
   width: 100%;
   border-radius: 3px;
@@ -58,7 +83,7 @@ const StyledToolTipContainer = styled.div`
 `;
 
 /**
- * Accessible, aligned SearchSwitch
+ * SearchSwitch
  * - action: called on radio change
  * - isSelected: boolean
  * - title: label text
@@ -78,8 +103,19 @@ const SearchSwitch = ({ action, isSelected, title, tooltipText, tooltipAddress, 
     setOpen((o) => !o);
   };
 
-  // radio id used by label htmlFor
   const radioId = `search-input-radio-${id}`;
+
+  const onLabelKeyDown = (e) => {
+    // Space or Enter should activate the radio (click the native input)
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      const input = document.getElementById(radioId);
+      if (input) {
+        input.click();
+        input.focus(); // optionally move focus to the native input
+      }
+    }
+  };
 
   return (
     <div>
@@ -93,20 +129,31 @@ const SearchSwitch = ({ action, isSelected, title, tooltipText, tooltipAddress, 
             size="small"
             disableRipple
             sx={{
-              margin: 0,           // remove default margin
-              padding: 0,          // keep it compact
-              '& .MuiSvgIcon-root': { fontSize: '1.5rem' }, // icon size
+              margin: 0,
+              padding: 0,
+              '& .MuiSvgIcon-root': { fontSize: '1.5rem' },
               color: '#BDBDBD',
               '&.Mui-checked': { color: theme?.colors?.mainColor1 ?? '#1976d2' }
             }}
-            inputProps={{ 'aria-label': title }}
+            // keep the native radio out of the tab order (label is primary tab stop)
+            inputProps={{
+              'aria-label': title,
+              tabIndex: -1
+            }}
           />
 
-          <StyledLabel htmlFor={radioId}>{title}</StyledLabel>
+          <StyledLabel
+            htmlFor={radioId}
+            tabIndex={0}
+            onKeyDown={onLabelKeyDown}
+          >
+            {title}
+          </StyledLabel>
         </Left>
 
         <div>
           <InfoButton
+            tabIndex={0}
             aria-expanded={isOpen}
             aria-controls={isOpen ? `search-switch-info-${id}` : undefined}
             aria-label={`Show info for ${title}`}

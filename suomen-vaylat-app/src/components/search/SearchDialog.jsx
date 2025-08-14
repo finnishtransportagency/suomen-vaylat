@@ -44,7 +44,7 @@ const DropdownWrapper = styled.div`
   margin-bottom: 0.5em;
 `;
 
-const DropdownHeader = styled.div`
+const DropdownHeader = styled.button`
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -54,6 +54,15 @@ const DropdownHeader = styled.div`
   font-size: 16px;
   padding: 8px 0;
   user-select: none;
+  border: none;
+  background: transparent;
+  width: 100%;
+  text-align: left;
+
+  &:focus {
+    outline: 2px solid ${(p) => p.theme.colors.mainColor1};
+    outline-offset: 2px;
+  }
 `;
 
 const DropdownContent = styled.div`
@@ -214,14 +223,19 @@ const SearchDialog = ({
   return (
     <StyledSearchDialog>
       <DropdownWrapper>
-        <DropdownHeader onClick={() => setDropdownOpen((o) => !o)}>
+        <DropdownHeader
+          onClick={() => setDropdownOpen((o) => !o)}
+          aria-expanded={dropdownOpen}
+          aria-controls="search-dropdown-content"
+          id="search-dropdown-button"
+        >
           <span>{headerTitle}</span>
           <FontAwesomeIcon
             icon={faChevronDown}
             rotation={dropdownOpen ? 180 : undefined}
           />
         </DropdownHeader>
-        <DropdownContent open={dropdownOpen}>
+        <DropdownContent open={dropdownOpen} id="search-dropdown-content" aria-labelledby="search-dropdown-button">
           {switchDefinitions.map((sw, index) => (
             <Fragment key={sw.id}>
               <SearchSwitch
