@@ -482,7 +482,6 @@ const SearchInput = ({
                       if (e.key === 'Enter') handleSeach(searchValue);
                     }}
                   />
-                  
                 </StyledRelativeInputWrapper>
               </StyledWideInputGroup>
             </StyledInputsContainer>
@@ -522,7 +521,15 @@ const SearchInput = ({
               onChange={() => setCarriageWaySearch(!carriageWaySearch)}
               checked={carriageWaySearch}
               aria-checked={!!carriageWaySearch}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  e.preventDefault();
+                  // toggle checkbox (use currentTarget to be safe)
+                  e.currentTarget.click();
+                }
+              }}
             />
+
             <CheckboxLabel htmlFor="search-input-carriageWaySearchBox">
               {strings.search.carriageWaySearch}
             </CheckboxLabel>
@@ -535,7 +542,14 @@ const SearchInput = ({
               onChange={() => setRoadEndEnabled(!roadEndEnabled)}
               checked={roadEndEnabled}
               aria-checked={!!roadEndEnabled}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  e.preventDefault();
+                  e.currentTarget.click();
+                }
+              }}
             />
+
             <CheckboxLabel htmlFor="search-input-roadEndCheckbox">
               {'Anna tien loppu tiedot'}
             </CheckboxLabel>
@@ -670,7 +684,7 @@ const SearchInput = ({
                           type="button"
                           aria-label="Search"
                           onClick={emptySearchResults}
-                            roadEndEnabled={roadEndEnabled}
+                          roadEndEnabled={roadEndEnabled}
                         >
                           <FontAwesomeIcon icon={faTrash} />
                         </StyledStandardSearchButton>
