@@ -161,7 +161,8 @@ const SearchDialog = ({
   validateTrackSearch,
   featureErrors,
   handleFeatureSearch,
-  lastSearchValue
+  lastSearchValue,
+  emptySearchResults
 }) => {
   const { store } = useContext(ReactReduxContext);
   const { featureSearchResults, channel } = useAppSelector(
@@ -273,6 +274,8 @@ const SearchDialog = ({
         featureErrors={featureErrors}
         handleFeatureSearch={handleFeatureSearch}
         lastSearchValue={lastSearchValue}
+        emptySearchResults={emptySearchResults}
+        isSearching={isSearching}
       />
 
       {isSearching && (

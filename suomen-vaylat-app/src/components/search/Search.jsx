@@ -468,6 +468,7 @@ const Search = () => {
                                 validateFeatureSearch={validateFeatureSearch}
                                 handleFeatureSearch={handleFeatureSearch}
                                 lastSearchValue={lastSearchValue}
+                                emptySearchResults={emptySearchResults}
                             />
                 
                     </StyledSearchWrapper>

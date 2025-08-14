@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 // --- Better Responsive "road" field styling ---
 
-const SectionDivider = styled.div`
+const StyledSectionDivider = styled.div`
   margin: 0.5em 0;
   border-bottom: 1px solid #dee2e6;
   font-weight: 500;
@@ -16,21 +16,11 @@ const SectionDivider = styled.div`
   padding-bottom: 2px;
 `;
 
-const FieldGroup = styled.div`
+const StyledFieldGroup = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
   overflow-x: auto;
-`;
-
-const LabelRow = styled.div`
-  display: flex;
-  gap: 16px;
-  margin-bottom: 3px;
-  flex-wrap: wrap;
-  @media (max-width: 750px) {
-    gap: 6px;
-  }
 `;
 
 const InputRow = styled.div`
@@ -46,7 +36,7 @@ const InputRow = styled.div`
 `;
 
 /* New wrappers to place inputs left and button right */
-const RowWithButton = styled.div`
+const StyledRowWithButton = styled.div`
   display: flex;
   align-items: center;
   width: 100%;
@@ -61,27 +51,11 @@ const RowWithButton = styled.div`
 `;
 
 /* container for inputs to allow them to wrap inside left area */
-const InputsContainer = styled.div`
+const StyledInputsContainer = styled.div`
   flex: 1 1 0;
   min-width: 0; /* ensure proper shrinking inside flex */
   display: flex;
   align-items: center; /* vertically center the input row so the button aligns middle */
-`;
-
-/* Button row placed under inputs (two buttons: left trash, right search) */
-const ButtonsRow = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  justify-content: space-between;
-  margin-top: 1em;
-  gap: 1em;
-  flex-wrap: nowrap;
-
-  @media (max-width: 680px) {
-    flex-direction: row;
-    gap: 8px;
-  }
 `;
 
 /* Search button styling (right) */
@@ -102,60 +76,8 @@ const StyledStandardSearchButton = styled.button`
   visibility: ${(p) => (p.roadEndEnabled ? 'hidden' : 'visible')};
 `;
 
-/* Search button styling (right) */
-const StyledSearchButton = styled.button`
-  background-color: ${(p) => p.theme.colors.mainColor1};
-  color: ${(p) => p.theme.colors.mainWhite};
-  border: 1px solid ${(p) => p.theme.colors.mainColor1};
-  border-radius: 20px;
-  min-width: 44px;
-  height: 42px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  padding: 0 16px;
-  flex: 1 0 auto;
-  gap: 1em;
-
-  &:hover {
-    background-color: ${(p) => p.theme.colors.mainColor1Selected};
-  }
-
-  @media (max-width: 680px) {
-    flex: 1 1 0;
-    height: 40px;
-  }
-`;
-
-/* Trash / clear button styling (left) */
-const StyledTrashButton = styled.button`
-  background-color: ${(p) => p.theme.colors.secondaryColorDarkOrange};
-  color: ${(p) => p.theme.colors.mainWhite};
-  border: 1px solid ${(p) => p.theme.colors.secondaryColorDarkOrange};
-  border-radius: 20px;
-  min-width: 44px;
-  height: 42px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  padding: 0 16px;
-  flex: 1 0 auto;
-  gap: 1em;
-
-  &:hover {
-    background-color: ${(p) => p.theme.colors.secondaryColorDarkOrangeSelected};
-  }
-
-  @media (max-width: 680px) {
-    flex: 1 1 0;
-    height: 40px;
-  }
-`;
-
 /* Relative wrapper for an input that has a clear icon inside it */
-const RelativeInputWrapper = styled.div`
+const StyledRelativeInputWrapper = styled.div`
   position: relative;
   width: 100%;
 `;
@@ -184,24 +106,6 @@ const ClearIconButton = styled.button`
     outline: 2px solid ${(p) => p.theme.colors.mainColor1 || '#1976d2'};
     outline-offset: 2px;
   }
-`;
-
-const InputGroup = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-width: 72px;
-`;
-
-const RoadInputLabel = styled.label`
-  flex: 1 1 0px;
-  min-width: 70px;
-  max-width: 130px;
-  text-align: center;
-  font-size: 14px;
-  font-weight: 500;
-  color: #444;
-  box-sizing: border-box;
 `;
 
 const PillInput = styled.input`
@@ -257,12 +161,12 @@ const LabelAbove = styled.label`
 `;
 
 // For main search types single input (e.g. address, track, etc)
-const WideInputGroup = styled.div`
+const StyledWideInputGroup = styled.div`
   width: 100%;
 `;
 
 /* ensure room for inside clear button */
-const WidePillInput = styled(PillInput)`
+const StyledWidePillInput = styled(PillInput)`
   width: 100%;
   min-width: 150px;
   max-width: 600px;
@@ -285,7 +189,7 @@ const StyledSearchSection = styled.div`
   align-items: flex-start;
 `;
 
-const CheckboxWrapper = styled.div`
+const StyledCheckboxWrapper = styled.div`
   display: flex;
   align-items: center;
   margin: 0 0 1em 8px;
@@ -500,9 +404,15 @@ const SearchInput = ({
   trackErrors,
   setTrackErrors,
   validateTrackSearch,
-  featureErrors
+  featureErrors,
+  emptySearchResults,
+  lastSearchValue,
+  isSearching,
+  searchResults
 }) => {
-  const { selectedLayersByType } = useAppSelector((state) => state.rpc);
+  const { selectedLayersByType, featureSearchResults } = useAppSelector(
+    (state) => state.rpc
+  );
   const { activeSwitch } = useAppSelector((state) => state.ui);
   const [roadEndEnabled, setRoadEndEnabled] = useState(false);
 
@@ -558,11 +468,11 @@ const SearchInput = ({
     <>
       {activeSwitch === 'default' && (
         <StyledSearchSection>
-          <RowWithButton>
-            <InputsContainer>
-              <WideInputGroup>
-                <RelativeInputWrapper>
-                  <WidePillInput
+          <StyledRowWithButton>
+            <StyledInputsContainer>
+              <StyledWideInputGroup>
+                <StyledRelativeInputWrapper>
+                  <StyledWidePillInput
                     id="search-input-default"
                     aria-label={strings.search.address?.title || 'Search'}
                     type="text"
@@ -572,33 +482,39 @@ const SearchInput = ({
                       if (e.key === 'Enter') handleSeach(searchValue);
                     }}
                   />
-                  {searchValue.length > 0 && (
-                    <ClearIconButton
-                      type="button"
-                      aria-label="Clear search input"
-                      onClick={clearWideInput}
-                    >
-                      <FontAwesomeIcon icon={faTrash} />
-                    </ClearIconButton>
-                  )}
-                </RelativeInputWrapper>
-              </WideInputGroup>
-            </InputsContainer>
+                  
+                </StyledRelativeInputWrapper>
+              </StyledWideInputGroup>
+            </StyledInputsContainer>
 
-            <StyledStandardSearchButton
-              type="button"
-              aria-label="Search"
-              onClick={onClickSearchDefault}
-            >
-              <FontAwesomeIcon icon={faMagnifyingGlass} />
-            </StyledStandardSearchButton>
-          </RowWithButton>
+            {(searchResults !== null || featureSearchResults.length > 0) &&
+            searchValue === lastSearchValue &&
+            !isSearching ? (
+              <StyledStandardSearchButton
+                type="button"
+                aria-label="Search"
+                onClick={emptySearchResults}
+              >
+                <FontAwesomeIcon icon={faTrash} />
+              </StyledStandardSearchButton>
+            ) : (
+              !isSearching && (
+                <StyledStandardSearchButton
+                  type="button"
+                  aria-label="Search"
+                  onClick={onClickSearchDefault}
+                >
+                  <FontAwesomeIcon icon={faMagnifyingGlass} />
+                </StyledStandardSearchButton>
+              )
+            )}
+          </StyledRowWithButton>
         </StyledSearchSection>
       )}
 
       {activeSwitch === 'road' && (
         <StyledSearchSection>
-          <CheckboxWrapper>
+          <StyledCheckboxWrapper>
             <StyledCheckbox
               id="search-input-carriageWaySearchBox"
               name="search-input-carriageWaySearchBox"
@@ -610,8 +526,8 @@ const SearchInput = ({
             <CheckboxLabel htmlFor="search-input-carriageWaySearchBox">
               {strings.search.carriageWaySearch}
             </CheckboxLabel>
-          </CheckboxWrapper>
-          <CheckboxWrapper>
+          </StyledCheckboxWrapper>
+          <StyledCheckboxWrapper>
             <StyledCheckbox
               id="search-input-roadEndCheckbox"
               name="search-input-roadEndCheckbox"
@@ -623,17 +539,17 @@ const SearchInput = ({
             <CheckboxLabel htmlFor="search-input-roadEndCheckbox">
               {'Anna tien loppu tiedot'}
             </CheckboxLabel>
-          </CheckboxWrapper>
+          </StyledCheckboxWrapper>
           {roadEndEnabled && (
-            <SectionDivider id="search-input-road-start-divider">
+            <StyledSectionDivider id="search-input-road-start-divider">
               Alku
-            </SectionDivider>
+            </StyledSectionDivider>
           )}
 
           {/* START group */}
-          <RowWithButton>
-            <InputsContainer>
-              <FieldGroup>
+          <StyledRowWithButton>
+            <StyledInputsContainer>
+              <StyledFieldGroup>
                 <InputRow>
                   <FieldItem>
                     <LabelAbove htmlFor="search-input-road-tie">
@@ -746,31 +662,46 @@ const SearchInput = ({
                         }}
                       />
 
-                      {/* Show START search button only when roadEndEnabled is false (it will be vertically centered thanks to InputsContainer) */}
-                      <StyledStandardSearchButton
-                        type="button"
-                        aria-label="Search road"
-                        onClick={onClickSearchRoad}
-                        roadEndEnabled={roadEndEnabled}
-                      >
-                        <FontAwesomeIcon icon={faMagnifyingGlass} />
-                      </StyledStandardSearchButton>
+                      {(searchResults !== null ||
+                        featureSearchResults.length > 0) &&
+                      searchValue === lastSearchValue &&
+                      !isSearching ? (
+                        <StyledStandardSearchButton
+                          type="button"
+                          aria-label="Search"
+                          onClick={emptySearchResults}
+                            roadEndEnabled={roadEndEnabled}
+                        >
+                          <FontAwesomeIcon icon={faTrash} />
+                        </StyledStandardSearchButton>
+                      ) : (
+                        !isSearching && (
+                          <StyledStandardSearchButton
+                            type="button"
+                            aria-label="Search"
+                            onClick={onClickSearchRoad}
+                            roadEndEnabled={roadEndEnabled}
+                          >
+                            <FontAwesomeIcon icon={faMagnifyingGlass} />
+                          </StyledStandardSearchButton>
+                        )
+                      )}
                     </div>
                   </FieldItem>
                 </InputRow>
-              </FieldGroup>
-            </InputsContainer>
-          </RowWithButton>
+              </StyledFieldGroup>
+            </StyledInputsContainer>
+          </StyledRowWithButton>
 
           {/* END group (if enabled) */}
           {roadEndEnabled && (
             <>
-              <SectionDivider id="search-input-road-end-divider">
+              <StyledSectionDivider id="search-input-road-end-divider">
                 Loppu
-              </SectionDivider>
-              <RowWithButton>
-                <InputsContainer>
-                  <FieldGroup>
+              </StyledSectionDivider>
+              <StyledRowWithButton>
+                <StyledInputsContainer>
+                  <StyledFieldGroup>
                     <InputRow>
                       <FieldItem>
                         <LabelAbove htmlFor="search-input-road-tieloppu">
@@ -893,19 +824,34 @@ const SearchInput = ({
                             }}
                           />
 
-                          <StyledStandardSearchButton
-                            type="button"
-                            aria-label="Search road end"
-                            onClick={onClickSearchRoad}
-                          >
-                            <FontAwesomeIcon icon={faMagnifyingGlass} />
-                          </StyledStandardSearchButton>
+                          {(searchResults !== null ||
+                            featureSearchResults.length > 0) &&
+                          searchValue === lastSearchValue &&
+                          !isSearching ? (
+                            <StyledStandardSearchButton
+                              type="button"
+                              aria-label="Search"
+                              onClick={emptySearchResults}
+                            >
+                              <FontAwesomeIcon icon={faTrash} />
+                            </StyledStandardSearchButton>
+                          ) : (
+                            !isSearching && (
+                              <StyledStandardSearchButton
+                                type="button"
+                                aria-label="Search"
+                                onClick={onClickSearchRoad}
+                              >
+                                <FontAwesomeIcon icon={faMagnifyingGlass} />
+                              </StyledStandardSearchButton>
+                            )
+                          )}
                         </div>
                       </FieldItem>
                     </InputRow>
-                  </FieldGroup>
-                </InputsContainer>
-              </RowWithButton>
+                  </StyledFieldGroup>
+                </StyledInputsContainer>
+              </StyledRowWithButton>
             </>
           )}
         </StyledSearchSection>
@@ -913,9 +859,9 @@ const SearchInput = ({
 
       {activeSwitch === 'track' && (
         <StyledSearchSection>
-          <RowWithButton>
-            <InputsContainer>
-              <FieldGroup>
+          <StyledRowWithButton>
+            <StyledInputsContainer>
+              <StyledFieldGroup>
                 <InputRow>
                   <FieldItem>
                     <LabelAbove htmlFor="search-input-track-number">
@@ -1025,14 +971,28 @@ const SearchInput = ({
                         className={trackErrors[2] ? 'error' : ''}
                       />
 
-                      {/* Search button aligned vertically center with track input fields */}
-                      <StyledStandardSearchButton
-                        type="button"
-                        aria-label="Search track"
-                        onClick={onClickSearchTrack}
-                      >
-                        <FontAwesomeIcon icon={faMagnifyingGlass} />
-                      </StyledStandardSearchButton>
+                      {(searchResults !== null ||
+                        featureSearchResults.length > 0) &&
+                      searchValue === lastSearchValue &&
+                      !isSearching ? (
+                        <StyledStandardSearchButton
+                          type="button"
+                          aria-label="Search"
+                          onClick={emptySearchResults}
+                        >
+                          <FontAwesomeIcon icon={faTrash} />
+                        </StyledStandardSearchButton>
+                      ) : (
+                        !isSearching && (
+                          <StyledStandardSearchButton
+                            type="button"
+                            aria-label="Search"
+                            onClick={onClickSearchTrack}
+                          >
+                            <FontAwesomeIcon icon={faMagnifyingGlass} />
+                          </StyledStandardSearchButton>
+                        )
+                      )}
                     </div>
                   </FieldItem>
                 </InputRow>
@@ -1042,19 +1002,19 @@ const SearchInput = ({
                     {strings.search.track.trackMandatoryMessage}
                   </StyledValidationMessage>
                 )}
-              </FieldGroup>
-            </InputsContainer>
-          </RowWithButton>
+              </StyledFieldGroup>
+            </StyledInputsContainer>
+          </StyledRowWithButton>
         </StyledSearchSection>
       )}
 
       {activeSwitch === 'address' && (
         <StyledSearchSection>
-          <RowWithButton>
-            <InputsContainer>
-              <WideInputGroup>
-                <RelativeInputWrapper>
-                  <WidePillInput
+          <StyledRowWithButton>
+            <StyledInputsContainer>
+              <StyledWideInputGroup>
+                <StyledRelativeInputWrapper>
+                  <StyledWidePillInput
                     id="search-input-address"
                     aria-label={
                       strings.tooltips.searchButton || 'Address search'
@@ -1066,36 +1026,41 @@ const SearchInput = ({
                       if (e.key === 'Enter') handleSeach(searchValue);
                     }}
                   />
-                  {searchValue.length > 0 && (
-                    <ClearIconButton
-                      type="button"
-                      aria-label="Clear address"
-                      onClick={clearWideInput}
-                    >
-                      <FontAwesomeIcon icon={faTrash} />
-                    </ClearIconButton>
-                  )}
-                </RelativeInputWrapper>
-              </WideInputGroup>
-            </InputsContainer>
-            <StyledStandardSearchButton
-              type="button"
-              aria-label="Search address"
-              onClick={onClickSearchWide}
-            >
-              <FontAwesomeIcon icon={faMagnifyingGlass} />
-            </StyledStandardSearchButton>
-          </RowWithButton>
+                </StyledRelativeInputWrapper>
+              </StyledWideInputGroup>
+            </StyledInputsContainer>
+            {(searchResults !== null || featureSearchResults.length > 0) &&
+            searchValue === lastSearchValue &&
+            !isSearching ? (
+              <StyledStandardSearchButton
+                type="button"
+                aria-label="Search"
+                onClick={emptySearchResults}
+              >
+                <FontAwesomeIcon icon={faTrash} />
+              </StyledStandardSearchButton>
+            ) : (
+              !isSearching && (
+                <StyledStandardSearchButton
+                  type="button"
+                  aria-label="Search"
+                  onClick={onClickSearchDefault}
+                >
+                  <FontAwesomeIcon icon={faMagnifyingGlass} />
+                </StyledStandardSearchButton>
+              )
+            )}
+          </StyledRowWithButton>
         </StyledSearchSection>
       )}
 
       {activeSwitch === 'nomenclature' && (
         <StyledSearchSection>
-          <RowWithButton>
-            <InputsContainer>
-              <WideInputGroup>
-                <RelativeInputWrapper>
-                  <WidePillInput
+          <StyledRowWithButton>
+            <StyledInputsContainer>
+              <StyledWideInputGroup>
+                <StyledRelativeInputWrapper>
+                  <StyledWidePillInput
                     id="search-input-nomenclature"
                     aria-label={
                       strings.search.nomenclature?.title ||
@@ -1108,36 +1073,41 @@ const SearchInput = ({
                       if (e.key === 'Enter') handleSeach(searchValue);
                     }}
                   />
-                  {searchValue.length > 0 && (
-                    <ClearIconButton
-                      type="button"
-                      aria-label="Clear nomenclature"
-                      onClick={clearWideInput}
-                    >
-                      <FontAwesomeIcon icon={faTrash} />
-                    </ClearIconButton>
-                  )}
-                </RelativeInputWrapper>
-              </WideInputGroup>
-            </InputsContainer>
-            <StyledStandardSearchButton
-              type="button"
-              aria-label="Search nomenclature"
-              onClick={onClickSearchWide}
-            >
-              <FontAwesomeIcon icon={faMagnifyingGlass} />
-            </StyledStandardSearchButton>
-          </RowWithButton>
+                </StyledRelativeInputWrapper>
+              </StyledWideInputGroup>
+            </StyledInputsContainer>
+            {(searchResults !== null || featureSearchResults.length > 0) &&
+            searchValue === lastSearchValue &&
+            !isSearching ? (
+              <StyledStandardSearchButton
+                type="button"
+                aria-label="Search"
+                onClick={emptySearchResults}
+              >
+                <FontAwesomeIcon icon={faTrash} />
+              </StyledStandardSearchButton>
+            ) : (
+              !isSearching && (
+                <StyledStandardSearchButton
+                  type="button"
+                  aria-label="Search"
+                  onClick={onClickSearchDefault}
+                >
+                  <FontAwesomeIcon icon={faMagnifyingGlass} />
+                </StyledStandardSearchButton>
+              )
+            )}
+          </StyledRowWithButton>
         </StyledSearchSection>
       )}
 
       {activeSwitch === 'premise' && (
         <StyledSearchSection>
-          <RowWithButton>
-            <InputsContainer>
-              <WideInputGroup>
-                <RelativeInputWrapper>
-                  <WidePillInput
+          <StyledRowWithButton>
+            <StyledInputsContainer>
+              <StyledWideInputGroup>
+                <StyledRelativeInputWrapper>
+                  <StyledWidePillInput
                     id="search-input-premise"
                     aria-label={
                       strings.search.premise?.title || 'Premise search'
@@ -1149,36 +1119,41 @@ const SearchInput = ({
                       if (e.key === 'Enter') handleSeach(searchValue);
                     }}
                   />
-                  {searchValue.length > 0 && (
-                    <ClearIconButton
-                      type="button"
-                      aria-label="Clear premise"
-                      onClick={clearWideInput}
-                    >
-                      <FontAwesomeIcon icon={faTrash} />
-                    </ClearIconButton>
-                  )}
-                </RelativeInputWrapper>
-              </WideInputGroup>
-            </InputsContainer>
-            <StyledStandardSearchButton
-              type="button"
-              aria-label="Search premise"
-              onClick={onClickSearchWide}
-            >
-              <FontAwesomeIcon icon={faMagnifyingGlass} />
-            </StyledStandardSearchButton>
-          </RowWithButton>
+                </StyledRelativeInputWrapper>
+              </StyledWideInputGroup>
+            </StyledInputsContainer>
+            {(searchResults !== null || featureSearchResults.length > 0) &&
+            searchValue === lastSearchValue &&
+            !isSearching ? (
+              <StyledStandardSearchButton
+                type="button"
+                aria-label="Search"
+                onClick={emptySearchResults}
+              >
+                <FontAwesomeIcon icon={faTrash} />
+              </StyledStandardSearchButton>
+            ) : (
+              !isSearching && (
+                <StyledStandardSearchButton
+                  type="button"
+                  aria-label="Search"
+                  onClick={onClickSearchDefault}
+                >
+                  <FontAwesomeIcon icon={faMagnifyingGlass} />
+                </StyledStandardSearchButton>
+              )
+            )}
+          </StyledRowWithButton>
         </StyledSearchSection>
       )}
 
       {activeSwitch === 'layer' && (
         <StyledSearchSection>
-          <RowWithButton>
-            <InputsContainer>
-              <WideInputGroup>
-                <RelativeInputWrapper>
-                  <WidePillInput
+          <StyledRowWithButton>
+            <StyledInputsContainer>
+              <StyledWideInputGroup>
+                <StyledRelativeInputWrapper>
+                  <StyledWidePillInput
                     id="search-input-layer"
                     aria-label={strings.search.layer?.title || 'Layer search'}
                     type="text"
@@ -1188,36 +1163,41 @@ const SearchInput = ({
                       if (e.key === 'Enter') handleSeach(searchValue);
                     }}
                   />
-                  {searchValue.length > 0 && (
-                    <ClearIconButton
-                      type="button"
-                      aria-label="Clear layer"
-                      onClick={clearWideInput}
-                    >
-                      <FontAwesomeIcon icon={faTrash} />
-                    </ClearIconButton>
-                  )}
-                </RelativeInputWrapper>
-              </WideInputGroup>
-            </InputsContainer>
-            <StyledStandardSearchButton
-              type="button"
-              aria-label="Search layer"
-              onClick={onClickSearchWide}
-            >
-              <FontAwesomeIcon icon={faMagnifyingGlass} />
-            </StyledStandardSearchButton>
-          </RowWithButton>
+                </StyledRelativeInputWrapper>
+              </StyledWideInputGroup>
+            </StyledInputsContainer>
+            {(searchResults !== null || featureSearchResults.length > 0) &&
+            searchValue === lastSearchValue &&
+            !isSearching ? (
+              <StyledStandardSearchButton
+                type="button"
+                aria-label="Search"
+                onClick={emptySearchResults}
+              >
+                <FontAwesomeIcon icon={faTrash} />
+              </StyledStandardSearchButton>
+            ) : (
+              !isSearching && (
+                <StyledStandardSearchButton
+                  type="button"
+                  aria-label="Search"
+                  onClick={onClickSearchDefault}
+                >
+                  <FontAwesomeIcon icon={faMagnifyingGlass} />
+                </StyledStandardSearchButton>
+              )
+            )}
+          </StyledRowWithButton>
         </StyledSearchSection>
       )}
 
       {activeSwitch === 'feature' && (
         <StyledFeatureSearchSection>
-          <RowWithButton>
-            <InputsContainer>
-              <WideInputGroup>
-                <RelativeInputWrapper>
-                  <WidePillInput
+          <StyledRowWithButton>
+            <StyledInputsContainer>
+              <StyledWideInputGroup>
+                <StyledRelativeInputWrapper>
+                  <StyledWidePillInput
                     id="search-input-feature"
                     aria-label={
                       strings.search.feature?.title || 'Feature search'
@@ -1230,27 +1210,32 @@ const SearchInput = ({
                     }}
                     className={featureErrors.length > 0 ? 'error' : ''}
                   />
-                  {searchValue.length > 0 && (
-                    <ClearIconButton
-                      type="button"
-                      aria-label="Clear feature"
-                      onClick={clearWideInput}
-                    >
-                      <FontAwesomeIcon icon={faTrash} />
-                    </ClearIconButton>
-                  )}
-                </RelativeInputWrapper>
-              </WideInputGroup>
-            </InputsContainer>
+                </StyledRelativeInputWrapper>
+              </StyledWideInputGroup>
+            </StyledInputsContainer>
 
-            <StyledStandardSearchButton
-              type="button"
-              aria-label="Search feature"
-              onClick={onClickSearchFeature}
-            >
-              <FontAwesomeIcon icon={faMagnifyingGlass} />
-            </StyledStandardSearchButton>
-          </RowWithButton>
+            {(searchResults !== null || featureSearchResults.length > 0) &&
+            searchValue === lastSearchValue &&
+            !isSearching ? (
+              <StyledStandardSearchButton
+                type="button"
+                aria-label="Search"
+                onClick={emptySearchResults}
+              >
+                <FontAwesomeIcon icon={faTrash} />
+              </StyledStandardSearchButton>
+            ) : (
+              !isSearching && (
+                <StyledStandardSearchButton
+                  type="button"
+                  aria-label="Search"
+                  onClick={onClickSearchFeature}
+                >
+                  <FontAwesomeIcon icon={faMagnifyingGlass} />
+                </StyledStandardSearchButton>
+              )
+            )}
+          </StyledRowWithButton>
 
           <StyledSelectedLayerWrapper>
             {selectedLayersByType.mapLayers.length > 0 ? (
