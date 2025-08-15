@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { faSave } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { isMobile } from '../../theme/theme';
+import { isMobile } from '../../../theme/theme';
 
 const MAX_NAME_LENGTH = 80;
 const MAX_DESC_LENGTH = 200;

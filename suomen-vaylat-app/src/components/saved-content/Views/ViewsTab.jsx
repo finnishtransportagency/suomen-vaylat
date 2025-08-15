@@ -1,16 +1,16 @@
 import { useState, useContext } from 'react';
 import { ReactReduxContext } from 'react-redux';
-import { useAppSelector } from '../../state/hooks';
-import { activateView } from '../../utils/rpcUtil';
+import { useAppSelector } from '../../../state/hooks';
+import { activateView } from '../../../utils/rpcUtil';
 import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
-import strings from '../../translations';
+import strings from '../../../translations';
 import Moment from 'react-moment';
 import { v4 as uuidv4 } from 'uuid';
 import {
   setWarning,
   setShowSavedContentViewForm
-} from '../../state/slices/uiSlice';
+} from '../../../state/slices/uiSlice';
 import {
   faPlus,
   faTrash,
@@ -18,9 +18,9 @@ import {
   faStar
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { setViews } from '../../state/slices/rpcSlice';
+import { setViews } from '../../../state/slices/rpcSlice';
 import ViewForm from './ViewForm';
-import { isMobile } from '../../theme/theme';
+import { isMobile } from '../../../theme/theme';
 
 const StyledMainContainer = styled.div`
   overflow: auto;
