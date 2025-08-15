@@ -219,7 +219,18 @@ const MobileNav = ({ setIsMenuOpen }) => {
       <MobileMenuList id={menuId} role="menu" aria-labelledby={menuLabelId}>
         <StyledMobileMenuButton
           id={profileBtnId}
-          onClick={handleProfile}
+          onPointerDown={(e) => e.stopPropagation()}
+          onClick={(e) => {
+            e.stopPropagation();
+            handleProfile();
+          }}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              e.stopPropagation();
+              handleProfile();
+            }
+          }}
           aria-label={strings.tooltips.profile}
           aria-haspopup="true"
           role="menuitem"
@@ -239,7 +250,18 @@ const MobileNav = ({ setIsMenuOpen }) => {
 
         <StyledMobileMenuButton
           id={userGuideBtnId}
-          onClick={handleUserGuide}
+          onPointerDown={(e) => e.stopPropagation()}
+          onClick={(e) => {
+            e.stopPropagation();
+            handleUserGuide();
+          }}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              e.stopPropagation();
+              handleUserGuide();
+            }
+          }}
           aria-label={strings.tooltips.userGuide}
           aria-haspopup="true"
           role="menuitem"
@@ -259,7 +281,18 @@ const MobileNav = ({ setIsMenuOpen }) => {
 
         <StyledMobileMenuButton
           id={infoBtnId}
-          onClick={handleInfo}
+          onPointerDown={(e) => e.stopPropagation()}
+          onClick={(e) => {
+            e.stopPropagation();
+            handleInfo();
+          }}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              e.stopPropagation();
+              handleInfo();
+            }
+          }}
           aria-label={strings.tooltips.pageInfo}
           aria-haspopup="true"
           role="menuitem"
