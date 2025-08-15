@@ -271,31 +271,42 @@ const ViewsTab = () => {
         }
       };
 
+      // ensure we always have an array to work with
+      const existingViews = Array.isArray(views) ? views : [];
+
+      // Build updatedViews safely
       let updatedViews;
       if (editingView) {
-        // Remove default from all others if the edited one is default
-        updatedViews = views?.map((v) =>
+        // editing: replace edited view and clear default flag on others if needed
+        updatedViews = existingViews.map((v) =>
           v.id === editingView.id
             ? { ...newView, id: editingView.id }
             : { ...v, default: false }
         );
       } else {
-        // Remove default from others if the new one is default
+        // creating: clear default flag on existing views if new is default
         updatedViews = [
-          ...views?.map((v) => ({ ...v, default: false })),
+          ...existingViews.map((v) => ({ ...v, default: false })),
           newView
         ];
       }
 
-      // If not default, make sure only existing 'default: true' remains
+      // If not default and editing, ensure correct default flags (keeps existing defaults)
       if (!formData.isDefault && editingView) {
-        updatedViews = updatedViews?.map((v) =>
+        updatedViews = updatedViews.map((v) =>
           v.id === newView.id ? { ...v, default: false } : v
         );
       }
 
+      // dispatch to store
       store.dispatch(setViews(updatedViews));
-      window.localStorage.setItem('views', JSON.stringify(updatedViews));
+
+      // Persist to localStorage but guard for errors (incognito / storage disabled)
+      try {
+        window.localStorage.setItem('views', JSON.stringify(updatedViews));
+      } catch (err) {
+        console.warn('Could not persist views to localStorage', err);
+      }
       store.dispatch(setShowSavedContentViewForm(false));
       setEditingView(null);
     });
@@ -428,9 +439,9 @@ const ViewsTab = () => {
                               type="button"
                               data-action="edit"
                               aria-label={
-                                (strings.savedContent.saveView.editView) +
+                                strings.savedContent.saveView.editView +
                                 ' ' +
-                                (view.name)
+                                view.name
                               }
                               title={
                                 strings.savedContent.saveView.editView +
@@ -451,10 +462,9 @@ const ViewsTab = () => {
                               type="button"
                               data-action="remove"
                               aria-label={
-                                (strings.savedContent.saveView
-                                  .deleteSavedView) +
+                                strings.savedContent.saveView.deleteSavedView +
                                 ' ' +
-                                (view.name)
+                                view.name
                               }
                               title={
                                 strings.savedContent.saveView.deleteSavedView +
