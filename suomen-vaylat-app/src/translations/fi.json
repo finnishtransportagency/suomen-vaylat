@@ -1174,7 +1174,7 @@
     }
   },
   "legend": {
-    "title": "Kartalla nyt",
+    "title": "Karttaselitteet",
     "nolegend": "Ei karttaselitettä",
     "noSelectedLayers": "Karttatasoja ei valittuna"
   },

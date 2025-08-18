@@ -17,7 +17,6 @@ import { Slide, toast } from 'react-toastify';
 import {
   setSelectedMapLayersMenuThemeIndex,
   setIsLegendOpen,
-  setIsZoomBarOpen,
   removeActiveGeometry,
   addToActiveGeometries,
   setIsSaveViewOpen
@@ -331,13 +330,6 @@ export const selectGroup = (
     });
   };
 
-  const toggleLegendAndZoomBar = (isOpen) => {
-    if (!isMobile) {
-      store.dispatch(setIsLegendOpen(isOpen));
-      store.dispatch(setIsZoomBarOpen(isOpen));
-    }
-  };
-
   const processLayers = (theme) => {
     let layers = [];
     theme.layers && layers.push(...theme.layers);
@@ -371,7 +363,7 @@ export const selectGroup = (
     updateLayers(store, channel);
     setTimeout(
       () => {
-        toggleLegendAndZoomBar(true);
+        store.dispatch(setIsLegendOpen(true));
         store.dispatch(setSelectedThemeId(theme.id));
         setTimeout(() => processLayers(theme), 700);
       },
@@ -383,7 +375,7 @@ export const selectGroup = (
     closeThemeLayers(lastSelectedTheme);
     updateLayers(store, channel);
     setTimeout(() => {
-      toggleLegendAndZoomBar(false);
+      store.dispatch(setIsLegendOpen(false));
       store.dispatch(setSelectedThemeId(null));
       showNonThemeLayers(store, channel);
     }, 700);

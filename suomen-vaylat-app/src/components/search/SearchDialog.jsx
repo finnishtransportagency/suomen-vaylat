@@ -11,6 +11,8 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import SearchResultPanel from './SearchResultPanel';
 import { resetFeatureSearchResults } from '../../state/slices/rpcSlice';
+import { useDispatch } from 'react-redux';
+import { setIsSearchResultPanelVisible } from '../../state/slices/uiSlice';
 
 
 const StyledSearchDialog = styled.div`
@@ -325,7 +327,13 @@ const SearchDialog = ({
 }) => {
     const { store } = useContext(ReactReduxContext);
     const { selectedLayersByType } = useAppSelector((state) => state.rpc);
-
+  
+    const dispatch = useDispatch();
+        useEffect(() => {
+        return () => {
+            dispatch(setIsSearchResultPanelVisible(false));
+        };
+    }, [dispatch]);
 
     const updateActiveSwitch = (type) => {
         // if no specific search is selected, default to address
