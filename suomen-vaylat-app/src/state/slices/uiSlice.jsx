@@ -9,6 +9,7 @@ const initialState = {
   dialogConstrainsRef: null,
   isSideMenuOpen: false,
   isSearchOpen: false,
+  isSearchResultPanelVisible: false,
   downloadLink: {
     layerDownloadLinkDialogOpen: false,
     layerDownloadLink: null,
@@ -30,7 +31,6 @@ const initialState = {
   isThemeMenuOpen: false,
   isDrawingToolsOpen: false,
   isLegendOpen: false,
-  isZoomBarOpen: false,
   isSaveViewOpen: false,
   isGfiOpen: false,
   isGfiDownloadOpen: false,
@@ -86,7 +86,6 @@ export const uiSlice = createSlice({
       state.isUserGuideOpen = false;
       state.isDrawingToolsOpen = false;
       state.isLegendOpen = false;
-      state.isZoomBarOpen = false;
       state.isSaveViewOpen = false;
       state.selectedMapLayersMenuTab = 0;
       state.selectedMapLayersMenuThemeIndex = null;
@@ -103,6 +102,9 @@ export const uiSlice = createSlice({
     setIsSearchOpen: (state, action) => {
       state.isSearchOpen = action.payload;
     },
+    setIsSearchResultPanelVisible(state, action) {
+      state.isSearchResultPanelVisible = action.payload;
+    }, 
     setIsChecked: (state, action) => {
       state.isChecked = action.payload;
     },
@@ -157,9 +159,6 @@ export const uiSlice = createSlice({
     },
     setIsLegendOpen: (state, action) => {
       state.isLegendOpen = action.payload;
-    },
-    setIsZoomBarOpen: (state, action) => {
-      state.isZoomBarOpen = action.payload;
     },
     setIsSaveViewOpen: (state, action) => {
       state.isSaveViewOpen = action.payload;
@@ -315,6 +314,7 @@ export const {
   setDialogConstrainsRef,
   setIsSideMenuOpen,
   setIsSearchOpen,
+  setIsSearchResultPanelVisible,
   setIsChecked,
   setSearchParams,
   setFormSearchParams,
@@ -325,7 +325,6 @@ export const {
   setIsCustomFilterOpen,
   setIsSavedLayer,
   setIsLegendOpen,
-  setIsZoomBarOpen,
   setIsSaveViewOpen,
   setIsGfiOpen,
   setIsGfiDownloadToolsOpen,

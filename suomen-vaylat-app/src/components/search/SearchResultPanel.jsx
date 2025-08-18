@@ -20,7 +20,6 @@ const StyledSearchResultsTitle = styled.p`
 
 const SearchResultPanel = ({
   isSearchOpen,
-  isSearching,
   searchResults,
   searchType,
   firstSearchResultShown,

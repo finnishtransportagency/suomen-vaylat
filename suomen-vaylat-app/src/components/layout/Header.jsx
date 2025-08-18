@@ -163,9 +163,6 @@ const DesktopButtons = styled.div`
   display: flex;
   align-items: center;
   gap: 4px;
-  @media ${(props) => props.theme.device.mobileL} {
-    display: none;
-  }
 `;
 
 export const Header = () => {
@@ -319,13 +316,15 @@ export const Header = () => {
         <Badges />
 
         <HeaderRight id="header-right">
-          <DesktopButtons
-            id="header-desktop-buttons"
-            aria-label={strings.accessibility.desktopButtons}
-          >
-            <LanguageSelector />
-            <DesktopNav setIsMenuOpen={setIsMenuOpen} isMenuOpen={isMenuOpen} />
-          </DesktopButtons>
+          { !isMobile &&
+            <DesktopButtons
+              id="header-desktop-buttons"
+              aria-label={strings.accessibility.desktopButtons}
+            >
+              <LanguageSelector />
+              <DesktopNav setIsMenuOpen={setIsMenuOpen} isMenuOpen={isMenuOpen} />
+            </DesktopButtons>
+          }
 
           <StyledHeaderButton
             id="header-menu-toggle-button"

@@ -2,7 +2,7 @@ import { useState, useEffect, useContext } from 'react';
 import { ReactReduxContext } from 'react-redux';
 import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
-import strings from '../../translations';
+import strings from '../../../translations';
 import Moment from 'react-moment';
 import { useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
@@ -12,14 +12,14 @@ import {
   removeActiveGeometry,
   removeFromDrawToolMarkers,
   setShowSavedContentGeometryForm
-} from '../../state/slices/uiSlice';
+} from '../../../state/slices/uiSlice';
 import { faPlus, faTrash, faPen } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { isMobile, theme } from '../../theme/theme';
+import { isMobile, theme } from '../../../theme/theme';
 import {
   addMarkerRequest,
   removeMarkerRequest
-} from '../../state/slices/rpcSlice';
+} from '../../../state/slices/rpcSlice';
 import GeometryForm from './GeometryForm';
 
 const StyledGeometryActions = styled.div`

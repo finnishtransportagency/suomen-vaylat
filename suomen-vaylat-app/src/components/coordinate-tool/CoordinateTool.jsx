@@ -87,17 +87,6 @@ const StyledMarkerAdditionButton = styled.button`
   }
 `;
 
-const StyledCoordinateSelect = styled(ReactSelect)`
-  .react-select__control {
-    border-radius: 4px;
-  }
-`;
-
-const StyledLabelControl = styled(FormControlLabel)`
-  align-items: center;
-  color: #333;
-`;
-
 const StyledButtonGroup = styled.div`
   display: flex;
   gap: 16px;

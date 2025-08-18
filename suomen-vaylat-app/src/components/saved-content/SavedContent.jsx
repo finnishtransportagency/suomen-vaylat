@@ -10,8 +10,8 @@ import {
 } from '../../state/slices/uiSlice';
 
 import { Swiper, SwiperSlide } from 'swiper/react';
-import ViewsTab from './ViewsTab';
-import GeometriesTab from './GeometriesTab';
+import ViewsTab from './Views/ViewsTab';
+import GeometriesTab from './Geometries/GeometriesTab';
 import ProfileTab from './ProfileTab';
 
 const StyledContent = styled.div`
@@ -159,6 +159,9 @@ export const SavedContent = () => {
   }, [savedTab]);
 
   const handleChangeTab = (index) => {
+    // If user clicked the currently active tab, do nothing.
+    if (index === tabIndex) return;
+
     let newTabName = tabsContent[index].key;
     store.dispatch(setShowSavedContentGeometryForm(false));
     store.dispatch(setShowSavedContentViewForm(false));
@@ -173,7 +176,7 @@ export const SavedContent = () => {
             key={'sc_tab_' + tab.title}
             isSelected={index === tabIndex}
             color={tab.titleColor}
-            onClick={() => handleChangeTab(index)}
+            onClick={(e) => handleChangeTab(index)}
             tabsCount={tabsContent.length}
           >
             <p>{tab.title}</p>

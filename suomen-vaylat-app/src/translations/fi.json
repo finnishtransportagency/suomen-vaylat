@@ -72,7 +72,7 @@
     "saveView": {
       "title": "Tallenna uusi näkymä",
       "confirmDeleteAll" : "Haluatko varmasti poistaa kaikki tallennetut näkymät?",
-      "saveView" : "Tallenna tila",
+      "saveView" : "Tallenna näkymä",
       "savingView" : "Näkymän tallennus",
       "saveViewDescription1" : "Näkymä tallentuu selaimen välimuistiin",
       "saveViewDescription2" : "Tallennettu näkymä voidaan aktivoida vain selaimessa johon se on tallennettu",
@@ -1176,7 +1176,7 @@
     }
   },
   "legend": {
-    "title": "Kartalla nyt",
+    "title": "Karttaselitteet",
     "nolegend": "Ei karttaselitettä",
     "noSelectedLayers": "Karttatasoja ei valittuna"
   },

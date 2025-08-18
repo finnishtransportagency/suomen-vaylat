@@ -64,7 +64,7 @@ const initialState = {
   coordMarkerIndex: 0,
   views: null,
   // TODO: waiting for logging in option
-  isLoggedIn: true,
+  isLoggedIn: false,
 };
 
 export const rpcSlice = createSlice({

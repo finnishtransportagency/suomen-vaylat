@@ -72,7 +72,7 @@
     "saveView" : {
       "title": "Save new view",
       "confirmDeleteAll" : "Are you sure you want to delete all views?",
-      "saveView" : "Save state",
+      "saveView" : "Save view",
       "savingView" : "Saving view",
       "saveViewDescription1" : "View will be saved to browser local storage",
       "saveViewDescription2" : "Saved view can be accessed only by browser it has been saved",

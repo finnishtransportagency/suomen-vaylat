@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+ import { useRef} from 'react';
 import { ToastContainer, Slide } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import styled from 'styled-components';
@@ -26,9 +26,8 @@ import MenuBar from './menu-bar/MenuBar';
 import HierarchicalLayerlistDialog from '../layerlists/hierarchical-layerlist/dialog/HierarchicalLayerlistDialog';
 import PublishedMap from './published-map/PublishedMap';
 import Search from '../search/Search';
-import Badges from '../badges/Badges';
 import ScaleBar from '../scalebar/ScaleBar';
-import ZoomMenu from '../zoom-features/ZoomMenu';
+import ZoomBar from '../zoom-features/ZoomBar';
 import WarningDialog from '../warning-dialog/dialog/WarningDialog';
 import ThemeMenu from '../layerlists/theme-layerlist/ThemeMenu';
 import BaseLayerSelector from '../base-layers-selector/BaseLayersSelector';
@@ -194,7 +193,7 @@ const Content = () => {
           </StyledLeftSection>
           <StyledRightSection>
             <Search />
-            <ZoomMenu />
+            <ZoomBar/>
           </StyledRightSection>
         </StyledContentGrid>
       </StyledContent>
