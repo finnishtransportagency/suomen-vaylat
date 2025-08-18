@@ -179,7 +179,6 @@ const SearchDialog = ({
   );
   const { activeSwitch } = useAppSelector((state) => state.ui);
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [infoOpenId, setInfoOpenId] = useState(null);
 
   // Determine the header title: if an active switch matches, show its title; otherwise fallback to "Hakuasetukset"
   const activeDef = switchDefinitions.find((sw) => sw.id === activeSwitch);
@@ -216,10 +215,6 @@ const SearchDialog = ({
     validateTrackSearch
   ]);
 
-  const handleSwitchInfo = (id) => {
-    setInfoOpenId(infoOpenId === id ? null : id);
-  };
-
   return (
     <StyledSearchDialog>
       <DropdownWrapper>
@@ -247,19 +242,6 @@ const SearchDialog = ({
                 id={sw.id}
                 isMobile={isMobile}
               />
-              {infoOpenId === sw.id && (
-                <InfoText>
-                  <strong>{sw.title}</strong>
-                  <div>{sw.tooltipAddress}</div>
-                  <div
-                    style={{ marginTop: 6, color: '#666', fontSize: '0.96em' }}
-                  >
-                    {Array.isArray(sw.tooltipText)
-                      ? sw.tooltipText.map((txt, i) => <div key={i}>{txt}</div>)
-                      : sw.tooltipText}
-                  </div>
-                </InfoText>
-              )}
             </Fragment>
           ))}
         </DropdownContent>

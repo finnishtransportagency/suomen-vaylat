@@ -76,7 +76,7 @@ const StyledToolTipContainer = styled.div`
   border-radius: 3px;
   font-size: 15px;
   padding: 8px 12px;
-  margin-top: 8px;
+  margin: 8px 0;
   background: #eef3fb;
   color: #234167;
   border-radius: 5px;
