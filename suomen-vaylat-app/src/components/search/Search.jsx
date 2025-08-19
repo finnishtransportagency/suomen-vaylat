@@ -7,6 +7,7 @@ import {
     faSearch,
     faTimes,
     faInfoCircle,
+    faMinus
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import strings from '../../translations';
@@ -403,33 +404,52 @@ const Search = () => {
         setLastSearchValue('');
         removeMarkersAndFeatures(channel);
     }
+
+  const handleSearchButton = () => {
+    if (searchResults|| featureSearchResults.length > 0) {
+      store.dispatch(setIsSearchOpen(!isSearchOpen));
+    } else {
+      if (isSearchOpen) {
+        store.dispatch(setIsMoreSearchOpen(false));
+        store.dispatch(setActiveSwitch('default'));
+      }
+      store.dispatch(setIsSearchOpen(!isSearchOpen));
+      store.dispatch(resetFeatureSearchResults());
+      isSearchOpen && store.dispatch(setGeoJsonArray([]));
+      setIsSearching(false);
+      store.dispatch(setSearchOn(null));
+      isSearchOpen && removeMarkersAndFeatures(channel);
+      isSearchOpen && setSearchResults(null);
+      isSearchOpen && setSearchValue('');
+      isSearchMethodSelectorOpen && setIsSearchMethodSelectorOpen(false);
+      setSearchType('address');
+    }
+  };
+
     return (
         <StyledSearchContainer isSearchOpen={isSearchOpen}>
             <ReactTooltip backgroundColor={theme.colors.mainColor1} disable={isMobile} place='bottom' type='dark' effect='float' />
        
-            <CircleButton
-                icon={isSearchOpen ? faTimes : faSearch}
-                text={strings.tooltips.search}
-                toggleState={isSearchOpen}
-                tooltipDirection={'left'}
-                clickAction={() => {
-                    if (isSearchOpen) {
-                        store.dispatch(setIsMoreSearchOpen(false));
-                        store.dispatch(setActiveSwitch("default"));
+            {/* Choose icon based on isSearchOpen and whether results exist */}
+            {(() => {
+                let iconToShow = faSearch;
+                if (isSearchOpen) {
+                    if (searchResults || (featureSearchResults && featureSearchResults.length > 0)) {
+                        iconToShow = faTimes;
+                    } else {
+                        iconToShow = faMinus;
                     }
-                    store.dispatch(resetFeatureSearchResults());
-                    isSearchOpen && store.dispatch(setGeoJsonArray([]));
-                    setIsSearching(false);
-                    store.dispatch(setSearchOn(null));
-                    isSearchOpen && removeMarkersAndFeatures(channel);
-                    isSearchOpen && setSearchResults(null);
-                    isSearchOpen && setSearchValue('');
-                    store.dispatch(setIsSearchOpen(!isSearchOpen));
-                    isSearchMethodSelectorOpen &&
-                        setIsSearchMethodSelectorOpen(false);
-                    setSearchType('address');
-                }}
-            />
+                }
+                return (
+                    <CircleButton
+                        icon={iconToShow}
+                        text={strings.tooltips.search}
+                        toggleState={isSearchOpen}
+                        tooltipDirection={'left'}
+                        clickAction={handleSearchButton}
+                    />
+                );
+            })()}
           
             <AnimatePresence>
                 {isSearchOpen && (
