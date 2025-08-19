@@ -13,7 +13,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import strings from '../../translations';
 import { SEARCH_TIP_LOCALSTORAGE } from '../../utils/constants';
 
-import { isMobile, theme } from '../../theme/theme';
+import { theme } from '../../theme/theme';
 
 import {
   pushToFeatureSearchResults,
@@ -35,7 +35,6 @@ import CircleButton from '../../utils/components/CircleButton';
 
 import { Slide, toast } from 'react-toastify';
 import SearchToast from '../toasts/SearchToast';
-import ReactTooltip from 'react-tooltip';
 import TipToast from '../toasts/TipToast';
 import SearchDialog from './SearchDialog';
 import {
@@ -402,9 +401,6 @@ const Search = () => {
       });
   }, [channel, activeSwitch]);
 
-  useEffect(() => {
-    ReactTooltip.rebuild();
-  }, [isSearchOpen]);
 
   const handleCloseToast = () => {
     setShowToast(false);
@@ -415,11 +411,12 @@ const Search = () => {
   };
 
   // TODO: Not in use
+  /*
   if (
     searchType === 'address' &&
     isSearchOpen &&
     !hasToastBeenShown.includes('searchToast') &&
-    1 === 2 /*disable search help toast for now */
+    1 === 2 
   ) {
     toast(<SearchToast header={strings.search.tips.title} texts={texts} />, {
       toastId: 'searchToast',
@@ -433,6 +430,7 @@ const Search = () => {
   } else if (!isSearchOpen || searchType !== 'address') {
     toast.dismiss('searchToast');
   }
+    */
 
   useEffect(() => {
     const vkmKeys = ['vali', 'tie', 'osa', 'etaisyys', 'track'];
@@ -538,13 +536,6 @@ const Search = () => {
 
   return (
     <StyledSearchContainer isSearchOpen={isSearchOpen}>
-      <ReactTooltip
-        backgroundColor={theme.colors.mainColor1}
-        disable={isMobile}
-        place="bottom"
-        type="dark"
-        effect="float"
-      />
 
       <CircleButton
         icon={iconToShow}
