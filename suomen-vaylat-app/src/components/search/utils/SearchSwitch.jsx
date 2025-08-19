@@ -63,6 +63,13 @@ const InfoButton = styled.button`
     outline: none;
   }
 
+  :hover {
+    svg {
+      opacity: 0.95;
+    }
+    opacity: 0.95;
+  }
+
   /* visible ring only for keyboard focus */
   &:focus-visible {
     outline: 2px solid ${(p) => p.theme.colors.mainColor1};

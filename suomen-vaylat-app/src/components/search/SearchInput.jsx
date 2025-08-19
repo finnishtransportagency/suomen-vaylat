@@ -72,7 +72,7 @@ const StyledStandardSearchButton = styled.button`
 
   &:hover {
     svg {
-    opacity: 0.95;
+      opacity: 0.95;
     }
     opacity: 0.95;
   }
@@ -83,32 +83,6 @@ const StyledStandardSearchButton = styled.button`
 const StyledRelativeInputWrapper = styled.div`
   position: relative;
   width: 100%;
-`;
-
-/* Clear icon button positioned inside the input (right) */
-const ClearIconButton = styled.button`
-  position: absolute;
-  right: 8px;
-  top: 50%;
-  transform: translateY(-50%);
-  border: none;
-  background: transparent;
-  color: ${(p) => p.theme.colors.darkGrey};
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 6px;
-  cursor: pointer;
-  z-index: 2;
-
-  &:hover {
-    opacity: 0.9;
-  }
-
-  &:focus {
-    outline: 2px solid ${(p) => p.theme.colors.mainColor1 || '#1976d2'};
-    outline-offset: 2px;
-  }
 `;
 
 const PillInput = styled.input`
@@ -144,6 +118,7 @@ const PillInput = styled.input`
     background: #f7f8f8;
   }
 `;
+
 /* place near other styled components (after PillInput) */
 const FieldItem = styled.div`
   display: flex;
@@ -224,11 +199,13 @@ const StyledSelectedLayerWrapper = styled.div`
   overflow: hidden;
   white-space: nowrap;
 `;
+
 const StyledSelectedLayerTitle = styled.div`
   color: ${(props) => props.theme.colors.mainColor1};
   font-size: 16px;
   font-weight: 500;
 `;
+
 const StyledSelectedLayerText = styled.div`
   font-size: 15px;
   font-weight: 400;
@@ -241,6 +218,7 @@ const StyledSelectedLayerText = styled.div`
     white-space: normal;
   }
 `;
+
 const StyledNoActivaLayers = styled.div`
   color: ${(props) => props.theme.colors.secondaryColorDarkOrange};
   font-size: 16px;
@@ -430,9 +408,6 @@ const SearchInput = ({
     if (validateTrackSearch(searchValue, setTrackErrors)) {
       handleSeach(parseTrackSearchQuery(searchValue));
     }
-  };
-  const onClickSearchWide = () => {
-    handleSeach(searchValue);
   };
   const onClickSearchFeature = () => {
     handleSeach(searchValue.trim());

@@ -177,6 +177,11 @@ const SearchDialog = ({
   const { activeSwitch } = useAppSelector((state) => state.ui);
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
+  const handleSearchAndCloseDropdown = (searchValue) => {
+    handleSeach(searchValue);
+    setDropdownOpen(false);
+  }
+
   // Determine the header title: if an active switch matches, show its title; otherwise fallback to "Hakuasetukset"
   const activeDef = switchDefinitions.find((sw) => sw.id === activeSwitch);
   const headerTitle = activeDef ? activeDef.title : 'Hakuasetukset';
@@ -257,7 +262,7 @@ const SearchDialog = ({
         isSearchOpen={isSearchOpen}
         searchType={searchType}
         setSearchType={setSearchType}
-        handleSeach={handleSeach}
+        handleSeach={handleSearchAndCloseDropdown}
         carriageWaySearch={carriageWaySearch}
         setCarriageWaySearch={setCarriageWaySearch}
         removeMarkersAndFeatures={removeMarkersAndFeatures}
