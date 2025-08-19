@@ -66,7 +66,7 @@ const DropdownContent = styled.div`
   padding-left: 2px;
   padding-bottom: 8px;
   transition: all 0.3s;
-  display: ${(props) => (props.open ? 'block' : 'none')};
+  display: block;
 `;
 
 const InfoText = styled.div`
@@ -214,21 +214,23 @@ const SearchDialog = ({
             rotation={dropdownOpen ? 180 : undefined}
           />
         </DropdownHeader>
-        <DropdownContent open={dropdownOpen} id="search-dropdown-content" aria-labelledby="search-dropdown-button">
-          {switchDefinitions.map((sw, index) => (
-            <Fragment key={sw.id}>
-              <SearchSwitch
-                isSelected={activeSwitch === sw.id}
-                action={() => updateActiveSwitch(sw.id)}
-                title={sw.title}
-                tooltipText={sw.tooltipText}
-                tooltipAddress={sw.tooltipAddress}
-                id={sw.id}
-                isMobile={isMobile}
-              />
-            </Fragment>
-          ))}
-        </DropdownContent>
+        {dropdownOpen &&
+            <DropdownContent id="search-dropdown-content" aria-labelledby="search-dropdown-button">
+            {switchDefinitions.map((sw, index) => (
+                <Fragment key={sw.id}>
+                <SearchSwitch
+                    isSelected={activeSwitch === sw.id}
+                    action={() => updateActiveSwitch(sw.id)}
+                    title={sw.title}
+                    tooltipText={sw.tooltipText}
+                    tooltipAddress={sw.tooltipAddress}
+                    id={sw.id}
+                    isMobile={isMobile}
+                />
+                </Fragment>
+            ))}
+            </DropdownContent>
+        }
       </DropdownWrapper>
 
       <SearchInput
