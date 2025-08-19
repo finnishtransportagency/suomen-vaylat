@@ -435,9 +435,9 @@ const Search = () => {
                 let iconToShow = faSearch;
                 if (isSearchOpen) {
                     if (searchResults || (featureSearchResults && featureSearchResults.length > 0)) {
-                        iconToShow = faTimes;
-                    } else {
                         iconToShow = faMinus;
+                    } else {
+                        iconToShow = faTimes;
                     }
                 }
                 return (

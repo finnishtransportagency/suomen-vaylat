@@ -8,6 +8,7 @@ import { isMobile } from '../../theme/theme';
 const SearchPanelMain = styled.div`
   width: 100%;
   margin-bottom: 1em;
+  overflow: auto;
 `;
 
 const StyledSearchResultsTitle = styled.p`

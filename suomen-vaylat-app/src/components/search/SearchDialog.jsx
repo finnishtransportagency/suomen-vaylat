@@ -32,10 +32,7 @@ const StyledSearchDialog = styled.div`
   box-shadow: rgb(0 0 0 / 16%) 0px 3px 6px, rgb(0 0 0 / 23%) 0px 6px 6px;
   font-size: 15px;
   font-weight: 400;
-  max-height: ${(props) =>
-    props.isMobile
-      ? window.innerHeight - 50 + 'px'
-      : window.innerHeight - 200 + 'px'};
+  max-height: 80vh;
   overflow: auto;
 `;
 
