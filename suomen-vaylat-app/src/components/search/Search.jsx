@@ -20,7 +20,7 @@ import {
   resetFeatureSearchResults,
   setSearchOn,
   searchVKMTrack,
-  setFeatureSearchResults
+  setFeatureSearchResults,
 } from '../../state/slices/rpcSlice';
 
 import {
@@ -190,20 +190,13 @@ const Search = () => {
     JSON.parse(localStorage.getItem(SEARCH_TIP_LOCALSTORAGE))
   );
   const [carriageWaySearch, setCarriageWaySearch] = useState(false);
-  const [trackErrors, setTrackErrors] = useState([false, false, false]);
   const [featureErrors, setFeatureErrors] = useState([]);
 
   // Handle search click and direct to the right search handler based on type
   const handleSeach = (searchValue) => {
     switch (searchType) {
       case 'address':
-        if (activeSwitch === 'track') {
-          if (validateTrackSearch(searchValue, setTrackErrors))
-            handleAddressSearch(searchValue);
-        } else {
-          handleAddressSearch(searchValue);
-        }
-
+        handleAddressSearch(searchValue);
         break;
       case 'metadata':
         handleMetadataSearch(searchValue);
@@ -597,9 +590,6 @@ const Search = () => {
               carriageWaySearch={carriageWaySearch}
               setCarriageWaySearch={setCarriageWaySearch}
               removeMarkersAndFeatures={removeMarkersAndFeatures}
-              trackErrors={trackErrors}
-              setTrackErrors={setTrackErrors}
-              validateTrackSearch={validateTrackSearch}
               featureErrors={featureErrors}
               setFeatureErrors={setFeatureErrors}
               validateFeatureSearch={validateFeatureSearch}

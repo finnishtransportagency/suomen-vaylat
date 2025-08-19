@@ -1,9 +1,11 @@
 import styled from 'styled-components';
 import strings from '../../translations';
 import { useAppSelector } from '../../state/hooks';
-import { useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { faMagnifyingGlass, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { validateTrackSearch } from './utils/SearchUtil';
+import { ReactReduxContext } from 'react-redux';
 
 // --- Better Responsive "road" field styling ---
 
@@ -265,6 +267,7 @@ const getSearchValuePart = (
   }
   return retVa;
 };
+
 const splitSearchValue = (searchValue, searchType) => {
   let roadParts;
   if (
@@ -284,6 +287,7 @@ const splitSearchValue = (searchValue, searchType) => {
   }
   return roadParts;
 };
+
 const updateRoadSearchValue = (
   searchValue,
   searchType,
@@ -335,6 +339,7 @@ const updateRoadSearchValue = (
     setSearchValue(searchValue + '/' + value);
   }
 };
+
 const parseSearchValueFromParts = (partsArray, blancSpacePosition) => {
   let newSearchValue;
   if (partsArray !== undefined && partsArray.length > blancSpacePosition - 1) {
@@ -348,22 +353,19 @@ const parseSearchValueFromParts = (partsArray, blancSpacePosition) => {
     ? newSearchValue.slice(0, -1)
     : newSearchValue;
 };
+
 const getTrackSearchValuePart = (position, searchValue) => {
   if (!searchValue) return '';
   const searchArray = searchValue.split('/');
   return searchArray[position] || '';
 };
+
 const updateTrackSearchValue = (
   newValue,
   position,
   searchValue,
   setSearchValue,
-  trackErrors,
-  setTrackErrors
 ) => {
-  const newErrors = [...(trackErrors ?? [])];
-  newErrors[position] = newValue === '';
-  setTrackErrors(newErrors);
   let searchArray = searchValue ? searchValue.split('/') : ['', '', ''];
   searchArray[position] = newValue;
   const newSearchValue = searchArray.join('/');
@@ -382,18 +384,16 @@ const SearchInput = ({
   handleSeach,
   carriageWaySearch,
   setCarriageWaySearch,
-  trackErrors,
-  setTrackErrors,
-  validateTrackSearch,
   featureErrors,
   emptySearchResults,
   lastSearchValue,
   isSearching,
   searchResults
 }) => {
-  const { selectedLayersByType, featureSearchResults } = useAppSelector(
-    (state) => state.rpc
-  );
+  const { store } = useContext(ReactReduxContext);
+
+  const { selectedLayersByType, featureSearchResults, trackErrors } =
+    useAppSelector((state) => state.rpc);
   const { activeSwitch } = useAppSelector((state) => state.ui);
   const [roadEndEnabled, setRoadEndEnabled] = useState(false);
 
@@ -405,7 +405,7 @@ const SearchInput = ({
     handleSeach(searchValue);
   };
   const onClickSearchTrack = () => {
-    if (validateTrackSearch(searchValue, setTrackErrors)) {
+    if (validateTrackSearch(searchValue, store)) {
       handleSeach(parseTrackSearchQuery(searchValue));
     }
   };
@@ -413,32 +413,12 @@ const SearchInput = ({
     handleSeach(searchValue.trim());
   };
 
-  /* clearing helpers */
-  const clearAllRoadFields = (e) => {
-    if (e && typeof e.stopPropagation === 'function') e.stopPropagation();
-    // easiest: clear whole search string for road inputs
-    setSearchValue('');
-  };
-  const clearRoadEndFields = (e) => {
-    if (e && typeof e.stopPropagation === 'function') e.stopPropagation();
-    // clear whole search value as well (simpler and predictable)
-    setSearchValue('');
-  };
-  const clearTrackFields = (e) => {
-    if (e && typeof e.stopPropagation === 'function') e.stopPropagation();
-    setSearchValue('');
-    // reset validation flags too
-    if (Array.isArray(trackErrors) && trackErrors.length > 0) {
-      setTrackErrors([false, false, false]);
+  useEffect(() => {
+    //track validation every time searchValue changes
+    if (activeSwitch === 'track') {
+      validateTrackSearch(searchValue, store);
     }
-  };
-
-  /* clearing for wide inputs (address/nomenclature/premise/layer/default/feature) */
-  const clearWideInput = (e) => {
-    // prevent bubbling click to row or other handlers
-    if (e && typeof e.stopPropagation === 'function') e.stopPropagation();
-    setSearchValue('');
-  };
+  }, [activeSwitch, searchValue, validateTrackSearch]);
 
   const trackErrorsId = 'search-input-track-errors';
 
@@ -874,17 +854,11 @@ const SearchInput = ({
                           0,
                           searchValue,
                           setSearchValue,
-                          trackErrors,
-                          setTrackErrors
                         )
                       }
                       onKeyPress={(e) => {
                         if (e.key === 'Enter') {
-                          if (
-                            validateTrackSearch(searchValue, setTrackErrors)
-                          ) {
-                            handleSeach(parseTrackSearchQuery(searchValue));
-                          }
+                          onClickSearchTrack();
                         }
                       }}
                       className={trackErrors[0] ? 'error' : ''}
@@ -910,17 +884,11 @@ const SearchInput = ({
                           1,
                           searchValue,
                           setSearchValue,
-                          trackErrors,
-                          setTrackErrors
                         )
                       }
                       onKeyPress={(e) => {
                         if (e.key === 'Enter') {
-                          if (
-                            validateTrackSearch(searchValue, setTrackErrors)
-                          ) {
-                            handleSeach(parseTrackSearchQuery(searchValue));
-                          }
+                          onClickSearchTrack();
                         }
                       }}
                       className={trackErrors[1] ? 'error' : ''}
@@ -947,17 +915,11 @@ const SearchInput = ({
                             2,
                             searchValue,
                             setSearchValue,
-                            trackErrors,
-                            setTrackErrors
                           )
                         }
                         onKeyPress={(e) => {
                           if (e.key === 'Enter') {
-                            if (
-                              validateTrackSearch(searchValue, setTrackErrors)
-                            ) {
-                              handleSeach(parseTrackSearchQuery(searchValue));
-                            }
+                            onClickSearchTrack();
                           }
                         }}
                         className={trackErrors[2] ? 'error' : ''}

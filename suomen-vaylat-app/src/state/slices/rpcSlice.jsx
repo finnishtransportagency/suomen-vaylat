@@ -63,6 +63,7 @@ const initialState = {
   searchOn: null,
   coordMarkerIndex: 0,
   views: null,
+  trackErrors: [false, false, false],
   // TODO: waiting for logging in option
   isLoggedIn: false,
 };
@@ -961,6 +962,10 @@ export const rpcSlice = createSlice({
     setIsLoggedIn: (state, action) => {
       state.isLoggedIn = action.payload;
     },
+
+    setTrackErrors: (state, action) => {
+      state.trackErrors = action.payload;
+    },
   },
 });
 
@@ -1030,7 +1035,8 @@ export const {
   setAnnouncements,
   setCoordMarkerIndex,
   setViews,
-  setIsLoggedIn
+  setIsLoggedIn,
+  setTrackErrors
 } = rpcSlice.actions;
 
 export default rpcSlice.reducer;

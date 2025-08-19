@@ -162,9 +162,6 @@ const SearchDialog = ({
   handleSeach,
   carriageWaySearch,
   setCarriageWaySearch,
-  trackErrors,
-  setTrackErrors,
-  validateTrackSearch,
   featureErrors,
   handleFeatureSearch,
   lastSearchValue,
@@ -202,20 +199,6 @@ const SearchDialog = ({
     store.dispatch(resetFeatureSearchResults());
     removeMarkersAndFeatures(channel);
   };
-
-  useEffect(() => {
-    //track validation every time searchValue changes
-    if (activeSwitch === 'track') {
-      validateTrackSearch(searchValue, setTrackErrors);
-    }
-    setSearchValue(searchValue);
-  }, [
-    activeSwitch,
-    searchValue,
-    setSearchValue,
-    setTrackErrors,
-    validateTrackSearch
-  ]);
 
   return (
     <StyledSearchDialog>
@@ -266,9 +249,6 @@ const SearchDialog = ({
         carriageWaySearch={carriageWaySearch}
         setCarriageWaySearch={setCarriageWaySearch}
         removeMarkersAndFeatures={removeMarkersAndFeatures}
-        trackErrors={trackErrors}
-        setTrackErrors={setTrackErrors}
-        validateTrackSearch={validateTrackSearch}
         featureErrors={featureErrors}
         handleFeatureSearch={handleFeatureSearch}
         lastSearchValue={lastSearchValue}

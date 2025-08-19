@@ -1,3 +1,4 @@
+import { setTrackErrors } from "../../../state/slices/rpcSlice";
 import strings from "../../../translations";
 
     export const vectorLayerId = 'SEARCH_VECTORLAYER';
@@ -40,7 +41,7 @@ export const validateFeatureSearch = (searchValue, setFeatureErrors) => {
     };
 
 
-    export const validateTrackSearch = (searchValue, setTrackErrors) => {
+    export const validateTrackSearch = (searchValue, store) => {
         let searchArray = searchValue.split("/");
         const newErrors = Array(3).fill(false);
         // If there are not exactly 3 values, populate the errors array accordingly
@@ -58,7 +59,7 @@ export const validateFeatureSearch = (searchValue, setFeatureErrors) => {
                 }
             });
         }
-        setTrackErrors(newErrors);
+        store.dispatch(setTrackErrors(newErrors));
         return newErrors.every((error) => error === false)
     }
 
