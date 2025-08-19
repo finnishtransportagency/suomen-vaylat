@@ -162,7 +162,6 @@ const SearchDialog = ({
   handleSeach,
   carriageWaySearch,
   setCarriageWaySearch,
-  featureErrors,
   handleFeatureSearch,
   lastSearchValue,
   emptySearchResults
@@ -249,7 +248,6 @@ const SearchDialog = ({
         carriageWaySearch={carriageWaySearch}
         setCarriageWaySearch={setCarriageWaySearch}
         removeMarkersAndFeatures={removeMarkersAndFeatures}
-        featureErrors={featureErrors}
         handleFeatureSearch={handleFeatureSearch}
         lastSearchValue={lastSearchValue}
         emptySearchResults={emptySearchResults}

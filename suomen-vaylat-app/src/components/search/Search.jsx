@@ -44,7 +44,6 @@ import {
   searchDownloadTips,
   texts,
   validateFeatureSearch,
-  validateTrackSearch,
   variants
 } from './utils/SearchUtil';
 
@@ -190,7 +189,6 @@ const Search = () => {
     JSON.parse(localStorage.getItem(SEARCH_TIP_LOCALSTORAGE))
   );
   const [carriageWaySearch, setCarriageWaySearch] = useState(false);
-  const [featureErrors, setFeatureErrors] = useState([]);
 
   // Handle search click and direct to the right search handler based on type
   const handleSeach = (searchValue) => {
@@ -293,7 +291,6 @@ const Search = () => {
 
   // Handle feature search
   const handleFeatureSearch = (searchValue, startIndex = 0, layerId = -1) => {
-    if (validateFeatureSearch(searchValue, setFeatureErrors)) {
       const handleSearchResponse = (data) => {
         if (Object.keys(data).length > 0 && Object.keys(data.gfi).length > 0) {
           setIsSearching(false);
@@ -373,7 +370,6 @@ const Search = () => {
           (error) => handleSearchError(layerIdentifier, error)
         );
       }
-    }
   };
 
   useEffect(() => {
@@ -590,9 +586,6 @@ const Search = () => {
               carriageWaySearch={carriageWaySearch}
               setCarriageWaySearch={setCarriageWaySearch}
               removeMarkersAndFeatures={removeMarkersAndFeatures}
-              featureErrors={featureErrors}
-              setFeatureErrors={setFeatureErrors}
-              validateFeatureSearch={validateFeatureSearch}
               handleFeatureSearch={handleFeatureSearch}
               lastSearchValue={lastSearchValue}
               emptySearchResults={emptySearchResults}

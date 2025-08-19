@@ -4,7 +4,11 @@ import { useAppSelector } from '../../state/hooks';
 import { useContext, useEffect, useState } from 'react';
 import { faMagnifyingGlass, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { validateTrackSearch } from './utils/SearchUtil';
+import {
+  validateFeatureSearch,
+  validateSimpleSearch,
+  validateTrackSearch
+} from './utils/SearchUtil';
 import { ReactReduxContext } from 'react-redux';
 
 const StyledSectionDivider = styled.div`
@@ -194,7 +198,7 @@ const StyledSelectedLayerWrapper = styled.div`
   display: flex;
   align-items: baseline;
   margin-left: 0.5em;
-  margin-top: 4px;
+  margin-bottom: 4px;
   overflow: hidden;
   white-space: nowrap;
 `;
@@ -380,7 +384,6 @@ const SearchInput = ({
   handleSeach,
   carriageWaySearch,
   setCarriageWaySearch,
-  featureErrors,
   emptySearchResults,
   lastSearchValue,
   isSearching,
@@ -388,14 +391,21 @@ const SearchInput = ({
 }) => {
   const { store } = useContext(ReactReduxContext);
 
-  const { selectedLayersByType, featureSearchResults, trackErrors } =
-    useAppSelector((state) => state.rpc);
+  const {
+    selectedLayersByType,
+    featureSearchResults,
+    trackErrors,
+    featureErrors
+  } = useAppSelector((state) => state.rpc);
   const { activeSwitch } = useAppSelector((state) => state.ui);
+
   const [roadEndEnabled, setRoadEndEnabled] = useState(false);
 
-  /* helper click handlers mapping to existing enter behavior */
-  const onClickSearchDefault = () => {
-    handleSeach(searchValue);
+  // simpleError used for non-track / non-road / non-feature basic validations
+  const [simpleError, setSimpleError] = useState('');
+
+  const onClickSearchDefault = (value) => {
+    handleSeach(value);
   };
   const onClickSearchRoad = () => {
     handleSeach(searchValue);
@@ -407,27 +417,47 @@ const SearchInput = ({
     }
   };
   const onClickSearchFeature = () => {
-    handleSeach(searchValue.trim());
+    if (validateFeatureSearch(searchValue, store, true)) {
+      handleSeach(searchValue.trim());
+    }
   };
 
   useEffect(() => {
-    // live validation every time searchValue changes (only format checks, do not require all fields)
     if (activeSwitch === 'track') {
       validateTrackSearch(searchValue, store, false);
+      setSimpleError(''); // clear simple error when on track
+      return;
     }
-  }, [activeSwitch, searchValue]);
+    if (activeSwitch === 'feature') {
+      validateFeatureSearch(searchValue, store, false);
+      setSimpleError(''); // clear simple error when on track
+      return;
+    }
+    // For other types: run simple character-only validation live (no requirement)
+    if (['road'].includes(activeSwitch)) {
+      // we don't validate feature/road here
+      setSimpleError('');
+      return;
+    }
+    // simple live validation for other types
+    const msg = validateSimpleSearch(searchValue, false);
+    setSimpleError(msg);
+  }, [activeSwitch, searchValue, store]);
 
   const trackErrorsId = 'search-input-track-errors';
 
   // helpers to read  trackErrors
   const getTrackField = (index) => {
     if (!trackErrors) return { invalid: false, message: '' };
-    if (trackErrors[index].invalid && trackErrors[index].message.length > 0) {
+    if (
+      trackErrors[index] &&
+      trackErrors[index].invalid &&
+      trackErrors[index].message.length > 0
+    ) {
       return trackErrors[index];
     }
     return { invalid: false, message: '' };
   };
-
 
   const getCombinedFieldMessage = (index) => {
     const field = getTrackField(index);
@@ -439,6 +469,34 @@ const SearchInput = ({
   const combinedFieldMessages = [0, 1, 2]
     .map((i) => getCombinedFieldMessage(i))
     .filter(Boolean);
+
+  // Submit handler that routes validation by activeSwitch
+  const submitForActiveSwitch = () => {
+    // Track: handled separately
+    if (activeSwitch === 'track') {
+      onClickSearchTrack();
+      return;
+    }
+    // Feature and road excluded from these simple validations:
+    if (activeSwitch === 'feature') {
+      onClickSearchFeature();
+      return;
+    }
+    if (activeSwitch === 'road') {
+      onClickSearchRoad();
+      return;
+    }
+
+    // For other types: require non-empty and allowed characters
+    const msg = validateSimpleSearch(searchValue, true);
+    if (msg) {
+      setSimpleError(msg);
+      return;
+    }
+    setSimpleError('');
+    // For 'default' and most others we can just pass trimmed value
+    onClickSearchDefault(searchValue.trim());
+  };
 
   return (
     <>
@@ -453,9 +511,13 @@ const SearchInput = ({
                     aria-label={strings.search.address?.title || 'Search'}
                     type="text"
                     value={searchValue}
-                    onChange={(e) => setSearchValue(e.target.value)}
+                    onChange={(e) => {
+                      setSearchValue(e.target.value);
+                      // clear existing simple error while typing
+                      // live validation is handled in useEffect
+                    }}
                     onKeyPress={(e) => {
-                      if (e.key === 'Enter') handleSeach(searchValue);
+                      if (e.key === 'Enter') submitForActiveSwitch();
                     }}
                   />
                 </StyledRelativeInputWrapper>
@@ -468,7 +530,10 @@ const SearchInput = ({
               <StyledStandardSearchButton
                 type="button"
                 aria-label="Search"
-                onClick={emptySearchResults}
+                onClick={() => {
+                  // clear results
+                  emptySearchResults();
+                }}
               >
                 <FontAwesomeIcon icon={faTrash} />
               </StyledStandardSearchButton>
@@ -477,17 +542,25 @@ const SearchInput = ({
                 <StyledStandardSearchButton
                   type="button"
                   aria-label="Search"
-                  onClick={onClickSearchDefault}
+                  onClick={submitForActiveSwitch}
                 >
                   <FontAwesomeIcon icon={faMagnifyingGlass} />
                 </StyledStandardSearchButton>
               )
             )}
           </StyledRowWithButton>
+
+          {/* simple error shown under inputs for default */}
+          {simpleError && (
+            <StyledValidationMessage role="alert" aria-live="polite">
+              {simpleError}
+            </StyledValidationMessage>
+          )}
         </StyledSearchSection>
       )}
 
       {activeSwitch === 'road' && (
+        /* road section unchanged (no simple validation) */
         <StyledSearchSection>
           <StyledCheckboxWrapper>
             <StyledCheckbox
@@ -922,7 +995,9 @@ const SearchInput = ({
                         aria-labelledby="search-input-track-m-label"
                         aria-invalid={!!getTrackField(2).invalid}
                         aria-describedby={
-                          combinedFieldMessages.length ? trackErrorsId : undefined
+                          combinedFieldMessages.length
+                            ? trackErrorsId
+                            : undefined
                         }
                         type="text"
                         value={getTrackSearchValuePart(2, searchValue)}
@@ -987,81 +1062,43 @@ const SearchInput = ({
         </StyledSearchSection>
       )}
 
-      {activeSwitch === 'address' && (
+      {['address', 'nomenclature', 'premise', 'layer'].includes(
+        activeSwitch
+      ) && (
         <StyledSearchSection>
           <StyledRowWithButton>
             <StyledInputsContainer>
               <StyledWideInputGroup>
                 <StyledRelativeInputWrapper>
                   <StyledWidePillInput
-                    id="search-input-address"
+                    id={`search-input-${activeSwitch}`}
                     aria-label={
-                      strings.tooltips.searchButton || 'Address search'
+                      strings.search[activeSwitch]?.title ||
+                      `${activeSwitch} search`
                     }
                     type="text"
                     value={searchValue}
-                    onChange={(e) => setSearchValue(e.target.value)}
+                    onChange={(e) => {
+                      setSearchValue(e.target.value);
+                      // live validation handled in useEffect
+                    }}
                     onKeyPress={(e) => {
-                      if (e.key === 'Enter') handleSeach(searchValue);
+                      if (e.key === 'Enter') submitForActiveSwitch();
                     }}
                   />
                 </StyledRelativeInputWrapper>
               </StyledWideInputGroup>
             </StyledInputsContainer>
-            {(searchResults !== null || featureSearchResults.length > 0) &&
-            searchValue === lastSearchValue &&
-            !isSearching ? (
-              <StyledStandardSearchButton
-                type="button"
-                aria-label="Search"
-                onClick={emptySearchResults}
-              >
-                <FontAwesomeIcon icon={faTrash} />
-              </StyledStandardSearchButton>
-            ) : (
-              !isSearching && (
-                <StyledStandardSearchButton
-                  type="button"
-                  aria-label="Search"
-                  onClick={onClickSearchDefault}
-                >
-                  <FontAwesomeIcon icon={faMagnifyingGlass} />
-                </StyledStandardSearchButton>
-              )
-            )}
-          </StyledRowWithButton>
-        </StyledSearchSection>
-      )}
 
-      {activeSwitch === 'nomenclature' && (
-        <StyledSearchSection>
-          <StyledRowWithButton>
-            <StyledInputsContainer>
-              <StyledWideInputGroup>
-                <StyledRelativeInputWrapper>
-                  <StyledWidePillInput
-                    id="search-input-nomenclature"
-                    aria-label={
-                      strings.search.nomenclature?.title ||
-                      'Nomenclature search'
-                    }
-                    type="text"
-                    value={searchValue}
-                    onChange={(e) => setSearchValue(e.target.value)}
-                    onKeyPress={(e) => {
-                      if (e.key === 'Enter') handleSeach(searchValue);
-                    }}
-                  />
-                </StyledRelativeInputWrapper>
-              </StyledWideInputGroup>
-            </StyledInputsContainer>
             {(searchResults !== null || featureSearchResults.length > 0) &&
             searchValue === lastSearchValue &&
             !isSearching ? (
               <StyledStandardSearchButton
                 type="button"
                 aria-label="Search"
-                onClick={emptySearchResults}
+                onClick={() => {
+                  emptySearchResults();
+                }}
               >
                 <FontAwesomeIcon icon={faTrash} />
               </StyledStandardSearchButton>
@@ -1070,108 +1107,39 @@ const SearchInput = ({
                 <StyledStandardSearchButton
                   type="button"
                   aria-label="Search"
-                  onClick={onClickSearchDefault}
+                  onClick={submitForActiveSwitch}
                 >
                   <FontAwesomeIcon icon={faMagnifyingGlass} />
                 </StyledStandardSearchButton>
               )
             )}
           </StyledRowWithButton>
-        </StyledSearchSection>
-      )}
 
-      {activeSwitch === 'premise' && (
-        <StyledSearchSection>
-          <StyledRowWithButton>
-            <StyledInputsContainer>
-              <StyledWideInputGroup>
-                <StyledRelativeInputWrapper>
-                  <StyledWidePillInput
-                    id="search-input-premise"
-                    aria-label={
-                      strings.search.premise?.title || 'Premise search'
-                    }
-                    type="text"
-                    value={searchValue}
-                    onChange={(e) => setSearchValue(e.target.value)}
-                    onKeyPress={(e) => {
-                      if (e.key === 'Enter') handleSeach(searchValue);
-                    }}
-                  />
-                </StyledRelativeInputWrapper>
-              </StyledWideInputGroup>
-            </StyledInputsContainer>
-            {(searchResults !== null || featureSearchResults.length > 0) &&
-            searchValue === lastSearchValue &&
-            !isSearching ? (
-              <StyledStandardSearchButton
-                type="button"
-                aria-label="Search"
-                onClick={emptySearchResults}
-              >
-                <FontAwesomeIcon icon={faTrash} />
-              </StyledStandardSearchButton>
-            ) : (
-              !isSearching && (
-                <StyledStandardSearchButton
-                  type="button"
-                  aria-label="Search"
-                  onClick={onClickSearchDefault}
-                >
-                  <FontAwesomeIcon icon={faMagnifyingGlass} />
-                </StyledStandardSearchButton>
-              )
-            )}
-          </StyledRowWithButton>
-        </StyledSearchSection>
-      )}
-
-      {activeSwitch === 'layer' && (
-        <StyledSearchSection>
-          <StyledRowWithButton>
-            <StyledInputsContainer>
-              <StyledWideInputGroup>
-                <StyledRelativeInputWrapper>
-                  <StyledWidePillInput
-                    id="search-input-layer"
-                    aria-label={strings.search.layer?.title || 'Layer search'}
-                    type="text"
-                    value={searchValue}
-                    onChange={(e) => setSearchValue(e.target.value)}
-                    onKeyPress={(e) => {
-                      if (e.key === 'Enter') handleSeach(searchValue);
-                    }}
-                  />
-                </StyledRelativeInputWrapper>
-              </StyledWideInputGroup>
-            </StyledInputsContainer>
-            {(searchResults !== null || featureSearchResults.length > 0) &&
-            searchValue === lastSearchValue &&
-            !isSearching ? (
-              <StyledStandardSearchButton
-                type="button"
-                aria-label="Search"
-                onClick={emptySearchResults}
-              >
-                <FontAwesomeIcon icon={faTrash} />
-              </StyledStandardSearchButton>
-            ) : (
-              !isSearching && (
-                <StyledStandardSearchButton
-                  type="button"
-                  aria-label="Search"
-                  onClick={onClickSearchDefault}
-                >
-                  <FontAwesomeIcon icon={faMagnifyingGlass} />
-                </StyledStandardSearchButton>
-              )
-            )}
-          </StyledRowWithButton>
+          {simpleError && (
+            <StyledValidationMessage role="alert" aria-live="polite">
+              {simpleError}
+            </StyledValidationMessage>
+          )}
         </StyledSearchSection>
       )}
 
       {activeSwitch === 'feature' && (
         <StyledFeatureSearchSection>
+          <StyledSelectedLayerWrapper>
+            {selectedLayersByType.mapLayers.length > 0 ? (
+              <>
+                <StyledSelectedLayerTitle>
+                  {strings.search.feature.searchFromLayer}
+                </StyledSelectedLayerTitle>
+                <StyledSelectedLayerText>
+                  {selectedLayersByType.mapLayers[0].name}
+                </StyledSelectedLayerText>
+              </>
+            ) : (
+              <StyledNoActivaLayers></StyledNoActivaLayers>
+            )}
+          </StyledSelectedLayerWrapper>
+
           <StyledRowWithButton>
             <StyledInputsContainer>
               <StyledWideInputGroup>
@@ -1216,20 +1184,16 @@ const SearchInput = ({
             )}
           </StyledRowWithButton>
 
-          <StyledSelectedLayerWrapper>
-            {selectedLayersByType.mapLayers.length > 0 ? (
-              <>
-                <StyledSelectedLayerTitle>
-                  {strings.search.feature.searchFromLayer}
-                </StyledSelectedLayerTitle>
-                <StyledSelectedLayerText>
-                  {selectedLayersByType.mapLayers[0].name}
-                </StyledSelectedLayerText>
-              </>
-            ) : (
-              <StyledNoActivaLayers></StyledNoActivaLayers>
-            )}
-          </StyledSelectedLayerWrapper>
+          {featureErrors &&
+            featureErrors.map((error, i) => (
+              <StyledValidationMessage
+                key={`feature-error-${i}-${error}`}
+                role="alert"
+                aria-live="polite"
+              >
+                {strings?.search?.feature?.errors?.[error] ?? error}
+              </StyledValidationMessage>
+            ))}
         </StyledFeatureSearchSection>
       )}
     </>

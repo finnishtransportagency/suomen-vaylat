@@ -1,19 +1,20 @@
-import { setTrackErrors } from '../../../state/slices/rpcSlice';
+import { setFeatureErrors, setTrackErrors } from '../../../state/slices/rpcSlice';
 import strings from '../../../translations';
 
 export const vectorLayerId = 'SEARCH_VECTORLAYER';
 export const markerId = 'SEARCH_MARKER';
 
-export const validateFeatureSearch = (searchValue, setFeatureErrors) => {
+export const validateFeatureSearch = (searchValue, store, requireAll = false) => {
   const newErrors = [];
-  const regex = /[^A-Za-z0-9äöåÄÖÅ -,./()]/;
-  if (searchValue.length < 3) {
+  const regex = /[^A-Za-z0-9äöåÄÖÅ \-\/.,()]/;
+  if (requireAll && searchValue.length < 3) {
     newErrors.push('length');
   }
   if (regex.test(searchValue)) {
     newErrors.push('regex');
   }
-  newErrors.length > 0 && setFeatureErrors(newErrors);
+  console.log(newErrors)
+  store.dispatch(setFeatureErrors(newErrors));
   return newErrors.length === 0;
 };
 
@@ -41,12 +42,40 @@ export const removeMarkersAndFeatures = (channel) => {
     ]);
 };
 
+export const validateSimpleSearch = (searchValue, requireAll = false) => {
+  const value = (searchValue || '').trim();
+  const allowed = /^[A-Za-z0-9äöåÄÖÅ \-\/]+$/;
+
+  // translation helper (fallback to English)
+  const t = (key, fallback) => {
+    const path = strings?.search?.errors;
+    if (path && typeof path[key] === 'string') return path[key];
+    return fallback;
+  };
+
+  if (value === '') {
+    if (requireAll) {
+      return t('required', 'This field is required');
+    }
+    return '';
+  }
+
+  if (!allowed.test(value)) {
+    return t(
+      'invalidChars',
+      'Invalid characters — only letters (a–z, åäö), numbers and spaces are allowed'
+    );
+  }
+
+  return '';
+};
+
 export const validateTrackSearch = (searchValue, store, requireAll = false) => {
   // normalize input (trim whitespace)
   const value = (searchValue || '').trim();
 
   // patterns
-  const alphaNum = /^[A-Za-z0-9 ]+$/; // first part: letters, digits and space only
+  const alphaNum = /^[A-Za-z0-9äöåÄÖÅ ]+$/;// first part: letters, digits and space only
   const numOnly = /^[0-9]+$/; // second & third: digits only
 
   // split into parts; we accept less than 3 parts for live validation
