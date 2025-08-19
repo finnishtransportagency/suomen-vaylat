@@ -1,5 +1,5 @@
 import AddRessSearchResultPanel from './address-search/AddRessSearchResultPanel';
-import MetaSearchResultPanel from './metadata-search/MetadataSearchResultPanel';
+import MetadataSearchResultPanel from './metadata-search/MetadataSearchResultPanel';
 import FeatureSearchResultPanel from './feature-search/FeatureSearchResultPanel';
 import styled from 'styled-components';
 import { useAppSelector } from '../../state/hooks';
@@ -50,7 +50,7 @@ const SearchResultPanel = ({
         />
       )}
       {isSearchOpen && searchResults !== null && searchType === 'metadata' && (
-        <MetaSearchResultPanel
+        <MetadataSearchResultPanel
           searchResults={searchResults}
           allLayers={allLayers}
         />

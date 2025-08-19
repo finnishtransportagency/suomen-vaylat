@@ -71,6 +71,9 @@ const StyledStandardSearchButton = styled.button`
   padding: 0 0 0 0.5em;
 
   &:hover {
+    svg {
+    opacity: 0.95;
+    }
     opacity: 0.95;
   }
   visibility: ${(p) => (p.roadEndEnabled ? 'hidden' : 'visible')};

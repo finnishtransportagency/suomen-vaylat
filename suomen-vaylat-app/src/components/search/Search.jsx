@@ -140,6 +140,13 @@ export const StyledDropdownContentItem = styled.div`
     margin: 0;
     padding: 0;
   }
+
+  &:hover {
+    svg {
+    opacity: 0.9;
+    }
+    opacity: 0.9;
+  }
 `;
 
 export const StyledDropdownContentItemTitle = styled.p`
@@ -515,6 +522,10 @@ const Search = () => {
 
   // define circlebutton props
   let iconToShow = faSearch;
+  let circleButtonText = strings.tooltips.search;
+  let circleButtonTooltipBackgroundColor = theme.colors.mainWhite;
+  let circleButtonTooltipColor = theme.colors.mainColor1;
+  let circleButtonBackgroundColor = theme.colors.mainColor1;
   if (isSearchOpen) {
     if (
       searchResults ||
@@ -523,6 +534,16 @@ const Search = () => {
       iconToShow = faMinus;
     } else {
       iconToShow = faTimes;
+    }
+  } else {
+    if (
+      searchResults ||
+      (featureSearchResults && featureSearchResults.length > 0)
+    ) {
+      circleButtonText = strings.tooltips.searchActive;
+      circleButtonTooltipBackgroundColor = theme.colors.mainColor1Selected;
+      circleButtonTooltipColor = theme.colors.mainWhite;
+      circleButtonBackgroundColor = theme.colors.mainColor1Selected;
     }
   }
 
@@ -538,10 +559,13 @@ const Search = () => {
 
       <CircleButton
         icon={iconToShow}
-        text={strings.tooltips.search}
+        text={circleButtonText}
         toggleState={isSearchOpen}
         tooltipDirection={'left'}
         clickAction={handleSearchButton}
+        tooltipBackgroundColor={circleButtonTooltipBackgroundColor}
+        tooltipColor={circleButtonTooltipColor}
+        color={circleButtonBackgroundColor}
       />
 
       <AnimatePresence>

@@ -48,9 +48,12 @@ const AddRessSearchResultPanel = ({
   const nonNomenclatureTypes = Array.from(typeMap.values());
 
   // Guard: ensure we always work with an array
-  const locations = (searchResults && searchResults.result && Array.isArray(searchResults.result.locations))
-    ? searchResults.result.locations
-    : [];
+  const locations =
+    searchResults &&
+    searchResults.result &&
+    Array.isArray(searchResults.result.locations)
+      ? searchResults.result.locations
+      : [];
 
   // compute filteredResult via useMemo for stability
   const filteredResult = useMemo(() => {
@@ -258,6 +261,7 @@ const AddRessSearchResultPanel = ({
             return (
               <StyledDropdownContentItem
                 key={name + '_' + index}
+                tabIndex={0}
                 type={'searchResult'}
                 onClick={() => {
                   handleSearchSelect(
@@ -274,12 +278,26 @@ const AddRessSearchResultPanel = ({
                   );
                   setSearchClickedRow(index);
                 }}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    handleSearchSelect(
+                      name,
+                      lon,
+                      lat,
+                      geom,
+                      osa,
+                      ajorata,
+                      etaisyys,
+                      osa_loppu,
+                      etaisyys_loppu,
+                      vkmType
+                    );
+                    setSearchClickedRow(index);
+                  }
+                }}
               >
                 <StyledSearchIcon
-                  active={
-                    searchClickedRow === index ||
-                    locations.length === 1
-                  }
+                  active={searchClickedRow === index || locations.length === 1}
                 >
                   <FontAwesomeIcon
                     icon={
@@ -293,10 +311,7 @@ const AddRessSearchResultPanel = ({
                 </StyledSearchIcon>
                 <StyledDropdownContentItemTitle
                   type={'searchResult'}
-                  active={
-                    searchClickedRow === index ||
-                    locations.length === 1
-                  }
+                  active={searchClickedRow === index || locations.length === 1}
                 >
                   {visibleText}
                 </StyledDropdownContentItemTitle>

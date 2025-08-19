@@ -20,6 +20,7 @@
       "opacity": "Opasiteetti"
     },
     "search": "Haku",
+    "searchActive": "Haku aktiivisena",
     "searchButton": "Osoitehaku",
     "layerlistButton": "Tasovalikko",
     "fullscreenButton": "Koko näyttö",

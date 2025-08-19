@@ -70,7 +70,6 @@ const InfoButton = styled.button`
   }
 `;
 
-
 const StyledToolTipContainer = styled.div`
   width: 100%;
   border-radius: 3px;
@@ -90,7 +89,15 @@ const StyledToolTipContainer = styled.div`
  * - tooltipText / tooltipAddress: shown when info open
  * - id: unique id for radio input
  */
-const SearchSwitch = ({ action, isSelected, title, tooltipText, tooltipAddress, id, isMobile }) => {
+const SearchSwitch = ({
+  action,
+  isSelected,
+  title,
+  tooltipText,
+  tooltipAddress,
+  id,
+  isMobile
+}) => {
   const theme = useTheme();
   const [isOpen, setOpen] = useState(false);
 
@@ -166,11 +173,18 @@ const SearchSwitch = ({ action, isSelected, title, tooltipText, tooltipAddress, 
       </Row>
 
       {isOpen && (
-        <StyledToolTipContainer id={`search-switch-info-${id}`} isMobile={isMobile} role="region" aria-live="polite">
+        <StyledToolTipContainer
+          id={`search-switch-info-${id}`}
+          isMobile={isMobile}
+          role="region"
+          aria-live="polite"
+        >
           <strong>{title}</strong>
           {tooltipAddress && <div>{tooltipAddress}</div>}
           <div style={{ marginTop: 6, color: '#666', fontSize: '0.96em' }}>
-            {Array.isArray(tooltipText) ? tooltipText.map((t, i) => <div key={i}>{t}</div>) : tooltipText}
+            {Array.isArray(tooltipText)
+              ? tooltipText.map((t, i) => <div key={i}>{t}</div>)
+              : tooltipText}
           </div>
         </StyledToolTipContainer>
       )}

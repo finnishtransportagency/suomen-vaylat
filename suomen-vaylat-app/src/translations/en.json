@@ -20,6 +20,7 @@
       "opacity": "Opacity"
     },
     "search": "Search",
+    "searchActive": "Active search",
     "searchButton": "Address search",
     "layerlistButton": "Layerlist",
     "fullscreenButton": "Full screen",
