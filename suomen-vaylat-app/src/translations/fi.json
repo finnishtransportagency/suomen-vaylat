@@ -475,6 +475,14 @@
       }
     },
     "track" : {
+      "errors": {
+        "invalidTrackIdentifier": "Virheellinen radan tunniste — tunniste saa sisältää vain kirjaimia, numeroita ja välilyöntejä",
+        "trackIdentifierRequired": "Radan tunniste on pakollinen",
+        "invalidKilometer": "Virheellinen ratakilometri — ratakilometrin tulee sisältää vain numeroita",
+        "kilometerRequired": "Ratakilometri on pakollinen",
+        "invalidMeter": "Virheellinen ratametri — ratametrin tulee sisältää vain numeroita",
+        "meterRequired": "Ratametri on pakollinen"
+      },
       "tracknumber" : "Ratanumero",
       "trackkm" : "Ratakilometri",
       "trackm" : "Ratametri",

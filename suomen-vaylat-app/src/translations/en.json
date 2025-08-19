@@ -476,6 +476,14 @@
       }
     },
     "track" : {
+      "errors": {
+        "invalidTrackIdentifier": "Invalid track identifier — track id must contain only letters, numbers and spaces",
+        "trackIdentifierRequired": "Track identifier is required",
+        "invalidKilometer": "Invalid kilometer — kilometer must contain only digits",
+        "kilometerRequired": "Kilometer is required",
+        "invalidMeter": "Invalid meter — meter must contain only digits",
+        "meterRequired": "Meter is required"
+      },
       "tracknumber" : "Track number",
       "trackkm" : "Track kilometre",
       "trackm" : "Track metre",

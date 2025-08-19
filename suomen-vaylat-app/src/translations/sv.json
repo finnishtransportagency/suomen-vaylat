@@ -476,6 +476,14 @@
       }
     },
     "track" : {
+      "errors": {
+        "invalidTrackIdentifier": "Ogiltigt spår-id — spår-id får endast innehålla bokstäver, siffror och mellanslag",
+        "trackIdentifierRequired": "Spår-id är obligatoriskt",
+        "invalidKilometer": "Ogiltig kilometerangivelse — kilometertalet får endast innehålla siffror",
+        "kilometerRequired": "Kilometer är obligatoriskt",
+        "invalidMeter": "Ogiltig meterangivelse — metertalet får endast innehålla siffror",
+        "meterRequired": "Meter är obligatoriskt"
+      },
       "tracknumber" : "Bannummer",
       "trackkm" : "Spårkilometer",
       "trackm" : "Banmeter",

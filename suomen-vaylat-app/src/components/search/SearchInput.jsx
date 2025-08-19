@@ -7,8 +7,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { validateTrackSearch } from './utils/SearchUtil';
 import { ReactReduxContext } from 'react-redux';
 
-// --- Better Responsive "road" field styling ---
-
 const StyledSectionDivider = styled.div`
   margin: 0.5em 0;
   border-bottom: 1px solid #dee2e6;
@@ -37,7 +35,6 @@ const InputRow = styled.div`
   }
 `;
 
-/* New wrappers to place inputs left and button right */
 const StyledRowWithButton = styled.div`
   display: flex;
   align-items: center;
@@ -52,7 +49,6 @@ const StyledRowWithButton = styled.div`
   }
 `;
 
-/* container for inputs to allow them to wrap inside left area */
 const StyledInputsContainer = styled.div`
   flex: 1 1 0;
   min-width: 0; /* ensure proper shrinking inside flex */
@@ -60,7 +56,6 @@ const StyledInputsContainer = styled.div`
   align-items: center; /* vertically center the input row so the button aligns middle */
 `;
 
-/* Search button styling (right) */
 const StyledStandardSearchButton = styled.button`
   background: none;
   font-size: 1.2em;
@@ -81,7 +76,6 @@ const StyledStandardSearchButton = styled.button`
   visibility: ${(p) => (p.roadEndEnabled ? 'hidden' : 'visible')};
 `;
 
-/* Relative wrapper for an input that has a clear icon inside it */
 const StyledRelativeInputWrapper = styled.div`
   position: relative;
   width: 100%;
@@ -121,7 +115,6 @@ const PillInput = styled.input`
   }
 `;
 
-/* place near other styled components (after PillInput) */
 const FieldItem = styled.div`
   display: flex;
   flex-direction: column;
@@ -140,12 +133,10 @@ const LabelAbove = styled.label`
   margin-left: 0.5em;
 `;
 
-// For main search types single input (e.g. address, track, etc)
 const StyledWideInputGroup = styled.div`
   width: 100%;
 `;
 
-/* ensure room for inside clear button */
 const StyledWidePillInput = styled(PillInput)`
   width: 100%;
   min-width: 150px;
@@ -154,7 +145,6 @@ const StyledWidePillInput = styled(PillInput)`
   padding-right: 44px; /* room for clear button */
 `;
 
-/* keep feature input same (we'll add wrapper + clear button) */
 const StyledFeatureSearchSection = styled.div`
   display: flex;
   flex-direction: column;
@@ -190,7 +180,14 @@ const CheckboxLabel = styled.label`
 
 const StyledValidationMessage = styled.div`
   color: ${(props) => props.theme.colors.secondaryColorDarkOrange || '#c55'};
-  margin-top: 4px;
+  margin-top: 8px;
+  font-size: 0.95em;
+`;
+
+const StyledErrorsList = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 `;
 
 const StyledSelectedLayerWrapper = styled.div`
@@ -227,7 +224,6 @@ const StyledNoActivaLayers = styled.div`
   font-weight: 500;
 `;
 
-// Utility methods (your original versions, unchanged)
 const getSearchValuePart = (
   searchValue,
   searchType,
@@ -364,7 +360,7 @@ const updateTrackSearchValue = (
   newValue,
   position,
   searchValue,
-  setSearchValue,
+  setSearchValue
 ) => {
   let searchArray = searchValue ? searchValue.split('/') : ['', '', ''];
   searchArray[position] = newValue;
@@ -405,7 +401,8 @@ const SearchInput = ({
     handleSeach(searchValue);
   };
   const onClickSearchTrack = () => {
-    if (validateTrackSearch(searchValue, store)) {
+    // require full presence + format for submit
+    if (validateTrackSearch(searchValue, store, true)) {
       handleSeach(parseTrackSearchQuery(searchValue));
     }
   };
@@ -414,13 +411,34 @@ const SearchInput = ({
   };
 
   useEffect(() => {
-    //track validation every time searchValue changes
+    // live validation every time searchValue changes (only format checks, do not require all fields)
     if (activeSwitch === 'track') {
-      validateTrackSearch(searchValue, store);
+      validateTrackSearch(searchValue, store, false);
     }
-  }, [activeSwitch, searchValue, validateTrackSearch]);
+  }, [activeSwitch, searchValue]);
 
   const trackErrorsId = 'search-input-track-errors';
+
+  // helpers to read  trackErrors
+  const getTrackField = (index) => {
+    if (!trackErrors) return { invalid: false, message: '' };
+    if (trackErrors[index].invalid && trackErrors[index].message.length > 0) {
+      return trackErrors[index];
+    }
+    return { invalid: false, message: '' };
+  };
+
+
+  const getCombinedFieldMessage = (index) => {
+    const field = getTrackField(index);
+    if (!field || !field.invalid) return '';
+    return field.message;
+  };
+
+  // Build an array of messages for all fields (displayed together under the inputs)
+  const combinedFieldMessages = [0, 1, 2]
+    .map((i) => getCombinedFieldMessage(i))
+    .filter(Boolean);
 
   return (
     <>
@@ -482,7 +500,6 @@ const SearchInput = ({
               onKeyDown={(e) => {
                 if (e.key === 'Enter') {
                   e.preventDefault();
-                  // toggle checkbox (use currentTarget to be safe)
                   e.currentTarget.click();
                 }
               }}
@@ -842,9 +859,9 @@ const SearchInput = ({
                     <PillInput
                       id="search-input-track-number"
                       aria-labelledby="search-input-track-number-label"
-                      aria-invalid={!!trackErrors[0]}
+                      aria-invalid={!!getTrackField(0).invalid}
                       aria-describedby={
-                        trackErrors.some((e) => e) ? trackErrorsId : undefined
+                        combinedFieldMessages.length ? trackErrorsId : undefined
                       }
                       type="text"
                       value={getTrackSearchValuePart(0, searchValue)}
@@ -853,7 +870,7 @@ const SearchInput = ({
                           e.target.value,
                           0,
                           searchValue,
-                          setSearchValue,
+                          setSearchValue
                         )
                       }
                       onKeyPress={(e) => {
@@ -861,7 +878,7 @@ const SearchInput = ({
                           onClickSearchTrack();
                         }
                       }}
-                      className={trackErrors[0] ? 'error' : ''}
+                      className={getTrackField(0).invalid ? 'error' : ''}
                     />
                   </FieldItem>
 
@@ -872,9 +889,9 @@ const SearchInput = ({
                     <PillInput
                       id="search-input-track-km"
                       aria-labelledby="search-input-track-km-label"
-                      aria-invalid={!!trackErrors[1]}
+                      aria-invalid={!!getTrackField(1).invalid}
                       aria-describedby={
-                        trackErrors.some((e) => e) ? trackErrorsId : undefined
+                        combinedFieldMessages.length ? trackErrorsId : undefined
                       }
                       type="text"
                       value={getTrackSearchValuePart(1, searchValue)}
@@ -883,7 +900,7 @@ const SearchInput = ({
                           e.target.value,
                           1,
                           searchValue,
-                          setSearchValue,
+                          setSearchValue
                         )
                       }
                       onKeyPress={(e) => {
@@ -891,7 +908,7 @@ const SearchInput = ({
                           onClickSearchTrack();
                         }
                       }}
-                      className={trackErrors[1] ? 'error' : ''}
+                      className={getTrackField(1).invalid ? 'error' : ''}
                     />
                   </FieldItem>
 
@@ -903,9 +920,9 @@ const SearchInput = ({
                       <PillInput
                         id="search-input-track-m"
                         aria-labelledby="search-input-track-m-label"
-                        aria-invalid={!!trackErrors[2]}
+                        aria-invalid={!!getTrackField(2).invalid}
                         aria-describedby={
-                          trackErrors.some((e) => e) ? trackErrorsId : undefined
+                          combinedFieldMessages.length ? trackErrorsId : undefined
                         }
                         type="text"
                         value={getTrackSearchValuePart(2, searchValue)}
@@ -914,7 +931,7 @@ const SearchInput = ({
                             e.target.value,
                             2,
                             searchValue,
-                            setSearchValue,
+                            setSearchValue
                           )
                         }
                         onKeyPress={(e) => {
@@ -922,7 +939,7 @@ const SearchInput = ({
                             onClickSearchTrack();
                           }
                         }}
-                        className={trackErrors[2] ? 'error' : ''}
+                        className={getTrackField(2).invalid ? 'error' : ''}
                       />
 
                       {(searchResults !== null ||
@@ -951,9 +968,17 @@ const SearchInput = ({
                   </FieldItem>
                 </InputRow>
 
-                {trackErrors.some((error) => error === true) && (
-                  <StyledValidationMessage id={trackErrorsId}>
-                    {strings.search.track.trackMandatoryMessage}
+                {combinedFieldMessages.length > 0 && (
+                  <StyledValidationMessage
+                    id={trackErrorsId}
+                    role="alert"
+                    aria-live="polite"
+                  >
+                    <StyledErrorsList>
+                      {combinedFieldMessages.map((msg, i) => (
+                        <div key={`track-msg-${i}`}>{msg}</div>
+                      ))}
+                    </StyledErrorsList>
                   </StyledValidationMessage>
                 )}
               </StyledFieldGroup>
