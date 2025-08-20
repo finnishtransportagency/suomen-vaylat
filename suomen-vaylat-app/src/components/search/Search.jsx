@@ -21,6 +21,7 @@ import {
   setSearchOn,
   searchVKMTrack,
   setFeatureSearchResults,
+  setSearchResults,
 } from '../../state/slices/rpcSlice';
 
 import {
@@ -165,7 +166,6 @@ const Search = () => {
   const [searchValue, setSearchValue] = useState('');
   const [lastSearchValue, setLastSearchValue] = useState('');
   const [isSearching, setIsSearching] = useState(true);
-  const [searchResults, setSearchResults] = useState(null);
   const [isSearchMethodSelectorOpen, setIsSearchMethodSelectorOpen] =
     useState(false);
   const [searchType, setSearchType] = useState('address');
@@ -177,7 +177,7 @@ const Search = () => {
     activeSwitch,
     isMoreSearchOpen
   } = useAppSelector((state) => state.ui);
-  const { channel, allLayers, selectedLayersByType, featureSearchResults } =
+  const { channel, allLayers, selectedLayersByType, featureSearchResults, searchResults } =
     useAppSelector((state) => state.rpc);
 
   const { store } = useContext(ReactReduxContext);
@@ -252,7 +252,7 @@ const Search = () => {
               }
 
               const mimicdata = { result: { locations: locations } };
-              setSearchResults(mimicdata);
+              store.dispatch(setSearchResults(mimicdata));
               if (
                 (data?.result?.locations?.length > 1 ||
                   data?.geom?.features[0].geometry?.coordinates?.length > 0) &&
@@ -271,7 +271,7 @@ const Search = () => {
     }
     setSearchValue(value);
     setLastSearchValue(value);
-    setSearchResults(null);
+    store.dispatch(setSearchResults(null));
   };
 
   // Handle metadata search
@@ -377,7 +377,7 @@ const Search = () => {
         setIsSearching(false);
         if (data.success) {
           if (data.result) {
-            setSearchResults(data);
+            store.dispatch(setSearchResults(data));
           }
           if (
             (data?.result?.locations?.length > 1 ||
@@ -395,7 +395,7 @@ const Search = () => {
         setIsSearching(false);
         if (data.success) {
           if (data.results) {
-            setSearchResults(data.results);
+            store.dispatch(setSearchResults(data.results));
           }
         }
       });
@@ -480,7 +480,7 @@ const Search = () => {
   const emptySearchResults = () => {
     store.dispatch(setGeoJsonArray([]));
     store.dispatch(setFeatureSearchResults([]));
-    setSearchResults(null);
+    store.dispatch(setSearchResults(null));
     setSearchValue('');
     setLastSearchValue('');
     removeMarkersAndFeatures(channel);
@@ -500,7 +500,7 @@ const Search = () => {
       setIsSearching(false);
       store.dispatch(setSearchOn(null));
       isSearchOpen && removeMarkersAndFeatures(channel);
-      isSearchOpen && setSearchResults(null);
+      isSearchOpen && store.dispatch(setSearchResults(null));
       isSearchOpen && setSearchValue('');
       isSearchMethodSelectorOpen && setIsSearchMethodSelectorOpen(false);
       setSearchType('address');
@@ -562,8 +562,6 @@ const Search = () => {
             <SearchDialog
               searchValue={searchValue}
               setSearchValue={setSearchValue}
-              searchResults={searchResults}
-              setSearchResults={setSearchResults}
               firstSearchResultShown={firstSearchResultShown}
               setFirstSearchResultShown={setFirstSearchResultShown}
               setSearchClickedRow={setSearchClickedRow}

@@ -2,11 +2,13 @@ import strings from '../../../translations';
 import { StyledDropDown, StyledDropdownContentItem, StyledDropdownContentItemTitle } from '../Search';
 import Layer from '../../layer/Layer';
 import { dropdownVariants } from '../utils/SearchUtil';
+import { useAppSelector } from '../../../state/hooks';
 
 const MetadataSearchResultPanel = ({
-    searchResults,
     allLayers
 }) => {
+    const { searchResults } = useAppSelector((state) => state.rpc);
+    
     return (
         <StyledDropDown
         key={'dropdown-content-metadata'}

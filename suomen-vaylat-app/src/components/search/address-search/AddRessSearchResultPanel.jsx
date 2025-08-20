@@ -29,14 +29,13 @@ import {
 } from '../../../state/slices/rpcSlice';
 
 const AddRessSearchResultPanel = ({
-  searchResults,
   firstSearchResultShown,
   setFirstSearchResultShown,
   setSearchClickedRow,
   searchClickedRow
 }) => {
   const { activeSwitch } = useAppSelector((state) => state.ui);
-  const { channel } = useAppSelector((state) => state.rpc);
+  const { channel, searchResults } = useAppSelector((state) => state.rpc);
   const { store } = useContext(ReactReduxContext);
 
   const typeResolvTable = [

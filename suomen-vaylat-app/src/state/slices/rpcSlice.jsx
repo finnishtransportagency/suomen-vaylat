@@ -69,6 +69,7 @@ const initialState = {
     { invalid: false, message: '' }
   ],
   featureErrors: [],
+  searchResults: null,
   // TODO: waiting for logging in option
   isLoggedIn: false
 };
@@ -974,6 +975,10 @@ export const rpcSlice = createSlice({
 
     setFeatureErrors: (state, action) => {
       state.featureErrors = action.payload;
+    },
+
+    setSearchResults: (state, action) => {
+      state.searchResults = action.payload;
     }
   }
 });
@@ -1046,7 +1051,8 @@ export const {
   setViews,
   setIsLoggedIn,
   setTrackErrors,
-  setFeatureErrors
+  setFeatureErrors,
+  setSearchResults
 } = rpcSlice.actions;
 
 export default rpcSlice.reducer;

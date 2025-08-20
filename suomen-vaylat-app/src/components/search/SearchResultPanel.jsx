@@ -21,7 +21,6 @@ const StyledSearchResultsTitle = styled.p`
 
 const SearchResultPanel = ({
   isSearchOpen,
-  searchResults,
   searchType,
   firstSearchResultShown,
   setFirstSearchResultShown,
@@ -31,7 +30,7 @@ const SearchResultPanel = ({
   handleFeatureSearch,
   lastSearchValue
 }) => {
-  const { featureSearchResults } = useAppSelector((state) => state.rpc);
+  const { featureSearchResults, searchResults } = useAppSelector((state) => state.rpc);
   return (
     <SearchPanelMain>
       {(searchResults !== null || featureSearchResults.length > 0) && (
@@ -41,7 +40,6 @@ const SearchResultPanel = ({
       )}
       {isSearchOpen && searchResults !== null && searchType === 'address' && (
         <AddRessSearchResultPanel
-          searchResults={searchResults}
           firstSearchResultShown={firstSearchResultShown}
           setFirstSearchResultShown={setFirstSearchResultShown}
           isMobile={isMobile}
@@ -51,7 +49,6 @@ const SearchResultPanel = ({
       )}
       {isSearchOpen && searchResults !== null && searchType === 'metadata' && (
         <MetadataSearchResultPanel
-          searchResults={searchResults}
           allLayers={allLayers}
         />
       )}

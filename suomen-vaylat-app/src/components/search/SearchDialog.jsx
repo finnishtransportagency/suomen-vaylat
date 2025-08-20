@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import SearchSwitch from './utils/SearchSwitch';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import SearchResultPanel from './SearchResultPanel';
-import { resetFeatureSearchResults } from '../../state/slices/rpcSlice';
+import { resetFeatureSearchResults, setSearchResults } from '../../state/slices/rpcSlice';
 import { removeMarkersAndFeatures } from './utils/SearchUtil';
 import { isMobile } from '../../theme/theme';
 import SearchInput from './SearchInput';
@@ -148,8 +148,6 @@ const switchDefinitions = [
 const SearchDialog = ({
   searchValue,
   setSearchValue,
-  searchResults,
-  setSearchResults,
   firstSearchResultShown,
   setFirstSearchResultShown,
   setSearchClickedRow,
@@ -167,7 +165,7 @@ const SearchDialog = ({
   emptySearchResults
 }) => {
   const { store } = useContext(ReactReduxContext);
-  const { featureSearchResults, channel } = useAppSelector(
+  const { featureSearchResults, channel, searchResults } = useAppSelector(
     (state) => state.rpc
   );
   const { activeSwitch } = useAppSelector((state) => state.ui);
@@ -193,7 +191,7 @@ const SearchDialog = ({
       store.dispatch(setActiveSwitch('default'));
       setSearchType('address');
     }
-    setSearchResults(null);
+    store.dispatch(setSearchResults(null));
     setSearchValue('');
     store.dispatch(resetFeatureSearchResults());
     removeMarkersAndFeatures(channel);
@@ -236,8 +234,6 @@ const SearchDialog = ({
       <SearchInput
         searchValue={searchValue}
         setSearchValue={setSearchValue}
-        searchResults={searchResults}
-        setSearchResults={setSearchResults}
         firstSearchResultShown={firstSearchResultShown}
         setFirstSearchResultShown={setFirstSearchResultShown}
         setSearchClickedRow={setSearchClickedRow}
@@ -272,7 +268,6 @@ const SearchDialog = ({
             <SearchResultPanel
               isSearchOpen={isSearchOpen}
               isSearching={isSearching}
-              searchResults={searchResults}
               searchType={searchType}
               firstSearchResultShown={firstSearchResultShown}
               setFirstSearchResultShown={setFirstSearchResultShown}
