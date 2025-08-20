@@ -296,7 +296,6 @@ const RoadSearchInput = ({
   const {
     featureSearchResults, searchResults
   } = useAppSelector((state) => state.rpc);
-  const { activeSwitch } = useAppSelector((state) => state.ui);
 
   const [roadEndEnabled, setRoadEndEnabled] = useState(false);
 
@@ -305,7 +304,7 @@ const RoadSearchInput = ({
   };
 
   useEffect(() => {
-  }, [activeSwitch, searchValue, store]);
+  }, [searchValue, store]);
 
   return (
         <StyledSearchSection>
