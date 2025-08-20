@@ -89,6 +89,7 @@ const HorizontalLine = styled.div`
   width: 100%;
   height: 1px;
   background-color: #d7d9db;
+  margin-top: 1em;
 `;
 
 const switchDefinitions = [

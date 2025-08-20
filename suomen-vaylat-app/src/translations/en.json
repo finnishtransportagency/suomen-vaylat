@@ -419,6 +419,7 @@
     "moreSearchOptions": "More search options",
     "fill_all_fields": "Fill in all search fields",
     "required_field_missing": "Check the required fields.",
+    "clearResults": "Clear results",
     "errors": {
       "invalidChars": "Invalid characters — only letters, numbers and spaces are allowed"
     },

@@ -150,7 +150,7 @@ const StyledNoActivaLayers = styled.div`
   font-weight: 500;
 `;
 
-const FeatureSearchInput = ({ setDropdownOpen, emptySearchResults }) => {
+const FeatureSearchInput = ({ setDropdownOpen, emptySearchInputs }) => {
   const { store } = useContext(ReactReduxContext);
 
   const {
@@ -295,7 +295,7 @@ const FeatureSearchInput = ({ setDropdownOpen, emptySearchResults }) => {
           <StyledStandardSearchButton
             type="button"
             aria-label="Search"
-            onClick={emptySearchResults}
+            onClick={emptySearchInputs}
           >
             <FontAwesomeIcon icon={faTrash} />
           </StyledStandardSearchButton>

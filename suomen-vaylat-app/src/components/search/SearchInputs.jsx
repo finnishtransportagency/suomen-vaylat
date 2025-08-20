@@ -28,6 +28,7 @@ import {
   setGeoJsonArray,
   setIsMoreSearchOpen
 } from '../../state/slices/uiSlice';
+import PillButton from '../../utils/components/PillButton';
 
 const StyledRowWithButton = styled.div`
   display: flex;
@@ -286,7 +287,7 @@ const SearchInputs = ({ setDropdownOpen }) => {
       {activeSwitch === 'default' && (
         <DefaultSearchInput
           handleGeneralSearch={handleGeneralSearch}
-          emptySearchResults={emptySearchResults}
+          emptySearchInputs={() => store.dispatch(setSearchValue(''))}
         />
       )}
 
@@ -295,21 +296,21 @@ const SearchInputs = ({ setDropdownOpen }) => {
           carriageWaySearch={carriageWaySearch}
           setCarriageWaySearch={setCarriageWaySearch}
           handleGeneralSearch={handleGeneralSearch}
-          emptySearchResults={emptySearchResults}
+          emptySearchInputs={() => store.dispatch(setSearchValue(''))}
         />
       )}
 
       {activeSwitch === 'track' && (
         <TrackSearchInput
           handleGeneralSearch={handleGeneralSearch}
-          emptySearchResults={emptySearchResults}
+          emptySearchInputs={() => store.dispatch(setSearchValue(''))}
         />
       )}
 
       {activeSwitch === 'feature' && (
         <FeatureSearchInput
           setDropdownOpen={setDropdownOpen}
-          emptySearchResults={emptySearchResults}
+          emptySearchInputs={() => store.dispatch(setSearchValue(''))}
         />
       )}
 
@@ -348,7 +349,7 @@ const SearchInputs = ({ setDropdownOpen }) => {
                 type="button"
                 aria-label="Search"
                 onClick={() => {
-                  emptySearchResults();
+                  store.dispatch(setSearchValue(''));
                 }}
               >
                 <FontAwesomeIcon icon={faTrash} />
@@ -372,6 +373,17 @@ const SearchInputs = ({ setDropdownOpen }) => {
             </StyledValidationMessage>
           )}
         </StyledSearchSection>
+      )}
+
+      {(searchResults !== null || featureSearchResults.length > 0) && (
+        <PillButton
+          id={'search-inputs-clear-results-btn'}
+          key={'search-inputs-clear-results-btn'}
+          text={strings.search?.clearResults}
+          onClick={emptySearchResults}
+          aria-label={strings.search?.clearResults}
+          style={{width: '100%', justifyContent: 'center'}}
+        />
       )}
     </>
   );

@@ -151,7 +151,7 @@ const parseTrackSearchQuery = (searchQuery) => {
   return searchQuery.endsWith('/') ? searchQuery.slice(0, -1) : searchQuery;
 };
 
-const TrackSearchInput = ({ handleGeneralSearch, emptySearchResults }) => {
+const TrackSearchInput = ({ handleGeneralSearch, emptySearchInputs }) => {
   const { store } = useContext(ReactReduxContext);
 
   const {
@@ -297,7 +297,7 @@ const TrackSearchInput = ({ handleGeneralSearch, emptySearchResults }) => {
                     <StyledStandardSearchButton
                       type="button"
                       aria-label="Search"
-                      onClick={emptySearchResults}
+                      onClick={emptySearchInputs}
                     >
                       <FontAwesomeIcon icon={faTrash} />
                     </StyledStandardSearchButton>

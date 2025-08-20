@@ -67,6 +67,25 @@ const PillButton = ({
   iconColor,
   ...rest
 }) => {
+
+  const renderIcon = () => {
+    if (!icon) {
+      return null; // do not render FontAwesomeIcon with null
+    }
+
+    // image path (svg file)
+    if (typeof icon === 'string' && icon.endsWith('.svg')) {
+      return <img src={icon} alt="" aria-hidden="true" />;
+    }
+
+    try {
+      return <FontAwesomeIcon icon={icon} />;
+    } catch (err) {
+      console.warn('PillButton: invalid icon prop', icon, err);
+      return null;
+    }
+  };
+
   return (
     <StyledPillButton
       id={`pill-button-${id}`}
@@ -77,11 +96,7 @@ const PillButton = ({
       iconColor={iconColor}
       {...rest}
     >
-      {typeof icon === 'string' && icon.endsWith('.svg') ? (
-        <img src={icon} alt="icon" />
-      ) : (
-        <FontAwesomeIcon icon={icon} />
-      )}
+      {renderIcon()}
       <ButtonText>{children || text}</ButtonText>
     </StyledPillButton>
   );

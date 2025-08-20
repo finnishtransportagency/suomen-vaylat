@@ -70,7 +70,7 @@ const initialState = {
   ],
   featureErrors: [],
   searchResults: null,
-  searchValue: null,
+  searchValue: '',
   searchType: "address",
   isSearchingActive: false,
   lastSearchValue: '',

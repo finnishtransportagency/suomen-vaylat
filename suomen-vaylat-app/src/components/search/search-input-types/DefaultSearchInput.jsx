@@ -108,7 +108,7 @@ const StyledValidationMessage = styled.div`
   font-size: 0.95em;
 `;
 
-const DefaultSearchInput = ({ handleGeneralSearch, emptySearchResults }) => {
+const DefaultSearchInput = ({ handleGeneralSearch, emptySearchInputs }) => {
   const { store } = useContext(ReactReduxContext);
 
   const {
@@ -169,7 +169,7 @@ const DefaultSearchInput = ({ handleGeneralSearch, emptySearchResults }) => {
             aria-label="Search"
             onClick={() => {
               // clear results
-              emptySearchResults();
+              emptySearchInputs();
             }}
           >
             <FontAwesomeIcon icon={faTrash} />

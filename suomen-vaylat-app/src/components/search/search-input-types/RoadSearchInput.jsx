@@ -234,7 +234,7 @@ const RoadSearchInput = ({
   carriageWaySearch,
   setCarriageWaySearch,
   handleGeneralSearch,
-  emptySearchResults
+  emptySearchInputs
 }) => {
   const { store } = useContext(ReactReduxContext);
 
@@ -476,7 +476,7 @@ const RoadSearchInput = ({
                     <StyledStandardSearchButton
                       type="button"
                       aria-label="Search"
-                      onClick={emptySearchResults}
+                      onClick={emptySearchInputs}
                       roadEndEnabled={roadEndEnabled}
                     >
                       <FontAwesomeIcon icon={faTrash} />
@@ -635,7 +635,7 @@ const RoadSearchInput = ({
                         <StyledStandardSearchButton
                           type="button"
                           aria-label="Search"
-                          onClick={emptySearchResults}
+                          onClick={emptySearchInputs}
                         >
                           <FontAwesomeIcon icon={faTrash} />
                         </StyledStandardSearchButton>
