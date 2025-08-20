@@ -63,7 +63,7 @@ export const validateSimpleSearch = (searchValue, requireAll = false) => {
   if (!allowed.test(value)) {
     return t(
       'invalidChars',
-      'Invalid characters — only letters (a–z, åäö), numbers and spaces are allowed'
+      'Invalid characters — only letters, numbers and spaces are allowed'
     );
   }
 

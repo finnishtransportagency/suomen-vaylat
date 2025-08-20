@@ -160,7 +160,7 @@ const getSearchValuePart = (
   searchType,
   part,
   carriageWaySearch
-) => {
+) => { 
   const splittedSearchArray = splitSearchValue(searchValue, searchType, part);
   let retVa;
   let actualPart;
@@ -230,24 +230,21 @@ const parseSearchValueFromParts = (partsArray, blancSpacePosition) => {
 };
 
 const RoadSearchInput = ({
-  searchType,
-  handleSeach,
   carriageWaySearch,
   setCarriageWaySearch,
+  handleGeneralSearch,
   emptySearchResults,
-  lastSearchValue,
-  isSearching
 }) => {
   const { store } = useContext(ReactReduxContext);
 
-  const { featureSearchResults, searchResults, searchValue } = useAppSelector(
+  const { featureSearchResults, searchResults, searchValue, searchType, isSearchingActive, lastSearchValue } = useAppSelector(
     (state) => state.rpc
   );
 
   const [roadEndEnabled, setRoadEndEnabled] = useState(false);
 
   const onClickSearchRoad = () => {
-    handleSeach(searchValue);
+    handleGeneralSearch(searchValue);
   };
 
   useEffect(() => {
@@ -378,7 +375,7 @@ const RoadSearchInput = ({
                   }
                   value={getSearchValuePart(searchValue, searchType, 0)}
                   onKeyPress={(e) => {
-                    if (e.key === 'Enter') handleSeach(searchValue);
+                    if (e.key === 'Enter') handleGeneralSearch(searchValue);
                   }}
                 />
               </FieldItem>
@@ -402,7 +399,7 @@ const RoadSearchInput = ({
                   }
                   value={getSearchValuePart(searchValue, searchType, 1)}
                   onKeyPress={(e) => {
-                    if (e.key === 'Enter') handleSeach(searchValue);
+                    if (e.key === 'Enter') handleGeneralSearch(searchValue);
                   }}
                 />
               </FieldItem>
@@ -431,7 +428,7 @@ const RoadSearchInput = ({
                     carriageWaySearch
                   )}
                   onKeyPress={(e) => {
-                    if (e.key === 'Enter') handleSeach(searchValue);
+                    if (e.key === 'Enter') handleGeneralSearch(searchValue);
                   }}
                   disabled={!carriageWaySearch}
                 />
@@ -462,14 +459,14 @@ const RoadSearchInput = ({
                       carriageWaySearch
                     )}
                     onKeyPress={(e) => {
-                      if (e.key === 'Enter') handleSeach(searchValue);
+                      if (e.key === 'Enter') handleGeneralSearch(searchValue);
                     }}
                   />
 
                   {(searchResults !== null ||
                     featureSearchResults.length > 0) &&
                   searchValue === lastSearchValue &&
-                  !isSearching ? (
+                  !isSearchingActive ? (
                     <StyledStandardSearchButton
                       type="button"
                       aria-label="Search"
@@ -479,7 +476,7 @@ const RoadSearchInput = ({
                       <FontAwesomeIcon icon={faTrash} />
                     </StyledStandardSearchButton>
                   ) : (
-                    !isSearching && (
+                    !isSearchingActive && (
                       <StyledStandardSearchButton
                         type="button"
                         aria-label="Search"
@@ -531,7 +528,7 @@ const RoadSearchInput = ({
                         carriageWaySearch
                       )}
                       onKeyPress={(e) => {
-                        if (e.key === 'Enter') handleSeach(searchValue);
+                        if (e.key === 'Enter') handleGeneralSearch(searchValue);
                       }}
                     />
                   </FieldItem>
@@ -560,7 +557,7 @@ const RoadSearchInput = ({
                         carriageWaySearch
                       )}
                       onKeyPress={(e) => {
-                        if (e.key === 'Enter') handleSeach(searchValue);
+                        if (e.key === 'Enter') handleGeneralSearch(searchValue);
                       }}
                     />
                   </FieldItem>
@@ -589,7 +586,7 @@ const RoadSearchInput = ({
                         carriageWaySearch
                       )}
                       onKeyPress={(e) => {
-                        if (e.key === 'Enter') handleSeach(searchValue);
+                        if (e.key === 'Enter') handleGeneralSearch(searchValue);
                       }}
                       disabled={!carriageWaySearch}
                     />
@@ -620,14 +617,14 @@ const RoadSearchInput = ({
                           carriageWaySearch
                         )}
                         onKeyPress={(e) => {
-                          if (e.key === 'Enter') handleSeach(searchValue);
+                          if (e.key === 'Enter') handleGeneralSearch(searchValue);
                         }}
                       />
 
                       {(searchResults !== null ||
                         featureSearchResults.length > 0) &&
                       searchValue === lastSearchValue &&
-                      !isSearching ? (
+                      !isSearchingActive ? (
                         <StyledStandardSearchButton
                           type="button"
                           aria-label="Search"
@@ -636,7 +633,7 @@ const RoadSearchInput = ({
                           <FontAwesomeIcon icon={faTrash} />
                         </StyledStandardSearchButton>
                       ) : (
-                        !isSearching && (
+                        !isSearchingActive && (
                           <StyledStandardSearchButton
                             type="button"
                             aria-label="Search"

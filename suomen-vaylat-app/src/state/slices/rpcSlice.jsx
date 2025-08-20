@@ -71,6 +71,10 @@ const initialState = {
   featureErrors: [],
   searchResults: null,
   searchValue: null,
+  searchType: "address",
+  isSearchingActive: false,
+  lastSearchValue: '',
+  firstSearchResultShown: false,
   // TODO: waiting for logging in option
   isLoggedIn: false
 };
@@ -984,6 +988,22 @@ export const rpcSlice = createSlice({
 
     setSearchValue: (state, action) => {
       state.searchValue = action.payload;
+    },
+
+    setSearchType: (state, action) => {
+      state.searchType = action.payload;
+    },
+
+    setIsSearchingActive: (state, action) => {
+      state.isSearchingActive = action.payload;
+    },
+
+    setLastSearchValue: (state, action) => {
+      state.lastSearchValue = action.payload;
+    },
+
+    setFirstSearchResultShown: (state, action) => {
+      state.firstSearchResultShown = action.payload;
     }
   }
 });
@@ -1058,7 +1078,11 @@ export const {
   setTrackErrors,
   setFeatureErrors,
   setSearchResults,
-  setSearchValue
+  setSearchValue,
+  setSearchType,
+  setIsSearchingActive,
+  setLastSearchValue,
+  setFirstSearchResultShown
 } = rpcSlice.actions;
 
 export default rpcSlice.reducer;

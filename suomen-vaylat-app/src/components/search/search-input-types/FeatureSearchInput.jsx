@@ -4,9 +4,10 @@ import { useAppSelector } from '../../../state/hooks';
 import { useContext, useEffect } from 'react';
 import { faMagnifyingGlass, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { validateFeatureSearch } from '../utils/SearchUtil';
+import { mergeMatchedKeys, validateFeatureSearch } from '../utils/SearchUtil';
 import { ReactReduxContext } from 'react-redux';
-import { setSearchValue } from '../../../state/slices/rpcSlice';
+import { pushToFeatureSearchResults, resetFeatureSearchResults, setFeatureSearchResults, setIsSearchingActive, setLastSearchValue, setSearchOn, setSearchValue } from '../../../state/slices/rpcSlice';
+import { Slide, toast } from 'react-toastify';
 
 const StyledRowWithButton = styled.div`
   display: flex;
@@ -148,24 +149,108 @@ const StyledNoActivaLayers = styled.div`
 `;
 
 const FeatureSearchInput = ({
-  handleSeach,
+  setDropdownOpen,
   emptySearchResults,
-  lastSearchValue,
-  isSearching
 }) => {
   const { store } = useContext(ReactReduxContext);
 
   const {
+    channel,
     selectedLayersByType,
     featureSearchResults,
     featureErrors,
     searchResults,
-    searchValue
+    searchValue,
+    isSearchingActive,
+    lastSearchValue
   } = useAppSelector((state) => state.rpc);
 
   const onClickSearchFeature = () => {
     if (validateFeatureSearch(searchValue, store, true)) {
-      handleSeach(searchValue.trim());
+      setDropdownOpen(false);
+      handleFeatureSearch(searchValue.trim());
+    }
+  };
+
+  const handleFeatureSearch = (searchValue, startIndex = 0, layerId = -1) => {
+    const handleSearchResponse = (data) => {
+      console.log("??")
+      if (Object.keys(data).length > 0 && Object.keys(data.gfi).length > 0) {
+        store.dispatch(setIsSearchingActive(false));
+        store.dispatch(setSearchOn(false));
+
+        if (startIndex !== 0) {
+          // Update features for "more results"
+          let oldFeatureSearchResults = JSON.parse(
+            JSON.stringify(featureSearchResults)
+          );
+          let newFeatureSearchResults = { ...data.gfi };
+          const contentIndex = oldFeatureSearchResults
+            .map((gfi) => gfi.content.layerId)
+            .indexOf(data.gfi.content.layerId);
+          const updatedFeatures = oldFeatureSearchResults[
+            contentIndex
+          ].content.geojson.features.concat(data.gfi.content.geojson.features);
+          newFeatureSearchResults.content.geojson.features = updatedFeatures;
+
+          const updatedMatchedKeys = mergeMatchedKeys(
+            oldFeatureSearchResults[contentIndex].content.geojson
+              .matchedFeatures,
+            data.gfi.content.geojson.matchedFeatures
+          );
+          newFeatureSearchResults.content.geojson.matchedFeatures =
+            updatedMatchedKeys;
+
+          oldFeatureSearchResults[contentIndex] = newFeatureSearchResults;
+
+          store.dispatch(setFeatureSearchResults(oldFeatureSearchResults));
+        } else {
+          store.dispatch(pushToFeatureSearchResults(data.gfi));
+        }
+      } else {
+        store.dispatch(setIsSearchingActive(false));
+        store.dispatch(setSearchOn(false));
+      }
+      store.dispatch(setLastSearchValue(searchValue));
+    };
+
+    const handleSearchError = (layerIdentifier, error) => {
+      store.dispatch(setIsSearchingActive(false));
+      store.dispatch(setSearchOn(false));
+      store.dispatch(setLastSearchValue(searchValue));
+
+      toast.error(
+        `${strings.search.feature.errorLayerStart}${layerIdentifier}${strings.search.feature.errorLayerEnd}`,
+        {
+          position: 'top-center',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'colored',
+          transition: Slide
+        }
+      );
+    };
+
+    console.log("MIKSI")
+    store.dispatch(setIsSearchingActive(true));
+    store.dispatch(setSearchOn(true));
+    startIndex === 0 && store.dispatch(resetFeatureSearchResults());
+
+    const searchLayer =
+      layerId !== -1 ? layerId : selectedLayersByType.mapLayers[0]?.id;
+    const layerIdentifier =
+      layerId !== -1 ? layerId : selectedLayersByType.mapLayers[0]?.name;
+
+    if (searchLayer) {
+      channel.searchFeatures(
+        [[searchLayer], searchValue, startIndex],
+        (data) => handleSearchResponse(data, searchLayer),
+        (error) => handleSearchError(layerIdentifier, error)
+      );
     }
   };
 
@@ -197,7 +282,7 @@ const FeatureSearchInput = ({
                 value={searchValue}
                 onChange={(e) => store.dispatch(setSearchValue(e.target.value))}
                 onKeyPress={(e) => {
-                  if (e.key === 'Enter') handleSeach(searchValue.trim());
+                  if (e.key === 'Enter') onClickSearchFeature();
                 }}
                 className={featureErrors.length > 0 ? 'error' : ''}
               />
@@ -207,7 +292,7 @@ const FeatureSearchInput = ({
 
         {(searchResults !== null || featureSearchResults.length > 0) &&
         searchValue === lastSearchValue &&
-        !isSearching ? (
+        !isSearchingActive ? (
           <StyledStandardSearchButton
             type="button"
             aria-label="Search"
@@ -216,7 +301,7 @@ const FeatureSearchInput = ({
             <FontAwesomeIcon icon={faTrash} />
           </StyledStandardSearchButton>
         ) : (
-          !isSearching && (
+          !isSearchingActive && (
             <StyledStandardSearchButton
               type="button"
               aria-label="Search"

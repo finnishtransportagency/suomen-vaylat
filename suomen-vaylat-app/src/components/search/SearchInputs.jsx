@@ -5,6 +5,7 @@ import { useContext, useEffect, useState } from 'react';
 import { faMagnifyingGlass, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
+  removeMarkersAndFeatures,
   validateFeatureSearch,
   validateSimpleSearch,
   validateTrackSearch
@@ -14,7 +15,8 @@ import DefaultSearchInput from './search-input-types/DefaultSearchInput';
 import RoadSearchInput from './search-input-types/RoadSearchInput';
 import TrackSearchInput from './search-input-types/TrackSearchInput';
 import FeatureSearchInput from './search-input-types/FeatureSearchInput';
-import { setSearchValue } from '../../state/slices/rpcSlice';
+import { searchVKMTrack, setFirstSearchResultShown, setIsSearchingActive, setLastSearchValue, setSearchResults, setSearchValue } from '../../state/slices/rpcSlice';
+import { setGeoJsonArray, setIsMoreSearchOpen } from '../../state/slices/uiSlice';
 
 const StyledRowWithButton = styled.div`
   display: flex;
@@ -122,45 +124,19 @@ const StyledValidationMessage = styled.div`
   font-size: 0.95em;
 `;
 
-const parseTrackSearchQuery = (searchQuery) => {
-  return searchQuery.endsWith('/') ? searchQuery.slice(0, -1) : searchQuery;
-};
-
 const SearchInputs = ({
-  searchType,
-  handleSeach,
-  carriageWaySearch,
-  setCarriageWaySearch,
+  setDropdownOpen,
   emptySearchResults,
-  lastSearchValue,
-  isSearching
 }) => {
   const { store } = useContext(ReactReduxContext);
+  const [carriageWaySearch, setCarriageWaySearch] = useState(false);
 
-  const { featureSearchResults, trackErrors, searchResults, searchValue } =
+  const { featureSearchResults, searchResults, searchValue, isSearchingActive, channel, isMoreSearchOpen, lastSearchValue } =
     useAppSelector((state) => state.rpc);
   const { activeSwitch } = useAppSelector((state) => state.ui);
 
   // simpleError used for non-track / non-road / non-feature basic validations
   const [simpleError, setSimpleError] = useState('');
-
-  const onClickSearchDefault = (value) => {
-    handleSeach(value);
-  };
-  const onClickSearchRoad = () => {
-    handleSeach(searchValue);
-  };
-  const onClickSearchTrack = () => {
-    // require full presence + format for submit
-    if (validateTrackSearch(searchValue, store, true)) {
-      handleSeach(parseTrackSearchQuery(searchValue));
-    }
-  };
-  const onClickSearchFeature = () => {
-    if (validateFeatureSearch(searchValue, store, true)) {
-      handleSeach(searchValue.trim());
-    }
-  };
 
   useEffect(() => {
     if (activeSwitch === 'track') {
@@ -174,82 +150,147 @@ const SearchInputs = ({
       return;
     }
     // For other types: run simple character-only validation live (no requirement)
-    if (['road'].includes(activeSwitch)) {
+    if (activeSwitch === 'road') {
       // we don't validate feature/road here
       setSimpleError('');
       return;
     }
     // simple live validation for other types
     const msg = validateSimpleSearch(searchValue, false);
+    console.log(msg)
     setSimpleError(msg);
   }, [activeSwitch, searchValue, store]);
 
   // Submit handler that routes validation by activeSwitch
   const submitForActiveSwitch = () => {
-    // Track: handled separately
-    if (activeSwitch === 'track') {
-      onClickSearchTrack();
-      return;
-    }
-    // Feature and road excluded from these simple validations:
-    if (activeSwitch === 'feature') {
-      onClickSearchFeature();
-      return;
-    }
-    if (activeSwitch === 'road') {
-      onClickSearchRoad();
-      return;
-    }
-
-    // For other types: require non-empty and allowed characters
     const msg = validateSimpleSearch(searchValue, true);
     if (msg) {
       setSimpleError(msg);
       return;
     }
     setSimpleError('');
-    // For 'default' and most others we can just pass trimmed value
-    onClickSearchDefault(searchValue.trim());
+    if (activeSwitch == 'layer') {
+      handleMetadataSearch(searchValue.trim());
+      return;
+    } else {
+      handleGeneralSearch(searchValue.trim());
+      return;
+    }
+  };
+
+  const handleGeneralSearch = (value) => {
+    setDropdownOpen(false);
+    let searchValueCopy = value;
+    //special case, roadsearch with 3 params is road/part/distance,
+    //unless search ajorata and etaisyys flag ( carriageWaySearch ) found
+
+    //TODO if and when we implement track range search, this should be enabled also to track, for now only road search
+    if (
+      (activeSwitch === 'road' || activeSwitch === null) &&
+      !carriageWaySearch &&
+      value &&
+      value.includes('/') &&
+      (value.split('/').length === 3 || value.split('/').length === 5)
+    ) {
+      let splittedValue = value.split('/');
+      searchValueCopy =
+        splittedValue[0] + '/' + splittedValue[1] + '//' + splittedValue[2];
+      if (splittedValue.length === 5) {
+        searchValueCopy += '/' + splittedValue[3] + '//' + splittedValue[4];
+      }
+    }
+
+    searchValueCopy = searchValueCopy.trim();
+    store.dispatch(setGeoJsonArray([]));
+    store.dispatch(setFirstSearchResultShown(false));
+    removeMarkersAndFeatures(channel);
+    store.dispatch(setIsSearchingActive(true));
+    if (activeSwitch === 'track') {
+      console.log("juu")
+      store.dispatch(
+        searchVKMTrack({
+          value: value,
+          handler: (data) => {
+            if (data.ratanumero && data.geom) {
+              //mimic search structure of old vkm search
+              const name = `ratanumero=${data?.ratanumero}, ratakilometri=${data?.ratakilometri}, ratametri=${data?.ratametri}`;
+
+              let locations;
+              if (data?.geom?.features[0].geometry?.coordinates?.length > 0) {
+                locations = [
+                  { type: 'VKM', vkmType: 'track', geom: data.geom, name: name }
+                ];
+              } else {
+                locations = [];
+              }
+
+              const mimicdata = { result: { locations: locations } };
+              store.dispatch(setSearchResults(mimicdata));
+              if (
+                (data?.result?.locations?.length > 1 ||
+                  data?.geom?.features[0].geometry?.coordinates?.length > 0) &&
+                !isMoreSearchOpen
+              ) {
+                store.dispatch(setIsMoreSearchOpen(true));
+              }
+              store.dispatch(setIsSearchingActive(false));
+            }
+          }
+        })
+      );
+    } else {
+      // TODO: swap to rpcSlice function
+      channel.postRequest('SearchRequest', [searchValueCopy]);
+    }
+    store.dispatch(setSearchValue(value));
+    store.dispatch(setLastSearchValue(value));
+    store.dispatch(setSearchResults(null));
+  };
+
+  // Handle metadata search
+   const handleMetadataSearch = (value) => {
+    setDropdownOpen(false);
+    removeMarkersAndFeatures(channel);
+    store.dispatch(setIsSearchingActive(true));
+    channel.postRequest('MetadataSearchRequest', [
+      {
+        search: value,
+        srs: 'EPSG:3067',
+        OrganisationName: 'Väylävirasto'
+      }
+    ]);
+    store.dispatch(setLastSearchValue(value));
   };
 
   return (
     <>
       {activeSwitch === 'default' && (
         <DefaultSearchInput
-          handleSeach={handleSeach}
+          handleGeneralSearch={handleGeneralSearch}
           emptySearchResults={emptySearchResults}
-          lastSearchValue={lastSearchValue}
-          isSearching={isSearching}
         />
       )}
 
       {activeSwitch === 'road' && (
         <RoadSearchInput
-          searchType={searchType}
-          handleSeach={handleSeach}
-          carriageWaySearch={carriageWaySearch}
-          setCarriageWaySearch={setCarriageWaySearch}
+        carriageWaySearch={carriageWaySearch}
+        setCarriageWaySearch={setCarriageWaySearch}
+          handleGeneralSearch={handleGeneralSearch}
           emptySearchResults={emptySearchResults}
-          lastSearchValue={lastSearchValue}
-          isSearching={isSearching}
         />
       )}
 
       {activeSwitch === 'track' && (
         <TrackSearchInput
-          handleSeach={handleSeach}
+          handleGeneralSearch={handleGeneralSearch}
           emptySearchResults={emptySearchResults}
-          lastSearchValue={lastSearchValue}
-          isSearching={isSearching}
         />
       )}
 
       {activeSwitch === 'feature' && (
         <FeatureSearchInput
-          handleSeach={handleSeach}
+          setDropdownOpen={setDropdownOpen}
           emptySearchResults={emptySearchResults}
-          lastSearchValue={lastSearchValue}
-          isSearching={isSearching}
         />
       )}
 
@@ -283,7 +324,7 @@ const SearchInputs = ({
 
             {(searchResults !== null || featureSearchResults.length > 0) &&
             searchValue === lastSearchValue &&
-            !isSearching ? (
+            !isSearchingActive ? (
               <StyledStandardSearchButton
                 type="button"
                 aria-label="Search"
@@ -294,7 +335,7 @@ const SearchInputs = ({
                 <FontAwesomeIcon icon={faTrash} />
               </StyledStandardSearchButton>
             ) : (
-              !isSearching && (
+              !isSearchingActive && (
                 <StyledStandardSearchButton
                   type="button"
                   aria-label="Search"

@@ -19,19 +19,16 @@ const StyledSearchResultsTitle = styled.p`
 `;
 
 const SearchResultPanels = ({
-  isSearchOpen,
-  searchType,
-  firstSearchResultShown,
-  setFirstSearchResultShown,
   setSearchClickedRow,
   searchClickedRow,
-  allLayers,
-  handleFeatureSearch,
-  lastSearchValue
 }) => {
-  const { featureSearchResults, searchResults } = useAppSelector(
+  const { featureSearchResults, searchResults, searchType } = useAppSelector(
     (state) => state.rpc
   );
+  const { isSearchOpen } = useAppSelector(
+    (state) => state.ui
+  );
+  console.log(isSearchOpen && searchResults !== null && searchType === 'address')
   return (
     <SearchPanelMain>
       {(searchResults !== null || featureSearchResults.length > 0) && (
@@ -41,21 +38,16 @@ const SearchResultPanels = ({
       )}
       {isSearchOpen && searchResults !== null && searchType === 'address' && (
         <AddRessSearchResultPanel
-          firstSearchResultShown={firstSearchResultShown}
-          setFirstSearchResultShown={setFirstSearchResultShown}
           isMobile={isMobile}
           setSearchClickedRow={setSearchClickedRow}
           searchClickedRow={searchClickedRow}
         />
       )}
       {isSearchOpen && searchResults !== null && searchType === 'metadata' && (
-        <MetadataSearchResultPanel allLayers={allLayers} />
+        <MetadataSearchResultPanel/>
       )}
       {isSearchOpen && searchType === 'feature' && (
-        <FeatureSearchResultPanel
-          handleFeatureSearch={handleFeatureSearch}
-          lastSearchValue={lastSearchValue}
-        />
+        <FeatureSearchResultPanel/>
       )}
     </SearchPanelMain>
   );

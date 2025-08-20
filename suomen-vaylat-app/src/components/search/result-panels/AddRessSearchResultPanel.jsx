@@ -25,17 +25,16 @@ import {
 } from '../utils/VKMSearchStyles';
 import {
   addMarkerRequest,
-  mapMoveRequest
+  mapMoveRequest,
+  setFirstSearchResultShown
 } from '../../../state/slices/rpcSlice';
 
 const AddRessSearchResultPanel = ({
-  firstSearchResultShown,
-  setFirstSearchResultShown,
   setSearchClickedRow,
   searchClickedRow
 }) => {
   const { activeSwitch } = useAppSelector((state) => state.ui);
-  const { channel, searchResults } = useAppSelector((state) => state.rpc);
+  const { channel, searchResults, firstSearchResultShown } = useAppSelector((state) => state.rpc);
   const { store } = useContext(ReactReduxContext);
 
   const typeResolvTable = [
@@ -46,6 +45,7 @@ const AddRessSearchResultPanel = ({
   const typeMap = new Map(typeResolvTable);
   const nonNomenclatureTypes = Array.from(typeMap.values());
 
+  console.log(searchResults)
   // Guard: ensure we always work with an array
   const locations =
     searchResults &&
@@ -208,12 +208,13 @@ const AddRessSearchResultPanel = ({
     );
 
     // mark as shown and dismiss toast (these are safe here)
-    setFirstSearchResultShown(true);
+    store.dispatch(setFirstSearchResultShown(true));
     toast.dismiss('searchToast');
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filteredResult, firstSearchResultShown]);
 
+  console.log(filteredResult)
   return (
     <StyledDropDown
       key={'dropdown-content-address'}

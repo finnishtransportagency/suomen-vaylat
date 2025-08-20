@@ -151,20 +151,18 @@ const parseTrackSearchQuery = (searchQuery) => {
 };
 
 const TrackSearchInput = ({
-  handleSeach,
+  handleGeneralSearch,
   emptySearchResults,
-  lastSearchValue,
-  isSearching
 }) => {
   const { store } = useContext(ReactReduxContext);
 
-  const { featureSearchResults, trackErrors, searchResults, searchValue } =
+  const { featureSearchResults, trackErrors, searchResults, searchValue, isSearchingActive, lastSearchValue } =
     useAppSelector((state) => state.rpc);
 
   const onClickSearchTrack = () => {
     // require full presence + format for submit
     if (validateTrackSearch(searchValue, store, true)) {
-      handleSeach(parseTrackSearchQuery(searchValue));
+      handleGeneralSearch(parseTrackSearchQuery(searchValue));
     }
   };
 
@@ -291,7 +289,7 @@ const TrackSearchInput = ({
                   {(searchResults !== null ||
                     featureSearchResults.length > 0) &&
                   searchValue === lastSearchValue &&
-                  !isSearching ? (
+                  !isSearchingActive ? (
                     <StyledStandardSearchButton
                       type="button"
                       aria-label="Search"
@@ -300,7 +298,7 @@ const TrackSearchInput = ({
                       <FontAwesomeIcon icon={faTrash} />
                     </StyledStandardSearchButton>
                   ) : (
-                    !isSearching && (
+                    !isSearchingActive && (
                       <StyledStandardSearchButton
                         type="button"
                         aria-label="Search"

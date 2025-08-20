@@ -4,10 +4,8 @@ import Layer from '../../layer/Layer';
 import { dropdownVariants } from '../utils/SearchUtil';
 import { useAppSelector } from '../../../state/hooks';
 
-const MetadataSearchResultPanel = ({
-    allLayers
-}) => {
-    const { searchResults } = useAppSelector((state) => state.rpc);
+const MetadataSearchResultPanel = () => {
+    const { searchResults, allLayers } = useAppSelector((state) => state.rpc);
     
     return (
         <StyledDropDown

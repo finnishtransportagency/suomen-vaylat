@@ -11,6 +11,7 @@ import SearchResultPanels from './SearchResultPanels';
 import {
   resetFeatureSearchResults,
   setSearchResults,
+  setSearchType,
   setSearchValue
 } from '../../state/slices/rpcSlice';
 import { removeMarkersAndFeatures } from './utils/SearchUtil';
@@ -150,33 +151,17 @@ const switchDefinitions = [
 ];
 
 const SearchDialog = ({
-  firstSearchResultShown,
-  setFirstSearchResultShown,
   setSearchClickedRow,
   searchClickedRow,
-  allLayers,
-  isSearchOpen,
-  isSearching,
-  searchType,
-  setSearchType,
-  handleSeach,
-  carriageWaySearch,
-  setCarriageWaySearch,
-  handleFeatureSearch,
-  lastSearchValue,
   emptySearchResults
 }) => {
   const { store } = useContext(ReactReduxContext);
-  const { featureSearchResults, channel, searchResults } = useAppSelector(
+  const { featureSearchResults, channel, searchResults, isSearchingActive } = useAppSelector(
     (state) => state.rpc
   );
   const { activeSwitch } = useAppSelector((state) => state.ui);
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
-  const handleSearchAndCloseDropdown = (searchValue) => {
-    handleSeach(searchValue);
-    setDropdownOpen(false);
-  };
 
   // Determine the header title: if an active switch matches, show its title; otherwise fallback to "Hakuasetukset"
   const activeDef = switchDefinitions.find((sw) => sw.id === activeSwitch);
@@ -186,18 +171,21 @@ const SearchDialog = ({
     // if no specific search is selected, default to address
     if (activeSwitch !== type) {
       store.dispatch(setActiveSwitch(type));
-      if (type === 'layer') setSearchType('metadata');
-      else if (type === 'feature') setSearchType('feature');
-      else setSearchType('address');
+      if (type === 'layer') store.dispatch(setSearchType('metadata'));
+      else if (type === 'feature') store.dispatch(setSearchType('feature'));
+      else store.dispatch(setSearchType('address'));
     } else {
       store.dispatch(setActiveSwitch('default'));
-      setSearchType('address');
+      store.dispatch(setSearchType('address'));
     }
     store.dispatch(setSearchResults(null));
     store.dispatch(setSearchValue(''));
     store.dispatch(resetFeatureSearchResults());
     removeMarkersAndFeatures(channel);
   };
+
+  console.log((searchResults !== null || featureSearchResults.length > 0) &&
+        !isSearchingActive )
 
   return (
     <StyledSearchDialog>
@@ -237,25 +225,14 @@ const SearchDialog = ({
       </DropdownWrapper>
 
       <SearchInputs
-        firstSearchResultShown={firstSearchResultShown}
-        setFirstSearchResultShown={setFirstSearchResultShown}
+      setDropdownOpen={setDropdownOpen}
         setSearchClickedRow={setSearchClickedRow}
         searchClickedRow={searchClickedRow}
-        allLayers={allLayers}
-        isSearchOpen={isSearchOpen}
-        searchType={searchType}
-        setSearchType={setSearchType}
-        handleSeach={handleSearchAndCloseDropdown}
-        carriageWaySearch={carriageWaySearch}
-        setCarriageWaySearch={setCarriageWaySearch}
         removeMarkersAndFeatures={removeMarkersAndFeatures}
-        handleFeatureSearch={handleFeatureSearch}
-        lastSearchValue={lastSearchValue}
         emptySearchResults={emptySearchResults}
-        isSearching={isSearching}
       />
 
-      {isSearching && (
+      {isSearchingActive && (
         <>
           <HorizontalLine />
           <StyledLoaderWrapper>
@@ -265,20 +242,12 @@ const SearchDialog = ({
       )}
 
       {(searchResults !== null || featureSearchResults.length > 0) &&
-        !isSearching && (
+        !isSearchingActive && (
           <>
             <HorizontalLine />
             <SearchResultPanels
-              isSearchOpen={isSearchOpen}
-              isSearching={isSearching}
-              searchType={searchType}
-              firstSearchResultShown={firstSearchResultShown}
-              setFirstSearchResultShown={setFirstSearchResultShown}
               setSearchClickedRow={setSearchClickedRow}
-              handleFeatureSearch={handleFeatureSearch}
-              lastSearchValue={lastSearchValue}
               searchClickedRow={searchClickedRow}
-              allLayers={allLayers}
             />
           </>
         )}

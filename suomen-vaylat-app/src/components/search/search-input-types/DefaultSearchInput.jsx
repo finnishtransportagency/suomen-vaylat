@@ -115,14 +115,12 @@ const StyledValidationMessage = styled.div`
 `;
 
 const DefaultSearchInput = ({
-  handleSeach,
+  handleGeneralSearch,
   emptySearchResults,
-  lastSearchValue,
-  isSearching
 }) => {
   const { store } = useContext(ReactReduxContext);
 
-  const { featureSearchResults, searchResults, searchValue } = useAppSelector(
+  const { featureSearchResults, searchResults, searchValue, isSearchingActive, lastSearchValue } = useAppSelector(
     (state) => state.rpc
   );
 
@@ -136,8 +134,13 @@ const DefaultSearchInput = ({
       return;
     }
     setSimpleError('');
-    handleSeach(searchValue.trim());
+    handleGeneralSearch(searchValue.trim());
   };
+
+  useEffect(() => {
+      const msg = validateSimpleSearch(searchValue, false);
+      setSimpleError(msg);
+    }, [searchValue]);
 
   return (
     <StyledSearchSection>
@@ -165,7 +168,7 @@ const DefaultSearchInput = ({
 
         {(searchResults !== null || featureSearchResults.length > 0) &&
         searchValue === lastSearchValue &&
-        !isSearching ? (
+        !isSearchingActive ? (
           <StyledStandardSearchButton
             type="button"
             aria-label="Search"
@@ -177,7 +180,7 @@ const DefaultSearchInput = ({
             <FontAwesomeIcon icon={faTrash} />
           </StyledStandardSearchButton>
         ) : (
-          !isSearching && (
+          !isSearchingActive && (
             <StyledStandardSearchButton
               type="button"
               aria-label="Search"
