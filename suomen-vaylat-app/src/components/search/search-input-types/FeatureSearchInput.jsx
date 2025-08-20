@@ -302,7 +302,7 @@ const FeatureSearchInput = ({ setDropdownOpen, emptySearchInputs }) => {
           <StyledStandardSearchButton
             id="feature-search-clear-button"
             type="button"
-            aria-label="Clear feature search results"
+            aria-label={strings.search.clearResults}
             onClick={emptySearchInputs}
           >
             <FontAwesomeIcon icon={faTrash} />
@@ -312,7 +312,7 @@ const FeatureSearchInput = ({ setDropdownOpen, emptySearchInputs }) => {
             <StyledStandardSearchButton
               id="feature-search-submit-button"
               type="button"
-              aria-label="Submit feature search"
+              aria-label={strings.search.search}
               onClick={onClickSearchFeature}
             >
               <FontAwesomeIcon icon={faMagnifyingGlass} />

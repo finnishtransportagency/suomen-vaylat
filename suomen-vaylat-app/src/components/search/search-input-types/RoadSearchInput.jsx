@@ -356,13 +356,13 @@ const RoadSearchInput = ({
           }}
         />
         <CheckboxLabel htmlFor="road-search-roadend-checkbox">
-          {'Anna tien loppu tiedot'}
+          {strings.search?.vkm?.enableRoadEnd}
         </CheckboxLabel>
       </StyledCheckboxWrapper>
 
       {roadEndEnabled && (
         <StyledSectionDivider id="road-search-start-divider">
-          Alku
+          {strings.search?.vkm?.roadStart}
         </StyledSectionDivider>
       )}
 
@@ -481,7 +481,7 @@ const RoadSearchInput = ({
                     <StyledStandardSearchButton
                       id="road-search-clear-button-start"
                       type="button"
-                      aria-label="Clear road search results"
+                      aria-label={strings.search.clearResults}
                       onClick={emptySearchInputs}
                       roadEndEnabled={roadEndEnabled}
                     >
@@ -492,7 +492,7 @@ const RoadSearchInput = ({
                       <StyledStandardSearchButton
                         id="road-search-submit-button-start"
                         type="button"
-                        aria-label="Submit road search"
+                        aria-label={strings.search.search}
                         onClick={onClickSearchRoad}
                         roadEndEnabled={roadEndEnabled}
                       >
@@ -511,7 +511,7 @@ const RoadSearchInput = ({
       {roadEndEnabled && (
         <>
           <StyledSectionDivider id="road-search-end-divider">
-            Loppu
+            {strings.search?.vkm?.roadEnd}
           </StyledSectionDivider>
           <StyledRowWithButton>
             <StyledInputsContainer>
@@ -638,7 +638,7 @@ const RoadSearchInput = ({
                         <StyledStandardSearchButton
                           id="road-search-clear-button-end"
                           type="button"
-                          aria-label="Clear road search results"
+                          aria-label={strings.search.clearResults}
                           onClick={emptySearchInputs}
                         >
                           <FontAwesomeIcon icon={faTrash} />
@@ -648,7 +648,7 @@ const RoadSearchInput = ({
                           <StyledStandardSearchButton
                             id="road-search-submit-button-end"
                             type="button"
-                            aria-label="Submit road search"
+                            aria-label={strings.search.search}
                             onClick={onClickSearchRoad}
                           >
                             <FontAwesomeIcon icon={faMagnifyingGlass} />

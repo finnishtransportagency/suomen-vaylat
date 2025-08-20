@@ -321,7 +321,7 @@ const TrackSearchInput = ({ handleGeneralSearch, emptySearchInputs }) => {
                     <StyledStandardSearchButton
                       id="track-search-clear-button"
                       type="button"
-                      aria-label="Clear track search results"
+                      aria-label={strings.search.clearResults}
                       onClick={emptySearchInputs}
                     >
                       <FontAwesomeIcon icon={faTrash} />
@@ -331,7 +331,7 @@ const TrackSearchInput = ({ handleGeneralSearch, emptySearchInputs }) => {
                       <StyledStandardSearchButton
                         id="track-search-submit-button"
                         type="button"
-                        aria-label="Submit track search"
+                        aria-label={strings.search.search}
                         onClick={onClickSearchTrack}
                       >
                         <FontAwesomeIcon icon={faMagnifyingGlass} />

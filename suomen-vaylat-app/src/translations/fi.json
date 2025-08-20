@@ -414,6 +414,8 @@
   "search": {
     "search": "Hae",
     "erase": "Tyhjennä",
+    "showInfo": "Näytä info ",
+    "clearFields": "Tyhjennä kentät",
     "lessSearchOptions": "Vähemmän hakuehtoja",
     "moreSearchOptions": "Lisää hakuehtoja",
     "fill_all_fields": "Täytä kaikki hakukentät",
@@ -421,9 +423,13 @@
     "clearResults": "Tyhjennä tulokset",
     "results": "Hakutulokset",
     "errors": {
-      "invalidChars": "Virheellisiä markkejä – vain kirjaimet, numerot ja välilyönnit ovat sallittuja"
+      "invalidChars": "Virheellisiä markkejä – vain kirjaimet, numerot ja välilyönnit ovat sallittuja",
+      "required": "Pakollinen kenttä"
     },
     "vkm": {
+      "roadStart": "Alku",
+      "roadEnd": "Loppu",
+      "enableRoadEnd": "Anna tien lopputiedot",
       "tie": "Tienumero",
       "tieloppu": "Tienumero loppu",
       "title": "Tiehaku",

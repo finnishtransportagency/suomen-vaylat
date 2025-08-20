@@ -415,6 +415,8 @@
   "search": {
     "search": "Search",
     "erase": "Erase",
+    "showInfo": "Show info ",
+    "clearFields": "Clear fields",
     "lessSearchOptions": "Less search options",
     "moreSearchOptions": "More search options",
     "fill_all_fields": "Fill in all search fields",
@@ -422,9 +424,13 @@
     "clearResults": "Clear results",
     "results": "Search results",
     "errors": {
-      "invalidChars": "Invalid characters — only letters, numbers and spaces are allowed"
+      "invalidChars": "Invalid characters — only letters, numbers and spaces are allowed",
+      "required": "Required field"
     },
     "vkm": {
+      "roadStart": "Start",
+      "roadEnd": "End",
+      "enableRoadEnd": "Give road end information",
       "tie": "Road number",
       "tieloppu": "Road end",
       "title": "Road number search",

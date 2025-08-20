@@ -328,7 +328,7 @@ const SearchInputs = ({ setDropdownOpen }) => {
                     id={`search-inputs-${activeSwitch}`}
                     aria-label={
                       strings.search[activeSwitch]?.title ||
-                      `${activeSwitch} search`
+                      `${activeSwitch} ` + strings.gfi.search
                     }
                     type="text"
                     value={searchValue}
@@ -350,7 +350,7 @@ const SearchInputs = ({ setDropdownOpen }) => {
               <StyledStandardSearchButton
                 id="search-inputs-clear-button"
                 type="button"
-                aria-label="Clear search results"
+                aria-label={strings.search?.clearFields}
                 onClick={() => {
                   store.dispatch(setSearchValue(''));
                 }}
@@ -362,7 +362,7 @@ const SearchInputs = ({ setDropdownOpen }) => {
                 <StyledStandardSearchButton
                   id="search-inputs-submit-button"
                   type="button"
-                  aria-label="Submit search"
+                  aria-label={strings.search?.search}
                   onClick={submitForActiveSwitch}
                 >
                   <FontAwesomeIcon icon={faMagnifyingGlass} />

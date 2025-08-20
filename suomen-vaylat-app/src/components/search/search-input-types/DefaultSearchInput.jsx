@@ -169,7 +169,7 @@ const DefaultSearchInput = ({ handleGeneralSearch, emptySearchInputs }) => {
           <StyledStandardSearchButton
             id="default-search-clear-button"
             type="button"
-            aria-label="Clear search results"
+            aria-label={strings.search.clearResults}
             onClick={() => {
               // clear results
               emptySearchInputs();
@@ -182,7 +182,7 @@ const DefaultSearchInput = ({ handleGeneralSearch, emptySearchInputs }) => {
             <StyledStandardSearchButton
               id="default-search-submit-button"
               type="button"
-              aria-label="Submit search"
+              aria-label={strings.search.search}
               onClick={submitForActiveSwitch}
             >
               <FontAwesomeIcon icon={faMagnifyingGlass} />

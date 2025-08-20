@@ -348,7 +348,6 @@ const Search = () => {
       <AnimatePresence>
         {isSearchOpen && (
           <StyledSearchWrapper
-            hasGeometry={geoJsonArray.length > 0}
             variants={variants}
             initial={'initial'}
             animate={'animate'}

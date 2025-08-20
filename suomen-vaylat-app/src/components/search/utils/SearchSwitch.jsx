@@ -3,6 +3,7 @@ import Radio from '@mui/material/Radio';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
+import strings from '../../../translations';
 
 const Row = styled.div`
   display: flex;
@@ -25,7 +26,6 @@ const StyledLabel = styled.label`
   font-size: 16px;
   color: #2b2b2b;
   margin: 0;
-  line-height: 1;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -170,7 +170,7 @@ const SearchSwitch = ({
             tabIndex={0}
             aria-expanded={isOpen}
             aria-controls={isOpen ? `search-switch-info-${id}` : undefined}
-            aria-label={`Show info for ${title}`}
+            aria-label={strings.search.showInfo + title}
             onClick={handleInfoClick}
             type="button"
           >

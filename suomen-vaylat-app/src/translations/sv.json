@@ -415,6 +415,8 @@
   "search": {
     "search": "Sök",
     "erase": "Radera",
+    "showInfo": "Visa information ",
+    "clearFields": "Rensa fält",
     "lessSearchOptions": "Mindre sök alternativs",
     "moreSearchOptions": "Mera sök alternativs",
     "fill_all_fields": "Fyll i alla sökfält",
@@ -422,9 +424,13 @@
     "clearResults": "Tydliga resultat",
     "results": "Sök resultat",
     "errors": {
-      "invalidChars": "Ogiltiga tecken — endast bokstäver, siffror och mellanslag är tillåtna"
+      "invalidChars": "Ogiltiga tecken — endast bokstäver, siffror och mellanslag är tillåtna",
+      "required": "Obligatoriskt fält"
     },
     "vkm": {
+      "roadStart": "Börja",
+      "roadEnd": "Sluta",
+      "enableRoadEnd": "Aktivera vägslutsinformation",
       "tie": "Vägnummer",
       "tieloppu": "Vägnummer slut",
       "title": "Sök efter vägnummer",
