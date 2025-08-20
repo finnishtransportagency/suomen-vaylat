@@ -47,6 +47,10 @@ const StyledInputsContainer = styled.div`
   min-width: 0; /* ensure proper shrinking inside flex */
   display: flex;
   align-items: center; /* vertically center the input row so the button aligns middle */
+
+  @media ${(props) => props.theme.device.tablet} {
+    width: 100%
+  }
 `;
 
 const StyledStandardSearchButton = styled.button`
@@ -84,8 +88,8 @@ const PillInput = styled.input`
   background: #fff;
   margin-bottom: 0;
   flex: 1 1 0px;
-  @media (max-width: 750px) {
-    font-size: 17px;
+  @media ${(props) => props.theme.device.tablet} {
+    font-size: 14px;
     height: 36px;
     min-width: 54px;
     max-width: 100%;
@@ -139,6 +143,11 @@ const StyledErrorsList = styled.div`
   display: flex;
   flex-direction: column;
   gap: 6px;
+`;
+
+const StyledInputAndSearchWrapper = styled.div`
+  display: flex;
+  width: 100%;
 `;
 
 const getTrackSearchValuePart = (position, searchValue) => {
@@ -269,7 +278,7 @@ const TrackSearchInput = ({ handleGeneralSearch, emptySearchInputs }) => {
                 <LabelAbove htmlFor="search-input-track-m">
                   {strings.search.track.trackm}
                 </LabelAbove>
-                <div style={{ display: 'flex' }}>
+                <StyledInputAndSearchWrapper id={"track-search-input-and-search-wrapper"}>
                   <PillInput
                     id="search-input-track-m"
                     aria-labelledby="search-input-track-m-label"
@@ -312,7 +321,7 @@ const TrackSearchInput = ({ handleGeneralSearch, emptySearchInputs }) => {
                       </StyledStandardSearchButton>
                     )
                   )}
-                </div>
+                </StyledInputAndSearchWrapper>
               </FieldItem>
             </InputRow>
 

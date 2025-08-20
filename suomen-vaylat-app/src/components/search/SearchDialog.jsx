@@ -22,7 +22,7 @@ import SvLoader from '../../utils/components/SvLoader';
 const StyledSearchDialog = styled.div`
   border: none;
   width: 100%;
-  padding: 1.5em 1em 1em 1em;
+  padding: 1em 1em 1em 1em;
   &:focus {
     outline: none;
   }
