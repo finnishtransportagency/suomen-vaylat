@@ -18,8 +18,7 @@ const StyledSearchResultsTitle = styled.p`
   margin: 1em 0;
 `;
 
-
-const SearchResultPanel = ({
+const SearchResultPanels = ({
   isSearchOpen,
   searchType,
   firstSearchResultShown,
@@ -30,7 +29,9 @@ const SearchResultPanel = ({
   handleFeatureSearch,
   lastSearchValue
 }) => {
-  const { featureSearchResults, searchResults } = useAppSelector((state) => state.rpc);
+  const { featureSearchResults, searchResults } = useAppSelector(
+    (state) => state.rpc
+  );
   return (
     <SearchPanelMain>
       {(searchResults !== null || featureSearchResults.length > 0) && (
@@ -48,9 +49,7 @@ const SearchResultPanel = ({
         />
       )}
       {isSearchOpen && searchResults !== null && searchType === 'metadata' && (
-        <MetadataSearchResultPanel
-          allLayers={allLayers}
-        />
+        <MetadataSearchResultPanel allLayers={allLayers} />
       )}
       {isSearchOpen && searchType === 'feature' && (
         <FeatureSearchResultPanel
@@ -62,4 +61,4 @@ const SearchResultPanel = ({
   );
 };
 
-export default SearchResultPanel;
+export default SearchResultPanels;

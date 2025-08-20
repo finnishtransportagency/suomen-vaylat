@@ -7,11 +7,15 @@ import { useEffect, useContext, useState, Fragment } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import SearchSwitch from './utils/SearchSwitch';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
-import SearchResultPanel from './SearchResultPanel';
-import { resetFeatureSearchResults, setSearchResults, setSearchValue } from '../../state/slices/rpcSlice';
+import SearchResultPanels from './SearchResultPanels';
+import {
+  resetFeatureSearchResults,
+  setSearchResults,
+  setSearchValue
+} from '../../state/slices/rpcSlice';
 import { removeMarkersAndFeatures } from './utils/SearchUtil';
 import { isMobile } from '../../theme/theme';
-import SearchInput from './SearchInput';
+import SearchInputs from './SearchInputs';
 import SvLoader from '../../utils/components/SvLoader';
 
 const StyledSearchDialog = styled.div`
@@ -172,7 +176,7 @@ const SearchDialog = ({
   const handleSearchAndCloseDropdown = (searchValue) => {
     handleSeach(searchValue);
     setDropdownOpen(false);
-  }
+  };
 
   // Determine the header title: if an active switch matches, show its title; otherwise fallback to "Hakuasetukset"
   const activeDef = switchDefinitions.find((sw) => sw.id === activeSwitch);
@@ -210,26 +214,29 @@ const SearchDialog = ({
             rotation={dropdownOpen ? 180 : undefined}
           />
         </DropdownHeader>
-        {dropdownOpen &&
-            <DropdownContent id="search-dropdown-content" aria-labelledby="search-dropdown-button">
+        {dropdownOpen && (
+          <DropdownContent
+            id="search-dropdown-content"
+            aria-labelledby="search-dropdown-button"
+          >
             {switchDefinitions.map((sw, index) => (
-                <Fragment key={sw.id}>
+              <Fragment key={sw.id}>
                 <SearchSwitch
-                    isSelected={activeSwitch === sw.id}
-                    action={() => updateActiveSwitch(sw.id)}
-                    title={sw.title}
-                    tooltipText={sw.tooltipText}
-                    tooltipAddress={sw.tooltipAddress}
-                    id={sw.id}
-                    isMobile={isMobile}
+                  isSelected={activeSwitch === sw.id}
+                  action={() => updateActiveSwitch(sw.id)}
+                  title={sw.title}
+                  tooltipText={sw.tooltipText}
+                  tooltipAddress={sw.tooltipAddress}
+                  id={sw.id}
+                  isMobile={isMobile}
                 />
-                </Fragment>
+              </Fragment>
             ))}
-            </DropdownContent>
-        }
+          </DropdownContent>
+        )}
       </DropdownWrapper>
 
-      <SearchInput
+      <SearchInputs
         firstSearchResultShown={firstSearchResultShown}
         setFirstSearchResultShown={setFirstSearchResultShown}
         setSearchClickedRow={setSearchClickedRow}
@@ -261,7 +268,7 @@ const SearchDialog = ({
         !isSearching && (
           <>
             <HorizontalLine />
-            <SearchResultPanel
+            <SearchResultPanels
               isSearchOpen={isSearchOpen}
               isSearching={isSearching}
               searchType={searchType}

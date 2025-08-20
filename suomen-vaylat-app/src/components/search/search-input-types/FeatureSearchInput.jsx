@@ -4,9 +4,7 @@ import { useAppSelector } from '../../../state/hooks';
 import { useContext, useEffect } from 'react';
 import { faMagnifyingGlass, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  validateFeatureSearch,
-} from '../utils/SearchUtil';
+import { validateFeatureSearch } from '../utils/SearchUtil';
 import { ReactReduxContext } from 'react-redux';
 import { setSearchValue } from '../../../state/slices/rpcSlice';
 
@@ -115,7 +113,6 @@ const StyledValidationMessage = styled.div`
   font-size: 0.95em;
 `;
 
-
 const StyledSelectedLayerWrapper = styled.div`
   display: flex;
   align-items: baseline;
@@ -154,7 +151,7 @@ const FeatureSearchInput = ({
   handleSeach,
   emptySearchResults,
   lastSearchValue,
-  isSearching,
+  isSearching
 }) => {
   const { store } = useContext(ReactReduxContext);
 
@@ -172,82 +169,76 @@ const FeatureSearchInput = ({
     }
   };
 
-  useEffect(() => {
-      validateFeatureSearch(searchValue, store, false);
-  }, [searchValue, store]);
-
   return (
-        <StyledFeatureSearchSection>
-          <StyledSelectedLayerWrapper>
-            {selectedLayersByType.mapLayers.length > 0 ? (
-              <>
-                <StyledSelectedLayerTitle>
-                  {strings.search.feature.searchFromLayer}
-                </StyledSelectedLayerTitle>
-                <StyledSelectedLayerText>
-                  {selectedLayersByType.mapLayers[0].name}
-                </StyledSelectedLayerText>
-              </>
-            ) : (
-              <StyledNoActivaLayers></StyledNoActivaLayers>
-            )}
-          </StyledSelectedLayerWrapper>
+    <StyledFeatureSearchSection>
+      <StyledSelectedLayerWrapper>
+        {selectedLayersByType.mapLayers.length > 0 ? (
+          <>
+            <StyledSelectedLayerTitle>
+              {strings.search.feature.searchFromLayer}
+            </StyledSelectedLayerTitle>
+            <StyledSelectedLayerText>
+              {selectedLayersByType.mapLayers[0].name}
+            </StyledSelectedLayerText>
+          </>
+        ) : (
+          <StyledNoActivaLayers></StyledNoActivaLayers>
+        )}
+      </StyledSelectedLayerWrapper>
 
-          <StyledRowWithButton>
-            <StyledInputsContainer>
-              <StyledWideInputGroup>
-                <StyledRelativeInputWrapper>
-                  <StyledWidePillInput
-                    id="search-input-feature"
-                    aria-label={
-                      strings.search.feature?.title || 'Feature search'
-                    }
-                    type="text"
-                    value={searchValue}
-                    onChange={(e) => store.dispatch(setSearchValue(e.target.value))}
-                    onKeyPress={(e) => {
-                      if (e.key === 'Enter') handleSeach(searchValue.trim());
-                    }}
-                    className={featureErrors.length > 0 ? 'error' : ''}
-                  />
-                </StyledRelativeInputWrapper>
-              </StyledWideInputGroup>
-            </StyledInputsContainer>
+      <StyledRowWithButton>
+        <StyledInputsContainer>
+          <StyledWideInputGroup>
+            <StyledRelativeInputWrapper>
+              <StyledWidePillInput
+                id="search-input-feature"
+                aria-label={strings.search.feature?.title || 'Feature search'}
+                type="text"
+                value={searchValue}
+                onChange={(e) => store.dispatch(setSearchValue(e.target.value))}
+                onKeyPress={(e) => {
+                  if (e.key === 'Enter') handleSeach(searchValue.trim());
+                }}
+                className={featureErrors.length > 0 ? 'error' : ''}
+              />
+            </StyledRelativeInputWrapper>
+          </StyledWideInputGroup>
+        </StyledInputsContainer>
 
-            {(searchResults !== null || featureSearchResults.length > 0) &&
-            searchValue === lastSearchValue &&
-            !isSearching ? (
-              <StyledStandardSearchButton
-                type="button"
-                aria-label="Search"
-                onClick={emptySearchResults}
-              >
-                <FontAwesomeIcon icon={faTrash} />
-              </StyledStandardSearchButton>
-            ) : (
-              !isSearching && (
-                <StyledStandardSearchButton
-                  type="button"
-                  aria-label="Search"
-                  onClick={onClickSearchFeature}
-                >
-                  <FontAwesomeIcon icon={faMagnifyingGlass} />
-                </StyledStandardSearchButton>
-              )
-            )}
-          </StyledRowWithButton>
+        {(searchResults !== null || featureSearchResults.length > 0) &&
+        searchValue === lastSearchValue &&
+        !isSearching ? (
+          <StyledStandardSearchButton
+            type="button"
+            aria-label="Search"
+            onClick={emptySearchResults}
+          >
+            <FontAwesomeIcon icon={faTrash} />
+          </StyledStandardSearchButton>
+        ) : (
+          !isSearching && (
+            <StyledStandardSearchButton
+              type="button"
+              aria-label="Search"
+              onClick={onClickSearchFeature}
+            >
+              <FontAwesomeIcon icon={faMagnifyingGlass} />
+            </StyledStandardSearchButton>
+          )
+        )}
+      </StyledRowWithButton>
 
-          {featureErrors &&
-            featureErrors.map((error, i) => (
-              <StyledValidationMessage
-                key={`feature-error-${i}-${error}`}
-                role="alert"
-                aria-live="polite"
-              >
-                {strings?.search?.feature?.errors?.[error] ?? error}
-              </StyledValidationMessage>
-            ))}
-        </StyledFeatureSearchSection>
+      {featureErrors &&
+        featureErrors.map((error, i) => (
+          <StyledValidationMessage
+            key={`feature-error-${i}-${error}`}
+            role="alert"
+            aria-live="polite"
+          >
+            {strings?.search?.feature?.errors?.[error] ?? error}
+          </StyledValidationMessage>
+        ))}
+    </StyledFeatureSearchSection>
   );
 };
 

@@ -4,9 +4,7 @@ import { useAppSelector } from '../../../state/hooks';
 import { useContext, useEffect, useState } from 'react';
 import { faMagnifyingGlass, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  validateSimpleSearch,
-} from '../utils/SearchUtil';
+import { validateSimpleSearch } from '../utils/SearchUtil';
 import { ReactReduxContext } from 'react-redux';
 import { setSearchValue } from '../../../state/slices/rpcSlice';
 
@@ -120,20 +118,15 @@ const DefaultSearchInput = ({
   handleSeach,
   emptySearchResults,
   lastSearchValue,
-  isSearching,
+  isSearching
 }) => {
   const { store } = useContext(ReactReduxContext);
 
-  const {
-    featureSearchResults, searchResults, searchValue
-  } = useAppSelector((state) => state.rpc);
+  const { featureSearchResults, searchResults, searchValue } = useAppSelector(
+    (state) => state.rpc
+  );
 
   const [simpleError, setSimpleError] = useState('');
-
-  useEffect(() => {
-    const msg = validateSimpleSearch(searchValue, false);
-    setSimpleError(msg);
-  }, [searchValue, store]);
 
   // Submit handler that routes validation by activeSwitch
   const submitForActiveSwitch = () => {
@@ -147,62 +140,62 @@ const DefaultSearchInput = ({
   };
 
   return (
-        <StyledSearchSection>
-          <StyledRowWithButton>
-            <StyledInputsContainer>
-              <StyledWideInputGroup>
-                <StyledRelativeInputWrapper>
-                  <StyledWidePillInput
-                    id="search-input-default"
-                    aria-label={strings.search.address?.title || 'Search'}
-                    type="text"
-                    value={searchValue}
-                    onChange={(e) => {
-                      store.dispatch(setSearchValue(e.target.value));
-                      // clear existing simple error while typing
-                      // live validation is handled in useEffect
-                    }}
-                    onKeyPress={(e) => {
-                      if (e.key === 'Enter') submitForActiveSwitch();
-                    }}
-                  />
-                </StyledRelativeInputWrapper>
-              </StyledWideInputGroup>
-            </StyledInputsContainer>
-
-            {(searchResults !== null || featureSearchResults.length > 0) &&
-            searchValue === lastSearchValue &&
-            !isSearching ? (
-              <StyledStandardSearchButton
-                type="button"
-                aria-label="Search"
-                onClick={() => {
-                  // clear results
-                  emptySearchResults();
+    <StyledSearchSection>
+      <StyledRowWithButton>
+        <StyledInputsContainer>
+          <StyledWideInputGroup>
+            <StyledRelativeInputWrapper>
+              <StyledWidePillInput
+                id="search-input-default"
+                aria-label={strings.search.address?.title || 'Search'}
+                type="text"
+                value={searchValue}
+                onChange={(e) => {
+                  store.dispatch(setSearchValue(e.target.value));
+                  // clear existing simple error while typing
+                  // live validation is handled in useEffect
                 }}
-              >
-                <FontAwesomeIcon icon={faTrash} />
-              </StyledStandardSearchButton>
-            ) : (
-              !isSearching && (
-                <StyledStandardSearchButton
-                  type="button"
-                  aria-label="Search"
-                  onClick={submitForActiveSwitch}
-                >
-                  <FontAwesomeIcon icon={faMagnifyingGlass} />
-                </StyledStandardSearchButton>
-              )
-            )}
-          </StyledRowWithButton>
+                onKeyPress={(e) => {
+                  if (e.key === 'Enter') submitForActiveSwitch();
+                }}
+              />
+            </StyledRelativeInputWrapper>
+          </StyledWideInputGroup>
+        </StyledInputsContainer>
 
-          {/* simple error shown under inputs for default */}
-          {simpleError && (
-            <StyledValidationMessage role="alert" aria-live="polite">
-              {simpleError}
-            </StyledValidationMessage>
-          )}
-        </StyledSearchSection>
+        {(searchResults !== null || featureSearchResults.length > 0) &&
+        searchValue === lastSearchValue &&
+        !isSearching ? (
+          <StyledStandardSearchButton
+            type="button"
+            aria-label="Search"
+            onClick={() => {
+              // clear results
+              emptySearchResults();
+            }}
+          >
+            <FontAwesomeIcon icon={faTrash} />
+          </StyledStandardSearchButton>
+        ) : (
+          !isSearching && (
+            <StyledStandardSearchButton
+              type="button"
+              aria-label="Search"
+              onClick={submitForActiveSwitch}
+            >
+              <FontAwesomeIcon icon={faMagnifyingGlass} />
+            </StyledStandardSearchButton>
+          )
+        )}
+      </StyledRowWithButton>
+
+      {/* simple error shown under inputs for default */}
+      {simpleError && (
+        <StyledValidationMessage role="alert" aria-live="polite">
+          {simpleError}
+        </StyledValidationMessage>
+      )}
+    </StyledSearchSection>
   );
 };
 

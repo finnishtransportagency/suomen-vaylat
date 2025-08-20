@@ -126,25 +126,20 @@ const parseTrackSearchQuery = (searchQuery) => {
   return searchQuery.endsWith('/') ? searchQuery.slice(0, -1) : searchQuery;
 };
 
-const SearchInput = ({
+const SearchInputs = ({
   searchType,
   handleSeach,
   carriageWaySearch,
   setCarriageWaySearch,
   emptySearchResults,
   lastSearchValue,
-  isSearching,
+  isSearching
 }) => {
   const { store } = useContext(ReactReduxContext);
 
-  const {
-    featureSearchResults,
-    trackErrors,
-    searchResults,
-    searchValue
-  } = useAppSelector((state) => state.rpc);
+  const { featureSearchResults, trackErrors, searchResults, searchValue } =
+    useAppSelector((state) => state.rpc);
   const { activeSwitch } = useAppSelector((state) => state.ui);
-
 
   // simpleError used for non-track / non-road / non-feature basic validations
   const [simpleError, setSimpleError] = useState('');
@@ -189,32 +184,6 @@ const SearchInput = ({
     setSimpleError(msg);
   }, [activeSwitch, searchValue, store]);
 
-  const trackErrorsId = 'search-input-track-errors';
-
-  // helpers to read  trackErrors
-  const getTrackField = (index) => {
-    if (!trackErrors) return { invalid: false, message: '' };
-    if (
-      trackErrors[index] &&
-      trackErrors[index].invalid &&
-      trackErrors[index].message.length > 0
-    ) {
-      return trackErrors[index];
-    }
-    return { invalid: false, message: '' };
-  };
-
-  const getCombinedFieldMessage = (index) => {
-    const field = getTrackField(index);
-    if (!field || !field.invalid) return '';
-    return field.message;
-  };
-
-  // Build an array of messages for all fields (displayed together under the inputs)
-  const combinedFieldMessages = [0, 1, 2]
-    .map((i) => getCombinedFieldMessage(i))
-    .filter(Boolean);
-
   // Submit handler that routes validation by activeSwitch
   const submitForActiveSwitch = () => {
     // Track: handled separately
@@ -247,22 +216,22 @@ const SearchInput = ({
     <>
       {activeSwitch === 'default' && (
         <DefaultSearchInput
-        handleSeach={handleSeach}
-        emptySearchResults={emptySearchResults}
-        lastSearchValue={lastSearchValue}
-        isSearching={isSearching}
+          handleSeach={handleSeach}
+          emptySearchResults={emptySearchResults}
+          lastSearchValue={lastSearchValue}
+          isSearching={isSearching}
         />
       )}
 
       {activeSwitch === 'road' && (
         <RoadSearchInput
-        searchType={searchType}
-        handleSeach={handleSeach}
-        carriageWaySearch={carriageWaySearch}
-        setCarriageWaySearch={setCarriageWaySearch}
-        emptySearchResults={emptySearchResults}
-        lastSearchValue={lastSearchValue}
-        isSearching={isSearching}
+          searchType={searchType}
+          handleSeach={handleSeach}
+          carriageWaySearch={carriageWaySearch}
+          setCarriageWaySearch={setCarriageWaySearch}
+          emptySearchResults={emptySearchResults}
+          lastSearchValue={lastSearchValue}
+          isSearching={isSearching}
         />
       )}
 
@@ -277,10 +246,10 @@ const SearchInput = ({
 
       {activeSwitch === 'feature' && (
         <FeatureSearchInput
-        handleSeach={handleSeach}
-        emptySearchResults={emptySearchResults}
-        lastSearchValue={lastSearchValue}
-        isSearching={isSearching}
+          handleSeach={handleSeach}
+          emptySearchResults={emptySearchResults}
+          lastSearchValue={lastSearchValue}
+          isSearching={isSearching}
         />
       )}
 
@@ -348,4 +317,4 @@ const SearchInput = ({
   );
 };
 
-export default SearchInput;
+export default SearchInputs;

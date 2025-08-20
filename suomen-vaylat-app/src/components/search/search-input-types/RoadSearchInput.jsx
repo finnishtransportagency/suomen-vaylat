@@ -236,13 +236,13 @@ const RoadSearchInput = ({
   setCarriageWaySearch,
   emptySearchResults,
   lastSearchValue,
-  isSearching,
+  isSearching
 }) => {
   const { store } = useContext(ReactReduxContext);
 
-  const {
-    featureSearchResults, searchResults, searchValue
-  } = useAppSelector((state) => state.rpc);
+  const { featureSearchResults, searchResults, searchValue } = useAppSelector(
+    (state) => state.rpc
+  );
 
   const [roadEndEnabled, setRoadEndEnabled] = useState(false);
 
@@ -254,175 +254,272 @@ const RoadSearchInput = ({
     //when carriagewaysearch ( ajordalla haku ) changes, reset searchValue
     store.dispatch(setSearchValue(''));
   }, [carriageWaySearch]);
-  
-  useEffect(() => {
-  }, [searchValue, store]);
 
   const updateRoadSearchValue = (
-  searchValue,
-  searchType,
-  part,
-  value,
-  carriageWaySearch = false,
-) => {
-  let searchArray = splitSearchValue(searchValue, searchType);
-  const effectivePart = carriageWaySearch ? part : part - 1;
-  if (
-    searchArray !== undefined &&
-    searchArray !== '' &&
-    searchArray.length >= effectivePart
-  ) {
-    if (value === '') {
-      searchArray.length = part;
+    searchValue,
+    searchType,
+    part,
+    value,
+    carriageWaySearch = false
+  ) => {
+    let searchArray = splitSearchValue(searchValue, searchType);
+    const effectivePart = carriageWaySearch ? part : part - 1;
+    if (
+      searchArray !== undefined &&
+      searchArray !== '' &&
+      searchArray.length >= effectivePart
+    ) {
+      if (value === '') {
+        searchArray.length = part;
+      }
+      const blancSpacePosition = carriageWaySearch ? 4 : 3;
+      if (part > blancSpacePosition) {
+        searchArray[effectivePart] = value;
+      } else {
+        searchArray[part] = value;
+      }
+      const updatedSearchValue = parseSearchValueFromParts(
+        searchArray,
+        blancSpacePosition
+      );
+      if (updatedSearchValue !== undefined) {
+        store.dispatch(setSearchValue(updatedSearchValue));
+      }
+    } else if (
+      (searchArray === undefined || searchArray === '') &&
+      value !== undefined &&
+      part === 0
+    ) {
+      store.dispatch(setSearchValue(value));
+    } else if (
+      (searchArray === undefined || searchArray === '') &&
+      searchValue !== undefined &&
+      part === 1
+    ) {
+      store.dispatch(setSearchValue(searchValue + '/' + value));
+    } else if (
+      searchArray !== undefined &&
+      searchArray !== '' &&
+      searchArray.length === part - 1
+    ) {
+      store.dispatch(setSearchValue(searchValue + '/' + value));
     }
-    const blancSpacePosition = carriageWaySearch ? 4 : 3;
-    if (part > blancSpacePosition) {
-      searchArray[effectivePart] = value;
-    } else {
-      searchArray[part] = value;
-    }
-    const updatedSearchValue = parseSearchValueFromParts(
-      searchArray,
-      blancSpacePosition
-    );
-    if (updatedSearchValue !== undefined) {
-      store.dispatch(setSearchValue(updatedSearchValue));
-    }
-  } else if (
-    (searchArray === undefined || searchArray === '') &&
-    value !== undefined &&
-    part === 0
-  ) {
-    store.dispatch(setSearchValue(value));
-  } else if (
-    (searchArray === undefined || searchArray === '') &&
-    searchValue !== undefined &&
-    part === 1
-  ) {
-    store.dispatch(setSearchValue(searchValue + '/' + value));
-  } else if (
-    searchArray !== undefined &&
-    searchArray !== '' &&
-    searchArray.length === part - 1
-  ) {
-    store.dispatch(setSearchValue(searchValue + '/' + value));
-  }
-};
+  };
 
   return (
-        <StyledSearchSection>
-          <StyledCheckboxWrapper>
-            <StyledCheckbox
-              id="search-input-carriageWaySearchBox"
-              name="search-input-carriageWaySearchBox"
-              type="checkbox"
-              onChange={() => setCarriageWaySearch(!carriageWaySearch)}
-              checked={carriageWaySearch}
-              aria-checked={!!carriageWaySearch}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                  e.preventDefault();
-                  e.currentTarget.click();
-                }
-              }}
-            />
+    <StyledSearchSection>
+      <StyledCheckboxWrapper>
+        <StyledCheckbox
+          id="search-input-carriageWaySearchBox"
+          name="search-input-carriageWaySearchBox"
+          type="checkbox"
+          onChange={() => setCarriageWaySearch(!carriageWaySearch)}
+          checked={carriageWaySearch}
+          aria-checked={!!carriageWaySearch}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              e.preventDefault();
+              e.currentTarget.click();
+            }
+          }}
+        />
 
-            <CheckboxLabel htmlFor="search-input-carriageWaySearchBox">
-              {strings.search.carriageWaySearch}
-            </CheckboxLabel>
-          </StyledCheckboxWrapper>
-          <StyledCheckboxWrapper>
-            <StyledCheckbox
-              id="search-input-roadEndCheckbox"
-              name="search-input-roadEndCheckbox"
-              type="checkbox"
-              onChange={() => setRoadEndEnabled(!roadEndEnabled)}
-              checked={roadEndEnabled}
-              aria-checked={!!roadEndEnabled}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                  e.preventDefault();
-                  e.currentTarget.click();
-                }
-              }}
-            />
+        <CheckboxLabel htmlFor="search-input-carriageWaySearchBox">
+          {strings.search.carriageWaySearch}
+        </CheckboxLabel>
+      </StyledCheckboxWrapper>
+      <StyledCheckboxWrapper>
+        <StyledCheckbox
+          id="search-input-roadEndCheckbox"
+          name="search-input-roadEndCheckbox"
+          type="checkbox"
+          onChange={() => setRoadEndEnabled(!roadEndEnabled)}
+          checked={roadEndEnabled}
+          aria-checked={!!roadEndEnabled}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              e.preventDefault();
+              e.currentTarget.click();
+            }
+          }}
+        />
 
-            <CheckboxLabel htmlFor="search-input-roadEndCheckbox">
-              {'Anna tien loppu tiedot'}
-            </CheckboxLabel>
-          </StyledCheckboxWrapper>
-          {roadEndEnabled && (
-            <StyledSectionDivider id="search-input-road-start-divider">
-              Alku
-            </StyledSectionDivider>
-          )}
+        <CheckboxLabel htmlFor="search-input-roadEndCheckbox">
+          {'Anna tien loppu tiedot'}
+        </CheckboxLabel>
+      </StyledCheckboxWrapper>
+      {roadEndEnabled && (
+        <StyledSectionDivider id="search-input-road-start-divider">
+          Alku
+        </StyledSectionDivider>
+      )}
 
-          {/* START group */}
+      {/* START group */}
+      <StyledRowWithButton>
+        <StyledInputsContainer>
+          <StyledFieldGroup>
+            <InputRow>
+              <FieldItem>
+                <LabelAbove htmlFor="search-input-road-tie">
+                  {strings.search.vkm.tie}
+                </LabelAbove>
+                <PillInput
+                  id="search-input-road-tie"
+                  aria-labelledby="search-input-road-tie-label"
+                  type="text"
+                  onChange={(e) =>
+                    updateRoadSearchValue(
+                      searchValue,
+                      searchType,
+                      0,
+                      e.target.value,
+                      carriageWaySearch
+                    )
+                  }
+                  value={getSearchValuePart(searchValue, searchType, 0)}
+                  onKeyPress={(e) => {
+                    if (e.key === 'Enter') handleSeach(searchValue);
+                  }}
+                />
+              </FieldItem>
+
+              <FieldItem>
+                <LabelAbove htmlFor="search-input-road-osa">
+                  {strings.search.vkm.osa}
+                </LabelAbove>
+                <PillInput
+                  id="search-input-road-osa"
+                  aria-labelledby="search-input-road-osa-label"
+                  type="text"
+                  onChange={(e) =>
+                    updateRoadSearchValue(
+                      searchValue,
+                      searchType,
+                      1,
+                      e.target.value,
+                      carriageWaySearch
+                    )
+                  }
+                  value={getSearchValuePart(searchValue, searchType, 1)}
+                  onKeyPress={(e) => {
+                    if (e.key === 'Enter') handleSeach(searchValue);
+                  }}
+                />
+              </FieldItem>
+
+              <FieldItem>
+                <LabelAbove htmlFor="search-input-road-majorata">
+                  {strings.search.vkm.ajorata}
+                </LabelAbove>
+                <PillInput
+                  id="search-input-road-majorata"
+                  aria-labelledby="search-input-road-majorata-label"
+                  type="text"
+                  onChange={(e) =>
+                    updateRoadSearchValue(
+                      searchValue,
+                      searchType,
+                      2,
+                      e.target.value,
+                      carriageWaySearch
+                    )
+                  }
+                  value={getSearchValuePart(
+                    searchValue,
+                    searchType,
+                    2,
+                    carriageWaySearch
+                  )}
+                  onKeyPress={(e) => {
+                    if (e.key === 'Enter') handleSeach(searchValue);
+                  }}
+                  disabled={!carriageWaySearch}
+                />
+              </FieldItem>
+
+              <FieldItem>
+                <LabelAbove htmlFor="search-input-road-etaisyys">
+                  {strings.search.vkm.etaisyys}
+                </LabelAbove>
+                <div style={{ display: 'flex' }}>
+                  <PillInput
+                    id="search-input-road-etaisyys"
+                    aria-labelledby="search-input-road-etaisyys-label"
+                    type="text"
+                    onChange={(e) =>
+                      updateRoadSearchValue(
+                        searchValue,
+                        searchType,
+                        carriageWaySearch ? 3 : 2,
+                        e.target.value,
+                        carriageWaySearch
+                      )
+                    }
+                    value={getSearchValuePart(
+                      searchValue,
+                      searchType,
+                      3,
+                      carriageWaySearch
+                    )}
+                    onKeyPress={(e) => {
+                      if (e.key === 'Enter') handleSeach(searchValue);
+                    }}
+                  />
+
+                  {(searchResults !== null ||
+                    featureSearchResults.length > 0) &&
+                  searchValue === lastSearchValue &&
+                  !isSearching ? (
+                    <StyledStandardSearchButton
+                      type="button"
+                      aria-label="Search"
+                      onClick={emptySearchResults}
+                      roadEndEnabled={roadEndEnabled}
+                    >
+                      <FontAwesomeIcon icon={faTrash} />
+                    </StyledStandardSearchButton>
+                  ) : (
+                    !isSearching && (
+                      <StyledStandardSearchButton
+                        type="button"
+                        aria-label="Search"
+                        onClick={onClickSearchRoad}
+                        roadEndEnabled={roadEndEnabled}
+                      >
+                        <FontAwesomeIcon icon={faMagnifyingGlass} />
+                      </StyledStandardSearchButton>
+                    )
+                  )}
+                </div>
+              </FieldItem>
+            </InputRow>
+          </StyledFieldGroup>
+        </StyledInputsContainer>
+      </StyledRowWithButton>
+
+      {/* END group (if enabled) */}
+      {roadEndEnabled && (
+        <>
+          <StyledSectionDivider id="search-input-road-end-divider">
+            Loppu
+          </StyledSectionDivider>
           <StyledRowWithButton>
             <StyledInputsContainer>
               <StyledFieldGroup>
                 <InputRow>
                   <FieldItem>
-                    <LabelAbove htmlFor="search-input-road-tie">
+                    <LabelAbove htmlFor="search-input-road-tieloppu">
                       {strings.search.vkm.tie}
                     </LabelAbove>
                     <PillInput
-                      id="search-input-road-tie"
-                      aria-labelledby="search-input-road-tie-label"
+                      id="search-input-road-tieloppu"
+                      aria-labelledby="search-input-road-tieloppu-label"
                       type="text"
                       onChange={(e) =>
                         updateRoadSearchValue(
                           searchValue,
                           searchType,
-                          0,
-                          e.target.value,
-                          carriageWaySearch
-                        )
-                      }
-                      value={getSearchValuePart(searchValue, searchType, 0)}
-                      onKeyPress={(e) => {
-                        if (e.key === 'Enter') handleSeach(searchValue);
-                      }}
-                    />
-                  </FieldItem>
-
-                  <FieldItem>
-                    <LabelAbove htmlFor="search-input-road-osa">
-                      {strings.search.vkm.osa}
-                    </LabelAbove>
-                    <PillInput
-                      id="search-input-road-osa"
-                      aria-labelledby="search-input-road-osa-label"
-                      type="text"
-                      onChange={(e) =>
-                        updateRoadSearchValue(
-                          searchValue,
-                          searchType,
-                          1,
-                          e.target.value,
-                          carriageWaySearch
-                        )
-                      }
-                      value={getSearchValuePart(searchValue, searchType, 1)}
-                      onKeyPress={(e) => {
-                        if (e.key === 'Enter') handleSeach(searchValue);
-                      }}
-                    />
-                  </FieldItem>
-
-                  <FieldItem>
-                    <LabelAbove htmlFor="search-input-road-majorata">
-                      {strings.search.vkm.ajorata}
-                    </LabelAbove>
-                    <PillInput
-                      id="search-input-road-majorata"
-                      aria-labelledby="search-input-road-majorata-label"
-                      type="text"
-                      onChange={(e) =>
-                        updateRoadSearchValue(
-                          searchValue,
-                          searchType,
-                          2,
+                          4,
                           e.target.value,
                           carriageWaySearch
                         )
@@ -430,7 +527,65 @@ const RoadSearchInput = ({
                       value={getSearchValuePart(
                         searchValue,
                         searchType,
-                        2,
+                        4,
+                        carriageWaySearch
+                      )}
+                      onKeyPress={(e) => {
+                        if (e.key === 'Enter') handleSeach(searchValue);
+                      }}
+                    />
+                  </FieldItem>
+
+                  <FieldItem>
+                    <LabelAbove htmlFor="search-input-road-osa-loppu">
+                      {strings.search.vkm.osa}
+                    </LabelAbove>
+                    <PillInput
+                      id="search-input-road-osa-loppu"
+                      aria-labelledby="search-input-road-osa-loppu-label"
+                      type="text"
+                      onChange={(e) =>
+                        updateRoadSearchValue(
+                          searchValue,
+                          searchType,
+                          5,
+                          e.target.value,
+                          carriageWaySearch
+                        )
+                      }
+                      value={getSearchValuePart(
+                        searchValue,
+                        searchType,
+                        5,
+                        carriageWaySearch
+                      )}
+                      onKeyPress={(e) => {
+                        if (e.key === 'Enter') handleSeach(searchValue);
+                      }}
+                    />
+                  </FieldItem>
+
+                  <FieldItem>
+                    <LabelAbove htmlFor="search-input-road-majorata-loppu">
+                      {strings.search.vkm.ajorata}
+                    </LabelAbove>
+                    <PillInput
+                      id="search-input-road-majorata-loppu"
+                      aria-labelledby="search-input-road-majorata-loppu-label"
+                      type="text"
+                      onChange={(e) =>
+                        updateRoadSearchValue(
+                          searchValue,
+                          searchType,
+                          6,
+                          e.target.value,
+                          carriageWaySearch
+                        )
+                      }
+                      value={getSearchValuePart(
+                        searchValue,
+                        searchType,
+                        6,
                         carriageWaySearch
                       )}
                       onKeyPress={(e) => {
@@ -441,19 +596,19 @@ const RoadSearchInput = ({
                   </FieldItem>
 
                   <FieldItem>
-                    <LabelAbove htmlFor="search-input-road-etaisyys">
+                    <LabelAbove htmlFor="search-input-road-etaisyys-loppu">
                       {strings.search.vkm.etaisyys}
                     </LabelAbove>
                     <div style={{ display: 'flex' }}>
                       <PillInput
-                        id="search-input-road-etaisyys"
-                        aria-labelledby="search-input-road-etaisyys-label"
+                        id="search-input-road-etaisyys-loppu"
+                        aria-labelledby="search-input-road-etaisyys-loppu-label"
                         type="text"
                         onChange={(e) =>
                           updateRoadSearchValue(
                             searchValue,
                             searchType,
-                            carriageWaySearch ? 3 : 2,
+                            carriageWaySearch ? 7 : 6,
                             e.target.value,
                             carriageWaySearch
                           )
@@ -461,7 +616,7 @@ const RoadSearchInput = ({
                         value={getSearchValuePart(
                           searchValue,
                           searchType,
-                          3,
+                          7,
                           carriageWaySearch
                         )}
                         onKeyPress={(e) => {
@@ -477,7 +632,6 @@ const RoadSearchInput = ({
                           type="button"
                           aria-label="Search"
                           onClick={emptySearchResults}
-                          roadEndEnabled={roadEndEnabled}
                         >
                           <FontAwesomeIcon icon={faTrash} />
                         </StyledStandardSearchButton>
@@ -487,7 +641,6 @@ const RoadSearchInput = ({
                             type="button"
                             aria-label="Search"
                             onClick={onClickSearchRoad}
-                            roadEndEnabled={roadEndEnabled}
                           >
                             <FontAwesomeIcon icon={faMagnifyingGlass} />
                           </StyledStandardSearchButton>
@@ -499,165 +652,9 @@ const RoadSearchInput = ({
               </StyledFieldGroup>
             </StyledInputsContainer>
           </StyledRowWithButton>
-
-          {/* END group (if enabled) */}
-          {roadEndEnabled && (
-            <>
-              <StyledSectionDivider id="search-input-road-end-divider">
-                Loppu
-              </StyledSectionDivider>
-              <StyledRowWithButton>
-                <StyledInputsContainer>
-                  <StyledFieldGroup>
-                    <InputRow>
-                      <FieldItem>
-                        <LabelAbove htmlFor="search-input-road-tieloppu">
-                          {strings.search.vkm.tie}
-                        </LabelAbove>
-                        <PillInput
-                          id="search-input-road-tieloppu"
-                          aria-labelledby="search-input-road-tieloppu-label"
-                          type="text"
-                          onChange={(e) =>
-                            updateRoadSearchValue(
-                              searchValue,
-                              searchType,
-                              4,
-                              e.target.value,
-                              carriageWaySearch
-                            )
-                          }
-                          value={getSearchValuePart(
-                            searchValue,
-                            searchType,
-                            4,
-                            carriageWaySearch
-                          )}
-                          onKeyPress={(e) => {
-                            if (e.key === 'Enter') handleSeach(searchValue);
-                          }}
-                        />
-                      </FieldItem>
-
-                      <FieldItem>
-                        <LabelAbove htmlFor="search-input-road-osa-loppu">
-                          {strings.search.vkm.osa}
-                        </LabelAbove>
-                        <PillInput
-                          id="search-input-road-osa-loppu"
-                          aria-labelledby="search-input-road-osa-loppu-label"
-                          type="text"
-                          onChange={(e) =>
-                            updateRoadSearchValue(
-                              searchValue,
-                              searchType,
-                              5,
-                              e.target.value,
-                              carriageWaySearch
-                            )
-                          }
-                          value={getSearchValuePart(
-                            searchValue,
-                            searchType,
-                            5,
-                            carriageWaySearch
-                          )}
-                          onKeyPress={(e) => {
-                            if (e.key === 'Enter') handleSeach(searchValue);
-                          }}
-                        />
-                      </FieldItem>
-
-                      <FieldItem>
-                        <LabelAbove htmlFor="search-input-road-majorata-loppu">
-                          {strings.search.vkm.ajorata}
-                        </LabelAbove>
-                        <PillInput
-                          id="search-input-road-majorata-loppu"
-                          aria-labelledby="search-input-road-majorata-loppu-label"
-                          type="text"
-                          onChange={(e) =>
-                            updateRoadSearchValue(
-                              searchValue,
-                              searchType,
-                              6,
-                              e.target.value,
-                              carriageWaySearch
-                            )
-                          }
-                          value={getSearchValuePart(
-                            searchValue,
-                            searchType,
-                            6,
-                            carriageWaySearch
-                          )}
-                          onKeyPress={(e) => {
-                            if (e.key === 'Enter') handleSeach(searchValue);
-                          }}
-                          disabled={!carriageWaySearch}
-                        />
-                      </FieldItem>
-
-                      <FieldItem>
-                        <LabelAbove htmlFor="search-input-road-etaisyys-loppu">
-                          {strings.search.vkm.etaisyys}
-                        </LabelAbove>
-                        <div style={{ display: 'flex' }}>
-                          <PillInput
-                            id="search-input-road-etaisyys-loppu"
-                            aria-labelledby="search-input-road-etaisyys-loppu-label"
-                            type="text"
-                            onChange={(e) =>
-                              updateRoadSearchValue(
-                                searchValue,
-                                searchType,
-                                carriageWaySearch ? 7 : 6,
-                                e.target.value,
-                                carriageWaySearch
-                              )
-                            }
-                            value={getSearchValuePart(
-                              searchValue,
-                              searchType,
-                              7,
-                              carriageWaySearch
-                            )}
-                            onKeyPress={(e) => {
-                              if (e.key === 'Enter') handleSeach(searchValue);
-                            }}
-                          />
-
-                          {(searchResults !== null ||
-                            featureSearchResults.length > 0) &&
-                          searchValue === lastSearchValue &&
-                          !isSearching ? (
-                            <StyledStandardSearchButton
-                              type="button"
-                              aria-label="Search"
-                              onClick={emptySearchResults}
-                            >
-                              <FontAwesomeIcon icon={faTrash} />
-                            </StyledStandardSearchButton>
-                          ) : (
-                            !isSearching && (
-                              <StyledStandardSearchButton
-                                type="button"
-                                aria-label="Search"
-                                onClick={onClickSearchRoad}
-                              >
-                                <FontAwesomeIcon icon={faMagnifyingGlass} />
-                              </StyledStandardSearchButton>
-                            )
-                          )}
-                        </div>
-                      </FieldItem>
-                    </InputRow>
-                  </StyledFieldGroup>
-                </StyledInputsContainer>
-              </StyledRowWithButton>
-            </>
-          )}
-        </StyledSearchSection>
+        </>
+      )}
+    </StyledSearchSection>
   );
 };
 

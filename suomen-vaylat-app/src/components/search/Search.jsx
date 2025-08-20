@@ -22,7 +22,7 @@ import {
   searchVKMTrack,
   setFeatureSearchResults,
   setSearchResults,
-  setSearchValue,
+  setSearchValue
 } from '../../state/slices/rpcSlice';
 
 import {
@@ -143,7 +143,7 @@ export const StyledDropdownContentItem = styled.div`
 
   &:hover {
     svg {
-    opacity: 0.9;
+      opacity: 0.9;
     }
     opacity: 0.9;
   }
@@ -177,8 +177,13 @@ const Search = () => {
     activeSwitch,
     isMoreSearchOpen
   } = useAppSelector((state) => state.ui);
-  const { channel, allLayers, selectedLayersByType, featureSearchResults, searchResults } =
-    useAppSelector((state) => state.rpc);
+  const {
+    channel,
+    allLayers,
+    selectedLayersByType,
+    featureSearchResults,
+    searchResults
+  } = useAppSelector((state) => state.rpc);
 
   const { store } = useContext(ReactReduxContext);
 
@@ -290,85 +295,83 @@ const Search = () => {
 
   // Handle feature search
   const handleFeatureSearch = (searchValue, startIndex = 0, layerId = -1) => {
-      const handleSearchResponse = (data) => {
-        if (Object.keys(data).length > 0 && Object.keys(data.gfi).length > 0) {
-          setIsSearching(false);
-          store.dispatch(setSearchOn(false));
-
-          if (startIndex !== 0) {
-            // Update features for "more results"
-            let oldFeatureSearchResults = JSON.parse(
-              JSON.stringify(featureSearchResults)
-            );
-            let newFeatureSearchResults = { ...data.gfi };
-            const contentIndex = oldFeatureSearchResults
-              .map((gfi) => gfi.content.layerId)
-              .indexOf(data.gfi.content.layerId);
-            const updatedFeatures = oldFeatureSearchResults[
-              contentIndex
-            ].content.geojson.features.concat(
-              data.gfi.content.geojson.features
-            );
-            newFeatureSearchResults.content.geojson.features = updatedFeatures;
-
-            const updatedMatchedKeys = mergeMatchedKeys(
-              oldFeatureSearchResults[contentIndex].content.geojson
-                .matchedFeatures,
-              data.gfi.content.geojson.matchedFeatures
-            );
-            newFeatureSearchResults.content.geojson.matchedFeatures =
-              updatedMatchedKeys;
-
-            oldFeatureSearchResults[contentIndex] = newFeatureSearchResults;
-
-            store.dispatch(setFeatureSearchResults(oldFeatureSearchResults));
-          } else {
-            store.dispatch(pushToFeatureSearchResults(data.gfi));
-          }
-        } else {
-          setIsSearching(false);
-          store.dispatch(setSearchOn(false));
-        }
-        setLastSearchValue(searchValue);
-      };
-
-      const handleSearchError = (layerIdentifier, error) => {
+    const handleSearchResponse = (data) => {
+      if (Object.keys(data).length > 0 && Object.keys(data.gfi).length > 0) {
         setIsSearching(false);
         store.dispatch(setSearchOn(false));
-        setLastSearchValue(searchValue);
 
-        toast.error(
-          `${strings.search.feature.errorLayerStart}${layerIdentifier}${strings.search.feature.errorLayerEnd}`,
-          {
-            position: 'top-center',
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: 'colored',
-            transition: Slide
-          }
-        );
-      };
+        if (startIndex !== 0) {
+          // Update features for "more results"
+          let oldFeatureSearchResults = JSON.parse(
+            JSON.stringify(featureSearchResults)
+          );
+          let newFeatureSearchResults = { ...data.gfi };
+          const contentIndex = oldFeatureSearchResults
+            .map((gfi) => gfi.content.layerId)
+            .indexOf(data.gfi.content.layerId);
+          const updatedFeatures = oldFeatureSearchResults[
+            contentIndex
+          ].content.geojson.features.concat(data.gfi.content.geojson.features);
+          newFeatureSearchResults.content.geojson.features = updatedFeatures;
 
-      setIsSearching(true);
-      store.dispatch(setSearchOn(true));
-      startIndex === 0 && store.dispatch(resetFeatureSearchResults());
+          const updatedMatchedKeys = mergeMatchedKeys(
+            oldFeatureSearchResults[contentIndex].content.geojson
+              .matchedFeatures,
+            data.gfi.content.geojson.matchedFeatures
+          );
+          newFeatureSearchResults.content.geojson.matchedFeatures =
+            updatedMatchedKeys;
 
-      const searchLayer =
-        layerId !== -1 ? layerId : selectedLayersByType.mapLayers[0]?.id;
-      const layerIdentifier =
-        layerId !== -1 ? layerId : selectedLayersByType.mapLayers[0]?.name;
+          oldFeatureSearchResults[contentIndex] = newFeatureSearchResults;
 
-      if (searchLayer) {
-        channel.searchFeatures(
-          [[searchLayer], searchValue, startIndex],
-          (data) => handleSearchResponse(data, searchLayer),
-          (error) => handleSearchError(layerIdentifier, error)
-        );
+          store.dispatch(setFeatureSearchResults(oldFeatureSearchResults));
+        } else {
+          store.dispatch(pushToFeatureSearchResults(data.gfi));
+        }
+      } else {
+        setIsSearching(false);
+        store.dispatch(setSearchOn(false));
       }
+      setLastSearchValue(searchValue);
+    };
+
+    const handleSearchError = (layerIdentifier, error) => {
+      setIsSearching(false);
+      store.dispatch(setSearchOn(false));
+      setLastSearchValue(searchValue);
+
+      toast.error(
+        `${strings.search.feature.errorLayerStart}${layerIdentifier}${strings.search.feature.errorLayerEnd}`,
+        {
+          position: 'top-center',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'colored',
+          transition: Slide
+        }
+      );
+    };
+
+    setIsSearching(true);
+    store.dispatch(setSearchOn(true));
+    startIndex === 0 && store.dispatch(resetFeatureSearchResults());
+
+    const searchLayer =
+      layerId !== -1 ? layerId : selectedLayersByType.mapLayers[0]?.id;
+    const layerIdentifier =
+      layerId !== -1 ? layerId : selectedLayersByType.mapLayers[0]?.name;
+
+    if (searchLayer) {
+      channel.searchFeatures(
+        [[searchLayer], searchValue, startIndex],
+        (data) => handleSearchResponse(data, searchLayer),
+        (error) => handleSearchError(layerIdentifier, error)
+      );
+    }
   };
 
   useEffect(() => {
@@ -400,7 +403,6 @@ const Search = () => {
         }
       });
   }, [channel, activeSwitch]);
-
 
   const handleCloseToast = () => {
     setShowToast(false);
@@ -472,7 +474,6 @@ const Search = () => {
     } else toast.dismiss('searchTipToast');
   }, [geoJsonArray]);
 
-
   const emptySearchResults = () => {
     store.dispatch(setGeoJsonArray([]));
     store.dispatch(setFeatureSearchResults([]));
@@ -532,7 +533,6 @@ const Search = () => {
 
   return (
     <StyledSearchContainer isSearchOpen={isSearchOpen}>
-
       <CircleButton
         icon={iconToShow}
         text={circleButtonText}
