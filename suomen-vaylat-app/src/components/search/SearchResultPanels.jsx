@@ -1,4 +1,4 @@
-import AddRessSearchResultPanel from './result-panels/AddRessSearchResultPanel';
+import AddressSearchResultPanel from './result-panels/AddressSearchResultPanel';
 import MetadataSearchResultPanel from './result-panels/MetadataSearchResultPanel';
 import FeatureSearchResultPanel from './result-panels/FeatureSearchResultPanel';
 import styled from 'styled-components';
@@ -35,7 +35,7 @@ const SearchResultPanels = ({ setSearchClickedRow, searchClickedRow }) => {
         </>
       )}
       {isSearchOpen && searchResults !== null && searchType === 'address' && (
-        <AddRessSearchResultPanel
+        <AddressSearchResultPanel
           isMobile={isMobile}
           setSearchClickedRow={setSearchClickedRow}
           searchClickedRow={searchClickedRow}

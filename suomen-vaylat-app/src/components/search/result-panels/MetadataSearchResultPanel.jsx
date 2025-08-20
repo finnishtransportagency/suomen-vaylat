@@ -13,25 +13,45 @@ const MetadataSearchResultPanel = () => {
 
   return (
     <StyledDropDown
-      key={'dropdown-content-metadata'}
+      key="dropdown-content-metadata"
+      role="listbox"
       variants={dropdownVariants}
-      initial={'initial'}
-      animate={'animate'}
-      exit={'exit'}
-      transition={'transition'}
+      initial="initial"
+      animate="animate"
+      exit="exit"
+      transition="transition"
     >
       {searchResults?.results?.length > 0 ? (
-        searchResults.results.map((result) => {
+        searchResults.results.map((result, i) => {
           const layers = allLayers.filter(
             (layer) => layer.metadataIdentifier === result.id
           );
           return layers.map((layer) => {
-            return <Layer key={`metadata_${layer.id}`} layer={layer} />;
+            const optionId = `metadata-results-${layer.id}`;
+            const labelId = `${optionId}-label`;
+
+            return (
+              <Layer
+                key={optionId}
+                id={optionId}
+                role="option"
+                aria-labelledby={labelId}
+                layer={layer}
+              />
+            );
           });
         })
       ) : (
-        <StyledDropdownContentItem key={'no-results'}>
-          <StyledDropdownContentItemTitle type="noResults">
+        <StyledDropdownContentItem
+          key="metadata-results-no-results"
+          id="metadata-results-no-results"
+          role="status"
+          aria-live="polite"
+        >
+          <StyledDropdownContentItemTitle
+            id="metadata-results-no-results-label"
+            type="noResults"
+          >
             {strings.search.metadata.error.text}
           </StyledDropdownContentItemTitle>
         </StyledDropdownContentItem>

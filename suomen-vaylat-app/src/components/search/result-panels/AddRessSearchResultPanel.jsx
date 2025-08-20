@@ -29,7 +29,7 @@ import {
   setFirstSearchResultShown
 } from '../../../state/slices/rpcSlice';
 
-const AddRessSearchResultPanel = ({
+const AddressSearchResultPanel = ({
   setSearchClickedRow,
   searchClickedRow
 }) => {
@@ -217,6 +217,7 @@ const AddRessSearchResultPanel = ({
 
   return (
     <StyledDropDown
+      id={'dropdown-content-address'}
       key={'dropdown-content-address'}
       variants={dropdownVariants}
       initial={'initial'}
@@ -260,6 +261,7 @@ const AddRessSearchResultPanel = ({
 
             return (
               <StyledDropdownContentItem
+                id={'address-dropdown-'+ name + '_' + index}
                 key={name + '_' + index}
                 tabIndex={0}
                 type={'searchResult'}
@@ -310,6 +312,7 @@ const AddRessSearchResultPanel = ({
                   />
                 </StyledSearchIcon>
                 <StyledDropdownContentItemTitle
+                  id={'styled-dropdown-content-item-title' + name}
                   type={'searchResult'}
                   active={searchClickedRow === index || locations.length === 1}
                 >
@@ -330,4 +333,4 @@ const AddRessSearchResultPanel = ({
   );
 };
 
-export default AddRessSearchResultPanel;
+export default AddressSearchResultPanel;

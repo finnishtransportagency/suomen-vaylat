@@ -461,27 +461,35 @@ const FeatureList = ({
   selectedFeature
 }) => {
   return (
-    <StyledDropdownFeatureResults>
+    <StyledDropdownFeatureResults role="listbox">
       {layer.content.geojson.matchedFeatures[matchedKey].map((item, i) => {
         const actualFeature = layer.content.geojson.features.find(
           (f) => f.id === item.feature_id
         );
 
+        const isSelected = selectedFeature === item.feature_id;
+        const optionId = `feature-results-${item.feature_id}`;
+        const labelId = `${optionId}-label`;
+
         return (
           <StyledDropdownContentItem
-            key={`search-result-feature-${i}`}
+            id={optionId}
+            key={optionId}
+            role="option"
+            aria-selected={isSelected}
+            aria-labelledby={labelId}
             tabIndex={0}
-            selected={selectedFeature === item.feature_id}
+            selected={isSelected}
             onClick={() => {
               showFeatureOnMap(channel, layer, actualFeature);
-              selectedFeature === item.feature_id
+              isSelected
                 ? setSelectedFeature('')
                 : setSelectedFeature(item.feature_id);
             }}
             onKeyDown={(e) => {
               if (e.key === 'Enter') {
                 showFeatureOnMap(channel, layer, actualFeature);
-                selectedFeature === item.feature_id
+                isSelected
                   ? setSelectedFeature('')
                   : setSelectedFeature(item.feature_id);
               }
@@ -489,7 +497,7 @@ const FeatureList = ({
           >
             <StyledDropdownFeatureResultsContainer>
               <StyledDropdownFeatureResults>
-                <StyledDropdownContentItemTitle>
+                <StyledDropdownContentItemTitle id={labelId}>
                   <StyledResultId>{`${item.feature_id}:`}</StyledResultId>
                   <StyledResultValue>{item.value}</StyledResultValue>
                 </StyledDropdownContentItemTitle>
