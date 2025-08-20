@@ -142,10 +142,7 @@ const switchDefinitions = [
   }
 ];
 
-const SearchDialog = ({
-  setSearchClickedRow,
-  searchClickedRow,
-}) => {
+const SearchDialog = ({ setSearchClickedRow, searchClickedRow }) => {
   const { store } = useContext(ReactReduxContext);
   const { featureSearchResults, channel, searchResults, isSearchingActive } =
     useAppSelector((state) => state.rpc);
@@ -174,34 +171,35 @@ const SearchDialog = ({
   };
 
   return (
-    <StyledSearchDialog>
-      <DropdownWrapper>
+    <StyledSearchDialog id="search-dialog">
+      <DropdownWrapper id="search-dialog-dropdown-wrapper">
         <DropdownHeader
+          id="search-dialog-dropdown-button"
           onClick={() => setDropdownOpen((o) => !o)}
           aria-expanded={dropdownOpen}
-          aria-controls="search-dropdown-content"
-          id="search-dropdown-button"
+          aria-controls="search-dialog-dropdown-content"
         >
-          <span>{headerTitle}</span>
+          <span id="search-dialog-dropdown-title">{headerTitle}</span>
           <FontAwesomeIcon
             icon={faChevronDown}
             rotation={dropdownOpen ? 180 : undefined}
           />
         </DropdownHeader>
+
         {dropdownOpen && (
           <DropdownContent
-            id="search-dropdown-content"
-            aria-labelledby="search-dropdown-button"
+            id="search-dialog-dropdown-content"
+            aria-labelledby="search-dialog-dropdown-button"
           >
             {switchDefinitions.map((sw, index) => (
-              <Fragment key={sw.id}>
+              <Fragment key={`search-dialog-switch-${sw.id}`}>
                 <SearchSwitch
+                  id={`search-dialog-switch-${sw.id}`}
                   isSelected={activeSwitch === sw.id}
                   action={() => updateActiveSwitch(sw.id)}
                   title={sw.title}
                   tooltipText={sw.tooltipText}
                   tooltipAddress={sw.tooltipAddress}
-                  id={sw.id}
                   isMobile={isMobile}
                 />
               </Fragment>
@@ -211,6 +209,7 @@ const SearchDialog = ({
       </DropdownWrapper>
 
       <SearchInputs
+        id="search-dialog-inputs"
         setDropdownOpen={setDropdownOpen}
         setSearchClickedRow={setSearchClickedRow}
         searchClickedRow={searchClickedRow}
@@ -219,9 +218,9 @@ const SearchDialog = ({
 
       {isSearchingActive && (
         <>
-          <HorizontalLine />
-          <StyledLoaderWrapper>
-            <SvLoader />
+          <HorizontalLine id="search-dialog-line-loading" />
+          <StyledLoaderWrapper id="search-dialog-loader-wrapper">
+            <SvLoader id="search-dialog-loader" />
           </StyledLoaderWrapper>
         </>
       )}
@@ -229,8 +228,9 @@ const SearchDialog = ({
       {(searchResults !== null || featureSearchResults.length > 0) &&
         !isSearchingActive && (
           <>
-            <HorizontalLine />
+            <HorizontalLine id="search-dialog-line-results" />
             <SearchResultPanels
+              id="search-dialog-result-panels"
               setSearchClickedRow={setSearchClickedRow}
               searchClickedRow={searchClickedRow}
             />

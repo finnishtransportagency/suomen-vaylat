@@ -333,7 +333,7 @@ const Search = () => {
   }
 
   return (
-    <StyledSearchContainer isSearchOpen={isSearchOpen}>
+    <StyledSearchContainer id={"search-container"} isSearchOpen={isSearchOpen}>
       <CircleButton
         icon={iconToShow}
         text={circleButtonText}

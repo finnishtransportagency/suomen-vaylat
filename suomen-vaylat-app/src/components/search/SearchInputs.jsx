@@ -45,7 +45,7 @@ const StyledInputsContainer = styled.div`
   align-items: center; /* vertically center the input row so the button aligns middle */
 
   @media ${(props) => props.theme.device.tablet} {
-    width: 100%
+    width: 100%;
   }
 `;
 
@@ -319,13 +319,13 @@ const SearchInputs = ({ setDropdownOpen }) => {
       {['address', 'nomenclature', 'premise', 'layer'].includes(
         activeSwitch
       ) && (
-        <StyledSearchSection>
+        <StyledSearchSection id="search-inputs-section">
           <StyledRowWithButton>
             <StyledInputsContainer>
               <StyledWideInputGroup>
-                <StyledRelativeInputWrapper>
+                <StyledRelativeInputWrapper id="search-inputs-relative-wrapper">
                   <StyledWidePillInput
-                    id={`search-input-${activeSwitch}`}
+                    id={`search-inputs-${activeSwitch}`}
                     aria-label={
                       strings.search[activeSwitch]?.title ||
                       `${activeSwitch} search`
@@ -348,8 +348,9 @@ const SearchInputs = ({ setDropdownOpen }) => {
             searchValue === lastSearchValue &&
             !isSearchingActive ? (
               <StyledStandardSearchButton
+                id="search-inputs-clear-button"
                 type="button"
-                aria-label="Search"
+                aria-label="Clear search results"
                 onClick={() => {
                   store.dispatch(setSearchValue(''));
                 }}
@@ -359,8 +360,9 @@ const SearchInputs = ({ setDropdownOpen }) => {
             ) : (
               !isSearchingActive && (
                 <StyledStandardSearchButton
+                  id="search-inputs-submit-button"
                   type="button"
-                  aria-label="Search"
+                  aria-label="Submit search"
                   onClick={submitForActiveSwitch}
                 >
                   <FontAwesomeIcon icon={faMagnifyingGlass} />
@@ -370,7 +372,11 @@ const SearchInputs = ({ setDropdownOpen }) => {
           </StyledRowWithButton>
 
           {simpleError && (
-            <StyledValidationMessage role="alert" aria-live="polite">
+            <StyledValidationMessage
+              id="search-inputs-error"
+              role="alert"
+              aria-live="polite"
+            >
               {simpleError}
             </StyledValidationMessage>
           )}
@@ -384,7 +390,7 @@ const SearchInputs = ({ setDropdownOpen }) => {
           text={strings.search?.clearResults}
           onClick={emptySearchResults}
           aria-label={strings.search?.clearResults}
-          style={{width: '100%', justifyContent: 'center'}}
+          style={{ width: '100%', justifyContent: 'center' }}
         />
       )}
     </>

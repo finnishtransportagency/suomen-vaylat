@@ -420,6 +420,7 @@
     "fill_all_fields": "Fyll i alla sökfält",
     "required_field_missing": "Kontrollera de obligatoriska fälten.",
     "clearResults": "Tydliga resultat",
+    "results": "Sök resultat",
     "errors": {
       "invalidChars": "Ogiltiga tecken — endast bokstäver, siffror och mellanslag är tillåtna"
     },

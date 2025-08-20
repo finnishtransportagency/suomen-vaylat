@@ -4,6 +4,7 @@ import FeatureSearchResultPanel from './result-panels/FeatureSearchResultPanel';
 import styled from 'styled-components';
 import { useAppSelector } from '../../state/hooks';
 import { isMobile } from '../../theme/theme';
+import strings from '../../translations';
 
 const SearchPanelMain = styled.div`
   width: 100%;
@@ -28,10 +29,10 @@ const SearchResultPanels = ({ setSearchClickedRow, searchClickedRow }) => {
   const { isSearchOpen } = useAppSelector((state) => state.ui);
 
   return (
-    <SearchPanelMain>
+    <SearchPanelMain id={"searc-result-panels-main"}>
       {(searchResults !== null || featureSearchResults.length > 0) && (
         <>
-          <StyledSearchResultsTitle>{'Hakutulokset'}</StyledSearchResultsTitle>
+          <StyledSearchResultsTitle id={"searc-result-panels-title"}>{strings.search?.results}</StyledSearchResultsTitle>
         </>
       )}
       {isSearchOpen && searchResults !== null && searchType === 'address' && (

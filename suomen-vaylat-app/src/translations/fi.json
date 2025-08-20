@@ -419,6 +419,7 @@
     "fill_all_fields": "Täytä kaikki hakukentät",
     "required_field_missing": "Tarkista tarvittavat kentät.",
     "clearResults": "Tyhjennä tulokset",
+    "results": "Hakutulokset",
     "errors": {
       "invalidChars": "Virheellisiä markkejä – vain kirjaimet, numerot ja välilyönnit ovat sallittuja"
     },
