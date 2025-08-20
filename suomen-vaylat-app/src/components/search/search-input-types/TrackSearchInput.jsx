@@ -179,8 +179,6 @@ const TrackSearchInput = ({ handleGeneralSearch, emptySearchInputs }) => {
     }
   };
 
-  const trackErrorsId = 'search-input-track-errors';
-
   // helpers to read  trackErrors
   const getTrackField = (index) => {
     if (!trackErrors) return { invalid: false, message: '' };
