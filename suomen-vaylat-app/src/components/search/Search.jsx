@@ -22,6 +22,7 @@ import {
   searchVKMTrack,
   setFeatureSearchResults,
   setSearchResults,
+  setSearchValue,
 } from '../../state/slices/rpcSlice';
 
 import {
@@ -163,7 +164,6 @@ const StyledToastIcon = styled(FontAwesomeIcon)`
 `;
 
 const Search = () => {
-  const [searchValue, setSearchValue] = useState('');
   const [lastSearchValue, setLastSearchValue] = useState('');
   const [isSearching, setIsSearching] = useState(true);
   const [isSearchMethodSelectorOpen, setIsSearchMethodSelectorOpen] =
@@ -269,7 +269,7 @@ const Search = () => {
       // TODO: swap to rpcSlice function
       channel.postRequest('SearchRequest', [searchValueCopy]);
     }
-    setSearchValue(value);
+    store.dispatch(setSearchValue(value));
     setLastSearchValue(value);
     store.dispatch(setSearchResults(null));
   };
@@ -472,16 +472,12 @@ const Search = () => {
     } else toast.dismiss('searchTipToast');
   }, [geoJsonArray]);
 
-  useEffect(() => {
-    //when carriagewaysearch ( ajordalla haku ) changes, reset searchValue
-    setSearchValue('');
-  }, [carriageWaySearch, setSearchValue]);
 
   const emptySearchResults = () => {
     store.dispatch(setGeoJsonArray([]));
     store.dispatch(setFeatureSearchResults([]));
     store.dispatch(setSearchResults(null));
-    setSearchValue('');
+    store.dispatch(setSearchValue(''));
     setLastSearchValue('');
     removeMarkersAndFeatures(channel);
   };
@@ -501,7 +497,7 @@ const Search = () => {
       store.dispatch(setSearchOn(null));
       isSearchOpen && removeMarkersAndFeatures(channel);
       isSearchOpen && store.dispatch(setSearchResults(null));
-      isSearchOpen && setSearchValue('');
+      isSearchOpen && store.dispatch(setSearchValue(''));
       isSearchMethodSelectorOpen && setIsSearchMethodSelectorOpen(false);
       setSearchType('address');
     }
@@ -560,8 +556,6 @@ const Search = () => {
             searchType={searchType}
           >
             <SearchDialog
-              searchValue={searchValue}
-              setSearchValue={setSearchValue}
               firstSearchResultShown={firstSearchResultShown}
               setFirstSearchResultShown={setFirstSearchResultShown}
               setSearchClickedRow={setSearchClickedRow}

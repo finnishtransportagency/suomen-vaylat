@@ -10,37 +10,11 @@ import {
   validateTrackSearch
 } from './utils/SearchUtil';
 import { ReactReduxContext } from 'react-redux';
-import DefaultSearchInput from './DefaultSearchInput';
-import RoadSearchInput from './RoadSearchInput';
-import TrackSearchInput from './TrackSearchInput';
-
-const StyledSectionDivider = styled.div`
-  margin: 0.5em 0;
-  border-bottom: 1px solid #dee2e6;
-  font-weight: 500;
-  color: ${(p) => p.theme.colors.black};
-  font-size: 15px;
-  padding-bottom: 2px;
-`;
-
-const StyledFieldGroup = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  overflow-x: auto;
-`;
-
-const InputRow = styled.div`
-  display: flex;
-  gap: 0.5em;
-  width: 100%;
-  justify-content: flex-start;
-  margin-bottom: 8px;
-  flex-wrap: nowrap;
-  @media (max-width: 750px) {
-    gap: 6px;
-  }
-`;
+import DefaultSearchInput from './search-input-types/DefaultSearchInput';
+import RoadSearchInput from './search-input-types/RoadSearchInput';
+import TrackSearchInput from './search-input-types/TrackSearchInput';
+import FeatureSearchInput from './search-input-types/FeatureSearchInput';
+import { setSearchValue } from '../../state/slices/rpcSlice';
 
 const StyledRowWithButton = styled.div`
   display: flex;
@@ -122,24 +96,6 @@ const PillInput = styled.input`
   }
 `;
 
-const FieldItem = styled.div`
-  display: flex;
-  flex-direction: column;
-  min-width: 72px;
-  align-items: flex-start;
-  box-sizing: border-box;
-`;
-
-const LabelAbove = styled.label`
-  display: block;
-  text-align: center;
-  font-size: 14px;
-  font-weight: 500;
-  color: #444;
-  margin-bottom: 6px;
-  margin-left: 0.5em;
-`;
-
 const StyledWideInputGroup = styled.div`
   width: 100%;
 `;
@@ -152,12 +108,6 @@ const StyledWidePillInput = styled(PillInput)`
   padding-right: 44px; /* room for clear button */
 `;
 
-const StyledFeatureSearchSection = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 1em;
-  width: 100%;
-`;
 const StyledSearchSection = styled.div`
   width: 100%;
   margin-bottom: 1em;
@@ -166,223 +116,17 @@ const StyledSearchSection = styled.div`
   align-items: flex-start;
 `;
 
-const StyledCheckboxWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  margin: 0 0 1em 8px;
-`;
-
-const StyledCheckbox = styled.input`
-  margin-left: 0;
-  margin-right: 8px;
-  width: 16px;
-  height: 16px;
-`;
-
-const CheckboxLabel = styled.label`
-  font-size: 16px;
-  margin: 0;
-  color: ${(props) => props.theme.colors.darkGrey || '#333'};
-`;
-
 const StyledValidationMessage = styled.div`
   color: ${(props) => props.theme.colors.secondaryColorDarkOrange || '#c55'};
   margin-top: 8px;
   font-size: 0.95em;
 `;
 
-const StyledErrorsList = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-`;
-
-const StyledSelectedLayerWrapper = styled.div`
-  display: flex;
-  align-items: baseline;
-  margin-left: 0.5em;
-  margin-bottom: 4px;
-  overflow: hidden;
-  white-space: nowrap;
-`;
-
-const StyledSelectedLayerTitle = styled.div`
-  color: ${(props) => props.theme.colors.mainColor1};
-  font-size: 16px;
-  font-weight: 500;
-`;
-
-const StyledSelectedLayerText = styled.div`
-  font-size: 15px;
-  font-weight: 400;
-  margin-left: 0.5em;
-  margin-right: 0.5em;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  &:hover {
-    white-space: normal;
-  }
-`;
-
-const StyledNoActivaLayers = styled.div`
-  color: ${(props) => props.theme.colors.secondaryColorDarkOrange};
-  font-size: 16px;
-  font-weight: 500;
-`;
-
-const getSearchValuePart = (
-  searchValue,
-  searchType,
-  part,
-  carriageWaySearch
-) => {
-  const splittedSearchArray = splitSearchValue(searchValue, searchType, part);
-  let retVa;
-  let actualPart;
-  if (carriageWaySearch === true) {
-    if (splittedSearchArray && part > splittedSearchArray.length) {
-      return '';
-    } else {
-      actualPart = part;
-    }
-  } else {
-    if (part === 2 || part === 6) {
-      return '';
-    } else if (part > 6) {
-      actualPart = part - 2;
-    } else if (part >= 3) {
-      actualPart = part - 1;
-    } else {
-      actualPart = part;
-    }
-  }
-  if (
-    splittedSearchArray !== undefined &&
-    splittedSearchArray.length - 1 >= actualPart &&
-    typeof splittedSearchArray[actualPart] !== 'undefined'
-  ) {
-    retVa = splittedSearchArray[actualPart];
-  } else if (part === 0) {
-    retVa = searchValue;
-  } else {
-    retVa = '';
-  }
-  return retVa;
-};
-
-const splitSearchValue = (searchValue, searchType) => {
-  let roadParts;
-  if (
-    searchValue !== '' &&
-    searchType !== undefined &&
-    searchType === 'address' &&
-    searchValue.includes('/')
-  ) {
-    if (searchValue.includes(' ')) {
-      const partsArray = searchValue.split(' ');
-      const part1 = partsArray[0].split('/').filter((val) => val !== '');
-      const part2 = partsArray[1].split('/').filter((val) => val !== '');
-      roadParts = part1.concat(part2);
-    } else {
-      roadParts = searchValue.split('/');
-    }
-  }
-  return roadParts;
-};
-
-const updateRoadSearchValue = (
-  searchValue,
-  searchType,
-  setSearchValue,
-  part,
-  value,
-  carriageWaySearch = false
-) => {
-  let searchArray = splitSearchValue(searchValue, searchType);
-  const effectivePart = carriageWaySearch ? part : part - 1;
-  if (
-    searchArray !== undefined &&
-    searchArray !== '' &&
-    searchArray.length >= effectivePart
-  ) {
-    if (value === '') {
-      searchArray.length = part;
-    }
-    const blancSpacePosition = carriageWaySearch ? 4 : 3;
-    if (part > blancSpacePosition) {
-      searchArray[effectivePart] = value;
-    } else {
-      searchArray[part] = value;
-    }
-    const updatedSearchValue = parseSearchValueFromParts(
-      searchArray,
-      blancSpacePosition
-    );
-    if (updatedSearchValue !== undefined) {
-      setSearchValue(updatedSearchValue);
-    }
-  } else if (
-    (searchArray === undefined || searchArray === '') &&
-    value !== undefined &&
-    part === 0
-  ) {
-    setSearchValue(value);
-  } else if (
-    (searchArray === undefined || searchArray === '') &&
-    searchValue !== undefined &&
-    part === 1
-  ) {
-    setSearchValue(searchValue + '/' + value);
-  } else if (
-    searchArray !== undefined &&
-    searchArray !== '' &&
-    searchArray.length === part - 1
-  ) {
-    setSearchValue(searchValue + '/' + value);
-  }
-};
-
-const parseSearchValueFromParts = (partsArray, blancSpacePosition) => {
-  let newSearchValue;
-  if (partsArray !== undefined && partsArray.length > blancSpacePosition - 1) {
-    let firstPart = partsArray.slice(0, blancSpacePosition).join('/');
-    let secondi = partsArray.slice(blancSpacePosition).join('/');
-    newSearchValue = [firstPart, ' ', secondi].join('');
-  } else {
-    newSearchValue = partsArray.join('/');
-  }
-  return newSearchValue.endsWith('/')
-    ? newSearchValue.slice(0, -1)
-    : newSearchValue;
-};
-
-const getTrackSearchValuePart = (position, searchValue) => {
-  if (!searchValue) return '';
-  const searchArray = searchValue.split('/');
-  return searchArray[position] || '';
-};
-
-const updateTrackSearchValue = (
-  newValue,
-  position,
-  searchValue,
-  setSearchValue
-) => {
-  let searchArray = searchValue ? searchValue.split('/') : ['', '', ''];
-  searchArray[position] = newValue;
-  const newSearchValue = searchArray.join('/');
-  setSearchValue(
-    newSearchValue.endsWith('/') ? newSearchValue.slice(0, -1) : newSearchValue
-  );
-};
 const parseTrackSearchQuery = (searchQuery) => {
   return searchQuery.endsWith('/') ? searchQuery.slice(0, -1) : searchQuery;
 };
 
 const SearchInput = ({
-  searchValue,
-  setSearchValue,
   searchType,
   handleSeach,
   carriageWaySearch,
@@ -394,11 +138,10 @@ const SearchInput = ({
   const { store } = useContext(ReactReduxContext);
 
   const {
-    selectedLayersByType,
     featureSearchResults,
     trackErrors,
-    featureErrors,
-    searchResults
+    searchResults,
+    searchValue
   } = useAppSelector((state) => state.rpc);
   const { activeSwitch } = useAppSelector((state) => state.ui);
 
@@ -504,8 +247,6 @@ const SearchInput = ({
     <>
       {activeSwitch === 'default' && (
         <DefaultSearchInput
-        searchValue={searchValue}
-        setSearchValue={setSearchValue}
         handleSeach={handleSeach}
         emptySearchResults={emptySearchResults}
         lastSearchValue={lastSearchValue}
@@ -515,8 +256,6 @@ const SearchInput = ({
 
       {activeSwitch === 'road' && (
         <RoadSearchInput
-        searchValue={searchValue}
-        setSearchValue={setSearchValue}
         searchType={searchType}
         handleSeach={handleSeach}
         carriageWaySearch={carriageWaySearch}
@@ -529,12 +268,19 @@ const SearchInput = ({
 
       {activeSwitch === 'track' && (
         <TrackSearchInput
-          searchValue={searchValue}
-          setSearchValue={setSearchValue}
           handleSeach={handleSeach}
           emptySearchResults={emptySearchResults}
           lastSearchValue={lastSearchValue}
           isSearching={isSearching}
+        />
+      )}
+
+      {activeSwitch === 'feature' && (
+        <FeatureSearchInput
+        handleSeach={handleSeach}
+        emptySearchResults={emptySearchResults}
+        lastSearchValue={lastSearchValue}
+        isSearching={isSearching}
         />
       )}
 
@@ -555,7 +301,7 @@ const SearchInput = ({
                     type="text"
                     value={searchValue}
                     onChange={(e) => {
-                      setSearchValue(e.target.value);
+                      store.dispatch(setSearchValue(e.target.value));
                       // live validation handled in useEffect
                     }}
                     onKeyPress={(e) => {
@@ -597,80 +343,6 @@ const SearchInput = ({
             </StyledValidationMessage>
           )}
         </StyledSearchSection>
-      )}
-
-      {activeSwitch === 'feature' && (
-        <StyledFeatureSearchSection>
-          <StyledSelectedLayerWrapper>
-            {selectedLayersByType.mapLayers.length > 0 ? (
-              <>
-                <StyledSelectedLayerTitle>
-                  {strings.search.feature.searchFromLayer}
-                </StyledSelectedLayerTitle>
-                <StyledSelectedLayerText>
-                  {selectedLayersByType.mapLayers[0].name}
-                </StyledSelectedLayerText>
-              </>
-            ) : (
-              <StyledNoActivaLayers></StyledNoActivaLayers>
-            )}
-          </StyledSelectedLayerWrapper>
-
-          <StyledRowWithButton>
-            <StyledInputsContainer>
-              <StyledWideInputGroup>
-                <StyledRelativeInputWrapper>
-                  <StyledWidePillInput
-                    id="search-input-feature"
-                    aria-label={
-                      strings.search.feature?.title || 'Feature search'
-                    }
-                    type="text"
-                    value={searchValue}
-                    onChange={(e) => setSearchValue(e.target.value)}
-                    onKeyPress={(e) => {
-                      if (e.key === 'Enter') handleSeach(searchValue.trim());
-                    }}
-                    className={featureErrors.length > 0 ? 'error' : ''}
-                  />
-                </StyledRelativeInputWrapper>
-              </StyledWideInputGroup>
-            </StyledInputsContainer>
-
-            {(searchResults !== null || featureSearchResults.length > 0) &&
-            searchValue === lastSearchValue &&
-            !isSearching ? (
-              <StyledStandardSearchButton
-                type="button"
-                aria-label="Search"
-                onClick={emptySearchResults}
-              >
-                <FontAwesomeIcon icon={faTrash} />
-              </StyledStandardSearchButton>
-            ) : (
-              !isSearching && (
-                <StyledStandardSearchButton
-                  type="button"
-                  aria-label="Search"
-                  onClick={onClickSearchFeature}
-                >
-                  <FontAwesomeIcon icon={faMagnifyingGlass} />
-                </StyledStandardSearchButton>
-              )
-            )}
-          </StyledRowWithButton>
-
-          {featureErrors &&
-            featureErrors.map((error, i) => (
-              <StyledValidationMessage
-                key={`feature-error-${i}-${error}`}
-                role="alert"
-                aria-live="polite"
-              >
-                {strings?.search?.feature?.errors?.[error] ?? error}
-              </StyledValidationMessage>
-            ))}
-        </StyledFeatureSearchSection>
       )}
     </>
   );

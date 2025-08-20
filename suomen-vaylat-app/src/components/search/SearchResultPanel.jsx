@@ -1,6 +1,6 @@
-import AddRessSearchResultPanel from './address-search/AddRessSearchResultPanel';
-import MetadataSearchResultPanel from './metadata-search/MetadataSearchResultPanel';
-import FeatureSearchResultPanel from './feature-search/FeatureSearchResultPanel';
+import AddRessSearchResultPanel from './result-panels/AddRessSearchResultPanel';
+import MetadataSearchResultPanel from './result-panels/MetadataSearchResultPanel';
+import FeatureSearchResultPanel from './result-panels/FeatureSearchResultPanel';
 import styled from 'styled-components';
 import { useAppSelector } from '../../state/hooks';
 import { isMobile } from '../../theme/theme';

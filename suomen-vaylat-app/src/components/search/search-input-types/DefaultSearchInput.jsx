@@ -1,13 +1,14 @@
 import styled from 'styled-components';
-import strings from '../../translations';
-import { useAppSelector } from '../../state/hooks';
-import { useContext, useEffect } from 'react';
+import strings from '../../../translations';
+import { useAppSelector } from '../../../state/hooks';
+import { useContext, useEffect, useState } from 'react';
 import { faMagnifyingGlass, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  validateFeatureSearch,
-} from './utils/SearchUtil';
+  validateSimpleSearch,
+} from '../utils/SearchUtil';
 import { ReactReduxContext } from 'react-redux';
+import { setSearchValue } from '../../../state/slices/rpcSlice';
 
 const StyledRowWithButton = styled.div`
   display: flex;
@@ -101,11 +102,12 @@ const StyledWidePillInput = styled(PillInput)`
   padding-right: 44px; /* room for clear button */
 `;
 
-const StyledFeatureSearchSection = styled.div`
+const StyledSearchSection = styled.div`
+  width: 100%;
+  margin-bottom: 1em;
   display: flex;
   flex-direction: column;
-  margin-bottom: 1em;
-  width: 100%;
+  align-items: flex-start;
 `;
 
 const StyledValidationMessage = styled.div`
@@ -114,44 +116,7 @@ const StyledValidationMessage = styled.div`
   font-size: 0.95em;
 `;
 
-
-const StyledSelectedLayerWrapper = styled.div`
-  display: flex;
-  align-items: baseline;
-  margin-left: 0.5em;
-  margin-bottom: 4px;
-  overflow: hidden;
-  white-space: nowrap;
-`;
-
-const StyledSelectedLayerTitle = styled.div`
-  color: ${(props) => props.theme.colors.mainColor1};
-  font-size: 16px;
-  font-weight: 500;
-`;
-
-const StyledSelectedLayerText = styled.div`
-  font-size: 15px;
-  font-weight: 400;
-  margin-left: 0.5em;
-  margin-right: 0.5em;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  &:hover {
-    white-space: normal;
-  }
-`;
-
-const StyledNoActivaLayers = styled.div`
-  color: ${(props) => props.theme.colors.secondaryColorDarkOrange};
-  font-size: 16px;
-  font-weight: 500;
-`;
-
-const FeatureSearchInput = ({
-  searchValue,
-  setSearchValue,
+const DefaultSearchInput = ({
   handleSeach,
   emptySearchResults,
   lastSearchValue,
@@ -160,56 +125,46 @@ const FeatureSearchInput = ({
   const { store } = useContext(ReactReduxContext);
 
   const {
-    selectedLayersByType,
-    featureSearchResults,
-    featureErrors,
-    searchResults
+    featureSearchResults, searchResults, searchValue
   } = useAppSelector((state) => state.rpc);
 
-  const onClickSearchFeature = () => {
-    if (validateFeatureSearch(searchValue, store, true)) {
-      handleSeach(searchValue.trim());
-    }
-  };
+  const [simpleError, setSimpleError] = useState('');
 
   useEffect(() => {
-      validateFeatureSearch(searchValue, store, false);
-      setSimpleError(''); // clear simple error when on track
+    const msg = validateSimpleSearch(searchValue, false);
+    setSimpleError(msg);
   }, [searchValue, store]);
 
-  return (
-        <StyledFeatureSearchSection>
-          <StyledSelectedLayerWrapper>
-            {selectedLayersByType.mapLayers.length > 0 ? (
-              <>
-                <StyledSelectedLayerTitle>
-                  {strings.search.feature.searchFromLayer}
-                </StyledSelectedLayerTitle>
-                <StyledSelectedLayerText>
-                  {selectedLayersByType.mapLayers[0].name}
-                </StyledSelectedLayerText>
-              </>
-            ) : (
-              <StyledNoActivaLayers></StyledNoActivaLayers>
-            )}
-          </StyledSelectedLayerWrapper>
+  // Submit handler that routes validation by activeSwitch
+  const submitForActiveSwitch = () => {
+    const msg = validateSimpleSearch(searchValue, true);
+    if (msg) {
+      setSimpleError(msg);
+      return;
+    }
+    setSimpleError('');
+    handleSeach(searchValue.trim());
+  };
 
+  return (
+        <StyledSearchSection>
           <StyledRowWithButton>
             <StyledInputsContainer>
               <StyledWideInputGroup>
                 <StyledRelativeInputWrapper>
                   <StyledWidePillInput
-                    id="search-input-feature"
-                    aria-label={
-                      strings.search.feature?.title || 'Feature search'
-                    }
+                    id="search-input-default"
+                    aria-label={strings.search.address?.title || 'Search'}
                     type="text"
                     value={searchValue}
-                    onChange={(e) => setSearchValue(e.target.value)}
-                    onKeyPress={(e) => {
-                      if (e.key === 'Enter') handleSeach(searchValue.trim());
+                    onChange={(e) => {
+                      store.dispatch(setSearchValue(e.target.value));
+                      // clear existing simple error while typing
+                      // live validation is handled in useEffect
                     }}
-                    className={featureErrors.length > 0 ? 'error' : ''}
+                    onKeyPress={(e) => {
+                      if (e.key === 'Enter') submitForActiveSwitch();
+                    }}
                   />
                 </StyledRelativeInputWrapper>
               </StyledWideInputGroup>
@@ -221,7 +176,10 @@ const FeatureSearchInput = ({
               <StyledStandardSearchButton
                 type="button"
                 aria-label="Search"
-                onClick={emptySearchResults}
+                onClick={() => {
+                  // clear results
+                  emptySearchResults();
+                }}
               >
                 <FontAwesomeIcon icon={faTrash} />
               </StyledStandardSearchButton>
@@ -230,7 +188,7 @@ const FeatureSearchInput = ({
                 <StyledStandardSearchButton
                   type="button"
                   aria-label="Search"
-                  onClick={onClickSearchFeature}
+                  onClick={submitForActiveSwitch}
                 >
                   <FontAwesomeIcon icon={faMagnifyingGlass} />
                 </StyledStandardSearchButton>
@@ -238,18 +196,14 @@ const FeatureSearchInput = ({
             )}
           </StyledRowWithButton>
 
-          {featureErrors &&
-            featureErrors.map((error, i) => (
-              <StyledValidationMessage
-                key={`feature-error-${i}-${error}`}
-                role="alert"
-                aria-live="polite"
-              >
-                {strings?.search?.feature?.errors?.[error] ?? error}
-              </StyledValidationMessage>
-            ))}
-        </StyledFeatureSearchSection>
+          {/* simple error shown under inputs for default */}
+          {simpleError && (
+            <StyledValidationMessage role="alert" aria-live="polite">
+              {simpleError}
+            </StyledValidationMessage>
+          )}
+        </StyledSearchSection>
   );
 };
 
-export default FeatureSearchInput;
+export default DefaultSearchInput;

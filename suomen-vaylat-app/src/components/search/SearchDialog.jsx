@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import SearchSwitch from './utils/SearchSwitch';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import SearchResultPanel from './SearchResultPanel';
-import { resetFeatureSearchResults, setSearchResults } from '../../state/slices/rpcSlice';
+import { resetFeatureSearchResults, setSearchResults, setSearchValue } from '../../state/slices/rpcSlice';
 import { removeMarkersAndFeatures } from './utils/SearchUtil';
 import { isMobile } from '../../theme/theme';
 import SearchInput from './SearchInput';
@@ -146,8 +146,6 @@ const switchDefinitions = [
 ];
 
 const SearchDialog = ({
-  searchValue,
-  setSearchValue,
   firstSearchResultShown,
   setFirstSearchResultShown,
   setSearchClickedRow,
@@ -192,7 +190,7 @@ const SearchDialog = ({
       setSearchType('address');
     }
     store.dispatch(setSearchResults(null));
-    setSearchValue('');
+    store.dispatch(setSearchValue(''));
     store.dispatch(resetFeatureSearchResults());
     removeMarkersAndFeatures(channel);
   };
@@ -232,8 +230,6 @@ const SearchDialog = ({
       </DropdownWrapper>
 
       <SearchInput
-        searchValue={searchValue}
-        setSearchValue={setSearchValue}
         firstSearchResultShown={firstSearchResultShown}
         setFirstSearchResultShown={setFirstSearchResultShown}
         setSearchClickedRow={setSearchClickedRow}

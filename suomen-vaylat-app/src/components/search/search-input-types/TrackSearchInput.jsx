@@ -1,13 +1,14 @@
 import styled from 'styled-components';
-import strings from '../../translations';
-import { useAppSelector } from '../../state/hooks';
+import strings from '../../../translations';
+import { useAppSelector } from '../../../state/hooks';
 import { useContext, useEffect } from 'react';
 import { faMagnifyingGlass, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   validateTrackSearch
-} from './utils/SearchUtil';
+} from '../utils/SearchUtil';
 import { ReactReduxContext } from 'react-redux';
+import { setSearchValue } from '../../../state/slices/rpcSlice';
 
 const StyledFieldGroup = styled.div`
   display: flex;
@@ -147,26 +148,11 @@ const getTrackSearchValuePart = (position, searchValue) => {
   return searchArray[position] || '';
 };
 
-const updateTrackSearchValue = (
-  newValue,
-  position,
-  searchValue,
-  setSearchValue
-) => {
-  let searchArray = searchValue ? searchValue.split('/') : ['', '', ''];
-  searchArray[position] = newValue;
-  const newSearchValue = searchArray.join('/');
-  setSearchValue(
-    newSearchValue.endsWith('/') ? newSearchValue.slice(0, -1) : newSearchValue
-  );
-};
 const parseTrackSearchQuery = (searchQuery) => {
   return searchQuery.endsWith('/') ? searchQuery.slice(0, -1) : searchQuery;
 };
 
 const TrackSearchInput = ({
-  searchValue,
-  setSearchValue,
   handleSeach,
   emptySearchResults,
   lastSearchValue,
@@ -177,7 +163,8 @@ const TrackSearchInput = ({
   const {
     featureSearchResults,
     trackErrors,
-    searchResults
+    searchResults,
+    searchValue
   } = useAppSelector((state) => state.rpc);
 
   const onClickSearchTrack = () => {
@@ -217,6 +204,20 @@ const TrackSearchInput = ({
     .map((i) => getCombinedFieldMessage(i))
     .filter(Boolean);
 
+
+const updateTrackSearchValue = (
+  newValue,
+  position,
+  searchValue,
+) => {
+  let searchArray = searchValue ? searchValue.split('/') : ['', '', ''];
+  searchArray[position] = newValue;
+  const newSearchValue = searchArray.join('/');
+  store.dispatch(setSearchValue(
+    newSearchValue.endsWith('/') ? newSearchValue.slice(0, -1) : newSearchValue
+  ));
+};
+
   return (
         <StyledSearchSection>
           <StyledRowWithButton>
@@ -241,7 +242,6 @@ const TrackSearchInput = ({
                           e.target.value,
                           0,
                           searchValue,
-                          setSearchValue
                         )
                       }
                       onKeyPress={(e) => {
@@ -271,7 +271,6 @@ const TrackSearchInput = ({
                           e.target.value,
                           1,
                           searchValue,
-                          setSearchValue
                         )
                       }
                       onKeyPress={(e) => {
@@ -304,7 +303,6 @@ const TrackSearchInput = ({
                             e.target.value,
                             2,
                             searchValue,
-                            setSearchValue
                           )
                         }
                         onKeyPress={(e) => {

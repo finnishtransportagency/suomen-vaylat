@@ -1,10 +1,11 @@
 import styled from 'styled-components';
-import strings from '../../translations';
-import { useAppSelector } from '../../state/hooks';
+import strings from '../../../translations';
+import { useAppSelector } from '../../../state/hooks';
 import { useContext, useEffect, useState } from 'react';
 import { faMagnifyingGlass, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ReactReduxContext } from 'react-redux';
+import { setSearchValue } from '../../../state/slices/rpcSlice';
 
 const StyledSectionDivider = styled.div`
   margin: 0.5em 0;
@@ -214,13 +215,55 @@ const splitSearchValue = (searchValue, searchType) => {
   return roadParts;
 };
 
-const updateRoadSearchValue = (
+const parseSearchValueFromParts = (partsArray, blancSpacePosition) => {
+  let newSearchValue;
+  if (partsArray !== undefined && partsArray.length > blancSpacePosition - 1) {
+    let firstPart = partsArray.slice(0, blancSpacePosition).join('/');
+    let secondi = partsArray.slice(blancSpacePosition).join('/');
+    newSearchValue = [firstPart, ' ', secondi].join('');
+  } else {
+    newSearchValue = partsArray.join('/');
+  }
+  return newSearchValue.endsWith('/')
+    ? newSearchValue.slice(0, -1)
+    : newSearchValue;
+};
+
+const RoadSearchInput = ({
+  searchType,
+  handleSeach,
+  carriageWaySearch,
+  setCarriageWaySearch,
+  emptySearchResults,
+  lastSearchValue,
+  isSearching,
+}) => {
+  const { store } = useContext(ReactReduxContext);
+
+  const {
+    featureSearchResults, searchResults, searchValue
+  } = useAppSelector((state) => state.rpc);
+
+  const [roadEndEnabled, setRoadEndEnabled] = useState(false);
+
+  const onClickSearchRoad = () => {
+    handleSeach(searchValue);
+  };
+
+  useEffect(() => {
+    //when carriagewaysearch ( ajordalla haku ) changes, reset searchValue
+    store.dispatch(setSearchValue(''));
+  }, [carriageWaySearch]);
+  
+  useEffect(() => {
+  }, [searchValue, store]);
+
+  const updateRoadSearchValue = (
   searchValue,
   searchType,
-  setSearchValue,
   part,
   value,
-  carriageWaySearch = false
+  carriageWaySearch = false,
 ) => {
   let searchArray = splitSearchValue(searchValue, searchType);
   const effectivePart = carriageWaySearch ? part : part - 1;
@@ -243,68 +286,28 @@ const updateRoadSearchValue = (
       blancSpacePosition
     );
     if (updatedSearchValue !== undefined) {
-      setSearchValue(updatedSearchValue);
+      store.dispatch(setSearchValue(updatedSearchValue));
     }
   } else if (
     (searchArray === undefined || searchArray === '') &&
     value !== undefined &&
     part === 0
   ) {
-    setSearchValue(value);
+    store.dispatch(setSearchValue(value));
   } else if (
     (searchArray === undefined || searchArray === '') &&
     searchValue !== undefined &&
     part === 1
   ) {
-    setSearchValue(searchValue + '/' + value);
+    store.dispatch(setSearchValue(searchValue + '/' + value));
   } else if (
     searchArray !== undefined &&
     searchArray !== '' &&
     searchArray.length === part - 1
   ) {
-    setSearchValue(searchValue + '/' + value);
+    store.dispatch(setSearchValue(searchValue + '/' + value));
   }
 };
-
-const parseSearchValueFromParts = (partsArray, blancSpacePosition) => {
-  let newSearchValue;
-  if (partsArray !== undefined && partsArray.length > blancSpacePosition - 1) {
-    let firstPart = partsArray.slice(0, blancSpacePosition).join('/');
-    let secondi = partsArray.slice(blancSpacePosition).join('/');
-    newSearchValue = [firstPart, ' ', secondi].join('');
-  } else {
-    newSearchValue = partsArray.join('/');
-  }
-  return newSearchValue.endsWith('/')
-    ? newSearchValue.slice(0, -1)
-    : newSearchValue;
-};
-
-const RoadSearchInput = ({
-  searchValue,
-  setSearchValue,
-  searchType,
-  handleSeach,
-  carriageWaySearch,
-  setCarriageWaySearch,
-  emptySearchResults,
-  lastSearchValue,
-  isSearching,
-}) => {
-  const { store } = useContext(ReactReduxContext);
-
-  const {
-    featureSearchResults, searchResults
-  } = useAppSelector((state) => state.rpc);
-
-  const [roadEndEnabled, setRoadEndEnabled] = useState(false);
-
-  const onClickSearchRoad = () => {
-    handleSeach(searchValue);
-  };
-
-  useEffect(() => {
-  }, [searchValue, store]);
 
   return (
         <StyledSearchSection>
@@ -371,7 +374,6 @@ const RoadSearchInput = ({
                         updateRoadSearchValue(
                           searchValue,
                           searchType,
-                          setSearchValue,
                           0,
                           e.target.value,
                           carriageWaySearch
@@ -396,7 +398,6 @@ const RoadSearchInput = ({
                         updateRoadSearchValue(
                           searchValue,
                           searchType,
-                          setSearchValue,
                           1,
                           e.target.value,
                           carriageWaySearch
@@ -421,7 +422,6 @@ const RoadSearchInput = ({
                         updateRoadSearchValue(
                           searchValue,
                           searchType,
-                          setSearchValue,
                           2,
                           e.target.value,
                           carriageWaySearch
@@ -453,7 +453,6 @@ const RoadSearchInput = ({
                           updateRoadSearchValue(
                             searchValue,
                             searchType,
-                            setSearchValue,
                             carriageWaySearch ? 3 : 2,
                             e.target.value,
                             carriageWaySearch
@@ -523,7 +522,6 @@ const RoadSearchInput = ({
                             updateRoadSearchValue(
                               searchValue,
                               searchType,
-                              setSearchValue,
                               4,
                               e.target.value,
                               carriageWaySearch
@@ -553,7 +551,6 @@ const RoadSearchInput = ({
                             updateRoadSearchValue(
                               searchValue,
                               searchType,
-                              setSearchValue,
                               5,
                               e.target.value,
                               carriageWaySearch
@@ -583,7 +580,6 @@ const RoadSearchInput = ({
                             updateRoadSearchValue(
                               searchValue,
                               searchType,
-                              setSearchValue,
                               6,
                               e.target.value,
                               carriageWaySearch
@@ -615,7 +611,6 @@ const RoadSearchInput = ({
                               updateRoadSearchValue(
                                 searchValue,
                                 searchType,
-                                setSearchValue,
                                 carriageWaySearch ? 7 : 6,
                                 e.target.value,
                                 carriageWaySearch
