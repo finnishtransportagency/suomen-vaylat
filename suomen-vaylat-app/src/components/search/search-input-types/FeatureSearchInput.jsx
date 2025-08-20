@@ -32,7 +32,7 @@ const StyledInputsContainer = styled.div`
   align-items: center; /* vertically center the input row so the button aligns middle */
 
   @media ${(props) => props.theme.device.tablet} {
-    width: 100%
+    width: 100%;
   }
 `;
 
@@ -256,19 +256,19 @@ const FeatureSearchInput = ({ setDropdownOpen, emptySearchInputs }) => {
   };
 
   return (
-    <StyledFeatureSearchSection>
+    <StyledFeatureSearchSection id="feature-search-section">
       <StyledSelectedLayerWrapper>
         {selectedLayersByType.mapLayers.length > 0 ? (
           <>
-            <StyledSelectedLayerTitle>
+            <StyledSelectedLayerTitle id="feature-search-layer-title">
               {strings.search.feature.searchFromLayer}
             </StyledSelectedLayerTitle>
-            <StyledSelectedLayerText>
+            <StyledSelectedLayerText id="feature-search-layer-text">
               {selectedLayersByType.mapLayers[0].name}
             </StyledSelectedLayerText>
           </>
         ) : (
-          <StyledNoActivaLayers></StyledNoActivaLayers>
+          <StyledNoActivaLayers id="feature-search-no-active-layers" />
         )}
       </StyledSelectedLayerWrapper>
 
@@ -277,8 +277,13 @@ const FeatureSearchInput = ({ setDropdownOpen, emptySearchInputs }) => {
           <StyledWideInputGroup>
             <StyledRelativeInputWrapper>
               <StyledWidePillInput
-                id="search-input-feature"
+                id="feature-search-input"
                 aria-label={strings.search.feature?.title || 'Feature search'}
+                aria-describedby={
+                  featureErrors.length > 0
+                    ? 'feature-search-error-list'
+                    : undefined
+                }
                 type="text"
                 value={searchValue}
                 onChange={(e) => store.dispatch(setSearchValue(e.target.value))}
@@ -295,8 +300,9 @@ const FeatureSearchInput = ({ setDropdownOpen, emptySearchInputs }) => {
         searchValue === lastSearchValue &&
         !isSearchingActive ? (
           <StyledStandardSearchButton
+            id="feature-search-clear-button"
             type="button"
-            aria-label="Search"
+            aria-label="Clear feature search results"
             onClick={emptySearchInputs}
           >
             <FontAwesomeIcon icon={faTrash} />
@@ -304,8 +310,9 @@ const FeatureSearchInput = ({ setDropdownOpen, emptySearchInputs }) => {
         ) : (
           !isSearchingActive && (
             <StyledStandardSearchButton
+              id="feature-search-submit-button"
               type="button"
-              aria-label="Search"
+              aria-label="Submit feature search"
               onClick={onClickSearchFeature}
             >
               <FontAwesomeIcon icon={faMagnifyingGlass} />
@@ -314,16 +321,20 @@ const FeatureSearchInput = ({ setDropdownOpen, emptySearchInputs }) => {
         )}
       </StyledRowWithButton>
 
-      {featureErrors &&
-        featureErrors.map((error, i) => (
-          <StyledValidationMessage
-            key={`feature-error-${i}-${error}`}
-            role="alert"
-            aria-live="polite"
-          >
-            {strings?.search?.feature?.errors?.[error] ?? error}
-          </StyledValidationMessage>
-        ))}
+      {featureErrors && featureErrors.length > 0 && (
+        <div id="feature-search-error-list">
+          {featureErrors.map((error, i) => (
+            <StyledValidationMessage
+              id={`feature-search-error-${i}`}
+              key={`feature-search-error-${i}-${error}`}
+              role="alert"
+              aria-live="polite"
+            >
+              {strings?.search?.feature?.errors?.[error] ?? error}
+            </StyledValidationMessage>
+          ))}
+        </div>
+      )}
     </StyledFeatureSearchSection>
   );
 };

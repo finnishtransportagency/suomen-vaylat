@@ -49,7 +49,7 @@ const StyledInputsContainer = styled.div`
   align-items: center; /* vertically center the input row so the button aligns middle */
 
   @media ${(props) => props.theme.device.tablet} {
-    width: 100%
+    width: 100%;
   }
 `;
 
@@ -219,21 +219,26 @@ const TrackSearchInput = ({ handleGeneralSearch, emptySearchInputs }) => {
   };
 
   return (
-    <StyledSearchSection>
+    <StyledSearchSection id="track-search-section">
       <StyledRowWithButton>
         <StyledInputsContainer>
           <StyledFieldGroup>
             <InputRow>
               <FieldItem>
-                <LabelAbove htmlFor="search-input-track-number">
+                <LabelAbove
+                  id="track-search-input-track-number-label"
+                  htmlFor="track-search-input-track-number"
+                >
                   {strings.search.track.tracknumber}
                 </LabelAbove>
                 <PillInput
-                  id="search-input-track-number"
-                  aria-labelledby="search-input-track-number-label"
+                  id="track-search-input-track-number"
+                  aria-labelledby="track-search-input-track-number-label"
                   aria-invalid={!!getTrackField(0).invalid}
                   aria-describedby={
-                    combinedFieldMessages.length ? trackErrorsId : undefined
+                    combinedFieldMessages.length
+                      ? 'track-search-errors'
+                      : undefined
                   }
                   type="text"
                   value={getTrackSearchValuePart(0, searchValue)}
@@ -250,15 +255,20 @@ const TrackSearchInput = ({ handleGeneralSearch, emptySearchInputs }) => {
               </FieldItem>
 
               <FieldItem>
-                <LabelAbove htmlFor="search-input-track-km">
+                <LabelAbove
+                  id="track-search-input-track-km-label"
+                  htmlFor="track-search-input-track-km"
+                >
                   {strings.search.track.trackkm}
                 </LabelAbove>
                 <PillInput
-                  id="search-input-track-km"
-                  aria-labelledby="search-input-track-km-label"
+                  id="track-search-input-track-km"
+                  aria-labelledby="track-search-input-track-km-label"
                   aria-invalid={!!getTrackField(1).invalid}
                   aria-describedby={
-                    combinedFieldMessages.length ? trackErrorsId : undefined
+                    combinedFieldMessages.length
+                      ? 'track-search-errors'
+                      : undefined
                   }
                   type="text"
                   value={getTrackSearchValuePart(1, searchValue)}
@@ -275,16 +285,21 @@ const TrackSearchInput = ({ handleGeneralSearch, emptySearchInputs }) => {
               </FieldItem>
 
               <FieldItem>
-                <LabelAbove htmlFor="search-input-track-m">
+                <LabelAbove
+                  id="track-search-input-track-m-label"
+                  htmlFor="track-search-input-track-m"
+                >
                   {strings.search.track.trackm}
                 </LabelAbove>
-                <StyledInputAndSearchWrapper id={"track-search-input-and-search-wrapper"}>
+                <StyledInputAndSearchWrapper id="track-search-input-and-search-wrapper">
                   <PillInput
-                    id="search-input-track-m"
-                    aria-labelledby="search-input-track-m-label"
+                    id="track-search-input-track-m"
+                    aria-labelledby="track-search-input-track-m-label"
                     aria-invalid={!!getTrackField(2).invalid}
                     aria-describedby={
-                      combinedFieldMessages.length ? trackErrorsId : undefined
+                      combinedFieldMessages.length
+                        ? 'track-search-errors'
+                        : undefined
                     }
                     type="text"
                     value={getTrackSearchValuePart(2, searchValue)}
@@ -304,8 +319,9 @@ const TrackSearchInput = ({ handleGeneralSearch, emptySearchInputs }) => {
                   searchValue === lastSearchValue &&
                   !isSearchingActive ? (
                     <StyledStandardSearchButton
+                      id="track-search-clear-button"
                       type="button"
-                      aria-label="Search"
+                      aria-label="Clear track search results"
                       onClick={emptySearchInputs}
                     >
                       <FontAwesomeIcon icon={faTrash} />
@@ -313,8 +329,9 @@ const TrackSearchInput = ({ handleGeneralSearch, emptySearchInputs }) => {
                   ) : (
                     !isSearchingActive && (
                       <StyledStandardSearchButton
+                        id="track-search-submit-button"
                         type="button"
-                        aria-label="Search"
+                        aria-label="Submit track search"
                         onClick={onClickSearchTrack}
                       >
                         <FontAwesomeIcon icon={faMagnifyingGlass} />
@@ -327,13 +344,13 @@ const TrackSearchInput = ({ handleGeneralSearch, emptySearchInputs }) => {
 
             {combinedFieldMessages.length > 0 && (
               <StyledValidationMessage
-                id={trackErrorsId}
+                id="track-search-errors"
                 role="alert"
                 aria-live="polite"
               >
                 <StyledErrorsList>
                   {combinedFieldMessages.map((msg, i) => (
-                    <div key={`track-msg-${i}`}>{msg}</div>
+                    <div key={`track-search-msg-${i}`}>{msg}</div>
                   ))}
                 </StyledErrorsList>
               </StyledValidationMessage>

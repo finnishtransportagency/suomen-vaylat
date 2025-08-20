@@ -57,7 +57,7 @@ const StyledInputsContainer = styled.div`
   align-items: center; /* vertically center the input row so the button aligns middle */
 
   @media ${(props) => props.theme.device.tablet} {
-    width: 100%
+    width: 100%;
   }
 `;
 
@@ -319,11 +319,11 @@ const RoadSearchInput = ({
   };
 
   return (
-    <StyledSearchSection>
+    <StyledSearchSection id="road-search-section">
       <StyledCheckboxWrapper>
         <StyledCheckbox
-          id="search-input-carriageWaySearchBox"
-          name="search-input-carriageWaySearchBox"
+          id="road-search-carriageway-checkbox"
+          name="road-search-carriageway-checkbox"
           type="checkbox"
           onChange={() => setCarriageWaySearch(!carriageWaySearch)}
           checked={carriageWaySearch}
@@ -335,15 +335,15 @@ const RoadSearchInput = ({
             }
           }}
         />
-
-        <CheckboxLabel htmlFor="search-input-carriageWaySearchBox">
+        <CheckboxLabel htmlFor="road-search-carriageway-checkbox">
           {strings.search.carriageWaySearch}
         </CheckboxLabel>
       </StyledCheckboxWrapper>
+
       <StyledCheckboxWrapper>
         <StyledCheckbox
-          id="search-input-roadEndCheckbox"
-          name="search-input-roadEndCheckbox"
+          id="road-search-roadend-checkbox"
+          name="road-search-roadend-checkbox"
           type="checkbox"
           onChange={() => setRoadEndEnabled(!roadEndEnabled)}
           checked={roadEndEnabled}
@@ -355,13 +355,13 @@ const RoadSearchInput = ({
             }
           }}
         />
-
-        <CheckboxLabel htmlFor="search-input-roadEndCheckbox">
+        <CheckboxLabel htmlFor="road-search-roadend-checkbox">
           {'Anna tien loppu tiedot'}
         </CheckboxLabel>
       </StyledCheckboxWrapper>
+
       {roadEndEnabled && (
-        <StyledSectionDivider id="search-input-road-start-divider">
+        <StyledSectionDivider id="road-search-start-divider">
           Alku
         </StyledSectionDivider>
       )}
@@ -372,12 +372,11 @@ const RoadSearchInput = ({
           <StyledFieldGroup>
             <InputRow>
               <FieldItem>
-                <LabelAbove htmlFor="search-input-road-tie">
+                <LabelAbove htmlFor="road-search-tie">
                   {strings.search.vkm.tie}
                 </LabelAbove>
                 <PillInput
-                  id="search-input-road-tie"
-                  aria-labelledby="search-input-road-tie-label"
+                  id="road-search-tie"
                   type="text"
                   onChange={(e) =>
                     updateRoadSearchValue(
@@ -396,12 +395,11 @@ const RoadSearchInput = ({
               </FieldItem>
 
               <FieldItem>
-                <LabelAbove htmlFor="search-input-road-osa">
+                <LabelAbove htmlFor="road-search-osa">
                   {strings.search.vkm.osa}
                 </LabelAbove>
                 <PillInput
-                  id="search-input-road-osa"
-                  aria-labelledby="search-input-road-osa-label"
+                  id="road-search-osa"
                   type="text"
                   onChange={(e) =>
                     updateRoadSearchValue(
@@ -420,12 +418,11 @@ const RoadSearchInput = ({
               </FieldItem>
 
               <FieldItem>
-                <LabelAbove htmlFor="search-input-road-majorata">
+                <LabelAbove htmlFor="road-search-majorata">
                   {strings.search.vkm.ajorata}
                 </LabelAbove>
                 <PillInput
-                  id="search-input-road-majorata"
-                  aria-labelledby="search-input-road-majorata-label"
+                  id="road-search-majorata"
                   type="text"
                   onChange={(e) =>
                     updateRoadSearchValue(
@@ -450,13 +447,12 @@ const RoadSearchInput = ({
               </FieldItem>
 
               <FieldItem>
-                <LabelAbove htmlFor="search-input-road-etaisyys">
+                <LabelAbove htmlFor="road-search-etaisyys">
                   {strings.search.vkm.etaisyys}
                 </LabelAbove>
-                <StyledInputAndSearchWrapper id={"road-search-input-and-search-wrapper-start"}>
+                <StyledInputAndSearchWrapper id="road-search-input-and-search-wrapper-start">
                   <PillInput
-                    id="search-input-road-etaisyys"
-                    aria-labelledby="search-input-road-etaisyys-label"
+                    id="road-search-etaisyys"
                     type="text"
                     onChange={(e) =>
                       updateRoadSearchValue(
@@ -483,8 +479,9 @@ const RoadSearchInput = ({
                   searchValue === lastSearchValue &&
                   !isSearchingActive ? (
                     <StyledStandardSearchButton
+                      id="road-search-clear-button-start"
                       type="button"
-                      aria-label="Search"
+                      aria-label="Clear road search results"
                       onClick={emptySearchInputs}
                       roadEndEnabled={roadEndEnabled}
                     >
@@ -493,8 +490,9 @@ const RoadSearchInput = ({
                   ) : (
                     !isSearchingActive && (
                       <StyledStandardSearchButton
+                        id="road-search-submit-button-start"
                         type="button"
-                        aria-label="Search"
+                        aria-label="Submit road search"
                         onClick={onClickSearchRoad}
                         roadEndEnabled={roadEndEnabled}
                       >
@@ -512,7 +510,7 @@ const RoadSearchInput = ({
       {/* END group (if enabled) */}
       {roadEndEnabled && (
         <>
-          <StyledSectionDivider id="search-input-road-end-divider">
+          <StyledSectionDivider id="road-search-end-divider">
             Loppu
           </StyledSectionDivider>
           <StyledRowWithButton>
@@ -520,12 +518,11 @@ const RoadSearchInput = ({
               <StyledFieldGroup>
                 <InputRow>
                   <FieldItem>
-                    <LabelAbove htmlFor="search-input-road-tieloppu">
+                    <LabelAbove htmlFor="road-search-tieloppu">
                       {strings.search.vkm.tie}
                     </LabelAbove>
                     <PillInput
-                      id="search-input-road-tieloppu"
-                      aria-labelledby="search-input-road-tieloppu-label"
+                      id="road-search-tieloppu"
                       type="text"
                       onChange={(e) =>
                         updateRoadSearchValue(
@@ -549,12 +546,11 @@ const RoadSearchInput = ({
                   </FieldItem>
 
                   <FieldItem>
-                    <LabelAbove htmlFor="search-input-road-osa-loppu">
+                    <LabelAbove htmlFor="road-search-osa-loppu">
                       {strings.search.vkm.osa}
                     </LabelAbove>
                     <PillInput
-                      id="search-input-road-osa-loppu"
-                      aria-labelledby="search-input-road-osa-loppu-label"
+                      id="road-search-osa-loppu"
                       type="text"
                       onChange={(e) =>
                         updateRoadSearchValue(
@@ -578,12 +574,11 @@ const RoadSearchInput = ({
                   </FieldItem>
 
                   <FieldItem>
-                    <LabelAbove htmlFor="search-input-road-majorata-loppu">
+                    <LabelAbove htmlFor="road-search-majorata-loppu">
                       {strings.search.vkm.ajorata}
                     </LabelAbove>
                     <PillInput
-                      id="search-input-road-majorata-loppu"
-                      aria-labelledby="search-input-road-majorata-loppu-label"
+                      id="road-search-majorata-loppu"
                       type="text"
                       onChange={(e) =>
                         updateRoadSearchValue(
@@ -608,13 +603,12 @@ const RoadSearchInput = ({
                   </FieldItem>
 
                   <FieldItem>
-                    <LabelAbove htmlFor="search-input-road-etaisyys-loppu">
+                    <LabelAbove htmlFor="road-search-etaisyys-loppu">
                       {strings.search.vkm.etaisyys}
                     </LabelAbove>
-                    <StyledInputAndSearchWrapper id={"road-search-input-and-search-wrapper-end"}>
+                    <StyledInputAndSearchWrapper id="road-search-input-and-search-wrapper-end">
                       <PillInput
-                        id="search-input-road-etaisyys-loppu"
-                        aria-labelledby="search-input-road-etaisyys-loppu-label"
+                        id="road-search-etaisyys-loppu"
                         type="text"
                         onChange={(e) =>
                           updateRoadSearchValue(
@@ -642,8 +636,9 @@ const RoadSearchInput = ({
                       searchValue === lastSearchValue &&
                       !isSearchingActive ? (
                         <StyledStandardSearchButton
+                          id="road-search-clear-button-end"
                           type="button"
-                          aria-label="Search"
+                          aria-label="Clear road search results"
                           onClick={emptySearchInputs}
                         >
                           <FontAwesomeIcon icon={faTrash} />
@@ -651,8 +646,9 @@ const RoadSearchInput = ({
                       ) : (
                         !isSearchingActive && (
                           <StyledStandardSearchButton
+                            id="road-search-submit-button-end"
                             type="button"
-                            aria-label="Search"
+                            aria-label="Submit road search"
                             onClick={onClickSearchRoad}
                           >
                             <FontAwesomeIcon icon={faMagnifyingGlass} />

@@ -23,7 +23,7 @@ const StyledInputsContainer = styled.div`
   align-items: center; /* vertically center the input row so the button aligns middle */
 
   @media ${(props) => props.theme.device.tablet} {
-    width: 100%
+    width: 100%;
   }
 `;
 
@@ -142,20 +142,18 @@ const DefaultSearchInput = ({ handleGeneralSearch, emptySearchInputs }) => {
   }, [searchValue]);
 
   return (
-    <StyledSearchSection>
+    <StyledSearchSection id="default-search-section">
       <StyledRowWithButton>
         <StyledInputsContainer>
           <StyledWideInputGroup>
             <StyledRelativeInputWrapper>
               <StyledWidePillInput
-                id="search-input-default"
+                id="default-search-input"
                 aria-label={strings.search.address?.title || 'Search'}
                 type="text"
                 value={searchValue}
                 onChange={(e) => {
                   store.dispatch(setSearchValue(e.target.value));
-                  // clear existing simple error while typing
-                  // live validation is handled in useEffect
                 }}
                 onKeyPress={(e) => {
                   if (e.key === 'Enter') submitForActiveSwitch();
@@ -169,8 +167,9 @@ const DefaultSearchInput = ({ handleGeneralSearch, emptySearchInputs }) => {
         searchValue === lastSearchValue &&
         !isSearchingActive ? (
           <StyledStandardSearchButton
+            id="default-search-clear-button"
             type="button"
-            aria-label="Search"
+            aria-label="Clear search results"
             onClick={() => {
               // clear results
               emptySearchInputs();
@@ -181,8 +180,9 @@ const DefaultSearchInput = ({ handleGeneralSearch, emptySearchInputs }) => {
         ) : (
           !isSearchingActive && (
             <StyledStandardSearchButton
+              id="default-search-submit-button"
               type="button"
-              aria-label="Search"
+              aria-label="Submit search"
               onClick={submitForActiveSwitch}
             >
               <FontAwesomeIcon icon={faMagnifyingGlass} />
@@ -193,7 +193,11 @@ const DefaultSearchInput = ({ handleGeneralSearch, emptySearchInputs }) => {
 
       {/* simple error shown under inputs for default */}
       {simpleError && (
-        <StyledValidationMessage role="alert" aria-live="polite">
+        <StyledValidationMessage
+          id="default-search-error"
+          role="alert"
+          aria-live="polite"
+        >
           {simpleError}
         </StyledValidationMessage>
       )}
