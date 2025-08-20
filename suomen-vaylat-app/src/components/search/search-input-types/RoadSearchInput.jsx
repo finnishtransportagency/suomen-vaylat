@@ -160,7 +160,7 @@ const getSearchValuePart = (
   searchType,
   part,
   carriageWaySearch
-) => { 
+) => {
   const splittedSearchArray = splitSearchValue(searchValue, searchType, part);
   let retVa;
   let actualPart;
@@ -233,13 +233,18 @@ const RoadSearchInput = ({
   carriageWaySearch,
   setCarriageWaySearch,
   handleGeneralSearch,
-  emptySearchResults,
+  emptySearchResults
 }) => {
   const { store } = useContext(ReactReduxContext);
 
-  const { featureSearchResults, searchResults, searchValue, searchType, isSearchingActive, lastSearchValue } = useAppSelector(
-    (state) => state.rpc
-  );
+  const {
+    featureSearchResults,
+    searchResults,
+    searchValue,
+    searchType,
+    isSearchingActive,
+    lastSearchValue
+  } = useAppSelector((state) => state.rpc);
 
   const [roadEndEnabled, setRoadEndEnabled] = useState(false);
 
@@ -617,7 +622,8 @@ const RoadSearchInput = ({
                           carriageWaySearch
                         )}
                         onKeyPress={(e) => {
-                          if (e.key === 'Enter') handleGeneralSearch(searchValue);
+                          if (e.key === 'Enter')
+                            handleGeneralSearch(searchValue);
                         }}
                       />
 

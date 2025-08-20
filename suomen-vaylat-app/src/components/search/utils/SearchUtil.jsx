@@ -1,10 +1,17 @@
-import { setFeatureErrors, setTrackErrors } from '../../../state/slices/rpcSlice';
+import {
+  setFeatureErrors,
+  setTrackErrors
+} from '../../../state/slices/rpcSlice';
 import strings from '../../../translations';
 
 export const vectorLayerId = 'SEARCH_VECTORLAYER';
 export const markerId = 'SEARCH_MARKER';
 
-export const validateFeatureSearch = (searchValue, store, requireAll = false) => {
+export const validateFeatureSearch = (
+  searchValue,
+  store,
+  requireAll = false
+) => {
   const newErrors = [];
   const regex = /[^A-Za-z0-9äöåÄÖÅ \-\/.,()]/;
   if (requireAll && searchValue.length < 3) {
@@ -13,7 +20,7 @@ export const validateFeatureSearch = (searchValue, store, requireAll = false) =>
   if (regex.test(searchValue)) {
     newErrors.push('regex');
   }
-  console.log(newErrors)
+  console.log(newErrors);
   store.dispatch(setFeatureErrors(newErrors));
   return newErrors.length === 0;
 };
@@ -75,7 +82,7 @@ export const validateTrackSearch = (searchValue, store, requireAll = false) => {
   const value = (searchValue || '').trim();
 
   // patterns
-  const alphaNum = /^[A-Za-z0-9äöåÄÖÅ ]+$/;// first part: letters, digits and space only
+  const alphaNum = /^[A-Za-z0-9äöåÄÖÅ ]+$/; // first part: letters, digits and space only
   const numOnly = /^[0-9]+$/; // second & third: digits only
 
   // split into parts; we accept less than 3 parts for live validation

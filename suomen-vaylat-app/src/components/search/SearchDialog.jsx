@@ -3,7 +3,7 @@ import strings from '../../translations';
 import { ReactReduxContext } from 'react-redux';
 import { setActiveSwitch } from '../../state/slices/uiSlice';
 import { useAppSelector } from '../../state/hooks';
-import { useEffect, useContext, useState, Fragment } from 'react';
+import { useContext, useState, Fragment } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import SearchSwitch from './utils/SearchSwitch';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
@@ -72,15 +72,6 @@ const DropdownContent = styled.div`
   padding-bottom: 8px;
   transition: all 0.3s;
   display: block;
-`;
-
-const InfoText = styled.div`
-  background: #eef3fb;
-  border-radius: 5px;
-  padding: 10px 16px;
-  margin: 6px 0 6px 34px;
-  font-size: 0.97em;
-  color: #234167;
 `;
 
 const StyledLoaderWrapper = styled.div`
@@ -153,15 +144,12 @@ const switchDefinitions = [
 const SearchDialog = ({
   setSearchClickedRow,
   searchClickedRow,
-  emptySearchResults
 }) => {
   const { store } = useContext(ReactReduxContext);
-  const { featureSearchResults, channel, searchResults, isSearchingActive } = useAppSelector(
-    (state) => state.rpc
-  );
+  const { featureSearchResults, channel, searchResults, isSearchingActive } =
+    useAppSelector((state) => state.rpc);
   const { activeSwitch } = useAppSelector((state) => state.ui);
   const [dropdownOpen, setDropdownOpen] = useState(false);
-
 
   // Determine the header title: if an active switch matches, show its title; otherwise fallback to "Hakuasetukset"
   const activeDef = switchDefinitions.find((sw) => sw.id === activeSwitch);
@@ -183,9 +171,6 @@ const SearchDialog = ({
     store.dispatch(resetFeatureSearchResults());
     removeMarkersAndFeatures(channel);
   };
-
-  console.log((searchResults !== null || featureSearchResults.length > 0) &&
-        !isSearchingActive )
 
   return (
     <StyledSearchDialog>
@@ -225,11 +210,10 @@ const SearchDialog = ({
       </DropdownWrapper>
 
       <SearchInputs
-      setDropdownOpen={setDropdownOpen}
+        setDropdownOpen={setDropdownOpen}
         setSearchClickedRow={setSearchClickedRow}
         searchClickedRow={searchClickedRow}
         removeMarkersAndFeatures={removeMarkersAndFeatures}
-        emptySearchResults={emptySearchResults}
       />
 
       {isSearchingActive && (

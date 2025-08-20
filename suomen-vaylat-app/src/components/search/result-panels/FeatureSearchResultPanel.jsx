@@ -13,7 +13,15 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { dropdownVariants, mergeMatchedKeys } from '../utils/SearchUtil';
 import { isMobile } from '../../../theme/theme';
 import { ReactReduxContext } from 'react-redux';
-import { pushToFeatureSearchResults, resetFeatureSearchResults, setFeatureSearchResults, setIsSearchingActive, setLastSearchValue, setSearchOn, setSearchValue } from '../../../state/slices/rpcSlice';
+import {
+  pushToFeatureSearchResults,
+  resetFeatureSearchResults,
+  setFeatureSearchResults,
+  setIsSearchingActive,
+  setLastSearchValue,
+  setSearchOn,
+  setSearchValue
+} from '../../../state/slices/rpcSlice';
 import { Slide, toast } from 'react-toastify';
 
 const StyledDropDown = styled(motion.div)`
@@ -237,11 +245,15 @@ const showFeatureOnMap = (channel, layer, feature) => {
 
 // Feature Search Result Panel Component
 const FeatureSearchResultPanel = () => {
-    const { store } = useContext(ReactReduxContext);
-  
-  const { featureSearchResults, searchOn, channel, selectedLayersByType, lastSearchValue } = useAppSelector(
-    (state) => state.rpc
-  );
+  const { store } = useContext(ReactReduxContext);
+
+  const {
+    featureSearchResults,
+    searchOn,
+    channel,
+    selectedLayersByType,
+    lastSearchValue
+  } = useAppSelector((state) => state.rpc);
   const [selectedFeature, setSelectedFeature] = useState('');
   const [openAttribute, setOpenAttribute] = useState(null);
   const [showWarn, setShowWarn] = useState(false);
@@ -332,7 +344,7 @@ const FeatureSearchResultPanel = () => {
         }
       );
     };
-    console.log("MIKSI")
+    console.log('MIKSI');
 
     store.dispatch(setIsSearchingActive(true));
     store.dispatch(setSearchOn(true));

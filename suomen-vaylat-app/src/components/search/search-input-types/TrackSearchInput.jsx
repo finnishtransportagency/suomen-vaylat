@@ -150,14 +150,17 @@ const parseTrackSearchQuery = (searchQuery) => {
   return searchQuery.endsWith('/') ? searchQuery.slice(0, -1) : searchQuery;
 };
 
-const TrackSearchInput = ({
-  handleGeneralSearch,
-  emptySearchResults,
-}) => {
+const TrackSearchInput = ({ handleGeneralSearch, emptySearchResults }) => {
   const { store } = useContext(ReactReduxContext);
 
-  const { featureSearchResults, trackErrors, searchResults, searchValue, isSearchingActive, lastSearchValue } =
-    useAppSelector((state) => state.rpc);
+  const {
+    featureSearchResults,
+    trackErrors,
+    searchResults,
+    searchValue,
+    isSearchingActive,
+    lastSearchValue
+  } = useAppSelector((state) => state.rpc);
 
   const onClickSearchTrack = () => {
     // require full presence + format for submit

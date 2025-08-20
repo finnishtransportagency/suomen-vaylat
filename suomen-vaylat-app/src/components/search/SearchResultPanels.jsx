@@ -18,17 +18,12 @@ const StyledSearchResultsTitle = styled.p`
   margin: 1em 0;
 `;
 
-const SearchResultPanels = ({
-  setSearchClickedRow,
-  searchClickedRow,
-}) => {
+const SearchResultPanels = ({ setSearchClickedRow, searchClickedRow }) => {
   const { featureSearchResults, searchResults, searchType } = useAppSelector(
     (state) => state.rpc
   );
-  const { isSearchOpen } = useAppSelector(
-    (state) => state.ui
-  );
-  console.log(isSearchOpen && searchResults !== null && searchType === 'address')
+  const { isSearchOpen } = useAppSelector((state) => state.ui);
+  
   return (
     <SearchPanelMain>
       {(searchResults !== null || featureSearchResults.length > 0) && (
@@ -44,11 +39,9 @@ const SearchResultPanels = ({
         />
       )}
       {isSearchOpen && searchResults !== null && searchType === 'metadata' && (
-        <MetadataSearchResultPanel/>
+        <MetadataSearchResultPanel />
       )}
-      {isSearchOpen && searchType === 'feature' && (
-        <FeatureSearchResultPanel/>
-      )}
+      {isSearchOpen && searchType === 'feature' && <FeatureSearchResultPanel />}
     </SearchPanelMain>
   );
 };

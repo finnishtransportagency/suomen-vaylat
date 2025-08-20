@@ -6,7 +6,15 @@ import { faMagnifyingGlass, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { mergeMatchedKeys, validateFeatureSearch } from '../utils/SearchUtil';
 import { ReactReduxContext } from 'react-redux';
-import { pushToFeatureSearchResults, resetFeatureSearchResults, setFeatureSearchResults, setIsSearchingActive, setLastSearchValue, setSearchOn, setSearchValue } from '../../../state/slices/rpcSlice';
+import {
+  pushToFeatureSearchResults,
+  resetFeatureSearchResults,
+  setFeatureSearchResults,
+  setIsSearchingActive,
+  setLastSearchValue,
+  setSearchOn,
+  setSearchValue
+} from '../../../state/slices/rpcSlice';
 import { Slide, toast } from 'react-toastify';
 
 const StyledRowWithButton = styled.div`
@@ -148,10 +156,7 @@ const StyledNoActivaLayers = styled.div`
   font-weight: 500;
 `;
 
-const FeatureSearchInput = ({
-  setDropdownOpen,
-  emptySearchResults,
-}) => {
+const FeatureSearchInput = ({ setDropdownOpen, emptySearchResults }) => {
   const { store } = useContext(ReactReduxContext);
 
   const {
@@ -174,7 +179,7 @@ const FeatureSearchInput = ({
 
   const handleFeatureSearch = (searchValue, startIndex = 0, layerId = -1) => {
     const handleSearchResponse = (data) => {
-      console.log("??")
+      console.log('??');
       if (Object.keys(data).length > 0 && Object.keys(data.gfi).length > 0) {
         store.dispatch(setIsSearchingActive(false));
         store.dispatch(setSearchOn(false));
@@ -235,7 +240,7 @@ const FeatureSearchInput = ({
       );
     };
 
-    console.log("MIKSI")
+    console.log('MIKSI');
     store.dispatch(setIsSearchingActive(true));
     store.dispatch(setSearchOn(true));
     startIndex === 0 && store.dispatch(resetFeatureSearchResults());

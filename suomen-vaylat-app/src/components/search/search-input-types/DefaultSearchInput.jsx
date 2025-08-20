@@ -114,15 +114,16 @@ const StyledValidationMessage = styled.div`
   font-size: 0.95em;
 `;
 
-const DefaultSearchInput = ({
-  handleGeneralSearch,
-  emptySearchResults,
-}) => {
+const DefaultSearchInput = ({ handleGeneralSearch, emptySearchResults }) => {
   const { store } = useContext(ReactReduxContext);
 
-  const { featureSearchResults, searchResults, searchValue, isSearchingActive, lastSearchValue } = useAppSelector(
-    (state) => state.rpc
-  );
+  const {
+    featureSearchResults,
+    searchResults,
+    searchValue,
+    isSearchingActive,
+    lastSearchValue
+  } = useAppSelector((state) => state.rpc);
 
   const [simpleError, setSimpleError] = useState('');
 
@@ -138,9 +139,9 @@ const DefaultSearchInput = ({
   };
 
   useEffect(() => {
-      const msg = validateSimpleSearch(searchValue, false);
-      setSimpleError(msg);
-    }, [searchValue]);
+    const msg = validateSimpleSearch(searchValue, false);
+    setSimpleError(msg);
+  }, [searchValue]);
 
   return (
     <StyledSearchSection>

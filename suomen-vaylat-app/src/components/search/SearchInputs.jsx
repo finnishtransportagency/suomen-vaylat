@@ -15,8 +15,19 @@ import DefaultSearchInput from './search-input-types/DefaultSearchInput';
 import RoadSearchInput from './search-input-types/RoadSearchInput';
 import TrackSearchInput from './search-input-types/TrackSearchInput';
 import FeatureSearchInput from './search-input-types/FeatureSearchInput';
-import { searchVKMTrack, setFirstSearchResultShown, setIsSearchingActive, setLastSearchValue, setSearchResults, setSearchValue } from '../../state/slices/rpcSlice';
-import { setGeoJsonArray, setIsMoreSearchOpen } from '../../state/slices/uiSlice';
+import {
+  searchVKMTrack,
+  setFeatureSearchResults,
+  setFirstSearchResultShown,
+  setIsSearchingActive,
+  setLastSearchValue,
+  setSearchResults,
+  setSearchValue
+} from '../../state/slices/rpcSlice';
+import {
+  setGeoJsonArray,
+  setIsMoreSearchOpen
+} from '../../state/slices/uiSlice';
 
 const StyledRowWithButton = styled.div`
   display: flex;
@@ -124,15 +135,29 @@ const StyledValidationMessage = styled.div`
   font-size: 0.95em;
 `;
 
-const SearchInputs = ({
-  setDropdownOpen,
-  emptySearchResults,
-}) => {
+const SearchInputs = ({ setDropdownOpen }) => {
   const { store } = useContext(ReactReduxContext);
   const [carriageWaySearch, setCarriageWaySearch] = useState(false);
 
-  const { featureSearchResults, searchResults, searchValue, isSearchingActive, channel, isMoreSearchOpen, lastSearchValue } =
-    useAppSelector((state) => state.rpc);
+  const {
+    featureSearchResults,
+    searchResults,
+    searchValue,
+    isSearchingActive,
+    channel,
+    isMoreSearchOpen,
+    lastSearchValue
+  } = useAppSelector((state) => state.rpc);
+
+  const emptySearchResults = () => {
+    store.dispatch(setGeoJsonArray([]));
+    store.dispatch(setFeatureSearchResults([]));
+    store.dispatch(setSearchResults(null));
+    store.dispatch(setSearchValue(''));
+    store.dispatch(setLastSearchValue(''));
+    removeMarkersAndFeatures(channel);
+  };
+
   const { activeSwitch } = useAppSelector((state) => state.ui);
 
   // simpleError used for non-track / non-road / non-feature basic validations
@@ -157,7 +182,7 @@ const SearchInputs = ({
     }
     // simple live validation for other types
     const msg = validateSimpleSearch(searchValue, false);
-    console.log(msg)
+    console.log(msg);
     setSimpleError(msg);
   }, [activeSwitch, searchValue, store]);
 
@@ -206,7 +231,7 @@ const SearchInputs = ({
     removeMarkersAndFeatures(channel);
     store.dispatch(setIsSearchingActive(true));
     if (activeSwitch === 'track') {
-      console.log("juu")
+      console.log('juu');
       store.dispatch(
         searchVKMTrack({
           value: value,
@@ -248,7 +273,7 @@ const SearchInputs = ({
   };
 
   // Handle metadata search
-   const handleMetadataSearch = (value) => {
+  const handleMetadataSearch = (value) => {
     setDropdownOpen(false);
     removeMarkersAndFeatures(channel);
     store.dispatch(setIsSearchingActive(true));
@@ -273,8 +298,8 @@ const SearchInputs = ({
 
       {activeSwitch === 'road' && (
         <RoadSearchInput
-        carriageWaySearch={carriageWaySearch}
-        setCarriageWaySearch={setCarriageWaySearch}
+          carriageWaySearch={carriageWaySearch}
+          setCarriageWaySearch={setCarriageWaySearch}
           handleGeneralSearch={handleGeneralSearch}
           emptySearchResults={emptySearchResults}
         />

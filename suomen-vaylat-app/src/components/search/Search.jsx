@@ -16,16 +16,12 @@ import { SEARCH_TIP_LOCALSTORAGE } from '../../utils/constants';
 import { theme } from '../../theme/theme';
 
 import {
-  pushToFeatureSearchResults,
   resetFeatureSearchResults,
   setSearchOn,
-  searchVKMTrack,
-  setFeatureSearchResults,
   setSearchResults,
   setSearchValue,
   setSearchType,
   setIsSearchingActive,
-  setLastSearchValue
 } from '../../state/slices/rpcSlice';
 
 import {
@@ -38,16 +34,12 @@ import {
 
 import CircleButton from '../../utils/components/CircleButton';
 
-import { Slide, toast } from 'react-toastify';
-import SearchToast from '../toasts/SearchToast';
+import { toast } from 'react-toastify';
 import TipToast from '../toasts/TipToast';
 import SearchDialog from './SearchDialog';
 import {
-  mergeMatchedKeys,
   removeMarkersAndFeatures,
   searchDownloadTips,
-  texts,
-  validateFeatureSearch,
   variants
 } from './utils/SearchUtil';
 
@@ -179,10 +171,8 @@ const Search = () => {
   } = useAppSelector((state) => state.ui);
   const {
     channel,
-    selectedLayersByType,
     featureSearchResults,
     searchResults,
-    searchType
   } = useAppSelector((state) => state.rpc);
 
   const { store } = useContext(ReactReduxContext);
@@ -193,7 +183,6 @@ const Search = () => {
   );
 
   // Handle search click and direct to the right search handler based on type
-  
 
   useEffect(() => {
     channel &&
@@ -295,15 +284,6 @@ const Search = () => {
     } else toast.dismiss('searchTipToast');
   }, [geoJsonArray]);
 
-  const emptySearchResults = () => {
-    store.dispatch(setGeoJsonArray([]));
-    store.dispatch(setFeatureSearchResults([]));
-    store.dispatch(setSearchResults(null));
-    store.dispatch(setSearchValue(''));
-    store.dispatch(setLastSearchValue(''));
-    removeMarkersAndFeatures(channel);
-  };
-
   const handleSearchButton = () => {
     if (searchResults || featureSearchResults.length > 0) {
       store.dispatch(setIsSearchOpen(!isSearchOpen));
@@ -378,8 +358,6 @@ const Search = () => {
             <SearchDialog
               setSearchClickedRow={setSearchClickedRow}
               searchClickedRow={searchClickedRow}
-              removeMarkersAndFeatures={removeMarkersAndFeatures}
-              emptySearchResults={emptySearchResults}
             />
           </StyledSearchWrapper>
         )}
