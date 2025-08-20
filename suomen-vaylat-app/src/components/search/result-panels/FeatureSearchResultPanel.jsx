@@ -20,7 +20,6 @@ import {
   setIsSearchingActive,
   setLastSearchValue,
   setSearchOn,
-  setSearchValue
 } from '../../../state/slices/rpcSlice';
 import { Slide, toast } from 'react-toastify';
 

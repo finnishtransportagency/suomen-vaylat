@@ -177,7 +177,6 @@ const Search = () => {
 
   const { store } = useContext(ReactReduxContext);
 
-  const [searchClickedRow, setSearchClickedRow] = useState(null);
   const [showToast, setShowToast] = useState(
     JSON.parse(localStorage.getItem(SEARCH_TIP_LOCALSTORAGE))
   );
@@ -354,10 +353,7 @@ const Search = () => {
             exit={'exit'}
             transition={'transition'}
           >
-            <SearchDialog
-              setSearchClickedRow={setSearchClickedRow}
-              searchClickedRow={searchClickedRow}
-            />
+            <SearchDialog/>
           </StyledSearchWrapper>
         )}
       </AnimatePresence>

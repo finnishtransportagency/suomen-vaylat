@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import strings from '../../../translations';
 import { useAppSelector } from '../../../state/hooks';
-import { useContext, useEffect } from 'react';
+import { useContext } from 'react';
 import { faMagnifyingGlass, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { mergeMatchedKeys, validateFeatureSearch } from '../utils/SearchUtil';
@@ -104,7 +104,7 @@ const StyledWidePillInput = styled(PillInput)`
   min-width: 150px;
   max-width: 600px;
   text-align: left;
-  padding-right: 44px; /* room for clear button */
+  padding-right: 44px;
 `;
 
 const StyledFeatureSearchSection = styled.div`

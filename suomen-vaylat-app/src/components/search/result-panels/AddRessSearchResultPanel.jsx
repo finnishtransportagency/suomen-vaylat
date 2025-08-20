@@ -16,7 +16,7 @@ import {
 } from '../utils/SearchUtil';
 import { theme } from '../../../theme/theme';
 import { useAppSelector } from '../../../state/hooks';
-import { useContext, useEffect, useMemo } from 'react';
+import { useContext, useEffect, useMemo, useState } from 'react';
 import { ReactReduxContext } from 'react-redux';
 import { setGeoJsonArray } from '../../../state/slices/uiSlice';
 import {
@@ -29,10 +29,9 @@ import {
   setFirstSearchResultShown
 } from '../../../state/slices/rpcSlice';
 
-const AddressSearchResultPanel = ({
-  setSearchClickedRow,
-  searchClickedRow
-}) => {
+const AddressSearchResultPanel = () => {
+  const [searchClickedRow, setSearchClickedRow] = useState(null);
+  
   const { activeSwitch } = useAppSelector((state) => state.ui);
   const { channel, searchResults, firstSearchResultShown } = useAppSelector(
     (state) => state.rpc

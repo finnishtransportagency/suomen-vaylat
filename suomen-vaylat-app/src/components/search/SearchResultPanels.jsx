@@ -22,7 +22,7 @@ const StyledSearchResultsTitle = styled.p`
   margin: 1em 0;
 `;
 
-const SearchResultPanels = ({ setSearchClickedRow, searchClickedRow }) => {
+const SearchResultPanels = () => {
   const { featureSearchResults, searchResults, searchType } = useAppSelector(
     (state) => state.rpc
   );
@@ -38,8 +38,6 @@ const SearchResultPanels = ({ setSearchClickedRow, searchClickedRow }) => {
       {isSearchOpen && searchResults !== null && searchType === 'address' && (
         <AddressSearchResultPanel
           isMobile={isMobile}
-          setSearchClickedRow={setSearchClickedRow}
-          searchClickedRow={searchClickedRow}
         />
       )}
       {isSearchOpen && searchResults !== null && searchType === 'metadata' && (

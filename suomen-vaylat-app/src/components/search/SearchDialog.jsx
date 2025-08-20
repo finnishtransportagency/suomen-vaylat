@@ -142,7 +142,7 @@ const switchDefinitions = [
   }
 ];
 
-const SearchDialog = ({ setSearchClickedRow, searchClickedRow }) => {
+const SearchDialog = () => {
   const { store } = useContext(ReactReduxContext);
   const { featureSearchResults, channel, searchResults, isSearchingActive } =
     useAppSelector((state) => state.rpc);
@@ -211,9 +211,6 @@ const SearchDialog = ({ setSearchClickedRow, searchClickedRow }) => {
       <SearchInputs
         id="search-dialog-inputs"
         setDropdownOpen={setDropdownOpen}
-        setSearchClickedRow={setSearchClickedRow}
-        searchClickedRow={searchClickedRow}
-        removeMarkersAndFeatures={removeMarkersAndFeatures}
       />
 
       {isSearchingActive && (
@@ -231,8 +228,6 @@ const SearchDialog = ({ setSearchClickedRow, searchClickedRow }) => {
             <HorizontalLine id="search-dialog-line-results" />
             <SearchResultPanels
               id="search-dialog-result-panels"
-              setSearchClickedRow={setSearchClickedRow}
-              searchClickedRow={searchClickedRow}
             />
           </>
         )}
