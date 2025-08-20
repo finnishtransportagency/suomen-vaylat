@@ -181,7 +181,6 @@ const SearchInputs = ({ setDropdownOpen }) => {
     }
     // simple live validation for other types
     const msg = validateSimpleSearch(searchValue, false);
-    console.log(msg);
     setSimpleError(msg);
   }, [activeSwitch, searchValue, store]);
 
@@ -230,7 +229,6 @@ const SearchInputs = ({ setDropdownOpen }) => {
     removeMarkersAndFeatures(channel);
     store.dispatch(setIsSearchingActive(true));
     if (activeSwitch === 'track') {
-      console.log('juu');
       store.dispatch(
         searchVKMTrack({
           value: value,

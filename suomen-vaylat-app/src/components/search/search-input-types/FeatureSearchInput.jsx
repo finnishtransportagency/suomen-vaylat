@@ -177,7 +177,6 @@ const FeatureSearchInput = ({ setDropdownOpen, emptySearchInputs }) => {
 
   const handleFeatureSearch = (searchValue, startIndex = 0, layerId = -1) => {
     const handleSearchResponse = (data) => {
-      console.log('??');
       if (Object.keys(data).length > 0 && Object.keys(data.gfi).length > 0) {
         store.dispatch(setIsSearchingActive(false));
         store.dispatch(setSearchOn(false));
@@ -238,7 +237,6 @@ const FeatureSearchInput = ({ setDropdownOpen, emptySearchInputs }) => {
       );
     };
 
-    console.log('MIKSI');
     store.dispatch(setIsSearchingActive(true));
     store.dispatch(setSearchOn(true));
     startIndex === 0 && store.dispatch(resetFeatureSearchResults());

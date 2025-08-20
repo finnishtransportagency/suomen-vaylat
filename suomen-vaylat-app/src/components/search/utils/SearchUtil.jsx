@@ -20,7 +20,6 @@ export const validateFeatureSearch = (
   if (regex.test(searchValue)) {
     newErrors.push('regex');
   }
-  console.log(newErrors);
   store.dispatch(setFeatureErrors(newErrors));
   return newErrors.length === 0;
 };

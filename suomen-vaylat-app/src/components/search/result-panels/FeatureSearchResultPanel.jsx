@@ -344,7 +344,6 @@ const FeatureSearchResultPanel = () => {
         }
       );
     };
-    console.log('MIKSI');
 
     store.dispatch(setIsSearchingActive(true));
     store.dispatch(setSearchOn(true));

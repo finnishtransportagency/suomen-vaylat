@@ -47,7 +47,6 @@ const AddRessSearchResultPanel = ({
   const typeMap = new Map(typeResolvTable);
   const nonNomenclatureTypes = Array.from(typeMap.values());
 
-  console.log(searchResults);
   // Guard: ensure we always work with an array
   const locations =
     searchResults &&
@@ -216,7 +215,6 @@ const AddRessSearchResultPanel = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filteredResult, firstSearchResultShown]);
 
-  console.log(filteredResult);
   return (
     <StyledDropDown
       key={'dropdown-content-address'}
