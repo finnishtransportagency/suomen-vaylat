@@ -14,12 +14,6 @@ const StyledRowWithButton = styled.div`
   width: 100%;
   justify-content: space-between;
   flex-wrap: nowrap;
-
-  @media (max-width: 680px) {
-    /* stack on very small screens to avoid overflow */
-    flex-direction: column;
-    gap: 8px;
-  }
 `;
 
 const StyledInputsContainer = styled.div`

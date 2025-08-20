@@ -22,8 +22,10 @@ const InputRow = styled.div`
   justify-content: flex-start;
   margin-bottom: 8px;
   flex-wrap: nowrap;
-  @media (max-width: 750px) {
+
+  @media ${(props) => props.theme.device.tablet} {
     gap: 6px;
+    flex-direction: column;
   }
 `;
 
@@ -34,10 +36,9 @@ const StyledRowWithButton = styled.div`
   justify-content: space-between;
   flex-wrap: nowrap;
 
-  @media (max-width: 680px) {
-    /* stack on very small screens to avoid overflow */
-    flex-direction: column;
+  @media ${(props) => props.theme.device.tablet} {
     gap: 8px;
+    flex-direction: column;
   }
 `;
 

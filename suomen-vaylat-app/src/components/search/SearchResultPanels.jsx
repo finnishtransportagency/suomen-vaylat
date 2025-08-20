@@ -9,6 +9,9 @@ const SearchPanelMain = styled.div`
   width: 100%;
   margin-bottom: 1em;
   overflow: auto;
+  @media ${(props) => props.theme.device.mobileL} {
+    overflow: visible;
+  }
 `;
 
 const StyledSearchResultsTitle = styled.p`
@@ -23,7 +26,7 @@ const SearchResultPanels = ({ setSearchClickedRow, searchClickedRow }) => {
     (state) => state.rpc
   );
   const { isSearchOpen } = useAppSelector((state) => state.ui);
-  
+
   return (
     <SearchPanelMain>
       {(searchResults !== null || featureSearchResults.length > 0) && (
