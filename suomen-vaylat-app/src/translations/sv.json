@@ -499,7 +499,7 @@
       "trackkm": "Spårkilometer",
       "trackm": "Banmeter",
       "trackMandatoryMessage": "Bannummer, Spårkilometer och Banmeter parametrarna är obligatoriska vid bansökning."
-    },
+    },  
     "tips": {
       "title": "Med platssökning kan du söka en kommun, adress, fastighetsbeteckning, vägadress eller banadress.",
       "address": "Skriv i formatet 'kommun', 'adress' eller 'adress, kommun'.",
@@ -1196,10 +1196,16 @@
     "title": "Dela denna sida",
     "shareTexts": {
       "title": "Suomen väylät - kartlänk",
+      "shareDescription": "Dela språk, zoomnivå, fokus, valda dataset och datasetens transparens.",
       "emailBody": "Kartlänk:",
       "copiedToClipboard": "Kopierat till urklipp",
       "linkTitle": "Dela länk:",
-      "descTitle": "Delade funktioner:"
+      "showOpenLayersTitle": "Öppna kartlager som kan delas",
+      "showOpenLayersCount": "{count} st",
+      "showOpenLayers": "Visa lager",
+      "hideOpenLayers": "Dölj lager",
+      "copyToClipboard": "Kopiera till urklipp",
+      "sendEmail": "Skicka via e-post"
     },
     "shareDescriptions": {
       "currentZoomLevel": "Zoom-nivå",
@@ -1292,6 +1298,6 @@
       "dragSelectedLayerAriaLabel": "Flytta lager ",
       "selectBaseLayer": "Välj bakgrundskarta ",
       "editBaseLayers": "Byt bakgrundskartor"
-    }
+    }     
   }
 }

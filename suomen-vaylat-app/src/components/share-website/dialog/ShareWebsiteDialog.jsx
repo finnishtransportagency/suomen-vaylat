@@ -3,7 +3,7 @@ import Dialog from '../../dialog/Dialog';
 import { faShareAlt } from '@fortawesome/free-solid-svg-icons';
 import { useAppSelector } from '../../../state/hooks';
 import strings from '../../../translations';
-import ShareWebSitePopup from '../ShareWebSitePopup';
+import { ShareWebSitePopup }  from '../ShareWebSitePopup';
 import { setShareUrl } from '../../../state/slices/uiSlice';
 import { ReactReduxContext } from 'react-redux';
 

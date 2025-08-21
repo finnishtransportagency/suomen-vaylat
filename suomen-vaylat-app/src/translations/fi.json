@@ -535,7 +535,7 @@
     },
     "premise": {
       "title": "Kiinteistöhaku"
-    },
+    }, 
     "carriageWaySearch": "Käytä ajorataa haussa"
   },
   "coordinateTool": {
@@ -627,7 +627,7 @@
       "title": "Vesiväylätiedot",
       "description": "Aineisto kattaa Väyläviraston vastuulla olevat vesiväylät ja kanavat. Niiden ylläpidossa ja kehittämisessä otetaan huomioon niin kauppamerenkulun kuin muunkin vesiliikenteen tarpeet."
     }
-  },
+  },   
   "themelayerlist": {
     "readMore": "Lue lisää",
     "readLess": "Vähemmän",
@@ -1193,10 +1193,16 @@
     "title": "Jaa sivu",
     "shareTexts": {
       "title": "Suomen väylät - karttalinkki",
+      "shareDescription": "Jaa kieli, zoom-taso, kohdennus, valitut aineistot ja aineistojen läpinäkyvyys.",
       "emailBody": "Karttalinkki:",
       "copiedToClipboard": "Kopioitu leikepöydälle",
       "linkTitle": "Jakolinkki:",
-      "descTitle": "Jaettavat ominaisuudet:"
+      "showOpenLayersTitle": "Avoinna olevat karttatasot, jotka ovat jaettavissa",
+      "showOpenLayersCount": "{count} kpl",
+      "showOpenLayers": "Näytä tasot",
+      "hideOpenLayers": "Piilota tasot",
+      "copyToClipboard": "Kopioi leikepöydälle",
+      "sendEmail": "Lähetä sähköpostilla"
     },
     "shareDescriptions": {
       "currentZoomLevel": "Zoom-taso",

@@ -4,103 +4,227 @@ import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
 import ReactTooltip from 'react-tooltip';
 
-import { faCopy } from '@fortawesome/free-solid-svg-icons';
+import LayersIcon from '@mui/icons-material/Layers';
+import { faCopy, faEnvelope, faLayerGroup, faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { CopyToClipboard } from 'react-copy-to-clipboard';
-import {
-  EmailIcon,
-  EmailShareButton,
-  FacebookIcon,
-  FacebookShareButton,
-  LinkedinIcon,
-  LinkedinShareButton,
-  TelegramIcon,
-  TelegramShareButton,
-  TwitterIcon,
-  TwitterShareButton,
-  WhatsappIcon,
-  WhatsappShareButton
-} from 'react-share';
-import { isMobile, theme } from '../../theme/theme';
 
 import strings from '../../translations';
 
-const StyledClipboardIcon = styled.div`
-  svg {
-    color: ${(props) => props.theme.colors.mainColor1};
-    font-size: 18px;
-    transition: all 0.1s ease-out;
-  }
-`;
 
-const StyledContainer = styled.div`
-  text-align: start;
-  margin: 18px;
-`;
-
-const StyledInput = styled.textarea`
+const StyledPopupWrapper = styled.div`
+  max-width: 600px;
   width: 100%;
-  height: 80px;
-  resize: none;
-  border: none;
-`;
+  margin: 0 auto;
+  padding: 24px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
 
-const StyledShareButtonsContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-wrap: wrap;
-  padding: 8px;
-`;
-
-const StyledCopyClipboardButton = styled.button`
-  border-radius: 50%;
-  width: 48px;
-  height: 48px;
-  justify-content: center;
-  align-items: center;
-  background-color: ${(props) => props.theme.colors.mainColor1};
-  box-shadow: 2px 2px 4px #0000004d;
-  border: none;
-  margin: 4px;
-  svg {
-    color: ${(props) => props.theme.colors.mainWhite};
-    font-size: 18px;
-    transition: all 0.1s ease-out;
+  @media ${props => props.theme.device.mobileL} {
+    position: fixed;
+    padding: 22px;
+    bottom: 0;
+    left: 0;
+    width: 100vw;
+    margin: 0;
+    z-index: 1;
   }
-  &:hover {
-    color: ${(props) => props.theme.colors.mainColor2};
-    svg {
-      color: ${(props) => props.theme.colors.mainWhite};
-    }
+
+  @media ${props => props.theme.device.mobileM} {
+    padding: 7px;
+  }
+
+  @media ${props => props.theme.device.mobileS} {
+    padding: 2px;
+    font-size: 13px;
   }
 `;
+
+const StyledDescription = styled.p`
+  font-size: 0.95rem;
+  color: #333;
+  margin: 0 0 16px;
+`;
+
 
 const StyledCopiedToClipboardText = styled(motion.span)`
   color: ${(props) => props.theme.colors.mainColor1};
 `;
 
-const StyledTitle = styled.div`
-  font-size: 16px;
-  font-weight: 600;
-  margin-bottom: 1em;
+const StyledLinkBox = styled.div`
+  border: 2px dashed ${(props) => props.theme.colors.mainColor1};
+  border-radius: 8px;
+  background: ${(props) => props.theme.colors.mainColor1}1A;
+  padding: 16px;
+  min-height: 100px;
+  margin-bottom: 16px;
+  word-break: break-word;
+  white-space: pre-wrap;
+  font-family: monospace;
+  font-size: 0.9rem;
+  color: ${(props) => props.theme.colors.mainColor1};
 `;
 
-const StyledTable = styled.table`
-  margin-bottom: 1em;
-  font-family: arial, sans-serif;
-  border: none;
-  width: 100%;
-  td,
-  th {
-    border: 1px solid #dddddd;
-    text-align: left;
-    padding: 8px;
-    vertical-align: baseline;
-    font-weight: 500;
+const StyledLayerSummary = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  background-color: #ffffff;
+  padding: 12px 16px;
+  font-weight: 500;
+
+  box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+  border: 1px solid rgba(0,0,0,0.06);
+  border-radius: 12px;
+  margin-bottom: 16px;  /* always a gap before next element */
+
+  @media ${(props) => props.theme.device.mobileL} {
+    padding: 12px;
   }
 `;
+
+
+const StyledLayerList = styled.ul`
+  list-style: none;
+  margin: 0;
+  padding: 12px 16px;
+
+  background-color: #ffffff;
+  border: 1px solid rgba(0,0,0,0.06);
+  border-radius: 12px;
+  margin-bottom: 16px;
+
+  /* If the list comes right after the summary, visually merge them */
+  ${StyledLayerSummary} + & {
+    border-top: none;
+    border-radius: 0 0 12px 12px;
+    margin-top: -16px;   /* overlap to remove the gap */
+  }
+
+  li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 0;
+
+    .mui-icon {
+      font-size: 18px;
+      color: ${(p) => p.theme.colors.mainColor1};
+    }
+  }
+`;
+
+
+const StyledLayerInfo = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  .icon {
+    color: ${(props) => props.theme.colors.mainColor1};
+  }
+
+  .texts {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+  }
+
+  .title {
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .sub {
+    font-size: 13px;
+    color: #666;
+    margin-top: 2px;
+  }
+`;
+
+const StyledButtonColumn = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 180px; 
+`;
+
+const StyledRightAction = styled.button`
+  background: none;
+  border: none;
+  color: ${(props) => props.theme.colors.mainColor1};
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.95rem;
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  .caret {
+    transition: transform 0.15s ease;
+    transform: rotate(${(p) => (p.$open ? '180deg' : '0deg')});
+  }
+`;
+
+
+
+const StyledActionButtons = styled.div`
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  margin-top: 12px;
+  flex-wrap: wrap;
+
+  @media ${props => props.theme.device.mobileL} {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  @media ${props => props.theme.device.mobileM} {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  @media ${props => props.theme.device.mobileS} {
+    flex-direction: column;
+    gap: 8px;
+    padding: 8px;
+  }
+`;
+
+
+const StyledCTAButton = styled.button`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  background-color: ${(props) => props.theme.colors.mainColor1};
+  color: ${(props) => props.theme.colors.mainWhite};
+
+  border: none;
+  padding: 10px 20px;
+  border-radius: 999px; // makes pill shape
+  font-weight: 500;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+
+  svg {
+    color: ${(props) => props.theme.colors.mainWhite};
+    font-size: 16px;
+  }
+
+  &:hover {
+    background-color: ${(props) => props.theme.colors.mainColor2}; // hover color if defined
+  }
+`;
+
 
 export const StyledShareDescription = ({
   currentZoomLevel,
@@ -110,314 +234,134 @@ export const StyledShareDescription = ({
   hasThemeShare,
   selectedTheme
 }) => {
-  if (!hasThemeShare) {
-    return (
-      <StyledTable>
-        <tbody>
-          {lang && (
-            <tr>
-              <td>{strings.share.shareDescriptions.lang}</td>
-              <td>{strings.share.shareDescriptions.languages[lang]}</td>
-            </tr>
-          )}
-          {(currentZoomLevel !== null || currentZoomLevel !== undefined) && (
-            <tr>
-              <td>{strings.share.shareDescriptions.currentZoomLevel}</td>
-              <td>{currentZoomLevel}</td>
-            </tr>
-          )}
-          {center && (
-            <tr>
-              <td>{strings.share.shareDescriptions.center}</td>
-              <td>
-                <div>x: {center.x}</div>
-                <div>y: {center.y}</div>
-              </td>
-            </tr>
-          )}
-          {selectedLayers && (
-            <tr>
-              <td>{strings.share.shareDescriptions.selectedLayers}</td>
-              <td>
-                {selectedLayers.map((layer) => {
-                  return (
-                    <div key={`share_layer_${layer.id}`}>{layer.name}</div>
-                  );
-                })}
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </StyledTable>
-    );
-  } else {
-    return (
-      <StyledTable>
-        <tbody>
-          {lang && (
-            <tr>
-              <td>{strings.share.shareDescriptions.lang}</td>
-              <td>{strings.share.shareDescriptions.languages[lang]}</td>
-            </tr>
-          )}
-          {(currentZoomLevel !== null || currentZoomLevel !== undefined) && (
-            <tr>
-              <td>{strings.share.shareDescriptions.currentZoomLevel}</td>
-              <td>{currentZoomLevel}</td>
-            </tr>
-          )}
-          {center && (
-            <tr>
-              <td>{strings.share.shareDescriptions.center}</td>
-              <td>
-                <div>x: {center.x}</div>
-                <div>y: {center.y}</div>
-              </td>
-            </tr>
-          )}
-          <tr>
-            <td>{strings.share.shareDescriptions.theme}</td>
-            <td>{selectedTheme.locale[lang].name}</td>
-          </tr>
-        </tbody>
-      </StyledTable>
-    );
-  }
+  return null;
 };
+
 
 /**
  * Shows ShareWebSitePopup if shareUrl is defined in Redux state.
  */
-const ShareWebSitePopup = () => {
+export const ShareWebSitePopup = () => {
   const { center, currentZoomLevel, selectedLayers, legends, selectedTheme } =
     useAppSelector((state) => state.rpc);
 
   const { shareUrl } = useAppSelector((state) => state.ui);
 
   const [isCopied, setIsCopied] = useState(false);
+  const [showLayers, setShowLayers] = useState(false);
 
   const getMapLayerStyle = (layer) => {
-    const legend = legends.filter((l) => {
-      return l.layerId === layer.id;
-    });
-    if (legend.length > 0) {
-      return legend[0].legendStyle ? legend[0].legendStyle : 'default';
-    }
-    return 'default';
+    const legend = legends.find((l) => l.layerId === layer.id);
+    return legend?.legendStyle || 'default';
   };
 
   let mapLayers = '';
   selectedLayers.forEach((l) => {
     mapLayers += l.id + '+' + l.opacity + '+' + getMapLayerStyle(l) + '++';
   });
-  mapLayers = mapLayers.substring(0, mapLayers.length - 2);
+  mapLayers = mapLayers.slice(0, -2); // remove last '++'
 
-  // Replace link placeholders to correct values
-  let url = shareUrl.replace('{zoom}', currentZoomLevel);
-  url = url.replace('{x}', parseInt(center.x));
-  url = url.replace('{y}', parseInt(center.y));
-  url = url.replace('{maplayers}', mapLayers);
-  url = url.replace('{lang}', strings.getLanguage());
-
-  const hasThemeShare =
-    typeof shareUrl === 'string' ? shareUrl.includes('/theme/') : false;
+  let url = shareUrl
+    .replace('{zoom}', currentZoomLevel)
+    .replace('{x}', parseInt(center.x))
+    .replace('{y}', parseInt(center.y))
+    .replace('{maplayers}', mapLayers)
+    .replace('{lang}', strings.getLanguage());
 
   const title = strings.share.shareTexts.title;
-  const emailBody = strings.share.shareTexts.emailBody;
-  const shareIconSize = 48;
-  const inputRef = useRef(null);
 
-  const shareIconStyle = {
-    margin: '8px',
-    filter: 'drop-shadow( 2px 2px 4px #0000004d)'
+  const handleCopy = () => {
+    navigator.clipboard.writeText(url);
+    setIsCopied(true);
+    setTimeout(() => setIsCopied(false), 2000);
+  };
+
+  const handleEmail = () => {
+    window.location.href = `mailto:?subject=${encodeURIComponent(
+      title
+    )}&body=${encodeURIComponent(url)}`;
   };
 
   return (
-    <StyledContainer>
-      <StyledTitle>{strings.share.shareTexts.descTitle}</StyledTitle>
-      <StyledShareDescription
-        currentZoomLevel={currentZoomLevel}
-        selectedLayers={selectedLayers}
-        center={center}
-        lang={strings.getLanguage()}
-        hasThemeShare={hasThemeShare}
-        selectedTheme={selectedTheme}
-      />
-      <StyledTitle>{strings.share.shareTexts.linkTitle}</StyledTitle>
-      <StyledInput value={url} ref={inputRef} readOnly />
-      <AnimatePresence>
-        {isCopied && (
-          <StyledCopiedToClipboardText
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{
-              duration: 0.3,
-              type: 'tween'
-            }}
-          >
-            {strings.share.shareTexts.copiedToClipboard}
-          </StyledCopiedToClipboardText>
-        )}
-      </AnimatePresence>
-      <StyledShareButtonsContainer>
-        <ReactTooltip
-          backgroundColor={theme.colors.mainColor1}
-          disable={isMobile}
-          id="clipboard"
-          place="bottom"
-          type="dark"
-          effect="float"
-        >
-          <span>{strings.share.tooltips.clipboard}</span>
-        </ReactTooltip>
-        <ReactTooltip
-          backgroundColor={theme.colors.mainColor1}
-          disable={isMobile}
-          id="email"
-          place="bottom"
-          type="dark"
-          effect="float"
-        >
-          <span>{strings.share.tooltips.email}</span>
-        </ReactTooltip>
+      <StyledPopupWrapper>
+        <StyledDescription>
+          {strings.share.shareTexts.shareDescription}
+      </StyledDescription>
+        {selectedLayers?.length > 0 && (
+  <>
+  <StyledLayerSummary>
+    <StyledLayerInfo>
+      <FontAwesomeIcon icon={faLayerGroup} className="icon" />
+      <div className="texts">
+        <div className="title">
+          {strings.share.shareTexts.showOpenLayersTitle}
+        </div>
+        <div className="sub">
+          {strings.formatString(strings.share.shareTexts.showOpenLayersCount, {
+            count: selectedLayers.length,
+          })}
+        </div>
+      </div>
+    </StyledLayerInfo>
 
-        <ReactTooltip
-          backgroundColor={theme.colors.mainColor1}
-          disable={isMobile}
-          id="facebook"
-          place="bottom"
-          type="dark"
-          effect="float"
-        >
-          <span>{strings.share.tooltips.facebook}</span>
-        </ReactTooltip>
+    <StyledRightAction
+      onClick={() => setShowLayers((prev) => !prev)}
+      $open={showLayers}
+    >
+      {showLayers
+        ? strings.share.shareTexts.hideOpenLayers
+        : strings.share.shareTexts.showOpenLayers}
+      <FontAwesomeIcon icon={faChevronDown} className="caret" />
+    </StyledRightAction>
+  </StyledLayerSummary>
 
-        <ReactTooltip
-          backgroundColor={theme.colors.mainColor1}
-          disable={isMobile}
-          id="twitter"
-          place="bottom"
-          type="dark"
-          effect="float"
-        >
-          <span>{strings.share.tooltips.twitter}</span>
-        </ReactTooltip>
 
-        <ReactTooltip
-          backgroundColor={theme.colors.mainColor1}
-          disable={isMobile}
-          id="linkedin"
-          place="bottom"
-          type="dark"
-          effect="float"
-        >
-          <span>{strings.share.tooltips.linkedin}</span>
-        </ReactTooltip>
+    {showLayers && (
+  <StyledLayerList>
+    {selectedLayers.map((layer) => (
+      <li key={layer.id}>
+      <LayersIcon className="mui-icon" />
+        {layer.name}
+      </li>
+    ))}
+  </StyledLayerList>
+)}
 
-        <ReactTooltip
-          backgroundColor={theme.colors.mainColor1}
-          disable={isMobile}
-          id="whatsapp"
-          place="bottom"
-          type="dark"
-          effect="float"
-        >
-          <span>{strings.share.tooltips.whatsapp}</span>
-        </ReactTooltip>
+  </>
+)}
 
-        <ReactTooltip
-          backgroundColor={theme.colors.mainColor1}
-          disable={isMobile}
-          id="telegram"
-          place="bottom"
-          type="dark"
-          effect="float"
-        >
-          <span>{strings.share.tooltips.telegram}</span>
-        </ReactTooltip>
-        <CopyToClipboard
-          text={url}
-          onCopy={() => {
-            setIsCopied(true);
-          }}
-          id="share-website-clipboard"
-        >
-          <StyledCopyClipboardButton
-            onClick={() => {
-              inputRef.current.select();
-            }}
-            data-tip
-            data-for="clipboard"
-          >
-            <StyledClipboardIcon>
+
+        <StyledLinkBox>{url}</StyledLinkBox>
+
+        <StyledActionButtons>
+          <StyledButtonColumn>
+            <StyledCTAButton onClick={handleCopy}>
               <FontAwesomeIcon icon={faCopy} />
-            </StyledClipboardIcon>
-          </StyledCopyClipboardButton>
-        </CopyToClipboard>
-        <EmailShareButton
-          url={url}
-          subject={title}
-          body={emailBody}
-          data-tip
-          data-for="email"
-        >
-          <EmailIcon round={true} size={shareIconSize} style={shareIconStyle} />
-        </EmailShareButton>
-        <FacebookShareButton
-          url={url}
-          quote={title}
-          data-tip
-          data-for="facebook"
-        >
-          <FacebookIcon
-            round={true}
-            size={shareIconSize}
-            style={shareIconStyle}
-          />
-        </FacebookShareButton>
-        <TwitterShareButton url={url} title={title} data-tip data-for="twitter">
-          <TwitterIcon
-            round={true}
-            size={shareIconSize}
-            style={shareIconStyle}
-          />
-        </TwitterShareButton>
-        <LinkedinShareButton url={url} data-tip data-for="linkedin">
-          <LinkedinIcon
-            round={true}
-            size={shareIconSize}
-            style={shareIconStyle}
-          />
-        </LinkedinShareButton>
-        <WhatsappShareButton
-          url={url}
-          title={title}
-          separator=": "
-          data-tip
-          data-for="whatsapp"
-        >
-          <WhatsappIcon
-            round={true}
-            size={shareIconSize}
-            style={shareIconStyle}
-          />
-        </WhatsappShareButton>
-        <TelegramShareButton
-          url={url}
-          title={title}
-          data-tip
-          data-for="telegram"
-        >
-          <TelegramIcon
-            round={true}
-            size={shareIconSize}
-            style={shareIconStyle}
-          />
-        </TelegramShareButton>
-      </StyledShareButtonsContainer>
-    </StyledContainer>
+              {strings.share.shareTexts.copyToClipboard}
+            </StyledCTAButton>
+
+            <AnimatePresence>
+              {isCopied && (
+                <StyledCopiedToClipboardText
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.3, type: 'tween' }}
+                >
+                  {strings.share.shareTexts.copiedToClipboard}
+                </StyledCopiedToClipboardText>
+              )}
+            </AnimatePresence>
+          </StyledButtonColumn>
+            
+          <StyledButtonColumn>
+            <StyledCTAButton onClick={handleEmail}>
+              <FontAwesomeIcon icon={faEnvelope} />
+              {strings.share.shareTexts.sendEmail}
+            </StyledCTAButton>
+          </StyledButtonColumn>
+        </StyledActionButtons>
+
+      </StyledPopupWrapper>
   );
 };
-
-export default ShareWebSitePopup;

@@ -1196,10 +1196,16 @@
     "title": "Share this page",
     "shareTexts": {
       "title": "Suomen väylät - map link",
+      "shareDescription": "Share language, zoom level, focus, selected datasets and dataset transparency.",
       "emailBody": "Map link:",
       "copiedToClipboard": "Copied to clipboard",
       "linkTitle": "Shared link:",
-      "descTitle": "Shared attributes:"
+      "showOpenLayersTitle": "Open map layers that can be shared",
+      "showOpenLayersCount": "{count} layers",
+      "showOpenLayers": "Show layers",
+      "hideOpenLayers": "Hide layers",
+      "copyToClipboard": "Copy to clipboard",
+      "sendEmail": "Send by email"
     },
     "shareDescriptions": {
       "currentZoomLevel": "Zoom-level",
