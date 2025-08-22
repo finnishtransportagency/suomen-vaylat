@@ -192,7 +192,7 @@ const SearchInputs = ({ setDropdownOpen }) => {
       return;
     }
     setSimpleError('');
-    if (activeSwitch == 'layer') {
+    if (activeSwitch === 'layer') {
       handleMetadataSearch(searchValue.trim());
       return;
     } else {

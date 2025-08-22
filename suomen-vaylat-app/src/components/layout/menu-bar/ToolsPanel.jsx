@@ -1,10 +1,9 @@
 import { useState, useContext, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
-import { ReactReduxContext } from 'react-redux';
+import { ReactReduxContext, useSelector } from 'react-redux';
 import {
   faEraser,
-  faMapMarkerAlt,
   faCloudUploadAlt,
   faCamera,
   faDownload,
@@ -14,7 +13,6 @@ import {
   faArrowLeft
 } from '@fortawesome/free-solid-svg-icons';
 
-import { useSelector } from 'react-redux';
 import strings from '../../../translations';
 import {
   setActiveTool,

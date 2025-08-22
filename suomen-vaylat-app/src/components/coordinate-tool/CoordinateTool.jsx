@@ -1,7 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
 import styled from 'styled-components';
-import { FormControlLabel } from '@mui/material';
-import ReactSelect from 'react-select';
 import strings from '../../translations';
 import { useSelector } from 'react-redux';
 import { ReactReduxContext } from 'react-redux';

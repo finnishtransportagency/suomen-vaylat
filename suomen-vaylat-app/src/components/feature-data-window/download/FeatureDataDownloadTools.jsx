@@ -28,7 +28,6 @@ import {
   setWarning,
   setIsSaveViewOpen,
   setIsGfiDownloadToolsOpen,
-  setIsGfiToolsOpen
 } from '../../../state/slices/uiSlice';
 import { Slide, toast } from 'react-toastify';
 import { GFI_GEOMETRY_LAYER_ID, MAX_RECONNECTIONS_FEATURE_DATA_DOWNLOAD } from '../../../utils/constants';

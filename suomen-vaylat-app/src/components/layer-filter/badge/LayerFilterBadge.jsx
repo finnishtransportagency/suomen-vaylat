@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { faFilter, faExpand, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faFilter, faExpand } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useAppSelector } from '../../../state/hooks';
 import { ReactReduxContext } from 'react-redux';

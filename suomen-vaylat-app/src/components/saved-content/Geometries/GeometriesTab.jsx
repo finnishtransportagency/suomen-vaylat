@@ -200,11 +200,6 @@ const StyledLeftContent = styled.div`
   align-items: center;
 `;
 
-const StyledRightContent = styled.div`
-  display: flex;
-  align-items: center;
-`;
-
 const StyledGeometryTitleContent = styled.div`
   height: 100%;
   display: flex;

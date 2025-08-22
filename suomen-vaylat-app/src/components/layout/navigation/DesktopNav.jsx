@@ -10,7 +10,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import { useRef, useState, useContext, useEffect } from 'react';
+import { useRef, useContext, useEffect } from 'react';
 import { useAppSelector } from '../../../state/hooks';
 import { ReactReduxContext } from 'react-redux';
 import strings from '../../../translations';
@@ -126,14 +126,6 @@ const MenuDivider = styled.hr`
   height: 1px;
   background: ${(props) => props.theme.colors.lightGrey || '#eee'};
   margin: 0px 5px;
-`;
-
-const ProfileNameSpan = styled.span`
-  color: ${(props) => props.theme.colors.mainWhite};
-  font-weight: 500;
-  font-size: 15px;
-  margin-right: 2px;
-  margin-left: 6px;
 `;
 
 const DesktopNav = ({ setIsMenuOpen, isMenuOpen }) => {

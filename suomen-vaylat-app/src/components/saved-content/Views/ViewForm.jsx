@@ -97,12 +97,6 @@ const StyledCharCounter = styled.span`
   letter-spacing: 0.5px;
 `;
 
-const StyledWarning = styled.div`
-  color: #d83131;
-  font-size: 12px;
-  margin-top: 2px;
-  align-self: flex-end;
-`;
 
 const StyledSwitchRow = styled.div`
   display: flex;

@@ -114,7 +114,6 @@ const Badge = ({
       bg={bg}
       color={color}
       id={baseId}
-      role="region"
       aria-labelledby={titleId}
       aria-expanded={expanded}
       initial={{ y: 50, filter: 'blur(10px)', opacity: 0 }}
@@ -140,7 +139,6 @@ const Badge = ({
           aria-expanded={expanded}
           aria-label={typeof title === 'string' ? title : undefined}
           title={typeof title === 'string' ? title : undefined}
-          role="heading"
           aria-level={3}
           onClick={() => setExpanded((e) => !e)}
         >
@@ -156,7 +154,6 @@ const Badge = ({
           ))}
         <StyledCloseButton
           id={closeBtnId}
-          role="button"
           aria-label="Close badge"
           tabIndex={0}
           onClick={closeAction}

@@ -139,11 +139,6 @@ const StyledLeftContent = styled.div`
   align-items: center;
 `;
 
-const StyledRightContent = styled.div`
-  display: flex;
-  align-items: center;
-`;
-
 const StyledSavedViewTitleContent = styled.div`
   display: flex;
   flex-direction: column;

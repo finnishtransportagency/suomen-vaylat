@@ -100,7 +100,7 @@ export const SavedContent = () => {
   const inputEl = useRef(null);
 
   const { store } = useContext(ReactReduxContext);
-  const { savedTab, showSavedContentGeometryForm } = useAppSelector(
+  const { savedTab } = useAppSelector(
     (state) => state.ui
   );
   const { isLoggedIn } = useAppSelector((state) => state.rpc);

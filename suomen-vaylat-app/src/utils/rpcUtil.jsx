@@ -21,7 +21,6 @@ import {
   addToActiveGeometries,
   setIsSaveViewOpen
 } from '../state/slices/uiSlice';
-import { isMobile } from '../theme/theme';
 import strings from '../translations';
 import { ANNOUNCEMENTS_LOCALSTORAGE } from '../utils/constants';
 

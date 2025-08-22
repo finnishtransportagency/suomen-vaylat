@@ -1,8 +1,7 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { useAppSelector } from '../../state/hooks';
 import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
-import ReactTooltip from 'react-tooltip';
 
 import LayersIcon from '@mui/icons-material/Layers';
 import { faCopy, faEnvelope, faLayerGroup, faChevronDown } from '@fortawesome/free-solid-svg-icons';
@@ -242,7 +241,7 @@ export const StyledShareDescription = ({
  * Shows ShareWebSitePopup if shareUrl is defined in Redux state.
  */
 export const ShareWebSitePopup = () => {
-  const { center, currentZoomLevel, selectedLayers, legends, selectedTheme } =
+  const { center, currentZoomLevel, selectedLayers, legends } =
     useAppSelector((state) => state.rpc);
 
   const { shareUrl } = useAppSelector((state) => state.ui);

@@ -13,7 +13,7 @@ export const validateFeatureSearch = (
   requireAll = false
 ) => {
   const newErrors = [];
-  const regex = /[^A-Za-z0-9äöåÄÖÅ \-\/.,()]/;
+  const regex = /[^A-Za-z0-9äöåÄÖÅ \-/.,()]/;
   if (requireAll && searchValue.length < 3) {
     newErrors.push('length');
   }
@@ -50,7 +50,7 @@ export const removeMarkersAndFeatures = (channel) => {
 
 export const validateSimpleSearch = (searchValue, requireAll = false) => {
   const value = (searchValue || '').trim();
-  const allowed = /^[A-Za-z0-9äöåÄÖÅ ,.\-\/]+$/;
+  const allowed = /^[A-Za-z0-9äöåÄÖÅ ,.\-/]+$/;
 
   // translation helper (fallback to English)
   const t = (key, fallback) => {

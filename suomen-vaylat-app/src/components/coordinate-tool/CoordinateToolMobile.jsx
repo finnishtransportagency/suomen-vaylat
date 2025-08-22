@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { theme } from '../../theme/theme';
-import React, { useState, useContext, useEffect } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import styled from 'styled-components';
 import { FormControlLabel } from '@mui/material';
 import ReactSelect from 'react-select';
@@ -89,17 +89,6 @@ const StyledAddMarkerButton = styled.button`
         ? props.theme.colors.darkGrey
         : props.theme.colors.mainColor1Selected};
   }
-`;
-
-const StyledSelect = styled(ReactSelect)`
-  .react-select__control {
-    border-radius: 4px;
-  }
-`;
-
-const StyledFormControlLabel = styled(FormControlLabel)`
-  align-items: center;
-  color: #333;
 `;
 
 const ButtonContainer = styled.div`

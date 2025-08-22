@@ -87,7 +87,7 @@ const StyledGroupsContainer = styled.div`
   padding: 8px 4px 8px 8px;
 `;
 
-export const Legend = ({}) => {
+export const Legend = () => {
   const legends = [];
   const noLegends = [];
   const { store } = useContext(ReactReduxContext);

@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import strings from '../../../translations';
 import { useAppSelector } from '../../../state/hooks';
-import { useContext, useEffect } from 'react';
+import { useContext } from 'react';
 import { faMagnifyingGlass, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { validateTrackSearch } from '../utils/SearchUtil';

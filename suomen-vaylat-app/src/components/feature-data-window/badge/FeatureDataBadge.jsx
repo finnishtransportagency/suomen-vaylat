@@ -49,7 +49,7 @@ const addFeaturesToMapParams = {
 const FeatureDataBadge = () => {
   const { store } = useContext(ReactReduxContext);
   const [activeGeometries, setActiveGeometries] = useState(true);
-  const { channel, gfiLocations, filteringInfo } = useAppSelector(
+  const { channel, gfiLocations } = useAppSelector(
     (state) => state.rpc
   );
   const { activeTool } = useAppSelector((state) => state.ui);

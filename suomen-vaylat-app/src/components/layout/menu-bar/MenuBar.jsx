@@ -1,13 +1,9 @@
 import { useState, useContext, useEffect } from 'react';
 import strings from '../../../translations';
 import {
-  faCompress,
-  faExpand,
   faLayerGroup,
   faMapMarkedAlt,
-  faDownload,
   faMap,
-  faSave,
   faTimes
 } from '@fortawesome/free-solid-svg-icons';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -20,16 +16,13 @@ import { useAppSelector } from '../../../state/hooks';
 import {
   setIsDrawingToolsOpen,
   setIsSideMenuOpen,
-  setIsSaveViewOpen,
   setIsGfiOpen,
   setActiveTool,
   setMinimizeGfi,
-  setIsGfiDownloadOpen,
   setGeoJsonArray,
   setSelectedMarker,
   setIsThemeMenuOpen,
   removeFromDrawToolMarkers,
-  setSavedTab
 } from '../../../state/slices/uiSlice';
 import {
   removeMarkerRequest,
@@ -37,7 +30,6 @@ import {
 } from '../../../state/slices/rpcSlice';
 
 import CircleButton from '../../../utils/components/CircleButton';
-import DrawingTools from '../../measurement-tools/DrawingTools';
 import ArrowDropDownCircleIcon from '@mui/icons-material/ArrowDropDownCircle';
 import { isMobile } from '../../../theme/theme';
 import ToolsPanel from './ToolsPanel';

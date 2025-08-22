@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
 import ReactTooltip from 'react-tooltip';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { theme, isMobile } from '../../theme/theme';
+import { isMobile } from '../../theme/theme';
 
 const StyledCircleButton = styled(motion.button)`
     border: none;

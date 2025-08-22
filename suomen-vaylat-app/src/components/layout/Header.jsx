@@ -1,4 +1,4 @@
-import { useContext, useState, useRef, useCallback } from 'react';
+import { useContext, useState, useCallback } from 'react';
 import { ReactReduxContext } from 'react-redux';
 import ReactTooltip from 'react-tooltip';
 import { theme, isMobile } from '../../theme/theme';
