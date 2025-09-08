@@ -735,7 +735,7 @@ export const rpcSlice = createSlice({
      * @param {Object} action
      */
     setGFILocations: (state, action) => {
-       state.gfiLocations = action.payload;
+      state.gfiLocations = action.payload;
     },
 
     /**
@@ -1016,16 +1016,16 @@ export const rpcSlice = createSlice({
     setUserLayers: (state, action) => {
       state.userLayers = action.payload;
     },
-  
-     /**
-      * Push GFI locations.
-      * @method pushGFILocations
-      * @param {Object} state
-      * @param {Object} action
-      */
-     pushGFILocations: (state, action) => {
-	       state.gfiLocations.push(action.payload);
-     },
+
+    /**
+     * Push GFI locations.
+     * @method pushGFILocations
+     * @param {Object} state
+     * @param {Object} action
+     */
+    pushGFILocations: (state, action) => {
+      state.gfiLocations.push(action.payload);
+    }
   }
 });
 

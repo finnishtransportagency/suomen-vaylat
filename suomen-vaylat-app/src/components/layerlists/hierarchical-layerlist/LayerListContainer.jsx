@@ -185,9 +185,9 @@ const LayerListContainer = ({ groups, layers, tags }) => {
     store.dispatch(setSelectedCustomFilterLayers([]));
   };
 
-  // Add omat aineistot group
+  // Add userlayers group
   const userlayerGroup = {
-    id: 'userlayers', // must be unique and NOT collide with any numeric id
+    id: 'userlayers',
     parentId: -1,
     locale: {
       fi: { name: 'Omat aineistot' },
