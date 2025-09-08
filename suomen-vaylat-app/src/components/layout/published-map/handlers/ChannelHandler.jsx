@@ -31,7 +31,7 @@ const ChannelHandler = ({ iframe, store }) => {
     const storedViews = window.localStorage.getItem('views');
     const viewsArray = JSON.parse(storedViews);
     if (storedViews) store.dispatch(setViews(viewsArray));
-    const defaultView = viewsArray.find(view => view.default);
+    const defaultView = viewsArray?.find(view => view.default);
     defaultView && activateView(store, channel, defaultView);
     //
   });
