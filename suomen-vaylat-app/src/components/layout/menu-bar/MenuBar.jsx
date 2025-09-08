@@ -272,8 +272,10 @@ const MenuBar = () => {
                   text={strings.layerlist.layerlistLabels.themeLayers}
                   toggleState={isThemeMenuOpen}
                   tooltipDirection={'right'}
-                  clickAction={() =>
-                    store.dispatch(setIsThemeMenuOpen(!isThemeMenuOpen))
+                  clickAction={() => {
+                      store.dispatch(setIsSideMenuOpen(false))
+                      store.dispatch(setIsThemeMenuOpen(!isThemeMenuOpen))
+                    }
                   }
                   aria-label={strings.layerlist?.layerlistLabels?.themeLayers}
                 />
@@ -283,8 +285,10 @@ const MenuBar = () => {
                   text={strings.layerlist.layerlistLabels.mapLayers}
                   toggleState={isSideMenuOpen}
                   tooltipDirection={'right'}
-                  clickAction={() =>
-                    store.dispatch(setIsSideMenuOpen(!isSideMenuOpen))
+                  clickAction={() => {
+                      store.dispatch(setIsThemeMenuOpen(false))
+                      store.dispatch(setIsSideMenuOpen(!isSideMenuOpen))
+                    }
                   }
                   aria-label={strings.layerlist?.layerlistLabels?.mapLayers}
                 >
