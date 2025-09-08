@@ -71,12 +71,13 @@ const initialState = {
   featureErrors: [],
   searchResults: null,
   searchValue: '',
-  searchType: "address",
+  searchType: 'address',
   isSearchingActive: false,
   lastSearchValue: '',
   firstSearchResultShown: false,
   // TODO: waiting for logging in option
-  isLoggedIn: false
+  isLoggedIn: false,
+  userLayers: []
 };
 
 export const rpcSlice = createSlice({
@@ -1004,6 +1005,16 @@ export const rpcSlice = createSlice({
 
     setFirstSearchResultShown: (state, action) => {
       state.firstSearchResultShown = action.payload;
+    },
+
+    /**
+     * Set user layers.
+     * @method setUserLayers
+     * @param {Object} state
+     * @param {Object} action
+     */
+    setUserLayers: (state, action) => {
+      state.userLayers = action.payload;
     }
   }
 });
@@ -1082,7 +1093,8 @@ export const {
   setSearchType,
   setIsSearchingActive,
   setLastSearchValue,
-  setFirstSearchResultShown
+  setFirstSearchResultShown,
+  setUserLayers
 } = rpcSlice.actions;
 
 export default rpcSlice.reducer;

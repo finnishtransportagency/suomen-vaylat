@@ -11,7 +11,8 @@ import {
   getLegends,
   setLegends,
   addMarkerRequest,
-  removeMarkerRequest
+  removeMarkerRequest,
+  setUserLayers
 } from '../state/slices/rpcSlice';
 import { Slide, toast } from 'react-toastify';
 import {
@@ -197,7 +198,11 @@ export const updateAllLayers = (store, channel) => {
   channel &&
     channel.getAllLayersSV(
       function (data) {
+        const userLayers = data.filter(
+          (l) => typeof l.id === 'string' && l.id.startsWith('userlayer_')
+        );
         store.dispatch(setAllLayers(data));
+        store.dispatch(setUserLayers(userLayers));
       },
       function err(data) {
         toast.error(strings.layerlist.errorLoadingLayers, {
