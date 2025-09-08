@@ -115,23 +115,44 @@ const FeatureDataTabContentItem = ({
     const [orderLow, setOrderLow] = useState(null);
     const { channel } = useAppSelector(state => state.rpc);
 
+    // === Structure detection! ===
+    const isGeojson = !!data.properties;
+    const isFlatGeojson = !!data.geojson && typeof data.geojson === 'object' && !Array.isArray(data.geojson);
+
+    // Use these for flat objects (table rows):
+    const dataFields = isFlatGeojson
+        ? Object.keys(data.geojson).filter(
+            key => key !== 'id' && key !== 'UID'   // Exclude if needed
+        )
+        : [];
+
     useEffect(() => {
-        const hightPriorityFields = data.properties._orderHigh && JSON.parse(data.properties._orderHigh);
-        const lowPriorityFields = data.properties._order && JSON.parse(data.properties._order);
+        if (isGeojson) {
+            const hightPriorityFields = data.properties._orderHigh && JSON.parse(data.properties._orderHigh);
+            const lowPriorityFields = data.properties._order && JSON.parse(data.properties._order);
 
-        if (hightPriorityFields.length > 0) {
-            hightPriorityFields && setOrderHigh(hightPriorityFields);
-            lowPriorityFields && lowPriorityFields.length > 0 && setOrderLow(lowPriorityFields);
-        } else if (lowPriorityFields.length > 0) {
-            setOrderHigh(lowPriorityFields);
-        }
-    }, [data]);
-
-    const formattedContent = (data) => {
-        if (isValidUrl(data)) {
-            return (<StyledLinkText target="_blank" rel="noreferrer" href={data}>{data}</StyledLinkText>);
+            if (hightPriorityFields && hightPriorityFields.length > 0) {
+                setOrderHigh(hightPriorityFields);
+                lowPriorityFields && lowPriorityFields.length > 0 && setOrderLow(lowPriorityFields);
+            } else if (lowPriorityFields && lowPriorityFields.length > 0) {
+                setOrderHigh(lowPriorityFields);
+                setOrderLow(null);
+            }
         } else {
-            return (<StyledPropertyValue dangerouslySetInnerHTML={{ __html: typeof(data) === "string" ? data.replace(/\n/g, '<br />') : data}}/>)
+            setOrderHigh(null);
+            setOrderLow(null);
+        }
+    }, [data, isGeojson]);
+
+    const formattedContent = (value) => {
+        if (isValidUrl(value)) {
+            return (<StyledLinkText target="_blank" rel="noreferrer" href={value}>{value}</StyledLinkText>);
+        } else {
+            return (
+                <StyledPropertyValue 
+                    dangerouslySetInnerHTML={{ __html: typeof(value) === "string" ? value.replace(/\n/g, '<br />') : value}} 
+                />
+            );
         }
     };
 
@@ -139,11 +160,11 @@ const FeatureDataTabContentItem = ({
         <StyledGfiTabContentItem
             onMouseEnter={() => {
                 setHovered(true);
-                selectFeature(channel, [data]);
+                if (selectFeature && isGeojson) selectFeature(channel, [data]);
             }}
             onMouseLeave={() => {
                 setHovered(false);
-                deSelectFeature(channel, [data]);
+                if (deSelectFeature && isGeojson) deSelectFeature(channel, [data]);
             }}
             animate={{
                 backgroundColor: isHovered ? '#f0f0f0' : '#ffffff',
@@ -173,24 +194,15 @@ const FeatureDataTabContentItem = ({
             <AnimatePresence>
                 {isExpanded && (
                     <StyledGfiTabContentItemCollapseContent
-                        initial={{
-                            height: 0,
-                            opacity: 0,
-                        }}
-                        animate={{
-                            height: 'auto',
-                            opacity: 1,
-                        }}
-                        exit={{
-                            height: 0,
-                            opacity: 0,
-                        }}
-                        transition={{
-                            duration: 0.3,
-                            type: 'tween',
-                        }}
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.3, type: 'tween' }}
                     >
-                        <StyledGfiTabContentItemTable>
+                        {/* === GEOJSON properties version === */}
+                        {isGeojson ? (
+                            <>
+                                <StyledGfiTabContentItemTable>
                             <tbody>
                                 {orderHigh ? orderHigh.filter(value => value !== 'UID').map(value => (
                                     <StyledGfiTabContentItemTableRow key={value + '_' + data.properties[value]}>
@@ -266,6 +278,37 @@ const FeatureDataTabContentItem = ({
                                     )}
                                 </AnimatePresence>
                             </>
+                        )}
+                            </>
+                        ) 
+                        : isFlatGeojson ? (
+                            /* === FLAT new table/JSON version (data.geojson) === */
+                            <StyledGfiTabContentItemTable>
+                                <tbody>
+                                    {dataFields.map((field) => (
+                                        <StyledGfiTabContentItemTableRow key={field + '_' + data.geojson[field]}>
+                                            <StyledGfiTabContentItemTableHeader>{field}</StyledGfiTabContentItemTableHeader>
+                                            <StyledGfiTabContentItemTableData>
+                                                {formattedContent(data.geojson[field])}
+                                            </StyledGfiTabContentItemTableData>
+                                        </StyledGfiTabContentItemTableRow>
+                                    ))}
+                                </tbody>
+                            </StyledGfiTabContentItemTable>
+                        ) : (
+                            /* fallback for very unusual shaped data */
+                            <StyledGfiTabContentItemTable>
+                                <tbody>
+                                    {Object.keys(data).filter(key => key !== 'id').map((key) => (
+                                        <StyledGfiTabContentItemTableRow key={key + '_' + data[key]}>
+                                            <StyledGfiTabContentItemTableHeader>{key}</StyledGfiTabContentItemTableHeader>
+                                            <StyledGfiTabContentItemTableData>
+                                                {formattedContent(data[key])}
+                                            </StyledGfiTabContentItemTableData>
+                                        </StyledGfiTabContentItemTableRow>
+                                    ))}
+                                </tbody>
+                            </StyledGfiTabContentItemTable>
                         )}
                     </StyledGfiTabContentItemCollapseContent>
                 )}

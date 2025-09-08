@@ -28,13 +28,13 @@ import { ReactComponent as SvLinestring } from '../../../theme/icons/drawtools_l
 import { theme } from '../../../theme/theme';
 
 import {
-    setGFILocations,
+    pushGFILocations,
     resetGFILocations,
     setGFICroppingArea,
     setVKMData
 } from '../../../state/slices/rpcSlice';
 
-import { setMinimizeGfi, setSelectedGfiTool, setGeoJsonArray, setHasToastBeenShown, setWarning, setActiveSelectionTool, setActiveTool } from '../../../state/slices/uiSlice';
+import { setMinimizeGfi, setSelectedGfiTool, setGeoJsonArray, setHasToastBeenShown, setWarning, setActiveSelectionTool } from '../../../state/slices/uiSlice';
 
 import SVLoader from '../../../utils/components/SvLoader';
 import { DRAWING_TIP_LOCALSTORAGE, GFI_GEOMETRY_LAYER_ID, BODY_SIZE_EXCEED, GENERAL_FAIL, VECTOR_LAYER_ID} from '../../../utils/constants';
@@ -431,7 +431,6 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
                     style: style,
                 },
             ];
-            store.dispatch(setActiveTool('gfi-selection-tool'));
             channel.postRequest('DrawTools.StartDrawingRequest', data);
             isGfiOpen && store.dispatch(setMinimizeGfi(true));
             if(showToast !== false && !hasToastBeenShown.includes('measurementToast')) {
@@ -591,7 +590,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
             }
         })
         return () => {isSubscribed = false}
-    }, [channel, activeTool])
+    }, [channel])
 
     useEffect(() => {
         store.dispatch(setActiveSelectionTool(null));
@@ -617,7 +616,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
                                 type: 'geojson',
                                 moreFeatures: gfi.content.some(content => content.moreFeatures),
                             }
-                            store.dispatch(setGFILocations(gfiLoc))
+                            store.dispatch(pushGFILocations(gfiLoc))
                         }
                     });
 

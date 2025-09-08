@@ -5,6 +5,7 @@ import {
   removeMarkerRequest,
   resetGFILocations,
   setGFILocations,
+	   pushGFILocations,
   setPointInfo,
   setVKMData,
   setGFICroppingArea,
@@ -70,7 +71,7 @@ const MapEventsHandler = ({ channel, store }) => {
     // TODO: have every mapclick put in a new marker, it's not working atm for some reason
     store.dispatch(setVKMData(null));
     store.dispatch(removeMarkerRequest({ markerId: 'VKM_MARKER' }));
-    store.dispatch(resetGFILocations([]));
+    //store.dispatch(resetGFILocations([]));
   });
 
   channel.handleEvent('DataForMapLocationEvent', (data) => {
@@ -130,7 +131,18 @@ const MapEventsHandler = ({ channel, store }) => {
       store.dispatch(setGFICroppingArea(croppingArea));
       store.getState().ui.minimizeGfi && store.dispatch(setMinimizeGfi(false));
       !store.getState().ui.isGfiOpen && store.dispatch(setIsGfiOpen(true));
-      store.dispatch(setGFILocations(data));
+ 
+       const currentGfiLocations = [...store.getState().rpc.gfiLocations]; // or wherever your gfiLocations live
+	       const newLayerId = data.layerId || (data.content && data.content[0] && data.content[0].layerId);
+ 
+       const alreadyPresent = currentGfiLocations.some(
+         loc => loc.layerId === newLayerId
+       );
+ 
+       if (alreadyPresent) {
+         store.dispatch(resetGFILocations([]));
+       } 
+       store.dispatch(pushGFILocations(data));
     }
   });
 
