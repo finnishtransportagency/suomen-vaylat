@@ -196,7 +196,6 @@ const MenuBar = () => {
     drawToolMarkers
   } = useAppSelector((state) => state.ui);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [noDownloadableLayers, setNoDownloadableLayers] = useState(false);
 
   const closeDrawingTools = (open) => {
     channel && channel.postRequest('DrawTools.StopDrawingRequest');
@@ -217,11 +216,6 @@ const MenuBar = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
     closeDrawingTools();
   };
-
-  useEffect(() => {
-    const onlyUserLayers = selectedLayersByType.mapLayers?.length === 0 || (selectedLayersByType.mapLayers?.length > 0 && selectedLayersByType.mapLayers.filter(l => typeof l.id === 'string' && l.id.startsWith('userlayer_')).length === selectedLayersByType.mapLayers.length);
-    setNoDownloadableLayers(onlyUserLayers);
-  }, [selectedLayersByType]);
 
   const MENU_ANIMATION = {
     hidden: { y: -50, opacity: 0 },
