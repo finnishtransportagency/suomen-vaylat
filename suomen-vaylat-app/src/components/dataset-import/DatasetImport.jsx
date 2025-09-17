@@ -27,6 +27,7 @@ const StyledMainContainer = styled.div`
   background: #f6f7fa;
   border-radius: 16px;
   position: relative;
+  background-color: white;
 `;
 
 const OverlaySpinner = styled.div`
@@ -146,6 +147,7 @@ const StyledSubmitButtonGroup = styled.div`
   @media ${(props) => props.theme.device.mobileL} {
     flex-direction: column;
   }
+  margin: 0px 32px 24px 32px;
 `;
 
 const StyledPrimaryButton = styled.button`
@@ -189,8 +191,6 @@ const StyledSecondaryButton = styled(StyledPrimaryButton)`
 `;
 
 function GeneralTabContent({
-  store,
-  handleSubmitDataset,
   fields,
   errors,
   lang,
@@ -200,7 +200,6 @@ function GeneralTabContent({
   fileError,
   setFileError,
   handleInput,
-  disableImport,
   isSubmitting
 }) {
   return (
@@ -456,30 +455,6 @@ function GeneralTabContent({
           )}
         </StyledLanguageGroup>
       )}
-      {/* Bottom action bar */}
-      <StyledSubmitButtonGroup id="import-dataset-submit-button-group">
-        <StyledSecondaryButton
-          type="button"
-          tabIndex={0}
-          id="import-dataset-cancel-button"
-          disabled={isSubmitting}
-          aria-disabled={isSubmitting}
-          onClick={() => store.dispatch(setIsDatasetImportOpen(false))}
-        >
-          {strings.datasetImport.cancel}
-        </StyledSecondaryButton>
-        <StyledPrimaryButton
-          type="button"
-          tabIndex={0}
-          id="import-dataset-import-button"
-          disabled={disableImport || isSubmitting}
-          aria-disabled={disableImport || isSubmitting}
-          onClick={handleSubmitDataset}
-        >
-          <FontAwesomeIcon icon={faUpload} />
-          {strings.datasetImport.import}
-        </StyledPrimaryButton>
-      </StyledSubmitButtonGroup>
     </>
   );
 }
@@ -677,8 +652,6 @@ const DatasetImport = () => {
           aria-labelledby="import-dataset-tab-general"
         >
           <GeneralTabContent
-            store={store}
-            handleSubmitDataset={handleSubmitDataset}
             fields={fields}
             errors={errors}
             lang={lang}
@@ -688,7 +661,6 @@ const DatasetImport = () => {
             fileError={fileError}
             setFileError={setFileError}
             handleInput={handleInput}
-            disableImport={disableImport}
             isSubmitting={isSubmitting}
           />
         </SwiperSlide>
@@ -704,6 +676,38 @@ const DatasetImport = () => {
           />
         </SwiperSlide>
       </StyledSwiper>
+
+      <StyledSubmitButtonGroup
+        id="import-dataset-submit-button-group-bottom"
+        aria-label="Import dataset actions"
+      >
+        <StyledSecondaryButton
+          type="button"
+          tabIndex={0}
+          id="import-dataset-cancel-button-bottom"
+          disabled={isSubmitting}
+          aria-disabled={isSubmitting}
+          onClick={() => {
+            // close import dialog and reset form
+            store.dispatch(setIsDatasetImportOpen(false));
+            resetForm();
+          }}
+        >
+          {strings.datasetImport.cancel}
+        </StyledSecondaryButton>
+
+        <StyledPrimaryButton
+          type="button"
+          tabIndex={0}
+          id="import-dataset-import-button-bottom"
+          disabled={disableImport || isSubmitting}
+          aria-disabled={disableImport || isSubmitting}
+          onClick={handleSubmitDataset}
+        >
+          <FontAwesomeIcon icon={faUpload} />
+          {strings.datasetImport.import}
+        </StyledPrimaryButton>
+      </StyledSubmitButtonGroup>
     </StyledMainContainer>
   );
 };
