@@ -57,7 +57,9 @@ const StyledTab = styled.div`
   width: 50%;
   cursor: pointer;
   color: ${(props) =>
-    props['aria-selected'] ? props.theme.colors.mainColor1 || '#0067b1' : '#656565'};
+    props['aria-selected']
+      ? props.theme.colors.mainColor1 || '#0067b1'
+      : '#656565'};
   text-align: center;
   transition: color 0.2s ease-out;
   display: flex;
@@ -72,6 +74,7 @@ const StyledTab = styled.div`
     padding: 10px;
   }
 `;
+
 const StyledSwiper = styled(Swiper)`
   .swiper-slide {
     background-color: #fff;
@@ -80,54 +83,60 @@ const StyledSwiper = styled(Swiper)`
   }
   transition: box-shadow 0.3s ease-out;
 `;
+
 const StyledFlexRow = styled.div`
   display: flex;
   align-items: center;
   margin-bottom: 8px;
   margin-top: 16px;
 `;
+
 const StyledLanguageCheckboxGroup = styled.div`
   display: flex;
   align-items: center;
   gap: 28px;
   margin-left: 6px;
 `;
+
 const StyledFormGroup = styled.div`
   display: flex;
   flex-direction: column;
 `;
+
 const StyledTextField = styled(TextField)`
   &.MuiTextField-root {
     margin-bottom: 4px;
     background: #fff;
   }
 `;
+
 const StyledLabel = styled(Typography)`
   font-weight: 500 !important;
   margin-bottom: 4px !important;
 `;
+
 const StyledLangSectionTitle = styled(Typography)`
   font-weight: bold !important;
   margin-bottom: 18px !important;
   margin-top: 0 !important;
 `;
+
 const StyledLanguageDivider = styled(Divider)`
   margin-bottom: 12px !important;
 `;
+
 const StyledLanguageGroup = styled.div`
   margin-top: 24px;
   margin-bottom: 16px;
 `;
+
 const StyledErrorMsg = styled(Typography)`
   color: #d32f2f !important;
   font-size: 12px !important;
   margin: 0 0 10px 0 !important;
   padding: 0 !important;
 `;
-const StyledLink = styled(Link)`
-  color: #2285d7 !important;
-  font-weight: 500 !important;
-`;
+
 const StyledSubmitButtonGroup = styled.div`
   display: flex;
   justify-content: flex-start;
@@ -138,6 +147,7 @@ const StyledSubmitButtonGroup = styled.div`
     flex-direction: column;
   }
 `;
+
 const StyledPrimaryButton = styled.button`
   min-width: 180px;
   height: 40px;
@@ -163,6 +173,7 @@ const StyledPrimaryButton = styled.button`
     font-size: 18px;
   }
 `;
+
 const StyledSecondaryButton = styled(StyledPrimaryButton)`
   background-color: ${({ theme }) => theme.colors.mainWhite};
   color: ${({ theme }) => theme.colors.mainColor1};
@@ -177,7 +188,6 @@ const StyledSecondaryButton = styled(StyledPrimaryButton)`
   }
 `;
 
-// -------------- GeneralTabContent ----------------
 function GeneralTabContent({
   store,
   handleSubmitDataset,
@@ -237,11 +247,15 @@ function GeneralTabContent({
           InputLabelProps={{ shrink: true }}
         />
         {errors.fi.name && (
-          <StyledErrorMsg id="import-dataset-finnish-layerName-error">{strings.datasetImport.validationMsg}</StyledErrorMsg>
+          <StyledErrorMsg id="import-dataset-finnish-layerName-error">
+            {strings.datasetImport.validationMsg}
+          </StyledErrorMsg>
         )}
       </StyledFormGroup>
       <StyledFormGroup>
-        <StyledLabel as="label" htmlFor="import-dataset-finnish-desc">{strings.datasetImport.desc}</StyledLabel>
+        <StyledLabel as="label" htmlFor="import-dataset-finnish-desc">
+          {strings.datasetImport.desc}
+        </StyledLabel>
         <StyledTextField
           id="import-dataset-finnish-desc"
           value={fields.fi.desc}
@@ -252,11 +266,15 @@ function GeneralTabContent({
           InputLabelProps={{ shrink: true }}
         />
         {errors.fi.desc && (
-          <StyledErrorMsg id="import-dataset-finnish-desc-error">{strings.datasetImport.validationMsg}</StyledErrorMsg>
+          <StyledErrorMsg id="import-dataset-finnish-desc-error">
+            {strings.datasetImport.validationMsg}
+          </StyledErrorMsg>
         )}
       </StyledFormGroup>
       <StyledFormGroup>
-        <StyledLabel as="label" htmlFor="import-dataset-finnish-source">{strings.datasetImport.source}</StyledLabel>
+        <StyledLabel as="label" htmlFor="import-dataset-finnish-source">
+          {strings.datasetImport.source}
+        </StyledLabel>
         <StyledTextField
           id="import-dataset-finnish-source"
           value={fields.fi.source}
@@ -267,7 +285,9 @@ function GeneralTabContent({
           InputLabelProps={{ shrink: true }}
         />
         {errors.fi.source && (
-          <StyledErrorMsg id="import-dataset-finnish-source-error">{strings.datasetImport.validationMsg}</StyledErrorMsg>
+          <StyledErrorMsg id="import-dataset-finnish-source-error">
+            {strings.datasetImport.validationMsg}
+          </StyledErrorMsg>
         )}
       </StyledFormGroup>
       {/* Language selection */}
@@ -281,7 +301,10 @@ function GeneralTabContent({
           </span>
         </Tooltip>
       </StyledFlexRow>
-      <StyledLanguageCheckboxGroup role="group" aria-labelledby="import-dataset-language-checkbox-row">
+      <StyledLanguageCheckboxGroup
+        role="group"
+        aria-labelledby="import-dataset-language-checkbox-row"
+      >
         <FormControlLabel
           control={
             <Checkbox
@@ -309,7 +332,10 @@ function GeneralTabContent({
       {lang.sv && (
         <StyledLanguageGroup>
           <StyledLanguageDivider />
-          <StyledLangSectionTitle variant="subtitle2" id="import-dataset-swedish-section">
+          <StyledLangSectionTitle
+            variant="subtitle2"
+            id="import-dataset-swedish-section"
+          >
             {strings.datasetImport.swedishSectionTitle}
           </StyledLangSectionTitle>
           <StyledLabel as="label" htmlFor="import-dataset-swedish-layerName">
@@ -330,7 +356,9 @@ function GeneralTabContent({
               {strings.datasetImport.validationMsg}
             </StyledErrorMsg>
           )}
-          <StyledLabel as="label" htmlFor="import-dataset-swedish-desc">{strings.datasetImport.swedishDesc}</StyledLabel>
+          <StyledLabel as="label" htmlFor="import-dataset-swedish-desc">
+            {strings.datasetImport.swedishDesc}
+          </StyledLabel>
           <StyledTextField
             id="import-dataset-swedish-desc"
             value={fields.sv.desc}
@@ -345,7 +373,9 @@ function GeneralTabContent({
               {strings.datasetImport.validationMsg}
             </StyledErrorMsg>
           )}
-          <StyledLabel as="label" htmlFor="import-dataset-swedish-source">{strings.datasetImport.swedishSource}</StyledLabel>
+          <StyledLabel as="label" htmlFor="import-dataset-swedish-source">
+            {strings.datasetImport.swedishSource}
+          </StyledLabel>
           <StyledTextField
             id="import-dataset-swedish-source"
             value={fields.sv.source}
@@ -366,7 +396,10 @@ function GeneralTabContent({
       {lang.en && (
         <StyledLanguageGroup>
           <StyledLanguageDivider />
-          <StyledLangSectionTitle variant="subtitle2" id="import-dataset-english-section">
+          <StyledLangSectionTitle
+            variant="subtitle2"
+            id="import-dataset-english-section"
+          >
             {strings.datasetImport.englishSectionTitle}
           </StyledLangSectionTitle>
           <StyledLabel as="label" htmlFor="import-dataset-english-layerName">
@@ -387,7 +420,9 @@ function GeneralTabContent({
               {strings.datasetImport.validationMsg}
             </StyledErrorMsg>
           )}
-          <StyledLabel as="label" htmlFor="import-dataset-english-desc">{strings.datasetImport.englishDesc}</StyledLabel>
+          <StyledLabel as="label" htmlFor="import-dataset-english-desc">
+            {strings.datasetImport.englishDesc}
+          </StyledLabel>
           <StyledTextField
             id="import-dataset-english-desc"
             value={fields.en.desc}
@@ -402,7 +437,9 @@ function GeneralTabContent({
               {strings.datasetImport.validationMsg}
             </StyledErrorMsg>
           )}
-          <StyledLabel as="label" htmlFor="import-dataset-english-source">{strings.datasetImport.englishSource}</StyledLabel>
+          <StyledLabel as="label" htmlFor="import-dataset-english-source">
+            {strings.datasetImport.englishSource}
+          </StyledLabel>
           <StyledTextField
             id="import-dataset-english-source"
             value={fields.en.source}
@@ -499,7 +536,7 @@ const DatasetImport = () => {
     setLang({ en: false, sv: false });
     setSelectedTab(0);
     setStyle({});
-    setStyleEditorKey(k => k + 1);
+    setStyleEditorKey((k) => k + 1);
   };
 
   const handleSubmitDataset = () => {
@@ -535,31 +572,31 @@ const DatasetImport = () => {
               setIsSubmitting(false);
               resetForm();
               toast.success(`success`, {
-                    position: "top-center",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "colored",
-                    transition: Slide
-                });
+                position: 'top-center',
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: 'colored',
+                transition: Slide
+              });
             },
             (data) => {
               setIsSubmitting(false);
               setUploadedFile(null);
               toast.error(`${data}`, {
-                    position: "top-center",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "colored",
-                    transition: Slide
-                });
+                position: 'top-center',
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: 'colored',
+                transition: Slide
+              });
             }
           );
         });
@@ -591,11 +628,20 @@ const DatasetImport = () => {
   return (
     <StyledMainContainer>
       {isSubmitting && (
-        <OverlaySpinner id="import-dataset-spinner" role="status" aria-live="polite" aria-label="Uploading">
+        <OverlaySpinner
+          id="import-dataset-spinner"
+          role="status"
+          aria-live="polite"
+          aria-label="Uploading"
+        >
           <CircularProgress size={62} thickness={4} />
         </OverlaySpinner>
       )}
-      <StyledTabs role="tablist" aria-label={strings.datasetImport.title} id="import-dataset-tablist">
+      <StyledTabs
+        role="tablist"
+        aria-label={strings.datasetImport.title}
+        id="import-dataset-tablist"
+      >
         <StyledTab
           id="import-dataset-tab-general"
           type="button"
