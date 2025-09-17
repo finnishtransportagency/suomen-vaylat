@@ -177,6 +177,7 @@ const ColorPicker = ({ id, value, onChange, ariaLabel }) => {
       <StyledColorPickerWrapper>
         <StyledColorActionButton
           type="button"
+          id="import-color-picker-color-action-button"
           aria-label={
             ariaLabel ? `${ariaLabel} - open color picker` : 'Open color picker'
           }
@@ -185,8 +186,8 @@ const ColorPicker = ({ id, value, onChange, ariaLabel }) => {
           <FontAwesomeIcon icon={faFillDrip} />
         </StyledColorActionButton>
 
-        <StyledColorWrapper>
-          <StyledInputContainer>
+        <StyledColorWrapper id="import-color-picker-color-wrapper">
+          <StyledInputContainer id="import-color-picker-input-container">
             <StyledHexInput
               id={id}
               type="text"
@@ -200,6 +201,7 @@ const ColorPicker = ({ id, value, onChange, ariaLabel }) => {
 
             <StyledColorSwatch
               type="button"
+              id="import-color-picker-color-swatch"
               color={isValidHex(hex) ? normalizeHex(hex) : value || '#000000'}
               aria-label={`${ariaLabel ? ariaLabel + ' - ' : ''}swatch`}
               onClick={openPicker}
@@ -211,8 +213,8 @@ const ColorPicker = ({ id, value, onChange, ariaLabel }) => {
 
       {open &&
         ReactDOM.createPortal(
-          <StyledPickerOverlay role="dialog" aria-modal="true" onClick={closePicker}>
-            <StyledPickerBox onClick={(e) => e.stopPropagation()} ref={pickerRef}>
+          <StyledPickerOverlay id="import-color-picker-color-picker-overlay" role="dialog" aria-modal="true" onClick={closePicker}>
+            <StyledPickerBox id="import-color-picker-color-picker-boxr" onClick={(e) => e.stopPropagation()} ref={pickerRef}>
               <SketchPicker
                 color={isValidHex(hex) ? normalizeHex(hex) : value || '#000000'}
                 onChange={handlePickerChange}

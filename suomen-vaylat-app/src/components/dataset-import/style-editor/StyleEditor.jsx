@@ -414,7 +414,7 @@ export default function StyleEditor({ initialStyle = {}, onChange }) {
                 {seStrings.dot?.color?.label || 'Colour'}:
               </Label>
               <ColorPicker
-                id={ids.pointColor}
+                id={ids.pointColor + "-color-picker"}
                 value={pointColor}
                 onChange={setPointColor}
                 ariaLabel={seStrings.dot?.color?.label || 'Colour'}
@@ -477,7 +477,7 @@ export default function StyleEditor({ initialStyle = {}, onChange }) {
                 {seStrings.line?.color?.label || 'Colour'}:
               </Label>
               <ColorPicker
-                id={ids.lineColor}
+                id={ids.lineColor + "-color-picker"}
                 value={lineColor}
                 onChange={setLineColor}
                 ariaLabel={seStrings.dot?.color?.label || 'Colour'}
@@ -590,7 +590,7 @@ export default function StyleEditor({ initialStyle = {}, onChange }) {
                 {seStrings.area?.linecolor?.label || 'Line colour'}:
               </Label>
               <ColorPicker
-                id={ids.areaBorderColor}
+                id={ids.areaBorderColor + "-color-picker"}
                 value={areaBorderColor}
                 onChange={setAreaBorderColor}
                 ariaLabel={seStrings.dot?.color?.label || 'Colour'}
@@ -664,7 +664,7 @@ export default function StyleEditor({ initialStyle = {}, onChange }) {
                 {seStrings.area?.color?.label || 'Fill colour'}:
               </Label>
               <ColorPicker
-                id={ids.fillColor}
+                id={ids.fillColor + "-color-picker"}
                 value={fillColor}
                 onChange={setFillColor}
                 ariaLabel={seStrings.dot?.color?.label || 'Colour'}

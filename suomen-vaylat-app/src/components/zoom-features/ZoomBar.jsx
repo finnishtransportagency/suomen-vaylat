@@ -239,7 +239,7 @@ const ZoomBar = () => {
       const index = clamp(zoomRange.max - zoom, 0, positions - 1);
       return padding + index * step;
     },
-    [zoomRange.max, zoomRange.min, positions]
+    [zoomRange.max, positions]
   );
 
   // map clientY -> zoom using same inner area and step math

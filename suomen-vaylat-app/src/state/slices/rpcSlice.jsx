@@ -79,7 +79,6 @@ const initialState = {
   firstSearchResultShown: false,
   // TODO: waiting for logging in option
   isLoggedIn: false,
-  userLayers: [],
   editingView: null,
   editingGeometry: null
 };
@@ -1042,26 +1041,6 @@ export const rpcSlice = createSlice({
     setEditingGeometry: (state, action) => {
       state.editingGeometry = action.payload;
     },
-
-    /**
-     * Set user layers.
-     * @method setUserLayers
-     * @param {Object} state
-     * @param {Object} action
-     */
-    setUserLayers: (state, action) => {
-      state.userLayers = action.payload;
-    },
-
-    /**
-     * Push GFI locations.
-     * @method pushGFILocations
-     * @param {Object} state
-     * @param {Object} action
-     */
-    pushGFILocations: (state, action) => {
-      state.gfiLocations.push(action.payload);
-    }
   }
 });
 
