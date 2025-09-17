@@ -1,15 +1,10 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import strings from '../../../translations';
 import {
-  faCompress,
-  faExpand,
   faLayerGroup,
   faMapMarkedAlt,
-  faDownload,
   faMap,
-  faSave,
-  faTimes,
-  faUpload
+  faTimes
 } from '@fortawesome/free-solid-svg-icons';
 import { AnimatePresence, motion } from 'framer-motion';
 
@@ -21,16 +16,13 @@ import { useAppSelector } from '../../../state/hooks';
 import {
   setIsDrawingToolsOpen,
   setIsSideMenuOpen,
-  setIsSaveViewOpen,
   setIsGfiOpen,
   setActiveTool,
   setMinimizeGfi,
-  setIsGfiDownloadOpen,
   setGeoJsonArray,
   setSelectedMarker,
   setIsThemeMenuOpen,
   removeFromDrawToolMarkers,
-  setIsDatasetImportOpen
 } from '../../../state/slices/uiSlice';
 import {
   removeMarkerRequest,
@@ -38,10 +30,9 @@ import {
 } from '../../../state/slices/rpcSlice';
 
 import CircleButton from '../../../utils/components/CircleButton';
-import DrawingTools from '../../measurement-tools/DrawingTools';
-import PillButton from '../../../utils/components/PillButton';
 import ArrowDropDownCircleIcon from '@mui/icons-material/ArrowDropDownCircle';
 import { isMobile } from '../../../theme/theme';
+import ToolsPanel from './ToolsPanel';
 
 const StyledMenuBar = styled.div`
   z-index: 1;
@@ -73,11 +64,11 @@ const StyledDrawingToolsWrapper = styled.div`
   gap: 6px;
   background-color: ${({ theme }) => theme.colors.mainColor1 + '35'};
   border-radius: 22px 16px 16px 16px;
-  padding-bottom: 12px;
   pointer-events: auto;
 
   @media ${(props) => props.theme.device.mobileL} {
     border-radius: 18px 12px 12px 12px;
+    padding-bottom: 12px;
   }
 `;
 
@@ -89,7 +80,6 @@ const StyledToolButtons = styled.div`
   overflow: scroll;
   display: flex;
   flex-direction: column;
-  gap: 8px;
   padding: 0 8px;
   pointer-events: auto;
 
@@ -155,7 +145,7 @@ const StyledMenuButtonsContainer = styled(motion.div)`
 
 const StyledOpenMobileMenuButton = styled.button`
   background: ${({ theme, isMobileMenuOpen }) =>
-    isMobileMenuOpen ? theme.colors.buttonActive : theme.colors.button};
+    isMobileMenuOpen ? theme.colors.buttonSelected : theme.colors.button};
   color: white;
   border: none;
   border-radius: 50%;
@@ -283,8 +273,10 @@ const MenuBar = () => {
                   text={strings.layerlist.layerlistLabels.themeLayers}
                   toggleState={isThemeMenuOpen}
                   tooltipDirection={'right'}
-                  clickAction={() =>
-                    store.dispatch(setIsThemeMenuOpen(!isThemeMenuOpen))
+                  clickAction={() => {
+                      store.dispatch(setIsSideMenuOpen(false))
+                      store.dispatch(setIsThemeMenuOpen(!isThemeMenuOpen))
+                    }
                   }
                   aria-label={strings.layerlist?.layerlistLabels?.themeLayers}
                 />
@@ -294,8 +286,10 @@ const MenuBar = () => {
                   text={strings.layerlist.layerlistLabels.mapLayers}
                   toggleState={isSideMenuOpen}
                   tooltipDirection={'right'}
-                  clickAction={() =>
-                    store.dispatch(setIsSideMenuOpen(!isSideMenuOpen))
+                  clickAction={() => {
+                      store.dispatch(setIsThemeMenuOpen(false))
+                      store.dispatch(setIsSideMenuOpen(!isSideMenuOpen))
+                    }
                   }
                   aria-label={strings.layerlist?.layerlistLabels?.mapLayers}
                 >
@@ -344,51 +338,7 @@ const MenuBar = () => {
                       title={strings.tooltips?.closeDrawingTools}
                     />
                     <StyledToolButtons id="menubar-toolbuttons-container">
-                      <DrawingTools isOpen={isDrawingToolsOpen} />
-                      <PillButton
-                        id="menubar-tools-download-btn"
-                        icon={faDownload}
-                        text={strings.downloads.downloads}
-                        disabled={selectedLayersByType.mapLayers.length === 0}
-                        onClick={() =>
-                          store.dispatch(
-                            setIsGfiDownloadOpen(!isGfiDownloadOpen)
-                          )
-                        }
-                        aria-label={strings.downloads?.downloads}
-                      />
-                      <PillButton
-                        id="menubar-tools-save-btn"
-                        icon={faSave}
-                        text={strings.savedContent.saveView.saveView}
-                        onClick={() =>
-                          store.dispatch(setIsSaveViewOpen(!isSaveViewOpen))
-                        }
-                        aria-label={strings.savedContent?.saveView?.saveView}
-                      />
-                      <PillButton
-                        id="menubar-tools-dataset-import-button"
-                        icon={faUpload}
-                        text={strings.datasetImport.menuButtonTitle}
-                        onClick={() =>
-                          store.dispatch(setIsDatasetImportOpen(!isDatasetImportOpen))
-                        }
-                        aria-label={strings.datasetImport?.menuButtonTitle}
-                      />
-                      {!isMobile && (
-                        <PillButton
-                          id="menubar-tools-fullscreen-btn"
-                          icon={isFullScreen ? faCompress : faExpand}
-                          text={strings.tooltips.fullscreenButton}
-                          onClick={() => {
-                            const elem = document.documentElement;
-                            isFullScreen
-                              ? document.exitFullscreen?.()
-                              : elem.requestFullscreen?.();
-                          }}
-                          aria-label={strings.tooltips?.fullscreenButton}
-                        />
-                      )}
+                      <ToolsPanel isOpen={isDrawingToolsOpen} />
                     </StyledToolButtons>
                   </StyledDrawingToolsWrapper>
                 ) : (

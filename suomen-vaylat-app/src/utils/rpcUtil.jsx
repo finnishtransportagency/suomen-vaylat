@@ -10,15 +10,19 @@ import {
   setMapLayers,
   setAllSelectedThemeLayers,
   getLegends,
-  setLegends
+  setLegends,
+  addMarkerRequest,
+  removeMarkerRequest,
+  setUserLayers
 } from '../state/slices/rpcSlice';
 import { Slide, toast } from 'react-toastify';
 import {
   setSelectedMapLayersMenuThemeIndex,
   setIsLegendOpen,
-  setIsZoomBarOpen
+  removeActiveGeometry,
+  addToActiveGeometries,
+  setIsSaveViewOpen
 } from '../state/slices/uiSlice';
-import { isMobile } from '../theme/theme';
 import strings from '../translations';
 import { ANNOUNCEMENTS_LOCALSTORAGE } from '../utils/constants';
 
@@ -55,8 +59,134 @@ export const getDescTagContent = (text, startTag, endTag) => {
  * @param {Object} channel
  */
 export const updateLayers = (store, channel) => {
-  updateAllLayers(store,channel);
-  updateSelectedLayers(store,channel);
+  updateAllLayers(store, channel);
+  updateSelectedLayers(store, channel);
+};
+
+/**
+ * Activate view to map
+ * @method updateLayers
+ * @param {Object} store
+ * @param {Object} channel
+ * @param {Object} view The view data object
+ */
+export const activateView = (store, channel, view) => {
+  channel.getMapPosition(function () {
+    var routeSteps = [
+      {
+        lon: view.data.x,
+        lat: view.data.y,
+        duration: 3000,
+        zoom: view.data.zoom,
+        animation: 'zoomPan'
+      }
+    ];
+    var stepDefaults = {
+      lon: view.data.x,
+      lat: view.data.y,
+      zoom: view.data.zoom,
+      animation: 'zoomPan',
+      duration: 3000,
+      srsName: 'EPSG:3067'
+    };
+    channel.postRequest('MapTourRequest', [routeSteps, stepDefaults]);
+  });
+
+  store.getState().rpc.selectedLayers.forEach((layer) => {
+    channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [
+      layer.id,
+      false
+    ]);
+  });
+
+  view.data.layers.forEach((layer) => {
+    channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [
+      layer.id,
+      true
+    ]);
+    channel.postRequest('ChangeMapLayerOpacityRequest', [
+      layer.id,
+      layer.opacity
+    ]);
+  });
+
+  if (view.data.geometries) {
+    const geometry = view.data.geometries;
+    geometry.markers.forEach((marker) => {
+      store.dispatch(addMarkerRequest(marker));
+    });
+
+    const addFeaturesToMapParams = {
+      clearPrevious: false,
+      layerId: geometry.id,
+      featureStyle: {
+        fill: {
+          color: 'rgba(10, 140, 247, 0.1)'
+        },
+        stroke: {
+          color: 'rgba(10, 140, 247, 0.3)',
+          width: 5,
+          lineDash: 'solid',
+          lineCap: 'round',
+          lineJoin: 'round',
+          area: {
+            color: '#ff5100b3',
+            width: 4,
+            lineJoin: 'round'
+          }
+        },
+        image: {
+          shape: 5,
+          size: 3,
+          fill: {
+            color: '#ff5100b3'
+          }
+        }
+      }
+    };
+    if (store.getState().ui.activeGeometries.find((g) => g.id === view.id)) {
+      store.dispatch(removeActiveGeometry(view.id));
+      geometry.markers.forEach((marker) => {
+        store.dispatch(removeMarkerRequest({ markerId: marker.markerId }));
+      });
+      channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [
+        null,
+        null,
+        geometry.id
+      ]);
+      return;
+    }
+    const savedGeometries = [...geometry.geoJsonArray];
+
+    savedGeometries.forEach((g) => {
+      //tiehaku
+      g.data &&
+        g.data.geom &&
+        channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', [
+          geometry.data.geom,
+          addFeaturesToMapParams
+        ]);
+
+      g.features &&
+        g.features.forEach((feature) => {
+          channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', [
+            feature.geojson,
+            addFeaturesToMapParams
+          ]);
+        });
+
+      g.geojson &&
+        channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', [
+          g.geojson,
+          addFeaturesToMapParams
+        ]);
+    });
+
+    store.dispatch(addToActiveGeometries(geometry));
+  }
+
+  updateLayers(store, channel);
+  store.dispatch(setIsSaveViewOpen(false));
 };
 
 /**
@@ -69,7 +199,9 @@ export const updateAllLayers = (store, channel) => {
   channel &&
     channel.getAllLayersSV(
       function (data) {
-        const userLayers = data.filter(l => typeof l.id === 'string' && l.id.startsWith('userlayer_'));
+        const userLayers = data.filter(
+          (l) => typeof l.id === 'string' && l.id.startsWith('userlayer_')
+        );
         store.dispatch(setAllLayers(data));
         store.dispatch(setUserLayers(userLayers));
       },
@@ -203,13 +335,6 @@ export const selectGroup = (
     });
   };
 
-  const toggleLegendAndZoomBar = (isOpen) => {
-    if (!isMobile) {
-      store.dispatch(setIsLegendOpen(isOpen));
-      store.dispatch(setIsZoomBarOpen(isOpen));
-    }
-  };
-
   const processLayers = (theme) => {
     let layers = [];
     theme.layers && layers.push(...theme.layers);
@@ -243,7 +368,7 @@ export const selectGroup = (
     updateLayers(store, channel);
     setTimeout(
       () => {
-        toggleLegendAndZoomBar(true);
+        store.dispatch(setIsLegendOpen(true));
         store.dispatch(setSelectedThemeId(theme.id));
         setTimeout(() => processLayers(theme), 700);
       },
@@ -255,7 +380,7 @@ export const selectGroup = (
     closeThemeLayers(lastSelectedTheme);
     updateLayers(store, channel);
     setTimeout(() => {
-      toggleLegendAndZoomBar(false);
+      store.dispatch(setIsLegendOpen(false));
       store.dispatch(setSelectedThemeId(null));
       showNonThemeLayers(store, channel);
     }, 700);

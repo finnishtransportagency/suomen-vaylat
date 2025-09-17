@@ -1,47 +1,45 @@
-import { useState, useMemo } from "react";
-import store from "../../../state/store";
-import { faAngleUp, faAngleDown } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import styled from "styled-components";
-import { useAppSelector } from "../../../state/hooks";
-import { motion } from "framer-motion";
-import strings from "../../../translations";
-import {
-  setTagLayers,
-  setTags,
-} from "../../../state/slices/rpcSlice";
-import Tag from "./Tag";
-import LayerList, { TagLayerList } from "./LayerList";
-import LayerSearch from "./LayerSearch";
-import ReactTooltip from "react-tooltip";
-import { isMobile, theme } from "../../../theme/theme";
+import { useState, useMemo } from 'react';
+import store from '../../../state/store';
+import { faAngleUp, faAngleDown } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import styled from 'styled-components';
+import { useAppSelector } from '../../../state/hooks';
+import { motion } from 'framer-motion';
+import strings from '../../../translations';
+import { setTagLayers, setTags } from '../../../state/slices/rpcSlice';
+import Tag from './Tag';
+import LayerList, { TagLayerList } from './LayerList';
+import LayerSearch from './LayerSearch';
+import ReactTooltip from 'react-tooltip';
+import { isMobile, theme } from '../../../theme/theme';
 import {
   setIsCustomFilterOpen,
   setShowSavedLayers,
   setCheckedLayer,
-  setSelectedCustomFilterLayers,
-} from "../../../state/slices/uiSlice";
-import { useSelector } from "react-redux";
+  setSelectedCustomFilterLayers
+} from '../../../state/slices/uiSlice';
+import { useSelector } from 'react-redux';
+import UserContentGroup from './user-content/UserContentGroup';
 
 const listVariants = {
   visible: {
-    height: "auto",
-    opacity: 1,
+    height: 'auto',
+    opacity: 1
   },
   hidden: {
     height: 0,
-    opacity: 0,
-  },
+    opacity: 0
+  }
 };
 
+const StyledLayerGroupWrapper = styled.div``;
 const StyledFilterList = styled(motion.div)`
-  height: ${(props) => (props.isOpen ? "auto" : 0)};
+  height: ${(props) => (props.isOpen ? 'auto' : 0)};
   overflow: hidden;
   display: flex;
   flex-direction: column;
   justify-content: center;
   color: ${(props) => props.theme.colors.mainColor1};
-  background-color: ${(props) => props.theme.colors.mainWhite};
   margin-bottom: 8px;
 `;
 
@@ -92,9 +90,9 @@ const StyledCustomFilterButton = styled.div`
   border-radius: 20px;
   font-size: 13px;
   transition: all 0.1s ease-out;
-  color: ${props => props.isSelected && props.theme.colors.mainWhite};
+  color: ${(props) => props.isSelected && props.theme.colors.mainWhite};
   &:hover {
-    color: ${props => props.theme.colors.mainWhite};
+    color: ${(props) => props.theme.colors.mainWhite};
     background-color: ${(props) => props.theme.colors.mainColor3};
   }
 `;
@@ -120,45 +118,51 @@ const StyledFilterButton = styled.div`
   }
 `;
 
-const StyledLayerList = styled.div`
-
+const HorizontalLine = styled.div`
+  width: 100%;
+  height: 1px;
+  background-color: ${(props) => props.theme.colors.mainColor1};
+  margin: 1em 0;
 `;
 
+const StyledLayerList = styled.div``;
+
 const SavedLayer = ({ layers, groups }) => {
-  const customLayers = localStorage.getItem("checkedLayers");
+  const customLayers = localStorage.getItem('checkedLayers');
   const parsedLayers = JSON.parse(customLayers) || [];
   const { tagLayers, tags } = useSelector((state) => state.rpc);
-  const layerArray = parsedLayers.map(layer => layer.id)
+  const layerArray = parsedLayers.map((layer) => layer.id);
 
   if (parsedLayers.length > 0) {
     return (
       <>
-        {(tagLayers.length > 0 || layerArray.length > 0) &&
+        {(tagLayers.length > 0 || layerArray.length > 0) && (
           <StyledLayerList>
-            {
-              tags.map((tag, index) => {
-                return (
-                  <TagLayerList
-                    tag={tag}
-                    layers={layers}
-                    index={index}
-                    groups={groups}
-                    key={'taglayerlist-' + tag + '-' + index}
-                  />
-                );
-              })
-            }
-            {layerArray.length > 0 &&
+            {tags.map((tag, index) => {
+              return (
+                <TagLayerList
+                  tag={tag}
+                  layers={layers}
+                  index={index}
+                  groups={groups}
+                  key={'taglayerlist-' + tag + '-' + index}
+                />
+              );
+            })}
+            {layerArray.length > 0 && (
               <TagLayerList
                 tag={strings.layerlist.customLayerInfo.customFilter}
                 layers={layers}
                 groups={groups}
-                key={'taglayerlist-' + strings.layerlist.customLayerInfo.customFilter}
+                key={
+                  'taglayerlist-' +
+                  strings.layerlist.customLayerInfo.customFilter
+                }
                 customTag={layerArray}
               />
-            }
+            )}
           </StyledLayerList>
-        }
+        )}
       </>
     );
   }
@@ -169,12 +173,14 @@ const SavedLayer = ({ layers, groups }) => {
 const LayerListContainer = ({ groups, layers, tags }) => {
   useAppSelector((state) => state.language);
 
-  const { showSavedLayers, isCustomFilterOpen } = useAppSelector((state) => state.ui);
-  const { userLayers } = useAppSelector((state) => state.rpc);
+  const { showSavedLayers, isCustomFilterOpen } = useAppSelector(
+    (state) => state.ui
+  );
+  const { tagLayers } = useAppSelector((state) => state.rpc);
 
   const [isOpen, setIsOpen] = useState(false);
 
-  const selectedLayers = localStorage.getItem("checkedLayers");
+  const selectedLayers = localStorage.getItem('checkedLayers');
   const parsedLayers = useMemo(() => {
     return selectedLayers ? JSON.parse(selectedLayers) : [];
   }, [selectedLayers]);
@@ -186,23 +192,6 @@ const LayerListContainer = ({ groups, layers, tags }) => {
     store.dispatch(setShowSavedLayers(false));
     store.dispatch(setSelectedCustomFilterLayers([]));
   };
-
-  // Add omat aineistot group
-  const omatAineistotGroup = {
-    id: 'userlayers', // must be unique and NOT collide with any numeric id
-    parentId: -1,
-    locale: {
-      fi: { name: 'Omat aineistot'},
-      en: { name: 'My datasets'},
-      sv: { name: 'Egna data'}
-    },
-    layers: userLayers.map(l => l.id),
-    groups: []
-  };
-
-  const newGroups = userLayers.length > 0
-  ? [...groups, omatAineistotGroup]
-  : groups;
 
   return (
     <>
@@ -216,6 +205,7 @@ const LayerListContainer = ({ groups, layers, tags }) => {
       >
         <span>{strings.tooltips.layerlist.filter}</span>
       </ReactTooltip>
+
       <StyledSearchAndFilter>
         <LayerSearch layers={layers} groups={groups} />
         <StyledFilterButton
@@ -230,13 +220,14 @@ const LayerListContainer = ({ groups, layers, tags }) => {
           <span>{strings.layerlist.layerlistLabels.filterByType}</span>
         </StyledFilterButton>
       </StyledSearchAndFilter>
+
       <StyledFilterList
         initial="hidden"
-        animate={isOpen ? "visible" : "hidden"}
+        animate={isOpen ? 'visible' : 'hidden'}
         variants={listVariants}
         transition={{
           duration: 0.3,
-          type: "tween",
+          type: 'tween'
         }}
       >
         <StyledFiltersContainer>
@@ -254,9 +245,7 @@ const LayerListContainer = ({ groups, layers, tags }) => {
             {strings.layerlist.layerlistLabels.createCustomFilter}
           </StyledCustomFilterButton>
           {tags?.map((tag, index) => {
-            return (
-              <Tag isOpen={isOpen} key={"fiter-tag-" + index} tag={tag} />
-            );
+            return <Tag isOpen={isOpen} key={'fiter-tag-' + index} tag={tag} />;
           })}
         </StyledFiltersContainer>
         <StyledDeleteAllSelectedFilters onClick={() => emptyFilters()}>
@@ -267,12 +256,25 @@ const LayerListContainer = ({ groups, layers, tags }) => {
       {showSavedLayers || isCustomFilterOpen ? (
         <SavedLayer layers={layers} />
       ) : (
-        <LayerList
-          label={strings.layerlist.layerlistLabels.allLayers}
-          groups={newGroups}
-          layers={layers}
-          recurse={false}
-        />
+        <>
+          {tagLayers.length === 0 && (
+            <>
+              <StyledLayerGroupWrapper
+                key={'layerlist-container-user-content-group-wrapper'}
+              >
+                <UserContentGroup />
+              </StyledLayerGroupWrapper>
+
+              <HorizontalLine />
+            </>
+          )}
+          <LayerList
+            label={strings.layerlist.layerlistLabels.allLayers}
+            groups={groups}
+            layers={layers}
+            recurse={false}
+          />
+        </>
       )}
     </>
   );

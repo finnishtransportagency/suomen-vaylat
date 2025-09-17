@@ -1,7 +1,8 @@
 import OskariRPC from 'oskari-rpc';
 import setupSupportedFunctions from '../setup/ChannelSetup';
 import MapEventsHandler from './MapEventsHandler';
-import { setChannel, setStartState } from '../../../../state/slices/rpcSlice';
+import { setChannel, setGeometries, setStartState, setViews } from '../../../../state/slices/rpcSlice';
+import { activateView } from '../../../../utils/rpcUtil';
 
 const ChannelHandler = ({ iframe, store }) => {
   const channel = OskariRPC.connect(
@@ -25,6 +26,19 @@ const ChannelHandler = ({ iframe, store }) => {
     channel.getPublishedMapState((data) => {
       store.dispatch(setStartState(data));
     });
+
+
+    const storedGeometries = window.localStorage.getItem('geometries');
+    const geometriesArray = JSON.parse(storedGeometries);
+    if (storedGeometries) store.dispatch(setGeometries(geometriesArray));
+
+    // If there is a set default view, open that
+    const storedViews = window.localStorage.getItem('views');
+    const viewsArray = JSON.parse(storedViews);
+    if (storedViews) store.dispatch(setViews(viewsArray));
+    const defaultView = viewsArray?.find(view => view.default);
+    defaultView && activateView(store, channel, defaultView);
+    //
   });
 
   var synchronizer = OskariRPC.synchronizerFactory(channel, handlers);

@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import strings from '../../../translations';
 import Moment from 'react-moment';
-import { useContext } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { theme } from '../../../theme/theme';
 import { setDownloadRemove } from '../../../state/slices/rpcSlice';
 import { ReactReduxContext } from 'react-redux';
@@ -93,14 +93,17 @@ const StyledLoaderWrapper = styled.div`
     }
 `;
 
-const StyledShowMoreButton = styled.button`
+const StyledDowloadButton = styled.button`
   height: 3em;
   color: ${(props) => props.theme.colors.mainWhite};
-  background-color: ${(props) => props.theme.colors.mainColor1};
   border-radius: 20px;
   box-shadow: 0px 1px 3px #0000001f;
   border: none;
   margin: 0.5em 0 0.5em 0;
+  background-color: ${(props) =>
+    props.disabled
+      ? props.theme.colors.darkGrey
+      : props.theme.colors.mainColor1};
 `;
 
 const DownloadItem = ({
@@ -158,13 +161,19 @@ const DownloadItem = ({
 
 
 const FeatureDataDownload = () => {
-    let { downloads } = useAppSelector((state) => state.rpc);
+    let { downloads, gfiLocations, selectedLayersByType } = useAppSelector((state) => state.rpc);
     const { store } = useContext(ReactReduxContext);
+    const [noDownloadableLayers, setNoDownloadableLayers] = useState(false);
 
     const handleGfiLocationsOpen = () => {
         store.dispatch(setIsGfiToolsOpen(true));
         store.dispatch(setIsGfiDownloadOpen(false));
     }
+
+    useEffect(() => {
+        const onlyUserLayers = selectedLayersByType.mapLayers?.length > 0 && selectedLayersByType.mapLayers.filter(l => typeof l.id === 'string' && l.id.startsWith('userlayer_')).length === selectedLayersByType.mapLayers.length;
+        setNoDownloadableLayers(onlyUserLayers);
+      }, [gfiLocations]);
 
     return (
         <>
@@ -172,11 +181,19 @@ const FeatureDataDownload = () => {
         <StyledDownloadsContainer>
         <StyledDescription>{strings.downloads.downloadsInfo}</StyledDescription>
         <StyledDescription>{strings.downloads.downloadsInfo2}</StyledDescription>
-        <StyledShowMoreButton
+
+        {noDownloadableLayers && (
+            <StyledDescription style={{ color: "#d32f2f", marginBottom: 4 }}>
+                {strings.downloads.noValidMaplayers}
+            </StyledDescription>
+        )}
+
+        <StyledDowloadButton
+            disabled={noDownloadableLayers}
             onClick={handleGfiLocationsOpen}
         >
-            {strings.downloads.newDownloads}
-        </StyledShowMoreButton>
+            {strings.downloads.newDownload}
+        </StyledDowloadButton>
         
 
 

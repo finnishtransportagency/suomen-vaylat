@@ -137,13 +137,12 @@ const FeatureDataTabContent = ({ layer, title, tablePropsInit }) => {
   // --- Universal logic for normal/userlayers ---
   const isUserLayer =
     typeof layer.id === 'string' && layer.id.startsWith('userlayer_');
-  
   let features, tableProps;
   if (isUserLayer) {
     // Userlayer: use function to create props (pass features array)
     features = tablePropsInit?.filteredFeatures || [];
     tableProps = initUserLayerTableProps(features);
-  } else  {
+  } else {
     // Normal layer: tablePropsInit is an object, use as is
     tableProps = tablePropsInit;
     features = tablePropsInit?.filteredFeatures || [];

@@ -2,13 +2,14 @@ import { createSlice } from '@reduxjs/toolkit';
 import { theme } from '../../theme/theme';
 
 const initialState = {
-  activeSwitch: null,
+  activeSwitch: 'default',
   isGfiToolsOpen: false,
   isGfiDownloadToolsOpen: false,
   isFullScreen: false,
   dialogConstrainsRef: null,
   isSideMenuOpen: false,
   isSearchOpen: false,
+  isSearchResultPanelVisible: false,
   downloadLink: {
     layerDownloadLinkDialogOpen: false,
     layerDownloadLink: null,
@@ -20,7 +21,6 @@ const initialState = {
   isInfoOpen: false,
   geoJsonArray: [],
   isSavedOpen: false,
-  savedTabIndex: 0,
   isChecked: false,
   isUserGuideOpen: false,
   isCustomFilterOpen: false,
@@ -30,8 +30,8 @@ const initialState = {
   isThemeMenuOpen: false,
   isDrawingToolsOpen: false,
   isLegendOpen: false,
-  isZoomBarOpen: false,
   isSaveViewOpen: false,
+  isSaveGeometriesOpen: false,
   isGfiOpen: false,
   isGfiDownloadOpen: false,
   selectedGfiTool: null,
@@ -85,8 +85,8 @@ export const uiSlice = createSlice({
       state.isUserGuideOpen = false;
       state.isDrawingToolsOpen = false;
       state.isLegendOpen = false;
-      state.isZoomBarOpen = false;
       state.isSaveViewOpen = false;
+      state.isSaveGeometriesOpen = false;
       state.selectedMapLayersMenuTab = 0;
       state.selectedMapLayersMenuThemeIndex = null;
       state.minimizeGfi = false;
@@ -102,6 +102,9 @@ export const uiSlice = createSlice({
     setIsSearchOpen: (state, action) => {
       state.isSearchOpen = action.payload;
     },
+    setIsSearchResultPanelVisible(state, action) {
+      state.isSearchResultPanelVisible = action.payload;
+    }, 
     setIsChecked: (state, action) => {
       state.isChecked = action.payload;
     },
@@ -129,9 +132,6 @@ export const uiSlice = createSlice({
         state.geoJsonArray[duplicateIndex] = action.payload;
       else state.geoJsonArray.push(action.payload);
     },
-    setSavedTabIndex: (state, action) => {
-      state.savedTabIndex = action.payload;
-    },
     setIsSavedOpen: (state, action) => {
       state.isSavedOpen = action.payload;
     },
@@ -157,11 +157,11 @@ export const uiSlice = createSlice({
     setIsLegendOpen: (state, action) => {
       state.isLegendOpen = action.payload;
     },
-    setIsZoomBarOpen: (state, action) => {
-      state.isZoomBarOpen = action.payload;
-    },
     setIsSaveViewOpen: (state, action) => {
       state.isSaveViewOpen = action.payload;
+    },
+    setIsSaveGeometriesOpen: (state, action) => {
+      state.isSaveGeometriesOpen = action.payload;
     },
     setIsGfiOpen: (state, action) => {
       state.isGfiOpen = action.payload;
@@ -311,6 +311,7 @@ export const {
   setDialogConstrainsRef,
   setIsSideMenuOpen,
   setIsSearchOpen,
+  setIsSearchResultPanelVisible,
   setIsChecked,
   setSearchParams,
   setFormSearchParams,
@@ -321,8 +322,8 @@ export const {
   setIsCustomFilterOpen,
   setIsSavedLayer,
   setIsLegendOpen,
-  setIsZoomBarOpen,
   setIsSaveViewOpen,
+  setIsSaveGeometriesOpen,
   setIsGfiOpen,
   setIsGfiDownloadToolsOpen,
   setIsGfiDownloadOpen,
@@ -342,7 +343,6 @@ export const {
   setGeoJsonArray,
   addToGeoJsonArray,
   setIsSavedOpen,
-  setSavedTabIndex,
   setHasToastBeenShown,
   setSelectedMarker,
   addToDrawToolMarkers,

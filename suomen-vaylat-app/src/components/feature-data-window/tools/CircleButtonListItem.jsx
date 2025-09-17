@@ -21,7 +21,7 @@ const StyledCircleButton = styled(motion.div)`
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: ${props => props.isActive ? props.activeColor ? props.activeColor : props.theme.colors.buttonActive : props.bgColor ? props.bgColor : props.theme.colors.mainColor1};
+    background-color: ${props => props.isActive ? props.activeColor ? props.activeColor : props.theme.colors.buttonSelected : props.bgColor ? props.bgColor : props.theme.colors.mainColor1};
     box-shadow: 0px 2px 4px #0000004D;
     border-radius: 50%;
     svg {

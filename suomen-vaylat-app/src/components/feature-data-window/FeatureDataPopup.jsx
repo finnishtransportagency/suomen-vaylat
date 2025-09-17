@@ -423,35 +423,43 @@ export const FeatureDataPopup = () => {
     selectedLayersByType
   } = useAppSelector((state) => state.rpc);
 
-  const {
-    activeTool
-  } = useAppSelector((state) => state.ui);
+  const { activeTool } = useAppSelector((state) => state.ui);
 
   const [point, setPoint] = useState(null);
   const [isGfiDownloadToolsOpen, setIsGfiDownloadToolsOpen] = useState(false);
 
   const [selectedTab, setSelectedTab] = useState(0);
   const [tabsIds, setTabsIds] = useState([]);
-    const [isGfiToolsOpen, setIsGfiToolsOpen] = useState(false);
+  const [isGfiToolsOpen, setIsGfiToolsOpen] = useState(false);
 
   const [isVKMInfoOpen, setIsVKMInfoOpen] = useState(vkmData ? true : false);
   const [gfiTabsSwiper, setGfiTabsSwiper] = useState(null);
   const [gfiTabsSnapGridLength, setGfiTabsSnapGridLength] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
-  const [hasOnlyUserlayers, setHasOnlyUserlayers] = useState(false);
+  const [hasOnlyUserlayersSelected, sethasOnlyUserlayersSelectedSelected] = useState(false);
   const [filteredGFILocations, setFilteredGFILocations] = useState([]);
   const gfiInputEl = useRef(null);
-  
+
   useEffect(() => {
     if (gfiLocations.length === 0) setSelectedTab(0);
-    setHasOnlyUserlayers(gfiLocations.filter(l => typeof l.layerId === 'string' && l.layerId.startsWith('userlayer_')).length === gfiLocations.length);
     // Download is disabled if there's no layers/locations that aren't background maps
-    setFilteredGFILocations(gfiLocations.filter(
-      (g) =>
-        selectedLayersByType.backgroundMaps.filter((l) => l.id === g.layerId)
-          .length === 0
-    ));
+    setFilteredGFILocations(
+      gfiLocations.filter(
+        (g) =>
+          selectedLayersByType.backgroundMaps.filter((l) => l.id === g.layerId)
+            .length === 0
+      )
+    );
   }, [gfiLocations]);
+
+  useEffect(() => {
+    sethasOnlyUserlayersSelectedSelected(
+      selectedLayers.filter(
+        (l) =>
+          typeof l.id === 'string' && l.id.startsWith('userlayer_')
+      ).length === selectedLayers.length
+    );
+  }, [selectedLayers]);
 
   const handleLinkClick = (event) => {
     event.preventDefault();
@@ -531,7 +539,7 @@ export const FeatureDataPopup = () => {
             layerId: LAYER_ID,
             centerTo: true,
             maxZoomLevel: 13,
-            cursor: "pointer",
+            cursor: 'pointer',
             featureStyle: {
               fill: {
                 color: 'rgba(10, 140, 247, 0.3)'
@@ -627,165 +635,216 @@ export const FeatureDataPopup = () => {
   };
 
   const tablePropsInit = (index, data) => {
-  // Handle legacy geojson structure
-  if (data.type === 'geojson') {const properties =
+    // Handle legacy geojson structure
+    if (data.type === 'geojson') {
+      const properties =
+        data &&
+        data.content &&
+        data.content[0] &&
+        data.content[0].geojson &&
+        data.content[0].geojson.features &&
+        data.content[0].geojson.features[0].properties;
+
+      var highPriorityColumns =
+        properties?._orderHigh && JSON.parse(properties?._orderHigh);
+      var lowPriorityColumns =
+        properties?._order && JSON.parse(properties?._order);
+
+      const curLayerMeta = allLayers.filter((l) => l.id === data.layerId)[0];
+      var columnsArray = [];
+      var columns =
+        highPriorityColumns && highPriorityColumns.concat(lowPriorityColumns);
+      columns &&
+        columns.forEach((column) => {
+          if (column !== 'UID') {
+            columnsArray.push({
+              key: column,
+              title: column,
+              width: 180,
+              colGroup: { style: { minWidth: 120 } }
+            });
+          }
+        });
+
+      var filterColumnsArray = [];
+
+      curLayerMeta?.config?.gfi?.filterFields &&
+        curLayerMeta?.config?.gfi?.filterFields.forEach((column) => {
+          if (column.field && column.type) {
+            filterColumnsArray.push({
+              key: column.field,
+              title: column.field,
+              type: column.type
+            });
+          }
+        });
+
+      var cells = [];
+      var filteredFeatures = [];
+
       data &&
-      data.content &&
-      data.content[0] &&
-      data.content[0].geojson &&
-      data.content[0].geojson.features &&
-      data.content[0].geojson.features[0].properties;
+        data?.content?.forEach((cont) => {
+          var featureCells = cont.geojson.features
+            ? cont.geojson.features
+                .filter((feature) =>
+                  filterFeature(feature, data, filters, channel)
+                )
+                .map((feature) => {
+                  if (!feature.hasOwnProperty('id')) {
+                    var extendedFeature = { ...feature };
+                    extendedFeature.id = uuidv4();
+                    filteredFeatures.push(extendedFeature);
+                  } else {
+                    filteredFeatures.push(feature);
+                  }
+                  var cell = { ...feature.properties };
+                  if (cell.hasOwnProperty('id')) {
+                    cell['id'] = feature.id || uuidv4();
+                  } else {
+                    cell.id = feature.id || uuidv4();
+                  }
+                  cell.hasOwnProperty('UID') && delete cell['UID'];
+                  cell.hasOwnProperty('_orderHigh') &&
+                    delete cell['_orderHigh'];
+                  cell.hasOwnProperty('_order') && delete cell['_order'];
+                  return cell;
+                })
+            : [];
+          cells.push(...featureCells);
+        });
 
-    var highPriorityColumns =
-      properties?._orderHigh && JSON.parse(properties?._orderHigh);
-    var lowPriorityColumns =
-      properties?._order && JSON.parse(properties?._order);
+      // Set filtered results to map
+      selectedTab === index && addGFIResultsToMap(filteredFeatures);
 
-    const curLayerMeta = allLayers.filter((l) => l.id === data.layerId)[0];
-    var columnsArray = [];
-    var columns =
-      highPriorityColumns && highPriorityColumns.concat(lowPriorityColumns);
-    columns &&
-      columns.forEach((column) => {
-        if (column !== 'UID') {
-          columnsArray.push({
-            key: column,
-            title: column,
+      const tablePropsInit = {
+        columns: columnsArray,
+        filterableColumns: filterColumnsArray,
+        filteredFeatures: filteredFeatures,
+        data: cells,
+        rowKeyField: 'id',
+        sortingMode: SortingMode.SingleTripleState,
+        columnResizing: true,
+        paging: {
+          enabled: true,
+          pageIndex: 0,
+          pageSize: 100,
+          pageSizes: [10, 50, 100],
+          position: PagingPosition.Bottom
+        },
+        format: ({ value }) => {
+          if (isValidUrl(value)) {
+            return (
+              <a target="_blank" rel="noreferrer" href={value}>
+                {value}
+              </a>
+            );
+          } else if (typeof value === 'string') {
+            return (
+              <span>
+                {value.split('\n').map((line, index) => (
+                  <div key={index}>{line}</div>
+                ))}
+              </span>
+            );
+          }
+        }
+      };
+      return tablePropsInit;
+    }
+
+    // === Handle new flat json structure ===
+    if (data.type === 'json') {
+      // (support both cases: data.content can be [{...}] or something else)
+      let rows = [];
+      if (data.content && Array.isArray(data.content)) {
+        // If entries have "geojson" field, it's not our new structure
+        if (
+          data.content[0] &&
+          typeof data.content[0] === 'object' &&
+          data.content[0].geojson
+        ) {
+          rows = data.content;
+        }
+      }
+      // Defensive, in case content is a single object (not array)
+      if (
+        !rows.length &&
+        data.content &&
+        typeof data.content === 'object' &&
+        !Array.isArray(data.content)
+      ) {
+        rows = [data.content];
+      }
+
+      let columnsArray = [];
+      if (rows.length > 0) {
+        columnsArray = Object.keys(rows[0])
+          .filter((k) => k !== 'id' && k !== 'UID')
+          .map((key) => ({
+            key,
+            title: key,
             width: 180,
             colGroup: { style: { minWidth: 120 } }
-          });
-        }
-      });
-
-    var filterColumnsArray = [];
-
-    curLayerMeta?.config?.gfi?.filterFields &&
-      curLayerMeta?.config?.gfi?.filterFields.forEach((column) => {
-        if (column.field && column.type) {
-          filterColumnsArray.push({
-            key: column.field,
-            title: column.field,
-            type: column.type
-          });
-        }
-      });
-
-    var cells = [];
-    var filteredFeatures = [];
-
-    data &&
-      data?.content?.forEach((cont) => {
-        var featureCells = cont.geojson.features
-          ? cont.geojson.features
-              .filter((feature) =>
-                filterFeature(feature, data, filters, channel)
-              )
-              .map((feature) => {
-                if (!feature.hasOwnProperty('id')) {
-                  var extendedFeature = { ...feature };
-                  extendedFeature.id = uuidv4();
-                  filteredFeatures.push(extendedFeature);
-                } else {
-                  filteredFeatures.push(feature);
-                }
-                var cell = { ...feature.properties };
-                if (cell.hasOwnProperty('id')) {
-                  cell['id'] = feature.id || uuidv4();
-                } else {
-                  cell.id = feature.id || uuidv4();
-                }
-                cell.hasOwnProperty('UID') && delete cell['UID'];
-                cell.hasOwnProperty('_orderHigh') && delete cell['_orderHigh'];
-                cell.hasOwnProperty('_order') && delete cell['_order'];
-                return cell;
-              })
-          : [];
-        cells.push(...featureCells);
-      });
-
-    // Set filtered results to map
-    selectedTab === index && addGFIResultsToMap(filteredFeatures);
-
-    const tablePropsInit = {
-      columns: columnsArray,
-      filterableColumns: filterColumnsArray,
-      filteredFeatures: filteredFeatures,
-      data: cells,
-      rowKeyField: 'id',
-      sortingMode: SortingMode.SingleTripleState,
-      columnResizing: true,
-      paging: {
-        enabled: true,
-        pageIndex: 0,
-        pageSize: 100,
-        pageSizes: [10, 50, 100],
-        position: PagingPosition.Bottom
-      },
-      format: ({ value }) => {
-        if (isValidUrl(value)) {
-          return (
-            <a target="_blank" rel="noreferrer" href={value}>
-              {value}
-            </a>
-          );
-        } else if (typeof value === 'string') {
-          return (
-            <span>
-              {value.split('\n').map((line, index) => (
-                <div key={index}>{line}</div>
-              ))}
-            </span>
-          );
-        }
+          }));
       }
-    };
-    return tablePropsInit;
-  }
 
-  // === Handle new flat json structure ===
-  if (data.type === 'json') {
-    // (support both cases: data.content can be [{...}] or something else)
-    let rows = [];
-    if (data.content && Array.isArray(data.content)) {
-      // If entries have "geojson" field, it's not our new structure
-      if (data.content[0] && typeof data.content[0] === 'object' && data.content[0].geojson) {
-        rows = data.content;
-      }
-    }
-    // Defensive, in case content is a single object (not array)
-    if (!rows.length && data.content && typeof data.content === 'object' && !Array.isArray(data.content)) {
-      rows = [data.content];
-    }
-
-    let columnsArray = [];
-    if (rows.length > 0) {
-      columnsArray = Object.keys(rows[0]).filter(k => k !== 'id' && k !== 'UID').map((key) => ({
+      // For filterable columns support
+      let filterColumnsArray = columnsArray.map(({ key }) => ({
         key,
         title: key,
-        width: 180,
-        colGroup: { style: { minWidth: 120 } },
+        type: 'text'
       }));
+
+      // Ensure every row/cell has a unique id (for Table needs)
+      const cells = rows.map((row, idx) => ({
+        ...row,
+        id: row.id || `${strings.row}-${idx}`
+      }));
+
+      // Compose for Table
+      const tablePropsInit = {
+        columns: columnsArray,
+        filterableColumns: filterColumnsArray,
+        filteredFeatures: cells,
+        data: cells,
+        rowKeyField: 'id',
+        sortingMode: SortingMode.SingleTripleState,
+        columnResizing: true,
+        paging: {
+          enabled: true,
+          pageIndex: 0,
+          pageSize: 100,
+          pageSizes: [10, 50, 100],
+          position: PagingPosition.Bottom
+        },
+        format: ({ value }) => {
+          if (isValidUrl && isValidUrl(value)) {
+            return (
+              <a target="_blank" rel="noreferrer" href={value}>
+                {value}
+              </a>
+            );
+          } else if (typeof value === 'string') {
+            return (
+              <span>
+                {value.split('\n').map((line, index) => (
+                  <div key={index}>{line}</div>
+                ))}
+              </span>
+            );
+          }
+          return value;
+        }
+      };
+      return tablePropsInit;
     }
 
-    // For filterable columns support
-    let filterColumnsArray = columnsArray.map(({ key }) => ({
-      key,
-      title: key,
-      type: 'text',
-    }));
-
-    // Ensure every row/cell has a unique id (for Table needs)
-    const cells = rows.map((row, idx) => ({
-      ...row,
-      id: row.id || `${strings.row}-${idx}`
-    }));
-
-    // Compose for Table
-    const tablePropsInit = {
-      columns: columnsArray,
-      filterableColumns: filterColumnsArray,
-      filteredFeatures: cells,
-      data: cells,
+    // Defensive: If falls through, return empty table structure
+    return {
+      columns: [],
+      filterableColumns: [],
+      filteredFeatures: [],
+      data: [],
       rowKeyField: 'id',
       sortingMode: SortingMode.SingleTripleState,
       columnResizing: true,
@@ -796,48 +855,9 @@ export const FeatureDataPopup = () => {
         pageSizes: [10, 50, 100],
         position: PagingPosition.Bottom
       },
-      format: ({ value }) => {
-        if (isValidUrl && isValidUrl(value)) {
-          return (
-            <a target="_blank" rel="noreferrer" href={value}>
-              {value}
-            </a>
-          );
-        } else if (typeof value === 'string') {
-          return (
-            <span>
-              {value.split('\n').map((line, index) => (
-                <div key={index}>{line}</div>
-              ))}
-            </span>
-          );
-        }
-        return value;
-      }
+      format: ({ value }) => value
     };
-    return tablePropsInit;
-  }
-
-  // Defensive: If falls through, return empty table structure
-  return {
-    columns: [],
-    filterableColumns: [],
-    filteredFeatures: [],
-    data: [],
-    rowKeyField: 'id',
-    sortingMode: SortingMode.SingleTripleState,
-    columnResizing: true,
-    paging: {
-      enabled: true,
-      pageIndex: 0,
-      pageSize: 100,
-      pageSizes: [10, 50, 100],
-      position: PagingPosition.Bottom
-    },
-    format: ({ value }) => value,
   };
-};
-
 
   const handleGfiToolsMenuWithConfirmDialog = () => {
     const fetchableLayers = selectedLayers.filter((layer) =>
@@ -872,7 +892,8 @@ export const FeatureDataPopup = () => {
     setIsGfiToolsOpen(!isGfiToolsOpen);
     store.dispatch(setActiveSelectionTool(null));
 
-    channel && activeTool === 'gfi-selection-tool' &&
+    channel &&
+      activeTool === 'gfi-selection-tool' &&
       channel.postRequest('DrawTools.StopDrawingRequest', [
         'gfi-selection-tool',
         true
@@ -999,7 +1020,7 @@ export const FeatureDataPopup = () => {
               opacity: 0
             }}
           >
-            <StyledLoaderWrapper id='loader_wrapper'>
+            <StyledLoaderWrapper id="loader_wrapper">
               <SVLoader />
             </StyledLoaderWrapper>
           </StyledLoadingOverlay>
@@ -1299,7 +1320,7 @@ export const FeatureDataPopup = () => {
                     )}
                   </SwiperSlide>
                 );
-              } else if (location.type === "json") {
+              } else if (location.type === 'json') {
                 return (
                   <SwiperSlide
                     id={'gfi_tab_content_' + location.layerId}
@@ -1349,20 +1370,20 @@ export const FeatureDataPopup = () => {
                 selectedLayersByType.backgroundMaps.filter(
                   (l) => l.id === layer.id
                 ).length === 0
-            ) || hasOnlyUserlayers
+            ) || hasOnlyUserlayersSelected
           }
         />
         <CircleButton
           icon={faFileDownload}
           text={
-            gfiLocations.length > 0 && !hasOnlyUserlayers
+            gfiLocations.length > 0 && !hasOnlyUserlayersSelected
               ? strings.gfi.downloadMaterials
               : strings.gfi.downloadMaterialsDisabled
           }
           toggleState={isGfiDownloadToolsOpen}
           tooltipDirection={'bottom'}
           clickAction={handleGfiDownloadsMenu}
-          disabled={filteredGFILocations.length === 0 || hasOnlyUserlayers}
+          disabled={filteredGFILocations.length === 0 || hasOnlyUserlayersSelected}
         />
         <CircleButton
           icon={faSearchLocation}
@@ -1373,7 +1394,9 @@ export const FeatureDataPopup = () => {
             isMobile && store.dispatch(setMinimizeGfi(true));
           }}
           disabled={
-            gfiLocations.length === 0 || filteredGFILocations.length === 0 || hasOnlyUserlayers
+            gfiLocations.length === 0 ||
+            filteredGFILocations.length === 0 ||
+            hasOnlyUserlayersSelected
           }
         />
       </StyledButtonsContainer>
@@ -1425,7 +1448,9 @@ export const FeatureDataPopup = () => {
               x: '-100%'
             }}
           >
-            <FeatureDataDownloadTools handleGfiDownloadsMenu={handleGfiDownloadsMenu} />
+            <FeatureDataDownloadTools
+              handleGfiDownloadsMenu={handleGfiDownloadsMenu}
+            />
           </StyledGfiToolsContainer>
         )}
       </AnimatePresence>

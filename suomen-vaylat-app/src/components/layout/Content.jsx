@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+ import { useRef} from 'react';
 import { ToastContainer, Slide } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import styled from 'styled-components';
@@ -15,7 +15,6 @@ import DatasetImportDialog from '../dataset-import/dialog/DatasetImportDialog';
 import AnnouncementsDialog from '../announcements/dialog/AnnouncementsDialog';
 import MetadataDialog from '../metadata-dialog/dialog/MetadataDialog';
 import ShareWebsiteDialog from '../share-website/dialog/ShareWebsiteDialog';
-import SavedContentDialog from '../saved-content/dialog/SavedContentDialog';
 import LayerDownloadButtonLinkDialog from '../layerlists/hierarchical-layerlist/dialog/LayerDownloadButtonLinkDialog';
 import FeatureDataToolsDialog from '../feature-data-window/dialog/FeatureDataToolsDialog';
 import FeatureDataDownloadToolsDialog from '../feature-data-window/dialog/FeatureDataDownloadToolsDialog';
@@ -27,9 +26,8 @@ import MenuBar from './menu-bar/MenuBar';
 import HierarchicalLayerlistDialog from '../layerlists/hierarchical-layerlist/dialog/HierarchicalLayerlistDialog';
 import PublishedMap from './published-map/PublishedMap';
 import Search from '../search/Search';
-import Badges from '../badges/Badges';
 import ScaleBar from '../scalebar/ScaleBar';
-import ZoomMenu from '../zoom-features/ZoomMenu';
+import ZoomBar from '../zoom-features/ZoomBar';
 import WarningDialog from '../warning-dialog/dialog/WarningDialog';
 import ThemeMenu from '../layerlists/theme-layerlist/ThemeMenu';
 import BaseLayerSelector from '../base-layers-selector/BaseLayersSelector';
@@ -37,6 +35,8 @@ import BaseLayerSelectorDialog from '../base-layers-selector/dialog/BaseLayersSe
 import { isMobile } from '../../theme/theme';
 import { useAppSelector } from '../../state/hooks';
 import DrawtoolMarkersDialog from '../measurement-tools/dialog/DrawtoolMarkersDialog';
+import SaveViewDialog from '../saved-content-dialogs/dialogs/SaveViewDialog';
+import SaveGeometriesDialog from '../saved-content-dialogs/dialogs/SaveGeometriesDialog';
 
 const StyledContent = styled.div`
   position: absolute;
@@ -154,7 +154,9 @@ const Content = () => {
 
         <ShareWebsiteDialog constraintsRef={constraintsRef} />
 
-        <SavedContentDialog constraintsRef={constraintsRef} />
+        <SaveGeometriesDialog constraintsRef={constraintsRef} />
+
+        <SaveViewDialog constraintsRef={constraintsRef} />
 
         <LayerDownloadButtonLinkDialog constraintsRef={constraintsRef} />
 
@@ -197,8 +199,7 @@ const Content = () => {
           </StyledLeftSection>
           <StyledRightSection>
             <Search />
-            <ZoomMenu />
-            <Badges />
+            <ZoomBar/>
           </StyledRightSection>
         </StyledContentGrid>
       </StyledContent>

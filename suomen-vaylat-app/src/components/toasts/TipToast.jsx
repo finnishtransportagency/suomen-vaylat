@@ -15,7 +15,7 @@ const StyledToastButton = styled.button`
     padding: 0px;
     font-weight: bold;
     &:hover {
-        color: ${props => props.theme.colors.buttonActive }
+        color: ${props => props.theme.colors.buttonSelected }
     }
 `;
 

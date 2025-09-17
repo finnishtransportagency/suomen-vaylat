@@ -6,27 +6,44 @@ const StyledPillButton = styled.button`
   align-items: center;
   justify-content: flex-start;
   gap: 10px;
-  background-color: ${({ disabled, color, theme }) =>
-    disabled ? '#ccc' : color || theme.colors.button};
-  color: ${({ disabled, theme }) =>
-    disabled ? '#666' : theme.colors.mainWhite};
+  background-color: ${(props) =>
+    props.disabled
+      ? props.theme.colors.disabledBg
+      : props.color || props.theme.colors.button} !important;
+  color: ${(props) =>
+    props.disabled
+      ? props.theme.colors.disabledColor
+      : props.theme.colors.mainWhite} !important;
   border: none;
   border-radius: 30px;
   padding: 8px 16px;
   font-weight: 600;
   font-size: 15px;
   cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
-  width: fit-content;
+  min-height: 38.5px;
   transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: ${(props) =>
+      !props.disabled &&
+      (props.hoverColor
+        ? props.hoverColor
+        : props.theme.colors.buttonSelected)} !important;
+  }
 
   svg,
   img {
     width: 16px !important;
     height: 16px !important;
     opacity: ${({ disabled }) => (disabled ? 0.5 : 1)};
+    color: ${(props) =>
+      props.disabled
+        ? props.theme.colors.disabledColor
+        : props.iconColor || props.theme.colors.mainWhite} !important;
   }
 
   @media ${({ theme }) => theme.device.mobileL} {
+    min-height: 31.5px;
     font-size: 13px;
     padding: 6px 12px;
     width: 20p svg, img {
@@ -46,8 +63,29 @@ const PillButton = ({
   onClick,
   disabled,
   color,
-  hoverColor
+  hoverColor,
+  iconColor,
+  ...rest
 }) => {
+
+  const renderIcon = () => {
+    if (!icon) {
+      return null; // do not render FontAwesomeIcon with null
+    }
+
+    // image path (svg file)
+    if (typeof icon === 'string' && icon.endsWith('.svg')) {
+      return <img src={icon} alt="" aria-hidden="true" />;
+    }
+
+    try {
+      return <FontAwesomeIcon icon={icon} />;
+    } catch (err) {
+      console.warn('PillButton: invalid icon prop', icon, err);
+      return null;
+    }
+  };
+
   return (
     <StyledPillButton
       id={`pill-button-${id}`}
@@ -55,12 +93,10 @@ const PillButton = ({
       disabled={disabled}
       color={color}
       hoverColor={hoverColor}
+      iconColor={iconColor}
+      {...rest}
     >
-      {typeof icon === 'string' && icon.endsWith('.svg') ? (
-        <img src={icon} alt="icon" />
-      ) : (
-        <FontAwesomeIcon icon={icon} />
-      )}
+      {renderIcon()}
       <ButtonText>{children || text}</ButtonText>
     </StyledPillButton>
   );

@@ -1,9 +1,9 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { Logger } from "../../utils/logger";
-import { Slide, toast } from "react-toastify";
+import { createSlice } from '@reduxjs/toolkit';
+import { Logger } from '../../utils/logger';
+import { Slide, toast } from 'react-toastify';
 import strings from '../../translations';
 
-const LOG = new Logger("RPCSlice");
+const LOG = new Logger('RPCSlice');
 
 const initialState = {
   loading: true,
@@ -22,7 +22,7 @@ const initialState = {
   selectedLayers: [],
   selectedLayersByType: {
     backgroundMaps: [],
-    mapLayers: [],
+    mapLayers: []
   },
   announcements: [],
   activeAnnouncements: [],
@@ -43,7 +43,7 @@ const initialState = {
   },
   center: {
     x: 0,
-    y: 0,
+    y: 0
   },
   gfiPoint: null,
   gfiCroppingArea: null,
@@ -54,7 +54,7 @@ const initialState = {
     x: null,
     y: null,
     selectedLayers: [],
-    zoom: null,
+    zoom: null
   },
   pointInfo: {},
   filters: [],
@@ -62,11 +62,30 @@ const initialState = {
   filteringInfo: [],
   featureSearchResults: [],
   searchOn: null,
-  coordMarkerIndex: 0
+  coordMarkerIndex: 0,
+  views: null,
+  geometries: null,
+  trackErrors: [
+    { invalid: false, message: '' },
+    { invalid: false, message: '' },
+    { invalid: false, message: '' }
+  ],
+  featureErrors: [],
+  searchResults: null,
+  searchValue: '',
+  searchType: 'address',
+  isSearchingActive: false,
+  lastSearchValue: '',
+  firstSearchResultShown: false,
+  // TODO: waiting for logging in option
+  isLoggedIn: false,
+  userLayers: [],
+  editingView: null,
+  editingGeometry: null
 };
 
 export const rpcSlice = createSlice({
-  name: "rpc",
+  name: 'rpc',
   initialState,
   reducers: {
     /**
@@ -77,7 +96,7 @@ export const rpcSlice = createSlice({
      */
     setLoading: (state, action) => {
       state.loading = action.payload;
-      LOG.log("setLoading to " + action.payload);
+      LOG.log('setLoading to ' + action.payload);
     },
 
     /**
@@ -98,7 +117,7 @@ export const rpcSlice = createSlice({
      */
     setChannel: (state, action) => {
       state.channel = action.payload;
-      LOG.log("setChannel to ", action.payload);
+      LOG.log('setChannel to ', action.payload);
     },
 
     /**
@@ -129,7 +148,7 @@ export const rpcSlice = createSlice({
      */
     setAllGroups: (state, action) => {
       state.allGroups = action.payload;
-      LOG.log("setAllGroups to ", action.payload);
+      LOG.log('setAllGroups to ', action.payload);
     },
 
     /**
@@ -141,7 +160,7 @@ export const rpcSlice = createSlice({
      */
     setAllLayers: (state, action) => {
       state.allLayers = action.payload;
-      LOG.log("setAllLayers to ", action.payload);
+      LOG.log('setAllLayers to ', action.payload);
     },
 
     /**
@@ -162,7 +181,7 @@ export const rpcSlice = createSlice({
      */
     setSelectedLayers: (state, action) => {
       state.selectedLayers = action.payload;
-      LOG.log("setSelectedLayers to ", action.payload);
+      LOG.log('setSelectedLayers to ', action.payload);
     },
 
     /**
@@ -172,7 +191,7 @@ export const rpcSlice = createSlice({
      */
     setBackgroundMaps: (state, action) => {
       state.selectedLayersByType.backgroundMaps = action.payload;
-      LOG.log("setBackgroundMaps ", action.payload);
+      LOG.log('setBackgroundMaps ', action.payload);
     },
 
     /**
@@ -183,12 +202,12 @@ export const rpcSlice = createSlice({
 
     setMapLayers: (state, action) => {
       state.selectedLayersByType.mapLayers = action.payload;
-      LOG.log("setMapLayers ", action.payload);
+      LOG.log('setMapLayers ', action.payload);
     },
 
     setAllSelectedThemeLayers: (state, action) => {
       state.allSelectedThemeLayers = action.payload;
-      LOG.log("setThemeLayers", action.payload);
+      LOG.log('setThemeLayers', action.payload);
     },
 
     /**
@@ -199,7 +218,7 @@ export const rpcSlice = createSlice({
      */
     setAllTags: (state, action) => {
       state.allTags = action.payload;
-      LOG.log("setAllTags to ", action.payload);
+      LOG.log('setAllTags to ', action.payload);
     },
 
     /**
@@ -210,7 +229,7 @@ export const rpcSlice = createSlice({
      */
     setTags: (state, action) => {
       state.tags = action.payload;
-      LOG.log("setTags to ", action.payload);
+      LOG.log('setTags to ', action.payload);
     },
 
     /**
@@ -221,7 +240,7 @@ export const rpcSlice = createSlice({
      */
     setTagsWithLayers: (state, action) => {
       state.tagsWithLayers = action.payload;
-      LOG.log("setTagsWithLayers to ", action.payload);
+      LOG.log('setTagsWithLayers to ', action.payload);
     },
 
     /**
@@ -232,7 +251,7 @@ export const rpcSlice = createSlice({
      */
     setAllThemesWithLayers: (state, action) => {
       state.allThemesWithLayers = action.payload;
-      LOG.log("setAllThemesWithLayers to ", action.payload);
+      LOG.log('setAllThemesWithLayers to ', action.payload);
     },
 
     /**
@@ -243,7 +262,7 @@ export const rpcSlice = createSlice({
      */
     setSelectedTheme: (state, action) => {
       state.selectedTheme = action.payload;
-      LOG.log("setSelectedTheme to ", action.payload);
+      LOG.log('setSelectedTheme to ', action.payload);
     },
 
     /**
@@ -254,7 +273,7 @@ export const rpcSlice = createSlice({
      */
     setLastSelectedTheme: (state, action) => {
       state.lastSelectedTheme = action.payload;
-      LOG.log("setLastSelectedTheme to ", action.payload);
+      LOG.log('setLastSelectedTheme to ', action.payload);
     },
 
     /**
@@ -265,7 +284,7 @@ export const rpcSlice = createSlice({
      */
     setSelectedThemeId: (state, action) => {
       state.selectedThemeId = action.payload;
-      LOG.log("setSelectedThemeId to " + action.payload);
+      LOG.log('setSelectedThemeId to ' + action.payload);
     },
 
     /**
@@ -293,7 +312,7 @@ export const rpcSlice = createSlice({
      */
     setAnnouncements: (state, action) => {
       state.announcements = action.payload;
-      LOG.log("setAnnounchements to ", action.payload);
+      LOG.log('setAnnounchements to ', action.payload);
     },
 
     /**
@@ -304,7 +323,7 @@ export const rpcSlice = createSlice({
      */
     setActiveAnnouncements: (state, action) => {
       state.activeAnnouncements = action.payload;
-      LOG.log("setActiveAnnounchements to ", action.payload);
+      LOG.log('setActiveAnnounchements to ', action.payload);
     },
 
     /**
@@ -315,7 +334,7 @@ export const rpcSlice = createSlice({
      */
     setFeatures: (state, action) => {
       state.features = action.payload;
-      LOG.log("setFeatures to ", action.payload);
+      LOG.log('setFeatures to ', action.payload);
     },
 
     /**
@@ -326,7 +345,7 @@ export const rpcSlice = createSlice({
      */
     setCurrentState: (state, action) => {
       state.currentState = action.payload;
-      LOG.log("setCurrentState to ", action.payload);
+      LOG.log('setCurrentState to ', action.payload);
     },
 
     /**
@@ -337,7 +356,7 @@ export const rpcSlice = createSlice({
      */
     setTagLayers: (state, action) => {
       state.tagLayers = action.payload;
-      LOG.log("setTagLayers to ", action.payload);
+      LOG.log('setTagLayers to ', action.payload);
     },
 
     /**
@@ -348,7 +367,7 @@ export const rpcSlice = createSlice({
      */
     setZoomRange: (state, action) => {
       state.zoomRange = action.payload;
-      LOG.log("setZoomRange to " + action.payload);
+      LOG.log('setZoomRange to ' + action.payload);
     },
 
     /**
@@ -369,11 +388,11 @@ export const rpcSlice = createSlice({
      */
     setMapLayerVisibility: (state, action) => {
       var layer = action.payload;
-      state.channel.postRequest("MapModulePlugin.MapLayerVisibilityRequest", [
+      state.channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [
         layer.id,
-        !layer.visible,
+        !layer.visible
       ]);
-      LOG.log("setMapLayerVisibility to ", action.payload);
+      LOG.log('setMapLayerVisibility to ', action.payload);
     },
 
     /**
@@ -384,11 +403,11 @@ export const rpcSlice = createSlice({
      */
     setOpacity: (state, action) => {
       state.channel !== null &&
-        state.channel.postRequest("ChangeMapLayerOpacityRequest", [
+        state.channel.postRequest('ChangeMapLayerOpacityRequest', [
           action.payload.id,
-          action.payload.value,
+          action.payload.value
         ]);
-      LOG.log("setOpacity to ", action.payload);
+      LOG.log('setOpacity to ', action.payload);
     },
 
     /**
@@ -397,8 +416,8 @@ export const rpcSlice = createSlice({
      * @param {Object} state
      */
     setZoomIn: (state) => {
-      state.channel !== null && state.channel.zoomIn(function () { });
-      LOG.log("setZoomIn");
+      state.channel !== null && state.channel.zoomIn(function () {});
+      LOG.log('setZoomIn');
     },
 
     /**
@@ -407,8 +426,8 @@ export const rpcSlice = createSlice({
      * @param {Object} state
      */
     setZoomOut: (state) => {
-      state.channel !== null && state.channel.zoomOut(function () { });
-      LOG.log("setZoomOut");
+      state.channel !== null && state.channel.zoomOut(function () {});
+      LOG.log('setZoomOut');
     },
 
     /**
@@ -419,8 +438,8 @@ export const rpcSlice = createSlice({
      */
     setZoomTo: (state, action) => {
       state.channel !== null &&
-        state.channel.zoomTo([action.payload], function (data) { });
-      LOG.log("setZoomTo to " + action.payload);
+        state.channel.zoomTo([action.payload], function (data) {});
+      LOG.log('setZoomTo to ' + action.payload);
     },
 
     /**
@@ -435,40 +454,40 @@ export const rpcSlice = createSlice({
           action.payload.search,
           action.payload.handler,
           (err) => {
-            if (typeof action.payload.errorHandler === "function") {
+            if (typeof action.payload.errorHandler === 'function') {
               action.payload.errorHandler(err);
             } else {
-              LOG.warn("VKM search failed");
+              LOG.warn('VKM search failed');
             }
           }
         );
       }
-      LOG.log("searchVKMRoad ", action.payload);
+      LOG.log('searchVKMRoad ', action.payload);
     },
 
     searchVKMTrack: (state, action) => {
-      let ratanumero, ratakilometri, ratametri
-      if (action && action.payload.value.includes("/")) {
-        const values = action.payload.value.split("/");
+      let ratanumero, ratakilometri, ratametri;
+      if (action && action.payload.value.includes('/')) {
+        const values = action.payload.value.split('/');
         ratanumero = values[0].trim();
-        ratakilometri = values[1].trim()
-        ratametri = values[2].trim()
+        ratakilometri = values[1].trim();
+        ratametri = values[2].trim();
       }
 
       if (state.channel !== null) {
         state.channel.searchVKMTrack(
           [ratanumero, Number(ratakilometri), Number(ratametri)],
           function (data) {
-            if (typeof action.payload.handler === "function") {
+            if (typeof action.payload.handler === 'function') {
               action.payload.handler(data);
-              LOG.log("searchVKMTrack", data);
+              LOG.log('searchVKMTrack', data);
             }
           },
           function (errors) {
-            LOG.error('Ratahaku epäonnistui', errors)
+            LOG.error('Ratahaku epäonnistui', errors);
           }
-        )
-      };
+        );
+      }
     },
 
     /**
@@ -479,7 +498,7 @@ export const rpcSlice = createSlice({
      */
     setCurrentZoomLevel: (state, action) => {
       state.currentZoomLevel = action.payload;
-      LOG.log("setCurrentZoomLevel to " + action.payload);
+      LOG.log('setCurrentZoomLevel to ' + action.payload);
     },
 
     /**
@@ -490,8 +509,8 @@ export const rpcSlice = createSlice({
      */
     searchRequest: (state, action) => {
       state.channel !== null &&
-        state.channel.postRequest("SearchRequest", [action.payload]);
-      LOG.log("searchRequest " + action.payload);
+        state.channel.postRequest('SearchRequest', [action.payload]);
+      LOG.log('searchRequest ' + action.payload);
     },
 
     /**
@@ -504,20 +523,20 @@ export const rpcSlice = createSlice({
       const data = {
         x: action.payload.x,
         y: action.payload.y,
-        msg: action.payload.msg || "",
+        msg: action.payload.msg || '',
         shape:
-          typeof action.payload.shape === "number" ? action.payload.shape : 2,
+          typeof action.payload.shape === 'number' ? action.payload.shape : 2,
         size: action.payload.size || 7,
-        color: action.payload.color || "0064af",
-        offsetX: action.payload.offsetX || "",
-        offsetY: action.payload.offsetY || "",
+        color: action.payload.color || '0064af',
+        offsetX: action.payload.offsetX || '',
+        offsetY: action.payload.offsetY || ''
       };
       state.channel !== null &&
-        state.channel.postRequest("MapModulePlugin.AddMarkerRequest", [
+        state.channel.postRequest('MapModulePlugin.AddMarkerRequest', [
           data,
-          action.payload.markerId,
+          action.payload.markerId
         ]);
-      LOG.log("addMarkerRequest ", action.payload);
+      LOG.log('addMarkerRequest ', action.payload);
     },
 
     /**
@@ -528,11 +547,11 @@ export const rpcSlice = createSlice({
      */
     removeMarkerRequest: (state, action) => {
       state.channel !== null && action.payload
-        ? state.channel.postRequest("MapModulePlugin.RemoveMarkersRequest", [
-          action.payload.markerId,
-        ])
-        : state.channel.postRequest("MapModulePlugin.RemoveMarkersRequest");
-      LOG.log("removeMarkerRequest ", action.payload);
+        ? state.channel.postRequest('MapModulePlugin.RemoveMarkersRequest', [
+            action.payload.markerId
+          ])
+        : state.channel.postRequest('MapModulePlugin.RemoveMarkersRequest');
+      LOG.log('removeMarkerRequest ', action.payload);
     },
 
     /**
@@ -543,12 +562,12 @@ export const rpcSlice = createSlice({
      */
     mapMoveRequest: (state, action) => {
       state.channel !== null &&
-        state.channel.postRequest("MapMoveRequest", [
+        state.channel.postRequest('MapMoveRequest', [
           action.payload.x,
           action.payload.y,
-          typeof action.payload.zoom === "number" ? action.payload.zoom : 10,
+          typeof action.payload.zoom === 'number' ? action.payload.zoom : 10
         ]);
-      LOG.log("mapMoveRequest ", action.payload);
+      LOG.log('mapMoveRequest ', action.payload);
     },
 
     /**
@@ -563,7 +582,7 @@ export const rpcSlice = createSlice({
           [action.payload.layerId],
           (data) => {
             LOG.log(
-              "Metadata getted ",
+              'Metadata getted ',
               data,
               action.payload.layer,
               action.payload.uuid
@@ -576,25 +595,25 @@ export const rpcSlice = createSlice({
           },
           (err) => {
             toast.error(`${strings.metadata.error}`, {
-                position: "top-center",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: false,
-                progress: undefined,
-                theme: "colored",
-                transition: Slide
+              position: 'top-center',
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: false,
+              progress: undefined,
+              theme: 'colored',
+              transition: Slide
             });
-            if (typeof action.payload.errorHandler === "function") {
+            if (typeof action.payload.errorHandler === 'function') {
               action.payload.errorHandler(err);
-              LOG.warn("metadata get error", err);
+              LOG.warn('metadata get error', err);
             } else {
-              LOG.warn("Get layer metadata failed");
+              LOG.warn('Get layer metadata failed');
             }
           }
         );
-      LOG.log("getLayerMetadata ", action.payload);
+      LOG.log('getLayerMetadata ', action.payload);
     },
 
     /**
@@ -606,9 +625,9 @@ export const rpcSlice = createSlice({
     clearLayerMetadata: (state) => {
       state.layerMetadata = {
         data: null,
-        layer: null,
+        layer: null
       };
-      LOG.log("clearLayerrMetadata");
+      LOG.log('clearLayerrMetadata');
     },
 
     /**
@@ -621,9 +640,9 @@ export const rpcSlice = createSlice({
       state.layerMetadata = {
         layer: action.payload.layer,
         data: action.payload.data,
-        uuid: action.payload.uuid,
+        uuid: action.payload.uuid
       };
-      LOG.log("setLayerMetadata to ", action.payload);
+      LOG.log('setLayerMetadata to ', action.payload);
     },
 
     /**
@@ -635,12 +654,12 @@ export const rpcSlice = createSlice({
     getLegends: (state, action) => {
       state.channel &&
         state.channel.getLegends((data) => {
-          if (typeof action.payload.handler === "function") {
+          if (typeof action.payload.handler === 'function') {
             action.payload.handler(data);
-            LOG.log(" --> legends getted", data);
+            LOG.log(' --> legends getted', data);
           }
         });
-      LOG.log("getLegends ", action.payload);
+      LOG.log('getLegends ', action.payload);
     },
 
     /**
@@ -651,7 +670,7 @@ export const rpcSlice = createSlice({
      */
     setLegends: (state, action) => {
       state.legends = action.payload;
-      LOG.log("setLegends to ", action.payload);
+      LOG.log('setLegends to ', action.payload);
     },
 
     /**
@@ -671,7 +690,7 @@ export const rpcSlice = createSlice({
       state.startCenter.x = action.payload.centerX;
       state.startCenter.y = action.payload.centerY;
       state.startCenter.zoomLevel = action.payload.zoom;
-      LOG.log("setStartMapCenter to ", action.payload);
+      LOG.log('setStartMapCenter to ', action.payload);
     },
 
     /**
@@ -691,7 +710,7 @@ export const rpcSlice = createSlice({
       state.center.x = action.payload.centerX;
       state.center.y = action.payload.centerY;
       state.currentZoomLevel = action.payload.zoom;
-      LOG.log("setCurrentMapCenter to ", action.payload);
+      LOG.log('setCurrentMapCenter to ', action.payload);
     },
 
     /**
@@ -702,11 +721,11 @@ export const rpcSlice = createSlice({
      */
     changeLayerStyle: (state, action) => {
       state.channel !== null &&
-        state.channel.postRequest("ChangeMapLayerStyleRequest", [
+        state.channel.postRequest('ChangeMapLayerStyleRequest', [
           action.payload.layerId,
-          action.payload.style,
+          action.payload.style
         ]);
-      LOG.log("changeLayerStyle ", action.payload);
+      LOG.log('changeLayerStyle ', action.payload);
     },
 
     /**
@@ -717,9 +736,9 @@ export const rpcSlice = createSlice({
      */
     reArrangeSelectedMapLayers: (state, action) => {
       state.channel !== null &&
-        state.channel.postRequest("RearrangeSelectedMapLayerRequest", [
+        state.channel.postRequest('RearrangeSelectedMapLayerRequest', [
           action.payload.layerId,
-          action.payload.position,
+          action.payload.position
         ]);
     },
 
@@ -780,7 +799,7 @@ export const rpcSlice = createSlice({
      * @param {Object} action
      */
     setSearchOn: (state, action) => {
-      state.searchOn = action.payload;;
+      state.searchOn = action.payload;
     },
 
     /**
@@ -793,8 +812,8 @@ export const rpcSlice = createSlice({
       state.gfiLocations = action.payload;
       state.channel &&
         state.channel.postRequest(
-          "MapModulePlugin.RemoveFeaturesFromMapRequest",
-          [null, null, "gfi-result-layer"]
+          'MapModulePlugin.RemoveFeaturesFromMapRequest',
+          [null, null, 'gfi-result-layer']
         );
     },
 
@@ -924,13 +943,13 @@ export const rpcSlice = createSlice({
         if (groupId !== null) {
           if (l && l.groups && !l.groups.includes(groupId)) {
             state.channel.postRequest(
-              "MapModulePlugin.MapLayerVisibilityRequest",
+              'MapModulePlugin.MapLayerVisibilityRequest',
               [l.id, false]
             );
           }
         } else {
           state.channel.postRequest(
-            "MapModulePlugin.MapLayerVisibilityRequest",
+            'MapModulePlugin.MapLayerVisibilityRequest',
             [l.id, false]
           );
         }
@@ -958,20 +977,92 @@ export const rpcSlice = createSlice({
      * @param {Object} action
      */
     setStartState: (state, action) => {
-      if (typeof action.payload.x === "number") {
+      if (typeof action.payload.x === 'number') {
         state.startState.x = action.payload.x;
       }
-      if (typeof action.payload.y === "number") {
+      if (typeof action.payload.y === 'number') {
         state.startState.y = action.payload.y;
       }
       if (action.payload.selectedLayers) {
         state.startState.selectedLayers = action.payload.selectedLayers;
       }
-      if (typeof action.payload.zoom === "number") {
+      if (typeof action.payload.zoom === 'number') {
         state.startState.zoom = action.payload.zoom;
       }
     },
-  },
+
+    setViews: (state, action) => {
+      state.views = action.payload;
+    },
+
+    setGeometries: (state, action) => {
+      state.geometries = action.payload;
+    },
+
+    setIsLoggedIn: (state, action) => {
+      state.isLoggedIn = action.payload;
+    },
+
+    setTrackErrors: (state, action) => {
+      state.trackErrors = action.payload;
+    },
+
+    setFeatureErrors: (state, action) => {
+      state.featureErrors = action.payload;
+    },
+
+    setSearchResults: (state, action) => {
+      state.searchResults = action.payload;
+    },
+
+    setSearchValue: (state, action) => {
+      state.searchValue = action.payload;
+    },
+
+    setSearchType: (state, action) => {
+      state.searchType = action.payload;
+    },
+
+    setIsSearchingActive: (state, action) => {
+      state.isSearchingActive = action.payload;
+    },
+
+    setLastSearchValue: (state, action) => {
+      state.lastSearchValue = action.payload;
+    },
+
+    setFirstSearchResultShown: (state, action) => {
+      state.firstSearchResultShown = action.payload;
+    },
+
+    setEditingView: (state, action) => {
+      state.editingView = action.payload;
+    },
+
+    setEditingGeometry: (state, action) => {
+      state.editingGeometry = action.payload;
+    },
+
+    /**
+     * Set user layers.
+     * @method setUserLayers
+     * @param {Object} state
+     * @param {Object} action
+     */
+    setUserLayers: (state, action) => {
+      state.userLayers = action.payload;
+    },
+
+    /**
+     * Push GFI locations.
+     * @method pushGFILocations
+     * @param {Object} state
+     * @param {Object} action
+     */
+    pushGFILocations: (state, action) => {
+      state.gfiLocations.push(action.payload);
+    }
+  }
 });
 
 export const {
@@ -1040,7 +1131,20 @@ export const {
   searchVKMTrack,
   setAnnouncements,
   setCoordMarkerIndex,
-  setUserLayers
+  setViews,
+  setGeometries,
+  setIsLoggedIn,
+  setTrackErrors,
+  setFeatureErrors,
+  setSearchResults,
+  setSearchValue,
+  setSearchType,
+  setIsSearchingActive,
+  setLastSearchValue,
+  setFirstSearchResultShown,
+  setUserLayers,
+  setEditingView,
+  setEditingGeometry
 } = rpcSlice.actions;
 
 export default rpcSlice.reducer;

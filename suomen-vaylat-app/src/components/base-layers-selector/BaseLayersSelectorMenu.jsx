@@ -62,7 +62,7 @@ const StyledDraggableButton = styled.div`
   align-items: center;
   justify-content: center;
   &:hover {
-    background-color: ${(props) => props.theme.colors.buttonActive} !important;
+    background-color: ${(props) => props.theme.colors.buttonSelected} !important;
   }
   @media ${(props) => props.theme.device.laptop} {
     max-width: 120px;
@@ -79,7 +79,7 @@ const StyledSaveButton = styled(Button)`
   border: none;
   width: 10em;
   &:hover {
-    background-color: ${(props) => props.theme.colors.buttonActive} !important;
+    background-color: ${(props) => props.theme.colors.buttonSelected} !important;
   }
   @media ${(props) => props.theme.device.laptop} {
     max-width: 120px;
@@ -106,7 +106,7 @@ const StyledCancelButton = styled(Button)`
   font-weight: 600;
   &:hover:enabled {
     background-color: ${({ theme }) => theme.colors.hover};
-    color: ${({ theme }) => theme.colors.buttonActive};
+    color: ${({ theme }) => theme.colors.buttonSelected};
   }
   cursor: pointer;
   border-radius: 30px;

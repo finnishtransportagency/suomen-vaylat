@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
 import ReactTooltip from 'react-tooltip';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { theme, isMobile } from '../../theme/theme';
+import { isMobile } from '../../theme/theme';
 
 const StyledCircleButton = styled(motion.button)`
     border: none;
@@ -16,15 +16,16 @@ const StyledCircleButton = styled(motion.button)`
     justify-content: center;
     align-items: center;
     background-color: ${ props =>
-        props.disabled ? "#ddd" :
+        props.disabled ? props.theme.colors.disabledBg :
         props.color? props.color : 
         props.toggleState ?
-        props.theme.colors.buttonActive : props.theme.colors.button
+        props.theme.colors.buttonSelected : props.theme.colors.button
     };
     box-shadow: 0px 2px 4px #0000004D;
     border-radius: 50%;
     svg {
-        color: ${props => props.theme.colors.mainWhite};
+        color: ${(props) =>
+        props.disabled ? props.theme.colors.disabledColor : props.theme.colors.mainWhite};
         font-size: 22px;
     };
 
@@ -65,7 +66,7 @@ const StyledCircleButtonTextContainer = styled(motion.div)`
     position: absolute;
     left: ${props => props.direction === "right" && 0};
     right: ${props => props.direction === "left" && 0};
-    background-color: ${props => props.theme.colors.mainWhite};
+    background-color: ${props => props.tooltipBackgroundColor ? props.tooltipBackgroundColor : props.theme.colors.mainWhite};
     height: 100%;
     z-index: -1;
     display: flex;
@@ -78,7 +79,7 @@ const StyledCircleButtonTextContainer = styled(motion.div)`
     padding-right: ${props => props.direction === "left" && "calc(100% + 16px)"};
     overflow: hidden;
     border-radius: 24px;
-    color: ${props => props.theme.colors.mainColor1};
+    color: ${props => props.tooltipColor ? props.tooltipColor : props.theme.colors.mainColor1};
     font-size: 14px;
     font-weight: 600;
     pointer-events: none;
@@ -90,8 +91,8 @@ const CircleButton = ({
     toggleState,
     clickAction,
     tooltipDirection,
-    tooltipBackgroundColor = theme.colors.mainColor1,
-    tooltipColor = theme.colors.mainWhite,
+    tooltipBackgroundColor,
+    tooltipColor,
     type,
     color,
     disabled,
@@ -139,7 +140,8 @@ const CircleButton = ({
             }
              <AnimatePresence initial={false}>
                  {
-                      !toggleState && isHovered && <StyledCircleButtonTextContainer
+                      !toggleState && isHovered && !disabled &&
+                    <StyledCircleButtonTextContainer
                         key={text +"_button"}
                         direction={tooltipDirection}
                         positionTransition
@@ -162,8 +164,9 @@ const CircleButton = ({
                             opacity: 0,
                             boxShadow: "2px 2px 4px #0000004D"
                         }}
-                        color={color}
-                     >
+                        tooltipColor={tooltipColor}
+                        tooltipBackgroundColor={tooltipBackgroundColor}
+                    >
                         {text}
                      </StyledCircleButtonTextContainer>
                  }

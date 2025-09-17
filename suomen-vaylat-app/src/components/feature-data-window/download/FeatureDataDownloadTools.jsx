@@ -26,9 +26,7 @@ import {
 import {
   setIsGfiDownloadOpen,
   setWarning,
-  setIsSaveViewOpen,
   setIsGfiDownloadToolsOpen,
-  setIsGfiToolsOpen
 } from '../../../state/slices/uiSlice';
 import { Slide, toast } from 'react-toastify';
 import { GFI_GEOMETRY_LAYER_ID, MAX_RECONNECTIONS_FEATURE_DATA_DOWNLOAD } from '../../../utils/constants';
@@ -238,9 +236,6 @@ const FeatureDataDownloadTools = ({ closeButton = true, handleGfiDownloadsMenu})
       ]);
   };
 
-  const handleCloseSaveViewDialog = () => {
-    store.dispatch(setIsSaveViewOpen(false));
-  };
 
   // TODO: move to utils if this is used more than once
   const connectWebsocket = (count) => {
@@ -251,7 +246,6 @@ const FeatureDataDownloadTools = ({ closeButton = true, handleGfiDownloadsMenu})
 
     const handleDownloadFailure = () => {
       handleCloseGfiDownloadDialog();
-      handleCloseSaveViewDialog();
       ws.close();
 
       toast.error(strings.downloads.downloadFailure, {

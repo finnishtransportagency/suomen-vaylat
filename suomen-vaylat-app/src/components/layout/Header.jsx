@@ -1,21 +1,22 @@
-import {
-  faInfoCircle,
-  faQuestion,
-  faTimes,
-  faGlobe
-} from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useContext, useState } from 'react';
+import { useContext, useState, useCallback } from 'react';
 import { ReactReduxContext } from 'react-redux';
 import ReactTooltip from 'react-tooltip';
 import { theme, isMobile } from '../../theme/theme';
 import styled from 'styled-components';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence } from 'framer-motion';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useAppSelector } from '../../state/hooks';
+import strings from '../../translations';
+import LanguageSelector from '../language-selector/LanguageSelector';
+import { ReactComponent as VaylaLogo } from './images/vayla_v_white.svg';
+import DesktopNav from './navigation/DesktopNav';
+import { createBrowserHistory } from 'history';
+import MobileNav from './navigation/MobileNav';
+import { faBars } from '@fortawesome/free-solid-svg-icons';
+import Badges from '../badges/Badges';
+
 import {
-  setIsInfoOpen,
   setIsMainScreen,
-  setIsUserGuideOpen,
   setActiveTool,
   removeActiveGeometry
 } from '../../state/slices/uiSlice';
@@ -25,15 +26,11 @@ import {
   resetGFILocations,
   setVKMData
 } from '../../state/slices/rpcSlice';
-import { resetThemeGroupsForMainScreen } from '../../utils/rpcUtil';
-import strings from '../../translations';
-import LanguageSelector from '../language-selector/LanguageSelector';
-import { ReactComponent as VaylaLogoMobile } from './images/vayla_v_white.svg';
-import MenuIcon from '@mui/icons-material/Menu';
-import { ReactComponent as VaylaLogo } from './images/vayla_sivussa_fi_sv_white.svg';
-import { updateLayers } from '../../utils/rpcUtil';
+import {
+  resetThemeGroupsForMainScreen,
+  updateLayers
+} from '../../utils/rpcUtil';
 
-import { createBrowserHistory } from 'history';
 const history = createBrowserHistory();
 
 const StyledHeaderContainer = styled.div`
@@ -58,7 +55,7 @@ const HeaderLeft = styled.div`
   border-bottom-right-radius: 30px;
   z-index: 11;
   pointer-events: all;
-  padding: 25px;
+  padding: 1em 1.5em 1em 0;
 
   @media ${(props) => props.theme.device.mobileL} {
     height: 60px;
@@ -97,7 +94,7 @@ const HeaderRight = styled.div`
   display: flex;
   align-items: center;
   background-color: ${(props) => props.theme.colors.mainColor1};
-  padding: 0 12px;
+  padding: 1em 1em 1em 0.5em;
   border-bottom-left-radius: 30px;
   z-index: 11;
   pointer-events: all;
@@ -131,7 +128,6 @@ const StyledHeaderTitleContainer = styled.p`
   justify-content: flex-start;
   align-items: center;
   margin: 0;
-  padding-left: 18px;
   color: ${(props) => props.theme.colors.mainWhite};
   font-weight: 600;
 
@@ -161,133 +157,30 @@ const StyledHeaderLogoContainer = styled.div`
   svg {
     height: inherit;
   }
-
-  @media ${(props) => props.theme.device.desktop} {
-    width: 140px;
-  }
-  @media ${(props) => props.theme.device.mobileL} {
-    height: 45px;
-  }
-`;
-
-const StyledMobileHeaderRow = styled.header`
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-`;
-
-const StyledMobileMenuTitle = styled.p`
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 18px;
-  font-weight: 600;
-  color: ${(props) => props.theme.colors.mainWhite};
-  margin: 0;
-`;
-
-const MobileMenuList = styled.nav`
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  margin-top: 30px;
-  margin-left: 20px;
-`;
-
-const StyledMobileMenuButton = styled.button`
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  padding: 10px 0;
-  color: ${(props) => props.theme.colors.mainWhite};
-  font-size: 20px;
-  font-weight: 500;
-  cursor: pointer;
-  margin-left: 20px;
-  background: none;
-  border: none;
-
-  .icon-wrapper {
-    width: 25px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-shrink: 0;
-  }
-
-  .text-wrapper {
-    display: flex;
-    align-items: center;
-  }
-
-  &:focus {
-    outline: 2px solid ${(props) => props.theme.colors.secondaryColor};
-  }
 `;
 
 const DesktopButtons = styled.div`
   display: flex;
-  gap: 4px;
-  @media ${(props) => props.theme.device.mobileL} {
-    display: none;
-  }
-`;
-
-const StyledMobileNavContainer = styled(motion.nav)`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: ${(props) => props.theme.colors.mainColor1};
-  z-index: 1001;
-
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-start;
-  padding: 20px;
-  gap: 20px;
-`;
-
-const HiddenLanguageIconWrapper = styled.div`
-  display: flex;
   align-items: center;
-
-  svg {
-    display: none;
-  }
+  gap: 4px;
 `;
 
 export const Header = () => {
   const lang = useAppSelector((state) => state.language);
-  const [isSubNavOpen, setSubNavOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { store } = useContext(ReactReduxContext);
 
-  const {
-    channel,
-    selectedLayers,
-    lastSelectedTheme,
-    selectedThemeId,
-    startState
-  } = useAppSelector((state) => state.rpc);
+  // This function now only accesses latest redux state when called
+  const setToMainScreen = useCallback(() => {
+    const state = store.getState();
+    const channel = state.rpc.channel;
+    const selectedLayers = state.rpc.selectedLayers;
+    const lastSelectedTheme = state.rpc.lastSelectedTheme;
+    const selectedThemeId = state.rpc.selectedThemeId;
+    const startState = state.rpc.startState;
+    const activeTool = state.ui.activeTool;
+    const activeGeometries = state.ui.activeGeometries;
 
-  const { isInfoOpen, isUserGuideOpen, activeTool, activeGeometries } =
-    useAppSelector((state) => state.ui);
-
-  const handleSelectGroup = (index, theme) => {
-    resetThemeGroupsForMainScreen(
-      store,
-      channel,
-      index,
-      theme,
-      lastSelectedTheme,
-      selectedThemeId
-    );
-  };
-
-  const setToMainScreen = () => {
     let routerPrefix = '/';
     if (process.env.REACT_APP_ROUTER_PREFIX) {
       routerPrefix = process.env.REACT_APP_ROUTER_PREFIX;
@@ -313,7 +206,14 @@ export const Header = () => {
     store.dispatch(setIsMainScreen());
     store.dispatch(resetGFILocations([]));
     history.push(routerPrefix);
-    handleSelectGroup(null, lastSelectedTheme);
+    resetThemeGroupsForMainScreen(
+      store,
+      channel,
+      null,
+      lastSelectedTheme,
+      lastSelectedTheme,
+      selectedThemeId
+    );
 
     // add start layers back (do it after than select group)
     startState.selectedLayers.forEach((layer) => {
@@ -329,7 +229,8 @@ export const Header = () => {
         ]);
     });
 
-    channel && activeTool === 'gfi-selection-tool' &&
+    channel &&
+      activeTool === 'gfi-selection-tool' &&
       channel.postRequest('DrawTools.StopDrawingRequest', [
         'gfi-selection-tool',
         true
@@ -357,7 +258,7 @@ export const Header = () => {
     activeGeometries.forEach((geometry) => {
       store.dispatch(removeActiveGeometry(geometry.id));
     });
-  };
+  }, [store]);
 
   return (
     <>
@@ -399,11 +300,11 @@ export const Header = () => {
               rel="noreferrer"
               id="header-vayla-logo-link"
             >
-              {isMobile ? <VaylaLogoMobile aria-hidden="true" focusable="false"/> : <VaylaLogo aria-hidden="true" focusable="false"/>}
+              <VaylaLogo aria-hidden="true" focusable="false" />
             </a>
           </StyledHeaderLogoContainer>
-          <StyledHeaderTitleContainer 
-            id="header-title" 
+          <StyledHeaderTitleContainer
+            id="header-title"
             onClick={setToMainScreen}
             aria-label={strings.accessibility.headerTitle}
           >
@@ -412,131 +313,40 @@ export const Header = () => {
           </StyledHeaderTitleContainer>
         </HeaderLeft>
 
-        {/* Right blue corner */}
-        <HeaderRight id="header-right">
-          {/* Desktop buttons */}
-          <DesktopButtons id="header-desktop-buttons" aria-label={strings.accessibility.desktopButtons}>
-            <LanguageSelector />
-            <StyledHeaderButton 
-              id="header-user-guide-button"
-              data-tip
-              data-for="header-show-user-guide-tooltip"
-              onClick={() =>
-                store.dispatch(setIsUserGuideOpen(!isUserGuideOpen))
-              }
-              aria-label={strings.tooltips.showUserGuide}
-              aria-haspopup="true"
-            >
-              <FontAwesomeIcon icon={faQuestion} aria-hidden="true" focusable="false"/>
-            </StyledHeaderButton>
-            <StyledHeaderButton 
-              id="header-info-button"
-              data-tip
-              data-for="header-show-info-tooltip"
-              onClick={() => store.dispatch(setIsInfoOpen(!isInfoOpen))}
-              aria-label={strings.tooltips.showPageInfo}
-              aria-haspopup="true"
-            >
-              <FontAwesomeIcon icon={faInfoCircle} aria-hidden="true" focusable="false"/>
-            </StyledHeaderButton>
-          </DesktopButtons>
+        <Badges />
 
-          <StyledHeaderButton 
-            id="header-menu-toggle-button" 
+        <HeaderRight id="header-right">
+          { !isMobile &&
+            <DesktopButtons
+              id="header-desktop-buttons"
+              aria-label={strings.accessibility.desktopButtons}
+            >
+              <LanguageSelector />
+              <DesktopNav setIsMenuOpen={setIsMenuOpen} isMenuOpen={isMenuOpen} />
+            </DesktopButtons>
+          }
+
+          <StyledHeaderButton
+            id="header-menu-toggle-button"
             className="menu-toggle-button"
-            onClick={() => setSubNavOpen(!isSubNavOpen)}
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
             aria-label={strings.accessibility.menuToggle}
-            aria-expanded={isSubNavOpen}
+            aria-expanded={isMenuOpen}
             aria-controls="header-mobile-nav-container"
           >
-            <MenuIcon aria-hidden="true" focusable="false"/>
+            <FontAwesomeIcon
+              icon={faBars}
+              aria-hidden="true"
+              focusable="false"
+            />
           </StyledHeaderButton>
         </HeaderRight>
 
-        <AnimatePresence>
-          {isSubNavOpen && (
-            <StyledMobileNavContainer 
-              id="header-mobile-nav-container"
-              initial={{ y: -100, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              exit={{ y: -100, opacity: 0 }}
-              transition={{ duration: 0.3 }}
-              aria-label={strings.accessibility.mobileNavigation}
-            >
-              <StyledMobileHeaderRow 
-                id="header-mobile-header-row" 
-                role="banner"
-                aria-label={strings.accessibility.mobileHeader}
-              >
-                <StyledHeaderLogoContainer id="header-mobile-header-logo-container">
-                  <VaylaLogoMobile aria-hidden="true" focusable="false"/>
-                </StyledHeaderLogoContainer>
-
-                <StyledMobileMenuTitle 
-                  id="header-mobile-menu-title"
-                  aria-hidden="true"
-                >
-                  {strings.title}
-                </StyledMobileMenuTitle>
-
-                <StyledHeaderButton 
-                  id="header-mobile-close-button"
-                  onClick={() => setSubNavOpen(false)}
-                  aria-label={strings.accessibility.closeMenu}
-                >
-                  <FontAwesomeIcon icon={faTimes} aria-hidden="true" focusable="false"/>
-                </StyledHeaderButton>
-              </StyledMobileHeaderRow>
-
-              <MobileMenuList 
-                id="header-mobile-menu-list" 
-                aria-label={strings.accessibility.mobileMenu}
-              >
-                <StyledMobileMenuButton 
-                  id="header-mobile-user-guide-button"
-                  onClick={() => store.dispatch(setIsUserGuideOpen(true))}
-                  aria-label={strings.tooltips.userGuide}
-                  aria-haspopup="true"
-                >
-                  <div className="icon-wrapper" id="header-user-guide-icon-wrapper">
-                    <FontAwesomeIcon icon={faQuestion} aria-hidden="true" focusable="false"/>
-                  </div>
-                  <div className="text-wrapper">
-                    {strings.tooltips.userGuide}
-                  </div>
-                </StyledMobileMenuButton>
-
-                <StyledMobileMenuButton 
-                  id="header-mobile-info-button"
-                  onClick={() => store.dispatch(setIsInfoOpen(true))}
-                  aria-label={strings.tooltips.pageInfo}
-                  aria-haspopup="true"
-                >
-                  <div className="icon-wrapper" id="header-info-icon-wrapper">
-                    <FontAwesomeIcon icon={faInfoCircle} aria-hidden="true" focusable="false"/>
-                  </div>
-                  <div className="text-wrapper">
-                    {strings.tooltips.pageInfo}
-                  </div>
-                </StyledMobileMenuButton>
-
-                <StyledMobileMenuButton 
-                  id="header-mobile-language-button"
-                  aria-label={strings.accessibility.languageSelect}
-                >
-                  <div className="icon-wrapper" id="header-language-icon-wrapper">
-                    <FontAwesomeIcon icon={faGlobe} aria-hidden="true" focusable="false"/>
-                  </div>
-                  <div className="text-wrapper" id="header-language-selector-wrapper">
-                    <HiddenLanguageIconWrapper>
-                      <LanguageSelector />
-                    </HiddenLanguageIconWrapper>
-                  </div>
-                </StyledMobileMenuButton>
-              </MobileMenuList>
-            </StyledMobileNavContainer>
-          )}
-        </AnimatePresence>
+        { isMobile &&
+          <AnimatePresence>
+            {isMenuOpen && <MobileNav setIsMenuOpen={setIsMenuOpen}/>}
+           </AnimatePresence>
+        }
       </StyledHeaderContainer>
     </>
   );

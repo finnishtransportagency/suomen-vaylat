@@ -619,7 +619,6 @@ const handleRemoveFilter = (filter) => {
                   >
                     <FontAwesomeIcon
                       icon={faTimes}
-                      size="6x"
                       style={{ marginLeft: ".5em" }}
                     />
                   </StyledTimesIconWrapper>
@@ -635,7 +634,6 @@ const handleRemoveFilter = (filter) => {
               {strings.gfifiltering.removeAllFilters}{" "}
               <FontAwesomeIcon
                 icon={faTrash}
-                size="6x"
                 style={{ marginLeft: ".5em" }}
               />
             </StyledTrashIconWrapper>

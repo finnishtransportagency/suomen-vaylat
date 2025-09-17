@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { cloneElement } from 'react';
 import styled from 'styled-components';
 import { motion, AnimatePresence, useDragControls } from 'framer-motion';
@@ -210,6 +210,18 @@ const Dialog = ({
 
     const clonedChildren = cloneElement(children, { handleAnnouncementDialog }); // If announce dialog type is passed as prop, add additional 'handleAnnouncementDialog' function to dialog children to handle dialog state
 
+    const renderDialogIcon = (titleIcon) => {
+        // If a valid React element (e.g., MUI <AccountCircleIcon />), just return it
+        if (titleIcon && React.isValidElement(titleIcon)) {
+            return titleIcon;
+        }
+        // If it's an object (likely FontAwesome definition), render as FontAwesomeIcon
+        if (titleIcon && typeof titleIcon === "object") {
+            return <FontAwesomeIcon icon={titleIcon} />;
+        }
+        return null;
+    }
+
     return (
         <AnimatePresence>
             {(isOpen || localState) && (
@@ -277,9 +289,7 @@ const Dialog = ({
                                 </ReactTooltip>
 
                                 <StyledDialogTitle>
-                                    {titleIcon && (
-                                        <FontAwesomeIcon icon={titleIcon} />
-                                    )}
+                                    {renderDialogIcon(titleIcon)}
                                     <p>{title}</p>
                                 </StyledDialogTitle>
                                 <StyledRightContent>

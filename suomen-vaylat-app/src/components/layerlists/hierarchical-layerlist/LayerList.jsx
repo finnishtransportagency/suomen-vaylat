@@ -11,6 +11,7 @@ import Layers from '../../layer/Layers';
 
 import { motion } from 'framer-motion';
 import strings from '../../../translations';
+import UserContentGroup from './user-content/UserContentGroup';
 
 const masterHeaderIconVariants = {
   open: { rotate: 180 },
@@ -176,7 +177,7 @@ const StyledSaveButton = styled.div`
 `;
 
 const LayerList = ({ groups, layers, recurse = false }) => {
-  const { tagLayers, tags } = useSelector((state) => state.rpc);
+  const { tagLayers, tags, userLayers } = useSelector((state) => state.rpc);
 
   // const slicedGroups = groups ? groups.slice() : [];
   const slicedGroups = groups.slice();
@@ -231,7 +232,10 @@ const LayerList = ({ groups, layers, recurse = false }) => {
           })}
         </StyledLayerList>
       ) : (
+        <>
+
         <StyledLayerList>
+
           {sortedGroups.map((group, index) => {
             const recursiveCheckSubGroupLayers = (group) => {
               var hasChildrenLayers = false;
@@ -267,6 +271,7 @@ const LayerList = ({ groups, layers, recurse = false }) => {
             );
           })}
         </StyledLayerList>
+        </>
       )}
     </>
   );
