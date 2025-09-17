@@ -6,19 +6,19 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFillDrip } from '@fortawesome/free-solid-svg-icons';
 import { SketchPicker } from 'react-color';
 
-const ColorPickerWrapper = styled.div`
+const StyledColorPickerWrapper = styled.div`
   display: inline-flex;
   align-items: center;
   gap: 8px;
   background: transparent;
 `;
 
-const ColorActionButton = styled.button`
+const StyledColorActionButton = styled.button`
   width: 38px;
   height: 38px;
   border-radius: 8px;
-  border: 1.5px solid #e0e3e7;
-  background: #0f6db7; /* demo icon bg like your image - use theme if desired */
+  border: none;
+  background: ${(p) => p.theme.colors.mainColor1};
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -31,45 +31,53 @@ const ColorActionButton = styled.button`
   }
 `;
 
-/* hex text input */
-const HexInput = styled.input`
-  width: 110px;
-  padding: 8px 10px;
+/* container that holds input and swatch so swatch can be absolutely positioned */
+const StyledInputContainer = styled.div`
+  position: relative;
+  display: inline-block;
+`;
+
+/* hex text input — fixed height and rounded on left only so swatch can form the right rounding */
+const StyledHexInput = styled.input`
+  width: 130px;
+  height: 38px;
+  padding: 8px 12px;
+  padding-right: 48px; /* make room for the swatch inside the input area */
   font-size: 14px;
   border: 1.5px solid #e3e7ec;
-  border-radius: 6px;
+  border-radius: 4px 6px 6px 4px;
   background: #fff;
   color: #222;
-  box-shadow: 0 1px 3px #0002;
+  box-sizing: border-box;
   &:focus {
     outline: none;
     border-color: ${(p) => p.theme?.colors?.mainColor1 || '#0f6db7'};
   }
 `;
 
-/* visible color swatch */
-const ColorSwatch = styled.button`
+/* visible color swatch — absolutely positioned to appear inside the right edge of the input */
+const StyledColorSwatch = styled.button`
+  position: absolute;
+  top: 0;
+  right: 0;
   width: 38px;
-  height: 32px;
-  border-radius: 6px;
-  border: 1.5px solid #e0e3e7;
+  height: 38px; /* match the StyledHexInput height */
+  border-radius: 0 6px 6px 0; /* right corners rounded */
+  border: none;
   padding: 0;
   cursor: pointer;
   background: ${(p) => p.color || '#000'};
-  box-shadow: 0 1px 3px #0002;
   display: inline-block;
-`;
-
-/* hidden native color input */
-const HiddenColorInput = styled.input`
-  display: none;
 `;
 
 const StyledColorWrapper = styled.div`
   display: flex;
   flex-direction: row;
+  align-items: center;
 `;
-const PickerOverlay = styled.div`
+
+/* picker modal */
+const StyledPickerOverlay = styled.div`
   position: fixed;
   inset: 0;
   display: flex;
@@ -79,7 +87,7 @@ const PickerOverlay = styled.div`
   background: rgba(10, 20, 30, 0.35);
 `;
 
-const PickerBox = styled.div`
+const StyledPickerBox = styled.div`
   background: white;
   border-radius: 10px;
   padding: 8px;
@@ -92,12 +100,10 @@ const ColorPicker = ({ id, value, onChange, ariaLabel }) => {
   const [open, setOpen] = useState(false);
   const pickerRef = useRef(null);
 
-  // Keep internal hex in sync with parent value
   useEffect(() => {
     if (value && value.toLowerCase() !== hex.toLowerCase()) {
       setHex(value);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value]);
 
   const isValidHex = (v) => /^#([0-9a-fA-F]{6}|[0-9a-fA-F]{3})$/.test(v);
@@ -115,42 +121,32 @@ const ColorPicker = ({ id, value, onChange, ariaLabel }) => {
     return withHash.toLowerCase();
   };
 
-  // Open/close handlers
   const openPicker = () => setOpen(true);
   const closePicker = useCallback(() => setOpen(false), []);
 
-  // Live update while using the SketchPicker
   const handlePickerChange = (color) => {
     setHex(color.hex);
     onChange && onChange(color.hex);
   };
 
-  // Called while typing — keep internal state AND notify parent when a valid hex is available
   const handleHexChange = (e) => {
     const v = e.target.value;
     setHex(v);
-
-    // if the typed value is a valid hex (allow both short and full), normalize and notify parent
     try {
       const normalized = normalizeHex(v);
       if (isValidHex(normalized)) {
         onChange && onChange(normalized);
       }
-    } catch (err) {
-      // ignore invalid interim values
-    }
+    } catch (err) {}
   };
 
-  // Commit hex on blur or Enter if valid; if invalid, revert to last valid prop value
   const commitHex = () => {
     try {
       const normalized = normalizeHex(hex);
       if (isValidHex(normalized)) {
-        // ensure local state stores normalized 6-digit hex
         setHex(normalized);
         onChange && onChange(normalized);
       } else {
-        // revert to last valid parent value
         setHex((value && value.toLowerCase()) || '#000000');
       }
     } catch {
@@ -167,7 +163,6 @@ const ColorPicker = ({ id, value, onChange, ariaLabel }) => {
     }
   };
 
-  // Close on ESC when picker open
   useEffect(() => {
     if (!open) return;
     const onKey = (e) => {
@@ -177,11 +172,10 @@ const ColorPicker = ({ id, value, onChange, ariaLabel }) => {
     return () => document.removeEventListener('keydown', onKey);
   }, [open, closePicker]);
 
-  // Click outside handler: pickerBox stops propagation, overlay closes
   return (
     <>
-      <ColorPickerWrapper>
-        <ColorActionButton
+      <StyledColorPickerWrapper>
+        <StyledColorActionButton
           type="button"
           aria-label={
             ariaLabel ? `${ariaLabel} - open color picker` : 'Open color picker'
@@ -189,46 +183,48 @@ const ColorPicker = ({ id, value, onChange, ariaLabel }) => {
           onClick={openPicker}
         >
           <FontAwesomeIcon icon={faFillDrip} />
-        </ColorActionButton>
+        </StyledColorActionButton>
 
         <StyledColorWrapper>
-          <HexInput
-            id={id}
-            type="text"
-            value={hex}
-            aria-label={ariaLabel || 'Color hex value'}
-            onChange={handleHexChange}
-            onBlur={commitHex}
-            onKeyDown={onKeyDownHex}
-            inputMode="text"
-          />
+          <StyledInputContainer>
+            <StyledHexInput
+              id={id}
+              type="text"
+              value={hex}
+              aria-label={ariaLabel || 'Color hex value'}
+              onChange={handleHexChange}
+              onBlur={commitHex}
+              onKeyDown={onKeyDownHex}
+              inputMode="text"
+            />
 
-          <ColorSwatch
-            type="button"
-            color={isValidHex(hex) ? normalizeHex(hex) : value || '#000000'}
-            aria-label={`${ariaLabel ? ariaLabel + ' - ' : ''}swatch`}
-            onClick={openPicker}
-            title={isValidHex(hex) ? normalizeHex(hex) : value || '#000000'}
-          />
+            <StyledColorSwatch
+              type="button"
+              color={isValidHex(hex) ? normalizeHex(hex) : value || '#000000'}
+              aria-label={`${ariaLabel ? ariaLabel + ' - ' : ''}swatch`}
+              onClick={openPicker}
+              title={isValidHex(hex) ? normalizeHex(hex) : value || '#000000'}
+            />
+          </StyledInputContainer>
         </StyledColorWrapper>
-      </ColorPickerWrapper>
+      </StyledColorPickerWrapper>
 
       {open &&
         ReactDOM.createPortal(
-          <PickerOverlay role="dialog" aria-modal="true" onClick={closePicker}>
-            <PickerBox onClick={(e) => e.stopPropagation()} ref={pickerRef}>
+          <StyledPickerOverlay role="dialog" aria-modal="true" onClick={closePicker}>
+            <StyledPickerBox onClick={(e) => e.stopPropagation()} ref={pickerRef}>
               <SketchPicker
                 color={isValidHex(hex) ? normalizeHex(hex) : value || '#000000'}
                 onChange={handlePickerChange}
                 onChangeComplete={handlePickerChange}
                 disableAlpha={true}
               />
-            </PickerBox>
-          </PickerOverlay>,
+            </StyledPickerBox>
+          </StyledPickerOverlay>,
           document.body
         )}
     </>
   );
-}
+};
 
 export default ColorPicker;
