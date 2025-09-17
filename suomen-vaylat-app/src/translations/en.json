@@ -55,57 +55,64 @@
     "userGuide": "User guide",
     "pageInfo": "Application details"
   },
+  "profile": {
+    "title": "User information",
+    "firstName": "First name",
+    "lastName": "Last name",
+    "username": "Username",
+    "email": "Email address",
+    "accountCreated": "Account created",
+    "lastLogin": "Last login"
+  },
   "savedContent": {
     "savedContent": "My data",
     "profileTitle": "Profile",
     "viewTitle": "Views",
     "geometryTitle": "Geometries",
     "description": "Description",
-    "profile": {
-      "title": "User information",
-      "firstName": "First name",
-      "lastName": "Last name",
-      "username": "Username",
-      "email": "Email address",
-      "accountCreated": "Account created",
-      "lastLogin": "Last login"
-    },
+    "geometry": "Geometry",
+    "view": "View",
     "saveView": {
+      "formDesc": "The map view is saved to the map layers menu: My data => Views",
       "title": "Save new view",
-      "confirmDeleteAll": "Are you sure you want to delete all views?",
+      "confirmDelete": "Are you sure you want to delete the view?",
       "saveView": "Save view",
       "savingView": "Saving view",
-      "saveViewDescription1": "View will be saved to browser local storage",
-      "saveViewDescription2": "Saved view can be accessed only by browser it has been saved",
+      "saveViewDescription1": "View is saved to the browser cache",
+      "saveViewDescription2": "Saved view can only be activated in the browser where it was saved",
       "noSavedViews": "No saved views",
-      "deleteAllSavedViews": "Delete all saved views",
-      "savedViews": "Saved views",
       "viewName": "View name",
-      "saveNewView": "Save new view",
       "saveViewButton": "Save view",
       "defaultView": "Default view",
-      "setDefaultView": "Set as default view",
-      "addNewView": "Add new view",
+      "setDefaultView": "Set as default",
       "deleteSavedView": "Delete saved view",
-      "editView": "Edit view"
+      "editView": "Edit view",
+      "viewInfo": "View information",
+      "savedAt": "Saved at",
+      "zoom": "Zoom",
+      "center": "Center",
+      "layers": "Layers",
+      "language": "Language",
+      "geometries": "Geometries",
+      "default": "Default"
     },
     "saveGeometry": {
-      "confirmDeleteAll": "Are you sure you want to delete all saved geometries?",
-      "saveGeometry": "Save",
-      "savingGeometry": "Save geometries",
-      "saveGeometryDescription1": "Geometries will be saved to the browser’s cache",
-      "saveGeometryDescription2": "Saved geometries can only be accessed in the browser where they are saved",
+      "formDesc": "Geometries are saved to the map layers menu: My data => Geometries.",
+      "confirmDelete": "Are you sure you want to delete the geometry?",
+      "title": "Save geometries",
+      "saveGeometryDescription1": "Geometry is saved to the browser cache",
+      "saveGeometryDescription2": "Saved geometry can only be activated in the browser where it was saved",
       "noSavedGeometries": "No saved geometries",
-      "deleteAllSavedGeometries": "Delete all saved geometries",
       "savedGeometries": "Saved geometries",
       "geometryName": "Geometry name",
       "noGeometry": "No new geometries on the map",
-      "saveNewGeometry": "Save new geometry",
       "saveGeometryButton": "Save geometry",
-      "geometryDesc": "Geometry description",
-      "addNewGeometry": "Add new geometry",
       "deleteSavedGeometry": "Delete saved geometry",
-      "editGeometry": "Edit geometry information"
+      "editGeometry": "Edit geometry details",
+      "savedAt": "Saved at",
+      "active": "Active",
+      "markers": "Markers",
+      "features": "Features"
     }
   },
   "gfi": {
@@ -175,6 +182,7 @@
     "noValidMaplayers": "There are no downloadable layers currently selected"
   },
   "general": {
+    "save": "Save",
     "close": "Close",
     "warning": "Warning!",
     "continue": "Continue",
@@ -182,7 +190,13 @@
     "dontShowAgain": "Don't show again",
     "ok": "OK",
     "OkLowerCaseK": "Ok",
-    "submit": "Submit"
+    "submit": "Submit",
+    "yes": "Yes",
+    "no": "No",
+    "name": "Name",
+    "description": "Description",
+    "saveScuccessful": "saved successfully",
+    "saveFailed": "save failed"
   },
   "multipleLayersWarning": "You are about to activate 10 or more maplayers and it might affect the performance of the service",
   "multipleLayersFetchWarning": "You are about to fetch data from 10 or more maplayers, it might affect the performance of the service.",
@@ -592,6 +606,18 @@
       "removeLayers": "Clear all",
       "editLayers": "Edit",
       "saveTooltip": "Choose custom filter layers"
+    },
+    "userContent": {
+      "userlayers": {
+        "title": "Userlayers",
+        "noUserlayers": "No saved userlayers"
+      },
+      "geometries": {
+        "title": "Geometries"
+      },
+      "views": {
+        "title": "Views"
+      }
     }
   },
   "downloadLink": {

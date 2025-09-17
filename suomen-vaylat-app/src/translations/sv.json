@@ -56,57 +56,64 @@
     "userGuide": "Användarguide",
     "pageInfo": "Sidinformation"
   },
+  "profile": {
+    "title": "Användarinformation",
+    "firstName": "Förnamn",
+    "lastName": "Efternamn",
+    "username": "Användarnamn",
+    "email": "E-post",
+    "accountCreated": "Konto skapat",
+    "lastLogin": "Senaste inloggning"
+  },
   "savedContent": {
-    "savedContent": "Mina uppgifter",
+    "savedContent": "Mina data",
     "profileTitle": "Profil",
-    "viewTitle": "Vyn",
+    "viewTitle": "Vyernas",
     "geometryTitle": "Geometrier",
     "description": "Beskrivning",
-    "profile": {
-      "title": "Användarinformation",
-      "firstName": "Förnamn",
-      "lastName": "Efternamn",
-      "username": "Användarnamn",
-      "email": "E-postadress",
-      "accountCreated": "Konto skapat",
-      "lastLogin": "Senaste inloggning"
-    },
+    "geometry": "Geometri",
+    "view": "Vy",
     "saveView": {
+      "formDesc": "Kartvyn sparas i menyn för kartlager: Mina data => Vyer.",
       "title": "Spara ny vy",
-      "confirmDeleteAll": "Är du säker på att du vill ta bort alla sparade vyer?",
+      "confirmDelete": "Vill du verkligen radera vyn?",
       "saveView": "Spara vy",
       "savingView": "Sparar vy",
-      "saveViewDescription1": "Visa kommer att sparas i webbläsarens lokala lagring",
-      "saveViewDescription2": "Sparad vy kan endast nås av webbläsaren som den har sparats",
+      "saveViewDescription1": "Vyn sparas i webbläsarens cache",
+      "saveViewDescription2": "Sparad vy kan endast aktiveras i den webbläsare den sparades i",
       "noSavedViews": "Inga sparade vyer",
-      "deleteAllSavedViews": "Ta bort alla sparade vyer",
-      "savedViews": "Sparade vyer",
-      "viewName": "Visa namn",
-      "saveNewView": "Spara ny vy",
+      "viewName": "Vyns namn",
       "saveViewButton": "Spara vy",
-      "defaultView": "Förvald kartvy",
-      "setDefaultView": "Ange som standardvy",
-      "addNewView": "Lägg till ny vy",
-      "deleteSavedView": "Ta bort sparad vy",
-      "editView": "Redigera vy"
+      "defaultView": "Standardvy",
+      "setDefaultView": "Ange som standard",
+      "deleteSavedView": "Radera sparad vy",
+      "editView": "Redigera vy",
+      "viewInfo": "Vyns information",
+      "savedAt": "Sparad",
+      "zoom": "Zoom",
+      "center": "Centrering",
+      "layers": "Kartlager",
+      "language": "Språk",
+      "geometries": "Geometrier",
+      "default": "Standard"
     },
     "saveGeometry": {
-      "confirmDeleteAll": "Är du säker på att du vill ta bort all sparad geometri?",
-      "saveGeometry": "Spara",
-      "savingGeometry": "Spara geometri",
-      "saveGeometryDescription1": "Geometrin lagras i webbläsarens cacheminne",
-      "saveGeometryDescription2": "Sparad geometri kan endast aktiveras i den webbläsare där den har lagrats",
-      "noSavedGeometries": "Ingen sparad geometri",
-      "deleteAllSavedGeometries": "Ta bort all sparad geometri",
-      "savedGeometries": "Sparad geometri",
+      "formDesc": "Geometrier sparas i menyn för kartlager: Mina data => Geometrier",
+      "confirmDelete": "Vill du verkligen radera geometrin?",
+      "title": "Spara geometri",
+      "saveGeometryDescription1": "Geometrin sparas i webbläsarens cache",
+      "saveGeometryDescription2": "Sparad geometri kan endast aktiveras i den webbläsare den sparades i",
+      "noSavedGeometries": "Inga sparade geometrier",
+      "savedGeometries": "Sparade geometrier",
       "geometryName": "Geometrins namn",
-      "noGeometry": "Ingen ny geometri på kartan",
-      "saveNewGeometry": "Spara ny geometri",
+      "noGeometry": "Inga nya geometrier på kartan",
       "saveGeometryButton": "Spara geometri",
-      "geometryDesc": "Geometribeskrivning",
-      "addNewGeometry": "Lägg till ny geometri",
-      "deleteSavedGeometry": "Ta bort sparad geometri",
-      "editGeometry": "Redigera geometriinformation"
+      "deleteSavedGeometry": "Radera sparad geometri",
+      "editGeometry": "Redigera geometriinformation",
+      "savedAt": "Sparad",
+      "active": "Aktiv",
+      "markers": "Markörer",
+      "features": "Funktioner"
     }
   },
   "gfi": {
@@ -175,6 +182,7 @@
     "noValidMaplayers": "Det finns inga nedladdningsbara lager valda för närvarande"
   },
   "general": {
+    "save": "Spara",
     "close": "Stänga",
     "warning": "Obs!",
     "continue": "Fortsätta",
@@ -182,7 +190,13 @@
     "dontShowAgain": "Visa inte igen",
     "ok": "OK",
     "OkLowerCaseK": "Ok",
-    "submit": "Skicka"
+    "submit": "Skicka",
+    "yes": "Ja",
+    "no": "Nej",
+    "name": "Namn",
+    "description": "Beskrivning",
+    "saveScuccessful": "sparas framgångsrikt",
+    "saveFailed": "spara misslyckades"
   },
   "multipleLayersWarning": "Du håller på att lägga till minst 10 kartnivåer på kartan och det kan påverka tjänstens prestanda",
   "multipleLayersFetchWarning": "Du är på väg att hämta data från 10 eller fler maplayers, det kan påverka tjänstens prestanda.",
@@ -499,7 +513,7 @@
       "trackkm": "Spårkilometer",
       "trackm": "Banmeter",
       "trackMandatoryMessage": "Bannummer, Spårkilometer och Banmeter parametrarna är obligatoriska vid bansökning."
-    },  
+    },
     "tips": {
       "title": "Med platssökning kan du söka en kommun, adress, fastighetsbeteckning, vägadress eller banadress.",
       "address": "Skriv i formatet 'kommun', 'adress' eller 'adress, kommun'.",
@@ -592,6 +606,18 @@
       "removeLayers": "Rensa alla",
       "editLayers": "Redigera",
       "saveTooltip": "Välj de lager som ska sparas"
+    },
+    "userContent": {
+      "userlayers": {
+        "title": "Egen kartlager",
+        "noUserlayers": "Ingen egen kartlager"
+      },
+      "geometries": {
+        "title": "Geometrier"
+      },
+      "views": {
+        "title": "Vyer"
+      }
     }
   },
   "downloadLink": {
@@ -1298,6 +1324,6 @@
       "dragSelectedLayerAriaLabel": "Flytta lager ",
       "selectBaseLayer": "Välj bakgrundskarta ",
       "editBaseLayers": "Byt bakgrundskartor"
-    }     
+    }
   }
 }

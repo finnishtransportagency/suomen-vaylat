@@ -50,20 +50,20 @@ const StyledSubtitle = styled.div`
 
 const dummyData = ["Maija", "Meikäläinen", "LX123456789", "maija@email.com", "23.4.2020 08.34.43", "23.4.2024 12.02.09"]
 
-const ProfileTab = () => {
+const ProfileInfo = () => {
   const rows = [
-    { title: strings.savedContent.profile.firstName, value: dummyData[0]},
-    { title: strings.savedContent.profile.lastName, value: dummyData[1]},
-    { title: strings.savedContent.profile.username, value: dummyData[2]},
-    { title: strings.savedContent.profile.email, value: dummyData[3]},
-    { title: strings.savedContent.profile.accountCreated, value: dummyData[4]},
-    { title: strings.savedContent.profile.lastLogin, value: dummyData[5]}
+    { title: strings.profile.firstName, value: dummyData[0]},
+    { title: strings.profile.lastName, value: dummyData[1]},
+    { title: strings.profile.username, value: dummyData[2]},
+    { title: strings.profile.email, value: dummyData[3]},
+    { title: strings.profile.accountCreated, value: dummyData[4]},
+    { title: strings.profile.lastLogin, value: dummyData[5]}
   ];
 
   return (
     <StyledProfileInfo>
             <StyledSubtitle id="profile-tab-heading">
-              {strings.savedContent.profile.title}
+              {strings.profile.title}
             </StyledSubtitle>
       {rows.map((row, idx) => (
         <StyledProfileRow key={row.title + idx}>
@@ -75,4 +75,4 @@ const ProfileTab = () => {
   );
 };
 
-export default ProfileTab;
+export default ProfileInfo;

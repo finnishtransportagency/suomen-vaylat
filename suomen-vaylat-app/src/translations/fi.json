@@ -55,57 +55,64 @@
     "userGuide": "Käyttöohjeet",
     "pageInfo": "Sovelluksen tiedot"
   },
+  "profile": {
+    "title": "Käyttäjän tiedot",
+    "firstName": "Etunimi",
+    "lastName": "Sukunimi",
+    "username": "Käyttäjätunnus",
+    "email": "Sähköpostiosoite",
+    "accountCreated": "Tili luotu",
+    "lastLogin": "Edellinen kirjautuminen"
+  },
   "savedContent": {
     "savedContent": "Omat tiedot",
     "profileTitle": "Profiili",
     "viewTitle": "Näkymät",
     "geometryTitle": "Geometriat",
     "description": "Kuvaus",
-    "profile": {
-      "title": "Käyttäjän tiedot",
-      "firstName": "Etunimi",
-      "lastName": "Sukunimi",
-      "username": "Käyttäjätunnus",
-      "email": "Sähköpostiosoite",
-      "accountCreated": "Tili luotu",
-      "lastLogin": "Edellinen kirjautuminen"
-    },
+    "geometry": "Geometria",
+    "view": "Näkymä",
     "saveView": {
-      "title": "Tallenna uusi näkymä",
-      "confirmDeleteAll": "Haluatko varmasti poistaa kaikki tallennetut näkymät?",
+      "formDesc": "Karttanäkymä tallentuu karttataso-valikkoon Omat aineistot => Näkymät.",
+      "title": "Tallenna karttanäkymä",
+      "confirmDelete": "Haluatko varmasti poistaa näkymän?",
       "saveView": "Tallenna näkymä",
       "savingView": "Näkymän tallennus",
       "saveViewDescription1": "Näkymä tallentuu selaimen välimuistiin",
       "saveViewDescription2": "Tallennettu näkymä voidaan aktivoida vain selaimessa johon se on tallennettu",
       "noSavedViews": "Ei tallennettuja näkymiä",
-      "deleteAllSavedViews": "Poista kaikki tallennetut näkymät",
-      "savedViews": "Tallennetut näkymät",
       "viewName": "Näkymän nimi",
-      "saveNewView": "Tallenna uusi näkymä",
       "saveViewButton": "Tallenna näkymä",
       "defaultView": "Oletusnäkymä",
       "setDefaultView": "Aseta oletusnäkymäksi",
-      "addNewView": "lisää uusi näkymä",
       "deleteSavedView": "Poista tallennettu näkymä",
-      "editView": "Muokkaa näkymää"
+      "editView": "Muokkaa näkymää",
+      "viewInfo": "Näkymän tiedot",
+      "savedAt": "Tallennettu",
+      "zoom": "Zoom",
+      "center": "Keskipiste",
+      "layers": "Tasot",
+      "language": "Kieli",
+      "geometries": "Geometriat",
+      "default": "Oletus"
     },
     "saveGeometry": {
-      "confirmDeleteAll": "Haluatko varmasti poistaa kaikki tallennetut geometriat?",
-      "saveGeometry": "Tallenna",
-      "savingGeometry": "Geometrian tallennus",
+      "formDesc": "Geometriat tallentuvat karttataso-valikkoon Omat aineistot => Geometriat.",
+      "confirmDelete": "Haluatko varmasti poistaa geometrian?",
+      "title": "Tallenna geometriat",
       "saveGeometryDescription1": "Geometria tallentuu selaimen välimuistiin",
       "saveGeometryDescription2": "Tallennettu geometria voidaan aktivoida vain selaimessa johon se on tallennettu",
       "noSavedGeometries": "Ei tallennettuja geometrioita",
-      "deleteAllSavedGeometries": "Poista kaikki tallennetut geometriat",
       "savedGeometries": "Tallennetut geometriat",
       "geometryName": "Geometrian nimi",
       "noGeometry": "Ei uusia geometrioita kartalla",
-      "saveNewGeometry": "Tallenna uusi geometria",
       "saveGeometryButton": "Tallenna geometria",
-      "geometryDesc": "Geometrian kuvaus",
-      "addNewGeometry": "Uusi geometria",
       "deleteSavedGeometry": "Poista tallennettu geometria",
-      "editGeometry": "Muokkaa geometrian tietoja"
+      "editGeometry": "Muokkaa geometrian tietoja",
+      "savedAt": "Tallennettu",
+      "active": "Aktiivinen",
+      "markers": "Merkinnät",
+      "features": "Piirteet"
     }
   },
   "gfi": {
@@ -174,6 +181,7 @@
     "noValidMaplayers": "Ei ladattavissa olevia tasoja valittuna"
   },
   "general": {
+    "save": "Tallenna",
     "close": "Sulje",
     "warning": "Varoitus!",
     "continue": "Jatka",
@@ -181,7 +189,13 @@
     "dontShowAgain": "Älä näytä uudelleen",
     "ok": "OK",
     "OkLowerCaseK": "Ok",
-    "submit": "Lähetä"
+    "submit": "Lähetä",
+    "yes": "Kyllä",
+    "no": "Ei",
+    "name": "Nimi",
+    "description": "Kuvaus",
+    "saveScuccessful": "tallennettu onnistuneesti",
+    "saveFailed": "tallennus epäonnistui"
   },
   "multipleLayersWarning": "Olet lisäämässä kartalle 10 tai enemmän karttatasoa ja se saattaa vaikuttaa palvelun suorituskykyyn",
   "multipleLayersFetchWarning": "Olet hakemassa aineistoa 10 tai useammalta karttatasolta ja se saattaa vaikuttaa palvelun suorituskykyyn.",
@@ -535,7 +549,7 @@
     },
     "premise": {
       "title": "Kiinteistöhaku"
-    }, 
+    },
     "carriageWaySearch": "Käytä ajorataa haussa"
   },
   "coordinateTool": {
@@ -590,6 +604,18 @@
       "removeLayers": "Tyhjennä kaikki",
       "editLayers": "Muokkaa",
       "saveTooltip": "Valitse tallennettavat tasot"
+    },
+    "userContent": {
+      "userlayers": {
+        "title": "Omat karttatasot",
+        "noUserlayers": "Ei omia tasoja"
+      },
+      "geometries": {
+        "title": "Geometriat"
+      },
+      "views": {
+        "title": "Näkymät"
+      }
     }
   },
   "downloadLink": {
@@ -627,7 +653,7 @@
       "title": "Vesiväylätiedot",
       "description": "Aineisto kattaa Väyläviraston vastuulla olevat vesiväylät ja kanavat. Niiden ylläpidossa ja kehittämisessä otetaan huomioon niin kauppamerenkulun kuin muunkin vesiliikenteen tarpeet."
     }
-  },   
+  },
   "themelayerlist": {
     "readMore": "Lue lisää",
     "readLess": "Vähemmän",

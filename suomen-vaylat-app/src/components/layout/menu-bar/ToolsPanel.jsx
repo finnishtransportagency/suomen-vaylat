@@ -17,12 +17,10 @@ import strings from '../../../translations';
 import {
   setActiveTool,
   setIsSaveViewOpen,
-  setSavedTab,
   setGeoJsonArray,
   setIsGfiDownloadOpen,
   removeFromDrawToolMarkers,
-  setShowSavedContentGeometryForm,
-  setShowSavedContentViewForm
+  setIsSaveGeometriesOpen
 } from '../../../state/slices/uiSlice';
 import { removeMarkerRequest } from '../../../state/slices/rpcSlice';
 import DrawtoolMarkers from '../../measurement-tools/DrawtoolMarkers';
@@ -134,9 +132,7 @@ export const ToolsPanel = ({ isOpen }) => {
   };
 
   const handleAddGeometry = () => {
-    store.dispatch(setShowSavedContentGeometryForm(true));
-    store.dispatch(setSavedTab('geometry'));
-    store.dispatch(setIsSaveViewOpen(true));
+    store.dispatch(setIsSaveGeometriesOpen(true));
   };
 
   // Swiper sync: synchronize state with slide index
@@ -145,8 +141,6 @@ export const ToolsPanel = ({ isOpen }) => {
   };
 
   const handleSaveView = () => {
-    store.dispatch(setShowSavedContentViewForm(true));
-    store.dispatch(setSavedTab('views'));
     store.dispatch(setIsSaveViewOpen(true));
   };
 
@@ -267,8 +261,8 @@ export const ToolsPanel = ({ isOpen }) => {
               disabled={!geoJsonArray.length && drawToolMarkers.length <= 0}
               icon={faCloudUploadAlt}
               color={theme.colors.secondaryColorGreen}
-              text={strings.savedContent.saveGeometry.saveGeometry}
-              aria-label={strings.savedContent.saveGeometry.saveGeometry}
+              text={strings.general.save}
+              aria-label={strings.general.save}
             />
           </PanelContainer>
         </SwiperSlide>

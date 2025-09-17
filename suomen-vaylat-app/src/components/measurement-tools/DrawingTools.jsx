@@ -16,9 +16,7 @@ import {
   setActiveTool,
   setGeoJsonArray,
   removeFromDrawToolMarkers,
-  setShowSavedContentGeometryForm,
-  setSavedTab,
-  setIsSaveViewOpen
+  setIsSaveGeometriesOpen
 } from '../../state/slices/uiSlice';
 import { removeMarkerRequest } from '../../state/slices/rpcSlice';
 import { useSelector } from 'react-redux';
@@ -61,6 +59,7 @@ const DrawingTools = ({ setPanelIndex, geoJsonArray, drawToolMarkers }) => {
   const startStopTool = (tool) => {
     if (!tool) return;
     if (tool.id !== activeTool) {
+      if (activeTool) channel?.postRequest('DrawTools.StopDrawingRequest', [activeTool]);
       channel?.postRequest('DrawTools.StartDrawingRequest', [
         tool.id,
         tool.type,
@@ -75,6 +74,7 @@ const DrawingTools = ({ setPanelIndex, geoJsonArray, drawToolMarkers }) => {
 
   const addMarker = (tool) => {
     if (tool.id !== activeTool) {
+      if (activeTool) channel?.postRequest('DrawTools.StopDrawingRequest', [activeTool]);
       store.dispatch(setActiveTool(tool.id));
     } else {
       resetTools();
@@ -92,12 +92,12 @@ const DrawingTools = ({ setPanelIndex, geoJsonArray, drawToolMarkers }) => {
     if (activeTool !== 'marker') {
       store.dispatch(setActiveTool(null));
     }
+    startStopTool(drawingToolsData[activeTool]);
   };
 
   const handleAddGeometry = () => {
-    store.dispatch(setShowSavedContentGeometryForm(true));
-    store.dispatch(setSavedTab('geometry'));
-    store.dispatch(setIsSaveViewOpen(true));
+    store.dispatch(setIsSaveGeometriesOpen(true));
+    startStopTool(drawingToolsData[activeTool]);
   };
 
   return (
@@ -176,8 +176,8 @@ const DrawingTools = ({ setPanelIndex, geoJsonArray, drawToolMarkers }) => {
         disabled={!geoJsonArray.length && drawToolMarkers.length <= 0}
         icon={faCloudUploadAlt}
         color={theme.colors.secondaryColorGreen}
-        text={strings.savedContent.saveGeometry.saveGeometry}
-        aria-label={strings.savedContent.saveGeometry.saveGeometry}
+        text={strings.general.save}
+        aria-label={strings.general.save}
       />
     </>
   );

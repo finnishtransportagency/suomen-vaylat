@@ -63,6 +63,7 @@ const initialState = {
   searchOn: null,
   coordMarkerIndex: 0,
   views: null,
+  geometries: null,
   trackErrors: [
     { invalid: false, message: '' },
     { invalid: false, message: '' },
@@ -77,7 +78,9 @@ const initialState = {
   firstSearchResultShown: false,
   // TODO: waiting for logging in option
   isLoggedIn: false,
-  userLayers: []
+  userLayers: [],
+  editingView: null,
+  editingGeometry: null
 };
 
 export const rpcSlice = createSlice({
@@ -971,6 +974,10 @@ export const rpcSlice = createSlice({
       state.views = action.payload;
     },
 
+    setGeometries: (state, action) => {
+      state.geometries = action.payload;
+    },
+
     setIsLoggedIn: (state, action) => {
       state.isLoggedIn = action.payload;
     },
@@ -1005,6 +1012,14 @@ export const rpcSlice = createSlice({
 
     setFirstSearchResultShown: (state, action) => {
       state.firstSearchResultShown = action.payload;
+    },
+
+    setEditingView: (state, action) => {
+      state.editingView = action.payload;
+    },
+
+    setEditingGeometry: (state, action) => {
+      state.editingGeometry = action.payload;
     },
 
     /**
@@ -1095,6 +1110,7 @@ export const {
   setAnnouncements,
   setCoordMarkerIndex,
   setViews,
+  setGeometries,
   setIsLoggedIn,
   setTrackErrors,
   setFeatureErrors,
@@ -1105,7 +1121,9 @@ export const {
   setLastSearchValue,
   setFirstSearchResultShown,
   setUserLayers,
-  pushGFILocations
+  pushGFILocations,
+  setEditingView,
+  setEditingGeometry
 } = rpcSlice.actions;
 
 export default rpcSlice.reducer;

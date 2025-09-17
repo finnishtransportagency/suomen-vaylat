@@ -15,7 +15,6 @@ import { useAppSelector } from '../../../state/hooks';
 import {
   setIsInfoOpen,
   setIsUserGuideOpen,
-  setIsSaveViewOpen
 } from '../../../state/slices/uiSlice';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import strings from '../../../translations';
@@ -164,7 +163,7 @@ const MobileNav = ({ setIsMenuOpen }) => {
 
   // Menu actions
   const handleProfile = () => {
-    store.dispatch(setIsSaveViewOpen(true));
+    //TODO handle oopening profile info dialog
     setIsMenuOpen(false);
   };
 
@@ -217,36 +216,34 @@ const MobileNav = ({ setIsMenuOpen }) => {
       </StyledMobileHeaderRow>
 
       <MobileMenuList id={menuId} role="menu" aria-labelledby={menuLabelId}>
-        <StyledMobileMenuButton
-          id={profileBtnId}
-          onPointerDown={(e) => e.stopPropagation()}
-          onClick={(e) => {
-            e.stopPropagation();
-            handleProfile();
-          }}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-              e.preventDefault();
+        { isLoggedIn &&
+          <StyledMobileMenuButton
+            id={profileBtnId}
+            onPointerDown={(e) => e.stopPropagation()}
+            onClick={(e) => {
               e.stopPropagation();
               handleProfile();
-            }
-          }}
-          aria-label={strings.tooltips.profile}
-          aria-haspopup="true"
-          role="menuitem"
-          aria-controls={menuId}
-        >
-          <div className="icon-wrapper" id="mobile-nav-profile-icon-wrapper">
-            {isLoggedIn ? (
-              <AccountCircleIcon />
-            ) : (
-              <FontAwesomeIcon icon={faSave} />
-            )}
-          </div>
-          <div className="text-wrapper" id="mobile-nav-profile-text-wrapper">
-            {strings.tooltips.profile}
-          </div>
-        </StyledMobileMenuButton>
+            }}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                e.stopPropagation();
+                handleProfile();
+              }
+            }}
+            aria-label={strings.tooltips.profile}
+            aria-haspopup="true"
+            role="menuitem"
+            aria-controls={menuId}
+          >
+            <div className="icon-wrapper" id="mobile-nav-profile-icon-wrapper">
+                <AccountCircleIcon />
+            </div>
+            <div className="text-wrapper" id="mobile-nav-profile-text-wrapper">
+              {strings.tooltips.profile}
+            </div>
+          </StyledMobileMenuButton>
+        }
 
         <StyledMobileMenuButton
           id={userGuideBtnId}

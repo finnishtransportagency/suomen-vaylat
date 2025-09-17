@@ -10,9 +10,7 @@ import {
 } from '../../state/slices/rpcSlice';
 import {
   addToDrawToolMarkers,
-  setIsSaveViewOpen,
-  setSavedTab,
-  setShowSavedContentGeometryForm
+  setIsSaveGeometriesOpen,
 } from '../../state/slices/uiSlice';
 import { theme } from '../../theme/theme';
 import { faSave, faTrash } from '@fortawesome/free-solid-svg-icons';
@@ -243,9 +241,7 @@ const CoordinateTool = () => {
   };
 
   const handleSaveMarkers = () => {
-    store.dispatch(setIsSaveViewOpen(true));
-    store.dispatch(setSavedTab("geometry"));
-    store.dispatch(setShowSavedContentGeometryForm(true));
+    store.dispatch(setIsSaveGeometriesOpen(true));
   };
 
   const handleAddMarker = () => {

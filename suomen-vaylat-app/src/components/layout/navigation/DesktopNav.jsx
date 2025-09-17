@@ -17,7 +17,6 @@ import strings from '../../../translations';
 import PillButton from '../../../utils/components/PillButton';
 import {
   setIsInfoOpen,
-  setIsSaveViewOpen,
   setIsUserGuideOpen
 } from '../../../state/slices/uiSlice';
 
@@ -85,7 +84,24 @@ const DropdownMenuItem = styled.li`
   cursor: pointer;
   white-space: nowrap;
   transition: background 0.15s;
-  border-radius: 0;
+  border-radius: 0; /* default: no rounding for middle items */
+
+  /* top corners on the first item */
+  &:first-child {
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+  }
+
+  /* bottom corners on the last item */
+  &:last-child {
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+  }
+
+  /* if there's only one item, round all corners */
+  &:only-child {
+    border-radius: 8px;
+  }
 
   &:hover,
   &:focus {
@@ -103,6 +119,7 @@ const DropdownMenuItem = styled.li`
       background: none;
       color: ${(props) => props.theme.colors.black};
     }
+    /* ensure logout preserves first/last radius when positioned accordingly */
   }
 
   svg,
@@ -136,7 +153,7 @@ const DesktopNav = ({ setIsMenuOpen, isMenuOpen }) => {
 
   // Menu actions
   const handleProfile = () => {
-    store.dispatch(setIsSaveViewOpen(true));
+    //TODO handle showing profile dialog
     setIsMenuOpen(false);
   };
 
@@ -192,24 +209,18 @@ const DesktopNav = ({ setIsMenuOpen, isMenuOpen }) => {
       </ProfileButton>
       {isMenuOpen && (
         <DropdownMenu id={menuId} role="menu" aria-labelledby={profileBtnId}>
-          <DropdownMenuItem
-            id={menuProfileId}
-            role="menuitem"
-            tabIndex={0}
-            onClick={handleProfile}
-            aria-label={
-              isLoggedIn
-                ? strings.menu?.profile
-                : strings.savedContent?.savedContent
-            }
-          >
-            {isLoggedIn ? (
+          { isLoggedIn &&
+            <DropdownMenuItem
+              id={menuProfileId}
+              role="menuitem"
+              tabIndex={0}
+              onClick={handleProfile}
+              aria-label={strings.menu?.profile}
+            >
               <AccountCircleIcon aria-hidden="true" />
-            ) : (
-              <FontAwesomeIcon icon={faSave} aria-hidden="true" />
-            )}
-            {strings.savedContent?.savedContent}
-          </DropdownMenuItem>
+              {strings.savedContent?.savedContent}
+            </DropdownMenuItem>
+          }
           <DropdownMenuItem
             id={menuUserGuideId}
             role="menuitem"

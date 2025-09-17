@@ -1,11 +1,23 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import styled from 'styled-components';
 import { faSave } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { isMobile } from '../../../theme/theme';
+import strings from '../../../translations';
 
 const MAX_NAME_LENGTH = 80;
 const MAX_DESC_LENGTH = 200;
+
+const StyledMainContainer = styled.div`
+  overflow: auto;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  @media ${(props) => props.theme.device.lowResDesktop} {
+    max-height: 500px;
+  }
+`;
 
 const StyledForm = styled.form`
   display: flex;
@@ -75,11 +87,21 @@ const StyledCancel = styled.button`
   border-radius: 24px;
   font-size: 15px;
   padding: 8px 26px;
-  cursor: pointer;
   transition: 0.1s;
-  &:hover {
+
+  /* pointer only when not disabled */
+  &:not(:disabled) {
+    cursor: pointer;
+  }
+
+  /* avoid hover styles when disabled */
+  &:not(:disabled):hover {
     border-color: #1c478e;
     color: #1c478e;
+  }
+
+  &:disabled {
+    cursor: default;
   }
 `;
 
@@ -91,7 +113,6 @@ const StyledSave = styled.button`
   font-size: 16px;
   font-weight: 600;
   padding: 10px 36px;
-  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -100,9 +121,15 @@ const StyledSave = styled.button`
     margin-right: 12px;
     font-size: 16px;
   }
-  &:hover {
+
+  /* pointer only when not disabled and only hover when enabled */
+  &:not(:disabled) {
+    cursor: pointer;
+  }
+  &:not(:disabled):hover {
     background-color: ${(props) => props.theme?.colors?.mainColor1Selected};
   }
+
   &:disabled {
     opacity: 0.45;
     cursor: default;
@@ -126,31 +153,36 @@ const StyledCharCounter = styled.span`
   font-size: 12px;
   align-self: flex-end;
   margin-top: 3px;
-  color: ${(props) => (props.atMax ? props.theme?.colors?.secondaryColorDarkOrange : props.theme?.colors?.black )};
+  color: ${(props) =>
+    props.atMax
+      ? props.theme?.colors?.secondaryColorDarkOrange
+      : props.theme?.colors?.black};
   font-weight: ${({ atMax }) => (atMax ? 700 : 400)};
   letter-spacing: 0.5px;
 `;
 
-const GeometryForm = ({
-  initialData = {},
-  onSave,
-  onCancel,
-  itemsToSave,
-  strings
-}) => {
-  const [geometryName, setGeometryName] = useState(initialData.name || '');
+const GeometryForm = ({ initialData = {}, onSave, onCancel, itemsToSave }) => {
+  const [geometryName, setGeometryName] = useState(initialData?.name || '');
   const [geometryDescription, setGeometryDescription] = useState(
-    initialData.description || ''
+    initialData?.description || ''
   );
 
+  // ensure local state mirrors initialData when it changes
   useEffect(() => {
-    setGeometryName(initialData.name || '');
-    setGeometryDescription(initialData.description || '');
+    setGeometryName(initialData?.name || '');
+    setGeometryDescription(initialData?.description || '');
   }, [initialData]);
+
+  const isDirty = useMemo(() => {
+    const initName = initialData?.name || '';
+    const initDesc = initialData?.description || '';
+    return geometryName !== initName || geometryDescription !== initDesc;
+  }, [geometryName, geometryDescription, initialData]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (geometryName && itemsToSave) {
+    // only submit if there is at least something to save and form is dirty
+    if (geometryName && itemsToSave && isDirty) {
       onSave({
         name: geometryName,
         description: geometryDescription
@@ -158,12 +190,12 @@ const GeometryForm = ({
     }
   };
 
-  return (
-    <>
-      <StyledSubtitle id="geometry-form-title">
-        {strings.savedContent.saveGeometry.saveNewGeometry}
-      </StyledSubtitle>
+  // Save button disabled if name missing, nothing changed, or itemsToSave false
+  const saveDisabled = !geometryName || !itemsToSave || !isDirty;
 
+  return (
+    <StyledMainContainer>
+      <p>{strings.savedContent.saveGeometry?.formDesc}</p>
       <StyledForm
         onSubmit={handleSubmit}
         autoComplete="off"
@@ -172,7 +204,7 @@ const GeometryForm = ({
       >
         <StyledFormGroup>
           <StyledLabel htmlFor="geometry-form-name">
-            {strings.savedContent.saveGeometry.geometryName} *
+            {strings.savedContent.saveGeometry?.geometryName} *
           </StyledLabel>
           <StyledInput
             id="geometry-form-name"
@@ -180,11 +212,11 @@ const GeometryForm = ({
             type="text"
             value={geometryName}
             placeholder={
-              !itemsToSave ? strings.savedContent.saveGeometry.noGeometry : ""
+              !itemsToSave ? strings.savedContent.saveGeometry?.noGeometry : ''
             }
             onChange={(e) => setGeometryName(e.target.value)}
             disabled={!itemsToSave}
-            maxLength={80}
+            maxLength={MAX_NAME_LENGTH}
             aria-required="true"
             aria-invalid={!geometryName && itemsToSave ? 'true' : 'false'}
           />
@@ -205,11 +237,11 @@ const GeometryForm = ({
             name="geometry-form-description"
             value={geometryDescription}
             placeholder={
-              !itemsToSave ? strings.savedContent.saveGeometry.noGeometry : ""
+              !itemsToSave ? strings.savedContent.saveGeometry?.noGeometry : ''
             }
             disabled={!itemsToSave}
             onChange={(e) => setGeometryDescription(e.target.value)}
-            maxLength={200}
+            maxLength={MAX_DESC_LENGTH}
           />
           <StyledCharCounter
             id="geometry-form-desc-counter"
@@ -224,14 +256,14 @@ const GeometryForm = ({
             <StyledSave
               id="geometry-form-submit-btn"
               type="submit"
-              disabled={!geometryName || !itemsToSave}
+              disabled={saveDisabled}
             >
               <FontAwesomeIcon icon={faSave} />
-              {strings.savedContent.saveGeometry.saveGeometryButton}
+              {strings.savedContent.saveGeometry?.saveGeometryButton}
             </StyledSave>
             <StyledCancel
               id="geometry-form-cancel-btn"
-              type="cancel"
+              type="button"
               onClick={onCancel}
             >
               {strings.general.cancel}
@@ -241,7 +273,7 @@ const GeometryForm = ({
           <StyledButtonsRow>
             <StyledCancel
               id="geometry-form-cancel-btn"
-              type="cancel"
+              type="button"
               onClick={onCancel}
             >
               {strings.general.cancel}
@@ -249,15 +281,15 @@ const GeometryForm = ({
             <StyledSave
               id="geometry-form-submit-btn"
               type="submit"
-              disabled={!geometryName || !itemsToSave}
+              disabled={saveDisabled}
             >
               <FontAwesomeIcon icon={faSave} />
-              {strings.savedContent.saveGeometry.saveGeometryButton}
+              {strings.savedContent.saveGeometry?.saveGeometryButton}
             </StyledSave>
           </StyledButtonsRow>
         )}
       </StyledForm>
-    </>
+    </StyledMainContainer>
   );
 };
 

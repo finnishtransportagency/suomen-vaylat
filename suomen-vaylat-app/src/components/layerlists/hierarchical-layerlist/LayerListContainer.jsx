@@ -19,6 +19,7 @@ import {
   setSelectedCustomFilterLayers
 } from '../../../state/slices/uiSlice';
 import { useSelector } from 'react-redux';
+import UserContentGroup from './user-content/UserContentGroup';
 
 const listVariants = {
   visible: {
@@ -31,6 +32,7 @@ const listVariants = {
   }
 };
 
+const StyledLayerGroupWrapper = styled.div``;
 const StyledFilterList = styled(motion.div)`
   height: ${(props) => (props.isOpen ? 'auto' : 0)};
   overflow: hidden;
@@ -38,7 +40,6 @@ const StyledFilterList = styled(motion.div)`
   flex-direction: column;
   justify-content: center;
   color: ${(props) => props.theme.colors.mainColor1};
-  background-color: ${(props) => props.theme.colors.mainWhite};
   margin-bottom: 8px;
 `;
 
@@ -117,6 +118,13 @@ const StyledFilterButton = styled.div`
   }
 `;
 
+const HorizontalLine = styled.div`
+  width: 100%;
+  height: 1px;
+  background-color: ${(props) => props.theme.colors.mainColor1};
+  margin: 1em 0;
+`;
+
 const StyledLayerList = styled.div``;
 
 const SavedLayer = ({ layers, groups }) => {
@@ -168,7 +176,7 @@ const LayerListContainer = ({ groups, layers, tags }) => {
   const { showSavedLayers, isCustomFilterOpen } = useAppSelector(
     (state) => state.ui
   );
-  const { userLayers } = useAppSelector((state) => state.rpc);
+  const { tagLayers } = useAppSelector((state) => state.rpc);
 
   const [isOpen, setIsOpen] = useState(false);
 
@@ -185,22 +193,6 @@ const LayerListContainer = ({ groups, layers, tags }) => {
     store.dispatch(setSelectedCustomFilterLayers([]));
   };
 
-  // Add userlayers group
-  const userlayerGroup = {
-    id: 'userlayers',
-    parentId: -1,
-    locale: {
-      fi: { name: 'Omat aineistot' },
-      en: { name: 'My datasets' },
-      sv: { name: 'Egna data' }
-    },
-    layers: userLayers.map((l) => l.id),
-    groups: []
-  };
-
-  const groupsWithImports =
-    userLayers.length > 0 ? [...groups, userlayerGroup] : groups;
-
   return (
     <>
       <ReactTooltip
@@ -215,7 +207,7 @@ const LayerListContainer = ({ groups, layers, tags }) => {
       </ReactTooltip>
 
       <StyledSearchAndFilter>
-        <LayerSearch layers={layers} groups={groupsWithImports} />
+        <LayerSearch layers={layers} groups={groups} />
         <StyledFilterButton
           data-tip
           data-for="layerlist-filter"
@@ -264,12 +256,25 @@ const LayerListContainer = ({ groups, layers, tags }) => {
       {showSavedLayers || isCustomFilterOpen ? (
         <SavedLayer layers={layers} />
       ) : (
-        <LayerList
-          label={strings.layerlist.layerlistLabels.allLayers}
-          groups={groupsWithImports}
-          layers={layers}
-          recurse={false}
-        />
+        <>
+          {tagLayers.length === 0 && (
+            <>
+              <StyledLayerGroupWrapper
+                key={'layerlist-container-user-content-group-wrapepr'}
+              >
+                <UserContentGroup />
+              </StyledLayerGroupWrapper>
+
+              <HorizontalLine />
+            </>
+          )}
+          <LayerList
+            label={strings.layerlist.layerlistLabels.allLayers}
+            groups={groups}
+            layers={layers}
+            recurse={false}
+          />
+        </>
       )}
     </>
   );

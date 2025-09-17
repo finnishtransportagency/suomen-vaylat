@@ -21,7 +21,6 @@ const initialState = {
   isInfoOpen: false,
   geoJsonArray: [],
   isSavedOpen: false,
-  savedTab: null,
   isChecked: false,
   isUserGuideOpen: false,
   isCustomFilterOpen: false,
@@ -32,6 +31,7 @@ const initialState = {
   isDrawingToolsOpen: false,
   isLegendOpen: false,
   isSaveViewOpen: false,
+  isSaveGeometriesOpen: false,
   isGfiOpen: false,
   isGfiDownloadOpen: false,
   selectedGfiTool: null,
@@ -63,8 +63,6 @@ const initialState = {
   isCoordinateToolOpen: false,
   selectedBaseLayers: [],
   isBaseLayerSelectorMenuOpen: false,
-  showSavedContentViewForm: false,
-  showSavedContentGeometryForm: false
 };
 
 export const uiSlice = createSlice({
@@ -87,6 +85,7 @@ export const uiSlice = createSlice({
       state.isDrawingToolsOpen = false;
       state.isLegendOpen = false;
       state.isSaveViewOpen = false;
+      state.isSaveGeometriesOpen = false;
       state.selectedMapLayersMenuTab = 0;
       state.selectedMapLayersMenuThemeIndex = null;
       state.minimizeGfi = false;
@@ -132,9 +131,6 @@ export const uiSlice = createSlice({
         state.geoJsonArray[duplicateIndex] = action.payload;
       else state.geoJsonArray.push(action.payload);
     },
-    setSavedTab: (state, action) => {
-      state.savedTab = action.payload;
-    },
     setIsSavedOpen: (state, action) => {
       state.isSavedOpen = action.payload;
     },
@@ -162,6 +158,9 @@ export const uiSlice = createSlice({
     },
     setIsSaveViewOpen: (state, action) => {
       state.isSaveViewOpen = action.payload;
+    },
+    setIsSaveGeometriesOpen: (state, action) => {
+      state.isSaveGeometriesOpen = action.payload;
     },
     setIsGfiOpen: (state, action) => {
       state.isGfiOpen = action.payload;
@@ -296,12 +295,6 @@ export const uiSlice = createSlice({
     setIsBaseLayerSelectorMenuOpen: (state, action) => {
         state.isBaseLayerSelectorMenuOpen = action.payload;
     },
-    setShowSavedContentViewForm: (state, action) => {
-      state.showSavedContentViewForm = action.payload;
-    },
-    setShowSavedContentGeometryForm: (state, action) => {
-      state.showSavedContentGeometryForm = action.payload;
-    }
   }
 });
 
@@ -326,6 +319,7 @@ export const {
   setIsSavedLayer,
   setIsLegendOpen,
   setIsSaveViewOpen,
+  setIsSaveGeometriesOpen,
   setIsGfiOpen,
   setIsGfiDownloadToolsOpen,
   setIsGfiDownloadOpen,
@@ -345,7 +339,6 @@ export const {
   setGeoJsonArray,
   addToGeoJsonArray,
   setIsSavedOpen,
-  setSavedTab,
   setHasToastBeenShown,
   setSelectedMarker,
   addToDrawToolMarkers,
@@ -366,8 +359,6 @@ export const {
   setIsCoordinateToolOpen,
   setSelectedBaseLayers,
   setIsBaseLayerSelectorMenuOpen,
-  setShowSavedContentViewForm,
-  setShowSavedContentGeometryForm
 } = uiSlice.actions;
 
 export default uiSlice.reducer;

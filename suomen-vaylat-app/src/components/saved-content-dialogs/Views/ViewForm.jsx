@@ -1,12 +1,24 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import styled from 'styled-components';
 import { faSave } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Switch } from '@mui/material';
 import { isMobile } from '../../../theme/theme';
+import strings from '../../../translations';
 
 const MAX_NAME_LENGTH = 80;
 const MAX_DESC_LENGTH = 200;
+
+const StyledMainContainer = styled.div`
+  overflow: auto;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  @media ${(props) => props.theme.device.lowResDesktop} {
+    max-height: 500px;
+  }
+`;
 
 const StyledSave = styled.button`
   color: ${(props) => props.theme?.colors?.mainWhite};
@@ -16,7 +28,6 @@ const StyledSave = styled.button`
   font-size: 16px;
   font-weight: 600;
   padding: 10px 36px;
-  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -25,13 +36,20 @@ const StyledSave = styled.button`
     margin-right: 12px;
     font-size: 16px;
   }
-  &:hover {
+
+  /* pointer only when not disabled and only hover when enabled */
+  &:not(:disabled) {
+    cursor: pointer;
+  }
+  &:not(:disabled):hover {
     background-color: ${(props) => props.theme?.colors?.mainColor1Selected};
   }
+
   &:disabled {
     opacity: 0.45;
     cursor: default;
   }
+
   @media ${(props) => props.theme.device.mobileL} {
     margin: 18px 0px;
     width: 100%;
@@ -92,11 +110,13 @@ const StyledCharCounter = styled.span`
   font-size: 12px;
   align-self: flex-end;
   margin-top: 3px;
-  color: ${(props) => (props.atMax ? props.theme?.colors?.secondaryColorDarkOrange : props.theme?.colors?.black )};
+  color: ${(props) =>
+    props.atMax
+      ? props.theme?.colors?.secondaryColorDarkOrange
+      : props.theme?.colors?.black};
   font-weight: ${({ atMax }) => (atMax ? 700 : 400)};
   letter-spacing: 0.5px;
 `;
-
 
 const StyledSwitchRow = styled.div`
   display: flex;
@@ -128,11 +148,21 @@ const StyledCancel = styled.button`
   border-radius: 24px;
   font-size: 15px;
   padding: 8px 26px;
-  cursor: pointer;
   transition: 0.1s;
-  &:hover {
+
+  /* pointer only when not disabled */
+  &:not(:disabled) {
+    cursor: pointer;
+  }
+
+  /* avoid hover when disabled */
+  &:not(:disabled):hover {
     border-color: #1c478e;
     color: #1c478e;
+  }
+
+  &:disabled {
+    cursor: default;
   }
 `;
 
@@ -144,12 +174,7 @@ const StyledSubtitle = styled.div`
   margin-bottom: 1em;
 `;
 
-const ViewForm = ({
-  initialData = {},
-  onSave,
-  onCancel,
-  strings
-}) => {
+const ViewForm = ({ initialData = {}, onSave, onCancel }) => {
   const [viewName, setViewName] = useState(initialData?.name || '');
   const [viewDescription, setViewDescription] = useState(
     initialData?.description || ''
@@ -157,36 +182,33 @@ const ViewForm = ({
   const [includeGeometries, setIncludeGeometries] = useState(
     initialData?.includeGeometries || false
   );
-  const [isDefault, setIsDefault] = useState(initialData?.isDefault || false);
+  const [isDefault, setIsDefault] = useState(initialData?.default || false);
 
+  // mirror initialData when it changes
   useEffect(() => {
     setViewName(initialData?.name || '');
     setViewDescription(initialData?.description || '');
     setIncludeGeometries(initialData?.includeGeometries || false);
-    setIsDefault(initialData?.isDefault || false);
+    setIsDefault(initialData?.default || false);
   }, [initialData]);
 
-  // Handle paste/overflow for name
-  const handleNameChange = (e) => {
-    let val = e.target.value;
-    if (val.length > MAX_NAME_LENGTH) {
-      val = val.slice(0, MAX_NAME_LENGTH);
-    }
-    setViewName(val);
-  };
-
-  // Handle paste/overflow for description
-  const handleDescChange = (e) => {
-    let val = e.target.value;
-    if (val.length > MAX_DESC_LENGTH) {
-      val = val.slice(0, MAX_DESC_LENGTH);
-    }
-    setViewDescription(val);
-  };
+  // compute dirty: true when any field differs from initialData
+  const isDirty = useMemo(() => {
+    const initName = initialData?.name || '';
+    const initDesc = initialData?.description || '';
+    const initInclude = !!initialData?.includeGeometries;
+    const initDefault = !!initialData?.default;
+    return (
+      viewName !== initName ||
+      viewDescription !== initDesc ||
+      includeGeometries !== initInclude ||
+      isDefault !== initDefault
+    );
+  }, [viewName, viewDescription, includeGeometries, isDefault, initialData]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (viewName) {
+    if (viewName && isDirty) {
       onSave({
         ...initialData,
         name: viewName,
@@ -197,11 +219,25 @@ const ViewForm = ({
     }
   };
 
+  // Save disabled if no name OR nothing changed
+  const saveDisabled = !viewName || !isDirty;
+
+  // Prevent paste overflow exceeding MAX bounds is already handled by onChange limits below
+  const handleNameChange = (e) => {
+    let val = e.target.value;
+    if (val.length > MAX_NAME_LENGTH) val = val.slice(0, MAX_NAME_LENGTH);
+    setViewName(val);
+  };
+
+  const handleDescChange = (e) => {
+    let val = e.target.value;
+    if (val.length > MAX_DESC_LENGTH) val = val.slice(0, MAX_DESC_LENGTH);
+    setViewDescription(val);
+  };
+
   return (
-    <>
-      <StyledSubtitle id="view-form-title">
-        {strings.savedContent.saveView.saveNewView}
-      </StyledSubtitle>
+    <StyledMainContainer>
+      <p>{strings.savedContent.saveView?.formDesc}</p>
 
       <StyledForm
         onSubmit={handleSubmit}
@@ -211,7 +247,7 @@ const ViewForm = ({
       >
         <StyledFormGroup>
           <StyledLabel htmlFor="view-form-name">
-            {strings.savedContent.saveView.viewName} *
+            {strings.savedContent.saveView?.viewName} *
           </StyledLabel>
           <StyledInput
             id="view-form-name"
@@ -220,7 +256,6 @@ const ViewForm = ({
             value={viewName}
             maxLength={MAX_NAME_LENGTH}
             onChange={handleNameChange}
-            required
             aria-describedby="view-form-name-counter"
             aria-invalid={!viewName ? 'true' : 'false'}
             aria-required="true"
@@ -253,21 +288,7 @@ const ViewForm = ({
             {viewDescription.length} / {MAX_DESC_LENGTH}
           </StyledCharCounter>
         </StyledFormGroup>
-        {/* Lets not add the geometries just yet
-          <StyledSwitchRow>
-            <Switch
-              checked={includeGeometries}
-              onChange={(e) => setIncludeGeometries(e.target.checked)}
-              color="primary"
-              inputProps={{
-                'aria-label': strings.savedContent.saveView.includeGeometries
-              }}
-            />
-            <StyledSwitchLabel>
-              {strings.savedContent.saveView.includeGeometries || 'Tallenna omat geometriat mukaan.'}
-            </StyledSwitchLabel>
-          </StyledSwitchRow>
-        */}
+
         <StyledSwitchRow
           style={{
             alignItems: 'center',
@@ -282,14 +303,14 @@ const ViewForm = ({
             inputProps={{
               id: 'view-form-default-switch',
               'aria-label': isDefault
-                ? strings.savedContent.saveView.defaultView
-                : strings.savedContent.saveView.setDefaultView
+                ? strings.savedContent.saveView?.defaultView
+                : strings.savedContent.saveView?.setDefaultView
             }}
           />
           <StyledSwitchLabel id="view-form-default-label">
             {isDefault
-              ? strings.savedContent.saveView.defaultView
-              : strings.savedContent.saveView.setDefaultView}
+              ? strings.savedContent.saveView?.defaultView
+              : strings.savedContent.saveView?.setDefaultView}
           </StyledSwitchLabel>
         </StyledSwitchRow>
         {isMobile ? (
@@ -297,14 +318,14 @@ const ViewForm = ({
             <StyledSave
               id="view-form-submit-btn"
               type="submit"
-              disabled={!viewName}
+              disabled={saveDisabled}
             >
               <FontAwesomeIcon icon={faSave} style={{ marginRight: 12 }} />
-              {strings.savedContent.saveView.saveViewButton}
+              {strings.savedContent.saveView?.saveViewButton}
             </StyledSave>
             <StyledCancel
               id="view-form-cancel-btn"
-              type="cancel"
+              type="button"
               onClick={onCancel}
             >
               {strings.general.cancel}
@@ -314,7 +335,7 @@ const ViewForm = ({
           <StyledButtonsRow>
             <StyledCancel
               id="view-form-cancel-btn"
-              type="cancel"
+              type="button"
               onClick={onCancel}
             >
               {strings.general.cancel}
@@ -322,15 +343,15 @@ const ViewForm = ({
             <StyledSave
               id="view-form-submit-btn"
               type="submit"
-              disabled={!viewName}
+              disabled={saveDisabled}
             >
               <FontAwesomeIcon icon={faSave} style={{ marginRight: 12 }} />
-              {strings.savedContent.saveView.saveViewButton}
+              {strings.savedContent.saveView?.saveViewButton}
             </StyledSave>
           </StyledButtonsRow>
         )}
       </StyledForm>
-    </>
+    </StyledMainContainer>
   );
 };
 

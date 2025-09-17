@@ -14,7 +14,6 @@ import FeedbackFormDialog from '../feedback-form/dialog/FeedbackFormDialog';
 import AnnouncementsDialog from '../announcements/dialog/AnnouncementsDialog';
 import MetadataDialog from '../metadata-dialog/dialog/MetadataDialog';
 import ShareWebsiteDialog from '../share-website/dialog/ShareWebsiteDialog';
-import SavedContentDialog from '../saved-content/dialog/SavedContentDialog';
 import LayerDownloadButtonLinkDialog from '../layerlists/hierarchical-layerlist/dialog/LayerDownloadButtonLinkDialog';
 import FeatureDataToolsDialog from '../feature-data-window/dialog/FeatureDataToolsDialog';
 import FeatureDataDownloadToolsDialog from '../feature-data-window/dialog/FeatureDataDownloadToolsDialog';
@@ -35,6 +34,8 @@ import BaseLayerSelectorDialog from '../base-layers-selector/dialog/BaseLayersSe
 import { isMobile } from '../../theme/theme';
 import { useAppSelector } from '../../state/hooks';
 import DrawtoolMarkersDialog from '../measurement-tools/dialog/DrawtoolMarkersDialog';
+import SaveViewDialog from '../saved-content-dialogs/dialogs/SaveViewDialog';
+import SaveGeometriesDialog from '../saved-content-dialogs/dialogs/SaveGeometriesDialog';
 
 const StyledContent = styled.div`
   position: absolute;
@@ -150,7 +151,9 @@ const Content = () => {
 
         <ShareWebsiteDialog constraintsRef={constraintsRef} />
 
-        <SavedContentDialog constraintsRef={constraintsRef} />
+        <SaveGeometriesDialog constraintsRef={constraintsRef} />
+
+        <SaveViewDialog constraintsRef={constraintsRef} />
 
         <LayerDownloadButtonLinkDialog constraintsRef={constraintsRef} />
 
