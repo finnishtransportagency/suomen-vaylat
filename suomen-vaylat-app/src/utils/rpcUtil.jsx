@@ -1,6 +1,5 @@
 import {
   setAllLayers,
-  setUserLayers,
   setSelectedLayers,
   setSelectedTheme,
   setLastSelectedTheme,
