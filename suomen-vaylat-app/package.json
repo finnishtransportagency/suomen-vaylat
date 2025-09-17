@@ -37,6 +37,7 @@
     "proj4": "^2.9.0",
     "react": "^17.0.2",
     "react-bootstrap": "^2.0.0-rc.0",
+    "react-color": "^2.19.3",
     "react-copy-to-clipboard": "^5.0.4",
     "react-data-table-component": "^7.5.0",
     "react-data-table-component-extensions": "^1.6.0",
