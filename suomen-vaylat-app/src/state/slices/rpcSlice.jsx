@@ -79,7 +79,9 @@ const initialState = {
   firstSearchResultShown: false,
   // TODO: waiting for logging in option
   editingView: null,
-  editingGeometry: null
+  editingGeometry: null,
+  loggedInUser: {},
+  isLoggedIn: false
 };
 
 export const rpcSlice = createSlice({
@@ -993,6 +995,10 @@ export const rpcSlice = createSlice({
       state.views = action.payload;
     },
 
+    setIsLoggedIn: (state, action) => {
+      state.isLoggedIn = action.payload;
+    },
+
     setGeometries: (state, action) => {
       state.geometries = action.payload;
     },
@@ -1036,6 +1042,11 @@ export const rpcSlice = createSlice({
     setEditingGeometry: (state, action) => {
       state.editingGeometry = action.payload;
     },
+
+    setLoggedInUser: (state, action) => {
+      state.loggedInUser = action.payload;
+      //TODO figure how to make logout
+    }
   }
 });
 
@@ -1117,7 +1128,9 @@ export const {
   setFirstSearchResultShown,
   setUserLayers,
   setEditingView,
-  setEditingGeometry
+  setEditingGeometry,
+  setIsLoggedIn,
+  setLoggedInUser
 } = rpcSlice.actions;
 
 export default rpcSlice.reducer;

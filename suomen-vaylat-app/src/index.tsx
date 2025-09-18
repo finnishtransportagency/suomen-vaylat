@@ -2,10 +2,17 @@ import ReactDOM from 'react-dom';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import './resources/css/custom.scss';
-
+import { Provider } from 'react-redux';
+import { store } from './state/store';
+import { Router } from 'react-router-dom';
+import { history } from './state/store'
 
 ReactDOM.render(
-      <App />,
+  <Provider store={store}>
+     <Router history={history}>
+      <App />
+    </Router>
+  </Provider>,
   document.getElementById('root')
 );
 

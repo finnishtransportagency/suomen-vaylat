@@ -11,3 +11,13 @@ export const getAppBuildDate = () => {
     const formattedDate    = lastUpdateMoment.format('DD.MM.YYYY HH:mm:ss');
     return formattedDate;
 }
+
+export const IS_EXTRANET = (() => {
+  try {
+    return process.env.REACT_APP_IS_EXTRANET != null
+      ? JSON.parse(process.env.REACT_APP_IS_EXTRANET)
+      : false;
+  } catch {
+    return false;
+  }
+})();

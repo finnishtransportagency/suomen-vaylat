@@ -37,9 +37,8 @@ import { useAppSelector } from '../../state/hooks';
 import DrawtoolMarkersDialog from '../measurement-tools/dialog/DrawtoolMarkersDialog';
 import SaveViewDialog from '../saved-content-dialogs/dialogs/SaveViewDialog';
 import SaveGeometriesDialog from '../saved-content-dialogs/dialogs/SaveGeometriesDialog';
-import ProfileInfoDialog from '../profile-dialog/dialog/ProfileInfoDialog';
-
-const IS_EXTRANET = process.env.REACT_APP_IS_EXTRANET || false;
+import ProfileInfoDialog from '../profile-info/dialog/ProfileInfoDialog';
+import { IS_EXTRANET } from '../../utils/appInfoUtil';
 
 const StyledContent = styled.div`
   position: absolute;

@@ -20,8 +20,7 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import strings from '../../../translations';
 import LanguageSelector from '../../language-selector/LanguageSelector';
 import { ReactComponent as VaylaLogoMobile } from '../images/vayla_v_white.svg';
-
-const IS_EXTRANET = process.env.REACT_APP_IS_EXTRANET || false;
+import { IS_EXTRANET } from '../../../utils/appInfoUtil';
 
 const StyledHeaderButton = styled.button`
   position: relative;

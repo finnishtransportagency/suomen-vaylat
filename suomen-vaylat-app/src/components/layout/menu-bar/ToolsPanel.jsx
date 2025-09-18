@@ -34,8 +34,7 @@ import { isMobile, theme } from '../../../theme/theme';
 import { toast } from 'react-toastify';
 import PillButton from '../../../utils/components/PillButton';
 import DrawingTools from '../../measurement-tools/DrawingTools';
-
-const IS_EXTRANET = process.env.REACT_APP_IS_EXTRANET || false;
+import { IS_EXTRANET } from '../../../utils/appInfoUtil';
 
 const StyledTools = styled(motion.div)`
   display: flex;

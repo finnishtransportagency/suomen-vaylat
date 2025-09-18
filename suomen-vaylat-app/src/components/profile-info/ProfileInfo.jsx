@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import strings from '../../translations';
+import { useAppSelector } from '../../state/hooks';
 
 // Card-style wrapper
 const StyledProfileInfo = styled.div`
@@ -48,27 +49,36 @@ const StyledSubtitle = styled.div`
   margin-bottom: 1em;
 `;
 
-const dummyData = ["Maija", "Meikäläinen", "LX123456789", "maija@email.com", "23.4.2020 08.34.43", "23.4.2024 12.02.09"]
-
 const ProfileInfo = () => {
+  const { loggedInUser } = useAppSelector((state) => state.rpc);
   const rows = [
-    { title: strings.profile.firstName, value: dummyData[0]},
-    { title: strings.profile.lastName, value: dummyData[1]},
-    { title: strings.profile.username, value: dummyData[2]},
-    { title: strings.profile.email, value: dummyData[3]},
-    { title: strings.profile.accountCreated, value: dummyData[4]},
-    { title: strings.profile.lastLogin, value: dummyData[5]}
+    {
+      title: strings.profile?.firstName,
+      value: loggedInUser?.user?.etunimi
+    },
+    {
+      title: strings.profile?.lastName,
+      value: loggedInUser?.user?.sukunimi
+    },
+    {
+      title: strings.profile?.email,
+      value: loggedInUser?.user?.email
+    },
+    {
+      title: strings.profile?.username,
+      value: loggedInUser?.user?.uid
+    }
   ];
 
   return (
     <StyledProfileInfo>
-            <StyledSubtitle id="profile-tab-heading">
-              {strings.profile.title}
-            </StyledSubtitle>
+      <StyledSubtitle id="profile-tab-heading">
+        {strings.profile?.title}
+      </StyledSubtitle>
       {rows.map((row, idx) => (
-        <StyledProfileRow key={row.title + idx}>
-          <StyledRowTitle>{row.title}</StyledRowTitle>
-          <StyledRowValue>{row.value}</StyledRowValue>
+        <StyledProfileRow key={row?.title + idx}>
+          <StyledRowTitle>{row?.title}</StyledRowTitle>
+          <StyledRowValue>{row?.value}</StyledRowValue>
         </StyledProfileRow>
       ))}
     </StyledProfileInfo>

@@ -5,13 +5,11 @@ import {
   faInfoCircle,
   faArrowRightFromBracket,
   faAngleUp,
-  faSave,
   faBars
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { useRef, useContext, useEffect } from 'react';
-import { useAppSelector } from '../../../state/hooks';
 import { ReactReduxContext } from 'react-redux';
 import strings from '../../../translations';
 import PillButton from '../../../utils/components/PillButton';
@@ -20,8 +18,7 @@ import {
   setIsProfileOpen,
   setIsUserGuideOpen
 } from '../../../state/slices/uiSlice';
-
-const IS_EXTRANET = process.env.REACT_APP_IS_EXTRANET || false;
+import { IS_EXTRANET } from '../../../utils/appInfoUtil';
 
 const useOnClickOutside = (ref, handler) => {
   useEffect(() => {
