@@ -13,14 +13,12 @@ import { useAppSelector } from '../../state/hooks';
 import StyleEditor from './style-editor/StyleEditor';
 import GeneralInformation from './general-information/GeneralInformation';
 
-// --- Styled Components ---
 const StyledMainContainer = styled.div`
   background: #f6f7fa;
   border-radius: 16px;
   position: relative;
   background-color: white;
 `;
-
 const OverlaySpinner = styled.div`
   position: absolute;
   top: 0;
@@ -34,7 +32,6 @@ const OverlaySpinner = styled.div`
   justify-content: center;
   border-radius: 16px;
 `;
-
 const StyledTabs = styled.div`
   position: relative;
   display: flex;
@@ -42,7 +39,6 @@ const StyledTabs = styled.div`
   max-height: 100px;
   background-color: #f2f2f2;
 `;
-
 const StyledTab = styled.div`
   z-index: 2;
   padding: 8px;
@@ -67,7 +63,6 @@ const StyledTab = styled.div`
     padding: 10px;
   }
 `;
-
 const StyledSwiper = styled(Swiper)`
   .swiper-slide {
     background-color: #fff;
@@ -76,7 +71,6 @@ const StyledSwiper = styled(Swiper)`
   }
   transition: box-shadow 0.3s ease-out;
 `;
-
 const StyledSubmitButtonGroup = styled.div`
   display: flex;
   justify-content: flex-start;
@@ -88,7 +82,6 @@ const StyledSubmitButtonGroup = styled.div`
   }
   margin: 0px 32px 24px 32px;
 `;
-
 const StyledPrimaryButton = styled.button`
   min-width: 180px;
   height: 40px;
@@ -114,7 +107,6 @@ const StyledPrimaryButton = styled.button`
     font-size: 18px;
   }
 `;
-
 const StyledSecondaryButton = styled(StyledPrimaryButton)`
   background-color: ${({ theme }) => theme.colors.mainWhite};
   color: ${({ theme }) => theme.colors.mainColor1};
@@ -126,13 +118,6 @@ const StyledSecondaryButton = styled(StyledPrimaryButton)`
   }
   svg {
     color: ${({ theme }) => theme.colors.mainColor1};
-  }
-`;
-const StyledSwiperSlide = styled(SwiperSlide)`
-  height: fit-content !important;
-
-  .swiper-slide {
-  height: fit-content !important;
   }
 `;
 
@@ -160,7 +145,14 @@ const DatasetImport = () => {
 
   const [fields, setFields] = useState(initialFields);
   const [errors, setErrors] = useState(initialErrors);
-  const [lang, setLang] = useState({ en: false, sv: false });
+
+  // accordionOpen controls which language sections are included
+  const [accordionOpen, setAccordionOpen] = useState({
+    fi: true, // Finnish shown by default
+    sv: false,
+    en: false
+  });
+
   const [styleEditorKey, setStyleEditorKey] = useState(0);
   const [style, setStyle] = useState({});
 
@@ -185,7 +177,7 @@ const DatasetImport = () => {
     setFileError('');
     setFields(initialFields);
     setErrors(initialErrors);
-    setLang({ en: false, sv: false });
+    setAccordionOpen({ fi: true, sv: false, en: false });
     setSelectedTab(0);
     setStyle({});
     setStyleEditorKey((k) => k + 1);
@@ -197,8 +189,8 @@ const DatasetImport = () => {
       setTimeout(() => {
         const locale = {
           fi: fields.fi || {},
-          sv: lang.sv ? fields.sv || {} : {},
-          en: lang.en ? fields.en || {} : {}
+          sv: accordionOpen.sv ? fields.sv || {} : {},
+          en: accordionOpen.en ? fields.en || {} : {}
         };
 
         const fileToBase64 = (file) =>
@@ -220,7 +212,7 @@ const DatasetImport = () => {
 
           channel.importDataset(
             [dataset],
-            (data) => {
+            () => {
               setIsSubmitting(false);
               resetForm();
               toast.success(`success`, {
@@ -257,8 +249,6 @@ const DatasetImport = () => {
   };
 
   const requiredFi = !!fields.fi.name && !errors.fi.name;
-  const requiredSv = !lang.sv || (!!fields.sv.name && !errors.sv.name);
-  const requiredEn = !lang.en || (!!fields.en.name && !errors.en.name);
   const allFieldsValid = Object.values(errors).every((langObj) =>
     Object.values(langObj).every((val) => !val)
   );
@@ -266,14 +256,22 @@ const DatasetImport = () => {
     uploadedFile &&
     !fileError &&
     requiredFi &&
-    requiredSv &&
-    requiredEn &&
     allFieldsValid
   );
 
   useEffect(() => {
     if (swiperRef.current && swiperRef.current.swiper) {
       swiperRef.current.swiper.slideTo(selectedTab);
+    }
+  }, [selectedTab]);
+
+  // Close all accordions when switching away from General tab (tab index != 0)
+  useEffect(() => {
+    if (selectedTab !== 0) {
+      setAccordionOpen({ fi: false, sv: false, en: false });
+    } else {
+      // when returning to General tab, ensure Finnish open and leave others collapsed
+      setAccordionOpen((old) => ({ fi: true, sv: !!old.sv, en: !!old.en }));
     }
   }, [selectedTab]);
 
@@ -289,6 +287,7 @@ const DatasetImport = () => {
           <CircularProgress size={62} thickness={4} />
         </OverlaySpinner>
       )}
+
       <StyledTabs
         role="tablist"
         aria-label={strings.datasetImport.title}
@@ -317,6 +316,7 @@ const DatasetImport = () => {
           <p>{strings.datasetImport.tabVisualization}</p>
         </StyledTab>
       </StyledTabs>
+
       <StyledSwiper
         ref={swiperRef}
         allowTouchMove={false}
@@ -331,8 +331,8 @@ const DatasetImport = () => {
           <GeneralInformation
             fields={fields}
             errors={errors}
-            lang={lang}
-            setLang={setLang}
+            accordionOpen={accordionOpen}
+            setAccordionOpen={setAccordionOpen}
             uploadedFile={uploadedFile}
             setUploadedFile={setUploadedFile}
             fileError={fileError}
@@ -341,11 +341,11 @@ const DatasetImport = () => {
             isSubmitting={isSubmitting}
           />
         </SwiperSlide>
+
         <SwiperSlide
           id="import-dataset-panel-visualization"
           role="tabpanel"
           aria-labelledby="import-dataset-tab-visualization"
-          style={{height: "fit-content !important"}}
         >
           <StyleEditor
             key={styleEditorKey}

@@ -148,15 +148,6 @@ const SvgRadioButton = styled.button`
   }
 `;
 
-const ColorInput = styled.input`
-  border: none;
-  background: none;
-  width: 37px;
-  height: 32px;
-  box-shadow: 0 1px 3px #0002;
-  cursor: pointer;
-`;
-
 const NumberInput = styled.input`
   width: 54px;
   padding: 5px 7px;
