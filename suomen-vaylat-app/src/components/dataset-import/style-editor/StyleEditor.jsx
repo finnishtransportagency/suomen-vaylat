@@ -334,7 +334,7 @@ export default function StyleEditor({ initialStyle = {}, onChange }) {
   const radioGroupLabel = seStrings.subheaders?.style || 'Style';
 
   return (
-    <>
+    <div>
       <GroupTitle id={ids.styleTab}>{radioGroupLabel}</GroupTitle>
       <RadioTypeGroup
         id={`${ids.styleTab}-group`}
@@ -742,6 +742,6 @@ export default function StyleEditor({ initialStyle = {}, onChange }) {
           )}
         </pre>
       </PreviewBox>
-    </>
+    </div>
   );
 }
