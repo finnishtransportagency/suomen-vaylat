@@ -85,6 +85,8 @@
     "englishLayerName": "Lagernamn på engelska",
     "englishDesc": "Beskrivning på engelska",
     "englishSource": "Källa på engelska",
+    "submitSuccess": "Importen lyckades",
+    "submitFail": "Importen misslyckades, se loggning för mer information",
     "zipFileInput": {
       "onlyZipAllowed": "Endast zip-filer är tillåtna",
       "zipMaxSize": "Zip-filens maximala storlek är 10 MB.",

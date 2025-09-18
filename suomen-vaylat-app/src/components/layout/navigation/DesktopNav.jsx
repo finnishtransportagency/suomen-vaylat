@@ -20,6 +20,8 @@ import {
   setIsUserGuideOpen
 } from '../../../state/slices/uiSlice';
 
+const IS_EXTRANET = process.env.REACT_APP_IS_EXTRANET || false;
+
 const useOnClickOutside = (ref, handler) => {
   useEffect(() => {
     const listener = (event) => {
@@ -146,7 +148,6 @@ const MenuDivider = styled.hr`
 `;
 
 const DesktopNav = ({ setIsMenuOpen, isMenuOpen }) => {
-  const { isLoggedIn } = useAppSelector((state) => state.rpc);
   const ref = useRef();
   useOnClickOutside(ref, () => setIsMenuOpen(false));
   const { store } = useContext(ReactReduxContext);
@@ -187,7 +188,7 @@ const DesktopNav = ({ setIsMenuOpen, isMenuOpen }) => {
         onClick={() => setIsMenuOpen((v) => !v)}
         title={strings.accessibility?.openProfileMenu}
       >
-        {isLoggedIn ? (
+        {IS_EXTRANET ? (
           <>
             <AccountCircleIcon fontSize="large" />
             <FontAwesomeIcon
@@ -209,7 +210,7 @@ const DesktopNav = ({ setIsMenuOpen, isMenuOpen }) => {
       </ProfileButton>
       {isMenuOpen && (
         <DropdownMenu id={menuId} role="menu" aria-labelledby={profileBtnId}>
-          { isLoggedIn &&
+          { IS_EXTRANET &&
             <DropdownMenuItem
               id={menuProfileId}
               role="menuitem"
@@ -241,7 +242,7 @@ const DesktopNav = ({ setIsMenuOpen, isMenuOpen }) => {
             <FontAwesomeIcon icon={faInfoCircle} aria-hidden="true" />
             {strings.tooltips.pageInfo}
           </DropdownMenuItem>
-          {isLoggedIn && (
+          {IS_EXTRANET && (
             <>
               <MenuDivider />
               <DropdownMenuItem

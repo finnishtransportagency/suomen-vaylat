@@ -93,6 +93,8 @@
     "englishLayerName": "Karttatason nimi englanniksi",
     "englishDesc": "Kuvaus englanniksi",
     "englishSource": "Tietolähde englanniksi",
+    "submitSuccess": "Aineiston tuonti onnistui",
+    "submitFail": "Aineiston tuonti epäonnistui, lisätietoa logeista",
     "zipFileInput": {
       "onlyZipAllowed": "Vain zip-tiedostot ovat sallittuja.",
       "zipMaxSize": "Zip-tiedoston maksimikoko on 10 Mt.",

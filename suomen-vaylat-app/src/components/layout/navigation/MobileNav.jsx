@@ -21,6 +21,8 @@ import strings from '../../../translations';
 import LanguageSelector from '../../language-selector/LanguageSelector';
 import { ReactComponent as VaylaLogoMobile } from '../images/vayla_v_white.svg';
 
+const IS_EXTRANET = process.env.REACT_APP_IS_EXTRANET || false;
+
 const StyledHeaderButton = styled.button`
   position: relative;
   cursor: pointer;
@@ -149,7 +151,6 @@ const HiddenLanguageIconWrapper = styled.div`
 
 const MobileNav = ({ setIsMenuOpen }) => {
   const { store } = useContext(ReactReduxContext);
-  const { isLoggedIn } = useAppSelector((state) => state.rpc);
 
   // Accessible ID constants
   const menuId = 'mobile-nav-menu-list';
@@ -216,7 +217,7 @@ const MobileNav = ({ setIsMenuOpen }) => {
       </StyledMobileHeaderRow>
 
       <MobileMenuList id={menuId} role="menu" aria-labelledby={menuLabelId}>
-        { isLoggedIn &&
+        { IS_EXTRANET &&
           <StyledMobileMenuButton
             id={profileBtnId}
             onPointerDown={(e) => e.stopPropagation()}
@@ -331,7 +332,7 @@ const MobileNav = ({ setIsMenuOpen }) => {
           </div>
         </StyledMobileMenuButton>
 
-        {isLoggedIn && (
+        {IS_EXTRANET && (
           <StyledMobileMenuButton
             id={signOutBtnId}
             aria-label={strings.signOut}

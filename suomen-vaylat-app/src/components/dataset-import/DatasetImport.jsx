@@ -121,7 +121,7 @@ const StyledSecondaryButton = styled(StyledPrimaryButton)`
   }
 `;
 
-const allowedCharsExp = /^[A-Za-z0-9_\-()]*$/;
+const allowedCharsExp = /^[A-Za-z0-9_\- ()]*$/;
 const initialLangObj = { name: '', desc: '', source: '' };
 const initialFields = {
   fi: { ...initialLangObj },
@@ -215,7 +215,7 @@ const DatasetImport = () => {
             () => {
               setIsSubmitting(false);
               resetForm();
-              toast.success(`success`, {
+              toast.success(strings.datasetImport.submitSuccess, {
                 position: 'top-center',
                 autoClose: 5000,
                 hideProgressBar: false,
@@ -230,7 +230,7 @@ const DatasetImport = () => {
             (data) => {
               setIsSubmitting(false);
               setUploadedFile(null);
-              toast.error(`${data}`, {
+              toast.error(strings.datasetImport.submitFail, {
                 position: 'top-center',
                 autoClose: 5000,
                 hideProgressBar: false,
@@ -241,6 +241,7 @@ const DatasetImport = () => {
                 theme: 'colored',
                 transition: Slide
               });
+              console.error(strings.datasetImport.submitFail + ":" + data);
             }
           );
         });

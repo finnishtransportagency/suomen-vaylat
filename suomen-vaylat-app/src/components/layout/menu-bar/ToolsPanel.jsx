@@ -35,6 +35,8 @@ import { toast } from 'react-toastify';
 import PillButton from '../../../utils/components/PillButton';
 import DrawingTools from '../../measurement-tools/DrawingTools';
 
+const IS_EXTRANET = process.env.REACT_APP_IS_EXTRANET || false;
+
 const StyledTools = styled(motion.div)`
   display: flex;
   flex-direction: column;
@@ -203,15 +205,17 @@ export const ToolsPanel = ({ isOpen }) => {
               }
               aria-label={strings.downloads?.downloads}
             />
-            <PillButton
-              id="menubar-tools-dataset-import-button"
-              icon={faUpload}
-              text={strings.datasetImport.menuButtonTitle}
-              onClick={() =>
-                store.dispatch(setIsDatasetImportOpen(!isDatasetImportOpen))
-              }
-              aria-label={strings.datasetImport?.menuButtonTitle}
-            />
+            { IS_EXTRANET &&
+              <PillButton
+                id="menubar-tools-dataset-import-button"
+                icon={faUpload}
+                text={strings.datasetImport.menuButtonTitle}
+                onClick={() =>
+                  store.dispatch(setIsDatasetImportOpen(!isDatasetImportOpen))
+                }
+                aria-label={strings.datasetImport?.menuButtonTitle}
+              />
+            }
             {!isMobile && (
               <PillButton
                 id={'menubar-tools-fullscreen-btn'}

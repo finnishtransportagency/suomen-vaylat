@@ -78,7 +78,6 @@ const initialState = {
   lastSearchValue: '',
   firstSearchResultShown: false,
   // TODO: waiting for logging in option
-  isLoggedIn: false,
   editingView: null,
   editingGeometry: null
 };
@@ -998,10 +997,6 @@ export const rpcSlice = createSlice({
       state.geometries = action.payload;
     },
 
-    setIsLoggedIn: (state, action) => {
-      state.isLoggedIn = action.payload;
-    },
-
     setTrackErrors: (state, action) => {
       state.trackErrors = action.payload;
     },
@@ -1112,7 +1107,6 @@ export const {
   setCoordMarkerIndex,
   setViews,
   setGeometries,
-  setIsLoggedIn,
   setTrackErrors,
   setFeatureErrors,
   setSearchResults,

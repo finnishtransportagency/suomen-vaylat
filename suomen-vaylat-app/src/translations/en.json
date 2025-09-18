@@ -84,6 +84,8 @@
     "englishLayerName": "Layer name in English",
     "englishDesc": "Description in English",
     "englishSource": "Source in English",
+    "submitSuccess": "Import was successful",
+    "submitFail": "Import failed, refer to logging for more information",
     "zipFileInput": {
       "onlyZipAllowed": "Only zip-files allowed",
       "zipMaxSize": "Zip-file maximum size is 10 Mb.",

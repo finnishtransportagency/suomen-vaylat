@@ -1,4 +1,4 @@
- import { useRef} from 'react';
+import React, { useRef } from 'react';
 import { ToastContainer, Slide } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import styled from 'styled-components';
@@ -37,6 +37,8 @@ import { useAppSelector } from '../../state/hooks';
 import DrawtoolMarkersDialog from '../measurement-tools/dialog/DrawtoolMarkersDialog';
 import SaveViewDialog from '../saved-content-dialogs/dialogs/SaveViewDialog';
 import SaveGeometriesDialog from '../saved-content-dialogs/dialogs/SaveGeometriesDialog';
+
+const IS_EXTRANET = process.env.REACT_APP_IS_EXTRANET || false;
 
 const StyledContent = styled.div`
   position: absolute;
@@ -148,7 +150,7 @@ const Content = () => {
 
         <FeedbackFormDialog constraintsRef={constraintsRef} />
 
-        <DatasetImportDialog constraintsRef={constraintsRef} />
+        {IS_EXTRANET && <DatasetImportDialog constraintsRef={constraintsRef} />}
 
         <MetadataDialog constraintsRef={constraintsRef} />
 
@@ -169,9 +171,9 @@ const Content = () => {
         <LayerFilterDialog constraintsRef={constraintsRef} />
 
         <ScaleBar />
-        { !isMobile && 
-        <BaseLayerSelectorDialog constraintsRef={constraintsRef}/>
-        }
+        {!isMobile && (
+          <BaseLayerSelectorDialog constraintsRef={constraintsRef} />
+        )}
         {!isMobile && (
           <>
             <BaseLayerSelector />
@@ -183,7 +185,7 @@ const Content = () => {
 
         {isCoordinateToolOpen && <Crosshair />}
 
-        <DrawtoolMarkersDialog/>
+        <DrawtoolMarkersDialog />
         <StyledToastContainer
           position="bottom-left"
           pauseOnFocusLoss={false}
@@ -199,7 +201,7 @@ const Content = () => {
           </StyledLeftSection>
           <StyledRightSection>
             <Search />
-            <ZoomBar/>
+            <ZoomBar />
           </StyledRightSection>
         </StyledContentGrid>
       </StyledContent>
