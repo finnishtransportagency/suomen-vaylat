@@ -17,6 +17,7 @@ import strings from '../../../translations';
 import PillButton from '../../../utils/components/PillButton';
 import {
   setIsInfoOpen,
+  setIsProfileOpen,
   setIsUserGuideOpen
 } from '../../../state/slices/uiSlice';
 
@@ -154,7 +155,7 @@ const DesktopNav = ({ setIsMenuOpen, isMenuOpen }) => {
 
   // Menu actions
   const handleProfile = () => {
-    //TODO handle showing profile dialog
+    store.dispatch(setIsProfileOpen(true));
     setIsMenuOpen(false);
   };
 

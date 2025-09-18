@@ -4,16 +4,16 @@ import {
   faTimes,
   faGlobe,
   faArrowRightFromBracket,
-  faSave
+  
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useContext } from 'react';
 import { ReactReduxContext } from 'react-redux';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
-import { useAppSelector } from '../../../state/hooks';
 import {
   setIsInfoOpen,
+  setIsProfileOpen,
   setIsUserGuideOpen,
 } from '../../../state/slices/uiSlice';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
@@ -164,7 +164,7 @@ const MobileNav = ({ setIsMenuOpen }) => {
 
   // Menu actions
   const handleProfile = () => {
-    //TODO handle oopening profile info dialog
+    store.dispatch(setIsProfileOpen(true));
     setIsMenuOpen(false);
   };
 

@@ -37,6 +37,7 @@ import { useAppSelector } from '../../state/hooks';
 import DrawtoolMarkersDialog from '../measurement-tools/dialog/DrawtoolMarkersDialog';
 import SaveViewDialog from '../saved-content-dialogs/dialogs/SaveViewDialog';
 import SaveGeometriesDialog from '../saved-content-dialogs/dialogs/SaveGeometriesDialog';
+import ProfileInfoDialog from '../profile-dialog/dialog/ProfileInfoDialog';
 
 const IS_EXTRANET = process.env.REACT_APP_IS_EXTRANET || false;
 
@@ -150,7 +151,12 @@ const Content = () => {
 
         <FeedbackFormDialog constraintsRef={constraintsRef} />
 
-        {IS_EXTRANET && <DatasetImportDialog constraintsRef={constraintsRef} />}
+        {IS_EXTRANET && 
+          <>
+            <DatasetImportDialog constraintsRef={constraintsRef} />
+            <ProfileInfoDialog constraintsRef={constraintsRef} />
+          </>
+        }
 
         <MetadataDialog constraintsRef={constraintsRef} />
 
