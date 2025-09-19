@@ -9,7 +9,7 @@ import Layout from './components/layout/Layout';
 import PageTitle from './components/layout/PageTitle';
 import { HandleSharedWebSiteLink } from './components/share-website/HandleSharedWebSiteLink';
 import Theme from './theme/theme';
-import { setIsLoggedIn, setLoggedInUser } from './state/slices/rpcSlice';
+import { setLoggedInUser } from './state/slices/rpcSlice';
 import { useAppDispatch } from './state/hooks';
 import { IS_EXTRANET } from './utils/appInfoUtil';
 
@@ -91,7 +91,7 @@ export async function fetchSession() {
  */
 const App = () => {
   const dispatch = useAppDispatch();
-  const isLoggedIn = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
     if (!IS_EXTRANET) return;
