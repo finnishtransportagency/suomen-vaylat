@@ -47,13 +47,14 @@ const ProfileButton = styled.button`
   display: flex;
   align-items: center;
   cursor: pointer;
-  color: ${(props) => props.theme.colors.mainWhite};
+  color: ${(props) =>
+    IS_EXTRANET ? props.theme.colors.mainColor1 : props.theme.colors.mainWhite};
   padding: 0;
   margin: 0;
   border-radius: 8px;
   transition: background 0.15s;
   &:hover {
-    color: ${(props) => props.theme.colors.hover};
+    color: ${(props) => IS_EXTRANET ? props.theme.colors.mainColorselected1 : props.theme.colors.hover};
   }
 `;
 
@@ -208,7 +209,7 @@ const DesktopNav = ({ setIsMenuOpen, isMenuOpen }) => {
       </ProfileButton>
       {isMenuOpen && (
         <DropdownMenu id={menuId} role="menu" aria-labelledby={profileBtnId}>
-          { IS_EXTRANET &&
+          {IS_EXTRANET && (
             <DropdownMenuItem
               id={menuProfileId}
               role="menuitem"
@@ -219,7 +220,7 @@ const DesktopNav = ({ setIsMenuOpen, isMenuOpen }) => {
               <AccountCircleIcon aria-hidden="true" />
               {strings.savedContent?.savedContent}
             </DropdownMenuItem>
-          }
+          )}
           <DropdownMenuItem
             id={menuUserGuideId}
             role="menuitem"
@@ -240,27 +241,6 @@ const DesktopNav = ({ setIsMenuOpen, isMenuOpen }) => {
             <FontAwesomeIcon icon={faInfoCircle} aria-hidden="true" />
             {strings.tooltips.pageInfo}
           </DropdownMenuItem>
-          {IS_EXTRANET && (
-            <>
-              <MenuDivider />
-              <DropdownMenuItem
-                className="logout"
-                id={menuLogoutId}
-                role="menuitem"
-                tabIndex={0}
-                aria-label={strings.signOut}
-              >
-                <PillButton
-                  id="desktop-nav-profile-dropdown-logout-btn"
-                  icon={faArrowRightFromBracket}
-                  iconColor={'#FFF'}
-                  text={strings.signOut}
-                  onClick={() => alert('kirjaudu ulos')}
-                  aria-label={strings.signOut}
-                />
-              </DropdownMenuItem>
-            </>
-          )}
         </DropdownMenu>
       )}
     </DesktopNavContainer>

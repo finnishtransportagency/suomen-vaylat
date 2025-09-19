@@ -3,8 +3,6 @@ import {
   faQuestion,
   faTimes,
   faGlobe,
-  faArrowRightFromBracket,
-  
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useContext } from 'react';
@@ -14,12 +12,13 @@ import { motion } from 'framer-motion';
 import {
   setIsInfoOpen,
   setIsProfileOpen,
-  setIsUserGuideOpen,
+  setIsUserGuideOpen
 } from '../../../state/slices/uiSlice';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import strings from '../../../translations';
 import LanguageSelector from '../../language-selector/LanguageSelector';
 import { ReactComponent as VaylaLogoMobile } from '../images/vayla_v_white.svg';
+import VaylaLogoExtranetMobile from '../images/vayla_v_rgb.png';
 import { IS_EXTRANET } from '../../../utils/appInfoUtil';
 
 const StyledHeaderButton = styled.button`
@@ -34,7 +33,10 @@ const StyledHeaderButton = styled.button`
   border-radius: 50%;
   border: none;
   svg {
-    color: ${(props) => props.theme.colors.mainWhite};
+    color: ${(props) =>
+      IS_EXTRANET
+        ? props.theme.colors.mainColor1
+        : props.theme.colors.mainWhite};
     font-size: 22px;
   }
   &:focus {
@@ -79,7 +81,8 @@ const StyledMobileMenuTitle = styled.p`
   transform: translateX(-50%);
   font-size: 24px;
   font-weight: 600;
-  color: ${(props) => props.theme.colors.mainWhite};
+  color: ${(props) =>
+    IS_EXTRANET ? props.theme.colors.mainColor1 : props.theme.colors.mainWhite};
   margin: 0;
 `;
 
@@ -96,7 +99,8 @@ const StyledMobileMenuButton = styled.button`
   align-items: center;
   gap: 15px;
   padding: 10px 0;
-  color: ${(props) => props.theme.colors.mainWhite};
+  color: ${(props) =>
+    IS_EXTRANET ? props.theme.colors.mainColor1 : props.theme.colors.mainWhite};
   font-size: 20px;
   font-weight: 500;
   cursor: pointer;
@@ -128,7 +132,10 @@ const StyledMobileNavContainer = styled(motion.nav)`
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: ${(props) => props.theme.colors.mainColor1};
+  background-color: ${(props) =>
+    IS_EXTRANET
+      ? props.theme.colors.extranetHeaderColor
+      : props.theme.colors.mainColor1};
   z-index: 1001;
 
   display: flex;
@@ -158,7 +165,6 @@ const MobileNav = ({ setIsMenuOpen }) => {
   const userGuideBtnId = 'mobile-nav-user-guide-button';
   const infoBtnId = 'mobile-nav-info-button';
   const langBtnId = 'mobile-nav-language-button';
-  const signOutBtnId = 'mobile-nav-sign-out-button';
   const menuLabelId = 'mobile-nav-menu-title';
 
   // Menu actions
@@ -195,7 +201,15 @@ const MobileNav = ({ setIsMenuOpen }) => {
         aria-controls={menuId}
       >
         <StyledHeaderLogoContainer id="mobile-nav-header-logo-container">
-          <VaylaLogoMobile aria-hidden="true" focusable="false" />
+          {IS_EXTRANET ? (
+            <img
+              src={VaylaLogoExtranetMobile}
+              alt="Väylä"
+              style={{ height: '100%', display: 'block' }}
+            />
+          ) : (
+            <VaylaLogoMobile aria-hidden="true" focusable="false" />
+          )}
         </StyledHeaderLogoContainer>
 
         <StyledMobileMenuTitle id={menuLabelId} aria-hidden="false">
@@ -216,7 +230,7 @@ const MobileNav = ({ setIsMenuOpen }) => {
       </StyledMobileHeaderRow>
 
       <MobileMenuList id={menuId} role="menu" aria-labelledby={menuLabelId}>
-        { IS_EXTRANET &&
+        {IS_EXTRANET && (
           <StyledMobileMenuButton
             id={profileBtnId}
             onPointerDown={(e) => e.stopPropagation()}
@@ -237,13 +251,13 @@ const MobileNav = ({ setIsMenuOpen }) => {
             aria-controls={menuId}
           >
             <div className="icon-wrapper" id="mobile-nav-profile-icon-wrapper">
-                <AccountCircleIcon />
+              <AccountCircleIcon />
             </div>
             <div className="text-wrapper" id="mobile-nav-profile-text-wrapper">
               {strings.tooltips.profile}
             </div>
           </StyledMobileMenuButton>
-        }
+        )}
 
         <StyledMobileMenuButton
           id={userGuideBtnId}
@@ -330,26 +344,6 @@ const MobileNav = ({ setIsMenuOpen }) => {
             </HiddenLanguageIconWrapper>
           </div>
         </StyledMobileMenuButton>
-
-        {IS_EXTRANET && (
-          <StyledMobileMenuButton
-            id={signOutBtnId}
-            aria-label={strings.signOut}
-            role="menuitem"
-            tabIndex={0}
-          >
-            <div className="icon-wrapper" id="mobile-nav-sign-out-icon-wrapper">
-              <FontAwesomeIcon
-                icon={faArrowRightFromBracket}
-                aria-hidden="true"
-                focusable="false"
-              />
-            </div>
-            <div className="text-wrapper" id="mobile-nav-sign-out-text-wrapper">
-              {strings.signOut}
-            </div>
-          </StyledMobileMenuButton>
-        )}
       </MobileMenuList>
     </StyledMobileNavContainer>
   );

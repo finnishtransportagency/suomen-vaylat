@@ -7,9 +7,9 @@
     }
   },
   "title": "Suomen väylät",
+  "titleExtranet": "VäyläMappi",
   "extranet": "EXTRANET",
   "row": "row",
-  "signOut": "Sign out",
   "back": "Back",
   "tooltips": {
     "profile": "My data",

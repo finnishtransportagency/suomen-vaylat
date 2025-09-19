@@ -43,6 +43,7 @@ export const theme = {
         mainColor1: '#0064af',
         mainColor2: '#009ae1',
         mainColor3: '#49c2f1',
+        extranetHeaderColor: '#C8EDFB',
         mainColor3transparent30: '#49c2f130',
         mainColor3transparent80: '#49c2f180',
         mainColorselected1: '#024c85',

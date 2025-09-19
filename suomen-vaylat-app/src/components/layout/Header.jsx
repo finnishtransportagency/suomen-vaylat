@@ -8,7 +8,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useAppSelector } from '../../state/hooks';
 import strings from '../../translations';
 import LanguageSelector from '../language-selector/LanguageSelector';
-import { ReactComponent as VaylaLogo } from './images/vayla_v_white.svg';
+import VaylaLogoExtranetMobile from './images/vayla_v_rgb.png';
+import VaylaLogoExtranet from './images/vayla_alla_fi_sv_rgb.png';
+import { ReactComponent as VaylaLogoSV } from './images/vayla_alla_fi_sv_white.svg';
+import { ReactComponent as VaylaLogoSVMobile } from './images/vayla_v_white.svg';
 import DesktopNav from './navigation/DesktopNav';
 import { createBrowserHistory } from 'history';
 import MobileNav from './navigation/MobileNav';
@@ -30,13 +33,14 @@ import {
   resetThemeGroupsForMainScreen,
   updateLayers
 } from '../../utils/rpcUtil';
+import { IS_EXTRANET } from '../../utils/appInfoUtil';
 
 const history = createBrowserHistory();
 
 const StyledHeaderContainer = styled.div`
   position: relative;
   width: 100%;
-  height: 64px;
+  height: 68px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -50,12 +54,22 @@ const HeaderLeft = styled.div`
   height: 64px;
   display: flex;
   align-items: center;
-  background-color: ${(props) => props.theme.colors.mainColor1};
+    gap: ${IS_EXTRANET ? '1em' : '8px'}};
+  background-color: ${(props) =>
+    IS_EXTRANET
+      ? props.theme.colors.extranetHeaderColor
+      : props.theme.colors.mainColor1};
+  border: ${IS_EXTRANET ? '1px solid' : 'none'};
+  border-color: ${(props) =>
+    IS_EXTRANET ? props.theme.colors.mainColor1 : 'none'};
+  color: ${(props) =>
+    IS_EXTRANET ? props.theme.colors.mainColor1 : props.theme.colors.mainWhite};
   padding: 0 18px;
   border-bottom-right-radius: 30px;
   z-index: 11;
   pointer-events: all;
   padding: 1em 1.5em 1em 0;
+  box-shadow: ${IS_EXTRANET ? '0px 4px 8px 0px #00000040' : 'none'};
 
   @media ${(props) => props.theme.device.mobileL} {
     height: 60px;
@@ -78,7 +92,6 @@ const StyledHeaderButton = styled.button`
   border-radius: 50%;
   border: none;
   svg {
-    color: ${(props) => props.theme.colors.mainWhite};
     font-size: 22px;
   }
   &:focus {
@@ -93,11 +106,20 @@ const HeaderRight = styled.div`
   height: 64px;
   display: flex;
   align-items: center;
-  background-color: ${(props) => props.theme.colors.mainColor1};
+  background-color: ${(props) =>
+    IS_EXTRANET
+      ? props.theme.colors.extranetHeaderColor
+      : props.theme.colors.mainColor1};
+  border: ${IS_EXTRANET ? '1px solid' : 'none'};
+  border-color: ${(props) =>
+    IS_EXTRANET ? props.theme.colors.mainColor1 : 'none'};
+  color: ${(props) =>
+    IS_EXTRANET ? props.theme.colors.mainColor1 : props.theme.colors.mainWhite};
   padding: 1em 1em 1em 0.5em;
   border-bottom-left-radius: 30px;
   z-index: 11;
   pointer-events: all;
+  box-shadow: ${IS_EXTRANET ? '0px 4px 8px 0px #00000040' : 'none'};
 
   @media ${(props) => props.theme.device.mobileL} {
     height: 60px;
@@ -112,7 +134,15 @@ const HeaderRight = styled.div`
 
     @media ${(props) => props.theme.device.mobileL} {
       display: flex;
-      background-color: ${(props) => props.theme.colors.mainColor1};
+      background-color: ${(props) =>
+        IS_EXTRANET
+          ? props.theme.colors.extranetHeaderColor
+          : props.theme.colors.mainColor1};
+
+      color: ${(props) =>
+        IS_EXTRANET
+          ? props.theme.colors.mainColor1
+          : props.theme.colors.mainWhite};
 
       svg {
         font-size: 28px;
@@ -121,15 +151,15 @@ const HeaderRight = styled.div`
   }
 `;
 
-const StyledHeaderTitleContainer = styled.p`
+const StyledHeaderTitleContainer = styled.div`
   cursor: pointer;
   height: inherit;
   display: flex;
-  justify-content: flex-start;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
   margin: 0;
-  color: ${(props) => props.theme.colors.mainWhite};
-  font-weight: 600;
+  line-height: ${IS_EXTRANET ? 1.2 : 'normal'};
 
   @media ${(props) => props.theme.device.desktop} {
     font-size: 25px;
@@ -141,6 +171,18 @@ const StyledHeaderTitleContainer = styled.p`
   @media ${(props) => props.theme.device.mobileL} {
     display: none;
   }
+`;
+
+const StyledHeaderTitle = styled.div`
+  font-weight: ${IS_EXTRANET ? '700' : '600'};
+  font-size: ${IS_EXTRANET ? '20px' : '24px'};
+  letter-spacing: ${IS_EXTRANET ? '0.1px' : 'normal'};
+`;
+
+const StyledHeaderTitleExtranet = styled.div`
+  font-weight: 400 !important;
+  letter-spacing: 0.11em !important;
+  font-size: 20px;
 `;
 
 const StyledHeaderLogoContainer = styled.div`
@@ -300,7 +342,27 @@ export const Header = () => {
               rel="noreferrer"
               id="header-vayla-logo-link"
             >
-              <VaylaLogo aria-hidden="true" focusable="false" />
+              {IS_EXTRANET ? (
+                // Extranet: use PNGs (img tag)
+                isMobile ? (
+                  <img
+                    src={VaylaLogoExtranetMobile}
+                    alt="Väylä"
+                    style={{ height: '100%', display: 'block' }}
+                  />
+                ) : (
+                  <img
+                    src={VaylaLogoExtranet}
+                    alt="Väylä"
+                    style={{ height: '100%', display: 'block' }}
+                  />
+                )
+              ) : // Public site: use inline SVG components so they can be styled
+              isMobile ? (
+                <VaylaLogoSVMobile aria-hidden="true" focusable="false" />
+              ) : (
+                <VaylaLogoSV aria-hidden="true" focusable="false" />
+              )}
             </a>
           </StyledHeaderLogoContainer>
           <StyledHeaderTitleContainer
@@ -308,23 +370,36 @@ export const Header = () => {
             onClick={setToMainScreen}
             aria-label={strings.accessibility.headerTitle}
           >
-            {strings.title}{' '}
-            {process.env.REACT_APP_EXTRANET === 'true' && strings.extranet}
+            {IS_EXTRANET ? (
+              <>
+                <StyledHeaderTitle>{strings.titleExtranet} </StyledHeaderTitle>
+                <StyledHeaderTitleExtranet>
+                  {strings.extranet}
+                </StyledHeaderTitleExtranet>
+              </>
+            ) : (
+              <>
+                <StyledHeaderTitle>{strings.title} </StyledHeaderTitle>
+              </>
+            )}
           </StyledHeaderTitleContainer>
         </HeaderLeft>
 
         <Badges />
 
         <HeaderRight id="header-right">
-          { !isMobile &&
+          {!isMobile && (
             <DesktopButtons
               id="header-desktop-buttons"
               aria-label={strings.accessibility.desktopButtons}
             >
               <LanguageSelector />
-              <DesktopNav setIsMenuOpen={setIsMenuOpen} isMenuOpen={isMenuOpen} />
+              <DesktopNav
+                setIsMenuOpen={setIsMenuOpen}
+                isMenuOpen={isMenuOpen}
+              />
             </DesktopButtons>
-          }
+          )}
 
           <StyledHeaderButton
             id="header-menu-toggle-button"
@@ -342,11 +417,11 @@ export const Header = () => {
           </StyledHeaderButton>
         </HeaderRight>
 
-        { isMobile &&
+        {isMobile && (
           <AnimatePresence>
-            {isMenuOpen && <MobileNav setIsMenuOpen={setIsMenuOpen}/>}
-           </AnimatePresence>
-        }
+            {isMenuOpen && <MobileNav setIsMenuOpen={setIsMenuOpen} />}
+          </AnimatePresence>
+        )}
       </StyledHeaderContainer>
     </>
   );
