@@ -214,7 +214,7 @@ const ViewForm = ({ initialData = {}, onSave, onCancel }) => {
         name: viewName,
         description: viewDescription,
         includeGeometries,
-        isDefault
+        default: isDefault
       });
     }
   };

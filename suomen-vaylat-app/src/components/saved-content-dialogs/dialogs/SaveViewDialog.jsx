@@ -54,29 +54,48 @@ const SaveViewsDialog = ({ constraintsRef }) => {
           color: '#ff5100b3'
         }));
 
-        const newView = {
-          id: thisId,
-          name: formData.name,
-          description: formData.description,
-          saveDate: Date.now(),
-          default: !!formData.default,
-          data: {
-            zoom: center?.zoom ?? editingView?.data?.zoom ?? undefined,
-            x:
-              center?.centerX ??
-              editingView?.data?.x ??
-              editingView?.data?.center?.x,
-            y:
-              center?.centerY ??
-              editingView?.data?.y ??
-              editingView?.data?.center?.y,
-            layers: selectedLayers || [],
-            language: strings.getLanguage ? strings.getLanguage() : undefined,
-            geometries: formData.includeGeometries
-              ? { geoJsonArray, markers, id: thisId }
-              : undefined
-          }
-        };
+        // If we have an editingView, only update metadata
+        // and keep the original data object unchanged.
+        let newView;
+        if (editingView) {
+          newView = {
+            ...editingView,
+            // keep the same id as editingView
+            id: thisId,
+            // only change metadata fields
+            name: formData.name,
+            description: formData.description,
+            saveDate: Date.now(),
+            default: !!formData.default,
+            // preserve the existing data object exactly
+            data: editingView.data
+          };
+        } else {
+          // create a full new view 
+          newView = {
+            id: thisId,
+            name: formData.name,
+            description: formData.description,
+            saveDate: Date.now(),
+            default: !!formData.default,
+            data: {
+              zoom: center?.zoom ?? editingView?.data?.zoom ?? undefined,
+              x:
+                center?.centerX ??
+                editingView?.data?.x ??
+                editingView?.data?.center?.x,
+              y:
+                center?.centerY ??
+                editingView?.data?.y ??
+                editingView?.data?.center?.y,
+              layers: selectedLayers || [],
+              language: strings.getLanguage ? strings.getLanguage() : undefined,
+              geometries: formData.includeGeometries
+                ? { geoJsonArray, markers, id: thisId }
+                : undefined
+            }
+          };
+        }
 
         const existingViews = Array.isArray(views) ? views : [];
 
@@ -164,6 +183,7 @@ const SaveViewsDialog = ({ constraintsRef }) => {
       views
     ]
   );
+
   const helpContent = (
     <ul>
       <li>{strings.savedContent?.saveView?.saveViewDescription1}</li>
