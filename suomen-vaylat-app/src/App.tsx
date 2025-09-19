@@ -124,9 +124,6 @@ const App = () => {
   }, [dispatch, isLoggedIn]);
 
   let routerPrefix = '/';
-  if (process.env.REACT_APP_ROUTER_PREFIX) {
-    routerPrefix = process.env.REACT_APP_ROUTER_PREFIX;
-  }
 
   const appContainer = (
     <StyledAppContainer>
