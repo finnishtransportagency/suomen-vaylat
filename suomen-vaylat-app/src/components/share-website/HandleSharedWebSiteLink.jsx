@@ -90,7 +90,7 @@ export const HandleSharedWebSiteLink = () => {
         layers.reverse().forEach((l, index) => {
             const layerProps = l.split('+');
             if (layerProps.length === 3) {
-                const layerId = parseInt(layerProps[0]);
+                const layerId = parseInt(layerProps[0]) || layerProps[0] ;
                 const opacity = parseInt(layerProps[1]);
                 const style = layerProps[2];
                 channel.postRequest('ChangeMapLayerOpacityRequest', [layerId, opacity]);
