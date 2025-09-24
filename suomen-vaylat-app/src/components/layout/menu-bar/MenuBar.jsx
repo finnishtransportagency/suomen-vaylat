@@ -80,7 +80,7 @@ const StyledToolButtons = styled.div`
   overflow: scroll;
   display: flex;
   flex-direction: column;
-  padding: 0 8px;
+  padding: 0 8px 8px 8px;
   pointer-events: auto;
 
   @media ${(props) => props.theme.device.mobileL} {
