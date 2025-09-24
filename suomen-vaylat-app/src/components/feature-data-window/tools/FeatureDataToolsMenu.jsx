@@ -34,7 +34,7 @@ import {
     setVKMData
 } from '../../../state/slices/rpcSlice';
 
-import { setMinimizeGfi, setSelectedGfiTool, setGeoJsonArray, setHasToastBeenShown, setWarning, setActiveSelectionTool } from '../../../state/slices/uiSlice';
+import { setMinimizeGfi, setSelectedGfiTool, setGeoJsonArray, setHasToastBeenShown, setWarning, setActiveSelectionTool, setActiveTool } from '../../../state/slices/uiSlice';
 
 import SVLoader from '../../../utils/components/SvLoader';
 import { DRAWING_TIP_LOCALSTORAGE, GFI_GEOMETRY_LAYER_ID, BODY_SIZE_EXCEED, GENERAL_FAIL, VECTOR_LAYER_ID} from '../../../utils/constants';
@@ -432,6 +432,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
                 },
             ];
             channel.postRequest('DrawTools.StartDrawingRequest', data);
+            store.dispatch(setActiveTool("gfi-selection-tool"));
             isGfiOpen && store.dispatch(setMinimizeGfi(true));
             if(showToast !== false && !hasToastBeenShown.includes('measurementToast')) {
                 if(item.type === "LineString" || item.type === "Polygon") {
@@ -558,6 +559,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
                         'gfi-selection-tool',
                         true,
                     ]);
+                    store.dispatch(setActiveTool(null));
                     isGfiOpen && store.dispatch(setMinimizeGfi(false));
                     store.dispatch(setGeoJsonArray([data]));
                     store.dispatch(setSelectedGfiTool(null));
