@@ -5,14 +5,13 @@ import styled from 'styled-components';
 import { setSearchParams } from '../../../state/slices/uiSlice';
 import strings from '../../../translations';
 import Layer from '../../layer/Layer';
-import { findGroupForLayer } from '../../layer/Layer';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faSearch,
     faTimesCircle
 } from '@fortawesome/free-solid-svg-icons';
-
+import { findGroupForLayer } from '../../../utils/layerUtil';
 
 const listVariants = {
   visible: {

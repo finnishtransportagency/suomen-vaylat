@@ -41,19 +41,6 @@ const StyledLayerName = styled.p`
   padding-left: 8px;
 `;
 
-export const findGroupForLayer = (groups, layerId) => {
-  for (let group of groups) {
-    if (group.layers && group.layers.includes(layerId)) {
-      return group;
-    }
-    if (group.groups) {
-      const nestedGroup = findGroupForLayer(group.groups, layerId);
-      if (nestedGroup) return nestedGroup;
-    }
-  }
-  return null;
-};
-
 export const FilterLayer = ({ layer, theme, groupName }) => {
   const { store } = useContext(ReactReduxContext);
   const [layerStyle, setLayerStyle] = useState(null);

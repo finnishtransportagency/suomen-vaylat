@@ -1,6 +1,6 @@
 import Layer from './Layer';
 import strings from '../../translations';
-import { findGroupForLayer } from './Layer';
+import { findGroupForLayer } from '../../utils/layerUtil';
 
 export const Layers = ({
     layers,

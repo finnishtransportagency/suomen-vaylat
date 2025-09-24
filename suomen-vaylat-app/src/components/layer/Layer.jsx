@@ -71,19 +71,6 @@ const StyledFilterIcon = styled.div`
   }
 `;
 
-export const findGroupForLayer = (groups, layerId) => {
-  for (let group of groups) {
-    if (group.layers && group.layers.includes(layerId)) {
-      return group;
-    }
-    if (group.groups) {
-      const nestedGroup = findGroupForLayer(group.groups, layerId);
-      if (nestedGroup) return nestedGroup;
-    }
-  }
-  return null;
-};
-
 export const Layer = ({ layer, themeName, groupName, showSwitch = true }) => {
   const { store } = useContext(ReactReduxContext);
   const [layerStyle, setLayerStyle] = useState(null);

@@ -1,6 +1,6 @@
 import FilterLayer from './FilterLayer';
 import strings from '../../../../translations';
-import { findGroupForLayer } from './FilterLayer';
+import { findGroupForLayer } from '../../../../utils/layerUtil';
 
 export const FilterLayers = ({
     layers,
