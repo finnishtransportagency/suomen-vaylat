@@ -16,15 +16,13 @@ import { setFilteringInfo } from '../../state/slices/rpcSlice';
 import styled from 'styled-components';
 import {
   changeLayerStyle,
-  setMapLayerVisibility,
-} from "../../state/slices/rpcSlice";
-import { updateLayers, updateLayerLegends } from "../../utils/rpcUtil";
-import LayerDownloadLinkButton from "../layerlists/hierarchical-layerlist/LayerDownloadLinkButton";
-import {
-  setIsDownloadLinkDialogOpen,
-} from "../../state/slices/uiSlice";
-import LayerMetadataButton from "../layerlists/hierarchical-layerlist/LayerMetadataButton";
-import { useAppSelector } from "../../state/hooks";
+  setMapLayerVisibility
+} from '../../state/slices/rpcSlice';
+import { updateLayers, updateLayerLegends } from '../../utils/rpcUtil';
+import LayerDownloadLinkButton from '../layerlists/hierarchical-layerlist/LayerDownloadLinkButton';
+import { setIsDownloadLinkDialogOpen } from '../../state/slices/uiSlice';
+import LayerMetadataButton from '../layerlists/hierarchical-layerlist/LayerMetadataButton';
+import { useAppSelector } from '../../state/hooks';
 import LayerlistSwitch from '../layerlists/hierarchical-layerlist/LayerlistSwitch';
 
 const StyledLayerContainer = styled.div`
@@ -71,7 +69,7 @@ const StyledFilterIcon = styled.div`
   }
 `;
 
-export const Layer = ({ layer, themeName, groupName, showSwitch = true }) => {
+export const Layer = ({ layer, themeName, groupName }) => {
   const { store } = useContext(ReactReduxContext);
   const [layerStyle, setLayerStyle] = useState(null);
   const { minimizeFilter } = useAppSelector((state) => state.ui);
@@ -256,13 +254,11 @@ export const Layer = ({ layer, themeName, groupName, showSwitch = true }) => {
           handleIsDownloadLinkDialogOpen={handleIsDownloadLinkDialogOpen}
         />
       )}
-      {showSwitch && (
-        <LayerlistSwitch
-          action={() => handleLayerVisibility(channel, layer)}
-          isSelected={layer.visible}
-          layer={layer}
-        />
-      )}
+      <LayerlistSwitch
+        action={() => handleLayerVisibility(channel, layer)}
+        isSelected={layer.visible}
+        layer={layer}
+      />
     </StyledLayerContainer>
   );
 };
