@@ -1,17 +1,14 @@
 import UserLayer from "./UserLayer";
 
-export const UserLayers = ({ layers, themeName, isSelected }) => {
+export const UserLayers = ({ layers }) => {
   return (
     <>
       {layers.map((layer, index) => {
         return (
           <UserLayer
-            key={layer.id + '_' + themeName}
+            key={layer.id}
             layer={layer}
-            groupName={matchingGroup}
             index={index}
-            isSelected={isSelected}
-            themeName={themeName}
           />
         );
       })}

@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
 import { useSelector } from 'react-redux';
 import strings from '../../../../../translations';
-import Layers from '../../../../layer/Layers';
+import UserLayers from '../../../../user-layer/UserLayers';
 
 /* animation variants */
 const masterHeaderIconVariants = {
@@ -78,8 +78,6 @@ const StyledLayerGroup = styled(motion.div)`
 const UserLayersGroup = () => {
   const [open, setOpen] = useState(false);
   const userLayers = useSelector((state) => state.rpc.userLayers) || [];
-  const groups = useSelector((state) => state.rpc.groups) || [];
-  const layers = useSelector((state) => state.rpc.layers) || [];
 
   const prefix = 'layerlist-userlayers-group-';
   const headerId = `${prefix}header`;
@@ -133,9 +131,8 @@ const UserLayersGroup = () => {
           variants={listVariants}
           transition={{ duration: 0.22, type: 'tween' }}
         >
-          <Layers
-            layers={layers.length ? layers : userLayers}
-            groups={groups}
+          <UserLayers
+            layers={userLayers}
           />
         </StyledLayerGroup>
       </div>

@@ -12,12 +12,10 @@ import { updateLayers } from '../../utils/rpcUtil';
 import LayerlistSwitch from '../layerlists/hierarchical-layerlist/LayerlistSwitch';
 
 const StyledLayerContainer = styled.div`
-  background-color: ${(props) => props.themeStyle && '#F5F5F5'};
   overflow: hidden;
   min-height: 32px;
   display: flex;
   align-items: center;
-  margin-top: ${(props) => props.themeStyle && '8px'};
   border-radius: 4px;
   margin-bottom: 4px;
 `;
@@ -41,7 +39,7 @@ const StyledLayerName = styled.p`
   padding-left: 8px;
 `;
 
-export const UserLayer = ({ layer, themeName, groupName }) => {
+export const UserLayer = ({ layer }) => {
   const { store } = useContext(ReactReduxContext);
   const { channel } = useSelector((state) => state.rpc);
 
@@ -57,17 +55,12 @@ export const UserLayer = ({ layer, themeName, groupName }) => {
 
   return (
     <StyledLayerContainer
-      themeStyle={themeStyle}
       className={`list-layer ${layer.visible && 'list-layer-active'}`}
-      key={'layer' + layer.id + '_' + themeName}
+      key={'layer' + layer.id}
     >
       <StyledlayerHeader>
-        <StyledLayerName themeStyle={themeStyle}>
+        <StyledLayerName>
           {layer.name}{' '}
-          {groupName &&
-            groupName !== 'Unknown' &&
-            !excludeGroups.includes(groupName) &&
-            ` (${groupName})`}
           {layer.newLayer && (
             <Badge
               style={{
