@@ -141,7 +141,7 @@
     "lastLogin": "Last login"
   },
   "savedContent": {
-    "savedContent": "My data",
+    "savedContent": "My datasets",
     "profileTitle": "Profile",
     "viewTitle": "Views",
     "geometryTitle": "Geometries",
@@ -650,7 +650,7 @@
       "allLayers": "All layers",
       "themeLayers": "Themes",
       "selectedLayers": "Selected layers",
-      "mapLayers": "Layers",
+      "mapLayers": "Layers and datasets",
       "backgroundMaps": "Background maps",
       "selectAll": "Select all",
       "show": "Show",

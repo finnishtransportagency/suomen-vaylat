@@ -141,7 +141,7 @@
     }
   },
   "savedContent": {
-    "savedContent": "Omat tiedot",
+    "savedContent": "Omat aineistot",
     "profileTitle": "Profiili",
     "viewTitle": "Näkymät",
     "geometryTitle": "Geometriat",
@@ -647,7 +647,7 @@
     "layerlistLabels": {
       "allLayers": "Kaikki tasot",
       "themeLayers": "Teemakartat",
-      "mapLayers": "Karttatasot",
+      "mapLayers": "Karttatasot ja -aineistot",
       "backgroundMaps": "Taustakartat",
       "selectAll": "Valitse kaikki",
       "selectedLayers": "Valitut tasot",

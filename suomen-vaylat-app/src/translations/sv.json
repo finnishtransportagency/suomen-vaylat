@@ -142,7 +142,7 @@
     "lastLogin": "Senaste inloggning"
   },
   "savedContent": {
-    "savedContent": "Mina data",
+    "savedContent": "Mina dataset",
     "profileTitle": "Profil",
     "viewTitle": "Vyernas",
     "geometryTitle": "Geometrier",
@@ -650,7 +650,7 @@
       "allLayers": "Alla lager",
       "themeLayers": "Teman",
       "selectedLayers": "Valda lagert",
-      "mapLayers": "Kartnivåer",
+      "mapLayers": "Kartnivåer och dataset",
       "backgroundMaps": "Bakgrundskartor",
       "selectAll": "Välj alla",
       "show": "Visa",
