@@ -88,63 +88,57 @@ const UserLayersGroup = () => {
 
   return (
     <>
-      {userLayers.length > 0 ? (
-        <div
-          role="region"
-          aria-roledescription="user layers group"
-          aria-labelledby={headerId}
+      <div
+        role="region"
+        aria-roledescription="user layers group"
+        aria-labelledby={headerId}
+      >
+        <StyledGroupHeader
+          id={headerId}
+          aria-expanded={open}
+          aria-controls={listId}
+          onClick={() => setOpen((s) => !s)}
+          type="button"
         >
-          <StyledGroupHeader
-            id={headerId}
-            aria-expanded={open}
-            aria-controls={listId}
-            onClick={() => setOpen((s) => !s)}
-            type="button"
-          >
-            <StyledLefContent>
-              <StyledSelectButton aria-hidden="true">
-                <motion.div
-                  initial="closed"
-                  animate={open ? 'open' : 'closed'}
-                  variants={masterHeaderIconVariants}
-                  transition={{ duration: 0.22, type: 'tween' }}
-                >
-                  <FontAwesomeIcon icon={faAngleDown} />
-                </motion.div>
-              </StyledSelectButton>
+          <StyledLefContent>
+            <StyledSelectButton aria-hidden="true">
+              <motion.div
+                initial="closed"
+                animate={open ? 'open' : 'closed'}
+                variants={masterHeaderIconVariants}
+                transition={{ duration: 0.22, type: 'tween' }}
+              >
+                <FontAwesomeIcon icon={faAngleDown} />
+              </motion.div>
+            </StyledSelectButton>
 
-              <div>
-                <StyledGroupName id={`${prefix}label`}>
-                  {strings.layerlist?.userContent?.userlayers?.title}
-                </StyledGroupName>
-                <StyledSubGroupLayersCount id={countId}>
-                  {userLayers.filter((l) => l.visible).length} /{' '}
-                  {userLayers.length}
-                </StyledSubGroupLayersCount>
-              </div>
-            </StyledLefContent>
-          </StyledGroupHeader>
+            <div>
+              <StyledGroupName id={`${prefix}label`}>
+                {strings.layerlist?.userContent?.userlayers?.title}
+              </StyledGroupName>
+              <StyledSubGroupLayersCount id={countId}>
+                {userLayers.filter((l) => l.visible).length} /{' '}
+                {userLayers.length}
+              </StyledSubGroupLayersCount>
+            </div>
+          </StyledLefContent>
+        </StyledGroupHeader>
 
-          <StyledLayerGroup
-            id={listId}
-            parentId={-1}
-            aria-labelledby={headerId}
-            initial="hidden"
-            animate={open ? 'visible' : 'hidden'}
-            variants={listVariants}
-            transition={{ duration: 0.22, type: 'tween' }}
-          >
-            <Layers
-              layers={layers.length ? layers : userLayers}
-              groups={groups}
-            />
-          </StyledLayerGroup>
-        </div>
-      ) : (
-        <div role="status" aria-live="polite">
-          {strings.layerlist?.userContent?.userlayers?.noUserlayers}
-        </div>
-      )}
+        <StyledLayerGroup
+          id={listId}
+          parentId={-1}
+          aria-labelledby={headerId}
+          initial="hidden"
+          animate={open ? 'visible' : 'hidden'}
+          variants={listVariants}
+          transition={{ duration: 0.22, type: 'tween' }}
+        >
+          <Layers
+            layers={layers.length ? layers : userLayers}
+            groups={groups}
+          />
+        </StyledLayerGroup>
+      </div>
     </>
   );
 };
