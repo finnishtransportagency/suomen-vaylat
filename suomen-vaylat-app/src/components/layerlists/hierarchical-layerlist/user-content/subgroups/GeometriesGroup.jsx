@@ -104,7 +104,7 @@ const StyledGroup = styled(motion.div)`
 `;
 
 const StyledItem = styled.div`
-  min-height: 40px;
+  min-height: 33px;
   display: flex;
   align-items: center;
   justify-content: space-between;

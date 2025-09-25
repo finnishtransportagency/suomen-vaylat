@@ -92,7 +92,7 @@ const StyledGroup = styled(motion.div)`
 `;
 
 const StyledItem = styled.div`
-  min-height: 40px;
+  min-height: 32px;
   display: flex;
   align-items: center;
   justify-content: space-between;

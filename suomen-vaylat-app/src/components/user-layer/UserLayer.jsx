@@ -11,13 +11,16 @@ import {
 import { updateLayers } from '../../utils/rpcUtil';
 import LayerlistSwitch from '../layerlists/hierarchical-layerlist/LayerlistSwitch';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrash, faPen } from '@fortawesome/free-solid-svg-icons';
+
 const StyledLayerContainer = styled.div`
-  overflow: hidden;
-  min-height: 32px;
+min-height: 32px;
   display: flex;
   align-items: center;
-  border-radius: 4px;
-  margin-bottom: 4px;
+  justify-content: space-between;
+  gap: 1em;
+  width: 100%;
 `;
 
 const StyledlayerHeader = styled.div`
@@ -25,6 +28,7 @@ const StyledlayerHeader = styled.div`
   display: flex;
   width: 100%;
   align-items: center;
+  gap: 8px;
 `;
 
 const StyledLayerName = styled.p`
@@ -39,7 +43,50 @@ const StyledLayerName = styled.p`
   padding-left: 8px;
 `;
 
-export const UserLayer = ({ layer }) => {
+/* Icon button reused from geometries for consistent look */
+const StyledIconButton = styled.button`
+  color: ${(p) => p.theme.colors.mainColor1};
+  padding: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  &:hover {
+    color: ${(p) => p.theme.colors.mainColor2};
+  }
+`;
+
+/* Container for action buttons (edit/delete) */
+const StyledActions = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto; /* push actions to the right */
+  margin-right: 8px;
+`;
+
+const StyledItemsWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1em;
+  width: 100%;
+`;
+
+const StyledItemLeft = styled.div`
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+`;
+
+const StyledItemsRight = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+`;
+
+
+export const UserLayer = ({ layer, onEdit, onDelete }) => {
   const { store } = useContext(ReactReduxContext);
   const { channel } = useSelector((state) => state.rpc);
 
@@ -53,12 +100,39 @@ export const UserLayer = ({ layer }) => {
     return () => clearTimeout(window.legendUpdateTimer);
   }, []);
 
+  const handleEditClick = (ev) => {
+    ev && ev.stopPropagation();
+    if (typeof onEdit === 'function') {
+      onEdit(layer);
+      return;
+    }
+    // Fallback: if no onEdit provided, simple console message
+    console.warn('Edit callback not provided for UserLayer', layer);
+  };
+
+  const handleDeleteClick = (ev) => {
+    ev && ev.stopPropagation();
+    if (typeof onDelete === 'function') {
+      onDelete(layer);
+      return;
+    }
+    // Fallback behavior: native confirm, then warn (caller should handle actual removal)
+    const confirmMsg =
+      (strings.layerlist?.confirmDeleteLayer ||
+        'Are you sure you want to delete this layer?') + ` "${layer.name}"`;
+    if (window.confirm(confirmMsg)) {
+      console.warn('Delete requested for layer but no onDelete handler provided', layer);
+    }
+  };
+
   return (
     <StyledLayerContainer
       className={`list-layer ${layer.visible && 'list-layer-active'}`}
       key={'layer' + layer.id}
+      role="listitem"
+      aria-label={`layer-${layer.id}`}
     >
-      <StyledlayerHeader>
+      <StyledItemLeft>
         <StyledLayerName>
           {layer.name}{' '}
           {layer.newLayer && (
@@ -75,13 +149,32 @@ export const UserLayer = ({ layer }) => {
             </Badge>
           )}
         </StyledLayerName>
-      </StyledlayerHeader>
+      </StyledItemLeft>
+
+      <StyledItemsRight>
+
+        <StyledIconButton
+          aria-label={strings.layerlist?.deleteLayer || 'Delete layer'}
+          title={strings.layerlist?.deleteLayer || 'Delete'}
+          onClick={handleDeleteClick}
+        >
+          <FontAwesomeIcon icon={faTrash} />
+        </StyledIconButton>
+
+        <StyledIconButton
+          aria-label={strings.layerlist?.editLayer || 'Edit layer'}
+          title={strings.layerlist?.editLayer || 'Edit'}
+          onClick={handleEditClick}
+        >
+          <FontAwesomeIcon icon={faPen} />
+        </StyledIconButton>
 
       <LayerlistSwitch
         action={() => handleLayerVisibility(channel, layer)}
         isSelected={layer.visible}
         layer={layer}
       />
+      </StyledItemsRight>
     </StyledLayerContainer>
   );
 };
