@@ -85,8 +85,10 @@
     "englishLayerName": "Lagernamn på engelska",
     "englishDesc": "Beskrivning på engelska",
     "englishSource": "Källa på engelska",
-    "submitSuccess": "Importen lyckades",
-    "submitFail": "Importen misslyckades, se loggning för mer information",
+    "submitSuccess": "Importen lyckades!",
+    "submitFail": "Importen misslyckades!",
+    "saveSuccess": "Kartlagret lyckades spara!",
+    "saveFail": "Det gick inte att spara kartlagret!",
     "zipFileInput": {
       "onlyZipAllowed": "Endast zip-filer är tillåtna",
       "zipMaxSize": "Zip-filens maximala storlek är 10 MB.",
@@ -190,6 +192,13 @@
       "active": "Aktiv",
       "markers": "Markörer",
       "features": "Funktioner"
+    },
+    "userLayer": {
+      "deleteLayer": "Ta bort kartlagret",
+      "editLayer": "Redigera kartlagerinformation",
+      "confirmDelete": "Vill du verkligen radera kartlagret?",
+      "deleteSuccess": "Kartlagret raderad!",
+      "deleteFail": "Borttagning av kartlagret misslyckades!"
     }
   },
   "gfi": {

@@ -12,6 +12,8 @@ import { ReactReduxContext } from 'react-redux';
 import { useAppSelector } from '../../state/hooks';
 import StyleEditor from './style-editor/StyleEditor';
 import GeneralInformation from './general-information/GeneralInformation';
+import { setEditingUserlayer } from '../../state/slices/rpcSlice';
+import { updateLayers } from '../../utils/rpcUtil';
 
 const StyledMainContainer = styled.div`
   background: #f6f7fa;
@@ -141,9 +143,9 @@ const DatasetImport = () => {
   const [uploadedFile, setUploadedFile] = useState(null);
   const [fileError, setFileError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { channel } = useAppSelector((state) => state.rpc);
+  const { channel, editingUserlayer } = useAppSelector((state) => state.rpc);
 
-  const [fields, setFields] = useState(initialFields);
+  const [fields, setFields] = useState(editingUserlayer?.locale || initialFields);
   const [errors, setErrors] = useState(initialErrors);
 
   // accordionOpen controls which language sections are included
@@ -154,7 +156,7 @@ const DatasetImport = () => {
   });
 
   const [styleEditorKey, setStyleEditorKey] = useState(0);
-  const [style, setStyle] = useState({});
+  const [style, setStyle] = useState(editingUserlayer?.style || {});
 
   const swiperRef = useRef();
 
@@ -249,12 +251,68 @@ const DatasetImport = () => {
     }
   };
 
+  const handleSaveDataset = () => {
+    if (!disableUpdate && !isSubmitting) {
+      setIsSubmitting(true);
+      setTimeout(() => {
+        const locale = {
+          fi: fields.fi || {},
+          sv: accordionOpen.sv ? fields.sv || {} : {},
+          en: accordionOpen.en ? fields.en || {} : {}
+        };
+
+          channel.updateUserLayer(
+            [ editingUserlayer.id, {locale, style}],
+            () => {
+              setIsSubmitting(false);
+              resetForm();
+              updateLayers();
+              store.dispatch(setEditingUserlayer(null));
+              store.dispatch(setIsDatasetImportOpen(false));
+              toast.success(strings.datasetImport.submitSuccess, {
+                position: 'top-center',
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: 'colored',
+                transition: Slide
+              });
+            },
+            (data) => {
+              setIsSubmitting(false);
+              setUploadedFile(null);
+              toast.error(strings.datasetImport.submitFail, {
+                position: 'top-center',
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: 'colored',
+                transition: Slide
+              });
+              console.error(strings.datasetImport.submitFail + ":" + data);
+            }
+          );
+      }, 1200);
+    }
+  };
+
   const requiredFi = !!fields.fi.name && !errors.fi.name;
   const allFieldsValid = Object.values(errors).every((langObj) =>
     Object.values(langObj).every((val) => !val)
   );
   const disableImport = !(
     uploadedFile &&
+    !fileError &&
+    requiredFi &&
+    allFieldsValid
+  );
+  const disableUpdate = !(
     !fileError &&
     requiredFi &&
     allFieldsValid
@@ -340,6 +398,7 @@ const DatasetImport = () => {
             setFileError={setFileError}
             handleInput={handleInput}
             isSubmitting={isSubmitting}
+            isEditing={editingUserlayer !== null}
           />
         </SwiperSlide>
 
@@ -375,6 +434,20 @@ const DatasetImport = () => {
           {strings.datasetImport.cancel}
         </StyledSecondaryButton>
 
+{ editingUserlayer ?
+        <StyledPrimaryButton
+          type="button"
+          tabIndex={0}
+          id="import-dataset-savebutton-bottom"
+          disabled={disableUpdate || isSubmitting}
+          aria-disabled={disableUpdate || isSubmitting}
+          onClick={handleSaveDataset}
+        >
+          {strings.general.save}
+        </StyledPrimaryButton>
+
+        :
+
         <StyledPrimaryButton
           type="button"
           tabIndex={0}
@@ -386,6 +459,8 @@ const DatasetImport = () => {
           <FontAwesomeIcon icon={faUpload} />
           {strings.datasetImport.import}
         </StyledPrimaryButton>
+
+}
       </StyledSubmitButtonGroup>
     </StyledMainContainer>
   );

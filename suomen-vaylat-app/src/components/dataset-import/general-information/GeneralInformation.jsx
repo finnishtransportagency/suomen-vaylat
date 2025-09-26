@@ -64,36 +64,39 @@ const GeneralInformation = ({
   fileError,
   setFileError,
   handleInput,
-  isSubmitting
+  isSubmitting,
+  isEditing
 }) => {
   return (
     <div>
-      <ZipFileInput
-        value={uploadedFile}
-        onFileChange={setUploadedFile}
-        error={fileError}
-        setError={setFileError}
-        disabled={isSubmitting}
-        id="import-dataset-zipfile"
-        aria-labelledby="import-dataset-zipfile-label"
-      >
-        <StyledFormGroup>
-          <Typography
-            id="import-dataset-zipfile-label"
-            variant="body2"
-            component="div"
-            style={{ marginBottom: 16 }}
-          >
-            {strings.datasetImport.infoText}
-            <ul style={{ marginBlock: 0 }}>
-              {strings.datasetImport.fileList.map((item, idx) => (
-                <li key={idx}>{item}</li>
-              ))}
-            </ul>
-            {strings.datasetImport.fileNote}
-          </Typography>
-        </StyledFormGroup>
-      </ZipFileInput>
+      {!isEditing && (
+        <ZipFileInput
+          value={uploadedFile}
+          onFileChange={setUploadedFile}
+          error={fileError}
+          setError={setFileError}
+          disabled={isSubmitting}
+          id="import-dataset-zipfile"
+          aria-labelledby="import-dataset-zipfile-label"
+        >
+          <StyledFormGroup>
+            <Typography
+              id="import-dataset-zipfile-label"
+              variant="body2"
+              component="div"
+              style={{ marginBottom: 16 }}
+            >
+              {strings.datasetImport.infoText}
+              <ul style={{ marginBlock: 0 }}>
+                {strings.datasetImport.fileList.map((item, idx) => (
+                  <li key={idx}>{item}</li>
+                ))}
+              </ul>
+              {strings.datasetImport.fileNote}
+            </Typography>
+          </StyledFormGroup>
+        </ZipFileInput>
+      )}
 
       <StyledFormGroup>
         <StyledLabel as="label" htmlFor="import-dataset-finnish-layerName">

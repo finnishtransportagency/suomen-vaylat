@@ -6,6 +6,7 @@ import strings from '../../translations';
 
 import styled from 'styled-components';
 import {
+  setEditingUserlayer,
   setMapLayerVisibility
 } from '../../state/slices/rpcSlice';
 import { updateLayers } from '../../utils/rpcUtil';
@@ -13,9 +14,12 @@ import LayerlistSwitch from '../layerlists/hierarchical-layerlist/LayerlistSwitc
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faPen } from '@fortawesome/free-solid-svg-icons';
+import { setIsDatasetImportOpen, setWarning } from '../../state/slices/uiSlice';
+import { Slide, toast } from 'react-toastify';
+import { IS_EXTRANET } from '../../utils/appInfoUtil';
 
 const StyledLayerContainer = styled.div`
-min-height: 32px;
+  min-height: 32px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -85,8 +89,7 @@ const StyledItemsRight = styled.div`
   flex-shrink: 0;
 `;
 
-
-export const UserLayer = ({ layer, onEdit, onDelete }) => {
+export const UserLayer = ({ layer }) => {
   const { store } = useContext(ReactReduxContext);
   const { channel } = useSelector((state) => state.rpc);
 
@@ -102,27 +105,58 @@ export const UserLayer = ({ layer, onEdit, onDelete }) => {
 
   const handleEditClick = (ev) => {
     ev && ev.stopPropagation();
-    if (typeof onEdit === 'function') {
-      onEdit(layer);
-      return;
-    }
-    // Fallback: if no onEdit provided, simple console message
-    console.warn('Edit callback not provided for UserLayer', layer);
+    store.dispatch(setEditingUserlayer(layer));
+    store.dispatch(setIsDatasetImportOpen(true));
   };
 
   const handleDeleteClick = (ev) => {
     ev && ev.stopPropagation();
-    if (typeof onDelete === 'function') {
-      onDelete(layer);
-      return;
-    }
-    // Fallback behavior: native confirm, then warn (caller should handle actual removal)
-    const confirmMsg =
-      (strings.layerlist?.confirmDeleteLayer ||
-        'Are you sure you want to delete this layer?') + ` "${layer.name}"`;
-    if (window.confirm(confirmMsg)) {
-      console.warn('Delete requested for layer but no onDelete handler provided', layer);
-    }
+    store.dispatch(
+      setWarning({
+        title: strings.savedContent?.userLayer?.confirmDelete,
+        subtitle: null,
+        cancel: {
+          text: strings.general.cancel,
+          action: () => store.dispatch(setWarning(null))
+        },
+        confirm: {
+          text: strings.general.continue,
+          action: () => {
+            channel.deleteUserLayer(
+              [layer.id],
+              () => {
+                toast.success(strings.savedContent?.userLayer?.deleteSuccess, {
+                  position: 'top-center',
+                  autoClose: 5000,
+                  hideProgressBar: false,
+                  closeOnClick: true,
+                  pauseOnHover: true,
+                  draggable: false,
+                  progress: undefined,
+                  theme: 'colored',
+                  transition: Slide
+                });
+                updateLayers();
+              },
+              () => {
+                toast.error(strings.savedContent?.userLayer?.deleteFail, {
+                  position: 'top-center',
+                  autoClose: 5000,
+                  hideProgressBar: false,
+                  closeOnClick: true,
+                  pauseOnHover: true,
+                  draggable: false,
+                  progress: undefined,
+                  theme: 'colored',
+                  transition: Slide
+                });
+              }
+            );
+            store.dispatch(setWarning(null));
+          }
+        }
+      })
+    );
   };
 
   return (
@@ -152,28 +186,31 @@ export const UserLayer = ({ layer, onEdit, onDelete }) => {
       </StyledItemLeft>
 
       <StyledItemsRight>
+        {IS_EXTRANET && (
+          <>
+            <StyledIconButton
+              aria-label={strings.savedContent?.userLayer?.deleteLayer}
+              title={strings.savedContent?.userLayer?.deleteLayer}
+              onClick={handleDeleteClick}
+            >
+              <FontAwesomeIcon icon={faTrash} />
+            </StyledIconButton>
 
-        <StyledIconButton
-          aria-label={strings.layerlist?.deleteLayer || 'Delete layer'}
-          title={strings.layerlist?.deleteLayer || 'Delete'}
-          onClick={handleDeleteClick}
-        >
-          <FontAwesomeIcon icon={faTrash} />
-        </StyledIconButton>
+            <StyledIconButton
+              aria-label={strings.savedContent?.userLayer?.editLayer}
+              title={strings.savedContent?.userLayer?.editLayer}
+              onClick={handleEditClick}
+            >
+              <FontAwesomeIcon icon={faPen} />
+            </StyledIconButton>
+          </>
+        )}
 
-        <StyledIconButton
-          aria-label={strings.layerlist?.editLayer || 'Edit layer'}
-          title={strings.layerlist?.editLayer || 'Edit'}
-          onClick={handleEditClick}
-        >
-          <FontAwesomeIcon icon={faPen} />
-        </StyledIconButton>
-
-      <LayerlistSwitch
-        action={() => handleLayerVisibility(channel, layer)}
-        isSelected={layer.visible}
-        layer={layer}
-      />
+        <LayerlistSwitch
+          action={() => handleLayerVisibility(channel, layer)}
+          isSelected={layer.visible}
+          layer={layer}
+        />
       </StyledItemsRight>
     </StyledLayerContainer>
   );

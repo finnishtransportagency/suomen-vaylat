@@ -93,8 +93,10 @@
     "englishLayerName": "Karttatason nimi englanniksi",
     "englishDesc": "Kuvaus englanniksi",
     "englishSource": "Tietolähde englanniksi",
-    "submitSuccess": "Aineiston tuonti onnistui",
-    "submitFail": "Aineiston tuonti epäonnistui, lisätietoa logeista",
+    "submitSuccess": "Aineiston tuonti onnistui!",
+    "submitFail": "Aineiston tuonti epäonnistui!",
+    "saveSuccess": "Aineiston tallennus onnistui!",
+    "saveFail": "Aineiston tallennus epäonnistui!",
     "zipFileInput": {
       "onlyZipAllowed": "Vain zip-tiedostot ovat sallittuja.",
       "zipMaxSize": "Zip-tiedoston maksimikoko on 10 Mt.",
@@ -189,6 +191,13 @@
       "active": "Aktiivinen",
       "markers": "Merkinnät",
       "features": "Piirteet"
+    },
+    "userLayer": {
+      "deleteLayer": "Poista taso",
+      "editLayer": "Muokkaa tason tietoja",
+      "confirmDelete": "Haluatko varmasti poistaa karttatason?",
+      "deleteSuccess": "Taso poistettu!",
+      "deleteFail": "Tason poisto epäonnistui!"
     }
   },
   "gfi": {
