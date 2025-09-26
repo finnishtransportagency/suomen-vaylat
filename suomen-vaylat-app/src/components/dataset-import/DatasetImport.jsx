@@ -145,7 +145,9 @@ const DatasetImport = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { channel, editingUserlayer } = useAppSelector((state) => state.rpc);
 
-  const [fields, setFields] = useState(editingUserlayer?.locale || initialFields);
+  const [fields, setFields] = useState(
+    editingUserlayer?.locale || initialFields
+  );
   const [errors, setErrors] = useState(initialErrors);
 
   // accordionOpen controls which language sections are included
@@ -243,7 +245,7 @@ const DatasetImport = () => {
                 theme: 'colored',
                 transition: Slide
               });
-              console.error(strings.datasetImport.submitFail + ":" + data);
+              console.error(strings.datasetImport.submitFail + ':' + data);
             }
           );
         });
@@ -261,43 +263,45 @@ const DatasetImport = () => {
           en: accordionOpen.en ? fields.en || {} : {}
         };
 
-          channel.updateUserLayer(
-            [ editingUserlayer.id, {locale, style}],
-            () => {
-              setIsSubmitting(false);
-              resetForm();
-              updateLayers();
-              store.dispatch(setEditingUserlayer(null));
-              store.dispatch(setIsDatasetImportOpen(false));
-              toast.success(strings.datasetImport.submitSuccess, {
-                position: 'top-center',
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: 'colored',
-                transition: Slide
-              });
-            },
-            (data) => {
-              setIsSubmitting(false);
-              setUploadedFile(null);
-              toast.error(strings.datasetImport.submitFail, {
-                position: 'top-center',
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: 'colored',
-                transition: Slide
-              });
-              console.error(strings.datasetImport.submitFail + ":" + data);
-            }
-          );
+        console.log('style', style);
+
+        channel.updateUserLayer(
+          [editingUserlayer.id, { locale, style }],
+          () => {
+            setIsSubmitting(false);
+            resetForm();
+            updateLayers();
+            store.dispatch(setEditingUserlayer(null));
+            store.dispatch(setIsDatasetImportOpen(false));
+            toast.success(strings.datasetImport.saveSuccess, {
+              position: 'top-center',
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: 'colored',
+              transition: Slide
+            });
+          },
+          (data) => {
+            setIsSubmitting(false);
+            setUploadedFile(null);
+            toast.error(strings.datasetImport.saveFail, {
+              position: 'top-center',
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: 'colored',
+              transition: Slide
+            });
+            console.error(strings.datasetImport.submitFail + ':' + data);
+          }
+        );
       }, 1200);
     }
   };
@@ -312,11 +316,7 @@ const DatasetImport = () => {
     requiredFi &&
     allFieldsValid
   );
-  const disableUpdate = !(
-    !fileError &&
-    requiredFi &&
-    allFieldsValid
-  );
+  const disableUpdate = !(!fileError && requiredFi && allFieldsValid);
 
   useEffect(() => {
     if (swiperRef.current && swiperRef.current.swiper) {
@@ -434,33 +434,30 @@ const DatasetImport = () => {
           {strings.datasetImport.cancel}
         </StyledSecondaryButton>
 
-{ editingUserlayer ?
-        <StyledPrimaryButton
-          type="button"
-          tabIndex={0}
-          id="import-dataset-savebutton-bottom"
-          disabled={disableUpdate || isSubmitting}
-          aria-disabled={disableUpdate || isSubmitting}
-          onClick={handleSaveDataset}
-        >
-          {strings.general.save}
-        </StyledPrimaryButton>
-
-        :
-
-        <StyledPrimaryButton
-          type="button"
-          tabIndex={0}
-          id="import-dataset-import-button-bottom"
-          disabled={disableImport || isSubmitting}
-          aria-disabled={disableImport || isSubmitting}
-          onClick={handleSubmitDataset}
-        >
-          <FontAwesomeIcon icon={faUpload} />
-          {strings.datasetImport.import}
-        </StyledPrimaryButton>
-
-}
+        {editingUserlayer ? (
+          <StyledPrimaryButton
+            type="button"
+            tabIndex={0}
+            id="import-dataset-savebutton-bottom"
+            disabled={disableUpdate || isSubmitting}
+            aria-disabled={disableUpdate || isSubmitting}
+            onClick={handleSaveDataset}
+          >
+            {strings.general.save}
+          </StyledPrimaryButton>
+        ) : (
+          <StyledPrimaryButton
+            type="button"
+            tabIndex={0}
+            id="import-dataset-import-button-bottom"
+            disabled={disableImport || isSubmitting}
+            aria-disabled={disableImport || isSubmitting}
+            onClick={handleSubmitDataset}
+          >
+            <FontAwesomeIcon icon={faUpload} />
+            {strings.datasetImport.import}
+          </StyledPrimaryButton>
+        )}
       </StyledSubmitButtonGroup>
     </StyledMainContainer>
   );

@@ -28,7 +28,7 @@ const TypeRadioButton = styled.label`
   position: relative;
   font-size: 16px;
   font-weight: 600;
-  background: ${({ selected }) => (selected ? '#fff' : '#f2f4f9')};
+  background: ${(p) => p.theme.colors.mainWhite};
   color: ${(p) =>
     p.selected ? p.theme.colors.mainColor1 : p.theme.colors.darkGrey};
   border: 2px solid
@@ -61,7 +61,7 @@ const RadioDot = styled.span`
     ${({ selected, theme }) =>
       selected ? theme.colors.mainColor1 : theme.colors.lightGrey};
   background: ${({ selected, theme }) =>
-    selected ? theme.colors.transparentMain : theme.colors.white};
+    selected ? theme.colors.transparentMain : theme.colors.mainWhite};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -87,12 +87,6 @@ const Grouping = styled.fieldset`
 const GroupTitle = styled.h6`
   font-weight: 600;
   color: ${(p) => p.theme.colors.mainColor1};
-`;
-
-const StyledJSONPreviewTitle = styled.p`
-  font-size: 16px;
-  font-weight: 600;
-  margin-bottom: 1em;
 `;
 
 const Label = styled.label`
@@ -192,15 +186,17 @@ const fillPatternOptions = FILL_ORDER.map((name) => ({
 export default function StyleEditor({ initialStyle = {}, onChange }) {
   const [type, setType] = useState('point');
 
-  // Controls
+  // Controls - initialize from initialStyle or defaults
+  // POINT / image
   const [pointColor, setPointColor] = useState(
     initialStyle?.image?.fill?.color || '#F8931F'
   );
   const [pointShape, setPointShape] = useState(initialStyle?.image?.shape ?? 0);
-  const [pointSize, setPointSize] = useState(initialStyle?.image?.size || 3);
+  const [pointSize, setPointSize] = useState(initialStyle?.image?.size ?? 3);
 
+  // LINE / stroke top-level (line)
   const [lineColor, setLineColor] = useState(
-    initialStyle?.stroke?.color || '#000000'
+    initialStyle?.stroke?.color || initialStyle?.stroke?.color || '#000000'
   );
   const [lineDash, setLineDash] = useState(
     initialStyle?.stroke?.lineDash || 'solid'
@@ -211,13 +207,14 @@ export default function StyleEditor({ initialStyle = {}, onChange }) {
   const [lineJoin, setLineJoin] = useState(
     initialStyle?.stroke?.lineJoin || 'round'
   );
-  const [lineWidth, setLineWidth] = useState(initialStyle?.stroke?.width || 1);
+  const [lineWidth, setLineWidth] = useState(initialStyle?.stroke?.width ?? 1);
 
+  // AREA / stroke.area and fill
   const [areaBorderColor, setAreaBorderColor] = useState(
     initialStyle?.stroke?.area?.color || '#000000'
   );
   const [areaBorderWidth, setAreaBorderWidth] = useState(
-    initialStyle?.stroke?.area?.width || 1
+    initialStyle?.stroke?.area?.width ?? 1
   );
   const [areaDash, setAreaDash] = useState(
     initialStyle?.stroke?.area?.lineDash || 'solid'
@@ -232,46 +229,47 @@ export default function StyleEditor({ initialStyle = {}, onChange }) {
     initialStyle?.fill?.area?.pattern ?? FILLS.SOLID
   );
 
+  // Keep onChange called with a complete style object whenever any relevant state changes.
   useEffect(() => {
-    let style = {};
-    if (type === 'point') {
-      style = {
-        image: {
-          shape: pointShape,
-          size: pointSize,
-          fill: { color: pointColor }
-        }
-      };
-    } else if (type === 'line') {
-      style = {
-        stroke: {
-          color: lineColor,
-          width: lineWidth,
-          lineDash: lineDash,
-          lineCap: lineCap,
-          lineJoin: lineJoin
-        }
-      };
-    } else if (type === 'area') {
-      style = {
+    // Build the complete style object:
+    const style = {
+      // IMAGE (point)
+      image: {
+        shape: Number(pointShape ?? 0),
+        size: Number(pointSize ?? 0),
         fill: {
-          color: fillColor,
-          area: { pattern: fillPattern }
-        },
-        stroke: {
-          area: {
-            color: areaBorderColor,
-            width: areaBorderWidth,
-            lineDash: areaDash,
-            lineJoin: areaJoin
-          }
+          color: pointColor || '#F8931F'
         }
-      };
+      },
+      // FILL (area)
+      fill: {
+        color: fillColor || '#FAEBD7',
+        area: {
+          pattern: Number(fillPattern ?? FILLS.SOLID)
+        }
+      },
+      // STROKE: combine line-level stroke and area-level stroke
+      stroke: {
+        // top-level line style (for 'line' type)
+        color: lineColor || '#000000',
+        lineCap: lineCap || 'round',
+        lineDash: lineDash || 'solid',
+        width: Number(lineWidth ?? 1),
+        lineJoin: lineJoin || 'round',
+        // area-specific stroke properties nested under `area`
+        area: {
+          color: areaBorderColor || '#000000',
+          lineDash: areaDash || 'solid',
+          width: Number(areaBorderWidth ?? 1),
+          lineJoin: areaJoin || 'round'
+        }
+      }
+    };
+
+    if (onChange) {
+      onChange(style);
     }
-    if (onChange) onChange(style);
-    // eslint-disable-next-line
   }, [
-    type,
     pointColor,
     pointShape,
     pointSize,
@@ -280,12 +278,12 @@ export default function StyleEditor({ initialStyle = {}, onChange }) {
     lineCap,
     lineJoin,
     lineWidth,
-    fillColor,
-    fillPattern,
     areaBorderColor,
     areaBorderWidth,
     areaDash,
     areaJoin,
+    fillColor,
+    fillPattern,
     onChange
   ]);
 
@@ -326,7 +324,6 @@ export default function StyleEditor({ initialStyle = {}, onChange }) {
 
   return (
     <div>
-      <GroupTitle id={ids.styleTab}>{radioGroupLabel}</GroupTitle>
       <RadioTypeGroup
         id={`${ids.styleTab}-group`}
         role="radiogroup"
@@ -348,7 +345,6 @@ export default function StyleEditor({ initialStyle = {}, onChange }) {
             aria-controls={ids.panelPoint}
             aria-label={seStrings.dot?.title || 'Point feature style'}
           />
-          <RadioDot selected={type === 'point'} aria-hidden="true" />
           {seStrings.dot?.title || 'Point feature style'}
         </TypeRadioButton>
         <TypeRadioButton
@@ -366,7 +362,6 @@ export default function StyleEditor({ initialStyle = {}, onChange }) {
             aria-controls={ids.panelLine}
             aria-label={seStrings.line?.title || 'Line feature style'}
           />
-          <RadioDot selected={type === 'line'} aria-hidden="true" />
           {seStrings.line?.title || 'Line feature style'}
         </TypeRadioButton>
         <TypeRadioButton
@@ -384,7 +379,6 @@ export default function StyleEditor({ initialStyle = {}, onChange }) {
             aria-controls={ids.panelArea}
             aria-label={seStrings.area?.title || 'Area feature style'}
           />
-          <RadioDot selected={type === 'area'} aria-hidden="true" />
           {seStrings.area?.title || 'Area feature style'}
         </TypeRadioButton>
       </RadioTypeGroup>
@@ -405,7 +399,7 @@ export default function StyleEditor({ initialStyle = {}, onChange }) {
                 {seStrings.dot?.color?.label || 'Colour'}:
               </Label>
               <ColorPicker
-                id={ids.pointColor + "-color-picker"}
+                id={ids.pointColor + '-color-picker'}
                 value={pointColor}
                 onChange={setPointColor}
                 ariaLabel={seStrings.dot?.color?.label || 'Colour'}
@@ -468,7 +462,7 @@ export default function StyleEditor({ initialStyle = {}, onChange }) {
                 {seStrings.line?.color?.label || 'Colour'}:
               </Label>
               <ColorPicker
-                id={ids.lineColor + "-color-picker"}
+                id={ids.lineColor + '-color-picker'}
                 value={lineColor}
                 onChange={setLineColor}
                 ariaLabel={seStrings.dot?.color?.label || 'Colour'}
@@ -556,7 +550,7 @@ export default function StyleEditor({ initialStyle = {}, onChange }) {
                 id={ids.lineWidth}
                 type="number"
                 min={1}
-                max={5}
+                max={20}
                 value={lineWidth}
                 onChange={(e) => setLineWidth(Number(e.target.value))}
               />
@@ -581,7 +575,7 @@ export default function StyleEditor({ initialStyle = {}, onChange }) {
                 {seStrings.area?.linecolor?.label || 'Line colour'}:
               </Label>
               <ColorPicker
-                id={ids.areaBorderColor + "-color-picker"}
+                id={ids.areaBorderColor + '-color-picker'}
                 value={areaBorderColor}
                 onChange={setAreaBorderColor}
                 ariaLabel={seStrings.dot?.color?.label || 'Colour'}
@@ -643,7 +637,7 @@ export default function StyleEditor({ initialStyle = {}, onChange }) {
                 id={ids.areaBorderWidth}
                 type="number"
                 min={1}
-                max={5}
+                max={20}
                 value={areaBorderWidth}
                 onChange={(e) => setAreaBorderWidth(Number(e.target.value))}
               />
@@ -655,7 +649,7 @@ export default function StyleEditor({ initialStyle = {}, onChange }) {
                 {seStrings.area?.color?.label || 'Fill colour'}:
               </Label>
               <ColorPicker
-                id={ids.fillColor + "-color-picker"}
+                id={ids.fillColor + '-color-picker'}
                 value={fillColor}
                 onChange={setFillColor}
                 ariaLabel={seStrings.dot?.color?.label || 'Colour'}
@@ -688,51 +682,6 @@ export default function StyleEditor({ initialStyle = {}, onChange }) {
           </InputRow>
         </Grouping>
       )}
-
-      <PreviewBox
-        id={ids.jsonPreview}
-        aria-label={seStrings.preview?.label || 'Preview'}
-        role="region"
-      >
-        <StyledJSONPreviewTitle>
-          {seStrings.preview?.label || 'Preview'}
-        </StyledJSONPreviewTitle>
-        <pre style={{ margin: 0 }}>
-          {JSON.stringify(
-            type === 'point'
-              ? {
-                  image: {
-                    shape: pointShape,
-                    size: pointSize,
-                    fill: { color: pointColor }
-                  }
-                }
-              : type === 'line'
-              ? {
-                  stroke: {
-                    color: lineColor,
-                    width: lineWidth,
-                    lineDash: lineDash,
-                    lineCap: lineCap,
-                    lineJoin: lineJoin
-                  }
-                }
-              : {
-                  fill: { color: fillColor, area: { pattern: fillPattern } },
-                  stroke: {
-                    area: {
-                      color: areaBorderColor,
-                      width: areaBorderWidth,
-                      lineDash: areaDash,
-                      lineJoin: areaJoin
-                    }
-                  }
-                },
-            null,
-            2
-          )}
-        </pre>
-      </PreviewBox>
     </div>
   );
 }
