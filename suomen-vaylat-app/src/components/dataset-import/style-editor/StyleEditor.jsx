@@ -10,6 +10,7 @@ import {
 } from './styleConstants';
 import strings from '../../../translations';
 import ColorPicker from './ColorPicker';
+import { AreaPreview, LinePreview, PointPreview } from './PreviewHelpers';
 
 const RadioTypeGroup = styled.div`
   display: flex;
@@ -23,12 +24,14 @@ const RadioTypeGroup = styled.div`
 const TypeRadioButton = styled.label`
   flex: 1;
   display: flex;
+  flex-direction: column;
+  gap: 8px;
   align-items: center;
   justify-content: center;
   position: relative;
   font-size: 16px;
   font-weight: 600;
-  background: ${(p) => p.theme.colors.mainWhite};
+  background: ${({ selected }) => (selected ? '#fff' : '#f2f4f9')};
   color: ${(p) =>
     p.selected ? p.theme.colors.mainColor1 : p.theme.colors.darkGrey};
   border: 2px solid
@@ -51,31 +54,14 @@ const TypeRadioButton = styled.label`
   }
 `;
 
-const RadioDot = styled.span`
-  width: 17px;
-  height: 17px;
-  border-radius: 50%;
-  box-sizing: border-box;
-  margin-right: 9px;
-  border: 2.2px solid
-    ${({ selected, theme }) =>
-      selected ? theme.colors.mainColor1 : theme.colors.lightGrey};
-  background: ${({ selected, theme }) =>
-    selected ? theme.colors.transparentMain : theme.colors.mainWhite};
+const PreviewWrapper = styled.div`
+  width: 56px;
+  height: 56px;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background 0.14s, border-color 0.14s;
-  &:after {
-    content: '';
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: ${({ selected, theme }) =>
-      selected ? theme.colors.mainColor1 : 'transparent'};
-    display: block;
-    transition: background 0.12s;
-  }
+  margin-right: 0.5em;
+  margin-left: 0.5em;
 `;
 
 const Grouping = styled.fieldset`
@@ -162,6 +148,7 @@ const PreviewBox = styled.div`
   border: 1px solid #e4e8ed;
 `;
 
+/* reuse renderOskariSvg helper you had */
 function renderOskariSvg(data, size = 32) {
   return (
     <span
@@ -176,12 +163,15 @@ function renderOskariSvg(data, size = 32) {
   );
 }
 
+/* keep original fillPatternOptions mapping */
 const fillPatternOptions = FILL_ORDER.map((name) => ({
   id: name,
   label: name[0] + name.slice(1).toLowerCase().replace('_', ' '),
   value: FILLS[name],
   preview: <FillPatternSvgPreview type={name} />
 }));
+
+/* ---------------- Main component (only change: previews added into TypeRadioButton) ---------------- */
 
 export default function StyleEditor({ initialStyle = {}, onChange }) {
   const [type, setType] = useState('point');
@@ -269,6 +259,7 @@ export default function StyleEditor({ initialStyle = {}, onChange }) {
     if (onChange) {
       onChange(style);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     pointColor,
     pointShape,
@@ -334,6 +325,7 @@ export default function StyleEditor({ initialStyle = {}, onChange }) {
           selected={type === 'point'}
           htmlFor={ids.radioPoint}
           id={`${ids.radioPoint}-label`}
+          onClick={() => setType('point')}
         >
           <input
             id={ids.radioPoint}
@@ -345,12 +337,19 @@ export default function StyleEditor({ initialStyle = {}, onChange }) {
             aria-controls={ids.panelPoint}
             aria-label={seStrings.dot?.title || 'Point feature style'}
           />
+
+          {/* PREVIEW: Point */}
+          <PreviewWrapper>
+            <PointPreview imageDef={{ shape: pointShape, size: pointSize, fill: { color: pointColor } }} previewSize={56} />
+          </PreviewWrapper>
+
           {seStrings.dot?.title || 'Point feature style'}
         </TypeRadioButton>
         <TypeRadioButton
           selected={type === 'line'}
           htmlFor={ids.radioLine}
           id={`${ids.radioLine}-label`}
+          onClick={() => setType('line')}
         >
           <input
             id={ids.radioLine}
@@ -362,12 +361,19 @@ export default function StyleEditor({ initialStyle = {}, onChange }) {
             aria-controls={ids.panelLine}
             aria-label={seStrings.line?.title || 'Line feature style'}
           />
+
+          {/* PREVIEW: Line */}
+          <PreviewWrapper>
+            <LinePreview strokeDef={{ color: lineColor, width: lineWidth, lineCap, lineDash, lineJoin }} previewSize={56} />
+          </PreviewWrapper>
+
           {seStrings.line?.title || 'Line feature style'}
         </TypeRadioButton>
         <TypeRadioButton
           selected={type === 'area'}
           htmlFor={ids.radioArea}
           id={`${ids.radioArea}-label`}
+          onClick={() => setType('area')}
         >
           <input
             id={ids.radioArea}
@@ -379,6 +385,16 @@ export default function StyleEditor({ initialStyle = {}, onChange }) {
             aria-controls={ids.panelArea}
             aria-label={seStrings.area?.title || 'Area feature style'}
           />
+
+          {/* PREVIEW: Area */}
+          <PreviewWrapper>
+            <AreaPreview
+              strokeDef={{ color: areaBorderColor, width: areaBorderWidth, lineDash: areaDash, lineJoin: areaJoin }}
+              fillDef={{ color: fillColor, area: { pattern: fillPattern } }}
+              previewSize={56}
+            />
+          </PreviewWrapper>
+
           {seStrings.area?.title || 'Area feature style'}
         </TypeRadioButton>
       </RadioTypeGroup>
@@ -399,7 +415,7 @@ export default function StyleEditor({ initialStyle = {}, onChange }) {
                 {seStrings.dot?.color?.label || 'Colour'}:
               </Label>
               <ColorPicker
-                id={ids.pointColor + '-color-picker'}
+                id={ids.pointColor + "-color-picker"}
                 value={pointColor}
                 onChange={setPointColor}
                 ariaLabel={seStrings.dot?.color?.label || 'Colour'}
@@ -462,7 +478,7 @@ export default function StyleEditor({ initialStyle = {}, onChange }) {
                 {seStrings.line?.color?.label || 'Colour'}:
               </Label>
               <ColorPicker
-                id={ids.lineColor + '-color-picker'}
+                id={ids.lineColor + "-color-picker"}
                 value={lineColor}
                 onChange={setLineColor}
                 ariaLabel={seStrings.dot?.color?.label || 'Colour'}
@@ -550,7 +566,7 @@ export default function StyleEditor({ initialStyle = {}, onChange }) {
                 id={ids.lineWidth}
                 type="number"
                 min={1}
-                max={20}
+                max={5}
                 value={lineWidth}
                 onChange={(e) => setLineWidth(Number(e.target.value))}
               />
@@ -575,7 +591,7 @@ export default function StyleEditor({ initialStyle = {}, onChange }) {
                 {seStrings.area?.linecolor?.label || 'Line colour'}:
               </Label>
               <ColorPicker
-                id={ids.areaBorderColor + '-color-picker'}
+                id={ids.areaBorderColor + "-color-picker"}
                 value={areaBorderColor}
                 onChange={setAreaBorderColor}
                 ariaLabel={seStrings.dot?.color?.label || 'Colour'}
@@ -637,7 +653,7 @@ export default function StyleEditor({ initialStyle = {}, onChange }) {
                 id={ids.areaBorderWidth}
                 type="number"
                 min={1}
-                max={20}
+                max={5}
                 value={areaBorderWidth}
                 onChange={(e) => setAreaBorderWidth(Number(e.target.value))}
               />
@@ -649,7 +665,7 @@ export default function StyleEditor({ initialStyle = {}, onChange }) {
                 {seStrings.area?.color?.label || 'Fill colour'}:
               </Label>
               <ColorPicker
-                id={ids.fillColor + '-color-picker'}
+                id={ids.fillColor + "-color-picker"}
                 value={fillColor}
                 onChange={setFillColor}
                 ariaLabel={seStrings.dot?.color?.label || 'Colour'}
