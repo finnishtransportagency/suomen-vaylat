@@ -1,10 +1,5 @@
-
-/* small helpers & preview components - only added functionality: preview images */
-
 import { FILLS, POINT_SHAPES } from "./styleConstants";
 
-
-/* PATHs and pattern helper similar to your examples */
 const PATH_AREA = 'M10,25L70,15L50,70Z';
 const PATH_LINE = 'M10,20L30,60L70,40';
 const AREA_CAP = 'butt';

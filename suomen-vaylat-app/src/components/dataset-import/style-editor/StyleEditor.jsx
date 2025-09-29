@@ -148,7 +148,6 @@ const PreviewBox = styled.div`
   border: 1px solid #e4e8ed;
 `;
 
-/* reuse renderOskariSvg helper you had */
 function renderOskariSvg(data, size = 32) {
   return (
     <span
@@ -163,7 +162,6 @@ function renderOskariSvg(data, size = 32) {
   );
 }
 
-/* keep original fillPatternOptions mapping */
 const fillPatternOptions = FILL_ORDER.map((name) => ({
   id: name,
   label: name[0] + name.slice(1).toLowerCase().replace('_', ' '),
@@ -171,12 +169,9 @@ const fillPatternOptions = FILL_ORDER.map((name) => ({
   preview: <FillPatternSvgPreview type={name} />
 }));
 
-/* ---------------- Main component (only change: previews added into TypeRadioButton) ---------------- */
-
 export default function StyleEditor({ initialStyle = {}, onChange }) {
   const [type, setType] = useState('point');
 
-  // Controls - initialize from initialStyle or defaults
   // POINT / image
   const [pointColor, setPointColor] = useState(
     initialStyle?.image?.fill?.color || '#F8931F'
