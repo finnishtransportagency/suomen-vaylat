@@ -268,7 +268,7 @@ const DatasetImport = () => {
           () => {
             setIsSubmitting(false);
             resetForm();
-            updateLayers();
+            updateLayers(store, channel);
             store.dispatch(setEditingUserlayer(null));
             store.dispatch(setIsDatasetImportOpen(false));
             toast.success(strings.datasetImport.saveSuccess, {

@@ -125,6 +125,7 @@ export const UserLayer = ({ layer }) => {
             channel.deleteUserLayer(
               [layer.id],
               () => {
+                updateLayers(store, channel);
                 toast.success(strings.savedContent?.userLayer?.deleteSuccess, {
                   position: 'top-center',
                   autoClose: 5000,
@@ -136,7 +137,6 @@ export const UserLayer = ({ layer }) => {
                   theme: 'colored',
                   transition: Slide
                 });
-                updateLayers();
               },
               () => {
                 toast.error(strings.savedContent?.userLayer?.deleteFail, {
