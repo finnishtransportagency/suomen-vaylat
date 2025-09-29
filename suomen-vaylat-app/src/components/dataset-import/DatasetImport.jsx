@@ -266,11 +266,11 @@ const DatasetImport = () => {
         channel.updateUserLayer(
           [editingUserlayer.id, { locale, style }],
           () => {
+            store.dispatch(setIsDatasetImportOpen(false));
             setIsSubmitting(false);
             resetForm();
             updateLayers(store, channel);
             store.dispatch(setEditingUserlayer(null));
-            store.dispatch(setIsDatasetImportOpen(false));
             toast.success(strings.datasetImport.saveSuccess, {
               position: 'top-center',
               autoClose: 5000,
