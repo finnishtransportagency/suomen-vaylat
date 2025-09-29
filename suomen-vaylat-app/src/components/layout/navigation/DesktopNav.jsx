@@ -218,7 +218,7 @@ const DesktopNav = ({ setIsMenuOpen, isMenuOpen }) => {
               aria-label={strings.menu?.profile}
             >
               <AccountCircleIcon aria-hidden="true" />
-              {strings.savedContent?.savedContent}
+              {strings.tooltips?.profile}
             </DropdownMenuItem>
           )}
           <DropdownMenuItem
