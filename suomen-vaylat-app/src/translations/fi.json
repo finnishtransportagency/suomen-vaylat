@@ -7,8 +7,12 @@
     }
   },
   "title": "Suomen väylät",
+  "titleExtranet": "VäyläMappi",
   "extranet": "EXTRANET",
+  "row": "rivi",
+  "back": "Takaisin",
   "tooltips": {
+    "profile": "Omat tiedot",
     "showInfoLink": "Suodatus info (avautuu uuteen välilehteen)",
     "layerlist": {
       "newLayer": "Uusi",
@@ -17,17 +21,20 @@
       "opacity": "Opasiteetti"
     },
     "search": "Haku",
+    "searchActive": "Haku aktiivisena",
     "searchButton": "Osoitehaku",
     "layerlistButton": "Tasovalikko",
     "fullscreenButton": "Koko näyttö",
+    "closeDrawingTools": "Sulje piirtotyökalut",
     "legendHeader": "Tällä zoom-tasolla näkyvissä olevat aineistot ja niiden selitteet",
     "legendButton": "Selitteet",
     "myLocButton": "Oma sijainti",
-    "baseLayersButton": "Taustakartat",
+    "coordinateTool": "Koordinaattityökalu",
     "zoomExpand": "Laajenna",
     "zoomIn": "Lähennä",
     "zoomOut": "Loitonna",
     "opacity": "Läpinäkyvyys",
+    "toolsButton": "Työkalut",
     "drawingTools": {
       "drawingToolsButton": "Piirtotyökalut",
       "point": "Piste",
@@ -44,38 +51,153 @@
     "share": "Jaa sivu",
     "shareTheme": "Jaa teema",
     "metadata": "Näytä tason metadata",
-    "showPageInfo": "Sovelluksen tiedot",
-    "showUserGuide": "Käyttöohjeet"
+    "showPageInfo": "Näytä sivun info",
+    "showUserGuide": "Näytä käyttöohje",
+    "userGuide": "Käyttöohjeet",
+    "pageInfo": "Sovelluksen tiedot"
+  },
+  "profile": {
+    "title": "Käyttäjän tiedot",
+    "firstName": "Etunimi",
+    "lastName": "Sukunimi",
+    "username": "Käyttäjätunnus",
+    "email": "Sähköpostiosoite",
+    "accountCreated": "Tili luotu",
+    "lastLogin": "Edellinen kirjautuminen"
+  },
+  "datasetImport": {
+    "title": "Omien aineistojen tuonti",
+    "menuButtonTitle": "Tuo aineistoja",
+    "tabGeneral": "Yleiset",
+    "tabVisualization": "Visualisointi",
+    "infoText": "Lataa aineisto tietokoneeltasi yhdeksi zip-tiedostoksi pakattuna, joka sisältää tarvittavat tiedostot jostain seuraavasta tiedostomuodosta:",
+    "uploadTip": "Raahaa tiedosto tähän ja valitse selaamalla",
+    "uploadedFile": "Ladattu tiedosto:",
+    "layerName": "Karttatason nimi",
+    "desc": "Kuvaus",
+    "source": "Tietolähde",
+    "languages": "Muut kielet",
+    "english": "Englanti",
+    "swedish": "Ruotsi",
+    "swedishSectionTitle": "Ruotsiksi",
+    "swedishLayerName": "Karttatason nimi ruotsiksi",
+    "swedishDesc": "Kuvaus ruotsiksi",
+    "swedishSource": "Tietolähde ruotsiksi",
+    "mandatory": "(pakollinen)",
+    "cancel": "PERUUTA",
+    "import": "TUO AINEISTO",
+    "visTabText": "Visualisointi-asetukset tähän...",
+    "fileNote": "Zip-tiedosto saa sisältää vain yhden karttatason ja sen maksimikoko on 10 Mt. Purettuna tiedoston koko saa olla korkeintaan 150 Mt.",
+    "languagesTooltip": "Valitse lisäkielet, joille aineiston metatiedot annetaan.",
+    "englishSectionTitle": "Englanniksi",
+    "englishLayerName": "Karttatason nimi englanniksi",
+    "englishDesc": "Kuvaus englanniksi",
+    "englishSource": "Tietolähde englanniksi",
+    "submitSuccess": "Aineiston tuonti onnistui!",
+    "submitFail": "Aineiston tuonti epäonnistui!",
+    "saveSuccess": "Aineiston tallennus onnistui!",
+    "saveFail": "Aineiston tallennus epäonnistui!",
+    "zipFileInput": {
+      "onlyZipAllowed": "Vain zip-tiedostot ovat sallittuja.",
+      "zipMaxSize": "Zip-tiedoston maksimikoko on 10 Mt.",
+      "removeFile": "Poista valittu tiedosto"
+    },
+    "fileList": [
+      "Shapefile (.shp, .shx, .dbf ja .prj sekä mahdollinen .cpg)",
+      "GPX-siirtotiedosto (.gpx)",
+      "GeoPackage-tiedosto (.gpkg)",
+      "MapInfo (.mif ja .mid)",
+      "Google Maps (.kml)"
+    ],
+    "validationMsg": "Vain isot/pienet kirjaimet, numerot, alaviiva, väliviiva ja sulut sallitaan.",
+    "fileSelect": "Raahaa tiedosto tähän tai valitse selaamalla.",
+    "file": "Tiedosto:",
+    "styleEditor": {
+      "preview": { "label": "JSON esikatselu:" },
+      "subheaders": {
+        "style": "Tyyli"
+      },
+      "dot": {
+        "title": "Pisteen tyyli",
+        "color": { "label": "Väri" },
+        "symbol": { "label": "Symboli" },
+        "size": { "label": "Koko" }
+      },
+      "line": {
+        "title": "Viivan tyyli",
+        "color": { "label": "Väri" },
+        "style": { "label": "Tyyli" },
+        "cap": { "label": "Päädyt" },
+        "corner": { "label": "Kulmat" },
+        "width": { "label": "Leveys" } 
+      },
+      "area": {
+        "title": "Alueen tyyli",
+        "linecolor": { "label": "Väri" },
+        "linestyle": { "label": "Tyyli" },
+        "linecorner": { "label": "Kulmat" },
+        "linewidth": { "label": "Viivan paksuus" },
+        "color": { "label": "Täyttöväri" },
+        "fill": { "label": "Täyttökuvio" }
+      }
+    }
   },
   "savedContent": {
-    "savedContent": "Näkymän ja geometrian tallennus",
+    "savedContent": "Omat aineistot",
+    "profileTitle": "Profiili",
     "viewTitle": "Näkymät",
     "geometryTitle": "Geometriat",
+    "description": "Kuvaus",
+    "geometry": "Geometria",
+    "view": "Näkymä",
     "saveView": {
-      "confirmDeleteAll" : "Haluatko varmasti poistaa kaikki tallennetut näkymät?",
-      "saveView" : "Näkymän ja geometrian tallennus",
-      "savingView" : "Näkymän tallennus",
-      "saveViewDescription1" : "Näkymä tallentuu selaimen välimuistiin",
-      "saveViewDescription2" : "Tallennettu näkymä voidaan aktivoida vain selaimessa johon se on tallennettu",
-      "noSavedViews" : "Ei tallennettuja näkymiä",
-      "deleteAllSavedViews" : "Poista kaikki tallennetut näkymät",
-      "savedViews" : "Tallennetut näkymät",
-      "viewName" : "Näkymän nimi",
-      "saveNewView" : "Tallenna uusi näkymä",
-      "saveViewButton" : "Tallenna näkymä"
+      "formDesc": "Karttanäkymä tallentuu karttataso-valikkoon Omat aineistot => Näkymät.",
+      "title": "Tallenna karttanäkymä",
+      "confirmDelete": "Haluatko varmasti poistaa näkymän?",
+      "saveView": "Tallenna näkymä",
+      "savingView": "Näkymän tallennus",
+      "saveViewDescription1": "Näkymä tallentuu selaimen välimuistiin",
+      "saveViewDescription2": "Tallennettu näkymä voidaan aktivoida vain selaimessa johon se on tallennettu",
+      "noSavedViews": "Ei tallennettuja näkymiä",
+      "viewName": "Näkymän nimi",
+      "saveViewButton": "Tallenna näkymä",
+      "defaultView": "Oletusnäkymä",
+      "setDefaultView": "Aseta oletusnäkymäksi",
+      "deleteSavedView": "Poista tallennettu näkymä",
+      "editView": "Muokkaa näkymää",
+      "viewInfo": "Näkymän tiedot",
+      "savedAt": "Tallennettu",
+      "zoom": "Zoom",
+      "center": "Keskipiste",
+      "layers": "Tasot",
+      "language": "Kieli",
+      "geometries": "Geometriat",
+      "default": "Oletus"
     },
     "saveGeometry": {
-      "confirmDeleteAll": "Haluatko varmasti poistaa kaikki tallennetut geometriat?",
-      "saveGeometry": "Tallenna geometria",
-      "savingGeometry": "Geometrian tallennus",
+      "formDesc": "Geometriat tallentuvat karttataso-valikkoon Omat aineistot => Geometriat.",
+      "confirmDelete": "Haluatko varmasti poistaa geometrian?",
+      "title": "Tallenna geometriat",
       "saveGeometryDescription1": "Geometria tallentuu selaimen välimuistiin",
       "saveGeometryDescription2": "Tallennettu geometria voidaan aktivoida vain selaimessa johon se on tallennettu",
       "noSavedGeometries": "Ei tallennettuja geometrioita",
-      "deleteAllSavedGeometries": "Poista kaikki tallennetut geometriat",
       "savedGeometries": "Tallennetut geometriat",
       "geometryName": "Geometrian nimi",
       "noGeometry": "Ei uusia geometrioita kartalla",
-      "saveNewGeometry": "Tallenna uusi geometria"
+      "saveGeometryButton": "Tallenna geometria",
+      "deleteSavedGeometry": "Poista tallennettu geometria",
+      "editGeometry": "Muokkaa geometrian tietoja",
+      "savedAt": "Tallennettu",
+      "active": "Aktiivinen",
+      "markers": "Merkinnät",
+      "features": "Piirteet"
+    },
+    "userLayer": {
+      "deleteLayer": "Poista taso",
+      "editLayer": "Muokkaa tason tietoja",
+      "confirmDelete": "Haluatko varmasti poistaa karttatason?",
+      "deleteSuccess": "Taso poistettu!",
+      "deleteFail": "Tason poisto epäonnistui!"
     }
   },
   "gfi": {
@@ -109,7 +231,8 @@
       "description": "Omat tallennetut geometriat",
       "disabled": "Väliaikaisesti poissa käytöstä"
     },
-    "filter" : "Suodata",
+    "filter": "Suodata",
+    "filterBadgeTitle": "Suodattimet",
     "streetView": {
       "title": "Google Street View",
       "openGoogleStreetView": "Avaa Google Street View",
@@ -123,7 +246,7 @@
     "roadAddressInstructions": "Tieosoitetietoja ei pystytty hakemaan. Lähennä karttaa ja klikkaa pistettä, jolle haluat hakea tieosoitetiedot."
   },
   "downloads": {
-    "newDownloads": "UUSI LATAUS",
+    "newDownload": "UUSI LATAUS",
     "downloads": "Lataukset",
     "processing": "Prosessoidaan",
     "noProcessingDownloads": "Ei prosessoitavia latauksia",
@@ -139,9 +262,11 @@
     "noWebSocketSupport": "Selaimesi ei tue latauksia. Voit kokeilla uudelleen eri selaimella tai päivittämällä nykyisen selaimesi version.",
     "downloadFailure": "Latauksessa meni jokin pieleen, yritä uudelleen.",
     "downloadsInfo": "Osa aineistoista on ladattavissa koko Suomen alueelta karttatasovalikon latauspainikkeesta, aineiston nimen vierestä.",
-    "downloadsInfo2": "Mikäli latauspainike puuttuu, aineiston lataus edellyttää kohteen valintaa kartalta."
+    "downloadsInfo2": "Mikäli latauspainike puuttuu, aineiston lataus edellyttää kohteen valintaa kartalta.",
+    "noValidMaplayers": "Ei ladattavissa olevia tasoja valittuna"
   },
   "general": {
+    "save": "Tallenna",
     "close": "Sulje",
     "warning": "Varoitus!",
     "continue": "Jatka",
@@ -149,7 +274,13 @@
     "dontShowAgain": "Älä näytä uudelleen",
     "ok": "OK",
     "OkLowerCaseK": "Ok",
-    "submit": "Lähetä"
+    "submit": "Lähetä",
+    "yes": "Kyllä",
+    "no": "Ei",
+    "name": "Nimi",
+    "description": "Kuvaus",
+    "saveScuccessful": "tallennettu onnistuneesti",
+    "saveFailed": "tallennus epäonnistui"
   },
   "multipleLayersWarning": "Olet lisäämässä kartalle 10 tai enemmän karttatasoa ja se saattaa vaikuttaa palvelun suorituskykyyn",
   "multipleLayersFetchWarning": "Olet hakemassa aineistoa 10 tai useammalta karttatasolta ja se saattaa vaikuttaa palvelun suorituskykyyn.",
@@ -159,8 +290,10 @@
   "noGfiLocationsWarning": "Tuloksia ei löytynyt, valitse uusi rajaus.",
   "exitConfirmation": "Olet poistumassa Suomen väylät-palvelusta. Haluatko jatkaa?",
   "appGuide": {
+    "noResults": "Ei hakutuloksia",
+    "searchGuides": "Hae käyttöohjeita...",
     "title": "Käyttöohje",
-    "modalContent": {
+    "dialogContent": {
       "upperBar": {
         "title": "Yläpalkin toiminnot",
         "content": {
@@ -227,8 +360,8 @@
               "notEqual": "<strong>Erisuuri kuin</strong>: Näyttää kohteet, joiden attribuutti eroaa annetusta arvosta.",
               "contains": "<strong>Sisältää</strong>: Näyttää kohteet, joiden attribuutti sisältää annetun arvon.",
               "notContains": "<strong>Ei sisällä</strong>: Näyttää kohteet, joiden attribuutti ei sisällä annettua arvoa.",
-              "smallerThan" : "<strong>Pienempi kuin</strong>: pienempi kuin annettu arvo",
-              "biggerThan" : "<strong>Suurempi kuin</strong>: suurempi kuin annettu arvo"
+              "smallerThan": "<strong>Pienempi kuin</strong>: pienempi kuin annettu arvo",
+              "biggerThan": "<strong>Suurempi kuin</strong>: suurempi kuin annettu arvo"
             }
           },
           "step4": {
@@ -378,13 +511,26 @@
     }
   },
   "search": {
+    "search": "Hae",
+    "erase": "Tyhjennä",
+    "showInfo": "Näytä info ",
+    "clearFields": "Tyhjennä kentät",
     "lessSearchOptions": "Vähemmän hakuehtoja",
     "moreSearchOptions": "Lisää hakuehtoja",
     "fill_all_fields": "Täytä kaikki hakukentät",
     "required_field_missing": "Tarkista tarvittavat kentät.",
+    "clearResults": "Tyhjennä tulokset",
+    "results": "Hakutulokset",
+    "errors": {
+      "invalidChars": "Virheellisiä markkejä – vain kirjaimet, numerot ja välilyönnit ovat sallittuja",
+      "required": "Pakollinen kenttä"
+    },
     "vkm": {
+      "roadStart": "Alku",
+      "roadEnd": "Loppu",
+      "enableRoadEnd": "Anna tien lopputiedot",
       "tie": "Tienumero",
-      "tieloppu" : "Tienumero loppu",
+      "tieloppu": "Tienumero loppu",
       "title": "Tiehaku",
       "subtitle": "Hae tien numerolla",
       "osa": "Tieosa",
@@ -438,20 +584,25 @@
         "regex": "Haku ei saa sisältää erikoismerkkejä"
       }
     },
-    "track" : {
-      "tracknumber" : "Ratanumero",
-      "trackkm" : "Ratakilometri",
-      "trackm" : "Ratametri",
+    "track": {
+      "errors": {
+        "invalidTrackIdentifier": "Virheellinen radan tunniste — tunniste saa sisältää vain kirjaimia, numeroita ja välilyöntejä",
+        "trackIdentifierRequired": "Radan tunniste on pakollinen",
+        "invalidKilometer": "Virheellinen ratakilometri — ratakilometrin tulee sisältää vain numeroita",
+        "kilometerRequired": "Ratakilometri on pakollinen",
+        "invalidMeter": "Virheellinen ratametri — ratametrin tulee sisältää vain numeroita",
+        "meterRequired": "Ratametri on pakollinen"
+      },
+      "tracknumber": "Ratanumero",
+      "trackkm": "Ratakilometri",
+      "trackm": "Ratametri",
       "trackMandatoryMessage": "Ratanumero, ratakilometri ja ratametri kentät ovat pakollisia ratahaussa."
     },
     "tips": {
       "title": "Paikkahaulla voit hakea kuntaa, osoitetta, kiinteistötunnusta, tieosoitetta tai rataosoitetta.",
-      "address": "Osoitehaku, kirjoita muodossa 'kunta', 'osoite' tai 'osoite, kunta'.",
-      "addressExamples": [
-        "Opastinsilta 12",
-        "Opastinsilta 12, Helsinki"
-      ],
-      "vkmRoad": "Tiehaku, kirjoita muodossa 'tie/osa/ajorata/etäisyys', 'tie/osa/etäisyys', 'tie/osa/ajorata' ( käytettävä 'Käytä ajorataa haussa' -valintaa )  tai 'tie/osa/ajorata/etäisyys tie/osa_loppu/ajorata/etäisyys_loppu'.",
+      "address": "Kirjoita muodossa 'kunta', 'osoite' tai 'osoite, kunta'.",
+      "addressExamples": ["Opastinsilta 12", "Opastinsilta 12, Helsinki"],
+      "vkmRoad": "Kirjoita muodossa 'tie/osa/ajorata/etäisyys', 'tie/osa/etäisyys', 'tie/osa/ajorata' ( käytettävä 'Käytä ajorataa haussa' -valintaa )  tai 'tie/osa/ajorata/etäisyys tie/osa_loppu/ajorata/etäisyys_loppu'.",
       "vkmRoadExamples": [
         "5",
         "5/116",
@@ -463,42 +614,49 @@
         "alku:5/116/0/50 loppu:5/348/0/100",
         "'Käytä ajorataa haussa' -valinta vaihtaa kolmella parametrilla haettaessa haun käyttämään joko ajorataa tai etäisyyttä kolmantena parametrina"
       ],
-      "vkmTrack": "Ratahaku, kirjoita muodossa 'ratanumero/ratakilometri/ratametri'. Kaikki 3 parametria on pakollisia.",
-      "vkmTrackExamples": [
-        "001/2/10",
-        "OL 122/750/30"
-      ],
-      "realEstateUnitIdentifier": "Kiinteistötunnushaku, kirjoita muodossa 'aa-bb-cc-d' tai 'aaa-bbb-cc-ddd'.",
+      "vkmTrack": "Kirjoita muodossa 'ratanumero/ratakilometri/ratametri'. Kaikki 3 parametria on pakollisia.",
+      "vkmTrackExamples": ["001/2/10", "OL 122/750/30"],
+      "realEstateUnitIdentifier": "Kirjoita muodossa 'aa-bb-cc-d' tai 'aaa-bbb-cc-ddd'.",
       "realEstateUnitIdentifierExamples": ["91-17-16-1", "091-017-16-001"],
       "example": "Esim.",
       "toastTip": "Tiesitkö, että voit tallentaa rata- ja tiehausta kartalle tulleen geometrian?",
       "toastTipContent": "Geometrian voit tallentaa sivun vasemman reunan tallennus-ikonin kautta, toiselta välilehdeltä.",
-      "nomenclature" : "Nimistöhaulla voit hakea kohteita paikkatietonimistöstä. Esim.",
-      "nomenclatureExamples" : [
-        "Tampere", "Rautatieasema", "Eduskuntatalo"
-      ],
-      "layer" : "Aineistohaulla voit hakea karttatasojen metatiedoista sanalla tai sanan osalla ja kytkeä tasoja päälle hakutuloksista.  Esim. ",
-      "layerExamples" : [
-        "pölkytys",
-        "liikennemerkit"
-      ],
+      "nomenclature": "Nimistöhaulla voit hakea kohteita paikkatietonimistöstä. Esim.",
+      "nomenclatureExamples": ["Tampere", "Rautatieasema", "Eduskuntatalo"],
+      "layer": "Aineistohaulla voit hakea karttatasojen metatiedoista sanalla tai sanan osalla ja kytkeä tasoja päälle hakutuloksista.  Esim. ",
+      "layerExamples": ["pölkytys", "liikennemerkit"],
       "feature": "Kohdehakua voidaan käyttää kohdetietojen etsimiseen valittujen karttatasojen päällimmäiseltä tasolta. Esimerkkihaku: ",
-      "featureExamples": ["Vesiväylä => 'Siilinjärven väylä'"]
+      "featureExamples": ["Vesiväylä => 'Siilinjärven väylä'"],
+      "location": "Paikkahaku on oletusarvoinen hakukanava, joka sisältää kaikki muut hakutyypit, paitsi aineisto- ja kohdehaun."
     },
-    "nomenclature" : {
+    "nomenclature": {
       "title": "Nimistöhaku"
     },
-    "premise" : {
+    "premise": {
       "title": "Kiinteistöhaku"
-    }, 
+    },
     "carriageWaySearch": "Käytä ajorataa haussa"
+  },
+  "coordinateTool": {
+    "title": "Koordinaattityökalu",
+    "intro": "Syötä koordinaatit tai valitse piste kartalta.",
+    "coordinateSystemTitle": "Koordinaatisto:",
+    "coordinateSystem": "ETRS89-TM35FIN",
+    "n": "N",
+    "e": "E",
+    "centerMap": "Keskitä kartta",
+    "addMarker": "Lisää merkintä",
+    "deleteMarkers": "Poista karttamerkinnät",
+    "saveMarkers": "Tallenna karttamerkinnät",
+    "onlyNumbers": "Vain numerot sallittu",
+    "closeCoordinateTool": "Sulje koordinaattityökalu"
   },
   "layerlist": {
     "errorLoadingLayers": "Virhe tasojen latauksessa",
     "layerlistLabels": {
       "allLayers": "Kaikki tasot",
       "themeLayers": "Teemakartat",
-      "mapLayers": "Karttatasot",
+      "mapLayers": "Karttatasot ja -aineistot",
       "backgroundMaps": "Taustakartat",
       "selectAll": "Valitse kaikki",
       "selectedLayers": "Valitut tasot",
@@ -524,19 +682,31 @@
     },
     "customLayerInfo": {
       "customFilter": "Oma suodatin",
-      "modalTitle": "Luo oma suodatin",
+      "dialogTitle": "Luo oma suodatin",
       "closeInfo": "Sulje ohje",
       "infoContent": "Omalla suodattimella voidaan tallentaa valittuja tasoja selaimen välimuistiin. Oman suodattimen muokkaaminen on laitekohtaista. Kun olet valinnut halutut tasot, paina 'Tallenna' -painiketta. 'Tyhjennä kaikki' -painike poistaa kaikki valitut tasot suodattimesta.",
       "saveLayers": "Tallenna",
-      "removeLayers":"Tyhjennä kaikki",
+      "removeLayers": "Tyhjennä kaikki",
       "editLayers": "Muokkaa",
       "saveTooltip": "Valitse tallennettavat tasot"
+    },
+    "userContent": {
+      "userlayers": {
+        "title": "Omat karttatasot",
+        "noUserlayers": "Ei omia tasoja"
+      },
+      "geometries": {
+        "title": "Geometriat"
+      },
+      "views": {
+        "title": "Näkymät"
+      }
     }
   },
   "downloadLink": {
-    "downloadLinkModalHeader": "Aineiston lataus",
-    "downloadLinkModalNameText": "Aineiston nimi",
-    "downloadLinkModalButtonText": "Lataa aineisto",
+    "downloadLinkDialogHeader": "Aineiston lataus",
+    "downloadLinkDialogNameText": "Aineiston nimi",
+    "downloadLinkDialogButtonText": "Lataa aineisto",
     "downloadSize": "Aineiston koko"
   },
   "groupLayerList": {
@@ -568,7 +738,7 @@
       "title": "Vesiväylätiedot",
       "description": "Aineisto kattaa Väyläviraston vastuulla olevat vesiväylät ja kanavat. Niiden ylläpidossa ja kehittämisessä otetaan huomioon niin kauppamerenkulun kuin muunkin vesiliikenteen tarpeet."
     }
-  },   
+  },
   "themelayerlist": {
     "readMore": "Lue lisää",
     "readLess": "Vähemmän",
@@ -1126,7 +1296,7 @@
     }
   },
   "legend": {
-    "title": "Kartalla nyt",
+    "title": "Karttaselitteet",
     "nolegend": "Ei karttaselitettä",
     "noSelectedLayers": "Karttatasoja ei valittuna"
   },
@@ -1134,10 +1304,16 @@
     "title": "Jaa sivu",
     "shareTexts": {
       "title": "Suomen väylät - karttalinkki",
+      "shareDescription": "Jaa kieli, zoom-taso, kohdennus, valitut aineistot ja aineistojen läpinäkyvyys.",
       "emailBody": "Karttalinkki:",
       "copiedToClipboard": "Kopioitu leikepöydälle",
       "linkTitle": "Jakolinkki:",
-      "descTitle": "Jaettavat ominaisuudet:"
+      "showOpenLayersTitle": "Avoinna olevat karttatasot, jotka ovat jaettavissa",
+      "showOpenLayersCount": "{count} kpl",
+      "showOpenLayers": "Näytä tasot",
+      "hideOpenLayers": "Piilota tasot",
+      "copyToClipboard": "Kopioi leikepöydälle",
+      "sendEmail": "Lähetä sähköpostilla"
     },
     "shareDescriptions": {
       "currentZoomLevel": "Zoom-taso",
@@ -1170,22 +1346,22 @@
     "endDate": "Loppu pvm",
     "dateRange": "Aikaväli",
     "removeAllFilters": "Poista kaikki suodattimet",
-    "placeholders" : {
-      "chooseProp" : "Valitse ominaisuustieto",
-      "chooseOperator" : "Valitse operaattori",
-      "chooseValue" : "Suodatettava arvo"
+    "placeholders": {
+      "chooseProp": "Valitse ominaisuustieto",
+      "chooseOperator": "Valitse operaattori",
+      "chooseValue": "Suodatettava arvo"
     },
-    "activeFilters" : "Aktiiviset suodattimet",
-    "property" : "Ominaisuus",
-    "operator" : "Operaattori",
-    "value" : "Arvo",
+    "activeFilters": "Aktiiviset suodattimet",
+    "property": "Ominaisuus",
+    "operator": "Operaattori",
+    "value": "Arvo",
     "operators": {
-      "equals" : "Yhtäsuuri kuin",
-      "notEquals" : "Erisuuri kuin",
-      "smallerThan" : "Pienempi kuin",
-      "biggerThan" : "Suurempi kuin",
-      "includes" : "Sisältää",
-      "doesntInclude" : "Ei sisällä"
+      "equals": "Yhtäsuuri kuin",
+      "notEquals": "Erisuuri kuin",
+      "smallerThan": "Pienempi kuin",
+      "biggerThan": "Suurempi kuin",
+      "includes": "Sisältää",
+      "doesntInclude": "Ei sisällä"
     },
     "validationError": "Syötetty arvo saa sisältää vain kirjaimia, numeroita ja erikoismerkkejä  - , . / ( ) "
   },
@@ -1215,6 +1391,21 @@
       "circle": "Ympyrä",
       "marker": "Karttamerkintä",
       "erase": "Tyhjennä"
+    }
+  },
+  "baseLayerSelector": {
+    "title": "Pikavalikon taustakartat",
+    "description": "Valittujen karttatasojen järjestystä ja läpinäkyvyyttä voit säätää valitut tasot -kohdassa karttataso-valikossa.",
+    "selectedBaseLayers": "Valitut taustakartat pikavalikkoon ja niiden järjestys.",
+    "save": "Tallenna",
+    "cancel": "Peruuta",
+    "labels": {
+      "cancelAriaLabel": "Peruuta taustakarttavalinta",
+      "saveAriaLabel": "Tallenna valitut taustakartat",
+      "layerSwitchAriaLabel": "Ota käyttöön taso ",
+      "dragSelectedLayerAriaLabel": "Siirrä taso ",
+      "selectBaseLayer": "Valitse taustakartta ",
+      "editBaseLayers": "Vaihda taustakarttoja"
     }
   }
 }

@@ -7,8 +7,12 @@
     }
   },
   "title": "Suomen väylät",
+  "titleExtranet": "VäyläMappi",
   "extranet": "EXTRANET",
+  "row": "rad",
+  "back": "Tillbaka",
   "tooltips": {
+    "profile": "Mina uppgifter",
     "showInfoLink": "Filtreringsinformation (öppnas på en ny flik)",
     "layerlist": {
       "newLayer": "Ny",
@@ -17,17 +21,21 @@
       "opacity": "Opacitet"
     },
     "search": "Sökning",
+    "searchActive": "Sök aktiv",
     "searchButton": "Adressökning",
     "layerlistButton": "Nivåmeny",
     "fullscreenButton": "Helskärm",
+    "closeDrawingTools": "Stäng ritverktyg",
     "legendHeader": "Data som visas på denna zoomnivå och deras förklaringar",
     "legendButton": "Förklaringar",
     "myLocButton": "Egen position",
-    "baseLayersButton": "Bakgrundskarta",
+    "coordinateTool": "Koordinatverktyg",
     "zoomExpand": "Expandera",
     "zoomIn": "Zooma in",
     "zoomOut": "Zooma ut",
     "opacity": "Transparens",
+    "loadingData": "Laddar data",
+    "toolsButton": "Verktyg",
     "drawingTools": {
       "drawingToolsButton": "Ritverktyg",
       "point": "Point",
@@ -44,44 +52,160 @@
     "share": "Dela denna sida",
     "shareTheme": "Dela detta tema",
     "metadata": "Visa kartlagers metadata",
-    "showPageInfo": "Sidinformation",
-    "showUserGuide": "Användarguide"
+    "showPageInfo": "Visa sidinformation",
+    "showUserGuide": "Visa användarguide",
+    "userGuide": "Användarguide",
+    "pageInfo": "Sidinformation"
   },
-  "savedContent" : {
-    "savedContent" : "Spara vyer och geometrier",
-    "viewTitle" : "Syn",
-    "geometryTitle" : "Geometrier",
-    "saveView" : {
-      "confirmDeleteAll" : "Är du säker på att du vill ta bort alla sparade vyer?",
-      "saveView" : "Spara vyer och geometrier",
-      "savingView" : "Sparar vy",
-      "saveViewDescription1" : "Visa kommer att sparas i webbläsarens lokala lagring",
-      "saveViewDescription2" : "Sparad vy kan endast nås av webbläsaren som den har sparats",
-      "noSavedViews" : "Inga sparade vyer",
-      "deleteAllSavedViews" : "Ta bort alla sparade vyer",
-      "savedViews" : "Sparade vyer",
-      "viewName" : "Visa namn",
-      "saveNewView" : "Spara ny vy",
-      "saveViewButton" : "Spara vy"
+  "datasetImport": {
+    "title": "Importera egna dataset",
+    "menuButtonTitle": "Importera dataset",
+    "tabGeneral": "Allmänt",
+    "tabVisualization": "Visualisering",
+    "infoText": "Ladda upp ett dataset från din dator som en enda zip-fil som innehåller nödvändiga filer i något av följande format:",
+    "uploadTip": "Dra en fil hit och/eller välj en fil att ladda upp",
+    "uploadedFile": "Uppladdad fil:",
+    "layerName": "Lager namn på finska",
+    "desc": "Beskrivning på finska",
+    "source": "Källa på finska",
+    "languages": "Andra språk",
+    "english": "Engelska",
+    "swedish": "Svenska",
+    "swedishSectionTitle": "På svenska",
+    "swedishLayerName": "Lagernamn på svenska",
+    "swedishDesc": "Beskrivning på svenska",
+    "swedishSource": "Källa på svenska",
+    "mandatory": "(obligatorisk)",
+    "cancel": "AVBRYT",
+    "import": "IMPORTERA DATASET",
+    "visTabText": "Visualiseringsinställningar här...",
+    "fileNote": "Zip-filen får endast innehålla ett lager och får vara högst 10 MB stor. När den packats upp får filen vara högst 150 MB.",
+    "languagesTooltip": "Välj ytterligare språk för vilka metadata för dataset ges.",
+    "englishSectionTitle": "På engelska",
+    "englishLayerName": "Lagernamn på engelska",
+    "englishDesc": "Beskrivning på engelska",
+    "englishSource": "Källa på engelska",
+    "submitSuccess": "Importen lyckades!",
+    "submitFail": "Importen misslyckades!",
+    "saveSuccess": "Kartlagret lyckades spara!",
+    "saveFail": "Det gick inte att spara kartlagret!",
+    "zipFileInput": {
+      "onlyZipAllowed": "Endast zip-filer är tillåtna",
+      "zipMaxSize": "Zip-filens maximala storlek är 10 MB.",
+      "removeFile": "Ta bort vald fil"
+    },
+    "fileList": [
+      "Shapefile (.shp, .shx, .dbf och .prj samt eventuell .cpg)",
+      "GPX-överföringsfil (.gpx)",
+      "GeoPackage-fil (.gpkg)",
+      "MapInfo (.mif och .mid)",
+      "Google Maps (.kml)"
+    ],
+    "validationMsg": "Endast bokstäver (a-z, A-Z), siffror, understreck, bindestreck och parenteser är tillåtna.",
+    "fileSelect": "Dra fil hit, eller välj genom att bläddra.",
+    "file": "Fil:",
+    "styleEditor": {
+      "preview": { "label": "JSON-förhandsgranskning:" },
+      "subheaders": {
+        "style": "Stil"
+      },
+      "dot": {
+        "title": "Punktstil",
+        "color": { "label": "Färg" },
+        "symbol": { "label": "Symbol" },
+        "size": { "label": "Storlek" }
+      },
+      "line": {
+        "title": "Linjestil",
+        "color": { "label": "Färg" },
+        "style": { "label": "Stil" },
+        "cap": { "label": "Ändar" },
+        "corner": { "label": "Hörn" },
+        "width": { "label": "Bredd" } 
+      },
+      "area": {
+        "title": "Ytstil",
+        "linecolor": { "label": "Färg" },
+        "linestyle": { "label": "Stil" },
+        "linecorner": { "label": "Hörn" },
+        "linewidth": { "label": "Linjens bredd" },
+        "color": { "label": "Fyllnadsfärg" },
+        "fill": { "label": "Fyllnadsmönster" }
+      }
+    }
+  },
+  "profile": {
+    "title": "Användarinformation",
+    "firstName": "Förnamn",
+    "lastName": "Efternamn",
+    "username": "Användarnamn",
+    "email": "E-post",
+    "accountCreated": "Konto skapat",
+    "lastLogin": "Senaste inloggning"
+  },
+  "savedContent": {
+    "savedContent": "Mina dataset",
+    "profileTitle": "Profil",
+    "viewTitle": "Vyernas",
+    "geometryTitle": "Geometrier",
+    "description": "Beskrivning",
+    "geometry": "Geometri",
+    "view": "Vy",
+    "saveView": {
+      "formDesc": "Kartvyn sparas i menyn för kartlager: Mina data => Vyer.",
+      "title": "Spara ny vy",
+      "confirmDelete": "Vill du verkligen radera vyn?",
+      "saveView": "Spara vy",
+      "savingView": "Sparar vy",
+      "saveViewDescription1": "Vyn sparas i webbläsarens cache",
+      "saveViewDescription2": "Sparad vy kan endast aktiveras i den webbläsare den sparades i",
+      "noSavedViews": "Inga sparade vyer",
+      "viewName": "Vyns namn",
+      "saveViewButton": "Spara vy",
+      "defaultView": "Standardvy",
+      "setDefaultView": "Ange som standard",
+      "deleteSavedView": "Radera sparad vy",
+      "editView": "Redigera vy",
+      "viewInfo": "Vyns information",
+      "savedAt": "Sparad",
+      "zoom": "Zoom",
+      "center": "Centrering",
+      "layers": "Kartlager",
+      "language": "Språk",
+      "geometries": "Geometrier",
+      "default": "Standard"
     },
     "saveGeometry": {
-      "confirmDeleteAll": "Är du säker på att du vill ta bort all sparad geometri?",
-      "saveGeometry": "Spara geometrin",
-      "savingGeometry": "Spara geometri",
-      "saveGeometryDescription1": "Geometrin lagras i webbläsarens cacheminne",
-      "saveGeometryDescription2": "Sparad geometri kan endast aktiveras i den webbläsare där den har lagrats",
-      "noSavedGeometries": "Ingen sparad geometri",
-      "deleteAllSavedGeometries": "Ta bort all sparad geometri",
-      "savedGeometries": "Sparad geometri",
+      "formDesc": "Geometrier sparas i menyn för kartlager: Mina data => Geometrier",
+      "confirmDelete": "Vill du verkligen radera geometrin?",
+      "title": "Spara geometri",
+      "saveGeometryDescription1": "Geometrin sparas i webbläsarens cache",
+      "saveGeometryDescription2": "Sparad geometri kan endast aktiveras i den webbläsare den sparades i",
+      "noSavedGeometries": "Inga sparade geometrier",
+      "savedGeometries": "Sparade geometrier",
       "geometryName": "Geometrins namn",
-      "noGeometry": "Ingen ny geometri på kartan",
-      "saveNewGeometry": "Spara ny geometri"
+      "noGeometry": "Inga nya geometrier på kartan",
+      "saveGeometryButton": "Spara geometri",
+      "deleteSavedGeometry": "Radera sparad geometri",
+      "editGeometry": "Redigera geometriinformation",
+      "savedAt": "Sparad",
+      "active": "Aktiv",
+      "markers": "Markörer",
+      "features": "Funktioner"
+    },
+    "userLayer": {
+      "deleteLayer": "Ta bort kartlagret",
+      "editLayer": "Redigera kartlagerinformation",
+      "confirmDelete": "Vill du verkligen radera kartlagret?",
+      "deleteSuccess": "Kartlagret raderad!",
+      "deleteFail": "Borttagning av kartlagret misslyckades!"
     }
   },
   "gfi": {
     "noResultsTitle": "Inga resultat",
     "noResultsDesc": "Inga resultat med geometri, välj ny geometri eller nya lager",
     "filter": "Filtrera",
+    "filterBadgeTitle": "Filtrerar",
     "title": "Objektuppgifter",
     "close": "Stänga",
     "additionalInfo": "Tilläggsinformation",
@@ -98,7 +222,7 @@
     "search": "Sökning",
     "dataTableView": "Listvy",
     "downloadMaterials": "Ladda ner material",
-    "downloadMaterialsDisabled":"Nedladdning kräver val av objekt",
+    "downloadMaterialsDisabled": "Nedladdning kräver val av objekt",
     "list": "Lista",
     "table": "Tabell",
     "uniqueId": "Identifikationskod",
@@ -123,7 +247,7 @@
     "roadAddressInstructions": "Vägadressuppgifterna kunde inte hämtas. Zooma in på kartan och klicka på den punkt som du vill söka vägadressuppgifter för."
   },
   "downloads": {
-    "newDownloads": "NY NEDLADDNING",
+    "newDownload": "NY NEDLADDNING",
     "downloads": "Nedladdningar",
     "processing": "Bearbetas",
     "noProcessingDownloads": "Inga nedladdningar att bearbeta",
@@ -138,10 +262,12 @@
     "errorOccuredDuringDownloadProcessing": "Ett fel uppstod under bearbetningen av paketet",
     "noWebSocketSupport": "Din webbläsare stöder inte nedladdningar. Du kan prova på nytt med en annan webbläsare eller uppdatera din nuvarande webbläsare.",
     "downloadFailure": "Något gick fel vid nedladdningen, försök igen.",
-    "downloadsInfo":"En del av datan kan laddas ner från hela Finlands område via menyn för datalager bredvid datalagret i fråga.",
-    "downloadsInfo2": "Om nedladdningsknappen saknas måste du välja ett objekt på kartan för att ladda ner datan."
+    "downloadsInfo": "En del av datan kan laddas ner från hela Finlands område via menyn för datalager bredvid datalagret i fråga.",
+    "downloadsInfo2": "Om nedladdningsknappen saknas måste du välja ett objekt på kartan för att ladda ner datan.",
+    "noValidMaplayers": "Det finns inga nedladdningsbara lager valda för närvarande"
   },
   "general": {
+    "save": "Spara",
     "close": "Stänga",
     "warning": "Obs!",
     "continue": "Fortsätta",
@@ -149,7 +275,13 @@
     "dontShowAgain": "Visa inte igen",
     "ok": "OK",
     "OkLowerCaseK": "Ok",
-    "submit": "Skicka"
+    "submit": "Skicka",
+    "yes": "Ja",
+    "no": "Nej",
+    "name": "Namn",
+    "description": "Beskrivning",
+    "saveScuccessful": "sparas framgångsrikt",
+    "saveFailed": "spara misslyckades"
   },
   "multipleLayersWarning": "Du håller på att lägga till minst 10 kartnivåer på kartan och det kan påverka tjänstens prestanda",
   "multipleLayersFetchWarning": "Du är på väg att hämta data från 10 eller fler maplayers, det kan påverka tjänstens prestanda.",
@@ -159,8 +291,10 @@
   "noGfiLocationsWarning": "Inga resultat hittades, prova en annan geometri.",
   "exitConfirmation": "Du lämnar tjänsten Suomen väylät. Vill du fortsätta?",
   "appGuide": {
+    "noResults": "Inga resultat hittades",
+    "searchGuides": "Sök användarguider...",
     "title": "Användarguide",
-    "modalContent": {
+    "dialogContent": {
       "upperBar": {
         "title": "Top Bar-funktioner",
         "content": {
@@ -227,8 +361,8 @@
               "notEqual": "<strong>Inte lika med</strong>: Visar objekt vars attribut skiljer sig från det angivna värdet.",
               "contains": "<strong>Innehåller</strong>: Visar objekt vars attribut inkluderar det angivna värdet.",
               "notContains": "<strong>Innehåller inte</strong>: Visar objekt vars attribut inte inkluderar det angivna värdet.",
-              "smallerThan" : "<strong>Mindre än</strong>: mindre än det angivna värdet",
-              "biggerThan" : "<strong>Större än</strong>: större än det angivna värdet"
+              "smallerThan": "<strong>Mindre än</strong>: mindre än det angivna värdet",
+              "biggerThan": "<strong>Större än</strong>: större än det angivna värdet"
             }
           },
           "step4": {
@@ -339,16 +473,65 @@
     "googleTerms": {
       "googleTermsInfo": "Användarvillkor för Googles karttjänster: ",
       "googleTermsLink": "https://cloud.google.com/maps-platform/terms"
+    },
+    "feedbackForm": {
+      "openFeedbackForm": "Lähetä palautetta",
+      "title": "Palautelomake",
+      "selectCategory": "Valitse kategoria *",
+      "tiestotiedot": "Tiestötiedot",
+      "hanketiedot": "Hanke- ja suunnitelmatiedot",
+      "digiroad": "Digiroad",
+      "taitorakennerekisteri": "Taitorakennerekisteri",
+      "ratatiedot": "Ratatiedot",
+      "vesivaylatiedot": "Vesiväylätiedot",
+      "muutaineistot": "Muut aineistot",
+      "serviceSelect": "Palvelun valinta *",
+      "selectService": "Valitse palvelu",
+      "suomenVaylat": "Suomen väylät",
+      "topicSelect": "Aihe *",
+      "selectTopic": "Valitse aihe",
+      "toiminnot": "Toiminnot",
+      "aineistot": "Aineistot",
+      "aineistoSelect": "Aineiston valinta *",
+      "specificTopicInput": "Aiheen tarkenne",
+      "selectSpecificTopic": "Valitse tarkenne",
+      "kaytontuki": "Käytön tuki",
+      "virhetilanteet": "Virhetilanteet",
+      "kehitysehdotus": "Kehitysehdotus",
+      "palaute": "Yleinen palaute",
+      "laatupuute": "Laatupuute",
+      "descriptionTextarea": "Kuvaus *",
+      "descriptionPlaceholder": "Kirjoita kuvaus...",
+      "locationInfoInput": "Sijaintitieto",
+      "screenshotsInput": "Kuvankaappaukset",
+      "contactInfo": "Yhteystiedot *",
+      "contactName": "Nimi",
+      "contactEmail": "Sähköposti",
+      "errorMessage": "Täytä vaaditut kentät",
+      "successMessage": "Kiitos palautteestasi!"
     }
   },
   "search": {
+    "search": "Sök",
+    "erase": "Radera",
+    "showInfo": "Visa information ",
+    "clearFields": "Rensa fält",
     "lessSearchOptions": "Mindre sök alternativs",
     "moreSearchOptions": "Mera sök alternativs",
     "fill_all_fields": "Fyll i alla sökfält",
     "required_field_missing": "Kontrollera de obligatoriska fälten.",
+    "clearResults": "Tydliga resultat",
+    "results": "Sök resultat",
+    "errors": {
+      "invalidChars": "Ogiltiga tecken — endast bokstäver, siffror och mellanslag är tillåtna",
+      "required": "Obligatoriskt fält"
+    },
     "vkm": {
+      "roadStart": "Börja",
+      "roadEnd": "Sluta",
+      "enableRoadEnd": "Aktivera vägslutsinformation",
       "tie": "Vägnummer",
-      "tieloppu" : "Vägnummer slut",
+      "tieloppu": "Vägnummer slut",
       "title": "Sök efter vägnummer",
       "subtitle": "Sök på vägnummer",
       "osa": "Vägsträcka",
@@ -383,7 +566,7 @@
       "title": "Sök metadata",
       "subtitle": "Sök vid metadata",
       "error": {
-          "text": "Inga resultat hittades för metadata sök."
+        "text": "Inga resultat hittades för metadata sök."
       }
     },
     "layer": {
@@ -402,20 +585,25 @@
         "regex": "Sökningen får inte innehålla specialtecken"
       }
     },
-    "track" : {
-      "tracknumber" : "Bannummer",
-      "trackkm" : "Spårkilometer",
-      "trackm" : "Banmeter",
+    "track": {
+      "errors": {
+        "invalidTrackIdentifier": "Ogiltigt spår-id — spår-id får endast innehålla bokstäver, siffror och mellanslag",
+        "trackIdentifierRequired": "Spår-id är obligatoriskt",
+        "invalidKilometer": "Ogiltig kilometerangivelse — kilometertalet får endast innehålla siffror",
+        "kilometerRequired": "Kilometer är obligatoriskt",
+        "invalidMeter": "Ogiltig meterangivelse — metertalet får endast innehålla siffror",
+        "meterRequired": "Meter är obligatoriskt"
+      },
+      "tracknumber": "Bannummer",
+      "trackkm": "Spårkilometer",
+      "trackm": "Banmeter",
       "trackMandatoryMessage": "Bannummer, Spårkilometer och Banmeter parametrarna är obligatoriska vid bansökning."
-    },  
+    },
     "tips": {
       "title": "Med platssökning kan du söka en kommun, adress, fastighetsbeteckning, vägadress eller banadress.",
-      "address": "Adressökning, skriv i formatet 'kommun', 'adress' eller 'adress, kommun'.",
-      "addressExamples": [
-        "Opastinsilta 12",
-        "Opastinsilta 12, Helsinki"
-      ],
-      "vkmRoad": "Vägsökning, skriv i formatet ’väg/del/körbana/avstånd’, ’väg/del/avstånd’, 'väg/del/körfil' (använd alternativet 'Använd körfilen i sökningen') eller ’väg/del/körbana/avstånd väg/del_slut/körbana/avstånd_slut’.",
+      "address": "Skriv i formatet 'kommun', 'adress' eller 'adress, kommun'.",
+      "addressExamples": ["Opastinsilta 12", "Opastinsilta 12, Helsinki"],
+      "vkmRoad": "Skriv i formatet ’väg/del/körbana/avstånd’, ’väg/del/avstånd’, 'väg/del/körfil' (använd alternativet 'Använd körfilen i sökningen') eller ’väg/del/körbana/avstånd väg/del_slut/körbana/avstånd_slut’.",
       "vkmRoadExamples": [
         "5",
         "5/116",
@@ -428,34 +616,42 @@
         "start:5/116/0/50 slut:5/348/0/100",
         "Alternativet 'Använd körfilen i sökningen' ändrar sökningen så att den använder antingen filen eller avståndet som den tredje parametern när du söker med tre parametrar."
       ],
-      "vkmTrack": "Bansökning, skriv i formatet 'bannummer/bankilometer/banmeter'. Alla tre parametrarna är obligatoriska.",
-      "vkmTrackExamples": [
-        "001/2/10",
-        "OL 122/750/30"
-      ],
-      "realEstateUnitIdentifier": "Fastighetsbeteckning, skriv i formatet 'aa-bb-cc-d' eller 'aaa-bbb-cc-ddd'.",
+      "vkmTrack": "Skriv i formatet 'bannummer/bankilometer/banmeter'. Alla tre parametrarna är obligatoriska.",
+      "vkmTrackExamples": ["001/2/10", "OL 122/750/30"],
+      "realEstateUnitIdentifier": "Skriv i formatet 'aa-bb-cc-d' eller 'aaa-bbb-cc-ddd'.",
       "realEstateUnitIdentifierExamples": ["91-17-16-1", "091-017-16-001"],
       "example": "T.ex.",
       "toastTip": "Visste du att du kan spara den geometri som kommit upp på kartan vid ban- och vägsökningen?",
       "toastTipContent": "Du kan spara geometrin via ikonen spara i vänstra kanten, på den andra fliken.",
-      "nomenclature" : "Med namnsökning kan du söka efter objekt på basen av ortsnamn. T.ex.",
-      "nomenclatureExamples" : [
-        "Tampere", "Rautatieasema", "Eduskuntatalo"
-      ],
-      "layer" : "Genom sökning av material kan du söka bland kartlagrens metadata med ett ord eller en del av ett ord och aktivera kartlager från sökresultaten. T.ex. ",
-      "layerExamples" : [
-        "pölkytys"
-      ],
+      "nomenclature": "Med namnsökning kan du söka efter objekt på basen av ortsnamn. T.ex.",
+      "nomenclatureExamples": ["Tampere", "Rautatieasema", "Eduskuntatalo"],
+      "layer": "Genom sökning av material kan du söka bland kartlagrens metadata med ett ord eller en del av ett ord och aktivera kartlager från sökresultaten. T.ex. ",
+      "layerExamples": ["pölkytys"],
       "feature": "Destinationssökning kan användas för att söka efter destinationsinformation på den översta nivån av de valda kartlagren. Exempelsökning: ",
-      "featureExamples": ["Vesiväylä => 'Siilinjärven väylä'"]
+      "featureExamples": ["Vesiväylä => 'Siilinjärven väylä'"],
+      "location": "Platssökning är en standardsöktyp som inkluderar alla andra söktyper förutom material- och objektsökningar."
     },
-    "nomenclature" : {
+    "nomenclature": {
       "title": "Namnsökning"
     },
-    "premise" : {
+    "premise": {
       "title": "Fastighetssökning"
     },
     "carriageWaySearch": "Använda körbanasökning"
+  },
+  "coordinateTool": {
+    "title": "Koordinatverktyg",
+    "intro": "Mata in koordinaterna eller peka på platsen på kartan.",
+    "coordinateSystemTitle": "Koordinatsystem:",
+    "coordinateSystem": "ETRS89-TM35FIN",
+    "n": "N",
+    "e": "E",
+    "centerMap": "Fokusera kartan",
+    "addMarker": "Tillägg markör",
+    "deleteMarkers": "Ta bort markörer",
+    "saveMarkers": "Spara markörer",
+    "onlyNumbers": "Vänligen ange endast siffror",
+    "closeCoordinateTool": "Stäng koordinatverktyg"
   },
   "layerlist": {
     "errorLoadingLayers": "Det gick inte att ladda kartnivåer",
@@ -463,7 +659,7 @@
       "allLayers": "Alla lager",
       "themeLayers": "Teman",
       "selectedLayers": "Valda lagert",
-      "mapLayers": "Kartnivåer",
+      "mapLayers": "Kartnivåer och dataset",
       "backgroundMaps": "Bakgrundskartor",
       "selectAll": "Välj alla",
       "show": "Visa",
@@ -488,19 +684,31 @@
     },
     "customLayerInfo": {
       "customFilter": "Eget filter",
-      "modalTitle": "Skapa ditt eget filter",
+      "dialogTitle": "Skapa ditt eget filter",
       "closeInfo": "Stäng hjälpen",
       "infoContent": "Du kan använda ditt eget filter för att spara valda lager i webbläsarens cache. Att redigera ditt eget filter är enhetsspecifikt. När du har valt önskade lager, tryck på knappen 'Spara'. Knappen 'Rensa alla' tar bort alla valda lager från filtret.",
       "saveLayers": "Spara",
-      "removeLayers":"Rensa alla",
+      "removeLayers": "Rensa alla",
       "editLayers": "Redigera",
       "saveTooltip": "Välj de lager som ska sparas"
+    },
+    "userContent": {
+      "userlayers": {
+        "title": "Egen kartlager",
+        "noUserlayers": "Ingen egen kartlager"
+      },
+      "geometries": {
+        "title": "Geometrier"
+      },
+      "views": {
+        "title": "Vyer"
+      }
     }
   },
   "downloadLink": {
-    "downloadLinkModalHeader": "Nedladdning av material",
-    "downloadLinkModalNameText": "Materialets namn",
-    "downloadLinkModalButtonText": "Ladda ner material",
+    "downloadLinkDialogHeader": "Nedladdning av material",
+    "downloadLinkDialogNameText": "Materialets namn",
+    "downloadLinkDialogButtonText": "Ladda ner material",
     "downloadSize": "Materialets storlek"
   },
   "groupLayerList": {
@@ -534,8 +742,8 @@
     }
   },
   "themelayerlist": {
-    "readMore" : "Läs mer",
-    "readLess" : "Mindre",
+    "readMore": "Läs mer",
+    "readLess": "Mindre",
     "moreInfo": "Mer information:",
     "errors": {
       "themeStyleError": "Det gick inte att hämta stilar för tema: "
@@ -1099,10 +1307,16 @@
     "title": "Dela denna sida",
     "shareTexts": {
       "title": "Suomen väylät - kartlänk",
+      "shareDescription": "Dela språk, zoomnivå, fokus, valda dataset och datasetens transparens.",
       "emailBody": "Kartlänk:",
       "copiedToClipboard": "Kopierat till urklipp",
       "linkTitle": "Dela länk:",
-      "descTitle": "Delade funktioner:"
+      "showOpenLayersTitle": "Öppna kartlager som kan delas",
+      "showOpenLayersCount": "{count} st",
+      "showOpenLayers": "Visa lager",
+      "hideOpenLayers": "Dölj lager",
+      "copyToClipboard": "Kopiera till urklipp",
+      "sendEmail": "Skicka via e-post"
     },
     "shareDescriptions": {
       "currentZoomLevel": "Zoom-nivå",
@@ -1135,22 +1349,22 @@
     "addFilter": "Lägg till ett filter",
     "dateRange": "Datumintervall",
     "removeAllFilters": "Ta bort alla filter",
-    "placeholders" : {
-      "chooseProp" : "Välj attribut",
-      "chooseOperator" : "Välj operatör",
-      "chooseValue" : "Värde"
+    "placeholders": {
+      "chooseProp": "Välj attribut",
+      "chooseOperator": "Välj operatör",
+      "chooseValue": "Värde"
     },
-    "activeFilters" : "Aktiva filter",
-    "property" : "Attribut",
-    "operator" : "Operatör",
-    "value" : "Värde",
+    "activeFilters": "Aktiva filter",
+    "property": "Attribut",
+    "operator": "Operatör",
+    "value": "Värde",
     "operators": {
-      "equals" : "Är lika med",
-      "notEquals" : "Är inte lika med",
-      "smallerThan" : "Mindre än",
-      "biggerThan" : "Större än",
-      "includes" : "Innehåller",
-      "doesntInclude" : "Inte innehåller"
+      "equals": "Är lika med",
+      "notEquals": "Är inte lika med",
+      "smallerThan": "Mindre än",
+      "biggerThan": "Större än",
+      "includes": "Innehåller",
+      "doesntInclude": "Inte innehåller"
     },
     "validationError": "Det angivna värdet får endast innehålla bokstäver, siffror och specialtecken - , . / ( )"
   },
@@ -1180,6 +1394,21 @@
       "circle": "Cirkel",
       "marker": "Markör",
       "erase": "Radera"
+    }
+  },
+  "baseLayerSelector": {
+    "title": "Bakgrundskartor för snabbval",
+    "description": "Du kan justera ordningen och genomskinligheten för valda kartlager i avsnittet valda lager i kartlagsmenyn.",
+    "selectedBaseLayers": "Valda bakgrundskartor för snabbval och deras ordning.",
+    "save": "Spara",
+    "cancel": "Avbryt",
+    "labels": {
+      "cancelAriaLabel": "Avbryt bakgrundskartval",
+      "saveAriaLabel": "Spara valda bakgrundskartor",
+      "layerSwitchAriaLabel": "Aktivera lager ",
+      "dragSelectedLayerAriaLabel": "Flytta lager ",
+      "selectBaseLayer": "Välj bakgrundskarta ",
+      "editBaseLayers": "Byt bakgrundskartor"
     }
   }
 }

@@ -1,0 +1,139 @@
+import {
+  setAnnouncements,
+  setActiveAnnouncements,
+  setAllTags,
+  setTagsWithLayers,
+  setAllThemesWithLayers,
+  setZoomRange,
+  setCurrentZoomLevel,
+  setAllGroups,
+  setCurrentState,
+  setFeatures,
+  setLegends,
+  setCurrentMapCenter,
+  setStartMapCenter
+} from '../../../../state/slices/rpcSlice';
+import { setGfiCroppingTypes } from '../../../../state/slices/uiSlice';
+import { updateLayers } from '../../../../utils/rpcUtil';
+import { getActiveAnnouncements } from '../../../../utils/rpcUtil';
+
+const isSafari = () => {
+  return /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+};
+
+const fetchAnnouncementsAsync = async (data, channel, store) => {
+  let activeAnnouncements = [];
+  await new Promise((resolve) => {
+    setTimeout(() => {
+      if (data.getSelectedAnnouncements) {
+        channel.getSelectedAnnouncements(function (responseData) {
+          store.dispatch(setAnnouncements(responseData));
+          activeAnnouncements = getActiveAnnouncements(responseData);
+
+          if (activeAnnouncements && activeAnnouncements.length > 0) {
+            store.dispatch(setActiveAnnouncements(activeAnnouncements));
+          }
+          resolve(activeAnnouncements);
+        });
+      } else {
+        resolve(activeAnnouncements);
+      }
+    }, 1000);
+  }).then((announcements) => {
+    // due to a bug, check again after 3 seconds if announcements list is empty on Safari
+    if (isSafari() && announcements.length === 0) {
+      setTimeout(() => {
+        if (data.getSelectedAnnouncements) {
+          channel.getSelectedAnnouncements(function (responseData) {
+            activeAnnouncements = getActiveAnnouncements(responseData);
+            if (activeAnnouncements && activeAnnouncements.length > 0) {
+              store.dispatch(setActiveAnnouncements(activeAnnouncements));
+            }
+          });
+        }
+      }, 8000);
+    }
+  });
+};
+
+const setupSupportedFunctions = (data, channel, store) => {
+  // Fetch and save announcements to state
+  fetchAnnouncementsAsync(data, channel, store);
+
+  if (data.getTags) {
+    channel.getTags((tagsData) => store.dispatch(setAllTags(tagsData)));
+  }
+
+  if (data.getTagsWithLayers) {
+    channel.getTagsWithLayers((tagsLayersData) =>
+      store.dispatch(setTagsWithLayers(tagsLayersData))
+    );
+  }
+
+  if (data.getGfiCroppingTypes) {
+    channel.getGfiCroppingTypes((gfiCroppingTypesData) =>
+      store.dispatch(setGfiCroppingTypes(gfiCroppingTypesData))
+    );
+  }
+
+  if (data.getThemesWithLayers) {
+    channel.getThemesWithLayers((themesWithLayersData) =>
+      store.dispatch(setAllThemesWithLayers(themesWithLayersData))
+    );
+  }
+
+  if (data.getZoomRange) {
+    channel.getZoomRange((zoomRangeData) => {
+      store.dispatch(setZoomRange(zoomRangeData));
+      zoomRangeData.hasOwnProperty('current') &&
+        store.dispatch(setCurrentZoomLevel(zoomRangeData.current));
+    });
+  }
+
+  if (data.getAllGroups) {
+    channel.getAllGroups((allGroupsData) => {
+      const arrangeAlphabetically = (x, y) => {
+        if (x.name < y.name) {
+          return -1;
+        }
+        if (x.name > y.name) {
+          return 1;
+        }
+        return 0;
+      };
+
+      store.dispatch(setAllGroups(allGroupsData.sort(arrangeAlphabetically)));
+    });
+  }
+
+  updateLayers(store, channel);
+
+  if (data.getCurrentState) {
+    channel.getCurrentState((currentStateData) =>
+      store.dispatch(setCurrentState(currentStateData))
+    );
+  }
+
+  if (data.getFeatures) {
+    channel.getFeatures((featuresData) =>
+      store.dispatch(setFeatures(featuresData))
+    );
+  }
+
+  if (data.getLegends) {
+    window.legendUpdateTimer = setTimeout(() => {
+      channel.getLegends((legendsData) =>
+        store.dispatch(setLegends(legendsData))
+      );
+    }, 500);
+  }
+
+  if (data.getMapPosition) {
+    channel.getMapPosition((mapPositionData) => {
+      store.dispatch(setStartMapCenter(mapPositionData));
+      store.dispatch(setCurrentMapCenter(mapPositionData));
+    });
+  }
+};
+
+export default setupSupportedFunctions;

@@ -7,8 +7,12 @@
     }
   },
   "title": "Suomen väylät",
+  "titleExtranet": "VäyläMappi",
   "extranet": "EXTRANET",
+  "row": "row",
+  "back": "Back",
   "tooltips": {
+    "profile": "My data",
     "showInfoLink": "Filtering info (opens in a new tab)",
     "layerlist": {
       "newLayer": "New",
@@ -17,17 +21,20 @@
       "opacity": "Opacity"
     },
     "search": "Search",
+    "searchActive": "Active search",
     "searchButton": "Address search",
     "layerlistButton": "Layerlist",
     "fullscreenButton": "Full screen",
+    "closeDrawingTools": "Close drawing tools",
     "legendHeader": "The data displayed at this zoom level and their explanations",
     "legendButton": "Legend",
     "myLocButton": "My location",
-    "baseLayersButton": "Background maps",
+    "coordinateTool": "Coordinate tool",
     "zoomExpand": "Expand",
     "zoomIn": "Zoom in",
     "zoomOut": "Zoom out",
     "opacity": "Opacity",
+    "toolsButton": "Tools",
     "drawingTools": {
       "drawingToolsButton": "Drawing tools",
       "point": "Point",
@@ -44,45 +51,161 @@
     "share": "Share this page",
     "shareTheme": "Share this theme",
     "metadata": "Show maplayer metadata",
-    "showPageInfo": "Application details",
-    "showUserGuide": "User guide"
+    "showPageInfo": "Show page info",
+    "showUserGuide": "Show user guide",
+    "userGuide": "User guide",
+    "pageInfo": "Application details"
   },
-  "savedContent" : {
-    "savedContent" : "Save views and geometries",
-    "viewTitle" : "Views",
-    "geometryTitle" : "Geometries",
-    "saveView" : {
-      "confirmDeleteAll" : "Are you sure you want to delete all views?",
-      "saveView" : "Save views and geometries",
-      "savingView" : "Saving view",
-      "saveViewDescription1" : "View will be saved to browser local storage",
-      "saveViewDescription2" : "Saved view can be accessed only by browser it has been saved",
-      "noSavedViews" : "No saved views",
-      "deleteAllSavedViews" : "Delete all saved views",
-      "savedViews" : "Saved views",
-      "viewName" : "View name",
-      "saveNewView" : "Save new view",
-      "saveViewButton" : "Save view"
+  "datasetImport": {
+    "title": "Import your own datasets",
+    "menuButtonTitle": "Import datasets",
+    "tabGeneral": "General",
+    "tabVisualization": "Visualization",
+    "infoText": "Upload a dataset from your computer as a single zipped file containing the required files in one of the following formats:",
+    "uploadTip": "Drag a file here and/or choose a file to upload",
+    "uploadedFile": "Uploaded file:",
+    "layerName": "Layer name in Finnish",
+    "desc": "Description in Finnish",
+    "source": "Source in Finnish",
+    "languages": "Other languages",
+    "english": "English",
+    "swedish": "Swedish",
+    "swedishSectionTitle": "In Swedish",
+    "swedishLayerName": "Layer name in Swedish",
+    "swedishDesc": "Description in Swedish",
+    "swedishSource": "Source in Swedish",
+    "mandatory": "(mandatory)",
+    "cancel": "CANCEL",
+    "import": "IMPORT DATASET",
+    "visTabText": "Visualization settings here...",
+    "fileNote": "The zip file must contain only one layer and its maximum size is 10 MB. When unzipped, the file size must not exceed 150 MB.",
+    "languagesTooltip": "Select additional languages for which to provide metadata for the dataset.",
+    "englishSectionTitle": "In English",
+    "englishLayerName": "Layer name in English",
+    "englishDesc": "Description in English",
+    "englishSource": "Source in English",
+    "submitSuccess": "Import was successful!",
+    "submitFail": "Import failed!",
+    "saveSuccess": "Layer save successful!",
+    "saveFail": "Saving layer failed!",
+    "zipFileInput": {
+      "onlyZipAllowed": "Only zip-files allowed",
+      "zipMaxSize": "Zip-file maximum size is 10 Mb.",
+      "removeFile": "Remove selected file"
+    },
+    "fileList": [
+      "Shapefile (.shp, .shx, .dbf and .prj, optional .cpg)",
+      "GPX transfer file (.gpx)",
+      "GeoPackage file (.gpkg)",
+      "MapInfo (.mif and .mid)",
+      "Google Maps (.kml)"
+    ],
+    "validationMsg": "Only letters (a-z, A-Z), numbers, underscore, hyphen and parentheses are allowed.",
+    "fileSelect": "Drag a file here or select by browsing.",
+    "file": "File:",
+    "styleEditor": {
+      "preview": { "label": "JSON preview:" },
+      "subheaders": {
+        "style": "Style"
+      },
+      "dot": {
+        "title": "Point style",
+        "color": { "label": "Colour" },
+        "symbol": { "label": "Symbol" },
+        "size": { "label": "Size" }
+      },
+      "line": {
+        "title": "Line style",
+        "color": { "label": "Colour" },
+        "style": { "label": "Style" },
+        "cap": { "label": "Endings" },
+        "corner": { "label": "Corners" },
+        "width": { "label": "Width" } 
+      },
+      "area": {
+        "title": "Area style",
+        "linecolor": { "label": "Colour" },
+        "linestyle": { "label": "Style" },
+        "linecorner": { "label": "Corners" },
+        "linewidth": { "label": "Line width" },
+        "color": { "label": "Fill colour" },
+        "fill": { "label": "Fill pattern" }
+      }
+    }
+  },
+  "profile": {
+    "title": "User information",
+    "firstName": "First name",
+    "lastName": "Last name",
+    "username": "Username",
+    "email": "Email address",
+    "accountCreated": "Account created",
+    "lastLogin": "Last login"
+  },
+  "savedContent": {
+    "savedContent": "My datasets",
+    "profileTitle": "Profile",
+    "viewTitle": "Views",
+    "geometryTitle": "Geometries",
+    "description": "Description",
+    "geometry": "Geometry",
+    "view": "View",
+    "saveView": {
+      "formDesc": "The map view is saved to the map layers menu: My data => Views",
+      "title": "Save new view",
+      "confirmDelete": "Are you sure you want to delete the view?",
+      "saveView": "Save view",
+      "savingView": "Saving view",
+      "saveViewDescription1": "View is saved to the browser cache",
+      "saveViewDescription2": "Saved view can only be activated in the browser where it was saved",
+      "noSavedViews": "No saved views",
+      "viewName": "View name",
+      "saveViewButton": "Save view",
+      "defaultView": "Default view",
+      "setDefaultView": "Set as default",
+      "deleteSavedView": "Delete saved view",
+      "editView": "Edit view",
+      "viewInfo": "View information",
+      "savedAt": "Saved at",
+      "zoom": "Zoom",
+      "center": "Center",
+      "layers": "Layers",
+      "language": "Language",
+      "geometries": "Geometries",
+      "default": "Default"
     },
     "saveGeometry": {
-      "confirmDeleteAll": "Are you sure you want to delete all saved geometries?",
-      "saveGeometry": "Save geometry",
-      "savingGeometry": "Save geometries",
-      "saveGeometryDescription1": "Geometries will be saved to the browser’s cache",
-      "saveGeometryDescription2": "Saved geometries can only be accessed in the browser where they are saved",
+      "formDesc": "Geometries are saved to the map layers menu: My data => Geometries.",
+      "confirmDelete": "Are you sure you want to delete the geometry?",
+      "title": "Save geometries",
+      "saveGeometryDescription1": "Geometry is saved to the browser cache",
+      "saveGeometryDescription2": "Saved geometry can only be activated in the browser where it was saved",
       "noSavedGeometries": "No saved geometries",
-      "deleteAllSavedGeometries": "Delete all saved geometries",
       "savedGeometries": "Saved geometries",
       "geometryName": "Geometry name",
       "noGeometry": "No new geometries on the map",
-      "saveNewGeometry": "Save new geometry"
+      "saveGeometryButton": "Save geometry",
+      "deleteSavedGeometry": "Delete saved geometry",
+      "editGeometry": "Edit geometry details",
+      "savedAt": "Saved at",
+      "active": "Active",
+      "markers": "Markers",
+      "features": "Features"
+    },
+    "userLayer": {
+      "deleteLayer": "Delete layer",
+      "editLayer": "Edit layer",
+      "confirmDelete": "Are you sure you want to delete the layer?",
+      "deleteSuccess": "Layer deleted!",
+      "deleteFail": "Deleting layer failed!"
     }
   },
   "gfi": {
     "noResultsTitle": "No results",
     "noResultsDesc": "No results with geometry, select new geometry or new layers",
     "filter": "Filter",
-    "filterGuideTitle" : "Filtering",
+    "filterBadgeTitle": "Filters",
+    "filterGuideTitle": "Filtering",
     "title": "Feature Data",
     "close": "Close",
     "additionalInfo": "Additional information",
@@ -99,7 +222,7 @@
     "search": "Search",
     "dataTableView": "List view",
     "downloadMaterials": "Download materials",
-    "downloadMaterialsDisabled":"Download requires selection of objects",
+    "downloadMaterialsDisabled": "Download requires selection of objects",
     "list": "List",
     "table": "Table",
     "uniqueId": "Unique identifier",
@@ -124,7 +247,7 @@
     "roadAddressInstructions": "Unable to retrieve road address data. Zoom in on the map and click on the point for which you want to retrieve road address data."
   },
   "downloads": {
-    "newDownloads": "NEW DOWNLOAD",
+    "newDownload": "NEW DOWNLOAD",
     "downloads": "Downloads",
     "processing": "Processing",
     "noProcessingDownloads": "No processing downloads",
@@ -140,9 +263,11 @@
     "noWebSocketSupport": "Your browser does not support downloads. You can try again using a different browser or by updating your current browser.",
     "downloadFailure": "Something went wrong. Please try again.",
     "downloadsInfo": "Some of the datasets can be downloaded from the whole area of Finland via the download button in the layer menu, next to the data name.",
-    "downloadsInfo2": "If the download button is missing, downloading the material requires selecting an object on the map."
+    "downloadsInfo2": "If the download button is missing, downloading the material requires selecting an object on the map.",
+    "noValidMaplayers": "There are no downloadable layers currently selected"
   },
   "general": {
+    "save": "Save",
     "close": "Close",
     "warning": "Warning!",
     "continue": "Continue",
@@ -150,7 +275,13 @@
     "dontShowAgain": "Don't show again",
     "ok": "OK",
     "OkLowerCaseK": "Ok",
-    "submit": "Submit"
+    "submit": "Submit",
+    "yes": "Yes",
+    "no": "No",
+    "name": "Name",
+    "description": "Description",
+    "saveScuccessful": "saved successfully",
+    "saveFailed": "save failed"
   },
   "multipleLayersWarning": "You are about to activate 10 or more maplayers and it might affect the performance of the service",
   "multipleLayersFetchWarning": "You are about to fetch data from 10 or more maplayers, it might affect the performance of the service.",
@@ -160,8 +291,10 @@
   "noGfiLocationsWarning": "No results found, try another geometry.",
   "exitConfirmation": "You are leaving the Suomen väylät. Do you want to continue?",
   "appGuide": {
+    "noResults": "No results found",
+    "searchGuides": "Search for user guides...",
     "title": "User Guide",
-    "modalContent": {
+    "dialogContent": {
       "upperBar": {
         "title": "Top Bar Functions",
         "content": {
@@ -228,8 +361,8 @@
               "notEqual": "<strong>Not equal</strong>: Displays objects whose attribute differs from the given value.",
               "contains": "<strong>Contains</strong>: Displays objects whose attribute includes the given value.",
               "notContains": "<strong>Does not contain</strong>: Displays objects whose attribute does not include the given value.",
-              "smallerThan" : "<strong>Smaller than</strong>: smaller than the given value",
-              "biggerThan" : "<strong>Bigger than</strong>: bigger than the given value"
+              "smallerThan": "<strong>Smaller than</strong>: smaller than the given value",
+              "biggerThan": "<strong>Bigger than</strong>: bigger than the given value"
             }
           },
           "step4": {
@@ -340,16 +473,65 @@
     "googleTerms": {
       "googleTermsInfo": "Terms of use for Google map services: ",
       "googleTermsLink": "https://cloud.google.com/maps-platform/terms"
+    },
+    "feedbackForm": {
+      "openFeedbackForm": "Lähetä palautetta",
+      "title": "Palautelomake",
+      "selectCategory": "Valitse kategoria *",
+      "tiestotiedot": "Tiestötiedot",
+      "hanketiedot": "Hanke- ja suunnitelmatiedot",
+      "digiroad": "Digiroad",
+      "taitorakennerekisteri": "Taitorakennerekisteri",
+      "ratatiedot": "Ratatiedot",
+      "vesivaylatiedot": "Vesiväylätiedot",
+      "muutaineistot": "Muut aineistot",
+      "serviceSelect": "Palvelun valinta *",
+      "selectService": "Valitse palvelu",
+      "suomenVaylat": "Suomen väylät",
+      "topicSelect": "Aihe *",
+      "selectTopic": "Valitse aihe",
+      "toiminnot": "Toiminnot",
+      "aineistot": "Aineistot",
+      "aineistoSelect": "Aineiston valinta *",
+      "specificTopicInput": "Aiheen tarkenne",
+      "selectSpecificTopic": "Valitse tarkenne",
+      "kaytontuki": "Käytön tuki",
+      "virhetilanteet": "Virhetilanteet",
+      "kehitysehdotus": "Kehitysehdotus",
+      "palaute": "Yleinen palaute",
+      "laatupuute": "Laatupuute",
+      "descriptionTextarea": "Kuvaus *",
+      "descriptionPlaceholder": "Kirjoita kuvaus...",
+      "locationInfoInput": "Sijaintitieto",
+      "screenshotsInput": "Kuvankaappaukset",
+      "contactInfo": "Yhteystiedot *",
+      "contactName": "Nimi",
+      "contactEmail": "Sähköposti",
+      "errorMessage": "Täytä vaaditut kentät",
+      "successMessage": "Kiitos palautteestasi!"
     }
   },
   "search": {
+    "search": "Search",
+    "erase": "Erase",
+    "showInfo": "Show info ",
+    "clearFields": "Clear fields",
     "lessSearchOptions": "Less search options",
     "moreSearchOptions": "More search options",
     "fill_all_fields": "Fill in all search fields",
     "required_field_missing": "Check the required fields.",
+    "clearResults": "Clear results",
+    "results": "Search results",
+    "errors": {
+      "invalidChars": "Invalid characters — only letters, numbers and spaces are allowed",
+      "required": "Required field"
+    },
     "vkm": {
+      "roadStart": "Start",
+      "roadEnd": "End",
+      "enableRoadEnd": "Give road end information",
       "tie": "Road number",
-      "tieloppu" : "Road end",
+      "tieloppu": "Road end",
       "title": "Road number search",
       "subtitle": "Search by road number",
       "osa": "Road section",
@@ -403,20 +585,25 @@
         "regex": "Search can't include any special characters"
       }
     },
-    "track" : {
-      "tracknumber" : "Track number",
-      "trackkm" : "Track kilometre",
-      "trackm" : "Track metre",
+    "track": {
+      "errors": {
+        "invalidTrackIdentifier": "Invalid track identifier — track id must contain only letters, numbers and spaces",
+        "trackIdentifierRequired": "Track identifier is required",
+        "invalidKilometer": "Invalid kilometer — kilometer must contain only digits",
+        "kilometerRequired": "Kilometer is required",
+        "invalidMeter": "Invalid meter — meter must contain only digits",
+        "meterRequired": "Meter is required"
+      },
+      "tracknumber": "Track number",
+      "trackkm": "Track kilometre",
+      "trackm": "Track metre",
       "trackMandatoryMessage": "Tracknumber, Trackkm and Trackm fields are all mandatory in track search."
     },
     "tips": {
       "title": "Use location search to search for a municipality, address, property identifier, road address or track address.",
-      "address": "Address search, type in the format 'municipality', 'address' or 'address, municipality'.",
-      "addressExamples": [
-        "Opastinsilta 12",
-        "Opastinsilta 12, Helsinki"
-      ],
-      "vkmRoad": "Road search, write in the format ’road/part/driving_lane/distance’, road/part/distance, 'road/part/driving_lane' (use the 'Use driving_lane search' option) or ’road/part/driving_lane/distance road/part_end/driving_lane/distance_end’.",
+      "address": "Type in the format 'municipality', 'address' or 'address, municipality'.",
+      "addressExamples": ["Opastinsilta 12", "Opastinsilta 12, Helsinki"],
+      "vkmRoad": "Type in the format ’road/part/driving_lane/distance’, road/part/distance, 'road/part/driving_lane' (use the 'Use driving_lane search' option) or ’road/part/driving_lane/distance road/part_end/driving_lane/distance_end’.",
       "vkmRoadExamples": [
         "5",
         "5/116",
@@ -429,34 +616,42 @@
         "start:5/116/0/50 end:5/348/0/100",
         "The 'Use driving_lane search' option changes the search to use either the lane or distance when searching with three parameters"
       ],
-      "vkmTrack": "Track search, type in the format 'track number/track kilometre/track metre'. All 3 parameters are mandatory.",
-      "vkmTrackExamples": [
-        "001/2/10",
-        "OL 122/750/30"
-      ],
-      "realEstateUnitIdentifier": "Property identifier search, type in the format 'aa-bb-cc-d' or 'aaa-bbb-cc-ddd'.",
+      "vkmTrack": "Type in the format 'track number/track kilometre/track metre'. All 3 parameters are mandatory.",
+      "vkmTrackExamples": ["001/2/10", "OL 122/750/30"],
+      "realEstateUnitIdentifier": "Type in the format 'aa-bb-cc-d' or 'aaa-bbb-cc-ddd'.",
       "realEstateUnitIdentifierExamples": ["91-17-16-1", "091-017-16-001"],
       "example": "For example,",
       "toastTip": "Did you know that you can save the geometry that was placed on the map from a track and road search?",
       "toastTipContent": "You can save the geometry through the save icon on the left side of the page, from another tab.",
-      "nomenclature" : "With name search, you can search for objects in a geographic name registry. Eg.",
-      "nomenclatureExamples" : [
-        "Tampere", "Rautatieasema", "Eduskuntatalo"
-      ],
-      "layer" : "Using material search, you can search for words or parts of words in the metadata of map layers and activate layers from the search results. Eg. ",
-      "layerExamples" : [
-        "pölkytys"
-      ],
+      "nomenclature": "With name search, you can search for objects in a geographic name registry. Eg.",
+      "nomenclatureExamples": ["Tampere", "Rautatieasema", "Eduskuntatalo"],
+      "layer": "Using material search, you can search for words or parts of words in the metadata of map layers and activate layers from the search results. Eg. ",
+      "layerExamples": ["pölkytys"],
       "feature": "With feature search you can search for specific features from the top layer on the map. You can Control the selected layer order from the maplayer menu, in 'selected layers' tab. Example search: ",
-      "featureExamples": ["Vesiväylä => 'Siilinjärven väylä'"]
+      "featureExamples": ["Vesiväylä => 'Siilinjärven väylä'"],
+      "location": "Location search is a default search type that includes all other search types except material- and feature searches."
     },
-    "nomenclature" : {
+    "nomenclature": {
       "title": "Name search"
     },
-    "premise" : {
+    "premise": {
       "title": "Property search"
     },
     "carriageWaySearch": "Use driving lane search"
+  },
+  "coordinateTool": {
+    "title": "Coordinate tool",
+    "intro": "Type coordinates or click a point on the map.",
+    "coordinateSystemTitle": "Coordinate system:",
+    "coordinateSystem": "ETRS89-TM35FIN",
+    "n": "N",
+    "e": "E",
+    "centerMap": "Center map",
+    "addMarker": "Add marker",
+    "deleteMarkers": "Delete markers",
+    "saveMarkers": "Save markers",
+    "onlyNumbers": "Please enter only numbers",
+    "closeCoordinateTool": "Close coordinate tool"
   },
   "layerlist": {
     "errorLoadingLayers": "Error loading maplayers",
@@ -464,7 +659,7 @@
       "allLayers": "All layers",
       "themeLayers": "Themes",
       "selectedLayers": "Selected layers",
-      "mapLayers": "Layers",
+      "mapLayers": "Layers and datasets",
       "backgroundMaps": "Background maps",
       "selectAll": "Select all",
       "show": "Show",
@@ -489,19 +684,31 @@
     },
     "customLayerInfo": {
       "customFilter": "Custom filter",
-      "modalTitle": "Create custom filter",
+      "dialogTitle": "Create custom filter",
       "closeInfo": "Close info",
       "infoContent": "You can use your custom filter to save selected layers in the browser's cache. Editing your custom filter is device-specific. Once you have selected the desired layers, press the 'Save' button. The 'Clear All' button removes all selected layers from the filter.",
       "saveLayers": "Save",
-      "removeLayers":"Clear all",
+      "removeLayers": "Clear all",
       "editLayers": "Edit",
       "saveTooltip": "Choose custom filter layers"
+    },
+    "userContent": {
+      "userlayers": {
+        "title": "Userlayers",
+        "noUserlayers": "No saved userlayers"
+      },
+      "geometries": {
+        "title": "Geometries"
+      },
+      "views": {
+        "title": "Views"
+      }
     }
   },
   "downloadLink": {
-    "downloadLinkModalHeader": "Download dataset",
-    "downloadLinkModalNameText": "Dataset name",
-    "downloadLinkModalButtonText": "Download dataset",
+    "downloadLinkDialogHeader": "Download dataset",
+    "downloadLinkDialogNameText": "Dataset name",
+    "downloadLinkDialogButtonText": "Download dataset",
     "downloadSize": "Dataset size"
   },
   "groupLayerList": {
@@ -535,8 +742,8 @@
     }
   },
   "themelayerlist": {
-    "readMore" : "Read more",
-    "readLess" : "Show less",
+    "readMore": "Read more",
+    "readLess": "Show less",
     "moreInfo": "Further information:",
     "errors": {
       "themeStyleError": "Error getting styles for theme: "
@@ -1100,10 +1307,16 @@
     "title": "Share this page",
     "shareTexts": {
       "title": "Suomen väylät - map link",
+      "shareDescription": "Share language, zoom level, focus, selected datasets and dataset transparency.",
       "emailBody": "Map link:",
       "copiedToClipboard": "Copied to clipboard",
       "linkTitle": "Shared link:",
-      "descTitle": "Shared attributes:"
+      "showOpenLayersTitle": "Open map layers that can be shared",
+      "showOpenLayersCount": "{count} layers",
+      "showOpenLayers": "Show layers",
+      "hideOpenLayers": "Hide layers",
+      "copyToClipboard": "Copy to clipboard",
+      "sendEmail": "Send by email"
     },
     "shareDescriptions": {
       "currentZoomLevel": "Zoom-level",
@@ -1136,25 +1349,24 @@
     "addFilter": "Add filter",
     "dateRange": "Date range",
     "removeAllFilters": "Remove all filters",
-    "placeholders" : {
-      "chooseProp" : "Select attribute",
-      "chooseOperator" : "Select operator",
-      "chooseValue" : "Value"
+    "placeholders": {
+      "chooseProp": "Select attribute",
+      "chooseOperator": "Select operator",
+      "chooseValue": "Value"
     },
-    "activeFilters" : "Active filters",
-    "property" : "Attribute",
-    "operator" : "Operator",
-    "value" : "Value",
+    "activeFilters": "Active filters",
+    "property": "Attribute",
+    "operator": "Operator",
+    "value": "Value",
     "operators": {
-      "equals" : "Equals",
-      "notEquals" : "Does not equal",
-      "smallerThan" : "Smaller than",
-      "biggerThan" : "Bigger than",
-      "includes" : "Includes",
-      "doesntInclude" : "Doesn't include"
+      "equals": "Equals",
+      "notEquals": "Does not equal",
+      "smallerThan": "Smaller than",
+      "biggerThan": "Bigger than",
+      "includes": "Includes",
+      "doesntInclude": "Doesn't include"
     },
     "validationError": "The input value may only contain letters, numbers, and the special characters - , . / ( )"
-
   },
   "accessibility": {
     "langSelectMenu": "Language selection menu",
@@ -1182,6 +1394,21 @@
       "circle": "Circle",
       "marker": "Marker",
       "erase": "Erase"
+    }
+  },
+  "baseLayerSelector": {
+    "title": "Background maps for quick selection",
+    "description": "You can adjust the order and transparency of selected map layers in the selected layers section of the map layer menu.",
+    "selectedBaseLayers": "Selected background maps for quick selection and their order.",
+    "save": "Save",
+    "cancel": "Cancel",
+    "labels": {
+      "cancelAriaLabel": "Cancel base layer selection",
+      "saveAriaLabel": "Save selected base layers",
+      "layerSwitchAriaLabel": "Enable layer ",
+      "dragSelectedLayerAriaLabel": "Move layer ",
+      "selectBaseLayer": "Select base layer ",
+      "editBaseLayers": "Change base layers"
     }
   }
 }

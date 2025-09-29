@@ -162,7 +162,7 @@ For a full list of changes see: https://github.com/finnishtransportagency/suomen
 
 For a full list of changes see: https://github.com/finnishtransportagency/suomen-vaylat/milestone/2?closed=1
 
-* React-modal changed to own modal component
+* React-dialog changed to own dialog component
 * Fixed an issue for theme sharing
 * Fixed an issue for layers component
 * Fixed an issue for mobile Firefox
@@ -170,7 +170,7 @@ For a full list of changes see: https://github.com/finnishtransportagency/suomen
 * Set layer subgroups alphabetically on the front end side
 * Improve address search
 * UI tuning
-* GFI modal minimaze
+* GFI dialog minimaze
 
 
 ## 0.2.0

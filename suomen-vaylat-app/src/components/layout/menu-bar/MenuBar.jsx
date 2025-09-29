@@ -1,313 +1,366 @@
-import { useContext, useState } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import strings from '../../../translations';
 import {
-    faCompress,
-    faExpand,
-    faLayerGroup,
-    faPencilRuler,
-    faSave,
-    faMapMarkedAlt,
-    faDownload,
-    faMap
+  faLayerGroup,
+  faMapMarkedAlt,
+  faMap,
+  faTimes
 } from '@fortawesome/free-solid-svg-icons';
+import { AnimatePresence, motion } from 'framer-motion';
+
+import BuildIcon from '@mui/icons-material/Build';
+import { WebSiteShareButton } from '../../share-website/ShareLinkButtons';
 import { ReactReduxContext } from 'react-redux';
 import styled from 'styled-components';
 import { useAppSelector } from '../../../state/hooks';
 import {
-    setIsDrawingToolsOpen,
-    setIsSideMenuOpen,
-    setIsSaveViewOpen,
-    setIsGfiOpen,
-    setActiveTool,
-    setMinimizeGfi,
-    setIsGfiDownloadOpen,
-    setGeoJsonArray,
-    setSelectedMarker,
-    setIsThemeMenuOpen,
-    removeFromDrawToolMarkers
+  setIsDrawingToolsOpen,
+  setIsSideMenuOpen,
+  setIsGfiOpen,
+  setActiveTool,
+  setMinimizeGfi,
+  setGeoJsonArray,
+  setSelectedMarker,
+  setIsThemeMenuOpen,
+  removeFromDrawToolMarkers,
 } from '../../../state/slices/uiSlice';
+import {
+  removeMarkerRequest,
+  setVKMData
+} from '../../../state/slices/rpcSlice';
 
-import { removeMarkerRequest, setVKMData } from '../../../state/slices/rpcSlice';
-
-import CircleButton from '../../circle-button/CircleButton';
-
-import DrawingTools from '../../measurement-tools/DrawingTools';
+import CircleButton from '../../../utils/components/CircleButton';
+import ArrowDropDownCircleIcon from '@mui/icons-material/ArrowDropDownCircle';
+import { isMobile } from '../../../theme/theme';
+import ToolsPanel from './ToolsPanel';
 
 const StyledMenuBar = styled.div`
-    z-index: 1;
+  z-index: 1;
+  pointer-events: none;
+  height: 100%;
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  transition: all 0.5s ease-in-out;
+  gap: 8px;
+
+  @media ${(props) => props.theme.device.mobileL} {
     pointer-events: none;
-    grid-row-start: 1;
+    grid-row-start: ${(props) => (props.isSearchOpen ? 2 : 1)};
     grid-row-end: 3;
-    height: 100%;
-    display: flex;
-    align-items: flex-start;
-    flex-direction: column;
-    transition: all 0.5s ease-in-out;
-    gap: 8px;
+    gap: 6px;
+  }
 
-    @media ${(props) => props.theme.device.mobileL} {
-        grid-row-start: ${(props) => (props.isSearchOpen ? 2 : 1)};
-        grid-row-end: 3;
-        gap: 6px;
-    } ;
-
-    @media ${props => props.theme.device.lowresDesktop} {
-        gap: 6px;
-    };
+  @media ${(props) => props.theme.device.lowResDesktop} {
+    gap: 6px;
+  }
 `;
 
-const StyledMapToolsContainer = styled.div`
-    background-color: ${(props) => props.theme.colors.mainWhite};
-    border-radius: 24px;
-    box-shadow: 1px 2px 6px #0000004d;
-    z-index: -1;
+const StyledDrawingToolsWrapper = styled.div`
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background-color: ${({ theme }) => theme.colors.mainColor1 + '35'};
+  border-radius: 22px 16px 16px 16px;
+  pointer-events: auto;
+
+  @media ${(props) => props.theme.device.mobileL} {
+    border-radius: 18px 12px 12px 12px;
+    padding-bottom: 12px;
+  }
+`;
+
+const StyledCornerCloseButton = styled(CircleButton)`
+  z-index: 10;
+`;
+
+const StyledToolButtons = styled.div`
+  overflow: scroll;
+  display: flex;
+  flex-direction: column;
+  padding: 0 8px 8px 8px;
+  pointer-events: auto;
+
+  @media ${(props) => props.theme.device.mobileL} {
+    gap: 6px;
+  }
 `;
 
 const StyledLayerCount = styled.div`
-    position: absolute;
-    top: -7px;
-    right: -8px;
-    width: 24px;
-    height: 18px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 5px;
-    color: ${(props) => props.theme.colors.mainWhite};
-    background-color: ${(props) => props.theme.colors.secondaryColorDarkOrange};
-    font-size: 14px;
-    font-weight: 600;
+  position: absolute;
+  top: -7px;
+  right: -8px;
+  width: 24px;
+  height: 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+  color: ${(props) => props.theme.colors.mainWhite};
+  background-color: ${(props) => props.theme.colors.secondaryColorDarkOrange};
+  font-size: 14px;
+  font-weight: 600;
 
-    @media ${props => props.theme.device.lowResDesktop} {
-        width: 22px;
-        height: 16px;
-        font-size: 12px;
-    }
+  @media ${(props) => props.theme.device.lowResDesktop} {
+    width: 22px;
+    height: 16px;
+    font-size: 12px;
+  }
 
-    @media ${props => props.theme.device.mobileL} {
-        width: 22px;
-        height: 16px;
-        font-size: 12px;
-    }
+  @media ${(props) => props.theme.device.mobileL} {
+    width: 22px;
+    height: 16px;
+    font-size: 12px;
+  }
 
-    @media ${props => props.theme.device.mobileS} {
-        width: 20px;
-        height: 14px;
-        font-size: 10px;
-    }
+  @media ${(props) => props.theme.device.mobileS} {
+    width: 20px;
+    height: 14px;
+    font-size: 10px;
+  }
+`;
+
+const StyledMenuButtonsContainer = styled(motion.div)`
+  z-index: 1;
+  grid-row-start: 1;
+  grid-row-end: 3;
+  height: 100%;
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  transition: all 0.5s ease-in-out;
+  gap: 8px;
+  margin-left: 2px;
+
+  @media ${({ theme }) => theme.device.mobileL} {
+    gap: 6px;
+  }
+
+  @media ${({ theme }) => theme.device.lowResDesktop} {
+    gap: 6px;
+  }
+`;
+
+const StyledOpenMobileMenuButton = styled.button`
+  background: ${({ theme, isMobileMenuOpen }) =>
+    isMobileMenuOpen ? theme.colors.buttonSelected : theme.colors.button};
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  z-index: 1;
+  font-size: 30px;
+
+  @media ${(props) => props.theme.device.mobileL} {
+    width: 40px;
+    height: 40px;
+  }
+
+  @media ${(props) => props.theme.device.lowResDesktop} {
+    width: 44px;
+    height: 44px;
+  }
+
+  @media ${(props) => props.theme.device.mobileS} {
+    width: 38px;
+    height: 38px;
+  }
+`;
+
+const StyledArrowDropDownCircleIconWrapper = styled(motion.div)`
+  z-index: 6;
+  pointer-events: auto;
 `;
 
 const MenuBar = () => {
-    const { store } = useContext(ReactReduxContext);
-    const { selectedLayers, downloads, channel, filters, selectedLayersByType } = useAppSelector(
-        (state) => state.rpc
-    );
+  const { store } = useContext(ReactReduxContext);
+  const { selectedLayers, downloads, channel, filters, selectedLayersByType } =
+    useAppSelector((state) => state.rpc);
+  const {
+    isFullScreen,
+    isSideMenuOpen,
+    isThemeMenuOpen,
+    isDrawingToolsOpen,
+    isSearchOpen,
+    isSaveViewOpen,
+    isDatasetImportOpen,
+    isGfiOpen,
+    isGfiDownloadOpen,
+    drawToolMarkers
+  } = useAppSelector((state) => state.ui);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
+  const closeDrawingTools = (open) => {
+    channel && channel.postRequest('DrawTools.StopDrawingRequest');
+    store.dispatch(setGeoJsonArray([]));
+    store.dispatch(setActiveTool(null));
+    drawToolMarkers.forEach((marker) => {
+      store.dispatch(removeMarkerRequest({ markerId: marker }));
+    });
+    store.dispatch(setIsDrawingToolsOpen(open));
+    store.dispatch(setSelectedMarker(2));
+    drawToolMarkers.forEach((marker) => {
+      store.dispatch(removeMarkerRequest({ markerId: marker.markerId }));
+      store.dispatch(removeFromDrawToolMarkers(marker.markerId));
+    });
+  };
 
-    const {
-        isFullScreen,
-        isSideMenuOpen,
-        isThemeMenuOpen,
-        isDrawingToolsOpen,
-        isSearchOpen,
-        isSaveViewOpen,
-        isGfiOpen,
-        isGfiDownloadOpen,
-        activeTool,
-        drawToolMarkers
-    } = useAppSelector((state) => state.ui);
+  const handleCloseMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+    closeDrawingTools();
+  };
 
-    const [animationUnfinished, setAnimationUnfinished] = useState(false);
-    const handleFullScreen = () => {
-
-        var elem = document.documentElement;
-        /* View in fullscreen */
-
-        function openFullscreen() {
-            if (elem.requestFullscreen) {
-                elem.requestFullscreen();
-            } else if (elem.webkitRequestFullscreen) {
-                /* Safari */
-                elem.webkitRequestFullscreen();
-            } else if (elem.msRequestFullscreen) {
-                /* IE11 */
-                elem.msRequestFullscreen();
-            } else if (elem.mozRequestFullScreen) {
-                elem.mozRequestFullScreen();
-            }
-        }
-
-        /* Close fullscreen */
-        function closeFullscreen() {
-            if (document.exitFullscreen) {
-                document.exitFullscreen();
-            } else if (document.webkitExitFullscreen) {
-                /* Safari */
-                document.webkitExitFullscreen();
-            } else if (document.msExitFullscreen) {
-                /* IE11 */
-                document.msExitFullscreen();
-            }
-        }
-
-        if (isFullScreen) {
-            closeFullscreen();
-        } else {
-            openFullscreen();
-        }
-    };
-
-    const closeDrawingTools = (open) => {
-        // remove geometries off the map
-        channel && channel.postRequest('DrawTools.StopDrawingRequest');
-        store.dispatch(setGeoJsonArray([]));
-        store.dispatch(setActiveTool(null));
-        drawToolMarkers.forEach(marker => {
-            store.dispatch(removeMarkerRequest({markerId: marker}));
-        });
-        store.dispatch(setIsDrawingToolsOpen(open));
-        store.dispatch(setSelectedMarker(2));
-        // remove all markers made with drawing tools
-        drawToolMarkers.forEach(marker => {
-            store.dispatch(removeMarkerRequest({markerId: marker.markerId}));
-            store.dispatch(removeFromDrawToolMarkers(marker.markerId));
-        });
-    };
-
-    const waitForAnimationFinish = () => {
-        setAnimationUnfinished(true);
-        setTimeout(() => {
-            setAnimationUnfinished(false);
-        }, 400);
+  const MENU_ANIMATION = {
+    hidden: { y: -50, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: { type: 'tween', duration: 0.1 }
     }
+  };
 
-    const handleSideMenuClick = () => {
-        if(!animationUnfinished) {
-            if(isThemeMenuOpen) {
-                store.dispatch(setIsThemeMenuOpen(false));
-                setAnimationUnfinished(true);
-                setTimeout(() => {
-                    store.dispatch(setIsSideMenuOpen(true));
-                    setAnimationUnfinished(false);
-                }, 600);
-            }
-            else if(!isSideMenuOpen && !isThemeMenuOpen) {
-                store.dispatch(setIsSideMenuOpen(true));
-            } 
-            else if(isSideMenuOpen) {
-                store.dispatch(setIsSideMenuOpen(false));
-            } 
-            waitForAnimationFinish();
-        }
-        else return;
-    };
-
-    const handleThemeMenuClick = () => {
-        if(!animationUnfinished) {
-            if(isSideMenuOpen) {
-                store.dispatch(setIsSideMenuOpen(false));
-                setAnimationUnfinished(true);
-                setTimeout(() => {
-                    setAnimationUnfinished(false);
-                    store.dispatch(setIsThemeMenuOpen(true));
-                }, 600);
-            }
-            else if(!isSideMenuOpen && !isThemeMenuOpen) {
-                store.dispatch(setIsThemeMenuOpen(true));
-            } 
-            else if(isThemeMenuOpen) {
-                store.dispatch(setIsThemeMenuOpen(false));
-            } 
-            waitForAnimationFinish();
-        }
-        else return;
-    };
-
-    // If only background maps are selected, disable download button
-    const nonBgMaps = selectedLayers.filter((layer) =>  layer.groups?.every((group)=> group !==1) && selectedLayersByType.backgroundMaps.filter(l => l.id === layer.id).length === 0);
-
-    return (
-        <>
-            <StyledMenuBar isSearchOpen={isSearchOpen}>
-                <CircleButton 
-                    icon={faMap}
-                    text={strings.layerlist.layerlistLabels.themeLayers}
-                    toggleState={isThemeMenuOpen}
-                    tooltipDirection="right"
-                    clickAction={handleThemeMenuClick}
-                />
+  return (
+    <>
+      <StyledMenuBar
+        isSearchOpen={isSearchOpen}
+        id="menubar-container"
+        role="navigation"
+      >
+        {isMobile && (
+          <StyledArrowDropDownCircleIconWrapper
+            id="menubar-mobile-toggle-icon"
+            animate={{
+              rotate: isMobileMenuOpen ? -180 : 0
+            }}
+            transition={{
+              duration: 0.3,
+              type: 'tween'
+            }}
+          >
+            <StyledOpenMobileMenuButton
+              id="menubar-mobile-toggle-btn"
+              onClick={handleCloseMobileMenu}
+              isMobileMenuOpen={isMobileMenuOpen}
+            >
+              <ArrowDropDownCircleIcon fontSize="inherit" />
+            </StyledOpenMobileMenuButton>
+          </StyledArrowDropDownCircleIconWrapper>
+        )}
+        <AnimatePresence>
+          <StyledMenuButtonsContainer
+            id="menubar-buttons-container"
+            key="menubar-buttons-container"
+            initial={!isMobile || isMobileMenuOpen ? 'visible' : 'hidden'}
+            animate={!isMobile || isMobileMenuOpen ? 'visible' : 'hidden'}
+            exit="exit"
+            variants={MENU_ANIMATION}
+            style={{ flex: '1 1 auto', minHeight: 0 }}
+            role="region"
+          >
+            {(!isMobile || isMobileMenuOpen) && (
+              <>
                 <CircleButton
-                    icon={faLayerGroup}
-                    text={strings.layerlist.layerlistLabels.mapLayers}
-                    toggleState={isSideMenuOpen}
-                    tooltipDirection={"right"}
-                    clickAction={handleSideMenuClick}
-                >
-                    <StyledLayerCount>{selectedLayers.length}</StyledLayerCount>
-                </CircleButton>
-                <CircleButton
-                    icon={faMapMarkedAlt}
-                    text={strings.gfi.title}
-                    toggleState={isGfiOpen}
-                    tooltipDirection={"right"}
-                    clickAction={() => {
-                        isGfiOpen && store.dispatch(setVKMData(null));
-                        isGfiOpen && store.dispatch(setMinimizeGfi(false));
-                        store.dispatch(setIsGfiOpen(!isGfiOpen));
-                    }}
-                >
-                { filters?.filters && filters?.filters?.length >0 && 
-                 <StyledLayerCount>{filters?.filters?.length}</StyledLayerCount>
-                }
-                </CircleButton>
-                <CircleButton
-                    disabled={nonBgMaps.length === 0}
-                    icon={faDownload}
-                    text={strings.downloads.downloads}
-                    toggleState={isGfiDownloadOpen}
-                    tooltipDirection={"right"}
-                    clickAction={() => {
-                        closeDrawingTools(false);
-                        store.dispatch(setIsGfiDownloadOpen(!isGfiDownloadOpen))
-                    }}
-                >
-                    <StyledLayerCount>
-                        {
-                            downloads.filter(
-                                (download) => download.url !== null
-                            ).length
-                        }
-                    </StyledLayerCount>
-                </CircleButton>
-                <StyledMapToolsContainer>
-                    <CircleButton
-                        icon={faPencilRuler}
-                        text={strings.tooltips.drawingTools.drawingToolsButton}
-                        toggleState={isDrawingToolsOpen}
-                        tooltipDirection={"right"}
-                        clickAction={() => closeDrawingTools(!isDrawingToolsOpen)}
-                    />
-                    <DrawingTools isOpen={isDrawingToolsOpen} />
-                </StyledMapToolsContainer>
-                <CircleButton
-                    icon={faSave}
-                    text={strings.savedContent.saveView.saveView}
-                    toggleState={isSaveViewOpen}
-                    tooltipDirection={"right"}
-                    clickAction={() =>
-                        store.dispatch(setIsSaveViewOpen(!isSaveViewOpen))
+                  id="menubar-map-theme-btn"
+                  icon={faMap}
+                  text={strings.layerlist.layerlistLabels.themeLayers}
+                  toggleState={isThemeMenuOpen}
+                  tooltipDirection={'right'}
+                  clickAction={() => {
+                      store.dispatch(setIsSideMenuOpen(false))
+                      store.dispatch(setIsThemeMenuOpen(!isThemeMenuOpen))
                     }
+                  }
+                  aria-label={strings.layerlist?.layerlistLabels?.themeLayers}
                 />
                 <CircleButton
-                    icon={isFullScreen ? faCompress : faExpand}
-                    text={strings.tooltips.fullscreenButton}
-                    toggleState={isFullScreen}
-                    tooltipDirection={"right"}
-                    clickAction={handleFullScreen}
+                  id="menubar-map-layers-btn"
+                  icon={faLayerGroup}
+                  text={strings.layerlist.layerlistLabels.mapLayers}
+                  toggleState={isSideMenuOpen}
+                  tooltipDirection={'right'}
+                  clickAction={() => {
+                      store.dispatch(setIsThemeMenuOpen(false))
+                      store.dispatch(setIsSideMenuOpen(!isSideMenuOpen))
+                    }
+                  }
+                  aria-label={strings.layerlist?.layerlistLabels?.mapLayers}
+                >
+                  <StyledLayerCount id="menubar-map-layers-count">
+                    {selectedLayers.length}
+                  </StyledLayerCount>
+                </CircleButton>
+                <CircleButton
+                  id="menubar-gfi-btn"
+                  icon={faMapMarkedAlt}
+                  text={strings.gfi.title}
+                  toggleState={isGfiOpen}
+                  tooltipDirection={'right'}
+                  clickAction={() => {
+                    if (isGfiOpen) {
+                      store.dispatch(setVKMData(null));
+                      store.dispatch(setMinimizeGfi(false));
+                    }
+                    store.dispatch(setIsGfiOpen(!isGfiOpen));
+                  }}
+                  aria-label={strings.gfi?.title}
+                >
+                  {filters?.filters?.length > 0 && (
+                    <StyledLayerCount id="menubar-filter-layer-count">
+                      {filters.filters.length}
+                    </StyledLayerCount>
+                  )}
+                </CircleButton>
+                <WebSiteShareButton
+                  id="menubar-share-btn"
+                  aria-label={
+                    strings.accessibility?.shareWebsite ?? 'Share website'
+                  }
                 />
-            </StyledMenuBar>
-        </>
-    );
+
+                {isDrawingToolsOpen ? (
+                  <StyledDrawingToolsWrapper id="menubar-drawingtools-wrapper">
+                    <StyledCornerCloseButton
+                      id="menubar-drawingtools-close-btn"
+                      icon={faTimes}
+                      text=""
+                      toggleState={true}
+                      tooltipDirection={'right'}
+                      clickAction={closeDrawingTools}
+                      aria-label={strings.tooltips?.closeDrawingTools}
+                      title={strings.tooltips?.closeDrawingTools}
+                    />
+                    <StyledToolButtons id="menubar-toolbuttons-container">
+                      <ToolsPanel isOpen={isDrawingToolsOpen} />
+                    </StyledToolButtons>
+                  </StyledDrawingToolsWrapper>
+                ) : (
+                  <CircleButton
+                    id="menubar-tools-btn"
+                    icon={<BuildIcon />}
+                    text={strings.tooltips.toolsButton}
+                    toggleState={false}
+                    tooltipDirection="right"
+                    clickAction={() =>
+                      store.dispatch(setIsDrawingToolsOpen(true))
+                    }
+                    aria-label={strings.tooltips?.toolsButton}
+                  />
+                )}
+              </>
+            )}
+          </StyledMenuButtonsContainer>
+        </AnimatePresence>
+      </StyledMenuBar>
+    </>
+  );
 };
 
 export default MenuBar;

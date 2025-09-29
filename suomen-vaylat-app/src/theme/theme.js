@@ -43,22 +43,31 @@ export const theme = {
         mainColor1: '#0064af',
         mainColor2: '#009ae1',
         mainColor3: '#49c2f1',
+        extranetHeaderColor: '#C8EDFB',
+        mainColor3transparent30: '#49c2f130',
+        mainColor3transparent80: '#49c2f180',
         mainColorselected1: '#024c85',
+        mainColor1Selected: '#024c85',
         secondaryColorLightBlue: '#00b0cc',
         secondaryColorGreen: '#207a43',
+        secondaryColorGreenSelected: '#1b6537',
         secondaryColorLightGreen: '#8dcb6d',
         secondaryColorYellow: '#ffc300',
         secondaryColorPurple: '#910aa3',
         secondaryColorDarkOrange: '#c73f00',
+        secondaryColorDarkOrangeSelected: '#ab3a06',
         secondaryColorOrange: '#ff5100',
         secondaryColorPink: '#e50083',
         black: '#000000',
         mainWhite: '#ffffff',
         button: '#0064af',
-        buttonActive: '#004477',
+        buttonSelected: '#004477',
         transparentMain: '#80dbff40',
         hover: '#f0f0f0',
-        darkGrey: '#717070'
+        darkGrey: '#717070',
+        lightGrey: '#D7D9DB',
+        disabledBg: '#ccc',
+        disabledColor: '#66666680'
     },
     device: {
       mobileS: `(max-width: ${size.mobileS})`,
@@ -70,6 +79,10 @@ export const theme = {
       desktop: `(max-width: ${size.desktop})`,
       lowResDesktop: `(max-height: 756px)`,
     }
+};
+
+export const isTabletOrLarger = () => {
+  return window.innerWidth >= parseInt(size.tablet); // use parseInt to convert `${size.tablet}` to a number
 };
 
 const appHeight = () => {

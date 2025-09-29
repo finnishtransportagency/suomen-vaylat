@@ -1,316 +1,430 @@
-import { faInfoCircle, faQuestion, faEllipsisV } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useContext, useState} from 'react';
+import { useContext, useState, useCallback } from 'react';
 import { ReactReduxContext } from 'react-redux';
 import ReactTooltip from 'react-tooltip';
 import { theme, isMobile } from '../../theme/theme';
 import styled from 'styled-components';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence } from 'framer-motion';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useAppSelector } from '../../state/hooks';
-import {
-    setIsInfoOpen,
-    setIsMainScreen,
-    setIsUserGuideOpen,
-    setActiveTool,
-    removeActiveGeometry
-} from '../../state/slices/uiSlice';
-import {
-    mapMoveRequest,
-    removeMarkerRequest,
-    resetGFILocations,
-    setVKMData
-} from '../../state/slices/rpcSlice';
-import { resetThemeGroupsForMainScreen } from '../../utils/rpcUtil';
 import strings from '../../translations';
 import LanguageSelector from '../language-selector/LanguageSelector';
-import { WebSiteShareButton } from '../share-web-site/ShareLinkButtons';
-import { ReactComponent as VaylaLogoEn } from './images/vayla_sivussa_en_white.svg';
-import { ReactComponent as VaylaLogoFi } from './images/vayla_sivussa_fi_white.svg';
-import { ReactComponent as VaylaLogoSv } from './images/vayla_sivussa_sv_white.svg';
-import { updateLayers } from '../../utils/rpcUtil';
+import VaylaLogoExtranetMobile from './images/vayla_v_rgb.png';
+import VaylaLogoExtranet from './images/vayla_alla_fi_sv_rgb.png';
+import { ReactComponent as VaylaLogoSV } from './images/vayla_alla_fi_sv_white.svg';
+import { ReactComponent as VaylaLogoSVMobile } from './images/vayla_v_white.svg';
+import DesktopNav from './navigation/DesktopNav';
 import { createBrowserHistory } from 'history';
+import MobileNav from './navigation/MobileNav';
+import { faBars } from '@fortawesome/free-solid-svg-icons';
+import Badges from '../badges/Badges';
+
+import {
+  setIsMainScreen,
+  setActiveTool,
+  removeActiveGeometry
+} from '../../state/slices/uiSlice';
+import {
+  mapMoveRequest,
+  removeMarkerRequest,
+  resetGFILocations,
+  setVKMData
+} from '../../state/slices/rpcSlice';
+import {
+  resetThemeGroupsForMainScreen,
+  updateLayers
+} from '../../utils/rpcUtil';
+import { IS_EXTRANET } from '../../utils/appInfoUtil';
+
 const history = createBrowserHistory();
 
 const StyledHeaderContainer = styled.div`
-    height: 64px;
-    display: grid;
-    position: relative;
-    grid-template-columns: 1fr 1fr 1fr;
-    box-shadow: 0px 2px 4px #0000004D;
-    @media ${props => props.theme.device.tablet} {
-        height: 56px;
-    };
+  position: relative;
+  width: 100%;
+  height: 68px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 10;
 `;
 
-const StyledHeaderButton = styled.div`
-    position: relative;
-    cursor: pointer;
-    width: 40px;
-    height: 40px;
-    display: flex;
+const HeaderLeft = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 64px;
+  display: flex;
+  align-items: center;
+    gap: ${IS_EXTRANET ? '1em' : '8px'}};
+  background-color: ${(props) =>
+    IS_EXTRANET
+      ? props.theme.colors.extranetHeaderColor
+      : props.theme.colors.mainColor1};
+  border: ${IS_EXTRANET ? '1px solid' : 'none'};
+  border-color: ${(props) =>
+    IS_EXTRANET ? props.theme.colors.mainColor1 : 'none'};
+  color: ${(props) =>
+    IS_EXTRANET ? props.theme.colors.mainColor1 : props.theme.colors.mainWhite};
+  padding: 0 18px;
+  border-bottom-right-radius: 30px;
+  z-index: 11;
+  pointer-events: all;
+  padding: 1em 1.5em 1em 0;
+  box-shadow: ${IS_EXTRANET ? '0px 4px 8px 0px #00000040' : 'none'};
+
+  @media ${(props) => props.theme.device.mobileL} {
+    height: 60px;
+    padding: 0;
+    width: auto;
+    width: 60px;
+    border-bottom-right-radius: 30px;
+  }
+`;
+
+const StyledHeaderButton = styled.button`
+  position: relative;
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: transparent;
+  border-radius: 50%;
+  border: none;
+  svg {
+    font-size: 22px;
+  }
+  &:focus {
+    outline: 2px solid ${(props) => props.theme.colors.secondaryColor};
+  }
+`;
+
+const HeaderRight = styled.div`
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  background-color: ${(props) =>
+    IS_EXTRANET
+      ? props.theme.colors.extranetHeaderColor
+      : props.theme.colors.mainColor1};
+  border: ${IS_EXTRANET ? '1px solid' : 'none'};
+  border-color: ${(props) =>
+    IS_EXTRANET ? props.theme.colors.mainColor1 : 'none'};
+  color: ${(props) =>
+    IS_EXTRANET ? props.theme.colors.mainColor1 : props.theme.colors.mainWhite};
+  padding: 1em 1em 1em 0.5em;
+  border-bottom-left-radius: 30px;
+  z-index: 11;
+  pointer-events: all;
+  box-shadow: ${IS_EXTRANET ? '0px 4px 8px 0px #00000040' : 'none'};
+
+  @media ${(props) => props.theme.device.mobileL} {
+    height: 60px;
+    width: 60px;
+    padding: 0;
     justify-content: center;
-    align-items: center;
-    background-color: transparent;
-    border-radius: 50%;
-    svg {
-        color: ${props => props.theme.colors.mainWhite};
-        font-size: 22px;
-    };
+    border-bottom-left-radius: 30px;
+  }
+
+  .menu-toggle-button {
+    display: none;
+
+    @media ${(props) => props.theme.device.mobileL} {
+      display: flex;
+      background-color: ${(props) =>
+        IS_EXTRANET
+          ? props.theme.colors.extranetHeaderColor
+          : props.theme.colors.mainColor1};
+
+      color: ${(props) =>
+        IS_EXTRANET
+          ? props.theme.colors.mainColor1
+          : props.theme.colors.mainWhite};
+
+      svg {
+        font-size: 28px;
+      }
+    }
+  }
 `;
 
-const StyledHeaderTitleContainer = styled.p`
-    cursor: pointer;
-    height: inherit;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    margin: 0;
-    color: ${props => props.theme.colors.mainWhite};
-    padding-left: 8px;
-    font-weight: 600;
-    @media ${props => props.theme.device.desktop} {
-        font-size: 25px;
-    };
-    @media ${props => props.theme.device.tablet} {
-        font-size: 15px;
-    };
+const StyledHeaderTitleContainer = styled.div`
+  cursor: pointer;
+  height: inherit;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  line-height: ${IS_EXTRANET ? 1.2 : 'normal'};
+
+  @media ${(props) => props.theme.device.desktop} {
+    font-size: 25px;
+  }
+
+  @media ${(props) => props.theme.device.tablet} {
+    font-size: 10px;
+  }
+  @media ${(props) => props.theme.device.mobileL} {
+    display: none;
+  }
+`;
+
+const StyledHeaderTitle = styled.div`
+  font-weight: ${IS_EXTRANET ? '700' : '600'};
+  font-size: ${IS_EXTRANET ? '20px' : '24px'};
+  letter-spacing: ${IS_EXTRANET ? '0.1px' : 'normal'};
+`;
+
+const StyledHeaderTitleExtranet = styled.div`
+  font-weight: 400 !important;
+  letter-spacing: 0.11em !important;
+  font-size: 20px;
 `;
 
 const StyledHeaderLogoContainer = styled.div`
-    height: inherit;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    a {
-        height: inherit;
-    };
-    svg {
-        height: inherit;
-    };
-`;
+  height: inherit;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-left: 0px;
 
-const StyledRightCornerButtons = styled.div`
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    color: ${props => props.theme.colors.mainWhite};
-    padding-right: 10px;
-    @media ${props => props.theme.device.desktop} {
-        font-size: 25px;
-    };
+  a {
+    height: inherit;
+  }
+
+  svg {
+    height: inherit;
+  }
 `;
 
 const DesktopButtons = styled.div`
-    display: flex;
-    gap: 4px;
-    @media ${props => props.theme.device.mobileL} {
-        display: none;
-    };
-`;
-
-const StyledMobileNavContainer = styled(motion.div)`
-    z-index: 10;
-    position: absolute;
-    width: 100%;
-    height: 56px;
-    display: grid;
-    left: 0px;
-    top: 100%;
-    background-color: ${props => props.theme.colors.mainColor1};
-    box-shadow: rgb(0 0 0 / 16%) 0px 3px 6px, rgb(0 0 0 / 23%) 0px 3px 6px;
-    display: none;
-    @media ${props => props.theme.device.mobileL} {
-        display: flex;
-        justify-content: flex-end;
-    };
-`;
-
-const StyledRightCornerButtonsMobile = styled.div`
-    display: flex;
-    align-items: center;
-    color: ${props => props.theme.colors.mainWhite};
-`;
-
-const MobileButtons = styled.div`
-    display: none;
-    @media ${props => props.theme.device.mobileL} {
-        display: flex;
-    };
-    ${StyledHeaderButton}{
-        margin-right: 0px;
-        width: 24px;
-        svg {
-            font-size: 20px;
-        }
-    }
+  display: flex;
+  align-items: center;
+  gap: 4px;
 `;
 
 export const Header = () => {
-    const lang = useAppSelector((state) => state.language);
-    const [ isSubNavOpen, setSubNavOpen ] = useState(false);
-    const { store } = useContext(ReactReduxContext);
+  const lang = useAppSelector((state) => state.language);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { store } = useContext(ReactReduxContext);
 
-    const {
-        channel,
-        selectedLayers,
-        lastSelectedTheme,
-        selectedThemeId,
-        startState
-    } = useAppSelector((state) => state.rpc);
+  // This function now only accesses latest redux state when called
+  const setToMainScreen = useCallback(() => {
+    const state = store.getState();
+    const channel = state.rpc.channel;
+    const selectedLayers = state.rpc.selectedLayers;
+    const lastSelectedTheme = state.rpc.lastSelectedTheme;
+    const selectedThemeId = state.rpc.selectedThemeId;
+    const startState = state.rpc.startState;
+    const activeTool = state.ui.activeTool;
+    const activeGeometries = state.ui.activeGeometries;
 
-    const { isInfoOpen, isUserGuideOpen, activeTool, activeGeometries } = useAppSelector(state => state.ui);
-
-    const handleSelectGroup = (index, theme) => {
-        resetThemeGroupsForMainScreen(store, channel, index, theme, lastSelectedTheme, selectedThemeId);
-    };
-
-    const setToMainScreen = () => {
-        let routerPrefix = '/';
-        if (process.env.REACT_APP_ROUTER_PREFIX) {
-            routerPrefix = process.env.REACT_APP_ROUTER_PREFIX;
-        }
-        // remove all selected layers
-        selectedLayers.forEach((layer) => {
-            channel && channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, false]);
-        });
-
-        // set map center
-        store.dispatch(mapMoveRequest({
-            x: startState.x,
-            y: startState.y,
-            zoom: startState.zoom
-        }));
-
-        store.dispatch(setIsMainScreen());
-        store.dispatch(resetGFILocations([]));
-        history.push(routerPrefix);
-        handleSelectGroup(null, lastSelectedTheme);
-
-        // add start layers back (do it after than select group)
-        startState.selectedLayers.forEach((layer) => {
-            channel && channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [layer.id, true]);
-            channel && channel.postRequest('ChangeMapLayerOpacityRequest', [layer.id, layer.opacity]);
-        });
-
-        channel && channel.postRequest('DrawTools.StopDrawingRequest', [
-            'gfi-selection-tool',
-            true,
+    let routerPrefix = '/';
+    if (process.env.REACT_APP_ROUTER_PREFIX) {
+      routerPrefix = process.env.REACT_APP_ROUTER_PREFIX;
+    }
+    // remove all selected layers
+    selectedLayers.forEach((layer) => {
+      channel &&
+        channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [
+          layer.id,
+          false
         ]);
+    });
 
-        channel && channel.postRequest('DrawTools.StopDrawingRequest', [activeTool]);
-        channel && channel.postRequest('DrawTools.StopDrawingRequest', [true]);
-        store.dispatch(setActiveTool(null));
-
-        updateLayers(store, channel);
-
-        // Remove all features from map
-        channel && channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', []);
-
-        // Remove VKM data
-        store.dispatch(setVKMData(null));
-
-        // Remove all markers
-        store.dispatch(removeMarkerRequest());
-
-        store.dispatch(removeActiveGeometry());
-
-        activeGeometries.forEach(geometry => {
-            store.dispatch(removeActiveGeometry(geometry.id));
-        });
-    };
-
-    return (
-        <>
-            <StyledHeaderContainer>
-                <ReactTooltip backgroundColor={theme.colors.mainColor1} disable={isMobile} id={'show_info'} place='bottom' type='dark' effect='float'>
-                    <span>{strings.tooltips.showPageInfo}</span>
-                </ReactTooltip>
-                <ReactTooltip backgroundColor={theme.colors.mainColor1} disable={isMobile} id={'show_user_guide'} place='bottom' type='dark' effect='float'>
-                    <span>{strings.tooltips.showUserGuide}</span>
-                </ReactTooltip>
-                <StyledHeaderTitleContainer onClick={() => setToMainScreen()}>
-                    {strings.title} {process.env.REACT_APP_EXTRANET === "true" &&  strings.extranet}
-                </StyledHeaderTitleContainer>
-                <StyledHeaderLogoContainer>
-                    <a
-                        aria-label={strings.accessibility.vaylaLink}
-                        href={
-                            lang.current === 'fi' ? "https://vayla.fi/etusivu" :
-                            lang.current === 'en' ? "https://vayla.fi/en/frontpage" :
-                            lang.current === 'sv' ? "https://vayla.fi/sv/framsida" : "https://vayla.fi/etusivu"
-                        }
-                        target="_blank"
-                        rel="noreferrer">
-                        {
-                            lang.current === 'fi' ? <VaylaLogoFi /> :
-                            lang.current === 'en' ? <VaylaLogoEn /> :
-                            lang.current === 'sv' ? <VaylaLogoSv /> : <VaylaLogoFi />
-                        }
-                    </a>
-                </StyledHeaderLogoContainer>
-                <StyledRightCornerButtons>
-                    <MobileButtons>
-                        <StyledHeaderButton onClick={() => setSubNavOpen(!isSubNavOpen)}>
-                            <FontAwesomeIcon
-                                icon={faEllipsisV}
-                            />
-                        </StyledHeaderButton>
-                    </MobileButtons>
-                    <DesktopButtons>
-                        <WebSiteShareButton />
-                        <StyledHeaderButton data-tip data-for={'show_user_guide'} onClick={() => store.dispatch(setIsUserGuideOpen(!isUserGuideOpen))}>
-                            <FontAwesomeIcon
-                                icon={faQuestion}
-                            />
-                        </StyledHeaderButton>
-                        <StyledHeaderButton data-tip data-for={'show_info'} onClick={() => store.dispatch(setIsInfoOpen(!isInfoOpen))}>
-                            <FontAwesomeIcon
-                                icon={faInfoCircle}
-                            />
-                        </StyledHeaderButton>
-                        <LanguageSelector />
-                    </DesktopButtons>
-                </StyledRightCornerButtons>
-                <AnimatePresence>
-                    {
-                        isSubNavOpen &&
-                        <StyledMobileNavContainer
-                            initial={{ y: -100, filter: "blur(10px)", opacity: 0 }}
-                            animate={{ y: 0, filter: "blur(0px)", opacity: 1 }}
-                            exit={{ y: -100, filter: "blur(10px)", opacity: 0 }}
-                            transition={{
-                                duration: 0.4,
-                                type: "tween"
-                            }}
-                        >
-                            <StyledRightCornerButtonsMobile>
-                                <WebSiteShareButton setSubNavOpen={setSubNavOpen}/>
-                                <StyledHeaderButton data-tip data-for={'show_user_guide'}
-                                                    onClick={() => {
-                                                        setSubNavOpen(false);
-                                                        store.dispatch(setIsUserGuideOpen(!isUserGuideOpen))}
-                                                    }>
-                                    <FontAwesomeIcon
-                                        icon={faQuestion}
-                                    />
-                                </StyledHeaderButton>
-                                <StyledHeaderButton data-tip data-for={'show_info'}
-                                                    onClick={() => {
-                                                        setSubNavOpen(false);
-                                                        store.dispatch(setIsInfoOpen(!isInfoOpen))}
-                                                        }>
-                                    <FontAwesomeIcon
-                                        icon={faInfoCircle}
-                                    />
-                                </StyledHeaderButton>
-                                <LanguageSelector/>
-                            </StyledRightCornerButtonsMobile>
-                        </StyledMobileNavContainer>
-                    }
-                </AnimatePresence>
-            </StyledHeaderContainer>
-        </>
+    // set map center
+    store.dispatch(
+      mapMoveRequest({
+        x: startState.x,
+        y: startState.y,
+        zoom: startState.zoom
+      })
     );
- }
 
- export default Header;
+    store.dispatch(setIsMainScreen());
+    store.dispatch(resetGFILocations([]));
+    history.push(routerPrefix);
+    resetThemeGroupsForMainScreen(
+      store,
+      channel,
+      null,
+      lastSelectedTheme,
+      lastSelectedTheme,
+      selectedThemeId
+    );
+
+    // add start layers back (do it after than select group)
+    startState.selectedLayers.forEach((layer) => {
+      channel &&
+        channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [
+          layer.id,
+          true
+        ]);
+      channel &&
+        channel.postRequest('ChangeMapLayerOpacityRequest', [
+          layer.id,
+          layer.opacity
+        ]);
+    });
+
+    channel &&
+      activeTool === 'gfi-selection-tool' &&
+      channel.postRequest('DrawTools.StopDrawingRequest', [
+        'gfi-selection-tool',
+        true
+      ]);
+
+    channel &&
+      channel.postRequest('DrawTools.StopDrawingRequest', [activeTool]);
+    channel && channel.postRequest('DrawTools.StopDrawingRequest', [true]);
+    store.dispatch(setActiveTool(null));
+
+    updateLayers(store, channel);
+
+    // Remove all features from map
+    channel &&
+      channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', []);
+
+    // Remove VKM data
+    store.dispatch(setVKMData(null));
+
+    // Remove all markers
+    store.dispatch(removeMarkerRequest());
+
+    store.dispatch(removeActiveGeometry());
+
+    activeGeometries.forEach((geometry) => {
+      store.dispatch(removeActiveGeometry(geometry.id));
+    });
+  }, [store]);
+
+  return (
+    <>
+      <StyledHeaderContainer id="header-container" role="banner">
+        <ReactTooltip
+          backgroundColor={theme.colors.mainColor1}
+          disable={isMobile}
+          id="header-show-info-tooltip"
+          place="bottom"
+          type="dark"
+          effect="float"
+        >
+          <span>{strings.tooltips.showPageInfo}</span>
+        </ReactTooltip>
+        <ReactTooltip
+          backgroundColor={theme.colors.mainColor1}
+          disable={isMobile}
+          id="header-show-user-guide-tooltip"
+          place="bottom"
+          type="dark"
+          effect="float"
+        >
+          <span>{strings.tooltips.showUserGuide}</span>
+        </ReactTooltip>
+        <HeaderLeft id="header-left">
+          <StyledHeaderLogoContainer id="header-logo-container">
+            <a
+              aria-label={strings.accessibility.vaylaLink}
+              href={
+                lang.current === 'fi'
+                  ? 'https://vayla.fi/etusivu'
+                  : lang.current === 'en'
+                  ? 'https://vayla.fi/en/frontpage'
+                  : lang.current === 'sv'
+                  ? 'https://vayla.fi/sv/framsida'
+                  : 'https://vayla.fi/etusivu'
+              }
+              target="_blank"
+              rel="noreferrer"
+              id="header-vayla-logo-link"
+            >
+              {IS_EXTRANET ? (
+                // Extranet: use PNGs (img tag)
+                isMobile ? (
+                  <img
+                    src={VaylaLogoExtranetMobile}
+                    alt="Väylä"
+                    style={{ height: '100%', display: 'block' }}
+                  />
+                ) : (
+                  <img
+                    src={VaylaLogoExtranet}
+                    alt="Väylä"
+                    style={{ height: '100%', display: 'block' }}
+                  />
+                )
+              ) : // Public site: use inline SVG components so they can be styled
+              isMobile ? (
+                <VaylaLogoSVMobile aria-hidden="true" focusable="false" />
+              ) : (
+                <VaylaLogoSV aria-hidden="true" focusable="false" />
+              )}
+            </a>
+          </StyledHeaderLogoContainer>
+          <StyledHeaderTitleContainer
+            id="header-title"
+            onClick={setToMainScreen}
+            aria-label={strings.accessibility.headerTitle}
+          >
+            {IS_EXTRANET ? (
+              <>
+                <StyledHeaderTitle>{strings.titleExtranet} </StyledHeaderTitle>
+                <StyledHeaderTitleExtranet>
+                  {strings.extranet}
+                </StyledHeaderTitleExtranet>
+              </>
+            ) : (
+              <>
+                <StyledHeaderTitle>{strings.title} </StyledHeaderTitle>
+              </>
+            )}
+          </StyledHeaderTitleContainer>
+        </HeaderLeft>
+
+        <Badges />
+
+        <HeaderRight id="header-right">
+          {!isMobile && (
+            <DesktopButtons
+              id="header-desktop-buttons"
+              aria-label={strings.accessibility.desktopButtons}
+            >
+              <LanguageSelector />
+              <DesktopNav
+                setIsMenuOpen={setIsMenuOpen}
+                isMenuOpen={isMenuOpen}
+              />
+            </DesktopButtons>
+          )}
+
+          <StyledHeaderButton
+            id="header-menu-toggle-button"
+            className="menu-toggle-button"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            aria-label={strings.accessibility.menuToggle}
+            aria-expanded={isMenuOpen}
+            aria-controls="header-mobile-nav-container"
+          >
+            <FontAwesomeIcon
+              icon={faBars}
+              aria-hidden="true"
+              focusable="false"
+            />
+          </StyledHeaderButton>
+        </HeaderRight>
+
+        {isMobile && (
+          <AnimatePresence>
+            {isMenuOpen && <MobileNav setIsMenuOpen={setIsMenuOpen} />}
+          </AnimatePresence>
+        )}
+      </StyledHeaderContainer>
+    </>
+  );
+};
+
+export default Header;
