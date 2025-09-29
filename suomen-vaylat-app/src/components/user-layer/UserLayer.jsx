@@ -93,6 +93,14 @@ export const UserLayer = ({ layer }) => {
   const { store } = useContext(ReactReduxContext);
   const { channel } = useSelector((state) => state.rpc);
 
+  // Build unique IDs for accessibility, using the required prefix "user-layer-"
+  const containerId = `user-layer-${layer.id}`;
+  const nameId = `${containerId}-name`;
+  const deleteBtnId = `${containerId}-delete`;
+  const editBtnId = `${containerId}-edit`;
+  const switchId = `${containerId}-switch`;
+  const badgeId = `${containerId}-badge`;
+
   const handleLayerVisibility = (channel, layer) => {
     store.dispatch(setMapLayerVisibility(layer));
     updateLayers(store, channel);
@@ -161,16 +169,19 @@ export const UserLayer = ({ layer }) => {
 
   return (
     <StyledLayerContainer
+      id={containerId}
+      aria-labelledby={nameId}
       className={`list-layer ${layer.visible && 'list-layer-active'}`}
       key={'layer' + layer.id}
       role="listitem"
-      aria-label={`layer-${layer.id}`}
+      aria-label={`user-layer-${layer.id}`}
     >
       <StyledItemLeft>
-        <StyledLayerName>
+        <StyledLayerName id={nameId}>
           {layer.name}{' '}
           {layer.newLayer && (
             <Badge
+              id={badgeId}
               style={{
                 color: theme.colors.mainWhite,
                 backgroundColor: theme.colors.mainColor1,
@@ -189,7 +200,9 @@ export const UserLayer = ({ layer }) => {
         {IS_EXTRANET && (
           <>
             <StyledIconButton
-              aria-label={strings.savedContent?.userLayer?.deleteLayer}
+              id={deleteBtnId}
+              type="button"
+              aria-label={strings.savedContent?.userLayer?.deleteLayer || `Delete ${layer.name}`}
               title={strings.savedContent?.userLayer?.deleteLayer}
               onClick={handleDeleteClick}
             >
@@ -197,7 +210,9 @@ export const UserLayer = ({ layer }) => {
             </StyledIconButton>
 
             <StyledIconButton
-              aria-label={strings.savedContent?.userLayer?.editLayer}
+              id={editBtnId}
+              type="button"
+              aria-label={strings.savedContent?.userLayer?.editLayer || `Edit ${layer.name}`}
               title={strings.savedContent?.userLayer?.editLayer}
               onClick={handleEditClick}
             >
@@ -207,9 +222,13 @@ export const UserLayer = ({ layer }) => {
         )}
 
         <LayerlistSwitch
+          id={switchId}
           action={() => handleLayerVisibility(channel, layer)}
           isSelected={layer.visible}
           layer={layer}
+          aria-label={`Toggle visibility for ${layer.name}`}
+          aria-labelledby={nameId}
+          aria-checked={!!layer.visible}
         />
       </StyledItemsRight>
     </StyledLayerContainer>
