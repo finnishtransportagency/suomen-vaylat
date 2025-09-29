@@ -1,4 +1,4 @@
-import { FILLS, POINT_SHAPES } from "./styleConstants";
+import { FILLS, MARKER_SVGS } from "./styleConstants";
 
 const PATH_AREA = 'M10,25L70,15L50,70Z';
 const PATH_LINE = 'M10,20L30,60L70,40';
@@ -98,36 +98,91 @@ export const LinePreview = ({ previewSize = 56, strokeDef = {} }) => {
 };
 
 export const PointPreview = ({ imageDef = {}, previewSize = 56 }) => {
-  // Attempt to use Oskari.custom.getSvg if available (keeps parity with your environment)
-  try {
-    if (typeof window !== 'undefined' && window.Oskari && window.Oskari.custom && typeof window.Oskari.custom.getSvg === 'function') {
-      const { src, scale } = window.Oskari.custom.getSvg(imageDef);
-      const size = (window.Oskari.custom.SVG_SIZE || 24) * (scale || 1);
-      return (
-        <div style={{ width: previewSize, height: previewSize, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <img src={src} width={size} height={size} alt="" aria-hidden="true" />
-        </div>
-      );
+
+  // Map imageDef.size (1..5) to fixed pixel range 25..45
+  const sizeValue = Math.min(5, Math.max(1, Number(imageDef?.size ?? 3)));
+  const MIN_PIX = 25;
+  const MAX_PIX = 45;
+  const sizePx = Math.round(MIN_PIX + ((sizeValue - 1) / (5 - 1)) * (MAX_PIX - MIN_PIX));
+
+  // colors and stroke
+  const fillColor = (imageDef?.fill && imageDef.fill.color) || '#F8931F';
+  const strokeColor = (imageDef?.stroke && imageDef.stroke.color) || '#333';
+  const strokeWidth = imageDef?.stroke?.width ?? 1;
+
+  // Use raw MARKER_SVGS string, parse, patch attributes and render
+  const shapeIndex = Math.max(0, Math.min((imageDef.shape ?? 0), (MARKER_SVGS.length - 1)));
+  const rawSvg = MARKER_SVGS[shapeIndex] || '';
+
+  if (rawSvg) {
+    try {
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(rawSvg, 'image/svg+xml');
+      const svgEl = doc.querySelector('svg');
+
+      if (svgEl) {
+        svgEl.setAttribute('width', String(sizePx));
+        svgEl.setAttribute('height', String(sizePx));
+        svgEl.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+
+        svgEl.querySelectorAll('[fill]').forEach((el) => {
+          try {
+            const v = el.getAttribute('fill');
+            if (v && v.toLowerCase() !== 'none' && !/^url\(/i.test(v)) {
+              el.setAttribute('fill', fillColor);
+            }
+          } catch (ignore) {}
+        });
+
+        svgEl.querySelectorAll('[stroke]').forEach((el) => {
+          try {
+            el.setAttribute('stroke', strokeColor);
+          } catch (ignore) {}
+        });
+
+        svgEl.querySelectorAll('[stroke-width]').forEach((el) => {
+          try {
+            el.setAttribute('stroke-width', String(strokeWidth));
+          } catch (ignore) {}
+        });
+
+        // fallback root attributes if no inner elements had them
+        if (!svgEl.querySelector('[fill]')) {
+          svgEl.setAttribute('fill', fillColor);
+        }
+        if (!svgEl.querySelector('[stroke]')) {
+          svgEl.setAttribute('stroke', strokeColor);
+        }
+
+        const serializer = new XMLSerializer();
+        const patchedSvg = serializer.serializeToString(svgEl);
+
+        return (
+          <div
+            style={{
+              width: previewSize,
+              height: previewSize,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}
+            // eslint-disable-next-line react/no-danger
+            dangerouslySetInnerHTML={{ __html: patchedSvg }}
+          />
+        );
+      }
+    } catch (err) {
+      // parsing/patching failed -> fall through to final fallback
     }
-  } catch (e) {
-    // ignore and fallback
   }
 
-  // fallback to POINT_SHAPES preview node if defined
-  const shapeIndex = imageDef?.shape ?? 0;
-  const shape = POINT_SHAPES[shapeIndex];
-  if (shape && shape.preview) {
-    return <div style={{ width: previewSize, height: previewSize, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{shape.preview}</div>;
-  }
-
-  // final fallback: simple circle
-  const r = Math.max(6, Math.floor(previewSize * 0.18));
-  const cx = Math.floor(previewSize / 2);
-  const cy = Math.floor(previewSize / 2);
-  const fill = (imageDef?.fill && imageDef.fill.color) || '#F8931F';
+  // final fallback: simple circle sized by sizePx (keeps it from being too small)
+  const r = Math.max(6, Math.round(sizePx / 2));
+  const cx = Math.round(previewSize / 2);
+  const cy = Math.round(previewSize / 2);
   return (
-    <svg width={previewSize} height={previewSize} viewBox={`0 0 ${previewSize} ${previewSize}`}>
-      <circle cx={cx} cy={cy} r={r} fill={fill} stroke="#333" strokeWidth="1" />
+    <svg width={previewSize} height={previewSize} viewBox={`0 0 ${previewSize} ${previewSize}`} aria-hidden="true" focusable="false">
+      <circle cx={cx} cy={cy} r={r} fill={fillColor} stroke={strokeColor} strokeWidth={strokeWidth} />
     </svg>
   );
 };

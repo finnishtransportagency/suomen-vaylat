@@ -263,8 +263,6 @@ const DatasetImport = () => {
           en: accordionOpen.en ? fields.en || {} : {}
         };
 
-        console.log('style', style);
-
         channel.updateUserLayer(
           [editingUserlayer.id, { locale, style }],
           () => {
