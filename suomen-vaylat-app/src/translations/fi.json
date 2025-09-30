@@ -373,6 +373,10 @@
         "title": "Jaa sivu",
         "content": "Kartan nykyisen näkymän voi jakaa linkillä suoraan valittuun palveluun tai kopioimalla linkin. Näkymässä säilytetään kieli, kohdistus, zoom-taso sekä valitut karttatasot ja valittu teema."
       },
+      "tools": {
+        "title": "Työkalut",
+        "content": "Työkaluissa sijaitsee toiminnot, kuten piirtotyökalut, näkymän tallennus ja lataukset."
+      },
       "filter": {
         "title": "Suodatus",
         "steps": {

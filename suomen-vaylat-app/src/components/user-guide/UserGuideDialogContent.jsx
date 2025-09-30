@@ -7,7 +7,6 @@ import {
   faExpand,
   faLayerGroup,
   faSearch,
-  faPencilRuler,
   faSave,
   faMapMarkedAlt,
   faDownload,
@@ -26,6 +25,7 @@ import UserGuideFilterContent from './UserGuideFilterContent';
 import SearchBar from './UserGuideSearch';
 import { theme } from '../../theme/theme';
 import { IS_EXTRANET } from '../../utils/appInfoUtil';
+import BuildIcon from '@mui/icons-material/Build';
 
 const StyledContent = styled.div`
   min-width: 600px;
@@ -229,6 +229,54 @@ export const UserGuideDialogContent = () => {
         title: (
           <StyledTitleWrapper>
             <StyledIconButton>
+              <StyledFAIcon icon={faSearch} />
+            </StyledIconButton>
+            <p>{strings.appGuide.dialogContent.search.title}</p>
+          </StyledTitleWrapper>
+        ),
+        content: (
+          <StyledGuideContent>
+            <p>{strings.appGuide.dialogContent.search.content}</p>
+          </StyledGuideContent>
+        ),
+        flatText: extractStringsFromJson(strings.appGuide.dialogContent.search).toLowerCase()
+      },
+      {
+        title: (
+          <StyledTitleWrapper>
+            <StyledIconButton>
+              <StyledFAIcon icon={faList} />
+            </StyledIconButton>
+            <p>{strings.appGuide.dialogContent.zoomBar.title}</p>
+          </StyledTitleWrapper>
+        ),
+        content: (
+          <StyledGuideContent>
+            <p>{strings.appGuide.dialogContent.zoomBar.content}</p>
+          </StyledGuideContent>
+        ),
+        flatText: extractStringsFromJson(strings.appGuide.dialogContent.zoomBar).toLowerCase()
+      },
+      {
+        title: (
+          <StyledTitleWrapper>
+            <StyledIconButton>
+              <BuildIcon style={{color: "white"}} />
+            </StyledIconButton>
+            <p>{strings.appGuide.dialogContent.tools.title}</p>
+          </StyledTitleWrapper>
+        ),
+        content: (
+          <StyledGuideContent>
+            <p>{strings.appGuide.dialogContent.tools.content}</p>
+          </StyledGuideContent>
+        ),
+        flatText: extractStringsFromJson(strings.appGuide.dialogContent.tools).toLowerCase()
+      },
+      {
+        title: (
+          <StyledTitleWrapper>
+            <StyledIconButton>
               <StyledFAIcon icon={faDownload} />
             </StyledIconButton>
             <p>{strings.downloads.downloads}</p>
@@ -288,38 +336,6 @@ export const UserGuideDialogContent = () => {
           </StyledGuideContent>
         ),
         flatText: extractStringsFromJson(strings.appGuide.dialogContent.setFullScreen).toLowerCase()
-      },
-      {
-        title: (
-          <StyledTitleWrapper>
-            <StyledIconButton>
-              <StyledFAIcon icon={faSearch} />
-            </StyledIconButton>
-            <p>{strings.appGuide.dialogContent.search.title}</p>
-          </StyledTitleWrapper>
-        ),
-        content: (
-          <StyledGuideContent>
-            <p>{strings.appGuide.dialogContent.search.content}</p>
-          </StyledGuideContent>
-        ),
-        flatText: extractStringsFromJson(strings.appGuide.dialogContent.search).toLowerCase()
-      },
-      {
-        title: (
-          <StyledTitleWrapper>
-            <StyledIconButton>
-              <StyledFAIcon icon={faList} />
-            </StyledIconButton>
-            <p>{strings.appGuide.dialogContent.zoomBar.title}</p>
-          </StyledTitleWrapper>
-        ),
-        content: (
-          <StyledGuideContent>
-            <p>{strings.appGuide.dialogContent.zoomBar.content}</p>
-          </StyledGuideContent>
-        ),
-        flatText: extractStringsFromJson(strings.appGuide.dialogContent.zoomBar).toLowerCase()
       }
     ];
 
