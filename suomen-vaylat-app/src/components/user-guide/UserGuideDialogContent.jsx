@@ -14,7 +14,10 @@ import {
   faAngleRight,
   faList,
   faMap,
-  faFilter
+  faFilter,
+  faRulerHorizontal,
+  faShareAlt,
+  faUpload
 } from '@fortawesome/free-solid-svg-icons';
 import { ReactComponent as VaylaLogo } from '../layout/images/vayla_v_white.svg';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -22,6 +25,7 @@ import UserGuideUpperBarContent from './UserGuideUpperBarContent';
 import UserGuideFilterContent from './UserGuideFilterContent';
 import SearchBar from './UserGuideSearch';
 import { theme } from '../../theme/theme';
+import { IS_EXTRANET } from '../../utils/appInfoUtil';
 
 const StyledContent = styled.div`
   min-width: 600px;
@@ -125,187 +129,222 @@ export const UserGuideDialogContent = () => {
     dialogIndex === index ? setDialogIndex(null) : setDialogIndex(index);
   };
 
-  const dialogContent = useMemo(() => [
-    {
-      title: (
-        <StyledTitleWrapper>
-          <StyledVaylaButton>
-            <VaylaLogo />
-          </StyledVaylaButton>
-          <p>{strings.appGuide.dialogContent.upperBar.title}</p>
-        </StyledTitleWrapper>
-      ),
-      content: (
-        <StyledGuideContent>
-          <UserGuideUpperBarContent />
-        </StyledGuideContent>
-      ),
-      flatText: extractStringsFromJson(strings.appGuide.dialogContent.upperBar).toLowerCase()
-    },
-    {
-      title: (
-        <StyledTitleWrapper>
-          <StyledIconButton>
-            <StyledFAIcon icon={faMap} />
-          </StyledIconButton>
-          <p>{strings.appGuide.dialogContent.themeMenu.title}</p>
-        </StyledTitleWrapper>
-      ),
-      content: (
-        <StyledGuideContent>
-          <p>{strings.appGuide.dialogContent.themeMenu.content}</p>
-        </StyledGuideContent>
-      ),
-      flatText: extractStringsFromJson(strings.appGuide.dialogContent.themeMenu).toLowerCase()
-    },
-    {
-      title: (
-        <StyledTitleWrapper>
-          <StyledIconButton>
-            <StyledFAIcon icon={faLayerGroup} />
-          </StyledIconButton>
-          <p>{strings.appGuide.dialogContent.mapLayerMenu.title}</p>
-        </StyledTitleWrapper>
-      ),
-      content: <UserGuideTabs />,
-      flatText: extractStringsFromJson(strings.appGuide.dialogContent.mapLayerMenu).toLowerCase()
-    },
-    {
-      title: (
-        <StyledTitleWrapper>
-          <StyledIconButton>
-            <StyledFAIcon icon={faMapMarkedAlt} />
-          </StyledIconButton>
-          <p>{strings.gfi.title}</p>
-        </StyledTitleWrapper>
-      ),
-      content: (
-        <StyledGuideContent
-          style={{ display: 'grid', gridTemplateColumns: '1fr' }}
-        >
-          {strings.appGuide.dialogContent.gfi.content
-            .split('\n')
-            .map((c, index) => {
-              return <p key={`userguide_gfi_content_row_${index}`}> {c} </p>;
-            })}
-        </StyledGuideContent>
-      ),
-      flatText: extractStringsFromJson(strings.appGuide.dialogContent.gfi).toLowerCase()
-    },
-    {
-      title: (
-        <StyledTitleWrapper>
-          <StyledIconButton>
-            <StyledFAIcon icon={faFilter} />
-          </StyledIconButton>
-          <p>{strings.appGuide.dialogContent.filter.title}</p>
-        </StyledTitleWrapper>
-      ),
-      content: (
-        
-        <StyledGuideContent>
-          <UserGuideFilterContent />
-        </StyledGuideContent>
-      ),
-      flatText: extractStringsFromJson(strings.appGuide.dialogContent.filter).toLowerCase()
-    },
-    {
-      title: (
-        <StyledTitleWrapper>
-          <StyledIconButton>
-            <StyledFAIcon icon={faDownload} />
-          </StyledIconButton>
-          <p>{strings.downloads.downloads}</p>
-        </StyledTitleWrapper>
-      ),
-      content: (
-        <StyledGuideContent>
-          <p>{strings.appGuide.dialogContent.downloads.content}</p>
-        </StyledGuideContent>
-      ),
-      flatText: extractStringsFromJson(strings.appGuide.dialogContent.downloads).toLowerCase()
-    },
-    {
-      title: (
-        <StyledTitleWrapper>
-          <StyledIconButton>
-            <StyledFAIcon icon={faPencilRuler} />
-          </StyledIconButton>
-          <p>{strings.appGuide.dialogContent.drawingTools.title}</p>
-        </StyledTitleWrapper>
-      ),
-      content: (
-        <StyledGuideContent>
-          <p>{strings.appGuide.dialogContent.drawingTools.content}</p>
-        </StyledGuideContent>
-      ),
-      flatText: extractStringsFromJson(strings.appGuide.dialogContent.drawingTools).toLowerCase()
-    },
-    {
-      title: (
-        <StyledTitleWrapper>
-          <StyledIconButton>
-            <StyledFAIcon icon={faSave} />
-          </StyledIconButton>
-          <p>{strings.appGuide.dialogContent.viewsAndGeometries.title}</p>
-        </StyledTitleWrapper>
-      ),
-      content: (
-        <StyledGuideContent>
-          <p>{strings.appGuide.dialogContent.viewsAndGeometries.content}</p>
-        </StyledGuideContent>
-      ),
-      flatText: extractStringsFromJson(strings.appGuide.dialogContent.viewsAndGeometries).toLowerCase()
-    },
-    {
-      title: (
-        <StyledTitleWrapper>
-          <StyledIconButton>
-            <StyledFAIcon icon={faExpand} />
-          </StyledIconButton>
-          <p>{strings.appGuide.dialogContent.setFullScreen.title}</p>
-        </StyledTitleWrapper>
-      ),
-      content: (
-        <StyledGuideContent>
-          <p>{strings.appGuide.dialogContent.setFullScreen.content}</p>
-        </StyledGuideContent>
-      ),
-      flatText: extractStringsFromJson(strings.appGuide.dialogContent.setFullScreen).toLowerCase()
-    },
-    {
-      title: (
-        <StyledTitleWrapper>
-          <StyledIconButton>
-            <StyledFAIcon icon={faSearch} />
-          </StyledIconButton>
-          <p>{strings.appGuide.dialogContent.search.title}</p>
-        </StyledTitleWrapper>
-      ),
-      content: (
-        <StyledGuideContent>
-          <p>{strings.appGuide.dialogContent.search.content}</p>
-        </StyledGuideContent>
-      ),
-      flatText: extractStringsFromJson(strings.appGuide.dialogContent.search).toLowerCase()
-    },
-    {
-      title: (
-        <StyledTitleWrapper>
-          <StyledIconButton>
-            <StyledFAIcon icon={faList} />
-          </StyledIconButton>
-          <p>{strings.appGuide.dialogContent.zoomBar.title}</p>
-        </StyledTitleWrapper>
-      ),
-      content: (
-        <StyledGuideContent>
-          <p>{strings.appGuide.dialogContent.zoomBar.content}</p>
-        </StyledGuideContent>
-      ),
-      flatText: extractStringsFromJson(strings.appGuide.dialogContent.zoomBar).toLowerCase()
+  const dialogContent = useMemo(() => {
+    const base = [
+      {
+        title: (
+          <StyledTitleWrapper>
+            <StyledVaylaButton>
+              <VaylaLogo />
+            </StyledVaylaButton>
+            <p>{strings.appGuide.dialogContent.upperBar.title}</p>
+          </StyledTitleWrapper>
+        ),
+        content: (
+          <StyledGuideContent>
+            <UserGuideUpperBarContent />
+          </StyledGuideContent>
+        ),
+        flatText: extractStringsFromJson(strings.appGuide.dialogContent.upperBar).toLowerCase()
+      },
+      {
+        title: (
+          <StyledTitleWrapper>
+            <StyledIconButton>
+              <StyledFAIcon icon={faMap} />
+            </StyledIconButton>
+            <p>{strings.appGuide.dialogContent.themeMenu.title}</p>
+          </StyledTitleWrapper>
+        ),
+        content: (
+          <StyledGuideContent>
+            <p>{strings.appGuide.dialogContent.themeMenu.content}</p>
+          </StyledGuideContent>
+        ),
+        flatText: extractStringsFromJson(strings.appGuide.dialogContent.themeMenu).toLowerCase()
+      },
+      {
+        title: (
+          <StyledTitleWrapper>
+            <StyledIconButton>
+              <StyledFAIcon icon={faLayerGroup} />
+            </StyledIconButton>
+            <p>{strings.appGuide.dialogContent.mapLayerMenu.title}</p>
+          </StyledTitleWrapper>
+        ),
+        content: <UserGuideTabs />,
+        flatText: extractStringsFromJson(strings.appGuide.dialogContent.mapLayerMenu).toLowerCase()
+      },
+      {
+        title: (
+          <StyledTitleWrapper>
+            <StyledIconButton>
+              <StyledFAIcon icon={faMapMarkedAlt} />
+            </StyledIconButton>
+            <p>{strings.gfi.title}</p>
+          </StyledTitleWrapper>
+        ),
+        content: (
+          <StyledGuideContent style={{ display: 'grid', gridTemplateColumns: '1fr' }}>
+            {strings.appGuide.dialogContent.gfi.content.split('\n').map((c, i) => (
+              <p key={`userguide_gfi_content_row_${i}`}> {c} </p>
+            ))}
+          </StyledGuideContent>
+        ),
+        flatText: extractStringsFromJson(strings.appGuide.dialogContent.gfi).toLowerCase()
+      },
+      {
+        title: (
+          <StyledTitleWrapper>
+            <StyledIconButton>
+              <StyledFAIcon icon={faShareAlt} />
+            </StyledIconButton>
+            <p>{strings.appGuide.dialogContent.shareWebsite.title}</p>
+          </StyledTitleWrapper>
+        ),
+        content: (
+          <StyledGuideContent>
+            <p>{strings.appGuide.dialogContent.shareWebsite.content}</p>
+          </StyledGuideContent>
+        ),
+        flatText: extractStringsFromJson(strings.appGuide.dialogContent.shareWebsite).toLowerCase()
+      },
+      {
+        title: (
+          <StyledTitleWrapper>
+            <StyledIconButton>
+              <StyledFAIcon icon={faFilter} />
+            </StyledIconButton>
+            <p>{strings.appGuide.dialogContent.filter.title}</p>
+          </StyledTitleWrapper>
+        ),
+        content: (
+          <StyledGuideContent>
+            <UserGuideFilterContent />
+          </StyledGuideContent>
+        ),
+        flatText: extractStringsFromJson(strings.appGuide.dialogContent.filter).toLowerCase()
+      },
+      {
+        title: (
+          <StyledTitleWrapper>
+            <StyledIconButton>
+              <StyledFAIcon icon={faDownload} />
+            </StyledIconButton>
+            <p>{strings.downloads.downloads}</p>
+          </StyledTitleWrapper>
+        ),
+        content: (
+          <StyledGuideContent>
+            <p>{strings.appGuide.dialogContent.downloads.content}</p>
+          </StyledGuideContent>
+        ),
+        flatText: extractStringsFromJson(strings.appGuide.dialogContent.downloads).toLowerCase()
+      },
+      {
+        title: (
+          <StyledTitleWrapper>
+            <StyledIconButton>
+              <StyledFAIcon icon={faRulerHorizontal} />
+            </StyledIconButton>
+            <p>{strings.appGuide.dialogContent.drawingTools.title}</p>
+          </StyledTitleWrapper>
+        ),
+        content: (
+          <StyledGuideContent>
+            <p>{strings.appGuide.dialogContent.drawingTools.content}</p>
+          </StyledGuideContent>
+        ),
+        flatText: extractStringsFromJson(strings.appGuide.dialogContent.drawingTools).toLowerCase()
+      },
+      {
+        title: (
+          <StyledTitleWrapper>
+            <StyledIconButton>
+              <StyledFAIcon icon={faSave} />
+            </StyledIconButton>
+            <p>{strings.appGuide.dialogContent.views.title}</p>
+          </StyledTitleWrapper>
+        ),
+        content: (
+          <StyledGuideContent>
+            <p>{strings.appGuide.dialogContent.views.content}</p>
+          </StyledGuideContent>
+        ),
+        flatText: extractStringsFromJson(strings.appGuide.dialogContent.views).toLowerCase()
+      },
+      {
+        title: (
+          <StyledTitleWrapper>
+            <StyledIconButton>
+              <StyledFAIcon icon={faExpand} />
+            </StyledIconButton>
+            <p>{strings.appGuide.dialogContent.setFullScreen.title}</p>
+          </StyledTitleWrapper>
+        ),
+        content: (
+          <StyledGuideContent>
+            <p>{strings.appGuide.dialogContent.setFullScreen.content}</p>
+          </StyledGuideContent>
+        ),
+        flatText: extractStringsFromJson(strings.appGuide.dialogContent.setFullScreen).toLowerCase()
+      },
+      {
+        title: (
+          <StyledTitleWrapper>
+            <StyledIconButton>
+              <StyledFAIcon icon={faSearch} />
+            </StyledIconButton>
+            <p>{strings.appGuide.dialogContent.search.title}</p>
+          </StyledTitleWrapper>
+        ),
+        content: (
+          <StyledGuideContent>
+            <p>{strings.appGuide.dialogContent.search.content}</p>
+          </StyledGuideContent>
+        ),
+        flatText: extractStringsFromJson(strings.appGuide.dialogContent.search).toLowerCase()
+      },
+      {
+        title: (
+          <StyledTitleWrapper>
+            <StyledIconButton>
+              <StyledFAIcon icon={faList} />
+            </StyledIconButton>
+            <p>{strings.appGuide.dialogContent.zoomBar.title}</p>
+          </StyledTitleWrapper>
+        ),
+        content: (
+          <StyledGuideContent>
+            <p>{strings.appGuide.dialogContent.zoomBar.content}</p>
+          </StyledGuideContent>
+        ),
+        flatText: extractStringsFromJson(strings.appGuide.dialogContent.zoomBar).toLowerCase()
+      }
+    ];
+
+    if (IS_EXTRANET) {
+      base.push({
+        title: (
+          <StyledTitleWrapper>
+            <StyledIconButton>
+              <StyledFAIcon icon={faUpload} />
+            </StyledIconButton>
+            <p>{strings.appGuide.dialogContent.datasetImport.title}</p>
+          </StyledTitleWrapper>
+        ),
+        content: (
+          <StyledGuideContent>
+            <p>{strings.appGuide.dialogContent.datasetImport.content}</p>
+          </StyledGuideContent>
+        ),
+        flatText: extractStringsFromJson(strings.appGuide.dialogContent.datasetImport).toLowerCase()
+      });
     }
-  ], []);
+
+    return base;
+  }, [IS_EXTRANET, strings.appGuide]);
+
 
   // Filtering logic
   const normalizedQuery = searchQuery.trim().replace(/\s+/g, ' ').toLowerCase();
