@@ -377,6 +377,14 @@
         "title": "Työkalut",
         "content": "Työkaluissa sijaitsee toiminnot, kuten piirtotyökalut, näkymän tallennus ja lataukset."
       },
+      "coordinateTool": {
+        "title": "Koordinaattityökalu",
+        "content": "Koordinaattityökalu näyttää kartan keskikohdan koordinaatit. Koordinaatit voi myös syöttää itse, jolloin 'Keskitä kartta' -painike aktivoituu, jota painamalla kartta keskittyy syötettyyn pisteeseen. Keskipisteeseen voidaan lisätä halutessa karttamerkintä, ja nämä merkinnät voidaan tallentaa geometrioihin."
+      },
+      "baseLayers": {
+        "title": "Taustakarttojen valinta",
+        "content": "Kartan alaosassa näytettävät taustakartta-painikkeet voidaan valita kynä -painikkeesta sivun alareunassa. Avautuvasta ikkunasta voidaan valita maksimissaan neljä tasoa, ja niiden järjestystä sivun alareunassa voidaan muuttaa."
+      },
       "filter": {
         "title": "Suodatus",
         "steps": {
@@ -434,7 +442,7 @@
       },
       "zoomBar": {
         "title": "Selitteet / zoom-palkki",
-        "content": "Zoom-tason ja kartalla sillä zoom-tasolla näkyvät karttatasot selitteineen saa avattua oikean alareunan selitepainikkeesta. Karttatasot on listattu päällimmäinen ensimmäisenä. Valitsemalla zoom-palkista toisen mittakaavan, siirrytään valitulle lähestymistasolle."
+        "content": "Zoom-tasolla näkyvien karttatasojen selitteet saa avattua oikean alareunan selitepainikkeesta. Karttatasot on listattu päällimmäinen ensimmäisenä. Valitsemalla zoom-palkista toisen mittakaavan, siirrytään valitulle lähestymistasolle."
       }
     }
   },

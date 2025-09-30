@@ -26,6 +26,15 @@ import SearchBar from './UserGuideSearch';
 import { theme } from '../../theme/theme';
 import { IS_EXTRANET } from '../../utils/appInfoUtil';
 import BuildIcon from '@mui/icons-material/Build';
+import XYicon from '../coordinate-tool/resources/images/xy_icon.svg';
+import ModeEditOutlineTwoToneIcon from '@mui/icons-material/ModeEditOutlineTwoTone';
+
+const StyledXYIcon = styled.img`
+  height: 2em;
+  @media ${(props) => props.theme.device.mobileL} {
+    height: 1.7em;
+  }
+`;
 
 const StyledContent = styled.div`
   min-width: 600px;
@@ -240,6 +249,41 @@ export const UserGuideDialogContent = () => {
           </StyledGuideContent>
         ),
         flatText: extractStringsFromJson(strings.appGuide.dialogContent.search).toLowerCase()
+      },
+      {
+        title: (
+          <StyledTitleWrapper>
+            <StyledIconButton>
+              <StyledXYIcon
+                aria-label={strings.tooltips.coordinateTool + 'icon'}
+                src={XYicon}
+              />
+            </StyledIconButton>
+            <p>{strings.appGuide.dialogContent.coordinateTool.title}</p>
+          </StyledTitleWrapper>
+        ),
+        content: (
+          <StyledGuideContent>
+            <p>{strings.appGuide.dialogContent.coordinateTool.content}</p>
+          </StyledGuideContent>
+        ),
+        flatText: extractStringsFromJson(strings.appGuide.dialogContent.coordinateTool).toLowerCase()
+      },
+      {
+        title: (
+          <StyledTitleWrapper>
+            <StyledIconButton>
+              <ModeEditOutlineTwoToneIcon style={{color: "white"}} />
+            </StyledIconButton>
+            <p>{strings.appGuide.dialogContent.baseLayers.title}</p>
+          </StyledTitleWrapper>
+        ),
+        content: (
+          <StyledGuideContent>
+            <p>{strings.appGuide.dialogContent.baseLayers.content}</p>
+          </StyledGuideContent>
+        ),
+        flatText: extractStringsFromJson(strings.appGuide.dialogContent.baseLayers).toLowerCase()
       },
       {
         title: (
