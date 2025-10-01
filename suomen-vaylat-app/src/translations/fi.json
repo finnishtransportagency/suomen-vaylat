@@ -302,20 +302,46 @@
             "text": "Aloitusnäkymä on valmiiksi määritelty näkymä, jossa näytetään koko Suomen alueelta vesiväylät, rataverkko ja tieverkko."
           },
           "1": {
-            "title": "Jaa sivu",
-            "text": "Kartan nykyisen näkymän voi jakaa linkillä suoraan valittuun palveluun tai kopioimalla linkin. Näkymässä säilytetään kohdistus, zoom-taso sekä valitut aineistot ja valittu teema."
+            "title": "Kieli",
+            "text": "Karttapalvelun kieleksi voi valita suomen, ruotsin tai englannin."
           },
           "2": {
+            "title": "Valikko",
+            "text": "Valikosta avautuvat painikkeet alla listatuille toiminnoille."
+          },
+          "3": {
             "title": "Näytä käyttöohje",
             "text": ""
           },
-          "3": {
-            "title": "Info",
-            "text": "Info-napin takaa löytyy tietoa sovelluksesta, käyttöohjeet sekä yhteystiedot esimerkiksi palautteen lähettämistä varten."
-          },
           "4": {
+            "title": "Info",
+            "text": "Info-napin takaa löytyy tietoa sovelluksesta, sekä yhteystiedot esimerkiksi palautteen lähettämistä varten."
+          }
+        },
+        "extranetContent": {
+          "0": {
+            "title": "Palaa aloitusnäkymään",
+            "text": "Aloitusnäkymä on valmiiksi määritelty näkymä, jossa näytetään koko Suomen alueelta vesiväylät, rataverkko ja tieverkko."
+          },
+          "1": {
             "title": "Kieli",
             "text": "Karttapalvelun kieleksi voi valita suomen, ruotsin tai englannin."
+          },
+          "2": {
+            "title": "Valikko",
+            "text": "Valikosta avautuvat painikkeet alla listatuille toiminnoille."
+          },
+          "3": {
+            "title": "Näytä käyttäjän tiedot",
+            "text": ""
+          },
+          "4": {
+            "title": "Näytä käyttöohje",
+            "text": ""
+          },
+          "5": {
+            "title": "Info",
+            "text": "Info-napin takaa löytyy tietoa sovelluksesta, sekä yhteystiedot esimerkiksi palautteen lähettämistä varten."
           }
         }
       },
@@ -327,20 +353,37 @@
         "title": "Karttatasovalikko",
         "subTitle": "Karttatasovalikko avautuu vasemmasta yläreunasta. Valittavissa on kaksi välilehteä.",
         "tabsContent": {
-          "allLayers": "Karttatasoa voi hakea nimellä kirjoittamalla 3 kirjainta haku-kenttään. Aineistolistausta voi suodattaa aihealueittain Suodata tyypeittäin -valikon alta tai tallentaa oma suodatin halutuista aineistoista selaimen välimuistiin. Oma suodatin on käytettävissä sillä laitteella ja selaimessa, johon oma suodatin on tallennettu.\nKarttatason nimen vieressä olevasta info-kuvakkeesta avautuu aineiston metatiedot. Mikäli karttatason kohdalla näkyy latauspainike, aineisto on ladattavissa koko Suomen alueelta. Latauspainikkeen puuttuessa aineiston lataus edellyttää kohteen valintaa kartalta.\nOsa aineistoista on suodatettavissa aineiston ominaisuustietojen pohjalta. Mikäli aineistoa voidaan suodattaa, karttatason kohdalla näkyy suodatin-kuvake.",
+          "allLayers": "Karttatasoa voi hakea nimellä kirjoittamalla 3 kirjainta haku-kenttään. Aineistolistausta voi suodattaa aihealueittain Suodata tyypeittäin -valikon alta tai tallentaa oma suodatin halutuista aineistoista selaimen välimuistiin. Oma suodatin on käytettävissä sillä laitteella ja selaimessa, johon oma suodatin on tallennettu.\nKarttatason nimen vieressä olevasta info-kuvakkeesta avautuu aineiston metatiedot. Mikäli karttatason kohdalla näkyy latauspainike, aineisto on ladattavissa koko Suomen alueelta. Latauspainikkeen puuttuessa aineiston lataus edellyttää kohteen valintaa kartalta.\nOsa aineistoista on suodatettavissa aineiston ominaisuustietojen pohjalta. Mikäli aineistoa voidaan suodattaa, karttatason kohdalla näkyy suodatin-kuvake. \n'Omat aineistot' sisältävät käyttäjän tallentamat näkymät ja geometriat, joita voidaan muokata ja poistaa.",
+          "allLayersExtranet": "Karttatasoa voi hakea nimellä kirjoittamalla 3 kirjainta haku-kenttään. Aineistolistausta voi suodattaa aihealueittain Suodata tyypeittäin -valikon alta tai tallentaa oma suodatin halutuista aineistoista selaimen välimuistiin. Oma suodatin on käytettävissä sillä laitteella ja selaimessa, johon oma suodatin on tallennettu.\nKarttatason nimen vieressä olevasta info-kuvakkeesta avautuu aineiston metatiedot. Mikäli karttatason kohdalla näkyy latauspainike, aineisto on ladattavissa koko Suomen alueelta. Latauspainikkeen puuttuessa aineiston lataus edellyttää kohteen valintaa kartalta.\nOsa aineistoista on suodatettavissa aineiston ominaisuustietojen pohjalta. Mikäli aineistoa voidaan suodattaa, karttatason kohdalla näkyy suodatin-kuvake. \n'Omat aineistot' sisältävät käyttäjän tallentamat näkymät, geometriat ja mahdolliset omat tasot. Omissa aineistoissa voit muokata ja poistaa tallennettuja näkymiä, geometrioita ja omia karttatasoja.",
           "selectedLayers": "Lista kartalle valituista karttatasoista. Tasojen järjestystä voi vaihtaa raahaamalla niitä vasemman reunan ikonista. Läpinäkyvyyttä voi säätää liukusäätimellä ja tason valinnan voi poistaa ruksista. Suodatin-painikkeesta avautuu suodatustoiminto, mistä kartalla näkyviä tietoja voidaan suodattaa ominaisuustietojen pohjalta."
         }
       },
       "search": {
         "title": "Haku",
-        "content": "Haku avautuu kartan oikean yläkulman suurennuslasi-painikkeesta. Haku-toiminnolla voi hakea kuntia, osoitteita, kiinteistötunnuksia, tieosoitteita tai rataosoitteita. Tarkemmat hakuohjeet löytyvät avaamalla lisää hakuehtoja hakukentässä näkyvästä nuolipainikkeesta. Hakuohjeet voi avata ja sulkea hakukohtaisesti info-kuvakkeesta. Hakutuloksen voi poistaa kartalta painamalla hakukentän roskakoria."
+        "content": "Haku avautuu kartan oikean yläkulman suurennuslasi-painikkeesta. Haku-toiminnolla voi hakea kuntia, osoitteita, kiinteistötunnuksia, tieosoitteita tai rataosoitteita. Tarkemmat hakuohjeet löytyvät avaamalla lisää hakuehtoja avautuvasta ikkunasta näkyvästä nuolipainikkeesta. Hakuohjeet voi avata ja sulkea hakukohtaisesti info-kuvakkeesta. Hakusanat voi poistaa kartalta painamalla hakukentän roskakoria, ja tulokset voidaan poistaa kartalta 'Tyhjennä tulokset' -napista. Kun hakutuloksia on aktiivisena, hakuikkuna voidaan piilottaa."
       },
       "drawingTools": {
         "title": "Piirtotyökalut",
-        "content": "Piirtotyökalut avautuvat vasemman reunan piirto-painikkeesta. Työkaluilla voidaan lisätä kartalle geometrioita ja mitata pituutta tai pinta-alaa. Piirretyt geometriat ja karttamerkinnät voidaan tallentaa muistiin klikkaamalla Tallenna-painiketta, joka on piirtotyökalujen alin painike.  Piirretyt geometriat voidaan poistaa kartalta oranssilla kumi-painikkeella."
+        "content": "Piirtotyökalut avautuvat vasemman reunan työkalupainikkeesta avautuvan ikkunan piirto-painikkeesta. Työkaluilla voidaan lisätä kartalle geometrioita ja mitata pituutta tai pinta-alaa. 'Karttamerkintä' -painikkeesta avautuu valikko erilaisetn karttamerkintöjen lisäämiseksi kartalle. Näihin merkintöihin voidaan lisätä mukaan teksti. Piirretyt geometriat ja karttamerkinnät voidaan tallentaa muistiin klikkaamalla 'Tallenna' -painiketta, joka on piirtotyökalujen alin painike. Geometrioita tallennettaessa määritellään geometrioille nimi, sekä haluttaessa kuvaus. Piirretyt geometriat voidaan poistaa kartalta oranssilla 'Tyhjennä' -painikkeella. Tallennetut geometriat listautuvat karttatasovalikon 'omat aineistot' alle."
       },
       "gfi": {
         "content": "Kohdetiedot avautuvat klikkaamalla mistä tahansa kartalla, tai vasemman reunan panikkeesta, jonka ikonissa on karttamerkintä. Kohdetiedot-ikkunasta voit hakea kohdetietoja, sekä näet tietoja valitsemistasi kohteista ja sijainneista, jotka voit myös halutessasi ladata suoraan laitteellesi valitsemassasi tiedostomuodossa. Mikäli karttatason nimen vieressä on suodatin-painike, voit suodattaa kohdetiedot-ikkunassa listattuja kohdetietoja.\nJos kohde on valittu klikkaamalla karttaa, Kohdetiedot-ikkunan sijaintitiedoista voidaan siirtyä tarkastelemaan kohdetta Google Street View -palvelussa. "
+      },
+      "shareWebsite": {
+        "title": "Jaa sivu",
+        "content": "Kartan nykyisen näkymän voi jakaa linkillä suoraan valittuun palveluun tai kopioimalla linkin. Näkymässä säilytetään kieli, kohdistus, zoom-taso sekä valitut karttatasot ja valittu teema."
+      },
+      "tools": {
+        "title": "Työkalut",
+        "content": "Työkaluissa sijaitsee toiminnot, kuten piirtotyökalut, näkymän tallennus ja lataukset."
+      },
+      "coordinateTool": {
+        "title": "Koordinaattityökalu",
+        "content": "Koordinaattityökalu näyttää kartan keskikohdan koordinaatit. Koordinaatit voi myös syöttää itse, jolloin 'Keskitä kartta' -painike aktivoituu, jota painamalla kartta keskittyy syötettyyn pisteeseen. Keskipisteeseen voidaan lisätä halutessa karttamerkintä, ja nämä merkinnät voidaan tallentaa geometrioihin."
+      },
+      "baseLayers": {
+        "title": "Taustakarttojen valinta",
+        "content": "Kartan alaosassa näytettävät taustakartta-painikkeet voidaan valita kynä -painikkeesta sivun alareunassa. Avautuvasta ikkunasta voidaan valita maksimissaan neljä tasoa, ja niiden järjestystä sivun alareunassa voidaan muuttaa."
       },
       "filter": {
         "title": "Suodatus",
@@ -383,11 +426,15 @@
       },
       "downloads": {
         "title": "Lataukset",
-        "content": "Lataukset avautuvat vasemman reunan lataukset-painikkeesta. Avautuvasta ikkunasta voit luoda uuden rajauksen ladattavaksi, sekä hallita myös kohdetietojen kautta tehtyjä latauksia."
+        "content": "Lataukset avautuvat vasemman reunan työkalupainikkeesta avautuvan ikkunan lataukset-painikkeesta. Avautuvasta ikkunasta voit luoda uuden rajauksen ladattavaksi, sekä hallita myös kohdetietojen kautta tehtyjä latauksia."
       },
-      "viewsAndGeometries": {
-        "title": "Näkymän ja geometrian tallennus",
-        "content": "Näkymän tallennuksella voidaan tallentaa karttanäkymä selaimen välimuistiin. Näkymään tallennetaan kartan kohdistus, lähestymistaso sekä valitut kartta-aineistot. Geometrian tallennus voidaan tehdä, kun kartalla on piirrettyjä geometrioita. Tallennetut näkymät ja geometriat ovat käytettävissä sillä laitteella ja selaimessa, jossa näkymä tai geometria on tallennettu. Tallennettujen näkymien ja geometrioiden välillä voi siirtyä klikkaamalla/täppäämällä haluttua tallennusta. Tallennuksen voi poistaa roskakori-painikkeesta."
+      "views": {
+        "title": "Näkymän tallennus",
+        "content": "'Näkymän tallennus' löytyy vasemman reunan työkalupainikkeesta avautuvasta ikkunasta. Näkymän tallennuksella voidaan tallentaa karttanäkymä selaimen välimuistiin. Näkymään tallennetaan kartan kohdistus, lähestymistaso sekä valitut kartta-aineistot. Näkymälle määritellään nimi, sekä vaihtoehtoisesti kuvaus. Näkymä voidaan myös asettaa oletusnäkymäksi, jolloin se aktivoituu sovellukseen tultaessa automaattisesti. Tallennetut näkymät ovat käytettävissä sillä laitteella ja selaimessa, jossa näkymä on tallennettu. Tallennetut näkymät listautuvat karttatasovalikon 'omat aineistot' alle."
+      },
+      "datasetImport": {
+        "title": "Tuo aineistoja",
+        "content": "'Tuo aineistoja' löytyy vasemman reunan työkalupainikkeesta avautuvasta ikkunasta. Tällä työkalulla voit tuoda palveluun omia aineistoja, joille määritetään nimi, kuvaus, tietolähde ja tyylit. Tarkemmat ohjeet löytyvät avautuvasta ponnahdusikkunasta."
       },
       "setFullScreen": {
         "title": "Laajenna",
@@ -395,7 +442,7 @@
       },
       "zoomBar": {
         "title": "Selitteet / zoom-palkki",
-        "content": "Zoom-tason ja kartalla sillä zoom-tasolla näkyvät karttatasot selitteineen saa avattua oikean alareunan selitepainikkeesta. Karttatasot on listattu päällimmäinen ensimmäisenä. Valitsemalla zoom-palkista toisen mittakaavan, siirrytään valitulle lähestymistasolle."
+        "content": "Zoom-tasolla näkyvien karttatasojen selitteet saa avattua oikean alareunan selitepainikkeesta. Karttatasot on listattu päällimmäinen ensimmäisenä. Valitsemalla zoom-palkista toisen mittakaavan, siirrytään valitulle lähestymistasolle."
       }
     }
   },

@@ -6,6 +6,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 
 import strings from '../../translations';
+import { IS_EXTRANET } from '../../utils/appInfoUtil';
 
 const variants = {
   open: {
@@ -150,7 +151,13 @@ const UserGuideTabs = () => {
       id: 'swipeAbleTab_0',
       title: strings.layerlist.layerlistLabels.allLayers,
       titleColor: 'mainColor1',
-      content: strings.appGuide.dialogContent.mapLayerMenu.tabsContent.allLayers
+      content: !IS_EXTRANET ? strings.appGuide.dialogContent.mapLayerMenu.tabsContent.allLayers
+        .split('\n')
+        .map((c, index) => {
+          return <p key={`userguide_allLayers_content_row_${index}`}> {c} </p>;
+        })
+        :
+        strings.appGuide.dialogContent.mapLayerMenu.tabsContent.allLayersExtranet
         .split('\n')
         .map((c, index) => {
           return <p key={`userguide_allLayers_content_row_${index}`}> {c} </p>;

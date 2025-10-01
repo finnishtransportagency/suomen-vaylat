@@ -57,9 +57,10 @@ export const getDescTagContent = (text, startTag, endTag) => {
  * @param {Object} store
  * @param {Object} channel
  */
-export const updateLayers = (store, channel) => {
+export const updateLayers = (store, channel, onComplete) => {
+  // TODO maybe make functions promises
   updateAllLayers(store, channel);
-  updateSelectedLayers(store, channel);
+  updateSelectedLayers(store, channel, onComplete);
 };
 
 /**
@@ -91,6 +92,7 @@ export const activateView = (store, channel, view) => {
     channel.postRequest('MapTourRequest', [routeSteps, stepDefaults]);
   });
 
+  console.log("activate view", store.getState().rpc.selectedLayers)
   store.getState().rpc.selectedLayers.forEach((layer) => {
     channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [
       layer.id,
@@ -226,7 +228,7 @@ export const updateAllLayers = (store, channel) => {
  * @param {Object} store
  * @param {Object} channel
  */
-export const updateSelectedLayers = (store, channel) => {
+export const updateSelectedLayers = (store, channel, onComplete) => {
   channel &&
     channel.getSelectedLayers(function (data) {
       const reArrangedSelectedLayers = reArrangeSelectedLayersOrder(
@@ -235,6 +237,7 @@ export const updateSelectedLayers = (store, channel) => {
       );
       store.dispatch(setSelectedLayers(reArrangedSelectedLayers));
       reArrangeRPCLayerOrder(store, reArrangedSelectedLayers);
+      if (typeof onComplete === 'function') onComplete();
     });
 };
 

@@ -592,7 +592,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
             }
         })
         return () => {isSubscribed = false}
-    }, [channel])
+    }, [activeTool, channel])
 
     useEffect(() => {
         store.dispatch(setActiveSelectionTool(null));
