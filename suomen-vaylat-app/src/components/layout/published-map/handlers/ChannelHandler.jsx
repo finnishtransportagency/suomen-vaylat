@@ -32,13 +32,9 @@ const ChannelHandler = ({ iframe, store }) => {
     const geometriesArray = JSON.parse(storedGeometries);
     if (storedGeometries) store.dispatch(setGeometries(geometriesArray));
 
-    // If there is a set default view, open that
     const storedViews = window.localStorage.getItem('views');
     const viewsArray = JSON.parse(storedViews);
     if (storedViews) store.dispatch(setViews(viewsArray));
-    const defaultView = viewsArray?.find(view => view.default);
-    defaultView && activateView(store, channel, defaultView);
-    //
   });
 
   var synchronizer = OskariRPC.synchronizerFactory(channel, handlers);

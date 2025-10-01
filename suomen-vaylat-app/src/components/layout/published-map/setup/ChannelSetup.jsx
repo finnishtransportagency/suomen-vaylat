@@ -14,7 +14,7 @@ import {
   setStartMapCenter
 } from '../../../../state/slices/rpcSlice';
 import { setGfiCroppingTypes } from '../../../../state/slices/uiSlice';
-import { updateLayers } from '../../../../utils/rpcUtil';
+import { activateView, updateLayers } from '../../../../utils/rpcUtil';
 import { getActiveAnnouncements } from '../../../../utils/rpcUtil';
 
 const isSafari = () => {
@@ -106,7 +106,10 @@ const setupSupportedFunctions = (data, channel, store) => {
     });
   }
 
-  updateLayers(store, channel);
+  updateLayers(store, channel, () => {
+    const defaultView = store.getState().rpc?.views?.find(view => view.default);
+    activateView(store, channel, defaultView)
+  });
 
   if (data.getCurrentState) {
     channel.getCurrentState((currentStateData) =>
