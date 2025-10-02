@@ -238,7 +238,8 @@
       "openGoogleStreetView": "Avaa Google Street View",
       "googleStreetviewTitle": "Google Street View",
       "googleStreetviewContent": "Avaa valittu piste Google Street View:ssä uudelle välilehdelle"
-    }
+    },
+    "userLayerDataFetchError": "Kohdetietojen haku epäonnistui tasolle: "
   },
   "vkm": {
     "locationInfo": "Sijaintitiedot",

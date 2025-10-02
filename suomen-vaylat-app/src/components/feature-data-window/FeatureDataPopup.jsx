@@ -1370,7 +1370,7 @@ export const FeatureDataPopup = () => {
                 selectedLayersByType.backgroundMaps.filter(
                   (l) => l.id === layer.id
                 ).length === 0
-            ) || hasOnlyUserlayersSelected
+            )
           }
         />
         <CircleButton

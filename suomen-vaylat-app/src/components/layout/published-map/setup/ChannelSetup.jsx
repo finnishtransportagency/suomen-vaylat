@@ -108,7 +108,7 @@ const setupSupportedFunctions = (data, channel, store) => {
 
   updateLayers(store, channel, () => {
     const defaultView = store.getState().rpc?.views?.find(view => view.default);
-    defaultView && activateView(store, channel, defaultView)
+    defaultView && activateView(store, channel, defaultView);
   });
 
   if (data.getCurrentState) {
