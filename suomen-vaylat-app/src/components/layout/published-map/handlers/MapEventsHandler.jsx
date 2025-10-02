@@ -75,7 +75,6 @@ const MapEventsHandler = ({ channel, store }) => {
   });
 
   channel.handleEvent('DataForMapLocationEvent', (data) => {
-    console.log(data)
     if (data.content && data.content.features) {
       data.content.features.forEach((f) => {
         if (f.properties) {
@@ -143,7 +142,6 @@ const MapEventsHandler = ({ channel, store }) => {
       if (alreadyPresent) {
         store.dispatch(resetGFILocations([]));
       } 
-      console.log("!!!!", data)
       store.dispatch(pushGFILocations(data));
       
     }
