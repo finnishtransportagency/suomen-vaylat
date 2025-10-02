@@ -88,6 +88,7 @@
     "submitFail": "Import failed!",
     "saveSuccess": "Layer save successful!",
     "saveFail": "Saving layer failed!",
+    "fetchUserLayersError": "Loading user layers failed",
     "zipFileInput": {
       "onlyZipAllowed": "Only zip-files allowed",
       "zipMaxSize": "Zip-file maximum size is 10 Mb.",

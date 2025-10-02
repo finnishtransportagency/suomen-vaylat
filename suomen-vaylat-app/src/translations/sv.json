@@ -89,6 +89,7 @@
     "submitFail": "Importen misslyckades!",
     "saveSuccess": "Kartlagret lyckades spara!",
     "saveFail": "Det gick inte att spara kartlagret!",
+    "fetchUserLayersError": "Det gick inte att läsa in egen kartlager",
     "zipFileInput": {
       "onlyZipAllowed": "Endast zip-filer är tillåtna",
       "zipMaxSize": "Zip-filens maximala storlek är 10 MB.",

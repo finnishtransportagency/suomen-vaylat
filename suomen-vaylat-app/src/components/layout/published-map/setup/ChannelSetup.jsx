@@ -1,3 +1,4 @@
+import { ISO_8601 } from 'moment';
 import {
   setAnnouncements,
   setActiveAnnouncements,
@@ -16,6 +17,9 @@ import {
 import { setGfiCroppingTypes } from '../../../../state/slices/uiSlice';
 import { activateView, updateLayers } from '../../../../utils/rpcUtil';
 import { getActiveAnnouncements } from '../../../../utils/rpcUtil';
+import { IS_EXTRANET } from '../../../../utils/appInfoUtil';
+import { Slide, toast } from 'react-toastify';
+import strings from '../../../../translations';
 
 const isSafari = () => {
   return /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
@@ -57,6 +61,27 @@ const fetchAnnouncementsAsync = async (data, channel, store) => {
 };
 
 const setupSupportedFunctions = (data, channel, store) => {
+
+  if (IS_EXTRANET && data.fetchUserLayers) {
+    channel.fetchUserLayers(
+      () => {
+        updateLayers(store, channel);
+      },
+      () => {
+        toast.error(strings.datasetImport.fetchUserLayersError, {
+          position: 'top-center',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'colored',
+          transition: Slide
+        });
+      }
+    );
+  }
   // Fetch and save announcements to state
   fetchAnnouncementsAsync(data, channel, store);
 

@@ -97,6 +97,7 @@
     "submitFail": "Aineiston tuonti epäonnistui!",
     "saveSuccess": "Aineiston tallennus onnistui!",
     "saveFail": "Aineiston tallennus epäonnistui!",
+    "fetchUserLayersError": "Omien tasojen haku epäonnistui",
     "zipFileInput": {
       "onlyZipAllowed": "Vain zip-tiedostot ovat sallittuja.",
       "zipMaxSize": "Zip-tiedoston maksimikoko on 10 Mt.",
