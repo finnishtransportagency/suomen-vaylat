@@ -225,6 +225,13 @@ const StyledMetaRow = styled.div`
   }
 `;
 
+const StyledViewsCount = styled.p`
+  margin: 0;
+  padding: 0;
+  font-size: 12px;
+  color: ${(p) => p.theme.colors.mainColor1};
+`;
+
 const ViewsGroup = () => {
   const [open, setOpen] = useState(false);
   const { store } = useContext(ReactReduxContext);
@@ -234,6 +241,7 @@ const ViewsGroup = () => {
   const prefix = 'layerlist-views-group-';
   const headerId = `${prefix}header`;
   const listId = `${prefix}list`;
+  const countId = `${prefix}count`;
 
   const [infoOpen, setInfoOpen] = useState(false);
   const [infoView, setInfoView] = useState(null);
@@ -384,6 +392,10 @@ const ViewsGroup = () => {
             <StyledGroupName id={`${prefix}label`}>
               {strings.layerlist?.userContent?.views?.title}
             </StyledGroupName>
+
+            <StyledViewsCount id={countId}>
+              {views.length}
+            </StyledViewsCount>
           </div>
         </StyledLefContent>
       </StyledGroupHeader>
