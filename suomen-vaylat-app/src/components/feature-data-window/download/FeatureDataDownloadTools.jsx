@@ -462,7 +462,11 @@ const FeatureDataDownloadTools = ({ closeButton = true, handleGfiDownloadsMenu})
               selectedLayersByType.backgroundMaps.filter(
                 (l) => l.id === location.layerId
               ).length > 0;
-            if (isBackgroundMap) {
+
+            const isUserLayer =
+              typeof location.layerId === 'string' && location.layerId.startsWith('userlayer_');
+
+            if (isBackgroundMap || isUserLayer) {
               return null;
             }
             const layer = allLayers.find(
