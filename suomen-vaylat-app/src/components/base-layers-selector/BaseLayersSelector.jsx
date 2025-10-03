@@ -8,8 +8,6 @@ import { updateLayers } from '../../utils/rpcUtil';
 import { setMapLayerVisibility } from '../../state/slices/rpcSlice';
 import { setIsBaseLayerSelectorMenuOpen } from '../../state/slices/uiSlice';
 import ModeEditOutlineTwoToneIcon from '@mui/icons-material/ModeEditOutlineTwoTone';
-import { BASE_LAYERS_LOCALSTORAGE } from '../../utils/constants';
-import { setSelectedBaseLayers } from '../../state/slices/uiSlice';
 import strings from '../../translations';
 
 const StyledBaselayerButtonContainer = styled(motion.div)` 
@@ -28,14 +26,21 @@ const StyledBaselayerButtonContainer = styled(motion.div)`
 
 const StyledButton = styled(Button)`
     cursor: pointer;
-    background-color: ${props => props.active ? props.theme.colors.buttonSelected : props.theme.colors.mainColor1 + 'DB' } !important;
+    background-color: ${props => props.active ? props.theme.colors.buttonSelected : props.theme.colors.mainColor1 } !important;
     box-shadow: 0px 2px 4px #0000004D;
     border-radius: 30px;
     border: none;
     padding: 6px 12px;
     width: 10em;
+    transition: background-color 150ms ease; /* smooth the change */
     &:hover {
-        background-color: ${props => props.theme.colors.buttonSelected} !important;
+        outline: 2px solid ${props => props.theme.colors.mainColor2};
+    }
+    &:active {
+        outline: 2px solid ${props => props.theme.colors.mainColor2};
+    }
+    &:focus {
+        outline: 2px solid ${props => props.theme.colors.mainColor2};
     }
     @media ${props => props.theme.device.laptop} {
         max-width: 120px;
@@ -47,14 +52,20 @@ const StyledButton = styled(Button)`
 
 const StyledMenuButton = styled(Button)`
     cursor: pointer;
-    background-color: ${props => props.active ? props.theme.colors.buttonSelected : props.theme.colors.mainColor1 } !important;
+    background-color: ${props => props.theme.colors.mainColor1 } !important;
     box-shadow: 0px 2px 4px #0000004D;
     border-radius: 30px;
     border: none;
     padding: 6px 12px;
     width: 3em;
     &:hover {
-        background-color: ${props => props.theme.colors.buttonSelected} !important;
+        outline: 2px solid ${props => props.theme.colors.mainColor2};
+    }
+    &:active {
+        outline: 2px solid ${props => props.theme.colors.mainColor2};
+    }
+    &:focus {
+        outline: 2px solid ${props => props.theme.colors.mainColor2};
     }
     @media ${props => props.theme.device.laptop} {
         max-width: 120px;
@@ -74,22 +85,10 @@ const StyledButtonText = styled.div`
 `;
 
 const BaseLayerSelector = () => {
-    const { allLayers } = useAppSelector((state) => state.rpc);
+    const { allLayers, selectedLayersByType } = useAppSelector((state) => state.rpc);
     const { store } = useContext(ReactReduxContext);
     const channel = useSelector(state => state.rpc.channel);
     const { selectedBaseLayers } = useAppSelector((state) => state.ui);
-
-    useEffect(() => {
-        const stored = localStorage.getItem(BASE_LAYERS_LOCALSTORAGE);
-        if (stored) {
-            try {
-                store.dispatch(setSelectedBaseLayers(JSON.parse(stored)))
-            } catch (e) {
-                store.dispatch(setSelectedBaseLayers([]));
-            }
-        }
-    }, []);
-    
 
     const handleLayerVisibility = (channel, layer) => {
         store.dispatch(setMapLayerVisibility(layer));
@@ -121,7 +120,7 @@ const BaseLayerSelector = () => {
                 aria-label={strings.baseLayerSelector.labels.editBaseLayers}
                 tabIndex={0}
                 role="button"
-                disabled={allLayers.length === 0}
+                disabled={selectedLayersByType.backgroundMaps?.length === 0}
             >
                 <ModeEditOutlineTwoToneIcon />
             </StyledMenuButton>
