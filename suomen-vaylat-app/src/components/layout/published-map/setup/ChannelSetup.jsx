@@ -14,7 +14,11 @@ import {
   setCurrentMapCenter,
   setStartMapCenter
 } from '../../../../state/slices/rpcSlice';
-import { setGfiCroppingTypes } from '../../../../state/slices/uiSlice';
+import {
+  setGfiCroppingTypes,
+  setSelectedBaseLayers
+} from '../../../../state/slices/uiSlice';
+import { BASE_LAYERS_LOCALSTORAGE } from '../../../../utils/constants';
 import { activateView, updateLayers } from '../../../../utils/rpcUtil';
 import { getActiveAnnouncements } from '../../../../utils/rpcUtil';
 import { IS_EXTRANET } from '../../../../utils/appInfoUtil';
@@ -132,8 +136,42 @@ const setupSupportedFunctions = (data, channel, store) => {
   }
 
   updateLayers(store, channel, () => {
-    const defaultView = store.getState().rpc?.views?.find(view => view.default);
+    //handle default view
+    const defaultView = store
+      .getState()
+      .rpc?.views?.find((view) => view.default);
     defaultView && activateView(store, channel, defaultView);
+
+    // handle base layers tool
+    const stored = localStorage.getItem(BASE_LAYERS_LOCALSTORAGE);
+    if (stored) {
+      try {
+        const parsedBgLayers = JSON.parse(stored);
+        if (parsedBgLayers.length > 0) {
+          store.dispatch(setSelectedBaseLayers(parsedBgLayers));
+        } else {
+          const defaultBackgroundMaps = store
+            .getState()
+            .rpc?.selectedLayersByType?.backgroundMaps.map((l) => l.id);
+          localStorage.setItem(
+            BASE_LAYERS_LOCALSTORAGE,
+            JSON.stringify(defaultBackgroundMaps)
+          );
+          store.dispatch(setSelectedBaseLayers(defaultBackgroundMaps));
+        }
+      } catch (e) {
+        store.dispatch(setSelectedBaseLayers([]));
+      }
+    } else {
+      const defaultBackgroundMaps = store
+        .getState()
+        .rpc?.selectedLayersByType?.backgroundMaps.map((l) => l.id);
+      localStorage.setItem(
+        BASE_LAYERS_LOCALSTORAGE,
+        JSON.stringify(defaultBackgroundMaps)
+      );
+      store.dispatch(setSelectedBaseLayers(defaultBackgroundMaps));
+    }
   });
 
   if (data.getCurrentState) {
