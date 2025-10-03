@@ -89,6 +89,7 @@
     "submitFail": "Importen misslyckades!",
     "saveSuccess": "Kartlagret lyckades spara!",
     "saveFail": "Det gick inte att spara kartlagret!",
+    "fetchUserLayersError": "Det gick inte att läsa in egen kartlager",
     "zipFileInput": {
       "onlyZipAllowed": "Endast zip-filer är tillåtna",
       "zipMaxSize": "Zip-filens maximala storlek är 10 MB.",
@@ -239,7 +240,8 @@
       "openGoogleStreetView": "Öppna Google Street View",
       "googleStreetviewTitle": "Google Street View",
       "googleStreetviewContent": "Öppna den valda punkten i Google Street View på en ny flik"
-    }
+    },
+    "userLayerDataFetchError": "Hämtning av objektdata misslyckades för kartlagret: "
   },
   "vkm": {
     "locationInfo": "Positionsdata",
@@ -303,20 +305,46 @@
             "text": "Startvyn är en fördefinierad vy som visar vattenvägar, järnvägsnätet och vägnätet i hela Finland."
           },
           "1": {
-            "title": "Dela sida",
-            "text": "Du kan dela den aktuella vyn av kartan med en länk direkt till den valda tjänsten eller genom att kopiera länken. Vyn behåller fokus, zoomnivå och valda material och tema."
-          },
-          "2": {
-            "title": "Visa bruksanvisning",
-            "text": ""
-          },
-          "3": {
-            "title": "Info",
-            "text": "Bakom infoknappen hittar du information om applikationen, bruksanvisning och kontaktuppgifter för att skicka feedback till exempel."
-          },
-          "4": {
             "title": "Språk",
             "text": "Du kan välja finska, svenska eller engelska som språk för karttjänsten."
+          },
+          "2": {
+            "title": "Meny",
+            "text": "Menyn innehåller knappar för de funktioner som listas nedan."
+          },
+          "3": {
+            "title": "Visa användarguide",
+            "text": ""
+          },
+          "4": {
+            "title": "Information",
+            "text": "Informationsknappen innehåller information om applikationen och kontaktuppgifter, till exempel för att skicka feedback."
+          }
+        },
+        "extranetContent": {
+          "0": {
+            "title": "Återgå till startsidan",
+            "text": "Startsidan är en fördefinierad vy som visar farleder, järnvägsnätet och vägnätet för hela Finland."
+          },
+          "1": {
+            "title": "Språk",
+            "text": "Du kan välja finska, svenska eller engelska som språk för karttjänsten."
+          },
+          "2": {
+            "title": "Meny",
+            "text": "Menyn innehåller knappar för de funktioner som listas nedan."
+          },
+          "3": {
+            "title": "Visa användaruppgifter",
+            "text": ""
+          },
+          "4": {
+            "title": "Visa användarguide",
+            "text": ""
+          },
+          "5": {
+            "title": "Information",
+            "text": "Informationsknappen innehåller information om applikationen och kontaktuppgifter, till exempel för att skicka feedback."
           }
         }
       },
@@ -328,20 +356,37 @@
         "title": "Kartnivåmeny",
         "subTitle": "Kartnivåmenyn öppnas uppe till vänster. Det finns två flikar att välja mellan.",
         "tabsContent": {
-          "allLayers": "Du kan söka på kartnivån efter namn genom att ange minst 3 bokstäver i sökfältet. Du kan filtrera materiallistan efter ämne bakom filterknappen eller du kan spara ditt eget filter i webbläsarens cacheminne. Egett filter är tillgängliga på den enhet och i den webbläsare där filter är sparats.\nInfo-ikonen bredvid kartnivå namnet öppnar materialets metadata. Om en nedladdningsknapp är synlig på kartnivå kan materialet laddas ner från hela Finlands område. Om nedladdningsknappen saknas måste du välja ett objekt på kartan för att ladda ner datan.\nEn del av materialen kan filtreras utifrån materialets attribut data. Om materialet kan filtreras visas en filterikon på kartnivå.",
+          "allLayers": "Du kan söka på kartnivån efter namn genom att ange minst 3 bokstäver i sökfältet. Du kan filtrera materiallistan efter ämne bakom filterknappen eller du kan spara ditt eget filter i webbläsarens cacheminne. Egett filter är tillgängliga på den enhet och i den webbläsare där filter är sparats.\nInfo-ikonen bredvid kartnivå namnet öppnar materialets metadata. Om en nedladdningsknapp är synlig på kartnivå kan materialet laddas ner från hela Finlands område. Om nedladdningsknappen saknas måste du välja ett objekt på kartan för att ladda ner datan.\nEn del av materialen kan filtreras utifrån materialets attribut data. Om materialet kan filtreras visas en filterikon på kartnivå.\n'Mina dataset' innehåller användarens sparade vyer och geometrier som kan redigeras och tas bort.",
+          "allLayersExtranet": "Du kan söka på kartnivån efter namn genom att ange minst 3 bokstäver i sökfältet. Du kan filtrera materiallistan efter ämne bakom filterknappen eller du kan spara ditt eget filter i webbläsarens cacheminne. Egett filter är tillgängliga på den enhet och i den webbläsare där filter är sparats.\nInfo-ikonen bredvid kartnivå namnet öppnar materialets metadata. Om en nedladdningsknapp är synlig på kartnivå kan materialet laddas ner från hela Finlands område. Om nedladdningsknappen saknas måste du välja ett objekt på kartan för att ladda ner datan.\nEn del av materialen kan filtreras utifrån materialets attribut data. Om materialet kan filtreras visas en filterikon på kartnivå.\n'Mina dataset' innehåller användarens sparade vyer och geometrier som kan redigeras och tas bort.\n'Mina dataset' innehåller användarens sparade vyer, geometrier och eventuella egna lager. I 'Mina dataset' kan du redigera och ta bort sparade vyer, geometrier och egna kartlager.",
           "selectedLayers": "Lista över valda kartnivåer på kartan. Du kan ändra ordningen på nivåerna genom att dra dem från ikonen till vänster. Transparensen kan justeras med skjutreglaget och nivåvalet kan avmarkeras. Filterknappen öppnar filtermenyn, där informationen som visas på kartan kan filtreras utifrån attribut data."
         }
       },
       "search": {
         "title": "Sök",
-        "content": "Sökningen öppnas i kartans övre högra hörn med hjälp av förstoringsglasknappen till höger. Sökfunktionen låter dig söka efter kommuner, adresser, fastighetsbeteckningar, gatuadresser eller järnvägsadresser genom att välja den sökning du vill använda från rullgardinsmenyn. Mer detaljerade instruktioner kan hittas från info-ikoner som visas i rullgardinsmenyn. Du kan ta bort ett sökresultat från kartan genom att trycka på papperskorgen i sökrutan."
+        "content": "Sökningen öppnas via förstoringsglasknappen längst upp till höger på kartan. Med sökfunktionen kan du söka efter kommuner, adresser, fastighetsbeteckningar, gatuadresser eller järnvägsadresser. Mer detaljerade sökinstruktioner finns genom att öppna pilknappen i fönstret som visas när du väljer fler sökkriterier. Sökinstruktionerna kan öppnas och stängas per söktyp via infoikonen. Du kan ta bort söktermer från kartan genom att trycka på papperskorgsikonen i sökfältet, och resultaten kan tas bort från kartan med knappen 'Rensa resultat'. När sökresultat är aktiva kan sökfönstret döljas."
       },
       "drawingTools": {
         "title": "Ritverktyg",
-        "content": "Ritverktygen öppnas genom att klicka på ritknappen i vänstra kanten. Med verktygen kan man lägga till geometri på kartan och mäta längd eller yta. Ritad geometri och kartanteckningar kan sparas i minnet genom att klicka på knappen Spara, som är knappen längst ned bland ritverktygen.  Ritad geometri kan avlägsnas från kartan genom att klicka på den orange suddgummiknappen."
+        "content": "Ritverktygen öppnas via ritknappen i fönstret som öppnas från verktygsfältet till vänster. Med verktygen kan du lägga till geometrier på kartan och mäta längd eller area. Knappen 'Kartanteckning' öppnar en meny för att lägga till olika kartmarkeringar, och du kan lägga till text till dessa markeringar. Ritade geometrier och kartmarkeringar kan sparas genom att klicka på 'Spara'-knappen, som är den nedersta knappen i ritverktygen. När du sparar geometrier anger du ett namn och, om så önskas, en beskrivning. Ritade geometrier kan tas bort från kartan med den orangea 'Töm'-knappen. Sparade geometrier listas under 'Mina dataset' i kartlagrets meny."
       },
       "gfi": {
         "content": "Objektdata öppnas genom att klicka var som helst på kartan eller via knappen i vänstra kanten som har en kartanteckning som ikon. I fönstret Objektdata kan du söka objektdata och se uppgifter om valda objekt och platser som du också kan ladda ner direkt till din enhet i valfritt filformat. Om det finns en filterknapp bredvid kartnivå namnet kan du filtrera objektdata som listas i fönstret Objektdata.\nOm du har valt objektet genom att klicka på kartan kan du utforska samma plats från tjänsten Google Street View. Google Street View kan öppnas från positionsdata i fönstret Objektdata."
+      },
+      "shareWebsite": {
+        "title": "Dela kartvy",
+        "content": "Kartans aktuella vy kan delas via en länk till en vald tjänst eller genom att kopiera länken. Vyn bevarar språk, position, zoomnivå samt valda kartlager och valt tema."
+      },
+      "tools": {
+        "title": "Verktyg",
+        "content": "I verktygen finns funktioner som ritverktyg, spara vyer och nedladdningar."
+      },
+      "coordinateTool": {
+        "title": "Koordinatverktyg",
+        "content": "Koordinatverktyget visar koordinaterna för kartans mittpunkt. Du kan även ange koordinater manuellt, vilket aktiverar knappen 'Fokusera kartan'; när du trycker den centrerar kartan på den angivna punkten. Du kan lägga till en markering i mittpunkten och dessa markeringar kan sparas bland geometrierna."
+      },
+      "baseLayers": {
+        "title": "Val av bakgrundskartor",
+        "content": "Bakgrundsknappen som visas längst ner på kartan kan hanteras via pennikonen längst ner på sidan. I det öppnade fönstret kan du välja upp till fyra lager och ändra den ordning de visas i längst ner på sidan."
       },
       "filter": {
         "title": "Filtrering",
@@ -384,11 +429,15 @@
       },
       "downloads": {
         "title": "Nedladdningar",
-        "content": "Nedladdningarna öppnas genom att klicka på nedladdningsknappen i vänstra kanten. Från popup-fönstret kan du göra ett nytt funktionsval för att ladda ner och hantera tidigare nedladdningar från funktionsdatafönstret."
+        "content": "Nedladdningar öppnas från knappen Nedladdningar i verktygsfönstret. Från popup-fönstret kan du göra ett nytt funktionsval för att ladda ner och hantera tidigare nedladdningar från funktionsdatafönstret."
       },
-      "viewsAndGeometries": {
-        "title": "Spara vy och geometri",
-        "content": "Genom att spara vyn kan du spara kartvyn i webbläsarens cacheminne. I vyn sparas kartans justering, inställningsnivå och utvalt kartmaterial. Geometri kan sparas när det finns geometri inritad på kartan. De sparade vyerna och geometrin är tillgängliga på den enhet och i den webbläsare där vyn eller geometrin har sparats. Du kan förflytta dig mellan sparade vyer och sparad geometri genom att klicka/trycka på önskad sparad fil. Du kan ta bort det du sparat genom att klicka på papperskorgen."
+      "views": {
+        "title": "Spara vy",
+      "content": "'Spara vy' finns i fönstret som öppnas från verktygsikonen till vänster. Att spara en vy lagrar kartvyn i webbläsarens cache. Den sparade vyn innehåller kartans centrum, zoomnivå och kartlager. Du anger ett namn för vyn och kan lägga till en beskrivning. En vy kan också ställas in som standardvy så att den aktiveras automatiskt vid uppstart av applikationen. Sparade vyer är tillgängliga på enheten och i den webbläsare där de sparades. Sparade vyer listas under 'Mina dataset' i lager-menyn."
+      },
+      "datasetImport": {
+        "title": "Importera dataset",
+        "content": "'Importera dataset' finns i fönstret som öppnas från verktygsikonen till vänster. Med detta verktyg kan du importera egna dataset till tjänsten och ange namn, beskrivning, datakälla och stilar. Mer detaljerade instruktioner finns i popup-fönstret som öppnas."
       },
       "setFullScreen": {
         "title": "Bygga ut",

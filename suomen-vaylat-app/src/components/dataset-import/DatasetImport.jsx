@@ -214,7 +214,7 @@ const DatasetImport = () => {
             style
           };
 
-          channel.importDataset(
+          channel.importUserLayer(
             [dataset],
             () => {
               setIsSubmitting(false);
@@ -230,6 +230,24 @@ const DatasetImport = () => {
                 theme: 'colored',
                 transition: Slide
               });
+              channel.fetchUserLayers(
+                () => {
+                  updateLayers(store, channel);
+                },
+                () => {
+                  toast.error(strings.datasetImport.fetchUserLayersError, {
+                    position: 'top-center',
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: 'colored',
+                    transition: Slide
+                  });
+                }
+              );
             },
             (data) => {
               setIsSubmitting(false);

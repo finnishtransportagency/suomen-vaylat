@@ -97,6 +97,7 @@
     "submitFail": "Aineiston tuonti epäonnistui!",
     "saveSuccess": "Aineiston tallennus onnistui!",
     "saveFail": "Aineiston tallennus epäonnistui!",
+    "fetchUserLayersError": "Omien tasojen haku epäonnistui",
     "zipFileInput": {
       "onlyZipAllowed": "Vain zip-tiedostot ovat sallittuja.",
       "zipMaxSize": "Zip-tiedoston maksimikoko on 10 Mt.",
@@ -238,7 +239,8 @@
       "openGoogleStreetView": "Avaa Google Street View",
       "googleStreetviewTitle": "Google Street View",
       "googleStreetviewContent": "Avaa valittu piste Google Street View:ssä uudelle välilehdelle"
-    }
+    },
+    "userLayerDataFetchError": "Kohdetietojen haku epäonnistui tasolle: "
   },
   "vkm": {
     "locationInfo": "Sijaintitiedot",
@@ -364,7 +366,7 @@
       },
       "drawingTools": {
         "title": "Piirtotyökalut",
-        "content": "Piirtotyökalut avautuvat vasemman reunan työkalupainikkeesta avautuvan ikkunan piirto-painikkeesta. Työkaluilla voidaan lisätä kartalle geometrioita ja mitata pituutta tai pinta-alaa. 'Karttamerkintä' -painikkeesta avautuu valikko erilaisetn karttamerkintöjen lisäämiseksi kartalle. Näihin merkintöihin voidaan lisätä mukaan teksti. Piirretyt geometriat ja karttamerkinnät voidaan tallentaa muistiin klikkaamalla 'Tallenna' -painiketta, joka on piirtotyökalujen alin painike. Geometrioita tallennettaessa määritellään geometrioille nimi, sekä haluttaessa kuvaus. Piirretyt geometriat voidaan poistaa kartalta oranssilla 'Tyhjennä' -painikkeella. Tallennetut geometriat listautuvat karttatasovalikon 'omat aineistot' alle."
+        "content": "Piirtotyökalut avautuvat vasemman reunan työkalupainikkeesta avautuvasta ikkunasta. Työkaluilla voidaan lisätä kartalle geometrioita ja mitata pituutta tai pinta-alaa. 'Karttamerkintä' -painikkeesta avautuu valikko erilaisetn karttamerkintöjen lisäämiseksi kartalle. Näihin merkintöihin voidaan lisätä mukaan teksti. Piirretyt geometriat ja karttamerkinnät voidaan tallentaa muistiin klikkaamalla 'Tallenna' -painiketta, joka on piirtotyökalujen alin painike. Geometrioita tallennettaessa määritellään geometrioille nimi, sekä haluttaessa kuvaus. Piirretyt geometriat voidaan poistaa kartalta oranssilla 'Tyhjennä' -painikkeella. Tallennetut geometriat listautuvat karttatasovalikon 'omat aineistot' alle."
       },
       "gfi": {
         "content": "Kohdetiedot avautuvat klikkaamalla mistä tahansa kartalla, tai vasemman reunan panikkeesta, jonka ikonissa on karttamerkintä. Kohdetiedot-ikkunasta voit hakea kohdetietoja, sekä näet tietoja valitsemistasi kohteista ja sijainneista, jotka voit myös halutessasi ladata suoraan laitteellesi valitsemassasi tiedostomuodossa. Mikäli karttatason nimen vieressä on suodatin-painike, voit suodattaa kohdetiedot-ikkunassa listattuja kohdetietoja.\nJos kohde on valittu klikkaamalla karttaa, Kohdetiedot-ikkunan sijaintitiedoista voidaan siirtyä tarkastelemaan kohdetta Google Street View -palvelussa. "

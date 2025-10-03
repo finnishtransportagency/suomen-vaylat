@@ -88,6 +88,7 @@
     "submitFail": "Import failed!",
     "saveSuccess": "Layer save successful!",
     "saveFail": "Saving layer failed!",
+    "fetchUserLayersError": "Loading user layers failed",
     "zipFileInput": {
       "onlyZipAllowed": "Only zip-files allowed",
       "zipMaxSize": "Zip-file maximum size is 10 Mb.",
@@ -239,7 +240,8 @@
       "openGoogleStreetView": "Open Google Street View",
       "googleStreetviewTitle": "Google Street View",
       "googleStreetviewContent": "Open selected point in Google Street View in new tab"
-    }
+    },
+    "userLayerDataFetchError": "Failed to retrieve feature data for layer: "
   },
   "vkm": {
     "locationInfo": "Location info",
@@ -299,24 +301,50 @@
         "title": "Top Bar Functions",
         "content": {
           "0": {
-            "title": "Return to start view",
-            "text": "The start view is a predefined view that shows waterways, the railway network and the road net-work throughout Finland."
+            "title": "Return to home view",
+            "text": "The home view is a predefined view showing waterways, the rail network and the road network for the whole of Finland."
           },
           "1": {
-            "title": "Share page",
-            "text": "You can share the current view of the map with a link directly to the selected service or by copying the link. The view retains the focus, zoom level, and selected materials and theme."
+            "title": "Language",
+            "text": "You can choose Finnish, Swedish or English as the language of the map service."
           },
           "2": {
-            "title": "Show userguide",
-            "text": ""
+            "title": "Menu",
+            "text": "The menu contains buttons for the functions listed below."
           },
           "3": {
-            "title": "Info",
-            "text": "Behind the info button you will find information about the application, operating instructions and contact information for sending feedback, for example."
+            "title": "Show user guide",
+            "text": ""
           },
           "4": {
+            "title": "Info",
+            "text": "The Info button contains information about the application and contact details (for example to send feedback)."
+          }
+        },
+        "extranetContent": {
+          "0": {
+            "title": "Return to home view",
+            "text": "The home view is a predefined view showing waterways, the rail network and the road network for the whole of Finland."
+          },
+          "1": {
             "title": "Language",
-            "text": "You can select Finnish, Swedish or English as the language of the map service."
+            "text": "You can choose Finnish, Swedish or English as the language of the map service."
+          },
+          "2": {
+            "title": "Menu",
+            "text": "The menu contains buttons for the functions listed below."
+          },
+          "3": {
+            "title": "Show user information",
+            "text": ""
+          },
+          "4": {
+            "title": "Show user guide",
+            "text": ""
+          },
+          "5": {
+            "title": "Info",
+            "text": "The Info button contains information about the application and contact details (for example to send feedback)."
           }
         }
       },
@@ -328,20 +356,37 @@
         "title": "Map Layer Menu",
         "subTitle": "The map layer menu opens at the top left. There are two tabs to choose from.",
         "tabsContent": {
-          "allLayers": "You can search the map layer by name by entering at least 3 letters in the search field. You can filter the layerlist by topic behind the Filter by type selection or you can save your own filter in the browser’s cache. Own filter is available on the device and browser where the filter is saved.\nFrom info-icon next to the map layer name you can open metadata for material. If there is a download button visible for the material, it can be downloaded from the whole area of Finland. If the download button is missing, downloading the material requires selecting an object on the map.\nSome of the layers can be filtered by the attribute data. You can use attribute filtering for the layer if there is a filter-icon visible next to the map layer name.",
+          "allLayers": "You can search the map layer by name by entering at least 3 letters in the search field. You can filter the layerlist by topic behind the Filter by type selection or you can save your own filter in the browser’s cache. Own filter is available on the device and browser where the filter is saved.\nFrom info-icon next to the map layer name you can open metadata for material. If there is a download button visible for the material, it can be downloaded from the whole area of Finland. If the download button is missing, downloading the material requires selecting an object on the map.\nSome of the layers can be filtered by the attribute data. You can use attribute filtering for the layer if there is a filter-icon visible next to the map layer name.\n'My datasets' contains views and geometries saved by the user, which can be edited and deleted.",
+          "allLayersExtranet": "You can search the map layer by name by entering at least 3 letters in the search field. You can filter the layerlist by topic behind the Filter by type selection or you can save your own filter in the browser’s cache. Own filter is available on the device and browser where the filter is saved.\nFrom info-icon next to the map layer name you can open metadata for material. If there is a download button visible for the material, it can be downloaded from the whole area of Finland. If the download button is missing, downloading the material requires selecting an object on the map.\nSome of the layers can be filtered by the attribute data. You can use attribute filtering for the layer if there is a filter-icon visible next to the map layer name.\n'My datasets' contains the user's saved views, geometries and any custom layers. In 'My datasets' you can edit and delete saved views, geometries and your own map layers.",
           "selectedLayers": "List of selected map layers on the map. You can change the order of the layers by dragging them from the icon on the left. The transparency can be adjusted with the slider and the layer can be deselected from the close button. From the filter-button you can open filtering menu to filter the layer by attribute data."
         }
       },
       "search": {
         "title": "Search",
-        "content": "The search opens from the upper right corner magnifying icon. The Search function allows you to search for municipalities, addresses, real estate unit identifiers, street addresses or railway addresses by selecting the search you want to use from the drop-down menu. More detailed instructions can be found from info-icons shown in the drop-down menu. You can delete a search result from the map with the trash-icon on the search menu."
+        "content": "The search is opened from the magnifying-glass button in the top-right corner of the map. With the search function you can look for municipalities, addresses, real estate unit identifiers, street addresses or railway addresses. More detailed search instructions can be found by opening the arrow button in the window that appears when you choose more search criteria. Search instructions can be opened and closed per search type using the info icon. You can remove search terms from the map by clicking the trash icon in the search field, and results can be removed from the map using the 'Clear results' button. When search results are active, the search window can be hidden."
       },
       "drawingTools": {
         "title": "Drawing tools",
-        "content": "Drawing tools open from the drawing button on the left. The tools can be used to add geometries to the map and to measure length or area. Drawn geometries and markers can be saved by clicking the Save button, which is at the very bottom in the Drawing tools menu.  Drawn geometries can be deleted from the map with the orange rubber button."
+        "content": "The drawing tools are opened from the window that opens from the left hand side tool button. With the tools you can add geometries to the map and measure length or area. The 'Marker' button opens a menu for adding various map markers, plus you can add text to these annotations. Drawn geometries and annotations can be saved by clicking the 'Save' button, which is the bottom button in the drawing tools. When saving geometries you give them a name and, optionally, a description. Drawn geometries can be removed from the map using the orange 'Erase' button. Saved geometries are listed under 'My datasets' in the map layers menu."
       },
       "gfi": {
         "content": "To access feature data, click anywhere on the map or click the button with the marker icon on the left. In the Feature Data window, you can search for feature data and view information about the features and locations you select, which you can also download directly to your device in a file format of your choosing. If there is a filter-button next to the map layer name, you can filter data listed in the Feature Data window.\nIf you have selected the object by clicking the map, you can explore the same location from Google Street View service. Google Street View can be opened from the location informations at the Feature Data window."
+      },
+      "shareWebsite": {
+        "title": "Share map view",
+        "content": "You can share the current map view via a link to a selected service or by copying the link. The view preserves language, center position, zoom level, selected map layers and the chosen theme."
+      },
+      "tools": {
+        "title": "Tools",
+        "content": "The tools contain functions such as drawing tools, saving views and downloads."
+      },
+      "coordinateTool": {
+        "title": "Coordinate tool",
+        "content": "The coordinate tool shows the coordinates of the map centre. You can also enter coordinates manually, which activates the 'Center map' button; pressing it will centre the map on that point. You can optionally add a marker at the centre, and these markers can be saved to your geometries."
+      },
+      "baseLayers": {
+        "title": "Background maps selection",
+        "content": "The background map buttons shown at the bottom of the map can be managed from the pen icon at the bottom of the page. In the opened window you can select up to four layers and change the order they are shown in at the bottom of the page."
       },
       "filter": {
         "title": "Filtering",
@@ -384,11 +429,15 @@
       },
       "downloads": {
         "title": "Downloads",
-        "content": "Downloads open from the Downloads button on the left. From the popup you can make a new feature selection to download and manage previous downloads made from feature data window."
+        "content": "Downloads open from the Downloads button from the tools window. From the popup you can make a new feature selection to download and manage previous downloads made from feature data window."
       },
-      "viewsAndGeometries": {
-        "title": "Save views and geometries",
-        "content": "By saving a view, you can save the map view in the browser’s cache. The map’s focus, approach level and selected map materials are saved in the view. Geometries can be saved when there are drawn geometries on the map. Saved views and geometries are available on the device and browser where the view or geometry is saved. You can switch between saved views and geometries by clicking on the desired save. You can delete a save from the recycle bin button."
+      "views": {
+        "title": "Save views",
+        "content": "'Save view' is found in the tools window. Saving a view stores the map view in the browser cache. The saved view includes the map centre, zoom level and selected layers. You assign a name to the view and optionally a description. A view can also be set as the default view so that it is activated automatically when the application starts. Saved views are available on the device and in the browser where they were stored. Saved views are listed under 'My datasets' in the map layer menu."
+      },
+      "datasetImport": {
+        "title": "Import datasets",
+        "content": "'Import datasets' is found in the tools window. With this tool you can import your own datasets into the service and specify a name, description, data source and styles. More detailed instructions are available in the popup that opens."
       },
       "setFullScreen": {
         "title": "Expand",

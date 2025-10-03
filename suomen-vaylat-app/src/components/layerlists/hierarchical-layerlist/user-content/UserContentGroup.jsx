@@ -8,6 +8,8 @@ import strings from '../../../../translations';
 import UserLayersGroup from './subgroups/UserlayersGroup';
 import GeometriesGroup from './subgroups/GeometriesGroup';
 import ViewsGroup from './subgroups/ViewsGroup';
+import { useSelector } from 'react-redux';
+import { IS_EXTRANET } from '../../../../utils/appInfoUtil';
 
 const masterHeaderIconVariants = {
   open: { rotate: 180 },
@@ -142,6 +144,7 @@ const UserContentGroup = () => {
   
   const title = strings.savedContent?.savedContent;
   const [openMain, setOpenMain] = useState(false);
+  const userLayers = useSelector((state) => state.rpc.userLayers) || [];
 
   // IDs & aria prefixes
   const prefix = 'layerlist-user-content-';
@@ -227,7 +230,9 @@ const UserContentGroup = () => {
         aria-hidden={!openMain}
         style={{ pointerEvents: openMain ? 'auto' : 'none' }}
       >
-        <UserLayersGroup openMain={openMain} />
+        { (IS_EXTRANET || (userLayers && userLayers.length > 0)) &&
+          <UserLayersGroup openMain={openMain} />
+        }
         <GeometriesGroup openMain={openMain} />
         <ViewsGroup openMain={openMain} />
       </StyledMainContent>

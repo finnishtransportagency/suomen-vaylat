@@ -1,7 +1,7 @@
 import { useState, useContext, useEffect } from 'react';
 import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
-import { toast } from 'react-toastify';
+import { Slide, toast } from 'react-toastify';
 import strings from '../../../translations';
 import { isMobile } from '../../../theme/theme';
 import { ReactReduxContext } from 'react-redux';
@@ -550,6 +550,61 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
         }
     };
 
+    // helper to transform incoming vector features payload to desired shape
+    const transformVectorFeaturesResponse = (payload) => {
+        const result = [];
+
+        if (!payload) return result;
+
+        // If payload is an object that directly contains features (no top-level layerKey)
+        const looksLikeSingleLayer = !!payload.features && Array.isArray(payload.features);
+
+        if (looksLikeSingleLayer) {
+            // try to infer a layerId if present in the payload (optional)
+            const inferredLayerId = payload.layerId || payload.id || null;
+            const content = (payload.features || []).map((feat) => {
+            const props = feat?.properties ? { ...feat.properties } : {};
+            // strip internal fields you don't want to expose
+            delete props.__fid;
+            return { geojson: props };
+            });
+            result.push({
+            layerId: inferredLayerId || 'unknown',
+            type: 'json',
+            content
+            });
+            return result.length === 1 ? result[0] : result;
+        }
+
+        // Otherwise treat payload as object keyed by layer id
+        Object.keys(payload).forEach((layerKey) => {
+            try {
+            const node = payload[layerKey] || {};
+            const features = Array.isArray(node.features) ? node.features : [];
+            const content = features.map((feat) => {
+                const props = feat?.properties ? { ...feat.properties } : {};
+                delete props.__fid;
+                // optionally remove geometry entirely (not included in requested structure)
+                // if you want to keep geometry, add it under another key
+                return { geojson: props };
+            });
+
+            result.push({
+                layerId: layerKey,
+                type: 'json',
+                content
+            });
+            } catch (e) {
+            // skip broken nodes but keep other layers
+            // optionally push an error descriptor
+            console.warn('Failed to transform layer', layerKey, e);
+            }
+        });
+
+        // if you prefer single object when only one layer present:
+        return result.length === 1 ? result[0] : result;
+    }
+
     useEffect(() => {
         let isSubscribed = true;
         channel && channel.handleEvent("DrawingEvent", async (data) => {
@@ -572,11 +627,36 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
                     store.dispatch(setGFICroppingArea(data.geojson.features));
                     let index = 0;
                         try {
-                            for(const layer of fetchableLayers) {  
-                                await fetchFeaturesSynchronous(data.geojson.features, layer, data)
-                                .then(
-                                    index++
-                                )
+                            for(const layer of fetchableLayers) {
+                                const isUserLayer =
+                                    typeof layer.id === 'string' && layer.id.startsWith('userlayer_');
+                                if (isUserLayer) {
+                                    channel.getVectorFeatures([data.geojson.features[0], [fetchableLayers[0].id]], (data) => {
+                                        const transformed = transformVectorFeaturesResponse(data);
+                                        store.dispatch(pushGFILocations(transformed))
+                                        index++;
+                                    },(data) => {
+                                        toast.error(strings.gfi.userLayerDataFetchError + layer.name, {
+                                            position: 'top-center',
+                                            autoClose: 5000,
+                                            hideProgressBar: false,
+                                            closeOnClick: true,
+                                            pauseOnHover: true,
+                                            draggable: true,
+                                            progress: undefined,
+                                            theme: 'colored',
+                                            transition: Slide
+                                        });
+                                        console.error(data)
+                                        index++
+                                    })
+                                } else {
+                                    await fetchFeaturesSynchronous(data.geojson.features, layer, data)
+                                    .then(
+                                        index++
+                                    )
+                                }
+
                                 if (fetchableLayers.length === index){
                                     handleGfiToolsMenu();
                                     setIsGfiLoading(false)
