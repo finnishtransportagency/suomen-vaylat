@@ -13,12 +13,22 @@ const StyledContent = styled.div`
 `;
 
 const StyledFooter = styled.div`
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
     justify-content: space-between;
 `;
 
 const StyledButton = styled(Button)`
     border-radius: 30px;
     background-color: #0064af;
+`;
+
+const HorizontalLine = styled.div`
+  width: 100%;
+  height: 1px;
+  background-color: #d7d9db;
+  margin: 1em 0;
 `;
 
 export const AnnouncementsDialogContent = ({
@@ -32,6 +42,7 @@ export const AnnouncementsDialogContent = ({
     return (
             <StyledContent>
                 <div className='announcements-content' dangerouslySetInnerHTML={{ __html: content }}></div>
+                <HorizontalLine/>
                 <StyledFooter className='dialog-footer'>
                     <label>
                         <StyledCheckbox
