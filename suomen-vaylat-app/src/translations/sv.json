@@ -384,6 +384,10 @@
         "title": "Koordinatverktyg",
         "content": "Koordinatverktyget visar koordinaterna för kartans mittpunkt. Du kan även ange koordinater manuellt, vilket aktiverar knappen 'Fokusera kartan'; när du trycker den centrerar kartan på den angivna punkten. Du kan lägga till en markering i mittpunkten och dessa markeringar kan sparas bland geometrierna."
       },
+      "location": {
+        "title": "Min position",
+        "content": "Platsverktyget aktiverar spårning av användarens position på kartan."
+      },
       "baseLayers": {
         "title": "Val av bakgrundskartor",
         "content": "Bakgrundsknappen som visas längst ner på kartan kan hanteras via pennikonen längst ner på sidan. I det öppnade fönstret kan du välja upp till fyra lager och ändra den ordning de visas i längst ner på sidan."

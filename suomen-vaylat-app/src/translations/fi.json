@@ -383,6 +383,10 @@
         "title": "Koordinaattityökalu",
         "content": "Koordinaattityökalu näyttää kartan keskikohdan koordinaatit. Koordinaatit voi myös syöttää itse, jolloin 'Keskitä kartta' -painike aktivoituu, jota painamalla kartta keskittyy syötettyyn pisteeseen. Keskipisteeseen voidaan lisätä halutessa karttamerkintä, ja nämä merkinnät voidaan tallentaa geometrioihin."
       },
+      "location": {
+        "title": "Oma sijainti",
+        "content": "Sijaintityökalu aktivoi käyttäjän seurannan kartalla."
+      },
       "baseLayers": {
         "title": "Taustakarttojen valinta",
         "content": "Kartan alaosassa näytettävät taustakartta-painikkeet voidaan valita kynä -painikkeesta sivun alareunassa. Avautuvasta ikkunasta voidaan valita maksimissaan neljä tasoa, ja niiden järjestystä sivun alareunassa voidaan muuttaa."

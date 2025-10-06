@@ -384,6 +384,10 @@
         "title": "Coordinate tool",
         "content": "The coordinate tool shows the coordinates of the map centre. You can also enter coordinates manually, which activates the 'Center map' button; pressing it will centre the map on that point. You can optionally add a marker at the centre, and these markers can be saved to your geometries."
       },
+      "location": {
+        "title": "My location",
+        "content": "The location tool enables tracking of the user's position on the map."
+      },
       "baseLayers": {
         "title": "Background maps selection",
         "content": "The background map buttons shown at the bottom of the map can be managed from the pen icon at the bottom of the page. In the opened window you can select up to four layers and change the order they are shown in at the bottom of the page."
