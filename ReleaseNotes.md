@@ -1,6 +1,6 @@
 # Release Notes
 
-## 2.4.0
+## 3.0.0
 * Bugfixes
 * Codebase overhaul
 * Header update
