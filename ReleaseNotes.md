@@ -1,5 +1,19 @@
 # Release Notes
 
+## 2.4.0
+* Bugfixes
+* Codebase overhaul
+* Header update
+* Tools restructure and UI update
+* Zoom & Legends menu UI update
+* Search restructure and UI update
+* Move share website button to left panel and UI update
+* Move user content to layerlist and added more information on them
+* Added coordinatetool
+* Added baselayer selector
+* Added my location - tool
+* Updated userguide
+
 ## 2.3.0
 * "My Location" feature can now be toggled on/off, allowing tracking of the user's location.
 * Additional zoom levels have been added, enabling closer inspection of map layers.
