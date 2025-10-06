@@ -28,6 +28,7 @@ import { IS_EXTRANET } from '../../utils/appInfoUtil';
 import BuildIcon from '@mui/icons-material/Build';
 import XYicon from '../coordinate-tool/resources/images/xy_icon.svg';
 import ModeEditOutlineTwoToneIcon from '@mui/icons-material/ModeEditOutlineTwoTone';
+import NavigationRoundedIcon from '@mui/icons-material/NavigationRounded';
 
 const StyledXYIcon = styled.img`
   height: 2em;
@@ -268,6 +269,22 @@ export const UserGuideDialogContent = () => {
           </StyledGuideContent>
         ),
         flatText: extractStringsFromJson(strings.appGuide.dialogContent.coordinateTool).toLowerCase()
+      },
+      {
+        title: (
+          <StyledTitleWrapper>
+            <StyledIconButton>
+              <NavigationRoundedIcon style={{color: "white"}} />
+            </StyledIconButton>
+            <p>{strings.appGuide.dialogContent.location.title}</p>
+          </StyledTitleWrapper>
+        ),
+        content: (
+          <StyledGuideContent>
+            <p>{strings.appGuide.dialogContent.location.content}</p>
+          </StyledGuideContent>
+        ),
+        flatText: extractStringsFromJson(strings.appGuide.dialogContent.location).toLowerCase()
       },
       {
         title: (
