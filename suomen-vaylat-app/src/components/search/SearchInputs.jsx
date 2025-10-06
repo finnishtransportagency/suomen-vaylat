@@ -209,7 +209,7 @@ const SearchInputs = ({ setDropdownOpen }) => {
 
     //TODO if and when we implement track range search, this should be enabled also to track, for now only road search
     if (
-      (activeSwitch === 'road' || activeSwitch === null) &&
+      (activeSwitch === 'road' || activeSwitch === "default") &&
       !carriageWaySearch &&
       value &&
       value.includes('/') &&

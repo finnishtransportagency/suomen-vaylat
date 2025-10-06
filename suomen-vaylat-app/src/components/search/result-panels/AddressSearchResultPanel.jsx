@@ -58,7 +58,7 @@ const AddressSearchResultPanel = () => {
   const filteredResult = useMemo(() => {
     if (!locations.length) return [];
     return locations.filter((res) => {
-      if (activeSwitch === null || activeSwitch === undefined) {
+      if (activeSwitch === "default" || activeSwitch === undefined) {
         return true;
       }
       let showResult = false;
