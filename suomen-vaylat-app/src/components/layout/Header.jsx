@@ -393,7 +393,9 @@ export const Header = () => {
               id="header-desktop-buttons"
               aria-label={strings.accessibility.desktopButtons}
             >
-              <LanguageSelector />
+              { !IS_EXTRANET &&
+                <LanguageSelector />
+              }
               <DesktopNav
                 setIsMenuOpen={setIsMenuOpen}
                 isMenuOpen={isMenuOpen}

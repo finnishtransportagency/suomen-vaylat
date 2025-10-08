@@ -321,29 +321,31 @@ const MobileNav = ({ setIsMenuOpen }) => {
           </div>
         </StyledMobileMenuButton>
 
-        <StyledMobileMenuButton
-          id={langBtnId}
-          aria-label={strings.accessibility.languageSelect}
-          aria-haspopup="listbox"
-          role="menuitem"
-          aria-controls="mobile-nav-language-selector-wrapper"
-        >
-          <div className="icon-wrapper" id="mobile-nav-language-icon-wrapper">
-            <FontAwesomeIcon
-              icon={faGlobe}
-              aria-hidden="true"
-              focusable="false"
-            />
-          </div>
-          <div
-            className="text-wrapper"
-            id="mobile-nav-language-selector-wrapper"
+        { !IS_EXTRANET &&
+          <StyledMobileMenuButton
+            id={langBtnId}
+            aria-label={strings.accessibility.languageSelect}
+            aria-haspopup="listbox"
+            role="menuitem"
+            aria-controls="mobile-nav-language-selector-wrapper"
           >
-            <HiddenLanguageIconWrapper>
-              <LanguageSelector />
-            </HiddenLanguageIconWrapper>
-          </div>
-        </StyledMobileMenuButton>
+            <div className="icon-wrapper" id="mobile-nav-language-icon-wrapper">
+              <FontAwesomeIcon
+                icon={faGlobe}
+                aria-hidden="true"
+                focusable="false"
+              />
+            </div>
+            <div
+              className="text-wrapper"
+              id="mobile-nav-language-selector-wrapper"
+            >
+              <HiddenLanguageIconWrapper>
+                <LanguageSelector />
+              </HiddenLanguageIconWrapper>
+            </div>
+          </StyledMobileMenuButton>
+        }
       </MobileMenuList>
     </StyledMobileNavContainer>
   );
