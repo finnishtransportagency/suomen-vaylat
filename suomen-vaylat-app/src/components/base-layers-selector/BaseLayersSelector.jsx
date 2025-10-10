@@ -98,15 +98,15 @@ const BaseLayerSelector = () => {
     const BaseLayerButton = ({ action, layer, isSelected }) => {
         return(
             <StyledButton
-                id={`baselayer-selector-base-layer-btn-${layer.id}`}
+                id={`baselayer-selector-base-layer-btn-${layer?.id}`}
                 onClick={() => action(layer)}
                 active={isSelected}
                 tabIndex={0}
-                aria-label={strings.baseLayerSelector.labels.selectBaseLayer + layer.name}
+                aria-label={strings.baseLayerSelector.labels.selectBaseLayer + layer?.name}
                 role="button"
             >
-                <StyledButtonText id={`baselayer-selector-base-layer-btn-text-${layer.id}`}>
-                    {layer.name}
+                <StyledButtonText id={`baselayer-selector-base-layer-btn-text-${layer?.id}`}>
+                    {layer?.name}
                 </StyledButtonText>
             </StyledButton>
         );
@@ -130,13 +130,14 @@ const BaseLayerSelector = () => {
     return(
         <StyledBaselayerButtonContainer id="baselayer-selector-base-layer-container">
             {allLayers.length > 0 && selectedBaseLayers.map((layerID) => {
-                const layer = allLayers.find(layer => layer.id === layerID);
+                const layer = allLayers.find(layer => layer.id === layerID) || null;
+                if (layer === null) return;
                 return(
                     <BaseLayerButton
-                        key={layer.id}
+                        key={layer?.id}
                         action={() => handleLayerVisibility(channel, layer)}
                         layer={layer}
-                        isSelected={layer.visible}
+                        isSelected={layer?.visible}
                     />
                 );
             })}
