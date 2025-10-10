@@ -3,7 +3,6 @@ import {
   setSelectedLayers,
   setSelectedTheme,
   setLastSelectedTheme,
-  setSelectedThemeId,
   reArrangeSelectedMapLayers,
   setBackgroundMaps,
   setMapLayers,
@@ -12,7 +11,8 @@ import {
   setLegends,
   addMarkerRequest,
   removeMarkerRequest,
-  setUserLayers
+  setUserLayers,
+  changeLayerStyle
 } from '../state/slices/rpcSlice';
 import { Slide, toast } from 'react-toastify';
 import {
@@ -306,7 +306,8 @@ export const selectGroup = (
         layerId,
         false
       ]);
-      channel.postRequest('ChangeMapLayerStyleRequest', [layerId]);
+      const style = store.getState().rpc.defaultStyles[layerId] || null;
+      store.dispatch(changeLayerStyle({ layerId, style }));
     });
     updateLayerLegends(store);
   };
@@ -370,7 +371,6 @@ export const selectGroup = (
     setTimeout(
       () => {
         store.dispatch(setIsLegendOpen(true));
-        store.dispatch(setSelectedThemeId(theme.id));
         setTimeout(() => processLayers(theme), 700);
       },
       isThemeChanged ? 1000 : 700
@@ -382,7 +382,6 @@ export const selectGroup = (
     updateLayers(store, channel);
     setTimeout(() => {
       store.dispatch(setIsLegendOpen(false));
-      store.dispatch(setSelectedThemeId(null));
       showNonThemeLayers(store, channel);
     }, 700);
   }
@@ -512,7 +511,6 @@ export const reArrangeSelectedLayersOrder = (selectedLayers, store) => {
 export const resetThemeGroups = (store) => {
   store.dispatch(setSelectedTheme(null));
   store.dispatch(setLastSelectedTheme(null));
-  store.dispatch(setSelectedThemeId(null));
   store.dispatch(setAllSelectedThemeLayers([]));
 };
 
@@ -535,7 +533,6 @@ export const resetThemeGroupsForMainScreen = (store, channel, theme) => {
   store.dispatch(setSelectedMapLayersMenuThemeIndex(0));
   store.dispatch(setSelectedTheme(null));
   store.dispatch(setLastSelectedTheme(null));
-  store.dispatch(setSelectedThemeId(null));
 };
 
 /**

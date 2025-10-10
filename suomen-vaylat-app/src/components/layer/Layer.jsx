@@ -73,7 +73,7 @@ export const Layer = ({ layer, themeName, groupName }) => {
   const { store } = useContext(ReactReduxContext);
   const [layerStyle, setLayerStyle] = useState(null);
   const { minimizeFilter } = useAppSelector((state) => state.ui);
-  const { filters } = useAppSelector((state) => state.rpc);
+  const { filters, allSelectedThemeLayers } = useAppSelector((state) => state.rpc);
 
   const isFilterable =
     typeof layer.config?.gfi?.filterFields !== 'undefined' &&
@@ -112,7 +112,7 @@ export const Layer = ({ layer, themeName, groupName }) => {
     if (
       layer.visible &&
       selectedTheme &&
-      selectedTheme.layers?.includes(layer.id)
+      allSelectedThemeLayers.includes(layer.id)
     ) {
       const themeName = selectedTheme.locale?.['fi']?.name || null;
       channel.getLayerThemeStyle(

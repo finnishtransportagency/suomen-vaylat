@@ -1463,5 +1463,6 @@
       "selectBaseLayer": "Select base layer ",
       "editBaseLayers": "Change base layers"
     }
-  }
+  },
+  "getViewStylesError": "Fetching default styles for layers failed"
 }

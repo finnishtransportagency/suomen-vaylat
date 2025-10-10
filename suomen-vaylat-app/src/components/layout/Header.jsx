@@ -218,7 +218,7 @@ export const Header = () => {
     const channel = state.rpc.channel;
     const selectedLayers = state.rpc.selectedLayers;
     const lastSelectedTheme = state.rpc.lastSelectedTheme;
-    const selectedThemeId = state.rpc.selectedThemeId;
+    const selectedTheme = state.rpc.selectedTheme;
     const startState = state.rpc.startState;
     const activeTool = state.ui.activeTool;
     const activeGeometries = state.ui.activeGeometries;
@@ -254,7 +254,7 @@ export const Header = () => {
       null,
       lastSelectedTheme,
       lastSelectedTheme,
-      selectedThemeId
+      selectedTheme?.id
     );
 
     // add start layers back (do it after than select group)

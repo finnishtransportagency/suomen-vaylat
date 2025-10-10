@@ -46,7 +46,7 @@ export const FilterLayer = ({ layer, theme, groupName }) => {
   const [layerStyle, setLayerStyle] = useState(null);
   const { selectedCustomFilterLayers } = useAppSelector((state) => state.ui);
 
-  const { channel, selectedTheme } = useSelector((state) => state.rpc);
+  const { channel, selectedTheme, allSelectedThemeLayers } = useSelector((state) => state.rpc);
 
   const excludeGroups = ['Digiroad', 'Tierekisteri (Poistuva)'];
 
@@ -75,7 +75,7 @@ export const FilterLayer = ({ layer, theme, groupName }) => {
     if (
       layer.visible &&
       selectedTheme &&
-      selectedTheme.layers.includes(layer.id)
+      allSelectedThemeLayers.includes(layer.id)
     ) {
       const themeName = selectedTheme.locale?.['fi']?.name || null;
       channel.getLayerThemeStyle(

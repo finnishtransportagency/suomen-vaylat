@@ -1460,5 +1460,6 @@
       "selectBaseLayer": "Valitse taustakartta ",
       "editBaseLayers": "Vaihda taustakarttoja"
     }
-  }
+  },
+  "getViewStylesError": "Oletustyylien haku epäonnistui"
 }
