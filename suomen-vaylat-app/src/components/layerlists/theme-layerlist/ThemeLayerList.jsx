@@ -448,7 +448,7 @@ export const Themes = ({ groups, allLayers }) => {
     const { store } = useContext(ReactReduxContext);
     const lang = strings.getLanguage();
 
-    const { channel, selectedTheme, lastSelectedTheme, selectedThemeId } =
+    const { channel, selectedTheme, lastSelectedTheme } =
         useAppSelector((state) => state.rpc);
     const handleSelectGroup = (theme) => {
         selectGroup(
@@ -457,7 +457,7 @@ export const Themes = ({ groups, allLayers }) => {
             allLayers,
             theme,
             lastSelectedTheme,
-            selectedThemeId
+            selectedTheme?.id
         );
     };
 
@@ -498,7 +498,6 @@ export const Themes = ({ groups, allLayers }) => {
                             index={theme.index}
                             selectedTheme={selectedTheme}
                             selectGroup={handleSelectGroup}
-                            selectedThemeId={selectedThemeId}
                             isSubtheme={false}
                             isFirstSubtheme={true}
                         />
@@ -526,7 +525,7 @@ export const ThemeGroup = ({
     theme,
     layers,
     index,
-    selectedThemeId,
+    selectedTheme,
     selectGroup,
     isSubtheme,
     isFirstSubtheme
@@ -562,7 +561,7 @@ export const ThemeGroup = ({
             theme.locale[lang].desc) ||
         false;
 
-    const isActive = selectedThemeId === theme.id;
+    const isActive = selectedTheme?.id === theme.id;
 
     const images =
         (txt && getDescTagContent(txt.replace(/\s/g, ''), '<img>', '</img>')) || [];
@@ -622,12 +621,12 @@ export const ThemeGroup = ({
                     </StyledMasterGroupName>
                     <StyledRightContent
                         onClick={(e) => {
-                            !isThemeOpen && selectedThemeId !== theme.id && setIsThemeOpen(true);
+                            !isThemeOpen && selectedTheme?.id !== theme.id && setIsThemeOpen(true);
                             selectGroup(theme);
                         }}
                         onKeyDown={(e) => {
                             if (e.key === 'Enter') {
-                                !isThemeOpen && selectedThemeId !== theme.id && setIsThemeOpen(true);
+                                !isThemeOpen && selectedTheme?.id !== theme.id && setIsThemeOpen(true);
                                 selectGroup(theme);
                             }
                         }}
@@ -713,7 +712,6 @@ export const ThemeGroup = ({
                             layers={layers}
                             index={subIndex}
                             selectGroup={selectGroup}
-                            selectedThemeId={selectedThemeId}
                             isSubtheme={true}
                             isFirstSubtheme={!isSubtheme}
                         />

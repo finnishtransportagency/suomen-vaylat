@@ -4,8 +4,6 @@ import { faTimes, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { theme } from '../../theme/theme';
 import { useState, useContext, useEffect } from 'react';
 import styled from 'styled-components';
-import { FormControlLabel } from '@mui/material';
-import ReactSelect from 'react-select';
 import strings from '../../translations';
 import { useSelector } from 'react-redux';
 import { ReactReduxContext } from 'react-redux';
@@ -212,11 +210,6 @@ const StyledTitleContent = styled.div`
 const StyledCloseIcon = styled(FontAwesomeIcon)`
   cursor: pointer;
   font-size: 20px;
-`;
-
-const StyledGroupsContainer = styled.div`
-  overflow-y: auto;
-  padding: 8px 4px 8px 8px;
 `;
 
 const listVariants = {

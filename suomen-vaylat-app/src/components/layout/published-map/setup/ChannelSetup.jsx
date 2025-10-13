@@ -1,4 +1,3 @@
-import { ISO_8601 } from 'moment';
 import {
   setAnnouncements,
   setActiveAnnouncements,
@@ -12,7 +11,8 @@ import {
   setFeatures,
   setLegends,
   setCurrentMapCenter,
-  setStartMapCenter
+  setStartMapCenter,
+  setDefaultStyles
 } from '../../../../state/slices/rpcSlice';
 import {
   setGfiCroppingTypes,
@@ -65,6 +65,26 @@ const fetchAnnouncementsAsync = async (data, channel, store) => {
 };
 
 const setupSupportedFunctions = (data, channel, store) => {
+
+  channel.getViewLayerDefaultStyles(
+    (data) => {
+      store.dispatch(setDefaultStyles(data));
+    },
+    (data) => {
+      console.error(strings.getViewStylesError, data);
+      toast.error(strings.getViewStylesError, {
+        position: 'top-center',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'colored',
+        transition: Slide
+      });
+    }
+  );
 
   if (IS_EXTRANET && data.fetchUserLayers) {
     channel.fetchUserLayers(

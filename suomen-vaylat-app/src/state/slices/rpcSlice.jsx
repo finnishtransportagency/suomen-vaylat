@@ -30,7 +30,6 @@ const initialState = {
   allSelectedThemeLayers: [],
   selectedTheme: null,
   lastSelectedTheme: null,
-  selectedThemeId: null,
   filter: null,
   layerMetadata: { data: null, layer: null, uuid: null },
   legends: [],
@@ -82,7 +81,8 @@ const initialState = {
   editingGeometry: null,
   loggedInUser: {},
   isLoggedIn: false,
-  editingUserlayer: null
+  editingUserlayer: null,
+  defaultStyles: null,
 };
 
 export const rpcSlice = createSlice({
@@ -275,17 +275,6 @@ export const rpcSlice = createSlice({
     setLastSelectedTheme: (state, action) => {
       state.lastSelectedTheme = action.payload;
       LOG.log('setLastSelectedTheme to ', action.payload);
-    },
-
-    /**
-     * Set selected theme id.
-     * @method setSelectedThemeId
-     * @param {Object} state
-     * @param {Object} action
-     */
-    setSelectedThemeId: (state, action) => {
-      state.selectedThemeId = action.payload;
-      LOG.log('setSelectedThemeId to ' + action.payload);
     },
 
     /**
@@ -1051,7 +1040,11 @@ export const rpcSlice = createSlice({
 
     setEditingUserlayer: (state, action) => {
       state.editingUserlayer = action.payload;
-    }
+    },
+
+    setDefaultStyles: (state, action) => {
+      state.defaultStyles = action.payload;
+    },
   }
 });
 
@@ -1082,7 +1075,6 @@ export const {
   setAllThemesWithLayers,
   setSelectedTheme,
   setLastSelectedTheme,
-  setSelectedThemeId,
   setActiveAnnouncements,
   getLayerMetadata,
   clearLayerMetadata,
@@ -1136,7 +1128,8 @@ export const {
   setEditingGeometry,
   setIsLoggedIn,
   setLoggedInUser,
-  setEditingUserlayer
+  setEditingUserlayer,
+  setDefaultStyles
 } = rpcSlice.actions;
 
 export default rpcSlice.reducer;

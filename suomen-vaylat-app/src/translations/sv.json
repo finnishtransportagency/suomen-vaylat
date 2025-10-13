@@ -1463,5 +1463,6 @@
       "selectBaseLayer": "Välj bakgrundskarta ",
       "editBaseLayers": "Byt bakgrundskartor"
     }
-  }
+  },
+  "getViewStylesError": "Det gick inte att hämta standardstilar för lager"
 }
