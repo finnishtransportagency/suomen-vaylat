@@ -43,7 +43,7 @@ const StyledHeaderContent = styled.div`
   border-radius: 4px 4px 0px 0px;
   align-items: center;
   justify-content: space-between;
-  background-color: ${(props) => props.theme.colors.mainColor1};
+  background-color: ${(props) => props.theme.colors.mainColor1Selected};
   padding: 16px;
   box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.2);
 

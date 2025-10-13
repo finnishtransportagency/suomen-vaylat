@@ -10,7 +10,7 @@ const StyledHeaderContent = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color:  ${props => props.type === "warning" ? "#C73F00" : props.theme.colors.mainColor1};
+    background-color:  ${props => props.type === "warning" ? "#C73F00" : props.theme.colors.mainColor1Selected};
     padding: 16px;
     box-shadow: 2px 2px 4px 0px rgba(0,0,0,0.20);
     p {
