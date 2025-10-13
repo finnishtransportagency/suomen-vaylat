@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, useCallback } from 'react';
+import React, { useEffect, useContext, useCallback } from 'react';
 import { ReactReduxContext } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
@@ -8,7 +8,6 @@ import strings from '../../../translations';
 import { theme } from '../../../theme/theme';
 import { setIsSaveViewOpen } from '../../../state/slices/uiSlice';
 import { setEditingView, setViews } from '../../../state/slices/rpcSlice';
-import { setWarning } from '../../../state/slices/uiSlice';
 import { faCamera } from '@fortawesome/free-regular-svg-icons';
 import { Slide, toast } from 'react-toastify';
 

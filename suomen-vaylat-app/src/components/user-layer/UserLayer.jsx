@@ -27,14 +27,6 @@ const StyledLayerContainer = styled.div`
   width: 100%;
 `;
 
-const StyledlayerHeader = styled.div`
-  margin-right: 0.5em;
-  display: flex;
-  width: 100%;
-  align-items: center;
-  gap: 8px;
-`;
-
 const StyledLayerName = styled.p`
   word-break: break-word;
   user-select: none;
@@ -57,23 +49,6 @@ const StyledIconButton = styled.button`
   &:hover {
     color: ${(p) => p.theme.colors.mainColor2};
   }
-`;
-
-/* Container for action buttons (edit/delete) */
-const StyledActions = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-left: auto; /* push actions to the right */
-  margin-right: 8px;
-`;
-
-const StyledItemsWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1em;
-  width: 100%;
 `;
 
 const StyledItemLeft = styled.div`
