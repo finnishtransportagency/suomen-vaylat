@@ -1,4 +1,3 @@
-import { ISO_8601 } from 'moment';
 import {
   setAnnouncements,
   setActiveAnnouncements,
