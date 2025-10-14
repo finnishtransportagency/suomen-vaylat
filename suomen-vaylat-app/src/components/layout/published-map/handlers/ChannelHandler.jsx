@@ -15,15 +15,15 @@ const ChannelHandler = ({ iframe, store }) => {
   channel.onReady(() => {
     store.dispatch(setChannel(channel));
 
-    channel.getSupportedFunctions((data) => {
+    channel.getSupportedFunctions && channel.getSupportedFunctions((data) => {
       setupSupportedFunctions(data, channel, store);
     });
 
-    channel.getSupportedEvents((data) => {
+    channel.getSupportedEvents && channel.getSupportedEvents((data) => {
       MapEventsHandler({ channel, store });
     });
 
-    channel.getPublishedMapState((data) => {
+    channel.getPublishedMapState && channel.getPublishedMapState((data) => {
       store.dispatch(setStartState(data));
     });
 
