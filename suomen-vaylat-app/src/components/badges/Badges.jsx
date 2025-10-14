@@ -15,7 +15,7 @@ const StyledContent = styled.div`
   max-width: 312px;
   display: grid;
   gap: 8px;
-  margin-top: 0.7em;
+  margin-top: 0.5em;
   z-index: 12;
 
   @media ${(props) => props.theme.device.mobileL} {
