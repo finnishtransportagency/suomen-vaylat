@@ -92,7 +92,6 @@ export const activateView = (store, channel, view) => {
     channel.postRequest('MapTourRequest', [routeSteps, stepDefaults]);
   });
 
-  console.log("activate view", store.getState().rpc.selectedLayers)
   store.getState().rpc.selectedLayers.forEach((layer) => {
     channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [
       layer.id,
