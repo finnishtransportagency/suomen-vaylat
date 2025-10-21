@@ -241,6 +241,8 @@ const FeatureDataDownloadTools = ({ closeButton = true, handleGfiDownloadsMenu})
   const connectWebsocket = (count) => {
     setWebsocketFirstTimeTryConnecting(true);
 
+    console.log("connectWebsocket count", count)
+
     // Open WebSocket
     const ws = new WebSocket(process.env.REACT_APP_WEBSOCKET_URL);
 
@@ -268,6 +270,7 @@ const FeatureDataDownloadTools = ({ closeButton = true, handleGfiDownloadsMenu})
           type: 'resendDownloadStatuses',
           data: { uuids: downloadUuids }
         };
+        console.log("ws onopen stringify", JSON.stringify(json))
         ws.send(JSON.stringify(json));
       }
 
@@ -282,6 +285,7 @@ const FeatureDataDownloadTools = ({ closeButton = true, handleGfiDownloadsMenu})
       }, 1000 * 60 * 10);
     };
     ws.onmessage = function (evt) {
+      console.log("ws evt",evt);
       let data = JSON.parse(evt.data);
       if (data.type === 'BODY_SIZE_EXCEEDED') {
         store.dispatch(
