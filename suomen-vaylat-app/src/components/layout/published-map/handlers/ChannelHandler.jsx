@@ -2,9 +2,8 @@ import OskariRPC from 'oskari-rpc';
 import setupSupportedFunctions from '../setup/ChannelSetup';
 import MapEventsHandler from './MapEventsHandler';
 import { setChannel, setGeometries, setStartState, setViews } from '../../../../state/slices/rpcSlice';
-import { activateView } from '../../../../utils/rpcUtil';
 
-const ChannelHandler = ({ iframe, store }) => {
+const ChannelHandler = ({ iframe, store, isSharedLink }) => {
   const channel = OskariRPC.connect(
     iframe,
     process.env.REACT_APP_PUBLISHED_MAP_DOMAIN
@@ -16,7 +15,7 @@ const ChannelHandler = ({ iframe, store }) => {
     store.dispatch(setChannel(channel));
 
     channel.getSupportedFunctions && channel.getSupportedFunctions((data) => {
-      setupSupportedFunctions(data, channel, store);
+      setupSupportedFunctions(data, channel, store, isSharedLink);
     });
 
     channel.getSupportedEvents && channel.getSupportedEvents((data) => {

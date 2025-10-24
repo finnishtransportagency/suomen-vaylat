@@ -6,6 +6,7 @@ import ChannelHandler from './handlers/ChannelHandler';
 import { setIsFullScreen } from '../../../state/slices/uiSlice';
 import { setLoading } from '../../../state/slices/rpcSlice';
 import SvLoader from '../../../utils/components/SvLoader';
+import { useParams } from 'react-router';
 
 const StyledPublishedMap = styled.div`
   position: absolute;
@@ -48,6 +49,8 @@ const PublishedMap = () => {
     store.dispatch(setLoading(false));
   };
 
+  let {zoom, x, y, themeId} = useParams();
+
   useEffect(() => {
     const handleFullScreenChange = () => {
       const isFullScreen = Boolean(
@@ -61,8 +64,9 @@ const PublishedMap = () => {
 
     store.dispatch(setLoading(true));
 
+    const isSharedLink = ((!isNaN(zoom) && x && y) || themeId);
     const iframe = document.getElementById('sv-iframe');
-    const synchronizer = ChannelHandler({ iframe, store });
+    const synchronizer = ChannelHandler({ iframe, store, isSharedLink});
 
     document.addEventListener('fullscreenchange', handleFullScreenChange);
     document.addEventListener('mozfullscreenchange', handleFullScreenChange);

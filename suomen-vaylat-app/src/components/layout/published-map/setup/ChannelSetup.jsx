@@ -64,7 +64,7 @@ const fetchAnnouncementsAsync = async (data, channel, store) => {
   });
 };
 
-const setupSupportedFunctions = (data, channel, store) => {
+const setupSupportedFunctions = (data, channel, store, isSharedLink) => {
 
   if (data.getViewLayerDefaultStyles) {
     channel.getViewLayerDefaultStyles(
@@ -157,12 +157,15 @@ const setupSupportedFunctions = (data, channel, store) => {
     });
   }
 
-  updateLayers(store, channel, () => {
+  updateLayers(store, channel, isSharedLink, () => {
     //handle default view
     const defaultView = store
       .getState()
       .rpc?.views?.find((view) => view.default);
-    defaultView && activateView(store, channel, defaultView);
+
+    if (!isSharedLink && defaultView) {
+      activateView(store, channel, defaultView);
+    }
 
     // handle base layers tool
     const stored = localStorage.getItem(BASE_LAYERS_LOCALSTORAGE);
