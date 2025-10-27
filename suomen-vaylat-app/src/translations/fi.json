@@ -1416,7 +1416,12 @@
       "includes": "Sisältää",
       "doesntInclude": "Ei sisällä"
     },
-    "validationError": "Syötetty arvo saa sisältää vain kirjaimia, numeroita ja erikoismerkkejä  - , . / ( ) "
+    "featureCount": "Kohteiden määrä kartalla:",
+    "errors": {
+      "validationError": "Syötetty arvo saa sisältää vain kirjaimia, numeroita ja erikoismerkkejä  - , . / ( ) ",
+      "noResults": "Ei tuloksia suodatukselle - suodatinta ei lisätty",
+      "filterError": "Virhe suodattimen lisäyksessä"
+    }
   },
   "accessibility": {
     "langSelectMenu": "Kielen valinta menu",

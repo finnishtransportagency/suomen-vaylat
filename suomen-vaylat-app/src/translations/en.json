@@ -1419,7 +1419,12 @@
       "includes": "Includes",
       "doesntInclude": "Doesn't include"
     },
-    "validationError": "The input value may only contain letters, numbers, and the special characters - , . / ( )"
+    "featureCount": "Features on map:",
+    "errors": {
+      "validationError": "The entered value may only contain letters, numbers and the following special characters: - , . / ( )",
+      "noResults": "No results for the filter — filter not added",
+      "filterError": "Error adding filter"
+    }
   },
   "accessibility": {
     "langSelectMenu": "Language selection menu",

@@ -1419,7 +1419,12 @@
       "includes": "Innehåller",
       "doesntInclude": "Inte innehåller"
     },
-    "validationError": "Det angivna värdet får endast innehålla bokstäver, siffror och specialtecken - , . / ( )"
+    "featureCount": "Funktioner på kartan:",
+    "errors": {
+      "validationError": "Det angivna värdet får endast innehålla bokstäver, siffror och specialtecken - , . / ( )",
+      "noResults": "Inga resultat för filtret – filtret lades inte till",
+      "filterError": "Fel vid tillägg av filtret"
+    }
   },
   "tillgänglighet": {
     "langSelectMenu": "Språkvalsmeny",
