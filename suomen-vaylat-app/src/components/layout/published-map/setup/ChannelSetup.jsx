@@ -7,7 +7,6 @@ import {
   setZoomRange,
   setCurrentZoomLevel,
   setAllGroups,
-  setCurrentState,
   setFeatures,
   setLegends,
   setCurrentMapCenter,
@@ -19,7 +18,7 @@ import {
   setSelectedBaseLayers
 } from '../../../../state/slices/uiSlice';
 import { BASE_LAYERS_LOCALSTORAGE } from '../../../../utils/constants';
-import { activateView, updateLayers } from '../../../../utils/rpcUtil';
+import { activateView, updateLayerLegends, updateLayers } from '../../../../utils/rpcUtil';
 import { getActiveAnnouncements } from '../../../../utils/rpcUtil';
 import { IS_EXTRANET } from '../../../../utils/appInfoUtil';
 import { Slide, toast } from 'react-toastify';
@@ -157,6 +156,7 @@ const setupSupportedFunctions = (data, channel, store, isSharedLink) => {
     });
   }
 
+  // Update layers and then complete the function onComplete
   updateLayers(store, channel, isSharedLink, () => {
     //handle default view
     const defaultView = store
@@ -197,26 +197,15 @@ const setupSupportedFunctions = (data, channel, store, isSharedLink) => {
       );
       store.dispatch(setSelectedBaseLayers(defaultBackgroundMaps));
     }
-  });
 
-  if (data.getCurrentState) {
-    channel.getCurrentState((currentStateData) =>
-      store.dispatch(setCurrentState(currentStateData))
-    );
-  }
+    // Update legends now that they are for sure loaded in Oskari
+    updateLayerLegends(store);
+  });
 
   if (data.getFeatures) {
     channel.getFeatures((featuresData) =>
       store.dispatch(setFeatures(featuresData))
     );
-  }
-
-  if (data.getLegends) {
-    window.legendUpdateTimer = setTimeout(() => {
-      channel.getLegends((legendsData) =>
-        store.dispatch(setLegends(legendsData))
-      );
-    }, 500);
   }
 
   if (data.getMapPosition) {
