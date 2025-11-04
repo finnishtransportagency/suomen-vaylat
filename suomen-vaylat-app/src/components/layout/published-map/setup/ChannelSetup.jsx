@@ -157,7 +157,7 @@ const setupSupportedFunctions = (data, channel, store, isSharedLink) => {
   }
 
   // Update layers and then complete the function onComplete
-  updateLayers(store, channel, isSharedLink, () => {
+  updateLayers(store, channel, () => {
     //handle default view
     const defaultView = store
       .getState()

@@ -64,7 +64,8 @@ const PublishedMap = () => {
 
     store.dispatch(setLoading(true));
 
-    const isSharedLink = ((!isNaN(zoom) && x && y) || themeId);
+    // Check if we came in with a link
+    const isSharedLink = (!!(!isNaN(zoom) && x && y)) || !!themeId;
     const iframe = document.getElementById('sv-iframe');
     const synchronizer = ChannelHandler({ iframe, store, isSharedLink});
 
