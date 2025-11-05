@@ -275,6 +275,8 @@ export const updateLayerLegends = (store) => {
     store.dispatch(
       getLegends({
         handler: (data) => {
+              console.log("updateLayerLegends", data)
+
           store.dispatch(setLegends(data));
         }
       })
@@ -309,6 +311,7 @@ export const selectGroup = (
       const style = store.getState().rpc.defaultStyles[layerId] || null;
       store.dispatch(changeLayerStyle({ layerId, style }));
     });
+    console.log("closeLayers")
     updateLayerLegends(store);
   };
 
@@ -370,6 +373,7 @@ export const selectGroup = (
     updateLayers(store, channel);
     setTimeout(
       () => {
+        console.log("processLayers setIsLegendOpen")
         store.dispatch(setIsLegendOpen(true));
         setTimeout(() => processLayers(theme), 700);
       },
