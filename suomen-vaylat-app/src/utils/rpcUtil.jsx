@@ -286,7 +286,7 @@ export const updateLayerLegends = (store) => {
 
 /**
  * Selects and manages layers based on the given theme.
- * @function selectGroup
+ * @function selectTheme
  * @param {Object} store - Redux store for state management.
  * @param {Object} channel - Communication channel for map layer actions.
  * @param {Object} allLayers - All available layers.
@@ -294,7 +294,7 @@ export const updateLayerLegends = (store) => {
  * @param {String} lastSelectedTheme - Previously selected theme.
  * @param {Number} selectedThemeId - ID of currently selected theme.
  */
-export const selectGroup = (
+export const selectTheme = (
   store,
   channel,
   allLayers,

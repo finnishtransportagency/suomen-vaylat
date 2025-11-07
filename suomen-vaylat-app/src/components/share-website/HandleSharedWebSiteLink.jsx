@@ -5,7 +5,7 @@ import { setLocale } from '../../state/slices/languageSlice';
 import { changeLayerStyle, reArrangeSelectedMapLayers, setLegends, removeAllSelectedLayers } from '../../state/slices/rpcSlice';
 import {  setIsSideMenuOpen, setIsThemeMenuOpen, setSelectedMapLayersMenuTab } from '../../state/slices/uiSlice';
 import { Logger } from '../../utils/logger';
-import { updateLayers, selectGroup } from '../../utils/rpcUtil';
+import { updateLayers, selectTheme } from '../../utils/rpcUtil';
 import { isMobile} from '../../theme/theme';
 import { Slide, toast } from "react-toastify";
 import strings from '../../translations';
@@ -64,7 +64,7 @@ export const HandleSharedWebSiteLink = () => {
 
         if (activateTheme){
             channel && channel.getAllLayersSV(function (allLayers) {
-                selectGroup(store, channel, allLayers, activateTheme, null, null);
+                selectTheme(store, channel, allLayers, activateTheme, null, null);
                 !isMobile && store.dispatch(setIsThemeMenuOpen(true));
             }, function err() {
                 toast.error(strings.layerlist.errorLoadingLayers, {
