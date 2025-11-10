@@ -381,23 +381,25 @@ export const selectTheme = (
 
   // Main Execution Logic
   const isThemeChanged = selectedThemeId !== theme.id;
+  
+  // close themelayers
+  lastSelectedTheme !== null && closeThemeLayers(lastSelectedTheme);
 
   if (selectedThemeId === null || isThemeChanged) {
-    lastSelectedTheme !== null && closeThemeLayers(lastSelectedTheme);
     store.dispatch(setSelectedTheme(theme));
     // TODO: is this update necessary?
     updateLayers(store, channel);
     setTimeout(
       () => {
-        store.dispatch(setIsLegendOpen(true));
-        setTimeout(() => processLayers(theme), 700);
+        setTimeout(() => {
+          processLayers(theme);
+        }, 700);
       },
       isThemeChanged ? 1000 : 700
     );
   } else {
     store.dispatch(setSelectedTheme(null));
     store.dispatch(setAllSelectedThemeLayers([]));
-    closeThemeLayers(lastSelectedTheme);
     updateLayers(store, channel);
     setTimeout(() => {
       store.dispatch(setIsLegendOpen(false));
