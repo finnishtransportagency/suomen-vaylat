@@ -8,10 +8,8 @@ import {
   setCurrentZoomLevel,
   setAllGroups,
   setFeatures,
-  setLegends,
   setCurrentMapCenter,
   setStartMapCenter,
-  setDefaultStyles
 } from '../../../../state/slices/rpcSlice';
 import {
   setGfiCroppingTypes,
@@ -67,8 +65,7 @@ const setupSupportedFunctions = (data, channel, store, isSharedLink) => {
 
   if (data.getViewLayerDefaultStyles) {
     channel.getViewLayerDefaultStyles(
-      (data) => {
-        store.dispatch(setDefaultStyles(data));
+      () => {
       },
       (data) => {
         console.error(strings.getViewStylesError, data);

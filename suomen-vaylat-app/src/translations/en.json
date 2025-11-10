@@ -799,7 +799,8 @@
     "readLess": "Show less",
     "moreInfo": "Further information:",
     "errors": {
-      "themeStyleError": "Error getting styles for theme: "
+      "themeStyleError": "Error getting styles for theme: ",
+      "closeThemeLayersError": "Error closing theme layers!"
     }
   },
   "metadata": {

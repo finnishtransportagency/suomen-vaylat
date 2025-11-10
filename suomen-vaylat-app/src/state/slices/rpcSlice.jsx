@@ -80,7 +80,6 @@ const initialState = {
   loggedInUser: {},
   isLoggedIn: false,
   editingUserlayer: null,
-  defaultStyles: null,
 };
 
 export const rpcSlice = createSlice({
@@ -1016,11 +1015,7 @@ export const rpcSlice = createSlice({
 
     setEditingUserlayer: (state, action) => {
       state.editingUserlayer = action.payload;
-    },
-
-    setDefaultStyles: (state, action) => {
-      state.defaultStyles = action.payload;
-    },
+    }
   }
 });
 
@@ -1103,7 +1098,6 @@ export const {
   setIsLoggedIn,
   setLoggedInUser,
   setEditingUserlayer,
-  setDefaultStyles
 } = rpcSlice.actions;
 
 export default rpcSlice.reducer;

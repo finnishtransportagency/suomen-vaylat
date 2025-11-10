@@ -797,7 +797,8 @@
     "readLess": "Vähemmän",
     "moreInfo": "Lisätietoja:",
     "errors": {
-      "themeStyleError": "Virhe teeman tyylien haussa: "
+      "themeStyleError": "Virhe teeman tyylien haussa: ",
+      "closeThemeLayersError": "Virhe teemakarttojen sulkemisessa!"
     }
   },
   "metadata": {

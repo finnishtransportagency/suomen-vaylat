@@ -298,24 +298,30 @@ export const selectTheme = (
   lastSelectedTheme
 ) => {
   const selectedThemeId = lastSelectedTheme?.id || null;
+  const themeLayers = getThemeLayers(theme);
 
   const closeLayers = (layers) => {
-    layers.forEach((layerId) => {
-      channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [
-        layerId,
-        false
-      ]);
-      const style = store.getState().rpc.defaultStyles[layerId] || null;
-      store.dispatch(changeLayerStyle({ layerId, style }));
-    });
-    updateLayerLegends(store);
-  };
-
-  const closeThemeLayers = (theme) => {
-    if (theme) {
-      theme.layers && closeLayers(theme.layers);
-      theme.groups && theme.groups.forEach(closeThemeLayers);
-    }
+    channel.closeThemeLayers(
+      [layers],
+      function () {
+        // Theme layers successfully closed and styles returned to default, ready to update legends
+        updateLayerLegends(store);
+      },
+      function (err) {
+        console.error('closeThemeLayers error: ', err);
+        toast.error(strings.themelayerlist.errors.closeThemeLayersError, {
+          position: 'top-center',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: false,
+          progress: undefined,
+          theme: 'colored',
+          transition: Slide
+        });
+      }
+    );
   };
 
   const openThemeLayers = (theme, layers) => {
@@ -338,52 +344,50 @@ export const selectTheme = (
   };
 
   const processLayers = (theme) => {
-    const themeLayers = getThemeLayers(theme);
-
     channel.getLayerThemeStyle(
-        [themeLayers, theme.locale['fi'].name],
-        function (data) {
-          // data has successLayers and errorLayers
+      [themeLayers, theme.locale['fi'].name],
+      function (data) {
+        // data has successLayers and errorLayers
 
-          // actually open the default layers
-          openThemeLayers(theme, themeLayers);
+        // actually open the default layers
+        openThemeLayers(theme, themeLayers);
 
-          const selectedMapLayers =
-            store.getState().rpc.selectedLayersByType.mapLayers;
-          store.dispatch(setAllSelectedThemeLayers(themeLayers));
+        const selectedMapLayers =
+          store.getState().rpc.selectedLayersByType.mapLayers;
+        store.dispatch(setAllSelectedThemeLayers(themeLayers));
 
-          // if layer is not in theme, set it not visible
-          selectedMapLayers.forEach((layer) => {
-            if (!themeLayers.includes(layer.id)) {
-              channel.postRequest('ChangeMapLayerOpacityRequest', [layer.id, 0]);
-            }
-          });
-          updateLayers(store, channel);
+        // if layer is not in theme, set it not visible
+        selectedMapLayers.forEach((layer) => {
+          if (!themeLayers.includes(layer.id)) {
+            channel.postRequest('ChangeMapLayerOpacityRequest', [layer.id, 0]);
+          }
+        });
+        updateLayers(store, channel);
 
-          updateLayerLegends(store);
-          store.dispatch(setIsLegendOpen(true));
-        },
-        function (error) {
-          toast.error(strings.themelayerlist.errors.themeStyleError + error, {
-            position: 'top-center',
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: false,
-            progress: undefined,
-            theme: 'colored',
-            transition: Slide
-          });
-        }
-      );
+        updateLayerLegends(store);
+        store.dispatch(setIsLegendOpen(true));
+      },
+      function (error) {
+        toast.error(strings.themelayerlist.errors.themeStyleError + error, {
+          position: 'top-center',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: false,
+          progress: undefined,
+          theme: 'colored',
+          transition: Slide
+        });
+      }
+    );
   };
 
   // Main Execution Logic
   const isThemeChanged = selectedThemeId !== theme.id;
-  
+
   // close themelayers
-  lastSelectedTheme !== null && closeThemeLayers(lastSelectedTheme);
+  lastSelectedTheme !== null && closeLayers(themeLayers);
 
   if (selectedThemeId === null || isThemeChanged) {
     store.dispatch(setSelectedTheme(theme));
