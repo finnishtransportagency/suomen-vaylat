@@ -64,7 +64,7 @@ export const HandleSharedWebSiteLink = () => {
 
         if (activateTheme){
             channel && channel.getAllLayersSV(function (allLayers) {
-                selectTheme(store, channel, allLayers, activateTheme, null, null);
+                selectTheme(store, channel, allLayers, activateTheme, null);
                 !isMobile && store.dispatch(setIsThemeMenuOpen(true));
             }, function err() {
                 toast.error(strings.layerlist.errorLoadingLayers, {

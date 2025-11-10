@@ -28,7 +28,6 @@ const initialState = {
   allThemesWithLayers: [],
   allSelectedThemeLayers: [],
   selectedTheme: null,
-  lastSelectedTheme: null,
   filter: null,
   layerMetadata: { data: null, layer: null, uuid: null },
   legends: [],
@@ -263,17 +262,6 @@ export const rpcSlice = createSlice({
     setSelectedTheme: (state, action) => {
       state.selectedTheme = action.payload;
       LOG.log('setSelectedTheme to ', action.payload);
-    },
-
-    /**
-     * Set last selected theme.
-     * @method setLastSelectedTheme
-     * @param {Object} state
-     * @param {Object} action
-     */
-    setLastSelectedTheme: (state, action) => {
-      state.lastSelectedTheme = action.payload;
-      LOG.log('setLastSelectedTheme to ', action.payload);
     },
 
     /**
@@ -1061,7 +1049,6 @@ export const {
   mapMoveRequest,
   setAllThemesWithLayers,
   setSelectedTheme,
-  setLastSelectedTheme,
   setActiveAnnouncements,
   getLayerMetadata,
   clearLayerMetadata,

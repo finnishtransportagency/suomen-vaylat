@@ -2,7 +2,6 @@ import {
   setAllLayers,
   setSelectedLayers,
   setSelectedTheme,
-  setLastSelectedTheme,
   reArrangeSelectedMapLayers,
   setBackgroundMaps,
   setMapLayers,
@@ -291,17 +290,20 @@ export const updateLayerLegends = (store) => {
  * @param {Object} channel - Communication channel for map layer actions.
  * @param {Object} allLayers - All available layers.
  * @param {Object} theme - The theme to be selected.
- * @param {String} lastSelectedTheme - Previously selected theme.
- * @param {Number} selectedThemeId - ID of currently selected theme.
+ * @param {Object} lastSelectedTheme - Previously selected theme.
  */
 export const selectTheme = (
   store,
   channel,
   allLayers,
   theme,
-  lastSelectedTheme,
-  selectedThemeId
+  lastSelectedTheme
 ) => {
+  const selectedThemeId = lastSelectedTheme?.id || null;
+
+  /* loopataan läpi teeman tasot, vaihdetaan tyyli jos täytyy, sitten päivitetään legendat
+  voisi muokata rpc kutsun niin, että siellä loopataan läpi tasot ja vain tarvittaessa päivitetään tyyli, sitten cllback hakee uudet legendat
+*/
   const closeLayers = (layers) => {
     layers.forEach((layerId) => {
       channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [
@@ -321,7 +323,6 @@ export const selectTheme = (
       theme.groups && theme.groups.forEach(closeThemeLayers);
     }
   };
-  store.dispatch(setLastSelectedTheme(theme));
 
   const openThemeLayers = (theme, layers) => {
     layers.forEach((layerId) => {
@@ -368,8 +369,8 @@ export const selectTheme = (
   const isThemeChanged = selectedThemeId !== theme.id;
 
   if (selectedThemeId === null || isThemeChanged) {
+    lastSelectedTheme !== null && closeThemeLayers(lastSelectedTheme);
     store.dispatch(setSelectedTheme(theme));
-    closeThemeLayers(lastSelectedTheme);
     updateLayers(store, channel);
     setTimeout(
       () => {
@@ -514,7 +515,6 @@ export const reArrangeSelectedLayersOrder = (selectedLayers, store) => {
  */
 export const resetThemeGroups = (store) => {
   store.dispatch(setSelectedTheme(null));
-  store.dispatch(setLastSelectedTheme(null));
   store.dispatch(setAllSelectedThemeLayers([]));
 };
 
@@ -536,7 +536,6 @@ export const resetThemeGroupsForMainScreen = (store, channel, theme) => {
   }
   store.dispatch(setSelectedMapLayersMenuThemeIndex(0));
   store.dispatch(setSelectedTheme(null));
-  store.dispatch(setLastSelectedTheme(null));
 };
 
 /**

@@ -448,7 +448,7 @@ export const Themes = ({ groups, allLayers }) => {
     const { store } = useContext(ReactReduxContext);
     const lang = strings.getLanguage();
 
-    const { channel, selectedTheme, lastSelectedTheme } =
+    const { channel, selectedTheme } =
         useAppSelector((state) => state.rpc);
     const handleSelectTheme = (theme) => {
         selectTheme(
@@ -456,8 +456,7 @@ export const Themes = ({ groups, allLayers }) => {
             channel,
             allLayers,
             theme,
-            lastSelectedTheme,
-            selectedTheme?.id
+            selectedTheme
         );
     };
 

@@ -13,7 +13,7 @@ import { theme } from '../../../../theme/theme';
 const ThemeBadge = () => {
   const { store } = useContext(ReactReduxContext);
   const lang = strings.getLanguage();
-  const { channel, selectedTheme, lastSelectedTheme } =
+  const { channel, selectedTheme } =
     useAppSelector((state) => state.rpc);
 
   const handleClose = () => {
@@ -22,8 +22,7 @@ const ThemeBadge = () => {
       channel,
       null,
       selectedTheme,
-      lastSelectedTheme,
-      selectedTheme?.id
+      null
     );
   };
 
