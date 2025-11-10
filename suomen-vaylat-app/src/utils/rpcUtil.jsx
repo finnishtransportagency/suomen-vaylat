@@ -239,7 +239,7 @@ export const updateSelectedLayers = (store, channel, onComplete) => {
     });
 };
 
-export const getSelectedThemeLayers = (theme, selectedMapLayers) => {
+export const getThemeLayers = (theme) => {
   let array = [];
 
   const recurseThemeLayers = (theme) => {
@@ -254,7 +254,7 @@ export const getSelectedThemeLayers = (theme, selectedMapLayers) => {
       });
     } else return array;
   };
-  recurseThemeLayers(theme, selectedMapLayers);
+  recurseThemeLayers(theme);
   return array;
 };
 
@@ -274,8 +274,6 @@ export const updateLayerLegends = (store) => {
     store.dispatch(
       getLegends({
         handler: (data) => {
-              console.log("updateLayerLegends", data)
-
           store.dispatch(setLegends(data));
         }
       })
@@ -301,9 +299,6 @@ export const selectTheme = (
 ) => {
   const selectedThemeId = lastSelectedTheme?.id || null;
 
-  /* loopataan läpi teeman tasot, vaihdetaan tyyli jos täytyy, sitten päivitetään legendat
-  voisi muokata rpc kutsun niin, että siellä loopataan läpi tasot ja vain tarvittaessa päivitetään tyyli, sitten cllback hakee uudet legendat
-*/
   const closeLayers = (layers) => {
     layers.forEach((layerId) => {
       channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [
@@ -313,7 +308,6 @@ export const selectTheme = (
       const style = store.getState().rpc.defaultStyles[layerId] || null;
       store.dispatch(changeLayerStyle({ layerId, style }));
     });
-    console.log("closeLayers")
     updateLayerLegends(store);
   };
 
@@ -339,30 +333,50 @@ export const selectTheme = (
         ]);
       }
     });
+    // TODO: is this necessary as we already update the layers after hiding non theme layers?
+    updateLayers(store, channel);
   };
 
   const processLayers = (theme) => {
-    let layers = [];
-    theme.layers && layers.push(...theme.layers);
-    theme.groups?.forEach((g) => g.layers && layers.push(...g.layers));
+    const themeLayers = getThemeLayers(theme);
 
-    openThemeLayers(theme, layers);
-    updateLayers(store, channel);
+    channel.getLayerThemeStyle(
+        [themeLayers, theme.locale['fi'].name],
+        function (data) {
+          // data has successLayers and errorLayers
 
-    const selectedMapLayers =
-      store.getState().rpc.selectedLayersByType.mapLayers;
-    const selectedThemeLayers = getSelectedThemeLayers(
-      theme,
-      selectedMapLayers
-    );
-    store.dispatch(setAllSelectedThemeLayers(selectedThemeLayers));
+          // actually open the default layers
+          openThemeLayers(theme, themeLayers);
 
-    selectedMapLayers.forEach((layer) => {
-      if (!selectedThemeLayers.includes(layer.id)) {
-        channel.postRequest('ChangeMapLayerOpacityRequest', [layer.id, 0]);
-        updateLayers(store, channel);
-      }
-    });
+          const selectedMapLayers =
+            store.getState().rpc.selectedLayersByType.mapLayers;
+          store.dispatch(setAllSelectedThemeLayers(themeLayers));
+
+          // if layer is not in theme, set it not visible
+          selectedMapLayers.forEach((layer) => {
+            if (!themeLayers.includes(layer.id)) {
+              channel.postRequest('ChangeMapLayerOpacityRequest', [layer.id, 0]);
+            }
+          });
+          updateLayers(store, channel);
+
+          updateLayerLegends(store);
+          store.dispatch(setIsLegendOpen(true));
+        },
+        function (error) {
+          toast.error(strings.themelayerlist.errors.themeStyleError + error, {
+            position: 'top-center',
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: false,
+            progress: undefined,
+            theme: 'colored',
+            transition: Slide
+          });
+        }
+      );
   };
 
   // Main Execution Logic
@@ -371,10 +385,10 @@ export const selectTheme = (
   if (selectedThemeId === null || isThemeChanged) {
     lastSelectedTheme !== null && closeThemeLayers(lastSelectedTheme);
     store.dispatch(setSelectedTheme(theme));
+    // TODO: is this update necessary?
     updateLayers(store, channel);
     setTimeout(
       () => {
-        console.log("processLayers setIsLegendOpen")
         store.dispatch(setIsLegendOpen(true));
         setTimeout(() => processLayers(theme), 700);
       },

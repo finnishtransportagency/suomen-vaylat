@@ -71,9 +71,8 @@ const StyledFilterIcon = styled.div`
 
 export const Layer = ({ layer, themeName, groupName }) => {
   const { store } = useContext(ReactReduxContext);
-  const [layerStyle, setLayerStyle] = useState(null);
   const { minimizeFilter } = useAppSelector((state) => state.ui);
-  const { filters, allSelectedThemeLayers } = useAppSelector((state) => state.rpc);
+  const { filters } = useAppSelector((state) => state.rpc);
 
   const isFilterable =
     typeof layer.config?.gfi?.filterFields !== 'undefined' &&
@@ -106,44 +105,6 @@ export const Layer = ({ layer, themeName, groupName }) => {
   }, []);
 
   const themeStyle = themeName || null;
-
-  useEffect(() => {
-    // needs only get new style or legends when toggling theme selection
-    if (
-      layer.visible &&
-      selectedTheme &&
-      allSelectedThemeLayers.includes(layer.id)
-    ) {
-      const themeName = selectedTheme.locale?.['fi']?.name || null;
-      channel.getLayerThemeStyle(
-        [layer.id, themeName],
-        function (styleName) {
-          if (styleName && styleName !== layerStyle) {
-            setLayerStyle(styleName);
-            store.dispatch(
-              changeLayerStyle({ layerId: layer.id, style: styleName })
-            );
-            // update layers legends
-            console.log(layer)
-            updateLayerLegends(store);
-          }
-        },
-        function (error) {
-          toast.error(strings.themelayerlist.errors.themeStyleError + error, {
-            position: 'top-center',
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: false,
-            progress: undefined,
-            theme: 'colored',
-            transition: Slide
-          });
-        }
-      );
-    }
-  }, [selectedTheme, layer.visible]);
 
   const handleFilterClick = (layer) => {
     !layer.visible && handleLayerVisibility(channel, layer);
