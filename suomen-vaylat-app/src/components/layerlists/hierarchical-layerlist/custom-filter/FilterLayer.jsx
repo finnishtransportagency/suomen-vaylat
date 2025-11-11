@@ -1,13 +1,9 @@
-import { useContext, useEffect, useState } from "react";
-import { ReactReduxContext, useSelector } from "react-redux";
+import { useContext } from "react";
+import { ReactReduxContext } from "react-redux";
 import styled from "styled-components";
 import LayerMetadataButton from "../LayerMetadataButton";
 import { useAppSelector } from "../../../../state/hooks";
-import { toast, Slide } from "react-toastify";
-import strings from "../../../../translations"
 import LayerlistSwitch from "../LayerlistSwitch";
-import { changeLayerStyle } from '../../../../state/slices/rpcSlice';
-import { updateLayerLegends } from '../../../../utils/rpcUtil';
 import { setSelectedCustomFilterLayers } from '../../../../state/slices/uiSlice';
 
 const StyledLayerContainer = styled.div`

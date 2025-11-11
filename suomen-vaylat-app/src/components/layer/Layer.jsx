@@ -1,8 +1,7 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect } from 'react';
 import { ReactReduxContext, useSelector } from 'react-redux';
 import { faFilter } from '@fortawesome/free-solid-svg-icons';
 import Badge from 'react-bootstrap/Badge';
-import { toast, Slide } from 'react-toastify';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { theme, isMobile } from '../../theme/theme';
 import ReactTooltip from 'react-tooltip';
@@ -15,10 +14,9 @@ import { setFilteringInfo } from '../../state/slices/rpcSlice';
 
 import styled from 'styled-components';
 import {
-  changeLayerStyle,
   setMapLayerVisibility
 } from '../../state/slices/rpcSlice';
-import { updateLayers, updateLayerLegends } from '../../utils/rpcUtil';
+import { updateLayers } from '../../utils/rpcUtil';
 import LayerDownloadLinkButton from '../layerlists/hierarchical-layerlist/LayerDownloadLinkButton';
 import { setIsDownloadLinkDialogOpen } from '../../state/slices/uiSlice';
 import LayerMetadataButton from '../layerlists/hierarchical-layerlist/LayerMetadataButton';
