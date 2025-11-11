@@ -63,7 +63,7 @@ export const updateLayers = (store, channel, onComplete) => {
 
 /**
  * Activate view to map
- * @method updateLayers
+ * @method activateView
  * @param {Object} store
  * @param {Object} channel
  * @param {Object} view The view data object
@@ -280,12 +280,15 @@ export const updateLayerLegends = (store) => {
   }, 1000);
 };
 
-const closeLayers = (channel, store, layers) => {
+const closeThemeLayers = (channel, store, theme, onComplete) => {
+  const themeLayers = getThemeLayers(theme);
   channel.closeThemeLayers(
-    [layers],
+    [themeLayers],
     function () {
       // Theme layers successfully closed and styles returned to default, ready to update legends
+      updateLayers(store, channel)
       updateLayerLegends(store);
+      onComplete();
     },
     function (err) {
       console.error('closeThemeLayers error: ', err);
@@ -312,15 +315,15 @@ const closeLayers = (channel, store, layers) => {
  * @param {Object} theme - The theme to be selected.
  */
 export const closeTheme = (store, channel, theme) => {
-  const themeLayers = getThemeLayers(theme);
   // close themelayers
-  closeLayers(channel, store, themeLayers);
-  store.dispatch(setSelectedTheme(null));
-  store.dispatch(setAllSelectedThemeLayers([]));
-  setTimeout(() => {
-    store.dispatch(setIsLegendOpen(false));
-    showNonThemeLayers(store, channel);
-  }, 700);
+  closeThemeLayers(channel, store, theme, () => {
+    store.dispatch(setSelectedTheme(null));
+    store.dispatch(setAllSelectedThemeLayers([]));
+    setTimeout(() => {
+      store.dispatch(setIsLegendOpen(false));
+      showNonThemeLayers(store, channel);
+    }, 700);
+  });
 };
 
 /**
@@ -341,6 +344,7 @@ export const selectTheme = (
 ) => {
   const selectedThemeId = lastSelectedTheme?.id || null;
   const themeLayers = getThemeLayers(theme);
+  console.log("themeLayers", themeLayers)
 
   const openThemeLayers = (theme, layers) => {
     layers.forEach((layerId) => {
@@ -362,7 +366,7 @@ export const selectTheme = (
   };
 
   const processLayers = (theme) => {
-    channel.setLayerThemeStyle(
+    channel.getLayerThemeStyle(
       [themeLayers, theme.locale['fi'].name],
       function (data) {
         // data has successLayers and errorLayers
@@ -404,18 +408,30 @@ export const selectTheme = (
   // Main Execution Logic
   const isThemeChanged = selectedThemeId !== theme.id;
 
-  // close themelayers
-  closeLayers(channel, store, themeLayers);
-
-  store.dispatch(setSelectedTheme(theme));
-  setTimeout(
-    () => {
-      setTimeout(() => {
-        processLayers(theme);
-      }, 700);
-    },
-    isThemeChanged ? 1000 : 700
-  );
+  if (lastSelectedTheme !== null) {
+    // close themelayers
+    closeThemeLayers(channel, store, lastSelectedTheme, () => {
+      store.dispatch(setSelectedTheme(theme));
+      setTimeout(
+        () => {
+          setTimeout(() => {
+            processLayers(theme);
+          }, 700);
+        },
+        isThemeChanged ? 1000 : 700
+      );
+    });
+  } else {
+    store.dispatch(setSelectedTheme(theme));
+    setTimeout(
+      () => {
+        setTimeout(() => {
+          processLayers(theme);
+        }, 700);
+      },
+      isThemeChanged ? 1000 : 700
+    );
+  }
 };
 
 /**
