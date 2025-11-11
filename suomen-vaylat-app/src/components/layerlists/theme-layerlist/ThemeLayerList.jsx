@@ -15,7 +15,7 @@ import { useAppSelector } from '../../../state/hooks';
 import strings from '../../../translations';
 import { setZoomTo } from '../../../state/slices/rpcSlice';
 import { setWarning } from '../../../state/slices/uiSlice';
-import { selectTheme, sortObjectAlphabetically } from '../../../utils/rpcUtil';
+import { closeTheme, selectTheme, sortObjectAlphabetically } from '../../../utils/rpcUtil';
 import Layers from '../../layer/Layers';
 
 import hankekartta from './resources/images/hankekartta.JPG';
@@ -451,13 +451,21 @@ export const Themes = ({ groups, allLayers }) => {
     const { channel, selectedTheme } =
         useAppSelector((state) => state.rpc);
     const handleSelectTheme = (theme) => {
-        selectTheme(
-            store,
-            channel,
-            allLayers,
-            theme,
-            selectedTheme
-        );
+        if (selectedTheme && theme.id === selectedTheme.id) {
+            closeTheme(
+                store,
+                channel,
+                selectedTheme
+            );
+        } else {
+            selectTheme(
+                store,
+                channel,
+                allLayers,
+                theme,
+                selectedTheme
+            );
+        }
     };
 
     let links = [];

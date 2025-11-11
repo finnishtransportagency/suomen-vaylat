@@ -10,8 +10,7 @@ import {
   setLegends,
   addMarkerRequest,
   removeMarkerRequest,
-  setUserLayers,
-  changeLayerStyle
+  setUserLayers
 } from '../state/slices/rpcSlice';
 import { Slide, toast } from 'react-toastify';
 import {
@@ -281,6 +280,49 @@ export const updateLayerLegends = (store) => {
   }, 1000);
 };
 
+const closeLayers = (channel, store, layers) => {
+  channel.closeThemeLayers(
+    [layers],
+    function () {
+      // Theme layers successfully closed and styles returned to default, ready to update legends
+      updateLayerLegends(store);
+    },
+    function (err) {
+      console.error('closeThemeLayers error: ', err);
+      toast.error(strings.themelayerlist.errors.closeThemeLayersError, {
+        position: 'top-center',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: false,
+        progress: undefined,
+        theme: 'colored',
+        transition: Slide
+      });
+    }
+  );
+};
+
+/**
+ * Closes theme
+ * @function closeTheme
+ * @param {Object} store - Redux store for state management.
+ * @param {Object} channel - Communication channel for map layer actions.
+ * @param {Object} theme - The theme to be selected.
+ */
+export const closeTheme = (store, channel, theme) => {
+  const themeLayers = getThemeLayers(theme);
+  // close themelayers
+  closeLayers(channel, store, themeLayers);
+  store.dispatch(setSelectedTheme(null));
+  store.dispatch(setAllSelectedThemeLayers([]));
+  setTimeout(() => {
+    store.dispatch(setIsLegendOpen(false));
+    showNonThemeLayers(store, channel);
+  }, 700);
+};
+
 /**
  * Selects and manages layers based on the given theme.
  * @function selectTheme
@@ -299,30 +341,6 @@ export const selectTheme = (
 ) => {
   const selectedThemeId = lastSelectedTheme?.id || null;
   const themeLayers = getThemeLayers(theme);
-
-  const closeLayers = (layers) => {
-    channel.closeThemeLayers(
-      [layers],
-      function () {
-        // Theme layers successfully closed and styles returned to default, ready to update legends
-        updateLayerLegends(store);
-      },
-      function (err) {
-        console.error('closeThemeLayers error: ', err);
-        toast.error(strings.themelayerlist.errors.closeThemeLayersError, {
-          position: 'top-center',
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: false,
-          progress: undefined,
-          theme: 'colored',
-          transition: Slide
-        });
-      }
-    );
-  };
 
   const openThemeLayers = (theme, layers) => {
     layers.forEach((layerId) => {
@@ -387,29 +405,17 @@ export const selectTheme = (
   const isThemeChanged = selectedThemeId !== theme.id;
 
   // close themelayers
-  lastSelectedTheme !== null && closeLayers(themeLayers);
+  closeLayers(channel, store, themeLayers);
 
-  if (selectedThemeId === null || isThemeChanged) {
-    store.dispatch(setSelectedTheme(theme));
-    // TODO: is this update necessary?
-    updateLayers(store, channel);
-    setTimeout(
-      () => {
-        setTimeout(() => {
-          processLayers(theme);
-        }, 700);
-      },
-      isThemeChanged ? 1000 : 700
-    );
-  } else {
-    store.dispatch(setSelectedTheme(null));
-    store.dispatch(setAllSelectedThemeLayers([]));
-    updateLayers(store, channel);
-    setTimeout(() => {
-      store.dispatch(setIsLegendOpen(false));
-      showNonThemeLayers(store, channel);
-    }, 700);
-  }
+  store.dispatch(setSelectedTheme(theme));
+  setTimeout(
+    () => {
+      setTimeout(() => {
+        processLayers(theme);
+      }, 700);
+    },
+    isThemeChanged ? 1000 : 700
+  );
 };
 
 /**

@@ -4,12 +4,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useAppSelector } from '../../../../state/hooks';
 import { ReactReduxContext } from 'react-redux';
 import strings from '../../../../translations';
-import { selectTheme } from '../../../../utils/rpcUtil';
+import { closeTheme } from '../../../../utils/rpcUtil';
 import { ThemeGroupShareButton } from '../../../share-website/ShareLinkButtons';
 import Badge from '../../../badges/Badge';
 import { theme } from '../../../../theme/theme';
 
-// Adjust as needed!
 const ThemeBadge = () => {
   const { store } = useContext(ReactReduxContext);
   const lang = strings.getLanguage();
@@ -17,12 +16,10 @@ const ThemeBadge = () => {
     useAppSelector((state) => state.rpc);
 
   const handleClose = () => {
-    selectTheme(
+    closeTheme(
       store,
       channel,
-      null,
-      selectedTheme,
-      null
+      selectedTheme
     );
   };
 
