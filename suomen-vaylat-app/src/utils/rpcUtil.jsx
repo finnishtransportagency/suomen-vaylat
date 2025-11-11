@@ -282,8 +282,12 @@ export const updateLayerLegends = (store) => {
 
 const closeThemeLayers = (channel, store, theme, onComplete) => {
   const themeLayers = getThemeLayers(theme);
+  const selectedMapLayers = store.getState().rpc.selectedLayersByType.mapLayers;
+  const selectedIdSet = new Set(selectedMapLayers.map(l => Number(l.id)));
+  const selectedLayers = themeLayers.filter(id => selectedIdSet.has(Number(id)));
+
   channel.closeThemeLayers(
-    [themeLayers],
+    [themeLayers, selectedLayers],
     function () {
       // Theme layers successfully closed and styles returned to default, ready to update legends
       updateLayers(store, channel)
@@ -366,7 +370,7 @@ export const selectTheme = (
   };
 
   const processLayers = (theme) => {
-    channel.getLayerThemeStyle(
+    channel.setLayerThemeStyle(
       [themeLayers, theme.locale['fi'].name],
       function (data) {
         // data has successLayers and errorLayers
