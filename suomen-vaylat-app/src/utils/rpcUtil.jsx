@@ -362,7 +362,7 @@ export const selectTheme = (
   };
 
   const processLayers = (theme) => {
-    channel.getLayerThemeStyle(
+    channel.setLayerThemeStyle(
       [themeLayers, theme.locale['fi'].name],
       function (data) {
         // data has successLayers and errorLayers
