@@ -224,23 +224,10 @@ const StyledCTAButton = styled.button`
   }
 `;
 
-
-export const StyledShareDescription = ({
-  currentZoomLevel,
-  selectedLayers,
-  center,
-  lang,
-  hasThemeShare,
-  selectedTheme
-}) => {
-  return null;
-};
-
-
 /**
- * Shows ShareWebsiteDialog if shareUrl is defined in Redux state.
+ * Shows ShareWebsiteContent if shareUrl is defined in Redux state.
  */
-export const ShareWebsiteDialog = () => {
+export const ShareWebsiteContent = () => {
   const { center, currentZoomLevel, selectedLayers, legends } =
     useAppSelector((state) => state.rpc);
 

@@ -3,7 +3,7 @@ import Dialog from '../../dialog/Dialog';
 import { faShareAlt } from '@fortawesome/free-solid-svg-icons';
 import { useAppSelector } from '../../../state/hooks';
 import strings from '../../../translations';
-import { ShareWebsiteDialog }  from '../ShareWebsiteDialog';
+import { ShareWebsiteContent }  from '../ShareWebsiteContent';
 import { setShareUrl } from '../../../state/slices/uiSlice';
 import { ReactReduxContext } from 'react-redux';
 
@@ -31,7 +31,7 @@ const ShareWebsiteDialog = ({ constraintsRef }) => {
       isOpen={isShareOpen}
       id="share_website_popup"
     >
-      <ShareWebsiteDialog />
+      <ShareWebsiteContent />
     </Dialog>
   );
 };
