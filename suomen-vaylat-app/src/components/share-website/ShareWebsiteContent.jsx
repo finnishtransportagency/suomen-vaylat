@@ -241,8 +241,10 @@ export const ShareWebsiteContent = () => {
     return legend?.legendStyle || 'default';
   };
 
+  const filteredLayers = selectedLayers.filter((l) => typeof l.id !== 'string');
+
   let mapLayers = '';
-  selectedLayers.forEach((l) => {
+  filteredLayers.forEach((l) => {
     mapLayers += l.id + '+' + l.opacity + '+' + getMapLayerStyle(l) + '++';
   });
   mapLayers = mapLayers.slice(0, -2); // remove last '++'
@@ -273,7 +275,7 @@ export const ShareWebsiteContent = () => {
         <StyledDescription>
           {strings.share.shareTexts.shareDescription}
       </StyledDescription>
-        {selectedLayers?.length > 0 && (
+        {filteredLayers?.length > 0 && (
   <>
   <StyledLayerSummary>
     <StyledLayerInfo>
@@ -284,7 +286,7 @@ export const ShareWebsiteContent = () => {
         </div>
         <div className="sub">
           {strings.formatString(strings.share.shareTexts.showOpenLayersCount, {
-            count: selectedLayers.length,
+            count: filteredLayers.length,
           })}
         </div>
       </div>
@@ -304,7 +306,7 @@ export const ShareWebsiteContent = () => {
 
     {showLayers && (
   <StyledLayerList>
-    {selectedLayers.map((layer) => (
+    {filteredLayers.map((layer) => (
       <li key={layer.id}>
       <LayersIcon className="mui-icon" />
         {layer.name}
