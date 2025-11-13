@@ -95,8 +95,6 @@ export const Legend = () => {
   const { currentZoomLevel, selectedLayers } = useSelector((state) => state.rpc);
   const { isSearchResultPanelVisible, isLegendOpen } = useSelector((state) => state.ui);
 
-  console.log(allLegends)
-
   const listVariants = {
     visible: {
       y: 0,

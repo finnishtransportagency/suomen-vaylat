@@ -124,7 +124,6 @@ export const Layer = ({ layer, themeName, groupName }) => {
               changeLayerStyle({ layerId: layer.id, style: styleName })
             );
             // update layers legends
-            console.log(layer)
             updateLayerLegends(store);
           }
         },
