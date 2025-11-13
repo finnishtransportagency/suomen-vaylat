@@ -91,6 +91,8 @@ export const HandleSharedWebSiteLink = () => {
             const layerProps = l.split('+');
             if (layerProps.length === 3) {
                 const layerId = parseInt(layerProps[0]) || layerProps[0] ;
+                // make sure we do not do anything with possible userlayer that is somehow passed in the url
+                if (typeof layerId === 'string') return;
                 const opacity = parseInt(layerProps[1]);
                 const style = layerProps[2];
                 channel.postRequest('ChangeMapLayerOpacityRequest', [layerId, opacity]);

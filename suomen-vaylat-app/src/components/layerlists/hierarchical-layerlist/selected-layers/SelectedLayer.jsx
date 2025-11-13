@@ -304,8 +304,8 @@ export const SelectedLayer = (
     };
 
     // TODO : Currently there's some mismatch between the zoom levels so we fix it manually by adding or substracting 1
-    const isCurrentZoomTooFar = layer.maxZoomLevel && layer.minZoomLevel && currentZoomLevel <=  layer.minZoomLevel;
-    const isCurrentZoomTooClose = layer.maxZoomLevel && layer.minZoomLevel && currentZoomLevel >=  layer.maxZoomLevel
+    const isCurrentZoomTooFar = layer.minZoomLevel && layer.minZoomLevel !== -1 && currentZoomLevel <=  layer.minZoomLevel;
+    const isCurrentZoomTooClose = layer.maxZoomLevel && layer.maxZoomLevel !== -1 && currentZoomLevel >=  layer.maxZoomLevel
 
     let layerInfoText = strings.layerlist.selectedLayers.layerVisible;
     if (isCurrentZoomTooFar) {
@@ -315,6 +315,7 @@ export const SelectedLayer = (
     }
 
     const isLayerSelectedThemeLayer = allSelectedThemeLayers.find(themeLayer => themeLayer === layer.id);
+
     return (
             <StyledLayerContainer>
                 <DragHandle />

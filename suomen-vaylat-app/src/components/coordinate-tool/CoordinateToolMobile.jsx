@@ -238,8 +238,8 @@ const CoordinateToolMobile = () => {
   const { isCoordinateToolOpen } = useAppSelector((state) => state.ui);
   const { store } = useContext(ReactReduxContext);
   const [mapCenter, setMapCenter] = useState({
-    x: Math.round(center.x),
-    y: Math.round(center.y)
+    x: center.x,
+    y: center.y
   });
   const [isValidX, setIsValidX] = useState(true);
   const [isValidY, setIsValidY] = useState(true);
@@ -260,7 +260,7 @@ const CoordinateToolMobile = () => {
     setIsValidX(true);
     setIsValidY(true);
 
-    setMapCenter({ x: Math.round(center.x), y: Math.round(center.y) });
+    setMapCenter({ x: center.x, y: center.y });
   }, [center]);
 
   const handleInputChange = (key, value) => {
@@ -303,8 +303,8 @@ const CoordinateToolMobile = () => {
 
   const hasCoordsChanged = () => {
     return (
-      Math.round(center.x) !== Number(mapCenter.x) ||
-      Math.round(center.y) !== Number(mapCenter.y)
+      center.x !== Number(mapCenter.x) ||
+      center.y !== Number(mapCenter.y)
     );
   };
 

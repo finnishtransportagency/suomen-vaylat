@@ -348,7 +348,6 @@ export const selectTheme = (
 ) => {
   const selectedThemeId = lastSelectedTheme?.id || null;
   const themeLayers = getThemeLayers(theme);
-  console.log("themeLayers", themeLayers)
 
   const openThemeLayers = (theme, layers) => {
     layers.forEach((layerId) => {
