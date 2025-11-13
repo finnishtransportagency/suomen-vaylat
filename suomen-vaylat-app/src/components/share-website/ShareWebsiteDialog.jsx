@@ -238,9 +238,9 @@ export const StyledShareDescription = ({
 
 
 /**
- * Shows ShareWebSitePopup if shareUrl is defined in Redux state.
+ * Shows ShareWebsiteDialog if shareUrl is defined in Redux state.
  */
-export const ShareWebSitePopup = () => {
+export const ShareWebsiteDialog = () => {
   const { center, currentZoomLevel, selectedLayers, legends } =
     useAppSelector((state) => state.rpc);
 
