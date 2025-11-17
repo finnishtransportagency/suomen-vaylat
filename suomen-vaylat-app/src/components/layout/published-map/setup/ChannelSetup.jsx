@@ -7,19 +7,16 @@ import {
   setZoomRange,
   setCurrentZoomLevel,
   setAllGroups,
-  setCurrentState,
   setFeatures,
-  setLegends,
   setCurrentMapCenter,
   setStartMapCenter,
-  setDefaultStyles
 } from '../../../../state/slices/rpcSlice';
 import {
   setGfiCroppingTypes,
   setSelectedBaseLayers
 } from '../../../../state/slices/uiSlice';
 import { BASE_LAYERS_LOCALSTORAGE } from '../../../../utils/constants';
-import { activateView, updateLayers } from '../../../../utils/rpcUtil';
+import { activateView, updateLayerLegends, updateLayers } from '../../../../utils/rpcUtil';
 import { getActiveAnnouncements } from '../../../../utils/rpcUtil';
 import { IS_EXTRANET } from '../../../../utils/appInfoUtil';
 import { Slide, toast } from 'react-toastify';
@@ -64,27 +61,28 @@ const fetchAnnouncementsAsync = async (data, channel, store) => {
   });
 };
 
-const setupSupportedFunctions = (data, channel, store) => {
+const setupSupportedFunctions = (data, channel, store, isSharedLink) => {
 
-  channel.getViewLayerDefaultStyles(
-    (data) => {
-      store.dispatch(setDefaultStyles(data));
-    },
-    (data) => {
-      console.error(strings.getViewStylesError, data);
-      toast.error(strings.getViewStylesError, {
-        position: 'top-center',
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: 'colored',
-        transition: Slide
-      });
-    }
-  );
+  if (data.getViewLayerDefaultStyles) {
+    channel.getViewLayerDefaultStyles(
+      () => {
+      },
+      (data) => {
+        console.error(strings.getViewStylesError, data);
+        toast.error(strings.getViewStylesError, {
+          position: 'top-center',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'colored',
+          transition: Slide
+        });
+      }
+    );
+  }
 
   if (IS_EXTRANET && data.fetchUserLayers) {
     channel.fetchUserLayers(
@@ -155,12 +153,16 @@ const setupSupportedFunctions = (data, channel, store) => {
     });
   }
 
+  // Update layers and then complete the function onComplete
   updateLayers(store, channel, () => {
     //handle default view
     const defaultView = store
       .getState()
       .rpc?.views?.find((view) => view.default);
-    defaultView && activateView(store, channel, defaultView);
+
+    if (!isSharedLink && defaultView) {
+      activateView(store, channel, defaultView);
+    }
 
     // handle base layers tool
     const stored = localStorage.getItem(BASE_LAYERS_LOCALSTORAGE);
@@ -192,26 +194,15 @@ const setupSupportedFunctions = (data, channel, store) => {
       );
       store.dispatch(setSelectedBaseLayers(defaultBackgroundMaps));
     }
-  });
 
-  if (data.getCurrentState) {
-    channel.getCurrentState((currentStateData) =>
-      store.dispatch(setCurrentState(currentStateData))
-    );
-  }
+    // Update legends now that they are for sure loaded in Oskari
+    updateLayerLegends(store);
+  });
 
   if (data.getFeatures) {
     channel.getFeatures((featuresData) =>
       store.dispatch(setFeatures(featuresData))
     );
-  }
-
-  if (data.getLegends) {
-    window.legendUpdateTimer = setTimeout(() => {
-      channel.getLegends((legendsData) =>
-        store.dispatch(setLegends(legendsData))
-      );
-    }, 500);
   }
 
   if (data.getMapPosition) {

@@ -1,25 +1,33 @@
-import { useState, useContext, useEffect, useCallback } from "react";
-import { useAppSelector } from "../../state/hooks";
-import { ReactReduxContext } from "react-redux";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import "dayjs/locale/fi";
-import "dayjs/locale/sv";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { useState, useContext, useEffect, useCallback } from 'react';
+import { useAppSelector } from '../../state/hooks';
+import { ReactReduxContext } from 'react-redux';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import 'dayjs/locale/fi';
+import 'dayjs/locale/sv';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import ReactTooltip from 'react-tooltip';
-import { updateFiltersOnMap } from "../../utils/gfiUtil"
-import { theme, isMobile } from '../../theme/theme';
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import {
-  setWarning,
-} from "../../state/slices/uiSlice";
-import Select from "react-select";
+  getPropertyOperatorCQL,
+  updateFiltersOnMap
+} from '../../utils/gfiUtil';
+import { theme, isMobile } from '../../theme/theme';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { setWarning } from '../../state/slices/uiSlice';
+import Select from 'react-select';
 
-import "react-toastify/dist/ReactToastify.css";
-import styled from "styled-components";
-import strings from "../../translations";
-import { faPlus, faTimes, faTrash, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { setFilters } from "../../state/slices/rpcSlice";
+import 'react-toastify/dist/ReactToastify.css';
+import styled from 'styled-components';
+import strings from '../../translations';
+import {
+  faPlus,
+  faTimes,
+  faTrash,
+  faInfoCircle
+} from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { setFilters } from '../../state/slices/rpcSlice';
+import { Slide, toast } from 'react-toastify';
+import { CircularProgress } from '@mui/material';
 
 const StyledFilterProp = styled.div``;
 
@@ -29,26 +37,26 @@ const StyledFilterPropContainer = styled.div`
 `;
 
 const StyledHeaderButton = styled.div`
-    position: relative;
-    cursor: pointer;
-    width: 40px;
-    height: 40px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 50%;
-    border: none;
-    background: none;
+  position: relative;
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  border: none;
+  background: none;
+  svg {
+    color: ${(props) => props.theme.colors.mainColor1};
+    font-size: 20px;
+    transition: all 0.1s ease-out;
+  }
+  &:hover {
     svg {
-        color: ${props => props.theme.colors.mainColor1};
-        font-size: 20px;
-        transition: all 0.1s ease-out;
-    };
-    &:hover {
-        svg {
-            color: ${props => props.theme.colors.mainColor2};
-        }
+      color: ${(props) => props.theme.colors.mainColor2};
     }
+  }
 `;
 
 const StyledFilterHeader = styled.div`
@@ -58,7 +66,7 @@ const StyledFilterHeader = styled.div`
 
 const StyledDialogContainer = styled.div`
   :after {
-    content: "";
+    content: '';
     display: table;
     clear: both;
   }
@@ -74,7 +82,7 @@ const StyledDialogContainer = styled.div`
 
 const StyledDialogSelectionContainer = styled.div`
   :after {
-    content: "";
+    content: '';
     display: table;
     clear: both;
   }
@@ -85,7 +93,7 @@ const StyledDialogSelectionContainer = styled.div`
 
 const StyledDialogResultContainer = styled.div`
   :after {
-    content: "";
+    content: '';
     display: table;
     clear: both;
   }
@@ -111,15 +119,15 @@ const StyledDialogInputFloatingChapter = styled.div`
 
 const StyledDialogFloatingActionChapter = styled.div`
   width: 7%;
-  margin-left: ".5em";
+  margin-top: 1em;
   float: left;
   position: relative;
   display: flex;
   flex-direction: row;
   align-items: center;
   width: 100%;
-  justify-content: flex-end;
-  align-self: flex-end;
+  justify-content: flex-start;
+  align-self: flex-start;
 `;
 
 const StyledInput = styled.input`
@@ -134,8 +142,7 @@ const StyledInput = styled.input`
 `;
 
 const StyledFilterContainer = styled.div`
-  padding-top: 1em;
-  margin-left: ".5em";
+  margin-left: '.5em';
   width: 100%;
   height: 100%;
   display: flex;
@@ -164,31 +171,6 @@ const StyledFilter = styled.div`
   display: flex;
 `;
 
-const StyledSelectedTabDisplayOptionsButton = styled.button`
-  display: flex;
-  align-items: center;
-  position: relative;
-  right: 0px;
-  margin: 1em 0 0.5em 0.5em;
-  cursor: pointer;
-  color: ${(props) => props.theme.colors.mainColor1};
-  background: none;
-  border: none;
-  padding: 0;
-  font: inherit;
-  user-select: none;
-
-  svg {
-    font-size: 24px;
-  }
-
-  &:disabled {
-    opacity: 0.5;
-    color: ${(props) => props.theme.colors.darkGrey};
-    cursor: not-allowed;
-  }
-`;
-
 const StyledTimesIconWrapper = styled.div`
   margin: 0.5em;
   border: none;
@@ -207,51 +189,123 @@ const StyledTimesIconWrapper = styled.div`
   float: right;
 `;
 
-const StyledTrashIconWrapper = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  align-items: flex-start;
-  text-align: end;
-  margin: 1em 0 1em 0;
-  border: none;
-  background: none;
-  cursor: pointer;
-  color: ${(props) => props.theme.colors.mainColor1};
-  svg {
-    font-size: 20px;
-  }
-  &:hover {
-    svg {
-      color: ${(props) => props.theme.colors.mainColor2};
-    }
-  }
-`;
-
 const StyledValidationMessage = styled.div`
-  color: ${props => props.theme.colors.secondaryColorDarkOrange};
+  color: ${(props) => props.theme.colors.secondaryColorDarkOrange};
   margin: 0.3em 0 0 0.2em;
-`
+`;
 
 const StyledSelect = styled(Select)`
   font-size: 14;
   color: 'blue';
 `;
 
-const Dropdown = ({   
-    options,
-    placeholder,
-    value, 
-    setValue,
-    isDisabled
-  }) => {
-      
-  const styles3 = { 
+const StyledFeatureCount = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 0.5em;
+  margin-top: 1em;
+`;
+
+const StyledAddFilterButton = styled.button`
+  background-color: ${(props) => props.theme?.colors?.mainWhite};
+  color: ${(props) => props.theme?.colors?.mainColor1};
+  border: 2px solid ${(props) => props.theme?.colors?.mainColor1};
+  border-radius: 24px;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 8px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.1s;
+
+  #add_filter_plus_icon {
+    margin-right: 0.5em;
+    font-size: 12px;
+  }
+
+  #add_filter_spinner {
+    margin-right: 0.5em;
+    color: ${(props) => props.theme?.colors?.mainColor1};
+  }
+
+  /* pointer only when not disabled and only hover when enabled */
+  &:not(:disabled) {
+    cursor: pointer;
+  }
+  &:not(:disabled):hover {
+    background-color: ${(props) => props.theme?.colors?.hover};
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    background-color: ${(props) => props.theme.colors.darkGrey};
+    color: ${(props) => props.theme?.colors?.mainWhite};
+    cursor: not-allowed;
+    border: 2px solid ${(props) => props.theme?.colors?.darkGrey};
+
+    #add_filter_spinner {
+      margin-right: 0.5em;
+      color: ${(props) => props.theme?.colors?.mainWhite};
+    }
+  }
+
+  @media ${(props) => props.theme.device.mobileL} {
+    margin: 18px 0px;
+    width: 100%;
+  }
+`;
+
+const StyledRemoveAllFiltersButton = styled.button`
+  background-color: ${(props) => props.theme?.colors?.mainWhite};
+  color: ${(props) => props.theme?.colors?.mainColor1};
+  border: 2px solid ${(props) => props.theme?.colors?.mainColor1};
+  border-radius: 24px;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 8px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.1s;
+  width: fit-content;
+  margin-top: 1em;
+
+  svg {
+    margin-right: 12px;
+    font-size: 12px;
+  }
+
+  /* pointer only when not disabled and only hover when enabled */
+  &:not(:disabled) {
+    cursor: pointer;
+  }
+  &:not(:disabled):hover {
+    background-color: ${(props) => props.theme?.colors?.hover};
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    background-color: ${(props) => props.theme.colors.darkGrey};
+    color: ${(props) => props.theme?.colors?.mainWhite};
+    cursor: not-allowed;
+    border: none;
+  }
+
+  @media ${(props) => props.theme.device.mobileL} {
+    margin: 18px 0px;
+    width: 100%;
+  }
+`;
+
+const Dropdown = ({ options, placeholder, value, setValue, isDisabled }) => {
+  const styles3 = {
     option: (provided, state) => ({
       ...provided,
       zIndex: 101,
       position: 'relative'
     }),
-    menuPortal: base => ({ ...base, zIndex: 9999 })
+    menuPortal: (base) => ({ ...base, zIndex: 9999 })
   };
 
   return (
@@ -266,19 +320,16 @@ const Dropdown = ({
       styles={styles3}
       autoFocus={false}
       isDisabled={isDisabled}
-      menuPortalTarget={document.body} 
+      menuPortalTarget={document.body}
     />
   );
 };
 
-export const LayerFilter = ({filterInfo}) => {
-  const {
-    filters,
-    channel,
-  } = useAppSelector((state) => state.rpc);
+export const LayerFilter = ({ filterInfo }) => {
+  const { filters, channel } = useAppSelector((state) => state.rpc);
   const { store } = useContext(ReactReduxContext);
   const [operatorValue, setOperatorValue] = useState({});
-  const [filterValue, setFilterValue] = useState({ value: "", type: null });
+  const [filterValue, setFilterValue] = useState({ value: '', type: null });
   const [propValue, setPropValue] = useState({});
   const [filterOptions, setFilterOptions] = useState([]);
   const [fieldNameLocales, setFieldNameLocales] = useState({});
@@ -286,77 +337,130 @@ export const LayerFilter = ({filterInfo}) => {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [validationError, setValidationError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [featureCount, setFeatureCount] = useState(null);
 
   const handleSetPropValue = (value) => {
     setStartDate(null);
     setEndDate(null);
-    setFilterValue({ value: "", type: null });
+    setFilterValue({ value: '', type: null });
     setOperatorValue({});
     setPropValue(value);
   };
 
   const addFilter = () => {
+    setIsLoading(true);
     const prop = propValue.value;
     var value;
     if (startDate || endDate) {
       value = {
         start: startDate ? new Date(startDate) : null,
-        end: endDate ? new Date(endDate) : null,
+        end: endDate ? new Date(endDate) : null
       };
     } else {
       value = filterValue.value;
     }
     const type = propValue.type;
-    const oper = type === "date" ? "date" : operatorValue.value;
+    const oper = type === 'date' ? 'date' : operatorValue.value;
     const layer = filterInfo?.layer?.id;
 
     if (!prop || !value) {
       //lisää popup varoitus
       return;
     }
-    const updatedFilters = [
-        ...filters,
-        {
-          layer: layer,
-          property: prop,
-          operator: oper,
-          value: value,
-          type: type,
-          codeValues: codeListValues[prop] || null
-        },
-      ]
+    let updatedFilters = [
+      ...filters,
+      {
+        layer: layer,
+        property: prop,
+        operator: oper,
+        value: value,
+        type: type,
+        codeValues: codeListValues[prop] || null
+      }
+    ];
 
-    updateFiltersOnMap(updatedFilters, filterInfo, channel);
-    store.dispatch(
-      setFilters(updatedFilters)
+    let filtersString = '';
+    updatedFilters &&
+      !updatedFilters.codeValue &&
+      updatedFilters
+        .filter((f) => f.layer === filterInfo?.layer?.id)
+        .forEach((filter, index) => {
+          var cqlFilter = getPropertyOperatorCQL(filter);
+          index === 0
+            ? (filtersString += cqlFilter)
+            : (filtersString += ' AND ' + cqlFilter);
+        });
+
+    channel.getFeatureCount(
+      [filterInfo.layer.id, filtersString],
+      (data) => {
+        if (data.count && typeof data.count === 'number' && data.count > 0) {
+          // features found so apply filter
+          updateFiltersOnMap(filtersString, filterInfo, channel);
+          setFeatureCount(data.count);
+          setIsLoading(false);
+
+          store.dispatch(setFilters(updatedFilters));
+          setStartDate(null);
+          setEndDate(null);
+          setPropValue({});
+          setFilterValue({ value: '', type: null });
+          setOperatorValue({});
+        } else {
+          // No features would be on map so notify user and do not apply the filter
+          toast.warn(strings.gfifiltering?.errors?.noResults, {
+            position: 'top-center',
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: 'colored',
+            transition: Slide
+          });
+          setIsLoading(false);
+        }
+      },
+      (data) => {
+        toast.error(strings.gfifiltering?.errors?.filterError, {
+          position: 'top-center',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'colored',
+          transition: Slide
+        });
+        console.error(data);
+        setIsLoading(false);
+      }
     );
-    setStartDate(null);
-    setEndDate(null);
-    setPropValue({});
-    setFilterValue({ value: "", type: null });
-    setOperatorValue({});
   };
 
   const gfiFilteringNumberOptions = [
-    { value: "equals", label: strings.gfifiltering.operators.equals },
-    { value: "notEquals", label: strings.gfifiltering.operators.notEquals },
-    { value: "smallerThan", label: strings.gfifiltering.operators.smallerThan },
-    { value: "biggerThan", label: strings.gfifiltering.operators.biggerThan },
+    { value: 'equals', label: strings.gfifiltering.operators.equals },
+    { value: 'notEquals', label: strings.gfifiltering.operators.notEquals },
+    { value: 'smallerThan', label: strings.gfifiltering.operators.smallerThan },
+    { value: 'biggerThan', label: strings.gfifiltering.operators.biggerThan }
   ];
 
   const gfiFilteringStringOptions = [
-    { value: "equals", label: strings.gfifiltering.operators.equals },
-    { value: "notEquals", label: strings.gfifiltering.operators.notEquals },
-    { value: "includes", label: strings.gfifiltering.operators.includes },
+    { value: 'equals', label: strings.gfifiltering.operators.equals },
+    { value: 'notEquals', label: strings.gfifiltering.operators.notEquals },
+    { value: 'includes', label: strings.gfifiltering.operators.includes },
     {
-      value: "doesntInclude",
-      label: strings.gfifiltering.operators.doesntInclude,
-    },
+      value: 'doesntInclude',
+      label: strings.gfifiltering.operators.doesntInclude
+    }
   ];
 
   var comparisonOperatorsHash = {
     number: gfiFilteringNumberOptions,
-    string: gfiFilteringStringOptions,
+    string: gfiFilteringStringOptions
   };
 
   useEffect(() => {
@@ -390,7 +494,7 @@ export const LayerFilter = ({filterInfo}) => {
           label: fieldNameLocales[column.title],
           type: column.type
         };
-        column.default && handleSetPropValue(props)
+        column.default && handleSetPropValue(props);
         return props;
       } else {
         const props = {
@@ -398,14 +502,25 @@ export const LayerFilter = ({filterInfo}) => {
           label: column.title,
           type: column.type
         };
-        column.default && handleSetPropValue(props)
+        column.default && handleSetPropValue(props);
         return props;
       }
     });
     setFilterOptions(options);
+    channel.getFeatureCount(
+      [filterInfo.layer.id, ''],
+      (data) => {
+        if (data.count && typeof data.count === 'number') {
+          setFeatureCount(data.count);
+        }
+      },
+      (data) => {
+        console.error(data);
+      }
+    );
   }, [fieldNameLocales, filterInfo?.layer]);
 
-  const [activeFilters, setActiveFilters] = useState();
+  const [activeFilters, setActiveFilters] = useState([]);
 
   useEffect(() => {
     if (filterInfo && filterInfo?.layer && filters) {
@@ -416,46 +531,87 @@ export const LayerFilter = ({filterInfo}) => {
     }
   }, [filters, filterInfo]);
 
-const handleRemoveFilter = (filter) => {
+  const handleRemoveFilter = (filter) => {
     if (filters && filters.length > 0 && filters.includes(filter)) {
-      const updatedFilters = filters.filter(
+      let updatedFilters = filters.filter(
         (existingFilter) => existingFilter !== filter
       );
-      updateFiltersOnMap(updatedFilters, filterInfo, channel)
+      let filtersString = '';
+      updatedFilters &&
+        !updatedFilters.codeValue &&
+        updatedFilters
+          .filter((f) => f.layer === filterInfo?.layer?.id)
+          .forEach((filter, index) => {
+            var cqlFilter = getPropertyOperatorCQL(filter);
+            index === 0
+              ? (filtersString += cqlFilter)
+              : (filtersString += ' AND ' + cqlFilter);
+          });
+
+      updateFiltersOnMap(filtersString, filterInfo, channel);
+
+      channel.getFeatureCount(
+        [filterInfo.layer.id, filtersString],
+        (data) => {
+          if (data.count && typeof data.count === 'number') {
+            setFeatureCount(data.count);
+          }
+        },
+        (data) => {
+          console.error(data);
+        }
+      );
       store.dispatch(setFilters(updatedFilters));
     }
   };
 
+  const handleRemoveAllFilters = () => {
+    store.dispatch(setFilters([]));
+    updateFiltersOnMap(null, filterInfo, channel);
+    channel.getFeatureCount(
+      [filterInfo.layer.id, ''],
+      (data) => {
+        if (data.count && typeof data.count === 'number') {
+          setFeatureCount(data.count);
+        }
+      },
+      (data) => {
+        console.error(data);
+      }
+    );
+  };
 
   // Warn user about leaving the page
   const handleInfoClick = (event) => {
     event.preventDefault();
-    const savedState = localStorage.getItem("dontShowExitLinkWarn");
+    const savedState = localStorage.getItem('dontShowExitLinkWarn');
     if (!savedState) {
-      store.dispatch(setWarning({
-      title: strings.exitConfirmation,
-      subtitle: null,
-      confirm: {
-        text: strings.general.continue,
-        action: () => {
-          window.open(filterInfo.layer.filterFieldsInfo, "_blank");
-          store.dispatch(setWarning(null));
-        }
-      },
-      cancel: {
-        text: strings.general.cancel,
-          action: () => {
-            store.dispatch(setWarning(null))
+      store.dispatch(
+        setWarning({
+          title: strings.exitConfirmation,
+          subtitle: null,
+          confirm: {
+            text: strings.general.continue,
+            action: () => {
+              window.open(filterInfo.layer.filterFieldsInfo, '_blank');
+              store.dispatch(setWarning(null));
+            }
+          },
+          cancel: {
+            text: strings.general.cancel,
+            action: () => {
+              store.dispatch(setWarning(null));
+            }
+          },
+          dontShowAgain: {
+            id: 'dontShowExitLinkWarn'
           }
-      },
-      dontShowAgain: {
-        id: "dontShowExitLinkWarn"
-      }
-      }))
+        })
+      );
     } else {
-      window.open(filterInfo.layer.filterFieldsInfo, "_blank");
+      window.open(filterInfo.layer.filterFieldsInfo, '_blank');
     }
-  }
+  };
 
   const validateFilterInput = useCallback((searchValue) => {
     const regex = /^[A-Za-z0-9äöåÄÖÅ \-.,/()]*$/;
@@ -465,20 +621,27 @@ const handleRemoveFilter = (filter) => {
     } else {
       setValidationError(true);
     }
-  }, [])
+  }, []);
 
   const handleFilterInput = (value, type) => {
     validateFilterInput(value);
     setFilterValue({
       value: value,
-      type: type,
-    })
-  }
+      type: type
+    });
+  };
 
   return (
     <StyledDialogContainer>
-      <ReactTooltip backgroundColor={theme.colors.mainColor1} disable={isMobile} id={'open_info_link'} place='left' type='dark' effect='float'>
-          <span>{strings.tooltips.showInfoLink}</span>
+      <ReactTooltip
+        backgroundColor={theme.colors.mainColor1}
+        disable={isMobile}
+        id={'open_info_link'}
+        place="left"
+        type="dark"
+        effect="float"
+      >
+        <span>{strings.tooltips.showInfoLink}</span>
       </ReactTooltip>
       <StyledDialogSelectionContainer>
         <StyledDialogFloatingChapter>
@@ -491,17 +654,20 @@ const handleRemoveFilter = (filter) => {
             isDisabled={false}
           />
         </StyledDialogFloatingChapter>
-        {propValue.type === "date" ? (
+        {propValue.type === 'date' ? (
           <>
-            <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={strings.getLanguage()}>
+            <LocalizationProvider
+              dateAdapter={AdapterDayjs}
+              adapterLocale={strings.getLanguage()}
+            >
               <DatePicker
-                sx={{ marginTop: ".5em" }}
+                sx={{ marginTop: '.5em' }}
                 label={strings.gfifiltering.startDate}
                 value={startDate}
                 onChange={(newValue) => setStartDate(newValue)}
               />
               <DatePicker
-                sx={{ marginTop: ".5em" }}
+                sx={{ marginTop: '.5em' }}
                 label={strings.gfifiltering.endDate}
                 value={endDate}
                 onChange={(newValue) => setEndDate(newValue)}
@@ -510,7 +676,7 @@ const handleRemoveFilter = (filter) => {
           </>
         ) : (
           <>
-            <StyledDialogFloatingChapter style={{ marginTop: ".5em" }}>
+            <StyledDialogFloatingChapter style={{ marginTop: '.5em' }}>
               <Dropdown
                 options={comparisonOperatorsHash[propValue.type]}
                 placeholder={strings.gfifiltering.placeholders.chooseOperator}
@@ -520,7 +686,7 @@ const handleRemoveFilter = (filter) => {
               />
             </StyledDialogFloatingChapter>
 
-            <StyledDialogInputFloatingChapter style={{ marginTop: ".5em" }}>
+            <StyledDialogInputFloatingChapter style={{ marginTop: '.5em' }}>
               <StyledInput
                 type="text"
                 value={filterValue.value}
@@ -529,81 +695,121 @@ const handleRemoveFilter = (filter) => {
                   handleFilterInput(e.target.value, propValue.type)
                 }
                 onKeyPress={(e) => {
-                  if (e.key === "Enter" && !validationError && Object.keys(propValue).length !== 0 && Object.keys(operatorValue).length !== 0) {
+                  if (
+                    e.key === 'Enter' &&
+                    !validationError &&
+                    Object.keys(propValue).length !== 0 &&
+                    Object.keys(operatorValue).length !== 0
+                  ) {
                     addFilter();
                   }
                 }}
                 disabled={Object.keys(operatorValue).length === 0}
               />
-              { filterInfo.layer.filterFieldsInfo &&
-                <StyledHeaderButton data-tip data-for={'open_info_link'} onClick={handleInfoClick}>
-                  <FontAwesomeIcon
-                    icon={faInfoCircle}
-                  />
+              {filterInfo.layer.filterFieldsInfo && (
+                <StyledHeaderButton
+                  data-tip
+                  data-for={'open_info_link'}
+                  onClick={handleInfoClick}
+                >
+                  <FontAwesomeIcon icon={faInfoCircle} />
                 </StyledHeaderButton>
-              }
+              )}
             </StyledDialogInputFloatingChapter>
 
-            { validationError && <StyledValidationMessage>{strings.gfifiltering.validationError}</StyledValidationMessage> }
-
+            {validationError && (
+              <StyledValidationMessage>
+                {strings.gfifiltering?.errors?.validationError}
+              </StyledValidationMessage>
+            )}
           </>
         )}
         <StyledDialogFloatingActionChapter>
-          <StyledSelectedTabDisplayOptionsButton disabled={validationError || Object.keys(propValue).length === 0 || Object.keys(operatorValue).length === 0} onClick={() => addFilter()}>
-            {strings.gfifiltering.addFilter}{" "}
-            <FontAwesomeIcon style={{ marginLeft: ".3em" }} icon={faPlus} />
-          </StyledSelectedTabDisplayOptionsButton>
+          <StyledAddFilterButton
+            disabled={
+              filterValue.value.length === 0 ||
+              validationError ||
+              Object.keys(propValue).length === 0 ||
+              Object.keys(operatorValue).length === 0
+            }
+            onClick={() => addFilter()}
+          >
+            {!isLoading ? (
+              <FontAwesomeIcon id="add_filter_plus_icon" icon={faPlus} />
+            ) : (
+              <CircularProgress
+                id="add_filter_spinner"
+                size={14}
+                thickness={4}
+              />
+            )}
+            {strings.gfifiltering.addFilter}{' '}
+          </StyledAddFilterButton>
         </StyledDialogFloatingActionChapter>
       </StyledDialogSelectionContainer>
 
       <StyledDialogResultContainer>
+        <StyledFeatureCount>
+          <StyledFilterHeader style={{ marginBottom: '.5em' }}>
+            {strings.gfifiltering.featureCount}
+          </StyledFilterHeader>
+          {featureCount}
+        </StyledFeatureCount>
         {activeFilters && activeFilters.length > 0 && (
           <StyledFilterContainer>
             <StyledFilterResultContainer>
-              <StyledFilterHeader style={{ marginBottom: ".5em" }}>
+              <StyledFilterHeader style={{ marginBottom: '.5em' }}>
                 {strings.gfifiltering.activeFilters}
               </StyledFilterHeader>
               {activeFilters.map((filter, index) => (
-                <StyledFilter key={"filter_" + filter.value}>
+                <StyledFilter key={'filter_' + filter.value}>
                   <StyledFilterPropContainer>
                     <StyledFilterProp>
-                      {strings.gfifiltering.property}:{" "}
-                      {Object.keys(fieldNameLocales).length > 0 ? fieldNameLocales[filter.property] : filter.property}
+                      {strings.gfifiltering.property}:{' '}
+                      {Object.keys(fieldNameLocales).length > 0
+                        ? fieldNameLocales[filter.property]
+                        : filter.property}
                     </StyledFilterProp>
                     <StyledFilterProp>
-                      {filter.operator === "date" ? (
+                      {filter.operator === 'date' ? (
                         <>
-                          {strings.gfifiltering.operator}:{" "}
-                          {strings.gfifiltering.dateRange}{" "}
+                          {strings.gfifiltering.operator}:{' '}
+                          {strings.gfifiltering.dateRange}{' '}
                         </>
                       ) : (
                         <>
-                          {strings.gfifiltering.operator}:{" "}
-                          {strings.gfifiltering.operators[filter.operator]}{" "}
+                          {strings.gfifiltering.operator}:{' '}
+                          {strings.gfifiltering.operators[filter.operator]}{' '}
                         </>
                       )}
                     </StyledFilterProp>
-                    {filter.type === "date" ? (
+                    {filter.type === 'date' ? (
                       <>
                         <StyledFilterProp>
-                          {strings.gfifiltering.startDate}:{" "}
+                          {strings.gfifiltering.startDate}:{' '}
                           {filter.value.start
-                            ? filter.value.start.toLocaleString([strings.getLanguage()], {
-                                year: "numeric",
-                                month: "numeric",
-                                day: "numeric",
-                              })
-                            : "-"}
+                            ? filter.value.start.toLocaleString(
+                                [strings.getLanguage()],
+                                {
+                                  year: 'numeric',
+                                  month: 'numeric',
+                                  day: 'numeric'
+                                }
+                              )
+                            : '-'}
                         </StyledFilterProp>
                         <StyledFilterProp>
-                          {strings.gfifiltering.endDate}:{" "}
+                          {strings.gfifiltering.endDate}:{' '}
                           {filter.value.end
-                            ? filter.value.end.toLocaleString([strings.getLanguage()], {
-                                year: "numeric",
-                                month: "numeric",
-                                day: "numeric",
-                              })
-                            : "-"}
+                            ? filter.value.end.toLocaleString(
+                                [strings.getLanguage()],
+                                {
+                                  year: 'numeric',
+                                  month: 'numeric',
+                                  day: 'numeric'
+                                }
+                              )
+                            : '-'}
                         </StyledFilterProp>
                       </>
                     ) : (
@@ -619,24 +825,18 @@ const handleRemoveFilter = (filter) => {
                   >
                     <FontAwesomeIcon
                       icon={faTimes}
-                      style={{ marginLeft: ".5em" }}
+                      style={{ marginLeft: '.5em' }}
                     />
                   </StyledTimesIconWrapper>
                 </StyledFilter>
               ))}
             </StyledFilterResultContainer>
-            <StyledTrashIconWrapper
-              onClick={() => {
-                  store.dispatch(setFilters([]));
-                  updateFiltersOnMap(null, filterInfo, channel);
-              }}
+            <StyledRemoveAllFiltersButton
+              onClick={() => handleRemoveAllFilters()}
             >
-              {strings.gfifiltering.removeAllFilters}{" "}
-              <FontAwesomeIcon
-                icon={faTrash}
-                style={{ marginLeft: ".5em" }}
-              />
-            </StyledTrashIconWrapper>
+              <FontAwesomeIcon icon={faTrash} style={{ marginLeft: '.5em' }} />
+              {strings.gfifiltering?.removeAllFilters}{' '}
+            </StyledRemoveAllFiltersButton>
           </StyledFilterContainer>
         )}
       </StyledDialogResultContainer>

@@ -13,7 +13,6 @@ const initialState = {
   userLayers: [],
   allTags: [],
   features: {},
-  currentState: {},
   scaleBarState: null,
   tagLayers: [],
   tags: [],
@@ -29,7 +28,6 @@ const initialState = {
   allThemesWithLayers: [],
   allSelectedThemeLayers: [],
   selectedTheme: null,
-  lastSelectedTheme: null,
   filter: null,
   layerMetadata: { data: null, layer: null, uuid: null },
   legends: [],
@@ -82,7 +80,6 @@ const initialState = {
   loggedInUser: {},
   isLoggedIn: false,
   editingUserlayer: null,
-  defaultStyles: null,
 };
 
 export const rpcSlice = createSlice({
@@ -267,17 +264,6 @@ export const rpcSlice = createSlice({
     },
 
     /**
-     * Set last selected theme.
-     * @method setLastSelectedTheme
-     * @param {Object} state
-     * @param {Object} action
-     */
-    setLastSelectedTheme: (state, action) => {
-      state.lastSelectedTheme = action.payload;
-      LOG.log('setLastSelectedTheme to ', action.payload);
-    },
-
-    /**
      * Set announcements.
      * object type:
       [
@@ -325,17 +311,6 @@ export const rpcSlice = createSlice({
     setFeatures: (state, action) => {
       state.features = action.payload;
       LOG.log('setFeatures to ', action.payload);
-    },
-
-    /**
-     * Set current state.
-     * @method  setCurrentState
-     * @param {Object} state
-     * @param {Object} action
-     */
-    setCurrentState: (state, action) => {
-      state.currentState = action.payload;
-      LOG.log('setCurrentState to ', action.payload);
     },
 
     /**
@@ -1040,11 +1015,7 @@ export const rpcSlice = createSlice({
 
     setEditingUserlayer: (state, action) => {
       state.editingUserlayer = action.payload;
-    },
-
-    setDefaultStyles: (state, action) => {
-      state.defaultStyles = action.payload;
-    },
+    }
   }
 });
 
@@ -1056,7 +1027,6 @@ export const {
   setSelectedLayers,
   setAllTags,
   setTags,
-  setCurrentState,
   setFeatures,
   setTagLayers,
   setZoomRange,
@@ -1074,7 +1044,6 @@ export const {
   mapMoveRequest,
   setAllThemesWithLayers,
   setSelectedTheme,
-  setLastSelectedTheme,
   setActiveAnnouncements,
   getLayerMetadata,
   clearLayerMetadata,
@@ -1129,7 +1098,6 @@ export const {
   setIsLoggedIn,
   setLoggedInUser,
   setEditingUserlayer,
-  setDefaultStyles
 } = rpcSlice.actions;
 
 export default rpcSlice.reducer;

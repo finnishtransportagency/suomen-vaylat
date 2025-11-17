@@ -271,22 +271,13 @@ export const getPropertyOperatorCQL = (filter) => {
   }
 };
 
-export const updateFiltersOnMap = (updatedFilters, filterInfo, channel) => {
-  let filters = '';
-  updatedFilters && !updatedFilters.codeValue &&
-    updatedFilters
-      .filter((f) => f.layer === filterInfo?.layer?.id)
-      .forEach((filter, index) => {
-        var cqlFilter = getPropertyOperatorCQL(filter);
-        index === 0 ? (filters += cqlFilter) : (filters += ' AND ' + cqlFilter);
-      });
-
-  if (filters.length > 0) {
+export const updateFiltersOnMap = (filtersString, filterInfo, channel) => {
+  if (filtersString?.length > 0) {
     channel &&
       channel.postRequest('MapModulePlugin.MapLayerUpdateRequest', [
         filterInfo.layer.id,
         true,
-        { CQL_FILTER: filters }
+        { CQL_FILTER: filtersString}
       ]);
   } else {
     filterInfo.layer &&

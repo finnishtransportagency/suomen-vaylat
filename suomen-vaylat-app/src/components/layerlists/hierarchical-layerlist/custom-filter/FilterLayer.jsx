@@ -1,13 +1,9 @@
-import { useContext, useEffect, useState } from "react";
-import { ReactReduxContext, useSelector } from "react-redux";
+import { useContext } from "react";
+import { ReactReduxContext } from "react-redux";
 import styled from "styled-components";
 import LayerMetadataButton from "../LayerMetadataButton";
 import { useAppSelector } from "../../../../state/hooks";
-import { toast, Slide } from "react-toastify";
-import strings from "../../../../translations"
 import LayerlistSwitch from "../LayerlistSwitch";
-import { changeLayerStyle } from '../../../../state/slices/rpcSlice';
-import { updateLayerLegends } from '../../../../utils/rpcUtil';
 import { setSelectedCustomFilterLayers } from '../../../../state/slices/uiSlice';
 
 const StyledLayerContainer = styled.div`
@@ -43,10 +39,7 @@ const StyledLayerName = styled.p`
 
 export const FilterLayer = ({ layer, theme, groupName }) => {
   const { store } = useContext(ReactReduxContext);
-  const [layerStyle, setLayerStyle] = useState(null);
   const { selectedCustomFilterLayers } = useAppSelector((state) => state.ui);
-
-  const { channel, selectedTheme, allSelectedThemeLayers } = useSelector((state) => state.rpc);
 
   const excludeGroups = ['Digiroad', 'Tierekisteri (Poistuva)'];
 
@@ -69,43 +62,6 @@ export const FilterLayer = ({ layer, theme, groupName }) => {
   };
 
   const themeStyle = theme || null;
-
-  useEffect(() => {
-    // needs only get new style or legends when toggling theme selection
-    if (
-      layer.visible &&
-      selectedTheme &&
-      allSelectedThemeLayers.includes(layer.id)
-    ) {
-      const themeName = selectedTheme.locale?.['fi']?.name || null;
-      channel.getLayerThemeStyle(
-        [layer.id, themeName],
-        function (styleName) {
-          if (styleName && styleName !== layerStyle) {
-            setLayerStyle(styleName);
-            store.dispatch(
-              changeLayerStyle({ layerId: layer.id, style: styleName })
-            );
-            // update layers legends
-            updateLayerLegends(store);
-          }
-        },
-        function (error) {
-          toast.error(strings.themelayerlist.errors.themeStyleError + error, {
-            position: 'top-center',
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: false,
-            progress: undefined,
-            theme: 'colored',
-            transition: Slide
-          });
-        }
-      );
-    }
-  }, [selectedTheme]);
 
   const isSelected =
     selectedCustomFilterLayers.filter(

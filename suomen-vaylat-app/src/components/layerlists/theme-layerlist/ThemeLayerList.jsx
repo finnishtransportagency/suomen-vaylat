@@ -15,7 +15,7 @@ import { useAppSelector } from '../../../state/hooks';
 import strings from '../../../translations';
 import { setZoomTo } from '../../../state/slices/rpcSlice';
 import { setWarning } from '../../../state/slices/uiSlice';
-import { selectGroup, sortObjectAlphabetically } from '../../../utils/rpcUtil';
+import { closeTheme, selectTheme, sortObjectAlphabetically } from '../../../utils/rpcUtil';
 import Layers from '../../layer/Layers';
 
 import hankekartta from './resources/images/hankekartta.JPG';
@@ -448,17 +448,24 @@ export const Themes = ({ groups, allLayers }) => {
     const { store } = useContext(ReactReduxContext);
     const lang = strings.getLanguage();
 
-    const { channel, selectedTheme, lastSelectedTheme } =
+    const { channel, selectedTheme } =
         useAppSelector((state) => state.rpc);
-    const handleSelectGroup = (theme) => {
-        selectGroup(
-            store,
-            channel,
-            allLayers,
-            theme,
-            lastSelectedTheme,
-            selectedTheme?.id
-        );
+    const handleSelectTheme = (theme) => {
+        if (selectedTheme && theme.id === selectedTheme.id) {
+            closeTheme(
+                store,
+                channel,
+                selectedTheme
+            );
+        } else {
+            selectTheme(
+                store,
+                channel,
+                allLayers,
+                theme,
+                selectedTheme
+            );
+        }
     };
 
     let links = [];
@@ -497,7 +504,7 @@ export const Themes = ({ groups, allLayers }) => {
                             layers={allLayers}
                             index={theme.index}
                             selectedTheme={selectedTheme}
-                            selectGroup={handleSelectGroup}
+                            selectTheme={handleSelectTheme}
                             isSubtheme={false}
                             isFirstSubtheme={true}
                         />
@@ -526,7 +533,7 @@ export const ThemeGroup = ({
     layers,
     index,
     selectedTheme,
-    selectGroup,
+    selectTheme,
     isSubtheme,
     isFirstSubtheme
 }) => {
@@ -622,12 +629,12 @@ export const ThemeGroup = ({
                     <StyledRightContent
                         onClick={(e) => {
                             !isThemeOpen && selectedTheme?.id !== theme.id && setIsThemeOpen(true);
-                            selectGroup(theme);
+                            selectTheme(theme);
                         }}
                         onKeyDown={(e) => {
                             if (e.key === 'Enter') {
                                 !isThemeOpen && selectedTheme?.id !== theme.id && setIsThemeOpen(true);
-                                selectGroup(theme);
+                                selectTheme(theme);
                             }
                         }}
                         role="button"
@@ -711,7 +718,7 @@ export const ThemeGroup = ({
                             theme={subtheme}
                             layers={layers}
                             index={subIndex}
-                            selectGroup={selectGroup}
+                            selectTheme={selectTheme}
                             isSubtheme={true}
                             isFirstSubtheme={!isSubtheme}
                         />

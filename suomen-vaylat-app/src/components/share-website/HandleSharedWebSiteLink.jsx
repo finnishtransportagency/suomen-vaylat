@@ -5,7 +5,7 @@ import { setLocale } from '../../state/slices/languageSlice';
 import { changeLayerStyle, reArrangeSelectedMapLayers, setLegends, removeAllSelectedLayers } from '../../state/slices/rpcSlice';
 import {  setIsSideMenuOpen, setIsThemeMenuOpen, setSelectedMapLayersMenuTab } from '../../state/slices/uiSlice';
 import { Logger } from '../../utils/logger';
-import { updateLayers, selectGroup } from '../../utils/rpcUtil';
+import { updateLayers, selectTheme } from '../../utils/rpcUtil';
 import { isMobile} from '../../theme/theme';
 import { Slide, toast } from "react-toastify";
 import strings from '../../translations';
@@ -64,7 +64,7 @@ export const HandleSharedWebSiteLink = () => {
 
         if (activateTheme){
             channel && channel.getAllLayersSV(function (allLayers) {
-                selectGroup(store, channel, allLayers, activateTheme, null, null);
+                selectTheme(store, channel, allLayers, activateTheme, null);
                 !isMobile && store.dispatch(setIsThemeMenuOpen(true));
             }, function err() {
                 toast.error(strings.layerlist.errorLoadingLayers, {
@@ -91,6 +91,8 @@ export const HandleSharedWebSiteLink = () => {
             const layerProps = l.split('+');
             if (layerProps.length === 3) {
                 const layerId = parseInt(layerProps[0]) || layerProps[0] ;
+                // make sure we do not do anything with possible userlayer that is somehow passed in the url
+                if (typeof layerId === 'string') return;
                 const opacity = parseInt(layerProps[1]);
                 const style = layerProps[2];
                 channel.postRequest('ChangeMapLayerOpacityRequest', [layerId, opacity]);
