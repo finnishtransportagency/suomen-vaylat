@@ -369,6 +369,7 @@ export const selectTheme = (
   };
 
   const processLayers = (theme) => {
+    if (themeLayers.length === 0) return;
     channel.setLayerThemeStyle(
       [themeLayers, theme.locale['fi'].name],
       function (data) {
