@@ -799,6 +799,7 @@
     "readLess": "Vähemmän",
     "moreInfo": "Lisätietoja:",
     "errors": {
+      "getThemesError": "Virhe teemojen haussa!",
       "themeStyleError": "Virhe teeman tyylien haussa: ",
       "closeThemeLayersError": "Virhe teemakarttojen sulkemisessa!"
     }
