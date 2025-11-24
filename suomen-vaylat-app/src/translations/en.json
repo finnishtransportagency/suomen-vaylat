@@ -799,6 +799,7 @@
     "readLess": "Show less",
     "moreInfo": "Further information:",
     "errors": {
+      "getThemesError": "Error getting themes!",
       "themeStyleError": "Error getting styles for theme: ",
       "closeThemeLayersError": "Error closing theme layers!"
     }

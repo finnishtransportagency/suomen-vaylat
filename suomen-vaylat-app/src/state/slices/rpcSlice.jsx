@@ -25,7 +25,7 @@ const initialState = {
   },
   announcements: [],
   activeAnnouncements: [],
-  allThemesWithLayers: [],
+  allThemesWithLayers: {themes: [], restrictedThemes: []},
   allSelectedThemeLayers: [],
   selectedTheme: null,
   filter: null,
