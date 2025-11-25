@@ -697,16 +697,19 @@
   "coordinateTool": {
     "title": "Koordinatverktyg",
     "intro": "Mata in koordinaterna eller peka på platsen på kartan.",
-    "coordinateSystemTitle": "Koordinatsystem:",
+    "coordinateSystemTitle": "Mata in koordinaterna eller peka på platsen på kartan",
     "coordinateSystem": "ETRS89-TM35FIN",
     "n": "N",
     "e": "E",
+    "lat": "Lat",
+    "lon": "Lon",
     "centerMap": "Fokusera kartan",
     "addMarker": "Tillägg markör",
     "deleteMarkers": "Ta bort markörer",
     "saveMarkers": "Spara markörer",
     "onlyNumbers": "Vänligen ange endast siffror",
-    "closeCoordinateTool": "Stäng koordinatverktyg"
+    "closeCoordinateTool": "Stäng koordinatverktyg",
+    "projectionSelect": "Välj koordinatsystem"
   },
   "layerlist": {
     "errorLoadingLayers": "Det gick inte att ladda kartnivåer",

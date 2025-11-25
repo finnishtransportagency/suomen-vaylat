@@ -695,16 +695,19 @@
   "coordinateTool": {
     "title": "Koordinaattityökalu",
     "intro": "Syötä koordinaatit tai valitse piste kartalta.",
-    "coordinateSystemTitle": "Koordinaatisto:",
+    "coordinateSystemTitle": "Syötä koordinaatit tai osoita piste kartalta",
     "coordinateSystem": "ETRS89-TM35FIN",
     "n": "N",
     "e": "E",
+    "lat": "Lat",
+    "lon": "Lon",
     "centerMap": "Keskitä kartta",
     "addMarker": "Lisää merkintä",
     "deleteMarkers": "Poista karttamerkinnät",
     "saveMarkers": "Tallenna karttamerkinnät",
     "onlyNumbers": "Vain numerot sallittu",
-    "closeCoordinateTool": "Sulje koordinaattityökalu"
+    "closeCoordinateTool": "Sulje koordinaattityökalu",
+    "projectionSelect": "Valitse coordinaatisto"
   },
   "layerlist": {
     "errorLoadingLayers": "Virhe tasojen latauksessa",
