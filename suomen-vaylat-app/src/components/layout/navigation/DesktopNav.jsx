@@ -3,7 +3,6 @@ import {
   faAngleDown,
   faQuestion,
   faInfoCircle,
-  faArrowRightFromBracket,
   faAngleUp,
   faBars
 } from '@fortawesome/free-solid-svg-icons';
@@ -12,7 +11,6 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { useRef, useContext, useEffect } from 'react';
 import { ReactReduxContext } from 'react-redux';
 import strings from '../../../translations';
-import PillButton from '../../../utils/components/PillButton';
 import {
   setIsInfoOpen,
   setIsProfileOpen,
@@ -139,13 +137,6 @@ const DropdownMenuItem = styled.li`
   }
 `;
 
-const MenuDivider = styled.hr`
-  border: none;
-  height: 1px;
-  background: ${(props) => props.theme.colors.lightGrey || '#eee'};
-  margin: 0px 5px;
-`;
-
 const DesktopNav = ({ setIsMenuOpen, isMenuOpen }) => {
   const ref = useRef();
   useOnClickOutside(ref, () => setIsMenuOpen(false));
@@ -173,7 +164,6 @@ const DesktopNav = ({ setIsMenuOpen, isMenuOpen }) => {
   const menuProfileId = 'desktop-nav-profile-menuitem';
   const menuUserGuideId = 'desktop-nav-userguide-menuitem';
   const menuInfoId = 'desktop-nav-info-menuitem';
-  const menuLogoutId = 'desktop-nav-logout-menuitem';
 
   return (
     <DesktopNavContainer ref={ref} id="desktop-nav-container">

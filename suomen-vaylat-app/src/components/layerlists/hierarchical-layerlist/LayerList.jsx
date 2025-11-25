@@ -11,7 +11,6 @@ import Layers from '../../layer/Layers';
 
 import { motion } from 'framer-motion';
 import strings from '../../../translations';
-import UserContentGroup from './user-content/UserContentGroup';
 
 const masterHeaderIconVariants = {
   open: { rotate: 180 },
@@ -177,7 +176,7 @@ const StyledSaveButton = styled.div`
 `;
 
 const LayerList = ({ groups, layers, recurse = false }) => {
-  const { tagLayers, tags, userLayers } = useSelector((state) => state.rpc);
+  const { tagLayers, tags } = useSelector((state) => state.rpc);
 
   // const slicedGroups = groups ? groups.slice() : [];
   const slicedGroups = groups.slice();
