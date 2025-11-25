@@ -8,6 +8,7 @@ import DialogHeader from '../../../utils/components/DialogHeader';
 import strings from '../../../translations';
 import store from '../../../state/store';
 import { setIsThemeMenuOpen } from '../../../state/slices/uiSlice';
+import { useEffect, useState } from 'react';
 
 const StyledThemeMenuContainer = styled(motion.div)`
   width: 350px;
@@ -45,16 +46,26 @@ function ThemeMenu() {
     (state) => state.rpc
   );
 
+  const [ combinedThemes, setCombinedThemes] = useState([]);
+
   const lang = strings.getLanguage();
 
-  const sortedThemes = allThemesWithLayers.themes.sort((a, b) =>
-    sortObjectAlphabetically(a.locale[lang].name, b.locale[lang].name)
-  );
-  const sortedRestrictedThemes = allThemesWithLayers.restrictedThemes.sort(
-    (a, b) => sortObjectAlphabetically(a.locale[lang].name, b.locale[lang].name)
-  );
+  useEffect(() => {
+    if (allThemesWithLayers.themes.length === 0) return;
 
-  const combinedThemes = [...sortedRestrictedThemes, ...sortedThemes];
+    let sortedThemes = [...allThemesWithLayers.themes];
+    let sortedRestrictedThemes = [...allThemesWithLayers.restrictedThemes];
+
+    sortedThemes.sort((a, b) =>
+        sortObjectAlphabetically(a.locale[lang].name, b.locale[lang].name)
+    );
+
+    sortedRestrictedThemes.sort(
+        (a, b) => sortObjectAlphabetically(a.locale[lang].name, b.locale[lang].name)
+    );
+
+    setCombinedThemes([...sortedRestrictedThemes, ...sortedThemes]);
+  }, [allThemesWithLayers]);
 
   const variants = {
     open: {
