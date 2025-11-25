@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect } from 'react';
+import { useState, useContext } from 'react';
 import strings from '../../../translations';
 import {
   faLayerGroup,
@@ -182,18 +182,14 @@ const StyledArrowDropDownCircleIconWrapper = styled(motion.div)`
 
 const MenuBar = () => {
   const { store } = useContext(ReactReduxContext);
-  const { selectedLayers, downloads, channel, filters, selectedLayersByType } =
+  const { selectedLayers, channel, filters } =
     useAppSelector((state) => state.rpc);
   const {
-    isFullScreen,
     isSideMenuOpen,
     isThemeMenuOpen,
     isDrawingToolsOpen,
     isSearchOpen,
-    isSaveViewOpen,
-    isDatasetImportOpen,
     isGfiOpen,
-    isGfiDownloadOpen,
     drawToolMarkers
   } = useAppSelector((state) => state.ui);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);

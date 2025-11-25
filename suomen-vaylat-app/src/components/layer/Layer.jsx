@@ -76,7 +76,7 @@ export const Layer = ({ layer, themeName, groupName }) => {
     typeof layer.config?.gfi?.filterFields !== 'undefined' &&
     layer.config?.gfi?.filterFields.length > 0;
 
-  const { channel, selectedTheme, filteringInfo } = useSelector(
+  const { channel, filteringInfo } = useSelector(
     (state) => state.rpc
   );
 
