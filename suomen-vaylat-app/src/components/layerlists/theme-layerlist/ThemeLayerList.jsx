@@ -66,7 +66,7 @@ const StyledMasterGroupName = styled.p`
   max-width: ${(props) => (props.$expanded ? 'none' : '230px')};
   color: ${(props) => props.theme.colors.mainWhite};
   margin: 0;
-  padding: 0px;
+  padding: 8px;
   font-size: 16px;
   font-weight: 600;
   transition: all 0.1s ease-in;
@@ -136,7 +136,7 @@ const StyledSubthemeName = styled.p`
   max-width: ${(props) => (props.$expanded ? 'none' : '230px')};
   color: ${(props) => props.theme.colors.mainWhite};
   margin: 0;
-  padding: 0px;
+  padding: 8px;
   font-size: 14px;
   font-weight: 600;
   transition: all 0.1s ease-in;
