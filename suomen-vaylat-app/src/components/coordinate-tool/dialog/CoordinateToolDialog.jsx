@@ -34,6 +34,7 @@ const CoordinateToolDialog = ({ constraintsRef }) => {
       overflow={'auto'}
       bottom={"10px"}
       right={isSearchResultPanelVisible ? "500px" : "80px"}
+      style={{zIndex: 9992}}
     >
       <CoordinateTool/>
     </Dialog>

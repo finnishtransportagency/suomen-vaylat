@@ -195,7 +195,8 @@ const Dialog = ({
     children,
     minHeight,
     height = 'auto',
-    width = 'auto'
+    width = 'auto',
+    style = {}
 }) => {
     const dragControls = useDragControls();
 
@@ -263,6 +264,7 @@ const Dialog = ({
                         bottom={bottom}
                         right={right}
                         left={left}
+                        style={style}
                     >
                         <StyledDialog
                             id={"dialog_" + title}

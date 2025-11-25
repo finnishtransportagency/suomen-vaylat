@@ -695,16 +695,19 @@
   "coordinateTool": {
     "title": "Coordinate tool",
     "intro": "Type coordinates or click a point on the map.",
-    "coordinateSystemTitle": "Coordinate system:",
+    "coordinateSystemTitle": "Type coordinates or click a point on the map",
     "coordinateSystem": "ETRS89-TM35FIN",
     "n": "N",
     "e": "E",
+    "lat": "Lat",
+    "lon": "Lon",
     "centerMap": "Center map",
     "addMarker": "Add marker",
     "deleteMarkers": "Delete markers",
     "saveMarkers": "Save markers",
     "onlyNumbers": "Please enter only numbers",
-    "closeCoordinateTool": "Close coordinate tool"
+    "closeCoordinateTool": "Close coordinate tool",
+    "projectionSelect": "Select coordinate system"
   },
   "layerlist": {
     "errorLoadingLayers": "Error loading maplayers",

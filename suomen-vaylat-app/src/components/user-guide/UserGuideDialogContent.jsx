@@ -420,7 +420,7 @@ export const UserGuideDialogContent = () => {
     }
 
     return base;
-  }, [IS_EXTRANET, strings.appGuide]);
+  }, []);
 
 
   // Filtering logic

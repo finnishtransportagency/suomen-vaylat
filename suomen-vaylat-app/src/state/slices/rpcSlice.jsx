@@ -640,7 +640,7 @@ export const rpcSlice = createSlice({
 
     /**
      * Set current map center.
-     * @method setCurrentMapCenter
+     * @method setStartMapCenter
      * @param {Object} state
      * @param {Object} action
      */
