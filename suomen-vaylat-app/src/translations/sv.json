@@ -709,7 +709,13 @@
     "saveMarkers": "Spara markörer",
     "onlyNumbers": "Vänligen ange endast siffror",
     "closeCoordinateTool": "Stäng koordinatverktyg",
-    "projectionSelect": "Välj koordinatsystem"
+    "projectionSelect": "Välj koordinatsystem",
+    "errors": {
+      "transformCoordinatesError": "Fel vid koordinattransformation",
+      "degreeInputParseError": "Fel vid parsning av grader",
+      "centerMapError": "Centrering av kartan misslyckades",
+      "addMarkerError": "Fel vid tillägg av markör på kartan"
+    }
   },
   "layerlist": {
     "errorLoadingLayers": "Det gick inte att ladda kartnivåer",

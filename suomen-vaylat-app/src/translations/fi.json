@@ -707,7 +707,13 @@
     "saveMarkers": "Tallenna karttamerkinnät",
     "onlyNumbers": "Vain numerot sallittu",
     "closeCoordinateTool": "Sulje koordinaattityökalu",
-    "projectionSelect": "Valitse coordinaatisto"
+    "projectionSelect": "Valitse coordinaatisto",
+    "errors": {
+      "transformCoordinatesError": "Virhe koordinaattimuunnoksessa",
+      "degreeInputParseError": "Virhe asteiden parsinnassa",
+      "centerMapError": "Kartan keskitys epäonnistui",
+      "addMarkerError": "Virhe karttamerkinnän lisäyksessä"
+    }
   },
   "layerlist": {
     "errorLoadingLayers": "Virhe tasojen latauksessa",
