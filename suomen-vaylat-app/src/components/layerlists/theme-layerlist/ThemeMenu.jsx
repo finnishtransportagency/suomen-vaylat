@@ -37,6 +37,10 @@ const StyledThemeMenuContainer = styled(motion.div)`
   }
 `;
 
+const StyledThemeLayersContainet = styled(motion.div)`
+  overflow: auto;
+`;
+
 function ThemeMenu() {
   const { isThemeMenuOpen, isSideMenuOpen } = useAppSelector(
     (state) => state.ui
@@ -60,12 +64,12 @@ function ThemeMenu() {
         sortObjectAlphabetically(a.locale[lang].name, b.locale[lang].name)
     );
 
-    sortedRestrictedThemes.sort(
-        (a, b) => sortObjectAlphabetically(a.locale[lang].name, b.locale[lang].name)
+    sortedRestrictedThemes.sort((a, b) => 
+        sortObjectAlphabetically(a.locale[lang].name, b.locale[lang].name)
     );
 
     setCombinedThemes([...sortedRestrictedThemes, ...sortedThemes]);
-  }, [allThemesWithLayers]);
+  }, [allThemesWithLayers, lang]);
 
   const variants = {
     open: {
@@ -107,10 +111,12 @@ function ThemeMenu() {
             title={strings.layerlist.layerlistLabels.themeLayers}
             handleClose={() => store.dispatch(setIsThemeMenuOpen(false))}
           />
-          <ThemeLayerList
-            allLayers={sortedLayers}
-            allThemes={[...combinedThemes]}
-          />
+          <StyledThemeLayersContainet>
+            <ThemeLayerList
+                allLayers={sortedLayers}
+                allThemes={[...combinedThemes]}
+            />
+          </StyledThemeLayersContainet>
         </StyledThemeMenuContainer>
       )}
     </AnimatePresence>
