@@ -397,10 +397,6 @@ export const ThemeLayerList = ({ allLayers, allThemes }) => {
     linksArray.push(strings.themeLinks[i]);
   }
 
-  allThemes.sort((a, b) =>
-    sortObjectAlphabetically(a.locale[lang].name, b.locale[lang].name)
-  );
-
   return (
     <>
       {allThemes.map((themeGroup, themeGroupIndex) => {
