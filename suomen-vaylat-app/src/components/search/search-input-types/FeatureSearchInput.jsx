@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import strings from '../../../translations';
 import { useAppSelector } from '../../../state/hooks';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { faMagnifyingGlass, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { mergeMatchedKeys, validateFeatureSearch } from '../utils/SearchUtil';
@@ -154,6 +154,25 @@ const StyledNoActivaLayers = styled.div`
   font-weight: 500;
 `;
 
+const StyledCheckboxWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  margin: 0 0 1em 8px;
+`;
+
+const StyledCheckbox = styled.input`
+  margin-left: 0;
+  margin-right: 8px;
+  width: 16px;
+  height: 16px;
+`;
+
+const CheckboxLabel = styled.label`
+  font-size: 16px;
+  margin: 0;
+  color: ${(props) => props.theme.colors.darkGrey || '#333'};
+`;
+
 const FeatureSearchInput = ({ setDropdownOpen, emptySearchInputs }) => {
   const { store } = useContext(ReactReduxContext);
 
@@ -168,6 +187,50 @@ const FeatureSearchInput = ({ setDropdownOpen, emptySearchInputs }) => {
     lastSearchValue
   } = useAppSelector((state) => state.rpc);
 
+  // Keep available layer attributes and user chosen attribute
+  const [ layerAttributes, setLayerAttributes] = useState([]);
+  const [ activeLayer, setActiveLayer ] = useState(null);
+  const [ searchAttribute, setSearchAttribute ] = useState('');
+
+  // Update layer attribute list if active layer was changed or if attribute list is empty
+  if (selectedLayersByType.mapLayers[0]?.id !== activeLayer || !layerAttributes) {
+    channel.getFieldNameLocales(selectedLayersByType.mapLayers[0]?.id, 
+      (data) => {if (data) {setLayerAttributes(Object.values(data)); console.log(data);}},
+      (error) => console.log(error)
+    );
+    setActiveLayer(selectedLayersByType.mapLayers[0]?.id);
+  }
+  
+  const DropDownMenu = () => {
+    const [selectedOption, setSelectedOption] = useState('');
+
+    // Use active layer attributes as menu options
+    const options = layerAttributes;
+
+    console.log(options);
+
+    // Update seacrh attribute on option change
+    const handleChange = (event) => {
+      setSelectedOption(event.target.value);
+      setSearchAttribute(event.target.value);
+    };
+
+    return (
+      <div style={{ margin: '20px' }}>
+        <label htmlFor="dropdown">Choose an option: </label>
+        <select id="dropdown" value={selectedOption} onChange={handleChange}>
+          <option value="">--Select--</option>
+          {options.map((option, index) => (
+            <option key={index} value={option}>
+              {option}
+            </option>
+          ))}
+        </select>
+        {selectedOption && <p>You selected: {selectedOption}</p>}
+      </div>
+    );
+  }
+
   const onClickSearchFeature = () => {
     if (validateFeatureSearch(searchValue, store, true)) {
       setDropdownOpen(false);
@@ -180,6 +243,8 @@ const FeatureSearchInput = ({ setDropdownOpen, emptySearchInputs }) => {
       if (Object.keys(data).length > 0 && Object.keys(data.gfi).length > 0) {
         store.dispatch(setIsSearchingActive(false));
         store.dispatch(setSearchOn(false));
+
+        console.log(data.gfi);
 
         if (startIndex !== 0) {
           // Update features for "more results"
@@ -250,7 +315,8 @@ const FeatureSearchInput = ({ setDropdownOpen, emptySearchInputs }) => {
       channel.searchFeatures(
         [[searchLayer], searchValue, startIndex],
         (data) => handleSearchResponse(data, searchLayer),
-        (error) => handleSearchError(layerIdentifier, error)
+        (error) => handleSearchError(layerIdentifier, error),
+        searchAttribute
       );
     }
   };
@@ -271,6 +337,7 @@ const FeatureSearchInput = ({ setDropdownOpen, emptySearchInputs }) => {
           <StyledNoActivaLayers id="feature-search-no-active-layers" />
         )}
       </StyledSelectedLayerWrapper>
+      <DropDownMenu></DropDownMenu>
 
       <StyledRowWithButton>
         <StyledInputsContainer>
