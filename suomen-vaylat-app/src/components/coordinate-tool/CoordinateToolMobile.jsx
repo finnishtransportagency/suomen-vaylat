@@ -404,8 +404,13 @@ const CoordinateToolMobile = () => {
         }
       } catch (err) {
         if (activeRequestRef.current === reqId) {
-          console.error(err?.toString?.() || String(err));
-          toast.error(err?.toString?.() || String(err), {
+          let errorMsg =
+            strings.coordinateTool.errors.transformCoordinatesError;
+          if (err?.responseJSON?.error) {
+            errorMsg = errorMsg + ' : ' + err?.responseJSON?.error;
+          }
+          console.error(errorMsg);
+          toast.error(errorMsg, {
             position: 'top-center',
             autoClose: 5000,
             hideProgressBar: false,
@@ -451,8 +456,13 @@ const CoordinateToolMobile = () => {
         return { lon: Number(res.lon), lat: Number(res.lat) };
       } catch (err) {
         if (activeRequestRef.current === reqId) {
-          console.error(err?.toString?.() || String(err));
-          toast.error(err?.toString?.() || String(err), {
+          let errorMsg =
+            strings.coordinateTool.errors.transformCoordinatesError;
+          if (err?.responseJSON?.error) {
+            errorMsg = errorMsg + ' : ' + err?.responseJSON?.error;
+          }
+          console.error(errorMsg);
+          toast.error(errorMsg, {
             position: 'top-center',
             autoClose: 5000,
             hideProgressBar: false,
@@ -597,6 +607,18 @@ const CoordinateToolMobile = () => {
           );
         } catch (err) {
           console.error('Failed to parse degree input:', err);
+
+          toast.error(strings.coordinateTool.errors.degreeInputParseError, {
+            position: 'top-center',
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: 'colored',
+            transition: Slide
+          });
           return;
         }
       } else {
@@ -637,6 +659,18 @@ const CoordinateToolMobile = () => {
       ]);
     } catch (err) {
       console.error('Failed to center map:', err);
+
+      toast.error(strings.coordinateTool.errors.centerMapError, {
+        position: 'top-center',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'colored',
+        transition: Slide
+      });
     }
   };
 
@@ -707,6 +741,18 @@ const CoordinateToolMobile = () => {
       }
     } catch (err) {
       console.error('Failed to add marker:', err);
+
+      toast.error(strings.coordinateTool.errors.addMarkerError, {
+        position: 'top-center',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'colored',
+        transition: Slide
+      });
     }
   };
 

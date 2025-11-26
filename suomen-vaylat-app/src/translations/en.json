@@ -707,7 +707,13 @@
     "saveMarkers": "Save markers",
     "onlyNumbers": "Please enter only numbers",
     "closeCoordinateTool": "Close coordinate tool",
-    "projectionSelect": "Select coordinate system"
+    "projectionSelect": "Select coordinate system",
+    "errors": {
+      "transformCoordinatesError": "Error transforming coordinates",
+      "degreeInputParseError": "Error parsing degree input",
+      "centerMapError": "Failed to center the map",
+      "addMarkerError": "Error adding map marker"
+    }
   },
   "layerlist": {
     "errorLoadingLayers": "Error loading maplayers",
