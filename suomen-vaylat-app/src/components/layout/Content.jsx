@@ -48,7 +48,7 @@ const StyledContent = styled.div`
   justify-content: center;
   align-items: center;
   .Toastify {
-    z-index: 99 !important;
+    z-index: 9999 !important;
   }
   .Toastify__toast-container {
   }
@@ -86,10 +86,6 @@ const StyledContent = styled.div`
         right: 0;
       }
     }
-  }
-
-  .Toastify {
-    z-index: 2;
   }
 `;
 
