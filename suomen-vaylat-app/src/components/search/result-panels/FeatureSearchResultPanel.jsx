@@ -288,6 +288,8 @@ const FeatureSearchResultPanel = () => {
         store.dispatch(setIsSearchingActive(false));
         store.dispatch(setSearchOn(false));
 
+        console.log('handling response (panel):', data);
+
         if (startIndex !== 0) {
           // Update features for "more results"
           let oldFeatureSearchResults = JSON.parse(
@@ -355,7 +357,7 @@ const FeatureSearchResultPanel = () => {
 
     if (searchLayer) {
       channel.searchFeatures(
-        [[searchLayer], searchValue, startIndex],
+        [[searchLayer], searchValue, '', startIndex],
         (data) => handleSearchResponse(data, searchLayer),
         (error) => handleSearchError(layerIdentifier, error)
       );

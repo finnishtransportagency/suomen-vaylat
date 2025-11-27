@@ -188,45 +188,45 @@ const FeatureSearchInput = ({ setDropdownOpen, emptySearchInputs }) => {
   } = useAppSelector((state) => state.rpc);
 
   // Keep available layer attributes and user chosen attribute
-  const [ layerAttributes, setLayerAttributes] = useState([]);
+  // Contains object of key-value pairs, eg. {attribute: humanReadableAttribute}
+  const [ layerAttributes, setLayerAttributes] = useState({});
+
   const [ activeLayer, setActiveLayer ] = useState(null);
   const [ searchAttribute, setSearchAttribute ] = useState('');
+  const [selectedOption, setSelectedOption] = useState('');
 
   // Update layer attribute list if active layer was changed or if attribute list is empty
-  if (selectedLayersByType.mapLayers[0]?.id !== activeLayer || !layerAttributes) {
-    channel.getFieldNameLocales(selectedLayersByType.mapLayers[0]?.id, 
-      (data) => {if (data) {setLayerAttributes(Object.values(data)); console.log(data);}},
-      (error) => console.log(error)
-    );
-    setActiveLayer(selectedLayersByType.mapLayers[0]?.id);
+  const updateAttributeNames = () => {
+    if (selectedLayersByType.mapLayers[0]?.id && (selectedLayersByType.mapLayers[0]?.id !== activeLayer || !layerAttributes)) {
+      channel.getFieldNameLocales([selectedLayersByType.mapLayers[0]?.id], 
+        (data) => {if (data) {setLayerAttributes(data)}},
+        (error) => console.log(error)
+      );
+      setActiveLayer(selectedLayersByType.mapLayers[0]?.id);
+    }
   }
   
   const DropDownMenu = () => {
-    const [selectedOption, setSelectedOption] = useState('');
 
-    // Use active layer attributes as menu options
-    const options = layerAttributes;
-
-    console.log(options);
-
+    updateAttributeNames();
     // Update seacrh attribute on option change
     const handleChange = (event) => {
-      setSelectedOption(event.target.value);
-      setSearchAttribute(event.target.value);
+      const [attribute, readableAttribute] = event.target.value.split(',');
+      setSelectedOption(readableAttribute);
+      setSearchAttribute(attribute);
     };
 
     return (
       <div style={{ margin: '20px' }}>
-        <label htmlFor="dropdown">Choose an option: </label>
+        <label htmlFor="dropdown">Valitse hakuattributti:</label>
         <select id="dropdown" value={selectedOption} onChange={handleChange}>
-          <option value="">--Select--</option>
-          {options.map((option, index) => (
+          <option value="">{selectedOption}</option>
+          {Object.entries(layerAttributes).map((option, index) => (
             <option key={index} value={option}>
-              {option}
+              {option[1]}
             </option>
           ))}
         </select>
-        {selectedOption && <p>You selected: {selectedOption}</p>}
       </div>
     );
   }
@@ -244,7 +244,7 @@ const FeatureSearchInput = ({ setDropdownOpen, emptySearchInputs }) => {
         store.dispatch(setIsSearchingActive(false));
         store.dispatch(setSearchOn(false));
 
-        console.log(data.gfi);
+        console.log('handling response (input):', data);
 
         if (startIndex !== 0) {
           // Update features for "more results"
@@ -312,11 +312,12 @@ const FeatureSearchInput = ({ setDropdownOpen, emptySearchInputs }) => {
       layerId !== -1 ? layerId : selectedLayersByType.mapLayers[0]?.name;
 
     if (searchLayer) {
+      console.log(searchAttribute);
+      console.log(searchValue);
       channel.searchFeatures(
-        [[searchLayer], searchValue, startIndex],
+        [[searchLayer], searchValue, searchAttribute, startIndex],
         (data) => handleSearchResponse(data, searchLayer),
         (error) => handleSearchError(layerIdentifier, error),
-        searchAttribute
       );
     }
   };
