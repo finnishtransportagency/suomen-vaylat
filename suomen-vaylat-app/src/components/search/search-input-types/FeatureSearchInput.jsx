@@ -16,6 +16,7 @@ import {
   setSearchValue
 } from '../../../state/slices/rpcSlice';
 import { Slide, toast } from 'react-toastify';
+import Select from 'react-select';
 
 const StyledRowWithButton = styled.div`
   display: flex;
@@ -173,6 +174,18 @@ const CheckboxLabel = styled.label`
   color: ${(props) => props.theme.colors.darkGrey || '#333'};
 `;
 
+const StyledAttributeSelectionSection = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-start;
+  justify-content: space-between;
+`;
+
+const StyledInstructionText = styled.p`
+  margin-bottom: 0px;
+`;
+
 const FeatureSearchInput = ({ setDropdownOpen, emptySearchInputs }) => {
   const { store } = useContext(ReactReduxContext);
 
@@ -191,46 +204,29 @@ const FeatureSearchInput = ({ setDropdownOpen, emptySearchInputs }) => {
   // Contains object of key-value pairs, eg. {attribute: humanReadableAttribute}
   const [ layerAttributes, setLayerAttributes] = useState({});
 
+  const [ attirbuteSearchEnabled, setAttirbuteSearchEnabled ] = useState(false);
   const [ activeLayer, setActiveLayer ] = useState(null);
   const [ searchAttribute, setSearchAttribute ] = useState('');
-  const [selectedOption, setSelectedOption] = useState('');
+  const [ selectedOption, setSelectedOption ] = useState('');
+
+  // Turn object with key-value pairs into array of key-value pairs
+  const parseFieldNameLocales = (data) => {
+    if (!data) return [];
+    return Object.entries(data).map(([key, value]) => ({
+      key,
+      value
+    }));
+  };
 
   // Update layer attribute list if active layer was changed or if attribute list is empty
-  const updateAttributeNames = () => {
-    if (selectedLayersByType.mapLayers[0]?.id && (selectedLayersByType.mapLayers[0]?.id !== activeLayer || !layerAttributes)) {
-      channel.getFieldNameLocales([selectedLayersByType.mapLayers[0]?.id], 
-        (data) => {if (data) {setLayerAttributes(data)}},
-        (error) => console.log(error)
-      );
-      setActiveLayer(selectedLayersByType.mapLayers[0]?.id);
-    }
+  if (selectedLayersByType.mapLayers[0]?.id && (selectedLayersByType.mapLayers[0]?.id !== activeLayer || !layerAttributes)) {
+    channel.getFieldNameLocales([selectedLayersByType.mapLayers[0]?.id], 
+      (data) => {if (data) {setLayerAttributes(parseFieldNameLocales(data))}},
+      (error) => console.log(error)
+    );
+    setActiveLayer(selectedLayersByType.mapLayers[0]?.id);
   }
   
-  const DropDownMenu = () => {
-
-    updateAttributeNames();
-    // Update seacrh attribute on option change
-    const handleChange = (event) => {
-      const [attribute, readableAttribute] = event.target.value.split(',');
-      setSelectedOption(readableAttribute);
-      setSearchAttribute(attribute);
-    };
-
-    return (
-      <div style={{ margin: '20px' }}>
-        <label htmlFor="dropdown">Valitse hakuattributti:</label>
-        <select id="dropdown" value={selectedOption} onChange={handleChange}>
-          <option value="">{selectedOption}</option>
-          {Object.entries(layerAttributes).map((option, index) => (
-            <option key={index} value={option}>
-              {option[1]}
-            </option>
-          ))}
-        </select>
-      </div>
-    );
-  }
-
   const onClickSearchFeature = () => {
     if (validateFeatureSearch(searchValue, store, true)) {
       setDropdownOpen(false);
@@ -243,8 +239,6 @@ const FeatureSearchInput = ({ setDropdownOpen, emptySearchInputs }) => {
       if (Object.keys(data).length > 0 && Object.keys(data.gfi).length > 0) {
         store.dispatch(setIsSearchingActive(false));
         store.dispatch(setSearchOn(false));
-
-        console.log('handling response (input):', data);
 
         if (startIndex !== 0) {
           // Update features for "more results"
@@ -312,12 +306,15 @@ const FeatureSearchInput = ({ setDropdownOpen, emptySearchInputs }) => {
       layerId !== -1 ? layerId : selectedLayersByType.mapLayers[0]?.name;
 
     if (searchLayer) {
-      console.log(searchAttribute);
-      console.log(searchValue);
+      let attributeUsedInSearch = attirbuteSearchEnabled ? searchAttribute : '';
       channel.searchFeatures(
-        [[searchLayer], searchValue, searchAttribute, startIndex],
-        (data) => handleSearchResponse(data, searchLayer),
-        (error) => handleSearchError(layerIdentifier, error),
+        [[searchLayer], searchValue, attributeUsedInSearch, startIndex],
+        (data) => {
+          handleSearchResponse(data, searchLayer);
+        },
+        (error) => {
+          handleSearchError(layerIdentifier, error);
+        },
       );
     }
   };
@@ -338,7 +335,58 @@ const FeatureSearchInput = ({ setDropdownOpen, emptySearchInputs }) => {
           <StyledNoActivaLayers id="feature-search-no-active-layers" />
         )}
       </StyledSelectedLayerWrapper>
-      <DropDownMenu></DropDownMenu>
+
+      <StyledCheckboxWrapper>
+        <StyledCheckbox
+          id="feature-search-attribute-checkbox"
+          name="feature-search-attribute-checkbox"
+          type="checkbox"
+          onChange={() => setAttirbuteSearchEnabled(!attirbuteSearchEnabled)}
+          checked={attirbuteSearchEnabled}
+          aria-checked={!!attirbuteSearchEnabled}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              e.preventDefault();
+              e.currentTarget.click();
+            }
+          }}
+        />
+        <CheckboxLabel htmlFor="feature-search-attribute-checkbox">
+          {strings.search.feature.attributeSearch}
+        </CheckboxLabel>
+      </StyledCheckboxWrapper>
+
+      {attirbuteSearchEnabled && (
+        <StyledAttributeSelectionSection id="attribute-selection-section">
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
+            <StyledInstructionText id="attribute-selection-title">
+              {strings.search.feature.selectSearchAttribute}
+            </StyledInstructionText>
+          </div>
+          <div style={{ width: '93%', marginBottom: '14px'}}>
+            <Select
+              inputId="attribute-select"
+              aria-label={strings.search.feature.selectSearchAttribute}
+              value={{ value: selectedOption, label: selectedOption }}
+              onChange={(opt) => {
+                if (opt && opt.value) {
+                  console.log(opt.value[0]);
+                  setSelectedOption(opt.value);
+                  setSearchAttribute(opt.value);
+                  // If user hasn't edited, effect will refresh displayed values for the new projection
+                }
+              }}
+              options={layerAttributes}
+              isSearchable
+              placeholder="Select attribute..."
+              // avoids parent clipping / z-index issues
+              // TODO: Options in the menu are invisibe or white --> needs to be fixed
+              menuPortalTarget={typeof document !== 'undefined' ? document.body : null}
+              menuPosition="fixed"
+            />
+          </div>
+        </StyledAttributeSelectionSection>
+      )}
 
       <StyledRowWithButton>
         <StyledInputsContainer>
