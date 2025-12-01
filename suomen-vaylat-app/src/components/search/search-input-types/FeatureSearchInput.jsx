@@ -12,6 +12,7 @@ import {
   setFeatureSearchResults,
   setIsSearchingActive,
   setLastSearchValue,
+  setLastSearchAttribute,
   setSearchOn,
   setSearchValue
 } from '../../../state/slices/rpcSlice';
@@ -197,24 +198,25 @@ const FeatureSearchInput = ({ setDropdownOpen, emptySearchInputs }) => {
     searchResults,
     searchValue,
     isSearchingActive,
-    lastSearchValue
+    lastSearchValue,
+    lastSearchAttribute
   } = useAppSelector((state) => state.rpc);
 
   // Keep available layer attributes and user chosen attribute
   // Contains object of key-value pairs, eg. {attribute: humanReadableAttribute}
-  const [ layerAttributes, setLayerAttributes] = useState({});
+  const [ layerAttributes, setLayerAttributes] = useState([]);
 
   const [ attirbuteSearchEnabled, setAttirbuteSearchEnabled ] = useState(false);
   const [ activeLayer, setActiveLayer ] = useState(null);
   const [ searchAttribute, setSearchAttribute ] = useState('');
   const [ selectedOption, setSelectedOption ] = useState('');
 
-  // Turn object with key-value pairs into array of key-value pairs
+  // Turn object with key-value pairs into array of value-label pairs for select-react module
   const parseFieldNameLocales = (data) => {
     if (!data) return [];
     return Object.entries(data).map(([key, value]) => ({
-      key,
-      value
+      value: key, // Used as the searchAttribute for the feature search
+      label: value // Visible in the drop-down menu
     }));
   };
 
@@ -235,7 +237,8 @@ const FeatureSearchInput = ({ setDropdownOpen, emptySearchInputs }) => {
   };
 
   const handleFeatureSearch = (searchValue, startIndex = 0, layerId = -1) => {
-    const handleSearchResponse = (data) => {
+    const attributeUsedInSearch = attirbuteSearchEnabled ? searchAttribute : '';
+    const handleSearchResponse = (data, usedAttr) => {
       if (Object.keys(data).length > 0 && Object.keys(data.gfi).length > 0) {
         store.dispatch(setIsSearchingActive(false));
         store.dispatch(setSearchOn(false));
@@ -273,12 +276,14 @@ const FeatureSearchInput = ({ setDropdownOpen, emptySearchInputs }) => {
         store.dispatch(setSearchOn(false));
       }
       store.dispatch(setLastSearchValue(searchValue));
+      store.dispatch(setLastSearchAttribute(usedAttr));
     };
 
-    const handleSearchError = (layerIdentifier, error) => {
+    const handleSearchError = (layerIdentifier, error, usedAttr) => {
       store.dispatch(setIsSearchingActive(false));
       store.dispatch(setSearchOn(false));
       store.dispatch(setLastSearchValue(searchValue));
+      store.dispatch(setLastSearchAttribute(usedAttr));
 
       toast.error(
         `${strings.search.feature.errorLayerStart}${layerIdentifier}${strings.search.feature.errorLayerEnd}`,
@@ -306,14 +311,13 @@ const FeatureSearchInput = ({ setDropdownOpen, emptySearchInputs }) => {
       layerId !== -1 ? layerId : selectedLayersByType.mapLayers[0]?.name;
 
     if (searchLayer) {
-      let attributeUsedInSearch = attirbuteSearchEnabled ? searchAttribute : '';
       channel.searchFeatures(
         [[searchLayer], searchValue, attributeUsedInSearch, startIndex],
         (data) => {
-          handleSearchResponse(data, searchLayer);
+          handleSearchResponse(data, attributeUsedInSearch);
         },
         (error) => {
-          handleSearchError(layerIdentifier, error);
+          handleSearchError(layerIdentifier, error, attributeUsedInSearch);
         },
       );
     }
@@ -341,7 +345,9 @@ const FeatureSearchInput = ({ setDropdownOpen, emptySearchInputs }) => {
           id="feature-search-attribute-checkbox"
           name="feature-search-attribute-checkbox"
           type="checkbox"
-          onChange={() => setAttirbuteSearchEnabled(!attirbuteSearchEnabled)}
+          onChange={() => {
+            setAttirbuteSearchEnabled(!attirbuteSearchEnabled); 
+          }}
           checked={attirbuteSearchEnabled}
           aria-checked={!!attirbuteSearchEnabled}
           onKeyDown={(e) => {
@@ -370,8 +376,7 @@ const FeatureSearchInput = ({ setDropdownOpen, emptySearchInputs }) => {
               value={{ value: selectedOption, label: selectedOption }}
               onChange={(opt) => {
                 if (opt && opt.value) {
-                  console.log(opt.value[0]);
-                  setSelectedOption(opt.value);
+                  setSelectedOption(opt.label);
                   setSearchAttribute(opt.value);
                   // If user hasn't edited, effect will refresh displayed values for the new projection
                 }
@@ -413,7 +418,7 @@ const FeatureSearchInput = ({ setDropdownOpen, emptySearchInputs }) => {
         </StyledInputsContainer>
 
         {(searchResults !== null || featureSearchResults.length > 0) &&
-        searchValue === lastSearchValue &&
+        searchValue === lastSearchValue && lastSearchAttribute === searchAttribute &&
         !isSearchingActive ? (
           <StyledStandardSearchButton
             id="feature-search-clear-button"
