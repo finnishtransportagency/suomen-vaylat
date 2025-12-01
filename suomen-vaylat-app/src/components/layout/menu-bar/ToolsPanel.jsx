@@ -92,6 +92,7 @@ const variants = {
 export const ToolsPanel = ({ isOpen }) => {
   const [panelIndex, setPanelIndex] = useState(0); // 0: Left, 1: Middle, 2: Right
   const swiperRef = useRef(null);
+  const [lineUnit, setLineUnit] = useState(null);
 
   const { store } = useContext(ReactReduxContext);
   const { channel, selectedLayersByType } = useSelector((state) => state.rpc);
@@ -157,6 +158,11 @@ export const ToolsPanel = ({ isOpen }) => {
     }
   }, [panelIndex]);
 
+  useEffect(() => {
+    if (!swiperRef.current || !swiperRef.current.swiper) return;
+    swiperRef.current.swiper.updateAutoHeight(50);
+  }, [lineUnit, activeTool]);
+
   return (
     <StyledTools
       id="drawing-tools-buttons-wrapper"
@@ -204,7 +210,7 @@ export const ToolsPanel = ({ isOpen }) => {
               }
               aria-label={strings.downloads?.downloads}
             />
-            { IS_EXTRANET &&
+            {IS_EXTRANET && (
               <PillButton
                 id="menubar-tools-dataset-import-button"
                 icon={faUpload}
@@ -214,7 +220,7 @@ export const ToolsPanel = ({ isOpen }) => {
                 }
                 aria-label={strings.datasetImport?.menuButtonTitle}
               />
-            }
+            )}
             {!isMobile && (
               <PillButton
                 id={'menubar-tools-fullscreen-btn'}
@@ -238,6 +244,7 @@ export const ToolsPanel = ({ isOpen }) => {
               setPanelIndex={setPanelIndex}
               geoJsonArray={geoJsonArray}
               drawToolMarkers={drawToolMarkers}
+              onLineUnitChange={(unit) => setLineUnit(unit)} // <-- receive changes
             />
           </PanelContainer>
         </SwiperSlide>
