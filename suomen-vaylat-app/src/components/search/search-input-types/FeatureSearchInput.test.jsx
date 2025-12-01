@@ -155,7 +155,7 @@ describe('FeatureSearchInput', () => {
                 emptySearchInputs={emptySearchInputs} 
             />
         );
-
+        
         // Enable attribute search (there is one checkbox)
         const checkbox = screen.getByRole('checkbox', { name: strings.search.feature.attributeSearch });
         fireEvent.click(checkbox);
@@ -193,6 +193,10 @@ describe('FeatureSearchInput', () => {
         await waitFor(() => {
             // dispatch should have run (component dispatches isSearching flags)
             expect(mockStore.dispatch).toHaveBeenCalled();
+        });
+
+        await waitFor(() => {
+            expect(setDropdownOpen).toHaveBeenCalledWith(false)
         });
     });
 
