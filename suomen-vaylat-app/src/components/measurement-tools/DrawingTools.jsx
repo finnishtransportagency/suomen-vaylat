@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { ReactReduxContext } from 'react-redux';
 import PillButton from '../../utils/components/PillButton';
 import {
@@ -20,11 +20,30 @@ import {
 } from '../../state/slices/uiSlice';
 import { removeMarkerRequest } from '../../state/slices/rpcSlice';
 import { useSelector } from 'react-redux';
+import { FormControlLabel, Radio, RadioGroup } from '@mui/material';
 
 const DrawingTools = ({ setPanelIndex, geoJsonArray, drawToolMarkers }) => {
   const { store } = useContext(ReactReduxContext);
   const { channel } = useSelector((state) => state.rpc);
   const { activeTool } = useSelector((state) => state.ui);
+
+  const LOCAL_STORAGE_KEY = 'lineUnitPreference';
+  const [lineUnit, setLineUnit] = useState('metric');
+
+  useEffect(() => {
+    try {
+      const saved = window.localStorage.getItem(LOCAL_STORAGE_KEY);
+      if (saved === 'metric' || saved === 'nautical') {
+        // note: use 'nautical' as internal value, will map to 'nauticalMiles' for API
+        setLineUnit(saved === 'nautical' ? 'nautical' : 'metric');
+      }
+    } catch (e) {
+      // ignore localStorage errors
+    }
+  }, []);
+
+  const measurementFormatForApi = (unit) =>
+    unit === 'metric' ? 'metric' : 'nauticalMiles';
 
   const drawingToolsData = {
     linestring: {
@@ -60,10 +79,14 @@ const DrawingTools = ({ setPanelIndex, geoJsonArray, drawToolMarkers }) => {
     if (!tool) return;
     if (tool.id !== activeTool) {
       if (activeTool) channel?.postRequest('DrawTools.StopDrawingRequest', [activeTool]);
+      // use currently selected measurement unit
       channel?.postRequest('DrawTools.StartDrawingRequest', [
         tool.id,
         tool.type,
-        { showMeasureOnMap: true }
+        {
+          showMeasureOnMap: true,
+          measurementFormat: measurementFormatForApi(lineUnit)
+        }
       ]);
       store.dispatch(setActiveTool(tool.id));
     } else {
@@ -100,6 +123,33 @@ const DrawingTools = ({ setPanelIndex, geoJsonArray, drawToolMarkers }) => {
     startStopTool(drawingToolsData[activeTool]);
   };
 
+  // When user changes the unit, persist and (if a drawing is active) restart it so the new
+  // measurementFormat is applied immediately.
+  const handleLineUnitChange = (event) => {
+    const value = event.target.value; // 'metric' or 'nautical'
+    setLineUnit(value);
+    try {
+      window.localStorage.setItem(LOCAL_STORAGE_KEY, value === 'nautical' ? 'nautical' : 'metric');
+    } catch (e) {
+      // ignore localStorage write errors
+    }
+
+    // If there's an active drawing (and it has a type), restart it with new measurementFormat
+    if (activeTool && drawingToolsData[activeTool] && drawingToolsData[activeTool].type) {
+      channel?.postRequest('DrawTools.StopDrawingRequest', [activeTool]);
+      channel?.postRequest('DrawTools.StartDrawingRequest', [
+        activeTool,
+        drawingToolsData[activeTool].type,
+        {
+          showMeasureOnMap: true,
+          measurementFormat: measurementFormatForApi(value)
+        }
+      ]);
+      // keep the store activeTool in sync (it was already active)
+      store.dispatch(setActiveTool(activeTool));
+    }
+  };
+
   return (
     <>
       <PillButton
@@ -113,6 +163,32 @@ const DrawingTools = ({ setPanelIndex, geoJsonArray, drawToolMarkers }) => {
         text={strings.back}
         aria-label={'return-to-menubar-tools-panel'}
       />
+      <div>Viivan yksikkö</div>
+
+      {/* Radio buttons for units */}
+      <RadioGroup
+        row
+        aria-label="line-unit"
+        name="line-unit-group"
+        value={lineUnit}
+        onChange={handleLineUnitChange}
+        sx={{ display: 'flex', flexDirection: 'row', gap: 1, alignItems: 'center' }}
+      >
+        <FormControlLabel
+          sx={{ marginLeft: '0px'}}
+          value="metric"
+          control={<Radio 
+          sx={{ padding: '0px'}}/>}
+          label="Metrit"
+        />
+        <FormControlLabel
+          sx={{ marginLeft: '0px'}}
+          value="nautical"
+          control={<Radio 
+          sx={{ padding: '0px'}}/>}
+          label="Merimailit"
+        />
+      </RadioGroup>
       <PillButton
         id={'drawing-tools-linestring'}
         key={'linestring'}
@@ -124,6 +200,7 @@ const DrawingTools = ({ setPanelIndex, geoJsonArray, drawToolMarkers }) => {
         text={strings.tooltips.drawingTools.linestring}
         aria-label={strings.tooltips.drawingTools.linestring}
       />
+
       <PillButton
         id={'drawing-tools-polygon'}
         key={'polygon'}
