@@ -343,6 +343,7 @@ const FeatureSearchInput = ({ setDropdownOpen, emptySearchInputs }) => {
       <StyledCheckboxWrapper>
         <StyledCheckbox
           id="feature-search-attribute-checkbox"
+          aria-label={strings.search.feature.attributeSearch}
           name="feature-search-attribute-checkbox"
           type="checkbox"
           onChange={() => {

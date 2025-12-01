@@ -637,7 +637,7 @@
         "length": "Enter at least three characters",
         "regex": "Search can't include any special characters"
       },
-      "attributeSearch": "Advanced search",
+      "attributeSearch": "Enable advanced search",
       "selectSearchAttribute": "Choose a search attribute:"
     },
     "track": {

@@ -636,7 +636,7 @@
         "length": "Syötä vähintään kolme merkkiä",
         "regex": "Haku ei saa sisältää erikoismerkkejä"
       },
-      "attributeSearch": "Tarkennettu haku",
+      "attributeSearch": "Käytä tarkennettua kohdehakua",
       "selectSearchAttribute": "Valitse hakuattribuutti:"
     },
     "track": {

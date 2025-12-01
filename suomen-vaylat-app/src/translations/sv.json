@@ -637,7 +637,7 @@
         "length": "Ange minst tre tecken",
         "regex": "Sökningen får inte innehålla specialtecken"
       },
-      "attributeSearch": "Avancerad sökning",
+      "attributeSearch": "Aktivera avancerad sökning",
       "selectSearchAttribute": "Välj ett sökattribut:"
     },
     "track": {
