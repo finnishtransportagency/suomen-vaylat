@@ -22,7 +22,12 @@ import { removeMarkerRequest } from '../../state/slices/rpcSlice';
 import { useSelector } from 'react-redux';
 import { FormControlLabel, Radio, RadioGroup } from '@mui/material';
 
-const DrawingTools = ({ setPanelIndex, geoJsonArray, drawToolMarkers }) => {
+const DrawingTools = ({
+  setPanelIndex,
+  geoJsonArray,
+  drawToolMarkers,
+  onLineUnitChange
+}) => {
   const { store } = useContext(ReactReduxContext);
   const { channel } = useSelector((state) => state.rpc);
   const { activeTool } = useSelector((state) => state.ui);
@@ -34,7 +39,6 @@ const DrawingTools = ({ setPanelIndex, geoJsonArray, drawToolMarkers }) => {
     try {
       const saved = window.localStorage.getItem(LOCAL_STORAGE_KEY);
       if (saved === 'metric' || saved === 'nautical') {
-        // note: use 'nautical' as internal value, will map to 'nauticalMiles' for API
         setLineUnit(saved === 'nautical' ? 'nautical' : 'metric');
       }
     } catch (e) {
@@ -78,8 +82,8 @@ const DrawingTools = ({ setPanelIndex, geoJsonArray, drawToolMarkers }) => {
   const startStopTool = (tool) => {
     if (!tool) return;
     if (tool.id !== activeTool) {
-      if (activeTool) channel?.postRequest('DrawTools.StopDrawingRequest', [activeTool]);
-      // use currently selected measurement unit
+      if (activeTool)
+        channel?.postRequest('DrawTools.StopDrawingRequest', [activeTool]);
       channel?.postRequest('DrawTools.StartDrawingRequest', [
         tool.id,
         tool.type,
@@ -97,7 +101,8 @@ const DrawingTools = ({ setPanelIndex, geoJsonArray, drawToolMarkers }) => {
 
   const addMarker = (tool) => {
     if (tool.id !== activeTool) {
-      if (activeTool) channel?.postRequest('DrawTools.StopDrawingRequest', [activeTool]);
+      if (activeTool)
+        channel?.postRequest('DrawTools.StopDrawingRequest', [activeTool]);
       store.dispatch(setActiveTool(tool.id));
     } else {
       resetTools();
@@ -123,31 +128,47 @@ const DrawingTools = ({ setPanelIndex, geoJsonArray, drawToolMarkers }) => {
     startStopTool(drawingToolsData[activeTool]);
   };
 
-  // When user changes the unit, persist and (if a drawing is active) restart it so the new
+  // When user changes the unit, persist and (if the active tool is linestring) restart it so the new
   // measurementFormat is applied immediately.
   const handleLineUnitChange = (event) => {
     const value = event.target.value; // 'metric' or 'nautical'
     setLineUnit(value);
     try {
-      window.localStorage.setItem(LOCAL_STORAGE_KEY, value === 'nautical' ? 'nautical' : 'metric');
+      window.localStorage.setItem(
+        LOCAL_STORAGE_KEY,
+        value === 'nautical' ? 'nautical' : 'metric'
+      );
     } catch (e) {
       // ignore localStorage write errors
     }
 
-    // If there's an active drawing (and it has a type), restart it with new measurementFormat
-    if (activeTool && drawingToolsData[activeTool] && drawingToolsData[activeTool].type) {
+    // If the currently active tool is the linestring, restart it with new measurementFormat
+    if (activeTool === 'linestring') {
+      // stop then start again so measurement format updates
       channel?.postRequest('DrawTools.StopDrawingRequest', [activeTool]);
       channel?.postRequest('DrawTools.StartDrawingRequest', [
-        activeTool,
-        drawingToolsData[activeTool].type,
+        'linestring',
+        drawingToolsData.linestring.type,
         {
           showMeasureOnMap: true,
           measurementFormat: measurementFormatForApi(value)
         }
       ]);
-      // keep the store activeTool in sync (it was already active)
-      store.dispatch(setActiveTool(activeTool));
+      // keep store in sync
+      store.dispatch(setActiveTool('linestring'));
     }
+    // notify parent ToolsPanel so it can update swiper autoHeight
+    onLineUnitChange?.(value);
+  };
+
+  // Styles for the expanding radio container (light blue background + transition)
+  const radioContainerBase = {
+    borderRadius: 8,
+    padding: activeTool === 'linestring' ? '8px 8px 0 8px' : '0 8px',
+    overflow: 'hidden',
+    transition: 'opacity 220ms ease, padding 220ms ease',
+    maxHeight: activeTool === 'linestring' ? 'none' : 0,
+    opacity: activeTool === 'linestring' ? 1 : 0
   };
 
   return (
@@ -163,44 +184,52 @@ const DrawingTools = ({ setPanelIndex, geoJsonArray, drawToolMarkers }) => {
         text={strings.back}
         aria-label={'return-to-menubar-tools-panel'}
       />
-      <div>Viivan yksikkö</div>
 
-      {/* Radio buttons for units */}
-      <RadioGroup
-        row
-        aria-label="line-unit"
-        name="line-unit-group"
-        value={lineUnit}
-        onChange={handleLineUnitChange}
-        sx={{ display: 'flex', flexDirection: 'row', gap: 1, alignItems: 'center' }}
-      >
-        <FormControlLabel
-          sx={{ marginLeft: '0px'}}
-          value="metric"
-          control={<Radio 
-          sx={{ padding: '0px'}}/>}
-          label="Metrit"
+      {/* Linestring button */}
+      <div>
+        <PillButton
+          id={'drawing-tools-linestring'}
+          key={'linestring'}
+          onClick={() => startStopTool(drawingToolsData.linestring)}
+          icon={svLinestring}
+          color={
+            activeTool === 'linestring'
+              ? theme.colors.buttonSelected
+              : undefined
+          }
+          text={strings.tooltips.drawingTools.linestring}
+          aria-label={strings.tooltips.drawingTools.linestring}
+          style={{width: '100%'}}
         />
-        <FormControlLabel
-          sx={{ marginLeft: '0px'}}
-          value="nautical"
-          control={<Radio 
-          sx={{ padding: '0px'}}/>}
-          label="Merimailit"
-        />
-      </RadioGroup>
-      <PillButton
-        id={'drawing-tools-linestring'}
-        key={'linestring'}
-        onClick={() => startStopTool(drawingToolsData.linestring)}
-        icon={svLinestring}
-        color={
-          activeTool === 'linestring' ? theme.colors.buttonSelected : undefined
-        }
-        text={strings.tooltips.drawingTools.linestring}
-        aria-label={strings.tooltips.drawingTools.linestring}
-      />
 
+        {/* Radio container appears only when linestring is active; it transitions in/out */}
+        <div
+          style={radioContainerBase}
+          aria-hidden={activeTool !== 'linestring'}
+        >
+          <RadioGroup
+            row
+            aria-label="line-unit"
+            name="line-unit-group"
+            value={lineUnit}
+            onChange={handleLineUnitChange}
+            sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}
+          >
+            <FormControlLabel
+              sx={{ marginLeft: '0px' }}
+              value="metric"
+              control={<Radio size="small" sx={{ padding: '0px' }} />}
+              label="Metrit"
+            />
+            <FormControlLabel
+              sx={{ marginLeft: '0px' }}
+              value="nautical"
+              control={<Radio size="small" sx={{ padding: '0px' }} />}
+              label="Merimailit"
+            />
+          </RadioGroup>
+        </div>
+      </div>
       <PillButton
         id={'drawing-tools-polygon'}
         key={'polygon'}
