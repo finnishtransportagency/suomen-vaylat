@@ -44,13 +44,16 @@ const StyledTools = styled(motion.div)`
   transition: all 0.3s ease;
   pointer-events: auto;
   gap: 8px;
-  width: 200px;
-  max-width: 95vw;
+  max-width: 20vw;
   box-sizing: border-box;
 
   @media ${(props) => props.theme.device.mobileL} {
     gap: 6px;
-    width: 150px;
+    max-width: 40vw;
+  }
+
+  @media ${(props) => props.theme.device.mobileM} {
+    max-width: 45vw;
   }
 
   @media ${(props) => props.theme.device.lowResDesktop} {
