@@ -4,7 +4,7 @@
 
 import strings from '../../../translations';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import FeatureSearchInput from './FeatureSearchInput';
+import FeatureSearchInput from '../search-input-types/FeatureSearchInput';
 import { ReactReduxContext } from 'react-redux';
 import { ThemeProvider } from 'styled-components';
 import { useAppSelector } from '../../../state/hooks';
