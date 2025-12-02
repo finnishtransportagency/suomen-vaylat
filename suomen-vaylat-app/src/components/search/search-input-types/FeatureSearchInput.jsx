@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import strings from '../../../translations';
 import { useAppSelector } from '../../../state/hooks';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { faMagnifyingGlass, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { mergeMatchedKeys, validateFeatureSearch } from '../utils/SearchUtil';
@@ -18,6 +18,7 @@ import {
 } from '../../../state/slices/rpcSlice';
 import { Slide, toast } from 'react-toastify';
 import Select from 'react-select';
+import '../css/ReactSelectStyling.css'
 
 const StyledRowWithButton = styled.div`
   display: flex;
@@ -159,7 +160,7 @@ const StyledNoActivaLayers = styled.div`
 const StyledCheckboxWrapper = styled.div`
   display: flex;
   align-items: center;
-  margin: 0 0 1em 8px;
+  margin: 0 0 1em 0.5em;
 `;
 
 const StyledCheckbox = styled.input`
@@ -185,6 +186,7 @@ const StyledAttributeSelectionSection = styled.div`
 
 const StyledInstructionText = styled.p`
   margin-bottom: 0px;
+  margin-left: 0.5em;
 `;
 
 const FeatureSearchInput = ({ setDropdownOpen, emptySearchInputs }) => {
@@ -214,20 +216,29 @@ const FeatureSearchInput = ({ setDropdownOpen, emptySearchInputs }) => {
   // Turn object with key-value pairs into array of value-label pairs for select-react module
   const parseFieldNameLocales = (data) => {
     if (!data) return [];
-    return Object.entries(data).map(([key, value]) => ({
-      value: key, // Used as the searchAttribute for the feature search
-      label: value // Visible in the drop-down menu
-    }));
+    return Object.entries(data)
+      .map(([key, value]) => ({ value: key, label: value }))
+      .sort((a, b) => {
+        const la = a.label ?? '';
+        const lb = b.label ?? '';
+        // Prefer string comparison; fall back to String() for non-strings
+        const sa = typeof la === 'string' ? la : String(la);
+        const sb = typeof lb === 'string' ? lb : String(lb);
+        return sa.localeCompare(sb, undefined, { sensitivity: 'base' });
+      });
   };
 
-  // Update layer attribute list if active layer was changed or if attribute list is empty
-  if (selectedLayersByType.mapLayers[0]?.id && (selectedLayersByType.mapLayers[0]?.id !== activeLayer || !layerAttributes)) {
-    channel.getFieldNameLocales([selectedLayersByType.mapLayers[0]?.id], 
-      (data) => {if (data) {setLayerAttributes(parseFieldNameLocales(data))}},
-      (error) => console.log(error)
-    );
-    setActiveLayer(selectedLayersByType.mapLayers[0]?.id);
-  }
+  useEffect(() => {
+    // Update layer attribute list if active layer was changed or if attribute list is empty
+    if (selectedLayersByType.mapLayers[0]?.id && (selectedLayersByType.mapLayers[0]?.id !== activeLayer || !layerAttributes)) {
+      setSelectedOption('');
+      channel.getFieldNameLocales([selectedLayersByType.mapLayers[0]?.id], 
+        (data) => {if (data) {setLayerAttributes(parseFieldNameLocales(data))}},
+        (error) => console.log(error)
+      );
+      setActiveLayer(selectedLayersByType.mapLayers[0]?.id);
+    }
+  }, [selectedLayersByType, activeLayer, channel, layerAttributes]);
   
   const onClickSearchFeature = () => {
     if (validateFeatureSearch(searchValue, store, true)) {
@@ -346,7 +357,8 @@ const FeatureSearchInput = ({ setDropdownOpen, emptySearchInputs }) => {
           aria-label={strings.search.feature.attributeSearch}
           name="feature-search-attribute-checkbox"
           type="checkbox"
-          onChange={() => {
+          onChange={(e) => {
+            if (e.target.checked === false) setSelectedOption('');
             setAttirbuteSearchEnabled(!attirbuteSearchEnabled); 
           }}
           checked={attirbuteSearchEnabled}
@@ -370,7 +382,7 @@ const FeatureSearchInput = ({ setDropdownOpen, emptySearchInputs }) => {
               {strings.search.feature.selectSearchAttribute}
             </StyledInstructionText>
           </div>
-          <div style={{ width: '93%', marginBottom: '14px'}}>
+          <div style={{ width: '100%', marginBottom: '0.5em'}}>
             <Select
               inputId="attribute-select"
               aria-label={strings.search.feature.selectSearchAttribute}
@@ -389,6 +401,7 @@ const FeatureSearchInput = ({ setDropdownOpen, emptySearchInputs }) => {
               // TODO: Options in the menu are invisibe or white --> needs to be fixed
               menuPortalTarget={typeof document !== 'undefined' ? document.body : null}
               menuPosition="fixed"
+              classNamePrefix="feature-search"
             />
           </div>
         </StyledAttributeSelectionSection>
