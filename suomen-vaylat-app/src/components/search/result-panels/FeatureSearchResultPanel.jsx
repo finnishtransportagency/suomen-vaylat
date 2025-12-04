@@ -27,7 +27,6 @@ import { Slide, toast } from 'react-toastify';
 const StyledDropDown = styled(motion.div)`
   top: 0px;
   right: 0px;
-  max-width: 400px;
   width: 100%;
   height: auto;
   padding: 0 1px;
@@ -278,10 +277,12 @@ const FeatureSearchResultPanel = () => {
   }, [featureSearchResults]);
 
   // Toggle feature details and show them on the map
-  const handleSetOpenMatchKey = (layer, matchedKey) => {
+  const handleSetOpenMatchKey = (layer, matchedKey, selectedFeature) => {
     setOpenAttribute(openAttribute === matchedKey ? null : matchedKey);
-    setSelectedFeature('');
-    showFeatureOnMap(channel, layer, null);
+    if (selectedFeature !== '') {
+      setSelectedFeature('');
+      showFeatureOnMap(channel, layer, null);
+    }
   };
 
   const handleFeatureSearch = (searchValue, searchAttribute, startIndex = 0, layerId = -1) => {
@@ -398,11 +399,11 @@ const FeatureSearchResultPanel = () => {
                 id="syled-title-wrapper"
                 tabIndex={0}
                 onClick={() =>
-                  handleSetOpenMatchKey(featureSearchResults[0], matchedKey)
+                  handleSetOpenMatchKey(featureSearchResults[0], matchedKey, selectedFeature)
                 }
                 onKeyDown={(e) => {
                   if (e.key === 'Enter') {
-                    handleSetOpenMatchKey(featureSearchResults[0], matchedKey);
+                    handleSetOpenMatchKey(featureSearchResults[0], matchedKey, selectedFeature);
                   }
                 }}
               >
