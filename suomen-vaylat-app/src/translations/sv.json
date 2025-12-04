@@ -809,6 +809,8 @@
     "readMore": "Läs mer",
     "readLess": "Mindre",
     "moreInfo": "Mer information:",
+    "restrictedThemes": "Intern",
+    "openThemes": "Öppen",
     "errors": {
       "getThemesError": "Fel vid sökning efter teman!",
       "themeStyleError": "Det gick inte att hämta stilar för tema: ",

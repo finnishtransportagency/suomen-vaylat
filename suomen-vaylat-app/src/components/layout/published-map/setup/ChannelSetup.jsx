@@ -144,24 +144,8 @@ const setupSupportedFunctions = (data, channel, store, isSharedLink) => {
           transition: Slide
         });
       }
-      if (IS_EXTRANET) {
-        themesWithLayersData.hasOwnProperty('themes') &&
-          themesWithLayersData.hasOwnProperty('restrictedThemes') &&
-          store.dispatch(
-            setAllThemesWithLayers({
-              themes: themesWithLayersData.themes,
-              restrictedThemes: themesWithLayersData.restrictedThemes
-            })
-          );
-      } else {
-        themesWithLayersData.hasOwnProperty('themes') &&
-          store.dispatch(
-            setAllThemesWithLayers({
-              themes: themesWithLayersData.themes,
-              restrictedThemes: []
-            })
-          );
-      }
+
+      store.dispatch(setAllThemesWithLayers(themesWithLayersData));
     });
   }
 

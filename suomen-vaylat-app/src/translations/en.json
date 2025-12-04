@@ -809,6 +809,8 @@
     "readMore": "Read more",
     "readLess": "Show less",
     "moreInfo": "Further information:",
+    "restrictedThemes": "Restricted",
+    "openThemes": "Open",
     "errors": {
       "getThemesError": "Error getting themes!",
       "themeStyleError": "Error getting styles for theme: ",

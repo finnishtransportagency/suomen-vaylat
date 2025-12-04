@@ -807,6 +807,8 @@
     "readMore": "Lue lisää",
     "readLess": "Vähemmän",
     "moreInfo": "Lisätietoja:",
+    "restrictedThemes": "Sisäiset",
+    "openThemes": "Avoimet",
     "errors": {
       "getThemesError": "Virhe teemojen haussa!",
       "themeStyleError": "Virhe teeman tyylien haussa: ",

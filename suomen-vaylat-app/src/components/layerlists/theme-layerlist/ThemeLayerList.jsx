@@ -5,7 +5,9 @@ import {
   faAngleDown,
   faRoad,
   faShip,
-  faTrain
+  faTrain,
+  faLock,
+  faKey
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ReactReduxContext } from 'react-redux';
@@ -27,6 +29,8 @@ import intersection from './resources/images/Intersection.jpg';
 import siltarajoituskartta from './resources/images/siltarajoituskartta.jpg';
 import tienumerokartta from './resources/images/tienumerokartta.jpg';
 import kuntokartta from './resources/images/kuntokartta.jpg';
+import { theme } from '../../../theme/theme';
+import { IS_EXTRANET } from '../../../utils/appInfoUtil';
 
 const listVariants = {
   visible: {
@@ -145,7 +149,7 @@ const StyledSubthemeName = styled.p`
 
 const StyledMasterGroupHeader = styled.div`
   z-index: 1;
-  height: ${(props) => (props.$expanded ? 'auto' : '48px')};
+  height: auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -328,6 +332,31 @@ const StyledSubthemes = styled.div`
   padding: 0px 16px;
 `;
 
+const StyledRestrictedThemesTitle = styled.div`
+  font-size: 16px;
+  font-weight: 600;
+  color: ${(props) => props.theme.colors.secondaryColorGreen};
+`;
+
+const StyledOpenThemesTitle = styled.div`
+  font-weight: 600;
+  color: ${(props) => props.theme.colors.secondaryColorGreen};
+`;
+
+const HorizontalLine = styled.div`
+  width: 100%;
+  height: 1px;
+  background-color: #d7d9db;
+  margin: 0.5em 0;
+`;
+
+const StyledThemesContainer = styled.div`
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  margin-bottom: 6px;
+`;
+
 const themeImages = {
   hankekartta: hankekartta,
   päällysteidenkuntokartta: intersection,
@@ -487,8 +516,13 @@ export const Themes = ({ groups, allLayers }) => {
     }
   };
 
+  const [restrictedOpen, setRestrictedOpen] = useState(true);
+  const [normalOpen, setNormalOpen] = useState(true);
+
   let links = [];
-  let themes = [];
+  let openThemes = [];
+  let restrictedThemes = [];
+
   groups
     .sort((a, b) =>
       sortObjectAlphabetically(a.locale[lang].name, b.locale[lang].name)
@@ -507,28 +541,150 @@ export const Themes = ({ groups, allLayers }) => {
       if (link.length > 0) {
         links.push({ group, link, index });
       } else {
-        themes.push({ group, index });
+        if (group.locale?.fi?.name?.includes('(sisäinen)')) {
+          restrictedThemes.push({ group, index });
+        } else {
+          openThemes.push({ group, index });
+        }
       }
     });
 
   return (
     <StyledSubthemes>
-      {themes.length > 0 &&
-        themes.map((theme) => {
-          return (
-            <ThemeGroup
-              key={`theme-${theme.index}`}
-              lang={lang}
-              theme={theme.group}
-              layers={allLayers}
-              index={theme.index}
-              selectedTheme={selectedTheme}
-              selectTheme={handleSelectTheme}
-              isSubtheme={false}
-              isFirstSubtheme={true}
+      {IS_EXTRANET ? (
+        <>
+          {/* Restricted section header */}
+          <StyledThemesContainer
+            role="button"
+            tabIndex={0}
+            aria-expanded={restrictedOpen}
+            onClick={() => setRestrictedOpen((v) => !v)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') setRestrictedOpen((v) => !v);
+            }}
+          >
+            <FontAwesomeIcon
+              style={{ color: theme.colors.secondaryColorGreen, margin: '8px' }}
+              icon={faLock}
             />
-          );
-        })}
+            <StyledRestrictedThemesTitle style={{ marginLeft: 4 }}>
+              {strings.themelayerlist.restrictedThemes}
+            </StyledRestrictedThemesTitle>
+            <motion.div
+              style={{ marginLeft: 'auto', marginRight: 8 }}
+              animate={{ rotate: restrictedOpen ? 180 : 0 }}
+            >
+              <FontAwesomeIcon
+                color={theme.colors.secondaryColorGreen}
+                icon={faAngleDown}
+              />
+            </motion.div>
+          </StyledThemesContainer>
+
+          {/* Restricted list (animated) */}
+          <motion.div
+            initial={false}
+            animate={restrictedOpen ? 'visible' : 'hidden'}
+            variants={listVariants}
+            transition={{ duration: 0.25 }}
+            style={{ overflow: 'hidden' }}
+          >
+            {restrictedThemes.length > 0 &&
+              restrictedThemes.map((theme) => {
+                return (
+                  <ThemeGroup
+                    key={`restricted-theme-${theme.index}`}
+                    lang={lang}
+                    theme={theme.group}
+                    layers={allLayers}
+                    index={theme.index}
+                    selectedTheme={selectedTheme}
+                    selectTheme={handleSelectTheme}
+                    isSubtheme={false}
+                    isFirstSubtheme={true}
+                  />
+                );
+              })}
+          </motion.div>
+
+          <HorizontalLine />
+
+          {/* open section header */}
+          <StyledThemesContainer
+            role="button"
+            tabIndex={0}
+            aria-expanded={normalOpen}
+            onClick={() => setNormalOpen((v) => !v)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') setNormalOpen((v) => !v);
+            }}
+          >
+            <FontAwesomeIcon
+              style={{ color: theme.colors.secondaryColorGreen, margin: '8px' }}
+              icon={faKey}
+            />
+            <StyledOpenThemesTitle style={{ marginLeft: 4 }}>
+              {strings.themelayerlist.openThemes}
+            </StyledOpenThemesTitle>
+            <motion.div
+              style={{ marginLeft: 'auto', marginRight: 8 }}
+              animate={{ rotate: normalOpen ? 180 : 0 }}
+            >
+              <FontAwesomeIcon
+                color={theme.colors.secondaryColorGreen}
+                icon={faAngleDown}
+              />
+            </motion.div>
+          </StyledThemesContainer>
+
+          {/* Normal list (animated) */}
+          <motion.div
+            initial={false}
+            animate={normalOpen ? 'visible' : 'hidden'}
+            variants={listVariants}
+            transition={{ duration: 0.25 }}
+            style={{ overflow: 'hidden' }}
+          >
+            {openThemes.length > 0 &&
+              openThemes.map((theme) => {
+                return (
+                  <ThemeGroup
+                    key={`theme-${theme.index}`}
+                    lang={lang}
+                    theme={theme.group}
+                    layers={allLayers}
+                    index={theme.index}
+                    selectedTheme={selectedTheme}
+                    selectTheme={handleSelectTheme}
+                    isSubtheme={false}
+                    isFirstSubtheme={true}
+                  />
+                );
+              })}
+          </motion.div>
+        </>
+      ) : (
+        <>
+          {openThemes.length > 0 &&
+            openThemes.map((theme) => {
+              return (
+                <ThemeGroup
+                  key={`theme-${theme.index}`}
+                  lang={lang}
+                  theme={theme.group}
+                  layers={allLayers}
+                  index={theme.index}
+                  selectedTheme={selectedTheme}
+                  selectTheme={handleSelectTheme}
+                  isSubtheme={false}
+                  isFirstSubtheme={true}
+                />
+              );
+            })}
+        </>
+      )}
+
+      {/* Links */}
       {links.length > 0 &&
         links.map((link, index) => {
           return (
@@ -611,12 +767,6 @@ export const ThemeGroup = ({
       role="region"
       aria-labelledby={`theme-group-heading-${index}`}
     >
-      <h2
-        id={`theme-group-heading-${index}`}
-        style={{ position: 'absolute', top: '-9999px' }}
-      >
-        {theme.locale[lang].name}
-      </h2>
       {!isSubtheme ? (
         <StyledMasterGroupHeader
           key={`master-group-${theme.id}`}

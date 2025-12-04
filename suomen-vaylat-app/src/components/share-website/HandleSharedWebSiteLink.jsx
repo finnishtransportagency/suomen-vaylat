@@ -30,7 +30,6 @@ export const HandleSharedWebSiteLink = () => {
     const channel = useSelector(state => state.rpc.channel);
 
     const allThemesWithLayers = useSelector(state => state.rpc.allThemesWithLayers);
-    const combinedThemes = [...allThemesWithLayers.themes, ...allThemesWithLayers.restrictedThemes];
 
     if ((!isNaN(zoom) && x && y) || themeId) {
         LOG.log('The page was accessed via a link, initializing the map according to the link.');
@@ -52,9 +51,9 @@ export const HandleSharedWebSiteLink = () => {
     }
 
     // If theme given then select wanted theme
-    if (themeId && combinedThemes.length > 0) {
+    if (themeId && allThemesWithLayers.length > 0) {
         let activateTheme = {};
-        combinedThemes.forEach(theme => {
+        allThemesWithLayers.forEach(theme => {
             if (theme.id === parseInt(themeId)) {
                 activateTheme = theme;
             } else if (theme.groups && theme.groups.find(t => t.id === parseInt(themeId))) {
