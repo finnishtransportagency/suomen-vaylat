@@ -305,7 +305,7 @@ const CoordinateToolMobile = () => {
   const [isValidY, setIsValidY] = useState(true);
 
   // projection selection and transform status
-  const [selectedProjection, setSelectedProjection] = useState('EPSG:3067'); // default map SRS
+  const [selectedProjection, setSelectedProjection] = useState(projectionOptions[0]); // default map SRS
   const [isTransformLoading, setIsTransformLoading] = useState(false);
 
   // for cancelling/guarding inflight responses
@@ -493,7 +493,7 @@ const CoordinateToolMobile = () => {
     setMapCenter({ x: center.x, y: center.y });
 
     if (!userEditedRef.current) {
-      if (selectedProjection === 'EPSG:3067') {
+      if (selectedProjection.value === 'EPSG:3067') {
         setDisplayedRaw({ x: center.x, y: center.y });
         setDisplayedShown({
           x: formatProjectedShown(center.x),
@@ -503,7 +503,7 @@ const CoordinateToolMobile = () => {
         transformNativeToDisplayed(
           center.x,
           center.y,
-          selectedProjection
+          selectedProjection.value
         ).catch(() => {});
       }
     }
@@ -513,7 +513,7 @@ const CoordinateToolMobile = () => {
   // Re-run transform when selected projection changes (if the user hasn't edited displayed inputs)
   useEffect(() => {
     if (!channel) return;
-    if (selectedProjection === 'EPSG:3067') {
+    if (selectedProjection.value === 'EPSG:3067') {
       setDisplayedRaw({ x: mapCenter.x, y: mapCenter.y });
       setDisplayedShown({
         x: formatProjectedShown(mapCenter.x),
@@ -524,17 +524,17 @@ const CoordinateToolMobile = () => {
         transformNativeToDisplayed(
           mapCenter.x,
           mapCenter.y,
-          selectedProjection
+          selectedProjection.value
         ).catch(() => {});
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedProjection, channel]);
+  }, [selectedProjection.value, channel]);
 
   const handleInputChange = (key, value) => {
     // Accept free text (we allow DMS strings for degree projections)
     // We'll do a light numeric validation for projected inputs (only digits, dot, minus)
-    const isProjected = !isProjectionDegrees(selectedProjection);
+    const isProjected = !isProjectionDegrees(selectedProjection.value);
 
     let isNumeric = true;
     if (isProjected) {
@@ -582,7 +582,7 @@ const CoordinateToolMobile = () => {
   const handleCenterMap = async () => {
     try {
       let native;
-      if (isProjectionDegrees(selectedProjection)) {
+      if (isProjectionDegrees(selectedProjection.value)) {
         // Parse DMS -> decimal degrees using coordinateDegreesToMetric
         try {
           const lonDms = displayedShown.x;
@@ -603,7 +603,7 @@ const CoordinateToolMobile = () => {
           native = await transformDisplayedToNative(
             rawLon,
             rawLat,
-            selectedProjection
+            selectedProjection.value
           );
         } catch (err) {
           console.error('Failed to parse degree input:', err);
@@ -628,7 +628,7 @@ const CoordinateToolMobile = () => {
         native = await transformDisplayedToNative(
           rawX,
           rawY,
-          selectedProjection
+          selectedProjection.value
         );
       }
 
@@ -637,7 +637,7 @@ const CoordinateToolMobile = () => {
       userEditedRef.current = false;
 
       // After centering, refresh displayed (canonical) shown values for current projection
-      if (selectedProjection === 'EPSG:3067') {
+      if (selectedProjection.value === 'EPSG:3067') {
         setDisplayedRaw({ x: native.lon, y: native.lat });
         setDisplayedShown({
           x: formatProjectedShown(native.lon),
@@ -647,7 +647,7 @@ const CoordinateToolMobile = () => {
         await transformNativeToDisplayed(
           native.lon,
           native.lat,
-          selectedProjection
+          selectedProjection.value
         );
       }
 
@@ -679,7 +679,7 @@ const CoordinateToolMobile = () => {
     try {
       let native;
       let msgLon, msgLat;
-      if (isProjectionDegrees(selectedProjection)) {
+      if (isProjectionDegrees(selectedProjection.value)) {
         // parse DMS to decimal degrees for transforming
         const lonDms = displayedShown.x;
         const latDms = displayedShown.y;
@@ -692,7 +692,7 @@ const CoordinateToolMobile = () => {
         native = await transformDisplayedToNative(
           rawLon,
           rawLat,
-          selectedProjection
+          selectedProjection.value
         );
         msgLon = displayedShown.x;
         msgLat = displayedShown.y;
@@ -703,7 +703,7 @@ const CoordinateToolMobile = () => {
         native = await transformDisplayedToNative(
           rawX,
           rawY,
-          selectedProjection
+          selectedProjection.value
         );
         msgLon = formatProjectedShown(displayedRaw.x);
         msgLat = formatProjectedShown(displayedRaw.y);
@@ -726,7 +726,7 @@ const CoordinateToolMobile = () => {
       setMapCenter({ x: native.lon, y: native.lat });
 
       // update canonical shown values after adding
-      if (selectedProjection === 'EPSG:3067') {
+      if (selectedProjection.value === 'EPSG:3067') {
         setDisplayedRaw({ x: native.lon, y: native.lat });
         setDisplayedShown({
           x: formatProjectedShown(native.lon),
@@ -736,7 +736,7 @@ const CoordinateToolMobile = () => {
         await transformNativeToDisplayed(
           native.lon,
           native.lat,
-          selectedProjection
+          selectedProjection.value
         );
       }
     } catch (err) {
@@ -763,7 +763,7 @@ const CoordinateToolMobile = () => {
     if (!isValidX || !isValidY) return;
 
     try {
-      if (isProjectionDegrees(selectedProjection)) {
+      if (isProjectionDegrees(selectedProjection.value)) {
         // parse DMS strings
         const lonDms = displayedShown.x;
         const latDms = displayedShown.y;
@@ -783,14 +783,14 @@ const CoordinateToolMobile = () => {
         const native = await transformDisplayedToNative(
           rawLon,
           rawLat,
-          selectedProjection
+          selectedProjection.value
         );
         setMapCenter({ x: native.lon, y: native.lat });
         // re-run native->displayed to get canonical representation (DMS) and ensure any server normalization is reflected
         await transformNativeToDisplayed(
           native.lon,
           native.lat,
-          selectedProjection
+          selectedProjection.value
         );
       } else {
         // projected: parse numeric inputs, store raw, set native then reformat shown (3 decimals)
@@ -806,12 +806,12 @@ const CoordinateToolMobile = () => {
         const native = await transformDisplayedToNative(
           rawX,
           rawY,
-          selectedProjection
+          selectedProjection.value
         );
         setMapCenter({ x: native.lon, y: native.lat });
 
         // update shown to canonical formatted (3 decimals)
-        if (selectedProjection === 'EPSG:3067') {
+        if (selectedProjection.value === 'EPSG:3067') {
           setDisplayedShown({
             x: formatProjectedShown(native.lon),
             y: formatProjectedShown(native.lat)
@@ -820,7 +820,7 @@ const CoordinateToolMobile = () => {
           await transformNativeToDisplayed(
             native.lon,
             native.lat,
-            selectedProjection
+            selectedProjection.value
           );
         }
       }
@@ -875,12 +875,9 @@ const CoordinateToolMobile = () => {
             <Select
               inputId="projection-select"
             aria-label={strings.coordinateTool.projectionSelect}
-              value={{ value: selectedProjection, label: selectedProjection }}
+              value={{ value: selectedProjection.value, label: selectedProjection.label }}
               onChange={(opt) => {
-                if (opt && opt.value) {
-                  setSelectedProjection(opt.value);
-                  // If user hasn't edited, effect will refresh displayed values for the new projection
-                }
+                setSelectedProjection(opt);
               }}
               options={projectionOptions}
               isSearchable
@@ -904,7 +901,7 @@ const CoordinateToolMobile = () => {
 
         <StyledInputContainer>
           <StyledRoundedBox id="coordinate-tool-lat-label">
-            {isProjectionDegrees(selectedProjection)
+            {isProjectionDegrees(selectedProjection.value)
               ? strings.coordinateTool.lat
               : strings.coordinateTool.n}
           </StyledRoundedBox>
@@ -929,7 +926,7 @@ const CoordinateToolMobile = () => {
 
         <StyledInputContainer>
           <StyledRoundedBox id="coordinate-tool-lon-label">
-            {isProjectionDegrees(selectedProjection)
+            {isProjectionDegrees(selectedProjection.value)
               ? strings.coordinateTool.lon
               : strings.coordinateTool.e}
           </StyledRoundedBox>

@@ -1,26 +1,27 @@
 const PROJECTIONS = [
-  'EPSG:3067',
-  'EPSG:4258',
-  'EPSG:3046',
-  'EPSG:3048',
-  'EPSG:3873',
-  'EPSG:3874',
-  'EPSG:3875',
-  'EPSG:3876',
-  'EPSG:3877',
-  'EPSG:3878',
-  'EPSG:3879',
-  'EPSG:3880',
-  'EPSG:3881',
-  'EPSG:3882',
-  'EPSG:3883',
-  'EPSG:3884',
-  'EPSG:3885'
-];
+  { code: 'EPSG:3067', name: 'ETRS-TM35FIN (EPSG:3067)' },
+  { code: 'EPSG:4326', name: 'ETRS89 maantieteelliset (~WGS84)' }, 
+  { code: 'EPSG:10690', name:'EUREF-FIN-GRS80 (EPSG:10690 )' },
+  { code: 'EPSG:3046', name: 'ETRS-TM34 (EPSG:3046)' },
+  { code: 'EPSG:3048', name: 'ETRS-TM36 (EPSG:3048)' },
+  { code: 'EPSG:3873', name: 'ETRS-GK19 (EPSG:3873)' },
+  { code: 'EPSG:3874', name: 'ETRS-GK20 (EPSG:3874)' },
+  { code: 'EPSG:3875', name: 'ETRS-GK21 (EPSG:3875)' },
+  { code: 'EPSG:3876', name: 'ETRS-GK22 (EPSG:3876)' },
+  { code: 'EPSG:3877', name: 'ETRS-GK23 (EPSG:3877)' },
+  { code: 'EPSG:3878', name: 'ETRS-GK24 (EPSG:3878)' },
+  { code: 'EPSG:3879', name: 'ETRS-GK25 (EPSG:3879)' },
+  { code: 'EPSG:3880', name: 'ETRS-GK26 (EPSG:3880)' },
+  { code: 'EPSG:3881', name: 'ETRS-GK27 (EPSG:3881)' },
+  { code: 'EPSG:3882', name: 'ETRS-GK28 (EPSG:3882)' },
+  { code: 'EPSG:3883', name: 'ETRS-GK29 (EPSG:3883)' },
+  { code: 'EPSG:3884', name: 'ETRS-GK30 (EPSG:3884)' },
+  { code: 'EPSG:3885', name: 'ETRS-GK31 (EPSG:3885)' }
+]
 
 export const projectionOptions = PROJECTIONS.map((p) => ({
-  value: p,
-  label: p
+  value: p.code,
+  label: p.name
 }));
 
 // helper for projected display rounding (metres) - show 3 decimals
