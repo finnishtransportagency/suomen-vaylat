@@ -635,7 +635,9 @@
       "errors": {
         "length": "Syötä vähintään kolme merkkiä",
         "regex": "Haku ei saa sisältää erikoismerkkejä"
-      }
+      },
+      "attributeSearch": "Käytä tarkennettua kohdehakua",
+      "selectSearchAttribute": "Valitse hakuattribuutti:"
     },
     "track": {
       "errors": {
@@ -693,16 +695,25 @@
   "coordinateTool": {
     "title": "Koordinaattityökalu",
     "intro": "Syötä koordinaatit tai valitse piste kartalta.",
-    "coordinateSystemTitle": "Koordinaatisto:",
+    "coordinateSystemTitle": "Syötä koordinaatit tai osoita piste kartalta",
     "coordinateSystem": "ETRS89-TM35FIN",
     "n": "N",
     "e": "E",
+    "lat": "Lat",
+    "lon": "Lon",
     "centerMap": "Keskitä kartta",
     "addMarker": "Lisää merkintä",
     "deleteMarkers": "Poista karttamerkinnät",
     "saveMarkers": "Tallenna karttamerkinnät",
     "onlyNumbers": "Vain numerot sallittu",
-    "closeCoordinateTool": "Sulje koordinaattityökalu"
+    "closeCoordinateTool": "Sulje koordinaattityökalu",
+    "projectionSelect": "Valitse coordinaatisto",
+    "errors": {
+      "transformCoordinatesError": "Virhe koordinaattimuunnoksessa",
+      "degreeInputParseError": "Virhe asteiden parsinnassa",
+      "centerMapError": "Kartan keskitys epäonnistui",
+      "addMarkerError": "Virhe karttamerkinnän lisäyksessä"
+    }
   },
   "layerlist": {
     "errorLoadingLayers": "Virhe tasojen latauksessa",
@@ -796,7 +807,10 @@
     "readMore": "Lue lisää",
     "readLess": "Vähemmän",
     "moreInfo": "Lisätietoja:",
+    "restrictedThemes": "Sisäiset",
+    "openThemes": "Avoimet",
     "errors": {
+      "getThemesError": "Virhe teemojen haussa!",
       "themeStyleError": "Virhe teeman tyylien haussa: ",
       "closeThemeLayersError": "Virhe teemakarttojen sulkemisessa!"
     }

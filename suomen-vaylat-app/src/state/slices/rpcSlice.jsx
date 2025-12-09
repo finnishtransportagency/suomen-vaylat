@@ -73,6 +73,7 @@ const initialState = {
   searchType: 'address',
   isSearchingActive: false,
   lastSearchValue: '',
+  lastSearchAttribute: '',
   firstSearchResultShown: false,
   // TODO: waiting for logging in option
   editingView: null,
@@ -640,7 +641,7 @@ export const rpcSlice = createSlice({
 
     /**
      * Set current map center.
-     * @method setCurrentMapCenter
+     * @method setStartMapCenter
      * @param {Object} state
      * @param {Object} action
      */
@@ -996,6 +997,10 @@ export const rpcSlice = createSlice({
       state.lastSearchValue = action.payload;
     },
 
+    setLastSearchAttribute: (state, action) => {
+      state.lastSearchAttribute = action.payload;
+    },
+
     setFirstSearchResultShown: (state, action) => {
       state.firstSearchResultShown = action.payload;
     },
@@ -1091,6 +1096,7 @@ export const {
   setSearchType,
   setIsSearchingActive,
   setLastSearchValue,
+  setLastSearchAttribute,
   setFirstSearchResultShown,
   setUserLayers,
   setEditingView,

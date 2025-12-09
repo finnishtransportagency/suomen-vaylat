@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import strings from '../../../translations';
 import { useAppSelector } from '../../../state/hooks';
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { faMagnifyingGlass, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { mergeMatchedKeys, validateFeatureSearch } from '../utils/SearchUtil';
@@ -12,10 +12,13 @@ import {
   setFeatureSearchResults,
   setIsSearchingActive,
   setLastSearchValue,
+  setLastSearchAttribute,
   setSearchOn,
   setSearchValue
 } from '../../../state/slices/rpcSlice';
 import { Slide, toast } from 'react-toastify';
+import Select from 'react-select';
+import '../css/ReactSelectStyling.css'
 
 const StyledRowWithButton = styled.div`
   display: flex;
@@ -154,6 +157,38 @@ const StyledNoActivaLayers = styled.div`
   font-weight: 500;
 `;
 
+const StyledCheckboxWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  margin: 0 0 1em 0.5em;
+`;
+
+const StyledCheckbox = styled.input`
+  margin-left: 0;
+  margin-right: 8px;
+  width: 16px;
+  height: 16px;
+`;
+
+const CheckboxLabel = styled.label`
+  font-size: 16px;
+  margin: 0;
+  color: ${(props) => props.theme.colors.darkGrey || '#333'};
+`;
+
+const StyledAttributeSelectionSection = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-start;
+  justify-content: space-between;
+`;
+
+const StyledInstructionText = styled.p`
+  margin-bottom: 0px;
+  margin-left: 0.5em;
+`;
+
 const FeatureSearchInput = ({ setDropdownOpen, emptySearchInputs }) => {
   const { store } = useContext(ReactReduxContext);
 
@@ -165,9 +200,46 @@ const FeatureSearchInput = ({ setDropdownOpen, emptySearchInputs }) => {
     searchResults,
     searchValue,
     isSearchingActive,
-    lastSearchValue
+    lastSearchValue,
+    lastSearchAttribute
   } = useAppSelector((state) => state.rpc);
 
+  // Keep available layer attributes and user chosen attribute
+  // Contains object of key-value pairs, eg. {attribute: humanReadableAttribute}
+  const [ layerAttributes, setLayerAttributes] = useState([]);
+
+  const [ attirbuteSearchEnabled, setAttirbuteSearchEnabled ] = useState(false);
+  const [ activeLayer, setActiveLayer ] = useState(null);
+  const [ searchAttribute, setSearchAttribute ] = useState('');
+  const [ selectedOption, setSelectedOption ] = useState('');
+
+  // Turn object with key-value pairs into array of value-label pairs for select-react module
+  const parseFieldNameLocales = (data) => {
+    if (!data) return [];
+    return Object.entries(data)
+      .map(([key, value]) => ({ value: key, label: value }))
+      .sort((a, b) => {
+        const la = a.label ?? '';
+        const lb = b.label ?? '';
+        // Prefer string comparison; fall back to String() for non-strings
+        const sa = typeof la === 'string' ? la : String(la);
+        const sb = typeof lb === 'string' ? lb : String(lb);
+        return sa.localeCompare(sb, undefined, { sensitivity: 'base' });
+      });
+  };
+
+  useEffect(() => {
+    // Update layer attribute list if active layer was changed or if attribute list is empty
+    if (selectedLayersByType.mapLayers[0]?.id && (selectedLayersByType.mapLayers[0]?.id !== activeLayer || !layerAttributes)) {
+      setSelectedOption('');
+      channel.getFieldNameLocales([selectedLayersByType.mapLayers[0]?.id], 
+        (data) => {if (data) {setLayerAttributes(parseFieldNameLocales(data))}},
+        (error) => console.log(error)
+      );
+      setActiveLayer(selectedLayersByType.mapLayers[0]?.id);
+    }
+  }, [selectedLayersByType, activeLayer, channel, layerAttributes]);
+  
   const onClickSearchFeature = () => {
     if (validateFeatureSearch(searchValue, store, true)) {
       setDropdownOpen(false);
@@ -176,7 +248,8 @@ const FeatureSearchInput = ({ setDropdownOpen, emptySearchInputs }) => {
   };
 
   const handleFeatureSearch = (searchValue, startIndex = 0, layerId = -1) => {
-    const handleSearchResponse = (data) => {
+    const attributeUsedInSearch = attirbuteSearchEnabled ? searchAttribute : '';
+    const handleSearchResponse = (data, usedAttr) => {
       if (Object.keys(data).length > 0 && Object.keys(data.gfi).length > 0) {
         store.dispatch(setIsSearchingActive(false));
         store.dispatch(setSearchOn(false));
@@ -214,12 +287,14 @@ const FeatureSearchInput = ({ setDropdownOpen, emptySearchInputs }) => {
         store.dispatch(setSearchOn(false));
       }
       store.dispatch(setLastSearchValue(searchValue));
+      store.dispatch(setLastSearchAttribute(usedAttr));
     };
 
-    const handleSearchError = (layerIdentifier, error) => {
+    const handleSearchError = (layerIdentifier, error, usedAttr) => {
       store.dispatch(setIsSearchingActive(false));
       store.dispatch(setSearchOn(false));
       store.dispatch(setLastSearchValue(searchValue));
+      store.dispatch(setLastSearchAttribute(usedAttr));
 
       toast.error(
         `${strings.search.feature.errorLayerStart}${layerIdentifier}${strings.search.feature.errorLayerEnd}`,
@@ -248,9 +323,13 @@ const FeatureSearchInput = ({ setDropdownOpen, emptySearchInputs }) => {
 
     if (searchLayer) {
       channel.searchFeatures(
-        [[searchLayer], searchValue, startIndex],
-        (data) => handleSearchResponse(data, searchLayer),
-        (error) => handleSearchError(layerIdentifier, error)
+        [[searchLayer], searchValue, attributeUsedInSearch, startIndex],
+        (data) => {
+          handleSearchResponse(data, attributeUsedInSearch);
+        },
+        (error) => {
+          handleSearchError(layerIdentifier, error, attributeUsedInSearch);
+        },
       );
     }
   };
@@ -271,6 +350,62 @@ const FeatureSearchInput = ({ setDropdownOpen, emptySearchInputs }) => {
           <StyledNoActivaLayers id="feature-search-no-active-layers" />
         )}
       </StyledSelectedLayerWrapper>
+
+      <StyledCheckboxWrapper>
+        <StyledCheckbox
+          id="feature-search-attribute-checkbox"
+          aria-label={strings.search.feature.attributeSearch}
+          name="feature-search-attribute-checkbox"
+          type="checkbox"
+          onChange={(e) => {
+            if (e.target.checked === false) setSelectedOption('');
+            setAttirbuteSearchEnabled(!attirbuteSearchEnabled); 
+          }}
+          checked={attirbuteSearchEnabled}
+          aria-checked={!!attirbuteSearchEnabled}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              e.preventDefault();
+              e.currentTarget.click();
+            }
+          }}
+        />
+        <CheckboxLabel htmlFor="feature-search-attribute-checkbox">
+          {strings.search.feature.attributeSearch}
+        </CheckboxLabel>
+      </StyledCheckboxWrapper>
+
+      {attirbuteSearchEnabled && (
+        <StyledAttributeSelectionSection id="attribute-selection-section">
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
+            <StyledInstructionText id="attribute-selection-title">
+              {strings.search.feature.selectSearchAttribute}
+            </StyledInstructionText>
+          </div>
+          <div style={{ width: '100%', marginBottom: '0.5em'}}>
+            <Select
+              inputId="attribute-select"
+              aria-label={strings.search.feature.selectSearchAttribute}
+              value={{ value: selectedOption, label: selectedOption }}
+              onChange={(opt) => {
+                if (opt && opt.value) {
+                  setSelectedOption(opt.label);
+                  setSearchAttribute(opt.value);
+                  // If user hasn't edited, effect will refresh displayed values for the new projection
+                }
+              }}
+              options={layerAttributes}
+              isSearchable
+              placeholder="Select attribute..."
+              // avoids parent clipping / z-index issues
+              // TODO: Options in the menu are invisibe or white --> needs to be fixed
+              menuPortalTarget={typeof document !== 'undefined' ? document.body : null}
+              menuPosition="fixed"
+              classNamePrefix="feature-search"
+            />
+          </div>
+        </StyledAttributeSelectionSection>
+      )}
 
       <StyledRowWithButton>
         <StyledInputsContainer>
@@ -297,7 +432,7 @@ const FeatureSearchInput = ({ setDropdownOpen, emptySearchInputs }) => {
         </StyledInputsContainer>
 
         {(searchResults !== null || featureSearchResults.length > 0) &&
-        searchValue === lastSearchValue &&
+        searchValue === lastSearchValue && lastSearchAttribute === searchAttribute &&
         !isSearchingActive ? (
           <StyledStandardSearchButton
             id="feature-search-clear-button"

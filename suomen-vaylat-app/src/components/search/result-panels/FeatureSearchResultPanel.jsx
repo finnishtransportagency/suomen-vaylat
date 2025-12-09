@@ -19,6 +19,7 @@ import {
   setFeatureSearchResults,
   setIsSearchingActive,
   setLastSearchValue,
+  setLastSearchAttribute,
   setSearchOn,
 } from '../../../state/slices/rpcSlice';
 import { Slide, toast } from 'react-toastify';
@@ -26,7 +27,6 @@ import { Slide, toast } from 'react-toastify';
 const StyledDropDown = styled(motion.div)`
   top: 0px;
   right: 0px;
-  max-width: 400px;
   width: 100%;
   height: auto;
   padding: 0 1px;
@@ -251,7 +251,8 @@ const FeatureSearchResultPanel = () => {
     searchOn,
     channel,
     selectedLayersByType,
-    lastSearchValue
+    lastSearchValue,
+    lastSearchAttribute
   } = useAppSelector((state) => state.rpc);
   const [selectedFeature, setSelectedFeature] = useState('');
   const [openAttribute, setOpenAttribute] = useState(null);
@@ -276,17 +277,21 @@ const FeatureSearchResultPanel = () => {
   }, [featureSearchResults]);
 
   // Toggle feature details and show them on the map
-  const handleSetOpenMatchKey = (layer, matchedKey) => {
+  const handleSetOpenMatchKey = (layer, matchedKey, selectedFeature) => {
     setOpenAttribute(openAttribute === matchedKey ? null : matchedKey);
-    setSelectedFeature('');
-    showFeatureOnMap(channel, layer, null);
+    if (selectedFeature !== '') {
+      setSelectedFeature('');
+      showFeatureOnMap(channel, layer, null);
+    }
   };
 
-  const handleFeatureSearch = (searchValue, startIndex = 0, layerId = -1) => {
+  const handleFeatureSearch = (searchValue, searchAttribute, startIndex = 0, layerId = -1) => {
     const handleSearchResponse = (data) => {
       if (Object.keys(data).length > 0 && Object.keys(data.gfi).length > 0) {
         store.dispatch(setIsSearchingActive(false));
         store.dispatch(setSearchOn(false));
+
+        console.log('handling response (panel):', data);
 
         if (startIndex !== 0) {
           // Update features for "more results"
@@ -321,12 +326,14 @@ const FeatureSearchResultPanel = () => {
         store.dispatch(setSearchOn(false));
       }
       store.dispatch(setLastSearchValue(searchValue));
+      store.dispatch(setLastSearchAttribute(searchAttribute));
     };
 
     const handleSearchError = (layerIdentifier, error) => {
       store.dispatch(setIsSearchingActive(false));
       store.dispatch(setSearchOn(false));
       store.dispatch(setLastSearchValue(searchValue));
+      store.dispatch(setLastSearchAttribute(searchAttribute));
 
       toast.error(
         `${strings.search.feature.errorLayerStart}${layerIdentifier}${strings.search.feature.errorLayerEnd}`,
@@ -355,7 +362,7 @@ const FeatureSearchResultPanel = () => {
 
     if (searchLayer) {
       channel.searchFeatures(
-        [[searchLayer], searchValue, startIndex],
+        [[searchLayer], searchValue, searchAttribute, startIndex],
         (data) => handleSearchResponse(data, searchLayer),
         (error) => handleSearchError(layerIdentifier, error)
       );
@@ -389,13 +396,14 @@ const FeatureSearchResultPanel = () => {
           ).map((matchedKey, index) => (
             <div key={`${matchedKey}-${index}`}>
               <StyledLayerTitleWrapper
+                id="syled-title-wrapper"
                 tabIndex={0}
                 onClick={() =>
-                  handleSetOpenMatchKey(featureSearchResults[0], matchedKey)
+                  handleSetOpenMatchKey(featureSearchResults[0], matchedKey, selectedFeature)
                 }
                 onKeyDown={(e) => {
                   if (e.key === 'Enter') {
-                    handleSetOpenMatchKey(featureSearchResults[0], matchedKey);
+                    handleSetOpenMatchKey(featureSearchResults[0], matchedKey, selectedFeature);
                   }
                 }}
               >
@@ -405,11 +413,13 @@ const FeatureSearchResultPanel = () => {
                     {`(${featureSearchResults[0].content.geojson.matchedFeatures[matchedKey].length})`}
                   </StyledGroupAmount>
                 </StyledTitleWrapper>
+              {lastSearchAttribute === '' && (
                 <DropdownIcon
                   icon={openAttribute === matchedKey ? faAngleUp : faAngleDown}
                 />
+              )}
               </StyledLayerTitleWrapper>
-              {openAttribute === matchedKey && (
+              {(openAttribute === matchedKey || lastSearchAttribute !== '') && (
                 <FeatureList
                   channel={channel}
                   layer={featureSearchResults[0]}
@@ -430,6 +440,7 @@ const FeatureSearchResultPanel = () => {
               onClick={() =>
                 handleFeatureSearch(
                   lastSearchValue,
+                  lastSearchAttribute,
                   featureSearchResults[0].content.nextStartIndex,
                   featureSearchResults[0].content.layerId
                 )

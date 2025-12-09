@@ -636,7 +636,9 @@
       "errors": {
         "length": "Enter at least three characters",
         "regex": "Search can't include any special characters"
-      }
+      },
+      "attributeSearch": "Enable advanced search",
+      "selectSearchAttribute": "Choose a search attribute:"
     },
     "track": {
       "errors": {
@@ -695,16 +697,25 @@
   "coordinateTool": {
     "title": "Coordinate tool",
     "intro": "Type coordinates or click a point on the map.",
-    "coordinateSystemTitle": "Coordinate system:",
+    "coordinateSystemTitle": "Type coordinates or click a point on the map",
     "coordinateSystem": "ETRS89-TM35FIN",
     "n": "N",
     "e": "E",
+    "lat": "Lat",
+    "lon": "Lon",
     "centerMap": "Center map",
     "addMarker": "Add marker",
     "deleteMarkers": "Delete markers",
     "saveMarkers": "Save markers",
     "onlyNumbers": "Please enter only numbers",
-    "closeCoordinateTool": "Close coordinate tool"
+    "closeCoordinateTool": "Close coordinate tool",
+    "projectionSelect": "Select coordinate system",
+    "errors": {
+      "transformCoordinatesError": "Error transforming coordinates",
+      "degreeInputParseError": "Error parsing degree input",
+      "centerMapError": "Failed to center the map",
+      "addMarkerError": "Error adding map marker"
+    }
   },
   "layerlist": {
     "errorLoadingLayers": "Error loading maplayers",
@@ -798,7 +809,10 @@
     "readMore": "Read more",
     "readLess": "Show less",
     "moreInfo": "Further information:",
+    "restrictedThemes": "Restricted",
+    "openThemes": "Open",
     "errors": {
+      "getThemesError": "Error getting themes!",
       "themeStyleError": "Error getting styles for theme: ",
       "closeThemeLayersError": "Error closing theme layers!"
     }

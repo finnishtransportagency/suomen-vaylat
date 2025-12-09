@@ -636,7 +636,9 @@
       "errors": {
         "length": "Ange minst tre tecken",
         "regex": "Sökningen får inte innehålla specialtecken"
-      }
+      },
+      "attributeSearch": "Aktivera avancerad sökning",
+      "selectSearchAttribute": "Välj ett sökattribut:"
     },
     "track": {
       "errors": {
@@ -695,16 +697,25 @@
   "coordinateTool": {
     "title": "Koordinatverktyg",
     "intro": "Mata in koordinaterna eller peka på platsen på kartan.",
-    "coordinateSystemTitle": "Koordinatsystem:",
+    "coordinateSystemTitle": "Mata in koordinaterna eller peka på platsen på kartan",
     "coordinateSystem": "ETRS89-TM35FIN",
     "n": "N",
     "e": "E",
+    "lat": "Lat",
+    "lon": "Lon",
     "centerMap": "Fokusera kartan",
     "addMarker": "Tillägg markör",
     "deleteMarkers": "Ta bort markörer",
     "saveMarkers": "Spara markörer",
     "onlyNumbers": "Vänligen ange endast siffror",
-    "closeCoordinateTool": "Stäng koordinatverktyg"
+    "closeCoordinateTool": "Stäng koordinatverktyg",
+    "projectionSelect": "Välj koordinatsystem",
+    "errors": {
+      "transformCoordinatesError": "Fel vid koordinattransformation",
+      "degreeInputParseError": "Fel vid parsning av grader",
+      "centerMapError": "Centrering av kartan misslyckades",
+      "addMarkerError": "Fel vid tillägg av markör på kartan"
+    }
   },
   "layerlist": {
     "errorLoadingLayers": "Det gick inte att ladda kartnivåer",
@@ -798,7 +809,10 @@
     "readMore": "Läs mer",
     "readLess": "Mindre",
     "moreInfo": "Mer information:",
+    "restrictedThemes": "Intern",
+    "openThemes": "Öppen",
     "errors": {
+      "getThemesError": "Fel vid sökning efter teman!",
       "themeStyleError": "Det gick inte att hämta stilar för tema: ",
       "closeThemeLayersError": "Fel vid stängning av kartlager för tema!"
     }

@@ -9,14 +9,18 @@ import {
   setAllGroups,
   setFeatures,
   setCurrentMapCenter,
-  setStartMapCenter,
+  setStartMapCenter
 } from '../../../../state/slices/rpcSlice';
 import {
   setGfiCroppingTypes,
   setSelectedBaseLayers
 } from '../../../../state/slices/uiSlice';
 import { BASE_LAYERS_LOCALSTORAGE } from '../../../../utils/constants';
-import { activateView, updateLayerLegends, updateLayers } from '../../../../utils/rpcUtil';
+import {
+  activateView,
+  updateLayerLegends,
+  updateLayers
+} from '../../../../utils/rpcUtil';
 import { getActiveAnnouncements } from '../../../../utils/rpcUtil';
 import { IS_EXTRANET } from '../../../../utils/appInfoUtil';
 import { Slide, toast } from 'react-toastify';
@@ -62,11 +66,9 @@ const fetchAnnouncementsAsync = async (data, channel, store) => {
 };
 
 const setupSupportedFunctions = (data, channel, store, isSharedLink) => {
-
   if (data.getViewLayerDefaultStyles) {
     channel.getViewLayerDefaultStyles(
-      () => {
-      },
+      () => {},
       (data) => {
         console.error(strings.getViewStylesError, data);
         toast.error(strings.getViewStylesError, {
@@ -124,9 +126,27 @@ const setupSupportedFunctions = (data, channel, store, isSharedLink) => {
   }
 
   if (data.getThemesWithLayers) {
-    channel.getThemesWithLayers((themesWithLayersData) =>
-      store.dispatch(setAllThemesWithLayers(themesWithLayersData))
-    );
+    channel.getThemesWithLayers((themesWithLayersData) => {
+      if (themesWithLayersData.hasOwnProperty('error')) {
+        console.error(
+          'getThemesWithLayers Error: ',
+          themesWithLayersData.error
+        );
+        toast.error(strings.themelayerlist.errors.getThemesError, {
+          position: 'top-center',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'colored',
+          transition: Slide
+        });
+      }
+
+      store.dispatch(setAllThemesWithLayers(themesWithLayersData));
+    });
   }
 
   if (data.getZoomRange) {

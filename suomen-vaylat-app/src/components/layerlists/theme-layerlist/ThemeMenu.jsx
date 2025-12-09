@@ -37,12 +37,12 @@ const StyledThemeMenuContainer = styled(motion.div)`
 `;
 
 
-function ThemeMenu() {
-
+const ThemeMenu = () => {
     const { isThemeMenuOpen, isSideMenuOpen } = useAppSelector((state) => state.ui);
-
     const { allLayers, allThemesWithLayers } = useAppSelector((state) => state.rpc);
 
+    if (isSideMenuOpen && !isThemeMenuOpen) return null;
+    
     const variants = {
         open: {
             pointerEvents: 'auto',
@@ -63,7 +63,6 @@ function ThemeMenu() {
 
     return (
         <AnimatePresence>
-            {!isSideMenuOpen && isThemeMenuOpen &&
             <StyledThemeMenuContainer 
                 initial='closed'
                 animate={isThemeMenuOpen ? 'open' : 'closed'}
@@ -82,7 +81,6 @@ function ThemeMenu() {
                     allThemes={[...allThemesWithLayers]}
                 />
             </StyledThemeMenuContainer>
-            }
         </AnimatePresence>
     )
 }

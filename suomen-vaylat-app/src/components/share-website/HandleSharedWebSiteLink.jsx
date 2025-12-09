@@ -31,7 +31,6 @@ export const HandleSharedWebSiteLink = () => {
 
     const allThemesWithLayers = useSelector(state => state.rpc.allThemesWithLayers);
 
-
     if ((!isNaN(zoom) && x && y) || themeId) {
         LOG.log('The page was accessed via a link, initializing the map according to the link.');
     } else {
