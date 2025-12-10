@@ -303,6 +303,7 @@ const StyledThemeContent = styled.div`
 
 const StyledSubText = styled.p`
   color: ${(props) => props.theme.colors.black};
+  margin: 0px;
 `;
 
 const StyledLinkText = styled.a``;
