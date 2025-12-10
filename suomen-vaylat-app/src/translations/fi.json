@@ -765,7 +765,8 @@
       "views": {
         "title": "Näkymät"
       }
-    }
+    },
+    "linkAddress": "Linkin osoite: "
   },
   "downloadLink": {
     "downloadLinkDialogHeader": "Aineiston lataus",
