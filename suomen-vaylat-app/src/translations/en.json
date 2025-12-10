@@ -767,7 +767,8 @@
       "views": {
         "title": "Views"
       }
-    }
+    },
+    "linkAddress": "Link address: "
   },
   "downloadLink": {
     "downloadLinkDialogHeader": "Download dataset",

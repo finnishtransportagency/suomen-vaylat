@@ -216,6 +216,7 @@ const StyledSubthemeRightContent = styled.div`
 
 const StyledMasterGroupHeaderIcon = styled.div`
   width: 48px;
+  margin: 1em 0px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -938,7 +939,7 @@ export const ThemeLinkList = ({
       store.dispatch(
         setWarning({
           title: strings.exitConfirmation,
-          subtitle: null,
+          subtitle: strings.layerlist.linkAddress + link,
           confirm: {
             text: strings.general.continue,
             action: () => {
@@ -980,8 +981,16 @@ export const ThemeLinkList = ({
             <StyledMasterGroupHeaderIcon>
               <FontAwesomeIcon icon={faLink} />
             </StyledMasterGroupHeaderIcon>
-            <StyledLinkName>{theme.locale[lang].name}</StyledLinkName>
           </StyledLeftContent>
+
+          <StyledMasterGroupName
+            title={theme.locale[lang].name}
+            aria-label={`Open ${theme.locale[lang].name} link`}
+            tabIndex="0"
+          >
+            {theme.locale[lang].name}
+          </StyledMasterGroupName>
+
           <StyledRightContent>
             <StyledMasterGroupLinkIcon>
               <FontAwesomeIcon icon={faExternalLinkAlt} />

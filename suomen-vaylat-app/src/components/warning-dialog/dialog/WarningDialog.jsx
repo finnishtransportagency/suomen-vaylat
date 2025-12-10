@@ -7,6 +7,7 @@ import strings from '../../../translations';
 import WarningDialogContent from '../WarningDialogContent';
 
 import { setWarning } from '../../../state/slices/uiSlice';
+import { isMobile } from '../../../theme/theme';
 
 const WarningDialog = ({ constraintsRef }) => {
   const { warning } = useAppSelector((state) => state.ui);
@@ -22,13 +23,14 @@ const WarningDialog = ({ constraintsRef }) => {
       drag={false}
       resize={false}
       backdrop={true}
-      fullScreenOnMobile={false}
+      fullScreenOnMobile={true}
       titleIcon={faExclamationCircle}
       title={strings.general.warning}
       type={'warning'}
       closeAction={handleCloseWarning}
       isOpen={warning !== null}
       id={null}
+      maxWidth={isMobile ? null : '30em'}
     >
       <WarningDialogContent warning={warning} />
     </Dialog>

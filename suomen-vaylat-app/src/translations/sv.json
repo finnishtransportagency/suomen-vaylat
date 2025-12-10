@@ -767,7 +767,8 @@
       "views": {
         "title": "Vyer"
       }
-    }
+    },
+    "linkAddress": "Länkadress: "
   },
   "downloadLink": {
     "downloadLinkDialogHeader": "Nedladdning av material",
