@@ -45,9 +45,9 @@ const StyledLayerGroups = styled.div`
   }
 `;
 
-const StyledMasterGroupHeader = styled.div`
+const StyledMasterGroupHeader = styled.button`
   position: sticky;
-  top: -16px;
+  top: -8px;
   z-index: 1;
   min-height: 48px;
   display: flex;
@@ -58,8 +58,16 @@ const StyledMasterGroupHeader = styled.div`
   border-radius: 4px;
   padding-top: 8px;
   padding-bottom: 8px;
+  box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, 0.16);
+  border: none;
+  width: 100%;
+  text-align: left;
   @-moz-document url-prefix() {
     position: initial;
+  }
+  &:focus {
+    outline: 2px solid ${(p) => p.theme.colors.mainColor1Selected};
+    outline-offset: 2px;
   }
 `;
 
@@ -68,7 +76,7 @@ const StyledMasterGroupName = styled.p`
   max-width: 240px;
   color: ${(props) => props.theme.colors.mainWhite};
   margin: 0;
-  padding: 0px;
+  padding: 9px 0px;
   font-size: 14px;
   font-weight: 600;
   transition: all 0.1s ease-in;
@@ -83,7 +91,7 @@ const StyledMasterGroupLayersCount = styled.p`
   padding: 0px;
   font-size: 12px;
   font-weight: 500;
-  color: rgba(255, 255, 255, 0.8);
+  color: ${(props) => props.theme.colors.mainWhite};
 `;
 
 const StyledLeftContent = styled.div`
@@ -306,8 +314,9 @@ export const TagLayerList = ({
   });
 
   return (
-    <StyledLayerGroups>
+    <StyledLayerGroups id={'taglayerlist-' + tag}>
       <StyledMasterGroupHeader
+        id={'smgh_' + index + '_'}
         aria-label={
           isOpen
             ? strings.accessibility.closeLayerGroup
@@ -318,7 +327,7 @@ export const TagLayerList = ({
           setIsOpen(!isOpen);
         }}
       >
-        <StyledLeftContent>
+        <StyledLeftContent id={'taglayerlist-' + tag + 'left-content'}>
           <StyledMasterGroupHeaderIcon>
             <p>{tag.charAt(0).toUpperCase()}</p>
           </StyledMasterGroupHeaderIcon>
@@ -326,10 +335,11 @@ export const TagLayerList = ({
             <StyledMasterGroupName>
               {tag.charAt(0).toUpperCase() + tag.slice(1)}
             </StyledMasterGroupName>
-            <StyledMasterGroupLayersCount></StyledMasterGroupLayersCount>
+            <StyledMasterGroupLayersCount>
+                  </StyledMasterGroupLayersCount>
           </StyledMasterGroupTitleContent>
         </StyledLeftContent>
-        <StyledRightContent>
+        <StyledRightContent id={'taglayerlist-' + tag + 'right-content'}>
           <StyledSelectButton
             aria-label={
               isOpen
@@ -352,6 +362,7 @@ export const TagLayerList = ({
         </StyledRightContent>
       </StyledMasterGroupHeader>
       <StyledLayerGroup
+        id={'taglayerlist-' + tag + 'layer-group'}
         key={'slg_' + index + '_'}
         isOpen={isOpen}
         initial="hidden"
@@ -365,7 +376,7 @@ export const TagLayerList = ({
         <Layers layers={filteredLayers} groups={groups} />
 
         { customTag.length > 0 &&
-            <StyledButtonContainer>
+            <StyledButtonContainer id={'taglayerlist-' + tag + 'button-container'}>
                 <StyledSaveButton
                     onClick={() => {
                     store.dispatch(setIsCustomFilterOpen(true));

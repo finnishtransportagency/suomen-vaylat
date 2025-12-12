@@ -62,7 +62,7 @@ const StyledLayerGroups = styled.div`
   }
 `;
 
-const StyledMasterGroupHeader = styled.div`
+const StyledMasterGroupHeader = styled.button`
   position: sticky;
   top: -8px;
   z-index: 1;
@@ -76,8 +76,15 @@ const StyledMasterGroupHeader = styled.div`
   padding-top: 8px;
   padding-bottom: 8px;
   box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, 0.16);
+  border: none;
+  width: 100%;
+  text-align: left;
   @-moz-document url-prefix() {
     position: initial;
+  }
+  &:focus {
+    outline: 2px solid ${(p) => p.theme.colors.mainColor1Selected};
+    outline-offset: 2px;
   }
 `;
 
@@ -201,7 +208,7 @@ const StyledGroupName = styled.p`
   max-width: 220px;
   user-select: none;
   margin: 0;
-  padding-left: 0px;
+  padding-right: 8px;
   font-size: 14px;
   font-weight: bold;
   color: ${(props) => props.theme.colors.mainColor1};

@@ -16,7 +16,8 @@ const StyledLayerContainer = styled.li`
     z-index: 9999;
     display: flex;
     margin-bottom: 8px;
-    background-color: #F5F5F5;
+    background-color: ${props => props.theme.colors.mainWhite};
+    border-radius: 4px;
     box-shadow: 0px 1px 3px #0000001F;
     list-style: none;
 `;
