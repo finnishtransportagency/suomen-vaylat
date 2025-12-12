@@ -49,8 +49,6 @@ const ThemeMenu = () => {
     (state) => state.rpc
   );
 
-  if (isSideMenuOpen && !isThemeMenuOpen) return null;
-
   const variants = {
     open: {
       pointerEvents: 'auto',
