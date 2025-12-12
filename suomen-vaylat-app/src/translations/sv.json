@@ -718,12 +718,13 @@
     }
   },
   "layerlist": {
+    "title": "Kartnivåer och dataset",
     "errorLoadingLayers": "Det gick inte att ladda kartnivåer",
     "layerlistLabels": {
       "allLayers": "Alla lager",
       "themeLayers": "Teman",
       "selectedLayers": "Valda lagert",
-      "mapLayers": "Kartnivåer och dataset",
+      "mapLayers": "Kartnivåer",
       "backgroundMaps": "Bakgrundskartor",
       "selectAll": "Välj alla",
       "show": "Visa",

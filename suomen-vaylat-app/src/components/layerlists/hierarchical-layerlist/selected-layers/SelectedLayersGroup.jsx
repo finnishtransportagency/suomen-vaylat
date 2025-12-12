@@ -5,12 +5,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
 import strings from '../../../../translations';
 
-import UserLayersGroup from './subgroups/UserlayersGroup';
-import GeometriesGroup from './subgroups/GeometriesGroup';
-import ViewsGroup from './subgroups/ViewsGroup';
-import { useSelector } from 'react-redux';
-import { IS_EXTRANET } from '../../../../utils/appInfoUtil';
-import { faFileLines } from '@fortawesome/free-regular-svg-icons';
+import SelectedLayers from './SelectedLayers';
+import { useAppSelector } from '../../../../state/hooks';
+import { faStar } from '@fortawesome/free-regular-svg-icons';
 
 const masterHeaderIconVariants = {
   open: { rotate: 180 },
@@ -121,7 +118,6 @@ const StyledMotionIconWrapper = styled(motion.div)`
 
 const StyledMainContent = styled(motion.div)`
   background-color: #f2f2f2;
-  padding-left: 8px; /* keep left padding constant so list indentation is stable */
   border-radius: 4px;
   overflow: hidden; /* ensure collapsed content is not visible */
 `;
@@ -141,14 +137,30 @@ const StyledMainGroupSelectButton = styled.button`
   }
 `;
 
-const UserContentGroup = () => {
-  
-  const title = strings.savedContent?.savedContent;
+const StyledLayerCount = styled.div`
+  width: 1.5em;
+  height: 1.5em;
+  margin-left: 0.5em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 4px;
+  color: ${(props) => props.theme.colors.mainWhite};
+  background-color: ${(props) => props.theme.colors.secondaryColorDarkOrange};
+  font-size: 14px;
+  font-weight: 600;
+`;
+
+const SelectedLayersGroup = () => {
+  const title = strings.layerlist?.layerlistLabels?.selectedLayers;
   const [openMain, setOpenMain] = useState(false);
-  const userLayers = useSelector((state) => state.rpc.userLayers) || [];
+
+  const { currentZoomLevel, selectedLayers } = useAppSelector(
+    (state) => state.rpc
+  );
 
   // IDs & aria prefixes
-  const prefix = 'layerlist-user-content-';
+  const prefix = 'selected-layers-content-';
   const headerId = `${prefix}header`;
   const contentId = `${prefix}content`;
   const labelId = `${prefix}label`;
@@ -166,13 +178,13 @@ const UserContentGroup = () => {
     <StyledLayerGroups
       parentId={-1}
       role="region"
-      aria-roledescription="user content group"
+      aria-roledescription="selected layers group"
       aria-labelledby={labelId}
     >
       <StyledMasterGroupHeader
         id={headerId}
         aria-expanded={openMain}
-        aria-controls={contentId}
+        aria-controls={headerId}
         onClick={onToggle}
         onKeyDown={onKeyToggle}
         type="button"
@@ -180,11 +192,13 @@ const UserContentGroup = () => {
       >
         <StyledLeftContent>
           <StyledMasterGroupHeaderIcon aria-hidden="true">
-            <FontAwesomeIcon icon={faFileLines} />
+            <FontAwesomeIcon icon={faStar} />
           </StyledMasterGroupHeaderIcon>
           <StyledMasterGroupTitleContent>
             <StyledMasterGroupName id={labelId}>{title}</StyledMasterGroupName>
           </StyledMasterGroupTitleContent>
+
+          <StyledLayerCount>{selectedLayers.length}</StyledLayerCount>
         </StyledLeftContent>
 
         <StyledRightContent>
@@ -221,7 +235,7 @@ const UserContentGroup = () => {
       </StyledMasterGroupHeader>
 
       <StyledMainContent
-        id={contentId}
+        id="selected-layers-content-wrapper"
         role="region"
         aria-labelledby={headerId}
         initial="hidden"
@@ -231,14 +245,10 @@ const UserContentGroup = () => {
         aria-hidden={!openMain}
         style={{ pointerEvents: openMain ? 'auto' : 'none' }}
       >
-        { (IS_EXTRANET || (userLayers && userLayers.length > 0)) &&
-          <UserLayersGroup openMain={openMain} />
-        }
-        <GeometriesGroup openMain={openMain} />
-        <ViewsGroup openMain={openMain} />
+        <SelectedLayers currentZoomLevel={currentZoomLevel} />
       </StyledMainContent>
     </StyledLayerGroups>
   );
 };
 
-export default UserContentGroup;
+export default SelectedLayersGroup;

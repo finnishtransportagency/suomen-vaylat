@@ -718,12 +718,13 @@
     }
   },
   "layerlist": {
+    "title": "Layers and datasets",
     "errorLoadingLayers": "Error loading maplayers",
     "layerlistLabels": {
       "allLayers": "All layers",
       "themeLayers": "Themes",
       "selectedLayers": "Selected layers",
-      "mapLayers": "Layers and datasets",
+      "mapLayers": "Layers",
       "backgroundMaps": "Background maps",
       "selectAll": "Select all",
       "show": "Show",

@@ -10,7 +10,7 @@ import {arrayMoveImmutable} from 'array-move';
 import SelectedLayer from "./SelectedLayer";
 
 const StyledSelectedLayers = styled.div`
-
+    margin: 0.5em;
 `;
 
 const StyledDeleteAllSelectedLayers = styled.div`

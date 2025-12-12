@@ -20,6 +20,7 @@ import {
 } from '../../../state/slices/uiSlice';
 import { useSelector } from 'react-redux';
 import UserContentGroup from './user-content/UserContentGroup';
+import SelectedLayersGroup from './selected-layers/SelectedLayersGroup';
 
 const listVariants = {
   visible: {
@@ -127,7 +128,12 @@ const HorizontalLine = styled.div`
 
 const StyledLayerList = styled.div``;
 
-const SavedLayer = ({ layers, groups }) => {
+const StyledLayerListContainer = styled.div`
+  padding: 0.5em;
+  background-color: ${(props) => props.theme.colors.mainWhite};
+`;
+
+const FilterLayerList = ({ layers, groups }) => {
   const customLayers = localStorage.getItem('checkedLayers');
   const parsedLayers = JSON.parse(customLayers) || [];
   const { tagLayers, tags } = useSelector((state) => state.rpc);
@@ -137,7 +143,7 @@ const SavedLayer = ({ layers, groups }) => {
     return (
       <>
         {(tagLayers.length > 0 || layerArray.length > 0) && (
-          <StyledLayerList>
+          <StyledLayerList id='saved-layer-list'>
             {tags.map((tag, index) => {
               return (
                 <TagLayerList
@@ -194,7 +200,7 @@ const LayerListContainer = ({ groups, layers, tags }) => {
   };
 
   return (
-    <>
+    <StyledLayerListContainer>
       <ReactTooltip
         backgroundColor={theme.colors.mainColor1}
         disable={isMobile}
@@ -253,8 +259,16 @@ const LayerListContainer = ({ groups, layers, tags }) => {
         </StyledDeleteAllSelectedFilters>
       </StyledFilterList>
 
+      <StyledLayerGroupWrapper key={'selected-layers-wrapper'}>
+        <SelectedLayersGroup />
+      </StyledLayerGroupWrapper>
+
       {showSavedLayers || isCustomFilterOpen ? (
-        <SavedLayer layers={layers} />
+        <>
+          <HorizontalLine />
+
+          <FilterLayerList layers={layers} />
+        </>
       ) : (
         <>
           {tagLayers.length === 0 && (
@@ -264,10 +278,11 @@ const LayerListContainer = ({ groups, layers, tags }) => {
               >
                 <UserContentGroup />
               </StyledLayerGroupWrapper>
-
-              <HorizontalLine />
             </>
           )}
+
+          <HorizontalLine />
+
           <LayerList
             label={strings.layerlist.layerlistLabels.allLayers}
             groups={groups}
@@ -276,7 +291,7 @@ const LayerListContainer = ({ groups, layers, tags }) => {
           />
         </>
       )}
-    </>
+    </StyledLayerListContainer>
   );
 };
 
