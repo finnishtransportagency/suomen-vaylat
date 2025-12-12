@@ -4,9 +4,6 @@ import { setIsSideMenuOpen } from '../../../../state/slices/uiSlice';
 import { motion } from 'framer-motion';
 import store from '../../../../state/store';
 
-// Import Swiper styles
-import 'swiper/css';
-
 import DialogHeader from '../../../../utils/components/DialogHeader';
 import LayerListContainer from '../LayerListContainer';
 
