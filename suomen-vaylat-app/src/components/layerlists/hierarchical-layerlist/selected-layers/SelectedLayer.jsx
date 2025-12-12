@@ -174,7 +174,7 @@ const StyledShowLayerButton = styled.button`
 `;
 
 const DragHandle = sortableHandle(() => (
-    <StyledLayerGripControl className="swiper-no-swiping">
+    <StyledLayerGripControl>
         <FontAwesomeIcon
             icon={faCaretUp}
             style={{
@@ -331,7 +331,6 @@ export const SelectedLayer = (
                 { uuid &&
                     <StyledIconWrapper
                         aria-label={strings.accessibility.layerInfo}
-                        className="swiper-no-swiping"
                         uuid={uuid}
                         onClick={() => {
                             handleLayerMetadata(layer, uuid);
@@ -342,7 +341,6 @@ export const SelectedLayer = (
                 }
                     <StyledIconWrapper
                         aria-label={strings.accessibility.closeLayer}
-                        className="swiper-no-swiping"
                         onClick={() => {
                             handleLayerRemoveSelectedLayer(channel, layer);
                         }}>
@@ -368,7 +366,6 @@ export const SelectedLayer = (
                         <p>{strings.layerlist.selectedLayers.opacity}</p>
                         <StyledlayerOpacityControl
                             aria-label={strings.accessibility.opacitySlider}
-                            className="swiper-no-swiping"
                             type="range"
                             min="0"
                             max="100"
