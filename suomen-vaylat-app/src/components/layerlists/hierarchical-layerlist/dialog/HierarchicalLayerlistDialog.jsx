@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { useAppSelector } from '../../../../state/hooks';
 import { setIsSideMenuOpen } from '../../../../state/slices/uiSlice';
-import { motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import store from '../../../../state/store';
 
 import DialogHeader from '../../../../utils/components/DialogHeader';
@@ -12,8 +12,11 @@ import { faLayerGroup } from '@fortawesome/free-solid-svg-icons';
 import strings from '../../../../translations';
 
 const StyledMapLayersDialog = styled(motion.div)`
+  position: absolute;
+  left: 5em;
+  top: 80px;
   width: 350px;
-  max-height: 100%;
+  height: calc(100% - 96px);
   display: flex;
   flex-direction: column;
   pointer-events: auto;
@@ -23,28 +26,30 @@ const StyledMapLayersDialog = styled(motion.div)`
   overflow-y: auto;
   user-select: none;
   box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, 0.16);
-  margin-left: 16px;
+  z-index: 900;
+
   &::-webkit-scrollbar {
     display: none;
   }
+
   @media ${(props) => props.theme.device.mobileL} {
-    z-index: 10;
     position: fixed;
-    top: 0px;
-    left: 0px;
+    left: 0;
+    top: 0;
     width: 100%;
     height: 100%;
-    margin-left: unset;
+
+    z-index: 2000;
   }
 `;
 
 const HierarchicalLayerlistDialog = () => {
-  const { isSideMenuOpen, isThemeMenuOpen } =
-    useAppSelector((state) => state.ui);
+  const { isSideMenuOpen, isThemeMenuOpen } = useAppSelector(
+    (state) => state.ui
+  );
   const { allGroups, allLayers, allTags } = useAppSelector(
     (state) => state.rpc
   );
-
 
   const closeSideMenu = () => {
     store.dispatch(setIsSideMenuOpen(!isSideMenuOpen));
@@ -66,7 +71,7 @@ const HierarchicalLayerlistDialog = () => {
   };
 
   return (
-    !isThemeMenuOpen && (
+    <AnimatePresence>
       <StyledMapLayersDialog
         initial="closed"
         animate={isSideMenuOpen ? 'open' : 'closed'}
@@ -91,7 +96,7 @@ const HierarchicalLayerlistDialog = () => {
           tags={allTags}
         />
       </StyledMapLayersDialog>
-    )
+    </AnimatePresence>
   );
 };
 
