@@ -1,17 +1,16 @@
-import { useContext } from "react";
+import React, { useContext } from "react";
 import styled from 'styled-components';
-import { setBackgroundMaps, setMapLayers } from "../../../../state/slices/rpcSlice";
-import strings from "../../../../translations";
-import { updateLayers, resetThemeGroups, reArrangeRPCLayerOrder } from '../../../../utils/rpcUtil';
+import { DndContext, closestCenter, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
+import { SortableContext, verticalListSortingStrategy, useSortable, arrayMove } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 import { ReactReduxContext } from 'react-redux';
+import SelectedLayer from './SelectedLayer';
+import { setBackgroundMaps, setMapLayers } from "../../../../state/slices/rpcSlice";
+import { updateLayers, resetThemeGroups, reArrangeRPCLayerOrder } from '../../../../utils/rpcUtil';
+import strings from "../../../../translations";
 import { useAppSelector } from "../../../../state/hooks";
-import { sortableContainer, sortableElement } from 'react-sortable-hoc';
-import {arrayMoveImmutable} from 'array-move';
-import SelectedLayer from "./SelectedLayer";
 
-const StyledSelectedLayers = styled.div`
-
-`;
+const StyledSelectedLayers = styled.div``;
 
 const StyledDeleteAllSelectedLayers = styled.div`
     width: 250px;
@@ -47,41 +46,76 @@ const StyledListSubtitle = styled.div`
     };
 `;
 
+const ListRoot = styled.ul`
+  padding-inline-start: 0px;
+  margin: 0;
+`;
 
-const SortableElement = sortableElement((props) => {
-    const {value, currentZoomLevel, filtersEnabled} = props;
-    return <SelectedLayer
-        layer={value}
-        uuid={value.metadataIdentifier}db
+/**
+ * SortableItem wrapper:
+ * - Attaches dnd-kit sortable to a given item and forwards drag handle props into SelectedLayer
+ */
+const SortableItem = ({ id, item, index, currentZoomLevel, filtersEnabled }) => {
+  // useSortable gives attributes/listeners to attach to the handle, and setNodeRef to attach to item root
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging
+  } = useSortable({ id: String(id) });
+
+  const style = {
+    transform: CSS.Transform.toString(transform || {}),
+    transition,
+    zIndex: isDragging ? 9999 : undefined,
+    // avoid pointer events issues while dragging
+    listStyle: 'none'
+  };
+
+  // pass handleProps and setNodeRef to SelectedLayer
+  const handleProps = { attributes, listeners };
+
+  return (
+    <div ref={setNodeRef} style={style}>
+      <SelectedLayer
+        layer={item}
+        uuid={item?.metadataIdentifier}
         currentZoomLevel={currentZoomLevel}
+        handleProps={handleProps}
+        setNodeRef={null} /* already attached above */
+        style={{}}
         filtersEnabled={filtersEnabled}
-    />
-}
-    
-);
-
-const SortableContainer = sortableContainer(({children}) => {
-  return <div>{children}</div>;
-});
-
+      />
+    </div>
+  );
+};
 
 export const SelectedLayers = (props) => {
     const { currentZoomLevel } = props;
     const { store } = useContext(ReactReduxContext);
-    const {channel, selectedLayersByType, filters} = useAppSelector(state => state.rpc);
-    let backgroundMaps = selectedLayersByType.backgroundMaps;
-    let mapLayers = selectedLayersByType.mapLayers;
+    const { channel, selectedLayersByType, filters } = useAppSelector(state => state.rpc);
+    const { mapLayers, backgroundMaps } = selectedLayersByType || { mapLayers: [], backgroundMaps: [] };
 
-    const sortSelectedLayers = (selectedLayer) => {
-        const newSelectedLayers = arrayMoveImmutable(mapLayers, selectedLayer.oldIndex, selectedLayer.newIndex)
+    const sensors = useSensors(
+      useSensor(PointerSensor, {
+        activationConstraint: {
+          distance: 6 // require small drag distance to start drag
+        }
+      })
+    );
+
+    const sortSelectedLayers = (oldIndex, newIndex) => {
+        const newSelectedLayers = arrayMove(mapLayers, oldIndex, newIndex);
         store.dispatch(setMapLayers(newSelectedLayers));
         reArrangeRPCLayerOrder(store, newSelectedLayers);
     };
 
-    const sortSelectedBackgroundLayers = (backgroundLayer) => {
-        const newSelectedLayers = arrayMoveImmutable(backgroundMaps, backgroundLayer.oldIndex, backgroundLayer.newIndex);
-        store.dispatch(setBackgroundMaps(newSelectedLayers));
-        reArrangeRPCLayerOrder(store, newSelectedLayers);
+    const sortSelectedBackgroundLayers = (oldIndex, newIndex) => {
+        const newSelected = arrayMove(backgroundMaps, oldIndex, newIndex);
+        store.dispatch(setBackgroundMaps(newSelected));
+        reArrangeRPCLayerOrder(store, newSelected);
     };
 
     const handleClearSelectedLayers = () => {
@@ -101,65 +135,79 @@ export const SelectedLayers = (props) => {
         updateLayers(store, channel);
     };
 
-    // TODO: handle situation where all themelayers have bewen unselected and so the theme should get unselected too
-    /*
-    useEffect(() => {
-        if(selectedTheme?.length > 0 && allSelectedThemeLayers?.length > 0 && !selectedLayers.some(layer => allSelectedThemeLayers.includes(layer.id))) {
-            resetThemeGroups(store);
-            showNonThemeLayers(store, channel);
+    const onDragEndMapLayers = (event) => {
+      const { active, over } = event;
+      if (!over) return;
+      if (String(active.id) !== String(over.id)) {
+        const oldIndex = mapLayers.findIndex(l => String(l.id) === String(active.id));
+        const newIndex = mapLayers.findIndex(l => String(l.id) === String(over.id));
+        if (oldIndex !== -1 && newIndex !== -1) {
+          const newArr = arrayMove(mapLayers, oldIndex, newIndex);
+          store.dispatch(setMapLayers(newArr));
+          reArrangeRPCLayerOrder(store, newArr);
         }
-    }, [selectedLayers])
-    */
+      }
+    };
+
+    const onDragEndBackgroundMaps = (event) => {
+      const { active, over } = event;
+      if (!over) return;
+      if (String(active.id) !== String(over.id)) {
+        const oldIndex = backgroundMaps.findIndex(l => String(l.id) === String(active.id));
+        const newIndex = backgroundMaps.findIndex(l => String(l.id) === String(over.id));
+        if (oldIndex !== -1 && newIndex !== -1) {
+          const newArr = arrayMove(backgroundMaps, oldIndex, newIndex);
+          store.dispatch(setBackgroundMaps(newArr));
+          reArrangeRPCLayerOrder(store, newArr);
+        }
+      }
+    };
 
     return (
         <StyledSelectedLayers>
             <StyledListSubtitle>{strings.layerlist.layerlistLabels.mapLayers}</StyledListSubtitle>
-            <SortableContainer
-                onSortEnd={sortSelectedLayers}
-                useDragHandle
-                lockAxis={"y"}
-            >
-                <ul
-                    style={{paddingInlineStart: "0px"}}
-                >
-                    {mapLayers.map((item, index) => (
-                        <SortableElement
-                            key={'maplayer-' + item.id} 
-                            value={item}
-                            index={index}
-                            currentZoomLevel={currentZoomLevel}
-                            filtersEnabled={filters && filters.length > 0 && filters.some(filter => (filter.layer ===  item.id))}
-                        />
-                    ))}
-                </ul>
-            </SortableContainer>
-            <StyledDeleteAllSelectedLayers
-                onClick={() => handleClearSelectedLayers()}
-            >
+
+            <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={onDragEndMapLayers}>
+              <SortableContext items={mapLayers.map(l => String(l.id))} strategy={verticalListSortingStrategy}>
+                <ListRoot>
+                  {mapLayers.map((item, index) => (
+                      <SortableItem
+                        key={'maplayer-' + item.id}
+                        id={String(item.id)}
+                        item={item}
+                        index={index}
+                        currentZoomLevel={currentZoomLevel}
+                        filtersEnabled={filters && filters.length > 0 && filters.some(filter => (filter.layer ===  item.id))}
+                      />
+                  ))}
+                </ListRoot>
+              </SortableContext>
+            </DndContext>
+
+            <StyledDeleteAllSelectedLayers onClick={() => handleClearSelectedLayers()}>
                 <p>{strings.layerlist.layerlistLabels.clearSelectedMapLayers}</p>
             </StyledDeleteAllSelectedLayers>
+
             <StyledListSubtitle>{strings.layerlist.layerlistLabels.backgroundMaps}</StyledListSubtitle>
-            <SortableContainer
-                onSortEnd={sortSelectedBackgroundLayers}
-                useDragHandle
-                lockAxis={"y"}
-            >
-                <ul
-                    style={{paddingInlineStart: "0px"}}
-                >
-                    {backgroundMaps && backgroundMaps.map((item, index) => (
-                        <SortableElement
-                            key={'background-maplayer-' + item.id}
-                            value={item}
-                            index={index}
-                            currentZoomLevel={currentZoomLevel}
-                        />
-                    ))}
-                </ul>
-            </SortableContainer>
-            <StyledDeleteAllSelectedLayers
-                onClick={() => handleClearSelectedBackgroundMaps()}
-            >
+
+            <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={onDragEndBackgroundMaps}>
+              <SortableContext items={backgroundMaps.map(l => String(l.id))} strategy={verticalListSortingStrategy}>
+                <ListRoot>
+                  {backgroundMaps && backgroundMaps.map((item, index) => (
+                      <SortableItem
+                        key={'background-maplayer-' + item.id}
+                        id={String(item.id)}
+                        item={item}
+                        index={index}
+                        currentZoomLevel={currentZoomLevel}
+                        filtersEnabled={false}
+                      />
+                  ))}
+                </ListRoot>
+              </SortableContext>
+            </DndContext>
+
+            <StyledDeleteAllSelectedLayers onClick={() => handleClearSelectedBackgroundMaps()}>
                 <p>{strings.layerlist.layerlistLabels.clearSelectedBackgroundMaps}</p>
             </StyledDeleteAllSelectedLayers>
         </StyledSelectedLayers>
