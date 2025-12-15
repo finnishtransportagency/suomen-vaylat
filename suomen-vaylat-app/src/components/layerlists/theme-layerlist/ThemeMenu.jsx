@@ -70,7 +70,8 @@ const ThemeMenu = () => {
   return (
     <AnimatePresence>
       <StyledThemeMenuContainer
-        initial="closed"
+        id='theme-menu-container'
+        initial='closed'
         animate={isThemeMenuOpen ? 'open' : 'closed'}
         transition={{
           duration: 0.4

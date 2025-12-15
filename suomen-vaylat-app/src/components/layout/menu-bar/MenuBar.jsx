@@ -279,7 +279,7 @@ const MenuBar = () => {
                 <CircleButton
                   id="menubar-map-layers-btn"
                   icon={faLayerGroup}
-                  text={strings.layerlist.layerlistLabels.mapLayers}
+                  text={strings.layerlist.title}
                   toggleState={isSideMenuOpen}
                   tooltipDirection={'right'}
                   clickAction={() => {
