@@ -73,7 +73,8 @@ const HierarchicalLayerlistDialog = () => {
   return (
     <AnimatePresence>
       <StyledMapLayersDialog
-        initial="closed"
+        id='hierarchical-layerlist-dialog'
+        initial='closed'
         animate={isSideMenuOpen ? 'open' : 'closed'}
         transition={{ duration: 0.4 }}
         exit={{
