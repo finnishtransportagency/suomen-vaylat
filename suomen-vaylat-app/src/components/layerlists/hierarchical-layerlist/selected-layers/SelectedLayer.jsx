@@ -19,7 +19,8 @@ const StyledLayerContainer = styled.li`
     z-index: 9999;
     display: flex;
     margin-bottom: 8px;
-    background-color: #F5F5F5;
+    background-color: ${props => props.theme.colors.mainWhite};
+    border-radius: 4px;
     box-shadow: 0px 1px 3px #0000001F;
 `;
 
@@ -173,7 +174,7 @@ const StyledShowLayerButton = styled.button`
 `;
 
 const DragHandle = sortableHandle(() => (
-    <StyledLayerGripControl className="swiper-no-swiping">
+    <StyledLayerGripControl>
         <FontAwesomeIcon
             icon={faCaretUp}
             style={{
@@ -330,7 +331,6 @@ export const SelectedLayer = (
                 { uuid &&
                     <StyledIconWrapper
                         aria-label={strings.accessibility.layerInfo}
-                        className="swiper-no-swiping"
                         uuid={uuid}
                         onClick={() => {
                             handleLayerMetadata(layer, uuid);
@@ -341,7 +341,6 @@ export const SelectedLayer = (
                 }
                     <StyledIconWrapper
                         aria-label={strings.accessibility.closeLayer}
-                        className="swiper-no-swiping"
                         onClick={() => {
                             handleLayerRemoveSelectedLayer(channel, layer);
                         }}>
@@ -367,7 +366,6 @@ export const SelectedLayer = (
                         <p>{strings.layerlist.selectedLayers.opacity}</p>
                         <StyledlayerOpacityControl
                             aria-label={strings.accessibility.opacitySlider}
-                            className="swiper-no-swiping"
                             type="range"
                             min="0"
                             max="100"

@@ -716,11 +716,12 @@
     }
   },
   "layerlist": {
+    "title": "Karttatasot ja -aineistot",
     "errorLoadingLayers": "Virhe tasojen latauksessa",
     "layerlistLabels": {
       "allLayers": "Kaikki tasot",
       "themeLayers": "Teemakartat",
-      "mapLayers": "Karttatasot ja -aineistot",
+      "mapLayers": "Karttatasot",
       "backgroundMaps": "Taustakartat",
       "selectAll": "Valitse kaikki",
       "selectedLayers": "Valitut tasot",
@@ -765,7 +766,8 @@
       "views": {
         "title": "Näkymät"
       }
-    }
+    },
+    "linkAddress": "Linkin osoite: "
   },
   "downloadLink": {
     "downloadLinkDialogHeader": "Aineiston lataus",

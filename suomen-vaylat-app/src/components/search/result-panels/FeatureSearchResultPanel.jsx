@@ -291,8 +291,6 @@ const FeatureSearchResultPanel = () => {
         store.dispatch(setIsSearchingActive(false));
         store.dispatch(setSearchOn(false));
 
-        console.log('handling response (panel):', data);
-
         if (startIndex !== 0) {
           // Update features for "more results"
           let oldFeatureSearchResults = JSON.parse(

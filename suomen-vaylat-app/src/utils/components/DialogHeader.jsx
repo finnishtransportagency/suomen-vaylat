@@ -46,8 +46,8 @@ const DialogHeader = ({
 }) => {
 
     return (
-            <StyledHeaderContent type={type}>
-                <StyledTitleContent>
+            <StyledHeaderContent id={'dialog-header-' + title} type={type}>
+                <StyledTitleContent id={'dialog-header-title-content-' + title}>
                     {
                         icon && <FontAwesomeIcon
                             icon={icon}

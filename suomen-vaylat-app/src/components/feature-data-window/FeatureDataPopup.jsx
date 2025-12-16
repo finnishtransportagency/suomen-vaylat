@@ -582,7 +582,7 @@ export const FeatureDataPopup = () => {
           LAYER_ID
         ]);
     } else {
-      filteredFeatures[0].geometry.type === 'Point' &&
+      filteredFeatures[0].geometry?.type === 'Point' &&
         store.dispatch(removeMarkerRequest({ markerId: 'VKM_MARKER' }));
 
       let featureStyle = {
@@ -684,7 +684,7 @@ export const FeatureDataPopup = () => {
 
       data &&
         data?.content?.forEach((cont) => {
-          var featureCells = cont.geojson.features
+          var featureCells = cont.geojson?.features
             ? cont.geojson.features
                 .filter((feature) =>
                   filterFeature(feature, data, filters, channel)

@@ -216,6 +216,7 @@ const StyledSubthemeRightContent = styled.div`
 
 const StyledMasterGroupHeaderIcon = styled.div`
   width: 48px;
+  margin: 1em 0px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -302,6 +303,7 @@ const StyledThemeContent = styled.div`
 
 const StyledSubText = styled.p`
   color: ${(props) => props.theme.colors.black};
+  margin: 0px;
 `;
 
 const StyledLinkText = styled.a``;
@@ -432,6 +434,7 @@ export const ThemeLayerList = ({ allLayers, allThemes }) => {
         return (
           <Fragment key={`themeGroup-div-${themeGroupIndex}`}>
             <StyledThemeGroup
+              id={`stg-${themeGroupIndex}`}
               key={`stg-${themeGroupIndex}`}
               onClick={() =>
                 isOpen === themeGroupIndex
@@ -439,7 +442,7 @@ export const ThemeLayerList = ({ allLayers, allThemes }) => {
                   : setIsOpen(themeGroupIndex)
               }
             >
-              <StyledMasterThemeHeader>
+              <StyledMasterThemeHeader id={`stg-theme-header-${themeGroupIndex}`}>
                 <StyledMasterGroupHeaderIconLetter>
                   {mainThemeImages.hasOwnProperty(
                     themeGroup.locale['fi'].name.toLowerCase()
@@ -459,6 +462,7 @@ export const ThemeLayerList = ({ allLayers, allThemes }) => {
                 </StyledMasterGroupHeaderIconLetter>
 
                 <StyledMasterGroupName
+                  id={`stg-master-group-name-${themeGroupIndex}`}
                   $expanded={isOpen === themeGroupIndex}
                   title={themeGroup.locale[lang].name}
                 >
@@ -466,6 +470,7 @@ export const ThemeLayerList = ({ allLayers, allThemes }) => {
                 </StyledMasterGroupName>
 
                 <StyledInfoHeaderIconContainer
+                  id={`stg-info-header-icon-container-${themeGroupIndex}`}
                   animate={{
                     transform:
                       isOpen === themeGroupIndex
@@ -478,6 +483,7 @@ export const ThemeLayerList = ({ allLayers, allThemes }) => {
               </StyledMasterThemeHeader>
             </StyledThemeGroup>
             <StyledLayerGroupContainer
+              id={`slg-${themeGroupIndex}`}
               key={`slg-${themeGroupIndex}`}
               initial="hidden"
               animate={isOpen === themeGroupIndex ? 'visible' : 'hidden'}
@@ -555,6 +561,7 @@ export const Themes = ({ groups, allLayers }) => {
         <>
           {/* Restricted section header */}
           <StyledThemesContainer
+            id={`restricted-themes-container`}
             role="button"
             tabIndex={0}
             aria-expanded={restrictedOpen}
@@ -567,7 +574,7 @@ export const Themes = ({ groups, allLayers }) => {
               style={{ color: theme.colors.secondaryColorGreen, margin: '8px' }}
               icon={faLock}
             />
-            <StyledRestrictedThemesTitle style={{ marginLeft: 4 }}>
+            <StyledRestrictedThemesTitle id={`restricted-themes-title`} style={{ marginLeft: 4 }}>
               {strings.themelayerlist.restrictedThemes}
             </StyledRestrictedThemesTitle>
             <motion.div
@@ -583,6 +590,7 @@ export const Themes = ({ groups, allLayers }) => {
 
           {/* Restricted list (animated) */}
           <motion.div
+            id={`restricted-themes-themegroup-motion-wrapper`}
             initial={false}
             animate={restrictedOpen ? 'visible' : 'hidden'}
             variants={listVariants}
@@ -611,6 +619,7 @@ export const Themes = ({ groups, allLayers }) => {
 
           {/* open section header */}
           <StyledThemesContainer
+            id={`themes-container`}
             role="button"
             tabIndex={0}
             aria-expanded={normalOpen}
@@ -639,6 +648,7 @@ export const Themes = ({ groups, allLayers }) => {
 
           {/* Normal list (animated) */}
           <motion.div
+            id={`themes-themegroup-motion-wrapper`}
             initial={false}
             animate={normalOpen ? 'visible' : 'hidden'}
             variants={listVariants}
@@ -938,7 +948,7 @@ export const ThemeLinkList = ({
       store.dispatch(
         setWarning({
           title: strings.exitConfirmation,
-          subtitle: null,
+          subtitle: strings.layerlist.linkAddress + link,
           confirm: {
             text: strings.general.continue,
             action: () => {
@@ -980,8 +990,16 @@ export const ThemeLinkList = ({
             <StyledMasterGroupHeaderIcon>
               <FontAwesomeIcon icon={faLink} />
             </StyledMasterGroupHeaderIcon>
-            <StyledLinkName>{theme.locale[lang].name}</StyledLinkName>
           </StyledLeftContent>
+
+          <StyledMasterGroupName
+            title={theme.locale[lang].name}
+            aria-label={`Open ${theme.locale[lang].name} link`}
+            tabIndex="0"
+          >
+            {theme.locale[lang].name}
+          </StyledMasterGroupName>
+
           <StyledRightContent>
             <StyledMasterGroupLinkIcon>
               <FontAwesomeIcon icon={faExternalLinkAlt} />
