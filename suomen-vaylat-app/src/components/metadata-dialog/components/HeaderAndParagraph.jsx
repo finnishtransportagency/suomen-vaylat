@@ -1,6 +1,6 @@
 import React from 'react';
 import 'moment-timezone';
-import Moment from 'react-moment';
+import moment from 'moment';
 import { StyledParagraph, StyledTitle } from './Common';
 
 export const HeaderAndParagraph = ({ visible, header, title, text, momentFormat }) => {
@@ -11,7 +11,7 @@ export const HeaderAndParagraph = ({ visible, header, title, text, momentFormat 
                     <StyledTitle>{header}</StyledTitle>
                     <StyledParagraph title={title}>
                         {momentFormat &&
-                            <Moment format={momentFormat} tz="Europe/Helsinki">{text}</Moment>
+                            <div>{moment(text).format('DD.MM.YYYY HH:mm').tz('Europe/Helsinki')}</div>
                         }
                         {!momentFormat &&
                             <React.Fragment key={'metadata-dialog-header-and-paragraph-content-text'}>

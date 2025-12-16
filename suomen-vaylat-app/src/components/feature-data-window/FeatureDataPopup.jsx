@@ -43,7 +43,6 @@ import { theme, isMobile } from '../../theme/theme';
 import { filterFeature } from '../../utils/gfiUtil';
 import { SortingMode, PagingPosition } from 'ka-table/enums';
 
-// Max amount of features that wont trigger react-data-table-component
 const KUNTA_IMAGE_URL =
   'https://www.kuntaliitto.fi/sites/default/files/styles/narrow_320_x_600_/public/media/profile_pictures/';
 

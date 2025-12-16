@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import strings from '../../../translations';
-import Moment from 'react-moment';
+import moment from 'moment';
 import { useContext, useState, useEffect } from 'react';
 import { theme } from '../../../theme/theme';
 import { setDownloadRemove } from '../../../state/slices/rpcSlice';
@@ -120,7 +120,7 @@ const DownloadItem = ({
             title={
                 <StyledListItemTitleWrapper key={'download-wrapper-list-item-' + download.id}>
                     <li key={'download-wrapper-format-' + download.id}>{strings.downloads.format}: <span>{download.format && download.format}</span></li>
-                    <li key={'download-wrapper-date-' + download.id}>{strings.downloads.date}: <span><Moment format='DD.MM.YYYY HH:mm' tz='Europe/Helsinki'>{download.date}</Moment></span></li>
+                    <li key={'download-wrapper-date-' + download.id}>{strings.downloads.date}: <span><div format='DD.MM.YYYY HH:mm' tz='Europe/Helsinki'>{moment(download.date).format('DD.MM.YYYY HH:mm').tz('Europe/Helsinki')}</div></span></li>
                     <li key={'download-wrapper-file-size-' + download.id}>{strings.downloads.fileSize}: <span>{download.fileSize ? download.fileSize : "-"}</span></li>
                     <li key={'download-wrapper-layers-' + download.id}>{strings.downloads.layers}: </li>
                         <ul key={'download-ul-' + download.id}>

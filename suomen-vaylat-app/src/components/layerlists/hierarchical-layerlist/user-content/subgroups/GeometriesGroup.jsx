@@ -17,7 +17,7 @@ import {
   faTimes
 } from '@fortawesome/free-solid-svg-icons';
 import { useSelector, useDispatch, ReactReduxContext } from 'react-redux';
-import Moment from 'react-moment';
+import moment from 'moment';
 import strings from '../../../../../translations';
 import {
   addMarkerRequest,
@@ -712,9 +712,9 @@ const GeometriesGroup = () => {
               <StyledMetaRow id={`${prefix}info-modal-saved`}>
                 <b>{strings.savedContent?.saveGeometry?.savedAt || 'Saved'}:</b>
                 <span>
-                  <Moment format="DD.MM.YYYY HH:mm" tz="Europe/Helsinki">
-                    {infoGeometry.saveDate}
-                  </Moment>
+                  <div>
+                    {moment(infoGeometry.saveDate).format('DD.MM.YYYY HH:mm').tz('Europe/Helsinki')}
+                  </div>
                 </span>
               </StyledMetaRow>
 

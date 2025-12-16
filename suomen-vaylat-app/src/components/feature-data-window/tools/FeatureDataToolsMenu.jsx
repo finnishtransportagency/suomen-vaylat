@@ -5,7 +5,7 @@ import { Slide, toast } from 'react-toastify';
 import strings from '../../../translations';
 import { isMobile } from '../../../theme/theme';
 import { ReactReduxContext } from 'react-redux';
-import Moment from 'react-moment';
+import moment from 'moment';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -146,7 +146,7 @@ const StyledSavedViewName = styled.p`
   transition: all 0.1s ease-in;
 `;
 
-const StyledSavedViewDescription = styled(Moment)`
+const StyledSavedViewDescription = styled.div`
   margin: 0;
   padding: 0px;
   font-size: 12px;
@@ -1121,10 +1121,8 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
                           {geometry.name}
                         </StyledSavedViewName>
                         <StyledSavedViewDescription
-                          format="DD.MM.YYYY"
-                          tz="Europe/Helsinki"
                         >
-                          {geometry.saveDate}
+                          {moment(geometry.saveDate).format('DD.MM.YYYY HH:mm').tz('Europe/Helsinki')}
                         </StyledSavedViewDescription>
                       </StyledSavedViewTitleContent>
                     </StyledLeftContent>

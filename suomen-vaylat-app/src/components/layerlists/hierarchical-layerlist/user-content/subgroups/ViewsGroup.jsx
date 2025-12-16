@@ -26,7 +26,7 @@ import {
   setWarning
 } from '../../../../../state/slices/uiSlice';
 import { setEditingView, setViews } from '../../../../../state/slices/rpcSlice';
-import Moment from 'react-moment';
+import moment from 'moment';
 
 /* animation variants */
 const masterHeaderIconVariants = {
@@ -595,9 +595,9 @@ const ViewsGroup = () => {
               <StyledMetaRow id={`${prefix}info-modal-saved`}>
                 <b>{strings.savedContent?.saveView?.savedAt || 'Saved'}:</b>
                 <span>
-                  <Moment format="DD.MM.YYYY HH:mm" tz="Europe/Helsinki">
-                    {infoView.saveDate}
-                  </Moment>
+                  <div>
+                    {moment(infoView.saveDate).format('DD.MM.YYYY HH:mm').tz('Europe/Helsinki')}
+                  </div>
                 </span>
               </StyledMetaRow>
 
