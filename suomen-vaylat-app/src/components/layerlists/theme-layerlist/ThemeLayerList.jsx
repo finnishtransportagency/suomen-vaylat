@@ -442,7 +442,9 @@ export const ThemeLayerList = ({ allLayers, allThemes }) => {
                   : setIsOpen(themeGroupIndex)
               }
             >
-              <StyledMasterThemeHeader id={`stg-theme-header-${themeGroupIndex}`}>
+              <StyledMasterThemeHeader
+                id={`stg-theme-header-${themeGroupIndex}`}
+              >
                 <StyledMasterGroupHeaderIconLetter>
                   {mainThemeImages.hasOwnProperty(
                     themeGroup.locale['fi'].name.toLowerCase()
@@ -574,7 +576,10 @@ export const Themes = ({ groups, allLayers }) => {
               style={{ color: theme.colors.secondaryColorGreen, margin: '8px' }}
               icon={faLock}
             />
-            <StyledRestrictedThemesTitle id={`restricted-themes-title`} style={{ marginLeft: 4 }}>
+            <StyledRestrictedThemesTitle
+              id={`restricted-themes-title`}
+              style={{ marginLeft: 4 }}
+            >
               {strings.themelayerlist.restrictedThemes}
             </StyledRestrictedThemesTitle>
             <motion.div
@@ -671,6 +676,20 @@ export const Themes = ({ groups, allLayers }) => {
                   />
                 );
               })}
+            {/* Links */}
+            {links.length > 0 &&
+              links.map((link, index) => {
+                return (
+                  <ThemeLinkList
+                    key={`link-${index}`}
+                    isFirstSubtheme={true}
+                    index={link.index}
+                    link={link.link}
+                    theme={link.group}
+                    lang={lang}
+                  />
+                );
+              })}
           </motion.div>
         </>
       ) : (
@@ -691,23 +710,23 @@ export const Themes = ({ groups, allLayers }) => {
                 />
               );
             })}
+
+          {/* Links */}
+          {links.length > 0 &&
+            links.map((link, index) => {
+              return (
+                <ThemeLinkList
+                  key={`link-${index}`}
+                  isFirstSubtheme={true}
+                  index={link.index}
+                  link={link.link}
+                  theme={link.group}
+                  lang={lang}
+                />
+              );
+            })}
         </>
       )}
-
-      {/* Links */}
-      {links.length > 0 &&
-        links.map((link, index) => {
-          return (
-            <ThemeLinkList
-              key={`link-${index}`}
-              isFirstSubtheme={true}
-              index={link.index}
-              link={link.link}
-              theme={link.group}
-              lang={lang}
-            />
-          );
-        })}
     </StyledSubthemes>
   );
 };
