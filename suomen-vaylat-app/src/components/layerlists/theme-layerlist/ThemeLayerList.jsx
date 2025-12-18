@@ -6,8 +6,8 @@ import {
   faRoad,
   faShip,
   faTrain,
-  faLock,
-  faKey
+  faKey,
+  faGlobe
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ReactReduxContext } from 'react-redux';
@@ -574,7 +574,7 @@ export const Themes = ({ groups, allLayers }) => {
           >
             <FontAwesomeIcon
               style={{ color: theme.colors.secondaryColorGreen, margin: '8px' }}
-              icon={faLock}
+              icon={faKey}
             />
             <StyledRestrictedThemesTitle
               id={`restricted-themes-title`}
@@ -635,7 +635,7 @@ export const Themes = ({ groups, allLayers }) => {
           >
             <FontAwesomeIcon
               style={{ color: theme.colors.secondaryColorGreen, margin: '8px' }}
-              icon={faKey}
+              icon={faGlobe}
             />
             <StyledOpenThemesTitle style={{ marginLeft: 4 }}>
               {strings.themelayerlist.openThemes}
