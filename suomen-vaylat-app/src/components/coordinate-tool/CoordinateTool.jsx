@@ -386,7 +386,7 @@ const CoordinateTool = () => {
           'EPSG:3067',
           fromSRS
         );
-        if (activeRequestRef.current !== reqId) throw new Error('superseded');
+        if (activeRequestRef.current !== reqId) return null;
         return { lon: Number(res.lon), lat: Number(res.lat) };
       } catch (err) {
         if (activeRequestRef.current === reqId) {
@@ -714,11 +714,11 @@ const CoordinateTool = () => {
         setDisplayedRaw({ x: rawLon, y: rawLat });
 
         // transform to native and update mapCenter + canonical shown
-        const native = await transformDisplayedToNative(
-          rawLon,
-          rawLat,
-          selectedProjection.value
-        );
+        const native = await transformDisplayedToNative(rawLon, rawLat, selectedProjection.value);
+        if (native == null) {
+          // transform was superseded by a newer request — nothing to commit
+          return;
+        }
         setMapCenter({ x: native.lon, y: native.lat });
         // re-run native->displayed to get canonical representation (DMS) and ensure any server normalization is reflected
         await transformNativeToDisplayed(
