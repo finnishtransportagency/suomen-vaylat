@@ -10,7 +10,6 @@ import FeatureDataDownloadDialog from '../feature-data-window/dialog/FeatureData
 import UserGuideDialog from '../user-guide/dialog/UserGuideDialog';
 import AppInfoDialog from '../app-info/dialog/AppInfoDialog';
 import CustomLayerDialog from '../layerlists/hierarchical-layerlist/custom-filter/dialog/CustomLayerDialog';
-import FeedbackFormDialog from '../feedback-form/dialog/FeedbackFormDialog';
 import DatasetImportDialog from '../dataset-import/dialog/DatasetImportDialog';
 import AnnouncementsDialog from '../announcements/dialog/AnnouncementsDialog';
 import MetadataDialog from '../metadata-dialog/dialog/MetadataDialog';
@@ -143,8 +142,6 @@ const Content = () => {
         <AppInfoDialog constraintsRef={constraintsRef} />
 
         <CustomLayerDialog constraintsRef={constraintsRef} />
-
-        <FeedbackFormDialog constraintsRef={constraintsRef} />
 
         {IS_EXTRANET && 
           <>

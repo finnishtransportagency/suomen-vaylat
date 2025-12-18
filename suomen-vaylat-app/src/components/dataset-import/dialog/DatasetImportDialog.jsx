@@ -35,7 +35,7 @@ const DatasetImportDialog = ({ constraintsRef }) => {
         handleCloseDatasetImport
       } /* Action when pressing dialog close button or backdrop */
       isOpen={isDatasetImportOpen} /* Dialog state */
-      id="feedback_form_dialog"
+      id='dataset-import-dialog'
       maxWidth={'800px'}
       overflow={'auto'}
     >
