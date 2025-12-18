@@ -16,6 +16,7 @@ import {
 } from '../../state/slices/rpcSlice';
 import {
   addToDrawToolMarkers,
+  removeFromDrawToolMarkers,
   setIsSaveGeometriesOpen
 } from '../../state/slices/uiSlice';
 import { theme } from '../../theme/theme';
@@ -252,6 +253,8 @@ const CoordinateTool = () => {
       const markerId = `coordinate_tool_marker_${i}`;
       store.dispatch(removeMarkerRequest({ markerId }));
       store.dispatch(setCoordMarkerIndex(0));
+      // removes markers from store so they are not saved later
+      store.dispatch(removeFromDrawToolMarkers(markerId));
     }
   };
 
