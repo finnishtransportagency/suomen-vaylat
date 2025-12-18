@@ -59,7 +59,6 @@ const initialState = {
   checkedLayer: [],
   isCheckmark: false,
   selectedCustomFilterLayers: [],
-  isFeedbackFormOpen: false,
   isCoordinateToolOpen: false,
   selectedBaseLayers: [],
   isBaseLayerSelectorMenuOpen: false,
@@ -282,9 +281,6 @@ export const uiSlice = createSlice({
     setSelectedCustomFilterLayers: (state, action) => {
       state.selectedCustomFilterLayers = action.payload;
     },
-    setIsFeedBackFormOpen: (state, action) => {
-      state.isFeedbackFormOpen = action.payload;
-    },
     setActiveSwitch: (state, action) => {
       state.activeSwitch = action.payload;
     },
@@ -363,7 +359,6 @@ export const {
   setIsCheckmark,
   setSelectedCustomFilterLayers,
   setActiveSwitch,
-  setIsFeedBackFormOpen,
   setIsCoordinateToolOpen,
   setSelectedBaseLayers,
   setIsBaseLayerSelectorMenuOpen,
