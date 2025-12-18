@@ -33,7 +33,6 @@
     "lodash.throttle": "^4.1.1",
     "moment": "^2.29.1",
     "moment-timezone": "^0.5.33",
-    "nodemailer": "^6.9.7",
     "oskari-rpc": "^2.1.0",
     "preval.macro": "^5.0.0",
     "process": "^0.11.10",
@@ -92,13 +91,13 @@
     ]
   },
   "devDependencies": {
+    "@redux-devtools/extension": "3.3.0",
     "@types/lodash": "^4.14.168",
     "@types/preval.macro": "^3.0.0",
     "@types/react-router-dom": "5.3.3",
     "eslint": "^8.48.0",
     "eslint-config-react-app": "^7.0.0",
-    "prettier": "^2.8.8",
-    "@redux-devtools/extension": "3.3.0"
+    "prettier": "^2.8.8"
   },
   "optionalDependencies": {
     "fsevents": "^2.3.3"
