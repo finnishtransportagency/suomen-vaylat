@@ -740,11 +740,12 @@ const CoordinateTool = () => {
         if (Number.isNaN(rawX) || Number.isNaN(rawY)) return;
         setDisplayedRaw({ x: rawX, y: rawY });
 
-        const native = await transformDisplayedToNative(
-          rawX,
-          rawY,
-          selectedProjection.value
-        );
+        const native = await transformDisplayedToNative(rawX, rawY, selectedProjection.value);
+        if (native == null) {
+          // transform was superseded by a newer request — nothing to commit
+          return;
+        }
+        
         setMapCenter({ x: native.lon, y: native.lat });
 
         // update shown to canonical formatted (3 decimals)
