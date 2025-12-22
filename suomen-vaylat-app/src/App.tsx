@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import './resources/css/_colors.scss';
 import './resources/css/custom.scss';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Route } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import styled from 'styled-components';
 import Layout from './components/layout/Layout';
 import PageTitle from './components/layout/PageTitle';
@@ -139,32 +139,26 @@ const App = () => {
     </>
   ) : (
     <Theme>
-      <Route
-        exact
-        path={routerPrefix}
-        render={() => (
-          <StyledAppContainer>
-            <PageTitle />
-            <Layout />
-          </StyledAppContainer>
-        )}
-      />
-      <Route
-        exact
-        path={routerPrefix + 'theme/:zoom/:x/:y/:themeId/:lang?'}
-        render={() => {
-          return appContainer;
-        }}
-      />
-
-      <Route
-        exact
-        path={routerPrefix + 'link/:zoom/:x/:y/:maplayers/:lang?'}
-        render={() => {
-          return appContainer;
-        }}
-      />
-    </Theme>
+      <Routes>
+        <Route
+          path={routerPrefix}
+          element={
+            <StyledAppContainer>
+              <PageTitle />
+              <Layout />
+            </StyledAppContainer>
+          }
+        />
+        <Route
+          path={routerPrefix + 'theme/:zoom/:x/:y/:themeId/:lang?'}
+          element={appContainer}
+        />
+        <Route
+          path={routerPrefix + 'link/:zoom/:x/:y/:maplayers/:lang?'}
+          element={appContainer}
+        />
+      </Routes>
+</Theme>
   );
 };
 

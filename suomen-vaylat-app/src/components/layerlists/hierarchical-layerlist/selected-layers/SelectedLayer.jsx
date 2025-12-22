@@ -1,14 +1,15 @@
-import React, { useContext, useEffect, useState } from "react";
-import { faInfoCircle, faTimes, faGripLines, faMap, faLayerGroup, faFilter, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+// SelectedLayer.jsx
+import React, { useContext, useEffect, useState } from 'react';
+import { faInfoCircle, faTimes, faCaretDown, faCaretUp, faGripLines, faFilter, faEye, faEyeSlash, faLayerGroup, faMap } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styled from 'styled-components';
 import { ReactReduxContext } from 'react-redux';
-import ReactTooltip from "react-tooltip";
+import ReactTooltip from 'react-tooltip';
 import strings from '../../../../translations';
 import { clearLayerMetadata, getLayerMetadata, setLayerMetadata, setZoomTo, setFilteringInfo, setFilters } from '../../../../state/slices/rpcSlice';
 import { updateLayers } from '../../../../utils/rpcUtil';
 import { theme, isMobile } from '../../../../theme/theme';
-import { setMinimizeFilterDialog } from "../../../../state/slices/uiSlice";
+import { setMinimizeFilterDialog } from '../../../../state/slices/uiSlice';
 import { useAppSelector } from '../../../../state/hooks';
 
 const StyledLayerContainer = styled.li`
@@ -172,33 +173,23 @@ const StyledFloatingSpan = styled.div`
     margin-left: 6px;
 `;
 
-/**
- * SelectedLayer component
- * - Accepts handleProps: { listeners, attributes } to attach to the drag handle element
- * - Accepts setNodeRef and style to be used by the sortable wrapper (passed down from SortableItem)
- */
-const SelectedLayer = ({
-    layer,
-    uuid,
-    currentZoomLevel,
-    handleProps = null,
-    setNodeRef = null,
-    style = {},
-    filtersEnabled
-}) => {
-    const { store } = useContext(ReactReduxContext);
-    const [opacity, setOpacity] = useState(parseInt(layer.opacity));
-    const [prevOpacity, setPrevOpacity] = useState(parseInt(layer.opacity));
-    const { channel, filters, filteringInfo, allSelectedThemeLayers } = useAppSelector((state) => state.rpc);
-    const { minimizeFilter } = useAppSelector(state => state.ui);
+const SelectedLayer = ({ layer, uuid, currentZoomLevel, handleProps = null, filtersEnabled }) => {
+  const { store } = useContext(ReactReduxContext);
+  const [opacity, setOpacity] = useState(parseInt(layer.opacity));
+  const [prevOpacity, setPrevOpacity] = useState(parseInt(layer.opacity));
+  const { channel, filters, filteringInfo, allSelectedThemeLayers } = useAppSelector(state => state.rpc);
+  const { minimizeFilter } = useAppSelector(state => state.ui);
+    const [localfilterenabled, setLocalfilterenabled] = useState(false)
+
+  useEffect(() => setOpacity(parseInt(layer.opacity)), [layer.opacity]);
 
     useEffect(() => {
-        setOpacity(parseInt(layer.opacity));
-    }, [layer.opacity]);
+        setLocalfilterenabled(filtersEnabled)
+    }, [filtersEnabled])
+    
+  const isFilterable = typeof layer.config?.gfi?.filterFields !== 'undefined' && layer.config?.gfi?.filterFields.length > 0;
 
-    const isFilterable = typeof layer.config?.gfi?.filterFields !== "undefined" && layer.config?.gfi?.filterFields.length > 0 ;
-
-    const handleOpenFilteringDialog = (layerArg) => {
+  const handleOpenFilteringDialog = (layerArg) => {
         if (filteringInfo.filter(f => f.layer.id === layerArg.id).length === 0) {
             var filterColumnsArray = [];
             layerArg.config?.gfi?.filterFields &&
@@ -240,12 +231,12 @@ const SelectedLayer = ({
         updateLayers(store, channelArg);
     };
 
-    const handleLayerOpacity = (channelArg, layerArg, value) => {
-        channelArg.postRequest('ChangeMapLayerOpacityRequest', [layerArg.id, value]);
-        setOpacity(value);
-    };
+  const handleLayerOpacity = (channelArg, layerArg, value) => {
+    channelArg.postRequest('ChangeMapLayerOpacityRequest', [layerArg.id, value]);
+    setOpacity(value);
+  };
 
-    const handleLayerOpacityToggle = (channelArg, layerArg) => {
+  const handleLayerOpacityToggle = (channelArg, layerArg) => {
         let newOpacity = opacity === 0 ? prevOpacity: 0;
         if(opacity === 0 && prevOpacity) {
             newOpacity = prevOpacity;
@@ -256,24 +247,16 @@ const SelectedLayer = ({
         setOpacity(newOpacity);
         channelArg.postRequest('ChangeMapLayerOpacityRequest', [layerArg.id, newOpacity]);
         opacity !== 0 ? setPrevOpacity(opacity) : setPrevOpacity(100);
-    };
+  };
 
-    const handleMetadataSuccess = (data) => {
-        if (data) {
-            store.dispatch(setLayerMetadata({ data: data, layer: layer, uuid: uuid }));
-        }
-    };
-    const handleMetadataError = () => {
-        store.dispatch(clearLayerMetadata());
-    };
+  const handleMetadataSuccess = (data) => {
+    if (data) store.dispatch(setLayerMetadata({ data, layer, uuid }));
+  };
+  const handleMetadataError = () => store.dispatch(clearLayerMetadata());
+  const handleLayerMetadata = () => store.dispatch(getLayerMetadata({ layer, layerId: layer.id, handler: handleMetadataSuccess, errorHandler: handleMetadataError }));
 
-    const handleLayerMetadata = () => {
-        store.dispatch(getLayerMetadata({ layer: layer, layerId: layer.id, handler: handleMetadataSuccess, errorHandler: handleMetadataError }));
-    };
-
-    const isCurrentZoomTooFar = layer.minZoomLevel && layer.minZoomLevel !== -1 && currentZoomLevel <=  layer.minZoomLevel;
-    const isCurrentZoomTooClose = layer.maxZoomLevel && layer.maxZoomLevel !== -1 && currentZoomLevel >=  layer.maxZoomLevel;
-
+  const isCurrentZoomTooFar = layer.minZoomLevel && layer.minZoomLevel !== -1 && currentZoomLevel <= layer.minZoomLevel;
+  const isCurrentZoomTooClose = layer.maxZoomLevel && layer.maxZoomLevel !== -1 && currentZoomLevel >= layer.maxZoomLevel;
     let layerInfoText = strings.layerlist.selectedLayers.layerVisible;
     if (isCurrentZoomTooFar) {
         layerInfoText = strings.layerlist.selectedLayers.zoomInToShowLayer;
@@ -281,110 +264,101 @@ const SelectedLayer = ({
         layerInfoText = strings.layerlist.selectedLayers.zoomOutToShowLayer;
     }
 
-    const isLayerSelectedThemeLayer = allSelectedThemeLayers.find(themeLayer => themeLayer === layer.id);
+  const isLayerSelectedThemeLayer = allSelectedThemeLayers.find(themeLayer => themeLayer === layer.id);
 
-    // setNodeRef attaches to the outer DOM node for dnd-kit
-    return (
-        <StyledLayerContainer ref={setNodeRef} style={style} aria-roledescription="sortable item">
-            {/* Drag handle is a separate element, attach handleProps (listeners/attributes) there */}
-            <StyledLayerContent>
-                <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
-                    <div style={{display: 'flex', alignItems: 'center'}}>
-                        <div style={{marginRight: 8}}>
-                            <StyledLayerGripControl
-                                {...(handleProps ? { ...handleProps.attributes, ...handleProps.listeners } : {})}
-                                aria-label={strings.accessibility.reorderLayer}
-                                title={strings.accessibility.reorderLayer}
-                            >
-                                <FontAwesomeIcon
-                                    icon={faGripLines}
-                                />
-                            </StyledLayerGripControl>
-                        </div>
-                        <StyledLayerName style={{color: isLayerSelectedThemeLayer ? theme.colors.secondaryColorGreen : theme.colors.mainColor1}}>
-                            <FontAwesomeIcon style={{marginRight: '4px', color: isLayerSelectedThemeLayer ? theme.colors.secondaryColorGreen : theme.colors.mainColor1 }} icon={isLayerSelectedThemeLayer ? faMap : faLayerGroup} />
-                                {layer.name}
-                        </StyledLayerName>
-                    </div>
+  return (
+    <StyledLayerContainer>
+      <StyledLayerContent>
+        <div style={{display:'flex', justifyContent:'space-between', alignItems:'center'}}>
+          <div style={{display:'flex', alignItems:'center'}}>
+            <div style={{marginRight: 8}}>
+              {/* Apply drag handle props to the grip if available */}
+              <StyledLayerGripControl
+                {...(handleProps ? { ...handleProps } : {})}
+                aria-label={strings.accessibility.reorderLayer}
+                title={strings.accessibility.reorderLayer}
+              >
+                <FontAwesomeIcon icon={faCaretUp} style={{fontSize:'14px', marginBottom:'-4px'}} />
+                <FontAwesomeIcon icon={faGripLines} style={{fontSize:'16px'}} />
+                <FontAwesomeIcon icon={faCaretDown} style={{fontSize:'14px', marginTop:'-4px'}} />
+              </StyledLayerGripControl>
+            </div>
 
-                    <StyledIconsWrapper>
-                        { uuid &&
-                            <StyledIconWrapper
-                                aria-label={strings.accessibility.layerInfo}
-                                className="swiper-no-swiping"
-                                uuid={uuid}
-                                onClick={handleLayerMetadata}
-                            >
-                                <FontAwesomeIcon icon={faInfoCircle} />
-                            </StyledIconWrapper>
-                        }
-                        <StyledIconWrapper
-                            aria-label={strings.accessibility.closeLayer}
-                            className="swiper-no-swiping"
-                            onClick={() => handleLayerRemoveSelectedLayer(channel, layer)}
-                        >
-                            <FontAwesomeIcon icon={faTimes}/>
-                        </StyledIconWrapper>
-                    </StyledIconsWrapper>
-                </div>
+            {/* Layer name */}
+            <StyledLayerName /* can be kept as StyledLayerName */ style={{display: 'inline-block', maxWidth: 210, margin:0, userSelect: 'none', whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis', fontSize:14, color: isLayerSelectedThemeLayer ? theme.colors.secondaryColorGreen : theme.colors.mainColor1}}>
+              <FontAwesomeIcon style={{marginRight:'4px', color: isLayerSelectedThemeLayer ? theme.colors.secondaryColorGreen : theme.colors.mainColor1}} icon={isLayerSelectedThemeLayer ? faMap : faLayerGroup} />
+                            {layer.name} {localfilterenabled} {filtersEnabled} {localfilterenabled}
+            </StyledLayerName>
+                        { localfilterenabled && 
+                            (
+                                <StyledIconWrapper>
+                                    <StyledFloatingSpan><FontAwesomeIcon icon={faFilter}  style={{ color: theme.colors.secondaryColorPurple }}/></StyledFloatingSpan>
+                                </StyledIconWrapper>
+                            )
+                        }  
+          </div>
 
-                <StyledMidContent>
-                    {isCurrentZoomTooFar || isCurrentZoomTooClose ? (
-                        <StyledLayerInfoContainer>
-                            <StyledShowLayerButton onClick={() => isCurrentZoomTooFar ? store.dispatch(setZoomTo(layer.minZoomLevel + 1)) : store.dispatch(setZoomTo(layer.maxZoomLevel - 1))}>
-                                {isCurrentZoomTooFar ? strings.tooltips.zoomIn : isCurrentZoomTooClose && strings.tooltips.zoomOut}
-                            </StyledShowLayerButton>
-                            <p>{strings.layerlist.selectedLayers.toShowLayer}</p>
-                        </StyledLayerInfoContainer>
-                    ) : (
-                        layerInfoText
-                    )}
-                </StyledMidContent>
+          <StyledIconsWrapper style={{display:'flex', alignItems:'center'}}>
+            { uuid &&
+              <StyledIconWrapper aria-label={strings.accessibility.layerInfo} className="swiper-no-swiping" onClick={handleLayerMetadata}>
+                <FontAwesomeIcon icon={faInfoCircle} />
+              </StyledIconWrapper>
+            }
+            <StyledIconWrapper aria-label={strings.accessibility.closeLayer} className="swiper-no-swiping" onClick={() => handleLayerRemoveSelectedLayer(channel, layer)}>
+              <FontAwesomeIcon icon={faTimes} />
+            </StyledIconWrapper>
+          </StyledIconsWrapper>
+        </div>
 
-                <StyledBottomContent>
-                    <p>{strings.layerlist.selectedLayers.opacity}</p>
-                    <StyledlayerOpacityControl
-                        aria-label={strings.accessibility.opacitySlider}
-                        className="swiper-no-swiping"
-                        type="range"
-                        min="0"
-                        max="100"
-                        value={opacity}
-                        onChange={event => handleLayerOpacity(channel, layer, parseInt(event.target.value))}
-                    />
-                    <StyledToggleOpacityIconWrapper onClick={() => handleLayerOpacityToggle(channel, layer)}>
-                        <FontAwesomeIcon icon={opacity > 0 ? faEye : faEyeSlash} />
-                    </StyledToggleOpacityIconWrapper>
+        {/* mid content */}
+        <StyledMidContent>
+          {isCurrentZoomTooFar || isCurrentZoomTooClose ? (
+            <StyledLayerInfoContainer>
+              <StyledShowLayerButton onClick={() => isCurrentZoomTooFar ? store.dispatch(setZoomTo(layer.minZoomLevel + 1)) : store.dispatch(setZoomTo(layer.maxZoomLevel - 1))}>
+                {isCurrentZoomTooFar ? strings.tooltips.zoomIn : isCurrentZoomTooClose && strings.tooltips.zoomOut}
+              </StyledShowLayerButton>
+              <p>{strings.layerlist.selectedLayers.toShowLayer}</p>
+            </StyledLayerInfoContainer>
+          ) : (
+            layerInfoText
+          )}
+        </StyledMidContent>
 
-                    { isFilterable &&
-                        <>
-                        <ReactTooltip
-                            backgroundColor={theme.colors.mainColor1}
-                            textColor={theme.colors.mainWhite}
-                            disable={isMobile}
-                            id={`filter-${layer.id}`}
-                            place="top"
-                            type="dark"
-                            effect="float"
-                        >
-                            <span>{strings.tooltips.layerlist.filter}</span>
-                        </ReactTooltip>
-                        <StyledIconWrapper
-                            aria-label={strings.accessibility.openFiltering}
-                            onClick={() => handleOpenFilteringDialog(layer)}
-                            data-tip
-                            data-for={`filter-${layer.id}`}
-                        >
-                            <StyledFloatingSpan>
-                                <FontAwesomeIcon icon={faFilter}  style={{ color: filters.filter(f => f.layer === layer.id).length > 0 ? theme.colors.secondaryColorPink : theme.colors.primaryColor1 }}/>
-                            </StyledFloatingSpan>
-                        </StyledIconWrapper>
-                        </>
-                    }
-                </StyledBottomContent>
-            </StyledLayerContent>
-        </StyledLayerContainer>
-    );
+        {/* bottom content */}
+        <StyledBottomContent style={{display:'flex', alignItems:'center'}}>
+          <p style={{margin:0, color: theme.colors.mainColor1, fontSize: 12}}>{strings.layerlist.selectedLayers.opacity}</p>
+
+          <StyledlayerOpacityControl
+            aria-label={strings.accessibility.opacitySlider}
+            className="swiper-no-swiping"
+            type="range"
+            min="0"
+            max="100"
+            value={opacity}
+            onChange={event => handleLayerOpacity(channel, layer, parseInt(event.target.value))}
+            style={{marginLeft: 8}}
+          />
+
+          <StyledToggleOpacityIconWrapper onClick={() => handleLayerOpacityToggle(channel, layer)} style={{marginLeft: 10, cursor: 'pointer'}}>
+            <FontAwesomeIcon icon={opacity > 0 ? faEye : faEyeSlash} />
+          </StyledToggleOpacityIconWrapper>
+
+          { isFilterable && (
+            <>
+              <ReactTooltip backgroundColor={theme.colors.mainColor1} textColor={theme.colors.mainWhite} disable={isMobile} id={`filter-${layer.id}`} place="top" type="dark" effect="float">
+                <span>{strings.tooltips.layerlist.filter}</span>
+              </ReactTooltip>
+              <StyledIconWrapper aria-label={strings.accessibility.openFiltering} onClick={() => handleOpenFilteringDialog(layer)} data-tip data-for={`filter-${layer.id}`} style={{marginLeft: 8}}>
+                <StyledFloatingSpan style={{float:'right', marginLeft: 6}}>
+                  <FontAwesomeIcon icon={faFilter} style={{ color: filters.filter(f => f.layer === layer.id).length > 0 ? theme.colors.secondaryColorPink : theme.colors.primaryColor1 }}/>
+                </StyledFloatingSpan>
+              </StyledIconWrapper>
+            </>
+          )}
+        </StyledBottomContent>
+      </StyledLayerContent>
+    </StyledLayerContainer>
+  );
 };
 
 export default SelectedLayer;

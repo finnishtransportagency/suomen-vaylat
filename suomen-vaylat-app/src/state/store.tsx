@@ -1,5 +1,4 @@
 import { applyMiddleware, configureStore } from '@reduxjs/toolkit';
-import { createBrowserHistory } from 'history';
 import thunkMiddleware from 'redux-thunk';
 import languageReducer from './slices/languageSlice';
 import rpcReducer from './slices/rpcSlice';
@@ -31,8 +30,6 @@ export const store = configureStore ({
 // store.subscribe(throttle(() => saveToLocalStorage({language: store.getState().language}), 1000));
 
 export default store;
-
-export const history = createBrowserHistory();
 
 // Infer the `RootState` and `AppDispatch` types from the store itself
 export type RootState = ReturnType<typeof store.getState>;
