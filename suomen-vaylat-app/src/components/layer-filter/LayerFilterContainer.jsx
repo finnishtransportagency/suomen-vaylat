@@ -9,7 +9,7 @@ import { ReactReduxContext } from 'react-redux';
 import styled from 'styled-components';
 import { useAppSelector } from '../../state/hooks';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { FreeMode, Controller } from 'swiper';
+import { Controller, FreeMode } from 'swiper/modules';
 import { isMobile } from '../../theme/theme';
 import { LayerFilter } from './LayerFilter';
 import { setFilteringInfo, setFilters } from '../../state/slices/rpcSlice';

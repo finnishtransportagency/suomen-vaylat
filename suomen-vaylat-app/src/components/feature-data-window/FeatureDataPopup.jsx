@@ -20,7 +20,7 @@ import styled from 'styled-components';
 import strings from '../../translations';
 import { useAppSelector } from '../../state/hooks';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { FreeMode, Controller } from 'swiper';
+import { Controller, FreeMode } from 'swiper/modules';
 import {
   setMinimizeGfi,
   setWarning,
