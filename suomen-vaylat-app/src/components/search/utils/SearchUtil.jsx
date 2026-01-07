@@ -14,7 +14,7 @@ export const validateFeatureSearch = (
 ) => {
   const newErrors = [];
   const regex = /[^A-Za-z0-9äöåÄÖÅ \-/.,()]/;
-  if (requireAll && searchValue.length < 3) {
+  if (requireAll && searchValue.length < 1) {
     newErrors.push('length');
   }
   if (regex.test(searchValue)) {

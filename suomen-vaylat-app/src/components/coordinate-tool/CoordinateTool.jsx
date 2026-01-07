@@ -16,6 +16,7 @@ import {
 } from '../../state/slices/rpcSlice';
 import {
   addToDrawToolMarkers,
+  removeFromDrawToolMarkers,
   setIsSaveGeometriesOpen
 } from '../../state/slices/uiSlice';
 import { theme } from '../../theme/theme';
@@ -252,6 +253,8 @@ const CoordinateTool = () => {
       const markerId = `coordinate_tool_marker_${i}`;
       store.dispatch(removeMarkerRequest({ markerId }));
       store.dispatch(setCoordMarkerIndex(0));
+      // removes markers from store so they are not saved later
+      store.dispatch(removeFromDrawToolMarkers(markerId));
     }
   };
 
@@ -386,7 +389,7 @@ const CoordinateTool = () => {
           'EPSG:3067',
           fromSRS
         );
-        if (activeRequestRef.current !== reqId) throw new Error('superseded');
+        if (activeRequestRef.current !== reqId) return null;
         return { lon: Number(res.lon), lat: Number(res.lat) };
       } catch (err) {
         if (activeRequestRef.current === reqId) {
@@ -714,11 +717,11 @@ const CoordinateTool = () => {
         setDisplayedRaw({ x: rawLon, y: rawLat });
 
         // transform to native and update mapCenter + canonical shown
-        const native = await transformDisplayedToNative(
-          rawLon,
-          rawLat,
-          selectedProjection.value
-        );
+        const native = await transformDisplayedToNative(rawLon, rawLat, selectedProjection.value);
+        if (native == null) {
+          // transform was superseded by a newer request — nothing to commit
+          return;
+        }
         setMapCenter({ x: native.lon, y: native.lat });
         // re-run native->displayed to get canonical representation (DMS) and ensure any server normalization is reflected
         await transformNativeToDisplayed(
@@ -737,11 +740,12 @@ const CoordinateTool = () => {
         if (Number.isNaN(rawX) || Number.isNaN(rawY)) return;
         setDisplayedRaw({ x: rawX, y: rawY });
 
-        const native = await transformDisplayedToNative(
-          rawX,
-          rawY,
-          selectedProjection.value
-        );
+        const native = await transformDisplayedToNative(rawX, rawY, selectedProjection.value);
+        if (native == null) {
+          // transform was superseded by a newer request — nothing to commit
+          return;
+        }
+        
         setMapCenter({ x: native.lon, y: native.lat });
 
         // update shown to canonical formatted (3 decimals)

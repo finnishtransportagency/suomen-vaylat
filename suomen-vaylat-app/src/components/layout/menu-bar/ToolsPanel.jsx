@@ -129,7 +129,6 @@ export const ToolsPanel = ({ isOpen }) => {
   const eraseDrawing = () => {
     channel?.postRequest('DrawTools.StopDrawingRequest', []);
     store.dispatch(setGeoJsonArray([]));
-    store.dispatch(removeFromDrawToolMarkers(true));
     drawToolMarkers.forEach((marker) => {
       store.dispatch(removeMarkerRequest({ markerId: marker.markerId }));
       store.dispatch(removeFromDrawToolMarkers(marker.markerId));
