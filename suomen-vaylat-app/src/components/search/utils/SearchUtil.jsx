@@ -17,7 +17,7 @@ export const validateFeatureSearch = (
   const regex = /[^A-Za-z0-9äöåÄÖÅ \-/.,()]/;
   const minLength = attributeSearch ? 1 : 3;
   if (requireAll && searchValue.length < minLength) {
-    newErrors.push('length');
+    attributeSearch? newErrors.push('lengthAttributeSearch') : newErrors.push('length');
   }
   if (regex.test(searchValue)) {
     newErrors.push('regex');

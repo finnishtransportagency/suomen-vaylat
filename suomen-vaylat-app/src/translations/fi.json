@@ -597,7 +597,8 @@
       "searchFromLayer": "Haetaan tasolta:",
       "noActiveLayers": "Ei aktiivisia tasoja",
       "errors": {
-        "length": "Syötä vähintään yksi merkki",
+        "lengthAttributeSearch": "Syötä vähintään yksi merkki",
+        "length": "Syötä vähintään kolme merkkiä",
         "regex": "Haku ei saa sisältää erikoismerkkejä"
       },
       "attributeSearch": "Käytä tarkennettua kohdehakua",

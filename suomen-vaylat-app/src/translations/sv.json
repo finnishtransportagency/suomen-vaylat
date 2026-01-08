@@ -598,7 +598,8 @@
       "searchFromLayer": "Sök från kartlager:",
       "noActiveLayers": "Inga aktiva kartlager",
       "errors": {
-        "length": "Ange minst ett tecken",
+        "lengthAttributeSearch": "Ange minst ett tecken",
+        "length": "Ange minst tre tecken",
         "regex": "Sökningen får inte innehålla specialtecken"
       },
       "attributeSearch": "Aktivera avancerad sökning",
