@@ -63,7 +63,8 @@ const initialState = {
   selectedBaseLayers: [],
   isBaseLayerSelectorMenuOpen: false,
   isDatasetImportOpen: false,
-  isProfileOpen: false
+  isProfileOpen: false,
+  attributeSearchEnabled: false
 };
 
 export const uiSlice = createSlice({
@@ -298,6 +299,9 @@ export const uiSlice = createSlice({
     },
     setIsProfileOpen: (state, action) => {
         state.isProfileOpen = action.payload;
+    },
+    setAttributeSearchEnabled: (state, action) => {
+        state.attributeSearchEnabled = action.payload;
     }
   }
 });
@@ -363,7 +367,8 @@ export const {
   setSelectedBaseLayers,
   setIsBaseLayerSelectorMenuOpen,
   setIsDatasetImportOpen,
-  setIsProfileOpen
+  setIsProfileOpen,
+  setAttributeSearchEnabled
 } = uiSlice.actions;
 
 export default uiSlice.reducer;
