@@ -598,7 +598,8 @@
       "searchFromLayer": "Search from maplayer:",
       "noActiveLayers": "No active maplayers",
       "errors": {
-        "length": "Enter at least one character",
+        "lengthAttributeSearch": "Enter at least one character",
+        "length": "Enter at least three characters",
         "regex": "Search can't include any special characters"
       },
       "attributeSearch": "Enable advanced search",
