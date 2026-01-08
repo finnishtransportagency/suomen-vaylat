@@ -18,6 +18,7 @@ import { removeMarkersAndFeatures } from './utils/SearchUtil';
 import { isMobile } from '../../theme/theme';
 import SearchInputs from './SearchInputs';
 import SvLoader from '../../utils/components/SvLoader';
+import { IS_EXTRANET } from '../../utils/appInfoUtil';
 
 const StyledSearchDialog = styled.div`
   border: none;
@@ -134,12 +135,15 @@ const switchDefinitions = [
     tooltipText: strings.search.tips.layerExamples,
     tooltipAddress: strings.search.tips.layer
   },
-  {
-    id: 'feature',
-    title: strings.search.feature.title,
-    tooltipText: strings.search.tips.featureExamples,
-    tooltipAddress: strings.search.tips.feature
-  }
+  // include feature only when using extranet
+  ...(IS_EXTRANET
+    ? [{
+        id: 'feature',
+        title: strings.search.feature.title,
+        tooltipText: strings.search.tips.featureExamples,
+        tooltipAddress: strings.search.tips.feature
+      }]
+    : [])
 ];
 
 const SearchDialog = () => {
