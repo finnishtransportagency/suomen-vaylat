@@ -16,6 +16,9 @@ import {
   setSearchOn,
   setSearchValue
 } from '../../../state/slices/rpcSlice';
+import {
+  setAttributeSearchEnabled
+} from '../../../state/slices/uiSlice';
 import { Slide, toast } from 'react-toastify';
 import Select from 'react-select';
 import '../css/ReactSelectStyling.css'
@@ -204,11 +207,14 @@ const FeatureSearchInput = ({ setDropdownOpen, emptySearchInputs }) => {
     lastSearchAttribute
   } = useAppSelector((state) => state.rpc);
 
+  const {
+    attributeSearchEnabled
+  } = useAppSelector((state) => state.ui);
+
   // Keep available layer attributes and user chosen attribute
   // Contains object of key-value pairs, eg. {attribute: humanReadableAttribute}
   const [ layerAttributes, setLayerAttributes] = useState([]);
 
-  const [ attirbuteSearchEnabled, setAttirbuteSearchEnabled ] = useState(false);
   const [ activeLayer, setActiveLayer ] = useState(null);
   const [ searchAttribute, setSearchAttribute ] = useState('');
   const [ selectedOption, setSelectedOption ] = useState('');
@@ -241,14 +247,14 @@ const FeatureSearchInput = ({ setDropdownOpen, emptySearchInputs }) => {
   }, [selectedLayersByType, activeLayer, channel, layerAttributes]);
   
   const onClickSearchFeature = () => {
-    if (validateFeatureSearch(searchValue, store, true)) {
+    if (validateFeatureSearch(searchValue, store, true, attributeSearchEnabled)) {
       setDropdownOpen(false);
       handleFeatureSearch(searchValue.trim());
     }
   };
 
   const handleFeatureSearch = (searchValue, startIndex = 0, layerId = -1) => {
-    const attributeUsedInSearch = attirbuteSearchEnabled ? searchAttribute : '';
+    const attributeUsedInSearch = attributeSearchEnabled ? searchAttribute : '';
     const handleSearchResponse = (data, usedAttr) => {
       if (Object.keys(data).length > 0 && Object.keys(data.gfi).length > 0) {
         store.dispatch(setIsSearchingActive(false));
@@ -359,10 +365,10 @@ const FeatureSearchInput = ({ setDropdownOpen, emptySearchInputs }) => {
           type="checkbox"
           onChange={(e) => {
             if (e.target.checked === false) setSelectedOption('');
-            setAttirbuteSearchEnabled(!attirbuteSearchEnabled); 
+            store.dispatch(setAttributeSearchEnabled(!attributeSearchEnabled)); 
           }}
-          checked={attirbuteSearchEnabled}
-          aria-checked={!!attirbuteSearchEnabled}
+          checked={attributeSearchEnabled}
+          aria-checked={!!attributeSearchEnabled}
           onKeyDown={(e) => {
             if (e.key === 'Enter') {
               e.preventDefault();
@@ -375,7 +381,7 @@ const FeatureSearchInput = ({ setDropdownOpen, emptySearchInputs }) => {
         </CheckboxLabel>
       </StyledCheckboxWrapper>
 
-      {attirbuteSearchEnabled && (
+      {attributeSearchEnabled && (
         <StyledAttributeSelectionSection id="attribute-selection-section">
           <div style={{ display: 'flex', flexDirection: 'column' }}>
             <StyledInstructionText id="attribute-selection-title">

@@ -148,6 +148,10 @@ const SearchInputs = ({ setDropdownOpen }) => {
     lastSearchValue
   } = useAppSelector((state) => state.rpc);
 
+  const {
+    attributeSearchEnabled
+  } = useAppSelector((state) => state.ui);
+
   const emptySearchResults = () => {
     store.dispatch(setGeoJsonArray([]));
     store.dispatch(setFeatureSearchResults([]));
@@ -169,7 +173,7 @@ const SearchInputs = ({ setDropdownOpen }) => {
       return;
     }
     if (activeSwitch === 'feature') {
-      validateFeatureSearch(searchValue, store, false);
+      validateFeatureSearch(searchValue, store, false, attributeSearchEnabled);
       setSimpleError(''); // clear simple error when on track
       return;
     }
@@ -182,7 +186,7 @@ const SearchInputs = ({ setDropdownOpen }) => {
     // simple live validation for other types
     const msg = validateSimpleSearch(searchValue, false);
     setSimpleError(msg);
-  }, [activeSwitch, searchValue, store]);
+  }, [activeSwitch, attributeSearchEnabled, searchValue, store]);
 
   // Submit handler that routes validation by activeSwitch
   const submitForActiveSwitch = () => {
