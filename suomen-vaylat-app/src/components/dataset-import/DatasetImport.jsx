@@ -123,7 +123,7 @@ const StyledSecondaryButton = styled(StyledPrimaryButton)`
   }
 `;
 
-const allowedCharsExp = /^[A-Za-z0-9_\- ()]*$/;
+const allowedCharsExp = /^[A-Za-z0-9_\- ()äöåÄÖÅ]*$/;
 const initialLangObj = { name: '', desc: '', source: '' };
 const initialFields = {
   fi: { ...initialLangObj },

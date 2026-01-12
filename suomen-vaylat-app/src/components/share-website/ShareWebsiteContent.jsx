@@ -224,23 +224,10 @@ const StyledCTAButton = styled.button`
   }
 `;
 
-
-export const StyledShareDescription = ({
-  currentZoomLevel,
-  selectedLayers,
-  center,
-  lang,
-  hasThemeShare,
-  selectedTheme
-}) => {
-  return null;
-};
-
-
 /**
- * Shows ShareWebSitePopup if shareUrl is defined in Redux state.
+ * Shows ShareWebsiteContent if shareUrl is defined in Redux state.
  */
-export const ShareWebSitePopup = () => {
+export const ShareWebsiteContent = () => {
   const { center, currentZoomLevel, selectedLayers, legends } =
     useAppSelector((state) => state.rpc);
 
@@ -254,8 +241,10 @@ export const ShareWebSitePopup = () => {
     return legend?.legendStyle || 'default';
   };
 
+  const filteredLayers = selectedLayers.filter((l) => typeof l.id !== 'string');
+
   let mapLayers = '';
-  selectedLayers.forEach((l) => {
+  filteredLayers.forEach((l) => {
     mapLayers += l.id + '+' + l.opacity + '+' + getMapLayerStyle(l) + '++';
   });
   mapLayers = mapLayers.slice(0, -2); // remove last '++'
@@ -286,7 +275,7 @@ export const ShareWebSitePopup = () => {
         <StyledDescription>
           {strings.share.shareTexts.shareDescription}
       </StyledDescription>
-        {selectedLayers?.length > 0 && (
+        {filteredLayers?.length > 0 && (
   <>
   <StyledLayerSummary>
     <StyledLayerInfo>
@@ -297,7 +286,7 @@ export const ShareWebSitePopup = () => {
         </div>
         <div className="sub">
           {strings.formatString(strings.share.shareTexts.showOpenLayersCount, {
-            count: selectedLayers.length,
+            count: filteredLayers.length,
           })}
         </div>
       </div>
@@ -317,7 +306,7 @@ export const ShareWebSitePopup = () => {
 
     {showLayers && (
   <StyledLayerList>
-    {selectedLayers.map((layer) => (
+    {filteredLayers.map((layer) => (
       <li key={layer.id}>
       <LayersIcon className="mui-icon" />
         {layer.name}

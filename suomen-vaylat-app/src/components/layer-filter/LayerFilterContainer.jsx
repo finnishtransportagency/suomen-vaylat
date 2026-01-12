@@ -13,7 +13,7 @@ import { FreeMode, Controller } from 'swiper';
 import { isMobile } from '../../theme/theme';
 import { LayerFilter } from './LayerFilter';
 import { setFilteringInfo, setFilters } from '../../state/slices/rpcSlice';
-import { updateFiltersOnMap } from '../../utils/gfiUtil';
+import { getPropertyOperatorCQL, updateFiltersOnMap } from '../../utils/gfiUtil';
 
 const StyledDialogContainer = styled.div`
   :after {
@@ -154,10 +154,21 @@ export const LayerFilterContainer = () => {
 
   const closeTab = (index, id) => {
     // delete filter by layer
-    const updatedFilters = filters.filter((f) => f.layer !== id);
+    const filterInfo = filteringInfo.filter((f) => f.layer.id === id)[0];
+    let updatedFilters = filters.filter((f) => f.layer !== id);
+    let filtersString = '';
+
+    updatedFilters && !updatedFilters.codeValue &&
+        updatedFilters
+          .filter((f) => f.layer === filterInfo?.layer?.id)
+          .forEach((filter, index) => {
+            var cqlFilter = getPropertyOperatorCQL(filter);
+            index === 0 ? (filtersString += cqlFilter) : (filtersString += ' AND ' + cqlFilter);
+          });
+
     updateFiltersOnMap(
-      updatedFilters,
-      filteringInfo.filter((f) => f.layer.id === id)[0],
+      filtersString,
+      filteringInfo,
       channel
     );
     store.dispatch(setFilters(updatedFilters));

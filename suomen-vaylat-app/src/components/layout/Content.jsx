@@ -10,7 +10,6 @@ import FeatureDataDownloadDialog from '../feature-data-window/dialog/FeatureData
 import UserGuideDialog from '../user-guide/dialog/UserGuideDialog';
 import AppInfoDialog from '../app-info/dialog/AppInfoDialog';
 import CustomLayerDialog from '../layerlists/hierarchical-layerlist/custom-filter/dialog/CustomLayerDialog';
-import FeedbackFormDialog from '../feedback-form/dialog/FeedbackFormDialog';
 import DatasetImportDialog from '../dataset-import/dialog/DatasetImportDialog';
 import AnnouncementsDialog from '../announcements/dialog/AnnouncementsDialog';
 import MetadataDialog from '../metadata-dialog/dialog/MetadataDialog';
@@ -48,7 +47,7 @@ const StyledContent = styled.div`
   justify-content: center;
   align-items: center;
   .Toastify {
-    z-index: 99 !important;
+    z-index: 9999 !important;
   }
   .Toastify__toast-container {
   }
@@ -86,10 +85,6 @@ const StyledContent = styled.div`
         right: 0;
       }
     }
-  }
-
-  .Toastify {
-    z-index: 2;
   }
 `;
 
@@ -147,8 +142,6 @@ const Content = () => {
         <AppInfoDialog constraintsRef={constraintsRef} />
 
         <CustomLayerDialog constraintsRef={constraintsRef} />
-
-        <FeedbackFormDialog constraintsRef={constraintsRef} />
 
         {IS_EXTRANET && 
           <>

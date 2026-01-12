@@ -137,17 +137,6 @@ const NumberInput = styled.input`
   background: #fafbfd;
 `;
 
-const PreviewBox = styled.div`
-  background: #f7f8fd;
-  border-radius: 10px;
-  padding: 10px 12px;
-  font-size: 12.2px;
-  color: #485261;
-  margin-top: 20px;
-  overflow-x: auto;
-  border: 1px solid #e4e8ed;
-`;
-
 function renderOskariSvg(data, size = 32) {
   return (
     <span

@@ -163,7 +163,6 @@ const App = () => {
           exact
           path={routerPrefix + 'link/:zoom/:x/:y/:maplayers/:lang?'}
           render={() => {
-            console.info('Link route');
             return appContainer;
           }}
         />

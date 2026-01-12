@@ -2,7 +2,6 @@ import {
   setAllLayers,
   setSelectedLayers,
   setSelectedTheme,
-  setLastSelectedTheme,
   reArrangeSelectedMapLayers,
   setBackgroundMaps,
   setMapLayers,
@@ -11,8 +10,7 @@ import {
   setLegends,
   addMarkerRequest,
   removeMarkerRequest,
-  setUserLayers,
-  changeLayerStyle
+  setUserLayers
 } from '../state/slices/rpcSlice';
 import { Slide, toast } from 'react-toastify';
 import {
@@ -65,7 +63,7 @@ export const updateLayers = (store, channel, onComplete) => {
 
 /**
  * Activate view to map
- * @method updateLayers
+ * @method activateView
  * @param {Object} store
  * @param {Object} channel
  * @param {Object} view The view data object
@@ -240,7 +238,7 @@ export const updateSelectedLayers = (store, channel, onComplete) => {
     });
 };
 
-export const getSelectedThemeLayers = (theme, selectedMapLayers) => {
+export const getThemeLayers = (theme) => {
   let array = [];
 
   const recurseThemeLayers = (theme) => {
@@ -255,7 +253,7 @@ export const getSelectedThemeLayers = (theme, selectedMapLayers) => {
       });
     } else return array;
   };
-  recurseThemeLayers(theme, selectedMapLayers);
+  recurseThemeLayers(theme);
   return array;
 };
 
@@ -282,43 +280,74 @@ export const updateLayerLegends = (store) => {
   }, 1000);
 };
 
+const closeThemeLayers = (channel, store, theme, onComplete) => {
+  const themeLayers = getThemeLayers(theme);
+  const selectedMapLayers = store.getState().rpc.selectedLayersByType.mapLayers;
+  const selectedIdSet = new Set(selectedMapLayers.map(l => Number(l.id)));
+  const selectedLayers = themeLayers.filter(id => selectedIdSet.has(Number(id)));
+
+  channel.closeThemeLayers(
+    [themeLayers, selectedLayers],
+    function () {
+      // Theme layers successfully closed and styles returned to default, ready to update legends
+      updateLayers(store, channel)
+      updateLayerLegends(store);
+      onComplete();
+    },
+    function (err) {
+      console.error('closeThemeLayers error: ', err);
+      toast.error(strings.themelayerlist.errors.closeThemeLayersError, {
+        position: 'top-center',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: false,
+        progress: undefined,
+        theme: 'colored',
+        transition: Slide
+      });
+    }
+  );
+};
+
+/**
+ * Closes theme
+ * @function closeTheme
+ * @param {Object} store - Redux store for state management.
+ * @param {Object} channel - Communication channel for map layer actions.
+ * @param {Object} theme - The theme to be selected.
+ */
+export const closeTheme = (store, channel, theme) => {
+  // close themelayers
+  closeThemeLayers(channel, store, theme, () => {
+    store.dispatch(setSelectedTheme(null));
+    store.dispatch(setAllSelectedThemeLayers([]));
+    setTimeout(() => {
+      store.dispatch(setIsLegendOpen(false));
+      showNonThemeLayers(store, channel);
+    }, 700);
+  });
+};
+
 /**
  * Selects and manages layers based on the given theme.
- * @function selectGroup
+ * @function selectTheme
  * @param {Object} store - Redux store for state management.
  * @param {Object} channel - Communication channel for map layer actions.
  * @param {Object} allLayers - All available layers.
  * @param {Object} theme - The theme to be selected.
- * @param {String} lastSelectedTheme - Previously selected theme.
- * @param {Number} selectedThemeId - ID of currently selected theme.
+ * @param {Object} lastSelectedTheme - Previously selected theme.
  */
-export const selectGroup = (
+export const selectTheme = (
   store,
   channel,
   allLayers,
   theme,
-  lastSelectedTheme,
-  selectedThemeId
+  lastSelectedTheme
 ) => {
-  const closeLayers = (layers) => {
-    layers.forEach((layerId) => {
-      channel.postRequest('MapModulePlugin.MapLayerVisibilityRequest', [
-        layerId,
-        false
-      ]);
-      const style = store.getState().rpc.defaultStyles[layerId] || null;
-      store.dispatch(changeLayerStyle({ layerId, style }));
-    });
-    updateLayerLegends(store);
-  };
-
-  const closeThemeLayers = (theme) => {
-    if (theme) {
-      theme.layers && closeLayers(theme.layers);
-      theme.groups && theme.groups.forEach(closeThemeLayers);
-    }
-  };
-  store.dispatch(setLastSelectedTheme(theme));
+  const selectedThemeId = lastSelectedTheme?.id || null;
+  const themeLayers = getThemeLayers(theme);
 
   const openThemeLayers = (theme, layers) => {
     layers.forEach((layerId) => {
@@ -335,55 +364,77 @@ export const selectGroup = (
         ]);
       }
     });
+    // TODO: is this necessary as we already update the layers after hiding non theme layers?
+    updateLayers(store, channel);
   };
 
   const processLayers = (theme) => {
-    let layers = [];
-    theme.layers && layers.push(...theme.layers);
-    theme.groups?.forEach((g) => g.layers && layers.push(...g.layers));
+    if (themeLayers.length === 0) return;
+    channel.setLayerThemeStyle(
+      [themeLayers, theme.locale['fi'].name],
+      function (data) {
+        // data has successLayers and errorLayers
 
-    openThemeLayers(theme, layers);
-    updateLayers(store, channel);
+        // actually open the default layers
+        openThemeLayers(theme, themeLayers);
 
-    const selectedMapLayers =
-      store.getState().rpc.selectedLayersByType.mapLayers;
-    const selectedThemeLayers = getSelectedThemeLayers(
-      theme,
-      selectedMapLayers
-    );
-    store.dispatch(setAllSelectedThemeLayers(selectedThemeLayers));
+        const selectedMapLayers =
+          store.getState().rpc.selectedLayersByType.mapLayers;
+        store.dispatch(setAllSelectedThemeLayers(themeLayers));
 
-    selectedMapLayers.forEach((layer) => {
-      if (!selectedThemeLayers.includes(layer.id)) {
-        channel.postRequest('ChangeMapLayerOpacityRequest', [layer.id, 0]);
+        // if layer is not in theme, set it not visible
+        selectedMapLayers.forEach((layer) => {
+          if (!themeLayers.includes(layer.id)) {
+            channel.postRequest('ChangeMapLayerOpacityRequest', [layer.id, 0]);
+          }
+        });
         updateLayers(store, channel);
+
+        updateLayerLegends(store);
+        store.dispatch(setIsLegendOpen(true));
+      },
+      function (error) {
+        toast.error(strings.themelayerlist.errors.themeStyleError + error, {
+          position: 'top-center',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: false,
+          progress: undefined,
+          theme: 'colored',
+          transition: Slide
+        });
       }
-    });
+    );
   };
 
   // Main Execution Logic
   const isThemeChanged = selectedThemeId !== theme.id;
 
-  if (selectedThemeId === null || isThemeChanged) {
+  if (lastSelectedTheme !== null) {
+    // close themelayers
+    closeThemeLayers(channel, store, lastSelectedTheme, () => {
+      store.dispatch(setSelectedTheme(theme));
+      setTimeout(
+        () => {
+          setTimeout(() => {
+            processLayers(theme);
+          }, 700);
+        },
+        isThemeChanged ? 1000 : 700
+      );
+    });
+  } else {
     store.dispatch(setSelectedTheme(theme));
-    closeThemeLayers(lastSelectedTheme);
-    updateLayers(store, channel);
     setTimeout(
       () => {
-        store.dispatch(setIsLegendOpen(true));
-        setTimeout(() => processLayers(theme), 700);
+        setTimeout(() => {
+          processLayers(theme);
+        }, 700);
       },
       isThemeChanged ? 1000 : 700
     );
-  } else {
-    store.dispatch(setSelectedTheme(null));
-    store.dispatch(setAllSelectedThemeLayers([]));
-    closeThemeLayers(lastSelectedTheme);
-    updateLayers(store, channel);
-    setTimeout(() => {
-      store.dispatch(setIsLegendOpen(false));
-      showNonThemeLayers(store, channel);
-    }, 700);
   }
 };
 
@@ -510,7 +561,6 @@ export const reArrangeSelectedLayersOrder = (selectedLayers, store) => {
  */
 export const resetThemeGroups = (store) => {
   store.dispatch(setSelectedTheme(null));
-  store.dispatch(setLastSelectedTheme(null));
   store.dispatch(setAllSelectedThemeLayers([]));
 };
 
@@ -532,7 +582,6 @@ export const resetThemeGroupsForMainScreen = (store, channel, theme) => {
   }
   store.dispatch(setSelectedMapLayersMenuThemeIndex(0));
   store.dispatch(setSelectedTheme(null));
-  store.dispatch(setLastSelectedTheme(null));
 };
 
 /**

@@ -1,0 +1,11 @@
+.feature-search__control {
+  border-radius: 20px !important;
+  height: 42px !important;
+}
+
+/* tablet / responsive breakpoint to match PillInput in feature search input */
+@media (max-width: 768px) {
+  .feature-search__control {
+    height: 36px !important;
+  }
+}

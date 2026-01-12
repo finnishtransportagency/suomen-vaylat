@@ -59,12 +59,12 @@ const initialState = {
   checkedLayer: [],
   isCheckmark: false,
   selectedCustomFilterLayers: [],
-  isFeedbackFormOpen: false,
   isCoordinateToolOpen: false,
   selectedBaseLayers: [],
   isBaseLayerSelectorMenuOpen: false,
   isDatasetImportOpen: false,
-  isProfileOpen: false
+  isProfileOpen: false,
+  attributeSearchEnabled: false
 };
 
 export const uiSlice = createSlice({
@@ -282,9 +282,6 @@ export const uiSlice = createSlice({
     setSelectedCustomFilterLayers: (state, action) => {
       state.selectedCustomFilterLayers = action.payload;
     },
-    setIsFeedBackFormOpen: (state, action) => {
-      state.isFeedbackFormOpen = action.payload;
-    },
     setActiveSwitch: (state, action) => {
       state.activeSwitch = action.payload;
     },
@@ -302,6 +299,9 @@ export const uiSlice = createSlice({
     },
     setIsProfileOpen: (state, action) => {
         state.isProfileOpen = action.payload;
+    },
+    setAttributeSearchEnabled: (state, action) => {
+        state.attributeSearchEnabled = action.payload;
     }
   }
 });
@@ -363,12 +363,12 @@ export const {
   setIsCheckmark,
   setSelectedCustomFilterLayers,
   setActiveSwitch,
-  setIsFeedBackFormOpen,
   setIsCoordinateToolOpen,
   setSelectedBaseLayers,
   setIsBaseLayerSelectorMenuOpen,
   setIsDatasetImportOpen,
-  setIsProfileOpen
+  setIsProfileOpen,
+  setAttributeSearchEnabled
 } = uiSlice.actions;
 
 export default uiSlice.reducer;

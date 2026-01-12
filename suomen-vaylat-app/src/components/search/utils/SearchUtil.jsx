@@ -10,12 +10,14 @@ export const markerId = 'SEARCH_MARKER';
 export const validateFeatureSearch = (
   searchValue,
   store,
-  requireAll = false
+  requireAll = false,
+  attributeSearch
 ) => {
   const newErrors = [];
   const regex = /[^A-Za-z0-9äöåÄÖÅ \-/.,()]/;
-  if (requireAll && searchValue.length < 3) {
-    newErrors.push('length');
+  const minLength = attributeSearch ? 1 : 3;
+  if (requireAll && searchValue.length < minLength) {
+    attributeSearch? newErrors.push('lengthAttributeSearch') : newErrors.push('length');
   }
   if (regex.test(searchValue)) {
     newErrors.push('regex');

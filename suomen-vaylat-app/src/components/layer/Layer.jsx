@@ -1,8 +1,7 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect } from 'react';
 import { ReactReduxContext, useSelector } from 'react-redux';
 import { faFilter } from '@fortawesome/free-solid-svg-icons';
 import Badge from 'react-bootstrap/Badge';
-import { toast, Slide } from 'react-toastify';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { theme, isMobile } from '../../theme/theme';
 import ReactTooltip from 'react-tooltip';
@@ -15,10 +14,9 @@ import { setFilteringInfo } from '../../state/slices/rpcSlice';
 
 import styled from 'styled-components';
 import {
-  changeLayerStyle,
   setMapLayerVisibility
 } from '../../state/slices/rpcSlice';
-import { updateLayers, updateLayerLegends } from '../../utils/rpcUtil';
+import { updateLayers } from '../../utils/rpcUtil';
 import LayerDownloadLinkButton from '../layerlists/hierarchical-layerlist/LayerDownloadLinkButton';
 import { setIsDownloadLinkDialogOpen } from '../../state/slices/uiSlice';
 import LayerMetadataButton from '../layerlists/hierarchical-layerlist/LayerMetadataButton';
@@ -71,15 +69,14 @@ const StyledFilterIcon = styled.div`
 
 export const Layer = ({ layer, themeName, groupName }) => {
   const { store } = useContext(ReactReduxContext);
-  const [layerStyle, setLayerStyle] = useState(null);
   const { minimizeFilter } = useAppSelector((state) => state.ui);
-  const { filters, allSelectedThemeLayers } = useAppSelector((state) => state.rpc);
+  const { filters } = useAppSelector((state) => state.rpc);
 
   const isFilterable =
     typeof layer.config?.gfi?.filterFields !== 'undefined' &&
     layer.config?.gfi?.filterFields.length > 0;
 
-  const { channel, selectedTheme, filteringInfo } = useSelector(
+  const { channel, filteringInfo } = useSelector(
     (state) => state.rpc
   );
 
@@ -106,43 +103,6 @@ export const Layer = ({ layer, themeName, groupName }) => {
   }, []);
 
   const themeStyle = themeName || null;
-
-  useEffect(() => {
-    // needs only get new style or legends when toggling theme selection
-    if (
-      layer.visible &&
-      selectedTheme &&
-      allSelectedThemeLayers.includes(layer.id)
-    ) {
-      const themeName = selectedTheme.locale?.['fi']?.name || null;
-      channel.getLayerThemeStyle(
-        [layer.id, themeName],
-        function (styleName) {
-          if (styleName && styleName !== layerStyle) {
-            setLayerStyle(styleName);
-            store.dispatch(
-              changeLayerStyle({ layerId: layer.id, style: styleName })
-            );
-            // update layers legends
-            updateLayerLegends(store);
-          }
-        },
-        function (error) {
-          toast.error(strings.themelayerlist.errors.themeStyleError + error, {
-            position: 'top-center',
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: false,
-            progress: undefined,
-            theme: 'colored',
-            transition: Slide
-          });
-        }
-      );
-    }
-  }, [selectedTheme, layer.visible]);
 
   const handleFilterClick = (layer) => {
     !layer.visible && handleLayerVisibility(channel, layer);

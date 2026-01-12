@@ -356,7 +356,7 @@
         "subTitle": "Karttatasovalikko avautuu vasemmasta yläreunasta. Valittavissa on kaksi välilehteä.",
         "tabsContent": {
           "allLayers": "Karttatasoa voi hakea nimellä kirjoittamalla 3 kirjainta haku-kenttään. Aineistolistausta voi suodattaa aihealueittain Suodata tyypeittäin -valikon alta tai tallentaa oma suodatin halutuista aineistoista selaimen välimuistiin. Oma suodatin on käytettävissä sillä laitteella ja selaimessa, johon oma suodatin on tallennettu.\nKarttatason nimen vieressä olevasta info-kuvakkeesta avautuu aineiston metatiedot. Mikäli karttatason kohdalla näkyy latauspainike, aineisto on ladattavissa koko Suomen alueelta. Latauspainikkeen puuttuessa aineiston lataus edellyttää kohteen valintaa kartalta.\nOsa aineistoista on suodatettavissa aineiston ominaisuustietojen pohjalta. Mikäli aineistoa voidaan suodattaa, karttatason kohdalla näkyy suodatin-kuvake. \n'Omat aineistot' sisältävät käyttäjän tallentamat näkymät ja geometriat, joita voidaan muokata ja poistaa.",
-          "allLayersExtranet": "Karttatasoa voi hakea nimellä kirjoittamalla 3 kirjainta haku-kenttään. Aineistolistausta voi suodattaa aihealueittain Suodata tyypeittäin -valikon alta tai tallentaa oma suodatin halutuista aineistoista selaimen välimuistiin. Oma suodatin on käytettävissä sillä laitteella ja selaimessa, johon oma suodatin on tallennettu.\nKarttatason nimen vieressä olevasta info-kuvakkeesta avautuu aineiston metatiedot. Mikäli karttatason kohdalla näkyy latauspainike, aineisto on ladattavissa koko Suomen alueelta. Latauspainikkeen puuttuessa aineiston lataus edellyttää kohteen valintaa kartalta.\nOsa aineistoista on suodatettavissa aineiston ominaisuustietojen pohjalta. Mikäli aineistoa voidaan suodattaa, karttatason kohdalla näkyy suodatin-kuvake. \n'Omat aineistot' sisältävät käyttäjän tallentamat näkymät, geometriat ja mahdolliset omat tasot. Omissa aineistoissa voit muokata ja poistaa tallennettuja näkymiä, geometrioita ja omia karttatasoja.",
+          "allLayersExtranet": "Karttatasoa voi hakea nimellä kirjoittamalla 3 kirjainta haku-kenttään. Aineistolistausta voi suodattaa aihealueittain Suodata tyypeittäin -valikon alta tai tallentaa oma suodatin halutuista aineistoista selaimen välimuistiin. Oma suodatin on käytettävissä sillä laitteella ja selaimessa, johon oma suodatin on tallennettu.\nKarttatason nimen vieressä olevasta info-kuvakkeesta avautuu aineiston metatiedot. Mikäli karttatason kohdalla näkyy latauspainike, aineisto on ladattavissa koko Suomen alueelta. Latauspainikkeen puuttuessa aineiston lataus edellyttää kohteen valintaa kartalta.\nOsa aineistoista on suodatettavissa aineiston ominaisuustietojen pohjalta. Mikäli aineistoa voidaan suodattaa, karttatason kohdalla näkyy suodatin-kuvake. \n'Omat aineistot' sisältävät käyttäjän tallentamat näkymät, geometriat ja mahdolliset omat tasot. Omissa aineistoissa voit muokata ja poistaa tallennettuja näkymiä, geometrioita ja omia karttatasoja. Omia karttatasoja ei voi toistaiseksi jakaa.",
           "selectedLayers": "Lista kartalle valituista karttatasoista. Tasojen järjestystä voi vaihtaa raahaamalla niitä vasemman reunan ikonista. Läpinäkyvyyttä voi säätää liukusäätimellä ja tason valinnan voi poistaa ruksista. Suodatin-painikkeesta avautuu suodatustoiminto, mistä kartalla näkyviä tietoja voidaan suodattaa ominaisuustietojen pohjalta."
         }
       },
@@ -525,42 +525,6 @@
     "googleTerms": {
       "googleTermsInfo": "Google-karttapalveluiden käyttöehdot: ",
       "googleTermsLink": "https://cloud.google.com/maps-platform/terms"
-    },
-    "feedbackForm": {
-      "openFeedbackForm": "Lähetä palautetta",
-      "title": "Palautelomake",
-      "selectCategory": "Valitse kategoria *",
-      "tiestotiedot": "Tiestötiedot",
-      "hanketiedot": "Hanke- ja suunnitelmatiedot",
-      "digiroad": "Digiroad",
-      "taitorakennerekisteri": "Taitorakennerekisteri",
-      "ratatiedot": "Ratatiedot",
-      "vesivaylatiedot": "Vesiväylätiedot",
-      "muutaineistot": "Muut aineistot",
-      "serviceSelect": "Palvelun valinta *",
-      "selectService": "Valitse palvelu",
-      "suomenVaylat": "Suomen väylät",
-      "topicSelect": "Aihe *",
-      "selectTopic": "Valitse aihe",
-      "toiminnot": "Toiminnot",
-      "aineistot": "Aineistot",
-      "aineistoSelect": "Aineiston valinta *",
-      "specificTopicInput": "Aiheen tarkenne",
-      "selectSpecificTopic": "Valitse tarkenne",
-      "kaytontuki": "Käytön tuki",
-      "virhetilanteet": "Virhetilanteet",
-      "kehitysehdotus": "Kehitysehdotus",
-      "palaute": "Yleinen palaute",
-      "laatupuute": "Laatupuute",
-      "descriptionTextarea": "Kuvaus *",
-      "descriptionPlaceholder": "Kirjoita kuvaus...",
-      "locationInfoInput": "Sijaintitieto",
-      "screenshotsInput": "Kuvankaappaukset",
-      "contactInfo": "Yhteystiedot *",
-      "contactName": "Nimi",
-      "contactEmail": "Sähköposti",
-      "errorMessage": "Täytä vaaditut kentät",
-      "successMessage": "Kiitos palautteestasi!"
     }
   },
   "search": {
@@ -633,9 +597,12 @@
       "searchFromLayer": "Haetaan tasolta:",
       "noActiveLayers": "Ei aktiivisia tasoja",
       "errors": {
+        "lengthAttributeSearch": "Syötä vähintään yksi merkki",
         "length": "Syötä vähintään kolme merkkiä",
         "regex": "Haku ei saa sisältää erikoismerkkejä"
-      }
+      },
+      "attributeSearch": "Käytä tarkennettua kohdehakua",
+      "selectSearchAttribute": "Valitse hakuattribuutti:"
     },
     "track": {
       "errors": {
@@ -693,23 +660,33 @@
   "coordinateTool": {
     "title": "Koordinaattityökalu",
     "intro": "Syötä koordinaatit tai valitse piste kartalta.",
-    "coordinateSystemTitle": "Koordinaatisto:",
+    "coordinateSystemTitle": "Syötä koordinaatit tai osoita piste kartalta",
     "coordinateSystem": "ETRS89-TM35FIN",
     "n": "N",
     "e": "E",
+    "lat": "Lat",
+    "lon": "Lon",
     "centerMap": "Keskitä kartta",
     "addMarker": "Lisää merkintä",
     "deleteMarkers": "Poista karttamerkinnät",
     "saveMarkers": "Tallenna karttamerkinnät",
     "onlyNumbers": "Vain numerot sallittu",
-    "closeCoordinateTool": "Sulje koordinaattityökalu"
+    "closeCoordinateTool": "Sulje koordinaattityökalu",
+    "projectionSelect": "Valitse coordinaatisto",
+    "errors": {
+      "transformCoordinatesError": "Virhe koordinaattimuunnoksessa",
+      "degreeInputParseError": "Virhe asteiden parsinnassa",
+      "centerMapError": "Kartan keskitys epäonnistui",
+      "addMarkerError": "Virhe karttamerkinnän lisäyksessä"
+    }
   },
   "layerlist": {
+    "title": "Karttatasot ja -aineistot",
     "errorLoadingLayers": "Virhe tasojen latauksessa",
     "layerlistLabels": {
       "allLayers": "Kaikki tasot",
       "themeLayers": "Teemakartat",
-      "mapLayers": "Karttatasot ja -aineistot",
+      "mapLayers": "Karttatasot",
       "backgroundMaps": "Taustakartat",
       "selectAll": "Valitse kaikki",
       "selectedLayers": "Valitut tasot",
@@ -754,7 +731,8 @@
       "views": {
         "title": "Näkymät"
       }
-    }
+    },
+    "linkAddress": "Linkin osoite: "
   },
   "downloadLink": {
     "downloadLinkDialogHeader": "Aineiston lataus",
@@ -796,8 +774,12 @@
     "readMore": "Lue lisää",
     "readLess": "Vähemmän",
     "moreInfo": "Lisätietoja:",
+    "restrictedThemes": "Sisäiset",
+    "openThemes": "Avoimet",
     "errors": {
-      "themeStyleError": "Virhe teeman tyylien haussa: "
+      "getThemesError": "Virhe teemojen haussa!",
+      "themeStyleError": "Virhe teeman tyylien haussa: ",
+      "closeThemeLayersError": "Virhe teemakarttojen sulkemisessa!"
     }
   },
   "metadata": {
@@ -1416,7 +1398,12 @@
       "includes": "Sisältää",
       "doesntInclude": "Ei sisällä"
     },
-    "validationError": "Syötetty arvo saa sisältää vain kirjaimia, numeroita ja erikoismerkkejä  - , . / ( ) "
+    "featureCount": "Kohteiden määrä kartalla:",
+    "errors": {
+      "validationError": "Syötetty arvo saa sisältää vain kirjaimia, numeroita ja erikoismerkkejä  - , . / ( ) ",
+      "noResults": "Ei tuloksia suodatukselle - suodatinta ei lisätty",
+      "filterError": "Virhe suodattimen lisäyksessä"
+    }
   },
   "accessibility": {
     "langSelectMenu": "Kielen valinta menu",

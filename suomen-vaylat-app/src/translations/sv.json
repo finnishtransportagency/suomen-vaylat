@@ -357,7 +357,7 @@
         "subTitle": "Kartnivåmenyn öppnas uppe till vänster. Det finns två flikar att välja mellan.",
         "tabsContent": {
           "allLayers": "Du kan söka på kartnivån efter namn genom att ange minst 3 bokstäver i sökfältet. Du kan filtrera materiallistan efter ämne bakom filterknappen eller du kan spara ditt eget filter i webbläsarens cacheminne. Egett filter är tillgängliga på den enhet och i den webbläsare där filter är sparats.\nInfo-ikonen bredvid kartnivå namnet öppnar materialets metadata. Om en nedladdningsknapp är synlig på kartnivå kan materialet laddas ner från hela Finlands område. Om nedladdningsknappen saknas måste du välja ett objekt på kartan för att ladda ner datan.\nEn del av materialen kan filtreras utifrån materialets attribut data. Om materialet kan filtreras visas en filterikon på kartnivå.\n'Mina dataset' innehåller användarens sparade vyer och geometrier som kan redigeras och tas bort.",
-          "allLayersExtranet": "Du kan söka på kartnivån efter namn genom att ange minst 3 bokstäver i sökfältet. Du kan filtrera materiallistan efter ämne bakom filterknappen eller du kan spara ditt eget filter i webbläsarens cacheminne. Egett filter är tillgängliga på den enhet och i den webbläsare där filter är sparats.\nInfo-ikonen bredvid kartnivå namnet öppnar materialets metadata. Om en nedladdningsknapp är synlig på kartnivå kan materialet laddas ner från hela Finlands område. Om nedladdningsknappen saknas måste du välja ett objekt på kartan för att ladda ner datan.\nEn del av materialen kan filtreras utifrån materialets attribut data. Om materialet kan filtreras visas en filterikon på kartnivå.\n'Mina dataset' innehåller användarens sparade vyer och geometrier som kan redigeras och tas bort.\n'Mina dataset' innehåller användarens sparade vyer, geometrier och eventuella egna lager. I 'Mina dataset' kan du redigera och ta bort sparade vyer, geometrier och egna kartlager.",
+          "allLayersExtranet": "Du kan söka på kartnivån efter namn genom att ange minst 3 bokstäver i sökfältet. Du kan filtrera materiallistan efter ämne bakom filterknappen eller du kan spara ditt eget filter i webbläsarens cacheminne. Egett filter är tillgängliga på den enhet och i den webbläsare där filter är sparats.\nInfo-ikonen bredvid kartnivå namnet öppnar materialets metadata. Om en nedladdningsknapp är synlig på kartnivå kan materialet laddas ner från hela Finlands område. Om nedladdningsknappen saknas måste du välja ett objekt på kartan för att ladda ner datan.\nEn del av materialen kan filtreras utifrån materialets attribut data. Om materialet kan filtreras visas en filterikon på kartnivå.\n'Mina dataset' innehåller användarens sparade vyer och geometrier som kan redigeras och tas bort.\n'Mina dataset' innehåller användarens sparade vyer, geometrier och eventuella egna lager. I 'Mina dataset' kan du redigera och ta bort sparade vyer, geometrier och egna kartlager. Det är inte möjligt att dela dina egna kartlager för närvarande.",
           "selectedLayers": "Lista över valda kartnivåer på kartan. Du kan ändra ordningen på nivåerna genom att dra dem från ikonen till vänster. Transparensen kan justeras med skjutreglaget och nivåvalet kan avmarkeras. Filterknappen öppnar filtermenyn, där informationen som visas på kartan kan filtreras utifrån attribut data."
         }
       },
@@ -526,42 +526,6 @@
     "googleTerms": {
       "googleTermsInfo": "Användarvillkor för Googles karttjänster: ",
       "googleTermsLink": "https://cloud.google.com/maps-platform/terms"
-    },
-    "feedbackForm": {
-      "openFeedbackForm": "Lähetä palautetta",
-      "title": "Palautelomake",
-      "selectCategory": "Valitse kategoria *",
-      "tiestotiedot": "Tiestötiedot",
-      "hanketiedot": "Hanke- ja suunnitelmatiedot",
-      "digiroad": "Digiroad",
-      "taitorakennerekisteri": "Taitorakennerekisteri",
-      "ratatiedot": "Ratatiedot",
-      "vesivaylatiedot": "Vesiväylätiedot",
-      "muutaineistot": "Muut aineistot",
-      "serviceSelect": "Palvelun valinta *",
-      "selectService": "Valitse palvelu",
-      "suomenVaylat": "Suomen väylät",
-      "topicSelect": "Aihe *",
-      "selectTopic": "Valitse aihe",
-      "toiminnot": "Toiminnot",
-      "aineistot": "Aineistot",
-      "aineistoSelect": "Aineiston valinta *",
-      "specificTopicInput": "Aiheen tarkenne",
-      "selectSpecificTopic": "Valitse tarkenne",
-      "kaytontuki": "Käytön tuki",
-      "virhetilanteet": "Virhetilanteet",
-      "kehitysehdotus": "Kehitysehdotus",
-      "palaute": "Yleinen palaute",
-      "laatupuute": "Laatupuute",
-      "descriptionTextarea": "Kuvaus *",
-      "descriptionPlaceholder": "Kirjoita kuvaus...",
-      "locationInfoInput": "Sijaintitieto",
-      "screenshotsInput": "Kuvankaappaukset",
-      "contactInfo": "Yhteystiedot *",
-      "contactName": "Nimi",
-      "contactEmail": "Sähköposti",
-      "errorMessage": "Täytä vaaditut kentät",
-      "successMessage": "Kiitos palautteestasi!"
     }
   },
   "search": {
@@ -634,9 +598,12 @@
       "searchFromLayer": "Sök från kartlager:",
       "noActiveLayers": "Inga aktiva kartlager",
       "errors": {
+        "lengthAttributeSearch": "Ange minst ett tecken",
         "length": "Ange minst tre tecken",
         "regex": "Sökningen får inte innehålla specialtecken"
-      }
+      },
+      "attributeSearch": "Aktivera avancerad sökning",
+      "selectSearchAttribute": "Välj ett sökattribut:"
     },
     "track": {
       "errors": {
@@ -695,24 +662,34 @@
   "coordinateTool": {
     "title": "Koordinatverktyg",
     "intro": "Mata in koordinaterna eller peka på platsen på kartan.",
-    "coordinateSystemTitle": "Koordinatsystem:",
+    "coordinateSystemTitle": "Mata in koordinaterna eller peka på platsen på kartan",
     "coordinateSystem": "ETRS89-TM35FIN",
     "n": "N",
     "e": "E",
+    "lat": "Lat",
+    "lon": "Lon",
     "centerMap": "Fokusera kartan",
     "addMarker": "Tillägg markör",
     "deleteMarkers": "Ta bort markörer",
     "saveMarkers": "Spara markörer",
     "onlyNumbers": "Vänligen ange endast siffror",
-    "closeCoordinateTool": "Stäng koordinatverktyg"
+    "closeCoordinateTool": "Stäng koordinatverktyg",
+    "projectionSelect": "Välj koordinatsystem",
+    "errors": {
+      "transformCoordinatesError": "Fel vid koordinattransformation",
+      "degreeInputParseError": "Fel vid parsning av grader",
+      "centerMapError": "Centrering av kartan misslyckades",
+      "addMarkerError": "Fel vid tillägg av markör på kartan"
+    }
   },
   "layerlist": {
+    "title": "Kartnivåer och dataset",
     "errorLoadingLayers": "Det gick inte att ladda kartnivåer",
     "layerlistLabels": {
       "allLayers": "Alla lager",
       "themeLayers": "Teman",
       "selectedLayers": "Valda lagert",
-      "mapLayers": "Kartnivåer och dataset",
+      "mapLayers": "Kartnivåer",
       "backgroundMaps": "Bakgrundskartor",
       "selectAll": "Välj alla",
       "show": "Visa",
@@ -756,7 +733,8 @@
       "views": {
         "title": "Vyer"
       }
-    }
+    },
+    "linkAddress": "Länkadress: "
   },
   "downloadLink": {
     "downloadLinkDialogHeader": "Nedladdning av material",
@@ -798,8 +776,12 @@
     "readMore": "Läs mer",
     "readLess": "Mindre",
     "moreInfo": "Mer information:",
+    "restrictedThemes": "Intern",
+    "openThemes": "Öppen",
     "errors": {
-      "themeStyleError": "Det gick inte att hämta stilar för tema: "
+      "getThemesError": "Fel vid sökning efter teman!",
+      "themeStyleError": "Det gick inte att hämta stilar för tema: ",
+      "closeThemeLayersError": "Fel vid stängning av kartlager för tema!"
     }
   },
   "metadata": {
@@ -1419,7 +1401,12 @@
       "includes": "Innehåller",
       "doesntInclude": "Inte innehåller"
     },
-    "validationError": "Det angivna värdet får endast innehålla bokstäver, siffror och specialtecken - , . / ( )"
+    "featureCount": "Funktioner på kartan:",
+    "errors": {
+      "validationError": "Det angivna värdet får endast innehålla bokstäver, siffror och specialtecken - , . / ( )",
+      "noResults": "Inga resultat för filtret – filtret lades inte till",
+      "filterError": "Fel vid tillägg av filtret"
+    }
   },
   "tillgänglighet": {
     "langSelectMenu": "Språkvalsmeny",

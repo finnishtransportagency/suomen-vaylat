@@ -57,7 +57,7 @@ const HierarchicalLayerlistDialogButton = ({
   return (
     <CircleButton
       icon={faLayerGroup}
-      text={strings.layerlist.layerlistLabels.mapLayers}
+      text={strings.layerlist.title}
       toggleState={isSideMenuOpen}
       tooltipDirection="right"
       clickAction={handleSideMenuClick}

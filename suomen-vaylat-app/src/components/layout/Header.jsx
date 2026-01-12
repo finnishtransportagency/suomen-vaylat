@@ -217,7 +217,6 @@ export const Header = () => {
     const state = store.getState();
     const channel = state.rpc.channel;
     const selectedLayers = state.rpc.selectedLayers;
-    const lastSelectedTheme = state.rpc.lastSelectedTheme;
     const selectedTheme = state.rpc.selectedTheme;
     const startState = state.rpc.startState;
     const activeTool = state.ui.activeTool;
@@ -248,13 +247,11 @@ export const Header = () => {
     store.dispatch(setIsMainScreen());
     store.dispatch(resetGFILocations([]));
     history.push(routerPrefix);
+    // TODO: Which of these are actually necessary, are we doing extra work?
     resetThemeGroupsForMainScreen(
       store,
       channel,
-      null,
-      lastSelectedTheme,
-      lastSelectedTheme,
-      selectedTheme?.id
+      selectedTheme
     );
 
     // add start layers back (do it after than select group)

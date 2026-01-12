@@ -357,7 +357,7 @@
         "subTitle": "The map layer menu opens at the top left. There are two tabs to choose from.",
         "tabsContent": {
           "allLayers": "You can search the map layer by name by entering at least 3 letters in the search field. You can filter the layerlist by topic behind the Filter by type selection or you can save your own filter in the browser’s cache. Own filter is available on the device and browser where the filter is saved.\nFrom info-icon next to the map layer name you can open metadata for material. If there is a download button visible for the material, it can be downloaded from the whole area of Finland. If the download button is missing, downloading the material requires selecting an object on the map.\nSome of the layers can be filtered by the attribute data. You can use attribute filtering for the layer if there is a filter-icon visible next to the map layer name.\n'My datasets' contains views and geometries saved by the user, which can be edited and deleted.",
-          "allLayersExtranet": "You can search the map layer by name by entering at least 3 letters in the search field. You can filter the layerlist by topic behind the Filter by type selection or you can save your own filter in the browser’s cache. Own filter is available on the device and browser where the filter is saved.\nFrom info-icon next to the map layer name you can open metadata for material. If there is a download button visible for the material, it can be downloaded from the whole area of Finland. If the download button is missing, downloading the material requires selecting an object on the map.\nSome of the layers can be filtered by the attribute data. You can use attribute filtering for the layer if there is a filter-icon visible next to the map layer name.\n'My datasets' contains the user's saved views, geometries and any custom layers. In 'My datasets' you can edit and delete saved views, geometries and your own map layers.",
+          "allLayersExtranet": "You can search the map layer by name by entering at least 3 letters in the search field. You can filter the layerlist by topic behind the Filter by type selection or you can save your own filter in the browser’s cache. Own filter is available on the device and browser where the filter is saved.\nFrom info-icon next to the map layer name you can open metadata for material. If there is a download button visible for the material, it can be downloaded from the whole area of Finland. If the download button is missing, downloading the material requires selecting an object on the map.\nSome of the layers can be filtered by the attribute data. You can use attribute filtering for the layer if there is a filter-icon visible next to the map layer name.\n'My datasets' contains the user's saved views, geometries and any custom layers. In 'My datasets' you can edit and delete saved views, geometries and your own map layers. User's own datasets are currently not sharable.",
           "selectedLayers": "List of selected map layers on the map. You can change the order of the layers by dragging them from the icon on the left. The transparency can be adjusted with the slider and the layer can be deselected from the close button. From the filter-button you can open filtering menu to filter the layer by attribute data."
         }
       },
@@ -526,42 +526,6 @@
     "googleTerms": {
       "googleTermsInfo": "Terms of use for Google map services: ",
       "googleTermsLink": "https://cloud.google.com/maps-platform/terms"
-    },
-    "feedbackForm": {
-      "openFeedbackForm": "Lähetä palautetta",
-      "title": "Palautelomake",
-      "selectCategory": "Valitse kategoria *",
-      "tiestotiedot": "Tiestötiedot",
-      "hanketiedot": "Hanke- ja suunnitelmatiedot",
-      "digiroad": "Digiroad",
-      "taitorakennerekisteri": "Taitorakennerekisteri",
-      "ratatiedot": "Ratatiedot",
-      "vesivaylatiedot": "Vesiväylätiedot",
-      "muutaineistot": "Muut aineistot",
-      "serviceSelect": "Palvelun valinta *",
-      "selectService": "Valitse palvelu",
-      "suomenVaylat": "Suomen väylät",
-      "topicSelect": "Aihe *",
-      "selectTopic": "Valitse aihe",
-      "toiminnot": "Toiminnot",
-      "aineistot": "Aineistot",
-      "aineistoSelect": "Aineiston valinta *",
-      "specificTopicInput": "Aiheen tarkenne",
-      "selectSpecificTopic": "Valitse tarkenne",
-      "kaytontuki": "Käytön tuki",
-      "virhetilanteet": "Virhetilanteet",
-      "kehitysehdotus": "Kehitysehdotus",
-      "palaute": "Yleinen palaute",
-      "laatupuute": "Laatupuute",
-      "descriptionTextarea": "Kuvaus *",
-      "descriptionPlaceholder": "Kirjoita kuvaus...",
-      "locationInfoInput": "Sijaintitieto",
-      "screenshotsInput": "Kuvankaappaukset",
-      "contactInfo": "Yhteystiedot *",
-      "contactName": "Nimi",
-      "contactEmail": "Sähköposti",
-      "errorMessage": "Täytä vaaditut kentät",
-      "successMessage": "Kiitos palautteestasi!"
     }
   },
   "search": {
@@ -634,9 +598,12 @@
       "searchFromLayer": "Search from maplayer:",
       "noActiveLayers": "No active maplayers",
       "errors": {
+        "lengthAttributeSearch": "Enter at least one character",
         "length": "Enter at least three characters",
         "regex": "Search can't include any special characters"
-      }
+      },
+      "attributeSearch": "Enable advanced search",
+      "selectSearchAttribute": "Choose a search attribute:"
     },
     "track": {
       "errors": {
@@ -695,24 +662,34 @@
   "coordinateTool": {
     "title": "Coordinate tool",
     "intro": "Type coordinates or click a point on the map.",
-    "coordinateSystemTitle": "Coordinate system:",
+    "coordinateSystemTitle": "Type coordinates or click a point on the map",
     "coordinateSystem": "ETRS89-TM35FIN",
     "n": "N",
     "e": "E",
+    "lat": "Lat",
+    "lon": "Lon",
     "centerMap": "Center map",
     "addMarker": "Add marker",
     "deleteMarkers": "Delete markers",
     "saveMarkers": "Save markers",
     "onlyNumbers": "Please enter only numbers",
-    "closeCoordinateTool": "Close coordinate tool"
+    "closeCoordinateTool": "Close coordinate tool",
+    "projectionSelect": "Select coordinate system",
+    "errors": {
+      "transformCoordinatesError": "Error transforming coordinates",
+      "degreeInputParseError": "Error parsing degree input",
+      "centerMapError": "Failed to center the map",
+      "addMarkerError": "Error adding map marker"
+    }
   },
   "layerlist": {
+    "title": "Layers and datasets",
     "errorLoadingLayers": "Error loading maplayers",
     "layerlistLabels": {
       "allLayers": "All layers",
       "themeLayers": "Themes",
       "selectedLayers": "Selected layers",
-      "mapLayers": "Layers and datasets",
+      "mapLayers": "Layers",
       "backgroundMaps": "Background maps",
       "selectAll": "Select all",
       "show": "Show",
@@ -756,7 +733,8 @@
       "views": {
         "title": "Views"
       }
-    }
+    },
+    "linkAddress": "Link address: "
   },
   "downloadLink": {
     "downloadLinkDialogHeader": "Download dataset",
@@ -798,8 +776,12 @@
     "readMore": "Read more",
     "readLess": "Show less",
     "moreInfo": "Further information:",
+    "restrictedThemes": "Restricted",
+    "openThemes": "Open",
     "errors": {
-      "themeStyleError": "Error getting styles for theme: "
+      "getThemesError": "Error getting themes!",
+      "themeStyleError": "Error getting styles for theme: ",
+      "closeThemeLayersError": "Error closing theme layers!"
     }
   },
   "metadata": {
@@ -1419,7 +1401,12 @@
       "includes": "Includes",
       "doesntInclude": "Doesn't include"
     },
-    "validationError": "The input value may only contain letters, numbers, and the special characters - , . / ( )"
+    "featureCount": "Features on map:",
+    "errors": {
+      "validationError": "The entered value may only contain letters, numbers and the following special characters: - , . / ( )",
+      "noResults": "No results for the filter — filter not added",
+      "filterError": "Error adding filter"
+    }
   },
   "accessibility": {
     "langSelectMenu": "Language selection menu",

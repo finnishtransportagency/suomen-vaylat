@@ -44,13 +44,16 @@ const StyledTools = styled(motion.div)`
   transition: all 0.3s ease;
   pointer-events: auto;
   gap: 8px;
-  width: 180px;
-  max-width: 95vw;
+  max-width: 20vw;
   box-sizing: border-box;
 
   @media ${(props) => props.theme.device.mobileL} {
     gap: 6px;
-    width: 150px;
+    max-width: 40vw;
+  }
+
+  @media ${(props) => props.theme.device.mobileM} {
+    max-width: 45vw;
   }
 
   @media ${(props) => props.theme.device.lowResDesktop} {
@@ -92,6 +95,7 @@ const variants = {
 export const ToolsPanel = ({ isOpen }) => {
   const [panelIndex, setPanelIndex] = useState(0); // 0: Left, 1: Middle, 2: Right
   const swiperRef = useRef(null);
+  const [lineUnit, setLineUnit] = useState(null);
 
   const { store } = useContext(ReactReduxContext);
   const { channel, selectedLayersByType } = useSelector((state) => state.rpc);
@@ -125,7 +129,6 @@ export const ToolsPanel = ({ isOpen }) => {
   const eraseDrawing = () => {
     channel?.postRequest('DrawTools.StopDrawingRequest', []);
     store.dispatch(setGeoJsonArray([]));
-    store.dispatch(removeFromDrawToolMarkers(true));
     drawToolMarkers.forEach((marker) => {
       store.dispatch(removeMarkerRequest({ markerId: marker.markerId }));
       store.dispatch(removeFromDrawToolMarkers(marker.markerId));
@@ -156,6 +159,11 @@ export const ToolsPanel = ({ isOpen }) => {
       }
     }
   }, [panelIndex]);
+
+  useEffect(() => {
+    if (!swiperRef.current || !swiperRef.current.swiper) return;
+    swiperRef.current.swiper.updateAutoHeight(50);
+  }, [lineUnit, activeTool]);
 
   return (
     <StyledTools
@@ -204,7 +212,7 @@ export const ToolsPanel = ({ isOpen }) => {
               }
               aria-label={strings.downloads?.downloads}
             />
-            { IS_EXTRANET &&
+            {IS_EXTRANET && (
               <PillButton
                 id="menubar-tools-dataset-import-button"
                 icon={faUpload}
@@ -214,7 +222,7 @@ export const ToolsPanel = ({ isOpen }) => {
                 }
                 aria-label={strings.datasetImport?.menuButtonTitle}
               />
-            }
+            )}
             {!isMobile && (
               <PillButton
                 id={'menubar-tools-fullscreen-btn'}
@@ -238,6 +246,7 @@ export const ToolsPanel = ({ isOpen }) => {
               setPanelIndex={setPanelIndex}
               geoJsonArray={geoJsonArray}
               drawToolMarkers={drawToolMarkers}
+              onLineUnitChange={(unit) => setLineUnit(unit)} // <-- receive changes
             />
           </PanelContainer>
         </SwiperSlide>
