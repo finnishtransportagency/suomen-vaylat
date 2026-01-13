@@ -27,7 +27,6 @@ const DrawtoolMarkersDialog = ({ constraintsRef }) => {
       isOpen={false} /* Dialog state */
       id="metadata_dialog"
       maxWidth={'800px'}
-      overflow={'auto'}
     >
       <DrawtoolMarkers />
     </Dialog>
