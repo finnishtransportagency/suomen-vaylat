@@ -1,6 +1,7 @@
 const PROJECTIONS = [
   { code: 'EPSG:3067', name: 'ETRS-TM35FIN (EPSG:3067)' },
-  { code: 'EPSG:4326', name: 'ETRS89 maantieteelliset (~WGS84)' }, 
+  { code: 'EPSG:4326', name: 'ETRS89 maantieteelliset (~WGS84)' },
+  { code: 'EPSG:3395', name: 'WGS 84 / World Mercator (EPSG:3395)' },
   { code: 'EPSG:10690', name:'EUREF-FIN-GRS80 (EPSG:10690 )' },
   { code: 'EPSG:3046', name: 'ETRS-TM34 (EPSG:3046)' },
   { code: 'EPSG:3048', name: 'ETRS-TM36 (EPSG:3048)' },
