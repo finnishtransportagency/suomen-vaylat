@@ -333,9 +333,7 @@ const MenuBar = () => {
                       aria-label={strings.tooltips?.closeDrawingTools}
                       title={strings.tooltips?.closeDrawingTools}
                     />
-                    <StyledToolButtons id="menubar-toolbuttons-container">
-                      <ToolsPanel isOpen={isDrawingToolsOpen} />
-                    </StyledToolButtons>
+                    <ToolsPanel isOpen={isDrawingToolsOpen} />
                   </StyledDrawingToolsWrapper>
                 ) : (
                   <CircleButton

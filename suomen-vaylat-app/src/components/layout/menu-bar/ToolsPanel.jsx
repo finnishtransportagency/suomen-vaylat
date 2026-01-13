@@ -44,8 +44,10 @@ const StyledTools = styled(motion.div)`
   transition: all 0.3s ease;
   pointer-events: auto;
   gap: 8px;
-  max-width: 20vw;
+  max-width: 200px;
   box-sizing: border-box;
+  overflow: scroll;
+  padding: 0 8px 8px 8px;
 
   @media ${(props) => props.theme.device.mobileL} {
     gap: 6px;
