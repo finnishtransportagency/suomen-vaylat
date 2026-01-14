@@ -127,6 +127,11 @@ const StyledSearchButtons = styled.div`
   display: flex;
   width: 100%;
   gap: 1em;
+
+  @media ${(props) => props.theme.device.tablet} {
+    gap: 8px;
+    flex-direction: column;
+  }
 `;
 
 const getTrackSearchValuePart = (position, searchValue) => {
