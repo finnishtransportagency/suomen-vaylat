@@ -4,52 +4,24 @@ import { useAppSelector } from '../../../state/hooks';
 import { useContext } from 'react';
 import { faMagnifyingGlass, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { validateTrackSearch } from '../utils/SearchUtil';
+import { emptySearchResults, validateTrackSearch } from '../utils/SearchUtil';
 import { ReactReduxContext } from 'react-redux';
 import { setSearchValue } from '../../../state/slices/rpcSlice';
-
-const StyledFieldGroup = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  overflow-x: auto;
-`;
+import PillButton from '../../../utils/components/PillButton';
 
 const InputRow = styled.div`
   display: flex;
+  flex: 1 1 0;
+  min-width: 0;
   gap: 0.5em;
   width: 100%;
-  justify-content: flex-start;
+  justify-content: center;
   margin-bottom: 8px;
   flex-wrap: nowrap;
 
   @media ${(props) => props.theme.device.tablet} {
     gap: 6px;
     flex-direction: column;
-  }
-`;
-
-const StyledRowWithButton = styled.div`
-  display: flex;
-  align-items: center;
-  width: 100%;
-  justify-content: space-between;
-  flex-wrap: nowrap;
-
-  @media ${(props) => props.theme.device.tablet} {
-    gap: 8px;
-    flex-direction: column;
-  }
-`;
-
-const StyledInputsContainer = styled.div`
-  flex: 1 1 0;
-  min-width: 0; /* ensure proper shrinking inside flex */
-  display: flex;
-  align-items: center; /* vertically center the input row so the button aligns middle */
-
-  @media ${(props) => props.theme.device.tablet} {
-    width: 100%;
   }
 `;
 
@@ -150,6 +122,13 @@ const StyledInputAndSearchWrapper = styled.div`
   width: 100%;
 `;
 
+const StyledSearchButtons = styled.div`
+  padding-top: 1em;
+  display: flex;
+  width: 100%;
+  gap: 1em;
+`;
+
 const getTrackSearchValuePart = (position, searchValue) => {
   if (!searchValue) return '';
   const searchArray = searchValue.split('/');
@@ -218,9 +197,6 @@ const TrackSearchInput = ({ handleGeneralSearch, emptySearchInputs }) => {
 
   return (
     <StyledSearchSection id="track-search-section">
-      <StyledRowWithButton>
-        <StyledInputsContainer>
-          <StyledFieldGroup>
             <InputRow>
               <FieldItem>
                 <LabelAbove
@@ -325,16 +301,7 @@ const TrackSearchInput = ({ handleGeneralSearch, emptySearchInputs }) => {
                       <FontAwesomeIcon icon={faTrash} />
                     </StyledStandardSearchButton>
                   ) : (
-                    !isSearchingActive && (
-                      <StyledStandardSearchButton
-                        id="track-search-submit-button"
-                        type="button"
-                        aria-label={strings.search.search}
-                        onClick={onClickSearchTrack}
-                      >
-                        <FontAwesomeIcon icon={faMagnifyingGlass} />
-                      </StyledStandardSearchButton>
-                    )
+                    !isSearchingActive && <></>
                   )}
                 </StyledInputAndSearchWrapper>
               </FieldItem>
@@ -353,9 +320,30 @@ const TrackSearchInput = ({ handleGeneralSearch, emptySearchInputs }) => {
                 </StyledErrorsList>
               </StyledValidationMessage>
             )}
-          </StyledFieldGroup>
-        </StyledInputsContainer>
-      </StyledRowWithButton>
+
+      <StyledSearchButtons>
+        <PillButton
+          id={'track-search-submit-button'}
+          key={'track-search-submit-button'}
+          text={strings.search?.search}
+          onClick={onClickSearchTrack}
+          aria-label={strings.search.search}
+          style={{ width: '100%', justifyContent: 'center' }}
+          icon={faMagnifyingGlass}
+        />
+
+        <PillButton
+          id={'track-search-inputs-clear-results-btn'}
+          key={'track-search-inputs-clear-results-btn'}
+          text={strings.search?.clearResults}
+          onClick={emptySearchResults}
+          aria-label={strings.search?.clearResults}
+          style={{ width: '100%', justifyContent: 'center' }}
+          disabled={
+            !(searchResults !== null || featureSearchResults.length > 0)
+          }
+        />
+      </StyledSearchButtons>
     </StyledSearchSection>
   );
 };

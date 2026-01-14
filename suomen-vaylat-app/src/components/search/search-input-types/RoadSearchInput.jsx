@@ -6,6 +6,8 @@ import { faMagnifyingGlass, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ReactReduxContext } from 'react-redux';
 import { setSearchValue } from '../../../state/slices/rpcSlice';
+import PillButton from '../../../utils/components/PillButton';
+import { emptySearchResults } from '../utils/SearchUtil';
 
 const StyledSectionDivider = styled.div`
   margin: 0.5em 0;
@@ -163,6 +165,13 @@ const CheckboxLabel = styled.label`
 const StyledInputAndSearchWrapper = styled.div`
   display: flex;
   width: 100%;
+`;
+
+const StyledSearchButtons = styled.div`
+  padding-top: 1em;
+  display: flex;
+  width: 100%;
+  gap: 1em;
 `;
 
 const getSearchValuePart = (
@@ -488,17 +497,7 @@ const RoadSearchInput = ({
                       <FontAwesomeIcon icon={faTrash} />
                     </StyledStandardSearchButton>
                   ) : (
-                    !isSearchingActive && (
-                      <StyledStandardSearchButton
-                        id="road-search-submit-button-start"
-                        type="button"
-                        aria-label={strings.search.search}
-                        onClick={onClickSearchRoad}
-                        roadEndEnabled={roadEndEnabled}
-                      >
-                        <FontAwesomeIcon icon={faMagnifyingGlass} />
-                      </StyledStandardSearchButton>
-                    )
+                    !isSearchingActive && <></>
                   )}
                 </StyledInputAndSearchWrapper>
               </FieldItem>
@@ -644,16 +643,7 @@ const RoadSearchInput = ({
                           <FontAwesomeIcon icon={faTrash} />
                         </StyledStandardSearchButton>
                       ) : (
-                        !isSearchingActive && (
-                          <StyledStandardSearchButton
-                            id="road-search-submit-button-end"
-                            type="button"
-                            aria-label={strings.search.search}
-                            onClick={onClickSearchRoad}
-                          >
-                            <FontAwesomeIcon icon={faMagnifyingGlass} />
-                          </StyledStandardSearchButton>
-                        )
+                        !isSearchingActive && <></>
                       )}
                     </StyledInputAndSearchWrapper>
                   </FieldItem>
@@ -663,6 +653,30 @@ const RoadSearchInput = ({
           </StyledRowWithButton>
         </>
       )}
+
+      <StyledSearchButtons>
+        <PillButton
+          id={'road-search-submit-button'}
+          key={'road-search-submit-button'}
+          text={strings.search?.search}
+          onClick={onClickSearchRoad}
+          aria-label={strings.search.search}
+          style={{ width: '100%', justifyContent: 'center' }}
+          icon={faMagnifyingGlass}
+        />
+
+        <PillButton
+          id={'road-search-inputs-clear-results-btn'}
+          key={'road-search-inputs-clear-results-btn'}
+          text={strings.search?.clearResults}
+          onClick={emptySearchResults}
+          aria-label={strings.search?.clearResults}
+          style={{ width: '100%', justifyContent: 'center' }}
+          disabled={
+            !(searchResults !== null || featureSearchResults.length > 0)
+          }
+        />
+      </StyledSearchButtons>
     </StyledSearchSection>
   );
 };
