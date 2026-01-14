@@ -197,129 +197,122 @@ const TrackSearchInput = ({ handleGeneralSearch, emptySearchInputs }) => {
 
   return (
     <StyledSearchSection id="track-search-section">
-            <InputRow>
-              <FieldItem>
-                <LabelAbove
-                  id="track-search-input-track-number-label"
-                  htmlFor="track-search-input-track-number"
-                >
-                  {strings.search.track.tracknumber}
-                </LabelAbove>
-                <PillInput
-                  id="track-search-input-track-number"
-                  aria-labelledby="track-search-input-track-number-label"
-                  aria-invalid={!!getTrackField(0).invalid}
-                  aria-describedby={
-                    combinedFieldMessages.length
-                      ? 'track-search-errors'
-                      : undefined
-                  }
-                  type="text"
-                  value={getTrackSearchValuePart(0, searchValue)}
-                  onChange={(e) =>
-                    updateTrackSearchValue(e.target.value, 0, searchValue)
-                  }
-                  onKeyPress={(e) => {
-                    if (e.key === 'Enter') {
-                      onClickSearchTrack();
-                    }
-                  }}
-                  className={getTrackField(0).invalid ? 'error' : ''}
-                />
-              </FieldItem>
+      <InputRow>
+        <FieldItem>
+          <LabelAbove
+            id="track-search-input-track-number-label"
+            htmlFor="track-search-input-track-number"
+          >
+            {strings.search.track.tracknumber}
+          </LabelAbove>
+          <PillInput
+            id="track-search-input-track-number"
+            aria-labelledby="track-search-input-track-number-label"
+            aria-invalid={!!getTrackField(0).invalid}
+            aria-describedby={
+              combinedFieldMessages.length ? 'track-search-errors' : undefined
+            }
+            type="text"
+            value={getTrackSearchValuePart(0, searchValue)}
+            onChange={(e) =>
+              updateTrackSearchValue(e.target.value, 0, searchValue)
+            }
+            onKeyPress={(e) => {
+              if (e.key === 'Enter') {
+                onClickSearchTrack();
+              }
+            }}
+            className={getTrackField(0).invalid ? 'error' : ''}
+          />
+        </FieldItem>
 
-              <FieldItem>
-                <LabelAbove
-                  id="track-search-input-track-km-label"
-                  htmlFor="track-search-input-track-km"
-                >
-                  {strings.search.track.trackkm}
-                </LabelAbove>
-                <PillInput
-                  id="track-search-input-track-km"
-                  aria-labelledby="track-search-input-track-km-label"
-                  aria-invalid={!!getTrackField(1).invalid}
-                  aria-describedby={
-                    combinedFieldMessages.length
-                      ? 'track-search-errors'
-                      : undefined
-                  }
-                  type="text"
-                  value={getTrackSearchValuePart(1, searchValue)}
-                  onChange={(e) =>
-                    updateTrackSearchValue(e.target.value, 1, searchValue)
-                  }
-                  onKeyPress={(e) => {
-                    if (e.key === 'Enter') {
-                      onClickSearchTrack();
-                    }
-                  }}
-                  className={getTrackField(1).invalid ? 'error' : ''}
-                />
-              </FieldItem>
+        <FieldItem>
+          <LabelAbove
+            id="track-search-input-track-km-label"
+            htmlFor="track-search-input-track-km"
+          >
+            {strings.search.track.trackkm}
+          </LabelAbove>
+          <PillInput
+            id="track-search-input-track-km"
+            aria-labelledby="track-search-input-track-km-label"
+            aria-invalid={!!getTrackField(1).invalid}
+            aria-describedby={
+              combinedFieldMessages.length ? 'track-search-errors' : undefined
+            }
+            type="text"
+            value={getTrackSearchValuePart(1, searchValue)}
+            onChange={(e) =>
+              updateTrackSearchValue(e.target.value, 1, searchValue)
+            }
+            onKeyPress={(e) => {
+              if (e.key === 'Enter') {
+                onClickSearchTrack();
+              }
+            }}
+            className={getTrackField(1).invalid ? 'error' : ''}
+          />
+        </FieldItem>
 
-              <FieldItem>
-                <LabelAbove
-                  id="track-search-input-track-m-label"
-                  htmlFor="track-search-input-track-m"
-                >
-                  {strings.search.track.trackm}
-                </LabelAbove>
-                <StyledInputAndSearchWrapper id="track-search-input-and-search-wrapper">
-                  <PillInput
-                    id="track-search-input-track-m"
-                    aria-labelledby="track-search-input-track-m-label"
-                    aria-invalid={!!getTrackField(2).invalid}
-                    aria-describedby={
-                      combinedFieldMessages.length
-                        ? 'track-search-errors'
-                        : undefined
-                    }
-                    type="text"
-                    value={getTrackSearchValuePart(2, searchValue)}
-                    onChange={(e) =>
-                      updateTrackSearchValue(e.target.value, 2, searchValue)
-                    }
-                    onKeyPress={(e) => {
-                      if (e.key === 'Enter') {
-                        onClickSearchTrack();
-                      }
-                    }}
-                    className={getTrackField(2).invalid ? 'error' : ''}
-                  />
+        <FieldItem>
+          <LabelAbove
+            id="track-search-input-track-m-label"
+            htmlFor="track-search-input-track-m"
+          >
+            {strings.search.track.trackm}
+          </LabelAbove>
+          <StyledInputAndSearchWrapper id="track-search-input-and-search-wrapper">
+            <PillInput
+              id="track-search-input-track-m"
+              aria-labelledby="track-search-input-track-m-label"
+              aria-invalid={!!getTrackField(2).invalid}
+              aria-describedby={
+                combinedFieldMessages.length ? 'track-search-errors' : undefined
+              }
+              type="text"
+              value={getTrackSearchValuePart(2, searchValue)}
+              onChange={(e) =>
+                updateTrackSearchValue(e.target.value, 2, searchValue)
+              }
+              onKeyPress={(e) => {
+                if (e.key === 'Enter') {
+                  onClickSearchTrack();
+                }
+              }}
+              className={getTrackField(2).invalid ? 'error' : ''}
+            />
 
-                  {(searchResults !== null ||
-                    featureSearchResults.length > 0) &&
-                  searchValue === lastSearchValue &&
-                  !isSearchingActive ? (
-                    <StyledStandardSearchButton
-                      id="track-search-clear-button"
-                      type="button"
-                      aria-label={strings.search.clearResults}
-                      onClick={emptySearchInputs}
-                    >
-                      <FontAwesomeIcon icon={faTrash} />
-                    </StyledStandardSearchButton>
-                  ) : (
-                    !isSearchingActive && <></>
-                  )}
-                </StyledInputAndSearchWrapper>
-              </FieldItem>
-            </InputRow>
-
-            {combinedFieldMessages.length > 0 && (
-              <StyledValidationMessage
-                id="track-search-errors"
-                role="alert"
-                aria-live="polite"
+            {(searchResults !== null || featureSearchResults.length > 0) &&
+            searchValue === lastSearchValue &&
+            !isSearchingActive ? (
+              <StyledStandardSearchButton
+                id="track-search-clear-button"
+                type="button"
+                aria-label={strings.search.clearResults}
+                onClick={emptySearchInputs}
               >
-                <StyledErrorsList>
-                  {combinedFieldMessages.map((msg, i) => (
-                    <div key={`track-search-msg-${i}`}>{msg}</div>
-                  ))}
-                </StyledErrorsList>
-              </StyledValidationMessage>
+                <FontAwesomeIcon icon={faTrash} />
+              </StyledStandardSearchButton>
+            ) : (
+              !isSearchingActive && <></>
             )}
+          </StyledInputAndSearchWrapper>
+        </FieldItem>
+      </InputRow>
+
+      {combinedFieldMessages.length > 0 && (
+        <StyledValidationMessage
+          id="track-search-errors"
+          role="alert"
+          aria-live="polite"
+        >
+          <StyledErrorsList>
+            {combinedFieldMessages.map((msg, i) => (
+              <div key={`track-search-msg-${i}`}>{msg}</div>
+            ))}
+          </StyledErrorsList>
+        </StyledValidationMessage>
+      )}
 
       <StyledSearchButtons>
         <PillButton

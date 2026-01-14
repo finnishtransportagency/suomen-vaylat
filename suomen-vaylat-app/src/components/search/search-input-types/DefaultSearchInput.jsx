@@ -135,7 +135,7 @@ const DefaultSearchInput = ({ handleGeneralSearch, handleMetadataSearch, emptySe
 
   const [simpleError, setSimpleError] = useState('');
 
-  const submitForActiveSwitch = () => {
+  const submitSearch = () => {
     const msg = validateSimpleSearch(searchValue, true);
     if (msg) {
       setSimpleError(msg);
@@ -171,7 +171,7 @@ const DefaultSearchInput = ({ handleGeneralSearch, handleMetadataSearch, emptySe
                   store.dispatch(setSearchValue(e.target.value));
                 }}
                 onKeyPress={(e) => {
-                  if (e.key === 'Enter') submitForActiveSwitch();
+                  if (e.key === 'Enter') submitSearch();
                 }}
               />
             </StyledRelativeInputWrapper>
@@ -213,7 +213,7 @@ const DefaultSearchInput = ({ handleGeneralSearch, handleMetadataSearch, emptySe
           id={'default-search-submit-button"'}
           key={'default-search-submit-button"'}
           text={strings.search?.search}
-          onClick={submitForActiveSwitch}
+          onClick={submitSearch}
           aria-label={strings.search?.clearResults}
           style={{ width: '100%', justifyContent: 'center' }}
           icon={faMagnifyingGlass}
