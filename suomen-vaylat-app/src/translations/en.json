@@ -675,6 +675,7 @@
     "onlyNumbers": "Please enter only numbers",
     "closeCoordinateTool": "Close coordinate tool",
     "projectionSelect": "Select coordinate system",
+    "roundCoordinates": "Round to even",
     "errors": {
       "transformCoordinatesError": "Error transforming coordinates",
       "degreeInputParseError": "Error parsing degree input",

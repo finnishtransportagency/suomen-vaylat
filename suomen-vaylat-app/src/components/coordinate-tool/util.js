@@ -30,7 +30,7 @@ export const formatProjectedShown = (val) => {
   if (val == null || val === '') return '';
   const n = Number(val);
   if (Number.isNaN(n)) return '';
-  return (Math.round(n * 1000) / 1000).toFixed(3);
+  return (Math.round(n * 1000) / 1000).toFixed();
 };
 
 export const isProjectionDegrees = (projection) => {
