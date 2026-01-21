@@ -1122,7 +1122,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
                         </StyledSavedViewName>
                         <StyledSavedViewDescription
                         >
-                          {moment(geometry.saveDate).format('DD.MM.YYYY HH:mm').tz('Europe/Helsinki')}
+                          {moment(geometry.saveDate).tz('Europe/Helsinki').format('DD.MM.YYYY HH:mm')}
                         </StyledSavedViewDescription>
                       </StyledSavedViewTitleContent>
                     </StyledLeftContent>

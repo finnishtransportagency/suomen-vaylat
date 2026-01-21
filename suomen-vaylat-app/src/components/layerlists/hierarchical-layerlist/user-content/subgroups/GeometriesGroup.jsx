@@ -713,7 +713,7 @@ const GeometriesGroup = () => {
                 <b>{strings.savedContent?.saveGeometry?.savedAt || 'Saved'}:</b>
                 <span>
                   <div>
-                    {moment(infoGeometry.saveDate).format('DD.MM.YYYY HH:mm').tz('Europe/Helsinki')}
+                    {moment(infoGeometry.saveDate).tz('Europe/Helsinki').format('DD.MM.YYYY HH:mm')}
                   </div>
                 </span>
               </StyledMetaRow>

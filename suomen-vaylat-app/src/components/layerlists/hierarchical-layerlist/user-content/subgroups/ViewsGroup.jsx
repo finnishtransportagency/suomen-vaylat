@@ -596,7 +596,7 @@ const ViewsGroup = () => {
                 <b>{strings.savedContent?.saveView?.savedAt || 'Saved'}:</b>
                 <span>
                   <div>
-                    {moment(infoView.saveDate).format('DD.MM.YYYY HH:mm').tz('Europe/Helsinki')}
+                    {moment(infoView.saveDate).tz('Europe/Helsinki').format('DD.MM.YYYY HH:mm')}
                   </div>
                 </span>
               </StyledMetaRow>

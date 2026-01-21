@@ -11,7 +11,7 @@ export const HeaderAndParagraph = ({ visible, header, title, text, momentFormat 
                     <StyledTitle>{header}</StyledTitle>
                     <StyledParagraph title={title}>
                         {momentFormat &&
-                            <div>{moment(text).format('DD.MM.YYYY HH:mm').tz('Europe/Helsinki')}</div>
+                            <div>{moment(text).tz('Europe/Helsinki').format('DD.MM.YYYY HH:mm')}</div>
                         }
                         {!momentFormat &&
                             <React.Fragment key={'metadata-dialog-header-and-paragraph-content-text'}>

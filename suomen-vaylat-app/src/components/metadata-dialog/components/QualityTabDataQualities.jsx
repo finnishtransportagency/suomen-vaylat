@@ -51,7 +51,7 @@ export const QualityTabDataQualities = ({ dataQualities }) => {
                                                 <React.Fragment key={'quality-tab-data-qualities-data-quality-datetime-' + index}>
                                                     {dateTime &&
                                                         <React.Fragment key={'quality-tab-data-qualities-data-quality-datetime-content-' + index}>
-                                                            {strings.metadata.qualityContent.dateTime}: <div>{moment(dateTime).format('DD.MM.YYYY HH:mm').tz('Europe/Helsinki')}</div><br />
+                                                            {strings.metadata.qualityContent.dateTime}: <div>{moment(dateTime).tz('Europe/Helsinki').format('DD.MM.YYYY HH:mm')}</div><br />
                                                         </React.Fragment>
                                                     }
                                                 </React.Fragment>
