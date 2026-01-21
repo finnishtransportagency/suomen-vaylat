@@ -119,7 +119,7 @@ const StyledlayerOpacityControl = styled.input`
 `;
 
 const StyledLayerGripControl = styled.div`
-  width: 40px;
+  width: 30px;
   min-width: 40px;
   max-width: 40px;
   flex: 0 0 40px; /* do not grow or shrink */
@@ -131,10 +131,7 @@ const StyledLayerGripControl = styled.div`
   cursor: grab;
   transition: all 0.1s ease-out;
 
-  /* make svg size explicit so it doesn't change with surrounding font-size */
   svg {
-    width: 16px;
-    height: 16px;
     color: ${(props) => props.theme.colors.secondaryColorPink};
   }
   &:hover {
