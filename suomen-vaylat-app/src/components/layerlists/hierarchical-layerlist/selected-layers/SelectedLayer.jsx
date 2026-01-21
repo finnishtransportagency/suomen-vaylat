@@ -65,7 +65,7 @@ const StyledTitleContent = styled.div`
 
 const StyledLayerName = styled.p`
   display: inline-block;
-  max-width: 210px;
+  max-width: 180px;
   margin: 0;
   user-select: none;
   white-space: nowrap;
@@ -119,16 +119,22 @@ const StyledlayerOpacityControl = styled.input`
 `;
 
 const StyledLayerGripControl = styled.div`
-  width: 100%;
+  width: 40px;
+  min-width: 40px;
   max-width: 40px;
+  flex: 0 0 40px; /* do not grow or shrink */
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   cursor: grab;
   transition: all 0.1s ease-out;
+
+  /* make svg size explicit so it doesn't change with surrounding font-size */
   svg {
-    font-size: 17px;
+    width: 16px;
+    height: 16px;
     color: ${(props) => props.theme.colors.secondaryColorPink};
   }
   &:hover {
@@ -138,6 +144,7 @@ const StyledLayerGripControl = styled.div`
     }
   }
 `;
+
 
 const StyledIconsWrapper = styled.div`
   display: flex;
@@ -348,7 +355,6 @@ const SelectedLayer = ({
   return (
     <StyledLayerContainer>
       <StyledLayerGripControl
-        {...(handleProps ? { ...handleProps } : {})}
         aria-label={strings.accessibility.reorderLayer}
         title={strings.accessibility.reorderLayer}
       >
