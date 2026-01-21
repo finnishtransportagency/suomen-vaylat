@@ -212,7 +212,6 @@ const SelectedLayer = ({
   layer,
   uuid,
   currentZoomLevel,
-  handleProps = null,
   filtersEnabled
 }) => {
   const { store } = useContext(ReactReduxContext);
@@ -365,7 +364,10 @@ const SelectedLayer = ({
           style={{ fontSize: '14px', marginTop: '-4px' }}
         />
       </StyledLayerGripControl>
-      <StyledLayerContent>
+      <StyledLayerContent
+            onMouseDown={(e) => e.stopPropagation()}
+            onTouchStart={(e) => e.stopPropagation()}
+            >
         <StyledTitleContent>
           {/* Layer name */}
           <StyledLayerName>
@@ -452,6 +454,7 @@ const SelectedLayer = ({
 
           <StyledToggleOpacityIconWrapper
             onClick={() => handleLayerOpacityToggle(channel, layer)}
+            aria-label={opacity > 0 ? strings.accessibility.hideLayer : strings.accessibility.showLayer}
           >
             <FontAwesomeIcon icon={opacity > 0 ? faEye : faEyeSlash} />
           </StyledToggleOpacityIconWrapper>

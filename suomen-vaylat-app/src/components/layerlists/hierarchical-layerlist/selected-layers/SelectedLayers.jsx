@@ -114,7 +114,6 @@ export const SelectedLayers = ({ currentZoomLevel }) => {
           const {
             key: _key,
             children: _children,
-            dragHandleProps,
             style: itemStyle,
             ...restProps
           } = itemProps;
@@ -123,8 +122,6 @@ export const SelectedLayers = ({ currentZoomLevel }) => {
             marginBottom: 8,
             ...itemStyle
           };
-
-          const handleProps = dragHandleProps || null;
 
           return (
             <div
@@ -137,7 +134,6 @@ export const SelectedLayers = ({ currentZoomLevel }) => {
                 layer={value}
                 uuid={value?.metadataIdentifier}
                 currentZoomLevel={currentZoomLevel}
-                handleProps={handleProps}
                 style={{}}
                 filtersEnabled={
                   filters &&
@@ -173,7 +169,6 @@ export const SelectedLayers = ({ currentZoomLevel }) => {
           const {
             key: _key,
             children: _children,
-            dragHandleProps,
             style: itemStyle,
             ...restProps
           } = itemProps;
@@ -182,8 +177,6 @@ export const SelectedLayers = ({ currentZoomLevel }) => {
             marginBottom: 8,
             ...itemStyle
           };
-
-          const handleProps = dragHandleProps || null;
 
           return (
             <div
@@ -196,7 +189,6 @@ export const SelectedLayers = ({ currentZoomLevel }) => {
                 layer={value}
                 uuid={value?.metadataIdentifier}
                 currentZoomLevel={currentZoomLevel}
-                handleProps={handleProps}
                 style={{}}
                 filtersEnabled={
                   filters &&
