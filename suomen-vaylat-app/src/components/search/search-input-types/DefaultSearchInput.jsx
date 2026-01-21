@@ -4,9 +4,10 @@ import { useAppSelector } from '../../../state/hooks';
 import { useContext, useEffect, useState } from 'react';
 import { faMagnifyingGlass, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { validateSimpleSearch } from '../utils/SearchUtil';
+import { emptySearchResults, validateSimpleSearch } from '../utils/SearchUtil';
 import { ReactReduxContext } from 'react-redux';
 import { setSearchValue } from '../../../state/slices/rpcSlice';
+import PillButton from '../../../utils/components/PillButton';
 
 const StyledRowWithButton = styled.div`
   display: flex;
@@ -112,7 +113,19 @@ const StyledValidationMessage = styled.div`
   font-size: 0.95em;
 `;
 
-const DefaultSearchInput = ({ handleGeneralSearch, emptySearchInputs }) => {
+const StyledSearchButtons = styled.div`
+  padding-top: 1em;
+  display: flex;
+  width: 100%;
+  gap: 1em;
+
+  @media ${(props) => props.theme.device.tablet} {
+    gap: 8px;
+    flex-direction: column;
+  }
+`;
+
+const DefaultSearchInput = ({ handleGeneralSearch, handleMetadataSearch, emptySearchInputs }) => {
   const { store } = useContext(ReactReduxContext);
 
   const {
@@ -122,18 +135,25 @@ const DefaultSearchInput = ({ handleGeneralSearch, emptySearchInputs }) => {
     isSearchingActive,
     lastSearchValue
   } = useAppSelector((state) => state.rpc);
+  
+  const { activeSwitch } = useAppSelector((state) => state.ui);
 
   const [simpleError, setSimpleError] = useState('');
 
-  // Submit handler that routes validation by activeSwitch
-  const submitForActiveSwitch = () => {
+  const submitSearch = () => {
     const msg = validateSimpleSearch(searchValue, true);
     if (msg) {
       setSimpleError(msg);
       return;
     }
     setSimpleError('');
-    handleGeneralSearch(searchValue.trim());
+    if (activeSwitch === 'layer') {
+      handleMetadataSearch(searchValue.trim());
+      return;
+    } else {
+      handleGeneralSearch(searchValue.trim());
+      return;
+    }
   };
 
   useEffect(() => {
@@ -156,7 +176,7 @@ const DefaultSearchInput = ({ handleGeneralSearch, emptySearchInputs }) => {
                   store.dispatch(setSearchValue(e.target.value));
                 }}
                 onKeyPress={(e) => {
-                  if (e.key === 'Enter') submitForActiveSwitch();
+                  if (e.key === 'Enter') submitSearch();
                 }}
               />
             </StyledRelativeInputWrapper>
@@ -178,16 +198,7 @@ const DefaultSearchInput = ({ handleGeneralSearch, emptySearchInputs }) => {
             <FontAwesomeIcon icon={faTrash} />
           </StyledStandardSearchButton>
         ) : (
-          !isSearchingActive && (
-            <StyledStandardSearchButton
-              id="default-search-submit-button"
-              type="button"
-              aria-label={strings.search.search}
-              onClick={submitForActiveSwitch}
-            >
-              <FontAwesomeIcon icon={faMagnifyingGlass} />
-            </StyledStandardSearchButton>
-          )
+          !isSearchingActive && <></>
         )}
       </StyledRowWithButton>
 
@@ -201,6 +212,30 @@ const DefaultSearchInput = ({ handleGeneralSearch, emptySearchInputs }) => {
           {simpleError}
         </StyledValidationMessage>
       )}
+
+      <StyledSearchButtons>
+        <PillButton
+          id={'default-search-submit-button"'}
+          key={'default-search-submit-button"'}
+          text={strings.search?.search}
+          onClick={submitSearch}
+          aria-label={strings.search?.clearResults}
+          style={{ width: '100%', justifyContent: 'center' }}
+          icon={faMagnifyingGlass}
+        />
+
+        <PillButton
+          id={'default-search-inputs-clear-results-btn'}
+          key={'default-search-inputs-clear-results-btn'}
+          text={strings.search?.clearResults}
+          onClick={emptySearchResults}
+          aria-label={strings.search?.clearResults}
+          style={{ width: '100%', justifyContent: 'center' }}
+          disabled={
+            !(searchResults !== null || featureSearchResults.length > 0)
+          }
+        />
+      </StyledSearchButtons>
     </StyledSearchSection>
   );
 };

@@ -80,7 +80,6 @@ const LayerFilterDialog = ({ constraintsRef }) => {
       maxWidth={maximizeFilter ? null : '40em'}
       minWidth={'25em'}
       minHeight={'30em'}
-      overflow={'auto'}
     >
       <LayerFilterContainer />
     </Dialog>

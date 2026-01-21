@@ -37,7 +37,6 @@ const DatasetImportDialog = ({ constraintsRef }) => {
       isOpen={isDatasetImportOpen} /* Dialog state */
       id='dataset-import-dialog'
       maxWidth={'800px'}
-      overflow={'auto'}
     >
       <DatasetImport/>
     </Dialog>

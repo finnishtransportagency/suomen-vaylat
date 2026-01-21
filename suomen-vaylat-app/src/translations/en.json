@@ -598,6 +598,7 @@
       "searchFromLayer": "Search from maplayer:",
       "noActiveLayers": "No active maplayers",
       "errors": {
+        "lengthAttributeSearch": "Enter at least one character",
         "length": "Enter at least three characters",
         "regex": "Search can't include any special characters"
       },
@@ -674,6 +675,7 @@
     "onlyNumbers": "Please enter only numbers",
     "closeCoordinateTool": "Close coordinate tool",
     "projectionSelect": "Select coordinate system",
+    "roundCoordinates": "Round to even",
     "errors": {
       "transformCoordinatesError": "Error transforming coordinates",
       "degreeInputParseError": "Error parsing degree input",

@@ -597,6 +597,7 @@
       "searchFromLayer": "Haetaan tasolta:",
       "noActiveLayers": "Ei aktiivisia tasoja",
       "errors": {
+        "lengthAttributeSearch": "Syötä vähintään yksi merkki",
         "length": "Syötä vähintään kolme merkkiä",
         "regex": "Haku ei saa sisältää erikoismerkkejä"
       },
@@ -672,6 +673,7 @@
     "onlyNumbers": "Vain numerot sallittu",
     "closeCoordinateTool": "Sulje koordinaattityökalu",
     "projectionSelect": "Valitse coordinaatisto",
+    "roundCoordinates": "Pyöristä tasalukuun",
     "errors": {
       "transformCoordinatesError": "Virhe koordinaattimuunnoksessa",
       "degreeInputParseError": "Virhe asteiden parsinnassa",
