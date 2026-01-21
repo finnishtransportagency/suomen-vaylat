@@ -1,5 +1,14 @@
 # Release Notes
 
+## 3.1.0
+* Bugfixes
+* Do not activate layers on empty theme
+* Remove feature search
+* New layerlist UI
+* Adjust theme styling
+* Coordinate tool fixes and added second names of coordinate systems
+* Added nautical miles option for drawtool's linetool
+
 ## 3.0.0
 * Bugfixes
 * Codebase overhaul
