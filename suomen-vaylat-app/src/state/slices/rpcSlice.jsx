@@ -560,7 +560,7 @@ export const rpcSlice = createSlice({
             );
           },
           (err) => {
-            toast.error(`${strings.metadata.error}`, {
+            toast.error(`${strings.metadata?.errors?.getLayerMetadataError}`, {
               position: 'top-center',
               autoClose: 5000,
               hideProgressBar: false,

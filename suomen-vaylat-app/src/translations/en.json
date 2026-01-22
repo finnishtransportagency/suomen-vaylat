@@ -787,7 +787,9 @@
   },
   "metadata": {
     "title": "{0} -map layer metadata",
-    "error": "Metadata not found",
+    "errors": {
+      "getLayerMetadataError": "Hämtning av metadata misslyckades"
+    },
     "heading": {
       "abstractTextService": "Abstract text (data)",
       "abstractTextData": "Abstract text (service)",

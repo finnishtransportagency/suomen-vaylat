@@ -785,6 +785,9 @@
   },
   "metadata": {
     "title": "{0} -karttatason metatiedot",
+    "errors": {
+      "getLayerMetadataError": "Metatietojen haku epäonnistui"
+    },
     "heading": {
       "abstractTextService": "Palvelun tiivistelmä",
       "abstractTextData": "Aineiston tiivistelmä",

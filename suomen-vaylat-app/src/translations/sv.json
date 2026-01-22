@@ -787,6 +787,9 @@
   },
   "metadata": {
     "title": "{0} -kartlager metadata",
+    "errors": {
+      "getLayerMetadataError": "Metatietojen haku epäonnistui"
+    },
     "error": "Metadata hittades inte",
     "heading": {
       "abstractTextService": "Sammanfattning text (data)",
