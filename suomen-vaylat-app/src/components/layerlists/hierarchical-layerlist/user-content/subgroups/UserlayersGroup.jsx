@@ -124,7 +124,6 @@ const UserLayersGroup = () => {
 
         <StyledLayerGroup
           id={listId}
-          parentId={-1}
           aria-labelledby={headerId}
           initial="hidden"
           animate={open ? 'visible' : 'hidden'}

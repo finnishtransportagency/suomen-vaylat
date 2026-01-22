@@ -50,13 +50,13 @@ const StyledLayerGroups = styled.div`
   flex-direction: column;
   justify-content: center;
   background-color: ${(props) =>
-    props.parentId === -1 ? props.theme.colors.mainWhite : "#F2F2F2"};
+    props.$parentId === -1 ? props.theme.colors.mainWhite : "#F2F2F2"};
   margin: 8px 0px 8px 0px;
   border-radius: 4px;
 
   &:last-child {
     ${(props) =>
-      props.parentId === -1
+      props.$parentId === -1
         ? "1px solid " + props.theme.colors.mainColor1
         : "none"};
   }
@@ -243,7 +243,7 @@ const StyledMotionIconWrapper = styled(motion.div)`
 
 const StyledLayerGroup = styled(motion.div)`
   margin: 0;
-  padding-inline-start: ${(props) => (props.parentId === -1 ? "8px" : "25px")};
+  padding-inline-start: ${(props) => (props.$parentId === -1 ? "8px" : "25px")};
   overflow: hidden;
   transition: max-height 0.3s ease-out;
 `;
@@ -583,7 +583,7 @@ export const LayerGroup = ({ group, layers, hasChildren }) => {
           </StyledGroupHeader>
         )}
         <StyledLayerGroup
-          parentId={group.parentId}
+          $parentId={group.parentId}
           key={"slg_" + group.parentId + "_" + group.id}
           initial="hidden"
           animate={isOpen ? "visible" : "hidden"}

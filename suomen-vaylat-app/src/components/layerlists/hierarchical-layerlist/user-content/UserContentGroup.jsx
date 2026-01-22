@@ -164,7 +164,6 @@ const UserContentGroup = () => {
 
   return (
     <StyledLayerGroups
-      parentId={-1}
       role="region"
       aria-roledescription="user content group"
       aria-labelledby={labelId}

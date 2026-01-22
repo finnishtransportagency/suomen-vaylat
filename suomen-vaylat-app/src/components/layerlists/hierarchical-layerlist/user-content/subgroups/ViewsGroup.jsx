@@ -402,7 +402,6 @@ const ViewsGroup = () => {
 
       <StyledGroup
         id={listId}
-        parentId={-1}
         role="list"
         aria-labelledby={headerId}
         initial="hidden"

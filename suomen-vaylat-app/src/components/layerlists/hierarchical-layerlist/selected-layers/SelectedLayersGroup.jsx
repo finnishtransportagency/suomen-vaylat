@@ -176,7 +176,6 @@ const SelectedLayersGroup = () => {
 
   return (
     <StyledLayerGroups
-      parentId={-1}
       role="region"
       aria-roledescription="selected layers group"
       aria-labelledby={labelId}

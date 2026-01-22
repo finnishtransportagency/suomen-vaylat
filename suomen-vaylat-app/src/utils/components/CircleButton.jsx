@@ -18,7 +18,7 @@ const StyledCircleButton = styled(motion.button)`
     background-color: ${ props =>
         props.disabled ? props.theme.colors.disabledBg :
         props.color? props.color : 
-        props.toggleState ?
+        props.$toggleState ?
         props.theme.colors.buttonSelected : props.theme.colors.button
     };
     box-shadow: 0px 2px 4px #0000004D;
@@ -66,7 +66,7 @@ const StyledCircleButtonTextContainer = styled(motion.div)`
     position: absolute;
     left: ${props => props.direction === "right" && 0};
     right: ${props => props.direction === "left" && 0};
-    background-color: ${props => props.tooltipBackgroundColor ? props.tooltipBackgroundColor : props.theme.colors.mainWhite};
+    background-color: ${props => props.$tooltipBackgroundColor ? props.$tooltipBackgroundColor : props.theme.colors.mainWhite};
     height: 100%;
     z-index: -1;
     display: flex;
@@ -79,7 +79,7 @@ const StyledCircleButtonTextContainer = styled(motion.div)`
     padding-right: ${props => props.direction === "left" && "calc(100% + 16px)"};
     overflow: hidden;
     border-radius: 24px;
-    color: ${props => props.tooltipColor ? props.tooltipColor : props.theme.colors.mainColor1};
+    color: ${props => props.$tooltipColor ? props.$tooltipColor : props.theme.colors.mainColor1};
     font-size: 14px;
     font-weight: 600;
     pointer-events: none;
@@ -105,7 +105,7 @@ const CircleButton = ({
     return (
         <>
         {useReactTooltip &&
-            <ReactTooltip backgroundColor={tooltipBackgroundColor} textColor={tooltipColor} disable={isMobile} id={text + "_id"} place={tooltipDirection} type='dark' effect={effect}>
+            <ReactTooltip $backgroundColor={tooltipBackgroundColor} textColor={tooltipColor} disable={isMobile} id={text + "_id"} place={tooltipDirection} type='dark' effect={effect}>
                 <span>{text}</span>
             </ReactTooltip>
         }
@@ -119,7 +119,7 @@ const CircleButton = ({
             onHoverEnd={() => { 
                text && !useReactTooltip && setHovered(false)
             }}
-            toggleState={toggleState}
+            $toggleState={toggleState}
             type={type}
             color={color}
             disabled={disabled}
@@ -144,7 +144,7 @@ const CircleButton = ({
                     <StyledCircleButtonTextContainer
                         key={text +"_button"}
                         direction={tooltipDirection}
-                        positionTransition
+                        layout
                         initial={{
                             width: 0,
                             filter: "blur(10px)",
@@ -164,8 +164,8 @@ const CircleButton = ({
                             opacity: 0,
                             boxShadow: "2px 2px 4px #0000004D"
                         }}
-                        tooltipColor={tooltipColor}
-                        tooltipBackgroundColor={tooltipBackgroundColor}
+                        $tooltipColor={tooltipColor}
+                        $tooltipBackgroundColor={tooltipBackgroundColor}
                     >
                         {text}
                      </StyledCircleButtonTextContainer>
