@@ -53,9 +53,9 @@ const StyledDialog = styled(motion.div)`
     position: relative;
     width: ${(props) => props.maximize  || isMobile ? '100% !important' : props.width && props.width};
     height: ${(props) => props.maximize || isMobile ? '100% !important' : props.height && props.height};
-    min-width: ${(props) => props.minWidth && props.minWidth};
-    max-width: ${(props) => (props.maxWidth ? props.maxWidth : '100vw')};
-    min-height: ${(props) => props.minHeight && props.minHeight};
+    min-width: ${(props) => props.$minWidth && props.$minWidth};
+    max-width: ${(props) => (props.$maxWidth ? props.$maxWidth : '100vw')};
+    min-height: ${(props) => props.$minHeight && props.$minHeight};
     max-height: ${(props) => !props.maximize && 'calc(100vh - 100px)'};
     background-color: ${(props) => props.theme.colors.mainWhite};
     border-radius: 4px;
@@ -66,7 +66,7 @@ const StyledDialog = styled(motion.div)`
     resize: ${(props) => !props.maximize && props.resize && 'both'};
     overflow: hidden;
     @media ${(props) => props.theme.device.mobileL} {
-        border-radius: ${(props) => props.fullScreenOnMobile && '0px'};
+        border-radius: ${(props) => props.$fullScreenOnMobile && '0px'};
         max-width: unset;
         min-width: unset;
         max-height: unset;
@@ -268,11 +268,11 @@ const Dialog = ({
                         <StyledDialog
                             id={"dialog_" + title}
                             resize={resize}
-                            minWidth={minWidth}
-                            maxWidth={maxWidth}
-                            fullScreenOnMobile={fullScreenOnMobile}
+                            $minWidth={minWidth}
+                            $maxWidth={maxWidth}
+                            $fullScreenOnMobile={fullScreenOnMobile}
                             maximize={maximize}
-                            minHeight={minHeight}
+                            $minHeight={minHeight}
                             height={height}
                             width={width} 
                         >

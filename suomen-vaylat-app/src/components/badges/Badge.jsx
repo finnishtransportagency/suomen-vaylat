@@ -120,7 +120,7 @@ const Badge = ({
       animate={{ y: 0, filter: 'blur(0px)', opacity: 1 }}
       exit={{ y: 50, filter: 'blur(10px)', opacity: 0 }}
       transition={{ duration: 0.4, type: 'tween' }}
-      expanded={expanded}
+      expanded={expanded.toString()}
     >
       <StyledLeft id={leftId}>
         {icon && (
