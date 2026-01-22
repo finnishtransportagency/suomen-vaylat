@@ -39,13 +39,13 @@ const StyledDialogWrapper = styled(motion.div)`
     transform: ${props => props.maximize && 'initial !important'};
     @media ${(props) => props.theme.device.mobileL} {
         position: ${(props) =>
-            props.fullScreenOnMobile ? 'fixed' : 'initial'};
+            props.$fullScreenOnMobile ? 'fixed' : 'initial'};
         top: 0px;
         right: 0px;
         bottom: 0px;
         left: 0px;
         padding: 0px;
-        margin: ${(props) => props.fullScreenOnMobile === false && '8px'};
+        margin: ${(props) => props.$fullScreenOnMobile === false && '8px'};
     };
 `;
 
@@ -252,8 +252,8 @@ const Dialog = ({
                             duration: 0.4,
                             type: 'tween',
                         }}
-                        fullScreenOnMobile={fullScreenOnMobile}
-                        resize={resize}
+                        $fullScreenOnMobile={fullScreenOnMobile}
+                        resize={resize.toString()}
                         maximize={maximize}
                         type={type}
                         onClick={(e) => {
@@ -267,7 +267,7 @@ const Dialog = ({
                     >
                         <StyledDialog
                             id={"dialog_" + title}
-                            resize={resize}
+                            resize={resize.toString()}
                             $minWidth={minWidth}
                             $maxWidth={maxWidth}
                             $fullScreenOnMobile={fullScreenOnMobile}
@@ -352,7 +352,6 @@ const Dialog = ({
                     </StyledDialogWrapper>
                     {backdrop && (
                         <StyledDialogBackdrop
-                            backdrop={backdrop}
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
@@ -368,7 +367,6 @@ const Dialog = ({
                                     : type === 'announcement' &&
                                       handleAnnouncementDialog(null, null);
                             }}
-                            resize={resize}
                             type={type}
                         />
                     )}

@@ -16,7 +16,7 @@ const StyledDialogListItem = styled(motion.div)`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    cursor: ${props => props.selectAction && "pointer"};
+    cursor: ${props => props.$selectAction && "pointer"};
     background-color: ${props => props.color ? props.color : props.theme.colors.mainColor1};
     border-radius: 4px;
     margin-right: 8px;
@@ -123,6 +123,7 @@ const DialogListItem = ({
         }}
     >
         <StyledDialogListItem
+            $selectAction={selectAction}
             onClick={e => {
                 e.preventDefault();
                 selectAction && selectAction(data);
