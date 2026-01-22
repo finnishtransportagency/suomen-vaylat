@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { ReactReduxContext, useSelector } from 'react-redux';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import '../../resources/css/custom.scss';
 import styled from 'styled-components';
 import strings from '../../translations';

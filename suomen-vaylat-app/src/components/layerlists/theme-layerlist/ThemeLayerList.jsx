@@ -11,7 +11,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ReactReduxContext } from 'react-redux';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import styled from 'styled-components';
 import { useAppSelector } from '../../../state/hooks';
 import strings from '../../../translations';

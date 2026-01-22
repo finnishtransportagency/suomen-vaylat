@@ -3,7 +3,7 @@ import { ReactReduxContext } from 'react-redux';
 import ReactTooltip from 'react-tooltip';
 import { theme, isMobile } from '../../theme/theme';
 import styled from 'styled-components';
-import { AnimatePresence } from 'framer-motion';
+import { AnimatePresence } from 'motion/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useAppSelector } from '../../state/hooks';
 import strings from '../../translations';

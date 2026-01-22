@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { cloneElement } from 'react';
 import styled from 'styled-components';
-import { motion, AnimatePresence, useDragControls } from 'framer-motion';
+import { motion, AnimatePresence, useDragControls } from 'motion/react';
 import { faTimes, faWindowMaximize, faWindowMinimize, faWindowRestore, faQuestion } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { isMobile, theme } from '../../theme/theme';

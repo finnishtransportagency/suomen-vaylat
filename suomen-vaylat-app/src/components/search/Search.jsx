@@ -2,7 +2,7 @@ import { useState, useContext, useEffect } from 'react';
 import styled from 'styled-components';
 import { ReactReduxContext } from 'react-redux';
 import { useAppSelector } from '../../state/hooks';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'motion/react';
 import {
   faSearch,
   faTimes,

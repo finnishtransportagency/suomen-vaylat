@@ -4,7 +4,7 @@ import { faAngleUp, faAngleDown } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styled from 'styled-components';
 import { useAppSelector } from '../../../state/hooks';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import strings from '../../../translations';
 import { setTagLayers, setTags } from '../../../state/slices/rpcSlice';
 import Tag from './Tag';

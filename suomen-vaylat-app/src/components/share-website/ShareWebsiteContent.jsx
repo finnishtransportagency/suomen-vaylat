@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useAppSelector } from '../../state/hooks';
 import styled from 'styled-components';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'motion/react';
 
 import LayersIcon from '@mui/icons-material/Layers';
 import { faCopy, faEnvelope, faLayerGroup, faChevronDown } from '@fortawesome/free-solid-svg-icons';
