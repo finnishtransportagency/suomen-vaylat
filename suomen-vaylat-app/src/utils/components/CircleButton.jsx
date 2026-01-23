@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { motion, AnimatePresence } from 'motion/react';
 import { Tooltip } from 'react-tooltip';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { isMobile } from '../../theme/theme';
+import { isMobile, theme } from '../../theme/theme';
 
 const StyledCircleButton = styled(motion.button)`
     border: none;
@@ -101,15 +101,13 @@ const CircleButton = ({
     children,
 }) => {
     const [isHovered, setHovered] = useState(false);
-    const useTooltip = tooltipDirection !== "left" && tooltipDirection !== "right" && text;
+    const useTooltip = (tooltipDirection !== "left" && tooltipDirection !== "right" && text !== null);
 
     return (
         <>
-        {useTooltip &&
-            <Tooltip style={{backgroundColor: tooltipBackgroundColor, color: tooltipColor}} disable={isMobile} anchorSelect={`#${text}_id`} id={text + '_id_tooltip'} place={tooltipDirection} effect={effect}>
-                <span>{text}</span>
-            </Tooltip>
-        }
+        {useTooltip && !isMobile && !disabled && (
+            <Tooltip id={'circlebutton_tooltip_' + text} style={{backgroundColor: tooltipBackgroundColor || theme.colors.mainColor1, color: tooltipColor || theme.colors.mainWhite}} place={tooltipDirection} />
+        )}
 
         <StyledCircleButton
             aria-label={text}
@@ -124,7 +122,9 @@ const CircleButton = ({
             type={type}
             color={color}
             disabled={disabled}
-            id={text + "_id"}
+            id={'circlebutton_' + text}
+            data-tooltip-id={'circlebutton_tooltip_' + text}
+            data-tooltip-content={text}
         >
             {   icon && 
                 <StyledIconContainer>
