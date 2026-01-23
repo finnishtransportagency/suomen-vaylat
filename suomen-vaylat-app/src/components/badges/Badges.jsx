@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { AnimatePresence } from 'framer-motion';
+import { AnimatePresence } from 'motion/react';
 import { useAppSelector } from '../../state/hooks';
 import FeatureDataBadge from '../feature-data-window/badge/FeatureDataBadge';
 import ThemeBadge from '../layerlists/theme-layerlist/badge/ThemeBadge';

@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 import styled from 'styled-components';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'motion/react';
 import { Slide, toast } from 'react-toastify';
 import strings from '../../../translations';
 import { isMobile } from '../../../theme/theme';

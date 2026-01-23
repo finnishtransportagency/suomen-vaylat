@@ -1,6 +1,6 @@
 import { useState} from 'react';
 import styled from 'styled-components';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'motion/react';
 import { Tooltip } from 'react-tooltip';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { isMobile } from '../../theme/theme';
@@ -66,6 +66,7 @@ const StyledCircleButtonTextContainer = styled(motion.div)`
     position: absolute;
     left: ${props => props.direction === "right" && 0};
     right: ${props => props.direction === "left" && 0};
+    transform-origin: ${p => p.direction === 'right' ? 'left center' : 'right center'};
     background-color: ${props => props.$tooltipBackgroundColor ? props.$tooltipBackgroundColor : props.theme.colors.mainWhite};
     height: 100%;
     z-index: -1;
@@ -139,35 +140,19 @@ const CircleButton = ({
             }
              <AnimatePresence initial={false}>
                  {
-                      !toggleState && isHovered && !disabled &&
+                    !toggleState && isHovered && !disabled &&
                     <StyledCircleButtonTextContainer
-                        key={text +"_button"}
+                        key={text + "_button"}
                         direction={tooltipDirection}
-                        layout
-                        initial={{
-                            width: 0,
-                            filter: "blur(10px)",
-                            opacity: 0,
-                            boxShadow: "2px 2px 4px #0000004D"
-
-                        }}
-                        animate={{
-                            width: "auto",
-                            filter: "blur(0px)",
-                            opacity: 1,
-                            boxShadow: "2px 2px 4px #0000004D"
-                        }}
-                        exit={{
-                            width: 0,
-                            filter: "blur(10px)",
-                            opacity: 0,
-                            boxShadow: "2px 2px 4px #0000004D"
-                        }}
+                        initial={{ scaleX: 0, opacity: 0, boxShadow: "2px 2px 4px #0000004D" }}
+                        animate={{ scaleX: 1, opacity: 1, boxShadow: "2px 2px 4px #0000004D" }}
+                        exit={{ scaleX: 0, opacity: 0, boxShadow: "2px 2px 4px #0000004D" }}
+                        transition={{ duration: 0.18, ease: "easeOut" }}
                         $tooltipColor={tooltipColor}
                         $tooltipBackgroundColor={tooltipBackgroundColor}
                     >
                         {text}
-                     </StyledCircleButtonTextContainer>
+                    </StyledCircleButtonTextContainer>
                  }
              </AnimatePresence>
             {

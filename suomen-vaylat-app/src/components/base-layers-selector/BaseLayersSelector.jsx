@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import { ReactReduxContext, useSelector } from "react-redux";
 import { useAppSelector } from '../../state/hooks';
 import { useContext } from 'react';

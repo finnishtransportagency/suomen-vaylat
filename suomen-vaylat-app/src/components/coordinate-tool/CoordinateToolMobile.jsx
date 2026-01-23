@@ -30,7 +30,7 @@ import {
   isProjectionDegrees
 } from './util';
 import { Slide, toast } from 'react-toastify';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import { setIsCoordinateToolOpen } from '../../state/slices/uiSlice';
 import { useAppSelector } from '../../state/hooks';
 import { Switch } from '@mui/material';
