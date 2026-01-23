@@ -13,7 +13,7 @@ import {
   faStreetView
 } from '@fortawesome/free-solid-svg-icons';
 import proj4 from 'proj4';
-import ReactTooltip from 'react-tooltip';
+import { Tooltip } from 'react-tooltip';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ReactReduxContext } from 'react-redux';
 import styled from 'styled-components';
@@ -1002,6 +1002,17 @@ export const FeatureDataPopup = () => {
 
   return (
     <StyledGfiContainer id="gfi_container">
+      <Tooltip
+        style={{ backgroundColor: theme.colors.mainColor1 }}
+        disable={isMobile}
+        anchorSelect="#streetview_link"
+        id="streetview_tooltip"
+        place="bottom"
+        effect="float"
+      >
+        <span>{strings.gfi.streetView.openGoogleStreetView}</span>
+      </Tooltip>
+
       <AnimatePresence>
         {isLoading && (
           <StyledLoadingOverlay
@@ -1072,8 +1083,7 @@ export const FeatureDataPopup = () => {
                 </span>
               </p>
               <a
-                data-tip
-                data-for={'streetview'}
+                id={'streetview_link'}
                 href={'http://maps.google.com/maps?q=&layer=c&cbll=' + point}
                 rel="noreferrer"
                 target="_blank"
@@ -1083,17 +1093,6 @@ export const FeatureDataPopup = () => {
                 <span style={{ fontSize: '14px', marginLeft: '.5em' }}>
                   {strings.gfi.streetView.title}
                 </span>
-                <ReactTooltip
-                  backgroundColor={theme.colors.mainColor1}
-                  textColor={theme.colors.mainWhite}
-                  disable={isMobile}
-                  id="streetview"
-                  place="bottom"
-                  type="dark"
-                  effect="float"
-                >
-                  <span>{strings.gfi.streetView.openGoogleStreetView}</span>
-                </ReactTooltip>
               </a>
             </div>
           </StyledCoordinatesWrapper>
@@ -1382,7 +1381,9 @@ export const FeatureDataPopup = () => {
           toggleState={isGfiDownloadToolsOpen}
           tooltipDirection={'bottom'}
           clickAction={handleGfiDownloadsMenu}
-          disabled={filteredGFILocations.length === 0 || hasOnlyUserlayersSelected}
+          disabled={
+            filteredGFILocations.length === 0 || hasOnlyUserlayersSelected
+          }
         />
         <CircleButton
           icon={faSearchLocation}

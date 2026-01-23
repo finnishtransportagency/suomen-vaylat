@@ -4,7 +4,7 @@ import { faFilter } from '@fortawesome/free-solid-svg-icons';
 import Badge from 'react-bootstrap/Badge';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { theme, isMobile } from '../../theme/theme';
-import ReactTooltip from 'react-tooltip';
+import { Tooltip } from 'react-tooltip';
 import strings from '../../translations';
 import {
   setMinimizeFilterDialog,
@@ -181,20 +181,18 @@ export const Layer = ({ layer, themeName, groupName }) => {
       {layer.metadataIdentifier && <LayerMetadataButton layer={layer} />}
       {isFilterable && (
         <>
-          <ReactTooltip
-            backgroundColor={theme.colors.mainColor1}
-            textColor={theme.colors.mainWhite}
+          <Tooltip
+            style={{backgroundColor: theme.colors.mainColor1}}
             disable={isMobile}
-            id="filterableLayer"
-            place="top"
-            type="dark"
+            anchorSelect={'#layer_filter_icon'+ layer.id}
+            id='layer_filter_icon_tooltip'
+            place="bottom"
             effect="float"
           >
             <span>{strings.tooltips.layerlist.filter}</span>
-          </ReactTooltip>
+          </Tooltip>
           <StyledFilterIcon
-            data-tip
-            data-for={'filterableLayer'}
+            id={'layer_filter_icon'+ layer.id}
             onClick={() => handleFilterClick(layer)}
           >
             <FontAwesomeIcon

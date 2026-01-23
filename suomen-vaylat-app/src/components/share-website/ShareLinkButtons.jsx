@@ -42,8 +42,6 @@ export const ThemeGroupShareButton = ({ themeId, color }) => {
 
   return (
     <StyledShareButton
-      data-tip
-      data-for={'share_' + themeId}
       onClick={(e) => {
         e && e.stopPropagation();
         store.dispatch(setShareUrl(url));

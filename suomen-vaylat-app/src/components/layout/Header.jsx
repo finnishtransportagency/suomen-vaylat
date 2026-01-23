@@ -1,7 +1,6 @@
 import { useContext, useState, useCallback } from 'react';
 import { ReactReduxContext } from 'react-redux';
-import ReactTooltip from 'react-tooltip';
-import { theme, isMobile } from '../../theme/theme';
+import { isMobile } from '../../theme/theme';
 import styled from 'styled-components';
 import { AnimatePresence } from 'motion/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -301,26 +300,6 @@ export const Header = () => {
   return (
     <>
       <StyledHeaderContainer id="header-container" role="banner">
-        <ReactTooltip
-          backgroundColor={theme.colors.mainColor1}
-          disable={isMobile}
-          id="header-show-info-tooltip"
-          place="bottom"
-          type="dark"
-          effect="float"
-        >
-          <span>{strings.tooltips.showPageInfo}</span>
-        </ReactTooltip>
-        <ReactTooltip
-          backgroundColor={theme.colors.mainColor1}
-          disable={isMobile}
-          id="header-show-user-guide-tooltip"
-          place="bottom"
-          type="dark"
-          effect="float"
-        >
-          <span>{strings.tooltips.showUserGuide}</span>
-        </ReactTooltip>
         <HeaderLeft id="header-left">
           <StyledHeaderLogoContainer id="header-logo-container">
             <a

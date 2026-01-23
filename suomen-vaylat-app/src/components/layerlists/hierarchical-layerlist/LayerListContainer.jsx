@@ -10,7 +10,7 @@ import { setTagLayers, setTags } from '../../../state/slices/rpcSlice';
 import Tag from './Tag';
 import LayerList, { TagLayerList } from './LayerList';
 import LayerSearch from './LayerSearch';
-import ReactTooltip from 'react-tooltip';
+import { Tooltip } from 'react-tooltip';
 import { isMobile, theme } from '../../../theme/theme';
 import {
   setIsCustomFilterOpen,
@@ -201,22 +201,21 @@ const LayerListContainer = ({ groups, layers, tags }) => {
 
   return (
     <StyledLayerListContainer>
-      <ReactTooltip
-        backgroundColor={theme.colors.mainColor1}
+      <Tooltip
+        style={{backgroundColor: theme.colors.mainColor1}}
         disable={isMobile}
-        id="layerlist-filter"
-        place="right"
-        type="dark"
+        anchorSelect={'#layerlist_filter'}
+        id='layerlist_filter_tooltip'
+        place="bottom"
         effect="float"
       >
         <span>{strings.tooltips.layerlist.filter}</span>
-      </ReactTooltip>
+      </Tooltip>
 
       <StyledSearchAndFilter>
         <LayerSearch layers={layers} groups={groups} />
         <StyledFilterButton
-          data-tip
-          data-for="layerlist-filter"
+          id="layerlist-filter"
           onClick={() => {
             setIsOpen(!isOpen);
           }}

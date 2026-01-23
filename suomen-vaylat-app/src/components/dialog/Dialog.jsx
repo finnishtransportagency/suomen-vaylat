@@ -5,7 +5,7 @@ import { motion, AnimatePresence, useDragControls } from 'motion/react';
 import { faTimes, faWindowMaximize, faWindowMinimize, faWindowRestore, faQuestion } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { isMobile, theme } from '../../theme/theme';
-import ReactTooltip from 'react-tooltip';
+import { Tooltip } from 'react-tooltip';
 
 const MIN_SCREEN_WIDTH_MAXIMIZE = 500;
 
@@ -285,9 +285,9 @@ const Dialog = ({
                                 }}
                             >
 
-                                <ReactTooltip backgroundColor={theme.colors.mainColor1} disable={isMobile} id={helpId} place='bottom' type='dark' effect='float'>
-                                        {helpContent}
-                                </ReactTooltip>
+                                <Tooltip anchorSelect={'#'+helpId} style={{backgroundColor: theme.colors.mainColor1}} disable={isMobile} id={helpId + '_tooltip'} place='bottom' effect='float'>
+                                    {helpContent}
+                                </Tooltip>
 
                                 <StyledDialogTitle>
                                     {renderDialogIcon(titleIcon)}
@@ -319,8 +319,7 @@ const Dialog = ({
 
                                     {hasHelp && (
                                         <StyledHeaderButton
-                                            data-tip
-                                            data-for={helpId}
+                                            id={helpId}
                                         >
                                             <FontAwesomeIcon
                                                 icon={faQuestion}

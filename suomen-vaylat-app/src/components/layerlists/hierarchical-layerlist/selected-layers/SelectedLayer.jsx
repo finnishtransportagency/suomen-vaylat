@@ -15,7 +15,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styled from 'styled-components';
 import { ReactReduxContext } from 'react-redux';
-import ReactTooltip from 'react-tooltip';
+import { Tooltip } from 'react-tooltip';
 import strings from '../../../../translations';
 import {
   clearLayerMetadata,
@@ -461,22 +461,20 @@ const SelectedLayer = ({
 
           {isFilterable && (
             <>
-              <ReactTooltip
-                backgroundColor={theme.colors.mainColor1}
-                textColor={theme.colors.mainWhite}
+              <Tooltip
+                style={{backgroundColor: theme.colors.mainColor1}}
                 disable={isMobile}
-                id={`filter-${layer.id}`}
-                place="top"
-                type="dark"
+                anchorSelect={`#filter-${layer.id}`}
+                id={`filter-${layer.id}_tooltip`}
+                place="bottom"
                 effect="float"
               >
                 <span>{strings.tooltips.layerlist.filter}</span>
-              </ReactTooltip>
+              </Tooltip>
               <StyledIconWrapper
                 aria-label={strings.accessibility.openFiltering}
                 onClick={() => handleOpenFilteringDialog(layer)}
-                data-tip
-                data-for={`filter-${layer.id}`}
+                id={`filter-${layer.id}`}
               >
                 <StyledFloatingSpan>
                   <FontAwesomeIcon

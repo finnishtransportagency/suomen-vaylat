@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes, faList } from '@fortawesome/free-solid-svg-icons';
 import { LegendGroup } from './LegendGroup';
 import { theme, isMobile } from '../../theme/theme';
-import ReactTooltip from 'react-tooltip';
+import { Tooltip } from 'react-tooltip';
 import { setIsLegendOpen } from '../../state/slices/uiSlice';
 
 const StyledLegendContainer = styled(motion.div)`
@@ -138,21 +138,21 @@ export const Legend = () => {
       variants={listVariants}
       transition={{ duration: 0.7, type: 'tween' }}
     >
-      <ReactTooltip
-        backgroundColor={theme.colors.mainColor1}
+      <Tooltip
+        style={{backgroundColor: theme.colors.mainColor1}}
         disable={isMobile}
-        id="legendHeader"
+        anchorSelect={'#legend_header'}
+        id="legend_header_tooltip"
         place="top"
-        type="dark"
         effect="float"
       >
         <span>{strings.tooltips.legendHeader}</span>
-      </ReactTooltip>
+      </Tooltip>
 
       <StyledHeaderContent>
         <StyledTitleContent>
           <FontAwesomeIcon icon={faList} />
-          <p data-tip data-for="legendHeader">
+          <p id="legend_header">
             {strings.legend.title}
           </p>
         </StyledTitleContent>

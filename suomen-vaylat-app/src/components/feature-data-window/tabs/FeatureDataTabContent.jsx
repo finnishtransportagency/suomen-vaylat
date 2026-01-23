@@ -10,7 +10,7 @@ import { setFilteringInfo } from '../../../state/slices/rpcSlice';
 import { Table } from 'ka-table';
 import 'ka-table/style.scss';
 import { theme, isMobile } from '../../../theme/theme';
-import ReactTooltip from 'react-tooltip';
+import { Tooltip } from 'react-tooltip';
 import { setMinimizeFilterDialog } from '../../../state/slices/uiSlice';
 import { isValidUrl } from '../../../utils/validUrlUtil';
 import { SortingMode, PagingPosition } from 'ka-table/enums';
@@ -265,20 +265,18 @@ const FeatureDataTabContent = ({ layer, title, tablePropsInit }) => {
         {isFiltering && (
           <StyledSelectedTabDisplayOptionsButton
             onClick={handleFilterClick}
-            data-tip
-            data-for={'gfiFilter'}
+            id='gfi_filter_button'
           >
-            <ReactTooltip
-              backgroundColor={theme.colors.mainColor1}
-              textColor={theme.colors.mainWhite}
+            <Tooltip
+              style={{backgroundColor: theme.colors.mainColor1}}
               disable={isMobile}
-              id={'gfiFilter'}
+              anchorSelect='#gfi_filter_button'
+              id='gfi_filter_tooltip'
               place="bottom"
-              type="dark"
               effect="float"
             >
               <span>{strings.gfifiltering.filter}</span>
-            </ReactTooltip>
+            </Tooltip>
             <FontAwesomeIcon
               icon={faFilter}
               style={{

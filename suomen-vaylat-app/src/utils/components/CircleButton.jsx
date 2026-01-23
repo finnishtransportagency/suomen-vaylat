@@ -1,7 +1,7 @@
 import { useState} from 'react';
 import styled from 'styled-components';
 import { motion, AnimatePresence } from 'motion/react';
-import ReactTooltip from 'react-tooltip';
+import { Tooltip } from 'react-tooltip';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { isMobile } from '../../theme/theme';
 
@@ -100,31 +100,30 @@ const CircleButton = ({
     children,
 }) => {
     const [isHovered, setHovered] = useState(false);
-    const useReactTooltip = tooltipDirection !== "left" && tooltipDirection !== "right" && text;
+    const useTooltip = tooltipDirection !== "left" && tooltipDirection !== "right" && text;
 
     return (
         <>
-        {useReactTooltip &&
-            <ReactTooltip $backgroundColor={tooltipBackgroundColor} textColor={tooltipColor} disable={isMobile} id={text + "_id"} place={tooltipDirection} type='dark' effect={effect}>
+        {useTooltip &&
+            <Tooltip style={{backgroundColor: tooltipBackgroundColor, color: tooltipColor}} disable={isMobile} anchorSelect={`#${text}_id`} id={text + '_id_tooltip'} place={tooltipDirection} effect={effect}>
                 <span>{text}</span>
-            </ReactTooltip>
+            </Tooltip>
         }
 
         <StyledCircleButton
             aria-label={text}
             onClick={() => clickAction()}
             onHoverStart={() => { 
-                text && !useReactTooltip && setHovered(true);
+                text && !useTooltip && setHovered(true);
             }}
             onHoverEnd={() => { 
-               text && !useReactTooltip && setHovered(false)
+               text && !useTooltip && setHovered(false)
             }}
             $toggleState={toggleState}
             type={type}
             color={color}
             disabled={disabled}
-            data-tip
-            data-for={text + "_id"}
+            id={text + "_id"}
         >
             {   icon && 
                 <StyledIconContainer>
