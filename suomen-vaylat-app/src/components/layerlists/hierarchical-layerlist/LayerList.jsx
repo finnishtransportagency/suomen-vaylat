@@ -9,7 +9,7 @@ import store from '../../../state/store';
 import LayerGroup from './LayerGroup';
 import Layers from '../../layer/Layers';
 
-import { motion } from 'motion/react';
+import { motion } from 'framer-motion';
 import strings from '../../../translations';
 
 const masterHeaderIconVariants = {

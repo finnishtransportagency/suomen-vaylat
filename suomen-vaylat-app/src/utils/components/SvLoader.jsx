@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { motion } from 'motion/react';
+import { motion } from 'framer-motion';
 
 const StyledLoaderContainer = styled.div`
     z-index: 999;

@@ -1,6 +1,6 @@
 import { useCallback, useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { motion } from 'motion/react';
+import { motion } from 'framer-motion';
 import { ReactReduxContext } from 'react-redux';
 import { debounce } from 'lodash';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

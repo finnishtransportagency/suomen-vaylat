@@ -6,7 +6,7 @@ import React, {
   useEffect
 } from 'react';
 import styled from 'styled-components';
-import { motion } from 'motion/react';
+import { motion } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faAngleDown,

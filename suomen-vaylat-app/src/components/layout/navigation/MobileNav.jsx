@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useContext } from 'react';
 import { ReactReduxContext } from 'react-redux';
 import styled from 'styled-components';
-import { motion } from 'motion/react';
+import { motion } from 'framer-motion';
 import {
   setIsInfoOpen,
   setIsProfileOpen,

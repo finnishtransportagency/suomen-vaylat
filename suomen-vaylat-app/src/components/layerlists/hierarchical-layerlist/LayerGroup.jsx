@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext } from "react";
 import styled from "styled-components";
 import { ReactReduxContext, useSelector } from "react-redux";
-import { motion } from "motion/react";
+import { motion } from "framer-motion";
 import LayerList from "./LayerList";
 import Layers from "../../layer/Layers";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

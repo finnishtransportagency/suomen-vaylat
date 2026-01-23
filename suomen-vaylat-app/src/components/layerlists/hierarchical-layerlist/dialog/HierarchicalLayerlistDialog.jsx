@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { useAppSelector } from '../../../../state/hooks';
 import { setIsSideMenuOpen } from '../../../../state/slices/uiSlice';
-import { AnimatePresence, motion } from 'motion/react';
+import { AnimatePresence, motion } from 'framer-motion';
 import store from '../../../../state/store';
 
 import DialogHeader from '../../../../utils/components/DialogHeader';

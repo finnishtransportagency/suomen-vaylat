@@ -6,7 +6,7 @@ import {
   faMap,
   faTimes
 } from '@fortawesome/free-solid-svg-icons';
-import { AnimatePresence, motion } from 'motion/react';
+import { AnimatePresence, motion } from 'framer-motion';
 
 import BuildIcon from '@mui/icons-material/Build';
 import { WebSiteShareButton } from '../../share-website/ShareLinkButtons';

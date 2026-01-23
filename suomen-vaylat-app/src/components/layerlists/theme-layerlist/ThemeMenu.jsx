@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { AnimatePresence, motion } from 'motion/react';
+import { AnimatePresence, motion } from 'framer-motion';
 import { faMap } from '@fortawesome/free-solid-svg-icons';
 import { sortObjectAlphabetically } from '../../../utils/rpcUtil';
 import { useAppSelector } from '../../../state/hooks';

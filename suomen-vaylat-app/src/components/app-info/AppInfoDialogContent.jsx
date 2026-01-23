@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import strings from '../../translations';
 import { getAppBuildDate, getAppVersion } from '../../utils/appInfoUtil';
 import { isMobile, size } from '../../theme/theme';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useSelector } from 'react-redux';
 
 import { Swiper, SwiperSlide } from 'swiper/react';

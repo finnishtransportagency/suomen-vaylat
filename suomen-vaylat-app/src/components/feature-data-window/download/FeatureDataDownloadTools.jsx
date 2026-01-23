@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from 'react';
 import styled from 'styled-components';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useAppSelector } from '../../../state/hooks';
 import { ReactReduxContext } from 'react-redux';
 

@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import { ReactReduxContext, useSelector } from 'react-redux';
-import { motion } from 'motion/react';
+import { motion } from 'framer-motion';
 import styled from 'styled-components';
 import { setSearchParams } from '../../../state/slices/uiSlice';
 import strings from '../../../translations';
