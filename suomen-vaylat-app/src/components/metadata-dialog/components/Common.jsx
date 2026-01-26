@@ -7,6 +7,14 @@ export const StyledTitle = styled.h5`
     };
 `;
 
+export const StyledCitationTitle = styled.h4`
+    padding-bottom: 0.5em;
+    cursor: default;
+    @media (max-width: 460px) {
+        font-size: 18px;
+    };
+`;
+
 export const StyledTitleLittle = styled.h6`
     cursor: default;
     @media (max-width: 460px) {
@@ -31,8 +39,8 @@ export const StyledA = styled.a`
     word-wrap: break-word;
 `;
 
-export const StyledParagraph = styled.p`
-    cursor: default;
+export const StyledParagraph = styled.div`
+    padding: 1em 0;
 `;
 
 export const StyledImage = styled.img`
