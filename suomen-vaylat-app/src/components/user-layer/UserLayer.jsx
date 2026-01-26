@@ -81,11 +81,6 @@ export const UserLayer = ({ layer }) => {
     updateLayers(store, channel);
   };
 
-  useEffect(() => {
-    // Clear the timeout when the component unmounts
-    return () => clearTimeout(window.legendUpdateTimer);
-  }, []);
-
   const handleEditClick = (ev) => {
     ev && ev.stopPropagation();
     store.dispatch(setEditingUserlayer(layer));

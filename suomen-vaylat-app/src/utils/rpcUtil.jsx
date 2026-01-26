@@ -267,17 +267,13 @@ export const showNonThemeLayers = (store, channel) => {
 };
 
 export const updateLayerLegends = (store) => {
-  // need use global window variable to limit legend updates
-  clearTimeout(window.legendUpdateTimer);
-  window.legendUpdateTimer = setTimeout(function () {
-    store.dispatch(
-      getLegends({
-        handler: (data) => {
-          store.dispatch(setLegends(data));
-        }
-      })
-    );
-  }, 1000);
+  store.dispatch(
+    getLegends({
+      handler: (data) => {
+        store.dispatch(setLegends(data));
+      }
+    })
+  );
 };
 
 const closeThemeLayers = (channel, store, theme, onComplete) => {

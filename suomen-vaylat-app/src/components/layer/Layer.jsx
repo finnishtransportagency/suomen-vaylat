@@ -97,11 +97,6 @@ export const Layer = ({ layer, themeName, groupName }) => {
     );
   };
 
-  useEffect(() => {
-    // Clear the timeout when the component unmounts
-    return () => clearTimeout(window.legendUpdateTimer);
-  }, []);
-
   const themeStyle = themeName || null;
 
   const handleFilterClick = (layer) => {
