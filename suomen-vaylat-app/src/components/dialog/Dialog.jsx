@@ -254,7 +254,7 @@ const Dialog = ({
                         }}
                         $fullScreenOnMobile={fullScreenOnMobile}
                         resize={resize.toString()}
-                        maximize={maximize}
+                        maximize={maximize.toString()}
                         type={type}
                         onClick={(e) => {
                             e.stopPropagation();
@@ -271,7 +271,7 @@ const Dialog = ({
                             $minWidth={minWidth}
                             $maxWidth={maxWidth}
                             $fullScreenOnMobile={fullScreenOnMobile}
-                            maximize={maximize}
+                            maximize={maximize.toString()}
                             $minHeight={minHeight}
                             height={height}
                             width={width} 
