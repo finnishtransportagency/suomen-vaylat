@@ -26,17 +26,17 @@ const StyledDialogBackdrop = styled(motion.div)`
 
 const StyledDialogWrapper = styled(motion.div)`
     z-index: ${(props) =>
-        props.type === 'warning' ? 9999 : props.resize ? 100 : 9993};
+        props.type === 'warning' ? 9999 : props.$resize ? 100 : 9993};
     position: absolute;
-    width: ${(props) => props.maximize? '100% !important' : 'auto'};
-    height: ${(props) => props.maximize? '100%' : 'auto'};
+    width: ${(props) => props.$maximize? '100% !important' : 'auto'};
+    height: ${(props) => props.$maximize? '100%' : 'auto'};
     top: ${(props) => props.top && props.top};
     left: ${(props) => props.left && props.left};
     bottom: ${(props) => props.bottom && props.bottom};
     right: ${(props) => props.right && props.right};
-    padding: ${props => props.maximize ? '4px 4px 4px 4px' : (props.resize || props.drag) && '8px'};
+    padding: ${props => props.$maximize ? '4px 4px 4px 4px' : (props.$resize || props.drag) && '8px'};
     max-width: 100%;
-    transform: ${props => props.maximize && 'initial !important'};
+    transform: ${props => props.$maximize && 'initial !important'};
     @media ${(props) => props.theme.device.mobileL} {
         position: ${(props) =>
             props.$fullScreenOnMobile ? 'fixed' : 'initial'};
@@ -51,19 +51,19 @@ const StyledDialogWrapper = styled(motion.div)`
 
 const StyledDialog = styled(motion.div)`
     position: relative;
-    width: ${(props) => props.maximize  || isMobile ? '100% !important' : props.width && props.width};
-    height: ${(props) => props.maximize || isMobile ? '100% !important' : props.height && props.height};
+    width: ${(props) => props.$maximize  || isMobile ? '100% !important' : props.width && props.width};
+    height: ${(props) => props.$maximize || isMobile ? '100% !important' : props.height && props.height};
     min-width: ${(props) => props.$minWidth && props.$minWidth};
     max-width: ${(props) => (props.$maxWidth ? props.$maxWidth : '100vw')};
     min-height: ${(props) => props.$minHeight && props.$minHeight};
-    max-height: ${(props) => !props.maximize && 'calc(100vh - 100px)'};
+    max-height: ${(props) => !props.$maximize && 'calc(100vh - 100px)'};
     background-color: ${(props) => props.theme.colors.mainWhite};
     border-radius: 4px;
     box-shadow: rgb(0 0 0 / 16%) 0px 3px 6px, rgb(0 0 0 / 23%) 0px 3px 6px;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    resize: ${(props) => !props.maximize && props.resize && 'both'};
+    resize: ${(props) => !props.$maximize && props.$resize && 'both'};
     overflow: hidden;
     @media ${(props) => props.theme.device.mobileL} {
         border-radius: ${(props) => props.$fullScreenOnMobile && '0px'};
@@ -253,8 +253,8 @@ const Dialog = ({
                             type: 'tween',
                         }}
                         $fullScreenOnMobile={fullScreenOnMobile}
-                        resize={resize.toString()}
-                        maximize={maximize.toString()}
+                        $resize={resize}
+                        $maximize={maximize}
                         type={type}
                         onClick={(e) => {
                             e.stopPropagation();
@@ -267,11 +267,11 @@ const Dialog = ({
                     >
                         <StyledDialog
                             id={"dialog_" + title}
-                            resize={resize.toString()}
+                            $resize={resize}
                             $minWidth={minWidth}
                             $maxWidth={maxWidth}
                             $fullScreenOnMobile={fullScreenOnMobile}
-                            maximize={maximize.toString()}
+                            $maximize={maximize}
                             $minHeight={minHeight}
                             height={height}
                             width={width} 
