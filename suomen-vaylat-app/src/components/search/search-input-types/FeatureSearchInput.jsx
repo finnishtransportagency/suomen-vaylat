@@ -326,20 +326,37 @@ const FeatureSearchInput = ({ setDropdownOpen, emptySearchInputs }) => {
       store.dispatch(setLastSearchValue(searchValue));
       store.dispatch(setLastSearchAttribute(usedAttr));
 
-      toast.error(
-        `${strings.search.feature.errorLayerStart}${layerIdentifier}${strings.search.feature.errorLayerEnd}`,
-        {
-          position: 'top-center',
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: 'colored',
-          transition: Slide
-        }
-      );
+      if (error === "invalid datatype") {
+        toast.error(
+          `${strings.search?.feature?.errors?.invalidDataType}`,
+          {
+            position: 'top-center',
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: 'colored',
+            transition: Slide
+          }
+        );
+      } else {
+        toast.error(
+          `${strings.search.feature.errorLayerStart}${layerIdentifier}${strings.search.feature.errorLayerEnd}`,
+          {
+            position: 'top-center',
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: 'colored',
+            transition: Slide
+          }
+        );
+      }
     };
 
     store.dispatch(setIsSearchingActive(true));
