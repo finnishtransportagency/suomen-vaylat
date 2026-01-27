@@ -485,9 +485,9 @@ const FeatureSearchInput = ({ setDropdownOpen, emptySearchInputs }) => {
         lastSearchAttribute === searchAttribute &&
         !isSearchingActive ? (
           <StyledStandardSearchButton
-            id="feature-search-clear-button"
+            id="feature-search-clear-fields-button"
             type="button"
-            aria-label={strings.search.clearResults}
+            aria-label={strings.search?.clearFields}
             onClick={emptySearchInputs}
           >
             <FontAwesomeIcon icon={faTrash} />

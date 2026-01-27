@@ -187,9 +187,9 @@ const DefaultSearchInput = ({ handleGeneralSearch, handleMetadataSearch, emptySe
         searchValue === lastSearchValue &&
         !isSearchingActive ? (
           <StyledStandardSearchButton
-            id="default-search-clear-button"
+            id="default-search-clear-fields-button"
             type="button"
-            aria-label={strings.search.clearResults}
+            aria-label={strings.search?.clearFields}
             onClick={() => {
               // clear results
               emptySearchInputs();

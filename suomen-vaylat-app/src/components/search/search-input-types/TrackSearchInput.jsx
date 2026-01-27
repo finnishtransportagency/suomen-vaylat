@@ -291,9 +291,9 @@ const TrackSearchInput = ({ handleGeneralSearch, emptySearchInputs }) => {
             searchValue === lastSearchValue &&
             !isSearchingActive ? (
               <StyledStandardSearchButton
-                id="track-search-clear-button"
+                id="track-search-clear-fields-button"
                 type="button"
-                aria-label={strings.search.clearResults}
+                aria-label={strings.search?.clearFields}
                 onClick={emptySearchInputs}
               >
                 <FontAwesomeIcon icon={faTrash} />

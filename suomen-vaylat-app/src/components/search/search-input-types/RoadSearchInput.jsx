@@ -459,9 +459,9 @@ const RoadSearchInput = ({
             searchValue === lastSearchValue &&
             !isSearchingActive ? (
               <StyledStandardSearchButton
-                id="road-search-clear-button-start"
+                id="road-search-clear-fields-button-start"
                 type="button"
-                aria-label={strings.search.clearResults}
+                aria-label={strings.search?.clearFields}
                 onClick={emptySearchInputs}
                 roadEndEnabled={roadEndEnabled}
               >
@@ -598,9 +598,9 @@ const RoadSearchInput = ({
                 searchValue === lastSearchValue &&
                 !isSearchingActive ? (
                   <StyledStandardSearchButton
-                    id="road-search-clear-button-end"
+                    id="road-search-clear-fields-button-end"
                     type="button"
-                    aria-label={strings.search.clearResults}
+                    aria-label={strings.search?.clearFields}
                     onClick={emptySearchInputs}
                   >
                     <FontAwesomeIcon icon={faTrash} />
