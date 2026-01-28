@@ -280,7 +280,7 @@ const FeatureSearchInput = ({ setDropdownOpen, emptySearchInputs }) => {
   const handleFeatureSearch = (searchValue, startIndex = 0, layerId = -1) => {
     const attributeUsedInSearch = attributeSearchEnabled ? searchAttribute : '';
     const handleSearchResponse = (data, usedAttr) => {
-      if (Object.keys(data).length > 0 && Object.keys(data.gfi).length > 0) {
+      if (Object.keys(data).length > 0) {
         store.dispatch(setIsSearchingActive(false));
         store.dispatch(setSearchOn(false));
 
@@ -289,19 +289,19 @@ const FeatureSearchInput = ({ setDropdownOpen, emptySearchInputs }) => {
           let oldFeatureSearchResults = JSON.parse(
             JSON.stringify(featureSearchResults)
           );
-          let newFeatureSearchResults = { ...data.gfi };
+          let newFeatureSearchResults = { ...data };
           const contentIndex = oldFeatureSearchResults
             .map((gfi) => gfi.content.layerId)
-            .indexOf(data.gfi.content.layerId);
+            .indexOf(data.content.layerId);
           const updatedFeatures = oldFeatureSearchResults[
             contentIndex
-          ].content.geojson.features.concat(data.gfi.content.geojson.features);
+          ].content.geojson.features.concat(data.content.geojson.features);
           newFeatureSearchResults.content.geojson.features = updatedFeatures;
 
           const updatedMatchedKeys = mergeMatchedKeys(
             oldFeatureSearchResults[contentIndex].content.geojson
               .matchedFeatures,
-            data.gfi.content.geojson.matchedFeatures
+            data.content.geojson.matchedFeatures
           );
           newFeatureSearchResults.content.geojson.matchedFeatures =
             updatedMatchedKeys;
@@ -310,7 +310,7 @@ const FeatureSearchInput = ({ setDropdownOpen, emptySearchInputs }) => {
 
           store.dispatch(setFeatureSearchResults(oldFeatureSearchResults));
         } else {
-          store.dispatch(pushToFeatureSearchResults(data.gfi));
+          store.dispatch(pushToFeatureSearchResults(data));
         }
       } else {
         store.dispatch(setIsSearchingActive(false));
@@ -370,7 +370,7 @@ const FeatureSearchInput = ({ setDropdownOpen, emptySearchInputs }) => {
 
     if (searchLayer) {
       channel.searchFeatures(
-        [[searchLayer], searchValue, attributeUsedInSearch, startIndex],
+        [searchLayer, searchValue, attributeUsedInSearch, startIndex],
         (data) => {
           handleSearchResponse(data, attributeUsedInSearch);
         },
