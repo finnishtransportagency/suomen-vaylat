@@ -480,10 +480,8 @@ const FeatureSearchInput = ({ setDropdownOpen, emptySearchInputs }) => {
           </StyledWideInputGroup>
         </StyledInputsContainer>
 
-        {(searchResults !== null || featureSearchResults.length > 0) &&
-        searchValue === lastSearchValue &&
-        lastSearchAttribute === searchAttribute &&
-        !isSearchingActive ? (
+        {
+        !isSearchingActive && searchValue ? (
           <StyledStandardSearchButton
             id="feature-search-clear-fields-button"
             type="button"

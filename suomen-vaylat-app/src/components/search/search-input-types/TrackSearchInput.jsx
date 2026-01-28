@@ -287,9 +287,8 @@ const TrackSearchInput = ({ handleGeneralSearch, emptySearchInputs }) => {
               className={getTrackField(2).invalid ? 'error' : ''}
             />
 
-            {(searchResults !== null || featureSearchResults.length > 0) &&
-            searchValue === lastSearchValue &&
-            !isSearchingActive ? (
+            {
+            !isSearchingActive && searchValue ? (
               <StyledStandardSearchButton
                 id="track-search-clear-fields-button"
                 type="button"

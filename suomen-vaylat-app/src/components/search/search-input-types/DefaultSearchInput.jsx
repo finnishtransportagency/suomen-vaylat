@@ -133,7 +133,6 @@ const DefaultSearchInput = ({ handleGeneralSearch, handleMetadataSearch, emptySe
     searchResults,
     searchValue,
     isSearchingActive,
-    lastSearchValue
   } = useAppSelector((state) => state.rpc);
   
   const { activeSwitch } = useAppSelector((state) => state.ui);
@@ -183,9 +182,8 @@ const DefaultSearchInput = ({ handleGeneralSearch, handleMetadataSearch, emptySe
           </StyledWideInputGroup>
         </StyledInputsContainer>
 
-        {(searchResults !== null || featureSearchResults.length > 0) &&
-        searchValue === lastSearchValue &&
-        !isSearchingActive ? (
+        {
+        !isSearchingActive && searchValue ? (
           <StyledStandardSearchButton
             id="default-search-clear-fields-button"
             type="button"

@@ -455,9 +455,8 @@ const RoadSearchInput = ({
               }}
             />
 
-            {(searchResults !== null || featureSearchResults.length > 0) &&
-            searchValue === lastSearchValue &&
-            !isSearchingActive ? (
+            {
+            !isSearchingActive && searchValue ? (
               <StyledStandardSearchButton
                 id="road-search-clear-fields-button-start"
                 type="button"
@@ -594,9 +593,8 @@ const RoadSearchInput = ({
                   }}
                 />
 
-                {(searchResults !== null || featureSearchResults.length > 0) &&
-                searchValue === lastSearchValue &&
-                !isSearchingActive ? (
+                {
+                !isSearchingActive && searchValue ? (
                   <StyledStandardSearchButton
                     id="road-search-clear-fields-button-end"
                     type="button"
