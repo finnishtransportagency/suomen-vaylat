@@ -1,11 +1,7 @@
-import styled from 'styled-components';
 import { useAppSelector } from '../../state/hooks';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 import {
   removeMarkersAndFeatures,
-  validateFeatureSearch,
-  validateSimpleSearch,
-  validateTrackSearch
 } from './utils/SearchUtil';
 import { ReactReduxContext } from 'react-redux';
 import DefaultSearchInput from './search-input-types/DefaultSearchInput';
@@ -31,12 +27,9 @@ const SearchInputs = ({ setDropdownOpen }) => {
   const [carriageWaySearch, setCarriageWaySearch] = useState(false);
 
   const {
-    searchValue,
     channel,
     isMoreSearchOpen,
   } = useAppSelector((state) => state.rpc);
-
-  const { attributeSearchEnabled } = useAppSelector((state) => state.ui);
 
   const { activeSwitch } = useAppSelector((state) => state.ui);
 
@@ -104,7 +97,6 @@ const SearchInputs = ({ setDropdownOpen }) => {
       channel.postRequest('SearchRequest', [searchValueCopy]);
     }
     store.dispatch(setSearchValue(value));
-    store.dispatch(setLastSearchValue(value));
     store.dispatch(setSearchResults(null));
   };
 
@@ -119,7 +111,6 @@ const SearchInputs = ({ setDropdownOpen }) => {
         OrganisationName: 'Väylävirasto'
       }
     ]);
-    store.dispatch(setLastSearchValue(value));
   };
 
   return (

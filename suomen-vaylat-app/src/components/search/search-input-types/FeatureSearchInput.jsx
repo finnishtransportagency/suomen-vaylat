@@ -218,8 +218,6 @@ const FeatureSearchInput = ({ setDropdownOpen, emptySearchInputs }) => {
     searchResults,
     searchValue,
     isSearchingActive,
-    lastSearchValue,
-    lastSearchAttribute
   } = useAppSelector((state) => state.rpc);
 
   const { attributeSearchEnabled } = useAppSelector((state) => state.ui);
@@ -280,7 +278,7 @@ const FeatureSearchInput = ({ setDropdownOpen, emptySearchInputs }) => {
   const handleFeatureSearch = (searchValue, startIndex = 0, layerId = -1) => {
     const attributeUsedInSearch = attributeSearchEnabled ? searchAttribute : '';
     const handleSearchResponse = (data, usedAttr) => {
-      if (Object.keys(data).length > 0) {
+      if (data !== null && Object.keys(data).length > 0) {
         store.dispatch(setIsSearchingActive(false));
         store.dispatch(setSearchOn(false));
 
@@ -313,6 +311,7 @@ const FeatureSearchInput = ({ setDropdownOpen, emptySearchInputs }) => {
           store.dispatch(pushToFeatureSearchResults(data));
         }
       } else {
+        store.dispatch(setFeatureSearchResults([null]));
         store.dispatch(setIsSearchingActive(false));
         store.dispatch(setSearchOn(false));
       }

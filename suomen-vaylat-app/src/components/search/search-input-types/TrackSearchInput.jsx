@@ -153,7 +153,6 @@ const TrackSearchInput = ({ handleGeneralSearch, emptySearchInputs }) => {
     searchResults,
     searchValue,
     isSearchingActive,
-    lastSearchValue
   } = useAppSelector((state) => state.rpc);
 
   const onClickSearchTrack = () => {

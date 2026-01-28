@@ -287,7 +287,7 @@ const FeatureSearchResultPanel = () => {
 
   const handleFeatureSearch = (searchValue, searchAttribute, startIndex = 0, layerId = -1) => {
     const handleSearchResponse = (data) => {
-      if (Object.keys(data).length > 0) {
+      if (data !== null && Object.keys(data).length > 0) {
         store.dispatch(setIsSearchingActive(false));
         store.dispatch(setSearchOn(false));
 
@@ -320,6 +320,7 @@ const FeatureSearchResultPanel = () => {
           store.dispatch(pushToFeatureSearchResults(data));
         }
       } else {
+        store.dispatch(setFeatureSearchResults([null]));
         store.dispatch(setIsSearchingActive(false));
         store.dispatch(setSearchOn(false));
       }
@@ -468,9 +469,7 @@ const FeatureSearchResultPanel = () => {
 
       {lastSearchValue.length > 0 &&
         !searchOn &&
-        featureSearchResults[0]?.content?.geojson?.matchedFeatures &&
-        Object.keys(featureSearchResults[0].content.geojson.matchedFeatures)
-          .length === 0 && (
+        featureSearchResults[0] === null && (
           <StyledNoResults>{strings.search.feature.noResults}</StyledNoResults>
         )}
     </>

@@ -237,7 +237,6 @@ const RoadSearchInput = ({
     searchValue,
     searchType,
     isSearchingActive,
-    lastSearchValue
   } = useAppSelector((state) => state.rpc);
 
   const [roadEndEnabled, setRoadEndEnabled] = useState(false);
