@@ -269,8 +269,6 @@ const CoordinateTool = () => {
   const handleSetRound = (round) => {
     setRound(round);
     if (isProjectionDegrees(selectedProjection.value)) {
-      // produce DMS strings using util - pass decimals high to preserve precision in DMS fractions
-      // Use 9 decimals for the decimal->DMS conversion to preserve precision (mirror earlier behaviour)
       try {
         const dms = coordinateMetricToDegrees(
           [displayedRaw.x, displayedRaw.y],
@@ -380,8 +378,6 @@ const CoordinateTool = () => {
         setDisplayedRaw({ x: rawX, y: rawY });
 
         if (isProjectionDegrees(targetSRS)) {
-          // produce DMS strings using util - pass decimals high to preserve precision in DMS fractions
-          // Use 9 decimals for the decimal->DMS conversion to preserve precision (mirror earlier behaviour)
           try {
             const dms = coordinateMetricToDegrees([rawX, rawY], round); // [dmsLon, dmsLat]
             setDisplayedShown({ x: String(dms[0]), y: String(dms[1]) });
