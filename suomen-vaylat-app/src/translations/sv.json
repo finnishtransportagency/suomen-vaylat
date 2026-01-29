@@ -676,7 +676,7 @@
     "onlyNumbers": "Vänligen ange endast siffror",
     "closeCoordinateTool": "Stäng koordinatverktyg",
     "projectionSelect": "Välj koordinatsystem",
-    "roundCoordinates": "Rund till jämn",
+    "roundCoordinates": "Runda",
     "errors": {
       "transformCoordinatesError": "Fel vid koordinattransformation",
       "degreeInputParseError": "Fel vid parsning av grader",

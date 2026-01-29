@@ -268,10 +268,29 @@ const CoordinateTool = () => {
 
   const handleSetRound = (round) => {
     setRound(round);
-    setDisplayedShown({
-      x: round ? formatProjectedShown(center.x) : center.x,
-      y: round ? formatProjectedShown(center.y) : center.y
-    });
+    if (isProjectionDegrees(selectedProjection.value)) {
+      // produce DMS strings using util - pass decimals high to preserve precision in DMS fractions
+      // Use 9 decimals for the decimal->DMS conversion to preserve precision (mirror earlier behaviour)
+      try {
+        const dms = coordinateMetricToDegrees(
+          [displayedRaw.x, displayedRaw.y],
+          round
+        ); // [dmsLon, dmsLat]
+        setDisplayedShown({ x: String(dms[0]), y: String(dms[1]) });
+      } catch (e) {
+        // fallback to show numeric full precision if util fails
+        setDisplayedShown({
+          x: String(displayedRaw.x),
+          y: String(displayedRaw.y)
+        });
+      }
+    } else {
+      // projected: show rounded to 3 decimals?
+      setDisplayedShown({
+        x: round ? formatProjectedShown(displayedRaw.x) : displayedRaw.x,
+        y: round ? formatProjectedShown(displayedRaw.y) : displayedRaw.y
+      });
+    }
     localStorage.setItem('roundCoordinates', round.toString());
   };
 
@@ -364,14 +383,14 @@ const CoordinateTool = () => {
           // produce DMS strings using util - pass decimals high to preserve precision in DMS fractions
           // Use 9 decimals for the decimal->DMS conversion to preserve precision (mirror earlier behaviour)
           try {
-            const dms = coordinateMetricToDegrees([rawX, rawY], 3); // [dmsLon, dmsLat]
+            const dms = coordinateMetricToDegrees([rawX, rawY], round); // [dmsLon, dmsLat]
             setDisplayedShown({ x: String(dms[0]), y: String(dms[1]) });
           } catch (e) {
             // fallback to show numeric full precision if util fails
             setDisplayedShown({ x: String(rawX), y: String(rawY) });
           }
         } else {
-          // projected: show rounded to 3 decimals
+          // projected: show rounded to 3 decimals?
           setDisplayedShown({
             x: round ? formatProjectedShown(rawX) : rawX,
             y: round ? formatProjectedShown(rawY) : rawY
@@ -402,7 +421,7 @@ const CoordinateTool = () => {
         setIsTransformLoading(false);
       }
     },
-    [channel, callTransformRPC]
+    [channel, round, callTransformRPC]
   );
 
   // transform displayed raw coords in selectedProjection back to native EPSG:3067 (numbers)

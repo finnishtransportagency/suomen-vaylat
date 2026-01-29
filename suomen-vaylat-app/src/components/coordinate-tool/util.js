@@ -103,11 +103,7 @@ const coordinateDMSDecode = function (value) {
   return null;
 };
 
-export const coordinateMetricToDegrees = (point, decimals) => {
-  let roundToDecimals = decimals || 0;
-  if (roundToDecimals > 20) {
-    roundToDecimals = 20;
-  }
+export const coordinateMetricToDegrees = (point, round) => {
   if (validCoordinates(point)) {
     // first coordinate
     var dms1 = NaN;
@@ -116,7 +112,7 @@ export const coordinateMetricToDegrees = (point, decimals) => {
       var d1 = p1 | 0;
       var m1 = ((p1 - d1) * 60) | 0;
       var s1 = (p1 - d1 - m1 / 60) * 3600;
-      s1 = parseFloat(s1).toFixed(roundToDecimals);
+      s1 = round ? parseFloat(s1).toFixed(3) : parseFloat(s1);
       s1 = '' + s1;
       s1 = s1.replace('.', ',');
       dms1 =
@@ -139,7 +135,7 @@ export const coordinateMetricToDegrees = (point, decimals) => {
       var d2 = p2 | 0;
       var m2 = ((p2 - d2) * 60) | 0;
       var s2 = (p2 - d2 - m2 / 60) * 3600;
-      s2 = parseFloat(s2).toFixed(roundToDecimals);
+      s2 = round ? parseFloat(s2).toFixed(3) : parseFloat(s2);
       s2 = '' + s2;
       s2 = s2.replace('.', ',');
       dms2 =

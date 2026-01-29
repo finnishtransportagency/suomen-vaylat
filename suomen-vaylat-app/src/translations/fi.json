@@ -674,7 +674,7 @@
     "onlyNumbers": "Vain numerot sallittu",
     "closeCoordinateTool": "Sulje koordinaattityökalu",
     "projectionSelect": "Valitse coordinaatisto",
-    "roundCoordinates": "Pyöristä tasalukuun",
+    "roundCoordinates": "Pyöristä",
     "errors": {
       "transformCoordinatesError": "Virhe koordinaattimuunnoksessa",
       "degreeInputParseError": "Virhe asteiden parsinnassa",
