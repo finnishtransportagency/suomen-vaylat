@@ -4,7 +4,11 @@ import { useAppSelector } from '../../../state/hooks';
 import { useContext, useEffect, useState } from 'react';
 import { faMagnifyingGlass, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { mergeMatchedKeys, validateFeatureSearch } from '../utils/SearchUtil';
+import {
+  emptySearchResults,
+  mergeMatchedKeys,
+  validateFeatureSearch
+} from '../utils/SearchUtil';
 import { ReactReduxContext } from 'react-redux';
 import {
   pushToFeatureSearchResults,
@@ -16,12 +20,11 @@ import {
   setSearchOn,
   setSearchValue
 } from '../../../state/slices/rpcSlice';
-import {
-  setAttributeSearchEnabled
-} from '../../../state/slices/uiSlice';
+import { setAttributeSearchEnabled } from '../../../state/slices/uiSlice';
 import { Slide, toast } from 'react-toastify';
 import Select from 'react-select';
-import '../css/ReactSelectStyling.css'
+import '../css/ReactSelectStyling.css';
+import PillButton from '../../../utils/components/PillButton';
 
 const StyledRowWithButton = styled.div`
   display: flex;
@@ -192,6 +195,18 @@ const StyledInstructionText = styled.p`
   margin-left: 0.5em;
 `;
 
+const StyledSearchButtons = styled.div`
+  padding-top: 1em;
+  display: flex;
+  width: 100%;
+  gap: 1em;
+
+  @media ${(props) => props.theme.device.tablet} {
+    gap: 8px;
+    flex-direction: column;
+  }
+`;
+
 const FeatureSearchInput = ({ setDropdownOpen, emptySearchInputs }) => {
   const { store } = useContext(ReactReduxContext);
 
@@ -203,21 +218,17 @@ const FeatureSearchInput = ({ setDropdownOpen, emptySearchInputs }) => {
     searchResults,
     searchValue,
     isSearchingActive,
-    lastSearchValue,
-    lastSearchAttribute
   } = useAppSelector((state) => state.rpc);
 
-  const {
-    attributeSearchEnabled
-  } = useAppSelector((state) => state.ui);
+  const { attributeSearchEnabled } = useAppSelector((state) => state.ui);
 
   // Keep available layer attributes and user chosen attribute
   // Contains object of key-value pairs, eg. {attribute: humanReadableAttribute}
-  const [ layerAttributes, setLayerAttributes] = useState([]);
+  const [layerAttributes, setLayerAttributes] = useState([]);
 
-  const [ activeLayer, setActiveLayer ] = useState(null);
-  const [ searchAttribute, setSearchAttribute ] = useState('');
-  const [ selectedOption, setSelectedOption ] = useState('');
+  const [activeLayer, setActiveLayer] = useState(null);
+  const [searchAttribute, setSearchAttribute] = useState('');
+  const [selectedOption, setSelectedOption] = useState('');
 
   // Turn object with key-value pairs into array of value-label pairs for select-react module
   const parseFieldNameLocales = (data) => {
@@ -236,18 +247,29 @@ const FeatureSearchInput = ({ setDropdownOpen, emptySearchInputs }) => {
 
   useEffect(() => {
     // Update layer attribute list if active layer was changed or if attribute list is empty
-    if (selectedLayersByType.mapLayers[0]?.id && (selectedLayersByType.mapLayers[0]?.id !== activeLayer || !layerAttributes)) {
+    if (
+      selectedLayersByType.mapLayers[0]?.id &&
+      (selectedLayersByType.mapLayers[0]?.id !== activeLayer ||
+        !layerAttributes)
+    ) {
       setSelectedOption('');
-      channel.getFieldNameLocales([selectedLayersByType.mapLayers[0]?.id], 
-        (data) => {if (data) {setLayerAttributes(parseFieldNameLocales(data))}},
+      channel.getFieldNameLocales(
+        [selectedLayersByType.mapLayers[0]?.id],
+        (data) => {
+          if (data) {
+            setLayerAttributes(parseFieldNameLocales(data));
+          }
+        },
         (error) => console.log(error)
       );
       setActiveLayer(selectedLayersByType.mapLayers[0]?.id);
     }
   }, [selectedLayersByType, activeLayer, channel, layerAttributes]);
-  
+
   const onClickSearchFeature = () => {
-    if (validateFeatureSearch(searchValue, store, true, attributeSearchEnabled)) {
+    if (
+      validateFeatureSearch(searchValue, store, true, attributeSearchEnabled)
+    ) {
       setDropdownOpen(false);
       handleFeatureSearch(searchValue.trim());
     }
@@ -256,7 +278,7 @@ const FeatureSearchInput = ({ setDropdownOpen, emptySearchInputs }) => {
   const handleFeatureSearch = (searchValue, startIndex = 0, layerId = -1) => {
     const attributeUsedInSearch = attributeSearchEnabled ? searchAttribute : '';
     const handleSearchResponse = (data, usedAttr) => {
-      if (Object.keys(data).length > 0 && Object.keys(data.gfi).length > 0) {
+      if (data !== null && Object.keys(data).length > 0) {
         store.dispatch(setIsSearchingActive(false));
         store.dispatch(setSearchOn(false));
 
@@ -265,19 +287,19 @@ const FeatureSearchInput = ({ setDropdownOpen, emptySearchInputs }) => {
           let oldFeatureSearchResults = JSON.parse(
             JSON.stringify(featureSearchResults)
           );
-          let newFeatureSearchResults = { ...data.gfi };
+          let newFeatureSearchResults = { ...data };
           const contentIndex = oldFeatureSearchResults
             .map((gfi) => gfi.content.layerId)
-            .indexOf(data.gfi.content.layerId);
+            .indexOf(data.content.layerId);
           const updatedFeatures = oldFeatureSearchResults[
             contentIndex
-          ].content.geojson.features.concat(data.gfi.content.geojson.features);
+          ].content.geojson.features.concat(data.content.geojson.features);
           newFeatureSearchResults.content.geojson.features = updatedFeatures;
 
           const updatedMatchedKeys = mergeMatchedKeys(
             oldFeatureSearchResults[contentIndex].content.geojson
               .matchedFeatures,
-            data.gfi.content.geojson.matchedFeatures
+            data.content.geojson.matchedFeatures
           );
           newFeatureSearchResults.content.geojson.matchedFeatures =
             updatedMatchedKeys;
@@ -286,9 +308,10 @@ const FeatureSearchInput = ({ setDropdownOpen, emptySearchInputs }) => {
 
           store.dispatch(setFeatureSearchResults(oldFeatureSearchResults));
         } else {
-          store.dispatch(pushToFeatureSearchResults(data.gfi));
+          store.dispatch(pushToFeatureSearchResults(data));
         }
       } else {
+        store.dispatch(setFeatureSearchResults([null]));
         store.dispatch(setIsSearchingActive(false));
         store.dispatch(setSearchOn(false));
       }
@@ -302,20 +325,37 @@ const FeatureSearchInput = ({ setDropdownOpen, emptySearchInputs }) => {
       store.dispatch(setLastSearchValue(searchValue));
       store.dispatch(setLastSearchAttribute(usedAttr));
 
-      toast.error(
-        `${strings.search.feature.errorLayerStart}${layerIdentifier}${strings.search.feature.errorLayerEnd}`,
-        {
-          position: 'top-center',
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: 'colored',
-          transition: Slide
-        }
-      );
+      if (error === "invalid datatype") {
+        toast.error(
+          `${strings.search?.feature?.errors?.invalidDataType}`,
+          {
+            position: 'top-center',
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: 'colored',
+            transition: Slide
+          }
+        );
+      } else {
+        toast.error(
+          `${strings.search.feature.errorLayerStart}${layerIdentifier}${strings.search.feature.errorLayerEnd}`,
+          {
+            position: 'top-center',
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: 'colored',
+            transition: Slide
+          }
+        );
+      }
     };
 
     store.dispatch(setIsSearchingActive(true));
@@ -329,13 +369,13 @@ const FeatureSearchInput = ({ setDropdownOpen, emptySearchInputs }) => {
 
     if (searchLayer) {
       channel.searchFeatures(
-        [[searchLayer], searchValue, attributeUsedInSearch, startIndex],
+        [searchLayer, searchValue, attributeUsedInSearch, startIndex],
         (data) => {
           handleSearchResponse(data, attributeUsedInSearch);
         },
         (error) => {
           handleSearchError(layerIdentifier, error, attributeUsedInSearch);
-        },
+        }
       );
     }
   };
@@ -365,7 +405,7 @@ const FeatureSearchInput = ({ setDropdownOpen, emptySearchInputs }) => {
           type="checkbox"
           onChange={(e) => {
             if (e.target.checked === false) setSelectedOption('');
-            store.dispatch(setAttributeSearchEnabled(!attributeSearchEnabled)); 
+            store.dispatch(setAttributeSearchEnabled(!attributeSearchEnabled));
           }}
           checked={attributeSearchEnabled}
           aria-checked={!!attributeSearchEnabled}
@@ -388,7 +428,7 @@ const FeatureSearchInput = ({ setDropdownOpen, emptySearchInputs }) => {
               {strings.search.feature.selectSearchAttribute}
             </StyledInstructionText>
           </div>
-          <div style={{ width: '100%', marginBottom: '0.5em'}}>
+          <div style={{ width: '100%', marginBottom: '0.5em' }}>
             <Select
               inputId="attribute-select"
               aria-label={strings.search.feature.selectSearchAttribute}
@@ -405,7 +445,9 @@ const FeatureSearchInput = ({ setDropdownOpen, emptySearchInputs }) => {
               placeholder="Select attribute..."
               // avoids parent clipping / z-index issues
               // TODO: Options in the menu are invisibe or white --> needs to be fixed
-              menuPortalTarget={typeof document !== 'undefined' ? document.body : null}
+              menuPortalTarget={
+                typeof document !== 'undefined' ? document.body : null
+              }
               menuPosition="fixed"
               classNamePrefix="feature-search"
             />
@@ -437,28 +479,18 @@ const FeatureSearchInput = ({ setDropdownOpen, emptySearchInputs }) => {
           </StyledWideInputGroup>
         </StyledInputsContainer>
 
-        {(searchResults !== null || featureSearchResults.length > 0) &&
-        searchValue === lastSearchValue && lastSearchAttribute === searchAttribute &&
-        !isSearchingActive ? (
+        {
+        !isSearchingActive && searchValue ? (
           <StyledStandardSearchButton
-            id="feature-search-clear-button"
+            id="feature-search-clear-fields-button"
             type="button"
-            aria-label={strings.search.clearResults}
+            aria-label={strings.search?.clearFields}
             onClick={emptySearchInputs}
           >
             <FontAwesomeIcon icon={faTrash} />
           </StyledStandardSearchButton>
         ) : (
-          !isSearchingActive && (
-            <StyledStandardSearchButton
-              id="feature-search-submit-button"
-              type="button"
-              aria-label={strings.search.search}
-              onClick={onClickSearchFeature}
-            >
-              <FontAwesomeIcon icon={faMagnifyingGlass} />
-            </StyledStandardSearchButton>
-          )
+          !isSearchingActive && <></>
         )}
       </StyledRowWithButton>
 
@@ -476,6 +508,30 @@ const FeatureSearchInput = ({ setDropdownOpen, emptySearchInputs }) => {
           ))}
         </div>
       )}
+
+      <StyledSearchButtons>
+        <PillButton
+          id={'feature-search-submit-button'}
+          key={'feature-search-submit-button'}
+          text={strings.search?.search}
+          onClick={onClickSearchFeature}
+          aria-label={strings.search.search}
+          style={{ width: '100%', justifyContent: 'center' }}
+          icon={faMagnifyingGlass}
+        />
+
+        <PillButton
+          id={'feature-search-inputs-clear-results-btn'}
+          key={'feature-search-inputs-clear-results-btn'}
+          text={strings.search?.clearResults}
+          onClick={emptySearchResults}
+          aria-label={strings.search?.clearResults}
+          style={{ width: '100%', justifyContent: 'center' }}
+          disabled={
+            !(searchResults !== null || featureSearchResults.length > 0)
+          }
+        />
+      </StyledSearchButtons>
     </StyledFeatureSearchSection>
   );
 };

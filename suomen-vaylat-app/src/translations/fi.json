@@ -599,7 +599,8 @@
       "errors": {
         "lengthAttributeSearch": "Syötä vähintään yksi merkki",
         "length": "Syötä vähintään kolme merkkiä",
-        "regex": "Haku ei saa sisältää erikoismerkkejä"
+        "regex": "Haku ei saa sisältää erikoismerkkejä",
+        "invalidDataType": "Väärä tietotyyppi, käytä tällä hakuattribuutilla numeerisia arvoja"
       },
       "attributeSearch": "Käytä tarkennettua kohdehakua",
       "selectSearchAttribute": "Valitse hakuattribuutti:"
@@ -673,6 +674,7 @@
     "onlyNumbers": "Vain numerot sallittu",
     "closeCoordinateTool": "Sulje koordinaattityökalu",
     "projectionSelect": "Valitse coordinaatisto",
+    "roundCoordinates": "Pyöristä",
     "errors": {
       "transformCoordinatesError": "Virhe koordinaattimuunnoksessa",
       "degreeInputParseError": "Virhe asteiden parsinnassa",

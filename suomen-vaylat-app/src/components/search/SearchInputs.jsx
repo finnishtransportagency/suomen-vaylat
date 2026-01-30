@@ -1,14 +1,7 @@
-import styled from 'styled-components';
-import strings from '../../translations';
 import { useAppSelector } from '../../state/hooks';
-import { useContext, useEffect, useState } from 'react';
-import { faMagnifyingGlass, faTrash } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useContext, useState } from 'react';
 import {
   removeMarkersAndFeatures,
-  validateFeatureSearch,
-  validateSimpleSearch,
-  validateTrackSearch
 } from './utils/SearchUtil';
 import { ReactReduxContext } from 'react-redux';
 import DefaultSearchInput from './search-input-types/DefaultSearchInput';
@@ -17,7 +10,6 @@ import TrackSearchInput from './search-input-types/TrackSearchInput';
 import FeatureSearchInput from './search-input-types/FeatureSearchInput';
 import {
   searchVKMTrack,
-  setFeatureSearchResults,
   setFirstSearchResultShown,
   setIsSearchingActive,
   setLastSearchValue,
@@ -28,182 +20,18 @@ import {
   setGeoJsonArray,
   setIsMoreSearchOpen
 } from '../../state/slices/uiSlice';
-import PillButton from '../../utils/components/PillButton';
 
-const StyledRowWithButton = styled.div`
-  display: flex;
-  align-items: center;
-  width: 100%;
-  justify-content: space-between;
-  flex-wrap: nowrap;
-`;
-
-const StyledInputsContainer = styled.div`
-  flex: 1 1 0;
-  min-width: 0; /* ensure proper shrinking inside flex */
-  display: flex;
-  align-items: center; /* vertically center the input row so the button aligns middle */
-
-  @media ${(props) => props.theme.device.tablet} {
-    width: 100%;
-  }
-`;
-
-const StyledStandardSearchButton = styled.button`
-  background: none;
-  font-size: 1.2em;
-  border: none;
-  color: ${(p) => p.theme.colors.mainColor1};
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  padding: 0 0 0 0.5em;
-
-  &:hover {
-    svg {
-      opacity: 0.95;
-    }
-    opacity: 0.95;
-  }
-  visibility: ${(p) => (p.roadEndEnabled ? 'hidden' : 'visible')};
-`;
-
-const StyledRelativeInputWrapper = styled.div`
-  position: relative;
-  width: 100%;
-`;
-
-const PillInput = styled.input`
-  box-sizing: border-box;
-  width: 100%;
-  min-width: 64px;
-  max-width: 130px;
-  height: 42px;
-  border: 1.5px solid #ccc;
-  border-radius: 20px;
-  padding: 1em;
-  text-align: center;
-  outline: none;
-  transition: border-color 0.17s;
-  background: #fff;
-  margin-bottom: 0;
-  flex: 1 1 0px;
-  @media ${(props) => props.theme.device.tablet} {
-    font-size: 14px;
-    height: 36px;
-    min-width: 54px;
-    max-width: 100%;
-  }
-  &.error {
-    border-color: ${(props) =>
-      props.theme.colors.secondaryColorDarkOrange || '#c55'};
-  }
-  &:focus {
-    border-color: #888;
-  }
-  &:disabled {
-    color: #aaa;
-    background: #f7f8f8;
-  }
-`;
-
-const StyledWideInputGroup = styled.div`
-  width: 100%;
-`;
-
-const StyledWidePillInput = styled(PillInput)`
-  width: 100%;
-  min-width: 150px;
-  max-width: 600px;
-  text-align: left;
-  padding-right: 44px; /* room for clear button */
-`;
-
-const StyledSearchSection = styled.div`
-  width: 100%;
-  margin-bottom: 1em;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-`;
-
-const StyledValidationMessage = styled.div`
-  color: ${(props) => props.theme.colors.secondaryColorDarkOrange || '#c55'};
-  margin-top: 8px;
-  font-size: 0.95em;
-`;
 
 const SearchInputs = ({ setDropdownOpen }) => {
   const { store } = useContext(ReactReduxContext);
   const [carriageWaySearch, setCarriageWaySearch] = useState(false);
 
   const {
-    featureSearchResults,
-    searchResults,
-    searchValue,
-    isSearchingActive,
     channel,
     isMoreSearchOpen,
-    lastSearchValue
   } = useAppSelector((state) => state.rpc);
 
-  const {
-    attributeSearchEnabled
-  } = useAppSelector((state) => state.ui);
-
-  const emptySearchResults = () => {
-    store.dispatch(setGeoJsonArray([]));
-    store.dispatch(setFeatureSearchResults([]));
-    store.dispatch(setSearchResults(null));
-    store.dispatch(setSearchValue(''));
-    store.dispatch(setLastSearchValue(''));
-    removeMarkersAndFeatures(channel);
-  };
-
   const { activeSwitch } = useAppSelector((state) => state.ui);
-
-  // simpleError used for non-track / non-road / non-feature basic validations
-  const [simpleError, setSimpleError] = useState('');
-
-  useEffect(() => {
-    if (activeSwitch === 'track') {
-      validateTrackSearch(searchValue, store, false);
-      setSimpleError(''); // clear simple error when on track
-      return;
-    }
-    if (activeSwitch === 'feature') {
-      validateFeatureSearch(searchValue, store, false, attributeSearchEnabled);
-      setSimpleError(''); // clear simple error when on track
-      return;
-    }
-    // For other types: run simple character-only validation live (no requirement)
-    if (activeSwitch === 'road') {
-      // we don't validate feature/road here
-      setSimpleError('');
-      return;
-    }
-    // simple live validation for other types
-    const msg = validateSimpleSearch(searchValue, false);
-    setSimpleError(msg);
-  }, [activeSwitch, attributeSearchEnabled, searchValue, store]);
-
-  // Submit handler that routes validation by activeSwitch
-  const submitForActiveSwitch = () => {
-    const msg = validateSimpleSearch(searchValue, true);
-    if (msg) {
-      setSimpleError(msg);
-      return;
-    }
-    setSimpleError('');
-    if (activeSwitch === 'layer') {
-      handleMetadataSearch(searchValue.trim());
-      return;
-    } else {
-      handleGeneralSearch(searchValue.trim());
-      return;
-    }
-  };
 
   const handleGeneralSearch = (value) => {
     setDropdownOpen(false);
@@ -213,7 +41,7 @@ const SearchInputs = ({ setDropdownOpen }) => {
 
     //TODO if and when we implement track range search, this should be enabled also to track, for now only road search
     if (
-      (activeSwitch === 'road' || activeSwitch === "default") &&
+      (activeSwitch === 'road' || activeSwitch === 'default') &&
       !carriageWaySearch &&
       value &&
       value.includes('/') &&
@@ -269,11 +97,9 @@ const SearchInputs = ({ setDropdownOpen }) => {
       channel.postRequest('SearchRequest', [searchValueCopy]);
     }
     store.dispatch(setSearchValue(value));
-    store.dispatch(setLastSearchValue(value));
     store.dispatch(setSearchResults(null));
   };
 
-  // Handle metadata search
   const handleMetadataSearch = (value) => {
     setDropdownOpen(false);
     removeMarkersAndFeatures(channel);
@@ -285,14 +111,15 @@ const SearchInputs = ({ setDropdownOpen }) => {
         OrganisationName: 'Väylävirasto'
       }
     ]);
-    store.dispatch(setLastSearchValue(value));
   };
 
   return (
     <>
-      {activeSwitch === 'default' && (
+      {['default', 'address', 'nomenclature', 'premise', 'layer'].includes(
+        activeSwitch) && (
         <DefaultSearchInput
           handleGeneralSearch={handleGeneralSearch}
+          handleMetadataSearch={handleMetadataSearch}
           emptySearchInputs={() => store.dispatch(setSearchValue(''))}
         />
       )}
@@ -317,84 +144,6 @@ const SearchInputs = ({ setDropdownOpen }) => {
         <FeatureSearchInput
           setDropdownOpen={setDropdownOpen}
           emptySearchInputs={() => store.dispatch(setSearchValue(''))}
-        />
-      )}
-
-      {['address', 'nomenclature', 'premise', 'layer'].includes(
-        activeSwitch
-      ) && (
-        <StyledSearchSection id="search-inputs-section">
-          <StyledRowWithButton>
-            <StyledInputsContainer>
-              <StyledWideInputGroup>
-                <StyledRelativeInputWrapper id="search-inputs-relative-wrapper">
-                  <StyledWidePillInput
-                    id={`search-inputs-${activeSwitch}`}
-                    aria-label={
-                      strings.search[activeSwitch]?.title ||
-                      `${activeSwitch} ` + strings.gfi.search
-                    }
-                    type="text"
-                    value={searchValue}
-                    onChange={(e) => {
-                      store.dispatch(setSearchValue(e.target.value));
-                      // live validation handled in useEffect
-                    }}
-                    onKeyPress={(e) => {
-                      if (e.key === 'Enter') submitForActiveSwitch();
-                    }}
-                  />
-                </StyledRelativeInputWrapper>
-              </StyledWideInputGroup>
-            </StyledInputsContainer>
-
-            {(searchResults !== null || featureSearchResults.length > 0) &&
-            searchValue === lastSearchValue &&
-            !isSearchingActive ? (
-              <StyledStandardSearchButton
-                id="search-inputs-clear-button"
-                type="button"
-                aria-label={strings.search?.clearFields}
-                onClick={() => {
-                  store.dispatch(setSearchValue(''));
-                }}
-              >
-                <FontAwesomeIcon icon={faTrash} />
-              </StyledStandardSearchButton>
-            ) : (
-              !isSearchingActive && (
-                <StyledStandardSearchButton
-                  id="search-inputs-submit-button"
-                  type="button"
-                  aria-label={strings.search?.search}
-                  onClick={submitForActiveSwitch}
-                >
-                  <FontAwesomeIcon icon={faMagnifyingGlass} />
-                </StyledStandardSearchButton>
-              )
-            )}
-          </StyledRowWithButton>
-
-          {simpleError && (
-            <StyledValidationMessage
-              id="search-inputs-error"
-              role="alert"
-              aria-live="polite"
-            >
-              {simpleError}
-            </StyledValidationMessage>
-          )}
-        </StyledSearchSection>
-      )}
-
-      {(searchResults !== null || featureSearchResults.length > 0) && (
-        <PillButton
-          id={'search-inputs-clear-results-btn'}
-          key={'search-inputs-clear-results-btn'}
-          text={strings.search?.clearResults}
-          onClick={emptySearchResults}
-          aria-label={strings.search?.clearResults}
-          style={{ width: '100%', justifyContent: 'center' }}
         />
       )}
     </>

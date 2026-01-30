@@ -600,7 +600,8 @@
       "errors": {
         "lengthAttributeSearch": "Ange minst ett tecken",
         "length": "Ange minst tre tecken",
-        "regex": "Sökningen får inte innehålla specialtecken"
+        "regex": "Sökningen får inte innehålla specialtecken",
+        "invalidDataType": "Ogiltig datatyp, använd numeriska värden för detta sökattribut"
       },
       "attributeSearch": "Aktivera avancerad sökning",
       "selectSearchAttribute": "Välj ett sökattribut:"
@@ -675,6 +676,7 @@
     "onlyNumbers": "Vänligen ange endast siffror",
     "closeCoordinateTool": "Stäng koordinatverktyg",
     "projectionSelect": "Välj koordinatsystem",
+    "roundCoordinates": "Runda",
     "errors": {
       "transformCoordinatesError": "Fel vid koordinattransformation",
       "degreeInputParseError": "Fel vid parsning av grader",

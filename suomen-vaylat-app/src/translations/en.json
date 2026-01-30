@@ -600,7 +600,8 @@
       "errors": {
         "lengthAttributeSearch": "Enter at least one character",
         "length": "Enter at least three characters",
-        "regex": "Search can't include any special characters"
+        "regex": "Search can't include any special characters",
+        "invalidDataType": "Invalid data type, use numeric values for this search attribute"
       },
       "attributeSearch": "Enable advanced search",
       "selectSearchAttribute": "Choose a search attribute:"
@@ -675,6 +676,7 @@
     "onlyNumbers": "Please enter only numbers",
     "closeCoordinateTool": "Close coordinate tool",
     "projectionSelect": "Select coordinate system",
+    "roundCoordinates": "Round up",
     "errors": {
       "transformCoordinatesError": "Error transforming coordinates",
       "degreeInputParseError": "Error parsing degree input",

@@ -287,7 +287,7 @@ const FeatureSearchResultPanel = () => {
 
   const handleFeatureSearch = (searchValue, searchAttribute, startIndex = 0, layerId = -1) => {
     const handleSearchResponse = (data) => {
-      if (Object.keys(data).length > 0 && Object.keys(data.gfi).length > 0) {
+      if (data !== null && Object.keys(data).length > 0) {
         store.dispatch(setIsSearchingActive(false));
         store.dispatch(setSearchOn(false));
 
@@ -296,19 +296,19 @@ const FeatureSearchResultPanel = () => {
           let oldFeatureSearchResults = JSON.parse(
             JSON.stringify(featureSearchResults)
           );
-          let newFeatureSearchResults = { ...data.gfi };
+          let newFeatureSearchResults = { ...data };
           const contentIndex = oldFeatureSearchResults
             .map((gfi) => gfi.content.layerId)
-            .indexOf(data.gfi.content.layerId);
+            .indexOf(data.content.layerId);
           const updatedFeatures = oldFeatureSearchResults[
             contentIndex
-          ].content.geojson.features.concat(data.gfi.content.geojson.features);
+          ].content.geojson.features.concat(data.content.geojson.features);
           newFeatureSearchResults.content.geojson.features = updatedFeatures;
 
           const updatedMatchedKeys = mergeMatchedKeys(
             oldFeatureSearchResults[contentIndex].content.geojson
               .matchedFeatures,
-            data.gfi.content.geojson.matchedFeatures
+            data.content.geojson.matchedFeatures
           );
           newFeatureSearchResults.content.geojson.matchedFeatures =
             updatedMatchedKeys;
@@ -317,9 +317,10 @@ const FeatureSearchResultPanel = () => {
 
           store.dispatch(setFeatureSearchResults(oldFeatureSearchResults));
         } else {
-          store.dispatch(pushToFeatureSearchResults(data.gfi));
+          store.dispatch(pushToFeatureSearchResults(data));
         }
       } else {
+        store.dispatch(setFeatureSearchResults([null]));
         store.dispatch(setIsSearchingActive(false));
         store.dispatch(setSearchOn(false));
       }
@@ -327,26 +328,43 @@ const FeatureSearchResultPanel = () => {
       store.dispatch(setLastSearchAttribute(searchAttribute));
     };
 
-    const handleSearchError = (layerIdentifier, error) => {
+    const handleSearchError = (layerIdentifier, error, usedAttr) => {
       store.dispatch(setIsSearchingActive(false));
       store.dispatch(setSearchOn(false));
       store.dispatch(setLastSearchValue(searchValue));
-      store.dispatch(setLastSearchAttribute(searchAttribute));
+      store.dispatch(setLastSearchAttribute(usedAttr));
 
-      toast.error(
-        `${strings.search.feature.errorLayerStart}${layerIdentifier}${strings.search.feature.errorLayerEnd}`,
-        {
-          position: 'top-center',
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: 'colored',
-          transition: Slide
-        }
-      );
+      if (error === "invalid datatype") {
+        toast.error(
+          `${strings.search?.feature?.errors?.invalidDataType}`,
+          {
+            position: 'top-center',
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: 'colored',
+            transition: Slide
+          }
+        );
+      } else {
+        toast.error(
+          `${strings.search.feature.errorLayerStart}${layerIdentifier}${strings.search.feature.errorLayerEnd}`,
+          {
+            position: 'top-center',
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: 'colored',
+            transition: Slide
+          }
+        );
+      }
     };
 
     store.dispatch(setIsSearchingActive(true));
@@ -360,7 +378,7 @@ const FeatureSearchResultPanel = () => {
 
     if (searchLayer) {
       channel.searchFeatures(
-        [[searchLayer], searchValue, searchAttribute, startIndex],
+        [searchLayer, searchValue, searchAttribute, startIndex],
         (data) => handleSearchResponse(data, searchLayer),
         (error) => handleSearchError(layerIdentifier, error)
       );
@@ -451,9 +469,7 @@ const FeatureSearchResultPanel = () => {
 
       {lastSearchValue.length > 0 &&
         !searchOn &&
-        featureSearchResults[0]?.content?.geojson?.matchedFeatures &&
-        Object.keys(featureSearchResults[0].content.geojson.matchedFeatures)
-          .length === 0 && (
+        featureSearchResults[0] === null && (
           <StyledNoResults>{strings.search.feature.noResults}</StyledNoResults>
         )}
     </>

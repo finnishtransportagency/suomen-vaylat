@@ -10,6 +10,7 @@ import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import SearchResultPanels from './SearchResultPanels';
 import {
   resetFeatureSearchResults,
+  setLastSearchValue,
   setSearchResults,
   setSearchType,
   setSearchValue
@@ -170,6 +171,7 @@ const SearchDialog = () => {
     }
     store.dispatch(setSearchResults(null));
     store.dispatch(setSearchValue(''));
+    store.dispatch(setLastSearchValue(''));
     store.dispatch(resetFeatureSearchResults());
     removeMarkersAndFeatures(channel);
   };
@@ -226,7 +228,7 @@ const SearchDialog = () => {
         </>
       )}
 
-      {(searchResults !== null || featureSearchResults.length > 0) &&
+      {(searchResults !== null || featureSearchResults.length > 0 || featureSearchResults[0] === null) &&
         !isSearchingActive && (
           <>
             <HorizontalLine id="search-dialog-line-results" />
