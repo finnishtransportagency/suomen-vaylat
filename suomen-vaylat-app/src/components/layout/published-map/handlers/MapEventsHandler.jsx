@@ -4,7 +4,6 @@ import {
   addMarkerRequest,
   removeMarkerRequest,
   resetGFILocations,
-  setGFILocations,
   pushGFILocations,
   setPointInfo,
   setVKMData,

@@ -654,35 +654,24 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
     }
   };
 
-  const transformVectorFeaturesResponse = (data, geojson) => {
-    const result = [];
+  // returns empty object if error, otherwise return gfi location object
+  const transformVectorFeaturesResponse = (data, geojson, layerId) => {
+    if (!data || !data[layerId]) return {};
 
-    if (!data) return [];
-    Object.keys(data).forEach((layerKey) => {
-      try {
-        const node = data[layerKey] || {};
-        const features = Array.isArray(node.features) ? node.features : [];
-        const content = features.map((feat) => {
-          const props = feat?.properties ? { ...feat.properties } : {};
-          delete props.__fid;
-          // optionally remove geometry entirely (not included in requested structure)
-          // if you want to keep geometry, add it under another key
-          return { geojson: props };
-        });
-
-        result.push({
-          layerId: layerKey,
-          gfiCroppingArea: geojson,
-          type: 'json',
-          content
-        });
-      } catch (e) {
-        // skip broken nodes but keep other layers
-        // optionally push an error descriptor
-        console.warn('Failed to transform layer', layerKey, e);
-      }
+    const node = data[layerId] || {};
+    const features = Array.isArray(node.features) ? node.features : [];
+    const content = features.map((feat) => {
+      const props = feat?.properties ? { ...feat.properties } : {};
+      delete props.__fid;
+      return { geojson: props };
     });
-    return result[0];
+
+    return {
+      layerId: layerId,
+      gfiCroppingArea: geojson,
+      type: 'json',
+      content
+    };
   };
 
   const fetchVectorFeaturesSynchronous = (featureArg, layer, geojson) => {
@@ -697,16 +686,28 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
       }
 
       const featureToSend = featureArg; 
-      const layerIds = [layer.id];
+      const layerId = [layer.id];
 
       channel.getVectorFeatures(
-        [featureToSend, {'layers': layerIds}],
+        [featureToSend, {'layers': layerId}],
         (vectorData) => {
           try {
-            const transformed = transformVectorFeaturesResponse(vectorData, geojson);
+            const transformed = transformVectorFeaturesResponse(vectorData, geojson, layer.id);
 
-            if (transformed) {
+            if (Object.keys(transformed).length > 0) {
               store.dispatch(pushGFILocations(transformed));
+            } else {
+              toast.error(strings.gfi.errors.userlayerDataParseError, {
+                position: 'top-center',
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: 'colored',
+                transition: Slide
+              });
             }
             setNumberedLoader((prev) =>
               prev ? { current: prev.current + 1, total: prev.total } : prev
@@ -726,7 +727,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
           );
 
           if (error?.BODY_SIZE_EXCEEDED_ERROR) {
-            toast.error(strings.gfi.userLayerDataFetchError + layer.name, {
+            toast.error(strings.gfi.errors.userLayerDataFetchError + layer.name, {
               position: 'top-center',
               autoClose: 5000,
               hideProgressBar: false,

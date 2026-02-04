@@ -240,7 +240,10 @@
       "googleStreetviewTitle": "Google Street View",
       "googleStreetviewContent": "Avaa valittu piste Google Street View:ssä uudelle välilehdelle"
     },
-    "userLayerDataFetchError": "Kohdetietojen haku epäonnistui tasolle: "
+    "errors": {
+      "userLayerDataFetchError": "Kohdetietojen haku epäonnistui tasolle: ",
+      "userlayerDataParseError": "Oman aineiston tietojen käsittely epäonnistui"
+    }
   },
   "vkm": {
     "locationInfo": "Sijaintitiedot",
