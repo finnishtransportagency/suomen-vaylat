@@ -99,16 +99,6 @@ export const rpcSlice = createSlice({
     },
 
     /**
-     * Set selected layer on gfi popup
-     * @method setActiveGFILayer
-     * @param {Object} state
-     * @param {Object} action
-     */
-    setActiveGFILayer: (state, action) => {
-      state.activeGFILayer = action.payload;
-    },
-
-    /**
      * Set channel.
      * @method setChannel
      * @param {Object} state
@@ -1078,7 +1068,6 @@ export const {
   setAllSelectedThemeLayers,
   setPointInfo,
   setFilters,
-  setActiveGFILayer,
   setFilteringInfo,
   pushToFeatureSearchResults,
   resetFeatureSearchResults,

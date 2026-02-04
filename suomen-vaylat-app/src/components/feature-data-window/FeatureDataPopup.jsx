@@ -29,7 +29,6 @@ import {
 import {
   resetGFILocations,
   addFeaturesToGFILocations,
-  setActiveGFILayer,
   setFilters,
   removeMarkerRequest
 } from '../../state/slices/rpcSlice';
@@ -443,11 +442,19 @@ export const FeatureDataPopup = () => {
     if (gfiLocations.length === 0) {
       setSelectedTab(0);
       setDisableDownload(true);
+      setTabsIds([]);
     } else {
       const onlyUserLayers = gfiLocations.every(
         l => typeof l.layerId === 'string' && l.layerId.startsWith('userlayer_')
       );
       setDisableDownload(onlyUserLayers);
+
+      let layerIds = [];
+      gfiLocations.forEach((location) => {
+        layerIds.push(location.layerId);
+      });
+
+      setTabsIds(layerIds);
     }
   }, [gfiLocations]);
 
@@ -487,22 +494,6 @@ export const FeatureDataPopup = () => {
       );
     }
   };
-
-  useEffect(() => {
-    let layerIds = [];
-    gfiLocations.forEach((location) => {
-      const isBackgroundMap =
-        selectedLayersByType.backgroundMaps.filter(
-          (l) => l.id === location.layerId
-        ).length > 0;
-      if (isBackgroundMap) {
-        return;
-      }
-      layerIds.push(location.layerId);
-    });
-
-    setTabsIds(layerIds);
-  }, [gfiLocations, selectedLayersByType.backgroundMaps]);
 
   useEffect(() => {
     isGfiDownloadToolsOpen && setIsGfiDownloadToolsOpen(false);
@@ -917,9 +908,9 @@ export const FeatureDataPopup = () => {
         LAYER_ID
       ]);
     if (index > 0) {
-      handleSelectTab(index - 1);
+      setSelectedTab(index - 1);
     } else {
-      handleSelectTab(0);
+      setSelectedTab(0);
     }
   };
 
@@ -984,12 +975,6 @@ export const FeatureDataPopup = () => {
       setPoint([pointCoords[1], pointCoords[0]].toString());
     }
   }, [vkmData, pointInfo]);
-
-  const handleSelectTab = (index) => {
-    setSelectedTab(index);
-    const layer = selectedLayers.filter((l) => l.id === tabsIds[index]);
-    store.dispatch(setActiveGFILayer(layer));
-  };
 
   return (
     <StyledGfiContainer id="gfi_container">
@@ -1167,7 +1152,7 @@ export const FeatureDataPopup = () => {
               return (
                 <SwiperSlide id={'tab_' + index} key={'tab_' + index}>
                   <StyledGfiTab
-                    onClick={() => handleSelectTab(index)}
+                    onClick={() => setSelectedTab(index)}
                     selected={selectedTab === index}
                   >
                     <StyledTabName>
@@ -1240,7 +1225,7 @@ export const FeatureDataPopup = () => {
             ref={gfiInputEl}
             id={'gfi-swiper'}
             onSlideChange={(e) => {
-              handleSelectTab(e.activeIndex);
+              setSelectedTab(e.activeIndex);
             }}
             tabIndex={selectedTab}
             allowTouchMove={false} // Disable swiping
