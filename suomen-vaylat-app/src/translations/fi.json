@@ -592,7 +592,7 @@
       "title": "Aineistohaku"
     },
     "feature": {
-      "title": "Kohdehaku",
+      "title": "Kohdehaku  (beta)",
       "warn": "Hakutuloksien enimmäismäärä ylitetty, tarkenna hakua.",
       "noResults": "Ei tuloksia",
       "errorLayerStart": "Virhe tason ' ",
