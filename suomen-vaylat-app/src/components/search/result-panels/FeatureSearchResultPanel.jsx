@@ -40,8 +40,6 @@ const StyledDropDown = styled(motion.div)`
 
 const StyledDropdownContentItem = styled.div`
   display: flex;
-  flex-direction: row;
-  user-select: none;
   cursor: pointer;
   padding: 4px;
   border-bottom: solid;
@@ -49,14 +47,23 @@ const StyledDropdownContentItem = styled.div`
   :last-child {
     //border: none;
   }
+  overflow: hidden;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr 2fr;
+  font-size: 14px;
   &:hover {
     background-color: ${(props) => props.theme.colors.hover};
   }
   background-color: ${(props) =>
     props.selected ? props.theme.colors.hover : ''};
-  p {
-    margin: 0;
-    padding: 0;
+
+  /* When hovering the title, expand both id and value */
+  &:hover [data-truncate="true"] {
+    white-space: normal;      /* allow wrapping */
+    overflow: visible;       /* let the content overflow so it can wrap/expand */
+    text-overflow: clip;     /* remove ellipsis */
+    word-break: break-word;  /* wrap long tokens */
   }
 `;
 
@@ -72,29 +79,30 @@ const StyledWarningContainer = styled.div`
   color: ${(props) => props.theme.colors.mainWhite};
 `;
 
-const StyledDropdownFeatureResultsContainer = styled.div`
-  display: flex;
-  width: 100%;
-  flex-direction: column;
-  user-select: none;
-  cursor: pointer;
-  border-radius: 5px;
-`;
-
 const StyledDropdownFeatureResults = styled.div`
   display: flex;
   flex-direction: column;
   user-select: none;
 `;
 
-const StyledDropdownContentItemTitle = styled.div`
-  margin: 4px 0px 4px 0px;
+const StyledResultId = styled.div.attrs(() => ({ 'data-truncate': 'true' }))`
+  margin-right: 0.5em;
+  font-weight: 600;
   overflow: hidden;
-  display: grid;
-  grid-auto-flow: column;
-  grid-auto-columns: 1fr 2fr;
-  font-size: 14px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  max-width: 220px;
+  display: inline-block;
+  vertical-align: middle;
 `;
+
+const StyledResultValue = styled.p.attrs(() => ({ 'data-truncate': 'true' }))`
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  margin: 0;
+`;
+
 
 const StyledGroupName = styled.div`
   max-width: 220px;
@@ -160,28 +168,6 @@ const StyledNoResults = styled.div`
   display: flex;
   justify-content: center;
   margin-top: 8px;
-`;
-
-const StyledResultId = styled.div`
-  margin-right: 0.5em;
-  font-weight: 600;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  &:hover {
-    white-space: wrap;
-    text-overflow: none;
-  }
-`;
-
-const StyledResultValue = styled.p`
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  &:hover {
-    white-space: wrap;
-    text-overflow: none;
-  }
 `;
 
 const StyledShowMoreButtonWrapper = styled.div`
@@ -519,14 +505,10 @@ const FeatureList = ({
               }
             }}
           >
-            <StyledDropdownFeatureResultsContainer>
-              <StyledDropdownFeatureResults>
-                <StyledDropdownContentItemTitle id={labelId}>
-                  <StyledResultId>{`${item.feature_id}:`}</StyledResultId>
-                  <StyledResultValue>{item.value}</StyledResultValue>
-                </StyledDropdownContentItemTitle>
-              </StyledDropdownFeatureResults>
-            </StyledDropdownFeatureResultsContainer>
+            <StyledResultId
+              id={labelId}
+            >{`${item.feature_id}:`}</StyledResultId>
+            <StyledResultValue>{item.value}</StyledResultValue>
           </StyledDropdownContentItem>
         );
       })}
