@@ -241,7 +241,10 @@
       "googleStreetviewTitle": "Google Street View",
       "googleStreetviewContent": "Open selected point in Google Street View in new tab"
     },
-    "userLayerDataFetchError": "Failed to retrieve feature data for layer: "
+    "errors": {
+      "userLayerDataFetchError": "Failed to retrieve feature data for layer: ",
+      "userlayerDataParseError": "Error parsing userlayer data"
+    }
   },
   "vkm": {
     "locationInfo": "Location info",

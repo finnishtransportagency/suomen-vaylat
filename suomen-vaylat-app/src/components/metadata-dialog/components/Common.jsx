@@ -33,6 +33,7 @@ export const StyledA = styled.a`
 
 export const StyledParagraph = styled.p`
     cursor: default;
+    white-space: pre-wrap;
 `;
 
 export const StyledImage = styled.img`

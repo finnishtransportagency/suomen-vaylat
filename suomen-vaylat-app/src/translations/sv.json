@@ -241,7 +241,10 @@
       "googleStreetviewTitle": "Google Street View",
       "googleStreetviewContent": "Öppna den valda punkten i Google Street View på en ny flik"
     },
-    "userLayerDataFetchError": "Hämtning av objektdata misslyckades för kartlagret: "
+    "errors": {
+      "userLayerDataFetchError": "Hämtning av objektdata misslyckades för kartlagret: ",
+      "userlayerDataParseError": "Misslyckades med att bearbeta data för egen kartlager"
+    }
   },
   "vkm": {
     "locationInfo": "Positionsdata",
