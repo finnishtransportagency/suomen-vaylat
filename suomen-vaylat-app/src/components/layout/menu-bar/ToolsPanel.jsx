@@ -44,7 +44,7 @@ const StyledTools = styled(motion.div)`
   transition: all 0.3s ease;
   pointer-events: auto;
   gap: 8px;
-  width: 13rem;
+  width: 14rem;
   box-sizing: border-box;
   overflow: scroll;
   padding: 0 8px 8px 8px;
