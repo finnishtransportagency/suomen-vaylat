@@ -140,7 +140,8 @@ describe('FeatureSearchInput', () => {
             searchValue: 'abc', // input bound to redux searchValue
             isSearchingActive: false,
             lastSearchValue: '',
-            lastSearchAttribute: ''
+            lastSearchAttribute: '',
+            attributeSearchEnabled: true
         });
 
         // Make validation pass
@@ -172,7 +173,7 @@ describe('FeatureSearchInput', () => {
 
         await waitFor(() => {
             // validateFeatureSearch should be invoked with the current searchValue and the store
-            expect(validateFeatureSearch).toHaveBeenCalledWith('abc', mockStore, true);
+            expect(validateFeatureSearch).toHaveBeenCalledWith('abc', mockStore, true, true);
         });
 
         let firstCallArgs = [];
@@ -221,7 +222,7 @@ describe('FeatureSearchInput', () => {
             <FeatureSearchInput setDropdownOpen={() => {}} emptySearchInputs={emptySearchInputs} />
         );
 
-        const clearButton = screen.getByRole('button', { name: strings.search.clearResults });
+        const clearButton = screen.getByRole('button', { name: strings.search.clearFields });
         expect(clearButton).toBeInTheDocument();
         fireEvent.click(clearButton);
         expect(emptySearchInputs).toHaveBeenCalled();

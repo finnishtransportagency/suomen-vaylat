@@ -55,7 +55,6 @@ const AnnouncementsDialog = ({ constraintsRef }) => {
             announcements[currentAnnouncement].title
           } /* Dialog header title */
           type={'announcement'} /* Dialog type */
-          overflow={'auto'}
           closeAction={
             closeAnnouncement
           } /* Action when pressing dialog close button or backdrop */

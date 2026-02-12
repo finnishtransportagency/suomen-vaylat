@@ -40,8 +40,6 @@ const StyledDropDown = styled(motion.div)`
 
 const StyledDropdownContentItem = styled.div`
   display: flex;
-  flex-direction: row;
-  user-select: none;
   cursor: pointer;
   padding: 4px;
   border-bottom: solid;
@@ -49,14 +47,23 @@ const StyledDropdownContentItem = styled.div`
   :last-child {
     //border: none;
   }
+  overflow: hidden;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr 2fr;
+  font-size: 14px;
   &:hover {
     background-color: ${(props) => props.theme.colors.hover};
   }
   background-color: ${(props) =>
     props.selected ? props.theme.colors.hover : ''};
-  p {
-    margin: 0;
-    padding: 0;
+
+  /* When hovering the title, expand both id and value */
+  &:hover [data-truncate="true"] {
+    white-space: normal;      /* allow wrapping */
+    overflow: visible;       /* let the content overflow so it can wrap/expand */
+    text-overflow: clip;     /* remove ellipsis */
+    word-break: break-word;  /* wrap long tokens */
   }
 `;
 
@@ -72,29 +79,30 @@ const StyledWarningContainer = styled.div`
   color: ${(props) => props.theme.colors.mainWhite};
 `;
 
-const StyledDropdownFeatureResultsContainer = styled.div`
-  display: flex;
-  width: 100%;
-  flex-direction: column;
-  user-select: none;
-  cursor: pointer;
-  border-radius: 5px;
-`;
-
 const StyledDropdownFeatureResults = styled.div`
   display: flex;
   flex-direction: column;
   user-select: none;
 `;
 
-const StyledDropdownContentItemTitle = styled.div`
-  margin: 4px 0px 4px 0px;
+const StyledResultId = styled.div.attrs(() => ({ 'data-truncate': 'true' }))`
+  margin-right: 0.5em;
+  font-weight: 600;
   overflow: hidden;
-  display: grid;
-  grid-auto-flow: column;
-  grid-auto-columns: 1fr 2fr;
-  font-size: 14px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  max-width: 220px;
+  display: inline-block;
+  vertical-align: middle;
 `;
+
+const StyledResultValue = styled.p.attrs(() => ({ 'data-truncate': 'true' }))`
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  margin: 0;
+`;
+
 
 const StyledGroupName = styled.div`
   max-width: 220px;
@@ -160,28 +168,6 @@ const StyledNoResults = styled.div`
   display: flex;
   justify-content: center;
   margin-top: 8px;
-`;
-
-const StyledResultId = styled.div`
-  margin-right: 0.5em;
-  font-weight: 600;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  &:hover {
-    white-space: wrap;
-    text-overflow: none;
-  }
-`;
-
-const StyledResultValue = styled.p`
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  &:hover {
-    white-space: wrap;
-    text-overflow: none;
-  }
 `;
 
 const StyledShowMoreButtonWrapper = styled.div`
@@ -287,7 +273,7 @@ const FeatureSearchResultPanel = () => {
 
   const handleFeatureSearch = (searchValue, searchAttribute, startIndex = 0, layerId = -1) => {
     const handleSearchResponse = (data) => {
-      if (Object.keys(data).length > 0 && Object.keys(data.gfi).length > 0) {
+      if (data !== null && Object.keys(data).length > 0) {
         store.dispatch(setIsSearchingActive(false));
         store.dispatch(setSearchOn(false));
 
@@ -296,19 +282,19 @@ const FeatureSearchResultPanel = () => {
           let oldFeatureSearchResults = JSON.parse(
             JSON.stringify(featureSearchResults)
           );
-          let newFeatureSearchResults = { ...data.gfi };
+          let newFeatureSearchResults = { ...data };
           const contentIndex = oldFeatureSearchResults
             .map((gfi) => gfi.content.layerId)
-            .indexOf(data.gfi.content.layerId);
+            .indexOf(data.content.layerId);
           const updatedFeatures = oldFeatureSearchResults[
             contentIndex
-          ].content.geojson.features.concat(data.gfi.content.geojson.features);
+          ].content.geojson.features.concat(data.content.geojson.features);
           newFeatureSearchResults.content.geojson.features = updatedFeatures;
 
           const updatedMatchedKeys = mergeMatchedKeys(
             oldFeatureSearchResults[contentIndex].content.geojson
               .matchedFeatures,
-            data.gfi.content.geojson.matchedFeatures
+            data.content.geojson.matchedFeatures
           );
           newFeatureSearchResults.content.geojson.matchedFeatures =
             updatedMatchedKeys;
@@ -317,9 +303,10 @@ const FeatureSearchResultPanel = () => {
 
           store.dispatch(setFeatureSearchResults(oldFeatureSearchResults));
         } else {
-          store.dispatch(pushToFeatureSearchResults(data.gfi));
+          store.dispatch(pushToFeatureSearchResults(data));
         }
       } else {
+        store.dispatch(setFeatureSearchResults([null]));
         store.dispatch(setIsSearchingActive(false));
         store.dispatch(setSearchOn(false));
       }
@@ -327,26 +314,43 @@ const FeatureSearchResultPanel = () => {
       store.dispatch(setLastSearchAttribute(searchAttribute));
     };
 
-    const handleSearchError = (layerIdentifier, error) => {
+    const handleSearchError = (layerIdentifier, error, usedAttr) => {
       store.dispatch(setIsSearchingActive(false));
       store.dispatch(setSearchOn(false));
       store.dispatch(setLastSearchValue(searchValue));
-      store.dispatch(setLastSearchAttribute(searchAttribute));
+      store.dispatch(setLastSearchAttribute(usedAttr));
 
-      toast.error(
-        `${strings.search.feature.errorLayerStart}${layerIdentifier}${strings.search.feature.errorLayerEnd}`,
-        {
-          position: 'top-center',
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: 'colored',
-          transition: Slide
-        }
-      );
+      if (error === "invalid datatype") {
+        toast.error(
+          `${strings.search?.feature?.errors?.invalidDataType}`,
+          {
+            position: 'top-center',
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: 'colored',
+            transition: Slide
+          }
+        );
+      } else {
+        toast.error(
+          `${strings.search.feature.errorLayerStart}${layerIdentifier}${strings.search.feature.errorLayerEnd}`,
+          {
+            position: 'top-center',
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: 'colored',
+            transition: Slide
+          }
+        );
+      }
     };
 
     store.dispatch(setIsSearchingActive(true));
@@ -360,7 +364,7 @@ const FeatureSearchResultPanel = () => {
 
     if (searchLayer) {
       channel.searchFeatures(
-        [[searchLayer], searchValue, searchAttribute, startIndex],
+        [searchLayer, searchValue, searchAttribute, startIndex],
         (data) => handleSearchResponse(data, searchLayer),
         (error) => handleSearchError(layerIdentifier, error)
       );
@@ -451,9 +455,7 @@ const FeatureSearchResultPanel = () => {
 
       {lastSearchValue.length > 0 &&
         !searchOn &&
-        featureSearchResults[0]?.content?.geojson?.matchedFeatures &&
-        Object.keys(featureSearchResults[0].content.geojson.matchedFeatures)
-          .length === 0 && (
+        featureSearchResults[0] === null && (
           <StyledNoResults>{strings.search.feature.noResults}</StyledNoResults>
         )}
     </>
@@ -503,14 +505,10 @@ const FeatureList = ({
               }
             }}
           >
-            <StyledDropdownFeatureResultsContainer>
-              <StyledDropdownFeatureResults>
-                <StyledDropdownContentItemTitle id={labelId}>
-                  <StyledResultId>{`${item.feature_id}:`}</StyledResultId>
-                  <StyledResultValue>{item.value}</StyledResultValue>
-                </StyledDropdownContentItemTitle>
-              </StyledDropdownFeatureResults>
-            </StyledDropdownFeatureResultsContainer>
+            <StyledResultId
+              id={labelId}
+            >{`${item.feature_id}:`}</StyledResultId>
+            <StyledResultValue>{item.value}</StyledResultValue>
           </StyledDropdownContentItem>
         );
       })}

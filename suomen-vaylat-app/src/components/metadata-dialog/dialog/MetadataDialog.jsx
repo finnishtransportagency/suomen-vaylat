@@ -41,7 +41,6 @@ const MetadataDialog = ({ constraintsRef }) => {
           isOpen={layerMetadata.data !== null} /* Dialog state */
           id="metadata_dialog"
           maxWidth={"800px"}
-          overflow={"auto"}
         >
           <MetadataDialogContent metadata={layerMetadata} />
         </Dialog>

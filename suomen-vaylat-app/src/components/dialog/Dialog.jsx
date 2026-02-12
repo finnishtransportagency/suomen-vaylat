@@ -162,7 +162,7 @@ const StyledDialogContent = styled.div`
     height: 100%;
     display: flex;
     flex-direction: column;
-    overflow-y: ${(props) => (props.overflow ? 'auto' : 'hidden')};
+    overflow-y: auto;
 `;
 
 const Dialog = ({
@@ -185,7 +185,6 @@ const Dialog = ({
     bottom,
     right,
     left,
-    overflow,
     minimizable,
     minimizeAction,
     maximizable,
@@ -344,7 +343,7 @@ const Dialog = ({
                                     </StyledCloseButton>
                                 </StyledRightContent>
                             </StyledDialogHeader>
-                            <StyledDialogContent overflow={overflow}>
+                            <StyledDialogContent>
                                 {!type === 'announcement'
                                     ? children
                                     : clonedChildren}

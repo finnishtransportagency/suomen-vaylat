@@ -1,7 +1,13 @@
 import {
   setFeatureErrors,
+  setFeatureSearchResults,
+  setLastSearchValue,
+  setSearchResults,
+  setSearchValue,
   setTrackErrors
 } from '../../../state/slices/rpcSlice';
+import { setGeoJsonArray } from '../../../state/slices/uiSlice';
+import store from '../../../state/store';
 import strings from '../../../translations';
 
 export const vectorLayerId = 'SEARCH_VECTORLAYER';
@@ -17,7 +23,9 @@ export const validateFeatureSearch = (
   const regex = /[^A-Za-z0-9äöåÄÖÅ \-/.,()]/;
   const minLength = attributeSearch ? 1 : 3;
   if (requireAll && searchValue.length < minLength) {
-    attributeSearch? newErrors.push('lengthAttributeSearch') : newErrors.push('length');
+    attributeSearch
+      ? newErrors.push('lengthAttributeSearch')
+      : newErrors.push('length');
   }
   if (regex.test(searchValue)) {
     newErrors.push('regex');
@@ -248,4 +256,13 @@ export const mergeMatchedKeys = (oldMatchedKeys, newMatchedKeys) => {
 
   // Return the merged object
   return mergedMatchedKeys;
+};
+
+export const emptySearchResults = () => {
+  store.dispatch(setGeoJsonArray([]));
+  store.dispatch(setFeatureSearchResults([]));
+  store.dispatch(setSearchResults(null));
+  store.dispatch(setSearchValue(''));
+  store.dispatch(setLastSearchValue(''));
+  removeMarkersAndFeatures(store.getState().rpc.channel);
 };

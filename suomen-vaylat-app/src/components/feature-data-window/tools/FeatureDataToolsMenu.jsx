@@ -512,7 +512,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
               await fetchVectorFeaturesSynchronous(
                 features.data[0].geojson.features[0],
                 layer,
-                features.data[0]
+                features.data[0].geojson
               );
             } catch (err) {
               // errors handled inside wrapper
@@ -523,7 +523,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
               await fetchFeaturesSynchronous(
                 features.data[0].geojson.features,
                 layer,
-                features.data[0]
+                features.data[0].geojson
               );
             } catch (err) {
               // handled in fetchFeaturesSynchronous
@@ -566,7 +566,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
               await fetchVectorFeaturesSynchronous(
                 features.data[0].data.geom.features[0],
                 layer,
-                features.data[0]
+                features.data[0].geojson
               );
             } catch (err) {
               // handled in wrapper
@@ -577,7 +577,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
               await fetchFeaturesSynchronous(
                 features.data[0].data.geom.features,
                 layer,
-                features.data[0]
+                features.data[0].geojson
               );
             } catch (err) {
               // handled in fetchFeaturesSynchronous
@@ -621,7 +621,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
                 await fetchVectorFeaturesSynchronous(
                   data.features[0].geojson.features[0],
                   layer,
-                  data.features[0]
+                  data.features[0].geojson
                 );
               } catch (err) {
                 // handled in wrapper
@@ -632,7 +632,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
                 await fetchFeaturesSynchronous(
                   data.features[0].geojson.features,
                   layer,
-                  data.features[0]
+                  data.features[0].geojson
                 );
               } catch (err) {
                 // handled
@@ -654,65 +654,27 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
     }
   };
 
-  // helper to transform incoming vector features payload to desired shape
-  const transformVectorFeaturesResponse = (payload) => {
-    const result = [];
+  // returns empty object if error, otherwise return gfi location object
+  const transformVectorFeaturesResponse = (data, geojson, layerId) => {
+    if (!data || !data[layerId]) return {};
 
-    if (!payload) return result;
-
-    // If payload is an object that directly contains features (no top-level layerKey)
-    const looksLikeSingleLayer =
-      !!payload.features && Array.isArray(payload.features);
-
-    if (looksLikeSingleLayer) {
-      // try to infer a layerId if present in the payload (optional)
-      const inferredLayerId = payload.layerId || payload.id || null;
-      const content = (payload.features || []).map((feat) => {
-        const props = feat?.properties ? { ...feat.properties } : {};
-        // strip internal fields you don't want to expose
-        delete props.__fid;
-        return { geojson: props };
-      });
-      result.push({
-        layerId: inferredLayerId || 'unknown',
-        type: 'json',
-        content
-      });
-      return result.length === 1 ? result[0] : result;
-    }
-
-    // Otherwise treat payload as object keyed by layer id
-    Object.keys(payload).forEach((layerKey) => {
-      try {
-        const node = payload[layerKey] || {};
-        const features = Array.isArray(node.features) ? node.features : [];
-        const content = features.map((feat) => {
-          const props = feat?.properties ? { ...feat.properties } : {};
-          delete props.__fid;
-          // optionally remove geometry entirely (not included in requested structure)
-          // if you want to keep geometry, add it under another key
-          return { geojson: props };
-        });
-
-        result.push({
-          layerId: layerKey,
-          type: 'json',
-          content
-        });
-      } catch (e) {
-        // skip broken nodes but keep other layers
-        // optionally push an error descriptor
-        console.warn('Failed to transform layer', layerKey, e);
-      }
+    const node = data[layerId] || {};
+    const features = Array.isArray(node.features) ? node.features : [];
+    const content = features.map((feat) => {
+      const props = feat?.properties ? { ...feat.properties } : {};
+      delete props.__fid;
+      return { geojson: props };
     });
 
-    // if you prefer single object when only one layer present:
-    return result.length === 1 ? result[0] : result;
+    return {
+      layerId: layerId,
+      gfiCroppingArea: geojson,
+      type: 'json',
+      content
+    };
   };
 
-  // Promise-wrapper for channel.getVectorFeatures so it can be awaited like fetchFeaturesSynchronous
-  // Accepts either a single feature or an array of features as `featureArg`.
-  const fetchVectorFeaturesSynchronous = (featureArg, layer, origData) => {
+  const fetchVectorFeaturesSynchronous = (featureArg, layer, geojson) => {
     return new Promise((resolve, reject) => {
       if (!channel || !channel.getVectorFeatures) {
         // No channel available: fail fast
@@ -723,18 +685,29 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
         return;
       }
 
-      // Prepare params in the shape the channel expects:
-      // many existing calls used [feature, [layerId]]
-      const featureToSend = featureArg; // could be single feature or array depending on call site
-      const layerIds = [layer.id];
+      const featureToSend = featureArg; 
+      const layerId = [layer.id];
 
       channel.getVectorFeatures(
-        [featureToSend, layerIds],
+        [featureToSend, {'layers': layerId}],
         (vectorData) => {
           try {
-            const transformed = transformVectorFeaturesResponse(vectorData);
-            if (transformed) {
+            const transformed = transformVectorFeaturesResponse(vectorData, geojson, layer.id);
+
+            if (Object.keys(transformed).length > 0) {
               store.dispatch(pushGFILocations(transformed));
+            } else {
+              toast.error(strings.gfi.errors.userlayerDataParseError, {
+                position: 'top-center',
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: 'colored',
+                transition: Slide
+              });
             }
             setNumberedLoader((prev) =>
               prev ? { current: prev.current + 1, total: prev.total } : prev
@@ -754,7 +727,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
           );
 
           if (error?.BODY_SIZE_EXCEEDED_ERROR) {
-            toast.error(strings.gfi.userLayerDataFetchError + layer.name, {
+            toast.error(strings.gfi.errors.userLayerDataFetchError + layer.name, {
               position: 'top-center',
               autoClose: 5000,
               hideProgressBar: false,
@@ -796,7 +769,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
   };
 
   // Existing fetchFeaturesSynchronous kept as-is (slightly adapted to ensure consistent loader updates)
-  const fetchFeaturesSynchronous = (feature, layer, data) => {
+  const fetchFeaturesSynchronous = (feature, layer, geojson) => {
     return new Promise(function (resolve, reject) {
       channel.getFeaturesByGeoJSON(
         [feature, 0, [layer.id]],
@@ -811,7 +784,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
               const gfiLoc = {
                 content: gfi.content,
                 layerId: gfi.layerId,
-                gfiCroppingArea: data.geojson,
+                gfiCroppingArea: geojson,
                 type: 'geojson',
                 moreFeatures: gfi.content.some(
                   (content) => content.moreFeatures
@@ -916,7 +889,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
                     await fetchVectorFeaturesSynchronous(
                       data.geojson.features[0],
                       layer,
-                      data
+                      data.geojson
                     );
                   } catch (err) {
                     // error handled in wrapper
@@ -927,7 +900,7 @@ const GfiToolsMenu = ({ handleGfiToolsMenu, closeButton = true }) => {
                     await fetchFeaturesSynchronous(
                       data.geojson.features,
                       layer,
-                      data
+                      data.geojson
                     );
                   } catch (err) {
                     // handled inside fetchFeaturesSynchronous

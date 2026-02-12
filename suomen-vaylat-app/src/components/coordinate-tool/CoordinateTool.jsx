@@ -31,6 +31,7 @@ import {
   isProjectionDegrees
 } from './util';
 import { Slide, toast } from 'react-toastify';
+import { Switch } from '@mui/material';
 
 const StyledCoordinateToolContainer = styled.div`
   width: 100%;
@@ -212,11 +213,25 @@ const StyledCoordinateIndicator = styled.span`
   font-weight: bold;
 `;
 
+const StyledSwitchRow = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const StyledSwitchLabel = styled.div`
+  font-size: 1rem;
+  color: #292929;
+  margin-left: 10px;
+`;
+
 const CoordinateTool = () => {
   const { channel, center, currentZoomLevel, coordMarkerIndex } = useSelector(
     (state) => state.rpc
   );
   const { store } = useContext(ReactReduxContext);
+
+  // Round the value
+  const [round, setRound] = useState(true);
 
   // native coords (EPSG:3067) numeric full precision
   const [mapCenter, setMapCenter] = useState({
@@ -230,9 +245,10 @@ const CoordinateTool = () => {
     x: center.x,
     y: center.y
   });
+
   const [displayedShown, setDisplayedShown] = useState({
-    x: formatProjectedShown(center.x),
-    y: formatProjectedShown(center.y)
+    x: round ? formatProjectedShown(center.x) : center.x,
+    y: round ? formatProjectedShown(center.y) : center.y
   });
 
   // validation
@@ -240,13 +256,52 @@ const CoordinateTool = () => {
   const [isValidY, setIsValidY] = useState(true);
 
   // projection selection and transform status
-  const [selectedProjection, setSelectedProjection] = useState(projectionOptions[0]); // default map SRS
+  const [selectedProjection, setSelectedProjection] = useState(
+    projectionOptions[0]
+  ); // default map SRS
   const [isTransformLoading, setIsTransformLoading] = useState(false);
 
   // for cancelling/guarding inflight responses
   const activeRequestRef = useRef(null);
   // track user edits so incoming map updates don't overwrite while typing
   const userEditedRef = useRef(false);
+
+  const handleSetRound = (round) => {
+    setRound(round);
+    if (isProjectionDegrees(selectedProjection.value)) {
+      try {
+        const dms = coordinateMetricToDegrees(
+          [displayedRaw.x, displayedRaw.y],
+          round
+        ); // [dmsLon, dmsLat]
+        setDisplayedShown({ x: String(dms[0]), y: String(dms[1]) });
+      } catch (e) {
+        // fallback to show numeric full precision if util fails
+        setDisplayedShown({
+          x: String(displayedRaw.x),
+          y: String(displayedRaw.y)
+        });
+      }
+    } else {
+      // projected: show rounded to 3 decimals?
+      setDisplayedShown({
+        x: round ? formatProjectedShown(displayedRaw.x) : displayedRaw.x,
+        y: round ? formatProjectedShown(displayedRaw.y) : displayedRaw.y
+      });
+    }
+    localStorage.setItem('roundCoordinates', round.toString());
+  };
+
+  useEffect(() => {
+    let round = localStorage.getItem('roundCoordinates');
+    if (round) {
+      setRound(round === 'true');
+      setDisplayedShown({
+        x: round ? formatProjectedShown(center.x) : center.x,
+        y: round ? formatProjectedShown(center.y) : center.y
+      });
+    }
+  }, []);
 
   const handleDeleteMarkers = () => {
     for (let i = 0; i < coordMarkerIndex; i++) {
@@ -287,8 +342,8 @@ const CoordinateTool = () => {
       if (!targetSRS || targetSRS === 'EPSG:3067') {
         setDisplayedRaw({ x: nativeX, y: nativeY });
         setDisplayedShown({
-          x: formatProjectedShown(nativeX),
-          y: formatProjectedShown(nativeY)
+          x: round ? formatProjectedShown(nativeX) : nativeX,
+          y: round ? formatProjectedShown(nativeY) : nativeY
         });
         return;
       }
@@ -323,20 +378,18 @@ const CoordinateTool = () => {
         setDisplayedRaw({ x: rawX, y: rawY });
 
         if (isProjectionDegrees(targetSRS)) {
-          // produce DMS strings using util - pass decimals high to preserve precision in DMS fractions
-          // Use 9 decimals for the decimal->DMS conversion to preserve precision (mirror earlier behaviour)
           try {
-            const dms = coordinateMetricToDegrees([rawX, rawY], 3); // [dmsLon, dmsLat]
+            const dms = coordinateMetricToDegrees([rawX, rawY], round); // [dmsLon, dmsLat]
             setDisplayedShown({ x: String(dms[0]), y: String(dms[1]) });
           } catch (e) {
             // fallback to show numeric full precision if util fails
             setDisplayedShown({ x: String(rawX), y: String(rawY) });
           }
         } else {
-          // projected: show rounded to 3 decimals
+          // projected: show rounded to 3 decimals?
           setDisplayedShown({
-            x: formatProjectedShown(rawX),
-            y: formatProjectedShown(rawY)
+            x: round ? formatProjectedShown(rawX) : rawX,
+            y: round ? formatProjectedShown(rawY) : rawY
           });
         }
       } catch (err) {
@@ -364,7 +417,7 @@ const CoordinateTool = () => {
         setIsTransformLoading(false);
       }
     },
-    [channel, callTransformRPC]
+    [channel, round, callTransformRPC]
   );
 
   // transform displayed raw coords in selectedProjection back to native EPSG:3067 (numbers)
@@ -433,8 +486,8 @@ const CoordinateTool = () => {
       if (selectedProjection.value === 'EPSG:3067') {
         setDisplayedRaw({ x: center.x, y: center.y });
         setDisplayedShown({
-          x: formatProjectedShown(center.x),
-          y: formatProjectedShown(center.y)
+          x: round ? formatProjectedShown(center.x) : center.x,
+          y: round ? formatProjectedShown(center.y) : center.y
         });
       } else {
         transformNativeToDisplayed(
@@ -453,8 +506,8 @@ const CoordinateTool = () => {
     if (selectedProjection.value === 'EPSG:3067') {
       setDisplayedRaw({ x: mapCenter.x, y: mapCenter.y });
       setDisplayedShown({
-        x: formatProjectedShown(mapCenter.x),
-        y: formatProjectedShown(mapCenter.y)
+        x: round ? formatProjectedShown(mapCenter.x) : mapCenter.x,
+        y: round ? formatProjectedShown(mapCenter.y) : mapCenter.y
       });
     } else {
       if (!userEditedRef.current) {
@@ -577,8 +630,8 @@ const CoordinateTool = () => {
       if (selectedProjection.value === 'EPSG:3067') {
         setDisplayedRaw({ x: native.lon, y: native.lat });
         setDisplayedShown({
-          x: formatProjectedShown(native.lon),
-          y: formatProjectedShown(native.lat)
+          x: round ? formatProjectedShown(native.lon) : native.lon,
+          y: round ? formatProjectedShown(native.lat) : native.lat
         });
       } else {
         await transformNativeToDisplayed(
@@ -642,8 +695,8 @@ const CoordinateTool = () => {
           rawY,
           selectedProjection.value
         );
-        msgLon = formatProjectedShown(displayedRaw.x);
-        msgLat = formatProjectedShown(displayedRaw.y);
+        msgLon = round ? formatProjectedShown(displayedRaw.x) : displayedRaw.x;
+        msgLat = round ? formatProjectedShown(displayedRaw.y) : displayedRaw.y;
       }
 
       const newMarkerId = `coordinate_tool_marker_${coordMarkerIndex}`;
@@ -666,8 +719,8 @@ const CoordinateTool = () => {
       if (selectedProjection.value === 'EPSG:3067') {
         setDisplayedRaw({ x: native.lon, y: native.lat });
         setDisplayedShown({
-          x: formatProjectedShown(native.lon),
-          y: formatProjectedShown(native.lat)
+          x: round ? formatProjectedShown(native.lon) : native.lon,
+          y: round ? formatProjectedShown(native.lat) : native.lat
         });
       } else {
         await transformNativeToDisplayed(
@@ -717,7 +770,11 @@ const CoordinateTool = () => {
         setDisplayedRaw({ x: rawLon, y: rawLat });
 
         // transform to native and update mapCenter + canonical shown
-        const native = await transformDisplayedToNative(rawLon, rawLat, selectedProjection.value);
+        const native = await transformDisplayedToNative(
+          rawLon,
+          rawLat,
+          selectedProjection.value
+        );
         if (native == null) {
           // transform was superseded by a newer request — nothing to commit
           return;
@@ -740,19 +797,22 @@ const CoordinateTool = () => {
         if (Number.isNaN(rawX) || Number.isNaN(rawY)) return;
         setDisplayedRaw({ x: rawX, y: rawY });
 
-        const native = await transformDisplayedToNative(rawX, rawY, selectedProjection.value);
+        const native = await transformDisplayedToNative(
+          rawX,
+          rawY,
+          selectedProjection.value
+        );
         if (native == null) {
           // transform was superseded by a newer request — nothing to commit
           return;
         }
-        
         setMapCenter({ x: native.lon, y: native.lat });
 
         // update shown to canonical formatted (3 decimals)
         if (selectedProjection.value === 'EPSG:3067') {
           setDisplayedShown({
-            x: formatProjectedShown(native.lon),
-            y: formatProjectedShown(native.lat)
+            x: round ? formatProjectedShown(native.lon) : native.lon,
+            y: round ? formatProjectedShown(native.lat) : native.lat
           });
         } else {
           await transformNativeToDisplayed(
@@ -794,7 +854,10 @@ const CoordinateTool = () => {
           <Select
             inputId="projection-select"
             aria-label={strings.coordinateTool.projectionSelect}
-            value={{ value: selectedProjection.value, label: selectedProjection.label }}
+            value={{
+              value: selectedProjection.value,
+              label: selectedProjection.label
+            }}
             onChange={(opt) => {
               setSelectedProjection(opt);
             }}
@@ -803,6 +866,21 @@ const CoordinateTool = () => {
             placeholder="Select projection..."
           />
         </div>
+
+        <StyledSwitchRow>
+          <Switch
+            checked={round}
+            onChange={(e) => handleSetRound(e.target.checked)}
+            color="primary"
+            inputProps={{
+              id: 'view-form-default-switch',
+              'aria-label': strings.coordinateTool?.roundCoordinates
+            }}
+          />
+          <StyledSwitchLabel id="view-form-default-label">
+            {strings.coordinateTool?.roundCoordinates}
+          </StyledSwitchLabel>
+        </StyledSwitchRow>
       </StyledCoordinateSystemSection>
 
       <StyledInputSection id="coordinate-tool-input-section-y">
