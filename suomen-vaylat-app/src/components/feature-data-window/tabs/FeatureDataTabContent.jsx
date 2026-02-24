@@ -12,8 +12,8 @@ import 'ka-table/style.scss';
 import { theme, isMobile } from '../../../theme/theme';
 import ReactTooltip from 'react-tooltip';
 import { setMinimizeFilterDialog } from '../../../state/slices/uiSlice';
-import { isValidUrl } from '../../../utils/validUrlUtil';
 import { SortingMode, PagingPosition } from 'ka-table/enums';
+import { renderLinksInText } from '../../../utils/commonUtil';
 
 const StyledSelectedTabHeader = styled.div`
   position: relative;
@@ -106,24 +106,7 @@ function initUserLayerTableProps(inputFeatures) {
       pageSizes: [10, 50, 100],
       position: PagingPosition.Bottom
     },
-    format: ({ value }) => {
-      if (isValidUrl(value)) {
-        return (
-          <a target="_blank" rel="noreferrer" href={value}>
-            {value}
-          </a>
-        );
-      } else if (typeof value === 'string') {
-        return (
-          <span>
-            {value.split('\n').map((line, index) => (
-              <div key={index}>{line}</div>
-            ))}
-          </span>
-        );
-      }
-      return value;
-    }
+    format: ({ value }) => { return renderLinksInText(value) }
   };
 }
 

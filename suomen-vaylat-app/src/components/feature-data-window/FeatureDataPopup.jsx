@@ -37,9 +37,9 @@ import FeatureDataToolsMenu from './tools/FeatureDataToolsMenu';
 import FeatureDataDownloadTools from './download/FeatureDataDownloadTools';
 import CircleButton from '../../utils/components/CircleButton';
 import SVLoader from '../../utils/components/SvLoader';
-import { isValidUrl } from '../../utils/validUrlUtil';
 import { theme, isMobile } from '../../theme/theme';
 import { filterFeature } from '../../utils/gfiUtil';
+import { renderLinksInText } from '../../utils/commonUtil';
 import { SortingMode, PagingPosition } from 'ka-table/enums';
 
 // Max amount of features that wont trigger react-data-table-component
@@ -712,23 +712,7 @@ export const FeatureDataPopup = () => {
           pageSizes: [10, 50, 100],
           position: PagingPosition.Bottom
         },
-        format: ({ value }) => {
-          if (isValidUrl(value)) {
-            return (
-              <a target="_blank" rel="noreferrer" href={value}>
-                {value}
-              </a>
-            );
-          } else if (typeof value === 'string') {
-            return (
-              <span>
-                {value.split('\n').map((line, index) => (
-                  <div key={index}>{line}</div>
-                ))}
-              </span>
-            );
-          }
-        }
+        format: ({ value }) => {return renderLinksInText(value)}
       };
       return tablePropsInit;
     }
@@ -798,24 +782,7 @@ export const FeatureDataPopup = () => {
           pageSizes: [10, 50, 100],
           position: PagingPosition.Bottom
         },
-        format: ({ value }) => {
-          if (isValidUrl && isValidUrl(value)) {
-            return (
-              <a target="_blank" rel="noreferrer" href={value}>
-                {value}
-              </a>
-            );
-          } else if (typeof value === 'string') {
-            return (
-              <span>
-                {value.split('\n').map((line, index) => (
-                  <div key={index}>{line}</div>
-                ))}
-              </span>
-            );
-          }
-          return value;
-        }
+        format: ({ value }) => {return renderLinksInText(value)}
       };
       return tablePropsInit;
     }
