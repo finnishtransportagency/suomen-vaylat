@@ -19,6 +19,7 @@ const FeatureDataDownloadDialog = ({ constraintsRef }) => {
   const handleCloseGfiDownloadDialog = () => {
     store.dispatch(setIsGfiDownloadOpen(false));
 
+    // If gfi window is closed, remove features, otherwise there's no way to erase them afterwards
     !isGfiOpen &&
       channel &&
       channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [

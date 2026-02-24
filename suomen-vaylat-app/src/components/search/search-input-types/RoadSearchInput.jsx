@@ -625,6 +625,7 @@ const RoadSearchInput = ({
         <PillButton
           id={'road-search-inputs-clear-results-btn'}
           key={'road-search-inputs-clear-results-btn'}
+          variant='inverse'
           text={strings.search?.clearResults}
           onClick={emptySearchResults}
           aria-label={strings.search?.clearResults}

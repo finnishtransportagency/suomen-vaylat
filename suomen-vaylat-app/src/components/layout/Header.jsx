@@ -34,6 +34,7 @@ import {
   updateLayers
 } from '../../utils/rpcUtil';
 import { IS_EXTRANET } from '../../utils/appInfoUtil';
+import { FEATURE_SELECTION_DRAWING_TOOL } from '../../utils/constants';
 
 const history = createBrowserHistory();
 
@@ -247,6 +248,7 @@ export const Header = () => {
     store.dispatch(setIsMainScreen());
     store.dispatch(resetGFILocations([]));
     history.push(routerPrefix);
+    
     // TODO: Which of these are actually necessary, are we doing extra work?
     resetThemeGroupsForMainScreen(
       store,
@@ -269,9 +271,9 @@ export const Header = () => {
     });
 
     channel &&
-      activeTool === 'gfi-selection-tool' &&
+      activeTool === FEATURE_SELECTION_DRAWING_TOOL &&
       channel.postRequest('DrawTools.StopDrawingRequest', [
-        'gfi-selection-tool',
+        FEATURE_SELECTION_DRAWING_TOOL,
         true
       ]);
 

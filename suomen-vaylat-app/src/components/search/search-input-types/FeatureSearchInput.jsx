@@ -523,6 +523,7 @@ const FeatureSearchInput = ({ setDropdownOpen, emptySearchInputs }) => {
         <PillButton
           id={'feature-search-inputs-clear-results-btn'}
           key={'feature-search-inputs-clear-results-btn'}
+          variant='inverse'
           text={strings.search?.clearResults}
           onClick={emptySearchResults}
           aria-label={strings.search?.clearResults}

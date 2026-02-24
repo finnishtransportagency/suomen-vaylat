@@ -54,7 +54,7 @@ const StyledGfiSubTabContentItemName = styled.p`
 const StyledGfiTabContentItemExpandIcon = styled(motion.div)`
     display: flex;
     align-items: center;
-    font-size: 24px;
+    font-size: 16px;
     margin: 6px;
     svg {
         color: ${props => props.theme.colors.mainColor1};
@@ -150,7 +150,7 @@ const FeatureDataTabContentItem = ({
             setOrderLow(null);
         }
     }, [data, isGeojson]);
-    
+
     return (
         <StyledGfiTabContentItem
             id={'gfi_tab_content_item_' + data.id}

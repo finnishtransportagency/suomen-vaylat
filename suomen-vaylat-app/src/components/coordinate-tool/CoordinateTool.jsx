@@ -21,7 +21,6 @@ import {
 } from '../../state/slices/uiSlice';
 import { theme } from '../../theme/theme';
 import { faSave, faTrash } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Select from 'react-select';
 import {
   coordinateDegreesToMetric,
@@ -32,6 +31,7 @@ import {
 } from './util';
 import { Slide, toast } from 'react-toastify';
 import { Switch } from '@mui/material';
+import PillButton from '../../utils/components/PillButton';
 
 const StyledCoordinateToolContainer = styled.div`
   width: 100%;
@@ -44,60 +44,6 @@ const StyledCoordinateToolContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 16px;
-`;
-
-const StyledMapCenterButton = styled.button`
-  display: flex;
-  align-items: center;
-  height: 2.5em;
-  width: 100%;
-  justify-content: center;
-  color: ${(props) =>
-    props.disabled
-      ? props.theme.colors.disabledColor
-      : props.theme.colors.mainWhite};
-  background-color: ${(props) =>
-    props.disabled
-      ? props.theme.colors.disabledBg
-      : props.theme.colors.mainColor1};
-  border-radius: 20px;
-  box-shadow: 0px 1px 3px #0000001f;
-  border: none;
-  margin: 0.5em 0 0.5em 0;
-  padding: 12px;
-  &:hover {
-    background-color: ${(props) =>
-      props.disabled
-        ? props.theme.colors.disabledBg
-        : props.theme.colors.mainColor1Selected};
-  }
-`;
-
-const StyledMarkerAdditionButton = styled.button`
-  display: flex;
-  align-items: center;
-  height: 2.5em;
-  width: 100%;
-  justify-content: center;
-  color: ${(props) =>
-    props.disabled
-      ? props.theme.colors.disabledColor
-      : props.theme.colors.mainWhite};
-  background-color: ${(props) =>
-    props.disabled
-      ? props.theme.colors.disabledBg
-      : props.theme.colors.mainColor1};
-  border-radius: 20px;
-  box-shadow: 0px 1px 3px #0000001f;
-  border: none;
-  margin: 0.5em 0 0.5em 0;
-  padding: 12px;
-  &:hover {
-    background-color: ${(props) =>
-      props.disabled
-        ? props.theme.colors.disabledBg
-        : props.theme.colors.mainColor1Selected};
-  }
 `;
 
 const StyledButtonGroup = styled.div`
@@ -126,50 +72,6 @@ const StyledActionBox = styled.div`
   gap: 12px;
 `;
 
-const StyledMarkerDeleteButton = styled.button`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: none;
-  cursor: pointer;
-  height: 2.5em;
-  background-color: ${(props) => props.theme.colors.secondaryColorDarkOrange};
-  color: ${(props) => props.theme.colors.mainWhite};
-  svg {
-    font-size: 16px;
-  }
-  border-radius: 20px;
-  box-shadow: 0px 1px 3px #0000001f;
-  border: none;
-  padding: 12px;
-  &:hover {
-    background-color: ${(props) =>
-      props.theme.colors.secondaryColorDarkOrangeSelected};
-  }
-`;
-
-const StyledMarkerSaveButton = styled.button`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: none;
-  cursor: pointer;
-  height: 2.5em;
-  background-color: ${(props) => props.theme.colors.secondaryColorGreen};
-  color: ${(props) => props.theme.colors.mainWhite};
-  svg {
-    font-size: 16px;
-  }
-  border-radius: 20px;
-  box-shadow: 0px 1px 3px #0000001f;
-  border: none;
-  padding: 12px;
-  &:hover {
-    background-color: ${(props) =>
-      props.theme.colors.secondaryColorGreenSelected};
-  }
-`;
-
 const StyledInputSection = styled.div`
   display: flex;
   flex-direction: row;
@@ -181,10 +83,6 @@ const StyledInputField = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-`;
-
-const StyledButtonLabel = styled.span`
-  margin: 0px;
 `;
 
 const StyledWarningMessage = styled.p`
@@ -936,53 +834,49 @@ const CoordinateTool = () => {
 
       <StyledActionBox id="coordinate-tool-action-box">
         <StyledButtonGroup id="coordinate-tool-button-group">
-          <StyledMapCenterButton
-            id="coordinate-tool-map-center-button"
+          <PillButton
+            id={'coordinate-tool-map-center-button'}
             disabled={
               !isValidX ||
               !isValidY ||
               (!userEditedRef.current && !hasCoordsChanged(center, mapCenter))
             }
+            text={strings.coordinateTool.centerMap}
             onClick={handleCenterMap}
             aria-label={strings.coordinateTool.centerMap}
-          >
-            <StyledButtonLabel>
-              {strings.coordinateTool.centerMap}
-            </StyledButtonLabel>
-          </StyledMapCenterButton>
-          <StyledMarkerAdditionButton
-            id="coordinate-tool-marker-addition-button"
-            onClick={handleAddMarker}
+            style={{ width: '100%', justifyContent: 'center' }}
+          />
+          <PillButton
+            id={'coordinate-tool-marker-addition-button'}
             disabled={!isValidX || !isValidY}
+            text={strings.coordinateTool.addMarker}
+            onClick={handleAddMarker}
             aria-label={strings.coordinateTool.addMarker}
-          >
-            <StyledButtonLabel>
-              {strings.coordinateTool.addMarker}
-            </StyledButtonLabel>
-          </StyledMarkerAdditionButton>
+            style={{ width: '100%', justifyContent: 'center' }}
+          />
         </StyledButtonGroup>
         {coordMarkerIndex > 0 && (
           <>
-            <StyledMarkerSaveButton
-              id="coordinate-tool-marker-save-button"
+            <PillButton
+              id={'coordinate-tool-marker-save-button'}
+              icon={faSave}
+              text={strings.coordinateTool.saveMarkers}
               onClick={() => handleSaveMarkers()}
               aria-label={strings.coordinateTool.saveMarkers}
-            >
-              <FontAwesomeIcon icon={faSave} style={{ marginRight: '1em' }} />
-              <StyledButtonLabel>
-                {strings.coordinateTool.saveMarkers}
-              </StyledButtonLabel>
-            </StyledMarkerSaveButton>
-            <StyledMarkerDeleteButton
-              id="coordinate-tool-marker-delete-button"
+              color={theme.colors.secondaryColorGreen}
+              hoverColor={theme.colors.secondaryColorGreenSelected}
+              style={{ width: '100%', justifyContent: 'center' }}
+            />
+            <PillButton
+              id={'coordinate-tool-marker-delete-button'}
+              icon={faTrash}
+              text={strings.coordinateTool.deleteMarkers}
               onClick={() => handleDeleteMarkers()}
               aria-label={strings.coordinateTool.deleteMarkers}
-            >
-              <FontAwesomeIcon icon={faTrash} style={{ marginRight: '1em' }} />
-              <StyledButtonLabel>
-                {strings.coordinateTool.deleteMarkers}
-              </StyledButtonLabel>
-            </StyledMarkerDeleteButton>
+              color={theme.colors.secondaryColorOrange}
+              hoverColor={theme.colors.secondaryColorDarkOrange}
+              style={{ width: '100%', justifyContent: 'center' }}
+            />
           </>
         )}
       </StyledActionBox>

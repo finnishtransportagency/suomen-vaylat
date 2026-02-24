@@ -352,7 +352,6 @@ const Dialog = ({
                     </StyledDialogWrapper>
                     {backdrop && (
                         <StyledDialogBackdrop
-                            backdrop={backdrop}
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
@@ -368,8 +367,6 @@ const Dialog = ({
                                     : type === 'announcement' &&
                                       handleAnnouncementDialog(null, null);
                             }}
-                            resize={resize}
-                            type={type}
                         />
                     )}
                 </>

@@ -331,6 +331,7 @@ const TrackSearchInput = ({ handleGeneralSearch, emptySearchInputs }) => {
         <PillButton
           id={'track-search-inputs-clear-results-btn'}
           key={'track-search-inputs-clear-results-btn'}
+          variant='inverse'
           text={strings.search?.clearResults}
           onClick={emptySearchResults}
           aria-label={strings.search?.clearResults}

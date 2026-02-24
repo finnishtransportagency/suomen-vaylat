@@ -19,7 +19,7 @@ import {
 } from '../../../state/slices/uiSlice';
 
 import { faMapMarkedAlt } from '@fortawesome/free-solid-svg-icons';
-import { GFI_GEOMETRY_LAYER_ID } from '../../../utils/constants';
+import { FEATURE_SELECTION_DRAWING_TOOL, FEATURE_SELECTION_LAYER, GFI_GEOMETRY_LAYER_ID } from '../../../utils/constants';
 
 const FeatureDataDialog = ({ constraintsRef }) => {
   const { store } = useContext(ReactReduxContext);
@@ -43,7 +43,7 @@ const FeatureDataDialog = ({ constraintsRef }) => {
     channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [
       null,
       null,
-      'download-tool-layer'
+      FEATURE_SELECTION_LAYER
     ]);
     channel &&
       channel.postRequest('MapModulePlugin.RemoveFeaturesFromMapRequest', [
@@ -51,8 +51,10 @@ const FeatureDataDialog = ({ constraintsRef }) => {
         null,
         GFI_GEOMETRY_LAYER_ID
       ]);
-    activeTool === 'gfi-selection-tool' && channel.postRequest('DrawTools.StopDrawingRequest', [
-      'gfi-selection-tool',
+
+    // clears feature selection drawing
+    activeTool === FEATURE_SELECTION_DRAWING_TOOL && channel.postRequest('DrawTools.StopDrawingRequest', [
+      FEATURE_SELECTION_DRAWING_TOOL,
       true
     ]);
   };
