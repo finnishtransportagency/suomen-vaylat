@@ -3,37 +3,40 @@ import { ReactReduxContext } from "react-redux";
 import Dialog from '../../dialog/Dialog';
 import { useAppSelector } from "../../../state/hooks";
 import strings from "../../../translations";
-import FeatureDataToolsMenu from "../tools/FeatureDataToolsMenu";
-import { setIsGfiToolsOpen, setIsGfiDownloadToolsOpen, setActiveSelectionTool } from "../../../state/slices/uiSlice";
+import FeatureDataSelectionToolsMenu from "../tools/FeatureDataSelectionToolsMenu";
+import { setIsGfiToolsOpen, setActiveSelectionTool, setMinimizeFeatureSelection, setSelectedDrawingTool } from "../../../state/slices/uiSlice";
+import { faObjectGroup } from '@fortawesome/free-solid-svg-icons';
+import { FEATURE_SELECTION_DRAWING_TOOL, FEATURE_SELECTION_LAYER } from '../../../utils/constants';
+import { toast } from 'react-toastify';
 
 const FeatureDataToolsDialog = ({ constraintsRef }) => {
-  const { isGfiToolsOpen, isGfiDownloadToolsOpen, activeTool } = useAppSelector((state) => state.ui);
+  const { isGfiToolsOpen, minimizeFeatureSelection, activeTool } = useAppSelector((state) => state.ui);
   const { store } = useContext(ReactReduxContext);
   let { channel } = useAppSelector((state) => state.rpc);
 
   const handleCloseGfiLocations = () => {
-    store.dispatch(setActiveSelectionTool(null));
-    store.dispatch(setIsGfiToolsOpen(false));
-  };
-
-  const handleGfiToolsMenu = () => {
-    store.dispatch(setIsGfiToolsOpen(false));
-    channel && activeTool === 'gfi-selection-tool' &&
-      channel.postRequest("DrawTools.StopDrawingRequest", [
-        "gfi-selection-tool",
-        true,
+    // Make sure drawing is stopped and cleared
+    channel &&
+      activeTool === FEATURE_SELECTION_DRAWING_TOOL &&
+      channel.postRequest('DrawTools.StopDrawingRequest', [
+        FEATURE_SELECTION_DRAWING_TOOL,
+        true
       ]);
 
-    isGfiToolsOpen &&
+    setIsGfiToolsOpen &&
       channel &&
-      channel.postRequest("VectorLayerRequest", [
+      channel.postRequest('VectorLayerRequest', [
         {
-          layerId: "download-tool-layer",
-          remove: true,
-        },
+          layerId: FEATURE_SELECTION_LAYER,
+          remove: true
+        }
       ]);
+
     store.dispatch(setActiveSelectionTool(null));
-    store.dispatch(setIsGfiDownloadToolsOpen(!isGfiDownloadToolsOpen));
+    store.dispatch(setSelectedDrawingTool(null));
+    store.dispatch(setIsGfiToolsOpen(false));
+    // dismiss measurement toast as drawing is not active anymore
+    toast.dismiss('measurementToast');
   };
 
   return (
@@ -43,16 +46,17 @@ const FeatureDataToolsDialog = ({ constraintsRef }) => {
       resize={true}
       backdrop={false}
       fullScreenOnMobile={true}
-      title={strings.gfi.selectLocations}
+      title={strings.gfi.featureSelection.title}
       type={"normal"}
       closeAction={handleCloseGfiLocations}
       isOpen={isGfiToolsOpen}
+      titleIcon={faObjectGroup}
+      minimize={minimizeFeatureSelection}
+      minimizable={true}
+      minimizeAction={() => store.dispatch(setMinimizeFeatureSelection(true))}
       id="gfi_tools_menu_dialog"
     >
-      <FeatureDataToolsMenu
-        handleGfiToolsMenu={handleGfiToolsMenu}
-        closeButton={false}
-      />
+      <FeatureDataSelectionToolsMenu/>
     </Dialog>
   );
 };

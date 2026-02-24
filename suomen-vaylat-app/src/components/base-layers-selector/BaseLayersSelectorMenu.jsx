@@ -10,6 +10,7 @@ import {
 } from '../../state/slices/uiSlice';
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 import { BASE_LAYERS_LOCALSTORAGE } from '../../utils/constants';
+import PillButton from '../../utils/components/PillButton';
 
 const StyledMenuContainer = styled.div`
   padding: 16px;
@@ -362,29 +363,24 @@ const BaseLayerSelectorMenu = () => {
 
   const SaveButton = () => {
     return (
-      <StyledSaveButton
-        id="baselayer-selector-base-layer-save-button"
-        aria-label={strings.baseLayerSelector.labels.saveAriaLabel}
-        tabIndex={0}
+      <PillButton
+        id={'baselayer-selector-base-layer-save-button'}
+        text={strings.baseLayerSelector.save}
         onClick={handleSaveBaseLayers}
-      >
-        <StyledButtonText>{strings.baseLayerSelector.save}</StyledButtonText>
-      </StyledSaveButton>
+        aria-label={strings.baseLayerSelector.labels.saveAriaLabel}
+      />
     );
   };
 
   const CancelButton = () => {
     return (
-      <StyledCancelButton
-        id="baselayer-selector-base-layer-cancel-button"
-        aria-label={strings.baseLayerSelector.labels.cancelAriaLabel}
-        tabIndex={0}
+      <PillButton
+        id={'baselayer-selector-base-layer-cancel-button'}
+        text={strings.baseLayerSelector.cancel}
+        variant='inverse'
         onClick={() => store.dispatch(setIsBaseLayerSelectorMenuOpen(false))}
-      >
-        <StyledCancelButtonText>
-          {strings.baseLayerSelector.cancel}
-        </StyledCancelButtonText>
-      </StyledCancelButton>
+        aria-label={strings.baseLayerSelector.labels.cancelAriaLabel}
+      />
     );
   };
 

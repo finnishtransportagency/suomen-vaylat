@@ -61,9 +61,10 @@ const StyledSearchInputContainerIcon = styled.div`
 
 const StyledSearchInput = styled.input`
     font-size: 16px;
-    height: 260px;
-   // border-radius: 5px;
     border: none;
+    flex: 1;
+    margin-right: 1em;
+    outline: none;
     &::-webkit-search-cancel-button {
         //position: relative;
         //right: 10px;
@@ -118,6 +119,7 @@ const LayerSearch = ({ layers, groups }) => {
                     />
                 </StyledSearchInputContainerIcon>
                 <StyledSearchInput
+                    id='layer_search_input'
                     aria-label={strings.layerlist.layerlistLabels.searchForLayers}
                     placeholder={strings.layerlist.layerlistLabels.searchForLayers+'...'}
                     value={searchParams}

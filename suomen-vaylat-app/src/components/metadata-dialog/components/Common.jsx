@@ -39,8 +39,9 @@ export const StyledA = styled.a`
     word-wrap: break-word;
 `;
 
-export const StyledParagraph = styled.div`
-    padding: 1em 0;
+export const StyledParagraph = styled.p`
+    cursor: default;
+    white-space: pre-wrap;
 `;
 
 export const StyledImage = styled.img`

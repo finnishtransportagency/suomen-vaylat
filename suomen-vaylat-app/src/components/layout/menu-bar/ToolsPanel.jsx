@@ -11,7 +11,8 @@ import {
   faExpand,
   faRulerHorizontal,
   faArrowLeft,
-  faUpload
+  faUpload,
+  faObjectGroup
 } from '@fortawesome/free-solid-svg-icons';
 
 import strings from '../../../translations';
@@ -22,7 +23,8 @@ import {
   setIsGfiDownloadOpen,
   removeFromDrawToolMarkers,
   setIsSaveGeometriesOpen,
-  setIsDatasetImportOpen
+  setIsDatasetImportOpen,
+  setIsGfiToolsOpen
 } from '../../../state/slices/uiSlice';
 import { removeMarkerRequest } from '../../../state/slices/rpcSlice';
 import DrawtoolMarkers from '../../measurement-tools/DrawtoolMarkers';
@@ -44,10 +46,10 @@ const StyledTools = styled(motion.div)`
   transition: all 0.3s ease;
   pointer-events: auto;
   gap: 8px;
-  width: 200px;
+  width: 14rem;
   box-sizing: border-box;
   overflow: scroll;
-  padding: 0 8px 8px 8px;
+  padding: 0 6px 6px;
 
   @media ${(props) => props.theme.device.mobileL} {
     gap: 6px;
@@ -73,6 +75,7 @@ const PanelContainer = styled.div`
   gap: 8px;
   width: 100%;
   box-sizing: border-box;
+  padding: 2px;
 `;
 
 const variants = {
@@ -149,6 +152,10 @@ export const ToolsPanel = ({ isOpen }) => {
     store.dispatch(setIsSaveViewOpen(true));
   };
 
+  const handleFeatureSelection = () => {
+    store.dispatch(setIsGfiToolsOpen(true));
+  };
+
   // When panelIndex changes through controls, update Swiper
   useEffect(() => {
     if (swiperRef.current && swiperRef.current.swiper) {
@@ -192,6 +199,14 @@ export const ToolsPanel = ({ isOpen }) => {
               text={strings.tooltips.drawingTools.drawingToolsButton}
               onClick={() => setPanelIndex(1)}
               aria-label={strings.tooltips.drawingTools.drawingToolsButton}
+            />
+            <PillButton
+              id={'menubar-tools-feature-selection-btn'}
+              key={'feature-selection-btn'}
+              icon={faObjectGroup}
+              text={strings.gfi.featureSelection.title}
+              onClick={handleFeatureSelection}
+              aria-label={strings.gfi.featureSelection.title}
             />
             <PillButton
               id={'menubar-tools-save-btn'}
@@ -271,7 +286,7 @@ export const ToolsPanel = ({ isOpen }) => {
               }
               onClick={eraseDrawing}
               icon={faEraser}
-              color={theme.colors.secondaryColorDarkOrange}
+              color={theme.colors.secondaryColorOrange}
               hoverColor={theme.colors.secondaryColorDarkOrange}
               text={strings.tooltips.drawingTools.erase}
               aria-label={strings.tooltips.drawingTools.erase}
@@ -283,6 +298,7 @@ export const ToolsPanel = ({ isOpen }) => {
               disabled={!geoJsonArray.length && drawToolMarkers.length <= 0}
               icon={faCloudUploadAlt}
               color={theme.colors.secondaryColorGreen}
+              hoverColor={theme.colors.secondaryColorGreenSelected}
               text={strings.general.save}
               aria-label={strings.general.save}
             />

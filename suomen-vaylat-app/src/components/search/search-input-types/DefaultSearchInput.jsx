@@ -133,7 +133,6 @@ const DefaultSearchInput = ({ handleGeneralSearch, handleMetadataSearch, emptySe
     searchResults,
     searchValue,
     isSearchingActive,
-    lastSearchValue
   } = useAppSelector((state) => state.rpc);
   
   const { activeSwitch } = useAppSelector((state) => state.ui);
@@ -183,13 +182,12 @@ const DefaultSearchInput = ({ handleGeneralSearch, handleMetadataSearch, emptySe
           </StyledWideInputGroup>
         </StyledInputsContainer>
 
-        {(searchResults !== null || featureSearchResults.length > 0) &&
-        searchValue === lastSearchValue &&
-        !isSearchingActive ? (
+        {
+        !isSearchingActive && searchValue ? (
           <StyledStandardSearchButton
-            id="default-search-clear-button"
+            id="default-search-clear-fields-button"
             type="button"
-            aria-label={strings.search.clearResults}
+            aria-label={strings.search?.clearFields}
             onClick={() => {
               // clear results
               emptySearchInputs();
@@ -215,11 +213,11 @@ const DefaultSearchInput = ({ handleGeneralSearch, handleMetadataSearch, emptySe
 
       <StyledSearchButtons>
         <PillButton
-          id={'default-search-submit-button"'}
-          key={'default-search-submit-button"'}
+          id={'default-search-submit-button'}
+          key={'default-search-submit-button'}
           text={strings.search?.search}
           onClick={submitSearch}
-          aria-label={strings.search?.clearResults}
+          aria-label={strings.search?.search}
           style={{ width: '100%', justifyContent: 'center' }}
           icon={faMagnifyingGlass}
         />
@@ -227,6 +225,7 @@ const DefaultSearchInput = ({ handleGeneralSearch, handleMetadataSearch, emptySe
         <PillButton
           id={'default-search-inputs-clear-results-btn'}
           key={'default-search-inputs-clear-results-btn'}
+          variant='inverse'
           text={strings.search?.clearResults}
           onClick={emptySearchResults}
           aria-label={strings.search?.clearResults}

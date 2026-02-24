@@ -4,7 +4,6 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Slide, toast } from 'react-toastify';
 
 import { CircularProgress } from '@mui/material';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUpload } from '@fortawesome/free-solid-svg-icons';
 import strings from '../../translations';
 import { setIsDatasetImportOpen } from '../../state/slices/uiSlice';
@@ -14,6 +13,7 @@ import StyleEditor from './style-editor/StyleEditor';
 import GeneralInformation from './general-information/GeneralInformation';
 import { setEditingUserlayer } from '../../state/slices/rpcSlice';
 import { updateLayers } from '../../utils/rpcUtil';
+import PillButton from '../../utils/components/PillButton';
 
 const StyledMainContainer = styled.div`
   background: #f6f7fa;
@@ -75,14 +75,11 @@ const StyledSwiper = styled(Swiper)`
 `;
 const StyledSubmitButtonGroup = styled.div`
   display: flex;
-  justify-content: flex-start;
-  margin-top: 24px;
-  margin-bottom: 8px;
   gap: 18px;
   @media ${(props) => props.theme.device.mobileL} {
     flex-direction: column;
   }
-  margin: 0px 32px 24px 32px;
+  margin: 8px 32px 24px 32px;
 `;
 const StyledPrimaryButton = styled.button`
   min-width: 180px;
@@ -435,44 +432,39 @@ const DatasetImport = () => {
         id="import-dataset-submit-button-group-bottom"
         aria-label="Import dataset actions"
       >
-        <StyledSecondaryButton
-          type="button"
-          tabIndex={0}
-          id="import-dataset-cancel-button-bottom"
+        <PillButton
+          id={'import-dataset-cancel-button-bottom'}
+          variant="inverse"
           disabled={isSubmitting}
           aria-disabled={isSubmitting}
+          text={strings.datasetImport.cancel}
           onClick={() => {
             // close import dialog and reset form
             store.dispatch(setIsDatasetImportOpen(false));
             resetForm();
           }}
-        >
-          {strings.datasetImport.cancel}
-        </StyledSecondaryButton>
+          aria-label={strings.datasetImport.cancel}
+        />
 
         {editingUserlayer ? (
-          <StyledPrimaryButton
-            type="button"
-            tabIndex={0}
-            id="import-dataset-savebutton-bottom"
+          <PillButton
+            id={'import-dataset-savebutton-bottom'}
             disabled={disableUpdate || isSubmitting}
-            aria-disabled={disableUpdate || isSubmitting}
+            text={strings.general.save}
             onClick={handleSaveDataset}
-          >
-            {strings.general.save}
-          </StyledPrimaryButton>
+            aria-label={strings.general.save}
+            aria-disabled={disableUpdate || isSubmitting}
+          />
         ) : (
-          <StyledPrimaryButton
-            type="button"
-            tabIndex={0}
-            id="import-dataset-import-button-bottom"
+          <PillButton
+            id={'import-dataset-import-button-bottom'}
+            icon={faUpload}
             disabled={disableImport || isSubmitting}
-            aria-disabled={disableImport || isSubmitting}
+            text={strings.datasetImport.import}
             onClick={handleSubmitDataset}
-          >
-            <FontAwesomeIcon icon={faUpload} />
-            {strings.datasetImport.import}
-          </StyledPrimaryButton>
+            aria-label={strings.datasetImport.import}
+            aria-disabled={disableUpdate || isSubmitting}
+          />
         )}
       </StyledSubmitButtonGroup>
     </StyledMainContainer>

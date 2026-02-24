@@ -153,7 +153,6 @@ const TrackSearchInput = ({ handleGeneralSearch, emptySearchInputs }) => {
     searchResults,
     searchValue,
     isSearchingActive,
-    lastSearchValue
   } = useAppSelector((state) => state.rpc);
 
   const onClickSearchTrack = () => {
@@ -287,13 +286,12 @@ const TrackSearchInput = ({ handleGeneralSearch, emptySearchInputs }) => {
               className={getTrackField(2).invalid ? 'error' : ''}
             />
 
-            {(searchResults !== null || featureSearchResults.length > 0) &&
-            searchValue === lastSearchValue &&
-            !isSearchingActive ? (
+            {
+            !isSearchingActive && searchValue ? (
               <StyledStandardSearchButton
-                id="track-search-clear-button"
+                id="track-search-clear-fields-button"
                 type="button"
-                aria-label={strings.search.clearResults}
+                aria-label={strings.search?.clearFields}
                 onClick={emptySearchInputs}
               >
                 <FontAwesomeIcon icon={faTrash} />
@@ -333,6 +331,7 @@ const TrackSearchInput = ({ handleGeneralSearch, emptySearchInputs }) => {
         <PillButton
           id={'track-search-inputs-clear-results-btn'}
           key={'track-search-inputs-clear-results-btn'}
+          variant='inverse'
           text={strings.search?.clearResults}
           onClick={emptySearchResults}
           aria-label={strings.search?.clearResults}

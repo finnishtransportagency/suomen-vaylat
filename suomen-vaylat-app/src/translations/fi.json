@@ -84,8 +84,8 @@
     "swedishDesc": "Kuvaus ruotsiksi",
     "swedishSource": "Tietolähde ruotsiksi",
     "mandatory": "(pakollinen)",
-    "cancel": "PERUUTA",
-    "import": "TUO AINEISTO",
+    "cancel": "Peruuta",
+    "import": "Tuo aineisto",
     "visTabText": "Visualisointi-asetukset tähän...",
     "fileNote": "Zip-tiedosto saa sisältää vain yhden karttatason ja sen maksimikoko on 10 Mt. Purettuna tiedoston koko saa olla korkeintaan 150 Mt.",
     "languagesTooltip": "Valitse lisäkielet, joille aineiston metatiedot annetaan.",
@@ -210,10 +210,10 @@
     "gfiLocation": "Lähennä kohteeseen",
     "target": "Kohde",
     "selectLocations": "Valitse kohteita",
-    "focusToLocations": "Tarkenna kohteisiin",
+    "focusToLocations": "Kohdista",
     "choosingGfi": "Kohdetietojen valitseminen",
     "choosingGfiDescription0": "Varmista että olet aktivoinut tasoja Karttatasot valikosta",
-    "choosingGfiDescription1": "Näytä kohteiden valintatyökalut valitsemalla Valitse kohteita",
+    "choosingGfiDescription1": "Valitse työkaluvalikosta 'Kohteiden valinta'",
     "choosingGfiDescription2": "Voit valita kohteita käyttämällä piirtotyökaluja tai valmiita rajausvaihtoehtoja",
     "draw": "Piirrä",
     "drawSubtitle": "Valitse kohteita käyttämällä piirtotyökaluja",
@@ -240,15 +240,21 @@
       "googleStreetviewTitle": "Google Street View",
       "googleStreetviewContent": "Avaa valittu piste Google Street View:ssä uudelle välilehdelle"
     },
-    "userLayerDataFetchError": "Kohdetietojen haku epäonnistui tasolle: "
+    "errors": {
+      "userLayerDataFetchError": "Kohdetietojen haku epäonnistui tasolle: ",
+      "userlayerDataParseError": "Oman aineiston tietojen käsittely epäonnistui"
+    },
+    "featureSelection": {
+      "title": "Kohteiden valinta"
+    }
   },
   "vkm": {
+    "title": "Sijainti- ja osoitetiedot",
     "locationInfo": "Sijaintitiedot",
     "roadAddressInfo": "Tieosoitetiedot",
     "roadAddressInstructions": "Tieosoitetietoja ei pystytty hakemaan. Lähennä karttaa ja klikkaa pistettä, jolle haluat hakea tieosoitetiedot."
   },
   "downloads": {
-    "newDownload": "UUSI LATAUS",
     "downloads": "Lataukset",
     "processing": "Prosessoidaan",
     "noProcessingDownloads": "Ei prosessoitavia latauksia",
@@ -589,7 +595,7 @@
       "title": "Aineistohaku"
     },
     "feature": {
-      "title": "Kohdehaku",
+      "title": "Kohdehaku  (beta)",
       "warn": "Hakutuloksien enimmäismäärä ylitetty, tarkenna hakua.",
       "noResults": "Ei tuloksia",
       "errorLayerStart": "Virhe tason ' ",
@@ -599,7 +605,8 @@
       "errors": {
         "lengthAttributeSearch": "Syötä vähintään yksi merkki",
         "length": "Syötä vähintään kolme merkkiä",
-        "regex": "Haku ei saa sisältää erikoismerkkejä"
+        "regex": "Haku ei saa sisältää erikoismerkkejä",
+        "invalidDataType": "Väärä tietotyyppi, käytä tällä hakuattribuutilla numeerisia arvoja"
       },
       "attributeSearch": "Käytä tarkennettua kohdehakua",
       "selectSearchAttribute": "Valitse hakuattribuutti:"
@@ -673,7 +680,7 @@
     "onlyNumbers": "Vain numerot sallittu",
     "closeCoordinateTool": "Sulje koordinaattityökalu",
     "projectionSelect": "Valitse coordinaatisto",
-    "roundCoordinates": "Pyöristä tasalukuun",
+    "roundCoordinates": "Pyöristä",
     "errors": {
       "transformCoordinatesError": "Virhe koordinaattimuunnoksessa",
       "degreeInputParseError": "Virhe asteiden parsinnassa",

@@ -4,7 +4,6 @@ import {
   addMarkerRequest,
   removeMarkerRequest,
   resetGFILocations,
-  setGFILocations,
   pushGFILocations,
   setPointInfo,
   setVKMData,
@@ -23,7 +22,6 @@ import {
 const MapEventsHandler = ({ channel, store }) => {
 
   // this adds drawings to geojsonArray for tools
-  // TODO: the addToGeoJsonArray and setGeojsonArray functions are confusing and might be called too often
   channel.handleEvent('DrawingEvent', (data) => {
     if (
       store.getState().ui.activeTool &&

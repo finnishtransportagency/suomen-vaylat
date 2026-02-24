@@ -263,18 +263,16 @@ const LayerList = ({ groups, layers, recurse = false }) => {
             let isVisible =
               (group.layers && group.layers.length > 0) || hasChildren;
             return (
-              group.id !== 826 && (
-                <StyledLayerGroupWrapper key={'group-sl-' + group.id}>
-                  {isVisible ? (
-                    <LayerGroup
-                      key={'layer-group-' + group.id}
-                      group={group}
-                      layers={layers}
-                      hasChildren={hasChildren}
-                    />
-                  ) : null}
-                </StyledLayerGroupWrapper>
-              )
+              <StyledLayerGroupWrapper key={'group-sl-' + group.id}>
+                {isVisible ? (
+                  <LayerGroup
+                    key={'layer-group-' + group.id}
+                    group={group}
+                    layers={layers}
+                    hasChildren={hasChildren}
+                  />
+                ) : null}
+              </StyledLayerGroupWrapper>
             );
           })}
         </StyledLayerList>

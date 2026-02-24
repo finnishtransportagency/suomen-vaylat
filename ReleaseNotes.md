@@ -1,5 +1,15 @@
 # Release Notes
 
+## 3.1.1
+* More precise attribute option for feature search
+* Fix bug with date type layer filter not allowing to add filters
+* Fix issues with legends not showing for some layers
+* Updated button placement of searches to be more intuitive
+* Separate themes to internal and external groups
+* Allow user to round up coordinates or to show the whole precise values
+* Fix selecting of own maplayers with selection tools
+* Minor bugfixes
+
 ## 3.1.0
 * Bugfixes
 * Do not activate layers on empty theme

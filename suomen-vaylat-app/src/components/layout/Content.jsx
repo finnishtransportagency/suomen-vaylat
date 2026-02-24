@@ -16,7 +16,6 @@ import MetadataDialog from '../metadata-dialog/dialog/MetadataDialog';
 import ShareWebsiteDialog from '../share-website/dialog/ShareWebsiteDialog';
 import LayerDownloadButtonLinkDialog from '../layerlists/hierarchical-layerlist/dialog/LayerDownloadButtonLinkDialog';
 import FeatureDataToolsDialog from '../feature-data-window/dialog/FeatureDataToolsDialog';
-import FeatureDataDownloadToolsDialog from '../feature-data-window/dialog/FeatureDataDownloadToolsDialog';
 import CoordinateToolDialog from '../coordinate-tool/dialog/CoordinateToolDialog';
 import CoordinateToolMobile from '../coordinate-tool/CoordinateToolMobile';
 import Crosshair from '../crosshair/Crosshair';
@@ -163,8 +162,6 @@ const Content = () => {
         <WarningDialog constraintsRef={constraintsRef} />
 
         <FeatureDataToolsDialog constraintsRef={constraintsRef} />
-
-        <FeatureDataDownloadToolsDialog constraintsRef={constraintsRef} />
 
         <LayerFilterDialog constraintsRef={constraintsRef} />
 

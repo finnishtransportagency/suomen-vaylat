@@ -75,8 +75,8 @@
     "swedishDesc": "Description in Swedish",
     "swedishSource": "Source in Swedish",
     "mandatory": "(mandatory)",
-    "cancel": "CANCEL",
-    "import": "IMPORT DATASET",
+    "cancel": "Cancel",
+    "import": "Import dataset",
     "visTabText": "Visualization settings here...",
     "fileNote": "The zip file must contain only one layer and its maximum size is 10 MB. When unzipped, the file size must not exceed 150 MB.",
     "languagesTooltip": "Select additional languages for which to provide metadata for the dataset.",
@@ -213,10 +213,10 @@
     "gfiLocation": "Zoom to location",
     "target": "Target",
     "selectLocations": "Select locations",
-    "focusToLocations": "Focus to locations",
+    "focusToLocations": "Target",
     "choosingGfi": "Choosing feature data",
     "choosingGfiDescription0": "Make sure that you have activated layers from the Layers menu",
-    "choosingGfiDescription1": "Show feature data selection tools by choosing Select Locations",
+    "choosingGfiDescription1": "Select 'Feature selection' from tools menu",
     "choosingGfiDescription2": "You can choose locations by using drawing tools or cropping presets",
     "draw": "Draw",
     "drawSubtitle": "Select locations by using drawing tools",
@@ -241,15 +241,21 @@
       "googleStreetviewTitle": "Google Street View",
       "googleStreetviewContent": "Open selected point in Google Street View in new tab"
     },
-    "userLayerDataFetchError": "Failed to retrieve feature data for layer: "
+    "errors": {
+      "userLayerDataFetchError": "Failed to retrieve feature data for layer: ",
+      "userlayerDataParseError": "Error parsing userlayer data"
+    },
+    "featureSelection": {
+      "title": "Feature selection"
+    }
   },
   "vkm": {
+    "title": "Location and address information",
     "locationInfo": "Location info",
     "roadAddressInfo": "Road address data",
     "roadAddressInstructions": "Unable to retrieve road address data. Zoom in on the map and click on the point for which you want to retrieve road address data."
   },
   "downloads": {
-    "newDownload": "NEW DOWNLOAD",
     "downloads": "Downloads",
     "processing": "Processing",
     "noProcessingDownloads": "No processing downloads",
@@ -600,7 +606,8 @@
       "errors": {
         "lengthAttributeSearch": "Enter at least one character",
         "length": "Enter at least three characters",
-        "regex": "Search can't include any special characters"
+        "regex": "Search can't include any special characters",
+        "invalidDataType": "Invalid data type, use numeric values for this search attribute"
       },
       "attributeSearch": "Enable advanced search",
       "selectSearchAttribute": "Choose a search attribute:"
@@ -675,7 +682,7 @@
     "onlyNumbers": "Please enter only numbers",
     "closeCoordinateTool": "Close coordinate tool",
     "projectionSelect": "Select coordinate system",
-    "roundCoordinates": "Round to even",
+    "roundCoordinates": "Round up",
     "errors": {
       "transformCoordinatesError": "Error transforming coordinates",
       "degreeInputParseError": "Error parsing degree input",

@@ -34,7 +34,7 @@ const initialState = {
   isSaveGeometriesOpen: false,
   isGfiOpen: false,
   isGfiDownloadOpen: false,
-  selectedGfiTool: null,
+  selectedDrawingTool: null,
   activeTool: null,
   activeSelectionTool: null,
   gfiLocations: null,
@@ -43,6 +43,7 @@ const initialState = {
   selectedMapLayersMenuThemeIndex: null,
   minimizeGfi: false,
   maximizeGfi: false,
+  minimizeFeatureSelection: false,
   minimizeFilter: { minimized: false },
   maximizeFilter: false,
   gfiCroppingTypes: [],
@@ -170,8 +171,8 @@ export const uiSlice = createSlice({
     setIsGfiDownloadOpen: (state, action) => {
       state.isGfiDownloadOpen = action.payload;
     },
-    setSelectedGfiTool: (state, action) => {
-      state.selectedGfiTool = action.payload;
+    setSelectedDrawingTool: (state, action) => {
+      state.selectedDrawingTool = action.payload;
     },
     setShareUrl: (state, action) => {
       state.shareUrl = action.payload;
@@ -196,6 +197,9 @@ export const uiSlice = createSlice({
     },
     setMinimizeGfi: (state, action) => {
       state.minimizeGfi = action.payload;
+    },
+    setMinimizeFeatureSelection: (state, action) => {
+      state.minimizeFeatureSelection = action.payload;
     },
     setMaximizeGfi: (state, action) => {
       state.maximizeGfi = action.payload;
@@ -331,7 +335,7 @@ export const {
   setIsGfiOpen,
   setIsGfiDownloadToolsOpen,
   setIsGfiDownloadOpen,
-  setSelectedGfiTool,
+  setSelectedDrawingTool,
   setShareUrl,
   setIsDrawingToolsOpen,
   setActiveTool,
@@ -342,6 +346,7 @@ export const {
   setSelectedMapLayersMenuThemeIndex,
   setMinimizeGfi,
   setMaximizeGfi,
+  setMinimizeFeatureSelection,
   setGfiCroppingTypes,
   setWarning,
   setGeoJsonArray,

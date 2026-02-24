@@ -218,8 +218,6 @@ const FeatureSearchInput = ({ setDropdownOpen, emptySearchInputs }) => {
     searchResults,
     searchValue,
     isSearchingActive,
-    lastSearchValue,
-    lastSearchAttribute
   } = useAppSelector((state) => state.rpc);
 
   const { attributeSearchEnabled } = useAppSelector((state) => state.ui);
@@ -280,7 +278,7 @@ const FeatureSearchInput = ({ setDropdownOpen, emptySearchInputs }) => {
   const handleFeatureSearch = (searchValue, startIndex = 0, layerId = -1) => {
     const attributeUsedInSearch = attributeSearchEnabled ? searchAttribute : '';
     const handleSearchResponse = (data, usedAttr) => {
-      if (Object.keys(data).length > 0 && Object.keys(data.gfi).length > 0) {
+      if (data !== null && Object.keys(data).length > 0) {
         store.dispatch(setIsSearchingActive(false));
         store.dispatch(setSearchOn(false));
 
@@ -289,19 +287,19 @@ const FeatureSearchInput = ({ setDropdownOpen, emptySearchInputs }) => {
           let oldFeatureSearchResults = JSON.parse(
             JSON.stringify(featureSearchResults)
           );
-          let newFeatureSearchResults = { ...data.gfi };
+          let newFeatureSearchResults = { ...data };
           const contentIndex = oldFeatureSearchResults
             .map((gfi) => gfi.content.layerId)
-            .indexOf(data.gfi.content.layerId);
+            .indexOf(data.content.layerId);
           const updatedFeatures = oldFeatureSearchResults[
             contentIndex
-          ].content.geojson.features.concat(data.gfi.content.geojson.features);
+          ].content.geojson.features.concat(data.content.geojson.features);
           newFeatureSearchResults.content.geojson.features = updatedFeatures;
 
           const updatedMatchedKeys = mergeMatchedKeys(
             oldFeatureSearchResults[contentIndex].content.geojson
               .matchedFeatures,
-            data.gfi.content.geojson.matchedFeatures
+            data.content.geojson.matchedFeatures
           );
           newFeatureSearchResults.content.geojson.matchedFeatures =
             updatedMatchedKeys;
@@ -310,9 +308,10 @@ const FeatureSearchInput = ({ setDropdownOpen, emptySearchInputs }) => {
 
           store.dispatch(setFeatureSearchResults(oldFeatureSearchResults));
         } else {
-          store.dispatch(pushToFeatureSearchResults(data.gfi));
+          store.dispatch(pushToFeatureSearchResults(data));
         }
       } else {
+        store.dispatch(setFeatureSearchResults([null]));
         store.dispatch(setIsSearchingActive(false));
         store.dispatch(setSearchOn(false));
       }
@@ -326,20 +325,37 @@ const FeatureSearchInput = ({ setDropdownOpen, emptySearchInputs }) => {
       store.dispatch(setLastSearchValue(searchValue));
       store.dispatch(setLastSearchAttribute(usedAttr));
 
-      toast.error(
-        `${strings.search.feature.errorLayerStart}${layerIdentifier}${strings.search.feature.errorLayerEnd}`,
-        {
-          position: 'top-center',
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: 'colored',
-          transition: Slide
-        }
-      );
+      if (error === "invalid datatype") {
+        toast.error(
+          `${strings.search?.feature?.errors?.invalidDataType}`,
+          {
+            position: 'top-center',
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: 'colored',
+            transition: Slide
+          }
+        );
+      } else {
+        toast.error(
+          `${strings.search.feature.errorLayerStart}${layerIdentifier}${strings.search.feature.errorLayerEnd}`,
+          {
+            position: 'top-center',
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: 'colored',
+            transition: Slide
+          }
+        );
+      }
     };
 
     store.dispatch(setIsSearchingActive(true));
@@ -353,7 +369,7 @@ const FeatureSearchInput = ({ setDropdownOpen, emptySearchInputs }) => {
 
     if (searchLayer) {
       channel.searchFeatures(
-        [[searchLayer], searchValue, attributeUsedInSearch, startIndex],
+        [searchLayer, searchValue, attributeUsedInSearch, startIndex],
         (data) => {
           handleSearchResponse(data, attributeUsedInSearch);
         },
@@ -463,14 +479,12 @@ const FeatureSearchInput = ({ setDropdownOpen, emptySearchInputs }) => {
           </StyledWideInputGroup>
         </StyledInputsContainer>
 
-        {(searchResults !== null || featureSearchResults.length > 0) &&
-        searchValue === lastSearchValue &&
-        lastSearchAttribute === searchAttribute &&
-        !isSearchingActive ? (
+        {
+        !isSearchingActive && searchValue ? (
           <StyledStandardSearchButton
-            id="feature-search-clear-button"
+            id="feature-search-clear-fields-button"
             type="button"
-            aria-label={strings.search.clearResults}
+            aria-label={strings.search?.clearFields}
             onClick={emptySearchInputs}
           >
             <FontAwesomeIcon icon={faTrash} />
@@ -509,6 +523,7 @@ const FeatureSearchInput = ({ setDropdownOpen, emptySearchInputs }) => {
         <PillButton
           id={'feature-search-inputs-clear-results-btn'}
           key={'feature-search-inputs-clear-results-btn'}
+          variant='inverse'
           text={strings.search?.clearResults}
           onClick={emptySearchResults}
           aria-label={strings.search?.clearResults}

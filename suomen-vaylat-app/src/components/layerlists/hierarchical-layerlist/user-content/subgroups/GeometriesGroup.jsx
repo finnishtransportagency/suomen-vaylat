@@ -268,6 +268,10 @@ const StyledMetaRow = styled.div`
   }
 `;
 
+const StyledNoGeometriesText = styled.div`
+  font-size: 14px;
+`;
+
 const GeometriesGroup = () => {
   const [open, setOpen] = useState(false);
   const { store } = useContext(ReactReduxContext);
@@ -654,10 +658,10 @@ const GeometriesGroup = () => {
               );
             })
         ) : (
-          <div role="status" aria-live="polite">
+          <StyledNoGeometriesText role="status" aria-live="polite">
             {strings.savedContent?.saveGeometry?.noSavedGeometries ||
               'No saved geometries'}
-          </div>
+          </StyledNoGeometriesText>
         )}
       </StyledGroup>
 

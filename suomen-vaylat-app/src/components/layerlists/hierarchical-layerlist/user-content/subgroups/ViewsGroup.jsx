@@ -232,6 +232,10 @@ const StyledViewsCount = styled.p`
   color: ${(p) => p.theme.colors.mainColor1};
 `;
 
+const StyledNoViewsText = styled.div`
+  font-size: 14px;
+`;
+
 const ViewsGroup = () => {
   const [open, setOpen] = useState(false);
   const { store } = useContext(ReactReduxContext);
@@ -539,9 +543,9 @@ const ViewsGroup = () => {
               );
             })
         ) : (
-          <div role="status" aria-live="polite">
+          <StyledNoViewsText role="status" aria-live="polite">
             {strings.savedContent?.saveView?.noSavedViews || 'No saved views'}
-          </div>
+          </StyledNoViewsText>
         )}
       </StyledGroup>
 

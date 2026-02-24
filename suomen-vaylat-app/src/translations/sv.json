@@ -76,8 +76,8 @@
     "swedishDesc": "Beskrivning på svenska",
     "swedishSource": "Källa på svenska",
     "mandatory": "(obligatorisk)",
-    "cancel": "AVBRYT",
-    "import": "IMPORTERA DATASET",
+    "cancel": "Avbryt",
+    "import": "Importera dataset",
     "visTabText": "Visualiseringsinställningar här...",
     "fileNote": "Zip-filen får endast innehålla ett lager och får vara högst 10 MB stor. När den packats upp får filen vara högst 150 MB.",
     "languagesTooltip": "Välj ytterligare språk för vilka metadata för dataset ges.",
@@ -213,10 +213,10 @@
     "gfiLocation": "Zooma in på objektet",
     "target": "Mål",
     "selectLocations": "Välj objekt",
-    "focusToLocations": "Precisera objekt",
+    "focusToLocations": "Inrikta",
     "choosingGfi": "Val av objektdata",
     "choosingGfiDescription0": "Kontrollera att du har aktiverat nivåer i menyn Kartnivåer",
-    "choosingGfiDescription1": "Visa verktyg för val av funktionsdata genom att välja Välj Platser",
+    "choosingGfiDescription1": "Välj 'Funktionsval' från verktyg menu",
     "choosingGfiDescription2": "Du kan välja platser genom att använda ritverktyg eller beskärning förinställningar",
     "draw": "Rita",
     "drawSubtitle": "Välj platser med hjälp av ritverktyg",
@@ -241,15 +241,21 @@
       "googleStreetviewTitle": "Google Street View",
       "googleStreetviewContent": "Öppna den valda punkten i Google Street View på en ny flik"
     },
-    "userLayerDataFetchError": "Hämtning av objektdata misslyckades för kartlagret: "
+    "errors": {
+      "userLayerDataFetchError": "Hämtning av objektdata misslyckades för kartlagret: ",
+      "userlayerDataParseError": "Misslyckades med att bearbeta data för egen kartlager"
+    },
+    "featureSelection": {
+      "title": "Funktionsval"
+    }
   },
   "vkm": {
+    "title": "Plats- och adressinformation",
     "locationInfo": "Positionsdata",
     "roadAddressInfo": "Vägadressuppgifter",
     "roadAddressInstructions": "Vägadressuppgifterna kunde inte hämtas. Zooma in på kartan och klicka på den punkt som du vill söka vägadressuppgifter för."
   },
   "downloads": {
-    "newDownload": "NY NEDLADDNING",
     "downloads": "Nedladdningar",
     "processing": "Bearbetas",
     "noProcessingDownloads": "Inga nedladdningar att bearbeta",
@@ -600,7 +606,8 @@
       "errors": {
         "lengthAttributeSearch": "Ange minst ett tecken",
         "length": "Ange minst tre tecken",
-        "regex": "Sökningen får inte innehålla specialtecken"
+        "regex": "Sökningen får inte innehålla specialtecken",
+        "invalidDataType": "Ogiltig datatyp, använd numeriska värden för detta sökattribut"
       },
       "attributeSearch": "Aktivera avancerad sökning",
       "selectSearchAttribute": "Välj ett sökattribut:"
@@ -675,7 +682,7 @@
     "onlyNumbers": "Vänligen ange endast siffror",
     "closeCoordinateTool": "Stäng koordinatverktyg",
     "projectionSelect": "Välj koordinatsystem",
-    "roundCoordinates": "Rund till jämn",
+    "roundCoordinates": "Runda",
     "errors": {
       "transformCoordinatesError": "Fel vid koordinattransformation",
       "degreeInputParseError": "Fel vid parsning av grader",

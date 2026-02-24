@@ -56,7 +56,7 @@ const FilterLayerList = ({
 
                         var hasChildren = recursiveCheckSubGroupLayers(group);
                         let isVisible = (group.layers && group.layers.length > 0) || hasChildren;
-                        return group.id !== 826 && (
+                        return (
                             <StyledLayerGroupWrapper key={'group-sl-' + group.id }>
                                 { isVisible ? (
                                     <FilterLayerGroup

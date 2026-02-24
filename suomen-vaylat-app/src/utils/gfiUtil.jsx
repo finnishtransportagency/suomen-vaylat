@@ -1,3 +1,4 @@
+
 const getPropertyOperator = (operator) => {
   switch (operator) {
     case 'equals':
@@ -61,9 +62,7 @@ export const getCQLStringPropertyOperator = (property, operator, value) => {
         "%'"
       );
     default:
-      return (
-        property + " = '" + value.toString().trim().toLowerCase() + "'"
-      );
+      return property + " = '" + value.toString().trim().toLowerCase() + "'";
   }
 };
 
@@ -150,7 +149,7 @@ const noResultsSearchNumber = (property, codeValues) => {
     }
   }
   return searchString;
-}
+};
 
 const resultsSearchNumber = (property, codeValueKeys) => {
   var searchString = '';
@@ -166,7 +165,7 @@ const resultsSearchNumber = (property, codeValueKeys) => {
     }
   }
   return searchString;
-}
+};
 
 const noResultsSearchString = (property, codeValues) => {
   var searchString = '';
@@ -174,7 +173,11 @@ const noResultsSearchString = (property, codeValues) => {
     if (i === 0) {
       searchString += '(';
     }
-    searchString += 'strToLowerCase(' + property + ") <> '" + codeValues[i].toString().trim().toLowerCase();
+    searchString +=
+      'strToLowerCase(' +
+      property +
+      ") <> '" +
+      codeValues[i].toString().trim().toLowerCase();
     if (i !== codeValues.length - 1) {
       searchString += "' AND ";
     } else {
@@ -182,7 +185,7 @@ const noResultsSearchString = (property, codeValues) => {
     }
   }
   return searchString;
-}
+};
 
 const resultsSearchString = (property, codeValueKeys) => {
   var searchString = '';
@@ -190,7 +193,11 @@ const resultsSearchString = (property, codeValueKeys) => {
     if (i === 0) {
       searchString += '(';
     }
-    searchString += 'strToLowerCase(' + property + ") = '" + codeValueKeys[i].toString().trim().toLowerCase();
+    searchString +=
+      'strToLowerCase(' +
+      property +
+      ") = '" +
+      codeValueKeys[i].toString().trim().toLowerCase();
     if (i !== codeValueKeys.length - 1) {
       searchString += "' OR ";
     } else {
@@ -198,53 +205,94 @@ const resultsSearchString = (property, codeValueKeys) => {
     }
   }
   return searchString;
-}
+};
 
-const getCodeValuePropertyOperator = (property, operator, value, codeValues, filterType) => {
+const getCodeValuePropertyOperator = (
+  property,
+  operator,
+  value,
+  codeValues,
+  filterType
+) => {
   var codeValueKeys;
 
   switch (operator) {
     case 'equals':
-      codeValueKeys = Object.keys(codeValues).filter(key => codeValues[key].toString().trim().toLowerCase() === value.toString().trim().toLowerCase());
+      codeValueKeys = Object.keys(codeValues).filter(
+        (key) =>
+          codeValues[key].toString().trim().toLowerCase() ===
+          value.toString().trim().toLowerCase()
+      );
       break;
 
     case 'notEquals':
-      codeValueKeys =  Object.keys(codeValues).filter(key => codeValues[key].toString().trim().toLowerCase() !== value.toString().trim().toLowerCase());
+      codeValueKeys = Object.keys(codeValues).filter(
+        (key) =>
+          codeValues[key].toString().trim().toLowerCase() !==
+          value.toString().trim().toLowerCase()
+      );
       break;
 
     case 'includes':
-      codeValueKeys =  Object.keys(codeValues).filter(key => codeValues[key].toString().trim().toLowerCase().includes(value.toString().trim().toLowerCase()));
+      codeValueKeys = Object.keys(codeValues).filter((key) =>
+        codeValues[key]
+          .toString()
+          .trim()
+          .toLowerCase()
+          .includes(value.toString().trim().toLowerCase())
+      );
       break;
 
     case 'doesntInclude':
-      codeValueKeys =  Object.keys(codeValues).filter(key => !codeValues[key].toString().trim().toLowerCase().includes(value.toString().trim().toLowerCase()));
+      codeValueKeys = Object.keys(codeValues).filter(
+        (key) =>
+          !codeValues[key]
+            .toString()
+            .trim()
+            .toLowerCase()
+            .includes(value.toString().trim().toLowerCase())
+      );
       break;
 
     default:
-      console.log("Error filtering:",property, operator, value, codeValues, filterType)
-      codeValueKeys = Object.keys(codeValues).filter(key => codeValues[key].toString().trim().toLowerCase() === value.toString().trim().toLowerCase());
+      console.log(
+        'Error filtering:',
+        property,
+        operator,
+        value,
+        codeValues,
+        filterType
+      );
+      codeValueKeys = Object.keys(codeValues).filter(
+        (key) =>
+          codeValues[key].toString().trim().toLowerCase() ===
+          value.toString().trim().toLowerCase()
+      );
       break;
-
   }
 
   if (codeValueKeys.length === 0) {
-    return filterType === 'number' ? noResultsSearchNumber(property, Object.keys(codeValues)) : noResultsSearchString(property, Object.keys(codeValues));
+    return filterType === 'number'
+      ? noResultsSearchNumber(property, Object.keys(codeValues))
+      : noResultsSearchString(property, Object.keys(codeValues));
   } else {
     // is the type number or string
-    return filterType === 'number' ? resultsSearchNumber(property, codeValueKeys) : resultsSearchString(property, codeValueKeys);
+    return filterType === 'number'
+      ? resultsSearchNumber(property, codeValueKeys)
+      : resultsSearchString(property, codeValueKeys);
   }
-}
+};
 
 export const getPropertyOperatorCQL = (filter) => {
   // if the values are coded we need to handle it differently
   if (filter.codeValues) {
     return getCodeValuePropertyOperator(
-          filter.property,
-          filter.operator,
-          filter.value,
-          filter.codeValues,
-          filter.type
-        );
+      filter.property,
+      filter.operator,
+      filter.value,
+      filter.codeValues,
+      filter.type
+    );
   } else {
     switch (filter.type) {
       case 'string':
@@ -277,7 +325,7 @@ export const updateFiltersOnMap = (filtersString, filterInfo, channel) => {
       channel.postRequest('MapModulePlugin.MapLayerUpdateRequest', [
         filterInfo.layer.id,
         true,
-        { CQL_FILTER: filtersString}
+        { CQL_FILTER: filtersString }
       ]);
   } else {
     filterInfo.layer &&

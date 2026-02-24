@@ -33,6 +33,7 @@ import {
 } from '../../utils/rpcUtil';
 import { IS_EXTRANET } from '../../utils/appInfoUtil';
 import { useNavigate } from 'react-router-dom';
+import { FEATURE_SELECTION_DRAWING_TOOL } from '../../utils/constants';
 
 const StyledHeaderContainer = styled.div`
   position: relative;
@@ -267,9 +268,9 @@ export const Header = () => {
     });
 
     channel &&
-      activeTool === 'gfi-selection-tool' &&
+      activeTool === FEATURE_SELECTION_DRAWING_TOOL &&
       channel.postRequest('DrawTools.StopDrawingRequest', [
-        'gfi-selection-tool',
+        FEATURE_SELECTION_DRAWING_TOOL,
         true
       ]);
 

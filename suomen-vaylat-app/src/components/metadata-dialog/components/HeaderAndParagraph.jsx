@@ -2,6 +2,7 @@ import React from 'react';
 import 'moment-timezone';
 import moment from 'moment';
 import { StyledParagraph, StyledTitle } from './Common';
+import { renderLinksInText } from '../../../utils/commonUtil';
 
 export const HeaderAndParagraph = ({ visible, header, title, text, momentFormat }) => {
     return (
@@ -15,7 +16,7 @@ export const HeaderAndParagraph = ({ visible, header, title, text, momentFormat 
                         }
                         {!momentFormat &&
                             <React.Fragment key={'metadata-dialog-header-and-paragraph-content-text'}>
-                                {text}
+                                {renderLinksInText(text)}
                             </React.Fragment>
                         }
                     </StyledParagraph>

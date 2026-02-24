@@ -237,7 +237,6 @@ const RoadSearchInput = ({
     searchValue,
     searchType,
     isSearchingActive,
-    lastSearchValue
   } = useAppSelector((state) => state.rpc);
 
   const [roadEndEnabled, setRoadEndEnabled] = useState(false);
@@ -455,13 +454,12 @@ const RoadSearchInput = ({
               }}
             />
 
-            {(searchResults !== null || featureSearchResults.length > 0) &&
-            searchValue === lastSearchValue &&
-            !isSearchingActive ? (
+            {
+            !isSearchingActive && searchValue ? (
               <StyledStandardSearchButton
-                id="road-search-clear-button-start"
+                id="road-search-clear-fields-button-start"
                 type="button"
-                aria-label={strings.search.clearResults}
+                aria-label={strings.search?.clearFields}
                 onClick={emptySearchInputs}
                 roadEndEnabled={roadEndEnabled}
               >
@@ -594,13 +592,12 @@ const RoadSearchInput = ({
                   }}
                 />
 
-                {(searchResults !== null || featureSearchResults.length > 0) &&
-                searchValue === lastSearchValue &&
-                !isSearchingActive ? (
+                {
+                !isSearchingActive && searchValue ? (
                   <StyledStandardSearchButton
-                    id="road-search-clear-button-end"
+                    id="road-search-clear-fields-button-end"
                     type="button"
-                    aria-label={strings.search.clearResults}
+                    aria-label={strings.search?.clearFields}
                     onClick={emptySearchInputs}
                   >
                     <FontAwesomeIcon icon={faTrash} />
@@ -628,6 +625,7 @@ const RoadSearchInput = ({
         <PillButton
           id={'road-search-inputs-clear-results-btn'}
           key={'road-search-inputs-clear-results-btn'}
+          variant='inverse'
           text={strings.search?.clearResults}
           onClick={emptySearchResults}
           aria-label={strings.search?.clearResults}

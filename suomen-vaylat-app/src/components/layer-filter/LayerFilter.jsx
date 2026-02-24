@@ -726,10 +726,9 @@ export const LayerFilter = ({ filterInfo }) => {
         <StyledDialogFloatingActionChapter>
           <StyledAddFilterButton
             disabled={
-              filterValue.value.length === 0 ||
-              validationError ||
-              Object.keys(propValue).length === 0 ||
-              Object.keys(operatorValue).length === 0
+              (filterValue.value.length === 0 &&
+              (startDate === null && endDate === null)) ||
+              validationError
             }
             onClick={() => addFilter()}
           >
