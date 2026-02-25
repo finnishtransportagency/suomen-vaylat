@@ -370,6 +370,10 @@
         "title": "Haku",
         "content": "Haku avautuu kartan oikean yläkulman suurennuslasi-painikkeesta. Haku-toiminnolla voi hakea kuntia, osoitteita, kiinteistötunnuksia, tieosoitteita tai rataosoitteita. Tarkemmat hakuohjeet löytyvät avaamalla lisää hakuehtoja avautuvasta ikkunasta näkyvästä nuolipainikkeesta. Hakuohjeet voi avata ja sulkea hakukohtaisesti info-kuvakkeesta. Hakusanat voi poistaa kartalta painamalla hakukentän roskakoria, ja tulokset voidaan poistaa kartalta 'Tyhjennä tulokset' -napista. Kun hakutuloksia on aktiivisena, hakuikkuna voidaan piilottaa."
       },
+      "featureSelection": {
+        "title": "Kohteiden valinta",
+        "content": "Voit valita kohteita kartalta eri rajausvaihtoehdoilla, kuten piirtotyökaluilla, aiemmin tallennetuilla geometrioilla tai ennaltamääritellyillä aluegeometrioilla. Ikkuna pienentyy automaattisesti kun valintatyökalu aktivoidaan. Kun valinta on tehty ja kohdetiedot on haettu, ne avautuvat kohdetietoikkunaan. Kohdetietoikkunan tai 'Kohteiden valinta' -ikkuna suljettaessa myös rajaus pyyhkiytyy kartalta. Aktivoitu rajauspainike voidaan deaktivoida painamalla kyseistä nappia uudelleen, tai valitsemalla toinen."
+      },
       "drawingTools": {
         "title": "Piirtotyökalut",
         "content": "Piirtotyökalut avautuvat vasemman reunan työkalupainikkeesta avautuvasta ikkunasta. Työkaluilla voidaan lisätä kartalle geometrioita ja mitata pituutta tai pinta-alaa. 'Karttamerkintä' -painikkeesta avautuu valikko erilaisetn karttamerkintöjen lisäämiseksi kartalle. Näihin merkintöihin voidaan lisätä mukaan teksti. Piirretyt geometriat ja karttamerkinnät voidaan tallentaa muistiin klikkaamalla 'Tallenna' -painiketta, joka on piirtotyökalujen alin painike. Tallennus pätee myös muiden toimintojen kartalle piirrettyihin geometrioihin, kuten koordinaattityökalun lisäämiin pisteisiin, sekä haun kartalle piirtämiin tuloksiin. Geometrioita tallennettaessa määritellään geometrioille nimi, sekä haluttaessa kuvaus. Piirretyt geometriat voidaan poistaa kartalta oranssilla 'Tyhjennä' -painikkeella. Tallennetut geometriat listautuvat karttatasovalikon 'omat aineistot' alle. "

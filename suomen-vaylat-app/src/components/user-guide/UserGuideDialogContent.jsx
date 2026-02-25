@@ -16,7 +16,8 @@ import {
   faFilter,
   faRulerHorizontal,
   faShareAlt,
-  faUpload
+  faUpload,
+  faObjectGroup
 } from '@fortawesome/free-solid-svg-icons';
 import { ReactComponent as VaylaLogo } from '../layout/images/vayla_v_white.svg';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -349,6 +350,22 @@ export const UserGuideDialogContent = () => {
           </StyledGuideContent>
         ),
         flatText: extractStringsFromJson(strings.appGuide.dialogContent.downloads).toLowerCase()
+      },
+      {
+        title: (
+          <StyledTitleWrapper>
+            <StyledIconButton>
+              <StyledFAIcon icon={faObjectGroup} />
+            </StyledIconButton>
+            <p>{strings.appGuide.dialogContent.featureSelection.title}</p>
+          </StyledTitleWrapper>
+        ),
+        content: (
+          <StyledGuideContent>
+            <p>{strings.appGuide.dialogContent.featureSelection.content}</p>
+          </StyledGuideContent>
+        ),
+        flatText: extractStringsFromJson(strings.appGuide.dialogContent.featureSelection).toLowerCase()
       },
       {
         title: (
