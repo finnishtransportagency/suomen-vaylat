@@ -649,7 +649,7 @@
       "realEstateUnitIdentifierExamples": ["91-17-16-1", "091-017-16-001"],
       "example": "T.ex.",
       "toastTip": "Visste du att du kan spara den geometri som kommit upp på kartan vid ban- och vägsökningen?",
-      "toastTipContent": "Du kan spara geometrin via ikonen spara i vänstra kanten, på den andra fliken.",
+      "toastTipContent": "Du kan spara geometrin från ritverktygen i verktygsmenyn längst till vänster på sidan.",
       "nomenclature": "Med namnsökning kan du söka efter objekt på basen av ortsnamn. T.ex.",
       "nomenclatureExamples": ["Tampere", "Rautatieasema", "Eduskuntatalo"],
       "layer": "Genom sökning av material kan du söka bland kartlagrens metadata med ett ord eller en del av ett ord och aktivera kartlager från sökresultaten. T.ex. ",

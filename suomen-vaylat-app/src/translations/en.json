@@ -649,7 +649,7 @@
       "realEstateUnitIdentifierExamples": ["91-17-16-1", "091-017-16-001"],
       "example": "For example,",
       "toastTip": "Did you know that you can save the geometry that was placed on the map from a track and road search?",
-      "toastTipContent": "You can save the geometry through the save icon on the left side of the page, from another tab.",
+      "toastTipContent": "You can save the geometry from the drawing tools in the tool menu on the left side of the page.",
       "nomenclature": "With name search, you can search for objects in a geographic name registry. Eg.",
       "nomenclatureExamples": ["Tampere", "Rautatieasema", "Eduskuntatalo"],
       "layer": "Using material search, you can search for words or parts of words in the metadata of map layers and activate layers from the search results. Eg. ",
