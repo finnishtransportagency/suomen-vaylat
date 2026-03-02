@@ -392,7 +392,7 @@
       },
       "coordinateTool": {
         "title": "Koordinatverktyg",
-        "content": "Koordinatverktyget visar koordinaterna för kartans mittpunkt. Du kan även ange koordinater manuellt, vilket aktiverar knappen 'Fokusera kartan'; när du trycker den centrerar kartan på den angivna punkten. Du kan lägga till en markering i mittpunkten och dessa markeringar kan sparas bland geometrierna."
+        "content": "Koordinatverktyget visar koordinaterna för kartans mittpunkt. Du kan även ange koordinater manuellt, vilket aktiverar knappen 'Fokusera kartan'; när du trycker den centrerar kartan på den angivna punkten. Du kan lägga till en markering i mittpunkten och dessa markeringar kan sparas bland geometrierna. Koordinaterna kan visas antingen med tre decimalers precision eller i fullständig form. Valet sparas i webbläsarens cache."
       },
       "location": {
         "title": "Min position",
