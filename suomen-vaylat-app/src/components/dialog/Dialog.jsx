@@ -199,24 +199,23 @@ const Dialog = ({
     width = 'auto',
     style = {}
 }) => {
+    const { bringToFront, assignInitialZ, topId } = useDialogStack();
+    const [zIndex, setZIndex] = useState(null);
+    const idRef = useRef(id || Math.random().toString(36).slice(2, 9));
 
-  const { bringToFront, assignInitialZ, topId } = useDialogStack();
-  const [zIndex, setZIndex] = useState(null);
-  const idRef = useRef(id || Math.random().toString(36).slice(2, 9));
+    useEffect(() => {
+        // assign an initial z when component mounts or when opened
+        if (isOpen) {
+        setZIndex(assignInitialZ());
+        }
+    }, [isOpen, assignInitialZ]);
 
-  useEffect(() => {
-    // assign an initial z when component mounts or when opened
-    if (isOpen) {
-      setZIndex(assignInitialZ());
-    }
-  }, [isOpen, assignInitialZ]);
-
-  // Set new z-index for dialog
-  const handlePointerDown = (e) => {
-    e.stopPropagation();
-    if (topId === idRef.current) return;
-    setZIndex(bringToFront(idRef.current));
-  };
+    // Set new z-index for dialog
+    const handlePointerDown = (e) => {
+        e.stopPropagation();
+        if (topId === idRef.current) return;
+        setZIndex(bringToFront(idRef.current));
+    };
 
 
     const dragControls = useDragControls();

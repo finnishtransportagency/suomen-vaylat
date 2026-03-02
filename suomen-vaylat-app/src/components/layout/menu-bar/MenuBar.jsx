@@ -35,7 +35,7 @@ import { isMobile } from '../../../theme/theme';
 import ToolsPanel from './ToolsPanel';
 
 const StyledMenuBar = styled.div`
-  z-index: 1;
+  z-index: 1000;
   pointer-events: none;
   height: 100%;
   display: flex;

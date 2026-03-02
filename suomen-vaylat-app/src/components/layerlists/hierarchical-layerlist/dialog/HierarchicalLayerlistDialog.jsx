@@ -16,7 +16,7 @@ const StyledMapLayersDialog = styled(motion.div)`
   left: 5em;
   top: 80px;
   width: 350px;
-  height: calc(100% - 96px);
+  height: 80vh;
   display: flex;
   flex-direction: column;
   pointer-events: auto;
@@ -44,7 +44,7 @@ const StyledMapLayersDialog = styled(motion.div)`
 `;
 
 const HierarchicalLayerlistDialog = () => {
-  const { isSideMenuOpen, isThemeMenuOpen } = useAppSelector(
+  const { isSideMenuOpen } = useAppSelector(
     (state) => state.ui
   );
   const { allGroups, allLayers, allTags } = useAppSelector(
