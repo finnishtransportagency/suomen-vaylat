@@ -83,7 +83,7 @@ const StyledDialogHeader = styled.div`
     background-color: ${(props) =>
         props.type === 'warning'
             ? props.theme.colors.secondaryColorDarkOrange
-            : props.theme.colors.mainColor1Selected};
+            : props.$onTop ? props.theme.colors.mainColor1Selected : props.theme.colors.mainColor1};
     box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.2);
     padding-left: 16px;
     padding-right: 16px;
@@ -206,7 +206,7 @@ const Dialog = ({
     useEffect(() => {
         // assign an initial z when component mounts or when opened
         if (isOpen) {
-        setZIndex(assignInitialZ());
+        setZIndex(assignInitialZ(idRef.current));
         }
     }, [isOpen, assignInitialZ]);
 
@@ -306,6 +306,7 @@ const Dialog = ({
                                 onPointerDown={(e) => {
                                     drag && dragControls.start(e);
                                 }}
+                                $onTop={topId === idRef.current}
                             >
 
                                 <Tooltip anchorSelect={'#'+helpId} style={{backgroundColor: theme.colors.mainColor1}} disable={isMobile} id={helpId + '_tooltip'} place='bottom' effect='float'>

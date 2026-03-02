@@ -21,7 +21,8 @@ export const DialogStackProvider = ({ children, baseZ = 1000 }) => {
     return nextZRef.current;
   }, []);
 
-  const assignInitialZ = useCallback(() => {
+  const assignInitialZ = useCallback((id) => {
+    setTopId(id);
     nextZRef.current += 1;
     return nextZRef.current;
   }, []);
