@@ -437,7 +437,7 @@
             "content": "Om så önskas kan du ta bort det applicerade filtret genom att trycka på \"Ta bort alla filter\" eller genom att klicka på krysset bredvid aktiva filter."
           }
         },
-        "additionalInstructions": "Genom att använda operatorerna '<strong>Innehåller</strong>' och '<strong>Innehåller inte</strong>' behöver attributvärdet inte vara helt korrekt. Det räcker att värdet bara är en del av attributets innehåll. Detta underlättar filtreringen när det exakta värdet inte är känt.",
+        "additionalInstructions": "Genom att använda operatorerna '<strong>Innehåller</strong>' och '<strong>Innehåller inte</strong>' behöver attributvärdet inte vara helt korrekt. Det räcker att värdet bara är en del av attributets innehåll. Detta underlättar filtreringen när det exakta värdet inte är känt.\nFiltrering fungerar med 'AND'-logik, vilket betyder att varje tillagt filter begränsar träffmängden.",
         "feedback": "Om filterverktyget saknas från lagret eller attributet som ska filtreras saknar ett väsentligt attribut kan du skicka feedback om ämnet till",
         "feedbackEmail": "paikkatieto@vayla.fi"
       },

@@ -437,7 +437,7 @@
             "content": "If desired, you can remove the applied filter by pressing \"Remove all filters\" or by clicking the cross next to active filters."
           }
         },
-        "additionalInstructions": "Using the operators '<strong>Contains</strong>' and '<strong>Does not contain</strong>', the attribute value does not need to be perfectly correct. It is sufficient that the value is only part of the attribute's content. This facilitates filtering when the exact value is not known.",
+        "additionalInstructions": "Using the operators '<strong>Contains</strong>' and '<strong>Does not contain</strong>', the attribute value does not need to be perfectly correct. It is sufficient that the value is only part of the attribute's content. This facilitates filtering when the exact value is not known.\nFiltering uses 'AND' logic, meaning each additional filter narrows down the result set.",
         "feedback": "If the filter tool is missing from the layer or the attribute to be filtered is missing an essential attribute, you can send feedback on the subject to",
         "feedbackEmail": "paikkatieto@vayla.fi"
       },

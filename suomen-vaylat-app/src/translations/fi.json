@@ -436,7 +436,7 @@
             "content": "Halutessasi voit poistaa tehdyn suodatuksen painamalla ”Poista kaikki suodattimet” tai painamalla ruksia aktiivisten suodattimien kohdalla."
           }
         },
-        "additionalInstructions": "Käyttämällä operaattoreita '<strong>Sisältää</strong>' sekä '<strong>Ei sisällä</strong>', attribuutin arvoa ei tarvitse kirjoittaa täydellisesti oikein. Riittää, että arvona on vain osa attribuutin sisällöstä. Tämä helpottaa suodatusta silloin, kun tarkkaa arvoa ei ole tiedossa.",
+        "additionalInstructions": "Käyttämällä operaattoreita '<strong>Sisältää</strong>' sekä '<strong>Ei sisällä</strong>', attribuutin arvoa ei tarvitse kirjoittaa täydellisesti oikein. Riittää, että arvona on vain osa attribuutin sisällöstä. Tämä helpottaa suodatusta silloin, kun tarkkaa arvoa ei ole tiedossa.\nSuodatus toimii 'AND' logiikalla, eli jokainen lisätty suodatus tarkentaa tulosjoukkoa.",
         "feedback": "Jos tasolta puuttuu suodata-työkalu tai suodatettavista attribuutista puuttuu jokin oleellinen attribuutti, voit lähettää aiheesta palautetta osoitteeseen",
         "feedbackEmail": "paikkatieto@vayla.fi"
       },
