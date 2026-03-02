@@ -443,7 +443,7 @@
       },
       "downloads": {
         "title": "Nedladdningar",
-        "content": "Nedladdningar öppnas från knappen Nedladdningar i verktygsfönstret. Från popup-fönstret kan du göra ett nytt funktionsval för att ladda ner och hantera tidigare nedladdningar från funktionsdatafönstret."
+        "content": "Nedladdningar öppnas från knappen Nedladdningar i verktygsfönstret. Från popup-fönstret kan du göra ett nytt funktionsval och hantera tidigare nedladdningar."
       },
       "views": {
         "title": "Spara vy",
