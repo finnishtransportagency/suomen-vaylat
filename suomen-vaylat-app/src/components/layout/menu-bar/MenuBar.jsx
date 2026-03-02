@@ -76,18 +76,6 @@ const StyledCornerCloseButton = styled(CircleButton)`
   z-index: 10;
 `;
 
-const StyledToolButtons = styled.div`
-  overflow: scroll;
-  display: flex;
-  flex-direction: column;
-  padding: 0 8px 8px 8px;
-  pointer-events: auto;
-
-  @media ${(props) => props.theme.device.mobileL} {
-    gap: 6px;
-  }
-`;
-
 const StyledLayerCount = styled.div`
   position: absolute;
   top: -7px;

@@ -33,7 +33,6 @@ const CoordinateToolDialog = ({ constraintsRef }) => {
       width={'400px'}
       bottom={"10px"}
       right={isSearchResultPanelVisible ? "500px" : "80px"}
-      style={{zIndex: 9992}}
     >
       <CoordinateTool/>
     </Dialog>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { cloneElement } from 'react';
 import styled from 'styled-components';
 import { motion, AnimatePresence, useDragControls } from 'motion/react';
@@ -6,6 +6,7 @@ import { faTimes, faWindowMaximize, faWindowMinimize, faWindowRestore, faQuestio
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { isMobile, theme } from '../../theme/theme';
 import { Tooltip } from 'react-tooltip';
+import { useDialogStack } from '../../state/DialogStackContext';
 
 const MIN_SCREEN_WIDTH_MAXIMIZE = 500;
 
@@ -26,7 +27,7 @@ const StyledDialogBackdrop = styled(motion.div)`
 
 const StyledDialogWrapper = styled(motion.div)`
     z-index: ${(props) =>
-        props.type === 'warning' ? 9999 : props.$resize ? 100 : 9993};
+        props.type === 'warning' ? 9999 : props.$zIndex ? props.$zIndex  : 1000};
     position: absolute;
     width: ${(props) => props.$maximize? '100% !important' : 'auto'};
     height: ${(props) => props.$maximize? '100%' : 'auto'};
@@ -166,6 +167,7 @@ const StyledDialogContent = styled.div`
 `;
 
 const Dialog = ({
+    id,
     hasHelp,
     helpId,
     helpContent,
@@ -197,6 +199,26 @@ const Dialog = ({
     width = 'auto',
     style = {}
 }) => {
+
+  const { bringToFront, assignInitialZ, topId } = useDialogStack();
+  const [zIndex, setZIndex] = useState(null);
+  const idRef = useRef(id || Math.random().toString(36).slice(2, 9));
+
+  useEffect(() => {
+    // assign an initial z when component mounts or when opened
+    if (isOpen) {
+      setZIndex(assignInitialZ());
+    }
+  }, [isOpen, assignInitialZ]);
+
+  // Set new z-index for dialog
+  const handlePointerDown = (e) => {
+    e.stopPropagation();
+    if (topId === idRef.current) return;
+    setZIndex(bringToFront(idRef.current));
+  };
+
+
     const dragControls = useDragControls();
 
     const [localState, setLocalState] = useState(type === 'announcement');
@@ -228,7 +250,8 @@ const Dialog = ({
                 <>
                     <StyledDialogWrapper
                         key={"dialog_wrapper_" + title}
-                        id={"dialog_wrapper_" + title}
+                        id={"dialog_wrapper_" + id}
+                        onPointerDown={handlePointerDown}
                         className="dialog_wrapper"
                         drag={isMobile? false : drag}
                         dragConstraints={constraintsRef && constraintsRef}
@@ -264,6 +287,7 @@ const Dialog = ({
                         right={right}
                         left={left}
                         style={style}
+                        $zIndex={zIndex}
                     >
                         <StyledDialog
                             id={"dialog_" + title}
