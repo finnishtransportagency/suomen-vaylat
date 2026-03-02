@@ -392,7 +392,7 @@
       },
       "coordinateTool": {
         "title": "Coordinate tool",
-        "content": "The coordinate tool shows the coordinates of the map centre. You can also enter coordinates manually, which activates the 'Center map' button; pressing it will centre the map on that point. You can optionally add a marker at the centre, and these markers can be saved to your geometries."
+        "content": "The coordinate tool shows the coordinates of the map centre. You can also enter coordinates manually, which activates the 'Center map' button; pressing it will centre the map on that point. You can optionally add a marker at the centre, and these markers can be saved to your geometries. Coordinates can be displayed either with three decimal places of precision or in full. The selection is saved to the browser cache."
       },
       "location": {
         "title": "My location",

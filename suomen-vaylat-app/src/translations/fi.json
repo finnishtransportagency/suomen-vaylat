@@ -391,7 +391,7 @@
       },
       "coordinateTool": {
         "title": "Koordinaattityökalu",
-        "content": "Koordinaattityökalu näyttää kartan keskikohdan koordinaatit. Koordinaatit voi myös syöttää itse, jolloin 'Keskitä kartta' -painike aktivoituu, jota painamalla kartta keskittyy syötettyyn pisteeseen. Keskipisteeseen voidaan lisätä halutessa karttamerkintä, ja nämä merkinnät voidaan tallentaa geometrioihin."
+        "content": "Koordinaattityökalu näyttää kartan keskikohdan koordinaatit. Koordinaatit voi myös syöttää itse, jolloin 'Keskitä kartta' -painike aktivoituu, jota painamalla kartta keskittyy syötettyyn pisteeseen. Keskipisteeseen voidaan lisätä halutessa karttamerkintä, ja nämä merkinnät voidaan tallentaa geometrioihin. Koordinaatit voidaan näyttää joko kolmen desimaalin tarkkuudella, tai kokonaisuudessaan. Valinta tallentuu välimuistiin."
       },
       "location": {
         "title": "Oma sijainti",
