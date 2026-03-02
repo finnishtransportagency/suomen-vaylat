@@ -368,7 +368,7 @@
       },
       "search": {
         "title": "Haku",
-        "content": "Haku avautuu kartan oikean yläkulman suurennuslasi-painikkeesta. Haku-toiminnolla voi hakea kuntia, osoitteita, kiinteistötunnuksia, tieosoitteita tai rataosoitteita. Tarkemmat hakuohjeet löytyvät avaamalla lisää hakuehtoja avautuvasta ikkunasta näkyvästä nuolipainikkeesta. Hakuohjeet voi avata ja sulkea hakukohtaisesti info-kuvakkeesta. Hakusanat voi poistaa kartalta painamalla hakukentän roskakoria, ja tulokset voidaan poistaa kartalta 'Tyhjennä tulokset' -napista. Kun hakutuloksia on aktiivisena, hakuikkuna voidaan piilottaa."
+        "content": "Haku avautuu kartan oikean yläkulman suurennuslasi-painikkeesta. Haku-toiminnolla voi hakea mm. kuntia, osoitteita, kiinteistötunnuksia, tieosoitteita tai rataosoitteita. Tarkemmat hakuohjeet löytyvät avaamalla lisää hakuehtoja avautuvasta ikkunasta näkyvästä nuolipainikkeesta. Hakuohjeet voi avata ja sulkea hakukohtaisesti info-kuvakkeesta. Hakusanat voi poistaa kartalta painamalla hakukentän roskakoria, ja tulokset voidaan poistaa kartalta 'Tyhjennä tulokset' -napista. Kun hakutuloksia on aktiivisena, hakuikkuna voidaan piilottaa."
       },
       "featureSelection": {
         "title": "Kohteiden valinta",
