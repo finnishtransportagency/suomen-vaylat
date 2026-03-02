@@ -369,7 +369,7 @@
       },
       "search": {
         "title": "Search",
-        "content": "The search is opened from the magnifying-glass button in the top-right corner of the map. With the search function you can look for municipalities, addresses, real estate unit identifiers, street addresses or railway addresses. More detailed search instructions can be found by opening the arrow button in the window that appears when you choose more search criteria. Search instructions can be opened and closed per search type using the info icon. You can remove search terms from the map by clicking the trash icon in the search field, and results can be removed from the map using the 'Clear results' button. When search results are active, the search window can be hidden."
+        "content": "The search is opened from the magnifying-glass button in the top-right corner of the map. With the search function you can look for f.ex. municipalities, addresses, real estate unit identifiers, street addresses or railway addresses. More detailed search instructions can be found by opening the arrow button in the window that appears when you choose more search criteria. Search instructions can be opened and closed per search type using the info icon. You can remove search terms from the map by clicking the trash icon in the search field, and results can be removed from the map using the 'Clear results' button. When search results are active, the search window can be hidden."
       },
       "featureSelection": {
         "title": "Feature selection",

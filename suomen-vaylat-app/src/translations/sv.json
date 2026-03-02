@@ -369,7 +369,7 @@
       },
       "search": {
         "title": "Sök",
-        "content": "Sökningen öppnas via förstoringsglasknappen längst upp till höger på kartan. Med sökfunktionen kan du söka efter kommuner, adresser, fastighetsbeteckningar, gatuadresser eller järnvägsadresser. Mer detaljerade sökinstruktioner finns genom att öppna pilknappen i fönstret som visas när du väljer fler sökkriterier. Sökinstruktionerna kan öppnas och stängas per söktyp via infoikonen. Du kan ta bort söktermer från kartan genom att trycka på papperskorgsikonen i sökfältet, och resultaten kan tas bort från kartan med knappen 'Rensa resultat'. När sökresultat är aktiva kan sökfönstret döljas."
+        "content": "Sökningen öppnas via förstoringsglasknappen längst upp till höger på kartan. Med sökfunktionen kan du söka efter t.ex. kommuner, adresser, fastighetsbeteckningar, gatuadresser eller järnvägsadresser. Mer detaljerade sökinstruktioner finns genom att öppna pilknappen i fönstret som visas när du väljer fler sökkriterier. Sökinstruktionerna kan öppnas och stängas per söktyp via infoikonen. Du kan ta bort söktermer från kartan genom att trycka på papperskorgsikonen i sökfältet, och resultaten kan tas bort från kartan med knappen 'Rensa resultat'. När sökresultat är aktiva kan sökfönstret döljas."
       },
       "featureSelection": {
         "title": "Val av objekt",
