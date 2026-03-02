@@ -377,7 +377,7 @@
       },
       "drawingTools": {
         "title": "Drawing tools",
-        "content": "The drawing tools are opened from the window that opens from the left hand side tool button. With the tools you can add geometries to the map and measure length or area. The 'Marker' button opens a menu for adding various map markers, plus you can add text to these annotations. Drawn geometries and annotations can be saved by clicking the 'Save' button, which is the bottom button in the drawing tools. Saving also applies to geometries drawn on the map by other functions, such as points added with the coordinate tool, as well as search results drawn on the map. When saving geometries you give them a name and, optionally, a description. Drawn geometries can be removed from the map using the orange 'Erase' button. Saved geometries are listed under 'My datasets' in the map layers menu."
+        "content": "The drawing tools are opened from the window that opens from the left hand side tool button. With the tools you can add geometries to the map and measure length or area. The 'Marker' button opens a menu for adding various map markers, plus you can add text to these annotations.\nDrawn geometries and annotations can be saved by clicking the 'Save' button, which is the bottom button in the drawing tools. Saving also applies to geometries drawn on the map by other functions, such as points added with the coordinate tool, as well as search results drawn on the map. When saving geometries you give them a name and, optionally, a description. Drawn geometries can be removed from the map using the orange 'Erase' button. Saved geometries are listed under 'My datasets' in the map layers menu."
       },
       "gfi": {
         "content": "To access feature data, click anywhere on the map or click the button with the marker icon on the left. In the Feature Data window, you can search for feature data and view information about the features and locations you select, which you can also download directly to your device in a file format of your choosing. If there is a filter-button next to the map layer name, you can filter data listed in the Feature Data window.\nIf you have selected the object by clicking the map, you can explore the same location from Google Street View service. Google Street View can be opened from the location informations at the Feature Data window.\nUse the 'Target' button to center the map on the selected features."
@@ -455,7 +455,7 @@
       },
       "setFullScreen": {
         "title": "Expand",
-        "content": "The Expand button can be used to expand the Suomen Vaylat application to fill the entire screen."
+        "content": "The Expand button can be used to expand the Suomen Vaylat application to fill the entire screen, and it can be found from the tools menu."
       },
       "zoomBar": {
         "title": "Captions / Zoom Bar",
