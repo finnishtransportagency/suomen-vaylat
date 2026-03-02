@@ -443,7 +443,7 @@
       },
       "downloads": {
         "title": "Downloads",
-        "content": "Downloads open from the Downloads button from the tools window. From the popup you can make a new feature selection to download and manage previous downloads made from feature data window."
+        "content": "Downloads open from the Downloads button from the tools window. From the popup you can make a new feature selection and manage previous downloads."
       },
       "views": {
         "title": "Save views",

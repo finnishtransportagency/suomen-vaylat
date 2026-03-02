@@ -442,7 +442,7 @@
       },
       "downloads": {
         "title": "Lataukset",
-        "content": "Lataukset avautuvat vasemman reunan työkalupainikkeesta avautuvan ikkunan lataukset-painikkeesta. Avautuvasta ikkunasta voit luoda uuden rajauksen ladattavaksi, sekä hallita myös kohdetietojen kautta tehtyjä latauksia."
+        "content": "Lataukset avautuvat vasemman reunan työkalupainikkeesta avautuvan ikkunan lataukset-painikkeesta. Avautuvasta ikkunasta voit luoda uuden rajauksen, sekä hallita myös aiemmin tehtyjä latauksia."
       },
       "views": {
         "title": "Näkymän tallennus",
