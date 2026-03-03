@@ -22,8 +22,6 @@ const StyledMapLayersDialog = styled(motion.div)`
   pointer-events: auto;
   background-color: ${(props) => props.theme.colors.mainWhite};
   border-radius: 4px;
-  overflow: hidden;
-  overflow-y: auto;
   user-select: none;
   box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, 0.16);
   z-index: 900;
