@@ -80,8 +80,8 @@ const FeatureDataDialog = ({ constraintsRef }) => {
       id="gfi_dialog"
       minWidth={'600px'}
       minHeight={'530px'}
-      height={gfiLocations.length > 0 ? "100vw" : "40vw"}
-      width={gfiLocations.length > 0 ? "50vh" : "40vh"}
+      height={gfiLocations.length > 0 && "100vw" }
+      width={gfiLocations.length > 0 && "50vh"}
       minimize={minimizeGfi}
       maximize={maximizeGfi}
       minimizable={true}
