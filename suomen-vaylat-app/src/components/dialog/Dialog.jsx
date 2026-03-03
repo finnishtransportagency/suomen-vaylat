@@ -11,7 +11,7 @@ import { useDialogStack } from '../../state/DialogStackContext';
 const MIN_SCREEN_WIDTH_MAXIMIZE = 500;
 
 const StyledDialogBackdrop = styled(motion.div)`
-    z-index: ${(props) => (props.type === 'warning' ? 9998 : 10)};
+    z-index: ${(props) => (props.type === 'warning' ? 9998 : props.$zIndex ? props.$zIndex - 1  : 10)};
     position: fixed;
     top: 0px;
     right: 0px;
@@ -206,7 +206,7 @@ const Dialog = ({
     useEffect(() => {
         // assign an initial z when component mounts or when opened
         if (isOpen) {
-        setZIndex(assignInitialZ(idRef.current));
+            setZIndex(assignInitialZ(idRef.current));
         }
     }, [isOpen, assignInitialZ]);
 
@@ -216,7 +216,6 @@ const Dialog = ({
         if (topId === idRef.current) return;
         setZIndex(bringToFront(idRef.current));
     };
-
 
     const dragControls = useDragControls();
 
@@ -391,6 +390,7 @@ const Dialog = ({
                                       handleAnnouncementDialog(null, null);
                             }}
                             type={type}
+                            $zIndex={zIndex}
                         />
                     )}
                 </>
