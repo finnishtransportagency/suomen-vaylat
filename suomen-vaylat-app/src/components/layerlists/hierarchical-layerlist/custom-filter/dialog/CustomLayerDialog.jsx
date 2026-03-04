@@ -4,36 +4,7 @@ import { useContext } from 'react';
 import { ReactReduxContext } from 'react-redux';
 import { useAppSelector } from '../../../../../state/hooks';
 import CustomLayerDialogContent from '../CustomLayerDialogContent';
-
 import { setIsCustomFilterOpen, setUpdateCustomLayers, setSelectedCustomFilterLayers, setShowSavedLayers } from '../../../../../state/slices/uiSlice';
-
-import styled from 'styled-components';
-
-const StyledDialogWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
-const StyledDialogContent = styled.div`
-  width: 100%;
-  max-width: 600px;
-  background-color: #ffffff;
-  padding: 16px;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-
-  @media (max-width: 350px) {
-    margin-left: 5px;
-    min-width: 300px;
-    max-width: 450px;
-  }
-`;
-
-const StyledDialogBody = styled.div`
-  margin-top: 5px;
-  color: ${(props) => props.theme.colors.black};
-`;
 
 const CustomLayerDialog = ({ constraintsRef }) => {
   const { store } = useContext(ReactReduxContext);
@@ -57,8 +28,6 @@ const CustomLayerDialog = ({ constraintsRef }) => {
         constraintsRef
       } /* Reference div for dialog drag boundaries */
       drag={true} /* Enable (true) or disable (false) drag */
-      resize={false}
-      backdrop={true} /* Is backdrop enabled (true) or disabled (false) */
       fullScreenOnMobile={
         true
       } /* Scale dialog full width / height when using mobile device */
@@ -72,15 +41,9 @@ const CustomLayerDialog = ({ constraintsRef }) => {
       } /* Action when pressing dialog close button or backdrop */
       isOpen={isCustomFilterOpen} /* Dialog state */
       id="custom_layer_dialog"
-      height="860px"
+      maxWidth={'50vw'}
     >
-      <StyledDialogWrapper>
-        <StyledDialogContent>
-          <StyledDialogBody>
-            <CustomLayerDialogContent />
-          </StyledDialogBody>
-        </StyledDialogContent>
-      </StyledDialogWrapper>
+      <CustomLayerDialogContent />
     </Dialog>
   );
 };

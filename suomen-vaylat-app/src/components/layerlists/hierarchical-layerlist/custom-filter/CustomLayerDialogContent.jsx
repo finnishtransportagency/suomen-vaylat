@@ -1,90 +1,54 @@
-import { useEffect } from "react";
-import { useAppSelector } from "../../../../state/hooks";
-import strings from "../../../../translations";
-import styled from "styled-components";
-import FilterLayerGroup from "./FilterLayerGroup";
-import store from "../../../../state/store";
+import React, { useEffect } from 'react';
+import { useAppSelector } from '../../../../state/hooks';
+import strings from '../../../../translations';
+import styled from 'styled-components';
+import FilterLayerGroup from './FilterLayerGroup';
+import store from '../../../../state/store';
 import {
   incrementTriggerUpdate,
   setIsCustomFilterOpen,
   setUpdateCustomLayers,
   setCheckedLayer,
   setShowSavedLayers,
-  setSelectedCustomFilterLayers,
-} from "../../../../state/slices/uiSlice";
+  setSelectedCustomFilterLayers
+} from '../../../../state/slices/uiSlice';
+import PillButton from '../../../../utils/components/PillButton';
 
 const StyledDialogContainer = styled.div`
-  position: relative;
   display: flex;
+  flex: 1;
   flex-direction: column;
   align-items: flex-start;
-`;
-
-const StyledGuideContent = styled.div`
-  display: flex;
-  justify-content: space-between;
+  padding: 1em;
 `;
 
 const StyledButtonContainer = styled.div`
   display: flex;
-  margin: 1em;
+  width: 100%;
+  margin: 1em 0;
   flex-direction: row;
   justify-content: space-around;
   align-items: center;
-`;
-
-const StyledSaveButton = styled.div`
-  height: 2.5em;
-  display: flex;
-  margin-top: 10px;
-  margin-bottom: 10px;
-  padding: 1em;
-  justify-content: center;
-  align-items: center;
-  border-radius: 30px;
-  background-color: ${(props) =>
-    props.isDisabled ? props.theme.colors.darkGrey : props.theme.colors.mainColor1};
-  cursor: ${(props) => (props.isDisabled ? "not-allowed" : "pointer")};
-  font-size: 14px;
-  color:  ${(props) => props.theme.colors.mainWhite};
-  font-weight: 500;
-`;
-
-const StyledRemoveButton = styled.div`
-  height: 2.5em;
-  display: flex;
-  margin-top: 10px;
-  margin-bottom: 10px;
-  padding: 1em;
-  justify-content: center;
-  align-items: center;
-  border-radius: 30px;
-  cursor: ${(props) => (props.isDisabled ? "not-allowed" : "pointer")};
-  font-size: 14px;
-  border-style: solid;
-  color:  ${(props) => (props.isDisabled ? props.theme.colors.mainWhite : props.theme.colors.mainColor1)};
-  background-color: ${(props) =>
-    props.isDisabled ? props.theme.colors.darkGrey : props.theme.colors.mainWhite};
-  font-weight: 500;
+  gap: 12px;
 `;
 
 const StyledLayerList = styled.div`
-  max-height: 520px;
-  padding: 0 5px 15px 5px;
   margin: 0 5px 10px 5px;
   overflow: auto;
+  flex: 1;
+  max-height: 80%;
 
   @media (max-width: 1024px) {
     // For devices larger than 480px but not desktop
     padding: 5px 10px 5px 10px;
-    height: 450px;
   }
 
   @media (max-width: 350px) {
     padding: 5px 10px 55px 10px;
-    height: 450px;
   }
 `;
+
+const StyledDialogContent = styled.div``;
 
 const StyledLayerGroupWrapper = styled.div``;
 
@@ -100,33 +64,33 @@ export const CustomLayerList = ({ groups, layers, recurse = false }) => {
   const sortedGroups =
     slicedGroups.length > 0
       ? slicedGroups.sort(function (a, b) {
-        const aName =
-          a.locale[currentLang] && a.locale[currentLang].name
-            ? a.locale[currentLang].name
-            : null;
-        const bName =
-          b.locale[currentLang] && b.locale[currentLang].name
-            ? b.locale[currentLang].name
-            : null;
+          const aName =
+            a.locale[currentLang] && a.locale[currentLang].name
+              ? a.locale[currentLang].name
+              : null;
+          const bName =
+            b.locale[currentLang] && b.locale[currentLang].name
+              ? b.locale[currentLang].name
+              : null;
 
-        // b.id 727 is Tierekisteri (Poistuva) and should be the lowest element on the list
-        if (b.id === 727) {
-          return -1;
-        }
-        // a.id 727 is Tierekisteri (Poistuva) only on Firefox
-        else if (a.id === 727) {
-          return 1;
-        } else if (aName && bName) {
-          return aName.toLowerCase().localeCompare(bName.toLowerCase());
-        } else {
-          return 0;
-        }
-      })
+          // b.id 727 is Tierekisteri (Poistuva) and should be the lowest element on the list
+          if (b.id === 727) {
+            return -1;
+          }
+          // a.id 727 is Tierekisteri (Poistuva) only on Firefox
+          else if (a.id === 727) {
+            return 1;
+          } else if (aName && bName) {
+            return aName.toLowerCase().localeCompare(bName.toLowerCase());
+          } else {
+            return 0;
+          }
+        })
       : [];
 
   return (
     <>
-      <StyledLayerList>
+      <StyledLayerList id="custom-layer-dialog-layerlist">
         {sortedGroups.map((group) => {
           const recursiveCheckSubGroupLayers = (group) => {
             var hasChildrenLayers = false;
@@ -147,7 +111,10 @@ export const CustomLayerList = ({ groups, layers, recurse = false }) => {
           let isVisible =
             (group.layers && group.layers.length > 0) || hasChildren;
           return (
-            <StyledLayerGroupWrapper key={'group-sl-' + group.id}>
+            <StyledLayerGroupWrapper
+              id="custom-layer-dialog-layer-group-wrapper"
+              key={'group-sl-' + group.id}
+            >
               {isVisible ? (
                 <FilterLayerGroup
                   key={'layer-group-' + group.id}
@@ -169,97 +136,104 @@ const CustomLayerDialogContent = () => {
   useAppSelector((state) => state.language);
 
   const { allGroups, allLayers } = useAppSelector((state) => state.rpc);
-  const { updateCustomLayer, selectedCustomFilterLayers } = useAppSelector((state) => state.ui);
+  const { updateCustomLayer, selectedCustomFilterLayers } = useAppSelector(
+    (state) => state.ui
+  );
 
-  const checkedLayers = localStorage.getItem('checkedLayers')
-  const checkedLayersJson = checkedLayers !== null ? JSON.parse(checkedLayers) : [];
-
-  const dialogContent = [
-    {
-      titleColor: "mainColor1",
-      content: (
-        <StyledGuideContent>
-          {strings.layerlist.customLayerInfo.infoContent}
-        </StyledGuideContent>
-      ),
-      layerlist: (
-        <CustomLayerList
-          label={strings.layerlist.layerlistLabels.allLayers}
-          groups={allGroups}
-          layers={allLayers}
-          recurse={false}
-        />
-      ),
-    },
-  ];
+  const checkedLayers = localStorage.getItem('checkedLayers');
+  const checkedLayersJson =
+    checkedLayers !== null ? JSON.parse(checkedLayers) : [];
 
   useEffect(() => {
-    if (checkedLayersJson !== null && checkedLayersJson.length > 0 && selectedCustomFilterLayers.length === 0) {
-      checkedLayers && store.dispatch(
-        setSelectedCustomFilterLayers(checkedLayersJson)
-      );
+    if (
+      checkedLayersJson !== null &&
+      checkedLayersJson.length > 0 &&
+      selectedCustomFilterLayers.length === 0
+    ) {
+      checkedLayers &&
+        store.dispatch(setSelectedCustomFilterLayers(checkedLayersJson));
     }
   }, []);
 
   useEffect(() => {
-    const selectedIds = selectedCustomFilterLayers.map(layer => layer.id).sort() || [];
-    const checkedIds = checkedLayersJson.map(layer => layer.id).sort() || [];
-    const matchingArrays = (selectedIds.length === checkedIds.length) && selectedIds.every((id, index) => id === checkedIds[index]);
+    const selectedIds =
+      selectedCustomFilterLayers.map((layer) => layer.id).sort() || [];
+    const checkedIds = checkedLayersJson.map((layer) => layer.id).sort() || [];
+    const matchingArrays =
+      selectedIds.length === checkedIds.length &&
+      selectedIds.every((id, index) => id === checkedIds[index]);
 
-    if (checkedLayersJson !== null && selectedIds.length > 0 && !matchingArrays) {
+    if (
+      checkedLayersJson !== null &&
+      selectedIds.length > 0 &&
+      !matchingArrays
+    ) {
       store.dispatch(setUpdateCustomLayers(true));
-    } else if (checkedLayersJson === null && selectedCustomFilterLayers.length > 0) {
+    } else if (
+      checkedLayersJson === null &&
+      selectedCustomFilterLayers.length > 0
+    ) {
       store.dispatch(setUpdateCustomLayers(true));
     } else {
       store.dispatch(setUpdateCustomLayers(false));
     }
   }, [selectedCustomFilterLayers, updateCustomLayer]);
 
-
   const saveLayers = () => {
     if (!updateCustomLayer) return;
     store.dispatch(incrementTriggerUpdate());
     store.dispatch(setIsCustomFilterOpen(false));
     if (selectedCustomFilterLayers.length > 0) {
-      localStorage.setItem("checkedLayers", JSON.stringify(selectedCustomFilterLayers));
+      localStorage.setItem(
+        'checkedLayers',
+        JSON.stringify(selectedCustomFilterLayers)
+      );
       store.dispatch(setShowSavedLayers(true));
     } else {
-      localStorage.removeItem("checkedLayers");
+      localStorage.removeItem('checkedLayers');
       store.dispatch(setShowSavedLayers(false));
     }
   };
 
   const removeLayers = () => {
-    localStorage.removeItem("checkedLayers");
+    localStorage.removeItem('checkedLayers');
     store.dispatch(setCheckedLayer([]));
     store.dispatch(setSelectedCustomFilterLayers([]));
   };
 
   return (
-    <StyledDialogContainer>
-      {dialogContent.map((content) => (
-        <div key={content.content}>
-          <div>{content.content}</div>
+    <StyledDialogContainer id="custom-layer-dialog-container">
+      <StyledDialogContent>
+        {' '}
+        {strings.layerlist.customLayerInfo.infoContent}
+      </StyledDialogContent>
 
-          <StyledButtonContainer>
-            <StyledRemoveButton onClick={removeLayers} isDisabled={selectedCustomFilterLayers.length === 0}>
-              {strings.layerlist.customLayerInfo.removeLayers}
-            </StyledRemoveButton>
-            <StyledSaveButton
-              onClick={() => {
-                saveLayers();
-              }}
-              isDisabled={!updateCustomLayer}
-            >
-              {strings.layerlist.layerlistLabels.saveCustomFilter}
-            </StyledSaveButton>
-          </StyledButtonContainer>
+      <StyledButtonContainer>
+        <PillButton
+          id={'custom-layer-dialog-remove-layers-button'}
+          onClick={removeLayers}
+          isDisabled={selectedCustomFilterLayers.length === 0}
+          variant="inverse"
+        >
+          {strings.layerlist.customLayerInfo.removeLayers}
+        </PillButton>
+        <PillButton
+          id={'custom-layer-dialog-save-layers-button'}
+          onClick={saveLayers}
+          isDisabled={!updateCustomLayer}
+        >
+          {strings.layerlist.layerlistLabels.saveCustomFilter}
+        </PillButton>
+      </StyledButtonContainer>
 
-          <div>{content.layerlist}</div>
-        </div>
-      ))}
+      <CustomLayerList
+        label={strings.layerlist.layerlistLabels.allLayers}
+        groups={allGroups}
+        layers={allLayers}
+        recurse={false}
+      />
     </StyledDialogContainer>
   );
 };
 
-export default CustomLayerDialogContent
+export default CustomLayerDialogContent;
