@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useAppSelector } from '../../../../state/hooks';
 import strings from '../../../../translations';
 import styled from 'styled-components';
@@ -134,21 +134,25 @@ const CustomLayerDialogContent = () => {
   const { selectedCustomFilterLayers } = useAppSelector((state) => state.ui);
   const [updateCustomLayer, setUpdateCustomLayers] = useState(false);
 
-  const checkedLayersLocalStorage = localStorage.getItem('checkedLayers');
-  const checkedLayersLSJson =
-    checkedLayersLocalStorage !== null
-      ? JSON.parse(checkedLayersLocalStorage)
-      : [];
-
-  useEffect(() => {
+  const checkedLayersLSJson = useMemo(() => {
+    const checkedLayersLocalStorage = localStorage.getItem('checkedLayers');
+    const checkedLayersJson =
+      checkedLayersLocalStorage !== null
+        ? JSON.parse(checkedLayersLocalStorage)
+        : [];
+    
+    // Update the selections from localstorage to the layerlist
     if (
-      checkedLayersLSJson !== null &&
-      checkedLayersLSJson.length > 0 &&
+      checkedLayersJson !== null &&
+      checkedLayersJson.length > 0 &&
       selectedCustomFilterLayers.length === 0
     ) {
       checkedLayersLocalStorage &&
-        store.dispatch(setSelectedCustomFilterLayers(checkedLayersLSJson));
+        store.dispatch(setSelectedCustomFilterLayers(checkedLayersJson));
     }
+    // assign the localstorage value to checkedLayersLSJson that is memoized 
+    // so we don't have to keep getting it every render
+    return checkedLayersJson;
   }, []);
 
   useEffect(() => {
