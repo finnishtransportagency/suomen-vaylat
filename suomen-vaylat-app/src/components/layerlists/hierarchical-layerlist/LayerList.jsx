@@ -380,7 +380,7 @@ export const TagLayerList = ({
                     store.dispatch(setIsCustomFilterOpen(true));
                     }}
                 >
-                    {strings.layerlist.customLayerInfo.editLayers}
+                    {strings.layerlist.customFilterInfo.editLayers}
                 </StyledSaveButton>
             </StyledButtonContainer>
         }

@@ -714,8 +714,7 @@
       "clearSelectedBackgroundMaps": "Clear selected background maps",
       "noSearchResults": "No search results",
       "typeAtLeastThreeCharacters": "Type at least 3 characters",
-      "createCustomFilter": "custom filter",
-      "saveCustomFilter": "Save"
+      "createCustomFilter": "custom filter"
     },
     "selectedLayers": {
       "layerVisible": "Layer visible",
@@ -724,7 +723,7 @@
       "toShowLayer": "to see the map layer",
       "opacity": "Transparency"
     },
-    "customLayerInfo": {
+    "customFilterInfo": {
       "customFilter": "Custom filter",
       "dialogTitle": "Create custom filter",
       "closeInfo": "Close info",

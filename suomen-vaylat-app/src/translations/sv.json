@@ -714,8 +714,7 @@
       "clearSelectedBackgroundMaps": "Ta bort valda bakgrundskartor",
       "noSearchResults": "Inga sökresultat",
       "typeAtLeastThreeCharacters": "Mata in minst 3 bokstäver",
-      "createCustomFilter": "eget filter",
-      "saveCustomFilter": "Spara"
+      "createCustomFilter": "eget filter"
     },
     "selectedLayers": {
       "layerVisible": "Lager synligt",
@@ -724,7 +723,7 @@
       "toShowLayer": "för att se kartlagret",
       "opacity": "Genomskinlighet"
     },
-    "customLayerInfo": {
+    "customFilterInfo": {
       "customFilter": "Eget filter",
       "dialogTitle": "Skapa ditt eget filter",
       "closeInfo": "Stäng hjälpen",

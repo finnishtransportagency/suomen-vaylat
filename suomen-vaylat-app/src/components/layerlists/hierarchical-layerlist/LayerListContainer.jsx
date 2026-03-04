@@ -157,12 +157,12 @@ const FilterLayerList = ({ layers, groups }) => {
             })}
             {layerArray.length > 0 && (
               <TagLayerList
-                tag={strings.layerlist.customLayerInfo.customFilter}
+                tag={strings.layerlist.customFilterInfo.customFilter}
                 layers={layers}
                 groups={groups}
                 key={
                   'taglayerlist-' +
-                  strings.layerlist.customLayerInfo.customFilter
+                  strings.layerlist.customFilterInfo.customFilter
                 }
                 customTag={layerArray}
               />

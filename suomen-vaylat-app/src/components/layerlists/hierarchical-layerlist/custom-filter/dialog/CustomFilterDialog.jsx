@@ -3,10 +3,10 @@ import strings from '../../../../../translations';
 import { useContext } from 'react';
 import { ReactReduxContext } from 'react-redux';
 import { useAppSelector } from '../../../../../state/hooks';
-import CustomLayerDialogContent from '../CustomLayerDialogContent';
+import CustomFilterDialogContent from '../CustomFilterDialogContent';
 import { setIsCustomFilterOpen, setUpdateCustomLayers, setSelectedCustomFilterLayers, setShowSavedLayers } from '../../../../../state/slices/uiSlice';
 
-const CustomLayerDialog = ({ constraintsRef }) => {
+const CustomFilterDialog = ({ constraintsRef }) => {
   const { store } = useContext(ReactReduxContext);
 
   const { isCustomFilterOpen } = useAppSelector((state) => state.ui);
@@ -33,7 +33,7 @@ const CustomLayerDialog = ({ constraintsRef }) => {
       } /* Scale dialog full width / height when using mobile device */
       titleIcon={null} /* Use icon on title or null */
       title={
-        strings.layerlist.customLayerInfo.dialogTitle
+        strings.layerlist.customFilterInfo.dialogTitle
       } /* Dialog header title */
       type={'normal'} /* Dialog type */
       closeAction={
@@ -43,9 +43,9 @@ const CustomLayerDialog = ({ constraintsRef }) => {
       id="custom_layer_dialog"
       maxWidth={'50vw'}
     >
-      <CustomLayerDialogContent />
+      <CustomFilterDialogContent />
     </Dialog>
   );
 };
 
-export default CustomLayerDialog;
+export default CustomFilterDialog;

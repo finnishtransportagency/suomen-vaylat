@@ -52,11 +52,7 @@ const StyledDialogContent = styled.div``;
 
 const StyledLayerGroupWrapper = styled.div``;
 
-// Layer list that renders in CustomLayerDialog
-// Checkbox logic and rendering is done in Layer.jsx
-
-export const CustomLayerList = ({ groups, layers, recurse = false }) => {
-  // const slicedGroups = groups ? groups.slice() : [];
+export const CustomLayerList = ({ groups, layers }) => {
   const slicedGroups = groups.slice();
 
   const currentLang = strings.getLanguage();
@@ -90,7 +86,7 @@ export const CustomLayerList = ({ groups, layers, recurse = false }) => {
 
   return (
     <>
-      <StyledLayerList id="custom-layer-dialog-layerlist">
+      <StyledLayerList id="custom-filter-dialog-layerlist">
         {sortedGroups.map((group) => {
           const recursiveCheckSubGroupLayers = (group) => {
             var hasChildrenLayers = false;
@@ -112,7 +108,7 @@ export const CustomLayerList = ({ groups, layers, recurse = false }) => {
             (group.layers && group.layers.length > 0) || hasChildren;
           return (
             <StyledLayerGroupWrapper
-              id="custom-layer-dialog-layer-group-wrapper"
+              id="custom-filter-dialog-layer-group-wrapper"
               key={'group-sl-' + group.id}
             >
               {isVisible ? (
@@ -202,32 +198,31 @@ const CustomLayerDialogContent = () => {
   };
 
   return (
-    <StyledDialogContainer id="custom-layer-dialog-container">
+    <StyledDialogContainer id="custom-filter-dialog-container">
       <StyledDialogContent>
         {' '}
-        {strings.layerlist.customLayerInfo.infoContent}
+        {strings.layerlist.customFilterInfo.infoContent}
       </StyledDialogContent>
 
       <StyledButtonContainer>
         <PillButton
-          id={'custom-layer-dialog-remove-layers-button'}
+          id={'custom-filter-dialog-remove-layers-button'}
           onClick={removeLayers}
-          isDisabled={selectedCustomFilterLayers.length === 0}
+          disabled={selectedCustomFilterLayers.length === 0}
           variant="inverse"
         >
-          {strings.layerlist.customLayerInfo.removeLayers}
+          {strings.layerlist.customFilterInfo.removeLayers}
         </PillButton>
         <PillButton
-          id={'custom-layer-dialog-save-layers-button'}
+          id={'custom-filter-dialog-save-layers-button'}
           onClick={saveLayers}
-          isDisabled={!updateCustomLayer}
+          disabled={!updateCustomLayer}
         >
-          {strings.layerlist.layerlistLabels.saveCustomFilter}
+          {strings.layerlist.customFilterInfo.saveLayers}
         </PillButton>
       </StyledButtonContainer>
 
       <CustomLayerList
-        label={strings.layerlist.layerlistLabels.allLayers}
         groups={allGroups}
         layers={allLayers}
         recurse={false}
