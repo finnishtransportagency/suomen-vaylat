@@ -108,7 +108,7 @@ const StyledDialogTitle = styled.div`
     align-items: center;
     user-select: none;
     p {
-        margin: 0rem 1rem 0rem 0rem;
+        margin: 8px;
         font-size: 20px;
         font-weight: bold;
         color: ${(props) => props.theme.colors.mainWhite};

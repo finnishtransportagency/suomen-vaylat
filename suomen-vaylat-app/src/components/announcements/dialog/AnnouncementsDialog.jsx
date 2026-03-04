@@ -60,6 +60,7 @@ const AnnouncementsDialog = ({ constraintsRef }) => {
           } /* Action when pressing dialog close button or backdrop */
           isOpen={null} /* Dialog state */
           id={announcements[currentAnnouncement].id}
+          maxWidth={'50vw'}
         >
           <AnnouncementsDialogContent
             id={announcements[currentAnnouncement].id}
