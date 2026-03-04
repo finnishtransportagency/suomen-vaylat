@@ -11,6 +11,7 @@ import Layers from '../../layer/Layers';
 
 import { motion } from 'motion/react';
 import strings from '../../../translations';
+import PillButton from '../../../utils/components/PillButton';
 
 const masterHeaderIconVariants = {
   open: { rotate: 180 },
@@ -167,20 +168,6 @@ const StyledButtonContainer = styled.div`
   align-items: center;
   margin: 20px 0px;
   gap: 30px;
-`;
-
-const StyledSaveButton = styled.div`
-  width: 78px;
-  height: 32px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 30px;
-  background-color: ${(props) =>
-    props.isOpen ? '#004477' : props.theme.colors.mainColor1};
-  cursor: pointer;
-  font-size: 13px;
-  color: #fff;
 `;
 
 const LayerList = ({ groups, layers, recurse = false }) => {
@@ -375,13 +362,13 @@ export const TagLayerList = ({
 
         { customTag.length > 0 &&
             <StyledButtonContainer id={'taglayerlist-' + tag + 'button-container'}>
-                <StyledSaveButton
-                    onClick={() => {
+                <PillButton
+                  onClick={() => {
                     store.dispatch(setIsCustomFilterOpen(true));
-                    }}
+                  }}
                 >
                     {strings.layerlist.customFilterInfo.editLayers}
-                </StyledSaveButton>
+                </PillButton>
             </StyledButtonContainer>
         }
       </StyledLayerGroup>
