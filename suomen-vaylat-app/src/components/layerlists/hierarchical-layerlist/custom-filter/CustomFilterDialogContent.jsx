@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useAppSelector } from '../../../../state/hooks';
 import strings from '../../../../translations';
 import styled from 'styled-components';
@@ -7,7 +7,6 @@ import store from '../../../../state/store';
 import {
   incrementTriggerUpdate,
   setIsCustomFilterOpen,
-  setUpdateCustomLayers,
   setCheckedLayer,
   setShowSavedLayers,
   setSelectedCustomFilterLayers
@@ -132,48 +131,46 @@ const CustomLayerDialogContent = () => {
   useAppSelector((state) => state.language);
 
   const { allGroups, allLayers } = useAppSelector((state) => state.rpc);
-  const { updateCustomLayer, selectedCustomFilterLayers } = useAppSelector(
-    (state) => state.ui
-  );
+  const { selectedCustomFilterLayers } = useAppSelector((state) => state.ui);
+  const [updateCustomLayer, setUpdateCustomLayers] = useState(false);
 
-  const checkedLayers = localStorage.getItem('checkedLayers');
-  const checkedLayersJson =
-    checkedLayers !== null ? JSON.parse(checkedLayers) : [];
+  const checkedLayersLocalStorage = localStorage.getItem('checkedLayers');
+  const checkedLayersLSJson =
+    checkedLayersLocalStorage !== null
+      ? JSON.parse(checkedLayersLocalStorage)
+      : [];
 
   useEffect(() => {
     if (
-      checkedLayersJson !== null &&
-      checkedLayersJson.length > 0 &&
+      checkedLayersLSJson !== null &&
+      checkedLayersLSJson.length > 0 &&
       selectedCustomFilterLayers.length === 0
     ) {
-      checkedLayers &&
-        store.dispatch(setSelectedCustomFilterLayers(checkedLayersJson));
+      checkedLayersLocalStorage &&
+        store.dispatch(setSelectedCustomFilterLayers(checkedLayersLSJson));
     }
   }, []);
 
   useEffect(() => {
     const selectedIds =
       selectedCustomFilterLayers.map((layer) => layer.id).sort() || [];
-    const checkedIds = checkedLayersJson.map((layer) => layer.id).sort() || [];
+    const checkedIds =
+      checkedLayersLSJson.map((layer) => layer.id).sort() || [];
     const matchingArrays =
       selectedIds.length === checkedIds.length &&
       selectedIds.every((id, index) => id === checkedIds[index]);
 
-    if (
-      checkedLayersJson !== null &&
-      selectedIds.length > 0 &&
-      !matchingArrays
-    ) {
-      store.dispatch(setUpdateCustomLayers(true));
+    if (checkedLayersLSJson !== null && !matchingArrays) {
+      setUpdateCustomLayers(true);
     } else if (
-      checkedLayersJson === null &&
+      checkedLayersLSJson === null &&
       selectedCustomFilterLayers.length > 0
     ) {
-      store.dispatch(setUpdateCustomLayers(true));
+      setUpdateCustomLayers(true);
     } else {
-      store.dispatch(setUpdateCustomLayers(false));
+      setUpdateCustomLayers(false);
     }
-  }, [selectedCustomFilterLayers, updateCustomLayer]);
+  }, [selectedCustomFilterLayers, checkedLayersLSJson]);
 
   const saveLayers = () => {
     if (!updateCustomLayer) return;
@@ -222,11 +219,7 @@ const CustomLayerDialogContent = () => {
         </PillButton>
       </StyledButtonContainer>
 
-      <CustomLayerList
-        groups={allGroups}
-        layers={allLayers}
-        recurse={false}
-      />
+      <CustomLayerList groups={allGroups} layers={allLayers} recurse={false} />
     </StyledDialogContainer>
   );
 };

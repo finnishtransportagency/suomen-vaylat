@@ -4,7 +4,7 @@ import { useContext } from 'react';
 import { ReactReduxContext } from 'react-redux';
 import { useAppSelector } from '../../../../../state/hooks';
 import CustomFilterDialogContent from '../CustomFilterDialogContent';
-import { setIsCustomFilterOpen, setUpdateCustomLayers, setSelectedCustomFilterLayers, setShowSavedLayers } from '../../../../../state/slices/uiSlice';
+import { setIsCustomFilterOpen, setSelectedCustomFilterLayers, setShowSavedLayers } from '../../../../../state/slices/uiSlice';
 
 const CustomFilterDialog = ({ constraintsRef }) => {
   const { store } = useContext(ReactReduxContext);
@@ -13,7 +13,6 @@ const CustomFilterDialog = ({ constraintsRef }) => {
 
   const handleCustomFilterClose = () => {
     store.dispatch(setIsCustomFilterOpen(false));
-    store.dispatch(setUpdateCustomLayers(false));
     store.dispatch(setSelectedCustomFilterLayers([]));
 
     const checkedLayers = localStorage.getItem('checkedLayers');
