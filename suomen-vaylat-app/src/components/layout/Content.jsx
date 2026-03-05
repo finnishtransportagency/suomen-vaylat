@@ -32,7 +32,6 @@ import BaseLayerSelector from '../base-layers-selector/BaseLayersSelector';
 import BaseLayerSelectorDialog from '../base-layers-selector/dialog/BaseLayersSelectorDialog';
 import { isMobile } from '../../theme/theme';
 import { useAppSelector } from '../../state/hooks';
-import DrawtoolMarkersDialog from '../measurement-tools/dialog/DrawtoolMarkersDialog';
 import SaveViewDialog from '../saved-content-dialogs/dialogs/SaveViewDialog';
 import SaveGeometriesDialog from '../saved-content-dialogs/dialogs/SaveGeometriesDialog';
 import ProfileInfoDialog from '../profile-info/dialog/ProfileInfoDialog';
@@ -180,7 +179,6 @@ const Content = () => {
 
         {isCoordinateToolOpen && <Crosshair />}
 
-        <DrawtoolMarkersDialog />
         <StyledToastContainer
           position="bottom-left"
           pauseOnFocusLoss={false}
