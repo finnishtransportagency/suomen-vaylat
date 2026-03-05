@@ -54,7 +54,6 @@ const LayerFilterDialog = ({ constraintsRef }) => {
       } /* Reference div for dialog drag boundaries */
       drag={true} /* Enable (true) or disable (false) drag */
       resize={true}
-      backdrop={false} /* Is backdrop enabled (true) or disabled (false) */
       fullScreenOnMobile={
         true
       } /* Scale dialog full width / height when using mobile device */

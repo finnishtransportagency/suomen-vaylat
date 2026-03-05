@@ -22,7 +22,6 @@ const ShareWebsiteDialog = ({ constraintsRef }) => {
       constraintsRef={constraintsRef}
       drag={false}
       resize={false}
-      backdrop={true}
       fullScreenOnMobile={true}
       titleIcon={faShareAlt}
       title={strings.share.title}

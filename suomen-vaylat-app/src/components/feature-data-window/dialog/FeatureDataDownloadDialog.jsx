@@ -36,7 +36,6 @@ const FeatureDataDownloadDialog = ({ constraintsRef }) => {
       } /* Reference div for dialog drag boundaries */
       drag={true} /* Enable (true) or disable (false) drag */
       resize={false}
-      backdrop={false} /* Is backdrop enabled (true) or disabled (false) */
       fullScreenOnMobile={
         true
       } /* Scale dialog full width / height when using mobile device */

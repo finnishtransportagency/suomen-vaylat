@@ -1,4 +1,4 @@
-
+// src/components/coordinate-tool/dialog/CoordinateToolDialog.jsx
 import strings from '../../../translations';
 import { useAppSelector } from '../../../state/hooks';
 import { setIsCoordinateToolOpen } from '../../../state/slices/uiSlice';
@@ -7,36 +7,31 @@ import { useContext } from 'react';
 import { ReactReduxContext } from 'react-redux';
 import CoordinateTool from '../CoordinateTool';
 
-const CoordinateToolDialog = ({ constraintsRef }) => {
+const CoordinateToolDialog = () => {
   const { isCoordinateToolOpen, isSearchResultPanelVisible } = useAppSelector((state) => state.ui);
   const { store } = useContext(ReactReduxContext);
 
   return (
     <Dialog
-      constraintsRef={
-        constraintsRef
-      } /* Reference div for dialog drag boundaries */
-      drag={true} /* Enable (true) or disable (false) drag */
+      // bounds default to window; pass constraintsRef if/when you add one at root
+      drag
       resize={false}
-      backdrop={false} /* Is backdrop enabled (true) or disabled (false) */
-      fullScreenOnMobile={
-        false
-      } /* Scale dialog full width / height when using mobile device */
-      titleIcon={null} /* Use icon on title or null */
-      title={strings.coordinateTool.title} /* Dialog header title */
-      type={'normal'} /* Dialog type */
-      closeAction={() =>
-        store.dispatch(setIsCoordinateToolOpen(false))
-      } /* Action when pressing dialog close button or backdrop */
-      isOpen={isCoordinateToolOpen} /* Dialog state */
+      backdrop={false}
+      fullScreenOnMobile={false}
+      titleIcon={null}
+      title={strings.coordinateTool.title}
+      type="normal"
+      closeAction={() => store.dispatch(setIsCoordinateToolOpen(false))}
+      isOpen={isCoordinateToolOpen}
       id="coordinate_tool_dialog"
-      width={'400px'}
-      bottom={"10px"}
-      right={isSearchResultPanelVisible ? "500px" : "80px"}
-      style={{zIndex: 9992}}
+      width="400px"
+      bottom="10px"
+      right={isSearchResultPanelVisible ? '500px' : '80px'}
+      style={{ zIndex: 9992 }}
     >
-      <CoordinateTool/>
+      <CoordinateTool />
     </Dialog>
   );
 };
+
 export default CoordinateToolDialog;

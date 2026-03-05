@@ -121,57 +121,56 @@ const StyledRightSection = styled.div`
 const StyledToastContainer = styled(ToastContainer)``;
 
 const Content = () => {
-  const constraintsRef = useRef(null);
   const { isCoordinateToolOpen } = useAppSelector((state) => state.ui);
 
   return (
     <>
-      <StyledContent ref={constraintsRef}>
+      <StyledContent>
         <PublishedMap />
 
-        <AnnouncementsDialog constraintsRef={constraintsRef} />
+        <AnnouncementsDialog/>
 
-        <FeatureDataDialog constraintsRef={constraintsRef} />
+        <FeatureDataDialog/>
 
-        <FeatureDataDownloadDialog constraintsRef={constraintsRef} />
+        <FeatureDataDownloadDialog/>
 
-        <UserGuideDialog constraintsRef={constraintsRef} />
+        <UserGuideDialog/>
 
-        <AppInfoDialog constraintsRef={constraintsRef} />
+        <AppInfoDialog/>
 
-        <CustomLayerDialog constraintsRef={constraintsRef} />
+        <CustomLayerDialog/>
 
         {IS_EXTRANET && 
           <>
-            <DatasetImportDialog constraintsRef={constraintsRef} />
-            <ProfileInfoDialog constraintsRef={constraintsRef} />
+            <DatasetImportDialog/>
+            <ProfileInfoDialog/>
           </>
         }
 
-        <MetadataDialog constraintsRef={constraintsRef} />
+        <MetadataDialog/>
 
-        <ShareWebsiteDialog constraintsRef={constraintsRef} />
+        <ShareWebsiteDialog/>
 
-        <SaveGeometriesDialog constraintsRef={constraintsRef} />
+        <SaveGeometriesDialog/>
 
-        <SaveViewDialog constraintsRef={constraintsRef} />
+        <SaveViewDialog/>
 
-        <LayerDownloadButtonLinkDialog constraintsRef={constraintsRef} />
+        <LayerDownloadButtonLinkDialog/>
 
-        <WarningDialog constraintsRef={constraintsRef} />
+        <WarningDialog/>
 
-        <FeatureDataToolsDialog constraintsRef={constraintsRef} />
+        <FeatureDataToolsDialog/>
 
-        <LayerFilterDialog constraintsRef={constraintsRef} />
+        <LayerFilterDialog/>
 
         <ScaleBar />
         {!isMobile && (
-          <BaseLayerSelectorDialog constraintsRef={constraintsRef} />
+          <BaseLayerSelectorDialog/>
         )}
         {!isMobile && (
           <>
             <BaseLayerSelector />
-            <CoordinateToolDialog constraintsRef={constraintsRef} />
+            <CoordinateToolDialog/>
           </>
         )}
 

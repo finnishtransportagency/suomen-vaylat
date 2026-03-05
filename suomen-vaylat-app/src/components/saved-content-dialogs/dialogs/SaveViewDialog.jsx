@@ -195,7 +195,6 @@ const SaveViewsDialog = ({ constraintsRef }) => {
       constraintsRef={constraintsRef}
       drag={true}
       resize={false}
-      backdrop={false}
       fullScreenOnMobile={true}
       titleIcon={faCamera}
       title={strings.savedContent?.saveView?.saveView}

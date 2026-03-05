@@ -22,7 +22,6 @@ const WarningDialog = ({ constraintsRef }) => {
       constraintsRef={constraintsRef}
       drag={false}
       resize={false}
-      backdrop={true}
       fullScreenOnMobile={true}
       titleIcon={faExclamationCircle}
       title={strings.general.warning}

@@ -132,7 +132,7 @@ const App = () => {
     </StyledAppContainer>
   );
 
-  return IS_EXTRANET && !isLoggedIn? (
+  return !IS_EXTRANET && isLoggedIn? (
     <>
       Logging in progress, please wait or refresh page and try again later. If
       problem continues contact paikkatieto@vayla.fi

@@ -21,7 +21,6 @@ const ProfileInfoDialog = ({ constraintsRef }) => {
       constraintsRef={constraintsRef}
       drag={true}
       resize={false}
-      backdrop={false}
       fullScreenOnMobile={true}
       titleIcon={<AccountCircleIcon style={{fontSize: "26px"}}/>}
       title={strings.tooltips.profile}

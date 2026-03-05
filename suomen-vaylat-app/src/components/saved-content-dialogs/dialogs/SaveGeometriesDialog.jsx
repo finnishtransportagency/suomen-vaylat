@@ -149,7 +149,6 @@ const SaveGeometriesDialog = ({ constraintsRef }) => {
       constraintsRef={constraintsRef}
       drag={true}
       resize={false}
-      backdrop={false}
       fullScreenOnMobile={true}
       titleIcon={faDrawPolygon}
       title={strings.savedContent?.saveGeometry?.title}

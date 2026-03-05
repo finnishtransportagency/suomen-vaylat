@@ -44,7 +44,6 @@ const FeatureDataToolsDialog = ({ constraintsRef }) => {
       constraintsRef={constraintsRef}
       drag={true}
       resize={true}
-      backdrop={false}
       fullScreenOnMobile={true}
       title={strings.gfi.featureSelection.title}
       type={"normal"}

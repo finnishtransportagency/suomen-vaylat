@@ -26,7 +26,6 @@ const LayerDownloadLinkButtonDialog = ({ constraintsRef }) => {
       constraintsRef={constraintsRef}
       drag={false}
       resize={false}
-      backdrop={true}
       fullScreenOnMobile={true}
       title={strings.downloadLink.downloadLinkDialogHeader}
       type={'normal'}

@@ -20,7 +20,6 @@ const BaseLayerSelectorDialog = ({ constraintsRef }) => {
       constraintsRef={constraintsRef}
       drag={false}
       resize={false}
-      backdrop={true}
       fullScreenOnMobile={true}
       title={strings.baseLayerSelector.title}
       type={'normal'}
