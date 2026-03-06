@@ -204,15 +204,15 @@ const Dialog = ({
     const idRef = useRef(id || Math.random().toString(36).slice(2, 9));
 
     useEffect(() => {
-        // assign an initial z when component mounts or when opened
         if (isOpen) {
-            setZIndex(assignInitialZ(idRef.current));
+            const z = assignInitialZ ? assignInitialZ(idRef.current) : 1000;
+            setZIndex(z);
         }
     }, [isOpen, assignInitialZ]);
 
-    // Set new z-index for dialog
     const handlePointerDown = (e) => {
         e.stopPropagation();
+        if (!bringToFront) return; // no-op if provider missing
         if (topId === idRef.current) return;
         setZIndex(bringToFront(idRef.current));
     };
