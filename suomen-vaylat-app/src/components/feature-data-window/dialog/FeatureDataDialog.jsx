@@ -72,7 +72,6 @@ const FeatureDataDialog = () => {
       closeAction={
         handleCloseGFIDialog
       } /* Action when pressing dialog close button or backdrop */
-      isOpen={isGfiOpen} /* Dialog state */
       id="gfi_dialog"
       minWidth={gfiLocations.length > 0 ? "50vw" : "40vw"}
       minHeight={gfiLocations.length > 0 ? "50vh" : "40vh"}

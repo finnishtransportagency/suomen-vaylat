@@ -65,7 +65,6 @@ const LayerFilterDialog = () => {
       closeAction={
         handleCloseFilterDialog
       } /* Action when pressing dialog close button or backdrop */
-      isOpen={filteringInfo.some((f) => f.dialogOpen)} /* Dialog state */
       minimize={minimizeFilter.minimized}
       maximize={maximizeFilter}
       minimizable={true}

@@ -25,7 +25,6 @@ const ProfileInfoDialog = () => {
       title={strings.tooltips.profile}
       type={'normal'}
       closeAction={handleCloseProfileDialog}
-      isOpen={isProfileOpen}
       id="profile_info_dialog"
       minWidth={'600px'}
       minHeight={isLowResScreen ? '300px' : '400px'}

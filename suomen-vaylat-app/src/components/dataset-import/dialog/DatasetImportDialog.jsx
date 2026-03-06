@@ -29,7 +29,6 @@ const DatasetImportDialog = () => {
       closeAction={
         handleCloseDatasetImport
       } /* Action when pressing dialog close button or backdrop */
-      isOpen={isDatasetImportOpen} /* Dialog state */
       id='dataset-import-dialog'
       maxWidth={'800px'}
     >

@@ -29,7 +29,6 @@ const LayerDownloadLinkButtonDialog = () => {
       title={strings.downloadLink.downloadLinkDialogHeader}
       type={'normal'}
       closeAction={handleCloseDownloadLinkDialog}
-      isOpen={downloadLink.layerDownloadLinkDialogOpen}
       id="layer_download_link_dialog"
     >
       <LayerDownloadLinkButtonDialogContent downloadLink={downloadLink} />

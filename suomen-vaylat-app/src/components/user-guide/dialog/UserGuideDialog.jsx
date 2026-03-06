@@ -31,7 +31,6 @@ const UserGuideDialog = () => {
       closeAction={
         handleCloseUserGuide
       } /* Action when pressing dialog close button or backdrop */
-      isOpen={isUserGuideOpen} /* Dialog state */
       id="user_guide_dialog"
       minHeight="860px"
     >

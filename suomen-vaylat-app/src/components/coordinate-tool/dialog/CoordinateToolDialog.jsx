@@ -21,7 +21,6 @@ const CoordinateToolDialog = () => {
       title={strings.coordinateTool.title}
       type="normal"
       closeAction={() => store.dispatch(setIsCoordinateToolOpen(false))}
-      isOpen={isCoordinateToolOpen}
       id="coordinate_tool_dialog"
       minWidth="400px"
       bottom="10px"

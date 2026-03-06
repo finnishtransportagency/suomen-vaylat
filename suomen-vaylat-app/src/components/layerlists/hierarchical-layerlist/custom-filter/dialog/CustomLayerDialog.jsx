@@ -66,7 +66,6 @@ const CustomLayerDialog = () => {
       closeAction={
         handleCustomFilterClose
       } /* Action when pressing dialog close button or backdrop */
-      isOpen={isCustomFilterOpen} /* Dialog state */
       id="custom_layer_dialog"
       minHeight="860px"
     >

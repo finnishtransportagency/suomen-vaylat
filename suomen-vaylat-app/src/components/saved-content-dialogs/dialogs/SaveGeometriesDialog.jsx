@@ -153,7 +153,6 @@ const SaveGeometriesDialog = () => {
       title={strings.savedContent?.saveGeometry?.title}
       type={'normal'}
       closeAction={handleCloseSaveGeometriesDialog}
-      isOpen={isSaveGeometriesOpen}
       id="saved_content_dialog"
       minWidth={'600px'}
       minHeight={isLowResScreen ? '300px' : '400px'}

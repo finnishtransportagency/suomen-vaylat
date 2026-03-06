@@ -34,7 +34,6 @@ const MetadataDialog = () => {
           closeAction={
             handleCloseMetadataDialog
           } /* Action when pressing dialog close button or backdrop */
-          isOpen={layerMetadata.data !== null} /* Dialog state */
           id="metadata_dialog"
           maxWidth={"800px"}
         >

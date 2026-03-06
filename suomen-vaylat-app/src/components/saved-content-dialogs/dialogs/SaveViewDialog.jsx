@@ -196,7 +196,6 @@ const SaveViewsDialog = () => {
       resize
       title={strings.savedContent?.saveView?.saveView}
       titleIcon={faCamera}
-      isOpen={isSaveViewOpen}
       closeAction={handleCloseSaveViewDialog}
       type="normal"
       minWidth="600px"

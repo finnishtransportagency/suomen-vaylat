@@ -54,7 +54,6 @@ const AnnouncementsDialog = () => {
           closeAction={
             closeAnnouncement
           } /* Action when pressing dialog close button or backdrop */
-          isOpen={null} /* Dialog state */
           id={announcements[currentAnnouncement].id}
         >
           <AnnouncementsDialogContent

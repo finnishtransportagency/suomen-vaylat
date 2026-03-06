@@ -26,7 +26,6 @@ const ShareWebsiteDialog = () => {
       title={strings.share.title}
       type={'normal'}
       closeAction={handleCloseShareWebSite}
-      isOpen={isShareOpen}
       id="share_website_popup"
     >
       <ShareWebsiteContent />

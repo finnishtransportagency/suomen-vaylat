@@ -200,7 +200,6 @@ const Dialog = ({
   hasHelp,
   helpId,
   helpContent,
-  isOpen,
   closeAction,
   minimizable,
   minimize = null,
@@ -363,11 +362,11 @@ const Dialog = ({
 
   // For mobile fullscreen
   useEffect(() => {
-    if (isMobile && fullScreenOnMobile && (isOpen || localState)) {
+    if (isMobile && fullScreenOnMobile && localState) {
       setPosition({ x: 0, y: 0 });
       setSize({ width: window.innerWidth, height: window.innerHeight });
     }
-  }, [isOpen, localState, fullScreenOnMobile]);
+  }, [localState, fullScreenOnMobile]);
 
   const disableDragging =
     !drag || minimize || maximize || (isMobile && fullScreenOnMobile);
@@ -378,7 +377,7 @@ const Dialog = ({
 
   // Auto-fit height on first open (and until user resizes)
   useLayoutEffect(() => {
-    if (!(isOpen || localState)) return;
+    if (!localState) return;
     if (maximize || minimize) return;
     if (!fitHeightOnOpen || userResized) return;
 
@@ -400,11 +399,11 @@ const Dialog = ({
       setSize((prev) => ({ ...prev, height: nextH }));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isOpen, localState, maximize, minimize, fitHeightOnOpen, userResized]);
+  }, [localState, maximize, minimize, fitHeightOnOpen, userResized]);
 
   // If content changes size after open (e.g., async), keep fitting until user resizes
   useEffect(() => {
-    if (!(isOpen || localState) || maximize || minimize || userResized) return;
+    if (!localState || maximize || minimize || userResized) return;
     if (!fitHeightOnOpen) return;
     if (!bodyRef.current) return;
 
@@ -428,9 +427,9 @@ const Dialog = ({
     ro.observe(bodyRef.current);
     return () => ro.disconnect();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isOpen, localState, maximize, minimize, userResized, fitHeightOnOpen]);
+  }, [localState, maximize, minimize, userResized, fitHeightOnOpen]);
 
-  if (!(isOpen || localState)) return null;
+  //if (!localState) return null;
 
   const showMaximizeButton =
     maximizable && window.innerWidth > MIN_SCREEN_WIDTH_MAXIMIZE;

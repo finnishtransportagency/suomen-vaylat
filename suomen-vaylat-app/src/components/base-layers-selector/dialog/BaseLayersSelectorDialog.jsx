@@ -22,7 +22,6 @@ const BaseLayerSelectorDialog = () => {
       title={strings.baseLayerSelector.title}
       type={'normal'}
       closeAction={handleCloseBaseLayerSelectorDialog}
-      isOpen={isBaseLayerSelectorMenuOpen}
       id="base_layer_selector_menu"
     >
       <BaseLayerSelectorMenu />

@@ -26,7 +26,6 @@ const WarningDialog = () => {
       title={strings.general.warning}
       type={'warning'}
       closeAction={handleCloseWarning}
-      isOpen={warning !== null}
       id={null}
       maxWidth={isMobile ? null : '30em'}
     >

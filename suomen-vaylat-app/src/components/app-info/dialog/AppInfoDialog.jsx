@@ -30,7 +30,6 @@ const AppInfoDialog = () => {
           closeAction={
             handleCloseAppInfoDialog
           } /* Action when pressing dialog close button or backdrop */
-          isOpen={isInfoOpen} /* Dialog state */
           id="app_info_dialog"
           maxWidth={"800px"}
         >

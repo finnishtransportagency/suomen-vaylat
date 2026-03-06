@@ -47,7 +47,6 @@ const FeatureDataToolsDialog = () => {
       title={strings.gfi.featureSelection.title}
       type={"normal"}
       closeAction={handleCloseGfiLocations}
-      isOpen={isGfiToolsOpen}
       titleIcon={faObjectGroup}
       minimize={minimizeFeatureSelection}
       minimizable={true}
