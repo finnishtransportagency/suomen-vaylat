@@ -21,7 +21,7 @@ const LayerDownloadLinkButtonDialog = () => {
     );
   };
 
-  return (
+  return downloadLink.layerDownloadLinkDialogOpen ? (
     <Dialog
       drag={false}
       resize={false}
@@ -34,7 +34,8 @@ const LayerDownloadLinkButtonDialog = () => {
     >
       <LayerDownloadLinkButtonDialogContent downloadLink={downloadLink} />
     </Dialog>
-  );
+  )
+  : null ;
 };
 
 export default LayerDownloadLinkButtonDialog;

@@ -190,7 +190,7 @@ const SaveViewsDialog = () => {
     </ul>
   );
 
-  return (
+  return isSaveViewOpen ? (
     <Dialog
       drag
       resize
@@ -222,7 +222,8 @@ const SaveViewsDialog = () => {
         }}
       />
     </Dialog>
-  );
+  )
+  : null ;
 };
 
 export default SaveViewsDialog;

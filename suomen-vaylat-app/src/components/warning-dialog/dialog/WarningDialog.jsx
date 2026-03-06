@@ -12,12 +12,12 @@ import { isMobile } from '../../../theme/theme';
 const WarningDialog = () => {
   const { warning } = useAppSelector((state) => state.ui);
   const { store } = useContext(ReactReduxContext);
-
+  
   const handleCloseWarning = () => {
     store.dispatch(setWarning(null));
   };
 
-  return (
+  return warning !== null ? (
     <Dialog
       drag={false}
       resize={false}
@@ -32,7 +32,8 @@ const WarningDialog = () => {
     >
       <WarningDialogContent warning={warning} />
     </Dialog>
-  );
+  )
+  : null ;
 };
 
 export default WarningDialog;

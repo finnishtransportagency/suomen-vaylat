@@ -13,12 +13,11 @@ const AppInfoDialog = () => {
   const { store } = useContext(ReactReduxContext);
 
   const { isInfoOpen } = useAppSelector((state) => state.ui);
-
   const handleCloseAppInfoDialog = () => {
     store.dispatch(setIsInfoOpen(false));
   };
 
-  return (
+  return isInfoOpen ? (
     <Dialog
           drag={false} /* Enable (true) or disable (false) drag */
           resize={false}
@@ -37,7 +36,8 @@ const AppInfoDialog = () => {
         >
           <AppInfoDialogContent />
         </Dialog>
-  );
+  )
+  : null ;
 };
 
 export default AppInfoDialog;

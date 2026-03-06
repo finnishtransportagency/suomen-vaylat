@@ -144,7 +144,7 @@ const SaveGeometriesDialog = () => {
     </ul>
   );
 
-  return (
+  return isSaveGeometriesOpen ? (
     <Dialog
       drag={true}
       resize={false}
@@ -168,7 +168,8 @@ const SaveGeometriesDialog = () => {
         itemsToSave={itemsToSave}
       />
     </Dialog>
-  );
+  )
+  : null ;
 };
 
 export default SaveGeometriesDialog;

@@ -18,7 +18,7 @@ const UserGuideDialog = () => {
     store.dispatch(setIsUserGuideOpen(false));
   };
 
-  return (
+  return isUserGuideOpen ? (
     <Dialog
       drag={false} /* Enable (true) or disable (false) drag */
       resize={false}
@@ -37,7 +37,8 @@ const UserGuideDialog = () => {
     >
       <UserGuideDialogContent />
     </Dialog>
-  );
+  )
+  : null ;
 };
 
 export default UserGuideDialog;

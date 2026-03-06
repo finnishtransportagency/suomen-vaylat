@@ -11,7 +11,7 @@ const CoordinateToolDialog = () => {
   const { isCoordinateToolOpen, isSearchResultPanelVisible } = useAppSelector((state) => state.ui);
   const { store } = useContext(ReactReduxContext);
 
-  return (
+  return isCoordinateToolOpen ? (
     <Dialog
       drag
       resize={false}
@@ -30,7 +30,8 @@ const CoordinateToolDialog = () => {
     >
       <CoordinateTool />
     </Dialog>
-  );
+  )
+  : null ;
 };
 
 export default CoordinateToolDialog;

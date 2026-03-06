@@ -9,14 +9,14 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 const ProfileInfoDialog = () => {
   const { store } = useContext(ReactReduxContext);
-  const isProfileOpen = useSelector((s) => s.ui.isProfileOpen) || false;
+  const isProfileOpen = useSelector((s) => s.ui.isProfileOpen) || false;  
   const isLowResScreen = window.matchMedia(theme.device.lowResDesktop).matches;
 
   const handleCloseProfileDialog = () => {
     store.dispatch(setIsProfileOpen(false));
   };
 
-  return (
+  return isProfileOpen ? (
     <Dialog
       drag={true}
       resize={false}
@@ -32,7 +32,8 @@ const ProfileInfoDialog = () => {
     >
       <ProfileInfo/>
     </Dialog>
-  );
+  )
+  : null ;
 };
 
 export default ProfileInfoDialog;

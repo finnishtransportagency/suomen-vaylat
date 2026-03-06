@@ -12,12 +12,11 @@ const DatasetImportDialog = () => {
   const { store } = useContext(ReactReduxContext);
 
   const { isDatasetImportOpen } = useAppSelector((state) => state.ui);
-
   const handleCloseDatasetImport = () => {
     store.dispatch(setIsDatasetImportOpen(false));
   };
 
-  return (
+  return isDatasetImportOpen ? (
     <Dialog
       drag={true} /* Enable (true) or disable (false) drag */
       resize={false}
@@ -36,7 +35,8 @@ const DatasetImportDialog = () => {
     >
       <DatasetImport/>
     </Dialog>
-  );
+  )
+  : null ;
 };
 
 export default DatasetImportDialog;

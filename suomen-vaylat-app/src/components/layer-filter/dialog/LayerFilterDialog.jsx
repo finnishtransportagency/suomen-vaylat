@@ -1,7 +1,7 @@
 import Dialog from '../../dialog/Dialog';
 import { LayerFilterContainer } from '../LayerFilterContainer';
 import strings from '../../../translations';
-import { useContext } from 'react';
+import { useContext, useMemo } from 'react';
 import { ReactReduxContext } from 'react-redux';
 import { useAppSelector } from "../../../state/hooks";
 
@@ -25,6 +25,11 @@ const LayerFilterDialog = () => {
     maximizeFilter
   } = useAppSelector((state) => state.ui);
 
+  const isFilterDialogOpen = useMemo(
+      () => filteringInfo.some((f) => f.dialogOpen),
+      [filteringInfo]
+    );
+
   const handleCloseFilterDialog = () => {
     // reset map
     filteringInfo.forEach((filteringInfo) => {
@@ -46,7 +51,7 @@ const LayerFilterDialog = () => {
     store.dispatch(setFilteringInfo([]));
   };
 
-  return (
+  return isFilterDialogOpen ? (
     <Dialog
       id="filter_dialog_container"
       drag={true} /* Enable (true) or disable (false) drag */
@@ -79,7 +84,8 @@ const LayerFilterDialog = () => {
     >
       <LayerFilterContainer />
     </Dialog>
-  );
+  )
+  : null ;
 };
 
 export default LayerFilterDialog;

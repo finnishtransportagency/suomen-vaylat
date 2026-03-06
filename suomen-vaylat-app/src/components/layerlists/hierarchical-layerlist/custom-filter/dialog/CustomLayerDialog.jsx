@@ -39,7 +39,7 @@ const CustomLayerDialog = () => {
   const { store } = useContext(ReactReduxContext);
 
   const { isCustomFilterOpen } = useAppSelector((state) => state.ui);
-
+  
   const handleCustomFilterClose = () => {
     store.dispatch(setIsCustomFilterOpen(false));
     store.dispatch(setUpdateCustomLayers(false));
@@ -51,7 +51,7 @@ const CustomLayerDialog = () => {
     }
   };
 
-  return (
+  return isCustomFilterOpen ? (
     <Dialog
       drag={true} /* Enable (true) or disable (false) drag */
       resize={false}
@@ -78,7 +78,8 @@ const CustomLayerDialog = () => {
         </StyledDialogContent>
       </StyledDialogWrapper>
     </Dialog>
-  );
+  )
+  : null ;
 };
 
 export default CustomLayerDialog;

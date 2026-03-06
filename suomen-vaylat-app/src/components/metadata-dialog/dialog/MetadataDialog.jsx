@@ -13,12 +13,12 @@ const MetadataDialog = () => {
   const { store } = useContext(ReactReduxContext);
 
   const { layerMetadata } = useAppSelector((state) => state.rpc);
-
+  
   const handleCloseMetadataDialog = () => {
       store.dispatch(clearLayerMetadata());
     };
 
-  return (
+  return layerMetadata.data !== null ? (
     <Dialog
           drag={false} /* Enable (true) or disable (false) drag */
           resize={false}
@@ -40,7 +40,8 @@ const MetadataDialog = () => {
         >
           <MetadataDialogContent metadata={layerMetadata} />
         </Dialog>
-  );
+  )
+  : null ;
 };
 
 export default MetadataDialog;

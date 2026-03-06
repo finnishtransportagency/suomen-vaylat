@@ -17,7 +17,7 @@ const ShareWebsiteDialog = () => {
     store.dispatch(setShareUrl(''));
   };
 
-  return (
+  return isShareOpen ? (
     <Dialog
       drag={false}
       resize={false}
@@ -31,7 +31,8 @@ const ShareWebsiteDialog = () => {
     >
       <ShareWebsiteContent />
     </Dialog>
-  );
+  )
+  : null ;
 };
 
 export default ShareWebsiteDialog;

@@ -236,6 +236,7 @@ const Dialog = ({
   /** Styling */
   style = {}
 }) => {
+    console.log(title)
   const [localState, setLocalState] = useState(type === 'announcement');
 
   const headerRef = useRef(null);

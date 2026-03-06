@@ -39,7 +39,7 @@ const FeatureDataToolsDialog = () => {
     toast.dismiss('measurementToast');
   };
 
-  return (
+  return isGfiToolsOpen ? (
     <Dialog
       drag={true}
       resize={true}
@@ -56,7 +56,8 @@ const FeatureDataToolsDialog = () => {
     >
       <FeatureDataSelectionToolsMenu/>
     </Dialog>
-  );
+  )
+  : null ;
 };
 
 export default FeatureDataToolsDialog;

@@ -59,7 +59,7 @@ const FeatureDataDialog = () => {
     ]);
   };
 
-  return (
+  return isGfiOpen ? (
     <Dialog
       drag={true} /* Enable (true) or disable (false) drag */
       resize={true}
@@ -85,7 +85,8 @@ const FeatureDataDialog = () => {
     >
       <FeatureDataPopup />
     </Dialog>
-  );
+  )
+  : null ;
 };
 
 export default FeatureDataDialog;
