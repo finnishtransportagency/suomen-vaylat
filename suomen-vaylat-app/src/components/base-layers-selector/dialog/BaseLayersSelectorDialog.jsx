@@ -6,7 +6,7 @@ import BaseLayerSelectorMenu from '../BaseLayersSelectorMenu';
 import { setIsBaseLayerSelectorMenuOpen } from '../../../state/slices/uiSlice';
 import { ReactReduxContext } from 'react-redux';
 
-const BaseLayerSelectorDialog = ({ constraintsRef }) => {
+const BaseLayerSelectorDialog = () => {
   const { isBaseLayerSelectorMenuOpen } = useAppSelector((state) => state.ui)
 
   const { store } = useContext(ReactReduxContext);
@@ -17,7 +17,6 @@ const BaseLayerSelectorDialog = ({ constraintsRef }) => {
 
   return (
     <Dialog
-      constraintsRef={constraintsRef}
       drag={false}
       resize={false}
       fullScreenOnMobile={true}

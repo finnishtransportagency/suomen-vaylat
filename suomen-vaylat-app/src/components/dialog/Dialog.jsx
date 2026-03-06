@@ -1,7 +1,12 @@
-// src/components/dialog/Dialog.jsx
-import React, { useEffect, useMemo, useRef, useState, cloneElement } from 'react';
+import React, {
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+  cloneElement
+} from 'react';
 import styled from 'styled-components';
-import { AnimatePresence, motion } from 'motion/react';
 import { Rnd } from 'react-rnd';
 import {
   faTimes,
@@ -14,123 +19,130 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { isMobile, theme } from '../../theme/theme';
 import { Tooltip } from 'react-tooltip';
 
-// Used when deciding if we even show the maximize button
+/* ---------------- Constants ---------------- */
+
 const MIN_SCREEN_WIDTH_MAXIMIZE = 500;
 
 /* ---------------- Styled ---------------- */
 
-const StyledRnd = styled(Rnd)`
-  /* z-index is controlled by inline style from the component to support stacking */
-  padding: ${(props) =>
-    props.$maximize
-      ? '4px'
-      : (props.$resize || props.$drag) && !props.$maximize
-      ? '8px'
-      : '0'};
-  max-width: 100%;
-`;
+/** Rnd: only responsible for size/position/stacking. */
+const StyledRnd = styled(Rnd)``;
 
-const StyledDialog = styled.div`
-  position: relative;
-  width: ${(props) =>
-    props.$maximize || isMobile ? '100% !important' : props.$width || 'auto'};
-  height: ${(props) =>
-    props.$maximize || isMobile ? '100% !important' : props.$height || 'auto'};
-  min-width: ${(props) => props.$minWidth || 'auto'};
-  max-width: ${(props) => props.$maxWidth || '100vw'};
-  min-height: ${(props) => props.$minHeight || 'auto'};
-  max-height: ${(props) => (!props.$maximize ? 'calc(100vh - 100px)' : '100vh')};
-  background-color: ${(props) => props.theme.colors.mainWhite};
+/** Panel lives INSIDE Rnd and fills it; holds the visual card styles. */
+const Panel = styled.div`
+  width: 100%;
+  height: 100%;
+  background-color: ${(p) => p.theme.colors.mainWhite};
   border-radius: 4px;
   box-shadow: rgb(0 0 0 / 16%) 0px 3px 6px, rgb(0 0 0 / 23%) 0px 3px 6px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  overflow: hidden; /* safely clip content here without clipping handles */
 
-  @media ${(props) => props.theme.device.mobileL} {
-    border-radius: ${(props) => (props.$fullScreenOnMobile ? '0px' : '4px')};
+  @media ${(p) => p.theme.device.mobileL} {
+    border-radius: ${(p) => (p.$fullScreenOnMobile ? '0px' : '4px')};
     max-width: unset;
     min-width: unset;
     max-height: unset;
   }
 `;
 
-const StyledDialogHeader = styled.div`
+const Header = styled.div`
   z-index: 10;
   min-height: 56px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color: ${(props) =>
-    props.$type === 'warning'
-      ? props.theme.colors.secondaryColorDarkOrange
-      : props.theme.colors.mainColor1Selected};
+  background-color: ${(p) =>
+    p.$type === 'warning'
+      ? p.theme.colors.secondaryColorDarkOrange
+      : p.theme.colors.mainColor1Selected};
   box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.2);
   padding: 0 16px;
 
-  /* Make this the drag handle for react-rnd */
+  /* react-rnd drag handle */
   &.dialog-header {
-    cursor: ${(props) => (props.$drag ? 'grab' : 'default')};
+    cursor: ${(p) => (p.$drag ? 'grab' : 'default')};
     &:active {
-      cursor: ${(props) => (props.$drag ? 'grabbing' : 'default')};
+      cursor: ${(p) => (p.$drag ? 'grabbing' : 'default')};
     }
   }
 
   svg {
-    color: ${(props) => props.theme.colors.mainWhite};
+    color: ${(p) => p.theme.colors.mainWhite};
   }
-  @media ${(props) => props.theme.device.mobileL} {
+  @media ${(p) => p.theme.device.mobileL} {
     pointer-events: none;
-    svg { pointer-events: auto; }
+    svg {
+      pointer-events: auto;
+    }
   }
 `;
 
-const StyledDialogTitle = styled.div`
+const Title = styled.div`
   display: flex;
   align-items: center;
   user-select: none;
-
   p {
     margin: 0 1rem 0 0;
     font-size: 20px;
     font-weight: bold;
-    color: ${(props) => props.theme.colors.mainWhite};
+    color: ${(p) => p.theme.colors.mainWhite};
   }
-  svg { font-size: 20px; margin-right: 16px; }
+  svg {
+    font-size: 20px;
+    margin-right: 16px;
+  }
 
-  @media ${(props) => props.theme.device.mobileL} {
-    p { font-size: 16px; }
+  @media ${(p) => p.theme.device.mobileL} {
+    p {
+      font-size: 16px;
+    }
   }
 `;
 
-const StyledRightContent = styled.div`
+const Right = styled.div`
   display: flex;
   align-items: center;
 `;
-
-const StyledHeaderButton = styled.div`
+const HeaderBtn = styled.div`
   height: 100%;
-  display: flex; align-items: center; justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   margin-right: 8px;
   padding: 8px;
   cursor: pointer;
-  svg { font-size: 18px; }
+  svg {
+    font-size: 18px;
+  }
 `;
-
-const StyledCloseButton = styled.div`
-  display: flex; align-items: center; justify-content: center;
+const CloseBtn = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
   padding: 8px;
   cursor: pointer;
 `;
+const CloseIcon = styled(FontAwesomeIcon)`
+  font-size: 20px;
+`;
 
-const StyledCloseIcon = styled(FontAwesomeIcon)` font-size: 20px; `;
-
-const StyledDialogContent = styled.div`
-  height: 100%;
+const Body = styled.div`
+  flex: 1 1 auto;
+  min-height: 0; /* critical for proper flexbox scrolling */
   display: flex;
   flex-direction: column;
   overflow-y: auto;
+`;
+
+/** Optional backdrop per dialog (sits just under dialog) */
+const StyledDialogBackdrop = styled.div`
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  cursor: pointer;
 `;
 
 /* ---------------- Utils ---------------- */
@@ -141,10 +153,36 @@ const toPxNumber = (v) => {
   const m = String(v).match(/(-?\d+(\.\d+)?)/);
   return m ? parseFloat(m[1]) : null;
 };
+
+/**
+ * Convert CSS length to px. Supports: px, vw, vh, %, number
+ * For % we treat it as percentage of viewport/bounds (practical default).
+ */
+const lenToPx = (
+  val,
+  axis = 'y',
+  bounds = { vw: window.innerWidth, vh: window.innerHeight }
+) => {
+  if (val == null) return null;
+  if (typeof val === 'number') return val;
+  const s = String(val).trim().toLowerCase();
+  if (s.endsWith('px')) return parseFloat(s);
+  if (s.endsWith('vw')) return (parseFloat(s) / 100) * bounds.vw;
+  if (s.endsWith('vh')) return (parseFloat(s) / 100) * bounds.vh;
+  if (s.endsWith('%')) {
+    const p = parseFloat(s) / 100;
+    return axis === 'x' ? p * bounds.vw : p * bounds.vh;
+  }
+  const n = parseFloat(s);
+  return Number.isFinite(n) ? n : null;
+};
+
 const numberOr = (v, fb) => {
   const n = toPxNumber(v);
   return Number.isFinite(n) ? n : fb;
 };
+
+const clamp = (v, minV, maxV) => Math.min(maxV ?? v, Math.max(minV ?? v, v));
 
 /* A tiny global z-index counter so the last focused dialog comes on top */
 let __zCounter = 9993;
@@ -152,42 +190,59 @@ let __zCounter = 9993;
 /* ---------------- Component ---------------- */
 
 const Dialog = ({
+  drag = true,
+  resize = true,
+  backdrop = false, // show per-dialog backdrop under this dialog
+  fullScreenOnMobile = false,
+  title,
+  titleIcon,
+  type, // 'normal' | 'warning' | 'announcement'
   hasHelp,
   helpId,
   helpContent,
-  drag = true,
-  resize = true,
-  fullScreenOnMobile = false,
-  titleIcon,
-  title,
-  type,                      // 'normal' | 'warning' | 'announcement'
-  closeAction,
   isOpen,
-  minWidth,
-  maxWidth,
-  top,
-  bottom,
-  right,
-  left,
+  closeAction,
   minimizable,
+  minimize = null,
   minimizeAction,
   maximizable,
-  maximizeAction,
-  minimize = false,
   maximize = false,
-  children,
+  maximizeAction,
+
+  /** Sizing (strings or numbers) */
+  width = 'auto', // initial width fallback chain uses minWidth -> 600 if needed
+  height = 'auto', // initial height fallback chain uses minHeight -> 400; then we auto-fit height
+  minWidth,
+  maxWidth,
   minHeight,
-  height = 'auto',
-  width = 'auto',
-  style = {},
-  /** Optional: completely replace the header UI.
-   *  If provided, make sure the root element has className="dialog-header"
-   *  so dragging still works. */
-  customHeader = null,
-  /** Optional: restrict which edges can resize (if not provided, all edges when `resize` is true) */
+  maxHeight,
+
+  /** Anchor-based positioning (initial only) */
+  anchorOriginX = '30%', // 'px' | '%' | 'vw' | number
+  anchorOriginY = '30%', // 'px' | '%' | 'vh' | number
+  anchorX = 'start', // 'start' | 'center' | 'end' (how dialog is anchored horizontally)
+  anchorY = 'start', // 'start' | 'center' | 'end' (how dialog is anchored vertically)
+
+  /** Resize sides config (optional object) */
   enableResizingSides,
+
+  /** Auto-fit behavior */
+  fitHeightOnOpen = true, // auto-fit height to content on first open
+  viewportMarginY = 16, // breathing room vs viewport top/bottom
+
+  /** Content */
+  children,
+
+  /** Styling */
+  style = {}
 }) => {
   const [localState, setLocalState] = useState(type === 'announcement');
+
+  const headerRef = useRef(null);
+  const bodyRef = useRef(null);
+
+  // Stop auto-fitting after the user resizes
+  const [userResized, setUserResized] = useState(false);
 
   const handleAnnouncementDialog = (selected, id) => {
     setLocalState(false);
@@ -203,11 +258,12 @@ const Dialog = ({
 
   const renderDialogIcon = (icon) => {
     if (icon && React.isValidElement(icon)) return icon;
-    if (icon && typeof icon === 'object') return <FontAwesomeIcon icon={icon} />;
+    if (icon && typeof icon === 'object')
+      return <FontAwesomeIcon icon={icon} />;
     return null;
   };
 
-  // --- initial size/position (convert your props like width/bottom/right) ---
+  // --- initial size/position from props ---
   const initialW = useMemo(
     () => numberOr(width, numberOr(minWidth, 600)),
     [width, minWidth]
@@ -216,34 +272,49 @@ const Dialog = ({
     () => numberOr(height, numberOr(minHeight, 400)),
     [height, minHeight]
   );
-  const initialX = useMemo(() => {
-    const l = toPxNumber(left);
-    const r = toPxNumber(right);
-    if (Number.isFinite(l)) return l;
-    if (Number.isFinite(r)) return Math.max(0, window.innerWidth - initialW - r);
-    return 16; // default offset from left
-  }, [left, right, initialW]);
-  const initialY = useMemo(() => {
-    const t = toPxNumber(top);
-    const b = toPxNumber(bottom);
-    if (Number.isFinite(t)) return t;
-    if (Number.isFinite(b)) return Math.max(0, window.innerHeight - initialH - b);
-    return 16; // default offset from top
-  }, [top, bottom, initialH]);
 
-  // Controlled RND state
+  // Anchor shifts (how much to subtract from the anchor origin to align the dialog)
+  const anchorShiftX = useMemo(() => {
+    if (anchorX === 'center') return initialW / 2;
+    if (anchorX === 'end') return initialW;
+    return 0; // 'start'
+  }, [anchorX, initialW]);
+
+  const anchorShiftY = useMemo(() => {
+    if (anchorY === 'center') return initialH / 2;
+    if (anchorY === 'end') return initialH;
+    return 0; // 'start'
+  }, [anchorY, initialH]);
+
+  const initialX = useMemo(() => {
+    const bounds = { vw: window.innerWidth, vh: window.innerHeight };
+    const origin = lenToPx(anchorOriginX, 'x', bounds) ?? 16;
+    const x = origin - anchorShiftX;
+    return clamp(x, 0, Math.max(0, bounds.vw - initialW));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [anchorOriginX, anchorShiftX, initialW]);
+
+  const initialY = useMemo(() => {
+    const bounds = { vw: window.innerWidth, vh: window.innerHeight };
+    const origin = lenToPx(anchorOriginY, 'y', bounds) ?? 16;
+    const y = origin - anchorShiftY;
+    return clamp(y, 0, Math.max(0, bounds.vh - initialH));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [anchorOriginY, anchorShiftY, initialH]);
+
   const [size, setSize] = useState({ width: initialW, height: initialH });
   const [position, setPosition] = useState({ x: initialX, y: initialY });
 
-  // Stacking: bump zIndex on focus
+  // stacking
   const [zIndex, setZIndex] = useState(++__zCounter);
-  const bringToFront = () => {
-    console.log("?", __zCounter);
-        setZIndex(++__zCounter)
-    };
-  // Save/restore across maximize toggles
+  const bringToFront = () => setZIndex(++__zCounter);
+  console.log(__zCounter)
+  console.log(zIndex)
+
+  // remember before maximize
   const prevRef = useRef({ size, position });
 
+  // Maximize -> save/restore
   useEffect(() => {
     if (maximize) {
       prevRef.current = { size, position };
@@ -259,25 +330,29 @@ const Dialog = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [maximize]);
 
-  // Clamp inside viewport on window resize
+  // Keep inside viewport on window resize
   useEffect(() => {
     const onResize = () => {
       const vw = window.innerWidth;
       const vh = window.innerHeight;
-
       if (maximize) {
         setSize({ width: vw, height: vh });
         setPosition({ x: 0, y: 0 });
         return;
       }
-
       setSize((s) => ({
         width: Math.min(s.width, vw),
-        height: Math.min(s.height, vh),
+        height: Math.min(s.height, vh)
       }));
       setPosition((p) => ({
-        x: Math.min(Math.max(p.x, 0), Math.max(0, vw - Math.min(size.width, vw))),
-        y: Math.min(Math.max(p.y, 0), Math.max(0, vh - Math.min(size.height, vh))),
+        x: Math.min(
+          Math.max(p.x, 0),
+          Math.max(0, vw - Math.min(size.width, vw))
+        ),
+        y: Math.min(
+          Math.max(p.y, 0),
+          Math.max(0, vh - Math.min(size.height, vh))
+        )
       }));
     };
     window.addEventListener('resize', onResize);
@@ -285,120 +360,189 @@ const Dialog = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [maximize, size.width, size.height]);
 
-  const bounds = 'window';
+  // For mobile fullscreen
+  useEffect(() => {
+    if (isMobile && fullScreenOnMobile && (isOpen || localState)) {
+      setPosition({ x: 0, y: 0 });
+      setSize({ width: window.innerWidth, height: window.innerHeight });
+    }
+  }, [isOpen, localState, fullScreenOnMobile]);
 
   const disableDragging =
     !drag || minimize || maximize || (isMobile && fullScreenOnMobile);
-
   const canResize =
     resize && !minimize && !maximize && !(isMobile && fullScreenOnMobile);
-
-  const resizeConfig =
+  const enableResizing =
     typeof enableResizingSides === 'object' ? enableResizingSides : canResize;
 
-  // Default header (unless customHeader is provided)
-  const Header = 
-    <StyledDialogHeader
-      id={'dialog_header_' + title}
-      $type={type}
-      $drag={drag && !disableDragging}
-      className="dialog-header"
-    >
-      <Tooltip
-        anchorSelect={'#' + helpId}
-        style={{ backgroundColor: theme.colors.mainColor1 }}
-        disable={isMobile}
-        id={helpId + '_tooltip'}
-        place="bottom"
-        effect="float"
-      >
-        {helpContent}
-      </Tooltip>
+  // Auto-fit height on first open (and until user resizes)
+  useLayoutEffect(() => {
+    if (!(isOpen || localState)) return;
+    if (maximize || minimize) return;
+    if (!fitHeightOnOpen || userResized) return;
 
-      <StyledDialogTitle>
-        {renderDialogIcon(titleIcon)}
-        <p>{title}</p>
-      </StyledDialogTitle>
+    const headerH = headerRef.current?.offsetHeight ?? 0;
+    const bodyScrollH = bodyRef.current?.scrollHeight ?? size.height;
 
-      <StyledRightContent>
-        {minimizable && (
-          <StyledHeaderButton onClick={() => minimizeAction?.()}>
-            <FontAwesomeIcon icon={faWindowMinimize} />
-          </StyledHeaderButton>
-        )}
+    const desiredH = headerH + bodyScrollH;
 
-        {maximizable && window.innerWidth > MIN_SCREEN_WIDTH_MAXIMIZE && (
-          <StyledHeaderButton
-            onClick={(e) => {
-              e.preventDefault();
-              maximizeAction?.();
-            }}
-          >
-            <FontAwesomeIcon icon={maximize ? faWindowRestore : faWindowMaximize} />
-          </StyledHeaderButton>
-        )}
+    const minH = lenToPx(minHeight, 'y') ?? 0;
 
-        {hasHelp && (
-          <StyledHeaderButton id={helpId}>
-            <FontAwesomeIcon icon={faQuestion} />
-          </StyledHeaderButton>
-        )}
+    const propMaxH = lenToPx(maxHeight, 'y'); // allow props to cap it
+    const viewportCap = window.innerHeight - viewportMarginY * 2;
+    const maxH =
+      propMaxH != null ? Math.min(propMaxH, viewportCap) : viewportCap;
 
-        <StyledCloseButton
-          onClick={() => {
-            type !== 'announcement' && closeAction?.();
-            type === 'announcement' && handleAnnouncementDialog(null, null);
-          }}
-        >
-          <StyledCloseIcon icon={faTimes} />
-        </StyledCloseButton>
-      </StyledRightContent>
-    </StyledDialogHeader>
-  ;
+    const nextH = clamp(desiredH, minH, maxH);
+
+    if (Math.abs((size?.height ?? 0) - nextH) > 1) {
+      setSize((prev) => ({ ...prev, height: nextH }));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen, localState, maximize, minimize, fitHeightOnOpen, userResized]);
+
+  // If content changes size after open (e.g., async), keep fitting until user resizes
+  useEffect(() => {
+    if (!(isOpen || localState) || maximize || minimize || userResized) return;
+    if (!fitHeightOnOpen) return;
+    if (!bodyRef.current) return;
+
+    const ro = new ResizeObserver(() => {
+      const headerH = headerRef.current?.offsetHeight ?? 0;
+      const bodyScrollH = bodyRef.current?.scrollHeight ?? size.height;
+      const desiredH = headerH + bodyScrollH;
+
+      const minH = lenToPx(minHeight, 'y') ?? 0;
+      const propMaxH = lenToPx(maxHeight, 'y');
+      const viewportCap = window.innerHeight - viewportMarginY * 2;
+      const maxH =
+        propMaxH != null ? Math.min(propMaxH, viewportCap) : viewportCap;
+
+      const nextH = clamp(desiredH, minH, maxH);
+      if (Math.abs((size?.height ?? 0) - nextH) > 1) {
+        setSize((prev) => ({ ...prev, height: nextH }));
+      }
+    });
+
+    ro.observe(bodyRef.current);
+    return () => ro.disconnect();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen, localState, maximize, minimize, userResized, fitHeightOnOpen]);
+
+  if (!(isOpen || localState)) return null;
+
+  const showMaximizeButton =
+    maximizable && window.innerWidth > MIN_SCREEN_WIDTH_MAXIMIZE;
+
+  const minWNum = lenToPx(minWidth, 'x') ?? undefined;
+  const minHNum = lenToPx(minHeight, 'y') ?? undefined;
+  const maxWNum = lenToPx(maxWidth, 'x') ?? undefined;
+  const maxHNum = lenToPx(maxHeight, 'y') ?? undefined;
 
   return (
-    <AnimatePresence>
-      {(isOpen || localState) && (
-        <>
-          {/* Motion wrapper keeps your entry/minimize animation.
-              Set pointer-events so the Rnd surface catches events. */}
-            <StyledRnd
-              $resize={resize}
-              $maximize={maximize}
-              $drag={drag}
-              size={size}
-              position={position}
-              bounds={bounds}
-              onDragStop={(_, d) => setPosition({ x: d.x, y: d.y })}
-              onResize={(_, __, ref, ___, newPosition) => {
-                setSize({ width: ref.offsetWidth, height: ref.offsetHeight });
-                setPosition(newPosition);
-              }}
-              dragHandleClassName="dialog-header"
-              disableDragging={disableDragging}
-              enableResizing={resizeConfig}
-              style={{ zIndex: zIndex, ...style }}
-              onMouseDown={bringToFront}
-            >
-              <StyledDialog
-                id={'dialog_' + title}
-                $minWidth={minWidth}
-                $maxWidth={maxWidth}
-                $minHeight={minHeight}
-                $fullScreenOnMobile={fullScreenOnMobile}
-                $maximize={maximize}
-                $width={width}
-                $height={height}
-              >
-                {Header}
-                <StyledDialogContent>
-                  {renderedChildren}
-                </StyledDialogContent>
-              </StyledDialog>
-            </StyledRnd>
-        </>
+    <>
+      {/* Optional per-dialog backdrop: sits just under the dialog */}
+      {backdrop && (
+        <StyledDialogBackdrop
+          style={{ zIndex: zIndex - 1 }}
+          onClick={() => closeAction?.()}
+        />
       )}
-    </AnimatePresence>
+
+      <StyledRnd
+        size={size}
+        position={position}
+        bounds={'window'}
+        minWidth={minWNum}
+        minHeight={minHNum}
+        maxWidth={maxWNum}
+        maxHeight={maxHNum}
+        onDragStart={bringToFront}
+        onResizeStart={() => {
+          bringToFront();
+          setUserResized(true);
+        }}
+        onMouseDown={bringToFront}
+        onDragStop={(_, d) => setPosition({ x: d.x, y: d.y })}
+        onResize={(_, __, ref, ___, newPosition) => {
+          setSize({ width: ref.offsetWidth, height: ref.offsetHeight });
+          setPosition(newPosition);
+        }}
+        dragHandleClassName="dialog-header"
+        disableDragging={disableDragging}
+        enableResizing={enableResizing}
+        style={{ zIndex, ...style }}
+      >
+        {/* The inner panel fills Rnd and always resizes with it */}
+        <Panel $fullScreenOnMobile={fullScreenOnMobile}>
+          <Header
+            ref={headerRef}
+            id={'dialog_header_' + title}
+            $type={type}
+            $drag={drag && !disableDragging}
+            className="dialog-header"
+          >
+            <Tooltip
+              anchorSelect={'#' + helpId}
+              style={{ backgroundColor: theme.colors.mainColor1 }}
+              disable={isMobile}
+              id={helpId + '_tooltip'}
+              place="bottom"
+              effect="float"
+            >
+              {helpContent}
+            </Tooltip>
+
+            <Title>
+              {renderDialogIcon(titleIcon)}
+              <p>{title}</p>
+            </Title>
+
+            <Right>
+              {minimizable && (
+                <HeaderBtn onClick={() => minimizeAction?.()}>
+                  <FontAwesomeIcon icon={faWindowMinimize} />
+                </HeaderBtn>
+              )}
+
+              {showMaximizeButton && (
+                <HeaderBtn
+                  onClick={(e) => {
+                    e.preventDefault();
+                    maximizeAction?.();
+                  }}
+                >
+                  <FontAwesomeIcon
+                    icon={maximize ? faWindowRestore : faWindowMaximize}
+                  />
+                </HeaderBtn>
+              )}
+
+              {hasHelp && (
+                <HeaderBtn id={helpId}>
+                  <FontAwesomeIcon icon={faQuestion} />
+                </HeaderBtn>
+              )}
+
+              <CloseBtn
+                onClick={() => {
+                  if (type !== 'announcement') {
+                    closeAction?.();
+                  } else {
+                    setLocalState(false);
+                    setTimeout(() => closeAction?.(null, null), 500);
+                  }
+                }}
+              >
+                <CloseIcon icon={faTimes} />
+              </CloseBtn>
+            </Right>
+          </Header>
+
+          <Body ref={bodyRef}>{renderedChildren}</Body>
+        </Panel>
+      </StyledRnd>
+    </>
   );
 };
 

@@ -5,7 +5,7 @@ import AnnouncementsDialogContent from '../AnnouncementsDialogContent';
 import { ANNOUNCEMENTS_LOCALSTORAGE } from '../../../utils/constants';
 import { faBullhorn } from '@fortawesome/free-solid-svg-icons';
 
-const AnnouncementsDialog = ({ constraintsRef }) => {
+const AnnouncementsDialog = () => {
   const announcements = useAppSelector(
     (state) => state.rpc.activeAnnouncements
   );
@@ -41,9 +41,6 @@ const AnnouncementsDialog = ({ constraintsRef }) => {
       {currentAnnouncement !== null && announcements[currentAnnouncement] && (
         <Dialog
           key={'announcement-dialog-' + announcements[currentAnnouncement].id}
-          constraintsRef={
-            constraintsRef
-          } /* Reference div for dialog drag boundaries */
           drag={false} /* Enable (true) or disable (false) drag */
           resize={false}
           fullScreenOnMobile={

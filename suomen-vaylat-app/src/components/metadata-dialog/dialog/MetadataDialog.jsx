@@ -9,7 +9,7 @@ import { clearLayerMetadata } from '../../../state/slices/rpcSlice';
 
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 
-const MetadataDialog = ({ constraintsRef }) => {
+const MetadataDialog = () => {
   const { store } = useContext(ReactReduxContext);
 
   const { layerMetadata } = useAppSelector((state) => state.rpc);
@@ -20,9 +20,6 @@ const MetadataDialog = ({ constraintsRef }) => {
 
   return (
     <Dialog
-          constraintsRef={
-            constraintsRef
-          } /* Reference div for dialog drag boundaries */
           drag={false} /* Enable (true) or disable (false) drag */
           resize={false}
           fullScreenOnMobile={

@@ -9,7 +9,7 @@ import { setIsInfoOpen } from '../../../state/slices/uiSlice';
 
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 
-const AppInfoDialog = ({ constraintsRef }) => {
+const AppInfoDialog = () => {
   const { store } = useContext(ReactReduxContext);
 
   const { isInfoOpen } = useAppSelector((state) => state.ui);
@@ -20,9 +20,6 @@ const AppInfoDialog = ({ constraintsRef }) => {
 
   return (
     <Dialog
-          constraintsRef={
-            constraintsRef
-          } /* Reference div for dialog drag boundaries */
           drag={false} /* Enable (true) or disable (false) drag */
           resize={false}
           fullScreenOnMobile={

@@ -7,7 +7,7 @@ import { ShareWebsiteContent }  from '../ShareWebsiteContent';
 import { setShareUrl } from '../../../state/slices/uiSlice';
 import { ReactReduxContext } from 'react-redux';
 
-const ShareWebsiteDialog = ({ constraintsRef }) => {
+const ShareWebsiteDialog = () => {
   const { shareUrl } = useAppSelector((state) => state.ui);
   const isShareOpen = shareUrl && shareUrl.length > 0;
 
@@ -19,7 +19,6 @@ const ShareWebsiteDialog = ({ constraintsRef }) => {
 
   return (
     <Dialog
-      constraintsRef={constraintsRef}
       drag={false}
       resize={false}
       fullScreenOnMobile={true}

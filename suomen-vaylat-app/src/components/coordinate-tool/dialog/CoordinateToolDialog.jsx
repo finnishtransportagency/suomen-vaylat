@@ -13,7 +13,6 @@ const CoordinateToolDialog = () => {
 
   return (
     <Dialog
-      // bounds default to window; pass constraintsRef if/when you add one at root
       drag
       resize={false}
       backdrop={false}
@@ -24,7 +23,7 @@ const CoordinateToolDialog = () => {
       closeAction={() => store.dispatch(setIsCoordinateToolOpen(false))}
       isOpen={isCoordinateToolOpen}
       id="coordinate_tool_dialog"
-      width="400px"
+      minWidth="400px"
       bottom="10px"
       right={isSearchResultPanelVisible ? '500px' : '80px'}
       style={{ zIndex: 9992 }}

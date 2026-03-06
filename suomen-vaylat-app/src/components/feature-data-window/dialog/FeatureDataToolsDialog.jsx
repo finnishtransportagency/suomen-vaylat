@@ -9,7 +9,7 @@ import { faObjectGroup } from '@fortawesome/free-solid-svg-icons';
 import { FEATURE_SELECTION_DRAWING_TOOL, FEATURE_SELECTION_LAYER } from '../../../utils/constants';
 import { toast } from 'react-toastify';
 
-const FeatureDataToolsDialog = ({ constraintsRef }) => {
+const FeatureDataToolsDialog = () => {
   const { isGfiToolsOpen, minimizeFeatureSelection, activeTool } = useAppSelector((state) => state.ui);
   const { store } = useContext(ReactReduxContext);
   let { channel } = useAppSelector((state) => state.rpc);
@@ -41,7 +41,6 @@ const FeatureDataToolsDialog = ({ constraintsRef }) => {
 
   return (
     <Dialog
-      constraintsRef={constraintsRef}
       drag={true}
       resize={true}
       fullScreenOnMobile={true}

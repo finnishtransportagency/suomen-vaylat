@@ -8,7 +8,7 @@ import DatasetImport from '../DatasetImport'
 import { setIsDatasetImportOpen } from '../../../state/slices/uiSlice';
 import { faUpload } from '@fortawesome/free-solid-svg-icons';
 
-const DatasetImportDialog = ({ constraintsRef }) => {
+const DatasetImportDialog = () => {
   const { store } = useContext(ReactReduxContext);
 
   const { isDatasetImportOpen } = useAppSelector((state) => state.ui);
@@ -19,9 +19,6 @@ const DatasetImportDialog = ({ constraintsRef }) => {
 
   return (
     <Dialog
-      constraintsRef={
-        constraintsRef
-      } /* Reference div for dialog drag boundaries */
       drag={true} /* Enable (true) or disable (false) drag */
       resize={false}
       fullScreenOnMobile={

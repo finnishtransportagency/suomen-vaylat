@@ -14,7 +14,7 @@ import {
 } from '../../../state/slices/rpcSlice';
 import { Slide, toast } from 'react-toastify';
 
-const SaveGeometriesDialog = ({ constraintsRef }) => {
+const SaveGeometriesDialog = () => {
   const { store } = useContext(ReactReduxContext);
   const isSaveGeometriesOpen = useSelector((s) => s.ui.isSaveGeometriesOpen);
   const geoJsonArray = useSelector((s) => s.ui.geoJsonArray) || [];
@@ -146,7 +146,6 @@ const SaveGeometriesDialog = ({ constraintsRef }) => {
 
   return (
     <Dialog
-      constraintsRef={constraintsRef}
       drag={true}
       resize={false}
       fullScreenOnMobile={true}

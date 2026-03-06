@@ -21,7 +21,7 @@ import {
 import { faMapMarkedAlt } from '@fortawesome/free-solid-svg-icons';
 import { FEATURE_SELECTION_DRAWING_TOOL, FEATURE_SELECTION_LAYER, GFI_GEOMETRY_LAYER_ID } from '../../../utils/constants';
 
-const FeatureDataDialog = ({ constraintsRef }) => {
+const FeatureDataDialog = () => {
   const { store } = useContext(ReactReduxContext);
   const { channel, gfiLocations } = useAppSelector((state) => state.rpc);
 
@@ -61,9 +61,6 @@ const FeatureDataDialog = ({ constraintsRef }) => {
 
   return (
     <Dialog
-      constraintsRef={
-        constraintsRef
-      } /* Reference div for dialog drag boundaries */
       drag={true} /* Enable (true) or disable (false) drag */
       resize={true}
       fullScreenOnMobile={
@@ -77,10 +74,8 @@ const FeatureDataDialog = ({ constraintsRef }) => {
       } /* Action when pressing dialog close button or backdrop */
       isOpen={isGfiOpen} /* Dialog state */
       id="gfi_dialog"
-      minWidth={'600px'}
-      minHeight={'530px'}
-      height={gfiLocations.length > 0 ? "100vw" : "40vw"}
-      width={gfiLocations.length > 0 ? "50vh" : "40vh"}
+      minWidth={gfiLocations.length > 0 ? "50vw" : "40vw"}
+      minHeight={gfiLocations.length > 0 ? "50vh" : "40vh"}
       minimize={minimizeGfi}
       maximize={maximizeGfi}
       minimizable={true}

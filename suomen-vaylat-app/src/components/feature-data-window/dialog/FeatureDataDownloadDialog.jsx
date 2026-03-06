@@ -10,7 +10,7 @@ import { setIsGfiDownloadOpen } from '../../../state/slices/uiSlice';
 import { faDownload } from '@fortawesome/free-solid-svg-icons';
 import { GFI_GEOMETRY_LAYER_ID } from '../../../utils/constants';
 
-const FeatureDataDownloadDialog = ({ constraintsRef }) => {
+const FeatureDataDownloadDialog = () => {
   const { store } = useContext(ReactReduxContext);
   const { channel } = useAppSelector((state) => state.rpc);
 
@@ -31,9 +31,6 @@ const FeatureDataDownloadDialog = ({ constraintsRef }) => {
 
   return (
     <Dialog
-      constraintsRef={
-        constraintsRef
-      } /* Reference div for dialog drag boundaries */
       drag={true} /* Enable (true) or disable (false) drag */
       resize={false}
       fullScreenOnMobile={

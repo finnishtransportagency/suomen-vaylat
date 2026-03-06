@@ -11,7 +11,7 @@ import { setEditingView, setViews } from '../../../state/slices/rpcSlice';
 import { faCamera } from '@fortawesome/free-regular-svg-icons';
 import { Slide, toast } from 'react-toastify';
 
-const SaveViewsDialog = ({ constraintsRef }) => {
+const SaveViewsDialog = () => {
   const { store } = useContext(ReactReduxContext);
   const isSaveViewOpen = useSelector((s) => s.ui.isSaveViewOpen);
   const channel = useSelector((s) => s.rpc.channel);
@@ -70,7 +70,7 @@ const SaveViewsDialog = ({ constraintsRef }) => {
             data: editingView.data
           };
         } else {
-          // create a full new view 
+          // create a full new view
           newView = {
             id: thisId,
             name: formData.name,
@@ -192,21 +192,26 @@ const SaveViewsDialog = ({ constraintsRef }) => {
 
   return (
     <Dialog
-      constraintsRef={constraintsRef}
-      drag={true}
-      resize={false}
-      fullScreenOnMobile={true}
-      titleIcon={faCamera}
+      drag
+      resize
       title={strings.savedContent?.saveView?.saveView}
-      type={'normal'}
-      closeAction={handleCloseSaveViewDialog}
+      titleIcon={faCamera}
       isOpen={isSaveViewOpen}
-      id="save_view_dialog"
-      minWidth={'600px'}
-      minHeight={isLowResScreen ? '300px' : '400px'}
-      hasHelp={true}
-      helpId={'show_view_help'}
+      closeAction={handleCloseSaveViewDialog}
+      type="normal"
+      minWidth="600px"
+      minHeight={isLowResScreen ? '400px' : '500px'}
+      maxWidth="90vw"
+      maxHeight="90vh"
+      hasHelp
+      helpId="show_view_help"
       helpContent={helpContent}
+
+  anchorOriginX="50%"
+  anchorOriginY="50%"
+  anchorX="end"
+  anchorY="center"
+
     >
       <ViewForm
         initialData={editingView}

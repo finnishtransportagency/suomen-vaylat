@@ -9,7 +9,7 @@ import WarningDialogContent from '../WarningDialogContent';
 import { setWarning } from '../../../state/slices/uiSlice';
 import { isMobile } from '../../../theme/theme';
 
-const WarningDialog = ({ constraintsRef }) => {
+const WarningDialog = () => {
   const { warning } = useAppSelector((state) => state.ui);
   const { store } = useContext(ReactReduxContext);
 
@@ -19,7 +19,6 @@ const WarningDialog = ({ constraintsRef }) => {
 
   return (
     <Dialog
-      constraintsRef={constraintsRef}
       drag={false}
       resize={false}
       fullScreenOnMobile={true}

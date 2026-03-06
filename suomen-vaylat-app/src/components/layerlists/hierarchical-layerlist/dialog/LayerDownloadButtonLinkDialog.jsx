@@ -7,7 +7,7 @@ import LayerDownloadLinkButtonDialogContent from '../LayerDownloadLinkButtonDial
 import { setIsDownloadLinkDialogOpen } from '../../../../state/slices/uiSlice';
 import { ReactReduxContext } from 'react-redux';
 
-const LayerDownloadLinkButtonDialog = ({ constraintsRef }) => {
+const LayerDownloadLinkButtonDialog = () => {
   const { downloadLink } = useAppSelector((state) => state.ui);
   const { store } = useContext(ReactReduxContext);
 
@@ -23,7 +23,6 @@ const LayerDownloadLinkButtonDialog = ({ constraintsRef }) => {
 
   return (
     <Dialog
-      constraintsRef={constraintsRef}
       drag={false}
       resize={false}
       fullScreenOnMobile={true}

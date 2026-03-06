@@ -9,7 +9,7 @@ import { setIsUserGuideOpen } from '../../../state/slices/uiSlice';
 
 import { faQuestion } from '@fortawesome/free-solid-svg-icons';
 
-const UserGuideDialog = ({ constraintsRef }) => {
+const UserGuideDialog = () => {
   const { store } = useContext(ReactReduxContext);
 
   const { isUserGuideOpen } = useAppSelector((state) => state.ui);
@@ -20,9 +20,6 @@ const UserGuideDialog = ({ constraintsRef }) => {
 
   return (
     <Dialog
-      constraintsRef={
-        constraintsRef
-      } /* Reference div for dialog drag boundaries */
       drag={false} /* Enable (true) or disable (false) drag */
       resize={false}
       fullScreenOnMobile={
@@ -36,7 +33,7 @@ const UserGuideDialog = ({ constraintsRef }) => {
       } /* Action when pressing dialog close button or backdrop */
       isOpen={isUserGuideOpen} /* Dialog state */
       id="user_guide_dialog"
-      height="860px"
+      minHeight="860px"
     >
       <UserGuideDialogContent />
     </Dialog>

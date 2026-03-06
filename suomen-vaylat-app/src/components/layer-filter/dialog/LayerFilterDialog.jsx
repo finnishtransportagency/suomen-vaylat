@@ -16,7 +16,7 @@ import {
   setMaximizeFilterDialog
 } from "../../../state/slices/uiSlice";
 
-const LayerFilterDialog = ({ constraintsRef }) => {
+const LayerFilterDialog = () => {
   const { store } = useContext(ReactReduxContext);
   const { filteringInfo, filters } = useAppSelector((state) => state.rpc);
   const { channel } = useAppSelector((state) => state.rpc);
@@ -49,9 +49,6 @@ const LayerFilterDialog = ({ constraintsRef }) => {
   return (
     <Dialog
       id="filter_dialog_container"
-      constraintsRef={
-        constraintsRef
-      } /* Reference div for dialog drag boundaries */
       drag={true} /* Enable (true) or disable (false) drag */
       resize={true}
       fullScreenOnMobile={

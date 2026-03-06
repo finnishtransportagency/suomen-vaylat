@@ -35,7 +35,7 @@ const StyledDialogBody = styled.div`
   color: ${(props) => props.theme.colors.black};
 `;
 
-const CustomLayerDialog = ({ constraintsRef }) => {
+const CustomLayerDialog = () => {
   const { store } = useContext(ReactReduxContext);
 
   const { isCustomFilterOpen } = useAppSelector((state) => state.ui);
@@ -53,9 +53,6 @@ const CustomLayerDialog = ({ constraintsRef }) => {
 
   return (
     <Dialog
-      constraintsRef={
-        constraintsRef
-      } /* Reference div for dialog drag boundaries */
       drag={true} /* Enable (true) or disable (false) drag */
       resize={false}
       fullScreenOnMobile={
@@ -71,7 +68,7 @@ const CustomLayerDialog = ({ constraintsRef }) => {
       } /* Action when pressing dialog close button or backdrop */
       isOpen={isCustomFilterOpen} /* Dialog state */
       id="custom_layer_dialog"
-      height="860px"
+      minHeight="860px"
     >
       <StyledDialogWrapper>
         <StyledDialogContent>
