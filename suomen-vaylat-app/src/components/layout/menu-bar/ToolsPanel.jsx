@@ -106,7 +106,10 @@ export const ToolsPanel = ({ isOpen }) => {
     drawToolMarkers,
     isGfiDownloadOpen,
     isFullScreen,
-    isDatasetImportOpen
+    isDatasetImportOpen,
+    isSaveGeometriesOpen,
+    isSaveViewOpen,
+    isGfiToolsOpen
   } = useSelector((state) => state.ui);
 
   const [noDownloadableLayers, setNoDownloadableLayers] = useState(false);
@@ -140,7 +143,7 @@ export const ToolsPanel = ({ isOpen }) => {
   };
 
   const handleAddGeometry = () => {
-    store.dispatch(setIsSaveGeometriesOpen(true));
+    store.dispatch(setIsSaveGeometriesOpen(!isSaveGeometriesOpen));
   };
 
   // Swiper sync: synchronize state with slide index
@@ -149,11 +152,11 @@ export const ToolsPanel = ({ isOpen }) => {
   };
 
   const handleSaveView = () => {
-    store.dispatch(setIsSaveViewOpen(true));
+    store.dispatch(setIsSaveViewOpen(!isSaveViewOpen));
   };
 
   const handleFeatureSelection = () => {
-    store.dispatch(setIsGfiToolsOpen(true));
+    store.dispatch(setIsGfiToolsOpen(!isGfiToolsOpen));
   };
 
   // When panelIndex changes through controls, update Swiper
@@ -207,13 +210,15 @@ export const ToolsPanel = ({ isOpen }) => {
               text={strings.gfi.featureSelection.title}
               onClick={handleFeatureSelection}
               aria-label={strings.gfi.featureSelection.title}
+              enabled={isGfiToolsOpen}
             />
             <PillButton
-              id={'menubar-tools-save-btn'}
+              id={'menubar-tools-save-view-btn'}
               icon={faCamera}
               text={strings.savedContent.saveView.saveView}
               onClick={handleSaveView}
               aria-label={strings.savedContent?.saveView?.saveView}
+              enabled={isSaveViewOpen}
             />
             <PillButton
               id={'menubar-tools-download-btn'}
@@ -224,6 +229,7 @@ export const ToolsPanel = ({ isOpen }) => {
                 store.dispatch(setIsGfiDownloadOpen(!isGfiDownloadOpen))
               }
               aria-label={strings.downloads?.downloads}
+              enabled={isGfiDownloadOpen}
             />
             {IS_EXTRANET && (
               <PillButton
@@ -234,6 +240,7 @@ export const ToolsPanel = ({ isOpen }) => {
                   store.dispatch(setIsDatasetImportOpen(!isDatasetImportOpen))
                 }
                 aria-label={strings.datasetImport?.menuButtonTitle}
+                enabled={isDatasetImportOpen}
               />
             )}
             {!isMobile && (
@@ -248,6 +255,7 @@ export const ToolsPanel = ({ isOpen }) => {
                     : elem.requestFullscreen?.();
                 }}
                 aria-label={strings.tooltips?.fullscreenButton}
+                enabled={isFullScreen}
               />
             )}
           </PanelContainer>

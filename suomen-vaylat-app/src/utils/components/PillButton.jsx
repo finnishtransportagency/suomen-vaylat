@@ -9,8 +9,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
  * - inverse: white background with blue text
  */
 
-const variantStyles = ({ variant = 'primary', disabled, theme, color, iconColor }) => {
+const variantStyles = ({ variant = 'primary', disabled, enabled, theme, color, enabledColor, iconColor }) => {
   const primaryBg = color || theme.colors.button;
+  const selectedBg = enabledColor || theme.colors.buttonSelected;
+  const BgColor = enabled ? selectedBg : primaryBg;
   const primaryText = theme.colors.mainWhite;
   const primaryBorder = theme.colors.mainColor1;
   const inverseBg = theme.colors.mainWhite;
@@ -45,7 +47,7 @@ const variantStyles = ({ variant = 'primary', disabled, theme, color, iconColor 
     case 'primary':
     default:
       return css`
-        background-color: ${primaryBg};
+        background-color: ${BgColor};
         color: ${primaryText};
         border: 1px solid ${primaryBg};
         svg, img { color: ${iconColor || primaryText} !important; }
@@ -107,8 +109,10 @@ const PillButton = ({
   children,
   onClick,
   disabled = false,
+  enabled,
   color, // optional override for primary bg
   hoverColor,
+  enabledColor,
   iconColor,
   variant = 'primary', // 'primary' | 'inverse'
   ...rest
@@ -133,8 +137,10 @@ const PillButton = ({
       id={`pill-button-${id}`}
       onClick={onClick}
       disabled={disabled}
+      enabled={enabled}
       color={color}
       hoverColor={hoverColor}
+      enabledColor={enabledColor}
       iconColor={iconColor}
       variant={variant}
       {...rest}
