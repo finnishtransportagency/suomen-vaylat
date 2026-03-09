@@ -274,9 +274,6 @@ export const uiSlice = createSlice({
     setShowSavedLayers: (state, action) => {
       state.showSavedLayers = action.payload;
     },
-    setUpdateCustomLayers: (state, action) => {
-      state.updateCustomLayer = action.payload;
-    },
     setCheckedLayer: (state, action) => {
       state.checkedLayer = action.payload;
     },
@@ -363,7 +360,6 @@ export const {
   incrementTriggerUpdate,
   setShowCustomLayerList,
   setShowSavedLayers,
-  setUpdateCustomLayers,
   setCheckedLayer,
   setIsCheckmark,
   setSelectedCustomFilterLayers,

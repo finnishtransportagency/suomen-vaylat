@@ -707,7 +707,6 @@
       "searchForLayers": "Hae karttatasoja",
       "createFilter": "Suodata",
       "createCustomFilter": "oma suodatin",
-      "saveCustomFilter": "Tallenna",
       "clearFilters": "Tyhjennä suodatinvalinnat",
       "searchResults": "Hakutulokset",
       "clearSelectedMapLayers": "Tyhjennä valitut karttatasot",
@@ -722,7 +721,7 @@
       "toShowLayer": "nähdäksesi taso",
       "opacity": "Läpinäkyvyys"
     },
-    "customLayerInfo": {
+    "customFilterInfo": {
       "customFilter": "Oma suodatin",
       "dialogTitle": "Luo oma suodatin",
       "closeInfo": "Sulje ohje",
