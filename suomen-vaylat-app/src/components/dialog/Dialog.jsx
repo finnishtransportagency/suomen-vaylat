@@ -25,10 +25,8 @@ const MIN_SCREEN_WIDTH_MAXIMIZE = 500;
 
 /* ---------------- Styled ---------------- */
 
-/** Rnd: only responsible for size/position/stacking. */
 const StyledRnd = styled(Rnd)``;
 
-/** Panel lives INSIDE Rnd and fills it; holds the visual card styles. */
 const Panel = styled.div`
   width: 100%;
   height: 100%;
@@ -38,7 +36,7 @@ const Panel = styled.div`
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  overflow: hidden; /* safely clip content here without clipping handles */
+  overflow: hidden;
 
   @media ${(p) => p.theme.device.mobileL} {
     border-radius: ${(p) => (p.$fullScreenOnMobile ? '0px' : '4px')};
@@ -61,7 +59,6 @@ const Header = styled.div`
   box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.2);
   padding: 0 16px;
 
-  /* react-rnd drag handle */
   &.dialog-header {
     cursor: ${(p) => (p.$drag ? 'grab' : 'default')};
     &:active {
@@ -131,13 +128,12 @@ const CloseIcon = styled(FontAwesomeIcon)`
 
 const Body = styled.div`
   flex: 1 1 auto;
-  min-height: 0; /* critical for proper flexbox scrolling */
+  min-height: 0;
   display: flex;
   flex-direction: column;
   overflow-y: auto;
 `;
 
-/** Optional backdrop per dialog (sits just under dialog) */
 const StyledDialogBackdrop = styled.div`
   position: fixed;
   inset: 0;
@@ -147,25 +143,18 @@ const StyledDialogBackdrop = styled.div`
 
 /* ---------------- Utils ---------------- */
 
-const toPxNumber = (v) => {
-  if (v == null) return null;
-  if (typeof v === 'number') return v;
-  const m = String(v).match(/(-?\d+(\.\d+)?)/);
-  return m ? parseFloat(m[1]) : null;
-};
+const clamp = (v, minV, maxV) => Math.min(maxV ?? v, Math.max(minV ?? v, v));
 
-/**
- * Convert CSS length to px. Supports: px, vw, vh, %, number
- * For % we treat it as percentage of viewport/bounds (practical default).
- */
-const lenToPx = (
+/** Parse a CSS length to pixels relative to the viewport. */
+const toPx = (
   val,
-  axis = 'y',
+  axis = 'x',
   bounds = { vw: window.innerWidth, vh: window.innerHeight }
 ) => {
   if (val == null) return null;
   if (typeof val === 'number') return val;
   const s = String(val).trim().toLowerCase();
+  if (s === 'auto') return null;
   if (s.endsWith('px')) return parseFloat(s);
   if (s.endsWith('vw')) return (parseFloat(s) / 100) * bounds.vw;
   if (s.endsWith('vh')) return (parseFloat(s) / 100) * bounds.vh;
@@ -173,16 +162,53 @@ const lenToPx = (
     const p = parseFloat(s) / 100;
     return axis === 'x' ? p * bounds.vw : p * bounds.vh;
   }
+  // Bare number treated as px
   const n = parseFloat(s);
   return Number.isFinite(n) ? n : null;
 };
 
-const numberOr = (v, fb) => {
-  const n = toPxNumber(v);
-  return Number.isFinite(n) ? n : fb;
+/** Resolve request/min/max to *pixels*, then clamp to get the effective size. */
+const resolveEffectiveSize = (
+  reqW, reqH,
+  minW, minH,
+  maxW, maxH,
+  bounds
+) => {
+  const rW = toPx(reqW, 'x', bounds);
+  const rH = toPx(reqH, 'y', bounds);
+  const miW = toPx(minW, 'x', bounds);
+  const miH = toPx(minH, 'y', bounds);
+  const maW = toPx(maxW, 'x', bounds);
+  const maH = toPx(maxH, 'y', bounds);
+
+  // Defaults if requested is auto or invalid
+  const fallbackW = miW ?? 600;
+  const fallbackH = miH ?? 400;
+
+  // Requested size (may be null if 'auto')
+  const wantW = rW ?? fallbackW;
+  const wantH = rH ?? fallbackH;
+
+  const effW = clamp(wantW, miW ?? wantW, maW ?? wantW);
+  const effH = clamp(wantH, miH ?? wantH, maH ?? wantH);
+  return { width: effW, height: effH, minW: miW, minH: miH, maxW: maW, maxH: maH };
 };
 
-const clamp = (v, minV, maxV) => Math.min(maxV ?? v, Math.max(minV ?? v, v));
+/** Compute anchored position for a given size (in px) */
+const anchoredPosition = (
+  w, h,
+  anchorOriginX, anchorOriginY,
+  anchorX, anchorY,
+  bounds
+) => {
+  const originX = toPx(anchorOriginX, 'x', bounds) ?? 16;
+  const originY = toPx(anchorOriginY, 'y', bounds) ?? 16;
+  const shiftX = anchorX === 'center' ? w / 2 : anchorX === 'end' ? w : 0;
+  const shiftY = anchorY === 'center' ? h / 2 : anchorY === 'end' ? h : 0;
+  const x = clamp(originX - shiftX, 0, Math.max(0, bounds.vw - w));
+  const y = clamp(originY - shiftY, 0, Math.max(0, bounds.vh - h));
+  return { x, y };
+};
 
 /* A tiny global z-index counter so the last focused dialog comes on top */
 let __zCounter = 9993;
@@ -192,7 +218,7 @@ let __zCounter = 9993;
 const Dialog = ({
   drag = true,
   resize = true,
-  backdrop = false, // show per-dialog backdrop under this dialog
+  backdrop = false,
   fullScreenOnMobile = false,
   title,
   titleIcon,
@@ -208,26 +234,26 @@ const Dialog = ({
   maximize = false,
   maximizeAction,
 
-  /** Sizing (strings or numbers) */
-  width = 'auto', // initial width fallback chain uses minWidth -> 600 if needed
-  height = 'auto', // initial height fallback chain uses minHeight -> 400; then we auto-fit height
+  /** Sizing (strings or numbers; px | % | vw | vh | number | 'auto') */
+  width = 'auto',
+  height = 'auto',
   minWidth,
-  maxWidth,
   minHeight,
+  maxWidth,
   maxHeight,
 
   /** Anchor-based positioning (initial only) */
-  anchorOriginX = '30%', // 'px' | '%' | 'vw' | number
-  anchorOriginY = '30%', // 'px' | '%' | 'vh' | number
-  anchorX = 'start', // 'start' | 'center' | 'end' (how dialog is anchored horizontally)
-  anchorY = 'start', // 'start' | 'center' | 'end' (how dialog is anchored vertically)
+  anchorOriginX = '50%', // where *in the viewport* we anchor from
+  anchorOriginY = '50%',
+  anchorX = 'center',    // how the dialog aligns to that origin (start|center|end)
+  anchorY = 'center',
 
   /** Resize sides config (optional object) */
   enableResizingSides,
 
   /** Auto-fit behavior */
-  fitHeightOnOpen = true, // auto-fit height to content on first open
-  viewportMarginY = 16, // breathing room vs viewport top/bottom
+  fitHeightOnOpen = true,
+  viewportMarginY = 16,
 
   /** Content */
   children,
@@ -235,13 +261,13 @@ const Dialog = ({
   /** Styling */
   style = {}
 }) => {
-    console.log(title)
   const [localState, setLocalState] = useState(type === 'announcement');
 
   const headerRef = useRef(null);
   const bodyRef = useRef(null);
 
-  // Stop auto-fitting after the user resizes
+  // Track user interactions so we stop auto anchoring afterward
+  const [hasUserMoved, setHasUserMoved] = useState(false);
   const [userResized, setUserResized] = useState(false);
 
   const handleAnnouncementDialog = (selected, id) => {
@@ -263,58 +289,40 @@ const Dialog = ({
     return null;
   };
 
-  // --- initial size/position from props ---
-  const initialW = useMemo(
-    () => numberOr(width, numberOr(minWidth, 600)),
-    [width, minWidth]
-  );
-  const initialH = useMemo(
-    () => numberOr(height, numberOr(minHeight, 400)),
-    [height, minHeight]
-  );
-
-  // Anchor shifts (how much to subtract from the anchor origin to align the dialog)
-  const anchorShiftX = useMemo(() => {
-    if (anchorX === 'center') return initialW / 2;
-    if (anchorX === 'end') return initialW;
-    return 0; // 'start'
-  }, [anchorX, initialW]);
-
-  const anchorShiftY = useMemo(() => {
-    if (anchorY === 'center') return initialH / 2;
-    if (anchorY === 'end') return initialH;
-    return 0; // 'start'
-  }, [anchorY, initialH]);
-
-  const initialX = useMemo(() => {
+  // Resolve initial effective size (in px) using *viewport* as bounds
+  const initial = useMemo(() => {
     const bounds = { vw: window.innerWidth, vh: window.innerHeight };
-    const origin = lenToPx(anchorOriginX, 'x', bounds) ?? 16;
-    const x = origin - anchorShiftX;
-    return clamp(x, 0, Math.max(0, bounds.vw - initialW));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [anchorOriginX, anchorShiftX, initialW]);
+    return resolveEffectiveSize(
+      width, height,
+      minWidth, minHeight,
+      maxWidth, maxHeight,
+      bounds
+    );
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // compute once on mount (requested units are viewport-relative)
 
-  const initialY = useMemo(() => {
+  // Initial position from anchors using the *effective* size
+  const initialPos = useMemo(() => {
     const bounds = { vw: window.innerWidth, vh: window.innerHeight };
-    const origin = lenToPx(anchorOriginY, 'y', bounds) ?? 16;
-    const y = origin - anchorShiftY;
-    return clamp(y, 0, Math.max(0, bounds.vh - initialH));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [anchorOriginY, anchorShiftY, initialH]);
+    return anchoredPosition(
+      initial.width, initial.height,
+      anchorOriginX, anchorOriginY,
+      anchorX, anchorY,
+      bounds
+    );
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // initial anchor only once; we reanchor via effects below
 
-  const [size, setSize] = useState({ width: initialW, height: initialH });
-  const [position, setPosition] = useState({ x: initialX, y: initialY });
+  const [size, setSize] = useState({ width: initial.width, height: initial.height });
+  const [position, setPosition] = useState({ x: initialPos.x, y: initialPos.y });
 
-  // stacking
+  // Stacking
   const [zIndex, setZIndex] = useState(++__zCounter);
   const bringToFront = () => setZIndex(++__zCounter);
-  console.log(__zCounter)
-  console.log(zIndex)
 
-  // remember before maximize
+  // Save/restore around maximize
   const prevRef = useRef({ size, position });
 
-  // Maximize -> save/restore
   useEffect(() => {
     if (maximize) {
       prevRef.current = { size, position };
@@ -330,37 +338,87 @@ const Dialog = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [maximize]);
 
-  // Keep inside viewport on window resize
+  // Auto-fit height on first open (until user resizes)
+  useLayoutEffect(() => {
+    if (!localState) return;
+    if (maximize || minimize) return;
+    if (!fitHeightOnOpen || userResized) return;
+
+    const headerH = headerRef.current?.offsetHeight ?? 0;
+    const bodyScrollH = bodyRef.current?.scrollHeight ?? size.height;
+
+    const desiredH = headerH + bodyScrollH;
+
+    const bounds = { vw: window.innerWidth, vh: window.innerHeight };
+    const minHpx = toPx(minHeight, 'y', bounds) ?? 0;
+    const maxHcap = (() => {
+      const propMax = toPx(maxHeight, 'y', bounds);
+      const viewportCap = window.innerHeight - viewportMarginY * 2;
+      return propMax != null ? Math.min(propMax, viewportCap) : viewportCap;
+    })();
+
+    const nextH = clamp(desiredH, minHpx, maxHcap);
+    if (Math.abs(size.height - nextH) > 1) {
+      setSize((prev) => ({ ...prev, height: nextH }));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [localState, maximize, minimize, fitHeightOnOpen, userResized]);
+
+  /**
+   * Re-anchor when:
+   * - window resizes (viewport changes), or
+   * - any of the sizing props change (if you wire them), and
+   * only if the user hasn't interacted and we're not maximized/minimized.
+   */
+  const reanchorIfNeeded = React.useCallback(() => {
+    if (maximize || minimize) return;
+    if (hasUserMoved || userResized) return;
+
+    const bounds = { vw: window.innerWidth, vh: window.innerHeight };
+
+    // Re-resolve constraints against new viewport (vh/vw/% may change!)
+    const resolved = resolveEffectiveSize(
+      width, height, minWidth, minHeight, maxWidth, maxHeight, bounds
+    );
+
+    // Keep current size unless it violates constraints; clamp to new constraints
+    const clampedW = clamp(size.width, resolved.minW ?? size.width, resolved.maxW ?? size.width);
+    const clampedH = clamp(size.height, resolved.minH ?? size.height, resolved.maxH ?? size.height);
+
+    // If requested was 'auto', we still let auto-fit effect adjust height; here we just respect min/max.
+    const nextSize = { width: clampedW, height: clampedH };
+
+    // Recompute anchored position using the *current/effective* size
+    const nextPos = anchoredPosition(
+      nextSize.width, nextSize.height,
+      anchorOriginX, anchorOriginY,
+      anchorX, anchorY,
+      bounds
+    );
+
+    setSize(nextSize);
+    setPosition(nextPos);
+  }, [
+    width, height, minWidth, minHeight, maxWidth, maxHeight,
+    anchorOriginX, anchorOriginY, anchorX, anchorY,
+    maximize, minimize, hasUserMoved, userResized, size.width, size.height
+  ]);
+
+  // Window resize → re-anchor (until user interacts)
   useEffect(() => {
     const onResize = () => {
-      const vw = window.innerWidth;
-      const vh = window.innerHeight;
       if (maximize) {
-        setSize({ width: vw, height: vh });
+        setSize({ width: window.innerWidth, height: window.innerHeight });
         setPosition({ x: 0, y: 0 });
         return;
       }
-      setSize((s) => ({
-        width: Math.min(s.width, vw),
-        height: Math.min(s.height, vh)
-      }));
-      setPosition((p) => ({
-        x: Math.min(
-          Math.max(p.x, 0),
-          Math.max(0, vw - Math.min(size.width, vw))
-        ),
-        y: Math.min(
-          Math.max(p.y, 0),
-          Math.max(0, vh - Math.min(size.height, vh))
-        )
-      }));
+      reanchorIfNeeded();
     };
     window.addEventListener('resize', onResize);
     return () => window.removeEventListener('resize', onResize);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [maximize, size.width, size.height]);
+  }, [reanchorIfNeeded, maximize]);
 
-  // For mobile fullscreen
+  // Mobile fullscreen
   useEffect(() => {
     if (isMobile && fullScreenOnMobile && localState) {
       setPosition({ x: 0, y: 0 });
@@ -375,73 +433,15 @@ const Dialog = ({
   const enableResizing =
     typeof enableResizingSides === 'object' ? enableResizingSides : canResize;
 
-  // Auto-fit height on first open (and until user resizes)
-  useLayoutEffect(() => {
-    if (!localState) return;
-    if (maximize || minimize) return;
-    if (!fitHeightOnOpen || userResized) return;
-
-    const headerH = headerRef.current?.offsetHeight ?? 0;
-    const bodyScrollH = bodyRef.current?.scrollHeight ?? size.height;
-
-    const desiredH = headerH + bodyScrollH;
-
-    const minH = lenToPx(minHeight, 'y') ?? 0;
-
-    const propMaxH = lenToPx(maxHeight, 'y'); // allow props to cap it
-    const viewportCap = window.innerHeight - viewportMarginY * 2;
-    const maxH =
-      propMaxH != null ? Math.min(propMaxH, viewportCap) : viewportCap;
-
-    const nextH = clamp(desiredH, minH, maxH);
-
-    if (Math.abs((size?.height ?? 0) - nextH) > 1) {
-      setSize((prev) => ({ ...prev, height: nextH }));
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [localState, maximize, minimize, fitHeightOnOpen, userResized]);
-
-  // If content changes size after open (e.g., async), keep fitting until user resizes
-  useEffect(() => {
-    if (!localState || maximize || minimize || userResized) return;
-    if (!fitHeightOnOpen) return;
-    if (!bodyRef.current) return;
-
-    const ro = new ResizeObserver(() => {
-      const headerH = headerRef.current?.offsetHeight ?? 0;
-      const bodyScrollH = bodyRef.current?.scrollHeight ?? size.height;
-      const desiredH = headerH + bodyScrollH;
-
-      const minH = lenToPx(minHeight, 'y') ?? 0;
-      const propMaxH = lenToPx(maxHeight, 'y');
-      const viewportCap = window.innerHeight - viewportMarginY * 2;
-      const maxH =
-        propMaxH != null ? Math.min(propMaxH, viewportCap) : viewportCap;
-
-      const nextH = clamp(desiredH, minH, maxH);
-      if (Math.abs((size?.height ?? 0) - nextH) > 1) {
-        setSize((prev) => ({ ...prev, height: nextH }));
-      }
-    });
-
-    ro.observe(bodyRef.current);
-    return () => ro.disconnect();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [localState, maximize, minimize, userResized, fitHeightOnOpen]);
-
-  //if (!localState) return null;
-
-  const showMaximizeButton =
-    maximizable && window.innerWidth > MIN_SCREEN_WIDTH_MAXIMIZE;
-
-  const minWNum = lenToPx(minWidth, 'x') ?? undefined;
-  const minHNum = lenToPx(minHeight, 'y') ?? undefined;
-  const maxWNum = lenToPx(maxWidth, 'x') ?? undefined;
-  const maxHNum = lenToPx(maxHeight, 'y') ?? undefined;
+  // Constraints passed to RND (numbers in px)
+  const bounds = { vw: window.innerWidth, vh: window.innerHeight };
+  const minWpx = toPx(minWidth, 'x', bounds) ?? undefined;
+  const minHpx = toPx(minHeight, 'y', bounds) ?? undefined;
+  const maxWpx = toPx(maxWidth, 'x', bounds) ?? undefined;
+  const maxHpx = toPx(maxHeight, 'y', bounds) ?? undefined;
 
   return (
     <>
-      {/* Optional per-dialog backdrop: sits just under the dialog */}
       {backdrop && (
         <StyledDialogBackdrop
           style={{ zIndex: zIndex - 1 }}
@@ -452,15 +452,18 @@ const Dialog = ({
       <StyledRnd
         size={size}
         position={position}
-        bounds={'window'}
-        minWidth={minWNum}
-        minHeight={minHNum}
-        maxWidth={maxWNum}
-        maxHeight={maxHNum}
-        onDragStart={bringToFront}
+        bounds="window"
+        minWidth={minWpx}
+        minHeight={minHpx}
+        maxWidth={maxWpx}
+        maxHeight={maxHpx}
+        onDragStart={() => {
+          bringToFront();
+          setHasUserMoved(true);   // stop further auto re-anchoring
+        }}
         onResizeStart={() => {
           bringToFront();
-          setUserResized(true);
+          setUserResized(true);    // stop further auto re-anchoring
         }}
         onMouseDown={bringToFront}
         onDragStop={(_, d) => setPosition({ x: d.x, y: d.y })}
@@ -473,7 +476,6 @@ const Dialog = ({
         enableResizing={enableResizing}
         style={{ zIndex, ...style }}
       >
-        {/* The inner panel fills Rnd and always resizes with it */}
         <Panel $fullScreenOnMobile={fullScreenOnMobile}>
           <Header
             ref={headerRef}
@@ -505,7 +507,7 @@ const Dialog = ({
                 </HeaderBtn>
               )}
 
-              {showMaximizeButton && (
+              {maximizable && window.innerWidth > MIN_SCREEN_WIDTH_MAXIMIZE && (
                 <HeaderBtn
                   onClick={(e) => {
                     e.preventDefault();
