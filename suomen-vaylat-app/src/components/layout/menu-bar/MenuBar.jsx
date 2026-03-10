@@ -35,7 +35,7 @@ import { isMobile } from '../../../theme/theme';
 import ToolsPanel from './ToolsPanel';
 
 const StyledMenuBar = styled.div`
-  z-index: 1;
+  z-index: 1000;
   pointer-events: none;
   height: 100%;
   display: flex;
@@ -74,18 +74,6 @@ const StyledDrawingToolsWrapper = styled.div`
 
 const StyledCornerCloseButton = styled(CircleButton)`
   z-index: 10;
-`;
-
-const StyledToolButtons = styled.div`
-  overflow: scroll;
-  display: flex;
-  flex-direction: column;
-  padding: 0 8px 8px 8px;
-  pointer-events: auto;
-
-  @media ${(props) => props.theme.device.mobileL} {
-    gap: 6px;
-  }
 `;
 
 const StyledLayerCount = styled.div`

@@ -16,14 +16,12 @@ const StyledMapLayersDialog = styled(motion.div)`
   left: 5em;
   top: 80px;
   width: 350px;
-  height: calc(100% - 96px);
+  height: 80vh;
   display: flex;
   flex-direction: column;
   pointer-events: auto;
   background-color: ${(props) => props.theme.colors.mainWhite};
   border-radius: 4px;
-  overflow: hidden;
-  overflow-y: auto;
   user-select: none;
   box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, 0.16);
   z-index: 900;
@@ -44,7 +42,7 @@ const StyledMapLayersDialog = styled(motion.div)`
 `;
 
 const HierarchicalLayerlistDialog = () => {
-  const { isSideMenuOpen, isThemeMenuOpen } = useAppSelector(
+  const { isSideMenuOpen } = useAppSelector(
     (state) => state.ui
   );
   const { allGroups, allLayers, allTags } = useAppSelector(

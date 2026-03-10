@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { cloneElement } from 'react';
 import styled from 'styled-components';
 import { motion, AnimatePresence, useDragControls } from 'motion/react';
@@ -6,11 +6,12 @@ import { faTimes, faWindowMaximize, faWindowMinimize, faWindowRestore, faQuestio
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { isMobile, theme } from '../../theme/theme';
 import { Tooltip } from 'react-tooltip';
+import { useDialogStack } from '../../state/DialogStackContext';
 
 const MIN_SCREEN_WIDTH_MAXIMIZE = 500;
 
 const StyledDialogBackdrop = styled(motion.div)`
-    z-index: ${(props) => (props.type === 'warning' ? 9998 : 10)};
+    z-index: ${(props) => (props.type === 'warning' ? 9998 : props.$zIndex ? props.$zIndex - 1  : 10)};
     position: fixed;
     top: 0px;
     right: 0px;
@@ -26,7 +27,7 @@ const StyledDialogBackdrop = styled(motion.div)`
 
 const StyledDialogWrapper = styled(motion.div)`
     z-index: ${(props) =>
-        props.type === 'warning' ? 9999 : props.$resize ? 100 : 9993};
+        props.type === 'warning' ? 9999 : props.$zIndex ? props.$zIndex  : 1000};
     position: absolute;
     width: ${(props) => props.$maximize? '100% !important' : 'auto'};
     height: ${(props) => props.$maximize? '100%' : 'auto'};
@@ -82,7 +83,7 @@ const StyledDialogHeader = styled.div`
     background-color: ${(props) =>
         props.type === 'warning'
             ? props.theme.colors.secondaryColorDarkOrange
-            : props.theme.colors.mainColor1Selected};
+            : props.$onTop ? props.theme.colors.mainColor1Selected : props.theme.colors.mainColor1};
     box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.2);
     padding-left: 16px;
     padding-right: 16px;
@@ -166,6 +167,7 @@ const StyledDialogContent = styled.div`
 `;
 
 const Dialog = ({
+    id,
     hasHelp,
     helpId,
     helpContent,
@@ -197,6 +199,24 @@ const Dialog = ({
     width = 'auto',
     style = {}
 }) => {
+    const { bringToFront, assignInitialZ, topId } = useDialogStack();
+    const [zIndex, setZIndex] = useState(null);
+    const idRef = useRef(id || Math.random().toString(36).slice(2, 9));
+
+    useEffect(() => {
+        if (isOpen) {
+            const z = assignInitialZ ? assignInitialZ(idRef.current) : 1000;
+            setZIndex(z);
+        }
+    }, [isOpen, assignInitialZ]);
+
+    const handlePointerDown = (e) => {
+        e.stopPropagation();
+        if (!bringToFront) return; // no-op if provider missing
+        if (topId === idRef.current) return;
+        setZIndex(bringToFront(idRef.current));
+    };
+
     const dragControls = useDragControls();
 
     const [localState, setLocalState] = useState(type === 'announcement');
@@ -228,7 +248,8 @@ const Dialog = ({
                 <>
                     <StyledDialogWrapper
                         key={"dialog_wrapper_" + title}
-                        id={"dialog_wrapper_" + title}
+                        id={"dialog_wrapper_" + id}
+                        onPointerDown={handlePointerDown}
                         className="dialog_wrapper"
                         drag={isMobile? false : drag}
                         dragConstraints={constraintsRef && constraintsRef}
@@ -264,6 +285,7 @@ const Dialog = ({
                         right={right}
                         left={left}
                         style={style}
+                        $zIndex={zIndex}
                     >
                         <StyledDialog
                             id={"dialog_" + title}
@@ -283,6 +305,7 @@ const Dialog = ({
                                 onPointerDown={(e) => {
                                     drag && dragControls.start(e);
                                 }}
+                                $onTop={topId === idRef.current}
                             >
 
                                 <Tooltip anchorSelect={'#'+helpId} style={{backgroundColor: theme.colors.mainColor1}} disable={isMobile} id={helpId + '_tooltip'} place='bottom' effect='float'>
@@ -367,6 +390,7 @@ const Dialog = ({
                                       handleAnnouncementDialog(null, null);
                             }}
                             type={type}
+                            $zIndex={zIndex}
                         />
                     )}
                 </>
