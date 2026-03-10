@@ -20,6 +20,7 @@ const StyledMainContainer = styled.div`
   border-radius: 16px;
   position: relative;
   background-color: white;
+  max-width: 
 `;
 const OverlaySpinner = styled.div`
   position: absolute;

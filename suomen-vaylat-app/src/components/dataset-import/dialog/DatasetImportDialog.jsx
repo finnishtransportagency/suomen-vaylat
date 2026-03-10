@@ -30,8 +30,8 @@ const DatasetImportDialog = () => {
         handleCloseDatasetImport
       } /* Action when pressing dialog close button or backdrop */
       id="dataset-import-dialog"
-      width={'auto'}
-      height={'auto'}
+      minWidth={'35rem'}
+      minHeight={'61rem'}
     >
       <DatasetImport />
     </Dialog>

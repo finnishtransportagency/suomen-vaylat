@@ -43,10 +43,8 @@ const FeatureDataDownloadDialog = () => {
         handleCloseGfiDownloadDialog
       } /* Action when pressing dialog close button or backdrop */
       id="gfi_download_dialog"
-      width='auto'
-      height='auto'
       minWidth={'30rem'}
-      minHeight={'30rem'}
+      minHeight={'25rem'}
     >
       <FeatureDataDownload />
     </Dialog>

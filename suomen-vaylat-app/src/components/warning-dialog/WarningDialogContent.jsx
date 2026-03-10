@@ -3,16 +3,12 @@ import { useState } from 'react';
 import strings from '../../translations';
 
 const StyledWarningDialogContainer = styled.div`
-  padding: 32px;
+  padding: 1rem;
   color: ${(props) => props.theme.colors.mainColor1};
   box-sizing: border-box;
   width: 100%;
   /* Allow content to wrap within the dialog's width */
   overflow: visible;
-
-  @media ${(props) => props.theme.device.mobileL} {
-    padding: 16px;
-  }
 `;
 
 const StyledWarningTitle = styled.p`
@@ -44,7 +40,7 @@ const StyledWarningButtonsContainer = styled.div`
   display: flex;
   justify-content: space-around;
   align-items: center;
-  padding: 18px;
+  padding-top: 1rem;
   border-top: 1px solid #dee2e6;
   @media ${(props) => props.theme.device.mobileL} {
     flex-direction: column;

@@ -26,8 +26,8 @@ const ProfileInfoDialog = () => {
       type={'normal'}
       closeAction={handleCloseProfileDialog}
       id="profile_info_dialog"
-      width={'30rem'}
-      height={'20rem'}
+      minWidthidth={'30rem'}
+      minHeight={'20rem'}
     >
       <ProfileInfo/>
     </Dialog>

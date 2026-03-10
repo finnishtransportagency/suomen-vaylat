@@ -15,7 +15,7 @@ const StyledMapLayersDialog = styled(motion.div)`
   position: absolute;
   left: 5em;
   top: 80px;
-  width: 350px;
+  width: min-content;
   height: 80vh;
   display: flex;
   flex-direction: column;

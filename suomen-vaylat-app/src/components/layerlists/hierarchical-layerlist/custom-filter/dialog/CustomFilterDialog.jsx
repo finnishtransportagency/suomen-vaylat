@@ -37,7 +37,7 @@ const CustomFilterDialog = ({ constraintsRef }) => {
         handleCustomFilterClose
       } /* Action when pressing dialog close button or backdrop */
       id="custom_layer_dialog"
-      minHeight="860px"
+      maxHeight='90vh'
     >
       <CustomFilterDialogContent />
     </Dialog>

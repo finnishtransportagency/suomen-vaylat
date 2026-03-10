@@ -35,8 +35,8 @@ const MetadataDialog = () => {
             handleCloseMetadataDialog
           } /* Action when pressing dialog close button or backdrop */
           id="metadata_dialog"
-          width={'40rem'}
-          height={'40rem'}
+          minWidth={'40rem'}
+          minHeight={'40rem'}
         >
           <MetadataDialogContent metadata={layerMetadata} />
         </Dialog>

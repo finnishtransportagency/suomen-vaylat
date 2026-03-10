@@ -23,8 +23,8 @@ const BaseLayerSelectorDialog = () => {
       type={'normal'}
       closeAction={handleCloseBaseLayerSelectorDialog}
       id="base_layer_selector_menu"
-      width="52rem"
-      height="36rem"
+      minWidth="52rem"
+      minHeight="36rem"
     >
       <BaseLayerSelectorMenu />
     </Dialog>
