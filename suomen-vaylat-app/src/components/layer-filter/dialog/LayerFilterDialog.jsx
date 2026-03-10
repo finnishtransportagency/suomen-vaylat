@@ -55,7 +55,7 @@ const LayerFilterDialog = () => {
     <Dialog
       id="filter_dialog_container"
       drag={true} /* Enable (true) or disable (false) drag */
-      resize={true}
+      resize={false}
       fullScreenOnMobile={
         true
       } /* Scale dialog full width / height when using mobile device */
@@ -77,7 +77,8 @@ const LayerFilterDialog = () => {
       maximizeAction={() =>
         store.dispatch(setMaximizeFilterDialog(!maximizeFilter))
       }
-      maxWidth={maximizeFilter ? null : '40em'}
+      maxWidth={maximizeFilter ? null : '90vw'}
+      maxHeight={maximizeFilter ? null : '90vh'}
       minWidth={'25em'}
       minHeight={'30em'}
     >

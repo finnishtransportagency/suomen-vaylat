@@ -127,6 +127,8 @@ const CloseIcon = styled(FontAwesomeIcon)`
 `;
 
 const Body = styled.div`
+  flex: 1 1 auto;
+  min-height: 0;
   display: flex;
   flex-direction: column;
   overflow-y: auto;
@@ -137,6 +139,12 @@ const StyledDialogBackdrop = styled.div`
   inset: 0;
   background-color: rgba(0, 0, 0, 0.4);
   cursor: pointer;
+`;
+
+const ContentSizer = styled.div`
+  display: block;
+  width: 100%;
+  height: 100%;
 `;
 
 /* ---------------- Utils ---------------- */
@@ -294,10 +302,19 @@ const Dialog = ({
   const panelRef = useRef(null); // <-- NEW: to compute `em`
   const headerRef = useRef(null);
   const bodyRef = useRef(null);
+  const contentRef = useRef(null);
 
   // Track user interactions so we stop auto anchoring afterward
   const [hasUserMoved, setHasUserMoved] = useState(false);
   const [userResized, setUserResized] = useState(false);
+
+  const wantsAutoWidth = width === 'auto' || width == null;
+  const wantsAutoHeight = height === 'auto' || height == null;
+
+  // If resize is enabled, keep auto-sizing only until user resizes manually.
+  // If resize is disabled, auto-sizing can stay active forever.
+  const autoWidthActive = wantsAutoWidth && (!resize || !userResized);
+  const autoHeightActive = wantsAutoHeight && (!resize || !userResized);
 
   useEffect(() => {
     if (!panelRef.current) return;
@@ -396,6 +413,111 @@ const Dialog = ({
     x: initialPos.x,
     y: initialPos.y
   });
+
+  useLayoutEffect(() => {
+    if (!contentRef.current || !headerRef.current) return;
+    if (maximize || minimize) return;
+    if (!autoWidthActive && !autoHeightActive) return;
+
+    let rafId = 0;
+    let framePending = false;
+
+    const updateSizeFromContent = () => {
+      const bounds = { vw: window.innerWidth, vh: window.innerHeight };
+
+      const headerH = headerRef.current?.offsetHeight ?? 0;
+      const contentW = contentRef.current?.scrollWidth ?? 0;
+      const contentH = contentRef.current?.scrollHeight ?? 0;
+
+      let desiredW = size.width;
+      let desiredH = size.height;
+
+      if (autoWidthActive) {
+        desiredW = contentW;
+      }
+
+      if (autoHeightActive) {
+        desiredH = headerH + contentH;
+      }
+
+      const resolved = resolveEffectiveSize(
+        desiredW,
+        desiredH,
+        minWidth,
+        minHeight,
+        maxWidth,
+        maxHeight,
+        bounds,
+        bases
+      );
+
+      const nextWidth = autoWidthActive ? resolved.width : size.width;
+      const nextHeight = autoHeightActive ? resolved.height : size.height;
+
+      const widthChanged = Math.abs(nextWidth - size.width) > 1;
+      const heightChanged = Math.abs(nextHeight - size.height) > 1;
+
+      if (!widthChanged && !heightChanged) return;
+
+      const nextSize = {
+        width: nextWidth,
+        height: nextHeight
+      };
+
+      setSize(nextSize);
+
+      // Keep anchor semantics until the user moves the dialog
+      if (!hasUserMoved) {
+        const nextPos = anchoredPosition(
+          nextSize.width,
+          nextSize.height,
+          anchorOriginX,
+          anchorOriginY,
+          anchorX,
+          anchorY,
+          bounds,
+          bases
+        );
+        setPosition(nextPos);
+      }
+    };
+
+    const observer = new ResizeObserver(() => {
+      if (framePending) return;
+      framePending = true;
+      rafId = requestAnimationFrame(() => {
+        framePending = false;
+        updateSizeFromContent();
+      });
+    });
+
+    observer.observe(contentRef.current);
+
+    // initial run
+    updateSizeFromContent();
+
+    return () => {
+      observer.disconnect();
+      if (rafId) cancelAnimationFrame(rafId);
+    };
+  }, [
+    autoWidthActive,
+    autoHeightActive,
+    maximize,
+    minimize,
+    minWidth,
+    minHeight,
+    maxWidth,
+    maxHeight,
+    anchorOriginX,
+    anchorOriginY,
+    anchorX,
+    anchorY,
+    hasUserMoved,
+    size.width,
+    size.height,
+    bases
+  ]);
 
   // If bases (rem/em) change after mount (e.g., user zoom or CSS loads), re-resolve once.
   useEffect(() => {
@@ -685,7 +807,9 @@ const Dialog = ({
             </Right>
           </Header>
 
-          <Body ref={bodyRef}>{renderedChildren}</Body>
+          <Body ref={bodyRef}>
+            <ContentSizer ref={contentRef}>{renderedChildren}</ContentSizer>
+          </Body>
         </Panel>
       </StyledRnd>
     </>

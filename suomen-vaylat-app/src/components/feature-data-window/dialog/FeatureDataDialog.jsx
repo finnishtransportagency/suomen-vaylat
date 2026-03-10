@@ -80,6 +80,8 @@ const FeatureDataDialog = () => {
       id="gfi_dialog"
       minWidth={'35rem'}
       minHeight={'34rem'}
+      width={gfiLocations.length > 0 ? '40rem' : 'auto'}
+      height={gfiLocations.length > 0 ? '50rem' : 'auto'}
       minimize={minimizeGfi}
       maximize={maximizeGfi}
       minimizable={true}

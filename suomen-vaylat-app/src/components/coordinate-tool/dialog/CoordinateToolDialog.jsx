@@ -24,8 +24,10 @@ const CoordinateToolDialog = () => {
       type="normal"
       closeAction={() => store.dispatch(setIsCoordinateToolOpen(false))}
       id="coordinate_tool_dialog"
-      width={'23rem'}
-      height={'30rem'}
+      width='auto'
+      height='auto'
+      minWidth={'23rem'}
+      minHeight={'23rem'}
       anchorX='end'
       anchorY='end'
       anchorOriginX = '90%'
