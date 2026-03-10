@@ -79,13 +79,13 @@ const FeatureDataDialog = () => {
       } /* Action when pressing dialog close button or backdrop */
       id="gfi_dialog"
       minWidth={'35rem'}
-      minHeight={'34rem'}
-      width={gfiLocations.length > 0 ? '40rem' : 'auto'}
-      height={gfiLocations.length > 0 ? '50rem' : 'auto'}
+      minHeight={gfiLocations.length > 0 ? '40rem' : '34rem'}
       minimize={minimizeGfi}
       maximize={maximizeGfi}
       minimizable={true}
-      maximizable={true}
+      maximizable={gfiLocations.length > 0 ? true : false}
+      maxWidth={maximizeGfi ? null : '90vw'}
+      maxHeight={maximizeGfi ? null : '90vh'}
       minimizeAction={() => store.dispatch(setMinimizeGfi(!minimizeGfi))}
       maximizeAction={() => store.dispatch(setMaximizeGfi(!maximizeGfi))}
     >

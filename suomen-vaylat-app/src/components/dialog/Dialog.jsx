@@ -139,15 +139,9 @@ const Body = styled.div`
   overflow-y: auto;
 `;
 
-/**
- * ContentSizer is used for measuring intrinsic content size.
- * width: max-content allows natural content width measurement,
- * min-width: 100% prevents it from becoming narrower than the body.
- */
 const ContentSizer = styled.div`
   display: inline-block;
   width: 100%;
-  min-width: 100%;
 `;
 
 const StyledDialogBackdrop = styled.div`
@@ -159,8 +153,7 @@ const StyledDialogBackdrop = styled.div`
 
 /* ---------------- Utils ---------------- */
 
-const clamp = (v, minV, maxV) =>
-  Math.min(maxV ?? v, Math.max(minV ?? v, v));
+const clamp = (v, minV, maxV) => Math.min(maxV ?? v, Math.max(minV ?? v, v));
 
 /**
  * Convert CSS length to px.
@@ -225,12 +218,9 @@ const resolveEffectiveSize = (
   const wantW = rW ?? fallbackW;
   const wantH = rH ?? fallbackH;
 
-  const effW = clamp(wantW, miW ?? wantW, maW ?? wantW);
-  const effH = clamp(wantH, miH ?? wantH, maH ?? wantH);
-
   return {
-    width: effW,
-    height: effH,
+    width: clamp(wantW, miW ?? wantW, maW ?? wantW),
+    height: clamp(wantH, miH ?? wantH, maH ?? wantH),
     minW: miW,
     minH: miH,
     maxW: maW,
@@ -238,7 +228,6 @@ const resolveEffectiveSize = (
   };
 };
 
-/** Compute anchored position for a given size */
 const anchoredPosition = (
   w,
   h,
@@ -265,6 +254,7 @@ let __zCounter = 9993;
 /* ---------------- Component ---------------- */
 
 const Dialog = ({
+  id,
   drag = true,
   resize = true,
   backdrop = false,
@@ -277,13 +267,13 @@ const Dialog = ({
   helpContent,
   closeAction,
   minimizable,
-  minimize = null,
+  minimize = false,
   minimizeAction,
   maximizable,
   maximize = false,
   maximizeAction,
 
-  /** Sizing (px | % | vw | vh | rem | em | number | 'auto') */
+  /** Sizing */
   width = 'auto',
   height = 'auto',
   minWidth,
@@ -291,16 +281,13 @@ const Dialog = ({
   maxWidth = '90vw',
   maxHeight = '90vh',
 
-  /** Anchor-based positioning */
+  /** Anchor */
   anchorOriginX = '50%',
   anchorOriginY = '50%',
   anchorX = 'center',
   anchorY = 'center',
 
   enableResizingSides,
-
-  /** Auto-fit / constraints */
-  viewportMarginY = 16,
 
   children,
   style = {}
@@ -319,7 +306,6 @@ const Dialog = ({
   const [hasUserMoved, setHasUserMoved] = useState(false);
   const [userResized, setUserResized] = useState(false);
 
-  // rem / em bases
   const [bases, setBases] = useState({ rem: 16, em: 16 });
 
   useEffect(() => {
@@ -346,10 +332,9 @@ const Dialog = ({
     }, 500);
   };
 
-  const renderedChildren =
-    !isAnnouncement
-      ? children
-      : cloneElement(children, { handleAnnouncementDialog });
+  const renderedChildren = !isAnnouncement
+    ? children
+    : cloneElement(children, { handleAnnouncementDialog });
 
   const renderDialogIcon = (icon) => {
     if (icon && React.isValidElement(icon)) return icon;
@@ -373,7 +358,6 @@ const Dialog = ({
   const autoHeightActive =
     !resize || effectiveHeightProp === 'auto' || effectiveHeightProp == null;
 
-  // Initial size
   const initial = useMemo(() => {
     const bounds = { vw: window.innerWidth, vh: window.innerHeight };
     return resolveEffectiveSize(
@@ -415,7 +399,7 @@ const Dialog = ({
     y: initialPos.y
   });
 
-  // Re-resolve once when rem/em bases are known
+  // Re-resolve when rem/em bases become available
   useEffect(() => {
     const bounds = { vw: window.innerWidth, vh: window.innerHeight };
 
@@ -477,9 +461,11 @@ const Dialog = ({
    */
   useLayoutEffect(() => {
     if (!isVisible) return;
+    if (minimize) return; // don't keep measuring while minimized
     if (!contentRef.current) return;
-    if (maximize || minimize) return;
+    if (maximize) return;
 
+    // if resize=true, stop auto sizing after user manually resized
     const autoSizingAllowed = !resize || !userResized;
     if (!autoSizingAllowed) return;
 
@@ -530,7 +516,7 @@ const Dialog = ({
 
       setSize(nextSize);
 
-      // Keep anchor semantics until user drags the dialog
+      // Keep anchored until user drags manually
       if (!hasUserMoved) {
         const nextPos = anchoredPosition(
           nextSize.width,
@@ -567,10 +553,10 @@ const Dialog = ({
     };
   }, [
     isVisible,
+    minimize,
     resize,
     userResized,
     maximize,
-    minimize,
     autoWidthActive,
     autoHeightActive,
     minWidth,
@@ -587,9 +573,6 @@ const Dialog = ({
     bases
   ]);
 
-  /**
-   * Re-anchor / clamp when viewport changes
-   */
   const reanchorIfNeeded = React.useCallback(() => {
     if (maximize || minimize) return;
     if (hasUserMoved || userResized) return;
@@ -670,27 +653,27 @@ const Dialog = ({
 
   // Mobile fullscreen
   useEffect(() => {
-    if (isMobile && fullScreenOnMobile && isVisible) {
+    if (isMobile && fullScreenOnMobile && isVisible && !minimize) {
       setPosition({ x: 0, y: 0 });
       setSize({ width: window.innerWidth, height: window.innerHeight });
     }
-  }, [isVisible, fullScreenOnMobile]);
+  }, [isVisible, minimize, fullScreenOnMobile]);
+
+  const hidden = minimize === true;
 
   const disableDragging =
-    !drag || minimize || maximize || (isMobile && fullScreenOnMobile);
+    hidden || !drag || maximize || (isMobile && fullScreenOnMobile);
 
   const canResize =
-    resize &&
-    !minimize &&
-    !maximize &&
-    !(isMobile && fullScreenOnMobile);
+    !hidden && resize && !maximize && !(isMobile && fullScreenOnMobile);
 
   const enableResizing =
     typeof enableResizingSides === 'object'
-      ? enableResizingSides
+      ? hidden
+        ? false
+        : enableResizingSides
       : canResize;
 
-  // Constraints passed to RND in px
   const bounds = { vw: window.innerWidth, vh: window.innerHeight };
   const minWpx = toPx(minWidth, 'x', bounds, bases) ?? undefined;
   const minHpx = toPx(minHeight, 'y', bounds, bases) ?? undefined;
@@ -699,7 +682,8 @@ const Dialog = ({
 
   return (
     <>
-      {backdrop && (
+      {/* Hide backdrop while minimized */}
+      {backdrop && !hidden && (
         <StyledDialogBackdrop
           style={{ zIndex: zIndex - 1 }}
           onClick={() => {
@@ -714,6 +698,7 @@ const Dialog = ({
       )}
 
       <StyledRnd
+        id={id}
         size={size}
         position={position}
         bounds="window"
@@ -722,14 +707,19 @@ const Dialog = ({
         maxWidth={maxWpx}
         maxHeight={maxHpx}
         onDragStart={() => {
+          if (hidden) return;
           bringToFront();
           setHasUserMoved(true);
         }}
         onResizeStart={() => {
+          if (hidden) return;
           bringToFront();
           setUserResized(true);
         }}
-        onMouseDown={bringToFront}
+        onMouseDown={() => {
+          if (hidden) return;
+          bringToFront();
+        }}
         onDragStop={(_, d) => setPosition({ x: d.x, y: d.y })}
         onResize={(_, __, ref, ___, newPosition) => {
           setSize({
@@ -741,7 +731,13 @@ const Dialog = ({
         dragHandleClassName="dialog-header"
         disableDragging={disableDragging}
         enableResizing={enableResizing}
-        style={{ zIndex, ...style }}
+        style={{
+          zIndex,
+          opacity: hidden ? 0 : 1,
+          visibility: hidden ? 'hidden' : 'visible',
+          pointerEvents: hidden ? 'none' : 'auto',
+          ...style
+        }}
       >
         <Panel ref={panelRef} $fullScreenOnMobile={fullScreenOnMobile}>
           <Header
@@ -776,17 +772,17 @@ const Dialog = ({
 
               {maximizable &&
                 window.innerWidth > MIN_SCREEN_WIDTH_MAXIMIZE && (
-                  <HeaderBtn
-                    onClick={(e) => {
-                      e.preventDefault();
-                      maximizeAction?.();
-                    }}
-                  >
-                    <FontAwesomeIcon
-                      icon={maximize ? faWindowRestore : faWindowMaximize}
-                    />
-                  </HeaderBtn>
-                )}
+                <HeaderBtn
+                  onClick={(e) => {
+                    e.preventDefault();
+                    maximizeAction?.();
+                  }}
+                >
+                  <FontAwesomeIcon
+                    icon={maximize ? faWindowRestore : faWindowMaximize}
+                  />
+                </HeaderBtn>
+              )}
 
               {hasHelp && (
                 <HeaderBtn id={helpId}>

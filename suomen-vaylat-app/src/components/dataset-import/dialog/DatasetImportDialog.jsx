@@ -31,7 +31,8 @@ const DatasetImportDialog = () => {
       } /* Action when pressing dialog close button or backdrop */
       id="dataset-import-dialog"
       minWidth={'35rem'}
-      minHeight={'61rem'}
+      maxWidth={'35rem'}
+      maxHeight={'90vh'}
     >
       <DatasetImport />
     </Dialog>
