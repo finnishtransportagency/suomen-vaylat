@@ -705,7 +705,6 @@
       "show": "Näytä",
       "filterByType": "Suodata tyypeittäin",
       "searchForLayers": "Hae karttatasoja",
-      "createFilter": "Suodata",
       "createCustomFilter": "oma suodatin",
       "saveCustomFilter": "Tallenna",
       "clearFilters": "Tyhjennä suodatinvalinnat",

@@ -1,16 +1,25 @@
 import { useContext } from 'react';
-import { ReactReduxContext } from "react-redux";
+import { ReactReduxContext } from 'react-redux';
 import Dialog from '../../dialog/Dialog';
-import { useAppSelector } from "../../../state/hooks";
-import strings from "../../../translations";
-import FeatureDataSelectionToolsMenu from "../tools/FeatureDataSelectionToolsMenu";
-import { setIsGfiToolsOpen, setActiveSelectionTool, setMinimizeFeatureSelection, setSelectedDrawingTool } from "../../../state/slices/uiSlice";
+import { useAppSelector } from '../../../state/hooks';
+import strings from '../../../translations';
+import FeatureDataSelectionToolsMenu from '../tools/FeatureDataSelectionToolsMenu';
+import {
+  setIsGfiToolsOpen,
+  setActiveSelectionTool,
+  setMinimizeFeatureSelection,
+  setSelectedDrawingTool
+} from '../../../state/slices/uiSlice';
 import { faObjectGroup } from '@fortawesome/free-solid-svg-icons';
-import { FEATURE_SELECTION_DRAWING_TOOL, FEATURE_SELECTION_LAYER } from '../../../utils/constants';
+import {
+  FEATURE_SELECTION_DRAWING_TOOL,
+  FEATURE_SELECTION_LAYER
+} from '../../../utils/constants';
 import { toast } from 'react-toastify';
 
 const FeatureDataToolsDialog = () => {
-  const { isGfiToolsOpen, minimizeFeatureSelection, activeTool } = useAppSelector((state) => state.ui);
+  const { isGfiToolsOpen, minimizeFeatureSelection, activeTool } =
+    useAppSelector((state) => state.ui);
   const { store } = useContext(ReactReduxContext);
   let { channel } = useAppSelector((state) => state.rpc);
 
@@ -45,18 +54,19 @@ const FeatureDataToolsDialog = () => {
       resize={true}
       fullScreenOnMobile={true}
       title={strings.gfi.featureSelection.title}
-      type={"normal"}
+      type={'normal'}
       closeAction={handleCloseGfiLocations}
       titleIcon={faObjectGroup}
       minimize={minimizeFeatureSelection}
       minimizable={true}
       minimizeAction={() => store.dispatch(setMinimizeFeatureSelection(true))}
       id="gfi_tools_menu_dialog"
+      width={'25rem'}
+      height={'30rem'}
     >
-      <FeatureDataSelectionToolsMenu/>
+      <FeatureDataSelectionToolsMenu />
     </Dialog>
-  )
-  : null ;
+  ) : null;
 };
 
 export default FeatureDataToolsDialog;

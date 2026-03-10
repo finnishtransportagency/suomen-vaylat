@@ -13,10 +13,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 
 const StyledContent = styled.div`
-    max-width: 660px;
     flex-direction: column;
     display: flex;
-    height: 100%;
     overflow-y: auto;
 `;
 

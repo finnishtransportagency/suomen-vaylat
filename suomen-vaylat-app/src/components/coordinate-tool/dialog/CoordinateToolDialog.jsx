@@ -8,7 +8,9 @@ import { ReactReduxContext } from 'react-redux';
 import CoordinateTool from '../CoordinateTool';
 
 const CoordinateToolDialog = () => {
-  const { isCoordinateToolOpen, isSearchResultPanelVisible } = useAppSelector((state) => state.ui);
+  const { isCoordinateToolOpen, isSearchResultPanelVisible } = useAppSelector(
+    (state) => state.ui
+  );
   const { store } = useContext(ReactReduxContext);
 
   return isCoordinateToolOpen ? (
@@ -22,15 +24,16 @@ const CoordinateToolDialog = () => {
       type="normal"
       closeAction={() => store.dispatch(setIsCoordinateToolOpen(false))}
       id="coordinate_tool_dialog"
-      minWidth="400px"
-      bottom="10px"
-      right={isSearchResultPanelVisible ? '500px' : '80px'}
-      style={{ zIndex: 9992 }}
+      width={'23rem'}
+      height={'30rem'}
+      anchorX='end'
+      anchorY='end'
+      anchorOriginX = '90%'
+      anchorOriginY = '95%'
     >
       <CoordinateTool />
     </Dialog>
-  )
-  : null ;
+  ) : null;
 };
 
 export default CoordinateToolDialog;

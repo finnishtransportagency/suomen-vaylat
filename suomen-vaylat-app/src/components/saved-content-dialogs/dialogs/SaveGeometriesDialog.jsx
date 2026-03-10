@@ -154,8 +154,8 @@ const SaveGeometriesDialog = () => {
       type={'normal'}
       closeAction={handleCloseSaveGeometriesDialog}
       id="saved_content_dialog"
-      minWidth={'600px'}
-      minHeight={isLowResScreen ? '300px' : '400px'}
+      width={'30rem'}
+      height={'27rem'}
       hasHelp={true}
       helpId={'show_geometries_help'}
       helpContent={helpContent}

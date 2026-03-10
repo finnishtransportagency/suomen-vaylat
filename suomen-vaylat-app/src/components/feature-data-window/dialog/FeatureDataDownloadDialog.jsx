@@ -15,7 +15,7 @@ const FeatureDataDownloadDialog = () => {
   const { channel } = useAppSelector((state) => state.rpc);
 
   const { isGfiOpen, isGfiDownloadOpen } = useAppSelector((state) => state.ui);
-  
+
   const handleCloseGfiDownloadDialog = () => {
     store.dispatch(setIsGfiDownloadOpen(false));
 
@@ -43,12 +43,12 @@ const FeatureDataDownloadDialog = () => {
         handleCloseGfiDownloadDialog
       } /* Action when pressing dialog close button or backdrop */
       id="gfi_download_dialog"
-      minWidth={'600px'}
+      width={'30rem'}
+      height={'30rem'}
     >
       <FeatureDataDownload />
     </Dialog>
-  )
-  : null ;
+  ) : null;
 };
 
 export default FeatureDataDownloadDialog;

@@ -19,24 +19,24 @@ const AppInfoDialog = () => {
 
   return isInfoOpen ? (
     <Dialog
-          drag={false} /* Enable (true) or disable (false) drag */
-          resize={false}
-          fullScreenOnMobile={
-            true
-          } /* Scale dialog full width / height when using mobile device */
-          titleIcon={faInfoCircle} /* Use icon on title or null */
-          title={strings.appInfo.title} /* Dialog header title */
-          type={"normal"} /* Dialog type */
-          closeAction={
-            handleCloseAppInfoDialog
-          } /* Action when pressing dialog close button or backdrop */
-          id="app_info_dialog"
-          maxWidth={"800px"}
-        >
-          <AppInfoDialogContent />
-        </Dialog>
-  )
-  : null ;
+      drag={false} /* Enable (true) or disable (false) drag */
+      resize={false}
+      fullScreenOnMobile={
+        true
+      } /* Scale dialog full width / height when using mobile device */
+      titleIcon={faInfoCircle} /* Use icon on title or null */
+      title={strings.appInfo.title} /* Dialog header title */
+      type={'normal'} /* Dialog type */
+      closeAction={
+        handleCloseAppInfoDialog
+      } /* Action when pressing dialog close button or backdrop */
+      id="app_info_dialog"
+      width={'40rem'}
+      height={'40rem'}
+    >
+      <AppInfoDialogContent />
+    </Dialog>
+  ) : null;
 };
 
 export default AppInfoDialog;

@@ -3,7 +3,7 @@ import strings from '../../../translations';
 import { useContext } from 'react';
 import { ReactReduxContext } from 'react-redux';
 import { useAppSelector } from '../../../state/hooks';
-import DatasetImport from '../DatasetImport'
+import DatasetImport from '../DatasetImport';
 
 import { setIsDatasetImportOpen } from '../../../state/slices/uiSlice';
 import { faUpload } from '@fortawesome/free-solid-svg-icons';
@@ -29,13 +29,13 @@ const DatasetImportDialog = () => {
       closeAction={
         handleCloseDatasetImport
       } /* Action when pressing dialog close button or backdrop */
-      id='dataset-import-dialog'
-      maxWidth={'800px'}
+      id="dataset-import-dialog"
+      width={'35rem'}
+      height={'61rem'}
     >
-      <DatasetImport/>
+      <DatasetImport />
     </Dialog>
-  )
-  : null ;
+  ) : null;
 };
 
 export default DatasetImportDialog;

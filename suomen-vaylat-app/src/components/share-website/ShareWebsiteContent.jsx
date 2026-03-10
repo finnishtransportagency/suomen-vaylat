@@ -16,8 +16,6 @@ import strings from '../../translations';
 import PillButton from '../../utils/components/PillButton';
 
 const StyledPopupWrapper = styled.div`
-  max-width: 600px;
-  width: 100%;
   margin: 0 auto;
   padding: 24px;
   background-color: white;
@@ -29,7 +27,6 @@ const StyledPopupWrapper = styled.div`
     padding: 22px;
     bottom: 0;
     left: 0;
-    width: 100vw;
     margin: 0;
     z-index: 1;
   }

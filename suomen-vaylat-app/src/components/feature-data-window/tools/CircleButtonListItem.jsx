@@ -21,7 +21,7 @@ const StyledCircleButton = styled(motion.div)`
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: ${props => props.isActive ? props.activeColor ? props.activeColor : props.theme.colors.buttonSelected : props.bgColor ? props.bgColor : props.theme.colors.mainColor1};
+    background-color: ${props => props.$isActive ? props.$activeColor ? props.$activeColor : props.theme.colors.buttonSelected : props.$bgColor ? props.$bgColor : props.theme.colors.mainColor1};
     box-shadow: 0px 2px 4px #0000004D;
     border-radius: 50%;
     svg {
@@ -86,13 +86,13 @@ const CircleButtonListItem = ({
             <StyledCircleButton
                 aria-label={title}
                 role="button"
-                isActive={selectedItem === id}
+                $isActive={selectedItem === id}
                 animate={{
                     scale: selectedItem === id || isHovered ? 1.1 : 1,
                 }}
                 size={size}
-                bgColor={bgColor}
-                activeColor={activeColor}
+                $bgColor={bgColor}
+                $activeColor={activeColor}
                 color={color}
             >
                 {

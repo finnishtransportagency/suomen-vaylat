@@ -27,6 +27,8 @@ const ShareWebsiteDialog = () => {
       type={'normal'}
       closeAction={handleCloseShareWebSite}
       id="share_website_popup"
+      height={'30rem'}
+      width={'33rem'}
     >
       <ShareWebsiteContent />
     </Dialog>

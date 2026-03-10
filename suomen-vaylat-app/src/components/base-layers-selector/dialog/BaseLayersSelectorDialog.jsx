@@ -7,14 +7,14 @@ import { setIsBaseLayerSelectorMenuOpen } from '../../../state/slices/uiSlice';
 import { ReactReduxContext } from 'react-redux';
 
 const BaseLayerSelectorDialog = () => {
-  const { isBaseLayerSelectorMenuOpen } = useAppSelector((state) => state.ui)
+  const { isBaseLayerSelectorMenuOpen } = useAppSelector((state) => state.ui);
   const { store } = useContext(ReactReduxContext);
 
   const handleCloseBaseLayerSelectorDialog = () => {
     store.dispatch(setIsBaseLayerSelectorMenuOpen(false));
   };
 
-  return isBaseLayerSelectorMenuOpen ?(
+  return isBaseLayerSelectorMenuOpen ? (
     <Dialog
       drag={false}
       resize={false}
@@ -23,11 +23,12 @@ const BaseLayerSelectorDialog = () => {
       type={'normal'}
       closeAction={handleCloseBaseLayerSelectorDialog}
       id="base_layer_selector_menu"
+      width="52rem"
+      height="36rem"
     >
       <BaseLayerSelectorMenu />
     </Dialog>
-  )
-  : null ;
+  ) : null;
 };
 
 export default BaseLayerSelectorDialog;

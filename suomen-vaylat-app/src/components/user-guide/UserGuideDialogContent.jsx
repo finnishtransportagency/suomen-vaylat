@@ -39,10 +39,6 @@ const StyledXYIcon = styled.img`
 `;
 
 const StyledContent = styled.div`
-  min-width: 600px;
-  max-width: 600px;
-  width: 100%;
-  height: 100%;
   padding: 16px;
   overflow: auto;
   @media ${(props) => props.theme.device.mobileL} {

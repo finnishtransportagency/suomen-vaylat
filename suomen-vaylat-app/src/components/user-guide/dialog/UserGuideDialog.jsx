@@ -20,8 +20,8 @@ const UserGuideDialog = () => {
 
   return isUserGuideOpen ? (
     <Dialog
-      drag={false} /* Enable (true) or disable (false) drag */
-      resize={false}
+      drag={true} /* Enable (true) or disable (false) drag */
+      resize={true}
       fullScreenOnMobile={
         true
       } /* Scale dialog full width / height when using mobile device */
@@ -32,7 +32,8 @@ const UserGuideDialog = () => {
         handleCloseUserGuide
       } /* Action when pressing dialog close button or backdrop */
       id="user_guide_dialog"
-      minHeight="860px"
+      minWidth={'30rem'}
+      minHeight={'30rem'}
     >
       <UserGuideDialogContent />
     </Dialog>

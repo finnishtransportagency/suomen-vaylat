@@ -19,7 +19,11 @@ import {
 } from '../../../state/slices/uiSlice';
 
 import { faMapMarkedAlt } from '@fortawesome/free-solid-svg-icons';
-import { FEATURE_SELECTION_DRAWING_TOOL, FEATURE_SELECTION_LAYER, GFI_GEOMETRY_LAYER_ID } from '../../../utils/constants';
+import {
+  FEATURE_SELECTION_DRAWING_TOOL,
+  FEATURE_SELECTION_LAYER,
+  GFI_GEOMETRY_LAYER_ID
+} from '../../../utils/constants';
 
 const FeatureDataDialog = () => {
   const { store } = useContext(ReactReduxContext);
@@ -53,10 +57,11 @@ const FeatureDataDialog = () => {
       ]);
 
     // clears feature selection drawing
-    activeTool === FEATURE_SELECTION_DRAWING_TOOL && channel.postRequest('DrawTools.StopDrawingRequest', [
-      FEATURE_SELECTION_DRAWING_TOOL,
-      true
-    ]);
+    activeTool === FEATURE_SELECTION_DRAWING_TOOL &&
+      channel.postRequest('DrawTools.StopDrawingRequest', [
+        FEATURE_SELECTION_DRAWING_TOOL,
+        true
+      ]);
   };
 
   return isGfiOpen ? (
@@ -73,8 +78,8 @@ const FeatureDataDialog = () => {
         handleCloseGFIDialog
       } /* Action when pressing dialog close button or backdrop */
       id="gfi_dialog"
-      minWidth={gfiLocations.length > 0 ? "50vw" : "40vw"}
-      minHeight={gfiLocations.length > 0 ? "50vh" : "40vh"}
+      minWidth={'35rem'}
+      minHeight={'34rem'}
       minimize={minimizeGfi}
       maximize={maximizeGfi}
       minimizable={true}
@@ -84,8 +89,7 @@ const FeatureDataDialog = () => {
     >
       <FeatureDataPopup />
     </Dialog>
-  )
-  : null ;
+  ) : null;
 };
 
 export default FeatureDataDialog;

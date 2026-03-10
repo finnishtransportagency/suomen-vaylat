@@ -20,7 +20,7 @@ const MetadataDialog = () => {
 
   return layerMetadata.data !== null ? (
     <Dialog
-          drag={false} /* Enable (true) or disable (false) drag */
+          drag={true} /* Enable (true) or disable (false) drag */
           resize={false}
           fullScreenOnMobile={
             true
@@ -35,7 +35,8 @@ const MetadataDialog = () => {
             handleCloseMetadataDialog
           } /* Action when pressing dialog close button or backdrop */
           id="metadata_dialog"
-          maxWidth={"800px"}
+          width={'40rem'}
+          height={'40rem'}
         >
           <MetadataDialogContent metadata={layerMetadata} />
         </Dialog>

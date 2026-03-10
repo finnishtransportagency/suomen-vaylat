@@ -198,19 +198,11 @@ const SaveViewsDialog = () => {
       titleIcon={faCamera}
       closeAction={handleCloseSaveViewDialog}
       type="normal"
-      minWidth="600px"
-      minHeight={isLowResScreen ? '400px' : '500px'}
-      maxWidth="90vw"
-      maxHeight="90vh"
+      minWidth={'32rem'}
+      minHeight={'31rem'}
       hasHelp
-      helpId="show_view_help"
+      helpId='show_view_help'
       helpContent={helpContent}
-
-  anchorOriginX="50%"
-  anchorOriginY="50%"
-  anchorX="end"
-  anchorY="center"
-
     >
       <ViewForm
         initialData={editingView}
@@ -221,8 +213,7 @@ const SaveViewsDialog = () => {
         }}
       />
     </Dialog>
-  )
-  : null ;
+  ) : null;
 };
 
 export default SaveViewsDialog;

@@ -21,13 +21,15 @@ const WarningDialog = () => {
     <Dialog
       drag={false}
       resize={false}
+      backdrop
       fullScreenOnMobile={true}
       titleIcon={faExclamationCircle}
       title={strings.general.warning}
       type={'warning'}
       closeAction={handleCloseWarning}
       id={null}
-      maxWidth={isMobile ? null : '30em'}
+      minWidth={'30rem'}
+      minHeight={'22rem'}
     >
       <WarningDialogContent warning={warning} />
     </Dialog>
