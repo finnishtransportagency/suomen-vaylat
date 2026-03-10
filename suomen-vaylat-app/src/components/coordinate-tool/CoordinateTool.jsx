@@ -35,7 +35,6 @@ import PillButton from '../../utils/components/PillButton';
 
 const StyledCoordinateToolContainer = styled.div`
   width: 100%;
-  height: 100%;
   margin: 0 auto;
   padding: 24px;
   border-radius: 8px;

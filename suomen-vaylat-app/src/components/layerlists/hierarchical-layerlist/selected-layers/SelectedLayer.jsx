@@ -383,16 +383,6 @@ const SelectedLayer = ({
             {layer.name} {localfilterenabled} {filtersEnabled}{' '}
             {localfilterenabled}
           </StyledLayerName>
-          {localfilterenabled && (
-            <StyledIconWrapper>
-              <StyledFloatingSpan>
-                <FontAwesomeIcon
-                  icon={faFilter}
-                  style={{ color: theme.colors.secondaryColorPurple }}
-                />
-              </StyledFloatingSpan>
-            </StyledIconWrapper>
-          )}
 
           <StyledIconsWrapper>
             {uuid && (
