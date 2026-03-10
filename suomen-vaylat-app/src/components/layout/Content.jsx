@@ -9,7 +9,7 @@ import FeatureDataDialog from '../feature-data-window/dialog/FeatureDataDialog';
 import FeatureDataDownloadDialog from '../feature-data-window/dialog/FeatureDataDownloadDialog';
 import UserGuideDialog from '../user-guide/dialog/UserGuideDialog';
 import AppInfoDialog from '../app-info/dialog/AppInfoDialog';
-import CustomLayerDialog from '../layerlists/hierarchical-layerlist/custom-filter/dialog/CustomLayerDialog';
+import CustomLayerDialog from '../layerlists/hierarchical-layerlist/custom-filter/dialog/CustomFilterDialog';
 import DatasetImportDialog from '../dataset-import/dialog/DatasetImportDialog';
 import AnnouncementsDialog from '../announcements/dialog/AnnouncementsDialog';
 import MetadataDialog from '../metadata-dialog/dialog/MetadataDialog';

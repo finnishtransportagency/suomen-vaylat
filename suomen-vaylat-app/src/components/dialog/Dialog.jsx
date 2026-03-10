@@ -18,6 +18,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { isMobile, theme } from '../../theme/theme';
 import { Tooltip } from 'react-tooltip';
+import { useDialogStack } from '../../state/DialogStackContext';
 
 /* ---------------- Constants ---------------- */
 

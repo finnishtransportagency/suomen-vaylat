@@ -131,6 +131,7 @@ const StyledLayerList = styled.div``;
 const StyledLayerListContainer = styled.div`
   padding: 0.5em;
   background-color: ${(props) => props.theme.colors.mainWhite};
+  overflow: auto;
 `;
 
 const FilterLayerList = ({ layers, groups }) => {
@@ -157,12 +158,12 @@ const FilterLayerList = ({ layers, groups }) => {
             })}
             {layerArray.length > 0 && (
               <TagLayerList
-                tag={strings.layerlist.customLayerInfo.customFilter}
+                tag={strings.layerlist.customFilterInfo.customFilter}
                 layers={layers}
                 groups={groups}
                 key={
                   'taglayerlist-' +
-                  strings.layerlist.customLayerInfo.customFilter
+                  strings.layerlist.customFilterInfo.customFilter
                 }
                 customTag={layerArray}
               />
@@ -200,7 +201,7 @@ const LayerListContainer = ({ groups, layers, tags }) => {
   };
 
   return (
-    <StyledLayerListContainer>
+    <StyledLayerListContainer id='layerlist-container'>
       <Tooltip
         style={{backgroundColor: theme.colors.mainColor1}}
         disable={isMobile}

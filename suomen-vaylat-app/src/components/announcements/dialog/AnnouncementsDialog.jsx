@@ -55,6 +55,7 @@ const AnnouncementsDialog = () => {
             closeAnnouncement
           } /* Action when pressing dialog close button or backdrop */
           id={announcements[currentAnnouncement].id}
+          maxWidth={'50vw'}
         >
           <AnnouncementsDialogContent
             id={announcements[currentAnnouncement].id}

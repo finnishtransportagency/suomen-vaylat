@@ -2,7 +2,6 @@ import { useState, useMemo } from 'react';
 import styled from 'styled-components';
 import strings from '../../translations';
 import { Accordion } from 'react-bootstrap';
-import UserGuideTabs from './UserGuideTabs';
 import {
   faExpand,
   faLayerGroup,
@@ -179,7 +178,13 @@ export const UserGuideDialogContent = () => {
             <p>{strings.appGuide.dialogContent.mapLayerMenu.title}</p>
           </StyledTitleWrapper>
         ),
-        content: <UserGuideTabs />,
+        content:  (
+          <StyledGuideContent>
+            <p>{strings.appGuide.dialogContent.mapLayerMenu.content.general}</p>
+            <p>{strings.appGuide.dialogContent.mapLayerMenu.content.selectedLayers}</p>
+            <p>{IS_EXTRANET ? strings.appGuide.dialogContent.mapLayerMenu.content.ownDatasets : strings.appGuide.dialogContent.mapLayerMenu.content.ownDatasetsExtranet}</p>
+          </StyledGuideContent>
+        ),
         flatText: extractStringsFromJson(strings.appGuide.dialogContent.mapLayerMenu).toLowerCase()
       },
       {

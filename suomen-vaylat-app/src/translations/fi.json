@@ -359,16 +359,16 @@
       },
       "mapLayerMenu": {
         "title": "Karttatasovalikko",
-        "subTitle": "Karttatasovalikko avautuu vasemmasta yläreunasta. Valittavissa on kaksi välilehteä.",
-        "tabsContent": {
-          "allLayers": "Karttatasoa voi hakea nimellä kirjoittamalla 3 kirjainta haku-kenttään. Aineistolistausta voi suodattaa aihealueittain Suodata tyypeittäin -valikon alta tai tallentaa oma suodatin halutuista aineistoista selaimen välimuistiin. Oma suodatin on käytettävissä sillä laitteella ja selaimessa, johon oma suodatin on tallennettu.\nKarttatason nimen vieressä olevasta info-kuvakkeesta avautuu aineiston metatiedot. Mikäli karttatason kohdalla näkyy latauspainike, aineisto on ladattavissa koko Suomen alueelta. Latauspainikkeen puuttuessa aineiston lataus edellyttää kohteen valintaa kartalta.\nOsa aineistoista on suodatettavissa aineiston ominaisuustietojen pohjalta. Mikäli aineistoa voidaan suodattaa, karttatason kohdalla näkyy suodatin-kuvake. \n'Omat aineistot' sisältävät käyttäjän tallentamat näkymät ja geometriat, joita voidaan muokata ja poistaa.",
-          "allLayersExtranet": "Karttatasoa voi hakea nimellä kirjoittamalla 3 kirjainta haku-kenttään. Aineistolistausta voi suodattaa aihealueittain Suodata tyypeittäin -valikon alta tai tallentaa oma suodatin halutuista aineistoista selaimen välimuistiin. Oma suodatin on käytettävissä sillä laitteella ja selaimessa, johon oma suodatin on tallennettu.\nKarttatason nimen vieressä olevasta info-kuvakkeesta avautuu aineiston metatiedot. Mikäli karttatason kohdalla näkyy latauspainike, aineisto on ladattavissa koko Suomen alueelta. Latauspainikkeen puuttuessa aineiston lataus edellyttää kohteen valintaa kartalta.\nOsa aineistoista on suodatettavissa aineiston ominaisuustietojen pohjalta. Mikäli aineistoa voidaan suodattaa, karttatason kohdalla näkyy suodatin-kuvake. \n'Omat aineistot' sisältävät käyttäjän tallentamat näkymät, geometriat ja mahdolliset omat tasot. Omissa aineistoissa voit muokata ja poistaa tallennettuja näkymiä, geometrioita ja omia karttatasoja. Omia karttatasoja ei voi toistaiseksi jakaa.",
-          "selectedLayers": "Lista kartalle valituista karttatasoista. Tasojen järjestystä voi vaihtaa raahaamalla niitä vasemman reunan ikonista. Läpinäkyvyyttä voi säätää liukusäätimellä ja tason valinnan voi poistaa ruksista. Suodatin-painikkeesta avautuu suodatustoiminto, mistä kartalla näkyviä tietoja voidaan suodattaa ominaisuustietojen pohjalta."
+        "content": {
+          "general": "Karttatasoa voi hakea nimellä kirjoittamalla 3 kirjainta haku-kenttään. Aineistolistausta voi suodattaa aihealueittain ‘Suodata tyypeittäin’ -valikon alta tai tallentaa ‘oma suodatin’ halutuista aineistoista selaimen välimuistiin (löytyy suodatusvaihtoehdoista). Oma suodatin on käytettävissä sillä laitteella ja selaimessa, johon oma suodatin on tallennettu.\nKarttatason nimen vieressä olevasta info-kuvakkeesta avautuu aineiston metatiedot. Mikäli karttatason kohdalla näkyy latauspainike, aineisto on ladattavissa koko Suomen alueelta. Latauspainikkeen puuttuessa aineiston lataus edellyttää kohteiden valintaa kartalta.\nOsa aineistoista on suodatettavissa aineiston ominaisuustietojen pohjalta. Mikäli aineistoa voidaan suodattaa, karttatason kohdalla näkyy suodatin-kuvake.",
+          "ownDatasets": "'Omat aineistot' sisältävät käyttäjän tallentamat näkymät ja geometriat, joita voidaan näyttää, muokata ja poistaa.\nOmat näkymät ja geometriat ovat tallennettuna toistaiseksi vain selaimen välimuistiin, joten ne ovat myös käytettävissä vain kyseisellä laitteella ja selaimella.\nOmien geometrioiden ja näkymien metatietoja voidaan tarkastella info-napista.Oletusnäkymäksi asetetun näkymän nimen vieressä on tähti-kuvake. Oletusnäkymät aktivoituvat automaattisesti sivulle tultaessa.",
+          "ownDatasetsExtranet": "'Omat aineistot' sisältävät käyttäjän tallentamat näkymät, geometriat ja omat karttatasot, joita voidaan näyttää, muokata ja poistaa.\nOmat näkymät ja geometriat ovat tallennettuna toistaiseksi vain selaimen välimuistiin, joten ne ovat myös käytettävissä vain kyseisellä laitteella ja selaimella. Omat karttatasot ovat tallennettuja tietokantaan ja haetaan käyttäjän mukaan. Omia karttatasoja ei voi toistaiseksi jakaa.\nOmien geometrioiden ja näkymien metatietoja voidaan tarkastella info-napista. Oletusnäkymäksi asetetun näkymän nimen vieressä on tähti-kuvake. Oletusnäkymät aktivoituvat automaattisesti sivulle tultaessa.",
+          "selectedLayers": "'Valitut tasot' sisältää listan kartalle valituista karttatasoista. Tasojen järjestystä voi vaihtaa raahaamalla niitä vasemman reunan ikonista. Läpinäkyvyyttä voi säätää liukusäätimellä ja tason valinnan voi poistaa ruksista. Suodatin-painikkeesta avautuu suodatustoiminto, mistä kartalla näkyviä tietoja voidaan suodattaa ominaisuustietojen pohjalta."
         }
       },
       "search": {
         "title": "Haku",
-        "content": "Haku avautuu kartan oikean yläkulman suurennuslasi-painikkeesta. Haku-toiminnolla voi hakea kuntia, osoitteita, kiinteistötunnuksia, tieosoitteita tai rataosoitteita. Tarkemmat hakuohjeet löytyvät avaamalla lisää hakuehtoja avautuvasta ikkunasta näkyvästä nuolipainikkeesta. Hakuohjeet voi avata ja sulkea hakukohtaisesti info-kuvakkeesta. Hakusanat voi poistaa kartalta painamalla hakukentän roskakoria, ja tulokset voidaan poistaa kartalta 'Tyhjennä tulokset' -napista. Kun hakutuloksia on aktiivisena, hakuikkuna voidaan piilottaa."
+        "content": "Haku avautuu kartan oikean yläkulman suurennuslasi-painikkeesta. Haku-toiminnolla voi hakea mm. kuntia, osoitteita, kiinteistötunnuksia, tieosoitteita tai rataosoitteita. Tarkemmat hakuohjeet löytyvät avaamalla lisää hakuehtoja avautuvasta ikkunasta näkyvästä nuolipainikkeesta. Hakuohjeet voi avata ja sulkea hakukohtaisesti info-kuvakkeesta. Hakusanat voi poistaa kartalta painamalla hakukentän roskakoria, ja tulokset voidaan poistaa kartalta 'Tyhjennä tulokset' -napista. Kun hakutuloksia on aktiivisena, hakuikkuna voidaan piilottaa."
       },
       "featureSelection": {
         "title": "Kohteiden valinta",
@@ -376,7 +376,7 @@
       },
       "drawingTools": {
         "title": "Piirtotyökalut",
-        "content": "Piirtotyökalut avautuvat vasemman reunan työkalupainikkeesta avautuvasta ikkunasta. Työkaluilla voidaan lisätä kartalle geometrioita ja mitata pituutta tai pinta-alaa. 'Karttamerkintä' -painikkeesta avautuu valikko erilaisetn karttamerkintöjen lisäämiseksi kartalle. Näihin merkintöihin voidaan lisätä mukaan teksti. Piirretyt geometriat ja karttamerkinnät voidaan tallentaa muistiin klikkaamalla 'Tallenna' -painiketta, joka on piirtotyökalujen alin painike. Tallennus pätee myös muiden toimintojen kartalle piirrettyihin geometrioihin, kuten koordinaattityökalun lisäämiin pisteisiin, sekä haun kartalle piirtämiin tuloksiin. Geometrioita tallennettaessa määritellään geometrioille nimi, sekä haluttaessa kuvaus. Piirretyt geometriat voidaan poistaa kartalta oranssilla 'Tyhjennä' -painikkeella. Tallennetut geometriat listautuvat karttatasovalikon 'omat aineistot' alle. "
+        "content": "Piirtotyökalut avautuvat vasemman reunan työkalupainikkeesta avautuvasta ikkunasta. Työkaluilla voidaan lisätä kartalle geometrioita ja mitata pituutta tai pinta-alaa. 'Karttamerkintä' -painikkeesta avautuu valikko erilaisten karttamerkintöjen lisäämiseksi kartalle. Näihin merkintöihin voidaan lisätä mukaan teksti.\nPiirretyt geometriat ja karttamerkinnät voidaan tallentaa muistiin klikkaamalla 'Tallenna' -painiketta, joka on piirtotyökalujen alin painike. Tallennus pätee myös muiden toimintojen kartalle piirrettyihin geometrioihin, kuten koordinaattityökalun lisäämiin pisteisiin, sekä haun kartalle piirtämiin tuloksiin. Geometrioita tallennettaessa määritellään geometrioille nimi, sekä haluttaessa kuvaus. Piirretyt geometriat voidaan poistaa kartalta oranssilla 'Tyhjennä' -painikkeella. Tallennetut geometriat listautuvat karttatasovalikon 'omat aineistot' alle. "
       },
       "gfi": {
         "content": "Kohdetiedot avautuvat klikkaamalla mistä tahansa kartalla, tai vasemman reunan panikkeesta, jonka ikonissa on karttamerkintä. Kohdetiedot-ikkunasta voit hakea kohdetietoja, sekä näet tietoja valitsemistasi kohteista ja sijainneista, jotka voit myös halutessasi ladata suoraan laitteellesi valitsemassasi tiedostomuodossa. Mikäli karttatason nimen vieressä on suodatin-painike, voit suodattaa kohdetiedot-ikkunassa listattuja kohdetietoja.\nJos kohde on valittu klikkaamalla karttaa, Kohdetiedot-ikkunan sijaintitiedoista voidaan siirtyä tarkastelemaan kohdetta Google Street View -palvelussa.\n'Kohdista' -painikkeella voit kohdistaa kartan valittuihin kohteisiin."
@@ -391,7 +391,7 @@
       },
       "coordinateTool": {
         "title": "Koordinaattityökalu",
-        "content": "Koordinaattityökalu näyttää kartan keskikohdan koordinaatit. Koordinaatit voi myös syöttää itse, jolloin 'Keskitä kartta' -painike aktivoituu, jota painamalla kartta keskittyy syötettyyn pisteeseen. Keskipisteeseen voidaan lisätä halutessa karttamerkintä, ja nämä merkinnät voidaan tallentaa geometrioihin."
+        "content": "Koordinaattityökalu näyttää kartan keskikohdan koordinaatit. Koordinaatit voi myös syöttää itse, jolloin 'Keskitä kartta' -painike aktivoituu, jota painamalla kartta keskittyy syötettyyn pisteeseen. Keskipisteeseen voidaan lisätä halutessa karttamerkintä, ja nämä merkinnät voidaan tallentaa geometrioihin. Koordinaatit voidaan näyttää joko kolmen desimaalin tarkkuudella, tai kokonaisuudessaan. Valinta tallentuu välimuistiin."
       },
       "location": {
         "title": "Oma sijainti",
@@ -436,13 +436,13 @@
             "content": "Halutessasi voit poistaa tehdyn suodatuksen painamalla ”Poista kaikki suodattimet” tai painamalla ruksia aktiivisten suodattimien kohdalla."
           }
         },
-        "additionalInstructions": "Käyttämällä operaattoreita '<strong>Sisältää</strong>' sekä '<strong>Ei sisällä</strong>', attribuutin arvoa ei tarvitse kirjoittaa täydellisesti oikein. Riittää, että arvona on vain osa attribuutin sisällöstä. Tämä helpottaa suodatusta silloin, kun tarkkaa arvoa ei ole tiedossa.",
+        "additionalInstructions": "Käyttämällä operaattoreita '<strong>Sisältää</strong>' sekä '<strong>Ei sisällä</strong>', attribuutin arvoa ei tarvitse kirjoittaa täydellisesti oikein. Riittää, että arvona on vain osa attribuutin sisällöstä. Tämä helpottaa suodatusta silloin, kun tarkkaa arvoa ei ole tiedossa.\nSuodatus toimii 'AND' logiikalla, eli jokainen lisätty suodatus tarkentaa tulosjoukkoa.",
         "feedback": "Jos tasolta puuttuu suodata-työkalu tai suodatettavista attribuutista puuttuu jokin oleellinen attribuutti, voit lähettää aiheesta palautetta osoitteeseen",
         "feedbackEmail": "paikkatieto@vayla.fi"
       },
       "downloads": {
         "title": "Lataukset",
-        "content": "Lataukset avautuvat vasemman reunan työkalupainikkeesta avautuvan ikkunan lataukset-painikkeesta. Avautuvasta ikkunasta voit luoda uuden rajauksen ladattavaksi, sekä hallita myös kohdetietojen kautta tehtyjä latauksia."
+        "content": "Lataukset avautuvat vasemman reunan työkalupainikkeesta avautuvan ikkunan lataukset-painikkeesta. Avautuvasta ikkunasta voit luoda uuden rajauksen, sekä hallita myös aiemmin tehtyjä latauksia."
       },
       "views": {
         "title": "Näkymän tallennus",
@@ -454,7 +454,7 @@
       },
       "setFullScreen": {
         "title": "Laajenna",
-        "content": "Laajenna-painikkeella voi laajentaa Suomen väylät -sovelluksen täyttämään koko näyttöruudun."
+        "content": "Laajenna-painikkeella voi laajentaa Suomen väylät -sovelluksen täyttämään koko näyttöruudun, ja se löytyy työkaluvalikosta."
       },
       "zoomBar": {
         "title": "Selitteet / zoom-palkki",
@@ -706,7 +706,6 @@
       "filterByType": "Suodata tyypeittäin",
       "searchForLayers": "Hae karttatasoja",
       "createCustomFilter": "oma suodatin",
-      "saveCustomFilter": "Tallenna",
       "clearFilters": "Tyhjennä suodatinvalinnat",
       "searchResults": "Hakutulokset",
       "clearSelectedMapLayers": "Tyhjennä valitut karttatasot",
@@ -721,7 +720,7 @@
       "toShowLayer": "nähdäksesi taso",
       "opacity": "Läpinäkyvyys"
     },
-    "customLayerInfo": {
+    "customFilterInfo": {
       "customFilter": "Oma suodatin",
       "dialogTitle": "Luo oma suodatin",
       "closeInfo": "Sulje ohje",
