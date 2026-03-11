@@ -31,8 +31,6 @@ const AppInfoDialog = () => {
         handleCloseAppInfoDialog
       } /* Action when pressing dialog close button or backdrop */
       id="app_info_dialog"
-      minWidth={'40rem'}
-      minHeight={'40rem'}
     >
       <AppInfoDialogContent />
     </Dialog>

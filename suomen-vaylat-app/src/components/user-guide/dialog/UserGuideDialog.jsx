@@ -32,8 +32,8 @@ const UserGuideDialog = () => {
         handleCloseUserGuide
       } /* Action when pressing dialog close button or backdrop */
       id="user_guide_dialog"
-      minWidth={'30rem'}
-      minHeight={'30rem'}
+      width={'35rem'}
+      height={'35rem'}
     >
       <UserGuideDialogContent />
     </Dialog>

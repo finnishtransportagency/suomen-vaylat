@@ -42,12 +42,6 @@ const StyledButton = styled(Button)`
     &:focus {
         outline: 2px solid ${props => props.theme.colors.mainColor2};
     }
-    @media ${props => props.theme.device.laptop} {
-        max-width: 120px;
-    };
-    @media ${props => props.theme.device.tablet} {
-        max-width: 100px;
-    };
 `;
 
 const StyledMenuButton = styled(Button)`
@@ -67,12 +61,6 @@ const StyledMenuButton = styled(Button)`
     &:focus {
         outline: 2px solid ${props => props.theme.colors.mainColor2};
     }
-    @media ${props => props.theme.device.laptop} {
-        max-width: 120px;
-    };
-    @media ${props => props.theme.device.tablet} {
-        max-width: 100px;
-    };
 `;
 
 const StyledButtonText = styled.div`
