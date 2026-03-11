@@ -166,14 +166,13 @@ const StyledArrowDropDownCircleIconWrapper = styled(motion.div)`
 
 const MenuBar = () => {
   const { store } = useContext(ReactReduxContext);
-  const { selectedLayers, channel, filters } =
+  const { selectedLayers, channel } =
     useAppSelector((state) => state.rpc);
   const {
     isSideMenuOpen,
     isThemeMenuOpen,
     isDrawingToolsOpen,
     isSearchOpen,
-    isGfiOpen,
     drawToolMarkers
   } = useAppSelector((state) => state.ui);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);

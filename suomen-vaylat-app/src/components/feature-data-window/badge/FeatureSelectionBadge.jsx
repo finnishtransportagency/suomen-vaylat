@@ -1,6 +1,5 @@
 import React, { useContext } from 'react';
 import {
-  faMapMarkedAlt,
   faExpand,
   faObjectGroup,
 } from '@fortawesome/free-solid-svg-icons';

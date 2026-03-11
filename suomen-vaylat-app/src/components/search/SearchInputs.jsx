@@ -12,7 +12,6 @@ import {
   searchVKMTrack,
   setFirstSearchResultShown,
   setIsSearchingActive,
-  setLastSearchValue,
   setSearchResults,
   setSearchValue
 } from '../../state/slices/rpcSlice';

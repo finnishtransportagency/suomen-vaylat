@@ -5,9 +5,7 @@ import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons';
 import { useAppSelector } from '../../../state/hooks';
 import strings from '../../../translations';
 import WarningDialogContent from '../WarningDialogContent';
-
 import { setWarning } from '../../../state/slices/uiSlice';
-import { isMobile } from '../../../theme/theme';
 
 const WarningDialog = () => {
   const { warning } = useAppSelector((state) => state.ui);

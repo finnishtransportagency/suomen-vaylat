@@ -5,7 +5,6 @@ import { v4 as uuidv4 } from 'uuid';
 import Dialog from '../../dialog/Dialog';
 import ViewForm from '../Views/ViewForm';
 import strings from '../../../translations';
-import { theme } from '../../../theme/theme';
 import { setIsSaveViewOpen } from '../../../state/slices/uiSlice';
 import { setEditingView, setViews } from '../../../state/slices/rpcSlice';
 import { faCamera } from '@fortawesome/free-regular-svg-icons';
@@ -20,8 +19,6 @@ const SaveViewsDialog = () => {
   const views = useSelector((s) => s.rpc.views) || [];
   const geoJsonArray = useSelector((s) => s.ui.geoJsonArray) || [];
   const drawToolMarkers = useSelector((s) => s.ui.drawToolMarkers) || [];
-
-  const isLowResScreen = window.matchMedia(theme.device.lowResDesktop).matches;
 
   // Load any persisted views into local state if needed (we use store + localStorage)
   useEffect(() => {

@@ -1,11 +1,10 @@
-import React, { useState, useEffect, useContext, useCallback } from 'react';
+import React, { useEffect, useContext, useCallback } from 'react';
 import { ReactReduxContext } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import Dialog from '../../dialog/Dialog';
 import GeometryForm from '../Geometries/GeometryForm';
 import strings from '../../../translations';
-import { theme } from '../../../theme/theme';
 import { setIsSaveGeometriesOpen } from '../../../state/slices/uiSlice';
 import { faDrawPolygon } from '@fortawesome/free-solid-svg-icons';
 import {
@@ -21,7 +20,6 @@ const SaveGeometriesDialog = () => {
   const drawToolMarkers = useSelector((s) => s.ui.drawToolMarkers) || [];
   const editingGeometry = useSelector((s) => s.rpc.editingGeometry) || null;
   const geometries = useSelector((s) => s.rpc.geometries) || [];
-  const isLowResScreen = window.matchMedia(theme.device.lowResDesktop).matches;
 
   // Load any persisted views into local state if needed (we use store + localStorage)
   useEffect(() => {

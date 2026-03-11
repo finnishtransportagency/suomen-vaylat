@@ -1,4 +1,4 @@
-import { useContext, useEffect } from 'react';
+import { useContext } from 'react';
 import { ReactReduxContext, useSelector } from 'react-redux';
 import Badge from 'react-bootstrap/Badge';
 import { theme } from '../../theme/theme';

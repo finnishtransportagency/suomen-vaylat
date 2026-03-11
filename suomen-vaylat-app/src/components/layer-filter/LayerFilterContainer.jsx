@@ -156,7 +156,6 @@ export const LayerFilterContainer = ({ handleCloseFilterDialog }) => {
     // delete filter by layer
     const filterInfo = filteringInfo.filter((f) => f.layer.id === id)[0];
     let updatedFilters = filters.filter((f) => f.layer !== id);
-    console.log(updatedFilters, filterInfo)
     
     // no more filters so we close the dialog
     if (updatedFilters.length === 0) handleCloseFilterDialog();

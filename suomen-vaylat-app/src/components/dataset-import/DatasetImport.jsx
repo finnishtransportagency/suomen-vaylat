@@ -20,8 +20,9 @@ const StyledMainContainer = styled.div`
   border-radius: 16px;
   position: relative;
   background-color: white;
-  max-width: 
+  max-width: ;
 `;
+
 const OverlaySpinner = styled.div`
   position: absolute;
   top: 0;
@@ -35,6 +36,7 @@ const OverlaySpinner = styled.div`
   justify-content: center;
   border-radius: 16px;
 `;
+
 const StyledTabs = styled.div`
   position: relative;
   display: flex;
@@ -42,6 +44,7 @@ const StyledTabs = styled.div`
   max-height: 100px;
   background-color: #f2f2f2;
 `;
+
 const StyledTab = styled.div`
   z-index: 2;
   padding: 8px;
@@ -66,6 +69,7 @@ const StyledTab = styled.div`
     padding: 10px;
   }
 `;
+
 const StyledSwiper = styled(Swiper)`
   .swiper-slide {
     background-color: #fff;
@@ -74,6 +78,7 @@ const StyledSwiper = styled(Swiper)`
   }
   transition: box-shadow 0.3s ease-out;
 `;
+
 const StyledSubmitButtonGroup = styled.div`
   display: flex;
   gap: 18px;
@@ -81,44 +86,6 @@ const StyledSubmitButtonGroup = styled.div`
     flex-direction: column;
   }
   margin: 8px 32px 24px 32px;
-`;
-const StyledPrimaryButton = styled.button`
-  min-width: 180px;
-  height: 40px;
-  cursor: pointer;
-  user-select: none;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: ${({ theme }) => theme.colors.button};
-  color: ${({ theme }) => theme.colors.mainWhite};
-  border-radius: 20px;
-  font-size: 15px;
-  font-weight: 700;
-  transition: background 0.2s;
-  border: none;
-  &:hover:enabled {
-    background-color: ${({ theme }) => theme.colors.buttonActive};
-  }
-  opacity: ${(props) => (props.disabled ? 0.5 : 1)};
-  pointer-events: ${(props) => (props.disabled ? 'none' : 'auto')};
-  svg {
-    margin-right: 7px;
-    font-size: 18px;
-  }
-`;
-const StyledSecondaryButton = styled(StyledPrimaryButton)`
-  background-color: ${({ theme }) => theme.colors.mainWhite};
-  color: ${({ theme }) => theme.colors.mainColor1};
-  border: 2px solid ${({ theme }) => theme.colors.mainColor1};
-  font-weight: 600;
-  &:hover:enabled {
-    background-color: ${({ theme }) => theme.colors.hover};
-    color: ${({ theme }) => theme.colors.buttonActive};
-  }
-  svg {
-    color: ${({ theme }) => theme.colors.mainColor1};
-  }
 `;
 
 const allowedCharsExp = /^[A-Za-z0-9_\- ()äöåÄÖÅ]*$/;

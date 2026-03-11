@@ -8,7 +8,7 @@ import { ReactReduxContext } from 'react-redux';
 import CoordinateTool from '../CoordinateTool';
 
 const CoordinateToolDialog = () => {
-  const { isCoordinateToolOpen, isSearchResultPanelVisible } = useAppSelector(
+  const { isCoordinateToolOpen } = useAppSelector(
     (state) => state.ui
   );
   const { store } = useContext(ReactReduxContext);

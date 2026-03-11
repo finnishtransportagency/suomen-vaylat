@@ -1,4 +1,4 @@
-import { useContext, useEffect } from 'react';
+import { useContext } from 'react';
 import { ReactReduxContext, useSelector } from 'react-redux';
 import { faFilter } from '@fortawesome/free-solid-svg-icons';
 import Badge from 'react-bootstrap/Badge';
